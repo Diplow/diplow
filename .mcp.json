@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "hodor": {
+      "type": "http",
+      "url": "https://api.hodor.ai/mcp",
+      "headers": {
+        "X-Project": "diplow"
+      }
+    }
+  }
+}
