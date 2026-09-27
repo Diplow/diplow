@@ -51,6 +51,14 @@ export function InputsGallery() {
       </GallerySection>
       <GallerySection name="Input">
         <TextControls render={(props) => <Input className="w-56" {...props} />} />
+        <GalleryState label={m.dev_ui_state_password()}>
+          <Input
+            className="w-56"
+            type="password"
+            aria-label={m.dev_ui_state_password()}
+            defaultValue="correct horse"
+          />
+        </GalleryState>
       </GallerySection>
       <GallerySection name="Textarea">
         <TextControls render={(props) => <Textarea className="w-56" {...props} />} />
