@@ -156,3 +156,28 @@ describe('the UI library boundary', () => {
     expect(exempt.test('src/routes/index.tsx')).toBe(false)
   })
 })
+
+describe('the .ts import lint', () => {
+  const tsImport = /No \.ts in an import path under src\//
+
+  async function restrictedImports(code: string, filePath: string) {
+    const [result] = await eslint.lintText(code, { filePath })
+    return (result?.messages ?? [])
+      .filter((message) => message.ruleId === 'no-restricted-imports')
+      .map((message) => message.message)
+  }
+
+  it.each(["import { a } from './a.ts'\n", "import { a } from '#/api/server/run.ts'\n"])(
+    'refuses %s under src/',
+    async (code) => {
+      const messages = await restrictedImports(code, feature)
+      expect(messages).toHaveLength(1)
+      expect(messages[0]).toMatch(tsImport)
+    },
+  )
+
+  it('lets the migrations file, which Node runs, import with .ts', async () => {
+    const code = "import { Database } from './database.ts'\n"
+    expect(await restrictedImports(code, 'src/repositories/database/migrations.ts')).toEqual([])
+  })
+})

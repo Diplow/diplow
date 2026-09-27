@@ -53,7 +53,7 @@ Each build of the layer is a new, empty database: the tests inside one `layer(..
 
 ## Rules
 
-- **Only this folder imports `drizzle-orm`, `@effect/sql-pg` and `@effect/sql-pglite`** (`dependency-cruiser.config.ts`).
-- **The query builder, never raw SQL.** It is the security bar, and it is also what keeps the two drivers alike: `execute` returns rows as an array on Postgres and as `{ rows }` on PGlite, while a `select` returns the same array on both.
-- **`node scripts/migrate.ts` runs `database.ts` and `migrations.ts` without a bundler**, so they import packages, and each other with a `.ts` path. `testing.ts` is for tests: nothing the server bundles imports it.
+- **Only this folder imports `drizzle-orm`, `@effect/sql-pg`, `@effect/sql-pglite` and Neon's `@neondatabase/*`**, should one be needed (`dependency-cruiser.config.ts`).
+- **The query builder, never raw SQL.** It is the security bar, and it is also what keeps the two drivers alike: Drizzle's `db.execute` returns rows as an array over `effect-postgres` and as `{ rows }` over `effect-pglite`, while a `select` returns the same array on both.
+- **`node scripts/migrate.ts` runs `database.ts` and `migrations.ts` without a bundler.** `database.ts` imports packages only, and `migrations.ts` imports it as `./database.ts`, the one `.ts` import path the lint allows under `src/`. `scripts/migrate.test.ts` proves the script loads. `testing.ts` is for tests: nothing the server bundles imports it.
 - **The `Database` layer is not in the server function runtime yet.** It joins `layer` in `src/api/server/run.ts` with the first domain that reads (HEX-18): the runtime builds every layer on its first call, so before that it would make every server function wait on a database it does not use.
