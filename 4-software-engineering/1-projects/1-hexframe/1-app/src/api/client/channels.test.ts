@@ -29,7 +29,10 @@ beforeEach(() => {
   })
 })
 
-afterEach(() => {
+afterEach(async () => {
+  // A case sets the page's language on the runtime it imported; the next starts from English.
+  const { overwriteGetLocale } = await import('#/paraglide/runtime')
+  overwriteGetLocale(() => 'en')
   vi.unstubAllGlobals()
   vi.restoreAllMocks()
 })

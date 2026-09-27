@@ -1,6 +1,7 @@
 // The programs behind /dev/errors' server functions (./provoke.ts): each ends with the outcome it is
-// asked for. Apart from those functions, so the page's client bundle, which imports them, never reaches
-// the server function helper: Start strips what a handler alone uses, not what a module exports.
+// asked for. They sit in a module of their own because they reach `run.ts`: the page imports the
+// server functions, and only their handlers import this module, which Start strips from the client.
+// Were the programs exported beside the server functions, the page would reach `run.ts` through them.
 import { Effect } from 'effect'
 
 import { RequestContext } from '../server/run'

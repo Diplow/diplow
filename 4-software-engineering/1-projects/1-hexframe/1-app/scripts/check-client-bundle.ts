@@ -5,8 +5,10 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 
-// Nitro writes the client to .output/public, or to .vercel/output/static when it builds for Vercel.
-const candidates = ['.output/public/assets', '.vercel/output/static/assets']
+// Nitro writes the client to .vercel/output/static when it builds for Vercel (VERCEL_ENV set), to
+// .output/public otherwise. Only this build's output is checked: the other may be a stale one.
+const folder =
+  process.env.VERCEL_ENV === undefined ? '.output/public/assets' : '.vercel/output/static/assets'
 // Markers of server code: the runtime's services, the SDKs behind the repositories, their secret.
 const markers = [
   'ManagedRuntime',
@@ -17,22 +19,19 @@ const markers = [
   'BETTER_AUTH_SECRET',
 ]
 
-const folders = candidates.filter((folder) => existsSync(folder))
-if (folders.length === 0) {
-  console.error(`No client bundle to check: none of ${candidates.join(', ')} exists.`)
+if (!existsSync(folder)) {
+  console.error(`No client bundle to check: ${folder} does not exist.`)
   process.exit(1)
 }
 
-const leaks = folders.flatMap((folder) =>
-  readdirSync(folder)
-    .filter((file) => file.endsWith('.js'))
-    .flatMap((file) => {
-      const code = readFileSync(join(folder, file), 'utf8')
-      return markers
-        .filter((marker) => code.includes(marker))
-        .map((marker) => `${join(folder, file)}: ${marker}`)
-    }),
-)
+const leaks = readdirSync(folder)
+  .filter((file) => file.endsWith('.js'))
+  .flatMap((file) => {
+    const code = readFileSync(join(folder, file), 'utf8')
+    return markers
+      .filter((marker) => code.includes(marker))
+      .map((marker) => `${join(folder, file)}: ${marker}`)
+  })
 
 if (leaks.length > 0) {
   console.error(

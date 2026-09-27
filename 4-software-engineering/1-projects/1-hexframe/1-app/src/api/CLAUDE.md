@@ -17,7 +17,7 @@ The layer between what the client shows and what the domains know. On the server
 | `server/` | `run.ts`, the helper: `RequestContext`, the one `ManagedRuntime` and its repositories, the bus's subscriptions, `run(context, program)` and `provenSession`; `middleware.ts`, Start's middleware, which `src/start.ts` runs before every server function: `sameOriginOnly`, the CSRF check, then `requestContext`; `bus.ts`, the server bus |
 | `errors/` | Shared by both sides and pure: `failure.ts`, the union of every failure and its wire form (`Outcome`, `encodeFailure`, `decodeFailure`); `channel.ts`, the channel table; `messages.ts`, the message table. Tested |
 | `client/` | `calls.ts`, `settle` and the `read` and `write` builders for TanStack Query; `channels.ts`, the QueryClient that carries each failure out, and `submitWrite` for a form; `ReadBoundary`, the nearest boundary of a read |
-| `iam/` | IAM's server functions (`signUp`, `signIn`, `signOut`, `session`) and `guard.ts`: `signedIn`, the `beforeLoad` of a page only a signed-in Account sees, and the `?redirect=` sign-in and sign-up read back |
+| `iam/` | IAM's server functions (`signUp`, `signIn`, `signOut`, `session`) and `guard.ts`: `signedIn`, the `beforeLoad` of a page only a signed-in Account sees, and the `?redirect=` sign-in and sign-up read back: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/CLAUDE\|iam]] |
 | `dev/` | The failures, programs and server functions `/dev/errors` uses to provoke every channel. They stay members of `Failure` as long as the page exists; outside dev and previews the functions answer `NotFound` |
 
 ## Effect stops at the server function

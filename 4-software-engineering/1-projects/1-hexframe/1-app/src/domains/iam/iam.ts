@@ -14,7 +14,6 @@ import {
   TooManyAttempts,
 } from './errors'
 
-/** What someone signs up or in with. */
 interface Credentials {
   readonly email: string
   readonly password: string
