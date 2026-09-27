@@ -138,7 +138,7 @@
   "error_invalid": "Some fields need another look.",
   "error_not_found": "This doesn't exist, or no longer does.",
   "error_conflict": "This changed in the meantime. Reload, then try again.",
-  "error_unexpected": "Something went wrong on our side. Try again; if it keeps failing, send us the request id.",
+  "error_unexpected": "Something went wrong on our side. Try again in a moment.",
   "error_dev_title_missing": "Give it a title.",
   "error_dev_title_taken": "That title is taken.",
   "error_dev_not_found": "This dev record doesn't exist. (The table's entry for DevNotFound, in every scope.)",

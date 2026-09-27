@@ -25,6 +25,8 @@ Domains, repositories and the API layer are Effect. The client stays on TanStack
 
 The two meet in one helper. Start middleware stays promise-based and puts the request id (and, once IAM is built, the Session) on Start's `context`; every server function hands its program to `run`, which provides that context as Effect services, runs the program on one `ManagedRuntime` built from every layer, and returns an `Outcome`: the value, or the failure encoded with the request id. Nothing else calls `run*`: `eslint.config.ts` says no, and `scripts/lint.test.ts` proves it fires.
 
+The shape every server function takes, here for a Mapping read once that domain exists:
+
 ```ts
 export const getTile = createServerFn({ method: 'GET' })
   .validator(Schema.toStandardSchemaV1(TileRef))

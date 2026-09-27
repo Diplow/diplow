@@ -23,7 +23,7 @@ The choices, and the rules they come with. Each rule is written here until the f
 
 - **Vercel**, Node runtime.
 - **One package to start**, `1-app`: a TanStack Start app holding client and server. A second package appears when a second deployable does, not before.
-- **Stable or release candidate; beta and alpha only behind a seam**, one file that can be swapped. So: TanStack Start RC, Effect 4 RC (migrating 3 to 4 later would touch every file), Drizzle v1 RC if `@effect/sql-drizzle` supports it (0.45 otherwise), and Sentry's alpha TanStack Start SDK behind the observability seam.
+- **Stable or release candidate; beta and alpha only behind a seam**, one file that can be swapped. So: TanStack Start RC, Effect 4 RC (migrating 3 to 4 later would touch every file), Drizzle v1 RC, whose own Effect driver replaces `@effect/sql-drizzle`, which has no Effect 4 release (HEX-15), and Sentry's alpha TanStack Start SDK behind the observability seam.
 
 | Need | Choice |
 |---|---|
@@ -36,7 +36,7 @@ The choices, and the rules they come with. Each rule is written here until the f
 | Building a system by conversation | TanStack AI |
 | Effects and typed errors | Effect |
 | Validation | Effect Schema, everywhere; `zod` is banned by lint |
-| Database | Neon, Drizzle through `@effect/sql-drizzle` |
+| Database | Neon, Drizzle through its Effect driver (`drizzle-orm/effect-postgres` over `@effect/sql-pg`; `effect-pglite` over `@effect/sql-pglite` in tests) |
 | Auth | Better Auth, behind IAM |
 | Payments | Stripe through `@better-auth/stripe`, behind IAM |
 | UI | Tailwind, shadcn |

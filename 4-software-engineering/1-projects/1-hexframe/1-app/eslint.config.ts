@@ -41,9 +41,13 @@ const effectHooks = [
 // so every server function gets the request's services and has its failures encoded the same way.
 const effectRun = '/^run(?:Sync|Promise|Fork|Callback)/'
 const helper = 'src/api/server/run.ts'
+// Read off a module or a runtime (`Effect.runPromise`, `runtime['runSync']`), imported by name, or
+// destructured (`const { runFork } = Effect`).
 const effectRuns = [
   `MemberExpression[property.name=${effectRun}]`,
+  `MemberExpression[property.value=${effectRun}]`,
   `ImportSpecifier[imported.name=${effectRun}]`,
+  `ObjectPattern > Property[key.name=${effectRun}]`,
 ].map((selector) => ({
   selector,
   message: `Only the server function helper (${helper}) runs an Effect program.`,

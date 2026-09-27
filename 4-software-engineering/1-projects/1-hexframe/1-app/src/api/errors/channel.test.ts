@@ -6,7 +6,7 @@ import { channelFor, type Call, type Channel } from './channel'
 
 const calls: readonly Call[] = ['read', 'frame', 'write', 'submit']
 
-// STACK.md's table, written out for every call and kind.
+// The table in src/api/CLAUDE.md, written out for every call and kind.
 const expected: Record<Call, Record<Kind, Channel>> = {
   read: {
     Unauthenticated: 'sign-in',
@@ -44,7 +44,7 @@ const expected: Record<Call, Record<Kind, Channel>> = {
 
 describe('the channel table', () => {
   it.each(calls.flatMap((call) => kinds.map((kind) => [call, kind] as const)))(
-    'sends a %s failing with %s where STACK.md says',
+    'sends a %s failing with %s where src/api/CLAUDE.md says',
     (call, kind) => {
       expect(channelFor(call, kind)).toBe(expected[call][kind])
     },

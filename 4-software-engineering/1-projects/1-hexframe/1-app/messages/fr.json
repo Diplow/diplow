@@ -138,7 +138,7 @@
   "error_invalid": "Certains champs sont à revoir.",
   "error_not_found": "Ceci n’existe pas, ou plus.",
   "error_conflict": "Ceci a changé entre-temps. Rechargez, puis réessayez.",
-  "error_unexpected": "Un problème est survenu de notre côté. Réessayez ; si cela persiste, envoyez-nous l’identifiant de la requête.",
+  "error_unexpected": "Un problème est survenu de notre côté. Réessayez dans un instant.",
   "error_dev_title_missing": "Donnez-lui un titre.",
   "error_dev_title_taken": "Ce titre est déjà pris.",
   "error_dev_not_found": "Cet enregistrement de dev n’existe pas. (L’entrée de la table pour DevNotFound, dans toutes les portées.)",

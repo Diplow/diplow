@@ -12,7 +12,7 @@ preview: >-
 
 ### DEC-1 Effect 4 RC stays; the database goes through Drizzle v1 RC's own Effect driver
 
-HEX-15, [#12](https://github.com/Diplow/diplow/pull/12). `@effect/sql-drizzle` has no Effect 4 release: its latest, 0.51.0, peers `effect ^3.22` and `drizzle-orm <0.50`. Drizzle v1 RC ships `drizzle-orm/effect-postgres` and `drizzle-orm/effect-pglite`, over `@effect/sql-pg` and `@effect/sql-pglite`, both at `4.0.0-rc.117` like the app's `effect`. HEX-16 should use those, and rename `@effect/sql-drizzle` where STACK.md's table and `dependency-cruiser.config.ts` still name it. The full check is a comment on HEX-15.
+HEX-15, [#12](https://github.com/Diplow/diplow/pull/12). `@effect/sql-drizzle` has no Effect 4 release: its latest, 0.51.0, peers `effect ^3.22` and `drizzle-orm <0.50`. Drizzle v1 RC ships `drizzle-orm/effect-postgres` and `drizzle-orm/effect-pglite`, over `@effect/sql-pg` and `@effect/sql-pglite`, both at `4.0.0-rc.117` like the app's `effect`. HEX-16 uses those; STACK.md, the app's CLAUDE.md and the `database` boundary in `dependency-cruiser.config.ts` name them already. The full check is a comment on HEX-15.
 
 ### DEC-2 An error carries its kind as a schema field, and the kinds live in `src/domains/kind.ts`
 
@@ -32,4 +32,4 @@ HEX-15, [#12](https://github.com/Diplow/diplow/pull/12). The server's sentence n
 
 ### DEC-6 Sign-in is `/sign-in?redirect=…`, and reports go to the logs until HEX-19
 
-HEX-15, [#12](https://github.com/Diplow/diplow/pull/12). The redirect channel sends the user to `/sign-in`, in the page's language, carrying where they were. The page doesn't exist until HEX-18, so `/dev/errors` lands on Not Found for now. `Unexpected` is reported through Effect's logger with the request id on the server, and a frame read's failure through the browser's console. Both are where Sentry plugs in with HEX-19.
+HEX-15, [#12](https://github.com/Diplow/diplow/pull/12). The redirect channel sends the user to `/sign-in`, in the page's language, carrying where they were. That page doesn't exist until HEX-18, so for now an Unauthenticated call on `/dev/errors` redirects to Not Found. `Unexpected` is reported through Effect's logger with the request id on the server, and a frame read's failure through the browser's console. Both are where Sentry plugs in with HEX-19.

@@ -97,6 +97,8 @@ describe('the Effect run lint', () => {
     "import { Effect } from 'effect'\nEffect.runSyncExit(Effect.void)\n",
     "import { runFork } from 'effect/Effect'\nrunFork\n",
     'declare const runtime: { runPromiseExit: () => void }\nruntime.runPromiseExit()\n',
+    "import { Effect } from 'effect'\nEffect['runSync'](Effect.void)\n",
+    "import { Effect } from 'effect'\nconst { runFork } = Effect\nrunFork(Effect.void)\n",
   ]
   const files = [feature, inUi, 'src/api/dev/provoke.ts']
 

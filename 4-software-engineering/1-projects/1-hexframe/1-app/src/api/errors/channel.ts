@@ -20,7 +20,7 @@ interface Row {
   channel: Channel
 }
 
-/** STACK.md's table, row for row: the first row that matches wins. */
+/** The table in src/api/CLAUDE.md, row for row: the first row that matches wins. */
 const table: readonly Row[] = [
   { calls: 'any', kinds: ['Unauthenticated'], channel: 'sign-in' },
   { calls: ['read'], kinds: ['Forbidden'], channel: 'forbidden' },
