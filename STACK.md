@@ -1,32 +1,79 @@
+---
+title: Top-level stack
+parent: .
+owner: diplo
+preview: >-
+  What the repo root owns. Markdown with Obsidian links and YAML frontmatter, read
+  by me in Obsidian and by agents in Claude Code. The repo is a hexframe node:
+  meta (.claude, .obsidian, .skills) as inner children, six domains of interest as
+  children. .skills is the only source of skills, symlinked flat into
+  .claude/skills. Software only goes in the monorepo.
+---
 # Top-level stack
 
-What the root of the repo owns. Each subproject describes its own stack in its own `CLAUDE.md`; this file covers only what applies repo-wide.
+What the root of the repo owns. Each child node describes its own stack in its own `CLAUDE.md`; this file covers only what applies repo-wide.
 
 ## One medium, two readers
 
 Content is Markdown. I read it through Obsidian: the repo root is the vault. Agents read it through Claude Code: the `CLAUDE.md` chain plus the root `.claude/` config. Everything written here has to work for both.
 
+- **Links** are Obsidian wikilinks: `[[note]]`, `[[note#heading]]`, `[[note|label]]`.
+- **Frontmatter** opens every Markdown file, `CLAUDE.md` included:
+
+  ```yaml
+  ---
+  title: What the parent's list calls this file
+  parent: path of the node this file hangs in, from the repo root (`.` for the root)
+  owner: diplo
+  preview: >-
+    At most 350 characters. The paragraph a reader needs to decide whether to open
+    the file, written so most readers won't have to. The parent's CLAUDE.md copies it.
+  ---
+  ```
+
+  A `SKILL.md` keeps the `name` and `description` Claude Code requires and adds these four.
+
+## Layout: the repo is a hexframe
+
+The repo root is one node. A node holds:
+
+| Slot | Budget | What goes there |
+|---|---|---|
+| `CLAUDE.md` | 1, outside every budget | Presents the node: a preview and a link per child |
+| Inner children (-1 to -6) | 6 folders | Meta about the node itself: `.claude/`, `.obsidian/`, `.skills/` |
+| Children (1 to 6) | 6 folders | The node's facets, numbered by their place on the ring: `1-name/` … `6-name/` |
+| Files | 6 | Content that belongs to the node itself, not to one facet |
+
+Every child folder is a node again, with the same shape and its own `CLAUDE.md`. The limit of 6 is the point: it forces prioritization and keeps each node small enough to hold in one sitting. A node that overflows its budget is ready to be cut, not worked around.
+
+Children sit on a ring: neighbors share an edge, and the child across the ring is a tension the node balances. Fewer than six is fine while a node is young; the missing numbers stay free for the facets still to come.
+
 ## Root-level pieces
 
 | Piece | Role | Status |
 |---|---|---|
-| `CLAUDE.md` | Agent entry point: what the repo is, pointers down to subprojects | exists |
+| `CLAUDE.md` | Agent entry point: what the repo is, the six domains | exists |
 | `STACK.md` | This file | exists |
-| `.claude/` | Claude Code config shared by every agent working in the repo | exists |
+| `.claude/` | Inner child: Claude Code config shared by every agent working in the repo | exists |
+| `.obsidian/` | Inner child: Obsidian config that makes the repo root a vault; per-device layout (`workspace*.json`) stays out of git | exists |
+| `.skills/` | Inner child: the skills I use, mine and vendored; see [[.skills/CLAUDE\|Skills]] | exists |
 | `.mcp.json` | MCP servers for this repo only; the `X-Project` header on `hodor` gives it an OAuth login separate from other projects' `hodor` | exists |
-| `.obsidian/` | Obsidian config; makes the repo root a vault | planned |
-| Monorepo tooling | Workspace setup for the applications I implement | probable, undecided |
+| `.gitignore` | Paths kept out of git | exists |
 
-## Subprojects
+The six children are the domains listed in [[CLAUDE]]. Each one is a node with its own `CLAUDE.md`, and owns whatever stack its content needs.
 
-Each one owns its stack and documents it in its own `CLAUDE.md`.
+### Skills: a hierarchy, exposed flat
 
-| Subproject | Purpose | Kind |
-|---|---|---|
-| skills | Define the skills I use | agent tooling |
-| hexframe | The app that defines and organizes contents | application |
-| website | My personal website | application |
-| docs | Document what I do, and my conclusions from those experiences | content |
+Claude Code only discovers skills sitting directly under `.claude/skills/<name>/SKILL.md`, it follows symlinks, and the folder name becomes the command, colons included (all checked on 2026-09-27). So:
+
+- `.skills/` is the only source of skills in this repo. My own skills sit there in folders and subfolders, like any other node; external skill repos are vendored under `.skills/external/<vendor>/`.
+- `.claude/skills/` holds one symlink per skill, pointing into `.skills/`: `/<name>` for mine, `/<vendor>:<name>` for vendored ones. My skill names must be unique across the hierarchy, since the flat directory is where they meet.
+- `.claude/settings.json` switches off every skill defined outside the repo (user skills, claude.ai synced skills, plugins).
+- `.skills/sync` rebuilds both the symlinks and the overrides; [[.skills/CLAUDE|Skills]] says when to run it.
+
+### Software: one monorepo
+
+Software projects (hexframe, my personal website) share one monorepo; everything else stays outside it. Where the monorepo hangs and which tooling it uses are still undecided.
 
 ## Workflow
 
@@ -36,10 +83,3 @@ The loop that steers agents is part of the stack:
 - **Conductor** runs agents in parallel, one git worktree per workspace.
 - **Claude Code** is the agent; **skills** encode the processes I repeat.
 - **GitHub** (`Diplow/diplow`) holds history; changes land on `main` through pull requests.
-
-## Open questions
-
-- Links: Obsidian wikilinks (`[[note]]`) or standard Markdown links (render on GitHub)?
-- How do the skills subproject's skills reach `.claude/skills/`: symlink, plugin, or copy?
-- Which monorepo tooling, and do the non-application subprojects (skills, docs) sit inside it?
-- Directory layout for subprojects (e.g. `hexframe/` at the root, or grouped under `apps/`, `content/`).
