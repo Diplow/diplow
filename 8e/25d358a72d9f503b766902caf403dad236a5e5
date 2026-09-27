@@ -1,0 +1,40 @@
+.skills/1-ship/run-autonomous-initiative/references/root.md
+  s_941b834abbd195::t_ec55cdc43f00b2 8-9,53,60,73,80,83,86,88,92,94
+4-software-engineering/1-projects/1-hexframe/CLAUDE.md
+  s_941b834abbd195::t_0d9980e6f16969 23
+.skills/1-ship/run-autonomous-initiative/SKILL.md
+  s_941b834abbd195::t_ec55cdc43f00b2 3,10-11,22,24,63
+.skills/1-ship/run-autonomous-project/SKILL.md
+  s_941b834abbd195::t_ec55cdc43f00b2 18,89
+.skills/1-ship/run-autonomous-project/references/top.md
+  s_941b834abbd195::t_ec55cdc43f00b2 25,33
+.skills/1-ship/run-autonomous-project/references/contract.md
+  s_941b834abbd195::t_ec55cdc43f00b2 35,62,122
+4-software-engineering/1-projects/1-hexframe/STACK.md
+  s_941b834abbd195::t_9287e2c7f2262d 17,19
+4-software-engineering/1-projects/1-hexframe/.run/CLAUDE.md
+  s_941b834abbd195::t_9287e2c7f2262d 6-9,13,18,20,23,26,28,30
+.skills/1-ship/run-autonomous-project/references/pr-loop.md
+  s_941b834abbd195::t_ec55cdc43f00b2 13,160
+4-software-engineering/1-projects/1-hexframe/.run/run.yaml
+  s_941b834abbd195::t_7c06632b6f95b6 1-2,4-5,7,9,13,16,22-23
+.skills/1-ship/run-autonomous-project/references/state.md
+  s_941b834abbd195::t_ec55cdc43f00b2 26,34
+  s_941b834abbd195::t_b68b86f5c70230 35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8e25d358a72d9f503b766902caf403dad236a5e5",
+  "prompts": {},
+  "sessions": {
+    "s_941b834abbd195": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "75436b47-19cf-4a65-add1-e818793f91f4",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
