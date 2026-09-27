@@ -15,7 +15,8 @@ Every table hexframe keeps, and the one way to reach them: the `Database` servic
 
 | File | Holds |
 |---|---|
-| `database.ts` | `Database`, the service, and `layer`, the deployed one, built from `DATABASE_URL`; `PromiseDatabase` and `promiseLayer`, the same database through Drizzle's promise API over a node-postgres pool, for Better Auth's adapter |
+| `database.ts` | `Database`, the service, and `layer`, the deployed one, built from `DATABASE_URL` |
+| `promise.ts` | `PromiseDatabase` and its deployed `layer`: the same database through Drizzle's promise API over a node-postgres pool, for Better Auth's adapter. Only `auth/` may import it |
 | `schema.ts` | The tables, in Drizzle's schema language: IAM's, in Better Auth's shape and under its names ([[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE\|auth]]) |
 | `migrations.ts` | `migrated`, the one program that applies what the database has not recorded yet, from `migrations/` at the package's root |
 | `testing.ts` | `TestDatabase`, the integration harness: a fresh PGlite, migrated, as both services over one PGlite |
@@ -55,7 +56,7 @@ Each build of the layer is a new, empty database: the tests inside one `layer(..
 ## Rules
 
 - **Only this folder imports `drizzle-orm`, `@effect/sql-pg`, `@effect/sql-pglite`, `pg`, `@electric-sql/pglite` and Neon's `@neondatabase/*`**, should one be needed (`dependency-cruiser.config.ts`).
-- **`Database` for every repository; `PromiseDatabase` only for a library that awaits its queries.** Better Auth's Drizzle adapter is the one today. Both reach the same Postgres and the same tables, so a row Better Auth writes is one a later repository reads with `Database`.
+- **`Database` for every repository; `PromiseDatabase` only for Better Auth's adapter, which awaits its queries.** `dependency-cruiser.config.ts` keeps `promise.ts` to `auth/`. Both reach the same Postgres and the same tables, so a row Better Auth writes is one a later repository reads with `Database`.
 - **The query builder, never raw SQL.** It is the security bar, and it is also what keeps the two drivers alike: Drizzle's `db.execute` returns rows as an array over `effect-postgres` and as `{ rows }` over `effect-pglite`, while a `select` returns the same array on both.
 - **`node scripts/migrate.ts` runs `database.ts` and `migrations.ts` without a bundler.** `database.ts` imports packages only, and `migrations.ts` imports it as `./database.ts`, the one `.ts` import path the lint allows under `src/`. `scripts/migrate.test.ts` proves the script loads. `testing.ts` is for tests, and for `pnpm dev` without `DATABASE_URL` (`src/api/server/run.ts` imports it behind `import.meta.env.DEV`): a build never holds it.
 - **The `Database` layer is not in the server function runtime yet.** IAM reaches Postgres through Better Auth, so only `PromiseDatabase` is there, under `Auth`. `Database` joins `layer` in `src/api/server/run.ts` with the first domain that reads through it, Mapping's.

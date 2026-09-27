@@ -17,7 +17,7 @@ interface Credentials {
   password: string
 }
 
-/** Each mode's words, the call it makes, and the other mode, which it links to. */
+/** Each mode's words, the call it makes, its password's autocomplete, and the other mode it links to. */
 const modes = {
   'sign-in': {
     title: m.iam_sign_in_title,
@@ -47,13 +47,13 @@ interface AccessProps {
 
 /** The sign-in or sign-up page's content. */
 export function Access({ mode, redirect }: AccessProps) {
-  const words = modes[mode]
+  const settings = modes[mode]
   const form = useAppForm({
     defaultValues: { email: '', password: '' },
     validators: {
       onSubmitAsync: submitWrite({
         scope: mode === 'sign-in' ? 'signIn' : 'signUp',
-        call: words.call,
+        call: settings.call,
         onSaved: () => {
           continueTo(redirect)
         },
@@ -62,7 +62,7 @@ export function Access({ mode, redirect }: AccessProps) {
   })
   return (
     <main className="mx-auto grid w-full max-w-md gap-6 px-6 pb-12">
-      <PageHeader title={words.title()} description={words.description()} />
+      <PageHeader title={settings.title()} description={settings.description()} />
       <Card>
         <form
           noValidate
@@ -79,27 +79,27 @@ export function Access({ mode, redirect }: AccessProps) {
             {(field) => (
               <field.TextField
                 label={m.iam_password()}
-                description={words.passwordRule?.()}
+                description={settings.passwordRule?.()}
                 type="password"
-                autoComplete={words.passwordAutoComplete}
+                autoComplete={settings.passwordAutoComplete}
               />
             )}
           </form.AppField>
           <div>
             <form.AppForm>
-              <form.SubmitButton>{words.submit()}</form.SubmitButton>
+              <form.SubmitButton>{settings.submit()}</form.SubmitButton>
             </form.AppForm>
           </div>
         </form>
       </Card>
       <p className="text-sm text-muted-foreground">
-        {words.other.question()}{' '}
+        {settings.other.question()}{' '}
         <Link
-          to={words.other.to}
+          to={settings.other.to}
           search={{ redirect }}
           className="font-medium text-primary underline-offset-4 hover:underline"
         >
-          {words.other.link()}
+          {settings.other.link()}
         </Link>
       </p>
     </main>

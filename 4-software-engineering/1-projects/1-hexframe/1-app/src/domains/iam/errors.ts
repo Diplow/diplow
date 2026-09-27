@@ -29,10 +29,16 @@ export class PasswordLengthInvalid extends Schema.TaggedError<PasswordLengthInva
   invalid,
 ) {}
 
+/** Too many sign-ups or sign-ins from this place in a short while: wait, then try again. */
+export class TooManyAttempts extends Schema.TaggedError<TooManyAttempts>()('TooManyAttempts', {
+  kind: kind('Forbidden'),
+}) {}
+
 export const iamFailures = [
   SignedOut,
   CredentialsRejected,
   EmailTaken,
   EmailMalformed,
   PasswordLengthInvalid,
+  TooManyAttempts,
 ] as const

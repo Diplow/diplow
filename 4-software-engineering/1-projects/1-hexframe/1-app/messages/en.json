@@ -171,7 +171,7 @@
   "iam_sign_up_submit": "Create account",
   "iam_email": "Email",
   "iam_password": "Password",
-  "iam_password_rule": "At least 8 characters.",
+  "iam_password_rule": "Between 8 and 128 characters.",
   "iam_to_sign_up": "No account yet?",
   "iam_to_sign_up_link": "Create one",
   "iam_to_sign_in": "Already have an account?",
@@ -180,5 +180,6 @@
   "dev_session_description": "A page only a signed-in account sees. Signed out, you land on sign-in, then back here.",
   "dev_session_signed_in_as": "Signed in as {email}.",
   "dev_session_sign_out": "Sign out",
-  "dev_ui_state_password": "Password"
+  "dev_ui_state_password": "Password",
+  "error_iam_too_many_attempts": "Too many attempts. Wait a few seconds, then try again."
 }

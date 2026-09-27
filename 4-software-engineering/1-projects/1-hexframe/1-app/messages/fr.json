@@ -171,14 +171,15 @@
   "iam_sign_up_submit": "Créer le compte",
   "iam_email": "E-mail",
   "iam_password": "Mot de passe",
-  "iam_password_rule": "Au moins 8 caractères.",
-  "iam_to_sign_up": "Pas encore de compte ?",
+  "iam_password_rule": "Entre 8 et 128 caractères.",
+  "iam_to_sign_up": "Pas encore de compte ?",
   "iam_to_sign_up_link": "En créer un",
-  "iam_to_sign_in": "Déjà un compte ?",
+  "iam_to_sign_in": "Déjà un compte ?",
   "iam_to_sign_in_link": "Se connecter",
   "dev_session_title": "Session",
   "dev_session_description": "Une page que seul un compte connecté voit. Déconnecté, vous arrivez sur la connexion, puis revenez ici.",
   "dev_session_signed_in_as": "Connecté en tant que {email}.",
   "dev_session_sign_out": "Se déconnecter",
-  "dev_ui_state_password": "Mot de passe"
+  "dev_ui_state_password": "Mot de passe",
+  "error_iam_too_many_attempts": "Trop de tentatives. Patientez quelques secondes, puis réessayez."
 }

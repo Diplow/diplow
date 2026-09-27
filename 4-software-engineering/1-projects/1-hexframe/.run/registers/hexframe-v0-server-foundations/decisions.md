@@ -79,9 +79,9 @@ HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). Better Auth's Drizzle a
 
 HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). Better Auth's `user` table is IAM's Account, and its `account` table is a way to sign in, which clashes with IAM's word. Renaming both through Better Auth's `modelName` and field options would have made every Better Auth document and plugin (Stripe's first) need translating. So `schema.ts` holds the tables as Better Auth's generator writes them, and the words stop at the repository: IAM, and everything above it, sees only `Account` and `Session`. `repositories/auth/CLAUDE.md` says which is which.
 
-### DEC-18 Better Auth is called through its server API from server functions, never through its own HTTP handler
+### DEC-18 Better Auth is called from server functions only, never through a route of its own
 
-HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). The security bar allows a raw server route only for an inbound webhook, and puts every call behind Start's middleware and a schema. So sign-up, sign-in and sign-out are server functions calling `auth.api.*` with `returnHeaders: true`, and the `Set-Cookie` lines they return go on Start's response through `HttpExchange`, which the helper provides per request, so the tests carry cookies with a plain jar. Two things are lost with the handler and noted in `repositories/auth/CLAUDE.md`: Better Auth's rate limiting, and the callback routes an OAuth provider will need.
+HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). The security bar allows a raw server route only for an inbound webhook, and puts every call behind Start's middleware and a schema. So sign-up, sign-in and sign-out are server functions, and the `Set-Cookie` lines Better Auth returns go on Start's response through `HttpExchange`, which the helper provides per request, so the tests carry cookies with a plain jar. Better Auth's rate limiter runs only in its request handler, so signing up and in are posted to `auth.handler` in-process, a `Request` built from the client's headers (DEC-24); the session and sign-out use `auth.api.*` with `returnHeaders: true`. The callback routes an OAuth provider needs come with the first one.
 
 ### DEC-19 The middleware resolves the Session for every server function; a guarded page checks it in `beforeLoad`
 
@@ -102,3 +102,7 @@ HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). With `Auth` in the runt
 ### DEC-23 A module the client imports keeps `run.ts` inside its handlers, and server function calls from another site are refused
 
 HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). Start strips what a handler alone uses, not what a module exports. `api/dev/provoke.ts` exported the Effect programs its tests use, which reference `run.ts`, so `/dev/errors`' client bundle held the whole runtime, Better Auth and Drizzle once IAM joined it (877 kB). The programs moved to `api/dev/programs.ts`, and `outcomes` to `failures.ts`. With a session cookie on every call, `src/start.ts` now runs Start's `createCsrfMiddleware` on server function requests, which Start warned about in dev: a call whose `Sec-Fetch-Site` or `Origin` is another site gets a 403 before any middleware of ours.
+
+### DEC-24 Signing up and in are rate limited per IP by Better Auth, counted in the database
+
+HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). cubic's first review found nothing limited credential attempts, since Better Auth's limiter does not run on `auth.api` calls. Its defaults allow 3 sign-ups or sign-ins per IP in 10 seconds; with `storage: 'database'` the count lives in a `rate_limit` table, so Vercel's instances count together, where the memory store would count per instance. The IP is `x-forwarded-for`, which Vercel overwrites with the client's. A refused attempt is IAM's `TooManyAttempts`, of kind Forbidden, so a form's submit shows it as a toast. It also slows the one enumeration sign-up allows (DEC-21).

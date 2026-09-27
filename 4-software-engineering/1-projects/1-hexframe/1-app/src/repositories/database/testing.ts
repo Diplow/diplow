@@ -8,8 +8,9 @@ import * as PgliteDrizzle from 'drizzle-orm/effect-pglite'
 import * as PglitePromiseDrizzle from 'drizzle-orm/pglite'
 import { Context, Effect, Layer } from 'effect'
 
-import { Database, PromiseDatabase } from './database'
+import { Database } from './database'
 import { migrated } from './migrations'
+import { PromiseDatabase } from './promise'
 
 /** The one PGlite both services share, closed with the layer. */
 class Pglite extends Context.Service<Pglite, PGlite>()('hexframe/Pglite') {}

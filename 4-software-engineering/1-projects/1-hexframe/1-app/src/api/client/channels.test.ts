@@ -81,6 +81,27 @@ describe('the sign-in redirect', () => {
     )
   })
 
+  it('carries the place without its language prefix, and signs in in that language', async () => {
+    vi.stubGlobal('window', {
+      location: {
+        href: 'http://localhost/fr/dev/errors?a=1',
+        origin: 'http://localhost',
+        pathname: '/fr/dev/errors',
+        search: '?a=1',
+        hash: '',
+        assign,
+      },
+    })
+    const submit = await signingIn()
+    // The page's language, as Paraglide reads it off the URL in a browser.
+    const { overwriteGetLocale } = await import('#/paraglide/runtime')
+    overwriteGetLocale(() => 'fr')
+    await submit()
+    expect(assign).toHaveBeenCalledExactlyOnceWith(
+      `/fr/sign-in?redirect=${encodeURIComponent('/dev/errors?a=1')}`,
+    )
+  })
+
   it('does nothing on the server, where there is no window to move', async () => {
     vi.unstubAllGlobals()
     const submit = await signingIn()

@@ -12,10 +12,14 @@ import { channelFor } from '../errors/channel'
 import { session } from './iam'
 
 /**
- * A path on this site, as the router sees it, without the language prefix. Anything else, a `//host`
- * or a full URL included, is refused: sign-in never sends anyone off the site.
+ * A path on this site, as the router sees it, without the language prefix. Anything else is refused,
+ * so sign-in never sends anyone off the site: a full URL, a `//host`, a backslash, and any control
+ * character, which a browser drops from a URL (`/\t/host` would reach `//host`).
  */
-const LocalPath = Schema.String.check(Schema.isMaxLength(2000), Schema.isPattern(/^\/(?![/\\])/))
+const LocalPath = Schema.String.check(
+  Schema.isMaxLength(2000),
+  Schema.isPattern(/^\/(?![/\\])[^\\\p{Cc}]*$/u),
+)
 
 /** Sign-in's and sign-up's search params: where to go once signed in; absent or refused, home. */
 const SignInSearch = Schema.Struct({
@@ -29,9 +33,14 @@ export function readSignInSearch(search: Record<string, unknown>) {
   return { redirect: undefined, ...decodeSignInSearch(search) }
 }
 
-/** Where a signed-in Account goes next: a full load, so the page renders with its Session. */
+/**
+ * Where a signed-in Account goes next: a full load, so the page renders with its Session. Home when
+ * the place, resolved, is not on this site after all.
+ */
 export function continueTo(redirect: string | undefined) {
-  window.location.assign(localizeHref(redirect ?? '/'))
+  const { origin } = window.location
+  const onThisSite = new URL(redirect ?? '/', origin).origin === origin
+  window.location.assign(localizeHref(onThisSite && redirect !== undefined ? redirect : '/'))
 }
 
 /**

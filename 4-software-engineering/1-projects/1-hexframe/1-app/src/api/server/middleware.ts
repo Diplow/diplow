@@ -1,8 +1,9 @@
 // Start's middleware stays promise-based: it puts what it knows about the request on Start's
 // `context`, and the helper (./run.ts) hands it to the program as Effect services. src/start.ts runs it
 // before every server function: the request id, the platform's waitUntil, the request's headers and
-// cookies, and the Session its cookie proves. Auth is checked here, once, for every server function.
-import { createMiddleware } from '@tanstack/react-start'
+// cookies, and the Session its cookie proves. Auth is checked here, once, for every server function,
+// after `sameOriginOnly` has refused a call from another site.
+import { createCsrfMiddleware, createMiddleware } from '@tanstack/react-start'
 import { getRequest, getResponseHeaders } from '@tanstack/react-start/server'
 
 import { provenSession, type StartContext } from './run'
@@ -27,6 +28,7 @@ function waitUntilOf(request: Request): StartContext['waitUntil'] {
 /** The request's headers, and the response's, where the cookies a call sets are appended. */
 function exchangeOf(request: Request): StartContext['exchange'] {
   return {
+    url: request.url,
     headers: request.headers,
     setCookies: (cookies) => {
       const response = getResponseHeaders()
@@ -43,7 +45,16 @@ export const requestContext = createMiddleware({ type: 'function' }).server(asyn
     requestId,
     waitUntil: waitUntilOf(request),
     exchange,
-    session: await provenSession(requestId, exchange),
+    session: await provenSession(exchange),
   }
   return next({ context })
+})
+
+/**
+ * Refuses a server function call from another site before anything runs (Start's CSRF check, on
+ * `Sec-Fetch-Site`, then `Origin`, then `Referer`): the session cookie rides along with every call,
+ * so a page elsewhere could otherwise sign someone out, or in as someone else.
+ */
+export const sameOriginOnly = createCsrfMiddleware({
+  filter: (context) => context.handlerType === 'serverFn',
 })

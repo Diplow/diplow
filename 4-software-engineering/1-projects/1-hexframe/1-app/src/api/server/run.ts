@@ -6,7 +6,6 @@ import { Cause, Context, Effect, Exit, Layer, ManagedRuntime, Option, Schema } f
 
 import { CurrentSession, proven, type Session } from '#/domains/iam/iam'
 import { Auth, HttpExchange, layer as authLayer } from '#/repositories/auth/auth'
-import { promiseLayer } from '#/repositories/database/database'
 
 import { Failure, Unexpected, encodeFailure, type Outcome } from '../errors/failure'
 import { WaitUntil, serverBus, type Subscription } from './bus'
@@ -29,11 +28,11 @@ const subscriptions: ReadonlyArray<Subscription<never>> = []
  * with a secret of its own, both gone when the process stops. A build never holds that branch.
  */
 const repositories: Layer.Layer<Auth> =
-  import.meta.env.DEV && process.env.DATABASE_URL === undefined
+  import.meta.env.DEV && (process.env.DATABASE_URL ?? '') === ''
     ? Layer.unwrap(
         Effect.promise(async () => (await import('#/repositories/auth/testing')).TestAuth),
       )
-    : authLayer.pipe(Layer.provide(promiseLayer), Layer.orDie)
+    : Layer.orDie(authLayer)
 
 /**
  * Every layer: the bus, the domains' services and the repositories below them, merged here as each is
@@ -57,8 +56,8 @@ export interface StartContext {
   readonly waitUntil: (promise: Promise<unknown>) => void
   /** The request's headers, and where the cookies a call sets go. */
   readonly exchange: HttpExchange['Service']
-  /** The Session the request's cookie proves, if any. */
-  readonly session: Option.Option<Session>
+  /** The Session the request's cookie proves, if any, or how resolving it failed. */
+  readonly session: Exit.Exit<Option.Option<Session>>
 }
 
 const isFailure = Schema.is(Failure)
@@ -70,7 +69,8 @@ const isFailure = Schema.is(Failure)
  */
 async function failureOf<E extends Failure>(cause: Cause.Cause<E>, context: StartContext) {
   const declared = Cause.findErrorOption(cause)
-  if (declared._tag === 'Some' && !Cause.hasDies(cause) && isFailure(declared.value)) {
+  const cleanly = !Cause.hasDies(cause) && !Cause.hasInterrupts(cause)
+  if (declared._tag === 'Some' && cleanly && isFailure(declared.value)) {
     return declared.value
   }
   return reported(cause, context)
@@ -87,7 +87,8 @@ export async function run<A, E extends Failure>(
   const exit = await runtime.runPromiseExit(
     program.pipe(
       Effect.provideService(RequestContext, { requestId: context.requestId }),
-      Effect.provideService(CurrentSession, context.session),
+      // A Session the middleware could not resolve fails the program: reported, sent as Unexpected.
+      Effect.provideServiceEffect(CurrentSession, context.session),
       Effect.provideService(HttpExchange, context.exchange),
       Effect.provideService(WaitUntil, (work) => {
         context.waitUntil(runtime.runPromise(work))
@@ -111,21 +112,11 @@ async function reported(cause: Cause.Cause<unknown>, context: StartContext) {
 
 /**
  * The Session a request's cookie proves, if any, for the middleware to put on Start's context before
- * any server function runs. A failure to tell (the database is down) is logged with the request id and
- * fails the request, which the client sees as `Unexpected`.
+ * any server function runs. A failure to tell (the database is down) is kept, not thrown: `run` fails
+ * the program with it, so the client gets `Unexpected` with the request id, and the log gets the cause.
  */
 export function provenSession(
-  requestId: string,
   exchange: HttpExchange['Service'],
-): Promise<Option.Option<Session>> {
-  return runtime.runPromise(
-    proven.pipe(
-      Effect.provideService(HttpExchange, exchange),
-      Effect.tapCause((cause) =>
-        Effect.logError('Resolving the session failed', cause).pipe(
-          Effect.annotateLogs({ requestId }),
-        ),
-      ),
-    ),
-  )
+): Promise<Exit.Exit<Option.Option<Session>>> {
+  return runtime.runPromiseExit(proven.pipe(Effect.provideService(HttpExchange, exchange)))
 }

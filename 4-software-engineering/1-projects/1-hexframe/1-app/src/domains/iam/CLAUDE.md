@@ -24,8 +24,8 @@ Better Auth and its Stripe plugin are repositories below IAM ([[4-software-engin
 | File | Holds |
 |---|---|
 | `iam.ts` | `Account`, `Session`, `CurrentSession` (the request's Session, which the API layer's middleware resolves once per request), and the operations: `signUp`, `signIn`, `signOut`, `proven` (the Session a request's cookie proves) and `signedIn` |
-| `errors.ts` | IAM's errors, each with its kind: `SignedOut` (Unauthenticated); `CredentialsRejected`, `EmailTaken`, `EmailMalformed` and `PasswordLengthInvalid` (Invalid, each on the field at fault) |
-| `iam.test.ts` | IAM on Better Auth for real, over PGlite: sign-up, sign-in on another device, refusals, sign-out |
+| `errors.ts` | IAM's errors, each with its kind: `SignedOut` (Unauthenticated); `CredentialsRejected`, `EmailTaken`, `EmailMalformed` and `PasswordLengthInvalid` (Invalid, each on the field at fault); `TooManyAttempts` (Forbidden) |
+| `iam.test.ts` | IAM on Better Auth for real, over PGlite: sign-up, sign-in on another device, refusals, too many attempts, sign-out |
 
 ## Rules
 

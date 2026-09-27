@@ -1,4 +1,4 @@
-import { Option } from 'effect'
+import { Exit, Option } from 'effect'
 import { describe, expect, it } from 'vitest'
 
 import { run, type StartContext } from '../server/run'
@@ -9,8 +9,12 @@ import { provoked, savedDevTitle } from './programs'
 const context: StartContext = {
   requestId: 'req-dev',
   waitUntil: () => undefined,
-  exchange: { headers: new Headers(), setCookies: () => undefined },
-  session: Option.none(),
+  exchange: {
+    url: 'http://localhost/_serverFn',
+    headers: new Headers(),
+    setCookies: () => undefined,
+  },
+  session: Exit.succeed(Option.none()),
 }
 
 describe('the calls /dev/errors provokes', () => {

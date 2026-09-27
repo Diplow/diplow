@@ -3,13 +3,7 @@
 // in its own words and decides what a refusal means to the user. Keys and Entitlements come later.
 import { Context, Effect, Option } from 'effect'
 
-import {
-  Auth,
-  type AuthRefused,
-  type AuthSession,
-  type Credentials,
-  type Refusal,
-} from '#/repositories/auth/auth'
+import { Auth, type AuthRefused, type AuthSession, type Refusal } from '#/repositories/auth/auth'
 
 import {
   CredentialsRejected,
@@ -17,7 +11,14 @@ import {
   EmailTaken,
   PasswordLengthInvalid,
   SignedOut,
+  TooManyAttempts,
 } from './errors'
+
+/** What someone signs up or in with. */
+interface Credentials {
+  readonly email: string
+  readonly password: string
+}
 
 /**
  * Someone known to hexframe. Its name is not IAM's: the user is their Root tile in Mapping, whose
@@ -50,6 +51,7 @@ const refused = {
   'email-taken': () => new EmailTaken({ fields: ['email'] }),
   'email-malformed': () => new EmailMalformed({ fields: ['email'] }),
   'password-length': () => new PasswordLengthInvalid({ fields: ['password'] }),
+  'too-many-attempts': () => new TooManyAttempts(),
 } satisfies Record<Refusal, () => unknown>
 
 const inIamTerms = <A, R>(attempt: Effect.Effect<A, AuthRefused, R>) =>

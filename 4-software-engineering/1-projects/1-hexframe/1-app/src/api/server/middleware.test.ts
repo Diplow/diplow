@@ -1,9 +1,9 @@
-import { Option } from 'effect'
+import { Exit, Option } from 'effect'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { signUp } from '#/domains/iam/iam'
 
-import { requestContext } from './middleware'
+import { requestContext, sameOriginOnly } from './middleware'
 import { run, type StartContext } from './run'
 
 // The request Start is handling; Nitro puts the platform's waitUntil on it, when the platform has one.
@@ -59,7 +59,7 @@ describe('the request context middleware', () => {
   })
 
   it('puts no Session on a request without a session cookie', async () => {
-    expect((await passedOn()).session).toEqual(Option.none())
+    expect((await passedOn()).session).toEqual(Exit.succeed(Option.none()))
   })
 
   it('puts on the request the Session its cookie proves, and sends the cookies a call sets', async () => {
@@ -76,6 +76,40 @@ describe('the request context middleware', () => {
       headers: { cookie: cookies.map((cookie) => cookie.split(';')[0]).join('; ') },
     })
     const session = (await passedOn()).session
-    expect(Option.getOrThrow(session).account).toEqual(account.ok ? account.value : undefined)
+    expect(session).toEqual(
+      Exit.succeed(
+        Option.some(expect.objectContaining({ account: account.ok ? account.value : undefined })),
+      ),
+    )
+  })
+})
+
+describe('the same-origin check before every server function', () => {
+  const calling = async (headers: Record<string, string>, handlerType = 'serverFn') => {
+    const server = sameOriginOnly.options.server
+    if (server === undefined) throw new Error('the middleware has no server half')
+    const call = new Request('http://localhost/_serverFn/abc', { method: 'POST', headers })
+    const answer: unknown = await server({
+      request: call,
+      handlerType,
+      next: () => Promise.resolve('handled'),
+    } as never)
+    return answer instanceof Response ? answer.status : answer
+  }
+
+  it('lets a call from this site through', async () => {
+    expect(await calling({ 'sec-fetch-site': 'same-origin' })).toBe('handled')
+    expect(await calling({ origin: 'http://localhost' })).toBe('handled')
+  })
+
+  it('refuses a call from another site with a 403, before anything runs', async () => {
+    expect(await calling({ 'sec-fetch-site': 'cross-site' })).toBe(403)
+    expect(await calling({ origin: 'https://evil.example' })).toBe(403)
+    expect(await calling({ referer: 'https://evil.example/page' })).toBe(403)
+    expect(await calling({})).toBe(403)
+  })
+
+  it('leaves page loads alone', async () => {
+    expect(await calling({ 'sec-fetch-site': 'cross-site' }, 'router')).toBe('handled')
   })
 })
