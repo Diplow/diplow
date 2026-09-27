@@ -11,6 +11,10 @@ describe('errorMessages', () => {
     expect(errorMessages([{ message: 'Too long', path: ['preview'] }])).toEqual(['Too long'])
   })
 
+  it('shows a message once when several validators returned it', () => {
+    expect(errorMessages(['Required', { message: 'Required' }])).toEqual(['Required'])
+  })
+
   it('shows nothing for an error that carries no message', () => {
     expect(errorMessages([undefined, '', 42, { code: 'x' }, { message: 42 }])).toEqual([])
   })

@@ -70,7 +70,7 @@ export function DataTable<TRow extends RowData>({
     getRowId: rowId,
   })
   const cellClass = (id: string) =>
-    cn('px-3 py-2 align-middle', alignOf.get(id) === 'end' && 'text-right')
+    cn('px-3 py-2 align-middle', alignOf.get(id) === 'end' ? 'text-right' : 'text-left')
 
   return (
     <div className="w-full overflow-x-auto rounded-lg border">

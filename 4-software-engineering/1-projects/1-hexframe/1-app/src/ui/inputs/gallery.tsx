@@ -147,9 +147,11 @@ function TileForm() {
           />
         )}
       </form.AppField>
-      <form.AppForm>
-        <form.SubmitButton>{m.dev_ui_sample_save()}</form.SubmitButton>
-      </form.AppForm>
+      <div>
+        <form.AppForm>
+          <form.SubmitButton>{m.dev_ui_sample_save()}</form.SubmitButton>
+        </form.AppForm>
+      </div>
     </form>
   )
 }
