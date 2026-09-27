@@ -1,0 +1,35 @@
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-v0-server-foundations/decisions.md
+  s_2908cd458e0dd6::t_06177a0a64b228 51
+4-software-engineering/1-projects/1-hexframe/STACK.md
+  s_2908cd458e0dd6::t_06177a0a64b228 112
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE.md
+  s_2908cd458e0dd6::t_e07e65823fa19f 29
+  s_2908cd458e0dd6::t_06177a0a64b228 19,37-40,58
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/testing.ts
+  s_2908cd458e0dd6::t_040450a0010aae 11-19
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/migrations.ts
+  s_2908cd458e0dd6::t_040450a0010aae 1,3,8-9,14
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/migrate.ts
+  s_2908cd458e0dd6::t_040450a0010aae 7,10
+  s_2908cd458e0dd6::t_06177a0a64b228 2-4
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/database.test.ts
+  s_2908cd458e0dd6::t_040450a0010aae 35
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/database.ts
+  s_2908cd458e0dd6::t_040450a0010aae 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ea702e00ffc15673585e0f14a86fdb5ac98b1463",
+  "prompts": {},
+  "sessions": {
+    "s_2908cd458e0dd6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0cbfaeea-8195-45e3-a873-1ae996767d5d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
