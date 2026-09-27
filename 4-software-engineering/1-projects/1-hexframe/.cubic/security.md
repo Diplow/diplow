@@ -22,7 +22,7 @@ Start middleware resolves the Session and puts it on Start's `context`; every se
 - a server function that reads the session itself from cookies, headers or Better Auth instead of taking it from `context`;
 - access guarded only in the client: a hidden button, a route `beforeLoad`, a component check. The server function behind it must refuse on its own;
 - an Account id taken from the input where it should come from the Session, so a caller can act as someone else;
-- a raw server route for anything but an inbound webhook, or a webhook that doesn't verify its signature before reading the payload.
+- a raw server route for anything but an inbound webhook, or a webhook that parses or acts on its payload before verifying the signature over the raw body.
 
 An unauthenticated call fails with the `Unauthenticated` kind; a signed-in caller without the right fails with `Forbidden`.
 

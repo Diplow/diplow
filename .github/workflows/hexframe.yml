@@ -29,7 +29,7 @@ jobs:
           for brief in .cubic/*.md; do
             [ "$brief" = .cubic/CLAUDE.md ] && continue
             chars=$(wc -m < "$brief")
-            if [ "$chars" -gt 10000 ]; then echo "::error file=$brief::$chars characters, cubic reads 10,000"; status=1; fi
+            if [ "$chars" -gt 10000 ]; then echo "::error file=4-software-engineering/1-projects/1-hexframe/$brief::$chars characters, cubic reads 10,000"; status=1; fi
           done
           exit $status
       - uses: pnpm/action-setup@v6

@@ -16,7 +16,7 @@ You review a hexframe pull request against one question: **will the next reader 
 
 Read the PR description and its linked ticket, then state the change to yourself in two sentences: what it is, and what larger thing it serves. The diff is measured against that model. The area's direction lives in the `CLAUDE.md` files from the repo root down to the touched folder, and in `4-software-engineering/1-projects/1-hexframe/STACK.md`.
 
-The lint already fails the build on cognitive complexity over 15, functions over 150 lines or 5 parameters, files over 600 lines, more than 6 folders or 6 files in a folder, layer direction and dead code. Don't restate a lint. A lint disable carries a `-- reason`: judge whether the reason holds, and flag it when splitting would make the code clearer to its next reader.
+STACK.md's lint set covers cognitive complexity over 15, functions over 150 lines or 5 parameters, files over 600 lines, more than 6 folders or 6 files in a folder, layer direction and dead code. A rule the package's lint config already carries is the lint's job: don't restate it. A rule it doesn't carry yet is yours. A lint disable carries a `-- reason`: judge whether the reason holds, and flag it when splitting would make the code clearer to its next reader.
 
 ## The comment
 
@@ -26,7 +26,7 @@ One finding per comment, anchored where the reader first pays. Open with the tag
 
 ### `model`. The change can't be stated small
 
-The two-sentence model survives the diff; the diff may refine it, not replace it or double it. After the diff, count the concepts the model now needs that it didn't before. Zero or one passes. 🔴 when it grew by two or more, or the fix is to split the change. 🟡 when it grew by one that the PR description could carry.
+The two-sentence model survives the diff; the diff may refine it, not replace it or double it. After the diff, count the concepts the model now needs that it didn't before. Zero or one passes. A change whose intent needs more than two sentences even from context fails too. 🔴 when it grew by two or more, or the fix is to split the change. 🟡 when it grew by one that the PR description could carry.
 
 ### `altitude`. Complexity leaks above where it belongs
 
