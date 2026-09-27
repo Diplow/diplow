@@ -1,7 +1,8 @@
 import type { IConfiguration } from 'dependency-cruiser'
 
-// Layers, top to bottom: routes → API → domains → repositories. An import only ever points down.
-const layers = ['routes', 'api', 'domains', 'repositories']
+// Layers, top to bottom: routes → features → API → domains → repositories. An import only ever
+// points down. A feature is client code a route composes: it reaches the server through src/api/.
+const layers = ['routes', 'features', 'api', 'domains', 'repositories']
 
 // Each third-party SDK is imported by its repository alone; the rest of the app sees it through that seam.
 const sdks = {
@@ -44,11 +45,19 @@ const config: IConfiguration = {
   forbidden: [
     ...upwardImports,
     {
-      name: 'no-routes-importing-domains-or-repositories',
-      comment: 'A route reaches the server through a server function in src/api/.',
+      name: 'no-routes-or-features-importing-domains-or-repositories',
+      comment: 'A route or a feature reaches the server through a server function in src/api/.',
       severity: 'error',
-      from: { path: '^src/routes/' },
+      from: { path: '^src/(routes|features)/' },
       to: { path: '^src/(domains|repositories)/' },
+    },
+    {
+      name: 'no-feature-importing-another',
+      comment:
+        'Sibling features ignore each other; a route composes them, the client bus links them.',
+      severity: 'error',
+      from: { path: '^src/features/([^/]+)/' },
+      to: { path: '^src/features/([^/]+)/', pathNot: '^src/features/$1/' },
     },
     {
       name: 'no-domain-importing-another',

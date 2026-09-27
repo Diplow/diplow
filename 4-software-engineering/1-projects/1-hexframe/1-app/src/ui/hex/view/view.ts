@@ -47,18 +47,26 @@ export function readCanvasView(search: Record<string, unknown>): CanvasView {
   return { center: undefined, expanded: undefined, context: undefined, ...decodeCanvasView(search) }
 }
 
-/** The Tile with this id, anywhere in the System, Context Tiles included. */
-export function findTile(system: TileNode, id: string): TileNode | undefined {
-  if (system.id === id) return system
+/**
+ * The Tiles from the System's root down to the one with this id, both included, Context Tiles
+ * included: the ancestors a breadcrumb shows. Empty when no Tile has the id.
+ */
+export function pathTo(system: TileNode, id: string): TileNode[] {
+  if (system.id === id) return [system]
   const below = directions.flatMap((direction) => [
     system.children?.[direction],
     system.context?.[direction],
   ])
   for (const tile of below) {
-    const found = tile && findTile(tile, id)
-    if (found) return found
+    const path = tile ? pathTo(tile, id) : []
+    if (path.length > 0) return [system, ...path]
   }
-  return undefined
+  return []
+}
+
+/** The Tile with this id, anywhere in the System, Context Tiles included. */
+export function findTile(system: TileNode, id: string): TileNode | undefined {
+  return pathTo(system, id).at(-1)
 }
 
 /** A view as a change asks for it, before `tidy` drops what no one would see. */

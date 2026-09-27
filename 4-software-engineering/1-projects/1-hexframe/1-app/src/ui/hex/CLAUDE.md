@@ -14,11 +14,11 @@ The canvas a System is seen through. HEX-9 picked SVG: one `<svg>` whose viewBox
 | Path | Holds |
 |---|---|
 | `geometry/` | `geometry.ts`, pointy-top hexes, their neighbors and a Frame's seven slots; `layout.ts`, which turns a centered Tile and what is open into a flat list of placements, frames first, each with a stable `key`. Pure and tested |
-| `view/` | `view.ts`, the view state as the URL carries it: `CanvasView` (`center`, `expanded`, `context`), an Effect Schema whose fields each fall back to their default, read from the search params, resolved against a System, and changed by `toggleExpanded`, `toggleContext` and `centerOn`, which return the next view in its shortest form. Pure and tested |
+| `view/` | `view.ts`, the view state as the URL carries it: `CanvasView` (`center`, `expanded`, `context`), an Effect Schema whose fields each fall back to their default, read from the search params, resolved against a System (`findTile`, and `pathTo` for a Tile's ancestors), and changed by `toggleExpanded`, `toggleContext` and `centerOn`, which return the next view in its shortest form. Pure and tested |
 | `Canvas.tsx` | `Canvas`: takes the System's root, the `view` and `onViewChange`, lays the placements out and draws them |
 | `Tile.tsx`, `Frame.tsx` | `Tile`, a button with its title always and its preview when there is room, and a hover card with both in full; `Frame`, the hex behind a Frame's ring, and `EmptySlot` |
 | `look.tsx` | Colours from theme tokens (`--context` for the Context's teal), the stroke, and the label's type scale |
-| `fixtures.ts` | The System `/dev/hex` draws, the top of this vault, and the views its links jump to |
+| `fixtures.ts` | The System `/dev/hex` and `/dev/system` draw, the top of this vault, and the views `/dev/hex` links to |
 
 ## Rules
 
