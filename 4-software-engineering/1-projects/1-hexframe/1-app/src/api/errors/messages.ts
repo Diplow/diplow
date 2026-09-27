@@ -17,6 +17,11 @@ interface Entry {
  * entry comes before its tag's general one. A domain's errors add their entries as it is built.
  */
 const table: readonly Entry[] = [
+  { tag: 'CredentialsRejected', message: m.error_iam_credentials_rejected },
+  { tag: 'EmailTaken', message: m.error_iam_email_taken },
+  { tag: 'EmailMalformed', message: m.error_iam_email_malformed },
+  { tag: 'PasswordLengthInvalid', message: m.error_iam_password_length },
+  { tag: 'TooManyAttempts', message: m.error_iam_too_many_attempts },
   { tag: 'DevInvalid', scope: 'submitDevTitle', message: m.error_dev_title_missing },
   { tag: 'DevConflict', scope: 'submitDevTitle', message: m.error_dev_title_taken },
   { tag: 'DevNotFound', message: m.error_dev_not_found },

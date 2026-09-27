@@ -10,7 +10,7 @@ import { Field } from './field'
 
 const { fieldContext, formContext, useFieldContext, useFormContext } = createFormHookContexts()
 
-interface TextFieldProps {
+interface TextareaFieldProps {
   label: string
   description?: string
   placeholder?: string
@@ -33,16 +33,23 @@ function useTextField() {
   }
 }
 
-function TextField({ label, description, placeholder }: TextFieldProps) {
+interface TextFieldProps extends TextareaFieldProps {
+  /** What the value is, so the browser offers the right keyboard and hides a password. */
+  type?: 'text' | 'email' | 'password'
+  /** What the browser may fill it with: `email`, `current-password`, `new-password`… */
+  autoComplete?: string
+}
+
+function TextField({ label, description, placeholder, type, autoComplete }: TextFieldProps) {
   const { errors, control } = useTextField()
   return (
     <Field label={label} description={description} errors={errors}>
-      <Input placeholder={placeholder} {...control} />
+      <Input placeholder={placeholder} type={type} autoComplete={autoComplete} {...control} />
     </Field>
   )
 }
 
-function TextareaField({ label, description, placeholder }: TextFieldProps) {
+function TextareaField({ label, description, placeholder }: TextareaFieldProps) {
   const { errors, control } = useTextField()
   return (
     <Field label={label} description={description} errors={errors}>

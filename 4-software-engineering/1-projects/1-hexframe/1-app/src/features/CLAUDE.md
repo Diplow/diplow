@@ -16,6 +16,7 @@ A feature is client code that shows one thing a page needs, in a domain's langua
 |---|---|
 | `conversation/` | `Conversation`, Assistant's timeline split by day (`timeline.ts`, pure and tested), its entries (`Entry.tsx`: Messages, navigations, operations), `TileCard` with its show more/less, and the message input; `fixtures.ts`, three days of a Conversation about the fixture System |
 | `breadcrumb/` | `Breadcrumb`, the rail of the centered Tile's ancestors; a click centers one. The path comes from `pathTo` in `ui/hex/view/` |
+| `access/` | `Access`, the sign-in and sign-up pages' content: one form, an email and a password, whose refusals show on their fields, then back where the user was: [[4-software-engineering/1-projects/1-hexframe/1-app/src/features/access/CLAUDE\|access]] |
 
 | File | Holds |
 |---|---|

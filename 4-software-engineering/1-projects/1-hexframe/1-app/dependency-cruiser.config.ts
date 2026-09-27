@@ -6,7 +6,13 @@ const layers = ['routes', 'features', 'api', 'domains', 'repositories']
 
 // Each third-party SDK is imported by its repository alone; the rest of the app sees it through that seam.
 const sdks = {
-  database: ['drizzle-orm', '@effect/sql-(pg|pglite)', '@neondatabase/.+'],
+  database: [
+    'drizzle-orm',
+    '@effect/sql-(pg|pglite)',
+    'pg',
+    '@electric-sql/pglite',
+    '@neondatabase/.+',
+  ],
   auth: ['better-auth', '@better-auth/.+', 'stripe'],
 }
 
@@ -67,6 +73,14 @@ const config: IConfiguration = {
       to: { path: '^src/domains/([^/]+)/', pathNot: '^src/domains/$1/' },
     },
     ...sdkOutsideItsRepository,
+    {
+      name: 'no-promise-database-outside-auth',
+      comment:
+        "PromiseDatabase is for Better Auth's adapter, which awaits its queries; every other repository uses Database.",
+      severity: 'error',
+      from: { pathNot: '^src/repositories/(auth|database)/' },
+      to: { path: '^src/repositories/database/promise\\.ts$' },
+    },
     {
       name: 'no-ui-library-outside-ui',
       comment: `${uiLibraries.join(', ')}: imported by src/ui/ only; a feature builds from its components.`,

@@ -1,13 +1,25 @@
-import { Cause, Effect, Option } from 'effect'
+import { Cause, Effect, Exit, Option } from 'effect'
 import { describe, expect, it } from 'vitest'
 
 import { Bus } from '#/domains/bus'
+import { CurrentSession } from '#/domains/iam/iam'
+import { HttpExchange } from '#/repositories/auth/auth'
 
 import { DevConflict, DevInvalid } from '../dev/failures'
 import { WaitUntil } from './bus'
-import { RequestContext, run } from './run'
+import { RequestContext, run, type StartContext } from './run'
 
-const context = { requestId: 'req-1', waitUntil: () => undefined }
+// A signed-out request.
+const context: StartContext = {
+  requestId: 'req-1',
+  waitUntil: () => undefined,
+  exchange: {
+    url: 'http://localhost/_serverFn',
+    headers: new Headers(),
+    setCookies: () => undefined,
+  },
+  session: Exit.succeed(Option.none()),
+}
 
 describe('the server function helper', () => {
   it('returns the value of a program that succeeds', async () => {
@@ -48,6 +60,31 @@ describe('the server function helper', () => {
     expect(kept).toHaveLength(1)
     await Promise.all(kept)
     expect(ran).toBe(true)
+  })
+
+  it("provides the request's Session and its HttpExchange as services", async () => {
+    const session = { account: { id: 'a-1', email: 'ada@example.com' }, expiresAt: new Date() }
+    const program = Effect.gen(function* () {
+      return { session: yield* CurrentSession, url: (yield* HttpExchange).url }
+    })
+    expect(await run({ ...context, session: Exit.succeed(Option.some(session)) }, program)).toEqual(
+      { ok: true, value: { session: Option.some(session), url: 'http://localhost/_serverFn' } },
+    )
+  })
+
+  it('sends Unexpected when the Session could not be resolved, whatever the program', async () => {
+    const lost = { ...context, session: Exit.die(new Error('the database is down')) }
+    const outcome = await run(lost, Effect.succeed('never reached'))
+    expect(outcome).toMatchObject({ ok: false, failure: { _tag: 'Unexpected' } })
+    expect(JSON.stringify(outcome)).not.toContain('database')
+  })
+
+  it('sends Unexpected when an interruption sits beside a declared failure', async () => {
+    const both = Cause.combine(Cause.fail(new DevConflict()), Cause.interrupt())
+    expect(await run(context, Effect.failCause(both))).toMatchObject({
+      ok: false,
+      failure: { _tag: 'Unexpected' },
+    })
   })
 
   it('sends a declared failure encoded, with the request id', async () => {

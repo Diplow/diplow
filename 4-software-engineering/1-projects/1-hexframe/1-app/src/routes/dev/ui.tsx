@@ -10,7 +10,7 @@ import { SurfacesGallery } from '#/ui/surfaces/gallery'
 import { PageHeader } from '#/ui/surfaces/PageHeader'
 import { colorTokens, type ColorToken } from '#/ui/tokens'
 
-import css from '../styles.css?raw'
+import css from '../../styles.css?raw'
 
 const tokens = colorTokens(css)
 

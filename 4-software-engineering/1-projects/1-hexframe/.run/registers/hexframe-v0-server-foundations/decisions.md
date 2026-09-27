@@ -6,8 +6,8 @@ preview: >-
   The choices the autonomous run made while building hexframe v0's server
   foundations, where a ticket left room: Effect 4 with Drizzle v1's own
   Effect driver, where the error kinds live, what a server function returns,
-  how the client carries each channel out, how migrations run, and how the
-  two buses are placed, kept alive and logged.
+  how the client carries each channel out, how migrations run, how the two
+  buses are placed, kept alive and logged, and how IAM sits on Better Auth.
 ---
 # Decisions
 
@@ -70,3 +70,39 @@ HEX-17, [#14](https://github.com/Diplow/diplow/pull/14). A fact's listener may n
 ### DEC-15 The one boundary a message is decoded at today is `receive`, on the client
 
 HEX-17, [#14](https://github.com/Diplow/diplow/pull/14). STACK.md decodes a message where it crosses a boundary (into the client, into an outbox), and types it inside one process. The server bus is in-process and no event leaves the server yet, so it decodes nothing and routes by schema. The client bus has `receive(schema, input)`, which decodes a fact coming from outside the page before any feature sees it, and drops and reports one that does not decode. The outbox decodes when it exists.
+
+### DEC-16 Better Auth reaches Postgres through Drizzle's promise API over node-postgres, beside the Effect `Database`
+
+HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). Better Auth's Drizzle adapter awaits its queries, and Drizzle's Effect driver yields them, so the adapter cannot take `Database`. The database repository adds `PromiseDatabase`: `drizzle-orm/node-postgres` over a `pg` pool on the same `DATABASE_URL`, and `drizzle-orm/pglite` over the same PGlite as `Database` in tests. Writing a Better Auth adapter over `Database` would have meant running Effect programs outside the helper, and Kysely, Better Auth's other way in, would have put IAM's tables outside drizzle-kit's migrations. `pg` 8 is stable; it and PGlite join the database's SDK list in `dependency-cruiser.config.ts`. `better-auth` is `^1.7.6`, its `minimal` build, without Kysely.
+
+### DEC-17 IAM's tables keep Better Auth's names
+
+HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). Better Auth's `user` table is IAM's Account, and its `account` table is a way to sign in, which clashes with IAM's word. Renaming both through Better Auth's `modelName` and field options would have made every Better Auth document and plugin (Stripe's first) need translating. So `schema.ts` holds the tables as Better Auth's generator writes them, and the words stop at the repository: IAM, and everything above it, sees only `Account` and `Session`. `repositories/auth/CLAUDE.md` says which is which.
+
+### DEC-18 Better Auth is called from server functions only, never through a route of its own
+
+HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). The security bar allows a raw server route only for an inbound webhook, and puts every call behind Start's middleware and a schema. So sign-up, sign-in and sign-out are server functions, and the `Set-Cookie` lines Better Auth returns go on Start's response through `HttpExchange`, which the helper provides per request, so the tests carry cookies with a plain jar. Better Auth's rate limiter runs only in its request handler, so signing up and in are posted to `auth.handler` in-process, a `Request` built from the client's headers (DEC-24); the session and sign-out use `auth.api.*` with `returnHeaders: true`. The callback routes an OAuth provider needs come with the first one.
+
+### DEC-19 The middleware resolves the Session for every server function; a guarded page checks it in `beforeLoad`
+
+HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). The security bar wants auth checked in middleware. `middleware.ts` asks IAM for the Session a request's cookie proves (`provenSession` in `run.ts`, the one other program it runs) and puts it on Start's context, and `run` provides it as `CurrentSession`; without a session cookie Better Auth answers without a query. A server function for signed-in Accounts starts with `Iam.signedIn`, which fails `SignedOut`, of kind Unauthenticated. A page does the same before it renders: `beforeLoad: signedIn` calls the `session` server function and turns Unauthenticated into a router redirect to `/sign-in?redirect=…`, on the server too, where the client's channel has no window to move. `/dev/session` is the one guarded page until Mapping's.
+
+### DEC-20 Sign-up asks an email and a password only; the Account's name stays empty until Mapping
+
+HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). STACK.md says an Account's name is the Root tile's Title, copied into Better Auth, never the other way. So sign-up asks no name, and Better Auth's `name` is an empty string until Mapping copies the Root's Title there. Email and password is the only way in: another (a social provider, a magic link) is a product decision, and the first to need a callback brings `BETTER_AUTH_URL`.
+
+### DEC-21 IAM's refusals are Invalid errors on the field at fault, and sign-in does not say which of the two was wrong
+
+HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). `CredentialsRejected` (on the password), `EmailTaken`, `EmailMalformed` and `PasswordLengthInvalid` are of kind Invalid, so a form's submit shows each under its field, worded by the message table in both languages. An unknown email and a wrong password are the same `CredentialsRejected`. `EmailTaken` does tell sign-up that an email has an Account, as most sign-up forms do; hiding it needs email verification first. The server functions' schemas only bound the strings (320 and 1024 characters): what an email or a password must be is IAM's to say on the field, where a schema failure would reach the client as Unexpected.
+
+### DEC-22 Without `DATABASE_URL`, `pnpm dev` and the tests run on an in-memory PGlite
+
+HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). With `Auth` in the runtime, every server function needs a database, and no Neon database exists yet (`HEX-16#PARK-1`). `run.ts` picks the repositories once: deployed, Better Auth over `DATABASE_URL` with `BETTER_AUTH_SECRET`; under `import.meta.env.DEV` without `DATABASE_URL`, `TestAuth`, over a fresh, migrated PGlite with a random secret. `run.test.ts` and the `/dev` pages keep working with nothing to set up, and a build never holds that branch (the import is dynamic, behind `import.meta.env.DEV`). Accounts made under `pnpm dev` are gone on restart; setting `DATABASE_URL` points it at a real Postgres.
+
+### DEC-23 A module the client imports keeps `run.ts` inside its handlers, and server function calls from another site are refused
+
+HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). Start strips what a handler alone uses, not what a module exports. `api/dev/provoke.ts` exported the Effect programs its tests use, which reference `run.ts`, so `/dev/errors`' client bundle held the whole runtime, Better Auth and Drizzle once IAM joined it (877 kB). The programs moved to `api/dev/programs.ts`, and `outcomes` to `failures.ts`. No lint sees what Start's compiler strips, so `build` now ends with `scripts/check-client-bundle.ts`, which fails when the client bundle holds the runtime, Better Auth, Drizzle or their secret's name; the phase gate and every Vercel preview run it. With a session cookie on every call, `src/start.ts` now runs Start's `createCsrfMiddleware` on server function requests, which Start warned about in dev: a call whose `Sec-Fetch-Site` or `Origin` is another site gets a 403 before any middleware of ours.
+
+### DEC-24 Signing up and in are rate limited per IP by Better Auth, counted in the database
+
+HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). cubic's first review found nothing limited credential attempts, since Better Auth's limiter does not run on `auth.api` calls. Its defaults allow 3 sign-ups or sign-ins per IP in 10 seconds; with `storage: 'database'` the count lives in a `rate_limit` table, so Vercel's instances count together, where the memory store would count per instance. The IP is `x-forwarded-for`, which Vercel overwrites with the client's. A refused attempt is IAM's `TooManyAttempts`, of kind Forbidden, so a form's submit shows it as a toast. Sign-up and sign-in count in separate buckets, so this slows the one enumeration sign-up allows (DEC-21) rather than preventing it: that takes email verification, and a provider to send it (`HEX-18#PARK-1`).

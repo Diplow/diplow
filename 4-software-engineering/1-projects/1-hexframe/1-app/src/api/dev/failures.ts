@@ -2,7 +2,7 @@
 // domain's language, so nobody mistakes them for Mapping's or IAM's; the first domains bring real ones.
 import { Schema } from 'effect'
 
-import { invalid, kind } from '#/domains/kind'
+import { invalid, kind, kinds } from '#/domains/kind'
 
 export class DevUnauthenticated extends Schema.TaggedError<DevUnauthenticated>()(
   'DevUnauthenticated',
@@ -30,3 +30,8 @@ export const devFailures = [
   DevNotFound,
   DevConflict,
 ] as const
+
+/** What a provoked call ends with: a success, or a failure of one kind. */
+export const outcomes = ['Success', ...kinds] as const
+
+export type ProvokedOutcome = (typeof outcomes)[number]

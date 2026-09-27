@@ -2,6 +2,9 @@
 // router plugin registers them (routeTree.gen.ts), so every handler's `context` is typed with it.
 import { createStart } from '@tanstack/react-start'
 
-import { requestContext } from '#/api/server/middleware'
+import { requestContext, sameOriginOnly } from '#/api/server/middleware'
 
-export const startInstance = createStart(() => ({ functionMiddleware: [requestContext] }))
+export const startInstance = createStart(() => ({
+  requestMiddleware: [sameOriginOnly],
+  functionMiddleware: [requestContext],
+}))

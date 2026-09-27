@@ -5,7 +5,10 @@ import { PgClient } from '@effect/sql-pg'
 import * as PgDrizzle from 'drizzle-orm/effect-postgres'
 import { Config, Context, Layer } from 'effect'
 
-/** Drizzle over one connection pool, shared by every repository. */
+/**
+ * Drizzle over one Effect connection pool, the one every repository reads and writes through. Only
+ * Better Auth's adapter, which awaits its queries, has a pool of its own (./promise.ts).
+ */
 export class Database extends Context.Service<Database, PgDrizzle.EffectPgDatabase>()(
   'hexframe/Database',
 ) {}

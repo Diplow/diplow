@@ -1,12 +1,13 @@
 import { readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
-import { expect, layer } from '@effect/vitest'
+import { describe, expect, it, layer } from '@effect/vitest'
 import { integer, pgSchema, text } from 'drizzle-orm/pg-core'
-import { Effect } from 'effect'
+import { ConfigProvider, Effect, Exit } from 'effect'
 
 import { Database } from './database'
 import { migrated } from './migrations'
+import { PromiseDatabase, layer as promiseLayer } from './promise'
 import { TestDatabase } from './testing'
 
 const committed = readdirSync(fileURLToPath(new URL('../../../migrations', import.meta.url)))
@@ -34,6 +35,31 @@ layer(TestDatabase)('the test database', (it) => {
     Effect.gen(function* () {
       yield* migrated
       expect(yield* recorded).toEqual(committed.toSorted())
+    }),
+  )
+})
+
+describe("Better Auth's promise database, deployed", () => {
+  const builtWith = (env: Record<string, string>) =>
+    Effect.gen(function* () {
+      return typeof (yield* PromiseDatabase).select
+    }).pipe(
+      Effect.provide(promiseLayer),
+      Effect.provide(ConfigProvider.layer(ConfigProvider.fromEnvRecord(env))),
+      Effect.exit,
+    )
+
+  it.effect('is a Drizzle database over DATABASE_URL, whose pool ends with the layer', () =>
+    Effect.gen(function* () {
+      // A pool connects on its first query, so a server that is not there is enough to build it.
+      const url = 'postgres://nobody@127.0.0.1:1/none'
+      expect(yield* builtWith({ DATABASE_URL: url })).toEqual(Exit.succeed('function'))
+    }),
+  )
+
+  it.effect('fails to build without DATABASE_URL', () =>
+    Effect.gen(function* () {
+      expect(Exit.isFailure(yield* builtWith({}))).toBe(true)
     }),
   )
 })
