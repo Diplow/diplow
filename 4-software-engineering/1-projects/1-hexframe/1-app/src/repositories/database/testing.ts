@@ -8,7 +8,12 @@ import { Effect, Layer } from 'effect'
 import { Database } from './database'
 import { migrated } from './migrations'
 
-/** A fresh PGlite, migrated, as the Database service. A migration that fails is a defect: the test dies. */
-export const TestDatabase = Layer.effect(Database)(
-  PgliteDrizzle.makeWithDefaults().pipe(Effect.tap(migrated), Effect.orDie),
-).pipe(Layer.provide(PgliteClient.layer()), Layer.orDie)
+const pglite = Layer.effect(Database)(PgliteDrizzle.makeWithDefaults()).pipe(
+  Layer.provide(PgliteClient.layer()),
+)
+
+/** A fresh PGlite, migrated by the program `pnpm db:migrate` runs. A failed migration kills the test. */
+export const TestDatabase = Layer.effectDiscard(Effect.orDie(migrated)).pipe(
+  Layer.provideMerge(pglite),
+  Layer.orDie,
+)

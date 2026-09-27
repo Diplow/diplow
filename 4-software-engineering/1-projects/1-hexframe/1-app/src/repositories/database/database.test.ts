@@ -32,7 +32,7 @@ layer(TestDatabase)('the test database', (it) => {
 
   it.effect('applies nothing twice', () =>
     Effect.gen(function* () {
-      yield* migrated(yield* Database)
+      yield* migrated
       expect(yield* recorded).toEqual(committed.toSorted())
     }),
   )

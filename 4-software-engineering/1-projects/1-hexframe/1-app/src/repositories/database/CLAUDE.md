@@ -16,7 +16,7 @@ Every table hexframe keeps, and the one way to reach them: the `Database` servic
 |---|---|
 | `database.ts` | `Database`, the service, and `layer`, the deployed one, built from `DATABASE_URL` |
 | `schema.ts` | The tables, in Drizzle's schema language. Empty until a domain brings its own |
-| `migrations.ts` | `migrated(database)`: applies what the database has not recorded yet, from `migrations/` at the package's root |
+| `migrations.ts` | `migrated`, the one program that applies what the database has not recorded yet, from `migrations/` at the package's root |
 | `testing.ts` | `TestDatabase`, the integration harness: a fresh PGlite, migrated, as the `Database` service |
 
 ## Changing the schema
@@ -26,7 +26,7 @@ Every table hexframe keeps, and the one way to reach them: the `Database` servic
 3. `pnpm test` runs it against PGlite.
 4. `pnpm db:migrate` applies it to the database `DATABASE_URL` names. CI is to run it against the pull request's Neon branch before its preview deploys, and against production before production deploys; until that step exists (`HEX-16#PARK-1` in Linear) nobody runs it for you.
 
-A deployed database changes through committed migrations only; `drizzle-kit push` is for a local one ([[4-software-engineering/1-projects/1-hexframe/STACK|STACK]], Database).
+A deployed database changes through committed migrations only; `drizzle-kit push` is for a local one.
 
 ## Testing on the database
 
@@ -34,6 +34,10 @@ An integration test provides `TestDatabase` to the program under test, with `@ef
 
 ```ts
 import { layer } from '@effect/vitest'
+import { Effect } from 'effect'
+
+import { Database } from '#/repositories/database/database'
+import { TestDatabase } from '#/repositories/database/testing'
 
 layer(TestDatabase)('the tiles repository', (it) => {
   it.effect('reads back what it wrote', () =>
@@ -51,5 +55,5 @@ Each build of the layer is a new, empty database: the tests inside one `layer(..
 
 - **Only this folder imports `drizzle-orm`, `@effect/sql-pg` and `@effect/sql-pglite`** (`dependency-cruiser.config.ts`).
 - **The query builder, never raw SQL.** It is the security bar, and it is also what keeps the two drivers alike: `execute` returns rows as an array on Postgres and as `{ rows }` on PGlite, while a `select` returns the same array on both.
-- **`database.ts` and `migrations.ts` import packages only**, so `node scripts/migrate.ts` runs them without a bundler. `testing.ts` is for tests: nothing the server bundles imports it.
+- **`node scripts/migrate.ts` runs `database.ts` and `migrations.ts` without a bundler**, so they import packages, and each other with a `.ts` path. `testing.ts` is for tests: nothing the server bundles imports it.
 - **The `Database` layer is not in the server function runtime yet.** It joins `layer` in `src/api/server/run.ts` with the first domain that reads (HEX-18): the runtime builds every layer on its first call, so before that it would make every server function wait on a database it does not use.

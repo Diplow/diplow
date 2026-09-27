@@ -1,6 +1,6 @@
 // The database as every repository sees it: Drizzle's query builder over Effect's Postgres client.
 // Neon in every deployed environment, reached through DATABASE_URL; PGlite in tests (./testing.ts).
-// This file and ./migrations.ts import packages only, so `node scripts/migrate.ts` runs them as they are.
+// `node scripts/migrate.ts` runs this file as it is, without a bundler: it imports packages only.
 import { PgClient } from '@effect/sql-pg'
 import * as PgDrizzle from 'drizzle-orm/effect-postgres'
 import { Config, Context, Layer } from 'effect'
