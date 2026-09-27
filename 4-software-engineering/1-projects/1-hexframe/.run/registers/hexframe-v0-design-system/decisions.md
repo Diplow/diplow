@@ -17,6 +17,6 @@ HEX-11, [#9](https://github.com/Diplow/diplow/pull/9). `Card`, `DropdownMenu`, `
 
 HEX-11, [#9](https://github.com/Diplow/diplow/pull/9). shadcn's Drawer is built on vaul, which would be one more dependency, and it's barely maintained. A Radix Dialog does the job and keeps every overlay on Radix. `open` and `onOpenChange` are required because STACK.md puts an open drawer in the route's search params.
 
-### DEC-3 Dark `--destructive` raised to shadcn's current value
+### DEC-3 Dark `--destructive` is brighter and gets a dark foreground
 
-HEX-11, [#9](https://github.com/Diplow/diplow/pull/9). At `oklch(0.396 0.141 25.723)`, field errors and destructive menu entries were barely readable on the dark background. `oklch(0.704 0.191 22.216)` is what shadcn ships today. The destructive button already dims it with `dark:bg-destructive/60`.
+HEX-11, [#9](https://github.com/Diplow/diplow/pull/9). At `oklch(0.396 0.141 25.723)`, field errors and destructive menu entries were barely readable on the dark background. It is now `oklch(0.704 0.191 22.216)`, shadcn's current value. Its dark-theme foreground is a dark red, as success and info already had, so the destructive button sits on the solid token without shadcn's `dark:bg-destructive/60` and its label passes contrast.
