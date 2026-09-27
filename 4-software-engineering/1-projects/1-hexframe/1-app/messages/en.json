@@ -94,5 +94,19 @@
   "dev_ui_sample_games": "Games",
   "dev_ui_sample_software": "Software Engineering",
   "dev_ui_sample_startups": "Startups",
-  "dev_ui_sample_politics": "Politics"
+  "dev_ui_sample_politics": "Politics",
+  "hex_canvas_label": "The canvas, centered on {title}",
+  "hex_tile_expand": "Expand {title}",
+  "hex_tile_collapse": "Collapse {title}",
+  "hex_tile_show_context": "Show the context of {title}",
+  "hex_tile_hide_context": "Hide the context of {title}",
+  "hex_tile_center": "Center on {title}",
+  "dev_hex_title": "Canvas",
+  "dev_hex_description": "The hex canvas on a fixture System. Click a tile to expand or collapse it, click the center to show its context, double-click a tile or press Shift+Enter on it to center it. The view lives in the URL.",
+  "dev_hex_views": "Views",
+  "dev_hex_view_root": "Root",
+  "dev_hex_view_expanded": "Expanded",
+  "dev_hex_view_nested": "Nested expansion",
+  "dev_hex_view_context": "Context",
+  "dev_hex_view_centered": "Centered on a child"
 }

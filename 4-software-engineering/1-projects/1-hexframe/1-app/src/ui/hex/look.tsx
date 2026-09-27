@@ -1,31 +1,26 @@
 // What each placement looks like: its colours, its stroke and its label. Colours are theme tokens;
-// HEX-10 will name the canvas's own.
+// the Context's is `--context`. Sizes are in the canvas's own coordinates (see Canvas.tsx).
 import type { CSSProperties } from 'react'
 
-import { hexWidth } from '../geometry'
-import type { Placement } from '../layout'
+import { hexCorners, hexWidth, type Hex } from './geometry/geometry'
+import type { Placement } from './geometry/layout'
 
-export interface Look {
+interface Look {
   fill: string
   stroke: string
   dashed: boolean
   ink: string
 }
 
-const contextTint = 'var(--chart-2)'
-
 export const strokeWidth = 1.5
 
-export function lookOf(placement: Placement): Look {
+const context = 'var(--context)'
+
+function lookOf(placement: Placement): Look {
   switch (placement.kind) {
     case 'frame':
       return placement.ring === 'context'
-        ? {
-            fill: mix(contextTint, 14),
-            stroke: contextTint,
-            dashed: true,
-            ink: 'var(--foreground)',
-          }
+        ? { fill: mix(context, 14), stroke: context, dashed: true, ink: 'var(--foreground)' }
         : {
             fill: mix('var(--muted-foreground)', placement.depth === 0 ? 8 : 16),
             stroke: 'transparent',
@@ -43,7 +38,7 @@ export function lookOf(placement: Placement): Look {
       }
       return {
         fill: 'var(--card)',
-        stroke: placement.role === 'context' ? contextTint : 'var(--border)',
+        stroke: placement.role === 'context' ? context : 'var(--border)',
         dashed: placement.role === 'context',
         ink: 'var(--card-foreground)',
       }
@@ -59,6 +54,27 @@ export function lookOf(placement: Placement): Look {
 
 function mix(color: string, percent: number) {
   return `color-mix(in oklab, ${color} ${String(percent)}%, var(--background))`
+}
+
+/** A hex as the `points` of an SVG polygon. */
+export function polygonPoints(hex: Hex): string {
+  return hexCorners(hex)
+    .map(({ x, y }) => `${String(x)},${String(y)}`)
+    .join(' ')
+}
+
+/** The hex's outline, dashed or not, in its look's colours. */
+export function HexShape({ placement }: { placement: Placement }) {
+  const look = lookOf(placement)
+  return (
+    <polygon
+      points={polygonPoints(placement.hex)}
+      style={{ fill: look.fill, stroke: look.stroke }}
+      strokeWidth={strokeWidth}
+      strokeDasharray={look.dashed ? '4 3' : undefined}
+      strokeLinejoin="round"
+    />
+  )
 }
 
 export function showsPreview(placement: Placement): boolean {
@@ -77,12 +93,11 @@ export function TileLabel({ placement }: { placement: Placement }) {
   const style: CSSProperties = { color: lookOf(placement).ink }
   return (
     <div
-      className="flex h-full w-full flex-col items-center justify-center gap-1 overflow-hidden text-center leading-tight"
+      className="flex h-full w-full flex-col items-center justify-center gap-1 overflow-hidden text-center leading-tight select-none"
       style={style}
     >
       <span
-        className="max-w-full font-semibold tracking-tight hyphens-auto"
-        lang="en"
+        className="max-w-full font-semibold tracking-tight break-words"
         style={{ fontSize: titleSize }}
       >
         {placement.tile.title}

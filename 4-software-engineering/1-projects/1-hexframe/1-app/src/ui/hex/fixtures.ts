@@ -1,20 +1,40 @@
-// The top of this very vault, as a System: the user, their six domains, and a little below.
-import type { CanvasView, TileNode } from '../layout'
+// A fixture System for /dev/hex: the top of this very vault, the user and their six domains, and a
+// little below, deep enough to nest two expansions and open a Context. Its content is the user's own,
+// in their words, so it is not translated.
+import type { TileNode } from './geometry/layout'
+import type { CanvasView } from './view/view'
+
+const projects: TileNode = {
+  id: 'projects',
+  title: 'Projects',
+  preview: 'The software I build: hexframe and my personal site.',
+  children: {
+    1: {
+      id: 'hexframe',
+      title: 'hexframe',
+      preview: 'Lay out a system as a hierarchy of tiles, so AI works along its intent.',
+    },
+    2: { id: 'site', title: 'Site', preview: 'My personal website.' },
+  },
+}
 
 const softwareEngineering: TileNode = {
   id: 'software-engineering',
   title: 'Software Engineering',
   preview: 'How software gets built in the AI era, and what I build with it.',
   children: {
-    1: {
-      id: 'projects',
-      title: 'Projects',
-      preview: 'The software I build: hexframe and my personal site.',
-    },
+    1: projects,
     2: {
       id: 'principles',
       title: 'Principles',
       preview: 'Domain-driven design, AI-first, feedback, mapping modules, maintainability.',
+    },
+  },
+  context: {
+    1: {
+      id: 'ai-first',
+      title: 'AI-first',
+      preview: 'Agents write most of the code; people steer.',
     },
   },
 }
@@ -38,13 +58,11 @@ export const ulysse: TileNode = {
   },
 }
 
-export const scenes = {
-  frame: { label: 'Expanded Frame', view: { expanded: new Set(), showContext: false } },
-  nested: {
-    label: 'Nested expansion',
-    view: { expanded: new Set(['software-engineering']), showContext: false },
-  },
-  context: { label: 'Center Context', view: { expanded: new Set(), showContext: true } },
-} satisfies Record<string, { label: string; view: CanvasView }>
-
-export type Scene = keyof typeof scenes
+/** A view per state the canvas has to get right, named by the fixture's own Tiles. */
+export const fixtureViews = {
+  root: {},
+  expanded: { expanded: [softwareEngineering.id] },
+  nested: { expanded: [softwareEngineering.id, projects.id] },
+  context: { context: true },
+  centered: { center: softwareEngineering.id, context: true },
+} satisfies Record<string, CanvasView>
