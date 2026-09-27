@@ -1,0 +1,44 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/errors/channel.ts
+  s_2908cd458e0dd6::t_867f30c8a22a01 23
+4-software-engineering/1-projects/1-hexframe/1-app/dependency-cruiser.config.ts
+  s_2908cd458e0dd6::t_867f30c8a22a01 9
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/client/channels.test.ts
+  s_2908cd458e0dd6::t_337a1ddf940647 1-19,30-95,103-117
+  s_2908cd458e0dd6::t_4f0c31da9a7ba1 20,29,96-101
+  s_2908cd458e0dd6::t_7be03a5773907c 102
+  s_2908cd458e0dd6::t_ac884302cac94b 21-28
+4-software-engineering/1-projects/1-hexframe/STACK.md
+  s_2908cd458e0dd6::t_867f30c8a22a01 26,39
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-v0-server-foundations/decisions.md
+  s_2908cd458e0dd6::t_867f30c8a22a01 15,35
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_2908cd458e0dd6::t_867f30c8a22a01 141
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_2908cd458e0dd6::t_867f30c8a22a01 65
+4-software-engineering/1-projects/1-hexframe/1-app/eslint.config.ts
+  s_2908cd458e0dd6::t_867f30c8a22a01 44-45,48,50
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_2908cd458e0dd6::t_867f30c8a22a01 141
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE.md
+  s_2908cd458e0dd6::t_867f30c8a22a01 28-29
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/errors/channel.test.ts
+  s_2908cd458e0dd6::t_867f30c8a22a01 9,47
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/lint.test.ts
+  s_2908cd458e0dd6::t_867f30c8a22a01 100-101
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "17e00f171494cb726b35af12eb581a17d6edbe03",
+  "prompts": {},
+  "sessions": {
+    "s_2908cd458e0dd6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0cbfaeea-8195-45e3-a873-1ae996767d5d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
