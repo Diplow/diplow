@@ -47,7 +47,7 @@ In a Conductor workspace (`CONDUCTOR_WORKSPACE_PATH` is set) the run switches th
 
 ## Resume entry
 
-When `--resume` continues a run that already started, post the `resume` entry as a status update on the top's Linear object (format in the contract's "Registers"). It holds the last halt's reason, from `get_status_updates` on that object, then what changed since that halt: `git log --format='%h %an %s' --since=<halt time> origin/<target>`, merge commits aside, and the ticket state changes the fresh snapshot shows. The run lands nothing between halting and resuming, so those commits are a human's. A run that stopped without a halt entry (a crash, a closed session) has no such boundary: write that no halt was recorded, and list no commits.
+When `--resume` continues a run that already started, post the `resume` entry as a status update on the top's Linear object (format in the contract's "Registers"). It holds the last halt's reason, from `get_status_updates` on that object, then what changed since that halt: `git fetch origin`, then `git log --format='%h %an %s' --since=<halt time> origin/<target>`, merge commits aside, and the ticket state changes the fresh snapshot shows. The run lands nothing between halting and resuming, so those commits are a human's. A run that stopped without a halt entry (a crash, a closed session) has no such boundary: write that no halt was recorded, and list no commits.
 
 ## Halt
 

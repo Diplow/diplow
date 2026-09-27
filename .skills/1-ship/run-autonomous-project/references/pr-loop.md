@@ -159,7 +159,7 @@ git -C "$CONDUCTOR_ROOT_PATH" push origin main
 
 Otherwise, whether `<target>` is `main` outside Conductor or a project branch checked out nowhere, push the branch onto it: `git push origin <branch>:<target>`. The remote refuses anything but a fast-forward.
 
-A refused fast-forward means `<target>` moved. Merge `origin/<target>` into the branch, re-run the gates and the guard, and try once more. A second refusal takes the exhaustion path with kind `gate-exhausted`. A failed `pull --ff-only` in the original folder means a human has work there that diverged from `origin/main`: return `halted` and name the folder.
+A refused fast-forward means `<target>` moved. Merge `origin/<target>` into the branch, re-run the gates and the guard, and try once more. A second refusal takes the exhaustion path with kind `gate-exhausted`. In the Conductor case, a failed `pull --ff-only` in the original folder means a human has work there that diverged from `origin/main`: return `halted` and name the folder.
 
 Then prove it and go home:
 

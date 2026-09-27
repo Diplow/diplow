@@ -15,7 +15,7 @@ preview: >-
 
 # run-autonomous-project. One project, one landing per ticket, nobody to ask
 
-Linear holds the plan: a project, one ticket per unit of work, ordered by `blockedBy`, and one phase-close ticket that owns the project's close. This skill executes that plan end to end without a human. Each ticket becomes a short-lived branch cut from `origin/main` and lands back on `main` once green, so `main` grows one ticket at a time. When the config sets `repo.target_branch`, a project branch such as `project/design-system` takes `main`'s place for the whole run, and a human merges it into `main` once the project is done. The skill knows nothing about the target codebase. Everything specific comes from three places: the run config, the Linear descriptions, and the target repo's `CLAUDE.md` files.
+Linear holds the plan: a project, one ticket per unit of work, ordered by `blockedBy`, and one phase-close ticket that owns the project's close. This skill executes that plan end to end without a human. Each ticket becomes a short-lived branch cut from `origin/<target>` and lands back on `<target>` once green, so `<target>` grows one ticket at a time. `<target>` is `main`, or the project branch the config's `repo.target_branch` names, such as `project/design-system`, which a human merges into `main` once the project is done. The skill knows nothing about the target codebase. Everything specific comes from three places: the run config, the Linear descriptions, and the target repo's `CLAUDE.md` files.
 
 | Level | Role | Linear | Git |
 |---|---|---|---|
