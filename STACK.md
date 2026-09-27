@@ -27,11 +27,15 @@ Content is Markdown. I read it through Obsidian: the repo root is the vault. Age
   owner: diplo
   preview: >-
     At most 350 characters. The paragraph a reader needs to decide whether to open
-    the file, written so most readers won't have to. The parent's CLAUDE.md copies it.
+    the file, written so most readers won't have to. The parent's CLAUDE.md can reuse it.
   ---
   ```
 
   A `SKILL.md` keeps the `name` and `description` Claude Code requires and adds these four.
+
+- **Private files** start with `-`: a file or folder named `-something` is encrypted on GitHub and plain on my machine, in the original folder and every worktree. [transcrypt](https://github.com/elasticdog/transcrypt) does this through the patterns in `.gitattributes`. Only contents are hidden: names, paths, sizes and commit messages stay public. Name a file with `-` from its first commit; a file renamed to `-` later keeps its old plain version in the history.
+
+  On a new clone, `transcrypt -c aes-256-cbc -p '<passphrase>'` decrypts the private files. The passphrase is in my password manager. Without it, the private files can't be recovered.
 
 ## Layout: the repo is a hexframe
 
@@ -59,6 +63,7 @@ Children sit on a ring: neighbors share an edge, and the child across the ring i
 | `.skills/` | Inner child: the skills I use, mine and vendored; see [[.skills/CLAUDE\|Skills]] | exists |
 | `.mcp.json` | MCP servers for this repo only; the `X-Project` header on `hodor` gives it an OAuth login separate from other projects' `hodor` | exists |
 | `.gitignore` | Paths kept out of git | exists |
+| `.gitattributes` | Marks `-` files and folders for encryption | exists |
 
 The six children are the domains listed in [[CLAUDE]]. Each one is a node with its own `CLAUDE.md`, and owns whatever stack its content needs.
 

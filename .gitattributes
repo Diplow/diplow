@@ -1,0 +1,4 @@
+# Private files: any file or folder whose name starts with "-" is encrypted
+# by transcrypt on GitHub and decrypted locally. See STACK.md.
+-*        filter=crypt diff=crypt merge=crypt
+**/-*/**  filter=crypt diff=crypt merge=crypt
