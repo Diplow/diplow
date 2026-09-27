@@ -9,7 +9,7 @@ const storageKey = 'hexframe.theme'
  * the stored choice if there is one, the system's preference otherwise. From then on, the class on
  * `<html>` is the one source of truth.
  */
-export const themeScript = `try{var t=localStorage.getItem('${storageKey}');if(t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('dark')}catch(e){}`
+export const themeScript = `try{var t=null;try{t=localStorage.getItem('${storageKey}')}catch(e){}if(t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('dark')}catch(e){}`
 
 const listeners = new Set<() => void>()
 
@@ -31,7 +31,11 @@ function serverTheme(): Theme {
 
 function setTheme(theme: Theme) {
   document.documentElement.classList.toggle('dark', theme === 'dark')
-  localStorage.setItem(storageKey, theme)
+  try {
+    localStorage.setItem(storageKey, theme)
+  } catch {
+    // Storage is blocked: the theme still applies, it just won't outlive the page.
+  }
   listeners.forEach((listener) => {
     listener()
   })

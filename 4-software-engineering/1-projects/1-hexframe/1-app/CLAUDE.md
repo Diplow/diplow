@@ -36,7 +36,7 @@ Run them here or, for every package at once, from the monorepo root.
 
 ## Shape: the rule of 6 inside the code
 
-Every folder under `1-app/src/` is a node: at most 6 child folders and 6 files, enforced by lint. Names are plain inside the code (`domains/iam/`, not `domains/1-iam/`): numbers stay on packages and vault nodes, where the ring means something.
+Every folder under `1-app/src/` is a node: at most 6 child folders and 6 files, enforced by lint once HEX-5 wires it into `check`. Names are plain inside the code (`domains/iam/`, not `domains/1-iam/`): numbers stay on packages and vault nodes, where the ring means something.
 
 ## Rules
 

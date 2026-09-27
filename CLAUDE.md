@@ -43,4 +43,4 @@ The six children are the domains where I want to have something to say. Everythi
 
 ## Conventions
 
-Every Markdown file opens with a frontmatter (`title`, `parent`, `owner`, `preview`) and links with `[[wikilinks]]`. Read [[STACK]] before adding a file, a folder, a domain or a skill, or touching root-level config (`.claude/`, `.obsidian/`, `.conductor/`).
+Every Markdown file opens with a frontmatter (`title`, `parent`, `owner`, `preview`) and links with `[[wikilinks]]`. Read [[STACK]] before adding a file, a folder, a domain or a skill, or touching root-level config (`.claude/`, `.obsidian/`, `.conductor/`, `.github/`).

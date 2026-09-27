@@ -6,3 +6,4 @@ src/paraglide/
 .vercel/
 dist/
 .env*
+!.env.example

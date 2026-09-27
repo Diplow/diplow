@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import { act, renderHook } from '@testing-library/react'
+import { act, cleanup, renderHook } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { themeScript, useThemeState } from './theme'
@@ -16,15 +16,42 @@ function runThemeScript() {
   new Function(themeScript)()
 }
 
+function blockStorage() {
+  const blocked = () => {
+    throw new DOMException('The operation is insecure.', 'SecurityError')
+  }
+  vi.stubGlobal('localStorage', { getItem: blocked, setItem: blocked })
+}
+
 afterEach(() => {
+  cleanup()
+  vi.unstubAllGlobals()
   root.classList.remove('dark')
   localStorage.clear()
-  vi.unstubAllGlobals()
 })
 
 describe('themeScript', () => {
   it('follows the system preference when nothing is stored', () => {
     prefersDark(true)
+    runThemeScript()
+    expect(root.classList.contains('dark')).toBe(true)
+  })
+
+  it('stays light when nothing is stored and the system prefers light', () => {
+    runThemeScript()
+    expect(root.classList.contains('dark')).toBe(false)
+  })
+
+  it('treats an unknown stored value as no choice', () => {
+    prefersDark(true)
+    localStorage.setItem('hexframe.theme', 'auto')
+    runThemeScript()
+    expect(root.classList.contains('dark')).toBe(true)
+  })
+
+  it('still follows the system preference when storage is blocked', () => {
+    prefersDark(true)
+    blockStorage()
     runThemeScript()
     expect(root.classList.contains('dark')).toBe(true)
   })
@@ -67,5 +94,15 @@ describe('useThemeState', () => {
     })
     expect(result.current.state.theme).toBe('light')
     expect(localStorage.getItem('hexframe.theme')).toBe('light')
+  })
+
+  it('still toggles when storage is blocked', () => {
+    blockStorage()
+    const { result } = renderHook(() => useThemeState())
+    act(() => {
+      result.current.actions.toggle()
+    })
+    expect(result.current.state.theme).toBe('dark')
+    expect(root.classList.contains('dark')).toBe(true)
   })
 })

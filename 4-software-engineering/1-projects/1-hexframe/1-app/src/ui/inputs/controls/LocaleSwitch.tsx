@@ -7,7 +7,7 @@ import { Button } from './button'
 
 // A plain link and a full page load: every message on the page, server-rendered ones included, switches at once.
 export function LocaleSwitch() {
-  const { pathname } = useLocation()
+  const href = useLocation({ select: (location) => location.href })
   const current = getLocale()
   return (
     <nav aria-label={m.locale_switch_label()} className="flex gap-1">
@@ -18,7 +18,7 @@ export function LocaleSwitch() {
           size="sm"
           variant={locale === current ? 'secondary' : 'ghost'}
         >
-          <a href={localizeHref(pathname, { locale })} hrefLang={locale} aria-current={locale === current}>
+          <a href={localizeHref(href, { locale })} hrefLang={locale} aria-current={locale === current}>
             {locale.toUpperCase()}
           </a>
         </Button>
