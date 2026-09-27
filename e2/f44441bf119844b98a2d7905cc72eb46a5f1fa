@@ -1,0 +1,31 @@
+4-software-engineering/1-hexframe/pnpm-workspace.yaml
+  s_1ef5328587f847::t_3f3c13547ae36a 1-3
+.conductor/settings.toml
+  s_1ef5328587f847::t_3f3c13547ae36a 4
+CLAUDE.md
+  s_1ef5328587f847::t_a273140213e8e9 46
+4-software-engineering/1-hexframe/package.json
+  s_1ef5328587f847::t_3f3c13547ae36a 1-14
+4-software-engineering/2-site/CLAUDE.md
+  s_1ef5328587f847::t_3f3c13547ae36a 1-10
+STACK.md
+  s_1ef5328587f847::t_a273140213e8e9 10-11,65,81,83
+4-software-engineering/1-hexframe/CLAUDE.md
+  s_1ef5328587f847::t_876b14ddd06b77 2-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e2f44441bf119844b98a2d7905cc72eb46a5f1fa",
+  "prompts": {},
+  "sessions": {
+    "s_1ef5328587f847": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8830389f-ec47-4f81-a030-9cd8d652fcec",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
