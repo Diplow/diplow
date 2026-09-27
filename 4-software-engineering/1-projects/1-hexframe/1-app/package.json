@@ -9,9 +9,12 @@
     "dev": "vite dev",
     "build": "vite build",
     "check": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --silent && tsc && eslint . && depcruise --config dependency-cruiser.config.ts src && node scripts/check-rule-of-six.ts && knip && prettier --check .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "node scripts/migrate.ts"
   },
   "dependencies": {
+    "@effect/sql-pg": "4.0.0-rc.117",
     "@tanstack/react-form": "^1.33.5",
     "@tanstack/react-query": "^5.104.0",
     "@tanstack/react-router": "^1.170.39",
@@ -19,6 +22,7 @@
     "@tanstack/react-table": "^9.2.4",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.4.0",
+    "drizzle-orm": "1.0.0-rc.5-5935859",
     "effect": "4.0.0-rc.117",
     "lucide-react": "^1.48.0",
     "radix-ui": "^1.6.7",
@@ -27,6 +31,9 @@
     "sonner": "^2.0.8"
   },
   "devDependencies": {
+    "@effect/sql-pglite": "4.0.0-rc.117",
+    "@effect/vitest": "4.0.0-rc.117",
+    "@electric-sql/pglite": "^0.5.8",
     "@eslint-community/eslint-plugin-eslint-comments": "^4.8.1",
     "@eslint/js": "^10.0.1",
     "@inlang/paraglide-js": "^2.25.4",
@@ -37,6 +44,7 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",
     "dependency-cruiser": "^18.4.0",
+    "drizzle-kit": "1.0.0-rc.5-5935859",
     "eslint": "^10.11.0",
     "eslint-plugin-sonarjs": "^4.2.1",
     "happy-dom": "^20.14.5",
