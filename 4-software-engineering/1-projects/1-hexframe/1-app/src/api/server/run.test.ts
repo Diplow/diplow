@@ -5,9 +5,15 @@ import { Bus } from '#/domains/bus'
 
 import { DevConflict, DevInvalid } from '../dev/failures'
 import { WaitUntil } from './bus'
-import { RequestContext, run } from './run'
+import { RequestContext, run, type StartContext } from './run'
 
-const context = { requestId: 'req-1', waitUntil: () => undefined }
+// A signed-out request.
+const context: StartContext = {
+  requestId: 'req-1',
+  waitUntil: () => undefined,
+  exchange: { headers: new Headers(), setCookies: () => undefined },
+  session: Option.none(),
+}
 
 describe('the server function helper', () => {
   it('returns the value of a program that succeeds', async () => {

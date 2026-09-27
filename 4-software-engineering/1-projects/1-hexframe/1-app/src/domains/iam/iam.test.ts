@@ -12,7 +12,8 @@ layer(TestAuth)('IAM on Better Auth', (it) => {
     Effect.gen(function* () {
       const device = browser()
       const account = yield* device.request(signUp(ada))
-      expect(account).toEqual({ id: expect.any(String), email: ada.email })
+      expect(account.email).toBe(ada.email)
+      expect(account.id).not.toBe('')
       const session = yield* device.request(proven)
       expect(Option.getOrThrow(session).account).toEqual(account)
       expect(Option.getOrThrow(session).expiresAt.getTime()).toBeGreaterThan(Date.now())

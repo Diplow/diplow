@@ -10,14 +10,27 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DevErrorsRouteImport } from './routes/dev.errors'
-import { Route as DevHexRouteImport } from './routes/dev.hex'
-import { Route as DevSystemRouteImport } from './routes/dev.system'
-import { Route as DevUiRouteImport } from './routes/dev.ui'
+import { Route as SignInRouteImport } from './routes/sign-in'
+import { Route as SignUpRouteImport } from './routes/sign-up'
+import { Route as DevErrorsRouteImport } from './routes/dev/errors'
+import { Route as DevHexRouteImport } from './routes/dev/hex'
+import { Route as DevSessionRouteImport } from './routes/dev/session'
+import { Route as DevSystemRouteImport } from './routes/dev/system'
+import { Route as DevUiRouteImport } from './routes/dev/ui'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignInRoute = SignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignUpRoute = SignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DevErrorsRoute = DevErrorsRouteImport.update({
@@ -28,6 +41,11 @@ const DevErrorsRoute = DevErrorsRouteImport.update({
 const DevHexRoute = DevHexRouteImport.update({
   id: '/dev/hex',
   path: '/dev/hex',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevSessionRoute = DevSessionRouteImport.update({
+  id: '/dev/session',
+  path: '/dev/session',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DevSystemRoute = DevSystemRouteImport.update({
@@ -43,38 +61,75 @@ const DevUiRoute = DevUiRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
   '/dev/errors': typeof DevErrorsRoute
   '/dev/hex': typeof DevHexRoute
+  '/dev/session': typeof DevSessionRoute
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
   '/dev/errors': typeof DevErrorsRoute
   '/dev/hex': typeof DevHexRoute
+  '/dev/session': typeof DevSessionRoute
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
   '/dev/errors': typeof DevErrorsRoute
   '/dev/hex': typeof DevHexRoute
+  '/dev/session': typeof DevSessionRoute
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dev/errors' | '/dev/hex' | '/dev/system' | '/dev/ui'
+  fullPaths:
+    | '/'
+    | '/sign-in'
+    | '/sign-up'
+    | '/dev/errors'
+    | '/dev/hex'
+    | '/dev/session'
+    | '/dev/system'
+    | '/dev/ui'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dev/errors' | '/dev/hex' | '/dev/system' | '/dev/ui'
-  id: '__root__' | '/' | '/dev/errors' | '/dev/hex' | '/dev/system' | '/dev/ui'
+  to:
+    | '/'
+    | '/sign-in'
+    | '/sign-up'
+    | '/dev/errors'
+    | '/dev/hex'
+    | '/dev/session'
+    | '/dev/system'
+    | '/dev/ui'
+  id:
+    | '__root__'
+    | '/'
+    | '/sign-in'
+    | '/sign-up'
+    | '/dev/errors'
+    | '/dev/hex'
+    | '/dev/session'
+    | '/dev/system'
+    | '/dev/ui'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SignInRoute: typeof SignInRoute
+  SignUpRoute: typeof SignUpRoute
   DevErrorsRoute: typeof DevErrorsRoute
   DevHexRoute: typeof DevHexRoute
+  DevSessionRoute: typeof DevSessionRoute
   DevSystemRoute: typeof DevSystemRoute
   DevUiRoute: typeof DevUiRoute
 }
@@ -86,6 +141,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sign-in': {
+      id: '/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sign-up': {
+      id: '/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dev/errors': {
@@ -100,6 +169,13 @@ declare module '@tanstack/react-router' {
       path: '/dev/hex'
       fullPath: '/dev/hex'
       preLoaderRoute: typeof DevHexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dev/session': {
+      id: '/dev/session'
+      path: '/dev/session'
+      fullPath: '/dev/session'
+      preLoaderRoute: typeof DevSessionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dev/system': {
@@ -121,8 +197,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SignInRoute: SignInRoute,
+  SignUpRoute: SignUpRoute,
   DevErrorsRoute: DevErrorsRoute,
   DevHexRoute: DevHexRoute,
+  DevSessionRoute: DevSessionRoute,
   DevSystemRoute: DevSystemRoute,
   DevUiRoute: DevUiRoute,
 }

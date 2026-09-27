@@ -33,11 +33,18 @@ function useTextField() {
   }
 }
 
-function TextField({ label, description, placeholder }: TextFieldProps) {
+interface InputFieldProps extends TextFieldProps {
+  /** What the value is, so the browser offers the right keyboard and hides a password. */
+  type?: 'text' | 'email' | 'password'
+  /** What the browser may fill it with: `email`, `current-password`, `new-password`… */
+  autoComplete?: string
+}
+
+function TextField({ label, description, placeholder, type, autoComplete }: InputFieldProps) {
   const { errors, control } = useTextField()
   return (
     <Field label={label} description={description} errors={errors}>
-      <Input placeholder={placeholder} {...control} />
+      <Input placeholder={placeholder} type={type} autoComplete={autoComplete} {...control} />
     </Field>
   )
 }

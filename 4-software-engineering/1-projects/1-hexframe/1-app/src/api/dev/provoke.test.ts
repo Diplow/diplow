@@ -1,9 +1,17 @@
+import { Option } from 'effect'
 import { describe, expect, it } from 'vitest'
 
-import { run } from '../server/run'
-import { outcomes, provoked, savedDevTitle } from './provoke'
+import { run, type StartContext } from '../server/run'
+import { outcomes } from './failures'
+import { provoked, savedDevTitle } from './programs'
 
-const context = { requestId: 'req-dev', waitUntil: () => undefined }
+// A signed-out request.
+const context: StartContext = {
+  requestId: 'req-dev',
+  waitUntil: () => undefined,
+  exchange: { headers: new Headers(), setCookies: () => undefined },
+  session: Option.none(),
+}
 
 describe('the calls /dev/errors provokes', () => {
   it.each(outcomes.filter((outcome) => outcome !== 'Success'))(

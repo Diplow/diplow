@@ -1,15 +1,23 @@
+import { Option } from 'effect'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import { signUp } from '#/domains/iam/iam'
+
 import { requestContext } from './middleware'
-import type { StartContext } from './run'
+import { run, type StartContext } from './run'
 
 // The request Start is handling; Nitro puts the platform's waitUntil on it, when the platform has one.
 let request: Request = new Request('http://localhost/_serverFn')
+let response = new Headers()
 
-vi.mock('@tanstack/react-start/server', () => ({ getRequest: () => request }))
+vi.mock('@tanstack/react-start/server', () => ({
+  getRequest: () => request,
+  getResponseHeaders: () => response,
+}))
 
 afterEach(() => {
   request = new Request('http://localhost/_serverFn')
+  response = new Headers()
 })
 
 // Start calls the server half with `next`; the context it passes on is what every handler receives.
@@ -48,5 +56,26 @@ describe('the request context middleware', () => {
     expect(() => {
       waitUntil(Promise.resolve())
     }).not.toThrow()
+  })
+
+  it('puts no Session on a request without a session cookie', async () => {
+    expect((await passedOn()).session).toEqual(Option.none())
+  })
+
+  it('puts on the request the Session its cookie proves, and sends the cookies a call sets', async () => {
+    const signingUp = await passedOn()
+    const account = await run(
+      signingUp,
+      signUp({ email: 'ada@example.com', password: 'lovelace1815' }),
+    )
+    expect(account).toMatchObject({ ok: true, value: { email: 'ada@example.com' } })
+    const cookies = response.getSetCookie()
+    expect(cookies).not.toHaveLength(0)
+
+    request = new Request('http://localhost/_serverFn', {
+      headers: { cookie: cookies.map((cookie) => cookie.split(';')[0]).join('; ') },
+    })
+    const session = (await passedOn()).session
+    expect(Option.getOrThrow(session).account).toEqual(account.ok ? account.value : undefined)
   })
 })

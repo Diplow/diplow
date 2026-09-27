@@ -7,13 +7,8 @@ import { useState } from 'react'
 import { read, write } from '#/api/client/calls'
 import { submitWrite } from '#/api/client/channels'
 import { ReadBoundary } from '#/api/client/ReadBoundary'
-import {
-  outcomes,
-  provokeRead,
-  provokeWrite,
-  submitDevTitle,
-  type ProvokedOutcome,
-} from '#/api/dev/provoke'
+import { outcomes, type ProvokedOutcome } from '#/api/dev/failures'
+import { provokeRead, provokeWrite, submitDevTitle } from '#/api/dev/provoke'
 import { m } from '#/paraglide/messages'
 import { Skeleton } from '#/ui/feedback/skeleton'
 import { toast } from '#/ui/feedback/Toaster'

@@ -3,7 +3,7 @@
 // in `submitWrite`; ReadBoundary shows what belongs in the nearest boundary.
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query'
 
-import { localizeHref } from '#/paraglide/runtime'
+import { deLocalizeHref, localizeHref } from '#/paraglide/runtime'
 import { toast } from '#/ui/feedback/Toaster'
 
 import { channelFor, type Call } from '../errors/channel'
@@ -13,13 +13,15 @@ import { asCallFailed, settle, type CallFailed } from './calls'
 
 let signingIn = false
 
-// One redirect, however many calls fail at once, carrying where the user was. HEX-18 builds the page.
-// On the server there is no window to move: a read made while rendering a page is IAM's to guard,
-// with a route's `beforeLoad` redirect, before anything is rendered.
+// One redirect, however many calls fail at once, carrying where the user was, without its language
+// prefix, as the router's own redirect (../iam/guard.ts) carries it. On the server there is no window
+// to move: a read made while rendering a page is guarded by the route's `beforeLoad`, `signedIn`.
 function signIn() {
   if (signingIn || typeof window === 'undefined') return
   signingIn = true
-  const here = `${window.location.pathname}${window.location.search}${window.location.hash}`
+  const here = deLocalizeHref(
+    `${window.location.pathname}${window.location.search}${window.location.hash}`,
+  )
   window.location.assign(localizeHref(`/sign-in?redirect=${encodeURIComponent(here)}`))
 }
 

@@ -2,7 +2,11 @@
 // request's context on Start's `context`; the helper provides it as Effect services, runs the program
 // on the one ManagedRuntime, and returns the value or the failure, encoded. Nothing else calls `run*`:
 // eslint.config.ts says no.
-import { Cause, Context, Effect, Exit, ManagedRuntime, Schema } from 'effect'
+import { Cause, Context, Effect, Exit, Layer, ManagedRuntime, Option, Schema } from 'effect'
+
+import { CurrentSession, proven, type Session } from '#/domains/iam/iam'
+import { Auth, HttpExchange, layer as authLayer } from '#/repositories/auth/auth'
+import { promiseLayer } from '#/repositories/database/database'
 
 import { Failure, Unexpected, encodeFailure, type Outcome } from '../errors/failure'
 import { WaitUntil, serverBus, type Subscription } from './bus'
@@ -20,21 +24,41 @@ export class RequestContext extends Context.Service<
 const subscriptions: ReadonlyArray<Subscription<never>> = []
 
 /**
+ * The repositories, deployed: Better Auth over Postgres, from DATABASE_URL and BETTER_AUTH_SECRET.
+ * Under `pnpm dev` and the tests, without DATABASE_URL: Better Auth over a fresh PGlite in memory,
+ * with a secret of its own, both gone when the process stops. A build never holds that branch.
+ */
+const repositories: Layer.Layer<Auth> =
+  import.meta.env.DEV && process.env.DATABASE_URL === undefined
+    ? Layer.unwrap(
+        Effect.promise(async () => (await import('#/repositories/auth/testing')).TestAuth),
+      )
+    : authLayer.pipe(Layer.provide(promiseLayer), Layer.orDie)
+
+/**
  * Every layer: the bus, the domains' services and the repositories below them, merged here as each is
  * built. Built once, on the first call, and shared by every request.
  */
-const layer = serverBus(subscriptions)
+const layer = Layer.mergeAll(serverBus(subscriptions), repositories)
 
 const runtime = ManagedRuntime.make(layer)
 
-/** The services a server function's program may use: the request's context and every layer's. */
-export type Services = RequestContext | ManagedRuntime.ManagedRuntime.Services<typeof runtime>
+/** The services a server function's program may use: the request's and every layer's. */
+export type Services =
+  | RequestContext
+  | CurrentSession
+  | HttpExchange
+  | ManagedRuntime.ManagedRuntime.Services<typeof runtime>
 
 /** Start's `context`, as its middleware (./middleware.ts) fills it. */
 export interface StartContext {
   readonly requestId: string
   /** The platform's: keeps the request's function up until the promise settles. */
   readonly waitUntil: (promise: Promise<unknown>) => void
+  /** The request's headers, and where the cookies a call sets go. */
+  readonly exchange: HttpExchange['Service']
+  /** The Session the request's cookie proves, if any. */
+  readonly session: Option.Option<Session>
 }
 
 const isFailure = Schema.is(Failure)
@@ -63,6 +87,8 @@ export async function run<A, E extends Failure>(
   const exit = await runtime.runPromiseExit(
     program.pipe(
       Effect.provideService(RequestContext, { requestId: context.requestId }),
+      Effect.provideService(CurrentSession, context.session),
+      Effect.provideService(HttpExchange, context.exchange),
       Effect.provideService(WaitUntil, (work) => {
         context.waitUntil(runtime.runPromise(work))
       }),
@@ -81,4 +107,25 @@ async function reported(cause: Cause.Cause<unknown>, context: StartContext) {
     ),
   )
   return new Unexpected()
+}
+
+/**
+ * The Session a request's cookie proves, if any, for the middleware to put on Start's context before
+ * any server function runs. A failure to tell (the database is down) is logged with the request id and
+ * fails the request, which the client sees as `Unexpected`.
+ */
+export function provenSession(
+  requestId: string,
+  exchange: HttpExchange['Service'],
+): Promise<Option.Option<Session>> {
+  return runtime.runPromise(
+    proven.pipe(
+      Effect.provideService(HttpExchange, exchange),
+      Effect.tapCause((cause) =>
+        Effect.logError('Resolving the session failed', cause).pipe(
+          Effect.annotateLogs({ requestId }),
+        ),
+      ),
+    ),
+  )
 }

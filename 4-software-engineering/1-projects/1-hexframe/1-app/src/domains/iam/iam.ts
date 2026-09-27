@@ -23,7 +23,7 @@ import {
  * Someone known to hexframe. Its name is not IAM's: the user is their Root tile in Mapping, whose
  * Title is copied to Better Auth for emails, never the other way.
  */
-export interface Account {
+interface Account {
   readonly id: string
   readonly email: string
 }

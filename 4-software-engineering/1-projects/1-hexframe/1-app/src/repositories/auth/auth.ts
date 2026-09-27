@@ -97,7 +97,8 @@ function exchanged<A>(call: (headers: Headers) => Promise<{ headers: Headers; re
       try: () => call(exchange.headers),
       catch: (error) => error,
     }).pipe(Effect.catch(refusedOrDefect))
-    exchange.setCookies(headers.getSetCookie())
+    const cookies = headers.getSetCookie()
+    if (cookies.length > 0) exchange.setCookies(cookies)
     return response
   })
 }
@@ -105,7 +106,7 @@ function exchanged<A>(call: (headers: Headers) => Promise<{ headers: Headers; re
 const userOf = ({ id, email }: AuthUser): AuthUser => ({ id, email })
 
 /** The Auth service over Better Auth, signing its cookies with `secret`. */
-export const make = (secret: Redacted.Redacted<string>) =>
+export const make = (secret: Redacted.Redacted) =>
   Effect.gen(function* () {
     const database = yield* PromiseDatabase
     const auth = betterAuth({

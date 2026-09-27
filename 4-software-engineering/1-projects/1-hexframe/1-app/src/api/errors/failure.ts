@@ -3,6 +3,8 @@
 // runtime: only schemas and plain data.
 import { Option, Schema } from 'effect'
 
+import { iamFailures } from '#/domains/iam/errors'
+
 import { devFailures } from '../dev/failures'
 
 /**
@@ -17,7 +19,7 @@ export class Unexpected extends Schema.TaggedError<Unexpected>()('Unexpected', {
  * Every failure a server function may end with. A domain's errors join the union as the domain is
  * built; the server function helper refuses, by its type, a program failing with one missing here.
  */
-export const Failure = Schema.Union([Unexpected, ...devFailures])
+export const Failure = Schema.Union([Unexpected, ...iamFailures, ...devFailures])
 export type Failure = typeof Failure.Type
 
 /** A failure as it crosses the wire: plain data, narrowed to the failures `E` lists. */
