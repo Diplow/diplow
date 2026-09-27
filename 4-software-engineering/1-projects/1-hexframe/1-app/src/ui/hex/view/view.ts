@@ -1,18 +1,33 @@
 // The canvas's view state: which Tile is centered, which Children are expanded, whether the center
 // shows its Context. It lives in the URL, so a link shows what its sender saw. Every function here
 // is pure; each change returns the next view, tidied, for the route to navigate to.
+import { Effect, Schema } from 'effect'
+
 import { directions } from '../geometry/geometry'
 import type { Placement, TileNode, Unfolding } from '../geometry/layout'
 
-/** The view as the URL carries it. An absent field is its default, so a plain URL is the root. */
-export interface CanvasView {
+/** A field the URL got wrong is left out, so the view falls back to its default for that field. */
+const orDefault = <S extends Schema.Top>(schema: S) =>
+  schema.pipe(Schema.catchDecoding(() => Effect.succeedNone))
+
+const TileId = Schema.String.check(Schema.isNonEmpty(), Schema.isMaxLength(100))
+
+/**
+ * The view as the URL carries it, and the route's `validateSearch`. Every field is optional and an
+ * absent one is its default, so a plain URL is the root with nothing open.
+ */
+export const CanvasView = Schema.Struct({
   /** The centered Tile's id; absent, the System's root. */
-  center?: string
+  center: Schema.optionalKey(orDefault(TileId)),
   /** The Children shown as Frames, each inside the centered Tile or an expanded Child. */
-  expanded?: string[]
+  expanded: Schema.optionalKey(
+    orDefault(Schema.Array(TileId).check(Schema.isMinLength(1), Schema.isMaxLength(100))),
+  ),
   /** Whether the centered Tile shows its Context. */
-  context?: boolean
-}
+  context: Schema.optionalKey(orDefault(Schema.Literal(true))),
+})
+
+export type CanvasView = typeof CanvasView.Type
 
 /** The view resolved against a System: the centered Tile itself, and what is open around it. */
 export interface ShownView extends Unfolding {
@@ -22,16 +37,14 @@ export interface ShownView extends Unfolding {
 /** What a click on a Tile does. A double-click, or Shift+Enter, centers any Tile but the center. */
 export type TileAction = 'expand' | 'collapse' | 'show-context' | 'hide-context' | 'center' | 'none'
 
-/** Reads the URL's search params field by field; a field it cannot read falls back to its default. */
+const decodeCanvasView = Schema.decodeUnknownSync(CanvasView)
+
+/**
+ * Reads the URL's search params, field by field. Every field is set, `undefined` when it falls back:
+ * the router lays a route's search over the raw one, where a field left out would keep its raw value.
+ */
 export function readCanvasView(search: Record<string, unknown>): CanvasView {
-  const view: CanvasView = {}
-  if (typeof search.center === 'string' && search.center !== '') view.center = search.center
-  if (Array.isArray(search.expanded)) {
-    const ids = search.expanded.filter((id): id is string => typeof id === 'string' && id !== '')
-    if (ids.length > 0) view.expanded = ids
-  }
-  if (search.context === true) view.context = true
-  return view
+  return { center: undefined, expanded: undefined, context: undefined, ...decodeCanvasView(search) }
 }
 
 /** The Tile with this id, anywhere in the System, Context Tiles included. */
@@ -48,11 +61,18 @@ export function findTile(system: TileNode, id: string): TileNode | undefined {
   return undefined
 }
 
+/** A view as a change asks for it, before `tidy` drops what no one would see. */
+interface WantedView {
+  center?: string
+  expanded?: readonly string[]
+  context?: boolean
+}
+
 /**
  * The view resolved against the System. An unknown center falls back to the root, and only the
  * expansions a reader can see are kept: a Child of the center, or of a Child that is expanded.
  */
-export function showView(system: TileNode, view: CanvasView): ShownView {
+export function showView(system: TileNode, view: WantedView): ShownView {
   const center = (view.center === undefined ? undefined : findTile(system, view.center)) ?? system
   const wanted = new Set(view.expanded)
   const expanded: string[] = []
@@ -70,13 +90,13 @@ export function showView(system: TileNode, view: CanvasView): ShownView {
 }
 
 /** The view in its shortest form: defaults left out, expansions no one can see dropped. */
-function tidy(system: TileNode, view: CanvasView): CanvasView {
+function tidy(system: TileNode, view: WantedView): CanvasView {
   const shown = showView(system, view)
-  const next: CanvasView = {}
-  if (shown.center !== system) next.center = shown.center.id
-  if (shown.expanded.size > 0) next.expanded = [...shown.expanded]
-  if (shown.context) next.context = true
-  return next
+  return {
+    ...(shown.center === system ? {} : { center: shown.center.id }),
+    ...(shown.expanded.size > 0 ? { expanded: [...shown.expanded] } : {}),
+    ...(shown.context ? { context: true } : {}),
+  }
 }
 
 export function toggleExpanded(system: TileNode, view: CanvasView, id: string): CanvasView {

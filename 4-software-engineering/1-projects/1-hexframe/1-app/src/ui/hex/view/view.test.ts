@@ -10,6 +10,7 @@ import {
   tileAction,
   toggleContext,
   toggleExpanded,
+  type CanvasView,
 } from './view'
 
 const tile = (id: string, more: Partial<TileNode> = {}): TileNode => ({
@@ -42,8 +43,18 @@ describe('readCanvasView', () => {
     expect(readCanvasView({ center: '', expanded: [], context: false })).toEqual({})
   })
 
-  it('keeps the ids of an expansion list and drops what is not one', () => {
-    expect(readCanvasView({ expanded: ['a', 1, '', null, 'b'] })).toEqual({ expanded: ['a', 'b'] })
+  it('sets every field, so a raw value the router keeps underneath is overwritten', () => {
+    const view = readCanvasView({ center: 3, expanded: 5, context: 'x' })
+    expect(Object.entries(view)).toEqual([
+      ['center', undefined],
+      ['expanded', undefined],
+      ['context', undefined],
+    ])
+  })
+
+  it('drops an expansion list holding anything but ids', () => {
+    expect(readCanvasView({ expanded: ['a', 1], context: true })).toEqual({ context: true })
+    expect(readCanvasView({ center: 'x'.repeat(101) })).toEqual({})
   })
 })
 
@@ -99,7 +110,7 @@ describe('toggleContext', () => {
 
 describe('centerOn', () => {
   it('centers a Tile, keeps the expansions below it and closes the Context', () => {
-    const view = { expanded: ['a', 'a3', 'b'], context: true }
+    const view: CanvasView = { expanded: ['a', 'a3', 'b'], context: true }
     expect(centerOn(system, view, 'a')).toEqual({ center: 'a', expanded: ['a3'] })
   })
 
@@ -136,7 +147,7 @@ describe('tileAction', () => {
   it('hides the Context from the center drawn inside it, and centers a Context Tile', () => {
     expect(actions({ context: true })).toEqual({
       'tile:root': 'hide-context',
-      'tile:why': 'center',
+      'tile:context:2': 'center',
       'tile:a': 'expand',
       'tile:b': 'expand',
     })
