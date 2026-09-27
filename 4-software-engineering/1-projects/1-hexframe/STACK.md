@@ -14,7 +14,7 @@ The choices, and the rules they come with. Each rule is written here until the f
 
 ## Where the code lives and how it lands
 
-- **Here, in the public `Diplow/diplow` repo.** Notes land on `main` by fast-forward; code under `1-hexframe/` lands through short-lived pull requests, hours old rather than days. I do the final merge for now; the direction is to let a green PR merge itself.
+- **Here, in the public `Diplow/diplow` repo.** Everything lands on `main` through short-lived pull requests, hours old rather than days, notes included (see the root [[STACK]]). I do the final merge for now; the direction is to let a green PR merge itself.
 - **Each pull request** runs `check` and `test`, gets a Neon branch and a Vercel preview, then Playwright against that preview. CI is path-filtered to `4-software-engineering/1-projects/1-hexframe/**`, so a note never triggers it.
 - **Autonomous runs land on a project branch.** When `run-autonomous-project` builds hexframe, its units branch from and merge into `project/<slug>`, not `main`; I merge that branch into `main` once the project's phase-close ticket is done.
 - **cubic** reviews each pull request through a `cubic.yaml` at the repo root, scoped to hexframe, with three custom agents: maintainability (from the `maintainability-review` skill), domain design (from `domain-design`) and security. The security bar: auth is checked in middleware, no secret reaches the client, every server function input goes through a schema, no raw SQL.
