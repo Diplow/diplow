@@ -4,5 +4,7 @@
   "hello_body": "hexframe lays out a system as a hierarchy of tiles, so AI can work along its intent.",
   "theme_toggle_to_dark": "Switch to dark theme",
   "theme_toggle_to_light": "Switch to light theme",
-  "locale_switch_label": "Language"
+  "locale_switch_label": "Language",
+  "dev_ui_tokens_title": "Theme tokens",
+  "dev_ui_tokens_body": "Every colour token in the theme, with its foreground on it when it has one. Switch the theme to see the other half."
 }

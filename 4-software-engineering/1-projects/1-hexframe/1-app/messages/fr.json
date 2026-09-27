@@ -4,5 +4,7 @@
   "hello_body": "hexframe organise un système en hiérarchie de tuiles, pour que l’IA travaille dans le sens de son intention.",
   "theme_toggle_to_dark": "Passer au thème sombre",
   "theme_toggle_to_light": "Passer au thème clair",
-  "locale_switch_label": "Langue"
+  "locale_switch_label": "Langue",
+  "dev_ui_tokens_title": "Jetons du thème",
+  "dev_ui_tokens_body": "Chaque jeton de couleur du thème, avec sa couleur de premier plan par-dessus quand il en a une. Changez de thème pour voir l’autre moitié."
 }
