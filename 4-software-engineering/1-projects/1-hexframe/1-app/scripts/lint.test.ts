@@ -3,7 +3,7 @@
 import { join } from 'node:path'
 
 import { ESLint } from 'eslint'
-import { describe, expect, it } from 'vitest'
+import { beforeAll, describe, expect, it } from 'vitest'
 
 import depcruise from '../dependency-cruiser.config'
 
@@ -20,6 +20,12 @@ async function restrictedSyntax(code: string, filePath: string) {
 const feature = 'src/routes/index.tsx'
 const inUi = 'src/ui/data/DataTable.tsx'
 const colour = /theme token/
+
+// The first type-aware lint builds the TypeScript program of the whole app, which takes seconds on a
+// cold CI runner and grows with the app. Built once here, so each case below times only its own lint.
+beforeAll(async () => {
+  await eslint.lintText('', { filePath: feature })
+}, 60_000)
 
 describe('the colour lint', () => {
   it.each([
@@ -86,18 +92,22 @@ describe('the Effect run lint', () => {
   const helper = 'src/api/server/run.ts'
   const run = /Only the server function helper/
 
-  it.each([
+  const runs = [
     "import { Effect } from 'effect'\nEffect.runPromise(Effect.void)\n",
     "import { Effect } from 'effect'\nEffect.runSyncExit(Effect.void)\n",
     "import { runFork } from 'effect/Effect'\nrunFork\n",
     'declare const runtime: { runPromiseExit: () => void }\nruntime.runPromiseExit()\n',
-  ])('refuses a program run outside the helper: %s', async (code) => {
-    for (const file of [feature, inUi, 'src/api/dev/provoke.ts']) {
+  ]
+  const files = [feature, inUi, 'src/api/dev/provoke.ts']
+
+  it.each(files.flatMap((file) => runs.map((code) => [file, code] as const)))(
+    'refuses a program run in %s: %s',
+    async (file, code) => {
       const messages = await restrictedSyntax(code, file)
       expect(messages).toHaveLength(1)
       expect(messages.every((message) => run.test(message))).toBe(true)
-    }
-  })
+    },
+  )
 
   it('lets the helper run one, and the rest of Effect through', async () => {
     const code = "import { Effect } from 'effect'\nEffect.runPromise(Effect.void)\n"
