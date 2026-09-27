@@ -45,7 +45,7 @@ The repo root is one node. A node holds:
 | Slot | Budget | What goes there |
 |---|---|---|
 | `CLAUDE.md` | 1, outside every budget | Presents the node: a preview and a link per child |
-| Inner children (-1 to -6) | 6 folders | Meta about the node itself: `.claude/`, `.obsidian/`, `.skills/`, `.conductor/` |
+| Inner children (-1 to -6) | 6 folders | Meta about the node itself: `.claude/`, `.obsidian/`, `.skills/`, `.conductor/`, `.github/` |
 | Children (1 to 6) | 6 folders | The node's facets, numbered by their place on the ring: `1-name/` … `6-name/` |
 | Files | 6 | Content that belongs to the node itself, not to one facet |
 
@@ -63,6 +63,7 @@ Children sit on a ring: neighbors share an edge, and the child across the ring i
 | `.obsidian/` | Inner child: Obsidian config that makes the repo root a vault; per-device layout (`workspace*.json`) stays out of git; `node_modules/` is excluded from the vault | exists |
 | `.skills/` | Inner child: the skills I use, mine and vendored; see [[.skills/CLAUDE\|Skills]] | exists |
 | `.conductor/` | Inner child: Conductor settings; the setup script installs hexframe's dependencies in each new workspace | exists |
+| `.github/` | Inner child: GitHub Actions, one workflow per project, path-filtered to it so a note never triggers one | exists |
 | `.mcp.json` | MCP servers for this repo only; the `X-Project` header on `hodor` gives it an OAuth login separate from other projects' `hodor` | exists |
 | `.gitignore` | Paths kept out of git | exists |
 | `.gitattributes` | Marks `-` files and folders for encryption | exists |

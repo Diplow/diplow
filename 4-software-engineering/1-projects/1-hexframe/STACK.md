@@ -48,7 +48,7 @@ TanStack Store, DB, Pacer, Charts and Virtual stay out until a problem asks for 
 
 ## Shape: the rule of 6 inside the code
 
-Every folder under `1-app/src/` is a node: at most 6 child folders and 6 files, enforced by lint. Names are plain inside the code (`domains/iam/`, not `domains/1-iam/`): numbers stay on packages and vault nodes, where the ring means something.
+Every folder under `1-app/src/` holds at most 6 child folders and 6 files. The rule now lives in [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE|1-app]].
 
 ## Layers
 
@@ -120,13 +120,7 @@ Three small custom lint rules enforce it: the `useState` ceiling, no `dispatch` 
 
 ## Design system
 
-`ui/` is a closed list of components I own. A feature builds from it and never adds to it; a missing component is a Linear ticket that says what the feature needs to show, not which component it wants.
-
-- Six folders, named for what a component is for: `inputs/` (with `controls/` and `forms/` inside), `surfaces/`, `overlays/`, `data/`, `feedback/`, and `hex/`, the canvas: the geometry as tested pure functions, then the tile, the frame and the canvas built on it.
-- Only `ui/` imports Radix, TanStack Table, the Markdown renderer and TanStack Hotkeys. No raw `<table>` or `<dialog>` outside it. Colour comes from theme tokens, never a palette name or a hex.
-- Light and dark from the start.
-- `/dev/ui`, in dev only, shows every component in every state.
-- The first list: `Button`, `Input`, `Textarea`, `Field` and `useAppForm`, `Card`, `PageHeader`, `Drawer`, `ConfirmDialog`, `DropdownMenu`, `Tooltip`, `Toaster`, `Skeleton`, `EmptyState`, `ErrorState`, `Forbidden`, `DataTable`. It grows by request.
+`ui/` is a closed list of components I own, in six folders, light and dark from the start. The rules now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/ui/CLAUDE|ui]].
 
 ## Lint
 

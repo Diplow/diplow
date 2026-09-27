@@ -5,13 +5,17 @@ owner: diplo
 preview: >-
   Hexframe, the app where a user lays out a system as a hierarchy of tiles so AI
   can work along their intent. A pnpm monorepo, each package a numbered child;
-  no package yet. STACK.md holds the stack, the rules and the domains' language.
+  the first is 1-app. STACK.md holds the stack, the rules and the domains' language.
 ---
 # hexframe
 
 The app where a user lays out a system (a codebase, a team, their own life) as a hierarchy of tiles: one tile, the six it breaks into, then theirs. What they choose to show first carries their intent, and an AI reading the system in that order works along it.
 
-It is a pnpm monorepo; each package is a numbered child of this node (`1-<name>/`, `2-<name>/`, …). No package exists yet: the first will be `1-app`.
+It is a pnpm monorepo; each package is a numbered child of this node (`1-<name>/`, `2-<name>/`, …).
+
+| # | Package | What it is |
+|---|---|---|
+| 1 | [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE\|app]] | `@hexframe/app`, the TanStack Start app holding client and server, deployed to Vercel |
 
 | File | What it holds |
 |---|---|
@@ -24,3 +28,5 @@ It is a pnpm monorepo; each package is a numbered child of this node (`1-<name>/
 - **Package names** are `@hexframe/<package>`.
 
 Conductor runs `pnpm install` here when it creates a workspace (`.conductor/settings.toml` at the repo root). Obsidian ignores `node_modules/`.
+
+Each pull request that touches this folder runs `check` and `test` in CI (`.github/workflows/hexframe.yml` at the repo root) and gets a Vercel preview.

@@ -1,0 +1,33 @@
+# hexframe's pull request checks. Notes never trigger it: it only runs when hexframe's code changes.
+name: hexframe
+
+on:
+  pull_request:
+    paths:
+      - 4-software-engineering/1-projects/1-hexframe/**
+      - .github/workflows/hexframe.yml
+
+concurrency:
+  group: hexframe-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: 4-software-engineering/1-projects/1-hexframe
+
+jobs:
+  check-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          package_json_file: 4-software-engineering/1-projects/1-hexframe/package.json
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: 4-software-engineering/1-projects/1-hexframe/package.json
+          cache: pnpm
+          cache-dependency-path: 4-software-engineering/1-projects/1-hexframe/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm test
