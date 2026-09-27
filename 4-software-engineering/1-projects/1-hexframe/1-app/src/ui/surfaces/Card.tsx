@@ -11,9 +11,12 @@ interface CardProps {
   className?: string
 }
 
+// `null` and `false` render nothing, so a slot holding one stays out, wrapper and spacing included.
+const present = (slot: ReactNode) => slot !== undefined && slot !== null && slot !== false
+
 /** A bordered surface grouping one thing's content, with an optional header and footer. */
 export function Card({ title, description, action, footer, children, className }: CardProps) {
-  const hasHeader = title !== undefined || description !== undefined || action !== undefined
+  const hasHeader = present(title) || present(description) || present(action)
   return (
     <section
       data-slot="card"
@@ -25,16 +28,14 @@ export function Card({ title, description, action, footer, children, className }
       {hasHeader && (
         <header className="flex items-start gap-4 px-6">
           <div className="grid flex-1 gap-1.5">
-            {title !== undefined && <h3 className="leading-none font-semibold">{title}</h3>}
-            {description !== undefined && (
-              <p className="text-sm text-muted-foreground">{description}</p>
-            )}
+            {present(title) && <h3 className="leading-none font-semibold">{title}</h3>}
+            {present(description) && <p className="text-sm text-muted-foreground">{description}</p>}
           </div>
           {action}
         </header>
       )}
-      {children !== undefined && <div className="px-6">{children}</div>}
-      {footer !== undefined && <footer className="flex items-center gap-2 px-6">{footer}</footer>}
+      {present(children) && <div className="px-6">{children}</div>}
+      {present(footer) && <footer className="flex items-center gap-2 px-6">{footer}</footer>}
     </section>
   )
 }

@@ -54,9 +54,10 @@ function TextareaField({ label, description, placeholder }: TextFieldProps) {
 function SubmitButton({ children }: { children: ReactNode }) {
   const form = useFormContext()
   return (
-    <form.Subscribe selector={(state) => [state.canSubmit, state.isSubmitting] as const}>
-      {([canSubmit, isSubmitting]) => (
-        <Button type="submit" disabled={!canSubmit || isSubmitting}>
+    // Enabled while the form is invalid: a submit attempt is what shows every field's error.
+    <form.Subscribe selector={(state) => state.isSubmitting}>
+      {(isSubmitting) => (
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting && <Loader2 className="animate-spin" />}
           {children}
         </Button>

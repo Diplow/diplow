@@ -6,9 +6,13 @@ import tseslint from 'typescript-eslint'
 
 // Colour comes from theme tokens (src/styles.css), never a hex nor a Tailwind palette name such as
 // `bg-zinc-900` or `text-white`: a literal would miss the other theme. Esquery regexes cannot hold a `/`.
-const hex = '#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\\b'
-const palette =
-  '\\b(?:bg|text|border|ring|outline|fill|stroke|from|via|to|shadow|decoration|divide|accent|caret|placeholder)-(?:(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-[0-9]{2,3}|black|white)\\b'
+// `#rgb`, `#rrggbb`, `#rrggbbaa`; `#rgba` is left out, since it reads like an anchor (`#cafe`) or an issue (`#1234`).
+const hex = '#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\\b'
+// A palette name with its shade after any utility (`bg-zinc-900`, `border-x-red-500/50`), or black and white.
+const palette = [
+  '-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|[1-9]00|950)\\b',
+  '\\b(?:bg|text|border(?:-[xytblrse])?|ring(?:-offset)?|outline|fill|stroke|from|via|to|shadow|decoration|divide|accent|caret|placeholder)-(?:black|white)\\b',
+].join('|')
 const colourLiterals = [hex, palette].flatMap((pattern) =>
   ['Literal[value', 'TemplateElement[value.raw'].map((node) => ({
     selector: `${node}=/${pattern}/]`,
@@ -40,9 +44,10 @@ export default defineConfig(
       'max-lines-per-function': ['error', { max: 150, skipBlankLines: true, skipComments: true }],
       'max-params': ['error', 5],
       'max-lines': ['error', { max: 600, skipBlankLines: true, skipComments: true }],
-      'no-restricted-syntax': ['error', ...colourLiterals],
     },
   },
+  // The app's code, where colour is rendered; scripts/lint.test.ts holds the literals these rules refuse.
+  { files: ['src/**'], rules: { 'no-restricted-syntax': ['error', ...colourLiterals] } },
   {
     files: ['src/**'],
     ignores: ['src/ui/**'],

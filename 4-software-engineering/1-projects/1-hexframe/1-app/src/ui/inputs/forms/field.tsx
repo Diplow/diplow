@@ -1,13 +1,19 @@
-import { Label, Slot } from 'radix-ui'
-import { useId, type ReactElement } from 'react'
+import { Label } from 'radix-ui'
+import { cloneElement, useId, type ReactElement } from 'react'
+
+interface ControlProps {
+  id?: string
+  'aria-invalid'?: boolean
+  'aria-describedby'?: string
+}
 
 interface FieldProps {
   label: string
   description?: string
   /** Messages to show under the control; any of them marks it invalid. */
   errors?: readonly string[]
-  /** One control (Input, Textarea…): Field gives it its id and its aria wiring. */
-  children: ReactElement
+  /** One control (Input, Textarea…): Field gives it its id and its aria wiring, over any of its own. */
+  children: ReactElement<ControlProps>
 }
 
 /** A labelled control, with its description and its errors, announced to assistive technology. */
@@ -25,16 +31,18 @@ export function Field({ label, description, errors = [], children }: FieldProps)
       >
         {label}
       </Label.Root>
-      <Slot.Root id={id} aria-invalid={invalid || undefined} aria-describedby={describedBy}>
-        {children}
-      </Slot.Root>
+      {cloneElement(children, {
+        id,
+        'aria-invalid': invalid || undefined,
+        'aria-describedby': describedBy,
+      })}
       {description && (
         <p id={descriptionId} className="text-sm text-muted-foreground">
           {description}
         </p>
       )}
       {invalid && (
-        <p id={errorId} className="text-sm text-destructive">
+        <p id={errorId} role="alert" className="text-sm text-destructive">
           {errors.join(' ')}
         </p>
       )}

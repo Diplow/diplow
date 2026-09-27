@@ -45,7 +45,7 @@ export function DropdownMenu({ trigger, label, entries, align = 'start' }: Dropd
               />
             ) : (
               <Menu.Item
-                key={entry.label}
+                key={`${String(index)}-${entry.label}`}
                 onSelect={entry.onSelect}
                 disabled={entry.disabled}
                 className={cn(

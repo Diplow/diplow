@@ -23,6 +23,7 @@ export interface DataColumn<TRow> {
 }
 
 interface DataTableProps<TRow> {
+  /** Keep the array stable across renders (module scope or `useMemo`): a new one rebuilds the table. */
   columns: readonly DataColumn<TRow>[]
   /** `undefined` while loading, as TanStack Query's `data` is. */
   rows: readonly TRow[] | undefined
@@ -74,7 +75,7 @@ export function DataTable<TRow extends RowData>({
 
   return (
     <div className="w-full overflow-x-auto rounded-lg border">
-      <table className="w-full caption-bottom text-sm">
+      <table aria-busy={rows === undefined || undefined} className="w-full caption-bottom text-sm">
         <caption className="sr-only">{caption}</caption>
         <thead className="border-b bg-muted/50">
           {table.getHeaderGroups().map((group) => (

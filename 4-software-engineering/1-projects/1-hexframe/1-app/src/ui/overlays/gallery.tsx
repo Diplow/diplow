@@ -103,6 +103,8 @@ function DrawerSpecimen() {
     <>
       <Button
         variant="outline"
+        aria-haspopup="dialog"
+        aria-expanded={open}
         onClick={() => {
           setOpen(true)
         }}

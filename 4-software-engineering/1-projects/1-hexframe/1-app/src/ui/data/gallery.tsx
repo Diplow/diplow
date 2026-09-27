@@ -1,4 +1,5 @@
 import { Plus, Rows3 } from 'lucide-react'
+import { useMemo } from 'react'
 
 import { m } from '#/paraglide/messages'
 
@@ -45,7 +46,8 @@ const tileColumns = (): DataColumn<TileRow>[] => [
 const tileId = (row: TileRow) => row.id
 
 export function DataGallery() {
-  const columns = tileColumns()
+  // The locale changes with a full page load, so the columns are built once.
+  const columns = useMemo(tileColumns, [])
   const empty = (
     <EmptyState
       icon={<Rows3 />}

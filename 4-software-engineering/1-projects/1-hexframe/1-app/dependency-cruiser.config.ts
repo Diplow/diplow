@@ -14,6 +14,7 @@ const uiLibraries = [
   'radix-ui',
   '@radix-ui/.+',
   '@tanstack/react-table',
+  '@tanstack/react-form',
   '@tanstack/table-core',
   '@tanstack/(react-)?hotkeys',
   '@tanstack/(react-)?markdown',

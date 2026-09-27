@@ -12,7 +12,7 @@ export function GallerySection({ name, children }: { name: string; children: Rea
 
 export function GalleryState({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <figure className="grid max-w-full gap-2">
+    <figure className="grid max-w-full min-w-0 gap-2 [&>*]:max-w-full">
       <figcaption className="text-xs text-muted-foreground">{label}</figcaption>
       {children}
     </figure>
