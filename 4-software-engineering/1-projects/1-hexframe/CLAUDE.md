@@ -3,12 +3,19 @@ title: hexframe
 parent: 4-software-engineering/1-projects/1-hexframe
 owner: diplo
 preview: >-
-  Hexframe, the app that defines and organizes contents as hexframes, as a pnpm
-  monorepo: each package is a numbered child of this node. Empty for now.
+  Hexframe, the app where a user lays out a system as a hierarchy of tiles so AI
+  can work along their intent. A pnpm monorepo, each package a numbered child;
+  no package yet. STACK.md holds the stack, the rules and the domains' language.
 ---
 # hexframe
 
-The app that defines and organizes contents as hexframes. It is a pnpm monorepo; each package is a numbered child of this node (`1-<name>/`, `2-<name>/`, …). No package exists yet.
+The app where a user lays out a system (a codebase, a team, their own life) as a hierarchy of tiles: one tile, the six it breaks into, then theirs. What they choose to show first carries their intent, and an AI reading the system in that order works along it.
+
+It is a pnpm monorepo; each package is a numbered child of this node (`1-<name>/`, `2-<name>/`, …). No package exists yet: the first will be `1-app`.
+
+| File | What it holds |
+|---|---|
+| [[4-software-engineering/1-projects/1-hexframe/STACK\|STACK]] | The technical choices, the rules that come with them, and the language of each domain. Read it before adding code |
 
 ## Rules
 

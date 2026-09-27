@@ -12,5 +12,5 @@ The software I build. Each project is a numbered child and owns its own stack.
 
 | # | Project | What it is |
 |---|---|---|
-| 1 | [[4-software-engineering/1-projects/1-hexframe/CLAUDE\|hexframe]] | The app that defines and organizes contents as hexframes; a pnpm monorepo |
+| 1 | [[4-software-engineering/1-projects/1-hexframe/CLAUDE\|hexframe]] | The app where a user lays out a system as a hierarchy of tiles so AI works along their intent; a pnpm monorepo |
 | 2 | [[4-software-engineering/1-projects/2-site/CLAUDE\|site]] | My personal website; not started |

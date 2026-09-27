@@ -1,0 +1,214 @@
+---
+title: hexframe stack
+parent: 4-software-engineering/1-projects/1-hexframe
+owner: diplo
+preview: >-
+  hexframe's technical choices, the rules that come with them, and the language
+  of its three domains (IAM, Mapping, Assistant). A TanStack Start app on
+  Vercel, Effect on the server, Neon and Drizzle below. Each rule moves into the
+  CLAUDE.md of the folder it governs once that folder exists.
+---
+# hexframe stack
+
+The choices, and the rules they come with. Each rule is written here until the folder it governs exists; then it moves into that folder's `CLAUDE.md` and this file keeps one line and a link. The principles behind all of it are in [[4-software-engineering/2-principles/CLAUDE|Principles]].
+
+## Where the code lives and how it lands
+
+- **Here, in the public `Diplow/diplow` repo.** Notes land on `main` by fast-forward; code under `1-hexframe/` lands through short-lived pull requests, hours old rather than days. I do the final merge for now; the direction is to let a green PR merge itself.
+- **Each pull request** runs `check` and `test`, gets a Neon branch and a Vercel preview, then Playwright against that preview. CI is path-filtered to `4-software-engineering/1-projects/1-hexframe/**`, so a note never triggers it.
+- **Autonomous runs land on a project branch.** When `run-autonomous-project` builds hexframe, its units branch from and merge into `project/<slug>`, not `main`; I merge that branch into `main` once the project's phase-close ticket is done.
+- **cubic** reviews each pull request through a `cubic.yaml` at the repo root, scoped to hexframe, with three custom agents: maintainability (from the `maintainability-review` skill), domain design (from `domain-design`) and security. The security bar: auth is checked in middleware, no secret reaches the client, every server function input goes through a schema, no raw SQL.
+
+## Runtime and versions
+
+- **Vercel**, Node runtime.
+- **One package to start**, `1-app`: a TanStack Start app holding client and server. A second package appears when a second deployable does, not before.
+- **Stable or release candidate; beta and alpha only behind a seam**, one file that can be swapped. So: TanStack Start RC, Effect 4 RC (migrating 3 to 4 later would touch every file), Drizzle v1 RC if `@effect/sql-drizzle` supports it (0.45 otherwise), and Sentry's alpha TanStack Start SDK behind the observability seam.
+
+| Need | Choice |
+|---|---|
+| Framework | React 19, TanStack Start, Router |
+| Server data | TanStack Query |
+| Forms | TanStack Form |
+| Tables | TanStack Table v9, inside `ui/` only |
+| Shortcuts | TanStack Hotkeys, behind a `hotkeys` seam in `ui/` |
+| Tile content | TanStack Markdown (alpha), behind a seam in `ui/`: if it disappoints, the seam is the one file that changes |
+| Building a system by conversation | TanStack AI |
+| Effects and typed errors | Effect |
+| Validation | Effect Schema, everywhere; `zod` is banned by lint |
+| Database | Neon, Drizzle through `@effect/sql-drizzle` |
+| Auth | Better Auth, behind IAM |
+| Payments | Stripe through `@better-auth/stripe`, behind IAM |
+| UI | Tailwind, shadcn |
+| Languages | Paraglide JS |
+| Errors and alerting | Sentry |
+| Analytics and logs | PostHog |
+
+TanStack Store, DB, Pacer, Charts and Virtual stay out until a problem asks for them.
+
+## Shape: the rule of 6 inside the code
+
+Every folder under `1-app/src/` is a node: at most 6 child folders and 6 files, enforced by lint. Names are plain inside the code (`domains/iam/`, not `domains/1-iam/`): numbers stay on packages and vault nodes, where the ring means something.
+
+## Layers
+
+| Layer | In TanStack Start | Holds |
+|---|---|---|
+| API | Server functions (`createServerFn`) and Start middleware; raw server routes only for inbound webhooks | Plumbing (auth, request id, logging) and the composition of domains |
+| Domains | Effect services, one folder per domain | The business logic, in the domain's language |
+| Repositories | Effect layers over Drizzle, Better Auth, Stripe | The technical complexity |
+
+Domains ignore each other; only the API layer composes them.
+
+## Effect stops at the server function
+
+Domains, repositories and the API layer are Effect. The client stays on TanStack Query, Form and Router, which are promise-native: wrapping them in Effect would fight three libraries for nothing the decoded error union does not already give.
+
+The two meet in one helper. Start middleware stays promise-based and puts the request id and the Session on Start's `context`; every server function hands its program to the helper, which provides that context as Effect services, runs the program on one `ManagedRuntime` built from every layer, and returns the value or the serialized error. Nothing else calls `run*`: a lint says no.
+
+## Errors
+
+- **Each domain declares its errors** as tagged classes in its own language (`EntitlementMissing`). Each carries one **kind** from a closed set: `Unauthenticated`, `Forbidden`, `Invalid` (with field errors), `NotFound`, `Conflict`, `Unexpected`.
+- **A server function's type lists the errors it can fail with.** Repository and infrastructure failures collapse to `Unexpected`: reported to Sentry with the request id, never shown as they are.
+- **The client decodes the union back into the tagged classes** with Effect Schema.
+- **The channel is picked by kind and by read or write**, never by a component's author:
+
+| The call | The kind | Channel |
+|---|---|---|
+| anything | `Unauthenticated` | one redirect to sign-in, carrying where the user was |
+| a read | `Forbidden` | the `Forbidden` state: the page worked, the answer is no |
+| a read | anything else | `ErrorState` in the nearest boundary, with a retry and the request id |
+| a read that frames every page | anything but `Unauthenticated` | reported, nothing on screen |
+| a write | `Invalid`, on a form's submit | the form's fields |
+| a write | anything else | one toast |
+
+- **The message table** is keyed by `_tag`, optionally narrowed by a scope (a server function's name or a route id), first match wins, with a fallback per kind, in both languages.
+- **A feature writes no error handling**: components never `try/catch` a call, reducers never hold an error, and the server's own sentence never reaches the screen.
+
+Adapted from the error model of a previous project; its channels survive, its HTTP statuses become kinds.
+
+## The bus
+
+One typed bus on the server, one in the client, for facts other parts may react to.
+
+- **An event is a fact in the past tense**, declared by the domain that emits it, in its language (`AccountCreated`), with an Effect Schema.
+- **Subscriptions are wired in the API layer**, since only it composes domains. A caller that needs a result calls directly; the bus is never a way to ask.
+- **The server bus is in-process** (Effect `PubSub`); subscribers finish inside the request through `waitUntil`, and a lost event is acceptable. The day a subscriber cannot be lost, the bus moves to an outbox table.
+- **The client bus** carries facts between sibling features, which may not import each other.
+- **A message is decoded by its schema where it crosses a boundary** (into the client, into an outbox); inside one process the type is enough.
+- Every message is logged at `medium`.
+
+## State
+
+Every piece of client state has one owner, decided by what the state is. The first line that matches wins:
+
+| The state is | Owner |
+|---|---|
+| something the server knows | TanStack Query |
+| something a link should carry: a filter, a page, the open drawer | Router search params (`validateSearch`, a `.catch` default per field) |
+| a value being typed, validated and submitted | TanStack Form (`useAppForm`) |
+| anything else, more than a handful | a `use<Thing>State` hook returning `{ state, actions }` |
+| anything else, a handful | the component: at most 5 `useState` |
+
+- **Server data is never copied into a reducer**; a reducer holds ids, rows stay in Query's cache.
+- **A state hook** is `createSlice` (from RTK, with no store, no provider, no thunk) plus `useReducer`, or `useSyncExternalStore` when the state comes from outside React. A component never sees `dispatch`.
+- **No `useEffect` outside `ui/`.**
+- **Every state hook has a test** beside it; `state/` folders carry a 90% branch floor.
+- **No state outlives a page** except in the URL or Query's cache. Adding some is a decision, not a refactor.
+
+Three small custom lint rules enforce it: the `useState` ceiling, no `dispatch` in a component, a state hook needs a test.
+
+## Design system
+
+`ui/` is a closed list of components I own. A feature builds from it and never adds to it; a missing component is a Linear ticket that says what the feature needs to show, not which component it wants.
+
+- Six folders, named for what a component is for: `inputs/` (with `controls/` and `forms/` inside), `surfaces/`, `overlays/`, `data/`, `feedback/`, and `hex/`, the canvas: the geometry as tested pure functions, then the tile, the frame and the canvas built on it.
+- Only `ui/` imports Radix, TanStack Table, the Markdown renderer and TanStack Hotkeys. No raw `<table>` or `<dialog>` outside it. Colour comes from theme tokens, never a palette name or a hex.
+- Light and dark from the start.
+- `/dev/ui`, in dev only, shows every component in every state.
+- The first list: `Button`, `Input`, `Textarea`, `Field` and `useAppForm`, `Card`, `PageHeader`, `Drawer`, `ConfirmDialog`, `DropdownMenu`, `Tooltip`, `Toaster`, `Skeleton`, `EmptyState`, `ErrorState`, `Forbidden`, `DataTable`. It grows by request.
+
+## Lint
+
+`pnpm check` runs all of it and CI enforces it; no pre-commit hook.
+
+| Rule | Tool |
+|---|---|
+| Strict types | ESLint flat config, `typescript-eslint` strict type-checked |
+| At most 6 folders and 6 files per folder | `eslint-plugin-project-structure` |
+| Layer direction, no domain importing another, a third-party SDK imported only by its repository | `dependency-cruiser` |
+| Dead code | `knip` |
+| Cognitive complexity at most 15 | `eslint-plugin-sonarjs` |
+| At most 150 lines per function, 5 parameters (an object beyond), 600 lines per file | ESLint core |
+| Formatting | Prettier |
+
+**The escape hatch is a comment.** When splitting would not make the code clearer to its next reader, human or agent, a rule can be disabled on the spot with a `-- reason` that says why; a disable without one fails the lint (`eslint-comments/require-description`). cubic reads the reasons.
+
+## Database
+
+Neon in every deployed environment, one branch per pull request. Migrations are generated by `drizzle-kit generate` and committed; CI applies them to the pull request's branch before its preview deploys, and to production before production deploys. `push` is for local dev only. The PGlite tests run the same migrations.
+
+## Tests
+
+Vitest with `@effect/vitest`.
+
+- **Unit**: pure domain functions.
+- **Integration**, most of the suite: a server function or a domain service on real repositories over PGlite, an in-memory Postgres. Better Auth runs for real on it; Stripe is a fake layer.
+- **End to end**: a few critical journeys, Playwright against the pull request's preview.
+- **Components get no tests.** Their logic lives in state hooks, which do.
+- **The agent looks at what it built.** A change a user can see is not done until the agent building it has opened it in a browser (claude-in-chrome) and checked it does what the ticket says: the screens it touched, in light and dark, in both languages. Types and tests say the code holds together; only the browser says it lands.
+
+## Domains
+
+Each domain introduces its language with a short story in its `CLAUDE.md`: what it is about and the problems it solves, not an exhaustive glossary.
+
+### IAM
+
+Identity and access: who someone is, and what they may do.
+
+- **Account**: someone known to hexframe. Its name is not IAM's to decide: the user is their Root tile in Mapping, and the name Better Auth keeps for emails is copied from that Tile's Title, never the other way.
+- **Session**: an Account's proven presence, for a while, on one device.
+- **Key**: a credential an Account issues to a program (an MCP client, a script) and can revoke. Whether a Key can be limited to one Tile or to reading, and how OAuth clients fit beside it, is settled when the MCP server is built.
+- **Entitlement**: something an Account may do. It is derived, when asked, from what the Account pays for, so it never drifts from Stripe.
+
+Better Auth and its Stripe plugin are repositories below IAM; the plugin owns the subscription tables and the Stripe webhook. No domain says "billing". AI usage is what a paid Entitlement buys; the structure itself stays free.
+
+### Mapping
+
+The core domain. Someone maintains a system (a codebase, a team, their own life) and wants AI to work along their intent. Mapping lets them lay that system out as a hierarchy where what comes first is what matters most: a reader, human or agent, sees one tile, then the six it breaks into, then theirs. Choosing what to expose first is the exercise, and the hierarchy it produces carries the intent.
+
+- **System**: the whole hierarchy a user maintains. An Account has exactly one, and its **Root** tile is the user: there is no profile beside it. The Root's Title is the user's name everywhere in the app. Mapping ensures the Root the first time a System is read, idempotently, so no lost event can leave an Account without one. *Hexframe* is the product and the form, never the thing a user owns.
+- **Tile**: the unit. A **Title**, a **Preview** (at most 350 characters: what a reader needs to decide whether to open it) and a **Body** in Markdown.
+- **Child**: a Tile in one of its parent's six **Directions**, which say what the parent does and how: 1 NW, 2 NE, 3 E, 4 SE, 5 SW, 6 W. The **Opposite** direction, three away, is a tension the parent balances. A seventh Child is refused: the user regroups some Children under a new one, by moving them. That regrouping is the exercise, not a workaround.
+- **Context**: what a Tile *is*, where its Children say what it does. Up to six Context slots, −1 to −6, in the same Directions; each holds a Tile of its own or a Reference to any Tile the user can read, a public one in someone else's System included. A codebase's Children are its frontend, backend and CI; its Context is the principles it follows.
+- **Frame**: a Tile together with its Children.
+- **Reference**: a link from one Tile to another, by id, so it survives a move. A reference to a deleted Tile shows as broken; it never blocks the delete.
+- **Operations**: create, edit, move (a Tile and everything below it), delete.
+
+What a user does *to look* at a System is not Mapping: centering on a Tile, expanding and collapsing a Frame, showing the center Tile's Context. It is view state, owned by the URL, so a link shows exactly what its sender saw.
+
+Sharing, export and the MCP server all take a Tile as their entry point, and everything below it comes along. A Tile can be public by link, so any LLM that can fetch a URL can read it. An agent reads through the MCP server, in the order a human discovers it: a Tile's Children's Previews before any of their Bodies. A System exports as a zipped folder: a folder per Tile, `<n>-<slug>/` for a Child and `.<n>-<slug>/` for a Context tile, holding one Markdown file with the frontmatter (`title`, `parent`, `preview`) and the Body; References become `[[wikilinks]]`. The user can rename the file and the folder pattern (defaults: `CLAUDE.md`, the ones above).
+
+### Assistant
+
+A conversation with an agent that builds a System on the user's behalf, saving every click. Assistant knows nothing about Tiles: the API layer hands it Mapping's operations as tools.
+
+- **Conversation**: one continuous timeline per Account, split by day. It holds the **Messages** between the user and the agent, and records what the user did on the canvas (navigations, operations), so the agent always knows where the user is. Mapping never hears about views; Assistant is what records them.
+- **Proposal**: an operation the agent wants to run, waiting for the user.
+- **Mode**, per Conversation, as in Claude Code: *ask* (the default) makes every operation a Proposal, *apply* runs them. An applied batch can be undone.
+
+## Languages
+
+Bilingual from day one, English and French, with Paraglide: typed message functions, and a missing message fails the build. The code, its identifiers and its message keys are in English.
+
+## Observability
+
+- **Sentry** owns errors, traces and alerting.
+- **PostHog** owns product analytics and the leveled event log. An error reaches PostHog as a small `error` event (kind, code, scope, request id, Sentry event id), never as a second copy of the stack.
+- **Verbosity** is set per environment and can be raised for one user by a PostHog feature flag:
+
+| Level | Logs | Where by default |
+|---|---|---|
+| high | page visits, action clicks and shortcuts, API calls, errors | production |
+| medium | high, plus domain service calls, state actions, bus messages | previews |
+| low | medium, plus information logs, repository and database calls, renders | dev (renders only ever in dev) |
