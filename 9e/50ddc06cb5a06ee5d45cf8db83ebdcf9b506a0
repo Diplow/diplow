@@ -1,0 +1,43 @@
+4-software-engineering/1-code/pnpm-workspace.yaml
+  s_1ef5328587f847::t_fdd7cb21c32144 1-3
+4-software-engineering/1-code/.gitignore
+  s_1ef5328587f847::t_fdd7cb21c32144 1
+4-software-engineering/1-code/CLAUDE.md
+  s_1ef5328587f847::t_591855e0cffe90 1-27
+.obsidian/app.json
+  s_1ef5328587f847::t_fdd7cb21c32144 1-5
+4-software-engineering/1-code/2-site/CLAUDE.md
+  s_1ef5328587f847::t_993cf0c6ee978b 1-10
+4-software-engineering/1-code/3-boilerplate/CLAUDE.md
+  s_1ef5328587f847::t_2d87d975aee5ad 10
+  s_1ef5328587f847::t_993cf0c6ee978b 1-9
+STACK.md
+  s_1ef5328587f847::t_7061b83aafc991 82
+  s_1ef5328587f847::t_4cf9d80e963755 47,91
+  s_1ef5328587f847::t_58a3d33bf0914b 62
+  s_1ef5328587f847::t_7e2c21637e20df 64
+4-software-engineering/1-code/package.json
+  s_1ef5328587f847::t_fdd7cb21c32144 1-14
+.conductor/settings.toml
+  s_1ef5328587f847::t_fdd7cb21c32144 1-4
+4-software-engineering/1-code/1-hexframe/CLAUDE.md
+  s_1ef5328587f847::t_993cf0c6ee978b 1-10
+4-software-engineering/1-code/pnpm-lock.yaml
+  s_1ef5328587f847::t_c91ba55f667a44 1-9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9e50ddc06cb5a06ee5d45cf8db83ebdcf9b506a0",
+  "prompts": {},
+  "sessions": {
+    "s_1ef5328587f847": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8830389f-ec47-4f81-a030-9cd8d652fcec",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
