@@ -2,10 +2,31 @@
 // `context`, and the helper (./run.ts) hands it to the program as Effect services. src/start.ts runs it
 // before every server function. IAM's Session joins the request id here once IAM is built.
 import { createMiddleware } from '@tanstack/react-start'
+import { getRequest } from '@tanstack/react-start/server'
 
 import type { StartContext } from './run'
 
+/** A request as Nitro hands it over (srvx's `ServerRequest`), with the platform's `waitUntil`. */
+type PlatformRequest = Request & Pick<StartContext, 'waitUntil'>
+
+function isPlatformRequest(request: Request): request is PlatformRequest {
+  return 'waitUntil' in request && typeof request.waitUntil === 'function'
+}
+
+/**
+ * The platform's `waitUntil`, which Nitro puts on the request: Vercel's on Vercel, srvx's own under
+ * `pnpm dev`. Where there is none, the work still runs; nothing keeps the function up for it.
+ */
+function waitUntilOf(request: Request): StartContext['waitUntil'] {
+  return (promise) => {
+    if (isPlatformRequest(request)) request.waitUntil(promise)
+  }
+}
+
 export const requestContext = createMiddleware({ type: 'function' }).server(({ next }) => {
-  const context: StartContext = { requestId: crypto.randomUUID() }
+  const context: StartContext = {
+    requestId: crypto.randomUUID(),
+    waitUntil: waitUntilOf(getRequest()),
+  }
   return next({ context })
 })

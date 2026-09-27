@@ -6,7 +6,8 @@ preview: >-
   The choices the autonomous run made while building hexframe v0's server
   foundations, where a ticket left room: Effect 4 with Drizzle v1's own
   Effect driver, where the error kinds live, what a server function returns,
-  how the client carries each channel out, and how migrations run.
+  how the client carries each channel out, how migrations run, and how the
+  two buses are placed, kept alive and logged.
 ---
 # Decisions
 
@@ -49,3 +50,23 @@ HEX-16, [#13](https://github.com/Diplow/diplow/pull/13). The `ManagedRuntime` in
 ### DEC-10 One migrator everywhere: Drizzle's Effect migrator, run by `scripts/migrate.ts`
 
 HEX-16, [#13](https://github.com/Diplow/diplow/pull/13). `drizzle-kit migrate` would need a second Postgres driver (`pg`) and would apply migrations with other code than the tests use. `pnpm db:migrate` runs `node scripts/migrate.ts`, which applies them with `drizzle-orm/effect-postgres/migrator` over the same `Database` layer the app uses. The PGlite harness runs the same `migrated` program over its own `Database`. To run without a bundler, the script and `migrations.ts` import with `.ts` paths (`allowImportingTsExtensions`), and `database.ts` imports packages only. A lint keeps `.ts` import paths out of the rest of `src/`, and `scripts/migrate.test.ts` proves the script loads under plain Node.
+
+### DEC-11 A domain publishes through `Bus` in `src/domains/bus.ts`; the API layer builds it and wires its subscriptions in `run.ts`
+
+HEX-17, [#14](https://github.com/Diplow/diplow/pull/14). A domain must publish without importing the API layer, and only the API layer composes domains. So the port, `Bus` and `DomainEvent`, sits beside the domain folders like `kind.ts` (DEC-2), and the PubSub behind it, with `on(Event, reaction)`, is `src/api/server/bus.ts`. The subscriptions are a list in `run.ts`, beside the runtime's `layer`, empty until two domains exist to connect. A subscription picks its events with the event's own schema (`Schema.is`), so a subscriber never sees a value its schema refuses.
+
+### DEC-12 `waitUntil` comes from the request Nitro hands over, and publishing hands it only the work of the subscriptions that heard the event
+
+HEX-17, [#14](https://github.com/Diplow/diplow/pull/14). Nitro's Vercel entry puts Vercel's `waitUntil` on the request (srvx's `ServerRequest`), and srvx does the same under `pnpm dev`, so the middleware reads it off Start's `getRequest()`: no `@vercel/functions`, which would be one more SDK to put behind a repository. Where a request has none, the work still runs and nothing keeps the function up. Each subscription reads the PubSub in a fiber scoped to the runtime, not to the request, so the request ending does not interrupt it. Publishing creates one `Deferred` per subscription that accepts the event and hands `WaitUntil`, which `run` provides per request, the effect that awaits them. `run` turns it into the promise `waitUntil` takes, so `run.ts` stays the only file that runs a program. Seen on `effect@4.0.0-rc.117` while testing it: a forked fiber running `Effect.andThen(Deferred.await(d), () => value)` never reaches what follows it, while `Effect.map` does. The bus and its tests use `map` and `flatMap`.
+
+### DEC-13 Until HEX-19, "logged at medium" is a log line annotated `verbosity: medium`, carrying the message's tag only
+
+HEX-17, [#14](https://github.com/Diplow/diplow/pull/14). The levels do not exist before HEX-19, and they cannot be Effect's log levels: STACK.md puts information logs at `low`, below the bus's `medium`. So each bus logs one line per message, annotated `{ bus: 'server' | 'client', verbosity: 'medium' }`, through Effect's logger on the server and `console.debug` in the client. HEX-19 filters on the annotation. The line carries the `_tag` and never the fields, which will hold account data once IAM publishes.
+
+### DEC-14 The client bus is `src/features/bus.ts`; a feature reacts with `useFact` over `useSyncExternalStore`, and shared facts go in `src/features/facts.ts`
+
+HEX-17, [#14](https://github.com/Diplow/diplow/pull/14). A fact's listener may not import the feature that publishes it, so the bus and the facts it carries sit beside the feature folders, where `no-feature-importing-another` does not reach (its pattern only matches folders), as `kind.ts` does for domains. `useEffect` is banned outside `ui/`, so `useFact` subscribes through `useSyncExternalStore`, React's hook for a source outside React, with a snapshot that never changes, so it never re-renders. The listeners are module-level: only mounted components subscribe, and `useSyncExternalStore` never subscribes during a server render, so a request never leaks into another. No fact exists yet: `facts.ts` arrives with the first one, since naming it is a domain's call.
+
+### DEC-15 The one boundary a message is decoded at today is `receive`, on the client
+
+HEX-17, [#14](https://github.com/Diplow/diplow/pull/14). STACK.md decodes a message where it crosses a boundary (into the client, into an outbox), and types it inside one process. The server bus is in-process and no event leaves the server yet, so it decodes nothing and routes by schema. The client bus has `receive(schema, input)`, which decodes a fact coming from outside the page before any feature sees it, and drops and reports one that does not decode. The outbox decodes when it exists.

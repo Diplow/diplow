@@ -1,10 +1,13 @@
-import { Cause, Effect } from 'effect'
+import { Cause, Effect, Option } from 'effect'
 import { describe, expect, it } from 'vitest'
 
+import { Bus } from '#/domains/bus'
+
 import { DevConflict, DevInvalid } from '../dev/failures'
+import { WaitUntil } from './bus'
 import { RequestContext, run } from './run'
 
-const context = { requestId: 'req-1' }
+const context = { requestId: 'req-1', waitUntil: () => undefined }
 
 describe('the server function helper', () => {
   it('returns the value of a program that succeeds', async () => {
@@ -17,6 +20,34 @@ describe('the server function helper', () => {
       return requestId
     })
     expect(await run(context, program)).toEqual({ ok: true, value: 'req-1' })
+  })
+
+  it('provides the bus, where a program publishes without waiting for anyone', async () => {
+    const program = Effect.gen(function* () {
+      const bus = yield* Bus
+      yield* bus.publish({ _tag: 'DevHappened' })
+      return 'published'
+    })
+    expect(await run(context, program)).toEqual({ ok: true, value: 'published' })
+  })
+
+  it("hands the work a program leaves pending to the platform's waitUntil, as a promise", async () => {
+    let ran = false
+    const kept: Array<Promise<unknown>> = []
+    const program = Effect.gen(function* () {
+      const waitUntil = yield* Effect.serviceOption(WaitUntil)
+      if (Option.isSome(waitUntil)) {
+        waitUntil.value(
+          Effect.sync(() => {
+            ran = true
+          }),
+        )
+      }
+    })
+    await run({ ...context, waitUntil: (promise) => kept.push(promise) }, program)
+    expect(kept).toHaveLength(1)
+    await Promise.all(kept)
+    expect(ran).toBe(true)
   })
 
   it('sends a declared failure encoded, with the request id', async () => {

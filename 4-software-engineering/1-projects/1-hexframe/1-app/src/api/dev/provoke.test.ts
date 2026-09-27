@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { run } from '../server/run'
 import { outcomes, provoked, savedDevTitle } from './provoke'
 
-const context = { requestId: 'req-dev' }
+const context = { requestId: 'req-dev', waitUntil: () => undefined }
 
 describe('the calls /dev/errors provokes', () => {
   it.each(outcomes.filter((outcome) => outcome !== 'Success'))(
