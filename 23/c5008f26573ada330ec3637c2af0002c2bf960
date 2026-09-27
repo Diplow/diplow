@@ -1,0 +1,781 @@
+.skills/external/anthropic/skills/claude-api/shared/managed-agents-client-patterns.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-220
+.skills/external/anthropic/skills/docx/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-91
+.skills/external/anthropic/skills/claude-api/shared/managed-agents-core.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-359
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlSchemaProperties.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-18
+.skills/external/anthropic/skills/webapp-testing/scripts/with_server.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-106
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-spreadsheetDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-108
+.skills/external/anthropic/skills/docx/scripts/office/schemas/microsoft/wml-2012.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-67
+.skills/external/anthropic/skills/claude-api/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-202
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ecma/fouth-edition/opc-relationships.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-33
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-bibliography.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-144
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-presentationDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-12
+.skills/external/anthropic/skills/claude-api/shared/models.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-142
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-picture.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-23
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/PoiretOne-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/internal-comms/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-32
+.skills/external/anthropic/skills/webapp-testing/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-202
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/PixelifySans-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-additionalCharacteristics.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-28
+.skills/external/anthropic/skills/claude-api/ruby/claude-api/README.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-134
+.skills/external/anthropic/skills/claude-api/shared/anthropic-cli.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-269
+.skills/external/anthropic/skills/xlsx/scripts/office/helpers/__init__.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-111
+.skills/external/anthropic/spec/agent-skills-spec.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-3
+.skills/external/anthropic/.claude-plugin/marketplace.json
+  s_941b834abbd195::t_fa8948e8f508a2 1-73
+.skills/external/anthropic/skills/claude-api/typescript/claude-api/batches.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-106
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/Gloock-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/claude-api/shared/managed-agents-scheduled-deployments.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-156
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/sml.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-4439
+.skills/external/anthropic/skills/pptx/scripts/add_slide.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-367
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chartDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-146
+.skills/external/anthropic/skills/claude-api/java/claude-api/tool-use.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-228
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-lockedCanvas.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-11
+.skills/external/anthropic/skills/claude-api/shared/prompt-audit.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-223
+.skills/external/anthropic/skills/pptx/scripts/office/validators/docx.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-466
+.skills/external/anthropic/skills/web-artifacts-builder/scripts/bundle-artifact.sh
+  s_941b834abbd195::t_fa8948e8f508a2 1-54
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chart.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-1499
+.skills/external/anthropic/skills/claude-api/csharp/claude-api/batches.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-14
+.skills/external/anthropic/skills/xlsx/scripts/office/validators/__init__.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-15
+.skills/external/anthropic/skills/frontend-design/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-177
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ecma/fouth-edition/opc-coreProperties.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-50
+.skills/external/anthropic/skills/mcp-builder/scripts/example_evaluation.xml
+  s_941b834abbd195::t_fa8948e8f508a2 1-22
+.skills/external/anthropic/skills/skill-creator/scripts/quick_validate.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-103
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/microsoft/wml-symex-2015.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-8
+.skills/external/anthropic/skills/web-artifacts-builder/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-202
+.skills/external/anthropic/skills/canvas-design/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-130
+.skills/external/anthropic/skills/claude-api/csharp/claude-api/files-api.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-25
+.skills/external/anthropic/skills/algorithmic-art/templates/generator_template.js
+  s_941b834abbd195::t_fa8948e8f508a2 1-223
+.skills/external/anthropic/skills/docx/scripts/comment.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-368
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ecma/fouth-edition/opc-relationships.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-33
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-main.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-3081
+.skills/external/anthropic/skills/pdf/scripts/check_fillable_fields.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-11
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlSchemaProperties.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-18
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-additionalCharacteristics.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-28
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-wordprocessingDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-96
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/microsoft/wml-2010.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-560
+.skills/external/anthropic/skills/docx/scripts/office/schemas/mce/mc.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-75
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-officeDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-509
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/Jura-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/algorithmic-art/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-405
+.skills/external/anthropic/skills/claude-api/shared/tool-use-concepts.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-526
+.skills/external/anthropic/skills/docx/scripts/office/schemas/microsoft/wml-cex-2018.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-20
+.skills/external/anthropic/skills/skill-creator/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-202
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ecma/fouth-edition/opc-coreProperties.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-50
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-additionalCharacteristics.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-28
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlDataProperties.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-25
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-presentationDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-12
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-spreadsheetDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-185
+.skills/external/anthropic/.gitignore
+  s_941b834abbd195::t_fa8948e8f508a2 1-5
+.skills/external/anthropic/skills/docx/scripts/merge_runs.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-310
+.skills/external/anthropic/skills/mcp-builder/reference/python_mcp_server.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-719
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/wml.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-3646
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ecma/fouth-edition/opc-relationships.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-33
+.skills/external/anthropic/skills/pptx/scripts/office/validators/redlining.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-299
+.skills/external/anthropic/skills/claude-api/java/claude-api/files-api.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-27
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/microsoft/wml-2012.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-67
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/microsoft/wml-2010.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-560
+.skills/external/anthropic/skills/mcp-builder/reference/mcp_best_practices.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-249
+.skills/external/anthropic/skills/skill-creator/eval-viewer/viewer.html
+  s_941b834abbd195::t_fa8948e8f508a2 1-1325
+.skills/external/anthropic/skills/claude-api/python/claude-api/sdk-upgrade.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-286
+.skills/external/anthropic/skills/web-artifacts-builder/scripts/init-artifact.sh
+  s_941b834abbd195::t_fa8948e8f508a2 1-322
+.skills/external/anthropic/skills/pdf/forms.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-294
+.skills/external/anthropic/skills/docx/scripts/templates/commentsExtensible.xml
+  s_941b834abbd195::t_fa8948e8f508a2 1-3
+.skills/external/anthropic/skills/web-artifacts-builder/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-74
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-main.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-570
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-picture.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-23
+.skills/external/anthropic/skills/claude-api/shared/managed-agents-onboarding.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-82
+.skills/external/anthropic/skills/claude-api/python/claude-api/README.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-565
+.skills/external/anthropic/skills/docx/scripts/office/soffice.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-192
+.skills/external/anthropic/skills/slack-gif-creator/core/frame_composer.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-176
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/EricaOne-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-94
+.skills/external/anthropic/skills/xlsx/scripts/office/soffice.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-192
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-main.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-570
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chartDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-146
+.skills/external/anthropic/skills/pptx/scripts/office/validators/pptx.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-441
+.skills/external/anthropic/skills/mcp-builder/reference/evaluation.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-602
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-spreadsheetDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-108
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/xml.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-116
+.skills/external/anthropic/skills/claude-api/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-572
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/CrimsonPro-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/sml.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-4439
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-main.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-570
+.skills/external/anthropic/skills/slack-gif-creator/core/validators.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-136
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-commonSimpleTypes.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-174
+.skills/external/anthropic/skills/algorithmic-art/templates/viewer.html
+  s_941b834abbd195::t_fa8948e8f508a2 1-599
+.skills/external/anthropic/skills/skill-creator/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-485
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-relationshipReference.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-25
+.skills/external/anthropic/skills/claude-api/shared/managed-agents-memory.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-201
+.skills/external/anthropic/skills/docx/scripts/office/validate.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-173
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/WorkSans-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/docx/scripts/office/schemas/microsoft/wml-symex-2015.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-8
+.skills/external/anthropic/skills/webapp-testing/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-96
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/microsoft/wml-cex-2018.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-20
+.skills/external/anthropic/skills/claude-api/go/claude-api/files-api.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-23
+.skills/external/anthropic/skills/mcp-builder/scripts/evaluation.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-373
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/SmoochSans-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/skill-creator/scripts/aggregate_benchmark.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-401
+.skills/external/anthropic/skills/slack-gif-creator/requirements.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-4
+.skills/external/anthropic/skills/discernment-nudge/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-209
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/microsoft/wml-sdtdatahash-2020.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-4
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-wordprocessingDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-287
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/Italiana-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/xlsx/scripts/office/validate.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-173
+.skills/external/anthropic/skills/docx/scripts/office/helpers/__init__.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-111
+.skills/external/anthropic/skills/pdf/scripts/convert_pdf_to_images.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-33
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/BricolageGrotesque-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/pml.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-1676
+.skills/external/anthropic/skills/claude-api/csharp/claude-api/streaming.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-28
+.skills/external/anthropic/skills/claude-api/typescript/claude-api/files-api.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-98
+.skills/external/anthropic/skills/theme-factory/themes/forest-canopy.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-19
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesCustom.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-59
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-officeDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-509
+.skills/external/anthropic/skills/brand-guidelines/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-73
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/microsoft/wml-symex-2015.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-8
+.skills/external/anthropic/skills/internal-comms/examples/company-newsletter.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-65
+.skills/external/anthropic/skills/claude-api/shared/cost-optimization.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-233
+.skills/external/anthropic/skills/docx/scripts/templates/commentsExtended.xml
+  s_941b834abbd195::t_fa8948e8f508a2 1-3
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/Outfit-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/template/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-6
+.skills/external/anthropic/skills/internal-comms/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-202
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-diagram.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-1085
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chart.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-1499
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/microsoft/wml-cex-2018.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-20
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesVariantTypes.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-195
+.skills/external/anthropic/skills/docx/scripts/templates/commentsIds.xml
+  s_941b834abbd195::t_fa8948e8f508a2 1-3
+.skills/external/anthropic/skills/academy-guide/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-147
+.skills/external/anthropic/skills/skill-creator/assets/eval_review.html
+  s_941b834abbd195::t_fa8948e8f508a2 1-146
+.skills/external/anthropic/skills/theme-factory/themes/golden-hour.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-19
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlDataProperties.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-25
+.skills/external/anthropic/skills/slack-gif-creator/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-254
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/RedHatMono-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-main.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-3081
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/pml.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-1676
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/sml.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-4439
+.skills/external/anthropic/skills/xlsx/scripts/office/validators/base.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-875
+.skills/external/anthropic/skills/canvas-design/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-202
+.skills/external/anthropic/skills/skill-creator/scripts/package_skill.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-136
+.skills/external/anthropic/skills/claude-api/shared/managed-agents-webhooks.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-143
+.skills/external/anthropic/skills/pdf/scripts/extract_form_field_info.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-122
+.skills/external/anthropic/skills/claude-api/shared/token-counting.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-56
+.skills/external/anthropic/skills/webapp-testing/examples/element_discovery.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-40
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ecma/fouth-edition/opc-digSig.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-49
+.skills/external/anthropic/skills/claude-api/php/claude-api/batches.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-15
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-diagram.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-1085
+.skills/external/anthropic/skills/claude-api/java/claude-api/streaming.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-24
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/microsoft/wml-cid-2016.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-13
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chart.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-1499
+.skills/external/anthropic/skills/theme-factory/themes/arctic-frost.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-19
+.skills/external/anthropic/skills/mcp-builder/scripts/requirements.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-2
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-bibliography.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-144
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/Boldonse-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/docx/scripts/office/validators/redlining.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-299
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/wml.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-3646
+.skills/external/anthropic/skills/claude-api/shared/managed-agents-events.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-290
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/IBMPlexMono-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/claude-api/shared/managed-agents-multiagent.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-260
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-picture.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-23
+.skills/external/anthropic/skills/claude-api/java/claude-api/README.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-238
+.skills/external/anthropic/skills/skill-creator/scripts/utils.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-47
+.skills/external/anthropic/skills/pptx/scripts/office/helpers/pptx_chart.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-170
+.skills/external/anthropic/skills/claude-api/shared/platform-availability.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-53
+.skills/external/anthropic/skills/claude-api/go/managed-agents/README.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-564
+.skills/external/anthropic/skills/pptx/scripts/office/validators/base.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-875
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/NothingYouCouldDo-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/skill-creator/agents/comparator.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-202
+.skills/external/anthropic/skills/skill-creator/references/schemas.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-430
+.skills/external/anthropic/skills/xlsx/scripts/office/helpers/pptx_theme.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-114
+.skills/external/anthropic/skills/docx/scripts/office/helpers/pptx_slide.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-60
+.skills/external/anthropic/README.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-96
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/ArsenalSC-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/microsoft/wml-2012.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-67
+.skills/external/anthropic/skills/skill-creator/eval-viewer/generate_review.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-471
+.skills/external/anthropic/skills/claude-api/curl/examples.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-256
+.skills/external/anthropic/skills/docx/scripts/office/schemas/microsoft/wml-cid-2016.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-13
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/wml.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-3646
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-relationshipReference.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-25
+.skills/external/anthropic/skills/docx/scripts/accept_changes.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-135
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-wordprocessingDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-96
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ecma/fouth-edition/opc-contentTypes.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-42
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesVariantTypes.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-195
+.skills/external/anthropic/skills/slack-gif-creator/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-202
+.skills/external/anthropic/skills/theme-factory/themes/sunset-boulevard.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-19
+.skills/external/anthropic/skills/theme-factory/themes/tech-innovation.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-19
+.skills/external/anthropic/skills/webapp-testing/examples/static_html_automation.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-33
+.skills/external/anthropic/skills/theme-factory/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-59
+.skills/external/anthropic/skills/xlsx/scripts/office/helpers/pptx_slide.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-60
+.skills/external/anthropic/skills/claude-api/ruby/claude-api/streaming.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-16
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlSchemaProperties.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-18
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/mce/mc.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-75
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/xml.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-116
+.skills/external/anthropic/skills/claude-api/shared/agent-design.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-101
+.skills/external/anthropic/skills/pptx/scripts/office/validators/__init__.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-15
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/JetBrainsMono-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/claude-api/python/managed-agents/README.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-335
+.skills/external/anthropic/skills/docx/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-30
+.skills/external/anthropic/skills/docx/scripts/office/validators/docx.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-466
+.skills/external/anthropic/skills/claude-api/curl/managed-agents.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-371
+.skills/external/anthropic/skills/webapp-testing/examples/console_logging.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-35
+.skills/external/anthropic/skills/mcp-builder/scripts/connections.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-151
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-wordprocessingDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-287
+.skills/external/anthropic/skills/theme-factory/themes/botanical-garden.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-19
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-officeDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-509
+.skills/external/anthropic/skills/pptx/scripts/thumbnail.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-311
+.skills/external/anthropic/skills/docx/scripts/templates/comments.xml
+  s_941b834abbd195::t_fa8948e8f508a2 1-3
+.skills/external/anthropic/skills/brand-guidelines/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-202
+.skills/external/anthropic/skills/pptx/scripts/office/helpers/pptx_theme.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-114
+.skills/external/anthropic/skills/claude-api/ruby/claude-api/tool-use.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-41
+.skills/external/anthropic/skills/claude-api/csharp/claude-api/README.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-362
+.skills/external/anthropic/skills/claude-api/php/claude-api/streaming.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-27
+.skills/external/anthropic/skills/claude-api/python/claude-api/batches.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-198
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/LibreBaskerville-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/claude-api/shared/managed-agents-self-hosted-sandboxes.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-282
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/DMMono-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/docx/scripts/__init__.py
+  s_941b834abbd195::t_fa8948e8f508a2 1
+.skills/external/anthropic/skills/docx/scripts/office/validators/__init__.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-15
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/Lora-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/YoungSerif-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/pdf/scripts/fill_fillable_fields.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-98
+.skills/external/anthropic/skills/claude-api/csharp/claude-api/tool-use.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-164
+.skills/external/anthropic/skills/claude-api/shared/admin-api.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-179
+.skills/external/anthropic/skills/docx/scripts/office/validators/pptx.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-441
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesCustom.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-59
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlDataProperties.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-25
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-spreadsheetDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-108
+.skills/external/anthropic/skills/docx/scripts/office/helpers/pptx_chart.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-170
+.skills/external/anthropic/skills/pptx/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-30
+.skills/external/anthropic/skills/pdf/scripts/fill_pdf_form_with_annotations.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-107
+.skills/external/anthropic/skills/skill-creator/agents/grader.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-223
+.skills/external/anthropic/skills/slack-gif-creator/core/easing.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-234
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chartDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-146
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesExtended.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-56
+.skills/external/anthropic/skills/pptx/scripts/office/helpers/pptx_slide.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-60
+.skills/external/anthropic/skills/xlsx/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-30
+.skills/external/anthropic/skills/pptx/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-238
+.skills/external/anthropic/skills/skill-creator/scripts/run_loop.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-328
+.skills/external/anthropic/skills/pdf/reference.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-612
+.skills/external/anthropic/skills/skill-creator/scripts/improve_description.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-247
+.skills/external/anthropic/skills/claude-api/python/claude-api/streaming.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-179
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/Silkscreen-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/Tektur-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/slack-gif-creator/core/gif_builder.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-269
+.skills/external/anthropic/skills/mcp-builder/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-202
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ecma/fouth-edition/opc-contentTypes.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-42
+.skills/external/anthropic/skills/discernment-nudge/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-202
+.skills/external/anthropic/skills/claude-api/typescript/claude-api/tool-use.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-586
+.skills/external/anthropic/skills/internal-comms/examples/3p-updates.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-47
+.skills/external/anthropic/skills/theme-factory/themes/midnight-galaxy.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-19
+.skills/external/anthropic/skills/xlsx/scripts/office/validators/docx.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-466
+.skills/external/anthropic/skills/skill-creator/scripts/generate_report.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-326
+.skills/external/anthropic/THIRD_PARTY_NOTICES.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-405
+.skills/external/anthropic/skills/xlsx/scripts/office/validators/pptx.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-441
+.skills/external/anthropic/skills/docx/scripts/office/schemas/microsoft/wml-sdtdatahash-2020.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-4
+.skills/external/anthropic/skills/claude-api/shared/claude-platform-on-aws.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-59
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesCustom.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-59
+.skills/external/anthropic/skills/mcp-builder/reference/node_mcp_server.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-970
+.skills/external/anthropic/skills/theme-factory/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-202
+.skills/external/anthropic/skills/pptx/scripts/office/validate.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-173
+.skills/external/anthropic/skills/algorithmic-art/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-202
+.skills/external/anthropic/skills/claude-api/shared/managed-agents-overview.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-77
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-relationshipReference.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-25
+.skills/external/anthropic/skills/claude-api/php/claude-api/tool-use.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-253
+.skills/external/anthropic/skills/claude-api/typescript/claude-api/README.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-405
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-wordprocessingDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-287
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-bibliography.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-144
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-main.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-3081
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-wordprocessingDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-96
+.skills/external/anthropic/skills/pptx/scripts/office/soffice.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-192
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-diagram.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-1085
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-spreadsheetDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-185
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/NationalPark-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-math.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-582
+.skills/external/anthropic/skills/pdf/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-30
+.skills/external/anthropic/skills/claude-api/php/claude-api/files-api.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-13
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/mce/mc.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-75
+.skills/external/anthropic/skills/claude-api/go/claude-api/README.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-188
+.skills/external/anthropic/skills/claude-api/python/claude-api/files-api.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-170
+.skills/external/anthropic/skills/claude-api/shared/managed-agents-tools.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-504
+.skills/external/anthropic/skills/claude-api/shared/managed-agents-outcomes.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-108
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/GeistMono-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/docx/scripts/office/helpers/pptx_theme.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-114
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-math.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-582
+.skills/external/anthropic/skills/docx/scripts/office/schemas/microsoft/wml-2010.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-560
+.skills/external/anthropic/skills/xlsx/scripts/office/helpers/pptx_chart.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-170
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ecma/fouth-edition/opc-contentTypes.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-42
+.skills/external/anthropic/skills/claude-api/typescript/managed-agents/README.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-359
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-lockedCanvas.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-11
+.skills/external/anthropic/skills/pdf/scripts/check_bounding_boxes.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-65
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/xml.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-116
+.skills/external/anthropic/skills/claude-api/typescript/claude-api/streaming.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-178
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ecma/fouth-edition/opc-coreProperties.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-50
+.skills/external/anthropic/skills/internal-comms/examples/faq-answers.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-30
+.skills/external/anthropic/skills/academy-guide/LICENSE.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-202
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/pml.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-1676
+.skills/external/anthropic/skills/pdf/scripts/create_validation_image.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-37
+.skills/external/anthropic/skills/pptx/scripts/clean.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-309
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-spreadsheetDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-185
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/InstrumentSans-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/microsoft/wml-cid-2016.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-13
+.skills/external/anthropic/skills/theme-factory/themes/ocean-depths.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-19
+.skills/external/anthropic/skills/skill-creator/agents/analyzer.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-274
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/microsoft/wml-2018.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-14
+.skills/external/anthropic/skills/theme-factory/themes/modern-minimalist.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-19
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-math.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-582
+.skills/external/anthropic/skills/docx/scripts/office/schemas/microsoft/wml-2018.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-14
+.skills/external/anthropic/skills/claude-api/shared/error-codes.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-262
+.skills/external/anthropic/skills/pptx/scripts/office/helpers/__init__.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-111
+.skills/external/anthropic/skills/claude-api/go/claude-api/streaming.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-43
+.skills/external/anthropic/skills/skill-creator/scripts/run_eval.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-310
+.skills/external/anthropic/skills/claude-api/shared/managed-agents-api-reference.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-455
+.skills/external/anthropic/skills/claude-api/shared/managed-agents-environments.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-226
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ecma/fouth-edition/opc-digSig.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-49
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesExtended.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-56
+.skills/external/anthropic/skills/theme-factory/themes/desert-rose.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-19
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ecma/fouth-edition/opc-digSig.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-49
+.skills/external/sources
+  s_941b834abbd195::t_fa8948e8f508a2 2
+.skills/external/anthropic/skills/claude-api/go/claude-api/tool-use.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-220
+.skills/external/anthropic/skills/xlsx/scripts/recalc.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-308
+.skills/external/anthropic/skills/claude-api/java/managed-agents/README.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-443
+.skills/external/anthropic/skills/claude-api/php/claude-api/README.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-174
+.skills/external/anthropic/skills/claude-api/shared/live-sources.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-166
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-lockedCanvas.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-11
+.skills/external/anthropic/skills/docx/scripts/templates/people.xml
+  s_941b834abbd195::t_fa8948e8f508a2 1-3
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-presentationDrawing.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-12
+.skills/external/anthropic/skills/internal-comms/examples/general-comms.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-16
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesExtended.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-56
+.skills/external/anthropic/skills/mcp-builder/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-236
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-commonSimpleTypes.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-174
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/microsoft/wml-sdtdatahash-2020.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-4
+.skills/external/anthropic/skills/claude-api/shared/prompt-caching.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-292
+.skills/external/anthropic/skills/xlsx/scripts/office/validators/redlining.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-299
+.skills/external/anthropic/skills/xlsx/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-99
+.skills/external/anthropic/skills/claude-api/php/managed-agents/README.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-443
+.skills/external/anthropic/skills/canvas-design/canvas-fonts/BigShoulders-OFL.txt
+  s_941b834abbd195::t_fa8948e8f508a2 1-93
+.skills/external/anthropic/skills/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesVariantTypes.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-195
+.skills/external/anthropic/skills/pptx/scripts/office/schemas/microsoft/wml-2018.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-14
+.skills/external/anthropic/skills/claude-api/python/claude-api/tool-use.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-627
+.skills/external/anthropic/skills/claude-api/shared/model-migration.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-1872
+.skills/external/anthropic/skills/docx/scripts/office/validators/base.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-875
+.skills/external/anthropic/skills/pdf/scripts/extract_form_structure.py
+  s_941b834abbd195::t_fa8948e8f508a2 1-115
+.skills/external/anthropic/skills/claude-api/ruby/managed-agents/README.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-394
+.skills/external/anthropic/skills/doc-coauthoring/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-375
+.skills/external/anthropic/skills/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-commonSimpleTypes.xsd
+  s_941b834abbd195::t_fa8948e8f508a2 1-174
+.skills/external/anthropic/skills/pdf/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-314
+.skills/external/anthropic/skills/frontend-design/SKILL.md
+  s_941b834abbd195::t_fa8948e8f508a2 1-71
+.claude/skills/anthropic:academy-guide
+  s_941b834abbd195::t_278ed88f1eaae6 1
+.claude/skills/anthropic:algorithmic-art
+  s_941b834abbd195::t_3d4826963588ba 1
+.claude/skills/anthropic:brand-guidelines
+  s_941b834abbd195::t_59e835858f22ca 1
+.claude/skills/anthropic:canvas-design
+  s_941b834abbd195::t_5db5bc5007c1cb 1
+.claude/skills/anthropic:claude-api
+  s_941b834abbd195::t_d06c2ddc188fd8 1
+.claude/skills/anthropic:discernment-nudge
+  s_941b834abbd195::t_1bd6764bcff948 1
+.claude/skills/anthropic:doc-coauthoring
+  s_941b834abbd195::t_8fae613899cc8d 1
+.claude/skills/anthropic:docx
+  s_941b834abbd195::t_f2db15bfd75872 1
+.claude/skills/anthropic:frontend-design
+  s_941b834abbd195::t_58a97f9197b7a5 1
+.claude/skills/anthropic:internal-comms
+  s_941b834abbd195::t_a00d08c09edd7f 1
+.claude/skills/anthropic:mcp-builder
+  s_941b834abbd195::t_1fcbc03ca288d4 1
+.claude/skills/anthropic:pdf
+  s_941b834abbd195::t_318dd26ed05b1f 1
+.claude/skills/anthropic:pptx
+  s_941b834abbd195::t_97b0e599734209 1
+.claude/skills/anthropic:skill-creator
+  s_941b834abbd195::t_0d62fb1341b3b0 1
+.claude/skills/anthropic:slack-gif-creator
+  s_941b834abbd195::t_da8b8a332d3f0e 1
+.claude/skills/anthropic:template
+  s_941b834abbd195::t_fb65401a630c01 1
+.claude/skills/anthropic:theme-factory
+  s_941b834abbd195::t_2229bc82972d70 1
+.claude/skills/anthropic:web-artifacts-builder
+  s_941b834abbd195::t_67762250ba7665 1
+.claude/skills/anthropic:webapp-testing
+  s_941b834abbd195::t_8c2c0ba5a9b64e 1
+.claude/skills/anthropic:xlsx
+  s_941b834abbd195::t_2436e50d87167d 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "23c5008f26573ada330ec3637c2af0002c2bf960",
+  "prompts": {},
+  "sessions": {
+    "s_941b834abbd195": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "75436b47-19cf-4a65-add1-e818793f91f4",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
