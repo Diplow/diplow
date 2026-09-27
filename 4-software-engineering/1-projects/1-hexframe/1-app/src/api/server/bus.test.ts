@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@effect/vitest'
-import { Deferred, Effect, Logger, References, Schema } from 'effect'
+import { Deferred, Duration, Effect, Logger, References, Schema } from 'effect'
 
 import { Bus, type DomainEvent } from '#/domains/bus'
 
@@ -42,7 +42,7 @@ describe('the server bus', () => {
 
   it.effect('hands waitUntil work that settles once every subscriber has reacted', () =>
     Effect.gen(function* () {
-      const gate = yield* Deferred.make<void>()
+      const gate = yield* Deferred.make<undefined>()
       let reacted = false
       const slow = on(DevHappened, () =>
         Effect.map(Deferred.await(gate), () => {
@@ -88,7 +88,7 @@ describe('the server bus', () => {
       const seen: Array<number> = []
       // The first event takes the longest to handle; it is still handled first.
       const slowerFirst = on(DevHappened, ({ n }) =>
-        Effect.map(Effect.sleep(`${String(4 - n)} millis`), () => {
+        Effect.map(Effect.sleep(Duration.millis(4 - n)), () => {
           seen.push(n)
         }),
       )
@@ -107,7 +107,7 @@ describe('the server bus', () => {
         lines.push({ message, annotations: fiber.getRef(References.CurrentLogAnnotations) })
       })
       yield* published(new DevHappened({ n: 1 })).pipe(
-        Effect.provide(bus()),
+        Effect.provide(bus<never>()),
         Effect.provide(Logger.layer([capture])),
       )
       expect(lines).toEqual([

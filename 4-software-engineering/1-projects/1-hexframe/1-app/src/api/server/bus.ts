@@ -36,7 +36,7 @@ export function on<A extends DomainEvent, R>(
 /** What the PubSub carries: the event, and one slot per subscription, completed once it has reacted. */
 interface Envelope {
   readonly event: DomainEvent
-  readonly handled: ReadonlyArray<Deferred.Deferred<void> | undefined>
+  readonly handled: ReadonlyArray<Deferred.Deferred<undefined> | undefined>
 }
 
 // Until HEX-19 sets the levels, a bus message is a log line tagged with the level it belongs to.
@@ -61,7 +61,7 @@ function publish<R>(
   return (event: DomainEvent) =>
     Effect.gen(function* () {
       const handled = subscriptions.map((subscription) =>
-        subscription.accepts(event) ? Deferred.makeUnsafe<void>() : undefined,
+        subscription.accepts(event) ? Deferred.makeUnsafe<undefined>() : undefined,
       )
       yield* logged(`${event._tag} published`)
       yield* PubSub.publish(pubsub, { event, handled })

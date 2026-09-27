@@ -14,7 +14,7 @@ The layer between what the client shows and what the domains know. On the server
 
 | Folder | Holds |
 |---|---|
-| `server/` | `run.ts`, the helper: `RequestContext`, the one `ManagedRuntime`, and `run(context, program)`; `middleware.ts`, Start's function middleware, which `src/start.ts` runs before every server function |
+| `server/` | `run.ts`, the helper: `RequestContext`, the one `ManagedRuntime`, the bus's subscriptions, and `run(context, program)`; `middleware.ts`, Start's function middleware, which `src/start.ts` runs before every server function; `bus.ts`, the server bus |
 | `errors/` | Shared by both sides and pure: `failure.ts`, the union of every failure and its wire form (`Outcome`, `encodeFailure`, `decodeFailure`); `channel.ts`, the channel table; `messages.ts`, the message table. Tested |
 | `client/` | `calls.ts`, `settle` and the `read` and `write` builders for TanStack Query; `channels.ts`, the QueryClient that carries each failure out, and `submitWrite` for a form; `ReadBoundary`, the nearest boundary of a read |
 | `dev/` | The failures and server functions `/dev/errors` uses to provoke every channel. They stay members of `Failure` as long as the page exists; outside dev and previews the functions answer `NotFound` |
@@ -23,7 +23,7 @@ The layer between what the client shows and what the domains know. On the server
 
 Domains, repositories and the API layer are Effect. The client stays on TanStack Query, Form and Router, which are promise-native: wrapping them in Effect would fight three libraries for nothing the decoded error union does not already give.
 
-The two meet in one helper. Start middleware stays promise-based and puts the request id (and, once IAM is built, the Session) on Start's `context`; every server function hands its program to `run`, which provides that context as Effect services, runs the program on one `ManagedRuntime` built from every layer, and returns an `Outcome`: the value, or the failure encoded with the request id. Nothing else calls `run*`: `eslint.config.ts` says no, and `scripts/lint.test.ts` proves it fires.
+The two meet in one helper. Start middleware stays promise-based and puts the request id, the platform's `waitUntil` (and, once IAM is built, the Session) on Start's `context`; every server function hands its program to `run`, which provides that context as Effect services, runs the program on one `ManagedRuntime` built from every layer, and returns an `Outcome`: the value, or the failure encoded with the request id. Nothing else calls `run*`: `eslint.config.ts` says no, and `scripts/lint.test.ts` proves it fires.
 
 The shape every server function takes, here for a Mapping read once that domain exists:
 
@@ -57,6 +57,17 @@ export const getTile = createServerFn({ method: 'GET' })
   - a form's write is `validators.onSubmitAsync: submitWrite({ scope, call, onSaved })`.
 
 Adapted from the error model of a previous project; its channels survive, its HTTP statuses become kinds.
+
+## The server bus
+
+A domain publishes a fact other parts may react to, without knowing who does; this layer, which alone composes domains, wires who reacts. The client has its own bus, between features: [[4-software-engineering/1-projects/1-hexframe/1-app/src/features/CLAUDE|features]].
+
+- **A domain declares its events** in its language, in the past tense (`AccountCreated`), as `Schema.TaggedClass`, and publishes them through `Bus`, from `src/domains/bus.ts`: beside the domains, like `kind.ts`, so a domain reaches it without importing this layer. A domain never subscribes.
+- **Subscriptions are wired in `server/run.ts`**, one `on(AccountCreated, reaction)` each, where the reaction calls another domain. The event's schema picks what a subscription hears. A caller that needs a result calls directly: publishing neither fails nor waits, so the bus is never a way to ask.
+- **The bus is in-process**, on Effect's `PubSub` (`server/bus.ts`). Each subscription reads it from its own fiber, in the order events were published, for as long as the runtime lives rather than the request. A subscriber that fails is reported and the others carry on.
+- **Subscribers finish inside the request.** `run` provides `WaitUntil`, and publishing hands it the work of every subscription that heard the event, so the function stays up until they are done: Vercel's `waitUntil`, which Nitro puts on the request. A lost event is acceptable; the day a subscriber cannot be lost, the bus moves to an outbox table.
+- **Inside the process the type is enough.** An event is decoded by its schema only where it crosses a boundary: into the client, into an outbox.
+- **Every event is logged at `medium`**: a log line annotated `verbosity: medium`, carrying the event's tag, never its fields, until HEX-19 sets the levels.
 
 ## Rules
 
