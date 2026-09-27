@@ -1,0 +1,41 @@
+// The message table: the sentence a failure shows, in the page's language. The server's own sentence
+// never reaches the screen.
+import type { Kind } from '#/domains/kind'
+import { m } from '#/paraglide/messages'
+
+import type { Failure } from './failure'
+
+interface Entry {
+  tag: Failure['_tag']
+  /** Narrows the entry to one server function, by the scope its call names. */
+  scope?: string
+  message: () => string
+}
+
+/**
+ * Keyed by `_tag`, optionally narrowed by a scope: the first entry that matches wins, so a scoped
+ * entry comes before its tag's general one. A domain's errors add their entries as it is built.
+ */
+const table: readonly Entry[] = [
+  { tag: 'DevInvalid', scope: 'submitDevTitle', message: m.error_dev_title_missing },
+  { tag: 'DevConflict', scope: 'submitDevTitle', message: m.error_dev_title_taken },
+  { tag: 'DevNotFound', message: m.error_dev_not_found },
+]
+
+/** What a failure of each kind says when the table has no entry for it. */
+const fallbacks: Record<Kind, () => string> = {
+  Unauthenticated: m.error_unauthenticated,
+  Forbidden: m.error_forbidden,
+  Invalid: m.error_invalid,
+  NotFound: m.error_not_found,
+  Conflict: m.error_conflict,
+  Unexpected: m.error_unexpected,
+}
+
+/** The sentence to show for a failure met in a scope, from the table or its kind's fallback. */
+export function messageFor(failure: Failure, scope?: string): string {
+  const entry = table.find(
+    (entry) => entry.tag === failure._tag && (entry.scope === undefined || entry.scope === scope),
+  )
+  return (entry?.message ?? fallbacks[failure.kind])()
+}

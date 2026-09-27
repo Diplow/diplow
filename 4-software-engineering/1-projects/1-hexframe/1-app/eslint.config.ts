@@ -37,6 +37,22 @@ const effectHooks = [
   message: 'No useEffect outside src/ui/: give the state its owner (STACK.md, State).',
 }))
 
+// Effect stops at the server function (src/api/CLAUDE.md): its helper is the one place a program runs,
+// so every server function gets the request's services and has its failures encoded the same way.
+const effectRun = '/^run(?:Sync|Promise|Fork|Callback)/'
+const helper = 'src/api/server/run.ts'
+// Read off a module or a runtime (`Effect.runPromise`, `runtime['runSync']`), imported by name, or
+// destructured (`const { runFork } = Effect`).
+const effectRuns = [
+  `MemberExpression[property.name=${effectRun}]`,
+  `MemberExpression[property.value=${effectRun}]`,
+  `ImportSpecifier[imported.name=${effectRun}]`,
+  `ObjectPattern > Property[key.name=${effectRun}]`,
+].map((selector) => ({
+  selector,
+  message: `Only the server function helper (${helper}) runs an Effect program.`,
+}))
+
 // The lint set from STACK.md. A rule may be disabled on the spot, but only with a `-- reason` that says why.
 export default defineConfig(
   globalIgnores(['src/paraglide/', 'src/routeTree.gen.ts', '.output/', '.nitro/', '.tanstack/']),
@@ -58,10 +74,25 @@ export default defineConfig(
     },
   },
   // The app's code, where colour is rendered; scripts/lint.test.ts holds the literals these rules refuse.
-  { files: ['src/**'], rules: { 'no-restricted-syntax': ['error', ...colourLiterals] } },
+  {
+    files: ['src/**'],
+    rules: { 'no-restricted-syntax': ['error', ...colourLiterals, ...effectRuns] },
+  },
   {
     files: ['src/**'],
     ignores: ['src/ui/**'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        ...colourLiterals,
+        ...rawElements,
+        ...effectHooks,
+        ...effectRuns,
+      ],
+    },
+  },
+  {
+    files: [helper],
     rules: { 'no-restricted-syntax': ['error', ...colourLiterals, ...rawElements, ...effectHooks] },
   },
 )

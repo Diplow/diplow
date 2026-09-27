@@ -6,7 +6,7 @@ const layers = ['routes', 'features', 'api', 'domains', 'repositories']
 
 // Each third-party SDK is imported by its repository alone; the rest of the app sees it through that seam.
 const sdks = {
-  database: ['drizzle-orm', '@effect/sql-drizzle', '@neondatabase/.+'],
+  database: ['drizzle-orm', '@effect/sql-(pg|pglite)', '@neondatabase/.+'],
   auth: ['better-auth', '@better-auth/.+', 'stripe'],
 }
 

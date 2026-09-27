@@ -23,7 +23,7 @@ The choices, and the rules they come with. Each rule is written here until the f
 
 - **Vercel**, Node runtime.
 - **One package to start**, `1-app`: a TanStack Start app holding client and server. A second package appears when a second deployable does, not before.
-- **Stable or release candidate; beta and alpha only behind a seam**, one file that can be swapped. So: TanStack Start RC, Effect 4 RC (migrating 3 to 4 later would touch every file), Drizzle v1 RC if `@effect/sql-drizzle` supports it (0.45 otherwise), and Sentry's alpha TanStack Start SDK behind the observability seam.
+- **Stable or release candidate; beta and alpha only behind a seam**, one file that can be swapped. So: TanStack Start RC, Effect 4 RC (migrating 3 to 4 later would touch every file), Drizzle v1 RC, whose own Effect driver replaces `@effect/sql-drizzle`, which has no Effect 4 release (HEX-15), and Sentry's alpha TanStack Start SDK behind the observability seam.
 
 | Need | Choice |
 |---|---|
@@ -36,7 +36,7 @@ The choices, and the rules they come with. Each rule is written here until the f
 | Building a system by conversation | TanStack AI |
 | Effects and typed errors | Effect |
 | Validation | Effect Schema, everywhere; `zod` is banned by lint |
-| Database | Neon, Drizzle through `@effect/sql-drizzle` |
+| Database | Neon, Drizzle through its Effect driver (`drizzle-orm/effect-postgres` over `@effect/sql-pg`; `effect-pglite` over `@effect/sql-pglite` in tests) |
 | Auth | Better Auth, behind IAM |
 | Payments | Stripe through `@better-auth/stripe`, behind IAM |
 | UI | Tailwind, shadcn |
@@ -62,30 +62,11 @@ Domains ignore each other; only the API layer composes them.
 
 ## Effect stops at the server function
 
-Domains, repositories and the API layer are Effect. The client stays on TanStack Query, Form and Router, which are promise-native: wrapping them in Effect would fight three libraries for nothing the decoded error union does not already give.
-
-The two meet in one helper. Start middleware stays promise-based and puts the request id and the Session on Start's `context`; every server function hands its program to the helper, which provides that context as Effect services, runs the program on one `ManagedRuntime` built from every layer, and returns the value or the serialized error. Nothing else calls `run*`: a lint says no.
+Domains, repositories and the API layer are Effect; the client stays on TanStack Query, Form and Router. The two meet in one helper, and nothing else runs a program. The rules now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]].
 
 ## Errors
 
-- **Each domain declares its errors** as tagged classes in its own language (`EntitlementMissing`). Each carries one **kind** from a closed set: `Unauthenticated`, `Forbidden`, `Invalid` (with field errors), `NotFound`, `Conflict`, `Unexpected`.
-- **A server function's type lists the errors it can fail with.** Repository and infrastructure failures collapse to `Unexpected`: reported to Sentry with the request id, never shown as they are.
-- **The client decodes the union back into the tagged classes** with Effect Schema.
-- **The channel is picked by kind and by read or write**, never by a component's author:
-
-| The call | The kind | Channel |
-|---|---|---|
-| anything | `Unauthenticated` | one redirect to sign-in, carrying where the user was |
-| a read | `Forbidden` | the `Forbidden` state: the page worked, the answer is no |
-| a read | anything else | `ErrorState` in the nearest boundary, with a retry and the request id |
-| a read that frames every page | anything but `Unauthenticated` | reported, nothing on screen |
-| a write | `Invalid`, on a form's submit | the form's fields |
-| a write | anything else | one toast |
-
-- **The message table** is keyed by `_tag`, optionally narrowed by a scope (a server function's name or a route id), first match wins, with a fallback per kind, in both languages.
-- **A feature writes no error handling**: components never `try/catch` a call, reducers never hold an error, and the server's own sentence never reaches the screen.
-
-Adapted from the error model of a previous project; its channels survive, its HTTP statuses become kinds.
+Each domain's errors carry a kind from a closed set; the client decodes them back and the kind and the call pick the channel, never a component's author. The model, the channel table and the message table now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]].
 
 ## The bus
 
