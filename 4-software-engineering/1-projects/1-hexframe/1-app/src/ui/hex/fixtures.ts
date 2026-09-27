@@ -1,4 +1,4 @@
-// A fixture System for /dev/hex: the top of this very vault, the user and their six domains, and a
+// A fixture System for /dev/hex and /dev/system: the top of this very vault, the user and their six domains, and a
 // little below, deep enough to nest two expansions and open a Context. Its content is the user's own,
 // in their words, so it is not translated.
 import type { TileNode } from './geometry/layout'
@@ -12,7 +12,12 @@ const projects: TileNode = {
     1: {
       id: 'hexframe',
       title: 'hexframe',
-      preview: 'Lay out a system as a hierarchy of tiles, so AI works along its intent.',
+      // Long, near the Preview's 350 characters: the chat's tile card shows it with show more.
+      preview:
+        'The app where a user lays out a system (a codebase, a team, their own life) as a ' +
+        'hierarchy of tiles: one tile, the six it breaks into, then theirs. What they choose to ' +
+        'show first carries their intent, and an AI reading the system in that order works along ' +
+        'it. A TanStack Start app on Vercel, Effect on the server, Neon below.',
     },
     2: { id: 'site', title: 'Site', preview: 'My personal website.' },
   },

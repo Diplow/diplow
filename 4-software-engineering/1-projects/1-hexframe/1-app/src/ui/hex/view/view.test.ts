@@ -5,6 +5,7 @@ import { layoutCanvas, type TileNode } from '../geometry/layout'
 import {
   centerOn,
   findTile,
+  pathTo,
   readCanvasView,
   showView,
   tileAction,
@@ -64,6 +65,23 @@ describe('findTile', () => {
     expect(findTile(system, 'a3b')?.id).toBe('a3b')
     expect(findTile(system, 'why1')?.id).toBe('why1')
     expect(findTile(system, 'nowhere')).toBeUndefined()
+  })
+})
+
+describe('pathTo', () => {
+  const ids = (id: string) => pathTo(system, id).map((tile) => tile.id)
+
+  it('goes from the root down to the Tile, both included', () => {
+    expect(ids('root')).toEqual(['root'])
+    expect(ids('a3b')).toEqual(['root', 'a', 'a3', 'a3b'])
+  })
+
+  it('goes through a Context slot', () => {
+    expect(ids('why1')).toEqual(['root', 'why', 'why1'])
+  })
+
+  it('is empty for an id no Tile has', () => {
+    expect(ids('nowhere')).toEqual([])
   })
 })
 
