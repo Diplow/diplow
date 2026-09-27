@@ -12,6 +12,11 @@ const retry = () => {
   toast(m.dev_ui_sample_retrying())
 }
 
+const showLoading = () => {
+  const id = toast.loading(m.dev_ui_toast_loading_message())
+  setTimeout(() => toast.success(m.dev_ui_toast_success_message(), { id }), 1500)
+}
+
 export function FeedbackGallery() {
   const toasts = [
     { label: m.dev_ui_toast_plain(), show: () => toast(m.dev_ui_toast_plain_message()) },
@@ -25,10 +30,8 @@ export function FeedbackGallery() {
       show: () => toast.warning(m.dev_ui_toast_warning_message()),
     },
     { label: m.dev_ui_toast_error(), show: () => toast.error(m.dev_ui_toast_error_message()) },
-    {
-      label: m.dev_ui_toast_loading(),
-      show: () => toast.loading(m.dev_ui_toast_loading_message()),
-    },
+    // A loading toast stays until it is settled; the demo settles it as a save would.
+    { label: m.dev_ui_toast_loading(), show: showLoading },
   ]
   return (
     <>
