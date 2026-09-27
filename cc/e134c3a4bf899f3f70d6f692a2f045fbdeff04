@@ -1,0 +1,29 @@
+.skills/1-ship/CLAUDE.md
+  s_93a8d512abb1b8::t_74c8f3be356b31 8-9,13
+.skills/1-ship/do-ticket/SKILL.md
+  s_93a8d512abb1b8::t_5bff09318b4483 79
+.skills/1-ship/run-autonomous-project/SKILL.md
+  s_93a8d512abb1b8::t_add4bdc4da2bee 18
+.skills/1-ship/run-autonomous-project/references/pr-loop.md
+  s_93a8d512abb1b8::t_0ce5c39ac9275c 162
+.skills/1-ship/run-autonomous-project/references/top.md
+  s_93a8d512abb1b8::t_b7b433a0c3ca0e 50
+4-software-engineering/1-projects/1-hexframe/STACK.md
+  s_93a8d512abb1b8::t_4a0baeba5ef426 17-19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cce134c3a4bf899f3f70d6f692a2f045fbdeff04",
+  "prompts": {},
+  "sessions": {
+    "s_93a8d512abb1b8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "60d6e371-8905-4176-b8c9-7d3b96ee0ab3",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
