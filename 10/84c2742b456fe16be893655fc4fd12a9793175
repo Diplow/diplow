@@ -1,0 +1,49 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/prototype/HtmlCanvas.tsx
+  s_075b0a1e2e68ed::t_4e2e8cc8bdd222 1,13-18,28-40,44,62-63,78
+  s_075b0a1e2e68ed::t_de8aa48729826c 2-3,41,43,49,54,59-61,64-67,71-77
+  s_075b0a1e2e68ed::t_daab9e91363be7 42
+  s_075b0a1e2e68ed::t_0c6d2ef09b6fc0 4-12,19-27,45-48,50-53,55-58,68-70
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/prototype/appearance.tsx
+  s_075b0a1e2e68ed::t_59c205b940360b 1-22,29-36,43-50,57-60,62-73,75-81,87-100
+  s_075b0a1e2e68ed::t_daab9e91363be7 61
+  s_075b0a1e2e68ed::t_0c6d2ef09b6fc0 23-28,37-42,51-56,82-86
+  s_075b0a1e2e68ed::t_72b848913bd2c7 74
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/prototype/fixtures.ts
+  s_075b0a1e2e68ed::t_17af13dca8df72 1-50
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/prototype/SvgCanvas.tsx
+  s_075b0a1e2e68ed::t_1058a7a68b2c5c 1-7,17-52
+  s_075b0a1e2e68ed::t_0c6d2ef09b6fc0 8-16
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/layout.test.ts
+  s_075b0a1e2e68ed::t_0c6d2ef09b6fc0 13-18,31-40,45-49,55-57,67-69,73-80
+  s_075b0a1e2e68ed::t_849f411abce3b9 1-12,19-30,41-44,50-54,58-66,70-72,81-84
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/geometry.ts
+  s_075b0a1e2e68ed::t_79df6e9abc5a4f 1-28,30-103
+  s_075b0a1e2e68ed::t_da815097f106f5 29
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/layout.ts
+  s_075b0a1e2e68ed::t_da815097f106f5 21
+  s_075b0a1e2e68ed::t_87586e0fbf5bad 1-20,22-38,46-57,65-71,79-83
+  s_075b0a1e2e68ed::t_2c04e15ddec728 39-45,58-64,72-78
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/geometry.test.ts
+  s_075b0a1e2e68ed::t_bf277228ab5cc7 1-106
+4-software-engineering/1-projects/1-hexframe/1-app/src/routeTree.gen.ts
+  s_075b0a1e2e68ed::t_f89c94038f95c9 13,20-24,28,32,37,41,43-44,49,61-67,73
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/dev.hex.tsx
+  s_075b0a1e2e68ed::t_be9e0a2b8a7326 1-9,14-50
+  s_075b0a1e2e68ed::t_0c6d2ef09b6fc0 10-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1084c2742b456fe16be893655fc4fd12a9793175",
+  "prompts": {},
+  "sessions": {
+    "s_075b0a1e2e68ed": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c8d2900e-71de-4b41-bb3b-4d0e35e8016f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
