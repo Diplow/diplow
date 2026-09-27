@@ -1,6 +1,6 @@
 ---
 name: run-autonomous-project
-description: "Execute one Linear project with no human in the loop. The invoking session is the project orchestrator: it runs one unit agent per ticket in blockedBy order, each on a short-lived branch off main that lands on main once green, through a pull request, or a fast-forward when the repo lands directly on main. With repo.target_branch set, the units branch from and land on that project branch instead, and a human merges it into main. Gates, review rounds, halting rules and models come from a committed run config (run.yaml). State lives in Linear and git, so a stopped run restarts with --resume. run-autonomous-initiative runs this skill once per project of an initiative. Use only on an explicit request such as \"/run-autonomous-project <project> --config <path/to/run.yaml> [--resume]\", \"run this project autonomously\" or \"resume the autonomous project run\". One ticket with a human at the wheel is do-ticket."
+description: "Execute one Linear project with no human in the loop. The invoking session is the project orchestrator: it runs one unit agent per ticket in blockedBy order, each on a short-lived branch off main that lands on main once green, through a pull request, or a fast-forward when the repo lands directly on main. With repo.target_branch set, the units branch from and land on that branch instead, a project branch or, under run-autonomous-initiative, an initiative branch, and a human merges it into main. Gates, review rounds, halting rules and models come from a committed run config (run.yaml). State lives in Linear and git, so a stopped run restarts with --resume. run-autonomous-initiative runs this skill once per project of an initiative. Use only on an explicit request such as \"/run-autonomous-project <project> --config <path/to/run.yaml> [--resume]\", \"run this project autonomously\" or \"resume the autonomous project run\". One ticket with a human at the wheel is do-ticket."
 argument-hint: "<project> --config <path/to/run.yaml> [--resume]"
 title: run-autonomous-project
 parent: .skills/1-ship/run-autonomous-project
@@ -8,7 +8,7 @@ owner: diplo
 preview: >-
   Runs one Linear project of the Hexframe team to done with nobody watching:
   one unit agent per ticket, each on a short-lived branch that lands on main,
-  or on a project branch the config names, once its gates are green. Settings come from a committed run.yaml; state is
+  or on the project or initiative branch the config names, once its gates are green. Settings come from a committed run.yaml; state is
   read back from Linear and git, so --resume picks up after a halt. Use only
   when asked to run a project autonomously.
 ---

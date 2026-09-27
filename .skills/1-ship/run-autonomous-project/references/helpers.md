@@ -20,7 +20,7 @@ A helper that cannot finish says so in its return, with the evidence. It never a
 
 | Brief | Input | Return |
 |---|---|---|
-| project snapshot | project name, `landing` | project id and state; then one line per ticket: `id · title · state · blockedBy ids · closing comment status and landed, or none · park comment PARK ids, or none · branch or none · landed yes or no · PR number, state, base, or none`, read as described in "What to read" of `references/state.md` |
+| project snapshot | project name, `landing` | project id and state; then one line per ticket: `id · title · state · blockedBy ids · closing comment status and landed, or none · park comment PARK ids, or none · branch or none · landed yes or no · PR number, state, base and merge commit SHA, or none`, read as described in "What to read" of `references/state.md` |
 | CI digest | failed run ids | per run: failing job and step, file:line, the message in at most 5 lines, and `code` or `infrastructure` with the reason |
 | review threads | pull request number | one deduplicated list of actionable findings: `source · thread id or comment URL · file:line · reviewer's level · the claim in one sentence`, collected from the surfaces in step 5 of `references/pr-loop.md`, long collapsed `<details>` analysis blocks stripped. Then the count of unresolved threads |
 | code lookup | a question and where to look | excerpts with file:line that answer it, at most 60 lines in total, and what it could not find |

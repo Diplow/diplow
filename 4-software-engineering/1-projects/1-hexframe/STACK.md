@@ -16,7 +16,7 @@ The choices, and the rules they come with. Each rule is written here until the f
 
 - **Here, in the public `Diplow/diplow` repo.** Every change reaches `main` through a short-lived pull request, hours old rather than days, notes included (see the root [[STACK]]); an autonomous run's units reach it through their initiative branch, below. I do the final merge for now; the direction is to let a green PR merge itself.
 - **Each pull request that touches hexframe** runs `check` and `test`, gets a Neon branch and a Vercel preview, then Playwright against that preview. CI is path-filtered to `4-software-engineering/1-projects/1-hexframe/**`, so a note never triggers it.
-- **Autonomous runs land on an initiative branch.** When `run-autonomous-initiative` builds hexframe, every unit of every project branches from and merges into `initiative/<slug>`, not `main`; I merge that branch into `main` through a pull request once the last project's phase-close ticket is done. The config and the launch live in [[4-software-engineering/1-projects/1-hexframe/.run/CLAUDE|.run]].
+- **Autonomous runs land on an initiative branch**, which I merge into `main` once its last project is done: see [[4-software-engineering/1-projects/1-hexframe/.run/CLAUDE|.run]].
 - **cubic** reviews each pull request through a `cubic.yaml` at the repo root, scoped to hexframe, with three custom agents: maintainability (from the `maintainability-review` skill), domain design (from `domain-design`) and security. The security bar: auth is checked in middleware, no secret reaches the client, every server function input goes through a schema, no raw SQL. The three briefs live in [[4-software-engineering/1-projects/1-hexframe/.cubic/CLAUDE|.cubic]].
 
 ## Runtime and versions

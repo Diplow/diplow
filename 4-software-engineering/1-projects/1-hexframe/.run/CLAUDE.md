@@ -6,7 +6,7 @@ preview: >-
   How hexframe v0 gets built with nobody watching: run.yaml, the config
   run-autonomous-initiative reads, every ticket landing on one initiative
   branch I merge into main at the end, and the registers the run writes its
-  decisions and open security findings to.
+  decisions to.
 ---
 # autonomous runs
 
@@ -36,6 +36,5 @@ The run writes to `registers/<project slug>/`, the slug being the Linear project
 | File | An entry per |
 |---|---|
 | `decisions.md` | choice a unit made where its ticket left room, and that a later ticket or a human would want to know about |
-| `security.md` | security finding left open when a pull request's review rounds ran out; the phase-close ticket fixes or parks it |
 
-A register file opens with the repo's frontmatter (`title`, `parent`, `owner: diplo`, `preview`), then a one-line heading. Each entry is a `###` heading `DEC-<n>` or `SEC-<n>` and a short title, then the ticket, the pull request, and two or three sentences on what was decided or found and why.
+A register file opens with the repo's frontmatter (`title`, `parent`, `owner: diplo`, `preview`), then a one-line heading. Each entry is a `###` heading `DEC-<n>` and a short title, then the ticket, the pull request, and two or three sentences on what was decided and why.

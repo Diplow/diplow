@@ -86,6 +86,7 @@ halting:
   read_only_paths:
     - CLAUDE.md
     - STACK.md
+    - .gitignore
     - 1-leadership/**
     - 2-education/**
     - 3-games/**
@@ -94,16 +95,19 @@ halting:
     - 4-software-engineering/-CLAUDE.md
     - 4-software-engineering/2-principles/**
     - 4-software-engineering/1-projects/CLAUDE.md
+    - 4-software-engineering/1-projects/2-site/**
     - "**/-*"
     - "**/-*/**"
 
 registers:
   dir: 4-software-engineering/1-projects/1-hexframe/.run/registers
-  files: [decisions.md, security.md]
+  files: [decisions.md]
+  # .cubic/security.md: every break of the security bar is fixed, never waived.
   security_bugs: >-
-    A security finding left open by the round cap goes in security.md with its
-    thread URL, and the project's phase-close ticket fixes it or parks it.
-    It never closes silently.
+    Nothing lands with a security finding open. When the round cap runs out
+    with a valid security finding unresolved, the pull request is not merged:
+    the unit is parked whole, kind review-exhausted, with the finding's thread
+    URL in its PARK entry.
 
 summary_schema: [status, landed, register_entries, parked, interventions]
 
