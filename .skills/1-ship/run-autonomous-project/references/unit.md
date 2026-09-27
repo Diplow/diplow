@@ -4,21 +4,21 @@ parent: .skills/1-ship/run-autonomous-project
 owner: diplo
 preview: >-
   The unit agent's role: take one Linear ticket to a short-lived branch off
-  main, implement it, pass its gates within the fix-round cap, land it through
+  the target branch, implement it, pass its gates within the fix-round cap, land it through
   the PR loop or a fast-forward, close the ticket. When a cap runs out, the
   exhaustion path parks or halts it.
 ---
-# Unit agent. One ticket, one short-lived branch, landed on main
+# Unit agent. One ticket, one short-lived branch, landed on the target branch
 
-You are spawned by the project orchestrator, one level below it (level one in a project run, level two in an initiative run), to take one Linear ticket from its description to a branch landed on `main`, with nobody to ask. You may spawn helpers; they are leaves. Read `references/contract.md` before anything else: its hard rules, summary block and path guard bind every step here.
+You are spawned by the project orchestrator, one level below it (level one in a project run, level two in an initiative run), to take one Linear ticket from its description to a branch landed on `<target>`, with nobody to ask. You may spawn helpers; they are leaves. Read `references/contract.md` before anything else: its hard rules, summary block and path guard bind every step here.
 
 ## Your brief
 
 The project orchestrator passes these explicitly. If one is missing, return `halted` with the missing name as the first `interventions` line and touch nothing: guessing is how work lands in the wrong place.
 
-`ticket`, `project`, `initiative` (`none` in a project run), `config` (absolute path), `skill_dir` (absolute path), `landing`, `home_branch`, `on_exhausted`, `frozen_now`, the `halting.never` list, `parked_before` (tickets earlier in the order that were parked, so you know what code is absent from `main`), and `resume_at` (`fresh`, `implement`, `review`, `close` or `repair`).
+`ticket`, `project`, `initiative` (`none` in a project run), `config` (absolute path), `skill_dir` (absolute path), `landing`, `target`, `home_branch`, `on_exhausted`, `frozen_now`, the `halting.never` list, `parked_before` (tickets earlier in the order that were parked, so you know what code is absent from `<target>`), and `resume_at` (`fresh`, `implement`, `review`, `close` or `repair`).
 
-`resume_at` picks your entry point: `fresh` and `implement` start at step 1, `review` at step 5, `close` at step 7. `repair` means your parent re-ran the gates on `main` after this ticket landed and found them red: the brief adds `repair_log`, the path of that failing log. Start at step 2 on a new branch for the same ticket, cut from `origin/main` (the old one landed; add `-repair` to its slug), fix what the log shows, and carry on from step 4 to a second landing. At step 7, update the existing closing comment instead of posting another.
+`resume_at` picks your entry point: `fresh` and `implement` start at step 1, `review` at step 5, `close` at step 7. `repair` means your parent re-ran the gates on `<target>` after this ticket landed and found them red: the brief adds `repair_log`, the path of that failing log. Start at step 2 on a new branch for the same ticket, cut from `origin/<target>` (the old one landed; add `-repair` to its slug), fix what the log shows, and carry on from step 4 to a second landing. At step 7, update the existing closing comment instead of posting another.
 
 ## Steps
 
@@ -37,7 +37,7 @@ git fetch origin
 git status --porcelain            # must print nothing; otherwise return halted, the previous agent broke rule 7
 ```
 
-Look for an existing branch by ticket number ("Branch names" in the contract). None: `git switch -c <branch from repo.branch_pattern> origin/main`. One: `git switch <branch>`, pull it, and if `git merge-base --is-ancestor origin/main HEAD` fails, `git merge origin/main`. With `resume_at: implement`, read `git log --stat origin/main..HEAD` to see what is already built.
+Look for an existing branch by ticket number ("Branch names" in the contract). None: `git switch -c <branch from repo.branch_pattern> origin/<target>`. One: `git switch <branch>`, pull it, and if `git merge-base --is-ancestor origin/<target> HEAD` fails, `git merge origin/<target>`. With `resume_at: implement`, read `git log --stat origin/<target>..HEAD` to see what is already built.
 
 Set the ticket to `linear.state_in_progress`.
 
@@ -53,7 +53,7 @@ When the work surfaces something the ticket or the repo's `CLAUDE.md` files say 
 
 ### 4. Run the gates, within the cap
 
-Bring the branch up to date first: if `git merge-base --is-ancestor origin/main HEAD` fails after a fetch, `git merge origin/main`. Then run each command of `gates.unit` in order, output to `$(git rev-parse --git-dir)/run-logs/<ticket>-gate<i>-round<r>.log` (create the directory), and read the exit code and the last 80 lines. A longer log goes to the same fetch-tier helper for a digest of failing checks with file:line.
+Bring the branch up to date first: if `git merge-base --is-ancestor origin/<target> HEAD` fails after a fetch, `git merge origin/<target>`. Then run each command of `gates.unit` in order, output to `$(git rev-parse --git-dir)/run-logs/<ticket>-gate<i>-round<r>.log` (create the directory), and read the exit code and the last 80 lines. A longer log goes to the same fetch-tier helper for a digest of failing checks with file:line.
 
 A **fix round** is one attempt to turn a red gate green, followed by a re-run of every gate from the first. Count rounds per gate. The fix is always in the code under test (hard rule 4, and the Enforcement check of `4-software-engineering/2-principles/5-maintainability/CLAUDE.md`). When a gate is red and its count already equals `gates.fix_rounds_per_gate`, take the exhaustion path with kind `gate-exhausted`.
 
@@ -65,7 +65,7 @@ Then run the pre-landing form of the path guard. A hit is the exhaustion path wi
 
 `pr` landing: follow `references/pr-loop.md` with `<branch>` your branch, the ticket as owner, and yourself as the fixer. Stop after its step 5; step 6 is below. `direct` landing: skip to step 6.
 
-### 6. Land on main
+### 6. Land on the target branch
 
 `pr`: step 6 of the PR loop. `direct`: "Direct landing" in the same file. After it, the working tree is on the home branch and `git status --porcelain` prints nothing.
 
@@ -86,6 +86,6 @@ Either way, end on the home branch with `git status --porcelain` printing nothin
 
 The contract's hard rules bind you. Plus:
 
-- **One ticket.** You change the state and comments of `ticket` only, and you land one branch, yours, on `main`.
-- **Your branch, nothing else.** You commit only to your own branch. `main` receives your work only through step 6.
+- **One ticket.** You change the state and comments of `ticket` only, and you land one branch, yours, on `<target>`.
+- **Your branch, nothing else.** You commit only to your own branch. `<target>` receives your work only through step 6.
 - **A red gate is fixed in the code.** Editing a lint rule, a test, a threshold or a gate command to reach green is the first line of most `halting.never` lists, and it halts the run when the path guard finds it.

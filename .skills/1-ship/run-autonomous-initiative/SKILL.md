@@ -60,5 +60,5 @@ Read `run-autonomous-project`'s `references/contract.md`, then follow `reference
 
 `run-autonomous-project`'s `SKILL.md` lists the invariants every level keeps, and its contract states them in full, with the reasons. Two are specific to this level:
 
-- **Projects run in the config's order, one at a time.** A project starts only after the previous one is completed, its gates re-run green on `main` by the root, and the path guard silent. Every unit lands on `main` on its own; there is no initiative branch and no final pull request.
+- **Projects run in the config's order, one at a time.** A project starts only after the previous one is completed, its gates re-run green on `main` by the root, and the path guard silent. Every unit lands on `main` on its own; there is no initiative branch, no project branch (preflight refuses `repo.target_branch` set to anything but `main`) and no final pull request.
 - **The initiative is reported on, never edited.** The Linear tools can only list its projects and post its status updates. The root creates no project and changes no description.

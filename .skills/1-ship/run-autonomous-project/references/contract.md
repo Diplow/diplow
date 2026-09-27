@@ -28,22 +28,24 @@ A **project run** starts from `/run-autonomous-project` on one Linear project. A
 
 The **top of the run** is the one agent with a terminal. It prints the launch summary and the final one, writes the halt and resume entries, and turns a `halted` summary into a stop. Its preflight, resume and halt steps, shared by both ways in, are in `references/top.md`.
 
-## Trunk-based: every unit lands on main
+## Trunk-based: every unit lands on the target branch
 
-`main` is the only long-lived branch. There is no project branch and no initiative branch. Each ticket is a short-lived branch cut from `origin/main`, and it lands back on `main` as soon as its gates are green. Later tickets start from a `main` that already holds the earlier ones. Several small landings beat one long branch.
+Every unit lands on one branch, the **target branch**, written `<target>` in commands: `repo.target_branch` from the config, `main` when the key is absent. The top resolves it once, in preflight, and passes `target` down in every brief. Each ticket is a short-lived branch cut from `origin/<target>`, and it lands back on `<target>` as soon as its gates are green. Later tickets start from a `<target>` that already holds the earlier ones. Several small landings beat one long branch.
+
+When `<target>` is `main`, `main` is the only long-lived branch. When the config names another one, a **project branch** such as `project/design-system`, it is the one other long-lived branch, and it lives for one project. The run never merges it into `main`: a human does, once the project's phase-close ticket is done. There is never an initiative branch.
 
 How a unit lands depends on the target repo. The top decides it once, in preflight, and passes `landing` down in every brief:
 
 | `landing` | When | How a unit lands | "Landed" means |
 |---|---|---|---|
-| `pr` | the default | a pull request into `main`, merged by the run once gates, CI and review rounds are done (`references/pr-loop.md`) | the pull request is `MERGED` into `main` |
-| `direct` | the target repo's root `CLAUDE.md` or `STACK.md` says changes land directly on `main` | a fast-forward of `main` to the unit branch, then a push (`references/pr-loop.md`, "Direct landing") | the branch tip is an ancestor of `origin/main` |
+| `pr` | the default | a pull request into `<target>`, merged by the run once gates, CI and review rounds are done (`references/pr-loop.md`) | the pull request is `MERGED` into `<target>` |
+| `direct` | the target repo's root `CLAUDE.md` or `STACK.md` says changes land directly on `main` | a fast-forward of `<target>` to the unit branch, then a push (`references/pr-loop.md`, "Direct landing") | the branch tip is an ancestor of `origin/<target>` |
 
-In `direct` landing, every step that exists only for a pull request (CI wait, review wait, review rounds) is skipped. The local gates are the only check before `main`.
+In `direct` landing, every step that exists only for a pull request (CI wait, review wait, review rounds) is skipped. The local gates are the only check before `<target>`.
 
 ### The home branch
 
-The working tree is shared, and the run switches it between unit branches. The **home branch** is the branch the top was on at launch: the workspace's own branch in a Conductor workspace (see `.skills/conductor-workspaces.md`). Between units, and whenever an agent returns, the tree sits on the home branch with nothing uncommitted. To look at `main` itself (gate re-runs, the path guard), use `git switch --detach origin/main` after `git fetch origin`, then switch back home. Never `git checkout main`: in a Conductor workspace `main` is checked out in the original folder, and the checkout fails.
+The working tree is shared, and the run switches it between unit branches. The **home branch** is the branch the top was on at launch: the workspace's own branch in a Conductor workspace (see `.skills/conductor-workspaces.md`). Between units, and whenever an agent returns, the tree sits on the home branch with nothing uncommitted. To look at `<target>` itself (gate re-runs, the path guard), use `git switch --detach origin/<target>` after `git fetch origin`, then switch back home. Never `git checkout <target>`: the tree belongs to the home branch, and in a Conductor workspace `main` is checked out in the original folder, where the checkout fails.
 
 ## The config is the only source of run settings
 
@@ -57,12 +59,13 @@ Keys, when each is needed, and who reads them. `always` keys are needed by both 
 | `team` | always | all | Linear team, `Hexframe` here |
 | `initiative` | initiative | root | Linear initiative name |
 | `repo.branch_pattern` | optional | project, unit | defaults to `{type}/hex-{ticket}-{slug}`. `{type}` is one of `feat`, `fix`, `refactor`, `docs`, `chore`, chosen from what the ticket asks. `{ticket}` is the ticket number without the team key, `{slug}` is 2 to 5 lowercase words from the title joined by `-` |
+| `repo.target_branch` | optional | top | the branch every unit branches from and lands on, `main` when absent. Any other value is a project branch: a project run only, created from `origin/main` by preflight if the remote lacks it (`references/top.md`). The top passes the resolved value down as `target` |
 | `repo.merge_strategy` | pr | unit, project | `merge` or `squash`, passed to `gh pr merge`. Never `rebase`: the path guard and state reads rely on one landing commit per pull request |
 | `repo.working_tree`, `parallelism` | always | project | `shared` and `1`: one working tree, one unit at a time |
 | `projects[]` | always | top | `name`, `on_exhausted` (`halt` or `park`) and `mint_tickets` per project. An initiative run takes them in this order; a project run reads the entry whose `name` is its project |
 | `models.phase` | initiative | root | the model of the project orchestrator the root spawns |
 | `models.*`, the rest | always | whoever spawns | the concrete model for each role; see "Delegation" below |
-| `gates.unit`, `gates.phase`, `gates.fix_rounds_per_gate` | always | unit, project, root | shell commands that must exit 0, and the fix-round cap. `gates.phase` is the project's gate set, run on `main` once its units have landed |
+| `gates.unit`, `gates.phase`, `gates.fix_rounds_per_gate` | always | unit, project, root | shell commands that must exit 0, and the fix-round cap. `gates.phase` is the project's gate set, run on `<target>` once its units have landed |
 | `reviews.automated`, `reviews.max_rounds`, `reviews.must_fix`, `reviews.should_fix` | pr | unit, project | the automated reviewers to wait for (an empty list skips the wait), the round cap, and the reviewer levels that count as must-fix and should-fix |
 | `reviews.clean_marker` | optional | unit, project | the phrase an app reviewer writes in its summary comment when it found nothing, for reviewers that report a clean review only that way |
 | `halting.never`, `halting.frozen_paths`, `halting.read_only_paths` | always | all | the `never` list, frozen paths, read-only paths |
@@ -82,7 +85,7 @@ Each agent's final message to its parent is this block and nothing else. A paren
 
 ```yaml
 status: done | parked | halted
-landed: <pull request URL (pr landing), commit SHA on main (direct landing), or none>
+landed: <pull request URL (pr landing), commit SHA on <target> (direct landing), or none>
 register_entries: [<path>#<entry id>, ...]   # entries this level added, path under registers.dir
 parked: [<ticket>#PARK-n: <one line>, ...]    # everything left for a human
 interventions: [<one line>, ...]             # what only a human can do next, or did
@@ -90,21 +93,21 @@ interventions: [<one line>, ...]             # what only a human can do next, or
 
 | `status` | Means | The parent then |
 |---|---|---|
-| `done` | this level's work landed on `main` with gates green. For a project: every unit is done or parked, and `gates.phase` is green on `main`. `parked` may still list smaller items left behind | verifies the claim, then continues |
+| `done` | this level's work landed on `<target>` with gates green. For a project: every unit is done or parked, and `gates.phase` is green on `<target>`. `parked` may still list smaller items left behind | verifies the claim, then continues |
 | `parked` | the cap ran out under `on_exhausted: park`. Nothing landed; the branch, and its pull request if any, stay open. One `PARK-n` entry with evidence exists | verifies the entry exists, then continues with the next ticket |
 | `halted` | the run must stop. The first `interventions` line says why and what would unblock it | stops spawning and returns `halted` upward with the same line |
 
 What gets parked is the smallest item that failed, and code lands only while its gates are green. A unit whose gates stay red is parked whole and does not land. A unit whose gates are green but whose review threads outlive the round cap lands, returns `done`, and parks the unresolved threads. Under `on_exhausted: halt` both cases return `halted` instead and nothing lands.
 
-A project returns `parked` only when `gates.phase` stays red on `main` after the fix rounds. An initiative's later projects build on that code, so the root stops the run on a `parked` project the same way it does on `halted`.
+A project returns `parked` only when `gates.phase` stays red on `<target>` after the fix rounds. An initiative's later projects build on that code, so the root stops the run on a `parked` project the same way it does on `halted`.
 
 ## Verify every claim
 
 A subagent's summary is a claim, and claims have been false before. Before a parent records anything from a summary it re-derives the fact itself:
 
-- "landed", `pr`: `gh pr view <url> --json state,mergedAt,baseRefName` shows `MERGED` into `main`.
-- "landed", `direct`: after `git fetch origin`, `git merge-base --is-ancestor <sha> origin/main` exits 0.
-- "gates green": the parent fetches, switches to a detached `origin/main`, and runs the gate commands itself, then switches back home. Send the output to a log file and read only the exit code, so a long log never enters an orchestrator's context:
+- "landed", `pr`: `gh pr view <url> --json state,mergedAt,baseRefName` shows `MERGED` into `<target>`.
+- "landed", `direct`: after `git fetch origin`, `git merge-base --is-ancestor <sha> origin/<target>` exits 0.
+- "gates green": the parent fetches, switches to a detached `origin/<target>`, and runs the gate commands itself, then switches back home. Send the output to a log file and read only the exit code, so a long log never enters an orchestrator's context:
   `mkdir -p "$(git rev-parse --git-dir)/run-logs"; <cmd> > "$(git rev-parse --git-dir)/run-logs/<name>.log" 2>&1; echo "exit=$?"`.
 - "ticket Done, comment posted": `get_issue` and `list_comments` show it.
 - "parked with evidence": `list_comments` on the ticket shows the park comment holding the `PARK-n` entry.
@@ -116,7 +119,7 @@ A claim that fails verification gets one repair attempt, described in the role f
 These hold at every level and in every brief. Each role file adds the few that only bite at its level.
 
 1. **Every line of `halting.never` in the config is a hard rule.** Read the list now. When you write a brief, paste the list into it verbatim, because a helper sees only its brief.
-2. **Land only your own branch, only on `main`, only when green.** A unit lands its own branch once its gates are green, and in `pr` landing once CI and review rounds are done too. No agent force-pushes, pushes to a branch the run did not create, or lands anything that bypasses its own gates. In `direct` landing the only push to `main` is the fast-forward in "Direct landing".
+2. **Land only your own branch, only on `<target>`, only when green.** A unit lands its own branch once its gates are green, and in `pr` landing once CI and review rounds are done too. No agent force-pushes, pushes to a branch the run did not create other than `<target>`, or lands anything that bypasses its own gates. In `direct` landing the only push to `<target>` is the fast-forward in "Direct landing". When `<target>` is a project branch, nothing the run does reaches `main`.
 3. **Linear writes stay inside the plan.** The run updates the state and comments of tickets that already belong to its projects, mints tickets only through the planner inside the current project, posts status updates, and moves a project between started and completed. It creates no project and edits neither an initiative nor any project description. The Linear tools here cannot read or write an initiative at all, only list its projects and post its status updates, so nothing depends on its description.
 4. **Frozen and read-only paths stay untouched.** `.github/`, the config file, every `halting.frozen_paths` and `halting.read_only_paths` entry, and every `halting.frozen_after` entry whose project is completed. The check is mechanical, see "Path guard". When the ticket cannot be finished without such an edit, stop and take the exhaustion path with kind `forbidden-path`. A gate stays as strict as the run found it: the fix for a red gate is in the code under test.
 5. **Decide or park, never ask.** Nobody is watching the session. Wherever a supervised skill such as `do-ticket` would ask the user (which ticket, which mode, is this recap right, may I post), take the answer from the config, the ticket or the repo's `CLAUDE.md` files. When none of them answers and the choice changes what ships, park the item with the question written in the entry.
@@ -132,16 +135,16 @@ Build the pathspec list from `halting.frozen_paths`, `halting.read_only_paths`, 
 # unit, before every commit: staged files that match must be none
 git diff --cached --name-only -- ':(glob).github/**' ':(glob)<entry>' ...
 
-# unit, before landing: what the branch changes since it left main must match none
-git diff --name-only origin/main...HEAD -- <pathspecs>
+# unit, before landing: what the branch changes since it left <target> must match none
+git diff --name-only origin/<target>...HEAD -- <pathspecs>
 
-# project orchestrator, after a unit lands: commits that reached main since the unit started
-git log --format='%H %an %s' <main_before>..origin/main -- <pathspecs>
+# project orchestrator, after a unit lands: commits that reached <target> since the unit started
+git log --format='%H %an %s' <target_before>..origin/<target> -- <pathspecs>
 ```
 
-`<main_before>` is the `origin/main` SHA the project orchestrator recorded right before spawning the unit. An initiative's root runs the same `git log` form over a whole project, described in the `run-autonomous-initiative` skill.
+`<target_before>` is the `origin/<target>` SHA the project orchestrator recorded right before spawning the unit. An initiative's root runs the same `git log` form over a whole project, described in the `run-autonomous-initiative` skill.
 
-Anything these print is a violation, and the level that sees it returns `halted`, naming the SHA (or file) and the path. The `git log` form also lists a commit a human pushed to `main` during the run. The halt names the author so a human can tell. A human who confirms the commit is theirs clears the halt by resuming: the unit is already Done, so a resumed run does not check it again.
+Anything these print is a violation, and the level that sees it returns `halted`, naming the SHA (or file) and the path. The `git log` form also lists a commit a human pushed to `<target>` during the run. The halt names the author so a human can tell. A human who confirms the commit is theirs clears the halt by resuming: the unit is already Done, so a resumed run does not check it again.
 
 ## Registers
 
@@ -175,7 +178,7 @@ With no long-lived run branch, nothing can carry a record of a unit that did not
 
 - reason: <why a human had to act, from the halting summary>
 - needed: <what would unblock the run>            # halt entries
-- found on resume: <commits on main and ticket state changes since the halt>   # resume entries
+- found on resume: <commits on <target> and ticket state changes since the halt>   # resume entries
 ```
 
 ## Linear conventions
@@ -183,7 +186,7 @@ With no long-lived run branch, nothing can carry a record of a unit that did not
 The Linear tools are the personal Linear MCP's, with the prefix `mcp__hodor__Linear_mcp_Personal__`. Below they go by their short names: `get_issue`, `save_issue`, `list_issues`, `list_comments`, `save_comment`, `list_projects`, `get_project`, `save_project`, `list_issue_statuses`, `save_status_update`, `get_status_updates`. There is no initiative tool: `list_projects` with `initiative` lists an initiative's projects, and `save_status_update` and `get_status_updates` with `type: "initiative"` post and read its status updates. Pass `team` from the config when `save_issue` creates a ticket.
 
 - **States** come from `linear.state_in_progress`, `linear.state_in_review` and `linear.state_done`. A ticket in a canceled or duplicate state is skipped.
-- **The phase-close ticket.** Each project has exactly one ticket whose title ends with the words `phase close`, compared case-insensitively after trimming, for example `Billing A: phase close`. It is blocked by every unit ticket of the project, it owns the project close (the `gates.phase` run on `main` and any fix it takes), and it is the last ticket the project closes. Zero or several matches in a project is a plan error the run cannot repair, so the project returns `halted`.
+- **The phase-close ticket.** Each project has exactly one ticket whose title ends with the words `phase close`, compared case-insensitively after trimming, for example `Billing A: phase close`. It is blocked by every unit ticket of the project, it owns the project close (the `gates.phase` run on `<target>` and any fix it takes), and it is the last ticket the project closes. Zero or several matches in a project is a plan error the run cannot repair, so the project returns `halted`.
 - **The closing comment.** One per ticket, posted by the agent that owns the ticket when it reaches `done`, `parked` or `halted`. Its first line is pinned, because a resumed run finds the comment by matching it:
 
   ````markdown
@@ -208,7 +211,7 @@ git ls-remote --heads origin "*/hex-<ticket>-*"      # the pattern with {type} a
 
 One match is the branch. Several matches is `halted` with the names listed.
 
-Push a unit branch only once it holds its first commit. In `direct` landing a pushed branch whose tip is on `main` reads as landed, and an empty branch would read that way too.
+Push a unit branch only once it holds its first commit. In `direct` landing a pushed branch whose tip is on `<target>` reads as landed, and an empty branch would read that way too.
 
 ## Delegation
 
@@ -226,4 +229,4 @@ That depth is a property of the harness the skill targets, and preflight can onl
 
 The project orchestrator is judge tier because it rules on its units' claims and decides whether a whole project continues, parks or halts. In a project run it is the main session, whatever model that runs. Pass the config's value as the spawn's `model` parameter. When a key is absent, or the harness cannot pin a model, use the tier's mapping in `.skills/model-tiers.md` and still delegate.
 
-Every brief, at every level, carries these lines before its task: the absolute path of this skill's directory, the absolute config path, `landing`, `home_branch`, the initiative (`none` in a project run), the project, `on_exhausted`, `frozen_now`, the `halting.never` list verbatim, and the instruction to read this file first and to return the summary block, or the helper's own return format, as its whole final message.
+Every brief, at every level, carries these lines before its task: the absolute path of this skill's directory, the absolute config path, `landing`, `target`, `home_branch`, the initiative (`none` in a project run), the project, `on_exhausted`, `frozen_now`, the `halting.never` list verbatim, and the instruction to read this file first and to return the summary block, or the helper's own return format, as its whole final message.
