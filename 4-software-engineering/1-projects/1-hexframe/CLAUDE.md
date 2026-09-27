@@ -20,6 +20,7 @@ It is a pnpm monorepo; each package is a numbered child of this node (`1-<name>/
 | Inner child | What it holds |
 |---|---|
 | [[4-software-engineering/1-projects/1-hexframe/.cubic/CLAUDE\|.cubic]] | The briefs of cubic's three review agents (maintainability, domain design, security), wired in by `cubic.yaml` at the repo root |
+| [[4-software-engineering/1-projects/1-hexframe/.run/CLAUDE\|.run]] | `run.yaml`, the config of the autonomous runs that build hexframe v0 one project at a time, and the registers they write |
 
 | File | What it holds |
 |---|---|
