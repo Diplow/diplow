@@ -1,0 +1,28 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/Tile.tsx
+  s_2908cd458e0dd6::t_6d1d6defe0b5f7 28-29
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/dev.hex.tsx
+  s_2908cd458e0dd6::t_6d1d6defe0b5f7 6-7,20-26
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/geometry/layout.ts
+  s_2908cd458e0dd6::t_ce5edd0b6fab32 68-70
+  s_2908cd458e0dd6::t_ba583a01370cf9 25-27,65-67,71-72,95-97
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/geometry/layout.test.ts
+  s_2908cd458e0dd6::t_ba583a01370cf9 95-109
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/fixtures.ts
+  s_2908cd458e0dd6::t_6d1d6defe0b5f7 5,60-68
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cb733b4cac4a6d3ffe61a58e326d416b415f895d",
+  "prompts": {},
+  "sessions": {
+    "s_2908cd458e0dd6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0cbfaeea-8195-45e3-a873-1ae996767d5d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
