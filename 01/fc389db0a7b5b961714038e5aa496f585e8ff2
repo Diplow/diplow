@@ -1,0 +1,25 @@
+4-software-engineering/1-projects/1-hexframe/.cubic/security.md
+  s_224086adfa5b27::t_49b985bd14af62 25
+4-software-engineering/1-projects/1-hexframe/.cubic/maintainability.md
+  s_224086adfa5b27::t_49b985bd14af62 19,29
+.github/workflows/hexframe.yml
+  s_224086adfa5b27::t_49b985bd14af62 32
+4-software-engineering/1-projects/1-hexframe/.cubic/domain-design.md
+  s_224086adfa5b27::t_49b985bd14af62 23,36,44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "01fc389db0a7b5b961714038e5aa496f585e8ff2",
+  "prompts": {},
+  "sessions": {
+    "s_224086adfa5b27": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8666414d-1dce-4fc5-a208-5271f717ee2c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
