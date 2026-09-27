@@ -1,6 +1,6 @@
 ---
 name: run-autonomous-project
-description: "Execute one Linear project with no human in the loop. The invoking session is the project orchestrator: it runs one unit agent per ticket in blockedBy order, each on a short-lived branch off main that lands on main once green, through a pull request, or a fast-forward when the repo lands directly on main. With repo.target_branch set, the units branch from and land on that project branch instead, and a human merges it into main. Gates, review rounds, halting rules and models come from a committed run config (run.yaml). State lives in Linear and git, so a stopped run restarts with --resume. run-autonomous-initiative runs this skill once per project of an initiative. Use only on an explicit request such as \"/run-autonomous-project <project> --config <path/to/run.yaml> [--resume]\", \"run this project autonomously\" or \"resume the autonomous project run\". One ticket with a human at the wheel is do-ticket."
+description: "Execute one Linear project with no human in the loop. The invoking session is the project orchestrator: it runs one unit agent per ticket in blockedBy order, each on a short-lived branch off main that lands on main once green, through a pull request, or a fast-forward when the repo lands directly on main. With repo.target_branch set, the units branch from and land on that branch instead, a project branch or, under run-autonomous-initiative, an initiative branch, and a human merges it into main. Gates, review rounds, halting rules and models come from a committed run config (run.yaml). State lives in Linear and git, so a stopped run restarts with --resume. run-autonomous-initiative runs this skill once per project of an initiative. Use only on an explicit request such as \"/run-autonomous-project <project> --config <path/to/run.yaml> [--resume]\", \"run this project autonomously\" or \"resume the autonomous project run\". One ticket with a human at the wheel is do-ticket."
 argument-hint: "<project> --config <path/to/run.yaml> [--resume]"
 title: run-autonomous-project
 parent: .skills/1-ship/run-autonomous-project
@@ -8,14 +8,14 @@ owner: diplo
 preview: >-
   Runs one Linear project of the Hexframe team to done with nobody watching:
   one unit agent per ticket, each on a short-lived branch that lands on main,
-  or on a project branch the config names, once its gates are green. Settings come from a committed run.yaml; state is
+  or on the project or initiative branch the config names, once its gates are green. Settings come from a committed run.yaml; state is
   read back from Linear and git, so --resume picks up after a halt. Use only
   when asked to run a project autonomously.
 ---
 
 # run-autonomous-project. One project, one landing per ticket, nobody to ask
 
-Linear holds the plan: a project, one ticket per unit of work, ordered by `blockedBy`, and one phase-close ticket that owns the project's close. This skill executes that plan end to end without a human. Each ticket becomes a short-lived branch cut from `origin/<target>` and lands back on `<target>` once green, so `<target>` grows one ticket at a time. `<target>` is `main`, or the project branch the config's `repo.target_branch` names, such as `project/design-system`, which a human merges into `main` once the project is done. The skill knows nothing about the target codebase. Everything specific comes from three places: the run config, the Linear descriptions, and the target repo's `CLAUDE.md` files.
+Linear holds the plan: a project, one ticket per unit of work, ordered by `blockedBy`, and one phase-close ticket that owns the project's close. This skill executes that plan end to end without a human. Each ticket becomes a short-lived branch cut from `origin/<target>` and lands back on `<target>` once green, so `<target>` grows one ticket at a time. `<target>` is `main`, or the branch the config's `repo.target_branch` names: a project branch such as `project/design-system`, which a human merges into `main` once the project is done, or in an initiative run the initiative branch the root passes down. The skill knows nothing about the target codebase. Everything specific comes from three places: the run config, the Linear descriptions, and the target repo's `CLAUDE.md` files.
 
 | Level | Role | Linear | Git |
 |---|---|---|---|
@@ -86,7 +86,7 @@ On `halted` or `parked`, follow "Halt" in `references/top.md`. Project.md's step
 
 These hold at every level. The contract states them in full, with the reasons; they are repeated here so that reading this file alone is enough to know what the run will and will not do.
 
-- **Trunk-based.** Every ticket is a short-lived branch off `origin/<target>` that lands on `<target>` once its gates are green, and in `pr` landing once CI and review rounds are done too. `<target>` is `main`, or the project branch `repo.target_branch` names, which a human merges into `main` after the project's phase-close ticket. No other branch outlives its ticket.
+- **Trunk-based.** Every ticket is a short-lived branch off `origin/<target>` that lands on `<target>` once its gates are green, and in `pr` landing once CI and review rounds are done too. `<target>` is `main`, or the branch `repo.target_branch` names, which a human merges into `main`: a project branch after the project's phase-close ticket, an initiative branch after the initiative's last project. No other branch outlives its ticket.
 - **Every line of the config's `halting.never` is a hard rule** in every role and every brief, next to the run's own: no project created, no initiative or project description edited, `.github/` and the config file left untouched, guarded paths checked mechanically before each commit, before each landing and after it.
 - **Decide or park, never ask.** Where a supervised skill would ask the user, the run takes the answer from the config, the ticket or the repo's `CLAUDE.md` files, and parks the item with the question written down when none of them has it.
 - **Caps end every loop.** `gates.fix_rounds_per_gate`, `reviews.max_rounds` and the bounded waits of the PR loop. When a cap runs out, the project's `on_exhausted` decides between `halt` and `park`.

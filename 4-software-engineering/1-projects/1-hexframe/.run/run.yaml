@@ -1,0 +1,117 @@
+# The config of hexframe v0's autonomous run, read by run-autonomous-initiative
+# and the run-autonomous-project skill under it
+# (.skills/1-ship/run-autonomous-project/references/contract.md holds every key).
+# Every ticket of every project lands on one initiative branch, which I merge
+# into main once the last project is done:
+#
+#   /run-autonomous-initiative "Hexframe v0" --config 4-software-engineering/1-projects/1-hexframe/.run/run.yaml
+#
+# The run never edits this file.
+
+version: 1
+team: Hexframe
+initiative: Hexframe v0
+
+repo:
+  target_branch: initiative/hexframe-v0
+  merge_strategy: merge
+  working_tree: shared
+
+parallelism: 1
+
+# Run in this order; Ground was done by hand and is left out. The tickets
+# already exist, so nothing is minted.
+projects:
+  - name: "hexframe v0: Design system"
+    on_exhausted: park
+    mint_tickets: false
+  - name: "hexframe v0: Server foundations"
+    on_exhausted: park
+    mint_tickets: false
+  - name: "hexframe v0: Mapping"
+    on_exhausted: park
+    mint_tickets: false
+
+# Tiers from .skills/model-tiers.md: judge is the strongest, work the default, fetch the cheapest.
+models:
+  phase: opus
+  unit: opus
+  planner: opus
+  fixup: opus
+  reviewer: opus
+  fetch: haiku
+
+# Run from the repo root. The install comes first so a unit that adds a
+# dependency proves its lockfile.
+gates:
+  unit:
+    - pnpm --dir 4-software-engineering/1-projects/1-hexframe install --frozen-lockfile
+    - pnpm --dir 4-software-engineering/1-projects/1-hexframe check
+    - pnpm --dir 4-software-engineering/1-projects/1-hexframe test
+  phase:
+    - pnpm --dir 4-software-engineering/1-projects/1-hexframe install --frozen-lockfile
+    - pnpm --dir 4-software-engineering/1-projects/1-hexframe check
+    - pnpm --dir 4-software-engineering/1-projects/1-hexframe test
+    - pnpm --dir 4-software-engineering/1-projects/1-hexframe build
+  fix_rounds_per_gate: 3
+
+# cubic's three agents (cubic.yaml) post as one reviewer, cubic-dev-ai, and
+# rank each finding P0 to P3. It always leaves a review, clean or not.
+reviews:
+  automated: [cubic]
+  max_rounds: 3
+  must_fix: [P0, P1]
+  should_fix: [P2]
+
+halting:
+  never:
+    - Never push to main, open a pull request into main, or merge anything into main.
+    - Never weaken a gate to turn it green. No skipped or deleted test, no lowered lint threshold, no rule disabled without a reason, no --no-verify.
+    - Never put a secret, a token or a .env file in a commit, a log, a comment or a pull request. Name the variable, never its value.
+    - Never write to a production Neon database, a live Stripe account, or any third-party account outside a test mode or a preview.
+    - Never add a beta or alpha dependency outside a seam that STACK.md names.
+    - Never import one domain from another, or a third-party SDK from anywhere but its repository.
+  # The repo's own tooling and review setup.
+  frozen_paths:
+    - .skills/**
+    - .claude/**
+    - .conductor/**
+    - .obsidian/**
+    - .gitattributes
+    - .mcp.json
+    - cubic.yaml
+    - 4-software-engineering/1-projects/1-hexframe/.cubic/**
+    - 4-software-engineering/1-projects/1-hexframe/.run/CLAUDE.md
+  # Everything of mine that is not hexframe.
+  read_only_paths:
+    - CLAUDE.md
+    - STACK.md
+    - .gitignore
+    - 1-leadership/**
+    - 2-education/**
+    - 3-games/**
+    - 5-startups/**
+    - 6-politics/**
+    - 4-software-engineering/-CLAUDE.md
+    - 4-software-engineering/2-principles/**
+    - 4-software-engineering/1-projects/CLAUDE.md
+    - 4-software-engineering/1-projects/2-site/**
+    - "**/-*"
+    - "**/-*/**"
+
+registers:
+  dir: 4-software-engineering/1-projects/1-hexframe/.run/registers
+  files: [decisions.md]
+  # .cubic/security.md: every break of the security bar is fixed, never waived.
+  security_bugs: >-
+    Nothing lands with a security finding open. When the round cap runs out
+    with a valid security finding unresolved, the pull request is not merged:
+    the unit is parked whole, kind review-exhausted, with the finding's thread
+    URL in its PARK entry.
+
+summary_schema: [status, landed, register_entries, parked, interventions]
+
+linear:
+  state_in_progress: In Progress
+  state_in_review: In Review
+  state_done: Done

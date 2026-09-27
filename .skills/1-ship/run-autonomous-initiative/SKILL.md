@@ -1,14 +1,14 @@
 ---
 name: run-autonomous-initiative
-description: "Execute a whole Linear initiative with no human in the loop, as a hierarchy of agents. The main session is the root: it runs the initiative's projects in the config's order, each through the run-autonomous-project skill one level down, whose unit agents take one ticket each on a short-lived branch that lands on main once green. Gates, review rounds, halting rules and models come from a committed run config (run.yaml). State lives in Linear and git, so a stopped run restarts with --resume. Use only on an explicit request such as \"/run-autonomous-initiative <initiative> --config <path/to/run.yaml> [--resume]\", \"run this initiative autonomously\" or \"resume the autonomous run\". One project without an initiative is run-autonomous-project. One ticket with a human at the wheel is do-ticket."
+description: "Execute a whole Linear initiative with no human in the loop, as a hierarchy of agents. The main session is the root: it runs the initiative's projects in the config's order, each through the run-autonomous-project skill one level down, whose unit agents take one ticket each on a short-lived branch that lands on the target branch once green: main, or the initiative branch the config names, which a human merges into main after the last project. Gates, review rounds, halting rules and models come from a committed run config (run.yaml). State lives in Linear and git, so a stopped run restarts with --resume. Use only on an explicit request such as \"/run-autonomous-initiative <initiative> --config <path/to/run.yaml> [--resume]\", \"run this initiative autonomously\" or \"resume the autonomous run\". One project without an initiative is run-autonomous-project. One ticket with a human at the wheel is do-ticket."
 argument-hint: "<initiative> --config <path/to/run.yaml> [--resume]"
 title: run-autonomous-initiative
 parent: .skills/1-ship/run-autonomous-initiative
 owner: diplo
 preview: >-
   Runs a Linear initiative's projects one after the other with nobody
-  watching, each through run-autonomous-project, so every ticket lands on main
-  on its own short-lived branch. The root checks each project boundary itself
+  watching, each through run-autonomous-project, so every ticket lands on main,
+  or on the initiative branch the config names, on its own short-lived branch. The root checks each project boundary itself
   and reports on the initiative. Use only when explicitly asked to run an
   initiative autonomously, or to resume one.
 ---
@@ -19,9 +19,9 @@ Linear holds the plan: an initiative, one project per phase, one ticket per unit
 
 | Level | Role | Linear | Git |
 |---|---|---|---|
-| 0 | root, the session that invoked the skill | initiative: its project list and status updates | none of its own; it re-runs gates on `main` at each project boundary |
+| 0 | root, the session that invoked the skill | initiative: its project list and status updates | none of its own; it re-runs gates on the target branch at each project boundary |
 | 1 | project orchestrator, from `run-autonomous-project` | project | none of its own; lands the phase-close fix if one is needed |
-| 2 | unit agent | ticket | a short-lived branch off `main`, landed through a pull request or a fast-forward |
+| 2 | unit agent | ticket | a short-lived branch off the target branch, landed through a pull request or a fast-forward |
 | 3 | helpers: fetch, planner, fix-up, reviewer | none | none |
 
 The hierarchy exists for one reason: a run lasts days, and no orchestrator's context may fill up. So orchestrators hold briefs and summaries, and leaves hold the work. It uses all three subagent levels the harness offers, and "Delegation" in `run-autonomous-project`'s contract says what happens on a shallower one.
@@ -60,5 +60,5 @@ Read `run-autonomous-project`'s `references/contract.md`, then follow `reference
 
 `run-autonomous-project`'s `SKILL.md` lists the invariants every level keeps, and its contract states them in full, with the reasons. Two are specific to this level:
 
-- **Projects run in the config's order, one at a time.** A project starts only after the previous one is completed, its gates re-run green on `main` by the root, and the path guard silent. Every unit lands on `main` on its own; there is no initiative branch, no project branch (preflight refuses `repo.target_branch` set to anything but `main`) and no final pull request.
+- **Projects run in the config's order, one at a time.** A project starts only after the previous one is completed, its gates re-run green on `<target>` by the root, and the path guard silent. Every unit lands on `<target>` on its own: `main`, or the initiative branch `repo.target_branch` names. There is no branch per project, and the run opens no final pull request: merging an initiative branch into `main` is the human's, once the last project is done.
 - **The initiative is reported on, never edited.** The Linear tools can only list its projects and post its status updates. The root creates no project and changes no description.

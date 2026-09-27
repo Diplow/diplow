@@ -23,13 +23,15 @@ For a ticket, one **fetch-tier** helper call (`models.fetch`, the "project snaps
 
   ```bash
   gh pr list --state all --limit 1000 \
-    --json number,url,state,baseRefName,headRefName,mergedAt \
+    --json number,url,state,baseRefName,headRefName,mergedAt,mergeCommit \
     --jq '.[] | select(.headRefName | test("/hex-<ticket>-"))'
   ```
 
   Several pull requests for one ticket means a repair happened: the newest one decides the row. The `landed` field of a closing comment is a second witness. When the two disagree, GitHub wins and the disagreement goes into the summary's `interventions`.
 
 "Landed" in the table below has the meaning `landing` gives it in the contract. For a ticket whose branch was already deleted, the closing comment's `landed` value is checked instead: the pull request is merged, or the SHA is an ancestor of `origin/<target>`.
+
+When `<target>` is not `main`, a ticket a human landed on `main` before `<target>` was cut from it counts as landed too: its pull request is merged into `main` and its merge commit (`mergeCommit.oid`) is an ancestor of `origin/<target>`. Row 6 below is for pull requests still open; a merged one is judged by this rule.
 
 ## Ticket table
 
