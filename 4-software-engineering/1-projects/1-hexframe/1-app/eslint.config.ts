@@ -104,7 +104,7 @@ export default defineConfig(
           patterns: [
             {
               regex: '\\.tsx?$',
-              message: `No .ts in an import path under src/, but in ${migrationsFile}: the bundler resolves it.`,
+              message: `No .ts or .tsx in an import path under src/: the bundler resolves it. Only ${migrationsFile}, which Node runs as it is, needs one.`,
             },
           ],
         },

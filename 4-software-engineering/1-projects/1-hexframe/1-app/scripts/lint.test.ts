@@ -158,7 +158,7 @@ describe('the UI library boundary', () => {
 })
 
 describe('the .ts import lint', () => {
-  const tsImport = /No \.ts in an import path under src\//
+  const tsImport = /No \.ts or \.tsx in an import path under src\//
 
   async function restrictedImports(code: string, filePath: string) {
     const [result] = await eslint.lintText(code, { filePath })
