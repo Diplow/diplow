@@ -37,7 +37,7 @@ Run them here or, for every package at once, from the monorepo root.
 
 ## Shape: the rule of 6 inside the code
 
-Every folder under `1-app/src/` is a node: at most 6 child folders and 6 files, not counting its `CLAUDE.md`; `scripts/check-rule-of-six.ts` enforces it in `check`. Names are plain inside the code (`domains/iam/`, not `domains/1-iam/`): numbers stay on packages and vault nodes, where the ring means something.
+Every folder under `1-app/src/` is a node: at most 6 child folders and 6 files, not counting its `CLAUDE.md` (nor a stray `.DS_Store`); `scripts/check-rule-of-six.ts` enforces it in `check`. Names are plain inside the code (`domains/iam/`, not `domains/1-iam/`): numbers stay on packages and vault nodes, where the ring means something.
 
 ## Lint
 
@@ -51,7 +51,7 @@ Every folder under `1-app/src/` is a node: at most 6 child folders and 6 files, 
 | Dead code: files, exports, dependencies | `knip` |
 | Cognitive complexity at most 15 | `eslint-plugin-sonarjs` |
 | At most 150 lines per function, 5 parameters (an object beyond), 600 lines per file, blank lines and comments aside | ESLint core |
-| No `zod`: validation is Effect Schema | ESLint core, `no-restricted-imports` |
+| No `zod`, however it is imported: validation is Effect Schema | `dependency-cruiser` |
 | Formatting: no semicolons, single quotes, 100 columns | Prettier (`.prettierrc.json`) |
 
 **The layers have their folders before their code.** dependency-cruiser reads them as `src/routes/` → `src/api/` → `src/domains/<domain>/` → `src/repositories/<repository>/`; an import only points down, a route never skips `api/`, and a domain never imports another. `drizzle-orm`, `@effect/sql-drizzle` and Neon are imported by `repositories/database/` only; Better Auth and Stripe by `repositories/auth/` only. A new SDK gets its line in `dependency-cruiser.config.ts`.

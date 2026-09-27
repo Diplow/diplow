@@ -46,6 +46,14 @@ const config: IConfiguration = {
       to: { path: '^src/domains/([^/]+)/', pathNot: '^src/domains/$1/' },
     },
     ...sdkOutsideItsRepository,
+    {
+      name: 'no-zod',
+      comment:
+        'Validation is Effect Schema, everywhere; this catches static, dynamic and require imports alike.',
+      severity: 'error',
+      from: {},
+      to: { path: '(^|node_modules/)zod(/|$)' },
+    },
   ],
   options: {
     doNotFollow: { path: 'node_modules' },

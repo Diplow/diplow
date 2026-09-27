@@ -22,15 +22,6 @@ export default defineConfig(
       'max-lines-per-function': ['error', { max: 150, skipBlankLines: true, skipComments: true }],
       'max-params': ['error', 5],
       'max-lines': ['error', { max: 600, skipBlankLines: true, skipComments: true }],
-      'no-restricted-imports': [
-        'error',
-        {
-          paths: [{ name: 'zod', message: 'Validation is Effect Schema, everywhere (STACK.md).' }],
-          patterns: [
-            { group: ['zod/*'], message: 'Validation is Effect Schema, everywhere (STACK.md).' },
-          ],
-        },
-      ],
     },
   },
 )
