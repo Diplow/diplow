@@ -21,7 +21,7 @@ preview: >-
 | Folder | Holds |
 |---|---|
 | `inputs/controls/` | `Button`, `Input`, `Textarea`, `ThemeToggle`, `LocaleSwitch` |
-| `inputs/forms/` | `Field` (a label, a control, its description and errors) and `useAppForm` (TanStack Form with the fields `TextField`, `TextareaField` and the `SubmitButton`) |
+| `inputs/forms/` | `Field` (a label, a control, its description and errors) and `useAppForm` (TanStack Form with the fields `TextField`, which takes a `type` (text, email, password) and an `autoComplete`, `TextareaField` and the `SubmitButton`) |
 | `surfaces/` | `Card`, `PageHeader` |
 | `overlays/` | `Drawer` (controlled: its open state belongs in the URL), `ConfirmDialog`, `DropdownMenu`, `Tooltip` |
 | `data/` | `DataTable`, sortable, with its loading and empty states |

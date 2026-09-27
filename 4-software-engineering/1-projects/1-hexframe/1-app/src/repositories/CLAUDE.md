@@ -4,8 +4,8 @@ parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/repositories
 owner: diplo
 preview: >-
   The bottom layer: Effect layers over the SDKs that hold the technical
-  complexity, one folder per SDK family. The database (Drizzle over Neon, PGlite
-  in tests) is the first; auth (Better Auth and Stripe) comes with IAM.
+  complexity, one folder per SDK family: the database (Drizzle over Neon, PGlite
+  in tests) and auth (Better Auth, Stripe to come).
 ---
 # repositories
 
@@ -14,10 +14,9 @@ The layer under [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains
 | Folder | Holds |
 |---|---|
 | `database/` | Drizzle over Effect's Postgres client, the committed migrations' runner and the PGlite test harness: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE\|database]] |
-
-`auth/`, over Better Auth and its Stripe plugin, arrives with IAM (HEX-18).
+| `auth/` | Better Auth over the database, called through its server API, with its test harness; its Stripe plugin comes with Entitlements: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE\|auth]] |
 
 ## Rules
 
 - **Nothing above imports an SDK.** A domain uses the service a repository provides; a new SDK gets its line in `dependency-cruiser.config.ts` and its folder here.
-- **A repository never imports a domain**, nor the API layer: an import only points down.
+- **A repository never imports a domain**, nor the API layer: an import only points down. One repository may use another's service, as `auth/` uses the database's.

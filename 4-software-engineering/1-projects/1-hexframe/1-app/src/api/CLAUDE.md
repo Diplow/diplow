@@ -14,16 +14,17 @@ The layer between what the client shows and what the domains know. On the server
 
 | Folder | Holds |
 |---|---|
-| `server/` | `run.ts`, the helper: `RequestContext`, the one `ManagedRuntime`, the bus's subscriptions, and `run(context, program)`; `middleware.ts`, Start's function middleware, which `src/start.ts` runs before every server function; `bus.ts`, the server bus |
+| `server/` | `run.ts`, the helper: `RequestContext`, the one `ManagedRuntime` and its repositories, the bus's subscriptions, `run(context, program)` and `provenSession`; `middleware.ts`, Start's function middleware, which `src/start.ts` runs before every server function, after the CSRF check; `bus.ts`, the server bus |
 | `errors/` | Shared by both sides and pure: `failure.ts`, the union of every failure and its wire form (`Outcome`, `encodeFailure`, `decodeFailure`); `channel.ts`, the channel table; `messages.ts`, the message table. Tested |
 | `client/` | `calls.ts`, `settle` and the `read` and `write` builders for TanStack Query; `channels.ts`, the QueryClient that carries each failure out, and `submitWrite` for a form; `ReadBoundary`, the nearest boundary of a read |
-| `dev/` | The failures and server functions `/dev/errors` uses to provoke every channel. They stay members of `Failure` as long as the page exists; outside dev and previews the functions answer `NotFound` |
+| `iam/` | IAM's server functions (`signUp`, `signIn`, `signOut`, `session`) and `guard.ts`: `signedIn`, the `beforeLoad` of a page only a signed-in Account sees, and the `?redirect=` sign-in and sign-up read back |
+| `dev/` | The failures, programs and server functions `/dev/errors` uses to provoke every channel. They stay members of `Failure` as long as the page exists; outside dev and previews the functions answer `NotFound` |
 
 ## Effect stops at the server function
 
 Domains, repositories and the API layer are Effect. The client stays on TanStack Query, Form and Router, which are promise-native: wrapping them in Effect would fight three libraries for nothing the decoded error union does not already give.
 
-The two meet in one helper. Start middleware stays promise-based and puts the request id, the platform's `waitUntil` (and, once IAM is built, the Session) on Start's `context`; every server function hands its program to `run`, which provides that context as Effect services, runs the program on one `ManagedRuntime` built from every layer, and returns an `Outcome`: the value, or the failure encoded with the request id. Nothing else calls `run*`: `eslint.config.ts` says no, and `scripts/lint.test.ts` proves it fires.
+The two meet in one helper. Start middleware stays promise-based and puts the request id, the platform's `waitUntil`, the request's `HttpExchange` and its Session on Start's `context`; every server function hands its program to `run`, which provides that context as Effect services (`RequestContext`, `WaitUntil`, `HttpExchange`, IAM's `CurrentSession`), runs the program on one `ManagedRuntime` built from every layer, and returns an `Outcome`: the value, or the failure encoded with the request id. Nothing else calls `run*`: `eslint.config.ts` says no, and `scripts/lint.test.ts` proves it fires.
 
 The shape every server function takes, here for a Mapping read once that domain exists:
 
@@ -72,5 +73,8 @@ A domain publishes a fact other parts may react to, without knowing who does; th
 ## Rules
 
 - **Every server function runs through `run`**, and validates its input with an Effect Schema (`Schema.toStandardSchemaV1`) in `.validator`.
-- **The sign-in page is IAM's** (HEX-18): the redirect goes to `/sign-in?redirect=<where the user was>`, in the page's language.
+- **Auth is checked in middleware, once.** `middleware.ts` resolves the Session the request's cookie proves (`provenSession`, the one other program `run.ts` runs) before any server function; a function for signed-in Accounts starts its program with IAM's `signedIn`. Before it, `src/start.ts` refuses a server function call from another site (Start's CSRF middleware): the session cookie rides along with every call.
+- **The sign-in page is IAM's**: the redirect goes to `/sign-in?redirect=<where the user was>`, in the page's language, the path without its language prefix. A page only a signed-in Account sees guards itself with `beforeLoad: signedIn` (`iam/guard.ts`), which redirects the same way before anything renders, on the server too. Sign-in refuses a `redirect` that is not a path on this site.
+- **The runtime's repositories depend on where it runs.** Deployed, Better Auth over Postgres, from `DATABASE_URL` and `BETTER_AUTH_SECRET`; under `pnpm dev` and the tests without `DATABASE_URL`, over a fresh PGlite in memory (`run.ts`).
+- **A module the client imports never reaches `run.ts` outside a handler.** Start strips what a server function's handler alone uses, not what the module exports, and `run.ts` carries Better Auth and the database: an Effect program a test needs goes in a module of its own (`dev/programs.ts`).
 - **The dev server functions answer `NotFound` outside dev and previews**, as the `/dev` pages answer 404. A malformed call fails Start's validation first, which runs before the handler, and reaches the client as `Unexpected`.

@@ -120,14 +120,7 @@ Each domain introduces its language with a short story in its `CLAUDE.md`: what 
 
 ### IAM
 
-Identity and access: who someone is, and what they may do.
-
-- **Account**: someone known to hexframe. Its name is not IAM's to decide: the user is their Root tile in Mapping, and the name Better Auth keeps for emails is copied from that Tile's Title, never the other way.
-- **Session**: an Account's proven presence, for a while, on one device.
-- **Key**: a credential an Account issues to a program (an MCP client, a script) and can revoke. Whether a Key can be limited to one Tile or to reading, and how OAuth clients fit beside it, is settled when the MCP server is built.
-- **Entitlement**: something an Account may do. It is derived, when asked, from what the Account pays for, so it never drifts from Stripe.
-
-Better Auth and its Stripe plugin are repositories below IAM; the plugin owns the subscription tables and the Stripe webhook. No domain says "billing". AI usage is what a paid Entitlement buys; the structure itself stays free.
+Identity and access: who someone is (an Account, its Sessions, later its Keys), and what they may do (its Entitlements), on Better Auth. The language now lives in [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE|iam]].
 
 ### Mapping
 
