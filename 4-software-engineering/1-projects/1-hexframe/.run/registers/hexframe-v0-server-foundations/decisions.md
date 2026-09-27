@@ -6,7 +6,7 @@ preview: >-
   The choices the autonomous run made while building hexframe v0's server
   foundations, where a ticket left room: Effect 4 with Drizzle v1's own
   Effect driver, where the error kinds live, what a server function returns,
-  and how the client carries each channel out.
+  how the client carries each channel out, and how migrations run.
 ---
 # Decisions
 
@@ -33,3 +33,19 @@ HEX-15, [#12](https://github.com/Diplow/diplow/pull/12). The server's sentence n
 ### DEC-6 Sign-in is `/sign-in?redirect=…`, and reports go to the logs until HEX-19
 
 HEX-15, [#12](https://github.com/Diplow/diplow/pull/12). The redirect channel sends the user to `/sign-in`, in the page's language, carrying where they were. That page doesn't exist until HEX-18, so for now an Unauthenticated call on `/dev/errors` redirects to Not Found. `Unexpected` is reported through Effect's logger with the request id on the server, and a frame read's failure through the browser's console. Both are where Sentry plugs in with HEX-19.
+
+### DEC-7 Drizzle v1 at its `rc5` build, since the `rc` tag crashes against Effect 4 RC
+
+HEX-16, [#13](https://github.com/Diplow/diplow/pull/13). `drizzle-orm@1.0.0-rc.4`, the `rc` tag DEC-1 named, calls `Schema.TaggedErrorClass`, which `effect@4.0.0-rc.117` no longer has (it is `Schema.TaggedError` now), so importing `drizzle-orm/effect-postgres` throws. `1.0.0-rc.5-5935859`, the `rc5` tag, uses the new name and works. `drizzle-orm` and `drizzle-kit` are pinned to it, exactly. It is a build of the next RC, not a beta, and it only reaches `src/repositories/database/`. Move both to the `rc` tag once that catches up.
+
+### DEC-8 The first migration is empty; tables arrive with the domains that own them
+
+HEX-16, [#13](https://github.com/Diplow/diplow/pull/13). No table belongs to this ticket: IAM's come from Better Auth (HEX-18), Mapping's with Tiles. Inventing one to have something to generate would put a word in a domain's language that nobody chose. So `schema.ts` is empty and the first migration, `init`, was generated with `drizzle-kit generate --custom` and holds no statement. It still proves the chain: the migrator records it, on PGlite in the tests and on Postgres through `pnpm db:migrate`.
+
+### DEC-9 The `Database` layer joins the server function runtime with the first domain that reads
+
+HEX-16, [#13](https://github.com/Diplow/diplow/pull/13). The `ManagedRuntime` in `src/api/server/run.ts` builds every layer on its first call, and today that layer is `Layer.empty`. Were `Database` added now, `/dev/errors`, `run.test.ts` and every server function would need `DATABASE_URL` and a live Postgres before any of them reads a row. HEX-18 adds it to `layer` along with IAM, and has to pick how a server function's integration test gets `TestDatabase` in its place.
+
+### DEC-10 One migrator everywhere: Drizzle's Effect migrator, run by `scripts/migrate.ts`
+
+HEX-16, [#13](https://github.com/Diplow/diplow/pull/13). `drizzle-kit migrate` would need a second Postgres driver (`pg`) and would apply migrations with other code than the tests use. `pnpm db:migrate` runs `node scripts/migrate.ts`, which applies them with `drizzle-orm/effect-postgres/migrator` over the same `Database` layer the app uses. The PGlite harness runs the same `migrated` program over its own `Database`. To run without a bundler, the script and `migrations.ts` import with `.ts` paths (`allowImportingTsExtensions`), and `database.ts` imports packages only. A lint keeps `.ts` import paths out of the rest of `src/`, and `scripts/migrate.test.ts` proves the script loads under plain Node.

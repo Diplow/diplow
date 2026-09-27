@@ -53,6 +53,9 @@ const effectRuns = [
   message: `Only the server function helper (${helper}) runs an Effect program.`,
 }))
 
+// A `.ts` in an import path is for what Node runs without a bundler: `scripts/migrate.ts` and the one
+// file of the app it reaches through a relative import. Everywhere else in src/ the bundler resolves.
+const migrationsFile = 'src/repositories/database/migrations.ts'
 // The lint set from STACK.md. A rule may be disabled on the spot, but only with a `-- reason` that says why.
 export default defineConfig(
   globalIgnores(['src/paraglide/', 'src/routeTree.gen.ts', '.output/', '.nitro/', '.tanstack/']),
@@ -88,6 +91,23 @@ export default defineConfig(
         ...rawElements,
         ...effectHooks,
         ...effectRuns,
+      ],
+    },
+  },
+  {
+    files: ['src/**'],
+    ignores: [migrationsFile],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              regex: '\\.tsx?$',
+              message: `No .ts or .tsx in an import path under src/: the bundler resolves it. Only ${migrationsFile}, which Node runs as it is, needs one.`,
+            },
+          ],
+        },
       ],
     },
   },
