@@ -1,0 +1,51 @@
+.skills/1-ship/run-autonomous-project/references/top.md
+  s_93a8d512abb1b8::t_4e6377eb862fe1 7-8,25,28,34-35,50
+  s_93a8d512abb1b8::t_80bf28fb187c7d 26,43
+.skills/1-ship/run-autonomous-project/references/project.md
+  s_93a8d512abb1b8::t_01dc4a6c9f3431 8-9,11,13,17,41,46-47,59,66-67,74,83
+.skills/1-ship/run-autonomous-initiative/references/root.md
+  s_93a8d512abb1b8::t_f4a430d4911f4b 60-61
+.skills/1-ship/CLAUDE.md
+  s_93a8d512abb1b8::t_cfa5a4821a8b8b 12
+.skills/1-ship/run-autonomous-project/references/pr-loop.md
+  s_93a8d512abb1b8::t_f6f93e696aab4c 6-9,13,31,37,42,46,53,136,145,149,152,160,162,168,170
+.skills/1-ship/run-autonomous-project/references/unit.md
+  s_93a8d512abb1b8::t_01dc4a6c9f3431 7,11,13,19,21,40,56,68,89-90
+.skills/1-ship/run-autonomous-project/references/helpers.md
+  s_93a8d512abb1b8::t_01dc4a6c9f3431 13,32,42,44
+.skills/1-ship/run-autonomous-project/SKILL.md
+  s_93a8d512abb1b8::t_1c532acd1e5920 3,10-11,18,22-23,38,42,54,66,76-77,89,93
+.skills/1-ship/run-autonomous-project/references/state.md
+  s_93a8d512abb1b8::t_01dc4a6c9f3431 12,21,32,45,47-48
+.skills/1-ship/run-autonomous-initiative/SKILL.md
+  s_93a8d512abb1b8::t_f4a430d4911f4b 63
+.skills/1-ship/run-autonomous-project/references/contract.md
+  s_93a8d512abb1b8::t_a612acb014b0b3 138-139,141-142,145,147
+  s_93a8d512abb1b8::t_65cce6a39ae2d1 232
+  s_93a8d512abb1b8::t_2989c92cc5526e 88
+  s_93a8d512abb1b8::t_f5f1d4f8cbe80e 68
+  s_93a8d512abb1b8::t_e8688ab367fa42 96
+  s_93a8d512abb1b8::t_ee5f427204bb8e 122
+  s_93a8d512abb1b8::t_eea574726b29fb 108-110
+  s_93a8d512abb1b8::t_e814d6aac4f191 62
+  s_93a8d512abb1b8::t_d247857ee5efe2 181
+  s_93a8d512abb1b8::t_87b57f273967b8 31,33-35,41-42,44
+  s_93a8d512abb1b8::t_9366b27b77845a 48,189,214
+  s_93a8d512abb1b8::t_1d101f0d2262e9 102
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1546b14a502e74ecf9c76c27840c92d5929a0721",
+  "prompts": {},
+  "sessions": {
+    "s_93a8d512abb1b8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "60d6e371-8905-4176-b8c9-7d3b96ee0ab3",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
