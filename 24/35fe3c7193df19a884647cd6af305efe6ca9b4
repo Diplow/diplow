@@ -1,0 +1,67 @@
+.obsidian/community-plugins.json
+  s_67ef71751fb603::t_ba5e172a7ea853 1-7
+.obsidian/core-plugins.json
+  s_67ef71751fb603::t_42dd9e6d71c31c 10
+.obsidian/graph.json
+  s_67ef71751fb603::t_38d50fcbc0bf58 1-22
+.obsidian/plugins/dataview/main.js
+  s_32bd8709cc48ab::t_d18a3b325a56af 1-20876
+.obsidian/plugins/dataview/manifest.json
+  s_32bd8709cc48ab::t_a8d72a76e89387 1-11
+.obsidian/plugins/dataview/styles.css
+  s_32bd8709cc48ab::t_d012bad7cf70ca 1-141
+.obsidian/plugins/hidden-folders-access/main.js
+  s_32bd8709cc48ab::t_e1bd35e7bcf35e 1-134
+.obsidian/plugins/hidden-folders-access/styles.css
+  s_32bd8709cc48ab::t_9129c1bb4b0ffe 1-2
+.obsidian/plugins/obsidian-excalidraw-plugin/data.json
+  s_67ef71751fb603::t_bb3eda6c692af1 1-1118
+.obsidian/plugins/obsidian-excalidraw-plugin/main.js
+  s_32bd8709cc48ab::t_678ee84c135e1b 1-37
+.obsidian/plugins/obsidian-excalidraw-plugin/manifest.json
+  s_32bd8709cc48ab::t_1218fbe92e2278 1-12
+.obsidian/plugins/obsidian-excalidraw-plugin/styles.css
+  s_32bd8709cc48ab::t_6809fa2c84ab25 1
+.obsidian/plugins/obsidian-git/main.js
+  s_32bd8709cc48ab::t_86c0a51739617b 1-427
+.obsidian/plugins/obsidian-git/manifest.json
+  s_32bd8709cc48ab::t_515418a6c98b68 1-10
+.obsidian/plugins/obsidian-git/styles.css
+  s_32bd8709cc48ab::t_0fd514474addde 1-705
+.obsidian/plugins/obsidian-icon-folder/data.json
+  s_67ef71751fb603::t_2ff501bea66bff 1-31
+.obsidian/plugins/obsidian-icon-folder/main.js
+  s_32bd8709cc48ab::t_688a2c0b0a1ec1 1-7158
+.obsidian/plugins/obsidian-icon-folder/manifest.json
+  s_32bd8709cc48ab::t_ad991259c73fed 1-10
+.obsidian/plugins/obsidian-icon-folder/styles.css
+  s_32bd8709cc48ab::t_8b1dd790e0fff0 1-120
+.obsidian/plugins/hidden-folders-access/data.json
+  s_32bd8709cc48ab::t_098667f313a18c 1-31
+.obsidian/plugins/hidden-folders-access/manifest.json
+  s_32bd8709cc48ab::t_eb77b500bdf325 1-15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2435fe3c7193df19a884647cd6af305efe6ca9b4",
+  "prompts": {},
+  "sessions": {
+    "s_32bd8709cc48ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "31fa814a-099d-4558-aafb-1638b84eac3b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_67ef71751fb603": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "03c1711b-2a56-4753-a960-750a610807ef",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
