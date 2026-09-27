@@ -1,0 +1,29 @@
+4-software-engineering/2-principles/1-domain-driven-design/CLAUDE.md
+  s_1ef5328587f847::t_9d1fb413f2c244 1-27
+4-software-engineering/2-principles/5-maintainability/CLAUDE.md
+  s_1ef5328587f847::t_9d1fb413f2c244 1-37
+4-software-engineering/2-principles/CLAUDE.md
+  s_1ef5328587f847::t_9d1fb413f2c244 1-20
+4-software-engineering/2-principles/3-feedback/CLAUDE.md
+  s_1ef5328587f847::t_9d1fb413f2c244 1-17
+4-software-engineering/2-principles/2-ai-first/CLAUDE.md
+  s_1ef5328587f847::t_9d1fb413f2c244 1-26
+4-software-engineering/2-principles/4-mapping-modules/CLAUDE.md
+  s_1ef5328587f847::t_9d1fb413f2c244 1-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "61104d11867b9ce4bb83507c42a22fb803b8eff4",
+  "prompts": {},
+  "sessions": {
+    "s_1ef5328587f847": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8830389f-ec47-4f81-a030-9cd8d652fcec",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
