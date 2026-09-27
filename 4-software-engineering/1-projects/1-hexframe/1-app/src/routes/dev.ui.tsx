@@ -1,7 +1,13 @@
-// Every colour token in the theme, as a swatch: what a ui/ component colours itself with.
+// The design system on one page: every colour token as a swatch, then every ui/ component in every state.
 import { createFileRoute, notFound } from '@tanstack/react-router'
 
 import { m } from '#/paraglide/messages'
+import { DataGallery } from '#/ui/data/gallery'
+import { FeedbackGallery } from '#/ui/feedback/gallery'
+import { InputsGallery } from '#/ui/inputs/gallery'
+import { OverlaysGallery } from '#/ui/overlays/gallery'
+import { SurfacesGallery } from '#/ui/surfaces/gallery'
+import { PageHeader } from '#/ui/surfaces/PageHeader'
 import { colorTokens, type ColorToken } from '#/ui/tokens'
 
 import css from '../styles.css?raw'
@@ -19,14 +25,22 @@ export const Route = createFileRoute('/dev/ui')({
 
 function Gallery() {
   return (
-    <main className="mx-auto max-w-5xl px-6 pb-12">
-      <h1 className="text-2xl font-semibold tracking-tight">{m.dev_ui_tokens_title()}</h1>
-      <p className="mt-2 text-muted-foreground">{m.dev_ui_tokens_body()}</p>
-      <ul className="mt-8 grid grid-cols-[repeat(auto-fill,minmax(11rem,1fr))] gap-4">
-        {tokens.map((token) => (
-          <Swatch key={token.name} token={token} />
-        ))}
-      </ul>
+    <main className="mx-auto grid max-w-5xl gap-10 px-6 pb-12">
+      <PageHeader title={m.dev_ui_title()} description={m.dev_ui_description()} />
+      <section className="grid gap-4">
+        <h2 className="text-lg font-semibold">{m.dev_ui_tokens_title()}</h2>
+        <p className="text-muted-foreground">{m.dev_ui_tokens_body()}</p>
+        <ul className="grid grid-cols-[repeat(auto-fill,minmax(11rem,1fr))] gap-4">
+          {tokens.map((token) => (
+            <Swatch key={token.name} token={token} />
+          ))}
+        </ul>
+      </section>
+      <InputsGallery />
+      <SurfacesGallery />
+      <OverlaysGallery />
+      <DataGallery />
+      <FeedbackGallery />
     </main>
   )
 }
