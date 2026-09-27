@@ -70,14 +70,7 @@ Each domain's errors carry a kind from a closed set; the client decodes them bac
 
 ## The bus
 
-One typed bus on the server, one in the client, for facts other parts may react to.
-
-- **An event is a fact in the past tense**, declared by the domain that emits it, in its language (`AccountCreated`), with an Effect Schema.
-- **Subscriptions are wired in the API layer**, since only it composes domains. A caller that needs a result calls directly; the bus is never a way to ask.
-- **The server bus is in-process** (Effect `PubSub`); subscribers finish inside the request through `waitUntil`, and a lost event is acceptable. The day a subscriber cannot be lost, the bus moves to an outbox table.
-- **The client bus** carries facts between sibling features, which may not import each other.
-- **A message is decoded by its schema where it crosses a boundary** (into the client, into an outbox); inside one process the type is enough.
-- Every message is logged at `medium`.
+One typed bus on the server, one in the client, for facts other parts may react to: a domain publishes, the API layer wires who reacts, and subscribers finish inside the request through `waitUntil`; features tell each other what happened without importing each other. The rules now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]] and [[4-software-engineering/1-projects/1-hexframe/1-app/src/features/CLAUDE|features]].
 
 ## State
 
