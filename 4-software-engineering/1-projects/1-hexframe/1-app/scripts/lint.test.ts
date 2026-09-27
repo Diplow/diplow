@@ -82,6 +82,31 @@ describe('the effect hook lint', () => {
   })
 })
 
+describe('the Effect run lint', () => {
+  const helper = 'src/api/server/run.ts'
+  const run = /Only the server function helper/
+
+  it.each([
+    "import { Effect } from 'effect'\nEffect.runPromise(Effect.void)\n",
+    "import { Effect } from 'effect'\nEffect.runSyncExit(Effect.void)\n",
+    "import { runFork } from 'effect/Effect'\nrunFork\n",
+    'declare const runtime: { runPromiseExit: () => void }\nruntime.runPromiseExit()\n',
+  ])('refuses a program run outside the helper: %s', async (code) => {
+    for (const file of [feature, inUi, 'src/api/dev/provoke.ts']) {
+      const messages = await restrictedSyntax(code, file)
+      expect(messages).toHaveLength(1)
+      expect(messages.every((message) => run.test(message))).toBe(true)
+    }
+  })
+
+  it('lets the helper run one, and the rest of Effect through', async () => {
+    const code = "import { Effect } from 'effect'\nEffect.runPromise(Effect.void)\n"
+    expect(await restrictedSyntax(code, helper)).toEqual([])
+    const schema = "import { Schema } from 'effect'\nSchema.decodeUnknownSync(Schema.String)('')\n"
+    expect(await restrictedSyntax(schema, feature)).toEqual([])
+  })
+})
+
 describe('the UI library boundary', () => {
   // The rule is written with `from.pathNot` and `to.path`, one string each.
   const rule = depcruise.forbidden?.find(({ name }) => name === 'no-ui-library-outside-ui') as

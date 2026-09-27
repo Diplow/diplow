@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DevErrorsRouteImport } from './routes/dev.errors'
 import { Route as DevHexRouteImport } from './routes/dev.hex'
 import { Route as DevSystemRouteImport } from './routes/dev.system'
 import { Route as DevUiRouteImport } from './routes/dev.ui'
@@ -17,6 +18,11 @@ import { Route as DevUiRouteImport } from './routes/dev.ui'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevErrorsRoute = DevErrorsRouteImport.update({
+  id: '/dev/errors',
+  path: '/dev/errors',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DevHexRoute = DevHexRouteImport.update({
@@ -37,12 +43,14 @@ const DevUiRoute = DevUiRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dev/errors': typeof DevErrorsRoute
   '/dev/hex': typeof DevHexRoute
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dev/errors': typeof DevErrorsRoute
   '/dev/hex': typeof DevHexRoute
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dev/errors': typeof DevErrorsRoute
   '/dev/hex': typeof DevHexRoute
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dev/hex' | '/dev/system' | '/dev/ui'
+  fullPaths: '/' | '/dev/errors' | '/dev/hex' | '/dev/system' | '/dev/ui'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dev/hex' | '/dev/system' | '/dev/ui'
-  id: '__root__' | '/' | '/dev/hex' | '/dev/system' | '/dev/ui'
+  to: '/' | '/dev/errors' | '/dev/hex' | '/dev/system' | '/dev/ui'
+  id: '__root__' | '/' | '/dev/errors' | '/dev/hex' | '/dev/system' | '/dev/ui'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DevErrorsRoute: typeof DevErrorsRoute
   DevHexRoute: typeof DevHexRoute
   DevSystemRoute: typeof DevSystemRoute
   DevUiRoute: typeof DevUiRoute
@@ -76,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dev/errors': {
+      id: '/dev/errors'
+      path: '/dev/errors'
+      fullPath: '/dev/errors'
+      preLoaderRoute: typeof DevErrorsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dev/hex': {
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DevErrorsRoute: DevErrorsRoute,
   DevHexRoute: DevHexRoute,
   DevSystemRoute: DevSystemRoute,
   DevUiRoute: DevUiRoute,
