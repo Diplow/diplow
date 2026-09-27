@@ -39,7 +39,7 @@ function HexCanvas() {
               key={label()}
               to="/dev/hex"
               search={target}
-              activeOptions={{ includeSearch: true }}
+              activeOptions={{ exact: true, includeSearch: true }}
               className="rounded-md px-3 py-1.5 text-sm text-muted-foreground"
               activeProps={{ className: 'bg-muted text-foreground' }}
             >
@@ -54,7 +54,7 @@ function HexCanvas() {
         onViewChange={(next) => {
           void navigate({ search: next })
         }}
-        className="h-[calc(100dvh-14rem)] max-w-full"
+        className="h-[calc(100dvh-16rem)] max-w-full"
       />
     </main>
   )

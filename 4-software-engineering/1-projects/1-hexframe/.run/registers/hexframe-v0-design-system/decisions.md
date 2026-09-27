@@ -5,7 +5,8 @@ owner: diplo
 preview: >-
   The choices the autonomous run made while building hexframe v0's design
   system, where a ticket left room: how ui/ components take their content,
-  which library backs the Drawer, and a darker-theme token fix.
+  which library backs the Drawer, a darker-theme token fix, and how the hex
+  canvas is driven and coloured.
 ---
 # Decisions
 
@@ -20,3 +21,15 @@ HEX-11, [#9](https://github.com/Diplow/diplow/pull/9). shadcn's Drawer is built 
 ### DEC-3 Dark `--destructive` is brighter and gets a dark foreground
 
 HEX-11, [#9](https://github.com/Diplow/diplow/pull/9). At `oklch(0.396 0.141 25.723)`, field errors and destructive menu entries were barely readable on the dark background. It is now `oklch(0.704 0.191 22.216)`, shadcn's current value. Its dark-theme foreground is a dark red, as success and info already had, so the destructive button sits on the solid token without shadcn's `dark:bg-destructive/60` and its label passes contrast.
+
+### DEC-4 The canvas's gestures: click opens, double-click centers
+
+HEX-12. The ticket asked for centering, expanding and collapsing, and the Context view, without saying which gesture does what. A click (or Enter, or Space) does the cheap, reversible thing where the Tile is: expand a Child, collapse an expanded one, show or hide the center's Context, or center a Context Tile, which has nothing to expand. A double-click, or Shift+Enter, centers any Tile. The first click of a double-click expands the Tile in place, so the second lands on the same Tile and the double-click centers it.
+
+### DEC-5 The canvas's view state is three optional search params
+
+HEX-12. `center` (a Tile id; absent, the root), `expanded` (the ids shown as Frames) and `context` (the center shows its Context). Every change returns the view in its shortest form: defaults left out and expansions no one can see dropped, so the root is a plain `/dev/hex` and a link carries only what is on screen. `expanded` goes through the router's default JSON encoding.
+
+### DEC-6 `context` is a colour token, and the fixture System is not translated
+
+HEX-12. The prototype tinted the Context with `--chart-2`, a chart colour. It is now `--context`, with the same values in both themes, so the canvas names what it colours. The fixture System is the user's own content, in their words, so French translates the page and the canvas's labels but not the Tiles' titles and previews, as it will be with real data.
