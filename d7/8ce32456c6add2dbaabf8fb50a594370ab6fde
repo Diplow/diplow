@@ -1,0 +1,23 @@
+STACK.md
+  s_1ef5328587f847::t_a1fe6ad7825e20 66
+  s_1ef5328587f847::t_08427313de1b44 30
+  s_1ef5328587f847::t_19150b74742778 36-39
+.gitattributes
+  s_1ef5328587f847::t_1742e3c1022ed3 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d78ce32456c6add2dbaabf8fb50a594370ab6fde",
+  "prompts": {},
+  "sessions": {
+    "s_1ef5328587f847": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8830389f-ec47-4f81-a030-9cd8d652fcec",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
