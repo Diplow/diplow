@@ -1,0 +1,447 @@
+.skills/external/mattpocock/skills/in-progress/setup-ts-deep-modules/dependency-cruiser.config.cjs
+  s_1ef5328587f847::t_607f172f1f12b7 1-95
+.skills/external/mattpocock/docs/engineering/implement.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-97
+.skills/external/mattpocock/docs/engineering/diagnosing-bugs.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-93
+.skills/external/mattpocock/skills/engineering/setup-matt-pocock-skills/issue-tracker-gitlab.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-46
+.skills/external/mattpocock/skills/in-progress/writing-shape/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-79
+.skills/external/mattpocock/skills/engineering/prototype/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/docs/productivity/grill-me.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-76
+.skills/external/mattpocock/skills/misc/scaffold-exercises/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/.changeset/retro-deterministic-checks.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/engineering/tdd/tests.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-77
+.skills/external/mattpocock/skills/misc/setup-pre-commit/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/skills/in-progress/loop-me/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/docs/engineering/tdd.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-94
+.skills/external/mattpocock/skills/engineering/wayfinder/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-128
+.skills/external/mattpocock/docs/productivity/grilling.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-87
+.skills/external/mattpocock/docs/engineering/codebase-design.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-88
+.skills/external/mattpocock/docs/productivity/handoff.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-76
+.skills/external/mattpocock/skills/productivity/teach/LEARNING-RECORD-FORMAT.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-46
+.skills/external/mattpocock/skills/misc/scaffold-exercises/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-106
+.skills/external/mattpocock/.github/workflows/release.yml
+  s_1ef5328587f847::t_607f172f1f12b7 1-37
+.skills/external/mattpocock/skills/productivity/teach/RESOURCES-FORMAT.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-32
+.skills/external/mattpocock/skills/engineering/tdd/mocking.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-59
+.skills/external/mattpocock/skills/engineering/to-tickets/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-105
+.skills/external/mattpocock/skills/engineering/wizard/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-44
+.skills/external/mattpocock/skills/misc/migrate-to-shoehorn/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-118
+.skills/external/mattpocock/skills/engineering/research/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/skills/productivity/grilling/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-28
+.skills/external/mattpocock/docs/engineering/wizard.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-98
+.skills/external/mattpocock/skills/engineering/to-spec/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-75
+.skills/external/mattpocock/skills/engineering/codebase-design/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-114
+.skills/external/mattpocock/skills/engineering/ask-matt/PHASE-BOUNDARIES.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-55
+.skills/external/mattpocock/docs/engineering/resolving-merge-conflicts.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-51
+.skills/external/mattpocock/.changeset/README.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-8
+.skills/external/mattpocock/skills/engineering/to-tickets/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/engineering/ask-matt/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-90
+.skills/external/mattpocock/skills/in-progress/writing-fragments/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/in-progress/implement-spec/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/engineering/improve-codebase-architecture/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/engineering/codebase-design/DESIGN-IT-TWICE.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-44
+.skills/external/mattpocock/skills/misc/git-guardrails-claude-code/scripts/block-dangerous-git.sh
+  s_1ef5328587f847::t_607f172f1f12b7 1-25
+.skills/external/mattpocock/skills/engineering/triage/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/engineering/triage/OUT-OF-SCOPE.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-105
+.skills/external/mattpocock/skills/in-progress/pr/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-168
+.skills/external/mattpocock/skills/engineering/codebase-design/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/skills/engineering/research/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-12
+.skills/external/mattpocock/skills/productivity/to-questionnaire/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/engineering/improve-codebase-architecture/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-71
+.skills/external/mattpocock/skills/in-progress/setup-ts-deep-modules/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-102
+.skills/external/mattpocock/skills/in-progress/retro/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/engineering/domain-modeling/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-74
+.skills/external/mattpocock/skills/engineering/implement/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/.changeset/domain-modeling-trigger-context-adr.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/productivity/teach/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-140
+.skills/sync
+  s_1ef5328587f847::t_cee4459f46a611 65-66
+  s_1ef5328587f847::t_a80a260300353e 38,41-42,46
+  s_1ef5328587f847::t_d743deb3dc87dc 7
+  s_1ef5328587f847::t_ce513197614700 86
+  s_1ef5328587f847::t_278263bd5a3f1b 83
+  s_1ef5328587f847::t_f155f16d850330 1-6,8-37,39-40,43-45,47-64,67-78,80-82,84-85
+  s_1ef5328587f847::t_607f172f1f12b7 79
+.skills/external/sources
+  s_1ef5328587f847::t_607f172f1f12b7 1
+.skills/external/mattpocock/skills/misc/README.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-8
+.skills/external/mattpocock/docs/engineering/to-spec.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-81
+.skills/external/mattpocock/.agents/invocation.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-26
+.skills/external/mattpocock/skills/productivity/teach/MISSION-FORMAT.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-31
+.skills/external/mattpocock/CONTEXT.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-30
+.skills/external/mattpocock/skills/engineering/codebase-design/DEEPENING.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-37
+.skills/external/mattpocock/docs/engineering/domain-modeling.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-86
+.skills/external/mattpocock/docs/engineering/prototype.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-67
+.skills/external/mattpocock/skills/productivity/to-questionnaire/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-54
+.skills/external/mattpocock/docs/engineering/grill-with-docs.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-82
+.skills/external/mattpocock/.agents/adr/0002-ship-as-a-claude-code-plugin.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-41
+.skills/external/mattpocock/skills/in-progress/writing-fragments/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-79
+.skills/external/mattpocock/.agents/install-block.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-61
+.skills/external/mattpocock/skills/in-progress/setup-ts-deep-modules/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/in-progress/pr/CREDITS.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/skills/engineering/wizard/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/docs/engineering/improve-codebase-architecture.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-101
+.skills/external/mattpocock/skills/misc/git-guardrails-claude-code/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-95
+.skills/external/mattpocock/skills/productivity/README.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-20
+.skills/external/mattpocock/skills/engineering/setup-matt-pocock-skills/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/.changeset/config.json
+  s_1ef5328587f847::t_607f172f1f12b7 1-15
+.skills/external/mattpocock/skills/engineering/domain-modeling/CONTEXT-FORMAT.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-60
+.skills/external/mattpocock/skills/engineering/setup-matt-pocock-skills/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-116
+.skills/external/mattpocock/docs/productivity/writing-for-agents.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-70
+.skills/external/mattpocock/.changeset/remove-em-dashes-repo-wide.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/productivity/handoff/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/misc/git-guardrails-claude-code/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/skills/engineering/triage/AGENT-BRIEF.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-207
+.skills/external/mattpocock/CLAUDE.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-25
+.skills/external/mattpocock/skills/engineering/improve-codebase-architecture/HTML-REPORT.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-123
+.skills/external/mattpocock/.changeset/add-implement-spec-skill.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/in-progress/retro/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-44
+.skills/external/mattpocock/.changeset/user-invoked-skill-invocation.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-11
+.skills/external/mattpocock/docs/productivity/teach.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-97
+.skills/external/mattpocock/skills/engineering/prototype/UI.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-112
+.skills/external/mattpocock/skills/engineering/resolving-merge-conflicts/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/skills/in-progress/loop-me/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-32
+.skills/external/mattpocock/skills/engineering/wizard/template.sh
+  s_1ef5328587f847::t_607f172f1f12b7 1-204
+.skills/external/mattpocock/skills/engineering/wayfinder/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/productivity/teach/GLOSSARY-FORMAT.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-35
+.skills/external/mattpocock/skills/productivity/grilling/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/.out-of-scope/setup-skill-verify-mode.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-15
+.skills/external/mattpocock/docs/engineering/code-review.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-94
+.skills/external/mattpocock/docs/engineering/to-tickets.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-99
+.skills/external/mattpocock/.gitignore
+  s_1ef5328587f847::t_607f172f1f12b7 1-2
+.skills/external/mattpocock/skills/in-progress/pr/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/skills/engineering/diagnosing-bugs/scripts/hitl-loop.template.sh
+  s_1ef5328587f847::t_607f172f1f12b7 1-44
+.skills/external/mattpocock/skills/engineering/to-spec/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/docs/engineering/triage.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-99
+.skills/external/mattpocock/.out-of-scope/mainstream-issue-trackers-only.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-25
+.skills/external/mattpocock/README.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-231
+.skills/external/mattpocock/docs/productivity/wait-what.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-36
+.skills/external/mattpocock/skills/in-progress/writing-beats/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/in-progress/README.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-19
+.skills/external/mattpocock/docs/engineering/wayfinder.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-103
+.skills/external/mattpocock/.agents/writing-docs.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-96
+.skills/external/mattpocock/skills/engineering/code-review/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/skills/productivity/writing-for-agents/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/.changeset/grilling-add-hr-between-questions.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/engineering/resolving-merge-conflicts/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-14
+.skills/external/mattpocock/skills/engineering/README.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-32
+.skills/external/mattpocock/skills/in-progress/implement-spec/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-35
+.skills/external/mattpocock/skills/in-progress/claude-handoff/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/LICENSE
+  s_1ef5328587f847::t_607f172f1f12b7 1-21
+.skills/external/mattpocock/skills/engineering/triage/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-112
+.skills/external/mattpocock/skills/engineering/setup-matt-pocock-skills/issue-tracker-github.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-45
+.skills/external/mattpocock/docs/engineering/ask-matt.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-90
+.skills/external/mattpocock/skills/engineering/prototype/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-26
+.skills/external/mattpocock/skills/engineering/domain-modeling/ADR-FORMAT.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-47
+.skills/external/mattpocock/skills/in-progress/claude-handoff/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-18
+.skills/external/mattpocock/skills/engineering/prototype/LOGIC.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-67
+.skills/external/mattpocock/docs/engineering/research.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-73
+.skills/external/mattpocock/scripts/link-skills.sh
+  s_1ef5328587f847::t_607f172f1f12b7 1-62
+.skills/external/mattpocock/skills/productivity/teach/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/engineering/grill-with-docs/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-7
+.skills/external/mattpocock/skills/engineering/tdd/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/docs/engineering/setup-matt-pocock-skills.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-94
+.claude/settings.json
+  s_1ef5328587f847::t_607f172f1f12b7 2-55,69
+  s_1ef5328587f847::t_8705d41805d8da 56-68
+.skills/external/mattpocock/skills/engineering/setup-matt-pocock-skills/issue-tracker-local.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-30
+.skills/CLAUDE.md
+  s_1ef5328587f847::t_240a5f4100ca12 1-23,25-31
+  s_1ef5328587f847::t_c54c0dbc8e8b7e 24
+.skills/external/mattpocock/.out-of-scope/question-limits.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-18
+.skills/external/mattpocock/skills/productivity/wait-what/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/.agents/adr/0001-explicit-setup-pointer-only-for-hard-dependencies.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-10
+.skills/external/mattpocock/.changeset/fix-yaml-frontmatter-colons.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/misc/migrate-to-shoehorn/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/.claude-plugin/plugin.json
+  s_1ef5328587f847::t_607f172f1f12b7 1-48
+.skills/external/mattpocock/skills/engineering/domain-modeling/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/skills/productivity/writing-for-agents/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-81
+.skills/external/mattpocock/skills/deprecated/README.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/scripts/sync-plugin-version.mjs
+  s_1ef5328587f847::t_607f172f1f12b7 1-41
+.skills/external/mattpocock/skills/engineering/grill-with-docs/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/productivity/grill-me/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-7
+.skills/external/mattpocock/skills/productivity/wait-what/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-7
+.skills/external/mattpocock/skills/engineering/implement/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-15
+.skills/external/mattpocock/skills/misc/setup-pre-commit/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-91
+.skills/external/mattpocock/.changeset/wait-what-context-map.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/engineering/setup-matt-pocock-skills/triage-labels.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-15
+.skills/external/mattpocock/CHANGELOG.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-270
+.skills/external/mattpocock/.claude-plugin/marketplace.json
+  s_1ef5328587f847::t_607f172f1f12b7 1-23
+.skills/external/mattpocock/scripts/list-skills.sh
+  s_1ef5328587f847::t_607f172f1f12b7 1-7
+.skills/external/mattpocock/skills/in-progress/writing-shape/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/engineering/tdd/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-38
+.skills/external/mattpocock/skills/engineering/ask-matt/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/engineering/diagnosing-bugs/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-3
+.skills/external/mattpocock/skills/productivity/grill-me/agents/openai.yaml
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/in-progress/writing-beats/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-67
+.skills/external/mattpocock/skills/productivity/handoff/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-16
+.skills/external/mattpocock/skills/engineering/code-review/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-87
+.skills/external/mattpocock/docs/productivity/to-questionnaire.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-78
+.skills/external/mattpocock/skills/engineering/setup-matt-pocock-skills/domain.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-51
+.skills/external/mattpocock/skills/productivity/writing-for-agents/SKILL-MECHANICS.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-22
+.skills/external/mattpocock/.changeset/grilling-remove-em-dashes.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/package.json
+  s_1ef5328587f847::t_607f172f1f12b7 1-21
+.skills/external/mattpocock/.changeset/skill-tool-invocation-terminology.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-9
+.skills/external/mattpocock/.changeset/add-pr-skill.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-5
+.skills/external/mattpocock/skills/engineering/diagnosing-bugs/SKILL.md
+  s_1ef5328587f847::t_607f172f1f12b7 1-138
+.claude/skills/mattpocock:ask-matt
+  s_1ef5328587f847::t_d490d2be86bbcd 1
+.claude/skills/mattpocock:claude-handoff
+  s_1ef5328587f847::t_98f6464df1d1ec 1
+.claude/skills/mattpocock:code-review
+  s_1ef5328587f847::t_73a09e83e4dd05 1
+.claude/skills/mattpocock:codebase-design
+  s_1ef5328587f847::t_e8f8e778d610b1 1
+.claude/skills/mattpocock:diagnosing-bugs
+  s_1ef5328587f847::t_d87f6d40664752 1
+.claude/skills/mattpocock:domain-modeling
+  s_1ef5328587f847::t_216fbbd6427e51 1
+.claude/skills/mattpocock:git-guardrails-claude-code
+  s_1ef5328587f847::t_06b5540320f0d1 1
+.claude/skills/mattpocock:grill-me
+  s_1ef5328587f847::t_909c9d17182e1b 1
+.claude/skills/mattpocock:grill-with-docs
+  s_1ef5328587f847::t_d11aa3e56f9441 1
+.claude/skills/mattpocock:grilling
+  s_1ef5328587f847::t_bb74d52f2f6770 1
+.claude/skills/mattpocock:handoff
+  s_1ef5328587f847::t_f7083b98eadb45 1
+.claude/skills/mattpocock:implement
+  s_1ef5328587f847::t_f0567045856972 1
+.claude/skills/mattpocock:implement-spec
+  s_1ef5328587f847::t_655447f2e8c954 1
+.claude/skills/mattpocock:improve-codebase-architecture
+  s_1ef5328587f847::t_0c1486a1a46901 1
+.claude/skills/mattpocock:loop-me
+  s_1ef5328587f847::t_31dda94200bb07 1
+.claude/skills/mattpocock:migrate-to-shoehorn
+  s_1ef5328587f847::t_fd2bbfcfe8e664 1
+.claude/skills/mattpocock:pr
+  s_1ef5328587f847::t_e067ecf63b1d75 1
+.claude/skills/mattpocock:prototype
+  s_1ef5328587f847::t_5a3142992af822 1
+.claude/skills/mattpocock:research
+  s_1ef5328587f847::t_00599744ae04ec 1
+.claude/skills/mattpocock:resolving-merge-conflicts
+  s_1ef5328587f847::t_385d833888698a 1
+.claude/skills/mattpocock:retro
+  s_1ef5328587f847::t_787668c05d6595 1
+.claude/skills/mattpocock:scaffold-exercises
+  s_1ef5328587f847::t_66dd14d9ca6a2e 1
+.claude/skills/mattpocock:setup-matt-pocock-skills
+  s_1ef5328587f847::t_837551f520b64a 1
+.claude/skills/mattpocock:setup-pre-commit
+  s_1ef5328587f847::t_14a6a8cfca0940 1
+.claude/skills/mattpocock:setup-ts-deep-modules
+  s_1ef5328587f847::t_b9e152cb0665d2 1
+.claude/skills/mattpocock:tdd
+  s_1ef5328587f847::t_4c4f78c99a4f9c 1
+.claude/skills/mattpocock:teach
+  s_1ef5328587f847::t_9c455169acae76 1
+.claude/skills/mattpocock:to-questionnaire
+  s_1ef5328587f847::t_adbdc4dac7b045 1
+.claude/skills/mattpocock:to-spec
+  s_1ef5328587f847::t_8c7c690329d8dc 1
+.claude/skills/mattpocock:to-tickets
+  s_1ef5328587f847::t_4b6a6a1c800c30 1
+.claude/skills/mattpocock:triage
+  s_1ef5328587f847::t_5340486596c4fd 1
+.claude/skills/mattpocock:wait-what
+  s_1ef5328587f847::t_40e2d3daa25a71 1
+.claude/skills/mattpocock:wayfinder
+  s_1ef5328587f847::t_908813450cf5ca 1
+.claude/skills/mattpocock:wizard
+  s_1ef5328587f847::t_d74f3172b3220a 1
+.claude/skills/mattpocock:writing-beats
+  s_1ef5328587f847::t_b15f4ab80ce05c 1
+.claude/skills/mattpocock:writing-for-agents
+  s_1ef5328587f847::t_110876a93716fa 1
+.claude/skills/mattpocock:writing-fragments
+  s_1ef5328587f847::t_7c968520fe713d 1
+.claude/skills/mattpocock:writing-shape
+  s_1ef5328587f847::t_c98d28c12af705 1
+.skills/external/mattpocock/AGENTS.md
+  s_1ef5328587f847::t_74a15fd56341b7 1
+.skills/external/mattpocock/package-lock.json
+  s_1ef5328587f847::t_d3a1d6709473bf 1-1385
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ba8bbbd2ebb5c153381fc5e83c98d942108144be",
+  "prompts": {},
+  "sessions": {
+    "s_1ef5328587f847": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8830389f-ec47-4f81-a030-9cd8d652fcec",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
