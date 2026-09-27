@@ -22,8 +22,9 @@ export interface Unfolding {
 type Ring = 'children' | 'context'
 
 /**
- * Every placement has a `key`, unique in the list and stable across views, for React. A Tile keeps
- * its key when it expands into the hub of its Frame, so it keeps the focus too.
+ * Every placement has a `key`, unique in the list and stable across views, for React. A Child keeps
+ * its key when it expands into the hub of its Frame, so it keeps the focus too. Children form a tree,
+ * so a Child's id is unique on the canvas; a Context Tile, which may be a Reference, is keyed by slot.
  */
 export type Placement =
   | { kind: 'frame'; key: string; ring: Ring; hex: Hex; depth: number; tile: TileNode }
@@ -61,7 +62,14 @@ function placeFrame(
       const key = `empty:${ring}:${tile.id}:${String(direction)}`
       return [{ kind: 'empty', key, ring, hex: inset(slot), depth: depth + 1, direction }]
     }
-    return placeMember(member, ring, slot, depth + 1, view)
+    if (ring === 'context') {
+      // A Context slot may hold a Reference to a Tile drawn elsewhere, so its key is the slot's.
+      const key = `tile:context:${String(direction)}`
+      return [
+        { kind: 'tile', key, role: 'context', hex: inset(slot), depth: depth + 1, tile: member },
+      ]
+    }
+    return placeChild(member, slot, depth + 1, view)
   })
   return [
     { kind: 'frame', key: `frame:${ring}:${tile.id}`, ring, hex, depth, tile },
@@ -84,15 +92,7 @@ function placeHub(
   return [{ kind: 'tile', key: `tile:${tile.id}`, role: 'hub', hex: inset(slot), depth, tile }]
 }
 
-function placeMember(
-  tile: TileNode,
-  ring: Ring,
-  slot: Hex,
-  depth: number,
-  view: Unfolding,
-): Placement[] {
-  if (ring === 'children' && view.expanded.has(tile.id)) {
-    return placeFrame(tile, 'children', inset(slot), depth, view)
-  }
-  return [{ kind: 'tile', key: `tile:${tile.id}`, role: ring, hex: inset(slot), depth, tile }]
+function placeChild(tile: TileNode, slot: Hex, depth: number, view: Unfolding): Placement[] {
+  if (view.expanded.has(tile.id)) return placeFrame(tile, 'children', inset(slot), depth, view)
+  return [{ kind: 'tile', key: `tile:${tile.id}`, role: 'children', hex: inset(slot), depth, tile }]
 }

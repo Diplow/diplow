@@ -3,8 +3,8 @@ import { Link, createFileRoute, notFound } from '@tanstack/react-router'
 
 import { m } from '#/paraglide/messages'
 import { Canvas } from '#/ui/hex/Canvas'
-import { ulysse } from '#/ui/hex/fixtures'
-import { readCanvasView, type CanvasView } from '#/ui/hex/view/view'
+import { fixtureViews, ulysse } from '#/ui/hex/fixtures'
+import { readCanvasView } from '#/ui/hex/view/view'
 import { PageHeader } from '#/ui/surfaces/PageHeader'
 
 export const Route = createFileRoute('/dev/hex')({
@@ -17,13 +17,13 @@ export const Route = createFileRoute('/dev/hex')({
   component: HexCanvas,
 })
 
-/** A few views to jump to, one per state the canvas has to get right. */
-const views: { label: () => string; view: CanvasView }[] = [
-  { label: m.dev_hex_view_root, view: {} },
-  { label: m.dev_hex_view_expanded, view: { expanded: ['software-engineering'] } },
-  { label: m.dev_hex_view_nested, view: { expanded: ['software-engineering', 'projects'] } },
-  { label: m.dev_hex_view_context, view: { context: true } },
-  { label: m.dev_hex_view_centered, view: { center: 'software-engineering', context: true } },
+/** The label of each fixture view; the views themselves are the fixture's, so they cannot drift. */
+const views = [
+  { label: m.dev_hex_view_root, view: fixtureViews.root },
+  { label: m.dev_hex_view_expanded, view: fixtureViews.expanded },
+  { label: m.dev_hex_view_nested, view: fixtureViews.nested },
+  { label: m.dev_hex_view_context, view: fixtureViews.context },
+  { label: m.dev_hex_view_centered, view: fixtureViews.centered },
 ]
 
 function HexCanvas() {

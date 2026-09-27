@@ -2,6 +2,7 @@
 // little below, deep enough to nest two expansions and open a Context. Its content is the user's own,
 // in their words, so it is not translated.
 import type { TileNode } from './geometry/layout'
+import type { CanvasView } from './view/view'
 
 const projects: TileNode = {
   id: 'projects',
@@ -56,3 +57,12 @@ export const ulysse: TileNode = {
     3: { id: 'skills', title: 'Skills', preview: 'How agents work in this vault.' },
   },
 }
+
+/** A view per state the canvas has to get right, named by the fixture's own Tiles. */
+export const fixtureViews = {
+  root: {},
+  expanded: { expanded: [softwareEngineering.id] },
+  nested: { expanded: [softwareEngineering.id, projects.id] },
+  context: { context: true },
+  centered: { center: softwareEngineering.id, context: true },
+} satisfies Record<string, CanvasView>

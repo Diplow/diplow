@@ -25,6 +25,8 @@ export function Tile({ placement, action, onAct, onCenter }: TileProps) {
   function onKeyDown(event: KeyboardEvent) {
     if (event.key !== 'Enter' && event.key !== ' ') return
     event.preventDefault()
+    // A held key repeats: act once per press, not once per repeat.
+    if (event.repeat) return
     if (event.key === 'Enter' && event.shiftKey) onCenter('keyboard')
     else onAct(false)
   }

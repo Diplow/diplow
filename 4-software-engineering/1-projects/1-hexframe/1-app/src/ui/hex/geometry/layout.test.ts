@@ -92,4 +92,19 @@ describe('layoutCanvas', () => {
     expect(key(open, 'a')).toBe(key(closed, 'a'))
     expect(key(open, 'b')).toBe(key(closed, 'b'))
   })
+
+  it('keys a Context Tile by its slot, so a Reference to a Child drawn beside it keeps its own key', () => {
+    const child = { id: 'a', title: 'A', preview: '' }
+    const referencing: TileNode = {
+      id: 'root',
+      title: 'Root',
+      preview: '',
+      children: { 1: child },
+      context: { 2: child },
+    }
+    const keys = layoutCanvas(referencing, { expanded: new Set(), context: true }, canvas).map(
+      (placement) => placement.key,
+    )
+    expect(new Set(keys).size).toBe(keys.length)
+  })
 })
