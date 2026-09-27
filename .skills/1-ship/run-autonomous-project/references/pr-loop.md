@@ -10,7 +10,7 @@ preview: >-
 ---
 # The PR loop. Open, wait, answer, merge
 
-Shared by the unit agent (its own branch) and the project orchestrator (the phase-close ticket's fix branch). Every pull request goes into `<target>`, `main` unless the config names a project branch (the contract's "Trunk-based"). The caller supplies three things: `<branch>`, the ticket that owns the pull request, and its **fixer**. The unit agent fixes in its own context. The project orchestrator never edits code, so each of its fix rounds is one **work-tier** fix-up helper brief (`models.fixup`, see `references/helpers.md`).
+Shared by the unit agent (its own branch) and the project orchestrator (the phase-close ticket's fix branch). Every pull request goes into `<target>`, `main` unless the config names another target branch (the contract's "Trunk-based"). The caller supplies three things: `<branch>`, the ticket that owns the pull request, and its **fixer**. The unit agent fixes in its own context. The project orchestrator never edits code, so each of its fix rounds is one **work-tier** fix-up helper brief (`models.fixup`, see `references/helpers.md`).
 
 The review discipline is `do-ticket`'s (`.skills/1-ship/do-ticket/SKILL.md`, its review loop once the PR is up): collect every comment surface, triage each finding, verify before you decide, answer on the thread. This file replaces what that skill assumes about a human: its uncapped "loop until green" becomes the caps below. The GraphQL calls the loop needs are in step 5, so this file stands on its own.
 
@@ -157,7 +157,7 @@ git -C "$CONDUCTOR_ROOT_PATH" merge --ff-only <branch>
 git -C "$CONDUCTOR_ROOT_PATH" push origin main
 ```
 
-Otherwise, whether `<target>` is `main` outside Conductor or a project branch checked out nowhere, push the branch onto it: `git push origin <branch>:<target>`. The remote refuses anything but a fast-forward.
+Otherwise, whether `<target>` is `main` outside Conductor or a project or initiative branch checked out nowhere, push the branch onto it: `git push origin <branch>:<target>`. The remote refuses anything but a fast-forward.
 
 A refused fast-forward means `<target>` moved. Merge `origin/<target>` into the branch, re-run the gates and the guard, and try once more. A second refusal takes the exhaustion path with kind `gate-exhausted`. In the Conductor case, a failed `pull --ff-only` in the original folder means a human has work there that diverged from `origin/main`: return `halted` and name the folder.
 

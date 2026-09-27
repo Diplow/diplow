@@ -3,35 +3,31 @@ title: autonomous runs
 parent: 4-software-engineering/1-projects/1-hexframe/.run
 owner: diplo
 preview: >-
-  How hexframe v0's projects run with nobody watching: run.yaml, the config
-  run-autonomous-project reads, one project at a time on its own project
-  branch, and the registers the runs write their decisions and open security
-  findings to.
+  How hexframe v0 gets built with nobody watching: run.yaml, the config
+  run-autonomous-initiative reads, every ticket landing on one initiative
+  branch I merge into main at the end, and the registers the run writes its
+  decisions and open security findings to.
 ---
 # autonomous runs
 
-An inner child of hexframe: how its projects get built by [[.skills/1-ship/run-autonomous-project/SKILL|run-autonomous-project]] rather than ticket by ticket. [[4-software-engineering/1-projects/1-hexframe/STACK|STACK]] says why these runs land on a project branch.
+An inner child of hexframe: how its projects get built by [[.skills/1-ship/run-autonomous-initiative/SKILL|run-autonomous-initiative]] rather than ticket by ticket. [[4-software-engineering/1-projects/1-hexframe/STACK|STACK]] says why the run lands on an initiative branch.
 
 | File | What it holds |
 |---|---|
 | `run.yaml` | The run config: target branch, gates, cubic as the reviewer, the `never` list, frozen and read-only paths, models |
-| `registers/` | What the runs record, one folder per project, created by the first entry |
+| `registers/` | What the run records, one folder per project, created by the first entry |
 
-## One project at a time
-
-hexframe v0's initiative is not run with `run-autonomous-initiative`: that skill lands every unit on `main`, and each of these projects lands on its own `project/<slug>` branch instead. So each project gets its own launch, from a Conductor workspace with nothing uncommitted:
+## One run, one branch
 
 ```
-/run-autonomous-project "hexframe v0: Design system" --config 4-software-engineering/1-projects/1-hexframe/.run/run.yaml
+/run-autonomous-initiative "Hexframe v0" --config 4-software-engineering/1-projects/1-hexframe/.run/run.yaml
 ```
 
-Between two projects:
+Launch it from a Conductor workspace with nothing uncommitted. The run creates `initiative/hexframe-v0` from `main`, then takes Design system, Server foundations and Mapping in that order. Every ticket is a short-lived branch off the initiative branch and lands back on it through a pull request, with CI and cubic. A project ends when its phase-close ticket is done and the root has re-run the phase gates on the initiative branch; the next one starts from there. No branch exists per project.
 
-1. Merge the finished `project/<slug>` into `main` through a pull request, once its phase-close ticket is Done.
-2. In a pull request of its own, point `repo.target_branch` at the next project: `project/server-foundations`, then `project/mapping`. The run creates that branch from `main` at launch.
-3. Launch the next project with its name.
+The one review that is mine is the final merge: once Mapping's phase-close ticket is done, I merge `initiative/hexframe-v0` into `main` through a pull request. The run never touches `main`, and a fix I land on `main` mid-run (a skill, `cubic.yaml`) reaches the run only if I merge `main` into the initiative branch.
 
-Before a launch, nothing of the project should be in progress outside the run: a ticket already In Progress with a pull request into `main` would be picked up where it stands.
+Before a launch, nothing of these projects should be in progress outside the run: a ticket with a pull request open into `main` stops it.
 
 ## Registers
 

@@ -1,24 +1,26 @@
-# The config of hexframe v0's autonomous runs, read by run-autonomous-project
+# The config of hexframe v0's autonomous run, read by run-autonomous-initiative
+# and the run-autonomous-project skill under it
 # (.skills/1-ship/run-autonomous-project/references/contract.md holds every key).
-# One project at a time, each landing on its own project branch:
+# Every ticket of every project lands on one initiative branch, which I merge
+# into main once the last project is done:
 #
-#   /run-autonomous-project "hexframe v0: Design system" --config 4-software-engineering/1-projects/1-hexframe/.run/run.yaml
+#   /run-autonomous-initiative "Hexframe v0" --config 4-software-engineering/1-projects/1-hexframe/.run/run.yaml
 #
-# Between two projects, repo.target_branch moves to the next project's branch in
-# its own pull request (see .run/CLAUDE.md). The run never edits this file.
+# The run never edits this file.
 
 version: 1
 team: Hexframe
+initiative: Hexframe v0
 
 repo:
-  target_branch: project/design-system
+  target_branch: initiative/hexframe-v0
   merge_strategy: merge
   working_tree: shared
 
 parallelism: 1
 
-# A project run reads the entry named after its project. The tickets already
-# exist, so nothing is minted.
+# Run in this order; Ground was done by hand and is left out. The tickets
+# already exist, so nothing is minted.
 projects:
   - name: "hexframe v0: Design system"
     on_exhausted: park
