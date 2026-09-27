@@ -134,7 +134,7 @@
   "breadcrumb_label": "Où vous êtes",
   "dev_system_title": "Système",
   "error_unauthenticated": "Connectez-vous pour continuer.",
-  "error_forbidden": "Vous n’avez pas accès à ceci.",
+  "error_forbidden": "Ceci appartient à quelqu’un qui ne l’a pas partagé avec vous.",
   "error_invalid": "Certains champs sont à revoir.",
   "error_not_found": "Ceci n’existe pas, ou plus.",
   "error_conflict": "Ceci a changé entre-temps. Rechargez, puis réessayez.",

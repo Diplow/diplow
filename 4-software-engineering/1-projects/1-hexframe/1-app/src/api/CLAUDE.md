@@ -1,0 +1,59 @@
+---
+title: api
+parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/api
+owner: diplo
+preview: >-
+  The API layer: server functions, the one helper that runs their Effect
+  programs, and the client's side of the seam, where a failure is decoded back
+  into its tagged class and sent to the channel its kind and call pick, with a
+  message from the table, in English and French.
+---
+# api
+
+The layer between what the client shows and what the domains know. On the server, a server function (`createServerFn`) is plumbing (auth, request id, logging) and the composition of domains; on the client, the same module is what a route or a feature calls. This folder holds both sides of that seam, and the error model that crosses it.
+
+| Folder | Holds |
+|---|---|
+| `server/` | `run.ts`, the helper: `RequestContext`, the one `ManagedRuntime`, and `run(context, program)`; `middleware.ts`, Start's function middleware, which `src/start.ts` runs before every server function |
+| `errors/` | Shared by both sides and pure: `failure.ts`, the union of every failure and its wire form (`Outcome`, `encodeFailure`, `decodeFailure`); `channel.ts`, the channel table; `messages.ts`, the message table. Tested |
+| `client/` | `calls.ts`, `settle` and the `read` and `write` builders for TanStack Query; `channels.ts`, the QueryClient that carries each failure out, and `submitWrite` for a form; `ReadBoundary`, the nearest boundary of a read |
+| `dev/` | The failures and server functions `/dev/errors` provokes every channel with |
+
+## Effect stops at the server function
+
+Domains, repositories and the API layer are Effect. The client stays on TanStack Query, Form and Router, which are promise-native: wrapping them in Effect would fight three libraries for nothing the decoded error union does not already give.
+
+The two meet in one helper. Start middleware stays promise-based and puts the request id (and, once IAM is built, the Session) on Start's `context`; every server function hands its program to `run`, which provides that context as Effect services, runs the program on one `ManagedRuntime` built from every layer, and returns an `Outcome`: the value, or the failure encoded with the request id. Nothing else calls `run*`: `eslint.config.ts` says no, and `scripts/lint.test.ts` proves it fires.
+
+```ts
+export const getTile = createServerFn({ method: 'GET' })
+  .validator(Schema.toStandardSchemaV1(TileRef))
+  .handler(({ data, context }) => run(context, Mapping.getTile(data.id)))
+```
+
+## Errors
+
+- **Each domain declares its errors** as tagged classes in its own language (`EntitlementMissing`), with `Schema.TaggedError`. Each carries one **kind** from a closed set, as a field: `kind: kind('Forbidden')`, or `...invalid` for an `Invalid` error, which names the form fields at fault. The kinds are in `src/domains/kind.ts`, below every domain, so a domain can declare them without importing the API layer: `Unauthenticated`, `Forbidden`, `Invalid`, `NotFound`, `Conflict`, `Unexpected`.
+- **A server function's type lists the errors it can fail with**: its `Outcome<A, E>`. `run` refuses, by its type, a program whose errors are not in `Failure`, the union in `errors/failure.ts`; a domain's errors join it as the domain is built. Repository and infrastructure failures, defects and interruptions collapse to `Unexpected`: reported with the request id (to the server's log until Sentry, HEX-19), never sent as they are.
+- **The client decodes the union back into the tagged classes** with Effect Schema. `settle` throws a `CallFailed` holding the decoded failure, the scope and the request id. Anything the union does not know, or a call that never reached the helper, is `Unexpected`.
+- **The channel is picked by kind and by the call**, never by a component's author. `errors/channel.ts` is this table, row for row:
+
+| The call | The kind | Channel |
+|---|---|---|
+| anything | `Unauthenticated` | one redirect to sign-in, carrying where the user was |
+| a read | `Forbidden` | the `Forbidden` state: the page worked, the answer is no |
+| a read | anything else | `ErrorState` in the nearest `ReadBoundary`, with a retry and the request id |
+| a read that frames every page | anything but `Unauthenticated` | reported, nothing on screen |
+| a write | `Invalid`, on a form's submit | the form's fields |
+| a write | anything else | one toast |
+
+- **The message table** is keyed by `_tag`, optionally narrowed by a scope (the server function's name, which the call names), first match wins, with a fallback per kind, in both languages. The server's own sentence never reaches the screen.
+- **A feature writes no error handling**: components never `try/catch` a call, reducers never hold an error. A read is `useQuery(read({ scope, key, call }))` inside a `ReadBoundary` (`frame: true` for one that frames every page), a write `useMutation(write(scope, call))`, a form's write `validators.onSubmitAsync: submitWrite({ scope, call, onSaved })`; the QueryClient and `submitWrite` send each failure to its channel.
+
+Adapted from the error model of a previous project; its channels survive, its HTTP statuses become kinds.
+
+## Rules
+
+- **Every server function runs through `run`**, and validates its input with an Effect Schema (`Schema.toStandardSchemaV1`) in `.validator`.
+- **The sign-in page is IAM's** (HEX-18): the redirect goes to `/sign-in?redirect=<where the user was>`, in the page's language.
+- **The dev server functions answer `NotFound` outside dev and previews**, as the `/dev` pages answer 404.

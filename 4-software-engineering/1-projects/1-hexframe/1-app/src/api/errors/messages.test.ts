@@ -30,13 +30,17 @@ describe('the message table', () => {
   })
 
   it('has a sentence for a kind no entry names', () => {
-    expect(messageFor(new DevForbidden())).toBe("You don't have access to this.")
+    expect(messageFor(new DevForbidden())).toBe(
+      "This belongs to someone who hasn't shared it with you.",
+    )
     expect(messageFor(new Unexpected())).toMatch(/^Something went wrong on our side/)
   })
 
   it("speaks the page's language", () => {
     overwriteGetLocale(() => 'fr')
     expect(messageFor(new DevConflict(), 'submitDevTitle')).toBe('Ce titre est déjà pris.')
-    expect(messageFor(new DevForbidden())).toBe('Vous n’avez pas accès à ceci.')
+    expect(messageFor(new DevForbidden())).toBe(
+      'Ceci appartient à quelqu’un qui ne l’a pas partagé avec vous.',
+    )
   })
 })
