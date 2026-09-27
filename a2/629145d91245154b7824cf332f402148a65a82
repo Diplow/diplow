@@ -1,0 +1,36 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/gallery.tsx
+  s_2908cd458e0dd6::t_c4327e5a0ebb7f 150-154
+4-software-engineering/1-projects/1-hexframe/1-app/src/styles.css
+  s_2908cd458e0dd6::t_4e1e67d9474214 65
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/forms/errors.ts
+  s_2908cd458e0dd6::t_5213f890edce1c 3-4,7-10,14
+  s_2908cd458e0dd6::t_63c1ba3190de4f 11-13,15
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/overlays/ConfirmDialog.tsx
+  s_2908cd458e0dd6::t_6ba4886294daee 32
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/forms/errors.test.ts
+  s_2908cd458e0dd6::t_5213f890edce1c 14-17
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/data/DataTable.tsx
+  s_2908cd458e0dd6::t_c4327e5a0ebb7f 73
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/CLAUDE.md
+  s_2908cd458e0dd6::t_40427e6a1846c2 15-16,18,21-29
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/overlays/Drawer.tsx
+  s_2908cd458e0dd6::t_6ba4886294daee 23
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_2908cd458e0dd6::t_40427e6a1846c2 55-57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a2629145d91245154b7824cf332f402148a65a82",
+  "prompts": {},
+  "sessions": {
+    "s_2908cd458e0dd6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0cbfaeea-8195-45e3-a873-1ae996767d5d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
