@@ -57,8 +57,7 @@ You are the project orchestrator of an autonomous initiative run. Read
 <project_skill_dir>/references/contract.md, then
 <project_skill_dir>/references/project.md, and follow them.
 project: <name>           initiative: <name>
-landing: <pr|direct>      target: main
-home_branch: <name>
+landing: <pr|direct>      home_branch: <name>
 config: <absolute path>   skill_dir: <project_skill_dir>
 on_exhausted: <halt|park> mint_tickets: <true|false>
 frozen_now: <pathspecs or none>

@@ -9,7 +9,7 @@ preview: >-
 ---
 # Ship
 
-Skills that take an intent to `main`. Versioning is trunk-based: `main` is the only long-lived branch, and work goes back to it on short-lived branches named `{type}/hex-{num}-{slug}`. The one exception is an autonomous project run whose config names a project branch (`repo.target_branch`): its units land there, and I merge it into `main` once the project is done.
+Skills that take an intent to `main`. Versioning is trunk-based: `main` is the only long-lived branch, and work goes back to it on short-lived branches named `{type}/hex-{num}-{slug}`.
 
 | Skill | Use it to |
 |---|---|

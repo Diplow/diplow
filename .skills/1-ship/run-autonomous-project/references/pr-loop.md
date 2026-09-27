@@ -3,14 +3,14 @@ title: The PR loop
 parent: .skills/1-ship/run-autonomous-project
 owner: diplo
 preview: >-
-  How a unit branch lands on the target branch. In pr landing: open the pull
-  request, check mergeability, wait for CI and automated reviews with bounded
-  scripts, answer threads in capped rounds, merge and prove it. In direct
-  landing: fast-forward the target branch and push.
+  How a unit branch lands on main. In pr landing: open the pull request, check
+  mergeability, wait for CI and automated reviews with bounded scripts, answer
+  threads in capped rounds, merge and prove it. In direct landing: fast-forward
+  main from the original folder and push.
 ---
 # The PR loop. Open, wait, answer, merge
 
-Shared by the unit agent (its own branch) and the project orchestrator (the phase-close ticket's fix branch). Every pull request goes into `<target>`, `main` unless the config names a project branch (the contract's "Trunk-based"). The caller supplies three things: `<branch>`, the ticket that owns the pull request, and its **fixer**. The unit agent fixes in its own context. The project orchestrator never edits code, so each of its fix rounds is one **work-tier** fix-up helper brief (`models.fixup`, see `references/helpers.md`).
+Shared by the unit agent (its own branch) and the project orchestrator (the phase-close ticket's fix branch). Every pull request goes into `main`. The caller supplies three things: `<branch>`, the ticket that owns the pull request, and its **fixer**. The unit agent fixes in its own context. The project orchestrator never edits code, so each of its fix rounds is one **work-tier** fix-up helper brief (`models.fixup`, see `references/helpers.md`).
 
 The review discipline is `do-ticket`'s (`.skills/1-ship/do-ticket/SKILL.md`, its review loop once the PR is up): collect every comment surface, triage each finding, verify before you decide, answer on the thread. This file replaces what that skill assumes about a human: its uncapped "loop until green" becomes the caps below. The GraphQL calls the loop needs are in step 5, so this file stands on its own.
 
@@ -28,29 +28,29 @@ gh pr list --head <branch> --state all --json number,url,state,baseRefName
 If no open one exists (a merged one from before a repair does not count), write the body in the shape of the `pr-description` skill (`.skills/1-ship/pr-description/SKILL.md`) into a file, with `Closes <ticket>`, closed with the `run-autonomous-project` footer from the contract's "Linear conventions" in place of that skill's own. Skip that skill's step that shows the draft to the user, and create:
 
 ```bash
-gh pr create --base <target> --head <branch> --title "<conventional title>" --body-file <file>
+gh pr create --base main --head <branch> --title "<conventional title>" --body-file <file>
 ```
 
 `gh pr create` goes through GraphQL and can fail while the pull request was in fact created. On any error, run the `gh pr list --head` line again first. Only if it still shows nothing, create through REST:
 
 ```bash
-gh api repos/{owner}/{repo}/pulls -f title="<title>" -f head=<branch> -f base=<target> -F body=@<file>
+gh api repos/{owner}/{repo}/pulls -f title="<title>" -f head=<branch> -f base=main -F body=@<file>
 ```
 
 Then set the ticket to `linear.state_in_review`.
 
-**Done when** `gh pr list --head <branch>` shows exactly one open pull request whose `baseRefName` is `<target>`.
+**Done when** `gh pr list --head <branch>` shows exactly one open pull request whose `baseRefName` is `main`.
 
 ## 2. Check mergeability before waiting for anything
 
-A pull request that conflicts with `<target>` runs no CI at all, and waiting on it looks exactly like a slow queue.
+A pull request that conflicts with `main` runs no CI at all, and waiting on it looks exactly like a slow queue.
 
 ```bash
 gh pr view <n> --json mergeable,mergeStateStatus
 ```
 
 - `UNKNOWN`: GitHub is still computing. Ask again every 15 seconds, up to 2 minutes.
-- `CONFLICTING`: merge `<target>` into the branch (`git fetch origin && git merge origin/<target>`), resolve, re-run the gates and the pre-landing path guard, push. Rebase is out: the branch is already pushed and a resumed run reads it. Units are small and land one at a time, so a second conflict on the same pull request takes the exhaustion path with kind `gate-exhausted` and the conflict as evidence.
+- `CONFLICTING`: merge `main` into the branch (`git fetch origin && git merge origin/main`), resolve, re-run the gates and the pre-landing path guard, push. Rebase is out: the branch is already pushed and a resumed run reads it. Units are small and land one at a time, so a second conflict on the same pull request takes the exhaustion path with kind `gate-exhausted` and the conflict as evidence.
 - `MERGEABLE`: continue.
 
 ## 3. Wait for CI on the head commit
@@ -133,7 +133,7 @@ Merge only with the local gates green on the head commit, the pre-landing path g
 
 ```bash
 gh pr merge <n> --<repo.merge_strategy>
-gh pr view <n> --json state,mergedAt,baseRefName     # MERGED into <target>
+gh pr view <n> --json state,mergedAt,baseRefName     # MERGED into main
 git switch <home_branch>
 git status --porcelain                                # prints nothing
 ```
@@ -142,14 +142,14 @@ Keep the branch on the remote until the ticket's closing comment is posted: unti
 
 ## Direct landing
 
-For `landing: direct`, after step 4 of the unit (gates green on a branch that contains `origin/<target>`, pre-landing guard silent). The branch is already pushed.
+For `landing: direct`, after step 4 of the unit (gates green on a branch that contains `origin/main`, pre-landing guard silent). The branch is already pushed.
 
 ```bash
 git fetch origin
-git merge-base --is-ancestor origin/<target> HEAD    # must succeed; otherwise merge origin/<target>, re-run the gates, start over
+git merge-base --is-ancestor origin/main HEAD        # must succeed; otherwise merge origin/main, re-run the gates, start over
 ```
 
-When `<target>` is `main` in a Conductor workspace, `main` is checked out in the original folder. Move it there, never with `git update-ref` or `git branch -f`, so the files in that folder follow (`.skills/conductor-workspaces.md`, "Landing on main"):
+In a Conductor workspace, `main` is checked out in the original folder. Move it there, never with `git update-ref` or `git branch -f`, so the files in that folder follow (`.skills/conductor-workspaces.md`, "Landing on main"):
 
 ```bash
 git -C "$CONDUCTOR_ROOT_PATH" pull --ff-only origin main
@@ -157,17 +157,17 @@ git -C "$CONDUCTOR_ROOT_PATH" merge --ff-only <branch>
 git -C "$CONDUCTOR_ROOT_PATH" push origin main
 ```
 
-Otherwise, whether `<target>` is `main` outside Conductor or a project branch checked out nowhere, push the branch onto it: `git push origin <branch>:<target>`. The remote refuses anything but a fast-forward.
+Outside Conductor, with `main` checked out nowhere else, `git push origin <branch>:main`: the remote refuses anything but a fast-forward.
 
-A refused fast-forward means `<target>` moved. Merge `origin/<target>` into the branch, re-run the gates and the guard, and try once more. A second refusal takes the exhaustion path with kind `gate-exhausted`. A failed `pull --ff-only` in the original folder means a human has work there that diverged from `origin/main`: return `halted` and name the folder.
+A refused fast-forward means `main` moved. Merge `origin/main` into the branch, re-run the gates and the guard, and try once more. A second refusal takes the exhaustion path with kind `gate-exhausted`. A failed `pull --ff-only` in the original folder means a human has work there that diverged from `origin/main`: return `halted` and name the folder.
 
 Then prove it and go home:
 
 ```bash
 git fetch origin
-git merge-base --is-ancestor <branch> origin/<target>    # landed
+git merge-base --is-ancestor <branch> origin/main    # landed
 git switch <home_branch>
-git status --porcelain                                    # prints nothing
+git status --porcelain                                # prints nothing
 ```
 
 `landed` in the summary is `git rev-parse <branch>`.
