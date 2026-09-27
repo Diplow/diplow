@@ -1,0 +1,67 @@
+4-software-engineering/1-projects/1-hexframe/1-app/.prettierrc.json
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 1-5
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 9,23,36,40-59
+4-software-engineering/1-projects/1-hexframe/1-app/dependency-cruiser.config.ts
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 1-66
+4-software-engineering/1-projects/1-hexframe/1-app/.prettierignore
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 1-6
+4-software-engineering/1-projects/1-hexframe/.cubic/CLAUDE.md
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 1-25
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/controls/button.tsx
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 1-4,11,13,15-18,21,23-28,32-33,35,40-41,44,48,61
+.skills/2-review/maintainability-review/SKILL.md
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 22-23
+.github/workflows/hexframe.yml
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 23-34
+4-software-engineering/1-projects/1-hexframe/1-app/package.json
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 11,25-26,34-36,38,40,44
+4-software-engineering/1-projects/1-hexframe/.cubic/domain-design.md
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 1-53
+4-software-engineering/1-projects/1-hexframe/.cubic/maintainability.md
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 1-62
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/check-rule-of-six.ts
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 1-36
+.gitignore
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 3-5
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/theme.test.ts
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 16
+4-software-engineering/1-projects/1-hexframe/1-app/tsconfig.json
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 2
+CLAUDE.md
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 46
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/controls/LocaleSwitch.tsx
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 15-20
+4-software-engineering/1-projects/1-hexframe/STACK.md
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 20,127
+STACK.md
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 67
+.skills/2-review/domain-design/SKILL.md
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 26-27
+4-software-engineering/1-projects/1-hexframe/1-app/eslint.config.ts
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 1-27
+4-software-engineering/1-projects/1-hexframe/CLAUDE.md
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 20-23
+cubic.yaml
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 1-23
+4-software-engineering/1-projects/1-hexframe/.cubic/security.md
+  s_93a8d512abb1b8::t_37c1ec82f9c2ed 1-55
+4-software-engineering/1-projects/1-hexframe/pnpm-lock.yaml
+  s_93a8d512abb1b8::t_9ecdf8095f8ef1 18,38-43,46,49,64-73,77-79,83-85,95-97,100,103,246-251,255-257,261-263,267-311,327-346,382-390,564-688,692-794,1587-1589,1848-1850,1854-1856,1874-1932,1963-1978,1984-1986,1991-1994,2023-2026,2036-2039,2049-2059,2067-2070,2087-2093,2098-2101,2120-2123,2147-2154,2188-2191,2199-2233,2239-2250,2254-2257,2265-2276,2292-2309,2315-2320,2329-2343,2374-2385,2389-2394,2398-2441,2446-2448,2465-2470,2476-2491,2496-2499,2648-2654,2673-2679,2688-2690,2710-2713,2718-2746,2761-2764,2774-2785,2845-2868,2880-2882,2886-2889,2894-2898,2909-2923,2945-2960,2980-2993,3000-3010,3019-3022,3078-3080,3213-3221,3229-3233,3239-3242,3262-3270,3433-3444,3451-3456,3462-3466,3472-3511,3529-3545,3558,3590-3597,3628-3634,3700-3819,3822,3825-3829,3832,3835-3836,4634-4635,4697,4702,4723,4730,4759,4763,4767,4773,4815,4824,4828,4861,4869,4881,4885,4955-4956,4959-4960,4979-5070,5073,5075,5082,5086-5099,5102-5108,5111-5114,5142-5143,5148-5151,5164-5175,5180-5184,5197-5202,5205-5206,5220-5225,5238-5260,5287-5288,5293-5366,5369-5378,5383-5384,5389-5398,5407-5428,5432-5435,5440-5453,5484-5493,5496-5499,5502-5530,5533-5534,5545-5548,5551-5574,5577-5581,5680-5685,5704-5709,5714-5715,5740-5748,5772-5833,5846-5847,5856-5866,5968-5991,6017-6020,6023-6028,6031-6032,6039-6048,6059-6068,6082-6098,6103-6117,6122-6123,6137,6144,6154-6157,6185,6196,6198,6200,6202,6205,6216,6224-6227,6232-6235,6238-6239,6251-6254
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "71a5653ce121ef12800b0a63e9236aba4e71829f",
+  "prompts": {},
+  "sessions": {
+    "s_93a8d512abb1b8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "60d6e371-8905-4176-b8c9-7d3b96ee0ab3",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
