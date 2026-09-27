@@ -94,5 +94,19 @@
   "dev_ui_sample_games": "Jeux",
   "dev_ui_sample_software": "Génie logiciel",
   "dev_ui_sample_startups": "Startups",
-  "dev_ui_sample_politics": "Politique"
+  "dev_ui_sample_politics": "Politique",
+  "hex_canvas_label": "Le canevas, centré sur {title}",
+  "hex_tile_expand": "Déplier {title}",
+  "hex_tile_collapse": "Replier {title}",
+  "hex_tile_show_context": "Afficher le contexte de {title}",
+  "hex_tile_hide_context": "Masquer le contexte de {title}",
+  "hex_tile_center": "Centrer sur {title}",
+  "dev_hex_title": "Canevas",
+  "dev_hex_description": "Le canevas hexagonal sur un système d’exemple. Cliquez sur une tuile pour la déplier ou la replier, sur le centre pour afficher son contexte, double-cliquez sur une tuile ou appuyez sur Maj+Entrée pour la centrer. La vue vit dans l’URL.",
+  "dev_hex_views": "Vues",
+  "dev_hex_view_root": "Racine",
+  "dev_hex_view_expanded": "Dépliée",
+  "dev_hex_view_nested": "Dépliage imbriqué",
+  "dev_hex_view_context": "Contexte",
+  "dev_hex_view_centered": "Centrée sur un enfant"
 }

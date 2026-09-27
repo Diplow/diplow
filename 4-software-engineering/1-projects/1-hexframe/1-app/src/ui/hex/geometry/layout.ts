@@ -10,20 +10,25 @@ export interface TileNode {
   context?: Partial<Record<Direction, TileNode>>
 }
 
-export interface CanvasView {
-  /** The Tiles shown as Frames. The centered Tile is always one. */
+/** What is open around the centered Tile, which is always shown as a Frame. */
+export interface Unfolding {
+  /** The Children shown as Frames. */
   expanded: ReadonlySet<string>
   /** Whether the centered Tile shows its Context, inside its own slot. */
-  showContext: boolean
+  context: boolean
 }
 
 /** What a hex stands for: a Tile's Children around it, or its Context inside it. */
 type Ring = 'children' | 'context'
 
+/**
+ * Every placement has a `key`, unique in the list and stable across views, for React. A Tile keeps
+ * its key when it expands into the hub of its Frame, so it keeps the focus too.
+ */
 export type Placement =
-  | { kind: 'frame'; ring: Ring; hex: Hex; depth: number; tile: TileNode }
-  | { kind: 'tile'; role: 'hub' | Ring; hex: Hex; depth: number; tile: TileNode }
-  | { kind: 'empty'; ring: Ring; hex: Hex; depth: number; direction: Direction }
+  | { kind: 'frame'; key: string; ring: Ring; hex: Hex; depth: number; tile: TileNode }
+  | { kind: 'tile'; key: string; role: 'hub' | Ring; hex: Hex; depth: number; tile: TileNode }
+  | { kind: 'empty'; key: string; ring: Ring; hex: Hex; depth: number; direction: Direction }
 
 /** The gap between neighbors, as a share of a hex's radius. */
 const gap = 0.05
@@ -35,7 +40,7 @@ function inset(hex: Hex): Hex {
   return insetHex(hex, hex.radius * gap)
 }
 
-export function layoutCanvas(center: TileNode, view: CanvasView, hex: Hex): Placement[] {
+export function layoutCanvas(center: TileNode, view: Unfolding, hex: Hex): Placement[] {
   return placeFrame(center, 'children', inset(hex), 0, view)
 }
 
@@ -44,7 +49,7 @@ function placeFrame(
   ring: Ring,
   hex: Hex,
   depth: number,
-  view: CanvasView,
+  view: Unfolding,
 ): Placement[] {
   const slots = frameSlots(insetHex(hex, hex.radius * padding))
   const members = ring === 'children' ? tile.children : tile.context
@@ -52,10 +57,17 @@ function placeFrame(
   const around = directions.flatMap((direction): Placement[] => {
     const member = members?.[direction]
     const slot = slots.ring[direction]
-    if (!member) return [{ kind: 'empty', ring, hex: inset(slot), depth: depth + 1, direction }]
+    if (!member) {
+      const key = `empty:${ring}:${tile.id}:${String(direction)}`
+      return [{ kind: 'empty', key, ring, hex: inset(slot), depth: depth + 1, direction }]
+    }
     return placeMember(member, ring, slot, depth + 1, view)
   })
-  return [{ kind: 'frame', ring, hex, depth, tile } as const, ...hub, ...around]
+  return [
+    { kind: 'frame', key: `frame:${ring}:${tile.id}`, ring, hex, depth, tile },
+    ...hub,
+    ...around,
+  ]
 }
 
 function placeHub(
@@ -63,13 +75,13 @@ function placeHub(
   ring: Ring,
   slot: Hex,
   depth: number,
-  view: CanvasView,
+  view: Unfolding,
 ): Placement[] {
   // Only the centered Tile, at the top level, can open its Context.
-  if (ring === 'children' && depth === 1 && view.showContext) {
+  if (ring === 'children' && depth === 1 && view.context) {
     return placeFrame(tile, 'context', inset(slot), depth, view)
   }
-  return [{ kind: 'tile', role: 'hub', hex: inset(slot), depth, tile } as const]
+  return [{ kind: 'tile', key: `tile:${tile.id}`, role: 'hub', hex: inset(slot), depth, tile }]
 }
 
 function placeMember(
@@ -77,10 +89,10 @@ function placeMember(
   ring: Ring,
   slot: Hex,
   depth: number,
-  view: CanvasView,
+  view: Unfolding,
 ): Placement[] {
   if (ring === 'children' && view.expanded.has(tile.id)) {
     return placeFrame(tile, 'children', inset(slot), depth, view)
   }
-  return [{ kind: 'tile', role: ring, hex: inset(slot), depth, tile } as const]
+  return [{ kind: 'tile', key: `tile:${tile.id}`, role: ring, hex: inset(slot), depth, tile }]
 }
