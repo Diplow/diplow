@@ -25,6 +25,10 @@ export function FeedbackGallery() {
       show: () => toast.warning(m.dev_ui_toast_warning_message()),
     },
     { label: m.dev_ui_toast_error(), show: () => toast.error(m.dev_ui_toast_error_message()) },
+    {
+      label: m.dev_ui_toast_loading(),
+      show: () => toast.loading(m.dev_ui_toast_loading_message()),
+    },
   ]
   return (
     <>

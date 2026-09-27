@@ -15,13 +15,14 @@ interface TileRow {
   children: number
 }
 
-const rows: TileRow[] = [
-  { id: 'leadership', title: 'Leadership', direction: 1, children: 4 },
-  { id: 'education', title: 'Education', direction: 2, children: 6 },
-  { id: 'games', title: 'Games', direction: 3, children: 2 },
-  { id: 'software', title: 'Software Engineering', direction: 4, children: 5 },
-  { id: 'startups', title: 'Startups', direction: 5, children: 3 },
-  { id: 'politics', title: 'Politics', direction: 6, children: 1 },
+// The six domains of the vault, as a System's first children; titles are messages, read at render.
+const tileRows = (): TileRow[] => [
+  { id: 'leadership', title: m.dev_ui_sample_leadership(), direction: 1, children: 4 },
+  { id: 'education', title: m.dev_ui_sample_education(), direction: 2, children: 6 },
+  { id: 'games', title: m.dev_ui_sample_games(), direction: 3, children: 2 },
+  { id: 'software', title: m.dev_ui_sample_software(), direction: 4, children: 5 },
+  { id: 'startups', title: m.dev_ui_sample_startups(), direction: 5, children: 3 },
+  { id: 'politics', title: m.dev_ui_sample_politics(), direction: 6, children: 1 },
 ]
 const noRows: TileRow[] = []
 
@@ -48,6 +49,7 @@ const tileId = (row: TileRow) => row.id
 export function DataGallery() {
   // The locale changes with a full page load, so the columns are built once.
   const columns = useMemo(tileColumns, [])
+  const rows = useMemo(tileRows, [])
   const empty = (
     <EmptyState
       icon={<Rows3 />}

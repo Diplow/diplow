@@ -8,9 +8,7 @@ export function errorMessages(errors: readonly unknown[]): string[] {
 }
 
 function messageOf(error: unknown): string[] {
-  if (typeof error === 'string') return error ? [error] : []
-  if (typeof error === 'object' && error !== null && 'message' in error) {
-    return typeof error.message === 'string' ? [error.message] : []
-  }
-  return []
+  const message =
+    typeof error === 'object' && error !== null && 'message' in error ? error.message : error
+  return typeof message === 'string' && message !== '' ? [message] : []
 }

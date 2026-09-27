@@ -17,8 +17,10 @@ const present = (slot: ReactNode) => slot !== undefined && slot !== null && slot
 /** A bordered surface grouping one thing's content, with an optional header and footer. */
 export function Card({ title, description, action, footer, children, className }: CardProps) {
   const hasHeader = present(title) || present(description) || present(action)
+  // A titled card is a section of the page, named by its heading; an untitled one is only a box.
+  const Surface = present(title) ? 'section' : 'div'
   return (
-    <section
+    <Surface
       data-slot="card"
       className={cn(
         'flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm',
@@ -36,6 +38,6 @@ export function Card({ title, description, action, footer, children, className }
       )}
       {present(children) && <div className="px-6">{children}</div>}
       {present(footer) && <footer className="flex items-center gap-2 px-6">{footer}</footer>}
-    </section>
+    </Surface>
   )
 }

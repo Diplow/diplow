@@ -16,6 +16,8 @@ describe('errorMessages', () => {
   })
 
   it('shows nothing for an error that carries no message', () => {
-    expect(errorMessages([undefined, '', 42, { code: 'x' }, { message: 42 }])).toEqual([])
+    expect(
+      errorMessages([undefined, '', 42, { code: 'x' }, { message: 42 }, { message: '' }]),
+    ).toEqual([])
   })
 })

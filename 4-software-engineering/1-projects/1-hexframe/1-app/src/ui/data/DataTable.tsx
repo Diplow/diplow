@@ -10,6 +10,8 @@ import { cn } from 'cn'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 import { useMemo, type ReactNode } from 'react'
 
+import { getLocale } from '#/paraglide/runtime'
+
 import { Skeleton } from '../feedback/skeleton'
 
 /** A column, described without TanStack Table: a feature never imports it. */
@@ -34,7 +36,25 @@ interface DataTableProps<TRow> {
   caption: string
 }
 
-const features = tableFeatures({ rowSortingFeature, sortedRowModel: createSortedRowModel() })
+interface Sortable {
+  getValue: (columnId: string) => unknown
+}
+
+// Text sorts as the reader's language does: `É` beside `E`, `2` before `10`.
+const collators = new Map<string, Intl.Collator>()
+function collate(rowA: Sortable, rowB: Sortable, columnId: string) {
+  const locale = getLocale()
+  const collator = collators.get(locale) ?? new Intl.Collator(locale, { numeric: true })
+  collators.set(locale, collator)
+  return collator.compare(String(rowA.getValue(columnId)), String(rowB.getValue(columnId)))
+}
+
+// `auto` sorting resolves only registered functions, `text` and `alphanumeric` for strings; numbers need none.
+const features = tableFeatures({
+  rowSortingFeature,
+  sortedRowModel: createSortedRowModel(),
+  sortFns: { text: collate, alphanumeric: collate },
+})
 type Features = typeof features
 
 const loadingRows = 3

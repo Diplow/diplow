@@ -72,7 +72,7 @@ export function InputsGallery() {
         </GalleryState>
       </GallerySection>
       <GallerySection name="useAppForm">
-        <GalleryState label={m.dev_ui_form_hint()}>
+        <GalleryState label={m.dev_ui_form_hint({ limit: previewLimit })}>
           <TileForm />
         </GalleryState>
       </GallerySection>
