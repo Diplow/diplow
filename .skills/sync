@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+# Make .skills/ the only source of skills for Claude Code sessions in this repo.
+#
+#   .skills/sync          rebuild .claude/skills/ and the overrides in .claude/settings.json
+#   .skills/sync --pull   first re-vendor every repo in .skills/external/sources at its latest commit
+#
+# Runs at every session start (SessionStart hook in .claude/settings.json).
+set -euo pipefail
+
+root="$(cd "$(dirname "$0")/.." && pwd)"
+skills="$root/.skills"
+external="$skills/external"
+links="$root/.claude/skills"
+settings="$root/.claude/settings.json"
+
+pull() {
+  local vendor repo _sha tmp next
+  next="$(mktemp)"
+  while read -r vendor repo _sha; do
+    [[ -z "$vendor" || "$vendor" == \#* ]] && continue
+    tmp="$(mktemp -d)"
+    git clone --quiet --depth 1 "https://github.com/$repo" "$tmp/repo"
+    printf '%s %s %s\n' "$vendor" "$repo" "$(git -C "$tmp/repo" rev-parse HEAD)" >>"$next"
+    rm -rf "$tmp/repo/.git" "$external/$vendor"
+    mv "$tmp/repo" "$external/$vendor"
+    rm -rf "$tmp"
+  done <"$external/sources"
+  mv "$next" "$external/sources"
+}
+
+[[ "${1:-}" == "--pull" ]] && pull
+
+# 1. One symlink per skill: mine as <name>, vendored ones as <vendor>:<name>.
+mkdir -p "$links"
+find "$links" -maxdepth 1 -type l -delete
+
+own=()
+count=0
+link() {
+  local name="$1" dir="$2"
+  if [[ -L "$links/$name" ]]; then
+    echo "sync: two skills named '$name': $(readlink "$links/$name") and ${dir#"$root"/}" >&2
+    exit 1
+  fi
+  ln -s "../../${dir#"$root"/}" "$links/$name"
+  count=$((count + 1))
+}
+
+while IFS= read -r file; do
+  dir="$(dirname "$file")"
+  name="$(basename "$dir")"
+  own+=("$name")
+  link "$name" "$dir"
+done < <(find "$skills" -path "$external" -prune -o -name SKILL.md -print | sort)
+
+for vendor_dir in "$external"/*/; do
+  vendor="$(basename "$vendor_dir")"
+  while IFS= read -r file; do
+    dir="$(dirname "$file")"
+    link "$vendor:$(basename "$dir")" "$dir"
+  done < <(find "${vendor_dir%/}" -name SKILL.md | sort)
+done
+
+# 2. Switch off every other source: user skills, claude.ai synced skills, plugins.
+# Conductor's own skill is passed with --plugin-dir, which overrides can't reach.
+off=()
+for file in "$HOME"/.claude/skills/*/SKILL.md; do
+  [[ -e "$file" ]] && off+=("$(basename "$(dirname "$file")")")
+done
+for file in "$HOME"/.claude/skills/synced/*/*/SKILL.md; do
+  [[ -e "$file" ]] && off+=("anthropic-skills:$(basename "$(dirname "$file")")")
+done
+
+plugins="$HOME/.claude/plugins/installed_plugins.json"
+jq -n \
+  --args \
+  --slurpfile current "$settings" \
+  --argjson plugins "$( [[ -f "$plugins" ]] && jq '.plugins | keys' "$plugins" || echo '[]')" \
+  --argjson own "$(printf '%s\n' ${own[@]+"${own[@]}"} | jq -R . | jq -s 'map(select(. != ""))')" \
+  '$current[0]
+   | .skillOverrides = ($ARGS.positional - $own | unique | map({key: ., value: "off"}) | from_entries)
+   | .enabledPlugins = ((.enabledPlugins // {}) + ($plugins | map({key: ., value: false}) | from_entries))' \
+  ${off[@]+"${off[@]}"} >"$settings.tmp"
+mv "$settings.tmp" "$settings"
+
+echo "sync: $count skills linked, ${#off[@]} outside skills switched off"

@@ -1,3 +1,70 @@
 {
-  "enabledMcpjsonServers": ["hodor"]
+  "enabledMcpjsonServers": [
+    "hodor"
+  ],
+  "skillOverrides": {
+    "anthropic-skills:built-in-browser": "off",
+    "anthropic-skills:chrome-browser": "off",
+    "anthropic-skills:computer-use": "off",
+    "anthropic-skills:deep-research": "off",
+    "anthropic-skills:docs": "off",
+    "anthropic-skills:docx": "off",
+    "anthropic-skills:formation-apprendre-ere-ia": "off",
+    "anthropic-skills:google-workspace": "off",
+    "anthropic-skills:import-memory": "off",
+    "anthropic-skills:morning": "off",
+    "anthropic-skills:paduteam-fiche": "off",
+    "anthropic-skills:paduteam-knowledge": "off",
+    "anthropic-skills:paduteam-transcript": "off",
+    "anthropic-skills:pdf": "off",
+    "anthropic-skills:pptx": "off",
+    "anthropic-skills:setup-writing-style": "off",
+    "anthropic-skills:skill-creator": "off",
+    "anthropic-skills:xlsx": "off",
+    "ask-matt": "off",
+    "claude-handoff": "off",
+    "codebase-design": "off",
+    "diagnosing-bugs": "off",
+    "domain-modeling": "off",
+    "git-guardrails-claude-code": "off",
+    "grill-me": "off",
+    "grill-with-docs": "off",
+    "grilling": "off",
+    "handoff": "off",
+    "implement": "off",
+    "improve-codebase-architecture": "off",
+    "loop-me": "off",
+    "migrate-to-shoehorn": "off",
+    "prototype": "off",
+    "research": "off",
+    "resolving-merge-conflicts": "off",
+    "scaffold-exercises": "off",
+    "setup-pre-commit": "off",
+    "setup-ts-deep-modules": "off",
+    "tdd": "off",
+    "teach": "off",
+    "to-questionnaire": "off",
+    "to-tickets": "off",
+    "triage": "off",
+    "wayfinder": "off",
+    "wizard": "off",
+    "writing-beats": "off",
+    "writing-for-agents": "off"
+  },
+  "enabledPlugins": {
+    "hodor-skills@hodor": false
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.skills/sync >/dev/null"
+          }
+        ]
+      }
+    ]
+  }
 }
