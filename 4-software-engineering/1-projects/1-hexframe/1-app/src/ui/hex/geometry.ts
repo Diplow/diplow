@@ -89,15 +89,11 @@ export function frameSlots(hex: Hex): { center: Hex; ring: Record<Direction, Hex
   }
 }
 
-/** The smallest box around a hex. */
-export function hexBounds({ center, radius }: Hex): Box {
-  const width = hexWidth(radius)
-  return { x: center.x - width / 2, y: center.y - radius, width, height: hexHeight(radius) }
-}
-
-/** The box a hex's text sits in: the widest band that stays clear of its slanted sides. */
-export function textBox({ center, radius }: Hex): Box {
-  const width = hexWidth(radius) * 0.8
-  const height = radius * 1.2
+/** The box a hex's text sits in: taller for a few lines, or wider for a single title. */
+export function textBox({ center, radius }: Hex, shape: 'tall' | 'wide' = 'tall'): Box {
+  // Tall stays clear of the slanted sides; wide is the band between the side corners, where the
+  // hex is full width, less a margin.
+  const width = hexWidth(radius) * (shape === 'tall' ? 0.8 : 0.9)
+  const height = radius * (shape === 'tall' ? 1.2 : 0.9)
   return { x: center.x - width / 2, y: center.y - height / 2, width, height }
 }

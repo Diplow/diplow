@@ -69,7 +69,7 @@ describe('layoutCanvas', () => {
     ).toMatchObject({ tile: { id: 'why' } })
   })
 
-  it('shrinks by a third at each level', () => {
+  it('shrinks by a little more than a third at each level, gaps and padding taken', () => {
     const placements = layoutCanvas(
       system,
       { expanded: new Set(['a']), showContext: false },
@@ -79,6 +79,6 @@ describe('layoutCanvas', () => {
       (placement) => placement.kind === 'tile' && placement.tile.id === 'a3',
     )
     expect(a3?.hex.radius).toBeLessThan(canvas.radius / 9)
-    expect(a3?.hex.radius).toBeGreaterThan(canvas.radius / 12)
+    expect(a3?.hex.radius).toBeGreaterThan(canvas.radius / 15)
   })
 })

@@ -93,8 +93,8 @@ describe('insetHex', () => {
 })
 
 describe('textBox', () => {
-  it('keeps every corner of the text inside the hex', () => {
-    const box = textBox(origin)
+  it.each(['tall', 'wide'] as const)('keeps every corner of %s text inside the hex', (shape) => {
+    const box = textBox(origin, shape)
     const corners = [
       { x: box.x, y: box.y },
       { x: box.x + box.width, y: box.y },

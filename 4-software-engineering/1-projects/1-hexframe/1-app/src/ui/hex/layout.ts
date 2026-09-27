@@ -28,6 +28,9 @@ export type Placement =
 /** The gap between neighbors, as a share of a hex's radius. */
 const gap = 0.05
 
+/** The margin inside a Frame, between its edge and its ring, as a share of its radius. */
+const padding = 0.08
+
 function inset(hex: Hex): Hex {
   return insetHex(hex, hex.radius * gap)
 }
@@ -43,7 +46,7 @@ function placeFrame(
   depth: number,
   view: CanvasView,
 ): Placement[] {
-  const slots = frameSlots(hex)
+  const slots = frameSlots(insetHex(hex, hex.radius * padding))
   const members = ring === 'children' ? tile.children : tile.context
   const hub = placeHub(tile, ring, slots.center, depth + 1, view)
   const around = directions.flatMap((direction): Placement[] => {
