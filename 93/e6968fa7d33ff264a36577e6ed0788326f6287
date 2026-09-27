@@ -1,0 +1,83 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/data/DataTable.tsx
+  s_2908cd458e0dd6::t_e11cde2308403b 7,42
+  s_2908cd458e0dd6::t_eb5446ad4ede71 1-6,8-41,43-53,61-87,92-142
+  s_2908cd458e0dd6::t_1a8151e9d81016 54-60,88-91
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/__root.tsx
+  s_2908cd458e0dd6::t_c379ca37476899 5,38
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/forms/field.tsx
+  s_2908cd458e0dd6::t_c0bb509ad3508f 1-43
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/surfaces/Card.tsx
+  s_2908cd458e0dd6::t_56095cd86442a6 1-40
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/gallery.tsx
+  s_2908cd458e0dd6::t_a7c946315bcf11 1-20
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/controls/textarea.tsx
+  s_2908cd458e0dd6::t_6e96f8f142cbdf 1-17
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/overlays/Drawer.tsx
+  s_2908cd458e0dd6::t_e689494d2142cf 1-49
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/controls/input.tsx
+  s_2908cd458e0dd6::t_6e96f8f142cbdf 1-20
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/forms/errors.ts
+  s_2908cd458e0dd6::t_c0bb509ad3508f 1-13
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/data/gallery.tsx
+  s_2908cd458e0dd6::t_2b85f7d896c95e 1-28,35-84
+  s_2908cd458e0dd6::t_1a8151e9d81016 29-34
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/gallery.tsx
+  s_2908cd458e0dd6::t_2fbaf3b64a627c 2,92
+  s_2908cd458e0dd6::t_1a8151e9d81016 96-99,122-124
+  s_2908cd458e0dd6::t_a7c946315bcf11 1,3-91,93-95,100-121,125-155
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_2908cd458e0dd6::t_1a8151e9d81016 14-17,43,45,47,49,60-61,64-65,67-68,70,72,74,76,85,87,89
+  s_2908cd458e0dd6::t_a59e0ab792ab8e 9-13,18-42,44,46,48,50-59,62-63,66,69,71,73,75,77-84,86,88
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/surfaces/gallery.tsx
+  s_2908cd458e0dd6::t_2fbaf3b64a627c 1-58
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/feedback/states.tsx
+  s_2908cd458e0dd6::t_01198419648b10 1-106
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/overlays/Tooltip.tsx
+  s_2908cd458e0dd6::t_e689494d2142cf 1-30
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/feedback/Toaster.tsx
+  s_2908cd458e0dd6::t_e4421ef72ac636 1-37
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/feedback/gallery.tsx
+  s_2908cd458e0dd6::t_2b85f7d896c95e 1-17,22,27-101
+  s_2908cd458e0dd6::t_1a8151e9d81016 18-21,23-26
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/overlays/gallery.tsx
+  s_2908cd458e0dd6::t_2fbaf3b64a627c 1-17,20,32-73,75-130
+  s_2908cd458e0dd6::t_2b85f7d896c95e 18-19,74
+  s_2908cd458e0dd6::t_1a8151e9d81016 21-31
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/forms/errors.test.ts
+  s_2908cd458e0dd6::t_c0bb509ad3508f 1-17
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/surfaces/PageHeader.tsx
+  s_2908cd458e0dd6::t_56095cd86442a6 1-21
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/overlays/DropdownMenu.tsx
+  s_2908cd458e0dd6::t_e689494d2142cf 1-41,46-66
+  s_2908cd458e0dd6::t_1a8151e9d81016 42-45
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/dev.ui.tsx
+  s_2908cd458e0dd6::t_c379ca37476899 1,5-10,28-43
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/forms/form.tsx
+  s_2908cd458e0dd6::t_c0bb509ad3508f 1-77
+4-software-engineering/1-projects/1-hexframe/1-app/package.json
+  s_2908cd458e0dd6::t_d4c65876d9bed0 15,18,24-25
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/feedback/skeleton.tsx
+  s_2908cd458e0dd6::t_e4421ef72ac636 1-15
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/overlays/ConfirmDialog.tsx
+  s_2908cd458e0dd6::t_e689494d2142cf 1-54
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_2908cd458e0dd6::t_a59e0ab792ab8e 9-89
+4-software-engineering/1-projects/1-hexframe/pnpm-lock.yaml
+  s_2908cd458e0dd6::t_8826023d5f7cee 13-15,22-24,43-45,1693-1700,1705-1717,1779-1784,1849-1852,2964-2973,4754-4761,4764-4775,4865-4872,4996-4999,6131-6137
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "93e6968fa7d33ff264a36577e6ed0788326f6287",
+  "prompts": {},
+  "sessions": {
+    "s_2908cd458e0dd6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0cbfaeea-8195-45e3-a873-1ae996767d5d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
