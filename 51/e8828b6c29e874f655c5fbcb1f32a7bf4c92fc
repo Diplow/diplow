@@ -1,0 +1,38 @@
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_5bfd20160ac705::t_76357756a2f825 39
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/controls/LocaleSwitch.tsx
+  s_5bfd20160ac705::t_76357756a2f825 10,21
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/theme.ts
+  s_5bfd20160ac705::t_76357756a2f825 12,34-38
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_5bfd20160ac705::t_76357756a2f825 4
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/CLAUDE.md
+  s_5bfd20160ac705::t_76357756a2f825 17
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/controls/button.tsx
+  s_5bfd20160ac705::t_76357756a2f825 13
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/theme.test.ts
+  s_5bfd20160ac705::t_76357756a2f825 2,19,24-25,27,40-58,98-107
+  s_5bfd20160ac705::t_0c5ec71ee3e016 20-23,28
+CLAUDE.md
+  s_5bfd20160ac705::t_76357756a2f825 46
+4-software-engineering/1-projects/1-hexframe/1-app/.gitignore
+  s_5bfd20160ac705::t_76357756a2f825 9
+4-software-engineering/1-projects/1-hexframe/1-app/src/styles.css
+  s_5bfd20160ac705::t_76357756a2f825 22,58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "51e8828b6c29e874f655c5fbcb1f32a7bf4c92fc",
+  "prompts": {},
+  "sessions": {
+    "s_5bfd20160ac705": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6a9b9029-26f7-4a9c-82d8-716e2a636c80",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
