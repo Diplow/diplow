@@ -64,6 +64,7 @@ Children sit on a ring: neighbors share an edge, and the child across the ring i
 | `.skills/` | Inner child: the skills I use, mine and vendored; see [[.skills/CLAUDE\|Skills]] | exists |
 | `.conductor/` | Inner child: Conductor settings; the setup script installs hexframe's dependencies in each new workspace | exists |
 | `.github/` | Inner child: GitHub Actions, one workflow per project, path-filtered to it so a note never triggers one | exists |
+| `cubic.yaml` | cubic's review config: three custom agents on hexframe pull requests, whose briefs live in [[4-software-engineering/1-projects/1-hexframe/.cubic/CLAUDE\|hexframe's .cubic]]. cubic reads it from `main` only | exists |
 | `.mcp.json` | MCP servers for this repo only; the `X-Project` header on `hodor` gives it an OAuth login separate from other projects' `hodor` | exists |
 | `.gitignore` | Paths kept out of git | exists |
 | `.gitattributes` | Marks `-` files and folders for encryption | exists |
