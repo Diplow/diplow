@@ -114,7 +114,7 @@
   "conversation_yesterday": "Hier",
   "conversation_you": "Vous",
   "conversation_assistant": "Assistant",
-  "conversation_centered": "Vous avez centré sur {title}",
+  "conversation_centered": "Vous avez centré la vue sur {title}",
   "conversation_expanded": "Vous avez déplié {title}",
   "conversation_collapsed": "Vous avez replié {title}",
   "conversation_context_shown": "Vous avez affiché le contexte de {title}",

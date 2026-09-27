@@ -23,24 +23,25 @@ export function Breadcrumb({ system, view, onViewChange, className }: Breadcrumb
         {ancestors.map((tile, index) => {
           const centered = tile.id === center.id
           return (
-            <li key={tile.id} className="relative flex items-center gap-2 py-1.5">
-              {/* The rail: a line joining each hex to the next one down. */}
+            <li key={tile.id} className="relative flex items-start gap-2 py-1.5">
+              {/* The rail: a line from this hex's center to the next one's, however tall a
+                  wrapped title makes either row: each hex sits at the top of its row. */}
               {index < ancestors.length - 1 && (
                 <span
                   aria-hidden
-                  className="absolute top-1/2 left-3 h-full w-px -translate-x-1/2 bg-border"
+                  className="absolute top-[1.125rem] -bottom-[1.125rem] left-3 w-px -translate-x-1/2 bg-border"
                 />
               )}
               <HexGlyph centered={centered} />
               {centered ? (
-                <span aria-current="location" className="min-w-0 text-sm font-semibold">
+                <span aria-current="location" className="min-w-0 pt-0.5 text-sm font-semibold">
                   {tile.title}
                 </span>
               ) : (
                 <button
                   type="button"
                   aria-label={m.hex_tile_center({ title: tile.title })}
-                  className="min-w-0 rounded-sm text-left text-sm text-muted-foreground outline-none hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                  className="mt-0.5 min-w-0 rounded-sm text-left text-sm text-muted-foreground outline-none hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
                   onClick={() => {
                     onViewChange(centerOn(system, view, tile.id))
                   }}

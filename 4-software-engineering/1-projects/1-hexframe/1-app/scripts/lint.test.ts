@@ -63,6 +63,25 @@ describe('the raw element lint', () => {
   })
 })
 
+describe('the effect hook lint', () => {
+  const effect = /No useEffect outside src\/ui\//
+
+  it.each([
+    "import { useEffect } from 'react'\nuseEffect(() => undefined)\n",
+    "import { useLayoutEffect as run } from 'react'\nrun(() => undefined)\n",
+    "import * as React from 'react'\nReact.useEffect(() => undefined)\n",
+  ])('refuses an effect hook outside ui/: %s', async (code) => {
+    const messages = await restrictedSyntax(code, feature)
+    expect(messages).toHaveLength(1)
+    expect(messages.every((message) => effect.test(message))).toBe(true)
+  })
+
+  it('lets the other hooks through, and ui/ use effects', async () => {
+    expect(await restrictedSyntax("import { useState } from 'react'\n", feature)).toEqual([])
+    expect(await restrictedSyntax("import { useEffect } from 'react'\n", inUi)).toEqual([])
+  })
+})
+
 describe('the UI library boundary', () => {
   // The rule is written with `from.pathNot` and `to.path`, one string each.
   const rule = depcruise.forbidden?.find(({ name }) => name === 'no-ui-library-outside-ui') as

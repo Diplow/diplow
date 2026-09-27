@@ -1,7 +1,10 @@
 // The Conversation as the timeline shows it: one continuous timeline per Account, split by day,
 // holding the Messages and what the user did on the canvas. Pure; the components render it.
 
-/** A Tile as the Conversation shows it: what a reader needs to recognise it. */
+/**
+ * A Tile as the Conversation shows it: what a reader needs to recognise it. It is Mapping's: the
+ * Assistant domain will keep only the id, and the API will join the Title and Preview in.
+ */
 export interface TileSummary {
   id: string
   title: string
@@ -56,13 +59,15 @@ function dayKey(date: Date): string {
 
 /**
  * The start of a text too long to show whole, cut at a word and ended with an ellipsis, or
- * `undefined` when it fits within `limit` characters and there is nothing to hide.
+ * `undefined` when it fits within `limit` characters and there is nothing to hide. Characters are
+ * code points, so an emoji is never cut in half.
  */
 export function excerpt(text: string, limit: number): string | undefined {
-  if (text.length <= limit) return undefined
-  const cut = text.slice(0, limit)
-  const lastSpace = cut.lastIndexOf(' ')
+  const characters = Array.from(text)
+  if (characters.length <= limit) return undefined
+  const cut = characters.slice(0, limit)
+  const lastSpace = cut.findLastIndex((character) => /\s/.test(character))
   // A word longer than half the limit is cut through rather than dropped whole.
   const words = lastSpace > limit / 2 ? cut.slice(0, lastSpace) : cut
-  return `${words.replace(/[\s,;:.]+$/, '')}…`
+  return `${words.join('').replace(/[\s,;:.]+$/, '')}…`
 }

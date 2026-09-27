@@ -56,6 +56,7 @@ Every folder under `1-app/src/` is a node: at most 6 child folders and 6 files, 
 | Radix, TanStack Table, TanStack Form, the Markdown renderer, TanStack Hotkeys and Sonner imported by `src/ui/` only | `dependency-cruiser` |
 | No hex and no Tailwind palette name (`bg-zinc-900`, `text-white`) in a string under `src/`: colour is a theme token | ESLint `no-restricted-syntax` |
 | No raw `<table>` or `<dialog>` outside `src/ui/` | ESLint `no-restricted-syntax` |
+| No `useEffect` (nor `useLayoutEffect`, `useInsertionEffect`) outside `src/ui/`: state has an owner | ESLint `no-restricted-syntax` |
 | Formatting: no semicolons, single quotes, 100 columns | Prettier (`.prettierrc.json`) |
 
 **The layers have their folders before their code.** dependency-cruiser reads them as `src/routes/` → `src/features/<feature>/` → `src/api/` → `src/domains/<domain>/` → `src/repositories/<repository>/`; an import only points down, a route or a feature never skips `api/`, and neither a domain nor a feature imports another of its kind. `drizzle-orm`, `@effect/sql-drizzle` and Neon are imported by `repositories/database/` only; Better Auth and Stripe by `repositories/auth/` only. A new SDK gets its line in `dependency-cruiser.config.ts`.

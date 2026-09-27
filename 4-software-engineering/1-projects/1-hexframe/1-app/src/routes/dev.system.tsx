@@ -40,7 +40,7 @@ function SystemPage() {
       author: 'user',
       text,
     }
-    setEntries([...entries, sent])
+    setEntries((before) => [...before, sent])
   }
   return (
     <main className="grid gap-4 px-4 pb-4 lg:h-[calc(100dvh-4.25rem)] lg:grid-cols-[22rem_minmax(0,1fr)_12rem]">

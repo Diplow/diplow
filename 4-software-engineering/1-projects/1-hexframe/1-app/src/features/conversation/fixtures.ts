@@ -23,6 +23,9 @@ const drafts: TileSummary = {
 export function conversationFixture(now: Date): Entry[] {
   const at = (daysAgo: number, hour: number, minute: number) =>
     new Date(now.getFullYear(), now.getMonth(), now.getDate() - daysAgo, hour, minute)
+  // Today's entries are counted back from now, never before midnight, so none is in the future.
+  const today = (minutesAgo: number) =>
+    new Date(Math.max(at(0, 0, 0).getTime(), now.getTime() - minutesAgo * 60_000))
   const said = (id: string, when: Date, author: 'user' | 'agent', text: string): Entry => ({
     kind: 'message',
     id,
@@ -91,22 +94,22 @@ export function conversationFixture(now: Date): Entry[] {
     {
       kind: 'navigation',
       id: 'n5',
-      at: at(0, 8, 14),
+      at: today(5),
       navigation: 'context-hidden',
       tile: tile('software-engineering'),
     },
     {
       kind: 'navigation',
       id: 'n6',
-      at: at(0, 8, 15),
+      at: today(4),
       navigation: 'centered',
       tile: tile('ulysse'),
     },
-    { kind: 'operation', id: 'o5', at: at(0, 8, 15), operation: 'deleted', tile: drafts },
-    said('m3', at(0, 8, 16), 'user', 'What would you add to Games?'),
+    { kind: 'operation', id: 'o5', at: today(4), operation: 'deleted', tile: drafts },
+    said('m3', today(2), 'user', 'What would you add to Games?'),
     said(
       'm4',
-      at(0, 8, 16),
+      today(1),
       'agent',
       'Games has no Children yet. From what you wrote, I would start with three: the games you design, the ones you play, and what they teach about rules. Shall I propose them?',
     ),

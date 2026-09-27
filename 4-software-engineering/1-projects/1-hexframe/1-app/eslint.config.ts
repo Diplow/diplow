@@ -26,6 +26,17 @@ const rawElements = ['table', 'dialog'].map((element) => ({
   message: `No raw <${element}> outside src/ui/: build from the design system's component.`,
 }))
 
+// No effect hook outside ui/ (STACK.md, State): every piece of state has an owner, and syncing one
+// into another is the bug the owners exist to prevent. Imported by name or read off `React`.
+const effectHook = '/^use(?:Layout|Insertion)?Effect$/'
+const effectHooks = [
+  `ImportSpecifier[imported.name=${effectHook}]`,
+  `MemberExpression[property.name=${effectHook}]`,
+].map((selector) => ({
+  selector,
+  message: 'No useEffect outside src/ui/: give the state its owner (STACK.md, State).',
+}))
+
 // The lint set from STACK.md. A rule may be disabled on the spot, but only with a `-- reason` that says why.
 export default defineConfig(
   globalIgnores(['src/paraglide/', 'src/routeTree.gen.ts', '.output/', '.nitro/', '.tanstack/']),
@@ -51,6 +62,6 @@ export default defineConfig(
   {
     files: ['src/**'],
     ignores: ['src/ui/**'],
-    rules: { 'no-restricted-syntax': ['error', ...colourLiterals, ...rawElements] },
+    rules: { 'no-restricted-syntax': ['error', ...colourLiterals, ...rawElements, ...effectHooks] },
   },
 )

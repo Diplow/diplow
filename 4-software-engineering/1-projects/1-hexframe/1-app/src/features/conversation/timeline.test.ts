@@ -62,6 +62,15 @@ describe('excerpt', () => {
     expect(excerpt('Leading teams, and the people in them', 14)).toBe('Leading teams…')
   })
 
+  it('cuts at any whitespace, a line break included', () => {
+    expect(excerpt('How software\ngets built in the AI era', 20)).toBe('How software\ngets…')
+  })
+
+  it('counts an emoji as one character, and never cuts it in half', () => {
+    expect(excerpt('🧭🧭🧭 compass', 11)).toBeUndefined()
+    expect(excerpt('🧭🧭🧭🧭🧭🧭 tiles', 5)).toBe('🧭🧭🧭🧭🧭…')
+  })
+
   it('cuts through a word longer than half the limit', () => {
     expect(excerpt('a Supercalifragilistic word', 12)).toBe('a Supercalif…')
   })
