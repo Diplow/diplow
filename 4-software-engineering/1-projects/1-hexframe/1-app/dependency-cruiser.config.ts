@@ -9,6 +9,17 @@ const sdks = {
   auth: ['better-auth', '@better-auth/.+', 'stripe'],
 }
 
+// The UI libraries behind the design system: only src/ui/ imports them, and a feature builds from ui/.
+const uiLibraries = [
+  'radix-ui',
+  '@radix-ui/.+',
+  '@tanstack/react-table',
+  '@tanstack/table-core',
+  '@tanstack/(react-)?hotkeys',
+  '@tanstack/(react-)?markdown',
+  'sonner',
+]
+
 const upwardImports: IConfiguration['forbidden'] = layers.slice(1).map((layer, index) => ({
   name: `no-${layer}-importing-up`,
   comment: `${layer} sits below ${layers.slice(0, index + 1).join(', ')} and never imports them.`,
@@ -46,6 +57,13 @@ const config: IConfiguration = {
       to: { path: '^src/domains/([^/]+)/', pathNot: '^src/domains/$1/' },
     },
     ...sdkOutsideItsRepository,
+    {
+      name: 'no-ui-library-outside-ui',
+      comment: `${uiLibraries.join(', ')}: imported by src/ui/ only; a feature builds from its components.`,
+      severity: 'error',
+      from: { pathNot: '^src/ui/' },
+      to: { path: `(^|node_modules/)(${uiLibraries.join('|')})(/|$)` },
+    },
     {
       name: 'no-zod',
       comment:
