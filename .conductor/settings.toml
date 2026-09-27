@@ -1,0 +1,4 @@
+"$schema" = "https://conductor.build/schemas/settings.repo.schema.json"
+
+[scripts]
+setup = "cd 4-software-engineering/1-code && pnpm install"

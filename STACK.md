@@ -44,7 +44,7 @@ The repo root is one node. A node holds:
 | Slot | Budget | What goes there |
 |---|---|---|
 | `CLAUDE.md` | 1, outside every budget | Presents the node: a preview and a link per child |
-| Inner children (-1 to -6) | 6 folders | Meta about the node itself: `.claude/`, `.obsidian/`, `.skills/` |
+| Inner children (-1 to -6) | 6 folders | Meta about the node itself: `.claude/`, `.obsidian/`, `.skills/`, `.conductor/` |
 | Children (1 to 6) | 6 folders | The node's facets, numbered by their place on the ring: `1-name/` … `6-name/` |
 | Files | 6 | Content that belongs to the node itself, not to one facet |
 
@@ -59,8 +59,9 @@ Children sit on a ring: neighbors share an edge, and the child across the ring i
 | `CLAUDE.md` | Agent entry point: what the repo is, the six domains | exists |
 | `STACK.md` | This file | exists |
 | `.claude/` | Inner child: Claude Code config shared by every agent working in the repo | exists |
-| `.obsidian/` | Inner child: Obsidian config that makes the repo root a vault; per-device layout (`workspace*.json`) stays out of git | exists |
+| `.obsidian/` | Inner child: Obsidian config that makes the repo root a vault; per-device layout (`workspace*.json`) stays out of git; `node_modules/` is excluded from the vault | exists |
 | `.skills/` | Inner child: the skills I use, mine and vendored; see [[.skills/CLAUDE\|Skills]] | exists |
+| `.conductor/` | Inner child: Conductor settings; the setup script installs the monorepo's dependencies in each new workspace | exists |
 | `.mcp.json` | MCP servers for this repo only; the `X-Project` header on `hodor` gives it an OAuth login separate from other projects' `hodor` | exists |
 | `.gitignore` | Paths kept out of git | exists |
 | `.gitattributes` | Marks `-` files and folders for encryption | exists |
@@ -78,7 +79,7 @@ Claude Code only discovers skills sitting directly under `.claude/skills/<name>/
 
 ### Software: one monorepo
 
-Software projects (hexframe, my personal website) share one monorepo; everything else stays outside it. Where the monorepo hangs and which tooling it uses are still undecided.
+Software projects share one pnpm monorepo in `4-software-engineering/1-code/`; everything else stays outside it. Apps are numbered children of that node and start as copies of its boilerplate. [[4-software-engineering/1-code/CLAUDE|Code]] has the rules.
 
 ## Workflow
 
@@ -87,4 +88,4 @@ The loop that steers agents is part of the stack:
 - **Linear** (Hexframe team) holds intent: projects and tickets.
 - **Conductor** runs agents in parallel, one git worktree per workspace.
 - **Claude Code** is the agent; **skills** encode the processes I repeat.
-- **GitHub** (`Diplow/diplow`) holds history; changes land on `main` through pull requests.
+- **GitHub** (`Diplow/diplow`) holds history; changes land directly on `main`, fast-forwarded in the original folder where Obsidian is open.
