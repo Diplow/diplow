@@ -91,4 +91,4 @@ The loop that steers agents is part of the stack:
 - **Linear** (Hexframe team) holds intent: projects and tickets.
 - **Conductor** runs agents in parallel, one git worktree per workspace.
 - **Claude Code** is the agent; **skills** encode the processes I repeat.
-- **GitHub** (`Diplow/diplow`) holds history; changes land directly on `main`, fast-forwarded in the original folder where Obsidian is open.
+- **GitHub** (`Diplow/diplow`) holds history. Every change lands on `main` through a pull request, notes and skills as much as code: nothing is pushed to `main` directly. Once a pull request is merged, `main` is pulled into the original folder, where Obsidian is open.

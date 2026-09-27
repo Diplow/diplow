@@ -5,11 +5,12 @@ owner: diplo
 preview: >-
   Skills that move an intent to main: write the ticket, start work on it,
   describe the pull request, and run a whole Linear project or initiative
-  autonomously. Trunk-based: short-lived branches off main.
+  autonomously. Trunk-based: short-lived branches off main, or off the project
+  branch an autonomous run's config names.
 ---
 # Ship
 
-Skills that take an intent to `main`. Versioning is trunk-based: `main` is the only long-lived branch, and work goes back to it on short-lived branches named `{type}/hex-{num}-{slug}`.
+Skills that take an intent to `main`. Versioning is trunk-based: `main` is the only long-lived branch, and work goes back to it on short-lived branches named `{type}/hex-{num}-{slug}`. The one exception is an autonomous project run whose config names a project branch (`repo.target_branch`): its units land there, and I merge it into `main` through a pull request once the project is done.
 
 | Skill | Use it to |
 |---|---|
