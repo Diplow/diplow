@@ -31,6 +31,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.unstubAllGlobals()
+  vi.restoreAllMocks()
 })
 
 describe("a form's write", () => {
@@ -57,13 +58,34 @@ describe("a form's write", () => {
     })
     expect(toast.error).toHaveBeenCalledExactlyOnceWith('That title is taken.')
   })
+})
 
-  it('redirects once to sign-in, carrying where the user was', async () => {
-    await submit(() => failing(new DevUnauthenticated()))
-    await submit(() => failing(new DevUnauthenticated()))
+describe('the sign-in redirect', () => {
+  // Fresh modules for each case, so the one-redirect flag in channels.ts starts down.
+  const signingIn = async () => {
+    vi.resetModules()
+    const { submitWrite: fresh } = await import('./channels')
+    const { DevUnauthenticated: SignedOut } = await import('../dev/failures')
+    const { encodeFailure: encode } = await import('../errors/failure')
+    const outcome = { ok: false as const, failure: encode(new SignedOut()), requestId: 'req-1' }
+    const submit = fresh({ scope: 'save', call: () => Promise.resolve(outcome), onSaved: vi.fn() })
+    return () => submit({ value: {} })
+  }
+
+  it('happens once, carrying the path, the search and the hash', async () => {
+    const submit = await signingIn()
+    await submit()
+    await submit()
     expect(assign).toHaveBeenCalledExactlyOnceWith(
       `/sign-in?redirect=${encodeURIComponent('/dev/errors?a=1#x')}`,
     )
+  })
+
+  it('does nothing on the server, where there is no window to move', async () => {
+    vi.unstubAllGlobals()
+    const submit = await signingIn()
+    await expect(submit()).resolves.toEqual({ form: 'Sign in to go on.' })
+    expect(assign).not.toHaveBeenCalled()
   })
 })
 
