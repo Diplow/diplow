@@ -1,0 +1,23 @@
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/check-rule-of-six.ts
+  s_5920196c2dfc40::t_8b7382b45f143e 8-10,16
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_5920196c2dfc40::t_8b7382b45f143e 40,54
+4-software-engineering/1-projects/1-hexframe/1-app/dependency-cruiser.config.ts
+  s_5920196c2dfc40::t_8b7382b45f143e 49-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c65aa1b79b06a27763bbb4eb26d889199ebc1609",
+  "prompts": {},
+  "sessions": {
+    "s_5920196c2dfc40": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e51761ce-ba85-4511-9b78-02634aa46b43",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
