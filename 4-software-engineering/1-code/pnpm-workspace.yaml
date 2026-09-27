@@ -1,3 +1,0 @@
-# Every app is a numbered child of this node: 1-hexframe/, 2-site/, …
-packages:
-  - "[1-6]-*"

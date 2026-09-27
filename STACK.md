@@ -7,7 +7,8 @@ preview: >-
   by me in Obsidian and by agents in Claude Code. The repo is a hexframe node:
   meta (.claude, .obsidian, .skills) as inner children, six domains of interest as
   children. .skills is the only source of skills, symlinked flat into
-  .claude/skills. Software only goes in the monorepo.
+  .claude/skills. Software lives under 4-software-engineering; hexframe is a
+  pnpm monorepo.
 ---
 # Top-level stack
 
@@ -61,7 +62,7 @@ Children sit on a ring: neighbors share an edge, and the child across the ring i
 | `.claude/` | Inner child: Claude Code config shared by every agent working in the repo | exists |
 | `.obsidian/` | Inner child: Obsidian config that makes the repo root a vault; per-device layout (`workspace*.json`) stays out of git; `node_modules/` is excluded from the vault | exists |
 | `.skills/` | Inner child: the skills I use, mine and vendored; see [[.skills/CLAUDE\|Skills]] | exists |
-| `.conductor/` | Inner child: Conductor settings; the setup script installs the monorepo's dependencies in each new workspace | exists |
+| `.conductor/` | Inner child: Conductor settings; the setup script installs hexframe's dependencies in each new workspace | exists |
 | `.mcp.json` | MCP servers for this repo only; the `X-Project` header on `hodor` gives it an OAuth login separate from other projects' `hodor` | exists |
 | `.gitignore` | Paths kept out of git | exists |
 | `.gitattributes` | Marks `-` files and folders for encryption | exists |
@@ -77,9 +78,9 @@ Claude Code only discovers skills sitting directly under `.claude/skills/<name>/
 - `.claude/settings.json` switches off every skill defined outside the repo (user skills, claude.ai synced skills, plugins).
 - `.skills/sync` rebuilds both the symlinks and the overrides; [[.skills/CLAUDE|Skills]] says when to run it.
 
-### Software: one monorepo
+### Software
 
-Software projects share one pnpm monorepo in `4-software-engineering/1-code/`; everything else stays outside it. Apps are numbered children of that node and start as copies of its boilerplate. [[4-software-engineering/1-code/CLAUDE|Code]] has the rules.
+Software lives under `4-software-engineering/`, one project per numbered child. [[4-software-engineering/1-hexframe/CLAUDE|hexframe]] is a pnpm monorepo whose packages are its own numbered children; its `CLAUDE.md` has the rules. The site is not started.
 
 ## Workflow
 
