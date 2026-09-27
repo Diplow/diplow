@@ -12,13 +12,12 @@ export function LocaleSwitch() {
   return (
     <nav aria-label={m.locale_switch_label()} className="flex gap-1">
       {locales.map((locale) => (
-        <Button
-          key={locale}
-          asChild
-          size="sm"
-          variant={locale === current ? 'secondary' : 'ghost'}
-        >
-          <a href={localizeHref(href, { locale })} hrefLang={locale} aria-current={locale === current}>
+        <Button key={locale} asChild size="sm" variant={locale === current ? 'secondary' : 'ghost'}>
+          <a
+            href={localizeHref(href, { locale })}
+            hrefLang={locale}
+            aria-current={locale === current}
+          >
             {locale.toUpperCase()}
           </a>
         </Button>

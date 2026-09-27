@@ -13,6 +13,7 @@ function prefersDark(dark: boolean) {
 }
 
 function runThemeScript() {
+  // eslint-disable-next-line @typescript-eslint/no-implied-eval, @typescript-eslint/no-unsafe-call -- the script under test ships as a string inlined in <head>; evaluating it is the test
   new Function(themeScript)()
 }
 

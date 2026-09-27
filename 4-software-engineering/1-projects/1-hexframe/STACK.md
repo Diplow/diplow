@@ -124,19 +124,7 @@ Three small custom lint rules enforce it: the `useState` ceiling, no `dispatch` 
 
 ## Lint
 
-`pnpm check` runs all of it and CI enforces it; no pre-commit hook.
-
-| Rule | Tool |
-|---|---|
-| Strict types | ESLint flat config, `typescript-eslint` strict type-checked |
-| At most 6 folders and 6 files per folder | `eslint-plugin-project-structure` |
-| Layer direction, no domain importing another, a third-party SDK imported only by its repository | `dependency-cruiser` |
-| Dead code | `knip` |
-| Cognitive complexity at most 15 | `eslint-plugin-sonarjs` |
-| At most 150 lines per function, 5 parameters (an object beyond), 600 lines per file | ESLint core |
-| Formatting | Prettier |
-
-**The escape hatch is a comment.** When splitting would not make the code clearer to its next reader, human or agent, a rule can be disabled on the spot with a `-- reason` that says why; a disable without one fails the lint (`eslint-comments/require-description`). cubic reads the reasons.
+`pnpm check` runs the lint set and CI enforces it. The rules now live in [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE|1-app]].
 
 ## Database
 

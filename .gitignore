@@ -1,2 +1,5 @@
 # Obsidian per-device UI state (open tabs, pane layout)
 .obsidian/workspace*.json
+
+# Finder metadata, dropped in any folder on macOS
+.DS_Store
