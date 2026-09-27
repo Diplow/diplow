@@ -17,6 +17,10 @@ It is a pnpm monorepo; each package is a numbered child of this node (`1-<name>/
 |---|---|---|
 | 1 | [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE\|app]] | `@hexframe/app`, the TanStack Start app holding client and server, deployed to Vercel |
 
+| Inner child | What it holds |
+|---|---|
+| [[4-software-engineering/1-projects/1-hexframe/.cubic/CLAUDE\|.cubic]] | The briefs of cubic's three review agents (maintainability, domain design, security), wired in by `cubic.yaml` at the repo root |
+
 | File | What it holds |
 |---|---|
 | [[4-software-engineering/1-projects/1-hexframe/STACK\|STACK]] | The technical choices, the rules that come with them, and the language of each domain. Read it before adding code |

@@ -23,6 +23,8 @@ Be the adversary the author didn't have. Give the reason with every misplacement
 
 The why behind the direction is the principle page `4-software-engineering/2-principles/1-domain-driven-design/CLAUDE.md`. Read it first. This skill applies it; where the two disagree, the principle wins and this skill needs fixing.
 
+cubic runs a condensed copy of the review mode on hexframe pull requests, `4-software-engineering/1-projects/1-hexframe/.cubic/domain-design.md`. A change to the review checks here changes that copy in the same commit.
+
 ## The direction
 
 Three layers. The API layer is the thin one.

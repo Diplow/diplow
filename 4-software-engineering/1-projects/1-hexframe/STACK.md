@@ -17,7 +17,7 @@ The choices, and the rules they come with. Each rule is written here until the f
 - **Here, in the public `Diplow/diplow` repo.** Every change reaches `main` through a short-lived pull request, hours old rather than days, notes included (see the root [[STACK]]); an autonomous run's units reach it through their project branch, below. I do the final merge for now; the direction is to let a green PR merge itself.
 - **Each pull request that touches hexframe** runs `check` and `test`, gets a Neon branch and a Vercel preview, then Playwright against that preview. CI is path-filtered to `4-software-engineering/1-projects/1-hexframe/**`, so a note never triggers it.
 - **Autonomous runs land on a project branch.** When `run-autonomous-project` builds hexframe, its units branch from and merge into `project/<slug>`, not `main`; I merge that branch into `main` through a pull request once the project's phase-close ticket is done.
-- **cubic** reviews each pull request through a `cubic.yaml` at the repo root, scoped to hexframe, with three custom agents: maintainability (from the `maintainability-review` skill), domain design (from `domain-design`) and security. The security bar: auth is checked in middleware, no secret reaches the client, every server function input goes through a schema, no raw SQL.
+- **cubic** reviews each pull request through a `cubic.yaml` at the repo root, scoped to hexframe, with three custom agents: maintainability (from the `maintainability-review` skill), domain design (from `domain-design`) and security. The security bar: auth is checked in middleware, no secret reaches the client, every server function input goes through a schema, no raw SQL. The three briefs live in [[4-software-engineering/1-projects/1-hexframe/.cubic/CLAUDE|.cubic]].
 
 ## Runtime and versions
 
@@ -124,19 +124,7 @@ Three small custom lint rules enforce it: the `useState` ceiling, no `dispatch` 
 
 ## Lint
 
-`pnpm check` runs all of it and CI enforces it; no pre-commit hook.
-
-| Rule | Tool |
-|---|---|
-| Strict types | ESLint flat config, `typescript-eslint` strict type-checked |
-| At most 6 folders and 6 files per folder | `eslint-plugin-project-structure` |
-| Layer direction, no domain importing another, a third-party SDK imported only by its repository | `dependency-cruiser` |
-| Dead code | `knip` |
-| Cognitive complexity at most 15 | `eslint-plugin-sonarjs` |
-| At most 150 lines per function, 5 parameters (an object beyond), 600 lines per file | ESLint core |
-| Formatting | Prettier |
-
-**The escape hatch is a comment.** When splitting would not make the code clearer to its next reader, human or agent, a rule can be disabled on the spot with a `-- reason` that says why; a disable without one fails the lint (`eslint-comments/require-description`). cubic reads the reasons.
+`pnpm check` runs the lint set and CI enforces it. The rules now live in [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE|1-app]].
 
 ## Database
 

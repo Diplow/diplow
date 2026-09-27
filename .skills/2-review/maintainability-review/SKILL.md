@@ -19,6 +19,8 @@ This skill grades a change against one question: **will the next reader of this 
 
 The principle this skill enforces is `4-software-engineering/2-principles/5-maintainability/CLAUDE.md`. Its seven checks are the seven tags; if the two disagree, the principle wins and this skill needs fixing.
 
+cubic runs a condensed copy of the bar on hexframe pull requests, `4-software-engineering/1-projects/1-hexframe/.cubic/maintainability.md`. A change to `references/tags.md` changes that copy in the same commit.
+
 It reads and reports. It never edits code, commits, pushes, or posts to GitHub or Linear. The report goes to the terminal.
 
 ## What it reviews

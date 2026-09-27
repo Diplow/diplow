@@ -1,5 +1,5 @@
 {
-  "include": ["src", "*.config.ts"],
+  "include": ["src", "scripts", "*.config.ts"],
   "compilerOptions": {
     "target": "ES2023",
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
