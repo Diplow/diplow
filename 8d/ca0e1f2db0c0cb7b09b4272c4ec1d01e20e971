@@ -1,0 +1,77 @@
+4-software-engineering/1-projects/1-hexframe/1-app/.gitignore
+  s_5bfd20160ac705::t_6be7845a2c95c5 1-8
+4-software-engineering/1-projects/1-hexframe/STACK.md
+  s_5bfd20160ac705::t_19a61785b43014 51,123
+4-software-engineering/1-projects/1-hexframe/1-app/components.json
+  s_5bfd20160ac705::t_56ffb9012526c0 1-15,17-20
+  s_5bfd20160ac705::t_35ef6e8a6a904d 16
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/CLAUDE.md
+  s_5bfd20160ac705::t_d21cd76f5b125f 1-20
+STACK.md
+  s_5bfd20160ac705::t_b2b2685eeb0d3e 48,66
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/theme.test.ts
+  s_5bfd20160ac705::t_2c970f984628cc 3,10-12,22
+  s_5bfd20160ac705::t_5bad7e3209220f 1-2,4-9,13-21,23-71
+.github/workflows/hexframe.yml
+  s_5bfd20160ac705::t_020a456ac3f4a2 1-33
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/controls/button.tsx
+  s_5bfd20160ac705::t_5dad7ede464381 1-63
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/theme.ts
+  s_5bfd20160ac705::t_5bad7e3209220f 1-50
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/controls/LocaleSwitch.tsx
+  s_5bfd20160ac705::t_5bad7e3209220f 1-28
+4-software-engineering/1-projects/1-hexframe/1-app/package.json
+  s_5bfd20160ac705::t_5bad7e3209220f 27
+  s_5bfd20160ac705::t_35ef6e8a6a904d 18,22
+  s_5bfd20160ac705::t_6be7845a2c95c5 1-8,10-17,19,21,23-26,28-40
+  s_5bfd20160ac705::t_56ffb9012526c0 20
+  s_5bfd20160ac705::t_34b9c4a1de60da 9
+4-software-engineering/1-projects/1-hexframe/1-app/vitest.config.ts
+  s_5bfd20160ac705::t_2df8f8300df692 1-8
+4-software-engineering/1-projects/1-hexframe/1-app/src/styles.css
+  s_5bfd20160ac705::t_56ffb9012526c0 1-129
+4-software-engineering/1-projects/1-hexframe/1-app/project.inlang/settings.json
+  s_5bfd20160ac705::t_6be7845a2c95c5 1-12
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/__root.tsx
+  s_5bfd20160ac705::t_5bad7e3209220f 1-41
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/index.tsx
+  s_5bfd20160ac705::t_5bad7e3209220f 1-14
+4-software-engineering/1-projects/1-hexframe/1-app/src/routeTree.gen.ts
+  s_5bfd20160ac705::t_b6923f3d621558 1-68
+4-software-engineering/1-projects/1-hexframe/1-app/src/server.ts
+  s_5bfd20160ac705::t_2df8f8300df692 1-10
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_5bfd20160ac705::t_d21cd76f5b125f 1-47
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_5bfd20160ac705::t_2df8f8300df692 1-8
+4-software-engineering/1-projects/1-hexframe/1-app/src/router.tsx
+  s_5bfd20160ac705::t_2df8f8300df692 1-24
+4-software-engineering/1-projects/1-hexframe/1-app/tsconfig.json
+  s_5bfd20160ac705::t_6be7845a2c95c5 1-24
+4-software-engineering/1-projects/1-hexframe/1-app/vite.config.ts
+  s_5bfd20160ac705::t_2df8f8300df692 1-23
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/controls/ThemeToggle.tsx
+  s_5bfd20160ac705::t_5bad7e3209220f 1-16
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_5bfd20160ac705::t_2df8f8300df692 1-8
+4-software-engineering/1-projects/1-hexframe/CLAUDE.md
+  s_5bfd20160ac705::t_d21cd76f5b125f 8,14-18,31-32
+4-software-engineering/1-projects/1-hexframe/pnpm-lock.yaml
+  s_5bfd20160ac705::t_3bf2d194528a60 10-4572
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8dca0e1f2db0c0cb7b09b4272c4ec1d01e20e971",
+  "prompts": {},
+  "sessions": {
+    "s_5bfd20160ac705": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6a9b9029-26f7-4a9c-82d8-716e2a636c80",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
