@@ -1,10 +1,12 @@
 import { Cause, Effect } from 'effect'
 import { describe, expect, it } from 'vitest'
 
+import { Bus } from '#/domains/bus'
+
 import { DevConflict, DevInvalid } from '../dev/failures'
 import { RequestContext, run } from './run'
 
-const context = { requestId: 'req-1' }
+const context = { requestId: 'req-1', waitUntil: () => undefined }
 
 describe('the server function helper', () => {
   it('returns the value of a program that succeeds', async () => {
@@ -17,6 +19,15 @@ describe('the server function helper', () => {
       return requestId
     })
     expect(await run(context, program)).toEqual({ ok: true, value: 'req-1' })
+  })
+
+  it('provides the bus, where a program publishes without waiting for anyone', async () => {
+    const program = Effect.gen(function* () {
+      const bus = yield* Bus
+      yield* bus.publish({ _tag: 'DevHappened' })
+      return 'published'
+    })
+    expect(await run(context, program)).toEqual({ ok: true, value: 'published' })
   })
 
   it('sends a declared failure encoded, with the request id', async () => {
