@@ -51,7 +51,7 @@ export function Conversation({ entries, onSend, className }: ConversationProps) 
 function DayOfEntries({ day, now }: { day: Day; now: Date }) {
   return (
     <section className="grid gap-3">
-      <h2 className="sticky top-0 flex justify-center">
+      <h2 className="sticky top-0 z-10 -mx-4 flex justify-center bg-card py-2">
         <span className="rounded-full border bg-card px-3 py-0.5 text-xs font-medium text-muted-foreground">
           {dayLabel(day, now)}
         </span>

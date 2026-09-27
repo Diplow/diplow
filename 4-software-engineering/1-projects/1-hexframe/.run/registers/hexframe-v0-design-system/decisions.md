@@ -5,8 +5,8 @@ owner: diplo
 preview: >-
   The choices the autonomous run made while building hexframe v0's design
   system, where a ticket left room: how ui/ components take their content,
-  which library backs the Drawer, a darker-theme token fix, and how the hex
-  canvas is driven and coloured.
+  which library backs the Drawer, a darker-theme token fix, how the hex
+  canvas is driven and coloured, and where the chat and the breadcrumb live.
 ---
 # Decisions
 
@@ -33,3 +33,11 @@ HEX-12, [#10](https://github.com/Diplow/diplow/pull/10). `center` (a Tile id; ab
 ### DEC-6 `context` is a colour token, and the fixture System is not translated
 
 HEX-12, [#10](https://github.com/Diplow/diplow/pull/10). The prototype tinted the Context with `--chart-2`, a chart colour. It is now `--context`, which takes `--chart-2`'s value in each theme, so the canvas names what it colours. The fixture System is the user's own content, in their words, so French translates the page and the canvas's labels but not the Tiles' titles and previews, as it will be with real data.
+
+### DEC-7 Features get their own folder and layer, between routes and the API
+
+HEX-13. The Conversation and the breadcrumb are feature components, not `ui/`, and the app had no place for them: they live in `src/features/<feature>/`, which dependency-cruiser now reads as a layer below `routes/` and above `api/`, so a feature reaches the server through a server function like a route does. `no-feature-importing-another` makes STACK.md's sibling features, which may not import each other, a lint. The breadcrumb's path is `pathTo` in `ui/hex/view/`, beside `findTile`, which now uses it, since resolving an id against a System already lived there.
+
+### DEC-8 The Conversation shows the reader's days and times, and `/dev/system` renders on the client
+
+HEX-13. The timeline splits by the reader's local day ("Today", "Yesterday", then a date) and shows times in the page's language. A server in another time zone, as on Vercel, would render other days and times and fail hydration, so `/dev/system` is `ssr: false`. The real Conversation page will face the same choice once its data comes from the server. A long Preview on a tile card shows its first 140 characters, cut at a word, with "Show more": a count of characters rather than a CSS line clamp, since measuring whether a clamp cut anything would take a `useEffect`, which STACK.md keeps out of features.
