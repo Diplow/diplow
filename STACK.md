@@ -7,8 +7,8 @@ preview: >-
   by me in Obsidian and by agents in Claude Code. The repo is a hexframe node:
   meta (.claude, .obsidian, .skills) as inner children, six domains of interest as
   children. .skills is the only source of skills, symlinked flat into
-  .claude/skills. Software lives under 4-software-engineering; hexframe is a
-  pnpm monorepo.
+  .claude/skills. Software lives in 4-software-engineering/1-projects;
+  hexframe is a pnpm monorepo.
 ---
 # Top-level stack
 
@@ -80,7 +80,7 @@ Claude Code only discovers skills sitting directly under `.claude/skills/<name>/
 
 ### Software
 
-Software lives under `4-software-engineering/`, one project per numbered child. [[4-software-engineering/1-hexframe/CLAUDE|hexframe]] is a pnpm monorepo whose packages are its own numbered children; its `CLAUDE.md` has the rules. The site is not started.
+Software lives in `4-software-engineering/1-projects/`, one project per numbered child. [[4-software-engineering/1-projects/1-hexframe/CLAUDE|hexframe]] is a pnpm monorepo whose packages are its own numbered children; its `CLAUDE.md` has the rules. The site is not started.
 
 ## Workflow
 

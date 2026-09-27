@@ -1,6 +1,6 @@
 ---
 title: site
-parent: 4-software-engineering/2-site
+parent: 4-software-engineering/1-projects/2-site
 owner: diplo
 preview: >-
   My personal website. Not started.

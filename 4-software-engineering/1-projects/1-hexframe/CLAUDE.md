@@ -1,6 +1,6 @@
 ---
 title: hexframe
-parent: 4-software-engineering/1-hexframe
+parent: 4-software-engineering/1-projects/1-hexframe
 owner: diplo
 preview: >-
   Hexframe, the app that defines and organizes contents as hexframes, as a pnpm
