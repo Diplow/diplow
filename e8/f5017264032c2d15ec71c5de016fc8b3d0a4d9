@@ -1,0 +1,105 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/middleware.ts
+  s_2908cd458e0dd6::t_aba771c9ba9a36 4-6,52-59
+  s_2908cd458e0dd6::t_6cbd5a686e7761 31,48
+  s_2908cd458e0dd6::t_bdbe9749bbb19a 60
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/client/channels.test.ts
+  s_2908cd458e0dd6::t_f07315d1ee57a3 84-95,99-104
+  s_2908cd458e0dd6::t_18ce798b870334 96-98
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/errors/messages.test.ts
+  s_2908cd458e0dd6::t_f07315d1ee57a3 5-13,48-67
+  s_2908cd458e0dd6::t_a68f12b507850a 68
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/middleware.test.ts
+  s_2908cd458e0dd6::t_aba771c9ba9a36 6,84-113
+  s_2908cd458e0dd6::t_95ba000c241be3 1,62,79-83
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/guard.test.ts
+  s_2908cd458e0dd6::t_57016ba750c3e7 27-29
+  s_2908cd458e0dd6::t_d7793d6c009b51 1-26,30-102
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/guard.ts
+  s_2908cd458e0dd6::t_d393eac493eb8f 15-17,19-22,36-39
+  s_2908cd458e0dd6::t_57016ba750c3e7 41-43
+4-software-engineering/1-projects/1-hexframe/1-app/dependency-cruiser.config.ts
+  s_2908cd458e0dd6::t_127a96207c767b 77-83
+  s_2908cd458e0dd6::t_3d173b5977a53e 76
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/database.ts
+  s_2908cd458e0dd6::t_624a021ab03c87 6,8-11,17
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE.md
+  s_2908cd458e0dd6::t_ad740d1f858e93 7-9,17-18,22-25,31-32
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE.md
+  s_2908cd458e0dd6::t_ad740d1f858e93 27-28
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20260927195022_iam/snapshot.json
+  s_2908cd458e0dd6::t_ca74cf44e2e6df 1-715
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/testing.ts
+  s_2908cd458e0dd6::t_624a021ab03c87 11,13
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/iam.ts
+  s_2908cd458e0dd6::t_4ff29b9151b44f 6
+  s_2908cd458e0dd6::t_47448759a8ef2e 14,17-22,54
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_2908cd458e0dd6::t_ad740d1f858e93 39
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/iam.test.ts
+  s_2908cd458e0dd6::t_3dffd4127173db 8-21,26,28-29,39-40,47,50,57,59,62,72,75,82-98,101,103,112,116-119
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20260927195022_iam/migration.sql
+  s_2908cd458e0dd6::t_ca74cf44e2e6df 1-58
+4-software-engineering/1-projects/1-hexframe/1-app/src/start.ts
+  s_2908cd458e0dd6::t_aba771c9ba9a36 3,5
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE.md
+  s_2908cd458e0dd6::t_ad740d1f858e93 18-19,59
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/dev/provoke.test.ts
+  s_2908cd458e0dd6::t_95ba000c241be3 12-16
+  s_2908cd458e0dd6::t_c6502af8b7ebad 1,17
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/testing.ts
+  s_2908cd458e0dd6::t_47448759a8ef2e 2-3,14-15,21-23,25-26,30,33,36
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/inputs/forms/form.tsx
+  s_2908cd458e0dd6::t_127a96207c767b 13,36,43,52
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-v0-server-foundations/decisions.md
+  s_2908cd458e0dd6::t_ad740d1f858e93 82,84,105-108
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE.md
+  s_2908cd458e0dd6::t_ad740d1f858e93 17,76,78
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/promise.ts
+  s_2908cd458e0dd6::t_624a021ab03c87 1-20,24-36
+  s_2908cd458e0dd6::t_8c7b3732b572bc 21-23
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/errors.ts
+  s_2908cd458e0dd6::t_47448759a8ef2e 32-36,43
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/errors/messages.ts
+  s_2908cd458e0dd6::t_f07315d1ee57a3 24
+4-software-engineering/1-projects/1-hexframe/1-app/vitest.config.ts
+  s_2908cd458e0dd6::t_127a96207c767b 9-11
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/access/Access.tsx
+  s_2908cd458e0dd6::t_127a96207c767b 20,50,56,65,82,84,90,96,98,102
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/run.ts
+  s_2908cd458e0dd6::t_6cbd5a686e7761 31,35,59-60,72-73,90-91,115-116,120-121
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_2908cd458e0dd6::t_f07315d1ee57a3 174,183-184
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/auth.ts
+  s_2908cd458e0dd6::t_8da1cdc8af7881 2-4,7,9-10,13-15,20,43-49,71,74,82-94,97,99,102-103,105-108,112-122,126-140,145-149,151-164,167-170,173,175-182,184,188,191,196
+  s_2908cd458e0dd6::t_47448759a8ef2e 38
+  s_2908cd458e0dd6::t_e0258ecef74fd2 109,111,150,165
+  s_2908cd458e0dd6::t_8c7b3732b572bc 166
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/database.test.ts
+  s_2908cd458e0dd6::t_34c5e8a452f453 6,43-50,55-56,62
+  s_2908cd458e0dd6::t_9467f1f2e3ba8f 4,10,41-42,51-54,57-61,63-64
+  s_2908cd458e0dd6::t_8e23669b21111d 65
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/schema.ts
+  s_2908cd458e0dd6::t_ca74cf44e2e6df 4,80-87
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/run.test.ts
+  s_2908cd458e0dd6::t_c6502af8b7ebad 21
+  s_2908cd458e0dd6::t_95ba000c241be3 1,5-6,16-20,65-88
+  s_2908cd458e0dd6::t_ce87c7616966fa 89
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_2908cd458e0dd6::t_f07315d1ee57a3 174-175,177,183-184
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e8f5017264032c2d15ec71c5de016fc8b3d0a4d9",
+  "prompts": {},
+  "sessions": {
+    "s_2908cd458e0dd6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0cbfaeea-8195-45e3-a873-1ae996767d5d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
