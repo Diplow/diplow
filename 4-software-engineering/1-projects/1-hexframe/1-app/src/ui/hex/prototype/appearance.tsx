@@ -61,12 +61,11 @@ function mix(color: string, percent: number) {
   return `color-mix(in oklab, ${color} ${String(percent)}%, var(--background))`
 }
 
-/** The title always, the preview once the hex is large enough to hold a few lines. */
-/** Whether a tile is large enough for its preview under its title. */
 export function showsPreview(placement: Placement): boolean {
   return placement.kind === 'tile' && placement.hex.radius >= 70 && placement.tile.preview !== ''
 }
 
+/** The title always, the preview once the hex is large enough to hold a few lines. */
 export function TileLabel({ placement }: { placement: Placement }) {
   if (placement.kind !== 'tile') return null
   const { radius } = placement.hex

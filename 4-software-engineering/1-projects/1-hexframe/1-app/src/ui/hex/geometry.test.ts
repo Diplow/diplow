@@ -4,6 +4,8 @@ import {
   directions,
   frameSlots,
   hexCorners,
+  hexHeight,
+  hexWidth,
   insetHex,
   neighbor,
   opposite,
@@ -29,6 +31,13 @@ function contains({ center, radius }: Hex, point: Point) {
 describe('opposite', () => {
   it('pairs each direction with the one three away', () => {
     expect(directions.map(opposite)).toEqual([4, 5, 6, 1, 2, 3])
+  })
+})
+
+describe('hexWidth and hexHeight', () => {
+  it('measure a pointy hex: √3 radii across, two radii tall', () => {
+    expect(hexWidth(10)).toBeCloseTo(17.32, 2)
+    expect(hexHeight(10)).toBe(20)
   })
 })
 

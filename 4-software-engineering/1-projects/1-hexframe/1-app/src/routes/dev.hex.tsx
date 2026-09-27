@@ -1,13 +1,18 @@
 // HEX-9, throwaway: the SVG canvas on the fixture System, one scene at a time.
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute, notFound } from '@tanstack/react-router'
 
 import { scenes, ulysse, type Scene } from '#/ui/hex/prototype/fixtures'
 import { SvgCanvas } from '#/ui/hex/prototype/SvgCanvas'
 
 export const Route = createFileRoute('/dev/hex')({
+  // A dev page, like /dev/ui: a production build answers 404.
+  beforeLoad: () => {
+    // eslint-disable-next-line @typescript-eslint/only-throw-error -- TanStack Router's notFound() is meant to be thrown; the router catches it
+    if (!import.meta.env.DEV) throw notFound()
+  },
   validateSearch: (search: Record<string, unknown>): { scene: Scene } => ({
     scene:
-      typeof search.scene === 'string' && search.scene in scenes
+      typeof search.scene === 'string' && Object.hasOwn(scenes, search.scene)
         ? (search.scene as Scene)
         : 'frame',
   }),

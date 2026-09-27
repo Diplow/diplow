@@ -60,13 +60,20 @@ describe('layoutCanvas', () => {
 
   it("opens the centered Tile's Context inside its own slot", () => {
     const placements = layoutCanvas(system, { expanded: new Set(), showContext: true }, canvas)
-    const context = placements.filter(
-      (placement) => placement.kind !== 'frame' && placement.hex.radius < canvas.radius / 5,
+    const frames = placements.filter((placement) => placement.kind === 'frame')
+    expect(frames.map((frame) => [frame.ring, frame.tile.id, frame.depth])).toEqual([
+      ['children', 'root', 0],
+      ['context', 'root', 1],
+    ])
+    const inContext = placements.filter(
+      (placement) =>
+        (placement.kind === 'empty' && placement.ring === 'context') ||
+        (placement.kind === 'tile' && placement.role === 'context'),
     )
-    expect(context.filter((placement) => placement.kind === 'empty')).toHaveLength(5)
-    expect(
-      context.find((placement) => placement.kind === 'tile' && placement.role === 'context'),
-    ).toMatchObject({ tile: { id: 'why' } })
+    expect(inContext.filter((placement) => placement.kind === 'empty')).toHaveLength(5)
+    expect(inContext.find((placement) => placement.kind === 'tile')).toMatchObject({
+      tile: { id: 'why' },
+    })
   })
 
   it('shrinks by a little more than a third at each level, gaps and padding taken', () => {

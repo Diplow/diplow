@@ -91,9 +91,9 @@ export function frameSlots(hex: Hex): { center: Hex; ring: Record<Direction, Hex
 
 /** The box a hex's text sits in: taller for a few lines, or wider for a single title. */
 export function textBox({ center, radius }: Hex, shape: 'tall' | 'wide' = 'tall'): Box {
-  // Tall stays clear of the slanted sides; wide is the band between the side corners, where the
-  // hex is full width, less a margin.
+  // Tall keeps its corners a margin inside the slanted sides; wide is the band between the side
+  // corners, where the hex is full width, less a margin.
   const width = hexWidth(radius) * (shape === 'tall' ? 0.8 : 0.9)
-  const height = radius * (shape === 'tall' ? 1.2 : 0.9)
+  const height = radius * (shape === 'tall' ? 1.1 : 0.9)
   return { x: center.x - width / 2, y: center.y - height / 2, width, height }
 }
