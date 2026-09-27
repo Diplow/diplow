@@ -1,0 +1,19 @@
+CLAUDE.md
+  s_5bfd20160ac705::t_ea8f5b8cd8112b 46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9991613ea4a35c99dcaea1e58be97a5db60cdc25",
+  "prompts": {},
+  "sessions": {
+    "s_5bfd20160ac705": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6a9b9029-26f7-4a9c-82d8-716e2a636c80",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
