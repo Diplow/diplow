@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://cubic.dev/schema/cubic-repository-config.schema.json
+# cubic's review config. Its three agents hold hexframe's code to this repo's own bar; the briefs live in
+# 4-software-engineering/1-projects/1-hexframe/.cubic/. cubic reads this file from main only.
+
+version: 1
+
+reviews:
+  custom_rules:
+    - name: Maintainability
+      file_paths:
+        - 4-software-engineering/1-projects/1-hexframe/.cubic/maintainability.md
+      include:
+        - 4-software-engineering/1-projects/1-hexframe/**
+    - name: Domain design
+      file_paths:
+        - 4-software-engineering/1-projects/1-hexframe/.cubic/domain-design.md
+      include:
+        - 4-software-engineering/1-projects/1-hexframe/**
+    - name: Security
+      file_paths:
+        - 4-software-engineering/1-projects/1-hexframe/.cubic/security.md
+      include:
+        - 4-software-engineering/1-projects/1-hexframe/**
