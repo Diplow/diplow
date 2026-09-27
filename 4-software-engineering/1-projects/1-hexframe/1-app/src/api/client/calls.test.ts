@@ -41,6 +41,16 @@ describe('settling a call', () => {
     expect(error.failure).toBeInstanceOf(DevForbidden)
   })
 
+  it.each([null, undefined, 'Not Found', { value: 1 }])(
+    'throws Unexpected when the answer is no outcome: %j',
+    async (answer) => {
+      const call = Promise.resolve(answer as unknown as Outcome<number, never>)
+      const error = (await failed(settle('provokeRead', call))) as CallFailed
+      expect(error).toBeInstanceOf(CallFailed)
+      expect(error.failure).toBeInstanceOf(Unexpected)
+    },
+  )
+
   it('throws Unexpected, with no request id, when the call never reached the helper', async () => {
     const error = (await failed(
       settle('provokeRead', Promise.reject(new TypeError('offline'))),

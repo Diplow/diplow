@@ -14,10 +14,12 @@ import { asCallFailed, settle, type CallFailed } from './calls'
 let signingIn = false
 
 // One redirect, however many calls fail at once, carrying where the user was. HEX-18 builds the page.
+// On the server there is no window to move: a read made while rendering a page is IAM's to guard,
+// with a route's `beforeLoad` redirect, before anything is rendered.
 function signIn() {
-  if (signingIn) return
+  if (signingIn || typeof window === 'undefined') return
   signingIn = true
-  const here = `${window.location.pathname}${window.location.search}`
+  const here = `${window.location.pathname}${window.location.search}${window.location.hash}`
   window.location.assign(localizeHref(`/sign-in?redirect=${encodeURIComponent(here)}`))
 }
 
@@ -39,8 +41,8 @@ function raise(failed: CallFailed, call: Call) {
 }
 
 /** Whether a read's failure shows in the nearest boundary, which is where the query throws it. */
-function showsInBoundary({ failure }: CallFailed) {
-  const channel = channelFor('read', failure.kind)
+function showsInBoundary(error: unknown, scope: string) {
+  const channel = channelFor('read', asCallFailed(error, scope).failure.kind)
   return channel === 'forbidden' || channel === 'error-state'
 }
 
@@ -64,7 +66,8 @@ export function makeQueryClient() {
       queries: {
         // The server answered; asking again would get the same answer. The boundary offers a retry.
         retry: false,
-        throwOnError: (error, query) => query.meta?.call !== 'frame' && showsInBoundary(error),
+        throwOnError: (error, query) =>
+          query.meta?.call !== 'frame' && showsInBoundary(error, String(query.queryKey[0])),
       },
     },
   })

@@ -25,8 +25,8 @@ const failures = {
 
 const devPagesOnly = __DEV_PAGES__ ? Effect.void : Effect.fail(new DevNotFound())
 
-// A success answers with the request id, the one the failures carry too, so the page can show both.
-const provoked = (outcome: ProvokedOutcome) =>
+/** A success answers with the request id, the one the failures carry too, so the page can show both. */
+export const provoked = (outcome: ProvokedOutcome) =>
   Effect.gen(function* () {
     yield* devPagesOnly
     const { requestId } = yield* RequestContext
@@ -44,20 +44,18 @@ export const provokeWrite = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(Provoke))
   .handler(({ data, context }) => run(context, provoked(data.outcome)))
 
+/** A form's write: an empty title is Invalid on its field, "taken" is a Conflict, anything else saves. */
+export const savedDevTitle = (input: string) =>
+  Effect.gen(function* () {
+    yield* devPagesOnly
+    const title = input.trim()
+    if (title === '') return yield* new DevInvalid({ fields: ['title'] })
+    if (title.toLowerCase() === 'taken') return yield* new DevConflict()
+    return { title }
+  })
+
 const DevTitle = Schema.Struct({ title: Schema.String })
 
-/** A form's write: an empty title is Invalid on its field, "taken" is a Conflict, anything else saves. */
 export const submitDevTitle = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(DevTitle))
-  .handler(({ data, context }) =>
-    run(
-      context,
-      Effect.gen(function* () {
-        yield* devPagesOnly
-        const title = data.title.trim()
-        if (title === '') return yield* new DevInvalid({ fields: ['title'] })
-        if (title.toLowerCase() === 'taken') return yield* new DevConflict()
-        return { title }
-      }),
-    ),
-  )
+  .handler(({ data, context }) => run(context, savedDevTitle(data.title)))

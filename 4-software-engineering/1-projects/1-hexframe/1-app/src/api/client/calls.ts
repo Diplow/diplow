@@ -34,14 +34,25 @@ export async function settle<A, E extends Failure>(
   scope: string,
   call: Promise<Outcome<A, E>>,
 ): Promise<A> {
-  let outcome: Outcome<A, E>
+  let outcome: unknown
   try {
     outcome = await call
   } catch (error) {
     throw asCallFailed(error, scope)
   }
-  if (outcome.ok) return outcome.value
-  throw new CallFailed(decodeFailure(outcome.failure), scope, outcome.requestId)
+  // The type says Outcome; what came over the wire is only checked here.
+  if (!isOutcome(outcome)) throw new CallFailed(new Unexpected(), scope)
+  if (outcome.ok) return outcome.value as A
+  const requestId = typeof outcome.requestId === 'string' ? outcome.requestId : undefined
+  throw new CallFailed(decodeFailure(outcome.failure), scope, requestId)
+}
+
+type Received = { ok: true; value: unknown } | { ok: false; failure?: unknown; requestId?: unknown }
+
+function isOutcome(value: unknown): value is Received {
+  return (
+    typeof value === 'object' && value !== null && 'ok' in value && typeof value.ok === 'boolean'
+  )
 }
 
 interface ReadOptions<A, E extends Failure> {
@@ -52,10 +63,11 @@ interface ReadOptions<A, E extends Failure> {
   frame?: boolean
 }
 
-/** The query options of a read, for `useQuery`: keyed by its scope, then `key`. */
+/** The query options of a read, for `useQuery`: keyed by its scope, its mode, then `key`. */
 export function read<A, E extends Failure>({ scope, key, call, frame = false }: ReadOptions<A, E>) {
   return queryOptions({
-    queryKey: [scope, ...key],
+    // The mode is in the key: the same call as a read and as a frame read are two queries.
+    queryKey: [scope, frame ? 'frame' : 'read', ...key],
     queryFn: () => settle(scope, call()),
     meta: { call: frame ? 'frame' : 'read' },
   })

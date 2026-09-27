@@ -2,9 +2,9 @@
 // request's context on Start's `context`; the helper provides it as Effect services, runs the program
 // on the one ManagedRuntime, and returns the value or the failure, encoded. Nothing else calls `run*`:
 // eslint.config.ts says no.
-import { Cause, Context, Effect, Exit, Layer, ManagedRuntime } from 'effect'
+import { Cause, Context, Effect, Exit, Layer, ManagedRuntime, Schema } from 'effect'
 
-import { Unexpected, encodeFailure, type Failure, type Outcome } from '../errors/failure'
+import { Failure, Unexpected, encodeFailure, type Outcome } from '../errors/failure'
 
 /** What Start's middleware knows about the request, as a program sees it. */
 export class RequestContext extends Context.Service<
@@ -31,10 +31,24 @@ export interface StartContext {
   readonly requestId: string
 }
 
+const isFailure = Schema.is(Failure)
+
 /**
- * Runs a server function's program and returns its outcome. A failure the program declares is sent
- * encoded; a defect, an interruption or a failure outside the union becomes `Unexpected`, reported
- * with the request id and never sent as it is.
+ * The failure to send for a failed program: the one it declares, when that is all that went wrong
+ * and the union knows it. A defect (even beside a declared failure), an interruption, or a value the
+ * union does not know, reached through an untyped path, is reported and sent as `Unexpected`.
+ */
+async function failureOf<E extends Failure>(cause: Cause.Cause<E>, context: StartContext) {
+  const declared = Cause.findErrorOption(cause)
+  if (declared._tag === 'Some' && !Cause.hasDies(cause) && isFailure(declared.value)) {
+    return declared.value
+  }
+  return reported(cause, context)
+}
+
+/**
+ * Runs a server function's program and returns its outcome: the value, or the failure encoded with
+ * the request id. Only failures in the union reach the client as they are; see `failureOf`.
  */
 export async function run<A, E extends Failure>(
   context: StartContext,
@@ -44,9 +58,7 @@ export async function run<A, E extends Failure>(
     program.pipe(Effect.provideService(RequestContext, { requestId: context.requestId })),
   )
   if (Exit.isSuccess(exit)) return { ok: true, value: exit.value }
-  const declared = Cause.findErrorOption(exit.cause)
-  const failure: E | Unexpected =
-    declared._tag === 'Some' ? declared.value : await reported(exit.cause, context)
+  const failure: E | Unexpected = await failureOf(exit.cause, context)
   return { ok: false, failure: encodeFailure(failure), requestId: context.requestId }
 }
 

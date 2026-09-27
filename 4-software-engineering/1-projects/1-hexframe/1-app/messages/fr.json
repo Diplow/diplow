@@ -143,7 +143,7 @@
   "error_dev_title_taken": "Ce titre est déjà pris.",
   "error_dev_not_found": "Cet enregistrement de dev n’existe pas. (L’entrée de la table pour DevNotFound, dans toutes les portées.)",
   "dev_errors_title": "Erreurs",
-  "dev_errors_description": "Chaque canal qu’un échec peut prendre, provoqué à travers l’assistant des fonctions serveur. Où il s’affiche dépend de sa nature, et de ce que l’appel lisait ou écrivait ; jamais de la page.",
+  "dev_errors_description": "L’assistant des fonctions serveur fait passer un échec par chacun des canaux possibles. L’endroit où il s’affiche dépend de sa nature et de ce que l’appel lisait ou écrivait, jamais de la page.",
   "dev_errors_outcomes": "Terminer l’appel par",
   "dev_errors_success": "Réussite",
   "dev_errors_read_title": "Une lecture",

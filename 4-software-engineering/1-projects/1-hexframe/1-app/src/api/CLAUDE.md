@@ -17,7 +17,7 @@ The layer between what the client shows and what the domains know. On the server
 | `server/` | `run.ts`, the helper: `RequestContext`, the one `ManagedRuntime`, and `run(context, program)`; `middleware.ts`, Start's function middleware, which `src/start.ts` runs before every server function |
 | `errors/` | Shared by both sides and pure: `failure.ts`, the union of every failure and its wire form (`Outcome`, `encodeFailure`, `decodeFailure`); `channel.ts`, the channel table; `messages.ts`, the message table. Tested |
 | `client/` | `calls.ts`, `settle` and the `read` and `write` builders for TanStack Query; `channels.ts`, the QueryClient that carries each failure out, and `submitWrite` for a form; `ReadBoundary`, the nearest boundary of a read |
-| `dev/` | The failures and server functions `/dev/errors` provokes every channel with |
+| `dev/` | The failures and server functions `/dev/errors` uses to provoke every channel. They stay members of `Failure` as long as the page exists; outside dev and previews the functions answer `NotFound` |
 
 ## Effect stops at the server function
 
@@ -34,7 +34,7 @@ export const getTile = createServerFn({ method: 'GET' })
 ## Errors
 
 - **Each domain declares its errors** as tagged classes in its own language (`EntitlementMissing`), with `Schema.TaggedError`. Each carries one **kind** from a closed set, as a field: `kind: kind('Forbidden')`, or `...invalid` for an `Invalid` error, which names the form fields at fault. The kinds are in `src/domains/kind.ts`, below every domain, so a domain can declare them without importing the API layer: `Unauthenticated`, `Forbidden`, `Invalid`, `NotFound`, `Conflict`, `Unexpected`.
-- **A server function's type lists the errors it can fail with**: its `Outcome<A, E>`. `run` refuses, by its type, a program whose errors are not in `Failure`, the union in `errors/failure.ts`; a domain's errors join it as the domain is built. Repository and infrastructure failures, defects and interruptions collapse to `Unexpected`: reported with the request id (to the server's log until Sentry, HEX-19), never sent as they are.
+- **A server function's type lists the errors it can fail with**: its `Outcome<A, E>`. `run` refuses, by its type, a program whose errors are not in `Failure`, the union in `errors/failure.ts`; a domain's errors join it as the domain is built. So a repository's or an infrastructure's typed failure never reaches `run` typed: the domain maps it to one of its own errors, or turns it into a defect (`Effect.orDie`). Defects, interruptions and anything outside the union (a defect beside a declared failure included) collapse to `Unexpected`: reported with the request id (to the server's log until Sentry, HEX-19), never sent as they are.
 - **The client decodes the union back into the tagged classes** with Effect Schema. `settle` throws a `CallFailed` holding the decoded failure, the scope and the request id. Anything the union does not know, or a call that never reached the helper, is `Unexpected`.
 - **The channel is picked by kind and by the call**, never by a component's author. `errors/channel.ts` is this table, row for row:
 
@@ -48,7 +48,11 @@ export const getTile = createServerFn({ method: 'GET' })
 | a write | anything else | one toast |
 
 - **The message table** is keyed by `_tag`, optionally narrowed by a scope (the server function's name, which the call names), first match wins, with a fallback per kind, in both languages. The server's own sentence never reaches the screen.
-- **A feature writes no error handling**: components never `try/catch` a call, reducers never hold an error. A read is `useQuery(read({ scope, key, call }))` inside a `ReadBoundary` (`frame: true` for one that frames every page), a write `useMutation(write(scope, call))`, a form's write `validators.onSubmitAsync: submitWrite({ scope, call, onSaved })`; the QueryClient and `submitWrite` send each failure to its channel.
+- **A feature writes no error handling**: components never `try/catch` a call, reducers never hold an error. The QueryClient and `submitWrite` send each failure to its channel:
+  - a read a page shows is `useQuery(read({ scope, key, call }))`, inside a `ReadBoundary`;
+  - a read that frames every page is `useQuery(read({ scope, key, call, frame: true }))`, with no boundary: its failure is reported and it renders nothing;
+  - a write is `useMutation(write(scope, call))`;
+  - a form's write is `validators.onSubmitAsync: submitWrite({ scope, call, onSaved })`.
 
 Adapted from the error model of a previous project; its channels survive, its HTTP statuses become kinds.
 
@@ -56,4 +60,4 @@ Adapted from the error model of a previous project; its channels survive, its HT
 
 - **Every server function runs through `run`**, and validates its input with an Effect Schema (`Schema.toStandardSchemaV1`) in `.validator`.
 - **The sign-in page is IAM's** (HEX-18): the redirect goes to `/sign-in?redirect=<where the user was>`, in the page's language.
-- **The dev server functions answer `NotFound` outside dev and previews**, as the `/dev` pages answer 404.
+- **The dev server functions answer `NotFound` outside dev and previews**, as the `/dev` pages answer 404. A malformed call fails Start's validation first, which runs before the handler, and reaches the client as `Unexpected`.

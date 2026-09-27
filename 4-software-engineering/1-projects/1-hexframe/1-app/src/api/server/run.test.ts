@@ -1,4 +1,4 @@
-import { Effect } from 'effect'
+import { Cause, Effect } from 'effect'
 import { describe, expect, it } from 'vitest'
 
 import { DevConflict, DevInvalid } from '../dev/failures'
@@ -37,6 +37,20 @@ describe('the server function helper', () => {
       requestId: 'req-1',
     })
     expect(JSON.stringify(outcome)).not.toContain('database')
+  })
+
+  it('sends Unexpected when a defect sits beside a declared failure', async () => {
+    const both = Cause.combine(Cause.fail(new DevConflict()), Cause.die(new Error('lost')))
+    expect(await run(context, Effect.failCause(both))).toMatchObject({
+      ok: false,
+      failure: { _tag: 'Unexpected' },
+    })
+  })
+
+  it('sends Unexpected for a failure the union does not know', async () => {
+    // Only an untyped path can get one past `run`'s type; the helper still refuses to send it.
+    const stray = Effect.fail({ _tag: 'TileMissing', kind: 'NotFound' } as unknown as DevConflict)
+    expect(await run(context, stray)).toMatchObject({ ok: false, failure: { _tag: 'Unexpected' } })
   })
 
   it('sends an exception thrown inside the program as Unexpected', async () => {
