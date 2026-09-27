@@ -37,15 +37,36 @@ describe('the theme', () => {
     },
   )
 
-  it('gives every colour token a value in light and in dark', () => {
-    const variables = tokens.flatMap(({ name, foreground }) =>
-      foreground ? [name, foreground] : [name],
+  const variables = tokens.flatMap(({ name, foreground }) =>
+    foreground ? [name, foreground] : [name],
+  )
+
+  // Each theme's variables, by name, with their value; a declaration left empty is not one.
+  function declared(selector: RegExp) {
+    const block = selector.exec(css)?.[1] ?? ''
+    return new Map(
+      Array.from(block.matchAll(/--([\w-]+):\s*([^;\s][^;]*);/g), ([, name = '', value = '']) => [
+        name,
+        value,
+      ]),
     )
+  }
+
+  it('gives every colour token a value in light and in dark', () => {
     for (const [theme, selector] of Object.entries(themes)) {
-      const block = selector.exec(css)?.[1] ?? ''
-      const declared = new Set(Array.from(block.matchAll(/--([\w-]+):/g), ([, name]) => name))
-      const missing = variables.filter((name) => !declared.has(name))
-      expect(missing, theme).toEqual([])
+      const values = declared(selector)
+      expect(
+        variables.filter((name) => !values.has(name)),
+        theme,
+      ).toEqual([])
+    }
+  })
+
+  it('lists every colour the themes declare, so /dev/ui misses none', () => {
+    for (const [theme, selector] of Object.entries(themes)) {
+      const colours = [...declared(selector)].filter(([, value]) => value.startsWith('oklch('))
+      const unlisted = colours.map(([name]) => name).filter((name) => !variables.includes(name))
+      expect(unlisted, theme).toEqual([])
     }
   })
 })

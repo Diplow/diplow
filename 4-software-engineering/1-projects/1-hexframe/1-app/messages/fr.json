@@ -6,5 +6,5 @@
   "theme_toggle_to_light": "Passer au thème clair",
   "locale_switch_label": "Langue",
   "dev_ui_tokens_title": "Jetons du thème",
-  "dev_ui_tokens_body": "Chaque jeton de couleur du thème, avec son premier plan posé dessus quand il en a un. Changez de thème pour voir l’autre moitié."
+  "dev_ui_tokens_body": "Chaque jeton de couleur du thème, avec sa couleur de premier plan par-dessus quand il en a une. Changez de thème pour voir l’autre moitié."
 }
