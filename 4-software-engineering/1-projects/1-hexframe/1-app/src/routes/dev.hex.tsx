@@ -5,10 +5,10 @@ import { scenes, ulysse, type Scene } from '#/ui/hex/prototype/fixtures'
 import { SvgCanvas } from '#/ui/hex/prototype/SvgCanvas'
 
 export const Route = createFileRoute('/dev/hex')({
-  // A dev page, like /dev/ui: a production build answers 404.
+  // A dev page, like /dev/ui: production answers 404 (vite.config.ts).
   beforeLoad: () => {
     // eslint-disable-next-line @typescript-eslint/only-throw-error -- TanStack Router's notFound() is meant to be thrown; the router catches it
-    if (!import.meta.env.DEV) throw notFound()
+    if (!__DEV_PAGES__) throw notFound()
   },
   validateSearch: (search: Record<string, unknown>): { scene: Scene } => ({
     scene:

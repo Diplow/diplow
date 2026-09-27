@@ -5,8 +5,12 @@ import viteReact from '@vitejs/plugin-react'
 import { nitro } from 'nitro/vite'
 import { defineConfig } from 'vite'
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   resolve: { tsconfigPaths: true },
+  define: {
+    // The /dev pages: served by `pnpm dev` and on Vercel previews, a 404 in production and in a local build.
+    __DEV_PAGES__: JSON.stringify(command === 'serve' || process.env.VERCEL_ENV === 'preview'),
+  },
   plugins: [
     paraglideVitePlugin({
       project: './project.inlang',
@@ -20,4 +24,4 @@ export default defineConfig({
     tanstackStart(),
     viteReact(),
   ],
-})
+}))
