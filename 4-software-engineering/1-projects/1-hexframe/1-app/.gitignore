@@ -1,0 +1,9 @@
+# Generated: Paraglide's message functions, Nitro's and Vercel's build output
+src/paraglide/
+.nitro/
+.output/
+.tanstack/
+.vercel/
+dist/
+.env*
+!.env.example

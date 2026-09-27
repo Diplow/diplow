@@ -1,0 +1,8 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "hello_title": "Bonjour",
+  "hello_body": "hexframe organise un système en hiérarchie de tuiles, pour que l’IA travaille dans le sens de son intention.",
+  "theme_toggle_to_dark": "Passer au thème sombre",
+  "theme_toggle_to_light": "Passer au thème clair",
+  "locale_switch_label": "Langue"
+}
