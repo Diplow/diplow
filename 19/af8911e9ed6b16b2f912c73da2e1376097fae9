@@ -1,0 +1,61 @@
+4-software-engineering/1-projects/1-hexframe/1-app/dependency-cruiser.config.ts
+  s_2908cd458e0dd6::t_67de0c3b1b42d5 56-57
+  s_2908cd458e0dd6::t_e9bca6ff997582 3-5,48-49,51,54-55,58-60
+  s_2908cd458e0dd6::t_32377e93bbe8de 61
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_2908cd458e0dd6::t_57028396be120e 111-135
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/breadcrumb/Breadcrumb.tsx
+  s_2908cd458e0dd6::t_656af1afa75ad6 1-71
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/view/view.ts
+  s_2908cd458e0dd6::t_3c919baeddc034 50-55,61-62,64-69
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/conversation/fixtures.ts
+  s_2908cd458e0dd6::t_67de0c3b1b42d5 43-49,62-68,70-76,83-89,97-103
+  s_2908cd458e0dd6::t_3cfa218cabf309 1-7,9-42,50-61,69,77-82,90-96,104-114
+  s_2908cd458e0dd6::t_fa7baae4c80455 8
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/conversation/timeline.test.ts
+  s_2908cd458e0dd6::t_fa7baae4c80455 1-68
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/CLAUDE.md
+  s_2908cd458e0dd6::t_7a744ab5f64b5d 21
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/dev.system.tsx
+  s_2908cd458e0dd6::t_04a1f811fb015d 9
+  s_2908cd458e0dd6::t_b0ffa07416b83b 1-8,10-58
+4-software-engineering/1-projects/1-hexframe/1-app/src/routeTree.gen.ts
+  s_2908cd458e0dd6::t_e49ea0623816c9 14,27-31,41,47,54,59,61-62,68,88-94,108
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/fixtures.ts
+  s_2908cd458e0dd6::t_7a744ab5f64b5d 1
+  s_2908cd458e0dd6::t_99e630e3da891e 15-20
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/conversation/timeline.ts
+  s_2908cd458e0dd6::t_fa7baae4c80455 1-68
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/conversation/TileCard.tsx
+  s_2908cd458e0dd6::t_9166a7b57e48a0 1-8,10-31,35-51
+  s_2908cd458e0dd6::t_fa7baae4c80455 9
+  s_2908cd458e0dd6::t_67de0c3b1b42d5 32-34
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_2908cd458e0dd6::t_57028396be120e 111-135
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/view/view.test.ts
+  s_2908cd458e0dd6::t_ee605e074a846b 8,71-85
+  s_2908cd458e0dd6::t_0beae91fd7bafe 86-87
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/conversation/Entry.tsx
+  s_2908cd458e0dd6::t_fc7055371bebd4 1-19,21-91
+  s_2908cd458e0dd6::t_fa7baae4c80455 20
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/conversation/Conversation.tsx
+  s_2908cd458e0dd6::t_50acad8ded2af5 1-10,12-26,31-116
+  s_2908cd458e0dd6::t_fa7baae4c80455 11
+  s_2908cd458e0dd6::t_67de0c3b1b42d5 27-30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "19af8911e9ed6b16b2f912c73da2e1376097fae9",
+  "prompts": {},
+  "sessions": {
+    "s_2908cd458e0dd6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0cbfaeea-8195-45e3-a873-1ae996767d5d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
