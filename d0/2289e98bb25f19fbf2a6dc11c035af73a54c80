@@ -1,0 +1,38 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/layout.test.ts
+  s_075b0a1e2e68ed::t_906d9597ee5640 72,82
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/dev.hex.tsx
+  s_075b0a1e2e68ed::t_e2fef0d8009736 1,21-22,35
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/geometry.test.ts
+  s_075b0a1e2e68ed::t_73945619887785 96-97
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/prototype/appearance.tsx
+  s_075b0a1e2e68ed::t_73945619887785 65-67,91
+  s_075b0a1e2e68ed::t_4557d3d405dfd5 5,73-76
+  s_075b0a1e2e68ed::t_e2fef0d8009736 1-2
+  s_075b0a1e2e68ed::t_7849bf2d090552 64
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/prototype/SvgCanvas.tsx
+  s_075b0a1e2e68ed::t_5a45ec1a399558 1-3,9-10,15,19,25
+  s_075b0a1e2e68ed::t_73945619887785 7,38
+  s_075b0a1e2e68ed::t_e2fef0d8009736 4
+  s_075b0a1e2e68ed::t_a4ea2676adc4e2 8
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/geometry.ts
+  s_075b0a1e2e68ed::t_73945619887785 92-97
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/layout.ts
+  s_075b0a1e2e68ed::t_3dda6f72b80db8 49
+  s_075b0a1e2e68ed::t_47b5fcb5fe02d5 31-33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d02289e98bb25f19fbf2a6dc11c035af73a54c80",
+  "prompts": {},
+  "sessions": {
+    "s_075b0a1e2e68ed": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c8d2900e-71de-4b41-bb3b-4d0e35e8016f",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
