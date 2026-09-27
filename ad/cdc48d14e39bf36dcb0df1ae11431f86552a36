@@ -1,0 +1,36 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/CLAUDE.md
+  s_2908cd458e0dd6::t_08c4145d193441 19
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE.md
+  s_2908cd458e0dd6::t_578ec6f192a90a 19,59,62
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/client/channels.test.ts
+  s_2908cd458e0dd6::t_1f4ac2ef54acd4 32-35
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/access/CLAUDE.md
+  s_2908cd458e0dd6::t_578ec6f192a90a 1-20
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE.md
+  s_2908cd458e0dd6::t_578ec6f192a90a 22-23,26
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE.md
+  s_2908cd458e0dd6::t_08c4145d193441 20
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/check-client-bundle.ts
+  s_2908cd458e0dd6::t_7a460c2645d8d1 10-11,30-34
+  s_2908cd458e0dd6::t_1f4ac2ef54acd4 8-9,22-23,27-29
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/dev/programs.ts
+  s_2908cd458e0dd6::t_1f4ac2ef54acd4 2-4
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/CLAUDE.md
+  s_2908cd458e0dd6::t_578ec6f192a90a 1-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "adcdc48d14e39bf36dcb0df1ae11431f86552a36",
+  "prompts": {},
+  "sessions": {
+    "s_2908cd458e0dd6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0cbfaeea-8195-45e3-a873-1ae996767d5d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
