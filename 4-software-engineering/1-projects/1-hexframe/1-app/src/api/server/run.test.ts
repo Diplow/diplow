@@ -1,9 +1,10 @@
-import { Cause, Effect } from 'effect'
+import { Cause, Effect, Option } from 'effect'
 import { describe, expect, it } from 'vitest'
 
 import { Bus } from '#/domains/bus'
 
 import { DevConflict, DevInvalid } from '../dev/failures'
+import { WaitUntil } from './bus'
 import { RequestContext, run } from './run'
 
 const context = { requestId: 'req-1', waitUntil: () => undefined }
@@ -28,6 +29,25 @@ describe('the server function helper', () => {
       return 'published'
     })
     expect(await run(context, program)).toEqual({ ok: true, value: 'published' })
+  })
+
+  it("hands the work a program leaves pending to the platform's waitUntil, as a promise", async () => {
+    let ran = false
+    const kept: Array<Promise<unknown>> = []
+    const program = Effect.gen(function* () {
+      const waitUntil = yield* Effect.serviceOption(WaitUntil)
+      if (Option.isSome(waitUntil)) {
+        waitUntil.value(
+          Effect.sync(() => {
+            ran = true
+          }),
+        )
+      }
+    })
+    await run({ ...context, waitUntil: (promise) => kept.push(promise) }, program)
+    expect(kept).toHaveLength(1)
+    await Promise.all(kept)
+    expect(ran).toBe(true)
   })
 
   it('sends a declared failure encoded, with the request id', async () => {

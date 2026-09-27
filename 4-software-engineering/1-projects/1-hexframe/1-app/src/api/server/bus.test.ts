@@ -83,6 +83,21 @@ describe('the server bus', () => {
     }),
   )
 
+  it.effect('keeps a subscription listening after its reaction throws instead of failing', () =>
+    Effect.gen(function* () {
+      const seen: Array<number> = []
+      const throwsOnFirst = on(DevHappened, ({ n }) => {
+        if (n === 1) throw new Error('a bug before the effect is built')
+        return Effect.sync(() => seen.push(n))
+      })
+      yield* Effect.all([
+        settled(new DevHappened({ n: 1 })),
+        settled(new DevHappened({ n: 2 })),
+      ]).pipe(Effect.provide(bus(throwsOnFirst)))
+      expect(seen).toEqual([2])
+    }),
+  )
+
   it.live('delivers to each subscription in the order events were published', () =>
     Effect.gen(function* () {
       const seen: Array<number> = []

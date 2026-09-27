@@ -23,10 +23,19 @@ function logged(fact: Fact) {
   console.debug(`${fact._tag} published`, { bus: 'client', verbosity: 'medium' })
 }
 
-/** Tells every subscribed feature about a fact. Nothing answers: the bus is never a way to ask. */
+/**
+ * Tells every subscribed feature about a fact. Nothing answers: the bus is never a way to ask. A
+ * feature that throws while reacting is reported, and the others still hear the fact.
+ */
 export function publish(fact: Fact) {
   logged(fact)
-  for (const listener of listeners) listener(fact)
+  for (const listener of listeners) {
+    try {
+      listener(fact)
+    } catch (error) {
+      console.error(`A feature failed reacting to ${fact._tag}`, error)
+    }
+  }
 }
 
 /**

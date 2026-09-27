@@ -38,6 +38,19 @@ describe('the client bus', () => {
     expect(seen).toEqual([])
   })
 
+  it('still tells the other features when one throws while reacting', () => {
+    const report = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    renderHook(() => {
+      useFact(DevHappened, () => {
+        throw new Error('a bug in a feature')
+      })
+    })
+    const { seen } = subscribed()
+    publish(new DevHappened({ n: 1 }))
+    expect(seen).toEqual([new DevHappened({ n: 1 })])
+    expect(report).toHaveBeenCalledOnce()
+  })
+
   it('decodes a fact crossing into the client by its schema', () => {
     const { seen } = subscribed()
     receive(DevHappened, { _tag: 'DevHappened', n: 2 })

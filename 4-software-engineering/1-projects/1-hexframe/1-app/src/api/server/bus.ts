@@ -47,7 +47,8 @@ function deliver<R>(subscription: Subscription<R>, slot: number) {
   return ({ event, handled }: Envelope) => {
     const done = handled[slot]
     if (done === undefined) return Effect.void
-    return subscription.handle(event).pipe(
+    // Suspended, so a reaction that throws while building its effect is caught like one that fails.
+    return Effect.suspend(() => subscription.handle(event)).pipe(
       Effect.catchCause((cause) => Effect.logError(`A subscriber to ${event._tag} failed`, cause)),
       Effect.ensuring(Deferred.succeed(done, undefined)),
     )
