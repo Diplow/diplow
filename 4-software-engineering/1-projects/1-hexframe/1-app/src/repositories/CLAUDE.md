@@ -5,7 +5,8 @@ owner: diplo
 preview: >-
   The bottom layer: Effect layers over the SDKs that hold the technical
   complexity, one folder per SDK family: the database (Drizzle over Neon, PGlite
-  in tests) and auth (Better Auth, Stripe to come).
+  in tests), auth (Better Auth, Stripe to come) and observability (Sentry,
+  PostHog).
 ---
 # repositories
 
@@ -15,6 +16,7 @@ The layer under [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains
 |---|---|
 | `database/` | Drizzle over Effect's Postgres client, the committed migrations' runner and the PGlite test harness: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE\|database]] |
 | `auth/` | Better Auth over the database, called through its server API, with its test harness; its Stripe plugin comes with Entitlements: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE\|auth]] |
+| `observability/` | Sentry and PostHog, on both sides: where errors, traces and the leveled event log go, and the flag that raises one user's verbosity. Plain functions for the browser, Effect services for the server's runtime: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/CLAUDE\|observability]] |
 
 ## Rules
 

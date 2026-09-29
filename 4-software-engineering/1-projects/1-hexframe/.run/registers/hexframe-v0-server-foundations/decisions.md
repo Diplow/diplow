@@ -7,7 +7,8 @@ preview: >-
   foundations, where a ticket left room: Effect 4 with Drizzle v1's own
   Effect driver, where the error kinds live, what a server function returns,
   how the client carries each channel out, how migrations run, how the two
-  buses are placed, kept alive and logged, and how IAM sits on Better Auth.
+  buses are placed, kept alive and logged, how IAM sits on Better Auth, and how
+  Sentry and PostHog are wired, what they get and at which verbosity.
 ---
 # Decisions
 
@@ -106,3 +107,28 @@ HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). Start strips what a han
 ### DEC-24 Signing up and in are rate limited per IP by Better Auth, counted in the database
 
 HEX-18, [#15](https://github.com/Diplow/diplow/pull/15). cubic's first review found nothing limited credential attempts, since Better Auth's limiter does not run on `auth.api` calls. Its defaults allow 3 sign-ups or sign-ins per IP in 10 seconds; with `storage: 'database'` the count lives in a `rate_limit` table, so Vercel's instances count together, where the memory store would count per instance. The IP is `x-forwarded-for`, which Vercel overwrites with the client's. A refused attempt is IAM's `TooManyAttempts`, of kind Forbidden, so a form's submit shows it as a toast. Sign-up and sign-in count in separate buckets, so this slows the one enumeration sign-up allows (DEC-21) rather than preventing it: that takes email verification, and a provider to send it (`HEX-18#PARK-1`).
+
+### DEC-25 One observability seam: plain functions for the browser, Effect services for the server's runtime
+
+HEX-19, PR to come. Sentry's TanStack Start SDK (a beta), `posthog-js` and `posthog-node` are imported by `src/repositories/observability/` only, like any SDK. The browser's side is plain functions, since the client is not Effect; the server's is two services, `Analytics` and `ErrorTracker`, so the tests swap them for recorders. Sentry starts in `src/server.ts`, the server entry, which `wrapFetchWithSentry` also traces; it is not preloaded with `node --import`, which Vercel's Nitro output does not offer, so Node's automatic instrumentation (outgoing HTTP, `pg`) is partial: errors and request traces are there. Sentry's Vite plugin, which uploads source maps, is not wired: it needs `SENTRY_AUTH_TOKEN`, a secret, and the Sentry org and project, none of which exist yet.
+
+### DEC-26 A log line names its topic, not its level; the levels map topics, and replace DEC-13's annotation
+
+HEX-19, PR to come. `observability/levels.ts` gives each topic of STACK.md's table (`page`, `action`, `call`, `error`, `domain`, `state`, `bus`, `info`, `repository`, `render`) the least verbose level that logs it, so a caller never picks a level and moving a topic is one line. On the server a line names its topic with an annotation, `topic: 'bus'`, which replaces DEC-13's `verbosity: 'medium'`; a line without one is `info`, or `error` at the error level. The logger added beside Effect's own sends what the request's level logs to PostHog, as an event named by the topic, carrying identifiers only (request id, scope, kind, code, bus).
+
+### DEC-27 An error is reported where it is first seen: the server for every failure it sends, the client for what never reached it
+
+HEX-19, PR to come. `run` logs a declared failure as PostHog's `error` event alone, since it is an answer, not a bug, and anything that becomes `Unexpected` with its cause, so Sentry captures it and PostHog's event carries Sentry's event id. Any error line with a cause does the same, a bus subscriber's failure included. The client reports only a call without a request id (it never reached the helper) and a feature that threw, through `reportError`: Sentry, then the `error` event. So a frame read's failure, the channel table's "reported", is the server's report, and the client no longer logs it again.
+
+### DEC-28 The DSN, PostHog's key and its host are public `VITE_` variables, read at build time by both sides; Sentry gets no user data
+
+HEX-19, PR to come. Sentry's DSN and PostHog's project key are meant for browsers, so one `VITE_SENTRY_DSN`, `VITE_POSTHOG_KEY` and `VITE_POSTHOG_HOST` serve both sides, and a side without them starts nothing. The host has no default: the region is the PostHog project's, chosen when it is created. Sentry's v11 `dataCollection` is turned off entirely (cookies, the session's among them, headers, bodies, query parameters, local variables, database parameters), and `tracesSampleRate` is 1 while traffic is a handful of people. No Sentry project, PostHog project or `verbosity` flag exists yet: creating them is a human's (`HEX-19#PARK-1` holds the rest of what is left).
+
+### DEC-29 The `verbosity` flag raises one Account's level on both sides; the environment is fixed at build time
+
+HEX-19, PR to come. `__ENVIRONMENT__`, set in `vite.config.ts` from `VERCEL_ENV`, is `development` under `pnpm dev`, `preview` on a Vercel preview and `production` otherwise, a local build included. A multivariate flag keyed `verbosity` can only raise that level. The server reads it for the signed-in Account in `requestLog`, before the program, and keeps each value five minutes, with PostHog's request capped at 1.5 seconds, so a flag costs at most one request per Account every five minutes. The browser reads it as PostHog loads flags, once `signedIn` has identified the device with the Account id; the guard's sign-in redirect resets it. A page no guard protects stays anonymous, so the flag reaches the browser on guarded pages only, which Mapping's all are.
+
+### DEC-30 PostHog captures page visits and action clicks itself; the other topics have no call site yet
+
+HEX-19, PR to come. Both log at every level, so `capture_pageview: 'history_change'` and autocapture do it with no code of ours. Server function calls, errors and bus messages are logged. Domain service calls, state actions, repository calls, renders and shortcuts have no call site yet: no domain logs its calls, no state hook dispatches through a shared place, and TanStack Hotkeys has not arrived. Each logs with its `topic` as it is built (api's CLAUDE.md, "Observability").
+
