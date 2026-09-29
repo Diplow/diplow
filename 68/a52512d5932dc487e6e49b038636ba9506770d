@@ -1,0 +1,40 @@
+4-software-engineering/1-projects/1-hexframe/.cubic/CLAUDE.md
+  s_20c528098b0fdd::t_ea66e23d1ca5d1 26
+.skills/1-ship/run-autonomous-project/references/helpers.md
+  s_20c528098b0fdd::t_3d2c4625a3d8fb 19
+  s_20c528098b0fdd::t_9246597eeaf5a1 7
+  s_20c528098b0fdd::t_fdb0ba0a896225 45
+  s_20c528098b0fdd::t_d358352e3104a6 26
+.skills/1-ship/run-autonomous-project/references/contract.md
+  s_20c528098b0fdd::t_59d828bef5889a 71
+  s_20c528098b0fdd::t_7ddebb7fbd03d2 170
+.skills/1-ship/run-autonomous-project/references/pr-loop.md
+  s_20c528098b0fdd::t_c212c2bbd75635 73
+  s_20c528098b0fdd::t_88560ff9f762b0 134
+  s_20c528098b0fdd::t_f97b96bb0d2d8b 117-118
+  s_20c528098b0fdd::t_0dc3bba6d13fc4 129
+  s_20c528098b0fdd::t_ee868375451e94 104
+  s_20c528098b0fdd::t_3ddd23b19cddff 84-87
+.skills/1-ship/run-autonomous-project/references/top.md
+  s_20c528098b0fdd::t_d88f5299f96f1a 27
+4-software-engineering/1-projects/1-hexframe/.run/run.yaml
+  s_20c528098b0fdd::t_29ea463370fb6b 58-60,64-67
+  s_20c528098b0fdd::t_ea66e23d1ca5d1 61-62
+  s_20c528098b0fdd::t_d419f302fbf67a 116
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "68a52512d5932dc487e6e49b038636ba9506770d",
+  "prompts": {},
+  "sessions": {
+    "s_20c528098b0fdd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7fa107e8-9929-481a-899e-3739fffcebfe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
