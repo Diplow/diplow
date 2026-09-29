@@ -2,6 +2,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { createRouter } from '@tanstack/react-router'
 
 import { makeQueryClient } from '#/api/client/channels'
+import { startObservability } from '#/api/observability/client'
 import { deLocalizeUrl, localizeUrl } from '#/paraglide/runtime'
 
 import { routeTree } from './routeTree.gen'
@@ -9,7 +10,7 @@ import { routeTree } from './routeTree.gen'
 export function getRouter() {
   // One per router, so one per request on the server: a user's reads never reach another's page.
   const queryClient = makeQueryClient()
-  return createRouter({
+  const router = createRouter({
     routeTree,
     scrollRestoration: true,
     defaultPreload: 'intent',
@@ -22,6 +23,9 @@ export function getRouter() {
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     ),
   })
+  // In the browser, once: Sentry, whose traces follow the router, and PostHog. Nothing on the server.
+  startObservability(router)
+  return router
 }
 
 declare module '@tanstack/react-router' {

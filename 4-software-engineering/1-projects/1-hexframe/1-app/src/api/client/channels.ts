@@ -9,6 +9,7 @@ import { toast } from '#/ui/feedback/Toaster'
 import { channelFor, type Call } from '../errors/channel'
 import type { Failure, Outcome } from '../errors/failure'
 import { messageFor } from '../errors/messages'
+import { reportError } from '../observability/client'
 import { asCallFailed, settle, type CallFailed } from './calls'
 
 let signingIn = false
@@ -25,21 +26,20 @@ function signIn() {
   window.location.assign(localizeHref(`/sign-in?redirect=${encodeURIComponent(here)}`))
 }
 
-// Until Sentry is wired (HEX-19), a report is the browser's console, with the request id to trace it.
-function report({ failure, scope, requestId }: CallFailed) {
-  console.error(`${scope} failed: ${failure._tag} (${failure.kind})`, { requestId })
-}
-
 /**
- * Carries out the channels that show nothing in place: the sign-in redirect, the report and the toast.
- * The boundary's states and a form's fields are shown where they belong, by ReadBoundary and
- * `submitWrite`.
+ * Carries out the channels that show nothing in place: the sign-in redirect and the toast. The
+ * boundary's states and a form's fields are shown where they belong, by ReadBoundary and
+ * `submitWrite`. The report is the server's: it logged every failure it sent, with the request id,
+ * so the client reports only a call that never reached it.
  */
 function raise(failed: CallFailed, call: Call) {
-  const channel = channelFor(call, failed.failure.kind)
+  const { failure, scope } = failed
+  if (failed.requestId === undefined) {
+    reportError(failed, { scope, kind: failure.kind, code: failure._tag })
+  }
+  const channel = channelFor(call, failure.kind)
   if (channel === 'sign-in') signIn()
-  else if (channel === 'report') report(failed)
-  else if (channel === 'toast') toast.error(messageFor(failed.failure, failed.scope))
+  else if (channel === 'toast') toast.error(messageFor(failure, scope))
 }
 
 /** Whether a read's failure shows in the nearest boundary, which is where the query throws it. */

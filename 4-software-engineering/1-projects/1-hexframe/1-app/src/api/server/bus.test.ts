@@ -126,7 +126,7 @@ describe('the server bus', () => {
         Effect.provide(Logger.layer([capture])),
       )
       expect(lines).toEqual([
-        { message: ['DevHappened published'], annotations: { bus: 'server', verbosity: 'medium' } },
+        { message: ['DevHappened published'], annotations: { bus: 'server', topic: 'bus' } },
       ])
     }),
   )

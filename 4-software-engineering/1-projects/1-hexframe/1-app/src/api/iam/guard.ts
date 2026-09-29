@@ -9,6 +9,7 @@ import { localizeHref } from '#/paraglide/runtime'
 
 import { asCallFailed, settle } from '../client/calls'
 import { channelFor } from '../errors/channel'
+import { forget, identify } from '../observability/client'
 import { session } from './iam'
 
 /**
@@ -50,10 +51,14 @@ export function continueTo(redirect: string | undefined) {
  */
 export async function signedIn({ location }: { location: ParsedLocation }) {
   try {
-    return { session: await settle('session', session({ data: undefined })) }
+    const proven = await settle('session', session({ data: undefined }))
+    // In the browser, this device's events and flags are now the Account's (a no-op on the server).
+    identify(proven.account.id)
+    return { session: proven }
   } catch (error) {
     const failed = asCallFailed(error, 'session')
     if (channelFor('read', failed.failure.kind) === 'sign-in') {
+      forget()
       redirect({ to: '/sign-in', search: { redirect: location.href }, throw: true })
     }
     throw failed

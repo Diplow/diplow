@@ -10,6 +10,14 @@ export default defineConfig(({ command }) => ({
   define: {
     // The /dev pages: served by `pnpm dev` and on Vercel previews, a 404 in production and in a local build.
     __DEV_PAGES__: JSON.stringify(command === 'serve' || process.env.VERCEL_ENV === 'preview'),
+    // Where the app runs, for the verbosity it logs at (src/api/observability/): a local build counts as production.
+    __ENVIRONMENT__: JSON.stringify(
+      command === 'serve'
+        ? 'development'
+        : process.env.VERCEL_ENV === 'preview'
+          ? 'preview'
+          : 'production',
+    ),
   },
   plugins: [
     paraglideVitePlugin({

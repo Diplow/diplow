@@ -8,6 +8,7 @@ import { provoked, savedDevTitle } from './programs'
 // A signed-out request.
 const context: StartContext = {
   requestId: 'req-dev',
+  scope: 'test',
   waitUntil: () => undefined,
   exchange: {
     url: 'http://localhost/_serverFn',

@@ -12,6 +12,7 @@ import { RequestContext, run, type StartContext } from './run'
 // A signed-out request.
 const context: StartContext = {
   requestId: 'req-1',
+  scope: 'test',
   waitUntil: () => undefined,
   exchange: {
     url: 'http://localhost/_serverFn',
@@ -57,9 +58,19 @@ describe('the server function helper', () => {
       }
     })
     await run({ ...context, waitUntil: (promise) => kept.push(promise) }, program)
-    expect(kept).toHaveLength(1)
+    // The program's work, then PostHog's flush, handed over once the outcome is known.
+    expect(kept).toHaveLength(2)
     await Promise.all(kept)
     expect(ran).toBe(true)
+  })
+
+  it("hands PostHog's flush to waitUntil, whether the program succeeds or fails", async () => {
+    for (const program of [Effect.succeed(1), Effect.die(new Error('a bug'))]) {
+      const kept: Array<Promise<unknown>> = []
+      await run({ ...context, waitUntil: (promise) => kept.push(promise) }, program)
+      expect(kept).toHaveLength(1)
+      await Promise.all(kept)
+    }
   })
 
   it("provides the request's Session and its HttpExchange as services", async () => {

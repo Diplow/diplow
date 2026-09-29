@@ -37,18 +37,21 @@ function exchangeOf(request: Request): StartContext['exchange'] {
   }
 }
 
-export const requestContext = createMiddleware({ type: 'function' }).server(async ({ next }) => {
-  const request = getRequest()
-  const requestId = crypto.randomUUID()
-  const exchange = exchangeOf(request)
-  const context: StartContext = {
-    requestId,
-    waitUntil: waitUntilOf(request),
-    exchange,
-    session: await provenSession(exchange),
-  }
-  return next({ context })
-})
+export const requestContext = createMiddleware({ type: 'function' }).server(
+  async ({ next, serverFnMeta }) => {
+    const request = getRequest()
+    const requestId = crypto.randomUUID()
+    const exchange = exchangeOf(request)
+    const context: StartContext = {
+      requestId,
+      scope: serverFnMeta.name,
+      waitUntil: waitUntilOf(request),
+      exchange,
+      session: await provenSession(exchange),
+    }
+    return next({ context })
+  },
+)
 
 /**
  * Refuses a server function call from another site before anything runs (Start's CSRF check, on

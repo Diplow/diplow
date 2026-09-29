@@ -14,6 +14,8 @@ const markers = [
   'ManagedRuntime',
   'hexframe/RequestContext',
   'hexframe/Auth',
+  'hexframe/Analytics',
+  'hexframe/ErrorTracker',
   'better-auth',
   'drizzle',
   'BETTER_AUTH_SECRET',
