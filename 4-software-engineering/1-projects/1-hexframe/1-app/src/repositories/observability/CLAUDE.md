@@ -17,7 +17,7 @@ The seam behind which hexframe is observed: Sentry for errors and traces, PostHo
 | `sentry.ts` | both | `startSentry`; `captureError`, which returns the id of the event it made; and the scrubbing every event and breadcrumb goes through before it leaves (`scrubbed`, `scrubbedBreadcrumb`, `redacted`). The one package serves both sides: the bundler picks its browser build for the client, its Node build for the server. Tested |
 | `sentry-server.ts` | server | `traced`, the server entry with every request a trace; `ErrorTracker`, Sentry as the runtime sees it, and `errorTracker`, its layer |
 | `posthog-server.ts` | server | `Analytics`: `capture` an event, read a `flag` for one person (kept five minutes, PostHog given 500 ms to answer), `flush` the queue; `analytics`, its layer, a no-op while PostHog is off. Tested against a stand-in for PostHog's client |
-| `posthog-browser.ts` | client | `startBrowserAnalytics`, with page visits and action clicks captured by PostHog itself; `captureInBrowser`; `accountFlagInBrowser`, a flag's value while the device is tied to an Account, as PostHog keeps it (`$user_state`, read through the public `get_property`); `identifyInBrowser` and `forgetInBrowser`, which tie it and untie it |
+| `posthog-browser.ts` | client | `startBrowserAnalytics`, with page visits and action clicks captured by PostHog itself; `captureInBrowser`; `accountFlagInBrowser`, a flag's value while the device is tied to an Account, as PostHog keeps it (`$user_state`, read through the public `get_property`); `identifyInBrowser` and `forgetInBrowser`, which tie it and untie it. Tested through its caller, `api/observability/client.test.ts`, this folder holding six files already |
 
 ## Rules
 

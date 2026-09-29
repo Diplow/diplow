@@ -17,7 +17,7 @@ The API layer's side of observability: what is logged, at which verbosity, and w
 |---|---|---|
 | `levels.ts` | both, pure | The topics and their levels, `logs`, `verbosityFor` (the environment's level raised by a flag) and `environmentOf`, which `vite.config.ts` sets `__ENVIRONMENT__` with |
 | `server.ts` | server | The logger `run.ts`'s runtime adds beside Effect's own, `requestLog` (a request's verbosity and who its lines are about), what `run` logs (`called`, `sent`, `failedUnexpectedly`, `flushed`, `unobserved`), and `observedEntry`, the server entry with Sentry started and each request traced |
-| `client.ts` | client | `startObservability`, run once by the router; `log` and `reportError`; `identify` and `forget` |
+| `client.ts` | client | `startObservability`, run once by the router; `log` and `reportError`; `identify` and `forget`. Tested against a stand-in for PostHog's browser SDK, which also pins when `posthog-browser.ts` ties, unties and reads a flag |
 
 ## Levels
 
