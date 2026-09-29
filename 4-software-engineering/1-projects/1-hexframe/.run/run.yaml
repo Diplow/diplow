@@ -55,10 +55,16 @@ gates:
     - pnpm --dir 4-software-engineering/1-projects/1-hexframe build
   fix_rounds_per_gate: 3
 
-# cubic's three agents (cubic.yaml) post as one reviewer, cubic-dev-ai, and
-# rank each finding P0 to P3. It always leaves a review, clean or not.
+# cubic's three agents (cubic.yaml) rank each finding P0 to P3. The run starts
+# them itself through the cubic CLI, which reviews on the Claude Code
+# subscription (`cubic auth connect claude-code`) instead of cubic's credits.
+# cubic-dev-ai's own review on the pull request needs credits, so the run
+# does not wait for it.
 reviews:
-  automated: [cubic]
+  automated: []
+  local:
+    name: cubic
+    command: "cubic review --base origin/{target} --json"
   max_rounds: 3
   must_fix: [P0, P1]
   should_fix: [P2]
@@ -107,7 +113,7 @@ registers:
     Nothing lands with a security finding open. When the round cap runs out
     with a valid security finding unresolved, the pull request is not merged:
     the unit is parked whole, kind review-exhausted, with the finding's thread
-    URL in its PARK entry.
+    URL, or the round comment's URL for a local finding, in its PARK entry.
 
 summary_schema: [status, landed, register_entries, parked, interventions]
 

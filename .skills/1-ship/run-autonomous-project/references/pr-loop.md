@@ -70,7 +70,7 @@ One call blocks at most 9 minutes and ends with `CI=green`, `CI=red`, `CI=none` 
 
 ## 4. Wait once for the automated reviews
 
-Skip this step when `reviews.automated` is empty, and go to step 5 only to answer threads a human may have left.
+Skip the wait when `reviews.automated` is empty. The local reviewer below still runs when the config sets one. With neither, go to step 5 only to answer threads a human may have left.
 
 ```bash
 bash <scripts>/wait_reviews.sh <n> "$(git rev-parse HEAD)" "<reviews.automated joined by commas>" \
@@ -80,6 +80,10 @@ bash <scripts>/wait_reviews.sh <n> "$(git rev-parse HEAD)" "<reviews.automated j
 It ends with `REVIEWS=reported` or `REVIEWS=pending` and one line per reviewer. A reviewer's green check is not proof of a review: the script looks for the run, review or comment the reviewer left, and reports `commented` when an app posted only a summary or a skip notice. `reviewed:clean` is a finished review with no finding: the reviewer's comment carries `reviews.clean_marker` and names this head.
 
 Call it at most twice (about 18 minutes). A reviewer still `commented` or `missing` after that is recorded, not waited for: one `PARK-n` entry of kind `review-missing` naming the reviewer and the pull request. The loop then continues with the reviews that did arrive.
+
+### The local reviewer
+
+When the config sets `reviews.local`, run that review too, on every pass through this step. Some reviewers ship a CLI that reviews the diff on this machine on a model the run already pays for, where their hosted review on the pull request bills another account. Hand it to a **fetch-tier** helper (`models.fetch`, the "local review" brief in `references/helpers.md`), never inline: a review takes minutes and its output runs to thousands of lines. The helper runs the command on `<branch>` at the head commit and returns `LOCAL <name> clean`, `LOCAL <name> findings` with the findings in the shape of the review threads brief, or `LOCAL <name> missing` when the command failed twice without findings (a crash, an expired login, a rate limit). `missing` is recorded like a reviewer that never came: one `PARK-n` entry of kind `review-missing` naming the command and the log path, and the loop carries on without it.
 
 ## 5. Answer the threads, in capped rounds
 
@@ -97,7 +101,7 @@ A round is: collect, triage, fix, reply, resolve, push, wait again (steps 2 to 4
      -F o=<owner> -F r=<repo> -F n=<n>
    ```
 
-   The helper returns one deduplicated list of actionable findings with source, thread id, file:line, the reviewer's level and the claim.
+   The helper returns one deduplicated list of actionable findings with source, thread id, file:line, the reviewer's level and the claim. The local reviewer's findings from step 4 join that list, with `local` in place of a thread id.
 2. **Triage** each finding in one line. The level comes from the reviewer (`must-fix`, `should-fix`, or the reviewer's own words for them, such as a blocking severity). A claim you doubt goes to a **judge-tier** reviewer helper (`models.reviewer`; judging a claim means reading the code behind it) for a VALID, PARTIALLY VALID or FALSE verdict with file:line evidence before you decide.
 3. **Act** on `reviews.must_fix` and `reviews.should_fix`: a valid must-fix is fixed. A valid should-fix is fixed, or waived with the reason written on the thread. A false finding is answered with the evidence.
 4. **Reply on every thread and resolve the ones you settled.** A fix reply carries the commit SHA. Neither `gh pr comment` nor `gh pr review` can reply to a thread or resolve one:
@@ -110,6 +114,8 @@ A round is: collect, triage, fix, reply, resolve, push, wait again (steps 2 to 4
      resolveReviewThread(input:{threadId:$tid}){thread{isResolved}}}' -F tid="$THREAD_ID"
    ```
 
+   A local finding has no thread. Its row in the round comment is its reply. The local reviewer starts from nothing on every pass, so a finding it reports again (same file, same claim) keeps the disposition an earlier round comment gave it: a waived or `FALSE` finding is carried over, not triaged again.
+
 5. **Re-run the gates locally, push, and post the round comment**, whose first words are pinned because a resumed run counts them:
 
    ```markdown
@@ -120,12 +126,12 @@ A round is: collect, triage, fix, reply, resolve, push, wait again (steps 2 to 4
    | <source, file:line, claim in a few words> | must-fix | fixed in <sha> |
    | ... | should-fix | waived: <reason> |
 
-   ci: <green or none> · reviews: <reviewer states from wait_reviews.sh>
+   ci: <green or none> · reviews: <reviewer states from wait_reviews.sh, then the LOCAL line when reviews.local is set>
 
    _Created with skill_ [run-autonomous-project](https://github.com/Diplow/diplow/blob/main/.skills/1-ship/run-autonomous-project/SKILL.md)
    ```
 
-The loop ends when a wait comes back with CI green or `none` and no unresolved thread carrying a valid must-fix or an unanswered should-fix. When the cap is reached first, with gates and CI green: waive the remaining should-fix threads with the reason "round cap reached", leave every remaining must-fix thread open with a reply naming its `PARK-n` entry (kind `review-exhausted`, thread URLs as evidence), and continue to the merge. Under `on_exhausted: halt`, return `halted` instead and merge nothing. A security finding left open also follows `registers.security_bugs` when the config sets it.
+The loop ends when a wait comes back with CI green or `none`, no unresolved thread carrying a valid must-fix or an unanswered should-fix, and no such local finding. When the cap is reached first, with gates and CI green: waive the remaining should-fix threads with the reason "round cap reached", leave every remaining must-fix thread open with a reply naming its `PARK-n` entry (kind `review-exhausted`, thread URLs as evidence), and continue to the merge. A remaining local must-fix gets its `PARK-n` in the last round comment, whose URL is the evidence. Under `on_exhausted: halt`, return `halted` instead and merge nothing. A security finding left open also follows `registers.security_bugs` when the config sets it.
 
 ## 6. Merge and prove it
 
