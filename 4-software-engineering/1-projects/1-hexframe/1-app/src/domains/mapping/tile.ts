@@ -33,6 +33,11 @@ export const isContextDirection = (value: number): value is ContextDirection => 
 
 const previewLimit = 350
 
+const graphemes = new Intl.Segmenter()
+
+/** Characters as a reader counts them: an emoji of several code points is one. */
+const length = (text: string) => Array.from(graphemes.segment(text)).length
+
 /**
  * The content as Mapping keeps it, its Title trimmed, or the error on the field at fault. Only the
  * fields given are checked, so an edit of the Body alone never trips on a Title nobody wrote yet.
@@ -42,7 +47,7 @@ export function checked<C extends Partial<Content>>(
 ): Effect.Effect<C, TitleMissing | PreviewTooLong> {
   const title = content.title?.trim()
   if (title === '') return Effect.fail(new TitleMissing({ fields: ['title'] }))
-  if (content.preview !== undefined && [...content.preview].length > previewLimit) {
+  if (content.preview !== undefined && length(content.preview) > previewLimit) {
     return Effect.fail(new PreviewTooLong({ fields: ['preview'] }))
   }
   return Effect.succeed(title === undefined ? content : { ...content, title })

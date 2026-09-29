@@ -10,8 +10,8 @@ import { DirectionTaken, MovedUnderItself, RootFixed, TileNotFound } from './err
 import { below, rowAt, systemOf, tileRow } from './system'
 import { type Content, type ContextDirection, type Slot, type Tile, checked } from './tile'
 
-export type { BrokenReference, Reference, SystemTile } from './system'
-export type { Content, ContextDirection, Direction, Slot, Tile } from './tile'
+export type { SystemTile } from './system'
+export type { Content, ContextDirection, Direction } from './tile'
 
 /** Where a Tile or a Reference goes: a slot under a parent Tile. */
 interface Placement {

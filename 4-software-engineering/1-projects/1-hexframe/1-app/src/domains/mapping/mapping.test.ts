@@ -2,7 +2,7 @@ import { expect, layer } from '@effect/vitest'
 import { Effect, Layer } from 'effect'
 
 import { TestDatabase } from '#/repositories/database/testing'
-import { layer as tilesLayer } from '#/repositories/database/tiles/tiles'
+import { type Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
 import {
   type Direction,
@@ -33,11 +33,20 @@ const withAChild = Effect.gen(function* () {
 
 /** What the canvas would show: each Tile's Title with its Children's and its Context's. */
 function outline(tile: SystemTile): unknown {
-  const context = Object.entries(tile.context).map(([slot, held]) => [
-    slot,
-    held._tag === 'Tile' ? outline(held) : held._tag === 'Reference' ? `→ ${held.tile.title}` : '⚠',
-  ])
-  const children = Object.entries(tile.children).map(([slot, child]) => [slot, outline(child)])
+  const context = Object.entries(tile.context).map(
+    ([slot, held]) =>
+      [
+        slot,
+        held._tag === 'Tile'
+          ? outline(held)
+          : held._tag === 'Reference'
+            ? `→ ${held.tile.title}`
+            : '⚠',
+      ] as const,
+  )
+  const children = Object.entries(tile.children).map(
+    ([slot, child]) => [slot, outline(child)] as const,
+  )
   return {
     title: tile.title,
     children: Object.fromEntries(children),
@@ -45,7 +54,7 @@ function outline(tile: SystemTile): unknown {
   }
 }
 
-layer(TestTiles)('Mapping over PGlite', (it) => {
+layer(TestTiles)('a System and its Tiles, over PGlite', (it) => {
   it.effect('adds the Root, untitled, the first time a System is read, and only then', () =>
     Effect.gen(function* () {
       const accountId = someone()
@@ -114,20 +123,27 @@ layer(TestTiles)('Mapping over PGlite', (it) => {
       })
       yield* createTile(accountId, { parent: principle.id, slot: 2, ...content('Detail') })
       expect(child).toEqual({ id: child.id, ...content('Child') })
-      expect((yield* system(accountId)).children[1]).toEqual({
-        _tag: 'Tile',
-        ...child,
-        children: {},
-        context: {
-          [-1]: {
-            _tag: 'Tile',
-            ...principle,
-            children: { 2: expect.objectContaining({ title: 'Detail' }) },
-            context: {},
+      const found = yield* system(accountId)
+      expect(found.id).toBe(root.id)
+      expect(found.children[1]).toMatchObject({ _tag: 'Tile', ...child })
+      expect(found.children[1]?.context[-1]).toMatchObject({ _tag: 'Tile', ...principle })
+      expect(outline(found)).toEqual({
+        title: '',
+        children: {
+          1: {
+            title: 'Child',
+            children: {},
+            context: {
+              [-1]: {
+                title: 'Principle',
+                children: { 2: { title: 'Detail', children: {}, context: {} } },
+                context: {},
+              },
+            },
           },
         },
+        context: {},
       })
-      expect(yield* system(accountId)).toMatchObject({ id: root.id })
     }),
   )
 
@@ -148,17 +164,21 @@ layer(TestTiles)('Mapping over PGlite', (it) => {
         fields: ['preview'],
       })
       expect(cleared).toMatchObject({ _tag: 'TitleMissing' })
-      const fits = yield* createTile(accountId, { ...place, ...long, preview: '✳'.repeat(350) })
-      expect([...fits.preview]).toHaveLength(350)
+      // A family emoji is five code points and one character: 350 of them fit.
+      const family = '👩‍👩‍👧'.repeat(350)
+      const fits = yield* createTile(accountId, { ...place, ...long, preview: family })
+      expect(fits.preview).toBe(family)
     }),
   )
+})
 
+layer(TestTiles)('moving and deleting Tiles, over PGlite', (it) => {
   it.effect('finds no Tile of another Account’s System, and changes none', () =>
     Effect.gen(function* () {
       const { accountId, root, child } = yield* withAChild
       const intruder = someone()
       yield* system(intruder)
-      const attempts = [
+      const attempts: ReadonlyArray<Effect.Effect<unknown, object, Tiles>> = [
         createTile(intruder, { parent: root.id, slot: 2, ...content('Intruder') }),
         editTile(intruder, child.id, { title: 'Taken over' }),
         moveTile(intruder, child.id, { parent: root.id, slot: 2 }),
@@ -265,7 +285,9 @@ layer(TestTiles)('Mapping over PGlite', (it) => {
       expect(rootDeleted).toMatchObject({ _tag: 'RootFixed' })
     }),
   )
+})
 
+layer(TestTiles)('References, over PGlite', (it) => {
   it.effect(
     'holds a Reference in a Context slot, which follows its Tile and breaks when it is deleted',
     () =>

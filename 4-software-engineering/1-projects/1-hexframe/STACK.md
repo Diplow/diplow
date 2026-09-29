@@ -124,19 +124,7 @@ Identity and access: who someone is (an Account, its Sessions, later its Keys), 
 
 ### Mapping
 
-The core domain. Someone maintains a system (a codebase, a team, their own life) and wants AI to work along their intent. Mapping lets them lay that system out as a hierarchy where what comes first is what matters most: a reader, human or agent, sees one tile, then the six it breaks into, then theirs. Choosing what to expose first is the exercise, and the hierarchy it produces carries the intent.
-
-- **System**: the whole hierarchy a user maintains. An Account has exactly one, and its **Root** tile is the user: there is no profile beside it. The Root's Title is the user's name everywhere in the app. Mapping ensures the Root the first time a System is read, idempotently, so no lost event can leave an Account without one. *Hexframe* is the product and the form, never the thing a user owns.
-- **Tile**: the unit. A **Title**, a **Preview** (at most 350 characters: what a reader needs to decide whether to open it) and a **Body** in Markdown.
-- **Child**: a Tile in one of its parent's six **Directions**, which say what the parent does and how: 1 NW, 2 NE, 3 E, 4 SE, 5 SW, 6 W. The **Opposite** direction, three away, is a tension the parent balances. A seventh Child is refused: the user regroups some Children under a new one, by moving them. That regrouping is the exercise, not a workaround.
-- **Context**: what a Tile *is*, where its Children say what it does. Up to six Context slots, −1 to −6, in the same Directions; each holds a Tile of its own or a Reference to any Tile the user can read, a public one in someone else's System included. A codebase's Children are its frontend, backend and CI; its Context is the principles it follows.
-- **Frame**: a Tile together with its Children.
-- **Reference**: a link from one Tile to another, by id, so it survives a move. A reference to a deleted Tile shows as broken; it never blocks the delete.
-- **Operations**: create, edit, move (a Tile and everything below it), delete.
-
-What a user does *to look* at a System is not Mapping: centering on a Tile, expanding and collapsing a Frame, showing the center Tile's Context. It is view state, owned by the URL, so a link shows exactly what its sender saw.
-
-Sharing, export and the MCP server all take a Tile as their entry point, and everything below it comes along. A Tile can be public by link, so any LLM that can fetch a URL can read it. An agent reads through the MCP server, in the order a human discovers it: a Tile's Children's Previews before any of their Bodies. A System exports as a zipped folder: a folder per Tile, `<n>-<slug>/` for a Child and `.<n>-<slug>/` for a Context tile, holding one Markdown file with the frontmatter (`title`, `parent`, `preview`) and the Body; References become `[[wikilinks]]`. The user can rename the file and the folder pattern (defaults: `CLAUDE.md`, the ones above).
+The core domain: someone lays out a System they maintain (a codebase, a team, their own life) as a hierarchy of Tiles where what comes first is what matters most, so AI works along their intent. One System per Account, whose Root tile is the user. The language, and what sharing, export and the MCP server will take from it, now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE|mapping]].
 
 ### Assistant
 

@@ -18,13 +18,13 @@ export interface SystemTile extends Tile {
 }
 
 /** A Context slot holding a link to a Tile drawn elsewhere, by its id, so it survives a move. */
-export interface Reference {
+interface Reference {
   readonly _tag: 'Reference'
   readonly tile: Tile
 }
 
 /** A Reference whose Tile was deleted: shown as broken, it never blocked the delete. */
-export interface BrokenReference {
+interface BrokenReference {
   readonly _tag: 'BrokenReference'
   readonly target: string
 }

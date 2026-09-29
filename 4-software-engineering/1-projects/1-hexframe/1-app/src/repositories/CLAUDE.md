@@ -14,7 +14,7 @@ The layer under [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains
 
 | Folder | Holds |
 |---|---|
-| `database/` | Drizzle over Effect's Postgres client, the committed migrations' runner and the PGlite test harness: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE\|database]] |
+| `database/` | Drizzle over Effect's Postgres client, the committed migrations' runner, the PGlite test harness, and the repositories that query it, Mapping's `tiles/` first: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE\|database]] |
 | `auth/` | Better Auth over the database, called through its server API, with its test harness; its Stripe plugin comes with Entitlements: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE\|auth]] |
 | `observability/` | Sentry and PostHog, on both sides: where errors, traces and the leveled event log go, and the flag that raises one user's verbosity. Plain functions for the browser, Effect services for the server's runtime: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/CLAUDE\|observability]] |
 

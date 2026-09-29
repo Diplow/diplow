@@ -24,7 +24,7 @@ export interface TileRow {
 }
 
 /** A row to add under a parent. Its id is made here. */
-export type NewTileRow = Omit<TileRow, 'id' | 'parentId' | 'direction'> & {
+type NewTileRow = Omit<TileRow, 'id' | 'parentId' | 'direction'> & {
   readonly parentId: string
   readonly direction: number
 }
