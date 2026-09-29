@@ -2,7 +2,10 @@
 // client logs the rest of its topics with `log`, at the page's verbosity: the environment's, raised by
 // the `verbosity` flag PostHog serves the person on this device. An error the server never saw goes
 // to Sentry first, then to PostHog as an `error` event pointing to Sentry's.
+import type { AnyRouter } from '@tanstack/react-router'
+
 import {
+  accountFlagInBrowser,
   browserAnalyticsStarted,
   captureInBrowser,
   forgetInBrowser,
@@ -15,19 +18,20 @@ import { logs, verbosityFlag, verbosityFor, type Topic } from './levels'
 
 let verbosity = verbosityFor(undefined)
 
+// The page's verbosity: the environment's, raised by the flag of the Account this device is tied to.
+// An anonymous device, or one just signed out, gets no Account's flag.
+function applyFlag() {
+  verbosity = verbosityFor(accountFlagInBrowser(verbosityFlag))
+}
+
 /** Starts Sentry and PostHog in the browser, once; the router's navigations become Sentry's traces. */
-export function startObservability(router: unknown) {
+export function startObservability(router: AnyRouter) {
   if (typeof window === 'undefined') return
   startSentry({ dsn: import.meta.env.VITE_SENTRY_DSN, environment: __ENVIRONMENT__, router })
   startBrowserAnalytics({
     key: import.meta.env.VITE_POSTHOG_KEY,
     host: import.meta.env.VITE_POSTHOG_HOST,
-    flag: {
-      key: verbosityFlag,
-      loaded: (value) => {
-        verbosity = verbosityFor(value)
-      },
-    },
+    flagsLoaded: applyFlag,
   })
 }
 
@@ -68,12 +72,17 @@ export function reportError(
   if (sentryEventId === undefined && !browserAnalyticsStarted()) console.error(error, tags)
 }
 
-/** Ties this device to the signed-in Account, so its events and flags are the Account's. */
+/**
+ * Ties this device to the signed-in Account, so its events and flags are the Account's: on signing in
+ * or up, and on every page `signedIn` guards. PostHog keeps it across page loads until `forget`.
+ */
 export function identify(accountId: string) {
   identifyInBrowser(accountId)
+  applyFlag()
 }
 
-/** Unties this device from the Account it was signed in as, once nobody is. */
+/** Unties this device from the Account it was signed in as, once nobody is, and drops its flag. */
 export function forget() {
   forgetInBrowser()
+  applyFlag()
 }

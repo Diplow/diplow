@@ -1,11 +1,44 @@
 import { describe, expect, it } from '@effect/vitest'
 import { Cause, Effect, Exit, Layer, Option } from 'effect'
+import { vi } from 'vitest'
 
 import type { Session } from '#/domains/iam/iam'
 import { Analytics, type AnalyticsEvent } from '#/repositories/observability/posthog-server'
-import { ErrorTracker } from '#/repositories/observability/sentry-server'
+import { startSentry } from '#/repositories/observability/sentry'
+import { ErrorTracker, traced } from '#/repositories/observability/sentry-server'
 
-import { CurrentRequestLog, called, failedUnexpectedly, logger, requestLog, sent } from './server'
+import {
+  CurrentRequestLog,
+  called,
+  failedUnexpectedly,
+  logger,
+  observedEntry,
+  requestLog,
+  sent,
+} from './server'
+
+vi.mock('#/repositories/observability/sentry', async (original) => ({
+  ...(await original<object>()),
+  startSentry: vi.fn(),
+}))
+vi.mock('#/repositories/observability/sentry-server', async (original) => ({
+  ...(await original<object>()),
+  traced: vi.fn((entry: unknown) => entry),
+}))
+
+/** PostHog, serving `flag` for the flag it is asked, or failing to answer when it is `null`. */
+const posthog = (flag: unknown, asked: Array<string> = []) =>
+  Layer.succeed(Analytics, {
+    capture: () => undefined,
+    flag: (key, distinctId) =>
+      flag === null
+        ? Effect.die(new Error('PostHog is unreachable'))
+        : Effect.sync(() => {
+            asked.push(`${key} ${distinctId}`)
+            return flag
+          }),
+    flush: Effect.void,
+  })
 
 /** PostHog and Sentry, recorded: every event and every error. PostHog serves no flag. */
 function recorded() {
@@ -48,6 +81,7 @@ describe("the server's observability", () => {
           Effect.provide(layer),
         )
         expect(errors).toHaveLength(1)
+        expect(errors[0]?.error).toEqual(new Error('the database is down'))
         expect(errors[0]?.tags).toEqual({
           requestId: 'req-1',
           scope: 'getTile',
@@ -123,34 +157,34 @@ describe("the server's observability", () => {
     }),
   )
 
-  it.effect("reads the verbosity flag PostHog serves a signed-in request's Account", () =>
+  it.effect("raises a signed-in request's verbosity by the flag PostHog serves its Account", () =>
     Effect.gen(function* () {
       const asked: Array<string> = []
-      const analytics = Layer.succeed(Analytics, {
-        capture: () => undefined,
-        flag: (key, distinctId) => Effect.sync(() => void asked.push(`${key} ${distinctId}`)),
-        flush: Effect.void,
-      })
-      yield* requestLog({ requestId: 'req-1', scope: 'getTile', session: signedIn }).pipe(
-        Effect.provide(analytics),
+      const request = { requestId: 'req-1', scope: 'getTile', session: signedIn }
+      const log = yield* requestLog(request, 'production').pipe(
+        Effect.provide(posthog('low', asked)),
       )
       expect(asked).toEqual(['verbosity account-1'])
+      expect(log.verbosity).toBe('low')
+    }),
+  )
+
+  it.effect("keeps the environment's verbosity when the flag cannot be read", () =>
+    Effect.gen(function* () {
+      const request = { requestId: 'req-1', scope: 'getTile', session: signedIn }
+      const log = yield* requestLog(request, 'production').pipe(Effect.provide(posthog(null)))
+      expect(log).toMatchObject({ verbosity: 'high', distinctId: 'account-1', anonymous: false })
     }),
   )
 
   it.effect('reads no flag for a request nobody is signed in to', () =>
     Effect.gen(function* () {
       const asked: Array<string> = []
-      const analytics = Layer.succeed(Analytics, {
-        capture: () => undefined,
-        flag: (key) => Effect.sync(() => void asked.push(key)),
-        flush: Effect.void,
-      })
       const log = yield* requestLog({
         requestId: 'req-1',
         scope: 'getTile',
         session: signedOut,
-      }).pipe(Effect.provide(analytics))
+      }).pipe(Effect.provide(posthog('low', asked)))
       expect(asked).toEqual([])
       expect(log).toEqual({
         verbosity: 'low',
@@ -161,4 +195,13 @@ describe("the server's observability", () => {
       })
     }),
   )
+
+  it('starts Sentry before it traces the server entry', () => {
+    const entry = { fetch: () => Promise.resolve(new Response()) }
+    expect(observedEntry(entry)).toBe(entry)
+    expect(startSentry).toHaveBeenCalledWith(
+      expect.objectContaining({ environment: 'development' }),
+    )
+    expect(traced).toHaveBeenCalledWith(entry)
+  })
 })

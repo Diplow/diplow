@@ -52,7 +52,7 @@ function deliver<R>(subscription: Subscription<R>, slot: number) {
       // An error line with its cause: Sentry gets it, and PostHog an `error` event pointing to it.
       Effect.catchCause((cause) =>
         Effect.logError(`A subscriber to ${event._tag} failed`, cause).pipe(
-          Effect.annotateLogs({ bus: 'server', scope: event._tag }),
+          Effect.annotateLogs({ bus: 'server', code: event._tag }),
         ),
       ),
       Effect.ensuring(Deferred.succeed(done, undefined)),

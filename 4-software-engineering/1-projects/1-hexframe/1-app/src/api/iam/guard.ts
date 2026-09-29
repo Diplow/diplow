@@ -36,9 +36,11 @@ export function readSignInSearch(search: Record<string, unknown>) {
 
 /**
  * Where a signed-in Account goes next: a full load, so the page renders with its Session. Home when
- * the place, resolved, is not on this site after all.
+ * the place, resolved, is not on this site after all. This device is tied to the Account first, so
+ * its events and flags are the Account's wherever it lands.
  */
-export function continueTo(redirect: string | undefined) {
+export function continueTo(redirect: string | undefined, accountId: string) {
+  identify(accountId)
   const { origin } = window.location
   const onThisSite = new URL(redirect ?? '/', origin).origin === origin
   window.location.assign(localizeHref(onThisSite && redirect !== undefined ? redirect : '/'))

@@ -16,6 +16,7 @@ import {
   observability,
   requestLog,
   sent,
+  unobserved,
 } from '../observability/server'
 import { WaitUntil, serverBus, type Subscription } from './bus'
 
@@ -92,35 +93,45 @@ function failureOf<E extends Failure>(cause: Cause.Cause<E>): Effect.Effect<E | 
 /**
  * Runs a server function's program and returns its outcome: the value, or the failure encoded with
  * the request id. Only failures in the union reach the client as they are; see `failureOf`. The call
- * and its failure are logged at the request's verbosity, and PostHog's queue is flushed through
- * `waitUntil` once the outcome is known.
+ * and its failure are logged at the request's verbosity; once the work the program left pending has
+ * settled, PostHog's queue is flushed through `waitUntil`.
  */
 export async function run<A, E extends Failure>(
   context: StartContext,
   program: Effect.Effect<A, E, Services>,
 ): Promise<Outcome<A, E | Unexpected>> {
-  const log = await runtime.runPromise(requestLog(context))
-  try {
-    const exit = await runtime.runPromiseExit(
-      Effect.flatMap(called, () => program).pipe(
-        Effect.provideService(RequestContext, { requestId: context.requestId }),
-        // A Session the middleware could not resolve fails the program: reported, sent as Unexpected.
-        Effect.provideServiceEffect(CurrentSession, context.session),
-        Effect.provideService(HttpExchange, context.exchange),
-        Effect.provideService(WaitUntil, (work) => {
-          context.waitUntil(runtime.runPromise(work))
-        }),
-        Effect.provideService(CurrentRequestLog, log),
+  const { requestId } = context
+  const pending: Array<Promise<unknown>> = []
+  const outcome = Effect.flatMap(requestLog(context), (log) =>
+    Effect.flatMap(called, () =>
+      // A Session the middleware could not resolve fails the program: reported, sent as Unexpected.
+      program.pipe(Effect.provideServiceEffect(CurrentSession, context.session)),
+    ).pipe(
+      Effect.map((value): Outcome<A, E | Unexpected> => ({ ok: true, value })),
+      Effect.catchCause((cause) =>
+        Effect.map(failureOf(cause), (failure) => ({
+          ok: false as const,
+          failure: encodeFailure(failure),
+          requestId,
+        })),
       ),
-    )
-    if (Exit.isSuccess(exit)) return { ok: true, value: exit.value }
-    const failure = await runtime.runPromise(
-      failureOf(exit.cause).pipe(Effect.provideService(CurrentRequestLog, log)),
-    )
-    return { ok: false, failure: encodeFailure(failure), requestId: context.requestId }
-  } finally {
-    context.waitUntil(runtime.runPromise(flushed))
-  }
+      Effect.provideService(CurrentRequestLog, log),
+    ),
+  ).pipe(
+    Effect.provideService(RequestContext, { requestId }),
+    Effect.provideService(HttpExchange, context.exchange),
+    Effect.provideService(WaitUntil, (work) => {
+      const settled = runtime.runPromise(work)
+      pending.push(settled)
+      context.waitUntil(settled)
+    }),
+  )
+  const exit = await runtime.runPromiseExit(outcome)
+  context.waitUntil(Promise.allSettled(pending).then(() => runtime.runPromiseExit(flushed)))
+  if (Exit.isSuccess(exit)) return exit.value
+  // Only the runtime itself failing (a layer that could not be built) gets here: no logger heard it.
+  unobserved(exit.cause, context)
+  return { ok: false, failure: encodeFailure<E | Unexpected>(new Unexpected()), requestId }
 }
 
 /**

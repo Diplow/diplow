@@ -1,5 +1,5 @@
 import { Cause, Effect, Exit, Option } from 'effect'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { Bus } from '#/domains/bus'
 import { CurrentSession } from '#/domains/iam/iam'
@@ -58,8 +58,6 @@ describe('the server function helper', () => {
       }
     })
     await run({ ...context, waitUntil: (promise) => kept.push(promise) }, program)
-    // The program's work, then PostHog's flush, handed over once the outcome is known.
-    expect(kept).toHaveLength(2)
     await Promise.all(kept)
     expect(ran).toBe(true)
   })
@@ -81,6 +79,17 @@ describe('the server function helper', () => {
     expect(await run({ ...context, session: Exit.succeed(Option.some(session)) }, program)).toEqual(
       { ok: true, value: { session: Option.some(session), url: 'http://localhost/_serverFn' } },
     )
+  })
+
+  it('logs the call even when the Session could not be resolved', async () => {
+    const lines: Array<string> = []
+    const print = (...parts: Array<unknown>) => void lines.push(parts.map(String).join(' '))
+    for (const method of ['log', 'info', 'error'] as const) {
+      vi.spyOn(console, method).mockImplementation(print)
+    }
+    await run({ ...context, session: Exit.die(new Error('down')) }, Effect.succeed(1))
+    vi.restoreAllMocks()
+    expect(lines.some((line) => line.includes('Server function called'))).toBe(true)
   })
 
   it('sends Unexpected when the Session could not be resolved, whatever the program', async () => {

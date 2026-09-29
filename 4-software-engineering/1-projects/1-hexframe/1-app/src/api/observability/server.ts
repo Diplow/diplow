@@ -7,10 +7,18 @@ import { Cause, Context, Effect, Exit, Layer, Logger, Option, References } from 
 
 import type { Session } from '#/domains/iam/iam'
 import { Analytics, analytics } from '#/repositories/observability/posthog-server'
-import { startSentry } from '#/repositories/observability/sentry'
+import { captureError, startSentry } from '#/repositories/observability/sentry'
 import { ErrorTracker, errorTracker, traced } from '#/repositories/observability/sentry-server'
 
-import { isTopic, logs, verbosityFlag, verbosityFor, type Topic, type Verbosity } from './levels'
+import {
+  isTopic,
+  logs,
+  verbosityFlag,
+  verbosityFor,
+  type Environment,
+  type Topic,
+  type Verbosity,
+} from './levels'
 
 /** Who a request's log lines are about, and how many of them PostHog gets. */
 interface RequestLog {
@@ -46,28 +54,27 @@ interface Request {
 
 /**
  * A request's log: the environment's verbosity, raised by the `verbosity` flag PostHog serves the
- * signed-in Account. Nobody signed in, no flag is read.
+ * signed-in Account. Nobody signed in, no flag is read; a flag that cannot be read leaves the
+ * environment's verbosity.
  */
-export function requestLog({
-  requestId,
-  scope,
-  session,
-}: Request): Effect.Effect<RequestLog, never, Analytics> {
+export function requestLog(
+  { requestId, scope, session }: Request,
+  environment: Environment = __ENVIRONMENT__,
+): Effect.Effect<RequestLog, never, Analytics> {
   const account = Exit.isSuccess(session)
     ? Option.getOrUndefined(Option.map(session.value, ({ account }) => account.id))
     : undefined
-  if (account === undefined) {
-    const verbosity = verbosityFor(undefined)
-    return Effect.succeed({ verbosity, distinctId: requestId, anonymous: true, requestId, scope })
+  const base: RequestLog = {
+    verbosity: verbosityFor(undefined, environment),
+    distinctId: account ?? requestId,
+    anonymous: account === undefined,
+    requestId,
+    scope,
   }
+  if (account === undefined) return Effect.succeed(base)
   return Analytics.use((analytics) => analytics.flag(verbosityFlag, account)).pipe(
-    Effect.map((flag) => ({
-      verbosity: verbosityFor(flag),
-      distinctId: account,
-      anonymous: false,
-      requestId,
-      scope,
-    })),
+    Effect.map((flag) => ({ ...base, verbosity: verbosityFor(flag, environment) })),
+    Effect.catchCause(() => Effect.succeed(base)),
   )
 }
 
@@ -92,6 +99,16 @@ export function failedUnexpectedly(cause: Cause.Cause<unknown>) {
 
 /** Sends what PostHog has queued; the helper hands it to `waitUntil` as a request ends. */
 export const flushed = Analytics.use((analytics) => analytics.flush)
+
+/**
+ * A failure of the runtime itself (a layer that could not be built), which no logger heard: straight
+ * to Sentry, and to the server's console.
+ */
+export function unobserved(cause: Cause.Cause<unknown>, { requestId, scope }: Request) {
+  const tags = { requestId, scope, kind: 'Unexpected', code: 'Unexpected' }
+  captureError(Cause.squash(cause), tags)
+  console.error('The server function runtime failed', tags, Cause.pretty(cause))
+}
 
 // What a line may carry to Sentry's tags and PostHog's properties: identifiers, never a payload.
 const carried = ['requestId', 'scope', 'kind', 'code', 'bus'] as const

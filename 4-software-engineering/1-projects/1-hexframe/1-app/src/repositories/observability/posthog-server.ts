@@ -41,9 +41,9 @@ function on(key: string, host: string) {
   return Effect.gen(function* () {
     const client = yield* Effect.acquireRelease(
       Effect.sync(
-        () => new PostHog(key, { host, featureFlagsRequestTimeoutMs: 1500, disableGeoip: true }),
+        () => new PostHog(key, { host, featureFlagsRequestTimeoutMs: 500, disableGeoip: true }),
       ),
-      (client) => Effect.promise(() => client.shutdown()),
+      (client) => Effect.tryPromise(() => client.shutdown()).pipe(Effect.ignore),
     )
     const flags = yield* Cache.make({
       ...flagCache,
@@ -64,7 +64,7 @@ function on(key: string, host: string) {
         })
       },
       flag: (flag, distinctId) => Cache.get(flags, `${flag}\n${distinctId}`),
-      flush: Effect.promise(() => client.flush()).pipe(Effect.ignore),
+      flush: Effect.tryPromise(() => client.flush()).pipe(Effect.ignore),
     })
   })
 }

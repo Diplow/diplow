@@ -10,20 +10,20 @@ preview: >-
 ---
 # observability
 
-The seam behind which hexframe is observed: Sentry for errors and traces, PostHog for the leveled event log and the feature flag that raises one user's verbosity. Only this folder imports `@sentry/*`, `posthog-js` and `posthog-node` (`dependency-cruiser.config.ts`, `sdks`). What gets logged, and when, is the API layer's: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]], "Observability".
+The seam behind which hexframe is observed: Sentry for errors and traces, PostHog for the leveled event log and the feature flag that raises one user's verbosity. Only this folder imports `@sentry/*`, `posthog-js` and `posthog-node` (`dependency-cruiser.config.ts`, `sdks`). What gets logged, and when, is the API layer's: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/CLAUDE|api's observability]].
 
 | File | Side | Holds |
 |---|---|---|
-| `sentry.ts` | both | `startSentry` and `captureError`, which returns the id of the event it made. The one package serves both sides: the bundler picks its browser build for the client, its Node build for the server |
+| `sentry.ts` | both | `startSentry`; `captureError`, which returns the id of the event it made; and the scrubbing every event and breadcrumb goes through before it leaves (`scrubbed`, `scrubbedBreadcrumb`, `redacted`). The one package serves both sides: the bundler picks its browser build for the client, its Node build for the server. Tested |
 | `sentry-server.ts` | server | `traced`, the server entry with every request a trace; `ErrorTracker`, Sentry as the runtime sees it, and `errorTracker`, its layer |
-| `posthog-server.ts` | server | `Analytics`: `capture` an event, read a `flag` for one person (kept five minutes), `flush` the queue; `analytics`, its layer, a no-op while PostHog is off |
-| `posthog-browser.ts` | client | `startBrowserAnalytics`, with page visits and action clicks captured by PostHog itself; `captureInBrowser`; `identifyInBrowser` and `forgetInBrowser`, which tie this device to an Account and untie it |
+| `posthog-server.ts` | server | `Analytics`: `capture` an event, read a `flag` for one person (kept five minutes, PostHog given 500 ms to answer), `flush` the queue; `analytics`, its layer, a no-op while PostHog is off. Tested against a stand-in for PostHog's client |
+| `posthog-browser.ts` | client | `startBrowserAnalytics`, with page visits and action clicks captured by PostHog itself; `captureInBrowser`; `accountFlagInBrowser`, a flag's value while the device is tied to an Account; `identifyInBrowser` and `forgetInBrowser`, which tie it and untie it |
 
 ## Rules
 
 - **Sentry's TanStack Start SDK is a beta**, allowed because this folder is its seam (STACK.md, "Runtime and versions"): swapping it touches these files and nothing above. Its Vite plugin, which uploads source maps with an auth token, is not wired.
-- **Nothing the user sent reaches Sentry.** `startSentry` turns off every kind of data collection: cookies, the session's among them, headers, bodies, query parameters, local variables, database parameters. An error is traced by the tags it is captured with: the request id, the scope, the kind.
-- **PostHog gets identifiers, never a payload.** An event carries a topic, a message, a request id, a scope, a kind, a tag, a Sentry event id. A signed-out request's events are the request's, with no person profile.
+- **Sentry gets the error, not what the user sent.** `startSentry` turns off every kind of data collection: cookies, the session's among them, headers, bodies, query parameters, local variables, database parameters. What is left goes through `scrubbed` before it leaves: a request keeps its method and its URL without query, no user is attached, and every message and exception value has its email addresses and token-like runs redacted, since a defect's message can quote what a user sent. Console breadcrumbs are dropped. An error is traced by the tags it is captured with: the request id, the scope, the kind.
+- **PostHog gets names and identifiers, never a payload.** An event carries a topic, a message written in the code, a request id, a scope, a kind, a code, a Sentry event id. Autocapture masks every element's text and attributes, so a click never carries what a user wrote. A signed-out request's events are the request's, with no person profile.
 - **Off without its keys.** A side that has no DSN, or no project key and host, starts nothing and sends nothing; `pnpm dev` and the tests run that way.
 - **A server-only file is never imported by the client.** `sentry-server.ts` needs the SDK's Node build, and `posthog-server.ts` holds a Node client; `scripts/check-client-bundle.ts` fails the build when `Analytics` or `ErrorTracker` reaches the client bundle.
 

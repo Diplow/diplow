@@ -115,7 +115,7 @@ describe('the server bus', () => {
     }),
   )
 
-  it.effect('logs every event it carries at medium', () =>
+  it.effect('logs every event it carries under the bus topic, which logs at medium', () =>
     Effect.gen(function* () {
       const lines: Array<{ message: unknown; annotations: unknown }> = []
       const capture = Logger.make(({ message, fiber }) => {

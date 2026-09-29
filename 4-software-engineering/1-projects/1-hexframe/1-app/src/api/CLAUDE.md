@@ -20,7 +20,7 @@ The layer between what the client shows and what the domains know. On the server
 | `client/` | `calls.ts`, `settle` and the `read` and `write` builders for TanStack Query; `channels.ts`, the QueryClient that carries each failure out, and `submitWrite` for a form; `ReadBoundary`, the nearest boundary of a read |
 | `iam/` | IAM's server functions (`signUp`, `signIn`, `signOut`, `session`) and `guard.ts`: `signedIn`, the `beforeLoad` of a page only a signed-in Account sees, and the `?redirect=` sign-in and sign-up read back: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/CLAUDE\|iam]] |
 | `dev/` | The failures, programs and server functions `/dev/errors` uses to provoke every channel. They stay members of `Failure` as long as the page exists; outside dev and previews the functions answer `NotFound` |
-| `observability/` | `levels.ts`, the verbosity levels, shared and pure; `server.ts`, the logger that sends the lines a request's verbosity logs to PostHog and an error's cause to Sentry, and what `run` logs; `client.ts`, the client's `log` and `reportError`. Tested. See "Observability" below |
+| `observability/` | `levels.ts`, the verbosity levels, shared and pure; `server.ts`, the logger that sends the lines a request's verbosity logs to PostHog and an error's cause to Sentry, and what `run` logs; `client.ts`, the client's `log` and `reportError`: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/CLAUDE\|observability]] |
 
 ## Effect stops at the server function
 
@@ -74,22 +74,7 @@ A domain publishes a fact other parts may react to, without knowing who does; th
 
 ## Observability
 
-Sentry owns errors, traces and alerting; PostHog owns product analytics and the leveled event log. Both sit behind [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/CLAUDE|observability]], the seam; this layer decides what is logged, and when.
-
-- **Each line has a topic, and each topic a level** (`observability/levels.ts`). A level logs its own topics and those of every level above it:
-
-| Level | Logs | Where by default |
-|---|---|---|
-| high | page visits (`page`), action clicks and shortcuts (`action`), server function calls (`call`), errors (`error`) | production |
-| medium | high, plus domain service calls (`domain`), state actions (`state`), bus messages (`bus`) | previews |
-| low | medium, plus information (`info`), repository and database calls (`repository`), renders (`render`, in development only) | development |
-
-- **A PostHog feature flag raises one user's level, never lowers it.** The flag is `verbosity` (`high`, `medium`, `low`), read for the signed-in Account: on the server by `requestLog`, once per request and kept five minutes; in the browser as PostHog loads it, once `signedIn` has tied the device to the Account. A signed-out request logs at its environment's level.
-- **On the server, every layer logs through Effect's logger** and names its line's topic with an annotation: `Effect.log('…').pipe(Effect.annotateLogs({ topic: 'domain' }))`. A line without one is `info`, or `error` at the error level. Effect's own logger still prints every line to the server's log; the logger in `observability/server.ts` sends the ones the request's level logs to PostHog, as an event named by the topic.
-- **An error goes to Sentry first, then PostHog points to it.** An error line carrying a cause (`Effect.logError('…', cause)`) is captured by Sentry, and its PostHog `error` event carries the kind, the code (the failure's tag), the scope, the request id and Sentry's event id, never a second copy of the stack.
-- **`run` logs every call and every failure it sends.** The call at `call`; a declared failure as PostHog's `error` event alone, since it is an answer, not a bug; anything that becomes `Unexpected` with its cause, so Sentry has it. It hands PostHog's flush to `waitUntil` once the outcome is known.
-- **In the browser, PostHog captures page visits and action clicks itself.** The client logs its other topics with `log(topic, message)`, to the console while PostHog is off. An error the server never saw (a call that never reached it, a feature that threw) goes through `reportError`: Sentry, then PostHog's `error` event carrying Sentry's id. A failure the server sent is not reported again: the server logged it, with the request id the client shows.
-- **Properties are identifiers, never a payload**: a tag, a scope, a request id; no field of a fact, an event or a form.
+Sentry owns errors, traces and alerting; PostHog, product analytics and the leveled event log. This layer decides what is logged, at which verbosity, and where an error is reported: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/CLAUDE|observability]]. The SDKs sit behind [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/CLAUDE|their seam]].
 
 ## Rules
 

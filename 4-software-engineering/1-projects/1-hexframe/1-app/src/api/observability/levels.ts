@@ -10,6 +10,19 @@ export type Verbosity = typeof Verbosity.Type
 export type Environment = typeof __ENVIRONMENT__
 
 /**
+ * Where the app runs, from how Vite runs and Vercel's `VERCEL_ENV`: `pnpm dev` is development, a
+ * Vercel preview build is a preview, and any other build is production, a local one included.
+ * vite.config.ts sets `__ENVIRONMENT__` with it, and serves the /dev pages everywhere but production.
+ */
+export function environmentOf(
+  command: 'serve' | 'build',
+  vercelEnv: string | undefined,
+): Environment {
+  if (command === 'serve') return 'development'
+  return vercelEnv === 'preview' ? 'preview' : 'production'
+}
+
+/**
  * What gets logged, each at the least verbose level that logs it. A log line names its topic; a level
  * logs its own topics and those of every level above it.
  */

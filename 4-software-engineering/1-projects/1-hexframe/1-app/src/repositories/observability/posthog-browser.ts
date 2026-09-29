@@ -8,12 +8,12 @@ interface BrowserAnalyticsOptions {
   /** PostHog's project key and host, public by design. PostHog stays off without both. */
   readonly key: string | undefined
   readonly host: string | undefined
-  /** Called with a flag's value each time PostHog loads the flags of the person on this device. */
-  readonly flag: { readonly key: string; readonly loaded: (value: unknown) => void }
+  /** Called each time PostHog loads the flags of the person on this device. */
+  readonly flagsLoaded: () => void
 }
 
 /** Starts PostHog once, in the browser; without a key and a host, it stays off. */
-export function startBrowserAnalytics({ key, host, flag }: BrowserAnalyticsOptions) {
+export function startBrowserAnalytics({ key, host, flagsLoaded }: BrowserAnalyticsOptions) {
   if (started || key === undefined || key === '' || host === undefined || host === '') return
   started = true
   posthog.init(key, {
@@ -21,14 +21,16 @@ export function startBrowserAnalytics({ key, host, flag }: BrowserAnalyticsOptio
     // Page visits and action clicks log at every level, `high` included: PostHog captures both.
     capture_pageview: 'history_change',
     autocapture: true,
+    // A click is recorded by the element's kind and place, never its text nor its attributes' values:
+    // a Tile's title, a label, anything a user wrote.
+    mask_all_text: true,
+    mask_all_element_attributes: true,
     // Errors are Sentry's; PostHog gets a small `error` event pointing to Sentry's.
     capture_exceptions: false,
     disable_session_recording: true,
     person_profiles: 'identified_only',
   })
-  posthog.onFeatureFlags(() => {
-    flag.loaded(posthog.getFeatureFlag(flag.key))
-  })
+  posthog.onFeatureFlags(flagsLoaded)
 }
 
 /** Whether PostHog is on in this browser. */
@@ -41,7 +43,15 @@ export function captureInBrowser(event: string, properties: Readonly<Record<stri
   if (started) posthog.capture(event, properties)
 }
 
-/** Ties this device's events and flags to an Account, by its id. */
+/**
+ * A feature flag's value for this device, while it is tied to an Account, or `undefined`: a flag
+ * that raises one Account's verbosity never applies to an anonymous visitor, nor after a sign-out.
+ */
+export function accountFlagInBrowser(key: string) {
+  return started && posthog._isIdentified() ? posthog.getFeatureFlag(key) : undefined
+}
+
+/** Ties this device's events and flags to an Account, by its id; PostHog keeps it across loads. */
 export function identifyInBrowser(distinctId: string) {
   if (started && posthog.get_distinct_id() !== distinctId) posthog.identify(distinctId)
 }
