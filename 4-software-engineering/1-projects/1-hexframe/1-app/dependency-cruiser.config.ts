@@ -14,6 +14,7 @@ const sdks = {
     '@neondatabase/.+',
   ],
   auth: ['better-auth', '@better-auth/.+', 'stripe'],
+  observability: ['@sentry/.+', 'posthog-js', 'posthog-node'],
 }
 
 // The UI libraries behind the design system: only src/ui/ imports them, and a feature builds from ui/.

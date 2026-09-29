@@ -54,8 +54,8 @@ export function Access({ mode, redirect }: AccessProps) {
       onSubmitAsync: submitWrite({
         scope: mode === 'sign-in' ? 'signIn' : 'signUp',
         call: settings.call,
-        onSaved: () => {
-          continueTo(redirect)
+        onSaved: (account) => {
+          continueTo(redirect, account.id)
         },
       }),
     },

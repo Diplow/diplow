@@ -1,5 +1,5 @@
-import { Cause, Effect, Exit, Option } from 'effect'
-import { describe, expect, it } from 'vitest'
+import { Cause, Effect, Exit, Layer, Option } from 'effect'
+import { describe, expect, it, vi } from 'vitest'
 
 import { Bus } from '#/domains/bus'
 import { CurrentSession } from '#/domains/iam/iam'
@@ -12,6 +12,7 @@ import { RequestContext, run, type StartContext } from './run'
 // A signed-out request.
 const context: StartContext = {
   requestId: 'req-1',
+  scope: 'test',
   waitUntil: () => undefined,
   exchange: {
     url: 'http://localhost/_serverFn',
@@ -57,9 +58,17 @@ describe('the server function helper', () => {
       }
     })
     await run({ ...context, waitUntil: (promise) => kept.push(promise) }, program)
-    expect(kept).toHaveLength(1)
     await Promise.all(kept)
     expect(ran).toBe(true)
+  })
+
+  it("hands PostHog's flush to waitUntil, whether the program succeeds or fails", async () => {
+    for (const program of [Effect.succeed(1), Effect.die(new Error('a bug'))]) {
+      const kept: Array<Promise<unknown>> = []
+      await run({ ...context, waitUntil: (promise) => kept.push(promise) }, program)
+      expect(kept).toHaveLength(1)
+      await Promise.all(kept)
+    }
   })
 
   it("provides the request's Session and its HttpExchange as services", async () => {
@@ -70,6 +79,17 @@ describe('the server function helper', () => {
     expect(await run({ ...context, session: Exit.succeed(Option.some(session)) }, program)).toEqual(
       { ok: true, value: { session: Option.some(session), url: 'http://localhost/_serverFn' } },
     )
+  })
+
+  it('logs the call even when the Session could not be resolved', async () => {
+    const lines: Array<string> = []
+    const print = (...parts: Array<unknown>) => void lines.push(parts.map(String).join(' '))
+    for (const method of ['log', 'info', 'error'] as const) {
+      vi.spyOn(console, method).mockImplementation(print)
+    }
+    await run({ ...context, session: Exit.die(new Error('down')) }, Effect.succeed(1))
+    vi.restoreAllMocks()
+    expect(lines.some((line) => line.includes('Server function called'))).toBe(true)
   })
 
   it('sends Unexpected when the Session could not be resolved, whatever the program', async () => {
@@ -119,6 +139,30 @@ describe('the server function helper', () => {
     // Only an untyped path can get one past `run`'s type; the helper still refuses to send it.
     const stray = Effect.fail({ _tag: 'TileMissing', kind: 'NotFound' } as unknown as DevConflict)
     expect(await run(context, stray)).toMatchObject({ ok: false, failure: { _tag: 'Unexpected' } })
+  })
+
+  it('sends Unexpected, and hands the cause to `unobserved`, when the runtime cannot be built', async () => {
+    const unobserved = vi.fn<(cause: Cause.Cause<unknown>, request: StartContext) => void>()
+    vi.resetModules()
+    vi.doMock('../observability/server', async (original) => ({
+      ...(await original<object>()),
+      observability: Layer.effectDiscard(Effect.die(new Error('a layer could not be built'))),
+      unobserved,
+    }))
+    const fresh = await import('./run')
+    const outcome = await fresh.run(context, Effect.succeed('never reached'))
+    vi.doUnmock('../observability/server')
+    expect(outcome).toEqual({
+      ok: false,
+      failure: { _tag: 'Unexpected', kind: 'Unexpected' },
+      requestId: 'req-1',
+    })
+    expect(unobserved).toHaveBeenCalledOnce()
+    const [cause, request] = unobserved.mock.calls[0] ?? []
+    expect(cause === undefined ? undefined : Cause.squash(cause)).toEqual(
+      new Error('a layer could not be built'),
+    )
+    expect(request).toBe(context)
   })
 
   it('sends an exception thrown inside the program as Unexpected', async () => {

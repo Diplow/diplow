@@ -10,7 +10,9 @@ export type Call = 'read' | 'frame' | 'write' | 'submit'
 
 /**
  * Where a failure goes: one redirect to sign-in; the `Forbidden` state or the `ErrorState` in the
- * nearest boundary; a report with nothing on screen; the form's fields; one toast.
+ * nearest boundary; a report with nothing on screen; the form's fields; one toast. `report` has nothing
+ * to carry out in the client: the server reported every failure it sent, and the client reports, whatever
+ * the channel, only a call that never reached the server (../client/channels.ts, `raise`).
  */
 export type Channel = 'sign-in' | 'forbidden' | 'error-state' | 'report' | 'fields' | 'toast'
 

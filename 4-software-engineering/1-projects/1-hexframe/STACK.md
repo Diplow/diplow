@@ -152,12 +152,4 @@ Bilingual from day one, English and French, with Paraglide: typed message functi
 
 ## Observability
 
-- **Sentry** owns errors, traces and alerting.
-- **PostHog** owns product analytics and the leveled event log. An error reaches PostHog as a small `error` event (kind, code, scope, request id, Sentry event id), never as a second copy of the stack.
-- **Verbosity** is set per environment and can be raised for one user by a PostHog feature flag:
-
-| Level | Logs | Where by default |
-|---|---|---|
-| high | page visits, action clicks and shortcuts, API calls, errors | production |
-| medium | high, plus domain service calls, state actions, bus messages | previews |
-| low | medium, plus information logs, repository and database calls, renders | dev (renders only ever in dev) |
+Sentry owns errors, traces and alerting; PostHog, product analytics and the leveled event log. An error reaches PostHog as a small `error` event (kind, code, scope, request id, Sentry event id), never as a second copy of the stack. Three verbosity levels, set per environment (high in production, medium in previews, low in development) and raised for one user by a PostHog feature flag. The rules now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]] and [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/CLAUDE|observability]].

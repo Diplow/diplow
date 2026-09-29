@@ -39,9 +39,9 @@ interface Envelope {
   readonly handled: ReadonlyArray<Deferred.Deferred<undefined> | undefined>
 }
 
-// Until HEX-19 sets the levels, a bus message is a log line tagged with the level it belongs to.
+// A bus message is logged at `medium` (../observability/levels.ts), by its tag, never its fields.
 const logged = (message: string) =>
-  Effect.annotateLogs(Effect.log(message), { bus: 'server', verbosity: 'medium' })
+  Effect.annotateLogs(Effect.log(message), { bus: 'server', topic: 'bus' })
 
 function deliver<R>(subscription: Subscription<R>, slot: number) {
   return ({ event, handled }: Envelope) => {
@@ -49,7 +49,12 @@ function deliver<R>(subscription: Subscription<R>, slot: number) {
     if (done === undefined) return Effect.void
     // Suspended, so a reaction that throws while building its effect is caught like one that fails.
     return Effect.suspend(() => subscription.handle(event)).pipe(
-      Effect.catchCause((cause) => Effect.logError(`A subscriber to ${event._tag} failed`, cause)),
+      // An error line with its cause: Sentry gets it, and PostHog an `error` event pointing to it.
+      Effect.catchCause((cause) =>
+        Effect.logError(`A subscriber to ${event._tag} failed`, cause).pipe(
+          Effect.annotateLogs({ bus: 'server', code: event._tag }),
+        ),
+      ),
       Effect.ensuring(Deferred.succeed(done, undefined)),
     )
   }

@@ -26,6 +26,7 @@ const passedOn = async () => {
   if (server === undefined) throw new Error('the middleware has no server half')
   let context: unknown
   await server({
+    serverFnMeta: { id: 'fn-1', name: 'signUp', filename: 'src/api/iam/iam.ts' },
     next: (options: { context: unknown }) => {
       context = options.context
       return Promise.resolve(options)
@@ -41,6 +42,10 @@ describe('the request context middleware', () => {
 
   it('gives each request its own', async () => {
     expect((await passedOn()).requestId).not.toBe((await passedOn()).requestId)
+  })
+
+  it('scopes the request to the server function called, by its name', async () => {
+    expect((await passedOn()).scope).toBe('signUp')
   })
 
   it("hands pending work to the platform's waitUntil", async () => {

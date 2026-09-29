@@ -5,10 +5,12 @@ import { SignedOut } from '#/domains/iam/errors'
 
 import { CallFailed } from '../client/calls'
 import { Unexpected, encodeFailure, type Failure, type Outcome } from '../errors/failure'
+import { forget, identify } from '../observability/client'
 import { continueTo, readSignInSearch, signedIn } from './guard'
 import { session } from './iam'
 
 vi.mock('./iam', () => ({ session: vi.fn() }))
+vi.mock('../observability/client', () => ({ identify: vi.fn(), forget: vi.fn() }))
 
 const answering = (outcome: Outcome<unknown, Failure>) => {
   vi.mocked(session).mockResolvedValue(outcome as never)
@@ -59,18 +61,23 @@ describe("sign-in's search params", () => {
 
 describe('the way back once signed in', () => {
   it('goes where the user was, with a full load', () => {
-    continueTo('/dev/session?a=1')
+    continueTo('/dev/session?a=1', 'a-1')
     expect(assign).toHaveBeenCalledExactlyOnceWith('/dev/session?a=1')
   })
 
   it('goes home without a place', () => {
-    continueTo(undefined)
+    continueTo(undefined, 'a-1')
     expect(assign).toHaveBeenCalledExactlyOnceWith('/')
   })
 
   it('goes home when the place, resolved, is another site', () => {
-    continueTo('//evil.example/x')
+    continueTo('//evil.example/x', 'a-1')
     expect(assign).toHaveBeenCalledExactlyOnceWith('/')
+  })
+
+  it('ties the device to the Account before it leaves', () => {
+    continueTo(undefined, 'a-1')
+    expect(identify).toHaveBeenCalledExactlyOnceWith('a-1')
   })
 })
 
@@ -82,6 +89,20 @@ describe('the guard of a page only a signed-in Account sees', () => {
     const found = { account, expiresAt: new Date() }
     answering({ ok: true, value: found })
     expect(await signedIn({ location })).toEqual({ session: found })
+  })
+
+  it('ties the device to the Account whose Session it found', async () => {
+    answering({ ok: true, value: { account, expiresAt: new Date() } })
+    await signedIn({ location })
+    expect(identify).toHaveBeenCalledExactlyOnceWith('a-1')
+    expect(forget).not.toHaveBeenCalled()
+  })
+
+  it('unties the device from any Account when the visit is signed out', async () => {
+    answering(failing(new SignedOut()))
+    await signedIn({ location }).catch(() => undefined)
+    expect(forget).toHaveBeenCalledOnce()
+    expect(identify).not.toHaveBeenCalled()
   })
 
   it('redirects a signed-out visit to sign-in, carrying where it was', async () => {

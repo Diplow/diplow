@@ -6,7 +6,8 @@ preview: >-
   The API layer: server functions, the one helper that runs their Effect
   programs, and the client's side of the seam, where a failure is decoded back
   into its tagged class and sent to the channel its kind and call pick, with a
-  message from the table, in English and French.
+  message from the table, in English and French; and what gets logged, at which
+  verbosity, to PostHog and Sentry.
 ---
 # api
 
@@ -19,12 +20,13 @@ The layer between what the client shows and what the domains know. On the server
 | `client/` | `calls.ts`, `settle` and the `read` and `write` builders for TanStack Query; `channels.ts`, the QueryClient that carries each failure out, and `submitWrite` for a form; `ReadBoundary`, the nearest boundary of a read |
 | `iam/` | IAM's server functions (`signUp`, `signIn`, `signOut`, `session`) and `guard.ts`: `signedIn`, the `beforeLoad` of a page only a signed-in Account sees, and the `?redirect=` sign-in and sign-up read back: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/CLAUDE\|iam]] |
 | `dev/` | The failures, programs and server functions `/dev/errors` uses to provoke every channel. They stay members of `Failure` as long as the page exists; outside dev and previews the functions answer `NotFound` |
+| `observability/` | `levels.ts`, the verbosity levels, shared and pure; `server.ts`, the logger that sends the lines a request's verbosity logs to PostHog and an error's cause to Sentry, and what `run` logs; `client.ts`, the client's `log` and `reportError`: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/CLAUDE\|observability]] |
 
 ## Effect stops at the server function
 
 Domains, repositories and the API layer are Effect. The client stays on TanStack Query, Form and Router, which are promise-native: wrapping them in Effect would fight three libraries for nothing the decoded error union does not already give.
 
-The two meet in one helper. Start middleware stays promise-based and puts the request id, the platform's `waitUntil`, the request's `HttpExchange` and its Session on Start's `context`; every server function hands its program to `run`, which provides that context as Effect services (`RequestContext`, `WaitUntil`, `HttpExchange`, IAM's `CurrentSession`), runs the program on one `ManagedRuntime` built from every layer, and returns an `Outcome`: the value, or the failure encoded with the request id. Nothing else calls `run*`: `eslint.config.ts` says no, and `scripts/lint.test.ts` proves it fires.
+The two meet in one helper. Start middleware stays promise-based and puts the request id, the server function's name (its scope), the platform's `waitUntil`, the request's `HttpExchange` and its Session on Start's `context`; every server function hands its program to `run`, which provides that context as Effect services (`RequestContext`, `WaitUntil`, `HttpExchange`, IAM's `CurrentSession`), runs the program on one `ManagedRuntime` built from every layer, and returns an `Outcome`: the value, or the failure encoded with the request id. Nothing else calls `run*`: `eslint.config.ts` says no, and `scripts/lint.test.ts` proves it fires.
 
 The shape every server function takes, here for a Mapping read once that domain exists:
 
@@ -37,7 +39,7 @@ export const getTile = createServerFn({ method: 'GET' })
 ## Errors
 
 - **Each domain declares its errors** as tagged classes in its own language (`EntitlementMissing`), with `Schema.TaggedError`. Each carries one **kind** from a closed set, as a field: `kind: kind('Forbidden')`, or `...invalid` for an `Invalid` error, which names the form fields at fault. The kinds are in `src/domains/kind.ts`, below every domain, so a domain can declare them without importing the API layer: `Unauthenticated`, `Forbidden`, `Invalid`, `NotFound`, `Conflict`, `Unexpected`.
-- **A server function's type lists the errors it can fail with**: its `Outcome<A, E>`. `run` refuses, by its type, a program whose errors are not in `Failure`, the union in `errors/failure.ts`; a domain's errors join it as the domain is built. So a repository's or an infrastructure's typed failure never reaches `run` typed: the domain maps it to one of its own errors, or turns it into a defect (`Effect.orDie`). Defects, interruptions and anything outside the union (a defect beside a declared failure included) collapse to `Unexpected`: reported with the request id (to the server's log until Sentry, HEX-19), never sent as they are.
+- **A server function's type lists the errors it can fail with**: its `Outcome<A, E>`. `run` refuses, by its type, a program whose errors are not in `Failure`, the union in `errors/failure.ts`; a domain's errors join it as the domain is built. So a repository's or an infrastructure's typed failure never reaches `run` typed: the domain maps it to one of its own errors, or turns it into a defect (`Effect.orDie`). Defects, interruptions and anything outside the union (a defect beside a declared failure included) collapse to `Unexpected`: reported to Sentry with the request id, never sent as they are.
 - **The client decodes the union back into the tagged classes** with Effect Schema. `settle` throws a `CallFailed` holding the decoded failure, the scope and the request id. Anything the union does not know, or a call that never reached the helper, is `Unexpected`.
 - **The channel is picked by kind and by the call**, never by a component's author. `errors/channel.ts` is this table, row for row:
 
@@ -68,7 +70,11 @@ A domain publishes a fact other parts may react to, without knowing who does; th
 - **The bus is in-process**, on Effect's `PubSub` (`server/bus.ts`). Each subscription reads it from its own fiber, in the order events were published, for as long as the runtime lives rather than the request. A subscriber that fails is reported and the others carry on.
 - **Subscribers finish inside the request.** `run` provides `WaitUntil`, and publishing hands it the work of every subscription that heard the event, so the function stays up until they are done: Vercel's `waitUntil`, which Nitro puts on the request. A lost event is acceptable; the day a subscriber cannot be lost, the bus moves to an outbox table.
 - **Inside the process the type is enough.** An event is decoded by its schema only where it crosses a boundary: into the client, into an outbox.
-- **Every event is logged at `medium`**: a log line annotated `verbosity: medium`, carrying the event's tag, never its fields, until HEX-19 sets the levels.
+- **Every event is logged at `medium`**: a log line annotated `topic: 'bus'`, carrying the event's tag, never its fields. A subscriber's failure is an error line with its cause, so it reaches Sentry.
+
+## Observability
+
+Sentry owns errors, traces and alerting; PostHog, product analytics and the leveled event log. This layer decides what is logged, at which verbosity, and where an error is reported: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/CLAUDE|observability]]. The SDKs sit behind [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/CLAUDE|their seam]].
 
 ## Rules
 

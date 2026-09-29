@@ -5,6 +5,8 @@
 import { Option, Schema } from 'effect'
 import { useCallback, useSyncExternalStore } from 'react'
 
+import { log, reportError } from '#/api/observability/client'
+
 /**
  * A fact in the past tense, declared with an Effect Schema tagged class in the language of the domain
  * it speaks of: `class TileCentered extends Schema.TaggedClass<TileCentered>()('TileCentered', …)`.
@@ -18,9 +20,9 @@ type FactSchema<F extends Fact> = Schema.Codec<F, unknown>
 
 const listeners = new Set<(fact: Fact) => void>()
 
-// Until HEX-19 sets the levels, a bus message is a console line tagged with the level it belongs to.
+// A bus message is logged at `medium`, by its tag, never its fields.
 function logged(fact: Fact) {
-  console.debug(`${fact._tag} published`, { bus: 'client', verbosity: 'medium' })
+  log('bus', `${fact._tag} published`, { bus: 'client' })
 }
 
 /**
@@ -33,7 +35,7 @@ export function publish(fact: Fact) {
     try {
       listener(fact)
     } catch (error) {
-      console.error(`A feature failed reacting to ${fact._tag}`, error)
+      reportError(error, { scope: fact._tag })
     }
   }
 }
@@ -45,7 +47,7 @@ export function publish(fact: Fact) {
 export function receive<F extends Fact>(schema: FactSchema<F>, input: unknown) {
   const fact = Schema.decodeUnknownOption(schema)(input)
   if (Option.isSome(fact)) publish(fact.value)
-  else console.error('The client bus dropped a fact its schema refuses', { bus: 'client' })
+  else reportError(new Error('The client bus dropped a fact its schema refuses'), { scope: 'bus' })
 }
 
 function listen<F extends Fact>(schema: FactSchema<F>, react: (fact: F) => void) {

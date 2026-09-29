@@ -137,7 +137,8 @@ describe("the QueryClient's channels", () => {
     expect(inBoundary(new CallFailed(new DevForbidden(), 'scope'), 'frame')).toBe(false)
   })
 
-  it("reports a frame read's failure, and shows nothing", async () => {
+  it("leaves a frame read's failure to the server's report, and shows nothing", async () => {
+    // The server logged the failure it sent, with this request id: the client reports it again nowhere.
     const report = vi.spyOn(console, 'error').mockImplementation(() => undefined)
     const frame = read({
       scope: 'header',
@@ -146,10 +147,20 @@ describe("the QueryClient's channels", () => {
       frame: true,
     })
     await expect(client.query(frame)).rejects.toBeInstanceOf(CallFailed)
-    expect(report).toHaveBeenCalledWith('header failed: DevConflict (Conflict)', {
-      requestId: 'req-1',
-    })
+    expect(report).not.toHaveBeenCalled()
     expect(toast.error).not.toHaveBeenCalled()
+  })
+
+  it('reports a call that never reached the server, which has no report of it', async () => {
+    const report = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    const lost = new TypeError('Failed to fetch')
+    const frame = read({ scope: 'header', key: [], call: () => Promise.reject(lost), frame: true })
+    await expect(client.query(frame)).rejects.toBeInstanceOf(CallFailed)
+    expect(report).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ cause: lost }), {
+      scope: 'header',
+      kind: 'Unexpected',
+      code: 'Unexpected',
+    })
   })
 
   it("raises one toast for a write's failure", async () => {

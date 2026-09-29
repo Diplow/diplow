@@ -12,8 +12,9 @@ export class CallFailed extends Error {
   /** Absent when the call never reached the helper: the network, or Start itself, failed. */
   readonly requestId: string | undefined
 
-  constructor(failure: Failure, scope: string, requestId?: string) {
-    super(`${scope} failed: ${failure._tag}`)
+  /** `cause`: what the call threw instead of an outcome, kept for Sentry. */
+  constructor(failure: Failure, scope: string, requestId?: string, cause?: unknown) {
+    super(`${scope} failed: ${failure._tag}`, { cause })
     this.name = 'CallFailed'
     this.failure = failure
     this.scope = scope
@@ -23,7 +24,9 @@ export class CallFailed extends Error {
 
 /** Any error a call threw, as a CallFailed: what is not one already is `Unexpected`. */
 export function asCallFailed(error: unknown, scope: string): CallFailed {
-  return error instanceof CallFailed ? error : new CallFailed(new Unexpected(), scope)
+  return error instanceof CallFailed
+    ? error
+    : new CallFailed(new Unexpected(), scope, undefined, error)
 }
 
 /**

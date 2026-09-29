@@ -8,6 +8,16 @@ import { CurrentSession, proven, type Session } from '#/domains/iam/iam'
 import { Auth, HttpExchange, layer as authLayer } from '#/repositories/auth/auth'
 
 import { Failure, Unexpected, encodeFailure, type Outcome } from '../errors/failure'
+import {
+  CurrentRequestLog,
+  called,
+  failedUnexpectedly,
+  flushed,
+  observability,
+  requestLog,
+  sent,
+  unobserved,
+} from '../observability/server'
 import { WaitUntil, serverBus, type Subscription } from './bus'
 
 /** What Start's middleware knows about the request, as a program sees it. */
@@ -36,9 +46,10 @@ const repositories: Layer.Layer<Auth> =
 
 /**
  * Every layer: the bus, the domains' services and the repositories below them, merged here as each is
- * built. Built once, on the first call, and shared by every request.
+ * built, and the logger that sends to PostHog and Sentry. Built once, on the first call, and shared
+ * by every request.
  */
-const layer = Layer.mergeAll(serverBus(subscriptions), repositories)
+const layer = Layer.mergeAll(serverBus(subscriptions), repositories, observability)
 
 const runtime = ManagedRuntime.make(layer)
 
@@ -52,6 +63,8 @@ export type Services =
 /** Start's `context`, as its middleware (./middleware.ts) fills it. */
 export interface StartContext {
   readonly requestId: string
+  /** The server function called, by its name: what its log lines and its errors are scoped to. */
+  readonly scope: string
   /** The platform's: keeps the request's function up until the promise settles. */
   readonly waitUntil: (promise: Promise<unknown>) => void
   /** The request's headers, and where the cookies a call sets go. */
@@ -63,51 +76,62 @@ export interface StartContext {
 const isFailure = Schema.is(Failure)
 
 /**
- * The failure to send for a failed program: the one it declares, when that is all that went wrong
- * and the union knows it. A defect (even beside a declared failure), an interruption, or a value the
- * union does not know, reached through an untyped path, is reported and sent as `Unexpected`.
+ * The failure to send for a failed program, logged: the one it declares, when that is all that went
+ * wrong and the union knows it, as PostHog's `error` event. A defect (even beside a declared failure),
+ * an interruption, or a value the union does not know, reached through an untyped path, goes to
+ * Sentry and is sent as `Unexpected`.
  */
-async function failureOf<E extends Failure>(cause: Cause.Cause<E>, context: StartContext) {
+function failureOf<E extends Failure>(cause: Cause.Cause<E>): Effect.Effect<E | Unexpected> {
   const declared = Cause.findErrorOption(cause)
   const cleanly = !Cause.hasDies(cause) && !Cause.hasInterrupts(cause)
   if (declared._tag === 'Some' && cleanly && isFailure(declared.value)) {
-    return declared.value
+    return Effect.as(sent(declared.value), declared.value)
   }
-  return reported(cause, context)
+  return Effect.as(failedUnexpectedly(cause), new Unexpected())
 }
 
 /**
  * Runs a server function's program and returns its outcome: the value, or the failure encoded with
- * the request id. Only failures in the union reach the client as they are; see `failureOf`.
+ * the request id. Only failures in the union reach the client as they are; see `failureOf`. The call
+ * and its failure are logged at the request's verbosity; once the work the program left pending has
+ * settled, PostHog's queue is flushed through `waitUntil`.
  */
 export async function run<A, E extends Failure>(
   context: StartContext,
   program: Effect.Effect<A, E, Services>,
 ): Promise<Outcome<A, E | Unexpected>> {
-  const exit = await runtime.runPromiseExit(
-    program.pipe(
-      Effect.provideService(RequestContext, { requestId: context.requestId }),
+  const { requestId } = context
+  const pending: Array<Promise<unknown>> = []
+  const outcome = Effect.flatMap(requestLog(context), (log) =>
+    Effect.flatMap(called, () =>
       // A Session the middleware could not resolve fails the program: reported, sent as Unexpected.
-      Effect.provideServiceEffect(CurrentSession, context.session),
-      Effect.provideService(HttpExchange, context.exchange),
-      Effect.provideService(WaitUntil, (work) => {
-        context.waitUntil(runtime.runPromise(work))
-      }),
+      program.pipe(Effect.provideServiceEffect(CurrentSession, context.session)),
+    ).pipe(
+      Effect.map((value): Outcome<A, E | Unexpected> => ({ ok: true, value })),
+      Effect.catchCause((cause) =>
+        Effect.map(failureOf(cause), (failure) => ({
+          ok: false as const,
+          failure: encodeFailure(failure),
+          requestId,
+        })),
+      ),
+      Effect.provideService(CurrentRequestLog, log),
     ),
+  ).pipe(
+    Effect.provideService(RequestContext, { requestId }),
+    Effect.provideService(HttpExchange, context.exchange),
+    Effect.provideService(WaitUntil, (work) => {
+      const settled = runtime.runPromise(work)
+      pending.push(settled)
+      context.waitUntil(settled)
+    }),
   )
-  if (Exit.isSuccess(exit)) return { ok: true, value: exit.value }
-  const failure: E | Unexpected = await failureOf(exit.cause, context)
-  return { ok: false, failure: encodeFailure(failure), requestId: context.requestId }
-}
-
-// Until Sentry is wired (HEX-19), the report is Effect's logger, which prints to the server's log.
-async function reported(cause: Cause.Cause<unknown>, context: StartContext) {
-  await runtime.runPromise(
-    Effect.logError('A server function failed unexpectedly', cause).pipe(
-      Effect.annotateLogs({ requestId: context.requestId }),
-    ),
-  )
-  return new Unexpected()
+  const exit = await runtime.runPromiseExit(outcome)
+  context.waitUntil(Promise.allSettled(pending).then(() => runtime.runPromiseExit(flushed)))
+  if (Exit.isSuccess(exit)) return exit.value
+  // Only the runtime itself failing (a layer that could not be built) gets here: no logger heard it.
+  unobserved(exit.cause, context)
+  return { ok: false, failure: encodeFailure<E | Unexpected>(new Unexpected()), requestId }
 }
 
 /**
