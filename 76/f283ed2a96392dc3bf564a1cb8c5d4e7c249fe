@@ -1,0 +1,76 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/run.ts
+  s_8dec392e8787d2::t_9473cc81f1f160 134
+  s_8dec392e8787d2::t_fa1c6eb3f6ae3e 19,96-97,103-116,118-133
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/guard.test.ts
+  s_8dec392e8787d2::t_c67ce493b04889 8,13,64,69,74,77-81,94-106
+  s_8dec392e8787d2::t_51fb24e66e9d73 107
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-v0-server-foundations/decisions.md
+  s_8dec392e8787d2::t_ef7c6c36e8b429 121,125,129
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/client.ts
+  s_8dec392e8787d2::t_60fdda62459cd1 5-6
+  s_8dec392e8787d2::t_831900b342832f 8,21-26,28,34,75-78,81,84,87
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/bus.ts
+  s_8dec392e8787d2::t_fa1c6eb3f6ae3e 55
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE.md
+  s_8dec392e8787d2::t_a11d82a5156d67 23,77
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/posthog-server.ts
+  s_8dec392e8787d2::t_831900b342832f 44
+  s_8dec392e8787d2::t_ff927bf6f6ab09 46,67
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/levels.test.ts
+  s_8dec392e8787d2::t_1082d3f8076a0c 3,5-19,21-28,55-66
+  s_8dec392e8787d2::t_32ff4d5e2f6c53 67
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/levels.ts
+  s_8dec392e8787d2::t_850a7cb0386cec 13-24
+  s_8dec392e8787d2::t_aec0cfe7dc1362 12
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/sentry.test.ts
+  s_8dec392e8787d2::t_1ac861963ef4c6 43
+  s_8dec392e8787d2::t_05fb0803aad54c 1-42,44-62
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/run.test.ts
+  s_8dec392e8787d2::t_bd3dfe6c6c77ff 2,84-92
+  s_8dec392e8787d2::t_db6f4dff4632a4 93-94
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/posthog-browser.ts
+  s_8dec392e8787d2::t_cbe94180b159e8 11-12,16,24-27,33,46-54
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/server.ts
+  s_8dec392e8787d2::t_fa1c6eb3f6ae3e 10,13-21,57-58,60-63,67-72,74,76-77,103-111
+  s_8dec392e8787d2::t_2510e8e8317f43 112
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_8dec392e8787d2::t_ef7c6c36e8b429 79
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/CLAUDE.md
+  s_8dec392e8787d2::t_2ac34b8f1ad1bd 1-41
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/server.test.ts
+  s_8dec392e8787d2::t_90a196def5eef3 3,7-8,10-41,84,160,163-165,168-176,187,198-201,205-206
+  s_8dec392e8787d2::t_bd3dfe6c6c77ff 202-204
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/bus.test.ts
+  s_8dec392e8787d2::t_fa1c6eb3f6ae3e 118
+4-software-engineering/1-projects/1-hexframe/1-app/vite.config.ts
+  s_8dec392e8787d2::t_850a7cb0386cec 8-34
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/posthog-server.test.ts
+  s_8dec392e8787d2::t_ff927bf6f6ab09 1-67,72-74,77
+  s_8dec392e8787d2::t_1f75c357489f79 68-71,75-76
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/guard.ts
+  s_8dec392e8787d2::t_60fdda62459cd1 39-40,42-43
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/access/Access.tsx
+  s_8dec392e8787d2::t_60fdda62459cd1 57-58
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/CLAUDE.md
+  s_8dec392e8787d2::t_4ff9d990edf4b5 13,25
+  s_8dec392e8787d2::t_ef7c6c36e8b429 17,19-20,26
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/sentry.ts
+  s_8dec392e8787d2::t_1f75c357489f79 16
+  s_8dec392e8787d2::t_1a461e996b781f 5,10,12-15,17-74,83-84,97-100
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "76f283ed2a96392dc3bf564a1cb8c5d4e7c249fe",
+  "prompts": {},
+  "sessions": {
+    "s_8dec392e8787d2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5b2da9a5-bf15-4628-a9ec-c2000e9a2184",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
