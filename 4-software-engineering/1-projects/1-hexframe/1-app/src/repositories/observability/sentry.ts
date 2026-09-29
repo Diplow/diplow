@@ -12,12 +12,39 @@ interface SentryOptions {
   readonly router?: AnyRouter
 }
 
-// An email address, or a run of 24 characters or more that could be a token, a key or a session id.
-const sensitive = /[\w.%+-]+@[\w.-]+\.[A-Za-z]{2,}|[\w+=-]{24,}/g
+// What a message can carry of what a user sent, each kind a pattern, tried in this order at every place.
+const sensitive = new RegExp(
+  [
+    // A value the message quotes: in quotes, or in parentheses after `=`, as Postgres quotes a row.
+    /(?<!\w)'[^'\n]*'|"[^"\n]*"|`[^`\n]*`|(?<==)\([^)\n]*\)/,
+    // A value named by a key that says it is secret: `password=…`, `token: …`.
+    /(?<=\b(?:password|passcode|passphrase|secret|token|otp|code|pin|key)s?\s*[:=]\s*)[^\s,;)]+/,
+    // An email address.
+    /[\w.%+-]+@[\w.-]+\.[A-Za-z]{2,}/,
+    // A run of six digits or more: a one-time code, a card or a phone number.
+    /\b\d{6,}\b/,
+    // A run of 24 characters or more that could be a token, a key or a session id.
+    /[\w+=-]{24,}/,
+  ]
+    .map((pattern) => pattern.source)
+    .join('|'),
+  'gi',
+)
 
-/** A text with every email address and token-like run replaced, for what Sentry keeps of an error. */
+const quotes = new Set([`'`, '"', '`', '('])
+
+/**
+ * A text with every value it quotes, every value a secret key names, every email address, long number
+ * and token-like run replaced, for what Sentry keeps of an error: the shape of a message, never what a
+ * user sent. A quoted value keeps its quotes, so the message still reads.
+ */
 export function redacted(text: string) {
-  return text.replace(sensitive, '[redacted]')
+  return text.replace(sensitive, (match) => {
+    const first = match.charAt(0)
+    return quotes.has(first) && match.length > 1
+      ? `${first}[redacted]${match.charAt(match.length - 1)}`
+      : '[redacted]'
+  })
 }
 
 /** A URL without its query and fragment, its sensitive runs redacted: a path is all Sentry needs. */
@@ -25,13 +52,36 @@ function redactedUrl(url: string) {
   return redacted(url.replace(/[?#].*$/s, ''))
 }
 
+/** A span's or a transaction's name, such as `GET /reset/…?email=…`: every URL in it without its query. */
+function redactedName(name: string) {
+  return redacted(name.replace(/(?<=[^\s?#])[?#]\S*/g, ''))
+}
+
+// A span attribute that holds a URL's query or fragment, dropped whole; any other text is redacted, a URL
+// losing its query first.
+const dropped = /(?:^|\.)(?:query|fragment)$/
+const urlLike = /(?:^|\.)(?:url|full|target|path|from|to)$/
+
+/** A span's attributes as Sentry may keep them, as fetch and HTTP instrumentation fill them. */
+function scrubbedData<D extends Readonly<Record<string, unknown>>>(data: D): D {
+  const kept: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(data)) {
+    if (dropped.test(key)) continue
+    kept[key] =
+      typeof value !== 'string' ? value : urlLike.test(key) ? redactedUrl(value) : redacted(value)
+  }
+  return kept as D
+}
+
 /**
  * An event as Sentry may keep it: no request data but its method and redacted URL, no user, and every
  * message and exception value redacted, since a defect's message can quote what a user sent (a
- * database error quotes the row it refused).
+ * database error quotes the row it refused). A transaction's name, spans and trace keep no query and
+ * no sensitive run either, since fetch and HTTP instrumentation name a span by its full URL.
  */
 export function scrubbed<E extends Sentry.Event>(event: E): E {
-  const { request } = event
+  const { request, contexts } = event
+  const trace = contexts?.trace
   return {
     ...event,
     user: undefined,
@@ -53,6 +103,16 @@ export function scrubbed<E extends Sentry.Event>(event: E): E {
               value: value.value === undefined ? undefined : redacted(value.value),
             })),
           },
+    transaction: event.transaction === undefined ? undefined : redactedName(event.transaction),
+    spans: event.spans?.map((span) => ({
+      ...span,
+      description: span.description === undefined ? undefined : redactedName(span.description),
+      data: scrubbedData(span.data),
+    })),
+    contexts:
+      trace?.data === undefined
+        ? contexts
+        : { ...contexts, trace: { ...trace, data: scrubbedData(trace.data) } },
   }
 }
 

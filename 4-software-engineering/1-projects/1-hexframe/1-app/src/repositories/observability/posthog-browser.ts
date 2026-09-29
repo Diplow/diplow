@@ -48,7 +48,15 @@ export function captureInBrowser(event: string, properties: Readonly<Record<stri
  * that raises one Account's verbosity never applies to an anonymous visitor, nor after a sign-out.
  */
 export function accountFlagInBrowser(key: string) {
-  return started && posthog._isIdentified() ? posthog.getFeatureFlag(key) : undefined
+  return started && identified() ? posthog.getFeatureFlag(key) : undefined
+}
+
+/**
+ * Whether this device is tied to an Account, as PostHog keeps it across page loads: `$user_state`,
+ * read through the public `get_property`, is what PostHog's own private `_isIdentified` reads.
+ */
+function identified() {
+  return posthog.get_property('$user_state') === 'identified'
 }
 
 /** Ties this device's events and flags to an Account, by its id; PostHog keeps it across loads. */
@@ -61,6 +69,5 @@ export function identifyInBrowser(distinctId: string) {
  * load that finds nobody signed in calls it, so it resets once after each sign-out.
  */
 export function forgetInBrowser() {
-  // PostHog keeps whether the device is identified across page loads; this reads it back.
-  if (started && posthog._isIdentified()) posthog.reset()
+  if (started && identified()) posthog.reset()
 }

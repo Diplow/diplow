@@ -4,7 +4,7 @@ import { vi } from 'vitest'
 
 import type { Session } from '#/domains/iam/iam'
 import { Analytics, type AnalyticsEvent } from '#/repositories/observability/posthog-server'
-import { startSentry } from '#/repositories/observability/sentry'
+import { captureError, startSentry } from '#/repositories/observability/sentry'
 import { ErrorTracker, traced } from '#/repositories/observability/sentry-server'
 
 import {
@@ -15,11 +15,13 @@ import {
   observedEntry,
   requestLog,
   sent,
+  unobserved,
 } from './server'
 
 vi.mock('#/repositories/observability/sentry', async (original) => ({
   ...(await original<object>()),
   startSentry: vi.fn(),
+  captureError: vi.fn(),
 }))
 vi.mock('#/repositories/observability/sentry-server', async (original) => ({
   ...(await original<object>()),
@@ -203,5 +205,49 @@ describe("the server's observability", () => {
       expect.objectContaining({ environment: 'development' }),
     )
     expect(traced).toHaveBeenCalledWith(entry)
+  })
+})
+
+describe('what no topic and no logger heard', () => {
+  it.effect(
+    'sends a line with no topic by its level: an error to Sentry and as `error`, the rest as `info`',
+    () =>
+      Effect.gen(function* () {
+        const { events, errors, layer } = recorded()
+        yield* inRequest(
+          Effect.andThen(
+            Effect.logError('A cache could not be read', Cause.die(new Error('disk full'))),
+            Effect.logInfo('A cache was warmed'),
+          ),
+        ).pipe(Effect.provide(layer))
+        expect(errors).toMatchObject([{ error: new Error('disk full') }])
+        expect(events).toMatchObject([
+          {
+            event: 'error',
+            properties: { message: 'A cache could not be read', sentryEventId: 'sentry-event-1' },
+          },
+          {
+            event: 'info',
+            properties: { message: 'A cache was warmed', sentryEventId: undefined },
+          },
+        ])
+      }),
+  )
+
+  it("sends a failure of the runtime itself straight to Sentry, with the request's tags", () => {
+    const console_ = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    unobserved(Cause.die(new Error('a layer could not be built')), {
+      requestId: 'req-1',
+      scope: 'getTile',
+      session: signedOut,
+    })
+    expect(console_).toHaveBeenCalledOnce()
+    console_.mockRestore()
+    expect(captureError).toHaveBeenCalledWith(new Error('a layer could not be built'), {
+      requestId: 'req-1',
+      scope: 'getTile',
+      kind: 'Unexpected',
+      code: 'Unexpected',
+    })
   })
 })
