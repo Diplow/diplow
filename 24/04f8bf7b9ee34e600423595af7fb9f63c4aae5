@@ -1,0 +1,19 @@
+.skills/1-ship/run-autonomous-project/references/helpers.md
+  s_20c528098b0fdd::t_34cc77df7c312e 26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2404f8bf7b9ee34e600423595af7fb9f63c4aae5",
+  "prompts": {},
+  "sessions": {
+    "s_20c528098b0fdd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7fa107e8-9929-481a-899e-3739fffcebfe",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
