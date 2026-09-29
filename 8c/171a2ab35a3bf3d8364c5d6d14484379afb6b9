@@ -1,0 +1,42 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/sentry.test.ts
+  s_61922a4a3c813c::t_48765b402bc1af 5-6,15-33,67-104,109-111,115
+  s_61922a4a3c813c::t_121a7018e4ea38 105-108,112-114
+  s_61922a4a3c813c::t_8adb5f83ab7d64 116
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/posthog-browser.ts
+  s_61922a4a3c813c::t_955ca6b9b1be3a 72
+  s_61922a4a3c813c::t_7a2193c1ea031c 51-59
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-v0-server-foundations/decisions.md
+  s_61922a4a3c813c::t_ab53b8b5b61a56 125
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/server.test.ts
+  s_61922a4a3c813c::t_121a7018e4ea38 210-251
+  s_61922a4a3c813c::t_570c0d37512b3d 7,18,24
+  s_61922a4a3c813c::t_b1ed4d1f24e5c1 252-253
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/sentry.ts
+  s_61922a4a3c813c::t_7febe8062441fe 20-21
+  s_61922a4a3c813c::t_bf940fee0979a0 15-19,22-32,34-40,42-47,55-75,79-80,83-84,106-115
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/errors/channel.ts
+  s_61922a4a3c813c::t_9a31271b7d2244 13-15
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/CLAUDE.md
+  s_61922a4a3c813c::t_e1fb4db79b17f7 20,25
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/run.test.ts
+  s_61922a4a3c813c::t_53116b27d49227 161-162,165
+  s_61922a4a3c813c::t_570c0d37512b3d 1,144,146-160,163-164
+  s_61922a4a3c813c::t_121a7018e4ea38 145
+  s_61922a4a3c813c::t_a51720a881cb93 166-167
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8c171a2ab35a3bf3d8364c5d6d14484379afb6b9",
+  "prompts": {},
+  "sessions": {
+    "s_61922a4a3c813c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "da471f4a-6df8-47c0-9c3e-b45603dded5d",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
