@@ -1,0 +1,91 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/posthog-browser.ts
+  s_8dec392e8787d2::t_e1fd6924964540 1-56
+4-software-engineering/1-projects/1-hexframe/1-app/src/router.tsx
+  s_8dec392e8787d2::t_3309e84b04a4ea 5,13,26-28
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/run.test.ts
+  s_8dec392e8787d2::t_ff52e1a3578fa8 61-62,67-73
+  s_8dec392e8787d2::t_267a4cfe732344 15
+  s_8dec392e8787d2::t_4f1ce71271633b 74-75
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/bus.test.ts
+  s_8dec392e8787d2::t_97d69abcfa356a 129
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/client/channels.test.ts
+  s_8dec392e8787d2::t_71c8f3df9869c2 140-141,150,154-163
+  s_8dec392e8787d2::t_44238fc9da6367 164-165
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/client/calls.ts
+  s_8dec392e8787d2::t_ed1096939e4f52 15-17,27-29
+4-software-engineering/1-projects/1-hexframe/1-app/src/vite-env.d.ts
+  s_8dec392e8787d2::t_01f57849e06502 3-13
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/levels.test.ts
+  s_8dec392e8787d2::t_81db3c0cca64ba 1-54
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/middleware.test.ts
+  s_8dec392e8787d2::t_ff52e1a3578fa8 29,47-48
+  s_8dec392e8787d2::t_399f48bdcfdc0a 49-50
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/server.test.ts
+  s_8dec392e8787d2::t_f2376d7435b75e 4,30-31
+  s_8dec392e8787d2::t_f9c6608ca5ff7f 8-11,17,42-69,71-72,81-84,94-99,104,109-135,137,143-154
+  s_8dec392e8787d2::t_630c5007bb8ea6 1-3,5-7,12-16,18-29,32-41,70,73-80,85-93,100-103,105-108,136,138-142,155-164
+4-software-engineering/1-projects/1-hexframe/1-app/dependency-cruiser.config.ts
+  s_8dec392e8787d2::t_91f120c9ae6239 17
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/posthog-server.ts
+  s_8dec392e8787d2::t_e1fd6924964540 1-51,53-79
+  s_8dec392e8787d2::t_f9c6608ca5ff7f 52
+4-software-engineering/1-projects/1-hexframe/1-app/vite.config.ts
+  s_8dec392e8787d2::t_01f57849e06502 13-20
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/bus.ts
+  s_8dec392e8787d2::t_ed1096939e4f52 42,44,52-57
+4-software-engineering/1-projects/1-hexframe/1-app/src/server.ts
+  s_8dec392e8787d2::t_3309e84b04a4ea 3,6-7,12
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/bus.ts
+  s_8dec392e8787d2::t_ed1096939e4f52 8-9,23,25,38,50
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/dev/provoke.test.ts
+  s_8dec392e8787d2::t_0b4f9233d75f6f 11
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/sentry-server.ts
+  s_8dec392e8787d2::t_e1fd6924964540 1-25
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/check-client-bundle.ts
+  s_8dec392e8787d2::t_91f120c9ae6239 17-18
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/levels.ts
+  s_8dec392e8787d2::t_61d95db7447880 39-43
+  s_8dec392e8787d2::t_2f1460309ed7b1 1-38,44-53,59-79
+  s_8dec392e8787d2::t_f9c6608ca5ff7f 54-58
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/sentry.ts
+  s_8dec392e8787d2::t_853589b1b62a77 20-31
+  s_8dec392e8787d2::t_57e69ff63d145d 1-19,32-45
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/server.ts
+  s_8dec392e8787d2::t_f9c6608ca5ff7f 51-55,146-148
+  s_8dec392e8787d2::t_05ecfc57c2b377 1-50,56-145,149-154
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/guard.ts
+  s_8dec392e8787d2::t_ed1096939e4f52 12,54-57,61
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/client/channels.ts
+  s_8dec392e8787d2::t_ed1096939e4f52 12,30-33,36-40,42
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/run.ts
+  s_8dec392e8787d2::t_90db2aad2008b8 11-19,48-49,51,65-66,78-81,83,87,89,94-96,102-123
+4-software-engineering/1-projects/1-hexframe/1-app/package.json
+  s_8dec392e8787d2::t_db50738085642c 18,31-32
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/client.ts
+  s_8dec392e8787d2::t_f9c6608ca5ff7f 38-42,61-64
+  s_8dec392e8787d2::t_dd4149b4ee5673 1-37,43-60,65-79
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/middleware.ts
+  s_8dec392e8787d2::t_3309e84b04a4ea 40-54
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/bus.test.ts
+  s_8dec392e8787d2::t_97d69abcfa356a 72
+4-software-engineering/1-projects/1-hexframe/1-app/vitest.config.ts
+  s_8dec392e8787d2::t_01f57849e06502 6
+4-software-engineering/1-projects/1-hexframe/pnpm-lock.yaml
+  s_8dec392e8787d2::t_c3d0494caff75a 16-18,36,45,55-60,79,154,757-760,892-897,904-909,916-921,928-933,940-945,952-957,964-969,976-982,990-996,1004-1010,1018-1024,1032-1038,1046-1052,1060-1066,1074-1080,1088-1093,1100-1105,1112-1117,1124-1129,1136-1138,1248-1256,2046-2120,2450-2452,2772-2774,2831-2837,3115-3117,3165-3168,3494-3497,3523-3526,3569-3572,3602-3605,3670-3697,3723-3725,3839-3843,3919-3922,4188-4193,4354,4365-4366,4368,4370,4373,4375,4377,4382,4384,4387,4389,4392,4394,4397,4399,4491,4494,4791-4792,4859-4861,4865-4867,4871-4873,4877-4879,4883-4885,4889-4891,4895-4897,4901-4903,4907-4909,4913-4915,4919-4921,4925-4927,4931-4933,4937-4939,4943-4945,4949-4951,4955-4957,4961-4963,4967-4969,4973-4974,5040-5050,5845-5947,6336-6338,6512,6514-6520,6534,6538,6625-6626,6680-6685,6694,6699,6871-6872,6916-6921,7164-7165,7190-7191,7256-7279,7342-7346,7404-7427,7449-7450,7617-7618,7664-7667,7803,7820,7830-7833
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e28ab23c97ff014bdeeba60311bd0e8aff285616",
+  "prompts": {},
+  "sessions": {
+    "s_8dec392e8787d2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5b2da9a5-bf15-4628-a9ec-c2000e9a2184",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
