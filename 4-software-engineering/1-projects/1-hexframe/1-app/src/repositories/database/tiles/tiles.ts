@@ -33,6 +33,7 @@ type NewTileRow = Omit<TileRow, 'id' | 'parentId' | 'direction'> & {
 export interface Writes {
   /** Adds a row and answers its id. */
   readonly insert: (row: NewTileRow) => Effect.Effect<string>
+  /** Changes the columns given; with none, writes nothing. */
   readonly update: (id: string, changes: Partial<Omit<NewTileRow, 'target'>>) => Effect.Effect<void>
   /** Deletes a row and every row below it. */
   readonly remove: (id: string) => Effect.Effect<void>
@@ -81,11 +82,13 @@ const make = Effect.gen(function* () {
         .pipe(Effect.as(id), Effect.orDie)
     },
     update: (id, changes) =>
-      database
-        .update(tile)
-        .set(changes)
-        .where(and(ofAccount(accountId), eq(tile.id, id)))
-        .pipe(Effect.asVoid, Effect.orDie),
+      Object.values(changes).every((value) => value === undefined)
+        ? Effect.void
+        : database
+            .update(tile)
+            .set(changes)
+            .where(and(ofAccount(accountId), eq(tile.id, id)))
+            .pipe(Effect.asVoid, Effect.orDie),
     remove: (id) =>
       database
         .delete(tile)

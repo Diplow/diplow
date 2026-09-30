@@ -89,6 +89,7 @@ layer(TestTiles)('a System and its Tiles, over PGlite', (it) => {
         body: 'Written before any name.',
       })
       expect((yield* system(accountId)).title).toBe('Ada Lovelace')
+      expect(yield* editTile(accountId, root.id, {})).toEqual(named)
     }),
   )
 
