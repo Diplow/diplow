@@ -6,8 +6,8 @@ import { useRef } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { hexHeight, hexWidth, type Hex } from './geometry/geometry'
-import { layoutCanvas, type TileNode } from './geometry/layout'
+import { hexHeight, hexWidth, type Direction, type Hex } from './geometry/geometry'
+import { layoutCanvas, type Ring, type TileNode } from './geometry/layout'
 import { EmptySlot, Frame } from './Frame'
 import { Tile } from './Tile'
 import {
@@ -20,12 +20,27 @@ import {
   type TileAction,
 } from './view/view'
 
+/** An empty slot: a Direction of a Tile's Frame, or of its Context, that holds no Tile yet. */
+export interface EmptySlotTarget {
+  parent: TileNode
+  ring: Ring
+  direction: Direction
+}
+
 interface CanvasProps {
   /** The System's root Tile, with everything below it. */
   system: TileNode
   view: CanvasView
   /** The next view, after a click: the caller puts it in the URL. */
   onViewChange: (view: CanvasView) => void
+  /**
+   * What a click on an empty slot does, and how a screen reader names it: add a Tile there, move one
+   * there. Without it, empty slots take no click.
+   */
+  emptySlots?: {
+    label: (slot: EmptySlotTarget) => string
+    onSelect: (slot: EmptySlotTarget) => void
+  }
   className?: string
 }
 
@@ -33,7 +48,7 @@ interface CanvasProps {
 const radius = 320
 const canvas: Hex = { center: { x: hexWidth(radius) / 2, y: radius }, radius }
 
-export function Canvas({ system, view, onViewChange, className }: CanvasProps) {
+export function Canvas({ system, view, onViewChange, emptySlots, className }: CanvasProps) {
   const shown = showView(system, view)
   const placements = layoutCanvas(shown.center, shown, canvas)
   // The Tile the last single click landed on: a double-click centers it only if its first click
@@ -66,8 +81,17 @@ export function Canvas({ system, view, onViewChange, className }: CanvasProps) {
         switch (placement.kind) {
           case 'frame':
             return <Frame key={placement.key} placement={placement} />
-          case 'empty':
-            return <EmptySlot key={placement.key} placement={placement} />
+          case 'empty': {
+            const { parent, ring, direction } = placement
+            const slot = { parent, ring, direction }
+            const action = emptySlots && {
+              label: emptySlots.label(slot),
+              onSelect: () => {
+                emptySlots.onSelect(slot)
+              },
+            }
+            return <EmptySlot key={placement.key} placement={placement} action={action} />
+          }
           case 'tile': {
             const action = tileAction(placement, shown)
             return (

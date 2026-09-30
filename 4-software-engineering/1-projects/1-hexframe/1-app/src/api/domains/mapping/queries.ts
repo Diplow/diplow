@@ -5,6 +5,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { read, write } from '../../client/calls'
+import { submitWrite } from '../../client/channels'
 import type { Failure, Outcome } from '../../errors/failure'
 import {
   type NewReference,
@@ -31,6 +32,12 @@ const systemScope = 'system'
  */
 export const useSystem = () =>
   useQuery(read({ scope: systemScope, key: [], call: () => system({ data: undefined }) }))
+
+/**
+ * A Tile of the Account's System as the client holds it, with its Children by Direction, its Context
+ * by slot, and everything below them. The System is its Root.
+ */
+export type SystemTile = NonNullable<ReturnType<typeof useSystem>['data']>
 
 /** A write to the System, named by its scope, after which the System is read again. */
 function useSystemWrite<I, A, E extends Failure>(
@@ -67,3 +74,63 @@ export const useCreateReference = () =>
 /** Empties a Context slot holding a Reference. */
 export const useDeleteReference = () =>
   useSystemWrite('deleteReference', (data: typeof ReferenceSlot.Type) => deleteReference({ data }))
+
+/** The fields a Tile's form edits, which an edit compares one by one. */
+const contentFields = ['title', 'preview', 'body'] as const
+
+/** What a Tile's form edits: its Title, Preview and Body, one per field above. */
+export type TileContent = Pick<SystemTile, (typeof contentFields)[number]>
+
+/**
+ * A form's submit that writes to the System, as the form's `validators.onSubmitAsync`: a refusal shows
+ * on the fields it names, or in its channel, and the System is read again once the write settles.
+ */
+function useSystemSubmit<A, E extends Failure>(
+  scope: string,
+  call: (content: TileContent) => Promise<Outcome<A, E>>,
+  onSaved: () => void,
+) {
+  const client = useQueryClient()
+  return submitWrite({
+    scope,
+    call: (content: TileContent) =>
+      call(content).finally(() => {
+        void client.invalidateQueries({ queryKey: [systemScope] })
+      }),
+    onSaved,
+  })
+}
+
+/** Submits a new Tile's form: the Tile goes in this free slot, a Child or a Tile of the Context. */
+export const useCreateTileSubmit = (
+  where: Pick<typeof NewTile.Type, 'parent' | 'slot'>,
+  onSaved: () => void,
+) =>
+  useSystemSubmit(
+    'createTile',
+    (content) => createTile({ data: { ...where, ...content } }),
+    onSaved,
+  )
+
+/**
+ * Submits a Tile's form: only the fields that changed are sent, so the Body of an untitled Root can
+ * be written before its name.
+ */
+export const useEditTileSubmit = (tile: TileContent & { id: string }, onSaved: () => void) =>
+  useSystemSubmit(
+    'editTile',
+    (content) => editTile({ data: { id: tile.id, ...changed(tile, content) } }),
+    onSaved,
+  )
+
+/** The fields of `after` that differ from `before`. */
+function changed(before: TileContent, after: TileContent): Partial<TileContent> {
+  return Object.fromEntries(
+    contentFields.flatMap((field) =>
+      before[field] === after[field] ? [] : [[field, after[field]]],
+    ),
+  )
+}
+
+/** A Tile form's submit, as `useCreateTileSubmit` and `useEditTileSubmit` return it. */
+export type TileSubmit = ReturnType<typeof useSystemSubmit>

@@ -19,7 +19,7 @@ export interface Unfolding {
 }
 
 /** What a hex stands for: a Tile's Children around it, or its Context inside it. */
-type Ring = 'children' | 'context'
+export type Ring = 'children' | 'context'
 
 /**
  * Every placement has a `key`, unique in the list and stable across views, for React. A Child keeps
@@ -29,7 +29,16 @@ type Ring = 'children' | 'context'
 export type Placement =
   | { kind: 'frame'; key: string; ring: Ring; hex: Hex; depth: number; tile: TileNode }
   | { kind: 'tile'; key: string; role: 'hub' | Ring; hex: Hex; depth: number; tile: TileNode }
-  | { kind: 'empty'; key: string; ring: Ring; hex: Hex; depth: number; direction: Direction }
+  | {
+      kind: 'empty'
+      key: string
+      ring: Ring
+      hex: Hex
+      depth: number
+      /** The Tile whose Frame, or whose Context, the slot belongs to. */
+      parent: TileNode
+      direction: Direction
+    }
 
 /** The gap between neighbors, as a share of a hex's radius. */
 const gap = 0.05
@@ -60,7 +69,8 @@ function placeFrame(
     const slot = slots.ring[direction]
     if (!member) {
       const key = `empty:${ring}:${tile.id}:${String(direction)}`
-      return [{ kind: 'empty', key, ring, hex: inset(slot), depth: depth + 1, direction }]
+      const hex = inset(slot)
+      return [{ kind: 'empty', key, ring, hex, depth: depth + 1, parent: tile, direction }]
     }
     if (ring === 'context') {
       // A Context slot may hold a Reference to a Tile drawn elsewhere, so its key is the slot's.

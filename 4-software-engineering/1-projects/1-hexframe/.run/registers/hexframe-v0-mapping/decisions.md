@@ -8,7 +8,8 @@ preview: >-
   tiles repository sits, how a change keeps a System consistent, how the Root
   starts, what a Reference can do, and how the System is read; then how the
   app reaches Mapping: where its server functions sit, what their inputs
-  allow, and how the client keeps the System fresh.
+  allow, and how the client keeps the System fresh; then the canvas on real
+  data: home is the System, what each gesture changes, and what the URL holds.
 ---
 # Decisions
 
@@ -47,3 +48,19 @@ HEX-22, [#19](https://github.com/Diplow/diplow/pull/19). Each input is one flat 
 ### DEC-9 The System is one query, read again after every write, and the database joins the runtime
 
 HEX-22, [#19](https://github.com/Diplow/diplow/pull/19). Following DEC-6, the client holds one query, `['system', …]`, and `useSystem` reads it. Each write hook (`useCreateTile` and the others) reads it again once the write settles, whether it succeeded or failed, since a refusal such as `DirectionTaken` or `TileNotFound` means the page is behind. No write updates the cache optimistically yet: the canvas (HEX-23) can add it where a wait shows. The deployed `Database` layer joins the server function runtime beside Better Auth, with the tiles repository over it, as `hexframe-v0-server-foundations/decisions.md#DEC-9` planned. Under `pnpm dev` and the tests, the tiles repository shares `TestAuth`'s PGlite.
+
+### DEC-10 Home is the signed-in Account's System
+
+HEX-23. The canvas needed a page. `/` held a hello from the scaffold, and sign-in and sign-up already land there when no `redirect` names another page. So `/` became the System, guarded by IAM's `signedIn`: a signed-out visit goes to sign-in and comes back, and signing in lands on one's own System. The hello's messages went with it. `/dev/hex` and `/dev/system` stay on fixtures, since they show the canvas and the page's layout in every state a fixture can hold.
+
+### DEC-11 An empty slot adds a Tile; the centered Tile is the one edited, moved or deleted
+
+HEX-23. The canvas has no menu per Tile, and adding one to `ui/` is a component the design system does not have. So each operation takes the gesture the canvas already offers. A click on an empty slot opens the new Tile's form for that slot, a Child or a Tile of the centered Tile's Context. Edit, move and delete act on the centered Tile, from a card beside the canvas, where a double-click puts any Tile. A move is a mode: the next empty slot clicked is where the Tile goes, and the canvas can be navigated meanwhile to reach a slot in another Frame. The Root is only edited, since `RootFixed` refuses the rest. To make the empty slot usable, `ui/hex`'s `Canvas` takes `emptySlots`, the action and accessible name the caller gives it, as it takes `onViewChange`: the canvas grew from inside `ui/`, and the feature adds nothing to it.
+
+### DEC-12 The change under way lives in the URL beside the view
+
+HEX-23. STACK.md puts the open drawer in the search params. So the page's search params carry the canvas's view, then at most one change: `add` and `slot` for the new Tile's form, `edit` for a Tile's, `move` for a Tile being moved. Each falls back on its own when the URL gets it wrong, as the view's fields do. A link opens the same form or the same move, a view change keeps the change, and a new change replaces the old. No state hook was needed, so the page has none.
+
+### DEC-13 The canvas draws a Reference as its Tile, under that Tile's id; an edit sends only what changed
+
+HEX-23. The canvas takes plain Tiles, while a Context slot may hold a Reference. Drawn under the id of the Tile it points at, a Reference centers on that id and every action on it reaches the Tile itself. A broken one is drawn as broken, under an id no Tile has, so no action finds a Tile behind it. The untitled Root is drawn as untitled. The forms submit through the API layer's `submitWrite`, so a refusal shows on its field, and the System is read again once the write settles, as DEC-9 has every write do. An edit sends only the fields that changed, so the Root's Body can be written before its name (DEC-4). Nothing is updated optimistically: every write came back within a moment in the browser, so no wait shows yet.

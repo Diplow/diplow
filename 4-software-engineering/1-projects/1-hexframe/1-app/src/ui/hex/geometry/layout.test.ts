@@ -72,6 +72,16 @@ describe('layoutCanvas', () => {
     })
   })
 
+  it('names the Tile each empty slot belongs to, in its Frame or its Context', () => {
+    const placements = layoutCanvas(system, { expanded: new Set(['a']), context: true }, canvas)
+    const empty = placements.flatMap((placement) =>
+      placement.kind === 'empty' ? [[placement.ring, placement.parent.id]] : [],
+    )
+    expect(new Set(empty.map((slot) => slot.join(':')))).toEqual(
+      new Set(['children:root', 'children:a', 'context:root']),
+    )
+  })
+
   it('shrinks by a little more than a third at each level, gaps and padding taken', () => {
     const placements = layoutCanvas(system, { expanded: new Set(['a']), context: false }, canvas)
     const a3 = placements.find(

@@ -29,7 +29,7 @@ Run them here or, for every package at once, from the monorepo root.
 
 | Path | Holds |
 |---|---|
-| `src/routes/` | File routes; `__root.tsx` is the document shell, `sign-in` and `sign-up` are IAM's, and `dev/` holds the pages served in dev and on previews only |
+| `src/routes/` | File routes; `__root.tsx` is the document shell, `index.tsx`, home, is the signed-in Account's System, `sign-in` and `sign-up` are IAM's, and `dev/` holds the pages served in dev and on previews only |
 | `src/ui/` | The design system: [[4-software-engineering/1-projects/1-hexframe/1-app/src/ui/CLAUDE\|ui]] |
 | `src/features/` | What a page shows beyond the design system, one folder per feature: [[4-software-engineering/1-projects/1-hexframe/1-app/src/features/CLAUDE\|features]] |
 | `src/api/` | Server functions, the helper that runs their Effect programs, and the error model the client decodes: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE\|api]] |
