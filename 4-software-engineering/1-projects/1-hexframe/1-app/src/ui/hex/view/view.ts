@@ -7,10 +7,10 @@ import { directions } from '../geometry/geometry'
 import type { Placement, TileNode, Unfolding } from '../geometry/layout'
 
 /** A field the URL got wrong is left out, so the view falls back to its default for that field. */
-const orDefault = <S extends Schema.Top>(schema: S) =>
+export const orDefault = <S extends Schema.Top>(schema: S) =>
   schema.pipe(Schema.catchDecoding(() => Effect.succeedNone))
 
-const TileId = Schema.String.check(Schema.isNonEmpty(), Schema.isMaxLength(100))
+export const TileId = Schema.String.check(Schema.isNonEmpty(), Schema.isMaxLength(100))
 
 /**
  * The view as the URL carries it, and the route's `validateSearch`. Every field is optional and an

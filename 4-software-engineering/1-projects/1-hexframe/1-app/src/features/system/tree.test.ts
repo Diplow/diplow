@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest'
 
-import type { System } from '#/api/domains/mapping/queries'
+import type { SystemTile } from '#/api/domains/mapping/queries'
 import { m } from '#/paraglide/messages'
 
-import { canvasTree, slotOf, tileIn } from './tree'
+import { canvasTree, ringOf, slotOf, tileIn } from './tree'
 
-const tile = (id: string, below: Partial<Pick<System, 'children' | 'context'>> = {}): System => ({
+const tile = (
+  id: string,
+  below: Partial<Pick<SystemTile, 'children' | 'context'>> = {},
+): SystemTile => ({
   _tag: 'Tile',
   id,
   title: id.toUpperCase(),
@@ -18,7 +21,7 @@ const tile = (id: string, below: Partial<Pick<System, 'children' | 'context'>> =
 
 const why = tile('why', { children: { 2: tile('deep') } })
 const a = tile('a', { children: { 3: tile('a3') } })
-const system: System = {
+const system: SystemTile = {
   ...tile('root', {
     children: { 1: a, 4: tile('b') },
     context: {
@@ -74,9 +77,14 @@ describe('tileIn', () => {
   })
 })
 
-describe('slotOf', () => {
+describe('slotOf and ringOf', () => {
   it('is the Direction for a Child, its negation in the Context', () => {
     expect(slotOf('children', 3)).toBe(3)
     expect(slotOf('context', 3)).toBe(-3)
+  })
+
+  it('reads the ring back from the slot', () => {
+    expect(ringOf(slotOf('children', 6))).toBe('children')
+    expect(ringOf(slotOf('context', 6))).toBe('context')
   })
 })

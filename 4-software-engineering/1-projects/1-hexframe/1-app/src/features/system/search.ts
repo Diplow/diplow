@@ -1,15 +1,9 @@
 // What the System's page carries in its URL: the canvas's view (ui/hex/view), and the change the user
 // has under way, if any: a new Tile's form, a Tile's form, or a Tile to move. A link shows the page as
 // its sender saw it, the open form included. Every function here is pure.
-import { Effect, Schema } from 'effect'
+import { Schema } from 'effect'
 
-import { CanvasView } from '#/ui/hex/view/view'
-
-/** A field the URL got wrong is left out, so it falls back to its default, as the view's do. */
-const orDefault = <S extends Schema.Top>(schema: S) =>
-  schema.pipe(Schema.catchDecoding(() => Effect.succeedNone))
-
-const TileId = Schema.String.check(Schema.isNonEmpty(), Schema.isMaxLength(100))
+import { CanvasView, orDefault, TileId } from '#/ui/hex/view/view'
 
 /** A Child's Direction, 1 to 6, or a Context slot, −1 to −6. */
 const Slot = Schema.Literals([1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6])
@@ -81,4 +75,15 @@ export function withChange(search: SystemSearch, change: Change): SystemSearch {
     edit: change.kind === 'edit' ? change.id : undefined,
     move: change.kind === 'move' ? change.id : undefined,
   }
+}
+
+/**
+ * The search params once this Tile is gone: the change under way ends if it named the Tile, and any
+ * other survives, as it does a view change.
+ */
+export function withoutTile(search: SystemSearch, id: string): SystemSearch {
+  const change = changeOf(search)
+  const named =
+    change.kind === 'add' ? change.parent : change.kind === 'none' ? undefined : change.id
+  return named === id ? withChange(search, { kind: 'none' }) : search
 }

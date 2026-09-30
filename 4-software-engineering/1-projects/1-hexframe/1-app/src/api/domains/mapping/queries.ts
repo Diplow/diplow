@@ -33,8 +33,11 @@ const systemScope = 'system'
 export const useSystem = () =>
   useQuery(read({ scope: systemScope, key: [], call: () => system({ data: undefined }) }))
 
-/** The Account's System as the client holds it: the Root, with everything below it. */
-export type System = NonNullable<ReturnType<typeof useSystem>['data']>
+/**
+ * A Tile of the Account's System as the client holds it, with its Children by Direction, its Context
+ * by slot, and everything below them. The System is its Root.
+ */
+export type SystemTile = NonNullable<ReturnType<typeof useSystem>['data']>
 
 /** A write to the System, named by its scope, after which the System is read again. */
 function useSystemWrite<I, A, E extends Failure>(
@@ -73,7 +76,7 @@ export const useDeleteReference = () =>
   useSystemWrite('deleteReference', (data: typeof ReferenceSlot.Type) => deleteReference({ data }))
 
 /** What a Tile's form edits: its Title, Preview and Body. */
-export type TileContent = Pick<System, 'title' | 'preview' | 'body'>
+export type TileContent = Pick<SystemTile, 'title' | 'preview' | 'body'>
 
 /**
  * A form's submit that writes to the System, as the form's `validators.onSubmitAsync`: a refusal shows
@@ -124,3 +127,6 @@ function changed(before: TileContent, after: TileContent): Partial<TileContent> 
     fields.flatMap((field) => (before[field] === after[field] ? [] : [[field, after[field]]])),
   )
 }
+
+/** A Tile form's submit, as `useCreateTileSubmit` and `useEditTileSubmit` return it. */
+export type TileSubmit = ReturnType<typeof useSystemSubmit>

@@ -5,23 +5,33 @@ import {
   useCreateTileSubmit,
   useDeleteTile,
   useEditTileSubmit,
-  type System,
+  type SystemTile,
   type TileContent,
+  type TileSubmit,
 } from '#/api/domains/mapping/queries'
 import { m } from '#/paraglide/messages'
 import type { TileNode } from '#/ui/hex/geometry/layout'
-import { centerOn, findTile, showView, type CanvasView } from '#/ui/hex/view/view'
+import { centerOn, findTile, showView } from '#/ui/hex/view/view'
 import { Button } from '#/ui/inputs/controls/button'
 import { useAppForm } from '#/ui/inputs/forms/form'
 import { ConfirmDialog } from '#/ui/overlays/ConfirmDialog'
 import { Drawer } from '#/ui/overlays/Drawer'
 import { Card } from '#/ui/surfaces/Card'
 
-import { changeOf, viewOf, withChange, withView, type Change, type SystemSearch } from './search'
-import { tileIn } from './tree'
+import {
+  changeOf,
+  viewOf,
+  withChange,
+  withoutTile,
+  withView,
+  type Change,
+  type SystemSearch,
+} from './search'
+import { ringOf, tileIn } from './tree'
 
 interface TileActionsProps {
-  system: System
+  /** The System's Root, with everything below it. */
+  system: SystemTile
   /** The System's Tiles as the canvas draws them (`canvasTree`). */
   tree: TileNode
   search: SystemSearch
@@ -33,6 +43,7 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
   const center = showView(tree, view).center
   // A broken Reference, centered, stands for no Tile: there is nothing to act on.
   const found = tileIn(system, center.id)
+  const parent = found?.parent
   const begin = (change: Change) => {
     onSearchChange(withChange(search, change))
   }
@@ -41,24 +52,25 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
       {found !== undefined && (
         <CenteredTile
           title={center.title}
-          description={found.parent === undefined ? m.system_root_description() : center.preview}
+          description={parent === undefined ? m.system_root_description() : center.preview}
           onEdit={() => {
             begin({ kind: 'edit', id: found.tile.id })
           }}
           // The Root is the user: it neither moves nor goes.
-          {...(found.parent !== undefined && {
+          {...(parent !== undefined && {
             onMove: () => {
               begin({ kind: 'move', id: found.tile.id })
             },
             deletion: {
               id: found.tile.id,
-              // The centered Tile is gone: the view centers on the Tile it stood under.
-              then: centerOn(tree, view, found.parent.id),
+              // The centered Tile is gone: the view centers on the Tile it stood under, and a change
+              // under way ends only if it named the deleted Tile.
+              onDeleted: () => {
+                const next = withView(search, centerOn(tree, view, parent.id))
+                onSearchChange(withoutTile(next, found.tile.id))
+              },
             },
           })}
-          onViewChange={(next) => {
-            onSearchChange(withChange(withView(search, next), { kind: 'none' }))
-          }}
         />
       )}
       <ChangeDrawer
@@ -78,19 +90,11 @@ interface CenteredTileProps {
   description: string
   onEdit: () => void
   onMove?: () => void
-  /** The Tile a delete deletes, and the view to show once it is gone; the Root has none. */
-  deletion?: { id: string; then: CanvasView }
-  onViewChange: (view: CanvasView) => void
+  /** The Tile a delete deletes, and what follows once it is gone; the Root has none. */
+  deletion?: { id: string; onDeleted: () => void }
 }
 
-function CenteredTile({
-  title,
-  description,
-  onEdit,
-  onMove,
-  deletion,
-  onViewChange,
-}: CenteredTileProps) {
+function CenteredTile({ title, description, onEdit, onMove, deletion }: CenteredTileProps) {
   const remove = useDeleteTile()
   return (
     <Card
@@ -118,14 +122,7 @@ function CenteredTile({
               confirmLabel={m.system_delete()}
               destructive
               onConfirm={() => {
-                remove.mutate(
-                  { id: deletion.id },
-                  {
-                    onSuccess: () => {
-                      onViewChange(deletion.then)
-                    },
-                  },
-                )
+                remove.mutate({ id: deletion.id }, { onSuccess: deletion.onDeleted })
               }}
             />
           )}
@@ -136,7 +133,7 @@ function CenteredTile({
 }
 
 interface ChangeDrawerProps {
-  system: System
+  system: SystemTile
   tree: TileNode
   change: Change
   onDone: () => void
@@ -163,7 +160,7 @@ function ChangeDrawer({ system, tree, change, onDone }: ChangeDrawerProps) {
 }
 
 /** What the drawer shows for a change; `undefined` when the change is no form, or names no Tile. */
-function drawerOf(system: System, tree: TileNode, change: Change) {
+function drawerOf(system: SystemTile, tree: TileNode, change: Change) {
   if (change.kind === 'add') {
     const parent = findTile(tree, change.parent)
     if (parent === undefined) return undefined
@@ -172,7 +169,7 @@ function drawerOf(system: System, tree: TileNode, change: Change) {
       key: `${change.parent}:${String(change.slot)}`,
       title: m.system_add_title(),
       description:
-        change.slot > 0
+        ringOf(change.slot) === 'children'
           ? m.system_add_under({ title: parent.title })
           : m.system_add_in_context({ title: parent.title }),
       parent: change.parent,
@@ -211,7 +208,7 @@ function NewTileForm({ parent, slot, onSaved }: NewTileFormProps) {
   )
 }
 
-function EditTileForm({ tile, onSaved }: { tile: System; onSaved: () => void }) {
+function EditTileForm({ tile, onSaved }: { tile: SystemTile; onSaved: () => void }) {
   const submit = useEditTileSubmit(tile, onSaved)
   const { title, preview, body } = tile
   return <TileForm defaults={{ title, preview, body }} submit={submit} label={m.system_save()} />
@@ -219,7 +216,7 @@ function EditTileForm({ tile, onSaved }: { tile: System; onSaved: () => void }) 
 
 interface TileFormProps {
   defaults: TileContent
-  submit: ReturnType<typeof useEditTileSubmit>
+  submit: TileSubmit
   label: string
 }
 

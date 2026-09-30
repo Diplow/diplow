@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { changeOf, readSystemSearch, viewOf, withChange, withView } from './search'
+import { changeOf, readSystemSearch, viewOf, withChange, withoutTile, withView } from './search'
 
 describe('readSystemSearch', () => {
   it('reads the view and the change, every field set', () => {
@@ -60,5 +60,20 @@ describe('withView and withChange', () => {
 
   it('ends the change under way', () => {
     expect(changeOf(withChange(search, { kind: 'none' }))).toEqual({ kind: 'none' })
+  })
+})
+
+describe('withoutTile', () => {
+  it('ends the change under way when it named the Tile gone', () => {
+    for (const search of [{ move: 'a' }, { edit: 'a' }, { add: 'a', slot: 2 }]) {
+      const next = withoutTile(readSystemSearch({ center: 'b', ...search }), 'a')
+      expect(changeOf(next)).toEqual({ kind: 'none' })
+      expect(next.center).toBe('b')
+    }
+  })
+
+  it('keeps a change that named another Tile', () => {
+    const search = readSystemSearch({ move: 'a' })
+    expect(withoutTile(search, 'b')).toBe(search)
   })
 })
