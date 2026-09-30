@@ -4,17 +4,20 @@ import { cleanup, renderHook, waitFor } from '@testing-library/react'
 import { createElement, type ReactNode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { TileNotFound } from '#/domains/mapping/errors'
+import { TileNotFound, TitleMissing } from '#/domains/mapping/errors'
 
 import { CallFailed } from '../../client/calls'
 import { encodeFailure } from '../../errors/failure'
+import { messageFor } from '../../errors/messages'
 import * as Mapping from './mapping'
 import {
   useCreateReference,
   useCreateTile,
+  useCreateTileSubmit,
   useDeleteReference,
   useDeleteTile,
   useEditTile,
+  useEditTileSubmit,
   useMoveTile,
   useSystem,
 } from './queries'
@@ -138,5 +141,61 @@ describe("Mapping's hooks", () => {
       requestId: 'req-1',
     })
     expect(Mapping.system).toHaveBeenCalledTimes(2)
+  })
+})
+
+describe("Mapping's form submits", () => {
+  const content = { title: 'A', preview: 'What A is', body: '' }
+
+  /** Renders a submit hook beside the System's read, once the System is read. */
+  async function submitting(hook: () => (form: { value: typeof content }) => Promise<unknown>) {
+    const { result } = render(hook)
+    await waitFor(() => {
+      expect(result.current.system.isSuccess).toBe(true)
+    })
+    return (value: typeof content) => result.current.hook({ value })
+  }
+
+  it('create a Tile in the slot the form was opened on, then read the System again', async () => {
+    answering({ id: 't' })
+    const onSaved = vi.fn()
+    const submit = await submitting(() =>
+      useCreateTileSubmit({ parent: 'root', slot: -3 }, onSaved),
+    )
+    await expect(submit(content)).resolves.toBeUndefined()
+    expect(Mapping.createTile).toHaveBeenCalledWith({
+      data: { parent: 'root', slot: -3, ...content },
+    })
+    expect(onSaved).toHaveBeenCalledOnce()
+    await waitFor(() => {
+      expect(Mapping.system).toHaveBeenCalledTimes(2)
+    })
+  })
+
+  it('send only the fields an edit changed', async () => {
+    answering({ id: 't' })
+    const tile = { id: 't', title: '', preview: '', body: '' }
+    const submit = await submitting(() => useEditTileSubmit(tile, vi.fn()))
+    await submit({ title: '', preview: '', body: '# Me' })
+    expect(Mapping.editTile).toHaveBeenCalledWith({ data: { id: 't', body: '# Me' } })
+  })
+
+  it('show a refusal on the field it names, and read the System again all the same', async () => {
+    answering(undefined)
+    vi.mocked(Mapping.editTile).mockResolvedValue({
+      ok: false,
+      failure: encodeFailure(new TitleMissing({ fields: ['title'] })),
+      requestId: 'req-1',
+    })
+    const onSaved = vi.fn()
+    const tile = { id: 't', ...content }
+    const submit = await submitting(() => useEditTileSubmit(tile, onSaved))
+    await expect(submit({ ...content, title: ' ' })).resolves.toEqual({
+      fields: { title: messageFor(new TitleMissing({ fields: ['title'] }), 'editTile') },
+    })
+    expect(onSaved).not.toHaveBeenCalled()
+    await waitFor(() => {
+      expect(Mapping.system).toHaveBeenCalledTimes(2)
+    })
   })
 })
