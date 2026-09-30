@@ -34,3 +34,12 @@ export class RootFixed extends Schema.TaggedError<RootFixed>()('RootFixed', {
 export class MovedUnderItself extends Schema.TaggedError<MovedUnderItself>()('MovedUnderItself', {
   kind: kind('Conflict'),
 }) {}
+
+export const mappingFailures = [
+  TileNotFound,
+  TitleMissing,
+  PreviewTooLong,
+  DirectionTaken,
+  MovedUnderItself,
+  RootFixed,
+] as const

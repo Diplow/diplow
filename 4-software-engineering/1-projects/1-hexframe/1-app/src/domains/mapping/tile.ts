@@ -5,10 +5,12 @@ import { Effect } from 'effect'
 import { PreviewTooLong, TitleMissing } from './errors'
 
 /** Where a Child stands in its parent's Frame: 1 NW, 2 NE, 3 E, 4 SE, 5 SW, 6 W. */
-export type Direction = 1 | 2 | 3 | 4 | 5 | 6
+export const directions = [1, 2, 3, 4, 5, 6] as const
+export type Direction = (typeof directions)[number]
 
 /** A Context slot, -1 to -6, in the same Directions as the Children. */
-export type ContextDirection = -1 | -2 | -3 | -4 | -5 | -6
+export const contextDirections = [-1, -2, -3, -4, -5, -6] as const
+export type ContextDirection = (typeof contextDirections)[number]
 
 /** Where a Tile stands under its parent: a Child's Direction, or a Context slot. */
 export type Slot = Direction | ContextDirection

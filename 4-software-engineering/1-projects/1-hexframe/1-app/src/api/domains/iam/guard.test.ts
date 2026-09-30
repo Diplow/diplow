@@ -3,14 +3,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { SignedOut } from '#/domains/iam/errors'
 
-import { CallFailed } from '../client/calls'
-import { Unexpected, encodeFailure, type Failure, type Outcome } from '../errors/failure'
-import { forget, identify } from '../observability/client'
+import { CallFailed } from '../../client/calls'
+import { Unexpected, encodeFailure, type Failure, type Outcome } from '../../errors/failure'
+import { forget, identify } from '../../observability/client'
 import { continueTo, readSignInSearch, signedIn } from './guard'
 import { session } from './iam'
 
 vi.mock('./iam', () => ({ session: vi.fn() }))
-vi.mock('../observability/client', () => ({ identify: vi.fn(), forget: vi.fn() }))
+vi.mock('../../observability/client', () => ({ identify: vi.fn(), forget: vi.fn() }))
 
 const answering = (outcome: Outcome<unknown, Failure>) => {
   vi.mocked(session).mockResolvedValue(outcome as never)
