@@ -75,8 +75,11 @@ export const useCreateReference = () =>
 export const useDeleteReference = () =>
   useSystemWrite('deleteReference', (data: typeof ReferenceSlot.Type) => deleteReference({ data }))
 
-/** What a Tile's form edits: its Title, Preview and Body. */
-export type TileContent = Pick<SystemTile, 'title' | 'preview' | 'body'>
+/** The fields a Tile's form edits, which an edit compares one by one. */
+const contentFields = ['title', 'preview', 'body'] as const
+
+/** What a Tile's form edits: its Title, Preview and Body, one per field above. */
+export type TileContent = Pick<SystemTile, (typeof contentFields)[number]>
 
 /**
  * A form's submit that writes to the System, as the form's `validators.onSubmitAsync`: a refusal shows
@@ -122,9 +125,10 @@ export const useEditTileSubmit = (tile: TileContent & { id: string }, onSaved: (
 
 /** The fields of `after` that differ from `before`. */
 function changed(before: TileContent, after: TileContent): Partial<TileContent> {
-  const fields = ['title', 'preview', 'body'] as const
   return Object.fromEntries(
-    fields.flatMap((field) => (before[field] === after[field] ? [] : [[field, after[field]]])),
+    contentFields.flatMap((field) =>
+      before[field] === after[field] ? [] : [[field, after[field]]],
+    ),
   )
 }
 
