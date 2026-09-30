@@ -13,6 +13,9 @@ import { type Content, type ContextDirection, type Slot, type Tile, checked } fr
 export type { SystemTile } from './system'
 export type { Content, ContextDirection, Direction } from './tile'
 
+/** The content of a Root nobody has named yet, and of every Reference, which keeps none of its own. */
+const untitled: Content = { title: '', preview: '', body: '' }
+
 /** Where a Tile or a Reference goes: a slot under a parent Tile. */
 interface Placement {
   readonly parent: string
@@ -25,7 +28,7 @@ interface Placement {
  */
 export const system = (accountId: string) =>
   Effect.gen(function* () {
-    const rows = yield* Tiles.use((tiles) => tiles.read(accountId))
+    const rows = yield* Tiles.use((tiles) => tiles.read(accountId, untitled))
     const found = systemOf(rows)
     if (found === undefined) return yield* Effect.die(new Error('A System was read without a Root'))
     return found
@@ -118,12 +121,9 @@ export const createReference = (
     Effect.gen(function* () {
       yield* tileIn(rows, target)
       yield* freeSlot(rows, { parent, slot })
-      yield* writes.insert({ parentId: parent, direction: slot, target, ...empty })
+      yield* writes.insert({ parentId: parent, direction: slot, target, ...untitled })
     }),
   )
-
-/** A Reference keeps no content of its own. */
-const empty: Content = { title: '', preview: '', body: '' }
 
 /** Empties a Context slot holding a Reference; the Tile it pointed at is untouched. */
 export const deleteReference = (

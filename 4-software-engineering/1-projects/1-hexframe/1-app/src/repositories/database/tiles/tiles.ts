@@ -42,8 +42,14 @@ export interface Writes {
 export class Tiles extends Context.Service<
   Tiles,
   {
-    /** Every row of the Account's System, its Root added first when it has none. */
-    readonly read: (accountId: string) => Effect.Effect<ReadonlyArray<TileRow>>
+    /**
+     * Every row of the Account's System, its Root added first with the content given when it has
+     * none. Two reads at once add one Root.
+     */
+    readonly read: (
+      accountId: string,
+      root: Pick<TileRow, 'title' | 'preview' | 'body'>,
+    ) => Effect.Effect<ReadonlyArray<TileRow>>
     /**
      * Runs `change` in one transaction, on the System's rows as they stand once its Root is locked.
      * A failure of `change` rolls back what it wrote. An Account without a Root has no rows.
@@ -82,7 +88,7 @@ const make = Effect.gen(function* () {
         .pipe(Effect.as(id), Effect.orDie)
     },
     update: (id, changes) =>
-      Object.values(changes).every((value) => value === undefined)
+      Object.keys(changes).length === 0
         ? Effect.void
         : database
             .update(tile)
@@ -96,15 +102,15 @@ const make = Effect.gen(function* () {
         .pipe(Effect.asVoid, Effect.orDie),
   })
 
-  const ensureRoot = (accountId: string) =>
+  const ensureRoot = (accountId: string, root: Pick<TileRow, 'title' | 'preview' | 'body'>) =>
     database
       .insert(tile)
-      .values({ id: crypto.randomUUID(), accountId, title: '', preview: '', body: '' })
+      .values({ ...root, id: crypto.randomUUID(), accountId })
       .onConflictDoNothing()
       .pipe(Effect.asVoid, Effect.orDie)
 
   return Tiles.of({
-    read: (accountId) => Effect.andThen(ensureRoot(accountId), rowsOf(accountId)),
+    read: (accountId, root) => Effect.andThen(ensureRoot(accountId, root), rowsOf(accountId)),
     change: (accountId, change) =>
       database
         .transaction(() =>
