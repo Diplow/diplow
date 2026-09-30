@@ -10,6 +10,14 @@ import {
   SignedOut,
   TooManyAttempts,
 } from '#/domains/iam/errors'
+import {
+  DirectionTaken,
+  MovedUnderItself,
+  PreviewTooLong,
+  RootFixed,
+  TileNotFound,
+  TitleMissing,
+} from '#/domains/mapping/errors'
 
 import { DevConflict, DevForbidden, DevInvalid, DevNotFound } from '../dev/failures'
 import { Unexpected } from './failure'
@@ -63,6 +71,30 @@ describe('the message table', () => {
     )
     expect(messageFor(new TooManyAttempts())).toBe(
       'Trop de tentatives. Patientez quelques secondes, puis réessayez.',
+    )
+  })
+
+  it.each([
+    [new TileNotFound(), "This tile doesn't exist, or no longer does."],
+    [new TitleMissing({ fields: ['title'] }), 'Give this tile a title.'],
+    [new PreviewTooLong({ fields: ['preview'] }), 'Keep the preview to 350 characters.'],
+    [
+      new DirectionTaken(),
+      'This place already holds a tile. Pick a free one, or move that tile first.',
+    ],
+    [new MovedUnderItself(), "A tile can't move under itself or one of its own children."],
+    [new RootFixed(), "Your root tile is you: it can't be moved or deleted."],
+  ])("words Mapping's %s in its own sentence", (failure, sentence) => {
+    expect(messageFor(failure, 'moveTile')).toBe(sentence)
+  })
+
+  it("words Mapping's refusals in French too", () => {
+    overwriteGetLocale(() => 'fr')
+    expect(messageFor(new RootFixed())).toBe(
+      'Votre tuile racine, c’est vous : elle ne peut être ni déplacée ni supprimée.',
+    )
+    expect(messageFor(new TitleMissing({ fields: ['title'] }))).toBe(
+      'Donnez un titre à cette tuile.',
     )
   })
 

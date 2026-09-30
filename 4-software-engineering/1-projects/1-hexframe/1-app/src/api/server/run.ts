@@ -6,6 +6,8 @@ import { Cause, Context, Effect, Exit, Layer, ManagedRuntime, Option, Schema } f
 
 import { CurrentSession, proven, type Session } from '#/domains/iam/iam'
 import { Auth, HttpExchange, layer as authLayer } from '#/repositories/auth/auth'
+import { layer as databaseLayer } from '#/repositories/database/database'
+import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
 import { Failure, Unexpected, encodeFailure, type Outcome } from '../errors/failure'
 import {
@@ -33,16 +35,20 @@ export class RequestContext extends Context.Service<
 const subscriptions: ReadonlyArray<Subscription<never>> = []
 
 /**
- * The repositories, deployed: Better Auth over Postgres, from DATABASE_URL and BETTER_AUTH_SECRET.
- * Under `pnpm dev` and the tests, without DATABASE_URL: Better Auth over a fresh PGlite in memory,
- * with a secret of its own, both gone when the process stops. A build never holds that branch.
+ * Better Auth and the database, deployed: Postgres from DATABASE_URL, cookies signed with
+ * BETTER_AUTH_SECRET. Under `pnpm dev` and the tests, without DATABASE_URL: Better Auth over a fresh
+ * PGlite in memory, with a secret of its own, both gone when the process stops; that PGlite is the
+ * database too. A build never holds that branch.
  */
-const repositories: Layer.Layer<Auth> =
+const auth =
   import.meta.env.DEV && (process.env.DATABASE_URL ?? '') === ''
     ? Layer.unwrap(
         Effect.promise(async () => (await import('#/repositories/auth/testing')).TestAuth),
       )
-    : Layer.orDie(authLayer)
+    : Layer.orDie(Layer.merge(authLayer, databaseLayer))
+
+/** The repositories the domains use: Better Auth for IAM, the tiles repository for Mapping. */
+const repositories: Layer.Layer<Auth | Tiles> = Layer.provideMerge(tilesLayer, auth)
 
 /**
  * Every layer: the bus, the domains' services and the repositories below them, merged here as each is
