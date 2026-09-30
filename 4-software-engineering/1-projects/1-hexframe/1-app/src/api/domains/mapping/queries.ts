@@ -22,15 +22,15 @@ import {
   system,
 } from './mapping'
 
-/** The System's query key: its scope, which every mode of the read starts with. */
-const systemKey = ['system']
+/** The System's read, by the server function's name: every mode of its query key starts with it. */
+const systemScope = 'system'
 
 /**
  * The Account's System: its Root, the user, with everything below it. Shown inside a ReadBoundary,
  * where its failure appears; signed out, it sends the user to sign in.
  */
 export const useSystem = () =>
-  useQuery(read({ scope: 'system', key: [], call: () => system({ data: undefined }) }))
+  useQuery(read({ scope: systemScope, key: [], call: () => system({ data: undefined }) }))
 
 /** A write to the System, named by its scope, after which the System is read again. */
 function useSystemWrite<I, A, E extends Failure>(
@@ -40,7 +40,7 @@ function useSystemWrite<I, A, E extends Failure>(
   const client = useQueryClient()
   return useMutation({
     ...write(scope, call),
-    onSettled: () => client.invalidateQueries({ queryKey: systemKey }),
+    onSettled: () => client.invalidateQueries({ queryKey: [systemScope] }),
   })
 }
 

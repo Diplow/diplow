@@ -11,7 +11,10 @@ import * as Mapping from '#/domains/mapping/mapping'
 const forAccount = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, E, R>) =>
   Effect.flatMap(Iam.signedIn, ({ account }) => operation(account.id))
 
+/** Where a Tile goes, as Mapping takes it: a parent Tile's id and a slot under it. */
 type Placement = Parameters<typeof Mapping.moveTile>[2]
+
+/** A Context slot, as Mapping takes it: the id of the Tile that holds it and its slot, -1 to -6. */
 type ReferenceSlot = Parameters<typeof Mapping.deleteReference>[1]
 
 /** The Account's System: its Root, the user, with everything below it. */

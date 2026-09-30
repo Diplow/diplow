@@ -4,17 +4,17 @@
 import { createServerFn } from '@tanstack/react-start'
 import { Schema } from 'effect'
 
+import { contextDirections, directions } from '#/domains/mapping/tile'
+
 import { run } from '../../server/run'
 import * as Mapping from './programs'
 
 /** A Tile's id. Ids are UUIDs; the bound only keeps anything unbounded from reaching the domain. */
 const Id = Schema.String.check(Schema.isMaxLength(64))
 
-/** A Child's Direction, 1 NW to 6 W. */
-const Direction = Schema.Literals([1, 2, 3, 4, 5, 6])
-
-/** A Context slot, -1 to -6. */
-const ContextDirection = Schema.Literals([-1, -2, -3, -4, -5, -6])
+/** A Child's Direction and a Context slot, as Mapping names them. */
+const Direction = Schema.Literals(directions)
+const ContextDirection = Schema.Literals(contextDirections)
 
 const Slot = Schema.Union([Direction, ContextDirection])
 
