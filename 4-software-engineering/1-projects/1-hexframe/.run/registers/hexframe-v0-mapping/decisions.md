@@ -6,7 +6,9 @@ preview: >-
   The choices the autonomous run made while building hexframe v0's Mapping,
   where a ticket left room: one table for Tiles and References, where the
   tiles repository sits, how a change keeps a System consistent, how the Root
-  starts, what a Reference can do, and how the System is read.
+  starts, what a Reference can do, and how the System is read; then how the
+  app reaches Mapping: where its server functions sit, what their inputs
+  allow, and how the client keeps the System fresh.
 ---
 # Decisions
 
@@ -33,3 +35,15 @@ HEX-21, [#18](https://github.com/Diplow/diplow/pull/18). A Reference has no cont
 ### DEC-6 `system` reads the whole System at once, Bodies included; a Preview's limit counts graphemes
 
 HEX-21, [#18](https://github.com/Diplow/diplow/pull/18). The canvas opens a System at its Root and expands in place, and a System is hundreds of Tiles, not millions. So one read returns the Root with everything below it, each Tile with its Children by Direction and its Context by slot, and each Reference with the Tile it points at. A read per Frame can come when a System outgrows it. The 350-character Preview is counted with `Intl.Segmenter`, so an emoji of several code points counts as one character.
+
+### DEC-7 Each domain's side of the API layer sits under `api/domains/`
+
+HEX-22, PR_LINK. `src/api/` already held six folders (`server/`, `errors/`, `client/`, `iam/`, `dev/`, `observability/`), the rule of 6's cap, so a seventh for Mapping was refused. IAM's folder moved to `api/domains/iam/` and Mapping's sits beside it in `api/domains/mapping/`, as Assistant's will. The rest of `api/` is the plumbing every domain shares. The path mirrors `src/domains/<domain>/`, and dependency-cruiser's rules, anchored at `^src/domains/`, do not read it as a domain.
+
+### DEC-8 Mapping's server functions take flat inputs, bounded on every string, and never an Account
+
+HEX-22, PR_LINK. Each input is one flat struct (`{ id, parent, slot }` to move a Tile, `{ id, title?, preview?, body? }` to edit one), checked by an Effect Schema before the handler: a Child's Direction is 1 to 6, a Context slot −1 to −6, and a Reference goes in a Context slot only. The bounds keep anything unbounded from the domain, like IAM's: an id at most 64 characters, a Title 1,000, a Body 100,000. The Preview's bound is 8,000 UTF-16 units, far above Mapping's 350 characters, since one character a reader sees can take many units. A call over a bound fails Start's validation and reaches the client as `Unexpected`; what a Title and a Preview must be stays Mapping's to say, on the field. No input names an Account: each program takes it from IAM's `signedIn`, and each lives in `programs.ts` so the client bundle never reaches the domain.
+
+### DEC-9 The System is one query, read again after every write, and the database joins the runtime
+
+HEX-22, PR_LINK. Following DEC-6, the client holds one query, `['system', …]`, and `useSystem` reads it. Each write hook (`useCreateTile` and the others) reads it again once the write settles, whether it succeeded or failed, since a refusal such as `DirectionTaken` or `TileNotFound` means the page is behind. No write updates the cache optimistically yet: the canvas (HEX-23) can add it where a wait shows. The deployed `Database` layer joins the server function runtime beside Better Auth, with the tiles repository over it, as `hexframe-v0-server-foundations/decisions.md#DEC-9` planned. Under `pnpm dev` and the tests, the tiles repository shares `TestAuth`'s PGlite.

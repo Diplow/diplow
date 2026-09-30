@@ -34,7 +34,11 @@ function request(signedIn = true): StartContext {
     requestId: 'req-mapping',
     scope: 'test',
     waitUntil: () => undefined,
-    exchange: { url: 'http://localhost/_serverFn', headers: new Headers(), setCookies: () => undefined },
+    exchange: {
+      url: 'http://localhost/_serverFn',
+      headers: new Headers(),
+      setCookies: () => undefined,
+    },
     session: Exit.succeed(signedIn ? Option.some(session) : Option.none()),
   }
 }
@@ -90,9 +94,9 @@ describe("Mapping's server functions", () => {
     expect(edited).toEqual({ ...child, title: 'Renamed' })
 
     await value(run(context, Mapping.moveTile({ id: child.id, parent: root.id, slot: 4 })))
-    expect((await value(run(context, Mapping.system))).children).toEqual({
-      4: expect.objectContaining({ id: child.id, title: 'Renamed' }),
-    })
+    const { children } = await value(run(context, Mapping.system))
+    expect(Object.keys(children)).toEqual(['4'])
+    expect(children[4]).toMatchObject({ id: child.id, title: 'Renamed' })
 
     await value(run(context, Mapping.deleteTile({ id: child.id })))
     expect((await value(run(context, Mapping.system))).children).toEqual({})
@@ -201,7 +205,12 @@ describe("the schemas Mapping's server functions validate by", () => {
 
   it('take a Child in Directions 1 to 6 and a Context slot in -1 to -6, nothing else', () => {
     const at = (slot: number) => ({ parent: 'p', slot, ...content('Tile') })
-    expect([1, 6, -1, -6].map((slot) => accepts(NewTile, at(slot)))).toEqual([true, true, true, true])
+    expect([1, 6, -1, -6].map((slot) => accepts(NewTile, at(slot)))).toEqual([
+      true,
+      true,
+      true,
+      true,
+    ])
     expect([0, 7, -7, 1.5].map((slot) => accepts(NewTile, at(slot)))).toEqual([
       false,
       false,
