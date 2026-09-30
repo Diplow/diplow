@@ -1,0 +1,43 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/index.tsx
+  s_61922a4a3c813c::t_6c0a3e93146ef0 64
+  s_61922a4a3c813c::t_246de9156a5687 1-3,6-13,15,17-21,23-28,30-34,38-63,65-73,75
+  s_61922a4a3c813c::t_763f3006927545 74
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/system/System.tsx
+  s_61922a4a3c813c::t_5006fbc28c4704 1-3,7-63,77,91-93
+  s_61922a4a3c813c::t_8afd27db47b178 4-6,64-76,78-90
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/system/tree.test.ts
+  s_61922a4a3c813c::t_8afd27db47b178 78
+  s_61922a4a3c813c::t_cb20e3d296542a 1-77,79-82
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/system/TileActions.tsx
+  s_61922a4a3c813c::t_60b82119a26d7a 13,53,81-83,91,109,122,125,197-201,203
+  s_61922a4a3c813c::t_6c0a3e93146ef0 31,205-211
+  s_61922a4a3c813c::t_6a683cbf4d4eb3 1-12,14-30,32-52,54-80,84-90,92-108,110-121,123-124,126-196,202,204,212-264
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/system/tree.ts
+  s_61922a4a3c813c::t_9693e9d870ccd8 1-32,35-72
+  s_61922a4a3c813c::t_8afd27db47b178 33-34
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/system/search.ts
+  s_61922a4a3c813c::t_f90941c8607007 1-5,7-42,46-84
+  s_61922a4a3c813c::t_3a001eda246814 6,43-45
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_61922a4a3c813c::t_0c115a06f8cedc 188-213
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_61922a4a3c813c::t_0c115a06f8cedc 188-213
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/system/search.test.ts
+  s_61922a4a3c813c::t_84514a2ce7560d 1-64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5d6dba7790fed0b4e57b2ebcdc932c236cf8cf99",
+  "prompts": {},
+  "sessions": {
+    "s_61922a4a3c813c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "da471f4a-6df8-47c0-9c3e-b45603dded5d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
