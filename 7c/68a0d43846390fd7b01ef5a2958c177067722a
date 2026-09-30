@@ -1,0 +1,42 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE.md
+  s_61922a4a3c813c::t_7c1dab07fd8386 21
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/domains/iam/guard.test.ts
+  s_61922a4a3c813c::t_0128c3929977da 13
+  s_61922a4a3c813c::t_cf47133431fd68 1-12,14-123
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/dev/session.tsx
+  s_61922a4a3c813c::t_7c1dab07fd8386 7-8
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/sign-up.tsx
+  s_61922a4a3c813c::t_7c1dab07fd8386 4
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/middleware.test.ts
+  s_61922a4a3c813c::t_7c1dab07fd8386 29
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/access/Access.tsx
+  s_61922a4a3c813c::t_7c1dab07fd8386 6-7
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/domains/iam/guard.ts
+  s_61922a4a3c813c::t_cf47133431fd68 1-68
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/access/CLAUDE.md
+  s_61922a4a3c813c::t_745dc0f2c9c338 11
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/client/channels.ts
+  s_61922a4a3c813c::t_7c1dab07fd8386 18
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/sign-in.tsx
+  s_61922a4a3c813c::t_7c1dab07fd8386 5
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/domains/iam/CLAUDE.md
+  s_61922a4a3c813c::t_7c1dab07fd8386 1-23
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/domains/iam/iam.ts
+  s_61922a4a3c813c::t_cf47133431fd68 1-37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7c68a0d43846390fd7b01ef5a2958c177067722a",
+  "prompts": {},
+  "sessions": {
+    "s_61922a4a3c813c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "da471f4a-6df8-47c0-9c3e-b45603dded5d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
