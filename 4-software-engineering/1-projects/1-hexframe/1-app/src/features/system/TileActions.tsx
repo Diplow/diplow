@@ -97,7 +97,7 @@ function CenteredTile({
       title={title}
       description={description === '' ? undefined : description}
       footer={
-        <>
+        <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" onClick={onEdit}>
             {m.system_edit()}
           </Button>
@@ -129,7 +129,7 @@ function CenteredTile({
               }}
             />
           )}
-        </>
+        </div>
       }
     />
   )
