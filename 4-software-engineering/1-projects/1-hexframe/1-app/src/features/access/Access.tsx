@@ -3,8 +3,8 @@
 import { Link } from '@tanstack/react-router'
 
 import { submitWrite } from '#/api/client/channels'
-import { continueTo } from '#/api/iam/guard'
-import { signIn, signUp } from '#/api/iam/iam'
+import { continueTo } from '#/api/domains/iam/guard'
+import { signIn, signUp } from '#/api/domains/iam/iam'
 import { m } from '#/paraglide/messages'
 import { useAppForm } from '#/ui/inputs/forms/form'
 import { Card } from '#/ui/surfaces/Card'

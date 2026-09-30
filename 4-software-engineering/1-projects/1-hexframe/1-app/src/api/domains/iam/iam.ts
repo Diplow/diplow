@@ -5,7 +5,7 @@ import { Schema } from 'effect'
 
 import * as Iam from '#/domains/iam/iam'
 
-import { run } from '../server/run'
+import { run } from '../../server/run'
 
 /**
  * What a sign-up or a sign-in sends. Bounded here, so nothing unbounded reaches Better Auth; what an

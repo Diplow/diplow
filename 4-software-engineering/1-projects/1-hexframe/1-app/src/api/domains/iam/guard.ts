@@ -7,9 +7,9 @@ import { Effect, Schema } from 'effect'
 
 import { localizeHref } from '#/paraglide/runtime'
 
-import { asCallFailed, settle } from '../client/calls'
-import { channelFor } from '../errors/channel'
-import { forget, identify } from '../observability/client'
+import { asCallFailed, settle } from '../../client/calls'
+import { channelFor } from '../../errors/channel'
+import { forget, identify } from '../../observability/client'
 import { session } from './iam'
 
 /**

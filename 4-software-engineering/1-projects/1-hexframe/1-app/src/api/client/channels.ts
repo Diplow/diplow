@@ -15,7 +15,7 @@ import { asCallFailed, settle, type CallFailed } from './calls'
 let signingIn = false
 
 // One redirect, however many calls fail at once, carrying where the user was, without its language
-// prefix, as the router's own redirect (../iam/guard.ts) carries it. On the server there is no window
+// prefix, as the router's own redirect (../domains/iam/guard.ts) carries it. On the server there is no window
 // to move: a read made while rendering a page is guarded by the route's `beforeLoad`, `signedIn`.
 function signIn() {
   if (signingIn || typeof window === 'undefined') return

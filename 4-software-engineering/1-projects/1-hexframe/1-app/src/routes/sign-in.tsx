@@ -2,7 +2,7 @@
 // `?redirect=` carries where the user was, and signing in goes back there.
 import { createFileRoute } from '@tanstack/react-router'
 
-import { readSignInSearch } from '#/api/iam/guard'
+import { readSignInSearch } from '#/api/domains/iam/guard'
 import { Access } from '#/features/access/Access'
 
 export const Route = createFileRoute('/sign-in')({

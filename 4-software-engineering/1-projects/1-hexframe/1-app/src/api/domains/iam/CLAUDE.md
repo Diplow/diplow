@@ -1,6 +1,6 @@
 ---
 title: iam
-parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam
+parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/api/domains/iam
 owner: diplo
 preview: >-
   IAM's side of the API layer: the server functions that sign up, in and out
@@ -20,4 +20,4 @@ Where the client meets [[4-software-engineering/1-projects/1-hexframe/1-app/src/
 ## Rules
 
 - **A guarded page guards itself before it renders**, on the server too: `beforeLoad: signedIn`. The server function behind it still starts with IAM's `signedIn`; the page's guard is for the user, not for security.
-- **`redirect` is a path on this site, without its language prefix.** The guard and the client's Unauthenticated channel (`../client/channels.ts`) write it that way; sign-in drops anything else, and `continueTo` checks it again against the page's origin before it goes there.
+- **`redirect` is a path on this site, without its language prefix.** The guard and the client's Unauthenticated channel (`../../client/channels.ts`) write it that way; sign-in drops anything else, and `continueTo` checks it again against the page's origin before it goes there.

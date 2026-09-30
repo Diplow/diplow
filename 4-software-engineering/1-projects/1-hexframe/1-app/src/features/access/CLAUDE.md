@@ -8,7 +8,7 @@ preview: >-
 ---
 # access
 
-What `/sign-in` and `/sign-up` show. The two differ only in their words, the server function they call, the password's autocomplete, and the password rule sign-up shows under its field (between 8 and 128 characters, which IAM enforces), so `Access` takes a `mode` and a table holds each mode's settings. The routes pass it `redirect`, read by `readSignInSearch` in [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/CLAUDE|api/iam]].
+What `/sign-in` and `/sign-up` show. The two differ only in their words, the server function they call, the password's autocomplete, and the password rule sign-up shows under its field (between 8 and 128 characters, which IAM enforces), so `Access` takes a `mode` and a table holds each mode's settings. The routes pass it `redirect`, read by `readSignInSearch` in [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/domains/iam/CLAUDE|api/domains/iam]].
 
 | File | Holds |
 |---|---|
