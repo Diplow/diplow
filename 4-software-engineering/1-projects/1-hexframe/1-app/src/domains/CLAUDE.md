@@ -4,7 +4,7 @@ parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/domains
 owner: diplo
 preview: >-
   The business logic, one folder per domain (IAM, Mapping, Assistant), as
-  Effect services in the domain's language. IAM is the first; beside the
+  Effect services in the domain's language. IAM and Mapping so far; beside the
   folders, kind.ts, the closed set of kinds a domain's error carries, and
   bus.ts, where a domain publishes its events.
 ---
@@ -15,6 +15,7 @@ The middle layer: one folder per domain, each an Effect service in its own langu
 | Folder | Holds |
 |---|---|
 | `iam/` | Identity and access: Accounts and their Sessions, on Better Auth: [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE\|iam]] |
+| `mapping/` | The core: an Account's System, a hierarchy of Tiles in six Directions and six Context slots, and the operations on it, over the tiles repository: [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE\|mapping]] |
 
 | File | Holds |
 |---|---|
