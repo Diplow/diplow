@@ -4,7 +4,7 @@ description: >
   Orchestre l'ingestion d'un transcript de vidéo PaduTeam dans la base de connaissances Obsidian.
   Coordonne les skills spécialisées : gather-context pour la recherche, puis write-video,
   write-entity, write-concept et write-enjeu pour la rédaction des fiches.
-  Gère aussi le commit git (direct sur develop), la vérification ortho et les liens orphelins.
+  Gère aussi le workflow git (branche, commit, PR vers main), la vérification ortho et les liens orphelins.
   Déclencher quand l'utilisateur dit "ingérer", "ajouter au vault", "créer les fiches",
   "analyser cette vidéo pour Obsidian", ou toute demande combinant un transcript PaduTeam et la base de connaissances.
 date created: Tuesday, March 31st 2026, 10:29:39 am
@@ -43,11 +43,12 @@ Si l'utilisateur ne fournit ni URL, ni titre, ni transcript :
 
 **Note** : `Sources/Inventaire PaduTeam.md` est une vue DataviewJS dynamique — elle calcule ce croisement transcript ↔ fiche à la volée dans Obsidian, elle n'est pas lisible depuis le système de fichiers. C'est la raison pour laquelle on refait le croisement directement ici.
 
-### Étape 2 — Mettre develop à jour
+### Étape 2 — Branche git
 
-1. `git checkout develop && git pull origin develop`
+Suivre `BUILD.md` de WikiPol § Workflow git, « En début d'ingestion » :
 
-Le travail se fait directement sur `develop` — pas de branche dédiée.
+1. Si la branche courante n'est pas `main`, travailler dessus.
+2. Sinon, générer le slug depuis le titre (minuscules, sans accents, tirets, ~50 chars max), puis `git fetch origin && git checkout -b ingest/<slug> origin/main`
 
 ### Étape 3 — Lire le transcript
 
@@ -119,13 +120,13 @@ Se concentrer sur les noms étrangers et les personnalités secondaires.
 - ou un `[[wikilink]]` vers le transcript dans le corps de la fiche
 - ou un nom de fichier proche (normalisé) du nom du transcript
 
-### Étape 11 — Commit direct sur develop
+### Étape 11 — Commit, push et PR
 
-Suivre le workflow git défini dans `BUILD.md` — commit direct sur `develop`, pas de branche :
+Suivre le workflow git défini dans `BUILD.md` de WikiPol :
 
 1. `git status` pour lister les fichiers modifiés
 2. `git add` par nom (pas `-A`)
-3. Commit structuré sur `develop` :
+3. Commit structuré :
    ```
    ingest: TITRE ABRÉGÉ DE LA VIDÉO
 
@@ -135,7 +136,8 @@ Suivre le workflow git défini dans `BUILD.md` — commit direct sur `develop`, 
 
    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
    ```
-4. `git push origin develop`
+4. `git push -u origin HEAD`
+5. PR vers `main` avec résumé d'ingestion (`gh pr create --base main`), sauf si la branche en a déjà une. Ne pas la merger.
 
 ### Étape 12 — Résumé à l'utilisateur
 

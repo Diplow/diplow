@@ -1,3 +1,13 @@
+---
+title: WikiPol
+parent: 6-politics/1-projects/1-wikipol
+owner: diplo
+preview: >-
+  The shared frame that turns a media source (a YouTube channel today) into an
+  Obsidian knowledge graph: Claude skills, Python scripts, templates and
+  conventions, with one vault per source under Sources/. Says how to work on a
+  source and where its skills live.
+---
 # WikiPol — Instructions méta
 
 ## Objectif

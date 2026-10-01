@@ -49,4 +49,4 @@ Voir `CLAUDE.md` pour les instructions de travail et `BUILD.md` pour les convent
 
 ## Exemple de source mature
 
-Le projet [Graphiked](https://github.com/Diplow/paduteam-wiki) — vault PaduTeam — est l'incubateur historique de cette ossature. Il reste pour l'instant un repo séparé, migré plus tard si WikiPol fait ses preuves sur d'autres sources.
+Graphiked, le vault PaduTeam (`Sources/Paduteam/`), est l'incubateur historique de cette ossature. Ses deux sources, PaduTeam et Boniface, étaient des sous-modules git ; elles sont désormais copiées dans le dépôt `Diplow/diplow`, sous `6-politics/1-projects/1-wikipol/`, où vit WikiPol. Les anciens dépôts (`Diplow/wikipol`, `Diplow/paduteam-wiki`, `Diplow/boniface-wiki`) ne sont plus la source de vérité.

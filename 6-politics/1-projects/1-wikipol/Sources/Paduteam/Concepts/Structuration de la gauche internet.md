@@ -37,7 +37,7 @@ Même structurée, la gauche internet se heurte à un plafond : 60 000€/an suf
 
 ## La thèse de Padu sur la professionnalisation
 
-La structuration ne signifie pas nécessairement que les militants doivent quitter leur emploi salarié. Padu formule une position théorisée : garder un emploi en dehors du militantisme permet de conserver un "objectif politique pur", non dicté par la nécessité économique de "payer son loyer." Cette position hérite d'une tradition CGT — militer tout en faisant "tourner l'appareil de production" pour ne pas créer une "pseudo avant-garde déconnectée de la pratique collective" (voir [[CLAUDE.md]])[^4].
+La structuration ne signifie pas nécessairement que les militants doivent quitter leur emploi salarié. Padu formule une position théorisée : garder un emploi en dehors du militantisme permet de conserver un "objectif politique pur", non dicté par la nécessité économique de "payer son loyer." Cette position hérite d'une tradition CGT — militer tout en faisant "tourner l'appareil de production" pour ne pas créer une "pseudo avant-garde déconnectée de la pratique collective" (voir [[6-politics/1-projects/1-wikipol/Sources/Paduteam/CLAUDE|CLAUDE.md]])[^4].
 
 Glupatate représente le cas inverse — il a quitté l'ingénierie et vit maintenant en partie de sa production militante. Les deux positions coexistent dans la PaduTeam sans contradiction : l'important est la structure collective, pas l'arrangement individuel.
 

@@ -27,7 +27,7 @@ Les skills individuelles (dans `Skills/`) décrivent leur workflow spécifique ;
 │  1. Lit le transcript                                │
 │  2. Appelle gather-context pour le sujet             │
 │  3. Dispatche vers les skills spécialisées           │
-│  4. Commit direct sur develop                        │
+│  4. Commit, puis PR vers main                        │
 └───────┬──────────┬──────���───┬──────────┬─────────────┘
         │          │          │          │
         ▼          ▼          ▼          ▼
@@ -271,41 +271,13 @@ Pour les fiches non-vidéo (entités, concepts, enjeux), les footnotes référen
 
 ## Workflow git
 
-Le vault est versionné sur GitHub (`Diplow/paduteam-wiki`). Voir aussi le workflow git défini dans `BUILD.md` à la racine de WikiPol — Paduteam n'a pas de spécificité.
+Le vault vit dans le dépôt `Diplow/diplow`, sous `6-politics/1-projects/1-wikipol/Sources/Paduteam/`. Paduteam suit le workflow git défini dans `BUILD.md` à la racine de WikiPol, sans spécificité : une branche de travail, un commit par ingestion ou par batch, une PR vers `main` que l'utilisateur relit et merge.
 
-### Branches
+Préfixes de commit : `ingest:` (1 vidéo), `ingest-batch:` (batch), `synthesize: COUCHE — Nom cible` (synthèse).
 
-```
-main              ← production (publication du wiki)
- └── develop      ← intégration et travail courant
-```
+### Publication
 
-- **`main`** : état publié du wiki. Jamais de push direct — promu depuis `develop` par l'utilisateur.
-- **`develop`** : branche unique de travail. Les ingestions, synthèses et corrections committent **directement** sur `develop`. Pas de branches éphémères.
-
-### En début d'ingestion ou de synthèse
-
-1. Se placer sur develop à jour : `git checkout develop && git pull origin develop`
-
-### En fin d'ingestion ou de synthèse
-
-1. Stage les fichiers modifiés/créés par nom (pas `git add -A`)
-2. Commit avec message structuré sur `develop` :
-   ```
-   ingest: TITRE ABRÉGÉ DE LA VIDÉO
-
-   Fiches créées: X (liste)
-   Fiches enrichies: Y (liste)
-   Corrections ortho: Z (liste si applicable)
-
-   Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
-   ```
-   Préfixes : `ingest:` (1 vidéo), `ingest-batch:` (batch), `synthesize: COUCHE — Nom cible` (synthèse).
-3. Push direct : `git push origin develop`
-
-### Publication (develop → main)
-
-Merge manuel par l'utilisateur. Publication via Obsidian Publish.
+Publication via Obsidian Publish.
 
 ---
 
@@ -336,5 +308,5 @@ Sources/Paduteam/
 └── Skills/                          ← skills Claude (1 dossier par skill, dont write-<couche>)
 ```
 
-**Chemin (submodule depuis la racine WikiPol) :** `Sources/Paduteam/` (où WikiPol est le repo parent — `../../` depuis ce fichier).
-**Repo GitHub :** `git@github.com:Diplow/paduteam-wiki.git`
+**Chemin depuis la racine WikiPol :** `Sources/Paduteam/` (`../../` depuis ce fichier).
+**Repo GitHub :** `Diplow/diplow`, sous `6-politics/1-projects/1-wikipol/`

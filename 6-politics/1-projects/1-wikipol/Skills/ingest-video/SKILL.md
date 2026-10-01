@@ -54,9 +54,10 @@ Si l'utilisateur ne fournit ni URL, ni titre, ni transcript :
 
 ### Étape 2 — Branche git
 
-1. Générer le slug depuis le titre (minuscules, sans accents, tirets, ~50 chars max)
-2. `git checkout develop && git pull origin develop`
-3. `git checkout -b ingest/<slug>`
+Suivre `BUILD.md` de WikiPol § Workflow git, « En début d'ingestion » :
+
+1. Si la branche courante n'est pas `main`, travailler dessus.
+2. Sinon, générer le slug depuis le titre (minuscules, sans accents, tirets, ~50 chars max), puis `git fetch origin && git checkout -b ingest/<slug> origin/main`
 
 ### Étape 3 — Lire le transcript
 
@@ -166,8 +167,8 @@ Suivre le workflow git défini dans `BUILD.md` de WikiPol :
 
    Co-Authored-By: Claude <noreply@anthropic.com>
    ```
-4. `git push -u origin ingest/<slug>`
-5. PR vers `develop` avec résumé d'ingestion
+4. `git push -u origin HEAD`
+5. PR vers `main` avec résumé d'ingestion (`gh pr create --base main`), sauf si la branche en a déjà une. Ne pas la merger.
 
 ### Étape 12 — Résumé à l'utilisateur
 

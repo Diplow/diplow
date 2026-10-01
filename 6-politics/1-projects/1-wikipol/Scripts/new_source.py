@@ -9,7 +9,7 @@ Usage:
 Args optionnels :
     --handle "@MaChaine"           # handle YouTube (déduit de l'URL si absent)
     --attribution "la MaChaine"    # attribution collective dans les fiches
-    --git-repo "user/repo"         # dépôt GitHub pour cette source
+    --git-repo "user/repo"         # dépôt GitHub qui héberge WikiPol (défaut : Diplow/diplow)
 
 Résultat : Sources/MaChaine/ est créé avec :
     - source.yaml                  (config paramétrique)
@@ -213,7 +213,7 @@ def main():
     channel_url = args["youtube-url"]
     handle = args.get("handle") or derive_handle(channel_url)
     attribution = args.get("attribution") or name
-    git_repo = args.get("git-repo", "")
+    git_repo = args.get("git-repo", "Diplow/diplow")
 
     print(f"Nouvelle source WikiPol")
     print(f"  name        : {name}")

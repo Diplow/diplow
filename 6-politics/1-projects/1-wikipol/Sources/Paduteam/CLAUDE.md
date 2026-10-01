@@ -1,3 +1,12 @@
+---
+title: PaduTeam
+parent: 6-politics/1-projects/1-wikipol/Sources/Paduteam
+owner: diplo
+preview: >-
+  Graphiked, the PaduTeam vault: a knowledge graph of the analyses of the
+  PaduTeam, a Marxist YouTube channel and the media arm of La Brèche. Gives the
+  editorial context (who speaks, tone, reading traps) and how its ingestion runs.
+---
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
@@ -102,7 +111,7 @@ Trois pièges à éviter systématiquement quand on travaille sur ce vault :
 
 ## Ingestion automatisée
 
-Le fichier `PADUTEAM_CHRONOLOGIQUE.md` (à la racine) est le **tracker principal** : 40 batchs couvrant 18 mois de vidéos PaduTeam, chacun avec un statut ⏳/✅. C'est la source de vérité pour l'avancement de l'ingestion. Les commits sont directs sur `develop` (plus de branches éphémères — voir `BUILD.md` § Workflow git).
+Le fichier `PADUTEAM_CHRONOLOGIQUE.md` (à la racine) est le **tracker principal** : 40 batchs couvrant 18 mois de vidéos PaduTeam, chacun avec un statut ⏳/✅. C'est la source de vérité pour l'avancement de l'ingestion. Chaque ingestion arrive sur `main` par une PR (voir `BUILD.md` de WikiPol § Workflow git).
 
 ### Scripts d'automatisation (`Scripts/` — racine WikiPol)
 

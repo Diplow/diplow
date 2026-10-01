@@ -13,8 +13,8 @@ files:
   chronologique: "PADUTEAM_CHRONOLOGIQUE.md"
 
 git:
-  repo: "Diplow/paduteam-wiki"
-  default_branch: develop
+  repo: "Diplow/diplow"
+  default_branch: main
 
 claude:
   default_model: sonnet
@@ -28,7 +28,7 @@ content_types:
     Concepts: true
     Videos: true
     Evenements: true
-  couches:
+  advanced:
     Enjeux: true
     Conjonctures: true
     Possibles: true

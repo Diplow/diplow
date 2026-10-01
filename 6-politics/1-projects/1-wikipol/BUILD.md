@@ -23,7 +23,7 @@ La **taxonomie concrète** (domaines, thèmes, enjeux) n'est pas définie ici : 
 │  2. Appelle gather-context pour le sujet             │
 │  3. Dispatche vers les skills write-* selon les      │
 │     content_types activés dans source.yaml           │
-│  4. Gère le git (branche, commit, PR)                │
+│  4. Gère le git (branche, commit, PR vers main)      │
 └───────┬──────────────────┬─────────────────┬─────────┘
         │                  │                 │
         ▼                  ▼                 ▼
@@ -432,30 +432,27 @@ Les principes éditoriaux spécifiques (restituer sans challenger, nuancer, cont
 
 ## Workflow git
 
-Chaque source est versionnée dans son propre dépôt GitHub (paramètre `git.repo` dans `source.yaml`). WikiPol — l'ossature — est versionné dans un dépôt distinct.
+WikiPol et toutes ses sources vivent dans le dépôt `Diplow/diplow`, sous `6-politics/1-projects/1-wikipol/`. Il n'y a ni dépôt par source, ni branche `develop` : tout arrive sur `main` par une pull request, jamais par un push direct (règle du dépôt, voir `STACK.md` à sa racine).
 
-### Stratégie de branches
+### Branches
 
 ```
-main              ← production (publication du wiki)
- └── develop      ← intégration (état courant du vault)
-      ├── ingest/<slug-video>            ← ingestion unitaire (1 vidéo)
-      └── ingest-batch/<slug-sujet>      ← ingestion batch (N vidéos d'un même sujet)
+main                                ← état courant du vault ; jamais de push direct
+ ├── ingest/<slug-video>            ← ingestion unitaire (1 vidéo)
+ └── ingest-batch/<slug-sujet>      ← ingestion batch (N vidéos d'un même sujet)
 ```
 
-- **`main`** : état publié du wiki. Jamais de push direct.
-- **`develop`** : branche d'intégration. Toutes les ingestions sont mergées ici.
-- **`ingest/<slug>`** : branche éphémère pour une ingestion unitaire. Slug = titre de la vidéo en minuscules, sans accents, tirets, tronqué à ~50 chars.
-- **`ingest-batch/<slug>`** : branche éphémère pour un batch thématique. Slug = nom du sujet (ex: `paduteam-2024-w47-w48`), ~40 chars max. Un seul commit et une seule PR couvrant toutes les vidéos du batch.
+- **`ingest/<slug>`** : ingestion unitaire. Slug = slug de la source puis titre de la vidéo, en minuscules, sans accents, tirets, tronqué à ~50 chars.
+- **`ingest-batch/<slug>`** : batch thématique. Slug = champ `Slug branche` du fichier de suivi (ex: `paduteam-2024-w47-w48`), ~40 chars max. Un seul commit par batch.
 
 ### En début d'ingestion
 
-1. Se placer sur develop à jour : `git checkout develop && git pull origin develop`
-2. Créer la branche : `git checkout -b ingest/<slug>` (ou `ingest-batch/<slug>`)
+1. `git branch --show-current`. Si la branche courante n'est pas `main` (workspace Conductor, ou branche ouverte par un batch précédent du même run `Scripts/run_ingest.py`), travailler dessus : les batches successifs s'y empilent, un commit chacun, dans une seule PR.
+2. Sinon, partir de `main` à jour : `git fetch origin && git checkout -b ingest/<slug> origin/main` (ou `ingest-batch/<slug>`).
 
 ### En fin d'ingestion
 
-1. Stage les fichiers modifiés/créés par nom (pas `git add -A`)
+1. Stage les fichiers modifiés/créés par nom, tous sous `Sources/<NomSource>/` (pas `git add -A`)
 2. Commit avec message structuré :
    ```
    ingest: TITRE ABRÉGÉ DE LA VIDÉO
@@ -466,8 +463,10 @@ main              ← production (publication du wiki)
 
    Co-Authored-By: Claude <noreply@anthropic.com>
    ```
-3. Push : `git push -u origin ingest/<slug>`
-4. Merge dans develop (PR ou merge direct selon convention de la source)
+   Préfixes : `ingest:` (1 vidéo), `ingest-batch:` (batch), `synthesize: COUCHE — Nom cible` (synthèse).
+3. Push : `git push -u origin HEAD`
+4. Si la branche n'a pas encore de PR (`gh pr view` échoue), en ouvrir une vers `main` : `gh pr create --base main`, titre = première ligne du commit, corps = résumé d'ingestion. Sinon le push suffit, la PR existante se met à jour.
+5. Ne jamais merger soi-même : l'utilisateur relit la PR et la merge.
 
 ---
 

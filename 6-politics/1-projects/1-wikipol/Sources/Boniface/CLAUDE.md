@@ -1,3 +1,12 @@
+---
+title: Boniface
+parent: 6-politics/1-projects/1-wikipol/Sources/Boniface
+owner: diplo
+preview: >-
+  The Boniface vault: a knowledge graph of the geopolitical analyses of Pascal
+  Boniface, founder of IRIS, from his YouTube channel. Gives the editorial
+  context (who speaks, tone, reading traps). Bootstrapped, one book ingested.
+---
 # Boniface — Contexte éditorial
 
 ## Objectif
