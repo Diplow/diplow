@@ -1,0 +1,46 @@
+# Configuration de la source — paramètre unique d'entrée
+# pour les scripts (Scripts/*.py) et les skills (Skills/*).
+
+source:
+  name: "{{SOURCE_NAME}}"                # nom affiché (commits, logs, docs)
+  slug: "{{SOURCE_SLUG}}"                # préfixe branches git, nom court
+  type: "youtube"                        # unique type supporté pour l'instant
+  attribution: "{{SOURCE_ATTRIBUTION}}"  # phrase utilisée dans les fiches (ex: "la PaduTeam")
+
+youtube:
+  channel_url: "{{CHANNEL_URL}}"
+  channel_handle: "{{CHANNEL_HANDLE}}"
+
+files:
+  inventaire: "Sources/Inventaire.md"
+  chronologique: "{{SLUG_UPPER}}_CHRONOLOGIQUE.md"
+
+git:
+  repo: "{{GIT_REPO}}"                   # dépôt qui héberge WikiPol (GitHub)
+  default_branch: "main"
+  ingest_branch_prefix: "ingest-batch/"
+
+claude:
+  default_model: "sonnet"                # "sonnet" ou "opus"
+
+# Whitelist stricte des types de fiches activés pour cette source.
+# - Scripts/new_source.py scaffolde les dossiers correspondants.
+# - Les skills write-* refusent d'écrire un type désactivé.
+# - Pour activer un type plus tard : passer à `true` ici et créer le dossier
+#   à la main (ou via un script utilitaire).
+# Voir BUILD.md de WikiPol pour la spec frontmatter de chaque type.
+content_types:
+  raw:
+    Transcripts: true
+  basic:
+    Individus: true
+    Organisations: true
+    Concepts: true
+    Videos: true
+    Livres: false
+    Evenements: false
+  advanced:
+    Enjeux: true
+    Conjonctures: false
+    Possibles: false
+    Methodes: false
