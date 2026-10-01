@@ -1,0 +1,21 @@
+# Obsidian
+.obsidian/
+.trash/
+
+# Claude Code
+.claude/
+
+# Fichier de contexte temporaire produit par gather-context
+.context-tmp.md
+
+# Logs des scripts d'orchestration
+run_ingest.log
+synthesize.log
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+Thumbs.db
+.DS_Store

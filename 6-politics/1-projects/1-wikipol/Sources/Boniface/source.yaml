@@ -1,0 +1,24 @@
+# Configuration de la source — paramètre unique d'entrée
+# pour les scripts (Scripts/*.py) et les skills (Skills/*).
+
+source:
+  name: "Boniface"                # nom affiché (commits, logs, docs)
+  slug: "boniface"                # préfixe branches git, nom court
+  type: "youtube"                        # unique type supporté pour l'instant
+  attribution: "Pascal Boniface"  # phrase utilisée dans les fiches (ex: "la PaduTeam")
+
+youtube:
+  channel_url: "https://www.youtube.com/@pascalboniface241/videos"
+  channel_handle: "@pascalboniface241"
+
+files:
+  inventaire: "Sources/Inventaire.md"
+  chronologique: "BONIFACE_CHRONOLOGIQUE.md"
+
+git:
+  repo: ""                   # ex: "username/reponame" (GitHub)
+  default_branch: "develop"
+  ingest_branch_prefix: "ingest-batch/"
+
+claude:
+  default_model: "sonnet"                # "sonnet" ou "opus"

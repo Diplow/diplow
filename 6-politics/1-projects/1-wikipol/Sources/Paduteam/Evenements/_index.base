@@ -1,0 +1,41 @@
+filters:
+  and:
+    - type == "evenement"
+views:
+  - type: table
+    name: Tous les évènements
+    order:
+      - file.name
+      - date
+      - periode
+      - domaine
+      - thèmes
+      - file.mtime
+    sort:
+      - property: date
+        direction: DESC
+    columnSize:
+      file.name: 280
+  - type: table
+    name: 2026
+    filters:
+      and:
+        - periode == "2026"
+    order:
+      - file.name
+      - date
+      - domaine
+      - thèmes
+    sort:
+      - property: date
+        direction: ASC
+  - type: table
+    name: Récents
+    order:
+      - file.name
+      - date
+      - periode
+      - domaine
+    sort:
+      - property: file.mtime
+        direction: DESC

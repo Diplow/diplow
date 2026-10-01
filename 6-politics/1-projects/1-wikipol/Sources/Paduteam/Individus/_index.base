@@ -1,0 +1,52 @@
+filters:
+  and:
+    - type == "individu"
+views:
+  - type: table
+    name: Tous les individus
+    order:
+      - file.name
+      - domaine
+      - thèmes
+      - file.mtime
+      - skill_version
+    sort:
+      - property: file.name
+        direction: ASC
+    columnSize:
+      file.name: 280
+  - type: table
+    name: Récents
+    order:
+      - file.name
+      - domaine
+      - thèmes
+      - file.mtime
+      - skill_version
+    sort:
+      - property: file.mtime
+        direction: DESC
+  - type: table
+    name: Politique intérieure
+    filters:
+      and:
+        - domaine.contains("politique-intérieure")
+    order:
+      - file.name
+      - thèmes
+      - skill_version
+    sort:
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: Géopolitique
+    filters:
+      and:
+        - domaine.contains("géopolitique")
+    order:
+      - file.name
+      - thèmes
+      - skill_version
+    sort:
+      - property: file.name
+        direction: ASC

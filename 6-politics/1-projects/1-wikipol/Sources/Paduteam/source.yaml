@@ -1,0 +1,35 @@
+source:
+  name: PaduTeam
+  slug: paduteam
+  type: youtube
+  attribution: "la PaduTeam"
+
+youtube:
+  channel_url: https://www.youtube.com/@PaduTeam/videos
+  channel_handle: "@PaduTeam"
+
+files:
+  inventaire: "Sources/Inventaire PaduTeam.md"
+  chronologique: "PADUTEAM_CHRONOLOGIQUE.md"
+
+git:
+  repo: "Diplow/paduteam-wiki"
+  default_branch: develop
+
+claude:
+  default_model: sonnet
+
+content_types:
+  raw:
+    Transcripts: true
+  basic:
+    Individus: true
+    Organisations: true
+    Concepts: true
+    Videos: true
+    Evenements: true
+  couches:
+    Enjeux: true
+    Conjonctures: true
+    Possibles: true
+    Methodes: true
