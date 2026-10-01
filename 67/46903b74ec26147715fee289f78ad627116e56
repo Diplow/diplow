@@ -1,0 +1,58 @@
+6-politics/1-projects/1-wikipol/Sources/Boniface/CLAUDE.md
+  s_b87e7bbfb9eb97::t_d6046f38d718b5 1-9
+6-politics/1-projects/1-wikipol/Scripts/new_source.py
+  s_b87e7bbfb9eb97::t_a4d1060a53b185 12,216
+6-politics/1-projects/1-wikipol/Sources/Paduteam/Skills/ingest-batch/SKILL.md
+  s_b87e7bbfb9eb97::t_124cdbf515147b 37,50,71,73,75-77,149,151,169-172,180,190
+6-politics/1-projects/1-wikipol/Sources/Paduteam/source.yaml
+  s_b87e7bbfb9eb97::t_a4d1060a53b185 16-17,31
+6-politics/1-projects/1-wikipol/README.md
+  s_b87e7bbfb9eb97::t_d6046f38d718b5 52
+6-politics/1-projects/CLAUDE.md
+  s_b87e7bbfb9eb97::t_24cac7ba4b1173 1-24
+6-politics/1-projects/1-wikipol/Skills/ingest-video/SKILL.md
+  s_b87e7bbfb9eb97::t_3de1fd0b67fe10 57-60,170-171
+STACK.md
+  s_b87e7bbfb9eb97::t_a3a1f48c60121e 87-88
+6-politics/1-projects/1-wikipol/Scripts/source_config.py
+  s_b87e7bbfb9eb97::t_a4d1060a53b185 139
+6-politics/1-projects/1-wikipol/Skills/ingest-batch/SKILL.md
+  s_b87e7bbfb9eb97::t_6c654ec6178442 79
+  s_b87e7bbfb9eb97::t_3de1fd0b67fe10 77,80-81,164,184-187,195,205
+  s_b87e7bbfb9eb97::t_b13b4c35281065 78
+6-politics/1-projects/1-wikipol/Sources/Boniface/source.yaml
+  s_b87e7bbfb9eb97::t_a4d1060a53b185 19-20
+  s_b87e7bbfb9eb97::t_772ad717782dd8 25-46
+6-politics/1-projects/1-wikipol/BUILD.md
+  s_b87e7bbfb9eb97::t_3df8b4e7db1617 26,435,437,440-442,445-446,450-451,455,466-467,469
+  s_b87e7bbfb9eb97::t_487d1ca44fd6f1 468
+6-politics/1-projects/1-wikipol/Sources/Paduteam/BUILD.md
+  s_b87e7bbfb9eb97::t_124cdbf515147b 30,274,276,278,280,311-312
+6-politics/1-projects/1-wikipol/Sources/Paduteam/CLAUDE.md
+  s_b87e7bbfb9eb97::t_124cdbf515147b 114
+  s_b87e7bbfb9eb97::t_d6046f38d718b5 1-9
+6-politics/1-projects/1-wikipol/Sources/Paduteam/Skills/ingest-video/SKILL.md
+  s_b87e7bbfb9eb97::t_124cdbf515147b 7,46,48,50-51,123,125,129,139-140
+6-politics/1-projects/1-wikipol/Templates/source.yaml.tmpl
+  s_b87e7bbfb9eb97::t_a4d1060a53b185 19-20
+6-politics/1-projects/1-wikipol/CLAUDE.md
+  s_b87e7bbfb9eb97::t_d6046f38d718b5 1-10
+"6-politics/1-projects/1-wikipol/Sources/Paduteam/Concepts/Structuration de la gauche internet.md"
+  s_b87e7bbfb9eb97::t_a3a1f48c60121e 40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6746903b74ec26147715fee289f78ad627116e56",
+  "prompts": {},
+  "sessions": {
+    "s_b87e7bbfb9eb97": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9d244254-66b1-4d6f-a058-e6cacee8aa89",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
