@@ -189,20 +189,21 @@ The section borrows Mapping's Tile, Context and Frame, and adds words for what a
 What a folder is:
 
 - **Tile**: a folder's own is the `title` and `preview` of its `CLAUDE.md`, or of its `-CLAUDE.md` when it keeps a private one. Without either, a title made from the folder's name.
-- **Branch** and **Leaf**: a child folder and a file. A Leaf grows into a Branch when it needs children of its own, and keeps its direction: `3-games.md` becomes `3-games/`. Branches and Leaves count their directions apart: `<n>-<slug>` sits in direction n, and an unnumbered name takes the first free direction in name order. A folder's `CLAUDE.md` and `-CLAUDE.md` are its Tile, never Leaves, and a dot file is neither a Leaf nor Context.
+- **Branch** and **Leaf**: a child folder and a file. A Leaf grows into a Branch when it needs children of its own, and keeps its direction: `3-games.md` becomes `3-games/`. Branches and Leaves count their directions apart: `<n>-<slug>` sits in direction n, and an unnumbered name takes the first free direction in name order. When two names claim one number, the later in name order overflows. A folder's `CLAUDE.md` and `-CLAUDE.md` are its Tile, never Leaves, and a dot file is neither a Leaf nor Context.
 - **Context**: the dot folders. `.<n>-<slug>/` sits in direction n, as hexframe exports a System, then the other dot folders (`.claude/`, `.skills/`) take the free slots in name order.
 - **`.hexframe/` folder**: a folder's settings. Its `exclusions.yaml` lists the names and globs that folder leaves out, for that folder only. `.hexframe/` itself is always left out, as are `.git` and `node_modules`.
-- **Overflow**: more than six candidates for one ring, after exclusions.
+- **The vault's edge**: a medium reads nothing outside the vault. It follows a symlink only when the symlink's real path stays under the vault root's; any other symlink is left out like an excluded name.
+- **Overflow**: a candidate that finds no direction, because its ring already has six or because its number is taken.
 
 How a medium looks at it. This is view state, as in the app:
 
 - **Frame kind**: what a Frame's ring shows around its Tile. **Children** is the Branches and the Leaves together, offered only when there are six or fewer in all; the Leaves get another fill, and a Leaf that shares a Branch's number gets a subtle warning. **Branches** and **Leaves** show one of the two, **Context** the dot folders. Mapping's Frame is the Children kind of a folder that has no files.
 - **Depth**: how many generations a medium shows from the center. claude-mod 1, the app 2, the Obsidian plugin 2.
 - **Double expansion**: only the center has it. Its outer ring shows Children, Branches or Leaves; its inner ring, inside the center's hex, Leaves or Context; never the same kind in both. Each outer Branch expands on its own, into any kind. The inner ring's hexes don't expand. Collapsing peels the outer ring first, then the inner, and a fully collapsed center fills the canvas.
-- **An overflowing Frame** shows as a list, not as hexes, until exclusions bring it down to six. Only that Frame becomes a list, unless it is the center's outer ring: then the whole view does.
-- **Hexframe file**: a `*.hexframe` file opens the view on its folder and keeps the view's state in JSON: the center and the expansions. It is to a medium what the URL is to the app; the Obsidian plugin will put a `diplow.hexframe` at this vault's root. Its paths are relative to the vault and must resolve inside it. A medium that finds one pointing outside, through `..` or an absolute path, opens the file's own folder instead, so a shared vault can't make it read beyond itself.
+- **An overflowing Frame** shows as a list, not as hexes, until exclusions or renames clear it. Only that Frame becomes a list, unless it is the center's outer ring: then the whole view does.
+- **Hexframe file**: a `*.hexframe` file opens the view on its folder and keeps the view's state in JSON: the center and the expansions. It is to a medium what the URL is to the app; the Obsidian plugin will put a `diplow.hexframe` at this vault's root. Its paths are relative to the vault, and a medium resolves each one to its real path, symlinks followed, before using it. One that lands outside the vault, through `..`, an absolute path or a symlink, is dropped and the file's own folder opens instead, so a shared vault can't make a medium read beyond itself.
 
-The reading rules, and the layout that takes a depth, move into `1-hexframe/.shape/` when the ticket that extracts the shared shape lands, as the one pure definition every medium reads through; this section then keeps one line and a link. The rest of the view state stays each medium's.
+The reading rules, the vault's edge with the path check it implies, and the layout that takes a depth, move into `1-hexframe/.shape/` when the ticket that extracts the shared shape lands, as the one pure definition every medium reads through; this section then keeps one line and a link. The rest of the view state stays each medium's.
 
 ## Languages
 

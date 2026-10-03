@@ -24,7 +24,7 @@ Then `/hexframe` shows the session's folder, and `/hexframe <folder>` another on
 
 ## How it reads a folder
 
-As [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]] says, at depth 1. Not all of it yet. It shows the Branches and never the Leaves, so its Children are what STACK calls the Branches kind. It reads no `.hexframe/` folder: no exclusions, and a `.hexframe/` folder would show as a Context tile. A folder with no free slot left is named under the drawing instead of turning the Frame into a list.
+As [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]] says, at depth 1. Not all of it yet. It shows the Branches and never the Leaves, so its Children are what STACK calls the Branches kind. It reads no `.hexframe/` folder: no exclusions, and a `.hexframe/` folder would show as a Context tile. It doesn't check a symlinked folder against the vault's edge. And a folder that overflows is named under the drawing instead of turning the Frame into a list.
 
 ## Scripts
 
