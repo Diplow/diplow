@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs'
-import { mkdtemp, readFile, rm } from 'node:fs/promises'
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
@@ -25,10 +25,14 @@ async function build(dev: boolean) {
 }
 
 describe('bundle', () => {
-  it('writes main.js beside a copy of the manifest', async () => {
+  it.each(['manifest.json', 'styles.css'])('writes main.js beside a copy of %s', async (name) => {
     await build(false)
-    const manifest = await readFile(join(import.meta.dirname, '../manifest.json'), 'utf8')
-    expect(await readFile(join(outDir, 'manifest.json'), 'utf8')).toBe(manifest)
+    const source = await readFile(join(import.meta.dirname, '..', name), 'utf8')
+    expect(await readFile(join(outDir, name), 'utf8')).toBe(source)
+  })
+
+  it('builds production deterministically: the same sources give the same bytes', async () => {
+    expect(await build(false)).toBe(await build(false))
   })
 
   it('leaves the obsidian API to Obsidian, as a CommonJS module', async () => {
@@ -41,6 +45,12 @@ describe('bundle', () => {
     const main = await build(false)
     expect(main).not.toContain('sourceMappingURL')
     expect(main.split('\n').length).toBeLessThanOrEqual(2)
+    expect(existsSync(join(outDir, '.hotreload'))).toBe(false)
+  })
+
+  it('removes the .hotreload a dev build left', async () => {
+    await writeFile(join(outDir, '.hotreload'), '')
+    await build(false)
     expect(existsSync(join(outDir, '.hotreload'))).toBe(false)
   })
 

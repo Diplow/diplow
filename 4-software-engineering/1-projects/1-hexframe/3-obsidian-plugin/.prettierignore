@@ -1,4 +1,2 @@
 # Notes follow the vault's conventions, not Prettier's.
 *.md
-# The production build
-dist/
