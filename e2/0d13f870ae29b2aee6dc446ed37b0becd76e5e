@@ -1,0 +1,2105 @@
+.claude/agents/riftbound-strategist.md
+  s_b661d94074bd8f::t_801097c3cc79bd 1
+.claude/agents/riftbound-tactician.md
+  s_b661d94074bd8f::t_1460a68dfaf2ff 1
+.claude/skills/games:riftbound:card
+  s_b661d94074bd8f::t_34e509b6991dc1 1
+.claude/skills/games:riftbound:deckbuild
+  s_b661d94074bd8f::t_ff5178856e2e8c 1
+.claude/skills/games:riftbound:play
+  s_b661d94074bd8f::t_7c581cf3351ab8 1
+.claude/skills/games:riftbound:rules
+  s_b661d94074bd8f::t_1e8857802e0104 1
+.claude/skills/softeng:meta:skill-reviewer
+  s_b661d94074bd8f::t_581e53dc213d3e 1
+.claude/skills/softeng:review:domain-design
+  s_b661d94074bd8f::t_ffb2052dbbd45f 1
+.claude/skills/softeng:review:maintainability-review
+  s_b661d94074bd8f::t_742aa46576d33f 1
+.claude/skills/softeng:ship:do-ticket
+  s_b661d94074bd8f::t_1b70ce04f6d4a9 1
+.claude/skills/softeng:ship:new-ticket
+  s_b661d94074bd8f::t_b89d7988143fdd 1
+.claude/skills/softeng:ship:pr-description
+  s_b661d94074bd8f::t_3c03c047d9c7da 1
+.claude/skills/softeng:ship:run-autonomous-initiative
+  s_b661d94074bd8f::t_850fd7fe8f4155 1
+.claude/skills/softeng:ship:run-autonomous-project
+  s_b661d94074bd8f::t_5b849dc97d3158 1
+.skills/3-games/1-riftbound/CLAUDE.md
+  s_b661d94074bd8f::t_3098e3d0142652 1-21
+.skills/3-games/1-riftbound/card/SKILL.md
+  s_b661d94074bd8f::t_e953a65437ad20 1-42
+.skills/3-games/1-riftbound/deckbuild/SKILL.md
+  s_b661d94074bd8f::t_e450a70ec3d02d 1-71
+.skills/3-games/1-riftbound/play/SKILL.md
+  s_b661d94074bd8f::t_70d8665331c121 1-308
+.skills/3-games/1-riftbound/play/agents/riftbound-strategist.md
+  s_b661d94074bd8f::t_031496eb9217e6 1-52
+.skills/3-games/1-riftbound/play/agents/riftbound-tactician.md
+  s_b661d94074bd8f::t_18abaf8b2cece5 1-50
+.skills/3-games/1-riftbound/play/scripts/rift_lib.js
+  s_b661d94074bd8f::t_e00276709a6d54 1-282
+.skills/3-games/1-riftbound/rules/SKILL.md
+  s_b661d94074bd8f::t_b700b6e304d06f 1-38
+.skills/3-games/CLAUDE.md
+  s_b661d94074bd8f::t_478afc311f7810 1-15
+.skills/4-softeng/1-ship/CLAUDE.md
+  s_b661d94074bd8f::t_8308a625b7298e 3,17-21
+.skills/4-softeng/1-ship/do-ticket/SKILL.md
+  s_b661d94074bd8f::t_91c46d1c1924a4 3,5,12,23,57,80,142,151
+.skills/4-softeng/1-ship/do-ticket/scripts/start_ticket.sh
+  s_b661d94074bd8f::t_9bc4fe6e72aff0 3
+.skills/4-softeng/1-ship/new-ticket/SKILL.md
+  s_b661d94074bd8f::t_c311640bbcad9d 5,16,24-25,54,58,61,83,88
+.skills/4-softeng/1-ship/pr-description/SKILL.md
+  s_b661d94074bd8f::t_55bec7b953555d 5,65
+.skills/4-softeng/1-ship/run-autonomous-initiative/SKILL.md
+  s_b661d94074bd8f::t_be52f324e44c53 3,6,18,32,39
+.skills/4-softeng/1-ship/run-autonomous-initiative/references/root.md
+  s_b661d94074bd8f::t_b5bac3a1daf6a3 3,75
+.skills/4-softeng/1-ship/run-autonomous-project/SKILL.md
+  s_b661d94074bd8f::t_397feb6e5e50ef 3,6,31
+.skills/4-softeng/1-ship/run-autonomous-project/references/contract.md
+  s_b661d94074bd8f::t_99f10844a22c5c 3,19,200,203
+.skills/4-softeng/1-ship/run-autonomous-project/references/helpers.md
+  s_b661d94074bd8f::t_272248b811dd3c 3,35
+.skills/4-softeng/1-ship/run-autonomous-project/references/pr-loop.md
+  s_b661d94074bd8f::t_41290a4007ffd2 3,15,28,131
+.skills/4-softeng/1-ship/run-autonomous-project/references/project.md
+  s_b661d94074bd8f::t_aedde5ffab144a 3
+.skills/4-softeng/1-ship/run-autonomous-project/references/state.md
+  s_b661d94074bd8f::t_0dc9ac7b992292 3
+.skills/4-softeng/1-ship/run-autonomous-project/references/top.md
+  s_b661d94074bd8f::t_5792d72a46ec58 3
+.skills/4-softeng/1-ship/run-autonomous-project/references/unit.md
+  s_b661d94074bd8f::t_8283a3a5b04266 3
+.skills/4-softeng/1-ship/run-autonomous-project/scripts/wait_ci.sh
+  s_b661d94074bd8f::t_89a8e5a1c74f58 3
+.skills/4-softeng/1-ship/run-autonomous-project/scripts/wait_reviews.sh
+  s_b661d94074bd8f::t_163c9f0d65a4be 3
+.skills/4-softeng/2-review/CLAUDE.md
+  s_b661d94074bd8f::t_ec16ce3be864dc 3,16-17
+.skills/4-softeng/2-review/domain-design/SKILL.md
+  s_b661d94074bd8f::t_d376c9a9df6984 5
+.skills/4-softeng/2-review/maintainability-review/SKILL.md
+  s_b661d94074bd8f::t_22ad0fa3095c7c 3,6,32-33
+.skills/4-softeng/2-review/maintainability-review/references/tags.md
+  s_b661d94074bd8f::t_df85394bbb1712 3
+.skills/4-softeng/3-meta/CLAUDE.md
+  s_b661d94074bd8f::t_bee83ab028f80c 3,15
+.skills/4-softeng/3-meta/skill-reviewer/SKILL.md
+  s_b661d94074bd8f::t_77c38c76fcef93 3,6,119
+.skills/4-softeng/3-meta/skill-reviewer/references/criteria.md
+  s_b661d94074bd8f::t_cf32bbe5f9a739 3,44,48
+.skills/4-softeng/CLAUDE.md
+  s_b661d94074bd8f::t_e47de330b2e407 1-18
+.skills/CLAUDE.md
+  s_b661d94074bd8f::t_06792b4e3f68a4 6-10,18-20,22,24-27,37-38
+.skills/model-tiers.md
+  s_b661d94074bd8f::t_51eaed9ed38fcb 12
+.skills/sync
+  s_b661d94074bd8f::t_56c2da7f96342b 4,14,34-35,53,66-80,102
+3-games/1-riftbound/.gitignore
+  s_b661d94074bd8f::t_ccdf79dcd21434 1-7
+"3-games/1-riftbound/Booster Collection.md"
+  s_b661d94074bd8f::t_07163d91c7d2d3 1-179
+"3-games/1-riftbound/Booster Simulator.md"
+  s_b661d94074bd8f::t_d51b15e7d118a0 1-200
+3-games/1-riftbound/CLAUDE.md
+  s_b661d94074bd8f::t_c8ff33fa0be323 1-95
+"3-games/1-riftbound/Riftbound Cards.base"
+  s_b661d94074bd8f::t_4ffa3d5a692e99 1-57
+3-games/1-riftbound/booster_collection.json
+  s_b661d94074bd8f::t_0fca98db413a4f 1-5409
+3-games/1-riftbound/deckbuilding/README.md
+  s_b661d94074bd8f::t_2a5a6c47543f08 1-18
+3-games/1-riftbound/deckbuilding/archetype_identity.md
+  s_b661d94074bd8f::t_d627171cb6d503 1-42
+3-games/1-riftbound/deckbuilding/threat_distribution.md
+  s_b661d94074bd8f::t_edfacb961813e1 1-38
+3-games/1-riftbound/decks/irelia_blade_dancer/tempo_disruption/card_ids.json
+  s_b661d94074bd8f::t_b3e7c4159ebb3f 1-66
+3-games/1-riftbound/decks/irelia_blade_dancer/tempo_disruption/format.json
+  s_b661d94074bd8f::t_e61be5b6e52d03 1-24
+3-games/1-riftbound/decks/irelia_blade_dancer/tempo_disruption/guide.md
+  s_b661d94074bd8f::t_f52e422078dd38 1-101
+3-games/1-riftbound/decks/irelia_blade_dancer/tempo_disruption/list.json
+  s_b661d94074bd8f::t_47b99c47e74821 1-51
+3-games/1-riftbound/decks/irelia_blade_dancer/tempo_disruption/list.md
+  s_b661d94074bd8f::t_9f3a6100af7ad6 1-22
+3-games/1-riftbound/decks/irelia_blade_dancer/tempo_disruption/list.txt
+  s_b661d94074bd8f::t_c70063f568466b 1-43
+3-games/1-riftbound/decks/irelia_blade_dancer/tempo_disruption/pool.json
+  s_b661d94074bd8f::t_4c71b026c118dc 1-74
+3-games/1-riftbound/decks/irelia_blade_dancer/voltron_equipment/card_ids.json
+  s_b661d94074bd8f::t_1e323f6612cb36 1-57
+3-games/1-riftbound/decks/irelia_blade_dancer/voltron_equipment/format.json
+  s_b661d94074bd8f::t_d230b71a8fccac 1-24
+3-games/1-riftbound/decks/irelia_blade_dancer/voltron_equipment/guide.md
+  s_b661d94074bd8f::t_cdb59ab2ca1548 1-83
+3-games/1-riftbound/decks/irelia_blade_dancer/voltron_equipment/list.json
+  s_b661d94074bd8f::t_6a5411a02b10ab 1-45
+3-games/1-riftbound/decks/irelia_blade_dancer/voltron_equipment/list.md
+  s_b661d94074bd8f::t_c3795da9625249 1-22
+3-games/1-riftbound/decks/irelia_blade_dancer/voltron_equipment/list.txt
+  s_b661d94074bd8f::t_0429add866dac1 1-39
+3-games/1-riftbound/decks/irelia_blade_dancer/voltron_equipment/pool.json
+  s_b661d94074bd8f::t_7871efdd90f904 1-131
+3-games/1-riftbound/memory/MEMORY.md
+  s_b661d94074bd8f::t_85b00c5ffbb605 1-6
+3-games/1-riftbound/memory/feedback_methodology.md
+  s_b661d94074bd8f::t_fb10c71dec7494 1-11
+3-games/1-riftbound/memory/project_data_gaps.md
+  s_b661d94074bd8f::t_d14ee869d90b9a 1-29
+3-games/1-riftbound/memory/project_irelia_state.md
+  s_b661d94074bd8f::t_93bef298bcc39c 1-17
+3-games/1-riftbound/memory/reference_apis.md
+  s_b661d94074bd8f::t_f4c3f6731a6496 1-11
+3-games/1-riftbound/memory/rules_traps.md
+  s_b661d94074bd8f::t_d327020e0a6c92 1-18
+3-games/1-riftbound/memory/user_profile.md
+  s_b661d94074bd8f::t_a028e88b5eaf4b 1-11
+3-games/1-riftbound/rules/riftbound_general_rules.md
+  s_b661d94074bd8f::t_3bf2a9750c1511 1-240
+3-games/1-riftbound/rules/riftbound_keywords.md
+  s_b661d94074bd8f::t_264dec9cfca6cc 1-123
+3-games/1-riftbound/scripts/build_card_ids.py
+  s_b661d94074bd8f::t_556323c7e4b6d3 1-134
+3-games/1-riftbound/scripts/build_card_images.py
+  s_b661d94074bd8f::t_f5e97439b8a8e6 1-123
+3-games/1-riftbound/scripts/build_card_notes.py
+  s_b661d94074bd8f::t_d349386a7b01ba 1-203
+3-games/1-riftbound/scripts/build_list_md.py
+  s_b661d94074bd8f::t_98c3d5329717bc 1-171
+3-games/1-riftbound/scripts/build_pool.py
+  s_b661d94074bd8f::t_653a72323fbfba 1-283
+3-games/1-riftbound/scripts/riftbound_cards.py
+  s_b661d94074bd8f::t_03ddb9e24bd60a 1-136
+3-games/1-riftbound/scripts/riftbound_format_generator.py
+  s_b661d94074bd8f::t_2c82dba42b36bd 1-245
+"3-games/1-riftbound/sets/OGN/cards/oracle/Acceptable Losses.md"
+  s_b661d94074bd8f::t_ed52b4ef0b6ca2 1-17
+3-games/1-riftbound/sets/OGN/cards/oracle/Adaptatron.md
+  s_b661d94074bd8f::t_609e0e295dd967 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Ahri, Alluring (Alternate Art).md"
+  s_b661d94074bd8f::t_452105b2a2b142 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Ahri, Alluring.md"
+  s_b661d94074bd8f::t_b80a8ff30f6a1a 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Ahri, Inquisitive (Alternate Art).md"
+  s_b661d94074bd8f::t_32ff628d7aaac2 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Ahri, Inquisitive.md"
+  s_b661d94074bd8f::t_bd1027778b8b17 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Ahri, Nine-Tailed Fox (Overnumbered).md"
+  s_b661d94074bd8f::t_40b98ff2e6c438 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Ahri, Nine-Tailed Fox (Signature).md"
+  s_b661d94074bd8f::t_fe29d711a1ced8 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Ahri, Nine-Tailed Fox.md"
+  s_b661d94074bd8f::t_fd85018e955bc3 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Albus Ferros.md"
+  s_b661d94074bd8f::t_4fc6a57975898b 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Altar to Unity.md"
+  s_b661d94074bd8f::t_9c609add265029 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/Anivia, Primal.md"
+  s_b661d94074bd8f::t_74f577023acd67 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Arena Bar.md"
+  s_b661d94074bd8f::t_9586ce085128aa 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Aspirant's Climb.md"
+  s_b661d94074bd8f::t_99a5d3abfdf931 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/Ava Achiever.md"
+  s_b661d94074bd8f::t_aa46cafc52ba26 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Back to Back.md"
+  s_b661d94074bd8f::t_420ab59b5564c0 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Back-Alley Bar.md"
+  s_b661d94074bd8f::t_afe877362aed44 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/Baited Hook.md"
+  s_b661d94074bd8f::t_cf226c8a69ca1f 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Bandle Tree.md"
+  s_b661d94074bd8f::t_8e012191a3465e 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/Bilgewater Bully.md"
+  s_b661d94074bd8f::t_62a3887b4cd55d 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Blastcone Fae.md"
+  s_b661d94074bd8f::t_685135b18d4e6e 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Blazing Scorcher.md"
+  s_b661d94074bd8f::t_53233d8efb71eb 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Blind Fury.md"
+  s_b661d94074bd8f::t_dbfc32f7e6f419 1-16
+"3-games/1-riftbound/sets/OGN/cards/oracle/Blitzcrank, Impassive.md"
+  s_b661d94074bd8f::t_45a214891c0230 1-19
+3-games/1-riftbound/sets/OGN/cards/oracle/Block.md
+  s_b661d94074bd8f::t_319e048bfdbdc1 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Body Rune (Alternate Art).md"
+  s_b661d94074bd8f::t_80677cb1961917 1-13
+"3-games/1-riftbound/sets/OGN/cards/oracle/Body Rune.md"
+  s_b661d94074bd8f::t_813e53cd4fc2cf 1-13
+"3-games/1-riftbound/sets/OGN/cards/oracle/Brazen Buccaneer.md"
+  s_b661d94074bd8f::t_338dc124df6e63 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Brynhir Thundersong.md"
+  s_b661d94074bd8f::t_76255d4a372f40 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Bullet Time.md"
+  s_b661d94074bd8f::t_15760105ecdf6a 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Caitlyn, Patrolling.md"
+  s_b661d94074bd8f::t_ad661e6476fc48 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Call to Glory.md"
+  s_b661d94074bd8f::t_01c1b524eeed27 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Calm Rune (Alternate Art).md"
+  s_b661d94074bd8f::t_420e6f38dbfdf2 1-13
+"3-games/1-riftbound/sets/OGN/cards/oracle/Calm Rune.md"
+  s_b661d94074bd8f::t_5afbc16d28d473 1-13
+"3-games/1-riftbound/sets/OGN/cards/oracle/Cannon Barrage.md"
+  s_b661d94074bd8f::t_fe30f4b9ecf7b8 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Captain Farron.md"
+  s_b661d94074bd8f::t_0642cf43de068b 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Carnivorous Snapvine.md"
+  s_b661d94074bd8f::t_3812da2078bcff 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Catalyst of Aeons.md"
+  s_b661d94074bd8f::t_9c162e054c807a 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Cemetery Attendant.md"
+  s_b661d94074bd8f::t_2f107b8bf4c295 1-20
+3-games/1-riftbound/sets/OGN/cards/oracle/Challenge.md
+  s_b661d94074bd8f::t_98c4176c998b72 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Chaos Rune (Alternate Art).md"
+  s_b661d94074bd8f::t_5e81240f88ba98 1-13
+"3-games/1-riftbound/sets/OGN/cards/oracle/Chaos Rune.md"
+  s_b661d94074bd8f::t_8591a30d381880 1-13
+3-games/1-riftbound/sets/OGN/cards/oracle/Charm.md
+  s_b661d94074bd8f::t_9d09aac884c923 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Chemtech Enforcer.md"
+  s_b661d94074bd8f::t_5405bee2ce8129 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Cithria of Cloudfield.md"
+  s_b661d94074bd8f::t_cd49a44828920e 1-19
+3-games/1-riftbound/sets/OGN/cards/oracle/Cleave.md
+  s_b661d94074bd8f::t_896aae1d8c45c2 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Clockwork Keeper.md"
+  s_b661d94074bd8f::t_df26543ee8476b 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Commander Ledros.md"
+  s_b661d94074bd8f::t_733f36b8786d98 1-18
+3-games/1-riftbound/sets/OGN/cards/oracle/Confront.md
+  s_b661d94074bd8f::t_a103ce720741e9 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Consult the Past.md"
+  s_b661d94074bd8f::t_8292d1e9fe43e2 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Convergent Mutation.md"
+  s_b661d94074bd8f::t_88cb5400b7b5ed 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Crackshot Corsair.md"
+  s_b661d94074bd8f::t_d75ccf4d3a7810 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Cruel Patron.md"
+  s_b661d94074bd8f::t_0666359b4e74d8 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Cull the Weak.md"
+  s_b661d94074bd8f::t_f75859f45b7213 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Dangerous Duo.md"
+  s_b661d94074bd8f::t_26b221c9c832ff 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Daring Poro.md"
+  s_b661d94074bd8f::t_d7c0a216fa98a6 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Darius, Executioner (Alternate Art).md"
+  s_b661d94074bd8f::t_cc71f599b146c1 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Darius, Executioner.md"
+  s_b661d94074bd8f::t_698d15de216f13 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Darius, Hand of Noxus (Overnumbered).md"
+  s_b661d94074bd8f::t_03421de157d72f 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Darius, Hand of Noxus (Signature).md"
+  s_b661d94074bd8f::t_41fd77d76564ba 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Darius, Hand of Noxus.md"
+  s_b661d94074bd8f::t_0a19a1eebc2ade 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Darius, Trifarian (Alternate Art).md"
+  s_b661d94074bd8f::t_ec39f75dd2e800 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Darius, Trifarian.md"
+  s_b661d94074bd8f::t_fd7f686a38fc37 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Dazzling Aurora.md"
+  s_b661d94074bd8f::t_f472ce9b40457e 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Deadbloom Predator.md"
+  s_b661d94074bd8f::t_0ad27566963af3 1-20
+3-games/1-riftbound/sets/OGN/cards/oracle/Defy.md
+  s_b661d94074bd8f::t_160b07fb68ec8d 1-18
+3-games/1-riftbound/sets/OGN/cards/oracle/Discipline.md
+  s_b661d94074bd8f::t_55b8339e8afb6d 1-17
+3-games/1-riftbound/sets/OGN/cards/oracle/Disintegrate.md
+  s_b661d94074bd8f::t_24d2effc8fd961 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Divine Judgment.md"
+  s_b661d94074bd8f::t_0aceb78e3de1de 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Dr. Mundo, Expert.md"
+  s_b661d94074bd8f::t_d3a16fa79daeb0 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Dragon's Rage.md"
+  s_b661d94074bd8f::t_116c5a9298f8d0 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Draven, Showboat.md"
+  s_b661d94074bd8f::t_34ec9515fe7359 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Dune Drake.md"
+  s_b661d94074bd8f::t_f8c95b239054bb 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Eager Apprentice.md"
+  s_b661d94074bd8f::t_db8f831f60931c 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Eclipse Herald.md"
+  s_b661d94074bd8f::t_d46b386d49b576 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Ekko, Recurrent.md"
+  s_b661d94074bd8f::t_419787d3ef3653 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Ember Monk.md"
+  s_b661d94074bd8f::t_06ebae421a0f36 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/En Garde.md"
+  s_b661d94074bd8f::t_3cedfa63bfbab7 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Energy Conduit.md"
+  s_b661d94074bd8f::t_8f93367d805a2f 1-17
+3-games/1-riftbound/sets/OGN/cards/oracle/Facebreaker.md
+  s_b661d94074bd8f::t_bdd18d3bb06c1d 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Fading Memories.md"
+  s_b661d94074bd8f::t_c676a14b80b7e7 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Faithful Manufactor.md"
+  s_b661d94074bd8f::t_d55043c103bac0 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Falling Comet.md"
+  s_b661d94074bd8f::t_1f50a2a91c2bff 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Falling Star.md"
+  s_b661d94074bd8f::t_f7a1de5ad2e9b3 1-16
+"3-games/1-riftbound/sets/OGN/cards/oracle/Fight or Flight.md"
+  s_b661d94074bd8f::t_334ab2d0a49564 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Find Your Center.md"
+  s_b661d94074bd8f::t_b684345fc01004 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Fiora, Victorious.md"
+  s_b661d94074bd8f::t_836b307d0da2c9 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/First Mate.md"
+  s_b661d94074bd8f::t_b51212bbdc0bb8 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Flame Chompers.md"
+  s_b661d94074bd8f::t_8cbe3a4ce16825 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Flurry of Blades.md"
+  s_b661d94074bd8f::t_85a8f0ace4f0f6 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Forge of the Future.md"
+  s_b661d94074bd8f::t_45de5860f48c77 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Fortified Position.md"
+  s_b661d94074bd8f::t_3200c53369a57d 1-14
+3-games/1-riftbound/sets/OGN/cards/oracle/Fox-Fire.md
+  s_b661d94074bd8f::t_79be1c2595055b 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Fury Rune (Alternate Art).md"
+  s_b661d94074bd8f::t_cab7836693ccd5 1-13
+"3-games/1-riftbound/sets/OGN/cards/oracle/Fury Rune.md"
+  s_b661d94074bd8f::t_474fe3feafd329 1-13
+"3-games/1-riftbound/sets/OGN/cards/oracle/Garbage Grabber.md"
+  s_b661d94074bd8f::t_2a9598678e88ce 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Gemcraft Seer.md"
+  s_b661d94074bd8f::t_1e4d98a5258af6 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Get Excited!.md"
+  s_b661d94074bd8f::t_c907a83a182f53 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Grand Strategem.md"
+  s_b661d94074bd8f::t_f7081c71ee2095 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Grove of the God-Willow.md"
+  s_b661d94074bd8f::t_82c06012bdea2f 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/Guerilla Warfare.md"
+  s_b661d94074bd8f::t_b6525e2122cade 1-18
+3-games/1-riftbound/sets/OGN/cards/oracle/Gust.md
+  s_b661d94074bd8f::t_740a170f2c73bb 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Hallowed Tomb.md"
+  s_b661d94074bd8f::t_a24b960efbbb5d 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/Harnessed Dragon.md"
+  s_b661d94074bd8f::t_9bc2a2a9de8336 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Heimerdinger, Inventor.md"
+  s_b661d94074bd8f::t_de8d9dec9fdd80 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Herald of Scales.md"
+  s_b661d94074bd8f::t_3b4930bcf59935 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Hextech Ray.md"
+  s_b661d94074bd8f::t_bfd7251e6c8bc9 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Hidden Blade.md"
+  s_b661d94074bd8f::t_18d69876c3cf30 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Icathian Rain.md"
+  s_b661d94074bd8f::t_9cff313e9ba1df 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Immortal Phoenix.md"
+  s_b661d94074bd8f::t_6b3919d269439b 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Imperial Decree.md"
+  s_b661d94074bd8f::t_e7c6af1349f5ab 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Invert Timelines.md"
+  s_b661d94074bd8f::t_83bd211989c705 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Iron Ballista.md"
+  s_b661d94074bd8f::t_a86ca4d0f33762 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Jeweled Colossus.md"
+  s_b661d94074bd8f::t_b525e07b5291ef 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Jinx, Demolitionist (Alternate Art).md"
+  s_b661d94074bd8f::t_c156d22addcbe1 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Jinx, Demolitionist.md"
+  s_b661d94074bd8f::t_d10dea81afc412 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Jinx, Loose Cannon (Overnumbered).md"
+  s_b661d94074bd8f::t_8e3bc411c5dd3a 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Jinx, Loose Cannon (Signature).md"
+  s_b661d94074bd8f::t_9632985ee0d17d 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Jinx, Loose Cannon.md"
+  s_b661d94074bd8f::t_c0e29ed552a6c3 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Jinx, Rebel (Alternate Art).md"
+  s_b661d94074bd8f::t_4e3e0ff0f85d7f 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Jinx, Rebel.md"
+  s_b661d94074bd8f::t_1ca58f7c967629 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Kadregrin the Infernal.md"
+  s_b661d94074bd8f::t_d77efe4b5800ef 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Kai'Sa, Daughter of the Void (Overnumbered).md"
+  s_b661d94074bd8f::t_04289ae361432c 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Kai'Sa, Daughter of the Void (Signature).md"
+  s_b661d94074bd8f::t_8889a605ef78d7 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Kai'Sa, Daughter of the Void.md"
+  s_b661d94074bd8f::t_9676e433c68ff3 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Kai'Sa, Evolutionary (Alternate Art).md"
+  s_b661d94074bd8f::t_41d132ff7b607a 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Kai'Sa, Evolutionary.md"
+  s_b661d94074bd8f::t_935b88e7dbc0bd 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Kai'Sa, Survivor (Alternate Art).md"
+  s_b661d94074bd8f::t_e6951586aea01f 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Kai'Sa, Survivor.md"
+  s_b661d94074bd8f::t_ca7ad53c8630c8 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Karma, Channeler.md"
+  s_b661d94074bd8f::t_72fcb57b21e050 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Karthus, Eternal.md"
+  s_b661d94074bd8f::t_8a33bebc1bb99c 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Kayn, Unleashed.md"
+  s_b661d94074bd8f::t_6a27aa4565d343 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/King's Edict.md"
+  s_b661d94074bd8f::t_0558d59197941d 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Kinkou Monk.md"
+  s_b661d94074bd8f::t_eeace2aabd6e0f 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Kog'Maw, Caustic.md"
+  s_b661d94074bd8f::t_2baf20cb768d4b 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Kraken Hunter.md"
+  s_b661d94074bd8f::t_ed524dea5d5547 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Last Breath.md"
+  s_b661d94074bd8f::t_bd0228a6d5593b 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Last Stand.md"
+  s_b661d94074bd8f::t_c9aad5566ce933 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Lecturing Yordle.md"
+  s_b661d94074bd8f::t_6c4b62aedc00ed 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Lee Sin, Ascetic (Alternate Art).md"
+  s_b661d94074bd8f::t_0b5508d5e68e6f 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Lee Sin, Ascetic.md"
+  s_b661d94074bd8f::t_32711b1e5e8145 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Lee Sin, Blind Monk (Overnumbered).md"
+  s_b661d94074bd8f::t_0dd7637bce5687 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Lee Sin, Blind Monk (Signature).md"
+  s_b661d94074bd8f::t_afb3266bc5c928 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Lee Sin, Blind Monk.md"
+  s_b661d94074bd8f::t_28d52fc7fa0f4a 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Lee Sin, Centered (Alternate Art).md"
+  s_b661d94074bd8f::t_87c098db0246ba 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Lee Sin, Centered.md"
+  s_b661d94074bd8f::t_5884ef0a85f611 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Legion Rearguard.md"
+  s_b661d94074bd8f::t_f2ab7a360dfd2e 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Leona, Determined (Alternate Art).md"
+  s_b661d94074bd8f::t_66b0e2b17bebd7 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Leona, Determined.md"
+  s_b661d94074bd8f::t_be247a3c43ac5e 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Leona, Radiant Dawn (Overnumbered).md"
+  s_b661d94074bd8f::t_85a3f40d4059c1 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Leona, Radiant Dawn (Signature).md"
+  s_b661d94074bd8f::t_4230212cd07969 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Leona, Radiant Dawn.md"
+  s_b661d94074bd8f::t_3f850f47d1716f 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Leona, Zealot (Alternate Art).md"
+  s_b661d94074bd8f::t_bcdce39462556e 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Leona, Zealot.md"
+  s_b661d94074bd8f::t_859c1da7bb68d6 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Machine Evangel.md"
+  s_b661d94074bd8f::t_f22fe795b0a87a 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Maddened Marauder.md"
+  s_b661d94074bd8f::t_3d448822d083e3 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Mageseeker Warden.md"
+  s_b661d94074bd8f::t_df2c7722c2fbf0 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Magma Wurm.md"
+  s_b661d94074bd8f::t_1750f7a72f0132 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Malzahar, Fanatic.md"
+  s_b661d94074bd8f::t_274cac1a29be95 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Mask of Foresight.md"
+  s_b661d94074bd8f::t_7e5997f75494da 1-17
+3-games/1-riftbound/sets/OGN/cards/oracle/Meditation.md
+  s_b661d94074bd8f::t_b933297afb25c4 1-15
+3-games/1-riftbound/sets/OGN/cards/oracle/Mega-Mech.md
+  s_b661d94074bd8f::t_e696f467949973 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Mind Rune (Alternate Art).md"
+  s_b661d94074bd8f::t_419588c433af6c 1-13
+"3-games/1-riftbound/sets/OGN/cards/oracle/Mind Rune.md"
+  s_b661d94074bd8f::t_305df16587942d 1-13
+3-games/1-riftbound/sets/OGN/cards/oracle/Mindsplitter.md
+  s_b661d94074bd8f::t_318671e6fa6715 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Miss Fortune, Bounty Hunter (Overnumbered).md"
+  s_b661d94074bd8f::t_875321bf1af591 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Miss Fortune, Bounty Hunter (Signature).md"
+  s_b661d94074bd8f::t_4d8f057d3e80a8 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Miss Fortune, Bounty Hunter.md"
+  s_b661d94074bd8f::t_a7187cc619cb45 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Miss Fortune, Buccaneer (Alternate Art).md"
+  s_b661d94074bd8f::t_5cffe4be80e146 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Miss Fortune, Buccaneer.md"
+  s_b661d94074bd8f::t_73a184104f22db 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Miss Fortune, Captain (Alternate Art).md"
+  s_b661d94074bd8f::t_11ff3f11fe6054 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Miss Fortune, Captain.md"
+  s_b661d94074bd8f::t_85bfbb3a273162 1-21
+3-games/1-riftbound/sets/OGN/cards/oracle/Mistfall.md
+  s_b661d94074bd8f::t_a3c7ef39a78e06 1-17
+3-games/1-riftbound/sets/OGN/cards/oracle/Mobilize.md
+  s_b661d94074bd8f::t_8439802e25a5e4 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Monastery of Hirana.md"
+  s_b661d94074bd8f::t_af2d785e7c000f 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/Morbid Return.md"
+  s_b661d94074bd8f::t_10acf6ea8aecbf 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Mountain Drake.md"
+  s_b661d94074bd8f::t_9d30a21e0ec543 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Mushroom Pouch.md"
+  s_b661d94074bd8f::t_933b66da7b492a 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Mystic Poro.md"
+  s_b661d94074bd8f::t_31f5d6ba7ecb14 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Mystic Reversal.md"
+  s_b661d94074bd8f::t_d2a52ed40d4f4c 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Navori Fighting Pit.md"
+  s_b661d94074bd8f::t_4379a7b0441c75 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/Nocturne, Horrifying.md"
+  s_b661d94074bd8f::t_9ce8ed2174ca62 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Noxian Drummer.md"
+  s_b661d94074bd8f::t_1c02e225e40bbf 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Noxian Guillotine.md"
+  s_b661d94074bd8f::t_62539ad965be3c 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Noxus Hopeful.md"
+  s_b661d94074bd8f::t_92c94c7fceb1a3 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Noxus Saboteur.md"
+  s_b661d94074bd8f::t_7ffb8e6014f4b1 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Obelisk of Power.md"
+  s_b661d94074bd8f::t_29321ed2dee433 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/Orb of Regret.md"
+  s_b661d94074bd8f::t_729aa336201606 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Order Rune (Alternate Art).md"
+  s_b661d94074bd8f::t_6ba05ece8b43b9 1-13
+"3-games/1-riftbound/sets/OGN/cards/oracle/Order Rune.md"
+  s_b661d94074bd8f::t_f38f20b0fa89d2 1-13
+"3-games/1-riftbound/sets/OGN/cards/oracle/Overt Operation.md"
+  s_b661d94074bd8f::t_c6c943b82236ab 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Pack of Wonders.md"
+  s_b661d94074bd8f::t_4511d419242343 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Pakaa Cub.md"
+  s_b661d94074bd8f::t_91a0812b884aa0 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Party Favors.md"
+  s_b661d94074bd8f::t_06ba1263547f21 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Peak Guardian.md"
+  s_b661d94074bd8f::t_04c3c877499966 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Petty Officer.md"
+  s_b661d94074bd8f::t_e1172c0650d76f 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Pirate's Haven.md"
+  s_b661d94074bd8f::t_62c02506bfd1c1 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Pit Crew.md"
+  s_b661d94074bd8f::t_9426b893bec378 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Pit Rookie.md"
+  s_b661d94074bd8f::t_cc9ad42cec0353 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Playful Phantom.md"
+  s_b661d94074bd8f::t_a09dbac96ae684 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Poro Herder.md"
+  s_b661d94074bd8f::t_44b9bd1089a0dc 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Portal Rescue.md"
+  s_b661d94074bd8f::t_1509a2238617c8 1-18
+3-games/1-riftbound/sets/OGN/cards/oracle/Possession.md
+  s_b661d94074bd8f::t_6e0ab60cf71aaa 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Pouty Poro.md"
+  s_b661d94074bd8f::t_8aed5195dc66ed 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Primal Strength.md"
+  s_b661d94074bd8f::t_23b6f75b96d233 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Progress Day.md"
+  s_b661d94074bd8f::t_029d5ea96d8826 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Promising Future.md"
+  s_b661d94074bd8f::t_9ebc749f8aada4 1-16
+"3-games/1-riftbound/sets/OGN/cards/oracle/Qiyana, Victorious.md"
+  s_b661d94074bd8f::t_07792c6d42acae 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Raging Firebrand.md"
+  s_b661d94074bd8f::t_8e7dec28788ddd 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Raging Soul.md"
+  s_b661d94074bd8f::t_a89c5ca63129e4 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Ravenbloom Student.md"
+  s_b661d94074bd8f::t_dbf89198e937fd 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Ravenborn Tome.md"
+  s_b661d94074bd8f::t_6758a3ac65839c 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Reaver's Row.md"
+  s_b661d94074bd8f::t_1c810b14c5f096 1-14
+3-games/1-riftbound/sets/OGN/cards/oracle/Rebuke.md
+  s_b661d94074bd8f::t_10634d3e2adb6c 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Reckoner's Arena.md"
+  s_b661d94074bd8f::t_d3d9beec5b7e81 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/Recruit (271) -- Buff.md"
+  s_b661d94074bd8f::t_28a332c743f401 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Recruit (272) -- Buff.md"
+  s_b661d94074bd8f::t_e222b03d16de34 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Recruit (273) -- Buff.md"
+  s_b661d94074bd8f::t_b8a9fb9c1d4a72 1-17
+3-games/1-riftbound/sets/OGN/cards/oracle/Reinforce.md
+  s_b661d94074bd8f::t_7e536c318b27cd 1-15
+3-games/1-riftbound/sets/OGN/cards/oracle/Retreat.md
+  s_b661d94074bd8f::t_a5c25a2c3c7ea8 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Rhasa the Sunderer.md"
+  s_b661d94074bd8f::t_759153cd25b537 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Ride The Wind.md"
+  s_b661d94074bd8f::t_9f3f321720865e 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Riptide Rex.md"
+  s_b661d94074bd8f::t_234930ce9199da 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Rune Prison.md"
+  s_b661d94074bd8f::t_1de897df2ed620 1-18
+3-games/1-riftbound/sets/OGN/cards/oracle/Sabotage.md
+  s_b661d94074bd8f::t_e58cae1c78e4b9 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Sai Scout.md"
+  s_b661d94074bd8f::t_dc6db85e80f7b0 1-19
+3-games/1-riftbound/sets/OGN/cards/oracle/Salvage.md
+  s_b661d94074bd8f::t_c4cdbafd3314d1 1-18
+3-games/1-riftbound/sets/OGN/cards/oracle/Scrapheap.md
+  s_b661d94074bd8f::t_2db4de804854c2 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Scrapyard Champion.md"
+  s_b661d94074bd8f::t_5243482bebb003 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Seal of Discord.md"
+  s_b661d94074bd8f::t_8e29467a424c69 1-16
+"3-games/1-riftbound/sets/OGN/cards/oracle/Seal of Focus.md"
+  s_b661d94074bd8f::t_e6d103f049bb1c 1-16
+"3-games/1-riftbound/sets/OGN/cards/oracle/Seal of Insight.md"
+  s_b661d94074bd8f::t_8585f749946550 1-16
+"3-games/1-riftbound/sets/OGN/cards/oracle/Seal of Rage.md"
+  s_b661d94074bd8f::t_d29bce1cb3b0ba 1-16
+"3-games/1-riftbound/sets/OGN/cards/oracle/Seal of Strength.md"
+  s_b661d94074bd8f::t_8dc98dae54aef6 1-16
+"3-games/1-riftbound/sets/OGN/cards/oracle/Seal of Unity.md"
+  s_b661d94074bd8f::t_cc2e86f1673cb7 1-16
+"3-games/1-riftbound/sets/OGN/cards/oracle/Sett, Brawler (Alternate Art).md"
+  s_b661d94074bd8f::t_824ae08344f146 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Sett, Brawler.md"
+  s_b661d94074bd8f::t_fc4ceab2a89f82 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Sett, Kingpin (Alternate Art).md"
+  s_b661d94074bd8f::t_4029b9c8cf577f 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Sett, Kingpin.md"
+  s_b661d94074bd8f::t_612054cb319ae9 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Sett, The Boss (Overnumbered).md"
+  s_b661d94074bd8f::t_ac5ac530e451f7 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Sett, The Boss (Signature).md"
+  s_b661d94074bd8f::t_5aa41f03f480d0 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Sett, The Boss.md"
+  s_b661d94074bd8f::t_3303d4f0ffd1d0 1-15
+3-games/1-riftbound/sets/OGN/cards/oracle/Shakedown.md
+  s_b661d94074bd8f::t_cd7d7c0ef6f1be 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Shen, Kinkou.md"
+  s_b661d94074bd8f::t_c6b6ad7ba1d872 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Shipyard Skulker.md"
+  s_b661d94074bd8f::t_17740e3ba8127e 1-17
+3-games/1-riftbound/sets/OGN/cards/oracle/Showstopper.md
+  s_b661d94074bd8f::t_4a23f5cfdc2240 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Sigil of the Storm.md"
+  s_b661d94074bd8f::t_c4045b02481b19 1-14
+3-games/1-riftbound/sets/OGN/cards/oracle/Singularity.md
+  s_b661d94074bd8f::t_a13359d3075b60 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Siphon Power.md"
+  s_b661d94074bd8f::t_e0762241e21e5e 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Sky Splitter.md"
+  s_b661d94074bd8f::t_deed279d40ed24 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Smoke Screen.md"
+  s_b661d94074bd8f::t_9653c00a082708 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Sneaky Deckhand.md"
+  s_b661d94074bd8f::t_7d9032a6e4dbda 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Soaring Scout.md"
+  s_b661d94074bd8f::t_4034557b95cfd8 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Solari Chief.md"
+  s_b661d94074bd8f::t_0be0f49feafde7 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Solari Shieldbearer.md"
+  s_b661d94074bd8f::t_9e0995c9dabef1 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Solari Shrine.md"
+  s_b661d94074bd8f::t_62c86799efd1f5 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Sona, Harmonious.md"
+  s_b661d94074bd8f::t_1acf4d15676df0 1-21
+3-games/1-riftbound/sets/OGN/cards/oracle/Soulgorger.md
+  s_b661d94074bd8f::t_328afa7edc3eb7 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Spectral Matron.md"
+  s_b661d94074bd8f::t_0b1fa7f607ae98 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Spirit's Refuge.md"
+  s_b661d94074bd8f::t_5f033e886555e7 1-16
+"3-games/1-riftbound/sets/OGN/cards/oracle/Spoils of War.md"
+  s_b661d94074bd8f::t_833cbe4fe6151d 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Sprite (274) -- Buff.md"
+  s_b661d94074bd8f::t_3ea41eb0302982 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Sprite Call.md"
+  s_b661d94074bd8f::t_0c84d8c43d373f 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Sprite Mother.md"
+  s_b661d94074bd8f::t_6f59b9e7094cea 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Stacked Deck.md"
+  s_b661d94074bd8f::t_16661df228d72a 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Stalwart Poro.md"
+  s_b661d94074bd8f::t_4d1821b5b3678f 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Stand United.md"
+  s_b661d94074bd8f::t_77a6e46e10be2d 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Startipped Peak.md"
+  s_b661d94074bd8f::t_ebcb243fcc2715 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/Stealthy Pursuer.md"
+  s_b661d94074bd8f::t_6c4920c027e3b1 1-20
+3-games/1-riftbound/sets/OGN/cards/oracle/Stormbringer.md
+  s_b661d94074bd8f::t_39ca1595ec0a0a 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Stormclaw Ursine.md"
+  s_b661d94074bd8f::t_ef84d11fa63575 1-19
+3-games/1-riftbound/sets/OGN/cards/oracle/Stupefy.md
+  s_b661d94074bd8f::t_f3a45400b79500 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Sun Disc.md"
+  s_b661d94074bd8f::t_635ff871111385 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Sunlit Guardian.md"
+  s_b661d94074bd8f::t_2aca33cb659a91 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Super Mega Death Rocket!.md"
+  s_b661d94074bd8f::t_de777ea9ea8519 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Symbol of the Solari.md"
+  s_b661d94074bd8f::t_c1d13fc74e4710 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Targon's Peak.md"
+  s_b661d94074bd8f::t_b7daee95267061 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/Taric, Protector.md"
+  s_b661d94074bd8f::t_f3b7627b6697d8 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Tasty Faefolk.md"
+  s_b661d94074bd8f::t_00fe7e869ae6f7 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Teemo, Scout (Alternate Art).md"
+  s_b661d94074bd8f::t_8d9b298f0804ec 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Teemo, Scout.md"
+  s_b661d94074bd8f::t_f0bbf58b458e49 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Teemo, Strategist (Alternate Art).md"
+  s_b661d94074bd8f::t_0befacd73b1989 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Teemo, Strategist.md"
+  s_b661d94074bd8f::t_b5add6cf45fefb 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Teemo, Swift Scout (Overnumbered).md"
+  s_b661d94074bd8f::t_b18cab502a94bf 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Teemo, Swift Scout (Signature).md"
+  s_b661d94074bd8f::t_ba66175ddae7be 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Teemo, Swift Scout.md"
+  s_b661d94074bd8f::t_c6c1fc9bfc0b53 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/The Arena's Greatest.md"
+  s_b661d94074bd8f::t_3670c606cf7c2c 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/The Candlelit Sanctum.md"
+  s_b661d94074bd8f::t_14fc4b520742dc 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/The Dreaming Tree.md"
+  s_b661d94074bd8f::t_30d1bc3bf423e8 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/The Grand Plaza.md"
+  s_b661d94074bd8f::t_582eef44b385bf 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/The Harrowing.md"
+  s_b661d94074bd8f::t_bcaa583fcc5c0a 1-16
+"3-games/1-riftbound/sets/OGN/cards/oracle/The Syren.md"
+  s_b661d94074bd8f::t_4ff4fb691eb3d1 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Thermo Beam.md"
+  s_b661d94074bd8f::t_117f1d41fd50ec 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Thousand-Tailed Watcher.md"
+  s_b661d94074bd8f::t_86cfbb9df2931c 1-20
+3-games/1-riftbound/sets/OGN/cards/oracle/Tideturner.md
+  s_b661d94074bd8f::t_41af1ab6c549d8 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Time Warp.md"
+  s_b661d94074bd8f::t_37a632d5a3ba40 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Traveling Merchant.md"
+  s_b661d94074bd8f::t_0721dc14fe4a59 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Treasure Trove.md"
+  s_b661d94074bd8f::t_e01ebd95002a14 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Trifarian Gloryseeker.md"
+  s_b661d94074bd8f::t_b475f8ebd72206 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Trifarian War Camp.md"
+  s_b661d94074bd8f::t_41b608e5aedff5 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/Tryndamere, Barbarian.md"
+  s_b661d94074bd8f::t_4608cdf002a3be 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Twisted Fate, Gambler.md"
+  s_b661d94074bd8f::t_d19aae18e37512 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Udyr, Wildman.md"
+  s_b661d94074bd8f::t_3656eb3262a1e2 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Unchecked Power.md"
+  s_b661d94074bd8f::t_0eb3e77534e15d 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Undercover Agent.md"
+  s_b661d94074bd8f::t_c91cb19969229d 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Unlicensed Armory.md"
+  s_b661d94074bd8f::t_05234d56f0e5aa 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Unyielding Spirit.md"
+  s_b661d94074bd8f::t_f974335f44a40f 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Vanguard Captain.md"
+  s_b661d94074bd8f::t_124481c88a05a1 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Vanguard Helm.md"
+  s_b661d94074bd8f::t_b10fe6ebdbc975 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Vanguard Sergeant.md"
+  s_b661d94074bd8f::t_8f52812042cf1f 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Vayne, Hunter.md"
+  s_b661d94074bd8f::t_fd8a741533f2d6 1-21
+3-games/1-riftbound/sets/OGN/cards/oracle/Vengeance.md
+  s_b661d94074bd8f::t_dff9366cc72f48 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Vi, Destructive.md"
+  s_b661d94074bd8f::t_7734b2fd00a848 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Viktor, Herald of the Arcane (Overnumbered).md"
+  s_b661d94074bd8f::t_099ae26ae8f038 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Viktor, Herald of the Arcane (Signature).md"
+  s_b661d94074bd8f::t_de9f8ce1f69390 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Viktor, Herald of the Arcane.md"
+  s_b661d94074bd8f::t_10fd397ed93e9d 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Viktor, Innovator (Alternate Art).md"
+  s_b661d94074bd8f::t_852807d9c725a7 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Viktor, Innovator.md"
+  s_b661d94074bd8f::t_84223f28980102 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Viktor, Leader (Alternate Art).md"
+  s_b661d94074bd8f::t_3700f4948ef04a 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Viktor, Leader.md"
+  s_b661d94074bd8f::t_d1d77b5642c103 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Vilemaw's Lair.md"
+  s_b661d94074bd8f::t_5bdfc63bddd48e 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/Void Gate.md"
+  s_b661d94074bd8f::t_501040dd95511a 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/Void Seeker.md"
+  s_b661d94074bd8f::t_cc047a1df83dc7 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Volibear, Furious (Alternate Art).md"
+  s_b661d94074bd8f::t_19ab670aec7fdb 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Volibear, Furious.md"
+  s_b661d94074bd8f::t_121fbda8e9f09e 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Volibear, Imposing (Alternate Art).md"
+  s_b661d94074bd8f::t_93c036d158a597 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Volibear, Imposing.md"
+  s_b661d94074bd8f::t_047eb082f11e43 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Volibear, Relentless Storm (Overnumbered).md"
+  s_b661d94074bd8f::t_71943b39b9a10c 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Volibear, Relentless Storm (Signature).md"
+  s_b661d94074bd8f::t_0f1744b2afcf14 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Volibear, Relentless Storm.md"
+  s_b661d94074bd8f::t_f369631a5d3a42 1-15
+3-games/1-riftbound/sets/OGN/cards/oracle/Wallop.md
+  s_b661d94074bd8f::t_4ab48e2297662c 1-17
+"3-games/1-riftbound/sets/OGN/cards/oracle/Warwick, Hunter.md"
+  s_b661d94074bd8f::t_f3ad65d4690bfb 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Watchful Sentry.md"
+  s_b661d94074bd8f::t_33d2beb689eaee 1-19
+3-games/1-riftbound/sets/OGN/cards/oracle/Whirlwind.md
+  s_b661d94074bd8f::t_1515d597adda39 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Whiteflame Protector.md"
+  s_b661d94074bd8f::t_acf2485d93463e 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Wielder of Water.md"
+  s_b661d94074bd8f::t_57b75d71d13320 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Wildclaw Shaman.md"
+  s_b661d94074bd8f::t_b5718775e007e9 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Wind Wall.md"
+  s_b661d94074bd8f::t_8a2d0c73b643b3 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Windswept Hillock.md"
+  s_b661d94074bd8f::t_f3d4db00381b59 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/Wizened Elder.md"
+  s_b661d94074bd8f::t_d851932fc53a79 1-19
+"3-games/1-riftbound/sets/OGN/cards/oracle/Wraith of Echoes.md"
+  s_b661d94074bd8f::t_134ef01b082466 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Yasuo, Remorseful (Alternate Art).md"
+  s_b661d94074bd8f::t_a39f2650f4c4b0 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Yasuo, Remorseful.md"
+  s_b661d94074bd8f::t_f9a39f5b51e38d 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Yasuo, Unforgiven (Overnumbered).md"
+  s_b661d94074bd8f::t_fbae1ae7762f44 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Yasuo, Unforgiven (Signature).md"
+  s_b661d94074bd8f::t_2524ce2a4ab207 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Yasuo, Unforgiven.md"
+  s_b661d94074bd8f::t_552d3a173f94dc 1-15
+"3-games/1-riftbound/sets/OGN/cards/oracle/Yasuo, Windrider (Alternate Art).md"
+  s_b661d94074bd8f::t_bbc263fcc0bde7 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Yasuo, Windrider.md"
+  s_b661d94074bd8f::t_f6aea58cb1d33c 1-21
+"3-games/1-riftbound/sets/OGN/cards/oracle/Zaun Warrens.md"
+  s_b661d94074bd8f::t_8b5f19aafa78b6 1-14
+"3-games/1-riftbound/sets/OGN/cards/oracle/Zaunite Bouncer.md"
+  s_b661d94074bd8f::t_2263ff2f141e68 1-20
+"3-games/1-riftbound/sets/OGN/cards/oracle/Zenith Blade.md"
+  s_b661d94074bd8f::t_9db242d0b874c6 1-18
+"3-games/1-riftbound/sets/OGN/cards/oracle/Zhonya's Hourglass.md"
+  s_b661d94074bd8f::t_1f5e343f895d44 1-15
+3-games/1-riftbound/sets/OGN/source.json
+  s_b661d94074bd8f::t_01913164822b96 1-15743
+"3-games/1-riftbound/sets/SFD/cards/oracle/Against the Odds.md"
+  s_b661d94074bd8f::t_4a6919e23c7e4f 1-17
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ahri, Inquisitive (Overnumbered).md"
+  s_b661d94074bd8f::t_77c4cb897b22bd 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ahri, Inquisitive (Signature).md"
+  s_b661d94074bd8f::t_25f22ce707d98d 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Akshan, Mischievous.md"
+  s_b661d94074bd8f::t_9b66ae3c52b2b4 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Altar of Memories.md"
+  s_b661d94074bd8f::t_ce5f7d186e623d 1-17
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ancient Henge.md"
+  s_b661d94074bd8f::t_d918e031472d48 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ancient Warmonger.md"
+  s_b661d94074bd8f::t_9a12a9618d8efa 1-17
+"3-games/1-riftbound/sets/SFD/cards/oracle/Angle Shot.md"
+  s_b661d94074bd8f::t_79660ece90c577 1-17
+"3-games/1-riftbound/sets/SFD/cards/oracle/Aphelios, Exalted (Overnumbered).md"
+  s_b661d94074bd8f::t_6566fcd74d60c7 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Aphelios, Exalted (Signature).md"
+  s_b661d94074bd8f::t_a6d3e9f0cca888 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Aphelios, Exalted.md"
+  s_b661d94074bd8f::t_4325c93f5117b8 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Apprentice Smith.md"
+  s_b661d94074bd8f::t_6271b1079e5552 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Arcane Shift.md"
+  s_b661d94074bd8f::t_e799c17db5c7c8 1-20
+3-games/1-riftbound/sets/SFD/cards/oracle/Arise!.md
+  s_b661d94074bd8f::t_d588b7c327710d 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Armed Assailant.md"
+  s_b661d94074bd8f::t_56fe9fc0e476fe 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Aspiring Engineer.md"
+  s_b661d94074bd8f::t_6169fec5f1720b 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Assembly Rig.md"
+  s_b661d94074bd8f::t_784b2118cd93a5 1-17
+"3-games/1-riftbound/sets/SFD/cards/oracle/Azir, Ascendant (Alternate Art).md"
+  s_b661d94074bd8f::t_3b137579c8e830 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Azir, Ascendant.md"
+  s_b661d94074bd8f::t_ca284703334997 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Azir, Emperor of the Sands (Overnumbered).md"
+  s_b661d94074bd8f::t_b9c22eebc64c75 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Azir, Emperor of the Sands.md"
+  s_b661d94074bd8f::t_92ff1f316e1c7a 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Azir, Sovereign (Alternate Art).md"
+  s_b661d94074bd8f::t_07f3333671cf12 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Azir, Sovereign.md"
+  s_b661d94074bd8f::t_ec25f3fc2b373d 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/B.F. Sword.md"
+  s_b661d94074bd8f::t_f0667adff38886 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Bard, Mercurial (Overnumbered).md"
+  s_b661d94074bd8f::t_649eecfe00e988 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Bard, Mercurial (Signature).md"
+  s_b661d94074bd8f::t_f6d5465449a254 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Bard, Mercurial.md"
+  s_b661d94074bd8f::t_2372c6b5728f5b 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Battering Ram.md"
+  s_b661d94074bd8f::t_37f6efa3fd0ded 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Beast Below.md"
+  s_b661d94074bd8f::t_c28315625222ef 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Bellows Breath.md"
+  s_b661d94074bd8f::t_7a1786653a8504 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Black Market Broker.md"
+  s_b661d94074bd8f::t_4aa07ae046bf49 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Blade of the Ruined King.md"
+  s_b661d94074bd8f::t_597b28b8df6688 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Blast Corps Cadet.md"
+  s_b661d94074bd8f::t_285f6245427082 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Blood Money.md"
+  s_b661d94074bd8f::t_bedc23d70fe328 1-17
+"3-games/1-riftbound/sets/SFD/cards/oracle/Blood Rush.md"
+  s_b661d94074bd8f::t_98d85bbef278c1 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Bonds of Strength.md"
+  s_b661d94074bd8f::t_918aa0f621800d 1-17
+3-games/1-riftbound/sets/SFD/cards/oracle/Boneshiver.md
+  s_b661d94074bd8f::t_7577406407482f 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Boots of Swiftness.md"
+  s_b661d94074bd8f::t_4d1c14e6e904bb 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Breakneck Mech.md"
+  s_b661d94074bd8f::t_84eadee3e88dfd 1-18
+3-games/1-riftbound/sets/SFD/cards/oracle/Brutalizer.md
+  s_b661d94074bd8f::t_5bf55dbb93daf2 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Bubble Bot.md"
+  s_b661d94074bd8f::t_f120aec9f03617 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Buhru Captain.md"
+  s_b661d94074bd8f::t_c5b861f6005d9c 1-20
+3-games/1-riftbound/sets/SFD/cards/oracle/Bushwhack.md
+  s_b661d94074bd8f::t_c00bf695f5bf86 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Called Shot.md"
+  s_b661d94074bd8f::t_23712f5ce863c8 1-16
+"3-games/1-riftbound/sets/SFD/cards/oracle/Card Sharp.md"
+  s_b661d94074bd8f::t_a12fdfe8d9fd3b 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Chemtech Cask.md"
+  s_b661d94074bd8f::t_45b48b1987b8ad 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Cloth Armor.md"
+  s_b661d94074bd8f::t_f5804674c867cd 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Combat Chef.md"
+  s_b661d94074bd8f::t_777bd21cff4605 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Corina Veraza.md"
+  s_b661d94074bd8f::t_e6c6eb48450df2 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Corrupt Enforcer.md"
+  s_b661d94074bd8f::t_99f1605c23d045 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Counter Strike.md"
+  s_b661d94074bd8f::t_55eed2160989c9 1-20
+3-games/1-riftbound/sets/SFD/cards/oracle/Cull.md
+  s_b661d94074bd8f::t_7cd8af6c42c05a 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Danger Zone.md"
+  s_b661d94074bd8f::t_daf9f70485e4cd 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Darius, Executioner (Overnumbered).md"
+  s_b661d94074bd8f::t_cc5f1a22192308 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Darius, Executioner (Signature).md"
+  s_b661d94074bd8f::t_8d8f3f5f266f55 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Dauntless Vanguard.md"
+  s_b661d94074bd8f::t_7a8befd6e30bb5 1-20
+3-games/1-riftbound/sets/SFD/cards/oracle/Deathgrip.md
+  s_b661d94074bd8f::t_45e3e2aaee8322 1-17
+"3-games/1-riftbound/sets/SFD/cards/oracle/Defiant Dance.md"
+  s_b661d94074bd8f::t_3dad86567ab501 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Desert's Call.md"
+  s_b661d94074bd8f::t_0df77c298d14c9 1-17
+3-games/1-riftbound/sets/SFD/cards/oracle/Detonate.md
+  s_b661d94074bd8f::t_34a2c0b63681b7 1-18
+3-games/1-riftbound/sets/SFD/cards/oracle/Direwing.md
+  s_b661d94074bd8f::t_a8e7ffa98ec8d7 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Disarming Rake.md"
+  s_b661d94074bd8f::t_ea083dc278bc5a 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Doran's Blade.md"
+  s_b661d94074bd8f::t_97e07d6272d8ff 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Doran's Ring.md"
+  s_b661d94074bd8f::t_0d5fae19c241ff 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Doran's Shield.md"
+  s_b661d94074bd8f::t_66c8a17a2842f2 1-18
+3-games/1-riftbound/sets/SFD/cards/oracle/Downwell.md
+  s_b661d94074bd8f::t_f36d7a89c10369 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Drag Under.md"
+  s_b661d94074bd8f::t_0e5cd513775353 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Draven, Audacious (Alternate Art).md"
+  s_b661d94074bd8f::t_8668ebe2248a52 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Draven, Audacious.md"
+  s_b661d94074bd8f::t_5f69a7f71ca0f5 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Draven, Glorious Executioner (Overnumbered).md"
+  s_b661d94074bd8f::t_82eb765a5af4c3 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Draven, Glorious Executioner.md"
+  s_b661d94074bd8f::t_cb8bf75d613949 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Draven, Vanquisher (Alternate Art).md"
+  s_b661d94074bd8f::t_7c8d64f214f9ca 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Draven, Vanquisher.md"
+  s_b661d94074bd8f::t_4fdcf3522a4003 1-20
+3-games/1-riftbound/sets/SFD/cards/oracle/Dropboarder.md
+  s_b661d94074bd8f::t_b2f0f08c173c69 1-19
+3-games/1-riftbound/sets/SFD/cards/oracle/Dunebreaker.md
+  s_b661d94074bd8f::t_bfc055a54a52db 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Eager Drakehound.md"
+  s_b661d94074bd8f::t_dfbbfa8ec8f250 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Edge of Night.md"
+  s_b661d94074bd8f::t_39be01c1e54a24 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Eminent Benefactor.md"
+  s_b661d94074bd8f::t_7e9e7bab95f931 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Emperor's Dais.md"
+  s_b661d94074bd8f::t_f0a15f1e9f31cd 1-14
+"3-games/1-riftbound/sets/SFD/cards/oracle/Emperor's Divide.md"
+  s_b661d94074bd8f::t_f1514a69593607 1-17
+"3-games/1-riftbound/sets/SFD/cards/oracle/Experimental Hexplate.md"
+  s_b661d94074bd8f::t_857551b25290b2 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Eye of the Herald.md"
+  s_b661d94074bd8f::t_ff94c04b30fa00 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ezreal, Dashing (Alternate Art).md"
+  s_b661d94074bd8f::t_82e92f45d217fc 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ezreal, Dashing.md"
+  s_b661d94074bd8f::t_825c76cefcdf9a 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ezreal, Prodigal Explorer (Overnumbered).md"
+  s_b661d94074bd8f::t_75714ab4da934b 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ezreal, Prodigal Explorer.md"
+  s_b661d94074bd8f::t_baccb77142202c 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ezreal, Prodigy (Alternate Art).md"
+  s_b661d94074bd8f::t_4d349aa5c2eaa4 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ezreal, Prodigy.md"
+  s_b661d94074bd8f::t_febbf993373aef 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Factory Recall.md"
+  s_b661d94074bd8f::t_2fd19b191ece58 1-17
+"3-games/1-riftbound/sets/SFD/cards/oracle/Fae Dragon.md"
+  s_b661d94074bd8f::t_91134276ae78df 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Fae Porter.md"
+  s_b661d94074bd8f::t_d1e0328a15470a 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Feral Strength.md"
+  s_b661d94074bd8f::t_a7fd226ebd6ec3 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ferrous Forerunner.md"
+  s_b661d94074bd8f::t_9b726637d8f2d0 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Fiora, Grand Duelist (Overnumbered).md"
+  s_b661d94074bd8f::t_bdf4124be37211 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Fiora, Grand Duelist.md"
+  s_b661d94074bd8f::t_073d9bdd8891d7 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Fiora, Peerless (Alternate Art).md"
+  s_b661d94074bd8f::t_ddad246e2a8a7b 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Fiora, Peerless.md"
+  s_b661d94074bd8f::t_ef7636cb96dfbe 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Fiora, Worthy (Alternate Art).md"
+  s_b661d94074bd8f::t_087e18a53ed745 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Fiora, Worthy.md"
+  s_b661d94074bd8f::t_dc9011679b7b0d 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Fizz, Trickster.md"
+  s_b661d94074bd8f::t_a0ab98a87c999c 1-21
+3-games/1-riftbound/sets/SFD/cards/oracle/Forecaster.md
+  s_b661d94074bd8f::t_dfde89a7ea9424 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Forge of the Fluft.md"
+  s_b661d94074bd8f::t_c73d6e8adcbe7d 1-14
+"3-games/1-riftbound/sets/SFD/cards/oracle/Forgefire Cape.md"
+  s_b661d94074bd8f::t_85bfe3a7baeec8 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Forgotten Monument.md"
+  s_b661d94074bd8f::t_4308c3c408bff4 1-14
+"3-games/1-riftbound/sets/SFD/cards/oracle/Frigid Touch.md"
+  s_b661d94074bd8f::t_99f5a1ffb440f6 1-17
+"3-games/1-riftbound/sets/SFD/cards/oracle/Frostcoat Cub.md"
+  s_b661d94074bd8f::t_f069b62f7e3f3f 1-19
+3-games/1-riftbound/sets/SFD/cards/oracle/Gearhead.md
+  s_b661d94074bd8f::t_bbd8ecbd3d216a 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Gem Jammer.md"
+  s_b661d94074bd8f::t_52fc22dc3d0a99 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Glasc Mixologist.md"
+  s_b661d94074bd8f::t_1dd7b2b25ad208 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Gold -- Buff.md"
+  s_b661d94074bd8f::t_ec617c4a34f966 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Guardian Angel.md"
+  s_b661d94074bd8f::t_578f346aa9cdcd 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Guardian of the Passage.md"
+  s_b661d94074bd8f::t_cdca1fbbbf4c33 1-19
+3-games/1-riftbound/sets/SFD/cards/oracle/Guards!.md
+  s_b661d94074bd8f::t_22cafa98790fa9 1-17
+"3-games/1-riftbound/sets/SFD/cards/oracle/Hall of Legends.md"
+  s_b661d94074bd8f::t_bc2f450f6973db 1-14
+"3-games/1-riftbound/sets/SFD/cards/oracle/Hard Bargain.md"
+  s_b661d94074bd8f::t_22804f41b3cb8a 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Harpoon Squad.md"
+  s_b661d94074bd8f::t_97c506618a661e 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Heart of Dark Ice.md"
+  s_b661d94074bd8f::t_602de2efdd0591 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Here to Help.md"
+  s_b661d94074bd8f::t_5753a11b9103f5 1-16
+3-games/1-riftbound/sets/SFD/cards/oracle/Hexdrinker.md
+  s_b661d94074bd8f::t_cee5ef3f2d0e37 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Hextech Anomaly.md"
+  s_b661d94074bd8f::t_787a893d0eb9d3 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Honest Broker.md"
+  s_b661d94074bd8f::t_afc78d49e94160 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Hostile Takeover.md"
+  s_b661d94074bd8f::t_a1ffc525cf0f58 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Irelia, Blade Dancer (Overnumbered).md"
+  s_b661d94074bd8f::t_d4b9fb500b94ad 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Irelia, Blade Dancer.md"
+  s_b661d94074bd8f::t_41f2990757552a 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Irelia, Fervent (Alternate Art).md"
+  s_b661d94074bd8f::t_9f752a982975bb 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Irelia, Fervent (Overnumbered).md"
+  s_b661d94074bd8f::t_42ddf1a1b44dd7 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Irelia, Fervent (Signature).md"
+  s_b661d94074bd8f::t_544f59a89605fb 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Irelia, Fervent.md"
+  s_b661d94074bd8f::t_5116734e82c574 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Irelia, Graceful (Alternate Art).md"
+  s_b661d94074bd8f::t_bdd8249ae244d9 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Irelia, Graceful.md"
+  s_b661d94074bd8f::t_1b811852557098 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Jae Medarda.md"
+  s_b661d94074bd8f::t_2d4a584924cfa8 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Janna, Savior.md"
+  s_b661d94074bd8f::t_de907641abb4a9 1-21
+3-games/1-riftbound/sets/SFD/cards/oracle/Jaull-Fish.md
+  s_b661d94074bd8f::t_75456a5b38ce36 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Jax, Grandmaster At Arms (Overnumbered).md"
+  s_b661d94074bd8f::t_8608b71e56e0fa 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Jax, Grandmaster At Arms.md"
+  s_b661d94074bd8f::t_79cf2bf069b0e1 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Jax, Unmatched (Alternate Art).md"
+  s_b661d94074bd8f::t_462e8f45b96ec4 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Jax, Unmatched.md"
+  s_b661d94074bd8f::t_f7a8b728855f27 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Jax, Unrelenting (Alternate Art).md"
+  s_b661d94074bd8f::t_26e33045396197 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Jax, Unrelenting.md"
+  s_b661d94074bd8f::t_2598debed4b92e 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Jayce, Man of Progress.md"
+  s_b661d94074bd8f::t_503c28ded77150 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Karma, Channeler (Overnumbered).md"
+  s_b661d94074bd8f::t_dbee49e999674f 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Karma, Channeler (Signature).md"
+  s_b661d94074bd8f::t_aaf78b7e6d880e 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Kato the Arm.md"
+  s_b661d94074bd8f::t_9289a1c23ad84c 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Last Rites.md"
+  s_b661d94074bd8f::t_f07bdc4191ba01 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Laurent Bladekeeper.md"
+  s_b661d94074bd8f::t_b3b33e749a90f1 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Laurent Duelist.md"
+  s_b661d94074bd8f::t_9bb778c5277ab3 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Legion Quartermaster.md"
+  s_b661d94074bd8f::t_ca9a5a36b4c911 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Lonely Poro.md"
+  s_b661d94074bd8f::t_88785b3b1ef1f6 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Long Sword.md"
+  s_b661d94074bd8f::t_07a10698b8538c 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Loyal Pup.md"
+  s_b661d94074bd8f::t_611da253587aed 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Lucian, Gunslinger (Alternate Art).md"
+  s_b661d94074bd8f::t_6e3038f6e7294e 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Lucian, Gunslinger.md"
+  s_b661d94074bd8f::t_c772b02b89ca25 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Lucian, Merciless (Alternate Art).md"
+  s_b661d94074bd8f::t_c5124281c55d11 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Lucian, Merciless.md"
+  s_b661d94074bd8f::t_c5af88f8a3a0fc 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Lucian, Purifier (Overnumbered).md"
+  s_b661d94074bd8f::t_e537201f4301b2 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Lucian, Purifier.md"
+  s_b661d94074bd8f::t_bd85ecc73f37c5 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Marai Spire.md"
+  s_b661d94074bd8f::t_fc0bae7c3ee5a6 1-14
+"3-games/1-riftbound/sets/SFD/cards/oracle/Marching Orders.md"
+  s_b661d94074bd8f::t_276c5bbaa3f118 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Master Bingwen.md"
+  s_b661d94074bd8f::t_1c6fd54e47905b 1-19
+3-games/1-riftbound/sets/SFD/cards/oracle/Minefield.md
+  s_b661d94074bd8f::t_9b35421c098867 1-14
+"3-games/1-riftbound/sets/SFD/cards/oracle/Minotaur Reckoner.md"
+  s_b661d94074bd8f::t_a44883dc37cc13 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Navori Scout.md"
+  s_b661d94074bd8f::t_b6f4efe780b614 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Needlessly Large Yordle.md"
+  s_b661d94074bd8f::t_e7277888d74599 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Not So Fast.md"
+  s_b661d94074bd8f::t_82471691877ec5 1-16
+"3-games/1-riftbound/sets/SFD/cards/oracle/On the Hunt.md"
+  s_b661d94074bd8f::t_fa28f89e279c9d 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ornn's Forge.md"
+  s_b661d94074bd8f::t_dbb8cf0d08cd6d 1-14
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ornn, Blacksmith (Alternate Art).md"
+  s_b661d94074bd8f::t_f740c3d1a329c0 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ornn, Blacksmith.md"
+  s_b661d94074bd8f::t_9cdb2e4b6bf06c 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ornn, Fire Below the Mountain (Overnumbered).md"
+  s_b661d94074bd8f::t_afeb6582cb15d3 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ornn, Fire Below the Mountain.md"
+  s_b661d94074bd8f::t_db7f9d6f7c601f 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ornn, Forge God (Alternate Art).md"
+  s_b661d94074bd8f::t_a8c72c6eff4003 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ornn, Forge God.md"
+  s_b661d94074bd8f::t_9643e58e8e39ee 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Overzealous Fan.md"
+  s_b661d94074bd8f::t_40e38aaabc8c62 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Perched Grimwyrm.md"
+  s_b661d94074bd8f::t_ed5dc2f00ce898 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Petricite Monument.md"
+  s_b661d94074bd8f::t_655fb652f7a94b 1-17
+3-games/1-riftbound/sets/SFD/cards/oracle/Pickpocket.md
+  s_b661d94074bd8f::t_b8ca6d911d77b8 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Piercing Light.md"
+  s_b661d94074bd8f::t_03cc176a496b99 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Plundering Poro.md"
+  s_b661d94074bd8f::t_e9e07918bc9062 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Poro Snax.md"
+  s_b661d94074bd8f::t_1ee034a2c0de8f 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Power Nexus.md"
+  s_b661d94074bd8f::t_16e755bad9d7d2 1-14
+3-games/1-riftbound/sets/SFD/cards/oracle/Premonition.md
+  s_b661d94074bd8f::t_bc86ee90cf46c5 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Prize of Progress.md"
+  s_b661d94074bd8f::t_d340398b1b15ca 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Production Surge.md"
+  s_b661d94074bd8f::t_3ae63690c9406e 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Punch First.md"
+  s_b661d94074bd8f::t_d3fd04c66ff921 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rabadon's Deathcrown.md"
+  s_b661d94074bd8f::t_2d3d2b235197b4 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rally the Troops.md"
+  s_b661d94074bd8f::t_ba63a34c8d1108 1-17
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ravenbloom Conservatory.md"
+  s_b661d94074bd8f::t_d723046018cc82 1-14
+"3-games/1-riftbound/sets/SFD/cards/oracle/Recurve Bow.md"
+  s_b661d94074bd8f::t_1938dd6997e4eb 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rek'Sai, Breacher (Alternate Art).md"
+  s_b661d94074bd8f::t_52d0e50c87be51 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rek'Sai, Breacher.md"
+  s_b661d94074bd8f::t_9aa133903ee5fb 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rek'Sai, Swarm Queen (Alternate Art).md"
+  s_b661d94074bd8f::t_b91eb4d2c08bf9 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rek'Sai, Swarm Queen.md"
+  s_b661d94074bd8f::t_080d9ceb1b3a88 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rek'sai, Void Burrower (Overnumbered).md"
+  s_b661d94074bd8f::t_c5f382ba463989 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rek'sai, Void Burrower.md"
+  s_b661d94074bd8f::t_f3d833cfd17ed7 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Relentless Pursuit.md"
+  s_b661d94074bd8f::t_6deb3d85c6e318 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rell, Magnetic.md"
+  s_b661d94074bd8f::t_f2ef1c9637a5ff 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Renata Glasc, Chem-Baroness (Overnumbered).md"
+  s_b661d94074bd8f::t_95a82787e59ddd 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Renata Glasc, Chem-Baroness.md"
+  s_b661d94074bd8f::t_3ddf73a6677e70 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Renata Glasc, Industrialist (Alternate Art).md"
+  s_b661d94074bd8f::t_f7f9fbe69e8fc1 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Renata Glasc, Industrialist.md"
+  s_b661d94074bd8f::t_91db4966ec3d52 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Renata Glasc, Mastermind (Alternate Art).md"
+  s_b661d94074bd8f::t_626b459ebb3079 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Renata Glasc, Mastermind.md"
+  s_b661d94074bd8f::t_7b02ec193b7226 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rengar, Pouncing.md"
+  s_b661d94074bd8f::t_8383395895cca2 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ribbon Dancer.md"
+  s_b661d94074bd8f::t_2d35f6903091a7 1-19
+3-games/1-riftbound/sets/SFD/cards/oracle/Riposte.md
+  s_b661d94074bd8f::t_9fd70352c92e39 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rocket Barrage.md"
+  s_b661d94074bd8f::t_7d69792b3b5658 1-16
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rockfall Path.md"
+  s_b661d94074bd8f::t_533de9acde7b68 1-14
+"3-games/1-riftbound/sets/SFD/cards/oracle/Royal Entourage.md"
+  s_b661d94074bd8f::t_69e27c6e325b3b 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Royal Guard.md"
+  s_b661d94074bd8f::t_756a3c45f04943 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Ruin Runner.md"
+  s_b661d94074bd8f::t_e95a05db223427 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rumble, Hotheaded (Alternate Art).md"
+  s_b661d94074bd8f::t_02c80f7b683ee4 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rumble, Hotheaded.md"
+  s_b661d94074bd8f::t_9ebfa99b548810 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rumble, Mechanized Menace (Overnumbered).md"
+  s_b661d94074bd8f::t_7951c4c34832d8 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rumble, Mechanized Menace.md"
+  s_b661d94074bd8f::t_2dc00f71ebbe51 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rumble, Scrapper (Alternate Art).md"
+  s_b661d94074bd8f::t_49292a6df7f737 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Rumble, Scrapper.md"
+  s_b661d94074bd8f::t_bcda81093653d0 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Sacred Shears.md"
+  s_b661d94074bd8f::t_3f726b51da7e80 1-19
+3-games/1-riftbound/sets/SFD/cards/oracle/Sandshifter.md
+  s_b661d94074bd8f::t_ba6a1367c795a3 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Sea Monkey.md"
+  s_b661d94074bd8f::t_f5d92a738bc026 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Seal of Discord (Overnumbered).md"
+  s_b661d94074bd8f::t_5f8d70a2d2eb79 1-16
+"3-games/1-riftbound/sets/SFD/cards/oracle/Seal of Focus (Overnumbered).md"
+  s_b661d94074bd8f::t_896a0550eb369c 1-16
+"3-games/1-riftbound/sets/SFD/cards/oracle/Seal of Insight (Overnumbered).md"
+  s_b661d94074bd8f::t_2fc2c1ec3fba18 1-16
+"3-games/1-riftbound/sets/SFD/cards/oracle/Seal of Rage (Overnumbered).md"
+  s_b661d94074bd8f::t_9fc509aa8298f5 1-16
+"3-games/1-riftbound/sets/SFD/cards/oracle/Seal of Strength (Overnumbered).md"
+  s_b661d94074bd8f::t_f0e1699ce9f32b 1-16
+"3-games/1-riftbound/sets/SFD/cards/oracle/Seal of Unity (Overnumbered).md"
+  s_b661d94074bd8f::t_f440fe22c7f6f2 1-16
+"3-games/1-riftbound/sets/SFD/cards/oracle/Seat of Power.md"
+  s_b661d94074bd8f::t_4653b3e9a567eb 1-14
+"3-games/1-riftbound/sets/SFD/cards/oracle/Sentinel Adept.md"
+  s_b661d94074bd8f::t_2102651e244b70 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Serrated Dirk.md"
+  s_b661d94074bd8f::t_90349bba8792f3 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Sett, Brawler (Overnumbered).md"
+  s_b661d94074bd8f::t_7277e3d078411e 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Sett, Brawler (Signature).md"
+  s_b661d94074bd8f::t_0cfff333ada996 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Show of Strength.md"
+  s_b661d94074bd8f::t_4bcdb3abc6a4d8 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Shurelya's Requiem.md"
+  s_b661d94074bd8f::t_8b5e1189d4c1a0 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Simian Ancestor.md"
+  s_b661d94074bd8f::t_eea37942626d5a 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Sivir, Ambitious (Alternate Art).md"
+  s_b661d94074bd8f::t_4143e2c4e6a34f 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Sivir, Ambitious.md"
+  s_b661d94074bd8f::t_a74a14d9bf63ed 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Sivir, Battle Mistress (Overnumbered).md"
+  s_b661d94074bd8f::t_dab70fc463ddb2 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Sivir, Battle Mistress.md"
+  s_b661d94074bd8f::t_9e62135200e9ca 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Sivir, Mercenary (Alternate Art).md"
+  s_b661d94074bd8f::t_b1e5412406115c 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Sivir, Mercenary.md"
+  s_b661d94074bd8f::t_8a88629216f80b 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Skyfall of Areion.md"
+  s_b661d94074bd8f::t_dfda97aa922e7a 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Soraka, Wanderer (Overnumbered).md"
+  s_b661d94074bd8f::t_b3d0383c8de302 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Soraka, Wanderer (Signature).md"
+  s_b661d94074bd8f::t_a8e7cb4b616f0f 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Soraka, Wanderer.md"
+  s_b661d94074bd8f::t_b2ddf9f9d28e1b 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Spinning Axe.md"
+  s_b661d94074bd8f::t_25da52460b9bb8 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Spirit Wheel.md"
+  s_b661d94074bd8f::t_32cffcfff01f62 1-17
+"3-games/1-riftbound/sets/SFD/cards/oracle/Stellacorn Herder.md"
+  s_b661d94074bd8f::t_8158412d36d74f 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Sterak's Gage.md"
+  s_b661d94074bd8f::t_f746406bb5fed7 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Strike Down.md"
+  s_b661d94074bd8f::t_2dd84f5392aebc 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Sudden Storm.md"
+  s_b661d94074bd8f::t_6a806865734281 1-17
+"3-games/1-riftbound/sets/SFD/cards/oracle/Sunken Temple.md"
+  s_b661d94074bd8f::t_0f99161f3586a1 1-14
+3-games/1-riftbound/sets/SFD/cards/oracle/Svellsongur.md
+  s_b661d94074bd8f::t_7ea3db3616af52 1-21
+3-games/1-riftbound/sets/SFD/cards/oracle/Switcheroo.md
+  s_b661d94074bd8f::t_715107c8d18243 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Teemo, Strategist (Overnumbered).md"
+  s_b661d94074bd8f::t_9685efa525bf7e 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Teemo, Strategist (Signature).md"
+  s_b661d94074bd8f::t_b1aadb24d2184a 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Temporal Portal.md"
+  s_b661d94074bd8f::t_66af5d7b4eb2a8 1-17
+3-games/1-riftbound/sets/SFD/cards/oracle/Temptation.md
+  s_b661d94074bd8f::t_ed1601eb517fc4 1-17
+"3-games/1-riftbound/sets/SFD/cards/oracle/The Papertree.md"
+  s_b661d94074bd8f::t_1d4eb37c5c1e78 1-14
+"3-games/1-riftbound/sets/SFD/cards/oracle/The Zero Drive.md"
+  s_b661d94074bd8f::t_51abd5f2aa10c3 1-18
+3-games/1-riftbound/sets/SFD/cards/oracle/Thwonk!.md
+  s_b661d94074bd8f::t_5beb54bf557fa5 1-15
+"3-games/1-riftbound/sets/SFD/cards/oracle/Tianna Crownguard.md"
+  s_b661d94074bd8f::t_c3673d44b50e01 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Treasure Hoard.md"
+  s_b661d94074bd8f::t_6b7ecec0a5ea0e 1-14
+"3-games/1-riftbound/sets/SFD/cards/oracle/Treasure Hunter.md"
+  s_b661d94074bd8f::t_9cb55d6b56b5fb 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Trinity Force.md"
+  s_b661d94074bd8f::t_b790e13f6492cd 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Trove Golem.md"
+  s_b661d94074bd8f::t_6d21f64f8ed63e 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Trusty Ramhound.md"
+  s_b661d94074bd8f::t_c08bf2a7847828 1-19
+3-games/1-riftbound/sets/SFD/cards/oracle/Undertitan.md
+  s_b661d94074bd8f::t_c9f1e7290e324a 1-20
+"3-games/1-riftbound/sets/SFD/cards/oracle/Unsung Hero.md"
+  s_b661d94074bd8f::t_9ed750e5dad36f 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Vanguard Armory.md"
+  s_b661d94074bd8f::t_45911d8581ae61 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Vayne, Hunter (Overnumbered).md"
+  s_b661d94074bd8f::t_20fe950270de5d 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Vayne, Hunter (Signature).md"
+  s_b661d94074bd8f::t_eae6d1caa63435 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Veiled Temple.md"
+  s_b661d94074bd8f::t_c0bcd503f8ddc1 1-14
+"3-games/1-riftbound/sets/SFD/cards/oracle/Veteran Poro.md"
+  s_b661d94074bd8f::t_702e837d3f0753 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Vex, Cheerless.md"
+  s_b661d94074bd8f::t_de407f4db76ad2 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Void Drone.md"
+  s_b661d94074bd8f::t_bd2007fd6649e2 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Void Hatchling.md"
+  s_b661d94074bd8f::t_2fbd01a1f52247 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Void Rush.md"
+  s_b661d94074bd8f::t_9fa71eecc56527 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Wages of Pain.md"
+  s_b661d94074bd8f::t_ab25de743cac8c 1-17
+"3-games/1-riftbound/sets/SFD/cards/oracle/Warmog's Armor.md"
+  s_b661d94074bd8f::t_1083b3fa85c3bb 1-18
+3-games/1-riftbound/sets/SFD/cards/oracle/Windsinger.md
+  s_b661d94074bd8f::t_8574c4639e43c1 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/World Atlas.md"
+  s_b661d94074bd8f::t_a109e3a7bbcaff 1-18
+"3-games/1-riftbound/sets/SFD/cards/oracle/Xin Zhao, Vigilant.md"
+  s_b661d94074bd8f::t_f85fd2e8b37dfd 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Yasuo, Windrider (Overnumbered).md"
+  s_b661d94074bd8f::t_c669f8fc08ec07 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Yasuo, Windrider (Signature).md"
+  s_b661d94074bd8f::t_2b78815505be39 1-21
+"3-games/1-riftbound/sets/SFD/cards/oracle/Yone, Blademaster (Overnumbered).md"
+  s_b661d94074bd8f::t_c0c781164d297a 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Yone, Blademaster (Signature).md"
+  s_b661d94074bd8f::t_b905f4d62d7aa8 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Yone, Blademaster.md"
+  s_b661d94074bd8f::t_cdfda652c665a8 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Yordle Explorer.md"
+  s_b661d94074bd8f::t_43764b3472abce 1-19
+"3-games/1-riftbound/sets/SFD/cards/oracle/Zaun Punk.md"
+  s_b661d94074bd8f::t_6110f2b964b64d 1-19
+3-games/1-riftbound/sets/SFD/source.json
+  s_b661d94074bd8f::t_3ea6d7a7570240 1-13159
+3-games/1-riftbound/sets/UNL/cards/oracle/Abandon.md
+  s_b661d94074bd8f::t_1b776a1eb3bbf5 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Abandoned Hall.md"
+  s_b661d94074bd8f::t_e40728ab3b04e7 1-14
+"3-games/1-riftbound/sets/UNL/cards/oracle/Allay, Eager Admirer.md"
+  s_b661d94074bd8f::t_7cf18770633b95 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Alpha Strike.md"
+  s_b661d94074bd8f::t_4ae0659e91382f 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Alpha Wildclaw.md"
+  s_b661d94074bd8f::t_c9a7f68aec7506 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Altar of Blood.md"
+  s_b661d94074bd8f::t_8ab6d94ec00a53 1-14
+"3-games/1-riftbound/sets/UNL/cards/oracle/Amateur Recital.md"
+  s_b661d94074bd8f::t_9017b9b500991d 1-14
+"3-games/1-riftbound/sets/UNL/cards/oracle/Angler Beast.md"
+  s_b661d94074bd8f::t_ed0f64b2bb589d 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Arachnoid Horror.md"
+  s_b661d94074bd8f::t_d7175c4b7903d1 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Arena Kingpin.md"
+  s_b661d94074bd8f::t_231ad7467e8f79 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Ashe, Focused.md"
+  s_b661d94074bd8f::t_9367bdcc026e74 1-21
+3-games/1-riftbound/sets/UNL/cards/oracle/Atakhan.md
+  s_b661d94074bd8f::t_6f38716eecec67 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Back Off.md"
+  s_b661d94074bd8f::t_89045374e36fe2 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Bandle Soldier.md"
+  s_b661d94074bd8f::t_eae1b196fdb71b 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Baron Nashor (Alternate Art).md"
+  s_b661d94074bd8f::t_b896ad577f73ab 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Baron Nashor (Ultimate).md"
+  s_b661d94074bd8f::t_74728755381a05 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Baron Nashor.md"
+  s_b661d94074bd8f::t_1e834e155a1cf0 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Bewitching Spirit.md"
+  s_b661d94074bd8f::t_0c1d0efa399a98 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Black Flame Altar.md"
+  s_b661d94074bd8f::t_caaecf9992e4d7 1-14
+"3-games/1-riftbound/sets/UNL/cards/oracle/Black Rose Dignitary.md"
+  s_b661d94074bd8f::t_b5f98ea5f5e3df 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Blast Cone.md"
+  s_b661d94074bd8f::t_695473ec96d319 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Blighted Battleaxe.md"
+  s_b661d94074bd8f::t_1c0de0a29ae5c8 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Blood Rose.md"
+  s_b661d94074bd8f::t_459c68cabe01a7 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Blue Sentinel (Alternate Art).md"
+  s_b661d94074bd8f::t_3e521e5d7bc69d 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Blue Sentinel.md"
+  s_b661d94074bd8f::t_6c961d3bf2abe2 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Bone Skewer.md"
+  s_b661d94074bd8f::t_c8b37048391610 1-16
+"3-games/1-riftbound/sets/UNL/cards/oracle/Call to Battle.md"
+  s_b661d94074bd8f::t_3eccb22ba64bd1 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Carrion Dredger.md"
+  s_b661d94074bd8f::t_f9c33e1fac939d 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Chakram Dancer.md"
+  s_b661d94074bd8f::t_74126d006c5e80 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Clash of Giants.md"
+  s_b661d94074bd8f::t_7e5f03360cedae 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Combat Experience.md"
+  s_b661d94074bd8f::t_28eb4db8a4b4cf 1-15
+3-games/1-riftbound/sets/UNL/cards/oracle/Concentrate.md
+  s_b661d94074bd8f::t_d12ef7ecdd06bf 1-19
+3-games/1-riftbound/sets/UNL/cards/oracle/Conscription.md
+  s_b661d94074bd8f::t_1a728572b89a5c 1-16
+"3-games/1-riftbound/sets/UNL/cards/oracle/Crescent Guardian.md"
+  s_b661d94074bd8f::t_9eb12ff52ee669 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Crescent Strike.md"
+  s_b661d94074bd8f::t_a7cb5ff0a61270 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Crimson Pigeons.md"
+  s_b661d94074bd8f::t_67aae8e8f48bb3 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Crowd Favorite.md"
+  s_b661d94074bd8f::t_66b1f9b0f4c64d 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Cursed Sarcophagus.md"
+  s_b661d94074bd8f::t_24d9953b1cd529 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Curtain Call.md"
+  s_b661d94074bd8f::t_6e6b9345b60297 1-17
+3-games/1-riftbound/sets/UNL/cards/oracle/Daisy!.md
+  s_b661d94074bd8f::t_dec2a07ee11774 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Dancing Grenade.md"
+  s_b661d94074bd8f::t_69ea69cadc35c6 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Daring Poro (Overnumbered).md"
+  s_b661d94074bd8f::t_4cdc6066baf2f5 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Deadly Flourish.md"
+  s_b661d94074bd8f::t_edb30b34c7db3a 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Death from Below.md"
+  s_b661d94074bd8f::t_a664d2d6130646 1-22
+"3-games/1-riftbound/sets/UNL/cards/oracle/Demacian Diplomat.md"
+  s_b661d94074bd8f::t_ce7f08b3588edc 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Determined Sentry.md"
+  s_b661d94074bd8f::t_b5d7c6f1153d29 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Diana, Lunari (Alternate Art).md"
+  s_b661d94074bd8f::t_cb53e7f45c703d 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Diana, Lunari.md"
+  s_b661d94074bd8f::t_994cfa3fd6f307 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Diana, No Longer Human (Alternate Art).md"
+  s_b661d94074bd8f::t_88204acf9c5b14 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Diana, No Longer Human.md"
+  s_b661d94074bd8f::t_0b0efaa4a88152 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Diana, Scorn of the Moon (Overnumbered).md"
+  s_b661d94074bd8f::t_213d72015bb77d 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Diana, Scorn of the Moon (Signature).md"
+  s_b661d94074bd8f::t_858b19cb579565 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Diana, Scorn of the Moon.md"
+  s_b661d94074bd8f::t_0f36390eca1e44 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Disposal Order.md"
+  s_b661d94074bd8f::t_84e7fb3a56be7b 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Divining Shells.md"
+  s_b661d94074bd8f::t_042c958b4a5bc7 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Double Trouble.md"
+  s_b661d94074bd8f::t_16b670739ed622 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Downstage Dramatics.md"
+  s_b661d94074bd8f::t_735df031874e6b 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Dragonsoul Sage.md"
+  s_b661d94074bd8f::t_d6e2c924d43b6c 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Dramatic Visionary.md"
+  s_b661d94074bd8f::t_4db77aa48fa269 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Dusk Rose Lab.md"
+  s_b661d94074bd8f::t_a4f2700b9e2aed 1-14
+3-games/1-riftbound/sets/UNL/cards/oracle/Eclipse.md
+  s_b661d94074bd8f::t_5dfbc7fcbc225d 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Elder Dragon (Alternate Art).md"
+  s_b661d94074bd8f::t_1099c0e14c0e86 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Elder Dragon.md"
+  s_b661d94074bd8f::t_feeedcfb161221 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Enthralling Protector.md"
+  s_b661d94074bd8f::t_65dc63b32a1fd6 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Enthusiastic Promoter.md"
+  s_b661d94074bd8f::t_a515b08c52e14e 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Evelynn, Entrancing.md"
+  s_b661d94074bd8f::t_a05bc948881c8b 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Evershade Stalker.md"
+  s_b661d94074bd8f::t_7ed99703d0a1bf 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Existential Dread.md"
+  s_b661d94074bd8f::t_d2a8c85c95b930 1-16
+"3-games/1-riftbound/sets/UNL/cards/oracle/Fate Weaver.md"
+  s_b661d94074bd8f::t_698b8aefbb4fc3 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Flurry of Feathers.md"
+  s_b661d94074bd8f::t_a04ec61e136f02 1-16
+"3-games/1-riftbound/sets/UNL/cards/oracle/Forbidding Waste.md"
+  s_b661d94074bd8f::t_fff2867edb7734 1-14
+"3-games/1-riftbound/sets/UNL/cards/oracle/Forgotten Library.md"
+  s_b661d94074bd8f::t_a2b4a0610001c5 1-14
+"3-games/1-riftbound/sets/UNL/cards/oracle/Forgotten Signpost.md"
+  s_b661d94074bd8f::t_ba131c1f5da957 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Fresh Beans.md"
+  s_b661d94074bd8f::t_f0edec7512bc61 1-17
+3-games/1-riftbound/sets/UNL/cards/oracle/Friendship.md
+  s_b661d94074bd8f::t_1b1158af6b9b26 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Frigid Jewel.md"
+  s_b661d94074bd8f::t_1b2117a8b3cf1e 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Frisky Hunter.md"
+  s_b661d94074bd8f::t_6ea55f6a29d062 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Frozen Fortress.md"
+  s_b661d94074bd8f::t_2fe0ec61d759cd 1-14
+"3-games/1-riftbound/sets/UNL/cards/oracle/Galio, Indefatigable.md"
+  s_b661d94074bd8f::t_95f31bf54c8c0b 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Gardens of Becoming.md"
+  s_b661d94074bd8f::t_28bad67c58e590 1-14
+"3-games/1-riftbound/sets/UNL/cards/oracle/Gemhand Hunter.md"
+  s_b661d94074bd8f::t_361f93efb44c40 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Gentle Gemdragon.md"
+  s_b661d94074bd8f::t_640d1fbb3bbf85 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Grim Apothecary.md"
+  s_b661d94074bd8f::t_57b47e0f5b2527 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Grim Resolve.md"
+  s_b661d94074bd8f::t_dad3a63907c640 1-17
+3-games/1-riftbound/sets/UNL/cards/oracle/Gustwalker.md
+  s_b661d94074bd8f::t_ec60c528ba1b6f 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Gutter Palace.md"
+  s_b661d94074bd8f::t_25978bd3b7d9dc 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Heedless Resurrection.md"
+  s_b661d94074bd8f::t_5a45fd0534bf33 1-16
+"3-games/1-riftbound/sets/UNL/cards/oracle/Herald of Spring.md"
+  s_b661d94074bd8f::t_d9c858d2c993a0 1-22
+"3-games/1-riftbound/sets/UNL/cards/oracle/Heroic Charge.md"
+  s_b661d94074bd8f::t_54d32b3b5e9f32 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Hextech Gauntlets.md"
+  s_b661d94074bd8f::t_eebe9f0cabd914 1-19
+3-games/1-riftbound/sets/UNL/cards/oracle/Honeyfruit.md
+  s_b661d94074bd8f::t_0e39d8b7367d74 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Hunter's Machete.md"
+  s_b661d94074bd8f::t_028647b8e1618e 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Hwei, Brooding Painter.md"
+  s_b661d94074bd8f::t_e010ba601ebc14 1-19
+3-games/1-riftbound/sets/UNL/cards/oracle/Iascylla.md
+  s_b661d94074bd8f::t_f63b72d812211b 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Icevale Archer.md"
+  s_b661d94074bd8f::t_1aa9602be05a51 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Imposing Challenger.md"
+  s_b661d94074bd8f::t_fcb644d6716a2f 1-19
+3-games/1-riftbound/sets/UNL/cards/oracle/Inferna.md
+  s_b661d94074bd8f::t_278b50a606ad82 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Insightful Investigator.md"
+  s_b661d94074bd8f::t_63e72616677611 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Inviolus Vox.md"
+  s_b661d94074bd8f::t_0df99a187a3864 1-23
+"3-games/1-riftbound/sets/UNL/cards/oracle/Irresistible Faefolk.md"
+  s_b661d94074bd8f::t_79a6c6e2e621cb 1-19
+3-games/1-riftbound/sets/UNL/cards/oracle/Isolate.md
+  s_b661d94074bd8f::t_6919d52c748354 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Ivern, Friend to All (Alternate Art).md"
+  s_b661d94074bd8f::t_0ab6963dd6eb42 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Ivern, Friend to All.md"
+  s_b661d94074bd8f::t_58fd74f6a4edd3 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Ivern, Green Father (Overnumbered).md"
+  s_b661d94074bd8f::t_08c783d0e8b496 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Ivern, Green Father (Signature).md"
+  s_b661d94074bd8f::t_d53d3388a1155e 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Ivern, Green Father.md"
+  s_b661d94074bd8f::t_b4b8539a52ccd8 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Ivern, Nurturer (Alternate Art).md"
+  s_b661d94074bd8f::t_6ac61f80d3feb1 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Ivern, Nurturer.md"
+  s_b661d94074bd8f::t_5c920f4fd333ca 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Jhin, Meticulous Killer (Alternate Art).md"
+  s_b661d94074bd8f::t_9f6ec96f4b9d64 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Jhin, Meticulous Killer.md"
+  s_b661d94074bd8f::t_55286970def9e5 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Jhin, Murderous Artist (Alternate Art).md"
+  s_b661d94074bd8f::t_feb6b78278f619 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Jhin, Murderous Artist.md"
+  s_b661d94074bd8f::t_f1593db4e193e5 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Jhin, Virtuoso (Overnumbered).md"
+  s_b661d94074bd8f::t_b402095a7a452d 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Jhin, Virtuoso (Signature).md"
+  s_b661d94074bd8f::t_e032c150db00d2 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Jhin, Virtuoso.md"
+  s_b661d94074bd8f::t_02bcf97d82b1e8 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Katarina, Reckless.md"
+  s_b661d94074bd8f::t_3dfa1912b3c1e0 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Keeper of Masks.md"
+  s_b661d94074bd8f::t_e3a5d7b9dd262e 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Keeper's Verdict.md"
+  s_b661d94074bd8f::t_0e8a5636beabf8 1-22
+"3-games/1-riftbound/sets/UNL/cards/oracle/Kha'Zix, Evolving Hunter (Alternate Art).md"
+  s_b661d94074bd8f::t_08085a8dd8fe56 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Kha'Zix, Evolving Hunter.md"
+  s_b661d94074bd8f::t_36bfe78bb86ec8 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Kha'Zix, Mutating Horror (Alternate Art).md"
+  s_b661d94074bd8f::t_394b9231e44f0a 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Kha'Zix, Mutating Horror.md"
+  s_b661d94074bd8f::t_ea8a400987eff8 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Kha'Zix, Voidreaver (Overnumbered).md"
+  s_b661d94074bd8f::t_7fd344ad4c6205 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Kha'Zix, Voidreaver (Signature).md"
+  s_b661d94074bd8f::t_f77a80f56c3075 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Kha'Zix, Voidreaver.md"
+  s_b661d94074bd8f::t_fdb10f2f45f52a 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Kinkou Initiate.md"
+  s_b661d94074bd8f::t_3e3a75daea2642 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/LeBlanc, Deceiver (Overnumbered).md"
+  s_b661d94074bd8f::t_0c9a24dc52dfb5 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/LeBlanc, Deceiver (Signature).md"
+  s_b661d94074bd8f::t_2f662869e7f343 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/LeBlanc, Deceiver.md"
+  s_b661d94074bd8f::t_c8c588434b2a01 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/LeBlanc, Everywhere At Once (Alternate Art).md"
+  s_b661d94074bd8f::t_973cc8617d1e94 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/LeBlanc, Everywhere At Once.md"
+  s_b661d94074bd8f::t_9128ede928b50e 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/LeBlanc, Fragmented (Alternate Art).md"
+  s_b661d94074bd8f::t_2cebc34398c162 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/LeBlanc, Fragmented.md"
+  s_b661d94074bd8f::t_9dfa295e74fc29 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Lillia, Bashful Bloom (Overnumbered).md"
+  s_b661d94074bd8f::t_11bc7b5e04bdcc 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Lillia, Bashful Bloom (Signature).md"
+  s_b661d94074bd8f::t_23c0b22159acb6 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Lillia, Bashful Bloom.md"
+  s_b661d94074bd8f::t_9517b9ad68849e 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Lillia, Fae Fawn (Alternate Art).md"
+  s_b661d94074bd8f::t_b0424d10adac46 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Lillia, Fae Fawn.md"
+  s_b661d94074bd8f::t_b2164f313d2e80 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Lillia, Protector of Dreams (Alternate Art).md"
+  s_b661d94074bd8f::t_e2098146ca668f 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Lillia, Protector of Dreams.md"
+  s_b661d94074bd8f::t_b7d43e4b11c6bc 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Lilting Lullaby.md"
+  s_b661d94074bd8f::t_463d0f7e8d7ff6 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Lonely Poro (Overnumbered).md"
+  s_b661d94074bd8f::t_93e05a8b41b58b 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Lord Broadmane.md"
+  s_b661d94074bd8f::t_c3577f4bde21c9 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Lotus Trap.md"
+  s_b661d94074bd8f::t_508e902a523333 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Loyal Poro.md"
+  s_b661d94074bd8f::t_0a16161f5da842 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Lunar Boon.md"
+  s_b661d94074bd8f::t_2e59ab061f6a2a 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Maduli the Gatekeeper.md"
+  s_b661d94074bd8f::t_940dfbee9ad598 1-22
+"3-games/1-riftbound/sets/UNL/cards/oracle/Mageseeker Investigator.md"
+  s_b661d94074bd8f::t_effd0c99014680 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Master Yi, Tempered (Alternate Art).md"
+  s_b661d94074bd8f::t_f7cba552b73959 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Master Yi, Tempered.md"
+  s_b661d94074bd8f::t_61b83dce691ce7 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Master Yi, Unstoppable (Alternate Art).md"
+  s_b661d94074bd8f::t_656bf7f74b10ec 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Master Yi, Unstoppable.md"
+  s_b661d94074bd8f::t_ca5e9f37b699de 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Master Yi, Wuju Master (Overnumbered).md"
+  s_b661d94074bd8f::t_210e6e81077160 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Master Yi, Wuju Master (Signature).md"
+  s_b661d94074bd8f::t_f16deca2b0b5fd 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Master Yi, Wuju Master.md"
+  s_b661d94074bd8f::t_bc5167e508aaeb 1-15
+3-games/1-riftbound/sets/UNL/cards/oracle/Megatusk.md
+  s_b661d94074bd8f::t_18ed18a2d61e17 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Mirror Image.md"
+  s_b661d94074bd8f::t_486641223b7718 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Mischevious Marai.md"
+  s_b661d94074bd8f::t_2063038db1798a 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Mister Root.md"
+  s_b661d94074bd8f::t_477f7a7d1af18c 1-19
+3-games/1-riftbound/sets/UNL/cards/oracle/Monch.md
+  s_b661d94074bd8f::t_1c98bef94b5ac1 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Monster Harpoon.md"
+  s_b661d94074bd8f::t_1772e3def2a168 1-18
+3-games/1-riftbound/sets/UNL/cards/oracle/Moonfall.md
+  s_b661d94074bd8f::t_49a72adfbd44e1 1-22
+"3-games/1-riftbound/sets/UNL/cards/oracle/Moonlight Affliction.md"
+  s_b661d94074bd8f::t_80887dbfe674da 1-17
+3-games/1-riftbound/sets/UNL/cards/oracle/Mosstomper.md
+  s_b661d94074bd8f::t_ded1192b1c5119 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Mutated Mouser.md"
+  s_b661d94074bd8f::t_ed3bd991721192 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Mystic Poro (Overnumbered).md"
+  s_b661d94074bd8f::t_7d9cf0117058c1 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Nami, Headstrong.md"
+  s_b661d94074bd8f::t_120143ced3adf1 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Nidalee, Cat Form.md"
+  s_b661d94074bd8f::t_9f583549e67cde 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Nilah, Joyful Ascetic.md"
+  s_b661d94074bd8f::t_162b8bb4de2433 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Petal Pixie.md"
+  s_b661d94074bd8f::t_2e2263f44e3131 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Plundering Poro (Overnumbered).md"
+  s_b661d94074bd8f::t_29307d2c013c7b 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Poppy, Defender of the Meek (Alternate Art).md"
+  s_b661d94074bd8f::t_746809e0d03d73 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Poppy, Defender of the Meek.md"
+  s_b661d94074bd8f::t_8874c9fc39d99c 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Poppy, Keeper of the Hammer (Overnumbered).md"
+  s_b661d94074bd8f::t_369e348e6e9b40 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Poppy, Keeper of the Hammer (Signature).md"
+  s_b661d94074bd8f::t_dbdde84179166a 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Poppy, Keeper of the Hammer.md"
+  s_b661d94074bd8f::t_5e08aa6184faa4 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Poppy, Paragon (Alternate Art).md"
+  s_b661d94074bd8f::t_08ae1a3b48eb79 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Poppy, Paragon.md"
+  s_b661d94074bd8f::t_2399c804f18539 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Pouty Poro (Overnumbered).md"
+  s_b661d94074bd8f::t_8c45cc780b3c27 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Prepared Neophyte.md"
+  s_b661d94074bd8f::t_f6b26d54532798 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Pyke, Bloodharbor Ripper (Overnumbered).md"
+  s_b661d94074bd8f::t_4b93218e5449be 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Pyke, Bloodharbor Ripper (Signature).md"
+  s_b661d94074bd8f::t_ed186b58860489 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Pyke, Bloodharbor Ripper.md"
+  s_b661d94074bd8f::t_6cda8f392f64ce 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Pyke, Dockside Butcher (Alternate Art).md"
+  s_b661d94074bd8f::t_c77045d7132e7b 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Pyke, Dockside Butcher.md"
+  s_b661d94074bd8f::t_26406b7a795990 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Pyke, Returned (Alternate Art).md"
+  s_b661d94074bd8f::t_abd3bacf51bd23 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Pyke, Returned.md"
+  s_b661d94074bd8f::t_63326dd035e586 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Red Brambleback (Alternate Art).md"
+  s_b661d94074bd8f::t_e2cd48272360e1 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Red Brambleback.md"
+  s_b661d94074bd8f::t_3edd76476d61fc 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Rengar, Pridestalker (Overnumbered).md"
+  s_b661d94074bd8f::t_641d736fe27a3d 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Rengar, Pridestalker (Signature).md"
+  s_b661d94074bd8f::t_7aafefa9c2742a 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Rengar, Pridestalker.md"
+  s_b661d94074bd8f::t_759c6cb0337d88 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Rengar, Trophy Hunter (Alternate Art).md"
+  s_b661d94074bd8f::t_59c9852d1c5100 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Rengar, Trophy Hunter.md"
+  s_b661d94074bd8f::t_d894a58bf9083f 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Rengar, Unseen (Alternate Art).md"
+  s_b661d94074bd8f::t_4f8b808462122f 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Rengar, Unseen.md"
+  s_b661d94074bd8f::t_faa305b6b85f36 1-19
+3-games/1-riftbound/sets/UNL/cards/oracle/Repulse.md
+  s_b661d94074bd8f::t_f8cd87a8beee5f 1-16
+"3-games/1-riftbound/sets/UNL/cards/oracle/Revna the Lorekeeper.md"
+  s_b661d94074bd8f::t_8146a9350feee5 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Rift Herald (Alternate Art).md"
+  s_b661d94074bd8f::t_f280012919c953 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Rift Herald.md"
+  s_b661d94074bd8f::t_1a7d351f80cdef 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Right of Conquest.md"
+  s_b661d94074bd8f::t_5d073ad73f93e9 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Ripper's Bay.md"
+  s_b661d94074bd8f::t_3e3077e155903c 1-14
+"3-games/1-riftbound/sets/UNL/cards/oracle/Ruined Rex.md"
+  s_b661d94074bd8f::t_6be4da13ea7859 1-20
+3-games/1-riftbound/sets/UNL/cards/oracle/Sacrifice.md
+  s_b661d94074bd8f::t_e5861760e5d7f9 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Safety Inspector.md"
+  s_b661d94074bd8f::t_95bee94fa32bc2 1-20
+3-games/1-riftbound/sets/UNL/cards/oracle/Scorchclaw.md
+  s_b661d94074bd8f::t_19d9a1674ec7fb 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Scrutinizing Sergeant.md"
+  s_b661d94074bd8f::t_ae54664678b0db 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Scryer's Bloom.md"
+  s_b661d94074bd8f::t_9689eafbb13b6f 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Scuttle Crab.md"
+  s_b661d94074bd8f::t_f892d8a7d698b8 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Shadow Watcher.md"
+  s_b661d94074bd8f::t_aa751d7196f101 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Shadow's Call.md"
+  s_b661d94074bd8f::t_57b9f6e75220cc 1-17
+3-games/1-riftbound/sets/UNL/cards/oracle/Shadow.md
+  s_b661d94074bd8f::t_3bd3ab02afaa86 1-22
+"3-games/1-riftbound/sets/UNL/cards/oracle/Shard of Undoing.md"
+  s_b661d94074bd8f::t_55d48714cb6044 1-17
+3-games/1-riftbound/sets/UNL/cards/oracle/Sharkling.md
+  s_b661d94074bd8f::t_c4ffbdb2fb6ac0 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Shepherd's Heirloom.md"
+  s_b661d94074bd8f::t_936c534ec05072 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Sinister Poro.md"
+  s_b661d94074bd8f::t_86d2e24d75f587 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Skyward Strike.md"
+  s_b661d94074bd8f::t_d620fd0d742497 1-18
+3-games/1-riftbound/sets/UNL/cards/oracle/Smite.md
+  s_b661d94074bd8f::t_fe1e8f43b56dad 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Smoke and Mirrors.md"
+  s_b661d94074bd8f::t_b3a8b4a0abb181 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Soul Harvest.md"
+  s_b661d94074bd8f::t_da8d599a2d2852 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Soul Shepherd.md"
+  s_b661d94074bd8f::t_ec9bb8dbf78aab 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Soul Sword.md"
+  s_b661d94074bd8f::t_bdeaf8dff20929 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Spectral Centaur.md"
+  s_b661d94074bd8f::t_de40c98c570685 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Sprite Burst.md"
+  s_b661d94074bd8f::t_92451dd67082f5 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Sprite Fountain.md"
+  s_b661d94074bd8f::t_18c08b688bbeec 1-16
+"3-games/1-riftbound/sets/UNL/cards/oracle/Sprite Queen.md"
+  s_b661d94074bd8f::t_3488236e1aa6aa 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Square Up.md"
+  s_b661d94074bd8f::t_38779f4b9f7879 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Stalking Wolf.md"
+  s_b661d94074bd8f::t_a7545a0a39c4c7 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Star Spring.md"
+  s_b661d94074bd8f::t_493492adf8e372 1-14
+3-games/1-riftbound/sets/UNL/cards/oracle/Star-Crossed.md
+  s_b661d94074bd8f::t_241641ec63be53 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Stare Down.md"
+  s_b661d94074bd8f::t_69b772d5a6ca7b 1-17
+3-games/1-riftbound/sets/UNL/cards/oracle/Starhound.md
+  s_b661d94074bd8f::t_e72a00dcf160d4 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Sumpworks Map.md"
+  s_b661d94074bd8f::t_43b35b991be08d 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Syndra, Transcendent.md"
+  s_b661d94074bd8f::t_b39f8df96c9916 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Tactical Retreat.md"
+  s_b661d94074bd8f::t_8f6c550f7ee411 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Targonian Visionary.md"
+  s_b661d94074bd8f::t_9d5ba8034924cd 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/The Academy.md"
+  s_b661d94074bd8f::t_101d442c51a24c 1-14
+"3-games/1-riftbound/sets/UNL/cards/oracle/The List.md"
+  s_b661d94074bd8f::t_90ea3b6d9c360f 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/The Ruination.md"
+  s_b661d94074bd8f::t_98fc718271a60b 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Thrill of the Hunt.md"
+  s_b661d94074bd8f::t_98fb416310d520 1-22
+"3-games/1-riftbound/sets/UNL/cards/oracle/Towering Combatant.md"
+  s_b661d94074bd8f::t_664f13ad727e02 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Towering Pairofant.md"
+  s_b661d94074bd8f::t_8fb70302ca3306 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Trapping Grounds.md"
+  s_b661d94074bd8f::t_dc9710ad186294 1-14
+"3-games/1-riftbound/sets/UNL/cards/oracle/Trevor Snoozebottom.md"
+  s_b661d94074bd8f::t_d50980e69d2a97 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Tricksy Tentacles.md"
+  s_b661d94074bd8f::t_72ab9dfc4807b0 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Turn to Dust.md"
+  s_b661d94074bd8f::t_ea8ad17482e1fa 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Ultrasoft Poro.md"
+  s_b661d94074bd8f::t_457854965439a0 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Undying Legion.md"
+  s_b661d94074bd8f::t_b8d0928c8d0567 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Undying Loyalty.md"
+  s_b661d94074bd8f::t_fd077eee1e009c 1-18
+"3-games/1-riftbound/sets/UNL/cards/oracle/Upstage Comedy.md"
+  s_b661d94074bd8f::t_6cae9e56c82cab 1-17
+"3-games/1-riftbound/sets/UNL/cards/oracle/Valley of Idols.md"
+  s_b661d94074bd8f::t_371d3f639a65ab 1-14
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vault Breaker.md"
+  s_b661d94074bd8f::t_ab941edfda440c 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vaults of Helia.md"
+  s_b661d94074bd8f::t_958c36fdb1b1d5 1-14
+"3-games/1-riftbound/sets/UNL/cards/oracle/Veteran Poro (Overnumbered).md"
+  s_b661d94074bd8f::t_79a2610a3aaa8f 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vex, Apathetic (Alternate Art).md"
+  s_b661d94074bd8f::t_69e9e0f9dfeb1f 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vex, Apathetic.md"
+  s_b661d94074bd8f::t_c88d46ff22c89f 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vex, Gloomist (Overnumbered).md"
+  s_b661d94074bd8f::t_cea7a05f90a0a3 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vex, Gloomist (Signature).md"
+  s_b661d94074bd8f::t_29b37d55d29f5d 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vex, Gloomist.md"
+  s_b661d94074bd8f::t_facb060fcec111 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vex, Mocking (Alternate Art).md"
+  s_b661d94074bd8f::t_21c337f784d080 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vex, Mocking.md"
+  s_b661d94074bd8f::t_712b40bd3af6bb 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vi, Hotheaded (Alternate Art).md"
+  s_b661d94074bd8f::t_a1a667d4e07d4e 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vi, Hotheaded.md"
+  s_b661d94074bd8f::t_5303ba4988cb4f 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vi, Peacekeeper (Alternate Art).md"
+  s_b661d94074bd8f::t_25c584feabe0bd 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vi, Peacekeeper.md"
+  s_b661d94074bd8f::t_ab7e70289ded14 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vi, Piltover Enforcer (Overnumbered).md"
+  s_b661d94074bd8f::t_381df2a926733c 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vi, Piltover Enforcer (Signature).md"
+  s_b661d94074bd8f::t_ada9745e7969b6 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vi, Piltover Enforcer.md"
+  s_b661d94074bd8f::t_271585bc3fa271 1-15
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vicious Snapjaws.md"
+  s_b661d94074bd8f::t_bad737d6dce83f 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Vilemaw (Alternate Art).md"
+  s_b661d94074bd8f::t_4959613a271632 1-20
+3-games/1-riftbound/sets/UNL/cards/oracle/Vilemaw.md
+  s_b661d94074bd8f::t_f1cedf9ad2c710 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Void Assault.md"
+  s_b661d94074bd8f::t_89c47f9e135c57 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Voracious Gromp.md"
+  s_b661d94074bd8f::t_cbe6d8d4bcd9bf 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Walking Roost.md"
+  s_b661d94074bd8f::t_8ea983b2a60450 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Wily Newtfish.md"
+  s_b661d94074bd8f::t_f8beaed95d79ff 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Wuju Apprentice.md"
+  s_b661d94074bd8f::t_385e32be9dd1e8 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Xerath, Freed.md"
+  s_b661d94074bd8f::t_46abdb6d933b73 1-20
+"3-games/1-riftbound/sets/UNL/cards/oracle/Yeti Brawler.md"
+  s_b661d94074bd8f::t_e7be1f08ebb923 1-19
+"3-games/1-riftbound/sets/UNL/cards/oracle/Yuumi, Magical Cat.md"
+  s_b661d94074bd8f::t_63ffb2274b1016 1-21
+"3-games/1-riftbound/sets/UNL/cards/oracle/Zilean, Time Mage.md"
+  s_b661d94074bd8f::t_1f5bfec1a1dfde 1-21
+3-games/1-riftbound/sets/UNL/source.json
+  s_b661d94074bd8f::t_4d0b27664bbcf4 1-12647
+4-software-engineering/1-projects/1-hexframe/.cubic/CLAUDE.md
+  s_b661d94074bd8f::t_af803e1bdb4239 17-18
+4-software-engineering/1-projects/1-hexframe/.cubic/domain-design.md
+  s_b661d94074bd8f::t_e9fc1e4db08868 54
+4-software-engineering/1-projects/1-hexframe/.cubic/maintainability.md
+  s_b661d94074bd8f::t_e7b9019b05151b 62
+4-software-engineering/1-projects/1-hexframe/.run/CLAUDE.md
+  s_b661d94074bd8f::t_4e133ee410609c 13,25,36,41,43
+4-software-engineering/1-projects/1-hexframe/.run/claude-mod.yaml
+  s_b661d94074bd8f::t_849a304f3eb359 2,4-6,10
+4-software-engineering/1-projects/1-hexframe/.run/obsidian-plugin.yaml
+  s_b661d94074bd8f::t_035fcefd976945 2,5-6,9
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-claude-code-mod/decisions.md
+  s_b661d94074bd8f::t_63c0b842ddf893 1-37
+4-software-engineering/1-projects/1-hexframe/.run/run.yaml
+  s_b661d94074bd8f::t_4af26806c43e36 3,7
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/CLAUDE.md
+  s_b661d94074bd8f::t_d1da7ac8301d89 2-3,6-9,11,13,20,23-35,39,41,47-48,58-62,64
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/draw/outline.ts
+  s_b661d94074bd8f::t_9ccd10471df9eb 1-17
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/draw/raster.ts
+  s_b661d94074bd8f::t_2422695ff46e63 5-7,127-128,284-294
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/draw/style.ts
+  s_b661d94074bd8f::t_200c4e7149533c 1-54
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/draw/svg.ts
+  s_b661d94074bd8f::t_d75072134ed86c 2-5,10-14,23-24,35,41,46-57,59,83,91,119-123
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/footer.ts
+  s_b661d94074bd8f::t_a7eca45393a973 1-80
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/markdown.ts
+  s_b661d94074bd8f::t_d96629b55aa91f 1-87
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/register.ts
+  s_b661d94074bd8f::t_11fe79e169a454 2-14,16-17,19,21-22,25,29-36,38-39,45,48-49,84-90,92-95,97-98,101-103,106,108,111-160,162-258,264-268,270,273,275,282-283,285-308,310-378,380-382,385-389,392-398,402-411,416-437,440-441
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE.md
+  s_b661d94074bd8f::t_c386427da01c50 1-51
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/exclusions.test.ts
+  s_b661d94074bd8f::t_e9aea06d7d8aee 1-108
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/exclusions.ts
+  s_b661d94074bd8f::t_c8d7f8731acc31 1-240
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/layout.test.ts
+  s_b661d94074bd8f::t_d3b2939fe41e9a 1-86
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/layout.ts
+  s_b661d94074bd8f::t_1d3f131550d11a 1-3,5-13,20-24,26,29-30,37-39,41-48,53-56
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/node.test.ts
+  s_b661d94074bd8f::t_8b0297ab4e283f 1-268
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/node.ts
+  s_b661d94074bd8f::t_feec239db0620f 2-3,20-92,95,101,104-126,128-133,135-158,160-162,165-181,183-190,192-219,221-269,272-296,299-303,307,313-314,316,318-320,329,332-333,335-336,345,351-372
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/package.json
+  s_b661d94074bd8f::t_862f3c206c81f8 2,6
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/tests/drawing.test.ts
+  s_b661d94074bd8f::t_bb2685de512414 2-5,7-9,11-15,17-30,51,62-65,70-135
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/tests/footer.test.ts
+  s_b661d94074bd8f::t_d41784d283b494 1-44
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/tests/pane.test.ts
+  s_b661d94074bd8f::t_dcb06abde11235 1,52-64,66-67,69-82,87-91,99-103,144,150-412
+4-software-engineering/1-projects/1-hexframe/CLAUDE.md
+  s_b661d94074bd8f::t_e4f112439d884c 19,28
+4-software-engineering/1-projects/1-hexframe/STACK.md
+  s_b661d94074bd8f::t_8e1cea16e261a3 6-10,26,139-152
+4-software-engineering/1-projects/1-hexframe/pnpm-lock.yaml
+  s_b661d94074bd8f::t_a77a165a8c4677 156
+STACK.md
+  s_b661d94074bd8f::t_854b88249fc3c8 47-50,52-54,80-82,84
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e20d13f870ae29b2aee6dc446ed37b0becd76e5e",
+  "prompts": {},
+  "sessions": {
+    "s_b661d94074bd8f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b310efd9-cf35-4262-bdce-a5d6d86a0d23",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
