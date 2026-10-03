@@ -17,7 +17,8 @@ function bandWidth(radius: number): number {
 
 const fills = {
   center: { fill: '#5b3cc4', title: '#ffffff', preview: '#ddd6fe' },
-  children: { fill: '#2f3446', title: '#f3f4f6', preview: '#9ca3af' },
+  branch: { fill: '#2f3446', title: '#f3f4f6', preview: '#9ca3af' },
+  leaf: { fill: '#4a3426', title: '#fde7d0', preview: '#d4a373' },
   context: { fill: '#134e4a', title: '#ccfbf1', preview: '#5eead4' },
 }
 
@@ -52,7 +53,7 @@ function shapeOf(placement: Placement, selected: Direction | undefined): string 
     )
   }
 
-  const colors = fills[placement.kind === 'center' ? 'center' : placement.ring]
+  const colors = fills[placement.kind === 'center' ? 'center' : placement.memberKind]
   const band = bandWidth(radius) * scale * 0.86
   const title = wrap(placement.tile.title, Math.floor(band / (titleSize * characterWidth)), 2)
   const preview = wrap(

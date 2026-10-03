@@ -1,13 +1,17 @@
 import { expect, test } from 'claude-code/testing'
 import { viewHeight, viewWidth, layoutView, type FrameView, type Placement } from './layout.js'
-import type { Frame, Tile } from './node.js'
+import type { Direction, Frame, Member, MemberKind, Tile } from './node.js'
 
 const tile = (path: string): Tile => ({ path, title: path, preview: '' })
-const frameOf = (path: string, children: Frame['children'] = {}): Frame => ({
-  tile: tile(path),
-  children,
-  context: {},
+const branch = (path: string): Member => ({ kind: 'branch', tile: tile(path) })
+const ring = (members: Partial<Record<Direction, Member>> = {}) => ({
+  members,
   overflow: [],
+  clashes: [],
+})
+const frameOf = (path: string, children: Partial<Record<Direction, Member>> = {}): Frame => ({
+  tile: tile(path),
+  rings: { children: ring(children), context: ring() },
 })
 
 const sqrt3 = Math.sqrt(3)
@@ -30,8 +34,8 @@ const at = (dx: number, dy: number) => ({
 
 test('depth 1 is the Tile and its ring of six, neighbors sharing a side', () => {
   const view: FrameView = {
-    frame: frameOf('/w', { 1: tile('/w/1-a'), 3: tile('/w/3-c') }),
-    ring: 'children',
+    frame: frameOf('/w', { 1: branch('/w/1-a'), 3: branch('/w/3-c') }),
+    frameKind: 'children',
   }
   expect(summary(layoutView(view, 1))).toEqual([
     { kind: 'center', direction: undefined, ...at(0, 0), radius: 1 },
@@ -44,17 +48,35 @@ test('depth 1 is the Tile and its ring of six, neighbors sharing a side', () => 
   ])
 })
 
-test('the context ring lays out the dot folders the same way', () => {
-  const frame = { ...frameOf('/w'), context: { 2: tile('/w/.claude') } }
-  const placements = layoutView({ frame, ring: 'context' }, 1)
-  expect(placements[2]).toMatchObject({ kind: 'member', ring: 'context', direction: 2 })
+test('every Frame kind lays out its ring the same way, each member saying what it holds', () => {
+  const held = (kind: MemberKind, path: string): Member => ({ kind, tile: tile(path) })
+  const frame: Frame = {
+    tile: tile('/w'),
+    rings: {
+      branches: ring({ 1: held('branch', '/w/1-a') }),
+      leaves: ring({ 1: held('leaf', '/w/1-a.md') }),
+      context: ring({ 2: held('context', '/w/.claude') }),
+    },
+  }
+  expect(layoutView({ frame, frameKind: 'leaves' }, 1)[1]).toMatchObject({
+    kind: 'member',
+    memberKind: 'leaf',
+    direction: 1,
+  })
+  expect(layoutView({ frame, frameKind: 'context' }, 1)[2]).toMatchObject({
+    kind: 'member',
+    memberKind: 'context',
+    direction: 2,
+  })
+  // A Frame kind the folder doesn't offer lays out an empty ring.
+  expect(layoutView({ frame, frameKind: 'children' }, 1)[1]).toMatchObject({ kind: 'empty' })
 })
 
 test('at depth 1 an expanded member stays one hex', () => {
   const view: FrameView = {
-    frame: frameOf('/w', { 1: tile('/w/1-a') }),
-    ring: 'children',
-    expanded: { 1: { frame: frameOf('/w/1-a'), ring: 'children' } },
+    frame: frameOf('/w', { 1: branch('/w/1-a') }),
+    frameKind: 'children',
+    expanded: { 1: { frame: frameOf('/w/1-a'), frameKind: 'children' } },
   }
   expect(layoutView(view, 1)).toHaveLength(7)
   expect(layoutView(view, 1)[1]).toMatchObject({ kind: 'member', direction: 1 })
@@ -62,9 +84,11 @@ test('at depth 1 an expanded member stays one hex', () => {
 
 test('at depth 2 an expanded member shows its own Frame inside its hex, a third of its size', () => {
   const view: FrameView = {
-    frame: frameOf('/w', { 1: tile('/w/1-a'), 3: tile('/w/3-c') }),
-    ring: 'children',
-    expanded: { 3: { frame: frameOf('/w/3-c', { 6: tile('/w/3-c/6-f') }), ring: 'children' } },
+    frame: frameOf('/w', { 1: branch('/w/1-a'), 3: branch('/w/3-c') }),
+    frameKind: 'children',
+    expanded: {
+      3: { frame: frameOf('/w/3-c', { 6: branch('/w/3-c/6-f') }), frameKind: 'children' },
+    },
   }
   const placements = layoutView(view, 2)
   expect(placements).toHaveLength(13)

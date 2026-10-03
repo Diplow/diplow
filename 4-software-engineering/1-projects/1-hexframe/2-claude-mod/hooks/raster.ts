@@ -4,7 +4,7 @@
 // stepping two columns per pixel row, the steadiest line a grid draws near a hex's 30 degrees.
 // So it draws depth 1 only, where every placement's radius is 1: claude-mod's depth.
 import { viewHeight, viewWidth, type Placement, type Point } from './shape/layout.js'
-import type { Direction } from './shape/node.js'
+import type { Direction, MemberKind } from './shape/node.js'
 
 /** The terminal's own color, as a Raster's cells name it. */
 const defaultColor = 0x01000000
@@ -15,9 +15,10 @@ interface Palette {
   preview: number
 }
 
-const palettes: Record<'center' | 'children' | 'context', Palette> = {
+const palettes: Record<'center' | MemberKind, Palette> = {
   center: { background: 0x5b3cc4, title: 0xffffff, preview: 0xddd6fe },
-  children: { background: 0x2f3446, title: 0xf3f4f6, preview: 0x9ca3af },
+  branch: { background: 0x2f3446, title: 0xf3f4f6, preview: 0x9ca3af },
+  leaf: { background: 0x4a3426, title: 0xfde7d0, preview: 0xd4a373 },
   context: { background: 0x134e4a, title: 0xccfbf1, preview: 0x5eead4 },
 }
 
@@ -201,7 +202,7 @@ function pixelsOf(
 }
 
 function paletteOf(placement: Exclude<Placement, { kind: 'empty' }>): Palette {
-  return palettes[placement.kind === 'center' ? 'center' : placement.ring]
+  return palettes[placement.kind === 'center' ? 'center' : placement.memberKind]
 }
 
 interface Line {

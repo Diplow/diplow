@@ -1,4 +1,4 @@
-import type { FsEntry } from 'claude-code'
+import type { FsEntry, On } from 'claude-code'
 import { expect, test } from 'claude-code/testing'
 
 const PANE = {
@@ -117,4 +117,136 @@ test('a folder that cannot be read says so', async ($, on) => {
   await $.command.run(hexframe('missing'))
   const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
   expect(await ui.find({ type: 'Text', text: /^Can't read \/work\/missing/ })).toBeDefined()
+})
+
+/** Stubs the file system with `listings` and `texts`, the session in `cwd`. */
+function vault(
+  on: On,
+  cwd: string,
+  listings: Record<string, FsEntry[]>,
+  texts: Record<string, string>,
+) {
+  on('session.cwd', () => ({ value: cwd }))
+  on('fs.list', ($, e) => {
+    const entries = listings[e.path]
+    return entries ? { value: entries } : { deny: 'no such folder' }
+  })
+  on('fs.exists', ($, e) => ({ value: e.path in texts }))
+  on('fs.read', ($, e) => (e.path in texts ? { value: texts[e.path] ?? '' } : { deny: 'no file' }))
+  on('fs.stat', ($, e) => ({
+    value: { kind: 'file', size: (texts[e.path] ?? '').length, mtimeMs: 0, isLink: false },
+  }))
+  on('ui.open', () => ({ value: { isPlaced: true } }))
+}
+
+test('Leaves join the Branches in the Children, and opening one shows its file', async ($, on) => {
+  vault(
+    on,
+    '/v',
+    {
+      '/v': [
+        file('CLAUDE.md'),
+        dir('3-games'),
+        file('3-games.md'),
+        file('package.json'),
+        file('.gitignore'),
+        dir('.claude'),
+      ],
+      '/v/3-games': [],
+      '/v/.claude': [],
+    },
+    {
+      '/v/CLAUDE.md': '---\ntitle: v\n---\n',
+      '/v/3-games.md': '---\ntitle: Game notes\n---\n# Notes\n',
+      '/v/package.json': '{ "name": "v" }\n',
+      '/v/.gitignore': 'node_modules\n',
+    },
+  )
+  await $.command.run(hexframe(''))
+  const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
+
+  // `3-games.md` finds its number held by `3-games/`, so it takes the first free direction
+  expect(await ui.find({ key: 'open-1' })).toMatchObject({ props: { label: '1 Game notes' } })
+  expect(await ui.find({ key: 'open-2' })).toMatchObject({ props: { label: '2 package.json' } })
+  expect(await ui.find({ key: 'open-3' })).toMatchObject({ props: { label: '3 Games' } })
+  expect(
+    await ui.find({ type: 'Text', text: /^3-games\.md shares 3 with 3-games\/$/ }),
+  ).toBeDefined()
+  expect(await ui.find({ key: 'ring' })).toMatchObject({ props: { label: 'c context' } })
+
+  // Opening a Leaf shows its file in place of the drawing: Markdown rendered, the rest as it is
+  await ui.press({ key: 'open-1' })
+  expect(await ui.find({ key: 'preview' })).toMatchObject({ props: { text: '# Notes' } })
+  expect(await ui.find({ type: 'Text', text: /^\/v  ·  3-games\.md$/ })).toBeDefined()
+  await ui.press({ key: 'open-2' })
+  expect(await ui.find({ key: 'preview' })).toMatchObject({
+    props: { text: '```\n{ "name": "v" }\n```' },
+  })
+  await ui.press({ key: 'view' })
+  expect(await ui.find({ key: 'frame' })).toBeDefined()
+  expect(await ui.find({ key: 'preview' })).toBeUndefined()
+
+  // The Leaf last opened stays selected, so `p` renders it again
+  await ui.press({ key: 'view' })
+  expect(await ui.find({ key: 'preview' })).toMatchObject({
+    props: { text: '```\n{ "name": "v" }\n```' },
+  })
+  await ui.press({ key: 'view' })
+
+  // Opening a Branch still walks into it
+  await ui.press({ key: 'open-3' })
+  expect(await ui.find({ type: 'Text', text: /^\/v\/3-games  ·  children$/ })).toBeDefined()
+  await ui.unmount()
+
+  const desktop = await $.ui.mount({ ...PANE, surface: 'desktop' })
+  await desktop.press({ key: 'up' })
+  expect(await desktop.find({ type: 'Svg' })).toMatchObject({
+    props: { alt: expect.stringContaining('1  Game notes  (3-games.md)') },
+  })
+  await desktop.unmount()
+})
+
+test('past six Branches and Leaves, `c` cycles the Branches, the Leaves and the Context', async ($, on) => {
+  vault(
+    on,
+    '/big',
+    {
+      '/big': [
+        ...['1-a', '2-b', '3-c', '4-d'].map(dir),
+        ...['1-a.md', 'x.md', 'y.md', 'z.png'].map(file),
+        dir('.claude'),
+      ],
+      '/big/1-a': [file('1-a.md')],
+    },
+    {
+      '/big/y.md': '---\ntitle: Huge\n---\n' + 'y'.repeat(1_000_001),
+      '/big/z.png': 'PNG\u0000\u0001',
+    },
+  )
+  await $.command.run(hexframe(''))
+  const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
+  const kind = async () => (await ui.find({ type: 'Text', text: /^\/big  ·/ }))?.text
+
+  expect(await kind()).toBe('/big  ·  branches')
+  expect(await ui.find({ key: 'open-1' })).toMatchObject({ props: { label: '1 A' } })
+  await ui.press({ key: 'ring' })
+  expect(await kind()).toBe('/big  ·  leaves')
+  // A Leaf past the limit is not read, even for its title: its Tile comes from its name
+  expect(await ui.find({ key: 'open-3' })).toMatchObject({ props: { label: '3 Y' } })
+  // A Leaf too large or not text says so instead of showing
+  await ui.press({ key: 'open-3' })
+  expect(await ui.find({ type: 'Text', text: 'y.md is too large to show here.' })).toBeDefined()
+  await ui.press({ key: 'open-4' })
+  expect(await ui.find({ type: 'Text', text: 'z.png is not a text file.' })).toBeDefined()
+  await ui.press({ key: 'view' })
+  await ui.press({ key: 'ring' })
+  expect(await kind()).toBe('/big  ·  context')
+  expect(await ui.find({ key: 'open-1' })).toMatchObject({ props: { label: '1 .claude' } })
+  await ui.press({ key: 'ring' })
+  expect(await kind()).toBe('/big  ·  branches')
+
+  // A folder that has no Branches nor Leaves frames of its own shows its Children instead
+  await ui.press({ key: 'open-1' })
+  expect(await ui.find({ type: 'Text', text: /^\/big\/1-a  ·  children$/ })).toBeDefined()
+  await ui.unmount()
 })

@@ -16,94 +16,206 @@ export interface Tile {
   preview: string
 }
 
-/** A folder seen as a hexframe: its Tile, its Children (1 to 6) and its Context (-1 to -6). */
+/**
+ * What a Frame's ring shows around its Tile. Children is the Branches and the Leaves together,
+ * offered only when there are six or fewer in all, in place of the Branches and the Leaves.
+ */
+export type FrameKind = 'children' | 'branches' | 'leaves' | 'context'
+
+/** The Frame kinds in the order a medium offers them. */
+export const frameKinds: readonly FrameKind[] = ['children', 'branches', 'leaves', 'context']
+
+/** What a hex of a ring holds: a child folder, a file, or a dot folder. */
+export type MemberKind = 'branch' | 'leaf' | 'context'
+
+/** A member of a ring by its name, before a medium reads its Tile. */
+export interface Slot {
+  kind: MemberKind
+  name: string
+}
+
+/** A member of a ring with its Tile read. */
+export interface Member {
+  kind: MemberKind
+  tile: Tile
+}
+
+/** A Leaf of a Children ring that shares its number with the Branch in that direction. */
+export interface Clash {
+  direction: Direction
+  leaf: string
+  branch: string
+}
+
+/** One Frame kind's ring: its members by direction, and the names that found no direction. */
+export interface Ring<M> {
+  members: Partial<Record<Direction, M>>
+  overflow: string[]
+  /** Only a Children ring has any. */
+  clashes: Clash[]
+}
+
+/**
+ * The rings of the Frame kinds a folder offers: Context always, then Children, or Branches and
+ * Leaves when there are more than six of them in all.
+ */
+export type Rings<M> = Partial<Record<FrameKind, Ring<M>>>
+
+/** A folder seen as a hexframe: its Tile and the rings of the Frame kinds it offers. */
 export interface Frame {
   tile: Tile
-  children: Partial<Record<Direction, Tile>>
-  context: Partial<Record<Direction, Tile>>
-  /** Folders that found no free slot, so the reader knows the node overflows. */
-  overflow: string[]
+  rings: Rings<Member>
 }
 
 /** The file that presents a node; a private one (`-CLAUDE.md`) when the plain one is missing. */
 export const bodyFiles = ['CLAUDE.md', '-CLAUDE.md'] as const
 
-/** Folders that hold tooling, never a node's meaning. */
+/** Names that hold tooling, never a node's meaning. */
 const ignored = new Set(['.git', 'node_modules', '.DS_Store'])
 
-const child = /^([1-6])-(.+)$/
+const numbered = /^([1-6])-(.+)$/
 const numberedContext = /^\.([1-6])-(.+)$/
 
+const numberOf = (name: string): Direction | undefined => numberIn(numbered, name)
+const contextNumberOf = (name: string): Direction | undefined => numberIn(numberedContext, name)
+
+function numberIn(pattern: RegExp, name: string): Direction | undefined {
+  const match = pattern.exec(name)
+  return match ? (Number(match[1]) as Direction) : undefined
+}
+
+/** The Frame kinds `rings` offers, in the order a medium cycles through them. */
+export function kindsOf(rings: Rings<unknown>): FrameKind[] {
+  return frameKinds.filter((kind) => rings[kind] !== undefined)
+}
+
+/** Whether a Leaf is a Markdown file, which a medium reads for its Tile and renders. */
+export function isMarkdown(name: string): boolean {
+  return /\.md$/i.test(name)
+}
+
 /**
- * Sorts a node's folders into its two rings. `<n>-<slug>/` is the Child in direction n and
- * `.<n>-<slug>/` the Context tile in direction n, as hexframe exports a System. An unnumbered
- * folder takes a free slot of its ring in name order: a dot folder (`.claude/`, `.skills/`) the
- * Context's, as the vault keeps its meta, any other the Children's.
+ * Sorts a folder's listing into the rings of its Frame kinds. A child folder is a Branch, a file a
+ * Leaf, a dot folder Context. `<n>-<slug>/`, `<n>-<slug>.<ext>` and `.<n>-<slug>/` sit in direction
+ * n of their ring, the later of two names claiming one number overflowing; the unnumbered ones take
+ * its free directions in name order. The folder's own `CLAUDE.md` and `-CLAUDE.md` are its Tile and
+ * dot files are nothing, so neither is a Leaf.
  */
-export function sortFolders(entries: readonly Entry[]): {
-  children: Partial<Record<Direction, string>>
-  context: Partial<Record<Direction, string>>
-  overflow: string[]
-} {
-  const folders = entries
-    .filter((entry) => entry.kind === 'dir' && !ignored.has(entry.name))
-    .map((entry) => entry.name)
-    .sort()
-  const children: Partial<Record<Direction, string>> = {}
-  const context: Partial<Record<Direction, string>> = {}
-  const overflow: string[] = []
-  const unnumberedChildren: string[] = []
-  const unnumberedContext: string[] = []
-  for (const name of folders) {
-    const asChild = child.exec(name)
-    const asContext = numberedContext.exec(name)
-    if (asChild) place(children, Number(asChild[1]) as Direction, name, overflow)
-    else if (asContext) place(context, Number(asContext[1]) as Direction, name, overflow)
-    else if (name.startsWith('.')) unnumberedContext.push(name)
-    else unnumberedChildren.push(name)
+export function sortEntries(entries: readonly Entry[]): Rings<Slot> {
+  const shown = entries.filter((entry) => !ignored.has(entry.name))
+  const names = (keep: (entry: Entry) => boolean) =>
+    shown
+      .filter(keep)
+      .map(({ name }) => name)
+      .sort()
+  const folders = names(({ kind, name }) => kind === 'dir' && !name.startsWith('.'))
+  const dotFolders = names(({ kind, name }) => kind === 'dir' && name.startsWith('.'))
+  const files = names(
+    ({ kind, name }) =>
+      kind === 'file' && !name.startsWith('.') && !(bodyFiles as readonly string[]).includes(name),
+  )
+  const branches = seat('branch', folders, numberOf)
+  const context = seat('context', dotFolders, contextNumberOf)
+  if (folders.length + files.length > 6) {
+    return { branches, leaves: seat('leaf', files, numberOf), context }
   }
-  fill(children, unnumberedChildren, overflow)
-  fill(context, unnumberedContext, overflow)
-  return { children, context, overflow }
+  return { children: childrenOf(branches, files), context }
 }
 
-/** Seats each name in the ring's first free direction; with none left, it overflows. */
-function fill(
-  ring: Partial<Record<Direction, string>>,
+/** Seats the numbered names in their direction, then the others in the free ones, in name order. */
+function seat(
+  kind: MemberKind,
   names: readonly string[],
-  overflow: string[],
-) {
+  number: (name: string) => Direction | undefined,
+): Ring<Slot> {
+  const ring: Ring<Slot> = { members: {}, overflow: [], clashes: [] }
+  const unnumbered: string[] = []
   for (const name of names) {
-    const free = directions.find((direction) => ring[direction] === undefined)
-    if (free === undefined) overflow.push(name)
-    else ring[free] = name
+    const direction = number(name)
+    if (direction === undefined) unnumbered.push(name)
+    else if (ring.members[direction] === undefined) ring.members[direction] = { kind, name }
+    else ring.overflow.push(name)
+  }
+  fill(
+    ring,
+    unnumbered.map((name) => ({ kind, name })),
+  )
+  return ring
+}
+
+/**
+ * The Children ring: the Branches where they sit, then each Leaf in its own number's direction
+ * when that is free, then the other Leaves in the free directions in name order. A Leaf whose
+ * number is the Branch's in that direction, as `3-games.md` beside `3-games/`, is a clash.
+ */
+function childrenOf(branches: Ring<Slot>, leaves: readonly string[]): Ring<Slot> {
+  const ring: Ring<Slot> = {
+    members: { ...branches.members },
+    overflow: [...branches.overflow],
+    clashes: [],
+  }
+  const unseated: Slot[] = []
+  for (const name of leaves) {
+    const direction = numberOf(name)
+    const holder = direction === undefined ? undefined : ring.members[direction]
+    if (direction !== undefined && holder === undefined) {
+      ring.members[direction] = { kind: 'leaf', name }
+      continue
+    }
+    if (
+      direction !== undefined &&
+      holder?.kind === 'branch' &&
+      numberOf(holder.name) === direction
+    ) {
+      ring.clashes.push({ direction, leaf: name, branch: holder.name })
+    }
+    unseated.push({ kind: 'leaf', name })
+  }
+  fill(ring, unseated)
+  return ring
+}
+
+/** Seats each slot in the ring's first free direction; with none left, it overflows. */
+function fill(ring: Ring<Slot>, slots: readonly Slot[]) {
+  for (const slot of slots) {
+    const free = directions.find((direction) => ring.members[direction] === undefined)
+    if (free === undefined) ring.overflow.push(slot.name)
+    else ring.members[free] = slot
   }
 }
 
-function place(
-  ring: Partial<Record<Direction, string>>,
-  direction: Direction,
-  name: string,
-  overflow: string[],
-) {
-  if (ring[direction] === undefined) ring[direction] = name
-  else overflow.push(name)
+/**
+ * The files a Tile's body is read from, the first one that exists: a folder's `CLAUDE.md` or
+ * `-CLAUDE.md`, a Markdown Leaf itself, and none for a Leaf that isn't Markdown. A folder shown in
+ * the center reads as a Branch.
+ */
+export function bodySources(path: string, kind: MemberKind): string[] {
+  if (kind !== 'leaf') return bodyFiles.map((name) => join(path, name))
+  return isMarkdown(basename(path)) ? [path] : []
 }
 
-/** The Tile a folder shows: its frontmatter's title and preview, or a title made from its name. */
-export function tileOf(path: string, body: string | undefined): Tile {
+/**
+ * The Tile a folder or a Leaf shows: the title and preview of its body's frontmatter, or a title
+ * made from its name.
+ */
+export function tileOf(path: string, body: string | undefined, kind: MemberKind = 'branch'): Tile {
   const fields = body === undefined ? {} : frontmatter(body)
   return {
     path,
-    title: fields.title ?? titleFromName(basename(path)),
+    title: fields.title ?? titleFromName(basename(path), kind),
     preview: fields.preview ?? '',
   }
 }
 
-/** `4-software-engineering` and `.4-software-engineering` read `Software engineering`; `.claude` stays. */
-export function titleFromName(name: string): string {
+/**
+ * `4-software-engineering`, `.4-software-engineering` and the Leaf `4-software-engineering.md`
+ * read `Software engineering`; `.claude` and a Leaf that isn't Markdown, as `package.json`, stay.
+ */
+export function titleFromName(name: string, kind: MemberKind = 'branch'): string {
   if (name.startsWith('.') && !numberedContext.test(name)) return name
-  const slug = name.replace(/^\.?([1-6]-)?/, '').replace(/[-_]+/g, ' ')
+  if (kind === 'leaf' && !isMarkdown(name)) return name
+  const stem = kind === 'leaf' ? name.replace(/\.md$/i, '') : name
+  const slug = stem.replace(/^\.?([1-6]-)?/, '').replace(/[-_]+/g, ' ')
   return slug === '' ? name : slug.charAt(0).toUpperCase() + slug.slice(1)
 }
 

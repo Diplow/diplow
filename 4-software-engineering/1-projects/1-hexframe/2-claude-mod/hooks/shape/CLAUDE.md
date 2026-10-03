@@ -26,8 +26,8 @@ A Claude Code mod loads only the files under its own folder: an import that leav
 
 | File | Holds |
 |---|---|
-| `node.ts` | A folder read as a Frame: its Tile, its Children and its Context from its listing and its `CLAUDE.md`, titles from names, the frontmatter, the path arithmetic |
-| `layout.ts` | Where each hex of a view sits, `depth` generations deep. Depth 1 is one Frame, seven hexes; deeper, an expanded member shows its own Frame inside its hex, at a third of its radius, where its ring touches that hex's sides. Its `Ring` is the two Frame kinds the code knows, `children` (STACK's Branches kind for now) and `context`; STACK's four come with the Leaves |
+| `node.ts` | A folder read as a Frame: its Tile from its `CLAUDE.md`, and from its listing the rings of the Frame kinds it offers (Children, or Branches and Leaves, then Context), each with its overflow and, for Children, its clashes; which file a Tile's body is read from, titles from names, the frontmatter, the path arithmetic |
+| `layout.ts` | Where each hex of a view sits, `depth` generations deep, for the Frame kind the view shows. Depth 1 is one Frame, seven hexes; deeper, an expanded member shows its own Frame inside its hex, at a third of its radius, where its ring touches that hex's sides. Each member's hex says what it holds (a Branch, a Leaf or a Context tile), so a renderer fills it |
 
 ## How a vault reads
 
@@ -43,5 +43,7 @@ What a folder is:
 - **`.hexframe/` folder**: a folder's settings. Its `exclusions.yaml` lists the names and globs that folder leaves out, for that folder only. `.hexframe/` itself is always left out, as are `.git` and `node_modules`.
 - **The vault's edge**: a medium reads nothing outside the vault. It follows a symlink only when the symlink's real path lies under the vault root's real path, compared folder by folder rather than as a string prefix; any other symlink is left out like an excluded name.
 - **Overflow**: a candidate that finds no direction, because its ring already has six or because its number is taken.
+- **The Children ring**, offered when a folder's Branches and Leaves are six or fewer in all, in place of a Branches and a Leaves ring. The Branches sit where they sit among the Branches. Each numbered Leaf then takes its number's direction when it is free, and the Leaves left over take the free directions in name order. A Leaf whose number is the Branch's in that direction, as `3-games.md` beside `3-games/`, is a **clash**, which a medium shows as a subtle warning.
+- **A Leaf's Tile**: a Markdown Leaf's from its own frontmatter, else a title made from its name, `.md` dropped; a Leaf that isn't Markdown keeps its name, `package.json`.
 
-Not all of it is code yet. `node.ts` sorts the folders only, so it knows no Leaves, reads no `.hexframe/` folder, and checks no symlink against the vault's edge.
+Not all of it is code yet. `node.ts` reads no `.hexframe/` folder, and checks no symlink against the vault's edge: a symlink is neither a folder nor a file in a listing, so it shows as nothing.
