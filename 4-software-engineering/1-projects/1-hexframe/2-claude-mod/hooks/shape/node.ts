@@ -1,5 +1,5 @@
 // Reads a folder as a hexframe node, from what a directory listing and its CLAUDE.md say. Pure:
-// the hooks module does the file system calls and hands the results here.
+// each medium does the file system calls and hands the results here.
 
 export type Direction = 1 | 2 | 3 | 4 | 5 | 6
 
@@ -98,26 +98,6 @@ export function tileOf(path: string, body: string | undefined): Tile {
     title: fields.title ?? titleFromName(basename(path)),
     preview: fields.preview ?? '',
   }
-}
-
-/** The most a Markdown element draws. */
-const markdownLimit = 10000
-
-/**
- * A body file as a Markdown element draws it: its frontmatter dropped (the Tile shows that), the
- * control characters a Markdown refuses gone, and cut at its limit with a line that says so.
- */
-export function markdownOf(text: string): string {
-  const lines = text.replace(/\r\n?/g, '\n').split('\n')
-  const end = lines[0]?.trim() === '---' ? lines.indexOf('---', 1) : -1
-  const markdown = lines
-    .slice(end + 1)
-    .join('\n')
-    .replace(/[\u0000-\u0008\u000b-\u001f\u007f]/g, '')
-    .trim()
-  if (markdown.length <= markdownLimit) return markdown
-  const cut = '\n\n*The file goes on; open it to read the rest.*'
-  return markdown.slice(0, markdownLimit - cut.length) + cut
 }
 
 /** `4-software-engineering` and `.4-software-engineering` read `Software engineering`; `.claude` stays. */

@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check": "claude plugin validate . && prettier --check .",
+    "check": "claude plugin validate . && prettier --check . && ! grep -rnE --include='*.ts' --exclude='*.test.ts' \"from '([^.]|\\.\\./)\" hooks/shape",
     "test": "claude plugin test"
   },
   "devDependencies": {

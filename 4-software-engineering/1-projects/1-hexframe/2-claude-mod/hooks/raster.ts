@@ -2,8 +2,8 @@
 // as it is wide, so it holds two square pixels, drawn with a half block. The hexes are pixel art
 // rather than scaled geometry: every hex is the same stamp, set on whole pixels, its slanted sides
 // stepping two columns per pixel row, the steadiest line a grid draws near a hex's 30 degrees.
-import { frameHeight, frameWidth, type Placement, type Point } from './layout.js'
-import type { Direction } from './node.js'
+import { frameHeight, frameWidth, type Placement, type Point } from './shape/layout.js'
+import type { Direction } from './shape/node.js'
 
 /** The terminal's own color, as a Raster's cells name it. */
 const defaultColor = 0x01000000

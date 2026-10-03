@@ -1,5 +1,5 @@
 // Draws a Frame's placements as an SVG document, for the surfaces that take one (the Desktop app).
-import type { Direction } from './node.js'
+import type { Direction } from './shape/node.js'
 import { wrap } from './raster.js'
 import {
   bandWidth,
@@ -8,7 +8,7 @@ import {
   hexCorners,
   hexRadius,
   type Placement,
-} from './layout.js'
+} from './shape/layout.js'
 
 /** Pixels per unit of the layout. */
 const scale = 110

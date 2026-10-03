@@ -1,0 +1,45 @@
+---
+title: shape
+parent: 4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape
+owner: diplo
+preview: >-
+  How a vault reads as a hexframe, written once for every medium: the rules
+  that turn a folder listing into Frames, and the layout that places a view's
+  hexes at a given depth. Pure TypeScript, kept inside claude-mod because a mod
+  can import nothing outside its own folder.
+---
+# shape
+
+How a folder of this vault reads as a hexframe, written once for every medium that shows one: claude-mod in Claude Code, the Obsidian plugin in Obsidian, the app one day. If each medium read a folder its own way, the same vault would show as two hexframes. How a medium then looks at what this reads (the Frame kind, the expansions, a list for an overflowing Frame) is view state, each medium's own: [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]].
+
+## Why it lives inside claude-mod
+
+A Claude Code mod loads only the files under its own folder: an import that leaves it, directly or through a symlink, is refused by `claude plugin validate` and by the loader alike. So the shape sits in claude-mod's `hooks/`, and every other medium imports it from here by relative path. The decision is [[4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-claude-code-mod/decisions|DEC-2]].
+
+## Rules
+
+- **Pure.** No `$`, no Node, no DOM: a medium does the file system calls and hands the listing and the body here.
+- **Nothing imported from outside this folder**, a package included. claude-mod's `check` fails on an import that leaves it.
+- **Tests beside each file**, as `*.test.ts` on `claude-code/testing`. claude-mod's `test` runs them and its `check` formats them: the shape has no deployable, so it is no package. A change here changes every medium.
+
+| File | Holds |
+|---|---|
+| `node.ts` | A folder read as a Frame: its Tile, its Children and its Context from its listing and its `CLAUDE.md`, titles from names, the frontmatter, the path arithmetic |
+| `layout.ts` | Where each hex of a view sits, `depth` generations deep. Depth 1 is one Frame, seven hexes; deeper, an expanded member shows its own Frame inside its hex, at a third of its radius, where its ring touches that hex's sides |
+
+## How a vault reads
+
+It borrows Mapping's Tile, Context and Frame from STACK, and adds words for what a System doesn't have: files beside folders. A folder holds up to six Branches and six Leaves, and a Frame still draws at most six hexes around its Tile.
+
+The root `STACK.md` lays out the same slots from the repo's side: its children are the Branches, its files the Leaves (dot files aside), its inner children the Context.
+
+What a folder is:
+
+- **Tile**: a folder's own is the `title` and `preview` of its `CLAUDE.md`, or of its `-CLAUDE.md` when it keeps a private one. Without either, a title made from the folder's name.
+- **Branch** and **Leaf**: a child folder and a file. A Leaf grows into a Branch when it needs children of its own, and keeps its direction: `3-games.md` becomes `3-games/`. Branches and Leaves count their directions apart: `<n>-<slug>` sits in direction n, and an unnumbered name takes the first free direction in name order. When two names claim one number, the later in name order overflows. A folder's `CLAUDE.md` and `-CLAUDE.md` are its Tile, never Leaves, and a dot file is neither a Leaf nor Context.
+- **Context**: the dot folders. `.<n>-<slug>/` sits in direction n, as hexframe exports a System, then the other dot folders (`.claude/`, `.skills/`) take the free slots in name order.
+- **`.hexframe/` folder**: a folder's settings. Its `exclusions.yaml` lists the names and globs that folder leaves out, for that folder only. `.hexframe/` itself is always left out, as are `.git` and `node_modules`.
+- **The vault's edge**: a medium reads nothing outside the vault. It follows a symlink only when the symlink's real path lies under the vault root's real path, compared folder by folder rather than as a string prefix; any other symlink is left out like an excluded name.
+- **Overflow**: a candidate that finds no direction, because its ring already has six or because its number is taken.
+
+Not all of it is code yet. `node.ts` sorts the folders only, so it knows no Leaves, reads no `.hexframe/` folder, and checks no symlink against the vault's edge.
