@@ -6,6 +6,8 @@
 # branch has no Neon branch.
 name: hexframe previews
 
+permissions: {}
+
 on:
   pull_request:
     types: [closed]
