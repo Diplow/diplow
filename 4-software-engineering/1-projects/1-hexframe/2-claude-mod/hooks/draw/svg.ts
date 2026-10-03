@@ -1,23 +1,17 @@
 // Draws a Frame's placements as an SVG document, for the surfaces that take one (the Desktop app).
-import type { Direction } from './node.js'
-import { wrap } from './raster.js'
-import {
-  bandWidth,
-  frameHeight,
-  frameWidth,
-  hexCorners,
-  hexRadius,
-  type Placement,
-} from './layout.js'
+import { oneLine } from '../markdown.js'
+import type { Direction } from '../shape/node.js'
+import { viewHeight, viewWidth, hexCorners, type Placement } from '../shape/layout.js'
+import { emptyOutline, paletteOf, selectedOutline, wrap } from './style.js'
 
 /** Pixels per unit of the layout. */
 const scale = 110
 
-const fills = {
-  center: { fill: '#5b3cc4', title: '#ffffff', preview: '#ddd6fe' },
-  children: { fill: '#2f3446', title: '#f3f4f6', preview: '#9ca3af' },
-  context: { fill: '#134e4a', title: '#ccfbf1', preview: '#5eead4' },
-}
+/** A hex's radius as drawn, short of the layout's 1, leaving a gap between neighbors. */
+const radius = 0.93
+
+/** The width of the band between a hex's side corners, where its text sits. */
+const bandWidth = Math.sqrt(3) * radius
 
 const titleSize = 15
 const previewSize = 11
@@ -26,8 +20,8 @@ const characterWidth = 0.55
 
 /** Draws the placements; the member in direction `selected`, if any, outlined. */
 export function drawSvg(placements: readonly Placement[], selected?: Direction): string {
-  const width = Math.round(frameWidth * scale)
-  const height = Math.round(frameHeight * scale)
+  const width = Math.round(viewWidth * scale)
+  const height = Math.round(viewHeight * scale)
   const shapes = placements.map((placement) => shapeOf(placement, selected)).join('')
   return (
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" ` +
@@ -38,22 +32,31 @@ export function drawSvg(placements: readonly Placement[], selected?: Direction):
 function shapeOf(placement: Placement, selected: Direction | undefined): string {
   const cx = placement.center.x * scale
   const cy = placement.center.y * scale
-  const points = hexCorners(placement.center, hexRadius)
+  const points = hexCorners(placement.center, radius)
     .map(({ x, y }) => `${round(x * scale)},${round(y * scale)}`)
     .join(' ')
 
   if (placement.kind === 'empty') {
     return (
-      `<polygon points="${points}" fill="none" stroke="#4b5563" stroke-dasharray="4 6"/>` +
+      `<polygon points="${points}" fill="none" stroke="${hex(emptyOutline)}" stroke-dasharray="4 6"/>` +
       text(cx, cy + 5, '#6b7280', previewSize, String(placement.direction))
     )
   }
 
-  const colors = fills[placement.kind === 'center' ? 'center' : placement.ring]
-  const band = bandWidth(hexRadius) * scale * 0.86
-  const title = wrap(placement.tile.title, Math.floor(band / (titleSize * characterWidth)), 2)
+  const palette = paletteOf(placement)
+  const colors = {
+    fill: hex(palette.background),
+    title: hex(palette.title),
+    preview: hex(palette.preview),
+  }
+  const band = bandWidth * scale * 0.86
+  const title = wrap(
+    oneLine(placement.tile.title),
+    Math.floor(band / (titleSize * characterWidth)),
+    2,
+  )
   const preview = wrap(
-    placement.tile.preview,
+    oneLine(placement.tile.preview),
     Math.floor(band / (previewSize * characterWidth)),
     placement.kind === 'center' ? 5 : 4,
   )
@@ -77,7 +80,7 @@ function shapeOf(placement: Placement, selected: Direction | undefined): string 
     placement.kind === 'member'
       ? text(
           cx,
-          cy - hexRadius * scale * 0.72,
+          cy - radius * scale * 0.72,
           colors.preview,
           previewSize,
           String(placement.direction),
@@ -85,7 +88,7 @@ function shapeOf(placement: Placement, selected: Direction | undefined): string 
       : ''
   const outline =
     placement.kind === 'member' && placement.direction === selected
-      ? ' stroke="#fbbf24" stroke-width="4"'
+      ? ` stroke="${hex(selectedOutline)}" stroke-width="4"`
       : ''
   return `<polygon points="${points}" fill="${colors.fill}"${outline}/>${label}${words}`
 }
@@ -111,6 +114,11 @@ function escape(content: string): string {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
+}
+
+/** A color of the shared palette, `0xrrggbb`, as SVG writes it. */
+function hex(color: number): string {
+  return `#${color.toString(16).padStart(6, '0')}`
 }
 
 function round(value: number): number {

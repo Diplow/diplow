@@ -3,10 +3,11 @@ title: hexframe stack
 parent: 4-software-engineering/1-projects/1-hexframe
 owner: diplo
 preview: >-
-  hexframe's technical choices, the rules that come with them, and the language
-  of its three domains (IAM, Mapping, Assistant). A TanStack Start app on
-  Vercel, Effect on the server, Neon and Drizzle below. Each rule moves into the
-  CLAUDE.md of the folder it governs once that folder exists.
+  hexframe's technical choices, the rules that come with them, the language of
+  its three domains (IAM, Mapping, Assistant) and how a vault reads as a
+  hexframe. A TanStack Start app on Vercel, Effect on the server, Neon and
+  Drizzle below. Each rule moves into the CLAUDE.md of the folder it governs
+  once that folder exists.
 ---
 # hexframe stack
 
@@ -22,7 +23,7 @@ The choices, and the rules they come with. Each rule is written here until the f
 ## Runtime and versions
 
 - **Vercel**, Node runtime.
-- **A package per deployable**, never more: `1-app`, a TanStack Start app holding client and server, and `2-mod`, a Claude Code mod that shows a vault folder as a hexframe. Mods are in early access; the mod is its own package, so it is the seam.
+- **A package per deployable**, never more: `1-app`, a TanStack Start app holding client and server, and `2-claude-mod`, a Claude Code mod that shows a vault folder as a hexframe. Mods are in early access; the mod is its own package, so it is the seam.
 - **Stable or release candidate; beta and alpha only behind a seam**, one file that can be swapped. So: TanStack Start RC, Effect 4 RC (migrating 3 to 4 later would touch every file), Drizzle v1 RC if `@effect/sql-drizzle` supports it (0.45 otherwise), and Sentry's alpha TanStack Start SDK behind the observability seam.
 
 | Need | Choice |
@@ -178,6 +179,20 @@ A conversation with an agent that builds a System on the user's behalf, saving e
 - **Conversation**: one continuous timeline per Account, split by day. It holds the **Messages** between the user and the agent, and records what the user did on the canvas (navigations, operations), so the agent always knows where the user is. Mapping never hears about views; Assistant is what records them.
 - **Proposal**: an operation the agent wants to run, waiting for the user.
 - **Mode**, per Conversation, as in Claude Code: *ask* (the default) makes every operation a Proposal, *apply* runs them. An applied batch can be undone.
+
+## A vault as a hexframe
+
+This vault is a hexframe kept as files, the shape a System exports to. claude-mod shows it inside Claude Code, the Obsidian plugin inside Obsidian, and the app will read it one day. What a folder is, and how it reads as a Frame, is written once for all of them in the [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE|shape]].
+
+How a medium looks at it is view state, as in the app, each medium's own:
+
+- **Frame kind**: which of a Frame's rings shows around its Tile, Children, Branches, Leaves or Context, among those the shape offers. Mapping's Frame is the Children kind of a folder that has no files.
+- **Depth**: how many generations a medium shows from the center. claude-mod 1, the app 2, the Obsidian plugin 2.
+- **Double expansion**: only the center has it. Its outer ring shows Children, Branches or Leaves; its inner ring, inside the center's hex, Leaves or Context; never the same kind in both. Each outer Branch expands on its own, into any kind. The inner ring's hexes don't expand. Collapsing peels the outer ring first, then the inner, and a fully collapsed center fills the canvas.
+- **An overflowing Frame** shows as a list, not as hexes, until exclusions or renames clear it. Only that Frame becomes a list, unless it is the center's outer ring: then the whole view does.
+- **Hexframe file**: a `*.hexframe` file opens the view on its folder and keeps the view's state in JSON: the center and the expansions. It is to a medium what the URL is to the app; the Obsidian plugin will put a `diplow.hexframe` at this vault's root. Its paths are relative to the vault, and a medium resolves each one to its real path, symlinks followed, before using it. One that lands outside the vault, through `..`, an absolute path or a symlink, or on an excluded name, is dropped and the file's own folder opens instead, so a shared vault can't make a medium read beyond itself.
+
+Each medium keeps its view state itself. The shape's layout takes the Frame kind and lays out one generation; the depth and the expansions join it with the first medium that draws deeper.
 
 ## Languages
 
