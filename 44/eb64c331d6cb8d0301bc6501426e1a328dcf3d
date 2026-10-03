@@ -1,0 +1,175 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/search.ts
+  s_b661d94074bd8f::t_4628311de9dc76 1
+  s_b661d94074bd8f::t_6c2640b52731ec 2-74
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.test.ts
+  s_b661d94074bd8f::t_7b2be4bd4c5e5f 1-6,8,12-24,28-35,38-128,130-141,143-188,190-195,197-203
+  s_b661d94074bd8f::t_3964122ec8708d 7,129,142,189,196
+  s_b661d94074bd8f::t_fa9d08460c5fd6 9,27
+  s_b661d94074bd8f::t_88308c11663a1d 10-11
+  s_b661d94074bd8f::t_ebef414fa3a238 25-26,36-37
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE.md
+  s_b661d94074bd8f::t_2fabef99b17144 6-10,14,20-21,31,56,83,85
+  s_b661d94074bd8f::t_2090a274b4a345 66
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/access/CLAUDE.md
+  s_b661d94074bd8f::t_2090a274b4a345 1-10,12-20
+  s_b661d94074bd8f::t_94012156fa623b 11
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_b661d94074bd8f::t_27d7979bfccd3d 1-48
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/errors/channel.ts
+  s_b661d94074bd8f::t_4628311de9dc76 2,15
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/CLAUDE.md
+  s_b661d94074bd8f::t_2090a274b4a345 1-6,9-19,22-24
+  s_b661d94074bd8f::t_2fabef99b17144 7-8,20-21,25-26
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/TileActions.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-261
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE.md
+  s_b661d94074bd8f::t_94012156fa623b 12
+  s_b661d94074bd8f::t_2090a274b4a345 1-11,13-28
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.ts
+  s_b661d94074bd8f::t_6c2640b52731ec 1-80
+4-software-engineering/1-projects/1-hexframe/1-app/eslint.config.ts
+  s_b661d94074bd8f::t_04d4c232b351af 19-20
+  s_b661d94074bd8f::t_58faadec529564 30
+  s_b661d94074bd8f::t_b7469cc41549ad 7,24,27,38,62,87
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/middleware.test.ts
+  s_b661d94074bd8f::t_4628311de9dc76 29
+4-software-engineering/1-projects/1-hexframe/1-app/package.json
+  s_b661d94074bd8f::t_b7469cc41549ad 6,12
+4-software-engineering/1-projects/1-hexframe/1-app/src/routeTree.gen.ts
+  s_b661d94074bd8f::t_22afc47de0b88b 11-20
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/System.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-93
+4-software-engineering/1-projects/1-hexframe/1-app/components.json
+  s_b661d94074bd8f::t_b7469cc41549ad 8,14-15,17
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/channels.ts
+  s_b661d94074bd8f::t_88308c11663a1d 12
+  s_b661d94074bd8f::t_4628311de9dc76 1,18
+  s_b661d94074bd8f::t_6c2640b52731ec 2-7,13-17,19-108
+  s_b661d94074bd8f::t_7b2be4bd4c5e5f 8-11
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/iam/guard.test.ts
+  s_b661d94074bd8f::t_88308c11663a1d 8-10
+  s_b661d94074bd8f::t_fa9d08460c5fd6 7,12
+  s_b661d94074bd8f::t_3964122ec8708d 4,102,109
+  s_b661d94074bd8f::t_7b2be4bd4c5e5f 1-3,5-6,11,13-101,103-108,110-123
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/check-rule-of-six.ts
+  s_b661d94074bd8f::t_b7469cc41549ad 14
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/sign-in.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-15
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/calls.test.ts
+  s_b661d94074bd8f::t_7b2be4bd4c5e5f 1-4,6-63
+  s_b661d94074bd8f::t_88308c11663a1d 5
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/calls.ts
+  s_b661d94074bd8f::t_7b2be4bd4c5e5f 1-92
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_b661d94074bd8f::t_331ca6013d7a3e 2-4
+  s_b661d94074bd8f::t_fa9d08460c5fd6 23
+  s_b661d94074bd8f::t_7b2be4bd4c5e5f 1,6-22,27-138
+  s_b661d94074bd8f::t_88308c11663a1d 24-26
+  s_b661d94074bd8f::t_4628311de9dc76 5
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/session.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-47
+4-software-engineering/1-projects/1-hexframe/.cubic/domain-design.md
+  s_b661d94074bd8f::t_d0e106709dd672 19,24
+4-software-engineering/1-projects/1-hexframe/1-app/vite.config.ts
+  s_b661d94074bd8f::t_b7469cc41549ad 23-24,31-32
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/channels.test.ts
+  s_b661d94074bd8f::t_88308c11663a1d 7
+  s_b661d94074bd8f::t_7b2be4bd4c5e5f 5-6,71-72
+  s_b661d94074bd8f::t_6c2640b52731ec 1-4,8-70,73-174
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/access/Access.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-107
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/CLAUDE.md
+  s_b661d94074bd8f::t_2fabef99b17144 7-8,18-19,22
+  s_b661d94074bd8f::t_2090a274b4a345 1-6,9-17,20-21
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/CLAUDE.md
+  s_b661d94074bd8f::t_94012156fa623b 28
+  s_b661d94074bd8f::t_2090a274b4a345 1-27,29-34
+4-software-engineering/1-projects/1-hexframe/1-app/.gitignore
+  s_b661d94074bd8f::t_b7469cc41549ad 2
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.ts
+  s_b661d94074bd8f::t_7b2be4bd4c5e5f 1-86
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/breadcrumb/Breadcrumb.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-72
+4-software-engineering/1-projects/1-hexframe/1-app/dependency-cruiser.config.ts
+  s_b661d94074bd8f::t_34d9b72dffc4b8 5-7,10-12,14-26,66-67
+  s_b661d94074bd8f::t_22afc47de0b88b 117
+  s_b661d94074bd8f::t_58faadec529564 3-4,9,13,41,69-70,72,80-81,101,103
+  s_b661d94074bd8f::t_fc0de1157f0688 8
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/lint.test.ts
+  s_b661d94074bd8f::t_4628311de9dc76 20-21,63,154-156
+  s_b661d94074bd8f::t_6c2640b52731ec 46
+  s_b661d94074bd8f::t_95446f491286ed 73
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/errors.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-165
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/hex.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-56
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/feedback/Toaster.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-37
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/system.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-53
+4-software-engineering/1-projects/1-hexframe/1-app/tsconfig.json
+  s_b661d94074bd8f::t_b7469cc41549ad 2,11
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_b661d94074bd8f::t_94012156fa623b 32-33,39-40,61,63-64,69,79
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/TileCard.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-51
+4-software-engineering/1-projects/1-hexframe/1-app/src/router.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 4
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.test.ts
+  s_b661d94074bd8f::t_7b2be4bd4c5e5f 1-250
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/sign-up.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-14
+4-software-engineering/1-projects/1-hexframe/STACK.md
+  s_b661d94074bd8f::t_2090a274b4a345 74,98
+  s_b661d94074bd8f::t_9885192380b978 57,62
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/Conversation.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-116
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-9,16-80
+  s_b661d94074bd8f::t_04d4c232b351af 10-15
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/iam.ts
+  s_b661d94074bd8f::t_7b2be4bd4c5e5f 1-37
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/fixtures.ts
+  s_b661d94074bd8f::t_6c2640b52731ec 1-117
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE.md
+  s_b661d94074bd8f::t_2090a274b4a345 1-16,18-29
+  s_b661d94074bd8f::t_94012156fa623b 17
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/ui.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-59
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.test.ts
+  s_b661d94074bd8f::t_6c2640b52731ec 1-95
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/inputs/controls/ThemeToggle.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-16
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/CLAUDE.md
+  s_b661d94074bd8f::t_2090a274b4a345 1-30
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/__root.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-43
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_b661d94074bd8f::t_2090a274b4a345 26
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/iam/guard.ts
+  s_b661d94074bd8f::t_fa9d08460c5fd6 12
+  s_b661d94074bd8f::t_4628311de9dc76 3
+  s_b661d94074bd8f::t_7b2be4bd4c5e5f 10-11
+  s_b661d94074bd8f::t_88308c11663a1d 13-14
+  s_b661d94074bd8f::t_6c2640b52731ec 1-2,4-9,15-65
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/ReadBoundary.tsx
+  s_b661d94074bd8f::t_6c2640b52731ec 1-7,11-47
+  s_b661d94074bd8f::t_7b2be4bd4c5e5f 8-9
+  s_b661d94074bd8f::t_88308c11663a1d 10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "44eb64c331d6cb8d0301bc6501426e1a328dcf3d",
+  "prompts": {},
+  "sessions": {
+    "s_b661d94074bd8f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b310efd9-cf35-4262-bdce-a5d6d86a0d23",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
