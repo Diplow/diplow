@@ -3,10 +3,8 @@
 // its sender saw it, the open form included. Every function here is pure.
 import { Schema } from 'effect'
 
-import { CanvasView, orDefault, TileId } from '#/ui/hex/view/view'
-
-/** A Child's Direction, 1 to 6, or a Context slot, −1 to −6. */
-const Slot = Schema.Literals([1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6])
+import { Slot } from '#/api/domains/mapping/mapping'
+import { CanvasView, orDefault, readSearch, TileId } from '#/ui/hex/view/view'
 
 /** The page's search params, and the route's `validateSearch`: the view, then the change. */
 const SystemSearch = Schema.Struct({
@@ -29,21 +27,8 @@ export type Change =
   | { kind: 'edit'; id: string }
   | { kind: 'move'; id: string }
 
-const decodeSystemSearch = Schema.decodeUnknownSync(SystemSearch)
-
-/** Reads the URL's search params, field by field; every field is set, `undefined` when it falls back. */
-export function readSystemSearch(search: Record<string, unknown>): SystemSearch {
-  return {
-    center: undefined,
-    expanded: undefined,
-    context: undefined,
-    add: undefined,
-    slot: undefined,
-    edit: undefined,
-    move: undefined,
-    ...decodeSystemSearch(search),
-  }
-}
+/** Reads the URL's search params, field by field: the route's `validateSearch`. */
+export const readSystemSearch = readSearch(SystemSearch)
 
 /** The canvas's part of the search params. */
 export function viewOf({ center, expanded, context }: SystemSearch): CanvasView {

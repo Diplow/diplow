@@ -1,5 +1,5 @@
 // The design system on one page: every colour token as a swatch, then every ui/ component in every state.
-import { createFileRoute, notFound } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 
 import { m } from '#/paraglide/messages'
 import { DataGallery } from '#/ui/data/gallery'
@@ -15,11 +15,6 @@ import css from '../../styles.css?raw'
 const tokens = colorTokens(css)
 
 export const Route = createFileRoute('/dev/ui')({
-  // A dev page, like /dev/hex: production answers 404 (vite.config.ts).
-  beforeLoad: () => {
-    // eslint-disable-next-line @typescript-eslint/only-throw-error -- TanStack Router's notFound() is meant to be thrown; the router catches it
-    if (!__DEV_PAGES__) throw notFound()
-  },
   component: Gallery,
 })
 

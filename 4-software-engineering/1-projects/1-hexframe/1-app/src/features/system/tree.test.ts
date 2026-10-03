@@ -48,7 +48,12 @@ describe('canvasTree', () => {
   })
 
   it('draws a Reference as the Tile it points at, under that Tile id', () => {
-    expect(tree.context?.[2]).toEqual({ id: 'a3', title: 'A3', preview: 'A child' })
+    expect(tree.context?.[2]).toEqual({
+      id: 'a3',
+      title: 'A3',
+      preview: 'A child',
+      reference: true,
+    })
   })
 
   it('draws a broken Reference as broken, under an id no Tile has', () => {

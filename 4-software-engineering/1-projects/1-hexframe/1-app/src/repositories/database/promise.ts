@@ -6,6 +6,8 @@ import * as NodePgDrizzle from 'drizzle-orm/node-postgres'
 import { Config, Context, Effect, Layer, Redacted } from 'effect'
 import { Pool } from 'pg'
 
+import { captureError } from '../observability/sentry'
+
 /** Drizzle's promise API over the database: node-postgres when deployed, PGlite in tests. */
 export class PromiseDatabase extends Context.Service<
   PromiseDatabase,
@@ -14,7 +16,7 @@ export class PromiseDatabase extends Context.Service<
 
 /**
  * A node-postgres pool on DATABASE_URL, ended with the layer, which connects on its first query. An
- * idle connection the server drops is logged and replaced; unheard, it would crash the process.
+ * idle connection the server drops is reported and replaced; unheard, it would crash the process.
  */
 const pool = Effect.acquireRelease(
   Effect.gen(function* () {
@@ -22,8 +24,11 @@ const pool = Effect.acquireRelease(
       connectionString: Redacted.value(yield* Config.Redacted('DATABASE_URL')),
     })
     pool.on('error', (error) => {
-      // A pool callback runs outside any program, so it logs as the server does until Sentry (HEX-19).
-      console.error('An idle database connection failed', error.message)
+      // A pool callback runs outside any program, so no logger hears it: straight to Sentry, and to the
+      // server's console, as the runtime's own failures go (api/observability/server.ts, `unobserved`).
+      const tags = { kind: 'Unexpected', code: 'Unexpected', scope: 'databasePool' }
+      captureError(error, tags)
+      console.error('An idle database connection failed', tags, error.message)
     })
     return pool
   }),

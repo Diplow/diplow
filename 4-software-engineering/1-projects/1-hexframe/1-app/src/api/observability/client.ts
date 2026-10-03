@@ -74,7 +74,7 @@ export function reportError(
 
 /**
  * Ties this device to the signed-in Account, so its events and flags are the Account's: on signing in
- * or up, and on every page `signedIn` guards. PostHog keeps it across page loads until `forget`.
+ * or up, and on every page `signedInOnly` guards. PostHog keeps it across page loads until `forget`.
  */
 export function identify(accountId: string) {
   identifyInBrowser(accountId)

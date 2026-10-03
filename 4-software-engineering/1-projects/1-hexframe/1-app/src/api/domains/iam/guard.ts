@@ -3,9 +3,10 @@
 // place back from. The client's Unauthenticated channel (../client/channels.ts) sends a failed call
 // there the same way.
 import { redirect, type ParsedLocation } from '@tanstack/react-router'
-import { Effect, Schema } from 'effect'
+import { Schema } from 'effect'
 
 import { localizeHref } from '#/paraglide/runtime'
+import { orDefault, readSearch } from '#/ui/hex/view/view'
 
 import { asCallFailed, settle } from '../../client/calls'
 import { channelFor } from '../../errors/channel'
@@ -24,15 +25,11 @@ const LocalPath = Schema.String.check(
 
 /** Sign-in's and sign-up's search params: where to go once signed in; absent or refused, home. */
 const SignInSearch = Schema.Struct({
-  redirect: Schema.optionalKey(LocalPath.pipe(Schema.catchDecoding(() => Effect.succeedNone))),
+  redirect: Schema.optionalKey(orDefault(LocalPath)),
 })
 
-const decodeSignInSearch = Schema.decodeUnknownSync(SignInSearch)
-
-/** The route's `validateSearch`: every field set, `undefined` when it falls back (see readCanvasView). */
-export function readSignInSearch(search: Record<string, unknown>) {
-  return { redirect: undefined, ...decodeSignInSearch(search) }
-}
+/** The route's `validateSearch`: every field set, `undefined` when it falls back. */
+export const readSignInSearch = readSearch(SignInSearch)
 
 /**
  * Where a signed-in Account goes next: a full load, so the page renders with its Session. Home when
@@ -51,7 +48,7 @@ export function continueTo(redirect: string | undefined, accountId: string) {
  * context, or redirects a signed-out visit to sign-in, carrying where it was. Any other failure is the
  * route's error, as a read's would be.
  */
-export async function signedIn({ location }: { location: ParsedLocation }) {
+export async function signedInOnly({ location }: { location: ParsedLocation }) {
   try {
     const proven = await settle('session', session({ data: undefined }))
     // In the browser, this device's events and flags are now the Account's (a no-op on the server).

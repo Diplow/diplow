@@ -41,7 +41,12 @@ function contextNode(entry: ContextEntry, slot: string): TileNode {
     case 'Tile':
       return canvasTree(entry)
     case 'Reference':
-      return { id: entry.tile.id, title: titleOf(entry.tile.title), preview: entry.tile.preview }
+      return {
+        id: entry.tile.id,
+        title: titleOf(entry.tile.title),
+        preview: entry.tile.preview,
+        reference: true,
+      }
     case 'BrokenReference':
       return { id: `broken:${slot}`, title: m.system_reference_broken(), preview: '' }
   }

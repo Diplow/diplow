@@ -1,5 +1,5 @@
 // The hex canvas on a fixture System, its view in the search params: a link shows what its sender saw.
-import { Link, createFileRoute, notFound } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 
 import { m } from '#/paraglide/messages'
 import { Canvas } from '#/ui/hex/Canvas'
@@ -8,11 +8,6 @@ import { readCanvasView } from '#/ui/hex/view/view'
 import { PageHeader } from '#/ui/surfaces/PageHeader'
 
 export const Route = createFileRoute('/dev/hex')({
-  // A dev page, like /dev/ui: production answers 404 (vite.config.ts).
-  beforeLoad: () => {
-    // eslint-disable-next-line @typescript-eslint/only-throw-error -- TanStack Router's notFound() is meant to be thrown; the router catches it
-    if (!__DEV_PAGES__) throw notFound()
-  },
   validateSearch: readCanvasView,
   component: HexCanvas,
 })

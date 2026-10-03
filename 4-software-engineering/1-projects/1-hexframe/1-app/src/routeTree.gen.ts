@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DevRouteRouteImport } from './routes/dev/route'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as DevErrorsRouteImport } from './routes/dev/errors'
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DevRouteRoute = DevRouteRouteImport.update({
+  id: '/dev',
+  path: '/dev',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignInRoute = SignInRouteImport.update({
   id: '/sign-in',
   path: '/sign-in',
@@ -34,33 +40,34 @@ const SignUpRoute = SignUpRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const DevErrorsRoute = DevErrorsRouteImport.update({
-  id: '/dev/errors',
-  path: '/dev/errors',
-  getParentRoute: () => rootRouteImport,
+  id: '/errors',
+  path: '/errors',
+  getParentRoute: () => DevRouteRoute,
 } as any)
 const DevHexRoute = DevHexRouteImport.update({
-  id: '/dev/hex',
-  path: '/dev/hex',
-  getParentRoute: () => rootRouteImport,
+  id: '/hex',
+  path: '/hex',
+  getParentRoute: () => DevRouteRoute,
 } as any)
 const DevSessionRoute = DevSessionRouteImport.update({
-  id: '/dev/session',
-  path: '/dev/session',
-  getParentRoute: () => rootRouteImport,
+  id: '/session',
+  path: '/session',
+  getParentRoute: () => DevRouteRoute,
 } as any)
 const DevSystemRoute = DevSystemRouteImport.update({
-  id: '/dev/system',
-  path: '/dev/system',
-  getParentRoute: () => rootRouteImport,
+  id: '/system',
+  path: '/system',
+  getParentRoute: () => DevRouteRoute,
 } as any)
 const DevUiRoute = DevUiRouteImport.update({
-  id: '/dev/ui',
-  path: '/dev/ui',
-  getParentRoute: () => rootRouteImport,
+  id: '/ui',
+  path: '/ui',
+  getParentRoute: () => DevRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dev': typeof DevRouteRouteWithChildren
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/dev/errors': typeof DevErrorsRoute
@@ -71,6 +78,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dev': typeof DevRouteRouteWithChildren
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/dev/errors': typeof DevErrorsRoute
@@ -82,6 +90,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dev': typeof DevRouteRouteWithChildren
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/dev/errors': typeof DevErrorsRoute
@@ -94,6 +103,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/dev'
     | '/sign-in'
     | '/sign-up'
     | '/dev/errors'
@@ -104,6 +114,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/dev'
     | '/sign-in'
     | '/sign-up'
     | '/dev/errors'
@@ -114,6 +125,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/dev'
     | '/sign-in'
     | '/sign-up'
     | '/dev/errors'
@@ -125,13 +137,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DevRouteRoute: typeof DevRouteRouteWithChildren
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
-  DevErrorsRoute: typeof DevErrorsRoute
-  DevHexRoute: typeof DevHexRoute
-  DevSessionRoute: typeof DevSessionRoute
-  DevSystemRoute: typeof DevSystemRoute
-  DevUiRoute: typeof DevUiRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -141,6 +149,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dev': {
+      id: '/dev'
+      path: '/dev'
+      fullPath: '/dev'
+      preLoaderRoute: typeof DevRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sign-in': {
@@ -159,51 +174,67 @@ declare module '@tanstack/react-router' {
     }
     '/dev/errors': {
       id: '/dev/errors'
-      path: '/dev/errors'
+      path: '/errors'
       fullPath: '/dev/errors'
       preLoaderRoute: typeof DevErrorsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DevRouteRoute
     }
     '/dev/hex': {
       id: '/dev/hex'
-      path: '/dev/hex'
+      path: '/hex'
       fullPath: '/dev/hex'
       preLoaderRoute: typeof DevHexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DevRouteRoute
     }
     '/dev/session': {
       id: '/dev/session'
-      path: '/dev/session'
+      path: '/session'
       fullPath: '/dev/session'
       preLoaderRoute: typeof DevSessionRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DevRouteRoute
     }
     '/dev/system': {
       id: '/dev/system'
-      path: '/dev/system'
+      path: '/system'
       fullPath: '/dev/system'
       preLoaderRoute: typeof DevSystemRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DevRouteRoute
     }
     '/dev/ui': {
       id: '/dev/ui'
-      path: '/dev/ui'
+      path: '/ui'
       fullPath: '/dev/ui'
       preLoaderRoute: typeof DevUiRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof DevRouteRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  SignInRoute: SignInRoute,
-  SignUpRoute: SignUpRoute,
+interface DevRouteRouteChildren {
+  DevErrorsRoute: typeof DevErrorsRoute
+  DevHexRoute: typeof DevHexRoute
+  DevSessionRoute: typeof DevSessionRoute
+  DevSystemRoute: typeof DevSystemRoute
+  DevUiRoute: typeof DevUiRoute
+}
+
+const DevRouteRouteChildren: DevRouteRouteChildren = {
   DevErrorsRoute: DevErrorsRoute,
   DevHexRoute: DevHexRoute,
   DevSessionRoute: DevSessionRoute,
   DevSystemRoute: DevSystemRoute,
   DevUiRoute: DevUiRoute,
+}
+
+const DevRouteRouteWithChildren = DevRouteRoute._addFileChildren(
+  DevRouteRouteChildren,
+)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  DevRouteRoute: DevRouteRouteWithChildren,
+  SignInRoute: SignInRoute,
+  SignUpRoute: SignUpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

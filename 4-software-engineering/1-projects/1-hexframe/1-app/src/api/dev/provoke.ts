@@ -17,7 +17,8 @@ export const provokeWrite = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(Provoke))
   .handler(({ data, context }) => run(context, provoked(data.outcome)))
 
-const DevTitle = Schema.Struct({ title: Schema.String })
+/** Bounded like a Tile's Title, so nothing unbounded is decoded before a production call is refused. */
+const DevTitle = Schema.Struct({ title: Schema.String.check(Schema.isMaxLength(1_000)) })
 
 export const submitDevTitle = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(DevTitle))

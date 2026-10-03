@@ -8,6 +8,8 @@ export interface TileNode {
   preview: string
   children?: Partial<Record<Direction, TileNode>>
   context?: Partial<Record<Direction, TileNode>>
+  /** Drawn in place of the Tile of this id, which stands elsewhere: a search for the id skips it. */
+  reference?: true
 }
 
 /** What is open around the centered Tile, which is always shown as a Frame. */

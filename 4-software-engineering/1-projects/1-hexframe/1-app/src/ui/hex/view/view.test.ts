@@ -83,6 +83,15 @@ describe('pathTo', () => {
   it('is empty for an id no Tile has', () => {
     expect(ids('nowhere')).toEqual([])
   })
+
+  it('reaches the Tile itself, not a Reference to it met first', () => {
+    const referenced = tile('root', {
+      children: { 4: tile('b', { children: { 1: tile('b1') } }) },
+      context: { 1: tile('b', { reference: true }) },
+    })
+    expect(pathTo(referenced, 'b').map((found) => found.id)).toEqual(['root', 'b'])
+    expect(findTile(referenced, 'b')?.children?.[1]?.id).toBe('b1')
+  })
 })
 
 describe('showView', () => {

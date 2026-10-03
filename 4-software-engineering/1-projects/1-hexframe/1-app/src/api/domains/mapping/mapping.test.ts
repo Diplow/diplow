@@ -202,9 +202,11 @@ describe("Mapping's server functions", () => {
 
 describe("the schemas Mapping's server functions validate by", () => {
   const accepts = (schema: Schema.Top, input: unknown) => Schema.is(schema)(input)
+  const p = crypto.randomUUID()
+  const t = crypto.randomUUID()
 
   it('take a Child in Directions 1 to 6 and a Context slot in -1 to -6, nothing else', () => {
-    const at = (slot: number) => ({ parent: 'p', slot, ...content('Tile') })
+    const at = (slot: number) => ({ parent: p, slot, ...content('Tile') })
     expect([1, 6, -1, -6].map((slot) => accepts(NewTile, at(slot)))).toEqual([
       true,
       true,
@@ -217,22 +219,32 @@ describe("the schemas Mapping's server functions validate by", () => {
       false,
       false,
     ])
-    expect(accepts(TileMove, { id: 't', parent: 'p', slot: 3 })).toBe(true)
-    expect(accepts(TileMove, { id: 't', parent: 'p', slot: 9 })).toBe(false)
+    expect(accepts(TileMove, { id: t, parent: p, slot: 3 })).toBe(true)
+    expect(accepts(TileMove, { id: t, parent: p, slot: 9 })).toBe(false)
   })
 
   it('put a Reference in a Context slot only', () => {
-    expect(accepts(NewReference, { parent: 'p', slot: -3, target: 't' })).toBe(true)
-    expect(accepts(NewReference, { parent: 'p', slot: 3, target: 't' })).toBe(false)
-    expect(accepts(ReferenceSlot, { parent: 'p', slot: -3 })).toBe(true)
-    expect(accepts(ReferenceSlot, { parent: 'p', slot: 3 })).toBe(false)
+    expect(accepts(NewReference, { parent: p, slot: -3, target: t })).toBe(true)
+    expect(accepts(NewReference, { parent: p, slot: 3, target: t })).toBe(false)
+    expect(accepts(ReferenceSlot, { parent: p, slot: -3 })).toBe(true)
+    expect(accepts(ReferenceSlot, { parent: p, slot: 3 })).toBe(false)
   })
 
   it('edit any of the content, and bound every string', () => {
-    expect(accepts(TileEdit, { id: 't' })).toBe(true)
-    expect(accepts(TileEdit, { id: 't', body: '# Body' })).toBe(true)
-    expect(accepts(TileEdit, { id: 't', body: 'x'.repeat(100_001) })).toBe(false)
-    expect(accepts(TileRef, { id: 'x'.repeat(65) })).toBe(false)
-    expect(accepts(NewTile, { parent: 'p', slot: 1, ...content('x'.repeat(1_001)) })).toBe(false)
+    expect(accepts(TileEdit, { id: t })).toBe(true)
+    expect(accepts(TileEdit, { id: t, body: '# Body' })).toBe(true)
+    expect(accepts(TileEdit, { id: t, body: 'x'.repeat(100_001) })).toBe(false)
+    expect(accepts(NewTile, { parent: p, slot: 1, ...content('x'.repeat(1_001)) })).toBe(false)
+  })
+
+  it('take a Tile id only as a UUID', () => {
+    expect(accepts(TileRef, { id: t })).toBe(true)
+    expect(['', 't', 'x'.repeat(36), `${t}x`].map((id) => accepts(TileRef, { id }))).toEqual([
+      false,
+      false,
+      false,
+      false,
+    ])
+    expect(accepts(NewReference, { parent: p, slot: -1, target: 'root' })).toBe(false)
   })
 })

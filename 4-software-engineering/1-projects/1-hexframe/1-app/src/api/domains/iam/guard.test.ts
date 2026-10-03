@@ -6,7 +6,7 @@ import { SignedOut } from '#/domains/iam/errors'
 import { CallFailed } from '../../client/calls'
 import { Unexpected, encodeFailure, type Failure, type Outcome } from '../../errors/failure'
 import { forget, identify } from '../../observability/client'
-import { continueTo, readSignInSearch, signedIn } from './guard'
+import { continueTo, readSignInSearch, signedInOnly } from './guard'
 import { session } from './iam'
 
 vi.mock('./iam', () => ({ session: vi.fn() }))
@@ -82,32 +82,32 @@ describe('the way back once signed in', () => {
 })
 
 describe('the guard of a page only a signed-in Account sees', () => {
-  const location = { href: '/dev/session?a=1' } as Parameters<typeof signedIn>[0]['location']
+  const location = { href: '/dev/session?a=1' } as Parameters<typeof signedInOnly>[0]['location']
   const account = { id: 'a-1', email: 'ada@example.com' }
 
   it('puts the Session on the route context', async () => {
     const found = { account, expiresAt: new Date() }
     answering({ ok: true, value: found })
-    expect(await signedIn({ location })).toEqual({ session: found })
+    expect(await signedInOnly({ location })).toEqual({ session: found })
   })
 
   it('ties the device to the Account whose Session it found', async () => {
     answering({ ok: true, value: { account, expiresAt: new Date() } })
-    await signedIn({ location })
+    await signedInOnly({ location })
     expect(identify).toHaveBeenCalledExactlyOnceWith('a-1')
     expect(forget).not.toHaveBeenCalled()
   })
 
   it('unties the device from any Account when the visit is signed out', async () => {
     answering(failing(new SignedOut()))
-    await signedIn({ location }).catch(() => undefined)
+    await signedInOnly({ location }).catch(() => undefined)
     expect(forget).toHaveBeenCalledOnce()
     expect(identify).not.toHaveBeenCalled()
   })
 
   it('redirects a signed-out visit to sign-in, carrying where it was', async () => {
     answering(failing(new SignedOut()))
-    const thrown: unknown = await signedIn({ location }).catch((error: unknown) => error)
+    const thrown: unknown = await signedInOnly({ location }).catch((error: unknown) => error)
     expect(isRedirect(thrown)).toBe(true)
     expect(thrown).toMatchObject({
       options: { to: '/sign-in', search: { redirect: '/dev/session?a=1' } },
@@ -116,7 +116,7 @@ describe('the guard of a page only a signed-in Account sees', () => {
 
   it('makes any other failure the route’s error', async () => {
     answering(failing(new Unexpected()))
-    const thrown: unknown = await signedIn({ location }).catch((error: unknown) => error)
+    const thrown: unknown = await signedInOnly({ location }).catch((error: unknown) => error)
     expect(thrown).toBeInstanceOf(CallFailed)
     expect(thrown).toMatchObject({ failure: { _tag: 'Unexpected' }, scope: 'session' })
   })

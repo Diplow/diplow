@@ -1,6 +1,6 @@
 // A System as the app will show it, on fixtures: the Conversation left, the canvas center, the
 // breadcrumb rail right. The view lives in the search params, as on /dev/hex.
-import { createFileRoute, notFound } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
 import { Breadcrumb } from '#/features/breadcrumb/Breadcrumb'
@@ -13,11 +13,6 @@ import { ulysse } from '#/ui/hex/fixtures'
 import { readCanvasView, type CanvasView } from '#/ui/hex/view/view'
 
 export const Route = createFileRoute('/dev/system')({
-  // A dev page, like /dev/ui: production answers 404 (vite.config.ts).
-  beforeLoad: () => {
-    // eslint-disable-next-line @typescript-eslint/only-throw-error -- TanStack Router's notFound() is meant to be thrown; the router catches it
-    if (!__DEV_PAGES__) throw notFound()
-  },
   validateSearch: readCanvasView,
   // Days and times are the reader's own; a server in another time zone would draw other ones.
   ssr: false,

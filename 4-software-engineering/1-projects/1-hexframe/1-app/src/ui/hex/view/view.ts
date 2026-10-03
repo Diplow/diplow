@@ -10,6 +10,19 @@ import type { Placement, TileNode, Unfolding } from '../geometry/layout'
 export const orDefault = <S extends Schema.Top>(schema: S) =>
   schema.pipe(Schema.catchDecoding(() => Effect.succeedNone))
 
+/**
+ * A route's `validateSearch` over search params whose fields each fall back. Every field of the schema
+ * is set, `undefined` when it falls back: the router lays a route's search over the raw one, where a
+ * field left out would keep its raw value.
+ */
+export function readSearch<
+  S extends Schema.Struct<Schema.Struct.Fields> & Schema.ConstraintDecoder<object>,
+>(schema: S) {
+  const decode = Schema.decodeUnknownSync(schema)
+  const unset = Object.fromEntries(Object.keys(schema.fields).map((key) => [key, undefined]))
+  return (search: Record<string, unknown>): S['Type'] => ({ ...unset, ...decode(search) })
+}
+
 export const TileId = Schema.String.check(Schema.isNonEmpty(), Schema.isMaxLength(100))
 
 /**
@@ -37,22 +50,16 @@ export interface ShownView extends Unfolding {
 /** What a click on a Tile does. A double-click, or Shift+Enter, centers any Tile but the center. */
 export type TileAction = 'expand' | 'collapse' | 'show-context' | 'hide-context' | 'center' | 'none'
 
-const decodeCanvasView = Schema.decodeUnknownSync(CanvasView)
-
-/**
- * Reads the URL's search params, field by field. Every field is set, `undefined` when it falls back:
- * the router lays a route's search over the raw one, where a field left out would keep its raw value.
- */
-export function readCanvasView(search: Record<string, unknown>): CanvasView {
-  return { center: undefined, expanded: undefined, context: undefined, ...decodeCanvasView(search) }
-}
+/** Reads the URL's search params, field by field: the route's `validateSearch`. */
+export const readCanvasView = readSearch(CanvasView)
 
 /**
  * The Tiles from the System's root down to the one with this id, both included, Context Tiles
- * included: the ancestors a breadcrumb shows. Empty when no Tile has the id.
+ * included: the ancestors a breadcrumb shows. A Reference drawn under the id is not the Tile, which
+ * stands elsewhere. Empty when no Tile has the id.
  */
 export function pathTo(system: TileNode, id: string): TileNode[] {
-  if (system.id === id) return [system]
+  if (system.id === id && system.reference !== true) return [system]
   const below = directions.flatMap((direction) => [
     system.children?.[direction],
     system.context?.[direction],

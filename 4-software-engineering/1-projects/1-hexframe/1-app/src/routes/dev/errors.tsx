@@ -1,7 +1,7 @@
 // Every error channel, provoked: a read, a read that frames every page, a write and a form's submit,
 // each ending with the outcome a button asks for, through the server function helper.
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { createFileRoute, notFound } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
 import { read, write } from '#/api/client/calls'
@@ -18,11 +18,6 @@ import { Card } from '#/ui/surfaces/Card'
 import { PageHeader } from '#/ui/surfaces/PageHeader'
 
 export const Route = createFileRoute('/dev/errors')({
-  // A dev page, like /dev/ui: production answers 404 (vite.config.ts).
-  beforeLoad: () => {
-    // eslint-disable-next-line @typescript-eslint/only-throw-error -- TanStack Router's notFound() is meant to be thrown; the router catches it
-    if (!__DEV_PAGES__) throw notFound()
-  },
   component: ErrorsPage,
 })
 

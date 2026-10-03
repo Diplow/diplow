@@ -4,7 +4,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { ReadBoundary } from '#/api/client/ReadBoundary'
-import { signedIn } from '#/api/domains/iam/guard'
+import { signedInOnly } from '#/api/domains/iam/guard'
 import { useSystem } from '#/api/domains/mapping/queries'
 import { Breadcrumb } from '#/features/breadcrumb/Breadcrumb'
 import { readSystemSearch, viewOf, withView, type SystemSearch } from '#/features/system/search'
@@ -15,7 +15,7 @@ import { m } from '#/paraglide/messages'
 import { Skeleton } from '#/ui/feedback/skeleton'
 
 export const Route = createFileRoute('/')({
-  beforeLoad: signedIn,
+  beforeLoad: signedInOnly,
   validateSearch: readSystemSearch,
   component: Home,
 })

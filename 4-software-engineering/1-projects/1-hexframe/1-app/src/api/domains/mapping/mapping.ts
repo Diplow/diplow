@@ -9,14 +9,15 @@ import { contextDirections, directions } from '#/domains/mapping/tile'
 import { run } from '../../server/run'
 import * as Mapping from './programs'
 
-/** A Tile's id. Ids are UUIDs; the bound only keeps anything unbounded from reaching the domain. */
-const Id = Schema.String.check(Schema.isMaxLength(64))
+/** A Tile's id: a UUID, as the tiles repository makes every one, so nothing else reaches the domain. */
+const Id = Schema.String.check(Schema.isUUID())
 
 /** A Child's Direction and a Context slot, as Mapping names them. */
 const Direction = Schema.Literals(directions)
 const ContextDirection = Schema.Literals(contextDirections)
 
-const Slot = Schema.Union([Direction, ContextDirection])
+/** Where a Tile stands under its parent: a Child's Direction, 1 to 6, or a Context slot, −1 to −6. */
+export const Slot = Schema.Union([Direction, ContextDirection])
 
 /**
  * What a Tile says, bounded here, so nothing unbounded reaches the domain: what a Title and a Preview
