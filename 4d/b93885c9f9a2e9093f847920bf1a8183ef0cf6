@@ -1,0 +1,24 @@
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/CLAUDE.md
+  s_8004fe4b534599::t_2d92b29a0d6f53 33
+  s_8004fe4b534599::t_e38ed4280af041 10,25,27-32,34-37,44,55,59
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-obsidian-plugin/decisions.md
+  s_8004fe4b534599::t_2d92b29a0d6f53 18-21
+.obsidian/CLAUDE.md
+  s_8004fe4b534599::t_e38ed4280af041 37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4db93885c9f9a2e9093f847920bf1a8183ef0cf6",
+  "prompts": {},
+  "sessions": {
+    "s_8004fe4b534599": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d6be5684-daf1-47f2-ae41-5225e4178a75",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
