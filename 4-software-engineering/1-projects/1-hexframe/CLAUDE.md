@@ -5,7 +5,7 @@ owner: diplo
 preview: >-
   Hexframe, the app where a user lays out a system as a hierarchy of tiles so AI
   can work along their intent. A pnpm monorepo, each package a numbered child:
-  1-app, claude-mod, the Obsidian plugin. STACK.md holds the stack, the rules
+  1-app, 2-claude-mod, 3-obsidian-plugin. STACK.md holds the stack, the rules
   and the domains' language.
 ---
 # hexframe

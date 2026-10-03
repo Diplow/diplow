@@ -43,7 +43,10 @@ The lint set is [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE#Lint
 |---|---|
 | `manifest.json` | The plugin's manifest, copied beside `main.js` by every build |
 | `src/main.ts` | The plugin's entry, bundled into `main.js` |
-| `scripts/build.ts` | The esbuild bundle behind `dev` and `build`. Obsidian provides `obsidian`, `electron`, CodeMirror, Lezer and Node's own modules at runtime, so they stay out of it |
-| `scripts/plugin-dir.ts` | Which vault `dev` writes into, with its test beside it |
+| `scripts/build.ts` | `dev` and `build`: picks the folder and the mode, then bundles |
+| `scripts/bundle.ts` | The esbuild bundle. Obsidian provides `obsidian`, `electron`, CodeMirror, Lezer and Node's own modules at runtime, so they stay out of it |
+| `scripts/plugin-dir.ts` | Which vault `dev` writes into |
+
+Each script's test sits beside it; `bundle.test.ts` builds into a temporary folder.
 
 The `obsidian` typings are pinned to the app's API version, without a range: a newer one may type an API the installed app lacks. `minAppVersion` in `manifest.json` follows them.
