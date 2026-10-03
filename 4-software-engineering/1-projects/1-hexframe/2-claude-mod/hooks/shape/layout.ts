@@ -2,27 +2,40 @@
 // units where the ring's spacing makes neighbors share a side. Deeper generations sit inside the
 // hex of the member they expand. A renderer scales it; claude-mod's raster sets its own pixel-art
 // hexes on the same lattice.
-import { directions, type Direction, type Frame, type Tile } from './node.js'
+import {
+  directions,
+  type Direction,
+  type Frame,
+  type FrameKind,
+  type MemberKind,
+  type Tile,
+} from './node.js'
 
 export interface Point {
   x: number
   y: number
 }
 
-export type Ring = 'children' | 'context'
-
-/** A Frame as a view shows it: the ring around its Tile, and the members it opens as Frames. */
+/** A Frame as a view shows it: the kind its ring shows, and the members it opens as Frames. */
 export interface FrameView {
   frame: Frame
-  ring: Ring
+  frameKind: FrameKind
   expanded?: Partial<Record<Direction, FrameView>>
 }
 
 /** A hex of the view; `radius` is 1 at the first generation and a third of it at each next one. */
 export type Placement =
   | { kind: 'center'; center: Point; radius: number; tile: Tile }
-  | { kind: 'member'; ring: Ring; direction: Direction; center: Point; radius: number; tile: Tile }
-  | { kind: 'empty'; ring: Ring; direction: Direction; center: Point; radius: number }
+  | {
+      kind: 'member'
+      frameKind: FrameKind
+      memberKind: MemberKind
+      direction: Direction
+      center: Point
+      radius: number
+      tile: Tile
+    }
+  | { kind: 'empty'; frameKind: FrameKind; direction: Direction; center: Point; radius: number }
 
 const sqrt3 = Math.sqrt(3)
 
@@ -46,21 +59,29 @@ export function layoutView(view: FrameView, depth: number): Placement[] {
 }
 
 function layoutAt(view: FrameView, center: Point, radius: number, depth: number): Placement[] {
-  const { frame, ring } = view
-  const members = ring === 'children' ? frame.children : frame.context
+  const { frame, frameKind } = view
+  const members = frame.rings[frameKind]?.members ?? {}
   return [
     { kind: 'center', center, radius, tile: frame.tile },
     ...directions.flatMap((direction): Placement[] => {
       const at = neighbor(center, direction, radius)
-      const tile = members[direction]
+      const member = members[direction]
       const opened = view.expanded?.[direction]
-      if (tile && opened && depth > 1) {
+      if (member && opened && depth > 1) {
         return layoutAt(opened, at, radius * generationScale, depth - 1)
       }
       return [
-        tile
-          ? { kind: 'member', ring, direction, center: at, radius, tile }
-          : { kind: 'empty', ring, direction, center: at, radius },
+        member
+          ? {
+              kind: 'member',
+              frameKind,
+              memberKind: member.kind,
+              direction,
+              center: at,
+              radius,
+              tile: member.tile,
+            }
+          : { kind: 'empty', frameKind, direction, center: at, radius },
       ]
     }),
   ]

@@ -1,7 +1,24 @@
 import { expect, test } from 'claude-code/testing'
-import { markdownOf } from '../hooks/markdown.js'
+import { codeOf, markdownOf } from '../hooks/markdown.js'
 import { layoutView } from '../hooks/shape/layout.js'
+import type { Frame } from '../hooks/shape/node.js'
 import { base64, paint, sanitize, scaleFor, wrap } from '../hooks/raster.js'
+import { drawSvg } from '../hooks/svg.js'
+
+/** A Frame whose Children are a Branch and a Leaf. */
+const frame: Frame = {
+  tile: { path: '/w', title: 'Center', preview: 'A preview' },
+  rings: {
+    children: {
+      members: {
+        1: { kind: 'branch', tile: { path: '/w/1-a', title: 'A', preview: '' } },
+        2: { kind: 'leaf', tile: { path: '/w/2-b.md', title: 'B', preview: '' } },
+      },
+      overflow: [],
+      clashes: [],
+    },
+  },
+}
 
 test('words wrap and the last kept line ends with an ellipsis', () => {
   expect(wrap('one two three four', 9, 5)).toEqual(['one two', 'three', 'four'])
@@ -20,15 +37,9 @@ test('base64 matches the standard encoding', () => {
 })
 
 test('the painting has a triplet per cell', () => {
-  const frame = {
-    tile: { path: '/w', title: 'Center', preview: 'A preview' },
-    children: { 1: { path: '/w/1-a', title: 'A', preview: '' } },
-    context: {},
-    overflow: [],
-  }
   const scale = scaleFor(80, 26)
   expect(scale).toBeDefined()
-  const painting = paint(layoutView({ frame, ring: 'children' }, 1), scale ?? 0)
+  const painting = paint(layoutView({ frame, frameKind: 'children' }, 1), scale ?? 0)
   expect(painting.columns <= 80).toBe(true)
   expect(painting.rows <= 26).toBe(true)
   const bytes = (painting.cells.length / 4) * 3 - (painting.cells.match(/=*$/)?.[0].length ?? 0)
@@ -41,5 +52,19 @@ test('the preview drops the frontmatter and stays within what a Markdown draws',
   expect(markdownOf('No frontmatter')).toBe('No frontmatter')
   const long = markdownOf('x'.repeat(20000))
   expect(long.length).toBe(10000)
+  expect(long.endsWith('open it to read the rest.*')).toBe(true)
+})
+
+test('the SVG fills a Leaf apart from a Branch', () => {
+  const svg = drawSvg(layoutView({ frame, frameKind: 'children' }, 1))
+  expect(svg).toContain('fill="#2f3446"')
+  expect(svg).toContain('fill="#4a3426"')
+})
+
+test('a file that is not Markdown shows as a fence longer than its backticks', () => {
+  expect(codeOf('a: 1\r\nb: ```x```\n\n')).toBe('````\na: 1\nb: ```x```\n````')
+  expect(codeOf('  \n')).toBe('')
+  const long = codeOf('x'.repeat(20000))
+  expect(long.length <= 10000).toBe(true)
   expect(long.endsWith('open it to read the rest.*')).toBe(true)
 })
