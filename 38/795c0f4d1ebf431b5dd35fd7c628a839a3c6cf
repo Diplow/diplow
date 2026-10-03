@@ -1,0 +1,154 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/server.test.ts
+  s_b661d94074bd8f::t_021212a468aa96 208-210
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/Canvas.tsx
+  s_b661d94074bd8f::t_482dd21227ec50 63
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.test.ts
+  s_b661d94074bd8f::t_9262501b7eefff 304-312,315-316,320-323
+  s_b661d94074bd8f::t_0fc5f547557651 324
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/sentry.ts
+  s_b661d94074bd8f::t_f90a473d9bf337 15-17,29-33,38-40,42,44,46-48
+  s_b661d94074bd8f::t_ff30867439f56e 18-28,77-90,95,101,106-115,119-122,153-155,161,168
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/errors/messages.test.ts
+  s_b661d94074bd8f::t_c64f78045f48d9 67-80,82,99-112,114-117
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/system.test.ts
+  s_b661d94074bd8f::t_89ab913bc1ad08 1-96
+4-software-engineering/1-projects/1-hexframe/1-app/eslint.config.ts
+  s_b661d94074bd8f::t_e4680869a4e3dd 31-32,37-38
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/Entry.tsx
+  s_b661d94074bd8f::t_947dd792258d62 52,67
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/view/view.test.ts
+  s_b661d94074bd8f::t_6d402e00fb5631 49-50
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/Tile.tsx
+  s_b661d94074bd8f::t_27a8c43ad9dc31 25-26,31-32,35-39,53,62,80-86
+  s_b661d94074bd8f::t_97d8828a9b6c1d 87-88
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/database.test.ts
+  s_b661d94074bd8f::t_741640a519121f 45,48
+  s_b661d94074bd8f::t_f916fb5934787a 11,41-44,46-47,49-71
+  s_b661d94074bd8f::t_5ed4f233e16ba0 72-73,86
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/posthog-server.test.ts
+  s_b661d94074bd8f::t_6ea711d659d3cd 3,8-9,20,22-23,37,63,68-69,73-95
+  s_b661d94074bd8f::t_c51eae36d1bfd3 10-13
+  s_b661d94074bd8f::t_faf52cb77dc81e 96
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/search.test.ts
+  s_b661d94074bd8f::t_c892c6d6eb35bb 3-4,69-80,83,85,89-103
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/schema.ts
+  s_b661d94074bd8f::t_7e12f61df6bf1d 9
+  s_b661d94074bd8f::t_0929c426d3397f 4,128
+  s_b661d94074bd8f::t_f916fb5934787a 108-110,129-132
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261003234935_tile-direction-check/migration.sql
+  s_b661d94074bd8f::t_0929c426d3397f 1-2
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261003234935_tile-direction-check/snapshot.json
+  s_b661d94074bd8f::t_0929c426d3397f 1-936
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/iam.test.ts
+  s_b661d94074bd8f::t_9d189da08560b1 7-8,23-27,31-33,35-36,91
+  s_b661d94074bd8f::t_9ea7a519bfd570 1-6,9-22,28-30,34,37-90,92-137
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_b661d94074bd8f::t_90528246c81735 14,32,47
+.github/workflows/hexframe-previews.yml
+  s_b661d94074bd8f::t_67e938caf515c0 33-34
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/tile.ts
+  s_b661d94074bd8f::t_90caf18830eb48 31-35,37-39
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/system.ts
+  s_b661d94074bd8f::t_f916fb5934787a 43-45
+  s_b661d94074bd8f::t_3d82fb14396e2a 46-54,57,60,68
+  s_b661d94074bd8f::t_f459e2172cc27c 42
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/bus.test.ts
+  s_b661d94074bd8f::t_dfc5f2c1916df1 72-75
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_b661d94074bd8f::t_a28045b905eadc 36-37,45
+  s_b661d94074bd8f::t_b24531ab70b7cb 35
+  s_b661d94074bd8f::t_3b88a58d83cf12 46
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/iam/guard.ts
+  s_b661d94074bd8f::t_2222fe9e67ca3b 61
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/posthog-server.ts
+  s_b661d94074bd8f::t_e04b7ad485b75b 37-45
+  s_b661d94074bd8f::t_ef760ec2b34e8e 3,46,56-61,70-71
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/channels.ts
+  s_b661d94074bd8f::t_d1dcf9c8f3a34b 11,13,18-20,24,47-52
+  s_b661d94074bd8f::t_a6509b5a4853ca 53-54
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/TileActions.tsx
+  s_b661d94074bd8f::t_dfc5f2c1916df1 28,39,67-69,71-76
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/ReadBoundary.tsx
+  s_b661d94074bd8f::t_d1dcf9c8f3a34b 12,15-17,26,44
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/channels.test.ts
+  s_b661d94074bd8f::t_7f20a0f48ed74c 9,12-15,63-64,68,79,82,94-102,129-148
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE.md
+  s_b661d94074bd8f::t_a3a44043c21f23 22-23
+4-software-engineering/1-projects/1-hexframe/STACK.md
+  s_b661d94074bd8f::t_fb749e553476a4 40,63,121
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE.md
+  s_b661d94074bd8f::t_a3a44043c21f23 22
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_b661d94074bd8f::t_67e938caf515c0 40
+  s_b661d94074bd8f::t_48227ed68a1ddd 69
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE.md
+  s_b661d94074bd8f::t_491f73edfad93f 27
+  s_b661d94074bd8f::t_a3a44043c21f23 32
+4-software-engineering/1-projects/1-hexframe/1-app/vite.config.ts
+  s_b661d94074bd8f::t_d3530ed2672b93 8,10-11,13-16,18-37
+  s_b661d94074bd8f::t_f5fd4d515ffd26 38
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_b661d94074bd8f::t_a3a44043c21f23 33,42-43
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/geometry/layout.test.ts
+  s_b661d94074bd8f::t_4ad4f5aa6dd023 108,114
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE.md
+  s_b661d94074bd8f::t_55deaa61530509 22-23
+  s_b661d94074bd8f::t_3e42a28ce40d8e 21,27
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/lint.test.ts
+  s_b661d94074bd8f::t_5b3605dc405d77 79-81
+  s_b661d94074bd8f::t_be9e364d195286 173-181
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/look.tsx
+  s_b661d94074bd8f::t_6d402e00fb5631 17,46
+  s_b661d94074bd8f::t_dfc5f2c1916df1 23-28
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/CLAUDE.md
+  s_b661d94074bd8f::t_45d4690db293f2 19
+  s_b661d94074bd8f::t_1aeebac2c62695 33
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/CLAUDE.md
+  s_b661d94074bd8f::t_45d4690db293f2 18,25
+  s_b661d94074bd8f::t_85a832ec73bc10 17,19
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/view/view.ts
+  s_b661d94074bd8f::t_6d402e00fb5631 51,138-141
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/Frame.tsx
+  s_b661d94074bd8f::t_27a8c43ad9dc31 38-39,43-48,58
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/surfaces/Card.tsx
+  s_b661d94074bd8f::t_6d402e00fb5631 14-17
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/sentry.test.ts
+  s_b661d94074bd8f::t_92908cdb4d48fe 34-42,76-81,83-91,93-95,164-179
+  s_b661d94074bd8f::t_e04b7ad485b75b 82,92
+  s_b661d94074bd8f::t_c51eae36d1bfd3 146,148
+  s_b661d94074bd8f::t_24b42a0034716f 96
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/TileCard.tsx
+  s_b661d94074bd8f::t_947dd792258d62 26
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/search.ts
+  s_b661d94074bd8f::t_b058532840e3d9 7-8,24-30,74-76,78,82-84
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/iam.ts
+  s_b661d94074bd8f::t_5361b7ab0a1c59 14
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/CLAUDE.md
+  s_b661d94074bd8f::t_f5bbe753fd7edf 17
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.test.ts
+  s_b661d94074bd8f::t_3ab4c2867dd944 238-239
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/timeline.test.ts
+  s_b661d94074bd8f::t_30f8285821bc69 74-78
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/timeline.ts
+  s_b661d94074bd8f::t_2883c66557fe3d 60-62,66,69
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/System.tsx
+  s_b661d94074bd8f::t_9b3d68473c092e 13-20,27,34-35,59-60,62-63,68
+4-software-engineering/1-projects/1-hexframe/1-app/vitest.config.ts
+  s_b661d94074bd8f::t_b8b51afa07c106 3-5,8-9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "38795c0f4d1ebf431b5dd35fd7c628a839a3c6cf",
+  "prompts": {},
+  "sessions": {
+    "s_b661d94074bd8f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b310efd9-cf35-4262-bdce-a5d6d86a0d23",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
