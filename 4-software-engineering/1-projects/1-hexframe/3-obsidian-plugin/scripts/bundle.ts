@@ -20,9 +20,6 @@ export async function bundle({ outDir, dev }: { outDir: string; dev: boolean }) 
   await (dev ? writeFile(hotReload, '') : rm(hotReload, { force: true }))
 
   return esbuild.context({
-    // Paths in the output are relative to the package wherever the build runs from, so the same
-    // sources give the same bytes.
-    absWorkingDir: packageDir,
     entryPoints: [join(packageDir, 'src/main.ts')],
     outfile: join(outDir, 'main.js'),
     bundle: true,

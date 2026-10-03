@@ -31,8 +31,15 @@ describe('bundle', () => {
     expect(await readFile(join(outDir, name), 'utf8')).toBe(source)
   })
 
-  it('builds production deterministically: the same sources give the same bytes', async () => {
-    expect(await build(false)).toBe(await build(false))
+  it('builds production deterministically: the same sources give the same bytes in any folder', async () => {
+    const first = await build(false)
+    const otherDir = outDir
+    outDir = await mkdtemp(join(tmpdir(), 'hexframe-plugin-other-'))
+    try {
+      expect(await build(false)).toBe(first)
+    } finally {
+      await rm(otherDir, { recursive: true, force: true })
+    }
   })
 
   it('leaves the obsidian API to Obsidian, as a CommonJS module', async () => {
