@@ -33,14 +33,14 @@ Before a launch, nothing of these projects should be in progress outside the run
 
 ## Project runs
 
-The two configs beside `run.yaml` run one project each with [[.skills/1-ship/run-autonomous-project/SKILL|run-autonomous-project]], on a project branch I merge into `main` once its phase-close ticket is done. They differ from `run.yaml` in their target, their project, and what they freeze: `1-app/` is frozen in both, and the Obsidian plugin's run may write `.obsidian/plugins/hexframe/`, `.obsidian/community-plugins.json` and `.obsidian/CLAUDE.md`.
+The two configs beside `run.yaml` run one project each with [[.skills/4-softeng/1-ship/run-autonomous-project/SKILL|run-autonomous-project]], on a project branch I merge into `main` once its phase-close ticket is done. They differ from `run.yaml` in their target, their project, and what they freeze: `1-app/` is frozen in both, and the Obsidian plugin's run may write `.obsidian/plugins/hexframe/`, `.obsidian/community-plugins.json` and `.obsidian/CLAUDE.md`.
 
 The plugin builds on the shared shape the mod's project extracts, so the order is fixed:
 
 ```
-/run-autonomous-project "hexframe Claude Code mod" --config 4-software-engineering/1-projects/1-hexframe/.run/claude-mod.yaml
+/softeng:ship:run-autonomous-project "hexframe Claude Code mod" --config 4-software-engineering/1-projects/1-hexframe/.run/claude-mod.yaml
 # merge project/claude-mod into main
-/run-autonomous-project "hexframe Obsidian plugin" --config 4-software-engineering/1-projects/1-hexframe/.run/obsidian-plugin.yaml
+/softeng:ship:run-autonomous-project "hexframe Obsidian plugin" --config 4-software-engineering/1-projects/1-hexframe/.run/obsidian-plugin.yaml
 ```
 
 ## Registers
