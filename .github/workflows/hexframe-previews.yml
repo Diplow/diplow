@@ -1,0 +1,29 @@
+# Deletes a pull request's Neon branch once it closes. Neon's Vercel integration forks
+# `preview/<git branch>` for every preview Vercel deploys, a note's pull request included, and never
+# deletes it; the free plan holds 10 branches, and a full project fails every new preview before it
+# builds. So, unlike hexframe.yml, this one is not path-filtered: it runs on every closed pull
+# request, and does nothing when the branch has no Neon branch.
+name: hexframe previews
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  delete-neon-branch:
+    # A fork's pull request gets no secrets, and Vercel deploys no preview for it.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: delete preview/<branch> on Neon, if it exists
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
+          BRANCH: preview/${{ github.head_ref }}
+        run: |
+          api="https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches"
+          id=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api" \
+            | jq -r --arg name "$BRANCH" '.branches[] | select(.name == $name) | .id')
+          if [ -z "$id" ]; then echo "No Neon branch named $BRANCH."; exit 0; fi
+          curl -fsS -X DELETE -H "Authorization: Bearer $NEON_API_KEY" "$api/$id" > /dev/null
+          echo "Deleted Neon branch $BRANCH ($id)."
