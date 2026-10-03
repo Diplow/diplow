@@ -5,7 +5,11 @@
 // drawing for that hex's file, rendered, or the Tile's CLAUDE.md when no hex is selected. A ring
 // that overflows shows as a list of its names instead, each opening as its hex would.
 import type { Elements, EngineInterface, On } from 'claude-code'
-import { leafPreview, markdownOf, oneLine } from './markdown.js'
+import { outline } from './draw/outline.js'
+import { paint, scaleFor } from './draw/raster.js'
+import { drawSvg } from './draw/svg.js'
+import { footerRows, rowGap, type Control } from './footer.js'
+import { leafPreview, markdownPreview, oneLine, type Shown } from './markdown.js'
 import { exclusionsFile, exclusionsFrom, patternOf } from './shape/exclusions.js'
 import { layoutView } from './shape/layout.js'
 import {
@@ -13,7 +17,6 @@ import {
   bodySources,
   directions,
   type Clash,
-  frameKinds,
   join,
   kindsOf,
   membersOf,
@@ -34,16 +37,8 @@ import {
   type Tile,
   unreadable,
 } from './shape/node.js'
-import { paint, scaleFor } from './raster.js'
-import { drawSvg } from './svg.js'
 
 const pane = 'hexframe'
-
-/** The generations the pane shows from the center, as STACK.md gives claude-mod. */
-const depth = 1
-
-/** Rows the pane keeps under the drawing: the controls and the path. */
-const footerRows = 4
 
 let folder: string | undefined
 let frame: Frame | undefined
@@ -88,30 +83,33 @@ export function register(on: On) {
     if (e.requestId !== pane) return next(e)
     const ui = $.ui.resolve(e)
     const ring = ringOf(frame, frameKind)
-    const clashes = ring.overflowing || preview ? [] : ring.clashes
-    const footer = footerOf($, ui, membersOf(ring), clashes)
+    const clashes = preview ? [] : clashesOf(frame, frameKind)
+    const controls = controlsOf($, membersOf(ring))
+    const footer = footerOf(ui, controls, clashes)
     const column = (children: ReturnType<Ui['Box']>[]) =>
-      ui.Box({ flexDirection: 'column', rowGap: 1, children })
+      ui.Box({ flexDirection: 'column', rowGap, children })
 
     if (!frame) return ui.Box({ flexDirection: 'column', children: footer })
     // The controls go on top of a preview or a list: a long one scrolls, and they stay in sight.
     if (preview) return column([...footer, previewElement(ui, preview)])
     if (ring.overflowing) return column([...footer, ...listOf($, ui, ring)])
 
-    const placements = layoutView({ frame, frameKind }, depth)
+    const view = { frame, frameKind }
+    const placements = layoutView(view)
     if (e.surface === 'terminal') {
       const { Raster } = $.ui.resolve(e)
-      const rows = e.props.scroll.bodyRows - footerRows - noteRows(e.props.bodyColumns, clashes)
-      const scale = scaleFor(e.props.bodyColumns, rows)
+      const { bodyColumns, scroll } = e.props
+      const under = footerRows(bodyColumns, { problem, hasClashes: clashes.length > 0, controls })
+      const scale = scaleFor(bodyColumns, scroll.bodyRows - under)
       const drawing =
         scale === undefined
-          ? ui.Text({ children: [outline(frame, frameKind)] })
+          ? ui.Text({ children: [outline(view, selected)] })
           : Raster({ key: 'frame', ...paint(placements, scale, selected) })
       return column([drawing, ...footer])
     }
     const { Svg } = $.ui.resolve(e)
     return column([
-      Svg({ source: drawSvg(placements, selected), alt: outline(frame, frameKind) }),
+      Svg({ source: drawSvg(placements, selected), alt: outline(view, selected) }),
       ...footer,
     ])
   })
@@ -122,9 +120,8 @@ type Ui = Pick<Elements['terminal'], 'Box' | 'Text' | 'Button' | 'Markdown'>
 
 /** The lines that go with the drawing: the red one, the clashes, the controls and where the pane is. */
 function footerOf(
-  $: EngineInterface,
   { Box, Text, Button }: Ui,
-  members: Partial<Record<Direction, Member>>,
+  controls: readonly PaneControl[],
   clashes: readonly Clash[],
 ) {
   return [
@@ -134,33 +131,44 @@ function footerOf(
       flexDirection: 'row',
       flexWrap: 'wrap',
       columnGap: 2,
-      children: controlsOf($, Button, members),
+      children: controls.map((control) => Button({ ...control, plain: true })),
     }),
     Text({ dimColor: true, wrap: 'truncate-start', children: [oneLine(where())] }),
   ]
 }
 
+/** A control of the pane: what its Button draws, and what pressing it does. */
+type PaneControl = Control & {
+  key: string
+  hotkey: string
+  dimColor?: true
+  onPress: () => unknown
+}
+
 /** A button per member, then the pane's keys. */
 function controlsOf(
   $: EngineInterface,
-  Button: Ui['Button'],
   members: Partial<Record<Direction, Member>>,
-) {
+): PaneControl[] {
   const nextKind = cycle(frame, frameKind)
   // Each key's label opens with its hotkey, as the pane shows it.
-  const key = (name: string, label: string, onPress: () => unknown) =>
-    Button({ key: name, label, hotkey: label.charAt(0), plain: true, dimColor: true, onPress })
+  const key = (name: string, label: string, onPress: () => unknown): PaneControl => ({
+    key: name,
+    label,
+    hotkey: label.charAt(0),
+    dimColor: true,
+    onPress,
+  })
   return [
     ...directions.flatMap((direction) => {
       const member = members[direction]
       if (!member) return []
-      return Button({
+      return {
         key: `open-${direction}`,
         label: oneLine(`${direction} ${member.tile.title}`),
         hotkey: String(direction),
-        plain: true,
         onPress: () => openMember($, direction),
-      })
+      }
     }),
     key('up', 'u up', () => go($, parent(folder ?? '/'))),
     key('ring', `c ${nextKind}`, () => {
@@ -210,12 +218,6 @@ function clashLine(Text: Elements['terminal']['Text'], clashes: readonly Clash[]
     wrap: 'truncate-end',
     children: [oneLine(named.join('  ·  '))],
   })
-}
-
-/** The rows the drawing leaves to the lines above the controls: the red one wraps, the clashes' doesn't. */
-function noteRows(columns: number, clashes: readonly Clash[]): number {
-  const problemRows = problem ? Math.ceil(problem.length / Math.max(1, columns)) : 0
-  return problemRows + (clashes.length > 0 ? 1 : 0)
 }
 
 /** An overflowing ring as the pane shows it: the hint, then every candidate's name as a button. */
@@ -282,15 +284,26 @@ async function loadFrame(
 ): Promise<Frame> {
   const sorted = sortEntries(await $.fs.list(path), exclusions)
   const rings: Rings<Member> = {}
-  for (const kind of frameKinds) {
+  if (sorted.children) rings.children = await loadRing($, path, sorted.children)
+  for (const kind of ['branches', 'leaves', 'context'] as const) {
     const ring = sorted[kind]
     if (ring) rings[kind] = await loadRing($, path, ring)
   }
   return { tile: tileOf(path, textOf(body)), rings }
 }
 
-/** Reads the Tile of each seated member; an overflowing ring stays names, and reads no file. */
-async function loadRing($: EngineInterface, path: string, ring: Ring<Slot>): Promise<Ring<Member>> {
+/** A seated ring of Slots, `R`, with each one's Tile read. */
+type Loaded<R extends SeatedRing<Slot>> = Omit<R, 'members'> & SeatedRing<Member>
+
+/**
+ * Reads the Tile of each seated member, keeping what else the ring carries, a Children ring its
+ * clashes; an overflowing ring stays names, and reads no file.
+ */
+async function loadRing<R extends SeatedRing<Slot>>(
+  $: EngineInterface,
+  path: string,
+  ring: R | OverflowingRing,
+): Promise<Loaded<R> | OverflowingRing> {
   if (ring.overflowing) return ring
   const members: SeatedRing<Member>['members'] = {}
   for (const direction of directions) {
@@ -315,7 +328,13 @@ function ringOf(shown: Frame | undefined, kind: FrameKind): Ring<Member> {
   return shown?.rings[kind] ?? empty
 }
 
-const empty: SeatedRing<Member> = { overflowing: false, members: {}, clashes: [] }
+const empty: SeatedRing<Member> = { overflowing: false, members: {} }
+
+/** The clashes the shown Frame's ring names: a seated Children ring's, and no other's. */
+function clashesOf(shown: Frame | undefined, kind: FrameKind): readonly Clash[] {
+  const children = kind === 'children' ? shown?.rings.children : undefined
+  return children?.overflowing === false ? children.clashes : []
+}
 
 const ringNames: Record<FrameKind, string> = {
   children: 'Children',
@@ -341,7 +360,7 @@ function cycle(shown: Frame | undefined, kind: FrameKind): FrameKind {
 }
 
 /** What the preview shows: a file as Markdown, or a note saying why there is nothing to render. */
-type Preview = { label: string } & ({ markdown: string } | { note: string })
+type Preview = { label: string } & Shown
 
 /** A Tile's body file, by name. */
 type Body = { name: string } & FileRead
@@ -360,10 +379,7 @@ function previewOfFolder(tile: Tile, body: Body | undefined): Preview {
   }
   const label = `${tile.title}'s ${body.name}`
   if ('unread' in body) return { label, note: `Can't show ${label}: ${body.unread}` }
-  const markdown = markdownOf(body.text)
-  return markdown === ''
-    ? { label, note: `${label} holds only its frontmatter.` }
-    : { label, markdown }
+  return { label, ...markdownPreview(label, body.text) }
 }
 
 /** A member's file: a folder's body file, or a Leaf itself. */
@@ -423,17 +439,4 @@ async function readInFolder(
 
 function where(): string {
   return `${folder ?? ''}  ·  ${preview ? preview.label : frameKind}`
-}
-
-/** The Frame as lines of text, where no drawing fits and for readers that can't see one. */
-function outline(shown: Frame, kind: FrameKind): string {
-  const members = membersOf(ringOf(shown, kind))
-  const lines = [shown.tile.title, ...(shown.tile.preview ? [shown.tile.preview] : []), '']
-  for (const direction of directions) {
-    const mark = direction === selected ? '›' : ' '
-    const member = members[direction]
-    const file = member?.kind === 'leaf' ? `  (${basename(member.tile.path)})` : ''
-    lines.push(`${mark}${direction}  ${member?.tile.title ?? '·'}${file}`)
-  }
-  return lines.map(oneLine).join('\n')
 }

@@ -63,13 +63,25 @@ export function isText(text: string): boolean {
   return !text.slice(0, 8000).includes('\u0000')
 }
 
+/** What the preview shows of a file: its Markdown, or a note saying why there is nothing to render. */
+export type Shown = { markdown: string } | { note: string }
+
+/**
+ * What the preview shows of a Markdown file read as `text`, a folder's body file or a Leaf, named
+ * `label`: its Markdown, or a note when it holds only its frontmatter.
+ */
+export function markdownPreview(label: string, text: string): Shown {
+  const markdown = markdownOf(text)
+  return markdown === '' ? { note: `${label} holds only its frontmatter.` } : { markdown }
+}
+
 /**
  * What the preview shows of a Leaf read as `text`: Markdown rendered, any other text as a fence, or
  * a note when it is not text or has nothing to show.
  */
-export function leafPreview(name: string, text: string): { markdown: string } | { note: string } {
+export function leafPreview(name: string, text: string): Shown {
   if (!isText(text)) return { note: `${name} is not a text file.` }
-  const markdown = isMarkdown(name) ? markdownOf(text) : codeOf(text)
-  if (markdown !== '') return { markdown }
-  return { note: isMarkdown(name) ? `${name} holds only its frontmatter.` : `${name} is empty.` }
+  if (isMarkdown(name)) return markdownPreview(name, text)
+  const code = codeOf(text)
+  return code === '' ? { note: `${name} is empty.` } : { markdown: code }
 }

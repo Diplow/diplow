@@ -1,7 +1,7 @@
 // Where each hex of a view sits: the centered Tile and a ring of six around it, pointy-top, in
-// units where the ring's spacing makes neighbors share a side. Deeper generations sit inside the
-// hex of the member they expand. A renderer scales it; claude-mod's raster sets its own pixel-art
-// hexes on the same lattice.
+// units where the ring's spacing makes neighbors share a side. One generation, claude-mod's depth:
+// a deeper one comes with the medium that shows it. A renderer scales it; claude-mod's raster sets
+// its own pixel-art hexes on the same lattice.
 import {
   directions,
   membersOf,
@@ -17,25 +17,17 @@ export interface Point {
   y: number
 }
 
-/** A Frame as a view shows it: the kind its ring shows, and the members it opens as Frames. */
+/** A Frame as a view shows it: the kind its ring shows. */
 export interface FrameView {
   frame: Frame
   frameKind: FrameKind
-  expanded?: Partial<Record<Direction, FrameView>>
 }
 
-/** A hex of the view; `radius` is 1 at the first generation and a third of it at each next one. */
+/** A hex of the view, each of radius 1. */
 export type Placement =
-  | { kind: 'center'; center: Point; radius: number; tile: Tile }
-  | {
-      kind: 'member'
-      memberKind: MemberKind
-      direction: Direction
-      center: Point
-      radius: number
-      tile: Tile
-    }
-  | { kind: 'empty'; direction: Direction; center: Point; radius: number }
+  | { kind: 'center'; center: Point; tile: Tile }
+  | { kind: 'member'; memberKind: MemberKind; direction: Direction; center: Point; tile: Tile }
+  | { kind: 'empty'; direction: Direction; center: Point }
 
 const sqrt3 = Math.sqrt(3)
 
@@ -46,51 +38,29 @@ const neighborAngle: Record<Direction, number> = { 1: 120, 2: 60, 3: 0, 4: -60, 
 export const viewWidth = 3 * sqrt3
 export const viewHeight = 5
 
-/** A Frame opened inside a hex takes a third of its radius: its ring then touches that hex's sides. */
-const generationScale = 1 / 3
-
 /**
- * The hexes of a view `depth` generations deep, centered in a box of `viewWidth` by `viewHeight`,
- * in the order to paint them. At depth 1, the seven hexes of one Frame. Deeper, a member found in
- * `expanded` shows as its own Frame, in place of its hex; past the depth it stays one hex. A Frame
- * whose ring overflows has no member to place: a medium shows that ring as a list instead.
+ * The seven hexes of one Frame, centered in a box of `viewWidth` by `viewHeight`, in the order to
+ * paint them: its Tile, then its ring by direction. A Frame whose ring overflows has no member to
+ * place: a medium shows that ring as a list instead.
  */
-export function layoutView(view: FrameView, depth: number): Placement[] {
-  return layoutAt(view, { x: viewWidth / 2, y: viewHeight / 2 }, 1, depth)
-}
-
-function layoutAt(view: FrameView, center: Point, radius: number, depth: number): Placement[] {
-  const { frame, frameKind } = view
+export function layoutView({ frame, frameKind }: FrameView): Placement[] {
+  const center = { x: viewWidth / 2, y: viewHeight / 2 }
   const members = membersOf(frame.rings[frameKind])
   return [
-    { kind: 'center', center, radius, tile: frame.tile },
-    ...directions.flatMap((direction): Placement[] => {
-      const at = neighbor(center, direction, radius)
+    { kind: 'center', center, tile: frame.tile },
+    ...directions.map((direction): Placement => {
+      const at = neighbor(center, direction)
       const member = members[direction]
-      const opened = view.expanded?.[direction]
-      if (member && opened && depth > 1) {
-        return layoutAt(opened, at, radius * generationScale, depth - 1)
-      }
-      return [
-        member
-          ? {
-              kind: 'member',
-              memberKind: member.kind,
-              direction,
-              center: at,
-              radius,
-              tile: member.tile,
-            }
-          : { kind: 'empty', direction, center: at, radius },
-      ]
+      return member
+        ? { kind: 'member', memberKind: member.kind, direction, center: at, tile: member.tile }
+        : { kind: 'empty', direction, center: at }
     }),
   ]
 }
 
-function neighbor(center: Point, direction: Direction, radius: number): Point {
+function neighbor(center: Point, direction: Direction): Point {
   const radians = (neighborAngle[direction] * Math.PI) / 180
-  const distance = sqrt3 * radius
-  return { x: center.x + distance * Math.cos(radians), y: center.y - distance * Math.sin(radians) }
+  return { x: center.x + sqrt3 * Math.cos(radians), y: center.y - sqrt3 * Math.sin(radians) }
 }
 
 /** The six corners, clockwise from the top one. */
