@@ -1,0 +1,19 @@
+.claude/settings.json
+  s_61922a4a3c813c::t_3ce64abc1fb329 55-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "11bb178214178a0c98b57fb6c6134458c645e413",
+  "prompts": {},
+  "sessions": {
+    "s_61922a4a3c813c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "da471f4a-6df8-47c0-9c3e-b45603dded5d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
