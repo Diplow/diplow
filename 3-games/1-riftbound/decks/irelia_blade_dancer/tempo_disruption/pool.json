@@ -1,0 +1,74 @@
+{
+  "_principle": "Sous-ensemble large des cartes légales pour ce deck tempo-disruption : si une carte touche au plan (voir guide.md), elle est ici avec un statut et un rôle articulé. PAS la liste jouée (voir list.json) ni l'ensemble exhaustif légal (build_pool.py). Identité : threat-spread (menaces autonomes) + paquet d'interaction dense protégeant Irelia, plutôt que voltron mono-menace.",
+  "_status_values": {
+    "included":    "actuellement dans le main_deck",
+    "sideboard":   "actuellement dans le sideboard",
+    "battlefield": "dans les 3 battlefields apportés",
+    "candidate":   "à tester / envisager — pas encore inclus",
+    "considered":  "regardé mais mis de côté, peut revenir",
+    "excluded":    "écarté avec raison documentée — éviter de re-débattre"
+  },
+  "_axes_de_synergie": {
+    "threat_spread": "menaces autonomes diversifiées (Vex Apathetic, Fizz Trickster, Scuttle Crab, Stellacorn Herder, Adaptatron) — résout la dépendance mono-menace : on n'a pas besoin de LA bonne carte, juste d'assez de corps. Irelia reste le finisher mais n'est pas le seul plan (threat_distribution.md).",
+    "interaction_dense": "le coeur du shell : counters (Defy, Not So Fast, Hard Bargain) + removal tempo (Gust, Charm, Rebuke, Star-Crossed) + tricks Reaction (Discipline, Defiant Dance, En Garde). Protège Irelia ET conteste les terrains.",
+    "move_save": "Ride the Wind / Flash / Tideturner / Syren-like : repositionnent ET ready pour esquiver les trades perdants ou voler un point en gankant un 2e field tour adverse.",
+    "choose_trigger": "Irelia Fervent +1 Might quand choose OU ready ; déclenché par les sorts qui la ciblent, les attaches (GA/Boots), les moves. Defiant Dance/Discipline = choose + combat trick.",
+    "protection_irelia": "Deflect natif + Guardian Angel + Zhonya's Hourglass + le mur de counters. Ne pas gaspiller Irelia avant de pouvoir la protéger (gameplan)."
+  },
+  "cards": [
+    { "name": "Irelia, Blade Dancer", "status": "included", "role": "Légende — choose une unité amie → exhaust + 1 rune → ready ; conquer → 1 én. → ready la Légende. Finisher de la game." },
+    { "name": "Irelia, Fervent",      "status": "included", "role": "Chosen Champion — +1 Might quand choose OU ready ce tour ; Deflect. Menace primaire à protéger, pas à jeter tôt." },
+
+    { "name": "Vex, Apathetic",       "status": "included", "role": "Menace autonome Chaos E4 M4 — Deflect ; stun toute unité adverse jouée pendant qu'elle tient un field. Holdeuse anti-développement (accelerate/sprites/reflection). 2 copies." },
+    { "name": "Fizz, Trickster",      "status": "included", "role": "Menace autonome Chaos E3 M3 P1 — rejoue un sort du trash (≤3 én., ignore coût d'énergie, recycle). Valeur + relance d'un counter/trick. 1 copie." },
+    { "name": "Scuttle Crab",         "status": "included", "role": "Corps cantrip Calm E2 M0 — draw on play ; M0 conquer/hold gratuit ; Deathknell info. Holder bon marché + carburant draw. 3 copies (justifie 2 Stellacorn au lieu de 3)." },
+    { "name": "Stellacorn Herder",    "status": "included", "role": "Menace move-loot Calm E4 M3 — when I move, draw 1. Avantage de cartes via Ride the Wind/Tideturner. Descendu à 2 copies (draw assuré par Scuttle/move). 2 copies." },
+    { "name": "Adaptatron",           "status": "included", "role": "Corps Calm E4 M3 — conquer → kill un gear pour se buffer (+1 Might récurrent). Grandit en scorant + removal de gear adverse incident. 1 main / 2 SB." },
+
+    { "name": "Tideturner",           "status": "included", "role": "Unit Chaos E2 M2 — Hidden ; play → swap de position avec un ami à un autre lieu. Reposition + choose-trigger. 3 copies (clé de la mobilité)." },
+    { "name": "Ride the Wind",        "status": "included", "role": "Spell Action Chaos E2/P1 — Move un ami ET le ready. Sauve d'un trade (recall esquivé), vole un point en gankant, ou double-trigger Irelia (choose + ready). 2 copies. NB Action : ton tour/showdown, pas un trick au tour adverse." },
+    { "name": "Flash",               "status": "included", "role": "Spell [Reaction] 2 én. générique — 'Move up to 2 friendly units to base.' SAVE INSTANTANÉ de combat (vrai Reaction, contrairement à Ride the Wind qui est Action). 'Move' explicite → déclenche les when-I-move (Stellacorn draw, à valider règles) + choose Irelia Fervent (+1 Might). Contrepartie : les unités quittent le field (perte de hold). 1 copie.", "_note": "Set OGS 011/024 — absent de sets/*/source.json et de sets_legal (OGN/SFD/UNL). Légalité OGS à confirmer. Domaine probable Calm (badge teal), sans pip coloré." },
+
+    { "name": "Discipline",           "status": "included", "role": "Spell Reaction Calm E2 — +2 Might + draw + un choose. Vrai combat trick + carte. 3 copies." },
+    { "name": "Defiant Dance",        "status": "included", "role": "Spell Reaction Calm/Chaos E1/P1 (signature) — +2 / -2 Might, choose-trigger + swing de combat. 3 copies." },
+    { "name": "En Garde",             "status": "included", "role": "Spell Reaction Calm E1 — +1 Might (+1 de plus si seul à ce lieu). Trick bon marché ; pump l'Irelia solo. 2 copies." },
+
+    { "name": "Defy",                 "status": "included", "role": "Spell Reaction Calm E1/P1 — counter ciblé bon marché (sort ≤ seuil). Pilier anti-removal/anti-trick. 3 copies." },
+    { "name": "Not So Fast",          "status": "included", "role": "Spell Reaction Calm E2/P1 — counter ce qui CHOOSE une unité/gear ami. Bouclier dédié anti-removal sur Irelia. 2 copies." },
+    { "name": "Hard Bargain",         "status": "included", "role": "Spell Reaction Chaos E2 [Repeat] — taxe : counter sauf paiement 2 én. Tempo-counter qui passe sous les mains tapées. 1 copie." },
+
+    { "name": "Gust",                 "status": "included", "role": "Spell Reaction Chaos E1 — bounce une unité ≤3 Might à un battlefield. Removal tempo bon marché vs early aggro / blockers (Yi, LeBlanc cf SB). 2 main / 1 SB." },
+    { "name": "Charm",                "status": "included", "role": "Spell Calm E1/P1 — move an enemy unit. Removal conditionnel (l'attire où on la bat) / désengage un holder. 2 copies." },
+    { "name": "Rebuke",               "status": "included", "role": "Spell Action Chaos E2/P2 — return une unité à un battlefield en main. Removal tempo dur. 1 copie. NB Action (pas Reaction)." },
+
+    { "name": "Guardian Angel",       "status": "included", "role": "Equipment Calm E2 (+1 Might) — si l'unité allait mourir : tue le gear, heal/exhaust/recall. Protection d'Irelia + choose à l'attache. 2 copies." },
+    { "name": "Boots of Swiftness",   "status": "included", "role": "Equipment Chaos E3 (+2 Might) — donne Ganking : conquer un field, ready la Légende, repars sur le 2e. Mobilité de score + choose. 2 copies." },
+    { "name": "Zhonya's Hourglass",   "status": "included", "role": "Gear Calm E2 — Hidden ; redirige la mort de N'IMPORTE quel ami (heal/exhaust/recall). Protection flexible non liée au porteur. 1 copie." },
+
+    { "name": "Targon's Peak",        "status": "battlefield", "role": "Battlefield — conquer → ready 2 runes en fin de tour. Game 1 going-first après G1 : avantage de runes en restançant 2 après un play T2 (gameplan)." },
+    { "name": "Sunken Temple",        "status": "battlefield", "role": "Battlefield Colorless — conquer ici avec 1+ unité Mighty (5+) → payer 1 én. → draw 1. Game 2 vs decks sans gros Might (gameplan)." },
+    { "name": "Abandoned Hall",       "status": "battlefield", "role": "Battlefield — chaque sort joué → +1 Might à une unité ici. Empile avec le mur de Reactions/counters. Souvent posé Game 1 (gameplan)." },
+
+    { "name": "Find Your Center",     "status": "sideboard", "role": "Spell Action Calm E3 (-2 si score adverse proche victoire) — draw 1 + channel 1 rune exhausted. Lissage + ramp quand on peut jouer plus lentement. IN going-second vs slow, OUT 2x Scuttle Crab (gameplan). 2 SB." },
+    { "name": "Star-Crossed",         "status": "sideboard", "role": "Spell Reaction Chaos E3/P1 — bounce un ami ET un ennemi. Sauve Irelia d'un trade ET retire une menace, en Reaction. 2 SB." },
+    { "name": "Heart of Dark Ice",    "status": "sideboard", "role": "Gear Calm E3/P1 — exhaust : +3 Might à une unité ce tour. PAS un trick (Neutral) mais moteur de pump proactif répétable (Mighty pour Sunken Temple, ou push un score). 1 SB.", "note": "Voir rules_traps.md : Neutral speed, sur ton tour hors showdown/chain." },
+
+    { "name": "Wind Wall",            "status": "candidate", "role": "Spell Reaction Calm E3/P2 — counter inconditionnel d'un sort. Counter dur sans cap (vs combo/gros removal) si Defy ne suffit pas. SB.", "priority": "medium" },
+    { "name": "Abandon",              "status": "candidate", "role": "Spell Reaction Chaos E3 — counter + renvoie le sort en main + predict. Tempo-counter qui predict net (relisible par Fizz).", "priority": "low" },
+    { "name": "Sterak's Gage",        "status": "candidate", "role": "Equipment Calm (+3 Might) Quick-Draw = vrai trick de combat en Reaction n'importe où + choose. Renfort si on veut une menace équipée plus dure. Cher.", "priority": "low" },
+
+    { "name": "Find Your Center (3rd)","status": "considered", "role": "3e copie possible main si le shell veut plus de cycle/ramp dans les MU lents." },
+    { "name": "Yasuo, Windrider",     "status": "considered", "role": "Champion Chaos E5 M4 — Ganking, 3e move du tour → score. Menace de mobilité exploitant Ride the Wind/Tideturner/Flash. Concurrence la courbe T5 d'Irelia." },
+    { "name": "Sona, Harmonious",     "status": "considered", "role": "Moteur de runes du shell voltron — pas dans ce build (pas de boucle gourmande à alimenter). Mentionnée pour contraste." },
+    { "name": "Caitlyn, Patrolling",  "status": "considered", "role": "Menace secondaire equip du voltron — ici remplacée par les corps autonomes (Vex/Fizz/Adaptatron). Hors plan." },
+    { "name": "The Dreaming Tree",    "status": "excluded", "role": "—", "exclusion_reason": "BANNIE (banlist battlefields, format.json eff. 2026-03-30)." },
+    { "name": "Called Shot",          "status": "excluded", "role": "—", "exclusion_reason": "BANNIE (banlist cards)." }
+  ],
+  "_open_questions": [
+    "Flash : texte RÉSOLU (OGS 011/024, via image). Restent 2 vérifs — (a) légalité du set OGS dans le format (absent de sets_legal, mais liste regional-winning → présumé légal, couverture data à compléter) ; (b) ruling : 'Move ... to base' déclenche-t-il les when-I-move (Stellacorn) ? Le wording dit 'Move' (≠ recall), donc oui a priori, mais un move-to-base est inhabituel — cross-check rules/.",
+    "Runes 6/6 vs 7/5 : ce build penche Chaos (paquet d'interaction + menaces Chaos). Valider que le rune deck supporte les coûts colorés main + SB (les counters Calm Defy/NSF vs les removals Chaos).",
+    "2 Stellacorn Herder (au lieu de 3) : choix assumé du pilote (draw redondant avec Scuttle/move). À éprouver — est-ce que la 3e copie manque dans les MU grindy ?",
+    "Going-second : -2 Scuttle Crab / +2 Find Your Center, seulement si on peut ralentir (pas vs high-pressure/tempo). Cadrer quels MU exactement.",
+    "Comparaison structurelle au voltron_equipment : ce shell résout la mono-menace (threat_distribution.md) mais perd le plafond grind / la profondeur de runes Sona. Documenter quels MU favorisent lequel."
+  ]
+}

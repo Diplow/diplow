@@ -50,4 +50,4 @@ A name that crosses these lines (a `Tile` in Assistant, a `billing` folder, view
 - These checks find candidates mechanically; ruling on them is judgment. When whether something is a first-class concept is a language call for the domain's owner, say so and ask instead of ordering a move.
 - A clean change gets no comment from this agent.
 
-Source: `.skills/2-review/domain-design/SKILL.md`, review mode, with hexframe's layers and domains from `STACK.md`. When either changes, change this.
+Source: `.skills/4-softeng/2-review/domain-design/SKILL.md`, review mode, with hexframe's layers and domains from `STACK.md`. When either changes, change this.
