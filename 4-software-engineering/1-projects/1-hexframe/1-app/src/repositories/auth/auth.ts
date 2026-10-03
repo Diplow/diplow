@@ -164,15 +164,22 @@ export function baseURLOf(vercel: Option.Option<VercelHosts>): BaseURL {
   }
 }
 
-/** Vercel's system variables, when the app runs on Vercel. */
-const vercelHosts = Config.option(
-  Config.all({
-    environment: Config.String('VERCEL_ENV'),
-    deployment: Config.String('VERCEL_URL'),
-    branch: Config.option(Config.String('VERCEL_BRANCH_URL')),
-    production: Config.String('VERCEL_PROJECT_PRODUCTION_URL'),
-  }),
-)
+/**
+ * Vercel's system variables, when `VERCEL` says the app runs there; then each is required, but the
+ * branch's URL, so a deployment missing one fails to start rather than answering on localhost only.
+ */
+export const vercelHosts = Effect.gen(function* () {
+  if (Option.isNone(yield* Config.option(Config.String('VERCEL'))))
+    return Option.none<VercelHosts>()
+  return Option.some(
+    yield* Config.all({
+      environment: Config.String('VERCEL_ENV'),
+      deployment: Config.String('VERCEL_URL'),
+      branch: Config.option(Config.String('VERCEL_BRANCH_URL')),
+      production: Config.String('VERCEL_PROJECT_PRODUCTION_URL'),
+    }),
+  )
+})
 
 /** Better Auth, over the database, signing its cookies with `secret`, reached at `baseURL`. */
 function betterAuthWith(

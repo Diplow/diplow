@@ -1,8 +1,8 @@
 import { describe, expect, it, layer } from '@effect/vitest'
-import { Effect, Layer, Option } from 'effect'
+import { ConfigProvider, Effect, Exit, Layer, Option } from 'effect'
 
 import { TestDatabase } from '../database/testing'
-import { Auth, HttpExchange, baseURLOf, localBaseURL, make } from './auth'
+import { Auth, HttpExchange, baseURLOf, localBaseURL, make, vercelHosts } from './auth'
 import { testSecret } from './testing'
 
 const branch = 'hexframe-app-git-fix-team.vercel.app'
@@ -35,6 +35,41 @@ describe('the base URL', () => {
   it('answers on localhost off Vercel', () => {
     expect(baseURLOf(Option.none())).toBe(localBaseURL)
   })
+})
+
+describe('the Vercel hosts', () => {
+  const readFrom = (env: Record<string, string>) =>
+    vercelHosts.pipe(
+      Effect.provide(ConfigProvider.layer(ConfigProvider.fromEnvRecord(env))),
+      Effect.exit,
+    )
+  const onVercel = {
+    VERCEL: '1',
+    VERCEL_ENV: 'preview',
+    VERCEL_URL: preview.deployment,
+    VERCEL_BRANCH_URL: branch,
+    VERCEL_PROJECT_PRODUCTION_URL: preview.production,
+  }
+
+  it.effect('are read from Vercel’s system variables', () =>
+    Effect.gen(function* () {
+      expect(yield* readFrom(onVercel)).toEqual(Exit.succeed(Option.some(preview)))
+    }),
+  )
+
+  it.effect('are none off Vercel', () =>
+    Effect.gen(function* () {
+      expect(yield* readFrom({})).toEqual(Exit.succeed(Option.none()))
+    }),
+  )
+
+  it.effect('fail on Vercel when one is missing, rather than falling back to localhost', () =>
+    Effect.gen(function* () {
+      const withoutDeployment: Record<string, string> = { ...onVercel }
+      delete withoutDeployment.VERCEL_URL
+      expect(Exit.isFailure(yield* readFrom(withoutDeployment))).toBe(true)
+    }),
+  )
 })
 
 /** A request from a page on the preview's branch URL, to it, as a browser sends it. */
