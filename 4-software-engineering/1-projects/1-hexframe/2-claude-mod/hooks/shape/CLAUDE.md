@@ -27,7 +27,7 @@ A Claude Code mod loads only the files under its own folder: an import that leav
 | File | Holds |
 |---|---|
 | `node.ts` | A folder read as a Frame: its Tile from its `CLAUDE.md`, and from its listing, once the exclusions have left names out, the rings of the Frame kinds it offers (Children, or Branches and Leaves, then Context), each seated by direction with, for Children, its clashes, or overflowing with the list of its candidates; which file a Tile's body is read from, titles from names, the frontmatter, the path arithmetic |
-| `exclusions.ts` | What a folder leaves out: its `.hexframe/exclusions.yaml` parsed, with no YAML library, into names and globs, and the names every folder leaves out |
+| `exclusions.ts` | What a folder leaves out: its `.hexframe/exclusions.yaml` parsed, with no YAML library, into names and globs, matched in time linear in the name and the glob; the names every folder leaves out; and the exclusion that names a candidate, as a list shows it |
 | `layout.ts` | Where each hex of a view sits, `depth` generations deep, for the Frame kind the view shows. Depth 1 is one Frame, seven hexes; deeper, an expanded member shows its own Frame inside its hex, at a third of its radius, where its ring touches that hex's sides. Each member's hex says what it holds (a Branch, a Leaf or a Context tile), so a renderer fills it. A ring that overflows places no member: a medium shows it as a list |
 
 ## How a vault reads

@@ -6,7 +6,7 @@
 // that overflows shows as a list of its names instead, each opening as its hex would.
 import type { EngineInterface, On } from 'claude-code'
 import { leafPreview, markdownOf } from './markdown.js'
-import { exclusionsFile, parseExclusions, type Exclusion } from './shape/exclusions.js'
+import { exclusionsFile, parseExclusions, patternOf } from './shape/exclusions.js'
 import { layoutView } from './shape/layout.js'
 import {
   basename,
@@ -15,6 +15,7 @@ import {
   frameKinds,
   join,
   kindsOf,
+  membersOf,
   parent,
   resolvePath,
   sortEntries,
@@ -92,7 +93,8 @@ export function register(on: On) {
       $.ui.invalidate('ui.render')
     }
     const ring = ringOf(frame, frameKind)
-    const { members, clashes } = seated(ring)
+    const members = membersOf(ring)
+    const clashes = ring.overflowing ? [] : ring.clashes
     const nextKind = cycle(frame, frameKind)
     const controls = [
       ...directions
@@ -192,7 +194,7 @@ export function register(on: On) {
       const items = ring.candidates.map((slot, index) =>
         Button({
           key: `item-${index + 1}`,
-          label: labelOf(slot),
+          label: patternOf(slot),
           plain: true,
           onPress: () => openSlot($, slot),
         }),
@@ -221,7 +223,7 @@ export function register(on: On) {
 
 /** Opens the member in `direction`: walks into a Branch or a Context tile, shows a Leaf's file. */
 async function openMember($: EngineInterface, direction: Direction) {
-  const member = seated(ringOf(frame, frameKind)).members[direction]
+  const member = membersOf(ringOf(frame, frameKind))[direction]
   if (!member) return
   if (member.kind === 'leaf') {
     selected = direction
@@ -263,7 +265,7 @@ async function loadFrame(
   $: EngineInterface,
   path: string,
   body: Body | undefined,
-  exclusions: readonly Exclusion[],
+  exclusions: readonly string[],
 ): Promise<Frame> {
   const sorted = sortEntries(await $.fs.list(path), exclusions)
   const rings: Rings<Member> = {}
@@ -278,11 +280,20 @@ async function loadFrame(
 async function readExclusions(
   $: EngineInterface,
   path: string,
-): Promise<{ exclusions: Exclusion[]; warning?: string }> {
+): Promise<{ exclusions: string[]; warning?: string }> {
   const file = join(path, exclusionsFile)
   try {
     if (!(await $.fs.exists(file))) return { exclusions: [] }
-    if ((await $.fs.stat(file)).size > leafLimit) throw new Error('it is too large')
+    // It speaks for this folder only: one reached through a symlink, inside the vault or out, is
+    // no part of it, and its text could be anyone's.
+    const [own, home] = await Promise.all([
+      $.fs.stat(file, { resolve: true }),
+      $.fs.stat(path, { resolve: true }),
+    ])
+    const isOwn =
+      home.realPath !== undefined && own.realPath === join(home.realPath, exclusionsFile)
+    if (!isOwn) throw new Error('it leads outside its folder')
+    if (own.size > leafLimit) throw new Error('it is too large')
     return { exclusions: parseExclusions(await $.fs.read(file)) }
   } catch (error) {
     const reason = error instanceof Error ? error.message : String(error)
@@ -323,16 +334,6 @@ function ringOf(shown: Frame | undefined, kind: FrameKind): Ring<Member> {
 }
 
 const empty: SeatedRing<Member> = { overflowing: false, members: {}, clashes: [] }
-
-/** The hexes a ring draws: its own when it is seated, none when it shows as a list. */
-function seated(ring: Ring<Member>): SeatedRing<Member> {
-  return ring.overflowing ? empty : ring
-}
-
-/** A name of an overflowing ring's list, as an exclusion would match it: a folder ends in `/`. */
-function labelOf({ kind, name }: Slot): string {
-  return kind === 'leaf' ? name : `${name}/`
-}
 
 const ringNames: Record<FrameKind, string> = {
   children: 'Children',
@@ -424,7 +425,7 @@ function where(): string {
 
 /** The Frame as lines of text, where no drawing fits and for readers that can't see one. */
 function outline(shown: Frame, kind: FrameKind): string {
-  const { members } = seated(ringOf(shown, kind))
+  const members = membersOf(ringOf(shown, kind))
   const lines = [shown.tile.title, ...(shown.tile.preview ? [shown.tile.preview] : []), '']
   for (const direction of directions) {
     const mark = direction === selected ? '›' : ' '

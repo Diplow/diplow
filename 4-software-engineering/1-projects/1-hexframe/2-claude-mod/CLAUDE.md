@@ -36,7 +36,7 @@ Leaves take their own fill, warm where Branches are slate. A Leaf over 1 MB is n
 
 ## How it reads a folder
 
-Through the [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE|shape]], the one definition every medium reads a vault by, at the depth [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]] gives claude-mod: 1. It shows the four Frame kinds the shape offers, with the names the folder's `.hexframe/exclusions.yaml` lists left out. When that file can't be read, nothing is left out and a red line says why.
+Through the [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE|shape]], the one definition every medium reads a vault by, at the depth [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]] gives claude-mod: 1. It shows the four Frame kinds the shape offers, with the names the folder's `.hexframe/exclusions.yaml` lists left out. When that file can't be read, or is reached through a symlink, nothing is left out and a red line says why, naming the line at fault but never repeating its text.
 
 A ring that overflows shows as a list in place of the drawing: every candidate's name, a folder's ending in `/`, under a line naming those that found no direction and pointing to `exclusions.yaml`. The controls sit above it, since a long list scrolls. `c` still cycles to the folder's other Frame kinds, which draw as hexes when they fit.
 

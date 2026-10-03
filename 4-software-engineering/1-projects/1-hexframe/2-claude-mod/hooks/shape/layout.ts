@@ -4,6 +4,7 @@
 // hexes on the same lattice.
 import {
   directions,
+  membersOf,
   type Direction,
   type Frame,
   type FrameKind,
@@ -60,8 +61,7 @@ export function layoutView(view: FrameView, depth: number): Placement[] {
 
 function layoutAt(view: FrameView, center: Point, radius: number, depth: number): Placement[] {
   const { frame, frameKind } = view
-  const ring = frame.rings[frameKind]
-  const members = ring?.overflowing === false ? ring.members : {}
+  const members = membersOf(frame.rings[frameKind])
   return [
     { kind: 'center', center, radius, tile: frame.tile },
     ...directions.flatMap((direction): Placement[] => {

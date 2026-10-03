@@ -1,6 +1,6 @@
 // Reads a folder as a hexframe node, from what a directory listing and its CLAUDE.md say. Pure:
 // each medium does the file system calls and hands the results here.
-import { isExcluded, type Exclusion } from './exclusions.js'
+import { isExcluded } from './exclusions.js'
 
 export type Direction = 1 | 2 | 3 | 4 | 5 | 6
 
@@ -101,6 +101,11 @@ function numberIn(pattern: RegExp, name: string): Direction | undefined {
   return match ? (Number(match[1]) as Direction) : undefined
 }
 
+/** The members a ring draws as hexes: none when it overflows, since a medium shows it as a list. */
+export function membersOf<M>(ring: Ring<M> | undefined): Partial<Record<Direction, M>> {
+  return ring?.overflowing === false ? ring.members : {}
+}
+
 /** The Frame kinds `rings` offers, in the order a medium cycles through them. */
 export function kindsOf(rings: Rings<unknown>): FrameKind[] {
   return frameKinds.filter((kind) => rings[kind] !== undefined)
@@ -121,7 +126,7 @@ export function isMarkdown(name: string): boolean {
  */
 export function sortEntries(
   entries: readonly Entry[],
-  exclusions: readonly Exclusion[] = [],
+  exclusions: readonly string[] = [],
 ): Rings<Slot> {
   const shown = entries.filter(({ name, kind }) => !isExcluded(name, kind === 'dir', exclusions))
   const names = (keep: (entry: Entry) => boolean) =>

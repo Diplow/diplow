@@ -1,26 +1,18 @@
 // What a folder leaves out of its Frames: the names its `.hexframe/exclusions.yaml` lists, and the
 // ones every folder leaves out. Pure: a medium reads the file and hands its text here.
+import type { Slot } from './node.js'
 
 /** A folder's settings folder. It is always left out, so it never takes a Context slot. */
-export const settingsFolder = '.hexframe'
+const settingsFolder = '.hexframe'
 
 /** The names every folder leaves out, whatever its `exclusions.yaml` says. */
-export const builtInExclusions: readonly string[] = ['.git', 'node_modules', settingsFolder]
+const builtInExclusions: readonly string[] = ['.git', 'node_modules', settingsFolder]
 
 /** Where a folder lists the names it leaves out, relative to the folder. */
 export const exclusionsFile = `${settingsFolder}/exclusions.yaml`
 
 /** The one key of `exclusions.yaml`. */
 const key = 'exclude'
-
-/** One name or glob of a folder's exclusions, ready to match the entries of its listing. */
-export interface Exclusion {
-  /** As written, a trailing `/` included. */
-  pattern: string
-  /** A pattern written with a trailing `/` leaves out folders only. */
-  foldersOnly: boolean
-  matches: RegExp
-}
 
 /**
  * The exclusions an `exclusions.yaml` lists, under its one key, as a block list or a flow list:
@@ -33,9 +25,10 @@ export interface Exclusion {
  *
  * Each item is a name of the folder or a glob, where `*` stands for any run of characters and `?`
  * for one; a trailing `/` keeps it to folders. An item applies to that folder only, so it holds no
- * other `/`. Comments and blank lines are skipped. Anything else throws, naming the line.
+ * other `/`. Comments and blank lines are skipped. Anything else throws, naming the line but not
+ * repeating its text.
  */
-export function parseExclusions(text: string): Exclusion[] {
+export function parseExclusions(text: string): string[] {
   const items: string[] = []
   let opened = false
   text
@@ -47,7 +40,7 @@ export function parseExclusions(text: string): Exclusion[] {
       const listItem = /^\s*-(\s.*)?$/.exec(line)
       if (listItem) {
         if (!opened) throw new Error(`${where}: a list item comes before \`${key}:\``)
-        items.push(itemOf(new Cursor(listItem[1] ?? '', where)))
+        items.push(checked(itemOf(new Cursor(listItem[1] ?? '', where)), where))
         return
       }
       const field = /^([A-Za-z_][\w-]*):(\s.*)?$/.exec(line)
@@ -56,42 +49,70 @@ export function parseExclusions(text: string): Exclusion[] {
       }
       if (opened) throw new Error(`${where}: \`${key}:\` is written twice`)
       opened = true
-      items.push(...flowListOf(new Cursor(field[2] ?? '', where)))
+      items.push(
+        ...flowListOf(new Cursor(field[2] ?? '', where)).map((item) => checked(item, where)),
+      )
     })
-  return items.map(exclusionOf)
+  return items
 }
 
 /** Whether `exclusions`, or the built-in ones, leave out the entry `name`, a folder when `isFolder`. */
 export function isExcluded(
   name: string,
   isFolder: boolean,
-  exclusions: readonly Exclusion[],
+  exclusions: readonly string[],
 ): boolean {
   if (builtInExclusions.includes(name)) return true
-  return exclusions.some(
-    ({ foldersOnly, matches }) => (isFolder || !foldersOnly) && matches.test(name),
-  )
+  return exclusions.some((exclusion) => {
+    const foldersOnly = exclusion.endsWith('/')
+    return (
+      (isFolder || !foldersOnly) &&
+      globMatches(foldersOnly ? exclusion.slice(0, -1) : exclusion, name)
+    )
+  })
 }
 
-function exclusionOf(item: string): Exclusion {
-  const foldersOnly = item.endsWith('/')
-  const name = foldersOnly ? item.slice(0, -1) : item
-  if (name === '' || name.includes('/')) {
-    throw new Error(`\`${item}\` is no name of this folder: an exclusion holds no other /`)
+/** The exclusion that names exactly this candidate: its name, a folder's with a trailing `/`. */
+export function patternOf({ kind, name }: Slot): string {
+  return kind === 'leaf' ? name : `${name}/`
+}
+
+/** An item names an entry of this folder: no `/` but a trailing one. */
+function checked(item: string, where: string): string {
+  if (item === '/' || item.slice(0, -1).includes('/')) {
+    throw new Error(`${where}: an exclusion names an entry of this folder, so it holds no other /`)
   }
-  return { pattern: item, foldersOnly, matches: globOf(name) }
+  return item
 }
 
-/** `*` for any run of characters and `?` for one; every other character stands for itself. */
-function globOf(name: string): RegExp {
-  const source = [...name]
-    .map((character) => {
-      if (character === '*') return '.*'
-      if (character === '?') return '.'
-      return character.replace(/[\\^$.|+()[\]{}]/g, '\\$&')
-    })
-    .join('')
-  return new RegExp(`^${source}$`, 's')
+/**
+ * Whether the glob matches the whole name: `*` any run of characters, `?` one, every other
+ * character itself. Walks both once, going back only to the last `*`, so no glob takes longer than
+ * the name times the glob, whatever its stars.
+ */
+function globMatches(glob: string, name: string): boolean {
+  const pattern = [...glob]
+  const text = [...name]
+  let at = 0
+  let next = 0
+  let star = -1
+  let resume = 0
+  while (at < text.length) {
+    if (pattern[next] === '*') {
+      star = next++
+      resume = at
+    } else if (next < pattern.length && (pattern[next] === '?' || pattern[next] === text[at])) {
+      at++
+      next++
+    } else if (star !== -1) {
+      next = star + 1
+      at = ++resume
+    } else {
+      return false
+    }
+  }
+  while (pattern[next] === '*') next++
+  return next === pattern.length
 }
 
 /** One list item: a scalar, then nothing but a comment. */
@@ -154,7 +175,7 @@ class Cursor {
   end() {
     this.skipSpaces()
     if (!this.atEnd() && this.text[this.index] !== '#') {
-      throw this.error(`\`${this.text.slice(this.index).trim()}\` follows the item`)
+      throw this.error('something follows the item')
     }
   }
 

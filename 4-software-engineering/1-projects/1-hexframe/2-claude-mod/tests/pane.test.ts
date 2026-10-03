@@ -119,12 +119,13 @@ test('a folder that cannot be read says so', async ($, on) => {
   expect(await ui.find({ type: 'Text', text: /^Can't read \/work\/missing/ })).toBeDefined()
 })
 
-/** Stubs the file system with `listings` and `texts`, the session in `cwd`. */
+/** Stubs the file system with `listings` and `texts`, the session in `cwd`; `links` maps a symlink to where it lands. */
 function vault(
   on: On,
   cwd: string,
   listings: Record<string, FsEntry[]>,
   texts: Record<string, string>,
+  links: Record<string, string> = {},
 ) {
   on('session.cwd', () => ({ value: cwd }))
   on('fs.list', ($, e) => {
@@ -134,7 +135,13 @@ function vault(
   on('fs.exists', ($, e) => ({ value: e.path in texts }))
   on('fs.read', ($, e) => (e.path in texts ? { value: texts[e.path] ?? '' } : { deny: 'no file' }))
   on('fs.stat', ($, e) => ({
-    value: { kind: 'file', size: (texts[e.path] ?? '').length, mtimeMs: 0, isLink: false },
+    value: {
+      kind: 'file',
+      size: (texts[e.path] ?? '').length,
+      mtimeMs: 0,
+      isLink: false,
+      ...(e.resolve ? { realPath: links[e.path] ?? e.path } : {}),
+    },
   }))
   on('ui.open', () => ({ value: { isPlaced: true } }))
 }
@@ -283,6 +290,26 @@ test('a folder leaves out what its exclusions.yaml lists, and a broken one says 
   ).toBeDefined()
   expect(await ui.find({ key: 'open-2' })).toMatchObject({ props: { label: '2 Dist' } })
   expect(await ui.find({ key: 'open-4' })).toMatchObject({ props: { label: '4 c.lock' } })
+  await ui.unmount()
+})
+
+test('an exclusions.yaml reached through a symlink is not read', async ($, on) => {
+  vault(
+    on,
+    '/s',
+    { '/s': [dir('dist'), dir('.hexframe'), file('b.md')] },
+    { '/s/.hexframe/exclusions.yaml': 'exclude: [dist/]\n' },
+    { '/s/.hexframe/exclusions.yaml': '/elsewhere/exclusions.yaml' },
+  )
+  await $.command.run(hexframe(''))
+  const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
+  expect(
+    await ui.find({
+      type: 'Text',
+      text: "Can't read .hexframe/exclusions.yaml, so nothing is left out: it leads outside its folder",
+    }),
+  ).toBeDefined()
+  expect(await ui.find({ key: 'open-1' })).toMatchObject({ props: { label: '1 Dist' } })
   await ui.unmount()
 })
 

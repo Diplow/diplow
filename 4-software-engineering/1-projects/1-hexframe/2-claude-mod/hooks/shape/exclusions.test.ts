@@ -1,7 +1,7 @@
 import { expect, test } from 'claude-code/testing'
-import { exclusionsFile, isExcluded, parseExclusions } from './exclusions.js'
+import { exclusionsFile, isExcluded, parseExclusions, patternOf } from './exclusions.js'
 
-const patterns = (text: string) => parseExclusions(text).map(({ pattern }) => pattern)
+const patterns = parseExclusions
 
 test('exclusions.yaml lists its names under one key, as a block list or a flow list', () => {
   expect(exclusionsFile).toBe('.hexframe/exclusions.yaml')
@@ -30,8 +30,14 @@ test('anything else in exclusions.yaml throws, naming the line', () => {
   expect(() => parseExclusions('exclude: a')).toThrow(/^line 1: `exclude:` takes a list/)
   expect(() => parseExclusions('exclude: [a, b')).toThrow(/^line 1: the list is left open/)
   expect(() => parseExclusions('exclude:\n  - "a')).toThrow(/^line 2: a quote is left open/)
-  expect(() => parseExclusions('exclude:\n  - "a" b')).toThrow(/^line 2: `b` follows the item/)
-  expect(() => parseExclusions('exclude: [src/lib]')).toThrow(/`src\/lib` is no name/)
+  // The message names the line, never repeats its text: the file could be anyone's
+  expect(() => parseExclusions('exclude:\n  - "a" secret')).toThrow(
+    /^line 2: something follows the item$/,
+  )
+  expect(() => parseExclusions('exclude:\n  - a\n  - src/lib')).toThrow(
+    /^line 3: an exclusion names an entry of this folder, so it holds no other \/$/,
+  )
+  expect(() => parseExclusions('exclude: [/]')).toThrow(/^line 1: an exclusion names an entry/)
 })
 
 test('a glob matches whole names: * any run of characters, ? one, the rest as written', () => {
@@ -45,6 +51,23 @@ test('a glob matches whole names: * any run of characters, ? one, the rest as wr
   expect(out('aab(1).txt')).toBe(false)
   expect(out('.claude')).toBe(true)
   expect(out('notes.md')).toBe(false)
+  expect(isExcluded('*', false, ['*'])).toBe(true)
+  expect(isExcluded('', false, ['*'])).toBe(true)
+})
+
+test('a glob full of stars still answers at once', () => {
+  const started = Date.now()
+  const glob = '*a'.repeat(20) + '*b'
+  expect(isExcluded('a'.repeat(4000), false, [glob])).toBe(false)
+  expect(isExcluded('a'.repeat(4000) + 'b', false, [glob])).toBe(true)
+  expect(Date.now() - started).toBeLessThan(1000)
+})
+
+test('a candidate names its own exclusion, a folder with a trailing /', () => {
+  expect(patternOf({ kind: 'leaf', name: 'c.lock' })).toBe('c.lock')
+  expect(patternOf({ kind: 'branch', name: 'dist' })).toBe('dist/')
+  expect(patternOf({ kind: 'context', name: '.cache' })).toBe('.cache/')
+  expect(isExcluded('dist', true, [patternOf({ kind: 'branch', name: 'dist' })])).toBe(true)
 })
 
 test('a trailing / leaves out folders only', () => {
