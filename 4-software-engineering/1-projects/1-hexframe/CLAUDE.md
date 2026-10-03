@@ -25,7 +25,7 @@ It is a pnpm monorepo; each package is a numbered child of this node (`1-<name>/
 
 | File | What it holds |
 |---|---|
-| [[4-software-engineering/1-projects/1-hexframe/STACK\|STACK]] | The technical choices, the rules that come with them, and the language of each domain. Read it before adding code |
+| [[4-software-engineering/1-projects/1-hexframe/STACK\|STACK]] | The technical choices, the rules that come with them, the language of each domain, and how a vault reads as a hexframe. Read it before adding code |
 
 ## Rules
 
