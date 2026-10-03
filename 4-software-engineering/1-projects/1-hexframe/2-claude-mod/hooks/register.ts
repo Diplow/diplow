@@ -4,7 +4,7 @@
 // opening a Leaf shows its file. Tab outlines the hex whose button it lands on, and `p` swaps the
 // drawing for that hex's file, rendered, or the Tile's CLAUDE.md when no hex is selected.
 import type { EngineInterface, On } from 'claude-code'
-import { codeOf, markdownOf } from './markdown.js'
+import { codeOf, isText, markdownOf } from './markdown.js'
 import { layoutView } from './shape/layout.js'
 import {
   basename,
@@ -34,6 +34,9 @@ const pane = 'hexframe'
 
 /** The generations the pane shows from the center, as STACK.md gives claude-mod. */
 const depth = 1
+
+/** The largest Leaf the preview reads, in bytes. */
+const leafLimit = 1_000_000
 
 /** Rows the pane keeps under the drawing: the controls and the path. */
 const footerRows = 4
@@ -295,7 +298,11 @@ async function previewOfMember($: EngineInterface, member: Member): Promise<Prev
   if (member.kind !== 'leaf') return previewOfFolder(tile, await readBody($, tile.path))
   const label = basename(tile.path)
   try {
+    if ((await $.fs.stat(tile.path)).size > leafLimit) {
+      return { label, note: `${label} is too large to show here.` }
+    }
     const text = await $.fs.read(tile.path)
+    if (!isText(text)) return { label, note: `${label} is not a text file.` }
     const markdown = isMarkdown(label) ? markdownOf(text) : codeOf(text)
     if (markdown !== '') return { label, markdown }
     const note = isMarkdown(label) ? `${label} holds only its frontmatter.` : `${label} is empty.`

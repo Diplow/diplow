@@ -1,5 +1,5 @@
 import { expect, test } from 'claude-code/testing'
-import { codeOf, markdownOf } from '../hooks/markdown.js'
+import { codeOf, isText, markdownOf } from '../hooks/markdown.js'
 import { layoutView } from '../hooks/shape/layout.js'
 import type { Frame } from '../hooks/shape/node.js'
 import { base64, paint, sanitize, scaleFor, wrap } from '../hooks/raster.js'
@@ -67,4 +67,10 @@ test('a file that is not Markdown shows as a fence longer than its backticks', (
   const long = codeOf('x'.repeat(20000))
   expect(long.length <= 10000).toBe(true)
   expect(long.endsWith('open it to read the rest.*')).toBe(true)
+  // A run of backticks too long to fence within the limit is cut out of what shows.
+  const fenced = codeOf('a' + '`'.repeat(6000) + 'b')
+  expect(fenced.length <= 10000).toBe(true)
+  expect(fenced.endsWith('open it to read the rest.*')).toBe(true)
+  expect(isText('PNG\u0000\u0001')).toBe(false)
+  expect(isText('plain')).toBe(true)
 })

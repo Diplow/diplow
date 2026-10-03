@@ -133,6 +133,9 @@ function vault(
   })
   on('fs.exists', ($, e) => ({ value: e.path in texts }))
   on('fs.read', ($, e) => (e.path in texts ? { value: texts[e.path] ?? '' } : { deny: 'no file' }))
+  on('fs.stat', ($, e) => ({
+    value: { kind: 'file', size: (texts[e.path] ?? '').length, mtimeMs: 0, isLink: false },
+  }))
   on('ui.open', () => ({ value: { isPlaced: true } }))
 }
 
@@ -210,12 +213,12 @@ test('past six Branches and Leaves, `c` cycles the Branches, the Leaves and the 
     {
       '/big': [
         ...['1-a', '2-b', '3-c', '4-d'].map(dir),
-        ...['1-a.md', 'x.md', 'y.md'].map(file),
+        ...['1-a.md', 'x.md', 'y.md', 'z.png'].map(file),
         dir('.claude'),
       ],
       '/big/1-a': [file('1-a.md')],
     },
-    {},
+    { '/big/y.md': 'y'.repeat(1_000_001), '/big/z.png': 'PNG\u0000\u0001' },
   )
   await $.command.run(hexframe(''))
   const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
@@ -226,7 +229,12 @@ test('past six Branches and Leaves, `c` cycles the Branches, the Leaves and the 
   await ui.press({ key: 'ring' })
   expect(await kind()).toBe('/big  ·  leaves')
   expect(await ui.find({ key: 'open-3' })).toMatchObject({ props: { label: '3 Y' } })
-  expect(await ui.find({ key: 'open-4' })).toBeUndefined()
+  // A Leaf too large or not text says so instead of showing
+  await ui.press({ key: 'open-3' })
+  expect(await ui.find({ type: 'Text', text: 'y.md is too large to show here.' })).toBeDefined()
+  await ui.press({ key: 'open-4' })
+  expect(await ui.find({ type: 'Text', text: 'z.png is not a text file.' })).toBeDefined()
+  await ui.press({ key: 'view' })
   await ui.press({ key: 'ring' })
   expect(await kind()).toBe('/big  ·  context')
   expect(await ui.find({ key: 'open-1' })).toMatchObject({ props: { label: '1 .claude' } })

@@ -28,14 +28,13 @@ export type Placement =
   | { kind: 'center'; center: Point; radius: number; tile: Tile }
   | {
       kind: 'member'
-      frameKind: FrameKind
       memberKind: MemberKind
       direction: Direction
       center: Point
       radius: number
       tile: Tile
     }
-  | { kind: 'empty'; frameKind: FrameKind; direction: Direction; center: Point; radius: number }
+  | { kind: 'empty'; direction: Direction; center: Point; radius: number }
 
 const sqrt3 = Math.sqrt(3)
 
@@ -74,14 +73,13 @@ function layoutAt(view: FrameView, center: Point, radius: number, depth: number)
         member
           ? {
               kind: 'member',
-              frameKind,
               memberKind: member.kind,
               direction,
               center: at,
               radius,
               tile: member.tile,
             }
-          : { kind: 'empty', frameKind, direction, center: at, radius },
+          : { kind: 'empty', direction, center: at, radius },
       ]
     }),
   ]

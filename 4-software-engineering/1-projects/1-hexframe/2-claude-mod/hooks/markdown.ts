@@ -26,15 +26,30 @@ export function markdownOf(text: string): string {
 
 /**
  * A file that isn't Markdown, as a fenced block the element draws as it is: its fence longer than
- * any run of backticks inside, cut at the limit with a line that says so. Empty for an empty file.
+ * any run of backticks it shows, cut at the limit with a line that says so. Empty for an empty file.
  */
 export function codeOf(text: string): string {
   const clean = text.replace(/\r\n?/g, '\n').replace(controls, '').trimEnd()
   if (clean.trim() === '') return ''
-  const head = clean.slice(0, markdownLimit)
-  const longest = (head.match(/`+/g) ?? []).reduce((most, run) => Math.max(most, run.length), 2)
-  const fence = '`'.repeat(longest + 1)
-  const room = markdownLimit - 2 * fence.length - 2 - cutNote.length
-  if (clean.length <= room) return `${fence}\n${clean}\n${fence}`
-  return `${fence}\n${clean.slice(0, room)}\n${fence}${cutNote}`
+  // A longer fence leaves less room, which can only shorten the runs the shown part holds.
+  let fence = 3
+  let shown = clean
+  for (;;) {
+    const room = Math.max(0, markdownLimit - 2 * fence - 2 - cutNote.length)
+    shown = clean.slice(0, room)
+    const needed = longestRun(shown) + 1
+    if (needed <= fence) break
+    fence = needed
+  }
+  const bar = '`'.repeat(Math.max(3, longestRun(shown) + 1))
+  return `${bar}\n${shown}\n${bar}${shown.length < clean.length ? cutNote : ''}`
+}
+
+function longestRun(text: string): number {
+  return (text.match(/`+/g) ?? []).reduce((most, run) => Math.max(most, run.length), 0)
+}
+
+/** Whether a file read as text is text: a NUL among its first bytes says it is binary. */
+export function isText(text: string): boolean {
+  return !text.slice(0, 8000).includes('\u0000')
 }

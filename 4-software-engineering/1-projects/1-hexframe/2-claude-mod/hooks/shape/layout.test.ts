@@ -60,13 +60,11 @@ test('every Frame kind lays out its ring the same way, each member saying what i
   }
   expect(layoutView({ frame, frameKind: 'leaves' }, 1)[1]).toMatchObject({
     kind: 'member',
-    frameKind: 'leaves',
     memberKind: 'leaf',
     direction: 1,
   })
   expect(layoutView({ frame, frameKind: 'context' }, 1)[2]).toMatchObject({
     kind: 'member',
-    frameKind: 'context',
     memberKind: 'context',
     direction: 2,
   })
