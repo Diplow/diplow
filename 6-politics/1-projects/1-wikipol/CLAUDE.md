@@ -30,6 +30,22 @@ Lorsque l'utilisateur demande d'ingérer une vidéo, d'analyser un batch, ou de 
 3. **Lire la config**. `Sources/<NomSource>/source.yaml` contient les paramètres techniques (URL chaîne, nom affiché, chemins, slug git). Les scripts et skills s'y réfèrent via le helper `Scripts/source_config.py`.
 4. **Appliquer les conventions**. `BUILD.md` (ce repo) pour les invariants universels + `Sources/<NomSource>/BUILD.md` pour la taxonomie locale.
 
+## Transcripts : sur Google Drive, hors git
+
+Les transcripts (`Sources/<NomSource>/Sources/Transcripts/*.md`, ~30 Mo) ne sont pas versionnés : ils vivent sur Google Drive, sous `WikiPol/Sources`, avec la même arborescence que `Sources/`. On y accède par le remote rclone `diplow`. Les scripts rangés dans ce dossier (`.py`, `.skill`) restent dans git.
+
+Une copie fraîche (worktree Conductor, nouveau clone, ou dossier d'origine après un pull qui les a retirés) n'a donc pas les transcripts. Depuis la racine de WikiPol :
+
+```bash
+# Récupérer les transcripts d'une source (ou de toutes : rclone copy diplow:WikiPol/Sources Sources)
+rclone copy diplow:WikiPol/Sources/<NomSource>/Sources/Transcripts Sources/<NomSource>/Sources/Transcripts
+
+# Pousser les transcripts nouveaux ou modifiés (après batch_transcripts.py --extract, --recent, --enrich-transcripts…)
+rclone copy Sources diplow:WikiPol/Sources --include '/*/Sources/Transcripts/*.md'
+```
+
+`rclone copy` n'efface jamais rien à destination ; ne pas utiliser `rclone sync`, qui supprimerait sur Drive ce qui manque en local.
+
 ## Répartition des responsabilités
 
 | Niveau | Fichier | Contient |
