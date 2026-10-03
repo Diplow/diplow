@@ -24,7 +24,7 @@ HEXFRAME_VAULT=~/notes/perso pnpm dev     # into another vault's
 
 `dev` bundles `src/main.ts` with an inline source map, copies `manifest.json` beside it, drops a `.hotreload` file there, and rebuilds on every change. Install the [Hot Reload](https://github.com/pjeby/hot-reload) community plugin in that vault and enable Hexframe once: Hot Reload then reloads the plugin each time `main.js` changes.
 
-That vault's config is the repo's, tracked by git. Enabling the two plugins writes their ids into `.obsidian/community-plugins.json`, installing Hot Reload adds `.obsidian/plugins/hot-reload/`, and Obsidian may touch the other files of `.obsidian/` as it runs. None of it belongs in a commit: before committing, `git status -- :/.obsidian` should list nothing you did not mean to ship, and `git restore` puts a tracked file back.
+That vault's config is the repo's, tracked by git. Enabling the two plugins writes their ids into `.obsidian/community-plugins.json`, installing Hot Reload adds `.obsidian/plugins/hot-reload/`, and Obsidian may touch the other files of `.obsidian/` as it runs. None of it belongs in a commit: before committing, `git status -- :/.obsidian` should list nothing you did not mean to ship, and `git restore -- :/.obsidian/<file>` puts a tracked file back.
 
 ## Scripts
 
