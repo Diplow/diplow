@@ -1,5 +1,5 @@
 import { expect, test } from 'claude-code/testing'
-import { frameHeight, frameWidth, layoutFrame, type FrameView, type Placement } from './layout.js'
+import { viewHeight, viewWidth, layoutView, type FrameView, type Placement } from './layout.js'
 import type { Frame, Tile } from './node.js'
 
 const tile = (path: string): Tile => ({ path, title: path, preview: '' })
@@ -11,7 +11,7 @@ const frameOf = (path: string, children: Frame['children'] = {}): Frame => ({
 })
 
 const sqrt3 = Math.sqrt(3)
-const middle = { x: frameWidth / 2, y: frameHeight / 2 }
+const middle = { x: viewWidth / 2, y: viewHeight / 2 }
 
 /** Each placement as kind, direction and center, rounded so the floating point reads plainly. */
 const summary = (placements: Placement[]) =>
@@ -33,7 +33,7 @@ test('depth 1 is the Tile and its ring of six, neighbors sharing a side', () => 
     frame: frameOf('/w', { 1: tile('/w/1-a'), 3: tile('/w/3-c') }),
     ring: 'children',
   }
-  expect(summary(layoutFrame(view, 1))).toEqual([
+  expect(summary(layoutView(view, 1))).toEqual([
     { kind: 'center', direction: undefined, ...at(0, 0), radius: 1 },
     { kind: 'member', direction: 1, ...at(-sqrt3 / 2, -1.5), radius: 1 },
     { kind: 'empty', direction: 2, ...at(sqrt3 / 2, -1.5), radius: 1 },
@@ -46,7 +46,7 @@ test('depth 1 is the Tile and its ring of six, neighbors sharing a side', () => 
 
 test('the context ring lays out the dot folders the same way', () => {
   const frame = { ...frameOf('/w'), context: { 2: tile('/w/.claude') } }
-  const placements = layoutFrame({ frame, ring: 'context' }, 1)
+  const placements = layoutView({ frame, ring: 'context' }, 1)
   expect(placements[2]).toMatchObject({ kind: 'member', ring: 'context', direction: 2 })
 })
 
@@ -56,8 +56,8 @@ test('at depth 1 an expanded member stays one hex', () => {
     ring: 'children',
     expanded: { 1: { frame: frameOf('/w/1-a'), ring: 'children' } },
   }
-  expect(layoutFrame(view, 1)).toHaveLength(7)
-  expect(layoutFrame(view, 1)[1]).toMatchObject({ kind: 'member', direction: 1 })
+  expect(layoutView(view, 1)).toHaveLength(7)
+  expect(layoutView(view, 1)[1]).toMatchObject({ kind: 'member', direction: 1 })
 })
 
 test('at depth 2 an expanded member shows its own Frame inside its hex, a third of its size', () => {
@@ -66,7 +66,7 @@ test('at depth 2 an expanded member shows its own Frame inside its hex, a third 
     ring: 'children',
     expanded: { 3: { frame: frameOf('/w/3-c', { 6: tile('/w/3-c/6-f') }), ring: 'children' } },
   }
-  const placements = layoutFrame(view, 2)
+  const placements = layoutView(view, 2)
   expect(placements).toHaveLength(13)
   const inner = summary(placements).slice(3, 10)
   expect(inner[0]).toEqual({ kind: 'center', direction: undefined, ...at(sqrt3, 0), radius: 0.333 })

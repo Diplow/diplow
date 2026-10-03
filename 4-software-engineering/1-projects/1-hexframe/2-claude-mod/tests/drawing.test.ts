@@ -1,6 +1,6 @@
 import { expect, test } from 'claude-code/testing'
 import { markdownOf } from '../hooks/markdown.js'
-import { layoutFrame } from '../hooks/shape/layout.js'
+import { layoutView } from '../hooks/shape/layout.js'
 import { base64, paint, sanitize, scaleFor, wrap } from '../hooks/raster.js'
 
 test('words wrap and the last kept line ends with an ellipsis', () => {
@@ -28,7 +28,7 @@ test('the painting has a triplet per cell', () => {
   }
   const scale = scaleFor(80, 26)
   expect(scale).toBeDefined()
-  const painting = paint(layoutFrame({ frame, ring: 'children' }, 1), scale ?? 0)
+  const painting = paint(layoutView({ frame, ring: 'children' }, 1), scale ?? 0)
   expect(painting.columns <= 80).toBe(true)
   expect(painting.rows <= 26).toBe(true)
   const bytes = (painting.cells.length / 4) * 3 - (painting.cells.match(/=*$/)?.[0].length ?? 0)

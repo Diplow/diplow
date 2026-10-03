@@ -1,7 +1,8 @@
 // Draws a Frame's placements as an SVG document, for the surfaces that take one (the Desktop app).
+// Its hexes and text are sized for depth 1, where every placement's radius is 1: claude-mod's depth.
 import type { Direction } from './shape/node.js'
 import { wrap } from './raster.js'
-import { frameHeight, frameWidth, hexCorners, type Placement } from './shape/layout.js'
+import { viewHeight, viewWidth, hexCorners, type Placement } from './shape/layout.js'
 
 /** Pixels per unit of the layout. */
 const scale = 110
@@ -27,8 +28,8 @@ const characterWidth = 0.55
 
 /** Draws the placements; the member in direction `selected`, if any, outlined. */
 export function drawSvg(placements: readonly Placement[], selected?: Direction): string {
-  const width = Math.round(frameWidth * scale)
-  const height = Math.round(frameHeight * scale)
+  const width = Math.round(viewWidth * scale)
+  const height = Math.round(viewHeight * scale)
   const shapes = placements.map((placement) => shapeOf(placement, selected)).join('')
   return (
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" ` +

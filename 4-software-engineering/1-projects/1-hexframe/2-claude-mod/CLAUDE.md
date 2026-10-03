@@ -24,7 +24,7 @@ Then `/hexframe` shows the session's folder, and `/hexframe <folder>` another on
 
 ## How it reads a folder
 
-Through the [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE|shape]], the one definition every medium reads a vault by, at the depth [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]] gives claude-mod: 1. Not all of it yet. It shows the Branches and never the Leaves, so its Children are what STACK calls the Branches kind. It reads no `.hexframe/` folder: no exclusions, and a `.hexframe/` folder would show as a Context tile. It doesn't check a symlinked folder against the vault's edge. And a folder that overflows is named under the drawing instead of turning the Frame into a list.
+Through the [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE|shape]], the one definition every medium reads a vault by, at the depth [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]] gives claude-mod: 1. What the shape doesn't read yet, claude-mod doesn't show: its Children are what STACK calls the Branches kind, and a `.hexframe/` folder shows as a Context tile. A folder that overflows is named under the drawing instead of turning the Frame into a list.
 
 ## Scripts
 

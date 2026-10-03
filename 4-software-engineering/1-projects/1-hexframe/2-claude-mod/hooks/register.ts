@@ -4,7 +4,7 @@
 // CLAUDE.md, rendered, or the Tile's when no hex is selected.
 import type { EngineInterface, On } from 'claude-code'
 import { markdownOf } from './markdown.js'
-import { layoutFrame, type Ring } from './shape/layout.js'
+import { layoutView, type Ring } from './shape/layout.js'
 import {
   bodyFiles,
   directions,
@@ -158,7 +158,7 @@ export function register(on: On) {
       return Box({ flexDirection: 'column', rowGap: 1, children: [...footer, shown] })
     }
 
-    const placements = layoutFrame({ frame, ring }, depth)
+    const placements = layoutView({ frame, ring }, depth)
     if (e.surface === 'terminal') {
       const { Raster } = $.ui.resolve(e)
       const scale = scaleFor(e.props.bodyColumns, e.props.scroll.bodyRows - footerRows)

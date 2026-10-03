@@ -30,19 +30,19 @@ const sqrt3 = Math.sqrt(3)
 const neighborAngle: Record<Direction, number> = { 1: 120, 2: 60, 3: 0, 4: -60, 5: -120, 6: 180 }
 
 /** The view's size, for a hex of radius 1 and the ring at its spacing: three hexes across. */
-export const frameWidth = 3 * sqrt3
-export const frameHeight = 5
+export const viewWidth = 3 * sqrt3
+export const viewHeight = 5
 
 /** A Frame opened inside a hex takes a third of its radius: its ring then touches that hex's sides. */
 const generationScale = 1 / 3
 
 /**
- * The hexes of a view `depth` generations deep, centered in a box of `frameWidth` by `frameHeight`,
+ * The hexes of a view `depth` generations deep, centered in a box of `viewWidth` by `viewHeight`,
  * in the order to paint them. At depth 1, the seven hexes of one Frame. Deeper, a member found in
  * `expanded` shows as its own Frame, in place of its hex; past the depth it stays one hex.
  */
-export function layoutFrame(view: FrameView, depth: number): Placement[] {
-  return layoutAt(view, { x: frameWidth / 2, y: frameHeight / 2 }, 1, depth)
+export function layoutView(view: FrameView, depth: number): Placement[] {
+  return layoutAt(view, { x: viewWidth / 2, y: viewHeight / 2 }, 1, depth)
 }
 
 function layoutAt(view: FrameView, center: Point, radius: number, depth: number): Placement[] {

@@ -10,7 +10,9 @@ preview: >-
 ---
 # shape
 
-How a folder of this vault reads as a hexframe, written once for every medium that shows one: claude-mod in Claude Code, the Obsidian plugin in Obsidian, the app one day. If each medium read a folder its own way, the same vault would show as two hexframes. How a medium then looks at what this reads (the Frame kind, the expansions, a list for an overflowing Frame) is view state, each medium's own: [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]].
+How a folder of this vault reads as a hexframe, written once for every medium that shows one: claude-mod in Claude Code, the Obsidian plugin in Obsidian, the app one day. If each medium read a folder its own way, the same vault would show as two hexframes. How a medium then looks at what this reads (the Frame kind, the expansions, a list for an overflowing Frame) is view state, each medium's own: [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]]. The layout takes that state as input, and a medium decides its values.
+
+The app is no medium of the shape yet: it reads no vault, and `1-app/src/ui/hex/` keeps its own geometry, the same lattice and the same third per generation. The two merge when the app reads a vault.
 
 ## Why it lives inside claude-mod
 
@@ -25,7 +27,7 @@ A Claude Code mod loads only the files under its own folder: an import that leav
 | File | Holds |
 |---|---|
 | `node.ts` | A folder read as a Frame: its Tile, its Children and its Context from its listing and its `CLAUDE.md`, titles from names, the frontmatter, the path arithmetic |
-| `layout.ts` | Where each hex of a view sits, `depth` generations deep. Depth 1 is one Frame, seven hexes; deeper, an expanded member shows its own Frame inside its hex, at a third of its radius, where its ring touches that hex's sides |
+| `layout.ts` | Where each hex of a view sits, `depth` generations deep. Depth 1 is one Frame, seven hexes; deeper, an expanded member shows its own Frame inside its hex, at a third of its radius, where its ring touches that hex's sides. Its `Ring` is the two Frame kinds the code knows, `children` (STACK's Branches kind for now) and `context`; STACK's four come with the Leaves |
 
 ## How a vault reads
 
