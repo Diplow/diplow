@@ -22,7 +22,7 @@ pnpm dev                                  # into this worktree's .obsidian/plugi
 HEXFRAME_VAULT=~/notes/perso pnpm dev     # into another vault's
 ```
 
-`dev` bundles `src/main.ts` with an inline source map, copies `manifest.json` and `styles.css` beside it, drops a `.hotreload` file there, and rebuilds on every change. Install the [Hot Reload](https://github.com/pjeby/hot-reload) community plugin in that vault: Hot Reload then reloads the plugin each time `main.js` changes. Hexframe is already enabled, since the repo's `.obsidian/community-plugins.json` lists it.
+`dev` bundles `src/main.ts` with an inline source map, copies `manifest.json` and `styles.css` beside it, drops a `.hotreload` file there, and rebuilds on every change. Install the [Hot Reload](https://github.com/pjeby/hot-reload) community plugin in that vault: Hot Reload then reloads the plugin each time `main.js` changes. In this worktree Hexframe is already enabled, since the repo's `.obsidian/community-plugins.json` lists it; in another vault, enable it once.
 
 That vault's config is the repo's, tracked by git. Enabling Hot Reload writes its id into `.obsidian/community-plugins.json`, installing it adds `.obsidian/plugins/hot-reload/`, and Obsidian may touch the other files of `.obsidian/` as it runs. None of it belongs in a commit: before committing, `git status -- :/.obsidian` should list nothing you did not mean to ship, and `git restore -- :/.obsidian/<file>` puts a tracked file back. A `dev` build into this worktree also overwrites the committed build: run `pnpm build` before committing, which writes the production build back and removes `.hotreload`.
 
