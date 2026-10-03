@@ -1,0 +1,24 @@
+# Obsidian
+.obsidian/
+.trash/
+
+# Claude Code
+.claude/settings.local.json
+.claude/worktrees/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Logs
+*.log
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Scratch
+Sources/*/Sources/.context-tmp.md

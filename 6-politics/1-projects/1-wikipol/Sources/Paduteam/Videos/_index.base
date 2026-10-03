@@ -1,0 +1,85 @@
+filters:
+  and:
+    - type == "vidéo"
+views:
+  - type: table
+    name: Toutes les vidéos
+    order:
+      - file.name
+      - date
+      - domaine
+      - thèmes
+      - enjeux
+      - skill_version
+    sort:
+      - property: date
+        direction: DESC
+    columnSize:
+      file.name: 360
+  - type: table
+    name: Récemment ingérées
+    order:
+      - file.name
+      - date
+      - domaine
+      - file.mtime
+      - skill_version
+    sort:
+      - property: skill_version
+        direction: ASC
+      - property: file.mtime
+        direction: DESC
+  - type: table
+    name: Politique intérieure
+    filters:
+      and:
+        - domaine.contains("politique-intérieure")
+    order:
+      - file.name
+      - date
+      - thèmes
+      - enjeux
+      - skill_version
+    sort:
+      - property: date
+        direction: DESC
+  - type: table
+    name: Géopolitique
+    filters:
+      and:
+        - domaine.contains("géopolitique")
+    order:
+      - file.name
+      - date
+      - thèmes
+      - enjeux
+      - skill_version
+    sort:
+      - property: date
+        direction: DESC
+  - type: table
+    name: Plus jamais PS
+    filters:
+      and:
+        - enjeux.contains("plus-jamais-PS")
+    order:
+      - file.name
+      - date
+      - thèmes
+      - skill_version
+    sort:
+      - property: date
+        direction: DESC
+  - type: table
+    name: Palestine libre
+    filters:
+      and:
+        - enjeux.contains("Palestine-libre")
+    order:
+      - file.name
+      - date
+      - thèmes
+      - skill_version
+    sort:
+      - property: date
+        direction: DESC

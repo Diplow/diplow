@@ -1,0 +1,52 @@
+filters:
+  and:
+    - type == "organisation"
+views:
+  - type: table
+    name: Toutes les organisations
+    order:
+      - file.name
+      - domaine
+      - thèmes
+      - file.mtime
+      - skill_version
+    sort:
+      - property: file.name
+        direction: ASC
+    columnSize:
+      file.name: 280
+  - type: table
+    name: Récentes
+    order:
+      - file.name
+      - domaine
+      - thèmes
+      - file.mtime
+      - skill_version
+    sort:
+      - property: file.mtime
+        direction: DESC
+  - type: table
+    name: Guerre des gauches
+    filters:
+      and:
+        - thèmes.contains("guerre-des-gauches")
+    order:
+      - file.name
+      - domaine
+      - skill_version
+    sort:
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: Médias
+    filters:
+      and:
+        - thèmes.contains("médias")
+    order:
+      - file.name
+      - domaine
+      - skill_version
+    sort:
+      - property: file.name
+        direction: ASC
