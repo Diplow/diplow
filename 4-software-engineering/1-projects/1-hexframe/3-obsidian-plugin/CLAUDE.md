@@ -22,7 +22,9 @@ pnpm dev                                  # into this worktree's .obsidian/plugi
 HEXFRAME_VAULT=~/notes/perso pnpm dev     # into another vault's
 ```
 
-`dev` bundles `src/main.ts` with an inline source map, copies `manifest.json` beside it, drops a `.hotreload` file there, and rebuilds on every change. Install the [Hot Reload](https://github.com/pjeby/hot-reload) community plugin in that vault and enable Hexframe once: Hot Reload then reloads the plugin each time `main.js` changes. Both plugins' folders are untracked files in the worktree; leave them out of commits.
+`dev` bundles `src/main.ts` with an inline source map, copies `manifest.json` beside it, drops a `.hotreload` file there, and rebuilds on every change. Install the [Hot Reload](https://github.com/pjeby/hot-reload) community plugin in that vault and enable Hexframe once: Hot Reload then reloads the plugin each time `main.js` changes.
+
+That vault's config is the repo's, tracked by git. Enabling the two plugins writes their ids into `.obsidian/community-plugins.json`, installing Hot Reload adds `.obsidian/plugins/hot-reload/`, and Obsidian may touch the other files of `.obsidian/` as it runs. None of it belongs in a commit: before committing, `git status -- :/.obsidian` should list nothing you did not mean to ship, and `git restore` puts a tracked file back.
 
 ## Scripts
 
@@ -30,10 +32,10 @@ HEXFRAME_VAULT=~/notes/perso pnpm dev     # into another vault's
 |---|---|
 | `dev` | The watch build above |
 | `build` | The production build, minified, into `dist/` (ignored by git) |
-| `check` | Type-checks, then ESLint, then Prettier |
+| `check` | Type-checks, then ESLint, knip and Prettier |
 | `test` | Vitest, once |
 
-The lint set is [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE#Lint|1-app's]], minus what only the app has (dependency-cruiser's layers, the rule of 6 inside `src/`, knip): `typescript-eslint` strict type-checked, sonarjs' cognitive complexity at most 15, the same function, parameter and file sizes, a `-- reason` on every disable, and Prettier with the same config.
+The lint set is [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE#Lint|1-app's]], minus what only the app has (dependency-cruiser's layers, the rule of 6 inside `src/`): `typescript-eslint` strict type-checked, sonarjs' cognitive complexity at most 15, the same function, parameter and file sizes, a `-- reason` on every disable, knip for dead code (its entry, `src/main.ts`, is in `package.json`, since only esbuild reaches it), and Prettier with the same config.
 
 ## Layout
 

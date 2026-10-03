@@ -24,7 +24,7 @@ Obsidian is mostly a Markdown reader. The files stay plain Markdown on disk, so 
 
 ## How it is used here
 
-- The vault is the repo root, opened in the original folder. Conductor worktrees aren't vaults: a change reaches Obsidian once its pull request is merged and `main` is pulled there.
+- The vault is the repo root, opened in the original folder. Conductor worktrees aren't vaults: a change reaches Obsidian once its pull request is merged and `main` is pulled there. The one exception is a worktree where the hexframe plugin is being developed, opened as a second vault so its build reloads live ([[4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/CLAUDE|obsidian-plugin]]).
 - `node_modules/` is excluded from the vault (`app.json`).
 - Per-device layout (`workspace*.json`) stays out of git.
 
