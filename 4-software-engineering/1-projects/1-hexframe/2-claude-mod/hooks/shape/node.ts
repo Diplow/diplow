@@ -1,6 +1,6 @@
 // Reads a folder as a hexframe node, from what a directory listing and its CLAUDE.md say. Pure:
 // each medium does the file system calls and hands the results here.
-import { isExcluded } from './exclusions.js'
+import { exclusionsFile, isExcluded } from './exclusions.js'
 
 export type Direction = 1 | 2 | 3 | 4 | 5 | 6
 
@@ -258,25 +258,27 @@ export interface FileStat {
   realPath?: string
 }
 
+/** What a medium got from a file: its text, or why it left the file unread. */
+export type FileRead = { text: string } | { unread: string }
+
 /**
  * Why a medium leaves `relative`, a file of a folder, unread, or undefined when it reads it. It
  * reads a regular file within the read limit whose real path lies under the folder's, compared
- * folder by folder, so a symlink never leads it out of the folder. With `isOwnPath`, the real path
- * must be the folder's plus `relative` exactly, as for `exclusions.yaml`: never through a symlink.
- * Real paths are absolute and resolved; a missing one is never under the folder.
+ * folder by folder, so a symlink never leads it out of the folder. The folder's `exclusions.yaml`
+ * must sit at its own path exactly: never read through a symlink, it can't speak for another
+ * folder. Real paths are absolute and resolved; a missing one is never under the folder.
  */
 export function unreadable(
   file: FileStat,
   folderRealPath: string | undefined,
   relative: string,
-  isOwnPath = false,
 ): string | undefined {
   const folder = folderRealPath?.replace(/\/*$/, '/')
   const real = file.realPath
   const isInside =
     folder !== undefined &&
     real !== undefined &&
-    (isOwnPath ? real === folder + relative : real.startsWith(folder))
+    (relative === exclusionsFile ? real === folder + relative : real.startsWith(folder))
   if (!isInside) return 'it leads outside its folder'
   if (file.kind !== 'file') return 'it is not a file'
   if (file.size > readLimit) return 'it is too large'
@@ -316,9 +318,11 @@ export function frontmatter(text: string): Record<string, string> {
   const block = splitFrontmatter(text).frontmatter
   const fields: Record<string, string> = {}
   for (let index = 0; index < block.length; index++) {
-    const match = /^([A-Za-z_][\w-]*):\s*(.*)$/.exec(block[index] ?? '')
+    // One `.*` after the colon, trimmed after: `\s*.*` would backtrack in time quadratic in the line.
+    const match = /^([A-Za-z_][\w-]*):(.*)$/.exec(block[index] ?? '')
     if (!match) continue
-    const [, key = '', raw = ''] = match
+    const key = match[1] ?? ''
+    const raw = (match[2] ?? '').trim()
     if (/^[>|][+-]?$/.test(raw)) {
       const continued: string[] = []
       while (index + 1 < block.length && /^(\s|$)/.test(block[index + 1] ?? '')) {
@@ -327,10 +331,18 @@ export function frontmatter(text: string): Record<string, string> {
       }
       fields[key] = (raw.startsWith('>') ? continued.join(' ') : continued.join('\n')).trim()
     } else {
-      fields[key] = unquote(raw.trim())
+      fields[key] = unquote(raw)
     }
   }
   return fields
+}
+
+/**
+ * A file's lines, split at every line ending a file may hold: `\r\n`, `\r`, `\n`, and the Unicode
+ * line and paragraph separators. A line then holds none, so `.` matches all of it and `$` its end.
+ */
+export function linesOf(text: string): string[] {
+  return text.split(/\r\n?|[\n\u2028\u2029]/)
 }
 
 /**
@@ -339,7 +351,7 @@ export function frontmatter(text: string): Record<string, string> {
  * file has no frontmatter and is all body.
  */
 export function splitFrontmatter(text: string): { frontmatter: string[]; body: string } {
-  const lines = text.replace(/\r\n?/g, '\n').split('\n')
+  const lines = linesOf(text)
   const isFence = (line: string) => line.trim() === '---'
   // The closing line's index, or 0 when there is none.
   const end = isFence(lines[0] ?? '') ? lines.slice(1).findIndex(isFence) + 1 : 0

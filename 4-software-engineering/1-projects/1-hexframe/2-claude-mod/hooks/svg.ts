@@ -1,7 +1,8 @@
 // Draws a Frame's placements as an SVG document, for the surfaces that take one (the Desktop app).
 // Each hex takes its placement's radius; the text keeps one size, set for claude-mod's depth 1.
 import type { Direction } from './shape/node.js'
-import { emptyOutline, oneLine, palettes, selectedOutline, wrap } from './raster.js'
+import { oneLine } from './markdown.js'
+import { emptyOutline, palettes, selectedOutline, wrap } from './raster.js'
 import { viewHeight, viewWidth, hexCorners, type Placement } from './shape/layout.js'
 
 /** Pixels per unit of the layout. */

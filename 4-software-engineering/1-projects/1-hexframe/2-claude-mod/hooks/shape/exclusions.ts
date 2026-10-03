@@ -1,6 +1,6 @@
 // What a folder leaves out of its Frames: the names its `.hexframe/exclusions.yaml` lists, and the
 // ones every folder leaves out. Pure: a medium reads the file and hands its text here.
-import type { Slot } from './node.js'
+import { linesOf, type FileRead, type Slot } from './node.js'
 
 /** A folder's settings folder. It is always left out, so it never takes a Context slot. */
 const settingsFolder = '.hexframe'
@@ -31,29 +31,49 @@ const key = 'exclude'
 export function parseExclusions(text: string): string[] {
   const items: string[] = []
   let opened = false
-  text
-    .replace(/\r\n/g, '\n')
-    .split('\n')
-    .forEach((line, index) => {
-      const where = `line ${index + 1}`
-      if (/^\s*(#.*)?$/.test(line)) return
-      const listItem = /^\s*-(\s.*)?$/.exec(line)
-      if (listItem) {
-        if (!opened) throw new Error(`${where}: a list item comes before \`${key}:\``)
-        items.push(checked(itemOf(new Cursor(listItem[1] ?? '', where)), where))
-        return
-      }
-      const field = /^([A-Za-z_][\w-]*):(\s.*)?$/.exec(line)
-      if (!field || field[1] !== key) {
-        throw new Error(`${where}: the one key is \`${key}:\`, followed by a list`)
-      }
-      if (opened) throw new Error(`${where}: \`${key}:\` is written twice`)
-      opened = true
-      items.push(
-        ...flowListOf(new Cursor(field[2] ?? '', where)).map((item) => checked(item, where)),
-      )
-    })
+  linesOf(text).forEach((line, index) => {
+    const where = `line ${index + 1}`
+    if (/^\s*(#.*)?$/.test(line)) return
+    const listItem = /^\s*-(\s.*)?$/.exec(line)
+    if (listItem) {
+      if (!opened) throw new Error(`${where}: a list item comes before \`${key}:\``)
+      items.push(checked(itemOf(new Cursor(listItem[1] ?? '', where)), where))
+      return
+    }
+    const field = /^([A-Za-z_][\w-]*):(\s.*)?$/.exec(line)
+    if (!field || field[1] !== key) {
+      throw new Error(`${where}: the one key is \`${key}:\`, followed by a list`)
+    }
+    if (opened) throw new Error(`${where}: \`${key}:\` is written twice`)
+    opened = true
+    items.push(...flowListOf(new Cursor(field[2] ?? '', where)).map((item) => checked(item, where)))
+  })
   return items
+}
+
+/**
+ * A folder's exclusions from what a medium got of its `exclusions.yaml`: none when it has none, and
+ * none, with a warning for the medium to show, when the file was left unread or can't be parsed. A
+ * broken file never hides the folder.
+ */
+export function exclusionsFrom(read: FileRead | undefined): {
+  exclusions: string[]
+  warning?: string
+} {
+  if (read === undefined) return { exclusions: [] }
+  if ('unread' in read) return nothingLeftOut(read.unread)
+  try {
+    return { exclusions: parseExclusions(read.text) }
+  } catch (error) {
+    return nothingLeftOut(error instanceof Error ? error.message : String(error))
+  }
+}
+
+function nothingLeftOut(reason: string): { exclusions: string[]; warning: string } {
+  return {
+    exclusions: [],
+    warning: `Can't read ${exclusionsFile}, so nothing is left out: ${reason}`,
+  }
 }
 
 /** Whether `exclusions`, or the built-in ones, leave out the entry `name`, a folder when `isFolder`. */

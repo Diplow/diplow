@@ -5,8 +5,8 @@
 // drawing for that hex's file, rendered, or the Tile's CLAUDE.md when no hex is selected. A ring
 // that overflows shows as a list of its names instead, each opening as its hex would.
 import type { Elements, EngineInterface, On } from 'claude-code'
-import { leafPreview, markdownOf } from './markdown.js'
-import { exclusionsFile, parseExclusions, patternOf } from './shape/exclusions.js'
+import { leafPreview, markdownOf, oneLine } from './markdown.js'
+import { exclusionsFile, exclusionsFrom, patternOf } from './shape/exclusions.js'
 import { layoutView } from './shape/layout.js'
 import {
   basename,
@@ -30,10 +30,11 @@ import {
   type Rings,
   type SeatedRing,
   type Slot,
+  type FileRead,
   type Tile,
   unreadable,
 } from './shape/node.js'
-import { oneLine, paint, scaleFor } from './raster.js'
+import { paint, scaleFor } from './raster.js'
 import { drawSvg } from './svg.js'
 
 const pane = 'hexframe'
@@ -259,7 +260,7 @@ async function openSlot($: EngineInterface, slot: Slot) {
 async function show($: EngineInterface, target: string) {
   try {
     const body = await readBody($, target)
-    const { exclusions, warning } = await readExclusions($, target)
+    const { exclusions, warning } = exclusionsFrom(await readInFolder($, target, exclusionsFile))
     frame = await loadFrame($, target, body, exclusions)
     // A Frame kind the new folder doesn't offer gives way to its first one.
     if (!kindsOf(frame.rings).includes(frameKind)) frameKind = kindsOf(frame.rings)[0] ?? 'context'
@@ -286,22 +287,6 @@ async function loadFrame(
     if (ring) rings[kind] = await loadRing($, path, ring)
   }
   return { tile: tileOf(path, textOf(body)), rings }
-}
-
-/** A folder's exclusions; none, and a warning to show, when its `exclusions.yaml` can't be read. */
-async function readExclusions(
-  $: EngineInterface,
-  path: string,
-): Promise<{ exclusions: string[]; warning?: string }> {
-  const read = await readWithinLimit($, path, exclusionsFile, true)
-  if (read === undefined) return { exclusions: [] }
-  try {
-    if ('unread' in read) throw new Error(read.unread)
-    return { exclusions: parseExclusions(read.text) }
-  } catch (error) {
-    const warning = `Can't read ${exclusionsFile}, so nothing is left out: ${messageOf(error)}`
-    return { exclusions: [], warning }
-  }
 }
 
 /** Reads the Tile of each seated member; an overflowing ring stays names, and reads no file. */
@@ -358,13 +343,10 @@ function cycle(shown: Frame | undefined, kind: FrameKind): FrameKind {
 /** What the preview shows: a file as Markdown, or a note saying why there is nothing to render. */
 type Preview = { label: string } & ({ markdown: string } | { note: string })
 
-/** What reading a file gave: its text, or why it stays unread. */
-type Read = { text: string } | { unread: string }
-
 /** A Tile's body file, by name. */
-type Body = { name: string } & Read
+type Body = { name: string } & FileRead
 
-function textOf(read: Read | undefined): string | undefined {
+function textOf(read: FileRead | undefined): string | undefined {
   return read && 'text' in read ? read.text : undefined
 }
 
@@ -394,7 +376,7 @@ async function previewOfMember($: EngineInterface, member: Member): Promise<Prev
 /** A Leaf's file, rendered when it is Markdown and shown as it is otherwise. */
 async function previewOfLeaf($: EngineInterface, path: string): Promise<Preview> {
   const label = basename(path)
-  const read = await readWithinLimit($, parent(path), label)
+  const read = await readInFolder($, parent(path), label)
   if (read === undefined) return { label, note: `${label} is gone: r reads the folder again.` }
   if ('unread' in read) return { label, note: `Can't show ${label}: ${read.unread}` }
   return { label, ...leafPreview(label, read.text) }
@@ -409,7 +391,7 @@ function readBody($: EngineInterface, path: string): Promise<Body | undefined> {
 async function readFirst($: EngineInterface, files: readonly string[]): Promise<Body | undefined> {
   for (const file of files) {
     const name = basename(file)
-    const read = await readWithinLimit($, parent(file), name)
+    const read = await readInFolder($, parent(file), name)
     if (read) return { name, ...read }
   }
   return undefined
@@ -420,12 +402,11 @@ async function readFirst($: EngineInterface, files: readonly string[]): Promise<
  * undefined when there is none. Every file the pane reads goes through here. It never throws: a
  * read that fails gives its reason, as a file left unread does.
  */
-async function readWithinLimit(
+async function readInFolder(
   $: EngineInterface,
   folder: string,
   relative: string,
-  isOwnPath = false,
-): Promise<Read | undefined> {
+): Promise<FileRead | undefined> {
   const path = join(folder, relative)
   try {
     if (!(await $.fs.exists(path))) return undefined
@@ -433,7 +414,7 @@ async function readWithinLimit(
       $.fs.stat(path, { resolve: true }),
       $.fs.stat(folder, { resolve: true }),
     ])
-    const unread = unreadable(file, home.realPath, relative, isOwnPath)
+    const unread = unreadable(file, home.realPath, relative)
     return unread === undefined ? { text: await $.fs.read(path) } : { unread }
   } catch (error) {
     return { unread: messageOf(error) }

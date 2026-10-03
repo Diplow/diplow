@@ -4,6 +4,7 @@ import {
   bodySources,
   frontmatter,
   kindsOf,
+  linesOf,
   parent,
   readLimit,
   resolvePath,
@@ -190,6 +191,19 @@ test('a frontmatter opens on the first line and needs its closing line', () => {
   expect(splitFrontmatter('# A\n---\nb')).toEqual({ frontmatter: [], body: '# A\n---\nb' })
 })
 
+test('a line ends at every line ending a file may hold', () => {
+  expect(linesOf('a\r\nb\rc\nd\u2028e\u2029f')).toEqual(['a', 'b', 'c', 'd', 'e', 'f'])
+  expect(splitFrontmatter('---\u2028title: A\u2028---\u2028# A').frontmatter).toEqual(['title: A'])
+})
+
+test('a frontmatter line reads in time linear in its length', () => {
+  // `\s*(.*)$` took seconds on a line of spaces before a separator, still under the read limit
+  const line = `title:${' '.repeat(500_000)}x\u2028y`
+  const started = Date.now()
+  expect(frontmatter(`---\n${line}\n---\n`)).toEqual({ title: 'x' })
+  expect(Date.now() - started).toBeLessThan(500)
+})
+
 test('a medium reads a regular file within the limit, under its folder', () => {
   const stat = (realPath: string | undefined, size = 10, kind: FileStat['kind'] = 'file') => ({
     kind,
@@ -216,7 +230,7 @@ test('a medium reads a regular file within the limit, under its folder', () => {
 
 test("only the folder's own exclusions.yaml is read, never one a symlink leads to", () => {
   const own = (realPath: string, folder: string) =>
-    unreadable({ kind: 'file', size: 10, realPath }, folder, exclusionsFile, true)
+    unreadable({ kind: 'file', size: 10, realPath }, folder, exclusionsFile)
   expect(own('/v/a/.hexframe/exclusions.yaml', '/v/a')).toBeUndefined()
   expect(own('/.hexframe/exclusions.yaml', '/')).toBeUndefined()
   // `.hexframe/` or the file itself a link, to another folder of the vault, inside its own, or out

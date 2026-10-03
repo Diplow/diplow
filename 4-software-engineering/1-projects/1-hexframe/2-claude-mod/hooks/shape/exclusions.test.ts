@@ -1,5 +1,11 @@
 import { expect, test } from 'claude-code/testing'
-import { exclusionsFile, isExcluded, parseExclusions, patternOf } from './exclusions.js'
+import {
+  exclusionsFile,
+  exclusionsFrom,
+  isExcluded,
+  parseExclusions,
+  patternOf,
+} from './exclusions.js'
 
 const patterns = parseExclusions
 
@@ -20,6 +26,24 @@ test('exclusions.yaml lists its names under one key, as a block list or a flow l
   expect(patterns('exclude: []')).toEqual([])
   expect(patterns('exclude:   # nothing yet')).toEqual([])
   expect(patterns('')).toEqual([])
+})
+
+test('a lone \\r ends a line too, and leaves no item holding one', () => {
+  expect(patterns('exclude:\r  - dist/\r  - "*.log"\r')).toEqual(['dist/', '*.log'])
+})
+
+test('an exclusions.yaml missing, unread or broken leaves nothing out, and says why', () => {
+  expect(exclusionsFrom(undefined)).toEqual({ exclusions: [] })
+  expect(exclusionsFrom({ text: 'exclude: [dist/]' })).toEqual({ exclusions: ['dist/'] })
+  expect(exclusionsFrom({ unread: 'it is too large' })).toEqual({
+    exclusions: [],
+    warning: "Can't read .hexframe/exclusions.yaml, so nothing is left out: it is too large",
+  })
+  expect(exclusionsFrom({ text: 'exclude: dist' })).toEqual({
+    exclusions: [],
+    warning:
+      "Can't read .hexframe/exclusions.yaml, so nothing is left out: line 1: `exclude:` takes a list, as `[a, b]` or one `- a` per line",
+  })
 })
 
 test('anything else in exclusions.yaml throws, naming the line', () => {

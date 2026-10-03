@@ -314,15 +314,6 @@ function clip(text: string, width: number): string {
 }
 
 /**
- * `text` on one line for a terminal element or an SVG: every control character, C0 and C1, line
- * breaks among them, made a space, so a file name or a title can't break a layout or reach the
- * terminal as an escape.
- */
-export function oneLine(text: string): string {
-  return text.replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029]/g, ' ')
-}
-
-/**
  * Text a Raster cell can hold: one printable, one-column BMP character each. Wide, astral and
  * control characters read `?`; combining and zero-width ones go.
  */

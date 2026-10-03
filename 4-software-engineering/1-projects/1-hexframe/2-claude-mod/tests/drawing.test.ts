@@ -1,5 +1,5 @@
 import { expect, test } from 'claude-code/testing'
-import { codeOf, isText, leafPreview, markdownOf } from '../hooks/markdown.js'
+import { codeOf, isText, leafPreview, markdownOf, oneLine } from '../hooks/markdown.js'
 import { layoutView } from '../hooks/shape/layout.js'
 import type { Frame } from '../hooks/shape/node.js'
 import { base64, paint, sanitize, scaleFor, wrap } from '../hooks/raster.js'
@@ -65,10 +65,15 @@ test('the SVG fills a Leaf apart from a Branch', () => {
   expect(svg).toContain('fill="#4a3426"')
 })
 
+test('a name or a title reaches a Text on one line, with no control character', () => {
+  expect(oneLine('a\r\nb\tc\u2028d')).toBe('a b c d')
+  expect(oneLine('red\u001b[31m\u009b31m\u0007')).toBe('red[31m31m')
+})
+
 test('the SVG holds no control character, which would make it invalid XML', () => {
   const tile = { path: '/w', title: 'A\u0007title', preview: 'Two\nlines\u0085' }
   const svg = drawSvg(layoutView({ frame: { ...frame, tile }, frameKind: 'children' }, 1))
-  expect(svg).toContain('A title')
+  expect(svg).toContain('>Atitle<')
   expect(/[\u0000-\u001f\u007f-\u009f]/.test(svg)).toBe(false)
 })
 

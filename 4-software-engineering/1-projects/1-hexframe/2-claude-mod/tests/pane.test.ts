@@ -402,6 +402,6 @@ test('names reach the pane on one line, with no control character', async ($, on
   const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
   await ui.press({ key: 'ring' })
   expect(await ui.find({ key: 'item-1' })).toMatchObject({ props: { label: 'a b.md' } })
-  expect(await ui.find({ key: 'item-2' })).toMatchObject({ props: { label: 'c [31m.md' } })
+  expect(await ui.find({ key: 'item-2' })).toMatchObject({ props: { label: 'c[31m.md' } })
   await ui.unmount()
 })
