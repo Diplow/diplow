@@ -1,0 +1,57 @@
+.conductor/CLAUDE.md
+  s_6e75a18c885756::t_087be3430ccaaa 1-27
+.obsidian/CLAUDE.md
+  s_6e75a18c885756::t_ed06be1698db67 1-39
+4-software-engineering/1-projects/1-hexframe/2-mod/.claude-plugin/plugin.json
+  s_6e75a18c885756::t_8fd55f39eb52e6 1-6
+4-software-engineering/1-projects/1-hexframe/2-mod/.gitignore
+  s_6e75a18c885756::t_9a71d0600a4186 1-3
+4-software-engineering/1-projects/1-hexframe/2-mod/.prettierignore
+  s_6e75a18c885756::t_606504b5a46878 1-2
+4-software-engineering/1-projects/1-hexframe/2-mod/.prettierrc.json
+  s_6e75a18c885756::t_27fd07cda4d82f 1-5
+4-software-engineering/1-projects/1-hexframe/2-mod/CLAUDE.md
+  s_6e75a18c885756::t_5bdfb07d3c29b1 1-55
+4-software-engineering/1-projects/1-hexframe/2-mod/hooks/hooks.json
+  s_6e75a18c885756::t_0084dc4fe03c33 1-3
+4-software-engineering/1-projects/1-hexframe/2-mod/hooks/layout.ts
+  s_6e75a18c885756::t_5ac201767fe5e6 1-62
+4-software-engineering/1-projects/1-hexframe/2-mod/hooks/node.ts
+  s_6e75a18c885756::t_06791fec9b5ab0 1-194
+4-software-engineering/1-projects/1-hexframe/2-mod/hooks/raster.ts
+  s_6e75a18c885756::t_af310e20388fff 1-370
+4-software-engineering/1-projects/1-hexframe/2-mod/hooks/register.ts
+  s_6e75a18c885756::t_4d3ff30bf29f0a 1-240
+4-software-engineering/1-projects/1-hexframe/2-mod/hooks/svg.ts
+  s_6e75a18c885756::t_90d082df996ba7 1-118
+4-software-engineering/1-projects/1-hexframe/2-mod/package.json
+  s_6e75a18c885756::t_4e4f2901402314 1-13
+4-software-engineering/1-projects/1-hexframe/2-mod/tests/node.test.ts
+  s_6e75a18c885756::t_163ef8483af84d 1-109
+4-software-engineering/1-projects/1-hexframe/2-mod/tests/pane.test.ts
+  s_6e75a18c885756::t_0e1d32dc2b5568 1-120
+4-software-engineering/1-projects/1-hexframe/CLAUDE.md
+  s_6e75a18c885756::t_a6bba6276a931d 19
+4-software-engineering/1-projects/1-hexframe/STACK.md
+  s_6e75a18c885756::t_841c575f40dc74 25
+4-software-engineering/1-projects/1-hexframe/pnpm-lock.yaml
+  s_6e75a18c885756::t_99f4199e53a7c8 105-113,116-164,3334-3368
+4-software-engineering/1-projects/1-hexframe/pnpm-workspace.yaml
+  s_6e75a18c885756::t_b15ed5ca6931ea 4-7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b63b0abafe143f42a0bc47caabfe66628e62c1dd",
+  "prompts": {},
+  "sessions": {
+    "s_6e75a18c885756": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "02ad6137-0861-4c0b-8a55-97b2d8470fc9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
