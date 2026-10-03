@@ -1,23 +1,23 @@
 ---
-title: mod
-parent: 4-software-engineering/1-projects/1-hexframe/2-mod
+title: claude-mod
+parent: 4-software-engineering/1-projects/1-hexframe/2-claude-mod
 owner: diplo
 preview: >-
-  @hexframe/mod, a Claude Code mod: /hexframe [folder] opens a pane that shows
-  a folder as a hexframe, its tile in the middle and its six children or its
-  context around it, and walks the tree from there. A Raster in the terminal,
-  an SVG in the Desktop app.
+  @hexframe/claude-mod, a Claude Code mod: /hexframe [folder] opens a pane that
+  shows a folder as a hexframe, its tile in the middle and its six children or
+  its context around it, and walks the tree from there. A Raster in the
+  terminal, an SVG in the Desktop app.
 ---
-# mod
+# claude-mod
 
-`@hexframe/mod`, a [Claude Code mod](https://code.claude.com/docs/en/plugins/mods/overview): a plugin whose hooks module draws in Claude Code itself. It shows a folder of this vault as a hexframe without the app.
+`@hexframe/claude-mod`, a [Claude Code mod](https://code.claude.com/docs/en/plugins/mods/overview): a plugin whose hooks module draws in Claude Code itself. It shows a folder of this vault as a hexframe without the app.
 
 ## Use it
 
 Mods need Claude Code 2.1.287 or later, and are in early access. From the repo root:
 
 ```bash
-claude --plugin-dir 4-software-engineering/1-projects/1-hexframe/2-mod
+claude --plugin-dir 4-software-engineering/1-projects/1-hexframe/2-claude-mod
 ```
 
 Then `/hexframe` shows the session's folder, and `/hexframe <folder>` another one, relative to the session's. In the pane, `1` to `6` open the tile in that direction, `u` goes up, `c` switches between the Children and the Context, Tab outlines the hex whose button it lands on, `p` swaps the drawing for that hex's `CLAUDE.md`, rendered (the folder's own when no hex is outlined), and back, `r` reads the folder again, and Esc closes it.
