@@ -1,17 +1,19 @@
 // Draws a Frame's placements as an SVG document, for the surfaces that take one (the Desktop app).
-import type { Direction } from './node.js'
+// Each hex takes its placement's radius; the text keeps one size, set for claude-mod's depth 1.
+import type { Direction } from './shape/node.js'
 import { wrap } from './raster.js'
-import {
-  bandWidth,
-  frameHeight,
-  frameWidth,
-  hexCorners,
-  hexRadius,
-  type Placement,
-} from './layout.js'
+import { viewHeight, viewWidth, hexCorners, type Placement } from './shape/layout.js'
 
 /** Pixels per unit of the layout. */
 const scale = 110
+
+/** The share of a placement's radius a hex is drawn at, leaving a gap between neighbors. */
+const hexRadius = 0.93
+
+/** The width of the band between a hex's side corners, where its text sits. */
+function bandWidth(radius: number): number {
+  return Math.sqrt(3) * radius
+}
 
 const fills = {
   center: { fill: '#5b3cc4', title: '#ffffff', preview: '#ddd6fe' },
@@ -26,8 +28,8 @@ const characterWidth = 0.55
 
 /** Draws the placements; the member in direction `selected`, if any, outlined. */
 export function drawSvg(placements: readonly Placement[], selected?: Direction): string {
-  const width = Math.round(frameWidth * scale)
-  const height = Math.round(frameHeight * scale)
+  const width = Math.round(viewWidth * scale)
+  const height = Math.round(viewHeight * scale)
   const shapes = placements.map((placement) => shapeOf(placement, selected)).join('')
   return (
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" ` +
@@ -38,7 +40,8 @@ export function drawSvg(placements: readonly Placement[], selected?: Direction):
 function shapeOf(placement: Placement, selected: Direction | undefined): string {
   const cx = placement.center.x * scale
   const cy = placement.center.y * scale
-  const points = hexCorners(placement.center, hexRadius)
+  const radius = hexRadius * placement.radius
+  const points = hexCorners(placement.center, radius)
     .map(({ x, y }) => `${round(x * scale)},${round(y * scale)}`)
     .join(' ')
 
@@ -50,7 +53,7 @@ function shapeOf(placement: Placement, selected: Direction | undefined): string 
   }
 
   const colors = fills[placement.kind === 'center' ? 'center' : placement.ring]
-  const band = bandWidth(hexRadius) * scale * 0.86
+  const band = bandWidth(radius) * scale * 0.86
   const title = wrap(placement.tile.title, Math.floor(band / (titleSize * characterWidth)), 2)
   const preview = wrap(
     placement.tile.preview,
@@ -77,7 +80,7 @@ function shapeOf(placement: Placement, selected: Direction | undefined): string 
     placement.kind === 'member'
       ? text(
           cx,
-          cy - hexRadius * scale * 0.72,
+          cy - radius * scale * 0.72,
           colors.preview,
           previewSize,
           String(placement.direction),

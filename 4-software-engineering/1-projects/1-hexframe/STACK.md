@@ -182,18 +182,7 @@ A conversation with an agent that builds a System on the user's behalf, saving e
 
 ## A vault as a hexframe
 
-This vault is a hexframe kept as files: a folder per Tile, its `CLAUDE.md` for the Body, the shape a System exports to. claude-mod shows it inside Claude Code, the Obsidian plugin inside Obsidian, and the app will read it one day. If each medium read a folder its own way, the same vault would show as two hexframes, so they all read it by the rules below. The root `STACK.md` lays out the same slots from the repo's side: its children are the Branches, its files the Leaves (dot files aside), its inner children the Context.
-
-The section borrows Mapping's Tile, Context and Frame, and adds words for what a System doesn't have: files beside folders. A folder holds up to six Branches and six Leaves, and a Frame still draws at most six hexes around its Tile.
-
-What a folder is:
-
-- **Tile**: a folder's own is the `title` and `preview` of its `CLAUDE.md`, or of its `-CLAUDE.md` when it keeps a private one. Without either, a title made from the folder's name.
-- **Branch** and **Leaf**: a child folder and a file. A Leaf grows into a Branch when it needs children of its own, and keeps its direction: `3-games.md` becomes `3-games/`. Branches and Leaves count their directions apart: `<n>-<slug>` sits in direction n, and an unnumbered name takes the first free direction in name order. When two names claim one number, the later in name order overflows. A folder's `CLAUDE.md` and `-CLAUDE.md` are its Tile, never Leaves, and a dot file is neither a Leaf nor Context.
-- **Context**: the dot folders. `.<n>-<slug>/` sits in direction n, as hexframe exports a System, then the other dot folders (`.claude/`, `.skills/`) take the free slots in name order.
-- **`.hexframe/` folder**: a folder's settings. Its `exclusions.yaml` lists the names and globs that folder leaves out, for that folder only. `.hexframe/` itself is always left out, as are `.git` and `node_modules`.
-- **The vault's edge**: a medium reads nothing outside the vault. It follows a symlink only when the symlink's real path lies under the vault root's real path, compared folder by folder rather than as a string prefix; any other symlink is left out like an excluded name.
-- **Overflow**: a candidate that finds no direction, because its ring already has six or because its number is taken.
+This vault is a hexframe kept as files: a folder per Tile, its `CLAUDE.md` for the Body, the shape a System exports to. claude-mod shows it inside Claude Code, the Obsidian plugin inside Obsidian, and the app will read it one day. If each medium read a folder its own way, the same vault would show as two hexframes, so they all read it through one pure definition, the [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE|shape]]: what a folder is (its Tile, Branches, Leaves and Context, the `.hexframe/` folder, the vault's edge, overflow) and the layout that takes a depth. It lives inside claude-mod because a mod can import nothing outside its own folder, and every other medium imports it from there.
 
 How a medium looks at it. This is view state, as in the app:
 
@@ -203,7 +192,7 @@ How a medium looks at it. This is view state, as in the app:
 - **An overflowing Frame** shows as a list, not as hexes, until exclusions or renames clear it. Only that Frame becomes a list, unless it is the center's outer ring: then the whole view does.
 - **Hexframe file**: a `*.hexframe` file opens the view on its folder and keeps the view's state in JSON: the center and the expansions. It is to a medium what the URL is to the app; the Obsidian plugin will put a `diplow.hexframe` at this vault's root. Its paths are relative to the vault, and a medium resolves each one to its real path, symlinks followed, before using it. One that lands outside the vault, through `..`, an absolute path or a symlink, or on an excluded name, is dropped and the file's own folder opens instead, so a shared vault can't make a medium read beyond itself.
 
-The reading rules, the vault's edge with the path check it implies, and the layout that takes a depth, move into `1-hexframe/.shape/` when the ticket that extracts the shared shape lands, as the one pure definition every medium reads through; this section then keeps one line and a link. The rest of the view state stays each medium's.
+Each medium keeps its view state itself; the shape's layout takes the depth and the expanded members as parameters.
 
 ## Languages
 

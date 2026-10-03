@@ -2,8 +2,9 @@
 // as it is wide, so it holds two square pixels, drawn with a half block. The hexes are pixel art
 // rather than scaled geometry: every hex is the same stamp, set on whole pixels, its slanted sides
 // stepping two columns per pixel row, the steadiest line a grid draws near a hex's 30 degrees.
-import { frameHeight, frameWidth, type Placement, type Point } from './layout.js'
-import type { Direction } from './node.js'
+// So it draws depth 1 only, where every placement's radius is 1: claude-mod's depth.
+import { viewHeight, viewWidth, type Placement, type Point } from './shape/layout.js'
+import type { Direction } from './shape/node.js'
 
 /** The terminal's own color, as a Raster's cells name it. */
 const defaultColor = 0x01000000
@@ -139,8 +140,8 @@ const lowerHalf = 0x2584
  * across and one ring row down, so its centers map to whole steps of it.
  */
 function originOf(center: Point, stamp: Stamp): Point {
-  const across = Math.round(((center.x - frameWidth / 2) * 2) / Math.sqrt(3))
-  const down = Math.round((center.y - frameHeight / 2) / 1.5)
+  const across = Math.round(((center.x - viewWidth / 2) * 2) / Math.sqrt(3))
+  const down = Math.round((center.y - viewHeight / 2) / 1.5)
   return {
     x: stamp.width + gapColumns + (across * (stamp.width + gapColumns)) / 2,
     y: pitchOf(stamp) * (1 + down),

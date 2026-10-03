@@ -3,12 +3,12 @@
 // Tab outlines the hex whose button it lands on, and `p` swaps the drawing for that hex's
 // CLAUDE.md, rendered, or the Tile's when no hex is selected.
 import type { EngineInterface, On } from 'claude-code'
-import { layoutFrame, type Ring } from './layout.js'
+import { markdownOf } from './markdown.js'
+import { layoutView, type Ring } from './shape/layout.js'
 import {
   bodyFiles,
   directions,
   join,
-  markdownOf,
   parent,
   resolvePath,
   sortFolders,
@@ -16,11 +16,14 @@ import {
   type Direction,
   type Frame,
   type Tile,
-} from './node.js'
+} from './shape/node.js'
 import { paint, scaleFor } from './raster.js'
 import { drawSvg } from './svg.js'
 
 const pane = 'hexframe'
+
+/** The generations the pane shows from the center, as STACK.md gives claude-mod. */
+const depth = 1
 
 /** Rows the pane keeps under the drawing: the controls and the path. */
 const footerRows = 4
@@ -155,7 +158,7 @@ export function register(on: On) {
       return Box({ flexDirection: 'column', rowGap: 1, children: [...footer, shown] })
     }
 
-    const placements = layoutFrame(frame, ring)
+    const placements = layoutView({ frame, ring }, depth)
     if (e.surface === 'terminal') {
       const { Raster } = $.ui.resolve(e)
       const scale = scaleFor(e.props.bodyColumns, e.props.scroll.bodyRows - footerRows)
