@@ -1,0 +1,35 @@
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/register.ts
+  s_221932f643db8c::t_85cc47574a10d5 7,161
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE.md
+  s_221932f643db8c::t_1bb98879c41c4b 13-15,30
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/svg.ts
+  s_221932f643db8c::t_85cc47574a10d5 2,5,31-32
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/CLAUDE.md
+  s_221932f643db8c::t_1bb98879c41c4b 27
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/layout.test.ts
+  s_221932f643db8c::t_85cc47574a10d5 2,14,36,49,59-60,69
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/raster.ts
+  s_221932f643db8c::t_85cc47574a10d5 5-6,143-144
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/layout.ts
+  s_221932f643db8c::t_85cc47574a10d5 33-34,40,44-45
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/tests/drawing.test.ts
+  s_221932f643db8c::t_85cc47574a10d5 3,31
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/package.json
+  s_221932f643db8c::t_85cc47574a10d5 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3b70215da83e5df4e2dc921abf5c592b297d728d",
+  "prompts": {},
+  "sessions": {
+    "s_221932f643db8c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a37f577e-0e1b-462e-aae7-939f4bda3ddd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
