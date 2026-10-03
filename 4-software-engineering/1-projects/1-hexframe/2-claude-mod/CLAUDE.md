@@ -27,7 +27,7 @@ Then `/hexframe` shows the session's folder, and `/hexframe <folder>` another on
 | `1` to `6` | Opens the hex in that direction: a Branch or a Context tile walks into its folder, a Leaf shows its file in place of the drawing |
 | `u` | Goes up to the parent folder |
 | `c` | Cycles the Frame kinds the folder offers: Children then Context, or, past six Branches and Leaves, Branches, Leaves, then Context |
-| Tab | Outlines the hex whose button it lands on |
+| Tab | Outlines the hex whose button it lands on, or, in a list, reaches each name; pressing a name opens it as its hex would |
 | `p` | Swaps the drawing for the outlined hex's file, and back: a folder's `CLAUDE.md` (the shown folder's own when no hex is outlined) or a Leaf, rendered when it is Markdown and shown as it is otherwise |
 | `r` | Reads the folder again |
 | Esc | Closes the pane |
@@ -36,7 +36,9 @@ Leaves take their own fill, warm where Branches are slate. A Leaf over 1 MB is n
 
 ## How it reads a folder
 
-Through the [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE|shape]], the one definition every medium reads a vault by, at the depth [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]] gives claude-mod: 1. It shows the four Frame kinds the shape offers. What the shape doesn't read yet, claude-mod doesn't show: a `.hexframe/` folder shows as a Context tile. A ring that overflows is named under the drawing instead of turning the Frame into a list.
+Through the [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE|shape]], the one definition every medium reads a vault by, at the depth [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]] gives claude-mod: 1. It shows the four Frame kinds the shape offers, with the names the folder's `.hexframe/exclusions.yaml` lists left out. When that file can't be read, nothing is left out and a red line says why.
+
+A ring that overflows shows as a list in place of the drawing: every candidate's name, a folder's ending in `/`, under a line naming those that found no direction and pointing to `exclusions.yaml`. The controls sit above it, since a long list scrolls. `c` still cycles to the folder's other Frame kinds, which draw as hexes when they fit.
 
 ## Scripts
 
