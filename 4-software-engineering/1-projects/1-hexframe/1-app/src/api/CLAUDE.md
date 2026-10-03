@@ -3,22 +3,22 @@ title: api
 parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/api
 owner: diplo
 preview: >-
-  The API layer: server functions, the one helper that runs their Effect
-  programs, and the client's side of the seam, where a failure is decoded back
-  into its tagged class and sent to the channel its kind and call pick, with a
-  message from the table, in English and French; and what gets logged, at which
-  verbosity, to PostHog and Sentry.
+  The API layer: server functions, a folder per domain, the one helper that
+  runs their Effect programs, and the error model both sides share: a
+  failure's wire form, the channel its kind and call pick, its message in
+  English and French; and what gets logged, at which verbosity, to PostHog and
+  Sentry. The client's side of the seam is the front's.
 ---
 # api
 
-The layer between what the client shows and what the domains know. On the server, a server function (`createServerFn`) is plumbing (auth, request id, logging) and the composition of domains; on the client, the same module is what a route or a feature calls. This folder holds both sides of that seam, and the error model that crosses it.
+The layer between what the client shows and what the domains know. On the server, a server function (`createServerFn`) is plumbing (auth, request id, logging) and the composition of domains; on the client, the same module is what a route or a feature calls. This folder holds the server's side of that seam and the error model that crosses it; the client's side, which carries a failure out to its channel, is [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE|the front]]'s, in `front/client/`. Nothing here imports the front: dependency-cruiser says no.
 
 | Folder | Holds |
 |---|---|
 | `server/` | `run.ts`, the helper: `RequestContext`, the one `ManagedRuntime` and its repositories, the bus's subscriptions, `run(context, program)` and `provenSession`; `middleware.ts`, Start's middleware, which `src/start.ts` runs before every server function: `sameOriginOnly`, the CSRF check, then `requestContext`; `bus.ts`, the server bus |
 | `errors/` | Shared by both sides and pure: `failure.ts`, the union of every failure and its wire form (`Outcome`, `encodeFailure`, `decodeFailure`); `channel.ts`, the channel table; `messages.ts`, the message table. Tested |
-| `client/` | `calls.ts`, `settle` and the `read` and `write` builders for TanStack Query; `channels.ts`, the QueryClient that carries each failure out, and `submitWrite` for a form; `ReadBoundary`, the nearest boundary of a read |
-| `domains/` | Each domain's side of this layer, one folder per domain: its server functions, the programs they run, and what the client calls them through. `iam/`: `signUp`, `signIn`, `signOut`, `session`, and `guard.ts`: `signedInOnly`, the `beforeLoad` of a page only a signed-in Account sees, and the `?redirect=` sign-in and sign-up read back: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/domains/iam/CLAUDE\|iam]]. `mapping/`: a server function per operation, for the signed-in Account, and a TanStack Query hook per read and per write: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/domains/mapping/CLAUDE\|mapping]] |
+| `iam/` | IAM's server functions: `signUp`, `signIn`, `signOut`, `session`: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/CLAUDE\|iam]] |
+| `mapping/` | Mapping's: a server function per operation, for the signed-in Account, and the programs they run: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/CLAUDE\|mapping]] |
 | `dev/` | The failures, programs and server functions `/dev/errors` uses to provoke every channel. They stay members of `Failure` as long as the page exists; outside dev and previews the functions answer `NotFound` |
 | `observability/` | `levels.ts`, the verbosity levels, shared and pure; `server.ts`, the logger that sends the lines a request's verbosity logs to PostHog and an error's cause to Sentry, and what `run` logs; `client.ts`, the client's `log` and `reportError`: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/CLAUDE\|observability]] |
 
@@ -28,7 +28,7 @@ Domains, repositories and the API layer are Effect. The client stays on TanStack
 
 The two meet in one helper. Start middleware stays promise-based and puts the request id, the server function's name (its scope), the platform's `waitUntil`, the request's `HttpExchange` and its Session on Start's `context`; every server function hands its program to `run`, which provides that context as Effect services (`RequestContext`, `WaitUntil`, `HttpExchange`, IAM's `CurrentSession`), runs the program on one `ManagedRuntime` built from every layer, and returns an `Outcome`: the value, or the failure encoded with the request id. Nothing else calls `run*`: `eslint.config.ts` says no, and `scripts/lint.test.ts` proves it fires.
 
-The shape every server function takes, here Mapping's `moveTile` (`domains/mapping/mapping.ts`):
+The shape every server function takes, here Mapping's `moveTile` (`mapping/mapping.ts`):
 
 ```ts
 export const moveTile = createServerFn({ method: 'POST' })
@@ -53,7 +53,7 @@ export const moveTile = createServerFn({ method: 'POST' })
 | a write | anything else | one toast |
 
 - **The message table** is keyed by `_tag`, optionally narrowed by a scope (the server function's name, which the call names), first match wins, with a fallback per kind, in both languages. The server's own sentence never reaches the screen.
-- **A feature writes no error handling**: components never `try/catch` a call, reducers never hold an error. The QueryClient and `submitWrite` send each failure to its channel:
+- **A feature writes no error handling**: components never `try/catch` a call, reducers never hold an error. The QueryClient and `submitWrite` (`src/front/client/`) send each failure to its channel:
   - a read a page shows is `useQuery(read({ scope, key, call }))`, inside a `ReadBoundary`;
   - a read that frames every page is `useQuery(read({ scope, key, call, frame: true }))`, with no boundary: its failure is reported and it renders nothing;
   - a write is `useMutation(write(scope, call))`;
@@ -63,7 +63,7 @@ Adapted from the error model of a previous project; its channels survive, its HT
 
 ## The server bus
 
-A domain publishes a fact other parts may react to, without knowing who does; this layer, which alone composes domains, wires who reacts. The client has its own bus, between features: [[4-software-engineering/1-projects/1-hexframe/1-app/src/features/CLAUDE|features]].
+A domain publishes a fact other parts may react to, without knowing who does; this layer, which alone composes domains, wires who reacts. The client has its own bus, between features: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/CLAUDE|features]].
 
 - **A domain declares its events** in its language, in the past tense (`AccountCreated`), as `Schema.TaggedClass`, and publishes them through `Bus`, from `src/domains/bus.ts`: beside the domains, like `kind.ts`, so a domain reaches it without importing this layer. A domain never subscribes.
 - **Subscriptions are wired in `server/run.ts`**, one `on(AccountCreated, reaction)` each, where the reaction calls another domain. The event's schema picks what a subscription hears. A caller that needs a result calls directly: publishing neither fails nor waits, so the bus is never a way to ask.
@@ -80,7 +80,7 @@ Sentry owns errors, traces and alerting; PostHog, product analytics and the leve
 
 - **Every server function runs through `run`**, and validates its input with an Effect Schema (`Schema.toStandardSchemaV1`) in `.validator`.
 - **Auth is checked in middleware, once.** `middleware.ts` resolves the Session the request's cookie proves (`provenSession`, the one other program `run.ts` runs) before any server function; a function for signed-in Accounts starts its program with IAM's `signedIn`. A lookup that fails (the database is down) is kept as it failed, and `run` fails the program with it: `Unexpected`, with the request id. Before any of it, `sameOriginOnly` refuses a server function call from another site with a 403: the session cookie rides along with every call.
-- **The sign-in page is IAM's**: the redirect goes to `/sign-in?redirect=<where the user was>`, in the page's language, the path without its language prefix. A page only a signed-in Account sees guards itself with `beforeLoad: signedInOnly` (`domains/iam/guard.ts`), which redirects the same way before anything renders, on the server too. Sign-in refuses a `redirect` that is not a path on this site.
+- **The sign-in page is IAM's**: the redirect goes to `/sign-in?redirect=<where the user was>`, in the page's language, the path without its language prefix. A page only a signed-in Account sees guards itself with `beforeLoad: signedInOnly` (`src/front/client/iam/guard.ts`), which redirects the same way before anything renders, on the server too. Sign-in refuses a `redirect` that is not a path on this site.
 - **The runtime's repositories depend on where it runs**, which `run.ts` decides and [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE|auth]] tells.
-- **A module the client imports never reaches `run.ts` outside a handler.** Start strips what a server function's handler alone uses, not what the module exports, and `run.ts` carries Better Auth and the database: an Effect program a test needs goes in a module of its own (`dev/programs.ts`, `domains/mapping/programs.ts`). `build` fails when server code reaches the client bundle (`scripts/check-client-bundle.ts`).
+- **A module the client imports never reaches `run.ts` outside a handler.** Start strips what a server function's handler alone uses, not what the module exports, and `run.ts` carries Better Auth and the database: an Effect program a test needs goes in a module of its own (`dev/programs.ts`, `mapping/programs.ts`). `build` fails when server code reaches the client bundle (`scripts/check-client-bundle.ts`).
 - **The dev server functions answer `NotFound` outside dev and previews**, as the `/dev` pages answer 404. A malformed call fails Start's validation first, which runs before the handler, and reaches the client as `Unexpected`.

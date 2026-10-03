@@ -17,8 +17,8 @@ async function restrictedSyntax(code: string, filePath: string) {
     .map((message) => message.message)
 }
 
-const feature = 'src/routes/index.tsx'
-const inUi = 'src/ui/data/DataTable.tsx'
+const feature = 'src/front/routes/index.tsx'
+const inUi = 'src/front/ui/data/DataTable.tsx'
 const colour = /theme token/
 
 // The first type-aware lint builds the TypeScript program of the whole app, which takes seconds on a
@@ -43,7 +43,7 @@ describe('the colour lint', () => {
     expect(messages.every((message) => colour.test(message))).toBe(true)
   })
 
-  it.each(['bg-background text-muted-foreground whitespace-nowrap', '#cafe', '#/ui/tokens'])(
+  it.each(['bg-background text-muted-foreground whitespace-nowrap', '#cafe', '#/front/ui/tokens'])(
     'lets %s through',
     async (literal) => {
       expect(await restrictedSyntax(`export const a = '${literal}'\n`, feature)).toEqual([])
@@ -60,7 +60,7 @@ describe('the raw element lint', () => {
   it.each(['table', 'dialog'])('refuses a <%s> outside ui/', async (element) => {
     const messages = await restrictedSyntax(`export const e = <${element} />\n`, feature)
     expect(messages).toEqual([
-      `No raw <${element}> outside src/ui/: build from the design system's component.`,
+      `No raw <${element}> outside src/front/ui/: build from the design system's component.`,
     ])
   })
 
@@ -70,7 +70,7 @@ describe('the raw element lint', () => {
 })
 
 describe('the effect hook lint', () => {
-  const effect = /No useEffect outside src\/ui\//
+  const effect = /No useEffect outside src\/front\/ui\//
 
   it.each([
     "import { useEffect } from 'react'\nuseEffect(() => undefined)\n",
@@ -151,9 +151,9 @@ describe('the UI library boundary', () => {
     expect(to.test(module)).toBe(false)
   })
 
-  it('exempts src/ui/ and nothing else', () => {
-    expect(exempt.test('src/ui/overlays/Drawer.tsx')).toBe(true)
-    expect(exempt.test('src/routes/index.tsx')).toBe(false)
+  it('exempts src/front/ui/ and nothing else', () => {
+    expect(exempt.test('src/front/ui/overlays/Drawer.tsx')).toBe(true)
+    expect(exempt.test('src/front/routes/index.tsx')).toBe(false)
   })
 })
 

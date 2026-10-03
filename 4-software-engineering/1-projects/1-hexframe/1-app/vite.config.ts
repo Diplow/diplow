@@ -20,14 +20,16 @@ export default defineConfig(({ command }) => {
     plugins: [
       paraglideVitePlugin({
         project: './project.inlang',
-        outdir: './src/paraglide',
+        // Generated, so outside src/ and the rule of 6; `#/paraglide/*` reaches it (tsconfig.json).
+        outdir: './paraglide',
         // The locale lives in the URL (`/` English, `/fr/…` French), so a link shows what its sender saw.
         strategy: ['url', 'baseLocale'],
       }),
       // Nitro builds the server for Vercel's Node runtime. It is a beta, and this is its seam: the one line to swap.
       nitro(),
       tailwindcss(),
-      tanstackStart(),
+      // The routes sit in the front layer (src/front/), beside the features and the design system.
+      tanstackStart({ router: { routesDirectory: 'front/routes' } }),
       viteReact(),
     ],
   }

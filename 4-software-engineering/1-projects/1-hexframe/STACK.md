@@ -54,11 +54,12 @@ Every folder under `1-app/src/` holds at most 6 child folders and 6 files. The r
 
 | Layer | In TanStack Start | Holds |
 |---|---|---|
+| Front | File routes, the features they compose, the design system, and the client's calls, on TanStack Router, Query and Form | What the browser shows |
 | API | Server functions (`createServerFn`) and Start middleware; raw server routes only for inbound webhooks | Plumbing (auth, request id, logging) and the composition of domains |
 | Domains | Effect services, one folder per domain | The business logic, in the domain's language |
 | Repositories | Effect layers over Drizzle, Better Auth, Stripe | The technical complexity |
 
-Domains ignore each other; only the API layer composes them.
+An import only points down, so nothing below the front, the API layer included, can reach what the browser shows, and the front reaches the domains through the API layer only. Domains ignore each other; only the API layer composes them.
 
 ## Effect stops at the server function
 
@@ -70,7 +71,7 @@ Each domain's errors carry a kind from a closed set; the client decodes them bac
 
 ## The bus
 
-One typed bus on the server, one in the client, for facts other parts may react to: a domain publishes, the API layer wires who reacts, and subscribers finish inside the request through `waitUntil`; features tell each other what happened without importing each other. The rules now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]] and [[4-software-engineering/1-projects/1-hexframe/1-app/src/features/CLAUDE|features]].
+One typed bus on the server, one in the client, for facts other parts may react to: a domain publishes, the API layer wires who reacts, and subscribers finish inside the request through `waitUntil`; features tell each other what happened without importing each other. The rules now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]] and [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/CLAUDE|features]].
 
 ## State
 
@@ -94,7 +95,7 @@ Three small custom lint rules enforce it: the `useState` ceiling, no `dispatch` 
 
 ## Design system
 
-`ui/` is a closed list of components I own, in six folders, light and dark from the start. The rules now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/ui/CLAUDE|ui]].
+`ui/` is a closed list of components I own, in six folders, light and dark from the start. The rules now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]].
 
 ## Lint
 

@@ -8,16 +8,16 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as DevRouteRouteImport } from './routes/dev/route'
-import { Route as SignInRouteImport } from './routes/sign-in'
-import { Route as SignUpRouteImport } from './routes/sign-up'
-import { Route as DevErrorsRouteImport } from './routes/dev/errors'
-import { Route as DevHexRouteImport } from './routes/dev/hex'
-import { Route as DevSessionRouteImport } from './routes/dev/session'
-import { Route as DevSystemRouteImport } from './routes/dev/system'
-import { Route as DevUiRouteImport } from './routes/dev/ui'
+import { Route as rootRouteImport } from './front/routes/__root'
+import { Route as IndexRouteImport } from './front/routes/index'
+import { Route as DevRouteRouteImport } from './front/routes/dev/route'
+import { Route as SignInRouteImport } from './front/routes/sign-in'
+import { Route as SignUpRouteImport } from './front/routes/sign-up'
+import { Route as DevErrorsRouteImport } from './front/routes/dev/errors'
+import { Route as DevHexRouteImport } from './front/routes/dev/hex'
+import { Route as DevSessionRouteImport } from './front/routes/dev/session'
+import { Route as DevSystemRouteImport } from './front/routes/dev/system'
+import { Route as DevUiRouteImport } from './front/routes/dev/ui'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',

@@ -1,8 +1,29 @@
 import type { IConfiguration } from 'dependency-cruiser'
 
-// Layers, top to bottom: routes → features → API → domains → repositories. An import only ever
-// points down. A feature is client code a route composes: it reaches the server through src/api/.
-const layers = ['routes', 'features', 'api', 'domains', 'repositories']
+// Layers, top to bottom: front → API → domains → repositories. An import only ever points down, so
+// nothing below the front, the API layer included, can reach what the browser shows. The front is
+// the client: routes, the features they compose, the client's side of the API and the design system;
+// it reaches the server through src/api/. Each layer is a tier of one or more sibling folders.
+const layers = [['front'], ['api'], ['domains'], ['repositories']]
+
+// Inside the front, top to bottom: routes → features → the client's side of the API and the design
+// system, side by side. A route composes features; neither a feature nor the design system imports
+// a route, and neither the client nor the design system imports a feature.
+const frontLayers = [['routes'], ['features'], ['client', 'ui']]
+
+/** One rule per tier below the top: it never imports a tier above it. */
+function upward(root: string, tiers: string[][]): NonNullable<IConfiguration['forbidden']> {
+  return tiers.slice(1).map((tier, index) => {
+    const above = tiers.slice(0, index + 1).flat()
+    return {
+      name: `no-${tier.join('-or-')}-importing-up`,
+      comment: `${tier.join(' and ')} sit below ${above.join(', ')} and never import them.`,
+      severity: 'error',
+      from: { path: `^${root}(${tier.join('|')})/` },
+      to: { path: `^${root}(${above.join('|')})/` },
+    }
+  })
+}
 
 // Each third-party SDK is imported by its repository alone; the rest of the app sees it through that seam.
 const sdks = {
@@ -17,7 +38,7 @@ const sdks = {
   observability: ['@sentry/.+', 'posthog-js', 'posthog-node'],
 }
 
-// The UI libraries behind the design system: only src/ui/ imports them, and a feature builds from ui/.
+// The UI libraries behind the design system: only src/front/ui/ imports them, and a feature builds from ui/.
 const uiLibraries = [
   'radix-ui',
   '@radix-ui/.+',
@@ -28,14 +49,6 @@ const uiLibraries = [
   '@tanstack/(react-)?markdown',
   'sonner',
 ]
-
-const upwardImports: IConfiguration['forbidden'] = layers.slice(1).map((layer, index) => ({
-  name: `no-${layer}-importing-up`,
-  comment: `${layer} sits below ${layers.slice(0, index + 1).join(', ')} and never imports them.`,
-  severity: 'error',
-  from: { path: `^src/${layer}/` },
-  to: { path: `^src/(${layers.slice(0, index + 1).join('|')})/` },
-}))
 
 const sdkOutsideItsRepository: IConfiguration['forbidden'] = Object.entries(sdks).map(
   ([repository, modules]) => ({
@@ -50,12 +63,13 @@ const sdkOutsideItsRepository: IConfiguration['forbidden'] = Object.entries(sdks
 
 const config: IConfiguration = {
   forbidden: [
-    ...upwardImports,
+    ...upward('src/', layers),
+    ...upward('src/front/', frontLayers),
     {
-      name: 'no-routes-or-features-importing-domains-or-repositories',
-      comment: 'A route or a feature reaches the server through a server function in src/api/.',
+      name: 'no-front-importing-domains-or-repositories',
+      comment: 'The front reaches the server through a server function in src/api/.',
       severity: 'error',
-      from: { path: '^src/(routes|features)/' },
+      from: { path: '^src/front/' },
       to: { path: '^src/(domains|repositories)/' },
     },
     {
@@ -63,8 +77,8 @@ const config: IConfiguration = {
       comment:
         'Sibling features ignore each other; a route composes them, the client bus links them.',
       severity: 'error',
-      from: { path: '^src/features/([^/]+)/' },
-      to: { path: '^src/features/([^/]+)/', pathNot: '^src/features/$1/' },
+      from: { path: '^src/front/features/([^/]+)/' },
+      to: { path: '^src/front/features/([^/]+)/', pathNot: '^src/front/features/$1/' },
     },
     {
       name: 'no-domain-importing-another',
@@ -84,9 +98,9 @@ const config: IConfiguration = {
     },
     {
       name: 'no-ui-library-outside-ui',
-      comment: `${uiLibraries.join(', ')}: imported by src/ui/ only; a feature builds from its components.`,
+      comment: `${uiLibraries.join(', ')}: imported by src/front/ui/ only; a feature builds from its components.`,
       severity: 'error',
-      from: { pathNot: '^src/ui/' },
+      from: { pathNot: '^src/front/ui/' },
       to: { path: `(^|node_modules/)(${uiLibraries.join('|')})(/|$)` },
     },
     {
@@ -100,7 +114,7 @@ const config: IConfiguration = {
   ],
   options: {
     doNotFollow: { path: 'node_modules' },
-    exclude: { path: '^src/paraglide/' },
+    exclude: { path: '^paraglide/' },
     tsConfig: { fileName: 'tsconfig.json' },
     tsPreCompilationDeps: true,
   },

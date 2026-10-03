@@ -16,11 +16,12 @@ You review a hexframe pull request for **placement**: is each piece of logic in 
 
 | Layer | In hexframe | Holds |
 |---|---|---|
+| Front | File routes, the features they compose, the design system, and the client's calls, on TanStack Router, Query and Form | What the browser shows |
 | API | Server functions (`createServerFn`) and Start middleware; raw server routes only for inbound webhooks | Plumbing (auth, request id, logging) and the composition of domains |
 | Domains | Effect services, one folder per domain | The business logic, in the domain's language |
 | Repositories | Effect layers over Drizzle, Better Auth, Stripe | The technical complexity |
 
-The API layer is the thin one. Domains ignore each other: a domain imports no other domain, and when it needs another domain's data, the data arrives as an argument. Only the API layer composes domains, wires bus subscriptions and owns transactions; domains and repositories never do. Import direction is dependency-cruiser's job once the package's config carries it; until then, flag it here too. Above all, flag what a lint can't see.
+Nothing below the front, the API layer included, imports it, and the front reaches the domains through the API layer only: a domain's error class, a hook or a router guard in `src/api/` is misplaced. The API layer is the thin one. Domains ignore each other: a domain imports no other domain, and when it needs another domain's data, the data arrives as an argument. Only the API layer composes domains, wires bus subscriptions and owns transactions; domains and repositories never do. Import direction is dependency-cruiser's job once the package's config carries it; until then, flag it here too. Above all, flag what a lint can't see.
 
 ## The domains
 

@@ -4,7 +4,7 @@ import sonarjs from 'eslint-plugin-sonarjs'
 import { defineConfig, globalIgnores } from 'eslint/config'
 import tseslint from 'typescript-eslint'
 
-// Colour comes from theme tokens (src/styles.css), never a hex nor a Tailwind palette name such as
+// Colour comes from theme tokens (src/front/styles.css), never a hex nor a Tailwind palette name such as
 // `bg-zinc-900` or `text-white`: a literal would miss the other theme. Esquery regexes cannot hold a `/`.
 // `#rgb`, `#rrggbb`, `#rrggbbaa`; `#rgba` is left out, since it reads like an anchor (`#cafe`) or an issue (`#1234`).
 const hex = '#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\\b'
@@ -16,17 +16,18 @@ const palette = [
 const colourLiterals = [hex, palette].flatMap((pattern) =>
   ['Literal[value', 'TemplateElement[value.raw'].map((node) => ({
     selector: `${node}=/${pattern}/]`,
-    message: 'Colour comes from a theme token (src/styles.css), never a hex or a palette name.',
+    message:
+      'Colour comes from a theme token (src/front/styles.css), never a hex or a palette name.',
   })),
 )
 
-// Only ui/ renders a table or a dialog, so each looks and behaves one way.
+// Only the design system (src/front/ui/) renders a table or a dialog, so each looks and behaves one way.
 const rawElements = ['table', 'dialog'].map((element) => ({
   selector: `JSXOpeningElement[name.name='${element}']`,
-  message: `No raw <${element}> outside src/ui/: build from the design system's component.`,
+  message: `No raw <${element}> outside src/front/ui/: build from the design system's component.`,
 }))
 
-// No effect hook outside ui/ (STACK.md, State): every piece of state has an owner, and syncing one
+// No effect hook outside src/front/ui/ (STACK.md, State): every piece of state has an owner, and syncing one
 // into another is the bug the owners exist to prevent. Imported by name or read off `React`.
 const effectHook = '/^use(?:Layout|Insertion)?Effect$/'
 const effectHooks = [
@@ -34,7 +35,7 @@ const effectHooks = [
   `MemberExpression[property.name=${effectHook}]`,
 ].map((selector) => ({
   selector,
-  message: 'No useEffect outside src/ui/: give the state its owner (STACK.md, State).',
+  message: 'No useEffect outside src/front/ui/: give the state its owner (STACK.md, State).',
 }))
 
 // Effect stops at the server function (src/api/CLAUDE.md): its helper is the one place a program runs,
@@ -58,7 +59,7 @@ const effectRuns = [
 const migrationsFile = 'src/repositories/database/migrations.ts'
 // The lint set from STACK.md. A rule may be disabled on the spot, but only with a `-- reason` that says why.
 export default defineConfig(
-  globalIgnores(['src/paraglide/', 'src/routeTree.gen.ts', '.output/', '.nitro/', '.tanstack/']),
+  globalIgnores(['paraglide/', 'src/routeTree.gen.ts', '.output/', '.nitro/', '.tanstack/']),
   js.configs.recommended,
   tseslint.configs.strictTypeChecked,
   comments.recommended,
@@ -83,7 +84,7 @@ export default defineConfig(
   },
   {
     files: ['src/**'],
-    ignores: ['src/ui/**'],
+    ignores: ['src/front/ui/**'],
     rules: {
       'no-restricted-syntax': [
         'error',

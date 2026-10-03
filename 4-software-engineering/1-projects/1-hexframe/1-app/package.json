@@ -3,12 +3,13 @@
   "private": true,
   "type": "module",
   "imports": {
+    "#/paraglide/*": "./paraglide/*",
     "#/*": "./src/*"
   },
   "scripts": {
     "dev": "vite dev",
     "build": "vite build && node scripts/check-client-bundle.ts",
-    "check": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --silent && tsc && eslint . && depcruise --config dependency-cruiser.config.ts src && node scripts/check-rule-of-six.ts && knip && prettier --check .",
+    "check": "paraglide-js compile --project ./project.inlang --outdir ./paraglide --silent && tsc && eslint . && depcruise --config dependency-cruiser.config.ts src && node scripts/check-rule-of-six.ts && knip && prettier --check .",
     "test": "vitest run",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "node scripts/migrate.ts"

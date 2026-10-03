@@ -1,5 +1,5 @@
 // The channel table: where a failure shows, picked by its kind and by the call that met it, never by a
-// component's author. Pure; src/api/client/ carries each channel out.
+// component's author. Pure; src/front/client/ carries each channel out.
 import type { Kind } from '#/domains/kind'
 
 /**
@@ -12,7 +12,7 @@ export type Call = 'read' | 'frame' | 'write' | 'submit'
  * Where a failure goes: one redirect to sign-in; the `Forbidden` state or the `ErrorState` in the
  * nearest boundary; a report with nothing on screen; the form's fields; one toast. `report` has nothing
  * to carry out in the client: the server reported every failure it sent, and the client reports, whatever
- * the channel, only a call that never reached the server (../client/channels.ts, `raise`).
+ * the channel, only a call that never reached the server (src/front/client/channels.ts, `raise`).
  */
 export type Channel = 'sign-in' | 'forbidden' | 'error-state' | 'report' | 'fields' | 'toast'
 
