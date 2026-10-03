@@ -1,3 +1,7 @@
 # Every package is a numbered child of this node: 1-<name>/, 2-<name>/, …
 packages:
   - "[1-6]-*"
+
+# Dependencies whose install scripts may run: Claude Code's links its native binary
+onlyBuiltDependencies:
+  - "@anthropic-ai/claude-code"

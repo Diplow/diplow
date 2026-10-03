@@ -1,0 +1,13 @@
+{
+  "name": "@hexframe/mod",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "claude plugin validate . && prettier --check .",
+    "test": "claude plugin test"
+  },
+  "devDependencies": {
+    "@anthropic-ai/claude-code": "2.1.288",
+    "prettier": "^3.9.9"
+  }
+}
