@@ -9,22 +9,23 @@ import type { Direction, MemberKind } from './shape/node.js'
 /** The terminal's own color, as a Raster's cells name it. */
 const defaultColor = 0x01000000
 
-interface Palette {
+/** A hex's colors, as `0xrrggbb`: the SVG writes the same ones as `#rrggbb`. */
+export interface Palette {
   background: number
   title: number
   preview: number
 }
 
-const palettes: Record<'center' | MemberKind, Palette> = {
+export const palettes: Record<'center' | MemberKind, Palette> = {
   center: { background: 0x5b3cc4, title: 0xffffff, preview: 0xddd6fe },
   branch: { background: 0x2f3446, title: 0xf3f4f6, preview: 0x9ca3af },
   leaf: { background: 0x4a3426, title: 0xfde7d0, preview: 0xd4a373 },
   context: { background: 0x134e4a, title: 0xccfbf1, preview: 0x5eead4 },
 }
 
-const emptyOutline = 0x4b5563
+export const emptyOutline = 0x4b5563
 /** The outline of the hex whose button holds the focus. */
-const selectedOutline = 0xfbbf24
+export const selectedOutline = 0xfbbf24
 
 /** The size, a quarter of a hex's width in columns, under which a hex is too small to say anything. */
 export const minScale = 3
@@ -310,6 +311,15 @@ function ellipsize(line: string, width: number): string {
 function clip(text: string, width: number): string {
   const glyphs = [...text]
   return glyphs.length <= width ? text : glyphs.slice(0, width).join('')
+}
+
+/**
+ * `text` on one line for a terminal element or an SVG: every control character, C0 and C1, line
+ * breaks among them, made a space, so a file name or a title can't break a layout or reach the
+ * terminal as an escape.
+ */
+export function oneLine(text: string): string {
+  return text.replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029]/g, ' ')
 }
 
 /**

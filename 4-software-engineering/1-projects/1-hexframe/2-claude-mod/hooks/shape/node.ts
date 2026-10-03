@@ -248,8 +248,43 @@ export function bodySources(path: string, kind: MemberKind): string[] {
   return isMarkdown(basename(path)) ? [path] : []
 }
 
+/** The largest file a medium reads, in bytes. Past it, a Tile comes from its name, as if unread. */
+export const readLimit = 1_000_000
+
+/** What a medium's file system says of a file before reading it, every symlink followed. */
+export interface FileStat {
+  kind: 'file' | 'dir' | 'other'
+  size: number
+  realPath?: string
+}
+
 /**
- * The Tile a folder or a Leaf shows: the title and preview of its body's frontmatter, or a title
+ * Why a medium leaves `relative`, a file of a folder, unread, or undefined when it reads it. It
+ * reads a regular file within the read limit whose real path lies under the folder's, compared
+ * folder by folder, so a symlink never leads it out of the folder. With `isOwnPath`, the real path
+ * must be the folder's plus `relative` exactly, as for `exclusions.yaml`: never through a symlink.
+ * Real paths are absolute and resolved; a missing one is never under the folder.
+ */
+export function unreadable(
+  file: FileStat,
+  folderRealPath: string | undefined,
+  relative: string,
+  isOwnPath = false,
+): string | undefined {
+  const folder = folderRealPath?.replace(/\/*$/, '/')
+  const real = file.realPath
+  const isInside =
+    folder !== undefined &&
+    real !== undefined &&
+    (isOwnPath ? real === folder + relative : real.startsWith(folder))
+  if (!isInside) return 'it leads outside its folder'
+  if (file.kind !== 'file') return 'it is not a file'
+  if (file.size > readLimit) return 'it is too large'
+  return undefined
+}
+
+/**
+ * The Tile a folder or a Leaf shows:the title and preview of its body's frontmatter, or a title
  * made from its name.
  */
 export function tileOf(path: string, body: string | undefined, kind: MemberKind = 'branch'): Tile {
@@ -278,10 +313,7 @@ export function titleFromName(name: string, kind: MemberKind = 'branch'): string
  * `>` (folded) and `|` (literal), which is all the vault's frontmatters use.
  */
 export function frontmatter(text: string): Record<string, string> {
-  const lines = text.replace(/\r\n/g, '\n').split('\n')
-  if (lines[0]?.trim() !== '---') return {}
-  const end = lines.indexOf('---', 1)
-  const block = lines.slice(1, end === -1 ? lines.length : end)
+  const block = splitFrontmatter(text).frontmatter
   const fields: Record<string, string> = {}
   for (let index = 0; index < block.length; index++) {
     const match = /^([A-Za-z_][\w-]*):\s*(.*)$/.exec(block[index] ?? '')
@@ -299,6 +331,20 @@ export function frontmatter(text: string): Record<string, string> {
     }
   }
   return fields
+}
+
+/**
+ * A Markdown file's frontmatter lines and its body, every line ending made `\n`. The frontmatter
+ * opens with a `---` line at the top and closes with the next one; without that closing line, the
+ * file has no frontmatter and is all body.
+ */
+export function splitFrontmatter(text: string): { frontmatter: string[]; body: string } {
+  const lines = text.replace(/\r\n?/g, '\n').split('\n')
+  const isFence = (line: string) => line.trim() === '---'
+  // The closing line's index, or 0 when there is none.
+  const end = isFence(lines[0] ?? '') ? lines.slice(1).findIndex(isFence) + 1 : 0
+  if (end === 0) return { frontmatter: [], body: lines.join('\n') }
+  return { frontmatter: lines.slice(1, end), body: lines.slice(end + 1).join('\n') }
 }
 
 function unquote(value: string): string {

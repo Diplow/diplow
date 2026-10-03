@@ -50,6 +50,8 @@ test('the painting has a triplet per cell', () => {
 test('the preview drops the frontmatter and stays within what a Markdown draws', () => {
   expect(markdownOf('---\ntitle: A\n---\n# A\r\n\nBody\u0007\n')).toBe('# A\n\nBody')
   expect(markdownOf('No frontmatter')).toBe('No frontmatter')
+  // Unclosed, it is no frontmatter, as the Tile reads it: all of it shows
+  expect(markdownOf('---\ntitle: A\n# A')).toBe('---\ntitle: A\n# A')
   // C1 controls, CSI among them, go too: a terminal could read them as escapes.
   expect(markdownOf('a\u009b31mb\u0085c')).toBe('a31mbc')
   const long = markdownOf('x'.repeat(20000))
@@ -61,6 +63,13 @@ test('the SVG fills a Leaf apart from a Branch', () => {
   const svg = drawSvg(layoutView({ frame, frameKind: 'children' }, 1))
   expect(svg).toContain('fill="#2f3446"')
   expect(svg).toContain('fill="#4a3426"')
+})
+
+test('the SVG holds no control character, which would make it invalid XML', () => {
+  const tile = { path: '/w', title: 'A\u0007title', preview: 'Two\nlines\u0085' }
+  const svg = drawSvg(layoutView({ frame: { ...frame, tile }, frameKind: 'children' }, 1))
+  expect(svg).toContain('A title')
+  expect(/[\u0000-\u001f\u007f-\u009f]/.test(svg)).toBe(false)
 })
 
 test('a file that is not Markdown shows as a fence longer than its backticks', () => {

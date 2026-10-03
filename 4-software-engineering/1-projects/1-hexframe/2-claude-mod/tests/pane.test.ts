@@ -49,20 +49,46 @@ const files: Record<string, string> = {
   '/work/4-software-engineering/-CLAUDE.md': '---\ntitle: Software Engineering\n---\n',
 }
 
-test('/hexframe opens a pane that draws the folder and walks into a child', async ($, on) => {
-  on('session.cwd', () => ({ value: '/work' }))
-  on('fs.list', ($, e) => {
-    const entries = folders[e.path]
-    if (!entries) return { deny: 'no such folder' }
-    return { value: entries }
-  })
-  on('fs.exists', ($, e) => ({ value: e.path in files }))
-  on('fs.read', ($, e) => ({ value: files[e.path] ?? '' }))
+/**
+ * Stubs the file system with `listings` and `texts`, the session in `cwd`; `links` maps a symlink
+ * to where it lands, and a file of `denied` exists but can't be read. Returns the panes opened.
+ */
+function vault(
+  on: On,
+  cwd: string,
+  listings: Record<string, FsEntry[]>,
+  texts: Record<string, string>,
+  { links = {}, denied = [] }: { links?: Record<string, string>; denied?: string[] } = {},
+) {
   const opened: unknown[] = []
+  on('session.cwd', () => ({ value: cwd }))
+  on('fs.list', ($, e) => {
+    const entries = listings[e.path]
+    return entries ? { value: entries } : { deny: 'no such folder' }
+  })
+  on('fs.exists', ($, e) => ({ value: e.path in texts }))
+  on('fs.read', ($, e) => {
+    if (denied.includes(e.path)) return { deny: 'permission denied' }
+    return e.path in texts ? { value: texts[e.path] ?? '' } : { deny: 'no file' }
+  })
+  on('fs.stat', ($, e) => ({
+    value: {
+      kind: 'file',
+      size: (texts[e.path] ?? '').length,
+      mtimeMs: 0,
+      isLink: false,
+      ...(e.resolve ? { realPath: links[e.path] ?? e.path } : {}),
+    },
+  }))
   on('ui.open', ($, e) => {
     opened.push(e)
     return { value: { isPlaced: true } }
   })
+  return opened
+}
+
+test('/hexframe opens a pane that draws the folder and walks into a child', async ($, on) => {
+  const opened = vault(on, '/work', folders, files)
 
   expect(await $.command.run(hexframe(''))).toEqual({})
   expect(opened).toMatchObject([{ id: 'hexframe', focus: true, closeOnEscape: true }])
@@ -110,41 +136,12 @@ test('/hexframe opens a pane that draws the folder and walks into a child', asyn
 })
 
 test('a folder that cannot be read says so', async ($, on) => {
-  on('session.cwd', () => ({ value: '/work' }))
-  on('fs.list', () => ({ deny: 'no such folder' }))
-  on('ui.open', () => ({ value: { isPlaced: true } }))
+  vault(on, '/work', {}, {})
 
   await $.command.run(hexframe('missing'))
   const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
   expect(await ui.find({ type: 'Text', text: /^Can't read \/work\/missing/ })).toBeDefined()
 })
-
-/** Stubs the file system with `listings` and `texts`, the session in `cwd`; `links` maps a symlink to where it lands. */
-function vault(
-  on: On,
-  cwd: string,
-  listings: Record<string, FsEntry[]>,
-  texts: Record<string, string>,
-  links: Record<string, string> = {},
-) {
-  on('session.cwd', () => ({ value: cwd }))
-  on('fs.list', ($, e) => {
-    const entries = listings[e.path]
-    return entries ? { value: entries } : { deny: 'no such folder' }
-  })
-  on('fs.exists', ($, e) => ({ value: e.path in texts }))
-  on('fs.read', ($, e) => (e.path in texts ? { value: texts[e.path] ?? '' } : { deny: 'no file' }))
-  on('fs.stat', ($, e) => ({
-    value: {
-      kind: 'file',
-      size: (texts[e.path] ?? '').length,
-      mtimeMs: 0,
-      isLink: false,
-      ...(e.resolve ? { realPath: links[e.path] ?? e.path } : {}),
-    },
-  }))
-  on('ui.open', () => ({ value: { isPlaced: true } }))
-}
 
 test('Leaves join the Branches in the Children, and opening one shows its file', async ($, on) => {
   vault(
@@ -242,7 +239,7 @@ test('past six Branches and Leaves, `c` cycles the Branches, the Leaves and the 
   expect(await ui.find({ key: 'open-3' })).toMatchObject({ props: { label: '3 Y' } })
   // A Leaf too large or not text says so instead of showing
   await ui.press({ key: 'open-3' })
-  expect(await ui.find({ type: 'Text', text: 'y.md is too large to show here.' })).toBeDefined()
+  expect(await ui.find({ type: 'Text', text: "Can't show y.md: it is too large" })).toBeDefined()
   await ui.press({ key: 'open-4' })
   expect(await ui.find({ type: 'Text', text: 'z.png is not a text file.' })).toBeDefined()
   await ui.press({ key: 'view' })
@@ -299,7 +296,7 @@ test('an exclusions.yaml reached through a symlink is not read', async ($, on) =
     '/s',
     { '/s': [dir('dist'), dir('.hexframe'), file('b.md')] },
     { '/s/.hexframe/exclusions.yaml': 'exclude: [dist/]\n' },
-    { '/s/.hexframe/exclusions.yaml': '/elsewhere/exclusions.yaml' },
+    { links: { '/s/.hexframe/exclusions.yaml': '/elsewhere/exclusions.yaml' } },
   )
   await $.command.run(hexframe(''))
   const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
@@ -353,5 +350,58 @@ test('an overflowing ring shows as a list of its names, each opening as its hex 
   await ui.press({ key: 'ring' })
   await ui.press({ key: 'item-2' })
   expect(await ui.find({ type: 'Text', text: '/o/1-b  ·  children' })).toBeDefined()
+  await ui.unmount()
+})
+
+test('a body file is read only within the limit and its folder, and one that fails names its hex', async ($, on) => {
+  const texts: Record<string, string> = {
+    '/f/CLAUDE.md': '---\ntitle: F\n---\n',
+    '/f/1-big/CLAUDE.md': '---\ntitle: Big\n---\n' + 'b'.repeat(1_000_001),
+    '/f/2-linked/CLAUDE.md': '---\ntitle: Secret\n---\n',
+    '/f/3-broken/CLAUDE.md': '---\ntitle: Broken\n---\n',
+    '/f/4-ok/CLAUDE.md': '---\ntitle: Fine\n---\n',
+  }
+  vault(
+    on,
+    '/f',
+    {
+      '/f': [file('CLAUDE.md'), ...['1-big', '2-linked', '3-broken', '4-ok'].map(dir)],
+      '/f/2-linked': [],
+    },
+    texts,
+    {
+      links: { '/f/2-linked/CLAUDE.md': '/home/me/.ssh/notes.md' },
+      denied: ['/f/3-broken/CLAUDE.md'],
+    },
+  )
+  await $.command.run(hexframe(''))
+  const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
+
+  // Each one that can't be read takes its name; the folder still shows, the rest read as usual
+  expect(await ui.find({ key: 'open-1' })).toMatchObject({ props: { label: '1 Big' } })
+  expect(await ui.find({ key: 'open-2' })).toMatchObject({ props: { label: '2 Linked' } })
+  expect(await ui.find({ key: 'open-3' })).toMatchObject({ props: { label: '3 Broken' } })
+  expect(await ui.find({ key: 'open-4' })).toMatchObject({ props: { label: '4 Fine' } })
+
+  // `p` says why it shows nothing, and never shows what a symlink leads to
+  await ui.press({ key: 'open-2' })
+  await ui.press({ key: 'view' })
+  expect(
+    await ui.find({
+      type: 'Text',
+      text: "Can't show Linked's CLAUDE.md: it leads outside its folder",
+    }),
+  ).toBeDefined()
+  await ui.unmount()
+})
+
+test('names reach the pane on one line, with no control character', async ($, on) => {
+  const names = ['a\nb.md', 'c\u001b[31m.md', ...['d', 'e', 'f', 'g', 'h'].map((n) => `${n}.md`)]
+  vault(on, '/n', { '/n': [dir('1-x'), ...names.map(file)] }, {})
+  await $.command.run(hexframe(''))
+  const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
+  await ui.press({ key: 'ring' })
+  expect(await ui.find({ key: 'item-1' })).toMatchObject({ props: { label: 'a b.md' } })
+  expect(await ui.find({ key: 'item-2' })).toMatchObject({ props: { label: 'c [31m.md' } })
   await ui.unmount()
 })

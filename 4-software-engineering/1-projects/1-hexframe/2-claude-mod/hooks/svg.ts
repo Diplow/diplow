@@ -1,7 +1,7 @@
 // Draws a Frame's placements as an SVG document, for the surfaces that take one (the Desktop app).
 // Each hex takes its placement's radius; the text keeps one size, set for claude-mod's depth 1.
 import type { Direction } from './shape/node.js'
-import { wrap } from './raster.js'
+import { emptyOutline, oneLine, palettes, selectedOutline, wrap } from './raster.js'
 import { viewHeight, viewWidth, hexCorners, type Placement } from './shape/layout.js'
 
 /** Pixels per unit of the layout. */
@@ -13,13 +13,6 @@ const hexRadius = 0.93
 /** The width of the band between a hex's side corners, where its text sits. */
 function bandWidth(radius: number): number {
   return Math.sqrt(3) * radius
-}
-
-const fills = {
-  center: { fill: '#5b3cc4', title: '#ffffff', preview: '#ddd6fe' },
-  branch: { fill: '#2f3446', title: '#f3f4f6', preview: '#9ca3af' },
-  leaf: { fill: '#4a3426', title: '#fde7d0', preview: '#d4a373' },
-  context: { fill: '#134e4a', title: '#ccfbf1', preview: '#5eead4' },
 }
 
 const titleSize = 15
@@ -48,16 +41,25 @@ function shapeOf(placement: Placement, selected: Direction | undefined): string 
 
   if (placement.kind === 'empty') {
     return (
-      `<polygon points="${points}" fill="none" stroke="#4b5563" stroke-dasharray="4 6"/>` +
+      `<polygon points="${points}" fill="none" stroke="${hex(emptyOutline)}" stroke-dasharray="4 6"/>` +
       text(cx, cy + 5, '#6b7280', previewSize, String(placement.direction))
     )
   }
 
-  const colors = fills[placement.kind === 'center' ? 'center' : placement.memberKind]
+  const palette = palettes[placement.kind === 'center' ? 'center' : placement.memberKind]
+  const colors = {
+    fill: hex(palette.background),
+    title: hex(palette.title),
+    preview: hex(palette.preview),
+  }
   const band = bandWidth(radius) * scale * 0.86
-  const title = wrap(placement.tile.title, Math.floor(band / (titleSize * characterWidth)), 2)
+  const title = wrap(
+    oneLine(placement.tile.title),
+    Math.floor(band / (titleSize * characterWidth)),
+    2,
+  )
   const preview = wrap(
-    placement.tile.preview,
+    oneLine(placement.tile.preview),
     Math.floor(band / (previewSize * characterWidth)),
     placement.kind === 'center' ? 5 : 4,
   )
@@ -89,7 +91,7 @@ function shapeOf(placement: Placement, selected: Direction | undefined): string 
       : ''
   const outline =
     placement.kind === 'member' && placement.direction === selected
-      ? ' stroke="#fbbf24" stroke-width="4"'
+      ? ` stroke="${hex(selectedOutline)}" stroke-width="4"`
       : ''
   return `<polygon points="${points}" fill="${colors.fill}"${outline}/>${label}${words}`
 }
@@ -115,6 +117,11 @@ function escape(content: string): string {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
+}
+
+/** A color of the shared palette, `0xrrggbb`, as SVG writes it. */
+function hex(color: number): string {
+  return `#${color.toString(16).padStart(6, '0')}`
 }
 
 function round(value: number): number {

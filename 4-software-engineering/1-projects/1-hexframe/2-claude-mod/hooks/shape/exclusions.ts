@@ -72,21 +72,6 @@ export function isExcluded(
   })
 }
 
-/**
- * Whether the `exclusions.yaml` a medium found is the folder's own: its real path is the folder's
- * plus `.hexframe/exclusions.yaml`. One reached through a symlink, inside the vault or out, speaks
- * for another folder, or for no folder at all, so it is not read. Paths are absolute, `/`-separated
- * and resolved, as a medium's file system answers them; a missing one is never the folder's own.
- */
-export function isOwnExclusionsFile(
-  folderRealPath: string | undefined,
-  fileRealPath: string | undefined,
-): boolean {
-  if (folderRealPath === undefined || fileRealPath === undefined) return false
-  const folder = folderRealPath.endsWith('/') ? folderRealPath : `${folderRealPath}/`
-  return fileRealPath === folder + exclusionsFile
-}
-
 /** The exclusion that names exactly this candidate: its name, a folder's with a trailing `/`. */
 export function patternOf({ kind, name }: Slot): string {
   return kind === 'leaf' ? name : `${name}/`

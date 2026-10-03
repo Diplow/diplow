@@ -1,5 +1,5 @@
 // A file as the pane's preview shows it, in the Markdown element Claude Code draws.
-import { isMarkdown } from './shape/node.js'
+import { isMarkdown, splitFrontmatter } from './shape/node.js'
 
 /** The most a Markdown element draws. */
 const markdownLimit = 10000
@@ -14,13 +14,7 @@ const controls = /[\u0000-\u0008\u000b-\u001f\u007f-\u009f]/g
  * the control characters a Markdown refuses gone, and cut at its limit with a line that says so.
  */
 export function markdownOf(text: string): string {
-  const lines = text.replace(/\r\n?/g, '\n').split('\n')
-  const end = lines[0]?.trim() === '---' ? lines.indexOf('---', 1) : -1
-  const markdown = lines
-    .slice(end + 1)
-    .join('\n')
-    .replace(controls, '')
-    .trim()
+  const markdown = splitFrontmatter(text).body.replace(controls, '').trim()
   if (markdown.length <= markdownLimit) return markdown
   return markdown.slice(0, markdownLimit - cutNote.length) + cutNote
 }

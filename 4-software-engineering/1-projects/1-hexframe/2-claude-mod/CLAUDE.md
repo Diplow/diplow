@@ -32,7 +32,7 @@ Then `/hexframe` shows the session's folder, and `/hexframe <folder>` another on
 | `r` | Reads the folder again |
 | Esc | Closes the pane |
 
-Leaves take their own fill, warm where Branches are slate. A Leaf over 1 MB is never read: its Tile takes its name, and `p` says it is too large. In a Children frame, a Leaf that shares its number with the Branch in that direction, as `3-games.md` beside `3-games/`, is named on a dim line under the drawing.
+Leaves take their own fill, warm where Branches are slate. The pane reads no file over 1 MB, nor one a symlink leads out of its folder, nor one it can't: a Tile then takes its name, and `p` says why it shows nothing. In a Children frame, a Leaf that shares its number with the Branch in that direction, as `3-games.md` beside `3-games/`, is named on a dim line under the drawing.
 
 ## How it reads a folder
 

@@ -6,12 +6,7 @@
 // that overflows shows as a list of its names instead, each opening as its hex would.
 import type { Elements, EngineInterface, On } from 'claude-code'
 import { leafPreview, markdownOf } from './markdown.js'
-import {
-  exclusionsFile,
-  isOwnExclusionsFile,
-  parseExclusions,
-  patternOf,
-} from './shape/exclusions.js'
+import { exclusionsFile, parseExclusions, patternOf } from './shape/exclusions.js'
 import { layoutView } from './shape/layout.js'
 import {
   basename,
@@ -36,17 +31,15 @@ import {
   type SeatedRing,
   type Slot,
   type Tile,
+  unreadable,
 } from './shape/node.js'
-import { paint, scaleFor } from './raster.js'
+import { oneLine, paint, scaleFor } from './raster.js'
 import { drawSvg } from './svg.js'
 
 const pane = 'hexframe'
 
 /** The generations the pane shows from the center, as STACK.md gives claude-mod. */
 const depth = 1
-
-/** The largest Leaf the pane reads, in bytes. Past it, a Leaf's Tile comes from its name alone. */
-const leafLimit = 1_000_000
 
 /** Rows the pane keeps under the drawing: the controls and the path. */
 const footerRows = 4
@@ -92,99 +85,17 @@ export function register(on: On) {
 
   on('ui.render', { component: 'Pane' }, async ($, e, next) => {
     if (e.requestId !== pane) return next(e)
-    const { Box, Text, Button } = $.ui.resolve(e)
-
-    const go = async (target: string) => {
-      await show($, target)
-      $.ui.invalidate('ui.render')
-    }
+    const ui = $.ui.resolve(e)
     const ring = ringOf(frame, frameKind)
-    const members = membersOf(ring)
-    const clashes = ring.overflowing ? [] : ring.clashes
-    const nextKind = cycle(frame, frameKind)
-    const controls = [
-      ...directions
-        .filter((direction) => members[direction] !== undefined)
-        .map((direction) =>
-          Button({
-            key: `open-${direction}`,
-            label: `${direction} ${members[direction]?.tile.title ?? ''}`,
-            hotkey: String(direction),
-            plain: true,
-            onPress: () => openMember($, direction),
-          }),
-        ),
-      Button({
-        key: 'up',
-        label: 'u up',
-        hotkey: 'u',
-        plain: true,
-        dimColor: true,
-        onPress: () => go(parent(folder ?? '/')),
-      }),
-      Button({
-        key: 'ring',
-        label: `c ${nextKind}`,
-        hotkey: 'c',
-        plain: true,
-        dimColor: true,
-        onPress: () => {
-          frameKind = nextKind
-          selected = undefined
-          preview = undefined
-          $.ui.invalidate('ui.render')
-        },
-      }),
-      Button({
-        key: 'view',
-        label: preview ? 'p hexframe' : 'p preview',
-        hotkey: 'p',
-        plain: true,
-        dimColor: true,
-        onPress: async () => {
-          if (preview) preview = undefined
-          else if (frame) {
-            const member = selected === undefined ? undefined : members[selected]
-            preview = member
-              ? await previewOfMember($, member)
-              : previewOfFolder(frame.tile, await readBody($, frame.tile.path))
-          }
-          $.ui.invalidate('ui.render')
-        },
-      }),
-      Button({
-        key: 'reload',
-        label: 'r reload',
-        hotkey: 'r',
-        plain: true,
-        dimColor: true,
-        onPress: () => go(folder ?? '/'),
-      }),
-    ]
-    const footer = [
-      ...(problem ? [Text({ color: 'red', children: [problem] })] : []),
-      ...(clashes.length > 0 && !preview ? [clashLine(Text, clashes)] : []),
-      Box({ flexDirection: 'row', flexWrap: 'wrap', columnGap: 2, children: controls }),
-      Text({ dimColor: true, wrap: 'truncate-start', children: [where()] }),
-    ]
+    const clashes = ring.overflowing || preview ? [] : ring.clashes
+    const footer = footerOf($, ui, membersOf(ring), clashes)
+    const column = (children: ReturnType<Ui['Box']>[]) =>
+      ui.Box({ flexDirection: 'column', rowGap: 1, children })
 
-    if (!frame) return Box({ flexDirection: 'column', children: footer })
-
-    if (preview) {
-      // The controls go on top: a long file scrolls, and they stay in sight above it.
-      const { Markdown } = $.ui.resolve(e)
-      const shown =
-        'markdown' in preview
-          ? Markdown({ key: 'preview', text: preview.markdown })
-          : Text({ dimColor: true, children: [preview.note] })
-      return Box({ flexDirection: 'column', rowGap: 1, children: [...footer, shown] })
-    }
-
-    if (ring.overflowing) {
-      // The controls go on top here too: a long list scrolls.
-      const list = listOf($, { Box, Text, Button }, ring)
-      return Box({ flexDirection: 'column', rowGap: 1, children: [...footer, ...list] })
-    }
+    if (!frame) return ui.Box({ flexDirection: 'column', children: footer })
+    // The controls go on top of a preview or a list: a long one scrolls, and they stay in sight.
+    if (preview) return column([...footer, previewElement(ui, preview)])
+    if (ring.overflowing) return column([...footer, ...listOf($, ui, ring)])
 
     const placements = layoutView({ frame, frameKind }, depth)
     if (e.surface === 'terminal') {
@@ -193,14 +104,98 @@ export function register(on: On) {
       const scale = scaleFor(e.props.bodyColumns, rows)
       const drawing =
         scale === undefined
-          ? Text({ children: [outline(frame, frameKind)] })
+          ? ui.Text({ children: [outline(frame, frameKind)] })
           : Raster({ key: 'frame', ...paint(placements, scale, selected) })
-      return Box({ flexDirection: 'column', rowGap: 1, children: [drawing, ...footer] })
+      return column([drawing, ...footer])
     }
     const { Svg } = $.ui.resolve(e)
-    const drawing = Svg({ source: drawSvg(placements, selected), alt: outline(frame, frameKind) })
-    return Box({ flexDirection: 'column', rowGap: 1, children: [drawing, ...footer] })
+    return column([
+      Svg({ source: drawSvg(placements, selected), alt: outline(frame, frameKind) }),
+      ...footer,
+    ])
   })
+}
+
+/** The elements every surface draws the pane with. */
+type Ui = Pick<Elements['terminal'], 'Box' | 'Text' | 'Button' | 'Markdown'>
+
+/** The lines that go with the drawing: the red one, the clashes, the controls and where the pane is. */
+function footerOf(
+  $: EngineInterface,
+  { Box, Text, Button }: Ui,
+  members: Partial<Record<Direction, Member>>,
+  clashes: readonly Clash[],
+) {
+  return [
+    ...(problem ? [Text({ color: 'red', children: [oneLine(problem)] })] : []),
+    ...(clashes.length > 0 ? [clashLine(Text, clashes)] : []),
+    Box({
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      columnGap: 2,
+      children: controlsOf($, Button, members),
+    }),
+    Text({ dimColor: true, wrap: 'truncate-start', children: [oneLine(where())] }),
+  ]
+}
+
+/** A button per member, then the pane's keys. */
+function controlsOf(
+  $: EngineInterface,
+  Button: Ui['Button'],
+  members: Partial<Record<Direction, Member>>,
+) {
+  const nextKind = cycle(frame, frameKind)
+  // Each key's label opens with its hotkey, as the pane shows it.
+  const key = (name: string, label: string, onPress: () => unknown) =>
+    Button({ key: name, label, hotkey: label.charAt(0), plain: true, dimColor: true, onPress })
+  return [
+    ...directions.flatMap((direction) => {
+      const member = members[direction]
+      if (!member) return []
+      return Button({
+        key: `open-${direction}`,
+        label: oneLine(`${direction} ${member.tile.title}`),
+        hotkey: String(direction),
+        plain: true,
+        onPress: () => openMember($, direction),
+      })
+    }),
+    key('up', 'u up', () => go($, parent(folder ?? '/'))),
+    key('ring', `c ${nextKind}`, () => {
+      frameKind = nextKind
+      selected = undefined
+      preview = undefined
+      $.ui.invalidate('ui.render')
+    }),
+    key('view', preview ? 'p hexframe' : 'p preview', () => togglePreview($, members)),
+    key('reload', 'r reload', () => go($, folder ?? '/')),
+  ]
+}
+
+/** What the preview shows in place of the drawing: the file's Markdown, or the note without one. */
+function previewElement({ Markdown, Text }: Ui, shown: Preview) {
+  return 'markdown' in shown
+    ? Markdown({ key: 'preview', text: shown.markdown })
+    : Text({ dimColor: true, children: [oneLine(shown.note)] })
+}
+
+/** Swaps the drawing for the selected member's file, or the shown folder's own, and back. */
+async function togglePreview($: EngineInterface, members: Partial<Record<Direction, Member>>) {
+  if (preview) preview = undefined
+  else if (frame) {
+    const member = selected === undefined ? undefined : members[selected]
+    preview = member
+      ? await previewOfMember($, member)
+      : previewOfFolder(frame.tile, await readBody($, frame.tile.path))
+  }
+  $.ui.invalidate('ui.render')
+}
+
+/** Shows `target`, and draws the pane again. */
+async function go($: EngineInterface, target: string) {
+  await show($, target)
+  $.ui.invalidate('ui.render')
 }
 
 /** The dim line under the drawing that names each Leaf numbered like the Branch it sits beside. */
@@ -212,7 +207,7 @@ function clashLine(Text: Elements['terminal']['Text'], clashes: readonly Clash[]
     color: 'yellow',
     dimColor: true,
     wrap: 'truncate-end',
-    children: [named.join('  ·  ')],
+    children: [oneLine(named.join('  ·  '))],
   })
 }
 
@@ -223,21 +218,17 @@ function noteRows(columns: number, clashes: readonly Clash[]): number {
 }
 
 /** An overflowing ring as the pane shows it: the hint, then every candidate's name as a button. */
-function listOf(
-  $: EngineInterface,
-  { Box, Text, Button }: Pick<Elements['terminal'], 'Box' | 'Text' | 'Button'>,
-  ring: OverflowingRing,
-) {
+function listOf($: EngineInterface, { Box, Text, Button }: Ui, ring: OverflowingRing) {
   const items = ring.candidates.map((slot, index) =>
     Button({
       key: `item-${index + 1}`,
-      label: patternOf(slot),
+      label: oneLine(patternOf(slot)),
       plain: true,
       onPress: () => openSlot($, slot),
     }),
   )
   return [
-    Text({ dimColor: true, wrap: 'wrap', children: [overflowHint(ring, frameKind)] }),
+    Text({ dimColor: true, wrap: 'wrap', children: [oneLine(overflowHint(ring, frameKind))] }),
     Box({ key: 'list', flexDirection: 'column', children: items }),
   ]
 }
@@ -278,7 +269,7 @@ async function show($: EngineInterface, target: string) {
     folder = target
     problem = warning
   } catch (error) {
-    problem = `Can't read ${target}: ${error instanceof Error ? error.message : String(error)}`
+    problem = `Can't read ${target}: ${messageOf(error)}`
   }
 }
 
@@ -294,7 +285,7 @@ async function loadFrame(
     const ring = sorted[kind]
     if (ring) rings[kind] = await loadRing($, path, ring)
   }
-  return { tile: tileOf(path, body?.text), rings }
+  return { tile: tileOf(path, textOf(body)), rings }
 }
 
 /** A folder's exclusions; none, and a warning to show, when its `exclusions.yaml` can't be read. */
@@ -302,24 +293,14 @@ async function readExclusions(
   $: EngineInterface,
   path: string,
 ): Promise<{ exclusions: string[]; warning?: string }> {
-  const file = join(path, exclusionsFile)
+  const read = await readWithinLimit($, path, exclusionsFile, true)
+  if (read === undefined) return { exclusions: [] }
   try {
-    if (!(await $.fs.exists(file))) return { exclusions: [] }
-    const [own, home] = await Promise.all([
-      $.fs.stat(file, { resolve: true }),
-      $.fs.stat(path, { resolve: true }),
-    ])
-    if (!isOwnExclusionsFile(home.realPath, own.realPath)) {
-      throw new Error('it leads outside its folder')
-    }
-    if (own.size > leafLimit) throw new Error('it is too large')
-    return { exclusions: parseExclusions(await $.fs.read(file)) }
+    if ('unread' in read) throw new Error(read.unread)
+    return { exclusions: parseExclusions(read.text) }
   } catch (error) {
-    const reason = error instanceof Error ? error.message : String(error)
-    return {
-      exclusions: [],
-      warning: `Can't read ${exclusionsFile}, so nothing is left out: ${reason}`,
-    }
+    const warning = `Can't read ${exclusionsFile}, so nothing is left out: ${messageOf(error)}`
+    return { exclusions: [], warning }
   }
 }
 
@@ -334,17 +315,14 @@ async function loadRing($: EngineInterface, path: string, ring: Ring<Slot>): Pro
   return { ...ring, members }
 }
 
-/** A member's Tile, from the body the shape says it is read from. */
+/**
+ * A member's Tile, from the body the shape says it is read from. One that can't be read names
+ * itself, whatever its kind: it doesn't keep the folder from showing.
+ */
 async function loadTile($: EngineInterface, folderPath: string, slot: Slot): Promise<Tile> {
   const path = join(folderPath, slot.name)
-  const sources = bodySources(path, slot.kind)
-  const read = slot.kind === 'leaf' ? readLeaf($, sources) : readFirst($, sources)
-  const body = await read.catch((error: unknown) => {
-    // One unreadable file names itself; it doesn't keep the folder from showing.
-    if (slot.kind === 'leaf') return undefined
-    throw error
-  })
-  return tileOf(path, body?.text, slot.kind)
+  const body = await readFirst($, bodySources(path, slot.kind))
+  return tileOf(path, textOf(body), slot.kind)
 }
 
 /** The ring of `kind` in the shown Frame, empty when there is none. */
@@ -380,10 +358,18 @@ function cycle(shown: Frame | undefined, kind: FrameKind): FrameKind {
 /** What the preview shows: a file as Markdown, or a note saying why there is nothing to render. */
 type Preview = { label: string } & ({ markdown: string } | { note: string })
 
-/** A folder's body file, by name. */
-interface Body {
-  name: string
-  text: string
+/** What reading a file gave: its text, or why it stays unread. */
+type Read = { text: string } | { unread: string }
+
+/** A Tile's body file, by name. */
+type Body = { name: string } & Read
+
+function textOf(read: Read | undefined): string | undefined {
+  return read && 'text' in read ? read.text : undefined
+}
+
+function messageOf(error: unknown): string {
+  return error instanceof Error ? error.message : String(error)
 }
 
 function previewOfFolder(tile: Tile, body: Body | undefined): Preview {
@@ -391,6 +377,7 @@ function previewOfFolder(tile: Tile, body: Body | undefined): Preview {
     return { label: tile.title, note: `${tile.title} has no CLAUDE.md to show.` }
   }
   const label = `${tile.title}'s ${body.name}`
+  if ('unread' in body) return { label, note: `Can't show ${label}: ${body.unread}` }
   const markdown = markdownOf(body.text)
   return markdown === ''
     ? { label, note: `${label} holds only its frontmatter.` }
@@ -407,15 +394,10 @@ async function previewOfMember($: EngineInterface, member: Member): Promise<Prev
 /** A Leaf's file, rendered when it is Markdown and shown as it is otherwise. */
 async function previewOfLeaf($: EngineInterface, path: string): Promise<Preview> {
   const label = basename(path)
-  try {
-    if ((await $.fs.stat(path)).size > leafLimit) {
-      return { label, note: `${label} is too large to show here.` }
-    }
-    return { label, ...leafPreview(label, await $.fs.read(path)) }
-  } catch (error) {
-    const reason = error instanceof Error ? error.message : String(error)
-    return { label, note: `Can't read ${label}: ${reason}` }
-  }
+  const read = await readWithinLimit($, parent(path), label)
+  if (read === undefined) return { label, note: `${label} is gone: r reads the folder again.` }
+  if ('unread' in read) return { label, note: `Can't show ${label}: ${read.unread}` }
+  return { label, ...leafPreview(label, read.text) }
 }
 
 /** The folder's body file, `CLAUDE.md` or else `-CLAUDE.md`, or undefined when it has neither. */
@@ -423,19 +405,39 @@ function readBody($: EngineInterface, path: string): Promise<Body | undefined> {
   return readFirst($, bodySources(path, 'branch'))
 }
 
-/** A Leaf's own file, when its Tile is read from one and it is within the limit. */
-async function readLeaf($: EngineInterface, files: readonly string[]): Promise<Body | undefined> {
-  const [file] = files
-  if (file === undefined || (await $.fs.stat(file)).size > leafLimit) return undefined
-  return { name: basename(file), text: await $.fs.read(file) }
-}
-
-/** The first of `files` that exists, or undefined when none does. */
+/** The first of `files` that exists, read, or undefined when none does. */
 async function readFirst($: EngineInterface, files: readonly string[]): Promise<Body | undefined> {
   for (const file of files) {
-    if (await $.fs.exists(file)) return { name: basename(file), text: await $.fs.read(file) }
+    const name = basename(file)
+    const read = await readWithinLimit($, parent(file), name)
+    if (read) return { name, ...read }
   }
   return undefined
+}
+
+/**
+ * `relative`, a file of `folder`, read when the shape's `unreadable` lets a medium read it, or
+ * undefined when there is none. Every file the pane reads goes through here. It never throws: a
+ * read that fails gives its reason, as a file left unread does.
+ */
+async function readWithinLimit(
+  $: EngineInterface,
+  folder: string,
+  relative: string,
+  isOwnPath = false,
+): Promise<Read | undefined> {
+  const path = join(folder, relative)
+  try {
+    if (!(await $.fs.exists(path))) return undefined
+    const [file, home] = await Promise.all([
+      $.fs.stat(path, { resolve: true }),
+      $.fs.stat(folder, { resolve: true }),
+    ])
+    const unread = unreadable(file, home.realPath, relative, isOwnPath)
+    return unread === undefined ? { text: await $.fs.read(path) } : { unread }
+  } catch (error) {
+    return { unread: messageOf(error) }
+  }
 }
 
 function where(): string {
@@ -452,5 +454,5 @@ function outline(shown: Frame, kind: FrameKind): string {
     const file = member?.kind === 'leaf' ? `  (${basename(member.tile.path)})` : ''
     lines.push(`${mark}${direction}  ${member?.tile.title ?? '·'}${file}`)
   }
-  return lines.join('\n')
+  return lines.map(oneLine).join('\n')
 }

@@ -1,11 +1,5 @@
 import { expect, test } from 'claude-code/testing'
-import {
-  exclusionsFile,
-  isExcluded,
-  isOwnExclusionsFile,
-  parseExclusions,
-  patternOf,
-} from './exclusions.js'
+import { exclusionsFile, isExcluded, parseExclusions, patternOf } from './exclusions.js'
 
 const patterns = parseExclusions
 
@@ -67,17 +61,6 @@ test('a glob full of stars still answers at once', () => {
   expect(isExcluded('a'.repeat(4000), false, [glob])).toBe(false)
   expect(isExcluded('a'.repeat(4000) + 'b', false, [glob])).toBe(true)
   expect(Date.now() - started).toBeLessThan(1000)
-})
-
-test("only the folder's own exclusions.yaml is read, never one a symlink leads to", () => {
-  expect(isOwnExclusionsFile('/v/a', '/v/a/.hexframe/exclusions.yaml')).toBe(true)
-  expect(isOwnExclusionsFile('/', '/.hexframe/exclusions.yaml')).toBe(true)
-  // `.hexframe/` or the file itself a link, to another folder of the vault or outside it
-  expect(isOwnExclusionsFile('/v/a', '/v/b/.hexframe/exclusions.yaml')).toBe(false)
-  expect(isOwnExclusionsFile('/v/a', '/home/me/secrets.yaml')).toBe(false)
-  // A path the file system couldn't resolve is never the folder's own
-  expect(isOwnExclusionsFile(undefined, '/v/a/.hexframe/exclusions.yaml')).toBe(false)
-  expect(isOwnExclusionsFile('/v/a', undefined)).toBe(false)
 })
 
 test('a candidate names its own exclusion, a folder with a trailing /', () => {

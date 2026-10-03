@@ -1,14 +1,18 @@
 import { expect, test } from 'claude-code/testing'
-import { parseExclusions } from './exclusions.js'
+import { exclusionsFile, parseExclusions } from './exclusions.js'
 import {
   bodySources,
   frontmatter,
   kindsOf,
   parent,
+  readLimit,
   resolvePath,
   sortEntries,
+  splitFrontmatter,
   tileOf,
   titleFromName,
+  unreadable,
+  type FileStat,
   type Ring,
   type Slot,
 } from './node.js'
@@ -172,6 +176,53 @@ test('the frontmatter gives the title and a folded preview', () => {
   expect(frontmatter(body)).toEqual({ title: 'Hexframe', preview: 'One tile, six around it.' })
   expect(tileOf('/a/1-hexframe', body).title).toBe('Hexframe')
   expect(tileOf('/a/4-software-engineering', undefined).title).toBe('Software engineering')
+})
+
+test('a frontmatter opens on the first line and needs its closing line', () => {
+  expect(splitFrontmatter('---\r\ntitle: A\r---\r\n# A\n')).toEqual({
+    frontmatter: ['title: A'],
+    body: '# A\n',
+  })
+  // Unclosed, it is no frontmatter: the Tile and the preview both read the whole file as body
+  const unclosed = '---\ntitle: A\n# A'
+  expect(splitFrontmatter(unclosed)).toEqual({ frontmatter: [], body: unclosed })
+  expect(frontmatter(unclosed)).toEqual({})
+  expect(splitFrontmatter('# A\n---\nb')).toEqual({ frontmatter: [], body: '# A\n---\nb' })
+})
+
+test('a medium reads a regular file within the limit, under its folder', () => {
+  const stat = (realPath: string | undefined, size = 10, kind: FileStat['kind'] = 'file') => ({
+    kind,
+    size,
+    ...(realPath === undefined ? {} : { realPath }),
+  })
+  expect(unreadable(stat('/v/a/CLAUDE.md'), '/v/a', 'CLAUDE.md')).toBeUndefined()
+  expect(unreadable(stat('/CLAUDE.md'), '/', 'CLAUDE.md')).toBeUndefined()
+  // A symlink that stays in the folder is followed; one that leaves it is not, nor a prefix lookalike
+  expect(unreadable(stat('/v/a/docs/README.md'), '/v/a/', 'CLAUDE.md')).toBeUndefined()
+  expect(unreadable(stat('/v/ab/CLAUDE.md'), '/v/a', 'CLAUDE.md')).toBe(
+    'it leads outside its folder',
+  )
+  expect(unreadable(stat('/dev/zero', 0, 'other'), '/v/a', 'CLAUDE.md')).toBe(
+    'it leads outside its folder',
+  )
+  expect(unreadable(stat('/v/a/CLAUDE.md', 0, 'dir'), '/v/a', 'CLAUDE.md')).toBe('it is not a file')
+  expect(unreadable(stat('/v/a/b.md', readLimit + 1), '/v/a', 'b.md')).toBe('it is too large')
+  expect(unreadable(stat('/v/a/b.md', readLimit), '/v/a', 'b.md')).toBeUndefined()
+  // A path the file system couldn't resolve is never under the folder
+  expect(unreadable(stat(undefined), '/v/a', 'b.md')).toBe('it leads outside its folder')
+  expect(unreadable(stat('/v/a/b.md'), undefined, 'b.md')).toBe('it leads outside its folder')
+})
+
+test("only the folder's own exclusions.yaml is read, never one a symlink leads to", () => {
+  const own = (realPath: string, folder: string) =>
+    unreadable({ kind: 'file', size: 10, realPath }, folder, exclusionsFile, true)
+  expect(own('/v/a/.hexframe/exclusions.yaml', '/v/a')).toBeUndefined()
+  expect(own('/.hexframe/exclusions.yaml', '/')).toBeUndefined()
+  // `.hexframe/` or the file itself a link, to another folder of the vault, inside its own, or out
+  expect(own('/v/b/.hexframe/exclusions.yaml', '/v/a')).toBe('it leads outside its folder')
+  expect(own('/v/a/exclusions.yaml', '/v/a')).toBe('it leads outside its folder')
+  expect(own('/home/me/secrets.yaml', '/v/a')).toBe('it leads outside its folder')
 })
 
 test('names read as titles', () => {
