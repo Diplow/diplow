@@ -281,6 +281,17 @@ export function sanitize(text: string): string {
   return out
 }
 
+/** The terminal columns `text` takes: two for a wide or astral character, none for a zero-width one. */
+export function columnsOf(text: string): number {
+  let columns = 0
+  for (const glyph of text.normalize('NFC')) {
+    const code = glyph.codePointAt(0) ?? 0
+    if (isZeroWidth(code)) continue
+    columns += code > 0xffff || isWide(code) ? 2 : 1
+  }
+  return columns
+}
+
 function isZeroWidth(code: number): boolean {
   return (
     (code >= 0x0300 && code <= 0x036f) ||

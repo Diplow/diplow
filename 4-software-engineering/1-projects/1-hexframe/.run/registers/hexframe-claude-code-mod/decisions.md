@@ -34,4 +34,4 @@ HEX-42, from cubic's local review of [#34](https://github.com/Diplow/diplow/pull
 
 ### DEC-7 The drawings get a folder of their own
 
-HEX-42. The outline became a pure drawing beside the Raster and the SVG, and the palette and the word wrapping they share left `raster.ts` for a module of their own, so the SVG reads nothing of the terminal's. Two more files would have put seven in `hooks/`, past the six a node holds, so the four drawing files sit in `hooks/draw/` and `hooks/` keeps the hooks, the footer's rows and the text: the shape and the drawings are its two folders.
+HEX-42. The outline became a pure drawing beside the Raster and the SVG, and the palette and the word wrapping they share left `raster.ts` for a module of their own, so the SVG reads nothing of the terminal's. With `footer.ts` too, that would have put eight files in `hooks/`, past the six a node holds, so the four drawing files sit in `hooks/draw/` and `hooks/` keeps four: the hooks' manifest and module, the footer's rows and the text. The shape and the drawings are its two folders.

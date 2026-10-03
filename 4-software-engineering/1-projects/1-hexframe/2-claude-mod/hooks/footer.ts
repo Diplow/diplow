@@ -1,10 +1,17 @@
 // The rows the pane's lines take under the drawing in the terminal, so the drawing leaves them room:
 // a Raster too tall pushes the controls out of sight.
+import { columnsOf } from './draw/raster.js'
 
 /** The blank rows the pane's column puts between two of its elements. */
 export const rowGap = 1
 
-/** A control as a plain Button draws it: `hotkey: label`, or the label alone. */
+/** The columns the pane's row of controls puts between two of them. */
+export const controlGap = 2
+
+/**
+ * A control as a plain Button draws it in the terminal: `hotkey: label`, or the label alone, as
+ * `ButtonProps.plain` documents it. The pane's test pins that its controls are plain.
+ */
 export interface Control {
   hotkey?: string
   label: string
@@ -25,11 +32,13 @@ export interface Footer {
  * controls and the path, with the gap the column puts above it.
  */
 export function footerRows(columns: number, { problem, hasClashes, controls }: Footer): number {
-  const widths = controls.map(({ hotkey, label }) => length(hotkey ? `${hotkey}: ${label}` : label))
+  const widths = controls.map(({ hotkey, label }) =>
+    columnsOf(hotkey ? `${hotkey}: ${label}` : label),
+  )
   const lines = [
     ...(problem ? [rowsOf(problem, columns)] : []),
     ...(hasClashes ? [1] : []),
-    rowsOfRow(widths, columns, 2),
+    rowsOfRow(widths, columns),
     1,
   ]
   return lines.reduce((rows, line) => rows + rowGap + line, 0)
@@ -44,7 +53,7 @@ export function rowsOf(text: string, columns: number): number {
   let rows = 1
   let used = 0
   for (const word of text.split(/\s+/).filter(Boolean)) {
-    const size = length(word)
+    const size = columnsOf(word)
     if (used > 0 && used + 1 + size <= width) {
       used += 1 + size
       continue
@@ -56,20 +65,16 @@ export function rowsOf(text: string, columns: number): number {
   return rows
 }
 
-/** The rows a row of items `widths` wide takes when it wraps in `columns`, `gap` columns apart. */
-export function rowsOfRow(widths: readonly number[], columns: number, gap: number): number {
+/** The rows a row of controls `widths` wide takes when it wraps in `columns`. */
+export function rowsOfRow(widths: readonly number[], columns: number): number {
   let rows = 1
   let used = 0
   for (const width of widths) {
-    if (used > 0 && used + gap + width > columns) {
+    if (used > 0 && used + controlGap + width > columns) {
       rows++
       used = 0
     }
-    used += (used > 0 ? gap : 0) + width
+    used += (used > 0 ? controlGap : 0) + width
   }
   return rows
-}
-
-function length(text: string): number {
-  return [...text].length
 }

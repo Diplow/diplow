@@ -8,7 +8,7 @@ import type { Elements, EngineInterface, On } from 'claude-code'
 import { outline } from './draw/outline.js'
 import { paint, scaleFor } from './draw/raster.js'
 import { drawSvg } from './draw/svg.js'
-import { footerRows, rowGap, type Control } from './footer.js'
+import { controlGap, footerRows, rowGap, type Control } from './footer.js'
 import { leafPreview, markdownPreview, oneLine, type Shown } from './markdown.js'
 import { exclusionsFile, exclusionsFrom, patternOf } from './shape/exclusions.js'
 import { layoutView } from './shape/layout.js'
@@ -130,7 +130,7 @@ function footerOf(
     Box({
       flexDirection: 'row',
       flexWrap: 'wrap',
-      columnGap: 2,
+      columnGap: controlGap,
       children: controls.map((control) => Button({ ...control, plain: true })),
     }),
     Text({ dimColor: true, wrap: 'truncate-start', children: [oneLine(where())] }),

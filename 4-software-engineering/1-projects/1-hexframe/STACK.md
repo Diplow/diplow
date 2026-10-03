@@ -186,7 +186,7 @@ This vault is a hexframe kept as files, the shape a System exports to. claude-mo
 
 How a medium looks at it is view state, as in the app, each medium's own:
 
-- **Frame kind**: which of a Frame's rings shows around its Tile, Children, Branches, Leaves or Context, among those the shape offers. Leaves get another fill, and a clash a subtle warning. Mapping's Frame is the Children kind of a folder that has no files.
+- **Frame kind**: which of a Frame's rings shows around its Tile, Children, Branches, Leaves or Context, among those the shape offers. Mapping's Frame is the Children kind of a folder that has no files.
 - **Depth**: how many generations a medium shows from the center. claude-mod 1, the app 2, the Obsidian plugin 2.
 - **Double expansion**: only the center has it. Its outer ring shows Children, Branches or Leaves; its inner ring, inside the center's hex, Leaves or Context; never the same kind in both. Each outer Branch expands on its own, into any kind. The inner ring's hexes don't expand. Collapsing peels the outer ring first, then the inner, and a fully collapsed center fills the canvas.
 - **An overflowing Frame** shows as a list, not as hexes, until exclusions or renames clear it. Only that Frame becomes a list, unless it is the center's outer ring: then the whole view does.
