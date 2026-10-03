@@ -1,0 +1,37 @@
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/node.ts
+  s_e53a20fc5d44f6::t_86bb8030f75dc2 3,104-108,129
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/exclusions.test.ts
+  s_e53a20fc5d44f6::t_5806ef946da1d2 2,4,33-40,54-70
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/CLAUDE.md
+  s_e53a20fc5d44f6::t_8b15420761cc7e 39
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/register.ts
+  s_e53a20fc5d44f6::t_5806ef946da1d2 293-294
+  s_e53a20fc5d44f6::t_86bb8030f75dc2 9,18,96-97,197,226,268,283,287-292,295-296,428
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/layout.ts
+  s_e53a20fc5d44f6::t_86bb8030f75dc2 7,64
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/exclusions.ts
+  s_e53a20fc5d44f6::t_5806ef946da1d2 52-54,68-71
+  s_e53a20fc5d44f6::t_86bb8030f75dc2 101,104-106
+  s_e53a20fc5d44f6::t_235a1a790e3bdb 3,6,9,28-29,31,43,56,63,66-67,72,75-83,85,88-100,102-103,107-115,178
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/tests/pane.test.ts
+  s_e53a20fc5d44f6::t_5806ef946da1d2 122,128,138-144,296-312
+  s_e53a20fc5d44f6::t_0f202f18d65c63 313-315
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE.md
+  s_e53a20fc5d44f6::t_8fe3e7dad40b96 30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e5d33b0101f2056803aa374f7e512106d214466d",
+  "prompts": {},
+  "sessions": {
+    "s_e53a20fc5d44f6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0673bf7e-149a-4ad1-86e1-4717474f441c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
