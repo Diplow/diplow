@@ -1,0 +1,75 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/dev/route.tsx
+  s_b661d94074bd8f::t_610cd147e7d581 1-10
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/domains/mapping/mapping.test.ts
+  s_b661d94074bd8f::t_4b379164ebb86f 205-206,209,222-223,227-230,234-248
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/domains/iam/guard.test.ts
+  s_b661d94074bd8f::t_8713071b9b0855 9,85,91,96,103,110,119
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/CLAUDE.md
+  s_b661d94074bd8f::t_8713071b9b0855 33
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/dev/errors.tsx
+  s_b661d94074bd8f::t_610cd147e7d581 4
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/dev/ui.tsx
+  s_b661d94074bd8f::t_610cd147e7d581 2
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/dev/system.tsx
+  s_b661d94074bd8f::t_610cd147e7d581 3
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/dev/session.tsx
+  s_b661d94074bd8f::t_610cd147e7d581 4,7,15
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/view/view.ts
+  s_b661d94074bd8f::t_edf2be39652d3d 18-20,23
+  s_b661d94074bd8f::t_ffea1ba07aef5d 58-59,62
+  s_b661d94074bd8f::t_7691c4bc001e98 13-17,21-22,24-25,53-54
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/index.tsx
+  s_b661d94074bd8f::t_8713071b9b0855 7,18
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/domains/mapping/mapping.ts
+  s_b661d94074bd8f::t_4b379164ebb86f 12-13
+  s_b661d94074bd8f::t_7691c4bc001e98 19-20
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/dev/provoke.ts
+  s_b661d94074bd8f::t_4b379164ebb86f 20-21
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/system/CLAUDE.md
+  s_b661d94074bd8f::t_ffea1ba07aef5d 20
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/system/tree.ts
+  s_b661d94074bd8f::t_ffea1ba07aef5d 44-49
+4-software-engineering/1-projects/1-hexframe/1-app/src/routeTree.gen.ts
+  s_b661d94074bd8f::t_d194feaae2ce26 13,27-31,43-45,48-50,53-55,58-60,63-65,70,81,93,106,117,128,140,154-160,177,180,184,187,191,194,198,201,205,208,213-221,228-238
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/domains/iam/CLAUDE.md
+  s_b661d94074bd8f::t_8713071b9b0855 17,22
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE.md
+  s_b661d94074bd8f::t_8713071b9b0855 21,83
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/system/search.ts
+  s_b661d94074bd8f::t_7691c4bc001e98 6-7,30-31
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/view/view.test.ts
+  s_b661d94074bd8f::t_ffea1ba07aef5d 86-94
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/geometry/layout.ts
+  s_b661d94074bd8f::t_ffea1ba07aef5d 11-12
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/client.ts
+  s_b661d94074bd8f::t_8713071b9b0855 77
+4-software-engineering/1-projects/1-hexframe/1-app/src/routes/dev/hex.tsx
+  s_b661d94074bd8f::t_610cd147e7d581 2
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/promise.ts
+  s_b661d94074bd8f::t_7c1ad585050bcd 9-10,19,27-31
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/client/channels.ts
+  s_b661d94074bd8f::t_8713071b9b0855 19
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/domains/iam/guard.ts
+  s_b661d94074bd8f::t_8713071b9b0855 51
+  s_b661d94074bd8f::t_7691c4bc001e98 6,9,28,31-32
+4-software-engineering/1-projects/1-hexframe/1-app/src/ui/hex/CLAUDE.md
+  s_b661d94074bd8f::t_da82fd9b4c8dfc 17
+4-software-engineering/1-projects/1-hexframe/1-app/src/features/system/tree.test.ts
+  s_b661d94074bd8f::t_ffea1ba07aef5d 51-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "83c86a10a2448767b74558677aaf9e22577a6d8d",
+  "prompts": {},
+  "sessions": {
+    "s_b661d94074bd8f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b310efd9-cf35-4262-bdce-a5d6d86a0d23",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
