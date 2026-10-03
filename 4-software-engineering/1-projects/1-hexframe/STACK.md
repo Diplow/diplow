@@ -23,7 +23,7 @@ The choices, and the rules they come with. Each rule is written here until the f
 ## Runtime and versions
 
 - **Vercel**, Node runtime.
-- **A package per deployable**, never more: `1-app`, a TanStack Start app holding client and server, and `2-mod`, a Claude Code mod that shows a vault folder as a hexframe. Mods are in early access; the mod is its own package, so it is the seam.
+- **A package per deployable**, never more: `1-app`, a TanStack Start app holding client and server, and `2-claude-mod`, a Claude Code mod that shows a vault folder as a hexframe. Mods are in early access; the mod is its own package, so it is the seam.
 - **Stable or release candidate; beta and alpha only behind a seam**, one file that can be swapped. So: TanStack Start RC, Effect 4 RC (migrating 3 to 4 later would touch every file), Drizzle v1 RC if `@effect/sql-drizzle` supports it (0.45 otherwise), and Sentry's alpha TanStack Start SDK behind the observability seam.
 
 | Need | Choice |
