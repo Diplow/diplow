@@ -28,11 +28,14 @@ const rawElements = ['table', 'dialog'].map((element) => ({
 }))
 
 // No effect hook outside src/front/ui/ (STACK.md, State): every piece of state has an owner, and syncing one
-// into another is the bug the owners exist to prevent. Imported by name or read off `React`.
+// into another is the bug the owners exist to prevent. Imported by name, read off `React` (`React.useEffect`,
+// `React['useEffect']`), or destructured (`const { useEffect } = React`).
 const effectHook = '/^use(?:Layout|Insertion)?Effect$/'
 const effectHooks = [
   `ImportSpecifier[imported.name=${effectHook}]`,
   `MemberExpression[property.name=${effectHook}]`,
+  `MemberExpression[property.value=${effectHook}]`,
+  `ObjectPattern > Property[key.name=${effectHook}]`,
 ].map((selector) => ({
   selector,
   message: 'No useEffect outside src/front/ui/: give the state its owner (STACK.md, State).',

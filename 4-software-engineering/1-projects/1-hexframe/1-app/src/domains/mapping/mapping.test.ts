@@ -301,14 +301,26 @@ layer(TestTiles)('References, over PGlite', (it) => {
         })
         yield* createReference(accountId, { parent: child.id, slot: -2, target: shared.id })
         yield* moveTile(accountId, shared.id, { parent: root.id, slot: 6 })
-        expect((yield* system(accountId)).children[1]?.context[-2]).toEqual({
-          _tag: 'Reference',
-          tile: shared,
+        const held = yield* system(accountId)
+        expect(held.children[1]?.context[-2]).toEqual({ _tag: 'Reference', tile: shared })
+        expect(outline(held)).toEqual({
+          title: '',
+          children: {
+            1: { title: 'Child', children: {}, context: { [-2]: '→ Shared' } },
+            6: { title: 'Shared', children: {}, context: {} },
+          },
+          context: {},
         })
         yield* deleteTile(accountId, shared.id)
-        expect((yield* system(accountId)).children[1]?.context[-2]).toEqual({
+        const broken = yield* system(accountId)
+        expect(broken.children[1]?.context[-2]).toEqual({
           _tag: 'BrokenReference',
           target: shared.id,
+        })
+        expect(outline(broken)).toEqual({
+          title: '',
+          children: { 1: { title: 'Child', children: {}, context: { [-2]: '⚠' } } },
+          context: {},
         })
         const taken = yield* createTile(accountId, {
           parent: child.id,

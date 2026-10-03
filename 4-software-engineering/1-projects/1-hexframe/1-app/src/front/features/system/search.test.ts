@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
+import type { TileNode } from '#/front/ui/hex/geometry/layout'
+
 import { changeOf, readSystemSearch, viewOf, withChange, withoutTile, withView } from './search'
 
 describe('readSystemSearch', () => {
@@ -64,16 +66,40 @@ describe('withView and withChange', () => {
 })
 
 describe('withoutTile', () => {
+  // a goes, and with it its Child a1 and its Context Tile a2; its Reference to b leaves b standing.
+  const gone: TileNode = {
+    id: 'a',
+    title: 'A',
+    preview: '',
+    children: { 1: { id: 'a1', title: 'A1', preview: '' } },
+    context: {
+      2: { id: 'a2', title: 'A2', preview: '' },
+      3: { id: 'b', title: 'B', preview: '', reference: true },
+    },
+  }
+
   it('ends the change under way when it named the Tile gone', () => {
     for (const search of [{ move: 'a' }, { edit: 'a' }, { add: 'a', slot: 2 }]) {
-      const next = withoutTile(readSystemSearch({ center: 'b', ...search }), 'a')
+      const next = withoutTile(readSystemSearch({ center: 'c', ...search }), gone)
       expect(changeOf(next)).toEqual({ kind: 'none' })
-      expect(next.center).toBe('b')
+      expect(next.center).toBe('c')
     }
   })
 
-  it('keeps a change that named another Tile', () => {
-    const search = readSystemSearch({ move: 'a' })
-    expect(withoutTile(search, 'b')).toBe(search)
+  it('ends the change under way when it named a Tile below it, a Child or a Context Tile', () => {
+    for (const search of [{ move: 'a1' }, { edit: 'a2' }, { add: 'a1', slot: -2 }]) {
+      expect(changeOf(withoutTile(readSystemSearch(search), gone))).toEqual({ kind: 'none' })
+    }
+  })
+
+  it('keeps a change that named another Tile, one referenced from below included', () => {
+    expect(changeOf(withoutTile(readSystemSearch({ move: 'c' }), gone))).toEqual({
+      kind: 'move',
+      id: 'c',
+    })
+    expect(changeOf(withoutTile(readSystemSearch({ move: 'b' }), gone))).toEqual({
+      kind: 'move',
+      id: 'b',
+    })
   })
 })

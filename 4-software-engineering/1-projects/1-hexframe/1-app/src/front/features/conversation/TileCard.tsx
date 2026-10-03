@@ -23,7 +23,7 @@ export function TileCard({ tile, deleted = false }: TileCardProps) {
   return (
     <article
       className={cn(
-        'grid justify-items-start gap-1 rounded-lg border bg-background px-3 py-2 text-sm',
+        'grid justify-items-start gap-1 rounded-lg border bg-background px-3 py-2 text-sm wrap-anywhere',
         deleted && 'opacity-70',
       )}
     >

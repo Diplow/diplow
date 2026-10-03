@@ -57,13 +57,16 @@ function dayKey(date: Date): string {
   return `${String(date.getFullYear())}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
 }
 
+/** Splits a text into what a reader sees as characters, as Mapping counts a Tile's. */
+const graphemes = new Intl.Segmenter()
+
 /**
  * The start of a text too long to show whole, cut at a word and ended with an ellipsis, or
  * `undefined` when it fits within `limit` characters and there is nothing to hide. Characters are
- * code points, so an emoji is never cut in half.
+ * graphemes, so an emoji, even one joined from several (👩‍👩‍👧), is never cut in half.
  */
 export function excerpt(text: string, limit: number): string | undefined {
-  const characters = Array.from(text)
+  const characters = Array.from(graphemes.segment(text), ({ segment }) => segment)
   if (characters.length <= limit) return undefined
   const cut = characters.slice(0, limit)
   const lastSpace = cut.findLastIndex((character) => /\s/.test(character))

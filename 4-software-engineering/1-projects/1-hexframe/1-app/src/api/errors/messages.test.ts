@@ -64,14 +64,22 @@ describe('the message table', () => {
     expect(messageFor(failure, 'signIn')).toBe(sentence)
   })
 
-  it("words IAM's refusals in French too", () => {
+  it.each([
+    [new CredentialsRejected({ fields: ['password'] }), 'E-mail ou mot de passe incorrect.'],
+    [
+      new EmailTaken({ fields: ['email'] }),
+      'Un compte utilise déjà cet e-mail. Connectez-vous plutôt.',
+    ],
+    [
+      new EmailMalformed({ fields: ['email'] }),
+      'Saisissez une adresse e-mail, comme nom@exemple.fr.',
+    ],
+    [new PasswordLengthInvalid({ fields: ['password'] }), 'Utilisez entre 8 et 128 caractères.'],
+    [new TooManyAttempts(), 'Trop de tentatives. Patientez quelques secondes, puis réessayez.'],
+    [new SignedOut(), 'Connectez-vous pour continuer.'],
+  ])("words IAM's %s in French too", (failure, sentence) => {
     overwriteGetLocale(() => 'fr')
-    expect(messageFor(new CredentialsRejected({ fields: ['password'] }))).toBe(
-      'E-mail ou mot de passe incorrect.',
-    )
-    expect(messageFor(new TooManyAttempts())).toBe(
-      'Trop de tentatives. Patientez quelques secondes, puis réessayez.',
-    )
+    expect(messageFor(failure, 'signIn')).toBe(sentence)
   })
 
   it.each([
@@ -88,14 +96,25 @@ describe('the message table', () => {
     expect(messageFor(failure, 'moveTile')).toBe(sentence)
   })
 
-  it("words Mapping's refusals in French too", () => {
-    overwriteGetLocale(() => 'fr')
-    expect(messageFor(new RootFixed())).toBe(
+  it.each([
+    [new TileNotFound(), 'Cette tuile n’existe pas, ou plus.'],
+    [new TitleMissing({ fields: ['title'] }), 'Donnez un titre à cette tuile.'],
+    [new PreviewTooLong({ fields: ['preview'] }), 'Limitez l’aperçu à 350 caractères.'],
+    [
+      new DirectionTaken(),
+      'Cette place a déjà une tuile. Choisissez-en une libre, ou déplacez d’abord cette tuile.',
+    ],
+    [
+      new MovedUnderItself(),
+      'Une tuile ne peut pas aller sous elle-même ni sous l’un de ses enfants.',
+    ],
+    [
+      new RootFixed(),
       'Votre tuile racine, c’est vous : elle ne peut être ni déplacée ni supprimée.',
-    )
-    expect(messageFor(new TitleMissing({ fields: ['title'] }))).toBe(
-      'Donnez un titre à cette tuile.',
-    )
+    ],
+  ])("words Mapping's %s in French too", (failure, sentence) => {
+    overwriteGetLocale(() => 'fr')
+    expect(messageFor(failure, 'moveTile')).toBe(sentence)
   })
 
   it("speaks the page's language", () => {

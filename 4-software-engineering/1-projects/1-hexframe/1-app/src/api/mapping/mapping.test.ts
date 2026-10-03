@@ -235,6 +235,8 @@ describe("the schemas Mapping's server functions validate by", () => {
     expect(accepts(TileEdit, { id: t, body: '# Body' })).toBe(true)
     expect(accepts(TileEdit, { id: t, body: 'x'.repeat(100_001) })).toBe(false)
     expect(accepts(NewTile, { parent: p, slot: 1, ...content('x'.repeat(1_001)) })).toBe(false)
+    expect(accepts(TileEdit, { id: t, preview: 'x'.repeat(8_000) })).toBe(true)
+    expect(accepts(TileEdit, { id: t, preview: 'x'.repeat(8_001) })).toBe(false)
   })
 
   it('take a Tile id only as a UUID', () => {

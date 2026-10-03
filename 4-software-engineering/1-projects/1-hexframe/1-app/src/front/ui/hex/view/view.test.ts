@@ -46,11 +46,8 @@ describe('readCanvasView', () => {
 
   it('sets every field, so a raw value the router keeps underneath is overwritten', () => {
     const view = readCanvasView({ center: 3, expanded: 5, context: 'x' })
-    expect(Object.entries(view)).toEqual([
-      ['center', undefined],
-      ['expanded', undefined],
-      ['context', undefined],
-    ])
+    // Strict, so each key must be there, set to `undefined`, not merely absent.
+    expect(view).toStrictEqual({ center: undefined, expanded: undefined, context: undefined })
   })
 
   it('drops an expansion list holding anything but ids', () => {

@@ -31,6 +31,15 @@ describe('what Sentry keeps of an error', () => {
     )
   })
 
+  it('redacts a value a longer key names by its last word, however the key is spelt', () => {
+    expect(
+      redacted('client_secret=s3cr, auth_token=t0k, accessToken=a1, apiKey=k9, ACCESS_TOKEN=x'),
+    ).toBe(
+      'client_secret=[redacted], auth_token=[redacted], accessToken=[redacted], apiKey=[redacted], ACCESS_TOKEN=[redacted]',
+    )
+    expect(redacted('monkey=banana, opinion: none')).toBe('monkey=banana, opinion: none')
+  })
+
   it('leaves a message with nothing sensitive as it is', () => {
     expect(redacted('A server function failed unexpectedly')).toBe(
       'A server function failed unexpectedly',
@@ -62,6 +71,27 @@ describe('what Sentry keeps of an error', () => {
     expect(event.message).toBe('Signing in [redacted] failed')
     expect(event.exception.values).toEqual([{ type: 'Error', value: 'duplicate key: [redacted]' }])
     expect(event.tags).toEqual({ requestId: 'req-1' })
+  })
+
+  it('redacts every text in its extra data, its log entry and its contexts, and keeps the trace ids', () => {
+    const event = scrubbed({
+      extra: { __serialized__: { email: 'ada@example.com', tries: 3, tags: ['password=abc12'] } },
+      logentry: { message: 'Signing in %s failed', params: ['ada@example.com'] },
+      contexts: {
+        trace: { trace_id: token, span_id: 's' },
+        custom: { form: { note: 'reach me at ada@example.com' } },
+        runtime: { name: 'node', version: 'v26.5.0' },
+      },
+    })
+    expect(event.extra).toEqual({
+      __serialized__: { email: '[redacted]', tries: 3, tags: ['password=[redacted]'] },
+    })
+    expect(event.logentry).toEqual({ message: 'Signing in %s failed', params: ['[redacted]'] })
+    expect(event.contexts).toEqual({
+      trace: { trace_id: token, span_id: 's' },
+      custom: { form: { note: 'reach me at [redacted]' } },
+      runtime: { name: 'node', version: 'v26.5.0' },
+    })
   })
 
   it("strips a transaction's name, spans and trace of every query and sensitive run", () => {
@@ -113,7 +143,9 @@ describe('what Sentry keeps of an error', () => {
     expect(event.spans[0]?.data).not.toHaveProperty('http.fragment')
     expect(event.spans[1]?.description).toBe('select * from tile where id = ?')
   })
+})
 
+describe('what Sentry keeps of a breadcrumb', () => {
   it('drops console breadcrumbs, which print anything', () => {
     expect(scrubbedBreadcrumb({ category: 'console', message: 'the password is x' })).toBeNull()
   })
@@ -128,5 +160,21 @@ describe('what Sentry keeps of an error', () => {
     expect(
       scrubbedBreadcrumb({ category: 'fetch', data: { url: '/_serverFn/x?payload=secret' } }),
     ).toMatchObject({ data: { url: '/_serverFn/x' } })
+  })
+
+  it("drops a breadcrumb's query and fragment, and redacts every other text in its data", () => {
+    expect(
+      scrubbedBreadcrumb({
+        category: 'http',
+        data: {
+          url: '/reset',
+          'http.method': 'GET',
+          'http.query': 'email=ada@example.com',
+          'http.fragment': 'x',
+          status_code: 200,
+          note: { to: 'ada@example.com' },
+        },
+      })?.data,
+    ).toEqual({ url: '/reset', 'http.method': 'GET', status_code: 200, note: { to: '[redacted]' } })
   })
 })

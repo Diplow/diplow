@@ -30,6 +30,7 @@ What a user does *to look* at a System is not Mapping: centering on a Tile, expa
 | `mapping.ts` | The operations, each for one Account: `system` (the Root with everything below it, the Root added on the first read), `createTile`, `editTile`, `moveTile`, `deleteTile`, `createReference` and `deleteReference` |
 | `tile.ts` | `Tile` and its `Content`; `Direction` (1 to 6), `ContextDirection` (−1 to −6) and `Slot`, either; `checked`, what a Tile's content must be |
 | `system.ts` | `SystemTile`, a Tile with its Children and its Context, and the pure reading of the repository's rows: `systemOf`, `below`, the Tile or the Reference in a slot |
+| `system.test.ts` | That reading on rows made by hand, no database: the Root, a Child and a Context Tile in place, a Reference resolved and a broken one, what holds a slot, what lies below a Tile |
 | `errors.ts` | Mapping's errors, each with its kind: `TileNotFound` (NotFound); `TitleMissing` and `PreviewTooLong` (Invalid, on the field at fault); `DirectionTaken` and `MovedUnderItself` (Conflict); `RootFixed` (Forbidden) |
 | `mapping.test.ts` | Mapping over the tiles repository, for real, over PGlite: the Root, the six Directions, Context, References and their breaking, every operation and every refusal |
 
@@ -38,8 +39,8 @@ The rows live in one table, `tile`, through the tiles repository ([[4-software-e
 ## Rules
 
 - **An Account sees its own System only.** Every operation takes the Account the API layer has from IAM's Session, never one the caller sends; a Tile of another System is `TileNotFound`, as a deleted one is, so an id says nothing about whether it exists. A Reference, for now, points at a Tile of the same System: public Tiles, which anyone can refer to, come with sharing.
-- **A change sees the System alone.** Each one runs in a transaction that first locks the System's Root, then checks against the rows as they stand and writes. Two changes to one System never interleave, so a slot never holds two Tiles and a move never makes a loop.
-- **The Root is the user.** It is never moved nor deleted (`RootFixed`), and its Title is edited like any Tile's. IAM keeps a copy of it for emails: when that copy is wanted, Mapping publishes the change on the bus, and the API layer wires IAM to it.
+- **A change sees the System alone.** Each one runs in a transaction that first locks the System's Root, then checks against the rows as they stand and writes. Two changes to one System never interleave, so a slot never holds two Tiles and a move never makes a loop. That transaction is the System's own, so the tiles repository opens it (`Tiles.change`) and Mapping checks inside it, between the lock and the write (`hexframe-v0-mapping/decisions.md#DEC-3` in the run's registers); one that spans domains will be the API layer's to open.
+- **The Root is the user.** It is never moved nor deleted (`RootFixed`), and its Title is edited like any Tile's. IAM is to keep a copy of it for emails, but no email is sent yet, so none is kept: `editTile` publishes nothing, and Better Auth's name stays empty. The first email brings the event, the Root's rename on the bus, and the API layer wires IAM to it (`hexframe-v0-mapping/decisions.md#DEC-4`).
 - **A Reference is where it stands.** It has no content, and no operation but its create and delete, both by its slot: to put one elsewhere, delete it and create another. Moving the Tile that holds it carries it along; deleting the Tile it points at leaves it broken.
 - **Only the fields given are checked**, so the Body of an untitled Root can be written before its name. A Preview's 350 characters are counted as a reader counts them, an emoji of several code points being one.
 

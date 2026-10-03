@@ -4,7 +4,8 @@
 import { Schema } from 'effect'
 
 import { Slot } from '#/api/mapping/mapping'
-import { CanvasView, orDefault, readSearch, TileId } from '#/front/ui/hex/view/view'
+import type { TileNode } from '#/front/ui/hex/geometry/layout'
+import { CanvasView, findTile, orDefault, readSearch, TileId } from '#/front/ui/hex/view/view'
 
 /** The page's search params, and the route's `validateSearch`: the view, then the change. */
 const SystemSearch = Schema.Struct({
@@ -19,6 +20,13 @@ const SystemSearch = Schema.Struct({
 })
 
 export type SystemSearch = typeof SystemSearch.Type
+
+/**
+ * The next search params, for the route to navigate to; or, for a change that lands later, once a
+ * write settles, how to make them from the search params of that moment, which the user may have
+ * changed meanwhile.
+ */
+export type SearchChange = SystemSearch | ((current: SystemSearch) => SystemSearch)
 
 /** The change under way, as the page reads it from its search params. */
 export type Change =
@@ -63,12 +71,15 @@ export function withChange(search: SystemSearch, change: Change): SystemSearch {
 }
 
 /**
- * The search params once this Tile is gone: the change under way ends if it named the Tile, and any
- * other survives, as it does a view change.
+ * The search params once this Tile is gone, and everything below it with it: the change under way
+ * ends if it named one of them, and any other survives, as it does a view change. A Reference below
+ * the Tile names a Tile that stays.
  */
-export function withoutTile(search: SystemSearch, id: string): SystemSearch {
+export function withoutTile(search: SystemSearch, gone: TileNode): SystemSearch {
   const change = changeOf(search)
   const named =
     change.kind === 'add' ? change.parent : change.kind === 'none' ? undefined : change.id
-  return named === id ? withChange(search, { kind: 'none' }) : search
+  return named !== undefined && findTile(gone, named) !== undefined
+    ? withChange(search, { kind: 'none' })
+    : search
 }

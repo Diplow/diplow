@@ -205,6 +205,9 @@ describe("the server's observability", () => {
       expect.objectContaining({ environment: 'development' }),
     )
     expect(traced).toHaveBeenCalledWith(entry)
+    const [started] = vi.mocked(startSentry).mock.invocationCallOrder
+    const [tracing] = vi.mocked(traced).mock.invocationCallOrder
+    expect(started).toBeLessThan(tracing ?? 0)
   })
 })
 

@@ -48,7 +48,7 @@ export interface ShownView extends Unfolding {
 }
 
 /** What a click on a Tile does. A double-click, or Shift+Enter, centers any Tile but the center. */
-export type TileAction = 'expand' | 'collapse' | 'show-context' | 'hide-context' | 'center' | 'none'
+export type TileAction = 'expand' | 'collapse' | 'show-context' | 'hide-context' | 'center'
 
 /** Reads the URL's search params, field by field: the route's `validateSearch`. */
 export const readCanvasView = readSearch(CanvasView)
@@ -135,8 +135,10 @@ export function centerOn(system: TileNode, view: CanvasView, id: string): Canvas
  * A click on the center shows or hides its Context, a click on a Child expands or collapses it, and a
  * click on a Context Tile, which has nothing to expand, centers it.
  */
-export function tileAction(placement: Placement, shown: ShownView): TileAction {
-  if (placement.kind !== 'tile') return 'none'
+export function tileAction(
+  placement: Extract<Placement, { kind: 'tile' }>,
+  shown: ShownView,
+): TileAction {
   if (placement.tile.id === shown.center.id) return shown.context ? 'hide-context' : 'show-context'
   if (placement.role === 'children') return 'expand'
   // The hub of an expanded Child: the Child itself, drawn at the heart of its Frame.

@@ -76,6 +76,9 @@ describe('the effect hook lint', () => {
     "import { useEffect } from 'react'\nuseEffect(() => undefined)\n",
     "import { useLayoutEffect as run } from 'react'\nrun(() => undefined)\n",
     "import * as React from 'react'\nReact.useEffect(() => undefined)\n",
+    "import * as R from 'react'\nR.useEffect(() => undefined)\n",
+    "import * as React from 'react'\nReact['useEffect'](() => undefined)\n",
+    "import * as React from 'react'\nconst { useEffect } = React\nuseEffect(() => undefined)\n",
   ])('refuses an effect hook outside ui/: %s', async (code) => {
     const messages = await restrictedSyntax(code, feature)
     expect(messages).toHaveLength(1)
@@ -167,14 +170,15 @@ describe('the .ts import lint', () => {
       .map((message) => message.message)
   }
 
-  it.each(["import { a } from './a.ts'\n", "import { a } from '#/api/server/run.ts'\n"])(
-    'refuses %s under src/',
-    async (code) => {
-      const messages = await restrictedImports(code, feature)
-      expect(messages).toHaveLength(1)
-      expect(messages[0]).toMatch(tsImport)
-    },
-  )
+  it.each([
+    "import { a } from './a.ts'\n",
+    "import { a } from './a.tsx'\n",
+    "import { a } from '#/api/server/run.ts'\n",
+  ])('refuses %s under src/', async (code) => {
+    const messages = await restrictedImports(code, feature)
+    expect(messages).toHaveLength(1)
+    expect(messages[0]).toMatch(tsImport)
+  })
 
   it('lets the migrations file, which Node runs, import with .ts', async () => {
     const code = "import { Database } from './database.ts'\n"

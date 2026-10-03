@@ -32,9 +32,9 @@ The error model it carries out (the channel table, the message table, a failure'
 
 | Path | Holds |
 |---|---|
-| `calls.ts` | `settle`, which turns an `Outcome` into its value or a thrown `CallFailed`, and the `read` and `write` builders for TanStack Query |
-| `channels.ts` | The QueryClient that carries each failure out, and `submitWrite` for a form |
-| `ReadBoundary.tsx` | The nearest boundary of a read: its `ErrorState`, or `Forbidden` |
+| `calls.ts` | `settle`, which turns an `Outcome` into its value or a thrown `CallFailed`, and the `read` and `write` builders for TanStack Query. A read is keyed `[scope, mode, …key]`, its mode `read` for what a page shows, or `frame` for a read that frames every page, whose failure is reported and shows nothing |
+| `channels.ts` | The QueryClient that carries each failure out, `submitWrite` for a form, and `caught`, which reports a bug a `ReadBoundary` catches (a `CallFailed` was already carried out by the QueryClient) |
+| `ReadBoundary.tsx` | The nearest boundary of a page's read, mode `read`: its `ErrorState`, or `Forbidden`; a render bug it catches is reported through `caught`. A frame read never reaches it |
 | `iam/guard.ts` | `signedInOnly`, a route's `beforeLoad` for a page only a signed-in Account sees; `readSignInSearch`, sign-in's and sign-up's `validateSearch`; `continueTo`, the way back once signed in. Tested: the redirect, and every `redirect` that must not leave the site |
 | `mapping/queries.ts` | `useSystem`, the read, and `SystemTile`, a Tile of what it returns; one hook per write (`useCreateTile`, `useEditTile`, `useMoveTile`, `useDeleteTile`, `useCreateReference`, `useDeleteReference`); and a form's submit for a new Tile and an edited one (`useCreateTileSubmit`, `useEditTileSubmit`, of type `TileSubmit`), whose refusals show on the fields they name. Tested over stand-ins for the server functions |
 
@@ -42,7 +42,7 @@ The error model it carries out (the channel table, the message table, a failure'
 
 - **The front never imports a domain, its tests included.** A test that needs a refusal takes it as the client receives it, its wire form decoded (`decodeFailure`), or one of the dev failures (`src/api/dev/failures.ts`).
 - **A guarded page guards itself before it renders**, on the server too: `beforeLoad: signedInOnly`. The server function behind it still starts with IAM's `signedIn`; the page's guard is for the user, not for security.
-- **`redirect` is a path on this site, without its language prefix.** The guard and the client's Unauthenticated channel (`client/channels.ts`) write it that way; sign-in drops anything else, and `continueTo` checks it again against the page's origin before it goes there.
-- **The System is one query**, under the key `['system', …]`. Every write reads it again once it settles, whether it succeeded or not, since a refusal such as `DirectionTaken` means the page is out of date; a form's submit too.
+- **`redirect` is a path on this site, without its language prefix.** The guard and the client's Unauthenticated channel (`client/channels.ts`) write it that way, and both untie PostHog's identity (`forget`) before they redirect; sign-in drops anything else, and `continueTo` checks it again against the page's origin before it goes there.
+- **The System is one query**, a page's read under the key `['system', 'read']`. Every write reads it again once it settles (it invalidates `['system']`, every mode), whether it succeeded or not, since a refusal such as `DirectionTaken` means the page is out of date; a form's submit too.
 - **An edit sends what changed.** `useEditTileSubmit` compares the form with the Tile it opened on and sends only the fields that differ, so the Body of an untitled Root can be written before its name.
 - **Every `/dev` page sits under `routes/dev/`**, whose layout route answers 404 in production (`vite.config.ts`, `__DEV_PAGES__`): a page added there is guarded by being there.

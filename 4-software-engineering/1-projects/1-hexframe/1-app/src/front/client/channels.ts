@@ -8,18 +8,20 @@ import { toast } from '#/front/ui/feedback/Toaster'
 import { channelFor, type Call } from '#/api/errors/channel'
 import type { Failure, Outcome } from '#/api/errors/failure'
 import { messageFor } from '#/api/errors/messages'
-import { reportError } from '#/api/observability/client'
+import { forget, reportError } from '#/api/observability/client'
 
-import { asCallFailed, settle, type CallFailed } from './calls'
+import { CallFailed, asCallFailed, settle } from './calls'
 
 let signingIn = false
 
 // One redirect, however many calls fail at once, carrying where the user was, without its language
-// prefix, as the router's own redirect (./iam/guard.ts) carries it. On the server there is no window
-// to move: a read made while rendering a page is guarded by the route's `beforeLoad`, `signedInOnly`.
+// prefix, as the router's own redirect (./iam/guard.ts) carries it, and untying this device from the
+// Account whose Session ended, as that guard does. On the server there is no window to move: a read
+// made while rendering a page is guarded by the route's `beforeLoad`, `signedInOnly`.
 function signIn() {
   if (signingIn || typeof window === 'undefined') return
   signingIn = true
+  forget()
   const here = deLocalizeHref(
     `${window.location.pathname}${window.location.search}${window.location.hash}`,
   )
@@ -40,6 +42,14 @@ function raise(failed: CallFailed, call: Call) {
   const channel = channelFor(call, failure.kind)
   if (channel === 'sign-in') signIn()
   else if (channel === 'toast') toast.error(messageFor(failure, scope))
+}
+
+/**
+ * What ReadBoundary does with what it caught: a bug thrown while rendering is reported, since nothing
+ * else saw it. A read's failure, a CallFailed, went to its channel already, through the QueryCache.
+ */
+export function caught(error: unknown) {
+  if (!(error instanceof CallFailed)) reportError(error, { scope: 'render' })
 }
 
 /** Whether a read's failure shows in the nearest boundary, which is where the query throws it. */

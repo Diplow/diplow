@@ -1,11 +1,12 @@
 // Every table hexframe keeps, in Drizzle's schema language. `drizzle-kit generate` diffs this file
 // against the last migration's snapshot and writes the next migration into ../../../migrations/.
 // Tables arrive with the domains that own them: IAM's, then Mapping's.
-import { isNull } from 'drizzle-orm'
+import { eq, inArray, isNull } from 'drizzle-orm'
 import {
   type AnyPgColumn,
   bigint,
   boolean,
+  check,
   index,
   integer,
   pgTable,
@@ -104,8 +105,9 @@ export const rateLimit = pgTable('rate_limit', {
  * A row is a Tile or, when `target` is set, a Reference to the Tile of that id, standing in a Context
  * slot, whose content columns stay empty. A Root has no parent and no direction: one per Account. Any
  * other row stands under its parent in a direction, 1 to 6 for a Child, -1 to -6 for a Context slot,
- * and one row at most holds a slot. Deleting a row deletes everything below it; a Reference to it has
- * no key to it, so it stays, broken.
+ * and one row at most holds a slot; the checks refuse any other, which would hold a slot no reader
+ * sees. Deleting a row deletes everything below it; a Reference to it has no key to it, so it stays,
+ * broken. `account_id` has no key to `user`: Mapping ignores IAM (hexframe-v0-mapping DEC-1).
  */
 export const tile = pgTable(
   'tile',
@@ -123,5 +125,10 @@ export const tile = pgTable(
     index('tile_accountId_idx').on(table.accountId),
     uniqueIndex('tile_root_idx').on(table.accountId).where(isNull(table.parentId)),
     uniqueIndex('tile_slot_idx').on(table.parentId, table.direction),
+    check('tile_root_check', eq(isNull(table.parentId), isNull(table.direction))),
+    check(
+      'tile_direction_check',
+      inArray(table.direction, [1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6]),
+    ),
   ],
 )

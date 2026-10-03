@@ -105,12 +105,13 @@ describe('layoutCanvas', () => {
 
   it('keys a Context Tile by its slot, so a Reference to a Child drawn beside it keeps its own key', () => {
     const child = { id: 'a', title: 'A', preview: '' }
+    // The Child, referenced twice in the Context: a key drawn from its id would repeat.
     const referencing: TileNode = {
       id: 'root',
       title: 'Root',
       preview: '',
       children: { 1: child },
-      context: { 2: child },
+      context: { 2: child, 5: child },
     }
     const keys = layoutCanvas(referencing, { expanded: new Set(), context: true }, canvas).map(
       (placement) => placement.key,

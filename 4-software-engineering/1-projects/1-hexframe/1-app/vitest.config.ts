@@ -1,9 +1,12 @@
 import { defineConfig } from 'vitest/config'
 
+import { environmentOf } from './src/api/observability/levels'
+import { definesFor } from './vite.config'
+
 export default defineConfig({
   resolve: { tsconfigPaths: true },
-  // Tests run as `pnpm dev` does: the /dev pages and their server functions are on (vite.config.ts).
-  define: { __DEV_PAGES__: 'true', __ENVIRONMENT__: JSON.stringify('development') },
+  // Tests run as `pnpm dev` does: the /dev pages and their server functions are on.
+  define: definesFor(environmentOf('serve', undefined)),
   test: {
     include: ['src/**/*.test.ts', 'scripts/**/*.test.ts'],
     // The server function runtime runs on an in-memory PGlite when DATABASE_URL is empty

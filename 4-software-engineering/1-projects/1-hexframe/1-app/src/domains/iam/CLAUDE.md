@@ -24,11 +24,11 @@ Better Auth and its Stripe plugin are repositories below IAM ([[4-software-engin
 | File | Holds |
 |---|---|
 | `iam.ts` | `Account`, `Session`, `CurrentSession` (the request's Session, which the API layer's middleware resolves once per request), and the operations: `signUp`, `signIn`, `signOut`, `proven` (the Session a request's cookie proves) and `signedIn` |
-| `errors.ts` | IAM's errors, each with its kind: `SignedOut` (Unauthenticated); `CredentialsRejected`, `EmailTaken`, `EmailMalformed` and `PasswordLengthInvalid` (Invalid, each on the field at fault); `TooManyAttempts` (Forbidden) |
+| `errors.ts` | IAM's errors, each with its kind: `SignedOut` (Unauthenticated); `CredentialsRejected`, `EmailTaken`, `EmailMalformed` and `PasswordLengthInvalid` (Invalid, each on the field at fault; `CredentialsRejected` on `password`, whichever was wrong: see the Rules); `TooManyAttempts` (Forbidden) |
 | `iam.test.ts` | IAM on Better Auth for real, over PGlite: sign-up, sign-in on another device, refusals, too many attempts, sign-out |
 
 ## Rules
 
-- **A refusal names its field, never the server's sentence.** Better Auth's refusals become IAM's errors here, each on the form field the user can fix; the message table words them. A wrong password and an unknown email are the same `CredentialsRejected`, so sign-in never says which Accounts exist.
+- **A refusal names its field, never the server's sentence.** Better Auth's refusals become IAM's errors here, each on the form field the user can fix; the message table words them. A wrong password and an unknown email are the same `CredentialsRejected`, on the `password` field in both cases, so sign-in never says which Accounts exist.
 - **The Session comes from the request, not the input.** A server function acting for an Account takes it from `signedIn`, never an id the caller sends.
 - **Email and password only, for now.** Another way in (a social provider, a magic link) is a decision, and the first to need a callback URL will register it on each host Better Auth answers on ([[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE|auth]]).

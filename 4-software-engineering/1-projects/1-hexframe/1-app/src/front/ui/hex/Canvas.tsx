@@ -60,7 +60,7 @@ export function Canvas({ system, view, onViewChange, emptySlots, className }: Ca
       onViewChange(toggleExpanded(system, view, tile.id))
     } else if (action === 'show-context' || action === 'hide-context') {
       onViewChange(toggleContext(system, view))
-    } else if (action === 'center') {
+    } else {
       onViewChange(centerOn(system, view, tile.id))
     }
   }

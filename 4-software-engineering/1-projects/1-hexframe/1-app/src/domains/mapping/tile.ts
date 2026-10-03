@@ -28,10 +28,15 @@ export interface Tile extends Content {
   readonly id: string
 }
 
-export const isDirection = (value: number): value is Direction =>
-  Number.isInteger(value) && value >= 1 && value <= 6
+/** A guard for one of these values, so the guards and the lists above never drift apart. */
+const among =
+  <T extends number>(values: ReadonlyArray<T>) =>
+  (value: number): value is T =>
+    (values as ReadonlyArray<number>).includes(value)
 
-export const isContextDirection = (value: number): value is ContextDirection => isDirection(-value)
+export const isDirection = among(directions)
+
+export const isContextDirection = among(contextDirections)
 
 const previewLimit = 350
 

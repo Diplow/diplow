@@ -69,6 +69,9 @@ describe('the client bus', () => {
   it('logs every fact it carries at medium', () => {
     const log = vi.spyOn(console, 'debug').mockImplementation(() => undefined)
     publish(new DevOther())
-    expect(log).toHaveBeenCalledWith('DevOther published', { topic: 'bus', bus: 'client' })
+    expect(log).toHaveBeenCalledExactlyOnceWith(
+      expect.stringContaining('DevOther'),
+      expect.objectContaining({ topic: 'bus' }),
+    )
   })
 })

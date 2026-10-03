@@ -14,13 +14,18 @@ interface Look {
 
 export const strokeWidth = 1.5
 
-const context = 'var(--context)'
+const contextTint = 'var(--context)'
 
 function lookOf(placement: Placement): Look {
   switch (placement.kind) {
     case 'frame':
       return placement.ring === 'context'
-        ? { fill: mix(context, 14), stroke: context, dashed: true, ink: 'var(--foreground)' }
+        ? {
+            fill: mix(contextTint, 14),
+            stroke: contextTint,
+            dashed: true,
+            ink: 'var(--foreground)',
+          }
         : {
             fill: mix('var(--muted-foreground)', placement.depth === 0 ? 8 : 16),
             stroke: 'transparent',
@@ -38,7 +43,7 @@ function lookOf(placement: Placement): Look {
       }
       return {
         fill: 'var(--card)',
-        stroke: placement.role === 'context' ? context : 'var(--border)',
+        stroke: placement.role === 'context' ? contextTint : 'var(--border)',
         dashed: placement.role === 'context',
         ink: 'var(--card-foreground)',
       }

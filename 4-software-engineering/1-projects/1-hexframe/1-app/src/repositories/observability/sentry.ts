@@ -12,23 +12,40 @@ interface SentryOptions {
   readonly router?: AnyRouter
 }
 
+// The words that say a key is secret, as a key spells them: in lower or upper case after anything but a
+// letter (`password`, `client_secret`, `ACCESS_TOKEN`), or capitalised anywhere, as the last word of a
+// camelCase key (`accessToken`, `apiKey`), so `monkey` and `opinion` name nothing secret.
+const secretWords = [
+  'password',
+  'passcode',
+  'passphrase',
+  'secret',
+  'token',
+  'otp',
+  'code',
+  'pin',
+  'key',
+]
+const secretKey = [
+  `(?<![A-Za-z])(?:${secretWords.join('|')}|${secretWords.join('|').toUpperCase()})`,
+  secretWords.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join('|'),
+].join('|')
+
 // What a message can carry of what a user sent, each kind a pattern, tried in this order at every place.
 const sensitive = new RegExp(
   [
     // A value the message quotes: in quotes, or in parentheses after `=`, as Postgres quotes a row.
-    /(?<!\w)'[^'\n]*'|"[^"\n]*"|`[^`\n]*`|(?<==)\([^)\n]*\)/,
-    // A value named by a key that says it is secret: `password=…`, `token: …`.
-    /(?<=\b(?:password|passcode|passphrase|secret|token|otp|code|pin|key)s?\s*[:=]\s*)[^\s,;)]+/,
+    /(?<!\w)'[^'\n]*'|"[^"\n]*"|`[^`\n]*`|(?<==)\([^)\n]*\)/.source,
+    // A value named by a key that says it is secret: `password=…`, `token: …`, `apiKey=…`.
+    String.raw`(?<=(?:${secretKey})[sS]?\s*[:=]\s*)[^\s,;)]+`,
     // An email address.
-    /[\w.%+-]+@[\w.-]+\.[A-Za-z]{2,}/,
+    /[\w.%+-]+@[\w.-]+\.[A-Za-z]{2,}/.source,
     // A run of six digits or more: a one-time code, a card or a phone number.
-    /\b\d{6,}\b/,
+    /\b\d{6,}\b/.source,
     // A run of 24 characters or more that could be a token, a key or a session id.
-    /[\w+=-]{24,}/,
-  ]
-    .map((pattern) => pattern.source)
-    .join('|'),
-  'gi',
+    /[\w+=-]{24,}/.source,
+  ].join('|'),
+  'g',
 )
 
 const quotes = new Set([`'`, '"', '`', '('])
@@ -57,31 +74,55 @@ function redactedName(name: string) {
   return redacted(name.replace(/(?<=[^\s?#])[?#]\S*/g, ''))
 }
 
-// A span attribute that holds a URL's query or fragment, dropped whole; any other text is redacted, a URL
+/**
+ * Any value an event carries beside the fields Sentry names, every text in it redacted however deep it
+ * sits, its keys and its shape kept. Sentry has normalized the event already: plain data, no cycle.
+ */
+function scrubbedValue<T>(value: T): T {
+  if (typeof value === 'string') return redacted(value) as T
+  if (Array.isArray(value)) return value.map(scrubbedValue) as T
+  if (typeof value !== 'object' || value === null) return value
+  return Object.fromEntries(
+    Object.entries(value).map(([key, inner]) => [key, scrubbedValue(inner)]),
+  ) as T
+}
+
+// An attribute that holds a URL's query or fragment, dropped whole; any other text is redacted, a URL
 // losing its query first.
 const dropped = /(?:^|\.)(?:query|fragment)$/
 const urlLike = /(?:^|\.)(?:url|full|target|path|from|to)$/
 
-/** A span's attributes as Sentry may keep them, as fetch and HTTP instrumentation fill them. */
+/** A span's or a breadcrumb's data as Sentry may keep it, as fetch and HTTP instrumentation fill it. */
 function scrubbedData<D extends Readonly<Record<string, unknown>>>(data: D): D {
   const kept: Record<string, unknown> = {}
   for (const [key, value] of Object.entries(data)) {
     if (dropped.test(key)) continue
     kept[key] =
-      typeof value !== 'string' ? value : urlLike.test(key) ? redactedUrl(value) : redacted(value)
+      typeof value === 'string' && urlLike.test(key) ? redactedUrl(value) : scrubbedValue(value)
   }
   return kept as D
+}
+
+/** An event's contexts: the trace keeps its ids and loses its data's queries; any other is redacted. */
+function scrubbedContexts({ trace, ...others }: Sentry.Contexts): Sentry.Contexts {
+  const kept = scrubbedValue(others)
+  if (trace === undefined) return kept
+  return {
+    ...kept,
+    trace: trace.data === undefined ? trace : { ...trace, data: scrubbedData(trace.data) },
+  }
 }
 
 /**
  * An event as Sentry may keep it: no request data but its method and redacted URL, no user, and every
  * message and exception value redacted, since a defect's message can quote what a user sent (a
- * database error quotes the row it refused). A transaction's name, spans and trace keep no query and
- * no sensitive run either, since fetch and HTTP instrumentation name a span by its full URL.
+ * database error quotes the row it refused); so is every text in its extra data, its log entry and its
+ * contexts, where the SDK puts a thrown value that is not an Error. A transaction's name, spans and
+ * trace keep no query and no sensitive run either, since fetch and HTTP instrumentation name a span by
+ * its full URL.
  */
 export function scrubbed<E extends Sentry.Event>(event: E): E {
   const { request, contexts } = event
-  const trace = contexts?.trace
   return {
     ...event,
     user: undefined,
@@ -109,28 +150,22 @@ export function scrubbed<E extends Sentry.Event>(event: E): E {
       description: span.description === undefined ? undefined : redactedName(span.description),
       data: scrubbedData(span.data),
     })),
-    contexts:
-      trace?.data === undefined
-        ? contexts
-        : { ...contexts, trace: { ...trace, data: scrubbedData(trace.data) } },
+    extra: event.extra === undefined ? undefined : scrubbedValue(event.extra),
+    logentry: event.logentry === undefined ? undefined : scrubbedValue(event.logentry),
+    contexts: contexts === undefined ? undefined : scrubbedContexts(contexts),
   }
 }
 
 /**
  * A breadcrumb as Sentry may keep it: none from the console, which prints anything; a navigation's or
- * a fetch's URLs without their query; every message redacted.
+ * a fetch's URLs without their query; its message and every other text in its data redacted.
  */
 export function scrubbedBreadcrumb(breadcrumb: Sentry.Breadcrumb): Sentry.Breadcrumb | null {
   if (breadcrumb.category === 'console') return null
-  const data: Record<string, unknown> = { ...breadcrumb.data }
-  for (const key of ['url', 'from', 'to']) {
-    const value = data[key]
-    if (typeof value === 'string') data[key] = redactedUrl(value)
-  }
   return {
     ...breadcrumb,
     message: breadcrumb.message === undefined ? undefined : redacted(breadcrumb.message),
-    data,
+    data: breadcrumb.data === undefined ? undefined : scrubbedData(breadcrumb.data),
   }
 }
 

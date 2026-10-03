@@ -71,6 +71,11 @@ describe('excerpt', () => {
     expect(excerpt('🧭🧭🧭🧭🧭🧭 tiles', 5)).toBe('🧭🧭🧭🧭🧭…')
   })
 
+  it('counts an emoji joined from several as one character, and never cuts it apart', () => {
+    expect(excerpt('👩‍👩‍👧👩‍👩‍👧 family', 9)).toBeUndefined()
+    expect(excerpt('👩‍👩‍👧👩‍👩‍👧👩‍👩‍👧 family', 2)).toBe('👩‍👩‍👧👩‍👩‍👧…')
+  })
+
   it('cuts through a word longer than half the limit', () => {
     expect(excerpt('a Supercalifragilistic word', 12)).toBe('a Supercalif…')
   })

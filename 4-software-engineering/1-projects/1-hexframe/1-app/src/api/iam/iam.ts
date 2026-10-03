@@ -11,7 +11,7 @@ import { run } from '../server/run'
  * What a sign-up or a sign-in sends. Bounded here, so nothing unbounded reaches Better Auth; what an
  * email or a password must be is IAM's to say, on the field at fault.
  */
-const Credentials = Schema.Struct({
+export const Credentials = Schema.Struct({
   email: Schema.String.check(Schema.isMaxLength(320)),
   password: Schema.String.check(Schema.isMaxLength(1024)),
 })

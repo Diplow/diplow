@@ -22,13 +22,20 @@ interface TileProps {
 export function Tile({ placement, action, onAct, onCenter }: TileProps) {
   const { title, preview } = placement.tile
   const label = textBox(placement.hex, showsPreview(placement) ? 'tall' : 'wide')
+  // As a button does: Enter acts as it goes down, Space as it comes up; Space going down only keeps
+  // the page from scrolling.
   function onKeyDown(event: KeyboardEvent) {
     if (event.key !== 'Enter' && event.key !== ' ') return
     event.preventDefault()
     // A held key repeats: act once per press, not once per repeat.
-    if (event.repeat) return
-    if (event.key === 'Enter' && event.shiftKey) onCenter('keyboard')
+    if (event.key !== 'Enter' || event.repeat) return
+    if (event.shiftKey) onCenter('keyboard')
     else onAct(false)
+  }
+  function onKeyUp(event: KeyboardEvent) {
+    if (event.key !== ' ') return
+    event.preventDefault()
+    onAct(false)
   }
   return (
     <Tooltip
@@ -43,9 +50,7 @@ export function Tile({ placement, action, onAct, onCenter }: TileProps) {
         role="button"
         tabIndex={0}
         aria-label={actionLabel(action, title)}
-        aria-expanded={
-          action === 'expand' || action === 'collapse' ? action === 'collapse' : undefined
-        }
+        aria-expanded={expanded[action]}
         className="group cursor-pointer outline-none"
         onClick={(event: MouseEvent) => {
           onAct(event.detail > 1)
@@ -54,6 +59,7 @@ export function Tile({ placement, action, onAct, onCenter }: TileProps) {
           onCenter('pointer')
         }}
         onKeyDown={onKeyDown}
+        onKeyUp={onKeyUp}
       >
         <HexShape placement={placement} />
         {/* The hover and focus ring, drawn over the outline. */}
@@ -71,6 +77,15 @@ export function Tile({ placement, action, onAct, onCenter }: TileProps) {
   )
 }
 
+/** Whether what the Tile's action opens or closes is open: its Frame, or the center's Context. */
+const expanded: Record<TileAction, boolean | undefined> = {
+  expand: false,
+  collapse: true,
+  'show-context': false,
+  'hide-context': true,
+  center: undefined,
+}
+
 function actionLabel(action: TileAction, title: string): string {
   switch (action) {
     case 'expand':
@@ -82,7 +97,6 @@ function actionLabel(action: TileAction, title: string): string {
     case 'hide-context':
       return m.hex_tile_hide_context({ title })
     case 'center':
-    case 'none':
       return m.hex_tile_center({ title })
   }
 }

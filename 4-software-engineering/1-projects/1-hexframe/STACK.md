@@ -37,7 +37,7 @@ The choices, and the rules they come with. Each rule is written here until the f
 | Building a system by conversation | TanStack AI |
 | Effects and typed errors | Effect |
 | Validation | Effect Schema, everywhere; `zod` is banned by lint |
-| Database | Neon, Drizzle through its Effect driver (`drizzle-orm/effect-postgres` over `@effect/sql-pg`; `effect-pglite` over `@effect/sql-pglite` in tests) |
+| Database | Neon, Drizzle through its Effect driver (`drizzle-orm/effect-postgres` over `@effect/sql-pg`; `drizzle-orm/effect-pglite` over `@effect/sql-pglite` in tests) |
 | Auth | Better Auth, behind IAM |
 | Payments | Stripe through `@better-auth/stripe`, behind IAM |
 | UI | Tailwind, shadcn |
@@ -60,7 +60,7 @@ Every folder under `1-app/src/` holds at most 6 child folders and 6 files. The r
 | Domains | Effect services, one folder per domain | The business logic, in the domain's language |
 | Repositories | Effect layers over Drizzle, Better Auth, Stripe | The technical complexity |
 
-An import only points down, so nothing below the front, the API layer included, can reach what the browser shows, and the front reaches the domains through the API layer only. Domains ignore each other; only the API layer composes them.
+An import only points down, and only the API layer composes domains. The direction and its lint now live in [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE|1-app]], each layer's rules in its own folder: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]], [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE|domains]], [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/CLAUDE|repositories]].
 
 ## Effect stops at the server function
 
@@ -118,7 +118,7 @@ Vitest with `@effect/vitest`.
 
 ## Domains
 
-Each domain introduces its language with a short story in its `CLAUDE.md`: what it is about and the problems it solves, not an exhaustive glossary.
+Each domain introduces its language with a short story in its `CLAUDE.md`: what it is about and the problems it solves, not an exhaustive glossary. What a domain may import and hold now lives in [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE|domains]].
 
 ### IAM
 

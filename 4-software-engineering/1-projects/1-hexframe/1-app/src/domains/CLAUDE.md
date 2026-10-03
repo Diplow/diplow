@@ -19,5 +19,5 @@ The middle layer: one folder per domain, each an Effect service in its own langu
 
 | File | Holds |
 |---|---|
-| `kind.ts` | The kinds a domain's error carries (`kind('Conflict')`, `...invalid`), shared by every domain because it sits beside them, not in one: the channel the client picks depends on it |
+| `kind.ts` | The closed set of kinds the client picks a channel by, shared by every domain because it sits beside them, not in one. A domain's error carries one of the first five (`kind('Conflict')`, `...invalid`); `Unexpected`, the sixth, is no domain's to declare: `run`, in the API layer, gives it to every defect and every failure it does not know |
 | `bus.ts` | `Bus`, where a domain publishes a `DomainEvent`, a fact in its language declared with `Schema.TaggedClass`, for others to react to. The API layer builds the bus and wires who reacts: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE\|api]], "The server bus" |

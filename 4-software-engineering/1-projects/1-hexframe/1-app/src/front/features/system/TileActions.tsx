@@ -25,6 +25,7 @@ import {
   withoutTile,
   withView,
   type Change,
+  type SearchChange,
   type SystemSearch,
 } from './search'
 import { ringOf, tileIn } from './tree'
@@ -35,7 +36,7 @@ interface TileActionsProps {
   /** The System's Tiles as the canvas draws them (`canvasTree`). */
   tree: TileNode
   search: SystemSearch
-  onSearchChange: (search: SystemSearch) => void
+  onSearchChange: (change: SearchChange) => void
 }
 
 export function TileActions({ system, tree, search, onSearchChange }: TileActionsProps) {
@@ -63,11 +64,16 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
             },
             deletion: {
               id: found.tile.id,
-              // The centered Tile is gone: the view centers on the Tile it stood under, and a change
-              // under way ends only if it named the deleted Tile.
+              // The centered Tile is gone, and everything below it: the view, as it is by then,
+              // centers on the Tile it stood under, and a change under way ends only if it named one
+              // of the Tiles gone.
               onDeleted: () => {
-                const next = withView(search, centerOn(tree, view, parent.id))
-                onSearchChange(withoutTile(next, found.tile.id))
+                onSearchChange((current) =>
+                  withoutTile(
+                    withView(current, centerOn(tree, viewOf(current), parent.id)),
+                    center,
+                  ),
+                )
               },
             },
           })}

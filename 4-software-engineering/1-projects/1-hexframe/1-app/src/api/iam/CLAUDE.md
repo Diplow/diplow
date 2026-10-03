@@ -14,6 +14,7 @@ Where the client meets [[4-software-engineering/1-projects/1-hexframe/1-app/src/
 | File | Holds |
 |---|---|
 | `iam.ts` | `signUp`, `signIn`, `signOut` and `session`, the server functions. Their schemas bound the strings; what an email or a password must be is IAM's to say, on the field |
+| `iam.test.ts` | The programs through `run`, on the runtime's Better Auth over PGlite, one browser per device: signed out, sign-up and the Session its cookie proves, sign-in and sign-out on another device, every refusal as it crosses the wire; the schema's bounds |
 
 The client's side, the guard of a page only a signed-in Account sees and the way back from sign-in, is `front/client/iam/guard.ts`: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE|front]].
 

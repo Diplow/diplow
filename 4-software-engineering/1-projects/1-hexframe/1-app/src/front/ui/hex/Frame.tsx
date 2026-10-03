@@ -35,10 +35,17 @@ export function EmptySlot({ placement, action }: EmptySlotProps) {
   const { label, onSelect } = action
   const { center, radius } = placement.hex
   const arm = radius * 0.18
+  // As a button does: Enter selects as it goes down, Space as it comes up; Space going down only keeps
+  // the page from scrolling.
   function onKeyDown(event: KeyboardEvent) {
     if (event.key !== 'Enter' && event.key !== ' ') return
     event.preventDefault()
-    if (!event.repeat) onSelect()
+    if (event.key === 'Enter' && !event.repeat) onSelect()
+  }
+  function onKeyUp(event: KeyboardEvent) {
+    if (event.key !== ' ') return
+    event.preventDefault()
+    onSelect()
   }
   return (
     <g
@@ -48,6 +55,7 @@ export function EmptySlot({ placement, action }: EmptySlotProps) {
       className="group cursor-pointer outline-none"
       onClick={onSelect}
       onKeyDown={onKeyDown}
+      onKeyUp={onKeyUp}
     >
       <HexShape placement={placement} />
       <polygon

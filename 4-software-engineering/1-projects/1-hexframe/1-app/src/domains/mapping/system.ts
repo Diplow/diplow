@@ -39,11 +39,25 @@ export const tileRow = (rows: ReadonlyArray<TileRow>, id: string) =>
 export const rowAt = (rows: ReadonlyArray<TileRow>, parent: string, slot: number) =>
   rows.find((row) => row.parentId === parent && row.direction === slot)
 
+/** The rows under each parent, the Root's under `null`: built once, for a walk down. */
+function byParent(
+  rows: ReadonlyArray<TileRow>,
+): ReadonlyMap<string | null, ReadonlyArray<TileRow>> {
+  const under = new Map<string | null, Array<TileRow>>()
+  for (const row of rows) {
+    const siblings = under.get(row.parentId)
+    if (siblings === undefined) under.set(row.parentId, [row])
+    else siblings.push(row)
+  }
+  return under
+}
+
 /** The ids of a Tile and of everything below it. */
 export function below(rows: ReadonlyArray<TileRow>, id: string): ReadonlySet<string> {
+  const under = byParent(rows)
   const found = new Set([id])
   for (const parent of found) {
-    for (const row of rows) if (row.parentId === parent) found.add(row.id)
+    for (const row of under.get(parent) ?? []) found.add(row.id)
   }
   return found
 }
@@ -51,8 +65,7 @@ export function below(rows: ReadonlyArray<TileRow>, id: string): ReadonlySet<str
 /** The System these rows hold, from its Root down; `undefined` when they hold no Root. */
 export function systemOf(rows: ReadonlyArray<TileRow>): SystemTile | undefined {
   const byId = new Map(rows.map((row) => [row.id, row]))
-  const under = new Map<string | null, Array<TileRow>>()
-  for (const row of rows) under.set(row.parentId, [...(under.get(row.parentId) ?? []), row])
+  const under = byParent(rows)
 
   const referenceTo = (target: string): Reference | BrokenReference => {
     const row = byId.get(target)

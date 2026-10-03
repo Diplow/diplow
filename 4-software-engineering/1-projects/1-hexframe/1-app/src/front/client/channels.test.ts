@@ -6,9 +6,13 @@ import { DevConflict, DevForbidden, DevInvalid, DevUnauthenticated } from '#/api
 import { Unexpected, encodeFailure, type Failure, type Outcome } from '#/api/errors/failure'
 
 import { CallFailed, read, write } from './calls'
-import { makeQueryClient, submitWrite } from './channels'
+import { caught, makeQueryClient, submitWrite } from './channels'
 
 vi.mock('#/front/ui/feedback/Toaster', () => ({ toast: { error: vi.fn() } }))
+vi.mock('#/api/observability/client', async (original) => ({
+  ...(await original<object>()),
+  forget: vi.fn(),
+}))
 
 const failing = <E extends Failure>(failure: E): Promise<Outcome<never, E>> =>
   Promise.resolve({ ok: false, failure: encodeFailure(failure), requestId: 'req-1' })
@@ -56,10 +60,12 @@ describe("a form's write", () => {
   })
 
   it('raises one toast for any other failure, and keeps the submit from counting as done', async () => {
-    expect(await submit(() => failing(new DevConflict()))).toEqual({
+    const onSaved = vi.fn()
+    expect(await submit(() => failing(new DevConflict()), onSaved)).toEqual({
       form: 'That title is taken.',
     })
     expect(toast.error).toHaveBeenCalledExactlyOnceWith('That title is taken.')
+    expect(onSaved).not.toHaveBeenCalled()
   })
 })
 
@@ -70,9 +76,10 @@ describe('the sign-in redirect', () => {
     const { submitWrite: fresh } = await import('./channels')
     const { DevUnauthenticated: SignedOut } = await import('#/api/dev/failures')
     const { encodeFailure: encode } = await import('#/api/errors/failure')
+    const { forget } = await import('#/api/observability/client')
     const outcome = { ok: false as const, failure: encode(new SignedOut()), requestId: 'req-1' }
     const submit = fresh({ scope: 'save', call: () => Promise.resolve(outcome), onSaved: vi.fn() })
-    return () => submit({ value: {} })
+    return Object.assign(() => submit({ value: {} }), { forget: vi.mocked(forget) })
   }
 
   it('happens once, carrying the path, the search and the hash', async () => {
@@ -82,6 +89,15 @@ describe('the sign-in redirect', () => {
     expect(assign).toHaveBeenCalledExactlyOnceWith(
       `/sign-in?redirect=${encodeURIComponent('/dev/errors?a=1#x')}`,
     )
+  })
+
+  it('unties this device from the Account whose Session ended, before it leaves', async () => {
+    const submit = await signingIn()
+    await submit()
+    expect(submit.forget).toHaveBeenCalledOnce()
+    const [forgotten] = submit.forget.mock.invocationCallOrder
+    const [left] = assign.mock.invocationCallOrder
+    expect(forgotten).toBeLessThan(left ?? 0)
   })
 
   it('carries the place without its language prefix, and signs in in that language', async () => {
@@ -110,6 +126,26 @@ describe('the sign-in redirect', () => {
     const submit = await signingIn()
     await expect(submit()).resolves.toEqual({ form: 'Sign in to go on.' })
     expect(assign).not.toHaveBeenCalled()
+    expect(submit.forget).not.toHaveBeenCalled()
+  })
+})
+
+describe("what a read's boundary caught", () => {
+  it('reports a bug thrown while rendering, which nothing else saw', () => {
+    const report = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    const bug = new TypeError('a bug')
+    caught(bug)
+    expect(report).toHaveBeenCalledExactlyOnceWith(bug, {
+      scope: 'render',
+      kind: 'Unexpected',
+      code: 'Unexpected',
+    })
+  })
+
+  it("leaves a read's failure to the channel it went to already", () => {
+    const report = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    caught(new CallFailed(new Unexpected(), 'scope'))
+    expect(report).not.toHaveBeenCalled()
   })
 })
 

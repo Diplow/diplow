@@ -49,7 +49,7 @@ function Message({ entry }: { entry: Extract<Entry, { kind: 'message' }> }) {
       </p>
       <p
         className={cn(
-          'rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap',
+          'rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap wrap-anywhere',
           mine ? 'rounded-br-sm bg-primary text-primary-foreground' : 'rounded-bl-sm bg-muted',
         )}
       >
@@ -64,7 +64,7 @@ function Action({ icon: Icon, text, at }: { icon: LucideIcon; text: ReactNode; a
   return (
     <p className="flex items-center gap-2 text-xs text-muted-foreground">
       <Icon aria-hidden className="size-3.5 shrink-0" />
-      <span className="min-w-0 flex-1">{text}</span>
+      <span className="min-w-0 flex-1 wrap-anywhere">{text}</span>
       <Time at={at} />
     </p>
   )

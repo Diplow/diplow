@@ -16,7 +16,7 @@ The API layer's side of observability: what is logged, at which verbosity, and w
 | File | Side | Holds |
 |---|---|---|
 | `levels.ts` | both, pure | The topics and their levels, `logs`, `verbosityFor` (the environment's level raised by a flag) and `environmentOf`, which `vite.config.ts` sets `__ENVIRONMENT__` with |
-| `server.ts` | server | The logger `run.ts`'s runtime adds beside Effect's own, `requestLog` (a request's verbosity and who its lines are about), what `run` logs (`called`, `sent`, `failedUnexpectedly`, `flushed`, `unobserved`), and `observedEntry`, the server entry with Sentry started and each request traced |
+| `server.ts` | server | The logger `run.ts`'s runtime adds beside Effect's own, `requestLog` (a request's verbosity and who its lines are about), what `run` does around a program: log its call (`called`) and the failure it sends (`sent`, `failedUnexpectedly`), flush PostHog's queue (`flushed`), report a failure of the runtime no logger heard (`unobserved`), and `observedEntry`, the server entry with Sentry started and each request traced |
 | `client.ts` | client | `startObservability`, run once by the router; `log` and `reportError`; `identify` and `forget`. Tested against a stand-in for PostHog's browser SDK, which also pins when `posthog-browser.ts` ties, unties and reads a flag |
 
 ## Levels
@@ -30,7 +30,7 @@ Each line has a topic, and each topic a level. A level logs its own topics and t
 | low | medium, plus information (`info`), repository and database calls (`repository`), renders (`render`, in development only) | development |
 
 - **The environment is fixed at build time**: `development` under `pnpm dev`, `preview` on a Vercel preview, `production` for any other build, a local one included.
-- **A PostHog feature flag raises one Account's level, never lowers it.** The flag is `verbosity` (`high`, `medium`, `low`). The server reads it for the signed-in Account in `requestLog`, before the program, and keeps each value five minutes; a flag it cannot read leaves the environment's level. The browser applies it only while the device is tied to an Account: `identify` ties it on signing in or up (`continueTo`) and on every page `signedInOnly` guards, `forget` unties it when a guarded visit finds nobody signed in.
+- **A PostHog feature flag raises one Account's level, never lowers it.** The flag is `verbosity` (`high`, `medium`, `low`). The server reads it for the signed-in Account in `requestLog`, before the program, and keeps each value it reads five minutes; a flag it cannot read leaves the environment's level, and is read again shortly. The browser applies it only while the device is tied to an Account: `identify` ties it on signing in or up (`continueTo`) and on every page `signedInOnly` guards, `forget` unties it when a guarded visit, or a call made in the page (`client/channels.ts`), finds nobody signed in.
 
 ## Rules
 

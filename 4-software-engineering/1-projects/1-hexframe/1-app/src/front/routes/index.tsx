@@ -11,6 +11,7 @@ import {
   readSystemSearch,
   viewOf,
   withView,
+  type SearchChange,
   type SystemSearch,
 } from '#/front/features/system/search'
 import { System } from '#/front/features/system/System'
@@ -28,7 +29,7 @@ export const Route = createFileRoute('/')({
 function Home() {
   const search = Route.useSearch()
   const navigate = Route.useNavigate()
-  const onSearchChange = (next: SystemSearch) => {
+  const onSearchChange = (next: SearchChange) => {
     void navigate({ search: next })
   }
   return (
@@ -43,7 +44,7 @@ function Home() {
 
 interface SystemPageProps {
   search: SystemSearch
-  onSearchChange: (search: SystemSearch) => void
+  onSearchChange: (change: SearchChange) => void
 }
 
 function SystemPage({ search, onSearchChange }: SystemPageProps) {

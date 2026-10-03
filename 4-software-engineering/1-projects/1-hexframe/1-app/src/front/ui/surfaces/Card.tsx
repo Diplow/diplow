@@ -11,8 +11,10 @@ interface CardProps {
   className?: string
 }
 
-// `null` and `false` render nothing, so a slot holding one stays out, wrapper and spacing included.
-const present = (slot: ReactNode) => slot !== undefined && slot !== null && slot !== false
+// `null` and the booleans render nothing, so a slot holding one stays out, wrapper and spacing
+// included.
+const present = (slot: ReactNode) =>
+  slot !== undefined && slot !== null && typeof slot !== 'boolean'
 
 /** A bordered surface grouping one thing's content, with an optional header and footer. */
 export function Card({ title, description, action, footer, children, className }: CardProps) {

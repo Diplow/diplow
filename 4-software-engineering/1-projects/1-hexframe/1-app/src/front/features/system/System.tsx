@@ -10,20 +10,29 @@ import type { TileNode } from '#/front/ui/hex/geometry/layout'
 import { findTile } from '#/front/ui/hex/view/view'
 import { Button } from '#/front/ui/inputs/controls/button'
 
-import { changeOf, viewOf, withChange, withView, type SystemSearch } from './search'
+import {
+  changeOf,
+  viewOf,
+  withChange,
+  withView,
+  type SearchChange,
+  type SystemSearch,
+} from './search'
 import { slotOf } from './tree'
 
 interface SystemProps {
   /** The System's Tiles as the canvas draws them (`canvasTree`). */
   tree: TileNode
   search: SystemSearch
-  onSearchChange: (search: SystemSearch) => void
+  onSearchChange: (change: SearchChange) => void
   className?: string
 }
 
 export function System({ tree, search, onSearchChange, className }: SystemProps) {
   const move = useMoveTile()
   const change = changeOf(search)
+  // A move whose Tile is gone (deleted from another tab, an old link) is no move: no banner, and the
+  // empty slots add a Tile, the first of which replaces the move in the URL.
   const moving = change.kind === 'move' ? findTile(tree, change.id) : undefined
 
   const place = (slot: EmptySlotTarget) => ({
@@ -47,13 +56,16 @@ export function System({ tree, search, onSearchChange, className }: SystemProps)
         ? m.system_move_child({ tile: tile.title, title: parent.title })
         : m.system_move_context({ tile: tile.title, title: parent.title }),
     onSelect: (slot: EmptySlotTarget) => {
+      // One move at a time: a slot clicked while the Tile is on its way does nothing.
+      if (move.isPending) return
       // A refusal (a slot under the Tile itself, one taken meanwhile) shows in a toast, and the move
-      // stays under way, so another slot can be picked.
+      // stays under way, so another slot can be picked. Done, it ends in the URL as it is by then,
+      // whatever view the user opened meanwhile.
       move.mutate(
         { id: tile.id, ...place(slot) },
         {
           onSuccess: () => {
-            onSearchChange(withChange(search, { kind: 'none' }))
+            onSearchChange((current) => withChange(current, { kind: 'none' }))
           },
         },
       )

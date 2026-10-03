@@ -8,6 +8,7 @@ import { ConfigProvider, Effect, Exit } from 'effect'
 import { Database } from './database'
 import { migrated } from './migrations'
 import { PromiseDatabase, layer as promiseLayer } from './promise'
+import { tile } from './schema'
 import { TestDatabase } from './testing'
 
 const committed = readdirSync(fileURLToPath(new URL('../../../migrations', import.meta.url)))
@@ -37,6 +38,39 @@ layer(TestDatabase)('the test database', (it) => {
       expect(yield* recorded).toEqual(committed.toSorted())
     }),
   )
+
+  it.effect('keeps a tile in a Direction or a Context slot, and a Root in none', () =>
+    Effect.gen(function* () {
+      const database = yield* Database
+      // Each row of an Account of its own, so no unique index refuses it: only the checks may.
+      const row = (parentId: string | null, direction: number | null) => ({
+        id: crypto.randomUUID(),
+        accountId: crypto.randomUUID(),
+        parentId,
+        direction,
+        title: '',
+        preview: '',
+        body: '',
+      })
+      const root = row(null, null)
+      yield* database.insert(tile).values(root)
+      const written = (parentId: string | null, direction: number | null) =>
+        database
+          .insert(tile)
+          .values(row(parentId, direction))
+          .pipe(Effect.exit, Effect.map(Exit.isSuccess))
+      const [rootDirected, undirected, ...slots] = yield* Effect.all([
+        written(null, 1),
+        written(root.id, null),
+        ...[0, 7, -7, 6, -6].map((direction) => written(root.id, direction)),
+      ])
+      expect({ rootDirected, undirected, slots }).toEqual({
+        rootDirected: false,
+        undirected: false,
+        slots: [false, false, false, true, true],
+      })
+    }),
+  )
 })
 
 describe("Better Auth's promise database, deployed", () => {
@@ -49,7 +83,7 @@ describe("Better Auth's promise database, deployed", () => {
       Effect.exit,
     )
 
-  it.effect('is a Drizzle database over DATABASE_URL, whose pool ends with the layer', () =>
+  it.effect('is a Drizzle database over DATABASE_URL, built without connecting', () =>
     Effect.gen(function* () {
       // A pool connects on its first query, so a server that is not there is enough to build it.
       const url = 'postgres://nobody@127.0.0.1:1/none'

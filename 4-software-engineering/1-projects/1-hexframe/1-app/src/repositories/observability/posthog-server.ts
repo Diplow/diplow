@@ -1,6 +1,6 @@
 // PostHog on the server, behind the observability seam: the leveled event log and the feature flags a
 // request reads. Server only; the browser has its own client (./posthog-browser.ts).
-import { Cache, Context, Duration, Effect, Layer } from 'effect'
+import { Cache, Context, Duration, Effect, Exit, Layer } from 'effect'
 import { PostHog } from 'posthog-node'
 
 /** One event for PostHog: who it is about, and what happened. */
@@ -34,8 +34,16 @@ const off = Analytics.of({
 })
 
 // A flag read costs a request to PostHog, so each person's value is kept for a few minutes: raising
-// someone's verbosity takes effect within that time.
-const flagCache = { capacity: 10_000, timeToLive: Duration.minutes(5) }
+// someone's verbosity takes effect within that time. A read that failed is not kept, and one that came
+// back without the flag only briefly: PostHog's client answers a timeout so, as it answers a flag it does
+// not serve, so one slow answer does not drop someone's override for five minutes.
+const flagCache = {
+  capacity: 10_000,
+  timeToLive: (exit: Exit.Exit<unknown, unknown>) => {
+    if (Exit.isFailure(exit)) return Duration.zero
+    return exit.value === undefined ? Duration.seconds(30) : Duration.minutes(5)
+  },
+}
 
 function on(key: string, host: string) {
   return Effect.gen(function* () {
@@ -45,16 +53,12 @@ function on(key: string, host: string) {
       ),
       (client) => Effect.tryPromise(() => client.shutdown()).pipe(Effect.ignore),
     )
-    const flags = yield* Cache.make({
-      ...flagCache,
-      lookup: (entry: string) => {
-        const [flag = '', distinctId = ''] = entry.split('\n')
-        return Effect.tryPromise(() => client.evaluateFlags(distinctId, { flagKeys: [flag] })).pipe(
-          Effect.map((evaluated) => evaluated.getFlag(flag)),
-          Effect.orElseSucceed(() => undefined),
-        )
-      },
-    })
+    const flags = yield* Cache.makeWith((entry: string) => {
+      const [flag = '', distinctId = ''] = entry.split('\n')
+      return Effect.tryPromise(() => client.evaluateFlags(distinctId, { flagKeys: [flag] })).pipe(
+        Effect.map((evaluated): unknown => evaluated.getFlag(flag)),
+      )
+    }, flagCache)
     return Analytics.of({
       capture: ({ event, distinctId, anonymous, properties }) => {
         client.capture({
@@ -63,7 +67,8 @@ function on(key: string, host: string) {
           properties: anonymous ? { ...properties, $process_person_profile: false } : properties,
         })
       },
-      flag: (flag, distinctId) => Cache.get(flags, `${flag}\n${distinctId}`),
+      flag: (flag, distinctId) =>
+        Cache.get(flags, `${flag}\n${distinctId}`).pipe(Effect.orElseSucceed(() => undefined)),
       flush: Effect.tryPromise(() => client.flush()).pipe(Effect.ignore),
     })
   })

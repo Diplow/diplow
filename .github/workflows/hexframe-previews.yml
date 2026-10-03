@@ -32,6 +32,8 @@ jobs:
           NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
           BRANCH: preview/${{ github.head_ref || github.event.ref }}
         run: |
+          # Without pipefail, jq's success on curl's empty output would read a failed listing as no branch.
+          set -o pipefail
           api="https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches"
           id=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api" \
             | jq -r --arg name "$BRANCH" '.branches[] | select(.name == $name) | .id')

@@ -58,6 +58,7 @@ export async function signedInOnly({ location }: { location: ParsedLocation }) {
     const failed = asCallFailed(error, 'session')
     if (channelFor('read', failed.failure.kind) === 'sign-in') {
       forget()
+      // The router's `href`, which its rewrite (src/router.tsx) already took the language prefix off.
       redirect({ to: '/sign-in', search: { redirect: location.href }, throw: true })
     }
     throw failed
