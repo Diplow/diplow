@@ -1,0 +1,24 @@
+{
+  "format": "standard",
+  "format_label": "Standard 1v1 (compétitif)",
+  "snapshot_date": "2026-06-29",
+  "match_structure": "Best-of-3 (2 games gagnants)",
+  "battlefield_selection": "chosen (1 par game, pas de réutilisation dans le match)",
+  "construction": {
+    "main_deck_size": 40,
+    "rune_deck_size": 12,
+    "max_copies": 3,
+    "battlefields_brought": 3,
+    "sideboard_size": 8,
+    "sideboard_locked": ["Runes", "Legend", "Battlefields"],
+    "swap_chosen_champion_in_sideboarding": true
+  },
+  "sets_legal": ["OGN", "SFD", "UNL"],
+  "rotation_in_effect": false,
+  "banlist": {
+    "effective": "2026-03-30",
+    "cards": ["Called Shot", "Draven (Vanquisher)", "Fight or Flight", "Scrapheap"],
+    "battlefields": ["Dreaming Tree", "Obelisk of Power", "Reaver's Row"]
+  },
+  "_provenance": "Snapshot manuel issu de scripts/riftbound_format_generator.py au 2026-06-29. Pour régénérer ou vérifier l'état courant : python scripts/riftbound_format_generator.py --format standard --date <iso>. Ce script reste la single source of truth — ce snapshot peut devenir stale."
+}

@@ -16,7 +16,7 @@ It is a pnpm monorepo; each package is a numbered child of this node (`1-<name>/
 | # | Package | What it is |
 |---|---|---|
 | 1 | [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE\|app]] | `@hexframe/app`, the TanStack Start app holding client and server, deployed to Vercel |
-| 2 | [[4-software-engineering/1-projects/1-hexframe/2-mod/CLAUDE\|mod]] | `@hexframe/mod`, a Claude Code mod: `/hexframe` shows a folder of this vault as a hexframe, in the terminal or the Desktop app |
+| 2 | [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/CLAUDE\|claude-mod]] | `@hexframe/claude-mod`, a Claude Code mod: `/hexframe` shows a folder of this vault as a hexframe, in the terminal or the Desktop app |
 
 | Inner child | What it holds |
 |---|---|
@@ -25,7 +25,7 @@ It is a pnpm monorepo; each package is a numbered child of this node (`1-<name>/
 
 | File | What it holds |
 |---|---|
-| [[4-software-engineering/1-projects/1-hexframe/STACK\|STACK]] | The technical choices, the rules that come with them, and the language of each domain. Read it before adding code |
+| [[4-software-engineering/1-projects/1-hexframe/STACK\|STACK]] | The technical choices, the rules that come with them, the language of each domain, and how a vault reads as a hexframe. Read it before adding code |
 
 ## Rules
 

@@ -44,12 +44,14 @@ The repo root is one node. A node holds:
 
 | Slot | Budget | What goes there |
 |---|---|---|
-| `CLAUDE.md` | 1, outside every budget | Presents the node: a preview and a link per child |
-| Inner children (-1 to -6) | 6 folders | Meta about the node itself: `.claude/`, `.obsidian/`, `.skills/`, `.conductor/`, `.github/` |
-| Children (1 to 6) | 6 folders | The node's facets, numbered by their place on the ring: `1-name/` … `6-name/` |
-| Files | 6 | Content that belongs to the node itself, not to one facet |
+| `CLAUDE.md` | 1, outside every budget | The node's Tile: a preview and a link per child |
+| Context, the inner children | 6 dot folders | Meta about the node itself: `.claude/`, `.obsidian/`, `.skills/`, `.conductor/`, `.github/` |
+| Branches, the children (1 to 6) | 6 folders | The node's facets, numbered by their place on the ring: `1-name/` … `6-name/` |
+| Leaves, the files | 6 | Content that belongs to the node itself, not to one facet. Dot files aren't Leaves |
 
-Every child folder is a node again, with the same shape and its own `CLAUDE.md`. The limit of 6 is the point: it forces prioritization and keeps each node small enough to hold in one sitting. A node that overflows its budget is ready to be cut, not worked around.
+These are the words every medium that shows the vault as a hexframe reads it with, set out in [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|hexframe's STACK]]. A Leaf that needs children of its own grows into a Branch and keeps its number: `3-games.md` becomes `3-games/`.
+
+Every Branch is a node again, with the same shape and its own `CLAUDE.md`. The limit of 6 is the point: it forces prioritization and keeps each node small enough to hold in one sitting. A node that overflows its budget is ready to be cut, not worked around.
 
 Children sit on a ring: neighbors share an edge, and the child across the ring is a tension the node balances. Fewer than six is fine while a node is young; the missing numbers stay free for the facets still to come.
 
@@ -75,10 +77,11 @@ The six children are the domains listed in [[CLAUDE]]. Each one is a node with i
 
 Claude Code only discovers skills sitting directly under `.claude/skills/<name>/SKILL.md`, it follows symlinks, and the folder name becomes the command, colons included (all checked on 2026-09-27). So:
 
-- `.skills/` is the only source of skills in this repo. My own skills sit there in folders and subfolders, like any other node; external skill repos are vendored under `.skills/external/<vendor>/`.
-- `.claude/skills/` holds one symlink per skill, pointing into `.skills/`: `/<name>` for mine, `/<vendor>:<name>` for vendored ones. My skill names must be unique across the hierarchy, since the flat directory is where they meet.
+- `.skills/` is the only source of skills in this repo. My own skills sit there under the domain they serve (`3-games/`, `4-softeng/`), in folders and subfolders like any other node; external skill repos are vendored under `.skills/external/<vendor>/`.
+- `.claude/skills/` holds one symlink per skill, pointing into `.skills/`. Mine are named by their path with the `N-` of each folder dropped, `4-softeng/1-ship/do-ticket` becoming `/softeng:ship:do-ticket`; vendored ones are `/<vendor>:<name>`.
+- `.claude/agents/` holds one symlink per subagent a skill ships in its `agents/` folder. Claude Code names a subagent by its `name` field, so those must be unique across the hierarchy.
 - `.claude/settings.json` switches off every skill defined outside the repo (user skills, claude.ai synced skills, plugins).
-- `.skills/sync` rebuilds both the symlinks and the overrides; [[.skills/CLAUDE|Skills]] says when to run it.
+- `.skills/sync` rebuilds the symlinks and the overrides; [[.skills/CLAUDE|Skills]] says when to run it.
 
 ### Software
 

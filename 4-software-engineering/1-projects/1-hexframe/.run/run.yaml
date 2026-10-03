@@ -1,10 +1,10 @@
 # The config of hexframe v0's autonomous run, read by run-autonomous-initiative
 # and the run-autonomous-project skill under it
-# (.skills/1-ship/run-autonomous-project/references/contract.md holds every key).
+# (.skills/4-softeng/1-ship/run-autonomous-project/references/contract.md holds every key).
 # Every ticket of every project lands on one initiative branch, which I merge
 # into main once the last project is done:
 #
-#   /run-autonomous-initiative "Hexframe v0" --config 4-software-engineering/1-projects/1-hexframe/.run/run.yaml
+#   /softeng:ship:run-autonomous-initiative "Hexframe v0" --config 4-software-engineering/1-projects/1-hexframe/.run/run.yaml
 #
 # The run never edits this file.
 
