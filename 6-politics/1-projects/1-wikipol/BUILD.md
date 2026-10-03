@@ -73,7 +73,7 @@ Trois tiers structurent les fiches du vault. La distinction conditionne **quand*
 
 Données captées hors analyse de la source. Servent de matière première à l'ingestion.
 
-- **Transcripts** — transcripts `.md` des médias source (vidéos YouTube, podcasts, articles transcrits). Stockés sous `Sources/Transcripts/`.
+- **Transcripts** — transcripts `.md` des médias source (vidéos YouTube, podcasts, articles transcrits). Stockés sous `Sources/Transcripts/`, hors git : la copie de référence est sur Google Drive (voir `CLAUDE.md` de WikiPol § Transcripts).
 
 ### Basic (atomique)
 
@@ -481,7 +481,7 @@ Sources/<NomSource>/
 │   └── <skill-name>/SKILL.md     ←   les skills génériques de WikiPol/Skills/
 ├── Sources/
 │   ├── Inventaire.md             ← table des vidéos (Dataview)
-│   └── Transcripts/              ← transcripts bruts (.md) — type raw
+│   └── Transcripts/              ← transcripts bruts (.md) — type raw, hors git (Google Drive)
 ├── Videos/                       ← basic (cas standard)
 ├── Livres/                       ← basic (chronique d'ouvrage, remplace Videos pour ce format)
 ├── Individus/                    ← basic

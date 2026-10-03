@@ -33,6 +33,8 @@ Cette skill orchestre l'ingestion d'un transcript de vidéo PaduTeam. Elle ne r�
 
 ### Étape 1 — Sélection de la vidéo
 
+**Récupérer les transcripts d'abord.** Ils sont hors git, sur Google Drive : si `Sources/Transcripts/` est vide ou absent (worktree, clone neuf), lancer `rclone copy diplow:WikiPol/Sources/<NomSource>/Sources/Transcripts Sources/<NomSource>/Sources/Transcripts` depuis la racine de WikiPol (voir `CLAUDE.md` de WikiPol § Transcripts).
+
 Si l'utilisateur ne fournit ni URL, ni titre, ni transcript :
 
 1. Lister les fichiers de `Sources/Transcripts/` (ignorer ceux préfixés par `_`)
@@ -56,7 +58,7 @@ Suivre `BUILD.md` de WikiPol § Workflow git, « En début d'ingestion » :
 
 1. Chercher un fichier correspondant au titre (correspondance partielle)
 2. Si trouvé → lire directement
-3. Si non trouvé → extraire via `paduteam-transcript`, sauvegarder dans `Sources/Transcripts/`
+3. Si non trouvé → extraire via `paduteam-transcript`, sauvegarder dans `Sources/Transcripts/`, puis le pousser sur Google Drive (`rclone copy Sources diplow:WikiPol/Sources --include '/*/Sources/Transcripts/*.md'` depuis la racine de WikiPol). Il ne se commit pas.
 
 Lire le transcript en entier.
 
