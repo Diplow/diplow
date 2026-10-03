@@ -75,10 +75,11 @@ The six children are the domains listed in [[CLAUDE]]. Each one is a node with i
 
 Claude Code only discovers skills sitting directly under `.claude/skills/<name>/SKILL.md`, it follows symlinks, and the folder name becomes the command, colons included (all checked on 2026-09-27). So:
 
-- `.skills/` is the only source of skills in this repo. My own skills sit there in folders and subfolders, like any other node; external skill repos are vendored under `.skills/external/<vendor>/`.
-- `.claude/skills/` holds one symlink per skill, pointing into `.skills/`: `/<name>` for mine, `/<vendor>:<name>` for vendored ones. My skill names must be unique across the hierarchy, since the flat directory is where they meet.
+- `.skills/` is the only source of skills in this repo. My own skills sit there under the domain they serve (`3-games/`, `4-softeng/`), in folders and subfolders like any other node; external skill repos are vendored under `.skills/external/<vendor>/`.
+- `.claude/skills/` holds one symlink per skill, pointing into `.skills/`. Mine are named by their path with the `N-` of each folder dropped, `4-softeng/1-ship/do-ticket` becoming `/softeng:ship:do-ticket`; vendored ones are `/<vendor>:<name>`.
+- `.claude/agents/` holds one symlink per subagent a skill ships in its `agents/` folder. Claude Code names a subagent by its `name` field, so those must be unique across the hierarchy.
 - `.claude/settings.json` switches off every skill defined outside the repo (user skills, claude.ai synced skills, plugins).
-- `.skills/sync` rebuilds both the symlinks and the overrides; [[.skills/CLAUDE|Skills]] says when to run it.
+- `.skills/sync` rebuilds the symlinks and the overrides; [[.skills/CLAUDE|Skills]] says when to run it.
 
 ### Software
 

@@ -1,0 +1,51 @@
+{
+  "legend": "Irelia, Blade Dancer",
+  "chosen_champion": "Irelia, Fervent",
+  "domain_identity": ["Calm", "Chaos"],
+  "_provenance": "Liste gagnante d'un regional qualifier (non créée par Diplo, importée comme variante d'étude). Décode le shell 'tempo-disruption' référencé dans memory/project_irelia_state.md et deckbuilding/threat_distribution.md.",
+  "battlefields": ["Targon's Peak", "Sunken Temple", "Abandoned Hall"],
+  "runes": { "Calm": 6, "Chaos": 6 },
+  "main_deck": [
+    { "name": "Defy",               "count": 3, "category": "Spell" },
+    { "name": "Discipline",         "count": 3, "category": "Spell" },
+    { "name": "Tideturner",         "count": 3, "category": "Unit" },
+    { "name": "Defiant Dance",      "count": 3, "category": "Spell" },
+    { "name": "Scuttle Crab",       "count": 3, "category": "Unit" },
+    { "name": "Charm",              "count": 2, "category": "Spell" },
+    { "name": "En Garde",           "count": 2, "category": "Spell" },
+    { "name": "Gust",               "count": 2, "category": "Spell" },
+    { "name": "Ride the Wind",      "count": 2, "category": "Spell" },
+    { "name": "Not So Fast",        "count": 2, "category": "Spell" },
+    { "name": "Stellacorn Herder",  "count": 2, "category": "Unit" },
+    { "name": "Guardian Angel",     "count": 2, "category": "Equipment" },
+    { "name": "Boots of Swiftness", "count": 2, "category": "Equipment" },
+    { "name": "Adaptatron",         "count": 1, "category": "Unit" },
+    { "name": "Zhonya's Hourglass", "count": 1, "category": "Gear" },
+    { "name": "Rebuke",             "count": 1, "category": "Spell" },
+    { "name": "Flash",              "count": 1, "category": "Spell", "_note": "Identifiée via image carte (2026-06-30) : Spell [Reaction], 2 én. générique, 'Move up to 2 friendly units to base.' Set OGS 011/024 — ABSENT de sets/*/source.json et de sets_legal (OGN/SFD/UNL). Légalité OGS à confirmer (liste a gagné un regional → présumé légal, couverture data incomplète). Domaine probable Calm (badge énergie teal), sans pip coloré donc sans impact sur le cast." },
+    { "name": "Hard Bargain",       "count": 1, "category": "Spell" },
+    { "name": "Vex, Apathetic",     "count": 2, "category": "Unit (Champion)" },
+    { "name": "Fizz, Trickster",    "count": 1, "category": "Unit (Champion)" }
+  ],
+  "sideboard": [
+    { "name": "Find Your Center",   "count": 2, "category": "Spell" },
+    { "name": "Adaptatron",         "count": 2, "category": "Unit" },
+    { "name": "Star-Crossed",       "count": 2, "category": "Spell" },
+    { "name": "Gust",               "count": 1, "category": "Spell" },
+    { "name": "Heart of Dark Ice",  "count": 1, "category": "Gear" }
+  ],
+  "totals": {
+    "main_deck_total": 40,
+    "main_deck_library": 39,
+    "chosen_champion": 1,
+    "sideboard": 8,
+    "rune_deck": 12,
+    "battlefields": 3
+  },
+  "_notes": [
+    "Convention de notation : 'main_deck' liste les 39 cartes shuffle dans la library ; 'chosen_champion' (Irelia, Fervent) est la 40e carte du Main Deck construit, qui démarre en Champion Zone. Total construit = 40.",
+    "Ordre du main_deck préservé tel que fourni par l'utilisateur (pas trié par catégorie).",
+    "Copies totales croisant main+side : Adaptatron 3 (1+2), Gust 3 (2+1) — légal (max 3).",
+    "Runes 6 Calm / 6 Chaos : split plus chaos-lourd que le voltron (7/5), justifié par le paquet d'interaction Chaos dense (Gust, Rebuke, Hard Bargain, Star-Crossed, Ride the Wind) + menaces Chaos (Vex, Fizz, Tideturner)."
+  ]
+}

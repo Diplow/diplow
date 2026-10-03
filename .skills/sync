@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Make .skills/ the only source of skills for Claude Code sessions in this repo.
 #
-#   .skills/sync          rebuild .claude/skills/ and the overrides in .claude/settings.json
+#   .skills/sync          rebuild .claude/skills/, .claude/agents/ and the overrides in .claude/settings.json
 #   .skills/sync --pull   first re-vendor every repo in .skills/external/sources at its latest commit
 #
 # Runs at every session start (SessionStart hook in .claude/settings.json).
@@ -11,6 +11,7 @@ root="$(cd "$(dirname "$0")/.." && pwd)"
 skills="$root/.skills"
 external="$skills/external"
 links="$root/.claude/skills"
+agent_links="$root/.claude/agents"
 settings="$root/.claude/settings.json"
 
 pull() {
@@ -30,7 +31,8 @@ pull() {
 
 [[ "${1:-}" == "--pull" ]] && pull
 
-# 1. One symlink per skill: mine as <name>, vendored ones as <vendor>:<name>.
+# 1. One symlink per skill: mine named by their path, with the N- of each folder dropped
+# (4-softeng/1-ship/do-ticket -> softeng:ship:do-ticket), vendored ones as <vendor>:<name>.
 mkdir -p "$links"
 find "$links" -maxdepth 1 -type l -delete
 
@@ -48,7 +50,7 @@ link() {
 
 while IFS= read -r file; do
   dir="$(dirname "$file")"
-  name="$(basename "$dir")"
+  name="$(sed -E 's#(^|/)[0-9]+-#\1#g; s#/#:#g' <<<"${dir#"$skills"/}")"
   own+=("$name")
   link "$name" "$dir"
 done < <(find "$skills" -path "$external" -prune -o -name SKILL.md -print | sort)
@@ -61,7 +63,21 @@ for vendor_dir in "$external"/*/; do
   done < <(find "${vendor_dir%/}" -name SKILL.md | sort)
 done
 
-# 2. Switch off every other source: user skills, claude.ai synced skills, plugins.
+# 2. One symlink per agent: any <skill>/agents/<name>.md, linked as .claude/agents/<name>.md.
+mkdir -p "$agent_links"
+find "$agent_links" -maxdepth 1 -type l -delete
+agents=0
+while IFS= read -r file; do
+  target="$agent_links/$(basename "$file")"
+  if [[ -L "$target" ]]; then
+    echo "sync: two agents named '$(basename "$file" .md)': $(readlink "$target") and ${file#"$root"/}" >&2
+    exit 1
+  fi
+  ln -s "../../${file#"$root"/}" "$target"
+  agents=$((agents + 1))
+done < <(find "$skills" -path "$external" -prune -o -path '*/agents/*.md' -print | sort)
+
+# 3. Switch off every other source: user skills, claude.ai synced skills, plugins.
 # Conductor's own skill is passed with --plugin-dir, which overrides can't reach.
 off=()
 for file in "$HOME"/.claude/skills/*/SKILL.md; do
@@ -83,4 +99,4 @@ jq -n \
   ${off[@]+"${off[@]}"} >"$settings.tmp"
 mv "$settings.tmp" "$settings"
 
-echo "sync: $count skills linked, ${#off[@]} outside skills switched off"
+echo "sync: $count skills and $agents agents linked, ${#off[@]} outside skills switched off"

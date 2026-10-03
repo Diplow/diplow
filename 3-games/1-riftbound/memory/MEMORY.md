@@ -1,0 +1,6 @@
+- [Profil utilisateur — Diplo](user_profile.md) — débutant Riftbound, théorie-first, veut le « why » derrière chaque carte
+- [Méthodologie — isolation de variable](feedback_methodology.md) — un changement à la fois, pas de sur-résolution théorique
+- [Irelia Blade Dancer — état des decks](project_irelia_state.md) — 2 workspaces : voltron-equipment + tempo-disruption (liste regional, 6/6), Ride the Wind en suspens
+- [Gaps de données](project_data_gaps.md) — Equipment SFD+UNL RÉSOLU (text.equipped) ; gap OUVERT : set OGS hors couverture (carte Flash identifiée)
+- [APIs externes cartes](reference_apis.md) — Riftcodex (primaire), RiftScribe / Scrydex (candidats backfill)
+- [Rulings Riftbound acquis](rules_traps.md) — Domain ≠ rune cost, Neutral ≠ combat trick, Recall ≠ Move, etc.

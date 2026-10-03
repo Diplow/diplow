@@ -1,0 +1,7 @@
+# OS / éditeur
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Previews de cartes (~200 Mo) : stockées sur Google Drive (Riftbound/sets), voir CLAUDE.md
+sets/*/cards/images/

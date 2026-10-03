@@ -1,0 +1,57 @@
+filters:
+  and:
+    - file.inFolder("3-games/1-riftbound/sets")
+    - file.folder.endsWith("cards/oracle")
+    - file.ext == "md"
+properties:
+  note.name:
+    displayName: Card
+  note.set:
+    displayName: Set
+  note.type:
+    displayName: Type
+  note.domain:
+    displayName: Domain
+  note.energy:
+    displayName: Energy
+  note.might:
+    displayName: Might
+  note.power:
+    displayName: Power
+  note.rarity:
+    displayName: Rarity
+views:
+  - type: cards
+    name: Gallery
+    order: []
+    image: note.image
+    imageAspectRatio: 0.95
+    cardSize: 350
+    imageFit: contain
+  - type: table
+    name: Table
+    filters:
+      and:
+        - set == "OGN"
+    order:
+      - name
+      - set
+      - type
+      - domain
+      - energy
+      - might
+      - power
+      - rarity
+      - image
+      - number
+    sort:
+      - property: number
+        direction: ASC
+      - property: set
+        direction: ASC
+      - property: energy
+        direction: ASC
+    columnSize:
+      note.might: 96
+      note.power: 77
+      note.image: 228
