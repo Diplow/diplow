@@ -2,7 +2,7 @@ import { join, resolve } from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
-import { devPluginDir } from './plugin-dir.ts'
+import { buildPluginDir, devPluginDir } from './plugin-dir.ts'
 
 const repoRoot = resolve('/work/diplow')
 
@@ -27,5 +27,11 @@ describe('devPluginDir', () => {
     expect(devPluginDir({ HEXFRAME_VAULT: 'perso' }, repoRoot)).toBe(
       join(resolve('perso'), '.obsidian/plugins/hexframe'),
     )
+  })
+})
+
+describe('buildPluginDir', () => {
+  it("writes into the repo's own vault, where the build is committed", () => {
+    expect(buildPluginDir(repoRoot)).toBe(join(repoRoot, '.obsidian/plugins/hexframe'))
   })
 })

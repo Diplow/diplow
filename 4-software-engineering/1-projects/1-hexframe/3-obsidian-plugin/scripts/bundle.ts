@@ -1,5 +1,5 @@
-// The esbuild bundle of the plugin: src/main.ts into main.js, with manifest.json copied beside it.
-import { copyFile, mkdir, writeFile } from 'node:fs/promises'
+// The esbuild bundle of the plugin: src/main.ts into main.js, with manifest.json and styles.css copied beside it.
+import { copyFile, mkdir, rm, writeFile } from 'node:fs/promises'
 import { builtinModules } from 'node:module'
 import { join } from 'node:path'
 
@@ -7,12 +7,17 @@ import esbuild from 'esbuild'
 
 const packageDir = join(import.meta.dirname, '..')
 
+// The files a build copies beside main.js as they are.
+const copied = ['manifest.json', 'styles.css']
+
 // A dev bundle carries an inline source map and a `.hotreload` file, which the hot-reload plugin
-// watches for; a production one is minified.
+// watches for. A production one is minified, and removes a `.hotreload` a dev build left, so the
+// folder holds the committed build and nothing else.
 export async function bundle({ outDir, dev }: { outDir: string; dev: boolean }) {
   await mkdir(outDir, { recursive: true })
-  await copyFile(join(packageDir, 'manifest.json'), join(outDir, 'manifest.json'))
-  if (dev) await writeFile(join(outDir, '.hotreload'), '')
+  await Promise.all(copied.map((name) => copyFile(join(packageDir, name), join(outDir, name))))
+  const hotReload = join(outDir, '.hotreload')
+  await (dev ? writeFile(hotReload, '') : rm(hotReload, { force: true }))
 
   return esbuild.context({
     entryPoints: [join(packageDir, 'src/main.ts')],

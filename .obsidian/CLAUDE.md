@@ -34,6 +34,7 @@ Obsidian is mostly a Markdown reader. The files stay plain Markdown on disk, so 
 |---|---|
 | Dataview | Queries notes and their frontmatter, as tables and lists |
 | Excalidraw | Drawings inside the vault |
+| Hexframe | Mine, built from [[4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/CLAUDE\|obsidian-plugin]]. It will show a folder of the vault as a hexframe, and loads doing nothing for now. Desktop only, its build committed in `plugins/hexframe/` |
 | Git | Commits and pulls from inside Obsidian |
 | Hidden folders access | Indexes the dot folders (`.claude/`, `.skills/`, this one) so they show in the file tree and in searches |
 | Iconize | Icons on files and folders |
