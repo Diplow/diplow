@@ -1,0 +1,32 @@
+filters:
+  or:
+    - type == "conjoncture"
+    - couche.contains("conjoncture")
+views:
+  - type: table
+    name: Toutes les conjonctures
+    order:
+      - file.name
+      - periode
+      - statut
+      - domaine
+      - thèmes
+      - file.mtime
+      - skill_version
+    sort:
+      - property: periode
+        direction: DESC
+      - property: file.name
+        direction: ASC
+    columnSize:
+      file.name: 280
+  - type: table
+    name: Récents
+    order:
+      - file.name
+      - periode
+      - domaine
+      - file.mtime
+    sort:
+      - property: file.mtime
+        direction: DESC

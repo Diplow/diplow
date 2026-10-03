@@ -1,0 +1,53 @@
+filters:
+  and:
+    - type == "concept"
+views:
+  - type: table
+    name: Tous les concepts
+    order:
+      - file.name
+      - domaine
+      - thèmes
+      - file.mtime
+      - skill_version
+    sort:
+      - property: file.name
+        direction: ASC
+    columnSize:
+      file.name: 320
+  - type: table
+    name: Récents
+    order:
+      - file.name
+      - domaine
+      - thèmes
+      - file.mtime
+      - skill_version
+    sort:
+      - property: file.mtime
+        direction: DESC
+  - type: table
+    name: Théorie
+    filters:
+      and:
+        - domaine.contains("théorie")
+    order:
+      - file.name
+      - thèmes
+      - skill_version
+    sort:
+      - property: file.name
+        direction: ASC
+    cardSize: 320
+  - type: table
+    name: Politique intérieure
+    filters:
+      and:
+        - domaine.contains("politique-intérieure")
+    order:
+      - file.name
+      - thèmes
+      - skill_version
+    sort:
+      - property: file.name
+        direction: ASC

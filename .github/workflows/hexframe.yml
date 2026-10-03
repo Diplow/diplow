@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - 4-software-engineering/1-projects/1-hexframe/**
+      - .obsidian/plugins/hexframe/**
       - .github/workflows/hexframe.yml
 
 concurrency:
@@ -43,3 +44,13 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
       - run: pnpm test
+      - name: the committed Obsidian plugin build is up to date
+        # The vault's devices pull the plugin from git and can't build it, so its build is committed.
+        if: hashFiles('4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/package.json') != ''
+        run: |
+          pnpm --filter @hexframe/obsidian-plugin build
+          if [ -n "$(git status --porcelain -- :/.obsidian/plugins/hexframe)" ]; then
+            git status --porcelain -- :/.obsidian/plugins/hexframe
+            echo "::error::.obsidian/plugins/hexframe differs from a fresh build: run pnpm build in 3-obsidian-plugin and commit it"
+            exit 1
+          fi

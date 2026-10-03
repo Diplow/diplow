@@ -68,6 +68,7 @@ Keys, when each is needed, and who reads them. `always` keys are needed by both 
 | `gates.unit`, `gates.phase`, `gates.fix_rounds_per_gate` | always | unit, project, root | shell commands that must exit 0, and the fix-round cap. `gates.phase` is the project's gate set, run on `<target>` once its units have landed |
 | `reviews.automated`, `reviews.max_rounds`, `reviews.must_fix`, `reviews.should_fix` | pr | unit, project | the automated reviewers to wait for (an empty list skips the wait), the round cap, and the reviewer levels that count as must-fix and should-fix |
 | `reviews.clean_marker` | optional | unit, project | the phrase an app reviewer writes in its summary comment when it found nothing, for reviewers that report a clean review only that way |
+| `reviews.local` | optional | unit, project | a reviewer the run starts itself on the machine, instead of waiting for it to post on the pull request: `name`, used in the round comment, and `command`, a shell command run from the repo root with `{target}` replaced by `<target>`, which prints its findings with file:line and a level and exits 0 when it found nothing. Step 4 of `references/pr-loop.md` runs it |
 | `halting.never`, `halting.frozen_paths`, `halting.read_only_paths` | always | all | the `never` list, frozen paths, read-only paths |
 | `halting.frozen_after` | optional | top | paths frozen once a given project is completed |
 | `registers.dir`, `registers.files` | always | all | the directory and files where the run writes its deliverables, one subdirectory per project (see "Registers") |
@@ -166,7 +167,7 @@ With no long-lived run branch, nothing can carry a record of a unit that did not
 ### PARK-<n> <title>
 - when: <ISO date>
 - kind: gate-exhausted | review-exhausted | review-missing | forbidden-path | ci-timeout | open-question | harness-depth
-- evidence: <the failing command and its last lines, or the thread URLs, or the question>
+- evidence: <the failing command and its last lines, or the thread URLs (the round comment URL for a local finding), or the question>
 - state left: <branch, pull request URL and whether it is open or merged>
 - to pick it up: <what a human or a later run would do first>
 ```

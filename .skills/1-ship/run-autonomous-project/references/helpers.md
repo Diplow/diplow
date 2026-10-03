@@ -4,7 +4,7 @@ parent: .skills/1-ship/run-autonomous-project
 owner: diplo
 preview: >-
   Briefs and return formats for the leaves of an autonomous run: fetch-tier
-  lookups (project snapshot, CI digest, review threads, code lookup), the
+  lookups (project snapshot, CI digest, review threads, local review, code lookup), the
   work-tier planner and fix-up, and the judge-tier reviewer. Helpers own no
   ticket and no branch, spawn nothing, and never ask.
 ---
@@ -16,13 +16,14 @@ A helper that cannot finish says so in its return, with the evidence. It never a
 
 ## Fetch and lookup
 
-**Fetch tier** (`models.fetch`). Read and digest, so raw payloads stay out of the caller's context. Read-only on git and GitHub, read-only on Linear. Four briefs:
+**Fetch tier** (`models.fetch`). Read and digest, so raw payloads stay out of the caller's context. Read-only on git and GitHub, read-only on Linear. Five briefs:
 
 | Brief | Input | Return |
 |---|---|---|
 | project snapshot | project name, `landing` | project id and state; then one line per ticket: `id · title · state · blockedBy ids · closing comment status and landed, or none · park comment PARK ids, or none · branch or none · landed yes or no · PR number, state, base and merge commit SHA, or none`, read as described in "What to read" of `references/state.md` |
 | CI digest | failed run ids | per run: failing job and step, file:line, the message in at most 5 lines, and `code` or `infrastructure` with the reason |
 | review threads | pull request number | one deduplicated list of actionable findings: `source · thread id or comment URL · file:line · reviewer's level · the claim in one sentence`, collected from the surfaces in step 5 of `references/pr-loop.md`, long collapsed `<details>` analysis blocks stripped. Then the count of unresolved threads |
+| local review | `reviews.local` with `{target}` filled in, the branch, the head SHA, the ticket and the round | run the command from the repo root on that SHA, with its output in `$(git rev-parse --git-dir)/run-logs/<ticket>-review-<name>-round<r>.log`. A unit agent leaves its branch checked out. The project orchestrator stays on the home branch, so switch to the branch first and back after. A review can take ten minutes, longer than some harnesses let a foreground command block, so start it in the background and wait for it to exit. Exit 0 is `LOCAL <name> clean`. Findings in the output are `LOCAL <name> findings`, then one line per finding: `<name> · local · file:line · reviewer's level · the claim in one sentence`, with a path the output gives relative to a subfolder written from the repo root. A failure with no findings is retried once, then returned as `LOCAL <name> missing` with the log path and its last 10 lines |
 | code lookup | a question and where to look | excerpts with file:line that answer it, at most 60 lines in total, and what it could not find |
 
 ## Planner
@@ -41,7 +42,7 @@ Return: one line per ticket, `id · title · the line of the project description
 
 **Work tier** (`models.fixup`). Spawned by the project orchestrator, which never edits code itself, for one fix round on the phase-close ticket's branch: a red `gates.phase` run on `<target>` (input is the log path), a red CI digest, or review findings (the triaged list with thread ids and the disposition decided for each).
 
-Task: switch to the branch the brief names, creating it from `origin/<target>` if the brief says so. Make the smallest change that fixes the input, in the code under test and outside every guarded path. Run the path guard on staged files before each commit. Re-run the gate commands the brief names. For review findings, reply on each thread with what changed and the commit SHA, or with the waiver reason the brief gives, and resolve the threads that are settled, with the mutations in step 5 of `references/pr-loop.md`. Commit to that branch, push, and switch back to the home branch.
+Task: switch to the branch the brief names, creating it from `origin/<target>` if the brief says so. Make the smallest change that fixes the input, in the code under test and outside every guarded path. Run the path guard on staged files before each commit. Re-run the gate commands the brief names. For review findings, reply on each thread with what changed and the commit SHA, or with the waiver reason the brief gives, and resolve the threads that are settled, with the mutations in step 5 of `references/pr-loop.md`. A local finding has no thread: return its disposition and SHA, and the orchestrator writes them in the round comment. Commit to that branch, push, and switch back to the home branch.
 
 Return: commits made, the exit code of each gate, the threads replied to and resolved, and whatever is still failing with its evidence.
 
