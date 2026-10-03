@@ -2,6 +2,7 @@
 packages:
   - "[1-6]-*"
 
-# Dependencies whose install scripts may run: Claude Code's links its native binary
+# Dependencies whose install scripts may run: Claude Code's links its native binary, esbuild's checks its own
 onlyBuiltDependencies:
   - "@anthropic-ai/claude-code"
+  - esbuild
