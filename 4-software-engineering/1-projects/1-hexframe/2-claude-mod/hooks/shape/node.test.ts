@@ -1,4 +1,5 @@
 import { expect, test } from 'claude-code/testing'
+import { parseExclusions } from './exclusions.js'
 import {
   bodySources,
   frontmatter,
@@ -15,9 +16,17 @@ import {
 const dir = (name: string) => ({ name, kind: 'dir' as const })
 const file = (name: string) => ({ name, kind: 'file' as const })
 
-/** A ring's members by name. */
-const names = (ring: Ring<Slot> | undefined) =>
-  Object.fromEntries(Object.entries(ring?.members ?? {}).map(([at, slot]) => [at, slot.name]))
+/** A seated ring's members by name. */
+const names = (ring: Ring<Slot> | undefined) => {
+  if (ring?.overflowing !== false) throw new Error(`expected a seated ring, got ${String(ring)}`)
+  return Object.fromEntries(Object.entries(ring.members).map(([at, slot]) => [at, slot.name]))
+}
+
+/** An overflowing ring's candidates by name, and the names that found no direction. */
+const listed = (ring: Ring<Slot> | undefined) => {
+  if (ring?.overflowing !== true) throw new Error(`expected an overflowing ring`)
+  return { candidates: ring.candidates.map(({ name }) => name), overflow: ring.overflow }
+}
 
 test('numbered folders are Branches, dot folders are Context', () => {
   const rings = sortEntries([
@@ -30,19 +39,32 @@ test('numbered folders are Branches, dot folders are Context', () => {
   ])
   expect(names(rings.children)).toEqual({ 1: '1-leadership', 2: '2-education', 3: 'notes' })
   expect(names(rings.context)).toEqual({ 1: '.claude', 2: '.2-notes' })
-  expect(rings.children?.overflow).toEqual([])
 })
 
-test('unnumbered folders take the free Branch slots in name order, then overflow', () => {
-  const rings = sortEntries(['b', '2-two', 'a', 'c', 'd', 'e', 'f', 'node_modules'].map(dir))
+test('unnumbered folders take the free Branch slots in name order', () => {
+  const rings = sortEntries([
+    ...['b', '2-two', 'a', 'c', 'd', 'e', 'node_modules'].map(dir),
+    file('x.md'),
+  ])
   expect(names(rings.branches)).toEqual({ 1: 'a', 2: '2-two', 3: 'b', 4: 'c', 5: 'd', 6: 'e' })
-  expect(rings.branches?.overflow).toEqual(['f'])
 })
 
-test('a second folder in a direction overflows', () => {
-  const rings = sortEntries([dir('1-a'), dir('1-b')])
-  expect(names(rings.children)).toEqual({ 1: '1-a' })
-  expect(rings.children?.overflow).toEqual(['1-b'])
+test('a seventh Branch overflows the ring, which then lists every candidate', () => {
+  const rings = sortEntries(['b', '2-two', 'a', 'c', 'd', 'e', 'f'].map(dir))
+  expect(listed(rings.branches)).toEqual({
+    candidates: ['2-two', 'a', 'b', 'c', 'd', 'e', 'f'],
+    overflow: ['f'],
+  })
+})
+
+test('a second name in a direction overflows its ring, six or fewer as it may be', () => {
+  const rings = sortEntries([dir('1-a'), dir('1-b'), file('a.md')])
+  expect(listed(rings.children)).toEqual({ candidates: ['1-a', '1-b', 'a.md'], overflow: ['1-b'] })
+  expect(rings.children?.overflowing && rings.children.candidates).toEqual([
+    { kind: 'branch', name: '1-a' },
+    { kind: 'branch', name: '1-b' },
+    { kind: 'leaf', name: 'a.md' },
+  ])
 })
 
 test("a folder's files are its Leaves, but for its own CLAUDE.md and its dot files", () => {
@@ -50,11 +72,8 @@ test("a folder's files are its Leaves, but for its own CLAUDE.md and its dot fil
     ['CLAUDE.md', '-CLAUDE.md', '.gitignore', '.DS_Store', 'b.md', '2-two.md', 'a.ts'].map(file),
   )
   expect(names(rings.children)).toEqual({ 1: 'a.ts', 2: '2-two.md', 3: 'b.md' })
-  expect(Object.values(rings.children?.members ?? {}).map(({ kind }) => kind)).toEqual([
-    'leaf',
-    'leaf',
-    'leaf',
-  ])
+  const members = rings.children?.overflowing === false ? rings.children.members : {}
+  expect(Object.values(members).map(({ kind }) => kind)).toEqual(['leaf', 'leaf', 'leaf'])
 })
 
 test('six Branches and Leaves or fewer make one Children Frame, the Branches seated first', () => {
@@ -77,27 +96,66 @@ test('six Branches and Leaves or fewer make one Children Frame, the Branches sea
     5: '4-z.md',
     6: 'a.md',
   })
-  expect(rings.children?.overflow).toEqual([])
-  expect(rings.children?.clashes).toEqual([])
+  expect(rings.children?.overflowing === false && rings.children.clashes).toEqual([])
 })
 
 test('more than six make a Branches and a Leaves Frame, each counting its own directions', () => {
   const rings = sortEntries([
     ...['1-a', '2-b', '3-c', '4-d'].map(dir),
-    ...['1-a.md', '3-x.md', 'z.md', '3-y.md'].map(file),
+    ...['1-a.md', '3-x.md', 'z.md'].map(file),
   ])
   expect(kindsOf(rings)).toEqual(['branches', 'leaves', 'context'])
   expect(names(rings.branches)).toEqual({ 1: '1-a', 2: '2-b', 3: '3-c', 4: '4-d' })
   expect(names(rings.leaves)).toEqual({ 1: '1-a.md', 2: 'z.md', 3: '3-x.md' })
-  expect(rings.leaves?.overflow).toEqual(['3-y.md'])
-  expect(rings.leaves?.clashes).toEqual([])
+})
+
+test('only the ring with a name left over overflows, past six as within', () => {
+  const rings = sortEntries([
+    ...['1-a', '2-b', '3-c', '4-d'].map(dir),
+    ...['1-a.md', '3-x.md', 'z.md', '3-y.md'].map(file),
+  ])
+  expect(names(rings.branches)).toEqual({ 1: '1-a', 2: '2-b', 3: '3-c', 4: '4-d' })
+  expect(listed(rings.leaves)).toEqual({
+    candidates: ['1-a.md', '3-x.md', '3-y.md', 'z.md'],
+    overflow: ['3-y.md'],
+  })
 })
 
 test('a Leaf numbered like the Branch in its direction is a clash in the Children Frame', () => {
   const rings = sortEntries([dir('3-games'), dir('a'), file('3-games.md'), file('1-a.md')])
   // `a/` holds direction 1 without a number of its own, so `1-a.md` moves without a clash.
   expect(names(rings.children)).toEqual({ 1: 'a', 2: '1-a.md', 3: '3-games', 4: '3-games.md' })
-  expect(rings.children?.clashes).toEqual([{ direction: 3, leaf: '3-games.md', branch: '3-games' }])
+  expect(rings.children?.overflowing === false && rings.children.clashes).toEqual([
+    { direction: 3, leaf: '3-games.md', branch: '3-games' },
+  ])
+})
+
+test('a name its folder excludes takes no slot, in every Frame kind', () => {
+  const exclusions = parseExclusions('exclude: ["*.lock", dist/, .cache]')
+  const listing = [
+    ...['1-a', 'dist', '.cache', '.claude', '.hexframe', 'node_modules', '.git'].map(dir),
+    ...['pnpm.lock', 'dist', 'b.md'].map(file),
+  ]
+  const rings = sortEntries(listing, exclusions)
+  // `dist` the file stays: `dist/` leaves out the folder only.
+  expect(names(rings.children)).toEqual({ 1: '1-a', 2: 'b.md', 3: 'dist' })
+  expect(names(rings.context)).toEqual({ 1: '.claude' })
+  // Without them, the built-in exclusions alone still keep `.hexframe/` out of the Context.
+  expect(names(sortEntries(listing).context)).toEqual({ 1: '.cache', 2: '.claude' })
+})
+
+test('exclusions are what turns an overflowing ring back into hexes', () => {
+  const listing = ['a.md', 'b.md', 'c.md', 'd.md', 'e.md', 'f.md', 'g.md', 'h.md'].map(file)
+  expect(listed(sortEntries(listing).leaves).overflow).toEqual(['g.md', 'h.md'])
+  const rings = sortEntries(listing, parseExclusions('exclude: [g.md, h.md]'))
+  expect(names(rings.children)).toEqual({
+    1: 'a.md',
+    2: 'b.md',
+    3: 'c.md',
+    4: 'd.md',
+    5: 'e.md',
+    6: 'f.md',
+  })
 })
 
 test('the frontmatter gives the title and a folded preview', () => {

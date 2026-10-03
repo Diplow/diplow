@@ -5,8 +5,8 @@ import type { Direction, Frame, Member, MemberKind, Tile } from './node.js'
 const tile = (path: string): Tile => ({ path, title: path, preview: '' })
 const branch = (path: string): Member => ({ kind: 'branch', tile: tile(path) })
 const ring = (members: Partial<Record<Direction, Member>> = {}) => ({
+  overflowing: false as const,
   members,
-  overflow: [],
   clashes: [],
 })
 const frameOf = (path: string, children: Partial<Record<Direction, Member>> = {}): Frame => ({
@@ -70,6 +70,21 @@ test('every Frame kind lays out its ring the same way, each member saying what i
   })
   // A Frame kind the folder doesn't offer lays out an empty ring.
   expect(layoutView({ frame, frameKind: 'children' }, 1)[1]).toMatchObject({ kind: 'empty' })
+})
+
+test('a ring that overflows places no member: a medium shows it as a list', () => {
+  const frame: Frame = {
+    tile: tile('/w'),
+    rings: {
+      leaves: {
+        overflowing: true,
+        candidates: ['a.md', 'b.md'].map((name) => ({ kind: 'leaf', name })),
+        overflow: ['b.md'],
+      },
+    },
+  }
+  const placements = layoutView({ frame, frameKind: 'leaves' }, 1)
+  expect(placements.map(({ kind }) => kind)).toEqual(['center', ...Array(6).fill('empty')])
 })
 
 test('at depth 1 an expanded member stays one hex', () => {

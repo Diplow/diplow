@@ -51,7 +51,8 @@ const generationScale = 1 / 3
 /**
  * The hexes of a view `depth` generations deep, centered in a box of `viewWidth` by `viewHeight`,
  * in the order to paint them. At depth 1, the seven hexes of one Frame. Deeper, a member found in
- * `expanded` shows as its own Frame, in place of its hex; past the depth it stays one hex.
+ * `expanded` shows as its own Frame, in place of its hex; past the depth it stays one hex. A Frame
+ * whose ring overflows has no member to place: a medium shows that ring as a list instead.
  */
 export function layoutView(view: FrameView, depth: number): Placement[] {
   return layoutAt(view, { x: viewWidth / 2, y: viewHeight / 2 }, 1, depth)
@@ -59,7 +60,8 @@ export function layoutView(view: FrameView, depth: number): Placement[] {
 
 function layoutAt(view: FrameView, center: Point, radius: number, depth: number): Placement[] {
   const { frame, frameKind } = view
-  const members = frame.rings[frameKind]?.members ?? {}
+  const ring = frame.rings[frameKind]
+  const members = ring?.overflowing === false ? ring.members : {}
   return [
     { kind: 'center', center, radius, tile: frame.tile },
     ...directions.flatMap((direction): Placement[] => {

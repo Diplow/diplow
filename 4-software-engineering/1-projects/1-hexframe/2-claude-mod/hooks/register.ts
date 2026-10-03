@@ -2,9 +2,11 @@
 // Tile in the middle and one Frame kind's ring around it (Children, or Branches and Leaves, then
 // Context), and walks the tree from there. Opening a Branch or a Context tile walks into it;
 // opening a Leaf shows its file. Tab outlines the hex whose button it lands on, and `p` swaps the
-// drawing for that hex's file, rendered, or the Tile's CLAUDE.md when no hex is selected.
+// drawing for that hex's file, rendered, or the Tile's CLAUDE.md when no hex is selected. A ring
+// that overflows shows as a list of its names instead, each opening as its hex would.
 import type { EngineInterface, On } from 'claude-code'
 import { leafPreview, markdownOf } from './markdown.js'
+import { exclusionsFile, parseExclusions, type Exclusion } from './shape/exclusions.js'
 import { layoutView } from './shape/layout.js'
 import {
   basename,
@@ -21,8 +23,10 @@ import {
   type Frame,
   type FrameKind,
   type Member,
+  type OverflowingRing,
   type Ring,
   type Rings,
+  type SeatedRing,
   type Slot,
   type Tile,
 } from './shape/node.js'
@@ -87,7 +91,8 @@ export function register(on: On) {
       await show($, target)
       $.ui.invalidate('ui.render')
     }
-    const members = ringOf(frame, frameKind).members
+    const ring = ringOf(frame, frameKind)
+    const { members, clashes } = seated(ring)
     const nextKind = cycle(frame, frameKind)
     const controls = [
       ...directions
@@ -148,7 +153,6 @@ export function register(on: On) {
         onPress: () => go(folder ?? '/'),
       }),
     ]
-    const clashes = ringOf(frame, frameKind).clashes
     const footer = [
       ...(problem ? [Text({ color: 'red', children: [problem] })] : []),
       ...(clashes.length > 0 && !preview
@@ -183,6 +187,21 @@ export function register(on: On) {
       return Box({ flexDirection: 'column', rowGap: 1, children: [...footer, shown] })
     }
 
+    if (ring.overflowing) {
+      // The controls go on top here too: a long list scrolls.
+      const items = ring.candidates.map((slot, index) =>
+        Button({
+          key: `item-${index + 1}`,
+          label: labelOf(slot),
+          plain: true,
+          onPress: () => openSlot($, slot),
+        }),
+      )
+      const hint = Text({ dimColor: true, wrap: 'wrap', children: [overflowHint(ring, frameKind)] })
+      const list = Box({ key: 'list', flexDirection: 'column', children: items })
+      return Box({ flexDirection: 'column', rowGap: 1, children: [...footer, hint, list] })
+    }
+
     const placements = layoutView({ frame, frameKind }, depth)
     if (e.surface === 'terminal') {
       const { Raster } = $.ui.resolve(e)
@@ -202,14 +221,23 @@ export function register(on: On) {
 
 /** Opens the member in `direction`: walks into a Branch or a Context tile, shows a Leaf's file. */
 async function openMember($: EngineInterface, direction: Direction) {
-  const member = ringOf(frame, frameKind).members[direction]
+  const member = seated(ringOf(frame, frameKind)).members[direction]
   if (!member) return
   if (member.kind === 'leaf') {
     selected = direction
-    preview = await previewOfMember($, member)
+    preview = await previewOfLeaf($, member.tile.path)
   } else {
     await show($, member.tile.path)
   }
+  $.ui.invalidate('ui.render')
+}
+
+/** Opens a name of an overflowing ring's list, as its hex would open. */
+async function openSlot($: EngineInterface, slot: Slot) {
+  if (folder === undefined) return
+  const path = join(folder, slot.name)
+  if (slot.kind === 'leaf') preview = await previewOfLeaf($, path)
+  else await show($, path)
   $.ui.invalidate('ui.render')
 }
 
@@ -217,21 +245,27 @@ async function openMember($: EngineInterface, direction: Direction) {
 async function show($: EngineInterface, target: string) {
   try {
     const body = await readBody($, target)
-    frame = await loadFrame($, target, body)
+    const { exclusions, warning } = await readExclusions($, target)
+    frame = await loadFrame($, target, body, exclusions)
     // A Frame kind the new folder doesn't offer gives way to its first one.
     if (!kindsOf(frame.rings).includes(frameKind)) frameKind = kindsOf(frame.rings)[0] ?? 'context'
     // A preview open while walking follows to the new folder's own file.
     if (preview) preview = previewOfFolder(frame.tile, body)
     selected = undefined
     folder = target
-    problem = undefined
+    problem = warning
   } catch (error) {
     problem = `Can't read ${target}: ${error instanceof Error ? error.message : String(error)}`
   }
 }
 
-async function loadFrame($: EngineInterface, path: string, body: Body | undefined): Promise<Frame> {
-  const sorted = sortEntries(await $.fs.list(path))
+async function loadFrame(
+  $: EngineInterface,
+  path: string,
+  body: Body | undefined,
+  exclusions: readonly Exclusion[],
+): Promise<Frame> {
+  const sorted = sortEntries(await $.fs.list(path), exclusions)
   const rings: Rings<Member> = {}
   for (const kind of frameKinds) {
     const ring = sorted[kind]
@@ -240,8 +274,29 @@ async function loadFrame($: EngineInterface, path: string, body: Body | undefine
   return { tile: tileOf(path, body?.text), rings }
 }
 
+/** A folder's exclusions; none, and a warning to show, when its `exclusions.yaml` can't be read. */
+async function readExclusions(
+  $: EngineInterface,
+  path: string,
+): Promise<{ exclusions: Exclusion[]; warning?: string }> {
+  const file = join(path, exclusionsFile)
+  try {
+    if (!(await $.fs.exists(file))) return { exclusions: [] }
+    if ((await $.fs.stat(file)).size > leafLimit) throw new Error('it is too large')
+    return { exclusions: parseExclusions(await $.fs.read(file)) }
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : String(error)
+    return {
+      exclusions: [],
+      warning: `Can't read ${exclusionsFile}, so nothing is left out: ${reason}`,
+    }
+  }
+}
+
+/** Reads the Tile of each seated member; an overflowing ring stays names, and reads no file. */
 async function loadRing($: EngineInterface, path: string, ring: Ring<Slot>): Promise<Ring<Member>> {
-  const members: Ring<Member>['members'] = {}
+  if (ring.overflowing) return ring
+  const members: SeatedRing<Member>['members'] = {}
   for (const direction of directions) {
     const slot = ring.members[direction]
     if (slot) members[direction] = { kind: slot.kind, tile: await loadTile($, path, slot) }
@@ -264,7 +319,36 @@ async function loadTile($: EngineInterface, folderPath: string, slot: Slot): Pro
 
 /** The ring of `kind` in the shown Frame, empty when there is none. */
 function ringOf(shown: Frame | undefined, kind: FrameKind): Ring<Member> {
-  return shown?.rings[kind] ?? { members: {}, overflow: [], clashes: [] }
+  return shown?.rings[kind] ?? empty
+}
+
+const empty: SeatedRing<Member> = { overflowing: false, members: {}, clashes: [] }
+
+/** The hexes a ring draws: its own when it is seated, none when it shows as a list. */
+function seated(ring: Ring<Member>): SeatedRing<Member> {
+  return ring.overflowing ? empty : ring
+}
+
+/** A name of an overflowing ring's list, as an exclusion would match it: a folder ends in `/`. */
+function labelOf({ kind, name }: Slot): string {
+  return kind === 'leaf' ? name : `${name}/`
+}
+
+const ringNames: Record<FrameKind, string> = {
+  children: 'Children',
+  branches: 'Branches',
+  leaves: 'Leaves',
+  context: 'Context folders',
+}
+
+/** Why the ring shows as a list, and what turns it back into hexes. */
+function overflowHint({ candidates, overflow }: OverflowingRing, kind: FrameKind): string {
+  const named = overflow.slice(0, 3).join(', ')
+  const more = overflow.length > 3 ? ` and ${overflow.length - 3} more` : ''
+  return (
+    `${candidates.length} ${ringNames[kind]}, and no direction left for ${named}${more}. ` +
+    `List what this folder leaves out in ${exclusionsFile}, or renumber, to draw them as hexes.`
+  )
 }
 
 /** The Frame kind `c` goes to after `kind`, among the ones the Frame offers. */
@@ -293,16 +377,21 @@ function previewOfFolder(tile: Tile, body: Body | undefined): Preview {
     : { label, markdown }
 }
 
-/** A member's file: a folder's body file, or a Leaf itself, rendered when it is Markdown. */
+/** A member's file: a folder's body file, or a Leaf itself. */
 async function previewOfMember($: EngineInterface, member: Member): Promise<Preview> {
   const { tile } = member
-  if (member.kind !== 'leaf') return previewOfFolder(tile, await readBody($, tile.path))
-  const label = basename(tile.path)
+  if (member.kind === 'leaf') return previewOfLeaf($, tile.path)
+  return previewOfFolder(tile, await readBody($, tile.path))
+}
+
+/** A Leaf's file, rendered when it is Markdown and shown as it is otherwise. */
+async function previewOfLeaf($: EngineInterface, path: string): Promise<Preview> {
+  const label = basename(path)
   try {
-    if ((await $.fs.stat(tile.path)).size > leafLimit) {
+    if ((await $.fs.stat(path)).size > leafLimit) {
       return { label, note: `${label} is too large to show here.` }
     }
-    return { label, ...leafPreview(label, await $.fs.read(tile.path)) }
+    return { label, ...leafPreview(label, await $.fs.read(path)) }
   } catch (error) {
     const reason = error instanceof Error ? error.message : String(error)
     return { label, note: `Can't read ${label}: ${reason}` }
@@ -330,15 +419,12 @@ async function readFirst($: EngineInterface, files: readonly string[]): Promise<
 }
 
 function where(): string {
-  const shown = folder ?? ''
-  const overflow = ringOf(frame, frameKind).overflow
-  const noSlot = overflow.length > 0 && !preview ? `  ·  no slot: ${overflow.join(', ')}` : ''
-  return `${shown}  ·  ${preview ? preview.label : frameKind}${noSlot}`
+  return `${folder ?? ''}  ·  ${preview ? preview.label : frameKind}`
 }
 
 /** The Frame as lines of text, where no drawing fits and for readers that can't see one. */
 function outline(shown: Frame, kind: FrameKind): string {
-  const members = ringOf(shown, kind).members
+  const { members } = seated(ringOf(shown, kind))
   const lines = [shown.tile.title, ...(shown.tile.preview ? [shown.tile.preview] : []), '']
   for (const direction of directions) {
     const mark = direction === selected ? '›' : ' '
