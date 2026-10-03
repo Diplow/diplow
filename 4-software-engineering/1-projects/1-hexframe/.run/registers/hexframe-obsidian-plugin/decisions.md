@@ -15,3 +15,7 @@ HEX-28, [#36](https://github.com/Diplow/diplow/pull/36). CI already builds the p
 ### DEC-2 The `obsidian` typings are 1.13.1, not 1.14.x
 
 HEX-28, [#36](https://github.com/Diplow/diplow/pull/36). The ticket asked for typings pinned to the current app, which it took for 1.14.x. The app installed here runs 1.13.7, and the newest `obsidian` package on npm is 1.13.1, so the typings are pinned to exactly that, and `minAppVersion` follows them: the plugin types no API the app lacks.
+
+### DEC-3 `styles.css` is a plain file copied beside `main.js`, and `build` owns its folder
+
+HEX-30. The ticket asks `build` for `main.js`, `manifest.json` and `styles.css`, and the plugin has no styles yet. `styles.css` sits beside `manifest.json` in the package, holding one comment, and every build copies it as it is, the way it copies the manifest. A ticket that brings styles writes them there, or switches to a CSS file esbuild bundles, as long as the output keeps the name `styles.css`. DEC-1 is done: `build` writes into the repo's `.obsidian/plugins/hexframe/` and `dist/` is gone. Since `dev` writes into that same folder by default, a production build also removes the `.hotreload` a dev build leaves there, so after `pnpm build` the folder holds exactly what is committed, and CI's build-and-compare step fails on a committed `.hotreload`.
