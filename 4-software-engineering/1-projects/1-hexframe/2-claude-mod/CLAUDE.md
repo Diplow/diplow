@@ -44,7 +44,7 @@ Both run the Claude Code pinned in `package.json`, whose install script links it
 | `hooks/shape/` | The [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE\|shape]]: a folder read as a Frame, and where the hexes of a view sit at a given depth. Pure, and shared with every other medium |
 | `hooks/raster.ts`, `hooks/svg.ts` | The drawing, in terminal cells and in SVG. Pure |
 | `hooks/markdown.ts` | A `CLAUDE.md` as the preview's Markdown element draws it. Pure |
-| `tests/` | The pure functions' tests, and the pane's, with the file system stubbed |
+| `tests/` | The drawing's tests, and the pane's, with the file system stubbed; the shape's sit beside it |
 
 A hooks module only imports files under its own folder, by relative path: an import that leaves the folder, even through a symlink, is refused. That is why the shape lives here and the other media import it from claude-mod, not the other way.
 

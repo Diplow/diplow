@@ -1,5 +1,5 @@
 // Draws a Frame's placements as an SVG document, for the surfaces that take one (the Desktop app).
-// Its hexes and text are sized for depth 1, where every placement's radius is 1: claude-mod's depth.
+// Each hex takes its placement's radius; the text keeps one size, set for claude-mod's depth 1.
 import type { Direction } from './shape/node.js'
 import { wrap } from './raster.js'
 import { viewHeight, viewWidth, hexCorners, type Placement } from './shape/layout.js'
@@ -7,7 +7,7 @@ import { viewHeight, viewWidth, hexCorners, type Placement } from './shape/layou
 /** Pixels per unit of the layout. */
 const scale = 110
 
-/** A hex's radius is 1; the gap between neighbors is this share of it. */
+/** The share of a placement's radius a hex is drawn at, leaving a gap between neighbors. */
 const hexRadius = 0.93
 
 /** The width of the band between a hex's side corners, where its text sits. */
@@ -40,7 +40,8 @@ export function drawSvg(placements: readonly Placement[], selected?: Direction):
 function shapeOf(placement: Placement, selected: Direction | undefined): string {
   const cx = placement.center.x * scale
   const cy = placement.center.y * scale
-  const points = hexCorners(placement.center, hexRadius)
+  const radius = hexRadius * placement.radius
+  const points = hexCorners(placement.center, radius)
     .map(({ x, y }) => `${round(x * scale)},${round(y * scale)}`)
     .join(' ')
 
@@ -52,7 +53,7 @@ function shapeOf(placement: Placement, selected: Direction | undefined): string 
   }
 
   const colors = fills[placement.kind === 'center' ? 'center' : placement.ring]
-  const band = bandWidth(hexRadius) * scale * 0.86
+  const band = bandWidth(radius) * scale * 0.86
   const title = wrap(placement.tile.title, Math.floor(band / (titleSize * characterWidth)), 2)
   const preview = wrap(
     placement.tile.preview,
@@ -79,7 +80,7 @@ function shapeOf(placement: Placement, selected: Direction | undefined): string 
     placement.kind === 'member'
       ? text(
           cx,
-          cy - hexRadius * scale * 0.72,
+          cy - radius * scale * 0.72,
           colors.preview,
           previewSize,
           String(placement.direction),
