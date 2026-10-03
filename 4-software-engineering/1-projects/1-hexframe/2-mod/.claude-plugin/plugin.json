@@ -1,0 +1,6 @@
+{
+  "name": "hexframe",
+  "version": "0.1.0",
+  "description": "Shows a folder as a hexframe: its tile, the six children around it, and its context",
+  "author": { "name": "Ulysse Boillot" }
+}
