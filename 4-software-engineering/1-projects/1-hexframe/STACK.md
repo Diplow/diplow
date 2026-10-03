@@ -3,10 +3,11 @@ title: hexframe stack
 parent: 4-software-engineering/1-projects/1-hexframe
 owner: diplo
 preview: >-
-  hexframe's technical choices, the rules that come with them, and the language
-  of its three domains (IAM, Mapping, Assistant). A TanStack Start app on
-  Vercel, Effect on the server, Neon and Drizzle below. Each rule moves into the
-  CLAUDE.md of the folder it governs once that folder exists.
+  hexframe's technical choices, the rules that come with them, the language of
+  its three domains (IAM, Mapping, Assistant) and how a vault reads as a
+  hexframe. A TanStack Start app on Vercel, Effect on the server, Neon and
+  Drizzle below. Each rule moves into the CLAUDE.md of the folder it governs
+  once that folder exists.
 ---
 # hexframe stack
 
@@ -178,6 +179,22 @@ A conversation with an agent that builds a System on the user's behalf, saving e
 - **Conversation**: one continuous timeline per Account, split by day. It holds the **Messages** between the user and the agent, and records what the user did on the canvas (navigations, operations), so the agent always knows where the user is. Mapping never hears about views; Assistant is what records them.
 - **Proposal**: an operation the agent wants to run, waiting for the user.
 - **Mode**, per Conversation, as in Claude Code: *ask* (the default) makes every operation a Proposal, *apply* runs them. An applied batch can be undone.
+
+## A vault as a hexframe
+
+This vault is a hexframe kept as files: a folder per Tile, its `CLAUDE.md` for the Body, the shape a System exports to. claude-mod shows it inside Claude Code, the Obsidian plugin inside Obsidian, and the app will read it one day. If each medium read a folder its own way, the same vault would show as two hexframes, so they all read it by the rules below. The words are Mapping's, applied to files and folders; what a medium does to look at the vault is view state, as it is in the app.
+
+- **Tile**: a folder's own is the `title` and `preview` of its `CLAUDE.md`, or of its `-CLAUDE.md` when it keeps a private one. Without either, a title made from the folder's name.
+- **Branch** and **Leaf**: a folder Child and a file Child. A Leaf grows into a Branch when it needs Children of its own, and keeps its direction: `3-games.md` becomes `3-games/`. Branches and Leaves count their directions apart: `<n>-<slug>` sits in direction n, and an unnumbered name takes the first free direction in name order. A folder's `CLAUDE.md` is its Tile, never a Leaf, and a dot file is neither.
+- **Context**: the dot folders. `.<n>-<slug>/` sits in direction n, as hexframe exports a System, then the other dot folders (`.claude/`, `.skills/`) take the free slots in name order.
+- **Frame kind**: which of a folder's entries a Frame shows around it. **Children** is the Branches and the Leaves together, offered whenever there are six or fewer in all; the Leaves get another fill, and a Leaf that shares a Branch's number a subtle warning. **Branches** and **Leaves** show one of the two, **Context** the dot folders.
+- **Depth**: how many generations a medium shows from the center. claude-mod 1, the app 2, the Obsidian plugin 2.
+- **Double expansion**: only the center has it. Its outer ring shows Children, Branches or Leaves; its inner ring, inside the center's hex, Leaves or Context; never the same kind in both. Each outer Branch expands on its own, into any kind. The inner ring's hexes don't expand. Collapsing peels the outer ring first, then the inner, and a fully collapsed center fills the canvas.
+- **Overflow**: a Frame with more than six candidates shows as a list, not as hexes, until exclusions bring it down to six. Only that Frame becomes a list, unless it is the center's outer ring: then the whole view does.
+- **Hexframe file**: a `*.hexframe` file (`diplow.hexframe` at this vault's root) opens the view on its folder and keeps the view's state in JSON: the center and the expansions. It is to a medium what the URL is to the app.
+- **`.hexframe/` folder**: a folder's settings. Its `exclusions.yaml` lists the names and globs that folder leaves out, for that folder only. `.hexframe/` itself is always left out, as are `.git` and `node_modules`.
+
+These rules are written here until `1-hexframe/.shape/` exists. The ticket that extracts the shared shape moves them there, as the one pure definition every medium reads through, and this section then keeps one line and a link.
 
 ## Languages
 

@@ -24,11 +24,7 @@ Then `/hexframe` shows the session's folder, and `/hexframe <folder>` another on
 
 ## How it reads a folder
 
-- **The Tile** is the folder's own: the `title` and `preview` of its `CLAUDE.md`, or of its `-CLAUDE.md` when it keeps a private one. Without either, a title made from the folder's name.
-- **The Children** are its `<n>-<slug>/` folders, `n` from 1 to 6 being the direction: 1 NW, 2 NE, 3 E, 4 SE, 5 SW, 6 W. Its other folders, not starting with a dot, take the free slots in name order.
-- **The Context** is its `.<n>-<slug>/` folders, as hexframe exports a System, then its other dot folders (`.claude/`, `.skills/`) in the free slots, in name order.
-
-A folder with no free slot left is named under the drawing.
+As [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]] says, at depth 1. Not all of it yet: the Children it shows are the Branches only, it reads no `.hexframe/` folder, and a folder with no free slot left is named under the drawing instead of turning the Frame into a list.
 
 ## Scripts
 
