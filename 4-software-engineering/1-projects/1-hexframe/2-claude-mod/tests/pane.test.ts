@@ -218,7 +218,10 @@ test('past six Branches and Leaves, `c` cycles the Branches, the Leaves and the 
       ],
       '/big/1-a': [file('1-a.md')],
     },
-    { '/big/y.md': 'y'.repeat(1_000_001), '/big/z.png': 'PNG\u0000\u0001' },
+    {
+      '/big/y.md': '---\ntitle: Huge\n---\n' + 'y'.repeat(1_000_001),
+      '/big/z.png': 'PNG\u0000\u0001',
+    },
   )
   await $.command.run(hexframe(''))
   const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
@@ -228,6 +231,7 @@ test('past six Branches and Leaves, `c` cycles the Branches, the Leaves and the 
   expect(await ui.find({ key: 'open-1' })).toMatchObject({ props: { label: '1 A' } })
   await ui.press({ key: 'ring' })
   expect(await kind()).toBe('/big  ·  leaves')
+  // A Leaf past the limit is not read, even for its title: its Tile comes from its name
   expect(await ui.find({ key: 'open-3' })).toMatchObject({ props: { label: '3 Y' } })
   // A Leaf too large or not text says so instead of showing
   await ui.press({ key: 'open-3' })

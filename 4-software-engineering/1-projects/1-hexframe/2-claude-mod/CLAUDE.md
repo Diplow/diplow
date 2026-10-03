@@ -32,7 +32,7 @@ Then `/hexframe` shows the session's folder, and `/hexframe <folder>` another on
 | `r` | Reads the folder again |
 | Esc | Closes the pane |
 
-Leaves take their own fill, warm where Branches are slate. In a Children frame, a Leaf that shares its number with the Branch in that direction, as `3-games.md` beside `3-games/`, is named on a dim line under the drawing.
+Leaves take their own fill, warm where Branches are slate. A Leaf over 1 MB is never read: its Tile takes its name, and `p` says it is too large. In a Children frame, a Leaf that shares its number with the Branch in that direction, as `3-games.md` beside `3-games/`, is named on a dim line under the drawing.
 
 ## How it reads a folder
 
@@ -55,7 +55,7 @@ Both run the Claude Code pinned in `package.json`, whose install script links it
 | `hooks/register.ts` | The hooks: the `/hexframe` command, the pane and its keys. The only file that calls `$` |
 | `hooks/shape/` | The [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE\|shape]]: a folder read as a Frame, and where the hexes of a view sit at a given depth. Pure, and shared with every other medium |
 | `hooks/raster.ts`, `hooks/svg.ts` | The drawing, in terminal cells and in SVG. Pure |
-| `hooks/markdown.ts` | A file as the preview's Markdown element draws it: a Markdown one without its frontmatter, any other in a fenced block. Pure |
+| `hooks/markdown.ts` | A file as the preview's Markdown element draws it: a Markdown one without its frontmatter, any other in a fenced block, a binary or empty one as a note. Pure |
 | `tests/` | The drawing's tests, and the pane's, with the file system stubbed; the shape's sit beside it |
 
 A hooks module only imports files under its own folder, by relative path: an import that leaves the folder, even through a symlink, is refused. That is why the shape lives here and the other media import it from claude-mod, not the other way.

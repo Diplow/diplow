@@ -1,12 +1,13 @@
 // A file as the pane's preview shows it, in the Markdown element Claude Code draws.
+import { isMarkdown } from './shape/node.js'
 
 /** The most a Markdown element draws. */
 const markdownLimit = 10000
 
 const cutNote = '\n\n*The file goes on; open it to read the rest.*'
 
-/** The control characters a Markdown element refuses: all but tab and newline. */
-const controls = /[\u0000-\u0008\u000b-\u001f\u007f]/g
+/** The control characters a Markdown element refuses, C0 and C1: all but tab and newline. */
+const controls = /[\u0000-\u0008\u000b-\u001f\u007f-\u009f]/g
 
 /**
  * A Markdown file as a Markdown element draws it: its frontmatter dropped (the Tile shows that),
@@ -52,4 +53,15 @@ function longestRun(text: string): number {
 /** Whether a file read as text is text: a NUL among its first bytes says it is binary. */
 export function isText(text: string): boolean {
   return !text.slice(0, 8000).includes('\u0000')
+}
+
+/**
+ * What the preview shows of a Leaf read as `text`: Markdown rendered, any other text as a fence, or
+ * a note when it is not text or has nothing to show.
+ */
+export function leafPreview(name: string, text: string): { markdown: string } | { note: string } {
+  if (!isText(text)) return { note: `${name} is not a text file.` }
+  const markdown = isMarkdown(name) ? markdownOf(text) : codeOf(text)
+  if (markdown !== '') return { markdown }
+  return { note: isMarkdown(name) ? `${name} holds only its frontmatter.` : `${name} is empty.` }
 }

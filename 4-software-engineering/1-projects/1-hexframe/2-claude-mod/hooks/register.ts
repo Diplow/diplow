@@ -4,14 +4,13 @@
 // opening a Leaf shows its file. Tab outlines the hex whose button it lands on, and `p` swaps the
 // drawing for that hex's file, rendered, or the Tile's CLAUDE.md when no hex is selected.
 import type { EngineInterface, On } from 'claude-code'
-import { codeOf, isText, markdownOf } from './markdown.js'
+import { leafPreview, markdownOf } from './markdown.js'
 import { layoutView } from './shape/layout.js'
 import {
   basename,
   bodySources,
   directions,
   frameKinds,
-  isMarkdown,
   join,
   kindsOf,
   parent,
@@ -35,7 +34,7 @@ const pane = 'hexframe'
 /** The generations the pane shows from the center, as STACK.md gives claude-mod. */
 const depth = 1
 
-/** The largest Leaf the preview reads, in bytes. */
+/** The largest Leaf the pane reads, in bytes. Past it, a Leaf's Tile comes from its name alone. */
 const leafLimit = 1_000_000
 
 /** Rows the pane keeps under the drawing: the controls and the path. */
@@ -253,7 +252,9 @@ async function loadRing($: EngineInterface, path: string, ring: Ring<Slot>): Pro
 /** A member's Tile, from the body the shape says it is read from. */
 async function loadTile($: EngineInterface, folderPath: string, slot: Slot): Promise<Tile> {
   const path = join(folderPath, slot.name)
-  const body = await readFirst($, bodySources(path, slot.kind)).catch((error: unknown) => {
+  const sources = bodySources(path, slot.kind)
+  const read = slot.kind === 'leaf' ? readLeaf($, sources) : readFirst($, sources)
+  const body = await read.catch((error: unknown) => {
     // One unreadable file names itself; it doesn't keep the folder from showing.
     if (slot.kind === 'leaf') return undefined
     throw error
@@ -301,12 +302,7 @@ async function previewOfMember($: EngineInterface, member: Member): Promise<Prev
     if ((await $.fs.stat(tile.path)).size > leafLimit) {
       return { label, note: `${label} is too large to show here.` }
     }
-    const text = await $.fs.read(tile.path)
-    if (!isText(text)) return { label, note: `${label} is not a text file.` }
-    const markdown = isMarkdown(label) ? markdownOf(text) : codeOf(text)
-    if (markdown !== '') return { label, markdown }
-    const note = isMarkdown(label) ? `${label} holds only its frontmatter.` : `${label} is empty.`
-    return { label, note }
+    return { label, ...leafPreview(label, await $.fs.read(tile.path)) }
   } catch (error) {
     const reason = error instanceof Error ? error.message : String(error)
     return { label, note: `Can't read ${label}: ${reason}` }
@@ -316,6 +312,13 @@ async function previewOfMember($: EngineInterface, member: Member): Promise<Prev
 /** The folder's body file, `CLAUDE.md` or else `-CLAUDE.md`, or undefined when it has neither. */
 function readBody($: EngineInterface, path: string): Promise<Body | undefined> {
   return readFirst($, bodySources(path, 'branch'))
+}
+
+/** A Leaf's own file, when its Tile is read from one and it is within the limit. */
+async function readLeaf($: EngineInterface, files: readonly string[]): Promise<Body | undefined> {
+  const [file] = files
+  if (file === undefined || (await $.fs.stat(file)).size > leafLimit) return undefined
+  return { name: basename(file), text: await $.fs.read(file) }
 }
 
 /** The first of `files` that exists, or undefined when none does. */
