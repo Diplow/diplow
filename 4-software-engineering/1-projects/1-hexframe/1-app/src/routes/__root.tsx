@@ -2,6 +2,7 @@ import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 
 import { getLocale } from '#/paraglide/runtime'
+import { Toaster } from '#/ui/feedback/Toaster'
 import { LocaleSwitch } from '#/ui/inputs/controls/LocaleSwitch'
 import { ThemeToggle } from '#/ui/inputs/controls/ThemeToggle'
 import { themeScript } from '#/ui/theme'
@@ -34,6 +35,7 @@ function RootDocument({ children }: { children: ReactNode }) {
           <ThemeToggle />
         </header>
         {children}
+        <Toaster />
         <Scripts />
       </body>
     </html>

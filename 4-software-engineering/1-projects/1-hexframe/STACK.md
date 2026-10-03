@@ -23,7 +23,7 @@ The choices, and the rules they come with. Each rule is written here until the f
 
 - **Vercel**, Node runtime.
 - **A package per deployable**, never more: `1-app`, a TanStack Start app holding client and server, and `2-mod`, a Claude Code mod that shows a vault folder as a hexframe. Mods are in early access; the mod is its own package, so it is the seam.
-- **Stable or release candidate; beta and alpha only behind a seam**, one file that can be swapped. So: TanStack Start RC, Effect 4 RC (migrating 3 to 4 later would touch every file), Drizzle v1 RC if `@effect/sql-drizzle` supports it (0.45 otherwise), and Sentry's alpha TanStack Start SDK behind the observability seam.
+- **Stable or release candidate; beta and alpha only behind a seam**, one file that can be swapped. So: TanStack Start RC, Effect 4 RC (migrating 3 to 4 later would touch every file), Drizzle v1 RC, whose own Effect driver replaces `@effect/sql-drizzle`, which has no Effect 4 release (HEX-15), and Sentry's alpha TanStack Start SDK behind the observability seam.
 
 | Need | Choice |
 |---|---|
@@ -36,7 +36,7 @@ The choices, and the rules they come with. Each rule is written here until the f
 | Building a system by conversation | TanStack AI |
 | Effects and typed errors | Effect |
 | Validation | Effect Schema, everywhere; `zod` is banned by lint |
-| Database | Neon, Drizzle through `@effect/sql-drizzle` |
+| Database | Neon, Drizzle through its Effect driver (`drizzle-orm/effect-postgres` over `@effect/sql-pg`; `effect-pglite` over `@effect/sql-pglite` in tests) |
 | Auth | Better Auth, behind IAM |
 | Payments | Stripe through `@better-auth/stripe`, behind IAM |
 | UI | Tailwind, shadcn |
@@ -62,41 +62,15 @@ Domains ignore each other; only the API layer composes them.
 
 ## Effect stops at the server function
 
-Domains, repositories and the API layer are Effect. The client stays on TanStack Query, Form and Router, which are promise-native: wrapping them in Effect would fight three libraries for nothing the decoded error union does not already give.
-
-The two meet in one helper. Start middleware stays promise-based and puts the request id and the Session on Start's `context`; every server function hands its program to the helper, which provides that context as Effect services, runs the program on one `ManagedRuntime` built from every layer, and returns the value or the serialized error. Nothing else calls `run*`: a lint says no.
+Domains, repositories and the API layer are Effect; the client stays on TanStack Query, Form and Router. The two meet in one helper, and nothing else runs a program. The rules now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]].
 
 ## Errors
 
-- **Each domain declares its errors** as tagged classes in its own language (`EntitlementMissing`). Each carries one **kind** from a closed set: `Unauthenticated`, `Forbidden`, `Invalid` (with field errors), `NotFound`, `Conflict`, `Unexpected`.
-- **A server function's type lists the errors it can fail with.** Repository and infrastructure failures collapse to `Unexpected`: reported to Sentry with the request id, never shown as they are.
-- **The client decodes the union back into the tagged classes** with Effect Schema.
-- **The channel is picked by kind and by read or write**, never by a component's author:
-
-| The call | The kind | Channel |
-|---|---|---|
-| anything | `Unauthenticated` | one redirect to sign-in, carrying where the user was |
-| a read | `Forbidden` | the `Forbidden` state: the page worked, the answer is no |
-| a read | anything else | `ErrorState` in the nearest boundary, with a retry and the request id |
-| a read that frames every page | anything but `Unauthenticated` | reported, nothing on screen |
-| a write | `Invalid`, on a form's submit | the form's fields |
-| a write | anything else | one toast |
-
-- **The message table** is keyed by `_tag`, optionally narrowed by a scope (a server function's name or a route id), first match wins, with a fallback per kind, in both languages.
-- **A feature writes no error handling**: components never `try/catch` a call, reducers never hold an error, and the server's own sentence never reaches the screen.
-
-Adapted from the error model of a previous project; its channels survive, its HTTP statuses become kinds.
+Each domain's errors carry a kind from a closed set; the client decodes them back and the kind and the call pick the channel, never a component's author. The model, the channel table and the message table now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]].
 
 ## The bus
 
-One typed bus on the server, one in the client, for facts other parts may react to.
-
-- **An event is a fact in the past tense**, declared by the domain that emits it, in its language (`AccountCreated`), with an Effect Schema.
-- **Subscriptions are wired in the API layer**, since only it composes domains. A caller that needs a result calls directly; the bus is never a way to ask.
-- **The server bus is in-process** (Effect `PubSub`); subscribers finish inside the request through `waitUntil`, and a lost event is acceptable. The day a subscriber cannot be lost, the bus moves to an outbox table.
-- **The client bus** carries facts between sibling features, which may not import each other.
-- **A message is decoded by its schema where it crosses a boundary** (into the client, into an outbox); inside one process the type is enough.
-- Every message is logged at `medium`.
+One typed bus on the server, one in the client, for facts other parts may react to: a domain publishes, the API layer wires who reacts, and subscribers finish inside the request through `waitUntil`; features tell each other what happened without importing each other. The rules now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]] and [[4-software-engineering/1-projects/1-hexframe/1-app/src/features/CLAUDE|features]].
 
 ## State
 
@@ -128,7 +102,7 @@ Three small custom lint rules enforce it: the `useState` ceiling, no `dispatch` 
 
 ## Database
 
-Neon in every deployed environment, one branch per pull request. Migrations are generated by `drizzle-kit generate` and committed; CI applies them to the pull request's branch before its preview deploys, and to production before production deploys. `push` is for local dev only. The PGlite tests run the same migrations.
+Neon in every deployed environment, one branch per pull request, reached through committed migrations; the PGlite tests run the same ones. The rules now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE|database]].
 
 ## Tests
 
@@ -146,30 +120,11 @@ Each domain introduces its language with a short story in its `CLAUDE.md`: what 
 
 ### IAM
 
-Identity and access: who someone is, and what they may do.
-
-- **Account**: someone known to hexframe. Its name is not IAM's to decide: the user is their Root tile in Mapping, and the name Better Auth keeps for emails is copied from that Tile's Title, never the other way.
-- **Session**: an Account's proven presence, for a while, on one device.
-- **Key**: a credential an Account issues to a program (an MCP client, a script) and can revoke. Whether a Key can be limited to one Tile or to reading, and how OAuth clients fit beside it, is settled when the MCP server is built.
-- **Entitlement**: something an Account may do. It is derived, when asked, from what the Account pays for, so it never drifts from Stripe.
-
-Better Auth and its Stripe plugin are repositories below IAM; the plugin owns the subscription tables and the Stripe webhook. No domain says "billing". AI usage is what a paid Entitlement buys; the structure itself stays free.
+Identity and access: who someone is (an Account, its Sessions, later its Keys), and what they may do (its Entitlements), on Better Auth. The language now lives in [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE|iam]].
 
 ### Mapping
 
-The core domain. Someone maintains a system (a codebase, a team, their own life) and wants AI to work along their intent. Mapping lets them lay that system out as a hierarchy where what comes first is what matters most: a reader, human or agent, sees one tile, then the six it breaks into, then theirs. Choosing what to expose first is the exercise, and the hierarchy it produces carries the intent.
-
-- **System**: the whole hierarchy a user maintains. An Account has exactly one, and its **Root** tile is the user: there is no profile beside it. The Root's Title is the user's name everywhere in the app. Mapping ensures the Root the first time a System is read, idempotently, so no lost event can leave an Account without one. *Hexframe* is the product and the form, never the thing a user owns.
-- **Tile**: the unit. A **Title**, a **Preview** (at most 350 characters: what a reader needs to decide whether to open it) and a **Body** in Markdown.
-- **Child**: a Tile in one of its parent's six **Directions**, which say what the parent does and how: 1 NW, 2 NE, 3 E, 4 SE, 5 SW, 6 W. The **Opposite** direction, three away, is a tension the parent balances. A seventh Child is refused: the user regroups some Children under a new one, by moving them. That regrouping is the exercise, not a workaround.
-- **Context**: what a Tile *is*, where its Children say what it does. Up to six Context slots, −1 to −6, in the same Directions; each holds a Tile of its own or a Reference to any Tile the user can read, a public one in someone else's System included. A codebase's Children are its frontend, backend and CI; its Context is the principles it follows.
-- **Frame**: a Tile together with its Children.
-- **Reference**: a link from one Tile to another, by id, so it survives a move. A reference to a deleted Tile shows as broken; it never blocks the delete.
-- **Operations**: create, edit, move (a Tile and everything below it), delete.
-
-What a user does *to look* at a System is not Mapping: centering on a Tile, expanding and collapsing a Frame, showing the center Tile's Context. It is view state, owned by the URL, so a link shows exactly what its sender saw.
-
-Sharing, export and the MCP server all take a Tile as their entry point, and everything below it comes along. A Tile can be public by link, so any LLM that can fetch a URL can read it. An agent reads through the MCP server, in the order a human discovers it: a Tile's Children's Previews before any of their Bodies. A System exports as a zipped folder: a folder per Tile, `<n>-<slug>/` for a Child and `.<n>-<slug>/` for a Context tile, holding one Markdown file with the frontmatter (`title`, `parent`, `preview`) and the Body; References become `[[wikilinks]]`. The user can rename the file and the folder pattern (defaults: `CLAUDE.md`, the ones above).
+The core domain: someone lays out a System they maintain (a codebase, a team, their own life) as a hierarchy of Tiles where what comes first is what matters most, so AI works along their intent. One System per Account, whose Root tile is the user. The language, and what sharing, export and the MCP server will take from it, now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE|mapping]].
 
 ### Assistant
 
@@ -185,12 +140,4 @@ Bilingual from day one, English and French, with Paraglide: typed message functi
 
 ## Observability
 
-- **Sentry** owns errors, traces and alerting.
-- **PostHog** owns product analytics and the leveled event log. An error reaches PostHog as a small `error` event (kind, code, scope, request id, Sentry event id), never as a second copy of the stack.
-- **Verbosity** is set per environment and can be raised for one user by a PostHog feature flag:
-
-| Level | Logs | Where by default |
-|---|---|---|
-| high | page visits, action clicks and shortcuts, API calls, errors | production |
-| medium | high, plus domain service calls, state actions, bus messages | previews |
-| low | medium, plus information logs, repository and database calls, renders | dev (renders only ever in dev) |
+Sentry owns errors, traces and alerting; PostHog, product analytics and the leveled event log. An error reaches PostHog as a small `error` event (kind, code, scope, request id, Sentry event id), never as a second copy of the stack. Three verbosity levels, set per environment (high in production, medium in previews, low in development) and raised for one user by a PostHog feature flag. The rules now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]] and [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/CLAUDE|observability]].
