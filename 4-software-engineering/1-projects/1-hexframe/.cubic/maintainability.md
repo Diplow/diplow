@@ -59,4 +59,4 @@ The touched area has a direction a reader can find: a `CLAUDE.md` on the path, `
 - Grade the whole diff against the base, not the last commit.
 - A clean change gets no comment from this agent.
 
-Source: `.skills/2-review/maintainability-review/references/tags.md`. When the bar changes there, change it here.
+Source: `.skills/4-softeng/2-review/maintainability-review/references/tags.md`. When the bar changes there, change it here.

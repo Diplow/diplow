@@ -9,7 +9,7 @@ preview: >-
 ---
 # Model tiers
 
-The mapping behind criterion H1 of `skill-reviewer` (`.skills/3-meta/skill-reviewer/references/criteria.md`). Skills name a **tier** in prose; this file translates it to a model per harness. If a harness adds or renames models, fix it here, not in each skill.
+The mapping behind criterion H1 of `skill-reviewer` (`.skills/4-softeng/3-meta/skill-reviewer/references/criteria.md`). Skills name a **tier** in prose; this file translates it to a model per harness. If a harness adds or renames models, fix it here, not in each skill.
 
 ## The tiers
 

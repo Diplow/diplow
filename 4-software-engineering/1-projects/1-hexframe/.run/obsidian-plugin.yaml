@@ -1,11 +1,12 @@
 # The config of the "hexframe Obsidian plugin" project's autonomous run, read by
-# run-autonomous-project (.skills/1-ship/run-autonomous-project/references/contract.md
+# run-autonomous-project (.skills/4-softeng/1-ship/run-autonomous-project/references/contract.md
 # holds every key). It builds 3-obsidian-plugin and ships its build into
 # .obsidian/plugins/hexframe/. It starts once project/claude-mod is merged into
-# main, since its tickets build on .shape/. Every ticket lands on
+# main, since its tickets build on the shared shape, which lives in
+# 2-claude-mod/hooks/shape/ and is imported by relative path. Every ticket lands on
 # project/obsidian-plugin, which I merge into main at the end:
 #
-#   /run-autonomous-project "hexframe Obsidian plugin" --config 4-software-engineering/1-projects/1-hexframe/.run/obsidian-plugin.yaml
+#   /softeng:ship:run-autonomous-project "hexframe Obsidian plugin" --config 4-software-engineering/1-projects/1-hexframe/.run/obsidian-plugin.yaml
 #
 # The run never edits this file.
 

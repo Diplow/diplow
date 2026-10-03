@@ -14,8 +14,8 @@ An inner child of hexframe: how its pull requests are reviewed. `cubic.yaml` at 
 
 | Agent | Brief | Condensed from |
 |---|---|---|
-| Maintainability | [[4-software-engineering/1-projects/1-hexframe/.cubic/maintainability\|maintainability]] | [[.skills/2-review/maintainability-review/references/tags\|the maintainability bar]] |
-| Domain design | [[4-software-engineering/1-projects/1-hexframe/.cubic/domain-design\|domain-design]] | [[.skills/2-review/domain-design/SKILL\|domain-design]], review mode, with hexframe's layers and domains |
+| Maintainability | [[4-software-engineering/1-projects/1-hexframe/.cubic/maintainability\|maintainability]] | [[.skills/4-softeng/2-review/maintainability-review/references/tags\|the maintainability bar]] |
+| Domain design | [[4-software-engineering/1-projects/1-hexframe/.cubic/domain-design\|domain-design]] | [[.skills/4-softeng/2-review/domain-design/SKILL\|domain-design]], review mode, with hexframe's layers and domains |
 | Security | [[4-software-engineering/1-projects/1-hexframe/.cubic/security\|security]] | The security bar in [[4-software-engineering/1-projects/1-hexframe/STACK\|STACK]] |
 
 ## Rules

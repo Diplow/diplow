@@ -1,11 +1,13 @@
 # The config of the "hexframe Claude Code mod" project's autonomous run, read by
-# run-autonomous-project (.skills/1-ship/run-autonomous-project/references/contract.md
+# run-autonomous-project (.skills/4-softeng/1-ship/run-autonomous-project/references/contract.md
 # holds every key). It writes the vault language into STACK.md, renames 2-mod to
-# 2-claude-mod, extracts the shared shape into .shape/ and teaches claude-mod
+# 2-claude-mod, extracts the shared shape into 2-claude-mod/hooks/shape/ (a mod
+# loads nothing outside its own folder, so the shape can't sit in a
+# 1-hexframe/.shape/ of its own: DEC-2 of its register) and teaches claude-mod
 # Leaves, the Children frame, exclusions and overflow. Every ticket lands on
 # project/claude-mod, which I merge into main before the Obsidian plugin's run:
 #
-#   /run-autonomous-project "hexframe Claude Code mod" --config 4-software-engineering/1-projects/1-hexframe/.run/claude-mod.yaml
+#   /softeng:ship:run-autonomous-project "hexframe Claude Code mod" --config 4-software-engineering/1-projects/1-hexframe/.run/claude-mod.yaml
 #
 # The run never edits this file.
 
