@@ -79,7 +79,7 @@ test('a ring that overflows places no member: a medium shows it as a list', () =
       leaves: {
         overflowing: true,
         candidates: ['a.md', 'b.md'].map((name) => ({ kind: 'leaf', name })),
-        overflow: ['b.md'],
+        overflow: [{ kind: 'leaf', name: 'b.md' }],
       },
     },
   }

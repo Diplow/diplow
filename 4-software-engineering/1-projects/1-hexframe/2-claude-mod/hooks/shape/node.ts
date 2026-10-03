@@ -72,7 +72,7 @@ export interface OverflowingRing {
   /** Every candidate in name order, the Branches before the Leaves in a Children ring. */
   candidates: Slot[]
   /** The candidates that found no direction. */
-  overflow: string[]
+  overflow: Slot[]
 }
 
 /**
@@ -141,23 +141,27 @@ export function sortEntries(
       kind === 'file' && !name.startsWith('.') && !(bodyFiles as readonly string[]).includes(name),
   )
   const branches = seat('branch', folders, numberOf)
-  const context = ringOf(seat('context', dotFolders, contextNumberOf))
+  const context = ringFrom(seat('context', dotFolders, contextNumberOf))
   if (folders.length + files.length > 6) {
-    return { branches: ringOf(branches), leaves: ringOf(seat('leaf', files, numberOf)), context }
+    return {
+      branches: ringFrom(branches),
+      leaves: ringFrom(seat('leaf', files, numberOf)),
+      context,
+    }
   }
-  return { children: ringOf(childrenOf(branches, files)), context }
+  return { children: ringFrom(childrenOf(branches, files)), context }
 }
 
 /** Where a ring's candidates sat, in name order, before it knows whether it overflows. */
 interface Seating {
   candidates: Slot[]
   members: Partial<Record<Direction, Slot>>
-  overflow: string[]
+  overflow: Slot[]
   clashes: Clash[]
 }
 
 /** The ring a seating makes: its members, or the list of its candidates when one found no seat. */
-function ringOf({ candidates, members, overflow, clashes }: Seating): Ring<Slot> {
+function ringFrom({ candidates, members, overflow, clashes }: Seating): Ring<Slot> {
   return overflow.length > 0
     ? { overflowing: true, candidates, overflow }
     : { overflowing: false, members, clashes }
@@ -180,7 +184,7 @@ function seat(
     const direction = number(name)
     if (direction === undefined) unnumbered.push(name)
     else if (seating.members[direction] === undefined) seating.members[direction] = { kind, name }
-    else seating.overflow.push(name)
+    else seating.overflow.push({ kind, name })
   }
   fill(
     seating,
@@ -229,7 +233,7 @@ function childrenOf(branches: Seating, leaves: readonly string[]): Seating {
 function fill(seating: Seating, slots: readonly Slot[]) {
   for (const slot of slots) {
     const free = directions.find((direction) => seating.members[direction] === undefined)
-    if (free === undefined) seating.overflow.push(slot.name)
+    if (free === undefined) seating.overflow.push(slot)
     else seating.members[free] = slot
   }
 }

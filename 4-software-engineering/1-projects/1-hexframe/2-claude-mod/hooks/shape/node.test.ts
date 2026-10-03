@@ -25,7 +25,8 @@ const names = (ring: Ring<Slot> | undefined) => {
 /** An overflowing ring's candidates by name, and the names that found no direction. */
 const listed = (ring: Ring<Slot> | undefined) => {
   if (ring?.overflowing !== true) throw new Error(`expected an overflowing ring`)
-  return { candidates: ring.candidates.map(({ name }) => name), overflow: ring.overflow }
+  const names = (slots: Slot[]) => slots.map(({ name }) => name)
+  return { candidates: names(ring.candidates), overflow: names(ring.overflow) }
 }
 
 test('numbered folders are Branches, dot folders are Context', () => {

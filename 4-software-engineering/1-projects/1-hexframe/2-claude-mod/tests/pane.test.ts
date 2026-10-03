@@ -333,7 +333,7 @@ test('an overflowing ring shows as a list of its names, each opening as its hex 
   expect(
     await ui.find({
       type: 'Text',
-      text: '2 Branches, and no direction left for 1-b. List what this folder leaves out in .hexframe/exclusions.yaml, or renumber, to draw them as hexes.',
+      text: '2 Branches, and no direction left for 1-b/. List what this folder leaves out in .hexframe/exclusions.yaml, or renumber, to draw them as hexes.',
     }),
   ).toBeDefined()
 

@@ -6,7 +6,12 @@
 // that overflows shows as a list of its names instead, each opening as its hex would.
 import type { EngineInterface, On } from 'claude-code'
 import { leafPreview, markdownOf } from './markdown.js'
-import { exclusionsFile, parseExclusions, patternOf } from './shape/exclusions.js'
+import {
+  exclusionsFile,
+  isOwnExclusionsFile,
+  parseExclusions,
+  patternOf,
+} from './shape/exclusions.js'
 import { layoutView } from './shape/layout.js'
 import {
   basename,
@@ -284,15 +289,13 @@ async function readExclusions(
   const file = join(path, exclusionsFile)
   try {
     if (!(await $.fs.exists(file))) return { exclusions: [] }
-    // It speaks for this folder only: one reached through a symlink, inside the vault or out, is
-    // no part of it, and its text could be anyone's.
     const [own, home] = await Promise.all([
       $.fs.stat(file, { resolve: true }),
       $.fs.stat(path, { resolve: true }),
     ])
-    const isOwn =
-      home.realPath !== undefined && own.realPath === join(home.realPath, exclusionsFile)
-    if (!isOwn) throw new Error('it leads outside its folder')
+    if (!isOwnExclusionsFile(home.realPath, own.realPath)) {
+      throw new Error('it leads outside its folder')
+    }
     if (own.size > leafLimit) throw new Error('it is too large')
     return { exclusions: parseExclusions(await $.fs.read(file)) }
   } catch (error) {
@@ -344,7 +347,7 @@ const ringNames: Record<FrameKind, string> = {
 
 /** Why the ring shows as a list, and what turns it back into hexes. */
 function overflowHint({ candidates, overflow }: OverflowingRing, kind: FrameKind): string {
-  const named = overflow.slice(0, 3).join(', ')
+  const named = overflow.slice(0, 3).map(patternOf).join(', ')
   const more = overflow.length > 3 ? ` and ${overflow.length - 3} more` : ''
   return (
     `${candidates.length} ${ringNames[kind]}, and no direction left for ${named}${more}. ` +
