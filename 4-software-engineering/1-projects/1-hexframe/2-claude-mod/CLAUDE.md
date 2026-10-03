@@ -20,11 +20,23 @@ Mods need Claude Code 2.1.287 or later, and are in early access. From the repo r
 claude --plugin-dir 4-software-engineering/1-projects/1-hexframe/2-claude-mod
 ```
 
-Then `/hexframe` shows the session's folder, and `/hexframe <folder>` another one, relative to the session's. In the pane, `1` to `6` open the tile in that direction, `u` goes up, `c` switches between the Children and the Context, Tab outlines the hex whose button it lands on, `p` swaps the drawing for that hex's `CLAUDE.md`, rendered (the folder's own when no hex is outlined), and back, `r` reads the folder again, and Esc closes it.
+Then `/hexframe` shows the session's folder, and `/hexframe <folder>` another one, relative to the session's. In the pane:
+
+| Key | Does |
+|---|---|
+| `1` to `6` | Opens the hex in that direction: a Branch or a Context tile walks into its folder, a Leaf shows its file in place of the drawing |
+| `u` | Goes up to the parent folder |
+| `c` | Cycles the Frame kinds the folder offers: Children then Context, or, past six Branches and Leaves, Branches, Leaves, then Context |
+| Tab | Outlines the hex whose button it lands on |
+| `p` | Swaps the drawing for the outlined hex's file, and back: a folder's `CLAUDE.md` (the shown folder's own when no hex is outlined) or a Leaf, rendered when it is Markdown and shown as it is otherwise |
+| `r` | Reads the folder again |
+| Esc | Closes the pane |
+
+Leaves take their own fill, warm where Branches are slate. In a Children frame, a Leaf that shares its number with the Branch in that direction, as `3-games.md` beside `3-games/`, is named on a dim line under the drawing.
 
 ## How it reads a folder
 
-Through the [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE|shape]], the one definition every medium reads a vault by, at the depth [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]] gives claude-mod: 1. What the shape doesn't read yet, claude-mod doesn't show: its Children are what STACK calls the Branches kind, and a `.hexframe/` folder shows as a Context tile. A folder that overflows is named under the drawing instead of turning the Frame into a list.
+Through the [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE|shape]], the one definition every medium reads a vault by, at the depth [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]] gives claude-mod: 1. It shows the four Frame kinds the shape offers. What the shape doesn't read yet, claude-mod doesn't show: a `.hexframe/` folder shows as a Context tile. A ring that overflows is named under the drawing instead of turning the Frame into a list.
 
 ## Scripts
 
