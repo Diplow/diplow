@@ -182,17 +182,17 @@ A conversation with an agent that builds a System on the user's behalf, saving e
 
 ## A vault as a hexframe
 
-This vault is a hexframe kept as files: a folder per Tile, its `CLAUDE.md` for the Body, the shape a System exports to. claude-mod shows it inside Claude Code, the Obsidian plugin inside Obsidian, and the app will read it one day. If each medium read a folder its own way, the same vault would show as two hexframes, so they all read it through one pure definition, the [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE|shape]]: what a folder is (its Tile, Branches, Leaves and Context, the `.hexframe/` folder, the vault's edge, overflow) and the layout that takes a depth. It lives inside claude-mod because a mod can import nothing outside its own folder, and every other medium imports it from there.
+This vault is a hexframe kept as files, the shape a System exports to. claude-mod shows it inside Claude Code, the Obsidian plugin inside Obsidian, and the app will read it one day. What a folder is, and how it reads as a Frame, is written once for all of them in the [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE|shape]].
 
-How a medium looks at it. This is view state, as in the app:
+How a medium looks at it is view state, as in the app, each medium's own:
 
-- **Frame kind**: what a Frame's ring shows around its Tile. **Children** is the Branches and the Leaves together, offered only when there are six or fewer in all; the Leaves get another fill, and a Leaf that shares a Branch's number gets a subtle warning. **Branches** and **Leaves** show one of the two, **Context** the dot folders. Mapping's Frame is the Children kind of a folder that has no files.
+- **Frame kind**: which of a Frame's rings shows around its Tile, Children, Branches, Leaves or Context, among those the shape offers. Mapping's Frame is the Children kind of a folder that has no files.
 - **Depth**: how many generations a medium shows from the center. claude-mod 1, the app 2, the Obsidian plugin 2.
 - **Double expansion**: only the center has it. Its outer ring shows Children, Branches or Leaves; its inner ring, inside the center's hex, Leaves or Context; never the same kind in both. Each outer Branch expands on its own, into any kind. The inner ring's hexes don't expand. Collapsing peels the outer ring first, then the inner, and a fully collapsed center fills the canvas.
-- **An overflowing Frame**, one whose ring has a candidate with no direction (more than six, or a number two names claim), shows as a list, not as hexes, until exclusions in the folder's `.hexframe/exclusions.yaml` or renames clear it. The shape marks the ring as overflowing and hands over its candidates' names; the list is the medium's. Only that Frame becomes a list, unless it is the center's outer ring: then the whole view does.
+- **An overflowing Frame** shows as a list, not as hexes, until exclusions or renames clear it. Only that Frame becomes a list, unless it is the center's outer ring: then the whole view does.
 - **Hexframe file**: a `*.hexframe` file opens the view on its folder and keeps the view's state in JSON: the center and the expansions. It is to a medium what the URL is to the app; the Obsidian plugin will put a `diplow.hexframe` at this vault's root. Its paths are relative to the vault, and a medium resolves each one to its real path, symlinks followed, before using it. One that lands outside the vault, through `..`, an absolute path or a symlink, or on an excluded name, is dropped and the file's own folder opens instead, so a shared vault can't make a medium read beyond itself.
 
-Each medium keeps its view state itself; the shape's layout takes the depth and the expanded members as parameters.
+Each medium keeps its view state itself. The shape's layout takes the Frame kind and lays out one generation; the depth and the expansions join it with the first medium that draws deeper.
 
 ## Languages
 

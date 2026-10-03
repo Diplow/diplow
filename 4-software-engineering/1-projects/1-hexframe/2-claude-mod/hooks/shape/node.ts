@@ -58,7 +58,10 @@ export type Ring<M> = SeatedRing<M> | OverflowingRing
 export interface SeatedRing<M> {
   overflowing: false
   members: Partial<Record<Direction, M>>
-  /** Only a Children ring has any. */
+}
+
+/** A seated Children ring: the only kind where a Leaf can clash with a Branch. */
+export interface SeatedChildren<M> extends SeatedRing<M> {
   clashes: Clash[]
 }
 
@@ -79,7 +82,12 @@ export interface OverflowingRing {
  * The rings of the Frame kinds a folder offers: Context always, then Children, or Branches and
  * Leaves when there are more than six of them in all.
  */
-export type Rings<M> = Partial<Record<FrameKind, Ring<M>>>
+export interface Rings<M> {
+  children?: SeatedChildren<M> | OverflowingRing
+  branches?: Ring<M>
+  leaves?: Ring<M>
+  context?: Ring<M>
+}
 
 /** A folder seen as a hexframe: its Tile and the rings of the Frame kinds it offers. */
 export interface Frame {
@@ -149,7 +157,9 @@ export function sortEntries(
       context,
     }
   }
-  return { children: ringFrom(childrenOf(branches, files)), context }
+  const { seating, clashes } = childrenOf(branches, files)
+  const children = ringFrom(seating)
+  return { children: children.overflowing ? children : { ...children, clashes }, context }
 }
 
 /** Where a ring's candidates sat, in name order, before it knows whether it overflows. */
@@ -157,14 +167,13 @@ interface Seating {
   candidates: Slot[]
   members: Partial<Record<Direction, Slot>>
   overflow: Slot[]
-  clashes: Clash[]
 }
 
 /** The ring a seating makes: its members, or the list of its candidates when one found no seat. */
-function ringFrom({ candidates, members, overflow, clashes }: Seating): Ring<Slot> {
+function ringFrom({ candidates, members, overflow }: Seating): Ring<Slot> {
   return overflow.length > 0
     ? { overflowing: true, candidates, overflow }
-    : { overflowing: false, members, clashes }
+    : { overflowing: false, members }
 }
 
 /** Seats the numbered names in their direction, then the others in the free ones, in name order. */
@@ -177,7 +186,6 @@ function seat(
     candidates: names.map((name) => ({ kind, name })),
     members: {},
     overflow: [],
-    clashes: [],
   }
   const unnumbered: string[] = []
   for (const name of names) {
@@ -198,7 +206,10 @@ function seat(
  * when that is free, then the other Leaves in the free directions in name order. A Leaf whose
  * number is the Branch's in that direction, as `3-games.md` beside `3-games/`, is a clash.
  */
-function childrenOf(branches: Seating, leaves: readonly string[]): Seating {
+function childrenOf(
+  branches: Seating,
+  leaves: readonly string[],
+): { seating: Seating; clashes: Clash[] } {
   const seating: Seating = {
     candidates: [
       ...branches.candidates,
@@ -206,8 +217,8 @@ function childrenOf(branches: Seating, leaves: readonly string[]): Seating {
     ],
     members: { ...branches.members },
     overflow: [...branches.overflow],
-    clashes: [],
   }
+  const clashes: Clash[] = []
   const unseated: Slot[] = []
   for (const name of leaves) {
     const direction = numberOf(name)
@@ -221,12 +232,12 @@ function childrenOf(branches: Seating, leaves: readonly string[]): Seating {
       holder?.kind === 'branch' &&
       numberOf(holder.name) === direction
     ) {
-      seating.clashes.push({ direction, leaf: name, branch: holder.name })
+      clashes.push({ direction, leaf: name, branch: holder.name })
     }
     unseated.push({ kind: 'leaf', name })
   }
   fill(seating, unseated)
-  return seating
+  return { seating, clashes }
 }
 
 /** Seats each slot in the first free direction; with none left, it overflows. */

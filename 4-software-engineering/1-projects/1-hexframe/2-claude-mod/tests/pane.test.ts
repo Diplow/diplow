@@ -96,6 +96,11 @@ test('/hexframe opens a pane that draws the folder and walks into a child', asyn
   const terminal = await $.ui.mount({ ...PANE, surface: 'terminal' })
   expect(await terminal.find({ key: 'frame' })).toBeDefined()
   expect(await terminal.find({ key: 'open-1' })).toMatchObject({ props: { label: '1 Leadership' } })
+  // The footer's rows count each control as a plain Button draws it: `hotkey: label`.
+  expect(await terminal.find({ key: 'open-1' })).toMatchObject({
+    props: { plain: true, hotkey: '1' },
+  })
+  expect(await terminal.find({ key: 'up' })).toMatchObject({ props: { plain: true, hotkey: 'u' } })
   expect(await terminal.find({ key: 'open-4' })).toMatchObject({
     props: { label: '4 Software Engineering' },
   })

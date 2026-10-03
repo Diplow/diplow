@@ -2,30 +2,12 @@
 // as it is wide, so it holds two square pixels, drawn with a half block. The hexes are pixel art
 // rather than scaled geometry: every hex is the same stamp, set on whole pixels, its slanted sides
 // stepping two columns per pixel row, the steadiest line a grid draws near a hex's 30 degrees.
-// So it draws depth 1 only, where every placement's radius is 1: claude-mod's depth.
-import { viewHeight, viewWidth, type Placement, type Point } from './shape/layout.js'
-import type { Direction, MemberKind } from './shape/node.js'
+import { viewHeight, viewWidth, type Placement, type Point } from '../shape/layout.js'
+import type { Direction } from '../shape/node.js'
+import { emptyOutline, paletteOf, selectedOutline, wrap } from './style.js'
 
 /** The terminal's own color, as a Raster's cells name it. */
 const defaultColor = 0x01000000
-
-/** A hex's colors, as `0xrrggbb`: the SVG writes the same ones as `#rrggbb`. */
-export interface Palette {
-  background: number
-  title: number
-  preview: number
-}
-
-export const palettes: Record<'center' | MemberKind, Palette> = {
-  center: { background: 0x5b3cc4, title: 0xffffff, preview: 0xddd6fe },
-  branch: { background: 0x2f3446, title: 0xf3f4f6, preview: 0x9ca3af },
-  leaf: { background: 0x4a3426, title: 0xfde7d0, preview: 0xd4a373 },
-  context: { background: 0x134e4a, title: 0xccfbf1, preview: 0x5eead4 },
-}
-
-export const emptyOutline = 0x4b5563
-/** The outline of the hex whose button holds the focus. */
-export const selectedOutline = 0xfbbf24
 
 /** The size, a quarter of a hex's width in columns, under which a hex is too small to say anything. */
 export const minScale = 3
@@ -202,10 +184,6 @@ function pixelsOf(
   return pixels
 }
 
-function paletteOf(placement: Exclude<Placement, { kind: 'empty' }>): Palette {
-  return palettes[placement.kind === 'center' ? 'center' : placement.memberKind]
-}
-
 interface Line {
   column: number
   row: number
@@ -281,33 +259,6 @@ function spansOf(origin: Point, stamp: Stamp, columns: number, rows: number): Sp
   return spans
 }
 
-/** Words in lines of at most `width`, at most `limit` lines, the last cut with an ellipsis. */
-export function wrap(text: string, width: number, limit: number): string[] {
-  if (limit <= 0 || width <= 0) return []
-  const lines: string[] = []
-  let line = ''
-  for (const word of text.split(/\s+/).filter(Boolean)) {
-    const candidate = line === '' ? word : `${line} ${word}`
-    if ([...candidate].length <= width) {
-      line = candidate
-      continue
-    }
-    if (line !== '') lines.push(line)
-    // A word wider than a line is cut, not broken across two.
-    line = [...word].length <= width ? word : `${[...word].slice(0, width - 1).join('')}…`
-  }
-  if (line !== '') lines.push(line)
-  if (lines.length <= limit) return lines
-  const kept = lines.slice(0, limit)
-  kept[limit - 1] = ellipsize(kept[limit - 1] ?? '', width)
-  return kept
-}
-
-function ellipsize(line: string, width: number): string {
-  const glyphs = [...line]
-  return glyphs.length < width ? `${line}…` : `${glyphs.slice(0, width - 1).join('')}…`
-}
-
 function clip(text: string, width: number): string {
   const glyphs = [...text]
   return glyphs.length <= width ? text : glyphs.slice(0, width).join('')
@@ -328,6 +279,17 @@ export function sanitize(text: string): string {
     } else out += glyph
   }
   return out
+}
+
+/** The terminal columns `text` takes: two for a wide or astral character, none for a zero-width one. */
+export function columnsOf(text: string): number {
+  let columns = 0
+  for (const glyph of text.normalize('NFC')) {
+    const code = glyph.codePointAt(0) ?? 0
+    if (isZeroWidth(code)) continue
+    columns += code > 0xffff || isWide(code) ? 2 : 1
+  }
+  return columns
 }
 
 function isZeroWidth(code: number): boolean {

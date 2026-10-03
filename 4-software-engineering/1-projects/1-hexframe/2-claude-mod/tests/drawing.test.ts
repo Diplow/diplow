@@ -1,9 +1,18 @@
 import { expect, test } from 'claude-code/testing'
-import { codeOf, isText, leafPreview, markdownOf, oneLine } from '../hooks/markdown.js'
+import { outline } from '../hooks/draw/outline.js'
+import { base64, paint, sanitize, scaleFor } from '../hooks/draw/raster.js'
+import { wrap } from '../hooks/draw/style.js'
+import { drawSvg } from '../hooks/draw/svg.js'
+import {
+  codeOf,
+  isText,
+  leafPreview,
+  markdownOf,
+  markdownPreview,
+  oneLine,
+} from '../hooks/markdown.js'
 import { layoutView } from '../hooks/shape/layout.js'
 import type { Frame } from '../hooks/shape/node.js'
-import { base64, paint, sanitize, scaleFor, wrap } from '../hooks/raster.js'
-import { drawSvg } from '../hooks/svg.js'
 
 /** A Frame whose Children are a Branch and a Leaf. */
 const frame: Frame = {
@@ -39,7 +48,7 @@ test('base64 matches the standard encoding', () => {
 test('the painting has a triplet per cell', () => {
   const scale = scaleFor(80, 26)
   expect(scale).toBeDefined()
-  const painting = paint(layoutView({ frame, frameKind: 'children' }, 1), scale ?? 0)
+  const painting = paint(layoutView({ frame, frameKind: 'children' }), scale ?? 0)
   expect(painting.columns <= 80).toBe(true)
   expect(painting.rows <= 26).toBe(true)
   const bytes = (painting.cells.length / 4) * 3 - (painting.cells.match(/=*$/)?.[0].length ?? 0)
@@ -60,7 +69,7 @@ test('the preview drops the frontmatter and stays within what a Markdown draws',
 })
 
 test('the SVG fills a Leaf apart from a Branch', () => {
-  const svg = drawSvg(layoutView({ frame, frameKind: 'children' }, 1))
+  const svg = drawSvg(layoutView({ frame, frameKind: 'children' }))
   expect(svg).toContain('fill="#2f3446"')
   expect(svg).toContain('fill="#4a3426"')
 })
@@ -72,7 +81,7 @@ test('a name or a title reaches a Text on one line, with no control character', 
 
 test('the SVG holds no control character, which would make it invalid XML', () => {
   const tile = { path: '/w', title: 'A\u0007title', preview: 'Two\nlines\u0085' }
-  const svg = drawSvg(layoutView({ frame: { ...frame, tile }, frameKind: 'children' }, 1))
+  const svg = drawSvg(layoutView({ frame: { ...frame, tile }, frameKind: 'children' }))
   expect(svg).toContain('>Atitle<')
   expect(/[\u0000-\u001f\u007f-\u009f]/.test(svg)).toBe(false)
 })
@@ -99,4 +108,28 @@ test('a Leaf previews as Markdown, as a fence, or as a note saying why not', () 
     note: 'a.md holds only its frontmatter.',
   })
   expect(leafPreview('a.txt', '  \n')).toEqual({ note: 'a.txt is empty.' })
+})
+
+test("a folder's body file previews as its Markdown, or as a note when it holds only its frontmatter", () => {
+  expect(markdownPreview("A's CLAUDE.md", '---\ntitle: A\n---\n# A\n')).toEqual({ markdown: '# A' })
+  expect(markdownPreview("A's CLAUDE.md", '---\ntitle: A\n---\n\n')).toEqual({
+    note: "A's CLAUDE.md holds only its frontmatter.",
+  })
+})
+
+test('the outline says the Frame in lines, a Leaf naming its file and the selected hex marked', () => {
+  expect(outline({ frame, frameKind: 'children' }, 2).split('\n')).toEqual([
+    'Center',
+    'A preview',
+    '',
+    ' 1  A',
+    '›2  B  (2-b.md)',
+    ' 3  ·',
+    ' 4  ·',
+    ' 5  ·',
+    ' 6  ·',
+  ])
+  // A Frame kind the folder doesn't offer outlines an empty ring, and no hex is marked unselected.
+  expect(outline({ frame, frameKind: 'context' })).not.toContain('›')
+  expect(outline({ frame, frameKind: 'context' })).toContain(' 1  ·')
 })

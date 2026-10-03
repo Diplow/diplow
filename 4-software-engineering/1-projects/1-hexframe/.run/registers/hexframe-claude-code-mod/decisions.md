@@ -27,3 +27,11 @@ HEX-32. The ticket marks a Frame with more than six candidates as overflowing; t
 ### DEC-5 Which files a medium reads
 
 [#34](https://github.com/Diplow/diplow/pull/34), from cubic's local review of the project branch. claude-mod capped a Leaf at 1 MB but read a folder's `CLAUDE.md` in full and through any symlink, so a huge one, or one linked to `/dev/zero` or out of the vault, could hang the pane or show a file from elsewhere. The cap was also claude-mod's alone, though it decides what a Tile reads as. So the rule moved into the shape: a medium reads a regular file of 1 MB or less whose real path lies under its folder's, `exclusions.yaml` keeps its stricter own-path rule, and any other file reads as unread, its Tile made from its name whatever its kind. Holding a file to its folder is stricter than the vault's edge, which the shape names but no medium can check yet, since none knows the vault root.
+
+### DEC-6 The layout draws one generation until a medium draws deeper
+
+HEX-42, from cubic's local review of [#34](https://github.com/Diplow/diplow/pull/34). The layout took a depth and a `FrameView.expanded`, placed an expanded member's Frame inside its hex at a third of its radius, and the SVG scaled its hexes by that radius while keeping one text size. claude-mod passes depth 1, so nothing reached any of it but its own tests, and the SVG's half of it was never drawn. It went: the layout places the seven hexes of one Frame, each of radius 1. STACK still gives the app and the Obsidian plugin depth 2, so the depth and the expansions come back, with the drawing that shows them, in [HEX-35](https://linear.app/hexframe/issue/HEX-35), the Obsidian plugin's three scales.
+
+### DEC-7 The drawings get a folder of their own
+
+HEX-42. The outline became a pure drawing beside the Raster and the SVG, and the palette and the word wrapping they share left `raster.ts` for a module of their own, so the SVG reads nothing of the terminal's. With `footer.ts` too, that would have put eight files in `hooks/`, past the six a node holds, so the four drawing files sit in `hooks/draw/` and `hooks/` keeps four: the hooks' manifest and module, the footer's rows and the text. The shape and the drawings are its two folders.
