@@ -4,7 +4,7 @@
 // opening a Leaf shows its file. Tab outlines the hex whose button it lands on, and `p` swaps the
 // drawing for that hex's file, rendered, or the Tile's CLAUDE.md when no hex is selected. A ring
 // that overflows shows as a list of its names instead, each opening as its hex would.
-import type { EngineInterface, On } from 'claude-code'
+import type { Elements, EngineInterface, On } from 'claude-code'
 import { leafPreview, markdownOf } from './markdown.js'
 import {
   exclusionsFile,
@@ -17,6 +17,7 @@ import {
   basename,
   bodySources,
   directions,
+  type Clash,
   frameKinds,
   join,
   kindsOf,
@@ -162,22 +163,7 @@ export function register(on: On) {
     ]
     const footer = [
       ...(problem ? [Text({ color: 'red', children: [problem] })] : []),
-      ...(clashes.length > 0 && !preview
-        ? [
-            Text({
-              color: 'yellow',
-              dimColor: true,
-              wrap: 'truncate-end',
-              children: [
-                clashes
-                  .map(
-                    ({ leaf, direction, branch }) => `${leaf} shares ${direction} with ${branch}/`,
-                  )
-                  .join('  ·  '),
-              ],
-            }),
-          ]
-        : []),
+      ...(clashes.length > 0 && !preview ? [clashLine(Text, clashes)] : []),
       Box({ flexDirection: 'row', flexWrap: 'wrap', columnGap: 2, children: controls }),
       Text({ dimColor: true, wrap: 'truncate-start', children: [where()] }),
     ]
@@ -196,23 +182,14 @@ export function register(on: On) {
 
     if (ring.overflowing) {
       // The controls go on top here too: a long list scrolls.
-      const items = ring.candidates.map((slot, index) =>
-        Button({
-          key: `item-${index + 1}`,
-          label: patternOf(slot),
-          plain: true,
-          onPress: () => openSlot($, slot),
-        }),
-      )
-      const hint = Text({ dimColor: true, wrap: 'wrap', children: [overflowHint(ring, frameKind)] })
-      const list = Box({ key: 'list', flexDirection: 'column', children: items })
-      return Box({ flexDirection: 'column', rowGap: 1, children: [...footer, hint, list] })
+      const list = listOf($, { Box, Text, Button }, ring)
+      return Box({ flexDirection: 'column', rowGap: 1, children: [...footer, ...list] })
     }
 
     const placements = layoutView({ frame, frameKind }, depth)
     if (e.surface === 'terminal') {
       const { Raster } = $.ui.resolve(e)
-      const rows = e.props.scroll.bodyRows - footerRows - (clashes.length > 0 ? 1 : 0)
+      const rows = e.props.scroll.bodyRows - footerRows - noteRows(e.props.bodyColumns, clashes)
       const scale = scaleFor(e.props.bodyColumns, rows)
       const drawing =
         scale === undefined
@@ -224,6 +201,45 @@ export function register(on: On) {
     const drawing = Svg({ source: drawSvg(placements, selected), alt: outline(frame, frameKind) })
     return Box({ flexDirection: 'column', rowGap: 1, children: [drawing, ...footer] })
   })
+}
+
+/** The dim line under the drawing that names each Leaf numbered like the Branch it sits beside. */
+function clashLine(Text: Elements['terminal']['Text'], clashes: readonly Clash[]) {
+  const named = clashes.map(
+    ({ leaf, direction, branch }) => `${leaf} shares ${direction} with ${branch}/`,
+  )
+  return Text({
+    color: 'yellow',
+    dimColor: true,
+    wrap: 'truncate-end',
+    children: [named.join('  ·  ')],
+  })
+}
+
+/** The rows the drawing leaves to the lines above the controls: the red one wraps, the clashes' doesn't. */
+function noteRows(columns: number, clashes: readonly Clash[]): number {
+  const problemRows = problem ? Math.ceil(problem.length / Math.max(1, columns)) : 0
+  return problemRows + (clashes.length > 0 ? 1 : 0)
+}
+
+/** An overflowing ring as the pane shows it: the hint, then every candidate's name as a button. */
+function listOf(
+  $: EngineInterface,
+  { Box, Text, Button }: Pick<Elements['terminal'], 'Box' | 'Text' | 'Button'>,
+  ring: OverflowingRing,
+) {
+  const items = ring.candidates.map((slot, index) =>
+    Button({
+      key: `item-${index + 1}`,
+      label: patternOf(slot),
+      plain: true,
+      onPress: () => openSlot($, slot),
+    }),
+  )
+  return [
+    Text({ dimColor: true, wrap: 'wrap', children: [overflowHint(ring, frameKind)] }),
+    Box({ key: 'list', flexDirection: 'column', children: items }),
+  ]
 }
 
 /** Opens the member in `direction`: walks into a Branch or a Context tile, shows a Leaf's file. */
