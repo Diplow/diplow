@@ -1,0 +1,46 @@
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/draw/svg.ts
+  s_a38576a2864058::t_3292c4e78169a4 1-126
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/register.ts
+  s_a38576a2864058::t_ca6ea059ee5aea 8-12,86-88,90,97-98,101-103,106,112,134,140,147,155-161,166,171
+  s_a38576a2864058::t_08296a88cab56b 287-288,295-306,331-337,363,382
+  s_a38576a2864058::t_0e1f3f76ffe4e7 124,141-146,152
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/tests/footer.test.ts
+  s_a38576a2864058::t_0e1f3f76ffe4e7 30
+  s_a38576a2864058::t_60fc9f44103a28 1-29,31
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/tests/drawing.test.ts
+  s_a38576a2864058::t_da5c21241b5e5f 2-13,51,72,84,112,114-135
+  s_a38576a2864058::t_0e1f3f76ffe4e7 113
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/draw/style.ts
+  s_a38576a2864058::t_8eaa55f1ee2324 1-54
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/draw/raster.ts
+  s_a38576a2864058::t_9cad24b858d1a8 1-324
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/layout.test.ts
+  s_a38576a2864058::t_2cc055bc5020bf 33,38-45,59,64,70,84
+  s_a38576a2864058::t_da5c21241b5e5f 13
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/layout.ts
+  s_a38576a2864058::t_3ea2e790001d49 2-4,20,26,28-30,42-44,46-47,50-52,54-56,61,63
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/draw/outline.ts
+  s_a38576a2864058::t_4fa35e5a634121 1-17
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/markdown.ts
+  s_a38576a2864058::t_aa05a37ca83155 66-77,82,84-86
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/node.ts
+  s_a38576a2864058::t_9d4f2113c0e57d 61-64,85-90,160-162,173,176,209-212,221,235,240
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/footer.ts
+  s_a38576a2864058::t_ca8af8a3e0fe0b 1-75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "69e0c49c135750ea4adf605230cc101aa9532bb5",
+  "prompts": {},
+  "sessions": {
+    "s_a38576a2864058": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "49661160-2286-41ed-8057-0ac30e2a399a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
