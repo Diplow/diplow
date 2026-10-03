@@ -1,0 +1,22 @@
+4-software-engineering/1-projects/1-hexframe/1-app/package.json
+  s_221932f643db8c::t_1cd32378bdd222 16
+  s_221932f643db8c::t_469a26010aab85 15
+4-software-engineering/1-projects/1-hexframe/pnpm-lock.yaml
+  s_221932f643db8c::t_ac8d761a30a073 14-15,17-18,1746-1747,1753-1754,1760-1761,1777-1778,1784-1785,1801-1802,1807-1808,1811-1812,1815-1816,1820,1840-1841,1848-1849,1860-1861,1864-1865,1868-1869,4799,4802-4803,4808,4810-4812,4816,4818-4819,4821,4823-4824,4842,4844-4846,4852,4854-4857,4859-4861,4881,4883,4888,4895,4898,4908,4913-4914,4920,4945,4947,4949,4954,4960-4962,4964,4993,4996-4998,5005,5007,5009
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "93fe0ece1e5ff40f588efeff348885d282d2126c",
+  "prompts": {},
+  "sessions": {
+    "s_221932f643db8c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a37f577e-0e1b-462e-aae7-939f4bda3ddd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
