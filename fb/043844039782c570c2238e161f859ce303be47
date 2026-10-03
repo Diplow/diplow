@@ -1,0 +1,26 @@
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/node.test.ts
+  s_221932f643db8c::t_5eb5f1661b4c95 3,121-126,135-136
+  s_221932f643db8c::t_96c6c679bddf3b 127-134
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/register.ts
+  s_221932f643db8c::t_5eb5f1661b4c95 11,157,250,253-258,273,283,288-289,300,302,305,310-317
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/node.ts
+  s_221932f643db8c::t_5eb5f1661b4c95 188-190,192-201,205,211-212,214,216-217
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE.md
+  s_221932f643db8c::t_4d6410235ec972 29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fb043844039782c570c2238e161f859ce303be47",
+  "prompts": {},
+  "sessions": {
+    "s_221932f643db8c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a37f577e-0e1b-462e-aae7-939f4bda3ddd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
