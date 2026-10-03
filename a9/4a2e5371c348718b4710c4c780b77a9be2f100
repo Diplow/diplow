@@ -1,0 +1,48 @@
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/node.test.ts
+  s_221932f643db8c::t_91c4f3db218993 95
+  s_221932f643db8c::t_0a82ed55395837 2-12,15,18-22,30-32,35-38,42-62,64-68,70-73,75-79,81-94,96-99,120-121
+  s_221932f643db8c::t_a12d4161df871a 17,63,69,74,80
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/node.ts
+  s_221932f643db8c::t_6715ba2a6887a1 19-39,41-52,54-67,73,76,79-96,98-102,104-105,111-120,122,125-127,129-132,134-137,143,146-151,157-164,170-184,187-190,200-203,206-208
+  s_221932f643db8c::t_91c4f3db218993 106-110,139-142,152-156,165-169
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/tests/drawing.test.ts
+  s_221932f643db8c::t_afdbfb259e0b8c 2,4,6-21,42,57-68,70
+  s_221932f643db8c::t_a3c3322a341cc5 69
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/tests/pane.test.ts
+  s_221932f643db8c::t_91c4f3db218993 121-123,125-183,185,187,191-227,230-240
+  s_221932f643db8c::t_dc731f05d8b545 229
+  s_221932f643db8c::t_87e396c0e90383 1,124
+  s_221932f643db8c::t_56d81cd8e03e3d 184,186,188-190
+  s_221932f643db8c::t_6aedc8d8d59ee6 228
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/raster.ts
+  s_221932f643db8c::t_a164196069813e 7,18,20-21,205
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/layout.test.ts
+  s_221932f643db8c::t_a12d4161df871a 3,6-8,10-14,37-38,51-74,79-81,89-90
+  s_221932f643db8c::t_91c4f3db218993 91-93
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/layout.ts
+  s_221932f643db8c::t_a164196069813e 5-12,19,22,29-38,62-63,68,70,74-84
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/register.ts
+  s_221932f643db8c::t_0a82ed55395837 99,201
+  s_221932f643db8c::t_91c4f3db218993 159-161
+  s_221932f643db8c::t_eedc533b19b2d3 2-5,7-8,10,13-14,16,19,23-27,43,46-47,88-89,96,112,117,132-135,149,152-158,162-166,176-179,183,186-187,190,195,200,202-212,216-219,221,230-241,243-244,246-260,263-266,269-303,307,310,317-319,323-324,328-330
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/markdown.ts
+  s_221932f643db8c::t_ea72ec14c3a683 1,6-10,12-13,21,24-39
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/svg.ts
+  s_221932f643db8c::t_a164196069813e 20-21,56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a94a2e5371c348718b4710c4c780b77a9be2f100",
+  "prompts": {},
+  "sessions": {
+    "s_221932f643db8c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a37f577e-0e1b-462e-aae7-939f4bda3ddd",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
