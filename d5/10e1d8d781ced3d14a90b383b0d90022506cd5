@@ -1,0 +1,23 @@
+4-software-engineering/1-projects/1-hexframe/.run/claude-mod.yaml
+  s_1345842dfdf259::t_19b3e3d90ffefd 2,8
+4-software-engineering/1-projects/1-hexframe/.run/CLAUDE.md
+  s_1345842dfdf259::t_19b3e3d90ffefd 36,41,43
+4-software-engineering/1-projects/1-hexframe/.run/obsidian-plugin.yaml
+  s_1345842dfdf259::t_19b3e3d90ffefd 2,8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d510e1d8d781ced3d14a90b383b0d90022506cd5",
+  "prompts": {},
+  "sessions": {
+    "s_1345842dfdf259": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "04a2f9a8-f764-430d-ba85-440d7113da9e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
