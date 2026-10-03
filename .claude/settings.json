@@ -52,7 +52,8 @@
     "writing-for-agents": "off"
   },
   "enabledPlugins": {
-    "hodor-skills@hodor": false
+    "hodor-skills@hodor": false,
+    "sentry@claude-plugins-official": false
   },
   "hooks": {
     "SessionStart": [
