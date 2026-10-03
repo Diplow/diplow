@@ -29,9 +29,6 @@ const sqrt3 = Math.sqrt(3)
 /** Angle, in degrees counterclockwise from east, of the neighbor in each direction. */
 const neighborAngle: Record<Direction, number> = { 1: 120, 2: 60, 3: 0, 4: -60, 5: -120, 6: 180 }
 
-/** A hex's radius is 1; the gap between neighbors is this share of it. */
-export const hexRadius = 0.93
-
 /** The view's size, for a hex of radius 1 and the ring at its spacing: three hexes across. */
 export const frameWidth = 3 * sqrt3
 export const frameHeight = 5
@@ -81,9 +78,4 @@ export function hexCorners(center: Point, radius: number): Point[] {
     const radians = (degrees * Math.PI) / 180
     return { x: center.x + radius * Math.cos(radians), y: center.y + radius * Math.sin(radians) }
   })
-}
-
-/** The width of the band between a hex's side corners, where its text sits. */
-export function bandWidth(radius: number): number {
-  return sqrt3 * radius
 }

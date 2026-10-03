@@ -1,17 +1,18 @@
 // Draws a Frame's placements as an SVG document, for the surfaces that take one (the Desktop app).
 import type { Direction } from './shape/node.js'
 import { wrap } from './raster.js'
-import {
-  bandWidth,
-  frameHeight,
-  frameWidth,
-  hexCorners,
-  hexRadius,
-  type Placement,
-} from './shape/layout.js'
+import { frameHeight, frameWidth, hexCorners, type Placement } from './shape/layout.js'
 
 /** Pixels per unit of the layout. */
 const scale = 110
+
+/** A hex's radius is 1; the gap between neighbors is this share of it. */
+const hexRadius = 0.93
+
+/** The width of the band between a hex's side corners, where its text sits. */
+function bandWidth(radius: number): number {
+  return Math.sqrt(3) * radius
+}
 
 const fills = {
   center: { fill: '#5b3cc4', title: '#ffffff', preview: '#ddd6fe' },
