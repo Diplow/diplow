@@ -1,7 +1,7 @@
 // `pnpm db:migrate`: applies the committed migrations to the database DATABASE_URL names, the same way
-// the test harness applies them to PGlite. CI is to run it against the pull request's Neon branch before
-// its preview deploys, and against production before production deploys (HEX-16#PARK-1 in Linear). A
-// script is a process of its own, outside the server functions, so it runs its program itself.
+// the test harness applies them to PGlite. Vercel runs it before each build (vercel.json), against the
+// Neon branch the deployment gets: its git branch's on a preview, the main one in production. A script
+// is a process of its own, outside the server functions, so it runs its program itself.
 import { Effect } from 'effect'
 
 import { layer } from '../src/repositories/database/database.ts'

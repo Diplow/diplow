@@ -4,11 +4,14 @@
 import { Effect, Layer, Redacted } from 'effect'
 
 import { TestDatabase } from '../database/testing'
-import { Auth, HttpExchange, make } from './auth'
+import { Auth, HttpExchange, localBaseURL, make } from './auth'
+
+/** A secret made for the run. */
+export const testSecret = () => Redacted.make(crypto.randomUUID() + crypto.randomUUID())
 
 /** Auth over a fresh, migrated PGlite. The database is provided too, to look behind Better Auth. */
 export const TestAuth = Layer.effect(Auth)(
-  Effect.suspend(() => make(Redacted.make(crypto.randomUUID() + crypto.randomUUID()))),
+  Effect.suspend(() => make(testSecret(), localBaseURL)),
 ).pipe(Layer.provideMerge(TestDatabase))
 
 /** A Set-Cookie line's cookie, by name; an emptied value means the cookie is gone. */

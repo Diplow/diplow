@@ -31,4 +31,4 @@ Better Auth and its Stripe plugin are repositories below IAM ([[4-software-engin
 
 - **A refusal names its field, never the server's sentence.** Better Auth's refusals become IAM's errors here, each on the form field the user can fix; the message table words them. A wrong password and an unknown email are the same `CredentialsRejected`, so sign-in never says which Accounts exist.
 - **The Session comes from the request, not the input.** A server function acting for an Account takes it from `signedIn`, never an id the caller sends.
-- **Email and password only, for now.** Another way in (a social provider, a magic link) is a decision, and the first to need a callback URL brings `BETTER_AUTH_URL` with it.
+- **Email and password only, for now.** Another way in (a social provider, a magic link) is a decision, and the first to need a callback URL will register it on each host Better Auth answers on ([[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE|auth]]).

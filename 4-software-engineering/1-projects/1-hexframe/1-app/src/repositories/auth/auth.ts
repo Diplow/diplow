@@ -2,6 +2,7 @@
 // (a user, a session). IAM, above, turns them into its Accounts and Sessions. Better Auth has no route
 // of its own: every call comes from a server function, and the cookies it reads and sets travel
 // through HttpExchange. Signing up and in go through its request handler, where its rate limiter runs.
+import type { BetterAuthOptions } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { betterAuth } from 'better-auth/minimal'
 import { Config, Context, Data, Effect, Layer, Option, Redacted, Schema } from 'effect'
@@ -123,10 +124,72 @@ function credentialRequest(path: string, body: object, { url, headers }: HttpExc
   })
 }
 
-/** Better Auth, over the database, signing its cookies with `secret`. */
-function betterAuthWith(secret: Redacted.Redacted, database: PromiseDatabase['Service']) {
+/**
+ * Where Better Auth is reached: the hosts a request may name, which are also the origins it trusts,
+ * and the URL any other host falls back to.
+ */
+export type BaseURL = Extract<NonNullable<BetterAuthOptions['baseURL']>, object>
+
+/** The hosts a Vercel deployment answers on, as Vercel names them at runtime. */
+export interface VercelHosts {
+  readonly environment: string
+  /** VERCEL_URL, the deployment's own: `hexframe-<hash>-<team>.vercel.app`. */
+  readonly deployment: string
+  /** VERCEL_BRANCH_URL, its branch's: `hexframe-app-git-<branch>-<team>.vercel.app`. */
+  readonly branch: Option.Option<string>
+  /** VERCEL_PROJECT_PRODUCTION_URL, the project's domain: `hexframe.ai`. */
+  readonly production: string
+}
+
+/** Off Vercel: the dev server, the tests and a local build, on localhost whatever the port. */
+export const localBaseURL: BaseURL = {
+  allowedHosts: ['localhost', 'localhost:*'],
+  fallback: 'http://localhost',
+  protocol: 'http',
+}
+
+/**
+ * A deployment's base URL: its own host and its branch's, and in production the project's domain,
+ * which any other host falls back to. A preview falls back to its branch's URL. Off Vercel, localhost.
+ */
+export function baseURLOf(vercel: Option.Option<VercelHosts>): BaseURL {
+  if (Option.isNone(vercel)) return localBaseURL
+  const { environment, deployment, branch, production } = vercel.value
+  const canonical =
+    environment === 'production' ? production : Option.getOrElse(branch, () => deployment)
+  return {
+    allowedHosts: [...new Set([deployment, ...Option.toArray(branch), canonical])],
+    fallback: `https://${canonical}`,
+    protocol: 'https',
+  }
+}
+
+/**
+ * Vercel's system variables, when `VERCEL` says the app runs there; then each is required, but the
+ * branch's URL, so a deployment missing one fails to start rather than answering on localhost only.
+ */
+export const vercelHosts = Effect.gen(function* () {
+  if (Option.isNone(yield* Config.option(Config.String('VERCEL'))))
+    return Option.none<VercelHosts>()
+  return Option.some(
+    yield* Config.all({
+      environment: Config.String('VERCEL_ENV'),
+      deployment: Config.String('VERCEL_URL'),
+      branch: Config.option(Config.String('VERCEL_BRANCH_URL')),
+      production: Config.String('VERCEL_PROJECT_PRODUCTION_URL'),
+    }),
+  )
+})
+
+/** Better Auth, over the database, signing its cookies with `secret`, reached at `baseURL`. */
+function betterAuthWith(
+  secret: Redacted.Redacted,
+  baseURL: BaseURL,
+  database: PromiseDatabase['Service'],
+) {
   return betterAuth({
     secret: Redacted.value(secret),
+    baseURL,
     database: drizzleAdapter(database, {
       provider: 'pg',
       schema: { user, session, account, verification, rateLimit },
@@ -139,10 +202,10 @@ function betterAuthWith(secret: Redacted.Redacted, database: PromiseDatabase['Se
   })
 }
 
-/** The Auth service over Better Auth, signing its cookies with `secret`. */
-export const make = (secret: Redacted.Redacted) =>
+/** The Auth service over Better Auth, signing its cookies with `secret`, reached at `baseURL`. */
+export const make = (secret: Redacted.Redacted, baseURL: BaseURL) =>
   Effect.gen(function* () {
-    const auth = betterAuthWith(secret, yield* PromiseDatabase)
+    const auth = betterAuthWith(secret, baseURL, yield* PromiseDatabase)
 
     /** Posts credentials through Better Auth's handler, so its rate limiter and origin check run. */
     const credentialed = (path: string, body: object) =>
@@ -188,9 +251,13 @@ export const make = (secret: Redacted.Redacted) =>
     })
   })
 
-/** The deployed Auth, over DATABASE_URL, its cookies signed with BETTER_AUTH_SECRET. */
+/**
+ * The deployed Auth, over DATABASE_URL, its cookies signed with BETTER_AUTH_SECRET, reached on the
+ * hosts Vercel names.
+ */
 export const layer = Layer.effect(Auth)(
   Effect.gen(function* () {
-    return yield* make(yield* Config.Redacted('BETTER_AUTH_SECRET'))
+    const secret = yield* Config.Redacted('BETTER_AUTH_SECRET')
+    return yield* make(secret, baseURLOf(yield* vercelHosts))
   }),
 ).pipe(Layer.provide(promiseLayer))

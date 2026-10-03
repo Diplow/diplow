@@ -31,7 +31,9 @@ Every table hexframe keeps, and the one way to reach them: the `Database` servic
 1. Edit `schema.ts`.
 2. `pnpm db:generate --name <what-changed>` writes the next migration into `migrations/` (drizzle-kit, `drizzle.config.ts`). Commit it with the schema; never edit a migration once it has landed.
 3. `pnpm test` runs it against PGlite.
-4. `pnpm db:migrate` applies it to the database `DATABASE_URL` names. CI is to run it against the pull request's Neon branch before its preview deploys, and against production before production deploys; until that step exists (`HEX-16#PARK-1` in Linear) nobody runs it for you.
+4. Push. Each Vercel deployment runs `pnpm db:migrate` before it builds (`vercel.json`), against the Neon branch Neon's Vercel integration gives it: `preview/<git branch>`, forked from `main` on the branch's first deployment, on a preview; `main` in production. A build whose migration fails never goes live. When the pull request closes or the branch is deleted, `.github/workflows/hexframe-previews.yml` deletes its Neon branch: the free plan holds 10, and a full project fails every new preview. `pnpm db:migrate` by hand applies them to whatever `DATABASE_URL` names.
+
+Production migrates before its new code serves, while the old code still does: a migration that lands on `main` must keep the code before it working (add a column, backfill, then drop the old one in a later change).
 
 A deployed database changes through committed migrations only; `drizzle-kit push` is for a local one.
 
