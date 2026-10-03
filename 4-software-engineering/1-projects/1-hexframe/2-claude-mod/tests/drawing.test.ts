@@ -10,11 +10,11 @@ const frame: Frame = {
   tile: { path: '/w', title: 'Center', preview: 'A preview' },
   rings: {
     children: {
+      overflowing: false,
       members: {
         1: { kind: 'branch', tile: { path: '/w/1-a', title: 'A', preview: '' } },
         2: { kind: 'leaf', tile: { path: '/w/2-b.md', title: 'B', preview: '' } },
       },
-      overflow: [],
       clashes: [],
     },
   },

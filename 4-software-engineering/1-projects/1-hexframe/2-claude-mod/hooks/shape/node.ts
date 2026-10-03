@@ -1,5 +1,6 @@
 // Reads a folder as a hexframe node, from what a directory listing and its CLAUDE.md say. Pure:
 // each medium does the file system calls and hands the results here.
+import { isExcluded } from './exclusions.js'
 
 export type Direction = 1 | 2 | 3 | 4 | 5 | 6
 
@@ -47,12 +48,31 @@ export interface Clash {
   branch: string
 }
 
-/** One Frame kind's ring: its members by direction, and the names that found no direction. */
-export interface Ring<M> {
+/**
+ * One Frame kind's ring: its members by direction, or, when a candidate found no direction, every
+ * candidate as a list.
+ */
+export type Ring<M> = SeatedRing<M> | OverflowingRing
+
+/** A ring where every candidate found a direction. */
+export interface SeatedRing<M> {
+  overflowing: false
   members: Partial<Record<Direction, M>>
-  overflow: string[]
   /** Only a Children ring has any. */
   clashes: Clash[]
+}
+
+/**
+ * A ring where a candidate found no direction, because six were seated or its number was taken. A
+ * medium shows it as a list, not as hexes, until exclusions or renames clear it. Its candidates
+ * stay names: a list shows what an exclusion would match, and a large folder reads no file.
+ */
+export interface OverflowingRing {
+  overflowing: true
+  /** Every candidate in name order, the Branches before the Leaves in a Children ring. */
+  candidates: Slot[]
+  /** The candidates that found no direction. */
+  overflow: Slot[]
 }
 
 /**
@@ -70,9 +90,6 @@ export interface Frame {
 /** The file that presents a node; a private one (`-CLAUDE.md`) when the plain one is missing. */
 export const bodyFiles = ['CLAUDE.md', '-CLAUDE.md'] as const
 
-/** Names that hold tooling, never a node's meaning. */
-const ignored = new Set(['.git', 'node_modules', '.DS_Store'])
-
 const numbered = /^([1-6])-(.+)$/
 const numberedContext = /^\.([1-6])-(.+)$/
 
@@ -82,6 +99,11 @@ const contextNumberOf = (name: string): Direction | undefined => numberIn(number
 function numberIn(pattern: RegExp, name: string): Direction | undefined {
   const match = pattern.exec(name)
   return match ? (Number(match[1]) as Direction) : undefined
+}
+
+/** The members a ring draws as hexes: none when it overflows, since a medium shows it as a list. */
+export function membersOf<M>(ring: Ring<M> | undefined): Partial<Record<Direction, M>> {
+  return ring?.overflowing === false ? ring.members : {}
 }
 
 /** The Frame kinds `rings` offers, in the order a medium cycles through them. */
@@ -95,14 +117,18 @@ export function isMarkdown(name: string): boolean {
 }
 
 /**
- * Sorts a folder's listing into the rings of its Frame kinds. A child folder is a Branch, a file a
- * Leaf, a dot folder Context. `<n>-<slug>/`, `<n>-<slug>.<ext>` and `.<n>-<slug>/` sit in direction
- * n of their ring, the later of two names claiming one number overflowing; the unnumbered ones take
- * its free directions in name order. The folder's own `CLAUDE.md` and `-CLAUDE.md` are its Tile and
- * dot files are nothing, so neither is a Leaf.
+ * Sorts a folder's listing into the rings of its Frame kinds, once `exclusions` and the built-in
+ * ones have left their names out. A child folder is a Branch, a file a Leaf, a dot folder Context.
+ * `<n>-<slug>/`, `<n>-<slug>.<ext>` and `.<n>-<slug>/` sit in direction n of their ring, the later
+ * of two names claiming one number overflowing; the unnumbered ones take its free directions in
+ * name order. The folder's own `CLAUDE.md` and `-CLAUDE.md` are its Tile and dot files are
+ * nothing, so neither is a Leaf.
  */
-export function sortEntries(entries: readonly Entry[]): Rings<Slot> {
-  const shown = entries.filter((entry) => !ignored.has(entry.name))
+export function sortEntries(
+  entries: readonly Entry[],
+  exclusions: readonly string[] = [],
+): Rings<Slot> {
+  const shown = entries.filter(({ name, kind }) => !isExcluded(name, kind === 'dir', exclusions))
   const names = (keep: (entry: Entry) => boolean) =>
     shown
       .filter(keep)
@@ -115,11 +141,30 @@ export function sortEntries(entries: readonly Entry[]): Rings<Slot> {
       kind === 'file' && !name.startsWith('.') && !(bodyFiles as readonly string[]).includes(name),
   )
   const branches = seat('branch', folders, numberOf)
-  const context = seat('context', dotFolders, contextNumberOf)
+  const context = ringFrom(seat('context', dotFolders, contextNumberOf))
   if (folders.length + files.length > 6) {
-    return { branches, leaves: seat('leaf', files, numberOf), context }
+    return {
+      branches: ringFrom(branches),
+      leaves: ringFrom(seat('leaf', files, numberOf)),
+      context,
+    }
   }
-  return { children: childrenOf(branches, files), context }
+  return { children: ringFrom(childrenOf(branches, files)), context }
+}
+
+/** Where a ring's candidates sat, in name order, before it knows whether it overflows. */
+interface Seating {
+  candidates: Slot[]
+  members: Partial<Record<Direction, Slot>>
+  overflow: Slot[]
+  clashes: Clash[]
+}
+
+/** The ring a seating makes: its members, or the list of its candidates when one found no seat. */
+function ringFrom({ candidates, members, overflow, clashes }: Seating): Ring<Slot> {
+  return overflow.length > 0
+    ? { overflowing: true, candidates, overflow }
+    : { overflowing: false, members, clashes }
 }
 
 /** Seats the numbered names in their direction, then the others in the free ones, in name order. */
@@ -127,20 +172,25 @@ function seat(
   kind: MemberKind,
   names: readonly string[],
   number: (name: string) => Direction | undefined,
-): Ring<Slot> {
-  const ring: Ring<Slot> = { members: {}, overflow: [], clashes: [] }
+): Seating {
+  const seating: Seating = {
+    candidates: names.map((name) => ({ kind, name })),
+    members: {},
+    overflow: [],
+    clashes: [],
+  }
   const unnumbered: string[] = []
   for (const name of names) {
     const direction = number(name)
     if (direction === undefined) unnumbered.push(name)
-    else if (ring.members[direction] === undefined) ring.members[direction] = { kind, name }
-    else ring.overflow.push(name)
+    else if (seating.members[direction] === undefined) seating.members[direction] = { kind, name }
+    else seating.overflow.push({ kind, name })
   }
   fill(
-    ring,
+    seating,
     unnumbered.map((name) => ({ kind, name })),
   )
-  return ring
+  return seating
 }
 
 /**
@@ -148,8 +198,12 @@ function seat(
  * when that is free, then the other Leaves in the free directions in name order. A Leaf whose
  * number is the Branch's in that direction, as `3-games.md` beside `3-games/`, is a clash.
  */
-function childrenOf(branches: Ring<Slot>, leaves: readonly string[]): Ring<Slot> {
-  const ring: Ring<Slot> = {
+function childrenOf(branches: Seating, leaves: readonly string[]): Seating {
+  const seating: Seating = {
+    candidates: [
+      ...branches.candidates,
+      ...leaves.map((name) => ({ kind: 'leaf' as const, name })),
+    ],
     members: { ...branches.members },
     overflow: [...branches.overflow],
     clashes: [],
@@ -157,9 +211,9 @@ function childrenOf(branches: Ring<Slot>, leaves: readonly string[]): Ring<Slot>
   const unseated: Slot[] = []
   for (const name of leaves) {
     const direction = numberOf(name)
-    const holder = direction === undefined ? undefined : ring.members[direction]
+    const holder = direction === undefined ? undefined : seating.members[direction]
     if (direction !== undefined && holder === undefined) {
-      ring.members[direction] = { kind: 'leaf', name }
+      seating.members[direction] = { kind: 'leaf', name }
       continue
     }
     if (
@@ -167,20 +221,20 @@ function childrenOf(branches: Ring<Slot>, leaves: readonly string[]): Ring<Slot>
       holder?.kind === 'branch' &&
       numberOf(holder.name) === direction
     ) {
-      ring.clashes.push({ direction, leaf: name, branch: holder.name })
+      seating.clashes.push({ direction, leaf: name, branch: holder.name })
     }
     unseated.push({ kind: 'leaf', name })
   }
-  fill(ring, unseated)
-  return ring
+  fill(seating, unseated)
+  return seating
 }
 
-/** Seats each slot in the ring's first free direction; with none left, it overflows. */
-function fill(ring: Ring<Slot>, slots: readonly Slot[]) {
+/** Seats each slot in the first free direction; with none left, it overflows. */
+function fill(seating: Seating, slots: readonly Slot[]) {
   for (const slot of slots) {
-    const free = directions.find((direction) => ring.members[direction] === undefined)
-    if (free === undefined) ring.overflow.push(slot.name)
-    else ring.members[free] = slot
+    const free = directions.find((direction) => seating.members[direction] === undefined)
+    if (free === undefined) seating.overflow.push(slot)
+    else seating.members[free] = slot
   }
 }
 

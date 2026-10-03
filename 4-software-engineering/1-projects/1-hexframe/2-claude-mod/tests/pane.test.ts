@@ -119,12 +119,13 @@ test('a folder that cannot be read says so', async ($, on) => {
   expect(await ui.find({ type: 'Text', text: /^Can't read \/work\/missing/ })).toBeDefined()
 })
 
-/** Stubs the file system with `listings` and `texts`, the session in `cwd`. */
+/** Stubs the file system with `listings` and `texts`, the session in `cwd`; `links` maps a symlink to where it lands. */
 function vault(
   on: On,
   cwd: string,
   listings: Record<string, FsEntry[]>,
   texts: Record<string, string>,
+  links: Record<string, string> = {},
 ) {
   on('session.cwd', () => ({ value: cwd }))
   on('fs.list', ($, e) => {
@@ -134,7 +135,13 @@ function vault(
   on('fs.exists', ($, e) => ({ value: e.path in texts }))
   on('fs.read', ($, e) => (e.path in texts ? { value: texts[e.path] ?? '' } : { deny: 'no file' }))
   on('fs.stat', ($, e) => ({
-    value: { kind: 'file', size: (texts[e.path] ?? '').length, mtimeMs: 0, isLink: false },
+    value: {
+      kind: 'file',
+      size: (texts[e.path] ?? '').length,
+      mtimeMs: 0,
+      isLink: false,
+      ...(e.resolve ? { realPath: links[e.path] ?? e.path } : {}),
+    },
   }))
   on('ui.open', () => ({ value: { isPlaced: true } }))
 }
@@ -248,5 +255,103 @@ test('past six Branches and Leaves, `c` cycles the Branches, the Leaves and the 
   // A folder that has no Branches nor Leaves frames of its own shows its Children instead
   await ui.press({ key: 'open-1' })
   expect(await ui.find({ type: 'Text', text: /^\/big\/1-a  ·  children$/ })).toBeDefined()
+  await ui.unmount()
+})
+
+test('a folder leaves out what its exclusions.yaml lists, and a broken one says so', async ($, on) => {
+  const listings: Record<string, FsEntry[]> = {
+    '/x': [
+      ...['1-a', 'dist', '.hexframe', 'node_modules'].map(dir),
+      ...['b.md', 'c.lock'].map(file),
+    ],
+  }
+  const texts: Record<string, string> = {
+    '/x/.hexframe/exclusions.yaml': 'exclude:\n  - dist/\n  - "*.lock"\n',
+  }
+  vault(on, '/x', listings, texts)
+  await $.command.run(hexframe(''))
+  const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
+  expect(await ui.find({ key: 'open-1' })).toMatchObject({ props: { label: '1 A' } })
+  expect(await ui.find({ key: 'open-2' })).toMatchObject({ props: { label: '2 B' } })
+  expect(await ui.find({ key: 'open-3' })).toBeUndefined()
+  // `.hexframe/` is the folder's settings, never one of its Context tiles
+  await ui.press({ key: 'ring' })
+  expect(await ui.find({ key: 'open-1' })).toBeUndefined()
+  await ui.press({ key: 'ring' })
+
+  // A broken file leaves nothing out, and the pane says why
+  texts['/x/.hexframe/exclusions.yaml'] = 'exclude: dist\n'
+  await ui.press({ key: 'reload' })
+  expect(
+    await ui.find({
+      type: 'Text',
+      text: "Can't read .hexframe/exclusions.yaml, so nothing is left out: line 1: `exclude:` takes a list, as `[a, b]` or one `- a` per line",
+    }),
+  ).toBeDefined()
+  expect(await ui.find({ key: 'open-2' })).toMatchObject({ props: { label: '2 Dist' } })
+  expect(await ui.find({ key: 'open-4' })).toMatchObject({ props: { label: '4 c.lock' } })
+  await ui.unmount()
+})
+
+test('an exclusions.yaml reached through a symlink is not read', async ($, on) => {
+  vault(
+    on,
+    '/s',
+    { '/s': [dir('dist'), dir('.hexframe'), file('b.md')] },
+    { '/s/.hexframe/exclusions.yaml': 'exclude: [dist/]\n' },
+    { '/s/.hexframe/exclusions.yaml': '/elsewhere/exclusions.yaml' },
+  )
+  await $.command.run(hexframe(''))
+  const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
+  expect(
+    await ui.find({
+      type: 'Text',
+      text: "Can't read .hexframe/exclusions.yaml, so nothing is left out: it leads outside its folder",
+    }),
+  ).toBeDefined()
+  expect(await ui.find({ key: 'open-1' })).toMatchObject({ props: { label: '1 Dist' } })
+  await ui.unmount()
+})
+
+test('an overflowing ring shows as a list of its names, each opening as its hex would', async ($, on) => {
+  const leaves = ['a.md', 'b.md', 'c.md', 'd.md', 'e.md', 'f.md', 'g.md']
+  vault(
+    on,
+    '/o',
+    { '/o': [dir('1-a'), dir('1-b'), ...leaves.map(file)], '/o/1-b': [] },
+    { '/o/g.md': '---\ntitle: G\n---\n# Gee\n' },
+  )
+  await $.command.run(hexframe(''))
+  const ui = await $.ui.mount({ ...PANE, surface: 'terminal' })
+
+  // `1-b/` finds its number taken: the Branches are a list, not hexes
+  expect(await ui.find({ type: 'Text', text: '/o  ·  branches' })).toBeDefined()
+  expect(await ui.find({ key: 'frame' })).toBeUndefined()
+  expect(await ui.find({ key: 'open-1' })).toBeUndefined()
+  expect(await ui.find({ key: 'item-1' })).toMatchObject({ props: { label: '1-a/' } })
+  expect(await ui.find({ key: 'item-2' })).toMatchObject({ props: { label: '1-b/' } })
+  expect(
+    await ui.find({
+      type: 'Text',
+      text: '2 Branches, and no direction left for 1-b/. List what this folder leaves out in .hexframe/exclusions.yaml, or renumber, to draw them as hexes.',
+    }),
+  ).toBeDefined()
+
+  // Seven Leaves for six directions: a list too, where a Leaf opens its file
+  await ui.press({ key: 'ring' })
+  expect(await ui.find({ key: 'item-7' })).toMatchObject({ props: { label: 'g.md' } })
+  expect(
+    await ui.find({ type: 'Text', text: /^7 Leaves, and no direction left for g\.md\./ }),
+  ).toBeDefined()
+  await ui.press({ key: 'item-7' })
+  expect(await ui.find({ key: 'preview' })).toMatchObject({ props: { text: '# Gee' } })
+  await ui.press({ key: 'view' })
+  expect(await ui.find({ key: 'list' })).toBeDefined()
+
+  // And a folder in the list walks into it
+  await ui.press({ key: 'ring' })
+  await ui.press({ key: 'ring' })
+  await ui.press({ key: 'item-2' })
+  expect(await ui.find({ type: 'Text', text: '/o/1-b  ·  children' })).toBeDefined()
   await ui.unmount()
 })
