@@ -26,7 +26,7 @@ A Claude Code mod loads only the files under its own folder: an import that leav
 
 | File | Holds |
 |---|---|
-| `node.ts` | A folder read as a Frame: its Tile from its `CLAUDE.md`, and from its listing the rings of the Frame kinds it offers (Children, or Branches and Leaves, then Context), each with its overflow and, for Children, its clashes; titles from names, the frontmatter, the path arithmetic |
+| `node.ts` | A folder read as a Frame: its Tile from its `CLAUDE.md`, and from its listing the rings of the Frame kinds it offers (Children, or Branches and Leaves, then Context), each with its overflow and, for Children, its clashes; which file a Tile's body is read from, titles from names, the frontmatter, the path arithmetic |
 | `layout.ts` | Where each hex of a view sits, `depth` generations deep, for the Frame kind the view shows. Depth 1 is one Frame, seven hexes; deeper, an expanded member shows its own Frame inside its hex, at a third of its radius, where its ring touches that hex's sides. Each member's hex says what it holds (a Branch, a Leaf or a Context tile), so a renderer fills it |
 
 ## How a vault reads

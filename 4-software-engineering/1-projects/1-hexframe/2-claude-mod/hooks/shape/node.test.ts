@@ -1,5 +1,6 @@
 import { expect, test } from 'claude-code/testing'
 import {
+  bodySources,
   frontmatter,
   kindsOf,
   parent,
@@ -117,8 +118,22 @@ test('the frontmatter gives the title and a folded preview', () => {
 test('names read as titles', () => {
   expect(titleFromName('.claude')).toBe('.claude')
   expect(titleFromName('.3-game_rules')).toBe('Game rules')
-  expect(titleFromName('3-games.md')).toBe('Games')
-  expect(titleFromName('package.json')).toBe('package.json')
+  expect(titleFromName('3-games.md', 'leaf')).toBe('Games')
+  expect(titleFromName('package.json', 'leaf')).toBe('package.json')
+  expect(titleFromName('2-v1.2_notes')).toBe('V1.2 notes')
+})
+
+test("a folder's Tile reads its body file, a Leaf's itself when it is Markdown", () => {
+  expect(bodySources('/w/3-games', 'branch')).toEqual([
+    '/w/3-games/CLAUDE.md',
+    '/w/3-games/-CLAUDE.md',
+  ])
+  expect(bodySources('/w/.claude', 'context')).toEqual([
+    '/w/.claude/CLAUDE.md',
+    '/w/.claude/-CLAUDE.md',
+  ])
+  expect(bodySources('/w/3-games.md', 'leaf')).toEqual(['/w/3-games.md'])
+  expect(bodySources('/w/package.json', 'leaf')).toEqual([])
 })
 
 test('paths resolve without Node', () => {

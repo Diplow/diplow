@@ -8,7 +8,7 @@ import { codeOf, markdownOf } from './markdown.js'
 import { layoutView } from './shape/layout.js'
 import {
   basename,
-  bodyFiles,
+  bodySources,
   directions,
   frameKinds,
   isMarkdown,
@@ -154,6 +154,7 @@ export function register(on: On) {
             Text({
               color: 'yellow',
               dimColor: true,
+              wrap: 'truncate-end',
               children: [
                 clashes
                   .map(
@@ -246,13 +247,15 @@ async function loadRing($: EngineInterface, path: string, ring: Ring<Slot>): Pro
   return { ...ring, members }
 }
 
-/** A member's Tile: a folder's from its CLAUDE.md, a Markdown Leaf's from its own frontmatter. */
+/** A member's Tile, from the body the shape says it is read from. */
 async function loadTile($: EngineInterface, folderPath: string, slot: Slot): Promise<Tile> {
   const path = join(folderPath, slot.name)
-  if (slot.kind !== 'leaf') return tileOf(path, (await readBody($, path))?.text)
-  if (!isMarkdown(slot.name)) return tileOf(path, undefined)
-  // One unreadable file names itself; it doesn't keep the folder from showing.
-  return tileOf(path, await $.fs.read(path).catch(() => undefined))
+  const body = await readFirst($, bodySources(path, slot.kind)).catch((error: unknown) => {
+    // One unreadable file names itself; it doesn't keep the folder from showing.
+    if (slot.kind === 'leaf') return undefined
+    throw error
+  })
+  return tileOf(path, body?.text, slot.kind)
 }
 
 /** The ring of `kind` in the shown Frame, empty when there is none. */
@@ -267,7 +270,7 @@ function cycle(shown: Frame | undefined, kind: FrameKind): FrameKind {
 }
 
 /** What the preview shows: a file as Markdown, or a note saying why there is nothing to render. */
-type Preview = { tile: Tile; label: string } & ({ markdown: string } | { note: string })
+type Preview = { label: string } & ({ markdown: string } | { note: string })
 
 /** A folder's body file, by name. */
 interface Body {
@@ -277,13 +280,13 @@ interface Body {
 
 function previewOfFolder(tile: Tile, body: Body | undefined): Preview {
   if (body === undefined) {
-    return { tile, label: tile.title, note: `${tile.title} has no CLAUDE.md to show.` }
+    return { label: tile.title, note: `${tile.title} has no CLAUDE.md to show.` }
   }
   const label = `${tile.title}'s ${body.name}`
   const markdown = markdownOf(body.text)
   return markdown === ''
-    ? { tile, label, note: `${label} holds only its frontmatter.` }
-    : { tile, label, markdown }
+    ? { label, note: `${label} holds only its frontmatter.` }
+    : { label, markdown }
 }
 
 /** A member's file: a folder's body file, or a Leaf itself, rendered when it is Markdown. */
@@ -294,20 +297,24 @@ async function previewOfMember($: EngineInterface, member: Member): Promise<Prev
   try {
     const text = await $.fs.read(tile.path)
     const markdown = isMarkdown(label) ? markdownOf(text) : codeOf(text)
-    if (markdown !== '') return { tile, label, markdown }
+    if (markdown !== '') return { label, markdown }
     const note = isMarkdown(label) ? `${label} holds only its frontmatter.` : `${label} is empty.`
-    return { tile, label, note }
+    return { label, note }
   } catch (error) {
     const reason = error instanceof Error ? error.message : String(error)
-    return { tile, label, note: `Can't read ${label}: ${reason}` }
+    return { label, note: `Can't read ${label}: ${reason}` }
   }
 }
 
 /** The folder's body file, `CLAUDE.md` or else `-CLAUDE.md`, or undefined when it has neither. */
-async function readBody($: EngineInterface, path: string): Promise<Body | undefined> {
-  for (const name of bodyFiles) {
-    const file = join(path, name)
-    if (await $.fs.exists(file)) return { name, text: await $.fs.read(file) }
+function readBody($: EngineInterface, path: string): Promise<Body | undefined> {
+  return readFirst($, bodySources(path, 'branch'))
+}
+
+/** The first of `files` that exists, or undefined when none does. */
+async function readFirst($: EngineInterface, files: readonly string[]): Promise<Body | undefined> {
+  for (const file of files) {
+    if (await $.fs.exists(file)) return { name: basename(file), text: await $.fs.read(file) }
   }
   return undefined
 }

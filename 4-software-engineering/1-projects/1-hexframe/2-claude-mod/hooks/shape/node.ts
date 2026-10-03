@@ -185,26 +185,36 @@ function fill(ring: Ring<Slot>, slots: readonly Slot[]) {
 }
 
 /**
- * The Tile a folder or a Leaf shows: the title and preview of its body's frontmatter (a folder's
- * `CLAUDE.md`, a Markdown Leaf's own text), or a title made from its name.
+ * The files a Tile's body is read from, the first one that exists: a folder's `CLAUDE.md` or
+ * `-CLAUDE.md`, a Markdown Leaf itself, and none for a Leaf that isn't Markdown. A folder shown in
+ * the center reads as a Branch.
  */
-export function tileOf(path: string, body: string | undefined): Tile {
+export function bodySources(path: string, kind: MemberKind): string[] {
+  if (kind !== 'leaf') return bodyFiles.map((name) => join(path, name))
+  return isMarkdown(basename(path)) ? [path] : []
+}
+
+/**
+ * The Tile a folder or a Leaf shows: the title and preview of its body's frontmatter, or a title
+ * made from its name.
+ */
+export function tileOf(path: string, body: string | undefined, kind: MemberKind = 'branch'): Tile {
   const fields = body === undefined ? {} : frontmatter(body)
   return {
     path,
-    title: fields.title ?? titleFromName(basename(path)),
+    title: fields.title ?? titleFromName(basename(path), kind),
     preview: fields.preview ?? '',
   }
 }
 
 /**
- * `4-software-engineering`, `.4-software-engineering` and `4-software-engineering.md` read
- * `Software engineering`; `.claude` and a file that isn't Markdown, as `package.json`, stay.
+ * `4-software-engineering`, `.4-software-engineering` and the Leaf `4-software-engineering.md`
+ * read `Software engineering`; `.claude` and a Leaf that isn't Markdown, as `package.json`, stay.
  */
-export function titleFromName(name: string): string {
+export function titleFromName(name: string, kind: MemberKind = 'branch'): string {
   if (name.startsWith('.') && !numberedContext.test(name)) return name
-  const stem = name.replace(/\.md$/i, '')
-  if (stem === name && name.includes('.') && !name.startsWith('.')) return name
+  if (kind === 'leaf' && !isMarkdown(name)) return name
+  const stem = kind === 'leaf' ? name.replace(/\.md$/i, '') : name
   const slug = stem.replace(/^\.?([1-6]-)?/, '').replace(/[-_]+/g, ' ')
   return slug === '' ? name : slug.charAt(0).toUpperCase() + slug.slice(1)
 }
