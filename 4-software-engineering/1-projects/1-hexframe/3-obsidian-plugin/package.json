@@ -1,0 +1,24 @@
+{
+  "name": "@hexframe/obsidian-plugin",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/build.ts --watch",
+    "build": "node scripts/build.ts",
+    "check": "tsc && eslint . && prettier --check .",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@eslint-community/eslint-plugin-eslint-comments": "^4.8.1",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.3",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.11.0",
+    "eslint-plugin-sonarjs": "^4.2.1",
+    "obsidian": "1.13.1",
+    "prettier": "^3.9.9",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.70.1",
+    "vitest": "^5.0.2"
+  }
+}

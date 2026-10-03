@@ -4,8 +4,9 @@ parent: 4-software-engineering/1-projects/1-hexframe
 owner: diplo
 preview: >-
   Hexframe, the app where a user lays out a system as a hierarchy of tiles so AI
-  can work along their intent. A pnpm monorepo, each package a numbered child;
-  the first is 1-app. STACK.md holds the stack, the rules and the domains' language.
+  can work along their intent. A pnpm monorepo, each package a numbered child:
+  1-app, claude-mod, the Obsidian plugin. STACK.md holds the stack, the rules
+  and the domains' language.
 ---
 # hexframe
 
@@ -17,6 +18,7 @@ It is a pnpm monorepo; each package is a numbered child of this node (`1-<name>/
 |---|---|---|
 | 1 | [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE\|app]] | `@hexframe/app`, the TanStack Start app holding client and server, deployed to Vercel |
 | 2 | [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/CLAUDE\|claude-mod]] | `@hexframe/claude-mod`, a Claude Code mod: `/hexframe` shows a folder of this vault as a hexframe, in the terminal or the Desktop app |
+| 3 | [[4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/CLAUDE\|obsidian-plugin]] | `@hexframe/obsidian-plugin`, the Obsidian plugin `hexframe`: it will show a folder of this vault as a hexframe inside Obsidian |
 
 | Inner child | What it holds |
 |---|---|
