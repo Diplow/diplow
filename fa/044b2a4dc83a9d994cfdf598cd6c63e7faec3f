@@ -1,0 +1,39 @@
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/list.ts
+  s_8004fe4b534599::t_6785d1053fecea 47-48
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-obsidian-plugin/decisions.md
+  s_8004fe4b534599::t_87de4351021440 85-97
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/draw.test.ts
+  s_8004fe4b534599::t_6785d1053fecea 61,93
+.obsidian/plugins/hexframe/styles.css
+  s_8004fe4b534599::t_694149a5aa5af8 107-221
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/layout.ts
+  s_8004fe4b534599::t_a815ab248eccc5 88
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/CLAUDE.md
+  s_8004fe4b534599::t_87de4351021440 22-23,109,113-114,116
+  s_8004fe4b534599::t_2bc09e31a7738d 28,108
+.obsidian/plugins/hexframe/main.js
+  s_8004fe4b534599::t_694149a5aa5af8 1
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE.md
+  s_8004fe4b534599::t_87de4351021440 32
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/draw.ts
+  s_8004fe4b534599::t_6785d1053fecea 19,394-395
+  s_8004fe4b534599::t_ac7ef0bb5ce067 281,296,305
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/styles.css
+  s_8004fe4b534599::t_6785d1053fecea 125-129
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fa044b2a4dc83a9d994cfdf598cd6c63e7faec3f",
+  "prompts": {},
+  "sessions": {
+    "s_8004fe4b534599": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d6be5684-daf1-47f2-ae41-5225e4178a75",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
