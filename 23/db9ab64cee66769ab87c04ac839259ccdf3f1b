@@ -1,0 +1,29 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/__root.tsx
+  s_ed89c634a0e6b3::t_67c72bc11106e0 4
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-mcp-server/decisions.md
+  s_ed89c634a0e6b3::t_67c72bc11106e0 39
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/iam/guard.test.ts
+  s_ed89c634a0e6b3::t_67c72bc11106e0 10,94-98
+  s_ed89c634a0e6b3::t_43d13bdef65b0e 99-100
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_ed89c634a0e6b3::t_696f58155855b7 38,48
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/iam/guard.ts
+  s_ed89c634a0e6b3::t_67c72bc11106e0 47-53
+  s_ed89c634a0e6b3::t_878cc4b6cde1fc 46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "23db9ab64cee66769ab87c04ac839259ccdf3f1b",
+  "prompts": {},
+  "sessions": {
+    "s_ed89c634a0e6b3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bfdaae8a-87ed-4a58-8630-209d0ea6e784",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
