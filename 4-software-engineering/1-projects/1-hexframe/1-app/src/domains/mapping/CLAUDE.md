@@ -21,7 +21,8 @@ The language, as [[4-software-engineering/1-projects/1-hexframe/STACK|STACK]] fi
 - **Context**: what a Tile *is*, where its Children say what it does. Up to six Context slots, −1 to −6, in the same Directions; each holds a Tile of its own or a Reference. A codebase's Children are its frontend, backend and CI; its Context is the principles it follows.
 - **Frame**: a Tile together with its Children.
 - **Reference**: a link from a Context slot to another Tile, by id, so it survives a move. A Reference to a deleted Tile shows as broken; it never blocks the delete.
-- **Operations**: create, edit, move (a Tile and everything below it), delete.
+- **Operations**: create, edit, move (a Tile and everything below it), swap (two Tiles trade places, each with everything below it), delete.
+- **Help**: a System shipped with hexframe, which no Account owns: every Account reads it, none writes it.
 
 What a user does *to look* at a System is not Mapping: centering on a Tile, expanding and collapsing a Frame, showing the center Tile's Context. It is view state, owned by the URL, so a link shows exactly what its sender saw ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/CLAUDE|hex]]).
 

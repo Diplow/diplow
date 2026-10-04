@@ -16,7 +16,8 @@ The language, as [[4-software-engineering/1-projects/1-hexframe/STACK|STACK]] fi
 
 - **Account**: someone known to hexframe. Its name is not IAM's to decide: the user is their Root tile in Mapping, and the name Better Auth keeps for emails is copied from that Tile's Title, never the other way. Until Mapping does, it is empty.
 - **Session**: an Account's proven presence, for a while, on one device.
-- **Key**: a credential an Account issues to a program (an MCP client, a script) and can revoke. Whether a Key can be limited to one Tile or to reading, and how OAuth clients fit beside it, is settled when the MCP server is built.
+- **Key**: a credential an Account issues to a program (an MCP client, a script) and can revoke. It carries a name the Account gives it, acts with the Account's full power, and never expires; its secret is shown once, at its creation, and never again. Revoking it removes it. Limiting a Key to one Tile or to reading comes with sharing, and OAuth clients come beside Keys later, without replacing them.
+- **Signed in**: a request whose Account is proven, by a Session or by a Key. What acts for an Account asks only that, never which proof it was.
 - **Entitlement**: something an Account may do. It is derived, when asked, from what the Account pays for, so it never drifts from Stripe.
 
 Better Auth and its Stripe plugin are repositories below IAM ([[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE|auth]]); the plugin will own the subscription tables and the Stripe webhook. No domain says "billing". AI usage is what a paid Entitlement buys; the structure itself stays free.

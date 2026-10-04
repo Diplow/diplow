@@ -20,5 +20,5 @@ The layer under [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains
 
 ## Rules
 
-- **Nothing above imports an SDK.** A domain uses the service a repository provides; a new SDK gets its line in `dependency-cruiser.config.ts` and its folder here.
+- **Nothing above imports an SDK.** A domain uses the service a repository provides; a new SDK gets its line in `dependency-cruiser.config.ts` and its folder here. The exception is an SDK that serves requests rather than reaching out, as TanStack Start does: the MCP server's SDK belongs to the API layer's MCP folder alone ([[4-software-engineering/1-projects/1-hexframe/STACK|STACK]]).
 - **A repository never imports a domain**, nor the API layer: an import only points down. One repository may use another's service, as `auth/` uses the database's.
