@@ -49,7 +49,7 @@ export function followed(
     : { folder, lastPairedNote: opened.path }
 }
 
-/** The folder `path` is the note of, relative to the vault, `''` its root; undefined for any other file. */
+/** The folder `path` is the note of, relative to the vault, `''` its root; undefined otherwise. */
 function folderOf(path: string): string | undefined {
   const isNote = (bodyFiles as readonly string[]).includes(basename(path))
   return isNote ? vaultPath(parent(path)) : undefined
