@@ -14,10 +14,10 @@ preview: >-
 
 ## Use it
 
-Mods need Claude Code 2.1.287 or later, and are in early access. From the repo root:
+Mods need Claude Code 2.1.287 or later, and are in early access. Every session in this repo loads it: [[.skills/CLAUDE|`.skills/sync`]] links it as `.claude/skills/hexframe`, where Claude Code loads it as a `--plugin-dir`, and watches it, so an edit reloads it. Outside the repo, load it by hand:
 
 ```bash
-claude --plugin-dir 4-software-engineering/1-projects/1-hexframe/2-claude-mod
+claude --plugin-dir <path to>/2-claude-mod
 ```
 
 Then `/hexframe` shows the session's folder, and `/hexframe <folder>` another one, relative to the session's. In the pane:
