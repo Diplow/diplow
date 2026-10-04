@@ -34,7 +34,7 @@ import {
   centerToShow,
   messageOf,
   readFrame,
-  readKindsOf,
+  readBranchKinds,
   readOpened,
   refusal,
   unopenable,
@@ -199,11 +199,16 @@ export class HexframeView extends TextFileView {
     this.scope = scope
   }
 
-  /** Whether the user is typing in the view, its title being renamed: its keys are then text. */
+  /**
+   * Whether the user is typing, in the view's title or anywhere else, a popover's editor included,
+   * while the view stays the active one: the keys are then text. A modal is left out: Obsidian
+   * runs no hotkey in one, and the command palette, the one way to run an item from it, keeps the
+   * focus while it lists them.
+   */
   private isTyping(): boolean {
     const active = this.containerEl.ownerDocument.activeElement
     const editable = 'input, textarea, [contenteditable]:not([contenteditable="false"])'
-    return active !== null && this.containerEl.contains(active) && active.matches(editable)
+    return active?.matches(editable) === true && active.closest('.modal-container') === null
   }
 
   /** Moves the focus onto the hex holding the Tile at `path`, outlined; nowhere when undefined. */
@@ -222,16 +227,10 @@ export class HexframeView extends TextFileView {
     const scene = this.drawn?.scene
     const hex = scene && focusedHex(this.focus, scene.hexes)
     if (scene === undefined || hex === undefined || this.isTyping()) return false
-    const plan = planOf(item, this.targetOf(hex, scene))
+    const plan = planOf(item, targetOf(hex, scene))
     if (plan === undefined) return false
     if (!checking) this.carryOut(plan)
     return true
-  }
-
-  /** What an item acts on at `hex`, the expansions taken from the file as the drawing shows them. */
-  private targetOf(hex: TileHex, { view, offered, branchKinds }: Scene): Target {
-    const shown = shownExpansions(this.state.expansions, offered)
-    return { hex, view, shown, offered, branchKinds }
   }
 
   /**
@@ -244,7 +243,7 @@ export class HexframeView extends TextFileView {
     if (scene === undefined) return
     const { path } = hex.tile
     this.focusOn(path)
-    const target = this.targetOf(hex, scene)
+    const target = targetOf(hex, scene)
     const applying = items.filter(({ id }) => planOf(id, target) !== undefined)
     if (applying.length === 0) return
     // Obsidian's native menus show no key beside a title, so this one is drawn by Obsidian itself.
@@ -280,7 +279,9 @@ export class HexframeView extends TextFileView {
    * the file.
    */
   private commit(next: ViewState) {
-    if (next.center !== this.state.center) this.drawn = undefined
+    // What is drawn no longer matches the state: the items and the keys wait for the next drawing.
+    const kept = next.center === this.state.center ? this.drawn?.folders : undefined
+    this.drawn = kept && { folders: kept }
     this.text = withChanges(this.text, this.state, next)
     ;({ state: this.state, problems: this.problems } = decodeViewState(this.text))
     this.requestSave()
@@ -318,17 +319,13 @@ export class HexframeView extends TextFileView {
         }
       }
       // What "Expand as" may open each Branch into: an opened one's kinds from its Frame.
-      const closed = outerBranches(frame, shown).filter(({ direction }) => !opened[direction])
-      const branchKinds: Drawing['branchKinds'] = await readKindsOf(disk, closed)
-      for (const direction of directions) {
-        const branch = opened[direction]
-        if (branch) branchKinds[direction] = kindsOf(branch.rings)
-      }
+      const branchKinds = await readBranchKinds(disk, outerBranches(frame, shown), opened)
       if (drawingId !== this.drawings) return
       const view = viewOf(frame, shown, opened)
       const folders = [folder, ...Object.values(opened).map(({ tile }) => vaultPath(tile.path))]
       const hexes = focusable(layoutView(view))
-      this.drawn = { folders, scene: { view, hexes, offered: kindsOf(frame.rings), branchKinds } }
+      const offered = kindsOf(frame.rings)
+      this.drawn = { folders, scene: { view, hexes, shown, offered, branchKinds } }
       this.outline = drawView(this.contentEl, view, [...notes, ...warnings, ...ringNotes(view)], {
         click: (hex, event) => {
           this.focusOn(hex.tile.path)
@@ -444,6 +441,11 @@ export class HexframeView extends TextFileView {
     this.paired = leaf
     return leaf
   }
+}
+
+/** What an item acts on at `hex`, as the last drawing drew it. */
+function targetOf(hex: TileHex, { view, shown, offered, branchKinds }: Scene): Target {
+  return { hex, view, shown, offered, branchKinds }
 }
 
 /** What the last drawing drew, as the items read it, and the hexes the focus moves among. */

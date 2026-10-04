@@ -9,6 +9,8 @@ import type {
   Rings,
 } from '../../2-claude-mod/hooks/shape/node.ts'
 import type { Expansions } from './expansions.ts'
+import { outerBranchOf } from './click.ts'
+import { outerBranches } from './expansions.ts'
 import { focusable } from './focus.ts'
 import { commandsOf, items, planOf, type ItemId, type Target } from './menu.ts'
 
@@ -133,6 +135,16 @@ describe('the items that apply to a hex', () => {
   it('on a Leaf: preview a note, hand anything else to the default app', () => {
     expect(listed('4-se/3-c.md')).toEqual(['preview'])
     expect(listed('4-se/4-d.pdf')).toEqual(['open-in-default-app'])
+  })
+})
+
+describe('the Branches around the center', () => {
+  it('are the same hexes the menu opens and the Branches whose kinds the view reads', () => {
+    const fromHexes = hexes.flatMap((hex) => {
+      const direction = outerBranchOf(hex)
+      return direction === undefined ? [] : [{ direction, path: hex.tile.path }]
+    })
+    expect(fromHexes).toEqual(outerBranches(frame, shown))
   })
 })
 

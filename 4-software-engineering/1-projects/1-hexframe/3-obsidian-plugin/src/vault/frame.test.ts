@@ -6,7 +6,7 @@ import {
   inFolder,
   readFrame,
   readKinds,
-  readKindsOf,
+  readBranchKinds,
   readOpened,
   refusal,
   unopenable,
@@ -216,15 +216,30 @@ describe('readKinds', () => {
   })
 })
 
-describe('readKindsOf', () => {
-  it('gives the kinds of each folder by direction, leaving out one that offers none', async () => {
-    const disk = diskOf({ '1-a': {}, '2-b': {}, '2-b/.c': {}, out: { link: '/elsewhere' } })
-    const read = await readKindsOf(disk, [
-      { direction: 1, path: '/1-a' },
-      { direction: 2, path: '2-b' },
-      { direction: 3, path: 'out' },
-    ])
-    expect(read).toEqual({ 1: ['children', 'context'], 2: ['children', 'context'] })
+const ring = { overflowing: false as const, members: {} }
+
+describe('readBranchKinds', () => {
+  it("gives each Branch's kinds by direction, an opened one's from its Frame", async () => {
+    const crowded = Object.fromEntries('abcdefg'.split('').map((name) => [`2-b/${name}`, {}]))
+    const disk = diskOf({ '1-a': {}, '2-b': {}, ...crowded, out: { link: '/elsewhere' } })
+    const opened = {
+      3: { tile: { path: '3-c', title: 'c', preview: '' }, rings: { leaves: ring } },
+    }
+    const read = await readBranchKinds(
+      disk,
+      [
+        { direction: 1, path: '/1-a' },
+        { direction: 2, path: '2-b' },
+        { direction: 3, path: '3-c' },
+        { direction: 4, path: 'out' },
+      ],
+      opened,
+    )
+    expect(read).toEqual({
+      1: ['children', 'context'],
+      2: ['branches', 'leaves', 'context'],
+      3: ['leaves'],
+    })
   })
 })
 

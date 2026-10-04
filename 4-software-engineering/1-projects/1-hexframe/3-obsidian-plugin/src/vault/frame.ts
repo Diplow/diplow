@@ -103,21 +103,26 @@ export async function readKinds(disk: Disk, folder: string): Promise<FrameKind[]
 }
 
 /**
- * The Frame kinds each of `folders` offers, by direction, read side by side, as `readKinds` reads
- * them; a folder that offers none is left out.
+ * The Frame kinds each of `branches` offers, by direction, what "Expand as" may open it into: an
+ * opened one's from its Frame, in `opened`, a closed one's from its listing, read side by side as
+ * `readKinds` reads it. A Branch that offers none is left out.
  */
-export async function readKindsOf(
+export async function readBranchKinds(
   disk: Disk,
-  folders: readonly { direction: Direction; path: string }[],
+  branches: readonly { direction: Direction; path: string }[],
+  opened: Partial<Record<Direction, Frame>>,
 ): Promise<Partial<Record<Direction, FrameKind[]>>> {
   const read = await Promise.all(
-    folders.map(async ({ direction, path }) => ({
-      direction,
-      kinds: await readKinds(disk, vaultPath(path)),
-    })),
+    branches.map(async ({ direction, path }) => {
+      const frame = opened[direction]
+      const kinds = frame ? kindsOf(frame.rings) : await readKinds(disk, vaultPath(path))
+      return { direction, kinds }
+    }),
   )
   const kinds: Partial<Record<Direction, FrameKind[]>> = {}
-  for (const { direction, kinds: offered } of read) if (offered) kinds[direction] = offered
+  for (const { direction, kinds: offered } of read) {
+    if (offered !== undefined && offered.length > 0) kinds[direction] = offered
+  }
   return kinds
 }
 

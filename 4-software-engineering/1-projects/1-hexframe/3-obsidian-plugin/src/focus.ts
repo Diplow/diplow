@@ -48,9 +48,9 @@ export function stepFocus(
 }
 
 /**
- * The focus a digit moves to: the hex in `direction` of the ring the focused hex sits in, or, for
- * the center, of the ring around it, the one inside when it has none. Undefined when that
- * direction holds no Tile.
+ * The focus a digit moves to: from the center, the hex in `direction` of the ring around it, or
+ * inside it when it has none; from any other hex, of the ring it sits in, an opened Branch being
+ * its own ring's neighbor. Undefined when that direction holds no Tile.
  */
 export function focusToward(
   focus: string | undefined,
@@ -58,35 +58,33 @@ export function focusToward(
   hexes: readonly TileHex[],
   direction: Direction,
 ): string | undefined {
-  const from = focusedHex(focus, hexes)?.tile.path
+  const from = focusedHex(focus, hexes)
   if (from === undefined) return undefined
-  const rings = ringsOf(view)
-  const ring =
-    rings.find(({ members }) => Object.values(members).includes(from)) ??
-    rings.find(({ hub }) => hub === from)
-  return ring?.members[direction]
+  const { around, inside, opened } = ringsOf(view)
+  if (from.kind === 'center') return (around ?? inside)?.members[direction]
+  const sitsIn = [around, inside, ...opened].find((ring) =>
+    Object.values(ring?.members ?? {}).includes(from.tile.path),
+  )
+  return sitsIn?.members[direction]
 }
 
-/** A ring the view draws: the path of the Tile it surrounds, and its members' by direction. */
+/** A ring the view draws: its members' paths by direction. */
 interface DrawnRing {
-  hub: string
   members: Partial<Record<Direction, string>>
 }
 
-/**
- * The rings `view` draws, the one around the center first, then the opened Branches', then the one
- * inside the center, so a Branch's own ring comes after the ring it sits in.
- */
-function ringsOf(view: FrameView | CollapsedView): DrawnRing[] {
-  const rings: DrawnRing[] = []
-  if ('frameKind' in view) {
-    rings.push(ringOf(view.frame, view.frameKind))
-    for (const branch of Object.values(view.expanded ?? {})) {
-      rings.push(ringOf(branch.frame, branch.frameKind))
-    }
-  }
-  if (view.inner !== undefined) rings.push(ringOf(view.frame, view.inner))
-  return rings
+/** The rings `view` draws: around the center, inside it, and in each opened Branch. */
+function ringsOf(view: FrameView | CollapsedView): {
+  around?: DrawnRing
+  inside?: DrawnRing
+  opened: DrawnRing[]
+} {
+  const inside = view.inner === undefined ? undefined : ringOf(view.frame, view.inner)
+  if (!('frameKind' in view)) return { inside, opened: [] }
+  const opened = Object.values(view.expanded ?? {}).map((branch) =>
+    ringOf(branch.frame, branch.frameKind),
+  )
+  return { around: ringOf(view.frame, view.frameKind), inside, opened }
 }
 
 function ringOf(frame: Frame, kind: FrameKind): DrawnRing {
@@ -96,5 +94,5 @@ function ringOf(frame: Frame, kind: FrameKind): DrawnRing {
     const member = members[direction]
     if (member !== undefined) paths[direction] = member.tile.path
   }
-  return { hub: frame.tile.path, members: paths }
+  return { members: paths }
 }

@@ -20,17 +20,17 @@ import {
 /** What the view drew, which the items read. */
 export interface Drawing {
   view: FrameView | CollapsedView
+  /** The expansions the view shows, which an item's move starts from. */
+  shown: Expansions
   /** The Frame kinds the center offers. */
   offered: readonly FrameKind[]
   /** The Frame kinds each Branch around the center offers, by direction, where they were read. */
   branchKinds: Partial<Record<Direction, readonly FrameKind[]>>
 }
 
-/** The hex an item acts on, what the view drew around it, and the expansions it shows. */
+/** The hex an item acts on, and what the view drew around it. */
 export interface Target extends Drawing {
   hex: TileHex
-  /** The expansions the view shows, which an item's move starts from. */
-  shown: Expansions
 }
 
 /** What an item asks of the view: what a click would, or new expansions to write and draw. */
