@@ -84,24 +84,35 @@ export interface Count {
 }
 
 /**
- * Each kind's count once `items` leave names out, and whether the Branches and the Leaves, six or
- * fewer in all, then draw together as Children, whose ring then counts for both.
+ * Each kind's count once `items` leave names out, and the Children ring's when the Branches and the
+ * Leaves, six or fewer in all, then draw together as Children, whose ring counts for both.
  */
 export function countsOf(
   entries: readonly Entry[],
   items: readonly string[],
-): Record<MemberKind, Count> & { children: boolean } {
+): Record<MemberKind, Count> & { children: Count | undefined } {
   const rings = sortEntries(entries, items)
   const all = candidatesOf(entries)
   const shown = (kind: MemberKind) =>
     all[kind].filter(({ name }) => !isExcluded(name, kind !== 'leaf', items)).length
   const overflows = (ring: Ring<unknown> | undefined) => ring?.overflowing === true
+  const together = {
+    shown: shown('branch') + shown('leaf'),
+    overflowing: overflows(rings.children),
+  }
   return {
     branch: { shown: shown('branch'), overflowing: overflows(rings.children ?? rings.branches) },
     leaf: { shown: shown('leaf'), overflowing: overflows(rings.children ?? rings.leaves) },
     context: { shown: shown('context'), overflowing: overflows(rings.context) },
-    children: rings.children !== undefined,
+    children: rings.children === undefined ? undefined : together,
   }
+}
+
+/** What the panel says of the Branches and the Leaves together, from the Children ring's count. */
+export function togetherLine(children: Count | undefined): string {
+  return children === undefined
+    ? 'Branches and Leaves are more than six in all, so each kind draws in a ring of its own.'
+    : `Branches and Leaves draw together as Children: ${countLine(children)}.`
 }
 
 /** What a count says beside its kind: how many of six, and why its ring shows as a list. */
@@ -136,8 +147,10 @@ export function isEmpty({ add, remove }: Change): boolean {
  * `text`, a folder's `exclusions.yaml` (undefined when it has none), with `change` made: each item
  * removed has its line dropped, each one added a line after the last item, in the list's own
  * indent. Everything else stays as written, comments, the globs written by hand and their order
- * included; a flow list becomes a block list, so its items take a line each. A change of nothing
- * gives `text` back as it is. A file that can't be parsed throws, so it is never written over.
+ * included, and its line ending; a flow list becomes a block list, so its items take a line each.
+ * A change of nothing gives `text` back as it is. A file that can't be parsed throws, so it is never
+ * written over, and so does a change that wouldn't read back as made, such as a name holding a line
+ * break, which the file can't hold.
  */
 export function withChange(text: string | undefined, change: Change): string {
   const before = text ?? ''
@@ -146,6 +159,10 @@ export function withChange(text: string | undefined, change: Change): string {
   const add = change.add.filter(
     (item, at) => !items.includes(item) && change.add.indexOf(item) === at,
   )
+  const unwritable = add.find(breaksLines)
+  if (unwritable !== undefined) {
+    throw new Error(`${JSON.stringify(unwritable)} holds a line break or a control character`)
+  }
   const { kept, indent, listEnds } = withRemoved(linesOf(before), change.remove)
   // A file with no key yet, empty or comments only, gets one at its end.
   let at = listEnds
@@ -154,7 +171,13 @@ export function withChange(text: string | undefined, change: Change): string {
     at = kept.push('exclude:')
   }
   kept.splice(at, 0, ...add.map((item) => `${indent}- ${yamlOf(item)}`))
-  return `${kept.join('\n').replace(/\n+$/, '')}\n`
+  const eol = before.includes('\r\n') ? '\r\n' : '\n'
+  const written = `${kept.join(eol).replace(/(\r?\n)+$/, '')}${eol}`
+  const wanted = [...items.filter((item) => !change.remove.includes(item)), ...add]
+  if (JSON.stringify(parseExclusions(written)) !== JSON.stringify(wanted)) {
+    throw new Error('the change would not read back as made')
+  }
+  return written
 }
 
 /**
@@ -175,11 +198,16 @@ function withRemoved(lines: readonly string[], remove: readonly string[]) {
     } else {
       // The key, `exclude:`, with a flow list or nothing after it.
       const flow = parseExclusions(line).filter((item) => !remove.includes(item))
-      kept.push(flow.length === 0 && !line.includes('[') ? line : 'exclude:')
+      kept.push(/^[^:]*:\s*\[/.test(line) ? 'exclude:' : line)
       listEnds = kept.push(...flow.map((item) => `${indent}- ${yamlOf(item)}`))
     }
   }
   return { kept, indent, listEnds }
+}
+
+/** Whether `item` holds a line break or another control character, which no list line can hold. */
+function breaksLines(item: string): boolean {
+  return /[\p{Cc}\u2028\u2029]/u.test(item)
 }
 
 /** The item a list line holds, read by the shape's own parser. */

@@ -10,6 +10,7 @@ import {
   handWritten,
   leavingOf,
   toggled,
+  togetherLine,
   withChange,
 } from './exclusions.ts'
 
@@ -84,14 +85,14 @@ describe('countsOf', () => {
       branch: { shown: 2, overflowing: false },
       leaf: { shown: 7, overflowing: true },
       context: { shown: 1, overflowing: false },
-      children: false,
+      children: undefined,
     })
   })
 
   it('follows the ticks: Branches and Leaves six or fewer draw together as Children', () => {
     const counts = countsOf(app, ['*.json', 'drizzle.config.ts'])
     expect(counts.leaf).toEqual({ shown: 3, overflowing: false })
-    expect(counts.children).toBe(true)
+    expect(counts.children).toEqual({ shown: 5, overflowing: false })
   })
 
   it('says a ring overflows when two names claim one number, under six', () => {
@@ -107,6 +108,17 @@ describe('countLine', () => {
     )
     expect(countLine({ shown: 2, overflowing: true })).toBe(
       '2 of 6, names share a number: they show as a list',
+    )
+  })
+})
+
+describe('togetherLine', () => {
+  it('says whether Branches and Leaves draw together as Children, and how many of six', () => {
+    expect(togetherLine({ shown: 5, overflowing: false })).toBe(
+      'Branches and Leaves draw together as Children: 5 of 6.',
+    )
+    expect(togetherLine(undefined)).toBe(
+      'Branches and Leaves are more than six in all, so each kind draws in a ring of its own.',
     )
   })
 })
@@ -145,6 +157,19 @@ describe('withChange', () => {
       '# nothing yet\nexclude:\n  - a\n',
     )
     expect(withChange('exclude:\n  - a\n', { add: ['a'], remove: [] })).toBe('exclude:\n  - a\n')
+  })
+
+  it("keeps the file's line ending, and a comment on the key that holds a bracket", () => {
+    expect(withChange('# a\r\nexclude:\r\n  - b\r\n', { add: ['c'], remove: [] })).toBe(
+      '# a\r\nexclude:\r\n  - b\r\n  - c\r\n',
+    )
+    expect(withChange('exclude: # see [x]\n  - b\n', { add: [], remove: ['b'] })).toBe(
+      'exclude: # see [x]\n',
+    )
+  })
+
+  it('throws on a name that holds a line break, which the file cannot hold', () => {
+    expect(() => withChange(undefined, { add: ['a\nb'], remove: [] })).toThrow(/line break/)
   })
 
   it('gives the file back as it is for a change of nothing', () => {

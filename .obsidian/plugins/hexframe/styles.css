@@ -262,6 +262,11 @@
   inset-inline-end: var(--size-4-2);
 }
 
+/* A list filling the view keeps its head's buttons clear of the gear, however narrow the pane. */
+.hexframe-list-head {
+  padding-inline-end: var(--size-4-12);
+}
+
 /* The settings panel: each kind's candidates, a checkbox each, under the kind's count against six. */
 .hexframe-settings-kind {
   display: flex;

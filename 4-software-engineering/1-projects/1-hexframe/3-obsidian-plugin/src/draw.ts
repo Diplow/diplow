@@ -24,6 +24,7 @@ import {
   type ListedHex,
 } from './list.ts'
 import { gap, inset, perLine, scale, textOf, wrap, type TextStyle } from './text.ts'
+import { vaultPath } from './vault/frame.ts'
 
 /**
  * What the view does on a hex that holds a Tile, or a name of a list: when it is clicked, `event`
@@ -97,7 +98,7 @@ export function drawFullList(
   // The six are chosen by leaving the rest out, in the settings of the folder whose ring this is.
   const choose = head.createEl('button', { text: 'Choose six' })
   choose.addEventListener('click', () => {
-    onHex.settings(holder.tile.path)
+    onHex.settings(vaultPath(holder.tile.path))
   })
   const names = list.createEl('ul', { cls: 'hexframe-list-items' })
   for (const item of itemsOf(holder)) {

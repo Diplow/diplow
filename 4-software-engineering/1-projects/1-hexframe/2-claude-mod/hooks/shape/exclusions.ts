@@ -3,7 +3,7 @@
 import { linesOf, type FileRead, type Slot } from './node.js'
 
 /** A folder's settings folder. It is always left out, so it never takes a Context slot. */
-const settingsFolder = '.hexframe'
+export const settingsFolder = '.hexframe'
 
 /** The names every folder leaves out, whatever its `exclusions.yaml` says. */
 const builtInExclusions: readonly string[] = ['.git', 'node_modules', settingsFolder]

@@ -19,14 +19,35 @@ import {
   handWritten,
   leavingOf,
   toggled,
+  togetherLine,
   type Change,
 } from './exclusions.ts'
 import type { Excluded } from './menu.ts'
 import { diskOf, writerOf } from './vault/disk.ts'
-import { inFolder, messageOf, readSettings, saveSettings, type Settings } from './vault/frame.ts'
+import {
+  inFolder,
+  messageOf,
+  readSettings,
+  saveSettings,
+  type Disk,
+  type Settings,
+} from './vault/frame.ts'
 
 /** The panel's name, on its button, its title and its command. */
 const title = 'Hexframe settings'
+
+/**
+ * The saves still running, one after the other: each reads the file just before writing it, so a
+ * second `E` pressed while the first writes waits for it rather than writing over its line.
+ */
+let saving: Promise<unknown> = Promise.resolve()
+
+/** `change` saved in `folder`'s `exclusions.yaml` once every earlier save has ended. */
+function queuedSave(app: App, disk: Disk, folder: string, change: Change) {
+  const saved = saving.then(() => saveSettings(disk, writerOf(app), folder, change))
+  saving = saved.catch(() => undefined)
+  return saved
+}
 
 /**
  * Opens the settings of `folder`, once the vault lets the panel write there, and runs `saved` once
@@ -41,7 +62,7 @@ export async function openSettings(app: App, folder: string, saved: () => void) 
     return
   }
   const save = async (change: Change) => {
-    const result = await saveSettings(disk, writerOf(app), folder, change)
+    const result = await queuedSave(app, disk, folder, change)
     if ('refused' in result) {
       new Notice(`Hexframe can't save ${inFolder(folder, exclusionsFile)}, as ${result.refused}.`)
       return false
@@ -60,7 +81,7 @@ export async function excludeFrom(app: App, { folder, slot }: Excluded, saved: (
   const disk = diskOf(app)
   if (disk === undefined) return
   const pattern = patternOf(slot)
-  const result = await saveSettings(disk, writerOf(app), folder, { add: [pattern], remove: [] })
+  const result = await queuedSave(app, disk, folder, { add: [pattern], remove: [] })
   if ('refused' in result) {
     new Notice(`Hexframe can't leave ${pattern} out, as ${result.refused}.`)
     return
@@ -166,15 +187,7 @@ class SettingsModal extends Modal {
         element.setText(countLine(now[kind]))
         element.toggleClass('is-over', now[kind].overflowing)
       }
-      const shown = {
-        shown: now.branch.shown + now.leaf.shown,
-        overflowing: now.branch.overflowing,
-      }
-      together.setText(
-        now.children
-          ? `Branches and Leaves draw together as Children: ${countLine(shown)}.`
-          : 'Branches and Leaves are more than six in all, so each kind draws in a ring of its own.',
-      )
+      together.setText(togetherLine(now.children))
     }
     this.recount()
   }

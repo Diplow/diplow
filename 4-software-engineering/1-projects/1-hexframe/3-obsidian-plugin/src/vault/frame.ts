@@ -4,6 +4,7 @@ import {
   exclusionsFile,
   exclusionsFrom,
   isExcluded,
+  settingsFolder,
 } from '../../../2-claude-mod/hooks/shape/exclusions.ts'
 import {
   basename,
@@ -246,9 +247,6 @@ async function refusalBy(reader: Reader, folder: string): Promise<string | undef
   const real = (found.realPath ?? '').slice(root.replace(/\/*$/, '').length)
   return (await leftOut(reader, vaultPath(folder))) ?? (await leftOut(reader, real))
 }
-
-/** A folder's settings folder, `.hexframe`, which holds its `exclusions.yaml`. */
-const settingsFolder = basename(parent(`/${exclusionsFile}`))
 
 /** A folder's listing and the text of its `exclusions.yaml`, undefined when it has none. */
 export interface Settings {
