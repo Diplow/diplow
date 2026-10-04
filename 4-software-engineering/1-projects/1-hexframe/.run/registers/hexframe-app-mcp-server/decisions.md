@@ -36,7 +36,7 @@ HEX-44 called the three functions from the Keys page and removed the tags.
 
 ### DEC-6 The header's links read the Session a page's guard proved, and make no call of their own
 
-HEX-44. The ticket asked for a header link to the Keys page for a signed-in Account, and the root layout knows nothing of the Session. A frame read of `session` would send a signed-out visitor on sign-in to sign-in, since `Unauthenticated` goes to sign-in on every call, and it would cost a call on every page. `signedInOnly` already puts the Session on its route's context, so the root's header shows the System and Keys links when one of the page's matches holds it. A page without the guard (sign-in, sign-up, `/dev/*`) shows none, even for a signed-in Account.
+HEX-44. The ticket asked for a header link to the Keys page for a signed-in Account, and the root layout knows nothing of the Session. A frame read of `session` would send a signed-out visitor on sign-in to sign-in, since `Unauthenticated` goes to sign-in on every call, and it would cost a call on every page. `signedInOnly` already puts the Session on its route's context, so the root's header shows the System and Keys links when one of the page's matches holds it. A page without the guard (sign-in, sign-up, `/dev/ui` and the other `/dev` pages but `/dev/session`) shows none, even for a signed-in Account. `provedSession`, beside the guard in `front/client/iam/guard.ts`, is the one place that reads the key, and a test ties it to what `signedInOnly` returns.
 
 ### DEC-7 A Key's secret reaches the page through a form's submit, never a mutation, and the command's origin is read when the answer arrives
 

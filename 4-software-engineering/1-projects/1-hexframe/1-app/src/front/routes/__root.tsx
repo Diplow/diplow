@@ -1,6 +1,7 @@
 import { HeadContent, Link, Scripts, createRootRoute, useMatches } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 
+import { provedSession } from '#/front/client/iam/guard'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 import { Toaster } from '#/front/ui/feedback/Toaster'
@@ -43,10 +44,6 @@ function RootDocument({ children }: { children: ReactNode }) {
     </html>
   )
 }
-
-/** Whether a route's context holds the Session its guard proved. */
-const provedSession = (context: unknown) =>
-  typeof context === 'object' && context !== null && 'session' in context
 
 /**
  * The links a signed-in Account has, to its System and its Keys. A page's guard, `signedInOnly`, puts
