@@ -35,7 +35,10 @@ export interface Disk {
   list(folder: string): Promise<Entry[]>
   /** What is at `path`, every symlink followed, its real path absolute; undefined when nothing. */
   stat(path: string): Promise<FileStat | undefined>
-  /** The text of the file at `realPath`, a real path its `stat` gave, so the file read is the one checked. */
+  /**
+   * The text of the file at `realPath`, a real path its `stat` gave, refused when what is there is
+   * no longer a regular file within the read limit.
+   */
   read(realPath: string): Promise<string>
 }
 
@@ -132,10 +135,36 @@ async function readInFolder(
   }
 }
 
+/** The folder a view shows, and what it says about it; or why it can show none. */
+export type Center = { folder: string; note?: string } | { refused: string }
+
+/**
+ * The folder to show for `wanted`, the center a view state names (`dropped` saying why it named
+ * none it may show), with `home`, the hexframe file's own folder, as the fallback. `home` is
+ * checked too, since it may lie in a symlinked folder out of the vault: when it can't be shown
+ * either, nothing is.
+ */
+export async function centerToShow(
+  disk: Disk,
+  wanted: { folder: string; dropped?: string },
+  home: string,
+): Promise<Center> {
+  let note: string | undefined
+  if (wanted.dropped !== undefined || wanted.folder !== home) {
+    const refused = wanted.dropped ?? (await refusal(disk, wanted.folder))
+    if (refused === undefined) return { folder: wanted.folder }
+    note = `its center can't be shown, as ${refused}: the view shows its own folder`
+  }
+  const refused = await refusal(disk, home)
+  if (refused !== undefined) return { refused }
+  return note === undefined ? { folder: home } : { folder: home, note }
+}
+
 /**
  * Why the view can't center on `folder`, or undefined when it can: it must be a folder whose real
- * path, symlinks followed, lies within the vault's, and no folder on the way there, real path
- * again, may leave out the next one. A folder the file system fails on gives the failure.
+ * path, symlinks followed, lies within the vault's, and no folder on the way there may leave out
+ * the next one, along the path as written or along the real one. A folder the file system fails
+ * on gives the failure.
  */
 export async function refusal(disk: Disk, folder: string): Promise<string | undefined> {
   try {
@@ -145,13 +174,14 @@ export async function refusal(disk: Disk, folder: string): Promise<string | unde
     if (found.kind !== 'dir') return 'it is not a folder'
     const { root } = reader
     if (root === undefined || !isWithin(found.realPath, root)) return 'it leads out of the vault'
-    return await leftOut(reader, (found.realPath ?? '').slice(root.replace(/\/*$/, '').length))
+    const real = (found.realPath ?? '').slice(root.replace(/\/*$/, '').length)
+    return (await leftOut(reader, vaultPath(folder))) ?? (await leftOut(reader, real))
   } catch (error) {
     return messageOf(error)
   }
 }
 
-/** Why a folder on `relative`, a real path from the vault's root, leaves out the next one. */
+/** Why a folder on `relative`, a path from the vault's root, leaves out the next one. */
 async function leftOut(reader: Reader, relative: string): Promise<string | undefined> {
   let above = ''
   for (const name of relative.split('/').filter(Boolean)) {

@@ -31,3 +31,8 @@ HEX-33. The plugin's `tsc` type-checks the shape it imports, under `erasableSynt
 ### DEC-6 `diplow.hexframe` is empty, and the root STACK doesn't list it yet
 
 HEX-33. The vault's entry is an empty `diplow.hexframe` at the root: empty means the defaults, the root's Branches. It is a Leaf of the root, beside `STACK.md` and `cubic.yaml`. The root `STACK.md`'s table of root-level pieces should name it, but the run may not edit that file: a line for it there is left to me.
+
+### DEC-7 The plugin reads a Frame with its own copy of claude-mod's read, for now
+
+HEX-33, [#39](https://github.com/Diplow/diplow/pull/39). `vault/frame.ts`'s `readFrame` follows the steps of claude-mod's `loadFrame` (exclusions first, then the sort, then one Tile per seated member, an overflowing ring left as names), over a `Disk` port instead of `$.fs`. It adds one rule claude-mod lacks: every read must lie within the vault's real path, since Obsidian's index lists a symlinked folder as a folder. Moving one `readFrame` over a port into the shape would stretch the shape's rule that a medium does the file system calls, and it would change claude-mod's pane, so this ticket keeps the copy and leaves that call to me. cubic raised it in every review round of #39.
+

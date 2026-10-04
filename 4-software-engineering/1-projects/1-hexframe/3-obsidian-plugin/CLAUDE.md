@@ -75,7 +75,7 @@ The lint set is [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE#Lint
 | `src/view.ts` | The view, a `TextFileView` over the hexframe file: decodes it, picks the center, reads and draws it, follows the vault's events. The only file that holds Obsidian state |
 | `src/view-state.ts` | The hexframe file's JSON: its decoding with defaults, the center it names, the outer Frame kind, a rename followed, which changes touch the view. Pure |
 | `src/draw.ts` | The drawing: the shape's layout as SVG through Obsidian's `createSvg`, words wrapped to their hex, and the lines under it |
-| `src/vault/frame.ts` | A folder read as a Frame through the shape, over a `Disk` port, held to the shape's rules on what a medium reads; and whether a center may be shown. Pure but for the port |
+| `src/vault/frame.ts` | A folder read as a Frame through the shape, over a `Disk` port, held to the shape's rules on what a medium reads; and which center to show, the file's own folder checked as much as the state's. Pure but for the port |
 | `src/vault/disk.ts` | The `Disk` over Obsidian: Branches and Leaves from the vault's index, dot folders from its adapter, real paths from Node, and each read made by the real path just checked |
 | `scripts/build.ts` | `dev` and `build`: picks the folder and the mode, then bundles |
 | `scripts/bundle.ts` | The esbuild bundle. Obsidian provides `obsidian`, `electron`, CodeMirror, Lezer and Node's own modules at runtime, so they stay out of it |

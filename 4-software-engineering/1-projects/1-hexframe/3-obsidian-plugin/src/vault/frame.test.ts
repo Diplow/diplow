@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import type { Entry, FileStat } from '../../../2-claude-mod/hooks/shape/node.ts'
-import { inFolder, readFrame, refusal, vaultPath, type Disk } from './frame.ts'
+import { centerToShow, inFolder, readFrame, refusal, vaultPath, type Disk } from './frame.ts'
 
 /**
  * A vault in memory at `/vault`: each key a path relative to it, a string a file's text, `{}` a
@@ -189,6 +189,19 @@ describe('refusal', () => {
     )
   })
 
+  it('refuses a folder left out by the path written, whatever its real path', async () => {
+    const linked = diskOf({
+      '3-games': {},
+      '3-games/dist': { link: '/vault/archive' },
+      archive: {},
+      '3-games/.hexframe': {},
+      '3-games/.hexframe/exclusions.yaml': 'exclude: [dist/]\n',
+    })
+    expect(await refusal(linked, '3-games/dist')).toBe(
+      '3-games/.hexframe/exclusions.yaml leaves out dist',
+    )
+  })
+
   it('refuses a folder left out by its real path, whatever the path written', async () => {
     expect(await refusal(disk, '3-games/git')).toBe('every folder leaves out .git')
   })
@@ -196,6 +209,45 @@ describe('refusal', () => {
   it('gives the failure of a folder the file system fails on', async () => {
     const failing: Disk = { ...disk, stat: () => Promise.reject(new Error('ELOOP')) }
     expect(await refusal(failing, '3-games')).toBe('ELOOP')
+  })
+})
+
+describe('centerToShow', () => {
+  const disk = diskOf({
+    '3-games': {},
+    '3-games/1-riftbound': {},
+    out: { link: '/elsewhere' },
+    'out/notes': {},
+  })
+
+  it('shows the center when it may be shown', async () => {
+    expect(await centerToShow(disk, { folder: '3-games/1-riftbound' }, '3-games')).toEqual({
+      folder: '3-games/1-riftbound',
+    })
+  })
+
+  it("shows the file's own folder, noted, when the center was dropped", async () => {
+    const wanted = { folder: '3-games', dropped: 'it is an absolute path' }
+    expect(await centerToShow(disk, wanted, '3-games')).toEqual({
+      folder: '3-games',
+      note: "its center can't be shown, as it is an absolute path: the view shows its own folder",
+    })
+  })
+
+  it("shows the file's own folder, noted, when the center is refused", async () => {
+    expect(await centerToShow(disk, { folder: '3-games/2-chess' }, '3-games')).toEqual({
+      folder: '3-games',
+      note: "its center can't be shown, as it does not exist: the view shows its own folder",
+    })
+  })
+
+  it("shows nothing when the file's own folder leads out of the vault", async () => {
+    expect(await centerToShow(disk, { folder: 'out/notes' }, 'out/notes')).toEqual({
+      refused: 'it leads out of the vault',
+    })
+    expect(await centerToShow(disk, { folder: '3-games' }, 'out/notes')).toEqual({
+      folder: '3-games',
+    })
   })
 })
 

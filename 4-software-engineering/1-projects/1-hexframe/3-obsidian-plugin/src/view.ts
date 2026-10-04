@@ -1,11 +1,11 @@
 // The view a hexframe file opens in: its view state read from the file, the folder it centers on
 // drawn at depth 1, and drawn again when the vault changes under it.
-import { debounce, TextFileView, type TAbstractFile, type TFile } from 'obsidian'
+import { debounce, TextFileView, type TAbstractFile } from 'obsidian'
 
 import { kindsOf } from '../../2-claude-mod/hooks/shape/node.ts'
 import { drawNotes, drawView, ringNotes } from './draw.ts'
 import { diskOf } from './vault/disk.ts'
-import { readFrame, refusal, vaultPath, type Disk } from './vault/frame.ts'
+import { centerToShow, readFrame, vaultPath } from './vault/frame.ts'
 import {
   centerOf,
   decodeViewState,
@@ -124,9 +124,13 @@ export class HexframeView extends TextFileView {
       drawNotes(this.contentEl, ['Hexframe reads the vault from a file system, which it has not.'])
       return
     }
-    let folder = vaultPath(file.parent?.path ?? '')
+    const home = vaultPath(file.parent?.path ?? '')
+    let folder = home
     try {
-      folder = await this.centerFolder(disk, file, notes)
+      const center = await centerToShow(disk, centerOf(this.state, home), home)
+      if ('refused' in center) throw new Error(center.refused)
+      folder = center.folder
+      if (center.note !== undefined) notes.push(`${file.name}: ${center.note}.`)
       const { frame, warnings } = await readFrame(disk, folder)
       if (drawing !== this.drawings) return
       const view = { frame, frameKind: outerKindOf(this.state, kindsOf(frame.rings)) }
@@ -139,25 +143,5 @@ export class HexframeView extends TextFileView {
       const reason = error instanceof Error ? error.message : String(error)
       drawNotes(this.contentEl, [...notes, `Can't read ${folder || 'the vault root'}: ${reason}`])
     }
-  }
-
-  /**
-   * The folder to draw: the state's center, or the file's own when the center can't be shown,
-   * noted. The file's own folder is checked too, since it may lie in a symlinked folder out of the
-   * vault; when it can't be shown either, this throws why.
-   */
-  private async centerFolder(disk: Disk, file: TFile, notes: string[]): Promise<string> {
-    const home = vaultPath(file.parent?.path ?? '')
-    const { folder, dropped } = centerOf(this.state, home)
-    if (dropped !== undefined || folder !== home) {
-      const refused = dropped ?? (await refusal(disk, folder))
-      if (refused === undefined) return folder
-      notes.push(
-        `${file.name}'s center can't be shown, as ${refused}: the view shows its own folder.`,
-      )
-    }
-    const refused = await refusal(disk, home)
-    if (refused !== undefined) throw new Error(refused)
-    return home
   }
 }

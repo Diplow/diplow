@@ -1,11 +1,12 @@
 // The Disk over Obsidian's vault. Branches and Leaves come from the vault's index; the dot folders,
 // which the index leaves out, from its adapter. Real paths, and the reads made by the real path
 // just checked, come from Node, which is why the plugin is desktop only.
-import { readFile, realpath, stat } from 'node:fs/promises'
+import { constants } from 'node:fs'
+import { open, realpath, stat } from 'node:fs/promises'
 
 import { FileSystemAdapter, TFolder, type App } from 'obsidian'
 
-import type { Entry, FileStat } from '../../../2-claude-mod/hooks/shape/node.ts'
+import { readLimit, type Entry, type FileStat } from '../../../2-claude-mod/hooks/shape/node.ts'
 import { vaultPath, type Disk } from './frame.ts'
 
 /** The vault as a Disk, or undefined where Obsidian keeps it outside a file system. */
@@ -15,7 +16,7 @@ export function diskOf(app: App): Disk | undefined {
   return {
     list: (folder) => list(app, adapter, vaultPath(folder)),
     stat: (path) => statAt(adapter.getFullPath(vaultPath(path))),
-    read: (realPath) => readFile(realPath, 'utf8'),
+    read: readChecked,
   }
 }
 
@@ -40,6 +41,29 @@ async function list(app: App, adapter: FileSystemAdapter, folder: string): Promi
     .map(nameOf)
     .filter((name) => name.startsWith('.') && !known.has(name))
   return [...entries, ...context.map(dir)]
+}
+
+/** Node's flags as this platform has them: Windows has no `O_NOFOLLOW` nor `O_NONBLOCK`. */
+const platform: Partial<typeof constants> = constants
+
+/**
+ * The text of the file at `realPath`, opened once and held to the shape's rules on that one handle:
+ * a regular file of at most the read limit, and never more read than that. The open follows no
+ * symlink and doesn't wait on a pipe, so a file swapped in since its check is refused, not read.
+ */
+async function readChecked(realPath: string): Promise<string> {
+  const flags = constants.O_RDONLY | (platform.O_NOFOLLOW ?? 0) | (platform.O_NONBLOCK ?? 0)
+  const handle = await open(realPath, flags)
+  try {
+    const found = await handle.stat()
+    if (!found.isFile()) throw new Error('it is not a file')
+    if (found.size > readLimit) throw new Error('it is too large')
+    const buffer = Buffer.alloc(found.size)
+    const { bytesRead } = await handle.read(buffer, 0, found.size, 0)
+    return buffer.subarray(0, bytesRead).toString('utf8')
+  } finally {
+    await handle.close()
+  }
 }
 
 function nameOf(path: string): string {
