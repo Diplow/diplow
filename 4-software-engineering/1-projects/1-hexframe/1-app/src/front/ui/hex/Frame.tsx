@@ -1,9 +1,8 @@
 // A Frame is a Tile together with its Children: here, the hex behind its hub and its ring, and the
 // empty slots of that ring. The Frame takes no click; the Tiles drawn on top do, and so does an empty
 // slot when the caller says what it is for.
-import type { KeyboardEvent } from 'react'
-
 import type { Placement } from './geometry/layout'
+import { buttonKeys } from './keys'
 import { HexShape, polygonPoints, strokeWidth } from './look'
 
 type Of<Kind extends Placement['kind']> = Extract<Placement, { kind: Kind }>
@@ -35,18 +34,6 @@ export function EmptySlot({ placement, action }: EmptySlotProps) {
   const { label, onSelect } = action
   const { center, radius } = placement.hex
   const arm = radius * 0.18
-  // As a button does: Enter selects as it goes down, Space as it comes up; Space going down only keeps
-  // the page from scrolling.
-  function onKeyDown(event: KeyboardEvent) {
-    if (event.key !== 'Enter' && event.key !== ' ') return
-    event.preventDefault()
-    if (event.key === 'Enter' && !event.repeat) onSelect()
-  }
-  function onKeyUp(event: KeyboardEvent) {
-    if (event.key !== ' ') return
-    event.preventDefault()
-    onSelect()
-  }
   return (
     <g
       role="button"
@@ -54,8 +41,7 @@ export function EmptySlot({ placement, action }: EmptySlotProps) {
       aria-label={label}
       className="group cursor-pointer outline-none"
       onClick={onSelect}
-      onKeyDown={onKeyDown}
-      onKeyUp={onKeyUp}
+      {...buttonKeys({ onEnter: onSelect, onSpace: onSelect })}
     >
       <HexShape placement={placement} />
       <polygon

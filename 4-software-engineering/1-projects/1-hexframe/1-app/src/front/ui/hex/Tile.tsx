@@ -1,12 +1,13 @@
 // A Tile on the canvas: its hex, its title always, its preview when there is room, and on hover or
 // focus a card with both in full. It is a button: what a click does comes from the Canvas.
-import type { KeyboardEvent, MouseEvent } from 'react'
+import type { MouseEvent } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Tooltip } from '../overlays/Tooltip'
 import { textBox } from './geometry/geometry'
 import type { Placement } from './geometry/layout'
+import { buttonKeys } from './keys'
 import { HexShape, polygonPoints, showsPreview, strokeWidth, TileLabel } from './look'
 import type { TileAction } from './view/view'
 
@@ -22,21 +23,16 @@ interface TileProps {
 export function Tile({ placement, action, onAct, onCenter }: TileProps) {
   const { title, preview } = placement.tile
   const label = textBox(placement.hex, showsPreview(placement) ? 'tall' : 'wide')
-  // As a button does: Enter acts as it goes down, Space as it comes up; Space going down only keeps
-  // the page from scrolling.
-  function onKeyDown(event: KeyboardEvent) {
-    if (event.key !== 'Enter' && event.key !== ' ') return
-    event.preventDefault()
-    // A held key repeats: act once per press, not once per repeat.
-    if (event.key !== 'Enter' || event.repeat) return
-    if (event.shiftKey) onCenter('keyboard')
-    else onAct(false)
-  }
-  function onKeyUp(event: KeyboardEvent) {
-    if (event.key !== ' ') return
-    event.preventDefault()
-    onAct(false)
-  }
+  // Shift+Enter centers the Tile, as a double-click does.
+  const keys = buttonKeys({
+    onEnter: (event) => {
+      if (event.shiftKey) onCenter('keyboard')
+      else onAct(false)
+    },
+    onSpace: () => {
+      onAct(false)
+    },
+  })
   return (
     <Tooltip
       content={
@@ -58,8 +54,7 @@ export function Tile({ placement, action, onAct, onCenter }: TileProps) {
         onDoubleClick={() => {
           onCenter('pointer')
         }}
-        onKeyDown={onKeyDown}
-        onKeyUp={onKeyUp}
+        {...keys}
       >
         <HexShape placement={placement} />
         {/* The hover and focus ring, drawn over the outline. */}

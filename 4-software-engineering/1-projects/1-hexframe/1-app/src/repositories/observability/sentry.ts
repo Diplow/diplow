@@ -12,23 +12,28 @@ interface SentryOptions {
   readonly router?: AnyRouter
 }
 
+const capitalised = (word: string) => word.charAt(0).toUpperCase() + word.slice(1)
+
 // The words that say a key is secret, as a key spells them: in lower or upper case after anything but a
 // letter (`password`, `client_secret`, `ACCESS_TOKEN`), or capitalised anywhere, as the last word of a
 // camelCase key (`accessToken`, `apiKey`), so `monkey` and `opinion` name nothing secret.
-const secretWords = [
-  'password',
-  'passcode',
-  'passphrase',
-  'secret',
-  'token',
-  'otp',
-  'code',
-  'pin',
-  'key',
-]
+const secretWords = ['password', 'passcode', 'passphrase', 'secret', 'token', 'otp', 'pin', 'key']
+
+// `code` names a one-time code alone (`code=…`, `CODE: …`) or when a word says which one
+// (`verificationCode`, `auth_code`, `OTP_CODE`); `statusCode`, `exit_code` and their like are
+// diagnostics, kept.
+const codeWords = ['verification', 'confirmation', 'auth', 'reset', 'login', 'otp', 'mfa', 'sms']
+const codeKey = [
+  '(?<![A-Za-z_])(?:code|CODE)',
+  `(?:${codeWords.join('|')})_?code`,
+  `(?:${[...codeWords, ...codeWords.map(capitalised)].join('|')})Code`,
+  `(?:${codeWords.join('|').toUpperCase()})_?CODE`,
+].join('|')
+
 const secretKey = [
   `(?<![A-Za-z])(?:${secretWords.join('|')}|${secretWords.join('|').toUpperCase()})`,
-  secretWords.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join('|'),
+  secretWords.map(capitalised).join('|'),
+  codeKey,
 ].join('|')
 
 // What a message can carry of what a user sent, each kind a pattern, tried in this order at every place.
@@ -103,14 +108,27 @@ function scrubbedData<D extends Readonly<Record<string, unknown>>>(data: D): D {
   return kept as D
 }
 
-/** An event's contexts: the trace keeps its ids and loses its data's queries; any other is redacted. */
+// The trace's ids, kept as they are: a trace id is a run a redaction would take for a token.
+const traceIds = new Set(['trace_id', 'span_id', 'parent_span_id'])
+
+/**
+ * An event's contexts: the trace keeps its ids, its data loses its queries, and every other text in it
+ * is redacted; any other context is redacted whole.
+ */
 function scrubbedContexts({ trace, ...others }: Sentry.Contexts): Sentry.Contexts {
   const kept = scrubbedValue(others)
   if (trace === undefined) return kept
-  return {
-    ...kept,
-    trace: trace.data === undefined ? trace : { ...trace, data: scrubbedData(trace.data) },
-  }
+  const scrubbedTrace = Object.fromEntries(
+    Object.entries(trace).map(([key, value]: [string, unknown]) => [
+      key,
+      traceIds.has(key)
+        ? value
+        : key === 'data'
+          ? scrubbedData(value as Readonly<Record<string, unknown>>)
+          : scrubbedValue(value),
+    ]),
+  ) as typeof trace
+  return { ...kept, trace: scrubbedTrace }
 }
 
 /**

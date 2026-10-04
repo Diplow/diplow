@@ -83,8 +83,9 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
         system={system}
         tree={tree}
         change={changeOf(search)}
+        // A save settles later: it ends the change on the URL of that moment, not the one it was sent from.
         onDone={() => {
-          begin({ kind: 'none' })
+          onSearchChange((current) => withChange(current, { kind: 'none' }))
         }}
       />
     </>

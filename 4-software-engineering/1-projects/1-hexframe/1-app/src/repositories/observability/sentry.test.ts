@@ -5,7 +5,7 @@ import { redacted, scrubbed, scrubbedBreadcrumb } from './sentry'
 // A made-up session id: what matters is its length, which makes it look like one.
 const token = 'x'.repeat(28)
 
-describe('what Sentry keeps of an error', () => {
+describe('what Sentry keeps of a message', () => {
   it('redacts an email address and anything that could be a token', () => {
     expect(redacted(`Key (email)=(ada@example.com) already exists, session ${token}`)).toBe(
       'Key (email)=([redacted]) already exists, session [redacted]',
@@ -40,12 +40,25 @@ describe('what Sentry keeps of an error', () => {
     expect(redacted('monkey=banana, opinion: none')).toBe('monkey=banana, opinion: none')
   })
 
+  it('redacts a one-time code by its key, and keeps a status code or an exit code', () => {
+    expect(
+      redacted('code=ab1, verificationCode=12, auth_code=x9, OTP_CODE=77, resetCode: r2'),
+    ).toBe(
+      'code=[redacted], verificationCode=[redacted], auth_code=[redacted], OTP_CODE=[redacted], resetCode: [redacted]',
+    )
+    expect(redacted('statusCode=500, exit_code=1, errorCode: E42, HTTP_CODE=404')).toBe(
+      'statusCode=500, exit_code=1, errorCode: E42, HTTP_CODE=404',
+    )
+  })
+
   it('leaves a message with nothing sensitive as it is', () => {
     expect(redacted('A server function failed unexpectedly')).toBe(
       'A server function failed unexpectedly',
     )
   })
+})
 
+describe('what Sentry keeps of an error', () => {
   it("keeps a request's method and path, and drops its query, headers, cookies, body and user", () => {
     const event = scrubbed({
       user: { id: 'account-1', email: 'ada@example.com' },
@@ -73,12 +86,18 @@ describe('what Sentry keeps of an error', () => {
     expect(event.tags).toEqual({ requestId: 'req-1' })
   })
 
-  it('redacts every text in its extra data, its log entry and its contexts, and keeps the trace ids', () => {
+  it('redacts every text in its extra data, its log entry and its contexts, the trace’s but its ids', () => {
     const event = scrubbed({
       extra: { __serialized__: { email: 'ada@example.com', tries: 3, tags: ['password=abc12'] } },
       logentry: { message: 'Signing in %s failed', params: ['ada@example.com'] },
       contexts: {
-        trace: { trace_id: token, span_id: 's' },
+        trace: {
+          trace_id: token,
+          span_id: 's',
+          parent_span_id: 'p',
+          op: 'http.server',
+          description: 'POST /sign-in for ada@example.com',
+        },
         custom: { form: { note: 'reach me at ada@example.com' } },
         runtime: { name: 'node', version: 'v26.5.0' },
       },
@@ -88,7 +107,13 @@ describe('what Sentry keeps of an error', () => {
     })
     expect(event.logentry).toEqual({ message: 'Signing in %s failed', params: ['[redacted]'] })
     expect(event.contexts).toEqual({
-      trace: { trace_id: token, span_id: 's' },
+      trace: {
+        trace_id: token,
+        span_id: 's',
+        parent_span_id: 'p',
+        op: 'http.server',
+        description: 'POST /sign-in for [redacted]',
+      },
       custom: { form: { note: 'reach me at [redacted]' } },
       runtime: { name: 'node', version: 'v26.5.0' },
     })
