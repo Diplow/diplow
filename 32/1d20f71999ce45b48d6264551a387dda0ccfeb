@@ -1,0 +1,27 @@
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/expansions.ts
+  s_8004fe4b534599::t_47f6e23bbc3d68 158-159,166
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/view.ts
+  s_8004fe4b534599::t_47f6e23bbc3d68 304,306-309
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/expansions.test.ts
+  s_8004fe4b534599::t_47f6e23bbc3d68 219-223
+.obsidian/plugins/hexframe/main.js
+  s_8004fe4b534599::t_8e3a5b6c00d9c7 1
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/view-state.ts
+  s_8004fe4b534599::t_8e3a5b6c00d9c7 13,152
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "321d20f71999ce45b48d6264551a387dda0ccfeb",
+  "prompts": {},
+  "sessions": {
+    "s_8004fe4b534599": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d6be5684-daf1-47f2-ae41-5225e4178a75",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
