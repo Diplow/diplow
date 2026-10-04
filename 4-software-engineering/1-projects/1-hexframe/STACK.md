@@ -192,7 +192,7 @@ How a medium looks at it is view state, as in the app, each medium's own:
 - **An overflowing Frame** shows as a list, not as hexes, until exclusions or renames clear it. Only that Frame becomes a list, unless it is the center's outer ring: then the whole view does.
 - **Hexframe file**: a `*.hexframe` file opens the view on its folder and keeps the view's state in JSON: the center and the expansions. It is to a medium what the URL is to the app; `diplow.hexframe`, at this vault's root, opens the Obsidian plugin's view on the whole vault. Its paths are relative to the vault, and a medium resolves each one to its real path, symlinks followed, before using it. One that lands outside the vault, through `..`, an absolute path or a symlink, or on an excluded name, is dropped and the file's own folder opens instead, so a shared vault can't make a medium read beyond itself.
 
-Each medium keeps its view state itself. The shape's layout takes the Frame kind and lays out one generation; the depth and the expansions join it with the first medium that draws deeper.
+Each medium keeps its view state itself. The shape's layout takes the Frame kind and the hexes a view opens, and lays out as many scales as they make; a medium decides both.
 
 ## Languages
 
