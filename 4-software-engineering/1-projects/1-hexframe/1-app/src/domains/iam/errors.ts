@@ -34,6 +34,25 @@ export class TooManyAttempts extends Schema.TaggedError<TooManyAttempts>()('TooM
   kind: kind('Forbidden'),
 }) {}
 
+/**
+ * A Key proves the request, where only a Session may act: issuing, listing or revoking Keys, or changing
+ * the Account itself. So a leaked Key cannot keep itself alive.
+ */
+export class SessionRequired extends Schema.TaggedError<SessionRequired>()('SessionRequired', {
+  kind: kind('Forbidden'),
+}) {}
+
+/** A Key's name is empty, or longer than 32 characters. */
+export class KeyNameInvalid extends Schema.TaggedError<KeyNameInvalid>()(
+  'KeyNameInvalid',
+  invalid,
+) {}
+
+/** No Key of this id among the Account's: it was revoked, or it is someone else's. */
+export class KeyNotFound extends Schema.TaggedError<KeyNotFound>()('KeyNotFound', {
+  kind: kind('NotFound'),
+}) {}
+
 export const iamFailures = [
   SignedOut,
   CredentialsRejected,
@@ -41,4 +60,7 @@ export const iamFailures = [
   EmailMalformed,
   PasswordLengthInvalid,
   TooManyAttempts,
+  SessionRequired,
+  KeyNameInvalid,
+  KeyNotFound,
 ] as const

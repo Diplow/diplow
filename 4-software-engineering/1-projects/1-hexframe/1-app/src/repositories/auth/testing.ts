@@ -1,6 +1,7 @@
 // The auth harness: Better Auth for real, over the PGlite test database, its cookies signed with a
-// secret made for the run; and a browser, a cookie jar that carries what one call sets to the next,
-// from an IP of its own, as Better Auth's rate limiter counts attempts per IP.
+// secret made for the run; a browser, a cookie jar that carries what one call sets to the next, from
+// an IP of its own, as Better Auth's rate limiter counts attempts per IP; and a program calling with an
+// API key, as an MCP client does.
 import { Effect, Layer, Redacted } from 'effect'
 
 import { TestDatabase } from '../database/testing'
@@ -47,5 +48,19 @@ export function browser() {
     request: <A, E, R>(program: Effect.Effect<A, E, R>) =>
       Effect.suspend(() => Effect.provideService(program, HttpExchange, exchange())),
     cookies: () => [...jar.keys()],
+  }
+}
+
+/** A program calling with an API key, as an MCP client does: its `Authorization` header, no cookie. */
+export function keyClient(secret: string, scheme = 'Bearer') {
+  const exchange = HttpExchange.of({
+    url: 'http://localhost/mcp',
+    headers: new Headers({ authorization: `${scheme} ${secret}` }),
+    setCookies: () => undefined,
+  })
+  return {
+    /** Runs `program` as a request from this client. */
+    request: <A, E, R>(program: Effect.Effect<A, E, R>) =>
+      Effect.provideService(program, HttpExchange, exchange),
   }
 }

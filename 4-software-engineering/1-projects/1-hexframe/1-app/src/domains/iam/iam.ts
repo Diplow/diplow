@@ -1,15 +1,25 @@
 // IAM: who someone is. An Account is someone known to hexframe; a Session, an Account's proven presence,
-// for a while, on one device. Better Auth keeps both, below (src/repositories/auth/); IAM speaks of them
-// in its own words and decides what a refusal means to the user. Keys and Entitlements come later.
+// for a while, on one device; a Key, a credential it issues to a program. Better Auth keeps all three,
+// below (src/repositories/auth/); IAM speaks of them in its own words and decides what a refusal means
+// to the user. Entitlements come later.
 import { Context, Effect, Option } from 'effect'
 
-import { Auth, type AuthRefused, type AuthSession, type Refusal } from '#/repositories/auth/auth'
+import {
+  Auth,
+  type AuthApiKey,
+  type AuthRefused,
+  type AuthSession,
+  type Refusal,
+} from '#/repositories/auth/auth'
 
 import {
   CredentialsRejected,
   EmailMalformed,
   EmailTaken,
+  KeyNameInvalid,
+  KeyNotFound,
   PasswordLengthInvalid,
+  SessionRequired,
   SignedOut,
   TooManyAttempts,
 } from './errors'
@@ -34,6 +44,35 @@ export interface Session {
   readonly expiresAt: Date
 }
 
+/** A Key, as its Account sees it among its others: never its secret. */
+export interface Key {
+  readonly id: string
+  readonly name: string
+  /** Its first characters, `hf_` and three more, to tell it from the Account's others. */
+  readonly start: string
+  readonly createdAt: Date
+  /** When it last proved a request, if it ever did. */
+  readonly lastUsedAt: Date | null
+}
+
+/** A Key just issued, with its secret: shown this once, since only its hash is kept. */
+export interface IssuedKey {
+  readonly key: Key
+  readonly secret: string
+}
+
+/** What a Key proves of a request: whose it is, and which of their Keys it was. */
+export interface KeyProof {
+  readonly account: Account
+  readonly keyId: string
+}
+
+/** A signed-in request: its Account, and which of the two proofs it gave. */
+export interface SignedIn {
+  readonly account: Account
+  readonly by: 'session' | 'key'
+}
+
 /**
  * The request's Session, if its cookie proves one: resolved once per request by the API layer's
  * middleware, before any server function runs.
@@ -42,7 +81,20 @@ export class CurrentSession extends Context.Service<CurrentSession, Option.Optio
   'hexframe/iam/CurrentSession',
 ) {}
 
+/**
+ * The request's Key, if its `Authorization: Bearer` header proves one: resolved once per request at
+ * `/mcp`, the one door a Key opens. A server function's is always none: it never reads the header.
+ */
+export class CurrentKey extends Context.Service<CurrentKey, Option.Option<KeyProof>>()(
+  'hexframe/iam/CurrentKey',
+) {}
+
 const sessionOf = ({ user, expiresAt }: AuthSession): Session => ({ account: user, expiresAt })
+
+const keyOf = ({ lastRequest, ...listed }: AuthApiKey): Key => ({
+  ...listed,
+  lastUsedAt: lastRequest,
+})
 
 /** What each refusal says to the user, on the field at fault. */
 const refused = {
@@ -51,6 +103,8 @@ const refused = {
   'email-malformed': () => new EmailMalformed({ fields: ['email'] }),
   'password-length': () => new PasswordLengthInvalid({ fields: ['password'] }),
   'too-many-attempts': () => new TooManyAttempts(),
+  'api-key-name-length': () => new KeyNameInvalid({ fields: ['name'] }),
+  'api-key-not-found': () => new KeyNotFound(),
 } satisfies Record<Refusal, () => unknown>
 
 const inIamTerms = <A, R>(attempt: Effect.Effect<A, AuthRefused, R>) =>
@@ -67,12 +121,54 @@ export const signIn = (credentials: Credentials) =>
 /** Ends the Session on this device. */
 export const signOut = Auth.use((auth) => auth.signOut)
 
-/** The Session the request proves, if any: what the middleware puts on the request. */
+/** The Session the request's cookie proves, if any: what the middleware puts on the request. */
 export const proven = Auth.use((auth) => auth.session).pipe(Effect.map(Option.map(sessionOf)))
 
-/** The request's Session, or `SignedOut`: the first step of anything only a signed-in Account may do. */
+/** The Key the request's `Authorization: Bearer` header proves, if any: what `/mcp` puts on it. */
+export const keyProven = Auth.use((auth) => auth.bearer).pipe(
+  Effect.map(Option.map(({ user, apiKeyId }): KeyProof => ({ account: user, keyId: apiKeyId }))),
+)
+
+const signedInBy = (by: SignedIn['by'], { account }: { account: Account }): SignedIn => ({
+  account,
+  by,
+})
+
+/**
+ * The request's Account, proven by its Session or by its Key, or `SignedOut`: the first step of
+ * anything only a signed-in Account may do. Working on the System never asks which proof it was.
+ */
 export const signedIn = Effect.gen(function* () {
   const session = yield* CurrentSession
-  if (Option.isNone(session)) return yield* new SignedOut()
-  return session.value
+  if (Option.isSome(session)) return signedInBy('session', session.value)
+  const key = yield* CurrentKey
+  if (Option.isSome(key)) return signedInBy('key', key.value)
+  return yield* new SignedOut()
 })
+
+/**
+ * The request's Session, or `SessionRequired` when only a Key proves it, or `SignedOut`: the first
+ * step of managing Keys and of changing the Account itself, so a leaked Key cannot keep itself alive.
+ */
+export const sessionOnly = Effect.gen(function* () {
+  const session = yield* CurrentSession
+  if (Option.isSome(session)) return session.value
+  if (Option.isSome(yield* CurrentKey)) return yield* new SessionRequired()
+  return yield* new SignedOut()
+})
+
+/** Issues a Key, named, to the Account the request's Session proves. Its secret is in the answer only. */
+export const issueKey = (name: string) =>
+  Effect.andThen(sessionOnly, Auth.use((auth) => auth.createApiKey(name)).pipe(inIamTerms)).pipe(
+    Effect.map(({ apiKey, secret }): IssuedKey => ({ key: keyOf(apiKey), secret })),
+  )
+
+/** The Keys of the Account the request's Session proves, the newest first, without their secrets. */
+export const keys = Effect.andThen(
+  sessionOnly,
+  Auth.use((auth) => auth.apiKeys),
+).pipe(Effect.map((listed) => listed.map(keyOf)))
+
+/** Revokes one of the Keys of the Account the request's Session proves: it proves nothing again. */
+export const revokeKey = (id: string) =>
+  Effect.andThen(sessionOnly, Auth.use((auth) => auth.deleteApiKey(id)).pipe(inIamTerms))

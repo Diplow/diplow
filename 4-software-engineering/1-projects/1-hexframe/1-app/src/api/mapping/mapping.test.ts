@@ -2,7 +2,7 @@ import { Effect, Exit, Option, Schema } from 'effect'
 import { describe, expect, expectTypeOf, it } from 'vitest'
 
 import type { SignedOut } from '#/domains/iam/errors'
-import type { Session } from '#/domains/iam/iam'
+import type { KeyProof, Session } from '#/domains/iam/iam'
 import type {
   DirectionTaken,
   MovedUnderItself,
@@ -13,7 +13,7 @@ import type {
 } from '#/domains/mapping/errors'
 
 import type { Failure } from '../errors/failure'
-import { run, type Services, type StartContext } from '../server/run'
+import { noKey, run, type Services, type StartContext } from '../server/run'
 import { NewReference, NewTile, ReferenceSlot, TileEdit, TileMove, TileRef } from './mapping'
 import * as Mapping from './programs'
 
@@ -24,12 +24,14 @@ import * as Mapping from './programs'
 /** Any of Mapping's programs, as the helper takes it. */
 type Program = Effect.Effect<unknown, Failure, Services>
 
-/** A request from someone signed in as an Account no other test uses, or from nobody. */
-function request(signedIn = true): StartContext {
-  const session: Session = {
-    account: { id: crypto.randomUUID(), email: 'someone@example.com' },
-    expiresAt: new Date(Date.now() + 60_000),
-  }
+/**
+ * A request from someone signed in as an Account no other test uses, by a Session or by one of their
+ * Keys, or from nobody.
+ */
+function request(signedIn: boolean | 'by key' = true): StartContext {
+  const account = { id: crypto.randomUUID(), email: 'someone@example.com' }
+  const session: Session = { account, expiresAt: new Date(Date.now() + 60_000) }
+  const key: KeyProof = { account, keyId: 'key-1' }
   return {
     requestId: 'req-mapping',
     scope: 'test',
@@ -39,7 +41,8 @@ function request(signedIn = true): StartContext {
       headers: new Headers(),
       setCookies: () => undefined,
     },
-    session: Exit.succeed(signedIn ? Option.some(session) : Option.none()),
+    session: Exit.succeed(signedIn === true ? Option.some(session) : Option.none()),
+    key: signedIn === 'by key' ? Exit.succeed(Option.some(key)) : noKey,
   }
 }
 
@@ -77,6 +80,13 @@ describe("Mapping's server functions", () => {
       failure: { _tag: 'SignedOut', kind: 'Unauthenticated' },
       requestId: 'req-mapping',
     })
+  })
+
+  it('runs for an Account its Key proves as for one its Session proves', async () => {
+    const context = request('by key')
+    const root = await value(run(context, Mapping.system))
+    await value(run(context, Mapping.createTile({ parent: root.id, slot: 1, ...content('Child') })))
+    expect((await value(run(context, Mapping.system))).children[1]).toMatchObject(content('Child'))
   })
 
   it("reads the Account's System, its Root added untitled on the first read", async () => {
