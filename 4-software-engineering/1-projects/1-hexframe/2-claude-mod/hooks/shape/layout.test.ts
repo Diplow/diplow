@@ -14,6 +14,9 @@ const frameOf = (path: string, children: Partial<Record<Direction, Member>> = {}
 })
 
 const sqrt3 = Math.sqrt(3)
+/** The radius of a Frame opened inside a hex of radius 1, short of a third by the margin. */
+const third = (1 - 0.08) / 3
+const rounded = (value: number) => Math.round(value * 1000) / 1000
 const middle = { x: viewWidth / 2, y: viewHeight / 2 }
 
 /** Each placement as kind, direction and center, rounded so the floating point reads plainly. */
@@ -99,14 +102,15 @@ test('an opened center holds its inner ring inside its own hex, a third of its s
   expect(placements).toHaveLength(14)
   // The center's hex comes first, opened, then its Tile and the inner ring inside it.
   expect(placements[0]).toMatchObject({ kind: 'center', opened: true, radius: 1, generation: 0 })
+  const radius = rounded(third)
   expect(summary(placements.slice(1, 8))).toEqual([
-    { kind: 'center', direction: undefined, ...at(0, 0), radius: 0.333 },
-    { kind: 'empty', direction: 1, ...at(-sqrt3 / 6, -0.5), radius: 0.333 },
-    { kind: 'member', direction: 2, ...at(sqrt3 / 6, -0.5), radius: 0.333 },
-    { kind: 'empty', direction: 3, ...at(sqrt3 / 3, 0), radius: 0.333 },
-    { kind: 'empty', direction: 4, ...at(sqrt3 / 6, 0.5), radius: 0.333 },
-    { kind: 'empty', direction: 5, ...at(-sqrt3 / 6, 0.5), radius: 0.333 },
-    { kind: 'empty', direction: 6, ...at(-sqrt3 / 3, 0), radius: 0.333 },
+    { kind: 'center', direction: undefined, ...at(0, 0), radius },
+    { kind: 'empty', direction: 1, ...at((-sqrt3 / 2) * third, -1.5 * third), radius },
+    { kind: 'member', direction: 2, ...at((sqrt3 / 2) * third, -1.5 * third), radius },
+    { kind: 'empty', direction: 3, ...at(sqrt3 * third, 0), radius },
+    { kind: 'empty', direction: 4, ...at((sqrt3 / 2) * third, 1.5 * third), radius },
+    { kind: 'empty', direction: 5, ...at((-sqrt3 / 2) * third, 1.5 * third), radius },
+    { kind: 'empty', direction: 6, ...at(-sqrt3 * third, 0), radius },
   ])
   expect(placements[1]).toMatchObject({ tile: { path: '/w' }, generation: 0 })
   expect(placements[3]).toMatchObject({ memberKind: 'context', generation: 1 })
@@ -128,19 +132,15 @@ test('an expanded member shows its own Frame inside its hex, the third scale', (
   const inner = summary(placements).slice(4, 11)
   // Its Tile stays the member it opens, at the middle of the member's hex.
   expect(placements[4]).toMatchObject({ kind: 'member', direction: 3, tile: { path: '/w/3-c' } })
-  expect(inner[0]).toEqual({ kind: 'member', direction: 3, ...at(sqrt3, 0), radius: 0.333 })
-  // Its ring touches the member's hex: the east neighbor's east side sits on the hex's east side.
-  expect(inner[3]).toEqual({
-    kind: 'empty',
-    direction: 3,
-    ...at(sqrt3 + sqrt3 / 3, 0),
-    radius: 0.333,
-  })
+  const radius = rounded(third)
+  expect(inner[0]).toEqual({ kind: 'member', direction: 3, ...at(sqrt3, 0), radius })
+  // Its ring stays inside the member's hex, the margin short of its sides.
+  expect(inner[3]).toEqual({ kind: 'empty', direction: 3, ...at(sqrt3 + sqrt3 * third, 0), radius })
   expect(inner[6]).toEqual({
     kind: 'member',
     direction: 6,
-    ...at(sqrt3 - sqrt3 / 3, 0),
-    radius: 0.333,
+    ...at(sqrt3 - sqrt3 * third, 0),
+    radius,
   })
   expect(placements[10]).toMatchObject({ tile: { path: '/w/3-c/6-f' }, generation: 2 })
   // A member the view leaves closed stays one hex, at the first generation's size.
@@ -160,7 +160,7 @@ test('a collapsed center fills the view, opened into its inner ring when it keep
   expect(summary(placements)[3]).toEqual({
     kind: 'member',
     direction: 2,
-    ...at((sqrt3 * 2.5) / 6, -2.5 / 2),
-    radius: 0.833,
+    ...at((sqrt3 / 2) * 2.5 * third, -1.5 * 2.5 * third),
+    radius: rounded(2.5 * third),
   })
 })

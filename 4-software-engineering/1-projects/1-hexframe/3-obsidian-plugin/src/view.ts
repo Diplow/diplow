@@ -1,6 +1,7 @@
 // The view a hexframe file opens in: its view state read from the file, the folder it centers on
-// drawn at depth 1, and drawn again when the vault changes under it. A click on a hex moves it and
-// shows the hex's note in a paired pane beside it.
+// drawn at depth 2, as the expansions open it, and drawn again when the vault changes under it. A
+// click on a hex moves it and shows the hex's note in a paired pane beside it; an alt-click on a
+// Branch around the center opens it, and the view's header buttons open and peel the center.
 import {
   debounce,
   Notice,
@@ -12,9 +13,25 @@ import {
 } from 'obsidian'
 
 import type { Placement } from '../../2-claude-mod/hooks/shape/layout.ts'
-import { kindsOf } from '../../2-claude-mod/hooks/shape/node.ts'
-import { actionOf, type Asked } from './click.ts'
+import {
+  kindsOf,
+  type Direction,
+  type Frame,
+  type FrameKind,
+} from '../../2-claude-mod/hooks/shape/node.ts'
+import { actionOf, outerBranchOf, type Asked } from './click.ts'
 import { drawNotes, drawView, ringNotes } from './draw.ts'
+import {
+  branchesToOpen,
+  collapse,
+  expand,
+  shownExpansions,
+  switchBranch,
+  switchInner,
+  switchOuter,
+  viewOf,
+  type Expansions,
+} from './expansions.ts'
 import { diskOf } from './vault/disk.ts'
 import {
   centerToShow,
@@ -30,9 +47,8 @@ import {
   decodeViewState,
   defaultState,
   followRename,
-  outerKindOf,
   touches,
-  withCenter,
+  withChanges,
   type ViewState,
 } from './view-state.ts'
 
@@ -46,8 +62,10 @@ export class HexframeView extends TextFileView {
   private text = ''
   private state: ViewState = defaultState
   private problems: string[] = []
-  /** The folder drawn, once a drawing is done. */
-  private shown: string | undefined
+  /** The folders drawn, the center's first, once a drawing is done. */
+  private shown: string[] | undefined
+  /** The Frame kinds the center offers, once a drawing is done: what the expansions switch among. */
+  private offered: readonly FrameKind[] = []
   /** Counts the drawings started, so one that ends after a later one is dropped. */
   private drawings = 0
   private readonly redraw = debounce(() => void this.draw(), settle, true)
@@ -78,12 +96,26 @@ export class HexframeView extends TextFileView {
     this.state = defaultState
     this.problems = []
     this.shown = undefined
+    this.offered = []
     this.contentEl.empty()
   }
 
   override async onOpen(): Promise<void> {
     await super.onOpen()
     this.contentEl.addClass('hexframe-view')
+    // A temporary way to switch the center's expansions, until the hex view's menu replaces it.
+    this.addAction('chevrons-down-up', 'Collapse the center', () => {
+      this.expandWith(collapse)
+    })
+    this.addAction('chevrons-up-down', 'Expand the center', () => {
+      this.expandWith((expansions) => expand(expansions, this.offered))
+    })
+    this.addAction('hexagon', 'Switch the ring around the center', () => {
+      this.expandWith((expansions) => switchOuter(expansions, this.offered))
+    })
+    this.addAction('circle-dot', 'Switch the ring inside the center', () => {
+      this.expandWith((expansions) => switchInner(expansions, this.offered))
+    })
     const { vault } = this.app
     this.registerEvent(
       vault.on('create', (file) => {
@@ -130,12 +162,20 @@ export class HexframeView extends TextFileView {
     }
   }
 
+  /** The expansions the view shows, moved by `move`, written to the file and drawn. */
+  private expandWith(move: (shown: Expansions) => Expansions) {
+    const next = move(shownExpansions(this.state.expansions, this.offered))
+    this.commit({ ...this.state, expansions: next })
+    void this.draw()
+  }
+
   /**
-   * Takes `next`'s center as the view's, written to the hexframe file with the rest of it kept, and
-   * the state read back from what is written, so what the view holds and says matches the file.
+   * Takes `next` as the view's state, what changed written to the hexframe file with the rest of
+   * it kept, and the state read back from what is written, so what the view holds and says matches
+   * the file.
    */
   private commit(next: ViewState) {
-    this.text = withCenter(this.text, next)
+    this.text = withChanges(this.text, this.state, next)
     ;({ state: this.state, problems: this.problems } = decodeViewState(this.text))
     this.requestSave()
   }
@@ -161,15 +201,23 @@ export class HexframeView extends TextFileView {
       folder = center.folder
       if (center.note !== undefined) notes.push(`${file.name}: ${center.note}.`)
       const { frame, warnings } = await readFrame(disk, folder)
+      const shown = shownExpansions(this.state.expansions, kindsOf(frame.rings))
+      const opened: Partial<Record<Direction, Frame>> = {}
+      for (const { direction, path } of branchesToOpen(frame, shown)) {
+        const branch = await readFrame(disk, vaultPath(path))
+        opened[direction] = branch.frame
+        warnings.push(...branch.warnings)
+      }
       if (drawing !== this.drawings) return
-      const view = { frame, frameKind: outerKindOf(this.state, kindsOf(frame.rings)) }
-      this.shown = folder
+      const view = viewOf(frame, shown, opened)
+      this.shown = [folder, ...Object.values(opened).map(({ tile }) => vaultPath(tile.path))]
+      this.offered = kindsOf(frame.rings)
       drawView(this.contentEl, view, [...notes, ...warnings, ...ringNotes(view)], (hex, event) => {
         void this.onHex(hex, event)
       })
     } catch (error) {
       if (drawing !== this.drawings) return
-      this.shown = folder
+      this.shown = [folder]
       this.contentEl.empty()
       drawNotes(this.contentEl, [
         ...notes,
@@ -183,6 +231,10 @@ export class HexframeView extends TextFileView {
    * dropped once a later one, or another file in the view, has overtaken it during a check.
    */
   private async onHex(placement: Placement, event: MouseEvent) {
+    if (event.altKey) {
+      await this.switchBranch(placement)
+      return
+    }
     const action = actionOf(placement, event.shiftKey)
     const disk = diskOf(this.app)
     if (action === undefined || disk === undefined) return
@@ -199,7 +251,9 @@ export class HexframeView extends TextFileView {
           )
           return
         }
-        this.commit({ ...this.state, center: action.center })
+        // The Branches a view opens are its center's, so a new center opens none.
+        const expansions = { ...this.state.expansions, branches: {} }
+        this.commit({ center: action.center, expansions })
         void this.draw()
       }
       const checked = await checkedOf(this.app, disk, action.open)
@@ -213,6 +267,24 @@ export class HexframeView extends TextFileView {
       } else await openInDefaultApp(this.app, checked.system)
     } catch (error) {
       new Notice(`Hexframe can't carry out that click: ${messageOf(error)}`)
+    }
+  }
+
+  /**
+   * An alt-click on `placement`: when it is a Branch of the ring around the center, the Branch
+   * opens into the next kind its folder offers, or closes after the last one.
+   */
+  private async switchBranch(placement: Placement) {
+    const direction = outerBranchOf(placement)
+    const disk = diskOf(this.app)
+    if (direction === undefined || placement.kind === 'empty' || disk === undefined) return
+    const click = ++this.clicks
+    try {
+      const { frame } = await readFrame(disk, vaultPath(placement.tile.path))
+      if (click !== this.clicks) return
+      this.expandWith((expansions) => switchBranch(expansions, direction, kindsOf(frame.rings)))
+    } catch (error) {
+      new Notice(`Hexframe can't open ${placement.tile.title}: ${messageOf(error)}`)
     }
   }
 

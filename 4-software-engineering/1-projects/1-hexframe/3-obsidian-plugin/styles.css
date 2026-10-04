@@ -48,6 +48,25 @@
   text-anchor: middle;
 }
 
+/* An opened hex is the ground of the Frame drawn over it: its kind's fill, faded, and no clicks of
+   its own. The opened center keeps a tint of the accent, so its own Tile stands out on it. */
+.hexframe-hex.is-opened {
+  pointer-events: none;
+}
+
+.hexframe-hex.is-opened polygon {
+  fill-opacity: 0.45;
+}
+
+.hexframe-hex.is-center.is-opened polygon {
+  fill-opacity: 0.14;
+}
+
+/* A hex a generation further, inside an opened one, takes a thinner line. */
+.hexframe-hex.is-small polygon {
+  stroke-width: 0.6;
+}
+
 /* A hex that holds a Tile opens it on a click. */
 .hexframe-hex.is-clickable {
   cursor: pointer;

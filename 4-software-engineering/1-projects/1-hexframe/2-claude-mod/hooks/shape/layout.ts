@@ -84,6 +84,12 @@ export const viewHeight = 5
 /** A Frame drawn inside a hex takes a third of its radius: its ring then touches that hex's sides. */
 const generationScale = 1 / 3
 
+/**
+ * The margin a Frame opened inside a hex leaves to that hex's sides, as a share of its radius, so
+ * the Frame stays inside the hex a renderer draws, a little smaller than the layout's.
+ */
+const padding = 0.08
+
 /** The hex a view's Frame fills: its Tile and ring, of radius 1, take a third of it. */
 const frameRadius = 3
 
@@ -119,7 +125,8 @@ function placeHex(
 ): Placement[] {
   const hex = { ...role, center: room.at, radius: room.radius, generation }
   if (opened === undefined) return [hex]
-  return [{ ...hex, opened: true }, ...placeFrame(opened, role, generation, room)]
+  const inside = { at: room.at, radius: room.radius * (1 - padding) }
+  return [{ ...hex, opened: true }, ...placeFrame(opened, role, generation, inside)]
 }
 
 /** `view`'s Frame inside `room`: its Tile, standing for `hub`, then its ring by direction. */

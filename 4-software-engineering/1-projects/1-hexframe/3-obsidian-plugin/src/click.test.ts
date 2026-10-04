@@ -2,18 +2,25 @@ import { describe, expect, it } from 'vitest'
 
 import type { Placement } from '../../2-claude-mod/hooks/shape/layout.ts'
 import type { MemberKind } from '../../2-claude-mod/hooks/shape/node.ts'
-import { actionOf } from './click.ts'
+import { actionOf, outerBranchOf } from './click.ts'
 
-const at = { x: 0, y: 0 }
+const at = { center: { x: 0, y: 0 }, radius: 1 }
 const tile = (path: string) => ({ path, title: path, preview: '' })
-const center = (path: string): Placement => ({ kind: 'center', center: at, tile: tile(path) })
-const member = (memberKind: MemberKind, path: string): Placement => ({
+const center = (path: string): Placement => ({
+  kind: 'center',
+  ...at,
+  generation: 0,
+  tile: tile(path),
+})
+const member = (memberKind: MemberKind, path: string, generation = 1): Placement => ({
   kind: 'member',
   memberKind,
   direction: 3,
-  center: at,
+  ...at,
+  generation,
   tile: tile(path),
 })
+const empty: Placement = { kind: 'empty', direction: 2, ...at, generation: 1 }
 
 describe('actionOf', () => {
   it('centers on a Branch and shows its note', () => {
@@ -81,7 +88,32 @@ describe('actionOf', () => {
   })
 
   it('does nothing for an empty hex', () => {
-    expect(actionOf({ kind: 'empty', direction: 2, center: at }, false)).toBeUndefined()
-    expect(actionOf({ kind: 'empty', direction: 2, center: at }, true)).toBeUndefined()
+    expect(actionOf(empty, false)).toBeUndefined()
+    expect(actionOf(empty, true)).toBeUndefined()
+  })
+
+  it('centers on a Branch an opened Branch shows, a generation further', () => {
+    expect(actionOf(member('branch', '3-games/1-riftbound', 2), false)).toMatchObject({
+      center: '3-games/1-riftbound',
+    })
+  })
+})
+
+describe('outerBranchOf', () => {
+  it("names the direction of a Branch of the center's ring, opened or not", () => {
+    expect(outerBranchOf(member('branch', '3-games'))).toBe(3)
+    expect(outerBranchOf({ ...member('branch', '3-games'), radius: 1 / 3 })).toBe(3)
+  })
+
+  it('names none for the center, a Leaf, a Context tile, an empty hex or a deeper Branch', () => {
+    for (const placement of [
+      center(''),
+      member('leaf', 'STACK.md'),
+      member('context', '.claude'),
+      empty,
+      member('branch', '3-games/1-riftbound', 2),
+    ]) {
+      expect(outerBranchOf(placement)).toBeUndefined()
+    }
   })
 })
