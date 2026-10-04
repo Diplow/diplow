@@ -181,6 +181,24 @@ export async function refusal(disk: Disk, folder: string): Promise<string | unde
   }
 }
 
+/**
+ * Why the view can't open `path`, in the paired pane or in the system's default app, or undefined
+ * when it can: it must be a file whose real path, symlinks followed, lies within the vault's, so a
+ * shared vault can't make a click open what lies beyond it. A file the file system fails on gives
+ * the failure.
+ */
+export async function unopenable(disk: Disk, path: string): Promise<string | undefined> {
+  try {
+    const { root } = await readerOf(disk)
+    const found = await disk.stat(path)
+    if (found === undefined) return 'it does not exist'
+    if (found.kind !== 'file') return 'it is not a file'
+    return isWithin(found.realPath, root) ? undefined : 'it leads out of the vault'
+  } catch (error) {
+    return messageOf(error)
+  }
+}
+
 /** Why a folder on `relative`, a path from the vault's root, leaves out the next one. */
 async function leftOut(reader: Reader, relative: string): Promise<string | undefined> {
   let above = ''

@@ -36,3 +36,12 @@ HEX-33. The vault's entry is an empty `diplow.hexframe` at the root: empty means
 
 HEX-33, [#39](https://github.com/Diplow/diplow/pull/39). `vault/frame.ts`'s `readFrame` follows the steps of claude-mod's `loadFrame` (exclusions first, then the sort, then one Tile per seated member, an overflowing ring left as names), over a `Disk` port instead of `$.fs`. It adds one rule claude-mod lacks: every read must lie within the vault's real path, since Obsidian's index lists a symlinked folder as a folder. Moving one `readFrame` over a port into the shape would stretch the shape's rule that a medium does the file system calls, and it would change claude-mod's pane, so this ticket keeps the copy and leaves that call to me. cubic raised it in every review round of #39.
 
+
+### DEC-8 The clicks the ticket left open, and what a click may open
+
+HEX-34. The ticket's click rules leave four cases open, settled here so they read the same everywhere:
+
+- **The center goes up and shows the note there.** Going up is centering on the folder holding the center, so it shows that folder's note, as centering on a Branch does: the pane follows the view. At the vault root there is nowhere to go up to, and the click shows the root's own note.
+- **A Leaf that isn't Markdown goes to the default app, shift held or not.** The paired pane is for notes, and Obsidian opens most files that aren't Markdown in no view of its own.
+- **The paired pane is split off the view's own leaf** with `createLeafBySplit(this.leaf, 'vertical')`, not `getLeaf('split', 'vertical')`, which splits whichever leaf is active: the two match when the click comes from the view, and the first can't split another pane by mistake. The note opens with `active: false`, so the view keeps the focus for the next click.
+- **What a click opens is held to the vault, as what the view reads is.** A note or a file whose real path leaves the vault, through a symlinked folder, opens nothing, and a folder whose real path does is not centered on; a notice says why. Obsidian types no "Open in default app", so the view calls the app's own `openWithDefaultApp`, checked to exist, and says so in a notice when it is missing. A Leaf handed to the system runs whatever the system does with it, a script included: that is what the ticket asks, and it stays a deliberate click on a file of the vault.

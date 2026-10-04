@@ -1,7 +1,15 @@
 import { describe, expect, it } from 'vitest'
 
 import type { Entry, FileStat } from '../../../2-claude-mod/hooks/shape/node.ts'
-import { centerToShow, inFolder, readFrame, refusal, vaultPath, type Disk } from './frame.ts'
+import {
+  centerToShow,
+  inFolder,
+  readFrame,
+  refusal,
+  unopenable,
+  vaultPath,
+  type Disk,
+} from './frame.ts'
 
 /**
  * A vault in memory at `/vault`: each key a path relative to it, a string a file's text, `{}` a
@@ -248,6 +256,38 @@ describe('centerToShow', () => {
     expect(await centerToShow(disk, { folder: '3-games' }, 'out/notes')).toEqual({
       folder: '3-games',
     })
+  })
+})
+
+describe('unopenable', () => {
+  const disk = diskOf({
+    'STACK.md': 'stack',
+    '3-games': {},
+    '3-games/board.pdf': 'pdf',
+    out: { link: '/elsewhere' },
+    'out/CLAUDE.md': 'out',
+    beside: { link: '/vault-old' },
+    'beside/board.pdf': 'pdf',
+  })
+
+  it('lets the view open a file of the vault', async () => {
+    expect(await unopenable(disk, 'STACK.md')).toBeUndefined()
+    expect(await unopenable(disk, '3-games/board.pdf')).toBeUndefined()
+  })
+
+  it('refuses what is not a file', async () => {
+    expect(await unopenable(disk, '3-games/CLAUDE.md')).toBe('it does not exist')
+    expect(await unopenable(disk, '3-games')).toBe('it is not a file')
+  })
+
+  it('refuses a file whose real path leaves the vault, compared folder by folder', async () => {
+    expect(await unopenable(disk, 'out/CLAUDE.md')).toBe('it leads out of the vault')
+    expect(await unopenable(disk, 'beside/board.pdf')).toBe('it leads out of the vault')
+  })
+
+  it('gives the failure of a file the file system fails on', async () => {
+    const failing: Disk = { ...disk, stat: () => Promise.reject(new Error('EACCES')) }
+    expect(await unopenable(failing, 'STACK.md')).toBe('EACCES')
   })
 })
 

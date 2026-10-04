@@ -1,11 +1,28 @@
 // The view a hexframe file opens in: its view state read from the file, the folder it centers on
-// drawn at depth 1, and drawn again when the vault changes under it.
-import { debounce, TextFileView, type TAbstractFile } from 'obsidian'
+// drawn at depth 1, and drawn again when the vault changes under it. A click on a hex moves it and
+// shows the hex's note in a paired pane beside it.
+import {
+  debounce,
+  Notice,
+  TextFileView,
+  type App,
+  type TAbstractFile,
+  type WorkspaceLeaf,
+} from 'obsidian'
 
+import type { Placement } from '../../2-claude-mod/hooks/shape/layout.ts'
 import { kindsOf } from '../../2-claude-mod/hooks/shape/node.ts'
+import { actionOf } from './click.ts'
 import { drawNotes, drawView, ringNotes } from './draw.ts'
 import { diskOf } from './vault/disk.ts'
-import { centerToShow, readFrame, vaultPath } from './vault/frame.ts'
+import {
+  centerToShow,
+  readFrame,
+  refusal,
+  unopenable,
+  vaultPath,
+  type Disk,
+} from './vault/frame.ts'
 import {
   centerOf,
   decodeViewState,
@@ -32,6 +49,8 @@ export class HexframeView extends TextFileView {
   /** Counts the drawings started, so one that ends after a later one is dropped. */
   private drawings = 0
   private readonly redraw = debounce(() => void this.draw(), settle, true)
+  /** The pane beside the view that shows the clicked hex's note, once a click opened it. */
+  private paired: WorkspaceLeaf | undefined
 
   override getViewType(): string {
     return viewType
@@ -135,7 +154,9 @@ export class HexframeView extends TextFileView {
       if (drawing !== this.drawings) return
       const view = { frame, frameKind: outerKindOf(this.state, kindsOf(frame.rings)) }
       this.shown = folder
-      drawView(this.contentEl, view, [...notes, ...warnings, ...ringNotes(view)])
+      drawView(this.contentEl, view, [...notes, ...warnings, ...ringNotes(view)], (hex, event) => {
+        void this.onHex(hex, event)
+      })
     } catch (error) {
       if (drawing !== this.drawings) return
       this.shown = folder
@@ -144,4 +165,85 @@ export class HexframeView extends TextFileView {
       drawNotes(this.contentEl, [...notes, `Can't read ${folder || 'the vault root'}: ${reason}`])
     }
   }
+
+  /** A click on a hex: the view centers where the click asks, then opens what it asks. */
+  private async onHex(placement: Placement, event: MouseEvent) {
+    const action = actionOf(placement, event.shiftKey)
+    const disk = diskOf(this.app)
+    if (action === undefined || disk === undefined) return
+    if (action.center !== undefined) {
+      const refused = await refusal(disk, action.center)
+      if (refused !== undefined) {
+        new Notice(`Hexframe can't center on ${action.center || 'the vault root'}, as ${refused}.`)
+        return
+      }
+      this.centerOn(action.center)
+    }
+    if ('file' in action.open) await this.openInDefaultApp(disk, action.open.file)
+    else await this.showNote(disk, action.open.notes)
+  }
+
+  /** Centers the view on `folder`, written to the hexframe file with the rest of it kept. */
+  private centerOn(folder: string) {
+    this.text = withCenter(this.text, { ...this.state, center: folder })
+    ;({ state: this.state, problems: this.problems } = decodeViewState(this.text))
+    this.requestSave()
+    void this.draw()
+  }
+
+  /** Shows the first of `notes` that exists in the paired pane, in reading view; none, nothing. */
+  private async showNote(disk: Disk, notes: readonly string[]) {
+    const { vault } = this.app
+    const path = notes.find((note) => vault.getFileByPath(note) !== null)
+    if (path === undefined) return
+    const refused = await unopenable(disk, path)
+    const file = vault.getFileByPath(path)
+    if (refused !== undefined || file === null) {
+      new Notice(`Hexframe can't open ${path}, as ${refused ?? 'it does not exist'}.`)
+      return
+    }
+    await this.pairedLeaf().openFile(file, { state: { mode: 'preview' }, active: false })
+  }
+
+  /** The paired pane, split off to the right of the view the first time, and again once closed. */
+  private pairedLeaf(): WorkspaceLeaf {
+    const kept = this.paired
+    if (kept !== undefined && isOpen(this.app, kept)) return kept
+    const leaf = this.app.workspace.createLeafBySplit(this.leaf, 'vertical')
+    this.paired = leaf
+    return leaf
+  }
+
+  /** Hands `path` to the system's default app, once it is held to the vault. */
+  private async openInDefaultApp(disk: Disk, path: string) {
+    const { app } = this
+    if (!hasDefaultApp(app)) {
+      new Notice(`Hexframe can't open ${path}: this Obsidian opens no file in its default app.`)
+      return
+    }
+    const refused = await unopenable(disk, path)
+    if (refused === undefined) await app.openWithDefaultApp(path)
+    else new Notice(`Hexframe can't open ${path}, as ${refused}.`)
+  }
+}
+
+/**
+ * Obsidian's own "Open in default app", which its API doesn't type: it takes a path relative to the
+ * vault and hands the file to the system.
+ */
+interface DefaultApp {
+  openWithDefaultApp(path: string): Promise<void>
+}
+
+function hasDefaultApp(app: App): app is App & DefaultApp {
+  return 'openWithDefaultApp' in app && typeof app.openWithDefaultApp === 'function'
+}
+
+/** Whether `wanted` is still a pane of the workspace, not one the user closed. */
+function isOpen(app: App, wanted: WorkspaceLeaf): boolean {
+  const leaves: WorkspaceLeaf[] = []
+  app.workspace.iterateAllLeaves((leaf) => {
+    leaves.push(leaf)
+  })
+  return leaves.includes(wanted)
 }
