@@ -39,6 +39,8 @@ A click on a hex moves the view and shows the hex's note in a pane split off to 
 
 A folder with no note opens nothing and still centers, and so does one whose note Obsidian doesn't index, which is the case inside a dot folder unless a plugin such as Hidden folders access indexes it. The view opens nothing, and centers on nothing, whose real path leaves the vault, and says why in a notice.
 
+Reading takes the view along the other way. When the paired pane opens a folder's `CLAUDE.md` or `-CLAUDE.md`, by a wikilink followed in it, the back button or the quick switcher, the view centers on that folder as a click on its hex would, held to the vault the same way. Any other file opened there, and any file opened in another pane, leaves the view where it is. So does the note the view last dealt with there, opening again as the user comes back to the pane: one the view showed itself, since its click already chose where to center, shift held or not, or one it already followed, or refused with a notice, which it says once. Once the pane has opened another note, going back to that one follows it again.
+
 The file keeps the view state as JSON, what the app keeps in its URL. An empty file means the defaults, the file's own folder with Children (or Branches) around it and Context inside. One that sets every field:
 
 ```json
@@ -53,7 +55,7 @@ The file keeps the view state as JSON, what the app keeps in its URL. An empty f
 - `expansions.inner`: the Frame kind of the ring inside the center, `leaves` or `context`, or `null` once collapsed. Absent, Context. One the folder doesn't offer, or that can't sit beside the outer ring, shows Context; a pair the file names that no view shows keeps the outer ring, with Context inside, and a line saying so.
 - `expansions.branches`: the Frame kind each Branch of the outer ring opens into, by its direction, `"1"` to `"6"`. A Branch absent from it is closed, and one whose folder doesn't offer the kind shows Children, or Branches past six. A Branch the view couldn't center on (out of the vault, left out by a folder on the way, unreadable) stays closed, with a line saying why. Centering elsewhere closes them all, since they are the old center's.
 
-The view reads the file on open and writes it only when its state changes: when a click centers it, when the center, or a folder holding it, is renamed, and when an expansion is switched. It then sets the fields that changed, `center` or `expansions`, and keeps the rest of the file as written. A file that isn't JSON, or a field that is malformed, gives the defaults with a line saying so, and the file stays as it is.
+The view reads the file on open and writes it only when its state changes: when a click centers it or the paired pane takes it along, when the center, or a folder holding it, is renamed, and when an expansion is switched. It then sets the fields that changed, `center` or `expansions`, and keeps the rest of the file as written. A file that isn't JSON, or a field that is malformed, gives the defaults with a line saying so, and the file stays as it is.
 
 ## Develop it
 
@@ -96,8 +98,9 @@ The lint set is [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE#Lint
 | `manifest.json` | The plugin's manifest, copied beside `main.js` by every build |
 | `styles.css` | The plugin's styles, copied beside `main.js` by every build: the drawing's colors, all of them Obsidian's CSS variables |
 | `src/main.ts` | The plugin's entry, bundled into `main.js`: binds the `hexframe` extension to the view |
-| `src/view.ts` | The view, a `TextFileView` over the hexframe file: decodes it, picks the center, reads it and the Branches it opens and draws them, follows the vault's events, carries out a click, switches the expansions and keeps the paired pane. The only file that holds Obsidian state |
+| `src/view.ts` | The view, a `TextFileView` over the hexframe file: decodes it, picks the center, reads it and the Branches it opens and draws them, follows the vault's events, carries out a click, switches the expansions, keeps the paired pane and follows the folder notes opened in it. The only file that holds Obsidian state |
 | `src/click.ts` | What a click on a hex asks: the folder to center on, and the notes to show or the file to hand to the default app; and which hexes are the Branches around the center, the ones an alt-click opens. Pure |
+| `src/follow.ts` | Which opens in the paired pane move the view, and onto which folder: a folder's note, in that pane, other than the note the view dealt with last there (one it showed, followed or refused) or the center's own; and that last note, kept from one open to the next. Pure |
 | `src/expansions.ts` | How the view opens what it shows: the pairs the center's two rings may form, enforced by their type and one function, the moves between them (collapse, expand, switch a ring, open a Branch), what a folder makes of them, and the view the shape lays out. Pure |
 | `src/view-state.ts` | The hexframe file's JSON: its decoding with defaults, the center it names and the expansions, the fields that changed written back, a rename followed, which changes touch the view. Pure |
 | `src/draw.ts` | The drawing: the shape's layout as SVG through Obsidian's `createSvg`, an opened hex as the ground of the Frame over it, words wrapped and sized to their hex, a click handler on each hex holding a Tile, and the lines under it about every ring shown |
