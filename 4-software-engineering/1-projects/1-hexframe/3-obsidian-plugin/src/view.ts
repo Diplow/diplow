@@ -1,9 +1,11 @@
 // The view a hexframe file opens in: its view state read from the file, the folder it centers on
 // drawn at depth 2, as the expansions open it, and drawn again when the vault changes under it. A
-// click on a hex moves it and shows the hex's note in a paired pane beside it; an alt-click on a
-// Branch around the center opens it, and the view's header buttons open and peel the center.
+// click on a hex moves it and shows the hex's note in a paired pane beside it, and a folder's note
+// opened in that pane moves it back; an alt-click on a Branch around the center opens it, and the
+// view's header buttons open and peel the center.
 import {
   debounce,
+  FileView,
   Notice,
   TextFileView,
   type App,
@@ -21,6 +23,7 @@ import {
 } from '../../2-claude-mod/hooks/shape/node.ts'
 import { actionOf, outerBranchOf, type Asked } from './click.ts'
 import { drawNotes, drawView, ringNotes } from './draw.ts'
+import { followed } from './follow.ts'
 import {
   branchesToOpen,
   collapse,
@@ -77,6 +80,8 @@ export class HexframeView extends TextFileView {
   private readonly redraw = debounce(() => void this.draw(), settle, true)
   /** The pane beside the view that shows the clicked hex's note, once a click opened it. */
   private paired: WorkspaceLeaf | undefined
+  /** The note the view itself last showed in the paired pane, until the pane opens another one. */
+  private shown: string | undefined
   /** Counts the clicks, so one that a later click overtook during a check is dropped. */
   private clicks = 0
 
@@ -147,6 +152,13 @@ export class HexframeView extends TextFileView {
     this.registerEvent(
       this.app.workspace.on('active-leaf-change', (leaf) => {
         if (leaf === this.leaf) this.redraw()
+      }),
+    )
+    // Obsidian sends `file-open` when the active pane's file changes: following a link in the
+    // paired pane, or coming back to it.
+    this.registerEvent(
+      this.app.workspace.on('file-open', (file) => {
+        if (file !== null) void this.onFileOpen(file)
       }),
     )
   }
@@ -259,26 +271,16 @@ export class HexframeView extends TextFileView {
     const action = actionOf(placement, event.shiftKey)
     const disk = diskOf(this.app)
     if (action === undefined || disk === undefined) return
-    const click = ++this.clicks
-    const file = this.file
-    const isOvertaken = () => click !== this.clicks || this.file !== file
+    const isOvertaken = this.overtaker()
     try {
-      if (action.center !== undefined) {
-        const refused = await refusal(disk, action.center)
-        if (isOvertaken()) return
-        if (refused !== undefined) {
-          new Notice(
-            `Hexframe can't center on ${action.center || 'the vault root'}, as ${refused}.`,
-          )
-          return
-        }
-        this.commit({ center: action.center, expansions: recenter(this.state.expansions) })
-        void this.draw()
+      if (action.center !== undefined && !(await this.centerOn(disk, action.center, isOvertaken))) {
+        return
       }
       const checked = await checkedOf(this.app, disk, action.open)
       if (checked === undefined || isOvertaken()) return
       if ('refused' in checked) new Notice(checked.refused)
       else if ('note' in checked) {
+        this.shown = checked.note.path
         await this.pairedLeaf().openFile(checked.note, {
           state: { mode: 'preview' },
           active: false,
@@ -290,6 +292,54 @@ export class HexframeView extends TextFileView {
   }
 
   /**
+   * `file` opened in the active pane: when that is the paired pane and `file` a folder's note, the
+   * view moves onto that folder as a click would, unless the view showed that note there itself.
+   */
+  private async onFileOpen(file: TFile) {
+    const disk = diskOf(this.app)
+    const paired = this.paired
+    if (disk === undefined || paired === undefined || this.file === null) return
+    const inPaired = this.app.workspace.getActiveViewOfType(FileView)?.leaf === paired
+    const opened = { path: file.path, inPaired }
+    const home = vaultPath(this.file.parent?.path ?? '')
+    const folder = followed(opened, this.shown, centerOf(this.state, home).folder)
+    // The pane has moved past the note the view showed: going back to it is the user's move.
+    if (inPaired && file.path !== this.shown) this.shown = undefined
+    if (folder === undefined) return
+    try {
+      await this.centerOn(disk, folder, this.overtaker())
+    } catch (error) {
+      new Notice(`Hexframe can't follow ${file.path}: ${messageOf(error)}`)
+    }
+  }
+
+  /**
+   * Counts a new move of the view, a click or an open it follows, and tells whether a later one, or
+   * another file in the view, has overtaken it since.
+   */
+  private overtaker(): () => boolean {
+    const click = ++this.clicks
+    const { file } = this
+    return () => click !== this.clicks || this.file !== file
+  }
+
+  /**
+   * Centers the view on `folder`, written to the file and drawn, once the vault lets it; a notice
+   * says why when it doesn't. Whether it centered: not when refused, nor when overtaken meanwhile.
+   */
+  private async centerOn(disk: Disk, folder: string, isOvertaken: () => boolean) {
+    const refused = await refusal(disk, folder)
+    if (isOvertaken()) return false
+    if (refused !== undefined) {
+      new Notice(`Hexframe can't center on ${folder || 'the vault root'}, as ${refused}.`)
+      return false
+    }
+    this.commit({ center: folder, expansions: recenter(this.state.expansions) })
+    void this.draw()
+    return true
+  }
+
+  /**
    * An alt-click on `placement`: when it is a Branch of the ring around the center, the Branch
    * opens into the next kind its folder offers, or closes after the last one.
    */
@@ -298,13 +348,15 @@ export class HexframeView extends TextFileView {
     const disk = diskOf(this.app)
     if (direction === undefined || placement.kind === 'empty' || disk === undefined) return
     // Dropped when a later click, another file or another center overtakes it during the read.
-    const click = ++this.clicks
-    const { file } = this
+    const isOvertaken = this.overtaker()
     const center = this.drawn?.folders[0]
     const { outer } = this.state.expansions
     const branch = await readOpened(disk, vaultPath(placement.tile.path))
-    const isOvertaken = click !== this.clicks || file !== this.file
-    if (isOvertaken || center !== this.drawn?.folders[0] || outer !== this.state.expansions.outer) {
+    if (
+      isOvertaken() ||
+      center !== this.drawn?.folders[0] ||
+      outer !== this.state.expansions.outer
+    ) {
       return
     }
     if ('refused' in branch) {
