@@ -16,38 +16,25 @@ import {
   type WorkspaceLeaf,
 } from 'obsidian'
 
-import {
-  layoutView,
-  type CollapsedView,
-  type FrameView,
-} from '../../2-claude-mod/hooks/shape/layout.ts'
+import { layoutView } from '../../2-claude-mod/hooks/shape/layout.ts'
 import {
   directions,
   kindsOf,
-  membersOf,
   type Direction,
   type Frame,
-  type FrameKind,
 } from '../../2-claude-mod/hooks/shape/node.ts'
-import { actionOf, type Action, type Asked } from './click.ts'
+import { actionOf, type Action, type Asked, type TileHex } from './click.ts'
 import { drawNotes, drawView, ringNotes, type Focus } from './draw.ts'
-import {
-  branchesToOpen,
-  recenter,
-  sameExpansions,
-  shownExpansions,
-  viewOf,
-  type Expansions,
-} from './expansions.ts'
-import { focusable, focusedHex, focusToward, stepFocus, type TileHex } from './focus.ts'
+import { branchesToOpen, outerBranches, recenter, shownExpansions, viewOf } from './expansions.ts'
+import { focusable, focusedHex, focusToward, stepFocus } from './focus.ts'
 import { followed } from './follow.ts'
-import { items, planOf, type ItemId, type Plan, type Target } from './menu.ts'
+import { items, planOf, type Drawing, type ItemId, type Plan, type Target } from './menu.ts'
 import { diskOf } from './vault/disk.ts'
 import {
   centerToShow,
   messageOf,
   readFrame,
-  readKinds,
+  readKindsOf,
   readOpened,
   refusal,
   unopenable,
@@ -79,7 +66,7 @@ export class HexframeView extends TextFileView {
    * drew, absent when the center couldn't be read. Undefined until that drawing is done, so an item
    * never resolves against another folder's hexes or kinds.
    */
-  private drawn: { folders: string[]; shown?: Drawing } | undefined
+  private drawn: { folders: string[]; drawing?: Drawn } | undefined
   /** The path of the Tile whose hex holds the keyboard's focus; the center's when it is unset. */
   private focus: string | undefined
   /** Outlines the focused hex of the last drawing. */
@@ -196,10 +183,10 @@ export class HexframeView extends TextFileView {
    */
   private listenToKeys() {
     const scope = new Scope(this.scope ?? this.app.scope)
-    const move = (to: (shown: Drawing) => string | undefined) => {
-      const shown = this.drawn?.shown
-      if (shown === undefined || this.isTyping()) return true
-      this.focusOn(to(shown))
+    const move = (to: (drawing: Drawn) => string | undefined) => {
+      const drawing = this.drawn?.drawing
+      if (drawing === undefined || this.isTyping()) return true
+      this.focusOn(to(drawing))
       return false
     }
     scope.register([], 'Tab', () => move(({ hexes }) => stepFocus(this.focus, hexes, 1)))
@@ -232,56 +219,57 @@ export class HexframeView extends TextFileView {
    * takes it.
    */
   runItem(item: ItemId, checking: boolean): boolean {
-    const shown = this.drawn?.shown
-    const hex = shown && focusedHex(this.focus, shown.hexes)
-    if (shown === undefined || hex === undefined || this.isTyping()) return false
-    const plan = planOf(item, this.targetOf(hex, shown))
+    const drawing = this.drawn?.drawing
+    const hex = drawing && focusedHex(this.focus, drawing.hexes)
+    if (drawing === undefined || hex === undefined || this.isTyping()) return false
+    const plan = planOf(item, this.targetOf(hex, drawing))
     if (plan === undefined) return false
     if (!checking) this.carryOut(plan)
     return true
   }
 
   /** What an item acts on at `hex`, the expansions taken from the file as the drawing shows them. */
-  private targetOf(hex: TileHex, { view, offered, branchKinds }: Drawing): Target {
+  private targetOf(hex: TileHex, { view, offered, branchKinds }: Drawn): Target {
     const shown = shownExpansions(this.state.expansions, offered)
     return { hex, view, shown, offered, branchKinds }
   }
 
   /**
    * A right click on `hex`: it takes the focus, and a menu lists the items that apply to it, each
-   * with the key its command is bound to, right-aligned.
+   * with the key its command is bound to, right-aligned. An item chosen runs as its command does,
+   * on that hex as the view is then, and on nothing once a drawing has taken the hex away.
    */
   private onMenu(hex: TileHex, event: MouseEvent) {
-    const shown = this.drawn?.shown
-    if (shown === undefined) return
-    this.focusOn(hex.tile.path)
-    const target = this.targetOf(hex, shown)
+    const drawing = this.drawn?.drawing
+    if (drawing === undefined) return
+    const { path } = hex.tile
+    this.focusOn(path)
+    const target = this.targetOf(hex, drawing)
+    const applying = items.filter(({ id }) => planOf(id, target) !== undefined)
+    if (applying.length === 0) return
     // Obsidian's native menus show no key beside a title, so this one is drawn by Obsidian itself.
     const menu = new Menu().setUseNativeMenu(false)
-    let listed = 0
-    for (const { id, name } of items) {
-      const plan = planOf(id, target)
-      if (plan === undefined) continue
-      listed++
+    for (const { id, name } of applying) {
       menu.addItem((item) =>
         item.setTitle(titleOf(name, hotkeyOf(this.app, this.commandOf(id)))).onClick(() => {
-          this.carryOut(plan)
+          if (!this.drawn?.drawing?.hexes.some(({ tile }) => tile.path === path)) return
+          this.focusOn(path)
+          this.runItem(id, false)
         }),
       )
     }
-    if (listed > 0) menu.showAtMouseEvent(event)
+    menu.showAtMouseEvent(event)
   }
 
-  /** Carries out what an item asks: what a click would, or new expansions, written and drawn. */
+  /**
+   * Carries out what an item asks: what a click would, or new expansions, written and drawn. An
+   * item that would change nothing has no plan, so nothing is written for it.
+   */
   private carryOut(plan: Plan) {
     if ('click' in plan) {
       void this.act(plan.click)
       return
     }
-    // A move that changes nothing writes nothing: the file keeps asking for what it asked for.
-    const shown = this.drawn?.shown
-    const current = shown && shownExpansions(this.state.expansions, shown.offered)
-    if (current !== undefined && sameExpansions(plan.expansions, current)) return
     this.commit({ ...this.state, expansions: plan.expansions })
     void this.draw()
   }
@@ -329,12 +317,18 @@ export class HexframeView extends TextFileView {
           warnings.push(...branch.warnings)
         }
       }
-      const branchKinds = await readBranchKinds(disk, frame, shown, opened)
+      // What "Expand as" may open each Branch into: an opened one's kinds from its Frame.
+      const closed = outerBranches(frame, shown).filter(({ direction }) => !opened[direction])
+      const branchKinds: Drawing['branchKinds'] = await readKindsOf(disk, closed)
+      for (const direction of directions) {
+        const branch = opened[direction]
+        if (branch) branchKinds[direction] = kindsOf(branch.rings)
+      }
       if (drawing !== this.drawings) return
       const view = viewOf(frame, shown, opened)
       const folders = [folder, ...Object.values(opened).map(({ tile }) => vaultPath(tile.path))]
       const hexes = focusable(layoutView(view))
-      this.drawn = { folders, shown: { view, hexes, offered: kindsOf(frame.rings), branchKinds } }
+      this.drawn = { folders, drawing: { view, hexes, offered: kindsOf(frame.rings), branchKinds } }
       this.outline = drawView(this.contentEl, view, [...notes, ...warnings, ...ringNotes(view)], {
         click: (hex, event) => {
           this.focusOn(hex.tile.path)
@@ -452,41 +446,9 @@ export class HexframeView extends TextFileView {
   }
 }
 
-/**
- * What the last drawing drew: the view, the hexes the focus moves among, the Frame kinds the center
- * offers, and those each Branch around it offers, by direction, where they could be read.
- */
-interface Drawing {
-  view: FrameView | CollapsedView
+/** What the last drawing drew, as the items read it, and the hexes the focus moves among. */
+interface Drawn extends Drawing {
   hexes: TileHex[]
-  offered: readonly FrameKind[]
-  branchKinds: Target['branchKinds']
-}
-
-/**
- * The Frame kinds each Branch of `frame`'s outer ring offers, what "Expand as" may open it into:
- * an opened one's from the Frame read, a closed one's from its listing. A Branch the view may not
- * open, or can't read, offers none.
- */
-async function readBranchKinds(
-  disk: Disk,
-  frame: Frame,
-  shown: Expansions,
-  opened: Partial<Record<Direction, Frame>>,
-): Promise<Target['branchKinds']> {
-  const kinds: Target['branchKinds'] = {}
-  if (shown.outer === null) return kinds
-  const members = membersOf(frame.rings[shown.outer])
-  for (const direction of directions) {
-    const member = members[direction]
-    if (member?.kind !== 'branch') continue
-    const branch = opened[direction]
-    const offered = branch
-      ? kindsOf(branch.rings)
-      : await readKinds(disk, vaultPath(member.tile.path))
-    if (offered !== undefined) kinds[direction] = offered
-  }
-  return kinds
 }
 
 /** A menu item's title: its name, then the key its command is bound to, right-aligned. */

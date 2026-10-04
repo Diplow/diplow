@@ -18,6 +18,7 @@ import {
   around,
   beside,
   openBranch,
+  outerBranches,
   outerKinds,
   recenter,
   sameExpansions,
@@ -230,7 +231,7 @@ const ring = (members: Partial<Record<Direction, Member>>) => ({
 })
 const frameOf = (path: string, rings: Rings<Member>): Frame => ({ tile: tile(path), rings })
 
-describe('branchesToOpen and viewOf', () => {
+describe('outerBranches, branchesToOpen and viewOf', () => {
   const frame = frameOf('', {
     children: {
       ...ring({
@@ -240,6 +241,12 @@ describe('branchesToOpen and viewOf', () => {
       clashes: [],
     },
     context: ring({}),
+  })
+
+  it('lists the Branches of the outer ring, and none around a peeled center', () => {
+    const shown = open({ outer: 'children', inner: 'context' })
+    expect(outerBranches(frame, shown)).toEqual([{ direction: 1, path: '1-a' }])
+    expect(outerBranches(frame, open({ outer: null, inner: 'context' }))).toEqual([])
   })
 
   it('opens only the Branches of the outer ring that the expansions name', () => {

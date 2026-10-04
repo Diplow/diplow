@@ -15,6 +15,7 @@ import {
   sortEntries,
   tileOf,
   unreadable,
+  type Direction,
   type Entry,
   type FileRead,
   type FileStat,
@@ -98,6 +99,25 @@ export async function readKinds(disk: Disk, folder: string): Promise<FrameKind[]
   } catch {
     return undefined
   }
+}
+
+/**
+ * The Frame kinds each of `folders` offers, by direction, read side by side, as `readKinds` reads
+ * them; a folder that offers none is left out.
+ */
+export async function readKindsOf(
+  disk: Disk,
+  folders: readonly { direction: Direction; path: string }[],
+): Promise<Partial<Record<Direction, FrameKind[]>>> {
+  const read = await Promise.all(
+    folders.map(async ({ direction, path }) => ({
+      direction,
+      kinds: await readKinds(disk, vaultPath(path)),
+    })),
+  )
+  const kinds: Partial<Record<Direction, FrameKind[]>> = {}
+  for (const { direction, kinds: offered } of read) if (offered) kinds[direction] = offered
+  return kinds
 }
 
 /** `folder`'s listing sorted into rings of names, once its `exclusions.yaml` has left some out. */

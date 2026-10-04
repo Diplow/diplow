@@ -12,7 +12,7 @@ import {
   type Point,
 } from '../../2-claude-mod/hooks/shape/layout.ts'
 import type { FrameKind, Frame } from '../../2-claude-mod/hooks/shape/node.ts'
-import type { TileHex } from './focus.ts'
+import type { TileHex } from './click.ts'
 
 /** Units of the SVG per unit of the layout. */
 const scale = 110

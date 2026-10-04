@@ -6,6 +6,7 @@ import {
   inFolder,
   readFrame,
   readKinds,
+  readKindsOf,
   readOpened,
   refusal,
   unopenable,
@@ -212,6 +213,18 @@ describe('readKinds', () => {
     expect(await readKinds(disk, 'out')).toBeUndefined()
     const failing: Disk = { ...disk, list: () => Promise.reject(new Error('EACCES')) }
     expect(await readKinds(failing, '3-games')).toBeUndefined()
+  })
+})
+
+describe('readKindsOf', () => {
+  it('gives the kinds of each folder by direction, leaving out one that offers none', async () => {
+    const disk = diskOf({ '1-a': {}, '2-b': {}, '2-b/.c': {}, out: { link: '/elsewhere' } })
+    const read = await readKindsOf(disk, [
+      { direction: 1, path: '/1-a' },
+      { direction: 2, path: '2-b' },
+      { direction: 3, path: 'out' },
+    ])
+    expect(read).toEqual({ 1: ['children', 'context'], 2: ['children', 'context'] })
   })
 })
 

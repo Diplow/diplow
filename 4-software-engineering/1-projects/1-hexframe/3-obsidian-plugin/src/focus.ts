@@ -9,9 +9,7 @@ import {
   type Frame,
   type FrameKind,
 } from '../../2-claude-mod/hooks/shape/node.ts'
-
-/** A hex holding a Tile, which a click, the menu and the shortcuts act on. */
-export type TileHex = Exclude<Placement, { kind: 'empty' }>
+import type { TileHex } from './click.ts'
 
 /**
  * The hexes the focus moves among, in the order the view draws them: every hex holding a Tile but

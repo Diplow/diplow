@@ -9,9 +9,8 @@ import {
   type Direction,
   type FrameKind,
 } from '../../2-claude-mod/hooks/shape/node.ts'
-import { actionOf, outerBranchOf, type Action } from './click.ts'
+import { actionOf, outerBranchOf, type Action, type TileHex } from './click.ts'
 import { closeBranch, collapse, expandCenter, openBranch, type Expansions } from './expansions.ts'
-import type { TileHex } from './focus.ts'
 
 /** The items of the menu, each an Obsidian command of the same id. */
 export type ItemId =
@@ -53,23 +52,29 @@ const expandsAs: Partial<Record<ItemId, FrameKind>> = {
   'expand-as-context': 'context',
 }
 
-/** What the view knows of the hex an item acts on, and of the view around it. */
-export interface Target {
-  hex: TileHex
-  /** What the view draws. */
+/** What the view drew, which the items read. */
+export interface Drawing {
   view: FrameView | CollapsedView
-  /** The expansions the view shows, which an item's move starts from. */
-  shown: Expansions
   /** The Frame kinds the center offers. */
   offered: readonly FrameKind[]
   /** The Frame kinds each Branch around the center offers, by direction, where they were read. */
   branchKinds: Partial<Record<Direction, readonly FrameKind[]>>
 }
 
+/** The hex an item acts on, what the view drew around it, and the expansions it shows. */
+export interface Target extends Drawing {
+  hex: TileHex
+  /** The expansions the view shows, which an item's move starts from. */
+  shown: Expansions
+}
+
 /** What an item asks of the view: what a click would, or new expansions to write and draw. */
 export type Plan = { click: Action } | { expansions: Expansions }
 
-/** What `item` asks of the view on `target`'s hex, or undefined when it doesn't apply there. */
+/**
+ * What `item` asks of the view on `target`'s hex, or undefined when it doesn't apply there. A move
+ * that would change nothing doesn't apply either, so the file keeps asking for what it asked for.
+ */
 export function planOf(item: ItemId, { hex, ...around }: Target): Plan | undefined {
   const kind = expandsAs[item]
   if (kind !== undefined) return expansionsPlan(expandAs(hex, kind, around))
@@ -120,18 +125,20 @@ function expandAs(hex: TileHex, kind: FrameKind, around: Around): Expansions | u
 
 /**
  * The expansions "Collapse" makes of `hex`: the center peeled, its outer ring first, or an opened
- * Branch around it closed. A hex that shows nothing opened has nothing to collapse.
+ * Branch around it closed. A hex that shows nothing opened has nothing to collapse, a Branch the
+ * view left closed included.
  */
-function collapseOf(hex: TileHex, { shown }: Around): Expansions | undefined {
+function collapseOf(hex: TileHex, around: Around): Expansions | undefined {
+  const { shown } = around
   if (hex.kind === 'center') {
     return shown.outer === null && shown.inner === null ? undefined : collapse(shown)
   }
   const direction = outerBranchOf(hex)
-  if (direction === undefined || shown.branches[direction] === undefined) return undefined
+  if (direction === undefined || openedKind(around, direction) === undefined) return undefined
   return closeBranch(shown, direction)
 }
 
-/** The kind the Branch in `direction` shows opened, or undefined while it is closed. */
+/** The kind the Branch in `direction` shows opened, or undefined while the view shows it closed. */
 function openedKind({ view }: Around, direction: Direction): FrameKind | undefined {
   return 'frameKind' in view ? view.expanded?.[direction]?.frameKind : undefined
 }

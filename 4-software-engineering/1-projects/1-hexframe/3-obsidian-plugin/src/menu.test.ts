@@ -9,7 +9,8 @@ import type {
   Rings,
 } from '../../2-claude-mod/hooks/shape/node.ts'
 import type { Expansions } from './expansions.ts'
-import { focusable, type TileHex } from './focus.ts'
+import type { TileHex } from './click.ts'
+import { focusable } from './focus.ts'
 import { items, planOf, type ItemId, type Target } from './menu.ts'
 
 const tile = (path: string) => ({ path, title: path, preview: '' })
@@ -142,6 +143,13 @@ describe('planOf', () => {
     expect(planOf('expand-as-children', targetOf('4-se', peeled))).toEqual({
       expansions: { outer: 'children', inner: 'context', branches: {} },
     })
+  })
+
+  it('collapses nothing on a Branch the view left closed, whatever the file asks', () => {
+    const asked = {
+      shown: { ...shown, branches: { 1: 'children' as const, 2: 'leaves' as const } },
+    }
+    expect(planOf('collapse', targetOf('4-se/2-b', asked))).toBeUndefined()
   })
 
   it('does nothing where the rules forbid the layout asked for', () => {

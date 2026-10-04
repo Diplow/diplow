@@ -105,26 +105,46 @@ export function recenter(expansions: Expansions): Expansions {
 
 /**
  * The center opened into `kind`, among the kinds its folder offers, `offered`, as "Expand as" asks
- * it; undefined when the rings forbid it, the folder doesn't offer it, or it shows already.
- *
- * - A collapsed center opens its inner ring, Leaves or Context.
- * - A peeled center opens its outer ring around the inner one when `kind` can sit beside it, or
- *   else switches its inner ring.
- * - An open center switches the ring that can take `kind`, the inner one first, so Leaves go
- *   inside Branches; switching the outer ring closes the Branches opened in it.
+ * it; undefined when the rings forbid it, the folder doesn't offer it, or it shows already. A
+ * center with no outer ring opens its next ring; an open one switches a ring.
  */
 export function expandCenter(
   expansions: Expansions,
   kind: FrameKind,
   offered: readonly FrameKind[],
 ): Expansions | undefined {
-  const { outer, inner, branches } = expansions
-  if (!offered.includes(kind) || kind === outer || kind === inner) return undefined
-  const asInner = isInnerKind(kind) ? centerExpansion(outer, kind) : undefined
-  const asOuter = isOuterKind(kind) && inner !== null ? centerExpansion(kind, inner) : undefined
-  if (outer === null && inner !== null && asOuter !== undefined) return { ...asOuter, branches: {} }
-  if (asInner !== undefined) return { ...asInner, branches: outer === null ? {} : branches }
-  return asOuter === undefined ? undefined : { ...asOuter, branches: {} }
+  if (!offered.includes(kind) || kind === expansions.outer || kind === expansions.inner) {
+    return undefined
+  }
+  if (expansions.outer === null) return openRing(expansions.inner, kind)
+  return switchRing(expansions.outer, expansions.inner, expansions.branches, kind)
+}
+
+/**
+ * The next ring of a center with no outer ring opened into `kind`: a collapsed center's inner
+ * ring; a peeled one's outer ring around `inner`, or its inner ring switched when `kind` sits
+ * only inside.
+ */
+function openRing(inner: InnerKind | null, kind: FrameKind): Expansions | undefined {
+  const around = isOuterKind(kind) && inner !== null ? centerExpansion(kind, inner) : undefined
+  if (around !== undefined) return { ...around, branches: {} }
+  return isInnerKind(kind) ? { outer: null, inner: kind, branches: {} } : undefined
+}
+
+/**
+ * A ring of a center open into `outer` and `inner` switched to `kind`, the inner one first, so
+ * Leaves go inside Branches, keeping the opened `branches`; else the outer one, which closes them.
+ */
+function switchRing(
+  outer: OuterKind,
+  inner: InnerKind,
+  branches: Expansions['branches'],
+  kind: FrameKind,
+): Expansions | undefined {
+  const inside = isInnerKind(kind) ? centerExpansion(outer, kind) : undefined
+  if (inside !== undefined) return { ...inside, branches }
+  const outside = isOuterKind(kind) ? centerExpansion(kind, inner) : undefined
+  return outside === undefined ? undefined : { ...outside, branches: {} }
 }
 
 function isInnerKind(kind: FrameKind): kind is InnerKind {
@@ -169,6 +189,19 @@ export function sameExpansions(one: Expansions, other: Expansions): boolean {
   return key(one) === key(other)
 }
 
+/** The Branches of `frame`'s outer ring as `shown` shows it, by direction, with their path. */
+export function outerBranches(
+  frame: Frame,
+  shown: Expansions,
+): { direction: Direction; path: string }[] {
+  if (shown.outer === null) return []
+  const members = membersOf(frame.rings[shown.outer])
+  return directions.flatMap((direction) => {
+    const member = members[direction]
+    return member?.kind === 'branch' ? [{ direction, path: member.tile.path }] : []
+  })
+}
+
 /**
  * The Branches of `frame`'s outer ring that `shown` opens, by direction, with their path: the
  * folders the view reads as Frames beside the center's.
@@ -177,13 +210,9 @@ export function branchesToOpen(
   frame: Frame,
   shown: Expansions,
 ): { direction: Direction; path: string }[] {
-  if (shown.outer === null) return []
-  const members = membersOf(frame.rings[shown.outer])
-  return directions.flatMap((direction) => {
-    const member = members[direction]
-    const isOpened = shown.branches[direction] !== undefined && member?.kind === 'branch'
-    return isOpened ? [{ direction, path: member.tile.path }] : []
-  })
+  return outerBranches(frame, shown).filter(
+    ({ direction }) => shown.branches[direction] !== undefined,
+  )
 }
 
 /**
