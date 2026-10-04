@@ -123,7 +123,7 @@ Each domain introduces its language with a short story in its `CLAUDE.md`: what 
 
 ### IAM
 
-Identity and access: who someone is (an Account, its Sessions, later its Keys), and what they may do (its Entitlements), on Better Auth. The language now lives in [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE|iam]].
+Identity and access: who someone is (an Account, its Sessions and its Keys), and what they may do (its Entitlements), on Better Auth. The language now lives in [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE|iam]].
 
 ### Mapping
 

@@ -70,8 +70,9 @@ halting:
     - Never import one domain from another, or a third-party SDK from anywhere but its repository; the one exception is the MCP server's SDK, in the API layer's MCP folder, as STACK.md says.
     - Never exceed the rule of 6; when a folder is full, regroup and record the regrouping in the register.
     - Never touch a ticket, branch or pull request of another project.
-  # The repo's own tooling and review setup, and the two other packages, which
-  # this project doesn't touch.
+  # The repo's own tooling and review setup, hexframe's STACK.md (the bar the
+  # never list defers to), and the two other packages, which this project
+  # doesn't touch.
   frozen_paths:
     - .skills/**
     - .claude/**
@@ -83,6 +84,7 @@ halting:
     - 4-software-engineering/1-projects/1-hexframe/.cubic/**
     - 4-software-engineering/1-projects/1-hexframe/.run/CLAUDE.md
     - 4-software-engineering/1-projects/1-hexframe/.run/*.yaml
+    - 4-software-engineering/1-projects/1-hexframe/STACK.md
     - 4-software-engineering/1-projects/1-hexframe/2-claude-mod/**
     - 4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/**
   # Everything of mine that is not hexframe.

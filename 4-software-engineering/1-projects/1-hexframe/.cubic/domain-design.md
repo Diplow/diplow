@@ -17,7 +17,7 @@ You review a hexframe pull request for **placement**: is each piece of logic in 
 | Layer | In hexframe | Holds |
 |---|---|---|
 | Front | File routes, the features they compose, the design system, and the client's calls, on TanStack Router, Query and Form | What the browser shows |
-| API | Server functions (`createServerFn`) and Start middleware; raw server routes only for inbound webhooks | Plumbing (auth, request id, logging) and the composition of domains |
+| API | Server functions (`createServerFn`) and Start middleware; raw server routes only for inbound webhooks and the MCP endpoint (`/mcp`) | Plumbing (auth, request id, logging) and the composition of domains |
 | Domains | Effect programs, one folder per domain; a service only when it holds state | The business logic, in the domain's language |
 | Repositories | Effect layers over Drizzle, Better Auth, Stripe | The technical complexity |
 
@@ -25,8 +25,8 @@ Nothing below the front, the API layer included, imports it, and the front reach
 
 ## The domains
 
-- **IAM**: Account, Session, Key, Entitlement. Better Auth and its Stripe plugin are repositories below IAM. An Entitlement is derived from what the Account pays for, never stored beside Stripe. No domain says "billing".
-- **Mapping**: System, Tile, Child, Context, Frame, Reference and their operations. The Root tile is the user; the name Better Auth keeps is copied from its Title, never the other way. What a user does to look (centering, expanding, showing Context) is view state owned by the URL, not Mapping.
+- **IAM**: Account, Session, Key, Entitlement. A request is signed in when a Session or a Key proves its Account; managing Keys and the Account itself takes a Session. Better Auth and its Stripe plugin are repositories below IAM. An Entitlement is derived from what the Account pays for, never stored beside Stripe. No domain says "billing".
+- **Mapping**: System, Tile, Child, Context, Frame, Reference and their operations, swap among them; Help, a System no Account owns, which every Account reads and none writes. The Root tile is the user; the name Better Auth keeps is copied from its Title, never the other way. What a user does to look (centering, expanding, showing Context) is view state owned by the URL, not Mapping.
 - **Assistant**: Conversation, Message, Proposal, Mode. It knows nothing about Tiles: the API hands it Mapping's operations as tools.
 
 A name that crosses these lines (a `Tile` in Assistant, a `billing` folder, view state in a Mapping service) is a finding.
@@ -34,7 +34,7 @@ A name that crosses these lines (a `Tile` in Assistant, a `billing` folder, view
 ## The checks
 
 1. **Presence vs meaning, between API and domain.** The API may branch on composition: which source to ask, whether a source has data. It may not branch on what a value means ("a cancelled plan means blocked"). Test: does this server function hold an `if` whose outcome is a policy choice made nowhere else? Move it into the domain. A guard like `if (plan === null) return null` is presence and is fine.
-2. **The API calls a domain's operations, never its repository.** Any API code (a server function, a middleware, a webhook route) reaching a Drizzle table, a repository's service or a third-party client goes through the domain's public operations instead; a domain is a service of its own only when it holds state. A one-line operation that delegates to the repository is fine; the API depends on the domain's public entry, not its infrastructure. Plumbing is the exception, since it runs no query a domain should own: `transactional`, the runtime's layers, the request's `HttpExchange`, and the observability seam, which belongs to no domain.
+2. **The API calls a domain's operations, never its repository.** Any API code (a server function, a middleware, a webhook route, an MCP tool) reaching a Drizzle table, a repository's service or a third-party client goes through the domain's public operations instead. The MCP server's SDK is no such client: like Start, it is the framework the API layer serves `/mcp` with, imported by its MCP folder alone; a domain is a service of its own only when it holds state. A one-line operation that delegates to the repository is fine; the API depends on the domain's public entry, not its infrastructure. Plumbing is the exception, since it runs no query a domain should own: `transactional`, the runtime's layers, the request's `HttpExchange`, and the observability seam, which belongs to no domain.
 3. **Decision vs errand, between domain and repository.** For each branch ask "why is it this way?" A business, product or security answer is a decision and goes in the domain. A technical answer (how to fetch, how to serialize, how to retry) is an errand and goes in the repository. Weigh size: hoisting a one-line decision into its own module can cost more than it saves.
 4. **Pure first.** Once the data is loaded, most decisions are values in, values out. Put them in pure functions with plain unit tests. A service orchestrates only where it really interleaves with I/O. A decision buried inside an effectful service, untested alone, is a finding.
 5. **A decision lives with the vocabulary it speaks.** A derived or cross-cutting concept (access, pricing, eligibility) does not get its own bridging domain by reflex. Separate the decision from its enforcement. The decision belongs to the domain whose words it uses; the consumer keeps only enforcement. A rule split from the vocabulary it operates on forces every decision to reach across.
