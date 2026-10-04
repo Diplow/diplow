@@ -19,8 +19,11 @@ afterEach(async () => {
 
 async function build(dev: boolean) {
   const context = await bundle({ outDir, dev })
-  await context.rebuild()
-  await context.dispose()
+  try {
+    await context.rebuild()
+  } finally {
+    await context.dispose()
+  }
   return readFile(join(outDir, 'main.js'), 'utf8')
 }
 
@@ -29,6 +32,19 @@ describe('bundle', () => {
     await build(false)
     const source = await readFile(join(import.meta.dirname, '..', name), 'utf8')
     expect(await readFile(join(outDir, name), 'utf8')).toBe(source)
+  })
+
+  it('copies them again on every rebuild, as a dev build does when one changes', async () => {
+    const context = await bundle({ outDir, dev: true })
+    try {
+      await context.rebuild()
+      await writeFile(join(outDir, 'styles.css'), 'stale')
+      await context.rebuild()
+    } finally {
+      await context.dispose()
+    }
+    const source = await readFile(join(import.meta.dirname, '..', 'styles.css'), 'utf8')
+    expect(await readFile(join(outDir, 'styles.css'), 'utf8')).toBe(source)
   })
 
   it('builds production deterministically: the same sources give the same bytes in any folder', async () => {

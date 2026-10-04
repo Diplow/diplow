@@ -41,7 +41,11 @@ const hexes = focusable(layoutView(view))
 describe('focusable', () => {
   it('lists every hex holding a Tile in drawing order, the center first, an opened one once', () => {
     expect(hexes.map(({ tile }) => tile.path)).toEqual(['', '.c', '1-a', '1-a/x.md', '2-b.md'])
-    expect(hexes.every((hex) => hex.kind === 'item' || hex.opened !== true)).toBe(true)
+    // The layout draws the opened Branch twice, its ground and the Frame over it: one is dropped.
+    const drawnTwice = layoutView(view).filter(
+      (placement) => placement.kind !== 'empty' && placement.tile.path === '1-a',
+    )
+    expect(drawnTwice).toHaveLength(2)
   })
 })
 

@@ -1,7 +1,22 @@
 import { describe, expect, it } from 'vitest'
 
 import type { Frame } from '../../2-claude-mod/hooks/shape/node.ts'
-import { ringNotes } from './draw.ts'
+import { labelOf, ringNotes } from './draw.ts'
+
+describe('labelOf', () => {
+  const tile = (title: string) => ({ path: title, title, preview: '' })
+
+  it('names a hex, or a name of a list, by its title, then its kind', () => {
+    const at = { center: { x: 0, y: 0 }, radius: 1, generation: 0 }
+    expect(labelOf({ kind: 'center', tile: tile('diplow'), ...at })).toBe('diplow, the center')
+    expect(
+      labelOf({ kind: 'member', memberKind: 'branch', direction: 3, tile: tile('3-games'), ...at }),
+    ).toBe('3-games, Branch')
+    expect(labelOf({ kind: 'item', memberKind: 'context', tile: tile('.c/') })).toBe(
+      '.c/, Context folder',
+    )
+  })
+})
 
 describe('ringNotes', () => {
   const tile = { path: '', title: 'diplow', preview: '' }

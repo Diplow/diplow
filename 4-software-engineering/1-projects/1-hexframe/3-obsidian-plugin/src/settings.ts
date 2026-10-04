@@ -121,6 +121,8 @@ class SettingsModal extends Modal {
   private items: string[] = []
   /** Redraws the counts once the ticks change. */
   private recount: () => void = () => undefined
+  /** The checkboxes that may change and the buttons, disabled while Save writes. */
+  private readonly controls: (HTMLInputElement | HTMLButtonElement)[] = []
 
   constructor(app: App, panel: Panel) {
     super(app)
@@ -197,7 +199,7 @@ class SettingsModal extends Modal {
     if (lock !== undefined) {
       box.disabled = true
       row.createSpan({ cls: 'hexframe-settings-glob', text: lock })
-    }
+    } else this.controls.push(box)
     box.addEventListener('change', () => {
       this.items = toggled(this.items, slot)
       this.recount()
@@ -209,18 +211,26 @@ class SettingsModal extends Modal {
     const bar = this.contentEl.createDiv({ cls: 'modal-button-container' })
     if (before !== undefined) {
       const save = bar.createEl('button', { cls: 'mod-cta', text: 'Save' })
+      this.controls.push(save)
       save.addEventListener('click', () => {
-        save.disabled = true
+        // A tick made while the file is written would be missing from the change: the form waits.
+        this.enable(false)
         void this.panel.save(changeOf(before, this.items)).then((saved) => {
           if (saved) this.close()
-          else save.disabled = false
+          else this.enable(true)
         })
       })
     }
     const cancel = bar.createEl('button', { text: before === undefined ? 'Close' : 'Cancel' })
+    this.controls.push(cancel)
     cancel.addEventListener('click', () => {
       this.close()
     })
+  }
+
+  /** Enables the form, or disables it while Save writes; a checkbox a glob locks stays disabled. */
+  private enable(enabled: boolean) {
+    for (const control of this.controls) control.disabled = !enabled
   }
 }
 

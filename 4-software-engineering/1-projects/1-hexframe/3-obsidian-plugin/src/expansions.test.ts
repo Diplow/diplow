@@ -275,4 +275,22 @@ describe('outerBranches, branchesToOpen and viewOf', () => {
     })
     expect(viewOf(frame, open({ outer: null, inner: null }), {})).toEqual({ frame })
   })
+
+  it('finds no Branch to open in an outer ring that overflows into a list', () => {
+    const candidates = ['1-a', '1-b', '2-c'].map((name) => ({ kind: 'branch' as const, name }))
+    const listed = frameOf('', {
+      branches: { overflowing: true, candidates, overflow: candidates.slice(1, 2) },
+      leaves: ring({ 1: { kind: 'leaf', tile: tile('1-d.md') } }),
+      context: ring({}),
+    })
+    const shown = open({ outer: 'branches', inner: 'leaves' }, { 1: 'leaves', 2: 'context' })
+    expect(outerBranches(listed, shown)).toEqual([])
+    expect(branchesToOpen(listed, shown)).toEqual([])
+    expect(viewOf(listed, shown, {})).toEqual({
+      frame: listed,
+      frameKind: 'branches',
+      inner: 'leaves',
+      expanded: {},
+    })
+  })
 })

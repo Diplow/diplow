@@ -12,7 +12,7 @@ import {
   type Placement,
   type Point,
 } from '../../2-claude-mod/hooks/shape/layout.ts'
-import type { FrameKind, Frame } from '../../2-claude-mod/hooks/shape/node.ts'
+import type { FrameKind, Frame, MemberKind } from '../../2-claude-mod/hooks/shape/node.ts'
 import {
   fitsIn,
   isListed,
@@ -53,18 +53,19 @@ export function drawView(
   notes: readonly string[],
   onHex: OnHex,
 ): Focus {
+  const refocus = holdsFocus(container)
   container.empty()
   const svg = container.createSvg('svg', {
     cls: 'hexframe-canvas',
     attr: {
       viewBox: `0 0 ${round(viewWidth * scale)} ${round(viewHeight * scale)}`,
-      role: 'img',
-      'aria-label': view.frame.tile.title,
+      ...rootOf(view.frame.tile.title),
     },
   })
   const drawn = layoutView(view).flatMap((placement) => drawHex(svg, placement, onHex))
   drawNotes(container, notes)
-  return outlineOf(drawn)
+  if (refocus) svg.focus({ preventScroll: true })
+  return outlineOf(svg, drawn)
 }
 
 /**
@@ -79,16 +80,15 @@ export function drawFullList(
   notes: readonly string[],
   onHex: OnHex,
 ): Focus {
+  const refocus = holdsFocus(container)
   container.empty()
-  const list = container.createDiv({ cls: 'hexframe-list' })
+  const list = container.createDiv({ cls: 'hexframe-list', attr: rootOf(holder.tile.title) })
   const head = list.createDiv({ cls: 'hexframe-list-head' })
   const hex = head.createDiv({ cls: ['hexframe-list-holder', `is-${kindOf(holder)}`] })
   hex.createSpan({ cls: 'hexframe-list-title', text: holder.tile.title })
   hex.createSpan({ cls: 'hexframe-list-count', text: tooMany(holder.list) })
   clickableOn(hex, holder, onHex)
-  // Actions, for assistive technology; the keyboard reaches them through the view's focus.
-  hex.setAttribute('role', 'button')
-  const drawn: Drawn[] = [{ group: hex, path: holder.tile.path }]
+  const drawn: Drawn[] = [{ group: hex, path: holder.tile.path, button: buttonOf(hex, holder) }]
   if (source === 'opened') {
     const button = head.createEl('button', { text: 'Back to the hexes' })
     button.addEventListener('click', () => {
@@ -107,23 +107,52 @@ export function drawFullList(
       text: item.tile.title,
     })
     clickableOn(name, item, onHex)
-    name.setAttribute('role', 'button')
-    drawn.push({ group: name, path: item.tile.path })
+    drawn.push({ group: name, path: item.tile.path, button: buttonOf(name, item) })
   }
   drawNotes(container, notes)
-  return outlineOf(drawn)
+  if (refocus) list.focus({ preventScroll: true })
+  return outlineOf(list, drawn)
 }
 
-/** How to outline the focused one among `drawn`, which assistive technology reads as current. */
-function outlineOf(drawn: readonly Drawn[]): Focus {
+/**
+ * What makes the drawing's root, named `label`, the one stop of the DOM focus in it, for assistive
+ * technology: the view's keys, not the browser's, move the focus among its hexes and names, so the
+ * root is an application, whose active descendant `outlineOf` sets to the focused one.
+ */
+function rootOf(label: string): Record<string, string | number> {
+  return { role: 'application', tabindex: 0, 'aria-label': label }
+}
+
+/** Whether the DOM focus is within `container`, so the drawing replacing its own takes it back. */
+function holdsFocus(container: HTMLElement): boolean {
+  return container.contains(container.ownerDocument.activeElement)
+}
+
+/**
+ * How to outline the focused one among `drawn`, which `root` names to assistive technology as its
+ * active descendant.
+ */
+function outlineOf(root: Element, drawn: readonly Drawn[]): Focus {
   return (path) => {
-    for (const one of drawn) {
-      const isFocused = one.path === path
-      one.group.toggleClass('is-focused', isFocused)
-      if (isFocused) one.group.setAttribute('aria-current', 'true')
-      else one.group.removeAttribute('aria-current')
-    }
+    for (const one of drawn) one.group.toggleClass('is-focused', one.path === path)
+    const active = drawn.find((one) => one.path === path && one.button !== undefined)?.button
+    if (active === undefined) root.removeAttribute('aria-activedescendant')
+    else root.setAttribute('aria-activedescendant', active.id)
   }
+}
+
+/** Counts the buttons drawn, so each one's id is unique in the window. */
+let buttons = 0
+
+/**
+ * Makes `element` `hex`'s button to assistive technology, named as `labelOf` says, with the id the
+ * root names when it is focused; the keyboard reaches it through the view's focus.
+ */
+function buttonOf(element: Element, hex: Clickable): Element {
+  element.id = `hexframe-button-${String(++buttons)}`
+  element.setAttribute('role', 'button')
+  element.setAttribute('aria-label', labelOf(hex))
+  return element
 }
 
 /** Hands a click and a right click on `element` to `onHex`, as on `hex`. */
@@ -142,8 +171,21 @@ function clickableOn(element: GlobalEventHandlers & Element, hex: Clickable, onH
 }
 
 /** The kind of hex `hex` is, as styles.css names it. */
-function kindOf(hex: Clickable): string {
+function kindOf(hex: Clickable): 'center' | MemberKind {
   return hex.kind === 'center' ? 'center' : hex.memberKind
+}
+
+/** How assistive technology names each kind of hex, and of name of a list. */
+const kindNames: Record<'center' | MemberKind, string> = {
+  center: 'the center',
+  branch: 'Branch',
+  leaf: 'Leaf',
+  context: 'Context folder',
+}
+
+/** How assistive technology names `hex`, a hex or a name of a list: its title, then its kind. */
+export function labelOf(hex: Clickable): string {
+  return `${hex.tile.title}, ${kindNames[kindOf(hex)]}`
 }
 
 /** Shows only `notes`, when there is no Frame to draw. */
@@ -153,10 +195,14 @@ export function drawNotes(container: HTMLElement, notes: readonly string[]) {
   for (const note of notes) list.createEl('li', { text: note })
 }
 
-/** A drawn hex holding a Tile, or a name of a list, and the path of that Tile, which the focus names. */
+/**
+ * A drawn hex holding a Tile, or a name of a list, the path of that Tile, which the focus names,
+ * and its button to assistive technology, which an opened hex, the ground of a Frame, lacks.
+ */
 interface Drawn {
   group: HTMLElement | SVGElement
   path: string
+  button?: Element
 }
 
 /** Draws `placement`; what it holds when it holds a Tile, its hex outlined when focused. */
@@ -166,7 +212,7 @@ function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex): Drawn[
   const points = hexCorners(placement.center, placement.radius * inset)
     .map(({ x, y }) => `${round(x * scale)},${round(y * scale)}`)
     .join(' ')
-  group.createSvg('polygon', { attr: { points } })
+  const shape = group.createSvg('polygon', { attr: { points } })
   // An opened hex is the ground of the Frame drawn over it, which holds its Tile and its clicks.
   if (placement.kind !== 'empty' && placement.opened) {
     group.addClass('is-opened')
@@ -189,7 +235,11 @@ function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex): Drawn[
     const label = { ...at, y: at.y - placement.radius * inset * scale * 0.73 }
     words(group, label, text.direction, [String(placement.direction)])
   }
-  if (isListed(placement)) return [{ group, path: tile.path }, ...drawList(group, placement, onHex)]
+  if (isListed(placement)) {
+    // Its names are buttons, which a button can't hold: its shape is the hex's button.
+    const button = buttonOf(shape, placement)
+    return [{ group, path: tile.path, button }, ...drawList(group, placement, onHex)]
+  }
 
   const titleLines = wrap(tile.title, perLine(text.title, text.band), 2)
   const previewLines = wrap(tile.preview, perLine(text.preview, text.band), text.previewLines)
@@ -203,7 +253,7 @@ function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex): Drawn[
     text.preview,
     previewLines,
   )
-  return [{ group, path: tile.path }]
+  return [{ group, path: tile.path, button: buttonOf(group, placement) }]
 }
 
 /**
@@ -249,7 +299,7 @@ function drawList(group: SVGGElement, hex: ListedHex, onHex: OnHex): Drawn[] {
     const name = wrap(item.tile.title, perLine(text.preview, text.band), 1)
     const one = line(['hexframe-item', `is-${item.memberKind}`], row, name, item.tile.title)
     clickableOn(one, item, onHex)
-    return { group: one, path: item.tile.path }
+    return { group: one, path: item.tile.path, button: buttonOf(one, item) }
   })
 }
 

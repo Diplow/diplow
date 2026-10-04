@@ -19,11 +19,13 @@ import {
 
 /**
  * A vault in memory at `/vault`: each key a path relative to it, a string a file's text, `{}` a
- * folder, and `{ link }` a symlink to the real path it names.
+ * folder, `{ link }` a symlink to the real path it names, and `{ dangling: true }` a symlink that
+ * leads nowhere. `reads` keeps every real path read, in order.
  */
-type Node = string | Record<string, never> | { link: string }
+type Node = string | Record<string, never> | { link: string } | { dangling: true }
 
-function diskOf(nodes: Record<string, Node>): Disk {
+function diskOf(nodes: Record<string, Node>): Disk & { reads: string[] } {
+  const reads: string[] = []
   // A path's real path: the first symlink on its way followed, the rest kept.
   const real = (path: string) => {
     const parts = vaultPath(path).split('/').filter(Boolean)
@@ -38,19 +40,23 @@ function diskOf(nodes: Record<string, Node>): Disk {
   const nodeAt = (path: string): Node | undefined =>
     vaultPath(path) === '' ? {} : nodes[vaultPath(path)]
   return {
+    reads,
     list(folder) {
       const prefix = vaultPath(folder) === '' ? '' : `${vaultPath(folder)}/`
       const entries: Entry[] = Object.entries(nodes)
         .filter(([path]) => path.startsWith(prefix) && !path.slice(prefix.length).includes('/'))
         .map(([path, node]) => ({
           name: path.slice(prefix.length),
-          kind: typeof node === 'string' ? 'file' : 'dir',
+          kind: typeof node === 'string' || 'dangling' in node ? 'file' : 'dir',
         }))
       return Promise.resolve(entries)
     },
     stat(path) {
       const node = nodeAt(path)
       if (node === undefined) return Promise.resolve(undefined)
+      if (typeof node === 'object' && 'dangling' in node) {
+        return Promise.resolve({ kind: 'other', size: 0 })
+      }
       const stat: FileStat = {
         kind: typeof node === 'string' ? 'file' : 'dir',
         size: typeof node === 'string' ? node.length : 0,
@@ -59,6 +65,7 @@ function diskOf(nodes: Record<string, Node>): Disk {
       return Promise.resolve(stat)
     },
     read(realPath) {
+      reads.push(realPath)
       const path = ['', ...Object.keys(nodes)].find((key) => real(key) === realPath)
       const node = path === undefined ? undefined : nodeAt(path)
       if (typeof node !== 'string') return Promise.reject(new Error(`no file at ${realPath}`))
@@ -128,7 +135,7 @@ describe('readFrame', () => {
     ])
   })
 
-  it('names a Tile whose body a symlink leads out of its folder', async () => {
+  it('names a Tile whose body a symlink leads out of its folder, reading nothing there', async () => {
     const disk = diskOf({
       '3-games': {},
       '3-games/CLAUDE.md': { link: '/etc/passwd' },
@@ -137,6 +144,7 @@ describe('readFrame', () => {
     expect(frame.rings.children).toMatchObject({
       members: { 3: { tile: { path: '3-games', title: 'Games', preview: '' } } },
     })
+    expect(disk.reads).not.toContain('/etc/passwd')
   })
 
   it('names a Tile whose folder is a symlink out of the vault, reading nothing there', async () => {
@@ -148,6 +156,26 @@ describe('readFrame', () => {
     expect(frame.rings.children).toMatchObject({
       members: { 3: { tile: { path: '3-games', title: 'Games', preview: '' } } },
     })
+    expect(disk.reads).not.toContain('/home/someone/CLAUDE.md')
+  })
+
+  it('names a Tile whose body is a symlink that leads nowhere, and warns of such exclusions', async () => {
+    const disk = diskOf({
+      a: {},
+      'a/.hexframe': {},
+      'a/.hexframe/exclusions.yaml': { dangling: true },
+      'a/b': {},
+      'a/b/CLAUDE.md': { dangling: true },
+      'a/b/-CLAUDE.md': note('Not read'),
+    })
+    const { frame, warnings } = await readFrame(disk, 'a')
+    expect(frame.rings.children).toMatchObject({
+      members: { 1: { tile: { path: 'a/b', title: 'B', preview: '' } } },
+    })
+    expect(warnings).toEqual([
+      "Can't read .hexframe/exclusions.yaml, so nothing is left out: it leads outside its folder",
+    ])
+    expect(disk.reads).toEqual([])
   })
 
   it('follows a symlink that stays in the vault', async () => {
@@ -162,10 +190,20 @@ describe('readFrame', () => {
   })
 
   it('keeps an overflowing ring as names, reading none of their files', async () => {
+    const names = ['.a', '.b', '.c', '.d', '.e', '.f', '.g']
     const nodes: Record<string, Node> = {}
-    for (const name of ['a', 'b', 'c', 'd', 'e', 'f', 'g']) nodes[`.${name}`] = {}
-    const { frame } = await readFrame(diskOf(nodes), '')
-    expect(frame.rings.context).toMatchObject({ overflowing: true, overflow: [{ name: '.g' }] })
+    for (const name of names) {
+      nodes[name] = {}
+      nodes[`${name}/CLAUDE.md`] = note(name)
+    }
+    const disk = diskOf(nodes)
+    const { frame } = await readFrame(disk, '')
+    expect(frame.rings.context).toEqual({
+      overflowing: true,
+      candidates: names.map((name) => ({ kind: 'context', name })),
+      overflow: [{ kind: 'context', name: '.g' }],
+    })
+    expect(disk.reads).toEqual([])
   })
 })
 
@@ -479,6 +517,21 @@ describe('readSettings', () => {
     })
     expect(await readSettings(linkedFile, 'a')).toEqual({ refused: 'it leads outside its folder' })
   })
+
+  it('refuses a .hexframe or an exclusions.yaml that is a symlink leading nowhere', async () => {
+    const danglingFolder = diskOf({ a: {}, 'a/.hexframe': { dangling: true } })
+    expect(await readSettings(danglingFolder, 'a')).toEqual({
+      refused: 'its .hexframe is no folder of its own',
+    })
+    const danglingFile = diskOf({
+      a: {},
+      'a/.hexframe': {},
+      'a/.hexframe/exclusions.yaml': { dangling: true },
+    })
+    expect(await readSettings(danglingFile, 'a')).toEqual({
+      refused: 'it leads outside its folder',
+    })
+  })
 })
 
 describe('saveSettings', () => {
@@ -521,6 +574,14 @@ describe('saveSettings', () => {
     const linked = diskOf({ a: {}, 'a/.hexframe': { link: '/elsewhere' } })
     expect(await saveSettings(linked, write, 'a', { add: ['b'], remove: [] })).toEqual({
       refused: 'its .hexframe is no folder of its own',
+    })
+    const dangling = diskOf({
+      a: {},
+      'a/.hexframe': {},
+      'a/.hexframe/exclusions.yaml': { dangling: true },
+    })
+    expect(await saveSettings(dangling, write, 'a', { add: ['b'], remove: [] })).toEqual({
+      refused: 'it leads outside its folder',
     })
     expect(await saveSettings(diskOf({ a: {} }), write, 'a', { add: [], remove: [] })).toEqual({
       saved: 'a/.hexframe/exclusions.yaml',

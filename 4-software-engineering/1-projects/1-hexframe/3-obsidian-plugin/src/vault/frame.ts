@@ -39,7 +39,11 @@ import { isEmpty, withChange, type Change } from '../exclusions.ts'
 export interface Disk {
   /** A folder's entries, its dot folders among them. */
   list(folder: string): Promise<Entry[]>
-  /** What is at `path`, every symlink followed, its real path absolute; undefined when nothing. */
+  /**
+   * What is at `path`, every symlink followed, its real path absolute; undefined when nothing. A
+   * symlink that leads nowhere is something, `other` with no real path, so it is refused as a file
+   * and as a folder rather than taken for a free path.
+   */
   stat(path: string): Promise<FileStat | undefined>
   /**
    * The text of the file at `realPath`, a real path its `stat` gave, refused when what is there is
@@ -261,8 +265,9 @@ export interface Settings {
 
 /**
  * `folder`'s settings as the panel edits them, or why it may not: the view must be able to center
- * on it, and its `.hexframe/` and `exclusions.yaml`, when there, must sit at their own paths, never
- * through a symlink, the file a regular one within the read limit. Only then does a write there
+ * on it, and its `.hexframe/` and `exclusions.yaml`, when there, a symlink that leads nowhere
+ * included, must sit at their own paths, never through a symlink, the file a regular one within the
+ * read limit. Only then does a write there
  * speak for that folder and land inside the vault. It never throws: a read that fails gives its
  * reason.
  */
@@ -299,8 +304,9 @@ function parsedOf(text: string | undefined): Settings['parsed'] {
 }
 
 /**
- * Writes `text` at `path`, a file of the vault, making the folder holding it when missing, and
- * following no symlink at the file itself, a dangling one included.
+ * Writes `text` at `path`, a file of the vault, making the folder holding it when missing. It
+ * replaces what is at the file, never writing through a symlink there, a dangling one included,
+ * and leaves the file as it was when the write fails.
  */
 export type Write = (path: string, text: string) => Promise<void>
 

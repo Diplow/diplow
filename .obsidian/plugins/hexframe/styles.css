@@ -25,6 +25,13 @@
   font-family: var(--font-interface);
 }
 
+/* The drawing takes the DOM focus as one, for assistive technology, and the view's keys move it
+   among the hexes: the focused hex's outline shows where it is, so the drawing draws none. */
+.hexframe-canvas:focus,
+.hexframe-list:focus {
+  outline: none;
+}
+
 .hexframe-hex polygon {
   stroke: var(--background-modifier-border);
   stroke-width: 1;
@@ -134,7 +141,7 @@
 }
 
 .hexframe-item:hover text,
-.hexframe-more text {
+.hexframe-more:hover text {
   text-decoration: underline;
 }
 

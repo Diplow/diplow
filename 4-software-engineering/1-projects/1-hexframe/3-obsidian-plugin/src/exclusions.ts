@@ -180,8 +180,9 @@ export function isEmpty({ add, remove }: Change): boolean {
  * `text`, a folder's `exclusions.yaml` (undefined when it has none), with `change` made: each item
  * removed has its line dropped, each one added a line after the last item, in the list's own
  * indent. Everything else stays as written, comments, blank lines between them, the globs
- * written by hand and their order included, and its line ending, though trailing blank lines are
- * dropped for one final line ending; a flow list becomes a block list, so its items take a line each.
+ * written by hand and their order included, and its line ending, the first it holds, though trailing
+ * blank lines are dropped for one final line ending; a flow list becomes a block list, so its items
+ * take a line each.
  * A change of nothing gives `text` back as it is. A file that can't be parsed throws, so it is never
  * written over, and so does a change that wouldn't read back as made, such as a name holding a line
  * break, which the file can't hold.
@@ -205,8 +206,9 @@ export function withChange(text: string | undefined, change: Change): string {
     at = kept.push('exclude:')
   }
   kept.splice(at, 0, ...add.map((item) => `${indent}- ${yamlOf(item)}`))
-  const eol = before.includes('\r\n') ? '\r\n' : '\n'
-  const written = `${kept.join(eol).replace(/(\r?\n)+$/, '')}${eol}`
+  while (kept.length > 0 && kept[kept.length - 1] === '') kept.pop()
+  const eol = eolOf(before)
+  const written = `${kept.join(eol)}${eol}`
   const wanted = [...items.filter((item) => !change.remove.includes(item)), ...add]
   if (JSON.stringify(parseExclusions(written)) !== JSON.stringify(wanted)) {
     throw new Error('the change would not read back as made')
@@ -237,6 +239,14 @@ function withRemoved(lines: readonly string[], remove: readonly string[]) {
     }
   }
   return { kept, indent, listEnds }
+}
+
+/**
+ * The line ending `text` is written with: its first, any the shape's parser splits lines at, `\r\n`,
+ * `\r`, `\n` and the Unicode line and paragraph separators; `\n` when it has none.
+ */
+function eolOf(text: string): string {
+  return /\r\n?|[\n\u2028\u2029]/.exec(text)?.[0] ?? '\n'
 }
 
 /** Whether `item` holds a line break or another control character, which no list line can hold. */

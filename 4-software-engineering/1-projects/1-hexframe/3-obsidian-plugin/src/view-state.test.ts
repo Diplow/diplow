@@ -164,12 +164,17 @@ describe('centerOf', () => {
       folder: '',
       dropped: 'it leads out of the vault',
     })
-    for (const absolute of ['/etc', '\\etc', 'C:/Users']) {
+    for (const absolute of ['/etc', '\\etc', 'C:/Users', 'C:\\Users', 'C:']) {
       expect(centerOf(centered(absolute), '')).toEqual({
         folder: '',
         dropped: 'it is an absolute path',
       })
     }
+  })
+
+  it('shows a center that only starts like a Windows drive, a letter and a colon, as relative', () => {
+    expect(centerOf(centered('a:notes'), '')).toEqual({ folder: 'a:notes' })
+    expect(centerOf(centered('a:notes/1-x'), '')).toEqual({ folder: 'a:notes/1-x' })
   })
 
   it('drops a center on a name every folder leaves out', () => {

@@ -67,10 +67,15 @@ export class HexframeView extends TextFileView {
   private problems: string[] = []
   /**
    * The last drawing of the current center: the folders it read, the center's first, and what it
-   * drew, absent when the center couldn't be read. Undefined until that drawing is done, so an item
-   * never resolves against another folder's hexes or kinds.
+   * drew, absent when the center couldn't be read or the state changed since. Undefined until that
+   * drawing is done, so an item never resolves against another folder's hexes or kinds.
    */
-  private drawn: { folders: string[]; scene?: Scene } | undefined
+  private drawn: Drawn | undefined
+  /**
+   * What the vault changed while no drawing said which folders the view shows, checked against
+   * them once one does: one that changed after the drawing read it calls for another.
+   */
+  private readonly missed = new Set<string>()
   /** The path of the Tile whose hex holds the keyboard's focus; the center's when it is unset. */
   private focus: string | undefined
   /**
@@ -111,7 +116,9 @@ export class HexframeView extends TextFileView {
 
   override setViewData(data: string): void {
     this.text = data
-    ;({ state: this.state, problems: this.problems } = decodeViewState(data))
+    const decoded = decodeViewState(data)
+    this.outdate(decoded.state)
+    ;({ state: this.state, problems: this.problems } = decoded)
     void this.draw()
   }
 
@@ -123,6 +130,7 @@ export class HexframeView extends TextFileView {
     this.state = defaultState
     this.problems = []
     this.drawn = undefined
+    this.missed.clear()
     this.focus = undefined
     this.listing = undefined
     this.outline = undefined
@@ -172,7 +180,19 @@ export class HexframeView extends TextFileView {
   }
 
   private onChange(path: string) {
-    if (this.drawn !== undefined && touches(path, this.drawn.folders)) this.redraw()
+    if (this.drawn === undefined) this.missed.add(path)
+    else if (touches(path, this.drawn.folders)) this.redraw()
+  }
+
+  /**
+   * Takes `drawn` as the last drawing, and draws once more when the vault changed what it shows
+   * while no drawing said what that was.
+   */
+  private settleOn(drawn: Drawn) {
+    this.drawn = drawn
+    const missed = [...this.missed]
+    this.missed.clear()
+    if (missed.some((path) => touches(path, drawn.folders))) this.redraw()
   }
 
   /** A renamed center, or a folder holding it, takes the view state along, written to the file. */
@@ -307,12 +327,19 @@ export class HexframeView extends TextFileView {
    * the file.
    */
   private commit(next: ViewState) {
-    // What is drawn no longer matches the state: the items and the keys wait for the next drawing.
-    const kept = next.center === this.state.center ? this.drawn?.folders : undefined
-    this.drawn = kept && { folders: kept }
+    this.outdate(next)
     this.text = withChanges(this.text, this.state, next)
     ;({ state: this.state, problems: this.problems } = decodeViewState(this.text))
     this.requestSave()
+  }
+
+  /**
+   * What is drawn no longer matches the state about to be `next`: the items and the keys wait for
+   * the next drawing, and the folders drawn are kept only while the center stays.
+   */
+  private outdate(next: ViewState) {
+    const kept = next.center === this.state.center ? this.drawn?.folders : undefined
+    this.drawn = kept && { folders: kept }
   }
 
   private async draw() {
@@ -357,7 +384,7 @@ export class HexframeView extends TextFileView {
       const hexes = full ? focusableInList(full) : focusable(placements)
       const offered = kindsOf(frame.rings)
       const fillingView = full?.holder.tile.path
-      this.drawn = { folders, scene: { view, hexes, shown, offered, branchKinds, fillingView } }
+      this.settleOn({ folders, scene: { view, hexes, shown, offered, branchKinds, fillingView } })
       const said = [...notes, ...warnings, ...ringNotes(view)]
       this.outline = full
         ? drawFullList(this.contentEl, full, said, this.onHex())
@@ -370,7 +397,7 @@ export class HexframeView extends TextFileView {
       this.outline(this.focus)
     } catch (error) {
       if (drawingId !== this.drawings) return
-      this.drawn = { folders: [folder] }
+      this.settleOn({ folders: [folder] })
       this.outline = undefined
       this.contentEl.empty()
       drawNotes(this.contentEl, [
@@ -528,6 +555,12 @@ function targetOf(hex: Clickable, scene: Scene): Target {
  */
 interface Scene extends Drawing {
   hexes: Clickable[]
+}
+
+/** A drawing of the center: the folders it read, the center's first, and what it drew. */
+interface Drawn {
+  folders: string[]
+  scene?: Scene
 }
 
 /** A menu item's title: its name, then the key its command is bound to, right-aligned. */

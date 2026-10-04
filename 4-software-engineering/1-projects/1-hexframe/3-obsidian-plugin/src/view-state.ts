@@ -166,9 +166,13 @@ export function centerOf(state: ViewState, home: string): { folder: string; drop
   return 'outside' in folded ? { folder: home, dropped: folded.outside } : { folder: folded.path }
 }
 
-/** `path`, relative to the vault, with `.` and `..` folded, or why it leaves the vault. */
+/**
+ * `path`, relative to the vault, with `.` and `..` folded, or why it leaves the vault. A Windows
+ * drive is a letter and a colon that a separator follows, or that ends the path, a drive on its
+ * own; `a:notes` is then a folder's name, as POSIX reads it.
+ */
 function fold(path: string): { path: string } | { outside: string } {
-  if (/^(\/|\\|[A-Za-z]:)/.test(path)) return { outside: 'it is an absolute path' }
+  if (/^(\/|\\|[A-Za-z]:([/\\]|$))/.test(path)) return { outside: 'it is an absolute path' }
   const parts: string[] = []
   for (const part of path.split('/')) {
     if (part === '' || part === '.') continue

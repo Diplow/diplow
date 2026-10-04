@@ -1,15 +1,11 @@
 // The Disk over Obsidian's vault. Branches and Leaves come from the vault's index; the dot folders,
-// which the index leaves out, from its adapter. Real paths, and the reads made by the real path
-// just checked, come from Node, which is why the plugin is desktop only. The one write, a folder's
-// exclusions, goes through Node too, once `readSettings` has checked where it lands, following no
-// symlink at the file.
-import { constants } from 'node:fs'
-import { mkdir, open, realpath, stat } from 'node:fs/promises'
-import { dirname } from 'node:path'
-
+// which the index leaves out, from its adapter. Real paths, the reads made by the real path just
+// checked, and the one write, a folder's exclusions, once `readSettings` has checked where it lands,
+// come from Node through `files.ts`, which is why the plugin is desktop only.
 import { FileSystemAdapter, TFolder, type App } from 'obsidian'
 
-import { readLimit, type Entry, type FileStat } from '../../../2-claude-mod/hooks/shape/node.ts'
+import type { Entry } from '../../../2-claude-mod/hooks/shape/node.ts'
+import { readChecked, replaceFile, statAt } from './files.ts'
 import { vaultPath, type Disk, type Write } from './frame.ts'
 
 /** The vault as a Disk, or undefined where Obsidian keeps it outside a file system. */
@@ -24,35 +20,15 @@ export function diskOf(app: App): Disk | undefined {
 }
 
 /**
- * Writes a file of the vault, making the folder holding it when missing, as a `.hexframe/` is the
- * first time a folder leaves something out; undefined where Obsidian keeps the vault outside a file
- * system. The file is opened once, following no symlink, so one swapped in since `readSettings`
- * checked it, or a dangling one that check saw as nothing, is refused rather than written through,
- * and a folder that is already there, a dangling symlink included, is never made again. It is
- * emptied only once that handle is known to be a regular file.
+ * Writes a file of the vault as `replaceFile` does, the file renamed over rather than written
+ * through, so a symlink swapped in since `readSettings` checked it, or a dangling one, is replaced
+ * and nothing outside the vault is touched; undefined where Obsidian keeps the vault outside a file
+ * system.
  */
 export function writerOf(app: App): Write | undefined {
   const { adapter } = app.vault
   if (!(adapter instanceof FileSystemAdapter)) return undefined
-  return async (path, text) => {
-    const full = adapter.getFullPath(vaultPath(path))
-    await mkdir(dirname(full)).catch((error: unknown) => {
-      if (!(error instanceof Error && 'code' in error && error.code === 'EEXIST')) throw error
-    })
-    const flags =
-      constants.O_WRONLY |
-      constants.O_CREAT |
-      (platform.O_NOFOLLOW ?? 0) |
-      (platform.O_NONBLOCK ?? 0)
-    const handle = await open(full, flags, 0o644)
-    try {
-      if (!(await handle.stat()).isFile()) throw new Error('it is not a file')
-      await handle.truncate(0)
-      await handle.write(text, 0, 'utf8')
-    } finally {
-      await handle.close()
-    }
-  }
+  return (path, text) => replaceFile(adapter.getFullPath(vaultPath(path)), text)
 }
 
 async function list(app: App, adapter: FileSystemAdapter, folder: string): Promise<Entry[]> {
@@ -78,44 +54,6 @@ async function list(app: App, adapter: FileSystemAdapter, folder: string): Promi
   return [...entries, ...context.map(dir)]
 }
 
-/** Node's flags as this platform has them: Windows has no `O_NOFOLLOW` nor `O_NONBLOCK`. */
-const platform: Partial<typeof constants> = constants
-
-/**
- * The text of the file at `realPath`, opened once and held to the shape's rules on that one handle:
- * a regular file of at most the read limit, and never more read than that. The open follows no
- * symlink and doesn't wait on a pipe, so a file swapped in since its check is refused, not read.
- */
-async function readChecked(realPath: string): Promise<string> {
-  const flags = constants.O_RDONLY | (platform.O_NOFOLLOW ?? 0) | (platform.O_NONBLOCK ?? 0)
-  const handle = await open(realPath, flags)
-  try {
-    const found = await handle.stat()
-    if (!found.isFile()) throw new Error('it is not a file')
-    if (found.size > readLimit) throw new Error('it is too large')
-    const buffer = Buffer.alloc(found.size)
-    const { bytesRead } = await handle.read(buffer, 0, found.size, 0)
-    return buffer.subarray(0, bytesRead).toString('utf8')
-  } finally {
-    await handle.close()
-  }
-}
-
 function nameOf(path: string): string {
   return path.slice(path.lastIndexOf('/') + 1)
-}
-
-/**
- * What is at `fullPath` on disk, every symlink followed, or undefined when nothing is there. Its
- * real path is written with `/`, Windows' included, as the shape compares paths.
- */
-async function statAt(fullPath: string): Promise<FileStat | undefined> {
-  try {
-    const [found, realPath] = await Promise.all([stat(fullPath), realpath(fullPath)])
-    const kind = found.isFile() ? 'file' : found.isDirectory() ? 'dir' : 'other'
-    return { kind, size: found.size, realPath: realPath.replaceAll('\\', '/') }
-  } catch (error) {
-    if (error instanceof Error && 'code' in error && error.code === 'ENOENT') return undefined
-    throw error
-  }
 }

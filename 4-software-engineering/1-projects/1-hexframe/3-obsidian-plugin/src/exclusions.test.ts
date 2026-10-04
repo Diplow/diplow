@@ -205,6 +205,17 @@ describe('withChange', () => {
     )
   })
 
+  it.each([
+    ['\r', 'CR'],
+    ['\u2028', 'a line separator'],
+    ['\u2029', 'a paragraph separator'],
+  ])('keeps a line ending of %j (%s), trailing blank lines made one', (eol) => {
+    const text = ['# a', 'exclude:', '  - b', '  - c', '', ''].join(eol)
+    expect(withChange(text, { add: ['d'], remove: ['b'] })).toBe(
+      ['# a', 'exclude:', '  - c', '  - d', ''].join(eol),
+    )
+  })
+
   it('throws on a name that holds a line break, which the file cannot hold', () => {
     expect(() => withChange(undefined, { add: ['a\nb'], remove: [] })).toThrow(/line break/)
   })
