@@ -1,0 +1,36 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/CLAUDE.md
+  s_b661d94074bd8f::t_51d8acaa640254 25
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/TileActions.tsx
+  s_b661d94074bd8f::t_51d8acaa640254 86,88
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/sentry.test.ts
+  s_b661d94074bd8f::t_1af4e0fda2ce13 8,59,61
+  s_b661d94074bd8f::t_4005d658a24769 43-53,89,94-100,110-116
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_b661d94074bd8f::t_803c8b7eb8132e 69
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/sentry.ts
+  s_b661d94074bd8f::t_bc680ca30e67be 15-16,20-32,35-36,111-117,121-131
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/CLAUDE.md
+  s_b661d94074bd8f::t_cc3137f5d605f6 20
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/Frame.tsx
+  s_b661d94074bd8f::t_a66dd199223371 5,44
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/Tile.tsx
+  s_b661d94074bd8f::t_10f7d7fdb84841 3,10,26-35,57
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/keys.ts
+  s_b661d94074bd8f::t_411fe1aa84ab04 1-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "16841a92138e64700963b605a3c65979996df5b5",
+  "prompts": {},
+  "sessions": {
+    "s_b661d94074bd8f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b310efd9-cf35-4262-bdce-a5d6d86a0d23",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
