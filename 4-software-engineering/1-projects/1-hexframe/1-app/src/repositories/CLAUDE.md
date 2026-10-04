@@ -20,5 +20,5 @@ The layer under [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains
 
 ## Rules
 
-- **Nothing above imports an SDK.** A domain uses the service a repository provides; a new SDK gets its line in `dependency-cruiser.config.ts` and its folder here.
+- **Nothing above imports an SDK.** A domain uses the service a repository provides; a new SDK gets its line in `dependency-cruiser.config.ts` and its folder here. An SDK that serves requests rather than reaching out, as Start or the MCP server's, is the API layer's ([[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]]).
 - **A repository never imports a domain**, nor the API layer: an import only points down. One repository may use another's service, as `auth/` uses the database's.
