@@ -80,8 +80,8 @@ export class HexframeView extends TextFileView {
   private readonly redraw = debounce(() => void this.draw(), settle, true)
   /** The pane beside the view that shows the clicked hex's note, once a click opened it. */
   private paired: WorkspaceLeaf | undefined
-  /** The note of the paired pane the view dealt with last, `seen` in `followed`. */
-  private seen: string | undefined
+  /** The note of the paired pane the view dealt with last, kept as `followed` says. */
+  private lastPairedNote: string | undefined
   /**
    * Counts the moves, the clicks and the opens the view follows, so one that a later move overtook
    * during a check is dropped.
@@ -173,9 +173,9 @@ export class HexframeView extends TextFileView {
   /** A renamed center, or a folder holding it, takes the view state along, written to the file. */
   private onVaultRename(file: TAbstractFile, from: string) {
     const next = followRename(this.state, from, file.path)
-    const followed = next !== this.state
-    if (followed) this.commit(next)
-    if (followed || file === this.file) this.redraw()
+    const renamed = next !== this.state
+    if (renamed) this.commit(next)
+    if (renamed || file === this.file) this.redraw()
     else {
       this.onChange(from)
       this.onChange(file.path)
@@ -226,7 +226,7 @@ export class HexframeView extends TextFileView {
       drawNotes(this.contentEl, ['Hexframe reads the vault from a file system, which it has not.'])
       return
     }
-    const home = vaultPath(file.parent?.path ?? '')
+    const home = homeOf(file)
     let folder = home
     try {
       const center = await centerToShow(disk, centerOf(this.state, home), home)
@@ -283,7 +283,7 @@ export class HexframeView extends TextFileView {
       if (checked === undefined || isOvertaken()) return
       if ('refused' in checked) new Notice(checked.refused)
       else if ('note' in checked) {
-        this.seen = checked.note.path
+        this.lastPairedNote = checked.note.path
         await this.pairedLeaf().openFile(checked.note, {
           state: { mode: 'preview' },
           active: false,
@@ -305,9 +305,10 @@ export class HexframeView extends TextFileView {
     if (disk === undefined || paired === undefined || this.file === null) return
     const inPaired = this.app.workspace.getActiveViewOfType(FileView)?.leaf === paired
     const opened = { path: file.path, inPaired }
-    const home = vaultPath(this.file.parent?.path ?? '')
-    const { folder, seen } = followed(opened, this.seen, centerOf(this.state, home).folder)
-    this.seen = seen
+    // The center drawn, which the user sees, or until it is drawn the one the file asks for.
+    const center = this.drawn?.folders[0] ?? centerOf(this.state, homeOf(this.file)).folder
+    const { folder, lastPairedNote } = followed(opened, this.lastPairedNote, center)
+    this.lastPairedNote = lastPairedNote
     if (folder === undefined) return
     try {
       await this.centerOn(disk, folder, this.overtaker())
@@ -378,6 +379,11 @@ export class HexframeView extends TextFileView {
     this.paired = leaf
     return leaf
   }
+}
+
+/** The folder holding the hexframe file, the view's center when the file names none. */
+function homeOf(file: TFile): string {
+  return vaultPath(file.parent?.path ?? '')
 }
 
 /**
