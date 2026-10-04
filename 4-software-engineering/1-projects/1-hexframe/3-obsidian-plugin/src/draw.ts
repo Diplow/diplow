@@ -6,19 +6,18 @@ import {
   layoutView,
   viewHeight,
   viewWidth,
+  type CollapsedView,
   type FrameView,
   type Placement,
   type Point,
 } from '../../2-claude-mod/hooks/shape/layout.ts'
+import type { FrameKind, Frame } from '../../2-claude-mod/hooks/shape/node.ts'
 
 /** Units of the SVG per unit of the layout. */
 const scale = 110
 
-/** A hex's radius as drawn, short of the layout's 1, leaving a gap between neighbors. */
-const radius = 0.93
-
-/** The width of the band between a hex's side corners, where its words sit, in SVG units. */
-const band = Math.sqrt(3) * radius * scale * 0.86
+/** A hex's radius as drawn, as a share of the layout's, leaving a gap between neighbors. */
+const inset = 0.93
 
 /** How each kind of text is set: its class in styles.css, which colors it, and its size. */
 interface TextStyle {
@@ -27,6 +26,7 @@ interface TextStyle {
   lineHeight: number
 }
 
+/** The text styles of a hex of radius 1; a smaller or larger hex sets them smaller or larger. */
 const title: TextStyle = { cls: 'hexframe-title', size: 15, lineHeight: 18 }
 const preview: TextStyle = { cls: 'hexframe-preview', size: 11, lineHeight: 14.3 }
 const direction: TextStyle = { cls: 'hexframe-direction', size: 11, lineHeight: 14.3 }
@@ -34,10 +34,34 @@ const direction: TextStyle = { cls: 'hexframe-direction', size: 11, lineHeight: 
 /** About how wide a character of the interface font is, as a share of its size. */
 const characterWidth = 0.55
 
-/** How many characters of `style` fit on a line of the band. */
-const perLine = (style: TextStyle) => Math.floor(band / (style.size * characterWidth))
+/**
+ * How a hex of `radius` sets its words: the styles scaled to it, within bounds so a small hex
+ * stays legible and a large one doesn't shout, and how many preview lines it holds. A hex a third
+ * of the first generation's size shows its title only.
+ */
+function textOf(radius: number, isCenter: boolean) {
+  const factor = Math.min(Math.max(radius, 0.5), 1.6)
+  const sized = (style: TextStyle): TextStyle => ({
+    ...style,
+    size: style.size * factor,
+    lineHeight: style.lineHeight * factor,
+  })
+  const previewLines = radius < 0.75 ? 0 : radius > 2 ? 9 : isCenter ? 5 : 4
+  // The width of the band between a hex's side corners, where its words sit, in SVG units.
+  const band = Math.sqrt(3) * radius * inset * scale * 0.86
+  return {
+    title: sized(title),
+    preview: sized(preview),
+    direction: sized(direction),
+    previewLines,
+    band,
+  }
+}
 
-/** What the view does when a hex is clicked: `event` says whether shift was held. */
+/** How many characters of `style` fit on a line of `band`. */
+const perLine = (style: TextStyle, band: number) => Math.floor(band / (style.size * characterWidth))
+
+/** What the view does when a hex is clicked: `event` says whether shift or alt was held. */
 export type OnHex = (placement: Placement, event: MouseEvent) => void
 
 /**
@@ -46,7 +70,7 @@ export type OnHex = (placement: Placement, event: MouseEvent) => void
  */
 export function drawView(
   container: HTMLElement,
-  view: FrameView,
+  view: FrameView | CollapsedView,
   notes: readonly string[],
   onHex: OnHex,
 ) {
@@ -73,14 +97,22 @@ export function drawNotes(container: HTMLElement, notes: readonly string[]) {
 function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex) {
   const kind = placement.kind === 'member' ? placement.memberKind : placement.kind
   const group = svg.createSvg('g', { cls: ['hexframe-hex', `is-${kind}`] })
-  const points = hexCorners(placement.center, radius)
+  const points = hexCorners(placement.center, placement.radius * inset)
     .map(({ x, y }) => `${round(x * scale)},${round(y * scale)}`)
     .join(' ')
   group.createSvg('polygon', { attr: { points } })
+  // An opened hex is the ground of the Frame drawn over it, which holds its Tile and its clicks.
+  if (placement.kind !== 'empty' && placement.opened) {
+    group.addClass('is-opened')
+    return
+  }
   const at = { x: placement.center.x * scale, y: placement.center.y * scale }
+  const text = textOf(placement.radius, placement.kind === 'center')
+  if (placement.radius < 1) group.addClass('is-small')
 
   if (placement.kind === 'empty') {
-    words(group, { ...at, y: at.y + direction.size / 2 }, direction, [String(placement.direction)])
+    const label = text.direction
+    words(group, { ...at, y: at.y + label.size / 2 }, label, [String(placement.direction)])
     return
   }
   const { tile } = placement
@@ -90,18 +122,23 @@ function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex) {
   })
   group.createSvg('title').textContent =
     tile.preview === '' ? tile.title : `${tile.title}\n\n${tile.preview}`
-  if (placement.kind === 'member') {
-    const label = { ...at, y: at.y - radius * scale * 0.68 }
-    words(group, label, direction, [String(placement.direction)])
+  if (placement.kind === 'member' && text.previewLines > 0) {
+    const label = { ...at, y: at.y - placement.radius * inset * scale * 0.73 }
+    words(group, label, text.direction, [String(placement.direction)])
   }
 
-  const titleLines = wrap(tile.title, perLine(title), 2)
-  const previewLines = wrap(tile.preview, perLine(preview), placement.kind === 'center' ? 5 : 4)
-  const titleHeight = titleLines.length * title.lineHeight
+  const titleLines = wrap(tile.title, perLine(text.title, text.band), 2)
+  const previewLines = wrap(tile.preview, perLine(text.preview, text.band), text.previewLines)
+  const titleHeight = titleLines.length * text.title.lineHeight
   const gap = previewLines.length > 0 ? 6 : 0
-  const top = at.y - (titleHeight + gap + previewLines.length * preview.lineHeight) / 2
-  words(group, { ...at, y: top + title.size }, title, titleLines)
-  words(group, { ...at, y: top + titleHeight + gap + preview.size }, preview, previewLines)
+  const top = at.y - (titleHeight + gap + previewLines.length * text.preview.lineHeight) / 2
+  words(group, { ...at, y: top + text.title.size }, text.title, titleLines)
+  words(
+    group,
+    { ...at, y: top + titleHeight + gap + text.preview.size },
+    text.preview,
+    previewLines,
+  )
 }
 
 /** One `<text>` of `lines` set in `style`, centered on `at.x`, its first baseline at `at.y`. */
@@ -162,14 +199,30 @@ function charactersOf(text: string): string[] {
   return Array.from(new Intl.Segmenter().segment(text), ({ segment }) => segment)
 }
 
-/** What the view says about the ring it shows: its clashes, or why it shows no hexes. */
-export function ringNotes(view: FrameView): string[] {
-  const ring = view.frame.rings[view.frameKind]
+/**
+ * What the view says about the rings it shows, the center's outer and inner ones and those of the
+ * Branches it opens, named: their clashes, or why one shows no hexes.
+ */
+export function ringNotes(view: FrameView | CollapsedView): string[] {
+  const { frame } = view
+  const shown = 'frameKind' in view ? [view.frameKind] : []
+  if (view.inner !== undefined) shown.push(view.inner)
+  const own = shown.flatMap((kind) => notesOf(frame, kind))
+  if (!('frameKind' in view)) return own
+  const opened = Object.values(view.expanded ?? {}).flatMap((branch) =>
+    ringNotes(branch).map((note) => `${branch.frame.tile.title}: ${note}`),
+  )
+  return [...own, ...opened]
+}
+
+/** What the view says about `frame`'s ring of `kind`: its clashes, or why it shows no hexes. */
+function notesOf(frame: Frame, kind: FrameKind): string[] {
+  const ring = frame.rings[kind]
   if (ring === undefined) return []
   if (ring.overflowing) {
     const names = ring.overflow.map(patternOf).join(', ')
     return [
-      `${String(ring.candidates.length)} ${view.frameKind} for six directions, so none is drawn: ` +
+      `${String(ring.candidates.length)} ${kind} for six directions, so none is drawn: ` +
         `no direction is left for ${names}. List what this folder leaves out in ` +
         '.hexframe/exclusions.yaml, or renumber, to draw them.',
     ]

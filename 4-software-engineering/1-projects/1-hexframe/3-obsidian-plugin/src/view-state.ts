@@ -2,21 +2,28 @@
 // middle and how it is expanded. Pure, so it is tested without Obsidian. Paths are relative to the
 // vault, `''` being its root.
 import { isExcluded } from '../../2-claude-mod/hooks/shape/exclusions.ts'
-import type { FrameKind } from '../../2-claude-mod/hooks/shape/node.ts'
-
-/** The Frame kinds the center's outer ring shows. Context goes inside the center's hex. */
-export type OuterKind = Exclude<FrameKind, 'context'>
-
-const outerKinds: readonly OuterKind[] = ['children', 'branches', 'leaves']
+import { directions, frameKinds } from '../../2-claude-mod/hooks/shape/node.ts'
+import {
+  centerExpansion,
+  defaultExpansions,
+  around,
+  beside,
+  innerKinds,
+  outerKinds,
+  sameExpansions,
+  type CenterExpansion,
+  type Expansions,
+  type InnerKind,
+} from './expansions.ts'
 
 export interface ViewState {
   /** The folder in the middle; absent, the hexframe file's own folder. */
   center?: string
-  expansions: { outer: OuterKind }
+  expansions: Expansions
 }
 
 /** The state an empty hexframe file means. */
-export const defaultState: ViewState = { expansions: { outer: 'children' } }
+export const defaultState: ViewState = { expansions: defaultExpansions }
 
 /** A file's view state, and what in the file was ignored for being malformed. */
 export interface Decoded {
@@ -40,24 +47,76 @@ export function decodeViewState(text: string): Decoded {
   if (!isObject(json)) return { state: defaultState, problems: ['it holds no JSON object'] }
 
   const problems: string[] = []
-  const state: ViewState = { expansions: { outer: outerOf(json['expansions'], problems) } }
+  const state: ViewState = { expansions: expansionsOf(json['expansions'], problems) }
   const center = json['center']
   if (typeof center === 'string') state.center = center
   else if (center !== undefined) problems.push('`center` is not a path')
   return { state, problems }
 }
 
-function outerOf(expansions: unknown, problems: string[]): OuterKind {
-  if (expansions === undefined) return defaultState.expansions.outer
+/**
+ * The expansions a file's `expansions` field holds. A missing kind takes its default: Context
+ * inside, and around it Branches beside Leaves, Children beside Context, nothing beside nothing. A
+ * kind that is `null` is peeled. A pair a view can't show keeps the outer kind, Context inside.
+ */
+function expansionsOf(expansions: unknown, problems: string[]): Expansions {
+  if (expansions === undefined) return defaultExpansions
   if (!isObject(expansions)) {
     problems.push('`expansions` is not an object')
-    return defaultState.expansions.outer
+    return defaultExpansions
   }
-  const outer = expansions['outer']
-  if (outer === undefined) return defaultState.expansions.outer
-  const kind = outerKinds.find((candidate) => candidate === outer)
-  if (kind === undefined) problems.push(`\`expansions.outer\` is none of ${outerKinds.join(', ')}`)
-  return kind ?? defaultState.expansions.outer
+  const innerRead = kindOf(expansions, 'inner', innerKinds, problems)
+  const inner = innerRead === undefined ? defaultExpansions.inner : innerRead
+  const outer = kindOf(expansions, 'outer', outerKinds, problems)
+  const branches = branchesOf(expansions['branches'], problems)
+  if (outer === undefined) return { ...centerAround(inner), branches }
+  if (outer === null) return { outer, inner, branches }
+  const center = centerExpansion(outer, inner)
+  if (center !== undefined) return { ...center, branches }
+  problems.push(`\`expansions.inner\` can't be ${String(inner)} beside ${outer}`)
+  return { ...beside(outer), branches }
+}
+
+/**
+ * The center a file that names no outer kind means: the outer ring that opens around `inner`,
+ * Children beside Context until a folder says it has more than six, or none around none.
+ */
+function centerAround(inner: InnerKind | null): CenterExpansion {
+  return inner === null ? { outer: null, inner } : around(inner, frameKinds)
+}
+
+/**
+ * `field` of `expansions` when it is one of `kinds` or `null`; undefined when it is missing, or
+ * malformed, with a problem then.
+ */
+function kindOf<K extends string>(
+  expansions: Record<string, unknown>,
+  field: string,
+  kinds: readonly K[],
+  problems: string[],
+): K | null | undefined {
+  const value = expansions[field]
+  if (value === undefined || value === null) return value
+  const kind = kinds.find((candidate) => candidate === value)
+  if (kind === undefined) problems.push(`\`expansions.${field}\` is none of ${kinds.join(', ')}`)
+  return kind
+}
+
+/** The kind each Branch of the outer ring opens into, by direction; a malformed one stays closed. */
+function branchesOf(value: unknown, problems: string[]): Expansions['branches'] {
+  if (value === undefined) return {}
+  if (!isObject(value)) {
+    problems.push('`expansions.branches` is not an object')
+    return {}
+  }
+  const branches: Expansions['branches'] = {}
+  for (const [key, kind] of Object.entries(value)) {
+    const direction = directions.find((candidate) => String(candidate) === key)
+    const found = frameKinds.find((candidate) => candidate === kind)
+    if (direction !== undefined && found !== undefined) branches[direction] = found
+    else problems.push(`\`expansions.branches\` holds a direction or a kind it can't read`)
+  }
+  return branches
 }
 
 function isObject(value: unknown): value is Record<string, unknown> {
@@ -66,23 +125,33 @@ function isObject(value: unknown): value is Record<string, unknown> {
 
 /** The text a hexframe file holds for `state`. */
 export function encodeViewState(state: ViewState): string {
-  return `${JSON.stringify({ center: state.center, expansions: state.expansions }, null, 2)}\n`
+  return `${JSON.stringify({ center: state.center, expansions: jsonOf(state.expansions) }, null, 2)}\n`
+}
+
+/** The expansions as the file writes them: no `branches` when none is opened. */
+function jsonOf({ outer, inner, branches }: Expansions) {
+  return Object.keys(branches).length === 0 ? { outer, inner } : { outer, inner, branches }
 }
 
 /**
- * `text`, a hexframe file's, with its center set to `state`'s, and everything else in it kept as
- * written, a field the view doesn't know or couldn't read included. A file that holds no JSON
- * object is written whole from `state`.
+ * `text`, a hexframe file's, with each field where `next` differs from `state` set to `next`'s,
+ * and everything else in it kept as written, a field the view doesn't know or couldn't read
+ * included. A file that holds no JSON object is written whole from `next`.
  */
-export function withCenter(text: string, state: ViewState): string {
+export function withChanges(text: string, state: ViewState, next: ViewState): string {
   let json: unknown
   try {
     json = JSON.parse(text)
   } catch {
-    return encodeViewState(state)
+    return encodeViewState(next)
   }
-  if (!isObject(json)) return encodeViewState(state)
-  return `${JSON.stringify({ ...json, center: state.center }, null, 2)}\n`
+  if (!isObject(json)) return encodeViewState(next)
+  const expansions = jsonOf(next.expansions)
+  const changed = {
+    ...(next.center !== state.center && { center: next.center }),
+    ...(!sameExpansions(next.expansions, state.expansions) && { expansions }),
+  }
+  return `${JSON.stringify({ ...json, ...changed }, null, 2)}\n`
 }
 
 /**
@@ -112,16 +181,6 @@ function fold(path: string): { path: string } | { outside: string } {
 }
 
 /**
- * The Frame kind the center's outer ring shows, among `offered`: the state's, or else Children,
- * or else Branches. A folder offers Children or Branches, never both: past six Branches and Leaves
- * in all, Children gives way to Branches and Leaves.
- */
-export function outerKindOf(state: ViewState, offered: readonly FrameKind[]): OuterKind {
-  const kinds: OuterKind[] = [state.expansions.outer, 'children', 'branches']
-  return kinds.find((kind) => offered.includes(kind)) ?? 'children'
-}
-
-/**
  * The state once the folder at `from` is renamed to `to`: its center follows when it is that
  * folder or lies inside it. The same state, unchanged, otherwise.
  */
@@ -135,14 +194,16 @@ export function followRename(state: ViewState, from: string, to: string): ViewSt
 }
 
 /**
- * Whether a change at `path` can change a view centered on `center`, at depth 1: the center
- * itself or a folder holding it, the center's own entries, and what lies in one of them, a
- * member's `CLAUDE.md` among it.
+ * Whether a change at `path` can change a view that read `folders` as Frames, the center and the
+ * Branches it opens: one of them or a folder holding it, their own entries, and what lies in one
+ * of those, a member's `CLAUDE.md` among it.
  */
-export function touches(path: string, center: string): boolean {
-  if (relativeTo(center, path) !== undefined) return true
-  const inside = relativeTo(path, center)
-  return inside !== undefined && inside.split('/').length <= 2
+export function touches(path: string, folders: readonly string[]): boolean {
+  return folders.some((folder) => {
+    if (relativeTo(folder, path) !== undefined) return true
+    const inside = relativeTo(path, folder)
+    return inside !== undefined && inside.split('/').length <= 2
+  })
 }
 
 /** `path` relative to `folder`, `''` when it is `folder`, or undefined when it lies outside it. */

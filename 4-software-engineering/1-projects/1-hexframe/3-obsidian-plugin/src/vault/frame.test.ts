@@ -5,6 +5,7 @@ import {
   centerToShow,
   inFolder,
   readFrame,
+  readOpened,
   refusal,
   unopenable,
   vaultPath,
@@ -160,6 +161,33 @@ describe('readFrame', () => {
     for (const name of ['a', 'b', 'c', 'd', 'e', 'f', 'g']) nodes[`.${name}`] = {}
     const { frame } = await readFrame(diskOf(nodes), '')
     expect(frame.rings.context).toMatchObject({ overflowing: true, overflow: [{ name: '.g' }] })
+  })
+})
+
+describe('readOpened', () => {
+  it('reads a folder the view may center on', async () => {
+    const disk = diskOf({ '3-games': {}, '3-games/CLAUDE.md': note('Games') })
+    expect(await readOpened(disk, '3-games')).toMatchObject({ frame: { tile: { title: 'Games' } } })
+  })
+
+  it('lists nothing of a folder that leaves the vault or that a folder leaves out', async () => {
+    const disk = diskOf({
+      '3-games': {},
+      '3-games/out': { link: '/elsewhere' },
+      '3-games/.hexframe': {},
+      '3-games/.hexframe/exclusions.yaml': 'exclude: [dist/]\n',
+      '3-games/dist': {},
+    })
+    expect(await readOpened(disk, '3-games/out')).toEqual({ refused: 'it leads out of the vault' })
+    expect(await readOpened(disk, '3-games/dist')).toEqual({
+      refused: '3-games/.hexframe/exclusions.yaml leaves out dist',
+    })
+  })
+
+  it('gives the reason of a read that fails, rather than throwing', async () => {
+    const disk = diskOf({ '3-games': {} })
+    const failing: Disk = { ...disk, list: () => Promise.reject(new Error('EACCES')) }
+    expect(await readOpened(failing, '3-games')).toEqual({ refused: 'EACCES' })
   })
 })
 

@@ -1,7 +1,13 @@
 // What a click on a hex of the view does: where the view moves, and what it opens beside it. Pure,
 // so the click rules are tested without Obsidian; the view carries the action out.
 import type { Placement } from '../../2-claude-mod/hooks/shape/layout.ts'
-import { basename, bodySources, isMarkdown, parent } from '../../2-claude-mod/hooks/shape/node.ts'
+import {
+  basename,
+  bodySources,
+  isMarkdown,
+  parent,
+  type Direction,
+} from '../../2-claude-mod/hooks/shape/node.ts'
 import { vaultPath } from './vault/frame.ts'
 
 /**
@@ -47,4 +53,16 @@ function notesOf(folder: string): string[] {
 /** The folder holding `folder`, or undefined at the vault root. */
 function up(folder: string): string | undefined {
   return folder === '' ? undefined : vaultPath(parent(folder))
+}
+
+/**
+ * The direction of the outer ring's Branch that `placement` stands for, its hex or, once opened,
+ * its Tile inside it; undefined for any other hex. Those are the hexes a view opens on its own:
+ * the inner ring holds Leaves and Context, never a Branch, and a Branch's own members open
+ * nothing.
+ */
+export function outerBranchOf(placement: Placement): Direction | undefined {
+  const isOuterBranch =
+    placement.kind === 'member' && placement.memberKind === 'branch' && placement.generation === 1
+  return isOuterBranch ? placement.direction : undefined
 }
