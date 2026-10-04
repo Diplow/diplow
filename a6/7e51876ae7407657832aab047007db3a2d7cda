@@ -1,0 +1,92 @@
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/scripts/bundle.test.ts
+  s_1657f322d6ca1b::t_e2258d63693315 22-26,37-47
+  s_1657f322d6ca1b::t_f4ddee063b23ce 48-49
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/scripts/bundle.ts
+  s_1657f322d6ca1b::t_e2258d63693315 6,13-20,24-31
+  s_1657f322d6ca1b::t_6efba4ee091e4c 21-23
+  s_1657f322d6ca1b::t_623e7f3034e3a4 32,64
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/vault/files.ts
+  s_1657f322d6ca1b::t_e4ec25afa1217b 1-96
+  s_1657f322d6ca1b::t_5dfe66e110aa7b 97-100
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/vault/frame.ts
+  s_1657f322d6ca1b::t_1b7e766f1d6842 268-270
+  s_1657f322d6ca1b::t_201d7ed017a3c8 42-46,307-309
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/draw.ts
+  s_1657f322d6ca1b::t_7cdedca275c53b 91,110,138,140,144-145,148-149,151-152,155-157,198-201,205,215,238-242,256,302
+  s_1657f322d6ca1b::t_f813d8e38f77d6 15,56,62,67-68,83,85,113-114,117-135,137,139,147,150,153-154,174,178-189
+  s_1657f322d6ca1b::t_837b7bde91d3e2 146,190
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/expansions.test.ts
+  s_1657f322d6ca1b::t_a78aff573efd40 278-295
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/vault/files.test.ts
+  s_1657f322d6ca1b::t_bcf55151eb1e4c 1-11
+  s_1657f322d6ca1b::t_2d93b0725cb13c 12-134
+.obsidian/plugins/hexframe/styles.css
+  s_1657f322d6ca1b::t_fc4e44bf9735d8 28-34,144
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/view-state.ts
+  s_1657f322d6ca1b::t_230eb32815d377 169-173,175
+.obsidian/CLAUDE.md
+  s_1657f322d6ca1b::t_20f75d9b2c727f 27,37
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/view.ts
+  s_1657f322d6ca1b::t_cd8ff69467dc4b 183-195
+  s_1657f322d6ca1b::t_6728a4f2a84ba4 400
+  s_1657f322d6ca1b::t_5c61cad0c0be25 336-344
+  s_1657f322d6ca1b::t_bce8abfc5a1296 73-77
+  s_1657f322d6ca1b::t_753732a550b73a 70-71
+  s_1657f322d6ca1b::t_763df1d2c3350f 78
+  s_1657f322d6ca1b::t_20f35e232d9ef9 387
+  s_1657f322d6ca1b::t_df7eac8a8ee32b 119-121
+  s_1657f322d6ca1b::t_3c962306c65a9b 561-565
+  s_1657f322d6ca1b::t_7808437e21e9b4 560
+  s_1657f322d6ca1b::t_a16f919af37e83 330
+  s_1657f322d6ca1b::t_56b388c95ae100 133
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/vault/frame.test.ts
+  s_1657f322d6ca1b::t_6c92ce745e2654 22-23,25,27-28,43,50,57-59,68,138,147,159-178,193,195-206,520-534,578-585
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/settings.ts
+  s_1657f322d6ca1b::t_e03198e8c2c0dd 202
+  s_1657f322d6ca1b::t_6d1b24beb0cafc 124-125
+  s_1657f322d6ca1b::t_b6a80cd6fbf78f 214,216-217,220,225,230-233
+  s_1657f322d6ca1b::t_0860212a0cf7bf 234
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/CLAUDE.md
+  s_1657f322d6ca1b::t_98e87fe625b9f7 18,24,68,72,74,85,130-131,133,136
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/exclusions.ts
+  s_1657f322d6ca1b::t_1c266dc2fa6f68 183-185,209-211,244-249
+  s_1657f322d6ca1b::t_1f1ea257b5b090 250-251
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/exclusions.test.ts
+  s_1657f322d6ca1b::t_1c266dc2fa6f68 208-218
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/vault/disk.ts
+  s_1657f322d6ca1b::t_3c7cc0296871a1 2-4,7-8,23-26,31
+.obsidian/plugins/hexframe/main.js
+  s_1657f322d6ca1b::t_fc4e44bf9735d8 1
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-obsidian-plugin/decisions.md
+  s_1657f322d6ca1b::t_98e87fe625b9f7 47,84,110
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/view-state.test.ts
+  s_1657f322d6ca1b::t_230eb32815d377 167,175-177
+  s_1657f322d6ca1b::t_cf8eee7bacb6d9 178-179
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/focus.test.ts
+  s_1657f322d6ca1b::t_50ab9a460707df 44-48
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/draw.test.ts
+  s_1657f322d6ca1b::t_67af1fc89eced1 10
+  s_1657f322d6ca1b::t_77bb203fe01f1d 4-9,11-19
+.obsidian/plugins/hexframe/manifest.json
+  s_1657f322d6ca1b::t_fc4e44bf9735d8 4
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/styles.css
+  s_1657f322d6ca1b::t_2fe7d2108fc263 28-34,144
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/manifest.json
+  s_1657f322d6ca1b::t_e85f7e3df79c50 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a67e51876ae7407657832aab047007db3a2d7cda",
+  "prompts": {},
+  "sessions": {
+    "s_1657f322d6ca1b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "efac6855-719c-47dd-914e-6a45c657a6ae",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
