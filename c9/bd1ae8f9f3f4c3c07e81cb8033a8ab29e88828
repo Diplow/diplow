@@ -1,0 +1,35 @@
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/menu.ts
+  s_8004fe4b534599::t_bd7e505196964e 25,115,183-184,186-191
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/CLAUDE.md
+  s_8004fe4b534599::t_66b58a199a1375 74
+.obsidian/plugins/hexframe/main.js
+  s_8004fe4b534599::t_c21877d1e82def 1
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/exclusions.ts
+  s_8004fe4b534599::t_bd7e505196964e 54-57,59-71,77-78,82,165-167
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/settings.ts
+  s_8004fe4b534599::t_bd7e505196964e 20,206-208
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/menu.test.ts
+  s_8004fe4b534599::t_bd7e505196964e 230-231,233-236,241-243
+  s_8004fe4b534599::t_948fdb460ce77f 244-245
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-obsidian-plugin/decisions.md
+  s_8004fe4b534599::t_66b58a199a1375 104,106,108
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/exclusions.test.ts
+  s_8004fe4b534599::t_bd7e505196964e 11,57-60,76-81
+  s_8004fe4b534599::t_efd37f8afcec1d 82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c9bd1ae8f9f3f4c3c07e81cb8033a8ab29e88828",
+  "prompts": {},
+  "sessions": {
+    "s_8004fe4b534599": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d6be5684-daf1-47f2-ae41-5225e4178a75",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
