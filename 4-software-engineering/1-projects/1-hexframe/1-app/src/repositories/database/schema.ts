@@ -99,6 +99,47 @@ export const rateLimit = pgTable('rate_limit', {
   lastRequest: bigint('last_request', { mode: 'number' }).notNull(),
 })
 
+/**
+ * Better Auth's api-key plugin: IAM's Keys, one row each, owned by the user `reference_id` names. `key`
+ * holds the secret's hash, never the secret; `start`, its first characters, to tell Keys apart. Its
+ * usage and rate-limit columns stay unused (../auth/CLAUDE.md). The plugin's own schema has no key to
+ * `user`: this one has, so deleting an Account deletes its Keys rather than leaving them to prove it.
+ */
+export const apikey = pgTable(
+  'apikey',
+  {
+    id: text('id').primaryKey(),
+    configId: text('config_id').default('default').notNull(),
+    name: text('name'),
+    start: text('start'),
+    referenceId: text('reference_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    prefix: text('prefix'),
+    key: text('key').notNull(),
+    refillInterval: integer('refill_interval'),
+    refillAmount: integer('refill_amount'),
+    lastRefillAt: timestamp('last_refill_at'),
+    enabled: boolean('enabled').default(true),
+    rateLimitEnabled: boolean('rate_limit_enabled').default(true),
+    rateLimitTimeWindow: integer('rate_limit_time_window').default(86_400_000),
+    rateLimitMax: integer('rate_limit_max').default(10),
+    requestCount: integer('request_count').default(0),
+    remaining: integer('remaining'),
+    lastRequest: timestamp('last_request'),
+    expiresAt: timestamp('expires_at'),
+    createdAt: timestamp('created_at').notNull(),
+    updatedAt: timestamp('updated_at').notNull(),
+    permissions: text('permissions'),
+    metadata: text('metadata'),
+  },
+  (table) => [
+    index('apikey_configId_idx').on(table.configId),
+    index('apikey_referenceId_idx').on(table.referenceId),
+    uniqueIndex('apikey_key_idx').on(table.key),
+  ],
+)
+
 // Mapping's (./tiles/tiles.ts): every Tile of every System, and the References standing in Context slots.
 
 /**
