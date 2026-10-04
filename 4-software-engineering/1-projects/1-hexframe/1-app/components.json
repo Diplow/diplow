@@ -5,16 +5,16 @@
   "tsx": true,
   "tailwind": {
     "config": "",
-    "css": "src/styles.css",
+    "css": "src/front/styles.css",
     "baseColor": "zinc",
     "cssVariables": true,
     "prefix": ""
   },
   "aliases": {
-    "components": "#/ui",
-    "ui": "#/ui",
+    "components": "#/front/ui",
+    "ui": "#/front/ui",
     "utils": "cn",
-    "hooks": "#/ui"
+    "hooks": "#/front/ui"
   },
   "iconLibrary": "lucide"
 }

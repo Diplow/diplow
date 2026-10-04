@@ -1,0 +1,140 @@
+// Mapping's repository: the `tile` table (../schema.ts), read and written one System at a time. It
+// speaks rows, not Tiles: Mapping, above, decides what a row means and which changes are allowed.
+// A change locks the System's Root first, inside the transaction the API layer opened, so two
+// changes to one System never interleave between what Mapping checked and what it wrote.
+import { and, eq, isNull } from 'drizzle-orm'
+import { Context, Effect, Layer } from 'effect'
+
+import { Database, InTransaction } from '../database'
+import { tile } from '../schema'
+
+/**
+ * One row of the `tile` table, as the Account that owns it reads it. A Root has no parent and no
+ * direction; a row with a `target` is a Reference to the row of that id.
+ */
+export interface TileRow {
+  readonly id: string
+  readonly parentId: string | null
+  readonly direction: number | null
+  readonly title: string
+  readonly preview: string
+  readonly body: string
+  readonly target: string | null
+}
+
+/** A row to add under a parent. Its id is made here. */
+type NewTileRow = Omit<TileRow, 'id' | 'parentId' | 'direction'> & {
+  readonly parentId: string
+  readonly direction: number
+}
+
+/** What a change may write, to the System it locked only, inside the same transaction. */
+export interface Writes {
+  /** Adds a row and answers its id. */
+  readonly insert: (row: NewTileRow) => Effect.Effect<string, never, InTransaction>
+  /** Changes the columns given; with none, writes nothing. */
+  readonly update: (
+    id: string,
+    changes: Partial<Omit<NewTileRow, 'target'>>,
+  ) => Effect.Effect<void, never, InTransaction>
+  /** Deletes a row and every row below it. */
+  readonly remove: (id: string) => Effect.Effect<void, never, InTransaction>
+}
+
+export class Tiles extends Context.Service<
+  Tiles,
+  {
+    /**
+     * Every row of the Account's System, its Root added first with the content given when it has
+     * none. Two reads at once add one Root.
+     */
+    readonly read: (
+      accountId: string,
+      root: Pick<TileRow, 'title' | 'preview' | 'body'>,
+    ) => Effect.Effect<ReadonlyArray<TileRow>>
+    /**
+     * Locks the System's Root until the transaction ends, then answers its rows as they stand: no
+     * other change to the System runs until then. An Account without a Root has no rows.
+     */
+    readonly lock: (
+      accountId: string,
+    ) => Effect.Effect<ReadonlyArray<TileRow>, never, InTransaction>
+    /** What a change may write to the Account's System, once it locked it. */
+    readonly writes: (accountId: string) => Writes
+  }
+>()('hexframe/Tiles') {}
+
+const columns = {
+  id: tile.id,
+  parentId: tile.parentId,
+  direction: tile.direction,
+  title: tile.title,
+  preview: tile.preview,
+  body: tile.body,
+  target: tile.target,
+}
+
+/** A query that only holds inside a transaction: it requires one, so it runs in no other. */
+const inTransaction = <A>(query: Effect.Effect<A>) => InTransaction.use(() => query)
+
+/** The service over the given database; a database failure is a defect. */
+const make = Effect.gen(function* () {
+  const database = yield* Database
+  const ofAccount = (accountId: string) => eq(tile.accountId, accountId)
+  const rootOf = (accountId: string) => and(ofAccount(accountId), isNull(tile.parentId))
+  const rowsOf = (accountId: string) =>
+    database.select(columns).from(tile).where(ofAccount(accountId)).pipe(Effect.orDie)
+
+  const writes = (accountId: string): Writes => ({
+    insert: (row) => {
+      const id = crypto.randomUUID()
+      return inTransaction(
+        database
+          .insert(tile)
+          .values({ ...row, id, accountId })
+          .pipe(Effect.as(id), Effect.orDie),
+      )
+    },
+    update: (id, changes) =>
+      inTransaction(
+        Object.keys(changes).length === 0
+          ? Effect.void
+          : database
+              .update(tile)
+              .set(changes)
+              .where(and(ofAccount(accountId), eq(tile.id, id)))
+              .pipe(Effect.asVoid, Effect.orDie),
+      ),
+    remove: (id) =>
+      inTransaction(
+        database
+          .delete(tile)
+          .where(and(ofAccount(accountId), eq(tile.id, id)))
+          .pipe(Effect.asVoid, Effect.orDie),
+      ),
+  })
+
+  const ensureRoot = (accountId: string, root: Pick<TileRow, 'title' | 'preview' | 'body'>) =>
+    database
+      .insert(tile)
+      .values({ ...root, id: crypto.randomUUID(), accountId })
+      .onConflictDoNothing()
+      .pipe(Effect.asVoid, Effect.orDie)
+
+  return Tiles.of({
+    read: (accountId, root) => Effect.andThen(ensureRoot(accountId, root), rowsOf(accountId)),
+    lock: (accountId) =>
+      inTransaction(
+        database
+          .select({ id: tile.id })
+          .from(tile)
+          .where(rootOf(accountId))
+          .for('update')
+          .pipe(Effect.orDie, Effect.andThen(rowsOf(accountId))),
+      ),
+    writes,
+  })
+})
+
+/** The tiles repository, over the `Database` it is given. */
+export const layer = Layer.effect(Tiles)(make)

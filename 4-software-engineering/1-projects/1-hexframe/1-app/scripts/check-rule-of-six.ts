@@ -8,12 +8,10 @@ const root = 'src'
 // CLAUDE.md presents its node and sits outside every budget, as it does across the repo; macOS drops
 // .DS_Store files that git ignores.
 const outsideBudget = new Set(['CLAUDE.md', '.DS_Store'])
-// Generated and ignored by git.
-const skipped = new Set([join(root, 'paraglide')])
 
 function overflows(folder: string): string[] {
   const entries = readdirSync(folder, { withFileTypes: true }).filter(
-    (entry) => !outsideBudget.has(entry.name) && !skipped.has(join(folder, entry.name)),
+    (entry) => !outsideBudget.has(entry.name),
   )
   const folders = entries.filter((entry) => entry.isDirectory())
   const files = entries.filter((entry) => !entry.isDirectory())
