@@ -15,7 +15,7 @@ preview: >-
 
 ## Use it
 
-Open a `*.hexframe` file, such as `diplow.hexframe` at the vault's root: the view shows the file's folder, its Tile in the middle and its Children around it (its Branches past six Branches and Leaves), in the theme's colors, light and dark. It draws again when a file or folder it shows is created, deleted, renamed or modified; the dot folders, which Obsidian's index leaves out, are listed again on each drawing. Under the drawing, a line says what it left aside: a broken `exclusions.yaml`, a Leaf that clashes with a Branch, a ring too full to draw, a center it can't show.
+Open a `*.hexframe` file, such as `diplow.hexframe` at the vault's root: the view shows the file's folder, its Tile in the middle and its Children around it (its Branches past six Branches and Leaves), in the theme's colors, light and dark. It draws again when a file or folder it shows is created, deleted, renamed or modified. Obsidian sends no event for a dot folder, so those, `.hexframe/exclusions.yaml` among them, are read again on each drawing, and coming back to the view draws it again. It reads nothing whose real path leaves the vault, a file under a symlinked folder included. Under the drawing, a line says what it left aside: a broken `exclusions.yaml`, a Leaf that clashes with a Branch, a ring too full to draw, a center it can't show.
 
 The file keeps the view state as JSON, what the app keeps in its URL. An empty file means the defaults:
 
@@ -29,7 +29,7 @@ The file keeps the view state as JSON, what the app keeps in its URL. An empty f
 - `center`: the folder in the middle, relative to the vault; absent, the file's own folder. One that leaves the vault (an absolute path, a `..` past its root, a symlink out of it), that a folder on the way leaves out, or that isn't a folder is dropped, and the view says so and shows the file's own folder.
 - `expansions.outer`: the Frame kind of the ring around the center, `children`, `branches` or `leaves`. A folder that doesn't offer it shows Children, or Branches past six.
 
-The view reads the file on open and writes it only when its state changes, today when the center, or a folder holding it, is renamed. A file that isn't JSON, or a field that is malformed, gives the defaults with a line saying so, and the file stays as it is.
+The view reads the file on open and writes it only when its state changes, today when the center, or a folder holding it, is renamed: it then sets `center` and keeps the rest of the file as written. A file that isn't JSON, or a field that is malformed, gives the defaults with a line saying so, and the file stays as it is.
 
 ## Develop it
 

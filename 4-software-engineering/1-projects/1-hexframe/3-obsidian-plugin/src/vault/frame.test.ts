@@ -10,9 +10,16 @@ import { inFolder, readFrame, refusal, vaultPath, type Disk } from './frame.ts'
 type Node = string | Record<string, never> | { link: string }
 
 function diskOf(nodes: Record<string, Node>): Disk {
+  // A path's real path: the first symlink on its way followed, the rest kept.
   const real = (path: string) => {
-    const node = nodes[vaultPath(path)]
-    return typeof node === 'object' && 'link' in node ? node.link : `/vault/${vaultPath(path)}`
+    const parts = vaultPath(path).split('/').filter(Boolean)
+    for (let at = parts.length; at > 0; at--) {
+      const node = nodes[parts.slice(0, at).join('/')]
+      if (typeof node === 'object' && 'link' in node) {
+        return [node.link, ...parts.slice(at)].join('/')
+      }
+    }
+    return ['/vault', ...parts].join('/')
   }
   const nodeAt = (path: string): Node | undefined =>
     vaultPath(path) === '' ? {} : nodes[vaultPath(path)]
@@ -33,7 +40,7 @@ function diskOf(nodes: Record<string, Node>): Disk {
       const stat: FileStat = {
         kind: typeof node === 'string' ? 'file' : 'dir',
         size: typeof node === 'string' ? node.length : 0,
-        realPath: real(path).replace(/\/$/, ''),
+        realPath: real(path),
       }
       return Promise.resolve(stat)
     },
@@ -117,6 +124,28 @@ describe('readFrame', () => {
     })
   })
 
+  it('names a Tile whose folder is a symlink out of the vault, reading nothing there', async () => {
+    const disk = diskOf({
+      '3-games': { link: '/home/someone' },
+      '3-games/CLAUDE.md': note('Someone else'),
+    })
+    const { frame } = await readFrame(disk, '')
+    expect(frame.rings.children).toMatchObject({
+      members: { 3: { tile: { path: '3-games', title: 'Games', preview: '' } } },
+    })
+  })
+
+  it('follows a symlink that stays in the vault', async () => {
+    const disk = diskOf({
+      '3-games': { link: '/vault/archive/games' },
+      '3-games/CLAUDE.md': note('Games, archived'),
+    })
+    const { frame } = await readFrame(disk, '')
+    expect(frame.rings.children).toMatchObject({
+      members: { 3: { tile: { title: 'Games, archived' } } },
+    })
+  })
+
   it('keeps an overflowing ring as names, reading none of their files', async () => {
     const nodes: Record<string, Node> = {}
     for (const name of ['a', 'b', 'c', 'd', 'e', 'f', 'g']) nodes[`.${name}`] = {}
@@ -133,6 +162,7 @@ describe('refusal', () => {
     '3-games/out': { link: '/elsewhere' },
     '3-games/beside': { link: '/vault-old/3-games' },
     '3-games/dist': {},
+    '3-games/git': { link: '/vault/.git' },
     '3-games/.hexframe': {},
     '3-games/.hexframe/exclusions.yaml': 'exclude: [dist/]\n',
   })
@@ -154,8 +184,17 @@ describe('refusal', () => {
 
   it('refuses a folder its parent leaves out', async () => {
     expect(await refusal(disk, '3-games/dist')).toBe(
-      '3-games/.hexframe/exclusions.yaml leaves it out',
+      '3-games/.hexframe/exclusions.yaml leaves out dist',
     )
+  })
+
+  it('refuses a folder left out by its real path, whatever the path written', async () => {
+    expect(await refusal(disk, '3-games/git')).toBe('every folder leaves out .git')
+  })
+
+  it('gives the failure of a folder the file system fails on', async () => {
+    const failing: Disk = { ...disk, stat: () => Promise.reject(new Error('ELOOP')) }
+    expect(await refusal(failing, '3-games')).toBe('ELOOP')
   })
 })
 

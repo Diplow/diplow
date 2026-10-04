@@ -8,6 +8,7 @@ import {
   followRename,
   outerKindOf,
   touches,
+  withCenter,
   type ViewState,
 } from './view-state.ts'
 
@@ -157,6 +158,23 @@ describe('followRename', () => {
   it('keeps the same state when the rename is elsewhere', () => {
     for (const state of [defaultState, centered('3-games-old'), centered('../out')]) {
       expect(followRename(state, '3-games', '3-play')).toBe(state)
+    }
+  })
+})
+
+describe('withCenter', () => {
+  it('sets the center and keeps the rest of the file as written', () => {
+    const text = '{"center": "3-games", "expansions": {"outer": 6}, "zoom": 2}'
+    expect(JSON.parse(withCenter(text, centered('3-play')))).toEqual({
+      center: '3-play',
+      expansions: { outer: 6 },
+      zoom: 2,
+    })
+  })
+
+  it('writes the whole state when the file holds no JSON object', () => {
+    for (const text of ['', '[]', '{"center": ']) {
+      expect(withCenter(text, centered('3-play'))).toBe(encodeViewState(centered('3-play')))
     }
   })
 })

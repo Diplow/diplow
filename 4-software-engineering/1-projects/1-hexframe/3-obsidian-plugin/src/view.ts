@@ -10,10 +10,10 @@ import {
   centerOf,
   decodeViewState,
   defaultState,
-  encodeViewState,
   followRename,
   outerKindOf,
   touches,
+  withCenter,
   type ViewState,
 } from './view-state.ts'
 
@@ -79,6 +79,13 @@ export class HexframeView extends TextFileView {
         this.onVaultRename(file, from)
       }),
     )
+    // Obsidian sends no event for a dot folder, `.hexframe/` among them: coming back to the view
+    // reads the folder again.
+    this.registerEvent(
+      this.app.workspace.on('active-leaf-change', (leaf) => {
+        if (leaf === this.leaf) this.redraw()
+      }),
+    )
   }
 
   private onChange(path: string) {
@@ -91,7 +98,7 @@ export class HexframeView extends TextFileView {
     const followed = next !== this.state
     if (followed) {
       this.state = next
-      this.text = encodeViewState(next)
+      this.text = withCenter(this.text, next)
       this.requestSave()
     }
     if (followed || file === this.file) this.redraw()
@@ -114,8 +121,9 @@ export class HexframeView extends TextFileView {
       drawNotes(this.contentEl, ['Hexframe reads the vault from a file system, which it has not.'])
       return
     }
-    const folder = await this.centerFolder(disk, file, notes)
+    let folder = vaultPath(file.parent?.path ?? '')
     try {
+      folder = await this.centerFolder(disk, file, notes)
       const { frame, warnings } = await readFrame(disk, folder)
       if (drawing !== this.drawings) return
       const view = { frame, frameKind: outerKindOf(this.state, kindsOf(frame.rings)) }

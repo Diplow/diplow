@@ -70,6 +70,22 @@ export function encodeViewState(state: ViewState): string {
 }
 
 /**
+ * `text`, a hexframe file's, with its center set to `state`'s, and everything else in it kept as
+ * written, a field the view doesn't know or couldn't read included. A file that holds no JSON
+ * object is written whole from `state`.
+ */
+export function withCenter(text: string, state: ViewState): string {
+  let json: unknown
+  try {
+    json = JSON.parse(text)
+  } catch {
+    return encodeViewState(state)
+  }
+  if (!isObject(json)) return encodeViewState(state)
+  return `${JSON.stringify({ ...json, center: state.center }, null, 2)}\n`
+}
+
+/**
  * The folder a view shows: the state's center, or `home`, the hexframe file's own folder, when the
  * state names none or one that leaves the vault (an absolute path, a `..` past its root) or lands
  * on a name every folder leaves out. `dropped` then says why. A medium still checks the folder on

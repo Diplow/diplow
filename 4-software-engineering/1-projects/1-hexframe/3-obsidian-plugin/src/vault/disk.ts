@@ -22,33 +22,39 @@ export function diskOf(app: App): Disk | undefined {
 async function list(app: App, adapter: FileSystemAdapter, folder: string): Promise<Entry[]> {
   const listed = await adapter.list(folder)
   const indexed = folder === '' ? app.vault.getRoot() : app.vault.getFolderByPath(folder)
-  const dir = (path: string): Entry => ({ name: nameOf(path), kind: 'dir' })
+  const dir = (name: string): Entry => ({ name, kind: 'dir' })
   // A folder inside a dot folder is not in the index: the adapter lists all of it.
   if (indexed === null) {
     return [
-      ...listed.folders.map(dir),
+      ...listed.folders.map(nameOf).map(dir),
       ...listed.files.map((path): Entry => ({ name: nameOf(path), kind: 'file' })),
     ]
   }
-  return [
-    ...indexed.children.map((child): Entry => ({
-      name: child.name,
-      kind: child instanceof TFolder ? 'dir' : 'file',
-    })),
-    ...listed.folders.filter((path) => nameOf(path).startsWith('.')).map(dir),
-  ]
+  const entries = indexed.children.map((child): Entry => ({
+    name: child.name,
+    kind: child instanceof TFolder ? 'dir' : 'file',
+  }))
+  // A plugin such as Hidden folders access makes the index hold some dot folders already.
+  const known = new Set(entries.map(({ name }) => name))
+  const context = listed.folders
+    .map(nameOf)
+    .filter((name) => name.startsWith('.') && !known.has(name))
+  return [...entries, ...context.map(dir)]
 }
 
 function nameOf(path: string): string {
   return path.slice(path.lastIndexOf('/') + 1)
 }
 
-/** What is at `fullPath` on disk, every symlink followed, or undefined when nothing is there. */
+/**
+ * What is at `fullPath` on disk, every symlink followed, or undefined when nothing is there. Its
+ * real path is written with `/`, Windows' included, as the shape compares paths.
+ */
 async function statAt(fullPath: string): Promise<FileStat | undefined> {
   try {
     const [found, realPath] = await Promise.all([stat(fullPath), realpath(fullPath)])
     const kind = found.isFile() ? 'file' : found.isDirectory() ? 'dir' : 'other'
-    return { kind, size: found.size, realPath }
+    return { kind, size: found.size, realPath: realPath.replaceAll('\\', '/') }
   } catch (error) {
     if (error instanceof Error && 'code' in error && error.code === 'ENOENT') return undefined
     throw error

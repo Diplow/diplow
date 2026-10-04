@@ -9,6 +9,7 @@ import {
   basename,
   bodySources,
   directions,
+  liesWithin,
   parent,
   sortEntries,
   tileOf,
@@ -53,16 +54,27 @@ export interface Read {
  * `exclusions.yaml` has left names out. A file that can't be read gives a Tile from its name.
  */
 export async function readFrame(disk: Disk, folder: string): Promise<Read> {
-  const exclusions = exclusionsFrom(await readInFolder(disk, folder, exclusionsFile))
+  const reader = await readerOf(disk)
+  const exclusions = exclusionsFrom(await readInFolder(reader, folder, exclusionsFile))
   const sorted = sortEntries(await disk.list(folder), exclusions.exclusions)
   const rings: Rings<Member> = {}
-  if (sorted.children) rings.children = await readRing(disk, folder, sorted.children)
+  if (sorted.children) rings.children = await readRing(reader, folder, sorted.children)
   for (const kind of ['branches', 'leaves', 'context'] as const) {
     const ring = sorted[kind]
-    if (ring) rings[kind] = await readRing(disk, folder, ring)
+    if (ring) rings[kind] = await readRing(reader, folder, ring)
   }
-  const frame = { tile: await readTile(disk, folder, 'branch'), rings }
+  const frame = { tile: await readTile(reader, folder, 'branch'), rings }
   return { frame, warnings: exclusions.warning === undefined ? [] : [exclusions.warning] }
+}
+
+/** A Disk, and the real path of the vault's root, which everything read must lie within. */
+interface Reader {
+  disk: Disk
+  root: string | undefined
+}
+
+async function readerOf(disk: Disk): Promise<Reader> {
+  return { disk, root: (await disk.stat(''))?.realPath }
 }
 
 /** A seated ring of Slots, `R`, with each one's Tile read. */
@@ -70,7 +82,7 @@ type Loaded<R extends SeatedRing<Slot>> = Omit<R, 'members'> & SeatedRing<Member
 
 /** Reads the Tile of each seated member; an overflowing ring stays names, and reads no file. */
 async function readRing<R extends SeatedRing<Slot>>(
-  disk: Disk,
+  reader: Reader,
   folder: string,
   ring: R | OverflowingRing,
 ): Promise<Loaded<R> | OverflowingRing> {
@@ -79,7 +91,7 @@ async function readRing<R extends SeatedRing<Slot>>(
   for (const direction of directions) {
     const slot = ring.members[direction]
     if (slot) {
-      const tile = await readTile(disk, inFolder(folder, slot.name), slot.kind)
+      const tile = await readTile(reader, inFolder(folder, slot.name), slot.kind)
       members[direction] = { kind: slot.kind, tile }
     }
   }
@@ -87,53 +99,76 @@ async function readRing<R extends SeatedRing<Slot>>(
 }
 
 /** The Tile at `path`, from the first of its body files that exists and can be read. */
-async function readTile(disk: Disk, path: string, kind: Slot['kind']): Promise<Tile> {
+async function readTile(reader: Reader, path: string, kind: Slot['kind']): Promise<Tile> {
   for (const file of bodySources(path, kind)) {
-    const read = await readInFolder(disk, parent(file), basename(file))
+    const read = await readInFolder(reader, parent(file), basename(file))
     if (read) return tileOf(path, 'text' in read ? read.text : undefined, kind)
   }
   return tileOf(path, undefined, kind)
 }
 
 /**
- * `relative`, a file of `folder`, read when the shape's `unreadable` lets a medium read it, or
- * undefined when there is none. It never throws: a read that fails gives its reason.
+ * `relative`, a file of `folder`, read when the shape's `unreadable` lets a medium read it and its
+ * real path lies within the vault's, or undefined when there is none. Obsidian's index lists a
+ * symlinked folder as a folder, so a file can lie in its folder and still out of the vault. It
+ * never throws: a read that fails gives its reason.
  */
 async function readInFolder(
-  disk: Disk,
+  { disk, root }: Reader,
   folder: string,
   relative: string,
 ): Promise<FileRead | undefined> {
   try {
     const file = await disk.stat(inFolder(folder, relative))
     if (file === undefined) return undefined
-    const unread = unreadable(file, (await disk.stat(folder))?.realPath, relative)
+    const unread =
+      unreadable(file, (await disk.stat(folder))?.realPath, relative) ??
+      (isWithin(file.realPath, root) ? undefined : 'it leads outside the vault')
     return unread === undefined ? { text: await disk.read(inFolder(folder, relative)) } : { unread }
   } catch (error) {
-    return { unread: error instanceof Error ? error.message : String(error) }
+    return { unread: messageOf(error) }
   }
 }
 
 /**
  * Why the view can't center on `folder`, or undefined when it can: it must be a folder whose real
- * path, symlinks followed, lies in the vault's, compared folder by folder, and no folder on the way
- * may leave out the next one in its `exclusions.yaml`.
+ * path, symlinks followed, lies within the vault's, and no folder on the way there, real path
+ * again, may leave out the next one. A folder the file system fails on gives the failure.
  */
 export async function refusal(disk: Disk, folder: string): Promise<string | undefined> {
-  const [found, vault] = await Promise.all([disk.stat(folder), disk.stat('')])
-  if (found === undefined) return 'it does not exist'
-  if (found.kind !== 'dir') return 'it is not a folder'
-  const root = vault?.realPath?.replace(/\/*$/, '/')
-  const real = found.realPath === undefined ? undefined : `${found.realPath}/`
-  if (root === undefined || real?.startsWith(root) !== true) return 'it leads out of the vault'
+  try {
+    const reader = await readerOf(disk)
+    const found = await disk.stat(folder)
+    if (found === undefined) return 'it does not exist'
+    if (found.kind !== 'dir') return 'it is not a folder'
+    const { root } = reader
+    if (root === undefined || !isWithin(found.realPath, root)) return 'it leads out of the vault'
+    return await leftOut(reader, (found.realPath ?? '').slice(root.replace(/\/*$/, '').length))
+  } catch (error) {
+    return messageOf(error)
+  }
+}
+
+/** Why a folder on `relative`, a real path from the vault's root, leaves out the next one. */
+async function leftOut(reader: Reader, relative: string): Promise<string | undefined> {
   let above = ''
-  for (const name of vaultPath(folder).split('/').filter(Boolean)) {
-    const { exclusions } = exclusionsFrom(await readInFolder(disk, above, exclusionsFile))
-    if (isExcluded(name, true, exclusions))
-      return `${inFolder(above, exclusionsFile)} leaves it out`
+  for (const name of relative.split('/').filter(Boolean)) {
+    if (isExcluded(name, true, [])) return `every folder leaves out ${name}`
+    const { exclusions } = exclusionsFrom(await readInFolder(reader, above, exclusionsFile))
+    if (isExcluded(name, true, exclusions)) {
+      return `${inFolder(above, exclusionsFile)} leaves out ${name}`
+    }
     above = inFolder(above, name)
   }
   return undefined
+}
+
+function isWithin(realPath: string | undefined, root: string | undefined): boolean {
+  return realPath !== undefined && root !== undefined && liesWithin(realPath, root)
+}
+
+function messageOf(error: unknown): string {
+  return error instanceof Error ? error.message : String(error)
 }
 
 /** The path of `name` in `folder`, `''` being the vault root. */
