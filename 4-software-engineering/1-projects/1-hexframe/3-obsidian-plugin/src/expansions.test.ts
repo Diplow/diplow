@@ -10,20 +10,19 @@ import type {
 import {
   branchesToOpen,
   centerExpansion,
+  closeBranch,
   collapse,
   defaultExpansions,
-  expand,
+  expandCenter,
   innerKinds,
   around,
   beside,
+  openBranch,
   outerKinds,
   recenter,
   sameExpansions,
   shownExpansions,
   shownKind,
-  switchBranch,
-  switchInner,
-  switchOuter,
   viewOf,
   type CenterExpansion,
   type Expansions,
@@ -113,21 +112,95 @@ describe('sameExpansions', () => {
   })
 })
 
-describe('collapse and expand', () => {
-  it('peel the outer ring, then the inner one, and open them back in turn', () => {
+describe('collapse', () => {
+  it('peels the outer ring, then the inner one, and closes the opened Branches', () => {
     const full = open({ outer: 'branches', inner: 'leaves' }, { 3: 'context' })
     const peeled = collapse(full)
     expect(peeled).toEqual(open({ outer: null, inner: 'leaves' }))
     const collapsed = collapse(peeled)
     expect(collapsed).toEqual(open({ outer: null, inner: null }))
     expect(collapse(collapsed)).toEqual(collapsed)
+  })
+})
 
-    const inner = expand(collapsed, crowded)
-    expect(inner).toEqual(open({ outer: null, inner: 'context' }))
-    expect(expand(inner, crowded)).toEqual(open({ outer: 'branches', inner: 'context' }))
-    expect(expand(inner, fitting)).toEqual(open({ outer: 'children', inner: 'context' }))
-    expect(expand(peeled, crowded)).toEqual(open({ outer: 'branches', inner: 'leaves' }))
-    expect(expand(full, crowded)).toBe(full)
+describe('expandCenter', () => {
+  const collapsed = open({ outer: null, inner: null })
+
+  it('opens the inner ring of a collapsed center, and no outer ring alone', () => {
+    expect(expandCenter(collapsed, 'context', crowded)).toEqual(
+      open({ outer: null, inner: 'context' }),
+    )
+    expect(expandCenter(collapsed, 'leaves', crowded)).toEqual(
+      open({ outer: null, inner: 'leaves' }),
+    )
+    for (const kind of ['branches', 'children'] as const) {
+      expect(expandCenter(collapsed, kind, [...fitting, ...crowded])).toBeUndefined()
+    }
+  })
+
+  it('opens the outer ring around a peeled center, Leaves around Context included', () => {
+    const peeled = open({ outer: null, inner: 'context' })
+    expect(expandCenter(peeled, 'children', fitting)).toEqual(
+      open({ outer: 'children', inner: 'context' }),
+    )
+    expect(expandCenter(peeled, 'branches', crowded)).toEqual(
+      open({ outer: 'branches', inner: 'context' }),
+    )
+    expect(expandCenter(peeled, 'leaves', crowded)).toEqual(
+      open({ outer: 'leaves', inner: 'context' }),
+    )
+  })
+
+  it('switches the inner ring of a peeled center when the kind sits only inside', () => {
+    const leaves = open({ outer: null, inner: 'leaves' })
+    expect(expandCenter(leaves, 'context', crowded)).toEqual(
+      open({ outer: null, inner: 'context' }),
+    )
+    expect(expandCenter(leaves, 'branches', crowded)).toEqual(
+      open({ outer: 'branches', inner: 'leaves' }),
+    )
+  })
+
+  it('puts Leaves inside Branches, keeping the opened Branches', () => {
+    const center = open({ outer: 'branches', inner: 'context' }, { 2: 'leaves' })
+    expect(expandCenter(center, 'leaves', crowded)).toEqual(
+      open({ outer: 'branches', inner: 'leaves' }, { 2: 'leaves' }),
+    )
+    expect(expandCenter(open({ outer: 'branches', inner: 'leaves' }), 'context', crowded)).toEqual(
+      open({ outer: 'branches', inner: 'context' }),
+    )
+  })
+
+  it('switches the outer ring of an open center, closing the Branches opened in it', () => {
+    const leaves = open({ outer: 'leaves', inner: 'context' })
+    expect(expandCenter(leaves, 'branches', crowded)).toEqual(
+      open({ outer: 'branches', inner: 'context' }),
+    )
+  })
+
+  it('does nothing for a kind already shown, or one the folder lacks', () => {
+    const center = open({ outer: 'children', inner: 'context' })
+    for (const kind of ['children', 'context', 'branches', 'leaves'] as const) {
+      expect(expandCenter(center, kind, fitting)).toBeUndefined()
+    }
+    expect(expandCenter(open({ outer: 'branches', inner: 'leaves' }), 'leaves', crowded)).toBe(
+      undefined,
+    )
+  })
+})
+
+describe('openBranch and closeBranch', () => {
+  it('open a Branch into a kind and close it, leaving the others as they are', () => {
+    const center = open({ outer: 'branches', inner: 'context' }, { 1: 'leaves' })
+    const opened = openBranch(center, 2, 'context')
+    expect(opened.branches).toEqual({ 1: 'leaves', 2: 'context' })
+    expect(openBranch(opened, 2, 'children').branches).toEqual({ 1: 'leaves', 2: 'children' })
+    expect(closeBranch(opened, 1).branches).toEqual({ 2: 'context' })
+  })
+
+  it('open nothing around a peeled center', () => {
+    const peeled = open({ outer: null, inner: 'context' })
+    expect(openBranch(peeled, 1, 'leaves')).toBe(peeled)
   })
 })
 
@@ -147,83 +220,6 @@ describe('recenter', () => {
   it("closes the old center's Branches and keeps both rings", () => {
     const opened = open({ outer: 'branches', inner: 'leaves' }, { 1: 'leaves', 4: 'context' })
     expect(recenter(opened)).toEqual(open({ outer: 'branches', inner: 'leaves' }))
-  })
-})
-
-describe('switchOuter', () => {
-  it('goes round the kinds the folder offers that sit beside the inner ring', () => {
-    const beside = open({ outer: 'branches', inner: 'context' })
-    expect(switchOuter(beside, crowded)).toEqual(open({ outer: 'leaves', inner: 'context' }))
-    expect(switchOuter(open({ outer: 'leaves', inner: 'context' }), crowded)).toEqual(beside)
-  })
-
-  it('keeps Branches beside Leaves, and Children in a folder that offers nothing else', () => {
-    const leaves = open({ outer: 'branches', inner: 'leaves' })
-    expect(switchOuter(leaves, crowded)).toBe(leaves)
-    const children = open({ outer: 'children', inner: 'context' })
-    expect(switchOuter(children, fitting)).toBe(children)
-  })
-
-  it('closes the Branches opened in the ring it switches', () => {
-    const opened = open({ outer: 'branches', inner: 'context' }, { 1: 'leaves' })
-    expect(switchOuter(opened, crowded).branches).toEqual({})
-  })
-
-  it('switches nothing around a peeled center', () => {
-    const peeled = open({ outer: null, inner: 'context' })
-    expect(switchOuter(peeled, crowded)).toBe(peeled)
-  })
-})
-
-describe('switchInner', () => {
-  it('goes round Leaves and Context beside Branches, keeping the opened Branches', () => {
-    const opened = open({ outer: 'branches', inner: 'context' }, { 1: 'leaves' })
-    expect(switchInner(opened, crowded)).toEqual(
-      open({ outer: 'branches', inner: 'leaves' }, { 1: 'leaves' }),
-    )
-  })
-
-  it('keeps Context beside Children or Leaves, never the same kind twice', () => {
-    for (const outer of ['children', 'leaves'] as const) {
-      const center = open({ outer, inner: 'context' })
-      expect(switchInner(center, [...fitting, ...crowded])).toEqual(center)
-    }
-  })
-
-  it('switches the inner ring of a peeled center, and nothing in a collapsed one', () => {
-    expect(switchInner(open({ outer: null, inner: 'context' }), crowded)).toEqual(
-      open({ outer: null, inner: 'leaves' }),
-    )
-    const collapsed = open({ outer: null, inner: null })
-    expect(switchInner(collapsed, crowded)).toBe(collapsed)
-  })
-})
-
-describe('switchBranch', () => {
-  it('opens a Branch into each kind its folder offers in turn, then closes it', () => {
-    let expansions = open({ outer: 'branches', inner: 'context' })
-    const seen: (FrameKind | undefined)[] = []
-    for (let step = 0; step < 3; step++) {
-      expansions = switchBranch(expansions, 4, fitting)
-      seen.push(expansions.branches[4])
-    }
-    expect(seen).toEqual(['children', 'context', undefined])
-    expect(expansions.branches).toEqual({})
-  })
-
-  it('starts from the kind a Branch shows when its folder lacks the one asked for', () => {
-    const expansions = open({ outer: 'branches', inner: 'context' }, { 4: 'leaves' })
-    expect(switchBranch(expansions, 4, fitting).branches).toEqual({ 4: 'context' })
-  })
-
-  it('opens nothing around a peeled center', () => {
-    const peeled = open({ outer: null, inner: 'context' })
-    expect(switchBranch(peeled, 1, fitting)).toBe(peeled)
-  })
-
-  it('leaves the other Branches as they are', () => {
-    const expansions = open({ outer: 'branches', inner: 'context' }, { 1: 'leaves' })
-    expect(switchBranch(expansions, 2, crowded).branches).toEqual({ 1: 'leaves', 2: 'branches' })
   })
 })
 

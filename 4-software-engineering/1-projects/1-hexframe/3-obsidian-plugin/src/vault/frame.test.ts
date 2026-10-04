@@ -5,6 +5,7 @@ import {
   centerToShow,
   inFolder,
   readFrame,
+  readKinds,
   readOpened,
   refusal,
   unopenable,
@@ -188,6 +189,29 @@ describe('readOpened', () => {
     const disk = diskOf({ '3-games': {} })
     const failing: Disk = { ...disk, list: () => Promise.reject(new Error('EACCES')) }
     expect(await readOpened(failing, '3-games')).toEqual({ refused: 'EACCES' })
+  })
+})
+
+describe('readKinds', () => {
+  it('gives the kinds a folder offers, once its exclusions have left names out', async () => {
+    const disk = diskOf({
+      '3-games': {},
+      ...Object.fromEntries(
+        ['a', 'b', 'c', 'd', 'e', 'f', 'g'].map((name) => [`3-games/${name}.md`, '']),
+      ),
+      '3-games/.hexframe': {},
+      '3-games/.hexframe/exclusions.yaml': 'exclude: [g.md]\n',
+    })
+    expect(await readKinds(disk, '3-games')).toEqual(['children', 'context'])
+    const crowded = diskOf({ ...Object.fromEntries('abcdefg'.split('').map((n) => [n, {}])) })
+    expect(await readKinds(crowded, '')).toEqual(['branches', 'leaves', 'context'])
+  })
+
+  it('gives nothing for a folder the view may not open, or that fails to read', async () => {
+    const disk = diskOf({ '3-games': {}, out: { link: '/elsewhere' } })
+    expect(await readKinds(disk, 'out')).toBeUndefined()
+    const failing: Disk = { ...disk, list: () => Promise.reject(new Error('EACCES')) }
+    expect(await readKinds(failing, '3-games')).toBeUndefined()
   })
 })
 

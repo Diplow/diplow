@@ -9,6 +9,7 @@ import {
   basename,
   bodySources,
   directions,
+  kindsOf,
   liesWithin,
   parent,
   sortEntries,
@@ -18,6 +19,7 @@ import {
   type FileRead,
   type FileStat,
   type Frame,
+  type FrameKind,
   type Member,
   type OverflowingRing,
   type Rings,
@@ -59,8 +61,7 @@ export interface Read {
  */
 export async function readFrame(disk: Disk, folder: string): Promise<Read> {
   const reader = await readerOf(disk)
-  const exclusions = exclusionsFrom(await readInFolder(reader, folder, exclusionsFile))
-  const sorted = sortEntries(await disk.list(folder), exclusions.exclusions)
+  const { sorted, exclusions } = await sortFolder(reader, folder)
   const rings: Rings<Member> = {}
   if (sorted.children) rings.children = await readRing(reader, folder, sorted.children)
   for (const kind of ['branches', 'leaves', 'context'] as const) {
@@ -84,6 +85,25 @@ export async function readOpened(disk: Disk, folder: string): Promise<Read | { r
   } catch (error) {
     return { refused: messageOf(error) }
   }
+}
+
+/**
+ * The Frame kinds `folder` offers when the view may open it, read from its listing alone, or
+ * undefined when it may not or can't be read: what a closed Branch would open into.
+ */
+export async function readKinds(disk: Disk, folder: string): Promise<FrameKind[] | undefined> {
+  if ((await refusal(disk, folder)) !== undefined) return undefined
+  try {
+    return kindsOf((await sortFolder(await readerOf(disk), folder)).sorted)
+  } catch {
+    return undefined
+  }
+}
+
+/** `folder`'s listing sorted into rings of names, once its `exclusions.yaml` has left some out. */
+async function sortFolder(reader: Reader, folder: string) {
+  const exclusions = exclusionsFrom(await readInFolder(reader, folder, exclusionsFile))
+  return { sorted: sortEntries(await reader.disk.list(folder), exclusions.exclusions), exclusions }
 }
 
 /** A Disk, and the real path of the vault's root, which everything read must lie within. */

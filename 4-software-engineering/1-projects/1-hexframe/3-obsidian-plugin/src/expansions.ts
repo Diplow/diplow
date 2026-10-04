@@ -5,7 +5,6 @@
 import type { CollapsedView, FrameView } from '../../2-claude-mod/hooks/shape/layout.ts'
 import {
   directions,
-  frameKinds,
   kindsOf,
   membersOf,
   type Direction,
@@ -99,82 +98,68 @@ export function collapse(expansions: Expansions): Expansions {
   return { outer: null, inner: null, branches: {} }
 }
 
-/**
- * Expanding undoes a collapse: Context inside a collapsed center, then the outer ring around it,
- * Children or Branches beside Context, Branches beside Leaves. An open center stays so.
- */
-export function expand(expansions: Expansions, offered: readonly FrameKind[]): Expansions {
-  if (expansions.outer !== null) return expansions
-  const { inner } = expansions
-  if (inner === null) return { outer: null, inner: 'context', branches: {} }
-  return { ...around(inner, offered), branches: {} }
-}
-
 /** A new center opens none of the Branches around the old one: they were the old center's. */
 export function recenter(expansions: Expansions): Expansions {
   return { ...expansions, branches: {} }
 }
 
 /**
- * The outer ring's next kind, among those the folder offers that can sit beside the inner one;
- * the Branches opened in the ring close. A peeled center has no outer ring to switch.
+ * The center opened into `kind`, among the kinds its folder offers, `offered`, as "Expand as" asks
+ * it; undefined when the rings forbid it, the folder doesn't offer it, or it shows already.
+ *
+ * - A collapsed center opens its inner ring, Leaves or Context.
+ * - A peeled center opens its outer ring around the inner one when `kind` can sit beside it, or
+ *   else switches its inner ring.
+ * - An open center switches the ring that can take `kind`, the inner one first, so Leaves go
+ *   inside Branches; switching the outer ring closes the Branches opened in it.
  */
-export function switchOuter(expansions: Expansions, offered: readonly FrameKind[]): Expansions {
-  if (expansions.outer === null) return expansions
-  const { inner } = expansions
-  const pairs = outerKinds
-    .filter((outer) => offered.includes(outer))
-    .flatMap((outer) => pairOf(outer, inner))
-  const next = following(pairs, ({ outer }) => outer === expansions.outer)
-  return next === undefined ? expansions : { ...next, branches: {} }
+export function expandCenter(
+  expansions: Expansions,
+  kind: FrameKind,
+  offered: readonly FrameKind[],
+): Expansions | undefined {
+  const { outer, inner, branches } = expansions
+  if (!offered.includes(kind) || kind === outer || kind === inner) return undefined
+  const asInner = isInnerKind(kind) ? centerExpansion(outer, kind) : undefined
+  const asOuter = isOuterKind(kind) && inner !== null ? centerExpansion(kind, inner) : undefined
+  if (outer === null && inner !== null && asOuter !== undefined) return { ...asOuter, branches: {} }
+  if (asInner !== undefined) return { ...asInner, branches: outer === null ? {} : branches }
+  return asOuter === undefined ? undefined : { ...asOuter, branches: {} }
 }
 
-/** The inner ring's next kind, among those the folder offers that can sit beside the outer one. */
-export function switchInner(expansions: Expansions, offered: readonly FrameKind[]): Expansions {
-  if (expansions.inner === null) return expansions
-  const { outer } = expansions
-  const pairs = innerKinds
-    .filter((inner) => offered.includes(inner))
-    .flatMap((inner) => pairOf(outer, inner))
-  const next = following(pairs, ({ inner }) => inner === expansions.inner)
-  return next === undefined ? expansions : { ...next, branches: expansions.branches }
+function isInnerKind(kind: FrameKind): kind is InnerKind {
+  return (innerKinds as readonly FrameKind[]).includes(kind)
 }
 
-/** The pair of `outer` and `inner` when a view shows it, as a list of one, or none. */
-function pairOf(outer: OuterKind | null, inner: InnerKind): CenterExpansion[] {
-  const pair = centerExpansion(outer, inner)
-  return pair === undefined ? [] : [pair]
-}
-
-/** The item after the current one in `items`, going round; undefined when no other is there. */
-function following<T>(items: readonly T[], isCurrent: (item: T) => boolean): T | undefined {
-  const at = items.findIndex(isCurrent)
-  if (items.length < 2) return at === -1 ? items[0] : undefined
-  return items[(at + 1) % items.length]
+function isOuterKind(kind: FrameKind): kind is OuterKind {
+  return (outerKinds as readonly FrameKind[]).includes(kind)
 }
 
 /**
- * The Branch in `direction` of the outer ring opened into the kind after the one it shows, among
- * those its folder offers, `offered`, and closed after the last one. A peeled center has no
- * outer ring, so no Branch to open.
+ * The Branch in `direction` of the outer ring opened into `kind`, the others as they are. A peeled
+ * center has no outer ring, so no Branch to open.
  */
-export function switchBranch(
+export function openBranch(
   expansions: Expansions,
   direction: Direction,
-  offered: readonly FrameKind[],
+  kind: FrameKind,
 ): Expansions {
   if (expansions.outer === null) return expansions
-  const kinds = frameKinds.filter((kind) => offered.includes(kind))
-  const wanted = expansions.branches[direction]
-  const current = wanted === undefined ? undefined : shownKind(wanted, offered)
-  const next = current === undefined ? kinds[0] : kinds[kinds.indexOf(current) + 1]
+  return { ...expansions, branches: { ...withoutBranch(expansions, direction), [direction]: kind } }
+}
+
+/** The Branch in `direction` of the outer ring closed, the others as they are. */
+export function closeBranch(expansions: Expansions, direction: Direction): Expansions {
+  return { ...expansions, branches: withoutBranch(expansions, direction) }
+}
+
+function withoutBranch(expansions: Expansions, direction: Direction): Expansions['branches'] {
   const branches: Expansions['branches'] = {}
   for (const other of directions.filter((one) => one !== direction)) {
     const kind = expansions.branches[other]
     if (kind !== undefined) branches[other] = kind
   }
-  if (next !== undefined) branches[direction] = next
-  return { ...expansions, branches }
+  return branches
 }
 
 /** Whether `one` and `other` open the same: what the file would hold for each. */
