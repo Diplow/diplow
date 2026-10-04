@@ -4,6 +4,7 @@ import {
   exclusionsFile,
   exclusionsFrom,
   isExcluded,
+  parseExclusions,
   settingsFolder,
 } from '../../../2-claude-mod/hooks/shape/exclusions.ts'
 import {
@@ -248,10 +249,14 @@ async function refusalBy(reader: Reader, folder: string): Promise<string | undef
   return (await leftOut(reader, vaultPath(folder))) ?? (await leftOut(reader, real))
 }
 
-/** A folder's listing and the text of its `exclusions.yaml`, undefined when it has none. */
+/**
+ * A folder's listing, the text of its `exclusions.yaml` (undefined when it has none), and what it
+ * lists: its items, or why it can't be parsed, in which case the panel offers nothing to save.
+ */
 export interface Settings {
   entries: Entry[]
   text: string | undefined
+  parsed: { items: string[] } | { broken: string }
 }
 
 /**
@@ -278,15 +283,24 @@ export async function readSettings(
     }
     const read = await readInFolder(reader, folder, exclusionsFile)
     if (read !== undefined && 'unread' in read) return { refused: read.unread }
-    return { entries: await disk.list(folder), text: read?.text }
+    return { entries: await disk.list(folder), text: read?.text, parsed: parsedOf(read?.text) }
   } catch (error) {
     return { refused: messageOf(error) }
   }
 }
 
+/** The items `text` lists, or why it can't be parsed. */
+function parsedOf(text: string | undefined): Settings['parsed'] {
+  try {
+    return { items: parseExclusions(text ?? '') }
+  } catch (error) {
+    return { broken: messageOf(error) }
+  }
+}
+
 /**
- * Writes `text` at `path`, a file of the vault, making the folder holding it when missing: what
- * the view writes through Obsidian's adapter.
+ * Writes `text` at `path`, a file of the vault, making the folder holding it when missing, and
+ * following no symlink at the file itself, a dangling one included.
  */
 export type Write = (path: string, text: string) => Promise<void>
 

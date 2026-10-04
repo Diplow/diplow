@@ -5,11 +5,7 @@
 // asks is told after a save, to draw again.
 import { Modal, Notice, setIcon, type App } from 'obsidian'
 
-import {
-  exclusionsFile,
-  parseExclusions,
-  patternOf,
-} from '../../2-claude-mod/hooks/shape/exclusions.ts'
+import { exclusionsFile, patternOf } from '../../2-claude-mod/hooks/shape/exclusions.ts'
 import type { MemberKind, Slot } from '../../2-claude-mod/hooks/shape/node.ts'
 import {
   candidatesOf,
@@ -27,11 +23,11 @@ import type { Excluded } from './menu.ts'
 import { diskOf, writerOf } from './vault/disk.ts'
 import {
   inFolder,
-  messageOf,
   readSettings,
   saveSettings,
   type Disk,
   type Settings,
+  type Write,
 } from './vault/frame.ts'
 
 /** The panel's name, on its button, its title and its command. */
@@ -43,9 +39,21 @@ const title = 'Hexframe settings'
  */
 let saving: Promise<unknown> = Promise.resolve()
 
+/** The vault as the settings read and write it, or undefined outside a file system. */
+function vaultOf(app: App): Vault | undefined {
+  const disk = diskOf(app)
+  const write = writerOf(app)
+  return disk && write && { disk, write }
+}
+
+interface Vault {
+  disk: Disk
+  write: Write
+}
+
 /** `change` saved in `folder`'s `exclusions.yaml` once every earlier save has ended. */
-function queuedSave(app: App, disk: Disk, folder: string, change: Change) {
-  const saved = saving.then(() => saveSettings(disk, writerOf(app), folder, change))
+function queuedSave({ disk, write }: Vault, folder: string, change: Change) {
+  const saved = saving.then(() => saveSettings(disk, write, folder, change))
   saving = saved.catch(() => undefined)
   return saved
 }
@@ -55,15 +63,15 @@ function queuedSave(app: App, disk: Disk, folder: string, change: Change) {
  * a change is written; a notice says why when it can't.
  */
 export async function openSettings(app: App, folder: string, saved: () => void) {
-  const disk = diskOf(app)
-  if (disk === undefined) return
-  const settings = await readSettings(disk, folder)
+  const vault = vaultOf(app)
+  if (vault === undefined) return
+  const settings = await readSettings(vault.disk, folder)
   if ('refused' in settings) {
     new Notice(`Hexframe can't change what ${nameOf(folder)} leaves out, as ${settings.refused}.`)
     return
   }
   const save = async (change: Change) => {
-    const result = await queuedSave(app, disk, folder, change)
+    const result = await queuedSave(vault, folder, change)
     if ('refused' in result) {
       new Notice(`Hexframe can't save ${inFolder(folder, exclusionsFile)}, as ${result.refused}.`)
       return false
@@ -79,10 +87,10 @@ export async function openSettings(app: App, folder: string, saved: () => void) 
  * `exclusions.yaml` at once, and runs `saved`; a notice says what was written, or why nothing was.
  */
 export async function excludeFrom(app: App, { folder, slot }: Excluded, saved: () => void) {
-  const disk = diskOf(app)
-  if (disk === undefined) return
+  const vault = vaultOf(app)
+  if (vault === undefined) return
   const pattern = patternOf(slot)
-  const result = await queuedSave(app, disk, folder, { add: [pattern], remove: [] })
+  const result = await queuedSave(vault, folder, { add: [pattern], remove: [] })
   if ('refused' in result) {
     new Notice(`Hexframe can't leave ${pattern} out, as ${result.refused}.`)
     return
@@ -140,17 +148,15 @@ class SettingsModal extends Modal {
     this.contentEl.createEl('p', {
       text: `Tick what ${nameOf(folder)} leaves out of its rings: six of each kind draw as hexes, more show as a list. Saved to ${path}.`,
     })
-    let before: string[]
-    try {
-      before = parseExclusions(settings.text ?? '')
-    } catch (error) {
+    if ('broken' in settings.parsed) {
       this.contentEl.createEl('p', {
         cls: 'hexframe-settings-warning',
-        text: `${path} can't be read, so it leaves nothing out, and the panel won't write over it: ${messageOf(error)}. Mend it in a text editor first.`,
+        text: `${path} can't be read, so it leaves nothing out, and the panel won't write over it: ${settings.parsed.broken}. Mend it in a text editor first.`,
       })
       this.buttons(undefined)
       return
     }
+    const before = settings.parsed.items
     this.items = [...before]
     this.drawKinds()
     this.buttons(before)

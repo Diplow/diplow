@@ -1,9 +1,11 @@
 // The Disk over Obsidian's vault. Branches and Leaves come from the vault's index; the dot folders,
 // which the index leaves out, from its adapter. Real paths, and the reads made by the real path
 // just checked, come from Node, which is why the plugin is desktop only. The one write, a folder's
-// exclusions, goes through the adapter, once `readSettings` has checked where it lands.
+// exclusions, goes through Node too, once `readSettings` has checked where it lands, following no
+// symlink at the file.
 import { constants } from 'node:fs'
-import { open, realpath, stat } from 'node:fs/promises'
+import { mkdir, open, realpath, stat } from 'node:fs/promises'
+import { dirname } from 'node:path'
 
 import { FileSystemAdapter, TFolder, type App } from 'obsidian'
 
@@ -22,15 +24,34 @@ export function diskOf(app: App): Disk | undefined {
 }
 
 /**
- * Writes through Obsidian's adapter, making the folder holding the file when missing, as a
- * `.hexframe/` is the first time a folder leaves something out.
+ * Writes a file of the vault, making the folder holding it when missing, as a `.hexframe/` is the
+ * first time a folder leaves something out; undefined where Obsidian keeps the vault outside a file
+ * system. The file is opened once, following no symlink, so one swapped in since `readSettings`
+ * checked it, or a dangling one that check saw as nothing, is refused rather than written through,
+ * and a folder that is already there, a dangling symlink included, is never made again. It is
+ * emptied only once that handle is known to be a regular file.
  */
-export function writerOf(app: App): Write {
+export function writerOf(app: App): Write | undefined {
   const { adapter } = app.vault
+  if (!(adapter instanceof FileSystemAdapter)) return undefined
   return async (path, text) => {
-    const folder = path.slice(0, Math.max(path.lastIndexOf('/'), 0))
-    if (folder !== '' && !(await adapter.exists(folder))) await adapter.mkdir(folder)
-    await adapter.write(path, text)
+    const full = adapter.getFullPath(vaultPath(path))
+    await mkdir(dirname(full)).catch((error: unknown) => {
+      if (!(error instanceof Error && 'code' in error && error.code === 'EEXIST')) throw error
+    })
+    const flags =
+      constants.O_WRONLY |
+      constants.O_CREAT |
+      (platform.O_NOFOLLOW ?? 0) |
+      (platform.O_NONBLOCK ?? 0)
+    const handle = await open(full, flags, 0o644)
+    try {
+      if (!(await handle.stat()).isFile()) throw new Error('it is not a file')
+      await handle.truncate(0)
+      await handle.write(text, 0, 'utf8')
+    } finally {
+      await handle.close()
+    }
   }
 }
 

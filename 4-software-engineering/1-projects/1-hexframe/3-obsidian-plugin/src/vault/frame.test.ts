@@ -435,8 +435,21 @@ describe('readSettings', () => {
         { name: '.hexframe', kind: 'dir' },
       ],
       text: 'exclude: [c]',
+      parsed: { items: ['c'] },
     })
-    expect(await readSettings(disk, 'd')).toEqual({ entries: [], text: undefined })
+    expect(await readSettings(disk, 'd')).toEqual({
+      entries: [],
+      text: undefined,
+      parsed: { items: [] },
+    })
+  })
+
+  it('says why a file that cannot be parsed is broken, so the panel saves nothing', async () => {
+    const disk = diskOf({ a: {}, 'a/.hexframe': {}, 'a/.hexframe/exclusions.yaml': 'nope' })
+    expect(await readSettings(disk, 'a')).toMatchObject({
+      text: 'nope',
+      parsed: { broken: 'line 1: the one key is `exclude:`, followed by a list' },
+    })
   })
 
   it('refuses a folder the view may not center on', async () => {
