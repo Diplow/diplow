@@ -9,15 +9,18 @@ import {
   basename,
   bodySources,
   directions,
+  kindsOf,
   liesWithin,
   parent,
   sortEntries,
   tileOf,
   unreadable,
+  type Direction,
   type Entry,
   type FileRead,
   type FileStat,
   type Frame,
+  type FrameKind,
   type Member,
   type OverflowingRing,
   type Rings,
@@ -59,8 +62,7 @@ export interface Read {
  */
 export async function readFrame(disk: Disk, folder: string): Promise<Read> {
   const reader = await readerOf(disk)
-  const exclusions = exclusionsFrom(await readInFolder(reader, folder, exclusionsFile))
-  const sorted = sortEntries(await disk.list(folder), exclusions.exclusions)
+  const { sorted, exclusions } = await sortFolder(reader, folder)
   const rings: Rings<Member> = {}
   if (sorted.children) rings.children = await readRing(reader, folder, sorted.children)
   for (const kind of ['branches', 'leaves', 'context'] as const) {
@@ -84,6 +86,50 @@ export async function readOpened(disk: Disk, folder: string): Promise<Read | { r
   } catch (error) {
     return { refused: messageOf(error) }
   }
+}
+
+/**
+ * The Frame kinds `folder` offers when the view may open it, read from its listing alone, or
+ * undefined when it may not or can't be read: what a closed Branch would open into.
+ */
+export async function readKinds(disk: Disk, folder: string): Promise<FrameKind[] | undefined> {
+  try {
+    const reader = await readerOf(disk)
+    if ((await refusalBy(reader, folder)) !== undefined) return undefined
+    return kindsOf((await sortFolder(reader, folder)).sorted)
+  } catch {
+    return undefined
+  }
+}
+
+/**
+ * The Frame kinds each of `branches` offers, by direction, what "Expand as" may open it into: an
+ * opened one's from its Frame, in `opened`, a closed one's from its listing, read side by side as
+ * `readKinds` reads it. A Branch that offers none is left out.
+ */
+export async function readBranchKinds(
+  disk: Disk,
+  branches: readonly { direction: Direction; path: string }[],
+  opened: Partial<Record<Direction, Frame>>,
+): Promise<Partial<Record<Direction, FrameKind[]>>> {
+  const read = await Promise.all(
+    branches.map(async ({ direction, path }) => {
+      const frame = opened[direction]
+      const kinds = frame ? kindsOf(frame.rings) : await readKinds(disk, vaultPath(path))
+      return { direction, kinds }
+    }),
+  )
+  const kinds: Partial<Record<Direction, FrameKind[]>> = {}
+  for (const { direction, kinds: offered } of read) {
+    if (offered !== undefined && offered.length > 0) kinds[direction] = offered
+  }
+  return kinds
+}
+
+/** `folder`'s listing sorted into rings of names, once its `exclusions.yaml` has left some out. */
+async function sortFolder(reader: Reader, folder: string) {
+  const exclusions = exclusionsFrom(await readInFolder(reader, folder, exclusionsFile))
+  return { sorted: sortEntries(await reader.disk.list(folder), exclusions.exclusions), exclusions }
 }
 
 /** A Disk, and the real path of the vault's root, which everything read must lie within. */
@@ -183,17 +229,21 @@ export async function centerToShow(
  */
 export async function refusal(disk: Disk, folder: string): Promise<string | undefined> {
   try {
-    const reader = await readerOf(disk)
-    const found = await disk.stat(folder)
-    if (found === undefined) return 'it does not exist'
-    if (found.kind !== 'dir') return 'it is not a folder'
-    const { root } = reader
-    if (root === undefined || !isWithin(found.realPath, root)) return 'it leads out of the vault'
-    const real = (found.realPath ?? '').slice(root.replace(/\/*$/, '').length)
-    return (await leftOut(reader, vaultPath(folder))) ?? (await leftOut(reader, real))
+    return await refusalBy(await readerOf(disk), folder)
   } catch (error) {
     return messageOf(error)
   }
+}
+
+/** `refusal` through `reader`, whose vault root is already read; it may throw. */
+async function refusalBy(reader: Reader, folder: string): Promise<string | undefined> {
+  const found = await reader.disk.stat(folder)
+  if (found === undefined) return 'it does not exist'
+  if (found.kind !== 'dir') return 'it is not a folder'
+  const { root } = reader
+  if (root === undefined || !isWithin(found.realPath, root)) return 'it leads out of the vault'
+  const real = (found.realPath ?? '').slice(root.replace(/\/*$/, '').length)
+  return (await leftOut(reader, vaultPath(folder))) ?? (await leftOut(reader, real))
 }
 
 /** Who a clicked file is opened by: Obsidian, in the paired pane, or the system's default app. */

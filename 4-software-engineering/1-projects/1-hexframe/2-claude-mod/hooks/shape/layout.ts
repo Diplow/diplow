@@ -69,6 +69,8 @@ interface EmptyHex extends Hex {
 /** A hex of the view: the center's Tile, a member's, or a direction with nothing in it. */
 export type Placement = CenterHex | MemberHex | EmptyHex
 
+export type TileHex = CenterHex | MemberHex
+
 /** What a hex holding a Tile stands for, before it is placed. */
 type Role = Omit<CenterHex, keyof Hex | 'opened'> | Omit<MemberHex, keyof Hex | 'opened'>
 

@@ -10,6 +10,7 @@ import {
   type FrameView,
   type Placement,
   type Point,
+  type TileHex,
 } from '../../2-claude-mod/hooks/shape/layout.ts'
 import type { FrameKind, Frame } from '../../2-claude-mod/hooks/shape/node.ts'
 
@@ -61,19 +62,28 @@ function textOf(radius: number, isCenter: boolean) {
 /** How many characters of `style` fit on a line of `band`. */
 const perLine = (style: TextStyle, band: number) => Math.floor(band / (style.size * characterWidth))
 
-/** What the view does when a hex is clicked: `event` says whether shift or alt was held. */
-export type OnHex = (placement: Placement, event: MouseEvent) => void
+/**
+ * What the view does on a hex that holds a Tile: when it is clicked, `event` saying whether shift
+ * was held, and when it is right-clicked, for its menu.
+ */
+export interface OnHex {
+  click: (hex: TileHex, event: MouseEvent) => void
+  menu: (hex: TileHex, event: MouseEvent) => void
+}
+
+/** Outlines the hexes holding the Tile at `path`, the focused one, and no other. */
+export type Focus = (path: string | undefined) => void
 
 /**
- * Draws `view` into `container`, replacing what it held, with `notes` under the drawing; a click on
- * a hex that holds a Tile goes to `onHex`.
+ * Draws `view` into `container`, replacing what it held, with `notes` under the drawing; a click or
+ * a right click on a hex that holds a Tile goes to `onHex`. Returns how to outline the focused hex.
  */
 export function drawView(
   container: HTMLElement,
   view: FrameView | CollapsedView,
   notes: readonly string[],
   onHex: OnHex,
-) {
+): Focus {
   container.empty()
   const svg = container.createSvg('svg', {
     cls: 'hexframe-canvas',
@@ -83,8 +93,11 @@ export function drawView(
       'aria-label': view.frame.tile.title,
     },
   })
-  for (const placement of layoutView(view)) drawHex(svg, placement, onHex)
+  const drawn = layoutView(view).flatMap((placement) => drawHex(svg, placement, onHex))
   drawNotes(container, notes)
+  return (path) => {
+    for (const hex of drawn) hex.group.toggleClass('is-focused', hex.path === path)
+  }
 }
 
 /** Shows only `notes`, when there is no Frame to draw. */
@@ -94,7 +107,14 @@ export function drawNotes(container: HTMLElement, notes: readonly string[]) {
   for (const note of notes) list.createEl('li', { text: note })
 }
 
-function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex) {
+/** A drawn hex holding a Tile, and the path of that Tile, which the focus names. */
+interface DrawnHex {
+  group: SVGGElement
+  path: string
+}
+
+/** Draws `placement`; what it holds when it holds a Tile, its hex outlined when focused. */
+function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex): DrawnHex[] {
   const kind = placement.kind === 'member' ? placement.memberKind : placement.kind
   const group = svg.createSvg('g', { cls: ['hexframe-hex', `is-${kind}`] })
   const points = hexCorners(placement.center, placement.radius * inset)
@@ -104,7 +124,7 @@ function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex) {
   // An opened hex is the ground of the Frame drawn over it, which holds its Tile and its clicks.
   if (placement.kind !== 'empty' && placement.opened) {
     group.addClass('is-opened')
-    return
+    return [{ group, path: placement.tile.path }]
   }
   const at = { x: placement.center.x * scale, y: placement.center.y * scale }
   const text = textOf(placement.radius, placement.kind === 'center')
@@ -113,12 +133,16 @@ function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex) {
   if (placement.kind === 'empty') {
     const label = text.direction
     words(group, { ...at, y: at.y + label.size / 2 }, label, [String(placement.direction)])
-    return
+    return []
   }
   const { tile } = placement
   group.addClass('is-clickable')
   group.addEventListener('click', (event) => {
-    onHex(placement, event)
+    onHex.click(placement, event)
+  })
+  group.addEventListener('contextmenu', (event) => {
+    event.preventDefault()
+    onHex.menu(placement, event)
   })
   group.createSvg('title').textContent =
     tile.preview === '' ? tile.title : `${tile.title}\n\n${tile.preview}`
@@ -139,6 +163,7 @@ function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex) {
     text.preview,
     previewLines,
   )
+  return [{ group, path: tile.path }]
 }
 
 /** One `<text>` of `lines` set in `style`, centered on `at.x`, its first baseline at `at.y`. */

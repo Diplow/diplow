@@ -1,6 +1,6 @@
 // What every drawing of a Frame shares, the terminal's and the SVG: the colors a hex takes, and
 // its words wrapped to the room it has.
-import type { Placement } from '../shape/layout.js'
+import type { TileHex } from '../shape/layout.js'
 import type { MemberKind } from '../shape/node.js'
 
 /** A hex's colors, as `0xrrggbb`: the SVG writes the same ones as `#rrggbb`. */
@@ -22,7 +22,7 @@ export const emptyOutline = 0x4b5563
 export const selectedOutline = 0xfbbf24
 
 /** The palette of a hex that holds a Tile: the center's, or its member's kind's. */
-export function paletteOf(placement: Exclude<Placement, { kind: 'empty' }>): Palette {
+export function paletteOf(placement: TileHex): Palette {
   return palettes[placement.kind === 'center' ? 'center' : placement.memberKind]
 }
 

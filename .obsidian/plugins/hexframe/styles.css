@@ -77,6 +77,15 @@
   stroke-width: 2;
 }
 
+/* The hex the keyboard's focus is on, which the shortcuts act on: outlined in the text's color, so
+   it shows on every fill, the accent's included, and on an opened hex around its Frame. */
+.hexframe-hex.is-focused polygon,
+.hexframe-hex.is-focused.is-clickable:not(.is-center):hover polygon {
+  stroke: var(--text-normal);
+  stroke-width: 2.5;
+  stroke-dasharray: none;
+}
+
 .hexframe-title {
   font-weight: var(--font-semibold);
   fill: var(--text-normal);
@@ -101,4 +110,16 @@
   max-width: 900px;
   color: var(--text-muted);
   font-size: var(--font-ui-small);
+}
+
+/* An item of the hex view's menu: its name, then its command's key, right-aligned. */
+.menu-item-title:has(> .hexframe-menu-key) {
+  display: flex;
+  flex-grow: 1;
+  gap: var(--size-4-6);
+}
+
+.hexframe-menu-key {
+  margin-inline-start: auto;
+  color: var(--text-faint);
 }

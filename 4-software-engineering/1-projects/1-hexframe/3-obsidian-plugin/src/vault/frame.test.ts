@@ -5,6 +5,8 @@ import {
   centerToShow,
   inFolder,
   readFrame,
+  readKinds,
+  readBranchKinds,
   readOpened,
   refusal,
   unopenable,
@@ -188,6 +190,56 @@ describe('readOpened', () => {
     const disk = diskOf({ '3-games': {} })
     const failing: Disk = { ...disk, list: () => Promise.reject(new Error('EACCES')) }
     expect(await readOpened(failing, '3-games')).toEqual({ refused: 'EACCES' })
+  })
+})
+
+describe('readKinds', () => {
+  it('gives the kinds a folder offers, once its exclusions have left names out', async () => {
+    const disk = diskOf({
+      '3-games': {},
+      ...Object.fromEntries(
+        ['a', 'b', 'c', 'd', 'e', 'f', 'g'].map((name) => [`3-games/${name}.md`, '']),
+      ),
+      '3-games/.hexframe': {},
+      '3-games/.hexframe/exclusions.yaml': 'exclude: [g.md]\n',
+    })
+    expect(await readKinds(disk, '3-games')).toEqual(['children', 'context'])
+    const crowded = diskOf({ ...Object.fromEntries('abcdefg'.split('').map((n) => [n, {}])) })
+    expect(await readKinds(crowded, '')).toEqual(['branches', 'leaves', 'context'])
+  })
+
+  it('gives nothing for a folder the view may not open, or that fails to read', async () => {
+    const disk = diskOf({ '3-games': {}, out: { link: '/elsewhere' } })
+    expect(await readKinds(disk, 'out')).toBeUndefined()
+    const failing: Disk = { ...disk, list: () => Promise.reject(new Error('EACCES')) }
+    expect(await readKinds(failing, '3-games')).toBeUndefined()
+  })
+})
+
+const ring = { overflowing: false as const, members: {} }
+
+describe('readBranchKinds', () => {
+  it("gives each Branch's kinds by direction, an opened one's from its Frame", async () => {
+    const crowded = Object.fromEntries('abcdefg'.split('').map((name) => [`2-b/${name}`, {}]))
+    const disk = diskOf({ '1-a': {}, '2-b': {}, ...crowded, out: { link: '/elsewhere' } })
+    const opened = {
+      3: { tile: { path: '3-c', title: 'c', preview: '' }, rings: { leaves: ring } },
+    }
+    const read = await readBranchKinds(
+      disk,
+      [
+        { direction: 1, path: '/1-a' },
+        { direction: 2, path: '2-b' },
+        { direction: 3, path: '3-c' },
+        { direction: 4, path: 'out' },
+      ],
+      opened,
+    )
+    expect(read).toEqual({
+      1: ['children', 'context'],
+      2: ['branches', 'leaves', 'context'],
+      3: ['leaves'],
+    })
   })
 })
 
