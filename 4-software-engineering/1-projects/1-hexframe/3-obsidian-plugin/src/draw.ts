@@ -24,16 +24,19 @@ import {
   type ListedHex,
 } from './list.ts'
 import { gap, inset, perLine, scale, textOf, wrap, type TextStyle } from './text.ts'
+import { vaultPath } from './vault/frame.ts'
 
 /**
  * What the view does on a hex that holds a Tile, or a name of a list: when it is clicked, `event`
  * saying whether shift was held, and when it is right-clicked, for its menu. And `list`: a hex's
- * list too long for it opened to fill the view, or, given nothing, the hexes back.
+ * list too long for it opened to fill the view, or, given nothing, the hexes back; `settings`: the
+ * settings of the folder whose ring a list is opened, to choose its six.
  */
 export interface OnHex {
   click: (hex: Clickable, event: MouseEvent) => void
   menu: (hex: Clickable, event: MouseEvent) => void
   list: (hex: ListedHex | undefined) => void
+  settings: (folder: string) => void
 }
 
 /** Outlines the hexes, or the name, holding the Tile at `path`, the focused one, and no other. */
@@ -66,8 +69,8 @@ export function drawView(
 
 /**
  * Draws `full`, a list filling the view, into `container`, replacing what it held: its hex as a
- * button, what the list is of, the way back to the hexes when the user opened it, a placeholder for
- * choosing six, then every name, and `notes` under it. A click or a right click on the hex or a
+ * button, what the list is of, the way back to the hexes when the user opened it, the button that
+ * opens the settings of its folder to choose six, then every name, and `notes` under it. A click or a right click on the hex or a
  * name goes to `onHex`. Returns how to outline the focused one.
  */
 export function drawFullList(
@@ -92,10 +95,10 @@ export function drawFullList(
       onHex.list(undefined)
     })
   }
-  // Choosing which six to draw comes with the hexframe settings, which write the exclusions.
-  head.createEl('button', {
-    text: 'Choose six',
-    attr: { disabled: 'true', title: 'Comes with the hexframe settings' },
+  // The six are chosen by leaving the rest out, in the settings of the folder whose ring this is.
+  const choose = head.createEl('button', { text: 'Choose six' })
+  choose.addEventListener('click', () => {
+    onHex.settings(vaultPath(holder.tile.path))
   })
   const names = list.createEl('ul', { cls: 'hexframe-list-items' })
   for (const item of itemsOf(holder)) {

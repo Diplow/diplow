@@ -1,11 +1,16 @@
 /* The plugin's styles, copied beside main.js by every build: Obsidian loads them with the plugin.
    Every color is one of Obsidian's CSS variables, so the hexframe follows the theme, light and dark. */
 
-.hexframe-view {
-  /* Each kind's fill, shared by its hexes and its names in a list. */
+.hexframe-view,
+.hexframe-settings {
+  /* Each kind's fill, shared by its hexes, its names in a list and its rows in the settings. */
   --hexframe-branch-fill: var(--background-modifier-hover);
   --hexframe-leaf-fill: rgba(var(--color-orange-rgb), 0.18);
   --hexframe-context-fill: rgba(var(--color-cyan-rgb), 0.18);
+}
+
+.hexframe-view {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -248,4 +253,72 @@
 .hexframe-menu-key {
   margin-inline-start: auto;
   color: var(--text-faint);
+}
+
+/* The button that opens the hexframe settings, floating in the top right of the view. */
+.hexframe-settings-button {
+  position: absolute;
+  inset-block-start: var(--size-4-2);
+  inset-inline-end: var(--size-4-2);
+}
+
+/* A list filling the view keeps its head's buttons clear of the gear, however narrow the pane. */
+.hexframe-list-head {
+  padding-inline-end: var(--size-4-12);
+}
+
+/* The settings panel: each kind's candidates, a checkbox each, under the kind's count against six. */
+.hexframe-settings-kind {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-4-1);
+  margin-block: var(--size-4-3);
+}
+
+.hexframe-settings-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--size-4-2);
+  font-weight: var(--font-semibold);
+}
+
+.hexframe-settings-count,
+.hexframe-settings-none,
+.hexframe-settings-together,
+.hexframe-settings-hand,
+.hexframe-settings-glob {
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+  font-weight: normal;
+}
+
+.hexframe-settings-count.is-over,
+.hexframe-settings-warning {
+  color: var(--text-error);
+}
+
+.hexframe-settings-row {
+  display: flex;
+  align-items: center;
+  gap: var(--size-4-2);
+  padding: var(--size-4-1) var(--size-4-2);
+  border-radius: var(--radius-s);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.hexframe-settings-row.is-branch {
+  background: var(--hexframe-branch-fill);
+}
+
+.hexframe-settings-row.is-leaf {
+  background: var(--hexframe-leaf-fill);
+}
+
+.hexframe-settings-row.is-context {
+  background: var(--hexframe-context-fill);
+}
+
+.hexframe-settings-glob {
+  margin-inline-start: auto;
 }

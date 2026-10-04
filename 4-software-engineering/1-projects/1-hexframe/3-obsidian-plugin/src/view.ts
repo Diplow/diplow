@@ -3,7 +3,8 @@
 // click on a hex moves it and shows the hex's note in a paired pane beside it, and a folder's note
 // opened in that pane moves it back. A right click on a hex opens its menu, and the menu's items
 // are also commands, whose keys act on the hex that Tab and the digits focus. A ring that overflows
-// shows as a list, whose names act as their hexes would.
+// shows as a list, whose names act as their hexes would. A button, an item and a list's "Choose
+// six" open the settings of what a folder leaves out, and an item leaves a hex out at once.
 import {
   debounce,
   FileView,
@@ -31,6 +32,7 @@ import { focusable, focusableInList, focusedClickable, focusToward, stepFocus } 
 import { followed } from './follow.ts'
 import { fullListOf, type Clickable, type OpenedList } from './list.ts'
 import { items, planOf, type Drawing, type ItemId, type Plan, type Target } from './menu.ts'
+import { addSettingsButton, excludeFrom, openSettings } from './settings.ts'
 import { diskOf } from './vault/disk.ts'
 import {
   centerToShow,
@@ -287,6 +289,14 @@ export class HexframeView extends TextFileView {
       this.showList(plan.list)
       return
     }
+    if ('exclude' in plan) {
+      void excludeFrom(this.app, plan.exclude, this.redrawn)
+      return
+    }
+    if ('settings' in plan) {
+      this.openSettings(plan.settings)
+      return
+    }
     this.commit({ ...this.state, expansions: plan.expansions })
     void this.draw()
   }
@@ -352,6 +362,9 @@ export class HexframeView extends TextFileView {
       this.outline = full
         ? drawFullList(this.contentEl, full, said, this.onHex())
         : drawView(this.contentEl, view, said, this.onHex())
+      addSettingsButton(this.contentEl, () => {
+        this.openSettings(folder)
+      })
       // A focus whose hex is gone goes back to the center.
       this.focus = focusedClickable(this.focus, hexes)?.tile.path
       this.outline(this.focus)
@@ -380,7 +393,23 @@ export class HexframeView extends TextFileView {
       list: (hex) => {
         this.showList(hex?.tile.path)
       },
+      settings: (folder) => {
+        this.openSettings(folder)
+      },
     }
+  }
+
+  /**
+   * Opens the settings of what `folder` leaves out. Obsidian sends no event for a dot folder, so
+   * the view draws again once they are saved.
+   */
+  private openSettings(folder: string) {
+    void openSettings(this.app, folder, this.redrawn)
+  }
+
+  /** Draws the view again once its settings changed what a folder leaves out. */
+  private readonly redrawn = () => {
+    void this.draw()
   }
 
   /**
