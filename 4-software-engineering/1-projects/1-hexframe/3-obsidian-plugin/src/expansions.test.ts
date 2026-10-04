@@ -216,6 +216,11 @@ describe('switchBranch', () => {
     expect(switchBranch(expansions, 4, fitting).branches).toEqual({ 4: 'context' })
   })
 
+  it('opens nothing around a peeled center', () => {
+    const peeled = open({ outer: null, inner: 'context' })
+    expect(switchBranch(peeled, 1, fitting)).toBe(peeled)
+  })
+
   it('leaves the other Branches as they are', () => {
     const expansions = open({ outer: 'branches', inner: 'context' }, { 1: 'leaves' })
     expect(switchBranch(expansions, 2, crowded).branches).toEqual({ 1: 'leaves', 2: 'branches' })

@@ -155,13 +155,15 @@ function following<T>(items: readonly T[], isCurrent: (item: T) => boolean): T |
 
 /**
  * The Branch in `direction` of the outer ring opened into the kind after the one it shows, among
- * those its folder offers, `offered`, and closed after the last one.
+ * those its folder offers, `offered`, and closed after the last one. A peeled center has no
+ * outer ring, so no Branch to open.
  */
 export function switchBranch(
   expansions: Expansions,
   direction: Direction,
   offered: readonly FrameKind[],
 ): Expansions {
+  if (expansions.outer === null) return expansions
   const kinds = frameKinds.filter((kind) => offered.includes(kind))
   const wanted = expansions.branches[direction]
   const current = wanted === undefined ? undefined : shownKind(wanted, offered)

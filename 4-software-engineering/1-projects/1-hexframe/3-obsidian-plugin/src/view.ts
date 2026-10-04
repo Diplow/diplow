@@ -301,8 +301,12 @@ export class HexframeView extends TextFileView {
     const click = ++this.clicks
     const { file } = this
     const center = this.drawn?.folders[0]
+    const { outer } = this.state.expansions
     const branch = await readOpened(disk, vaultPath(placement.tile.path))
-    if (click !== this.clicks || file !== this.file || center !== this.drawn?.folders[0]) return
+    const isOvertaken = click !== this.clicks || file !== this.file
+    if (isOvertaken || center !== this.drawn?.folders[0] || outer !== this.state.expansions.outer) {
+      return
+    }
     if ('refused' in branch) {
       new Notice(`Hexframe can't open ${placement.tile.path}, as ${branch.refused}.`)
       return

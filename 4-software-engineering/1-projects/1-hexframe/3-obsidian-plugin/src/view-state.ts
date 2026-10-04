@@ -10,6 +10,7 @@ import {
   beside,
   innerKinds,
   outerKinds,
+  sameExpansions,
   type CenterExpansion,
   type Expansions,
   type InnerKind,
@@ -148,13 +149,9 @@ export function withChanges(text: string, state: ViewState, next: ViewState): st
   const expansions = jsonOf(next.expansions)
   const changed = {
     ...(next.center !== state.center && { center: next.center }),
-    ...(!sameJson(expansions, jsonOf(state.expansions)) && { expansions }),
+    ...(!sameExpansions(next.expansions, state.expansions) && { expansions }),
   }
   return `${JSON.stringify({ ...json, ...changed }, null, 2)}\n`
-}
-
-function sameJson(one: unknown, other: unknown): boolean {
-  return JSON.stringify(one) === JSON.stringify(other)
 }
 
 /**
