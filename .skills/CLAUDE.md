@@ -35,7 +35,8 @@ Three references are shared by every skill and cited by their path from the repo
 A `SessionStart` hook in `.claude/settings.json` runs it at the start of every session, so a skill installed outside the repo is switched off by the next session. Run it by hand to see a change in the current session. It:
 
 1. rebuilds `.claude/skills/` with one symlink per skill (Claude Code only looks one level deep there, and follows symlinks), and `.claude/agents/` with one symlink per skill subagent;
-2. rewrites `skillOverrides` and `enabledPlugins` in `.claude/settings.json` so that user skills (`~/.claude/skills`), claude.ai synced skills and installed plugins are off in this repo.
+2. links into `.claude/skills/` every Claude Code mod under `4-software-engineering/1-projects/` (a folder holding `.claude-plugin/plugin.json`), named by its manifest: Claude Code loads a plugin it finds there as it loads a `--plugin-dir`, so [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/CLAUDE|the hexframe mod]] and its `/hexframe` are in every session (checked on 2026-10-04);
+3. rewrites `skillOverrides` and `enabledPlugins` in `.claude/settings.json` so that user skills (`~/.claude/skills`), claude.ai synced skills and installed plugins are off in this repo.
 
 `--pull` first re-copies every repo in `external/sources` at its latest commit.
 

@@ -77,7 +77,17 @@ while IFS= read -r file; do
   agents=$((agents + 1))
 done < <(find "$skills" -path "$external" -prune -o -path '*/agents/*.md' -print | sort)
 
-# 3. Switch off every other source: user skills, claude.ai synced skills, plugins.
+# 3. One symlink per Claude Code mod in the software projects, named by its manifest:
+# Claude Code loads a plugin it finds in .claude/skills/<name> as it loads a --plugin-dir.
+mods=0
+while IFS= read -r file; do
+  dir="$(dirname "$(dirname "$file")")"
+  link "$(jq -r .name "$file")" "$dir"
+  mods=$((mods + 1))
+done < <(find "$root/4-software-engineering/1-projects" -name node_modules -prune -o -path '*/.claude-plugin/plugin.json' -print | sort)
+count=$((count - mods))
+
+# 4. Switch off every other source: user skills, claude.ai synced skills, plugins.
 # Conductor's own skill is passed with --plugin-dir, which overrides can't reach.
 off=()
 for file in "$HOME"/.claude/skills/*/SKILL.md; do
@@ -99,4 +109,4 @@ jq -n \
   ${off[@]+"${off[@]}"} >"$settings.tmp"
 mv "$settings.tmp" "$settings"
 
-echo "sync: $count skills and $agents agents linked, ${#off[@]} outside skills switched off"
+echo "sync: $count skills, $agents agents and $mods mods linked, ${#off[@]} outside skills switched off"

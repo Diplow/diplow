@@ -14,10 +14,10 @@ preview: >-
 
 ## Use it
 
-Mods need Claude Code 2.1.287 or later, and are in early access. From the repo root:
+Mods need Claude Code 2.1.287 or later, and are in early access. Every session in this repo loads it: [[.skills/CLAUDE|`.skills/sync`]] links it as `.claude/skills/hexframe`, where Claude Code loads it as a `--plugin-dir`, and watches it, so an edit reloads it. Outside the repo, load it by hand:
 
 ```bash
-claude --plugin-dir 4-software-engineering/1-projects/1-hexframe/2-claude-mod
+claude --plugin-dir <path to>/2-claude-mod
 ```
 
 Then `/hexframe` shows the session's folder, and `/hexframe <folder>` another one, relative to the session's. In the pane:
@@ -55,7 +55,7 @@ Both run the Claude Code pinned in `package.json`, whose install script links it
 |---|---|
 | `.claude-plugin/plugin.json` | The plugin's manifest |
 | `hooks/register.ts` | The hooks: the `/hexframe` command, the pane and its keys. The only file that calls `$` |
-| `hooks/shape/` | The [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE\|shape]]: a folder read as a Frame, and where the seven hexes of a view sit. Pure, and shared with every other medium |
+| `hooks/shape/` | The [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE\|shape]]: a folder read as a Frame, and where the hexes of a view sit. Pure, and shared with every other medium |
 | `hooks/draw/` | The drawings of a Frame: `raster.ts` in terminal cells, `svg.ts` in SVG, `outline.ts` in lines of text where neither fits or as the SVG's `alt`, and `style.ts`, the palette and the word wrapping they share. Pure |
 | `hooks/footer.ts` | The rows the lines under the drawing take, so the terminal's drawing leaves them room. Pure |
 | `hooks/markdown.ts` | Text as the pane shows it: a file as the preview's Markdown element draws it (a Markdown one without its frontmatter, any other in a fenced block, a binary or empty one as a note), and a name or a title on one line, with no control character. Pure |
