@@ -4,6 +4,7 @@ import {
   bodySources,
   frontmatter,
   kindsOf,
+  liesWithin,
   linesOf,
   parent,
   readLimit,
@@ -226,6 +227,15 @@ test('a medium reads a regular file within the limit, under its folder', () => {
   // A path the file system couldn't resolve is never under the folder
   expect(unreadable(stat(undefined), '/v/a', 'b.md')).toBe('it leads outside its folder')
   expect(unreadable(stat('/v/a/b.md'), undefined, 'b.md')).toBe('it leads outside its folder')
+})
+
+test('a real path lies within a folder, compared folder by folder', () => {
+  expect(liesWithin('/v/a', '/v/a')).toBe(true)
+  expect(liesWithin('/v/a/b/c.md', '/v/a/')).toBe(true)
+  expect(liesWithin('/v/a/', '/v/a')).toBe(true)
+  expect(liesWithin('/anything', '/')).toBe(true)
+  expect(liesWithin('/v/ab', '/v/a')).toBe(false)
+  expect(liesWithin('/v', '/v/a')).toBe(false)
 })
 
 test("only the folder's own exclusions.yaml is read, never one a symlink leads to", () => {

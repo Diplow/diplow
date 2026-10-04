@@ -19,3 +19,20 @@ HEX-28, [#36](https://github.com/Diplow/diplow/pull/36). The ticket asked for ty
 ### DEC-3 `styles.css` is a plain file copied beside `main.js`, and `build` owns its folder
 
 HEX-30. The ticket asks `build` for `main.js`, `manifest.json` and `styles.css`, and the plugin has no styles yet. `styles.css` sits beside `manifest.json` in the package, holding one comment, and every build copies it as it is, the way it copies the manifest. A ticket that brings styles writes them there, or switches to a CSS file esbuild bundles, as long as the output keeps the name `styles.css`. DEC-1 is done: `build` writes into the repo's `.obsidian/plugins/hexframe/` and `dist/` is gone. Since `dev` writes into that same folder by default, a production build also removes the `.hotreload` a dev build leaves there, so after `pnpm build` the folder holds exactly what is committed, and CI's build-and-compare step fails on a committed `.hotreload`.
+
+### DEC-4 The view state at depth 1: a center and the outer ring's kind, decoded by hand
+
+HEX-33. The ticket asks for the file's JSON to hold the center and the expansions, and HEX-35 owns the double expansion. So `expansions` holds only `outer` for now, the kind of the ring around the center (`children`, `branches`, `leaves`), defaulting to Children, or Branches when the folder offers no Children ring; HEX-35 adds `inner` and the Branches' own beside it. The decoder is a hand-written function in `view-state.ts` rather than Effect Schema: the plugin bundles no runtime dependency, and two fields don't justify one. A malformed field falls back on its own, so one typo doesn't reset the center.
+
+### DEC-5 The shape is written in erasable syntax, and the bundle lowers template literals
+
+HEX-33. The plugin's `tsc` type-checks the shape it imports, under `erasableSyntaxOnly`, which refuses the parameter properties of `exclusions.ts`'s `Cursor`: they became plain fields, with no change in behavior. And the shape joins lines with template literals holding `\n`, which esbuild's minifier writes as raw line breaks, so the production build no longer fit on the two lines `bundle.test.ts` takes as the mark of a minified build: the bundle now lowers template literals to string concatenation (`supported: { 'template-literal': false }`), which keeps each `\n` an escape.
+
+### DEC-6 `diplow.hexframe` is empty, and the root STACK doesn't list it yet
+
+HEX-33. The vault's entry is an empty `diplow.hexframe` at the root: empty means the defaults, the root's Branches. It is a Leaf of the root, beside `STACK.md` and `cubic.yaml`. The root `STACK.md`'s table of root-level pieces should name it, but the run may not edit that file: a line for it there is left to me.
+
+### DEC-7 The plugin reads a Frame with its own copy of claude-mod's read, for now
+
+HEX-33, [#39](https://github.com/Diplow/diplow/pull/39). `vault/frame.ts`'s `readFrame` follows the steps of claude-mod's `loadFrame` (exclusions first, then the sort, then one Tile per seated member, an overflowing ring left as names), over a `Disk` port instead of `$.fs`. It adds one rule claude-mod lacks: every read must lie within the vault's real path, since Obsidian's index lists a symlinked folder as a folder. Moving one `readFrame` over a port into the shape would stretch the shape's rule that a medium does the file system calls, and it would change claude-mod's pane, so this ticket keeps the copy and leaves that call to me. cubic raised it in every review round of #39.
+

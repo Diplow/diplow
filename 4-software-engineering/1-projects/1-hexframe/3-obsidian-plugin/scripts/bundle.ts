@@ -34,6 +34,10 @@ export async function bundle({ outDir, dev }: { outDir: string; dev: boolean }) 
     ],
     format: 'cjs',
     target: 'es2022',
+    // Minifying turns a `\n` inside a template literal into a raw line break. Lowered to string
+    // concatenation it stays an escape, so a production build stays on one line, the mark of a
+    // minified build that bundle.test.ts checks.
+    supported: { 'template-literal': false },
     logLevel: 'info',
     sourcemap: dev ? 'inline' : false,
     minify: !dev,

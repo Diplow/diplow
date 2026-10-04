@@ -22,6 +22,7 @@ A Claude Code mod loads only the files under its own folder: an import that leav
 
 - **Pure.** No `$`, no Node, no DOM: a medium does the file system calls and hands the listing and the body here.
 - **Nothing imported from outside this folder**, a package included. claude-mod's `check` fails on an import that leaves it.
+- **Erasable syntax only**: no parameter properties, enums or namespaces. The Obsidian plugin type-checks the shape under `erasableSyntaxOnly`, and its `check` fails on them.
 - **Tests beside each file**, as `*.test.ts` on `claude-code/testing`. claude-mod's `test` runs them and its `check` formats them: the shape has no deployable, so it is no package. A change here changes every medium.
 
 | File | Holds |
@@ -48,4 +49,4 @@ What a folder is:
 - **The Children ring**, offered when a folder's Branches and Leaves are six or fewer in all, in place of a Branches and a Leaves ring. The Branches sit where they sit among the Branches. Each numbered Leaf then takes its number's direction when it is free, and the Leaves left over take the free directions in name order. A Leaf whose number is the Branch's in that direction, as `3-games.md` beside `3-games/`, is a **clash**, which a medium shows as a subtle warning. Only a seated Children ring carries clashes: [[4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-claude-code-mod/decisions#DEC-3 Where a Leaf goes in the Children ring, and what opening one shows|DEC-3]].
 - **A Leaf's Tile**: a Markdown Leaf's from its own frontmatter, else a title made from its name, `.md` dropped; a Leaf that isn't Markdown keeps its name, `package.json`.
 
-Not all of it is code yet. Nothing checks a symlink against the vault's edge itself: a symlink is neither a folder nor a file in a listing, so it shows as nothing, and the files a medium reads by name (a body file, `exclusions.yaml`) are held to their own folder, which is stricter.
+Not all of it is code yet. claude-mod checks no symlink against the vault's edge itself: in its listing a symlink is neither a folder nor a file, so it shows as nothing, and the files it reads by name (a body file, `exclusions.yaml`) are held to their own folder, which is stricter. Obsidian's index lists a symlinked folder as a folder, so the Obsidian plugin holds its center and every file it reads to the vault's real path too, with `liesWithin`.

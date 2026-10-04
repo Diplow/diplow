@@ -289,11 +289,20 @@ export function unreadable(
   const isInside =
     folder !== undefined &&
     real !== undefined &&
-    (relative === exclusionsFile ? real === folder + relative : real.startsWith(folder))
+    (relative === exclusionsFile ? real === folder + relative : liesWithin(real, folder))
   if (!isInside) return 'it leads outside its folder'
   if (file.kind !== 'file') return 'it is not a file'
   if (file.size > readLimit) return 'it is too large'
   return undefined
+}
+
+/**
+ * Whether `path` is `folder` or lies inside it, both absolute real paths, compared folder by folder
+ * so that `/v/ab` does not lie in `/v/a`. A medium checks a real path against a folder, or against
+ * the vault that holds everything it reads, with this.
+ */
+export function liesWithin(path: string, folder: string): boolean {
+  return `${path.replace(/\/*$/, '')}/`.startsWith(folder.replace(/\/*$/, '/'))
 }
 
 /**

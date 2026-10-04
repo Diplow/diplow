@@ -164,11 +164,13 @@ function flowListOf(cursor: Cursor): string[] {
 /** Reads one line's value, left to right. */
 class Cursor {
   private index = 0
+  private readonly text: string
+  private readonly where: string
 
-  constructor(
-    private readonly text: string,
-    private readonly where: string,
-  ) {}
+  constructor(text: string, where: string) {
+    this.text = text
+    this.where = where
+  }
 
   /** A quoted scalar, or a plain one that runs until `stop` or the end, trimmed. */
   scalar(stop: RegExp): string {
