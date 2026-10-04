@@ -80,10 +80,13 @@ export class HexframeView extends TextFileView {
   private readonly redraw = debounce(() => void this.draw(), settle, true)
   /** The pane beside the view that shows the clicked hex's note, once a click opened it. */
   private paired: WorkspaceLeaf | undefined
-  /** The note the view itself last showed in the paired pane, until the pane opens another one. */
-  private shown: string | undefined
-  /** Counts the clicks, so one that a later click overtook during a check is dropped. */
-  private clicks = 0
+  /** The note of the paired pane the view dealt with last, `seen` in `followed`. */
+  private seen: string | undefined
+  /**
+   * Counts the moves, the clicks and the opens the view follows, so one that a later move overtook
+   * during a check is dropped.
+   */
+  private moves = 0
 
   override getViewType(): string {
     return viewType
@@ -280,7 +283,7 @@ export class HexframeView extends TextFileView {
       if (checked === undefined || isOvertaken()) return
       if ('refused' in checked) new Notice(checked.refused)
       else if ('note' in checked) {
-        this.shown = checked.note.path
+        this.seen = checked.note.path
         await this.pairedLeaf().openFile(checked.note, {
           state: { mode: 'preview' },
           active: false,
@@ -293,7 +296,8 @@ export class HexframeView extends TextFileView {
 
   /**
    * `file` opened in the active pane: when that is the paired pane and `file` a folder's note, the
-   * view moves onto that folder as a click would, unless the view showed that note there itself.
+   * view moves onto that folder as a click would, unless it is the pane's note the view dealt with
+   * last.
    */
   private async onFileOpen(file: TFile) {
     const disk = diskOf(this.app)
@@ -302,9 +306,8 @@ export class HexframeView extends TextFileView {
     const inPaired = this.app.workspace.getActiveViewOfType(FileView)?.leaf === paired
     const opened = { path: file.path, inPaired }
     const home = vaultPath(this.file.parent?.path ?? '')
-    const folder = followed(opened, this.shown, centerOf(this.state, home).folder)
-    // The pane has moved past the note the view showed: going back to it is the user's move.
-    if (inPaired && file.path !== this.shown) this.shown = undefined
+    const { folder, seen } = followed(opened, this.seen, centerOf(this.state, home).folder)
+    this.seen = seen
     if (folder === undefined) return
     try {
       await this.centerOn(disk, folder, this.overtaker())
@@ -318,9 +321,9 @@ export class HexframeView extends TextFileView {
    * another file in the view, has overtaken it since.
    */
   private overtaker(): () => boolean {
-    const click = ++this.clicks
+    const move = ++this.moves
     const { file } = this
-    return () => click !== this.clicks || this.file !== file
+    return () => move !== this.moves || this.file !== file
   }
 
   /**

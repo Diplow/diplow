@@ -12,23 +12,37 @@ export interface Opened {
   inPaired: boolean
 }
 
+/** What an open asks of the view. */
+export interface Follow {
+  /** The folder the view moves onto; absent, it stays where it is. */
+  folder?: string
+  /**
+   * The note of the paired pane the view has dealt with last, which it skips when it opens again:
+   * one it showed there itself, or one it followed, or refused to.
+   */
+  seen: string | undefined
+}
+
 /**
- * The folder the view moves onto once `opened` opens, or undefined when it stays where it is:
+ * What `opened` asks of the view, `seen` the note of the paired pane it dealt with last and
+ * `center` the folder it is on:
  *
  * - only an open in the paired pane moves it, never one in another pane;
  * - only a folder's note, its `CLAUDE.md` or `-CLAUDE.md`, any other file leaving it be;
- * - not the note the view itself last showed there, `shown`, which its click already centered on,
- *   or chose not to, shift held, so the view never follows itself;
- * - not the note of `center`, the folder it is already on, so nothing is written for nothing.
+ * - not `seen` opening again, as when the user comes back to the pane: the view showed it there
+ *   itself, its click having already centered or chosen not to, shift held, or it already followed
+ *   it, or refused to, so the view never follows itself and says a refusal once;
+ * - not the note of `center`, so nothing is written for nothing.
+ *
+ * Any other open in the paired pane is the one the view has seen last from then on, so going back
+ * to an older note, by the back button, follows it again.
  */
-export function followed(
-  opened: Opened,
-  shown: string | undefined,
-  center: string,
-): string | undefined {
-  if (!opened.inPaired || opened.path === shown) return undefined
+export function followed(opened: Opened, seen: string | undefined, center: string): Follow {
+  if (!opened.inPaired || opened.path === seen) return { seen }
   const folder = folderOf(opened.path)
-  return folder === center ? undefined : folder
+  return folder === undefined || folder === center
+    ? { seen: opened.path }
+    : { folder, seen: opened.path }
 }
 
 /** The folder `path` is the note of, relative to the vault, `''` its root; undefined for any other file. */
