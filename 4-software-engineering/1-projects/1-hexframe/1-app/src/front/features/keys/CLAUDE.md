@@ -25,4 +25,5 @@ What `/settings/keys` shows, behind `signedInOnly`. A Key is IAM's: a credential
 
 - **The secret is shown once and kept nowhere.** It reaches the page in issuing's answer only, through a form's submit, which no cache holds; it lives in `Keys`'s state, so leaving the screen, or Done, forgets it.
 - **A refusal takes its channel**: a name IAM refuses (`KeyNameInvalid`) shows under the field; a revoke of a Key already gone (`KeyNotFound`) in a toast.
+- **`Copyable` stays here until a second feature needs it.** It is a label, a `<code>` and `ui/`'s `Button` and `toast`, composed for the secret and the command. A feature does not add to `ui/` (ui's rules), so the day another feature wants it, a ticket moves it there with a gallery entry.
 - **These actions move into the chat once the Assistant exists.** The page is where they live until then.

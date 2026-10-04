@@ -5,6 +5,7 @@ import { provedSession } from '#/front/client/iam/guard'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 import { Toaster } from '#/front/ui/feedback/Toaster'
+import { Button } from '#/front/ui/inputs/controls/button'
 import { LocaleSwitch } from '#/front/ui/inputs/controls/LocaleSwitch'
 import { ThemeToggle } from '#/front/ui/inputs/controls/ThemeToggle'
 import { themeScript } from '#/front/ui/theme'
@@ -55,16 +56,18 @@ function SignedInLinks() {
     select: (matches) => matches.some((match) => provedSession(match.context)),
   })
   if (!signedIn) return null
-  const link =
-    'rounded-md px-3 py-2 text-sm font-medium text-muted-foreground outline-none hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[status=active]:text-foreground'
+  // The design system's ghost Button, as a link; the page the user is on reads as the current one.
+  const current = 'text-muted-foreground data-[status=active]:text-foreground'
   return (
     <nav aria-label={m.nav_label()} className="mr-auto flex items-center gap-1">
-      <Link to="/" activeOptions={{ exact: true, includeSearch: false }} className={link}>
-        {m.nav_system()}
-      </Link>
-      <Link to="/settings/keys" className={link}>
-        {m.nav_keys()}
-      </Link>
+      <Button asChild variant="ghost" size="sm" className={current}>
+        <Link to="/" activeOptions={{ exact: true, includeSearch: false }}>
+          {m.nav_system()}
+        </Link>
+      </Button>
+      <Button asChild variant="ghost" size="sm" className={current}>
+        <Link to="/settings/keys">{m.nav_keys()}</Link>
+      </Button>
     </nav>
   )
 }
