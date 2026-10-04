@@ -27,7 +27,7 @@ A right click on a hex opens its menu, which lists only the items that apply to 
 | Preview | `Space` | any hex but a Leaf that isn't Markdown | What a shift-click does: shows its note, the view staying where it is |
 | Expand as Children, Branches, Leaves, Context | `H`, `B`, `L`, `C` | the center, a Branch around it | Opens it into that kind, when its folder offers it and it doesn't show it already |
 | Collapse | `X` | the center, an opened Branch around it | Peels the center's outer ring, then its inner one; closes the Branch |
-| Up | `U` | the center, but at the vault root | What a click on it does: centers on the folder holding it |
+| Up | `U` | the center, except at the vault root | What a click on it does: centers on the folder holding it |
 | Open in default app | `O` | a Leaf that isn't Markdown | What a click on it does: hands it to the system, under the rule below |
 
 "Expand as" on the center opens the next ring: a collapsed center opens its inner ring (Leaves or Context), a peeled one its outer ring around it (Children, Branches or Leaves), or switches its inner ring when the kind only sits inside. On an open center it switches the ring that can take the kind, the inner one first, so Leaves go inside Branches; switching the outer ring closes the Branches opened in it. A kind that would make a pair no view shows, or that the folder lacks, is not listed and its key does nothing. "Exclude from the six" (`E`) and "Hexframe settings" (`,`) come with the settings panel, which writes the file they act on: [[4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-obsidian-plugin/decisions#DEC-12 The menu's items, what the ticket left open|DEC-12]].
@@ -102,12 +102,12 @@ The lint set is [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE#Lint
 |---|---|
 | `manifest.json` | The plugin's manifest, copied beside `main.js` by every build |
 | `styles.css` | The plugin's styles, copied beside `main.js` by every build: the drawing's colors, all of them Obsidian's CSS variables |
-| `src/main.ts` | The plugin's entry, bundled into `main.js`: binds the `hexframe` extension to the view, and adds one command per item of the view's menu, with its default key |
+| `src/main.ts` | The plugin's entry, bundled into `main.js`: binds the `hexframe` extension to the view, and adds the commands `menu.ts` makes of the items, run on the hexframe view that has the focus |
 | `src/view.ts` | The view, a `TextFileView` over the hexframe file: decodes it, picks the center, reads it and the Branches it opens and draws them, follows the vault's events, carries out a click, opens the menu and runs its items and their commands, moves the focus on Tab and the digits, keeps the paired pane and follows the folder notes opened in it. The only file that holds Obsidian state |
 | `src/click.ts` | What a click on a hex asks: the folder to center on, and the notes to show or the file to hand to the default app; and which hexes are the Branches around the center, the ones the menu opens. Pure |
 | `src/follow.ts` | Which opens in the paired pane move the view, and onto which folder: a folder's note, in that pane, other than the note the view dealt with last there (one it showed, followed or refused) or the center's own; and that last note, kept from one open to the next. Pure |
 | `src/expansions.ts` | How the view opens what it shows: the pairs the center's two rings may form, enforced by their type and one function, the moves between them (collapse, expand the center as a kind, open or close a Branch), what a folder makes of them, and the view the shape lays out. Pure |
-| `src/menu.ts` | The menu's items, their default keys, and what each asks of the view on a hex (what a click would, or new expansions), or nothing where it doesn't apply. Pure |
+| `src/menu.ts` | The menu's items in one table, each with its default key and what it asks of the view on a hex (what a click would, or new expansions), or nothing where it doesn't apply, a move that changes nothing included; and the commands they are. Pure |
 | `src/focus.ts` | Which hex holds the keyboard's focus, by the path of its Tile, and where Tab, shift-Tab and the digits move it. Pure |
 | `src/view-state.ts` | The hexframe file's JSON: its decoding with defaults, the center it names and the expansions, the fields that changed written back, a rename followed, which changes touch the view. Pure |
 | `src/draw.ts` | The drawing: the shape's layout as SVG through Obsidian's `createSvg`, an opened hex as the ground of the Frame over it, words wrapped and sized to their hex, a click and a right-click handler on each hex holding a Tile, the focused hex outlined, and the lines under it about every ring shown |

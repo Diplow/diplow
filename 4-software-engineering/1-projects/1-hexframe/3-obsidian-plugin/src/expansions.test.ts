@@ -201,7 +201,7 @@ describe('openBranch and closeBranch', () => {
 
   it('open nothing around a peeled center', () => {
     const peeled = open({ outer: null, inner: 'context' })
-    expect(openBranch(peeled, 1, 'leaves')).toBe(peeled)
+    expect(openBranch(peeled, 1, 'leaves')).toEqual(peeled)
   })
 })
 

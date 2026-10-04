@@ -93,9 +93,10 @@ export async function readOpened(disk: Disk, folder: string): Promise<Read | { r
  * undefined when it may not or can't be read: what a closed Branch would open into.
  */
 export async function readKinds(disk: Disk, folder: string): Promise<FrameKind[] | undefined> {
-  if ((await refusal(disk, folder)) !== undefined) return undefined
   try {
-    return kindsOf((await sortFolder(await readerOf(disk), folder)).sorted)
+    const reader = await readerOf(disk)
+    if ((await refusalBy(reader, folder)) !== undefined) return undefined
+    return kindsOf((await sortFolder(reader, folder)).sorted)
   } catch {
     return undefined
   }
@@ -223,17 +224,21 @@ export async function centerToShow(
  */
 export async function refusal(disk: Disk, folder: string): Promise<string | undefined> {
   try {
-    const reader = await readerOf(disk)
-    const found = await disk.stat(folder)
-    if (found === undefined) return 'it does not exist'
-    if (found.kind !== 'dir') return 'it is not a folder'
-    const { root } = reader
-    if (root === undefined || !isWithin(found.realPath, root)) return 'it leads out of the vault'
-    const real = (found.realPath ?? '').slice(root.replace(/\/*$/, '').length)
-    return (await leftOut(reader, vaultPath(folder))) ?? (await leftOut(reader, real))
+    return await refusalBy(await readerOf(disk), folder)
   } catch (error) {
     return messageOf(error)
   }
+}
+
+/** `refusal` through `reader`, whose vault root is already read; it may throw. */
+async function refusalBy(reader: Reader, folder: string): Promise<string | undefined> {
+  const found = await reader.disk.stat(folder)
+  if (found === undefined) return 'it does not exist'
+  if (found.kind !== 'dir') return 'it is not a folder'
+  const { root } = reader
+  if (root === undefined || !isWithin(found.realPath, root)) return 'it leads out of the vault'
+  const real = (found.realPath ?? '').slice(root.replace(/\/*$/, '').length)
+  return (await leftOut(reader, vaultPath(folder))) ?? (await leftOut(reader, real))
 }
 
 /** Who a clicked file is opened by: Obsidian, in the paired pane, or the system's default app. */

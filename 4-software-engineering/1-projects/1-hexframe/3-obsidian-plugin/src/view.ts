@@ -16,14 +16,14 @@ import {
   type WorkspaceLeaf,
 } from 'obsidian'
 
-import { layoutView } from '../../2-claude-mod/hooks/shape/layout.ts'
+import { layoutView, type TileHex } from '../../2-claude-mod/hooks/shape/layout.ts'
 import {
   directions,
   kindsOf,
   type Direction,
   type Frame,
 } from '../../2-claude-mod/hooks/shape/node.ts'
-import { actionOf, type Action, type Asked, type TileHex } from './click.ts'
+import { actionOf, type Action, type Asked } from './click.ts'
 import { drawNotes, drawView, ringNotes, type Focus } from './draw.ts'
 import { branchesToOpen, outerBranches, recenter, shownExpansions, viewOf } from './expansions.ts'
 import { focusable, focusedHex, focusToward, stepFocus } from './focus.ts'
@@ -66,7 +66,7 @@ export class HexframeView extends TextFileView {
    * drew, absent when the center couldn't be read. Undefined until that drawing is done, so an item
    * never resolves against another folder's hexes or kinds.
    */
-  private drawn: { folders: string[]; drawing?: Drawn } | undefined
+  private drawn: { folders: string[]; scene?: Scene } | undefined
   /** The path of the Tile whose hex holds the keyboard's focus; the center's when it is unset. */
   private focus: string | undefined
   /** Outlines the focused hex of the last drawing. */
@@ -183,10 +183,10 @@ export class HexframeView extends TextFileView {
    */
   private listenToKeys() {
     const scope = new Scope(this.scope ?? this.app.scope)
-    const move = (to: (drawing: Drawn) => string | undefined) => {
-      const drawing = this.drawn?.drawing
-      if (drawing === undefined || this.isTyping()) return true
-      this.focusOn(to(drawing))
+    const move = (to: (scene: Scene) => string | undefined) => {
+      const scene = this.drawn?.scene
+      if (scene === undefined || this.isTyping()) return true
+      this.focusOn(to(scene))
       return false
     }
     scope.register([], 'Tab', () => move(({ hexes }) => stepFocus(this.focus, hexes, 1)))
@@ -219,17 +219,17 @@ export class HexframeView extends TextFileView {
    * takes it.
    */
   runItem(item: ItemId, checking: boolean): boolean {
-    const drawing = this.drawn?.drawing
-    const hex = drawing && focusedHex(this.focus, drawing.hexes)
-    if (drawing === undefined || hex === undefined || this.isTyping()) return false
-    const plan = planOf(item, this.targetOf(hex, drawing))
+    const scene = this.drawn?.scene
+    const hex = scene && focusedHex(this.focus, scene.hexes)
+    if (scene === undefined || hex === undefined || this.isTyping()) return false
+    const plan = planOf(item, this.targetOf(hex, scene))
     if (plan === undefined) return false
     if (!checking) this.carryOut(plan)
     return true
   }
 
   /** What an item acts on at `hex`, the expansions taken from the file as the drawing shows them. */
-  private targetOf(hex: TileHex, { view, offered, branchKinds }: Drawn): Target {
+  private targetOf(hex: TileHex, { view, offered, branchKinds }: Scene): Target {
     const shown = shownExpansions(this.state.expansions, offered)
     return { hex, view, shown, offered, branchKinds }
   }
@@ -240,11 +240,11 @@ export class HexframeView extends TextFileView {
    * on that hex as the view is then, and on nothing once a drawing has taken the hex away.
    */
   private onMenu(hex: TileHex, event: MouseEvent) {
-    const drawing = this.drawn?.drawing
-    if (drawing === undefined) return
+    const scene = this.drawn?.scene
+    if (scene === undefined) return
     const { path } = hex.tile
     this.focusOn(path)
-    const target = this.targetOf(hex, drawing)
+    const target = this.targetOf(hex, scene)
     const applying = items.filter(({ id }) => planOf(id, target) !== undefined)
     if (applying.length === 0) return
     // Obsidian's native menus show no key beside a title, so this one is drawn by Obsidian itself.
@@ -252,7 +252,7 @@ export class HexframeView extends TextFileView {
     for (const { id, name } of applying) {
       menu.addItem((item) =>
         item.setTitle(titleOf(name, hotkeyOf(this.app, this.commandOf(id)))).onClick(() => {
-          if (!this.drawn?.drawing?.hexes.some(({ tile }) => tile.path === path)) return
+          if (!this.drawn?.scene?.hexes.some(({ tile }) => tile.path === path)) return
           this.focusOn(path)
           this.runItem(id, false)
         }),
@@ -290,7 +290,7 @@ export class HexframeView extends TextFileView {
     const file = this.file
     const disk = diskOf(this.app)
     if (file === null) return
-    const drawing = ++this.drawings
+    const drawingId = ++this.drawings
     const notes = this.problems.map(
       (problem) => `${file.name}: ${problem}, so the view keeps its defaults there.`,
     )
@@ -324,11 +324,11 @@ export class HexframeView extends TextFileView {
         const branch = opened[direction]
         if (branch) branchKinds[direction] = kindsOf(branch.rings)
       }
-      if (drawing !== this.drawings) return
+      if (drawingId !== this.drawings) return
       const view = viewOf(frame, shown, opened)
       const folders = [folder, ...Object.values(opened).map(({ tile }) => vaultPath(tile.path))]
       const hexes = focusable(layoutView(view))
-      this.drawn = { folders, drawing: { view, hexes, offered: kindsOf(frame.rings), branchKinds } }
+      this.drawn = { folders, scene: { view, hexes, offered: kindsOf(frame.rings), branchKinds } }
       this.outline = drawView(this.contentEl, view, [...notes, ...warnings, ...ringNotes(view)], {
         click: (hex, event) => {
           this.focusOn(hex.tile.path)
@@ -342,7 +342,7 @@ export class HexframeView extends TextFileView {
       this.focus = focusedHex(this.focus, hexes)?.tile.path
       this.outline(this.focus)
     } catch (error) {
-      if (drawing !== this.drawings) return
+      if (drawingId !== this.drawings) return
       this.drawn = { folders: [folder] }
       this.outline = undefined
       this.contentEl.empty()
@@ -447,7 +447,7 @@ export class HexframeView extends TextFileView {
 }
 
 /** What the last drawing drew, as the items read it, and the hexes the focus moves among. */
-interface Drawn extends Drawing {
+interface Scene extends Drawing {
   hexes: TileHex[]
 }
 

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { layoutView, type FrameView } from '../../2-claude-mod/hooks/shape/layout.ts'
+import { layoutView, type FrameView, type TileHex } from '../../2-claude-mod/hooks/shape/layout.ts'
 import type {
   Direction,
   Frame,
@@ -9,9 +9,8 @@ import type {
   Rings,
 } from '../../2-claude-mod/hooks/shape/node.ts'
 import type { Expansions } from './expansions.ts'
-import type { TileHex } from './click.ts'
 import { focusable } from './focus.ts'
-import { items, planOf, type ItemId, type Target } from './menu.ts'
+import { commandsOf, items, planOf, type ItemId, type Target } from './menu.ts'
 
 const tile = (path: string) => ({ path, title: path, preview: '' })
 const ring = (members: Partial<Record<Direction, Member>>) => ({
@@ -74,6 +73,33 @@ const listed = (path: string, changes: Partial<Target> = {}): ItemId[] =>
 describe('items', () => {
   it('bind each item to its key, Space written as Obsidian writes it', () => {
     expect(items.map(({ key }) => key)).toEqual(['Enter', ' ', 'H', 'B', 'L', 'C', 'X', 'U', 'O'])
+  })
+})
+
+describe('commandsOf', () => {
+  it('makes each item a command bound to its key, which runs only where it applies', () => {
+    const runs: [ItemId, boolean][] = []
+    const commands = commandsOf((item, checking) => {
+      runs.push([item, checking])
+      return item === 'collapse'
+    })
+    expect(commands.map(({ id, hotkeys }) => [id, hotkeys])).toEqual(
+      items.map(({ id, key }) => [id, [{ modifiers: [], key }]]),
+    )
+    const collapse = commands.find(({ id }) => id === 'collapse')
+    const up = commands.find(({ id }) => id === 'up')
+    expect(collapse?.checkCallback?.(true)).toBe(true)
+    expect(up?.checkCallback?.(false)).toBe(false)
+    expect(runs).toEqual([
+      ['collapse', true],
+      ['up', false],
+    ])
+  })
+
+  it('applies nowhere while no hexframe view has the focus', () => {
+    for (const command of commandsOf(() => undefined)) {
+      expect(command.checkCallback?.(true)).toBe(false)
+    }
   })
 })
 

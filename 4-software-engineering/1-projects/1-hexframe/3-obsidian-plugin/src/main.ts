@@ -1,6 +1,6 @@
 import { Plugin } from 'obsidian'
 
-import { items } from './menu.ts'
+import { commandsOf } from './menu.ts'
 import { HexframeView, viewType } from './view.ts'
 
 // The plugin Obsidian loads: a `*.hexframe` file opens in the hexframe view, and each item of the
@@ -12,14 +12,8 @@ export default class HexframePlugin extends Plugin {
     const commandOf = (item: string) => `${this.manifest.id}:${item}`
     this.registerView(viewType, (leaf) => new HexframeView(leaf, commandOf))
     this.registerExtensions(['hexframe'], viewType)
-    for (const { id, name, key } of items) {
-      this.addCommand({
-        id,
-        name,
-        hotkeys: [{ modifiers: [], key }],
-        checkCallback: (checking) =>
-          this.app.workspace.getActiveViewOfType(HexframeView)?.runItem(id, checking) ?? false,
-      })
-    }
+    const run = (item: Parameters<HexframeView['runItem']>[0], checking: boolean) =>
+      this.app.workspace.getActiveViewOfType(HexframeView)?.runItem(item, checking)
+    for (const command of commandsOf(run)) this.addCommand(command)
   }
 }

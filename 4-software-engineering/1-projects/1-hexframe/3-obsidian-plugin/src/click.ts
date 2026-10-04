@@ -10,9 +10,6 @@ import {
 } from '../../2-claude-mod/hooks/shape/node.ts'
 import { vaultPath } from './vault/frame.ts'
 
-/** A hex holding a Tile, which a click, the menu and the shortcuts act on. */
-export type TileHex = Exclude<Placement, { kind: 'empty' }>
-
 /**
  * What the view opens: the first of `notes` that exists, in the paired pane, or a `file` in the
  * system's default app, once the vault lets it hand that file over.

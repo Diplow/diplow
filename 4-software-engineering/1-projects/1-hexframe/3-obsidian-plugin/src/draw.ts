@@ -10,9 +10,9 @@ import {
   type FrameView,
   type Placement,
   type Point,
+  type TileHex,
 } from '../../2-claude-mod/hooks/shape/layout.ts'
 import type { FrameKind, Frame } from '../../2-claude-mod/hooks/shape/node.ts'
-import type { TileHex } from './click.ts'
 
 /** Units of the SVG per unit of the layout. */
 const scale = 110
@@ -96,7 +96,7 @@ export function drawView(
   const drawn = layoutView(view).flatMap((placement) => drawHex(svg, placement, onHex))
   drawNotes(container, notes)
   return (path) => {
-    for (const { group, tile } of drawn) group.toggleClass('is-focused', tile === path)
+    for (const hex of drawn) hex.group.toggleClass('is-focused', hex.path === path)
   }
 }
 
@@ -108,13 +108,13 @@ export function drawNotes(container: HTMLElement, notes: readonly string[]) {
 }
 
 /** A drawn hex holding a Tile, and the path of that Tile, which the focus names. */
-interface Drawn {
+interface DrawnHex {
   group: SVGGElement
-  tile: string
+  path: string
 }
 
 /** Draws `placement`; what it holds when it holds a Tile, its hex outlined when focused. */
-function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex): Drawn[] {
+function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex): DrawnHex[] {
   const kind = placement.kind === 'member' ? placement.memberKind : placement.kind
   const group = svg.createSvg('g', { cls: ['hexframe-hex', `is-${kind}`] })
   const points = hexCorners(placement.center, placement.radius * inset)
@@ -124,7 +124,7 @@ function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex): Drawn[
   // An opened hex is the ground of the Frame drawn over it, which holds its Tile and its clicks.
   if (placement.kind !== 'empty' && placement.opened) {
     group.addClass('is-opened')
-    return [{ group, tile: placement.tile.path }]
+    return [{ group, path: placement.tile.path }]
   }
   const at = { x: placement.center.x * scale, y: placement.center.y * scale }
   const text = textOf(placement.radius, placement.kind === 'center')
@@ -163,7 +163,7 @@ function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex): Drawn[
     text.preview,
     previewLines,
   )
-  return [{ group, tile: tile.path }]
+  return [{ group, path: tile.path }]
 }
 
 /** One `<text>` of `lines` set in `style`, centered on `at.x`, its first baseline at `at.y`. */

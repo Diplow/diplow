@@ -1,7 +1,12 @@
 // Which hex of the view holds the keyboard's focus, and where Tab and the digits move it. The focus
 // is the path of a Tile the view shows, so it survives a drawing: every hex that holds a Tile, the
 // opened ones aside, holds another one. Pure, so it is tested without Obsidian.
-import type { CollapsedView, FrameView, Placement } from '../../2-claude-mod/hooks/shape/layout.ts'
+import type {
+  CollapsedView,
+  FrameView,
+  Placement,
+  TileHex,
+} from '../../2-claude-mod/hooks/shape/layout.ts'
 import {
   directions,
   membersOf,
@@ -9,7 +14,6 @@ import {
   type Frame,
   type FrameKind,
 } from '../../2-claude-mod/hooks/shape/node.ts'
-import type { TileHex } from './click.ts'
 
 /**
  * The hexes the focus moves among, in the order the view draws them: every hex holding a Tile but

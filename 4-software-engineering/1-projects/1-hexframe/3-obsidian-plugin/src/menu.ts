@@ -1,56 +1,21 @@
 // What the hex view's menu and its shortcuts offer on a hex: the items, their default keys, and what
 // each asks of the view on a given hex, or nothing where it doesn't apply. The menu lists the items
-// that apply, and a shortcut whose item doesn't apply does nothing. Pure, so which items apply to
-// which hex is tested without Obsidian; the view carries them out.
-import type { CollapsedView, FrameView } from '../../2-claude-mod/hooks/shape/layout.ts'
+// that apply, and a shortcut whose item doesn't apply does nothing. Each item is an Obsidian
+// command, described here too. Pure, so which items apply to which hex is tested without Obsidian;
+// the view carries them out.
+import type { Command } from 'obsidian'
+
+import type { CollapsedView, FrameView, TileHex } from '../../2-claude-mod/hooks/shape/layout.ts'
+import type { Direction, FrameKind } from '../../2-claude-mod/hooks/shape/node.ts'
+import { actionOf, outerBranchOf, type Action } from './click.ts'
 import {
-  basename,
-  isMarkdown,
-  type Direction,
-  type FrameKind,
-} from '../../2-claude-mod/hooks/shape/node.ts'
-import { actionOf, outerBranchOf, type Action, type TileHex } from './click.ts'
-import { closeBranch, collapse, expandCenter, openBranch, type Expansions } from './expansions.ts'
-
-/** The items of the menu, each an Obsidian command of the same id. */
-export type ItemId =
-  | 'center-here'
-  | 'preview'
-  | 'expand-as-children'
-  | 'expand-as-branches'
-  | 'expand-as-leaves'
-  | 'expand-as-context'
-  | 'collapse'
-  | 'up'
-  | 'open-in-default-app'
-
-/** An item: its id, its name in the menu and the command palette, and its default key. */
-export interface Item {
-  id: ItemId
-  name: string
-  key: string
-}
-
-/** The items in the order the menu lists them. A key is Obsidian's: `' '` is Space. */
-export const items: readonly Item[] = [
-  { id: 'center-here', name: 'Center here', key: 'Enter' },
-  { id: 'preview', name: 'Preview', key: ' ' },
-  { id: 'expand-as-children', name: 'Expand as Children', key: 'H' },
-  { id: 'expand-as-branches', name: 'Expand as Branches', key: 'B' },
-  { id: 'expand-as-leaves', name: 'Expand as Leaves', key: 'L' },
-  { id: 'expand-as-context', name: 'Expand as Context', key: 'C' },
-  { id: 'collapse', name: 'Collapse', key: 'X' },
-  { id: 'up', name: 'Up', key: 'U' },
-  { id: 'open-in-default-app', name: 'Open in default app', key: 'O' },
-]
-
-/** The Frame kind each "Expand as" item opens. */
-const expandsAs: Partial<Record<ItemId, FrameKind>> = {
-  'expand-as-children': 'children',
-  'expand-as-branches': 'branches',
-  'expand-as-leaves': 'leaves',
-  'expand-as-context': 'context',
-}
+  closeBranch,
+  collapse,
+  expandCenter,
+  openBranch,
+  sameExpansions,
+  type Expansions,
+} from './expansions.ts'
 
 /** What the view drew, which the items read. */
 export interface Drawing {
@@ -72,73 +37,140 @@ export interface Target extends Drawing {
 export type Plan = { click: Action } | { expansions: Expansions }
 
 /**
+ * An item: its name in the menu and the command palette, its default key (Obsidian's: `' '` is
+ * Space), and what it asks of the view on a hex.
+ */
+interface Row {
+  name: string
+  key: string
+  plan: (target: Target) => Plan | undefined
+}
+
+/** The items, in the order the menu lists them. An item can't be added without its plan. */
+const table = {
+  'center-here': {
+    name: 'Center here',
+    key: 'Enter',
+    plan: ({ hex }) => clickIf(hex.kind === 'member', actionOf(hex, false), 'center'),
+  },
+  preview: {
+    name: 'Preview',
+    key: ' ',
+    plan: ({ hex }) => clickIf(true, actionOf(hex, true), 'notes'),
+  },
+  'expand-as-children': { name: 'Expand as Children', key: 'H', plan: expandAs('children') },
+  'expand-as-branches': { name: 'Expand as Branches', key: 'B', plan: expandAs('branches') },
+  'expand-as-leaves': { name: 'Expand as Leaves', key: 'L', plan: expandAs('leaves') },
+  'expand-as-context': { name: 'Expand as Context', key: 'C', plan: expandAs('context') },
+  collapse: {
+    name: 'Collapse',
+    key: 'X',
+    plan: (target) => expansionsIf(target, collapseOf(target)),
+  },
+  up: {
+    name: 'Up',
+    key: 'U',
+    plan: ({ hex }) => clickIf(hex.kind === 'center', actionOf(hex, false), 'center'),
+  },
+  'open-in-default-app': {
+    name: 'Open in default app',
+    key: 'O',
+    plan: ({ hex }) => clickIf(true, actionOf(hex, false), 'file'),
+  },
+} satisfies Record<string, Row>
+
+/** The items of the menu, each an Obsidian command of the same id. */
+export type ItemId = keyof typeof table
+
+/** An item: its id, its name and its default key. */
+export interface Item {
+  id: ItemId
+  name: string
+  key: string
+}
+
+/** The items in the order the menu lists them. */
+export const items: readonly Item[] = (Object.keys(table) as ItemId[]).map((id) => ({
+  id,
+  name: table[id].name,
+  key: table[id].key,
+}))
+
+/**
  * What `item` asks of the view on `target`'s hex, or undefined when it doesn't apply there. A move
  * that would change nothing doesn't apply either, so the file keeps asking for what it asked for.
  */
-export function planOf(item: ItemId, { hex, ...around }: Target): Plan | undefined {
-  const kind = expandsAs[item]
-  if (kind !== undefined) return expansionsPlan(expandAs(hex, kind, around))
-  if (item === 'collapse') return expansionsPlan(collapseOf(hex, around))
-  return clickPlan(item, hex)
-}
-
-function expansionsPlan(expansions: Expansions | undefined): Plan | undefined {
-  return expansions === undefined ? undefined : { expansions }
+export function planOf(item: ItemId, target: Target): Plan | undefined {
+  const row: Row = table[item]
+  return row.plan(target)
 }
 
 /**
- * The items that act as a click does: centering on a Branch or a Context folder, showing a hex's
- * note without moving, going up from the center, handing a Leaf that isn't Markdown to the system.
- * A Leaf that isn't Markdown has no note to preview: the paired pane is for notes.
+ * The commands the items are: each bound to its key by default, and carried out by `run`, which
+ * says whether it applies (`checking`) or carries it out, and is undefined while no hexframe view
+ * has the focus.
  */
-function clickPlan(item: ItemId, hex: TileHex): Plan | undefined {
-  const isMember = hex.kind === 'member'
-  const isLeaf = isMember && hex.memberKind === 'leaf'
-  const isDocument = isLeaf && !isMarkdown(basename(hex.tile.path))
-  const applies: Partial<Record<ItemId, boolean>> = {
-    'center-here': isMember && !isLeaf,
-    preview: !isDocument,
-    up: hex.kind === 'center' && actionOf(hex, false)?.center !== undefined,
-    'open-in-default-app': isDocument,
+export function commandsOf(
+  run: (item: ItemId, checking: boolean) => boolean | undefined,
+): Command[] {
+  return items.map(({ id, name, key }) => ({
+    id,
+    name,
+    hotkeys: [{ modifiers: [], key }],
+    checkCallback: (checking: boolean) => run(id, checking) ?? false,
+  }))
+}
+
+/**
+ * The click a click item asks, when it applies to the hex (`applies`) and what a click would do
+ * there holds what the item is for: a folder to center on, notes to show, or a file for the
+ * system. A Leaf that isn't Markdown has no note to preview: the paired pane is for notes.
+ */
+function clickIf(
+  applies: boolean,
+  click: Action | undefined,
+  wanted: 'center' | 'notes' | 'file',
+): Plan | undefined {
+  if (!applies || click === undefined) return undefined
+  const has = wanted === 'center' ? click.center !== undefined : wanted in click.open
+  return has ? { click } : undefined
+}
+
+/** `next` as a plan, unless it is missing or opens the same as what the view shows. */
+function expansionsIf({ shown }: Target, next: Expansions | undefined): Plan | undefined {
+  return next === undefined || sameExpansions(next, shown) ? undefined : { expansions: next }
+}
+
+/**
+ * The plan of "Expand as `kind`": the center opened into it, as `expandCenter` says, or a Branch
+ * around the center opened into it, when its folder offers it and the view doesn't show it opened
+ * so already. The inner ring's hexes and a Branch's own members open nothing.
+ */
+function expandAs(kind: FrameKind): Row['plan'] {
+  return (target) => {
+    const { hex, shown, offered, branchKinds } = target
+    if (hex.kind === 'center') return expansionsIf(target, expandCenter(shown, kind, offered))
+    const direction = outerBranchOf(hex)
+    if (direction === undefined || shown.outer === null) return undefined
+    if (branchKinds[direction]?.includes(kind) !== true) return undefined
+    if (openedKind(target, direction) === kind) return undefined
+    return expansionsIf(target, openBranch(shown, direction, kind))
   }
-  if (applies[item] !== true) return undefined
-  const click = actionOf(hex, item === 'preview')
-  return click === undefined ? undefined : { click }
-}
-
-type Around = Omit<Target, 'hex'>
-
-/**
- * The expansions "Expand as `kind`" makes of `hex`: the center opened into it, as `expandCenter`
- * says, or a Branch around the center opened into it, when its folder offers it and it doesn't
- * show it already. The inner ring's hexes and a Branch's own members open nothing.
- */
-function expandAs(hex: TileHex, kind: FrameKind, around: Around): Expansions | undefined {
-  if (hex.kind === 'center') return expandCenter(around.shown, kind, around.offered)
-  const direction = outerBranchOf(hex)
-  if (direction === undefined || around.shown.outer === null) return undefined
-  const offered = around.branchKinds[direction]
-  if (offered === undefined || !offered.includes(kind)) return undefined
-  if (openedKind(around, direction) === kind) return undefined
-  return openBranch(around.shown, direction, kind)
 }
 
 /**
- * The expansions "Collapse" makes of `hex`: the center peeled, its outer ring first, or an opened
- * Branch around it closed. A hex that shows nothing opened has nothing to collapse, a Branch the
- * view left closed included.
+ * The expansions "Collapse" makes of the hex: the center peeled, its outer ring first, or a Branch
+ * around it that the view shows opened, closed.
  */
-function collapseOf(hex: TileHex, around: Around): Expansions | undefined {
-  const { shown } = around
-  if (hex.kind === 'center') {
-    return shown.outer === null && shown.inner === null ? undefined : collapse(shown)
-  }
+function collapseOf(target: Target): Expansions | undefined {
+  const { hex, shown } = target
+  if (hex.kind === 'center') return collapse(shown)
   const direction = outerBranchOf(hex)
-  if (direction === undefined || openedKind(around, direction) === undefined) return undefined
+  if (direction === undefined || openedKind(target, direction) === undefined) return undefined
   return closeBranch(shown, direction)
 }
 
 /** The kind the Branch in `direction` shows opened, or undefined while the view shows it closed. */
-function openedKind({ view }: Around, direction: Direction): FrameKind | undefined {
+function openedKind({ view }: Target, direction: Direction): FrameKind | undefined {
   return 'frameKind' in view ? view.expanded?.[direction]?.frameKind : undefined
 }
