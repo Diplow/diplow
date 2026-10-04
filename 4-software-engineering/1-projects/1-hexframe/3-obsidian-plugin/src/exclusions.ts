@@ -51,19 +51,35 @@ export function leavingOf(slot: Slot, items: readonly string[]): Leaving {
   return glob === undefined ? { by: 'name' } : { by: 'glob', glob }
 }
 
-/** Whether `item` names `slot` exactly, rather than matching it as a glob. */
+/**
+ * Whether `item` names `slot` exactly, rather than matching it as a glob. An item holding `*` or
+ * `?` is a glob, even one written as the candidate's own name: it matches more than that name.
+ */
 function names(item: string, slot: Slot): boolean {
-  return item === slot.name || item === patternOf(slot)
+  return !isGlob(item) && (item === slot.name || item === patternOf(slot))
+}
+
+function isGlob(item: string): boolean {
+  return /[*?]/.test(item)
+}
+
+/**
+ * Whether an exclusion can name `slot` alone: not when its name holds `*` or `?`, which the file
+ * has no way to escape, so its pattern would leave out every name it matches too.
+ */
+export function isNameable(slot: Slot): boolean {
+  return !isGlob(slot.name)
 }
 
 /**
  * `items` once the user ticked or unticked `slot`: shown, its pattern added, as a list writes it;
  * left out by name, every item naming it removed. One a glob leaves out stays as it is, since
- * removing the glob would bring back what else it matches.
+ * removing the glob would bring back what else it matches, and so does one no exclusion can name
+ * alone.
  */
 export function toggled(items: readonly string[], slot: Slot): string[] {
   const leaving = leavingOf(slot, items)
-  if (leaving.by === 'none') return [...items, patternOf(slot)]
+  if (leaving.by === 'none') return isNameable(slot) ? [...items, patternOf(slot)] : [...items]
   if (leaving.by === 'glob') return [...items]
   return items.filter((item) => !names(item, slot))
 }
@@ -146,8 +162,9 @@ export function isEmpty({ add, remove }: Change): boolean {
 /**
  * `text`, a folder's `exclusions.yaml` (undefined when it has none), with `change` made: each item
  * removed has its line dropped, each one added a line after the last item, in the list's own
- * indent. Everything else stays as written, comments, the globs written by hand and their order
- * included, and its line ending; a flow list becomes a block list, so its items take a line each.
+ * indent. Everything else stays as written, comments, blank lines between them, the globs
+ * written by hand and their order included, and its line ending, though trailing blank lines are
+ * dropped for one final line ending; a flow list becomes a block list, so its items take a line each.
  * A change of nothing gives `text` back as it is. A file that can't be parsed throws, so it is never
  * written over, and so does a change that wouldn't read back as made, such as a name holding a line
  * break, which the file can't hold.

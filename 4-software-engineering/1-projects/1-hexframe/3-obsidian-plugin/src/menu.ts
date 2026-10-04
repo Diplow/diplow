@@ -22,6 +22,7 @@ import {
   sameExpansions,
   type Expansions,
 } from './expansions.ts'
+import { isNameable } from './exclusions.ts'
 import { isListed, type Clickable } from './list.ts'
 import { vaultPath } from './vault/frame.ts'
 
@@ -111,7 +112,7 @@ const table = {
   exclude: {
     name: 'Exclude from the six',
     key: 'E',
-    plan: ({ hex }) => (hex.kind === 'center' ? undefined : { exclude: excludedOf(hex) }),
+    plan: ({ hex }) => (hex.kind === 'center' ? undefined : excludedOf(hex)),
   },
   settings: {
     name: 'Hexframe settings',
@@ -179,13 +180,15 @@ function clickIf(
 
 /**
  * What "Exclude from the six" leaves out for `hex`, a member of a ring or a name of a list: its
- * name, as a candidate of the folder holding it, whose exclusions then list it.
+ * name, as a candidate of the folder holding it, whose exclusions then list it. Nothing for a name
+ * no exclusion can leave out alone, one holding `*` or `?`.
  */
-function excludedOf({ tile, memberKind }: Exclude<Clickable, { kind: 'center' }>): Excluded {
-  return {
-    folder: vaultPath(parent(tile.path)),
-    slot: { kind: memberKind, name: basename(tile.path) },
-  }
+function excludedOf({
+  tile,
+  memberKind,
+}: Exclude<Clickable, { kind: 'center' }>): Plan | undefined {
+  const slot = { kind: memberKind, name: basename(tile.path) }
+  return isNameable(slot) ? { exclude: { folder: vaultPath(parent(tile.path)), slot } } : undefined
 }
 
 /** `next` as a plan, unless it is missing or opens the same as what the view shows. */

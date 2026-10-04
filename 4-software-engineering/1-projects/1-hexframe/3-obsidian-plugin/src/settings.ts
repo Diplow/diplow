@@ -17,6 +17,7 @@ import {
   countLine,
   countsOf,
   handWritten,
+  isNameable,
   leavingOf,
   toggled,
   togetherLine,
@@ -202,6 +203,9 @@ class SettingsModal extends Modal {
     if (leaving.by === 'glob') {
       box.disabled = true
       row.createSpan({ cls: 'hexframe-settings-glob', text: `left out by ${leaving.glob}` })
+    } else if (leaving.by === 'none' && !isNameable(slot)) {
+      box.disabled = true
+      row.createSpan({ cls: 'hexframe-settings-glob', text: 'its * or ? would leave out more' })
     }
     box.addEventListener('change', () => {
       this.items = toggled(this.items, slot)

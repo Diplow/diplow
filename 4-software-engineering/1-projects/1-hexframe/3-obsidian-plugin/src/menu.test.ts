@@ -227,11 +227,20 @@ describe('Exclude from the six', () => {
     })
   })
 
-  it('leaves a name of a list out of the folder whose ring the list is, as a Leaf at the root', () => {
-    const name: Clickable = { kind: 'item', memberKind: 'leaf', tile: tile('README.md') }
+  it('leaves a name of a list out of the folder whose ring the list is', () => {
+    const name: Clickable = { kind: 'item', memberKind: 'leaf', tile: tile('4-se/README.md') }
     expect(planOf('exclude', targetOf('4-se', { hex: name }))).toEqual({
+      exclude: { folder: '4-se', slot: { kind: 'leaf', name: 'README.md' } },
+    })
+    const atRoot: Clickable = { kind: 'item', memberKind: 'leaf', tile: tile('README.md') }
+    expect(planOf('exclude', targetOf('4-se', { hex: atRoot }))).toEqual({
       exclude: { folder: '', slot: { kind: 'leaf', name: 'README.md' } },
     })
+  })
+
+  it('applies to no name holding * or ?, which would leave out more', () => {
+    const name: Clickable = { kind: 'item', memberKind: 'leaf', tile: tile('4-se/a*.md') }
+    expect(planOf('exclude', targetOf('4-se', { hex: name }))).toBeUndefined()
   })
 
   it('applies to no center', () => {

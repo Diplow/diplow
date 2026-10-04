@@ -8,6 +8,7 @@ import {
   countLine,
   countsOf,
   handWritten,
+  isNameable,
   leavingOf,
   toggled,
   togetherLine,
@@ -53,6 +54,10 @@ describe('leavingOf', () => {
     expect(leavingOf(leaf('README.md'), items)).toEqual({ by: 'none' })
   })
 
+  it('takes an item holding * or ? for a glob, even written as the name itself', () => {
+    expect(leavingOf(leaf('a*.md'), ['a*.md'])).toEqual({ by: 'glob', glob: 'a*.md' })
+  })
+
   it('keeps a trailing / to folders', () => {
     expect(leavingOf(leaf('src'), ['src/'])).toEqual({ by: 'none' })
   })
@@ -66,6 +71,13 @@ describe('toggled', () => {
 
   it('removes every item naming a candidate left out, and keeps the globs', () => {
     expect(toggled(['src', '*.json', 'src/'], branch('src'))).toEqual(['*.json'])
+  })
+
+  it('neither adds nor removes a name holding * or ?, which no exclusion names alone', () => {
+    expect(toggled([], leaf('a?.md'))).toEqual([])
+    expect(toggled(['a?.md'], leaf('a?.md'))).toEqual(['a?.md'])
+    expect(isNameable(leaf('a?.md'))).toBe(false)
+    expect(isNameable(branch('src'))).toBe(true)
   })
 
   it('leaves alone a candidate a glob leaves out, even when its name is listed too', () => {
