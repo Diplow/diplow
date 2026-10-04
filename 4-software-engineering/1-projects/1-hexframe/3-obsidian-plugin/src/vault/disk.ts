@@ -1,7 +1,7 @@
 // The Disk over Obsidian's vault. Branches and Leaves come from the vault's index; the dot folders,
-// which the index leaves out, and every read come from its adapter. The real paths a medium checks
-// a read against come from Node, which is why the plugin is desktop only.
-import { realpath, stat } from 'node:fs/promises'
+// which the index leaves out, from its adapter. Real paths, and the reads made by the real path
+// just checked, come from Node, which is why the plugin is desktop only.
+import { readFile, realpath, stat } from 'node:fs/promises'
 
 import { FileSystemAdapter, TFolder, type App } from 'obsidian'
 
@@ -15,7 +15,7 @@ export function diskOf(app: App): Disk | undefined {
   return {
     list: (folder) => list(app, adapter, vaultPath(folder)),
     stat: (path) => statAt(adapter.getFullPath(vaultPath(path))),
-    read: (path) => adapter.read(vaultPath(path)),
+    read: (realPath) => readFile(realPath, 'utf8'),
   }
 }
 

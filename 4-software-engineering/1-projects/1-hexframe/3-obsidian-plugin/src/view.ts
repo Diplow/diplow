@@ -48,6 +48,9 @@ export class HexframeView extends TextFileView {
   }
 
   override clear(): void {
+    // A drawing still running for the file before is dropped when it ends.
+    this.drawings++
+    this.redraw.cancel()
     this.text = ''
     this.state = defaultState
     this.problems = []
@@ -138,15 +141,23 @@ export class HexframeView extends TextFileView {
     }
   }
 
-  /** The folder to draw: the state's center, or the file's own when it can't be shown, noted. */
+  /**
+   * The folder to draw: the state's center, or the file's own when the center can't be shown,
+   * noted. The file's own folder is checked too, since it may lie in a symlinked folder out of the
+   * vault; when it can't be shown either, this throws why.
+   */
   private async centerFolder(disk: Disk, file: TFile, notes: string[]): Promise<string> {
     const home = vaultPath(file.parent?.path ?? '')
     const { folder, dropped } = centerOf(this.state, home)
-    const refused = dropped ?? (folder === home ? undefined : await refusal(disk, folder))
-    if (refused === undefined) return folder
-    notes.push(
-      `${file.name}'s center can't be shown, as ${refused}: the view shows its own folder.`,
-    )
+    if (dropped !== undefined || folder !== home) {
+      const refused = dropped ?? (await refusal(disk, folder))
+      if (refused === undefined) return folder
+      notes.push(
+        `${file.name}'s center can't be shown, as ${refused}: the view shows its own folder.`,
+      )
+    }
+    const refused = await refusal(disk, home)
+    if (refused !== undefined) throw new Error(refused)
     return home
   }
 }

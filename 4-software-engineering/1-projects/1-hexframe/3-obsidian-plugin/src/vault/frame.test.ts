@@ -44,9 +44,10 @@ function diskOf(nodes: Record<string, Node>): Disk {
       }
       return Promise.resolve(stat)
     },
-    read(path) {
-      const node = nodeAt(path)
-      if (typeof node !== 'string') return Promise.reject(new Error(`no file at ${path}`))
+    read(realPath) {
+      const path = ['', ...Object.keys(nodes)].find((key) => real(key) === realPath)
+      const node = path === undefined ? undefined : nodeAt(path)
+      if (typeof node !== 'string') return Promise.reject(new Error(`no file at ${realPath}`))
       return Promise.resolve(node)
     },
   }

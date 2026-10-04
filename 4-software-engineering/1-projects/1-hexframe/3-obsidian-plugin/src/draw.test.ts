@@ -13,8 +13,9 @@ describe('wrap', () => {
     expect(wrap('one two three', 7, 1)).toEqual(['one tw…'])
   })
 
-  it('cuts a word wider than a line', () => {
+  it('cuts a word wider than a line, on a line of its own', () => {
     expect(wrap('hexframe-obsidian-plugin', 10, 2)).toEqual(['hexframe-…'])
+    expect(wrap('the hexframe-obsidian-plugin is', 10, 3)).toEqual(['the', 'hexframe-…', 'is'])
   })
 
   it('gives no line for no words', () => {

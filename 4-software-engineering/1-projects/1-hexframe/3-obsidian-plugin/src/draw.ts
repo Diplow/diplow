@@ -118,7 +118,12 @@ export function wrap(text: string, width: number, limit: number): string[] {
       continue
     }
     if (line !== '') lines.push(line)
-    line = cut(word, width)
+    line = word
+    // A word cut to the width ends its line, so the ellipsis stays at the end of one.
+    if (charactersOf(word).length > width) {
+      lines.push(cut(word, width))
+      line = ''
+    }
   }
   if (line !== '') lines.push(line)
   if (lines.length <= limit) return lines

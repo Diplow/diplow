@@ -35,7 +35,8 @@ export interface Disk {
   list(folder: string): Promise<Entry[]>
   /** What is at `path`, every symlink followed, its real path absolute; undefined when nothing. */
   stat(path: string): Promise<FileStat | undefined>
-  read(path: string): Promise<string>
+  /** The text of the file at `realPath`, a real path its `stat` gave, so the file read is the one checked. */
+  read(realPath: string): Promise<string>
 }
 
 /** `path` as a Disk takes it: relative to the vault, with no leading or trailing `/`. */
@@ -124,7 +125,8 @@ async function readInFolder(
     const unread =
       unreadable(file, (await disk.stat(folder))?.realPath, relative) ??
       (isWithin(file.realPath, root) ? undefined : 'it leads outside the vault')
-    return unread === undefined ? { text: await disk.read(inFolder(folder, relative)) } : { unread }
+    if (unread !== undefined) return { unread }
+    return { text: await disk.read(file.realPath ?? '') }
   } catch (error) {
     return { unread: messageOf(error) }
   }

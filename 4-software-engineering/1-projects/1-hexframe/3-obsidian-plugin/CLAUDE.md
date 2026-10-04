@@ -15,7 +15,7 @@ preview: >-
 
 ## Use it
 
-Open a `*.hexframe` file, such as `diplow.hexframe` at the vault's root: the view shows the file's folder, its Tile in the middle and its Children around it (its Branches past six Branches and Leaves), in the theme's colors, light and dark. It draws again when a file or folder it shows is created, deleted, renamed or modified. Obsidian sends no event for a dot folder, so those, `.hexframe/exclusions.yaml` among them, are read again on each drawing, and coming back to the view draws it again. It reads nothing whose real path leaves the vault, a file under a symlinked folder included. Under the drawing, a line says what it left aside: a broken `exclusions.yaml`, a Leaf that clashes with a Branch, a ring too full to draw, a center it can't show.
+Open a `*.hexframe` file, such as `diplow.hexframe` at the vault's root: the view shows the file's folder, its Tile in the middle and its Children around it (its Branches past six Branches and Leaves), in the theme's colors, light and dark. It draws again when a file or folder it shows is created, deleted, renamed or modified. Obsidian sends no event for a dot folder, so those, `.hexframe/exclusions.yaml` among them, are read again on each drawing, and coming back to the view draws it again. It reads nothing whose real path leaves the vault, a file under a symlinked folder included, and shows no folder that does, the file's own included. Under the drawing, a line says what it left aside: a broken `exclusions.yaml`, a Leaf that clashes with a Branch, a ring too full to draw, a center it can't show.
 
 The file keeps the view state as JSON, what the app keeps in its URL. An empty file means the defaults:
 
@@ -76,7 +76,7 @@ The lint set is [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE#Lint
 | `src/view-state.ts` | The hexframe file's JSON: its decoding with defaults, the center it names, the outer Frame kind, a rename followed, which changes touch the view. Pure |
 | `src/draw.ts` | The drawing: the shape's layout as SVG through Obsidian's `createSvg`, words wrapped to their hex, and the lines under it |
 | `src/vault/frame.ts` | A folder read as a Frame through the shape, over a `Disk` port, held to the shape's rules on what a medium reads; and whether a center may be shown. Pure but for the port |
-| `src/vault/disk.ts` | The `Disk` over Obsidian: Branches and Leaves from the vault's index, dot folders and reads from its adapter, real paths from Node |
+| `src/vault/disk.ts` | The `Disk` over Obsidian: Branches and Leaves from the vault's index, dot folders from its adapter, real paths from Node, and each read made by the real path just checked |
 | `scripts/build.ts` | `dev` and `build`: picks the folder and the mode, then bundles |
 | `scripts/bundle.ts` | The esbuild bundle. Obsidian provides `obsidian`, `electron`, CodeMirror, Lezer and Node's own modules at runtime, so they stay out of it |
 | `scripts/plugin-dir.ts` | Which vault each build writes into |
