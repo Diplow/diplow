@@ -71,6 +71,21 @@ export async function readFrame(disk: Disk, folder: string): Promise<Read> {
   return { frame, warnings: exclusions.warning === undefined ? [] : [exclusions.warning] }
 }
 
+/**
+ * `folder` read as a Frame when the view may center on it, or why it isn't: a Branch the view
+ * opens is shown as much as a center is, so it is held to the same check, `refusal`. It never
+ * throws: a read that fails gives its reason, so one Branch can't take the whole view down.
+ */
+export async function readOpened(disk: Disk, folder: string): Promise<Read | { refused: string }> {
+  const refused = await refusal(disk, folder)
+  if (refused !== undefined) return { refused }
+  try {
+    return await readFrame(disk, folder)
+  } catch (error) {
+    return { refused: messageOf(error) }
+  }
+}
+
 /** A Disk, and the real path of the vault's root, which everything read must lie within. */
 interface Reader {
   disk: Disk

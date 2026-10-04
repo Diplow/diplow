@@ -108,7 +108,7 @@ function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex) {
   }
   const at = { x: placement.center.x * scale, y: placement.center.y * scale }
   const text = textOf(placement.radius, placement.kind === 'center')
-  if (placement.generation > 0) group.addClass('is-small')
+  if (placement.radius < 1) group.addClass('is-small')
 
   if (placement.kind === 'empty') {
     const label = text.direction

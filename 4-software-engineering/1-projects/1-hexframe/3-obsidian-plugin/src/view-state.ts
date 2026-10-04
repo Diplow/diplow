@@ -7,10 +7,9 @@ import {
   centerExpansion,
   defaultExpansions,
   innerKinds,
+  outerBeside,
   outerKinds,
   type Expansions,
-  type InnerKind,
-  type OuterKind,
 } from './expansions.ts'
 
 export interface ViewState {
@@ -65,18 +64,14 @@ function expansionsOf(expansions: unknown, problems: string[]): Expansions {
   const innerRead = kindOf(expansions, 'inner', innerKinds, problems)
   const inner = innerRead === undefined ? defaultExpansions.inner : innerRead
   const outerRead = kindOf(expansions, 'outer', outerKinds, problems)
-  const outer = outerRead === undefined ? outerBeside(inner) : outerRead
+  // A file that names no outer kind means the one that opens around the inner one, if any.
+  const beside = inner === null ? null : outerBeside(inner, frameKinds)
+  const outer = outerRead === undefined ? beside : outerRead
   const branches = branchesOf(expansions['branches'], problems)
   const center = centerExpansion(outer, inner)
   if (center !== undefined) return { ...center, branches }
   problems.push(`\`expansions.inner\` can't be ${String(inner)} beside ${String(outer)}`)
   return { ...(centerExpansion(outer, 'context') ?? defaultExpansions), branches }
-}
-
-/** The outer kind a file that names none means, beside `inner`. */
-function outerBeside(inner: InnerKind | null): OuterKind | null {
-  if (inner === null) return null
-  return inner === 'leaves' ? 'branches' : 'children'
 }
 
 /**

@@ -25,6 +25,7 @@ import {
   branchesToOpen,
   collapse,
   expand,
+  recenter,
   shownExpansions,
   switchBranch,
   switchInner,
@@ -37,6 +38,7 @@ import {
   centerToShow,
   messageOf,
   readFrame,
+  readOpened,
   refusal,
   unopenable,
   vaultPath,
@@ -64,8 +66,12 @@ export class HexframeView extends TextFileView {
   private problems: string[] = []
   /** The folders drawn, the center's first, once a drawing is done. */
   private shown: string[] | undefined
-  /** The Frame kinds the center offers, once a drawing is done: what the expansions switch among. */
-  private offered: readonly FrameKind[] = []
+  /**
+   * The folder of the last drawing of the current center, and the Frame kinds it offers, which
+   * the expansions switch among; undefined until that drawing is done, so a switch never resolves
+   * against another folder's kinds.
+   */
+  private drawn: { folder: string; offered: readonly FrameKind[] } | undefined
   /** Counts the drawings started, so one that ends after a later one is dropped. */
   private drawings = 0
   private readonly redraw = debounce(() => void this.draw(), settle, true)
@@ -96,7 +102,7 @@ export class HexframeView extends TextFileView {
     this.state = defaultState
     this.problems = []
     this.shown = undefined
-    this.offered = []
+    this.drawn = undefined
     this.contentEl.empty()
   }
 
@@ -108,13 +114,13 @@ export class HexframeView extends TextFileView {
       this.expandWith(collapse)
     })
     this.addAction('chevrons-up-down', 'Expand the center', () => {
-      this.expandWith((expansions) => expand(expansions, this.offered))
+      this.expandWith(expand)
     })
     this.addAction('hexagon', 'Switch the ring around the center', () => {
-      this.expandWith((expansions) => switchOuter(expansions, this.offered))
+      this.expandWith(switchOuter)
     })
     this.addAction('circle-dot', 'Switch the ring inside the center', () => {
-      this.expandWith((expansions) => switchInner(expansions, this.offered))
+      this.expandWith(switchInner)
     })
     const { vault } = this.app
     this.registerEvent(
@@ -162,9 +168,17 @@ export class HexframeView extends TextFileView {
     }
   }
 
-  /** The expansions the view shows, moved by `move`, written to the file and drawn. */
-  private expandWith(move: (shown: Expansions) => Expansions) {
-    const next = move(shownExpansions(this.state.expansions, this.offered))
+  /**
+   * The expansions the view shows, moved by `move` among the kinds the center offers, written to
+   * the file and drawn. Nothing moves until the current center is drawn.
+   */
+  private expandWith(move: (shown: Expansions, offered: readonly FrameKind[]) => Expansions) {
+    const { drawn } = this
+    if (drawn === undefined) {
+      new Notice('Hexframe is still reading this folder.')
+      return
+    }
+    const next = move(shownExpansions(this.state.expansions, drawn.offered), drawn.offered)
     this.commit({ ...this.state, expansions: next })
     void this.draw()
   }
@@ -175,6 +189,7 @@ export class HexframeView extends TextFileView {
    * the file.
    */
   private commit(next: ViewState) {
+    if (next.center !== this.state.center) this.drawn = undefined
     this.text = withChanges(this.text, this.state, next)
     ;({ state: this.state, problems: this.problems } = decodeViewState(this.text))
     this.requestSave()
@@ -204,20 +219,24 @@ export class HexframeView extends TextFileView {
       const shown = shownExpansions(this.state.expansions, kindsOf(frame.rings))
       const opened: Partial<Record<Direction, Frame>> = {}
       for (const { direction, path } of branchesToOpen(frame, shown)) {
-        const branch = await readFrame(disk, vaultPath(path))
-        opened[direction] = branch.frame
-        warnings.push(...branch.warnings)
+        const branch = await readOpened(disk, vaultPath(path))
+        if ('refused' in branch) warnings.push(`${path} stays closed, as ${branch.refused}.`)
+        else {
+          opened[direction] = branch.frame
+          warnings.push(...branch.warnings)
+        }
       }
       if (drawing !== this.drawings) return
       const view = viewOf(frame, shown, opened)
       this.shown = [folder, ...Object.values(opened).map(({ tile }) => vaultPath(tile.path))]
-      this.offered = kindsOf(frame.rings)
+      this.drawn = { folder, offered: kindsOf(frame.rings) }
       drawView(this.contentEl, view, [...notes, ...warnings, ...ringNotes(view)], (hex, event) => {
         void this.onHex(hex, event)
       })
     } catch (error) {
       if (drawing !== this.drawings) return
       this.shown = [folder]
+      this.drawn = undefined
       this.contentEl.empty()
       drawNotes(this.contentEl, [
         ...notes,
@@ -251,9 +270,7 @@ export class HexframeView extends TextFileView {
           )
           return
         }
-        // The Branches a view opens are its center's, so a new center opens none.
-        const expansions = { ...this.state.expansions, branches: {} }
-        this.commit({ center: action.center, expansions })
+        this.commit({ center: action.center, expansions: recenter(this.state.expansions) })
         void this.draw()
       }
       const checked = await checkedOf(this.app, disk, action.open)
@@ -278,14 +295,18 @@ export class HexframeView extends TextFileView {
     const direction = outerBranchOf(placement)
     const disk = diskOf(this.app)
     if (direction === undefined || placement.kind === 'empty' || disk === undefined) return
+    // Dropped when a later click, another file or another center overtakes it during the read.
     const click = ++this.clicks
-    try {
-      const { frame } = await readFrame(disk, vaultPath(placement.tile.path))
-      if (click !== this.clicks) return
-      this.expandWith((expansions) => switchBranch(expansions, direction, kindsOf(frame.rings)))
-    } catch (error) {
-      new Notice(`Hexframe can't open ${placement.tile.title}: ${messageOf(error)}`)
+    const { file } = this
+    const center = this.drawn?.folder
+    const branch = await readOpened(disk, vaultPath(placement.tile.path))
+    if (click !== this.clicks || file !== this.file || center !== this.drawn?.folder) return
+    if ('refused' in branch) {
+      new Notice(`Hexframe can't open ${placement.tile.path}, as ${branch.refused}.`)
+      return
     }
+    const offered = kindsOf(branch.frame.rings)
+    this.expandWith((expansions) => switchBranch(expansions, direction, offered))
   }
 
   /** The paired pane, split off to the right of the view the first time, and again once closed. */

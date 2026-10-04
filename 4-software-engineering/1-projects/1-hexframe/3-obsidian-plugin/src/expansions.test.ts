@@ -14,7 +14,9 @@ import {
   defaultExpansions,
   expand,
   innerKinds,
+  outerBeside,
   outerKinds,
+  recenter,
   shownExpansions,
   shownKind,
   switchBranch,
@@ -114,6 +116,21 @@ describe('collapse and expand', () => {
     expect(expand(inner, fitting)).toEqual(open({ outer: 'children', inner: 'context' }))
     expect(expand(peeled, crowded)).toEqual(open({ outer: 'branches', inner: 'leaves' }))
     expect(expand(full, crowded)).toBe(full)
+  })
+})
+
+describe('outerBeside', () => {
+  it('opens Branches around Leaves, and Children or Branches around Context', () => {
+    expect(outerBeside('leaves', fitting)).toBe('branches')
+    expect(outerBeside('context', fitting)).toBe('children')
+    expect(outerBeside('context', crowded)).toBe('branches')
+  })
+})
+
+describe('recenter', () => {
+  it("closes the old center's Branches and keeps both rings", () => {
+    const opened = open({ outer: 'branches', inner: 'leaves' }, { 1: 'leaves', 4: 'context' })
+    expect(recenter(opened)).toEqual(open({ outer: 'branches', inner: 'leaves' }))
   })
 })
 

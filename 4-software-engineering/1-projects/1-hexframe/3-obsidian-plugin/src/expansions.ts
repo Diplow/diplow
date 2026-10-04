@@ -88,9 +88,23 @@ export function collapse(expansions: Expansions): Expansions {
  */
 export function expand(expansions: Expansions, offered: readonly FrameKind[]): Expansions {
   if (expansions.outer !== null) return expansions
-  if (expansions.inner === null) return { outer: null, inner: 'context', branches: {} }
-  if (expansions.inner === 'leaves') return { outer: 'branches', inner: 'leaves', branches: {} }
-  return { outer: fallbackOuter(offered), inner: 'context', branches: {} }
+  const { inner } = expansions
+  if (inner === null) return { outer: null, inner: 'context', branches: {} }
+  const center = centerExpansion(outerBeside(inner, offered), inner)
+  return { ...(center ?? defaultExpansions), branches: {} }
+}
+
+/**
+ * The outer kind that opens around `inner` in a folder offering `offered`: Branches beside
+ * Leaves, the only kind that sits beside them; Children beside Context, or Branches past six.
+ */
+export function outerBeside(inner: InnerKind, offered: readonly FrameKind[]): OuterKind {
+  return inner === 'leaves' ? 'branches' : fallbackOuter(offered)
+}
+
+/** A new center opens none of the Branches around the old one: they were the old center's. */
+export function recenter(expansions: Expansions): Expansions {
+  return { ...expansions, branches: {} }
 }
 
 /**

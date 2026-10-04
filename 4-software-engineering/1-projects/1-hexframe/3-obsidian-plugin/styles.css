@@ -62,7 +62,7 @@
   fill-opacity: 0.14;
 }
 
-/* A hex a generation further, inside an opened one, takes a thinner line. */
+/* A hex smaller than the first generation's, inside an opened one, takes a thinner line. */
 .hexframe-hex.is-small polygon {
   stroke-width: 0.6;
 }
