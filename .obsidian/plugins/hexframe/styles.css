@@ -1,1 +1,75 @@
-/* The plugin's styles, copied beside main.js by every build: Obsidian loads them with the plugin. */
+/* The plugin's styles, copied beside main.js by every build: Obsidian loads them with the plugin.
+   Every color is one of Obsidian's CSS variables, so the hexframe follows the theme, light and dark. */
+
+.hexframe-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--size-4-3);
+}
+
+.hexframe-canvas {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  max-width: 900px;
+  font-family: var(--font-interface);
+}
+
+.hexframe-hex polygon {
+  stroke: var(--background-modifier-border);
+  stroke-width: 1;
+}
+
+.hexframe-hex.is-center polygon {
+  fill: var(--interactive-accent);
+  stroke: none;
+}
+
+.hexframe-hex.is-branch polygon {
+  fill: var(--background-secondary-alt);
+}
+
+/* Leaves take their own fill, warm where Branches are neutral; Context is cool. */
+.hexframe-hex.is-leaf polygon {
+  fill: rgba(var(--color-orange-rgb), 0.18);
+}
+
+.hexframe-hex.is-context polygon {
+  fill: rgba(var(--color-cyan-rgb), 0.18);
+}
+
+.hexframe-hex.is-empty polygon {
+  fill: none;
+  stroke-dasharray: 4 6;
+}
+
+.hexframe-hex text {
+  text-anchor: middle;
+}
+
+.hexframe-title {
+  font-weight: var(--font-semibold);
+  fill: var(--text-normal);
+}
+
+.hexframe-preview {
+  fill: var(--text-muted);
+}
+
+.hexframe-direction {
+  fill: var(--text-faint);
+}
+
+.hexframe-hex.is-center .hexframe-title,
+.hexframe-hex.is-center .hexframe-preview {
+  fill: var(--text-on-accent);
+}
+
+.hexframe-notes {
+  margin: 0;
+  padding-inline-start: var(--size-4-5);
+  max-width: 900px;
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+}
