@@ -22,6 +22,7 @@ A Claude Code mod loads only the files under its own folder: an import that leav
 
 - **Pure.** No `$`, no Node, no DOM: a medium does the file system calls and hands the listing and the body here.
 - **Nothing imported from outside this folder**, a package included. claude-mod's `check` fails on an import that leaves it.
+- **Erasable syntax only**: no parameter properties, enums or namespaces. The Obsidian plugin type-checks the shape under `erasableSyntaxOnly`, and its `check` fails on them.
 - **Tests beside each file**, as `*.test.ts` on `claude-code/testing`. claude-mod's `test` runs them and its `check` formats them: the shape has no deployable, so it is no package. A change here changes every medium.
 
 | File | Holds |

@@ -27,7 +27,7 @@
 }
 
 .hexframe-hex.is-branch polygon {
-  fill: var(--background-secondary-alt);
+  fill: var(--background-modifier-hover);
 }
 
 /* Leaves take their own fill, warm where Branches are neutral; Context is cool. */

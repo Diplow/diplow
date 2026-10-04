@@ -3,15 +3,33 @@ title: obsidian-plugin
 parent: 4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin
 owner: diplo
 preview: >-
-  @hexframe/obsidian-plugin, the Obsidian plugin with id hexframe: it will show a
-  folder of the vault as a hexframe, with the clicked tile's note in a pane
-  beside it. For now a plugin Obsidian loads that does nothing yet, bundled by
-  esbuild, checked like the other packages, developed in a worktree opened as a
-  second vault, its build committed into the vault's .obsidian/plugins/hexframe/.
+  @hexframe/obsidian-plugin, the Obsidian plugin with id hexframe: a *.hexframe
+  file opens a view of a folder of the vault as a hexframe, its state kept in the
+  file as JSON. Bundled by esbuild, checked like the other packages, developed in
+  a worktree opened as a second vault, its build committed into the vault's
+  .obsidian/plugins/hexframe/.
 ---
 # obsidian-plugin
 
-`@hexframe/obsidian-plugin`, an [Obsidian plugin](https://docs.obsidian.md/Plugins/Getting+started/Build+a+plugin) with the id `hexframe`. It will show a folder of the vault as a hexframe inside Obsidian, reading it through the [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE|shape]] at the depth [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]] gives it: 2. For now it loads and does nothing. Desktop only (`isDesktopOnly`) until it reads only through the vault API.
+`@hexframe/obsidian-plugin`, an [Obsidian plugin](https://docs.obsidian.md/Plugins/Getting+started/Build+a+plugin) with the id `hexframe`. It shows a folder of the vault as a hexframe inside Obsidian, reading it through the [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE|shape]]. [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]] gives it depth 2; for now it draws depth 1, the center and one ring. Desktop only (`isDesktopOnly`): the real paths the shape checks every read against come from Node.
+
+## Use it
+
+Open a `*.hexframe` file, such as `diplow.hexframe` at the vault's root: the view shows the file's folder, its Tile in the middle and its Children around it (its Branches past six Branches and Leaves), in the theme's colors, light and dark. It draws again when a file or folder it shows is created, deleted, renamed or modified; the dot folders, which Obsidian's index leaves out, are listed again on each drawing. Under the drawing, a line says what it left aside: a broken `exclusions.yaml`, a Leaf that clashes with a Branch, a ring too full to draw, a center it can't show.
+
+The file keeps the view state as JSON, what the app keeps in its URL. An empty file means the defaults:
+
+```json
+{
+  "center": "4-software-engineering",
+  "expansions": { "outer": "children" }
+}
+```
+
+- `center`: the folder in the middle, relative to the vault; absent, the file's own folder. One that leaves the vault (an absolute path, a `..` past its root, a symlink out of it), that a folder on the way leaves out, or that isn't a folder is dropped, and the view says so and shows the file's own folder.
+- `expansions.outer`: the Frame kind of the ring around the center, `children`, `branches` or `leaves`. A folder that doesn't offer it shows Children, or Branches past six.
+
+The view reads the file on open and writes it only when its state changes, today when the center, or a folder holding it, is renamed. A file that isn't JSON, or a field that is malformed, gives the defaults with a line saying so, and the file stays as it is.
 
 ## Develop it
 
@@ -52,12 +70,19 @@ The lint set is [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE#Lint
 | Path | Holds |
 |---|---|
 | `manifest.json` | The plugin's manifest, copied beside `main.js` by every build |
-| `styles.css` | The plugin's styles, copied beside `main.js` by every build. Empty for now |
-| `src/main.ts` | The plugin's entry, bundled into `main.js` |
+| `styles.css` | The plugin's styles, copied beside `main.js` by every build: the drawing's colors, all of them Obsidian's CSS variables |
+| `src/main.ts` | The plugin's entry, bundled into `main.js`: binds the `hexframe` extension to the view |
+| `src/view.ts` | The view, a `TextFileView` over the hexframe file: decodes it, picks the center, reads and draws it, follows the vault's events. The only file that holds Obsidian state |
+| `src/view-state.ts` | The hexframe file's JSON: its decoding with defaults, the center it names, the outer Frame kind, a rename followed, which changes touch the view. Pure |
+| `src/draw.ts` | The drawing: the shape's layout as SVG through Obsidian's `createSvg`, words wrapped to their hex, and the lines under it |
+| `src/vault/frame.ts` | A folder read as a Frame through the shape, over a `Disk` port, held to the shape's rules on what a medium reads; and whether a center may be shown. Pure but for the port |
+| `src/vault/disk.ts` | The `Disk` over Obsidian: Branches and Leaves from the vault's index, dot folders and reads from its adapter, real paths from Node |
 | `scripts/build.ts` | `dev` and `build`: picks the folder and the mode, then bundles |
 | `scripts/bundle.ts` | The esbuild bundle. Obsidian provides `obsidian`, `electron`, CodeMirror, Lezer and Node's own modules at runtime, so they stay out of it |
 | `scripts/plugin-dir.ts` | Which vault each build writes into |
 
-Each script's test sits beside it; `bundle.test.ts` builds into a temporary folder.
+Each script's and module's test sits beside it; `bundle.test.ts` builds into a temporary folder, and `frame.test.ts` reads a vault held in memory. `view.ts`, `disk.ts` and the DOM half of `draw.ts` need Obsidian, so they are looked at in it, not tested.
+
+The shape is imported from claude-mod by relative path, its `.ts` files type-checked by this package's `tsc` and bundled by esbuild: it is written in erasable syntax for that.
 
 The `obsidian` typings are pinned to the app's API version, without a range: a newer one may type an API the installed app lacks. `minAppVersion` in `manifest.json` follows them.
