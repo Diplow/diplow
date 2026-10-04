@@ -22,3 +22,6 @@ Thumbs.db
 
 # Scratch
 Sources/*/Sources/.context-tmp.md
+
+# Transcripts (~30 Mo) : stockés sur Google Drive (WikiPol/Sources), voir CLAUDE.md
+Sources/*/Sources/Transcripts/*.md

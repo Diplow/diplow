@@ -17,8 +17,9 @@ $EDITOR Sources/MaChaine/CLAUDE.md
 # 3. Découvrir les vidéos et peupler l'inventaire
 python Scripts/batch_transcripts.py --source Sources/MaChaine --discover
 
-# 4. Extraire les transcripts
+# 4. Extraire les transcripts, puis les pousser sur Google Drive (ils ne vont pas dans git)
 python Scripts/batch_transcripts.py --source Sources/MaChaine --extract
+rclone copy Sources diplow:WikiPol/Sources --include '/*/Sources/Transcripts/*.md'
 
 # 5. Générer le fichier de suivi chronologique
 python Scripts/generate_chronological.py --source Sources/MaChaine
@@ -42,7 +43,7 @@ WikiPol/
         ├── CLAUDE.md    Contexte éditorial de la source
         ├── BUILD.md     Taxonomie locale
         ├── Videos/ Individus/ Organisations/ Concepts/ Enjeux/
-        └── Sources/Transcripts/
+        └── Sources/Transcripts/   Hors git, sur Google Drive (voir CLAUDE.md)
 ```
 
 Voir `CLAUDE.md` pour les instructions de travail et `BUILD.md` pour les conventions.

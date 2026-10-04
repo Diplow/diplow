@@ -1,5 +1,5 @@
 {
-  "include": ["src", "scripts", "*.config.ts"],
+  "include": ["src", "paraglide", "scripts", "*.config.ts"],
   "compilerOptions": {
     "target": "ES2023",
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
@@ -8,6 +8,7 @@
     "jsx": "react-jsx",
     "types": ["vite/client", "node"],
     "paths": {
+      "#/paraglide/*": ["./paraglide/*"],
       "#/*": ["./src/*"]
     },
     "allowJs": true,
@@ -19,6 +20,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "allowImportingTsExtensions": true
   }
 }

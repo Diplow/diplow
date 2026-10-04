@@ -59,7 +59,7 @@ Si l'utilisateur fournit autre chose (un sujet, une liste de vidéos, un bloc te
 2. Identifier les sous-batches et leur statut. Chaque batch a typiquement un titre (`## Batch A — ...`), un **Statut** et une liste de vidéos (`- [ ]` / `- [x]`).
 3. **Si l'utilisateur a désigné un batch explicitement** (ex. « batch C »), prendre celui-là.
 4. **Sinon**, prendre le **premier batch non réalisé** dans l'ordre du fichier (ou dans l'ordre recommandé si la section « Notes et décisions » en définit un).
-5. Résoudre chaque vidéo cochable (`- [ ]`) du batch au transcript correspondant dans `Sources/Transcripts/` par correspondance fuzzy sur le basename (normalisation : minuscules, suppression des accents, ponctuation → espaces, compactage des espaces). Si aucune correspondance n'est trouvée pour une vidéo, signaler à l'utilisateur avant de continuer.
+5. Résoudre chaque vidéo cochable (`- [ ]`) du batch au transcript correspondant dans `Sources/Transcripts/` (hors git : s'il est vide, le récupérer d'abord depuis Google Drive, voir `CLAUDE.md` de WikiPol § Transcripts) par correspondance fuzzy sur le basename (normalisation : minuscules, suppression des accents, ponctuation → espaces, compactage des espaces). Si aucune correspondance n'est trouvée pour une vidéo, signaler à l'utilisateur avant de continuer.
 6. **Présenter la liste** à l'utilisateur pour validation avant de continuer — **sauf si le prompt contient "mode automatique"**, auquel cas procéder directement sans attendre de confirmation.
 
 ### Étape 2 — État du vault (gather-context)

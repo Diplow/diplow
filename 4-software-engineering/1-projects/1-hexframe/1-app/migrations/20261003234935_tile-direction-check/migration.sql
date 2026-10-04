@@ -1,0 +1,2 @@
+ALTER TABLE "tile" ADD CONSTRAINT "tile_root_check" CHECK (("parent_id" is null) = ("direction" is null));--> statement-breakpoint
+ALTER TABLE "tile" ADD CONSTRAINT "tile_direction_check" CHECK ("direction" in (1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6));

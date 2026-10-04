@@ -1,6 +1,8 @@
 # Notes follow the vault's conventions, not Prettier's.
 *.md
-# Generated: the route tree, and what Paraglide writes next to its settings (its own .gitignore hides it from git).
+# Generated: the route tree, drizzle-kit's migrations, and what Paraglide writes next to its settings (its own
+# .gitignore hides it from git).
 src/routeTree.gen.ts
+migrations/
 project.inlang/*
 !project.inlang/settings.json

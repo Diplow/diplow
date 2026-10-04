@@ -1,5 +1,5 @@
 # Generated: Paraglide's message functions, Nitro's and Vercel's build output
-src/paraglide/
+paraglide/
 .nitro/
 .output/
 .tanstack/

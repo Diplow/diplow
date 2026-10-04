@@ -1,0 +1,42 @@
+# Deletes a git branch's Neon branch once its pull request closes or the branch is deleted, whichever
+# comes first. Neon's Vercel integration forks `preview/<git branch>` for every preview Vercel deploys,
+# a note's branch and a branch that never gets a pull request included, and never deletes it; the free
+# plan holds 10 branches, and a full project fails every new preview before it builds. So, unlike
+# hexframe.yml, this one is not path-filtered: it runs for every branch, and does nothing when the
+# branch has no Neon branch.
+name: hexframe previews
+
+permissions: {}
+
+on:
+  pull_request:
+    types: [closed]
+  delete:
+
+jobs:
+  delete-neon-branch:
+    # A fork's pull request gets no secrets, and Vercel deploys no preview for it. A deleted tag has
+    # no preview either.
+    if: >-
+      (github.event_name == 'pull_request' &&
+        github.event.pull_request.head.repo.full_name == github.repository) ||
+      (github.event_name == 'delete' && github.event.ref_type == 'branch')
+    runs-on: ubuntu-latest
+    # A merged pull request whose branch is then deleted runs this twice: one after the other, the
+    # second finds nothing to delete.
+    concurrency: neon-preview-${{ github.head_ref || github.event.ref }}
+    steps:
+      - name: delete preview/<branch> on Neon, if it exists
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ vars.NEON_PROJECT_ID }}
+          BRANCH: preview/${{ github.head_ref || github.event.ref }}
+        run: |
+          # Without pipefail, jq's success on curl's empty output would read a failed listing as no branch.
+          set -o pipefail
+          api="https://console.neon.tech/api/v2/projects/$NEON_PROJECT_ID/branches"
+          id=$(curl -fsS -H "Authorization: Bearer $NEON_API_KEY" "$api" \
+            | jq -r --arg name "$BRANCH" '.branches[] | select(.name == $name) | .id')
+          if [ -z "$id" ]; then echo "No Neon branch named $BRANCH."; exit 0; fi
+          curl -fsS -X DELETE -H "Authorization: Bearer $NEON_API_KEY" "$api/$id" > /dev/null
+          echo "Deleted Neon branch $BRANCH ($id)."
