@@ -77,6 +77,12 @@
   stroke-width: 2;
 }
 
+/* A name inside a hex takes the click, not the hex: hovering it leaves the hex's outline alone. */
+.hexframe-hex.is-listed:not(.is-center):has(.hexframe-item:hover, .hexframe-more:hover) polygon {
+  stroke: var(--background-modifier-border);
+  stroke-width: 1;
+}
+
 /* The hex the keyboard's focus is on, which the shortcuts act on: outlined in the text's color, so
    it shows on every fill, the accent's included, and on an opened hex around its Frame. */
 .hexframe-hex.is-focused polygon,

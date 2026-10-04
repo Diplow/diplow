@@ -35,9 +35,9 @@ import {
   type OnHex,
 } from './draw.ts'
 import { branchesToOpen, outerBranches, recenter, shownExpansions, viewOf } from './expansions.ts'
-import { focusable, focusedHex, focusToward, stepFocus } from './focus.ts'
+import { focusable, focusableInList, focusedHex, focusToward, stepFocus } from './focus.ts'
 import { followed } from './follow.ts'
-import { fullListOf, itemsOf, type Clickable } from './list.ts'
+import { fullListOf, type Clickable } from './list.ts'
 import { items, planOf, type Drawing, type ItemId, type Plan, type Target } from './menu.ts'
 import { diskOf } from './vault/disk.ts'
 import {
@@ -202,9 +202,7 @@ export class HexframeView extends TextFileView {
     const move = (to: (scene: Scene) => string | undefined) => {
       const scene = this.drawn?.scene
       if (scene === undefined || this.isTyping()) return true
-      // A list filling the view leaves out the rings around it, which a digit could name.
-      const path = to(scene)
-      if (scene.hexes.some(({ tile }) => tile.path === path)) this.focusOn(path)
+      this.focusOn(to(scene))
       return false
     }
     scope.register([], 'Tab', () => move(({ hexes }) => stepFocus(this.focus, hexes, 1)))
@@ -352,7 +350,7 @@ export class HexframeView extends TextFileView {
       const placements = layoutView(view)
       const full = fullListOf(view, placements, this.listing)
       this.listing = full?.back === true ? full.holder.tile.path : undefined
-      const hexes = full ? [full.holder, ...itemsOf(full.holder)] : focusable(placements, fitsIn)
+      const hexes = full ? focusableInList(full) : focusable(placements, fitsIn)
       const offered = kindsOf(frame.rings)
       this.drawn = { folders, scene: { view, hexes, shown, offered, branchKinds } }
       const said = [...notes, ...warnings, ...ringNotes(view)]

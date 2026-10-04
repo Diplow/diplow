@@ -10,7 +10,7 @@ import {
   type Frame,
   type FrameKind,
 } from '../../2-claude-mod/hooks/shape/node.ts'
-import { isListed, itemsOf, type Clickable, type ListedHex } from './list.ts'
+import { isListed, itemsOf, type Clickable, type FullList, type ListedHex } from './list.ts'
 
 /**
  * What the focus moves among, in the order the view draws it: every hex holding a Tile but an
@@ -25,6 +25,11 @@ export function focusable(
     if (placement.kind === 'empty' || placement.opened === true) return []
     return isListed(placement) && fits(placement) ? [placement, ...itemsOf(placement)] : [placement]
   })
+}
+
+/** What the focus moves among when `full` fills the view: its hex, then its names. */
+export function focusableInList({ holder }: FullList): Clickable[] {
+  return [holder, ...itemsOf(holder)]
 }
 
 /** The hex `focus` names among `hexes`, or the center when it names none of them. */
@@ -52,7 +57,8 @@ export function stepFocus(
 /**
  * The focus a digit moves to: from the center, the hex in `direction` of the ring around it, or
  * inside it when it has none; from any other hex, of the ring it sits in, an opened Branch being
- * its own ring's neighbor. Undefined when that direction holds no Tile.
+ * its own ring's neighbor. Undefined when that direction holds no Tile, or none `hexes` holds: a
+ * list filling the view leaves out the rings around it.
  */
 export function focusToward(
   focus: string | undefined,
@@ -63,11 +69,14 @@ export function focusToward(
   const from = focusedHex(focus, hexes)
   if (from === undefined) return undefined
   const { around, inside, opened } = ringsOf(view)
-  if (from.kind === 'center') return (around ?? inside)?.members[direction]
-  const sitsIn = [around, inside, ...opened].find((ring) =>
-    Object.values(ring?.members ?? {}).includes(from.tile.path),
-  )
-  return sitsIn?.members[direction]
+  const sitsIn =
+    from.kind === 'center'
+      ? (around ?? inside)
+      : [around, inside, ...opened].find((ring) =>
+          Object.values(ring?.members ?? {}).includes(from.tile.path),
+        )
+  const to = sitsIn?.members[direction]
+  return hexes.some(({ tile }) => tile.path === to) ? to : undefined
 }
 
 /** A ring the view draws: its members' paths by direction. */

@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest'
 
 import { layoutView, type FrameView } from '../../2-claude-mod/hooks/shape/layout.ts'
 import type { Direction, Frame, Member, Rings } from '../../2-claude-mod/hooks/shape/node.ts'
-import { focusable, focusedHex, focusToward, stepFocus } from './focus.ts'
+import { focusable, focusableInList, focusedHex, focusToward, stepFocus } from './focus.ts'
+import { fullListOf } from './list.ts'
 
 const tile = (path: string) => ({ path, title: path, preview: '' })
 const ring = (members: Partial<Record<Direction, Member>>) => ({
@@ -108,5 +109,38 @@ describe('focusable, with a list', () => {
       focusable(layoutView(listing), () => fits).map(({ tile }) => tile.path)
     expect(paths(true)).toEqual(['', 'a.md', 'b.md', '1-a'])
     expect(paths(false)).toEqual(['', '1-a'])
+  })
+})
+
+describe('a list filling the view', () => {
+  const candidates = ['a.md', 'b.md'].map((name) => ({ kind: 'leaf' as const, name }))
+  const inside: FrameView = {
+    frame: frameOf('', {
+      children: children({ 1: { kind: 'branch', tile: tile('1-a') } }),
+      leaves: { overflowing: true, candidates, overflow: [] },
+    }),
+    frameKind: 'children',
+    inner: 'leaves',
+  }
+  const full = fullListOf(inside, layoutView(inside), '')
+  if (full === undefined) throw new Error('the list fills no view')
+  const listed = focusableInList(full)
+
+  it('lets Tab step through its hex, then its names', () => {
+    expect(listed.map(({ tile }) => tile.path)).toEqual(['', 'a.md', 'b.md'])
+    expect(stepFocus('', listed, 1)).toBe('a.md')
+    expect(stepFocus('b.md', listed, 1)).toBe('')
+  })
+
+  it('leaves the focus where it is on a digit naming a hex of the ring it hides', () => {
+    expect(focusToward('', inside, listed, 1)).toBeUndefined()
+    expect(
+      focusToward(
+        '',
+        inside,
+        focusable(layoutView(inside), () => true),
+        1,
+      ),
+    ).toBe('1-a')
   })
 })
