@@ -1,6 +1,7 @@
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import { HeadContent, Link, Scripts, createRootRoute, useMatches } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 
+import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 import { Toaster } from '#/front/ui/feedback/Toaster'
 import { LocaleSwitch } from '#/front/ui/inputs/controls/LocaleSwitch'
@@ -31,6 +32,7 @@ function RootDocument({ children }: { children: ReactNode }) {
       </head>
       <body>
         <header className="flex items-center justify-end gap-2 p-4">
+          <SignedInLinks />
           <LocaleSwitch />
           <ThemeToggle />
         </header>
@@ -39,5 +41,33 @@ function RootDocument({ children }: { children: ReactNode }) {
         <Scripts />
       </body>
     </html>
+  )
+}
+
+/** Whether a route's context holds the Session its guard proved. */
+const provedSession = (context: unknown) =>
+  typeof context === 'object' && context !== null && 'session' in context
+
+/**
+ * The links a signed-in Account has, to its System and its Keys. A page's guard, `signedInOnly`, puts
+ * the Session on its route's context: a page that proved one shows them, others show none, with no
+ * call of their own.
+ */
+function SignedInLinks() {
+  const signedIn = useMatches({
+    select: (matches) => matches.some((match) => provedSession(match.context)),
+  })
+  if (!signedIn) return null
+  const link =
+    'rounded-md px-3 py-2 text-sm font-medium text-muted-foreground outline-none hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[status=active]:text-foreground'
+  return (
+    <nav aria-label={m.nav_label()} className="mr-auto flex items-center gap-1">
+      <Link to="/" activeOptions={{ exact: true, includeSearch: false }} className={link}>
+        {m.nav_system()}
+      </Link>
+      <Link to="/settings/keys" className={link}>
+        {m.nav_keys()}
+      </Link>
+    </nav>
   )
 }

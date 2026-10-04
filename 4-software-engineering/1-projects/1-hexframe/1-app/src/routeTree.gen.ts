@@ -18,6 +18,7 @@ import { Route as DevHexRouteImport } from './front/routes/dev/hex'
 import { Route as DevSessionRouteImport } from './front/routes/dev/session'
 import { Route as DevSystemRouteImport } from './front/routes/dev/system'
 import { Route as DevUiRouteImport } from './front/routes/dev/ui'
+import { Route as SettingsKeysRouteImport } from './front/routes/settings/keys'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -64,6 +65,11 @@ const DevUiRoute = DevUiRouteImport.update({
   path: '/ui',
   getParentRoute: () => DevRouteRoute,
 } as any)
+const SettingsKeysRoute = SettingsKeysRouteImport.update({
+  id: '/settings/keys',
+  path: '/settings/keys',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/dev/session': typeof DevSessionRoute
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
+  '/settings/keys': typeof SettingsKeysRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/dev/session': typeof DevSessionRoute
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
+  '/settings/keys': typeof SettingsKeysRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -98,6 +106,7 @@ export interface FileRoutesById {
   '/dev/session': typeof DevSessionRoute
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
+  '/settings/keys': typeof SettingsKeysRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/dev/session'
     | '/dev/system'
     | '/dev/ui'
+    | '/settings/keys'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/dev/session'
     | '/dev/system'
     | '/dev/ui'
+    | '/settings/keys'
   id:
     | '__root__'
     | '/'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/dev/session'
     | '/dev/system'
     | '/dev/ui'
+    | '/settings/keys'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -140,6 +152,7 @@ export interface RootRouteChildren {
   DevRouteRoute: typeof DevRouteRouteWithChildren
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
+  SettingsKeysRoute: typeof SettingsKeysRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -207,6 +220,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevUiRouteImport
       parentRoute: typeof DevRouteRoute
     }
+    '/settings/keys': {
+      id: '/settings/keys'
+      path: '/settings/keys'
+      fullPath: '/settings/keys'
+      preLoaderRoute: typeof SettingsKeysRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -235,6 +255,7 @@ const rootRouteChildren: RootRouteChildren = {
   DevRouteRoute: DevRouteRouteWithChildren,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
+  SettingsKeysRoute: SettingsKeysRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
