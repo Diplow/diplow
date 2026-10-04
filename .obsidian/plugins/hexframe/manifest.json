@@ -1,0 +1,10 @@
+{
+  "id": "hexframe",
+  "name": "Hexframe",
+  "version": "0.1.0",
+  "minAppVersion": "1.13.1",
+  "description": "Shows a folder of the vault as a hexframe: its note in the middle, its six children around it.",
+  "author": "diplow",
+  "authorUrl": "https://github.com/Diplow",
+  "isDesktopOnly": true
+}

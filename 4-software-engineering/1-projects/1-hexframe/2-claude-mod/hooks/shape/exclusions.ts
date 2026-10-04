@@ -3,7 +3,7 @@
 import { linesOf, type FileRead, type Slot } from './node.js'
 
 /** A folder's settings folder. It is always left out, so it never takes a Context slot. */
-const settingsFolder = '.hexframe'
+export const settingsFolder = '.hexframe'
 
 /** The names every folder leaves out, whatever its `exclusions.yaml` says. */
 const builtInExclusions: readonly string[] = ['.git', 'node_modules', settingsFolder]
@@ -105,6 +105,11 @@ function checked(item: string, where: string): string {
   return item
 }
 
+/** Whether `item` is a glob, holding `*` or `?`, which match more than the item as written. */
+export function isGlob(item: string): boolean {
+  return /[*?]/.test(item)
+}
+
 /**
  * Whether the glob matches the whole name: `*` any run of characters, `?` one, every other
  * character itself. Walks both once, going back only to the last `*`, so no glob takes longer than
@@ -164,11 +169,13 @@ function flowListOf(cursor: Cursor): string[] {
 /** Reads one line's value, left to right. */
 class Cursor {
   private index = 0
+  private readonly text: string
+  private readonly where: string
 
-  constructor(
-    private readonly text: string,
-    private readonly where: string,
-  ) {}
+  constructor(text: string, where: string) {
+    this.text = text
+    this.where = where
+  }
 
   /** A quoted scalar, or a plain one that runs until `stop` or the end, trimmed. */
   scalar(stop: RegExp): string {

@@ -5,12 +5,12 @@ owner: diplo
 preview: >-
   How a vault reads as a hexframe, written once for every medium: the rules
   that turn a folder listing into Frames, and the layout that places a view's
-  seven hexes. Pure TypeScript, kept inside claude-mod because a mod can import
+  hexes, at every scale it opens. Pure TypeScript, kept inside claude-mod because a mod can import
   nothing outside its own folder.
 ---
 # shape
 
-How a folder of this vault reads as a hexframe, written once for every medium that shows one: claude-mod in Claude Code, the Obsidian plugin in Obsidian, the app one day. If each medium read a folder its own way, the same vault would show as two hexframes. How a medium then looks at what this reads (the Frame kind, the depth, the expansions, a list for an overflowing Frame) is view state, each medium's own: [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]]. The layout takes the Frame kind as input, and a medium decides it. It lays out one generation, claude-mod's depth: the depth and the expansions join it with the first medium that draws deeper, [[4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-claude-code-mod/decisions#DEC-6 The layout draws one generation until a medium draws deeper|DEC-6]].
+How a folder of this vault reads as a hexframe, written once for every medium that shows one: claude-mod in Claude Code, the Obsidian plugin in Obsidian, the app one day. If each medium read a folder its own way, the same vault would show as two hexframes. How a medium then looks at what this reads (the Frame kind, the depth, the expansions, a list for an overflowing Frame) is view state, each medium's own: [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]]. The layout takes the Frame kind as input, and the hexes a view opens, and a medium decides both. claude-mod opens none and gets one generation; the Obsidian plugin, the first medium to draw deeper, opens the center twice and its Branches once, as [[4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-claude-code-mod/decisions#DEC-6 The layout draws one generation until a medium draws deeper|DEC-6]] planned: [[4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-obsidian-plugin/decisions#DEC-9 The shape lays out opened hexes, and the plugin keeps which ones|DEC-9]].
 
 The app is no medium of the shape yet: it reads no vault, and `1-app/src/front/ui/hex/` keeps its own geometry, on the same lattice. The two merge when the app reads a vault.
 
@@ -22,13 +22,14 @@ A Claude Code mod loads only the files under its own folder: an import that leav
 
 - **Pure.** No `$`, no Node, no DOM: a medium does the file system calls and hands the listing and the body here.
 - **Nothing imported from outside this folder**, a package included. claude-mod's `check` fails on an import that leaves it.
+- **Erasable syntax only**: no parameter properties, enums or namespaces. The Obsidian plugin type-checks the shape under `erasableSyntaxOnly`, and its `check` fails on them.
 - **Tests beside each file**, as `*.test.ts` on `claude-code/testing`. claude-mod's `test` runs them and its `check` formats them: the shape has no deployable, so it is no package. A change here changes every medium.
 
 | File | Holds |
 |---|---|
 | `node.ts` | A folder read as a Frame: its Tile from its `CLAUDE.md`, and from its listing, once the exclusions have left names out, the rings of the Frame kinds it offers (Children, or Branches and Leaves, then Context), each seated by direction, a Children ring with its clashes, or overflowing with the list of its candidates; which file a Tile's body is read from, and which files a medium reads at all; titles from names, a file's lines and its frontmatter split from its body, the path arithmetic |
 | `exclusions.ts` | What a folder leaves out: its `.hexframe/exclusions.yaml` parsed, with no YAML library, into names and globs, matched in time linear in the name and the glob; the names every folder leaves out; what a folder leaves out when its file is missing, unread or broken (nothing, with a warning); and the exclusion that names a candidate, as a list shows it |
-| `layout.ts` | Where each of a view's seven hexes sits, its Tile and the ring of the Frame kind it shows. Each member's hex says what it holds (a Branch, a Leaf or a Context tile), so a renderer fills it. A ring that overflows places no member: a medium shows it as a list |
+| `layout.ts` | Where each hex of a view sits: its Tile and the ring of the Frame kind it shows, and inside each hex the view opens (the Tile's own, a member's) a Frame a third of its size, short of a margin; a collapsed center alone, filling the view. Each hex says what it holds (the center, a Branch, a Leaf or a Context tile), its size, its generation and whether it is opened, so a renderer fills it. A hex opened into a ring that overflows holds that ring as its `list`, with nothing placed inside it, and a view whose own ring overflows is its Tile alone, holding that ring as a list that fills the view: a medium shows both as lists |
 
 ## How a vault reads
 
@@ -48,4 +49,4 @@ What a folder is:
 - **The Children ring**, offered when a folder's Branches and Leaves are six or fewer in all, in place of a Branches and a Leaves ring. The Branches sit where they sit among the Branches. Each numbered Leaf then takes its number's direction when it is free, and the Leaves left over take the free directions in name order. A Leaf whose number is the Branch's in that direction, as `3-games.md` beside `3-games/`, is a **clash**, which a medium shows as a subtle warning. Only a seated Children ring carries clashes: [[4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-claude-code-mod/decisions#DEC-3 Where a Leaf goes in the Children ring, and what opening one shows|DEC-3]].
 - **A Leaf's Tile**: a Markdown Leaf's from its own frontmatter, else a title made from its name, `.md` dropped; a Leaf that isn't Markdown keeps its name, `package.json`.
 
-Not all of it is code yet. Nothing checks a symlink against the vault's edge itself: a symlink is neither a folder nor a file in a listing, so it shows as nothing, and the files a medium reads by name (a body file, `exclusions.yaml`) are held to their own folder, which is stricter.
+Not all of it is code yet. claude-mod checks no symlink against the vault's edge itself: in its listing a symlink is neither a folder nor a file, so it shows as nothing, and the files it reads by name (a body file, `exclusions.yaml`) are held to their own folder, which is stricter. Obsidian's index lists a symlinked folder as a folder, so the Obsidian plugin holds its center and every file it reads to the vault's real path too, with `liesWithin`.

@@ -24,7 +24,7 @@ Obsidian is mostly a Markdown reader. The files stay plain Markdown on disk, so 
 
 ## How it is used here
 
-- The vault is the repo root, opened in the original folder. Conductor worktrees aren't vaults: a change reaches Obsidian once its pull request is merged and `main` is pulled there.
+- The vault is the repo root, opened in the original folder. Conductor worktrees aren't vaults: a change reaches Obsidian once its pull request is merged and `main` is pulled there. The one exception is a worktree where the hexframe plugin is being developed, opened as a second vault where the Hot Reload community plugin reloads its build live ([[4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/CLAUDE|obsidian-plugin]]).
 - `node_modules/` is excluded from the vault (`app.json`).
 - Per-device layout (`workspace*.json`) stays out of git.
 
@@ -34,6 +34,7 @@ Obsidian is mostly a Markdown reader. The files stay plain Markdown on disk, so 
 |---|---|
 | Dataview | Queries notes and their frontmatter, as tables and lists |
 | Excalidraw | Drawings inside the vault |
+| Hexframe | Mine, built from [[4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/CLAUDE\|obsidian-plugin]]. A `*.hexframe` file opens a view of a folder of the vault as a hexframe: `diplow.hexframe`, at the root, opens it on the whole vault. Desktop only, its build committed in `.obsidian/plugins/hexframe/` |
 | Git | Commits and pulls from inside Obsidian |
 | Hidden folders access | Indexes the dot folders (`.claude/`, `.skills/`, this one) so they show in the file tree and in searches |
 | Iconize | Icons on files and folders |

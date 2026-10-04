@@ -23,7 +23,7 @@ The choices, and the rules they come with. Each rule is written here until the f
 ## Runtime and versions
 
 - **Vercel**, Node runtime.
-- **A package per deployable**, never more: `1-app`, a TanStack Start app holding client and server, and `2-claude-mod`, a Claude Code mod that shows a vault folder as a hexframe. Mods are in early access; the mod is its own package, so it is the seam.
+- **A package per deployable**, never more: `1-app`, a TanStack Start app holding client and server, `2-claude-mod`, a Claude Code mod that shows a vault folder as a hexframe, and `3-obsidian-plugin`, the Obsidian plugin that does the same inside Obsidian. Mods are in early access; the mod is its own package, so it is the seam.
 - **Stable or release candidate; beta and alpha only behind a seam**, one file that can be swapped. So: TanStack Start RC, Effect 4 RC (migrating 3 to 4 later would touch every file), Drizzle v1 RC, whose own Effect driver replaces `@effect/sql-drizzle`, which has no Effect 4 release (HEX-15), and Sentry's alpha TanStack Start SDK behind the observability seam.
 
 | Need | Choice |
@@ -146,9 +146,9 @@ How a medium looks at it is view state, as in the app, each medium's own:
 - **Depth**: how many generations a medium shows from the center. claude-mod 1, the app 2, the Obsidian plugin 2.
 - **Double expansion**: only the center has it. Its outer ring shows Children, Branches or Leaves; its inner ring, inside the center's hex, Leaves or Context; never the same kind in both. Each outer Branch expands on its own, into any kind. The inner ring's hexes don't expand. Collapsing peels the outer ring first, then the inner, and a fully collapsed center fills the canvas.
 - **An overflowing Frame** shows as a list, not as hexes, until exclusions or renames clear it. Only that Frame becomes a list, unless it is the center's outer ring: then the whole view does.
-- **Hexframe file**: a `*.hexframe` file opens the view on its folder and keeps the view's state in JSON: the center and the expansions. It is to a medium what the URL is to the app; the Obsidian plugin will put a `diplow.hexframe` at this vault's root. Its paths are relative to the vault, and a medium resolves each one to its real path, symlinks followed, before using it. One that lands outside the vault, through `..`, an absolute path or a symlink, or on an excluded name, is dropped and the file's own folder opens instead, so a shared vault can't make a medium read beyond itself.
+- **Hexframe file**: a `*.hexframe` file opens the view on its folder and keeps the view's state in JSON: the center and the expansions. It is to a medium what the URL is to the app; `diplow.hexframe`, at this vault's root, opens the Obsidian plugin's view on the whole vault. Its paths are relative to the vault, and a medium resolves each one to its real path, symlinks followed, before using it. One that lands outside the vault, through `..`, an absolute path or a symlink, or on an excluded name, is dropped and the file's own folder opens instead, so a shared vault can't make a medium read beyond itself.
 
-Each medium keeps its view state itself. The shape's layout takes the Frame kind and lays out one generation; the depth and the expansions join it with the first medium that draws deeper.
+Each medium keeps its view state itself. The shape's layout takes the Frame kind and the hexes a view opens, and lays out as many scales as they make; a medium decides both.
 
 ## Languages
 

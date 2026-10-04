@@ -1,0 +1,331 @@
+/* The plugin's styles, copied beside main.js by every build: Obsidian loads them with the plugin.
+   Every color is one of Obsidian's CSS variables, so the hexframe follows the theme, light and dark. */
+
+.hexframe-view,
+.hexframe-settings {
+  /* Each kind's fill, shared by its hexes, its names in a list and its rows in the settings. */
+  --hexframe-branch-fill: var(--background-modifier-hover);
+  --hexframe-leaf-fill: rgba(var(--color-orange-rgb), 0.18);
+  --hexframe-context-fill: rgba(var(--color-cyan-rgb), 0.18);
+}
+
+.hexframe-view {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--size-4-3);
+}
+
+.hexframe-canvas {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  max-width: 900px;
+  font-family: var(--font-interface);
+}
+
+/* The drawing takes the DOM focus as one, for assistive technology, and the view's keys move it
+   among the hexes: the focused hex's outline shows where it is, so the drawing draws none. */
+.hexframe-canvas:focus,
+.hexframe-list:focus {
+  outline: none;
+}
+
+.hexframe-hex polygon {
+  stroke: var(--background-modifier-border);
+  stroke-width: 1;
+}
+
+.hexframe-hex.is-center polygon {
+  fill: var(--interactive-accent);
+  stroke: none;
+}
+
+.hexframe-hex.is-branch polygon {
+  fill: var(--hexframe-branch-fill);
+}
+
+/* Leaves take their own fill, warm where Branches are neutral; Context is cool. */
+.hexframe-hex.is-leaf polygon {
+  fill: var(--hexframe-leaf-fill);
+}
+
+.hexframe-hex.is-context polygon {
+  fill: var(--hexframe-context-fill);
+}
+
+.hexframe-hex.is-empty polygon {
+  fill: none;
+  stroke-dasharray: 4 6;
+}
+
+.hexframe-hex text {
+  text-anchor: middle;
+}
+
+/* An opened hex is the ground of the Frame drawn over it: its kind's fill, faded, and no clicks of
+   its own. The opened center keeps a tint of the accent, so its own Tile stands out on it. */
+.hexframe-hex.is-opened {
+  pointer-events: none;
+}
+
+.hexframe-hex.is-opened polygon {
+  fill-opacity: 0.45;
+}
+
+.hexframe-hex.is-center.is-opened polygon {
+  fill-opacity: 0.14;
+}
+
+/* A hex smaller than the first generation's, inside an opened one, takes a thinner line. */
+.hexframe-hex.is-small polygon {
+  stroke-width: 0.6;
+}
+
+/* A hex that holds a Tile opens it on a click. */
+.hexframe-hex.is-clickable {
+  cursor: pointer;
+}
+
+.hexframe-hex.is-clickable:not(.is-center):hover polygon {
+  stroke: var(--interactive-accent);
+  stroke-width: 2;
+}
+
+/* A name inside a hex takes the click, not the hex: hovering it leaves the hex's outline alone. */
+.hexframe-hex.is-listed:not(.is-center, .is-focused):has(.hexframe-item:hover, .hexframe-more:hover)
+  polygon {
+  stroke: var(--background-modifier-border);
+  stroke-width: 1;
+}
+
+/* The hex the keyboard's focus is on, which the shortcuts act on: outlined in the text's color, so
+   it shows on every fill, the accent's included, and on an opened hex around its Frame. */
+.hexframe-hex.is-focused polygon,
+.hexframe-hex.is-focused.is-clickable:not(.is-center):hover polygon {
+  stroke: var(--text-normal);
+  stroke-width: 2.5;
+  stroke-dasharray: none;
+}
+
+.hexframe-title {
+  font-weight: var(--font-semibold);
+  fill: var(--text-normal);
+}
+
+.hexframe-preview {
+  fill: var(--text-muted);
+}
+
+.hexframe-direction {
+  fill: var(--text-faint);
+}
+
+.hexframe-hex.is-center .hexframe-title,
+.hexframe-hex.is-center .hexframe-preview {
+  fill: var(--text-on-accent);
+}
+
+/* A hex opened into a ring that overflows holds its list: one name per line, each clickable as its
+   hex would be, or, when they don't fit, a line saying how many, which opens the list. */
+.hexframe-item,
+.hexframe-more {
+  cursor: pointer;
+}
+
+.hexframe-item rect,
+.hexframe-more rect {
+  fill: transparent;
+  stroke: none;
+}
+
+.hexframe-item:hover text,
+.hexframe-more:hover text {
+  text-decoration: underline;
+}
+
+/* A name takes the text's color, so a list doesn't read as a preview. */
+.hexframe-item .hexframe-preview {
+  fill: var(--text-normal);
+}
+
+.hexframe-more .hexframe-preview {
+  fill: var(--text-accent);
+}
+
+.hexframe-item.is-focused rect {
+  stroke: var(--text-normal);
+  stroke-width: 1.5;
+}
+
+/* A list filling the view: its hex, what it is of, then its names in columns, each in its kind's
+   fill, as the hexes are. */
+.hexframe-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-4-3);
+  width: 100%;
+  max-width: 900px;
+}
+
+.hexframe-list-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--size-4-2);
+}
+
+.hexframe-list-holder {
+  display: flex;
+  flex-direction: column;
+  margin-inline-end: auto;
+  padding: var(--size-4-2) var(--size-4-4);
+  border-radius: var(--radius-m);
+}
+
+.hexframe-list-title {
+  font-weight: var(--font-semibold);
+}
+
+.hexframe-list-count {
+  font-size: var(--font-ui-small);
+  color: var(--text-muted);
+}
+
+.hexframe-list-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(14em, 100%), 1fr));
+  gap: var(--size-4-1) var(--size-4-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hexframe-list-item {
+  padding: var(--size-4-1) var(--size-4-2);
+  border-radius: var(--radius-s);
+  overflow-wrap: anywhere;
+}
+
+.hexframe-list .is-clickable {
+  cursor: pointer;
+}
+
+.hexframe-list .is-center {
+  background: var(--interactive-accent);
+}
+
+.hexframe-list .is-center,
+.hexframe-list .is-center .hexframe-list-count {
+  color: var(--text-on-accent);
+}
+
+.hexframe-list .is-branch {
+  background: var(--hexframe-branch-fill);
+}
+
+.hexframe-list .is-leaf {
+  background: var(--hexframe-leaf-fill);
+}
+
+.hexframe-list .is-context {
+  background: var(--hexframe-context-fill);
+}
+
+.hexframe-list .is-clickable:hover {
+  outline: 2px solid var(--interactive-accent);
+}
+
+.hexframe-list .is-focused,
+.hexframe-list .is-focused:hover {
+  outline: 2.5px solid var(--text-normal);
+}
+
+.hexframe-notes {
+  margin: 0;
+  padding-inline-start: var(--size-4-5);
+  max-width: 900px;
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+}
+
+/* An item of the hex view's menu: its name, then its command's key, right-aligned. */
+.menu-item-title:has(> .hexframe-menu-key) {
+  display: flex;
+  flex-grow: 1;
+  gap: var(--size-4-6);
+}
+
+.hexframe-menu-key {
+  margin-inline-start: auto;
+  color: var(--text-faint);
+}
+
+/* The button that opens the hexframe settings, floating in the top right of the view. */
+.hexframe-settings-button {
+  position: absolute;
+  inset-block-start: var(--size-4-2);
+  inset-inline-end: var(--size-4-2);
+}
+
+/* A list filling the view keeps its head's buttons clear of the gear, however narrow the pane. */
+.hexframe-list-head {
+  padding-inline-end: var(--size-4-12);
+}
+
+/* The settings panel: each kind's candidates, a checkbox each, under the kind's count against six. */
+.hexframe-settings-kind {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-4-1);
+  margin-block: var(--size-4-3);
+}
+
+.hexframe-settings-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--size-4-2);
+  font-weight: var(--font-semibold);
+}
+
+.hexframe-settings-count,
+.hexframe-settings-none,
+.hexframe-settings-together,
+.hexframe-settings-hand,
+.hexframe-settings-glob {
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+  font-weight: normal;
+}
+
+.hexframe-settings-count.is-over,
+.hexframe-settings-warning {
+  color: var(--text-error);
+}
+
+.hexframe-settings-row {
+  display: flex;
+  align-items: center;
+  gap: var(--size-4-2);
+  padding: var(--size-4-1) var(--size-4-2);
+  border-radius: var(--radius-s);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.hexframe-settings-row.is-branch {
+  background: var(--hexframe-branch-fill);
+}
+
+.hexframe-settings-row.is-leaf {
+  background: var(--hexframe-leaf-fill);
+}
+
+.hexframe-settings-row.is-context {
+  background: var(--hexframe-context-fill);
+}
+
+.hexframe-settings-glob {
+  margin-inline-start: auto;
+}
