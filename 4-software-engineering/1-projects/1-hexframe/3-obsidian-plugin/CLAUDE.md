@@ -24,7 +24,7 @@ A click on a hex moves the view and shows the hex's note in a pane split off to 
 | a Branch or a Context folder | onto it | its `CLAUDE.md`, or `-CLAUDE.md` |
 | the center | up, onto the folder holding it; at the vault root, nowhere | that folder's note |
 | a Markdown Leaf | nowhere | the Leaf |
-| a Leaf that isn't Markdown | nowhere | nothing: Obsidian's "Open in default app" hands it to the system, unless the system would run it or follow it elsewhere (a program, a script, an installer, a shortcut) |
+| a Leaf that isn't Markdown | nowhere | nothing: Obsidian's "Open in default app" hands it to the system when it is a document the system opens rather than runs (a PDF, an image, a sound, a video, an office or a text file), by its name and its real one |
 | any hex, shift held | nowhere | the hex's note, as above |
 
 A folder with no note opens nothing and still centers, and so does one whose note Obsidian doesn't index, which is the case inside a dot folder unless a plugin such as Hidden folders access indexes it. The view opens nothing, and centers on nothing, whose real path leaves the vault, and says why in a notice.
@@ -88,7 +88,7 @@ The lint set is [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE#Lint
 | `src/click.ts` | What a click on a hex asks: the folder to center on, and the notes to show or the file to hand to the default app. Pure |
 | `src/view-state.ts` | The hexframe file's JSON: its decoding with defaults, the center it names, the outer Frame kind, a rename followed, which changes touch the view. Pure |
 | `src/draw.ts` | The drawing: the shape's layout as SVG through Obsidian's `createSvg`, words wrapped to their hex, a click handler on each hex holding a Tile, and the lines under it |
-| `src/vault/frame.ts` | A folder read as a Frame through the shape, over a `Disk` port, held to the shape's rules on what a medium reads; which center to show, the file's own folder checked as much as the state's; and whether a clicked file may be opened. Pure but for the port |
+| `src/vault/frame.ts` | A folder read as a Frame through the shape, over a `Disk` port, held to the shape's rules on what a medium reads; which center to show, the file's own folder checked as much as the state's; and whether a clicked file may be opened, by Obsidian or by the system. Pure but for the port |
 | `src/vault/disk.ts` | The `Disk` over Obsidian: Branches and Leaves from the vault's index, dot folders from its adapter, real paths from Node, and each read made by the real path just checked |
 | `scripts/build.ts` | `dev` and `build`: picks the folder and the mode, then bundles |
 | `scripts/bundle.ts` | The esbuild bundle. Obsidian provides `obsidian`, `electron`, CodeMirror, Lezer and Node's own modules at runtime, so they stay out of it |

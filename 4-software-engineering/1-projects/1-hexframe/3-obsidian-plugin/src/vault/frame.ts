@@ -181,19 +181,48 @@ export async function refusal(disk: Disk, folder: string): Promise<string | unde
   }
 }
 
+/** Who a clicked file is opened by: Obsidian, in the paired pane, or the system's default app. */
+export type Opener = 'obsidian' | 'system'
+
 /**
- * Why the view can't open `path`, in the paired pane or in the system's default app, or undefined
- * when it can: it must be a file whose real path, symlinks followed, lies within the vault's, so a
- * shared vault can't make a click open what lies beyond it. A file the file system fails on gives
- * the failure.
+ * The extensions of the files the system's default app may be handed: documents it opens and
+ * doesn't run, picked from what a vault holds beside its notes. Whatever else the system may run,
+ * or follow elsewhere (a program, a script, an installer, a shortcut, a file with no extension), so
+ * it gets nothing that isn't listed here.
  */
-export async function unopenable(disk: Disk, path: string): Promise<string | undefined> {
+const documents = new Set([
+  ...['pdf', 'epub', 'txt', 'csv', 'tsv', 'json', 'yaml', 'yml', 'toml', 'log', 'rtf'],
+  ...['png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp', 'tif', 'tiff', 'heic', 'avif', 'ico'],
+  ...['mp3', 'wav', 'm4a', 'ogg', 'flac', 'aac', 'mp4', 'mov', 'm4v', 'webm', 'mkv', 'avi'],
+  ...['docx', 'xlsx', 'pptx', 'odt', 'ods', 'odp', 'pages', 'numbers', 'key'],
+])
+
+/** Whether the file at `path` is a document the system's default app may be handed. */
+function isDocument(path: string): boolean {
+  const name = basename(path)
+  const dot = name.lastIndexOf('.')
+  return dot > 0 && documents.has(name.slice(dot + 1).toLowerCase())
+}
+
+/**
+ * Why `path` can't be opened by `opener`, or undefined when it can: it must be a file whose real
+ * path, symlinks followed, lies within the vault's, so a shared vault can't make a click open what
+ * lies beyond it. The system gets a document only, by the name written and by the real one, so a
+ * click never runs anything. A file the file system fails on gives the failure.
+ */
+export async function unopenable(
+  disk: Disk,
+  path: string,
+  opener: Opener = 'obsidian',
+): Promise<string | undefined> {
   try {
     const { root } = await readerOf(disk)
     const found = await disk.stat(path)
     if (found === undefined) return 'it does not exist'
     if (found.kind !== 'file') return 'it is not a file'
-    return isWithin(found.realPath, root) ? undefined : 'it leads out of the vault'
+    if (!isWithin(found.realPath, root)) return 'it leads out of the vault'
+    const isHandable = isDocument(path) && isDocument(found.realPath ?? '')
+    return opener === 'system' && !isHandable ? 'it is no document the system opens' : undefined
   } catch (error) {
     return messageOf(error)
   }

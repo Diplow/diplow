@@ -285,6 +285,41 @@ describe('unopenable', () => {
     expect(await unopenable(disk, 'beside/board.pdf')).toBe('it leads out of the vault')
   })
 
+  it('hands the system a document only, by the name written and by the real one', async () => {
+    const files = diskOf({
+      'board.PDF': 'pdf',
+      'setup.exe': 'exe',
+      'Notes.lnk': 'lnk',
+      'run.command': 'sh',
+      install: 'sh',
+      linked: { link: '/vault/tools' },
+      'linked/board.pdf': 'pdf',
+      tools: {},
+      'tools/board.pdf': 'pdf',
+    })
+    expect(await unopenable(files, 'board.PDF', 'system')).toBeUndefined()
+    expect(await unopenable(files, 'linked/board.pdf', 'system')).toBeUndefined()
+    for (const path of ['setup.exe', 'Notes.lnk', 'run.command', 'install']) {
+      expect(await unopenable(files, path, 'system')).toBe('it is no document the system opens')
+      expect(await unopenable(files, path)).toBeUndefined()
+    }
+  })
+
+  it('refuses the system a document whose real name is not one', async () => {
+    const renamed: Disk = {
+      ...disk,
+      stat: async (path) => {
+        const found = await disk.stat(path)
+        if (found === undefined || path === '') return found
+        return { ...found, realPath: '/vault/3-games/payload.exe' }
+      },
+    }
+    expect(await unopenable(renamed, '3-games/board.pdf', 'system')).toBe(
+      'it is no document the system opens',
+    )
+    expect(await unopenable(renamed, '3-games/board.pdf')).toBeUndefined()
+  })
+
   it('gives the failure of a file the file system fails on', async () => {
     const failing: Disk = { ...disk, stat: () => Promise.reject(new Error('EACCES')) }
     expect(await unopenable(failing, 'STACK.md')).toBe('EACCES')

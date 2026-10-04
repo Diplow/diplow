@@ -7,12 +7,13 @@ import {
   TextFileView,
   type App,
   type TAbstractFile,
+  type TFile,
   type WorkspaceLeaf,
 } from 'obsidian'
 
 import type { Placement } from '../../2-claude-mod/hooks/shape/layout.ts'
 import { kindsOf } from '../../2-claude-mod/hooks/shape/node.ts'
-import { actionOf } from './click.ts'
+import { actionOf, type Opened } from './click.ts'
 import { drawNotes, drawView, ringNotes } from './draw.ts'
 import { diskOf } from './vault/disk.ts'
 import {
@@ -51,6 +52,8 @@ export class HexframeView extends TextFileView {
   private readonly redraw = debounce(() => void this.draw(), settle, true)
   /** The pane beside the view that shows the clicked hex's note, once a click opened it. */
   private paired: WorkspaceLeaf | undefined
+  /** Counts the clicks, so one that a later click overtook during a check is dropped. */
+  private clicks = 0
 
   override getViewType(): string {
     return viewType
@@ -175,18 +178,20 @@ export class HexframeView extends TextFileView {
   }
 
   /**
-   * A click on a hex: the view centers where the click asks, then opens what it asks. A click whose
-   * view has moved on to another file by the time a check returns is dropped.
+   * A click on a hex: the view centers where the click asks, then opens what it asks. A click is
+   * dropped once a later one, or another file in the view, has overtaken it during a check.
    */
   private async onHex(placement: Placement, event: MouseEvent) {
     const action = actionOf(placement, event.shiftKey)
     const disk = diskOf(this.app)
-    const file = this.file
     if (action === undefined || disk === undefined) return
+    const click = ++this.clicks
+    const file = this.file
+    const isOvertaken = () => click !== this.clicks || this.file !== file
     try {
       if (action.center !== undefined) {
         const refused = await refusal(disk, action.center)
-        if (this.file !== file) return
+        if (isOvertaken()) return
         if (refused !== undefined) {
           new Notice(
             `Hexframe can't center on ${action.center || 'the vault root'}, as ${refused}.`,
@@ -196,26 +201,18 @@ export class HexframeView extends TextFileView {
         this.commit({ ...this.state, center: action.center })
         void this.draw()
       }
-      const { open } = action
-      if ('refused' in open) new Notice(`Hexframe doesn't open ${open.refused}, as ${open.why}.`)
-      else if ('file' in open) await this.openInDefaultApp(disk, open.file)
-      else await this.showNote(disk, open.notes)
+      const opening = await openingOf(this.app, disk, action.open)
+      if (opening === undefined || isOvertaken()) return
+      if ('refused' in opening) new Notice(opening.refused)
+      else if ('note' in opening) {
+        await this.pairedLeaf().openFile(opening.note, {
+          state: { mode: 'preview' },
+          active: false,
+        })
+      } else await openInDefaultApp(this.app, opening.system)
     } catch (error) {
       new Notice(`Hexframe can't carry out that click: ${messageOf(error)}`)
     }
-  }
-
-  /** Shows the first of `notes` that exists in the paired pane, in reading view; none, nothing. */
-  private async showNote(disk: Disk, notes: readonly string[]) {
-    const { vault } = this.app
-    const file = notes.map((note) => vault.getFileByPath(note)).find((found) => found !== null)
-    if (file === undefined) return
-    const refused = await unopenable(disk, file.path)
-    if (refused !== undefined) {
-      new Notice(`Hexframe can't open ${file.path}, as ${refused}.`)
-      return
-    }
-    await this.pairedLeaf().openFile(file, { state: { mode: 'preview' }, active: false })
   }
 
   /** The paired pane, split off to the right of the view the first time, and again once closed. */
@@ -226,18 +223,34 @@ export class HexframeView extends TextFileView {
     this.paired = leaf
     return leaf
   }
+}
 
-  /** Hands `path` to the system's default app, once it is held to the vault. */
-  private async openInDefaultApp(disk: Disk, path: string) {
-    const { app } = this
-    if (!hasDefaultApp(app)) {
-      new Notice(`Hexframe can't open ${path}: this Obsidian opens no file in its default app.`)
-      return
-    }
-    const refused = await unopenable(disk, path)
-    if (refused === undefined) await app.openWithDefaultApp(path)
-    else new Notice(`Hexframe can't open ${path}, as ${refused}.`)
+/** What a click opens once checked: a note for the paired pane, a file for the system, or why not. */
+type Opening = { note: TFile } | { system: string } | { refused: string }
+
+/**
+ * What `open` comes to: the first of its notes that Obsidian indexes, or its file, either one held
+ * to the vault; nothing when no note exists.
+ */
+async function openingOf(app: App, disk: Disk, open: Opened): Promise<Opening | undefined> {
+  if ('file' in open) {
+    const refused = await unopenable(disk, open.file, 'system')
+    if (refused === undefined) return { system: open.file }
+    return { refused: `Hexframe can't open ${open.file}, as ${refused}.` }
   }
+  const { vault } = app
+  const note = open.notes.map((path) => vault.getFileByPath(path)).find((found) => found !== null)
+  if (note === undefined) return undefined
+  const refused = await unopenable(disk, note.path)
+  return refused === undefined
+    ? { note }
+    : { refused: `Hexframe can't open ${note.path}, as ${refused}.` }
+}
+
+/** Hands `path`, checked, to the system's default app through Obsidian's own call. */
+async function openInDefaultApp(app: App, path: string) {
+  if (hasDefaultApp(app)) await app.openWithDefaultApp(path)
+  else new Notice(`Hexframe can't open ${path}: this Obsidian opens no file in its default app.`)
 }
 
 /**
