@@ -67,6 +67,20 @@ describe('actionOf', () => {
     }
   })
 
+  it('hands no program, script or shortcut to the system, shift held or not', () => {
+    for (const shift of [false, true]) {
+      for (const path of ['tools/setup.EXE', 'run.command', 'build.sh', 'Notes.lnk', 'a/b.url']) {
+        expect(actionOf(member('leaf', path), shift)).toEqual({
+          open: { refused: path, why: 'the system would run it' },
+        })
+      }
+    }
+    expect(actionOf(member('leaf', 'sh'), false)).toEqual({ open: { file: 'sh' } })
+    expect(actionOf(member('leaf', 'notes.sh.txt'), false)).toEqual({
+      open: { file: 'notes.sh.txt' },
+    })
+  })
+
   it('shows the note of any hex without moving when shift is held', () => {
     expect(actionOf(member('branch', '3-games'), true)).toEqual({
       open: { notes: ['3-games/CLAUDE.md', '3-games/-CLAUDE.md'] },

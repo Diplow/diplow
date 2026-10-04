@@ -118,16 +118,22 @@ export class HexframeView extends TextFileView {
   private onVaultRename(file: TAbstractFile, from: string) {
     const next = followRename(this.state, from, file.path)
     const followed = next !== this.state
-    if (followed) {
-      this.state = next
-      this.text = withCenter(this.text, next)
-      this.requestSave()
-    }
+    if (followed) this.commit(next)
     if (followed || file === this.file) this.redraw()
     else {
       this.onChange(from)
       this.onChange(file.path)
     }
+  }
+
+  /**
+   * Takes `next`'s center as the view's, written to the hexframe file with the rest of it kept, and
+   * the state read back from what is written, so what the view holds and says matches the file.
+   */
+  private commit(next: ViewState) {
+    this.text = withCenter(this.text, next)
+    ;({ state: this.state, problems: this.problems } = decodeViewState(this.text))
+    this.requestSave()
   }
 
   private async draw() {
@@ -161,45 +167,52 @@ export class HexframeView extends TextFileView {
       if (drawing !== this.drawings) return
       this.shown = folder
       this.contentEl.empty()
-      const reason = error instanceof Error ? error.message : String(error)
-      drawNotes(this.contentEl, [...notes, `Can't read ${folder || 'the vault root'}: ${reason}`])
+      drawNotes(this.contentEl, [
+        ...notes,
+        `Can't read ${folder || 'the vault root'}: ${messageOf(error)}`,
+      ])
     }
   }
 
-  /** A click on a hex: the view centers where the click asks, then opens what it asks. */
+  /**
+   * A click on a hex: the view centers where the click asks, then opens what it asks. A click whose
+   * view has moved on to another file by the time a check returns is dropped.
+   */
   private async onHex(placement: Placement, event: MouseEvent) {
     const action = actionOf(placement, event.shiftKey)
     const disk = diskOf(this.app)
+    const file = this.file
     if (action === undefined || disk === undefined) return
-    if (action.center !== undefined) {
-      const refused = await refusal(disk, action.center)
-      if (refused !== undefined) {
-        new Notice(`Hexframe can't center on ${action.center || 'the vault root'}, as ${refused}.`)
-        return
+    try {
+      if (action.center !== undefined) {
+        const refused = await refusal(disk, action.center)
+        if (this.file !== file) return
+        if (refused !== undefined) {
+          new Notice(
+            `Hexframe can't center on ${action.center || 'the vault root'}, as ${refused}.`,
+          )
+          return
+        }
+        this.commit({ ...this.state, center: action.center })
+        void this.draw()
       }
-      this.centerOn(action.center)
+      const { open } = action
+      if ('refused' in open) new Notice(`Hexframe doesn't open ${open.refused}, as ${open.why}.`)
+      else if ('file' in open) await this.openInDefaultApp(disk, open.file)
+      else await this.showNote(disk, open.notes)
+    } catch (error) {
+      new Notice(`Hexframe can't carry out that click: ${messageOf(error)}`)
     }
-    if ('file' in action.open) await this.openInDefaultApp(disk, action.open.file)
-    else await this.showNote(disk, action.open.notes)
-  }
-
-  /** Centers the view on `folder`, written to the hexframe file with the rest of it kept. */
-  private centerOn(folder: string) {
-    this.text = withCenter(this.text, { ...this.state, center: folder })
-    ;({ state: this.state, problems: this.problems } = decodeViewState(this.text))
-    this.requestSave()
-    void this.draw()
   }
 
   /** Shows the first of `notes` that exists in the paired pane, in reading view; none, nothing. */
   private async showNote(disk: Disk, notes: readonly string[]) {
     const { vault } = this.app
-    const path = notes.find((note) => vault.getFileByPath(note) !== null)
-    if (path === undefined) return
-    const refused = await unopenable(disk, path)
-    const file = vault.getFileByPath(path)
-    if (refused !== undefined || file === null) {
-      new Notice(`Hexframe can't open ${path}, as ${refused ?? 'it does not exist'}.`)
+    const file = notes.map((note) => vault.getFileByPath(note)).find((found) => found !== null)
+    if (file === undefined) return
+    const refused = await unopenable(disk, file.path)
+    if (refused !== undefined) {
+      new Notice(`Hexframe can't open ${file.path}, as ${refused}.`)
       return
     }
     await this.pairedLeaf().openFile(file, { state: { mode: 'preview' }, active: false })
@@ -246,4 +259,8 @@ function isOpen(app: App, wanted: WorkspaceLeaf): boolean {
     leaves.push(leaf)
   })
   return leaves.includes(wanted)
+}
+
+function messageOf(error: unknown): string {
+  return error instanceof Error ? error.message : String(error)
 }
