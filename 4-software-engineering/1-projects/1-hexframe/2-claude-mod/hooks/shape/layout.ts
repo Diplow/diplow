@@ -1,8 +1,9 @@
 // Where each hex of a view sits: the centered Tile and a ring of six around it, pointy-top, in
 // units where the ring's spacing makes neighbors share a side. A hex the view opens holds a Frame
 // of its own, its Tile and ring a third of its size, so the view shows as many scales as it opens:
-// claude-mod opens none, the Obsidian plugin the center twice and each Branch around it once. A
-// renderer scales it; claude-mod's raster sets its own pixel-art hexes on the same lattice.
+// claude-mod opens none, the Obsidian plugin the center twice and each Branch around it once. A hex
+// opened into a ring that overflows holds a list instead, which the renderer draws. A renderer
+// scales it; claude-mod's raster sets its own pixel-art hexes on the same lattice.
 import {
   directions,
   membersOf,
@@ -10,6 +11,7 @@ import {
   type Frame,
   type FrameKind,
   type MemberKind,
+  type OverflowingRing,
   type Tile,
 } from './node.js'
 
@@ -43,14 +45,23 @@ interface Hex {
   generation: number
 }
 
+/** A ring a hex was opened into that overflows: its Frame kind and its candidates, a list. */
+export interface Listed {
+  frameKind: FrameKind
+  ring: OverflowingRing
+}
+
 /**
  * A hex holding a Tile. `opened` marks a hex the view opened: a renderer draws its shape only, and
- * the placements right after it, its Tile again among them, draw the Frame it holds over it.
+ * the placements right after it, its Tile again among them, draw the Frame it holds over it. `list`
+ * marks one opened into a ring that overflows: nothing is placed inside it, and a renderer draws
+ * the hex with its Tile and the ring's list.
  */
 interface CenterHex extends Hex {
   kind: 'center'
   tile: Tile
   opened?: true
+  list?: Listed
 }
 
 interface MemberHex extends Hex {
@@ -59,6 +70,7 @@ interface MemberHex extends Hex {
   direction: Direction
   tile: Tile
   opened?: true
+  list?: Listed
 }
 
 interface EmptyHex extends Hex {
@@ -72,7 +84,9 @@ export type Placement = CenterHex | MemberHex | EmptyHex
 export type TileHex = CenterHex | MemberHex
 
 /** What a hex holding a Tile stands for, before it is placed. */
-type Role = Omit<CenterHex, keyof Hex | 'opened'> | Omit<MemberHex, keyof Hex | 'opened'>
+type Role =
+  | Omit<CenterHex, keyof Hex | 'opened' | 'list'>
+  | Omit<MemberHex, keyof Hex | 'opened' | 'list'>
 
 const sqrt3 = Math.sqrt(3)
 
@@ -102,7 +116,8 @@ const collapsedRadius = Math.min(viewHeight / 2, viewWidth / sqrt3)
  * The hexes of a view, centered in a box of `viewWidth` by `viewHeight`, in the order to paint
  * them. A Frame view is its Tile, then its ring by direction, a hex the view opens followed by
  * what it holds; with nothing opened, that is seven hexes. A collapsed view is its Tile alone,
- * filling the box. A ring that overflows places no member: a medium shows it as a list instead.
+ * filling the box. The view's own ring overflowing places no member: a medium shows it as a list
+ * instead. A hex opened into a ring that overflows is placed with that ring as its `list`, alone.
  */
 export function layoutView(view: FrameView | CollapsedView): Placement[] {
   const middle = { x: viewWidth / 2, y: viewHeight / 2 }
@@ -118,7 +133,10 @@ interface Room {
   radius: number
 }
 
-/** A hex for `role`, holding `opened` when the view opens it, in `room`. */
+/**
+ * A hex for `role`, holding `opened` when the view opens it, in `room`: its Frame, or its list when
+ * the ring it opens into overflows.
+ */
 function placeHex(
   role: Role,
   generation: number,
@@ -127,6 +145,8 @@ function placeHex(
 ): Placement[] {
   const hex = { ...role, center: room.at, radius: room.radius, generation }
   if (opened === undefined) return [hex]
+  const ring = opened.frame.rings[opened.frameKind]
+  if (ring?.overflowing === true) return [{ ...hex, list: { frameKind: opened.frameKind, ring } }]
   const inside = { at: room.at, radius: room.radius * (1 - padding) }
   return [{ ...hex, opened: true }, ...placeFrame(opened, role, generation, inside)]
 }

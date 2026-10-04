@@ -164,3 +164,36 @@ test('a collapsed center fills the view, opened into its inner ring when it keep
     radius: rounded(2.5 * third),
   })
 })
+
+test('a hex opened into a ring that overflows holds its list, and nothing is placed inside it', () => {
+  const leaves = {
+    overflowing: true as const,
+    candidates: ['a.md', 'b.md'].map((name) => ({ kind: 'leaf' as const, name })),
+    overflow: [{ kind: 'leaf' as const, name: 'b.md' }],
+  }
+  const crowded: Frame = { tile: tile('/w/3-c'), rings: { leaves, context: ring() } }
+  const frame = { ...frameOf('/w', { 3: branch('/w/3-c') }), rings: { ...crowded.rings } }
+  const list = { frameKind: 'leaves', ring: leaves }
+
+  // The center's inner ring: its hex holds the list, then the outer ring follows at full size.
+  const inside = layoutView({ frame, frameKind: 'context', inner: 'leaves' })
+  expect(inside).toHaveLength(7)
+  expect(inside[0]).toMatchObject({ kind: 'center', radius: 1, generation: 0, list })
+  expect(inside[0]).not.toHaveProperty('opened')
+  expect(inside[1]).toMatchObject({ kind: 'empty', direction: 1, radius: 1, generation: 1 })
+
+  // An opened Branch: its hex holds the list in place of its Frame, the third scale.
+  const view: FrameView = {
+    frame: frameOf('/w', { 3: branch('/w/3-c') }),
+    frameKind: 'children',
+    expanded: { 3: { frame: crowded, frameKind: 'leaves' } },
+  }
+  const opened = layoutView(view)
+  expect(opened).toHaveLength(7)
+  expect(opened[3]).toMatchObject({ kind: 'member', direction: 3, radius: 1, list })
+
+  // A collapsed center: the list fills the view with it.
+  expect(layoutView({ frame: crowded, inner: 'leaves' })).toEqual([
+    expect.objectContaining({ kind: 'center', radius: 2.5, list }),
+  ])
+})
