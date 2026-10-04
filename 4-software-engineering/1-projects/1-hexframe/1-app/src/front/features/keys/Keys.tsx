@@ -222,7 +222,13 @@ function RevokeKey({ id, name }: { id: string; name: string }) {
       confirmLabel={m.keys_revoke()}
       destructive
       onConfirm={() => {
-        revoke.mutate({ id }, { onSuccess: () => toast.success(m.keys_revoked({ name })) })
+        // The Keys are read again before the revoke settles, and the row, this component with it, is
+        // gone by then: `mutate`'s own callbacks would not run. The promise still settles. A refusal
+        // has already gone to its channel, the toast.
+        revoke.mutateAsync({ id }).then(
+          () => toast.success(m.keys_revoked({ name })),
+          () => undefined,
+        )
       }}
     />
   )
