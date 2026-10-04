@@ -85,8 +85,7 @@ export type TileHex = CenterHex | MemberHex
 
 /** What a hex holding a Tile stands for, before it is placed. */
 type Role =
-  | Omit<CenterHex, keyof Hex | 'opened' | 'list'>
-  | Omit<MemberHex, keyof Hex | 'opened' | 'list'>
+  Omit<CenterHex, keyof Hex | 'opened' | 'list'> | Omit<MemberHex, keyof Hex | 'opened' | 'list'>
 
 const sqrt3 = Math.sqrt(3)
 

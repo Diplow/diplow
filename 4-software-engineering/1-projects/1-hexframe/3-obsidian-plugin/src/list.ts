@@ -44,8 +44,8 @@ export function itemsOf({ tile, list }: ListedHex): ListItem[] {
   }))
 }
 
-/** How a list names the kind of its ring. */
-const ringNames: Record<FrameKind, string> = {
+/** How the view names the kind of a ring, in a list and in the lines under the drawing. */
+export const ringNames: Record<FrameKind, string> = {
   children: 'Children',
   branches: 'Branches',
   leaves: 'Leaves',

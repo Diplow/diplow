@@ -58,7 +58,7 @@ describe('ringNotes', () => {
       },
     }
     expect(ringNotes({ frame, frameKind: 'branches' })).toEqual([
-      '2 branches for six directions, so they show as a list: no direction is left for 1-b/. ' +
+      '2 Branches for six directions, so they show as a list: no direction is left for 1-b/. ' +
         'List what this folder leaves out in .hexframe/exclusions.yaml, or renumber, to draw ' +
         'them as hexes.',
     ])
@@ -90,7 +90,7 @@ describe('ringNotes', () => {
   })
   const clash = '1-a.md and 1-a/ share direction 1: the Leaf takes another one.'
   const overflow =
-    '2 context for six directions, so they show as a list: no direction is left for .1-b/. ' +
+    '2 Context folders for six directions, so they show as a list: no direction is left for .1-b/. ' +
     'List what this folder leaves out in .hexframe/exclusions.yaml, or renumber, to draw them ' +
     'as hexes.'
 

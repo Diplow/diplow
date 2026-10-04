@@ -122,6 +122,11 @@
   text-decoration: underline;
 }
 
+/* A name takes the text's color, so a list doesn't read as a preview. */
+.hexframe-item .hexframe-preview {
+  fill: var(--text-normal);
+}
+
 .hexframe-more .hexframe-preview {
   fill: var(--text-accent);
 }

@@ -16,6 +16,7 @@ import type { FrameKind, Frame } from '../../2-claude-mod/hooks/shape/node.ts'
 import {
   isListed,
   itemsOf,
+  ringNames,
   tooMany,
   type Clickable,
   type FullList,
@@ -277,7 +278,7 @@ function drawList(group: SVGGElement, hex: ListedHex, onHex: OnHex): Drawn[] {
   const titleLine = wrap(hex.tile.title, perLine(text.title, text.band), 1)
   words(group, { ...at, y: top + text.title.size }, text.title, titleLine)
   const rowAt = (row: number) => top + text.title.lineHeight + gap + row * text.preview.lineHeight
-  const line = (cls: string, row: number, lines: string[], tip: string) => {
+  const line = (cls: string[], row: number, lines: string[], tip: string) => {
     const one = group.createSvg('g', { cls })
     one.createSvg('rect', {
       attr: {
@@ -292,7 +293,7 @@ function drawList(group: SVGGElement, hex: ListedHex, onHex: OnHex): Drawn[] {
     return one
   }
   if (items.length === 0) {
-    const label = line('hexframe-more', 0, more, 'Show the list')
+    const label = line(['hexframe-more'], 0, more, 'Show the list')
     label.addEventListener('click', (event) => {
       event.stopPropagation()
       onHex.list(hex)
@@ -301,7 +302,7 @@ function drawList(group: SVGGElement, hex: ListedHex, onHex: OnHex): Drawn[] {
   }
   return items.map((item, row) => {
     const name = wrap(item.tile.title, perLine(text.preview, text.band), 1)
-    const one = line(`hexframe-item is-${item.memberKind}`, row, name, item.tile.title)
+    const one = line(['hexframe-item', `is-${item.memberKind}`], row, name, item.tile.title)
     clickableOn(one, item, onHex)
     return { group: one, path: item.tile.path }
   })
@@ -390,8 +391,8 @@ function notesOf(frame: Frame, kind: FrameKind): string[] {
     const named = overflow.slice(0, 3).map(patternOf).join(', ')
     const more = overflow.length > 3 ? ` and ${String(overflow.length - 3)} more` : ''
     return [
-      `${String(candidates.length)} ${kind} for six directions, so they show as a list: no ` +
-        `direction is left for ${named}${more}. List what this folder leaves out in ` +
+      `${String(candidates.length)} ${ringNames[kind]} for six directions, so they show as a ` +
+        `list: no direction is left for ${named}${more}. List what this folder leaves out in ` +
         '.hexframe/exclusions.yaml, or renumber, to draw them as hexes.',
     ]
   }
