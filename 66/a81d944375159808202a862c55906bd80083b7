@@ -1,0 +1,411 @@
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20260927175720_init/migration.sql
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/promise.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-41
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-138
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/iam.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-37
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-86
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/search.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-105
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/feedback/gallery.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-108
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/surfaces/PageHeader.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-21
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-29
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/feedback/states.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-106
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/channels.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-118
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/dev/programs.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-46
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-28
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/sign-up.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-14
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/inputs/forms/errors.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-14
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/tile.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-61
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/server.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-171
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/testing.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-46
+6-politics/1-projects/1-wikipol/Skills/ingest-video/SKILL.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 45-46,70
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-31
+4-software-engineering/1-projects/1-hexframe/1-app/src/vite-env.d.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 3-13
+6-politics/1-projects/1-wikipol/.gitignore
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 25-27
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/timeline.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-76
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-34
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/view/view.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-179
+4-software-engineering/1-projects/1-hexframe/1-app/eslint.config.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 7-62,65,83-121
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-v0-server-foundations/decisions.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-134
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-v0-design-system/decisions.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-43
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/Tile.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-97
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/inputs/forms/errors.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-23
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/theme.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-109
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/breadcrumb/Breadcrumb.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-72
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 21-22,24-26,32-40,42,56,61-66,69,78-79
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/server.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-256
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/route.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-10
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/database.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-41
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/Frame.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-61
+4-software-engineering/1-projects/1-hexframe/.cubic/domain-design.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 19,21,24,37
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/errors/messages.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-127
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/geometry/layout.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-121
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/overlays/ConfirmDialog.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-54
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/session.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-47
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/iam.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-78
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/bus.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-21
+4-software-engineering/1-projects/1-hexframe/1-app/drizzle.config.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-9
+4-software-engineering/1-projects/1-hexframe/1-app/dependency-cruiser.config.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 3-26,30-36,38,41-51,66-67,69-70,72,75-82,91-105,117
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/sentry.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-206
+STACK.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 68
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/inputs/forms/field.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-51
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/schema.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-134
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/sentry.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-226
+4-software-engineering/1-projects/1-hexframe/1-app/src/router.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1,4-5,11-13,22-24,26-28
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-40
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/inputs/controls/button.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-65
+6-politics/1-projects/1-wikipol/Sources/Paduteam/Skills/ingest-batch/SKILL.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 62
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/calls.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-63
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/fixtures.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-73
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-252
+4-software-engineering/1-projects/1-hexframe/1-app/components.json
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 8,14-15,17
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/dev/provoke.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-25
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/run.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-155
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-26
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/system.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-96
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/middleware.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-120
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-95
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/fixtures.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-117
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/view/view.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-147
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/overlays/Drawer.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-49
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/surfaces/Card.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-45
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261003234935_tile-direction-check/snapshot.json
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-936
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/iam/guard.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-123
+4-software-engineering/1-projects/1-hexframe/1-app/src/server.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 3,6-7,12
+4-software-engineering/1-projects/1-hexframe/1-app/src/start.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-10
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/keys.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-27
+6-politics/1-projects/1-wikipol/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 33-48
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/bus.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-100
+.github/workflows/hexframe-previews.yml
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-42
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20260927195022_iam/snapshot.json
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-715
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/auth.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-263
+4-software-engineering/1-projects/1-hexframe/1-app/src/routeTree.gen.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 11-20,27-29,32-34,37-66,70-73,75-76,81-84,86-87,93-96,98-99,104-113,115-135,140-142,154-181,184,187-201,205,208,213-222,224-225,228-238,244,249
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/access/Access.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-107
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/run.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-177
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/inputs/controls/input.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-20
+4-software-engineering/1-projects/1-hexframe/1-app/tsconfig.json
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 2,11,23-24
+6-politics/1-projects/1-wikipol/README.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 20,22,46
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/bus.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-77
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/theme.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-54
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/surfaces/gallery.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-58
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-23
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/Entry.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-91
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/geometry/geometry.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-99
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20260929235448_mapping/snapshot.json
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-922
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/inputs/controls/ThemeToggle.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-16
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20260929235448_mapping/migration.sql
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-15
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20260927195022_iam/migration.sql
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-58
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/levels.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-92
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/iam.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-132
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/hex.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-56
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/TileActions.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-268
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/Conversation.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-116
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-44
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/errors/failure.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-37
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/system.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-93
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-203
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-81
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-23
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-80
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/dev/provoke.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-62
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-34
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-148
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/calls.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-92
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 7-213
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-41
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/TileCard.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-51
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/system.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-53
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 15
+4-software-engineering/1-projects/1-hexframe/STACK.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 27,40,58,60,63,67,71,75,99,107,121,125,129,159
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/styles.css
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-156
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/__root.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-43
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/client.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-88
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-70
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/search.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-85
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/middleware.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-63
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/kind.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-33
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-49
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/timeline.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-82
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/database.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-99
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/overlays/Tooltip.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-30
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/inputs/controls/LocaleSwitch.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-27
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/posthog-server.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-106
+4-software-engineering/1-projects/1-hexframe/1-app/vercel.json
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-4
+4-software-engineering/1-projects/1-hexframe/1-app/vitest.config.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 3-5,8-9,11-14
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/errors/channel.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-52
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/errors/failure.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-61
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/posthog-browser.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-73
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/feedback/Toaster.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-37
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/geometry/geometry.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-115
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/System.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-105
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261003234935_tile-direction-check/migration.sql
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-2
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/geometry/layout.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-110
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/migrate.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-11
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/feedback/skeleton.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-15
+6-politics/1-projects/1-wikipol/Sources/Paduteam/Skills/ingest-video/SKILL.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 36-37,61
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-48
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/overlays/DropdownMenu.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-66
+6-politics/1-projects/1-wikipol/BUILD.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 76,484
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/check-client-bundle.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-44
+6-politics/1-projects/1-wikipol/Skills/ingest-batch/SKILL.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 65
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/client.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-74
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-v0-mapping/decisions.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-66
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/iam.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-137
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/auth.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-108
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/access/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-20
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/programs.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-45
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/errors/channel.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-43
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/errors.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-44
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/bus.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-74
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/sign-in.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-15
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/testing.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-51
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/dev/failures.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-37
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/ReadBoundary.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-50
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/errors.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-45
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/errors.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-165
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/migrations.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-14
+4-software-engineering/1-projects/1-hexframe/1-app/vite.config.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 8-19,22,26-27,34-35
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/inputs/forms/form.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-85
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/migrate.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-23
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20260927175720_init/snapshot.json
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-10
+4-software-engineering/1-projects/1-hexframe/1-app/.gitignore
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 2
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/look.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-121
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/lint.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-187
+4-software-engineering/1-projects/1-hexframe/1-app/.prettierignore
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 3-4,6
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/levels.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-67
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/iam/guard.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-66
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-88
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/inputs/controls/textarea.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-17
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/CLAUDE.md
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-24
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/inputs/gallery.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-165
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/tokens.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-21
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/errors/messages.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-52
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/data/gallery.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-88
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/posthog-server.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-84
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 7-213
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/ui.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-59
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/Canvas.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-118
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/overlays/gallery.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-132
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/sentry-server.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-25
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/data/DataTable.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-163
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-401
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery.tsx
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-20
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/bus.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-133
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/tiles.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-140
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/check-rule-of-six.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 14
+4-software-engineering/1-projects/1-hexframe/1-app/package.json
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 6,11-15,18-21,24-25,28-29,31-33,36-37,40-42,49,54
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/tokens.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-72
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/channels.test.ts
+  s_1657f322d6ca1b::t_89aa2b689e9ed5 1-210
+4-software-engineering/1-projects/1-hexframe/pnpm-lock.yaml
+  s_1657f322d6ca1b::t_8b8125d5ec7174 13-24,31-36,43-48,52-60,70-72,74-82,101-103,116-118,154,202,326-404,485-506,522-527,534-539,546-551,558-563,570-575,582-587,594-599,606-611,618-623,630-635,642-647,654-659,666-671,678-683,690-695,702-707,714-719,726-731,738-743,750-755,762-767,774-779,786-791,798-803,810-815,822-827,949-952,995-1002,1019-1026,1154-1159,1166-1171,1178-1183,1190-1195,1202-1207,1214-1219,1226-1231,1238-1244,1252-1258,1266-1272,1280-1286,1294-1300,1308-1314,1322-1328,1336-1342,1350-1355,1362-1367,1374-1379,1386-1391,1398-1400,1510-1518,2308-2382,2389-2391,2486-2493,2498-2518,2574-2579,2586-2591,2653-2655,2659-2662,2713-2715,2727-2729,2894-2960,3049-3051,3085-3087,3111-3273,3296-3300,3400-3402,3450-3453,3571-3573,3581-3583,3779-3782,3808-3811,3823-3826,3863-3866,3896-3899,3903-3936,3948-3991,4017-4019,4133-4137,4148-4150,4166-4175,4184-4187,4216-4219,4488-4493,4531-4534,4689-4747,4826-4843,4871-4873,4877-4879,4883-4885,4889-4891,4895-4897,4901-4903,4907-4909,4913-4915,4919-4921,4925-4927,4931-4933,4937-4939,4943-4945,4949-4951,4955-4957,4961-4963,4967-4969,4973-4975,4979-4981,4985-4987,4991-4993,4997-4999,5003-5005,5009-5011,5015-5017,5021-5023,5145-5148,5196-5199,5217-5220,5285-5287,5291-5293,5297-5299,5303-5305,5309-5311,5315-5317,5321-5323,5327-5329,5333-5335,5339-5341,5345-5347,5351-5353,5357-5359,5363-5365,5369-5371,5375-5377,5381-5383,5387-5389,5393-5395,5399-5400,5466-5476,6271-6373,6378-6379,6448-6455,6458-6476,6559-6565,6573-6580,6702-6703,6706-6709,6761-6766,6779-6781,6955-6993,7068-7069,7092-7093,7125-7152,7173-7201,7345-7346,7390-7395,7485-7486,7493-7494,7638-7639,7664-7665,7672-7673,7739-7762,7825-7829,7832-7866,7877-7910,7932-7933,8100-8101,8108-8109,8120-8126,8131-8132,8149-8152,8290,8307,8319-8322,8344-8345
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "66a81d944375159808202a862c55906bd80083b7",
+  "prompts": {},
+  "sessions": {
+    "s_1657f322d6ca1b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "efac6855-719c-47dd-914e-6a45c657a6ae",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
