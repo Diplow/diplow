@@ -6,6 +6,9 @@
 # on the shape's layoutView. The app imports the shape from
 # 2-claude-mod/hooks/shape/ by relative path, as the Obsidian plugin does, so
 # the shape stays writable; the rest of claude-mod and the plugin are frozen.
+# Every caller of the shape outside the app is frozen with them, so a change to
+# the shape is additive: its exports keep their names, types and behaviour, and a
+# unit that needs to break one parks instead.
 # The design is in the "Later" section of 1-app/src/domains/mapping/CLAUDE.md.
 # Every ticket lands on project/import-export, which I merge into main at the end:
 #
