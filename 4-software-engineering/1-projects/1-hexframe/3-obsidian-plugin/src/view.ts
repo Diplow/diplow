@@ -202,7 +202,9 @@ export class HexframeView extends TextFileView {
     const move = (to: (scene: Scene) => string | undefined) => {
       const scene = this.drawn?.scene
       if (scene === undefined || this.isTyping()) return true
-      this.focusOn(to(scene))
+      // A list filling the view leaves out the rings around it, which a digit could name.
+      const path = to(scene)
+      if (scene.hexes.some(({ tile }) => tile.path === path)) this.focusOn(path)
       return false
     }
     scope.register([], 'Tab', () => move(({ hexes }) => stepFocus(this.focus, hexes, 1)))
