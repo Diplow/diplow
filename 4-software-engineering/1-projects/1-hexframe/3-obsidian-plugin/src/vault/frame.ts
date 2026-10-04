@@ -28,6 +28,7 @@ import {
   type Slot,
   type Tile,
 } from '../../../2-claude-mod/hooks/shape/node.ts'
+import { isEmpty, withChange, type Change } from '../exclusions.ts'
 
 /**
  * The vault as the view reads it. Paths are relative to the vault, `''` being its root; a leading
@@ -244,6 +245,74 @@ async function refusalBy(reader: Reader, folder: string): Promise<string | undef
   if (root === undefined || !isWithin(found.realPath, root)) return 'it leads out of the vault'
   const real = (found.realPath ?? '').slice(root.replace(/\/*$/, '').length)
   return (await leftOut(reader, vaultPath(folder))) ?? (await leftOut(reader, real))
+}
+
+/** A folder's settings folder, `.hexframe`, which holds its `exclusions.yaml`. */
+const settingsFolder = basename(parent(`/${exclusionsFile}`))
+
+/** A folder's listing and the text of its `exclusions.yaml`, undefined when it has none. */
+export interface Settings {
+  entries: Entry[]
+  text: string | undefined
+}
+
+/**
+ * `folder`'s settings as the panel edits them, or why it may not: the view must be able to center
+ * on it, and its `.hexframe/` and `exclusions.yaml`, when there, must sit at their own paths, never
+ * through a symlink, the file a regular one within the read limit. Only then does a write there
+ * speak for that folder and land inside the vault. It never throws: a read that fails gives its
+ * reason.
+ */
+export async function readSettings(
+  disk: Disk,
+  folder: string,
+): Promise<Settings | { refused: string }> {
+  try {
+    const reader = await readerOf(disk)
+    const refused = await refusalBy(reader, folder)
+    if (refused !== undefined) return { refused }
+    const real = (await disk.stat(folder))?.realPath?.replace(/\/*$/, '')
+    const settings = await disk.stat(inFolder(folder, settingsFolder))
+    const isOwn =
+      settings?.kind === 'dir' && settings.realPath === `${real ?? ''}/${settingsFolder}`
+    if (settings !== undefined && !isOwn) {
+      return { refused: `its ${settingsFolder} is no folder of its own` }
+    }
+    const read = await readInFolder(reader, folder, exclusionsFile)
+    if (read !== undefined && 'unread' in read) return { refused: read.unread }
+    return { entries: await disk.list(folder), text: read?.text }
+  } catch (error) {
+    return { refused: messageOf(error) }
+  }
+}
+
+/**
+ * Writes `text` at `path`, a file of the vault, making the folder holding it when missing: what
+ * the view writes through Obsidian's adapter.
+ */
+export type Write = (path: string, text: string) => Promise<void>
+
+/**
+ * Makes `change` in `folder`'s `exclusions.yaml`, read again just before, through `write`: the
+ * path written, or why nothing was, a folder `readSettings` refuses or a file it can't parse. A
+ * change of nothing writes nothing.
+ */
+export async function saveSettings(
+  disk: Disk,
+  write: Write,
+  folder: string,
+  change: Change,
+): Promise<{ saved: string } | { refused: string }> {
+  const settings = await readSettings(disk, folder)
+  if ('refused' in settings) return settings
+  const path = inFolder(folder, exclusionsFile)
+  try {
+    if (isEmpty(change)) return { saved: path }
+    await write(path, withChange(settings.text, change))
+    return { saved: path }
+  } catch (error) {
+    return { refused: messageOf(error) }
+  }
 }
 
 /** Who a clicked file is opened by: Obsidian, in the paired pane, or the system's default app. */

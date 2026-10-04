@@ -6,7 +6,13 @@
 import type { Command } from 'obsidian'
 
 import type { CollapsedView, FrameView } from '../../2-claude-mod/hooks/shape/layout.ts'
-import type { Direction, FrameKind } from '../../2-claude-mod/hooks/shape/node.ts'
+import {
+  basename,
+  parent,
+  type Direction,
+  type FrameKind,
+  type Slot,
+} from '../../2-claude-mod/hooks/shape/node.ts'
 import { actionOf, outerBranchOf, type Action } from './click.ts'
 import {
   closeBranch,
@@ -17,6 +23,7 @@ import {
   type Expansions,
 } from './expansions.ts'
 import { isListed, type Clickable } from './list.ts'
+import { vaultPath } from './vault/frame.ts'
 
 /** What the view drew, which the items read. */
 export interface Drawing {
@@ -37,10 +44,22 @@ export interface Target extends Drawing {
 }
 
 /**
- * What an item asks of the view: what a click would, new expansions to write and draw, or the list
- * of the hex at a path to fill the view.
+ * What an item asks of the view: what a click would, new expansions to write and draw, the list of
+ * the hex at a path to fill the view, a candidate left out of its folder's six, or the settings of
+ * a folder opened.
  */
-export type Plan = { click: Action } | { expansions: Expansions } | { list: string }
+export type Plan =
+  | { click: Action }
+  | { expansions: Expansions }
+  | { list: string }
+  | { exclude: Excluded }
+  | { settings: string }
+
+/** A candidate to leave out, and the folder whose `exclusions.yaml` leaves it out. */
+export interface Excluded {
+  folder: string
+  slot: Slot
+}
 
 /**
  * An item: its name in the menu and the command palette, its default key (Obsidian's: `' '` is
@@ -88,6 +107,16 @@ const table = {
     name: 'Open in default app',
     key: 'O',
     plan: ({ hex }) => clickIf(true, actionOf(hex, false), 'file'),
+  },
+  exclude: {
+    name: 'Exclude from the six',
+    key: 'E',
+    plan: ({ hex }) => (hex.kind === 'center' ? undefined : { exclude: excludedOf(hex) }),
+  },
+  settings: {
+    name: 'Hexframe settings',
+    key: ',',
+    plan: ({ view }) => ({ settings: vaultPath(view.frame.tile.path) }),
   },
 } satisfies Record<string, Row>
 
@@ -146,6 +175,17 @@ function clickIf(
   if (!applies || click === undefined) return undefined
   const has = wanted === 'center' ? click.center !== undefined : wanted in click.open
   return has ? { click } : undefined
+}
+
+/**
+ * What "Exclude from the six" leaves out for `hex`, a member of a ring or a name of a list: its
+ * name, as a candidate of the folder holding it, whose exclusions then list it.
+ */
+function excludedOf({ tile, memberKind }: Exclude<Clickable, { kind: 'center' }>): Excluded {
+  return {
+    folder: vaultPath(parent(tile.path)),
+    slot: { kind: memberKind, name: basename(tile.path) },
+  }
 }
 
 /** `next` as a plan, unless it is missing or opens the same as what the view shows. */

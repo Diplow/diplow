@@ -1,13 +1,14 @@
 // The Disk over Obsidian's vault. Branches and Leaves come from the vault's index; the dot folders,
 // which the index leaves out, from its adapter. Real paths, and the reads made by the real path
-// just checked, come from Node, which is why the plugin is desktop only.
+// just checked, come from Node, which is why the plugin is desktop only. The one write, a folder's
+// exclusions, goes through the adapter, once `readSettings` has checked where it lands.
 import { constants } from 'node:fs'
 import { open, realpath, stat } from 'node:fs/promises'
 
 import { FileSystemAdapter, TFolder, type App } from 'obsidian'
 
 import { readLimit, type Entry, type FileStat } from '../../../2-claude-mod/hooks/shape/node.ts'
-import { vaultPath, type Disk } from './frame.ts'
+import { vaultPath, type Disk, type Write } from './frame.ts'
 
 /** The vault as a Disk, or undefined where Obsidian keeps it outside a file system. */
 export function diskOf(app: App): Disk | undefined {
@@ -17,6 +18,19 @@ export function diskOf(app: App): Disk | undefined {
     list: (folder) => list(app, adapter, vaultPath(folder)),
     stat: (path) => statAt(adapter.getFullPath(vaultPath(path))),
     read: readChecked,
+  }
+}
+
+/**
+ * Writes through Obsidian's adapter, making the folder holding the file when missing, as a
+ * `.hexframe/` is the first time a folder leaves something out.
+ */
+export function writerOf(app: App): Write {
+  const { adapter } = app.vault
+  return async (path, text) => {
+    const folder = path.slice(0, Math.max(path.lastIndexOf('/'), 0))
+    if (folder !== '' && !(await adapter.exists(folder))) await adapter.mkdir(folder)
+    await adapter.write(path, text)
   }
 }
 

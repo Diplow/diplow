@@ -86,6 +86,8 @@ describe('items', () => {
       'S',
       'U',
       'O',
+      'E',
+      ',',
     ])
   })
 })
@@ -118,14 +120,23 @@ describe('commandsOf', () => {
 })
 
 describe('the items that apply to a hex', () => {
-  it('on the center: preview, expand into what it lacks, collapse and go up', () => {
-    expect(listed('4-se')).toEqual(['preview', 'collapse', 'up'])
+  // Every hex but the center can be left out, and every hex opens the settings.
+  const leaveOut: ItemId[] = ['exclude', 'settings']
+
+  it('on the center: preview, expand into what it lacks, collapse, go up and the settings', () => {
+    expect(listed('4-se')).toEqual(['preview', 'collapse', 'up', 'settings'])
     const collapsed = { shown: { outer: null, inner: null, branches: {} } }
-    expect(listed('4-se', collapsed)).toEqual(['preview', 'expand-as-context', 'up'])
+    expect(listed('4-se', collapsed)).toEqual(['preview', 'expand-as-context', 'up', 'settings'])
   })
 
   it('on an opened Branch around the center: center, preview, switch its kind, collapse', () => {
-    expect(listed('4-se/1-a')).toEqual(['center-here', 'preview', 'expand-as-context', 'collapse'])
+    expect(listed('4-se/1-a')).toEqual([
+      'center-here',
+      'preview',
+      'expand-as-context',
+      'collapse',
+      ...leaveOut,
+    ])
   })
 
   it('on a closed Branch around the center: the kinds its folder offers', () => {
@@ -135,18 +146,19 @@ describe('the items that apply to a hex', () => {
       'expand-as-branches',
       'expand-as-leaves',
       'expand-as-context',
+      ...leaveOut,
     ])
-    expect(listed('4-se/2-b', { branchKinds: {} })).toEqual(['center-here', 'preview'])
+    expect(listed('4-se/2-b', { branchKinds: {} })).toEqual(['center-here', 'preview', ...leaveOut])
   })
 
   it("on a hex that doesn't open: an opened Branch's own Branch, a Context folder inside", () => {
-    expect(listed('4-se/1-a/3-x')).toEqual(['center-here', 'preview'])
-    expect(listed('4-se/.e')).toEqual(['center-here', 'preview'])
+    expect(listed('4-se/1-a/3-x')).toEqual(['center-here', 'preview', ...leaveOut])
+    expect(listed('4-se/.e')).toEqual(['center-here', 'preview', ...leaveOut])
   })
 
   it('on a Leaf: preview a note, hand anything else to the default app', () => {
-    expect(listed('4-se/3-c.md')).toEqual(['preview'])
-    expect(listed('4-se/4-d.pdf')).toEqual(['open-in-default-app'])
+    expect(listed('4-se/3-c.md')).toEqual(['preview', ...leaveOut])
+    expect(listed('4-se/4-d.pdf')).toEqual(['open-in-default-app', ...leaveOut])
   })
 })
 
@@ -158,10 +170,22 @@ describe('the items that apply to a name of a list', () => {
   })
 
   it('are those of its hex, and open no ring', () => {
-    expect(listed('4-se', { hex: item('branch', '4-se/7-g') })).toEqual(['center-here', 'preview'])
-    expect(listed('4-se', { hex: item('context', '4-se/.f') })).toEqual(['center-here', 'preview'])
-    expect(listed('4-se', { hex: item('leaf', '4-se/x.md') })).toEqual(['preview'])
-    expect(listed('4-se', { hex: item('leaf', '4-se/y.pdf') })).toEqual(['open-in-default-app'])
+    const leaveOut: ItemId[] = ['exclude', 'settings']
+    expect(listed('4-se', { hex: item('branch', '4-se/7-g') })).toEqual([
+      'center-here',
+      'preview',
+      ...leaveOut,
+    ])
+    expect(listed('4-se', { hex: item('context', '4-se/.f') })).toEqual([
+      'center-here',
+      'preview',
+      ...leaveOut,
+    ])
+    expect(listed('4-se', { hex: item('leaf', '4-se/x.md') })).toEqual(['preview', ...leaveOut])
+    expect(listed('4-se', { hex: item('leaf', '4-se/y.pdf') })).toEqual([
+      'open-in-default-app',
+      ...leaveOut,
+    ])
   })
 })
 
@@ -187,6 +211,38 @@ describe('Show the list', () => {
     expect(planOf('show-list', targetOf('4-se'))).toBeUndefined()
     const name: Clickable = { kind: 'item', memberKind: 'leaf', tile: tile('4-se/a.md') }
     expect(planOf('show-list', targetOf('4-se', { hex: name }))).toBeUndefined()
+  })
+})
+
+describe('Exclude from the six', () => {
+  it("leaves a hex out of the folder holding it, a Branch's own member out of that Branch", () => {
+    expect(planOf('exclude', targetOf('4-se/2-b'))).toEqual({
+      exclude: { folder: '4-se', slot: { kind: 'branch', name: '2-b' } },
+    })
+    expect(planOf('exclude', targetOf('4-se/.e'))).toEqual({
+      exclude: { folder: '4-se', slot: { kind: 'context', name: '.e' } },
+    })
+    expect(planOf('exclude', targetOf('4-se/1-a/3-x'))).toEqual({
+      exclude: { folder: '4-se/1-a', slot: { kind: 'branch', name: '3-x' } },
+    })
+  })
+
+  it('leaves a name of a list out of the folder whose ring the list is, as a Leaf at the root', () => {
+    const name: Clickable = { kind: 'item', memberKind: 'leaf', tile: tile('README.md') }
+    expect(planOf('exclude', targetOf('4-se', { hex: name }))).toEqual({
+      exclude: { folder: '', slot: { kind: 'leaf', name: 'README.md' } },
+    })
+  })
+
+  it('applies to no center', () => {
+    expect(planOf('exclude', targetOf('4-se'))).toBeUndefined()
+  })
+})
+
+describe('Hexframe settings', () => {
+  it("opens the center's folder, whichever hex has the focus", () => {
+    expect(planOf('settings', targetOf('4-se'))).toEqual({ settings: '4-se' })
+    expect(planOf('settings', targetOf('4-se/1-a/3-x'))).toEqual({ settings: '4-se' })
   })
 })
 

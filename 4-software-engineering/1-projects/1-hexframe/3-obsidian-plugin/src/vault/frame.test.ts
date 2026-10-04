@@ -8,7 +8,9 @@ import {
   readKinds,
   readBranchKinds,
   readOpened,
+  readSettings,
   refusal,
+  saveSettings,
   unopenable,
   vaultPath,
   type Disk,
@@ -415,6 +417,108 @@ describe('unopenable', () => {
   it('gives the failure of a file the file system fails on', async () => {
     const failing: Disk = { ...disk, stat: () => Promise.reject(new Error('EACCES')) }
     expect(await unopenable(failing, 'STACK.md')).toBe('EACCES')
+  })
+})
+
+describe('readSettings', () => {
+  it("gives a folder's listing and the text of its exclusions.yaml, or none", async () => {
+    const disk = diskOf({
+      a: {},
+      'a/b.md': '',
+      'a/.hexframe': {},
+      'a/.hexframe/exclusions.yaml': 'exclude: [c]',
+      d: {},
+    })
+    expect(await readSettings(disk, 'a')).toEqual({
+      entries: [
+        { name: 'b.md', kind: 'file' },
+        { name: '.hexframe', kind: 'dir' },
+      ],
+      text: 'exclude: [c]',
+    })
+    expect(await readSettings(disk, 'd')).toEqual({ entries: [], text: undefined })
+  })
+
+  it('refuses a folder the view may not center on', async () => {
+    const disk = diskOf({ a: { link: '/elsewhere' }, b: {}, '.hexframe': {} })
+    expect(await readSettings(disk, 'a')).toEqual({ refused: 'it leads out of the vault' })
+    expect(await readSettings(disk, '.hexframe')).toEqual({
+      refused: 'every folder leaves out .hexframe',
+    })
+  })
+
+  it('refuses a .hexframe or an exclusions.yaml reached through a symlink, even in the vault', async () => {
+    const linkedFolder = diskOf({
+      a: {},
+      b: {},
+      'b/.hexframe': {},
+      'a/.hexframe': { link: '/vault/b/.hexframe' },
+    })
+    expect(await readSettings(linkedFolder, 'a')).toEqual({
+      refused: 'its .hexframe is no folder of its own',
+    })
+    const linkedFile = diskOf({
+      a: {},
+      'a/.hexframe': {},
+      'a/.hexframe/exclusions.yaml': { link: '/vault/b.yaml' },
+      'b.yaml': 'exclude: [x]',
+    })
+    expect(await readSettings(linkedFile, 'a')).toEqual({ refused: 'it leads outside its folder' })
+  })
+})
+
+describe('saveSettings', () => {
+  const recorder = () => {
+    const writes: [string, string][] = []
+    const write = (path: string, text: string) => {
+      writes.push([path, text])
+      return Promise.resolve()
+    }
+    return { writes, write }
+  }
+
+  it("makes the change in the folder's exclusions.yaml, as read just before", async () => {
+    const { writes, write } = recorder()
+    const disk = diskOf({
+      a: {},
+      'a/.hexframe': {},
+      'a/.hexframe/exclusions.yaml': 'exclude:\n  - "*.log"\n',
+    })
+    expect(await saveSettings(disk, write, 'a', { add: ['b/'], remove: [] })).toEqual({
+      saved: 'a/.hexframe/exclusions.yaml',
+    })
+    expect(writes).toEqual([['a/.hexframe/exclusions.yaml', 'exclude:\n  - "*.log"\n  - b/\n']])
+  })
+
+  it("writes the vault root's file at its own path", async () => {
+    const { writes, write } = recorder()
+    expect(await saveSettings(diskOf({}), write, '', { add: ['x.md'], remove: [] })).toEqual({
+      saved: '.hexframe/exclusions.yaml',
+    })
+    expect(writes).toEqual([['.hexframe/exclusions.yaml', 'exclude:\n  - x.md\n']])
+  })
+
+  it('writes nothing where it refuses, over a broken file, or for a change of nothing', async () => {
+    const { writes, write } = recorder()
+    const broken = diskOf({ a: {}, 'a/.hexframe': {}, 'a/.hexframe/exclusions.yaml': 'nope' })
+    expect(await saveSettings(broken, write, 'a', { add: ['b'], remove: [] })).toEqual({
+      refused: 'line 1: the one key is `exclude:`, followed by a list',
+    })
+    const linked = diskOf({ a: {}, 'a/.hexframe': { link: '/elsewhere' } })
+    expect(await saveSettings(linked, write, 'a', { add: ['b'], remove: [] })).toEqual({
+      refused: 'its .hexframe is no folder of its own',
+    })
+    expect(await saveSettings(diskOf({ a: {} }), write, 'a', { add: [], remove: [] })).toEqual({
+      saved: 'a/.hexframe/exclusions.yaml',
+    })
+    expect(writes).toEqual([])
+  })
+
+  it('gives the reason of a write that fails', async () => {
+    const write = () => Promise.reject(new Error('the disk is full'))
+    expect(await saveSettings(diskOf({ a: {} }), write, 'a', { add: ['b'], remove: [] })).toEqual({
+      refused: 'the disk is full',
+    })
   })
 })
 
