@@ -35,7 +35,7 @@ The choices, and the rules they come with. Each rule is written here until the f
 | Shortcuts | TanStack Hotkeys, behind a `hotkeys` seam in `ui/` |
 | Tile content | TanStack Markdown (alpha), behind a seam in `ui/`: if it disappoints, the seam is the one file that changes |
 | Building a system by conversation | TanStack AI |
-| Agents working on a System | An MCP server at `/mcp`, stateless, on `@modelcontextprotocol/server` (v2), imported by the API layer's MCP folder only; a bearer Key proves the Account, OAuth comes later |
+| Agents working on a System | An MCP server at `/mcp`, on `@modelcontextprotocol/server` (v2); its rules in [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE\|api]] |
 | Effects and typed errors | Effect |
 | Validation | Effect Schema, everywhere; `zod` is banned by lint |
 | Database | Neon, Drizzle through its Effect driver (`drizzle-orm/effect-postgres` over `@effect/sql-pg`; `drizzle-orm/effect-pglite` over `@effect/sql-pglite` in tests) |

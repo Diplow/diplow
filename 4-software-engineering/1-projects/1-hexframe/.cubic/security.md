@@ -42,9 +42,9 @@ Flag:
 
 ## 3. Every server function input goes through a schema
 
-Every server function validates its input with an Effect Schema before the handler runs. A TypeScript annotation or an `as` cast is not validation; `zod` is banned. The same holds wherever data crosses into the server: a webhook payload, an inbound bus message, search params (`validateSearch`), a file or an export being imported. Flag:
+Every server function validates its input with an Effect Schema before the handler runs. A TypeScript annotation or an `as` cast is not validation; `zod` is banned. The same holds wherever data crosses into the server: an MCP tool's arguments, a webhook payload, an inbound bus message, search params (`validateSearch`), a file or an export being imported. Flag:
 
-- a server function with no input validator, or one whose schema is `Schema.Unknown`, `Schema.Any` or a record of anything;
+- a server function or an MCP tool with no input validator, or one whose schema is `Schema.Unknown`, `Schema.Any` or a record of anything;
 - a schema looser than what the handler uses: an unbounded string going into a query, a Tile body with no size limit, an id that isn't checked as an id;
 - input decoded after it was already used.
 
@@ -54,6 +54,6 @@ Queries go through Drizzle's query builder, inside repository layers. Flag `sql.
 
 ## Beyond the four
 
-Flag any other clear hole you find in the diff (an open redirect, a write to a Tile outside the caller's System, Help's included, such as a move or a swap with one end in Help, a Context Reference to a Tile the caller can't read), stated the same way. Don't flag hypotheticals the diff doesn't touch. A clean change gets no comment from this agent.
+Flag any other clear hole you find in the diff (an open redirect, a write to a Tile outside the caller's System, Help's included, such as a move or a swap with one end in Help, a Context Reference to a Tile the caller can't read, a Help id used as a file path rather than looked up in the bundled set), stated the same way. Don't flag hypotheticals the diff doesn't touch. A clean change gets no comment from this agent.
 
 Source: the security bar in `4-software-engineering/1-projects/1-hexframe/STACK.md`, "Where the code lives and how it lands". When the bar changes there, change it here.

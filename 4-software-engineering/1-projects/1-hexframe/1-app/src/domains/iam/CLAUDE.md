@@ -10,7 +10,7 @@ preview: >-
 ---
 # iam
 
-Identity and access: who someone is, and what they may do. Someone signs up with an email and a password and becomes an **Account**; each time they sign in, on a device, they hold a **Session** there until it expires or they sign out. Everything else in hexframe asks IAM one question first: is this request signed in, and as whom? A page or a server function that only a signed-in Account may reach starts from `signedIn`, which answers the proven Account (by a Session, or by a Key once Keys exist) or fails `SignedOut`, and the client sends that to sign-in and back. Managing Keys and changing the Account itself start from IAM's Session-only check instead, never from a branch in the API layer.
+Identity and access: who someone is, and what they may do. Someone signs up with an email and a password and becomes an **Account**; each time they sign in, on a device, they hold a **Session** there until it expires or they sign out. Everything else in hexframe asks IAM one question first: is this request signed in, and as whom? A page or a server function that only a signed-in Account may reach starts from `signedIn`, which answers the proven Account or fails `SignedOut`: a server function's from the Session its cookie proves, an MCP call's from its Key, `/mcp` being the one door a Key opens ([[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]]). The client sends a `SignedOut` to sign-in and back. Managing Keys and changing the Account itself start from IAM's Session-only check instead, never from a branch in the API layer.
 
 The language, as [[4-software-engineering/1-projects/1-hexframe/STACK|STACK]] first told it:
 
