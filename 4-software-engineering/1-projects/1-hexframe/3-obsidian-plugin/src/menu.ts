@@ -27,6 +27,8 @@ export interface Drawing {
   offered: readonly FrameKind[]
   /** The Frame kinds each Branch around the center offers, by direction, where they were read. */
   branchKinds: Partial<Record<Direction, readonly FrameKind[]>>
+  /** The path of the Tile whose hex's list fills the view, when one does. */
+  listed?: string | undefined
 }
 
 /** The hex, or name of a list, an item acts on, and what the view drew around it. */
@@ -34,8 +36,11 @@ export interface Target extends Drawing {
   hex: Clickable
 }
 
-/** What an item asks of the view: what a click would, or new expansions to write and draw. */
-export type Plan = { click: Action } | { expansions: Expansions }
+/**
+ * What an item asks of the view: what a click would, new expansions to write and draw, or the list
+ * of the hex at a path to fill the view.
+ */
+export type Plan = { click: Action } | { expansions: Expansions } | { list: string }
 
 /**
  * An item: its name in the menu and the command palette, its default key (Obsidian's: `' '` is
@@ -67,6 +72,14 @@ const table = {
     name: 'Collapse',
     key: 'X',
     plan: (target) => expansionsIf(target, collapseOf(target)),
+  },
+  'show-list': {
+    name: 'Show the list',
+    key: 'S',
+    plan: ({ hex, listed }) => {
+      const isListed = hex.kind !== 'item' && hex.list !== undefined
+      return isListed && hex.tile.path !== listed ? { list: hex.tile.path } : undefined
+    },
   },
   up: {
     name: 'Up',

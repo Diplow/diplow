@@ -52,7 +52,7 @@ const view: FrameView = {
   inner: 'context',
   expanded: { 1: { frame: opened, frameKind: 'children' } },
 }
-const hexes = focusable(layoutView(view), () => true)
+const hexes = focusable(layoutView(view))
 
 const hexAt = (path: string): Clickable => {
   const hex = hexes.find(({ tile }) => tile.path === path)
@@ -75,7 +75,18 @@ const listed = (path: string, changes: Partial<Target> = {}): ItemId[] =>
 
 describe('items', () => {
   it('bind each item to its key, Space written as Obsidian writes it', () => {
-    expect(items.map(({ key }) => key)).toEqual(['Enter', ' ', 'H', 'B', 'L', 'C', 'X', 'U', 'O'])
+    expect(items.map(({ key }) => key)).toEqual([
+      'Enter',
+      ' ',
+      'H',
+      'B',
+      'L',
+      'C',
+      'X',
+      'S',
+      'U',
+      'O',
+    ])
   })
 })
 
@@ -151,6 +162,31 @@ describe('the items that apply to a name of a list', () => {
     expect(listed('4-se', { hex: item('context', '4-se/.f') })).toEqual(['center-here', 'preview'])
     expect(listed('4-se', { hex: item('leaf', '4-se/x.md') })).toEqual(['preview'])
     expect(listed('4-se', { hex: item('leaf', '4-se/y.pdf') })).toEqual(['open-in-default-app'])
+  })
+})
+
+describe('Show the list', () => {
+  const candidates = ['a.md', 'b.md'].map((name) => ({ kind: 'leaf' as const, name }))
+  const list = {
+    frameKind: 'leaves' as const,
+    ring: { overflowing: true as const, candidates, overflow: candidates.slice(1) },
+  }
+  const at = { center: { x: 0, y: 0 }, radius: 1, generation: 0 }
+  const listedCenter: Clickable = { kind: 'center', ...at, tile: tile('4-se'), list }
+
+  it('opens the list of a hex holding one to fill the view, unless it fills it already', () => {
+    expect(planOf('show-list', targetOf('4-se', { hex: listedCenter }))).toEqual({
+      list: '4-se',
+    })
+    expect(planOf('show-list', targetOf('4-se', { hex: listedCenter, listed: '4-se' }))).toBe(
+      undefined,
+    )
+  })
+
+  it('applies to no hex without a list, nor to a name', () => {
+    expect(planOf('show-list', targetOf('4-se'))).toBeUndefined()
+    const name: Clickable = { kind: 'item', memberKind: 'leaf', tile: tile('4-se/a.md') }
+    expect(planOf('show-list', targetOf('4-se', { hex: name }))).toBeUndefined()
   })
 })
 

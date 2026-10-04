@@ -75,7 +75,7 @@ test('every Frame kind lays out its ring the same way, each member saying what i
   expect(layoutView({ frame, frameKind: 'children' })[1]).toMatchObject({ kind: 'empty' })
 })
 
-test('a ring that overflows places no member: a medium shows it as a list', () => {
+test('a view whose own ring overflows is its Tile alone, with the list filling the view', () => {
   const frame: Frame = {
     tile: tile('/w'),
     rings: {
@@ -86,8 +86,16 @@ test('a ring that overflows places no member: a medium shows it as a list', () =
       },
     },
   }
-  const placements = layoutView({ frame, frameKind: 'leaves' })
-  expect(placements.map(({ kind }) => kind)).toEqual(['center', ...Array(6).fill('empty')])
+  const placements = layoutView({ frame, frameKind: 'leaves', inner: 'context' })
+  expect(placements).toEqual([
+    expect.objectContaining({
+      kind: 'center',
+      radius: 2.5,
+      generation: 0,
+      list: { frameKind: 'leaves', ring: frame.rings.leaves, fillsView: true },
+    }),
+  ])
+  expect(placements[0]).not.toHaveProperty('opened')
 })
 
 const context = (path: string): Member => ({ kind: 'context', tile: tile(path) })

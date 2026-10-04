@@ -6,7 +6,7 @@ import {
   type FrameView,
 } from '../../2-claude-mod/hooks/shape/layout.ts'
 import type { Frame, OverflowingRing, Slot } from '../../2-claude-mod/hooks/shape/node.ts'
-import { fullListOf, itemsOf, tooMany, type ListedHex } from './list.ts'
+import { fitsIn, fullListOf, itemsOf, tooMany, type ListedHex } from './list.ts'
 
 const tile = (path: string) => ({ path, title: path, preview: '' })
 const empty = { overflowing: false as const, members: {} }
@@ -57,28 +57,60 @@ describe('tooMany', () => {
   })
 })
 
+describe('fitsIn', () => {
+  const hexOf = (radius: number, count: number): ListedHex => {
+    const candidates = Array.from({ length: count }, (_, index) => ({
+      kind: 'leaf' as const,
+      name: `${String(index)}.md`,
+    }))
+    const ring = { overflowing: true as const, candidates, overflow: candidates.slice(6) }
+    const at = { center: { x: 0, y: 0 }, radius, generation: 0 }
+    return {
+      kind: 'center',
+      ...at,
+      tile: { path: '', title: '', preview: '' },
+      list: { frameKind: 'leaves', ring },
+    }
+  }
+
+  it('fits while its names fit, and opens to fill the view past them', () => {
+    expect(fitsIn(hexOf(1, 6))).toBe(true)
+    expect(fitsIn(hexOf(1, 7))).toBe(false)
+    expect(fitsIn(hexOf(2.5, 7))).toBe(true)
+    expect(fitsIn(hexOf(2.5, 14))).toBe(false)
+  })
+})
+
 describe('fullListOf', () => {
-  it("is the center's outer ring when it overflows, with no way back", () => {
+  it("is the view's own ring when it overflows, not opened from a hex", () => {
     const view: FrameView = { frame: app, frameKind: 'branches', inner: 'context' }
-    const full = fullListOf(view, layoutView(view), undefined)
-    expect(full?.back).toBe(false)
+    const opened = { center: '1-app', path: '1-app/src' }
+    const full = fullListOf(layoutView(view), opened, '1-app')
+    expect(full?.openedFromHex).toBe(false)
     expect(full?.holder).toMatchObject({
       kind: 'center',
       tile: { path: '1-app' },
-      list: { frameKind: 'branches', ring: branches },
+      list: { frameKind: 'branches', ring: branches, fillsView: true },
     })
-    expect(full?.holder).not.toHaveProperty('opened')
   })
 
-  it('is the list the user opened while its hex holds it, with the way back', () => {
+  it('is the list the user opened while the center stays and its hex holds it', () => {
     const view: FrameView = { frame: app, frameKind: 'context', inner: 'leaves' }
     const placements = layoutView(view)
-    expect(fullListOf(view, placements, '1-app')).toEqual({
+    const opened = { center: '1-app', path: '1-app' }
+    expect(fullListOf(placements, opened, '1-app')).toEqual({
       holder: listedHex('1-app', view),
-      back: true,
+      openedFromHex: true,
     })
-    expect(fullListOf(view, placements, undefined)).toBeUndefined()
+    expect(fullListOf(placements, undefined, '1-app')).toBeUndefined()
     const seated: FrameView = { frame: app, frameKind: 'context', inner: 'context' }
-    expect(fullListOf(seated, layoutView(seated), '1-app')).toBeUndefined()
+    expect(fullListOf(layoutView(seated), opened, '1-app')).toBeUndefined()
+  })
+
+  it('closes once the view centers elsewhere, a hex of the same path included', () => {
+    // Centering on an opened Branch whose inner ring overflows gives a center of the same path.
+    const view: FrameView = { frame: app, frameKind: 'context', inner: 'leaves' }
+    const opened = { center: '4-software-engineering', path: '1-app' }
+    expect(fullListOf(layoutView(view), opened, '1-app')).toBeUndefined()
   })
 })

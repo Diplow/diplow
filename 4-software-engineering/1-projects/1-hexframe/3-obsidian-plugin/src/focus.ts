@@ -10,20 +10,19 @@ import {
   type Frame,
   type FrameKind,
 } from '../../2-claude-mod/hooks/shape/node.ts'
-import { isListed, itemsOf, type Clickable, type FullList, type ListedHex } from './list.ts'
+import { fitsIn, isListed, itemsOf, type Clickable, type FullList } from './list.ts'
 
 /**
  * What the focus moves among, in the order the view draws it: every hex holding a Tile but an
- * opened one, whose Tile its hub holds again, and right after a hex whose list `fits` in it, the
- * names of that list. The center comes first.
+ * opened one, whose Tile its hub holds again, and right after a hex whose list fits in it, as the
+ * drawing draws it, the names of that list. The center comes first.
  */
-export function focusable(
-  placements: readonly Placement[],
-  fits: (hex: ListedHex) => boolean,
-): Clickable[] {
+export function focusable(placements: readonly Placement[]): Clickable[] {
   return placements.flatMap((placement): Clickable[] => {
     if (placement.kind === 'empty' || placement.opened === true) return []
-    return isListed(placement) && fits(placement) ? [placement, ...itemsOf(placement)] : [placement]
+    return isListed(placement) && fitsIn(placement)
+      ? [placement, ...itemsOf(placement)]
+      : [placement]
   })
 }
 

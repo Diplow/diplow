@@ -36,7 +36,7 @@ const view: FrameView = {
   inner: 'context',
   expanded: { 1: { frame: branch, frameKind: 'children' } },
 }
-const hexes = focusable(layoutView(view), () => true)
+const hexes = focusable(layoutView(view))
 
 describe('focusable', () => {
   it('lists every hex holding a Tile in drawing order, the center first, an opened one once', () => {
@@ -82,33 +82,34 @@ describe('focusToward', () => {
 
   it('jumps from a peeled center to the ring inside it', () => {
     const peeled = { frame, inner: 'context' as const }
-    expect(
-      focusToward(
-        undefined,
-        peeled,
-        focusable(layoutView(peeled), () => true),
-        1,
-      ),
-    ).toBe('.c')
+    expect(focusToward(undefined, peeled, focusable(layoutView(peeled)), 1)).toBe('.c')
   })
 })
 
 describe('focusable, with a list', () => {
-  const candidates = ['a.md', 'b.md'].map((name) => ({ kind: 'leaf' as const, name }))
-  const listing: FrameView = {
-    frame: frameOf('', {
-      children: children({ 1: { kind: 'branch', tile: tile('1-a') } }),
-      leaves: { overflowing: true, candidates, overflow: [] },
-    }),
-    frameKind: 'children',
-    inner: 'leaves',
+  const listing = (count: number): FrameView => {
+    const candidates = Array.from({ length: count }, (_, index) => ({
+      kind: 'leaf' as const,
+      name: `${String(index)}.md`,
+    }))
+    return {
+      frame: frameOf('', {
+        children: children({ 1: { kind: 'branch', tile: tile('1-a') } }),
+        leaves: { overflowing: true, candidates, overflow: candidates.slice(6) },
+      }),
+      frameKind: 'children',
+      inner: 'leaves',
+    }
   }
+  const paths = (view: FrameView) => focusable(layoutView(view)).map(({ tile }) => tile.path)
 
-  it('lists the names of a list right after its hex, when they fit in it', () => {
-    const paths = (fits: boolean) =>
-      focusable(layoutView(listing), () => fits).map(({ tile }) => tile.path)
-    expect(paths(true)).toEqual(['', 'a.md', 'b.md', '1-a'])
-    expect(paths(false)).toEqual(['', '1-a'])
+  it('lists the names of a list right after its hex, when the drawing fits them in it', () => {
+    expect(paths(listing(2))).toEqual(['', '0.md', '1.md', '1-a'])
+    expect(paths(listing(6))).toHaveLength(8)
+  })
+
+  it('leaves them out past what the hex holds, which shows how many instead', () => {
+    expect(paths(listing(7))).toEqual(['', '1-a'])
   })
 })
 
@@ -122,7 +123,7 @@ describe('a list filling the view', () => {
     frameKind: 'children',
     inner: 'leaves',
   }
-  const full = fullListOf(inside, layoutView(inside), '')
+  const full = fullListOf(layoutView(inside), { center: '', path: '' }, '')
   if (full === undefined) throw new Error('the list fills no view')
   const listed = focusableInList(full)
 
@@ -134,13 +135,6 @@ describe('a list filling the view', () => {
 
   it('leaves the focus where it is on a digit naming a hex of the ring it hides', () => {
     expect(focusToward('', inside, listed, 1)).toBeUndefined()
-    expect(
-      focusToward(
-        '',
-        inside,
-        focusable(layoutView(inside), () => true),
-        1,
-      ),
-    ).toBe('1-a')
+    expect(focusToward('', inside, focusable(layoutView(inside)), 1)).toBe('1-a')
   })
 })
