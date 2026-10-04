@@ -53,7 +53,7 @@
   cursor: pointer;
 }
 
-.hexframe-hex.is-clickable:hover polygon {
+.hexframe-hex.is-clickable:not(.is-center):hover polygon {
   stroke: var(--interactive-accent);
   stroke-width: 2;
 }

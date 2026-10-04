@@ -283,6 +283,7 @@ describe('unopenable', () => {
   it('refuses a file whose real path leaves the vault, compared folder by folder', async () => {
     expect(await unopenable(disk, 'out/CLAUDE.md')).toBe('it leads out of the vault')
     expect(await unopenable(disk, 'beside/board.pdf')).toBe('it leads out of the vault')
+    expect(await unopenable(disk, 'beside/board.pdf', 'system')).toBe('it leads out of the vault')
   })
 
   it('hands the system a document only, by the name written and by the real one', async () => {
@@ -301,6 +302,7 @@ describe('unopenable', () => {
     })
     expect(await unopenable(files, 'board.PDF', 'system')).toBeUndefined()
     expect(await unopenable(files, 'linked/board.pdf', 'system')).toBeUndefined()
+    expect(await unopenable(files, 'linked/board.pdf')).toBeUndefined()
     const others = [
       'setup.exe',
       'Notes.lnk',
