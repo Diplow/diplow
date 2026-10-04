@@ -110,6 +110,7 @@ export class HexframeView extends TextFileView {
     this.state = defaultState
     this.problems = []
     this.drawn = undefined
+    this.lastPairedNote = undefined
     this.contentEl.empty()
   }
 
@@ -303,15 +304,21 @@ export class HexframeView extends TextFileView {
     const disk = diskOf(this.app)
     const paired = this.paired
     if (disk === undefined || paired === undefined || this.file === null) return
-    const inPaired = this.app.workspace.getActiveViewOfType(FileView)?.leaf === paired
+    // Obsidian also sends `file-open` for a note embedded in the active one: the open counts only
+    // when the paired pane is active and shows that very file.
+    const active = this.app.workspace.getActiveViewOfType(FileView)
+    const inPaired = active?.leaf === paired && active.file === file
     const opened = { path: file.path, inPaired }
     // The center drawn, which the user sees, or until it is drawn the one the file asks for.
     const center = this.drawn?.folders[0] ?? centerOf(this.state, homeOf(this.file)).folder
     const { folder, lastPairedNote } = followed(opened, this.lastPairedNote, center)
+    if (lastPairedNote === this.lastPairedNote) return
     this.lastPairedNote = lastPairedNote
+    // A new note in the paired pane overtakes a move still running, a follow it outdates included.
+    const isOvertaken = this.overtaker()
     if (folder === undefined) return
     try {
-      await this.centerOn(disk, folder, this.overtaker())
+      await this.centerOn(disk, folder, isOvertaken)
     } catch (error) {
       new Notice(`Hexframe can't follow ${file.path}: ${messageOf(error)}`)
     }
