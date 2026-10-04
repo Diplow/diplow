@@ -1,0 +1,33 @@
+4-software-engineering/1-projects/1-hexframe/.cubic/security.md
+  s_a8fbc2e5447afd::t_580767ab0c5ccd 19,24,26-28,37,40-41,57
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/CLAUDE.md
+  s_a8fbc2e5447afd::t_580767ab0c5ccd 23
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE.md
+  s_a8fbc2e5447afd::t_580767ab0c5ccd 83
+4-software-engineering/1-projects/1-hexframe/STACK.md
+  s_a8fbc2e5447afd::t_580767ab0c5ccd 126
+4-software-engineering/1-projects/1-hexframe/.run/mcp-server.yaml
+  s_a8fbc2e5447afd::t_580767ab0c5ccd 73-75,87
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_a8fbc2e5447afd::t_580767ab0c5ccd 42
+4-software-engineering/1-projects/1-hexframe/.cubic/domain-design.md
+  s_a8fbc2e5447afd::t_580767ab0c5ccd 20,28-29,37
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE.md
+  s_a8fbc2e5447afd::t_580767ab0c5ccd 19-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4fbde50c088ed815207ecad77b032b51276601e2",
+  "prompts": {},
+  "sessions": {
+    "s_a8fbc2e5447afd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2e79516d-b4b3-44ec-a758-acac0bf771bf",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
