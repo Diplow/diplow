@@ -11,6 +11,7 @@ import {
   readSettings,
   refusal,
   saveSettings,
+  saverOf,
   unopenable,
   vaultPath,
   type Disk,
@@ -525,6 +526,21 @@ describe('saveSettings', () => {
       saved: 'a/.hexframe/exclusions.yaml',
     })
     expect(writes).toEqual([])
+  })
+
+  it('runs saves one after the other, so two asked at once both land', async () => {
+    const nodes: Record<string, Node> = { a: {}, 'a/.hexframe': {} }
+    const disk = diskOf(nodes)
+    const write = async (path: string, text: string) => {
+      await new Promise((resolve) => setTimeout(resolve, 5))
+      nodes[path] = text
+    }
+    const save = saverOf(disk, write)
+    await Promise.all([
+      save('a', { add: ['b'], remove: [] }),
+      save('a', { add: ['c'], remove: [] }),
+    ])
+    expect(nodes['a/.hexframe/exclusions.yaml']).toBe('exclude:\n  - b\n  - c\n')
   })
 
   it('gives the reason of a write that fails', async () => {

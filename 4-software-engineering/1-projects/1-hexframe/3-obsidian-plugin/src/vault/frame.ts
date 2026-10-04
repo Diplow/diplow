@@ -327,6 +327,23 @@ export async function saveSettings(
   }
 }
 
+/** Saves a change in a folder's `exclusions.yaml`, as `saveSettings` does. */
+export type Saver = (folder: string, change: Change) => ReturnType<typeof saveSettings>
+
+/**
+ * A `saveSettings` over `disk` and `write` whose saves run one after the other: each reads the
+ * file just before writing it, so a second save asked while the first writes waits for it rather
+ * than writing over its line.
+ */
+export function saverOf(disk: Disk, write: Write): Saver {
+  let saving: Promise<unknown> = Promise.resolve()
+  return (folder, change) => {
+    const saved = saving.then(() => saveSettings(disk, write, folder, change))
+    saving = saved.catch(() => undefined)
+    return saved
+  }
+}
+
 /** Who a clicked file is opened by: Obsidian, in the paired pane, or the system's default app. */
 export type Opener = 'obsidian' | 'system'
 

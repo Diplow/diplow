@@ -8,8 +8,10 @@ import {
   countLine,
   countsOf,
   handWritten,
+  isLeftOut,
   isNameable,
   leavingOf,
+  lockOf,
   toggled,
   togetherLine,
   withChange,
@@ -58,8 +60,25 @@ describe('leavingOf', () => {
     expect(leavingOf(leaf('a*.md'), ['a*.md'])).toEqual({ by: 'glob', glob: 'a*.md' })
   })
 
+  it('says a candidate whose name holds * or ? is unnameable while nothing leaves it out', () => {
+    expect(leavingOf(leaf('a?.md'), [])).toEqual({ by: 'unnameable' })
+  })
+
   it('keeps a trailing / to folders', () => {
     expect(leavingOf(leaf('src'), ['src/'])).toEqual({ by: 'none' })
+  })
+})
+
+describe('isLeftOut and lockOf', () => {
+  it('tick what is left out, and lock what a glob leaves out or no exclusion names alone', () => {
+    expect(isLeftOut({ by: 'name' })).toBe(true)
+    expect(isLeftOut({ by: 'glob', glob: '*.json' })).toBe(true)
+    expect(isLeftOut({ by: 'none' })).toBe(false)
+    expect(isLeftOut({ by: 'unnameable' })).toBe(false)
+    expect(lockOf({ by: 'glob', glob: '*.json' })).toBe('left out by *.json')
+    expect(lockOf({ by: 'unnameable' })).toBe('its * or ? would leave out more')
+    expect(lockOf({ by: 'name' })).toBeUndefined()
+    expect(lockOf({ by: 'none' })).toBeUndefined()
   })
 })
 
@@ -156,6 +175,12 @@ describe('withChange', () => {
     const written = withChange(text, changeOf(before, after))
     expect(parseExclusions(written)).toEqual(after)
     expect(written).toContain("- '*.lo?'")
+  })
+
+  it("keeps a flow list's comment on the key once its items take lines of their own", () => {
+    expect(withChange('exclude: [a, b] # mine\n', { add: [], remove: ['b'] })).toBe(
+      'exclude: # mine\n  - a\n',
+    )
   })
 
   it('makes a flow list a block list, its items kept in order', () => {

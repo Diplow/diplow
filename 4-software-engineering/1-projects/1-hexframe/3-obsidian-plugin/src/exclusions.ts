@@ -4,10 +4,12 @@
 // so reading and writing the file is tested without Obsidian; the panel and the view carry it out.
 import {
   isExcluded,
+  isGlob,
   parseExclusions,
   patternOf,
 } from '../../2-claude-mod/hooks/shape/exclusions.ts'
 import {
+  directions,
   linesOf,
   sortEntries,
   type Entry,
@@ -17,7 +19,7 @@ import {
 } from '../../2-claude-mod/hooks/shape/node.ts'
 
 /** How many hexes a ring draws around its Tile. */
-const six = 6
+const six = directions.length
 
 /**
  * Every candidate of a folder, by kind, in name order, before its `exclusions.yaml` leaves any out:
@@ -39,16 +41,30 @@ function slotsOf(ring: Ring<Slot> | undefined): Slot[] {
 /**
  * Whether `items`, a folder's exclusions, leave `slot` out, and how: not at all, only by items that
  * name it (its name, a folder's with or without its trailing `/`), which ticking it again removes,
- * or by a glob the user wrote, which the panel keeps and names.
+ * or by a glob the user wrote, which the panel keeps and names. A candidate left in whose name no
+ * exclusion can name alone is `unnameable`: ticking it would leave out more.
  */
-export type Leaving = { by: 'none' } | { by: 'name' } | { by: 'glob'; glob: string }
+export type Leaving =
+  { by: 'none' } | { by: 'unnameable' } | { by: 'name' } | { by: 'glob'; glob: string }
 
 export function leavingOf(slot: Slot, items: readonly string[]): Leaving {
   const isFolder = slot.kind !== 'leaf'
   const leaving = items.filter((item) => isExcluded(slot.name, isFolder, [item]))
-  if (leaving.length === 0) return { by: 'none' }
+  if (leaving.length === 0) return isNameable(slot) ? { by: 'none' } : { by: 'unnameable' }
   const glob = leaving.find((item) => !names(item, slot))
   return glob === undefined ? { by: 'name' } : { by: 'glob', glob }
+}
+
+/** Whether `leaving` leaves the candidate out, which ticks its checkbox. */
+export function isLeftOut({ by }: Leaving): boolean {
+  return by === 'name' || by === 'glob'
+}
+
+/** Why a candidate's checkbox can't change, or undefined when it can. */
+export function lockOf(leaving: Leaving): string | undefined {
+  if (leaving.by === 'glob') return `left out by ${leaving.glob}`
+  if (leaving.by === 'unnameable') return 'its * or ? would leave out more'
+  return undefined
 }
 
 /**
@@ -57,10 +73,6 @@ export function leavingOf(slot: Slot, items: readonly string[]): Leaving {
  */
 function names(item: string, slot: Slot): boolean {
   return !isGlob(item) && (item === slot.name || item === patternOf(slot))
-}
-
-function isGlob(item: string): boolean {
-  return /[*?]/.test(item)
 }
 
 /**
@@ -78,10 +90,15 @@ export function isNameable(slot: Slot): boolean {
  * alone.
  */
 export function toggled(items: readonly string[], slot: Slot): string[] {
-  const leaving = leavingOf(slot, items)
-  if (leaving.by === 'none') return isNameable(slot) ? [...items, patternOf(slot)] : [...items]
-  if (leaving.by === 'glob') return [...items]
-  return items.filter((item) => !names(item, slot))
+  switch (leavingOf(slot, items).by) {
+    case 'none':
+      return [...items, patternOf(slot)]
+    case 'name':
+      return items.filter((item) => !names(item, slot))
+    case 'glob':
+    case 'unnameable':
+      return [...items]
+  }
 }
 
 /** The items written by hand that name none of `candidates`: globs, and names of nothing here. */
@@ -215,7 +232,7 @@ function withRemoved(lines: readonly string[], remove: readonly string[]) {
     } else {
       // The key, `exclude:`, with a flow list or nothing after it.
       const flow = parseExclusions(line).filter((item) => !remove.includes(item))
-      kept.push(/^[^:]*:\s*\[/.test(line) ? 'exclude:' : line)
+      kept.push(keyOf(line))
       listEnds = kept.push(...flow.map((item) => `${indent}- ${yamlOf(item)}`))
     }
   }
@@ -225,6 +242,16 @@ function withRemoved(lines: readonly string[], remove: readonly string[]) {
 /** Whether `item` holds a line break or another control character, which no list line can hold. */
 function breaksLines(item: string): boolean {
   return /[\p{Cc}\u2028\u2029]/u.test(item)
+}
+
+/**
+ * The key line, `exclude:`, as kept: as written, unless it holds a flow list, whose items move to
+ * lines of their own, its comment kept after the key.
+ */
+function keyOf(line: string): string {
+  if (!/^[^:]*:\s*\[/.test(line)) return line
+  const comment = /\]\s*(#.*)$/.exec(line)?.[1]
+  return comment === undefined ? 'exclude:' : `exclude: ${comment}`
 }
 
 /** The item a list line holds, read by the shape's own parser. */

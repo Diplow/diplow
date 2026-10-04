@@ -13,65 +13,52 @@ import {
   countLine,
   countsOf,
   handWritten,
-  isNameable,
+  isLeftOut,
   leavingOf,
+  lockOf,
   toggled,
   togetherLine,
   type Change,
 } from './exclusions.ts'
 import type { Excluded } from './menu.ts'
 import { diskOf, writerOf } from './vault/disk.ts'
-import {
-  inFolder,
-  readSettings,
-  saveSettings,
-  type Disk,
-  type Settings,
-  type Write,
-} from './vault/frame.ts'
+import { inFolder, readSettings, saverOf, type Saver, type Settings } from './vault/frame.ts'
 
 /** The panel's name, on its button, its title and its command. */
 const title = 'Hexframe settings'
 
 /**
- * The saves still running, one after the other: each reads the file just before writing it, so a
- * second `E` pressed while the first writes waits for it rather than writing over its line.
+ * The vault's saver as the settings use it, one per vault, so every save of the plugin's views,
+ * the panel's and `E`'s alike, runs after the ones before; undefined outside a file system.
  */
-let saving: Promise<unknown> = Promise.resolve()
-
-/** The vault as the settings read and write it, or undefined outside a file system. */
-function vaultOf(app: App): Vault | undefined {
+function saverFor(app: App): Saver | undefined {
+  const kept = savers.get(app)
+  if (kept !== undefined) return kept
   const disk = diskOf(app)
   const write = writerOf(app)
-  return disk && write && { disk, write }
+  if (disk === undefined || write === undefined) return undefined
+  const saver = saverOf(disk, write)
+  savers.set(app, saver)
+  return saver
 }
 
-interface Vault {
-  disk: Disk
-  write: Write
-}
-
-/** `change` saved in `folder`'s `exclusions.yaml` once every earlier save has ended. */
-function queuedSave({ disk, write }: Vault, folder: string, change: Change) {
-  const saved = saving.then(() => saveSettings(disk, write, folder, change))
-  saving = saved.catch(() => undefined)
-  return saved
-}
+const savers = new WeakMap<App, Saver>()
 
 /**
  * Opens the settings of `folder`, once the vault lets the panel write there, and runs `saved` once
  * a change is written; a notice says why when it can't.
  */
 export async function openSettings(app: App, folder: string, saved: () => void) {
-  const vault = vaultOf(app)
-  if (vault === undefined) return
-  const settings = await readSettings(vault.disk, folder)
+  const disk = diskOf(app)
+  const saver = saverFor(app)
+  if (disk === undefined || saver === undefined) return
+  const settings = await readSettings(disk, folder)
   if ('refused' in settings) {
     new Notice(`Hexframe can't change what ${nameOf(folder)} leaves out, as ${settings.refused}.`)
     return
   }
   const save = async (change: Change) => {
-    const result = await queuedSave(vault, folder, change)
+    const result = await saver(folder, change)
     if ('refused' in result) {
       new Notice(`Hexframe can't save ${inFolder(folder, exclusionsFile)}, as ${result.refused}.`)
       return false
@@ -87,10 +74,10 @@ export async function openSettings(app: App, folder: string, saved: () => void) 
  * `exclusions.yaml` at once, and runs `saved`; a notice says what was written, or why nothing was.
  */
 export async function excludeFrom(app: App, { folder, slot }: Excluded, saved: () => void) {
-  const vault = vaultOf(app)
-  if (vault === undefined) return
+  const saver = saverFor(app)
+  if (saver === undefined) return
   const pattern = patternOf(slot)
-  const result = await queuedSave(vault, folder, { add: [pattern], remove: [] })
+  const result = await saver(folder, { add: [pattern], remove: [] })
   if ('refused' in result) {
     new Notice(`Hexframe can't leave ${pattern} out, as ${result.refused}.`)
     return
@@ -205,13 +192,11 @@ class SettingsModal extends Modal {
     const box = row.createEl('input', { type: 'checkbox' })
     row.createSpan({ text: patternOf(slot) })
     const leaving = leavingOf(slot, this.items)
-    box.checked = leaving.by !== 'none'
-    if (leaving.by === 'glob') {
+    box.checked = isLeftOut(leaving)
+    const lock = lockOf(leaving)
+    if (lock !== undefined) {
       box.disabled = true
-      row.createSpan({ cls: 'hexframe-settings-glob', text: `left out by ${leaving.glob}` })
-    } else if (leaving.by === 'none' && !isNameable(slot)) {
-      box.disabled = true
-      row.createSpan({ cls: 'hexframe-settings-glob', text: 'its * or ? would leave out more' })
+      row.createSpan({ cls: 'hexframe-settings-glob', text: lock })
     }
     box.addEventListener('change', () => {
       this.items = toggled(this.items, slot)

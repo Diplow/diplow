@@ -105,6 +105,11 @@ function checked(item: string, where: string): string {
   return item
 }
 
+/** Whether `item` is a glob, holding `*` or `?`, which match more than the item as written. */
+export function isGlob(item: string): boolean {
+  return /[*?]/.test(item)
+}
+
 /**
  * Whether the glob matches the whole name: `*` any run of characters, `?` one, every other
  * character itself. Walks both once, going back only to the last `*`, so no glob takes longer than
