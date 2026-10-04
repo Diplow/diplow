@@ -1,0 +1,46 @@
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/view-state.test.ts
+  s_8004fe4b534599::t_dc8bee47df1bca 11,165-177,179
+  s_8004fe4b534599::t_b57ff205b07845 178,180-181
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/view-state.ts
+  s_8004fe4b534599::t_dc8bee47df1bca 73-87
+  s_8004fe4b534599::t_035f04259f86e1 72
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/view.ts
+  s_8004fe4b534599::t_2bff0478c67707 16,82-88,101,124,126
+.obsidian/plugins/hexframe/main.js
+  s_8004fe4b534599::t_eff446fcdc08cf 1
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE.md
+  s_8004fe4b534599::t_22a1cf8bf0bf08 52
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/vault/frame.ts
+  s_8004fe4b534599::t_5261f5a52838a0 12,57-58,61,64,66,70-79,85,94,102,104,111-114,117,124-126,129,135-136,139-153,155-160,166-172
+  s_8004fe4b534599::t_c21c620be8d44b 173
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/vault/frame.test.ts
+  s_8004fe4b534599::t_5261f5a52838a0 13,15-22,43,127-148,165
+  s_8004fe4b534599::t_997b9239f93cbc 187,190-198
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/node.test.ts
+  s_8004fe4b534599::t_266fe9978debe6 7,232-238
+  s_8004fe4b534599::t_26961163aca1f2 239-240
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/CLAUDE.md
+  s_8004fe4b534599::t_eff446fcdc08cf 18,32
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/node.ts
+  s_8004fe4b534599::t_266fe9978debe6 292,299-305
+  s_8004fe4b534599::t_5c83d8207773f0 306-307
+4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/src/vault/disk.ts
+  s_8004fe4b534599::t_dc8bee47df1bca 25,29,37-38,42,49-52,57
+  s_8004fe4b534599::t_2bff0478c67707 33-36,39-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1b733f76b8e6cf4840b9559a72378675e6ef3d17",
+  "prompts": {},
+  "sessions": {
+    "s_8004fe4b534599": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d6be5684-daf1-47f2-ae41-5225e4178a75",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
