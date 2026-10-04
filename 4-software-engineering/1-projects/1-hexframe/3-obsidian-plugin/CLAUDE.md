@@ -17,6 +17,18 @@ preview: >-
 
 Open a `*.hexframe` file, such as `diplow.hexframe` at the vault's root: the view shows the file's folder, its Tile in the middle and its Children around it (its Branches past six Branches and Leaves), in the theme's colors, light and dark. It draws again when a file or folder it shows is created, deleted, renamed or modified. Obsidian sends no event for a dot folder, so those, `.hexframe/exclusions.yaml` among them, are read again on each drawing, and coming back to the view draws it again. It reads nothing whose real path leaves the vault, a file under a symlinked folder included, and shows no folder that does, the file's own included. Under the drawing, a line says what it left aside: a broken `exclusions.yaml`, a Leaf that clashes with a Branch, a ring too full to draw, a center it can't show.
 
+A click on a hex moves the view and shows the hex's note in a pane split off to the right of it, the paired pane, in reading view (the usual toggle still switches it to editing). The view keeps that one pane and reuses it on every click, and splits a new one once the user has closed it:
+
+| Click on | Moves the view | Shows |
+|---|---|---|
+| a Branch or a Context folder | onto it | its `CLAUDE.md`, or `-CLAUDE.md` |
+| the center | up, onto the folder holding it; at the vault root, nowhere | that folder's note |
+| a Markdown Leaf | nowhere | the Leaf |
+| a Leaf that isn't Markdown | nowhere | nothing: Obsidian's "Open in default app" hands it to the system when it is a document the system opens rather than runs (a PDF, an image, a sound, a video, a plain text file; no office file, whose app runs what it carries), by its name and its real one |
+| any hex, shift held | nowhere | the hex's note, as above |
+
+A folder with no note opens nothing and still centers, and so does one whose note Obsidian doesn't index, which is the case inside a dot folder unless a plugin such as Hidden folders access indexes it. The view opens nothing, and centers on nothing, whose real path leaves the vault, and says why in a notice.
+
 The file keeps the view state as JSON, what the app keeps in its URL. An empty file means the defaults:
 
 ```json
@@ -29,7 +41,7 @@ The file keeps the view state as JSON, what the app keeps in its URL. An empty f
 - `center`: the folder in the middle, relative to the vault; absent, the file's own folder. One that leaves the vault (an absolute path, a `..` past its root, a symlink out of it), that a folder on the way leaves out, or that isn't a folder is dropped, and the view says so and shows the file's own folder.
 - `expansions.outer`: the Frame kind of the ring around the center, `children`, `branches` or `leaves`. A folder that doesn't offer it shows Children, or Branches past six.
 
-The view reads the file on open and writes it only when its state changes, today when the center, or a folder holding it, is renamed: it then sets `center` and keeps the rest of the file as written. A file that isn't JSON, or a field that is malformed, gives the defaults with a line saying so, and the file stays as it is.
+The view reads the file on open and writes it only when its state changes: when a click centers it, and when the center, or a folder holding it, is renamed. It then sets `center` and keeps the rest of the file as written. A file that isn't JSON, or a field that is malformed, gives the defaults with a line saying so, and the file stays as it is.
 
 ## Develop it
 
@@ -72,10 +84,11 @@ The lint set is [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE#Lint
 | `manifest.json` | The plugin's manifest, copied beside `main.js` by every build |
 | `styles.css` | The plugin's styles, copied beside `main.js` by every build: the drawing's colors, all of them Obsidian's CSS variables |
 | `src/main.ts` | The plugin's entry, bundled into `main.js`: binds the `hexframe` extension to the view |
-| `src/view.ts` | The view, a `TextFileView` over the hexframe file: decodes it, picks the center, reads and draws it, follows the vault's events. The only file that holds Obsidian state |
+| `src/view.ts` | The view, a `TextFileView` over the hexframe file: decodes it, picks the center, reads and draws it, follows the vault's events, carries out a click and keeps the paired pane. The only file that holds Obsidian state |
+| `src/click.ts` | What a click on a hex asks: the folder to center on, and the notes to show or the file to hand to the default app. Pure |
 | `src/view-state.ts` | The hexframe file's JSON: its decoding with defaults, the center it names, the outer Frame kind, a rename followed, which changes touch the view. Pure |
-| `src/draw.ts` | The drawing: the shape's layout as SVG through Obsidian's `createSvg`, words wrapped to their hex, and the lines under it |
-| `src/vault/frame.ts` | A folder read as a Frame through the shape, over a `Disk` port, held to the shape's rules on what a medium reads; and which center to show, the file's own folder checked as much as the state's. Pure but for the port |
+| `src/draw.ts` | The drawing: the shape's layout as SVG through Obsidian's `createSvg`, words wrapped to their hex, a click handler on each hex holding a Tile, and the lines under it |
+| `src/vault/frame.ts` | A folder read as a Frame through the shape, over a `Disk` port, held to the shape's rules on what a medium reads; which center to show, the file's own folder checked as much as the state's; and whether a clicked file may be opened, by Obsidian or by the system. Pure but for the port |
 | `src/vault/disk.ts` | The `Disk` over Obsidian: Branches and Leaves from the vault's index, dot folders from its adapter, real paths from Node, and each read made by the real path just checked |
 | `scripts/build.ts` | `dev` and `build`: picks the folder and the mode, then bundles |
 | `scripts/bundle.ts` | The esbuild bundle. Obsidian provides `obsidian`, `electron`, CodeMirror, Lezer and Node's own modules at runtime, so they stay out of it |

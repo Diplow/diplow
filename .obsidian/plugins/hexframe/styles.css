@@ -48,6 +48,16 @@
   text-anchor: middle;
 }
 
+/* A hex that holds a Tile opens it on a click. */
+.hexframe-hex.is-clickable {
+  cursor: pointer;
+}
+
+.hexframe-hex.is-clickable:not(.is-center):hover polygon {
+  stroke: var(--interactive-accent);
+  stroke-width: 2;
+}
+
 .hexframe-title {
   font-weight: var(--font-semibold);
   fill: var(--text-normal);

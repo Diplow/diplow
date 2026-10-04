@@ -37,8 +37,19 @@ const characterWidth = 0.55
 /** How many characters of `style` fit on a line of the band. */
 const perLine = (style: TextStyle) => Math.floor(band / (style.size * characterWidth))
 
-/** Draws `view` into `container`, replacing what it held, with `notes` under the drawing. */
-export function drawView(container: HTMLElement, view: FrameView, notes: readonly string[]) {
+/** What the view does when a hex is clicked: `event` says whether shift was held. */
+export type OnHex = (placement: Placement, event: MouseEvent) => void
+
+/**
+ * Draws `view` into `container`, replacing what it held, with `notes` under the drawing; a click on
+ * a hex that holds a Tile goes to `onHex`.
+ */
+export function drawView(
+  container: HTMLElement,
+  view: FrameView,
+  notes: readonly string[],
+  onHex: OnHex,
+) {
   container.empty()
   const svg = container.createSvg('svg', {
     cls: 'hexframe-canvas',
@@ -48,7 +59,7 @@ export function drawView(container: HTMLElement, view: FrameView, notes: readonl
       'aria-label': view.frame.tile.title,
     },
   })
-  for (const placement of layoutView(view)) drawHex(svg, placement)
+  for (const placement of layoutView(view)) drawHex(svg, placement, onHex)
   drawNotes(container, notes)
 }
 
@@ -59,7 +70,7 @@ export function drawNotes(container: HTMLElement, notes: readonly string[]) {
   for (const note of notes) list.createEl('li', { text: note })
 }
 
-function drawHex(svg: SVGSVGElement, placement: Placement) {
+function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex) {
   const kind = placement.kind === 'member' ? placement.memberKind : placement.kind
   const group = svg.createSvg('g', { cls: ['hexframe-hex', `is-${kind}`] })
   const points = hexCorners(placement.center, radius)
@@ -73,6 +84,10 @@ function drawHex(svg: SVGSVGElement, placement: Placement) {
     return
   }
   const { tile } = placement
+  group.addClass('is-clickable')
+  group.addEventListener('click', (event) => {
+    onHex(placement, event)
+  })
   group.createSvg('title').textContent =
     tile.preview === '' ? tile.title : `${tile.title}\n\n${tile.preview}`
   if (placement.kind === 'member') {
