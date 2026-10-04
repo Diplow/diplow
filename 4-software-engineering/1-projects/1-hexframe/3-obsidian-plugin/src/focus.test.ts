@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { layoutView, type FrameView } from '../../2-claude-mod/hooks/shape/layout.ts'
 import type { Direction, Frame, Member, Rings } from '../../2-claude-mod/hooks/shape/node.ts'
-import { focusable, focusableInList, focusedHex, focusToward, stepFocus } from './focus.ts'
+import { focusable, focusableInList, focusedClickable, focusToward, stepFocus } from './focus.ts'
 import { fullListOf } from './list.ts'
 
 const tile = (path: string) => ({ path, title: path, preview: '' })
@@ -45,11 +45,11 @@ describe('focusable', () => {
   })
 })
 
-describe('focusedHex', () => {
+describe('focusedClickable', () => {
   it('finds the focused hex, and the center when the focus is unset or gone', () => {
-    expect(focusedHex('2-b.md', hexes)?.tile.path).toBe('2-b.md')
-    expect(focusedHex(undefined, hexes)?.kind).toBe('center')
-    expect(focusedHex('gone', hexes)?.kind).toBe('center')
+    expect(focusedClickable('2-b.md', hexes)?.tile.path).toBe('2-b.md')
+    expect(focusedClickable(undefined, hexes)?.kind).toBe('center')
+    expect(focusedClickable('gone', hexes)?.kind).toBe('center')
   })
 })
 
@@ -136,5 +136,14 @@ describe('a list filling the view', () => {
   it('leaves the focus where it is on a digit naming a hex of the ring it hides', () => {
     expect(focusToward('', inside, listed, 1)).toBeUndefined()
     expect(focusToward('', inside, focusable(layoutView(inside)), 1)).toBe('1-a')
+  })
+})
+
+describe('focusedClickable, around a Branch list filling the view', () => {
+  it('goes back to the first one drawn, the Branch, where no center is drawn', () => {
+    const name = { kind: 'item' as const, memberKind: 'leaf' as const, tile: tile('1-a/x.md') }
+    const branch = hexes.find(({ tile: { path } }) => path === '1-a')
+    if (branch === undefined) throw new Error('no Branch drawn')
+    expect(focusedClickable('1-a/gone.md', [branch, name])?.tile.path).toBe('1-a')
   })
 })

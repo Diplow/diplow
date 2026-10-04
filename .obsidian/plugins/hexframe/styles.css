@@ -2,6 +2,10 @@
    Every color is one of Obsidian's CSS variables, so the hexframe follows the theme, light and dark. */
 
 .hexframe-view {
+  /* Each kind's fill, shared by its hexes and its names in a list. */
+  --hexframe-branch-fill: var(--background-modifier-hover);
+  --hexframe-leaf-fill: rgba(var(--color-orange-rgb), 0.18);
+  --hexframe-context-fill: rgba(var(--color-cyan-rgb), 0.18);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,16 +31,16 @@
 }
 
 .hexframe-hex.is-branch polygon {
-  fill: var(--background-modifier-hover);
+  fill: var(--hexframe-branch-fill);
 }
 
 /* Leaves take their own fill, warm where Branches are neutral; Context is cool. */
 .hexframe-hex.is-leaf polygon {
-  fill: rgba(var(--color-orange-rgb), 0.18);
+  fill: var(--hexframe-leaf-fill);
 }
 
 .hexframe-hex.is-context polygon {
-  fill: rgba(var(--color-cyan-rgb), 0.18);
+  fill: var(--hexframe-context-fill);
 }
 
 .hexframe-hex.is-empty polygon {
@@ -78,7 +82,8 @@
 }
 
 /* A name inside a hex takes the click, not the hex: hovering it leaves the hex's outline alone. */
-.hexframe-hex.is-listed:not(.is-center):has(.hexframe-item:hover, .hexframe-more:hover) polygon {
+.hexframe-hex.is-listed:not(.is-center, .is-focused):has(.hexframe-item:hover, .hexframe-more:hover)
+  polygon {
   stroke: var(--background-modifier-border);
   stroke-width: 1;
 }
@@ -178,7 +183,7 @@
 
 .hexframe-list-items {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(14em, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(14em, 100%), 1fr));
   gap: var(--size-4-1) var(--size-4-3);
   margin: 0;
   padding: 0;
@@ -205,15 +210,15 @@
 }
 
 .hexframe-list .is-branch {
-  background: var(--background-modifier-hover);
+  background: var(--hexframe-branch-fill);
 }
 
 .hexframe-list .is-leaf {
-  background: rgba(var(--color-orange-rgb), 0.18);
+  background: var(--hexframe-leaf-fill);
 }
 
 .hexframe-list .is-context {
-  background: rgba(var(--color-cyan-rgb), 0.18);
+  background: var(--hexframe-context-fill);
 }
 
 .hexframe-list .is-clickable:hover {

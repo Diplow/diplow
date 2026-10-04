@@ -19,7 +19,7 @@ const leaves = overflowing(
   ['a.md', 'b.md', 'c.md', 'd.md', 'e.md', 'f.md', 'g.ts'].map((name) => ({ kind: 'leaf', name })),
 )
 const branches = overflowing(
-  ['1-a', '1-b', 'c', 'd', 'e', 'f', 'g'].map((name) => ({ kind: 'branch', name })),
+  ['1-a', '2-b', 'c', 'd', 'e', 'f', 'g'].map((name) => ({ kind: 'branch', name })),
 )
 const app: Frame = { tile: tile('1-app'), rings: { branches, leaves, context: empty } }
 

@@ -31,13 +31,18 @@ export function focusableInList({ holder }: FullList): Clickable[] {
   return [holder, ...itemsOf(holder)]
 }
 
-/** The hex `focus` names among `hexes`, or the center when it names none of them. */
-export function focusedHex(
+/**
+ * The hex or name `focus` names among `hexes`; when it names none of them, the center, or the
+ * first of them where no center is drawn, as around a Branch's list filling the view.
+ */
+export function focusedClickable(
   focus: string | undefined,
   hexes: readonly Clickable[],
 ): Clickable | undefined {
   return (
-    hexes.find(({ tile }) => tile.path === focus) ?? hexes.find(({ kind }) => kind === 'center')
+    hexes.find(({ tile }) => tile.path === focus) ??
+    hexes.find(({ kind }) => kind === 'center') ??
+    hexes[0]
   )
 }
 
@@ -47,7 +52,7 @@ export function stepFocus(
   hexes: readonly Clickable[],
   step: 1 | -1,
 ): string | undefined {
-  const current = focusedHex(focus, hexes)
+  const current = focusedClickable(focus, hexes)
   if (current === undefined) return hexes[0]?.tile.path
   const at = hexes.indexOf(current)
   return hexes[(at + step + hexes.length) % hexes.length]?.tile.path
@@ -65,7 +70,7 @@ export function focusToward(
   hexes: readonly Clickable[],
   direction: Direction,
 ): string | undefined {
-  const from = focusedHex(focus, hexes)
+  const from = focusedClickable(focus, hexes)
   if (from === undefined) return undefined
   const { around, inside, opened } = ringsOf(view)
   const sitsIn =

@@ -27,7 +27,7 @@ import {
 import { actionOf, type Action, type Asked } from './click.ts'
 import { drawFullList, drawNotes, drawView, ringNotes, type Focus, type OnHex } from './draw.ts'
 import { branchesToOpen, outerBranches, recenter, shownExpansions, viewOf } from './expansions.ts'
-import { focusable, focusableInList, focusedHex, focusToward, stepFocus } from './focus.ts'
+import { focusable, focusableInList, focusedClickable, focusToward, stepFocus } from './focus.ts'
 import { followed } from './follow.ts'
 import { fullListOf, type Clickable, type OpenedList } from './list.ts'
 import { items, planOf, type Drawing, type ItemId, type Plan, type Target } from './menu.ts'
@@ -239,7 +239,7 @@ export class HexframeView extends TextFileView {
    */
   runItem(item: ItemId, checking: boolean): boolean {
     const scene = this.drawn?.scene
-    const hex = scene && focusedHex(this.focus, scene.hexes)
+    const hex = scene && focusedClickable(this.focus, scene.hexes)
     if (scene === undefined || hex === undefined || this.isTyping()) return false
     const plan = planOf(item, targetOf(hex, scene))
     if (plan === undefined) return false
@@ -353,7 +353,7 @@ export class HexframeView extends TextFileView {
         ? drawFullList(this.contentEl, full, said, this.onHex())
         : drawView(this.contentEl, view, said, this.onHex())
       // A focus whose hex is gone goes back to the center.
-      this.focus = focusedHex(this.focus, hexes)?.tile.path
+      this.focus = focusedClickable(this.focus, hexes)?.tile.path
       this.outline(this.focus)
     } catch (error) {
       if (drawingId !== this.drawings) return

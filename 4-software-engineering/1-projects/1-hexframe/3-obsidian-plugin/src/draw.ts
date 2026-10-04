@@ -83,6 +83,8 @@ export function drawFullList(
   hex.createSpan({ cls: 'hexframe-list-title', text: holder.tile.title })
   hex.createSpan({ cls: 'hexframe-list-count', text: tooMany(holder.list) })
   clickableOn(hex, holder, onHex)
+  // Actions, for assistive technology; the keyboard reaches them through the view's focus.
+  hex.setAttribute('role', 'button')
   const drawn: Drawn[] = [{ group: hex, path: holder.tile.path }]
   if (source === 'opened') {
     const button = head.createEl('button', { text: 'Back to the hexes' })
@@ -102,16 +104,22 @@ export function drawFullList(
       text: item.tile.title,
     })
     clickableOn(name, item, onHex)
+    name.setAttribute('role', 'button')
     drawn.push({ group: name, path: item.tile.path })
   }
   drawNotes(container, notes)
   return outlineOf(drawn)
 }
 
-/** How to outline the focused one among `drawn`. */
+/** How to outline the focused one among `drawn`, which assistive technology reads as current. */
 function outlineOf(drawn: readonly Drawn[]): Focus {
   return (path) => {
-    for (const one of drawn) one.group.toggleClass('is-focused', one.path === path)
+    for (const one of drawn) {
+      const isFocused = one.path === path
+      one.group.toggleClass('is-focused', isFocused)
+      if (isFocused) one.group.setAttribute('aria-current', 'true')
+      else one.group.removeAttribute('aria-current')
+    }
   }
 }
 
@@ -174,11 +182,11 @@ function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex): Drawn[
   clickableOn(group, placement, onHex)
   group.createSvg('title').textContent =
     tile.preview === '' ? tile.title : `${tile.title}\n\n${tile.preview}`
-  if (isListed(placement)) return [{ group, path: tile.path }, ...drawList(group, placement, onHex)]
   if (placement.kind === 'member' && text.previewLines > 0) {
     const label = { ...at, y: at.y - placement.radius * inset * scale * 0.73 }
     words(group, label, text.direction, [String(placement.direction)])
   }
+  if (isListed(placement)) return [{ group, path: tile.path }, ...drawList(group, placement, onHex)]
 
   const titleLines = wrap(tile.title, perLine(text.title, text.band), 2)
   const previewLines = wrap(tile.preview, perLine(text.preview, text.band), text.previewLines)

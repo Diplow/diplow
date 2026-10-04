@@ -56,27 +56,31 @@ export interface Listed {
   fillsView?: true
 }
 
-/**
- * A hex holding a Tile. `opened` marks a hex the view opened: a renderer draws its shape only, and
- * the placements right after it, its Tile again among them, draw the Frame it holds over it. `list`
- * marks one opened into a ring that overflows: nothing is placed inside it, and a renderer draws
- * the hex with its Tile and the ring's list.
- */
-interface CenterHex extends Hex {
+/** The center's Tile, before it is placed. */
+interface CenterTile {
   kind: 'center'
   tile: Tile
-  opened?: true
-  list?: Listed
 }
 
-interface MemberHex extends Hex {
+/** A member's Tile in its direction, before it is placed. */
+interface MemberTile {
   kind: 'member'
   memberKind: MemberKind
   direction: Direction
   tile: Tile
-  opened?: true
-  list?: Listed
 }
+
+/**
+ * What a hex holding a Tile holds, one or the other: `opened` marks a hex the view opened, which a
+ * renderer draws as a shape only, the placements right after it, its Tile again among them,
+ * drawing the Frame it holds over it; `list` marks one opened into a ring that overflows, with
+ * nothing placed inside it, which a renderer draws with its Tile and the ring's list.
+ */
+type Holding = { opened?: true; list?: never } | { list: Listed; opened?: never }
+
+type CenterHex = Hex & CenterTile & Holding
+
+type MemberHex = Hex & MemberTile & Holding
 
 interface EmptyHex extends Hex {
   kind: 'empty'
@@ -89,8 +93,7 @@ export type Placement = CenterHex | MemberHex | EmptyHex
 export type TileHex = CenterHex | MemberHex
 
 /** What a hex holding a Tile stands for, before it is placed. */
-type Role =
-  Omit<CenterHex, keyof Hex | 'opened' | 'list'> | Omit<MemberHex, keyof Hex | 'opened' | 'list'>
+type Role = CenterTile | MemberTile
 
 const sqrt3 = Math.sqrt(3)
 

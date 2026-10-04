@@ -180,7 +180,7 @@ test('a hex opened into a ring that overflows holds its list, and nothing is pla
     overflow: [{ kind: 'leaf' as const, name: 'b.md' }],
   }
   const crowded: Frame = { tile: tile('/w/3-c'), rings: { leaves, context: ring() } }
-  const frame = { ...frameOf('/w', { 3: branch('/w/3-c') }), rings: { ...crowded.rings } }
+  const frame = { ...frameOf('/w'), rings: { ...crowded.rings } }
   const list = { frameKind: 'leaves', ring: leaves }
 
   // The center's inner ring: its hex holds the list, then the outer ring follows at full size.
