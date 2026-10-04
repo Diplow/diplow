@@ -8,6 +8,7 @@ import {
   parent,
   type Direction,
 } from '../../2-claude-mod/hooks/shape/node.ts'
+import type { ListItem } from './list.ts'
 import { vaultPath } from './vault/frame.ts'
 
 /**
@@ -24,7 +25,8 @@ export interface Action {
 }
 
 /**
- * What a click on `placement` asks, `shift` held or not; nothing for an empty hex.
+ * What a click on `placement` asks, `shift` held or not; nothing for an empty hex. A name of a
+ * list asks what its hex would.
  *
  * - A Branch or a Context folder: the view centers on it and shows its `CLAUDE.md` (or
  *   `-CLAUDE.md`).
@@ -34,10 +36,10 @@ export interface Action {
  *   in the system's default app.
  * - Shift held: the hex's note is shown and the view stays where it is.
  */
-export function actionOf(placement: Placement, shift: boolean): Action | undefined {
+export function actionOf(placement: Placement | ListItem, shift: boolean): Action | undefined {
   if (placement.kind === 'empty') return undefined
   const { path } = placement.tile
-  if (placement.kind === 'member' && placement.memberKind === 'leaf') {
+  if (placement.kind !== 'center' && placement.memberKind === 'leaf') {
     return { open: isMarkdown(basename(path)) ? { notes: [path] } : { file: path } }
   }
   const moveTo = placement.kind === 'center' ? up(path) : path
@@ -59,9 +61,9 @@ function up(folder: string): string | undefined {
  * The direction of the outer ring's Branch that `placement` stands for, its hex or, once opened,
  * its Tile inside it; undefined for any other hex. Those are the hexes a view opens on its own:
  * the inner ring holds Leaves and Context, never a Branch, and a Branch's own members open
- * nothing.
+ * nothing, nor does a name of a list.
  */
-export function outerBranchOf(placement: Placement): Direction | undefined {
+export function outerBranchOf(placement: Placement | ListItem): Direction | undefined {
   const isOuterBranch =
     placement.kind === 'member' && placement.memberKind === 'branch' && placement.generation === 1
   return isOuterBranch ? placement.direction : undefined

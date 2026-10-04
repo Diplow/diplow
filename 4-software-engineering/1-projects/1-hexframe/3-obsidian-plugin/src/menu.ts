@@ -5,7 +5,7 @@
 // the view carries them out.
 import type { Command } from 'obsidian'
 
-import type { CollapsedView, FrameView, TileHex } from '../../2-claude-mod/hooks/shape/layout.ts'
+import type { CollapsedView, FrameView } from '../../2-claude-mod/hooks/shape/layout.ts'
 import type { Direction, FrameKind } from '../../2-claude-mod/hooks/shape/node.ts'
 import { actionOf, outerBranchOf, type Action } from './click.ts'
 import {
@@ -16,6 +16,7 @@ import {
   sameExpansions,
   type Expansions,
 } from './expansions.ts'
+import { isListed, type Clickable } from './list.ts'
 
 /** What the view drew, which the items read. */
 export interface Drawing {
@@ -26,15 +27,20 @@ export interface Drawing {
   offered: readonly FrameKind[]
   /** The Frame kinds each Branch around the center offers, by direction, where they were read. */
   branchKinds: Partial<Record<Direction, readonly FrameKind[]>>
+  /** The path of the Tile whose hex's list fills the view, when one does. */
+  fillingView?: string | undefined
 }
 
-/** The hex an item acts on, and what the view drew around it. */
+/** The hex, or name of a list, an item acts on, and what the view drew around it. */
 export interface Target extends Drawing {
-  hex: TileHex
+  hex: Clickable
 }
 
-/** What an item asks of the view: what a click would, or new expansions to write and draw. */
-export type Plan = { click: Action } | { expansions: Expansions }
+/**
+ * What an item asks of the view: what a click would, new expansions to write and draw, or the list
+ * of the hex at a path to fill the view.
+ */
+export type Plan = { click: Action } | { expansions: Expansions } | { list: string }
 
 /**
  * An item: its name in the menu and the command palette, its default key (Obsidian's: `' '` is
@@ -51,7 +57,7 @@ const table = {
   'center-here': {
     name: 'Center here',
     key: 'Enter',
-    plan: ({ hex }) => clickIf(hex.kind === 'member', actionOf(hex, false), 'center'),
+    plan: ({ hex }) => clickIf(hex.kind !== 'center', actionOf(hex, false), 'center'),
   },
   preview: {
     name: 'Preview',
@@ -66,6 +72,12 @@ const table = {
     name: 'Collapse',
     key: 'X',
     plan: (target) => expansionsIf(target, collapseOf(target)),
+  },
+  'show-list': {
+    name: 'Show the list',
+    key: 'S',
+    plan: ({ hex, fillingView }) =>
+      isListed(hex) && hex.tile.path !== fillingView ? { list: hex.tile.path } : undefined,
   },
   up: {
     name: 'Up',

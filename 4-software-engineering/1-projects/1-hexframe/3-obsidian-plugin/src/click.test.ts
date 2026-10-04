@@ -117,3 +117,23 @@ describe('outerBranchOf', () => {
     }
   })
 })
+
+describe('a name of a list', () => {
+  const item = (memberKind: MemberKind, path: string) =>
+    ({ kind: 'item', memberKind, tile: tile(path) }) as const
+
+  it('asks what its hex would', () => {
+    for (const memberKind of ['branch', 'leaf', 'context'] as const) {
+      for (const shift of [false, true]) {
+        const path = memberKind === 'leaf' ? '1-app/vite.config.ts' : '1-app/src'
+        expect(actionOf(item(memberKind, path), shift)).toEqual(
+          actionOf(member(memberKind, path), shift),
+        )
+      }
+    }
+  })
+
+  it('is no Branch around the center, which the menu opens', () => {
+    expect(outerBranchOf(item('branch', '1-app/src'))).toBeUndefined()
+  })
+})

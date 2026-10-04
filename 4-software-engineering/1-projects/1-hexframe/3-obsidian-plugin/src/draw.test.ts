@@ -1,27 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import type { Frame } from '../../2-claude-mod/hooks/shape/node.ts'
-import { ringNotes, wrap } from './draw.ts'
-
-describe('wrap', () => {
-  it('fills lines of at most the width, word by word', () => {
-    expect(wrap('Who I am and what I aim at', 10, 4)).toEqual(['Who I am', 'and what I', 'aim at'])
-  })
-
-  it('cuts the last line it keeps with an ellipsis', () => {
-    expect(wrap('Who I am and what I aim at', 10, 2)).toEqual(['Who I am', 'and what…'])
-    expect(wrap('one two three', 7, 1)).toEqual(['one tw…'])
-  })
-
-  it('cuts a word wider than a line, on a line of its own', () => {
-    expect(wrap('hexframe-obsidian-plugin', 10, 2)).toEqual(['hexframe-…'])
-    expect(wrap('the hexframe-obsidian-plugin is', 10, 3)).toEqual(['the', 'hexframe-…', 'is'])
-  })
-
-  it('gives no line for no words', () => {
-    expect(wrap('  ', 10, 2)).toEqual([])
-  })
-})
+import { ringNotes } from './draw.ts'
 
 describe('ringNotes', () => {
   const tile = { path: '', title: 'diplow', preview: '' }
@@ -42,7 +22,7 @@ describe('ringNotes', () => {
     ])
   })
 
-  it('says why an overflowing ring draws no hex, and what fixes it', () => {
+  it('says why an overflowing ring shows as a list, and what fixes it', () => {
     const frame: Frame = {
       tile,
       rings: {
@@ -57,8 +37,9 @@ describe('ringNotes', () => {
       },
     }
     expect(ringNotes({ frame, frameKind: 'branches' })).toEqual([
-      '2 branches for six directions, so none is drawn: no direction is left for 1-b/. List what ' +
-        'this folder leaves out in .hexframe/exclusions.yaml, or renumber, to draw them.',
+      '2 Branches for six directions, so they show as a list: no direction is left for 1-b/. ' +
+        'List what this folder leaves out in .hexframe/exclusions.yaml, or renumber, to draw ' +
+        'them as hexes.',
     ])
   })
 
@@ -88,8 +69,9 @@ describe('ringNotes', () => {
   })
   const clash = '1-a.md and 1-a/ share direction 1: the Leaf takes another one.'
   const overflow =
-    '2 context for six directions, so none is drawn: no direction is left for .1-b/. List ' +
-    'what this folder leaves out in .hexframe/exclusions.yaml, or renumber, to draw them.'
+    '2 Context folders for six directions, so they show as a list: no direction is left for .1-b/. ' +
+    'List what this folder leaves out in .hexframe/exclusions.yaml, or renumber, to draw them ' +
+    'as hexes.'
 
   it("speaks of the center's inner ring after its outer one", () => {
     expect(
@@ -109,5 +91,40 @@ describe('ringNotes', () => {
       expanded: { 3: { frame: clashing('Games'), frameKind: 'children' as const } },
     }
     expect(ringNotes(view)).toEqual([`Games: ${clash}`])
+  })
+})
+
+describe('ringNotes, past three names', () => {
+  it('names more than three left without a direction by their count', () => {
+    const candidates = ['1-a', '1-b', '1-c', '1-d', '1-e'].map((name) => ({
+      kind: 'branch' as const,
+      name,
+    }))
+    const frame: Frame = {
+      tile: { path: '', title: 'diplow', preview: '' },
+      rings: { branches: { overflowing: true, candidates, overflow: candidates.slice(1) } },
+    }
+    expect(ringNotes({ frame, frameKind: 'branches' })[0]).toContain(
+      'no direction is left for 1-b/, 1-c/, 1-d/ and 1 more.',
+    )
+  })
+})
+
+describe('ringNotes, around a ring that fills the view', () => {
+  it('speaks only of that ring, the others not being on screen', () => {
+    const candidates = ['1-a', '1-b'].map((name) => ({ kind: 'branch' as const, name }))
+    const overflowing = { overflowing: true as const, candidates, overflow: candidates.slice(1) }
+    const crowded = {
+      overflowing: true as const,
+      candidates: [{ kind: 'context' as const, name: '.1-a' }],
+      overflow: [{ kind: 'context' as const, name: '.1-a' }],
+    }
+    const frame: Frame = {
+      tile: { path: '', title: 'diplow', preview: '' },
+      rings: { branches: overflowing, context: crowded },
+    }
+    const notes = ringNotes({ frame, frameKind: 'branches', inner: 'context' })
+    expect(notes).toHaveLength(1)
+    expect(notes[0]).toMatch(/^2 Branches for six directions/)
   })
 })
