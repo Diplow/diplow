@@ -1,12 +1,8 @@
-// Which hex of the view holds the keyboard's focus, and where Tab and the digits move it. The focus
-// is the path of a Tile the view shows, so it survives a drawing: every hex that holds a Tile, the
-// opened ones aside, holds another one. Pure, so it is tested without Obsidian.
-import type {
-  CollapsedView,
-  FrameView,
-  Placement,
-  TileHex,
-} from '../../2-claude-mod/hooks/shape/layout.ts'
+// Which hex of the view, or name of a list, holds the keyboard's focus, and where Tab and the digits
+// move it. The focus is the path of a Tile the view shows, so it survives a drawing: every hex that
+// holds a Tile, the opened ones aside, holds another one, and so does every name of a list. Pure,
+// so it is tested without Obsidian.
+import type { CollapsedView, FrameView, Placement } from '../../2-claude-mod/hooks/shape/layout.ts'
 import {
   directions,
   membersOf,
@@ -14,22 +10,28 @@ import {
   type Frame,
   type FrameKind,
 } from '../../2-claude-mod/hooks/shape/node.ts'
+import { isListed, itemsOf, type Clickable, type ListedHex } from './list.ts'
 
 /**
- * The hexes the focus moves among, in the order the view draws them: every hex holding a Tile but
- * an opened one, whose Tile its hub holds again. The center comes first.
+ * What the focus moves among, in the order the view draws it: every hex holding a Tile but an
+ * opened one, whose Tile its hub holds again, and right after a hex whose list `fits` in it, the
+ * names of that list. The center comes first.
  */
-export function focusable(placements: readonly Placement[]): TileHex[] {
-  return placements.filter(
-    (placement): placement is TileHex => placement.kind !== 'empty' && placement.opened !== true,
-  )
+export function focusable(
+  placements: readonly Placement[],
+  fits: (hex: ListedHex) => boolean,
+): Clickable[] {
+  return placements.flatMap((placement): Clickable[] => {
+    if (placement.kind === 'empty' || placement.opened === true) return []
+    return isListed(placement) && fits(placement) ? [placement, ...itemsOf(placement)] : [placement]
+  })
 }
 
 /** The hex `focus` names among `hexes`, or the center when it names none of them. */
 export function focusedHex(
   focus: string | undefined,
-  hexes: readonly TileHex[],
-): TileHex | undefined {
+  hexes: readonly Clickable[],
+): Clickable | undefined {
   return (
     hexes.find(({ tile }) => tile.path === focus) ?? hexes.find(({ kind }) => kind === 'center')
   )
@@ -38,7 +40,7 @@ export function focusedHex(
 /** The focus Tab moves to, `step` 1, or shift-Tab, -1, going round. */
 export function stepFocus(
   focus: string | undefined,
-  hexes: readonly TileHex[],
+  hexes: readonly Clickable[],
   step: 1 | -1,
 ): string | undefined {
   const current = focusedHex(focus, hexes)
@@ -55,7 +57,7 @@ export function stepFocus(
 export function focusToward(
   focus: string | undefined,
   view: FrameView | CollapsedView,
-  hexes: readonly TileHex[],
+  hexes: readonly Clickable[],
   direction: Direction,
 ): string | undefined {
   const from = focusedHex(focus, hexes)

@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
 import type { Frame } from '../../2-claude-mod/hooks/shape/node.ts'
-import { ringNotes, wrap } from './draw.ts'
+import { fitsIn, listRows, ringNotes, wrap } from './draw.ts'
+import type { ListedHex } from './list.ts'
 
 describe('wrap', () => {
   it('fills lines of at most the width, word by word', () => {
@@ -42,7 +43,7 @@ describe('ringNotes', () => {
     ])
   })
 
-  it('says why an overflowing ring draws no hex, and what fixes it', () => {
+  it('says why an overflowing ring shows as a list, and what fixes it', () => {
     const frame: Frame = {
       tile,
       rings: {
@@ -57,8 +58,9 @@ describe('ringNotes', () => {
       },
     }
     expect(ringNotes({ frame, frameKind: 'branches' })).toEqual([
-      '2 branches for six directions, so none is drawn: no direction is left for 1-b/. List what ' +
-        'this folder leaves out in .hexframe/exclusions.yaml, or renumber, to draw them.',
+      '2 branches for six directions, so they show as a list: no direction is left for 1-b/. ' +
+        'List what this folder leaves out in .hexframe/exclusions.yaml, or renumber, to draw ' +
+        'them as hexes.',
     ])
   })
 
@@ -88,8 +90,9 @@ describe('ringNotes', () => {
   })
   const clash = '1-a.md and 1-a/ share direction 1: the Leaf takes another one.'
   const overflow =
-    '2 context for six directions, so none is drawn: no direction is left for .1-b/. List ' +
-    'what this folder leaves out in .hexframe/exclusions.yaml, or renumber, to draw them.'
+    '2 context for six directions, so they show as a list: no direction is left for .1-b/. ' +
+    'List what this folder leaves out in .hexframe/exclusions.yaml, or renumber, to draw them ' +
+    'as hexes.'
 
   it("speaks of the center's inner ring after its outer one", () => {
     expect(
@@ -109,5 +112,48 @@ describe('ringNotes', () => {
       expanded: { 3: { frame: clashing('Games'), frameKind: 'children' as const } },
     }
     expect(ringNotes(view)).toEqual([`Games: ${clash}`])
+  })
+})
+
+describe('a list inside a hex', () => {
+  const hexOf = (radius: number, count: number): ListedHex => {
+    const candidates = Array.from({ length: count }, (_, index) => ({
+      kind: 'leaf' as const,
+      name: `${String(index)}.md`,
+    }))
+    const ring = { overflowing: true as const, candidates, overflow: candidates.slice(6) }
+    const at = { center: { x: 0, y: 0 }, radius, generation: 0 }
+    return {
+      kind: 'center',
+      ...at,
+      tile: { path: '', title: '', preview: '' },
+      list: { frameKind: 'leaves', ring },
+    }
+  }
+
+  it('holds six names in a hex of the first scale, ten in a collapsed center', () => {
+    expect(listRows(1)).toBe(6)
+    expect(listRows(2.5)).toBe(10)
+  })
+
+  it('fits while its names fit, and opens to fill the view past them', () => {
+    expect(fitsIn(hexOf(1, 6))).toBe(true)
+    expect(fitsIn(hexOf(1, 7))).toBe(false)
+    expect(fitsIn(hexOf(2.5, 7))).toBe(true)
+    expect(fitsIn(hexOf(2.5, 14))).toBe(false)
+  })
+
+  it('names more than three left without a direction by their count', () => {
+    const candidates = ['1-a', '1-b', '1-c', '1-d', '1-e'].map((name) => ({
+      kind: 'branch' as const,
+      name,
+    }))
+    const frame: Frame = {
+      tile: { path: '', title: 'diplow', preview: '' },
+      rings: { branches: { overflowing: true, candidates, overflow: candidates.slice(1) } },
+    }
+    expect(ringNotes({ frame, frameKind: 'branches' })[0]).toContain(
+      'no direction is left for 1-b/, 1-c/, 1-d/ and 1 more.',
+    )
   })
 })

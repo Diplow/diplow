@@ -2,7 +2,8 @@
 // drawn at depth 2, as the expansions open it, and drawn again when the vault changes under it. A
 // click on a hex moves it and shows the hex's note in a paired pane beside it, and a folder's note
 // opened in that pane moves it back. A right click on a hex opens its menu, and the menu's items
-// are also commands, whose keys act on the hex that Tab and the digits focus.
+// are also commands, whose keys act on the hex that Tab and the digits focus. A ring that overflows
+// shows as a list, whose names act as their hexes would.
 import {
   debounce,
   FileView,
@@ -16,7 +17,7 @@ import {
   type WorkspaceLeaf,
 } from 'obsidian'
 
-import { layoutView, type TileHex } from '../../2-claude-mod/hooks/shape/layout.ts'
+import { layoutView } from '../../2-claude-mod/hooks/shape/layout.ts'
 import {
   directions,
   kindsOf,
@@ -24,10 +25,19 @@ import {
   type Frame,
 } from '../../2-claude-mod/hooks/shape/node.ts'
 import { actionOf, type Action, type Asked } from './click.ts'
-import { drawNotes, drawView, ringNotes, type Focus } from './draw.ts'
+import {
+  drawFullList,
+  drawNotes,
+  drawView,
+  fitsIn,
+  ringNotes,
+  type Focus,
+  type OnHex,
+} from './draw.ts'
 import { branchesToOpen, outerBranches, recenter, shownExpansions, viewOf } from './expansions.ts'
 import { focusable, focusedHex, focusToward, stepFocus } from './focus.ts'
 import { followed } from './follow.ts'
+import { fullListOf, itemsOf, type Clickable } from './list.ts'
 import { items, planOf, type Drawing, type ItemId, type Plan, type Target } from './menu.ts'
 import { diskOf } from './vault/disk.ts'
 import {
@@ -69,6 +79,11 @@ export class HexframeView extends TextFileView {
   private drawn: { folders: string[]; scene?: Scene } | undefined
   /** The path of the Tile whose hex holds the keyboard's focus; the center's when it is unset. */
   private focus: string | undefined
+  /**
+   * The path of the Tile whose hex's list the user opened to fill the view, one too long for its
+   * hex, until they go back to the hexes, center elsewhere, or the hex holds no list any more.
+   */
+  private listing: string | undefined
   /** Outlines the focused hex of the last drawing. */
   private outline: Focus | undefined
   /** Counts the drawings started, so one that ends after a later one is dropped. */
@@ -115,6 +130,7 @@ export class HexframeView extends TextFileView {
     this.problems = []
     this.drawn = undefined
     this.focus = undefined
+    this.listing = undefined
     this.outline = undefined
     this.lastPairedNote = undefined
     this.contentEl.empty()
@@ -196,6 +212,12 @@ export class HexframeView extends TextFileView {
         move(({ view, hexes }) => focusToward(this.focus, view, hexes, direction)),
       )
     }
+    // Escape takes a list the user opened back to the hexes.
+    scope.register([], 'Escape', () => {
+      if (this.listing === undefined || this.isTyping()) return true
+      this.showList(undefined)
+      return false
+    })
     this.scope = scope
   }
 
@@ -238,7 +260,7 @@ export class HexframeView extends TextFileView {
    * with the key its command is bound to, right-aligned. An item chosen runs as its command does,
    * on that hex as the view is then, and on nothing once a drawing has taken the hex away.
    */
-  private onMenu(hex: TileHex, event: MouseEvent) {
+  private onMenu(hex: Clickable, event: MouseEvent) {
     const scene = this.drawn?.scene
     if (scene === undefined) return
     const { path } = hex.tile
@@ -282,6 +304,8 @@ export class HexframeView extends TextFileView {
     // What is drawn no longer matches the state: the items and the keys wait for the next drawing.
     const kept = next.center === this.state.center ? this.drawn?.folders : undefined
     this.drawn = kept && { folders: kept }
+    // A list the user opened was of the old center's hexes.
+    if (next.center !== this.state.center) this.listing = undefined
     this.text = withChanges(this.text, this.state, next)
     ;({ state: this.state, problems: this.problems } = decodeViewState(this.text))
     this.requestSave()
@@ -323,18 +347,16 @@ export class HexframeView extends TextFileView {
       if (drawingId !== this.drawings) return
       const view = viewOf(frame, shown, opened)
       const folders = [folder, ...Object.values(opened).map(({ tile }) => vaultPath(tile.path))]
-      const hexes = focusable(layoutView(view))
+      const placements = layoutView(view)
+      const full = fullListOf(view, placements, this.listing)
+      this.listing = full?.back === true ? full.holder.tile.path : undefined
+      const hexes = full ? [full.holder, ...itemsOf(full.holder)] : focusable(placements, fitsIn)
       const offered = kindsOf(frame.rings)
       this.drawn = { folders, scene: { view, hexes, shown, offered, branchKinds } }
-      this.outline = drawView(this.contentEl, view, [...notes, ...warnings, ...ringNotes(view)], {
-        click: (hex, event) => {
-          this.focusOn(hex.tile.path)
-          void this.act(actionOf(hex, event.shiftKey))
-        },
-        menu: (hex, event) => {
-          this.onMenu(hex, event)
-        },
-      })
+      const said = [...notes, ...warnings, ...ringNotes(view)]
+      this.outline = full
+        ? drawFullList(this.contentEl, full, said, this.onHex())
+        : drawView(this.contentEl, view, said, this.onHex())
       // A focus whose hex is gone goes back to the center.
       this.focus = focusedHex(this.focus, hexes)?.tile.path
       this.outline(this.focus)
@@ -348,6 +370,32 @@ export class HexframeView extends TextFileView {
         `Can't read ${folder || 'the vault root'}: ${messageOf(error)}`,
       ])
     }
+  }
+
+  /** What a click, a right click, or a list opened or closed, does on the drawing. */
+  private onHex(): OnHex {
+    return {
+      click: (hex, event) => {
+        this.focusOn(hex.tile.path)
+        void this.act(actionOf(hex, event.shiftKey))
+      },
+      menu: (hex, event) => {
+        this.onMenu(hex, event)
+      },
+      list: (hex) => {
+        this.showList(hex?.tile.path)
+      },
+    }
+  }
+
+  /**
+   * Opens the list of the hex holding the Tile at `path` to fill the view, the focus on it, or
+   * takes the view back to the hexes when `path` is undefined.
+   */
+  private showList(path: string | undefined) {
+    this.listing = path
+    if (path !== undefined) this.focus = path
+    void this.draw()
   }
 
   /**
@@ -444,13 +492,16 @@ export class HexframeView extends TextFileView {
 }
 
 /** What an item acts on at `hex`, as the last drawing drew it. */
-function targetOf(hex: TileHex, { view, shown, offered, branchKinds }: Scene): Target {
+function targetOf(hex: Clickable, { view, shown, offered, branchKinds }: Scene): Target {
   return { hex, view, shown, offered, branchKinds }
 }
 
-/** What the last drawing drew, as the items read it, and the hexes the focus moves among. */
+/**
+ * What the last drawing drew, as the items read it, and the hexes and names of lists the focus
+ * moves among.
+ */
 interface Scene extends Drawing {
-  hexes: TileHex[]
+  hexes: Clickable[]
 }
 
 /** A menu item's title: its name, then the key its command is bound to, right-aligned. */

@@ -104,6 +104,116 @@
   fill: var(--text-on-accent);
 }
 
+/* A hex opened into a ring that overflows holds its list: one name per line, each clickable as its
+   hex would be, or, when they don't fit, a line saying how many, which opens the list. */
+.hexframe-item,
+.hexframe-more {
+  cursor: pointer;
+}
+
+.hexframe-item rect,
+.hexframe-more rect {
+  fill: transparent;
+  stroke: none;
+}
+
+.hexframe-item:hover text,
+.hexframe-more text {
+  text-decoration: underline;
+}
+
+.hexframe-more .hexframe-preview {
+  fill: var(--text-accent);
+}
+
+.hexframe-item.is-focused rect {
+  stroke: var(--text-normal);
+  stroke-width: 1.5;
+}
+
+/* A list filling the view: its hex, what it is of, then its names in columns, each in its kind's
+   fill, as the hexes are. */
+.hexframe-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-4-3);
+  width: 100%;
+  max-width: 900px;
+}
+
+.hexframe-list-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--size-4-2);
+}
+
+.hexframe-list-holder {
+  display: flex;
+  flex-direction: column;
+  margin-inline-end: auto;
+  padding: var(--size-4-2) var(--size-4-4);
+  border-radius: var(--radius-m);
+}
+
+.hexframe-list-title {
+  font-weight: var(--font-semibold);
+}
+
+.hexframe-list-count {
+  font-size: var(--font-ui-small);
+  color: var(--text-muted);
+}
+
+.hexframe-list-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14em, 1fr));
+  gap: var(--size-4-1) var(--size-4-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hexframe-list-item {
+  padding: var(--size-4-1) var(--size-4-2);
+  border-radius: var(--radius-s);
+  overflow-wrap: anywhere;
+}
+
+.hexframe-list .is-clickable {
+  cursor: pointer;
+}
+
+.hexframe-list .is-center {
+  background: var(--interactive-accent);
+}
+
+.hexframe-list .is-center,
+.hexframe-list .is-center .hexframe-list-count {
+  color: var(--text-on-accent);
+}
+
+.hexframe-list .is-branch {
+  background: var(--background-modifier-hover);
+}
+
+.hexframe-list .is-leaf {
+  background: rgba(var(--color-orange-rgb), 0.18);
+}
+
+.hexframe-list .is-context {
+  background: rgba(var(--color-cyan-rgb), 0.18);
+}
+
+.hexframe-list .is-clickable:hover {
+  outline: 2px solid var(--interactive-accent);
+}
+
+.hexframe-list .is-focused,
+.hexframe-list .is-focused:hover {
+  outline: 2.5px solid var(--text-normal);
+}
+
 .hexframe-notes {
   margin: 0;
   padding-inline-start: var(--size-4-5);

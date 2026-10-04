@@ -5,7 +5,7 @@
 // the view carries them out.
 import type { Command } from 'obsidian'
 
-import type { CollapsedView, FrameView, TileHex } from '../../2-claude-mod/hooks/shape/layout.ts'
+import type { CollapsedView, FrameView } from '../../2-claude-mod/hooks/shape/layout.ts'
 import type { Direction, FrameKind } from '../../2-claude-mod/hooks/shape/node.ts'
 import { actionOf, outerBranchOf, type Action } from './click.ts'
 import {
@@ -16,6 +16,7 @@ import {
   sameExpansions,
   type Expansions,
 } from './expansions.ts'
+import type { Clickable } from './list.ts'
 
 /** What the view drew, which the items read. */
 export interface Drawing {
@@ -28,9 +29,9 @@ export interface Drawing {
   branchKinds: Partial<Record<Direction, readonly FrameKind[]>>
 }
 
-/** The hex an item acts on, and what the view drew around it. */
+/** The hex, or name of a list, an item acts on, and what the view drew around it. */
 export interface Target extends Drawing {
-  hex: TileHex
+  hex: Clickable
 }
 
 /** What an item asks of the view: what a click would, or new expansions to write and draw. */
@@ -51,7 +52,7 @@ const table = {
   'center-here': {
     name: 'Center here',
     key: 'Enter',
-    plan: ({ hex }) => clickIf(hex.kind === 'member', actionOf(hex, false), 'center'),
+    plan: ({ hex }) => clickIf(hex.kind !== 'center', actionOf(hex, false), 'center'),
   },
   preview: {
     name: 'Preview',

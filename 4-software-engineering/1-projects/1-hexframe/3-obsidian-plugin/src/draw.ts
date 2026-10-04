@@ -1,4 +1,5 @@
-// Draws a Frame as SVG with Obsidian's DOM helpers. Colors come from styles.css, through
+// Draws a Frame as SVG with Obsidian's DOM helpers, an overflowing ring as a list inside the hex
+// opened into it, and a list filling the view as HTML. Colors come from styles.css, through
 // Obsidian's CSS variables, so the drawing follows the theme, light and dark.
 import { patternOf } from '../../2-claude-mod/hooks/shape/exclusions.ts'
 import {
@@ -10,9 +11,16 @@ import {
   type FrameView,
   type Placement,
   type Point,
-  type TileHex,
 } from '../../2-claude-mod/hooks/shape/layout.ts'
 import type { FrameKind, Frame } from '../../2-claude-mod/hooks/shape/node.ts'
+import {
+  isListed,
+  itemsOf,
+  tooMany,
+  type Clickable,
+  type FullList,
+  type ListedHex,
+} from './list.ts'
 
 /** Units of the SVG per unit of the layout. */
 const scale = 110
@@ -63,20 +71,23 @@ function textOf(radius: number, isCenter: boolean) {
 const perLine = (style: TextStyle, band: number) => Math.floor(band / (style.size * characterWidth))
 
 /**
- * What the view does on a hex that holds a Tile: when it is clicked, `event` saying whether shift
- * was held, and when it is right-clicked, for its menu.
+ * What the view does on a hex that holds a Tile, or a name of a list: when it is clicked, `event`
+ * saying whether shift was held, and when it is right-clicked, for its menu. And `list`: a hex's
+ * list too long for it opened to fill the view, or, given nothing, the hexes back.
  */
 export interface OnHex {
-  click: (hex: TileHex, event: MouseEvent) => void
-  menu: (hex: TileHex, event: MouseEvent) => void
+  click: (hex: Clickable, event: MouseEvent) => void
+  menu: (hex: Clickable, event: MouseEvent) => void
+  list: (hex: ListedHex | undefined) => void
 }
 
-/** Outlines the hexes holding the Tile at `path`, the focused one, and no other. */
+/** Outlines the hexes, or the name, holding the Tile at `path`, the focused one, and no other. */
 export type Focus = (path: string | undefined) => void
 
 /**
  * Draws `view` into `container`, replacing what it held, with `notes` under the drawing; a click or
- * a right click on a hex that holds a Tile goes to `onHex`. Returns how to outline the focused hex.
+ * a right click on a hex that holds a Tile, or on a name of a list, goes to `onHex`. Returns how to
+ * outline the focused hex.
  */
 export function drawView(
   container: HTMLElement,
@@ -95,9 +106,78 @@ export function drawView(
   })
   const drawn = layoutView(view).flatMap((placement) => drawHex(svg, placement, onHex))
   drawNotes(container, notes)
-  return (path) => {
-    for (const hex of drawn) hex.group.toggleClass('is-focused', hex.path === path)
+  return outlineOf(drawn)
+}
+
+/**
+ * Draws `full`, a list filling the view, into `container`, replacing what it held: its hex as a
+ * button, what the list is of, the way back to the hexes when the user opened it, a placeholder for
+ * choosing six, then every name, and `notes` under it. A click or a right click on the hex or a
+ * name goes to `onHex`. Returns how to outline the focused one.
+ */
+export function drawFullList(
+  container: HTMLElement,
+  { holder, back }: FullList,
+  notes: readonly string[],
+  onHex: OnHex,
+): Focus {
+  container.empty()
+  const list = container.createDiv({ cls: 'hexframe-list' })
+  const head = list.createDiv({ cls: 'hexframe-list-head' })
+  const hex = head.createDiv({ cls: ['hexframe-list-holder', `is-${kindOf(holder)}`] })
+  hex.createSpan({ cls: 'hexframe-list-title', text: holder.tile.title })
+  hex.createSpan({ cls: 'hexframe-list-count', text: tooMany(holder.list) })
+  clickableOn(hex, holder, onHex)
+  const drawn: Drawn[] = [{ group: hex, path: holder.tile.path }]
+  if (back) {
+    const button = head.createEl('button', { text: 'Back to the hexes' })
+    button.addEventListener('click', () => {
+      onHex.list(undefined)
+    })
   }
+  // Choosing which six to draw comes with the hexframe settings, which write the exclusions.
+  head.createEl('button', {
+    text: 'Choose six',
+    attr: { disabled: 'true', title: 'Comes with the hexframe settings' },
+  })
+  const names = list.createEl('ul', { cls: 'hexframe-list-items' })
+  for (const item of itemsOf(holder)) {
+    const name = names.createEl('li', {
+      cls: ['hexframe-list-item', `is-${item.memberKind}`],
+      text: item.tile.title,
+    })
+    clickableOn(name, item, onHex)
+    drawn.push({ group: name, path: item.tile.path })
+  }
+  drawNotes(container, notes)
+  return outlineOf(drawn)
+}
+
+/** How to outline the focused one among `drawn`. */
+function outlineOf(drawn: readonly Drawn[]): Focus {
+  return (path) => {
+    for (const one of drawn) one.group.toggleClass('is-focused', one.path === path)
+  }
+}
+
+/** Hands a click and a right click on `element` to `onHex`, as on `hex`. */
+function clickableOn(element: GlobalEventHandlers & Element, hex: Clickable, onHex: OnHex) {
+  element.addClass('is-clickable')
+  element.addEventListener('click', (event) => {
+    // A name of a list sits inside its hex: the click is the name's, not the hex's too.
+    event.stopPropagation()
+    onHex.click(hex, event)
+  })
+  element.addEventListener('contextmenu', (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+    onHex.menu(hex, event)
+  })
+}
+
+/** The kind of hex `hex` is, as styles.css names it. */
+function kindOf(hex: Clickable): string {
+  return hex.kind === 'center' ? 'center' : hex.memberKind
 }
 
 /** Shows only `notes`, when there is no Frame to draw. */
@@ -107,14 +187,14 @@ export function drawNotes(container: HTMLElement, notes: readonly string[]) {
   for (const note of notes) list.createEl('li', { text: note })
 }
 
-/** A drawn hex holding a Tile, and the path of that Tile, which the focus names. */
-interface DrawnHex {
-  group: SVGGElement
+/** A drawn hex holding a Tile, or a name of a list, and the path of that Tile, which the focus names. */
+interface Drawn {
+  group: HTMLElement | SVGElement
   path: string
 }
 
 /** Draws `placement`; what it holds when it holds a Tile, its hex outlined when focused. */
-function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex): DrawnHex[] {
+function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex): Drawn[] {
   const kind = placement.kind === 'member' ? placement.memberKind : placement.kind
   const group = svg.createSvg('g', { cls: ['hexframe-hex', `is-${kind}`] })
   const points = hexCorners(placement.center, placement.radius * inset)
@@ -136,16 +216,10 @@ function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex): DrawnH
     return []
   }
   const { tile } = placement
-  group.addClass('is-clickable')
-  group.addEventListener('click', (event) => {
-    onHex.click(placement, event)
-  })
-  group.addEventListener('contextmenu', (event) => {
-    event.preventDefault()
-    onHex.menu(placement, event)
-  })
+  clickableOn(group, placement, onHex)
   group.createSvg('title').textContent =
     tile.preview === '' ? tile.title : `${tile.title}\n\n${tile.preview}`
+  if (isListed(placement)) return [{ group, path: tile.path }, ...drawList(group, placement, onHex)]
   if (placement.kind === 'member' && text.previewLines > 0) {
     const label = { ...at, y: at.y - placement.radius * inset * scale * 0.73 }
     words(group, label, text.direction, [String(placement.direction)])
@@ -154,16 +228,83 @@ function drawHex(svg: SVGSVGElement, placement: Placement, onHex: OnHex): DrawnH
   const titleLines = wrap(tile.title, perLine(text.title, text.band), 2)
   const previewLines = wrap(tile.preview, perLine(text.preview, text.band), text.previewLines)
   const titleHeight = titleLines.length * text.title.lineHeight
-  const gap = previewLines.length > 0 ? 6 : 0
-  const top = at.y - (titleHeight + gap + previewLines.length * text.preview.lineHeight) / 2
+  const space = previewLines.length > 0 ? gap : 0
+  const top = at.y - (titleHeight + space + previewLines.length * text.preview.lineHeight) / 2
   words(group, { ...at, y: top + text.title.size }, text.title, titleLines)
   words(
     group,
-    { ...at, y: top + titleHeight + gap + text.preview.size },
+    { ...at, y: top + titleHeight + space + text.preview.size },
     text.preview,
     previewLines,
   )
   return [{ group, path: tile.path }]
+}
+
+/** The gap between a hex's title and what it holds under it, in SVG units. */
+const gap = 6
+
+/**
+ * How many names a list holds inside a hex of `radius`, one per line under its title, in the band
+ * where its words sit and a height of 1.1 times its radius as drawn, which the band leaves inside
+ * the hex's sides.
+ */
+export function listRows(radius: number): number {
+  const text = textOf(radius, false)
+  const height = 1.1 * radius * inset * scale
+  const rows = (height - text.title.lineHeight - gap) / text.preview.lineHeight
+  return Math.max(0, Math.floor(rows))
+}
+
+/** Whether `hex`'s list fits inside it; when not, the hex says so and opens the list on a click. */
+export function fitsIn(hex: ListedHex): boolean {
+  return hex.list.ring.candidates.length <= listRows(hex.radius)
+}
+
+/**
+ * Draws `hex`'s list inside its group, under its title: every name, each one clickable as its hex
+ * would be, when they fit; else a line saying how many there are, which opens the list to fill the
+ * view. Returns the names drawn.
+ */
+function drawList(group: SVGGElement, hex: ListedHex, onHex: OnHex): Drawn[] {
+  group.addClass('is-listed')
+  const text = textOf(hex.radius, hex.kind === 'center')
+  const at = { x: hex.center.x * scale, y: hex.center.y * scale }
+  const items = fitsIn(hex) ? itemsOf(hex) : []
+  const more =
+    items.length === 0 ? wrap(tooMany(hex.list), perLine(text.preview, text.band), 2) : []
+  const rows = items.length + more.length
+  const top = at.y - (text.title.lineHeight + gap + rows * text.preview.lineHeight) / 2
+  const titleLine = wrap(hex.tile.title, perLine(text.title, text.band), 1)
+  words(group, { ...at, y: top + text.title.size }, text.title, titleLine)
+  const rowAt = (row: number) => top + text.title.lineHeight + gap + row * text.preview.lineHeight
+  const line = (cls: string, row: number, lines: string[], tip: string) => {
+    const one = group.createSvg('g', { cls })
+    one.createSvg('rect', {
+      attr: {
+        x: round(at.x - text.band / 2),
+        y: round(rowAt(row)),
+        width: round(text.band),
+        height: round(text.preview.lineHeight * lines.length),
+      },
+    })
+    words(one, { ...at, y: rowAt(row) + text.preview.size }, text.preview, lines)
+    one.createSvg('title').textContent = tip
+    return one
+  }
+  if (items.length === 0) {
+    const label = line('hexframe-more', 0, more, 'Show the list')
+    label.addEventListener('click', (event) => {
+      event.stopPropagation()
+      onHex.list(hex)
+    })
+    return []
+  }
+  return items.map((item, row) => {
+    const name = wrap(item.tile.title, perLine(text.preview, text.band), 1)
+    const one = line(`hexframe-item is-${item.memberKind}`, row, name, item.tile.title)
+    clickableOn(one, item, onHex)
+    return { group: one, path: item.tile.path }
+  })
 }
 
 /** One `<text>` of `lines` set in `style`, centered on `at.x`, its first baseline at `at.y`. */
@@ -245,11 +386,13 @@ function notesOf(frame: Frame, kind: FrameKind): string[] {
   const ring = frame.rings[kind]
   if (ring === undefined) return []
   if (ring.overflowing) {
-    const names = ring.overflow.map(patternOf).join(', ')
+    const { candidates, overflow } = ring
+    const named = overflow.slice(0, 3).map(patternOf).join(', ')
+    const more = overflow.length > 3 ? ` and ${String(overflow.length - 3)} more` : ''
     return [
-      `${String(ring.candidates.length)} ${kind} for six directions, so none is drawn: ` +
-        `no direction is left for ${names}. List what this folder leaves out in ` +
-        '.hexframe/exclusions.yaml, or renumber, to draw them.',
+      `${String(candidates.length)} ${kind} for six directions, so they show as a list: no ` +
+        `direction is left for ${named}${more}. List what this folder leaves out in ` +
+        '.hexframe/exclusions.yaml, or renumber, to draw them as hexes.',
     ]
   }
   if (!('clashes' in ring)) return []

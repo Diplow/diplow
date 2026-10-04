@@ -35,12 +35,12 @@ const view: FrameView = {
   inner: 'context',
   expanded: { 1: { frame: branch, frameKind: 'children' } },
 }
-const hexes = focusable(layoutView(view))
+const hexes = focusable(layoutView(view), () => true)
 
 describe('focusable', () => {
   it('lists every hex holding a Tile in drawing order, the center first, an opened one once', () => {
     expect(hexes.map(({ tile }) => tile.path)).toEqual(['', '.c', '1-a', '1-a/x.md', '2-b.md'])
-    expect(hexes.every((hex) => hex.opened !== true)).toBe(true)
+    expect(hexes.every((hex) => hex.kind === 'item' || hex.opened !== true)).toBe(true)
   })
 })
 
@@ -81,6 +81,32 @@ describe('focusToward', () => {
 
   it('jumps from a peeled center to the ring inside it', () => {
     const peeled = { frame, inner: 'context' as const }
-    expect(focusToward(undefined, peeled, focusable(layoutView(peeled)), 1)).toBe('.c')
+    expect(
+      focusToward(
+        undefined,
+        peeled,
+        focusable(layoutView(peeled), () => true),
+        1,
+      ),
+    ).toBe('.c')
+  })
+})
+
+describe('focusable, with a list', () => {
+  const candidates = ['a.md', 'b.md'].map((name) => ({ kind: 'leaf' as const, name }))
+  const listing: FrameView = {
+    frame: frameOf('', {
+      children: children({ 1: { kind: 'branch', tile: tile('1-a') } }),
+      leaves: { overflowing: true, candidates, overflow: [] },
+    }),
+    frameKind: 'children',
+    inner: 'leaves',
+  }
+
+  it('lists the names of a list right after its hex, when they fit in it', () => {
+    const paths = (fits: boolean) =>
+      focusable(layoutView(listing), () => fits).map(({ tile }) => tile.path)
+    expect(paths(true)).toEqual(['', 'a.md', 'b.md', '1-a'])
+    expect(paths(false)).toEqual(['', '1-a'])
   })
 })

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { layoutView, type FrameView, type TileHex } from '../../2-claude-mod/hooks/shape/layout.ts'
+import { layoutView, type FrameView } from '../../2-claude-mod/hooks/shape/layout.ts'
 import type {
   Direction,
   Frame,
@@ -12,6 +12,7 @@ import type { Expansions } from './expansions.ts'
 import { outerBranchOf } from './click.ts'
 import { outerBranches } from './expansions.ts'
 import { focusable } from './focus.ts'
+import type { Clickable } from './list.ts'
 import { commandsOf, items, planOf, type ItemId, type Target } from './menu.ts'
 
 const tile = (path: string) => ({ path, title: path, preview: '' })
@@ -51,9 +52,9 @@ const view: FrameView = {
   inner: 'context',
   expanded: { 1: { frame: opened, frameKind: 'children' } },
 }
-const hexes = focusable(layoutView(view))
+const hexes = focusable(layoutView(view), () => true)
 
-const hexAt = (path: string): TileHex => {
+const hexAt = (path: string): Clickable => {
   const hex = hexes.find(({ tile }) => tile.path === path)
   if (hex === undefined) throw new Error(`no hex holds ${path}`)
   return hex
@@ -135,6 +136,21 @@ describe('the items that apply to a hex', () => {
   it('on a Leaf: preview a note, hand anything else to the default app', () => {
     expect(listed('4-se/3-c.md')).toEqual(['preview'])
     expect(listed('4-se/4-d.pdf')).toEqual(['open-in-default-app'])
+  })
+})
+
+describe('the items that apply to a name of a list', () => {
+  const item = (memberKind: Member['kind'], path: string): Clickable => ({
+    kind: 'item',
+    memberKind,
+    tile: tile(path),
+  })
+
+  it('are those of its hex, and open no ring', () => {
+    expect(listed('4-se', { hex: item('branch', '4-se/7-g') })).toEqual(['center-here', 'preview'])
+    expect(listed('4-se', { hex: item('context', '4-se/.f') })).toEqual(['center-here', 'preview'])
+    expect(listed('4-se', { hex: item('leaf', '4-se/x.md') })).toEqual(['preview'])
+    expect(listed('4-se', { hex: item('leaf', '4-se/y.pdf') })).toEqual(['open-in-default-app'])
   })
 })
 
