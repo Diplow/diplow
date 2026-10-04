@@ -72,7 +72,7 @@ export function drawView(
  */
 export function drawFullList(
   container: HTMLElement,
-  { holder, openedFromHex }: FullList,
+  { holder, source }: FullList,
   notes: readonly string[],
   onHex: OnHex,
 ): Focus {
@@ -84,7 +84,7 @@ export function drawFullList(
   hex.createSpan({ cls: 'hexframe-list-count', text: tooMany(holder.list) })
   clickableOn(hex, holder, onHex)
   const drawn: Drawn[] = [{ group: hex, path: holder.tile.path }]
-  if (openedFromHex) {
+  if (source === 'opened') {
     const button = head.createEl('button', { text: 'Back to the hexes' })
     button.addEventListener('click', () => {
       onHex.list(undefined)
@@ -259,10 +259,15 @@ function words(group: SVGGElement, at: Point, style: TextStyle, lines: readonly 
 
 /**
  * What the view says about the rings it shows, the center's outer and inner ones and those of the
- * Branches it opens, named: their clashes, or why one shows no hexes.
+ * Branches it opens, named: their clashes, or why one shows as a list; only the latter for the
+ * center's outer ring when it overflows, since the view is then that list alone.
  */
 export function ringNotes(view: FrameView | CollapsedView): string[] {
   const { frame } = view
+  // A view whose own ring overflows is that list alone: its other rings aren't on screen.
+  if ('frameKind' in view && frame.rings[view.frameKind]?.overflowing === true) {
+    return notesOf(frame, view.frameKind)
+  }
   const shown = 'frameKind' in view ? [view.frameKind] : []
   if (view.inner !== undefined) shown.push(view.inner)
   const own = shown.flatMap((kind) => notesOf(frame, kind))

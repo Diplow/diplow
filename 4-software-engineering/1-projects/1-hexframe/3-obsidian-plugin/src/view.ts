@@ -343,11 +343,11 @@ export class HexframeView extends TextFileView {
       const folders = [folder, ...Object.values(opened).map(({ tile }) => vaultPath(tile.path))]
       const placements = layoutView(view)
       const full = fullListOf(placements, this.listing, folder)
-      if (full?.openedFromHex !== true) this.listing = undefined
+      if (full?.source !== 'opened') this.listing = undefined
       const hexes = full ? focusableInList(full) : focusable(placements)
       const offered = kindsOf(frame.rings)
-      const listed = full?.holder.tile.path
-      this.drawn = { folders, scene: { view, hexes, shown, offered, branchKinds, listed } }
+      const fillingView = full?.holder.tile.path
+      this.drawn = { folders, scene: { view, hexes, shown, offered, branchKinds, fillingView } }
       const said = [...notes, ...warnings, ...ringNotes(view)]
       this.outline = full
         ? drawFullList(this.contentEl, full, said, this.onHex())
@@ -488,8 +488,9 @@ export class HexframeView extends TextFileView {
 }
 
 /** What an item acts on at `hex`, as the last drawing drew it. */
-function targetOf(hex: Clickable, { view, shown, offered, branchKinds, listed }: Scene): Target {
-  return { hex, view, shown, offered, branchKinds, listed }
+function targetOf(hex: Clickable, scene: Scene): Target {
+  const { view, shown, offered, branchKinds, fillingView } = scene
+  return { hex, view, shown, offered, branchKinds, fillingView }
 }
 
 /**

@@ -86,7 +86,7 @@ describe('fullListOf', () => {
     const view: FrameView = { frame: app, frameKind: 'branches', inner: 'context' }
     const opened = { center: '1-app', path: '1-app/src' }
     const full = fullListOf(layoutView(view), opened, '1-app')
-    expect(full?.openedFromHex).toBe(false)
+    expect(full?.source).toBe('own-ring')
     expect(full?.holder).toMatchObject({
       kind: 'center',
       tile: { path: '1-app' },
@@ -100,7 +100,7 @@ describe('fullListOf', () => {
     const opened = { center: '1-app', path: '1-app' }
     expect(fullListOf(placements, opened, '1-app')).toEqual({
       holder: listedHex('1-app', view),
-      openedFromHex: true,
+      source: 'opened',
     })
     expect(fullListOf(placements, undefined, '1-app')).toBeUndefined()
     const seated: FrameView = { frame: app, frameKind: 'context', inner: 'context' }

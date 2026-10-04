@@ -16,7 +16,7 @@ import {
   sameExpansions,
   type Expansions,
 } from './expansions.ts'
-import type { Clickable } from './list.ts'
+import { isListed, type Clickable } from './list.ts'
 
 /** What the view drew, which the items read. */
 export interface Drawing {
@@ -28,7 +28,7 @@ export interface Drawing {
   /** The Frame kinds each Branch around the center offers, by direction, where they were read. */
   branchKinds: Partial<Record<Direction, readonly FrameKind[]>>
   /** The path of the Tile whose hex's list fills the view, when one does. */
-  listed?: string | undefined
+  fillingView?: string | undefined
 }
 
 /** The hex, or name of a list, an item acts on, and what the view drew around it. */
@@ -76,10 +76,8 @@ const table = {
   'show-list': {
     name: 'Show the list',
     key: 'S',
-    plan: ({ hex, listed }) => {
-      const isListed = hex.kind !== 'item' && hex.list !== undefined
-      return isListed && hex.tile.path !== listed ? { list: hex.tile.path } : undefined
-    },
+    plan: ({ hex, fillingView }) =>
+      isListed(hex) && hex.tile.path !== fillingView ? { list: hex.tile.path } : undefined,
   },
   up: {
     name: 'Up',

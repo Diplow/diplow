@@ -109,3 +109,22 @@ describe('ringNotes, past three names', () => {
     )
   })
 })
+
+describe('ringNotes, around a ring that fills the view', () => {
+  it('speaks only of that ring, the others not being on screen', () => {
+    const candidates = ['1-a', '1-b'].map((name) => ({ kind: 'branch' as const, name }))
+    const overflowing = { overflowing: true as const, candidates, overflow: candidates.slice(1) }
+    const crowded = {
+      overflowing: true as const,
+      candidates: [{ kind: 'context' as const, name: '.1-a' }],
+      overflow: [{ kind: 'context' as const, name: '.1-a' }],
+    }
+    const frame: Frame = {
+      tile: { path: '', title: 'diplow', preview: '' },
+      rings: { branches: overflowing, context: crowded },
+    }
+    const notes = ringNotes({ frame, frameKind: 'branches', inner: 'context' })
+    expect(notes).toHaveLength(1)
+    expect(notes[0]).toMatch(/^2 Branches for six directions/)
+  })
+})

@@ -178,7 +178,7 @@ describe('Show the list', () => {
     expect(planOf('show-list', targetOf('4-se', { hex: listedCenter }))).toEqual({
       list: '4-se',
     })
-    expect(planOf('show-list', targetOf('4-se', { hex: listedCenter, listed: '4-se' }))).toBe(
+    expect(planOf('show-list', targetOf('4-se', { hex: listedCenter, fillingView: '4-se' }))).toBe(
       undefined,
     )
   })

@@ -25,9 +25,9 @@ export type Clickable = TileHex | ListItem
 /** A hex opened into a ring that overflows, which holds that ring's list. */
 export type ListedHex = TileHex & { list: Listed }
 
-/** Whether `placement` holds a list. */
-export function isListed(placement: Placement): placement is ListedHex {
-  return placement.kind !== 'empty' && placement.list !== undefined
+/** Whether `placement`, a hex or a name of a list, is a hex that holds a list. */
+export function isListed(placement: Placement | ListItem): placement is ListedHex {
+  return placement.kind !== 'empty' && placement.kind !== 'item' && placement.list !== undefined
 }
 
 /** The names of `hex`'s list, in the ring's order, each in the folder whose ring it is. */
@@ -63,11 +63,13 @@ export interface OpenedList {
   path: string
 }
 
-/** A list filling the view: the hex it is of, and whether the user opened it from that hex. */
+/**
+ * A list filling the view: the hex it is of, and why it fills it, as the view's own ring, or
+ * because the user opened it from that hex and may go back to the hexes.
+ */
 export interface FullList {
   holder: ListedHex
-  /** True when the user opened it, and may go back to the hexes; false for the view's own ring. */
-  openedFromHex: boolean
+  source: 'own-ring' | 'opened'
 }
 
 /**
@@ -82,8 +84,8 @@ export function fullListOf(
 ): FullList | undefined {
   const listed = placements.filter(isListed)
   const own = listed.find(({ list }) => list.fillsView === true)
-  if (own !== undefined) return { holder: own, openedFromHex: false }
+  if (own !== undefined) return { holder: own, source: 'own-ring' }
   if (opened?.center !== center) return undefined
   const holder = listed.find(({ tile }) => tile.path === opened.path)
-  return holder && { holder, openedFromHex: true }
+  return holder && { holder, source: 'opened' }
 }
