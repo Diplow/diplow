@@ -1,18 +1,9 @@
-# The config of the "hexframe app: Import & export" project's autonomous run, read by
+# The config of the "hexframe app: MCP server" project's autonomous run, read by
 # run-autonomous-project (.skills/4-softeng/1-ship/run-autonomous-project/references/contract.md
-# holds every key). It gives Mapping Leaves, a Name, Tile config and kept
-# Frontmatter, writes a Tile and everything below it as files and as a zip,
-# reads a zip or a folder back the way the shape does, and lays the canvas out
-# on the shape's layoutView. The app imports the shape from
-# 2-claude-mod/hooks/shape/ by relative path, as the Obsidian plugin does, so
-# the shape stays writable; the rest of claude-mod and the plugin are frozen.
-# Every caller of the shape outside the app is frozen with them, so a change to
-# the shape is additive: its exports keep their names, types and behaviour, and a
-# unit that needs to break one parks instead.
-# The design is in the "Later" section of 1-app/src/domains/mapping/CLAUDE.md.
-# Every ticket lands on project/import-export, which I merge into main at the end:
+# holds every key). It builds Keys, the MCP server at /mcp, swap and Help in
+# 1-app. Every ticket lands on project/mcp-server, which I merge into main at the end:
 #
-#   /softeng:ship:run-autonomous-project "hexframe app: Import & export" --config 4-software-engineering/1-projects/1-hexframe/.run/import-export.yaml
+#   /softeng:ship:run-autonomous-project "hexframe app: MCP server" --config 4-software-engineering/1-projects/1-hexframe/.run/mcp-server.yaml
 #
 # The run never edits this file.
 
@@ -20,7 +11,7 @@ version: 1
 team: Hexframe
 
 repo:
-  target_branch: project/import-export
+  target_branch: project/mcp-server
   merge_strategy: merge
   working_tree: shared
 
@@ -28,7 +19,7 @@ parallelism: 1
 
 # The tickets exist, so nothing is minted.
 projects:
-  - name: "hexframe app: Import & export"
+  - name: "hexframe app: MCP server"
     on_exhausted: park
     mint_tickets: false
 
@@ -73,14 +64,16 @@ halting:
   never:
     - Never push to main, open a pull request into main, or merge anything into main.
     - Never weaken a gate to turn it green. No skipped or deleted test, no lowered lint threshold, no rule disabled without a reason, no --no-verify.
-    - Never put a secret, a token or a .env file in a commit, a log, a comment or a pull request. Name the variable, never its value.
+    - Never put a secret, a token, a Key or a .env file in a commit, a log, a comment or a pull request. Name the variable, never its value.
     - Never write to a production Neon database, a live Stripe account, or any third-party account outside a test mode or a preview.
     - Never add a beta or alpha dependency outside a seam that STACK.md names.
+    - Never import one domain from another, or a third-party SDK from anywhere but its repository; the one exception is the MCP server's SDK, in the API layer's MCP folder, as STACK.md says.
+    - Never exceed the rule of 6; when a folder is full, regroup and record the regrouping in the register.
     - Never touch a ticket, branch or pull request of another project.
   # The repo's own tooling and review setup, hexframe's STACK.md (the bar the
-  # never list defers to; what the project changes in it, the phase-close ticket
-  # lists for me), claude-mod but its shape, which the app now imports, the
-  # Obsidian plugin, and the vault's Obsidian config.
+  # never list defers to), and the two other packages, which this project
+  # doesn't touch. STACK.md's MCP row is already one line and a link: its
+  # rules live in 1-app/src/api/CLAUDE.md, which the run may edit.
   frozen_paths:
     - .skills/**
     - .claude/**
@@ -90,16 +83,10 @@ halting:
     - .mcp.json
     - cubic.yaml
     - 4-software-engineering/1-projects/1-hexframe/.cubic/**
-    - 4-software-engineering/1-projects/1-hexframe/STACK.md
     - 4-software-engineering/1-projects/1-hexframe/.run/CLAUDE.md
     - 4-software-engineering/1-projects/1-hexframe/.run/*.yaml
-    - 4-software-engineering/1-projects/1-hexframe/2-claude-mod/.claude-plugin/**
-    - 4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/draw/**
-    - 4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/*.ts
-    - 4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/hooks.json
-    - 4-software-engineering/1-projects/1-hexframe/2-claude-mod/tests/**
-    - 4-software-engineering/1-projects/1-hexframe/2-claude-mod/package.json
-    - 4-software-engineering/1-projects/1-hexframe/2-claude-mod/CLAUDE.md
+    - 4-software-engineering/1-projects/1-hexframe/STACK.md
+    - 4-software-engineering/1-projects/1-hexframe/2-claude-mod/**
     - 4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/**
   # Everything of mine that is not hexframe.
   read_only_paths:

@@ -35,10 +35,11 @@ The choices, and the rules they come with. Each rule is written here until the f
 | Shortcuts | TanStack Hotkeys, behind a `hotkeys` seam in `ui/` |
 | Tile content | TanStack Markdown (alpha), behind a seam in `ui/`: if it disappoints, the seam is the one file that changes |
 | Building a system by conversation | TanStack AI |
+| Agents working on a System | An MCP server at `/mcp`, on `@modelcontextprotocol/server` (v2); its rules in [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE\|api]] |
 | Effects and typed errors | Effect |
 | Validation | Effect Schema, everywhere; `zod` is banned by lint |
 | Database | Neon, Drizzle through its Effect driver (`drizzle-orm/effect-postgres` over `@effect/sql-pg`; `drizzle-orm/effect-pglite` over `@effect/sql-pglite` in tests) |
-| Auth | Better Auth, behind IAM |
+| Auth | Better Auth, behind IAM; an Account's Keys through `@better-auth/api-key` |
 | Payments | Stripe through `@better-auth/stripe`, behind IAM |
 | UI | Tailwind, shadcn |
 | Languages | Paraglide JS |
@@ -56,7 +57,7 @@ Every folder under `1-app/src/` holds at most 6 child folders and 6 files. The r
 | Layer | In TanStack Start | Holds |
 |---|---|---|
 | Front | File routes, the features they compose, the design system, and the client's calls, on TanStack Router, Query and Form | What the browser shows |
-| API | Server functions (`createServerFn`) and Start middleware; raw server routes only for inbound webhooks | Plumbing (auth, request id, logging) and the composition of domains |
+| API | Server functions (`createServerFn`) and Start middleware; raw server routes only for inbound webhooks and the MCP endpoint | Plumbing (auth, request id, logging) and the composition of domains |
 | Domains | Effect programs, one folder per domain; a service only when it holds state | The business logic, in the domain's language |
 | Repositories | Effect layers over Drizzle, Better Auth, Stripe | The technical complexity |
 
@@ -122,7 +123,7 @@ Each domain introduces its language with a short story in its `CLAUDE.md`: what 
 
 ### IAM
 
-Identity and access: who someone is (an Account, its Sessions, later its Keys), and what they may do (its Entitlements), on Better Auth. The language now lives in [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE|iam]].
+Identity and access: who someone is (an Account, its Sessions and its Keys), and what they may do (its Entitlements), on Better Auth. The language now lives in [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE|iam]].
 
 ### Mapping
 
