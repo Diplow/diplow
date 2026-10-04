@@ -14,7 +14,7 @@ The middle layer: one folder per domain, each in its own language. A domain's pu
 
 | Folder | Holds |
 |---|---|
-| `iam/` | Identity and access: Accounts and their Sessions, on Better Auth: [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE\|iam]] |
+| `iam/` | Identity and access: Accounts, their Sessions and their Keys, on Better Auth: [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE\|iam]] |
 | `mapping/` | The core: an Account's System, a hierarchy of Tiles in six Directions and six Context slots, and the operations on it, over the tiles repository: [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE\|mapping]] |
 
 | File | Holds |

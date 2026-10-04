@@ -1,9 +1,11 @@
 import { describe, expect, it, layer } from '@effect/vitest'
 import { ConfigProvider, Effect, Exit, Layer, Option } from 'effect'
 
+import { Database } from '../database/database'
+import { apikey } from '../database/schema'
 import { TestDatabase } from '../database/testing'
 import { Auth, HttpExchange, baseURLOf, localBaseURL, make, vercelHosts } from './auth'
-import { testSecret } from './testing'
+import { browser, TestAuth, testSecret } from './testing'
 
 const branch = 'hexframe-app-git-fix-team.vercel.app'
 
@@ -103,6 +105,26 @@ layer(OnPreview)('Better Auth on a preview', (it) => {
         Effect.provideService(HttpExchange, onBranch(cookies)),
       )
       expect(Option.getOrThrow(session).user).toEqual(user)
+    }),
+  )
+})
+
+layer(TestAuth)('API keys in the database', (it) => {
+  it.effect('keeps a hash of the secret and its first characters, never the secret', () =>
+    Effect.gen(function* () {
+      const auth = yield* Auth
+      const device = browser()
+      yield* device.request(
+        auth.signUp({ email: 'hashed@example.com', password: 'correct horse battery' }),
+      )
+      const { secret } = yield* device.request(auth.createApiKey('script'))
+      const rows = yield* (yield* Database)
+        .select({ key: apikey.key, start: apikey.start, prefix: apikey.prefix })
+        .from(apikey)
+      expect(rows.map(({ start, prefix }) => ({ start, prefix }))).toEqual([
+        { start: secret.slice(0, 6), prefix: 'hf_' },
+      ])
+      expect(rows[0]?.key).not.toContain(secret.slice(6))
     }),
   )
 })

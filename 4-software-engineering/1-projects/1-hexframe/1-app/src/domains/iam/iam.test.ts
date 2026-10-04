@@ -3,7 +3,16 @@ import { Effect, Option } from 'effect'
 
 import { browser, TestAuth } from '#/repositories/auth/testing'
 
-import { CurrentSession, proven, signIn, signOut, signUp, signedIn } from './iam'
+import {
+  CurrentKey,
+  CurrentSession,
+  proven,
+  sessionOnly,
+  signIn,
+  signOut,
+  signUp,
+  signedIn,
+} from './iam'
 
 let accounts = 0
 
@@ -108,25 +117,41 @@ layer(TestAuth)('IAM on Better Auth', (it) => {
   )
 })
 
-describe('signedIn', () => {
-  const session = { account: { id: 'a-1', email: 'ada@example.com' }, expiresAt: new Date() }
+describe('signedIn and sessionOnly', () => {
+  const account = { id: 'a-1', email: 'ada@example.com' }
+  const session = { account, expiresAt: new Date() }
+  const key = { account, keyId: 'k-1' }
 
-  it.effect('is the request’s Session when there is one', () =>
+  /** Runs `program` on a request proven by a Session, a Key, both or neither. */
+  const on = <A, E>(
+    program: Effect.Effect<A, E, CurrentSession | CurrentKey>,
+    proofs: { session?: typeof session; key?: typeof key },
+  ) =>
+    program.pipe(
+      Effect.provideService(CurrentSession, Option.fromNullishOr(proofs.session)),
+      Effect.provideService(CurrentKey, Option.fromNullishOr(proofs.key)),
+    )
+
+  it.effect('signedIn is the Account a Session proves, or the one a Key proves', () =>
     Effect.gen(function* () {
-      const found = yield* signedIn.pipe(
-        Effect.provideService(CurrentSession, Option.some(session)),
-      )
-      expect(found).toBe(session)
+      expect(yield* on(signedIn, { session })).toEqual({ account })
+      expect(yield* on(signedIn, { key })).toEqual({ account })
     }),
   )
 
-  it.effect('fails SignedOut, of kind Unauthenticated, when there is none', () =>
+  it.effect('signedIn fails SignedOut, of kind Unauthenticated, when nothing proves it', () =>
     Effect.gen(function* () {
-      const error = yield* signedIn.pipe(
-        Effect.provideService(CurrentSession, Option.none()),
-        Effect.flip,
-      )
+      const error = yield* on(signedIn, {}).pipe(Effect.flip)
       expect(error).toMatchObject({ _tag: 'SignedOut', kind: 'Unauthenticated' })
+    }),
+  )
+
+  it.effect('sessionOnly is the Session, refuses a Key alone, and sends nobody to sign in', () =>
+    Effect.gen(function* () {
+      expect(yield* on(sessionOnly, { session })).toBe(session)
+      const byKey = yield* on(sessionOnly, { key }).pipe(Effect.flip)
+      expect(byKey).toMatchObject({ _tag: 'SessionRequired', kind: 'Forbidden' })
+      expect(yield* on(sessionOnly, {}).pipe(Effect.flip)).toMatchObject({ _tag: 'SignedOut' })
     }),
   )
 })

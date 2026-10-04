@@ -2,11 +2,11 @@ import { Effect, Exit, Option, Schema } from 'effect'
 import { describe, expect, it } from 'vitest'
 
 import * as Iam from '#/domains/iam/iam'
-import { browser } from '#/repositories/auth/testing'
+import { browser, keyClient } from '#/repositories/auth/testing'
 
 import type { Failure } from '../errors/failure'
-import { run, type Services, type StartContext } from '../server/run'
-import { Credentials } from './iam'
+import { noKey, run, type Services, type StartContext } from '../server/run'
+import { Credentials, KeyId, KeyName } from './iam'
 
 // IAM's server functions, as their handlers run them: the domain's operation, through the helper, on
 // the runtime's Better Auth, over PGlite. Each device is a browser of its own, with its own IP, so
@@ -26,6 +26,7 @@ const signedOut: StartContext = {
     setCookies: () => undefined,
   },
   session: Exit.succeed(Option.none()),
+  key: noKey,
 }
 
 /** Any of IAM's programs, as the helper takes it. */
@@ -55,7 +56,7 @@ const credentials = (password = 'lovelace1815') => ({
 
 describe("IAM's server functions", () => {
   it('session sends SignedOut to nobody', async () => {
-    expect(await run(signedOut, Iam.signedIn)).toEqual({
+    expect(await run(signedOut, Iam.sessionOnly)).toEqual({
       ok: false,
       failure: { _tag: 'SignedOut', kind: 'Unauthenticated' },
       requestId: 'req-iam',
@@ -66,7 +67,7 @@ describe("IAM's server functions", () => {
     const device = browser()
     const account = await value(from(device, Iam.signUp(credentials())))
     expect(device.cookies()).not.toHaveLength(0)
-    const session = await value(run(await requestFrom(device), Iam.signedIn))
+    const session = await value(run(await requestFrom(device), Iam.sessionOnly))
     expect(session.account).toEqual(account)
   })
 
@@ -78,11 +79,11 @@ describe("IAM's server functions", () => {
     expect(await value(from(phone, Iam.signIn(signedUp)))).toEqual(account)
 
     await value(from(phone, Iam.signOut, await requestFrom(phone)))
-    expect(await run(await requestFrom(phone), Iam.signedIn)).toMatchObject({
+    expect(await run(await requestFrom(phone), Iam.sessionOnly)).toMatchObject({
       ok: false,
       failure: { _tag: 'SignedOut' },
     })
-    expect(await value(run(await requestFrom(laptop), Iam.signedIn))).toMatchObject({ account })
+    expect(await value(run(await requestFrom(laptop), Iam.sessionOnly))).toMatchObject({ account })
   })
 
   it('sends a refusal as its tagged error, on the field at fault, with the request id', async () => {
@@ -117,6 +118,72 @@ describe("IAM's server functions", () => {
       ok: false,
       failure: rejected,
     })
+  })
+})
+
+describe("IAM's Key server functions", () => {
+  /** A device signed in as a new Account, and a request from it as the middleware puts it on. */
+  async function signedInDevice() {
+    const device = browser()
+    const account = await value(from(device, Iam.signUp(credentials())))
+    return { device, account, request: await requestFrom(device) }
+  }
+
+  it('issues, lists and revokes a Key; only the issue carries its secret', async () => {
+    const { device, request } = await signedInDevice()
+    const issued = await value(from(device, Iam.issueKey('Claude Code'), request))
+    expect(issued.secret).toMatch(/^hf_/)
+    // KeyId's pattern follows Better Auth's ids: an upgrade that changes them fails here.
+    expect(Schema.is(KeyId)({ id: issued.key.id })).toBe(true)
+    const listed = await value(from(device, Iam.keys, request))
+    expect(listed).toEqual([issued.key])
+    expect(JSON.stringify(listed)).not.toContain(issued.secret)
+
+    await value(from(device, Iam.revokeKey(issued.key.id), request))
+    expect(await value(from(device, Iam.keys, request))).toEqual([])
+  })
+
+  it('sends SessionRequired over the wire to a request a Key proves', async () => {
+    const { device, account, request } = await signedInDevice()
+    const { secret } = await value(from(device, Iam.issueKey('leaked'), request))
+    const key = await value(run(signedOut, keyClient(secret).request(Iam.keyProven)))
+    expect(key).toMatchObject(Option.some({ account }))
+    const byKey: StartContext = { ...signedOut, key: Exit.succeed(key) }
+    const sessionOnly: ReadonlyArray<Program> = [Iam.issueKey('another'), Iam.keys, Iam.sessionOnly]
+    for (const program of sessionOnly) {
+      expect(await run(byKey, program)).toEqual({
+        ok: false,
+        failure: { _tag: 'SessionRequired', kind: 'Forbidden' },
+        requestId: 'req-iam',
+      })
+    }
+  })
+
+  it('sends KeyNameInvalid on the name, and KeyNotFound for a Key that is not theirs', async () => {
+    const { device, request } = await signedInDevice()
+    expect(await from(device, Iam.issueKey(''), request)).toMatchObject({
+      ok: false,
+      failure: { _tag: 'KeyNameInvalid', kind: 'Invalid', fields: ['name'] },
+    })
+    expect(await from(device, Iam.revokeKey('nosuchkey'), request)).toMatchObject({
+      ok: false,
+      failure: { _tag: 'KeyNotFound', kind: 'NotFound' },
+    })
+  })
+})
+
+describe('the schemas issuing and revoking a Key validate by', () => {
+  it('bound the name to 256 characters, a string', () => {
+    expect(Schema.is(KeyName)({ name: 'x'.repeat(256) })).toBe(true)
+    expect(Schema.is(KeyName)({ name: 'x'.repeat(257) })).toBe(false)
+    expect(Schema.is(KeyName)({ name: 1 })).toBe(false)
+  })
+
+  it('take an id of letters and digits only', () => {
+    expect(Schema.is(KeyId)({ id: 'aB3dEf9hIjKlMnOpQrStUvWxYz012345' })).toBe(true)
+    for (const id of ['', '../x', 'a b', 'x'.repeat(129)]) {
+      expect(Schema.is(KeyId)({ id })).toBe(false)
+    }
   })
 })
 

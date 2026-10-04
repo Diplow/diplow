@@ -1,7 +1,7 @@
 import { Exit, Option } from 'effect'
 import { describe, expect, it } from 'vitest'
 
-import { run, type StartContext } from '../server/run'
+import { noKey, run, type StartContext } from '../server/run'
 import { outcomes } from './failures'
 import { provoked, savedDevTitle } from './programs'
 
@@ -16,6 +16,7 @@ const context: StartContext = {
     setCookies: () => undefined,
   },
   session: Exit.succeed(Option.none()),
+  key: noKey,
 }
 
 describe('the calls /dev/errors provokes', () => {

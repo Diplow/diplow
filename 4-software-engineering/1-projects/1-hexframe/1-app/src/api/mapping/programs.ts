@@ -1,5 +1,5 @@
 // The programs behind Mapping's server functions (./mapping.ts): each runs one of Mapping's operations
-// for the Account the request's Session proves, or fails with IAM's `SignedOut`, and a change in the
+// for the Account the request proves, by its Session or its Key, or fails with IAM's `SignedOut`, and a change in the
 // transaction it opens. They sit in a module of their own because they reach the domain and the
 // database: the client imports the server functions, and only their handlers import this module,
 // which Start strips from the client.
@@ -9,7 +9,7 @@ import * as Iam from '#/domains/iam/iam'
 import * as Mapping from '#/domains/mapping/mapping'
 import { transactional } from '#/repositories/database/database'
 
-/** Runs an operation for the signed-in Account: the one its Session proves, never one a caller sends. */
+/** Runs an operation for the signed-in Account: the one the request proves, never one a caller sends. */
 const forAccount = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, E, R>) =>
   Effect.flatMap(Iam.signedIn, ({ account }) => operation(account.id))
 

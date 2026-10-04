@@ -4,9 +4,9 @@ parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam
 owner: diplo
 preview: >-
   IAM, identity and access: who someone is (an Account, known by its email) and
-  the proof they are here (a Session, on one device, for a while). Built on
-  Better Auth, which sits below it as a repository. Key and Entitlement come
-  later.
+  the two proofs a request gives of it: a Session, on one device, for a while,
+  or a Key, issued to a program. Built on Better Auth and its api-key plugin,
+  which sit below it as a repository. Entitlement comes later.
 ---
 # iam
 
@@ -24,12 +24,15 @@ Better Auth and its Stripe plugin are repositories below IAM ([[4-software-engin
 
 | File | Holds |
 |---|---|
-| `iam.ts` | `Account`, `Session`, `CurrentSession` (the request's Session, which the API layer's middleware resolves once per request), and the operations: `signUp`, `signIn`, `signOut`, `proven` (the Session a request's cookie proves) and `signedIn` |
-| `errors.ts` | IAM's errors, each with its kind: `SignedOut` (Unauthenticated); `CredentialsRejected`, `EmailTaken`, `EmailMalformed` and `PasswordLengthInvalid` (Invalid, each on the field at fault; `CredentialsRejected` on `password`, whichever was wrong: see the Rules); `TooManyAttempts` (Forbidden) |
-| `iam.test.ts` | IAM on Better Auth for real, over PGlite: sign-up, sign-in on another device, refusals, too many attempts, sign-out |
+| `iam.ts` | `Account`, `Session`, `Key`, `IssuedKey` (a Key with its secret, the one time it is shown), `KeyProof` (whose Key proved a request, and which), `SignedIn` (the proven Account, whichever proof gave it); `CurrentSession` and `CurrentKey`, the request's two proofs, each resolved once per request by its door; and the operations: `signUp`, `signIn`, `signOut`, `proven` (the Session a request's cookie proves), `keyProven` (the Key its `Authorization: Bearer` header proves), `signedIn`, `sessionOnly` (the Session-only check), `issueKey`, `keys` and `revokeKey` |
+| `errors.ts` | IAM's errors, each with its kind: `SignedOut` (Unauthenticated); `CredentialsRejected`, `EmailTaken`, `EmailMalformed`, `PasswordLengthInvalid` and `KeyNameInvalid` (Invalid, each on the field at fault; `CredentialsRejected` on `password`, whichever was wrong: see the Rules); `TooManyAttempts` and `SessionRequired` (Forbidden); `KeyNotFound` (NotFound) |
+| `iam.test.ts` | IAM on Better Auth for real, over PGlite: sign-up, sign-in on another device, refusals, too many attempts, sign-out; then `signedIn` and `sessionOnly` on each proof |
+| `keys.test.ts` | An Account's Keys on Better Auth for real, over PGlite: issued with their secret once, listed without it, a Key proving its Account and its use recorded, a wrong secret or a revoked Key proving nothing, another Account's Key out of reach, a Key refused for managing Keys, a name refused |
 
 ## Rules
 
 - **A refusal names its field, never the server's sentence.** Better Auth's refusals become IAM's errors here, each on the form field the user can fix; the message table words them. A wrong password and an unknown email are the same `CredentialsRejected`, on the `password` field in both cases, so sign-in never says which Accounts exist.
-- **The Session comes from the request, not the input.** A server function acting for an Account takes it from `signedIn`, never an id the caller sends.
+- **The Account comes from the request, not the input.** A server function acting for an Account takes it from `signedIn` (or `sessionOnly`), never an id the caller sends.
+- **Two proofs, two slots.** `CurrentSession` holds what a cookie proves, `CurrentKey` what a Bearer header proves; a server function's `CurrentKey` is always none, `/mcp`'s `CurrentSession` too. `signedIn` takes either; `sessionOnly` takes the Session and answers a Key alone with `SessionRequired`, so `issueKey`, `keys` and `revokeKey` start from it, and so will any change to the Account itself.
+- **A Key's secret is shown once.** `issueKey` answers it; Better Auth keeps only its hash, and `keys` lists a Key by its name, its first characters (`start`, `hf_` and three more), its creation and its last use.
 - **Email and password only, for now.** Another way in (a social provider, a magic link) is a decision, and the first to need a callback URL will register it on each host Better Auth answers on ([[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE|auth]]).

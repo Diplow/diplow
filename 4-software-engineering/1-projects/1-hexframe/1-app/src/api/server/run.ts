@@ -4,7 +4,7 @@
 // eslint.config.ts says no.
 import { Cause, Context, Effect, Exit, Layer, ManagedRuntime, Option, Schema } from 'effect'
 
-import { CurrentSession, proven, type Session } from '#/domains/iam/iam'
+import { CurrentKey, CurrentSession, proven, type KeyProof, type Session } from '#/domains/iam/iam'
 import { Auth, HttpExchange, layer as authLayer } from '#/repositories/auth/auth'
 import { type Database, layer as databaseLayer } from '#/repositories/database/database'
 import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
@@ -66,6 +66,7 @@ const runtime = ManagedRuntime.make(layer)
 export type Services =
   | RequestContext
   | CurrentSession
+  | CurrentKey
   | HttpExchange
   | ManagedRuntime.ManagedRuntime.Services<typeof runtime>
 
@@ -80,7 +81,15 @@ export interface StartContext {
   readonly exchange: HttpExchange['Service']
   /** The Session the request's cookie proves, if any, or how resolving it failed. */
   readonly session: Exit.Exit<Option.Option<Session>>
+  /**
+   * The Key the request's `Authorization: Bearer` header proves, if any, or how resolving it failed.
+   * Only `/mcp` reads the header; a server function's is always none, as `middleware.ts` sets it.
+   */
+  readonly key: Exit.Exit<Option.Option<KeyProof>>
 }
+
+/** A server function's Key: none, whatever its headers say, since a Key opens `/mcp` only. */
+export const noKey: StartContext['key'] = Exit.succeed(Option.none())
 
 const isFailure = Schema.is(Failure)
 
@@ -113,8 +122,11 @@ export async function run<A, E extends Failure>(
   const pending: Array<Promise<unknown>> = []
   const outcome = Effect.flatMap(requestLog(context), (log) =>
     Effect.flatMap(called, () =>
-      // A Session the middleware could not resolve fails the program: reported, sent as Unexpected.
-      program.pipe(Effect.provideServiceEffect(CurrentSession, context.session)),
+      // A proof that could not be resolved fails the program: reported, sent as Unexpected.
+      program.pipe(
+        Effect.provideServiceEffect(CurrentSession, context.session),
+        Effect.provideServiceEffect(CurrentKey, context.key),
+      ),
     ).pipe(
       Effect.map((value): Outcome<A, E | Unexpected> => ({ ok: true, value })),
       Effect.catchCause((cause) =>

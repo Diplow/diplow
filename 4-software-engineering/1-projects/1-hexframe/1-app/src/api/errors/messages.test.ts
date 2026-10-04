@@ -6,7 +6,10 @@ import {
   CredentialsRejected,
   EmailMalformed,
   EmailTaken,
+  KeyNameInvalid,
+  KeyNotFound,
   PasswordLengthInvalid,
+  SessionRequired,
   SignedOut,
   TooManyAttempts,
 } from '#/domains/iam/errors'
@@ -60,6 +63,12 @@ describe('the message table', () => {
     [new PasswordLengthInvalid({ fields: ['password'] }), 'Use between 8 and 128 characters.'],
     [new TooManyAttempts(), 'Too many attempts. Wait a few seconds, then try again.'],
     [new SignedOut(), 'Sign in to go on.'],
+    [
+      new SessionRequired(),
+      'Keys and your account can only be changed from a signed-in browser, not with a key.',
+    ],
+    [new KeyNameInvalid({ fields: ['name'] }), 'Give the key a name of 1 to 32 characters.'],
+    [new KeyNotFound(), "This key doesn't exist, or was already revoked."],
   ])("words IAM's %s in its own sentence", (failure, sentence) => {
     expect(messageFor(failure, 'signIn')).toBe(sentence)
   })
@@ -77,6 +86,12 @@ describe('the message table', () => {
     [new PasswordLengthInvalid({ fields: ['password'] }), 'Utilisez entre 8 et 128 caractères.'],
     [new TooManyAttempts(), 'Trop de tentatives. Patientez quelques secondes, puis réessayez.'],
     [new SignedOut(), 'Connectez-vous pour continuer.'],
+    [
+      new SessionRequired(),
+      'Les clés et votre compte ne se modifient que depuis un navigateur connecté, pas avec une clé.',
+    ],
+    [new KeyNameInvalid({ fields: ['name'] }), 'Donnez à la clé un nom de 1 à 32 caractères.'],
+    [new KeyNotFound(), 'Cette clé n’existe pas, ou a déjà été révoquée.'],
   ])("words IAM's %s in French too", (failure, sentence) => {
     overwriteGetLocale(() => 'fr')
     expect(messageFor(failure, 'signIn')).toBe(sentence)

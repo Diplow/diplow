@@ -7,7 +7,7 @@ import { HttpExchange } from '#/repositories/auth/auth'
 
 import { DevConflict, DevInvalid } from '../dev/failures'
 import { WaitUntil } from './bus'
-import { RequestContext, run, type StartContext } from './run'
+import { noKey, RequestContext, run, type StartContext } from './run'
 
 // A signed-out request.
 const context: StartContext = {
@@ -20,6 +20,7 @@ const context: StartContext = {
     setCookies: () => undefined,
   },
   session: Exit.succeed(Option.none()),
+  key: noKey,
 }
 
 describe('the server function helper', () => {

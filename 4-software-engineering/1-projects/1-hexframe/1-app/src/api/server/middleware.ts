@@ -2,11 +2,12 @@
 // `context`, and the helper (./run.ts) hands it to the program as Effect services. src/start.ts runs it
 // before every server function: the request id, the platform's waitUntil, the request's headers and
 // cookies, and the Session its cookie proves. Auth is checked here, once, for every server function,
-// after `sameOriginOnly` has refused a call from another site.
+// after `sameOriginOnly` has refused a call from another site. A Key proves nothing here: `/mcp` is
+// the one door it opens (src/api/CLAUDE.md).
 import { createCsrfMiddleware, createMiddleware } from '@tanstack/react-start'
 import { getRequest, getResponseHeaders } from '@tanstack/react-start/server'
 
-import { provenSession, type StartContext } from './run'
+import { noKey, provenSession, type StartContext } from './run'
 
 /** A request as Nitro hands it over (srvx's `ServerRequest`), with the platform's `waitUntil`. */
 type PlatformRequest = Request & Pick<StartContext, 'waitUntil'>
@@ -48,6 +49,7 @@ export const requestContext = createMiddleware({ type: 'function' }).server(
       waitUntil: waitUntilOf(request),
       exchange,
       session: await provenSession(exchange),
+      key: noKey,
     }
     return next({ context })
   },
