@@ -123,7 +123,7 @@ function scrubbedContexts({ trace, ...others }: Sentry.Contexts): Sentry.Context
       key,
       traceIds.has(key)
         ? value
-        : key === 'data'
+        : key === 'data' && typeof value === 'object' && value !== null
           ? scrubbedData(value as Readonly<Record<string, unknown>>)
           : scrubbedValue(value),
     ]),

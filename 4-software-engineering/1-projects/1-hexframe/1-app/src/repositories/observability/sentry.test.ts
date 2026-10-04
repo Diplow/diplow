@@ -86,7 +86,7 @@ describe('what Sentry keeps of an error', () => {
     expect(event.tags).toEqual({ requestId: 'req-1' })
   })
 
-  it('redacts every text in its extra data, its log entry and its contexts, the trace’s but its ids', () => {
+  it('redacts every text in its extra data, its log entry and its contexts, including the trace except its ids', () => {
     const event = scrubbed({
       extra: { __serialized__: { email: 'ada@example.com', tries: 3, tags: ['password=abc12'] } },
       logentry: { message: 'Signing in %s failed', params: ['ada@example.com'] },
@@ -97,6 +97,7 @@ describe('what Sentry keeps of an error', () => {
           parent_span_id: 'p',
           op: 'http.server',
           description: 'POST /sign-in for ada@example.com',
+          data: undefined,
         },
         custom: { form: { note: 'reach me at ada@example.com' } },
         runtime: { name: 'node', version: 'v26.5.0' },
