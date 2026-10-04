@@ -72,7 +72,8 @@ halting:
     - Never touch a ticket, branch or pull request of another project.
   # The repo's own tooling and review setup, hexframe's STACK.md (the bar the
   # never list defers to), and the two other packages, which this project
-  # doesn't touch.
+  # doesn't touch. STACK.md's MCP row stays put during the run: the MCP
+  # folder's CLAUDE.md links to it rather than taking it over.
   frozen_paths:
     - .skills/**
     - .claude/**
