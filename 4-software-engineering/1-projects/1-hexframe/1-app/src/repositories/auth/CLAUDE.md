@@ -5,7 +5,7 @@ owner: diplo
 preview: >-
   The auth repository: Better Auth and its api-key plugin over the database,
   as one Auth service in Better Auth's own terms (a user, a session, an API
-  key), called from server functions only, its cookies carried by
+  key), called from the API layer only, its cookies carried by
   HttpExchange, sign-up and sign-in rate limited per IP. IAM, above, speaks of
   Accounts, Sessions and Keys.
 ---
@@ -20,7 +20,7 @@ Better Auth, behind one Effect service, `Auth`: sign up, sign in, sign out, the 
 
 ## How it talks to Better Auth
 
-- **From server functions only, never a route of its own.** No raw `/api/auth/*` route exists: in the app, every call comes from a server function, through the helper, after Start's middleware and its same-origin check. The tests call `Auth` directly, with `browser()` standing in for the request. Signing up and in are posted to Better Auth's request handler in-process (`auth.handler`), so its rate limiter and origin check run; the session and sign-out use its server API, `auth.api.getSession` and `auth.api.signOut`, each called with `{ headers, returnHeaders: true }`, which neither limits nor needs to. The first OAuth provider will need a callback route.
+- **From the API layer only, never a route of its own.** No raw `/api/auth/*` route exists: in the app, every call comes from a server function, through the helper, after Start's middleware and its same-origin check, but `bearer`, which `/mcp` calls before it reads its body (HEX-47). The tests call `Auth` directly, with `browser()` standing in for the request. Signing up and in are posted to Better Auth's request handler in-process (`auth.handler`), so its rate limiter and origin check run; the session and sign-out use its server API, `auth.api.getSession` and `auth.api.signOut`, each called with `{ headers, returnHeaders: true }`, which neither limits nor needs to. The first OAuth provider will need a callback route.
 - **Reached on the hosts Vercel names, never a `BETTER_AUTH_URL`.** A preview answers on its deployment's URL and its branch's, so no one URL fits it. `baseURLOf` turns Vercel's system variables (`VERCEL_URL`, `VERCEL_BRANCH_URL`, `VERCEL_PROJECT_PRODUCTION_URL`) into Better Auth's dynamic base URL: those hosts allowed, and trusted as origins, any other falling back to the canonical one: the branch's URL on a preview, or the deployment's own, `VERCEL_URL`, when Vercel sets no `VERCEL_BRANCH_URL`; `hexframe.ai` in production. Off Vercel, it is localhost on any port; on Vercel (`VERCEL` set), each variable but the branch's URL is required, so a deployment missing one fails to start rather than refusing every sign-in. `auth.test.ts` pins both, and a sign-up on a preview's host.
 - **Signing up and in are rate limited per client IP**, 3 attempts in 10 seconds, counted in the `rate_limit` table so every instance counts together. The IP is `x-forwarded-for`, which Vercel overwrites with the client's and never forwards from outside, to prevent spoofing (Vercel's request headers documentation); under `pnpm dev` and the tests, a request without it counts as `127.0.0.1`. hexframe is deployed on Vercel only; behind any other proxy, set Better Auth's `advanced.ipAddress.trustedProxies` first. A refused attempt is `too-many-attempts`.
 - **Cookies travel through `HttpExchange`.** It holds the request's URL, whose origin the handler is called on, its headers, which Better Auth reads the session cookie and the IP from, and `setCookies`, where the `Set-Cookie` lines it returns go. The API layer's middleware provides it from Start's request and response; `browser()` provides it in tests.
@@ -33,7 +33,7 @@ Better Auth, behind one Effect service, `Auth`: sign up, sign in, sign out, the 
 The api-key plugin (`@better-auth/api-key`) keeps them in the `apikey` table ([[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE|database]]), configured in `auth.ts`:
 
 - **`hf_` and 64 letters, stored hashed.** The plugin keeps a SHA-256 hash of the secret and its first six characters (`start`), never the secret: `createApiKey` answers it once. `disableKeyHashing` stays off.
-- **A name, required**, 1 to 32 characters: the plugin's rule, which `AuthRefused` reports as `api-key-name-length`.
+- **A name, required**, 1 to 32 characters, set in `auth.ts` rather than left to the plugin's defaults, and refused as `api-key-name-length`.
 - **No rate limit, no expiry.** The plugin's default limit, 10 verifications a day, would stop an MCP client within minutes; a Key lives until it is revoked. Its usage and refill columns stay unused.
 - **Never a session.** `enableSessionForAPIKeys` stays off, so no Better Auth endpoint takes a key for a cookie, and `getSession` never answers from one. `bearer` reads the header itself and verifies the secret with the plugin's `verifyApiKey`, which records the use (`lastRequest`); a header that is not `Bearer <secret>`, or a secret over 128 characters, proves nothing.
 - **Creating, listing and deleting go through the request's session cookie**, as the plugin's endpoints require, so a user only ever reaches their own keys: deleting another's is `api-key-not-found`, like deleting one that is gone. IAM refuses a request only a Key proves before any of them runs.

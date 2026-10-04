@@ -133,6 +133,8 @@ describe("IAM's Key server functions", () => {
     const { device, request } = await signedInDevice()
     const issued = await value(from(device, Iam.issueKey('Claude Code'), request))
     expect(issued.secret).toMatch(/^hf_/)
+    // KeyId's pattern follows Better Auth's ids: an upgrade that changes them fails here.
+    expect(Schema.is(KeyId)({ id: issued.key.id })).toBe(true)
     const listed = await value(from(device, Iam.keys, request))
     expect(listed).toEqual([issued.key])
     expect(JSON.stringify(listed)).not.toContain(issued.secret)

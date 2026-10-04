@@ -295,7 +295,10 @@ function betterAuthWith(
     plugins: [
       apiKey({
         defaultPrefix: 'hf_',
+        // A Key's name, 1 to 32 characters: refused as `api-key-name-length` otherwise.
         requireName: true,
+        minimumNameLength: 1,
+        maximumNameLength: 32,
         // Its default, 10 verifications a day, would stop an MCP client within minutes.
         rateLimit: { enabled: false },
         keyExpiration: { defaultExpiresIn: null },

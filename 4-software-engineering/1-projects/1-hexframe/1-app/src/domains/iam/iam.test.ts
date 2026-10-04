@@ -132,10 +132,10 @@ describe('signedIn and sessionOnly', () => {
       Effect.provideService(CurrentKey, Option.fromNullishOr(proofs.key)),
     )
 
-  it.effect('signedIn is the Account a Session proves, or the one a Key proves, and by which', () =>
+  it.effect('signedIn is the Account a Session proves, or the one a Key proves', () =>
     Effect.gen(function* () {
-      expect(yield* on(signedIn, { session })).toEqual({ account, by: 'session' })
-      expect(yield* on(signedIn, { key })).toEqual({ account, by: 'key' })
+      expect(yield* on(signedIn, { session })).toEqual({ account })
+      expect(yield* on(signedIn, { key })).toEqual({ account })
     }),
   )
 

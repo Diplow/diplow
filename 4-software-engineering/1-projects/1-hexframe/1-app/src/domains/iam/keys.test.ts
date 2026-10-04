@@ -81,7 +81,7 @@ layer(TestAuth)("an Account's Keys", (it) => {
     Effect.gen(function* () {
       const { account, asSession } = yield* someone
       const { key, secret } = yield* asSession(issueKey('script'))
-      expect(yield* asKey(secret)(signedIn)).toEqual({ account, by: 'key' })
+      expect(yield* asKey(secret)(signedIn)).toEqual({ account })
       expect(Option.getOrThrow(yield* keyClient(secret).request(keyProven))).toEqual({
         account,
         keyId: key.id,

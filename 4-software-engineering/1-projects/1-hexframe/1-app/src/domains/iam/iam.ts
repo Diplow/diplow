@@ -67,10 +67,9 @@ export interface KeyProof {
   readonly keyId: string
 }
 
-/** A signed-in request: its Account, and which of the two proofs it gave. */
-export interface SignedIn {
+/** A signed-in request: its Account, whichever of the two proofs gave it. */
+interface SignedIn {
   readonly account: Account
-  readonly by: 'session' | 'key'
 }
 
 /**
@@ -129,21 +128,16 @@ export const keyProven = Auth.use((auth) => auth.bearer).pipe(
   Effect.map(Option.map(({ user, apiKeyId }): KeyProof => ({ account: user, keyId: apiKeyId }))),
 )
 
-const signedInBy = (by: SignedIn['by'], { account }: { account: Account }): SignedIn => ({
-  account,
-  by,
-})
-
 /**
  * The request's Account, proven by its Session or by its Key, or `SignedOut`: the first step of
  * anything only a signed-in Account may do. Working on the System never asks which proof it was.
  */
 export const signedIn = Effect.gen(function* () {
   const session = yield* CurrentSession
-  if (Option.isSome(session)) return signedInBy('session', session.value)
   const key = yield* CurrentKey
-  if (Option.isSome(key)) return signedInBy('key', key.value)
-  return yield* new SignedOut()
+  const proof = Option.orElse(session, () => key)
+  if (Option.isNone(proof)) return yield* new SignedOut()
+  return { account: proof.value.account } satisfies SignedIn
 })
 
 /**
