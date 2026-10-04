@@ -4,13 +4,13 @@ parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/domains
 owner: diplo
 preview: >-
   The business logic, one folder per domain (IAM, Mapping, Assistant), as
-  Effect services in the domain's language. IAM and Mapping so far; beside the
+  Effect programs in the domain's language. IAM and Mapping so far; beside the
   folders, kind.ts, the closed set of kinds a domain's error carries, and
   bus.ts, where a domain publishes its events.
 ---
 # domains
 
-The middle layer: one folder per domain, each an Effect service in its own language, as [[4-software-engineering/1-projects/1-hexframe/STACK|STACK]] tells it. Domains ignore each other; only [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]] composes them.
+The middle layer: one folder per domain, each in its own language. A domain's public entry is its module's operations, Effect programs whose type lists the repositories' services they use; a domain becomes a service of its own only when it holds state or configuration. It never opens a transaction: a change requires one (`InTransaction`), and the API layer opens it, as [[4-software-engineering/1-projects/1-hexframe/STACK|STACK]] tells it. Domains ignore each other; only [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]] composes them.
 
 | Folder | Holds |
 |---|---|

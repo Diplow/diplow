@@ -1,9 +1,11 @@
 // Mapping: someone lays out a System they maintain as a hierarchy of Tiles, where what comes first is
 // what matters most. Each Account has one System, whose Root is the user. The tiles repository keeps
 // the rows (src/repositories/database/tiles/); Mapping decides what a change may do, then writes it.
-// Every operation is for one Account, which the API layer takes from IAM's Session.
+// Every operation is for one Account, which the API layer takes from IAM's Session. A change runs in
+// the transaction the API layer opens around it (`transactional`): its type requires one.
 import { Effect } from 'effect'
 
+import type { InTransaction } from '#/repositories/database/database'
 import { Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/tiles'
 
 import { DirectionTaken, MovedUnderItself, RootFixed, TileNotFound } from './errors'
@@ -34,11 +36,17 @@ export const system = (accountId: string) =>
     return found
   })
 
-/** A change to the Account's System, on its rows as they stand, alone until it is written. */
+/**
+ * A change to the Account's System, on its rows as they stand once its Root is locked: alone until
+ * the transaction around it ends, so what it checked still holds when it writes.
+ */
 const changing = <A, E>(
   accountId: string,
-  change: (rows: ReadonlyArray<TileRow>, writes: Writes) => Effect.Effect<A, E>,
-) => Tiles.use((tiles) => tiles.change(accountId, change))
+  change: (rows: ReadonlyArray<TileRow>, writes: Writes) => Effect.Effect<A, E, InTransaction>,
+) =>
+  Tiles.use((tiles) =>
+    Effect.flatMap(tiles.lock(accountId), (rows) => change(rows, tiles.writes(accountId))),
+  )
 
 const tileIn = (rows: ReadonlyArray<TileRow>, id: string) => {
   const row = tileRow(rows, id)

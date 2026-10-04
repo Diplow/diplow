@@ -6,7 +6,7 @@ import { Cause, Context, Effect, Exit, Layer, ManagedRuntime, Option, Schema } f
 
 import { CurrentSession, proven, type Session } from '#/domains/iam/iam'
 import { Auth, HttpExchange, layer as authLayer } from '#/repositories/auth/auth'
-import { layer as databaseLayer } from '#/repositories/database/database'
+import { type Database, layer as databaseLayer } from '#/repositories/database/database'
 import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
 import { Failure, Unexpected, encodeFailure, type Outcome } from '../errors/failure'
@@ -47,8 +47,11 @@ const auth =
       )
     : Layer.orDie(Layer.merge(authLayer, databaseLayer))
 
-/** The repositories the domains use: Better Auth for IAM, the tiles repository for Mapping. */
-const repositories: Layer.Layer<Auth | Tiles> = Layer.provideMerge(tilesLayer, auth)
+/**
+ * The repositories the domains use: Better Auth for IAM, the tiles repository for Mapping; and the
+ * database itself, for the transaction a program opens (`transactional`).
+ */
+const repositories: Layer.Layer<Auth | Database | Tiles> = Layer.provideMerge(tilesLayer, auth)
 
 /**
  * Every layer: the bus, the domains' services and the repositories below them, merged here as each is

@@ -16,7 +16,7 @@ Every table hexframe keeps, and the one way to reach them: the `Database` servic
 
 | File | Holds |
 |---|---|
-| `database.ts` | `Database`, the service, and `layer`, the deployed one, built from `DATABASE_URL` |
+| `database.ts` | `Database`, the service, and `layer`, the deployed one, built from `DATABASE_URL`; `transactional`, which runs a program in one transaction every repository's query joins, and `InTransaction`, what a call that only holds inside one requires |
 | `promise.ts` | `PromiseDatabase` and its deployed `layer`: the same database through Drizzle's promise API over a node-postgres pool, for Better Auth's adapter. Only `auth/` may import it, and this folder's harness and tests |
 | `schema.ts` | The tables, in Drizzle's schema language: IAM's, in Better Auth's shape and under its names ([[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE\|auth]]); Mapping's `tile`, a Tile or a Reference per row |
 | `migrations.ts` | `migrated`, the one program that applies what the database has not recorded yet, from `migrations/` at the package's root |
@@ -24,7 +24,7 @@ Every table hexframe keeps, and the one way to reach them: the `Database` servic
 
 | Folder | Holds |
 |---|---|
-| `tiles/` | `Tiles` and its `layer`, over `Database`: Mapping's repository, which reads a System's rows, its Root added on the first read, and runs each change in one transaction that first locks the Root ([[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE\|mapping]]). A repository that queries lives here, below this folder, since only this folder imports `drizzle-orm` |
+| `tiles/` | `Tiles` and its `layer`, over `Database`: Mapping's repository, which reads a System's rows, its Root added on the first read, and, inside a transaction, locks the Root (`lock`) and writes (`writes`) ([[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE\|mapping]]). A repository that queries lives here, below this folder, since only this folder imports `drizzle-orm` |
 
 ## Changing the schema
 
@@ -64,6 +64,7 @@ Each build of the layer is a new, empty database: the tests inside one `layer(..
 
 - **Only this folder imports `drizzle-orm`, `@effect/sql-pg`, `@effect/sql-pglite`, `pg`, `@electric-sql/pglite` and Neon's `@neondatabase/*`**, should one be needed (`dependency-cruiser.config.ts`).
 - **`Database` for every repository; `PromiseDatabase` only for Better Auth's adapter, which awaits its queries.** `dependency-cruiser.config.ts` keeps `promise.ts` to `auth/` and this folder, whose `testing.ts` provides both over one PGlite. Both reach the same Postgres and the same tables, so a row Better Auth writes is one a later repository reads with `Database`.
+- **A repository never opens a transaction; the API layer does, with `transactional`.** Effect's SQL client carries the open transaction along with the running program, so every query made through `Database` inside it joins it, whichever repository makes it: nothing is passed down. A call that is wrong outside one, a lock or a write, requires `InTransaction`, so the compiler refuses a program that makes it without the API having opened one. Better Auth's writes go through `PromiseDatabase`, its own pool, and join no such transaction.
 - **The query builder, never raw SQL.** It is the security bar, and it is also what keeps the two drivers alike: Drizzle's `db.execute` returns rows as an array over `effect-postgres` and as `{ rows }` over `effect-pglite`, while a `select` returns the same array on both.
 - **`node scripts/migrate.ts` runs `database.ts` and `migrations.ts` without a bundler.** `database.ts` imports packages only, and `migrations.ts` imports it as `./database.ts`, the one `.ts` import path the lint allows under `src/`. `scripts/migrate.test.ts` proves the script loads. `testing.ts` is for tests, and for `pnpm dev` without `DATABASE_URL` (`src/api/server/run.ts` imports it behind `import.meta.env.DEV`): a build never holds it.
 - **The server function runtime builds `Database` under the tiles repository.** Deployed, `src/api/server/run.ts` builds the deployed `Database` beside Better Auth, which reaches Postgres through its own `PromiseDatabase`. Under `pnpm dev` and the tests, `TestAuth` brings `TestDatabase`, which holds both over one PGlite, and the tiles repository reads and writes it.

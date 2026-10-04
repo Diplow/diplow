@@ -1,22 +1,30 @@
 import { expect, layer } from '@effect/vitest'
 import { Effect, Layer } from 'effect'
+import { describe, expectTypeOf, it } from 'vitest'
 
+import { type Database, type InTransaction, transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 import { type Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
-import {
-  type Direction,
-  type SystemTile,
-  createReference,
-  createTile,
-  deleteReference,
-  deleteTile,
-  editTile,
-  moveTile,
-  system,
-} from './mapping'
+import * as Mapping from './mapping'
+import { type Direction, type SystemTile, system } from './mapping'
 
-const TestTiles = tilesLayer.pipe(Layer.provide(TestDatabase))
+const TestTiles = tilesLayer.pipe(Layer.provideMerge(TestDatabase))
+
+/** A change as the API layer runs it: in the transaction it opens. */
+const inTransaction =
+  <Args extends ReadonlyArray<unknown>, A, E, R>(
+    change: (...args: Args) => Effect.Effect<A, E, R>,
+  ) =>
+  (...args: Args) =>
+    transactional(change(...args))
+
+const createTile = inTransaction(Mapping.createTile)
+const editTile = inTransaction(Mapping.editTile)
+const moveTile = inTransaction(Mapping.moveTile)
+const deleteTile = inTransaction(Mapping.deleteTile)
+const createReference = inTransaction(Mapping.createReference)
+const deleteReference = inTransaction(Mapping.deleteReference)
 
 /** An Account no other test uses, so each test stands on its own. */
 const someone = () => crypto.randomUUID()
@@ -179,7 +187,7 @@ layer(TestTiles)('moving and deleting Tiles, over PGlite', (it) => {
       const { accountId, root, child } = yield* withAChild
       const intruder = someone()
       yield* system(intruder)
-      const attempts: ReadonlyArray<Effect.Effect<unknown, object, Tiles>> = [
+      const attempts: ReadonlyArray<Effect.Effect<unknown, object, Database | Tiles>> = [
         createTile(intruder, { parent: root.id, slot: 2, ...content('Intruder') }),
         editTile(intruder, child.id, { title: 'Taken over' }),
         moveTile(intruder, child.id, { parent: root.id, slot: 2 }),
@@ -375,4 +383,19 @@ layer(TestTiles)('References, over PGlite', (it) => {
       expect((yield* system(accountId)).context[-5]).toMatchObject({ _tag: 'Tile', id: beside.id })
     }),
   )
+})
+
+describe('the transaction a change runs in', () => {
+  it('is required of every change, and opened by whoever runs it, never by Mapping', () => {
+    type Requires<F extends (...args: never[]) => Effect.Effect<unknown, unknown, unknown>> =
+      Effect.Services<ReturnType<F>>
+    expectTypeOf<Requires<typeof Mapping.createTile>>().toEqualTypeOf<InTransaction | Tiles>()
+    expectTypeOf<Requires<typeof Mapping.editTile>>().toEqualTypeOf<InTransaction | Tiles>()
+    expectTypeOf<Requires<typeof Mapping.moveTile>>().toEqualTypeOf<InTransaction | Tiles>()
+    expectTypeOf<Requires<typeof Mapping.deleteTile>>().toEqualTypeOf<InTransaction | Tiles>()
+    expectTypeOf<Requires<typeof Mapping.createReference>>().toEqualTypeOf<InTransaction | Tiles>()
+    expectTypeOf<Requires<typeof Mapping.deleteReference>>().toEqualTypeOf<InTransaction | Tiles>()
+    expectTypeOf<Requires<typeof system>>().toEqualTypeOf<Tiles>()
+    expectTypeOf<Requires<typeof createTile>>().toEqualTypeOf<Database | Tiles>()
+  })
 })
