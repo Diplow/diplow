@@ -6,10 +6,13 @@ import { directions, frameKinds } from '../../2-claude-mod/hooks/shape/node.ts'
 import {
   centerExpansion,
   defaultExpansions,
+  around,
+  beside,
   innerKinds,
-  outerBeside,
   outerKinds,
+  type CenterExpansion,
   type Expansions,
+  type InnerKind,
 } from './expansions.ts'
 
 export interface ViewState {
@@ -63,15 +66,22 @@ function expansionsOf(expansions: unknown, problems: string[]): Expansions {
   }
   const innerRead = kindOf(expansions, 'inner', innerKinds, problems)
   const inner = innerRead === undefined ? defaultExpansions.inner : innerRead
-  const outerRead = kindOf(expansions, 'outer', outerKinds, problems)
-  // A file that names no outer kind means the one that opens around the inner one, if any.
-  const beside = inner === null ? null : outerBeside(inner, frameKinds)
-  const outer = outerRead === undefined ? beside : outerRead
+  const outer = kindOf(expansions, 'outer', outerKinds, problems)
   const branches = branchesOf(expansions['branches'], problems)
+  if (outer === undefined) return { ...centerAround(inner), branches }
+  if (outer === null) return { outer, inner, branches }
   const center = centerExpansion(outer, inner)
   if (center !== undefined) return { ...center, branches }
-  problems.push(`\`expansions.inner\` can't be ${String(inner)} beside ${String(outer)}`)
-  return { ...(centerExpansion(outer, 'context') ?? defaultExpansions), branches }
+  problems.push(`\`expansions.inner\` can't be ${String(inner)} beside ${outer}`)
+  return { ...beside(outer), branches }
+}
+
+/**
+ * The center a file that names no outer kind means: the outer ring that opens around `inner`,
+ * Children beside Context until a folder says it has more than six, or none around none.
+ */
+function centerAround(inner: InnerKind | null): CenterExpansion {
+  return inner === null ? { outer: null, inner } : around(inner, frameKinds)
 }
 
 /**

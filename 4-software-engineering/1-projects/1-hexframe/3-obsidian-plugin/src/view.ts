@@ -26,6 +26,7 @@ import {
   collapse,
   expand,
   recenter,
+  sameExpansions,
   shownExpansions,
   switchBranch,
   switchInner,
@@ -64,14 +65,13 @@ export class HexframeView extends TextFileView {
   private text = ''
   private state: ViewState = defaultState
   private problems: string[] = []
-  /** The folders drawn, the center's first, once a drawing is done. */
-  private shown: string[] | undefined
   /**
-   * The folder of the last drawing of the current center, and the Frame kinds it offers, which
-   * the expansions switch among; undefined until that drawing is done, so a switch never resolves
-   * against another folder's kinds.
+   * The last drawing of the current center: the folders it read, the center's first, and the
+   * Frame kinds the center offers, which the expansions switch among, absent when it couldn't be
+   * read. Undefined until that drawing is done, so a switch never resolves against another
+   * folder's kinds.
    */
-  private drawn: { folder: string; offered: readonly FrameKind[] } | undefined
+  private drawn: { folders: string[]; offered?: readonly FrameKind[] } | undefined
   /** Counts the drawings started, so one that ends after a later one is dropped. */
   private drawings = 0
   private readonly redraw = debounce(() => void this.draw(), settle, true)
@@ -101,7 +101,6 @@ export class HexframeView extends TextFileView {
     this.text = ''
     this.state = defaultState
     this.problems = []
-    this.shown = undefined
     this.drawn = undefined
     this.contentEl.empty()
   }
@@ -153,7 +152,7 @@ export class HexframeView extends TextFileView {
   }
 
   private onChange(path: string) {
-    if (this.shown !== undefined && touches(path, this.shown)) this.redraw()
+    if (this.drawn !== undefined && touches(path, this.drawn.folders)) this.redraw()
   }
 
   /** A renamed center, or a folder holding it, takes the view state along, written to the file. */
@@ -173,12 +172,16 @@ export class HexframeView extends TextFileView {
    * the file and drawn. Nothing moves until the current center is drawn.
    */
   private expandWith(move: (shown: Expansions, offered: readonly FrameKind[]) => Expansions) {
-    const { drawn } = this
-    if (drawn === undefined) {
-      new Notice('Hexframe is still reading this folder.')
+    const offered = this.drawn?.offered
+    if (offered === undefined) {
+      const why = this.drawn === undefined ? 'is still reading' : "couldn't read"
+      new Notice(`Hexframe ${why} this folder, so it has nothing to switch.`)
       return
     }
-    const next = move(shownExpansions(this.state.expansions, drawn.offered), drawn.offered)
+    const shown = shownExpansions(this.state.expansions, offered)
+    const next = move(shown, offered)
+    // A move that changes nothing writes nothing: the file keeps asking for what it asked for.
+    if (sameExpansions(next, shown)) return
     this.commit({ ...this.state, expansions: next })
     void this.draw()
   }
@@ -228,15 +231,14 @@ export class HexframeView extends TextFileView {
       }
       if (drawing !== this.drawings) return
       const view = viewOf(frame, shown, opened)
-      this.shown = [folder, ...Object.values(opened).map(({ tile }) => vaultPath(tile.path))]
-      this.drawn = { folder, offered: kindsOf(frame.rings) }
+      const folders = [folder, ...Object.values(opened).map(({ tile }) => vaultPath(tile.path))]
+      this.drawn = { folders, offered: kindsOf(frame.rings) }
       drawView(this.contentEl, view, [...notes, ...warnings, ...ringNotes(view)], (hex, event) => {
         void this.onHex(hex, event)
       })
     } catch (error) {
       if (drawing !== this.drawings) return
-      this.shown = [folder]
-      this.drawn = undefined
+      this.drawn = { folders: [folder] }
       this.contentEl.empty()
       drawNotes(this.contentEl, [
         ...notes,
@@ -298,9 +300,9 @@ export class HexframeView extends TextFileView {
     // Dropped when a later click, another file or another center overtakes it during the read.
     const click = ++this.clicks
     const { file } = this
-    const center = this.drawn?.folder
+    const center = this.drawn?.folders[0]
     const branch = await readOpened(disk, vaultPath(placement.tile.path))
-    if (click !== this.clicks || file !== this.file || center !== this.drawn?.folder) return
+    if (click !== this.clicks || file !== this.file || center !== this.drawn?.folders[0]) return
     if ('refused' in branch) {
       new Notice(`Hexframe can't open ${placement.tile.path}, as ${branch.refused}.`)
       return

@@ -14,9 +14,11 @@ import {
   defaultExpansions,
   expand,
   innerKinds,
-  outerBeside,
+  around,
+  beside,
   outerKinds,
   recenter,
+  sameExpansions,
   shownExpansions,
   shownKind,
   switchBranch,
@@ -101,6 +103,16 @@ describe('shownKind', () => {
   })
 })
 
+describe('sameExpansions', () => {
+  it('compares what the file would hold, whatever the order of the Branches', () => {
+    const one = open({ outer: 'branches', inner: 'leaves' }, { 1: 'leaves', 4: 'context' })
+    const other = open({ outer: 'branches', inner: 'leaves' }, { 4: 'context', 1: 'leaves' })
+    expect(sameExpansions(one, other)).toBe(true)
+    expect(sameExpansions(one, { ...one, branches: { 1: 'leaves' } })).toBe(false)
+    expect(sameExpansions(one, open({ outer: 'branches', inner: 'context' }))).toBe(false)
+  })
+})
+
 describe('collapse and expand', () => {
   it('peel the outer ring, then the inner one, and open them back in turn', () => {
     const full = open({ outer: 'branches', inner: 'leaves' }, { 3: 'context' })
@@ -119,11 +131,15 @@ describe('collapse and expand', () => {
   })
 })
 
-describe('outerBeside', () => {
-  it('opens Branches around Leaves, and Children or Branches around Context', () => {
-    expect(outerBeside('leaves', fitting)).toBe('branches')
-    expect(outerBeside('context', fitting)).toBe('children')
-    expect(outerBeside('context', crowded)).toBe('branches')
+describe('around and beside', () => {
+  it('open Branches around Leaves, and Children or Branches around Context', () => {
+    expect(around('leaves', fitting)).toEqual({ outer: 'branches', inner: 'leaves' })
+    expect(around('context', fitting)).toEqual({ outer: 'children', inner: 'context' })
+    expect(around('context', crowded)).toEqual({ outer: 'branches', inner: 'context' })
+  })
+
+  it('put Context inside every outer ring', () => {
+    for (const outer of outerKinds) expect(beside(outer)).toEqual({ outer, inner: 'context' })
   })
 })
 
@@ -193,6 +209,11 @@ describe('switchBranch', () => {
     }
     expect(seen).toEqual(['children', 'context', undefined])
     expect(expansions.branches).toEqual({})
+  })
+
+  it('starts from the kind a Branch shows when its folder lacks the one asked for', () => {
+    const expansions = open({ outer: 'branches', inner: 'context' }, { 4: 'leaves' })
+    expect(switchBranch(expansions, 4, fitting).branches).toEqual({ 4: 'context' })
   })
 
   it('leaves the other Branches as they are', () => {

@@ -259,6 +259,12 @@ describe('touches', () => {
     expect(touches('3-games/1-riftbound/CLAUDE.md', [''])).toBe(false)
   })
 
+  it('counts a change under any folder drawn, and none beside them', () => {
+    const folders = ['3-games', '6-politics/1-x']
+    expect(touches('6-politics/1-x/notes.md', folders)).toBe(true)
+    expect(touches('6-politics/2-y/notes.md', folders)).toBe(false)
+  })
+
   it('counts what lies in an opened Branch as in the center', () => {
     const folders = ['', '3-games']
     expect(touches('3-games/1-riftbound/CLAUDE.md', folders)).toBe(true)

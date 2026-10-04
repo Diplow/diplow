@@ -67,4 +67,47 @@ describe('ringNotes', () => {
     expect(ringNotes({ frame, frameKind: 'context' })).toEqual([])
     expect(ringNotes({ frame, frameKind: 'children' })).toEqual([])
   })
+
+  const clashing = (title: string): Frame => ({
+    tile: { path: title, title, preview: '' },
+    rings: {
+      children: {
+        overflowing: false,
+        members: {},
+        clashes: [{ direction: 1, leaf: '1-a.md', branch: '1-a' }],
+      },
+      context: {
+        overflowing: true,
+        candidates: [
+          { kind: 'context', name: '.1-a' },
+          { kind: 'context', name: '.1-b' },
+        ],
+        overflow: [{ kind: 'context', name: '.1-b' }],
+      },
+    },
+  })
+  const clash = '1-a.md and 1-a/ share direction 1: the Leaf takes another one.'
+  const overflow =
+    '2 context for six directions, so none is drawn: no direction is left for .1-b/. List ' +
+    'what this folder leaves out in .hexframe/exclusions.yaml, or renumber, to draw them.'
+
+  it("speaks of the center's inner ring after its outer one", () => {
+    expect(
+      ringNotes({ frame: clashing('diplow'), frameKind: 'children', inner: 'context' }),
+    ).toEqual([clash, overflow])
+  })
+
+  it('speaks of the inner ring alone around a peeled center, and of nothing around a collapsed one', () => {
+    expect(ringNotes({ frame: clashing('diplow'), inner: 'context' })).toEqual([overflow])
+    expect(ringNotes({ frame: clashing('diplow') })).toEqual([])
+  })
+
+  it('names the opened Branch whose ring it speaks of', () => {
+    const view = {
+      frame: { tile, rings: { context: { overflowing: false as const, members: {} } } },
+      frameKind: 'context' as const,
+      expanded: { 3: { frame: clashing('Games'), frameKind: 'children' as const } },
+    }
+    expect(ringNotes(view)).toEqual([`Games: ${clash}`])
+  })
 })

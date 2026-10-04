@@ -49,6 +49,20 @@ export function centerExpansion(
   return undefined
 }
 
+/** The center's expansion with `outer` around and Context inside: every outer kind sits beside it. */
+export function beside(outer: OuterKind): CenterExpansion {
+  return { outer, inner: 'context' }
+}
+
+/**
+ * The center's expansion that opens around `inner` in a folder offering `offered`: Branches
+ * beside Leaves, the only kind that sits beside them; beside Context, Children, or Branches past
+ * six.
+ */
+export function around(inner: InnerKind, offered: readonly FrameKind[]): CenterExpansion {
+  return inner === 'leaves' ? { outer: 'branches', inner } : beside(defaultRing(offered))
+}
+
 /**
  * The expansions a folder offering `offered` shows for `wanted`. An outer kind it doesn't offer
  * gives Children, or Branches past six Branches and Leaves; an inner kind it doesn't offer, or
@@ -61,19 +75,22 @@ export function shownExpansions(wanted: Expansions, offered: readonly FrameKind[
       wanted.inner !== null && !offered.includes(wanted.inner) ? 'context' : wanted.inner
     return { outer: null, inner, branches }
   }
-  const outer = offered.includes(wanted.outer) ? wanted.outer : fallbackOuter(offered)
+  const outer = offered.includes(wanted.outer) ? wanted.outer : defaultRing(offered)
   const inner = offered.includes(wanted.inner) ? wanted.inner : 'context'
-  return { ...(centerExpansion(outer, inner) ?? { outer, inner: 'context' }), branches }
+  return { ...(centerExpansion(outer, inner) ?? beside(outer)), branches }
 }
 
-/** The kind a folder offering `offered` shows a ring of when the one asked for is missing. */
-function fallbackOuter(offered: readonly FrameKind[]): 'children' | 'branches' {
+/**
+ * The kind of ring a folder offering `offered` shows when the one asked for is missing, around
+ * the center or in an opened Branch: Children, or Branches past six Branches and Leaves.
+ */
+function defaultRing(offered: readonly FrameKind[]): 'children' | 'branches' {
   return offered.includes('children') ? 'children' : 'branches'
 }
 
 /** The kind a Branch opened into `wanted` shows, among the kinds its folder offers. */
 export function shownKind(wanted: FrameKind, offered: readonly FrameKind[]): FrameKind {
-  return offered.includes(wanted) ? wanted : fallbackOuter(offered)
+  return offered.includes(wanted) ? wanted : defaultRing(offered)
 }
 
 /** Collapsing peels the outer ring first, then the inner one; a collapsed center stays so. */
@@ -90,16 +107,7 @@ export function expand(expansions: Expansions, offered: readonly FrameKind[]): E
   if (expansions.outer !== null) return expansions
   const { inner } = expansions
   if (inner === null) return { outer: null, inner: 'context', branches: {} }
-  const center = centerExpansion(outerBeside(inner, offered), inner)
-  return { ...(center ?? defaultExpansions), branches: {} }
-}
-
-/**
- * The outer kind that opens around `inner` in a folder offering `offered`: Branches beside
- * Leaves, the only kind that sits beside them; Children beside Context, or Branches past six.
- */
-export function outerBeside(inner: InnerKind, offered: readonly FrameKind[]): OuterKind {
-  return inner === 'leaves' ? 'branches' : fallbackOuter(offered)
+  return { ...around(inner, offered), branches: {} }
 }
 
 /** A new center opens none of the Branches around the old one: they were the old center's. */
@@ -114,29 +122,40 @@ export function recenter(expansions: Expansions): Expansions {
 export function switchOuter(expansions: Expansions, offered: readonly FrameKind[]): Expansions {
   if (expansions.outer === null) return expansions
   const { inner } = expansions
-  const next = nextOf(outerKinds, expansions.outer, (outer) => {
-    return offered.includes(outer) && centerExpansion(outer, inner) !== undefined
-  })
-  const center = centerExpansion(next, inner)
-  return center === undefined || next === expansions.outer
-    ? expansions
-    : { ...center, branches: {} }
+  const pairs = outerKinds
+    .filter((outer) => offered.includes(outer))
+    .flatMap((outer) => pairOf(outer, inner))
+  const next = following(pairs, ({ outer }) => outer === expansions.outer)
+  return next === undefined ? expansions : { ...next, branches: {} }
 }
 
 /** The inner ring's next kind, among those the folder offers that can sit beside the outer one. */
 export function switchInner(expansions: Expansions, offered: readonly FrameKind[]): Expansions {
   if (expansions.inner === null) return expansions
   const { outer } = expansions
-  const next = nextOf(innerKinds, expansions.inner, (inner) => {
-    return offered.includes(inner) && centerExpansion(outer, inner) !== undefined
-  })
-  const center = centerExpansion(outer, next)
-  return center === undefined ? expansions : { ...center, branches: expansions.branches }
+  const pairs = innerKinds
+    .filter((inner) => offered.includes(inner))
+    .flatMap((inner) => pairOf(outer, inner))
+  const next = following(pairs, ({ inner }) => inner === expansions.inner)
+  return next === undefined ? expansions : { ...next, branches: expansions.branches }
+}
+
+/** The pair of `outer` and `inner` when a view shows it, as a list of one, or none. */
+function pairOf(outer: OuterKind | null, inner: InnerKind): CenterExpansion[] {
+  const pair = centerExpansion(outer, inner)
+  return pair === undefined ? [] : [pair]
+}
+
+/** The item after the current one in `items`, going round; undefined when no other is there. */
+function following<T>(items: readonly T[], isCurrent: (item: T) => boolean): T | undefined {
+  const at = items.findIndex(isCurrent)
+  if (items.length < 2) return at === -1 ? items[0] : undefined
+  return items[(at + 1) % items.length]
 }
 
 /**
- * The Branch in `direction` of the outer ring opened into its next kind, among those its folder
- * offers, `offered`, and closed after the last one.
+ * The Branch in `direction` of the outer ring opened into the kind after the one it shows, among
+ * those its folder offers, `offered`, and closed after the last one.
  */
 export function switchBranch(
   expansions: Expansions,
@@ -144,11 +163,11 @@ export function switchBranch(
   offered: readonly FrameKind[],
 ): Expansions {
   const kinds = frameKinds.filter((kind) => offered.includes(kind))
-  const current = expansions.branches[direction]
+  const wanted = expansions.branches[direction]
+  const current = wanted === undefined ? undefined : shownKind(wanted, offered)
   const next = current === undefined ? kinds[0] : kinds[kinds.indexOf(current) + 1]
-  const others = directions.filter((other) => other !== direction)
   const branches: Expansions['branches'] = {}
-  for (const other of others) {
+  for (const other of directions.filter((one) => one !== direction)) {
     const kind = expansions.branches[other]
     if (kind !== undefined) branches[other] = kind
   }
@@ -156,14 +175,11 @@ export function switchBranch(
   return { ...expansions, branches }
 }
 
-/** The item after `current` in `items` that `fits`, going round; `current` when none does. */
-function nextOf<T>(items: readonly T[], current: T, fits: (item: T) => boolean): T {
-  const start = items.indexOf(current)
-  for (let step = 1; step < items.length; step++) {
-    const item = items[(start + step) % items.length]
-    if (item !== undefined && fits(item)) return item
-  }
-  return current
+/** Whether `one` and `other` open the same: what the file would hold for each. */
+export function sameExpansions(one: Expansions, other: Expansions): boolean {
+  const key = ({ outer, inner, branches }: Expansions) =>
+    JSON.stringify([outer, inner, directions.map((direction) => branches[direction] ?? null)])
+  return key(one) === key(other)
 }
 
 /**
