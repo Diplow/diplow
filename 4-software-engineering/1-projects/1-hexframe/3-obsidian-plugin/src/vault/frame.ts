@@ -186,15 +186,15 @@ export type Opener = 'obsidian' | 'system'
 
 /**
  * The extensions of the files the system's default app may be handed: documents it opens and
- * doesn't run, picked from what a vault holds beside its notes. Whatever else the system may run,
+ * doesn't run, picked from what a vault holds beside its notes. Office files are left out, since
+ * their app runs macros, links and formulas they carry. Whatever else the system may run,
  * or follow elsewhere (a program, a script, an installer, a shortcut, a file with no extension), so
  * it gets nothing that isn't listed here.
  */
 const documents = new Set([
-  ...['pdf', 'epub', 'txt', 'csv', 'tsv', 'json', 'yaml', 'yml', 'toml', 'log', 'rtf'],
+  ...['pdf', 'epub', 'txt', 'json', 'yaml', 'yml', 'toml', 'log'],
   ...['png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp', 'tif', 'tiff', 'heic', 'avif', 'ico'],
   ...['mp3', 'wav', 'm4a', 'ogg', 'flac', 'aac', 'mp4', 'mov', 'm4v', 'webm', 'mkv', 'avi'],
-  ...['docx', 'xlsx', 'pptx', 'odt', 'ods', 'odp', 'pages', 'numbers', 'key'],
 ])
 
 /** Whether the file at `path` is a document the system's default app may be handed. */
@@ -246,7 +246,7 @@ function isWithin(realPath: string | undefined, root: string | undefined): boole
   return realPath !== undefined && root !== undefined && liesWithin(realPath, root)
 }
 
-function messageOf(error: unknown): string {
+export function messageOf(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
 }
 

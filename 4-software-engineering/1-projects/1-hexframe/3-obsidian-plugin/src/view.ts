@@ -13,11 +13,12 @@ import {
 
 import type { Placement } from '../../2-claude-mod/hooks/shape/layout.ts'
 import { kindsOf } from '../../2-claude-mod/hooks/shape/node.ts'
-import { actionOf, type Opened } from './click.ts'
+import { actionOf, type Asked } from './click.ts'
 import { drawNotes, drawView, ringNotes } from './draw.ts'
 import { diskOf } from './vault/disk.ts'
 import {
   centerToShow,
+  messageOf,
   readFrame,
   refusal,
   unopenable,
@@ -201,15 +202,15 @@ export class HexframeView extends TextFileView {
         this.commit({ ...this.state, center: action.center })
         void this.draw()
       }
-      const opening = await openingOf(this.app, disk, action.open)
-      if (opening === undefined || isOvertaken()) return
-      if ('refused' in opening) new Notice(opening.refused)
-      else if ('note' in opening) {
-        await this.pairedLeaf().openFile(opening.note, {
+      const checked = await checkedOf(this.app, disk, action.open)
+      if (checked === undefined || isOvertaken()) return
+      if ('refused' in checked) new Notice(checked.refused)
+      else if ('note' in checked) {
+        await this.pairedLeaf().openFile(checked.note, {
           state: { mode: 'preview' },
           active: false,
         })
-      } else await openInDefaultApp(this.app, opening.system)
+      } else await openInDefaultApp(this.app, checked.system)
     } catch (error) {
       new Notice(`Hexframe can't carry out that click: ${messageOf(error)}`)
     }
@@ -225,14 +226,17 @@ export class HexframeView extends TextFileView {
   }
 }
 
-/** What a click opens once checked: a note for the paired pane, a file for the system, or why not. */
-type Opening = { note: TFile } | { system: string } | { refused: string }
+/**
+ * What a click asked to open, once checked: a note for the paired pane, a file for the system, or
+ * why it opens neither.
+ */
+type Checked = { note: TFile } | { system: string } | { refused: string }
 
 /**
- * What `open` comes to: the first of its notes that Obsidian indexes, or its file, either one held
- * to the vault; nothing when no note exists.
+ * What `open` comes to once checked: the first of its notes that Obsidian indexes, or its file,
+ * either one held to the vault; nothing when no note exists.
  */
-async function openingOf(app: App, disk: Disk, open: Opened): Promise<Opening | undefined> {
+async function checkedOf(app: App, disk: Disk, open: Asked): Promise<Checked | undefined> {
   if ('file' in open) {
     const refused = await unopenable(disk, open.file, 'system')
     if (refused === undefined) return { system: open.file }
@@ -272,8 +276,4 @@ function isOpen(app: App, wanted: WorkspaceLeaf): boolean {
     leaves.push(leaf)
   })
   return leaves.includes(wanted)
-}
-
-function messageOf(error: unknown): string {
-  return error instanceof Error ? error.message : String(error)
 }

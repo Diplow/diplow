@@ -291,6 +291,8 @@ describe('unopenable', () => {
       'setup.exe': 'exe',
       'Notes.lnk': 'lnk',
       'run.command': 'sh',
+      'budget.xlsx': 'xlsx',
+      'letter.docx': 'docx',
       install: 'sh',
       linked: { link: '/vault/tools' },
       'linked/board.pdf': 'pdf',
@@ -299,7 +301,15 @@ describe('unopenable', () => {
     })
     expect(await unopenable(files, 'board.PDF', 'system')).toBeUndefined()
     expect(await unopenable(files, 'linked/board.pdf', 'system')).toBeUndefined()
-    for (const path of ['setup.exe', 'Notes.lnk', 'run.command', 'install']) {
+    const others = [
+      'setup.exe',
+      'Notes.lnk',
+      'run.command',
+      'install',
+      'budget.xlsx',
+      'letter.docx',
+    ]
+    for (const path of others) {
       expect(await unopenable(files, path, 'system')).toBe('it is no document the system opens')
       expect(await unopenable(files, path)).toBeUndefined()
     }

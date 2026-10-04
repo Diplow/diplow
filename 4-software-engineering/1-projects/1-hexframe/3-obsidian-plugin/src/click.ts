@@ -1,20 +1,20 @@
 // What a click on a hex of the view does: where the view moves, and what it opens beside it. Pure,
 // so the click rules are tested without Obsidian; the view carries the action out.
 import type { Placement } from '../../2-claude-mod/hooks/shape/layout.ts'
-import { bodySources, parent } from '../../2-claude-mod/hooks/shape/node.ts'
+import { basename, bodySources, isMarkdown, parent } from '../../2-claude-mod/hooks/shape/node.ts'
 import { vaultPath } from './vault/frame.ts'
 
 /**
  * What the view opens: the first of `notes` that exists, in the paired pane, or a `file` in the
  * system's default app, once the vault lets it hand that file over.
  */
-export type Opened = { notes: string[] } | { file: string }
+export type Asked = { notes: string[] } | { file: string }
 
 /** What a click asks of the view. Paths are relative to the vault, `''` being its root. */
 export interface Action {
   /** The folder the view centers on; absent, the view stays where it is. */
   center?: string
-  open: Opened
+  open: Asked
 }
 
 /**
@@ -32,8 +32,7 @@ export function actionOf(placement: Placement, shift: boolean): Action | undefin
   if (placement.kind === 'empty') return undefined
   const { path } = placement.tile
   if (placement.kind === 'member' && placement.memberKind === 'leaf') {
-    const notes = bodySources(path, 'leaf')
-    return { open: notes.length === 0 ? { file: path } : { notes } }
+    return { open: isMarkdown(basename(path)) ? { notes: [path] } : { file: path } }
   }
   const moveTo = placement.kind === 'center' ? up(path) : path
   if (shift || moveTo === undefined) return { open: { notes: notesOf(path) } }

@@ -24,7 +24,7 @@ A click on a hex moves the view and shows the hex's note in a pane split off to 
 | a Branch or a Context folder | onto it | its `CLAUDE.md`, or `-CLAUDE.md` |
 | the center | up, onto the folder holding it; at the vault root, nowhere | that folder's note |
 | a Markdown Leaf | nowhere | the Leaf |
-| a Leaf that isn't Markdown | nowhere | nothing: Obsidian's "Open in default app" hands it to the system when it is a document the system opens rather than runs (a PDF, an image, a sound, a video, an office or a text file), by its name and its real one |
+| a Leaf that isn't Markdown | nowhere | nothing: Obsidian's "Open in default app" hands it to the system when it is a document the system opens rather than runs (a PDF, an image, a sound, a video, a plain text file; no office file, whose app runs what it carries), by its name and its real one |
 | any hex, shift held | nowhere | the hex's note, as above |
 
 A folder with no note opens nothing and still centers, and so does one whose note Obsidian doesn't index, which is the case inside a dot folder unless a plugin such as Hidden folders access indexes it. The view opens nothing, and centers on nothing, whose real path leaves the vault, and says why in a notice.
