@@ -6,8 +6,9 @@ preview: >-
   The choices the autonomous run made while building hexframe's MCP server,
   where a ticket left room: how a request's two proofs reach a program, what
   takes a Session, which of the api-key plugin's options it uses and which it
-  leaves, the apikey table's key to its user, and the Key server functions
-  that wait for their page.
+  leaves, the apikey table's key to its user, the Key server functions that
+  waited for their page, and how the Keys page keeps a secret and knows who
+  is signed in.
 ---
 # Decisions
 
@@ -30,3 +31,13 @@ HEX-43, [#51](https://github.com/Diplow/diplow/pull/51). The plugin's schema giv
 ### DEC-5 The three Key server functions carry knip's `@public` tag until the Keys page calls them
 
 HEX-43, [#51](https://github.com/Diplow/diplow/pull/51). `issueKey`, `keys` and `revokeKey` in `api/iam/iam.ts` have no caller in the app until the Keys page (HEX-44), so knip reports them as unused exports and `check` fails. Each carries `@public` with that reason in its doc comment. The tag skips one export and leaves knip's settings as they were. HEX-44 removes the three tags once the page imports the functions.
+
+HEX-44 called the three functions from the Keys page and removed the tags.
+
+### DEC-6 The header's links read the Session a page's guard proved, and make no call of their own
+
+HEX-44. The ticket asked for a header link to the Keys page for a signed-in Account, and the root layout knows nothing of the Session. A frame read of `session` would send a signed-out visitor on sign-in to sign-in, since `Unauthenticated` goes to sign-in on every call, and it would cost a call on every page. `signedInOnly` already puts the Session on its route's context, so the root's header shows the System and Keys links when one of the page's matches holds it. A page without the guard (sign-in, sign-up, `/dev/*`) shows none, even for a signed-in Account.
+
+### DEC-7 A Key's secret reaches the page through a form's submit, never a mutation, and the command's origin is read when the answer arrives
+
+HEX-44. A TanStack Query mutation keeps its result in the MutationCache after the component that ran it is gone, so the secret would outlive the screen. `useIssueKeySubmit` is a `submitWrite`, like every form's submit here: the answer goes to the caller's callback and nowhere else, and `Keys` holds it in its own state until Done or until the user leaves. A test checks that no query or mutation in the cache holds the secret. The `claude mcp add` command takes the origin from `window.location` when issuing answers, which only happens in the browser.
