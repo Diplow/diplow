@@ -1,0 +1,50 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/data/Markdown.tsx
+  s_add1a77a88c179::t_7dc744550a32e6 1-32
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_add1a77a88c179::t_7d3c68d9a0d12e 39
+  s_add1a77a88c179::t_8eb17fe250105f 215,223-224,232
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_add1a77a88c179::t_8eb17fe250105f 215,223-224,232
+  s_add1a77a88c179::t_7d3c68d9a0d12e 39
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.ts
+  s_add1a77a88c179::t_0c564340273d8d 87-91,105
+  s_add1a77a88c179::t_ceeb8335ca2fb6 141-145
+  s_add1a77a88c179::t_24c3bb609e05fb 74-76
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/System.tsx
+  s_add1a77a88c179::t_27b83ce15301d8 2-3
+  s_add1a77a88c179::t_325632567fb1f6 1,54-59,61
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/data/gallery.tsx
+  s_add1a77a88c179::t_7d3c68d9a0d12e 10,73-91,93-94,97-105
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.test.ts
+  s_add1a77a88c179::t_24c3bb609e05fb 144-148
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/files/download.ts
+  s_add1a77a88c179::t_b397a286231b35 8-9,12-16
+  s_add1a77a88c179::t_09d3a54ad0566e 17
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useCenteredTileState.ts
+  s_add1a77a88c179::t_ceeb8335ca2fb6 11
+  s_add1a77a88c179::t_e77999f6d40bb2 20
+  s_add1a77a88c179::t_019c26a00ea55b 1-10,12-19,21-74
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/TileActions.tsx
+  s_add1a77a88c179::t_e77999f6d40bb2 1-3,23,37-38,55,72-73,118-121,134-135,162-171,259,297,302-305
+  s_add1a77a88c179::t_4edc0fa9c30f2c 200-202
+  s_add1a77a88c179::t_b87936915b97bf 306-307
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useCenteredTileState.test.ts
+  s_add1a77a88c179::t_7d0460e6208352 125-128,139
+  s_add1a77a88c179::t_a88130b11f0d12 1-124,129-138,140-161
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c801f21c530be78c5eb85b4e5e851958e49299f3",
+  "prompts": {},
+  "sessions": {
+    "s_add1a77a88c179": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d3373e9-3681-410c-a221-392366b8a522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
