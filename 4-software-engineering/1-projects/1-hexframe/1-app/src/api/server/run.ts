@@ -15,6 +15,7 @@ import {
 import { Auth, HttpExchange, layer as authLayer } from '#/repositories/auth/auth'
 import { type Database, layer as databaseLayer } from '#/repositories/database/database'
 import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
+import { Zip, layer as zipLayer } from '#/repositories/zip/zip'
 
 import { Failure, Unexpected, encodeFailure, type Outcome } from '../errors/failure'
 import {
@@ -55,10 +56,13 @@ const auth =
     : Layer.orDie(Layer.merge(authLayer, databaseLayer))
 
 /**
- * The repositories the domains use: Better Auth for IAM, the tiles repository for Mapping; and the
- * database itself, for the transaction a program opens (`transactional`).
+ * The repositories the domains use: Better Auth for IAM, the tiles repository and Zip for Mapping; and
+ * the database itself, for the transaction a program opens (`transactional`).
  */
-const repositories: Layer.Layer<Auth | Database | Tiles> = Layer.provideMerge(tilesLayer, auth)
+const repositories: Layer.Layer<Auth | Database | Tiles | Zip> = Layer.merge(
+  Layer.provideMerge(tilesLayer, auth),
+  zipLayer,
+)
 
 /**
  * Every layer: the bus, the domains' services and the repositories below them, merged here as each is

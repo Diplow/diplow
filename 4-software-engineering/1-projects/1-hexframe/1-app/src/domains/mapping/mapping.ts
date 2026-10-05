@@ -8,8 +8,10 @@ import { Effect } from 'effect'
 
 import type { InTransaction } from '#/repositories/database/database'
 import { Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/tiles'
+import { Zip } from '#/repositories/zip/zip'
 
 import { DirectionTaken, HelpReadOnly, MovedUnderItself, RootFixed, TileNotFound } from './errors'
+import { type LinkOf, exportOf } from './files/files'
 import { findInHelp, type HelpLanguage, isHelpId } from './help/help'
 import type { ToKeep } from './kept/kept'
 import { holdsNothingIfLeaf, notLeaf } from './leaves/leaves'
@@ -185,6 +187,20 @@ export const openTile = <F extends Field>(
       }
     },
   )
+
+/**
+ * The Tile of this id in the Account's System, and everything below it, zipped: the archive's name,
+ * `<slug>.zip`, its Tile's slug, and its bytes, streamed as they are zipped. A Tile of another System
+ * is `TileNotFound`, as is a Reference, which has no files of its own. `link` is where the app shows
+ * a Tile, for a Reference whose Tile the export leaves out. Reading the Root adds it, as `system` does.
+ */
+export const exportTile = (accountId: string, { id, link }: { id: string; link: LinkOf }) =>
+  Effect.gen(function* () {
+    const exported = exportOf(yield* system(accountId), id, link)
+    if (exported === undefined) return yield* new TileNotFound()
+    const { zipped } = yield* Zip
+    return { name: `${exported.slug}.zip`, bytes: zipped(exported.files) }
+  })
 
 /**
  * Refuses a change that names a Tile of Help, whichever schema let its ids through: Help is read by
