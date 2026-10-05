@@ -13,9 +13,10 @@ import {
   fields as allFields,
   previewLimit,
   type Field,
+  TileId,
 } from '#/domains/mapping/entities'
 import { HelpId, helpRoot } from '#/domains/mapping/mapping'
-import { type OperationName, TileId } from '#/domains/mapping/operations'
+import type { OperationName } from '#/domains/mapping/operations'
 
 import type { Failure } from '../../errors/failure'
 import {

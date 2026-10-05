@@ -4,10 +4,7 @@
 // Operation may do to a System is the service's to decide.
 import { Schema } from 'effect'
 
-import { ContextDirection, contentBounds, Slot } from '../entities'
-
-/** A Tile's id: a UUID, as every Tile of a System is made, so a Help id, or any other text, names none. */
-export const TileId = Schema.String.check(Schema.isUUID())
+import { ContextDirection, contentBounds, Slot, TileId } from '../entities'
 
 /**
  * What a Tile says, bounded so nothing unbounded reaches the service, which says what a Title and a

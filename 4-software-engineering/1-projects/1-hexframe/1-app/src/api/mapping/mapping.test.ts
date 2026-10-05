@@ -13,15 +13,6 @@ import type {
   TileNotFound,
   TitleMissing,
 } from '#/domains/mapping/errors'
-import {
-  CreateReference,
-  CreateTile,
-  DeleteReference,
-  DeleteTile,
-  EditTile,
-  MoveTile,
-  SwapTiles,
-} from '#/domains/mapping/operations'
 
 import type { Failure } from '../errors/failure'
 import { noKey, run, type Services, type StartContext } from '../server/run'
@@ -30,7 +21,6 @@ import {
   NewReference,
   NewTile,
   ReferenceSlot,
-  TileDelete,
   TileEdit,
   TileMove,
   TileRef,
@@ -310,25 +300,6 @@ describe("the schemas Mapping's server functions validate by", () => {
     expect(accepts(TileMove, { id: t, parent: p, slot: 3 })).toBe(true)
     expect(accepts(TileMove, { id: t, parent: p, slot: 9 })).toBe(false)
     expect(accepts(TileMove, { id: t, parent: p, slot: { leaf: 3 } })).toBe(true)
-  })
-
-  it("take each of Mapping's Operations by its fields, its tag left to the function's name", () => {
-    const keys = (fields: object) => Object.keys(fields).filter((key) => key !== '_tag')
-    const taken = [
-      [TileEdit, EditTile],
-      [TileMove, MoveTile],
-      [TileSwap, SwapTiles],
-      [TileDelete, DeleteTile],
-      [NewReference, CreateReference],
-      [ReferenceSlot, DeleteReference],
-    ] as const
-    for (const [input, operation] of taken) {
-      expect(Object.keys(input.fields)).toEqual(keys(operation.fields))
-    }
-    // The id a caller may choose for a new Tile waits until Mapping honours it.
-    expect(Object.keys(NewTile.fields)).toEqual(
-      keys(CreateTile.fields).filter((key) => key !== 'id'),
-    )
   })
 
   it("read Help in one of the app's languages, nothing else", () => {

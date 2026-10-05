@@ -5,7 +5,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { Schema, Struct } from 'effect'
 
-import { Slot } from '#/domains/mapping/entities'
+import { Slot, TileId } from '#/domains/mapping/entities'
 import {
   CreateReference,
   CreateTile,
@@ -14,7 +14,6 @@ import {
   EditTile,
   MoveTile,
   SwapTiles,
-  TileId,
 } from '#/domains/mapping/operations'
 import { locales } from '#/paraglide/runtime'
 

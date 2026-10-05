@@ -60,6 +60,12 @@ export interface Tile extends Content {
   readonly id: string
 }
 
+/**
+ * A Tile's id as a caller names it: a UUID, as every Tile of a System is made, so a Help id, or any
+ * other text, names none of them.
+ */
+export const TileId = Schema.String.check(Schema.isUUID())
+
 /** A guard for one of these values, so the guards and the lists above never drift apart. */
 const among =
   <T extends number>(values: ReadonlyArray<T>) =>
