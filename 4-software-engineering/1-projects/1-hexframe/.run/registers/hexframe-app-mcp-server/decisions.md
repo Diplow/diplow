@@ -8,7 +8,8 @@ preview: >-
   takes a Session, which of the api-key plugin's options it uses and which it
   leaves, the apikey table's key to its user, the Key server functions that
   waited for their page, how the Keys page keeps a secret and knows who is
-  signed in, and how Mapping reads one Tile to a depth.
+  signed in, how Mapping reads one Tile to a depth, and how two Tiles swap,
+  in the database and on the canvas.
 ---
 # Decisions
 
@@ -45,3 +46,11 @@ HEX-44. A TanStack Query mutation keeps its result in the MutationCache after th
 ### DEC-8 `readTile` walks down a generation per query, and a Reference always shows its Tile's Title and Preview
 
 HEX-45. Drizzle has no recursive query, and the query builder is the security bar, so the tiles repository's `generationsFrom` reads the opened row, then each generation under the last one, one query each: four at most, for a depth of 3. A Tile at the read's last generation has no `children` and no `context` at all, so a reader tells "not read" from "empty". A Reference shows its Tile's id, Title and Preview whatever fields were asked, since that is what a reader needs to decide whether to follow it, and never its Body. The opened Tile's parent and the Tiles its References point at come from one more read, `ofIds`. `readTile` takes its depth and its fields with no defaults: the MCP tools choose theirs (HEX-47). Its tests sit in `mapping.test.ts` over PGlite, and `readOf`'s in `system.test.ts` on rows made by hand, since the Mapping folder already holds six files. The queries run outside a transaction, as every read does: a move that commits between two of them can show a Tile twice or a Reference as broken in that one answer, and the next read is right. A domain opens no transaction, and a snapshot for a read can come with the API layer if a reader ever trips on it.
+
+### DEC-9 A swap parks one Tile under a spare row for a moment, rather than deferring the slot index
+
+HEX-46. `tile_slot_idx`, one row per slot, is a unique index, and Postgres checks a unique index row by row, never at the end of a statement: one `UPDATE` that trades two rows' slots fails on its first row. A deferrable unique constraint would let the statement through, but Drizzle's schema language cannot say `DEFERRABLE`, so it would live in a hand-written migration the schema and its snapshot know nothing of, and the next generated migration touching the index would break on it. So the tiles repository's `swap` makes three updates inside the change's transaction: the first Tile waits in slot 1 of a spare row, one with nothing below it and so every slot free (a finite System always holds one, a leaf), the second takes the first's place, then the first takes the second's. The System's Root is locked throughout, so nobody sees the moment the first Tile stands under the spare. Mapping checks every refusal before the repository writes anything, and the repository knows nothing of Tiles or Roots.
+
+### DEC-10 On the canvas, a swap is a small button on the Tile, not the Tile's click
+
+HEX-46. The ticket asked that occupied slots become targets labelled "Swap with ⟨Title⟩" during a move. Taking over a Tile's click would cost the user the canvas while a move is under way: a click opens a Frame and a double-click centers, and a move is meant to cross the canvas ("anywhere the canvas is taken meanwhile"). So a Tile that can swap shows a disc with two arrows at the foot of its hex, a button of its own named "Swap with ⟨Title⟩", and the Tile keeps its click. The canvas takes it as `heldSlots`, beside `emptySlots`, and draws it from `Tile.tsx`, since `ui/hex/` already holds six files. The Root, the moving Tile, a Reference and a broken one offer nothing (`swapsWith` in `features/system/tree.ts`). A Tile above or below the moving one does offer it, and Mapping refuses it with its own sentence, as a slot below a moving Tile is offered and refused.

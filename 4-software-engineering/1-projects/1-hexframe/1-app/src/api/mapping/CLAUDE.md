@@ -13,7 +13,7 @@ Where the client meets [[4-software-engineering/1-projects/1-hexframe/1-app/src/
 
 | File | Holds |
 |---|---|
-| `mapping.ts` | The server functions (`system`, `createTile`, `editTile`, `moveTile`, `deleteTile`, `createReference`, `deleteReference`) and the schemas of their inputs. The schemas bound every string; what a Title or a Preview must be is Mapping's to say, on the field |
+| `mapping.ts` | The server functions (`system`, `createTile`, `editTile`, `moveTile`, `swapTiles`, `deleteTile`, `createReference`, `deleteReference`) and the schemas of their inputs. The schemas bound every string; what a Title or a Preview must be is Mapping's to say, on the field |
 | `programs.ts` | The program behind each server function: IAM's `signedIn`, then the operation for that Account, a change in the transaction it opens (`transactional`). It has a module of its own so the client, which imports `mapping.ts`, never reaches the domain |
 | `mapping.test.ts` | The programs through `run`, on the runtime's repositories over PGlite: signed out, every operation, an Account its Key proves, every refusal as it crosses the wire, another Account's System; the schemas; the errors each program lists by its type |
 
