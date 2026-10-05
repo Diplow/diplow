@@ -1,0 +1,35 @@
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_add1a77a88c179::t_d48afd9318cb54 63
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/import/read.test.ts
+  s_add1a77a88c179::t_d48afd9318cb54 143,148-150
+  s_add1a77a88c179::t_83082ec8b72ab7 151
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_add1a77a88c179::t_b460463b9d0521 79
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/import/plan.ts
+  s_add1a77a88c179::t_d48afd9318cb54 64-68,71
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/help/vault.ts
+  s_add1a77a88c179::t_9008215b084307 29-34,36,45,47,49,58-59,61-91,96-99,114,119-124,126,139-140,156-161
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/import/read.ts
+  s_add1a77a88c179::t_9008215b084307 361-365
+  s_add1a77a88c179::t_d48afd9318cb54 360,366
+4-software-engineering/1-projects/1-hexframe/1-app/dependency-cruiser.config.ts
+  s_add1a77a88c179::t_d48afd9318cb54 63-64,66,123,125
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-import-export/decisions.md
+  s_add1a77a88c179::t_b460463b9d0521 56,58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0f83f0cc3815fbbcb99b5fdf35c74e44af2cf917",
+  "prompts": {},
+  "sessions": {
+    "s_add1a77a88c179": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d3373e9-3681-410c-a221-392366b8a522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
