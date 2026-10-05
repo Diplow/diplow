@@ -30,46 +30,17 @@ export interface TileRow {
 }
 
 /** The columns keeping what an imported file carried: null when it carried nothing. */
-export type KeptColumn = 'name' | 'config' | 'frontmatter'
+type KeptColumn = 'name' | 'config' | 'frontmatter'
 
 /** The columns holding what a Tile says, which a read from one Tile names one by one. */
 export type ContentColumn = 'title' | 'preview' | 'body'
 
 /**
- * A row as a read from one Tile gives it: where it stands, whether it is a Reference, and, apart,
- * only the content columns asked.
+ * A row as a read from one Tile gives it: where it stands, whether it is a Reference, and only the
+ * content columns asked. Mapping shapes it (`domains/mapping/entities/rows.ts`).
  */
-export interface TileRowWith<C extends ContentColumn> {
-  readonly id: string
-  readonly parentId: string | null
-  readonly direction: number | null
-  readonly target: string | null
-  readonly content: Pick<TileRow, C>
-}
-
-/**
- * These content columns of what a Tile says, and no other: the one projection a read from one Tile
- * makes, whether its rows come from the database, here, or from Help's notes, in Mapping.
- */
-export function contentWith<C extends ContentColumn>(
-  content: Partial<Pick<TileRow, ContentColumn>>,
-  columns: ReadonlyArray<C>,
-): Pick<TileRow, C> {
-  // Built from the columns asked, each of them read, which a type cannot follow.
-  return Object.fromEntries(columns.map((column) => [column, content[column]])) as Pick<TileRow, C>
-}
-
-/** A row with only the content columns asked, apart from where it stands. */
-export const withContent = <C extends ContentColumn>(
-  {
-    id,
-    parentId,
-    direction,
-    target,
-    ...content
-  }: Omit<TileRow, ContentColumn | KeptColumn> & Partial<Pick<TileRow, ContentColumn>>,
-  columns: ReadonlyArray<C>,
-): TileRowWith<C> => ({ id, parentId, direction, target, content: contentWith(content, columns) })
+export type TileRowWith<C extends ContentColumn> = Omit<TileRow, ContentColumn | KeptColumn> &
+  Pick<TileRow, C>
 
 /** What a read from one row asks of each: the content columns of that row, and of the rows below it. */
 export interface ColumnsAsked<O extends ContentColumn, C extends ContentColumn> {
@@ -186,6 +157,14 @@ const placeColumns = {
 
 /** What a Tile says. */
 const contentColumns = { title: tile.title, preview: tile.preview, body: tile.body }
+
+/** The content columns asked, for a select, and no other. */
+const contentColumnsOf = <C extends ContentColumn>(asked: ReadonlyArray<C>) =>
+  // Built from the columns asked, each of them, which a type cannot follow.
+  Object.fromEntries(asked.map((column) => [column, contentColumns[column]])) as Pick<
+    typeof contentColumns,
+    C
+  >
 
 /** What an imported file carried. */
 const keptColumns = { name: tile.name, config: tile.config, frontmatter: tile.frontmatter }
@@ -337,19 +316,12 @@ const make = Effect.gen(function* () {
     accountId: string,
     where: SQL,
     columns: ReadonlyArray<C>,
-  ) => {
-    const asked: Partial<typeof contentColumns> = Object.fromEntries(
-      columns.map((column) => [column, contentColumns[column]]),
-    )
-    return database
-      .select({ ...placeColumns, ...asked })
+  ): Effect.Effect<ReadonlyArray<TileRowWith<C>>> =>
+    database
+      .select({ ...placeColumns, ...contentColumnsOf(columns) })
       .from(tile)
       .where(and(ofAccount(accountId), where))
-      .pipe(
-        Effect.orDie,
-        Effect.map((rows) => rows.map((row) => withContent(row, columns))),
-      )
-  }
+      .pipe(Effect.orDie)
 
   const root = (accountId: string, content: Pick<TileRow, ContentColumn>) =>
     ensureRoot(accountId, content).pipe(

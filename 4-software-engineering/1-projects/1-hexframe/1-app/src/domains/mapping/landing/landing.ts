@@ -20,10 +20,9 @@ import type {
   ReferenceTarget,
 } from '../files/import/plan'
 import { importOf } from '../files/import/read'
-import { isEmptySystem, onlyALeafIn } from '../leaves/leaves'
-import { type Placement, changing, freeSlot, untitled } from '../mapping'
-import { systemOf, tileRow } from '../system'
-import { type Slot, rowDirection } from '../tile'
+import { isEmptySystem, onlyALeafIn, rowDirection, type Slot, systemOf, tileRow } from '../entities'
+import { changing, freeSlot, untitled } from '../mapping'
+import type { Placement } from '../operations'
 import { type Upload, archiveBounds, folderOf } from './archive'
 
 export type { Upload } from './archive'

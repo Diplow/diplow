@@ -1,13 +1,11 @@
 // What a Tile keeps from the files it was imported from, so that an export writes the same vault back:
 // its Name, its Tile config and the Frontmatter keys Mapping has no use for. Mapping never reads the
 // last, but bounds all three before they are stored: each is a Schema whose branded type a write
-// takes, so only a checked value reaches the tiles repository. Pure.
+// takes, so only a checked value is stored. Pure.
 import { Effect, Schema, Struct } from 'effect'
 
-import type { TileConfigColumn } from '#/repositories/database/schema'
-import type { KeptColumn, TileRow } from '#/repositories/database/tiles/tiles'
-
-import { NameInvalid } from '../errors'
+import { NameInvalid } from '../../errors'
+import type { KeptPart, Row, StoredConfig } from '../rows'
 
 /** The most bytes a path segment holds, in UTF-8: what a file system allows one name. */
 const segmentBytes = 255
@@ -69,7 +67,7 @@ export function isFolderPattern(pattern: string): boolean {
  * name of a folder's own file, `CLAUDE.md` by default, and the pattern of a Branch's folder,
  * `<n>-<slug>` by default.
  */
-export type Naming = { readonly [Part in keyof TileConfigColumn]-?: string }
+export type Naming = { readonly [Part in keyof StoredConfig]-?: string }
 
 /** The check of each part a Tile config sets: every part its column holds, and no other. */
 const namingParts = {
@@ -162,10 +160,10 @@ export const configured = (config: Partial<Naming>) =>
   )
 
 /** What a Tile keeps from its files, as a read finds it: each part only when its file carried it. */
-export type Kept = { readonly [K in KeptColumn]?: NonNullable<TileRow[K]> }
+export type Kept = { readonly [K in KeptPart]?: NonNullable<Row[K]> }
 
 /** What a row keeps from its files, as a Tile shows it: a part its file carried nothing for is absent. */
-export const keptOf = ({ name, config, frontmatter }: Pick<TileRow, KeptColumn>): Kept => ({
+export const keptOf = ({ name, config, frontmatter }: Pick<Row, KeptPart>): Kept => ({
   ...(name === null ? {} : { name }),
   ...(config === null ? {} : { config }),
   ...(frontmatter === null ? {} : { frontmatter }),
@@ -176,4 +174,4 @@ export const keepsNothing = {
   name: null,
   config: null,
   frontmatter: null,
-} as const satisfies Pick<TileRow, KeptColumn>
+} as const satisfies Pick<Row, KeptPart>

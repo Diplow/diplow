@@ -70,6 +70,18 @@ const shapeLayout = '2-claude-mod/hooks/shape/layout\\.ts$'
 const shapeTypes = '2-claude-mod/hooks/shape/node\\.ts$'
 const layoutSeam = '^src/front/ui/hex/geometry/shape(\\.test)?\\.ts$'
 
+// A domain's door, the front's one way into the domains: its entities, its operations and its errors,
+// pure by what they are (STACK.md, "Domains"). What they reach stays inside that pure model: the
+// domain's entities/ and operations/, its errors.ts, the kinds and the bus beside the domains, and
+// effect. `$1` is the domain the door belongs to.
+const door = '^src/domains/([^/]+)/(entities/index|operations/index|errors)\\.ts$'
+const pureModel = [
+  '^src/domains/$1/(entities|operations)/',
+  '^src/domains/$1/errors\\.ts$',
+  '^src/domains/(kind|bus)\\.ts$',
+  '(^|node_modules/)effect(/|$)',
+]
+
 const sdkOutsideItsRepository: IConfiguration['forbidden'] = Object.entries(sdks).map(
   ([repository, modules]) => ({
     name: `no-${repository}-sdk-outside-its-repository`,
@@ -86,11 +98,20 @@ const config: IConfiguration = {
     ...upward('src/', layers),
     ...upward('src/front/', frontLayers),
     {
-      name: 'no-front-importing-domains-or-repositories',
-      comment: 'The front reaches the server through a server function in src/api/.',
+      name: 'no-front-past-a-domains-door',
+      comment:
+        'The front reaches the server through a server function in src/api/; of a domain it imports its door only: entities/index.ts, operations/index.ts and errors.ts.',
       severity: 'error',
       from: { path: '^src/front/' },
-      to: { path: '^src/(domains|repositories)/' },
+      to: { path: '^src/(domains|repositories)/', pathNot: door },
+    },
+    {
+      name: 'no-door-reaching-past-the-pure-model',
+      comment:
+        'Nothing reachable through a domain’s door touches a repository, the application service, a concept folder, another domain or Node, type-only imports included: only the domain’s entities/, operations/ and errors.ts, effect, domains/kind.ts and domains/bus.ts.',
+      severity: 'error',
+      from: { path: door },
+      to: { reachable: true, pathNot: pureModel },
     },
     {
       name: 'no-feature-importing-another',

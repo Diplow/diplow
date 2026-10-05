@@ -28,7 +28,7 @@ import {
 
 // The hooks over stand-ins for the server functions: what each calls, what it answers, and when the
 // System is read again. The server functions themselves are covered in src/api/mapping/mapping.test.ts.
-// A refusal is what the client receives, its wire form: the front never imports a domain.
+// A refusal is what the client receives, its wire form, decoded.
 vi.mock('#/api/mapping/mapping', async (original) => ({
   // The import's form is encoded by the server function's own schema.
   ImportUpload: (await original<typeof Mapping>()).ImportUpload,

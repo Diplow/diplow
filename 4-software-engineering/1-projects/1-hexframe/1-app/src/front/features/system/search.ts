@@ -3,7 +3,7 @@
 // the page as its sender saw it, the open form included. Every function here is pure.
 import { Schema } from 'effect'
 
-import { Slot } from '#/api/mapping/mapping'
+import { Slot } from '#/domains/mapping/entities'
 import type { ImportPlace } from '#/front/client/mapping/queries'
 import { findTile, type TileNode } from '#/front/ui/hex/view/tiles'
 import {
@@ -50,7 +50,7 @@ export type SearchChange = SystemSearch | ((current: SystemSearch) => SystemSear
 /** The change under way, as the page reads it from its search params. */
 export type Change =
   | { kind: 'none' }
-  | { kind: 'add'; parent: string; slot: typeof Slot.Type }
+  | { kind: 'add'; parent: string; slot: Slot }
   | { kind: 'import'; place: ImportPlace }
   | { kind: 'edit'; id: string }
   | { kind: 'move'; id: string }
@@ -64,7 +64,7 @@ export function viewOf(search: SystemSearch): CanvasView {
 }
 
 /** Where an import lands, as the URL says it: a slot under a Tile, the Root, or nowhere. */
-function importPlaceOf(into: string, slot: typeof Slot.Type | undefined): ImportPlace | undefined {
+function importPlaceOf(into: string, slot: Slot | undefined): ImportPlace | undefined {
   if (into === rootPlace) return { _tag: 'Root' }
   return slot === undefined ? undefined : { _tag: 'Slot', parent: into, slot }
 }

@@ -13,44 +13,33 @@ import { Zip } from '#/repositories/zip/zip'
 import { DirectionTaken, HelpReadOnly, MovedUnderItself, RootFixed, TileNotFound } from './errors'
 import { type LinkOf, exportOf } from './files/files'
 import { findInHelp, type HelpLanguage, isHelpId } from './help/help'
-import type { ToKeep } from './kept/kept'
-import { holdsNothingIfLeaf, notLeaf } from './leaves/leaves'
 import {
+  below,
+  checked,
+  type Content,
   type Depth,
   type Field,
   type FieldsAsked,
   type Found,
-  type ReadTile,
-  below,
+  holdsNothingIfLeaf,
+  notLeaf,
   readOf,
+  type ReadTile,
   rowAt,
+  rowDirection,
   showing,
   systemOf,
-  tileRow,
-} from './system'
-import {
-  type Content,
-  type ContextDirection,
-  type Slot,
   type Tile,
-  checked,
-  rowDirection,
-} from './tile'
+  tileRow,
+  type ToKeep,
+  withContent,
+} from './entities'
+import type { Placement, ReferenceSlot } from './operations'
 
 export { HelpId, helpRoot, helpSystem } from './help/help'
-export { depths, fields } from './system'
-export { directions, previewLimit } from './tile'
-export type { Depth, Field, ReadTile, SystemTile } from './system'
-export type { Content, ContextDirection, Direction } from './tile'
 
 /** The content of a Root nobody has named yet, and of every Reference, which keeps none of its own. */
 export const untitled: Content = { title: '', preview: '', body: '' }
-
-/** Where a Tile or a Reference goes: a slot under a parent Tile. */
-export interface Placement {
-  readonly parent: string
-  readonly slot: Slot
-}
 
 /**
  * The Account's System: its Root, the user, with everything below it. The first read adds the Root,
@@ -92,6 +81,9 @@ const find = <O extends Field, F extends Field>(
     ? findInHelp(id, { fields, language })
     : findOwn(accountId, { id, depth, fields })
 
+/** What a reader sees of a Tile beside the one opened: enough to decide whether to open it. */
+const glimpsed = ['title', 'preview'] as const satisfies ReadonlyArray<Field>
+
 /** What a read from a Tile of the Account's System finds, its Root when no id is given. */
 const findOwn = <O extends Field, F extends Field>(
   accountId: string,
@@ -107,18 +99,15 @@ const findOwn = <O extends Field, F extends Field>(
       const targets = below.flatMap(({ target }) => (target === null ? [] : [target]))
       const parentIds = opened.parentId === null ? [] : [opened.parentId]
       const [parents, pointedAt] = yield* Effect.all(
-        [
-          tiles.ofIds(accountId, parentIds, ['title']),
-          tiles.ofIds(accountId, targets, ['title', 'preview']),
-        ],
+        [tiles.ofIds(accountId, parentIds, ['title']), tiles.ofIds(accountId, targets, glimpsed)],
         { concurrency: 'unbounded' },
       )
       const parent = parents[0]
       return {
-        opened,
-        rows: below,
-        pointedAt,
-        parent: parent === undefined ? null : { id: parent.id, title: parent.content.title },
+        opened: withContent(opened, fields.opened),
+        rows: below.map((row) => withContent(row, fields.below)),
+        pointedAt: pointedAt.map((row) => withContent(row, glimpsed)),
+        parent: parent === undefined ? null : { id: parent.id, title: parent.title },
       } satisfies Found<O, F>
     }),
   )
@@ -141,9 +130,6 @@ export const readTile = <F extends Field>(
       parent,
     }),
   )
-
-/** What a reader sees of a Tile beside the one opened: enough to decide whether to open it. */
-const glimpsed = ['title', 'preview'] as const satisfies ReadonlyArray<Field>
 
 /** A Tile's Branches, Leaves and Context, each by its Title and Preview. */
 type Around = Required<Pick<ReadTile<(typeof glimpsed)[number]>, 'branches' | 'leaves' | 'context'>>
@@ -335,7 +321,7 @@ export const deleteTile = (accountId: string, id: string) =>
  */
 export const createReference = (
   accountId: string,
-  { parent, slot, target }: { parent: string; slot: ContextDirection; target: string },
+  { parent, slot, target }: ReferenceSlot & { target: string },
 ) =>
   changing(accountId, [parent, target], (rows, writes) =>
     Effect.gen(function* () {
@@ -346,10 +332,7 @@ export const createReference = (
   )
 
 /** Empties a Context slot holding a Reference; the Tile it pointed at is untouched. */
-export const deleteReference = (
-  accountId: string,
-  { parent, slot }: { parent: string; slot: ContextDirection },
-) =>
+export const deleteReference = (accountId: string, { parent, slot }: ReferenceSlot) =>
   changing(accountId, [parent], (rows, writes) =>
     Effect.gen(function* () {
       yield* tileIn(rows, parent)

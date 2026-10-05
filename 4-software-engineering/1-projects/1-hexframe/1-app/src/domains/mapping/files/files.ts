@@ -3,10 +3,18 @@
 // folder per Reference, and a `.hexframe/config.yaml` where a Tile sets its own naming. Mapping decides
 // the files; zipping them is a repository's errand, and handing them to another domain the API
 // layer's. Pure.
-import { type Naming, reservedKeys } from '../kept/kept'
-import { defaultNaming, inherited } from '../kept/naming'
-import type { BrokenReference, LeafTile, Reference, SystemTile } from '../system'
-import type { ContextDirection, Direction } from '../tile'
+import {
+  type BrokenReference,
+  type ContextDirection,
+  defaultNaming,
+  type Direction,
+  inherited,
+  type LeafTile,
+  type Naming,
+  type Reference,
+  reservedKeys,
+  type SystemTile,
+} from '../entities'
 import { type Fields, markdownOf, yamlOf } from './frontmatter'
 import { type EntryKind, type ToName, isVerbatim, namesIn, ownFileName, slugOf } from './names'
 

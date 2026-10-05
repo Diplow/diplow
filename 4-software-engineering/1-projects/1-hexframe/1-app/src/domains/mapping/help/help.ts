@@ -7,13 +7,19 @@
 // read as a file path. The build refuses a folder that reads as no Tile in either (vite.config.ts).
 import { Effect, Schema } from 'effect'
 
-import { withContent } from '#/repositories/database/tiles/tiles'
 import { helpNotes } from '#/repositories/help/help'
 import { noteFiles } from '#/repositories/help/note'
 
 import { TileNotFound } from '../errors'
-import { type Field, type FieldsAsked, type Found, systemOf } from '../system'
-import { contextDirections, directions } from '../tile'
+import {
+  contextDirections,
+  directions,
+  type Field,
+  type FieldsAsked,
+  type Found,
+  systemOf,
+  withContent,
+} from '../entities'
 import { type Vault, vaultOf } from './vault'
 
 /** The id of Help's Root; every other Help id is a path of slots below it. */

@@ -9,8 +9,9 @@ import { layer as zipLayer } from '#/repositories/zip/zip'
 
 import type { IdOfLink } from '../files/import/plan'
 import { helpRoot } from '../help/help'
+import type { SystemTile } from '../entities'
 import * as Mapping from '../mapping'
-import { type SystemTile, system } from '../mapping'
+import { system } from '../mapping'
 import { type ImportPlace, importTiles, planImport } from './landing'
 
 // An import landed in a System over PGlite, as the API layer runs it: the plan read outside any

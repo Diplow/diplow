@@ -2,12 +2,11 @@
 // at work, landed or refused, and each line of its report in the page's language. The import itself is
 // a write, Query's (`useImportTiles`); the files come from the browser's pickers and drops, read by
 // `front/client/mapping/files.ts`. The component renders this and calls the actions, nothing more.
+import { isLeafSlot } from '#/domains/mapping/entities'
 import { dropped, pickedFile, pickedFolder } from '#/front/client/mapping/files'
 import { type ImportPlace, type Imported, useImportTiles } from '#/front/client/mapping/queries'
 import type { Given, LeftOut } from '#/front/client/mapping/upload'
 import { m } from '#/paraglide/messages'
-
-import { isLeafSlot } from '../../tree'
 
 type Refused = Extract<Imported, { _tag: 'Refused' }>
 

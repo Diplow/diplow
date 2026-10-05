@@ -1,8 +1,7 @@
 // What an import reads and what it plans: the files it is handed, and the tree of Tiles it would create
 // from them, in Mapping's own words, each with what it keeps from its file; the shape's never reach it.
 // Landing a plan in a System is another step's (`hexframe-app-import-export/decisions.md#DEC-10`).
-import type { ToKeep } from '../../kept/kept'
-import type { Content, ContextDirection, Direction } from '../../tile'
+import type { Content, ContextDirection, Direction, ToKeep } from '../../entities'
 
 /** One file handed to an import: its path from the import's root, `/` between folders, and its bytes. */
 export interface ImportFile {

@@ -1,0 +1,27 @@
+---
+title: entities
+parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities
+owner: diplo
+preview: >-
+  Mapping's entities, value objects and aggregate, pure, behind index.ts, part
+  of the door the front may import: a Tile and where it stands, a System as a
+  reader finds it, the rows Mapping reads it from, which the tiles
+  repository's satisfy, what a Tile keeps from its files and what a Leaf may
+  hold.
+---
+# entities
+
+What [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE|Mapping]] is made of, and the invariants each holds, apart from how a change loads, decides and writes (`mapping.ts`). Pure by what it is, so the front imports it: `index.ts` is part of Mapping's door, with `operations/index.ts` and `errors.ts`, and what the door may reach is [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE|domains]]' to say ("The door").
+
+| File | Holds |
+|---|---|
+| `index.ts` | The door: everything below, re-exported, which Mapping's other folders, the API layer and the front import from |
+| `tile.ts` | `Tile` and its `Content`; `Direction` (1 to 6), `ContextDirection` (−1 to −6), a Leaf's slot (`{ leaf: 1 }` to `{ leaf: 6 }`) and `Slot`, any of them, each an Effect Schema and its type, which the API layer decodes its inputs by and the front a URL, `isLeafSlot` and `isContextSlot`, which kind of slot one is, and `contextSlotOf`, the Context slot in a Direction, which the front asks too; `rowDirection` and `leafOf`, the one place that knows a row stores a Leaf slot as 7 to 12 (`hexframe-app-import-export/decisions.md#DEC-1`); `checked`, what a Tile's content must be, and `previewLimit`, the 350 characters it counts against, which `fitsPreview` counts as a reader does; `contentBounds`, the most a Title and a Body hold, which the API checks every input against and an import every file |
+| `rows.ts` | The rows a System is read from, as Mapping reads them: `Row`, `RowWith`, a row with only the fields asked of its content, `FieldsAsked`, what a read asks of the Tile it opens and of those below, and `contentWith` and `withContent`, the one projection a read makes, which nests the flat rows the tiles repository selects, or Help's notes give, into a `RowWith`. Mapping declares them, and the tiles repository's rows satisfy them structurally, so nothing here imports the repository (`hexframe-app-optimistic-writes-and-patterns/decisions.md#DEC-1`) |
+| `system.ts` | `SystemTile`, a Tile, with what it keeps from its files, and its Branches and its Leaves (`LeafTile`, a `FoundTile` with nothing below) by Direction and its Context by slot, and the pure reading of a System's rows: `systemOf`, `below`, the Tile or the Reference in a slot; `Found`, what a read from one Tile finds before it is shaped, the Tile's row with the fields asked of it apart from the rows below with theirs, and `showing`, a row with fewer of its fields; and `ReadTile`, a Tile as `readTile` finds it, built by `readOf`, with the `fields` a read may ask and the `depths` it may go to: its id and the `Field`s asked, its Branches, Leaves (`ReadLeaf`) and Context above the read's last generation, a Reference as its Tile's id, Title and Preview |
+| `system.test.ts` | That reading on rows made by hand, no database: the Root, a Child and a Context Tile in place, a Leaf beside the Branch sharing its Direction, a Reference resolved and a broken one, what holds a slot, what lies below a Tile; and a Tile read to a depth: where it stops, the fields it carries, its References |
+
+| Folder | Holds |
+|---|---|
+| `leaves/` | What a Leaf may hold, nothing: `leaves.ts`, the two checks a change runs on the rows it locked, `notLeaf`, nothing created nor moved under a Leaf, and `holdsNothingIfLeaf`, nothing that holds anything into a Leaf slot, which `freeSlot`, `moveTile` and `swapTiles` call, and `onlyALeafIn`, an import into a Leaf slot only one file alone, which `landing/` calls; and what holds nothing, on a System as a read finds it, `holdsNothing`, a Tile with nothing below it, the one Branch that shrinks into a Leaf, and `isEmptySystem`, an untitled Root without Preview nor Body holding nothing, the one System an import lands as the Root of, which `landing/` calls and the front follows to offer only what Mapping takes; `leaves.test.ts`, those checks, where a Leaf slot is stored and which kind a slot is, on rows and slots made by hand, and what holds nothing on Systems made by hand. Leaves over PGlite are `../leaves.test.ts`'s (`hexframe-app-import-export/decisions.md#DEC-3`) |
+| `kept/` | What a Tile keeps from its files: `kept.ts`, `isSegment`, the one check of a path segment, which an export runs again on every name it writes, `isFolderPattern`, and the Schemas a write's types come from, `Name`, `TileConfig` and `Frontmatter`, so only a checked value is stored; `named` and `configured`, a Name and a Tile config or `NameInvalid` on the field at fault, and `keepable`, the same checks as guards, for an import that lists every fault; `Kept`, what a Tile keeps as a read finds it, typed from the row's parts, and `keptOf`, what a row keeps, as a Tile shows it; `naming.ts`, `inherited`, a config's parts over the naming above it, by which an export and an import work out the naming in force at each folder, and `defaultNaming`; `kept.test.ts`, those checks on values and rows made by hand. What a Tile keeps over PGlite is `../kept.test.ts`'s (`hexframe-app-import-export/decisions.md#DEC-4`, `#DEC-5`) |

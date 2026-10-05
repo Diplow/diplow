@@ -6,14 +6,12 @@
 // numbered, and says what keeps a folder from reading as a Tile, named; the notes that pass are then
 // read the way an import reads files (`files/import/`), the app's one reader of a vault folder, each
 // language's note in the place of the folder's `CLAUDE.md`, so every language reads alike.
-import type { TileRow } from '#/repositories/database/tiles/tiles'
 import { missingFrom, noteOf } from '#/repositories/help/note'
 import { Result } from 'effect'
 
 import { importOf } from '../files/import/read'
 import type { PlannedTile } from '../files/import/plan'
-import { keepsNothing } from '../kept/kept'
-import { directions, fitsPreview, previewLimit } from '../tile'
+import { directions, fitsPreview, keepsNothing, previewLimit, type Row } from '../entities'
 
 /** A folder's name, `3-children` or `.1-six-at-most`: a Child's Direction, or a Context slot. */
 const folderName = new RegExp(`^(\\.?)(${directions.join('|')})-[a-z0-9]+(?:-[a-z0-9]+)*$`)
@@ -51,25 +49,25 @@ function noteChecked(
 
 /** A vault folder read: the rows of its Tiles, and what kept any of its folders from being one. */
 export interface Vault {
-  readonly rows: ReadonlyArray<TileRow>
+  readonly rows: ReadonlyArray<Row>
   readonly problems: ReadonlyArray<string>
 }
 
 /** Where a planned Tile stands among the rows: its id, its parent's, its slot. */
-type Place = Pick<TileRow, 'id' | 'parentId' | 'direction'>
+type Place = Pick<Row, 'id' | 'parentId' | 'direction'>
 
 /**
  * The rows of a planned Tile and of the Tiles below it, Context first, each id its parent's and the
  * slot the import seated it in, but for the folders whose note Help refused, which `read` leaves out:
  * they read as no Tile.
  */
-function rowsOf(tile: PlannedTile, place: Place, read: ReadonlySet<string>): Array<TileRow> {
+function rowsOf(tile: PlannedTile, place: Place, read: ReadonlySet<string>): Array<Row> {
   const below = (slot: string): Place => ({
     id: `${place.id}/${slot}`,
     parentId: place.id,
     direction: Number(slot),
   })
-  const own: Array<TileRow> = read.has(tile.path)
+  const own: Array<Row> = read.has(tile.path)
     ? [
         {
           ...place,
@@ -142,7 +140,7 @@ const noteAt = (path: string) => (path === '' ? 'CLAUDE.md' : `${path}/CLAUDE.md
 function rowsRead(
   root: string,
   { read, file }: { read: ReadonlyMap<string, string>; file: string },
-): { rows: ReadonlyArray<TileRow> | undefined; problems: ReadonlyArray<string> } {
+): { rows: ReadonlyArray<Row> | undefined; problems: ReadonlyArray<string> } {
   const files = [...read].map(([path, text]) => ({ path: noteAt(path), bytes: utf8.encode(text) }))
   const plan = importOf({ _tag: 'Folder', name: root, files }, () => undefined)
   if (Result.isFailure(plan)) {

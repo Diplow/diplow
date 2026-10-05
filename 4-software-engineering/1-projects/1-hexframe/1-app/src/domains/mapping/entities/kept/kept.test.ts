@@ -1,14 +1,7 @@
-import { describe, expect, it, layer } from '@effect/vitest'
-import { Effect, Layer, Schema } from 'effect'
-import { expectTypeOf } from 'vitest'
+import { describe, expect, it } from '@effect/vitest'
+import { Effect, Schema } from 'effect'
 
-import { transactional } from '#/repositories/database/database'
-import { TestDatabase } from '#/repositories/database/testing'
-import { type TileRow, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
-
-import * as Mapping from '../mapping'
-import { system } from '../mapping'
-import { exportOf } from '../files/files'
+import type { Row } from '../rows'
 import { systemOf } from '../system'
 import {
   Frontmatter,
@@ -21,9 +14,9 @@ import {
 } from './kept'
 import { defaultNaming, inherited } from './naming'
 
-// What a Tile keeps from the files it was imported from: first the checks, on values made by hand,
-// and the naming in force on rows made by hand; then over PGlite, a Tile keeps them through an edit, a
-// move and a swap, and a read gives them back.
+// What a Tile keeps from the files it was imported from: the checks, on values made by hand, and the
+// naming in force on rows made by hand. Over PGlite, a Tile keeps them through an edit, a move and a
+// swap, and a read gives them back: `../../kept.test.ts`, beside the application service.
 
 describe('one path segment', () => {
   it('takes a plain name, a dot file and a name of 255 bytes', () => {
@@ -143,7 +136,7 @@ describe('kept Frontmatter', () => {
 })
 
 describe('the naming in force, on rows made by hand', () => {
-  const row = (id: string, parentId: string | null, direction: number | null): TileRow => ({
+  const row = (id: string, parentId: string | null, direction: number | null): Row => ({
     id,
     parentId,
     direction,
@@ -155,7 +148,7 @@ describe('the naming in force, on rows made by hand', () => {
   })
   // A Root; under it `.skills`, setting its file name, holding a skill, a Leaf and a Context Tile
   // setting its folder pattern; and a Branch setting nothing.
-  const rows: ReadonlyArray<TileRow> = [
+  const rows: ReadonlyArray<Row> = [
     row('root', null, null),
     { ...row('skills', 'root', 1), name: '.skills', config: { fileName: 'SKILL.md' } },
     { ...row('skill', 'skills', 2), name: 'do-ticket', frontmatter: { owner: 'diplo' } },
@@ -180,124 +173,5 @@ describe('the naming in force, on rows made by hand', () => {
       fileName: 'CLAUDE.md',
       folderPattern: '<slug>',
     })
-  })
-})
-
-const TestTiles = tilesLayer.pipe(Layer.provideMerge(TestDatabase))
-
-const createTile = (...args: Parameters<typeof Mapping.createTile>) =>
-  transactional(Mapping.createTile(...args))
-
-const content = (title: string) => ({ title, preview: `${title}, in short.`, body: `# ${title}` })
-
-layer(TestTiles)('what a Tile keeps, over the tiles repository', (it) => {
-  /** An Account's System, read once so its Root exists, and its Root. */
-  const aSystem = Effect.gen(function* () {
-    const accountId = crypto.randomUUID()
-    const root = yield* system(accountId)
-    return { accountId, root }
-  })
-
-  it.effect('keeps a Name through a Title edit, a move and a swap', () =>
-    Effect.gen(function* () {
-      const { accountId, root } = yield* aSystem
-      const name = yield* named('STACK.md')
-      const kept = yield* createTile(accountId, {
-        parent: root.id,
-        slot: { leaf: 1 },
-        ...content('Stack'),
-        name,
-      })
-      const other = yield* createTile(accountId, { parent: root.id, slot: 2, ...content('Other') })
-      yield* transactional(Mapping.editTile(accountId, kept.id, { title: 'The stack' }))
-      yield* transactional(Mapping.moveTile(accountId, kept.id, { parent: root.id, slot: 3 }))
-      expect((yield* system(accountId)).branches[3]).toMatchObject({ title: 'The stack', name })
-      yield* transactional(Mapping.swapTiles(accountId, kept.id, other.id))
-      const after = yield* system(accountId)
-      expect(after.branches[2]).toMatchObject({ id: kept.id, name: 'STACK.md' })
-      expect(after.branches[3]).not.toHaveProperty('name')
-    }),
-  )
-
-  it.effect('reads a config back, inherited below its Tile and overridden by one below', () =>
-    Effect.gen(function* () {
-      const { accountId, root } = yield* aSystem
-      const skills = yield* createTile(accountId, {
-        parent: root.id,
-        slot: 1,
-        ...content('Skills'),
-        name: yield* named('.skills'),
-        config: yield* configured({ fileName: 'SKILL.md' }),
-      })
-      const group = yield* createTile(accountId, {
-        parent: skills.id,
-        slot: 4,
-        ...content('Ship'),
-        config: yield* configured({ folderPattern: '<slug>' }),
-      })
-      yield* createTile(accountId, { parent: group.id, slot: 1, ...content('Do') })
-      const read = yield* system(accountId)
-      expect(read.branches[1]).toMatchObject({ config: { fileName: 'SKILL.md' } })
-      // The default file name at the Root, the one `skills` sets below it, and its folder pattern
-      // below `ship`; `skills` is named by the stem of the Name it kept, its leading dot dropped.
-      expect(exportOf(read, root.id, () => '')?.files.map(({ path }) => path)).toEqual([
-        'CLAUDE.md',
-        'skills/SKILL.md',
-        'skills/.hexframe/config.yaml',
-        'skills/4-ship/SKILL.md',
-        'skills/4-ship/.hexframe/config.yaml',
-        'skills/4-ship/do/SKILL.md',
-      ])
-    }),
-  )
-
-  it.effect('keeps Frontmatter as it was given, and an edit leaves it, as it leaves the rest', () =>
-    Effect.gen(function* () {
-      const { accountId, root } = yield* aSystem
-      const given = {
-        owner: 'diplo',
-        description: 'Starts a ticket: "HEX-1".',
-        weight: 3,
-        draft: true,
-      }
-      const frontmatter = yield* Schema.decodeUnknownEffect(Frontmatter)(given)
-      const name = yield* named('do-ticket')
-      const config = yield* configured({ fileName: 'SKILL.md' })
-      const tile = yield* createTile(accountId, {
-        parent: root.id,
-        slot: -2,
-        ...content('Do ticket'),
-        name,
-        config,
-        frontmatter,
-      })
-      yield* transactional(Mapping.editTile(accountId, tile.id, content('Do a ticket')))
-      const read = (yield* system(accountId)).context[-2]
-      expect(read).toMatchObject({
-        title: 'Do a ticket',
-        name: 'do-ticket',
-        config: { fileName: 'SKILL.md' },
-        frontmatter: given,
-      })
-      // In the order the file gave them, which a store sorting keys by length would lose.
-      const kept = read?._tag === 'Tile' ? read.frontmatter : undefined
-      expect(Object.keys(kept ?? {})).toEqual(['owner', 'description', 'weight', 'draft'])
-    }),
-  )
-
-  it.effect('stores nothing it was not given', () =>
-    Effect.gen(function* () {
-      const { accountId, root } = yield* aSystem
-      yield* createTile(accountId, { parent: root.id, slot: 5, ...content('Plain') })
-      const plain = (yield* system(accountId)).branches[5]
-      for (const part of ['name', 'config', 'frontmatter']) expect(plain).not.toHaveProperty(part)
-    }),
-  )
-
-  it('stores only what was checked: a write takes a decoded Name, Tile config and Frontmatter', () => {
-    type Given = Parameters<typeof Mapping.createTile>[1]
-    expectTypeOf<string>().not.toExtend<NonNullable<Given['name']>>()
-    expectTypeOf<{ fileName: string }>().not.toExtend<NonNullable<Given['config']>>()
-    expectTypeOf<Record<string, string>>().not.toExtend<NonNullable<Given['frontmatter']>>()
   })
 })

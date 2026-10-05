@@ -6,16 +6,9 @@ import { type Database, type InTransaction, transactional } from '#/repositories
 import { TestDatabase } from '#/repositories/database/testing'
 import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
+import type { ContextDirection, Depth, Direction, Field, ReadTile, SystemTile } from './entities'
 import * as Mapping from './mapping'
-import {
-  type ContextDirection,
-  type Depth,
-  type Direction,
-  type Field,
-  type ReadTile,
-  type SystemTile,
-  system,
-} from './mapping'
+import { system } from './mapping'
 
 const TestTiles = tilesLayer.pipe(Layer.provideMerge(TestDatabase))
 
@@ -570,9 +563,9 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
         tiles.generationsFrom(accountId, { id: ids[0] ?? '', depth: 2, columns }),
       )
       const rows = [found?.opened, ...(found?.below ?? [])]
-      expect(rows.map((row) => Object.keys(row?.content ?? {}))).toEqual(
-        rows.map((_, at) => (at === 0 ? ['body'] : ['title'])),
-      )
+      const content = (row: object | undefined) =>
+        Object.keys(row ?? {}).filter((key) => ['title', 'preview', 'body'].includes(key))
+      expect(rows.map(content)).toEqual(rows.map((_, at) => (at === 0 ? ['body'] : ['title'])))
     }),
   )
 

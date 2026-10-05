@@ -2,7 +2,7 @@ import { Result } from 'effect'
 import { describe, expect, it } from 'vitest'
 
 import type { ImportFault } from '../../errors'
-import { contentBounds, previewLimit } from '../../tile'
+import { contentBounds, previewLimit } from '../../entities'
 import type { ImportFile, ImportPlan, ImportSource, LeftOut, PlannedTile } from './plan'
 import { importOf, isSettingsFile, leftOutOf, skippedAsBinary } from './read'
 
