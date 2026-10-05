@@ -1,0 +1,19 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE.md
+  s_add1a77a88c179::t_28dd49dda46631 13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0348d872949c657e21ce9077465505e85108d62a",
+  "prompts": {},
+  "sessions": {
+    "s_add1a77a88c179": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d3373e9-3681-410c-a221-392366b8a522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
