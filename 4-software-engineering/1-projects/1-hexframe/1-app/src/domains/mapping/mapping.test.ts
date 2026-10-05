@@ -8,6 +8,7 @@ import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
 import * as Mapping from './mapping'
 import {
+  type ContextDirection,
   type Depth,
   type Direction,
   type Field,
@@ -30,6 +31,7 @@ const inTransaction =
 const createTile = inTransaction(Mapping.createTile)
 const editTile = inTransaction(Mapping.editTile)
 const moveTile = inTransaction(Mapping.moveTile)
+const swapTiles = inTransaction(Mapping.swapTiles)
 const deleteTile = inTransaction(Mapping.deleteTile)
 const createReference = inTransaction(Mapping.createReference)
 const deleteReference = inTransaction(Mapping.deleteReference)
@@ -306,6 +308,71 @@ layer(TestTiles)('moving and deleting Tiles, over PGlite', (it) => {
   )
 })
 
+type Slot = Direction | ContextDirection
+
+/** Where each Tile below this one stands, by its Title: its parent's Title and its slot. */
+function places(tile: SystemTile): Record<string, string> {
+  const held = [...Object.entries(tile.children), ...Object.entries(tile.context)]
+  return Object.fromEntries(
+    held.flatMap(([slot, below]) =>
+      below._tag === 'Tile'
+        ? [[below.title, `${tile.title}/${slot}`], ...Object.entries(places(below))]
+        : [],
+    ),
+  )
+}
+
+layer(TestTiles)('swapping Tiles, over PGlite', (it) => {
+  /** A Tile of the Account's System, titled `title`, added under `parent` in `slot`. */
+  const add = (accountId: string, parent: string, slot: Slot, title: string) =>
+    createTile(accountId, { parent, slot, ...content(title) })
+
+  it.effect('trades two Tiles’ places, Children, Context or across, with what lies below', () =>
+    Effect.gen(function* () {
+      const { accountId, root, child } = yield* withAChild
+      const other = yield* add(accountId, root.id, 4, 'Other')
+      const aside = yield* add(accountId, other.id, -2, 'Aside')
+      const principle = yield* add(accountId, root.id, -1, 'P')
+      yield* add(accountId, child.id, 6, 'Below')
+      yield* createReference(accountId, { parent: root.id, slot: -3, target: child.id })
+      yield* swapTiles(accountId, child.id, other.id)
+      const swapped = { Other: '/1', Aside: 'Other/-2', Child: '/4', Below: 'Child/6', P: '/-1' }
+      expect(places(yield* system(accountId))).toEqual(swapped)
+      yield* swapTiles(accountId, child.id, child.id)
+      yield* swapTiles(accountId, child.id, aside.id)
+      expect(places(yield* system(accountId))).toMatchObject({ Aside: '/4', Child: 'Other/-2' })
+      yield* swapTiles(accountId, principle.id, child.id)
+      const across = yield* system(accountId)
+      expect(places(across)).toEqual({ ...swapped, Aside: '/4', Child: '/-1', P: 'Other/-2' })
+      expect(across.context[-3]).toMatchObject({ _tag: 'Reference', tile: { id: child.id } })
+    }),
+  )
+
+  it.effect('refuses a swap with the Root, along one line, or with a Tile it cannot see', () =>
+    Effect.gen(function* () {
+      const { accountId, root, child } = yield* withAChild
+      const below = yield* add(accountId, child.id, 2, 'Below')
+      yield* createReference(accountId, { parent: root.id, slot: -1, target: below.id })
+      const rows = yield* Tiles.use((tiles) => tiles.read(accountId, untitledContent))
+      const reference = rows.find((row) => row.target !== null)?.id ?? ''
+      const elsewhere = yield* withAChild
+      const refusals = [
+        [swapTiles(accountId, root.id, child.id), 'RootFixed'],
+        [swapTiles(accountId, below.id, root.id), 'RootFixed'],
+        [swapTiles(accountId, child.id, below.id), 'MovedUnderItself'],
+        [swapTiles(accountId, below.id, child.id), 'MovedUnderItself'],
+        [swapTiles(accountId, child.id, reference), 'TileNotFound'],
+        [swapTiles(accountId, child.id, elsewhere.child.id), 'TileNotFound'],
+        [swapTiles(elsewhere.accountId, elsewhere.child.id, child.id), 'TileNotFound'],
+      ] as const
+      for (const [refused, tag] of refusals) {
+        expect(yield* Effect.flip(refused)).toMatchObject({ _tag: tag })
+      }
+      expect(places(yield* system(accountId))).toEqual({ Child: '/1', Below: 'Child/2' })
+    }),
+  )
+})
+
 layer(TestTiles)('References, over PGlite', (it) => {
   it.effect(
     'holds a Reference in a Context slot, which follows its Tile and breaks when it is deleted',
@@ -567,6 +634,7 @@ describe('the transaction a change runs in', () => {
     expectTypeOf<Requires<typeof Mapping.createTile>>().toEqualTypeOf<InTransaction | Tiles>()
     expectTypeOf<Requires<typeof Mapping.editTile>>().toEqualTypeOf<InTransaction | Tiles>()
     expectTypeOf<Requires<typeof Mapping.moveTile>>().toEqualTypeOf<InTransaction | Tiles>()
+    expectTypeOf<Requires<typeof Mapping.swapTiles>>().toEqualTypeOf<InTransaction | Tiles>()
     expectTypeOf<Requires<typeof Mapping.deleteTile>>().toEqualTypeOf<InTransaction | Tiles>()
     expectTypeOf<Requires<typeof Mapping.createReference>>().toEqualTypeOf<InTransaction | Tiles>()
     expectTypeOf<Requires<typeof Mapping.deleteReference>>().toEqualTypeOf<InTransaction | Tiles>()

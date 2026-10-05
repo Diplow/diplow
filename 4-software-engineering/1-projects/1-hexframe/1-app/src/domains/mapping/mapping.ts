@@ -159,6 +159,21 @@ export const moveTile = (accountId: string, id: string, to: Placement) =>
     }),
   )
 
+/**
+ * Two Tiles of the System trade places, each with everything below it: each takes the other's parent
+ * and slot, a Child's Direction or a Context slot alike. Neither may be the Root, nor lie below the
+ * other, which would put one below itself. References to them follow, since they hold their ids.
+ */
+export const swapTiles = (accountId: string, a: string, b: string) =>
+  changing(accountId, (rows, writes) =>
+    Effect.gen(function* () {
+      for (const id of [a, b]) yield* Effect.flatMap(tileIn(rows, id), notRoot)
+      if (a === b) return
+      if (below(rows, a).has(b) || below(rows, b).has(a)) return yield* new MovedUnderItself()
+      yield* writes.swap(a, b)
+    }),
+  )
+
 /** Deletes a Tile and everything below it. A Reference to any of them stays, broken. */
 export const deleteTile = (accountId: string, id: string) =>
   changing(accountId, (rows, writes) =>

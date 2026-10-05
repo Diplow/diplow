@@ -47,6 +47,9 @@ export const TileEdit = Schema.Struct({
 /** A Tile, and the free slot under another Tile, or its own parent, it moves to. */
 export const TileMove = Schema.Struct({ id: Id, parent: Id, slot: Slot })
 
+/** Two Tiles, by their ids, which trade places. */
+export const TileSwap = Schema.Struct({ a: Id, b: Id })
+
 /** A Context slot, by the Tile that holds it. */
 export const ReferenceSlot = Schema.Struct({ parent: Id, slot: ContextDirection })
 
@@ -72,6 +75,10 @@ export const editTile = createServerFn({ method: 'POST' })
 export const moveTile = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(TileMove))
   .handler(({ data, context }) => run(context, Mapping.moveTile(data)))
+
+export const swapTiles = createServerFn({ method: 'POST' })
+  .validator(Schema.toStandardSchemaV1(TileSwap))
+  .handler(({ data, context }) => run(context, Mapping.swapTiles(data)))
 
 export const deleteTile = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(TileRef))

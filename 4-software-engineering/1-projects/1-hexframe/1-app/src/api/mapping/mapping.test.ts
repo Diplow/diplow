@@ -14,7 +14,15 @@ import type {
 
 import type { Failure } from '../errors/failure'
 import { noKey, run, type Services, type StartContext } from '../server/run'
-import { NewReference, NewTile, ReferenceSlot, TileEdit, TileMove, TileRef } from './mapping'
+import {
+  NewReference,
+  NewTile,
+  ReferenceSlot,
+  TileEdit,
+  TileMove,
+  TileRef,
+  TileSwap,
+} from './mapping'
 import * as Mapping from './programs'
 
 // Mapping's server functions, as their handlers run them: the program, through the helper, on the
@@ -71,6 +79,7 @@ describe("Mapping's server functions", () => {
     ['createTile', Mapping.createTile({ parent: 'p', slot: 1, ...content('Child') })],
     ['editTile', Mapping.editTile({ id: 't', title: 'Renamed' })],
     ['moveTile', Mapping.moveTile({ id: 't', parent: 'p', slot: 2 })],
+    ['swapTiles', Mapping.swapTiles({ a: 't', b: 'u' })],
     ['deleteTile', Mapping.deleteTile({ id: 't' })],
     ['createReference', Mapping.createReference({ parent: 'p', slot: -1, target: 't' })],
     ['deleteReference', Mapping.deleteReference({ parent: 'p', slot: -1 })],
@@ -112,6 +121,24 @@ describe("Mapping's server functions", () => {
     expect((await value(run(context, Mapping.system))).children).toEqual({})
   })
 
+  it('swaps two Tiles, each with everything below it, and refuses a swap along one line', async () => {
+    const { context, root, child } = await withAChild()
+    const other = await value(
+      run(context, Mapping.createTile({ parent: root.id, slot: -5, ...content('Other') })),
+    )
+    const grandchild = await value(
+      run(context, Mapping.createTile({ parent: child.id, slot: 2, ...content('Grandchild') })),
+    )
+    await value(run(context, Mapping.swapTiles({ a: child.id, b: other.id })))
+    const swapped = await value(run(context, Mapping.system))
+    expect(swapped.children[1]).toMatchObject({ id: other.id, children: {} })
+    expect(swapped.context[-5]).toMatchObject({ id: child.id, children: { 2: grandchild } })
+    expect(await run(context, Mapping.swapTiles({ a: grandchild.id, b: child.id }))).toMatchObject({
+      ok: false,
+      failure: { _tag: 'MovedUnderItself', kind: 'Conflict' },
+    })
+  })
+
   it('puts a Reference in a Context slot and empties it', async () => {
     const { context, root, child } = await withAChild()
     await value(
@@ -131,6 +158,7 @@ describe("Mapping's server functions", () => {
       [Mapping.createTile({ parent: root.id, slot: 1, ...content('Another') }), 'DirectionTaken'],
       [Mapping.moveTile({ id: root.id, parent: child.id, slot: 1 }), 'RootFixed'],
       [Mapping.deleteTile({ id: root.id }), 'RootFixed'],
+      [Mapping.swapTiles({ a: child.id, b: root.id }), 'RootFixed'],
       [Mapping.deleteTile({ id: crypto.randomUUID() }), 'TileNotFound'],
     ]
     for (const [program, tag] of refusals) {
@@ -175,6 +203,7 @@ describe("Mapping's server functions", () => {
       Mapping.editTile({ id: child.id, title: 'Mine now' }),
       Mapping.moveTile({ id: child.id, parent: theirRoot.id, slot: 1 }),
       Mapping.deleteTile({ id: child.id }),
+      Mapping.swapTiles({ a: child.id, b: child.id }),
       Mapping.createTile({ parent: child.id, slot: 1, ...content('Squatter') }),
       Mapping.createReference({ parent: theirRoot.id, slot: -1, target: child.id }),
     ]
@@ -185,8 +214,10 @@ describe("Mapping's server functions", () => {
       })
     }
   })
+})
 
-  it('lists, by its type, the errors each can fail with', () => {
+describe("the errors Mapping's server functions can fail with", () => {
+  it('are each listed by its type', () => {
     type ErrorOf<P> = P extends Effect.Effect<unknown, infer E, unknown> ? E : never
     expectTypeOf<ErrorOf<typeof Mapping.system>>().toEqualTypeOf<SignedOut>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createTile>>>().toEqualTypeOf<
@@ -197,6 +228,9 @@ describe("Mapping's server functions", () => {
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.moveTile>>>().toEqualTypeOf<
       SignedOut | TileNotFound | RootFixed | MovedUnderItself | DirectionTaken
+    >()
+    expectTypeOf<ErrorOf<ReturnType<typeof Mapping.swapTiles>>>().toEqualTypeOf<
+      SignedOut | TileNotFound | RootFixed | MovedUnderItself
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.deleteTile>>>().toEqualTypeOf<
       SignedOut | TileNotFound | RootFixed
@@ -231,6 +265,12 @@ describe("the schemas Mapping's server functions validate by", () => {
     ])
     expect(accepts(TileMove, { id: t, parent: p, slot: 3 })).toBe(true)
     expect(accepts(TileMove, { id: t, parent: p, slot: 9 })).toBe(false)
+  })
+
+  it('swap two Tiles named by their ids', () => {
+    expect(accepts(TileSwap, { a: t, b: p })).toBe(true)
+    expect(accepts(TileSwap, { a: t })).toBe(false)
+    expect(accepts(TileSwap, { a: t, b: 'root' })).toBe(false)
   })
 
   it('put a Reference in a Context slot only', () => {

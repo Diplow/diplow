@@ -9,7 +9,7 @@ import { m } from '#/paraglide/messages'
 import { hexHeight, hexWidth, type Direction, type Hex } from './geometry/geometry'
 import { layoutCanvas, type Ring, type TileNode } from './geometry/layout'
 import { EmptySlot, Frame } from './Frame'
-import { Tile } from './Tile'
+import { Tile, type SwapTarget } from './Tile'
 import {
   centerOn,
   showView,
@@ -41,6 +41,12 @@ interface CanvasProps {
     label: (slot: EmptySlotTarget) => string
     onSelect: (slot: EmptySlotTarget) => void
   }
+  /**
+   * Whether a Tile offers to trade places with the Tile on the move, how that is named and what it
+   * does, on a small button of its own; `undefined` for a Tile that offers no swap. Without it, none
+   * does.
+   */
+  swapTargets?: (tile: TileNode) => SwapTarget | undefined
   className?: string
 }
 
@@ -48,7 +54,14 @@ interface CanvasProps {
 const radius = 320
 const canvas: Hex = { center: { x: hexWidth(radius) / 2, y: radius }, radius }
 
-export function Canvas({ system, view, onViewChange, emptySlots, className }: CanvasProps) {
+export function Canvas({
+  system,
+  view,
+  onViewChange,
+  emptySlots,
+  swapTargets,
+  className,
+}: CanvasProps) {
   const shown = showView(system, view)
   const placements = layoutCanvas(shown.center, shown, canvas)
   // The Tile the last single click landed on: a double-click centers it only if its first click
@@ -108,6 +121,7 @@ export function Canvas({ system, view, onViewChange, emptySlots, className }: Ca
                 onCenter={(from) => {
                   center(placement.tile, from)
                 }}
+                swap={swapTargets?.(placement.tile)}
               />
             )
           }

@@ -61,6 +61,7 @@ function SystemPage({ search, onSearchChange }: SystemPageProps) {
   return (
     <>
       <System
+        system={system}
         tree={tree}
         search={search}
         onSearchChange={onSearchChange}

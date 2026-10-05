@@ -1,11 +1,14 @@
 // A Tile on the canvas: its hex, its title always, its preview when there is room, and on hover or
-// focus a card with both in full. It is a button: what a click does comes from the Canvas.
+// focus a card with both in full. It is a button: what a click does comes from the Canvas. When the
+// Tile can trade places with a Tile on the move, a small button at the foot of its hex swaps them, so
+// the Tile's own click still opens and centers it.
+import { ArrowLeftRight } from 'lucide-react'
 import type { MouseEvent } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Tooltip } from '../overlays/Tooltip'
-import { textBox } from './geometry/geometry'
+import { textBox, type Hex } from './geometry/geometry'
 import type { Placement } from './geometry/layout'
 import { buttonKeys } from './keys'
 import { HexShape, polygonPoints, showsPreview, strokeWidth, TileLabel } from './look'
@@ -18,9 +21,17 @@ interface TileProps {
   onAct: (repeat: boolean) => void
   /** A double-click, or Shift+Enter. */
   onCenter: (from: 'pointer' | 'keyboard') => void
+  /** The swap the Tile offers with a Tile on the move; without it, the Tile offers none. */
+  swap?: SwapTarget | undefined
 }
 
-export function Tile({ placement, action, onAct, onCenter }: TileProps) {
+/** A swap a Tile offers beside its own click: what it does, and its name for a screen reader. */
+export interface SwapTarget {
+  label: string
+  onSelect: () => void
+}
+
+export function Tile({ placement, action, onAct, onCenter, swap }: TileProps) {
   const { title, preview } = placement.tile
   const label = textBox(placement.hex, showsPreview(placement) ? 'tall' : 'wide')
   // Shift+Enter centers the Tile, as a double-click does.
@@ -34,39 +45,82 @@ export function Tile({ placement, action, onAct, onCenter }: TileProps) {
     },
   })
   return (
-    <Tooltip
-      content={
-        <span className="grid max-w-64 gap-1">
-          <span className="font-semibold">{title}</span>
-          {preview === '' ? null : <span className="opacity-80">{preview}</span>}
-        </span>
-      }
-    >
+    <>
+      <Tooltip
+        content={
+          <span className="grid max-w-64 gap-1">
+            <span className="font-semibold">{title}</span>
+            {preview === '' ? null : <span className="opacity-80">{preview}</span>}
+          </span>
+        }
+      >
+        <g
+          role="button"
+          tabIndex={0}
+          aria-label={actionLabel(action, title)}
+          aria-expanded={expanded[action]}
+          className="group cursor-pointer outline-none"
+          onClick={(event: MouseEvent) => {
+            onAct(event.detail > 1)
+          }}
+          onDoubleClick={() => {
+            onCenter('pointer')
+          }}
+          {...keys}
+        >
+          <HexShape placement={placement} />
+          {/* The hover and focus ring, drawn over the outline. */}
+          <polygon
+            points={polygonPoints(placement.hex)}
+            className="fill-none stroke-transparent group-hover:stroke-brand group-focus-visible:stroke-ring"
+            strokeWidth={strokeWidth * 2}
+            strokeLinejoin="round"
+          />
+          <foreignObject x={label.x} y={label.y} width={label.width} height={label.height}>
+            <TileLabel placement={placement} />
+          </foreignObject>
+        </g>
+      </Tooltip>
+      {swap === undefined ? null : <SwapButton hex={placement.hex} swap={swap} />}
+    </>
+  )
+}
+
+/**
+ * The swap's button, a disc with two arrows at the foot of the Tile's hex, below its label, drawn over
+ * the Tile and apart from it, so a click there is never the Tile's.
+ */
+function SwapButton({ hex, swap }: { hex: Hex; swap: SwapTarget }) {
+  const { label, onSelect } = swap
+  const radius = hex.radius * 0.16
+  const x = hex.center.x
+  const y = hex.center.y + hex.radius * 0.64
+  const icon = radius * 1.2
+  return (
+    <Tooltip content={label}>
       <g
         role="button"
         tabIndex={0}
-        aria-label={actionLabel(action, title)}
-        aria-expanded={expanded[action]}
+        aria-label={label}
         className="group cursor-pointer outline-none"
-        onClick={(event: MouseEvent) => {
-          onAct(event.detail > 1)
-        }}
-        onDoubleClick={() => {
-          onCenter('pointer')
-        }}
-        {...keys}
+        onClick={onSelect}
+        {...buttonKeys({ onEnter: onSelect, onSpace: onSelect })}
       >
-        <HexShape placement={placement} />
-        {/* The hover and focus ring, drawn over the outline. */}
-        <polygon
-          points={polygonPoints(placement.hex)}
-          className="fill-none stroke-transparent group-hover:stroke-brand group-focus-visible:stroke-ring"
+        <circle
+          cx={x}
+          cy={y}
+          r={radius}
+          className="fill-brand stroke-background group-hover:stroke-brand-foreground group-focus-visible:stroke-ring"
           strokeWidth={strokeWidth * 2}
-          strokeLinejoin="round"
         />
-        <foreignObject x={label.x} y={label.y} width={label.width} height={label.height}>
-          <TileLabel placement={placement} />
-        </foreignObject>
+        <ArrowLeftRight
+          x={x - icon / 2}
+          y={y - icon / 2}
+          width={icon}
+          height={icon}
+          className="text-brand-foreground"
+          aria-hidden
+        />
       </g>
     </Tooltip>
   )

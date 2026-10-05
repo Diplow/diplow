@@ -13,12 +13,14 @@ import {
   type TileEdit,
   type TileMove,
   type TileRef,
+  type TileSwap,
   createReference,
   createTile,
   deleteReference,
   deleteTile,
   editTile,
   moveTile,
+  swapTiles,
   system,
 } from '#/api/mapping/mapping'
 
@@ -64,6 +66,10 @@ export const useEditTile = () =>
 /** Moves a Tile, and everything below it, to a free slot. */
 export const useMoveTile = () =>
   useSystemWrite('moveTile', (data: typeof TileMove.Type) => moveTile({ data }))
+
+/** Two Tiles trade places, each with everything below it. */
+export const useSwapTiles = () =>
+  useSystemWrite('swapTiles', (data: typeof TileSwap.Type) => swapTiles({ data }))
 
 /** Deletes a Tile and everything below it; References to them stay, broken. */
 export const useDeleteTile = () =>
