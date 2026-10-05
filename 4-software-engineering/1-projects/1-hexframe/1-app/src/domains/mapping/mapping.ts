@@ -23,7 +23,7 @@ import {
 } from './system'
 import { type Content, type ContextDirection, type Slot, type Tile, checked } from './tile'
 
-export { HelpId, helpRoot } from './help/help'
+export { HelpId, helpRoot, helpSystem } from './help/help'
 export { depths, fields } from './system'
 export { directions, previewLimit } from './tile'
 export type { Depth, Field, ReadTile, SystemTile } from './system'

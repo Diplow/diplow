@@ -1,10 +1,12 @@
 // Mapping's server functions: one per operation, for the signed-in Account, which the middleware has
-// already put on the context as its Session. Each validates its input, then hands its program
-// (./programs.ts) to the helper; its type lists the errors it can fail with.
+// already put on the context as its Session, and `help`, Help whole, for any visitor. Each validates
+// its input, then hands its program (./programs.ts) to the helper; its type lists the errors it can
+// fail with.
 import { createServerFn } from '@tanstack/react-start'
 import { Schema } from 'effect'
 
 import { contextDirections, directions } from '#/domains/mapping/tile'
+import { locales } from '#/paraglide/runtime'
 
 import { run } from '../server/run'
 import * as Mapping from './programs'
@@ -56,6 +58,9 @@ export const ReferenceSlot = Schema.Struct({ parent: Id, slot: ContextDirection 
 /** A Reference to put in a free Context slot: the Tile it points at, by its id. */
 export const NewReference = Schema.Struct({ parent: Id, slot: ContextDirection, target: Id })
 
+/** Help, in one of the app's languages: the page's, from its URL. */
+export const HelpLanguage = Schema.Struct({ language: Schema.Literals(locales) })
+
 /** A call that takes nothing. */
 const Nothing = Schema.toStandardSchemaV1(Schema.Undefined)
 
@@ -63,6 +68,14 @@ const Nothing = Schema.toStandardSchemaV1(Schema.Undefined)
 export const system = createServerFn({ method: 'GET' })
   .validator(Nothing)
   .handler(({ context }) => run(context, Mapping.system))
+
+/**
+ * Help whole, in the language asked: its Root with everything below it, Bodies included. Signed in or
+ * not, anyone reads it.
+ */
+export const help = createServerFn({ method: 'GET' })
+  .validator(Schema.toStandardSchemaV1(HelpLanguage))
+  .handler(({ data, context }) => run(context, Mapping.help(data)))
 
 export const createTile = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(NewTile))

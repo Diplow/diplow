@@ -4,6 +4,15 @@
 // vault's notes use, so no YAML library is needed. Pure, and free of `import.meta.glob`, so the
 // build's check of Help (scripts/check-help.ts) loads it with the Vite config.
 
+/**
+ * The languages Help is written in, each by the name of its notes: `CLAUDE.md` in English, and a twin
+ * beside it in each other language, `CLAUDE.fr.md` in French, so every language shares one structure.
+ */
+export const noteFiles = { en: 'CLAUDE.md', fr: 'CLAUDE.fr.md' } as const
+
+/** A language Help is written in. */
+export type Language = keyof typeof noteFiles
+
 /** What every note's frontmatter holds, in this vault. */
 const required = ['title', 'parent', 'owner', 'preview'] as const
 

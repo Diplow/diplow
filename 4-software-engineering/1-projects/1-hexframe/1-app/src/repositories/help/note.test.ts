@@ -26,13 +26,19 @@ describe('the fields every note holds', () => {
 
 describe("Help's notes, as the build bundles them", () => {
   it('holds the note of every folder, Context folders included, by its path', () => {
-    expect(Object.keys(helpNotes)).toEqual(
+    expect(Object.keys(helpNotes.en)).toEqual(
       expect.arrayContaining([
         '',
         '.1-what-comes-first',
         '3-children-and-directions/.1-six-at-most',
       ]),
     )
-    expect(helpNotes['']).toMatch(/^---\ntitle: Hexframe\n/)
+    expect(helpNotes.en['']).toMatch(/^---\ntitle: Hexframe\n/)
+  })
+
+  it("holds each folder's French twin under the same path, apart from its English note", () => {
+    expect(Object.keys(helpNotes.fr).sort()).toEqual(Object.keys(helpNotes.en).sort())
+    expect(helpNotes.fr['2-tiles']).toMatch(/^---\ntitle: Les tuiles\n/)
+    expect(helpNotes.en['2-tiles']).toMatch(/^---\ntitle: Tiles\n/)
   })
 })

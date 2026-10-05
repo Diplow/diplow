@@ -7,6 +7,7 @@ import { Effect } from 'effect'
 
 import * as Iam from '#/domains/iam/iam'
 import * as Mapping from '#/domains/mapping/mapping'
+import type { Locale } from '#/paraglide/runtime'
 import { transactional } from '#/repositories/database/database'
 
 /** Runs an operation for the signed-in Account: the one the request proves, never one a caller sends. */
@@ -25,6 +26,12 @@ type ReferenceSlot = Parameters<typeof Mapping.deleteReference>[1]
 
 /** The Account's System: its Root, the user, with everything below it. */
 export const system = forAccount(Mapping.system)
+
+/**
+ * Help whole, in the page's language, for any visitor: no Account reads it, so it asks for none. The
+ * app's locales are the languages Help is written in, which its type requires.
+ */
+export const help = ({ language }: { language: Locale }) => Mapping.helpSystem(language)
 
 /**
  * A Tile of the Account's System, its Root when no id is given, read to a depth with only the fields
