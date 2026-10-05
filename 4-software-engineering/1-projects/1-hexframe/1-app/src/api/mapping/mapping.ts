@@ -1,7 +1,7 @@
 // Mapping's server functions: one per operation, for the signed-in Account, which the middleware has
 // already put on the context as its Session, and `help`, Help whole, for any visitor. Each validates
 // its input, then hands its program (./programs.ts) to the helper; its type lists the errors it can
-// fail with. `exportTile` answers its zip as a download (./download.ts).
+// fail with. `exportTile` answers its zip as a download (./download.ts); `importTiles` takes a form.
 import { createServerFn } from '@tanstack/react-start'
 import { Schema } from 'effect'
 
@@ -65,6 +65,28 @@ export const ReferenceSlot = Schema.Struct({ parent: Id, slot: ContextDirection 
 /** A Reference to put in a free Context slot: the Tile it points at, by its id. */
 export const NewReference = Schema.Struct({ parent: Id, slot: ContextDirection, target: Id })
 
+/**
+ * Where an import lands: a free slot under a Tile of the System, a Branch's, a Leaf's or a Context
+ * slot, or the Root of an empty System.
+ */
+const ImportPlace = Schema.Union([
+  Schema.Struct({ _tag: Schema.tag('Slot'), parent: Id, slot: Slot }),
+  Schema.Struct({ _tag: Schema.tag('Root') }),
+])
+
+/**
+ * An import as a form uploads it: `upload`, the file, a zip of a folder (`as: 'Zip'`) named by its
+ * folder, or one file alone (`as: 'File'`); and `place`, where it lands, as JSON. Its size is checked
+ * by the program, before anything else, so a refusal says why.
+ */
+export const ImportUpload = Schema.fromFormData(
+  Schema.Struct({
+    upload: Schema.File,
+    as: Schema.Literals(['Zip', 'File']),
+    place: Schema.fromJsonString(ImportPlace),
+  }),
+)
+
 /** Help, in one of the app's languages: the page's, from its URL. */
 export const HelpLanguage = Schema.Struct({ language: Schema.Literals(locales) })
 
@@ -92,6 +114,14 @@ export const help = createServerFn({ method: 'GET' })
 export const exportTile = createServerFn({ method: 'GET' })
   .validator(Schema.toStandardSchemaV1(TileRef))
   .handler(async ({ data, context }) => asDownload(await run(context, Mapping.exportTile(data))))
+
+/**
+ * An import, uploaded as a form: a zip or one file, landed in a free slot or as the Root of an empty
+ * System, all of it or nothing. It answers what it created and skipped, or every fault at once.
+ */
+export const importTiles = createServerFn({ method: 'POST' })
+  .validator(Schema.toStandardSchemaV1(ImportUpload))
+  .handler(({ data, context }) => run(context, Mapping.importTiles(data)))
 
 export const createTile = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(NewTile))

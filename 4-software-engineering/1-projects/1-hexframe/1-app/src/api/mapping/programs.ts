@@ -6,12 +6,13 @@
 import { Effect } from 'effect'
 
 import * as Iam from '#/domains/iam/iam'
+import * as Landing from '#/domains/mapping/landing/landing'
 import * as Mapping from '#/domains/mapping/mapping'
 import type { Locale } from '#/paraglide/runtime'
 import { HttpExchange } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
 
-import { tileLink } from './download'
+import { tileLink, tileOfLink } from './download'
 
 /** Runs an operation for the signed-in Account: the one the request proves, never one a caller sends. */
 const forAccount = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, E, R>) =>
@@ -84,3 +85,28 @@ export const createReference = (input: ReferenceSlot & { target: string }) =>
 
 export const deleteReference = (input: ReferenceSlot) =>
   changeForAccount((accountId) => Mapping.deleteReference(accountId, input))
+
+/** An upload, as the import's server function decodes it: the file, what it is, where it lands. */
+interface ImportUpload {
+  readonly upload: File
+  readonly as: Landing.Upload['as']
+  readonly place: Landing.ImportPlace
+}
+
+/**
+ * An import: an upload past Mapping's 4 MB refused before anything else, by its size, then, for the signed-in Account, the
+ * upload read into a plan, an app link on the site the request reached read back as its Tile's id,
+ * and the plan landed in one transaction. The report says what it created and what it skipped.
+ */
+export const importTiles = ({ upload, as, place }: ImportUpload) =>
+  Effect.andThen(
+    Landing.fitsUpload(upload.size),
+    forAccount((accountId) =>
+      Effect.gen(function* () {
+        const { url } = yield* HttpExchange
+        const bytes = new Uint8Array(yield* Effect.promise(() => upload.arrayBuffer()))
+        const plan = yield* Landing.planImport({ as, name: upload.name, bytes }, tileOfLink(url))
+        return yield* transactional(Landing.importTiles(accountId, { plan, place }))
+      }),
+    ),
+  )

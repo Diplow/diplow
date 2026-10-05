@@ -90,10 +90,34 @@ type NewTileRow = Omit<TileRow, 'id' | 'parentId' | 'direction' | KeptColumn> &
     readonly direction: number
   }
 
+/** A row a batch names: one of the batch, by the key the caller gave it, or one already stored. */
+export type RowRef =
+  | { readonly _tag: 'Batch'; readonly key: string }
+  | { readonly _tag: 'Stored'; readonly id: string }
+
+/**
+ * A row of a batch, named by a key of the caller's, under a row of the batch or one already stored.
+ * Its `target`, a Reference's, names a row the same way, or `Nowhere`: a row of its own id made here,
+ * so it names no row, as a Reference to a deleted one does; `null` for a Tile.
+ */
+export interface BatchRow extends Omit<NewTileRow, 'parentId' | 'target'> {
+  readonly key: string
+  readonly parent: RowRef
+  readonly target: RowRef | { readonly _tag: 'Nowhere' } | null
+}
+
 /** What a change may write, to the System it locked only, inside the same transaction. */
 export interface Writes {
   /** Adds a row and answers its id. */
   readonly insert: (row: NewTileRow) => Effect.Effect<string, never, InTransaction>
+  /**
+   * Adds every row of a batch, in its order, a few hundred per statement, and answers each one's id
+   * by its key. A row comes after the row of the batch it stands under; a key named before it is
+   * given, or given twice, is a defect.
+   */
+  readonly insertAll: (
+    rows: ReadonlyArray<BatchRow>,
+  ) => Effect.Effect<ReadonlyMap<string, string>, never, InTransaction>
   /** Changes the columns given; with none, writes nothing. */
   readonly update: (
     id: string,
@@ -212,6 +236,46 @@ const swapRows = (database: Database['Service'], accountId: string, a: string, b
     yield* place(a, { parentId: second.parentId, direction: second.direction })
   })
 
+/** How many rows one statement of a batch adds: a few hundred, well within Postgres' parameters. */
+const batchSize = 500
+
+/**
+ * A batch's rows with their ids, made here, every key it names resolved: a row's parent before it,
+ * its target anywhere in the batch.
+ */
+function idsOf(rows: ReadonlyArray<BatchRow>) {
+  const ids = new Map<string, string>()
+  for (const { key } of rows) {
+    if (ids.has(key)) throw new Error(`A batch gave the key ${key} twice`)
+    ids.set(key, crypto.randomUUID())
+  }
+  const seen = new Set<string>()
+  const idOf = (ref: RowRef, before: boolean) => {
+    if (ref._tag === 'Stored') return ref.id
+    const id = ids.get(ref.key)
+    if (id === undefined || (before && !seen.has(ref.key))) {
+      throw new Error(`A batch named the key ${ref.key} before giving it`)
+    }
+    return id
+  }
+  const placed = rows.map(({ key, parent, target, ...row }) => {
+    const placedRow = {
+      ...row,
+      id: ids.get(key) ?? '',
+      parentId: idOf(parent, true),
+      target:
+        target === null
+          ? null
+          : target._tag === 'Nowhere'
+            ? crypto.randomUUID()
+            : idOf(target, false),
+    }
+    seen.add(key)
+    return placedRow
+  })
+  return { ids, placed }
+}
+
 /** The service over the given database; a database failure is a defect. */
 const make = Effect.gen(function* () {
   const database = yield* Database
@@ -229,6 +293,18 @@ const make = Effect.gen(function* () {
           .pipe(Effect.as(id), Effect.orDie),
       )
     },
+    insertAll: (rows) =>
+      inTransaction(
+        Effect.gen(function* () {
+          // A key named before it is given throws: a defect.
+          const { ids, placed } = yield* Effect.sync(() => idsOf(rows))
+          for (let at = 0; at < placed.length; at += batchSize) {
+            const values = placed.slice(at, at + batchSize).map((row) => ({ ...row, accountId }))
+            yield* database.insert(tile).values(values).pipe(Effect.orDie)
+          }
+          return ids
+        }),
+      ),
     update: (id, changes) =>
       inTransaction(
         Object.keys(changes).length === 0

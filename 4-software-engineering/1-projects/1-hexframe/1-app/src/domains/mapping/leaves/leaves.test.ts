@@ -9,7 +9,7 @@ import { keepsNothing } from '../kept/kept'
 import * as Mapping from '../mapping'
 import { type Direction, directions, system } from '../mapping'
 import { leafOf, rowDirection } from '../tile'
-import { holdsNothingIfLeaf, notLeaf } from './leaves'
+import { holdsNothingIfLeaf, notLeaf, onlyALeafIn } from './leaves'
 
 // Leaves beside Branches: first where a Leaf slot is stored and what a Leaf may hold, on rows made by
 // hand; then over PGlite, a Tile holds six of each in their own Directions, a Leaf holds nothing, and
@@ -66,6 +66,21 @@ describe('what a Leaf may hold, on rows made by hand', () => {
         ['full', -1],
       ] as const) {
         yield* holdsNothingIfLeaf(rows, id, direction)
+      }
+    }),
+  )
+})
+
+describe('what an import lands in a Leaf slot', () => {
+  it.effect('takes one file alone there, and a Tile with anything below it elsewhere only', () =>
+    Effect.gen(function* () {
+      expect(yield* Effect.flip(onlyALeafIn({ leaf: 2 }, { _tag: 'Tile' }))).toMatchObject({
+        _tag: 'LeafHoldsNothing',
+      })
+      yield* onlyALeafIn({ leaf: 2 }, { _tag: 'Leaf' })
+      for (const slot of [2, -2] as const) {
+        yield* onlyALeafIn(slot, { _tag: 'Tile' })
+        yield* onlyALeafIn(slot, { _tag: 'Leaf' })
       }
     }),
   )

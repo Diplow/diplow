@@ -7,10 +7,19 @@ import { Effect } from 'effect'
 import type { TileRow } from '#/repositories/database/tiles/tiles'
 
 import { LeafHoldsNothing } from '../errors'
-import { leafOf } from '../tile'
+import { type Slot, leafOf } from '../tile'
 
 /** Whether a row stands in a Leaf slot. */
 const isLeaf = (row: Pick<TileRow, 'direction'>) => leafOf(row.direction) !== undefined
+
+/**
+ * Refuses a Tile planned with anything below it into a Leaf slot: an import lands there only one file
+ * alone, its plan a Leaf.
+ */
+export const onlyALeafIn = (slot: Slot, planned: { readonly _tag: 'Tile' | 'Leaf' }) =>
+  typeof slot !== 'number' && planned._tag !== 'Leaf'
+    ? Effect.fail(new LeafHoldsNothing())
+    : Effect.void
 
 /** Whether anything stands below the Tile of this id: a Child, a Context Tile or a Reference. */
 const holdsAnything = (rows: ReadonlyArray<TileRow>, id: string) =>

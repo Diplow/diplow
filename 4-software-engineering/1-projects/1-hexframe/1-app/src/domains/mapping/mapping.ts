@@ -44,10 +44,10 @@ export type { Depth, Field, ReadTile, SystemTile } from './system'
 export type { Content, ContextDirection, Direction } from './tile'
 
 /** The content of a Root nobody has named yet, and of every Reference, which keeps none of its own. */
-const untitled: Content = { title: '', preview: '', body: '' }
+export const untitled: Content = { title: '', preview: '', body: '' }
 
 /** Where a Tile or a Reference goes: a slot under a parent Tile. */
-interface Placement {
+export interface Placement {
   readonly parent: string
   readonly slot: Slot
 }
@@ -214,7 +214,7 @@ const outsideHelp = (ids: ReadonlyArray<string>) =>
  * stand once its Root is locked: alone until the transaction around it ends, so what it checked still
  * holds when it writes.
  */
-const changing = <A, E>(
+export const changing = <A, E>(
   accountId: string,
   names: ReadonlyArray<string>,
   change: (rows: ReadonlyArray<TileRow>, writes: Writes) => Effect.Effect<A, E, InTransaction>,
@@ -235,7 +235,7 @@ const tileIn = (rows: ReadonlyArray<TileRow>, id: string) => {
  * The parent Tile of a placement, once it is known to be no Leaf, which holds nothing, and its slot to
  * be free.
  */
-const freeSlot = (rows: ReadonlyArray<TileRow>, { parent, slot }: Placement) =>
+export const freeSlot = (rows: ReadonlyArray<TileRow>, { parent, slot }: Placement) =>
   Effect.flatMap(Effect.flatMap(tileIn(rows, parent), notLeaf), (row) =>
     rowAt(rows, parent, rowDirection(slot)) === undefined
       ? Effect.succeed(row)

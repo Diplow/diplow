@@ -4,8 +4,8 @@
 // never waits whole in the function's memory, and its failure as an object, the `Outcome` every
 // server function answers. The client turns the answer back into an `Outcome`, so its channels carry
 // the failure as any other (`front/client/`). And where an export links a Tile it leaves out, a route
-// of the front's, which the front's own tests read back. Pure: no module of the server's reaches the
-// client here.
+// of the front's, which the front's own tests read back, and the id an import reads back from such a
+// link. Pure: no module of the server's reaches the client here.
 import type { Failure, Outcome } from '../errors/failure'
 
 /** A zip as Mapping hands it over: its name, `<slug>.zip`, and its bytes, streamed. */
@@ -66,3 +66,19 @@ export const tileLink =
   (requestUrl: string) =>
   (id: string): string =>
     new URL(`/?center=${encodeURIComponent(id)}`, requestUrl).href
+
+/**
+ * The id of the Tile a link points at, when `tileLink` would have built it on the site a request
+ * reached: home, centered on it; `undefined` for any other text. An import reads a Reference's link
+ * by it, and lands it only on a Tile of the importer's own System.
+ */
+export const tileOfLink =
+  (requestUrl: string) =>
+  (link: string): string | undefined => {
+    if (!URL.canParse(link)) return undefined
+    const url = new URL(link)
+    const home = new URL('/', requestUrl)
+    const center = url.searchParams.get('center')
+    const plain = url.origin === home.origin && url.pathname === home.pathname
+    return plain && center !== null && center !== '' ? center : undefined
+  }

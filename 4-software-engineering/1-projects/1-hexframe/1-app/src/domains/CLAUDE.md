@@ -10,7 +10,7 @@ preview: >-
 ---
 # domains
 
-The middle layer: one folder per domain, each in its own language. A domain's public entry is its module's operations, Effect programs whose type lists the repositories' services they use; a domain becomes a service of its own only when it holds state or configuration. It never opens a transaction: a change requires one (`InTransaction`), and the API layer opens it, as [[4-software-engineering/1-projects/1-hexframe/STACK|STACK]] tells it. Domains ignore each other; only [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]] composes them.
+The middle layer: one folder per domain, each in its own language. A domain's public entry is its module's operations, Effect programs whose type lists the repositories' services they use, and, once that module's folder is full, the operations of a folder of its own that the API imports as directly (Mapping's import, `mapping/landing/landing.ts`, `hexframe-app-import-export/decisions.md#DEC-11`); a domain becomes a service of its own only when it holds state or configuration. It never opens a transaction: a change requires one (`InTransaction`), and the API layer opens it, as [[4-software-engineering/1-projects/1-hexframe/STACK|STACK]] tells it. Domains ignore each other; only [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]] composes them.
 
 | Folder | Holds |
 |---|---|
