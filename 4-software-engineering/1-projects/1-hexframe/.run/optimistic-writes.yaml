@@ -1,8 +1,8 @@
 # The config of the "hexframe app: Optimistic writes and patterns" project's
 # autonomous run, read by run-autonomous-project
 # (.skills/4-softeng/1-ship/run-autonomous-project/references/contract.md
-# holds every key). It gives every domain one shape (entities/, operations/,
-# the application service), makes Mapping decide in two pure functions,
+# holds every key). It gives Mapping the domains' one shape (entities/,
+# operations/, the application service; IAM grows it lazily), makes Mapping decide in two pure functions,
 # decide and evolve, that the server and the client share, shows every
 # per-Tile write on the canvas before the server answers, and publishes
 # Mapping's events once a transaction commits. The design is in the project's
