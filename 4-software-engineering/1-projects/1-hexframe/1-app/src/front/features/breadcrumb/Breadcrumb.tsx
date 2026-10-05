@@ -4,8 +4,8 @@
 import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
-import type { TileNode } from '#/front/ui/hex/geometry/layout'
-import { centerOn, pathTo, showView, type CanvasView } from '#/front/ui/hex/view/view'
+import { pathTo, type TileNode } from '#/front/ui/hex/view/tiles'
+import { centerOn, showView, type CanvasView } from '#/front/ui/hex/view/view'
 
 interface BreadcrumbProps {
   system: TileNode
@@ -43,7 +43,7 @@ export function Breadcrumb({ system, view, onViewChange, className }: Breadcrumb
                   aria-label={m.hex_tile_center({ title: tile.title })}
                   className="mt-0.5 min-w-0 rounded-sm text-left text-sm text-muted-foreground outline-none hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
                   onClick={() => {
-                    onViewChange(centerOn(system, view, tile.id))
+                    onViewChange(centerOn(system, tile.id))
                   }}
                 >
                   {tile.title}

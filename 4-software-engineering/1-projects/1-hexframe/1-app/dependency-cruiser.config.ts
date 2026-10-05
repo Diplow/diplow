@@ -60,10 +60,15 @@ const mcpFolder = 'src/api/server/mcp/'
 const filesFolder = 'src/domains/mapping/files/'
 
 // The shape (2-claude-mod/hooks/shape/), how a vault reads as a hexframe, written once for every
-// medium: Mapping reads files by its rules, through one module that answers in Mapping's own types,
-// so that module alone imports it, and Mapping's tests, and only its reading rules.
+// medium. Mapping reads files by its rules, through one module that answers in Mapping's own types,
+// so that module alone imports it, and Mapping's tests, and only its reading rules. The canvas lays a
+// System out by its layout, through one module that answers in the canvas's own types, so that
+// module alone imports it, and its test, and only the layout and the types it speaks.
 const shapeReadingRules = '2-claude-mod/hooks/shape/(node|exclusions)\\.ts$'
 const shapeSeam = '^src/domains/mapping/(files/import/shape\\.ts|.+\\.test\\.ts)$'
+const shapeLayout = '2-claude-mod/hooks/shape/layout\\.ts$'
+const shapeTypes = '2-claude-mod/hooks/shape/node\\.ts$'
+const layoutSeam = '^src/front/ui/hex/geometry/shape(\\.test)?\\.ts$'
 
 const sdkOutsideItsRepository: IConfiguration['forbidden'] = Object.entries(sdks).map(
   ([repository, modules]) => ({
@@ -118,20 +123,35 @@ const config: IConfiguration = {
       to: { path: '(^|node_modules/)yaml(/|$)' },
     },
     {
-      name: 'no-shape-outside-mapping',
+      name: 'no-shape-outside-its-seams',
       comment:
-        'The shape is imported by src/domains/mapping/files/import/shape.ts only, and by Mapping’s tests.',
+        'The shape is imported by src/domains/mapping/files/import/shape.ts and Mapping’s tests, and by src/front/ui/hex/geometry/shape.ts and its test, only.',
       severity: 'error',
-      from: { path: '^src/', pathNot: shapeSeam },
+      from: { path: '^src/', pathNot: [shapeSeam, layoutSeam] },
       to: { path: '2-claude-mod/' },
     },
     {
-      name: 'no-claude-mod-but-the-shape-reading-rules',
+      name: 'no-claude-mod-in-mapping-but-the-shape-reading-rules',
       comment:
-        'Of claude-mod, the app imports the shape’s reading rules, node.ts and exclusions.ts, only.',
+        'Of claude-mod, Mapping imports the shape’s reading rules, node.ts and exclusions.ts, only.',
       severity: 'error',
-      from: { path: '^src/' },
+      from: { path: shapeSeam },
       to: { path: '2-claude-mod/', pathNot: shapeReadingRules },
+    },
+    {
+      name: 'no-claude-mod-in-the-canvas-but-the-shape-layout',
+      comment:
+        'Of claude-mod, the canvas imports the shape’s layout.ts, and node.ts for its types, only.',
+      severity: 'error',
+      from: { path: layoutSeam },
+      to: { path: '2-claude-mod/', pathNot: [shapeLayout, shapeTypes] },
+    },
+    {
+      name: 'no-shape-reading-rules-in-the-canvas',
+      comment: 'The canvas takes node.ts’s types, never its reading rules: those are Mapping’s.',
+      severity: 'error',
+      from: { path: layoutSeam },
+      to: { path: shapeTypes, dependencyTypesNot: ['type-only'] },
     },
     {
       name: 'no-promise-database-outside-auth',

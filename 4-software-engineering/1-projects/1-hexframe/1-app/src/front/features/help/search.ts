@@ -3,7 +3,14 @@
 // Every function here is pure.
 import { Schema } from 'effect'
 
-import { CanvasView, orDefault, readSearch, TileId } from '#/front/ui/hex/view/view'
+import {
+  CanvasView,
+  orDefault,
+  readSearch,
+  TileId,
+  viewIn,
+  withViewIn,
+} from '#/front/ui/hex/view/view'
 
 /** The page's search params, and the route's `validateSearch`: the view, then the open Body. */
 const HelpSearch = Schema.Struct({
@@ -18,13 +25,13 @@ export type HelpSearch = typeof HelpSearch.Type
 export const readHelpSearch = readSearch(HelpSearch)
 
 /** The canvas's part of the search params. */
-export function viewOf({ center, expanded, context }: HelpSearch): CanvasView {
-  return { center, expanded, context }
+export function viewOf(search: HelpSearch): CanvasView {
+  return viewIn(search)
 }
 
 /** The search params for this view, keeping the open Body: the drawer covers the canvas. */
 export function withView(search: HelpSearch, view: CanvasView): HelpSearch {
-  return { ...search, center: view.center, expanded: view.expanded, context: view.context }
+  return withViewIn(search, view)
 }
 
 /** The search params with this Tile's Body open, or none when `id` is `undefined`, keeping the view. */

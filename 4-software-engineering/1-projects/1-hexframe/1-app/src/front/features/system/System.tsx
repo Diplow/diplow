@@ -6,9 +6,9 @@ import { cn } from 'cn'
 
 import { useMoveTile, useSwapTiles } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
-import { Canvas, type EmptySlotTarget } from '#/front/ui/hex/Canvas'
-import type { TileNode } from '#/front/ui/hex/geometry/layout'
-import { findTile } from '#/front/ui/hex/view/view'
+import { Canvas } from '#/front/ui/hex/Canvas'
+import type { EmptySlotTarget } from '#/front/ui/hex/geometry/shape'
+import { findTile, type TileNode } from '#/front/ui/hex/view/tiles'
 import { Button } from '#/front/ui/inputs/controls/button'
 
 import {
@@ -40,19 +40,23 @@ export function System({ system, tree, search, onSearchChange, className }: Syst
   // empty slots add a Tile, the first of which replaces the move in the URL.
   const moving = change.kind === 'move' ? findTile(tree, change.id) : undefined
 
-  const place = (slot: EmptySlotTarget) => ({
-    parent: slot.parent.id,
-    slot: slotOf(slot.ring, slot.direction),
-  })
+  /** The slot an empty Direction stands for, for a new Tile or the moving one; none takes no click. */
+  const placeOf = (target: EmptySlotTarget, going?: TileNode) => {
+    const slot = slotOf(target.ring, target.direction, going)
+    return slot === undefined ? undefined : { parent: target.parent.id, slot }
+  }
 
-  const addHere = {
-    label: ({ parent, ring }: EmptySlotTarget) =>
-      ring === 'children'
-        ? m.system_add_child({ title: parent.title })
-        : m.system_add_context({ title: parent.title }),
-    onSelect: (slot: EmptySlotTarget) => {
-      onSearchChange(withChange(search, { kind: 'add', ...place(slot) }))
-    },
+  const addHere = (target: EmptySlotTarget) => {
+    const place = placeOf(target)
+    if (place === undefined) return undefined
+    const { title } = target.parent
+    return {
+      label:
+        target.ring === 'context' ? m.system_add_context({ title }) : m.system_add_child({ title }),
+      onSelect: () => {
+        onSearchChange(withChange(search, { kind: 'add', ...place }))
+      },
+    }
   }
 
   // One write at a time: a slot clicked while the Tile is on its way does nothing. A refusal (a slot
@@ -66,15 +70,17 @@ export function System({ system, tree, search, onSearchChange, className }: Syst
     },
   }
 
-  const moveHere = (tile: TileNode) => ({
-    label: ({ parent, ring }: EmptySlotTarget) =>
-      ring === 'children'
-        ? m.system_move_child({ tile: tile.title, title: parent.title })
-        : m.system_move_context({ tile: tile.title, title: parent.title }),
-    onSelect: (slot: EmptySlotTarget) => {
-      if (!pending) move.mutate({ id: tile.id, ...place(slot) }, done)
-    },
-  })
+  const moveHere = (tile: TileNode) => (target: EmptySlotTarget) => {
+    const place = placeOf(target, tile)
+    if (place === undefined) return undefined
+    const names = { tile: tile.title, title: target.parent.title }
+    return {
+      label: target.ring === 'context' ? m.system_move_context(names) : m.system_move_child(names),
+      onSelect: () => {
+        if (!pending) move.mutate({ id: tile.id, ...place }, done)
+      },
+    }
+  }
 
   const swapWith = (moving: TileNode) => (held: TileNode) =>
     swapsWith(system, moving, held)

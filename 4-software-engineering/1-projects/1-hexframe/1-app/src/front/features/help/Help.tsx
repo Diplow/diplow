@@ -5,7 +5,7 @@
 import type { SystemTile } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import { Canvas } from '#/front/ui/hex/Canvas'
-import type { TileNode } from '#/front/ui/hex/geometry/layout'
+import type { TileNode } from '#/front/ui/hex/view/tiles'
 import { showView } from '#/front/ui/hex/view/view'
 import { Button } from '#/front/ui/inputs/controls/button'
 import { Drawer } from '#/front/ui/overlays/Drawer'
