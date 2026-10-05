@@ -263,6 +263,20 @@ function exclusionsBounded(text: string) {
  * What a folder's `.hexframe/` says: the config it sets and the names it leaves out. A file there past
  * its bound, that isn't text, or that can't be read as what it holds, is a fault.
  */
+/**
+ * A `.hexframe/` file read by `parse`: its value, or why it can't be, past its bound or not read as
+ * what it holds. The reading and a sender's pruning read a setting the same way.
+ */
+function settingOf<T>(
+  bytes: Uint8Array,
+  parse: (text: string) => T | undefined,
+): { readonly value: T } | { readonly fault: 'TooLarge' | 'Unreadable' } {
+  if (bytes.length > settingsBounds.bytes) return { fault: 'TooLarge' }
+  const text = textOf(bytes)
+  const value = text === undefined ? undefined : parse(text)
+  return value === undefined ? { fault: 'Unreadable' } : { value }
+}
+
 function settingsOf(folder: Folder, path: string, reading: Reading) {
   const own = folder.folders.get(settings.folder)
   const read = <T>(
@@ -272,15 +286,14 @@ function settingsOf(folder: Folder, path: string, reading: Reading) {
   ) => {
     const bytes = own?.files.get(name)
     if (bytes === undefined) return undefined
-    const at = join(join(path, settings.folder), name)
-    if (bytes.length > settingsBounds.bytes) {
-      fault(reading, at, 'FileTooLarge')
-      return undefined
-    }
-    const text = textOf(bytes)
-    const parsed = text === undefined ? undefined : parse(text)
-    if (parsed === undefined) fault(reading, at, why)
-    return parsed
+    const setting = settingOf(bytes, parse)
+    if ('value' in setting) return setting.value
+    fault(
+      reading,
+      join(join(path, settings.folder), name),
+      setting.fault === 'TooLarge' ? 'FileTooLarge' : why,
+    )
+    return undefined
   }
   return {
     config: read(settings.config, configIn, 'ConfigInvalid'),
@@ -537,9 +550,8 @@ export function leftOutOf<F extends { readonly path: string }>(
   const leftOut: Array<LeftOut> = []
   const exclusionsAt = (path: string) => {
     const bytes = settingsBytes.get(join(join(path, settings.folder), settings.exclusions))
-    const text =
-      bytes === undefined || bytes.length > settingsBounds.bytes ? undefined : textOf(bytes)
-    return (text === undefined ? undefined : exclusionsBounded(text)) ?? []
+    const setting = bytes === undefined ? undefined : settingOf(bytes, exclusionsBounded)
+    return setting !== undefined && 'value' in setting ? setting.value : []
   }
   const walk = (tree: Tree<F>, path: string) => {
     const shown = shownIn(

@@ -8,6 +8,12 @@ import type { ImportPlace } from '#/front/client/mapping/queries'
 import type { TileNode } from '#/front/ui/hex/geometry/layout'
 import { CanvasView, findTile, orDefault, readSearch, TileId } from '#/front/ui/hex/view/view'
 
+/** What `import` says for the Root of an empty System, where a Tile's id goes otherwise. */
+const rootPlace = 'root'
+
+/** Where an import goes, as the URL names it: under a Tile, by its id, or `root`. */
+const ImportInto = Schema.Union([Schema.Literal(rootPlace), TileId])
+
 /** The page's search params, and the route's `validateSearch`: the view, then the change. */
 const SystemSearch = Schema.Struct({
   ...CanvasView.fields,
@@ -18,7 +24,7 @@ const SystemSearch = Schema.Struct({
    * Where an import lands, its drawer open: in `slot` under this Tile, or, `root`, as the Root of an
    * empty System.
    */
-  import: Schema.optionalKey(orDefault(TileId)),
+  import: Schema.optionalKey(orDefault(ImportInto)),
   /** The Tile whose form is open. */
   edit: Schema.optionalKey(orDefault(TileId)),
   /** The Tile being moved: the next empty slot clicked is where it goes. */
@@ -49,9 +55,6 @@ export const readSystemSearch = readSearch(SystemSearch)
 export function viewOf({ center, expanded, context }: SystemSearch): CanvasView {
   return { center, expanded, context }
 }
-
-/** What `import` says for the Root of an empty System, where a Tile's id goes otherwise. */
-const rootPlace = 'root'
 
 /** Where an import lands, as the URL says it: a slot under a Tile, the Root, or nowhere. */
 function importPlaceOf(into: string, slot: typeof Slot.Type | undefined): ImportPlace | undefined {

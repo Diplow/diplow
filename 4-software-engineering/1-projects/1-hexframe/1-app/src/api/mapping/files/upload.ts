@@ -3,7 +3,7 @@
 // function, which the client reaches as it reaches observability's: it leaves out what Mapping's
 // reading would (`leftOutOf`, `skippedAsBinary`), unwraps a zip's one wrapping folder
 // (`wrappingFolder`), checks the bounds the server unpacks within, its verdict on every path and the
-// 4 MB it takes (`pastBounds`, `pathFaults`, `stoppedAt`, `uploadLimit`), and zips what is left
+// 4 MB it takes (`pastBounds`, `pathFaults`, `stoppedAt`, `uploadFaults`), and zips what is left
 // through the zip repository. It takes from Mapping only pure modules, never `landing/landing.ts`, which reaches the
 // database. It only prunes and warns early: the server reads and checks everything again.
 import type { ImportRefused } from '#/domains/mapping/errors'
@@ -14,7 +14,7 @@ import {
   pastBounds,
   pathFaults,
   stoppedAt,
-  uploadLimit,
+  uploadFaults,
   wrappingFolder,
 } from '#/domains/mapping/landing/archive'
 import { type ArchiveEntry, unpacked } from '#/repositories/zip/unzip'
@@ -77,8 +77,9 @@ function refusedFor(
 
 /** One file alone, sent as it is: refused past 4 MB, or past the shape's 1 MB. */
 function single(file: File): Prepared {
+  const tooLargeFile = uploadFaults(file.size)
   const faults =
-    file.size > uploadLimit ? tooLarge : pastBounds([{ path: file.name, size: file.size }])
+    tooLargeFile.length > 0 ? tooLargeFile : pastBounds([{ path: file.name, size: file.size }])
   return refusedFor(faults, []) ?? { _tag: 'Ready', upload: file, as: 'File', leftOut: [] }
 }
 
@@ -89,6 +90,27 @@ async function readOf({ path, kind, blob }: GivenFile) {
   const head = whole.size > archiveBounds.entryBytes
   const bytes = await bytesOf(head ? whole.slice(0, headBytes) : whole)
   return { path, kind, size: whole.size, bytes, binary: skippedAsBinary(path, bytes, head) }
+}
+
+/**
+ * The kept files read one at a time, each binary left out as it is told. Reading stops once the texts
+ * pass what the server unpacks, in count or in bytes, since the bounds refuse them whatever follows,
+ * so a large folder is never read whole.
+ */
+async function textsOf(kept: ReadonlyArray<GivenFile>, leftOut: Array<LeftOut>) {
+  const texts: Array<Awaited<ReturnType<typeof readOf>>> = []
+  let total = 0
+  for (const file of kept) {
+    if (texts.length > archiveBounds.entries || total > archiveBounds.totalBytes) break
+    // One file at a time: what is read so far decides whether to read on.
+    const read = await readOf(file)
+    if (read.binary) leftOut.push({ path: read.path, reason: 'Binary' })
+    else {
+      texts.push(read)
+      total += read.size
+    }
+  }
+  return texts
 }
 
 /**
@@ -109,9 +131,7 @@ async function folder(
     ),
   )
   const { kept, leftOut } = leftOutOf(files, settings)
-  const read = await Promise.all(kept.map(readOf))
-  for (const { path, binary } of read) if (binary) leftOut.push({ path, reason: 'Binary' })
-  const texts = read.filter(({ binary }) => !binary)
+  const texts = await textsOf(kept, leftOut)
   const wrapper = unwrap ? wrappingFolder(texts) : undefined
   const name = wrapper ?? given
   // Every path the report lists reads from the folder sent, the wrapper's own left-out ones included.
@@ -136,7 +156,8 @@ async function folder(
   if (refused !== undefined) return refused
   // The verdict on the paths refuses a symlink: every entry left is a file.
   const archive = archived(entries)
-  if (archive.length > uploadLimit) return { _tag: 'Refused', faults: tooLarge, leftOut }
+  const tooLargeArchive = refusedFor(uploadFaults(archive.length), leftOut)
+  if (tooLargeArchive !== undefined) return tooLargeArchive
   const upload = new File([archive.slice()], `${name}.zip`, { type: 'application/zip' })
   return { _tag: 'Ready', upload, as: 'Zip', leftOut }
 }

@@ -125,8 +125,17 @@ describe('a folder the user gave', () => {
   })
 
   it('is refused past the bounds the server unpacks within, before it is zipped', async () => {
-    const many = Array.from({ length: 2_001 }, (_, index) => given(`${String(index)}.md`))
+    let reads = 0
+    const many = Array.from({ length: 2_100 }, (_, index): GivenFile => ({
+      ...given(`${String(index)}.md`),
+      blob: () => {
+        reads += 1
+        return Promise.resolve(new Blob(['x']))
+      },
+    }))
     expect((await refusedOf(folder(many))).faults).toEqual([{ path: '', fault: 'TooManyEntries' }])
+    // Reading stops once the files pass what the server takes.
+    expect(reads).toBe(2_001)
   })
 
   it('is refused on any path the server would refuse, every one at once', async () => {

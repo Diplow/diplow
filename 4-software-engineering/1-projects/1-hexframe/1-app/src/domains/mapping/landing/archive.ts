@@ -54,12 +54,16 @@ export const uploadLimit = 4_000_000
  * Refuses an upload past 4 MB, by its size alone, before a byte of it is read: `ImportRefused`, its
  * fault `UploadTooLarge` on the upload itself.
  */
-export const fitsUpload = (size: number) =>
-  size > uploadLimit
-    ? Effect.fail(
-        new ImportRefused({ fields: ['files'], faults: [{ path: '', fault: 'UploadTooLarge' }] }),
-      )
-    : Effect.void
+export const fitsUpload = (size: number) => {
+  const [first, ...rest] = uploadFaults(size)
+  return first === undefined
+    ? Effect.void
+    : Effect.fail(new ImportRefused({ fields: ['files'], faults: [first, ...rest] }))
+}
+
+/** The fault of an upload by its size: `UploadTooLarge` on the upload itself past 4 MB, else none. */
+export const uploadFaults = (size: number): Array<ImportFault> =>
+  size > uploadLimit ? [{ path: '', fault: 'UploadTooLarge' }] : []
 
 /** What an upload is, as its sender says: an archive of a folder, or one file alone. */
 export interface Upload {

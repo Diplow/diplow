@@ -1,7 +1,7 @@
 // Mapping's server functions: one per operation, for the signed-in Account, which the middleware has
 // already put on the context as its Session, and `help`, Help whole, for any visitor. Each validates
 // its input, then hands its program (./programs.ts) to the helper; its type lists the errors it can
-// fail with. `exportTile` answers its zip as a download (./download.ts); `importTiles` takes a form.
+// fail with. `exportTile` answers its zip as a download (./files/download.ts); `importTiles` takes a form.
 import { createServerFn } from '@tanstack/react-start'
 import { Schema } from 'effect'
 
