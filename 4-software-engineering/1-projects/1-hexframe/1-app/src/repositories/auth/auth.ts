@@ -295,7 +295,8 @@ function betterAuthWith(
     plugins: [
       apiKey({
         defaultPrefix: 'hf_',
-        // A Key's name, 1 to 32 characters: refused as `api-key-name-length` otherwise.
+        // A Key's name, 1 to 32 characters, refused as `api-key-name-length` otherwise: a backstop,
+        // since IAM checks the name before it asks for a Key (src/domains/iam/iam.ts).
         requireName: true,
         minimumNameLength: 1,
         maximumNameLength: 32,

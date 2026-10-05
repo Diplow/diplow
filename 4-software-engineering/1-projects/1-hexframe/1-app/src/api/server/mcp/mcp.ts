@@ -93,7 +93,7 @@ function resultOf(
  */
 const annotationsOf = (tool: Tool): ToolAnnotations => ({
   readOnlyHint: tool.kind === 'read',
-  destructiveHint: tool.destructive === true,
+  destructiveHint: tool.kind === 'write' && tool.destructive === true,
   openWorldHint: false,
 })
 
@@ -111,7 +111,7 @@ function serverFor(context: StartContext) {
       async (input) =>
         resultOf(
           await run({ ...context, scope: tool.name }, tool.program(input)),
-          tool.operation ?? tool.name,
+          tool.kind === 'write' ? tool.operation : tool.name,
         ),
     )
   }

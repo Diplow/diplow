@@ -30,27 +30,36 @@ import {
 import * as Mapping from '../../mapping/programs'
 import type { Services } from '../run'
 
-/** What a tool does to the System: reads it, or changes it. */
-type ToolKind = 'read' | 'write'
-
-/** One tool: its name and description as an agent reads them, its input, and the program it runs. */
-export interface Tool<I = unknown> {
+/** What every tool has: its name and description as an agent reads them, its input, its program. */
+interface ToolBase<I> {
   readonly name: string
   readonly description: string
   readonly input: Schema.Decoder<I>
-  readonly kind: ToolKind
-  /** A write that erases what the user wrote, which no tool brings back: a delete. */
-  readonly destructive?: true
-  /**
-   * The operation a write runs, by its server function's name: the scope the message table words
-   * its refusals by, so the table knows the operations and never the tools.
-   */
-  readonly operation?: keyof typeof Mapping
   // A method, so a table of tools with different inputs is one array: each entry decodes its own.
   program(input: I): Effect.Effect<unknown, Failure, Services>
 }
 
-const tool = <I>(entry: Tool<I>) => entry
+/** A tool that reads the System. */
+interface ReadTool<I> extends ToolBase<I> {
+  readonly kind: 'read'
+}
+
+/** A tool that changes the System, by running one of Mapping's operations. */
+interface WriteTool<I> extends ToolBase<I> {
+  readonly kind: 'write'
+  /**
+   * The operation it runs, by its server function's name: the scope the message table words its
+   * refusals by, so the table knows the operations and never the tools.
+   */
+  readonly operation: keyof typeof Mapping
+  /** It erases what the user wrote, which no tool brings back: a delete. */
+  readonly destructive?: true
+}
+
+/** One tool: a read, or a write. */
+export type Tool<I = unknown> = ReadTool<I> | WriteTool<I>
+
+const read = <I>(entry: ReadTool<I>) => entry
 
 const glimpseFields: ReadonlyArray<Field> = ['title', 'preview']
 
@@ -77,7 +86,7 @@ const directions =
   "`_tag: 'Reference'`, with the id, Title and Preview of the Tile it points at, or " +
   "`_tag: 'BrokenReference'` once that Tile is deleted."
 
-const openTile = tool({
+const openTile = read({
   name: 'open_tile',
   kind: 'read',
   description:
@@ -106,7 +115,7 @@ const openTile = tool({
     }),
 })
 
-const map = tool({
+const map = read({
   name: 'map',
   kind: 'read',
   description:
@@ -147,11 +156,10 @@ const write = <I, E extends Failure>({
   description,
   refusals,
   ...entry
-}: Omit<Tool<I>, 'kind' | 'program' | 'operation'> & {
-  readonly operation: keyof typeof Mapping
+}: Omit<WriteTool<I>, 'kind' | 'program'> & {
   readonly refusals: NoInfer<Refusals<E>>
   program: (input: I) => Effect.Effect<unknown, E, Services>
-}): Tool<I> => {
+}): WriteTool<I> => {
   const taught = Object.entries<string>(refusals).map(([tag, line]) => `${tag}: ${line}`)
   return { ...entry, kind: 'write', description: `${description} Refused with ${taught.join(' ')}` }
 }

@@ -9,7 +9,7 @@ import { Effect, Schema } from 'effect'
 
 import type { TileRow, TileRowWith } from '#/repositories/database/tiles/tiles'
 import { helpNotes } from '#/repositories/help/help'
-import { type Language, noteFiles } from '#/repositories/help/note'
+import { noteFiles } from '#/repositories/help/note'
 
 import { TileNotFound } from '../errors'
 import { type Depth, type Field, readOf, systemOf } from '../system'
@@ -38,17 +38,24 @@ export const HelpId = Schema.String.check(
   Schema.isPattern(new RegExp(`^${helpRoot}(/(${slot}))*$`)),
 )
 
+/**
+ * The languages Help is written in: English, and French beside it. The help repository names a note's
+ * file in each, so a language added here without its notes fails the typecheck.
+ */
+export type HelpLanguage = 'en' | 'fr'
+
 /** Help in one language, as the build bundled it. */
-const helpIn = (language: Language) => vaultOf(helpRoot, helpNotes[language], noteFiles[language])
+const helpIn = (language: HelpLanguage) =>
+  vaultOf(helpRoot, helpNotes[language], noteFiles[language])
 
 /** Help, as the build bundled it, in each language it is written in. */
-export const help = { en: helpIn('en'), fr: helpIn('fr') } satisfies Record<Language, Vault>
+export const help = { en: helpIn('en'), fr: helpIn('fr') } satisfies Record<HelpLanguage, Vault>
 
 /**
  * Help whole, in a language: its Root with everything below it, Bodies included, as `system` reads an
  * Account's System. Every visitor reads it, signed in or not, so it takes no Account.
  */
-export const helpSystem = (language: Language) =>
+export const helpSystem = (language: HelpLanguage) =>
   Effect.suspend(() => {
     const found = systemOf(help[language].rows)
     return found === undefined
@@ -77,7 +84,7 @@ function withFields<F extends Field>(
  */
 export const readHelp = <F extends Field>(
   id: string,
-  { depth, fields, language }: { depth: Depth; fields: ReadonlyArray<F>; language: Language },
+  { depth, fields, language }: { depth: Depth; fields: ReadonlyArray<F>; language: HelpLanguage },
 ) =>
   Effect.gen(function* () {
     const { rows: all } = help[language]

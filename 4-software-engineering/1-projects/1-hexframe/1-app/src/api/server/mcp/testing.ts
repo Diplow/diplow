@@ -1,44 +1,17 @@
-// What the MCP endpoint's tests share: an Account signed up on a device of its own, with a Key, an
+// What the MCP endpoint's tests share: an Account signed up in a browser of its own, with a Key, an
 // MCP client that sends the endpoint its headers through the SDK's own transport, and a System to work
 // on, all on the runtime's Better Auth and tiles over PGlite.
 import { Client, StreamableHTTPClientTransport } from '@modelcontextprotocol/client'
 import { Exit, Option } from 'effect'
 
 import * as Iam from '#/domains/iam/iam'
+import { browser } from '#/repositories/auth/testing'
 
 import * as Mapping from '../../mapping/programs'
 import { noKey, run, type StartContext } from '../run'
 import { serveMcp } from './mcp'
 
 export const endpoint = 'http://localhost/mcp'
-
-let devices = 0
-
-/** A request from a device of its own, its cookies kept as the server sets them. */
-function device() {
-  devices += 1
-  const cookies = new Map<string, string>()
-  const cookie = () => [...cookies].map(([name, value]) => `${name}=${value}`).join('; ')
-  const context = (): StartContext => ({
-    requestId: 'req-mcp',
-    scope: 'test',
-    waitUntil: () => undefined,
-    exchange: {
-      url: 'http://localhost/_serverFn',
-      headers: new Headers({ cookie: cookie(), 'x-forwarded-for': `10.1.0.${String(devices)}` }),
-      setCookies: (lines) => {
-        for (const line of lines) {
-          const [pair = ''] = line.split(';')
-          const at = pair.indexOf('=')
-          cookies.set(pair.slice(0, at).trim(), pair.slice(at + 1).trim())
-        }
-      },
-    },
-    session: Exit.succeed(Option.none()),
-    key: noKey,
-  })
-  return { context, cookie }
-}
 
 /** The value of a call that must succeed. */
 export async function value<A>(
@@ -49,15 +22,23 @@ export async function value<A>(
   return settled.value
 }
 
-/** A new Account, signed in on a device, with one Key issued, and a request its Session proves. */
+/** A new Account, signed in in a browser, with one Key issued, and a request its Session proves. */
 export async function signedUp() {
-  const { context, cookie } = device()
+  const device = browser()
+  const context = (): StartContext => ({
+    requestId: 'req-mcp',
+    scope: 'test',
+    waitUntil: () => undefined,
+    exchange: device.exchange(),
+    session: Exit.succeed(Option.none()),
+    key: noKey,
+  })
   const credentials = { email: `${crypto.randomUUID()}@example.com`, password: 'lovelace1815' }
   await value(run(context(), Iam.signUp(credentials)))
   const session = await value(run(context(), Iam.proven))
   const signedIn: StartContext = { ...context(), session: Exit.succeed(session) }
   const { key, secret } = await value(run(signedIn, Iam.issueKey('Claude Code')))
-  return { signedIn, cookie: cookie(), key, secret }
+  return { signedIn, cookie: device.cookie(), key, secret }
 }
 
 /** An MCP client that sends these headers to the handler, in the 2025 protocol or the newest. */

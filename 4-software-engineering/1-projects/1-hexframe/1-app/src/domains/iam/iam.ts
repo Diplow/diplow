@@ -151,9 +151,20 @@ export const sessionOnly = Effect.gen(function* () {
   return yield* new SignedOut()
 })
 
+/** The fewest and the most characters a Key's name holds, so the user can tell their Keys apart. */
+const keyNameLength = { min: 1, max: 32 } as const
+
+/** The name a Key may take, or `KeyNameInvalid` on the name: 1 to 32 characters. */
+const keyNamed = (name: string): Effect.Effect<string, KeyNameInvalid> =>
+  name.length >= keyNameLength.min && name.length <= keyNameLength.max
+    ? Effect.succeed(name)
+    : Effect.fail(new KeyNameInvalid({ fields: ['name'] }))
+
 /** Issues a Key, named, to the Account the request's Session proves. Its secret is in the answer only. */
 export const issueKey = (name: string) =>
-  Effect.andThen(sessionOnly, Auth.use((auth) => auth.createApiKey(name)).pipe(inIamTerms)).pipe(
+  sessionOnly.pipe(
+    Effect.andThen(keyNamed(name)),
+    Effect.andThen((named) => Auth.use((auth) => auth.createApiKey(named)).pipe(inIamTerms)),
     Effect.map(({ apiKey, secret }): IssuedKey => ({ key: keyOf(apiKey), secret })),
   )
 

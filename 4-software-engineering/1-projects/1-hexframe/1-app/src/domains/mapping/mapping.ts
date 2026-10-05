@@ -8,10 +8,9 @@ import { Effect } from 'effect'
 
 import type { InTransaction } from '#/repositories/database/database'
 import { Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/tiles'
-import type { Language as HelpLanguage } from '#/repositories/help/note'
 
 import { DirectionTaken, HelpReadOnly, MovedUnderItself, RootFixed, TileNotFound } from './errors'
-import { isHelpId, readHelp } from './help/help'
+import { type HelpLanguage, isHelpId, readHelp } from './help/help'
 import {
   type Depth,
   type Field,

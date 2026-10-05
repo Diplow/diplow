@@ -33,7 +33,7 @@ Better Auth, behind one Effect service, `Auth`: sign up, sign in, sign out, the 
 The api-key plugin (`@better-auth/api-key`) keeps them in the `apikey` table ([[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE|database]]), configured in `auth.ts`:
 
 - **`hf_` and 64 letters, stored hashed.** The plugin keeps a SHA-256 hash of the secret and its first six characters (`start`), never the secret: `createApiKey` answers it once. `disableKeyHashing` stays off.
-- **A name, required**, 1 to 32 characters, set in `auth.ts` rather than left to the plugin's defaults, and refused as `api-key-name-length`.
+- **A name, required**, 1 to 32 characters, set in `auth.ts` rather than left to the plugin's defaults, and refused as `api-key-name-length`: a backstop, since IAM checks the name first.
 - **No rate limit, no expiry.** The plugin's default limit, 10 verifications a day, would stop an MCP client within minutes; a Key lives until it is revoked. Its usage and refill columns stay unused.
 - **Never a session.** `enableSessionForAPIKeys` stays off, so no Better Auth endpoint takes a key for a cookie, and `getSession` never answers from one. `bearer` reads the header itself and verifies the secret with the plugin's `verifyApiKey`, which records the use (`lastRequest`); a header that is not `Bearer <secret>`, or a secret over 128 characters, proves nothing.
 - **Creating, listing and deleting go through the request's session cookie**, as the plugin's endpoints require, so a user only ever reaches their own keys: deleting another's is `api-key-not-found`, like deleting one that is gone. IAM refuses a request only a Key proves before any of them runs.

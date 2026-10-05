@@ -5,13 +5,11 @@
 // build's check of Help (scripts/check-help.ts) loads it with the Vite config.
 
 /**
- * The languages Help is written in, each by the name of its notes: `CLAUDE.md` in English, and a twin
- * beside it in each other language, `CLAUDE.fr.md` in French, so every language shares one structure.
+ * The name of a note in each language it may be written in: `CLAUDE.md` in English, and a twin beside
+ * it in each other language, `CLAUDE.fr.md` in French, so every language shares one structure. Which
+ * languages Help is written in is Mapping's to say (src/domains/mapping/help/).
  */
 export const noteFiles = { en: 'CLAUDE.md', fr: 'CLAUDE.fr.md' } as const
-
-/** A language Help is written in. */
-export type Language = keyof typeof noteFiles
 
 /** What every note's frontmatter holds, in this vault. */
 const required = ['title', 'parent', 'owner', 'preview'] as const
