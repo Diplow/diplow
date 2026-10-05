@@ -7,7 +7,7 @@
 import { Inflate } from 'fflate'
 
 /** What an entry of an archive is, as its header says. */
-export type EntryKind = 'File' | 'Folder' | 'Symlink'
+type EntryKind = 'File' | 'Folder' | 'Symlink'
 
 /** One entry of an archive: its path as written, what it is, and its bytes, none but a file's. */
 export interface ArchiveEntry {

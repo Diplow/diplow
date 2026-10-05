@@ -91,7 +91,9 @@ type NewTileRow = Omit<TileRow, 'id' | 'parentId' | 'direction' | KeptColumn> &
   }
 
 /** A row a batch names: one of the batch, by the key the caller gave it, or one already stored. */
-export type RowRef = { readonly _tag: 'Batch'; readonly key: string } | { readonly _tag: 'Stored'; readonly id: string }
+export type RowRef =
+  | { readonly _tag: 'Batch'; readonly key: string }
+  | { readonly _tag: 'Stored'; readonly id: string }
 
 /**
  * A row of a batch, named by a key of the caller's, under a row of the batch or one already stored.

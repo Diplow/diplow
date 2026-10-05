@@ -78,7 +78,11 @@ const vaultLanded = (tile: SystemTile | undefined) => {
     body: '\nThe body.\n',
     frontmatter: { owner: 'diplo' },
   })
-  expect(games).toMatchObject({ title: 'Games', name: '1-games', leaves: { 1: { title: 'Notes' } } })
+  expect(games).toMatchObject({
+    title: 'Games',
+    name: '1-games',
+    leaves: { 1: { title: 'Notes' } },
+  })
   expect(tile?.leaves[2]).toMatchObject({ title: 'Tools', name: '2-tools.md' })
   expect(tile?.context[-1]).toMatchObject({ _tag: 'Tile', title: 'Principles' })
   expect(tile?.context[-2]).toEqual({
@@ -87,16 +91,18 @@ const vaultLanded = (tile: SystemTile | undefined) => {
   })
 }
 
-layer(TestLayers)('an import landed, over PGlite', (it) => {
-  it.effect('lands in a free Branch slot as a new Tile, its Name the upload’s, with all below', () =>
-    Effect.gen(function* () {
-      const { accountId, root } = yield* someone
-      const report = yield* land(accountId, { _tag: 'Slot', parent: root.id, slot: 3 })
-      const landed = (yield* system(accountId)).branches[3]
-      vaultLanded(landed)
-      expect(landed).toMatchObject({ id: report.id, name: 'vault' })
-      expect(report).toEqual({ id: report.id, tiles: 5, references: 1, skipped: [] })
-    }),
+layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
+  it.effect(
+    'lands in a free Branch slot as a new Tile, its Name the upload’s, with all below',
+    () =>
+      Effect.gen(function* () {
+        const { accountId, root } = yield* someone
+        const report = yield* land(accountId, { _tag: 'Slot', parent: root.id, slot: 3 })
+        const landed = (yield* system(accountId)).branches[3]
+        vaultLanded(landed)
+        expect(landed).toMatchObject({ id: report.id, name: 'vault' })
+        expect(report).toEqual({ id: report.id, tiles: 5, references: 1, skipped: [] })
+      }),
   )
 
   it.effect('lands in a free Context slot as a Context Tile', () =>
@@ -108,24 +114,26 @@ layer(TestLayers)('an import landed, over PGlite', (it) => {
     }),
   )
 
-  it.effect('lands one file alone in a Leaf slot, and refuses a folder there, writing nothing', () =>
-    Effect.gen(function* () {
-      const { accountId, root } = yield* someone
-      const place = { _tag: 'Slot', parent: root.id, slot: { leaf: 2 } } as const
-      expect(yield* Effect.flip(land(accountId, place))).toMatchObject({
-        _tag: 'LeafHoldsNothing',
-      })
-      expect(yield* system(accountId)).toMatchObject({ branches: {}, leaves: {}, context: {} })
-      const plan = yield* planOfFile('STACK.md', '---\ntitle: Stack\n---\n\nThe stack.\n')
-      const report = yield* transactional(importTiles(accountId, { plan, place }))
-      expect(report).toMatchObject({ tiles: 1, references: 0 })
-      expect((yield* system(accountId)).leaves[2]).toMatchObject({
-        id: report.id,
-        title: 'Stack',
-        body: '\nThe stack.\n',
-        name: 'STACK.md',
-      })
-    }),
+  it.effect(
+    'lands one file alone in a Leaf slot, and refuses a folder there, writing nothing',
+    () =>
+      Effect.gen(function* () {
+        const { accountId, root } = yield* someone
+        const place = { _tag: 'Slot', parent: root.id, slot: { leaf: 2 } } as const
+        expect(yield* Effect.flip(land(accountId, place))).toMatchObject({
+          _tag: 'LeafHoldsNothing',
+        })
+        expect(yield* system(accountId)).toMatchObject({ branches: {}, leaves: {}, context: {} })
+        const plan = yield* planOfFile('STACK.md', '---\ntitle: Stack\n---\n\nThe stack.\n')
+        const report = yield* transactional(importTiles(accountId, { plan, place }))
+        expect(report).toMatchObject({ tiles: 1, references: 0 })
+        expect((yield* system(accountId)).leaves[2]).toMatchObject({
+          id: report.id,
+          title: 'Stack',
+          body: '\nThe stack.\n',
+          name: 'STACK.md',
+        })
+      }),
   )
 
   it.effect('lands as the Root of an empty System, and nowhere a System holds anything', () =>
@@ -168,7 +176,9 @@ layer(TestLayers)('an import landed, over PGlite', (it) => {
         Mapping.createTile(accountId, { parent: root.id, slot: 4, ...content('First') }),
       )
       const place = { _tag: 'Slot', parent: root.id, slot: 4 } as const
-      expect(yield* Effect.flip(transactional(importTiles(accountId, { plan, place })))).toMatchObject({
+      expect(
+        yield* Effect.flip(transactional(importTiles(accountId, { plan, place }))),
+      ).toMatchObject({
         _tag: 'DirectionTaken',
         kind: 'Conflict',
       })
@@ -176,7 +186,9 @@ layer(TestLayers)('an import landed, over PGlite', (it) => {
       expect(idsOf(after)).toEqual([root.id, taken.id])
     }),
   )
+})
 
+layer(TestLayers)('what an import writes, over PGlite', (it) => {
   it.effect('resolves an app link to a Tile of this System only; anything else lands broken', () =>
     Effect.gen(function* () {
       const { accountId, root } = yield* someone
@@ -197,10 +209,10 @@ layer(TestLayers)('an import landed, over PGlite', (it) => {
       }
       const report = yield* land(accountId, { _tag: 'Slot', parent: root.id, slot: 2 }, files, link)
       expect(report).toMatchObject({ tiles: 1, references: 4 })
-      const { context } = (yield* system(accountId)).branches[2] ?? { context: {} }
-      expect(context[-1]).toMatchObject({ _tag: 'Reference', tile: { id: own.id, title: 'Own' } })
+      const context = (yield* system(accountId)).branches[2]?.context
+      expect(context?.[-1]).toMatchObject({ _tag: 'Reference', tile: { id: own.id, title: 'Own' } })
       for (const slot of [-2, -3, -4] as const) {
-        expect(context[slot]).toMatchObject({ _tag: 'BrokenReference' })
+        expect(context?.[slot]).toMatchObject({ _tag: 'BrokenReference' })
       }
       // Nothing of the other Account's Tile is kept, not even its id.
       const rows = yield* Tiles.use((tiles) => tiles.read(accountId, Mapping.untitled))

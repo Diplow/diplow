@@ -79,7 +79,10 @@ describe('an archive unpacked', () => {
   })
 
   it('counts the bytes an entry inflates to, not what its headers say, and stops past its bound', () => {
-    const archive = lyingAbout(archiveOf({ 'small.md': 'ok', 'bomb.md': 'a'.repeat(2_000_000) }), 10)
+    const archive = lyingAbout(
+      archiveOf({ 'small.md': 'ok', 'bomb.md': 'a'.repeat(2_000_000) }),
+      10,
+    )
     expect(unpacked(archive, roomy)).toEqual({ _tag: 'EntryTooLarge', path: 'bomb.md' })
     expect(entriesOf(archive, { ...roomy, entryBytes: 2_000_000 })[1]?.text).toHaveLength(2_000_000)
   })

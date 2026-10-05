@@ -97,7 +97,11 @@ function entryFaults(entries: ReadonlyArray<ArchiveEntry>): Array<ImportFault> {
       entry.kind === 'Symlink'
         ? 'Symlink'
         : (pathFault(path) ??
-          (folders > depthLimit ? 'TooDeep' : clashes(seen, entry, path) ? 'PathsClash' : undefined))
+          (folders > depthLimit
+            ? 'TooDeep'
+            : clashes(seen, entry, path)
+              ? 'PathsClash'
+              : undefined))
     if (fault !== undefined) faults.push({ path: entry.path, fault })
   }
   return faults
@@ -111,7 +115,10 @@ const refused = ([first, ...rest]: readonly [ImportFault, ...Array<ImportFault>]
  * as an export writes them: or `ImportRefused` with where it stopped unpacking, or every entry at
  * fault. A folder's own entry adds nothing: a folder is there when a file is below it.
  */
-export function folderOf(name: string, unpacked: Unpacked): Result.Result<ImportSource, ImportRefused> {
+export function folderOf(
+  name: string,
+  unpacked: Unpacked,
+): Result.Result<ImportSource, ImportRefused> {
   if (unpacked._tag !== 'Unpacked') {
     const path = 'path' in unpacked ? unpacked.path : ''
     return Result.fail(refused([{ path, fault: stopped[unpacked._tag] }]))

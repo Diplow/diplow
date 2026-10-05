@@ -16,6 +16,7 @@ import {
 import {
   DirectionTaken,
   HelpReadOnly,
+  ImportRefused,
   LeafHoldsNothing,
   MovedUnderItself,
   PreviewTooLong,
@@ -114,6 +115,10 @@ describe('the message table', () => {
       "A leaf is a single file: nothing goes under it, and a tile with anything below it can't become one.",
     ],
     [new HelpReadOnly(), "Help is hexframe's guide: everyone reads it, nobody changes it."],
+    [
+      new ImportRefused({ fields: ['files'], faults: [{ path: '', fault: 'UploadTooLarge' }] }),
+      'This import was refused and nothing was written: each file at fault says why.',
+    ],
   ])("words Mapping's %s in its own sentence", (failure, sentence) => {
     expect(messageFor(failure, 'moveTile')).toBe(sentence)
   })

@@ -49,7 +49,7 @@ export type ImportPlace = ({ readonly _tag: 'Slot' } & Placement) | { readonly _
  * What an import landed: the id of the Tile it landed as, how many Tiles and References it wrote, the
  * Root among them when it landed as the Root, and what it skipped, and why.
  */
-export interface ImportReport {
+interface ImportReport {
   readonly id: string
   readonly tiles: number
   readonly references: number
@@ -100,7 +100,8 @@ function rowsBelow(
   const rows: Array<BatchRow> = []
   const add = (held: PlannedTile | PlannedLeaf, slot: Slot) => {
     rows.push(rowOf(held, { parent, direction: rowDirection(slot) }))
-    if (held._tag === 'Tile') rows.push(...rowsBelow(held, { parent: { _tag: 'Batch', key: held.path }, resolve }))
+    if (held._tag === 'Tile')
+      rows.push(...rowsBelow(held, { parent: { _tag: 'Batch', key: held.path }, resolve }))
   }
   for (const [direction, branch] of entriesOf(tile.branches)) add(branch, direction)
   for (const [direction, leaf] of entriesOf(tile.leaves)) add(leaf, { leaf: direction })
