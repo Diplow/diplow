@@ -9,8 +9,9 @@ preview: >-
   leaves, the apikey table's key to its user, the Key server functions that
   waited for their page, how the Keys page keeps a secret and knows who is
   signed in, how Mapping reads one Tile to a depth, how two Tiles swap,
-  in the database and on the canvas, and where the MCP endpoint sits, what
-  it answers and how a request's context reaches its tools.
+  in the database and on the canvas, where the MCP endpoint sits, what it
+  answers and how a request's context reaches its tools, and how Help comes
+  in French and opens at /help.
 ---
 # Decisions
 
@@ -88,3 +89,11 @@ HEX-49. `changing` now takes the ids a change names and fails `HelpReadOnly` (Fo
 ### DEC-18 Help's bundle and its note reader move to a repository, `repositories/help/`; Mapping keeps what a note means
 
 HEX-49, [#57](https://github.com/Diplow/diplow/pull/57), after cubic's first round, amending DEC-15. Bundling the notes and splitting a note into frontmatter and Markdown are errands, how to fetch and how to parse, which a repository holds. So `repositories/help/` holds `helpNotes`, the bundled text by folder path (`import.meta.glob`), and `noteOf`, the frontmatter reader, in a module of its own that the build's check can load with the Vite config. Mapping keeps every decision: which slot a folder's name stands in, a Tile's id, the fields a note must have, the Preview's limit, one Tile per slot, a folder below one that reads as none, and the read itself (`domains/mapping/help/`). The repository has no SDK and no Effect layer: its notes are constants of the bundle, so there is nothing to provide. `repositories/` holds four folders.
+
+### DEC-19 Help comes in the page's language, which the page sends; the MCP keeps reading it in English
+
+HEX-50. Each Help folder holds a French twin, `CLAUDE.fr.md`, beside its `CLAUDE.md`. The help repository bundles both, one `import.meta.glob` per language since Vite takes a glob's arguments as literals only, and names the languages by their note's file (`noteFiles`: `en` is `CLAUDE.md`, `fr` is `CLAUDE.fr.md`). Mapping reads a vault per language with the same reader, so a Tile has the same id in both, `help/3` in English as in French. The build's check reads each language's notes from disk and fails on a folder whose twin is missing, lacks a field, or has a Preview over 350 characters. Every problem about a note now names its file (`its CLAUDE.fr.md has no preview`), so a French one reads apart from an English one, and a problem both languages share is told once. The `help` server function takes the language as its input, one of Paraglide's `locales`, and the page sends `getLocale()`. A server function's own URL carries no locale prefix, so the server cannot read the page's language from the request. `programs.ts` hands the `Locale` to Mapping's `helpSystem`, whose type takes the languages Help is written in, so an app locale without a Help fails to type-check. `readHelp`, behind the MCP's reads, keeps English, as the ticket settled. `help` asks for no Account: Help is no Account's, and `/help` needs no sign-in.
+
+### DEC-20 At `/help` a Body opens in a drawer from the centered Tile's card, shown as written
+
+HEX-50. The ticket asked that a Tile open its Body "as on home". On home, a Body shows in the drawer of the centered Tile's form, as the Markdown it is written in, since `ui/` has no Markdown renderer and a feature never adds to `ui/`. So `/help` gives the centered Tile's card a Read button that opens a drawer with its Title, Preview and Body, the Body shown as written, whitespace kept. Which Body is open lives in the URL (`open`), as home's form does, so a link opens the same drawer. A view change keeps it. The help feature takes the canvas's Tiles and the open Tile from the route, which reads them through the system feature's `canvasTree` and `tileIn`, since a feature never imports another. The header links to Help on every page, apart from the signed-in Account's links (DEC-6), since anyone reads it. Rendering Markdown is a `ui/` component, which would reach home's Bodies too, and a ticket of its own.
