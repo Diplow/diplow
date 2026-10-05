@@ -3,7 +3,7 @@
 // plain, a symlink, an entry deeper than an import goes, and two paths a case-blind disk would take
 // for one are faults, each on its path, all at once; nothing is normalized to make them pass. Pure:
 // the files of a folder for `importOf`, or `ImportRefused`.
-import { Result } from 'effect'
+import { Effect, Result } from 'effect'
 
 import type { ArchiveEntry, UnpackBounds, Unpacked } from '#/repositories/zip/unzip'
 
@@ -21,6 +21,23 @@ export const archiveBounds: UnpackBounds = {
   entryBytes: fileLimit,
   totalBytes: 16_000_000,
 }
+
+/**
+ * The most an import uploads, in bytes: 4 MB, below the 4.5 MB to which Vercel caps a request's body.
+ * A larger import goes through storage first, later.
+ */
+export const uploadLimit = 4_000_000
+
+/**
+ * Refuses an upload past 4 MB, by its size alone, before a byte of it is read: `ImportRefused`, its
+ * fault `UploadTooLarge` on the upload itself.
+ */
+export const fitsUpload = (size: number) =>
+  size > uploadLimit
+    ? Effect.fail(
+        new ImportRefused({ fields: ['files'], faults: [{ path: '', fault: 'UploadTooLarge' }] }),
+      )
+    : Effect.void
 
 /** What an upload is, as its sender says: an archive of a folder, or one file alone. */
 export interface Upload {

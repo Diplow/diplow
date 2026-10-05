@@ -6,7 +6,6 @@
 import { Effect } from 'effect'
 
 import * as Iam from '#/domains/iam/iam'
-import { ImportRefused } from '#/domains/mapping/errors'
 import * as Landing from '#/domains/mapping/landing/landing'
 import * as Mapping from '#/domains/mapping/mapping'
 import type { Locale } from '#/paraglide/runtime'
@@ -87,12 +86,6 @@ export const createReference = (input: ReferenceSlot & { target: string }) =>
 export const deleteReference = (input: ReferenceSlot) =>
   changeForAccount((accountId) => Mapping.deleteReference(accountId, input))
 
-/**
- * The most an import uploads, in bytes: 4 MB, below the 4.5 MB to which Vercel caps a request's body.
- * A larger import goes through storage first, later.
- */
-export const uploadLimit = 4_000_000
-
 /** An upload, as the import's server function decodes it: the file, what it is, where it lands. */
 interface ImportUpload {
   readonly upload: File
@@ -101,20 +94,19 @@ interface ImportUpload {
 }
 
 /**
- * An import: an upload past 4 MB refused before anything else, then, for the signed-in Account, the
+ * An import: an upload past Mapping's 4 MB refused before anything else, by its size, then, for the signed-in Account, the
  * upload read into a plan, an app link on the site the request reached read back as its Tile's id,
  * and the plan landed in one transaction. The report says what it created and what it skipped.
  */
 export const importTiles = ({ upload, as, place }: ImportUpload) =>
-  upload.size > uploadLimit
-    ? Effect.fail(
-        new ImportRefused({ fields: ['files'], faults: [{ path: '', fault: 'UploadTooLarge' }] }),
-      )
-    : forAccount((accountId) =>
-        Effect.gen(function* () {
-          const { url } = yield* HttpExchange
-          const bytes = new Uint8Array(yield* Effect.promise(() => upload.arrayBuffer()))
-          const plan = yield* Landing.planImport({ as, name: upload.name, bytes }, tileOfLink(url))
-          return yield* transactional(Landing.importTiles(accountId, { plan, place }))
-        }),
-      )
+  Effect.andThen(
+    Landing.fitsUpload(upload.size),
+    forAccount((accountId) =>
+      Effect.gen(function* () {
+        const { url } = yield* HttpExchange
+        const bytes = new Uint8Array(yield* Effect.promise(() => upload.arrayBuffer()))
+        const plan = yield* Landing.planImport({ as, name: upload.name, bytes }, tileOfLink(url))
+        return yield* transactional(Landing.importTiles(accountId, { plan, place }))
+      }),
+    ),
+  )

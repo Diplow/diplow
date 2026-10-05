@@ -9,6 +9,7 @@ import type {
   LeafHoldsNothing,
   TileNotFound,
 } from '#/domains/mapping/errors'
+import { uploadLimit } from '#/domains/mapping/landing/landing'
 import { archiveOf } from '#/repositories/zip/testing'
 
 import { noKey, run, type StartContext } from '../server/run'
@@ -96,7 +97,7 @@ describe('an import, over the wire', () => {
   })
 
   it('refuses an upload past 4 MB before anything else, signed out or not, reading none of it', async () => {
-    const big = new File([new Uint8Array(Mapping.uploadLimit + 1)], 'big.zip')
+    const big = new File([new Uint8Array(uploadLimit + 1)], 'big.zip')
     // Its bytes are never read: the refusal comes from its size alone.
     big.arrayBuffer = () => Promise.reject(new Error('An upload past its limit was read'))
     const upload = { upload: big, as: 'Zip', place: { _tag: 'Root' } } as const
@@ -112,7 +113,7 @@ describe('an import, over the wire', () => {
     for (const signedIn of [true, false]) {
       expect(await run(request(signedIn), Mapping.importTiles(upload))).toMatchObject(refused)
     }
-    const fits = new File([new Uint8Array(Mapping.uploadLimit)], 'fits.zip')
+    const fits = new File([new Uint8Array(uploadLimit)], 'fits.zip')
     expect(await run(request(), Mapping.importTiles({ ...upload, upload: fits }))).toMatchObject({
       ok: false,
       failure: { faults: [{ path: '', fault: 'ArchiveUnreadable' }] },

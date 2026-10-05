@@ -9,7 +9,7 @@ import type { BatchRow, RowRef, TileRow } from '#/repositories/database/tiles/ti
 import { Tiles } from '#/repositories/database/tiles/tiles'
 import { Zip } from '#/repositories/zip/zip'
 
-import { DirectionTaken, LeafHoldsNothing } from '../errors'
+import { DirectionTaken } from '../errors'
 import type {
   IdOfLink,
   ImportPlan,
@@ -20,12 +20,14 @@ import type {
   Skipped,
 } from '../files/import/plan'
 import { importOf } from '../files/import/read'
+import { onlyALeafIn } from '../leaves/leaves'
 import { type Placement, changing, freeSlot, untitled } from '../mapping'
 import { tileRow } from '../system'
 import { type Slot, rowDirection } from '../tile'
 import { type Upload, archiveBounds, folderOf } from './archive'
 
 export type { Upload } from './archive'
+export { fitsUpload, uploadLimit } from './archive'
 
 /**
  * The plan for an upload: an archive unpacked within its bounds and read as a folder, or one file
@@ -147,9 +149,7 @@ const inSlot = (accountId: string, plan: ImportPlan, place: Placement) =>
     Effect.gen(function* () {
       yield* freeSlot(rows, place)
       const { root } = plan
-      if (typeof place.slot !== 'number' && root._tag !== 'Leaf') {
-        return yield* new LeafHoldsNothing()
-      }
+      yield* onlyALeafIn(place.slot, root)
       const nameOf: NameOf = (path) => ({ _tag: 'Batch', key: path })
       const resolve = (target: ReferenceTarget) => targetOf(target, { rows, nameOf })
       const placed = rowOf(root, {
