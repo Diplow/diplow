@@ -7,15 +7,24 @@ import { TestDatabase } from '#/repositories/database/testing'
 import type { TileConfigColumn } from '#/repositories/database/schema'
 import { layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
-import { configured, Frontmatter, named, type StoredConfig, type ToKeep } from './entities'
+import {
+  configured,
+  Frontmatter,
+  named,
+  type StoredConfig,
+  systemOf,
+  type ToKeep,
+} from './entities'
 import { exportOf } from './files/files'
 import * as Mapping from './mapping'
-import { system } from './mapping'
 import { CreateTile, EditTile, MoveTile, SwapTiles } from './operations'
 
 // What a Tile keeps from the files it was imported from, over PGlite: a Tile keeps them through an
 // edit, a move and a swap, and a read gives them back. The checks themselves, on values made by hand,
 // are in `entities/kept/kept.test.ts`.
+
+/** The Account's System, read flat, as its tree: what the canvas draws, as the client builds it. */
+const systemTree = (accountId: string) => Effect.map(Mapping.system(accountId), systemOf)
 
 const TestTiles = tilesLayer.pipe(Layer.provideMerge(TestDatabase))
 
@@ -34,7 +43,7 @@ layer(TestTiles)('what a Tile keeps, over the tiles repository', (it) => {
   /** An Account's System, read once so its Root exists, and its Root. */
   const aSystem = Effect.gen(function* () {
     const accountId = crypto.randomUUID()
-    const root = yield* system(accountId)
+    const root = yield* systemTree(accountId)
     return { accountId, root }
   })
 
@@ -55,9 +64,9 @@ layer(TestTiles)('what a Tile keeps, over the tiles repository', (it) => {
       yield* transactional(
         Mapping.moveTile(accountId, new MoveTile({ id: kept.id, parent: root.id, slot: 3 })),
       )
-      expect((yield* system(accountId)).branches[3]).toMatchObject({ title: 'The stack', name })
+      expect((yield* systemTree(accountId)).branches[3]).toMatchObject({ title: 'The stack', name })
       yield* transactional(Mapping.swapTiles(accountId, new SwapTiles({ a: kept.id, b: other.id })))
-      const after = yield* system(accountId)
+      const after = yield* systemTree(accountId)
       expect(after.branches[2]).toMatchObject({ id: kept.id, name: 'STACK.md' })
       expect(after.branches[3]).not.toHaveProperty('name')
     }),
@@ -80,7 +89,7 @@ layer(TestTiles)('what a Tile keeps, over the tiles repository', (it) => {
         config: yield* configured({ folderPattern: '<slug>' }),
       })
       yield* createTile(accountId, { parent: group.id, slot: 1, ...content('Do') })
-      const read = yield* system(accountId)
+      const read = yield* systemTree(accountId)
       expect(read.branches[1]).toMatchObject({ config: { fileName: 'SKILL.md' } })
       // The default file name at the Root, the one `skills` sets below it, and its folder pattern
       // below `ship`; `skills` is named by the stem of the Name it kept, its leading dot dropped.
@@ -118,7 +127,7 @@ layer(TestTiles)('what a Tile keeps, over the tiles repository', (it) => {
       yield* transactional(
         Mapping.editTile(accountId, new EditTile({ id: tile.id, ...content('Do a ticket') })),
       )
-      const read = (yield* system(accountId)).context[-2]
+      const read = (yield* systemTree(accountId)).context[-2]
       expect(read).toMatchObject({
         title: 'Do a ticket',
         name: 'do-ticket',
@@ -135,7 +144,7 @@ layer(TestTiles)('what a Tile keeps, over the tiles repository', (it) => {
     Effect.gen(function* () {
       const { accountId, root } = yield* aSystem
       yield* createTile(accountId, { parent: root.id, slot: 5, ...content('Plain') })
-      const plain = (yield* system(accountId)).branches[5]
+      const plain = (yield* systemTree(accountId)).branches[5]
       for (const part of ['name', 'config', 'frontmatter']) expect(plain).not.toHaveProperty(part)
     }),
   )

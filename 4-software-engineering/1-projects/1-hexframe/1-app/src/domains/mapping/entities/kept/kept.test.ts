@@ -2,7 +2,7 @@ import { describe, expect, it } from '@effect/vitest'
 import { Effect, Schema } from 'effect'
 
 import type { Row } from '../rows'
-import { systemOf } from '../system'
+import { systemFrom, systemOf } from '../system'
 import {
   Frontmatter,
   configured,
@@ -157,8 +157,9 @@ describe('the naming in force, on rows made by hand', () => {
     row('inside', 'context', 3),
     row('plain', 'root', 2),
   ]
-  const root = systemOf(rows)
-  if (root === undefined) throw new Error('These rows hold a Root')
+  const found = systemFrom(rows, { owned: true })
+  if (found === undefined) throw new Error('These rows hold a Root')
+  const root = systemOf(found)
 
   it('gives a Tile what it keeps, and nothing for what it keeps not', () => {
     expect(root.branches[1]).toMatchObject({ name: '.skills', config: { fileName: 'SKILL.md' } })

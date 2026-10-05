@@ -13,6 +13,7 @@ import type {
   TileNotFound,
   TitleMissing,
 } from '#/domains/mapping/errors'
+import { systemOf } from '#/domains/mapping/entities'
 
 import type { Failure } from '../errors/failure'
 import { noKey, run, type Services, type StartContext } from '../server/run'
@@ -66,10 +67,15 @@ async function value<A>(outcome: Promise<{ ok: true; value: A } | { ok: false }>
   return settled.value
 }
 
+/** The Account's System, read flat through its server function, as its tree, as the client builds it. */
+async function systemTree(context: StartContext) {
+  return systemOf(await value(run(context, Mapping.system)))
+}
+
 /** Someone's System, read once so its Root exists, with a Child of the Root in Direction 1. */
 async function withAChild() {
   const context = request()
-  const root = await value(run(context, Mapping.system))
+  const root = await systemTree(context)
   const child = await value(
     run(context, Mapping.createTile({ parent: root.id, slot: 1, ...content('Child') })),
   )
@@ -105,16 +111,20 @@ describe("Mapping's server functions", () => {
 
   it('runs for an Account its Key proves as for one its Session proves', async () => {
     const context = request('by key')
-    const root = await value(run(context, Mapping.system))
+    const root = await systemTree(context)
     await value(run(context, Mapping.createTile({ parent: root.id, slot: 1, ...content('Child') })))
-    expect((await value(run(context, Mapping.system))).branches[1]).toMatchObject(content('Child'))
+    expect((await systemTree(context)).branches[1]).toMatchObject(content('Child'))
   })
 
-  it("reads the Account's System, its Root added untitled on the first read", async () => {
+  it("reads the Account's System flat, owned by it, its Root added untitled on the first read", async () => {
     const context = request()
     const first = await value(run(context, Mapping.system))
-    expect(first).toMatchObject({ _tag: 'Tile', title: '', branches: {}, context: {} })
-    expect((await value(run(context, Mapping.system))).id).toBe(first.id)
+    expect(first).toEqual({
+      root: { _tag: 'Tile', id: first.root.id, title: '', preview: '', body: '' },
+      tiles: {},
+      owned: true,
+    })
+    expect((await value(run(context, Mapping.system))).root.id).toBe(first.root.id)
   })
 
   it('creates, edits, moves and deletes a Tile, and the System reads them back', async () => {
@@ -125,12 +135,12 @@ describe("Mapping's server functions", () => {
     expect(edited).toEqual({ ...child, title: 'Renamed' })
 
     await value(run(context, Mapping.moveTile({ id: child.id, parent: root.id, slot: 4 })))
-    const { branches } = await value(run(context, Mapping.system))
+    const { branches } = await systemTree(context)
     expect(Object.keys(branches)).toEqual(['4'])
     expect(branches[4]).toMatchObject({ id: child.id, title: 'Renamed' })
 
     await value(run(context, Mapping.deleteTile({ id: child.id })))
-    expect((await value(run(context, Mapping.system))).branches).toEqual({})
+    expect((await systemTree(context)).branches).toEqual({})
   })
 
   it('swaps two Tiles, each with everything below it, and refuses a swap along one line', async () => {
@@ -142,7 +152,7 @@ describe("Mapping's server functions", () => {
       run(context, Mapping.createTile({ parent: child.id, slot: 2, ...content('Grandchild') })),
     )
     await value(run(context, Mapping.swapTiles({ a: child.id, b: other.id })))
-    const swapped = await value(run(context, Mapping.system))
+    const swapped = await systemTree(context)
     expect(swapped.branches[1]).toMatchObject({ id: other.id, branches: {} })
     expect(swapped.context[-5]).toMatchObject({ id: child.id, branches: { 2: grandchild } })
     expect(await run(context, Mapping.swapTiles({ a: grandchild.id, b: child.id }))).toMatchObject({
@@ -156,12 +166,12 @@ describe("Mapping's server functions", () => {
     await value(
       run(context, Mapping.createReference({ parent: root.id, slot: -2, target: child.id })),
     )
-    expect((await value(run(context, Mapping.system))).context).toEqual({
+    expect((await systemTree(context)).context).toEqual({
       [-2]: { _tag: 'Reference', tile: child },
     })
 
     await value(run(context, Mapping.deleteReference({ parent: root.id, slot: -2 })))
-    expect((await value(run(context, Mapping.system))).context).toEqual({})
+    expect((await systemTree(context)).context).toEqual({})
   })
 
   it('sends a refusal as its tagged error, with its kind and the request id', async () => {
@@ -209,7 +219,7 @@ describe("Mapping's server functions", () => {
   it("shows an Account nothing of another's System: its Tiles are TileNotFound", async () => {
     const { child } = await withAChild()
     const stranger = request()
-    const theirRoot = await value(run(stranger, Mapping.system))
+    const theirRoot = await systemTree(stranger)
     expect(theirRoot.branches).toEqual({})
     const attempts: ReadonlyArray<Program> = [
       Mapping.editTile({ id: child.id, title: 'Mine now' }),
@@ -355,7 +365,7 @@ describe("Mapping's server functions, on Leaves", () => {
     const leaf = await value(
       run(context, Mapping.createTile({ parent: root.id, slot: { leaf: 1 }, ...content('Leaf') })),
     )
-    const found = await value(run(context, Mapping.system))
+    const found = await systemTree(context)
     expect(found.leaves).toEqual({ 1: { _tag: 'Tile', ...leaf } })
     expect(found.branches[1]).toMatchObject({ id: child.id })
     const under = Mapping.createTile({ parent: leaf.id, slot: -1, ...content('Under') })

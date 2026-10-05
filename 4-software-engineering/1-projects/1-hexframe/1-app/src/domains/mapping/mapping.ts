@@ -28,6 +28,7 @@ import {
   rowAt,
   rowDirection,
   showing,
+  systemFrom,
   systemOf,
   type Tile,
   tileRow,
@@ -51,13 +52,14 @@ export { HelpId, helpRoot, helpSystem } from './help/help'
 export const untitled: Content = { title: '', preview: '', body: '' }
 
 /**
- * The Account's System: its Root, the user, with everything below it. The first read adds the Root,
- * with an empty Title until the user names it; any later read, or two at once, finds that one.
+ * The Account's System, flat: its Root, the user, and every Tile and Reference below it by id, Bodies
+ * included, owned by the Account; `systemOf` builds its tree. The first read adds the Root, with an
+ * empty Title until the user names it; any later read, or two at once, finds that one.
  */
 export const system = (accountId: string) =>
   Effect.gen(function* () {
     const rows = yield* Tiles.use((tiles) => tiles.read(accountId, untitled))
-    const found = systemOf(rows)
+    const found = systemFrom(rows, { owned: true })
     if (found === undefined) return yield* Effect.die(new Error('A System was read without a Root'))
     return found
   })
@@ -191,7 +193,7 @@ export const openTile = <F extends Field>(
  */
 export const exportTile = (accountId: string, { id, link }: { id: string; link: LinkOf }) =>
   Effect.gen(function* () {
-    const exported = exportOf(yield* system(accountId), id, link)
+    const exported = exportOf(systemOf(yield* system(accountId)), id, link)
     if (exported === undefined) return yield* new TileNotFound()
     const { zipped } = yield* Zip
     return { name: `${exported.slug}.zip`, bytes: zipped(exported.files) }

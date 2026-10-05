@@ -48,8 +48,8 @@ interface SystemPageProps {
 }
 
 function SystemPage({ search, onSearchChange }: SystemPageProps) {
-  const { data: system } = useSystem()
-  if (system === undefined) {
+  const { data } = useSystem()
+  if (data === undefined) {
     return (
       <>
         <Skeleton className="h-[60dvh] lg:h-full" />
@@ -57,6 +57,7 @@ function SystemPage({ search, onSearchChange }: SystemPageProps) {
       </>
     )
   }
+  const system = data.root
   const tree = canvasTree(system)
   return (
     <>

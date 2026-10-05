@@ -3,7 +3,7 @@ import { Effect } from 'effect'
 
 import { keepsNothing } from '../kept/kept'
 import type { Row } from '../rows'
-import { type SystemTile, systemOf } from '../system'
+import { systemFrom, type SystemTile, systemOf } from '../system'
 import { directions, isContextSlot, isLeafSlot, leafOf, rowDirection, type Slot } from '../tile'
 import { holdsNothing, holdsNothingIfLeaf, isEmptySystem, notLeaf, onlyALeafIn } from './leaves'
 
@@ -124,7 +124,8 @@ describe('what a Leaf may hold, on rows made by hand', () => {
         row('d', 'root', 5),
         { ...row('d1', 'd', -2), target: 'bare' },
       ]
-      const read = systemOf(held)
+      const found = systemFrom(held, { owned: true })
+      const read = found === undefined ? undefined : systemOf(found)
       for (const [id, direction] of [
         ['bare', 1],
         ['a', 2],

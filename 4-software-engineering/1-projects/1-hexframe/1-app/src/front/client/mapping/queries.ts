@@ -1,13 +1,13 @@
 // Mapping on the client: one TanStack Query hook per read and per write, and the export, over its
-// server functions (src/api/mapping/mapping.ts). The System is one query, read whole; every write
-// reads it again once it settles, failed or not, since a refusal (a slot taken meanwhile, a Tile gone)
-// says the page is behind.
+// server functions (src/api/mapping/mapping.ts). The System is one query, read whole and flat, whose
+// tree the client builds; every write reads it again once it settles, failed or not, since a refusal
+// (a slot taken meanwhile, a Tile gone) says the page is behind.
 // Failures go to their channels (../channels.ts): a hook's caller handles none.
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Schema } from 'effect'
 
 import type { Failure, Outcome } from '#/api/errors/failure'
-import type { SystemTile } from '#/domains/mapping/entities'
+import { type System, type SystemTile, systemOf } from '#/domains/mapping/entities'
 import type { OperationName } from '#/domains/mapping/operations'
 import { type Download, downloaded } from '#/api/mapping/files/download'
 import { type Given, type LeftOut, type Prepared, prepared } from './upload'
@@ -42,12 +42,19 @@ import { settleSubmit, submitWrite } from '../channels'
 /** The System's read, by the server function's name: every mode of its query key starts with it. */
 const systemScope = 'system'
 
+/** The System as the server reads it, flat, and its tree, the Root with everything below it. */
+const withTree = (flat: System) => ({ system: flat, root: systemOf(flat) })
+
 /**
- * The Account's System: its Root, the user, with everything below it. Shown inside a ReadBoundary,
- * where its failure appears; signed out, it sends the user to sign in.
+ * The Account's System: as the server reads it, flat, which the cache holds, and its tree, its Root,
+ * the user, with everything below it, built once per answer. Shown inside a ReadBoundary, where its
+ * failure appears; signed out, it sends the user to sign in.
  */
 export const useSystem = () =>
-  useQuery(read({ scope: systemScope, key: [], call: () => system({ data: undefined }) }))
+  useQuery({
+    ...read({ scope: systemScope, key: [], call: () => system({ data: undefined }) }),
+    select: withTree,
+  })
 
 /**
  * Help whole, in the page's language, Bodies included, read as the System is. Anyone reads it, so it

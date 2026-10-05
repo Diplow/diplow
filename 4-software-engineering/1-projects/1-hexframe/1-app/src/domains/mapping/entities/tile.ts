@@ -90,6 +90,14 @@ export function leafOf(direction: number | null): Direction | undefined {
   return isDirection(leaf) ? leaf : undefined
 }
 
+/** The slot a row's direction stands for; `undefined` for the Root's, which has none, or for no slot. */
+export function slotOf(direction: number | null): Slot | undefined {
+  if (direction === null) return undefined
+  const leaf = leafOf(direction)
+  if (leaf !== undefined) return { leaf }
+  return isDirection(direction) || isContextDirection(direction) ? direction : undefined
+}
+
 /**
  * The most a Title and a Body hold, in UTF-16 units: the bounds the API checks every input against,
  * and an import every file it reads (`hexframe-v0-mapping/decisions.md#DEC-8`).

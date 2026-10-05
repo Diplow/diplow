@@ -5,6 +5,7 @@ import { archived, unpacked } from '#/api/mapping/files/upload'
 import { ImportUpload } from '#/api/mapping/mapping'
 import * as Mapping from '#/api/mapping/programs'
 import { noKey, run, type StartContext } from '#/api/server/run'
+import { systemOf } from '#/domains/mapping/entities'
 
 import { type Given, type GivenFile, type Prepared, prepared } from './upload'
 
@@ -292,9 +293,10 @@ describe('an upload the browser made', () => {
     )
     expect(landed).toMatchObject({ ok: true, value: { skipped: [] } })
     const system = await run(context, Mapping.system)
-    expect(system).toMatchObject({
-      ok: true,
-      value: { title: 'Vault', branches: { 1: { title: 'A' } } },
+    if (!system.ok) throw new Error('The System was not read')
+    expect(systemOf(system.value)).toMatchObject({
+      title: 'Vault',
+      branches: { 1: { title: 'A' } },
     })
   })
 })

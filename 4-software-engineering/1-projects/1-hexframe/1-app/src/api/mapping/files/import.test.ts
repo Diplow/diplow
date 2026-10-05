@@ -10,6 +10,7 @@ import type {
   TileNotFound,
 } from '#/domains/mapping/errors'
 import { uploadLimit } from '#/domains/mapping/landing/landing'
+import { systemOf } from '#/domains/mapping/entities'
 import { archiveOf } from '#/repositories/zip/testing'
 
 import { noKey, run, type StartContext } from '../../server/run'
@@ -46,6 +47,11 @@ async function value<A>(outcome: Promise<{ ok: true; value: A } | { ok: false }>
   return settled.value
 }
 
+/** The Account's System, read flat through its server function, as its tree, as the client builds it. */
+async function systemTree(context: StartContext) {
+  return systemOf(await value(run(context, Mapping.system)))
+}
+
 type Upload = typeof ImportUpload.Type
 
 /** An upload as the client's form sends it and the handler receives it: encoded, then decoded. */
@@ -60,7 +66,7 @@ const zipOf = (files: Readonly<Record<string, string>>, name = 'vault.zip') =>
 /** Someone signed in, their System read once so its Root exists. */
 async function someone() {
   const context = request()
-  const root = await value(run(context, Mapping.system))
+  const root = await systemTree(context)
   return { context, root }
 }
 
@@ -79,7 +85,7 @@ describe('an import, over the wire', () => {
       references: 0,
       skipped: [{ path: '.x', reason: 'DotFile' }],
     })
-    const system = await value(run(context, Mapping.system))
+    const system = await systemTree(context)
     expect(system.branches[2]).toMatchObject({ id: report.id, title: 'Vault', name: 'vault' })
     expect(system.branches[2]?.branches[1]).toMatchObject({ title: 'A' })
   })
@@ -92,7 +98,7 @@ describe('an import, over the wire', () => {
       place: { _tag: 'Root' },
     })
     const report = await value(run(context, Mapping.importTiles(upload)))
-    const system = await value(run(context, Mapping.system))
+    const system = await systemTree(context)
     expect(system).toMatchObject({ id: report.id, title: 'Ulysse', preview: 'Me.' })
   })
 
@@ -138,7 +144,7 @@ describe('an import, over the wire', () => {
       },
       requestId: 'req-import',
     })
-    expect(await value(run(context, Mapping.system))).toMatchObject({ branches: {}, leaves: {} })
+    expect(await systemTree(context)).toMatchObject({ branches: {}, leaves: {} })
   })
 
   it("resolves a Reference's link on the request's site to this System's Tile, and no other", async () => {
@@ -154,7 +160,7 @@ describe('an import, over the wire', () => {
       place: { _tag: 'Slot', parent: root.id, slot: 1 },
     } as const
     await value(run(context, Mapping.importTiles(upload)))
-    const context_ = (await value(run(context, Mapping.system))).branches[1]?.context
+    const context_ = (await systemTree(context)).branches[1]?.context
     expect(context_?.[-1]).toMatchObject({ _tag: 'Reference', tile: { id: root.id } })
     expect(context_?.[-2]).toMatchObject({ _tag: 'BrokenReference' })
   })
