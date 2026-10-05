@@ -1,0 +1,34 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.test.ts
+  s_add1a77a88c179::t_13c3bd5a82e10d 20,40,48,172-210
+  s_add1a77a88c179::t_ca322080f38838 211-212
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_add1a77a88c179::t_830d9264104971 1,9,23,98-124
+  s_add1a77a88c179::t_13c3bd5a82e10d 2-4
+  s_add1a77a88c179::t_6f6284388a5926 125
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_add1a77a88c179::t_3fe607890e5115 206
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/TileActions.tsx
+  s_add1a77a88c179::t_3fe607890e5115 1-2,8,56,98-99,108,110,125-134
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_add1a77a88c179::t_3fe607890e5115 206
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/download.test.ts
+  s_add1a77a88c179::t_00dea7a690141e 65
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/zip/zip.ts
+  s_add1a77a88c179::t_02cb5ea35b2916 65-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "acb09455d954d17d3256abd408517f004bf497b7",
+  "prompts": {},
+  "sessions": {
+    "s_add1a77a88c179": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d3373e9-3681-410c-a221-392366b8a522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
