@@ -1,0 +1,21 @@
+4-software-engineering/1-projects/1-hexframe/.cubic/domain-design.md
+  s_9be70a4006462c::t_c9411914de66f2 21,55
+4-software-engineering/1-projects/1-hexframe/STACK.md
+  s_9be70a4006462c::t_c9411914de66f2 61,134
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f4e995235822e881bd350db2bda717586a1bb436",
+  "prompts": {},
+  "sessions": {
+    "s_9be70a4006462c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a897282c-61ab-41ca-b0d1-655c4b53a742",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
