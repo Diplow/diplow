@@ -1,0 +1,26 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.ts
+  s_ed89c634a0e6b3::t_4b972cf90cd413 50-52,79-81
+  s_ed89c634a0e6b3::t_daeb3f51376310 82
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.test.ts
+  s_ed89c634a0e6b3::t_4b972cf90cd413 17-25,82,124-128,130-134,140-141,161,206,230-232,268-272
+  s_ed89c634a0e6b3::t_c3e9a94a079730 129,135-139
+  s_ed89c634a0e6b3::t_fc2c5936c0bda8 273
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/programs.ts
+  s_ed89c634a0e6b3::t_4b972cf90cd413 38-40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e4a2f0a7b2f2ecbaa28ef1525b2e7683703e8075",
+  "prompts": {},
+  "sessions": {
+    "s_ed89c634a0e6b3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bfdaae8a-87ed-4a58-8630-209d0ea6e784",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
