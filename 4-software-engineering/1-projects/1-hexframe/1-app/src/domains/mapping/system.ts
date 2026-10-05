@@ -82,23 +82,23 @@ export function below(rows: ReadonlyArray<TileRow>, id: string): ReadonlySet<str
 }
 
 /** How a walk down makes what it finds in each slot: a Tile, a Leaf, a Reference. */
-interface Makers<R, T, F, L> {
+interface Makers<R, T, Leaf, Ref> {
   readonly place: (row: R) => T
-  readonly leaf: (row: R) => F
-  readonly refer: (target: string) => L
+  readonly leaf: (row: R) => Leaf
+  readonly refer: (target: string) => Ref
 }
 
 /**
  * A Tile's Branches and Leaves, each by Direction, and its Context by slot, as `place`, `leaf` and
  * `refer` make them.
  */
-function slotsOf<R extends Placed, T, F, L>(
+function slotsOf<R extends Placed, T, Leaf, Ref>(
   rows: ReadonlyArray<R>,
-  { place, leaf, refer }: Makers<R, T, F, L>,
+  { place, leaf, refer }: Makers<R, T, Leaf, Ref>,
 ) {
   const branches: Partial<Record<Direction, T>> = {}
-  const leaves: Partial<Record<Direction, F>> = {}
-  const context: Partial<Record<ContextDirection, T | L>> = {}
+  const leaves: Partial<Record<Direction, Leaf>> = {}
+  const context: Partial<Record<ContextDirection, T | Ref>> = {}
   for (const row of rows) {
     const { direction, target } = row
     if (direction === null) continue
