@@ -28,7 +28,6 @@ export { HelpId, helpRoot, helpSystem } from './help/help'
 export { depths, fields } from './system'
 export { directions, previewLimit } from './tile'
 export type { Depth, Field, ReadTile, SystemTile } from './system'
-export type { HelpLanguage }
 export type { Content, ContextDirection, Direction } from './tile'
 
 /** The content of a Root nobody has named yet, and of every Reference, which keeps none of its own. */
