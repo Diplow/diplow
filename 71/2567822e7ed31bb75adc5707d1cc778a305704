@@ -1,0 +1,82 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/system.test.ts
+  s_add1a77a88c179::t_59d0fe7a50907a 48-50,53,63,132,135,142,151
+  s_add1a77a88c179::t_fc39e1abba98cb 54,58,143
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261005053933_leaf-slots/migration.sql
+  s_add1a77a88c179::t_6c30865c4c1e22 1
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/schema.ts
+  s_add1a77a88c179::t_6c30865c4c1e22 148-151,173
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/help/help.test.ts
+  s_add1a77a88c179::t_59d0fe7a50907a 63-65,67,87-89,187
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_add1a77a88c179::t_fc39e1abba98cb 146
+  s_add1a77a88c179::t_304e844a65fc63 155-157
+  s_add1a77a88c179::t_3cb43b21f97d20 14,28-35,40-41,145,148-150,181-182,217-220,222-223,231-234,240-241,258-261,267-268,271-272,278-280,285-286,289-290,304-307
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/errors/messages.ts
+  s_add1a77a88c179::t_9a5709f6e56c69 38
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/writes.test.ts
+  s_add1a77a88c179::t_6fd85119d3c9dc 27,51-52,68,72-73,80-81,164,166,177-179
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.test.ts
+  s_add1a77a88c179::t_f6a84bc4989ea7 10,17-18,23-24,27,76-77,119
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_add1a77a88c179::t_9a5709f6e56c69 192
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/errors.ts
+  s_add1a77a88c179::t_2f634575fadeaf 21-23,42-50,65
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.ts
+  s_add1a77a88c179::t_f6a84bc4989ea7 1-5,32,73-78,92
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.test.ts
+  s_add1a77a88c179::t_59d0fe7a50907a 75,80,137-138,156-157,160,163,167,224,242,245,248,259-260,307,322,397,400-402,408,414,449,501,503,536,565-566,589,607
+  s_add1a77a88c179::t_fc39e1abba98cb 508
+  s_add1a77a88c179::t_ad17912a2fb87c 608
+  s_add1a77a88c179::t_1b80cc2b48d216 51-53,98,517,545
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/mcp.test.ts
+  s_add1a77a88c179::t_6fd85119d3c9dc 111,137,160,176
+  s_add1a77a88c179::t_29babc59afce08 138,161
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/leaves/leaves.test.ts
+  s_add1a77a88c179::t_693fbe42ca680c 1-44,47-92,101-129,131-133,148,154-197
+  s_add1a77a88c179::t_f78a0dfee6db57 45-46,93-100,130,134-147,149-153
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261005053933_leaf-slots/snapshot.json
+  s_add1a77a88c179::t_6c30865c4c1e22 1-1318
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/system.ts
+  s_add1a77a88c179::t_30baf8008df0e3 105
+  s_add1a77a88c179::t_9f541a97d82bc7 2-3,17,21-22,24-32,84-95,97,99-100,106-107,112,133-134,136-137,158-159,164-176,217-218,220,223
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/leaves/leaves.ts
+  s_add1a77a88c179::t_9672cf06c37cc1 1-30
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/tile.ts
+  s_add1a77a88c179::t_31eab5651159dd 15-24
+  s_add1a77a88c179::t_13ebccba47310a 49-62
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.ts
+  s_add1a77a88c179::t_1d855dda547b56 44
+  s_add1a77a88c179::t_392293e5c340fe 21-28
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/TileActions.tsx
+  s_add1a77a88c179::t_ff397aa61db11d 176
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_add1a77a88c179::t_9a5709f6e56c69 192
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/errors/messages.test.ts
+  s_add1a77a88c179::t_096b256d6007d7 19
+  s_add1a77a88c179::t_9a5709f6e56c69 112-115,147-150
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.test.ts
+  s_add1a77a88c179::t_5ccb7fea36c32e 237-243,249-255,258,264
+  s_add1a77a88c179::t_6fd85119d3c9dc 101-103,110,116,128-130,133,146-147,213
+  s_add1a77a88c179::t_e302b20f03d92a 9,277-287,302,326
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.test.ts
+  s_add1a77a88c179::t_f6a84bc4989ea7 54-55
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/tools.ts
+  s_add1a77a88c179::t_b49a412001419b 84-88
+  s_add1a77a88c179::t_14126b1979cea9 171-174,180,182-184,187-189,194-196,210-211,217,263-265,272,291-292,297,340
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "712567822e7ed31bb75adc5707d1cc778a305704",
+  "prompts": {},
+  "sessions": {
+    "s_add1a77a88c179": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d3373e9-3681-410c-a221-392366b8a522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
