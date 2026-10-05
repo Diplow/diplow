@@ -1,0 +1,31 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/kept/kept.test.ts
+  s_add1a77a88c179::t_256b3a6c7ce087 3,292-298,300-306
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE.md
+  s_add1a77a88c179::t_6512d2c162baf7 21,27
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-import-export/decisions.md
+  s_add1a77a88c179::t_6512d2c162baf7 27
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_add1a77a88c179::t_6512d2c162baf7 49
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/schema.ts
+  s_add1a77a88c179::t_256b3a6c7ce087 150-152,180
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/kept/kept.ts
+  s_add1a77a88c179::t_062e42ecc49ec3 7,149,152,163
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/tiles.ts
+  s_add1a77a88c179::t_256b3a6c7ce087 12,29,32-33,97,100
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "29bc05d626d15a3167dfa99f2bf36436ecfe9f45",
+  "prompts": {},
+  "sessions": {
+    "s_add1a77a88c179": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d3373e9-3681-410c-a221-392366b8a522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
