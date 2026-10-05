@@ -25,7 +25,7 @@ export interface ToName {
  * however they are cased: a folder's own file and its private one (the shape's `bodyFiles`), and what
  * it always leaves out (its built-in exclusions, `.hexframe/` among them).
  */
-const shapeNames = ['CLAUDE.md', '-CLAUDE.md', '.hexframe', '.git', 'node_modules']
+export const shapeNames = ['CLAUDE.md', '-CLAUDE.md', '.hexframe', '.git', 'node_modules']
 
 const markdown = /\.md$/i
 
@@ -83,9 +83,7 @@ export function slugOf(title: string): string {
 const numbered = { branch: /^([1-6])-(.+)$/, leaf: /^([1-6])-(.+)$/, context: /^\.([1-6])-(.+)$/ }
 
 /** A Tile being named: where it stands, and the stem its name is made of. */
-interface Draft extends ToName {
-  readonly stem: string
-}
+type Draft<E extends ToName = ToName> = E & { readonly stem: string }
 
 /** The name a stem makes for its kind: a folder as it is, a dot folder, a Markdown file. */
 function nameOf({ kind, stem, verbatim }: Draft): string {
@@ -144,33 +142,66 @@ const rounds = 3
 /** The names of a folder, cased as a file system that ignores case compares them. */
 const folded = (name: string) => name.toLowerCase()
 
+/** What an entry exports as: the name it is written under, and whether as its content alone. */
+export interface Named {
+  readonly exportName: string
+  readonly verbatim: boolean
+}
+
+/** The naming in force in a folder, which names its entries. */
+type FolderNaming = Readonly<{ folderPattern: string; fileName: string }>
+
 /**
- * The names these entries of one folder export under, in their order. `folderPattern` and `fileName`
- * are the naming in force in the folder: the pattern names what has no Name, and the folder's own
- * file takes `fileName`, so nothing else does. Throws, a defect, rather than return a name that isn't
- * one path segment or that two entries would share: such a name is never written.
+ * What these entries of one folder export as, in their order. `folderPattern` and `fileName` are the
+ * naming in force in the folder: the pattern names what has no Name, and the folder's own file takes
+ * `fileName`, so nothing else does. A Leaf written as its content alone reads back titled by its
+ * file's name, so one that had to take another name than its own is written as Markdown instead, and
+ * its Title survives. Throws, a defect, rather than return a name that isn't one path segment or that
+ * two entries would share: such a name is never written.
  */
-export function namesIn(
-  entries: ReadonlyArray<ToName>,
-  { folderPattern, fileName }: { folderPattern: string; fileName: string },
-): ReadonlyArray<string> {
+export function namesIn<E extends ToName>(
+  entries: ReadonlyArray<E>,
+  naming: FolderNaming,
+): ReadonlyArray<E & Named> {
+  const drafts = draftsIn(entries, naming)
+  if (drafts.some(isRenamedVerbatim)) {
+    return namesIn(
+      drafts.map((draft) => (isRenamedVerbatim(draft) ? { ...draft, verbatim: false } : draft)),
+      naming,
+    )
+  }
+  return drafts.map((draft) => ({
+    ...draft,
+    exportName: nameOf(draft),
+    verbatim: draft.verbatim === true,
+  }))
+}
+
+/** A Leaf to write as its content alone that had to take another name than its own. */
+const isRenamedVerbatim = (draft: Draft) => draft.verbatim === true && nameOf(draft) !== draft.name
+
+/** The drafts of a folder's entries, each numbered until every one reads back where it stands. */
+function draftsIn<E extends ToName>(
+  entries: ReadonlyArray<E>,
+  { folderPattern, fileName }: FolderNaming,
+): ReadonlyArray<Draft<E>> {
   const reserved = new Set([fileName, ...shapeNames].map(folded))
-  let drafts: ReadonlyArray<Draft> = entries.map((entry) => ({
+  let drafts: ReadonlyArray<Draft<E>> = entries.map((entry) => ({
     ...entry,
     stem: stemFor(entry, folderPattern),
   }))
   for (let round = 0; round < rounds; round++) {
     const misread = misreadIn(drafts, reserved)
     if (misread.size === 0) break
-    drafts = drafts.map((entry) =>
-      misread.has(entry) ? { ...entry, stem: withNumber(entry.stem, entry.direction) } : entry,
+    drafts = drafts.map((draft) =>
+      misread.has(draft) ? { ...draft, stem: withNumber(draft.stem, draft.direction) } : draft,
     )
   }
   const names = drafts.map(nameOf)
   if (misreadIn(drafts, reserved).size > 0 || !names.every(isSegment)) {
     throw new Error(`An export cannot name a folder's entries apart: ${names.join(', ')}`)
   }
-  return names
+  return drafts
 }
 
 /**

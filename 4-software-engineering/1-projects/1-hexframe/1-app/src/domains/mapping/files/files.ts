@@ -31,42 +31,42 @@ type Entry =
   | { readonly _tag: 'Leaf'; readonly tile: LeafTile }
   | { readonly _tag: 'Reference'; readonly held: Reference | BrokenReference }
 
+/** An entry of a folder with what names it: its kind, its Direction, its Title, its Name. */
+type ToWrite = ToName & { readonly entry: Entry }
+
 /** A folder's entries with what names them: its Branches, its Leaves, its Context. */
-function entriesOf(tile: SystemTile): ReadonlyArray<readonly [Entry, ToName]> {
+function entriesOf(tile: SystemTile): ReadonlyArray<ToWrite> {
   const slots = <T>(record: Partial<Record<number, T>>) =>
     Object.entries(record).flatMap(([slot, held]) =>
       held === undefined ? [] : [[Math.abs(Number(slot)) as Direction, held] as const],
     )
-  const folder = (kind: EntryKind, tile: SystemTile, direction: Direction) =>
-    [
-      { _tag: 'Folder', tile },
-      { kind, direction, title: tile.title, name: tile.name },
-    ] as const
+  const folder = (kind: EntryKind, tile: SystemTile, direction: Direction): ToWrite => ({
+    entry: { _tag: 'Folder', tile },
+    kind,
+    direction,
+    title: tile.title,
+    name: tile.name,
+  })
   return [
     ...slots(tile.branches).map(([direction, branch]) => folder('branch', branch, direction)),
-    ...slots(tile.leaves).map(
-      ([direction, leaf]) =>
-        [
-          { _tag: 'Leaf', tile: leaf },
-          {
-            kind: 'leaf',
-            direction,
-            title: leaf.title,
-            name: leaf.name,
-            verbatim: isVerbatim(leaf),
-          },
-        ] as const,
-    ),
-    ...slots<NonNullable<Held>>(tile.context).map(([direction, held]) =>
+    ...slots(tile.leaves).map(([direction, leaf]): ToWrite => ({
+      entry: { _tag: 'Leaf', tile: leaf },
+      kind: 'leaf',
+      direction,
+      title: leaf.title,
+      name: leaf.name,
+      verbatim: isVerbatim(leaf),
+    })),
+    ...slots<NonNullable<Held>>(tile.context).map(([direction, held]): ToWrite =>
       held._tag === 'Tile'
         ? folder('context', held, direction)
-        : ([
-            { _tag: 'Reference', held },
-            { kind: 'context', direction, title: titleOf(held) },
-          ] as const),
+        : { entry: { _tag: 'Reference', held }, kind: 'context', direction, title: titleOf(held) },
     ),
   ]
 }
+
+/** A folder's entries, each with what it exports as, under the naming in force in the folder. */
+const namedIn = (tile: SystemTile, naming: Naming) => namesIn(entriesOf(tile), naming)
 
 /** The Title a Reference's file carries: its Tile's, or `broken` when its Tile is gone. */
 const titleOf = (held: Reference | BrokenReference) =>
@@ -96,6 +96,7 @@ type Placed =
       readonly tile: LeafTile
       readonly folder: string
       readonly name: string
+      readonly verbatim: boolean
     }
   | {
       readonly _tag: 'Reference'
@@ -110,20 +111,18 @@ type Placed =
  * and its Leaves.
  */
 function placed(tile: SystemTile, folder: string, naming: Naming): ReadonlyArray<Placed> {
-  const entries = entriesOf(tile)
-  const names = namesIn(
-    entries.map(([, toName]) => toName),
-    naming,
+  const below = namedIn(tile, naming).flatMap(
+    ({ entry, exportName, verbatim }): ReadonlyArray<Placed> => {
+      if (entry._tag === 'Leaf') {
+        return [{ _tag: 'Leaf', tile: entry.tile, folder, name: exportName, verbatim }]
+      }
+      const path = join(folder, exportName)
+      if (entry._tag === 'Reference') {
+        return [{ _tag: 'Reference', held: entry.held, folder: path, fileName: naming.fileName }]
+      }
+      return placed(entry.tile, path, inherited(naming, entry.tile))
+    },
   )
-  const below = entries.flatMap(([entry], index): ReadonlyArray<Placed> => {
-    const name = names[index] ?? ''
-    if (entry._tag === 'Leaf') return [{ _tag: 'Leaf', tile: entry.tile, folder, name }]
-    const path = join(folder, name)
-    if (entry._tag === 'Reference') {
-      return [{ _tag: 'Reference', held: entry.held, folder: path, fileName: naming.fileName }]
-    }
-    return placed(entry.tile, path, inherited(naming, entry.tile))
-  })
   const config = tile.config === undefined ? undefined : partsOf(tile.config)
   return [{ _tag: 'Folder', tile, folder, naming, config }, ...below]
 }
@@ -159,8 +158,8 @@ function filesOf(
   { links, link }: { links: ReadonlyMap<string, string>; link: LinkOf },
 ): ReadonlyArray<File> {
   if (written._tag === 'Leaf') {
-    const { tile, folder, name } = written
-    const content = isVerbatim(tile) ? tile.body : markdownOf(fieldsOf(tile, folder), tile.body)
+    const { tile, folder, name, verbatim } = written
+    const content = verbatim ? tile.body : markdownOf(fieldsOf(tile, folder), tile.body)
     return [{ path: join(folder, name), content }]
   }
   if (written._tag === 'Reference') {
@@ -186,23 +185,21 @@ function filesOf(
 /** Where the Tile of an id stands in a System: a folder with the naming in force at it, or a Leaf. */
 type Found =
   | { readonly _tag: 'Folder'; readonly tile: SystemTile; readonly naming: Naming }
-  | { readonly _tag: 'Leaf'; readonly tile: LeafTile; readonly name: string }
+  | {
+      readonly _tag: 'Leaf'
+      readonly tile: LeafTile
+      readonly name: string
+      readonly verbatim: boolean
+    }
 
 /** The Tile of this id at or below `tile`, the naming above it being `above`. */
 function find(tile: SystemTile, id: string, above: Naming): Found | undefined {
   const naming = inherited(above, tile)
   if (tile.id === id) return { _tag: 'Folder', tile, naming }
-  const entries = entriesOf(tile)
-  const index = entries.findIndex(([entry]) => entry._tag === 'Leaf' && entry.tile.id === id)
-  const leaf = entries[index]?.[0]
-  if (leaf?._tag === 'Leaf') {
-    const names = namesIn(
-      entries.map(([, toName]) => toName),
-      naming,
-    )
-    return { _tag: 'Leaf', tile: leaf.tile, name: names[index] ?? '' }
-  }
-  for (const [entry] of entries) {
+  for (const { entry, exportName, verbatim } of namedIn(tile, naming)) {
+    if (entry._tag === 'Leaf' && entry.tile.id === id) {
+      return { _tag: 'Leaf', tile: entry.tile, name: exportName, verbatim }
+    }
     const found = entry._tag === 'Folder' ? find(entry.tile, id, naming) : undefined
     if (found !== undefined) return found
   }
