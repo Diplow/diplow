@@ -179,6 +179,7 @@ describe('a zip the user gave', () => {
         {
           'notes/CLAUDE.md': '---\ntitle: Notes\n---\n',
           'notes/1-a/CLAUDE.md': '',
+          'notes/.git/HEAD': 'ref',
           '__MACOSX/notes/._CLAUDE.md': png,
         },
         'Archive.zip',
@@ -186,6 +187,8 @@ describe('a zip the user gave', () => {
     )
     expect(ready).toMatchObject({ upload: { name: 'notes.zip' } })
     expect([...ready.files].sort()).toEqual(['1-a/CLAUDE.md', 'CLAUDE.md'])
+    // What was left out reads from the folder sent, as the server's answer does.
+    expect(ready.leftOut).toEqual(expect.arrayContaining([{ path: '.git', reason: 'Excluded' }]))
     const beside = await readyOf(zip({ 'notes/CLAUDE.md': '', 'README.md': '' }))
     expect(beside).toMatchObject({ upload: { name: 'vault.zip' } })
   })

@@ -7,6 +7,8 @@ import { dropped, pickedFile, pickedFolder } from '#/front/client/mapping/files'
 import { type ImportPlace, type Imported, useImportTiles } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 
+import { isLeafSlot } from '../../tree'
+
 type Landed = Extract<Imported, { _tag: 'Landed' }>
 type Refused = Extract<Imported, { _tag: 'Refused' }>
 
@@ -106,7 +108,7 @@ function viewOf(imported: Imported | undefined, pending: boolean): ImportView {
  */
 export function useImportState(place: ImportPlace) {
   const importing = useImportTiles()
-  const takes = { fileOnly: place._tag === 'Slot' && typeof place.slot === 'object' }
+  const takes = { fileOnly: place._tag === 'Slot' && isLeafSlot(place.slot) }
   const start = (given: Given | Promise<Given> | undefined) => {
     if (given !== undefined && !importing.isPending) importing.mutate({ given, place })
   }

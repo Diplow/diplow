@@ -114,6 +114,13 @@ async function folder(
   const texts = read.filter(({ binary }) => !binary)
   const wrapper = unwrap ? wrappingFolder(texts) : undefined
   const name = wrapper ?? given
+  // Every path the report lists reads from the folder sent, the wrapper's own left-out ones included.
+  if (wrapper !== undefined) {
+    for (const [index, { path, reason }] of leftOut.entries()) {
+      if (path.startsWith(`${wrapper}/`))
+        leftOut[index] = { path: path.slice(wrapper.length + 1), reason }
+    }
+  }
   const sent =
     wrapper === undefined
       ? texts

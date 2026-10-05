@@ -398,6 +398,25 @@ describe('what a sender leaves out before an upload', () => {
     ).toHaveLength(2)
   })
 
+  it('leaves out nothing the reading would have read: the same plan from what is kept', () => {
+    const files = [
+      file('CLAUDE.md', note('title: Vault\npreview: All of it')),
+      file('1-a/CLAUDE.md', note('title: A')),
+      file('1-a/notes.md', note('title: Notes', 'Body')),
+      file('1-a/.env', 'SECRET=x'),
+      file('1-a/dist/out.md', 'built'),
+      file('1-a/.hexframe/exclusions.yaml', 'exclude: [dist/]'),
+      file('.1-why/CLAUDE.md', note('title: Why')),
+      file('.hexframe/config.yaml', 'fileName: CLAUDE.md'),
+      file('.hexframe/notes.txt', 'x'),
+      file('node_modules/x/index.js', 'x'),
+      file('.git/HEAD', 'ref'),
+      file('.DS_Store', 'x'),
+    ]
+    const { kept } = leftOutOf(files, new Map(files.map(({ path, bytes }) => [path, bytes])))
+    expect(planOf(folder(kept)).root).toEqual(planOf(folder(files)).root)
+  })
+
   it('names the settings a reading reads, in any folder', () => {
     expect(isSettingsFile('.hexframe/config.yaml')).toBe(true)
     expect(isSettingsFile('a/b/.hexframe/exclusions.yaml')).toBe(true)
