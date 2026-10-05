@@ -1,10 +1,11 @@
-// What the user can do to the centered Tile: edit it, move it, delete it; and the form a new Tile or an
-// edited one is written in, in a drawer. The drawer's open state and the move under way are the URL's.
+// What the user can do to the centered Tile: edit it, move it, export it, delete it; and the form a new
+// Tile or an edited one is written in, in a drawer. The drawer's open state and the move under way are the URL's.
 // A refusal shows where its channel sends it: on the form's field, or in a toast.
 import {
   useCreateTileSubmit,
   useDeleteTile,
   useEditTileSubmit,
+  useExportTile,
   type SystemTile,
   type TileContent,
   type TileSubmit,
@@ -52,6 +53,7 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
     <>
       {found !== undefined && (
         <CenteredTile
+          id={found.tile.id}
           title={center.title}
           description={parent === undefined ? m.system_root_description() : center.preview}
           onEdit={() => {
@@ -93,6 +95,8 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
 }
 
 interface CenteredTileProps {
+  /** The centered Tile's id, which its export names. */
+  id: string
   title: string
   description: string
   onEdit: () => void
@@ -101,8 +105,9 @@ interface CenteredTileProps {
   deletion?: { id: string; onDeleted: () => void }
 }
 
-function CenteredTile({ title, description, onEdit, onMove, deletion }: CenteredTileProps) {
+function CenteredTile({ id, title, description, onEdit, onMove, deletion }: CenteredTileProps) {
   const remove = useDeleteTile()
+  const exporting = useExportTile()
   return (
     <Card
       title={title}
@@ -117,6 +122,16 @@ function CenteredTile({ title, description, onEdit, onMove, deletion }: Centered
               {m.system_move()}
             </Button>
           )}
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={exporting.isPending}
+            onClick={() => {
+              exporting.mutate({ id })
+            }}
+          >
+            {m.system_export()}
+          </Button>
           {deletion && (
             <ConfirmDialog
               trigger={

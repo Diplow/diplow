@@ -17,6 +17,7 @@ import {
   useDeleteTile,
   useEditTile,
   useEditTileSubmit,
+  useExportTile,
   useHelp,
   useMoveTile,
   useSwapTiles,
@@ -36,6 +37,7 @@ vi.mock('#/api/mapping/mapping', () => ({
   deleteTile: vi.fn(),
   createReference: vi.fn(),
   deleteReference: vi.fn(),
+  exportTile: vi.fn(),
 }))
 
 const titleMissing = { _tag: 'TitleMissing', kind: 'Invalid', fields: ['title'] } as const
@@ -43,6 +45,7 @@ const titleMissing = { _tag: 'TitleMissing', kind: 'Invalid', fields: ['title'] 
 afterEach(() => {
   cleanup()
   vi.clearAllMocks()
+  vi.restoreAllMocks()
 })
 
 const root = {
@@ -163,6 +166,47 @@ describe("Mapping's hooks", () => {
       requestId: 'req-1',
     })
     expect(Mapping.system).toHaveBeenCalledTimes(2)
+  })
+})
+
+describe('the export of a Tile', () => {
+  it('has the browser save the zip under the name it came with, the System not read again', async () => {
+    answering(undefined)
+    const zip = new Response('PK', {
+      headers: { 'content-disposition': 'attachment; filename="games.zip"' },
+    })
+    vi.mocked(Mapping.exportTile).mockResolvedValue(zip)
+    const saved = vi.fn()
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:games')
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (
+      this: HTMLAnchorElement,
+    ) {
+      saved(this.download, this.href)
+    })
+    const { result } = render(useExportTile)
+    await waitFor(() => {
+      expect(result.current.system.isSuccess).toBe(true)
+    })
+    await result.current.hook.mutateAsync({ id: 'games' })
+    expect(Mapping.exportTile).toHaveBeenCalledWith({ data: { id: 'games' } })
+    expect(saved).toHaveBeenCalledWith('games.zip', 'blob:games')
+    expect(document.querySelector('a[download]')).toBeNull()
+    expect(Mapping.system).toHaveBeenCalledOnce()
+  })
+
+  it('throws a refusal as a CallFailed holding it, and saves nothing', async () => {
+    answering(undefined)
+    vi.mocked(Mapping.exportTile).mockResolvedValue({
+      ok: false,
+      failure: { _tag: 'TileNotFound', kind: 'NotFound' },
+      requestId: 'req-1',
+    })
+    const { result } = render(useExportTile)
+    const failed = await result.current.hook
+      .mutateAsync({ id: 'gone' })
+      .catch((error: unknown) => error)
+    expect(failed).toMatchObject({ scope: 'exportTile', requestId: 'req-1' })
+    expect(failed).toBeInstanceOf(CallFailed)
   })
 })
 

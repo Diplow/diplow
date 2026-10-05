@@ -62,7 +62,9 @@ export function unzipped(archive: Uint8Array): ReadonlyArray<Entry> {
 }
 
 /** Zip, as the server's runtime sees it: a list of files streamed into an archive. */
-export class Zip extends Context.Service<Zip, { readonly zipped: typeof zipped }>()('hexframe/Zip') {}
+export class Zip extends Context.Service<Zip, { readonly zipped: typeof zipped }>()(
+  'hexframe/Zip',
+) {}
 
 /** Zip over fflate. */
 export const layer = Layer.succeed(Zip, { zipped })

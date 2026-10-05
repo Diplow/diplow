@@ -62,10 +62,7 @@ async function aSystem() {
     run(context, Mapping.createTile({ parent: root, slot: -1, ...content('Principles') })),
   )
   await value(
-    run(
-      context,
-      Mapping.createReference({ parent: branch.id, slot: -3, target: principles.id }),
-    ),
+    run(context, Mapping.createReference({ parent: branch.id, slot: -3, target: principles.id })),
   )
   return { context, root, branch }
 }

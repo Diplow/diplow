@@ -203,6 +203,7 @@
   "system_swap_with": "Swap with {title}",
   "system_edit": "Edit",
   "system_move": "Move",
+  "system_export": "Export",
   "system_delete": "Delete",
   "system_delete_title": "Delete {title}?",
   "system_delete_description": "{title} and everything below it will be deleted, and references to them will show as broken. This cannot be undone.",
