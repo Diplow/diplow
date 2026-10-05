@@ -8,7 +8,7 @@ import { Schema } from 'effect'
 
 import type { Failure, Outcome } from '#/api/errors/failure'
 import { type Download, downloaded } from '#/api/mapping/files/download'
-import { type Given, type LeftOut, type Prepared, prepared } from '#/api/mapping/files/upload'
+import { type Given, type LeftOut, type Prepared, prepared } from './upload'
 import {
   ImportUpload,
   type NewReference,
@@ -148,7 +148,7 @@ export type Imported =
 
 /**
  * Imports what the user gave into a place of the System: the browser prunes and zips it, or refuses
- * it before sending (`api/mapping/files/upload.ts`), then the server lands it, all of it or nothing.
+ * it before sending (`./upload.ts`), then the server lands it, all of it or nothing.
  * The import is the form of its files, so its refusal, `ImportRefused`, is its answer, shown where the
  * import was given; any other failure goes to a write's channel, a toast. The System is read again
  * once it settles.

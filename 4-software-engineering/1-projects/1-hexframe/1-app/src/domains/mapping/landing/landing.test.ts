@@ -154,6 +154,15 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
         _tag: 'DirectionTaken',
       })
       expect(yield* system(named.accountId)).toMatchObject({ title: 'Ulysse', branches: {} })
+      // An untitled Root holding a Preview or a Body written before its name is no empty System.
+      for (const written of [{ preview: 'Me, in short.' }, { body: '# Me' }]) {
+        const untitled = yield* someone
+        yield* transactional(Mapping.editTile(untitled.accountId, untitled.root.id, written))
+        expect(yield* Effect.flip(land(untitled.accountId, { _tag: 'Root' }))).toMatchObject({
+          _tag: 'DirectionTaken',
+        })
+        expect(yield* system(untitled.accountId)).toMatchObject({ title: '', ...written })
+      }
     }),
   )
 

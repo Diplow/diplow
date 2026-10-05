@@ -2,20 +2,17 @@
 // at work, landed or refused, and each line of its report in the page's language. The import itself is
 // a write, Query's (`useImportTiles`); the files come from the browser's pickers and drops, read by
 // `front/client/mapping/files.ts`. The component renders this and calls the actions, nothing more.
-import type { Given } from '#/api/mapping/files/upload'
 import { dropped, pickedFile, pickedFolder } from '#/front/client/mapping/files'
 import { type ImportPlace, type Imported, useImportTiles } from '#/front/client/mapping/queries'
+import type { Given, LeftOut } from '#/front/client/mapping/upload'
 import { m } from '#/paraglide/messages'
 
 import { isLeafSlot } from '../../tree'
 
-type Landed = Extract<Imported, { _tag: 'Landed' }>
 type Refused = Extract<Imported, { _tag: 'Refused' }>
 
-/** Why a file stayed behind: left out by the browser, or skipped by the server. */
-type Reason = Imported['leftOut'][number]['reason'] | Landed['report']['skipped'][number]['reason']
-
-const reasons: Record<Reason, () => string> = {
+/** Why a file stayed behind, left out by the browser or skipped by the server alike. */
+const reasons: Record<LeftOut['reason'], () => string> = {
   Excluded: m.system_import_reason_excluded,
   DotFile: m.system_import_reason_dot_file,
   Binary: m.system_import_reason_binary,

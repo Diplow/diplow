@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import type { Given, GivenFile } from '#/api/mapping/files/upload'
+import type { Given, GivenFile } from './upload'
 
 import { dropped, pickedFile, pickedFolder } from './files'
 

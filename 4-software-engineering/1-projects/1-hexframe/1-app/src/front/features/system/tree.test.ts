@@ -3,15 +3,7 @@ import { describe, expect, it } from 'vitest'
 import type { SystemTile } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 
-import {
-  canvasTree,
-  isContextSlot,
-  isEmptySystem,
-  isLeafSlot,
-  slotOf,
-  swapsWith,
-  tileIn,
-} from './tree'
+import { canvasTree, isContextSlot, isLeafSlot, slotOf, swapsWith, tileIn } from './tree'
 
 const tile = (
   id: string,
@@ -176,24 +168,6 @@ describe('slotOf and isContextSlot', () => {
     expect(isContextSlot(-6)).toBe(true)
     expect(isContextSlot(6)).toBe(false)
     expect(isContextSlot({ leaf: 6 })).toBe(false)
-  })
-})
-
-describe('isEmptySystem', () => {
-  const root = { ...tile('root'), title: '', preview: '' }
-
-  it('is an untitled Root with nothing below it', () => {
-    expect(isEmptySystem(root)).toBe(true)
-  })
-
-  it('is not once the Root is named, or holds a Branch, a Leaf or a Context Tile', () => {
-    expect(isEmptySystem({ ...root, title: 'Ulysse' })).toBe(false)
-    // An import would replace a Preview or a Body written before the Root's name.
-    expect(isEmptySystem({ ...root, preview: 'Me' })).toBe(false)
-    expect(isEmptySystem({ ...root, body: '# Me' })).toBe(false)
-    expect(isEmptySystem({ ...root, branches: { 1: tile('a') } })).toBe(false)
-    expect(isEmptySystem({ ...root, leaves: { 2: { ...tile('l'), _tag: 'Tile' } } })).toBe(false)
-    expect(isEmptySystem({ ...root, context: { [-1]: tile('why') } })).toBe(false)
   })
 })
 

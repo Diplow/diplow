@@ -148,17 +148,5 @@ function below(parent: SystemTile, id: string): Found | undefined {
   return undefined
 }
 
-/**
- * Whether the System is empty, as Mapping adds it: its Root untitled, with nothing below it. Only an
- * empty System takes an import as its Root, which replaces the Root's Preview and Body, so a Root
- * that holds either, written before its name, is not offered one.
- */
-export const isEmptySystem = (root: SystemTile) =>
-  [root.title, root.preview, root.body].every((text) => text === '') && holdsNothing(root)
-
-/** Whether nothing stands below a Tile: no Branch, no Leaf, no Context Tile nor Reference. */
-export const holdsNothing = ({ branches, leaves, context }: SystemTile) =>
-  [branches, leaves, context].every((below) => Object.keys(below).length === 0)
-
 /** Whether a slot is a Leaf's, which takes one file alone and nothing below it. */
 export const isLeafSlot = (slot: typeof Slot.Type) => typeof slot === 'object'

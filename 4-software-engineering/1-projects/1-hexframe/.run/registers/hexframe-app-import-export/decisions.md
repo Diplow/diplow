@@ -10,7 +10,8 @@ preview: >-
   files, how an export names and writes them, how its zip reaches the
   browser, how an import reads files back into a plan, how a plan lands, how
   the browser prunes, zips and sends an import from an empty slot, how the
-  canvas lays itself out with the shape, and what STACK.md now gets wrong.
+  canvas lays itself out with the shape, what STACK.md now gets wrong, and
+  what cubic's review of the merge into main changed.
 ---
 # Decisions
 
@@ -124,3 +125,13 @@ Which Leaf shows as code is Mapping's `isVerbatim`, the rule an export writes a 
 The code block is `CodeBlock` in `front/ui/data/Markdown.tsx`, the seam STACK.md names for a Tile's content. No Body is rendered as Markdown anywhere yet, so the seam adds no dependency now: TanStack Markdown (alpha) comes in that file when a Body is first rendered, and a fenced block then renders through `CodeBlock`. It scrolls rather than wraps, and takes the focus so the keyboard scrolls it; `/dev/ui` shows it.
 
 Checked in the browser on a local dev server: `/dev/ui`'s `CodeBlock`, light and dark, English and French, its long line scrolling. The signed-in steps the ticket lists (create a Leaf, grow it, shrink it back, a refused grow, a `run.yaml` Leaf's card) need an account on the dev server, which this unit did not create: they are left to a human (`HEX-61#PARK-1`), and the hook's tests cover what each step offers and sends.
+
+### DEC-16 cubic's review of the merge into main: one rule for an empty System, the browser's pruning in the front
+
+PR #71, `project/import-export` into `main`, reviewed by cubic locally; every finding fixed on the branch.
+
+- **An empty System is Mapping's one rule.** `asRoot` took an untitled Root with a Preview or a Body as empty and replaced them, which DEC-12 knew and the front's stricter `isEmptySystem` only hid from the card: a stale page or a direct call replaced them. `isEmptySystem` and `holdsNothing` are now Mapping's, in `leaves/leaves.ts`, on a System as a read finds it (`SystemTile`), so no change to the read was needed, the reason DEC-12 waived it: `asRoot` reads the locked rows into a System and refuses one that isn't empty, a Root's Preview or Body included, and the front takes both rules from `api/mapping/rules.ts`, a pure module apart from the server functions, which the front's tests stand in for. `tree.ts` keeps no copy.
+- **The browser's pruning is the front's.** DEC-12 put the composition in `api/mapping/files/upload.ts`; it is browser logic, so it moved to `front/client/mapping/upload.ts`, with its test. The front still never imports a domain or a repository (`no-front-importing-domains-or-repositories`): `api/mapping/files/upload.ts` now only offers it Mapping's pure checks and the zip repository's `unpacked` and `archived`, as `download.ts` offers `isVerbatim`. The test builds and reads back its archives through those, since `repositories/zip/testing.ts` is no front's.
+- **One `LeftOut`.** `Skipped`, what a reading skipped, and `LeftOut`, what a sender left out, shared two reasons; `LeftOut` now holds all four (`Excluded`, `DotFile`, `Binary`, `Shadowed`), a sender never telling `Shadowed`, and the drawer reads one reason table.
+- **`namingOf` deleted.** Only its tests called it, while `exportOf` works out the naming in force on its own way down; `kept.test.ts` checks the inherited naming through the paths an export writes.
+- **`files/` and `landing/` have a `CLAUDE.md` each**, Mapping's table a line and a link for each.

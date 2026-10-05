@@ -1,11 +1,11 @@
 import { Exit, Option, Schema } from 'effect'
 import { describe, expect, it } from 'vitest'
 
-import { archiveOf, unzipped } from '#/repositories/zip/testing'
+import { archived, unpacked } from '#/api/mapping/files/upload'
+import { ImportUpload } from '#/api/mapping/mapping'
+import * as Mapping from '#/api/mapping/programs'
+import { noKey, run, type StartContext } from '#/api/server/run'
 
-import { noKey, run, type StartContext } from '../../server/run'
-import { ImportUpload } from '../mapping'
-import * as Mapping from '../programs'
 import { type Given, type GivenFile, type Prepared, prepared } from './upload'
 
 // What the browser makes of what the user gave, before a byte is sent: a folder or a zip pruned of
@@ -28,12 +28,32 @@ const folder = (files: ReadonlyArray<GivenFile>, name = 'vault'): Given => ({
 
 const png = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00])
 
+/** An archive holding these files, by their paths, in this order, text in UTF-8. */
+const archiveOf = (files: Readonly<Record<string, string | Uint8Array>>) =>
+  archived(
+    Object.entries(files).map(([path, content]) => ({
+      path,
+      bytes: typeof content === 'string' ? new TextEncoder().encode(content) : content,
+    })),
+  )
+
+/** The paths of the files an archive the browser made holds, read back as the server would. */
+function pathsIn(archive: Uint8Array) {
+  const opened = unpacked(archive, {
+    entries: 10_000,
+    entryBytes: 16_000_000,
+    totalBytes: 64_000_000,
+  })
+  if (opened._tag !== 'Unpacked') throw new Error(opened._tag)
+  return opened.entries.flatMap(({ path, kind }) => (kind === 'Folder' ? [] : [path]))
+}
+
 /** What is ready to send, which must be ready, with its archive's files read back by path. */
 async function readyOf(what: Given) {
   const ready = await prepared(what)
   if (ready._tag !== 'Ready') throw new Error(JSON.stringify(ready.faults))
   const bytes = new Uint8Array(await ready.upload.arrayBuffer())
-  const files = ready.as === 'Zip' ? unzipped(bytes).map(({ path }) => path) : []
+  const files = ready.as === 'Zip' ? pathsIn(bytes) : []
   return { ...ready, files }
 }
 

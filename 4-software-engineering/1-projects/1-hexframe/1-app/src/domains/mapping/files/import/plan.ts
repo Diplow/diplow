@@ -62,27 +62,19 @@ export interface PlannedTile<T = ReferenceTarget> extends Planned {
 }
 
 /**
- * A file an import leaves out, and why: a System can't hold a binary nor a dot file, and a folder's
- * own file shadows the shape's others beside it (`-CLAUDE.md` beside `CLAUDE.md`), which the shape
- * reads as neither its Tile nor a Leaf.
- */
-export interface Skipped {
-  readonly path: string
-  readonly reason: 'Binary' | 'DotFile' | 'Shadowed'
-}
-
-/**
- * A file a sender leaves out before an upload, and why: a name its folder's exclusions leave out, or
- * one every folder leaves out (`.git`, `node_modules`, `.hexframe/` but for the files a reading reads
- * there), a dot file, a binary. A reading would skip each of them, or read it as nothing.
+ * A file an import leaves out, and why, whether its sender left it out before an upload or its reading
+ * skipped it: a name its folder's exclusions leave out, or one every folder leaves out (`.git`,
+ * `node_modules`, `.hexframe/` but for the files a reading reads there); a binary or a dot file, which
+ * a System can't hold; a file a folder's own file shadows (`-CLAUDE.md` beside `CLAUDE.md`), which the
+ * shape reads as neither its Tile nor a Leaf. A sender never tells `Shadowed`: only a reading does.
  */
 export interface LeftOut {
   readonly path: string
-  readonly reason: 'Excluded' | 'DotFile' | 'Binary'
+  readonly reason: 'Excluded' | 'DotFile' | 'Binary' | 'Shadowed'
 }
 
 /** What an import would create, its root a Tile, or a Leaf for a file alone, and what it skipped. */
 export interface ImportPlan {
   readonly root: PlannedTile | PlannedLeaf
-  readonly skipped: ReadonlyArray<Skipped>
+  readonly skipped: ReadonlyArray<LeftOut>
 }

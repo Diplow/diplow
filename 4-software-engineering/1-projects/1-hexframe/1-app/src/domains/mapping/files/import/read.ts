@@ -21,7 +21,6 @@ import type {
   PlannedReference,
   PlannedTile,
   ReferenceTarget,
-  Skipped,
 } from './plan'
 import {
   exclusionsIn,
@@ -94,7 +93,7 @@ type Draft = PlannedTile<string>
 /** What a reading collects as it walks the import. */
 interface Reading {
   readonly faults: Array<ImportFault>
-  readonly skipped: Array<Skipped>
+  readonly skipped: Array<LeftOut>
   /** The path of each Tile read, by the path of the file it was read from, with and without `.md`. */
   readonly linkable: Map<string, string>
 }

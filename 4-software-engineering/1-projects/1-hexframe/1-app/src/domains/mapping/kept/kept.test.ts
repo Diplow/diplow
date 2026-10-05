@@ -8,6 +8,7 @@ import { type TileRow, layer as tilesLayer } from '#/repositories/database/tiles
 
 import * as Mapping from '../mapping'
 import { system } from '../mapping'
+import { exportOf } from '../files/files'
 import { systemOf } from '../system'
 import {
   Frontmatter,
@@ -18,7 +19,7 @@ import {
   keptOf,
   named,
 } from './kept'
-import { defaultNaming, inherited, namingOf } from './naming'
+import { defaultNaming, inherited } from './naming'
 
 // What a Tile keeps from the files it was imported from: first the checks, on values made by hand,
 // and the naming in force on rows made by hand; then over PGlite, a Tile keeps them through an edit, a
@@ -173,23 +174,6 @@ describe('the naming in force, on rows made by hand', () => {
     expect(root.branches[2]).not.toHaveProperty('name')
   })
 
-  it('is the defaults where no config sets any, at the Root and below it', () => {
-    expect(namingOf(root, 'root')).toEqual(defaultNaming)
-    expect(namingOf(root, 'plain')).toEqual(defaultNaming)
-  })
-
-  it('is a Tile’s own config, inherited below it, part by part, until a Tile sets its own', () => {
-    const skills = { ...defaultNaming, fileName: 'SKILL.md' }
-    for (const id of ['skills', 'skill', 'leaf']) expect(namingOf(root, id), id).toEqual(skills)
-    for (const id of ['context', 'inside']) {
-      expect(namingOf(root, id), id).toEqual({ fileName: 'SKILL.md', folderPattern: '<slug>' })
-    }
-  })
-
-  it('is nothing for a Tile the System does not hold', () => {
-    expect(namingOf(root, 'gone')).toBeUndefined()
-  })
-
   it('takes each part a config sets over the naming above it', () => {
     expect(inherited(defaultNaming, {})).toEqual(defaultNaming)
     expect(inherited(defaultNaming, { config: { folderPattern: '<slug>' } })).toEqual({
@@ -251,12 +235,19 @@ layer(TestTiles)('what a Tile keeps, over the tiles repository', (it) => {
         ...content('Ship'),
         config: yield* configured({ folderPattern: '<slug>' }),
       })
-      const skill = yield* createTile(accountId, { parent: group.id, slot: 1, ...content('Do') })
+      yield* createTile(accountId, { parent: group.id, slot: 1, ...content('Do') })
       const read = yield* system(accountId)
       expect(read.branches[1]).toMatchObject({ config: { fileName: 'SKILL.md' } })
-      expect(namingOf(read, root.id)).toEqual(defaultNaming)
-      expect(namingOf(read, skills.id)).toEqual({ ...defaultNaming, fileName: 'SKILL.md' })
-      expect(namingOf(read, skill.id)).toEqual({ fileName: 'SKILL.md', folderPattern: '<slug>' })
+      // The default file name at the Root, the one `skills` sets below it, and its folder pattern
+      // below `ship`; `skills` is named by the stem of the Name it kept, its leading dot dropped.
+      expect(exportOf(read, root.id, () => '')?.files.map(({ path }) => path)).toEqual([
+        'CLAUDE.md',
+        'skills/SKILL.md',
+        'skills/.hexframe/config.yaml',
+        'skills/4-ship/SKILL.md',
+        'skills/4-ship/.hexframe/config.yaml',
+        'skills/4-ship/do/SKILL.md',
+      ])
     }),
   )
 

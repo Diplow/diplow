@@ -1,8 +1,8 @@
-// What the user hands an import in the browser, read into what the API's browser entry takes
-// (`api/mapping/files/upload.ts`): a folder picked through `<input webkitdirectory>`, a zip or a file
+// What the user hands an import in the browser, read into what the browser's side of an import takes
+// (`./upload.ts`): a folder picked through `<input webkitdirectory>`, a zip or a file
 // picked, a folder or a file dropped. Only the listing is read here; a file's bytes are read when the
 // upload asks for them, once what the server would leave out is gone.
-import type { Given, GivenFile } from '#/api/mapping/files/upload'
+import type { Given, GivenFile } from './upload'
 
 /** What a slot takes: anything, or, a Leaf slot, one file alone, sent as it is, a zip included. */
 export interface Takes {

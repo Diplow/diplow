@@ -4,6 +4,7 @@
 // in a drawer, where an empty slot offers a new Tile or an import. The drawer's open state and the
 // move under way are the URL's. A refusal shows where its channel sends it: on the form's field, in
 // the import's report, or in a toast.
+import { isEmptySystem } from '#/api/mapping/rules'
 import {
   useCreateTileSubmit,
   useDeleteTile,
@@ -35,7 +36,7 @@ import {
 } from './search'
 import { Import } from './import/Import'
 import { type KindChange, useCenteredTileState } from './state/useCenteredTileState'
-import { isContextSlot, isEmptySystem, isLeafSlot, tileIn } from './tree'
+import { isContextSlot, isLeafSlot, tileIn } from './tree'
 
 interface TileActionsProps {
   /** The System's Root, with everything below it. */

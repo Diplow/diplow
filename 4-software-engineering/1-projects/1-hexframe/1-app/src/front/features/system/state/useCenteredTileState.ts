@@ -4,11 +4,12 @@
 // same Direction of the other kind (`useMoveTile`), refused `DirectionTaken`, in a toast, when a Tile
 // of that kind already stands there. The card renders this and calls the action, nothing more.
 import { isVerbatim } from '#/api/mapping/files/download'
+import { holdsNothing } from '#/api/mapping/rules'
 import { type SystemTile, useMoveTile } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import type { Direction } from '#/front/ui/hex/geometry/geometry'
 
-import { holdsNothing, tileIn } from '../tree'
+import { tileIn } from '../tree'
 
 /** A Tile changing kind in its own Direction: its button's name, whether it is on its way, the act. */
 export interface KindChange {

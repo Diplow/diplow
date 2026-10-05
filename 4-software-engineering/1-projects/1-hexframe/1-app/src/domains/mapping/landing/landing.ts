@@ -14,15 +14,15 @@ import type {
   IdOfLink,
   ImportPlan,
   ImportSource,
+  LeftOut,
   PlannedLeaf,
   PlannedTile,
   ReferenceTarget,
-  Skipped,
 } from '../files/import/plan'
 import { importOf } from '../files/import/read'
-import { onlyALeafIn } from '../leaves/leaves'
+import { isEmptySystem, onlyALeafIn } from '../leaves/leaves'
 import { type Placement, changing, freeSlot, untitled } from '../mapping'
-import { tileRow } from '../system'
+import { systemOf, tileRow } from '../system'
 import { type Slot, rowDirection } from '../tile'
 import { type Upload, archiveBounds, folderOf } from './archive'
 
@@ -55,7 +55,7 @@ interface ImportReport {
   readonly id: string
   readonly tiles: number
   readonly references: number
-  readonly skipped: ReadonlyArray<Skipped>
+  readonly skipped: ReadonlyArray<LeftOut>
 }
 
 /** How a batch names the Tile a plan's path was read from: a row of the batch, or one stored. */
@@ -167,18 +167,18 @@ const inSlot = (accountId: string, plan: ImportPlan, place: Placement) =>
   )
 
 /**
- * A plan landed as the Root of an empty System, an untitled Root with nothing below it: the plan's
- * root gives the Root its Title, Preview, Body, config and Frontmatter, and everything below it lands
- * below the Root. A System holding anything is `DirectionTaken`: the Root's place is taken.
+ * A plan landed as the Root of an empty System (`isEmptySystem`): the plan's root gives the Root its
+ * Title, Preview, Body, config and Frontmatter, and everything below it lands below the Root. A System
+ * holding anything, its Root's own content included, is `DirectionTaken`: the Root's place is taken.
  */
 const asRoot = (accountId: string, plan: ImportPlan) =>
   Effect.andThen(
     Tiles.use((tiles) => tiles.root(accountId, untitled)),
     changing(accountId, [], (rows, writes) =>
       Effect.gen(function* () {
-        const stored = rows.find(({ parentId }) => parentId === null)
+        const stored = systemOf(rows)
         if (stored === undefined) return yield* Effect.die(new Error('A Root was added, then lost'))
-        if (rows.length > 1 || stored.title !== '') return yield* new DirectionTaken()
+        if (!isEmptySystem(stored)) return yield* new DirectionTaken()
         const { root } = plan
         const nameOf: NameOf = (path) =>
           path === root.path ? { _tag: 'Stored', id: stored.id } : { _tag: 'Batch', key: path }
