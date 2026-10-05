@@ -65,11 +65,17 @@ export class HelpReadOnly extends Schema.TaggedError<HelpReadOnly>()('HelpReadOn
 
 /**
  * What an import finds wrong in its files, each by the path at fault from the import's root (`''` the
- * root itself): a ring of more than six Branches, Leaves or Context folders (the folder's path); two
- * names claiming one Direction (the later in name order); a Title, a Preview or a Body past its bound;
- * a file past the shape's 1 MB; a name that is no path segment; a folder deeper than an import goes; a
- * frontmatter that isn't YAML or keeps what a Tile can't; a `.hexframe/` file that can't be read; a
- * Reference's folder holding anything; and a file imported alone that holds nothing a System can.
+ * root itself, or the whole upload): a ring of more than six Branches, Leaves or Context folders (the
+ * folder's path); two names claiming one Direction (the later in name order); a Title, a Preview or a
+ * Body past its bound; a file past the shape's 1 MB, as it inflates; a name that is no path segment; a
+ * folder deeper than an import goes; a frontmatter that isn't YAML or keeps what a Tile can't; a
+ * `.hexframe/` file that can't be read; a Reference's folder holding anything; a file imported alone
+ * that holds nothing a System can. Then the upload's and its archive's: an upload past 4 MB; more
+ * entries than an import takes, or more bytes unpacked (at the entry that passed them); an archive
+ * that can't be read; and an entry whose path isn't plain: a symlink, an absolute path, a drive
+ * prefix (`C:`), a backslash, a `.` or `..` segment, a path that doesn't read the same once
+ * normalized (an empty segment, a character Unicode writes another way), and two entries whose paths
+ * are equal or differ only by case (the later).
  */
 const importFaults = [
   'RingOverflows',
@@ -85,6 +91,17 @@ const importFaults = [
   'ExclusionsInvalid',
   'ReferenceHoldsSomething',
   'NothingToImport',
+  'UploadTooLarge',
+  'TooManyEntries',
+  'UnpackedTooLarge',
+  'ArchiveUnreadable',
+  'Symlink',
+  'PathAbsolute',
+  'DrivePrefix',
+  'Backslash',
+  'DotSegment',
+  'PathNotNormal',
+  'PathsClash',
 ] as const
 
 /** One fault of an import, by the path at fault. */
@@ -114,4 +131,5 @@ export const mappingFailures = [
   LeafHoldsNothing,
   RootFixed,
   HelpReadOnly,
+  ImportRefused,
 ] as const

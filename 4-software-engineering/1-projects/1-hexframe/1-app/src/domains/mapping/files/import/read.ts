@@ -38,7 +38,7 @@ import {
 } from './shape'
 
 /** How many folders deep an import goes below its root. */
-const depthLimit = 16
+export const depthLimit = 16
 
 /** A folder of an import, as its file list draws it. */
 interface Folder {
