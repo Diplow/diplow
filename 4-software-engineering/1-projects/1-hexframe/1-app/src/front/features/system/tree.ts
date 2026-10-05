@@ -112,21 +112,36 @@ export function slotOf(
 export const isContextSlot = (slot: typeof Slot.Type) => typeof slot === 'number' && slot < 0
 
 /**
- * The Tile of this id, anywhere in the System, Leaves and Context Tiles included, with the Tile it
- * stands under; `undefined` when no Tile has it, as for a broken Reference.
+ * Where a Tile stands: a Leaf in its Direction under its parent, or a Tile with what it holds, under
+ * its parent in a Branch's Direction or a Context slot, or the Root, under nothing.
  */
-export function tileIn(
-  system: SystemTile,
-  id: string,
-  parent?: SystemTile,
-): { tile: SystemTile | LeafTile; parent: SystemTile | undefined } | undefined {
-  if (system.id === id) return { tile: system, parent }
+export type Found =
+  | { kind: 'leaf'; tile: LeafTile; parent: SystemTile; direction: Direction }
+  | { kind: 'branch'; tile: SystemTile; parent: SystemTile; direction: Direction }
+  | { kind: 'context'; tile: SystemTile; parent: SystemTile; slot: ContextSlot }
+  | { kind: 'root'; tile: SystemTile; parent: undefined }
+
+/**
+ * The Tile of this id, anywhere in the System, Leaves and Context Tiles included, and where it stands
+ * (`Found`); `undefined` when no Tile has it, as for a broken Reference.
+ */
+export function tileIn(system: SystemTile, id: string): Found | undefined {
+  return system.id === id ? { kind: 'root', tile: system, parent: undefined } : below(system, id)
+}
+
+/** The Tile of this id below `parent`, at any depth, and where it stands. */
+function below(parent: SystemTile, id: string): Found | undefined {
   for (const direction of directions) {
-    const leaf = system.leaves[direction]
-    if (leaf?.id === id) return { tile: leaf, parent: system }
-    const entry = system.context[contextSlot[direction]]
-    for (const below of [system.branches[direction], entry?._tag === 'Tile' ? entry : undefined]) {
-      const found = below && tileIn(below, id, system)
+    const leaf = parent.leaves[direction]
+    if (leaf?.id === id) return { kind: 'leaf', tile: leaf, parent, direction }
+    const branch = parent.branches[direction]
+    if (branch?.id === id) return { kind: 'branch', tile: branch, parent, direction }
+    const slot = contextSlot[direction]
+    const entry = parent.context[slot]
+    const tile = entry?._tag === 'Tile' ? entry : undefined
+    if (tile?.id === id) return { kind: 'context', tile, parent, slot }
+    for (const next of [branch, tile]) {
+      const found = next && below(next, id)
       if (found) return found
     }
   }

@@ -6,7 +6,7 @@
 import { isVerbatim } from '#/api/mapping/files/download'
 import { type SystemTile, useMoveTile } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
-import { directions, type Direction } from '#/front/ui/hex/geometry/geometry'
+import type { Direction } from '#/front/ui/hex/geometry/geometry'
 
 import { holdsNothing, tileIn } from '../tree'
 
@@ -27,10 +27,12 @@ interface CenteredTileState {
 /** The centered Tile's card, by the Tile's id, against the System it stands in. */
 export function useCenteredTileState(system: SystemTile, id: string): CenteredTileState {
   const move = useMoveTile()
-  const child = childOf(system, id)
-  if (child === undefined) return { code: undefined, kindChange: undefined }
-  const { parent, direction } = child
-  const act = (label: string, slot: Direction | { leaf: Direction }): KindChange => ({
+  const found = tileIn(system, id)
+  const act = (
+    parent: SystemTile,
+    label: string,
+    slot: Direction | { leaf: Direction },
+  ): KindChange => ({
     label,
     pending: move.isPending,
     change: () => {
@@ -38,37 +40,21 @@ export function useCenteredTileState(system: SystemTile, id: string): CenteredTi
       if (!move.isPending) move.mutate({ id, parent: parent.id, slot })
     },
   })
-  if (child.kind === 'leaf')
-    return {
-      code: isVerbatim(child.tile) ? child.tile.body : undefined,
-      kindChange: act(m.system_grow(), direction),
-    }
-  return {
-    code: undefined,
-    kindChange: holdsNothing(child.tile) ? act(m.system_shrink(), { leaf: direction }) : undefined,
+  switch (found?.kind) {
+    case 'leaf':
+      return {
+        code: isVerbatim(found.tile) ? found.tile.body : undefined,
+        kindChange: act(found.parent, m.system_grow(), found.direction),
+      }
+    case 'branch':
+      return {
+        code: undefined,
+        kindChange: holdsNothing(found.tile)
+          ? act(found.parent, m.system_shrink(), { leaf: found.direction })
+          : undefined,
+      }
+    default:
+      // The Root and a Context Tile are no Child, and an id no Tile has is nothing to act on.
+      return { code: undefined, kindChange: undefined }
   }
-}
-
-type Child =
-  | { kind: 'leaf'; tile: NonNullable<SystemTile['leaves'][Direction]> }
-  | { kind: 'branch'; tile: SystemTile }
-
-/**
- * Where a Child of the System stands: the Tile it stands under, its Direction, and its kind with the
- * Tile itself. `undefined` for the Root, a Context Tile and an id no Tile has, none of which is a
- * Child.
- */
-function childOf(
-  system: SystemTile,
-  id: string,
-): (Child & { parent: SystemTile; direction: Direction }) | undefined {
-  const parent = tileIn(system, id)?.parent
-  if (parent === undefined) return undefined
-  for (const direction of directions) {
-    const leaf = parent.leaves[direction]
-    if (leaf?.id === id) return { kind: 'leaf', tile: leaf, parent, direction }
-    const branch = parent.branches[direction]
-    if (branch?.id === id) return { kind: 'branch', tile: branch, parent, direction }
-  }
-  return undefined
 }
