@@ -37,6 +37,8 @@ HEX-21, [#18](https://github.com/Diplow/diplow/pull/18). A Reference has no cont
 
 HEX-21, [#18](https://github.com/Diplow/diplow/pull/18). The canvas opens a System at its Root and expands in place, and a System is hundreds of Tiles, not millions. So one read returns the Root with everything below it, each Tile with its Children by Direction and its Context by slot, and each Reference with the Tile it points at. A read per Frame can come when a System outgrows it. The 350-character Preview is counted with `Intl.Segmenter`, so an emoji of several code points counts as one character.
 
+HEX-45 added a second read beside it, `readTile`: one Tile to a depth, with only the fields asked (`hexframe-app-mcp-server/decisions.md#DEC-8`). The canvas still reads the whole System.
+
 ### DEC-7 Each domain's side of the API layer sits under `api/domains/`
 
 HEX-22, [#19](https://github.com/Diplow/diplow/pull/19). `src/api/` already held six folders (`server/`, `errors/`, `client/`, `iam/`, `dev/`, `observability/`), the rule of 6's cap, so a seventh for Mapping was refused. IAM's folder moved to `api/domains/iam/` and Mapping's sits beside it in `api/domains/mapping/`, as Assistant's will. The rest of `api/` is the plumbing every domain shares. The path mirrors `src/domains/<domain>/`, and dependency-cruiser's rules, anchored at `^src/domains/`, do not read it as a domain.

@@ -28,12 +28,12 @@ What a user does *to look* at a System is not Mapping: centering on a Tile, expa
 
 | File | Holds |
 |---|---|
-| `mapping.ts` | The operations, each for one Account: `system` (the Root with everything below it, the Root added on the first read), `createTile`, `editTile`, `moveTile`, `deleteTile`, `createReference` and `deleteReference` |
+| `mapping.ts` | The operations, each for one Account. Two reads: `system`, the Root with everything below it, Bodies included, for the canvas; and `readTile`, one Tile (the Root when no id is given) to a depth of 0 to 3, with only the fields asked of each Tile, and its parent's id and Title, for a reader that opens a Tile before its Children's Bodies. Both add the Root on the first read. Then `createTile`, `editTile`, `moveTile`, `deleteTile`, `createReference` and `deleteReference` |
 | `tile.ts` | `Tile` and its `Content`; `Direction` (1 to 6), `ContextDirection` (−1 to −6) and `Slot`, either; `checked`, what a Tile's content must be |
-| `system.ts` | `SystemTile`, a Tile with its Children and its Context, and the pure reading of the repository's rows: `systemOf`, `below`, the Tile or the Reference in a slot |
+| `system.ts` | `SystemTile`, a Tile with its Children and its Context, and the pure reading of the repository's rows: `systemOf`, `below`, the Tile or the Reference in a slot; and `ReadTile`, a Tile as `readTile` finds it, built by `readOf`: its id and the `Field`s asked, its Children and Context above the read's last generation, a Reference as its Tile's id, Title and Preview |
 | `system.test.ts` | That reading on rows made by hand, no database: the Root, a Child and a Context Tile in place, a Reference resolved and a broken one, what holds a slot, what lies below a Tile |
 | `errors.ts` | Mapping's errors, each with its kind: `TileNotFound` (NotFound); `TitleMissing` and `PreviewTooLong` (Invalid, on the field at fault); `DirectionTaken` and `MovedUnderItself` (Conflict); `RootFixed` (Forbidden) |
-| `mapping.test.ts` | Mapping over the tiles repository, for real, over PGlite: the Root, the six Directions, Context, References and their breaking, every operation and every refusal |
+| `mapping.test.ts` | Mapping over the tiles repository, for real, over PGlite: the Root, the six Directions, Context, References and their breaking, every operation and every refusal, and `readTile` at each depth and each choice of fields |
 
 The rows live in one table, `tile`, through the tiles repository ([[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE|database]], `tiles/`). It speaks rows; Mapping decides what a row means and which change is allowed.
 
@@ -43,6 +43,7 @@ The rows live in one table, `tile`, through the tiles repository ([[4-software-e
 - **A change sees the System alone.** It first locks the System's Root (`Tiles.lock`), then checks against the rows as they stand, then writes, all in one transaction. Two changes to one System never interleave, so a slot never holds two Tiles and a move never makes a loop. Mapping neither opens nor commits that transaction: the API layer does (`transactional`), as it will for one that spans domains, and every change's type requires it (`InTransaction`), so none can run outside one. The lock is Mapping's decision, the query the repository's errand (`hexframe-v0-mapping/decisions.md#DEC-3` in the run's registers, where the repository still opened the transaction).
 - **The Root is the user.** It is never moved nor deleted (`RootFixed`), and its Title is edited like any Tile's. IAM is to keep a copy of it for emails, but no email is sent yet, so none is kept: `editTile` publishes nothing, and Better Auth's name stays empty. The first email brings the event, the Root's rename on the bus, and the API layer wires IAM to it (`hexframe-v0-mapping/decisions.md#DEC-4`).
 - **A Reference is where it stands.** It has no content, and no operation but its create and delete, both by its slot: to put one elsewhere, delete it and create another. Moving the Tile that holds it carries it along; deleting the Tile it points at leaves it broken.
+- **A Body is read only when asked.** `readTile` walks down one generation per query and selects only the fields asked, so a Body nobody asked for never leaves the database. A Reference shows its Tile's id, Title and Preview whatever was asked, the least a reader needs to decide whether to open it (`hexframe-app-mcp-server/decisions.md#DEC-8`).
 - **Only the fields given are checked**, so the Body of an untitled Root can be written before its name. A Preview's 350 characters are counted as a reader counts them, an emoji of several code points being one.
 
 ## Later

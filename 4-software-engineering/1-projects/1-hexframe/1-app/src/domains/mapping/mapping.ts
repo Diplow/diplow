@@ -9,10 +9,19 @@ import type { InTransaction } from '#/repositories/database/database'
 import { Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/tiles'
 
 import { DirectionTaken, MovedUnderItself, RootFixed, TileNotFound } from './errors'
-import { below, rowAt, systemOf, tileRow } from './system'
+import {
+  type Depth,
+  type Field,
+  type ReadTile,
+  below,
+  readOf,
+  rowAt,
+  systemOf,
+  tileRow,
+} from './system'
 import { type Content, type ContextDirection, type Slot, type Tile, checked } from './tile'
 
-export type { SystemTile } from './system'
+export type { Depth, Field, ReadTile, SystemTile } from './system'
 export type { Content, ContextDirection, Direction } from './tile'
 
 /** The content of a Root nobody has named yet, and of every Reference, which keeps none of its own. */
@@ -35,6 +44,45 @@ export const system = (accountId: string) =>
     if (found === undefined) return yield* Effect.die(new Error('A System was read without a Root'))
     return found
   })
+
+/** A Tile read from, with the id and Title of its parent, `null` for the Root. */
+interface Read<F extends Field> {
+  readonly tile: ReadTile<F>
+  readonly parent: Pick<Tile, 'id' | 'title'> | null
+}
+
+/**
+ * A Tile of the Account's System, its Root when no id is given, read `depth` generations down with
+ * only the fields asked of each Tile, and its parent. A Reference shows the id, Title and Preview of
+ * the Tile it points at. A Body is read only when asked, and a Tile of another System is
+ * `TileNotFound`. Reading the Root adds it, as `system` does.
+ */
+export const readTile = <F extends Field>(
+  accountId: string,
+  { id, depth, fields }: { id?: string | undefined; depth: Depth; fields: ReadonlyArray<F> },
+) =>
+  Tiles.use((tiles) =>
+    Effect.gen(function* () {
+      const from = id ?? (yield* tiles.root(accountId, untitled))
+      const rows = yield* tiles.below(accountId, { id: from, depth, columns: fields })
+      const opened = tileRow(rows, from)
+      if (opened === undefined) return yield* new TileNotFound()
+      const targets = rows.flatMap(({ target }) => (target === null ? [] : [target]))
+      const parentIds = opened.parentId === null ? [] : [opened.parentId]
+      const [parents, pointedAt] = yield* Effect.all(
+        [
+          tiles.ofIds(accountId, parentIds, ['title']),
+          tiles.ofIds(accountId, targets, ['title', 'preview']),
+        ],
+        { concurrency: 'unbounded' },
+      )
+      const parent = parents[0]
+      return {
+        tile: readOf(opened, { rows, depth, pointedAt }),
+        parent: parent === undefined ? null : { id: parent.id, title: parent.content.title },
+      } satisfies Read<F>
+    }),
+  )
 
 /**
  * A change to the Account's System, on its rows as they stand once its Root is locked: alone until
