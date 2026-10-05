@@ -48,29 +48,17 @@ export const session = createServerFn({ method: 'GET' })
   .validator(Nothing)
   .handler(({ context }) => run(context, Iam.sessionOnly))
 
-/**
- * Issues a Key to the signed-in Account: the one answer that carries its secret.
- *
- * @public The Keys page (HEX-44) is the first caller of the three Key functions; it drops the tag.
- */
+/** Issues a Key to the signed-in Account: the one answer that carries its secret. */
 export const issueKey = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(KeyName))
   .handler(({ data, context }) => run(context, Iam.issueKey(data.name)))
 
-/**
- * The signed-in Account's Keys, the newest first, never their secrets.
- *
- * @public The Keys page (HEX-44) is its first caller.
- */
+/** The signed-in Account's Keys, the newest first, never their secrets. */
 export const keys = createServerFn({ method: 'GET' })
   .validator(Nothing)
   .handler(({ context }) => run(context, Iam.keys))
 
-/**
- * Revokes one of the signed-in Account's Keys.
- *
- * @public The Keys page (HEX-44) is its first caller.
- */
+/** Revokes one of the signed-in Account's Keys. */
 export const revokeKey = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(KeyId))
   .handler(({ data, context }) => run(context, Iam.revokeKey(data.id)))
