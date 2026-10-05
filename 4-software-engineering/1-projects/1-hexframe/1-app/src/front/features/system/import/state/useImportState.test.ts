@@ -13,7 +13,7 @@ import { useImportState } from './useImportState'
 
 // The import's state over a stand-in for its server function: what a place takes, the pickers and
 // the drop starting it, and the report it ends on, landed or refused, each line in the page's words.
-// A refusal is what the client receives, its wire form: the front never imports a domain.
+// A refusal is what the client receives, its wire form, decoded.
 vi.mock('#/api/mapping/mapping', async (original) => ({
   ImportUpload: (await original<typeof Mapping>()).ImportUpload,
   importTiles: vi.fn(),

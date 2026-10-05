@@ -563,9 +563,9 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
         tiles.generationsFrom(accountId, { id: ids[0] ?? '', depth: 2, columns }),
       )
       const rows = [found?.opened, ...(found?.below ?? [])]
-      expect(rows.map((row) => Object.keys(row?.content ?? {}))).toEqual(
-        rows.map((_, at) => (at === 0 ? ['body'] : ['title'])),
-      )
+      const content = (row: object | undefined) =>
+        Object.keys(row ?? {}).filter((key) => ['title', 'preview', 'body'].includes(key))
+      expect(rows.map(content)).toEqual(rows.map((_, at) => (at === 0 ? ['body'] : ['title'])))
     }),
   )
 

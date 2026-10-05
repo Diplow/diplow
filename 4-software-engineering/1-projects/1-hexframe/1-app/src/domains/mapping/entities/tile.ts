@@ -28,6 +28,13 @@ const LeafSlot = Schema.Struct({ leaf: Direction })
 export const Slot = Schema.Union([Direction, LeafSlot, ContextDirection])
 export type Slot = typeof Slot.Type
 
+/** Whether a slot is a Leaf's, which takes one file alone and nothing below it. */
+export const isLeafSlot = (slot: Slot): slot is typeof LeafSlot.Type => typeof slot === 'object'
+
+/** Whether a slot stands in its parent's Context, −1 to −6, rather than among its Branches or Leaves. */
+export const isContextSlot = (slot: Slot): slot is ContextDirection =>
+  typeof slot === 'number' && slot < 0
+
 /** What a reader finds in a Tile. */
 export interface Content {
   readonly title: string
@@ -56,7 +63,7 @@ const leafOffset = directions.length
 
 /** The direction a row stands in for this slot: a Leaf's stored past the six Branch slots. */
 export const rowDirection = (slot: Slot): number =>
-  typeof slot === 'number' ? slot : slot.leaf + leafOffset
+  isLeafSlot(slot) ? slot.leaf + leafOffset : slot
 
 /** The Direction of the Leaf a row's direction stands for; `undefined` for any other slot. */
 export function leafOf(direction: number | null): Direction | undefined {

@@ -102,9 +102,6 @@ export function slotOf(ring: FrameKind, direction: Direction, going?: TileNode):
   }
 }
 
-/** Whether a slot stands in its parent's Context, −1 to −6, rather than among its Branches or Leaves. */
-export const isContextSlot = (slot: Slot) => typeof slot === 'number' && slot < 0
-
 /**
  * Where a Tile stands: a Leaf in its Direction under its parent, or a Tile with what it holds, under
  * its parent in a Branch's Direction or a Context slot, or the Root, under nothing.
@@ -141,6 +138,3 @@ function below(parent: SystemTile, id: string): Found | undefined {
   }
   return undefined
 }
-
-/** Whether a slot is a Leaf's, which takes one file alone and nothing below it. */
-export const isLeafSlot = (slot: Slot) => typeof slot === 'object'

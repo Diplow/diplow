@@ -36,41 +36,11 @@ type KeptColumn = 'name' | 'config' | 'frontmatter'
 export type ContentColumn = 'title' | 'preview' | 'body'
 
 /**
- * A row as a read from one Tile gives it: where it stands, whether it is a Reference, and, apart,
- * only the content columns asked.
+ * A row as a read from one Tile gives it: where it stands, whether it is a Reference, and only the
+ * content columns asked. Mapping shapes it (`domains/mapping/entities/rows.ts`).
  */
-export interface TileRowWith<C extends ContentColumn> {
-  readonly id: string
-  readonly parentId: string | null
-  readonly direction: number | null
-  readonly target: string | null
-  readonly content: Pick<TileRow, C>
-}
-
-/**
- * These content columns of what a Tile says, and no other: the projection a read from one Tile makes.
- * Mapping makes the same on Help's notes, with its own (`domains/mapping/entities/rows.ts`), since a
- * repository imports no domain.
- */
-function contentWith<C extends ContentColumn>(
-  content: Partial<Pick<TileRow, ContentColumn>>,
-  columns: ReadonlyArray<C>,
-): Pick<TileRow, C> {
-  // Built from the columns asked, each of them read, which a type cannot follow.
-  return Object.fromEntries(columns.map((column) => [column, content[column]])) as Pick<TileRow, C>
-}
-
-/** A row with only the content columns asked, apart from where it stands. */
-const withContent = <C extends ContentColumn>(
-  {
-    id,
-    parentId,
-    direction,
-    target,
-    ...content
-  }: Omit<TileRow, ContentColumn | KeptColumn> & Partial<Pick<TileRow, ContentColumn>>,
-  columns: ReadonlyArray<C>,
-): TileRowWith<C> => ({ id, parentId, direction, target, content: contentWith(content, columns) })
+export type TileRowWith<C extends ContentColumn> = Omit<TileRow, ContentColumn | KeptColumn> &
+  Pick<TileRow, C>
 
 /** What a read from one row asks of each: the content columns of that row, and of the rows below it. */
 export interface ColumnsAsked<O extends ContentColumn, C extends ContentColumn> {
@@ -348,7 +318,9 @@ const make = Effect.gen(function* () {
       .where(and(ofAccount(accountId), where))
       .pipe(
         Effect.orDie,
-        Effect.map((rows) => rows.map((row) => withContent(row, columns))),
+        // Selected with the content columns asked and no other, which the select's type, built from a
+        // Partial of them, cannot follow.
+        Effect.map((rows) => rows as ReadonlyArray<unknown> as ReadonlyArray<TileRowWith<C>>),
       )
   }
 

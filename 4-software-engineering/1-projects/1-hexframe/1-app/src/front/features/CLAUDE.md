@@ -27,7 +27,7 @@ A feature is client code that shows one thing a page needs, in a domain's langua
 
 ## Rules
 
-- **A feature sits between routes and the client's side of the API.** dependency-cruiser reads `front/routes/` → `front/features/` → `front/client/` and `front/ui/` ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE|front]]): a feature reaches the server through a server function, never a domain or a repository.
+- **A feature sits between routes and the client's side of the API.** dependency-cruiser reads `front/routes/` → `front/features/` → `front/client/` and `front/ui/` ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE|front]]): a feature reaches the server through a server function, never a repository, and of a domain only its door, pure (`entities/index.ts`, `operations/index.ts`, `errors.ts`).
 - **Features ignore each other.** A route composes them, and the client bus carries a fact from one to another; `no-feature-importing-another` says no to the import.
 - **A fact is declared once, with its schema, where both sides reach it**, as a `Schema.TaggedClass` in the past tense and in a domain's language: in `facts.ts` beside `bus.ts`, created with the first fact, never inside the feature that publishes it, which its listener may not import.
 - **A feature reacts through a state hook**: `useFact(TileCentered, actions.recordNavigation)`, passing a stable action, so the hook subscribes once. React subscribes through `useSyncExternalStore`, since `useEffect` stays in `ui/`.

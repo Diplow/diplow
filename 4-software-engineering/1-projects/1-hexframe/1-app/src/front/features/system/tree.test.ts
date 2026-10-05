@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import type { SystemTile } from '#/domains/mapping/entities'
 import { m } from '#/paraglide/messages'
 
-import { canvasTree, isContextSlot, isLeafSlot, slotOf, swapsWith, tileIn } from './tree'
+import { canvasTree, slotOf, swapsWith, tileIn } from './tree'
 
 const tile = (
   id: string,
@@ -137,7 +137,7 @@ describe('swapsWith', () => {
   })
 })
 
-describe('slotOf and isContextSlot', () => {
+describe('slotOf', () => {
   const branch = canvasTree(system).branches?.[4]
   const leaf = canvasTree(system).leaves?.[1]
 
@@ -162,19 +162,5 @@ describe('slotOf and isContextSlot', () => {
   it('is no slot where a moving Tile would change kind', () => {
     expect(slotOf('branches', 3, leaf)).toBeUndefined()
     expect(slotOf('leaves', 3, branch)).toBeUndefined()
-  })
-
-  it('tells a Context slot from a Branch’s or a Leaf’s', () => {
-    expect(isContextSlot(-6)).toBe(true)
-    expect(isContextSlot(6)).toBe(false)
-    expect(isContextSlot({ leaf: 6 })).toBe(false)
-  })
-})
-
-describe('isLeafSlot', () => {
-  it('is a Leaf slot, never a Branch nor a Context slot', () => {
-    expect(isLeafSlot({ leaf: 4 })).toBe(true)
-    expect(isLeafSlot(4)).toBe(false)
-    expect(isLeafSlot(-4)).toBe(false)
   })
 })

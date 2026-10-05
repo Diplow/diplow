@@ -33,6 +33,7 @@ import {
   type Tile,
   tileRow,
   type ToKeep,
+  withContent,
 } from './entities'
 import type { Placement } from './operations'
 
@@ -81,6 +82,9 @@ const find = <O extends Field, F extends Field>(
     ? findInHelp(id, { fields, language })
     : findOwn(accountId, { id, depth, fields })
 
+/** What a reader sees of a Tile beside the one opened: enough to decide whether to open it. */
+const glimpsed = ['title', 'preview'] as const satisfies ReadonlyArray<Field>
+
 /** What a read from a Tile of the Account's System finds, its Root when no id is given. */
 const findOwn = <O extends Field, F extends Field>(
   accountId: string,
@@ -96,18 +100,15 @@ const findOwn = <O extends Field, F extends Field>(
       const targets = below.flatMap(({ target }) => (target === null ? [] : [target]))
       const parentIds = opened.parentId === null ? [] : [opened.parentId]
       const [parents, pointedAt] = yield* Effect.all(
-        [
-          tiles.ofIds(accountId, parentIds, ['title']),
-          tiles.ofIds(accountId, targets, ['title', 'preview']),
-        ],
+        [tiles.ofIds(accountId, parentIds, ['title']), tiles.ofIds(accountId, targets, glimpsed)],
         { concurrency: 'unbounded' },
       )
       const parent = parents[0]
       return {
-        opened,
-        rows: below,
-        pointedAt,
-        parent: parent === undefined ? null : { id: parent.id, title: parent.content.title },
+        opened: withContent(opened, fields.opened),
+        rows: below.map((row) => withContent(row, fields.below)),
+        pointedAt: pointedAt.map((row) => withContent(row, glimpsed)),
+        parent: parent === undefined ? null : { id: parent.id, title: parent.title },
       } satisfies Found<O, F>
     }),
   )
@@ -130,9 +131,6 @@ export const readTile = <F extends Field>(
       parent,
     }),
   )
-
-/** What a reader sees of a Tile beside the one opened: enough to decide whether to open it. */
-const glimpsed = ['title', 'preview'] as const satisfies ReadonlyArray<Field>
 
 /** A Tile's Branches, Leaves and Context, each by its Title and Preview. */
 type Around = Required<Pick<ReadTile<(typeof glimpsed)[number]>, 'branches' | 'leaves' | 'context'>>

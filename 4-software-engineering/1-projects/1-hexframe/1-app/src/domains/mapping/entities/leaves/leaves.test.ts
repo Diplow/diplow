@@ -4,7 +4,7 @@ import { Effect } from 'effect'
 import { keepsNothing } from '../kept/kept'
 import type { Row } from '../rows'
 import { type SystemTile, systemOf } from '../system'
-import { directions, leafOf, rowDirection } from '../tile'
+import { directions, isContextSlot, isLeafSlot, leafOf, rowDirection, type Slot } from '../tile'
 import { holdsNothing, holdsNothingIfLeaf, isEmptySystem, notLeaf, onlyALeafIn } from './leaves'
 
 // Leaves beside Branches, on rows and Systems made by hand: where a Leaf slot is stored, what holds
@@ -22,6 +22,13 @@ describe('where a Leaf slot is stored', () => {
     const slots = [1, 6, -1, -6] as const
     expect(slots.map((slot) => rowDirection(slot))).toEqual([...slots])
     expect([null, 0, 1, 6, -1, -6, 13].map(leafOf)).toEqual(Array(7).fill(undefined))
+  })
+
+  it('tells a Leaf slot and a Context slot from a Branch’s and from each other', () => {
+    const leafFirst: ReadonlyArray<Slot> = [{ leaf: 4 }, 4, -4]
+    const contextFirst: ReadonlyArray<Slot> = [-6, 6, { leaf: 6 }]
+    expect(leafFirst.map((slot) => isLeafSlot(slot))).toEqual([true, false, false])
+    expect(contextFirst.map((slot) => isContextSlot(slot))).toEqual([true, false, false])
   })
 })
 
