@@ -8,8 +8,9 @@ preview: >-
   a read answers now that a Child is a Branch or a Leaf, where Mapping's Leaf
   rules and tests went once its folder was full, what a Tile keeps from its
   files, how an export names and writes them, how its zip reaches the
-  browser, how an import reads files back into a plan, how a plan lands, and
-  how the browser prunes, zips and sends an import from an empty slot.
+  browser, how an import reads files back into a plan, how a plan lands, how
+  the browser prunes, zips and sends an import from an empty slot, how the
+  canvas lays itself out with the shape, and what STACK.md now gets wrong.
 ---
 # Decisions
 
@@ -87,3 +88,25 @@ The change is in the URL like `add`: `import=<parent>&slot=<slot>`, or `import=r
 The composition itself, which check runs first and how much of a large file is read, stays in `upload.ts`, as the ticket and the run's rules place it: the API layer offers the browser the zip repository's plain functions, as observability's, and each rule it composes is Mapping's (cubic asked for the pipeline in Mapping; waived on #67). The import's state hook holds no reducer: what the import came to is a Query mutation's, so `useImportState` derives the drawer's view from it and the browser's pickers and drop, and holds nothing else; the drop zone's highlight is the component's one `useState`. The 90% branch floor of `state/` folders has no tool behind it yet (no coverage provider in the app); the hook's tests walk each of its branches.
 
 Checked in the browser on a local dev server, in English and French, light and dark: `.cubic/` imported as an empty System's Root through the folder picker, a dot file and `node_modules` listed as left out; a Markdown file into a Leaf slot, and into a taken one, refused in a toast; a refused import, a Preview of 400 characters, with every fault and a binary left out; a file dropped into a slot. claude-in-chrome drives no native picker, so the pickers were handed files the way the browser hands them; a dropped folder is covered by `front/client/mapping/files.test.ts` only, since a synthetic drop carries no folder entry.
+
+### DEC-13 The canvas lays out by the shape through one adapter, at depth 2, its center's rings picked above it
+
+HEX-60. The ticket asks the canvas to draw from the shape's `layoutView`, the URL to hold the shape's view state, and everything the canvas did to keep working, and leaves the gestures, the files and the input `layoutView` takes open.
+
+`front/ui/hex/geometry/shape.ts` is the one module of the app that imports `layout.ts`, and `node.ts` for its types alone: dependency-cruiser holds the canvas to both (`no-claude-mod-in-the-canvas-but-the-shape-layout`, `no-shape-reading-rules-in-the-canvas`), as it holds Mapping to the reading rules. The adapter builds each Frame from the System itself rather than through `sortEntries`, which reads names: a Tile's Branches and Leaves already carry their Direction, so it seats a ring of Children as `shape/CLAUDE.md` writes it (Branches where they sit, each Leaf in its own Direction when free, the Leaves left over in the free ones, a Leaf whose Direction a Branch holds a clash), and offers the kinds the shape offers: Children and Context for six Branches and Leaves or fewer, Branches, Leaves and Context past six. A System never overflows a ring, so the app draws a list only for a Frame that does. `layoutView` needed no new input and the shape is unchanged. Its placement of an empty hex names only its Direction, so the adapter finds the hex it sits around by the layout's own geometry, one generation up, the same size, a neighbor away, and the empty Direction becomes the slot it stands for: under that Tile, in that ring.
+
+The URL holds `center`, `frame` (the ring around the center), `inner` (the ring inside its hex) and `expanded` (each Branch of the ring around the center that opens, by Direction, into a kind), each falling back on its own; a link from before, its `expanded` a list of ids, keeps its center alone, as the ticket asks. The app's default stays what it showed: the first ring around, nothing inside. It has no collapsed center: a centered Leaf, which offers no ring, is the only hex that fills the canvas alone. Centering resets the rings and closes every Branch, since Directions name another Tile's members once the center moves, and so does picking another ring around.
+
+Gestures keep their old meaning where they had one: a click on the center shows or hides its Context, on a Branch of the ring around the center opens or closes it, into its first ring; anything else is centered, having nothing to open at depth 2, which is where a Context Tile already went. The two choices a click can't carry, the ring around a center past six and Leaves inside Branches, are a row of buttons above the canvas, part of `Canvas` so every page that draws it gets them. A Branch opens into another kind through its URL only, the shape's view state holding it.
+
+Two things stay for HEX-61, which acts on Leaves: an empty Direction of a Leaves ring takes no click (`System` answers nothing for it), and a Leaf offers no swap to a Tile on the move. A centered Leaf shows its card, found by `tileIn`, with its edit, move, export and delete.
+
+Checked in the browser on a local dev server, in English and French, light and dark: `/dev/hex`'s fixture with Branches and Leaves mixed, a clash and its tooltip, the root's Branches around and Leaves inside, Context inside, a centered Leaf, two Branches open two deep, and Help; home on a fresh Account: a Branch added from an empty slot, a Leaf through its slot in the URL, clashing with a Branch, centered with its card, a move whose swap traded two Branches, Enter opening a Branch with focus kept on it, and the center's Context with its empty slots offered.
+
+### DEC-14 What STACK.md's "A vault as a hexframe" now gets wrong
+
+HEX-60. Hexframe's `STACK.md` is frozen for the run, so the phase close lists these for a human to write:
+
+- "the app will read it one day": the app reads a vault now, an import read by the shape (DEC-10), and draws its canvas by the shape's layout (DEC-13).
+- "Mapping's Frame is the Children kind of a folder that has no files": Mapping holds Leaves (DEC-1, DEC-2), so its Frame is the Children kind of any Tile with six Branches and Leaves or fewer, and Branches and Leaves apart past six, as a folder's is.
+- "Double expansion … Collapsing peels the outer ring first, then the inner, and a fully collapsed center fills the canvas": in the app the inner ring is optional and absent by default, and nothing collapses; only a centered Leaf fills the canvas (DEC-13).

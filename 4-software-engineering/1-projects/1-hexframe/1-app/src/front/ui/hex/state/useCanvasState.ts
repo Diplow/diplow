@@ -30,7 +30,7 @@ export type TileAction =
 const hiding: Record<InnerKind, TileAction> = { context: 'hide-context', leaves: 'hide-leaves' }
 
 /** What a click on `hex` does in `shown`; nothing on a centered Leaf, which opens nothing. */
-export function tileAction(hex: TileHex, shown: ShownView): TileAction | undefined {
+function tileAction(hex: TileHex, shown: ShownView): TileAction | undefined {
   switch (hex.role) {
     case 'center':
       if (shown.frame === undefined) return undefined
@@ -87,7 +87,7 @@ export function useCanvasState({ system, view, onViewChange }: CanvasInput) {
     actions: {
       actionOf: (hex: TileHex) => tileAction(hex, shown),
       /** A click, Enter or Space on `hex`. `repeat` is the second click of a double-click. */
-      click(hex: TileHex, repeat: boolean) {
+      click: (hex: TileHex, repeat: boolean) => {
         // The second click of a double-click is the double-click's, not a click of its own.
         if (repeat) return
         clicked.current = hex.key
@@ -95,14 +95,14 @@ export function useCanvasState({ system, view, onViewChange }: CanvasInput) {
         if (action !== undefined) act(hex, action)
       },
       /** A double-click, or Shift+Enter, on `hex`. */
-      center(hex: TileHex, from: 'pointer' | 'keyboard') {
+      center: (hex: TileHex, from: 'pointer' | 'keyboard') => {
         const again = from === 'keyboard' || clicked.current === hex.key
         if (again && hex.tile.id !== shown.center.id) onViewChange(centerOn(system, hex.tile.id))
       },
-      showAround(kind: OuterKind) {
+      showAround: (kind: OuterKind) => {
         onViewChange(withFrame(system, view, kind))
       },
-      showInside(kind: InnerKind | undefined) {
+      showInside: (kind: InnerKind | undefined) => {
         onViewChange(withInner(system, view, kind))
       },
     },

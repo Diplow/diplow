@@ -37,7 +37,7 @@ export interface EmptySlotTarget {
  * What a hex holding a Tile stands for: the center, a member of a ring by kind, or `hub`, a Branch of
  * the ring around the center drawn at the heart of the Frame it opens into.
  */
-export type TileRole = 'center' | 'hub' | MemberKind
+type TileRole = 'center' | 'hub' | MemberKind
 
 interface Drawn {
   /** Unique on the canvas and stable across views, for React: a Tile keeps it when it opens. */

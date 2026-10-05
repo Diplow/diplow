@@ -132,14 +132,16 @@ const config: IConfiguration = {
     },
     {
       name: 'no-claude-mod-in-mapping-but-the-shape-reading-rules',
-      comment: 'Of claude-mod, Mapping imports the shape’s reading rules, node.ts and exclusions.ts, only.',
+      comment:
+        'Of claude-mod, Mapping imports the shape’s reading rules, node.ts and exclusions.ts, only.',
       severity: 'error',
       from: { path: shapeSeam },
       to: { path: '2-claude-mod/', pathNot: shapeReadingRules },
     },
     {
       name: 'no-claude-mod-in-the-canvas-but-the-shape-layout',
-      comment: 'Of claude-mod, the canvas imports the shape’s layout.ts, and node.ts for its types, only.',
+      comment:
+        'Of claude-mod, the canvas imports the shape’s layout.ts, and node.ts for its types, only.',
       severity: 'error',
       from: { path: layoutSeam },
       to: { path: '2-claude-mod/', pathNot: [shapeLayout, shapeTypes] },
