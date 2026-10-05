@@ -117,10 +117,10 @@ function save({ name, blob }: Download) {
   document.body.append(link)
   link.click()
   link.remove()
-  // The click hands the file to the browser on its next turn: the URL outlives it until then.
+  // Some browsers read the file from its URL a while after the click: the URL outlives it by a minute.
   setTimeout(() => {
     URL.revokeObjectURL(url)
-  }, 0)
+  }, 60_000)
 }
 
 /** The fields a Tile's form edits, which an edit compares one by one. */

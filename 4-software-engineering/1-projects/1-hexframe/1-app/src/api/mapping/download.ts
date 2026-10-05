@@ -3,7 +3,9 @@
 // `x-tss-raw`): an export's zip goes as a `Response`, its bytes streamed as they are zipped, so it
 // never waits whole in the function's memory, and its failure as an object, the `Outcome` every
 // server function answers. The client turns the answer back into an `Outcome`, so its channels carry
-// the failure as any other (`front/client/`). Pure: no module of the server's reaches the client here.
+// the failure as any other (`front/client/`). And where an export links a Tile it leaves out, a route
+// of the front's, which the front's own tests read back. Pure: no module of the server's reaches the
+// client here.
 import type { Failure, Outcome } from '../errors/failure'
 
 /** A zip as Mapping hands it over: its name, `<slug>.zip`, and its bytes, streamed. */
@@ -54,3 +56,13 @@ export async function downloaded<E extends Failure>(
   if (!(answer instanceof Response)) return answer
   return { ok: true, value: { name: nameOf(answer), blob: await answer.blob() } }
 }
+
+/**
+ * Where the app shows a Tile, by its id, on the site a request reached: home, centered on it, as the
+ * System's page reads its search params (`front/features/system/search.ts`, whose test reads this
+ * link back). An export links by it a Reference whose Tile it leaves out.
+ */
+export const tileLink =
+  (requestUrl: string) =>
+  (id: string): string =>
+    new URL(`/?center=${encodeURIComponent(id)}`, requestUrl).href

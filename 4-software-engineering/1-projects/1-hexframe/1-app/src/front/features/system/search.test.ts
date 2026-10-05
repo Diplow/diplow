@@ -2,9 +2,18 @@ import { describe, expect, it } from 'vitest'
 
 import type { TileNode } from '#/front/ui/hex/geometry/layout'
 
+import { tileLink } from '#/api/mapping/download'
+
 import { changeOf, readSystemSearch, viewOf, withChange, withoutTile, withView } from './search'
 
 describe('readSystemSearch', () => {
+  it('centers on the Tile an export links a left-out Reference to', () => {
+    const id = crypto.randomUUID()
+    const link = new URL(tileLink('https://hexframe.test/_serverFn/x')(id))
+    expect(link.pathname).toBe('/')
+    expect(viewOf(readSystemSearch(Object.fromEntries(link.searchParams))).center).toBe(id)
+  })
+
   it('reads the view and the change, every field set', () => {
     expect(readSystemSearch({ center: 'a', context: true, add: 'a', slot: -2 })).toEqual({
       center: 'a',

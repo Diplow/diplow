@@ -11,6 +11,8 @@ import type { Locale } from '#/paraglide/runtime'
 import { HttpExchange } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
 
+import { tileLink } from './download'
+
 /** Runs an operation for the signed-in Account: the one the request proves, never one a caller sends. */
 const forAccount = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, E, R>) =>
   Effect.flatMap(Iam.signedIn, ({ account }) => operation(account.id))
@@ -49,15 +51,6 @@ export const readTile = <F extends Mapping.Field>(
 export const openTile = <F extends Mapping.Field>(
   input: Omit<Parameters<typeof Mapping.openTile<F>>[1], 'language'>,
 ) => forAccount((accountId) => Mapping.openTile(accountId, { ...input, language: 'en' }))
-
-/**
- * Where the app shows a Tile, by its id, on the site the request reached: home, centered on it. An
- * export links by it a Reference whose Tile it leaves out.
- */
-export const tileLink =
-  (requestUrl: string) =>
-  (id: string): string =>
-    new URL(`/?center=${encodeURIComponent(id)}`, requestUrl).href
 
 /**
  * A Tile of the Account's System and everything below it, zipped: the archive's name and its bytes,

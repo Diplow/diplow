@@ -8,7 +8,7 @@ import { unzipped } from '#/repositories/zip/zip'
 
 import type { Unexpected } from '../errors/failure'
 import { noKey, run, type StartContext } from '../server/run'
-import { asDownload, downloaded, type ExportAnswer } from './download'
+import { asDownload, downloaded, type ExportAnswer, tileLink } from './download'
 import type { exportTile } from './mapping'
 import * as Mapping from './programs'
 
@@ -80,7 +80,7 @@ describe('a Tile exported as a zip', () => {
       const answer = await answered(context, id)
       if (!(answer instanceof Response)) throw new Error('Expected a download')
       const archive = new Uint8Array(await answer.arrayBuffer())
-      const files = exportOf(system, id, Mapping.tileLink(context.exchange.url))?.files
+      const files = exportOf(system, id, tileLink(context.exchange.url))?.files
       expect(unzipped(archive)).toEqual(files)
     }
   })
