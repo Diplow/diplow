@@ -1,0 +1,28 @@
+4-software-engineering/1-projects/1-hexframe/.run/optimistic-writes.yaml
+  s_9be70a4006462c::t_e57ad49948b877 80,85-86
+  s_9be70a4006462c::t_e543895e363e35 1-79,81-84,87-133
+4-software-engineering/1-projects/1-hexframe/.run/CLAUDE.md
+  s_9be70a4006462c::t_4fef60be7c6be0 8-10,23,40,50,56-57
+4-software-engineering/1-projects/1-hexframe/STACK.md
+  s_9be70a4006462c::t_5de309d0070a7a 64,124-138
+  s_9be70a4006462c::t_6f2a298a8fbf7b 139
+4-software-engineering/1-projects/1-hexframe/.cubic/domain-design.md
+  s_9be70a4006462c::t_e094b564b3b144 9,24,29,34-37,39,43,45,47,51,57,62,72
+  s_9be70a4006462c::t_f9e4e2c89f030f 7-8,38,40-42,44,46,48-50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ee79d0aeed2fbe772f2098484545847d450ffd96",
+  "prompts": {},
+  "sessions": {
+    "s_9be70a4006462c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a897282c-61ab-41ca-b0d1-655c4b53a742",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
