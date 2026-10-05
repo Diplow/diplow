@@ -2,6 +2,7 @@
 // only looks around, as on home. Beside it, the centered Tile's card, whose button opens its Body in a
 // drawer. Like the canvas, it holds no state: the view and the open Body are the URL's, and it hands
 // the next search params to the route.
+import type { SystemTile } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import { Canvas } from '#/front/ui/hex/Canvas'
 import type { TileNode } from '#/front/ui/hex/geometry/layout'
@@ -35,11 +36,7 @@ export function HelpCanvas({ tree, search, onSearchChange, className }: HelpProp
 }
 
 /** A Tile of Help as its drawer shows it: what it says, its Body as written, in Markdown. */
-interface OpenedTile {
-  readonly title: string
-  readonly preview: string
-  readonly body: string
-}
+type OpenedTile = Pick<SystemTile, 'title' | 'preview' | 'body'>
 
 interface HelpTileProps extends Omit<HelpProps, 'className'> {
   /** The Tile whose Body is open, `undefined` when none is or the URL names no Tile of Help. */

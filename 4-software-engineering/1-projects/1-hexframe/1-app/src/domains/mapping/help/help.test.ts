@@ -76,6 +76,7 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
   it.effect('opens its Root with its Children and its Context, to the depth asked', () =>
     Effect.gen(function* () {
       const read = yield* Mapping.readTile(someone(), {
+        language: 'en',
         id: 'help',
         depth: 1,
         fields: ['title', 'preview'],
@@ -92,7 +93,12 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
 
   it.effect('opens a Tile below with the fields asked, and names its parent', () =>
     Effect.gen(function* () {
-      const read = yield* Mapping.readTile(someone(), { id: 'help/3', depth: 1, fields: ['body'] })
+      const read = yield* Mapping.readTile(someone(), {
+        language: 'en',
+        id: 'help/3',
+        depth: 1,
+        fields: ['body'],
+      })
       expect(read.parent).toEqual({ id: 'help', title: 'Hexframe' })
       expect(read.tile).toMatchObject({ _tag: 'Tile', id: 'help/3' })
       expect(read.tile.body).toMatch(/Directions/)
@@ -101,12 +107,33 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
     }),
   )
 
+  it.effect('opens the same Tile in French, at the same id', () =>
+    Effect.gen(function* () {
+      const read = yield* Mapping.readTile(someone(), {
+        id: 'help/3',
+        depth: 1,
+        fields: ['title'],
+        language: 'fr',
+      })
+      expect(read.parent).toEqual({ id: 'help', title: 'Hexframe' })
+      expect(read.tile).toMatchObject({
+        _tag: 'Tile',
+        id: 'help/3',
+        title: 'Enfants et directions',
+      })
+      expect(read.tile.context?.[-1]).toMatchObject({ id: 'help/3/-1', title: 'Six au plus' })
+    }),
+  )
+
   it.effect('finds no Tile at an id Help has none at, a path that climbs out included', () =>
     Effect.gen(function* () {
       for (const id of ['help/7', 'help/1/1/1', 'help/../../x', 'help/3/../../package.json']) {
-        const refused = yield* Mapping.readTile(someone(), { id, depth: 0, fields: ['body'] }).pipe(
-          Effect.flip,
-        )
+        const refused = yield* Mapping.readTile(someone(), {
+          language: 'en',
+          id,
+          depth: 0,
+          fields: ['body'],
+        }).pipe(Effect.flip)
         expect(refused).toMatchObject({ _tag: 'TileNotFound', kind: 'NotFound' })
       }
     }),

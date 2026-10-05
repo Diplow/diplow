@@ -72,15 +72,15 @@ function withFields<F extends Field>(
 
 /**
  * A Tile of Help read `depth` generations down with only the fields asked, and its parent, as
- * Mapping's `readTile` reads one of a System. An id no Tile of Help has is `TileNotFound`. It reads
- * Help in English, the language an agent reads it in through the MCP.
+ * Mapping's `readTile` reads one of a System, in the language asked. An id no Tile of Help has is
+ * `TileNotFound`, in every language, since they share their ids.
  */
 export const readHelp = <F extends Field>(
   id: string,
-  { depth, fields }: { depth: Depth; fields: ReadonlyArray<F> },
+  { depth, fields, language }: { depth: Depth; fields: ReadonlyArray<F>; language: Language },
 ) =>
   Effect.gen(function* () {
-    const { rows: all } = help.en
+    const { rows: all } = help[language]
     const opened = all.find((row) => row.id === id)
     if (opened === undefined) return yield* new TileNotFound()
     const parent = all.find((row) => row.id === opened.parentId)
