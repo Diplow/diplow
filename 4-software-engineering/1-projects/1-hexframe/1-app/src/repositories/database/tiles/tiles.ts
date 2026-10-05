@@ -67,13 +67,10 @@ export class Tiles extends Context.Service<
      */
     readonly read: (
       accountId: string,
-      root: Pick<TileRow, 'title' | 'preview' | 'body'>,
+      root: Pick<TileRow, ContentColumn>,
     ) => Effect.Effect<ReadonlyArray<TileRow>>
     /** The id of the Account's Root, added first with the content given when it has none. */
-    readonly root: (
-      accountId: string,
-      root: Pick<TileRow, 'title' | 'preview' | 'body'>,
-    ) => Effect.Effect<string>
+    readonly root: (accountId: string, root: Pick<TileRow, ContentColumn>) => Effect.Effect<string>
     /**
      * The row of this id in the Account's System, then the rows below it, `depth` generations down,
      * one query per generation, each row with only the content columns asked. Nothing when the
@@ -154,7 +151,7 @@ const make = Effect.gen(function* () {
       ),
   })
 
-  const ensureRoot = (accountId: string, root: Pick<TileRow, 'title' | 'preview' | 'body'>) =>
+  const ensureRoot = (accountId: string, root: Pick<TileRow, ContentColumn>) =>
     database
       .insert(tile)
       .values({ ...root, id: crypto.randomUUID(), accountId })
@@ -189,7 +186,7 @@ const make = Effect.gen(function* () {
       )
   }
 
-  const root = (accountId: string, content: Pick<TileRow, 'title' | 'preview' | 'body'>) =>
+  const root = (accountId: string, content: Pick<TileRow, ContentColumn>) =>
     ensureRoot(accountId, content).pipe(
       Effect.andThen(
         database.select({ id: tile.id }).from(tile).where(rootOf(accountId)).pipe(Effect.orDie),

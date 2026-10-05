@@ -543,13 +543,14 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
       const { tile } = yield* readTile(accountId, { depth: 1, fields: [] })
       const reference = yield* Tiles.use((tiles) =>
         tiles.generationsFrom(accountId, { id: tile.id, depth: 1, columns: [] }),
-      ).pipe(Effect.map((rows) => rows.find((row) => row.target !== null)?.id ?? ''))
+      ).pipe(Effect.map((rows) => rows.find((row) => row.target !== null)?.id))
+      expect(reference).toBeDefined()
       const stranger = someone()
       const refusals = yield* Effect.all(
         [
           readTile(stranger, { id: ids[1], depth: 1, fields: ['title'] }),
           readTile(accountId, { id: 'gone', depth: 1, fields: ['title'] }),
-          readTile(accountId, { id: reference, depth: 1, fields: ['title'] }),
+          readTile(accountId, { id: reference ?? '', depth: 1, fields: ['title'] }),
         ].map(Effect.flip),
       )
       for (const refusal of refusals) {

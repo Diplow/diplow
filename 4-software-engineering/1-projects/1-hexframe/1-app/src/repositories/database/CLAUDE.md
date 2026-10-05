@@ -24,7 +24,7 @@ Every table hexframe keeps, and the one way to reach them: the `Database` servic
 
 | Folder | Holds |
 |---|---|
-| `tiles/` | `Tiles` and its `layer`, over `Database`: Mapping's repository, which reads a System's rows, its Root added on the first read; reads from one row down a number of generations, or rows by id, with only the content columns asked (`generationsFrom`, `ofIds`); and, inside a transaction, locks the Root (`lock`) and writes (`writes`) ([[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE\|mapping]]). A repository that queries lives here, below this folder, since only this folder imports `drizzle-orm` |
+| `tiles/` | `Tiles` and its `layer`, over `Database`: Mapping's repository, which reads a System's rows, its Root added on the first read; answers the Root's id, adding it the same way (`root`); reads from one row down a number of generations, or rows by id, with only the content columns asked (`generationsFrom`, `ofIds`); and, inside a transaction, locks the Root (`lock`) and writes (`writes`) ([[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE\|mapping]]). A repository that queries lives here, below this folder, since only this folder imports `drizzle-orm` |
 
 ## Changing the schema
 
