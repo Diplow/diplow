@@ -129,7 +129,7 @@ function placed(tile: SystemTile, folder: string, naming: Naming): ReadonlyArray
 }
 
 /** The parts a Tile config sets, as its file writes them. */
-const partsOf = (config: Partial<Naming>): Fields =>
+const partsOf = (config: NonNullable<SystemTile['config']>): Fields =>
   Object.fromEntries(Object.entries(config).filter(([, value]) => value !== undefined))
 
 /** The path a `[[wikilink]]` reaches a placed Tile by, by its id: its file's. */

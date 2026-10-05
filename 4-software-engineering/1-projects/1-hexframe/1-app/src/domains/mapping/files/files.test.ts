@@ -171,7 +171,8 @@ describe('a System exported whole', () => {
   })
 
   it('writes the config a Tile sets in its folder’s `.hexframe/`, only the parts it sets', () => {
-    const config = (path: string) => parse(files.find((file) => file.path === path)?.content ?? '')
+    const config = (path: string) =>
+      parse(files.find((file) => file.path === path)?.content ?? '') as unknown
     expect(config('4-skills/.hexframe/config.yaml')).toEqual({ fileName: 'SKILL.md' })
     expect(config('4-skills/.1-rules/.hexframe/config.yaml')).toEqual({ folderPattern: '<slug>' })
   })
