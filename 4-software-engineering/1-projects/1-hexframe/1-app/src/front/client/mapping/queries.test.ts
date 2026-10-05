@@ -201,12 +201,26 @@ describe('the export of a Tile', () => {
       failure: { _tag: 'TileNotFound', kind: 'NotFound' },
       requestId: 'req-1',
     })
+    const click = vi.spyOn(HTMLAnchorElement.prototype, 'click')
     const { result } = render(useExportTile)
     const failed = await result.current.hook
       .mutateAsync({ id: 'gone' })
       .catch((error: unknown) => error)
     expect(failed).toMatchObject({ scope: 'exportTile', requestId: 'req-1' })
     expect(failed).toBeInstanceOf(CallFailed)
+    expect(click).not.toHaveBeenCalled()
+  })
+
+  it('fails as Unexpected on a file that comes without its name, and saves nothing', async () => {
+    answering(undefined)
+    vi.mocked(Mapping.exportTile).mockResolvedValue(new Response('PK'))
+    const click = vi.spyOn(HTMLAnchorElement.prototype, 'click')
+    const { result } = render(useExportTile)
+    const failed = await result.current.hook
+      .mutateAsync({ id: 'games' })
+      .catch((error: unknown) => error)
+    expect(failed).toMatchObject({ scope: 'exportTile', failure: { _tag: 'Unexpected' } })
+    expect(click).not.toHaveBeenCalled()
   })
 })
 

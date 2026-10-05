@@ -21,9 +21,6 @@ export interface Download {
 /** What an export's server function answers: the zip, streamed as a download, or the failure. */
 export type ExportAnswer<E extends Failure> = Response | Extract<Outcome<never, E>, { ok: false }>
 
-/** The name a download is saved under when its answer names none. */
-const fallbackName = 'export.zip'
-
 /**
  * An export's outcome as its server function answers it: the zip as an attachment, under its name,
  * kept by no cache since it is one Account's, or the failure as it came.
@@ -40,9 +37,15 @@ export function asDownload<E extends Failure>(outcome: Outcome<Zipped, E>): Expo
   })
 }
 
-/** The name an attachment is saved under, as its `Content-Disposition` gives it. */
-const nameOf = (response: Response) =>
-  /filename="([^"]+)"/.exec(response.headers.get('content-disposition') ?? '')?.[1] ?? fallbackName
+/**
+ * The name an attachment is saved under, as its `Content-Disposition` gives it: `asDownload` always
+ * names one, so an answer that doesn't came from somewhere else, and fails the call.
+ */
+function nameOf(response: Response): string {
+  const name = /filename="([^"]+)"/.exec(response.headers.get('content-disposition') ?? '')?.[1]
+  if (name === undefined) throw new Error('A download came without its file name')
+  return name
+}
 
 /** An export's answer, as the client receives it, as an outcome: the file to save, or the failure. */
 export async function downloaded<E extends Failure>(
