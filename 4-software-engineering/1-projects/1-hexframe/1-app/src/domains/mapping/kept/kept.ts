@@ -2,7 +2,7 @@
 // its Name, its Tile config and the Frontmatter keys Mapping has no use for. Mapping never reads the
 // last, but bounds all three before they are stored: each is a Schema whose branded type a write
 // takes, so only a checked value reaches the tiles repository. Pure.
-import { Effect, Schema } from 'effect'
+import { Effect, Schema, Struct } from 'effect'
 
 import type { TileConfigColumn } from '#/repositories/database/schema'
 import type { KeptColumn, TileRow } from '#/repositories/database/tiles/tiles'
@@ -79,12 +79,12 @@ const namingParts = {
 
 /**
  * A Tile config: what a `.hexframe/` folder holds in the app, for now the naming, inherited by
- * everything below the Tile until a Tile below sets its own. Either part not set is the Tile above's.
+ * everything below the Tile until a Tile below sets its own. Either part not set is the Tile above's,
+ * and a config sets at least one, since one that sets nothing is no config.
  */
-const TileConfig = Schema.Struct({
-  fileName: Schema.optionalKey(namingParts.fileName),
-  folderPattern: Schema.optionalKey(namingParts.folderPattern),
-}).pipe(Schema.brand('TileConfig'))
+const TileConfig = Schema.Struct(Struct.map(namingParts, Schema.optionalKey))
+  .check(Schema.makeFilter((config: object) => Object.keys(config).length > 0))
+  .pipe(Schema.brand('TileConfig'))
 type TileConfig = typeof TileConfig.Type
 
 /** The keys an export writes itself, from the Tile: never kept, since the Tile is what they say. */

@@ -19,8 +19,8 @@ export class PreviewTooLong extends Schema.TaggedError<PreviewTooLong>()(
 
 /**
  * A name a Tile keeps or a Tile config sets isn't one path segment: it is `.` or `..`, holds a `/`, a
- * `\` or a control character, or runs over 255 bytes; or a folder pattern fills in nothing. Named on
- * the field at fault, `name` or `config`.
+ * `\` or a control character, or runs over 255 bytes; or a folder pattern fills in nothing, or a
+ * Tile config sets no part at all. Named on the field at fault, `name` or `config`.
  */
 export class NameInvalid extends Schema.TaggedError<NameInvalid>()('NameInvalid', invalid) {}
 

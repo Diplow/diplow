@@ -85,6 +85,7 @@ describe('a Name and a Tile config, when stored', () => {
         expect(yield* configured({ fileName: 'SKILL.md' })).toEqual({ fileName: 'SKILL.md' })
         expect(yield* configured({ folderPattern: '<slug>' })).toEqual({ folderPattern: '<slug>' })
         for (const config of [
+          {},
           { fileName: '../CLAUDE.md' },
           { fileName: '' },
           { folderPattern: 'fixed' },
