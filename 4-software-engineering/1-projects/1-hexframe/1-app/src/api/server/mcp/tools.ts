@@ -10,6 +10,7 @@ import {
   depths,
   directions as childDirections,
   fields as allFields,
+  HelpId,
   helpRoot,
   previewLimit,
   type Field,
@@ -60,12 +61,6 @@ const Fields = (fallback: ReadonlyArray<Field>, description: string) =>
     .annotate({ description })
     .pipe(Schema.withDecodingDefaultKey(Effect.succeed(fallback)))
 
-/** A Tile of Help, by its path of slots from Help's Root: `help`, `help/3`, `help/3/-1`. */
-const HelpId = Schema.String.check(
-  Schema.isMaxLength(64),
-  Schema.isPattern(new RegExp(`^${helpRoot}(/-?[1-6])*$`)),
-)
-
 const TileId = Schema.Union([Id, HelpId]).annotate({
   description:
     "A Tile's id, as open_tile and map answer it: a Tile of the user's System, or of Help, from " +
@@ -73,7 +68,7 @@ const TileId = Schema.Union([Id, HelpId]).annotate({
 })
 
 const help =
-  `Help, hexframe's own guide, is a System every user reads and none writes, from its Root, id ` +
+  "Help, hexframe's own guide, is a System every user reads and none writes, from its Root, id " +
   `"${helpRoot}": open it to learn what a System, a Tile, a Direction or Context is.`
 
 const directions =

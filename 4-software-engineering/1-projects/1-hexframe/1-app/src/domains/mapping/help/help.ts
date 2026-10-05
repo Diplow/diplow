@@ -4,20 +4,37 @@
 // database. Its ids are paths of slots from its Root, `help`, `help/3`, `help/3/-1`, looked up among
 // the bundled Tiles, never read as a file path. The build refuses a folder that reads as no Tile
 // (vite.config.ts).
-import { Effect } from 'effect'
+import { Effect, Schema } from 'effect'
 
 import type { TileRow, TileRowWith } from '#/repositories/database/tiles/tiles'
 import { helpNotes } from '#/repositories/help/help'
 
 import { TileNotFound } from '../errors'
 import { type Depth, type Field, readOf } from '../system'
+import { contextDirections, directions } from '../tile'
 import { vaultOf } from './vault'
 
 /** The id of Help's Root; every other Help id is a path of slots below it. */
 export const helpRoot = 'help'
 
-/** Whether an id names Help: its Root or a path below it, whether a Tile stands there or not. */
+/**
+ * Whether an id names Help: its Root or anything below it, well formed or not, whether a Tile stands
+ * there or not. A change naming one is refused, so `help/../x` is Help's too.
+ */
 export const isHelpId = (id: string) => id === helpRoot || id.startsWith(`${helpRoot}/`)
+
+/** A slot, as a Help id writes it: a Child's Direction or a Context slot. */
+const slot = [...directions, ...contextDirections].join('|')
+
+/**
+ * A well-formed Help id, as a reader may send one: Help's Root, then the slot of each generation
+ * below it, `help/3/-1`. The id of every Tile of Help has this form; not every id of this form has a
+ * Tile.
+ */
+export const HelpId = Schema.String.check(
+  Schema.isMaxLength(64),
+  Schema.isPattern(new RegExp(`^${helpRoot}(/(${slot}))*$`)),
+)
 
 /** Help, as the build bundled it. */
 export const help = vaultOf(helpRoot, helpNotes)
