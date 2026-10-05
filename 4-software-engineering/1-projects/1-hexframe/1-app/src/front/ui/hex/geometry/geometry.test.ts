@@ -2,9 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   directions,
-  frameSlots,
   hexCorners,
-  hexHeight,
   hexWidth,
   insetHex,
   neighbor,
@@ -34,10 +32,9 @@ describe('opposite', () => {
   })
 })
 
-describe('hexWidth and hexHeight', () => {
-  it('measure a pointy hex: √3 radii across, two radii tall', () => {
+describe('hexWidth', () => {
+  it('measures a pointy hex: √3 radii across', () => {
     expect(hexWidth(10)).toBeCloseTo(17.32, 2)
-    expect(hexHeight(10)).toBe(20)
   })
 })
 
@@ -81,15 +78,6 @@ describe('neighbor', () => {
       const back = neighbor(neighbor(origin, direction), opposite(direction))
       expect(back.center.x).toBeCloseTo(0)
       expect(back.center.y).toBeCloseTo(0)
-    }
-  })
-})
-
-describe('frameSlots', () => {
-  it('fits all seven slots inside the hex the Frame replaces', () => {
-    const slots = frameSlots(origin)
-    for (const slot of [slots.center, ...Object.values(slots.ring)]) {
-      for (const corner of hexCorners(slot)) expect(contains(origin, corner)).toBe(true)
     }
   })
 })

@@ -5,8 +5,15 @@ import { Schema } from 'effect'
 
 import { Slot } from '#/api/mapping/mapping'
 import type { ImportPlace } from '#/front/client/mapping/queries'
-import type { TileNode } from '#/front/ui/hex/geometry/layout'
-import { CanvasView, findTile, orDefault, readSearch, TileId } from '#/front/ui/hex/view/view'
+import { findTile, type TileNode } from '#/front/ui/hex/view/tiles'
+import {
+  CanvasView,
+  orDefault,
+  readSearch,
+  TileId,
+  viewIn,
+  withViewIn,
+} from '#/front/ui/hex/view/view'
 
 /** What `import` says for the Root of an empty System, where a Tile's id goes otherwise. */
 const rootPlace = 'root'
@@ -52,8 +59,8 @@ export type Change =
 export const readSystemSearch = readSearch(SystemSearch)
 
 /** The canvas's part of the search params. */
-export function viewOf({ center, expanded, context }: SystemSearch): CanvasView {
-  return { center, expanded, context }
+export function viewOf(search: SystemSearch): CanvasView {
+  return viewIn(search)
 }
 
 /** Where an import lands, as the URL says it: a slot under a Tile, the Root, or nowhere. */
@@ -81,7 +88,7 @@ const importSearch = (place: ImportPlace) =>
 
 /** The search params for this view, keeping the change under way. */
 export function withView(search: SystemSearch, view: CanvasView): SystemSearch {
-  return { ...search, center: view.center, expanded: view.expanded, context: view.context }
+  return withViewIn(search, view)
 }
 
 /** The search params for this change, keeping the view; `none` ends the one under way. */

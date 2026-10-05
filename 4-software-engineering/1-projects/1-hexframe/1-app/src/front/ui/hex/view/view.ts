@@ -1,10 +1,19 @@
-// The canvas's view state: which Tile is centered, which Children are expanded, whether the center
-// shows its Context. It lives in the URL, so a link shows what its sender saw. Every function here
-// is pure; each change returns the next view, tidied, for the route to navigate to.
+// The canvas's view state, the shape's: which Tile is centered, the Frame kind of the ring around it,
+// the ring inside its hex, and which Branches of the ring around it open, each into a Frame kind of
+// its own, two generations deep. It lives in the URL, so a link shows what its sender saw. Every
+// function here is pure; each change returns the next view, tidied, for the route to navigate to.
 import { Effect, Schema } from 'effect'
 
-import { directions } from '../geometry/geometry'
-import type { Placement, TileNode, Unfolding } from '../geometry/layout'
+import { directions, type Direction } from '../geometry/geometry'
+import {
+  findTile,
+  firstKindOf,
+  kindsOf,
+  type FrameKind,
+  type InnerKind,
+  type OuterKind,
+  type TileNode,
+} from './tiles'
 
 /** A field the URL got wrong is left out, so the view falls back to its default for that field. */
 export const orDefault = <S extends Schema.Top>(schema: S) =>
@@ -25,123 +34,152 @@ export function readSearch<
 
 export const TileId = Schema.String.check(Schema.isNonEmpty(), Schema.isMaxLength(100))
 
+/** A Branch of the ring around the center, opened into a Frame kind; one the URL got wrong stays closed. */
+const opened = Schema.optionalKey(
+  orDefault(Schema.Literals(['children', 'branches', 'leaves', 'context'])),
+)
+
 /**
  * The view as the URL carries it, and the route's `validateSearch`. Every field is optional and an
- * absent one is its default, so a plain URL is the root with nothing open.
+ * absent one is its default, so a plain URL is the root with its first ring around it, nothing
+ * inside it and nothing open. A link from before the shape's view, its expansions a list of ids,
+ * keeps its center alone.
  */
 export const CanvasView = Schema.Struct({
   /** The centered Tile's id; absent, the System's root. */
   center: Schema.optionalKey(orDefault(TileId)),
-  /** The Children shown as Frames, each inside the centered Tile or an expanded Child. */
+  /** The Frame kind of the ring around the center; absent, Children, or Branches past six. */
+  frame: Schema.optionalKey(orDefault(Schema.Literals(['children', 'branches', 'leaves']))),
+  /** The ring inside the center's hex; absent, none. */
+  inner: Schema.optionalKey(orDefault(Schema.Literals(['leaves', 'context']))),
+  /** The Branches of the ring around the center that open, by Direction, each into its Frame kind. */
   expanded: Schema.optionalKey(
-    orDefault(Schema.Array(TileId).check(Schema.isMinLength(1), Schema.isMaxLength(100))),
+    orDefault(Schema.Struct({ 1: opened, 2: opened, 3: opened, 4: opened, 5: opened, 6: opened })),
   ),
-  /** Whether the centered Tile shows its Context. */
-  context: Schema.optionalKey(orDefault(Schema.Literal(true))),
 })
 
 export type CanvasView = typeof CanvasView.Type
-
-/** The view resolved against a System: the centered Tile itself, and what is open around it. */
-export interface ShownView extends Unfolding {
-  center: TileNode
-}
-
-/** What a click on a Tile does. A double-click, or Shift+Enter, centers any Tile but the center. */
-export type TileAction = 'expand' | 'collapse' | 'show-context' | 'hide-context' | 'center'
 
 /** Reads the URL's search params, field by field: the route's `validateSearch`. */
 export const readCanvasView = readSearch(CanvasView)
 
 /**
- * The Tiles from the System's root down to the one with this id, both included, Context Tiles
- * included: the ancestors a breadcrumb shows. A Reference drawn under the id is not the Tile, which
- * stands elsewhere. Empty when no Tile has the id.
+ * The view resolved against a System: the centered Tile itself, the rings it shows, and what opens
+ * around it. A centered Leaf has no ring, `frame` and `inner` undefined: it fills the view alone.
  */
-export function pathTo(system: TileNode, id: string): TileNode[] {
-  if (system.id === id && system.reference !== true) return [system]
-  const below = directions.flatMap((direction) => [
-    system.children?.[direction],
-    system.context?.[direction],
-  ])
-  for (const tile of below) {
-    const path = tile ? pathTo(tile, id) : []
-    if (path.length > 0) return [system, ...path]
-  }
-  return []
+export interface ShownView {
+  center: TileNode
+  frame: OuterKind | undefined
+  inner: InnerKind | undefined
+  expanded: Partial<Record<Direction, FrameKind>>
 }
 
-/** The Tile with this id, anywhere in the System, Context Tiles included. */
-export function findTile(system: TileNode, id: string): TileNode | undefined {
-  return pathTo(system, id).at(-1)
+/** The rings the center can show: around it, among the kinds it offers, and inside it beside that. */
+export interface RingChoices {
+  around: OuterKind[]
+  inside: InnerKind[]
 }
 
-/** A view as a change asks for it, before `tidy` drops what no one would see. */
-interface WantedView {
-  center?: string
-  expanded?: readonly string[]
-  context?: boolean
+/** Context goes inside any ring, Leaves only inside Branches: never the same kind in both. */
+function insideKinds(kinds: readonly FrameKind[], frame: OuterKind | undefined): InnerKind[] {
+  if (frame === undefined) return []
+  return frame === 'branches' && kinds.includes('leaves') ? ['leaves', 'context'] : ['context']
+}
+
+/** The rings the shown center can show, for a medium to offer. */
+export function ringChoices({ center, frame }: ShownView): RingChoices {
+  const kinds = kindsOf(center)
+  const around = kinds.filter((kind): kind is OuterKind => kind !== 'context')
+  return { around, inside: insideKinds(kinds, frame) }
 }
 
 /**
- * The view resolved against the System. An unknown center falls back to the root, and only the
- * expansions a reader can see are kept: a Child of the center, or of a Child that is expanded.
+ * The view resolved against the System. An unknown center falls back to the root, a ring it doesn't
+ * offer to its first one, an inner ring that can't sit beside the outer one to none. Only a Branch of
+ * the ring around the center opens, into a kind it offers, else into its first ring.
  */
-export function showView(system: TileNode, view: WantedView): ShownView {
+export function showView(system: TileNode, view: CanvasView): ShownView {
   const center = (view.center === undefined ? undefined : findTile(system, view.center)) ?? system
-  const wanted = new Set(view.expanded)
-  const expanded: string[] = []
-  const visit = (tile: TileNode) => {
-    for (const direction of directions) {
-      const child = tile.children?.[direction]
-      if (child && wanted.has(child.id)) {
-        expanded.push(child.id)
-        visit(child)
-      }
-    }
-  }
-  visit(center)
-  return { center, expanded: new Set(expanded), context: view.context === true }
+  const kinds = kindsOf(center)
+  const wanted = view.frame
+  const frame = wanted !== undefined && kinds.includes(wanted) ? wanted : firstKindOf(center)
+  const inner =
+    view.inner !== undefined && insideKinds(kinds, frame).includes(view.inner)
+      ? view.inner
+      : undefined
+  return { center, frame, inner, expanded: expansionsOf(center, frame, view.expanded ?? {}) }
 }
 
-/** The view in its shortest form: defaults left out, expansions no one can see dropped. */
-function tidy(system: TileNode, view: WantedView): CanvasView {
-  const shown = showView(system, view)
+/** The Branches of the ring `frame` around `center` that `wanted` opens, each into a kind it offers. */
+function expansionsOf(
+  center: TileNode,
+  frame: OuterKind | undefined,
+  wanted: Partial<Record<Direction, FrameKind>>,
+): ShownView['expanded'] {
+  const expanded: ShownView['expanded'] = {}
+  // A Leaves ring holds no Branch; in a Children ring, as in a Branches one, a Branch sits where it sits.
+  if (frame === undefined || frame === 'leaves') return expanded
+  for (const direction of directions) {
+    const kind = wanted[direction]
+    const branch = center.branches?.[direction]
+    if (kind === undefined || branch === undefined) continue
+    expanded[direction] = kindsOf(branch).includes(kind) ? kind : firstKindOf(branch)
+  }
+  return expanded
+}
+
+/** The view in its shortest form: defaults left out, what no one would see dropped. */
+function tidy(system: TileNode, view: CanvasView): CanvasView {
+  const { center, frame, inner, expanded } = showView(system, view)
   return {
-    ...(shown.center === system ? {} : { center: shown.center.id }),
-    ...(shown.expanded.size > 0 ? { expanded: [...shown.expanded] } : {}),
-    ...(shown.context ? { context: true } : {}),
+    ...(center === system ? {} : { center: center.id }),
+    ...(frame === firstKindOf(center) ? {} : { frame }),
+    ...(inner === undefined ? {} : { inner }),
+    ...(Object.keys(expanded).length === 0 ? {} : { expanded }),
   }
 }
 
-export function toggleExpanded(system: TileNode, view: CanvasView, id: string): CanvasView {
-  const expanded = view.expanded ?? []
-  return tidy(system, {
-    ...view,
-    expanded: expanded.includes(id) ? expanded.filter((other) => other !== id) : [...expanded, id],
-  })
+/** Centers a Tile, with its first ring around it, nothing inside and nothing open. */
+export function centerOn(system: TileNode, id: string): CanvasView {
+  return tidy(system, { center: id })
 }
 
-export function toggleContext(system: TileNode, view: CanvasView): CanvasView {
-  return tidy(system, { ...view, context: view.context !== true })
+/** Opens the Branch in this Direction of the ring around the center into its first ring, or closes it. */
+export function toggleExpanded(
+  system: TileNode,
+  view: CanvasView,
+  direction: Direction,
+): CanvasView {
+  const shown = showView(system, view)
+  const { [direction]: open, ...others } = shown.expanded
+  const branch = shown.center.branches?.[direction]
+  const first = branch === undefined ? undefined : firstKindOf(branch)
+  const expanded =
+    open === undefined && first !== undefined ? { ...others, [direction]: first } : others
+  return tidy(system, { ...view, expanded })
 }
 
-/** Centers a Tile. The expansions below it stay open; its Context starts closed. */
-export function centerOn(system: TileNode, view: CanvasView, id: string): CanvasView {
-  return tidy(system, { center: id, expanded: view.expanded ?? [] })
+/** Shows this kind around the center. Its Branches are other Tiles, so none stays open. */
+export function withFrame(system: TileNode, view: CanvasView, frame: OuterKind): CanvasView {
+  return tidy(system, { ...view, frame, expanded: {} })
 }
 
-/**
- * A click on the center shows or hides its Context, a click on a Child expands or collapses it, and a
- * click on a Context Tile, which has nothing to expand, centers it.
- */
-export function tileAction(
-  placement: Extract<Placement, { kind: 'tile' }>,
-  shown: ShownView,
-): TileAction {
-  if (placement.tile.id === shown.center.id) return shown.context ? 'hide-context' : 'show-context'
-  if (placement.role === 'children') return 'expand'
-  // The hub of an expanded Child: the Child itself, drawn at the heart of its Frame.
-  if (placement.role === 'hub') return 'collapse'
-  return 'center'
+/** Shows this kind inside the center's hex, or nothing. */
+export function withInner(
+  system: TileNode,
+  view: CanvasView,
+  inner: InnerKind | undefined,
+): CanvasView {
+  return tidy(system, { ...view, inner })
+}
+
+/** The canvas's part of a page's search params. */
+export function viewIn({ center, frame, inner, expanded }: CanvasView): CanvasView {
+  return { center, frame, inner, expanded }
+}
+
+/** A page's search params with this view, every field of the canvas's set, the others kept. */
+export function withViewIn<S extends CanvasView>(search: S, view: CanvasView): S {
+  const { center, frame, inner, expanded } = view
+  return { ...search, center, frame, inner, expanded }
 }

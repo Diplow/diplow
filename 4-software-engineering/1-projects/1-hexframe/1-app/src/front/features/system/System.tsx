@@ -6,9 +6,9 @@ import { cn } from 'cn'
 
 import { useMoveTile, useSwapTiles } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
-import { Canvas, type EmptySlotTarget } from '#/front/ui/hex/Canvas'
-import type { TileNode } from '#/front/ui/hex/geometry/layout'
-import { findTile } from '#/front/ui/hex/view/view'
+import { Canvas } from '#/front/ui/hex/Canvas'
+import type { EmptySlotTarget } from '#/front/ui/hex/geometry/shape'
+import { findTile, type TileNode } from '#/front/ui/hex/view/tiles'
 import { Button } from '#/front/ui/inputs/controls/button'
 
 import {
@@ -45,15 +45,19 @@ export function System({ system, tree, search, onSearchChange, className }: Syst
     slot: slotOf(slot.ring, slot.direction),
   })
 
-  const addHere = {
-    label: ({ parent, ring }: EmptySlotTarget) =>
-      ring === 'children'
-        ? m.system_add_child({ title: parent.title })
-        : m.system_add_context({ title: parent.title }),
-    onSelect: (slot: EmptySlotTarget) => {
-      onSearchChange(withChange(search, { kind: 'add', ...place(slot) }))
-    },
-  }
+  // An empty Leaf slot takes nothing from the canvas yet: creating a Leaf there is HEX-61's.
+  const addHere = (slot: EmptySlotTarget) =>
+    slot.ring === 'leaves'
+      ? undefined
+      : {
+          label:
+            slot.ring === 'context'
+              ? m.system_add_context({ title: slot.parent.title })
+              : m.system_add_child({ title: slot.parent.title }),
+          onSelect: () => {
+            onSearchChange(withChange(search, { kind: 'add', ...place(slot) }))
+          },
+        }
 
   // One write at a time: a slot clicked while the Tile is on its way does nothing. A refusal (a slot
   // under the Tile itself, one taken meanwhile, a swap along one line) shows in a toast, and the move
@@ -66,15 +70,18 @@ export function System({ system, tree, search, onSearchChange, className }: Syst
     },
   }
 
-  const moveHere = (tile: TileNode) => ({
-    label: ({ parent, ring }: EmptySlotTarget) =>
-      ring === 'children'
-        ? m.system_move_child({ tile: tile.title, title: parent.title })
-        : m.system_move_context({ tile: tile.title, title: parent.title }),
-    onSelect: (slot: EmptySlotTarget) => {
-      if (!pending) move.mutate({ id: tile.id, ...place(slot) }, done)
-    },
-  })
+  const moveHere = (tile: TileNode) => (slot: EmptySlotTarget) =>
+    slot.ring === 'leaves'
+      ? undefined
+      : {
+          label:
+            slot.ring === 'context'
+              ? m.system_move_context({ tile: tile.title, title: slot.parent.title })
+              : m.system_move_child({ tile: tile.title, title: slot.parent.title }),
+          onSelect: () => {
+            if (!pending) move.mutate({ id: tile.id, ...place(slot) }, done)
+          },
+        }
 
   const swapWith = (moving: TileNode) => (held: TileNode) =>
     swapsWith(system, moving, held)

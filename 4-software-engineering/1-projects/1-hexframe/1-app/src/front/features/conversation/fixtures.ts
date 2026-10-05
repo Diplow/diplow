@@ -3,7 +3,7 @@
 // from `now`, so the timeline always shows a today and a yesterday. Like the System, its content is
 // the user's own, so it is not translated.
 import { ulysse } from '#/front/ui/hex/fixtures'
-import { findTile } from '#/front/ui/hex/view/view'
+import { findTile } from '#/front/ui/hex/view/tiles'
 
 import type { Entry, TileSummary } from './timeline'
 

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import type { TileNode } from '#/front/ui/hex/geometry/layout'
+import type { TileNode } from '#/front/ui/hex/view/tiles'
 
 import { tileLink } from '#/api/mapping/files/download'
 
@@ -15,10 +15,11 @@ describe('readSystemSearch', () => {
   })
 
   it('reads the view and the change, every field set', () => {
-    expect(readSystemSearch({ center: 'a', context: true, add: 'a', slot: -2 })).toEqual({
+    expect(readSystemSearch({ center: 'a', inner: 'context', add: 'a', slot: -2 })).toEqual({
       center: 'a',
+      frame: undefined,
+      inner: 'context',
       expanded: undefined,
-      context: true,
       add: 'a',
       slot: -2,
       import: undefined,
@@ -62,11 +63,16 @@ describe('changeOf', () => {
 })
 
 describe('withView and withChange', () => {
-  const search = readSystemSearch({ center: 'a', expanded: ['b'], move: 'c' })
+  const search = readSystemSearch({ center: 'a', expanded: { 2: 'children' }, move: 'c' })
 
   it('changes the view and keeps the change under way', () => {
-    const next = withView(search, { context: true })
-    expect(viewOf(next)).toEqual({ center: undefined, expanded: undefined, context: true })
+    const next = withView(search, { inner: 'context' })
+    expect(viewOf(next)).toEqual({
+      center: undefined,
+      frame: undefined,
+      inner: 'context',
+      expanded: undefined,
+    })
     expect(changeOf(next)).toEqual({ kind: 'move', id: 'c' })
   })
 
@@ -99,12 +105,14 @@ describe('withView and withChange', () => {
 })
 
 describe('withoutTile', () => {
-  // a goes, and with it its Child a1 and its Context Tile a2; its Reference to b leaves b standing.
+  // a goes, and with it its Branch a1, its Leaf a4 and its Context Tile a2; its Reference to b
+  // leaves b standing.
   const gone: TileNode = {
     id: 'a',
     title: 'A',
     preview: '',
-    children: { 1: { id: 'a1', title: 'A1', preview: '' } },
+    branches: { 1: { id: 'a1', title: 'A1', preview: '' } },
+    leaves: { 4: { id: 'a4', title: 'A4', preview: '', leaf: true } },
     context: {
       2: { id: 'a2', title: 'A2', preview: '' },
       3: { id: 'b', title: 'B', preview: '', reference: true },
@@ -125,7 +133,12 @@ describe('withoutTile', () => {
   })
 
   it('ends the change under way when it named a Tile below it, a Child or a Context Tile', () => {
-    for (const search of [{ move: 'a1' }, { edit: 'a2' }, { add: 'a1', slot: -2 }]) {
+    for (const search of [
+      { move: 'a1' },
+      { edit: 'a2' },
+      { move: 'a4' },
+      { add: 'a1', slot: -2 },
+    ]) {
       expect(changeOf(withoutTile(readSystemSearch(search), gone))).toEqual({ kind: 'none' })
     }
   })

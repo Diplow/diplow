@@ -13,8 +13,8 @@ import {
   type TileSubmit,
 } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
-import type { TileNode } from '#/front/ui/hex/geometry/layout'
-import { centerOn, findTile, showView } from '#/front/ui/hex/view/view'
+import { findTile, type TileNode } from '#/front/ui/hex/view/tiles'
+import { centerOn, showView } from '#/front/ui/hex/view/view'
 import { Button } from '#/front/ui/inputs/controls/button'
 import { useAppForm } from '#/front/ui/inputs/forms/form'
 import { ConfirmDialog } from '#/front/ui/overlays/ConfirmDialog'
@@ -78,7 +78,7 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
             // of the Tiles gone.
             onDeleted: () => {
               onSearchChange((current) =>
-                withoutTile(withView(current, centerOn(tree, viewOf(current), parent.id)), center),
+                withoutTile(withView(current, centerOn(tree, parent.id)), center),
               )
             },
           })}
@@ -343,7 +343,13 @@ function NewTileForm({ parent, slot, onSaved }: NewTileFormProps) {
   )
 }
 
-function EditTileForm({ tile, onSaved }: { tile: SystemTile; onSaved: () => void }) {
+function EditTileForm({
+  tile,
+  onSaved,
+}: {
+  tile: TileContent & { id: string }
+  onSaved: () => void
+}) {
   const submit = useEditTileSubmit(tile, onSaved)
   const { title, preview, body } = tile
   return <TileForm defaults={{ title, preview, body }} submit={submit} label={m.system_save()} />
