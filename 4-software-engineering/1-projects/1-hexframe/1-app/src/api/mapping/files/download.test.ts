@@ -6,11 +6,11 @@ import type { TileNotFound } from '#/domains/mapping/errors'
 import { exportOf } from '#/domains/mapping/files/files'
 import { unzipped } from '#/repositories/zip/testing'
 
-import type { Unexpected } from '../errors/failure'
-import { noKey, run, type StartContext } from '../server/run'
+import type { Unexpected } from '../../errors/failure'
+import { noKey, run, type StartContext } from '../../server/run'
 import { asDownload, downloaded, type ExportAnswer, tileLink } from './download'
-import type { exportTile } from './mapping'
-import * as Mapping from './programs'
+import type { exportTile } from '../mapping'
+import * as Mapping from '../programs'
 
 // An export, from the program to the file the browser saves: the program through the helper, on the
 // runtime's repositories over PGlite, its outcome answered as the server function answers it, then

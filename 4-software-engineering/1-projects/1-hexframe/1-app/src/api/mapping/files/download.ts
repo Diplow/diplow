@@ -6,7 +6,7 @@
 // the failure as any other (`front/client/`). And where an export links a Tile it leaves out, a route
 // of the front's, which the front's own tests read back, and the id an import reads back from such a
 // link. Pure: no module of the server's reaches the client here.
-import type { Failure, Outcome } from '../errors/failure'
+import type { Failure, Outcome } from '../../errors/failure'
 
 /** A zip as Mapping hands it over: its name, `<slug>.zip`, and its bytes, streamed. */
 interface Zipped {

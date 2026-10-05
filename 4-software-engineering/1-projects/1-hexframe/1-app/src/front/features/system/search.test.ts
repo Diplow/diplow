@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { TileNode } from '#/front/ui/hex/geometry/layout'
 
-import { tileLink } from '#/api/mapping/download'
+import { tileLink } from '#/api/mapping/files/download'
 
 import { changeOf, readSystemSearch, viewOf, withChange, withoutTile, withView } from './search'
 
@@ -21,6 +21,7 @@ describe('readSystemSearch', () => {
       context: true,
       add: 'a',
       slot: -2,
+      import: undefined,
       edit: undefined,
       move: undefined,
     })
@@ -41,15 +42,22 @@ describe('changeOf', () => {
     expect(read({ add: 'a', slot: 3 })).toEqual({ kind: 'add', parent: 'a', slot: 3 })
     expect(read({ edit: 'a' })).toEqual({ kind: 'edit', id: 'a' })
     expect(read({ move: 'a' })).toEqual({ kind: 'move', id: 'a' })
+    expect(read({ import: 'a', slot: { leaf: 2 } })).toEqual({
+      kind: 'import',
+      place: { _tag: 'Slot', parent: 'a', slot: { leaf: 2 } },
+    })
+    expect(read({ import: 'root' })).toEqual({ kind: 'import', place: { _tag: 'Root' } })
   })
 
-  it('opens no new Tile form without its slot', () => {
+  it('opens no new Tile form, nor an import under a Tile, without its slot', () => {
     expect(read({ add: 'a' })).toEqual({ kind: 'none' })
+    expect(read({ import: 'a' })).toEqual({ kind: 'none' })
   })
 
   it('lets a form win over a move, since the form covers the canvas', () => {
     expect(read({ move: 'a', edit: 'b' })).toEqual({ kind: 'edit', id: 'b' })
     expect(read({ move: 'a', add: 'b', slot: 1 })).toMatchObject({ kind: 'add' })
+    expect(read({ move: 'a', import: 'root' })).toMatchObject({ kind: 'import' })
   })
 })
 
@@ -67,6 +75,22 @@ describe('withView and withChange', () => {
     expect(viewOf(next)).toEqual(viewOf(search))
     expect(changeOf(next)).toEqual({ kind: 'add', parent: 'a', slot: -4 })
     expect(next.move).toBeUndefined()
+  })
+
+  it('turns a new Tile into an import in the same slot, and back, and an import into the Root', () => {
+    const adding = withChange(search, { kind: 'add', parent: 'a', slot: 2 })
+    const place = { _tag: 'Slot', parent: 'a', slot: 2 } as const
+    const importing = withChange(adding, { kind: 'import', place })
+    expect(importing).toMatchObject({ import: 'a', slot: 2, add: undefined })
+    expect(changeOf(importing)).toEqual({ kind: 'import', place })
+    expect(changeOf(withChange(importing, { kind: 'add', parent: 'a', slot: 2 }))).toEqual({
+      kind: 'add',
+      parent: 'a',
+      slot: 2,
+    })
+    const vault = withChange(importing, { kind: 'import', place: { _tag: 'Root' } })
+    expect(vault).toMatchObject({ import: 'root', slot: undefined })
+    expect(changeOf(withChange(vault, { kind: 'none' }))).toEqual({ kind: 'none' })
   })
 
   it('ends the change under way', () => {
@@ -88,7 +112,12 @@ describe('withoutTile', () => {
   }
 
   it('ends the change under way when it named the Tile gone', () => {
-    for (const search of [{ move: 'a' }, { edit: 'a' }, { add: 'a', slot: 2 }]) {
+    for (const search of [
+      { move: 'a' },
+      { edit: 'a' },
+      { add: 'a', slot: 2 },
+      { import: 'a', slot: 2 },
+    ]) {
       const next = withoutTile(readSystemSearch({ center: 'c', ...search }), gone)
       expect(changeOf(next)).toEqual({ kind: 'none' })
       expect(next.center).toBe('c')
@@ -109,6 +138,10 @@ describe('withoutTile', () => {
     expect(changeOf(withoutTile(readSystemSearch({ move: 'b' }), gone))).toEqual({
       kind: 'move',
       id: 'b',
+    })
+    expect(changeOf(withoutTile(readSystemSearch({ import: 'root' }), gone))).toEqual({
+      kind: 'import',
+      place: { _tag: 'Root' },
     })
   })
 })

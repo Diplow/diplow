@@ -96,3 +96,15 @@ export function tileIn(
   }
   return undefined
 }
+
+/**
+ * Whether the System is empty, as Mapping adds it: its Root untitled, with nothing below it. Only an
+ * empty System takes an import as its Root, which replaces the Root's Preview and Body, so a Root
+ * that holds either, written before its name, is not offered one.
+ */
+export const isEmptySystem = ({ title, preview, body, branches, leaves, context }: SystemTile) =>
+  [title, preview, body].every((text) => text === '') &&
+  [branches, leaves, context].every((below) => Object.keys(below).length === 0)
+
+/** Whether a slot is a Leaf's, which takes one file alone and nothing below it. */
+export const isLeafSlot = (slot: typeof Slot.Type) => typeof slot === 'object'

@@ -12,7 +12,7 @@ import type { Locale } from '#/paraglide/runtime'
 import { HttpExchange } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
 
-import { tileLink, tileOfLink } from './download'
+import { tileLink, tileOfLink } from './files/download'
 
 /** Runs an operation for the signed-in Account: the one the request proves, never one a caller sends. */
 const forAccount = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, E, R>) =>

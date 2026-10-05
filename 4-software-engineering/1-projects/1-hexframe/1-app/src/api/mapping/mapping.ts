@@ -1,7 +1,7 @@
 // Mapping's server functions: one per operation, for the signed-in Account, which the middleware has
 // already put on the context as its Session, and `help`, Help whole, for any visitor. Each validates
 // its input, then hands its program (./programs.ts) to the helper; its type lists the errors it can
-// fail with. `exportTile` answers its zip as a download (./download.ts); `importTiles` takes a form.
+// fail with. `exportTile` answers its zip as a download (./files/download.ts); `importTiles` takes a form.
 import { createServerFn } from '@tanstack/react-start'
 import { Schema } from 'effect'
 
@@ -9,7 +9,7 @@ import { contentBounds, contextDirections, directions } from '#/domains/mapping/
 import { locales } from '#/paraglide/runtime'
 
 import { run } from '../server/run'
-import { asDownload } from './download'
+import { asDownload } from './files/download'
 import * as Mapping from './programs'
 
 /** A Tile's id: a UUID, as the tiles repository makes every one, so nothing else reaches the domain. */

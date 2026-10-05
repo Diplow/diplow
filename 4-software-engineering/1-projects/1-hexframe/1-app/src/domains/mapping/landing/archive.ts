@@ -23,6 +23,28 @@ export const archiveBounds: UnpackBounds = {
 }
 
 /**
+ * The faults of a folder's files against the bounds an archive unpacks within, as a sender checks
+ * them before it zips the files, by their sizes: more files than an archive may hold, each file past
+ * the shape's 1 MB, and the file at which the whole passes 16 MB. None when the files fit.
+ */
+export function pastBounds(
+  files: ReadonlyArray<{ readonly path: string; readonly size: number }>,
+): Array<ImportFault> {
+  if (files.length > archiveBounds.entries) return [{ path: '', fault: 'TooManyEntries' }]
+  const faults: Array<ImportFault> = []
+  let total = 0
+  for (const { path, size } of files) {
+    if (size > archiveBounds.entryBytes) faults.push({ path, fault: 'FileTooLarge' })
+    const before = total
+    total += size
+    if (before <= archiveBounds.totalBytes && total > archiveBounds.totalBytes) {
+      faults.push({ path, fault: 'UnpackedTooLarge' })
+    }
+  }
+  return faults
+}
+
+/**
  * The most an import uploads, in bytes: 4 MB, below the 4.5 MB to which Vercel caps a request's body.
  * A larger import goes through storage first, later.
  */
@@ -32,12 +54,16 @@ export const uploadLimit = 4_000_000
  * Refuses an upload past 4 MB, by its size alone, before a byte of it is read: `ImportRefused`, its
  * fault `UploadTooLarge` on the upload itself.
  */
-export const fitsUpload = (size: number) =>
-  size > uploadLimit
-    ? Effect.fail(
-        new ImportRefused({ fields: ['files'], faults: [{ path: '', fault: 'UploadTooLarge' }] }),
-      )
-    : Effect.void
+export const fitsUpload = (size: number) => {
+  const [first, ...rest] = uploadFaults(size)
+  return first === undefined
+    ? Effect.void
+    : Effect.fail(new ImportRefused({ fields: ['files'], faults: [first, ...rest] }))
+}
+
+/** The fault of an upload by its size: `UploadTooLarge` on the upload itself past 4 MB, else none. */
+export const uploadFaults = (size: number): Array<ImportFault> =>
+  size > uploadLimit ? [{ path: '', fault: 'UploadTooLarge' }] : []
 
 /** What an upload is, as its sender says: an archive of a folder, or one file alone. */
 export interface Upload {
@@ -55,6 +81,26 @@ const stopped: Record<Exclude<Unpacked['_tag'], 'Unpacked'>, Fault> = {
   EntryTooLarge: 'FileTooLarge',
   TotalTooLarge: 'UnpackedTooLarge',
   Unreadable: 'ArchiveUnreadable',
+}
+
+/** Where an archive stopped unpacking, as the fault of the import: on the entry it stopped at, if any. */
+export function stoppedAt(unpacked: Exclude<Unpacked, { _tag: 'Unpacked' }>): ImportFault {
+  return { path: 'path' in unpacked ? unpacked.path : '', fault: stopped[unpacked._tag] }
+}
+
+/**
+ * The one folder every file sits in, when there is one and no file beside it: an archive that wraps
+ * its folder in one more, as macOS's Compress writes it once its `__MACOSX` dot files are left out.
+ * A sender unwraps it, so the folder it holds is the import, named by it; the server reads the
+ * archive's root as the folder, as an export writes it.
+ */
+export function wrappingFolder(
+  files: ReadonlyArray<{ readonly path: string }>,
+): string | undefined {
+  const [first] = files
+  const [top] = first?.path.split('/') ?? []
+  if (top === undefined || first?.path === top) return undefined
+  return files.every(({ path }) => path.startsWith(`${top}/`)) ? top : undefined
 }
 
 /** An entry's path without the `/` a folder's ends with. */
@@ -103,8 +149,11 @@ function clashes(seen: Map<string, Seen>, entry: ArchiveEntry, path: string): bo
   return false
 }
 
-/** Every fault of an archive's entries, in their order, one per entry at most. */
-function entryFaults(entries: ReadonlyArray<ArchiveEntry>): Array<ImportFault> {
+/**
+ * Every fault of an archive's entries, in their order, one per entry at most: the verdict on their
+ * paths, which a sender runs too before it zips a folder's files.
+ */
+export function pathFaults(entries: ReadonlyArray<ArchiveEntry>): Array<ImportFault> {
   const faults: Array<ImportFault> = []
   const seen = new Map<string, Seen>()
   for (const entry of entries) {
@@ -136,11 +185,8 @@ export function folderOf(
   name: string,
   unpacked: Unpacked,
 ): Result.Result<ImportSource, ImportRefused> {
-  if (unpacked._tag !== 'Unpacked') {
-    const path = 'path' in unpacked ? unpacked.path : ''
-    return Result.fail(refused([{ path, fault: stopped[unpacked._tag] }]))
-  }
-  const [first, ...rest] = entryFaults(unpacked.entries)
+  if (unpacked._tag !== 'Unpacked') return Result.fail(refused([stoppedAt(unpacked)]))
+  const [first, ...rest] = pathFaults(unpacked.entries)
   if (first !== undefined) return Result.fail(refused([first, ...rest]))
   const files = unpacked.entries.flatMap(({ path, kind, bytes }) =>
     kind === 'File' ? [{ path, bytes }] : [],

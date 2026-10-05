@@ -71,6 +71,16 @@ export interface Skipped {
   readonly reason: 'Binary' | 'DotFile' | 'Shadowed'
 }
 
+/**
+ * A file a sender leaves out before an upload, and why: a name its folder's exclusions leave out, or
+ * one every folder leaves out (`.git`, `node_modules`, `.hexframe/` but for the files a reading reads
+ * there), a dot file, a binary. A reading would skip each of them, or read it as nothing.
+ */
+export interface LeftOut {
+  readonly path: string
+  readonly reason: 'Excluded' | 'DotFile' | 'Binary'
+}
+
 /** What an import would create, its root a Tile, or a Leaf for a file alone, and what it skipped. */
 export interface ImportPlan {
   readonly root: PlannedTile | PlannedLeaf

@@ -3,8 +3,8 @@ import { describe, expect, it } from 'vitest'
 
 import type { ImportFault } from '../../errors'
 import { contentBounds, previewLimit } from '../../tile'
-import type { ImportFile, ImportPlan, ImportSource, PlannedTile } from './plan'
-import { importOf } from './read'
+import type { ImportFile, ImportPlan, ImportSource, LeftOut, PlannedTile } from './plan'
+import { importOf, isSettingsFile, leftOutOf, skippedAsBinary } from './read'
 
 // Files read back into an import plan, on file lists made by hand, no zip: a vault folder read the way
 // the shape reads one, what it keeps and what it skips, its References, a file alone; then every fault
@@ -296,5 +296,146 @@ describe('an import refused', () => {
   it('reads a folder 16 deep, the deepest an import goes', () => {
     const sixteen = deep.split('/').slice(0, 16).join('/')
     expect(planOf(folder([file(`${sixteen}/CLAUDE.md`, note('title: Deep'))])).root).toBeDefined()
+  })
+})
+
+describe('what a sender leaves out before an upload', () => {
+  type Sent = { kept: ReadonlyArray<string>; leftOut: ReadonlyArray<LeftOut> }
+
+  /** Each list in path order: the order a sender walks a folder in is no rule. */
+  const inOrder = ({ kept, leftOut }: Sent): Sent => ({
+    kept: [...kept].sort((a, b) => a.localeCompare(b)),
+    leftOut: [...leftOut].sort((a, b) => a.path.localeCompare(b.path)),
+  })
+
+  /** What `leftOutOf` keeps, by path, and leaves out, the settings it reads given as text. */
+  function sent(paths: ReadonlyArray<string>, settings: Readonly<Record<string, string>> = {}) {
+    const bytes = new Map(Object.entries(settings).map(([path, text]) => [path, utf8.encode(text)]))
+    const { kept, leftOut } = leftOutOf(
+      paths.map((path) => ({ path })),
+      bytes,
+    )
+    return inOrder({ kept: kept.map(({ path }) => path), leftOut })
+  }
+
+  it('keeps what a reading reads, Context folders and the settings it reads among them', () => {
+    const paths = [
+      'CLAUDE.md',
+      '1-a/CLAUDE.md',
+      '1-a/notes.md',
+      '.1-why/CLAUDE.md',
+      '.hexframe/config.yaml',
+      '.hexframe/exclusions.yaml',
+      '1-a/.hexframe/config.yaml',
+    ]
+    expect(sent(paths)).toEqual(inOrder({ kept: paths, leftOut: [] }))
+  })
+
+  it('leaves out dot files, the folders every folder leaves out, once, and other settings', () => {
+    expect(
+      sent([
+        'CLAUDE.md',
+        '.DS_Store',
+        '1-a/.env',
+        '.git/HEAD',
+        '.git/objects/ab/cd',
+        '1-a/node_modules/x/index.js',
+        '.hexframe/notes.md',
+        '.hexframe/cache/x',
+      ]),
+    ).toEqual(
+      inOrder({
+        kept: ['CLAUDE.md'],
+        leftOut: [
+          { path: '.DS_Store', reason: 'DotFile' },
+          { path: '.git', reason: 'Excluded' },
+          { path: '.hexframe/notes.md', reason: 'Excluded' },
+          { path: '.hexframe/cache', reason: 'Excluded' },
+          { path: '1-a/.env', reason: 'DotFile' },
+          { path: '1-a/node_modules', reason: 'Excluded' },
+        ],
+      }),
+    )
+  })
+
+  it('leaves out what a folder’s exclusions name, in that folder only', () => {
+    const exclusions = 'exclude:\n  - dist/\n  - "*.log"\n'
+    expect(
+      sent(
+        [
+          '1-a/dist/x.md',
+          '1-a/run.log',
+          '1-a/keep.md',
+          'run.log',
+          'dist/x.md',
+          '1-a/.hexframe/exclusions.yaml',
+        ],
+        { '1-a/.hexframe/exclusions.yaml': exclusions },
+      ),
+    ).toEqual(
+      inOrder({
+        kept: ['run.log', 'dist/x.md', '1-a/keep.md', '1-a/.hexframe/exclusions.yaml'],
+        leftOut: [
+          { path: '1-a/run.log', reason: 'Excluded' },
+          { path: '1-a/dist', reason: 'Excluded' },
+        ],
+      }),
+    )
+  })
+
+  it('leaves nothing out by exclusions it can’t read, for the server to refuse', () => {
+    const paths = ['dist/x.md', '.hexframe/exclusions.yaml']
+    for (const text of ['not: [a list', 'x'.repeat(5_000)]) {
+      expect(sent(paths, { '.hexframe/exclusions.yaml': text })).toEqual(
+        inOrder({ kept: paths, leftOut: [] }),
+      )
+    }
+    expect(
+      leftOutOf(
+        paths.map((path) => ({ path })),
+        new Map([['.hexframe/exclusions.yaml', new Uint8Array([0xff])]]),
+      ).kept,
+    ).toHaveLength(2)
+  })
+
+  it('leaves out nothing the reading would have read: the same plan from what is kept', () => {
+    const files = [
+      file('CLAUDE.md', note('title: Vault\npreview: All of it')),
+      file('1-a/CLAUDE.md', note('title: A')),
+      file('1-a/notes.md', note('title: Notes', 'Body')),
+      file('1-a/.env', 'SECRET=x'),
+      file('1-a/dist/out.md', 'built'),
+      file('1-a/.hexframe/exclusions.yaml', 'exclude: [dist/]'),
+      file('.1-why/CLAUDE.md', note('title: Why')),
+      file('.hexframe/config.yaml', 'fileName: CLAUDE.md'),
+      file('.hexframe/notes.txt', 'x'),
+      file('node_modules/x/index.js', 'x'),
+      file('.git/HEAD', 'ref'),
+      file('.DS_Store', 'x'),
+    ]
+    const { kept } = leftOutOf(files, new Map(files.map(({ path, bytes }) => [path, bytes])))
+    expect(planOf(folder(kept)).root).toEqual(planOf(folder(files)).root)
+  })
+
+  it('names the settings a reading reads, in any folder', () => {
+    expect(isSettingsFile('.hexframe/config.yaml')).toBe(true)
+    expect(isSettingsFile('a/b/.hexframe/exclusions.yaml')).toBe(true)
+    expect(isSettingsFile('.hexframe/other.yaml')).toBe(false)
+    expect(isSettingsFile('config.yaml')).toBe(false)
+    expect(isSettingsFile('hexframe/config.yaml')).toBe(false)
+  })
+
+  it('tells a binary by its bytes, whole or by its first ones, as a reading does', () => {
+    // A folder's settings are read whatever they hold.
+    expect(skippedAsBinary('.hexframe/config.yaml', new Uint8Array([0xff]))).toBe(false)
+    expect(skippedAsBinary('x.md', utf8.encode('# Notes, café'))).toBe(false)
+    expect(skippedAsBinary('x.md', new Uint8Array([0x89, 0x50, 0x4e, 0x47]))).toBe(true)
+    expect(skippedAsBinary('x.md', utf8.encode('a\0b'))).toBe(true)
+    // A head may end inside a character: only the bytes before it count.
+    const cut = utf8.encode('café').slice(0, 4)
+    expect(skippedAsBinary('x.md', cut)).toBe(true)
+    expect(skippedAsBinary('x.md', cut, true)).toBe(false)
+    expect(skippedAsBinary('x.md', new Uint8Array([0xff, 0x41]), true)).toBe(true)
+    expect(skippedAsBinary('x.md', utf8.encode('a\0'), true)).toBe(true)
   })
 })

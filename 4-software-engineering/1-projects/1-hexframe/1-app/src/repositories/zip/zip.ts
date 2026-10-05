@@ -1,9 +1,10 @@
 // Zip archives, over fflate, imported by this folder only (dependency-cruiser.config.ts, `sdks`): a
-// list of files streamed into an archive, one file deflated each time the reader asks for more, and
-// an archive a user sends unpacked within bounds (./unzip.ts). It speaks paths and bytes; Mapping
+// list of files streamed into an archive, one file deflated each time the reader asks for more; the
+// archive a browser uploads, zipped whole; and an archive a user sends unpacked within bounds
+// (./unzip.ts). It speaks paths and bytes; Mapping
 // decides which files an export holds and what an import's entries may be (src/domains/mapping/).
 import { Context, Layer } from 'effect'
-import { Zip as Archive, ZipDeflate, strToU8 } from 'fflate'
+import { Zip as Archive, ZipDeflate, strToU8, zipSync } from 'fflate'
 
 import { unpacked } from './unzip'
 
@@ -54,6 +55,21 @@ export function zipped(entries: ReadonlyArray<Entry>): ReadableStream<Uint8Array
       archive?.terminate()
     },
   })
+}
+
+/** One file of an archive a browser writes: its path from the archive's root, and its bytes. */
+export interface ArchivedFile {
+  readonly path: string
+  readonly bytes: Uint8Array
+}
+
+/**
+ * These files zipped whole, in memory, in their order: what a browser uploads, a few megabytes at most,
+ * once it has left out what the server would. A plain function the browser reaches through the API
+ * layer (`api/mapping/files/upload.ts`), as it does observability's.
+ */
+export function archived(files: ReadonlyArray<ArchivedFile>): Uint8Array {
+  return zipSync(Object.fromEntries(files.map(({ path, bytes }) => [path, bytes])))
 }
 
 /**

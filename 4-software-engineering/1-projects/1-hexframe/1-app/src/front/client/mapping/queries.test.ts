@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { cleanup, renderHook, waitFor } from '@testing-library/react'
+import { Schema } from 'effect'
 import { createElement, type ReactNode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
@@ -19,6 +20,7 @@ import {
   useEditTileSubmit,
   useExportTile,
   useHelp,
+  useImportTiles,
   useMoveTile,
   useSwapTiles,
   useSystem,
@@ -27,7 +29,10 @@ import {
 // The hooks over stand-ins for the server functions: what each calls, what it answers, and when the
 // System is read again. The server functions themselves are covered in src/api/mapping/mapping.test.ts.
 // A refusal is what the client receives, its wire form: the front never imports a domain.
-vi.mock('#/api/mapping/mapping', () => ({
+vi.mock('#/api/mapping/mapping', async (original) => ({
+  // The import's form is encoded by the server function's own schema.
+  ImportUpload: (await original<typeof Mapping>()).ImportUpload,
+  importTiles: vi.fn(),
   system: vi.fn(),
   help: vi.fn(),
   createTile: vi.fn(),
@@ -221,6 +226,97 @@ describe('the export of a Tile', () => {
       .catch((error: unknown) => error)
     expect(failed).toMatchObject({ scope: 'exportTile', failure: { _tag: 'Unexpected' } })
     expect(click).not.toHaveBeenCalled()
+  })
+})
+
+describe('an import', () => {
+  const folder = {
+    _tag: 'Folder',
+    name: 'vault',
+    files: [
+      { path: 'CLAUDE.md', kind: 'File', blob: () => Promise.resolve(new Blob(['# Vault'])) },
+      { path: '.env', kind: 'File', blob: () => Promise.resolve(new Blob(['SECRET=x'])) },
+    ],
+  } as const
+  const place = { _tag: 'Slot', parent: crypto.randomUUID(), slot: 2 } as const
+  const report = { id: 'vault', tiles: 1, references: 0, skipped: [] }
+
+  /** Renders the import beside the System's read, once the System is read. */
+  async function importing() {
+    answering(undefined)
+    const { result } = render(useImportTiles)
+    await waitFor(() => {
+      expect(result.current.system.isSuccess).toBe(true)
+    })
+    return result
+  }
+
+  it('sends the folder pruned and zipped, as the form the server function decodes, then reads the System again', async () => {
+    vi.mocked(Mapping.importTiles).mockResolvedValue({ ok: true, value: report } as never)
+    const result = await importing()
+    const imported = await result.current.hook.mutateAsync({
+      given: Promise.resolve(folder),
+      place,
+    })
+    expect(imported).toEqual({
+      _tag: 'Landed',
+      report,
+      leftOut: [{ path: '.env', reason: 'DotFile' }],
+    })
+    const [[{ data }]] = vi.mocked(Mapping.importTiles).mock.calls as unknown as [
+      [{ data: FormData }],
+    ]
+    expect(Schema.decodeUnknownSync(Mapping.ImportUpload)(data)).toMatchObject({
+      as: 'Zip',
+      place,
+      upload: { name: 'vault.zip' },
+    })
+    await waitFor(() => {
+      expect(Mapping.system).toHaveBeenCalledTimes(2)
+    })
+  })
+
+  it('answers the server’s refusal with every fault, what was left out beside them', async () => {
+    const faults = [{ path: 'CLAUDE.md', fault: 'PreviewTooLong' }]
+    vi.mocked(Mapping.importTiles).mockResolvedValue({
+      ok: false,
+      failure: { _tag: 'ImportRefused', kind: 'Invalid', fields: ['files'], faults },
+      requestId: 'req-2',
+    } as never)
+    const result = await importing()
+    expect(await result.current.hook.mutateAsync({ given: folder, place })).toEqual({
+      _tag: 'Refused',
+      faults,
+      leftOut: [{ path: '.env', reason: 'DotFile' }],
+    })
+  })
+
+  it('answers the browser’s refusal without sending anything', async () => {
+    const result = await importing()
+    const big = new File([new Uint8Array(4_000_001)], 'big.md')
+    expect(
+      await result.current.hook.mutateAsync({ given: { _tag: 'File', file: big }, place }),
+    ).toEqual({
+      _tag: 'Refused',
+      faults: [{ path: '', fault: 'UploadTooLarge' }],
+      leftOut: [],
+    })
+    expect(Mapping.importTiles).not.toHaveBeenCalled()
+  })
+
+  it('throws any other failure as a CallFailed, for a write’s channel', async () => {
+    vi.mocked(Mapping.importTiles).mockResolvedValue({
+      ok: false,
+      failure: { _tag: 'DirectionTaken', kind: 'Conflict' },
+      requestId: 'req-3',
+    } as never)
+    const result = await importing()
+    const file = new File(['# Notes'], 'notes.md')
+    const failed = await result.current.hook
+      .mutateAsync({ given: { _tag: 'File', file }, place })
+      .catch((error: unknown) => error)
+    expect(failed).toBeInstanceOf(CallFailed)
+    expect(failed).toMatchObject({ scope: 'importTiles', failure: { _tag: 'DirectionTaken' } })
   })
 })
 
