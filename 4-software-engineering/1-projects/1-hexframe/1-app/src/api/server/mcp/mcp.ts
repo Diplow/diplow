@@ -8,6 +8,7 @@ import {
   createMcpHandler,
   type AuthInfo,
   type CallToolResult,
+  type ToolAnnotations,
 } from '@modelcontextprotocol/server'
 import { Schema } from 'effect'
 
@@ -16,7 +17,7 @@ import * as Iam from '#/domains/iam/iam'
 import { decodeFailure, type EncodedFailure, type Failure } from '../../errors/failure'
 import { messageFor } from '../../errors/messages'
 import { noSession, provenKey, run, waitUntilOf, type StartContext } from '../run'
-import { tools } from './tools'
+import { tools, type Tool } from './tools'
 
 const implementation = { name: 'hexframe', version: '1.0.0' }
 
@@ -43,9 +44,15 @@ interface Refusal {
   readonly requestId: string
 }
 
-/** A failure as an agent reads it: its tag, its sentence and the request id; never a stack. */
-const sentence = ({ failure, requestId }: Refusal, scope: string) =>
-  `${failure._tag}: ${messageFor(decodeFailure(failure), scope)} (request ${requestId})`
+/**
+ * A failure as an agent reads it: its tag, its sentence, the fields at fault for an `Invalid` one,
+ * and the request id; never a stack.
+ */
+function sentence({ failure, requestId }: Refusal, scope: string): string {
+  const decoded = decodeFailure(failure)
+  const atFault = 'fields' in decoded ? ` (at fault: ${decoded.fields.join(', ')})` : ''
+  return `${failure._tag}: ${messageFor(decoded, scope)}${atFault} (request ${requestId})`
+}
 
 /**
  * The answer to a request no Key proves, or whose Key could not be checked, sent before its body is
@@ -63,14 +70,29 @@ function refused(refusal: Refusal): Response {
   )
 }
 
-/** A tool's answer: its value as JSON, or its failure as a tool error the agent reads. */
+/**
+ * A tool's answer: its value as JSON, `null` for a write that answers nothing, or its failure as a
+ * tool error the agent reads.
+ */
 function resultOf(
   outcome: { ok: true; value: unknown } | ({ ok: false } & Refusal),
   scope: string,
 ): CallToolResult {
-  if (outcome.ok) return { content: [{ type: 'text', text: JSON.stringify(outcome.value) }] }
+  if (outcome.ok) {
+    return { content: [{ type: 'text', text: JSON.stringify(outcome.value ?? null) }] }
+  }
   return { isError: true, content: [{ type: 'text', text: sentence(outcome, scope) }] }
 }
+
+/**
+ * What a client may tell its user of a tool before calling it: whether it only reads, whether it
+ * erases what the user wrote, and that it reaches nothing but the user's System.
+ */
+const annotationsOf = (tool: Tool): ToolAnnotations => ({
+  readOnlyHint: tool.kind === 'read',
+  destructiveHint: tool.destructive === true,
+  openWorldHint: false,
+})
 
 /** The MCP server for one request: every tool of the table, each run for the Account its Key proved. */
 function serverFor(context: StartContext) {
@@ -81,7 +103,7 @@ function serverFor(context: StartContext) {
       {
         description: tool.description,
         inputSchema: inputs.get(tool),
-        annotations: { readOnlyHint: tool.kind === 'read' },
+        annotations: annotationsOf(tool),
       },
       async (input) =>
         resultOf(await run({ ...context, scope: tool.name }, tool.program(input)), tool.name),

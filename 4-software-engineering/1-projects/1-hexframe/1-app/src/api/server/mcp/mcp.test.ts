@@ -1,12 +1,11 @@
-import { Client, StreamableHTTPClientTransport } from '@modelcontextprotocol/client'
-import { Exit, Option } from 'effect'
+import { Exit } from 'effect'
 import { describe, expect, it, vi } from 'vitest'
 
 import * as Iam from '#/domains/iam/iam'
 
-import * as Mapping from '../../mapping/programs'
-import { noKey, provenKey, run, type StartContext } from '../run'
+import { provenKey, run } from '../run'
 import { methodNotAllowed, serveMcp } from './mcp'
+import { aSystem, bearer, call, connect, content, endpoint, signedUp, value } from './testing'
 
 // The Key's lookup as it runs, but where a test makes it fail as a database that is down would.
 vi.mock('../run', async (original) => {
@@ -15,104 +14,8 @@ vi.mock('../run', async (original) => {
 })
 
 // The MCP endpoint, driven by the SDK's own client over the handler, on the runtime's Better Auth and
-// tiles over PGlite: an Account signs up, issues a Key, and an agent reads its System with it.
-
-const endpoint = 'http://localhost/mcp'
-
-let devices = 0
-
-/** A request from a device of its own, its cookies kept as the server sets them. */
-function device() {
-  devices += 1
-  const cookies = new Map<string, string>()
-  const cookie = () => [...cookies].map(([name, value]) => `${name}=${value}`).join('; ')
-  const context = (): StartContext => ({
-    requestId: 'req-mcp',
-    scope: 'test',
-    waitUntil: () => undefined,
-    exchange: {
-      url: 'http://localhost/_serverFn',
-      headers: new Headers({ cookie: cookie(), 'x-forwarded-for': `10.1.0.${String(devices)}` }),
-      setCookies: (lines) => {
-        for (const line of lines) {
-          const [pair = ''] = line.split(';')
-          const at = pair.indexOf('=')
-          cookies.set(pair.slice(0, at).trim(), pair.slice(at + 1).trim())
-        }
-      },
-    },
-    session: Exit.succeed(Option.none()),
-    key: noKey,
-  })
-  return { context, cookie }
-}
-
-/** The value of a call that must succeed. */
-async function value<A>(outcome: Promise<{ ok: true; value: A } | { ok: false }>): Promise<A> {
-  const settled = await outcome
-  if (!settled.ok) throw new Error(`Expected a success, got ${JSON.stringify(settled)}`)
-  return settled.value
-}
-
-/** A new Account, signed in on a device, with one Key issued, and a request its Session proves. */
-async function signedUp() {
-  const { context, cookie } = device()
-  const credentials = { email: `${crypto.randomUUID()}@example.com`, password: 'lovelace1815' }
-  await value(run(context(), Iam.signUp(credentials)))
-  const session = await value(run(context(), Iam.proven))
-  const signedIn: StartContext = { ...context(), session: Exit.succeed(session) }
-  const { key, secret } = await value(run(signedIn, Iam.issueKey('Claude Code')))
-  return { signedIn, cookie: cookie(), key, secret }
-}
-
-/** An MCP client that sends these headers to the handler, in the 2025 protocol or the newest. */
-async function connect(headers: Record<string, string>, mode: 'legacy' | 'auto' = 'legacy') {
-  const client = new Client({ name: 'test', version: '1.0.0' }, { versionNegotiation: { mode } })
-  const transport = new StreamableHTTPClientTransport(new URL(endpoint), {
-    requestInit: { headers },
-    fetch: (input, init) => serveMcp(new Request(input, init)),
-  })
-  await client.connect(transport)
-  return client
-}
-
-const bearer = (secret: string) => ({ authorization: `Bearer ${secret}` })
-
-/** A tool's answer: its JSON, or its error's text. */
-async function call(client: Client, name: string, args: Record<string, unknown> = {}) {
-  const result = await client.callTool({ name, arguments: args })
-  const [first] = result.content as ReadonlyArray<{ type: string; text: string }>
-  const text = first?.text ?? ''
-  return result.isError === true ? { error: text } : { value: JSON.parse(text) as unknown }
-}
-
-const content = (title: string) => ({ title, preview: `${title}, in short.`, body: `# ${title}` })
-
-/**
- * The Account's System: the Root, named, a Child in Direction 1 with one of its own, a Context Tile,
- * a Reference to the Child, and a broken Reference.
- */
-async function aSystem(signedIn: StartContext) {
-  const { id } = await value(run(signedIn, Mapping.system))
-  const root = await value(run(signedIn, Mapping.editTile({ id, ...content('Ada') })))
-  const create = (
-    parent: string,
-    slot: Parameters<typeof Mapping.createTile>[0]['slot'],
-    title: string,
-  ) => value(run(signedIn, Mapping.createTile({ parent, slot, ...content(title) })))
-  const child = await create(root.id, 1, 'Frontend')
-  const grandchild = await create(child.id, 2, 'Routes')
-  const principles = await create(root.id, -1, 'Principles')
-  const gone = await create(root.id, 6, 'Gone')
-  await value(
-    run(signedIn, Mapping.createReference({ parent: root.id, slot: -2, target: child.id })),
-  )
-  await value(
-    run(signedIn, Mapping.createReference({ parent: root.id, slot: -3, target: gone.id })),
-  )
-  await value(run(signedIn, Mapping.deleteTile({ id: gone.id })))
-  return { root, child, grandchild, principles, gone }
-}
+// tiles over PGlite: an Account signs up, issues a Key, and an agent reads its System with it. The
+// writes have their own file, ./writes.test.ts.
 
 const glimpse = ({ id, title, preview }: { id: string; title: string; preview: string }) => ({
   _tag: 'Tile',
@@ -121,26 +24,66 @@ const glimpse = ({ id, title, preview }: { id: string; title: string; preview: s
   preview,
 })
 
-describe('the MCP endpoint', () => {
+describe('the tool table, as an agent lists it', () => {
   it.each(['legacy', 'auto'] as const)(
-    'lists open_tile and map, each with its input in JSON Schema (%s protocol)',
+    'lists the reads, then a write per operation, each with its input in JSON Schema (%s protocol)',
     async (mode) => {
       const { secret } = await signedUp()
       const client = await connect(bearer(secret), mode)
       const { tools } = await client.listTools()
-      expect(tools.map(({ name }) => name)).toEqual(['open_tile', 'map'])
+      const listed = tools.map(({ name, annotations, inputSchema }) => ({
+        name,
+        annotations,
+        required: inputSchema.required ?? [],
+      }))
+      const read = { readOnlyHint: true, destructiveHint: false, openWorldHint: false }
+      const write = { ...read, readOnlyHint: false }
+      const erase = { ...write, destructiveHint: true }
+      expect(listed).toEqual([
+        { name: 'open_tile', annotations: read, required: [] },
+        { name: 'map', annotations: read, required: [] },
+        {
+          name: 'create_tile',
+          annotations: write,
+          required: ['parent', 'slot', 'title', 'preview', 'body'],
+        },
+        { name: 'edit_tile', annotations: write, required: ['id'] },
+        { name: 'move_tile', annotations: write, required: ['id', 'parent', 'slot'] },
+        { name: 'swap_tiles', annotations: write, required: ['a', 'b'] },
+        { name: 'delete_tile', annotations: erase, required: ['id'] },
+        { name: 'create_reference', annotations: write, required: ['parent', 'slot', 'target'] },
+        { name: 'delete_reference', annotations: erase, required: ['parent', 'slot'] },
+      ])
       for (const tool of tools) {
-        expect(tool.description).toMatch(/Preview/)
-        expect(tool.annotations?.readOnlyHint).toBe(true)
+        expect(tool.description).toMatch(/Tile/)
         expect(tool.inputSchema).toMatchObject({ type: 'object' })
-        expect(tool.inputSchema.required ?? []).toEqual([])
+        for (const property of Object.values(tool.inputSchema.properties ?? {})) {
+          expect(property).toHaveProperty('description')
+        }
       }
-      const properties = Object.values(tools[1]?.inputSchema.properties ?? {})
-      expect(properties).toHaveLength(3)
-      for (const property of properties) expect(property).toHaveProperty('description')
     },
   )
 
+  it('teaches each write the refusals it may meet, and how to get past them', async () => {
+    const { secret } = await signedUp()
+    const client = await connect(bearer(secret))
+    const { tools } = await client.listTools()
+    const description = (name: string) => tools.find((tool) => tool.name === name)?.description
+    for (const tool of tools.filter(({ annotations }) => annotations?.readOnlyHint === false)) {
+      expect(tool.description).toMatch(/TileNotFound: .+; map or open_tile/)
+    }
+    expect(description('create_tile')).toMatch(/a seventh is refused: regroup .+ by moving them/)
+    for (const name of ['create_tile', 'edit_tile']) {
+      expect(description(name)).toMatch(/TitleMissing: .+ PreviewTooLong: /)
+    }
+    for (const name of ['move_tile', 'swap_tiles']) {
+      expect(description(name)).toMatch(/RootFixed: .+ MovedUnderItself: /)
+    }
+    expect(description('delete_tile')).toMatch(/for good: no tool brings it back/)
+  })
+})
+
+describe('the MCP endpoint', () => {
   it('opens the Root by default: all it says, and its neighbours by Title and Preview only', async () => {
     const { signedIn, secret } = await signedUp()
     const { root, child, principles, gone } = await aSystem(signedIn)
