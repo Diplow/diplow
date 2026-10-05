@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './front/routes/__root'
 import { Route as IndexRouteImport } from './front/routes/index'
 import { Route as DevRouteRouteImport } from './front/routes/dev/route'
+import { Route as McpRouteImport } from './front/routes/mcp'
 import { Route as SignInRouteImport } from './front/routes/sign-in'
 import { Route as SignUpRouteImport } from './front/routes/sign-up'
 import { Route as DevErrorsRouteImport } from './front/routes/dev/errors'
@@ -28,6 +29,11 @@ const IndexRoute = IndexRouteImport.update({
 const DevRouteRoute = DevRouteRouteImport.update({
   id: '/dev',
   path: '/dev',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignInRoute = SignInRouteImport.update({
@@ -74,6 +80,7 @@ const SettingsKeysRoute = SettingsKeysRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dev': typeof DevRouteRouteWithChildren
+  '/mcp': typeof McpRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/dev/errors': typeof DevErrorsRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dev': typeof DevRouteRouteWithChildren
+  '/mcp': typeof McpRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/dev/errors': typeof DevErrorsRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dev': typeof DevRouteRouteWithChildren
+  '/mcp': typeof McpRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/dev/errors': typeof DevErrorsRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dev'
+    | '/mcp'
     | '/sign-in'
     | '/sign-up'
     | '/dev/errors'
@@ -125,6 +135,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dev'
+    | '/mcp'
     | '/sign-in'
     | '/sign-up'
     | '/dev/errors'
@@ -137,6 +148,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/dev'
+    | '/mcp'
     | '/sign-in'
     | '/sign-up'
     | '/dev/errors'
@@ -150,6 +162,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DevRouteRoute: typeof DevRouteRouteWithChildren
+  McpRoute: typeof McpRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
   SettingsKeysRoute: typeof SettingsKeysRoute
@@ -169,6 +182,13 @@ declare module '@tanstack/react-router' {
       path: '/dev'
       fullPath: '/dev'
       preLoaderRoute: typeof DevRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sign-in': {
@@ -253,6 +273,7 @@ const DevRouteRouteWithChildren = DevRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DevRouteRoute: DevRouteRouteWithChildren,
+  McpRoute: McpRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
   SettingsKeysRoute: SettingsKeysRoute,

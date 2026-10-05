@@ -7,24 +7,7 @@
 import { createCsrfMiddleware, createMiddleware } from '@tanstack/react-start'
 import { getRequest, getResponseHeaders } from '@tanstack/react-start/server'
 
-import { noKey, provenSession, type StartContext } from './run'
-
-/** A request as Nitro hands it over (srvx's `ServerRequest`), with the platform's `waitUntil`. */
-type PlatformRequest = Request & Pick<StartContext, 'waitUntil'>
-
-function isPlatformRequest(request: Request): request is PlatformRequest {
-  return 'waitUntil' in request && typeof request.waitUntil === 'function'
-}
-
-/**
- * The platform's `waitUntil`, which Nitro puts on the request: Vercel's on Vercel, srvx's own under
- * `pnpm dev`. Where there is none, the work still runs; nothing keeps the function up for it.
- */
-function waitUntilOf(request: Request): StartContext['waitUntil'] {
-  return (promise) => {
-    if (isPlatformRequest(request)) request.waitUntil(promise)
-  }
-}
+import { noKey, provenSession, waitUntilOf, type StartContext } from './run'
 
 /** The request's headers, and the response's, where the cookies a call sets are appended. */
 function exchangeOf(request: Request): StartContext['exchange'] {

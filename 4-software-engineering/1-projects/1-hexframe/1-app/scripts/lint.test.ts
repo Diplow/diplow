@@ -160,6 +160,29 @@ describe('the UI library boundary', () => {
   })
 })
 
+describe('the MCP SDK boundary', () => {
+  const rule = depcruise.forbidden?.find(
+    ({ name }) => name === 'no-mcp-sdk-outside-the-mcp-folder',
+  ) as { from: { pathNot: string }; to: { path: string } } | undefined
+  const to = new RegExp(rule?.to.path ?? '$^')
+  const exempt = new RegExp(rule?.from.pathNot ?? '$^')
+
+  it.each([
+    '@modelcontextprotocol/server',
+    '@modelcontextprotocol/client',
+    '../node_modules/.pnpm/@modelcontextprotocol+server@2.3.0/node_modules/@modelcontextprotocol/server/dist/index.mjs',
+  ])('holds back %s', (module) => {
+    expect(to.test(module)).toBe(true)
+  })
+
+  it('exempts the API layer’s MCP folder and nothing else', () => {
+    expect(exempt.test('src/api/server/mcp/mcp.ts')).toBe(true)
+    expect(exempt.test('src/api/server/run.ts')).toBe(false)
+    expect(exempt.test('src/api/mapping/programs.ts')).toBe(false)
+    expect(exempt.test('src/front/routes/mcp.ts')).toBe(false)
+  })
+})
+
 describe('the .ts import lint', () => {
   const tsImport = /No \.ts or \.tsx in an import path under src\//
 

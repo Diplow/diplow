@@ -114,10 +114,12 @@ export function systemOf(rows: ReadonlyArray<TileRow>): SystemTile | undefined {
 }
 
 /** What a read may ask of each Tile: its Title, its Preview, its Body. */
-export type Field = keyof Content
+export const fields = ['title', 'preview', 'body'] as const satisfies ReadonlyArray<keyof Content>
+export type Field = (typeof fields)[number]
 
 /** How many generations below the Tile it opens a read goes: 0 for the Tile alone, at most 3. */
-export type Depth = 0 | 1 | 2 | 3
+export const depths = [0, 1, 2, 3] as const
+export type Depth = (typeof depths)[number]
 
 /** A Tile a Reference points at, as a read shows it: what a reader needs to decide to open it. */
 type Glimpse = Pick<Tile, 'id' | 'title' | 'preview'>

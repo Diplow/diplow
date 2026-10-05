@@ -30,7 +30,7 @@ Each line has a topic, and each topic a level. A level logs its own topics and t
 | low | medium, plus information (`info`), repository and database calls (`repository`), renders (`render`, in development only) | development |
 
 - **The environment is fixed at build time**: `development` under `pnpm dev`, `preview` on a Vercel preview, `production` for any other build, a local one included.
-- **A PostHog feature flag raises one Account's level, never lowers it.** The flag is `verbosity` (`high`, `medium`, `low`). The server reads it for the signed-in Account in `requestLog`, before the program, and keeps each value it reads five minutes; a flag it cannot read leaves the environment's level, and is read again shortly. The browser applies it only while the device is tied to an Account: `identify` ties it on signing in or up (`continueTo`) and on every page `signedInOnly` guards, `forget` unties it when a guarded visit, or a call made in the page (`client/channels.ts`), finds nobody signed in.
+- **A PostHog feature flag raises one Account's level, never lowers it.** The flag is `verbosity` (`high`, `medium`, `low`). The server reads it for the signed-in Account in `requestLog`, whether its Session or its Key proves it, before the program, and keeps each value it reads five minutes; a flag it cannot read leaves the environment's level, and is read again shortly. The browser applies it only while the device is tied to an Account: `identify` ties it on signing in or up (`continueTo`) and on every page `signedInOnly` guards, `forget` unties it when a guarded visit, or a call made in the page (`client/channels.ts`), finds nobody signed in.
 
 ## Rules
 

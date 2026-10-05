@@ -10,7 +10,7 @@ import { run } from '../server/run'
 import * as Mapping from './programs'
 
 /** A Tile's id: a UUID, as the tiles repository makes every one, so nothing else reaches the domain. */
-const Id = Schema.String.check(Schema.isUUID())
+export const Id = Schema.String.check(Schema.isUUID())
 
 /** A Child's Direction and a Context slot, as Mapping names them. */
 const Direction = Schema.Literals(directions)

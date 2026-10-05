@@ -50,6 +50,10 @@ const uiLibraries = [
   'sonner',
 ]
 
+// The MCP server's SDK is the API layer's framework at `/mcp`, as Start is for server functions: the
+// one SDK a repository does not hold, imported by the API layer's MCP folder alone (STACK.md).
+const mcpFolder = 'src/api/server/mcp/'
+
 const sdkOutsideItsRepository: IConfiguration['forbidden'] = Object.entries(sdks).map(
   ([repository, modules]) => ({
     name: `no-${repository}-sdk-outside-its-repository`,
@@ -88,6 +92,13 @@ const config: IConfiguration = {
       to: { path: '^src/domains/([^/]+)/', pathNot: '^src/domains/$1/' },
     },
     ...sdkOutsideItsRepository,
+    {
+      name: 'no-mcp-sdk-outside-the-mcp-folder',
+      comment: `@modelcontextprotocol/*: imported by ${mcpFolder} only.`,
+      severity: 'error',
+      from: { pathNot: `^${mcpFolder}` },
+      to: { path: '(^|node_modules/)@modelcontextprotocol/' },
+    },
     {
       name: 'no-promise-database-outside-auth',
       comment:

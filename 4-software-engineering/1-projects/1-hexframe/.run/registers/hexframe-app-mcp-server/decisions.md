@@ -8,8 +8,9 @@ preview: >-
   takes a Session, which of the api-key plugin's options it uses and which it
   leaves, the apikey table's key to its user, the Key server functions that
   waited for their page, how the Keys page keeps a secret and knows who is
-  signed in, how Mapping reads one Tile to a depth, and how two Tiles swap,
-  in the database and on the canvas.
+  signed in, how Mapping reads one Tile to a depth, how two Tiles swap,
+  in the database and on the canvas, and where the MCP endpoint sits, what
+  it answers and how a request's context reaches its tools.
 ---
 # Decisions
 
@@ -54,3 +55,16 @@ HEX-46. `tile_slot_idx`, one row per slot, is a unique index, and Postgres check
 ### DEC-10 On the canvas, a swap is a small button on the Tile, not the Tile's click
 
 HEX-46. The ticket asked that occupied slots become targets labelled "Swap with ⟨Title⟩" during a move. Taking over a Tile's click would cost the user the canvas while a move is under way: a click opens a Frame and a double-click centers, and a move is meant to cross the canvas ("anywhere the canvas is taken meanwhile"). So a Tile that can swap shows a disc with two arrows at the foot of its hex, a button of its own named "Swap with ⟨Title⟩", and the Tile keeps its click. The canvas takes it as `swapTargets`, beside `emptySlots`, named for the one thing it does, and draws it from `Tile.tsx`, since `ui/hex/` already holds six files. The Root, the moving Tile, a Reference and a broken one offer nothing: `swapsWith` in `features/system/tree.ts` reads the System for it, so the canvas's `TileNode` learns nothing of broken References and no id is read for its prefix. A Tile above or below the moving one does offer it, and Mapping refuses it with its own sentence, as a slot below a moving Tile is offered and refused.
+
+### DEC-11 The MCP folder is `api/server/mcp/`: `server/` regroups the two doors
+
+HEX-47. `src/api/` already held six folders (`server`, `errors`, `iam`, `mapping`, `dev`, `observability`), so a seventh, `mcp/`, would break the rule of 6. The MCP endpoint is a door, as `server/middleware.ts` is the server functions' door: it turns a request into a context and hands each program to `run`. So `server/` now groups both doors and the helper they share, and the MCP folder sits in it, holding the endpoint (`mcp.ts`), the tool table (`tools.ts`) and their test. `server/` keeps its six files and gains one folder. Moving a folder of its own (`dev/` under `errors/`, say) would have freed a top-level slot, but `dev/` holds server functions and `errors/` is pure and shared by both sides, and nothing else in `api/` reads as one with `mcp/`. dependency-cruiser's rule names `src/api/server/mcp/`, and `api/CLAUDE.md` gives it a row of its own.
+
+### DEC-12 The tools answer Mapping's read as it stands, and `open_tile` makes two reads
+
+HEX-47. `open_tile` answers the opened Tile with the fields asked, its parent, and its Children and Context with Title and Preview only. `readTile` asks the same fields of every Tile it reaches, so `open_tile` reads twice: the Tile alone with the fields asked, then the Tile one generation down with Title and Preview, so no neighbour's Body ever leaves the database. Both reads are Mapping's `readTile` for the signed-in Account (`api/mapping/programs.ts`). The answer keeps `readTile`'s shape, `_tag` included: a Tile is `_tag: 'Tile'`, a Reference `_tag: 'Reference'` with its Tile's id, Title and Preview, a broken one `_tag: 'BrokenReference'` with the deleted Tile's id, which names nothing that still exists. Reshaping it into plain `{ id, title, preview }` records took a cast and a second vocabulary for the same things; the tools' descriptions teach the tags instead. Defaults live in the input schemas (`withDecodingDefaultKey`): `open_tile` reads all three fields, `map` Title and Preview to a depth of 2.
+
+### DEC-13 A request's context reaches its MCP server through the SDK's `authInfo`, and the handler is built once
+
+HEX-47. `createMcpHandler` prints a warning each time it is built in JSON mode, so the endpoint builds it once, at module load, and its factory builds one `McpServer` per request. The factory needs that request's context (its id, its proven Key). The SDK hands the factory back the `authInfo` given to `fetch`, untouched, while on the 2025 protocol's path it rebuilds the request, so the request cannot be the key. So `serveMcp` passes a fresh `authInfo` object and keeps the context in a `WeakMap` keyed by it. That `authInfo` carries no token: the Key was proven before, from the header, and its secret goes no further. A request no Key proves is answered 401, `WWW-Authenticate: Bearer`, by a JSON-RPC error with no id (the body was never read), and its refusal is logged like any call: the proof runs as a program through `run`, scope `mcp`, so a Key that could not be checked reaches Sentry and answers 500.
+

@@ -26,6 +26,14 @@ type ReferenceSlot = Parameters<typeof Mapping.deleteReference>[1]
 /** The Account's System: its Root, the user, with everything below it. */
 export const system = forAccount(Mapping.system)
 
+/**
+ * A Tile of the Account's System, its Root when no id is given, read to a depth with only the fields
+ * asked: what the MCP's reads are made of.
+ */
+export const readTile = <F extends Mapping.Field>(
+  input: Parameters<typeof Mapping.readTile<F>>[1],
+) => forAccount((accountId) => Mapping.readTile(accountId, input))
+
 export const createTile = (input: Parameters<typeof Mapping.createTile>[1]) =>
   changeForAccount((accountId) => Mapping.createTile(accountId, input))
 

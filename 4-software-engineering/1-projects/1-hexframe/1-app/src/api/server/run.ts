@@ -4,7 +4,14 @@
 // eslint.config.ts says no.
 import { Cause, Context, Effect, Exit, Layer, ManagedRuntime, Option, Schema } from 'effect'
 
-import { CurrentKey, CurrentSession, proven, type KeyProof, type Session } from '#/domains/iam/iam'
+import {
+  CurrentKey,
+  CurrentSession,
+  keyProven,
+  proven,
+  type KeyProof,
+  type Session,
+} from '#/domains/iam/iam'
 import { Auth, HttpExchange, layer as authLayer } from '#/repositories/auth/auth'
 import { type Database, layer as databaseLayer } from '#/repositories/database/database'
 import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
@@ -88,8 +95,29 @@ export interface StartContext {
   readonly key: Exit.Exit<Option.Option<KeyProof>>
 }
 
+/** A request as Nitro hands it over (srvx's `ServerRequest`), with the platform's `waitUntil`. */
+type PlatformRequest = Request & Pick<StartContext, 'waitUntil'>
+
+function isPlatformRequest(request: Request): request is PlatformRequest {
+  return 'waitUntil' in request && typeof request.waitUntil === 'function'
+}
+
+/**
+ * The platform's `waitUntil`, which Nitro puts on the request: Vercel's on Vercel, srvx's own under
+ * `pnpm dev`. Where there is none, the work still runs; nothing keeps the function up for it. Both
+ * doors put it on the context they build.
+ */
+export function waitUntilOf(request: Request): StartContext['waitUntil'] {
+  return (promise) => {
+    if (isPlatformRequest(request)) request.waitUntil(promise)
+  }
+}
+
 /** A server function's Key: none, whatever its headers say, since a Key opens `/mcp` only. */
 export const noKey: StartContext['key'] = Exit.succeed(Option.none())
+
+/** An MCP call's Session: none, whatever its cookies say, since `/mcp` takes a Key alone. */
+export const noSession: StartContext['session'] = Exit.succeed(Option.none())
 
 const isFailure = Schema.is(Failure)
 
@@ -164,4 +192,14 @@ export function provenSession(
   exchange: HttpExchange['Service'],
 ): Promise<Exit.Exit<Option.Option<Session>>> {
   return runtime.runPromiseExit(proven.pipe(Effect.provideService(HttpExchange, exchange)))
+}
+
+/**
+ * The Key a request's `Authorization: Bearer` header proves, if any, for `/mcp` to put on its context
+ * before it reads the body. Like `provenSession`, a failure to tell is kept, and `run` fails with it.
+ */
+export function provenKey(
+  exchange: HttpExchange['Service'],
+): Promise<Exit.Exit<Option.Option<KeyProof>>> {
+  return runtime.runPromiseExit(keyProven.pipe(Effect.provideService(HttpExchange, exchange)))
 }
