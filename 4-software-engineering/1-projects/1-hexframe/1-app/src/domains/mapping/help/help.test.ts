@@ -9,7 +9,7 @@ import { type Tiles, layer as tilesLayer } from '#/repositories/database/tiles/t
 import * as Mapping from '../mapping'
 import { previewLimit } from '../tile'
 import { help } from './help'
-import { noteOf, vaultOf } from './vault'
+import { vaultOf } from './vault'
 
 // Help as the build bundles it, read through Mapping's `readTile` like a System, and refused to every
 // write; then a vault folder read from notes made by hand, and what keeps one from reading as a Tile.
@@ -142,16 +142,6 @@ layer(TestTiles)('Help, refused to every write in Mapping itself', (it) => {
 })
 
 describe('a vault folder read as Tiles', () => {
-  it("reads a note's frontmatter, its folded Preview joined into one line, and its Body", () => {
-    const text = `---\ntitle: "A: Tile"\nparent: x\nowner: diplo\npreview: >-\n  One\n  two.\n---\n\nBody\n`
-    expect(noteOf(text)).toEqual({
-      fields: { title: 'A: Tile', parent: 'x', owner: 'diplo', preview: 'One two.' },
-      body: 'Body',
-    })
-    expect(noteOf('# No frontmatter')).toBeUndefined()
-    expect(noteOf('---\ntitle: never closed\n')).toBeUndefined()
-  })
-
   it('names each Tile by the slots of its folders: a Child by its Direction, Context below zero', () => {
     const { rows, problems } = vaultOf('help', {
       '': note('Root'),

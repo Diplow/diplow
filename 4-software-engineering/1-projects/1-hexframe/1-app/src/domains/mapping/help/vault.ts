@@ -1,11 +1,15 @@
 // A vault folder read as a System's rows, in the shape a System exports to: a folder per Tile,
 // `<n>-<slug>/` for a Child in Direction n and `.<n>-<slug>/` for a Tile of its Context in slot -n,
 // each with a `CLAUDE.md` whose frontmatter holds the Tile's Title and Preview and whose rest is its
-// Body. Pure: the files come in as text, from whoever read or bundled them, and what keeps a folder
-// from reading as a Tile comes out as a problem, named.
+// Body. Pure: the notes come in as text, from whoever read or bundled them, the help repository
+// splits each into its frontmatter and its Body, and what keeps a folder from reading as a Tile comes
+// out as a problem, named. claude-mod's shape reads a whole vault for every medium; this reads the
+// narrower vault a System exports to, and the two merge once the app reads a user's vault
+// (hexframe-app-mcp-server/decisions.md#DEC-15).
 import type { TileRow } from '#/repositories/database/tiles/tiles'
+import { noteOf } from '#/repositories/help/note'
 
-import { fitsPreview } from '../tile'
+import { fitsPreview, previewLimit } from '../tile'
 
 /** What every Tile's frontmatter holds, as every note of the vault's does. */
 const required = ['title', 'parent', 'owner', 'preview'] as const
@@ -21,60 +25,6 @@ function slotOf(name: string): number | undefined {
   return match[1] === '.' ? -direction : direction
 }
 
-function unquoted(value: string): string {
-  const quote = value.at(0)
-  if (value.length < 2 || (quote !== '"' && quote !== "'") || !value.endsWith(quote)) return value
-  return quote === '"'
-    ? value.slice(1, -1).replace(/\\"/g, '"')
-    : value.slice(1, -1).replace(/''/g, "'")
-}
-
-/**
- * The scalar fields of a frontmatter's lines: `key: value`, quoted or not, and the block scalars `>`
- * (folded) and `|` (literal), which is all the vault's frontmatters use.
- */
-function fieldsOf(lines: ReadonlyArray<string>): Record<string, string> {
-  const fields: Record<string, string> = {}
-  let index = 0
-  while (index < lines.length) {
-    // One `.*` after the colon, trimmed after: `\s*.*` would backtrack in time quadratic in the line.
-    const match = /^([A-Za-z_][\w-]*):(.*)$/.exec(lines[index] ?? '')
-    index += 1
-    if (match === null) continue
-    const [, key = '', raw = ''] = match
-    const value = raw.trim()
-    if (!/^[>|][+-]?$/.test(value)) {
-      fields[key] = unquoted(value)
-      continue
-    }
-    const block: string[] = []
-    while (index < lines.length && /^(\s|$)/.test(lines[index] ?? '')) {
-      block.push((lines[index] ?? '').trim())
-      index += 1
-    }
-    fields[key] = (value.startsWith('>') ? block.join(' ') : block.join('\n')).trim()
-  }
-  return fields
-}
-
-/**
- * A note's frontmatter fields and its Body, or `undefined` when it opens with no frontmatter: a `---`
- * first line, closed by the next one.
- */
-export function noteOf(text: string): { fields: Record<string, string>; body: string } | undefined {
-  const lines = text.split(/\r\n?|\n/)
-  const isFence = (line: string | undefined) => line?.trim() === '---'
-  const end = lines.findIndex((line, index) => index > 0 && isFence(line))
-  if (!isFence(lines[0]) || end === -1) return undefined
-  return {
-    fields: fieldsOf(lines.slice(1, end)),
-    body: lines
-      .slice(end + 1)
-      .join('\n')
-      .trim(),
-  }
-}
-
 /** The content of a folder's note, or what keeps it from being a Tile's. */
 function contentOf(text: string | undefined): Pick<TileRow, 'title' | 'preview' | 'body'> | string {
   if (text === undefined) return 'no CLAUDE.md'
@@ -83,7 +33,7 @@ function contentOf(text: string | undefined): Pick<TileRow, 'title' | 'preview' 
   const missing = required.filter((field) => (note.fields[field] ?? '').trim() === '')
   if (missing.length > 0) return `its frontmatter has no ${missing.join(', ')}`
   const { title = '', preview = '' } = note.fields
-  if (!fitsPreview(preview)) return 'its Preview is over 350 characters'
+  if (!fitsPreview(preview)) return `its Preview is over ${String(previewLimit)} characters`
   return { title, preview, body: note.body }
 }
 
