@@ -19,9 +19,12 @@ import {
   type SearchChange,
   type SystemSearch,
 } from './search'
+import type { SystemTile } from '#/front/client/mapping/queries'
+
 import { slotOf, swapsWith } from './tree'
 
 interface SystemProps {
+  system: SystemTile
   /** The System's Tiles as the canvas draws them (`canvasTree`). */
   tree: TileNode
   search: SystemSearch
@@ -29,7 +32,7 @@ interface SystemProps {
   className?: string
 }
 
-export function System({ tree, search, onSearchChange, className }: SystemProps) {
+export function System({ system, tree, search, onSearchChange, className }: SystemProps) {
   const move = useMoveTile()
   const swap = useSwapTiles()
   const change = changeOf(search)
@@ -74,7 +77,7 @@ export function System({ tree, search, onSearchChange, className }: SystemProps)
   })
 
   const swapWith = (moving: TileNode) => (held: TileNode) =>
-    swapsWith(tree, moving, held)
+    swapsWith(system, moving, held)
       ? {
           label: m.system_swap_with({ title: held.title }),
           onSelect: () => {
@@ -109,7 +112,7 @@ export function System({ tree, search, onSearchChange, className }: SystemProps)
           onSearchChange(withView(search, view))
         }}
         emptySlots={moving === undefined ? addHere : moveHere(moving)}
-        heldSlots={moving === undefined ? undefined : swapWith(moving)}
+        swapTargets={moving === undefined ? undefined : swapWith(moving)}
         className="min-h-0 w-full flex-1"
       />
     </div>

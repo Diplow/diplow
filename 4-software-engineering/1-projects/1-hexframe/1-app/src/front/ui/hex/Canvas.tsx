@@ -9,7 +9,7 @@ import { m } from '#/paraglide/messages'
 import { hexHeight, hexWidth, type Direction, type Hex } from './geometry/geometry'
 import { layoutCanvas, type Ring, type TileNode } from './geometry/layout'
 import { EmptySlot, Frame } from './Frame'
-import { Tile, type Offer } from './Tile'
+import { Tile, type SwapTarget } from './Tile'
 import {
   centerOn,
   showView,
@@ -42,10 +42,11 @@ interface CanvasProps {
     onSelect: (slot: EmptySlotTarget) => void
   }
   /**
-   * What a Tile offers to do with it beside its own click, trade places with a Tile on the move say,
-   * on a small button of its own; `undefined` for a Tile that offers nothing. Without it, none does.
+   * Whether a Tile offers to trade places with the Tile on the move, how that is named and what it
+   * does, on a small button of its own; `undefined` for a Tile that offers no swap. Without it, none
+   * does.
    */
-  heldSlots?: (tile: TileNode) => Offer | undefined
+  swapTargets?: (tile: TileNode) => SwapTarget | undefined
   className?: string
 }
 
@@ -58,7 +59,7 @@ export function Canvas({
   view,
   onViewChange,
   emptySlots,
-  heldSlots,
+  swapTargets,
   className,
 }: CanvasProps) {
   const shown = showView(system, view)
@@ -120,7 +121,7 @@ export function Canvas({
                 onCenter={(from) => {
                   center(placement.tile, from)
                 }}
-                offer={heldSlots?.(placement.tile)}
+                swap={swapTargets?.(placement.tile)}
               />
             )
           }

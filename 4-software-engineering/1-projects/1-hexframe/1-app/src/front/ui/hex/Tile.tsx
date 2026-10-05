@@ -1,7 +1,7 @@
 // A Tile on the canvas: its hex, its title always, its preview when there is room, and on hover or
 // focus a card with both in full. It is a button: what a click does comes from the Canvas. When the
-// caller offers something to do with the Tile itself, such as trading places with a Tile on the move,
-// a small button at the foot of its hex does it, so the Tile's own click still opens and centers it.
+// Tile can trade places with a Tile on the move, a small button at the foot of its hex swaps them, so
+// the Tile's own click still opens and centers it.
 import { ArrowLeftRight } from 'lucide-react'
 import type { MouseEvent } from 'react'
 
@@ -21,17 +21,17 @@ interface TileProps {
   onAct: (repeat: boolean) => void
   /** A double-click, or Shift+Enter. */
   onCenter: (from: 'pointer' | 'keyboard') => void
-  /** What the caller offers to do with the Tile, and its name; without it, the Tile offers nothing. */
-  offer?: Offer | undefined
+  /** The swap the Tile offers with a Tile on the move; without it, the Tile offers none. */
+  swap?: SwapTarget | undefined
 }
 
-/** Something to do with a Tile, beside its own click, and its name for a screen reader. */
-export interface Offer {
+/** A swap a Tile offers beside its own click: what it does, and its name for a screen reader. */
+export interface SwapTarget {
   label: string
   onSelect: () => void
 }
 
-export function Tile({ placement, action, onAct, onCenter, offer }: TileProps) {
+export function Tile({ placement, action, onAct, onCenter, swap }: TileProps) {
   const { title, preview } = placement.tile
   const label = textBox(placement.hex, showsPreview(placement) ? 'tall' : 'wide')
   // Shift+Enter centers the Tile, as a double-click does.
@@ -81,17 +81,17 @@ export function Tile({ placement, action, onAct, onCenter, offer }: TileProps) {
           </foreignObject>
         </g>
       </Tooltip>
-      {offer === undefined ? null : <OfferButton hex={placement.hex} offer={offer} />}
+      {swap === undefined ? null : <SwapButton hex={placement.hex} swap={swap} />}
     </>
   )
 }
 
 /**
- * The offer's button, a disc at the foot of the Tile's hex, below its label, drawn over the Tile and
- * apart from it, so a click there is never the Tile's.
+ * The swap's button, a disc with two arrows at the foot of the Tile's hex, below its label, drawn over
+ * the Tile and apart from it, so a click there is never the Tile's.
  */
-function OfferButton({ hex, offer }: { hex: Hex; offer: Offer }) {
-  const { label, onSelect } = offer
+function SwapButton({ hex, swap }: { hex: Hex; swap: SwapTarget }) {
+  const { label, onSelect } = swap
   const radius = hex.radius * 0.16
   const x = hex.center.x
   const y = hex.center.y + hex.radius * 0.64

@@ -61,7 +61,6 @@ describe('canvasTree', () => {
       id: 'broken:root:-5',
       title: m.system_reference_broken(),
       preview: '',
-      broken: true,
     })
   })
 
@@ -87,7 +86,7 @@ describe('swapsWith', () => {
   const tree = canvasTree(system)
   const moving = tree.children?.[1] ?? tree
   const offers = (tile: typeof tree | undefined) =>
-    tile !== undefined && swapsWith(tree, moving, tile)
+    tile !== undefined && swapsWith(system, moving, tile)
 
   it('offers a swap with any Tile drawn where it stands, a Child or a Context Tile', () => {
     expect([tree.children?.[4], tree.context?.[1], moving.children?.[3]].map(offers)).toEqual([
