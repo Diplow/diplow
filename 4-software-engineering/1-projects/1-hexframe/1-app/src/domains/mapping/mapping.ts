@@ -64,7 +64,7 @@ export const readTile = <F extends Field>(
   Tiles.use((tiles) =>
     Effect.gen(function* () {
       const from = id ?? (yield* tiles.root(accountId, untitled))
-      const rows = yield* tiles.below(accountId, { id: from, depth, columns: fields })
+      const rows = yield* tiles.generationsFrom(accountId, { id: from, depth, columns: fields })
       const opened = tileRow(rows, from)
       if (opened === undefined) return yield* new TileNotFound()
       const targets = rows.flatMap(({ target }) => (target === null ? [] : [target]))

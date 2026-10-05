@@ -79,7 +79,7 @@ export class Tiles extends Context.Service<
      * one query per generation, each row with only the content columns asked. Nothing when the
      * System holds no row of this id.
      */
-    readonly below: <C extends ContentColumn>(
+    readonly generationsFrom: <C extends ContentColumn>(
       accountId: string,
       from: { readonly id: string; readonly depth: number; readonly columns: ReadonlyArray<C> },
     ) => Effect.Effect<ReadonlyArray<TileRowWith<C>>>
@@ -201,7 +201,7 @@ const make = Effect.gen(function* () {
       ),
     )
 
-  const below = <C extends ContentColumn>(
+  const generationsFrom = <C extends ContentColumn>(
     accountId: string,
     from: { readonly id: string; readonly depth: number; readonly columns: ReadonlyArray<C> },
   ) =>
@@ -226,7 +226,7 @@ const make = Effect.gen(function* () {
   return Tiles.of({
     read: (accountId, root) => Effect.andThen(ensureRoot(accountId, root), rowsOf(accountId)),
     root,
-    below,
+    generationsFrom,
     ofIds,
     lock: (accountId) =>
       inTransaction(

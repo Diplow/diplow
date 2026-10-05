@@ -492,7 +492,7 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
         expect(fieldsOf(tile.children?.[1] ?? {})).toEqual(expected)
         expect(fieldsOf(tile.children?.[1]?.children?.[1] ?? {})).toEqual(expected)
         const rows = yield* Tiles.use((tiles) =>
-          tiles.below(accountId, { id: ids[0] ?? '', depth: 2, columns: fields }),
+          tiles.generationsFrom(accountId, { id: ids[0] ?? '', depth: 2, columns: fields }),
         )
         expect(rows.map((row) => Object.keys(row.content).sort())).toEqual(
           rows.map(() => [...fields].sort()),
@@ -542,7 +542,7 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
       const { accountId, ids } = yield* fourDeep
       const { tile } = yield* readTile(accountId, { depth: 1, fields: [] })
       const reference = yield* Tiles.use((tiles) =>
-        tiles.below(accountId, { id: tile.id, depth: 1, columns: [] }),
+        tiles.generationsFrom(accountId, { id: tile.id, depth: 1, columns: [] }),
       ).pipe(Effect.map((rows) => rows.find((row) => row.target !== null)?.id ?? ''))
       const stranger = someone()
       const refusals = yield* Effect.all(
