@@ -4,9 +4,9 @@ parent: 4-software-engineering/1-projects/1-hexframe/.run
 owner: diplo
 preview: >-
   How hexframe's projects get built with nobody watching: run.yaml for the v0
-  initiative, one config per project run (claude-mod, obsidian-plugin, mcp-server), each
-  landing on one branch I merge into main at the end, and the registers the
-  runs write their decisions to.
+  initiative, one config per project run (claude-mod, obsidian-plugin,
+  mcp-server, import-export), each landing on one branch I merge into main at
+  the end, and the registers the runs write their decisions to.
 ---
 # autonomous runs
 
@@ -18,6 +18,7 @@ An inner child of hexframe: how its projects get built by [[.skills/4-softeng/1-
 | `claude-mod.yaml` | The run config of the "hexframe Claude Code mod" project, landing on `project/claude-mod` |
 | `obsidian-plugin.yaml` | The run config of the "hexframe Obsidian plugin" project, landing on `project/obsidian-plugin` |
 | `mcp-server.yaml` | The run config of the "hexframe app: MCP server" project, landing on `project/mcp-server` |
+| `import-export.yaml` | The run config of the "hexframe app: Import & export" project, landing on `project/import-export` |
 | `registers/` | What the run records, one folder per project, created by the first entry |
 
 ## One run, one branch
@@ -34,7 +35,7 @@ Before a launch, nothing of these projects should be in progress outside the run
 
 ## Project runs
 
-The configs beside `run.yaml` run one project each with [[.skills/4-softeng/1-ship/run-autonomous-project/SKILL|run-autonomous-project]], on a project branch I merge into `main` once its phase-close ticket is done. They differ from `run.yaml` in their target, their project, and what they freeze: `1-app/` is frozen in the mod's and the plugin's, and the plugin's run may write `.obsidian/plugins/hexframe/`, `.obsidian/community-plugins.json` and `.obsidian/CLAUDE.md`; the MCP server's builds in `1-app/` and freezes the two other packages and `.obsidian/`.
+The configs beside `run.yaml` run one project each with [[.skills/4-softeng/1-ship/run-autonomous-project/SKILL|run-autonomous-project]], on a project branch I merge into `main` once its phase-close ticket is done. They differ from `run.yaml` in their target, their project, and what they freeze: `1-app/` is frozen in the mod's and the plugin's, and the plugin's run may write `.obsidian/plugins/hexframe/`, `.obsidian/community-plugins.json` and `.obsidian/CLAUDE.md`; the MCP server's builds in `1-app/` and freezes the two other packages and `.obsidian/`; Import & export's builds in `1-app/` and the shape, and freezes every file of claude-mod outside its shape, the plugin and `.obsidian/`.
 
 The plugin builds on the shared shape the mod's project extracts, so the order is fixed:
 
@@ -44,10 +45,12 @@ The plugin builds on the shared shape the mod's project extracts, so the order i
 /softeng:ship:run-autonomous-project "hexframe Obsidian plugin" --config 4-software-engineering/1-projects/1-hexframe/.run/obsidian-plugin.yaml
 ```
 
-The MCP server's run stands alone: Keys, the MCP server at `/mcp`, swap and Help, in `1-app/`.
+The app's two runs both write `1-app/` and Mapping, so they go one after the other: the MCP server's first, then Import & export's, launched once `project/mcp-server` is merged into `main`, so it is cut from a `main` that has Keys, swap and Help.
 
 ```
 /softeng:ship:run-autonomous-project "hexframe app: MCP server" --config 4-software-engineering/1-projects/1-hexframe/.run/mcp-server.yaml
+# merge project/mcp-server into main
+/softeng:ship:run-autonomous-project "hexframe app: Import & export" --config 4-software-engineering/1-projects/1-hexframe/.run/import-export.yaml
 ```
 
 ## Registers
