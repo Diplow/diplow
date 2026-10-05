@@ -357,7 +357,13 @@ function folderOf(
   )
   const texts = textsIn(folder, { path: at.path, files: shown.files }, reading)
   const own = ownOf(at, { naming, texts }, reading)
-  const leaves = [...texts.keys()].filter((name) => name !== own.name)
+  // The shape's other own files beside the one read are neither its Tile nor a Leaf: reported.
+  const shadowed = ownFilesFor(naming.fileName).filter(
+    (name) => texts.has(name) && name !== own.name,
+  )
+  for (const name of shadowed)
+    reading.skipped.push({ path: join(at.path, name), reason: 'Shadowed' })
+  const leaves = [...texts.keys()].filter((name) => name !== own.name && !shadowed.includes(name))
   const reference = at.kind === 'context' ? own.read?.fields.reference : undefined
   if (reference !== undefined) {
     if (shown.folders.length + leaves.length > 0) fault(reading, at.path, 'ReferenceHoldsSomething')

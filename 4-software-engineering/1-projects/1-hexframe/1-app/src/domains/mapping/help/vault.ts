@@ -26,11 +26,14 @@ function slotOf(name: string): number | undefined {
   return match[1] === '.' ? -direction : direction
 }
 
-/** What keeps a folder's note, named `file`, from being a Tile's in Help; `undefined` when nothing. */
-function problemOf(text: string | undefined, file: string): string | undefined {
-  if (text === undefined) return `no ${file}`
+/** A folder's note, named `file`, when Help reads it; else what keeps it from being a Tile's. */
+function noteChecked(
+  text: string | undefined,
+  file: string,
+): { readonly text: string } | { readonly problem: string } {
+  if (text === undefined) return { problem: `no ${file}` }
   const note = noteOf(text)
-  if (note === undefined) return `its ${file} opens with no frontmatter`
+  if (note === undefined) return { problem: `its ${file} opens with no frontmatter` }
   const { title = '', preview = '' } = note.fields
   // A Tile has a Title, as Mapping requires of every Tile, and a Tile of Help a Preview, since a
   // reader opens Help by its Previews; the vault's own fields are the repository's to name.
@@ -39,11 +42,11 @@ function problemOf(text: string | undefined, file: string): string | undefined {
     ...missingFrom(note),
     ...(preview.trim() === '' ? ['preview'] : []),
   ]
-  if (missing.length > 0) return `its ${file} has no ${missing.join(', ')}`
+  if (missing.length > 0) return { problem: `its ${file} has no ${missing.join(', ')}` }
   if (!fitsPreview(preview)) {
-    return `its ${file} has a Preview over ${String(previewLimit)} characters`
+    return { problem: `its ${file} has a Preview over ${String(previewLimit)} characters` }
   }
-  return undefined
+  return { text }
 }
 
 /** A vault folder read: the rows of its Tiles, and what kept any of its folders from being one. */
@@ -52,19 +55,48 @@ export interface Vault {
   readonly problems: ReadonlyArray<string>
 }
 
-/** The Tiles a plan reads as folders, by the path of each: Branches and Context Tiles. */
-function tilesIn(tile: PlannedTile): ReadonlyArray<PlannedTile> {
-  const below = [...Object.values(tile.context), ...Object.values(tile.branches)]
-  return [tile, ...below.flatMap((held) => (held._tag === 'Tile' ? tilesIn(held) : []))]
-}
+/** Where a planned Tile stands among the rows: its id, its parent's, its slot. */
+type Place = Pick<TileRow, 'id' | 'parentId' | 'direction'>
 
-/** The folder holding a folder: `''`, the vault folder itself, for one at its top. */
-const parentOf = (path: string) => path.replace(/\/?[^/]*$/, '')
+/**
+ * The rows of a planned Tile and of the Tiles below it, Context first, each id its parent's and the
+ * slot the import seated it in, but for the folders whose note Help refused, which `read` leaves out:
+ * they read as no Tile.
+ */
+function rowsOf(tile: PlannedTile, place: Place, read: ReadonlySet<string>): Array<TileRow> {
+  const below = (slot: string): Place => ({
+    id: `${place.id}/${slot}`,
+    parentId: place.id,
+    direction: Number(slot),
+  })
+  const own: Array<TileRow> = read.has(tile.path)
+    ? [
+        {
+          ...place,
+          target: null,
+          title: tile.title,
+          preview: tile.preview,
+          body: tile.body.trim(),
+          ...keepsNothing,
+        },
+      ]
+    : []
+  return [
+    ...own,
+    ...Object.entries(tile.context).flatMap(([slot, held]) =>
+      held._tag === 'Tile' ? rowsOf(held, below(slot), read) : [],
+    ),
+    ...Object.entries(tile.branches).flatMap(([slot, branch]) => rowsOf(branch, below(slot), read)),
+  ]
+}
 
 /** The folder a path names: a folder's own, or the one a file read from it sits in. */
 const folderOf = (path: string) => path.replace(/(^|\/)[^/]*\.md$/, '')
 
-/** The id a folder's path names, the path of its slots from `root`; none for a name that is no slot. */
+/**
+ * The id a folder's name gives it in Help, the path of its slots from `root`; none for a name that is
+ * no slot. Help's own rule, so no two of its folders claim one slot; the import seats them alike.
+ */
 function idOf(root: string, path: string): string | undefined {
   const slots = path === '' ? [] : path.split('/').map(slotOf)
   return slots.every((slot) => slot !== undefined) ? [root, ...slots].join('/') : undefined
@@ -79,21 +111,19 @@ function notesRead(
   { notes, file }: { notes: Readonly<Record<string, string | undefined>>; file: string },
 ) {
   const problems: string[] = []
+  const refuse = (path: string, why: string) => problems.push(`${path || '.'}: ${why}`)
   const read = new Map<string, string>()
   const ids = new Set<string>()
   for (const path of Object.keys(notes).sort()) {
-    const text = notes[path]
     const id = idOf(root, path)
-    const problem =
-      id === undefined
-        ? 'a folder is named <n>-<slug> for a Child, .<n>-<slug> for Context'
-        : problemOf(text, file)
-    if (problem !== undefined) problems.push(`${path || '.'}: ${problem}`)
-    else if (id === undefined || text === undefined || ids.has(id)) {
-      problems.push(`${path || '.'}: another folder already stands in its slot`)
-    } else {
+    const note = noteChecked(notes[path], file)
+    if (id === undefined)
+      refuse(path, 'a folder is named <n>-<slug> for a Child, .<n>-<slug> for Context')
+    else if ('problem' in note) refuse(path, note.problem)
+    else if (ids.has(id)) refuse(path, 'another folder already stands in its slot')
+    else {
       ids.add(id)
-      read.set(path, text)
+      read.set(path, note.text)
     }
   }
   return { read, problems }
@@ -106,8 +136,8 @@ const noteAt = (path: string) => (path === '' ? 'CLAUDE.md' : `${path}/CLAUDE.md
 
 /**
  * The rows the notes Help reads give, read as an import reads the files of a folder, each note in the
- * place of its folder's `CLAUDE.md`, each placed by its folder's path; none, with the faults the
- * reading found, each on its folder, when it refuses them.
+ * place of its folder's `CLAUDE.md`; none, with the faults the reading found, each on its folder, when
+ * it refuses them.
  */
 function rowsRead(
   root: string,
@@ -123,29 +153,12 @@ function rowsRead(
       ),
     }
   }
-  const { root: planned } = plan.success
-  const tiles = new Map(
-    (planned._tag === 'Tile' ? tilesIn(planned) : []).map((tile) => [tile.path, tile]),
-  )
-  const rows = [...read.keys()].flatMap((path): ReadonlyArray<TileRow> => {
-    const tile = tiles.get(path)
-    const id = idOf(root, path)
-    if (tile === undefined || id === undefined) return []
-    const name = path.split('/').at(-1) ?? ''
-    return [
-      {
-        id,
-        parentId: path === '' ? null : (idOf(root, parentOf(path)) ?? null),
-        direction: path === '' ? null : (slotOf(name) ?? null),
-        target: null,
-        title: tile.title,
-        preview: tile.preview,
-        body: tile.body.trim(),
-        ...keepsNothing,
-      },
-    ]
-  })
-  return { rows, problems: [] }
+  const { root: tile } = plan.success
+  const place = { id: root, parentId: null, direction: null }
+  return {
+    rows: tile._tag === 'Tile' ? rowsOf(tile, place, new Set(read.keys())) : [],
+    problems: [],
+  }
 }
 
 /**

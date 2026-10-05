@@ -60,7 +60,7 @@ Every folder under `1-app/src/` is a node: at most 6 child folders and 6 files, 
 | At most 150 lines per function, 5 parameters (an object beyond), 600 lines per file, blank lines and comments aside | ESLint core |
 | The MCP server's SDK (`@modelcontextprotocol/*`) imported by `src/api/server/mcp/` only, the one SDK no repository holds | `dependency-cruiser` |
 | `yaml` imported by `src/domains/mapping/files/` only, where Mapping writes and reads its files | `dependency-cruiser` |
-| Of `2-claude-mod/`, only the shape's reading rules (`hooks/shape/node.ts`, `exclusions.ts`), and by `src/domains/mapping/` only | `dependency-cruiser` |
+| Of `2-claude-mod/`, only the shape's reading rules (`hooks/shape/node.ts`, `exclusions.ts`), and by `src/domains/mapping/files/import/shape.ts` only, the one module that calls them, and Mapping's tests | `dependency-cruiser` |
 | No `zod`, however it is imported: validation is Effect Schema | `dependency-cruiser` |
 | Radix, TanStack Table, TanStack Form, the Markdown renderer, TanStack Hotkeys and Sonner imported by `src/front/ui/` only | `dependency-cruiser` |
 | No hex and no Tailwind palette name (`bg-zinc-900`, `text-white`) in a string under `src/`: colour is a theme token | ESLint `no-restricted-syntax` |

@@ -61,10 +61,14 @@ export interface PlannedTile<T = ReferenceTarget> extends Planned {
   readonly context: Partial<Record<ContextDirection, PlannedTile<T> | PlannedReference<T>>>
 }
 
-/** A file an import leaves out because a System can't hold it, and why. */
+/**
+ * A file an import leaves out, and why: a System can't hold a binary nor a dot file, and a folder's
+ * own file shadows the shape's others beside it (`-CLAUDE.md` beside `CLAUDE.md`), which the shape
+ * reads as neither its Tile nor a Leaf.
+ */
 export interface Skipped {
   readonly path: string
-  readonly reason: 'Binary' | 'DotFile'
+  readonly reason: 'Binary' | 'DotFile' | 'Shadowed'
 }
 
 /** What an import would create, its root a Tile, or a Leaf for a file alone, and what it skipped. */

@@ -140,10 +140,14 @@ describe('a Tile config, read from `.hexframe/config.yaml`', () => {
     file('.hexframe/config.yaml', 'fileName: SKILL.md\n'),
     file('SKILL.md', note('title: Skills\npreview: What I do.')),
     file('do-ticket/SKILL.md', note('title: Do ticket\npreview: Start a ticket.')),
-    file('do-ticket/CLAUDE.md', 'Not a Leaf: the shape reads it as a folder’s own file.'),
+    file('do-ticket/CLAUDE.md', 'Not a Leaf: the shape reads it as a folder’s own file, shadowed.'),
     file('rules/.hexframe/config.yaml', 'folderPattern: <slug>\n'),
     file('rules/SKILL.md', note('title: Rules')),
   ])
+
+  it('reports the shape’s own files a folder’s file in force shadows', () => {
+    expect(planOf(skills).skipped).toEqual([{ path: 'do-ticket/CLAUDE.md', reason: 'Shadowed' }])
+  })
 
   it('becomes the config of its folder’s Tile, its file name in force below until one sets its own', () => {
     const root = rootOf(skills)
