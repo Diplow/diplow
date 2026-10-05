@@ -1,0 +1,41 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/CLAUDE.md
+  s_c6607867f8f345::t_189fd77c86969b 21-22
+  s_c6607867f8f345::t_e029e718994e01 7-8,19
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.test.ts
+  s_c6607867f8f345::t_d2eff576924db9 9-10,15,60,92,104-105,112,121,129,140,157,211,225,243,262,350,353,355,381,399,410,450,462,482,523
+  s_c6607867f8f345::t_6f63da1f3f08f1 310,470
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/landing/landing.test.ts
+  s_c6607867f8f345::t_d2eff576924db9 23,63,105,116,130,138,152,166,176,209,242,271,280,313
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/CLAUDE.md
+  s_c6607867f8f345::t_e029e718994e01 32
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/kept.test.ts
+  s_c6607867f8f345::t_d2eff576924db9 27,46,67,69,92,130,147
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_c6607867f8f345::t_e029e718994e01 40
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_c6607867f8f345::t_189fd77c86969b 21,41,49
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/leaves.test.ts
+  s_c6607867f8f345::t_d2eff576924db9 24,53,66,84,101,128,144,159,164,184,205
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.test.ts
+  s_c6607867f8f345::t_303266b24ee568 130-147
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-optimistic-writes-and-patterns/decisions.md
+  s_c6607867f8f345::t_7065f324ff368f 50-53
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE.md
+  s_c6607867f8f345::t_7797d857f8e838 15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "69d20080a7a54bbcbdfa82297fd49761f9172dc7",
+  "prompts": {},
+  "sessions": {
+    "s_c6607867f8f345": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4f8f3c2-2717-4700-ac6f-29d6bae7bf9e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
