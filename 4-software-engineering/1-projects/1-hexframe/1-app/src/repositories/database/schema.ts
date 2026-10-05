@@ -145,9 +145,10 @@ export const apikey = pgTable(
 /**
  * A row is a Tile or, when `target` is set, a Reference to the Tile of that id, standing in a Context
  * slot, whose content columns stay empty. A Root has no parent and no direction: one per Account. Any
- * other row stands under its parent in a direction, 1 to 6 for a Child, -1 to -6 for a Context slot,
- * and one row at most holds a slot; the checks refuse any other, which would hold a slot no reader
- * sees. Deleting a row deletes everything below it; a Reference to it has no key to it, so it stays,
+ * other row stands under its parent in a direction: 1 to 6 for a Branch, 7 to 12 for a Leaf, its
+ * Direction past the six Branch slots, so a Leaf and a Branch may share a Direction, and -1 to -6 for
+ * a Context slot. One row at most holds a slot; the checks refuse any other, which would hold a slot
+ * no reader sees. Deleting a row deletes everything below it; a Reference to it has no key to it, so it stays,
  * broken. `account_id` has no key to `user`: Mapping ignores IAM (hexframe-v0-mapping DEC-1).
  */
 export const tile = pgTable(
@@ -169,7 +170,7 @@ export const tile = pgTable(
     check('tile_root_check', eq(isNull(table.parentId), isNull(table.direction))),
     check(
       'tile_direction_check',
-      inArray(table.direction, [1, 2, 3, 4, 5, 6, -1, -2, -3, -4, -5, -6]),
+      inArray(table.direction, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, -1, -2, -3, -4, -5, -6]),
     ),
   ],
 )

@@ -51,7 +51,8 @@ const root = {
   title: '',
   preview: '',
   body: '',
-  children: {},
+  branches: {},
+  leaves: {},
   context: {},
 }
 

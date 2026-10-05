@@ -18,8 +18,9 @@ export class PreviewTooLong extends Schema.TaggedError<PreviewTooLong>()(
 ) {}
 
 /**
- * The Direction, or the Context slot, already holds a Tile or a Reference. A seventh Child is refused
- * this way: the user regroups some Children under a new one, by moving them.
+ * The slot, a Branch's or a Leaf's Direction or a Context slot, already holds a Tile or a Reference. A
+ * seventh Branch or a seventh Leaf is refused this way: the user regroups some Children under a new
+ * one, by moving them.
  */
 export class DirectionTaken extends Schema.TaggedError<DirectionTaken>()('DirectionTaken', {
   kind: kind('Conflict'),
@@ -39,6 +40,15 @@ export class MovedUnderItself extends Schema.TaggedError<MovedUnderItself>()('Mo
 }) {}
 
 /**
+ * A Leaf is one file: nothing stands below it, neither Children nor Context. Nothing is created or
+ * moved under a Leaf, and a Tile holding anything never takes a Leaf slot, by a move or a swap: a
+ * Leaf grows into a Branch, and a Branch with nothing below it shrinks into a Leaf, by moving.
+ */
+export class LeafHoldsNothing extends Schema.TaggedError<LeafHoldsNothing>()('LeafHoldsNothing', {
+  kind: kind('Conflict'),
+}) {}
+
+/**
  * Help is hexframe's own System, which every Account reads and none writes: a change naming one of its
  * Tiles is refused, whichever end of a move or a swap it is.
  */
@@ -52,6 +62,7 @@ export const mappingFailures = [
   PreviewTooLong,
   DirectionTaken,
   MovedUnderItself,
+  LeafHoldsNothing,
   RootFixed,
   HelpReadOnly,
 ] as const

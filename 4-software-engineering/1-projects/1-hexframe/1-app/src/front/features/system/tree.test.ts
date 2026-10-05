@@ -7,23 +7,24 @@ import { canvasTree, ringOf, slotOf, swapsWith, tileIn } from './tree'
 
 const tile = (
   id: string,
-  below: Partial<Pick<SystemTile, 'children' | 'context'>> = {},
+  below: Partial<Pick<SystemTile, 'branches' | 'context'>> = {},
 ): SystemTile => ({
   _tag: 'Tile',
   id,
   title: id.toUpperCase(),
   preview: `What ${id} is`,
   body: '',
-  children: {},
+  branches: {},
+  leaves: {},
   context: {},
   ...below,
 })
 
-const why = tile('why', { children: { 2: tile('deep') } })
-const a = tile('a', { children: { 3: tile('a3') } })
+const why = tile('why', { branches: { 2: tile('deep') } })
+const a = tile('a', { branches: { 3: tile('a3') } })
 const system: SystemTile = {
   ...tile('root', {
-    children: { 1: a, 4: tile('b') },
+    branches: { 1: a, 4: tile('b') },
     context: {
       [-1]: why,
       [-2]: { _tag: 'Reference', tile: { id: 'a3', title: 'A3', preview: 'A child', body: '' } },
@@ -72,8 +73,8 @@ describe('canvasTree', () => {
 describe('tileIn', () => {
   it('finds a Tile anywhere, Context Tiles included, with the Tile it stands under', () => {
     expect(tileIn(system, 'root')).toEqual({ tile: system, parent: undefined })
-    expect(tileIn(system, 'a3')).toEqual({ tile: a.children[3], parent: a })
-    expect(tileIn(system, 'deep')).toEqual({ tile: why.children[2], parent: why })
+    expect(tileIn(system, 'a3')).toEqual({ tile: a.branches[3], parent: a })
+    expect(tileIn(system, 'deep')).toEqual({ tile: why.branches[2], parent: why })
   })
 
   it('finds no Tile behind a broken Reference, nor an unknown id', () => {
@@ -115,5 +116,6 @@ describe('slotOf and ringOf', () => {
   it('reads the ring back from the slot', () => {
     expect(ringOf(slotOf('children', 6))).toBe('children')
     expect(ringOf(slotOf('context', 6))).toBe('context')
+    expect(ringOf({ leaf: 6 })).toBe('children')
   })
 })

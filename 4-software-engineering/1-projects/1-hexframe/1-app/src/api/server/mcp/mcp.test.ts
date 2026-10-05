@@ -77,9 +77,15 @@ describe('the tool table, as an agent lists it', () => {
       expect(description(name)).toMatch(/Help, hexframe's own guide, .+ id "help"/)
     }
     expect(description('create_tile')).toMatch(
-      /6 Children at most, so one more is refused: regroup .+ by moving them/,
+      /6 Branches and 6 Leaves at most, so one more of either is refused: regroup .+ by moving them/,
     )
-    expect(description('create_reference')).not.toMatch(/one more is refused/)
+    expect(description('create_reference')).not.toMatch(/one more of either is refused/)
+    for (const name of ['create_tile', 'move_tile', 'swap_tiles', 'create_reference']) {
+      expect(description(name)).toMatch(/LeafHoldsNothing: a Leaf is one file, with nothing below/)
+    }
+    for (const name of ['edit_tile', 'delete_tile']) {
+      expect(description(name)).not.toMatch(/LeafHoldsNothing/)
+    }
     for (const name of ['create_tile', 'edit_tile']) {
       expect(description(name)).toMatch(/TitleMissing: .+ PreviewTooLong: /)
     }
@@ -108,7 +114,7 @@ describe('Help, through the MCP endpoint', () => {
       value: {
         tile: { _tag: 'Tile', id: 'help', title: 'Hexframe' },
         parent: null,
-        children: { 1: { _tag: 'Tile', id: 'help/1' }, 6: { _tag: 'Tile', id: 'help/6' } },
+        branches: { 1: { _tag: 'Tile', id: 'help/1' }, 6: { _tag: 'Tile', id: 'help/6' } },
         context: { '-1': { _tag: 'Tile', id: 'help/-1' } },
       },
     })
@@ -134,7 +140,8 @@ describe('the MCP endpoint', () => {
       value: {
         tile: { _tag: 'Tile', id: root.id, ...content('Ada') },
         parent: null,
-        children: { 1: glimpse(child) },
+        branches: { 1: glimpse(child) },
+        leaves: {},
         context: {
           '-1': glimpse(principles),
           '-2': {
@@ -156,7 +163,8 @@ describe('the MCP endpoint', () => {
       value: {
         tile: { _tag: 'Tile', id: child.id, title: 'Frontend' },
         parent: { id: root.id, title: 'Ada' },
-        children: { 2: glimpse(grandchild) },
+        branches: { 2: glimpse(grandchild) },
+        leaves: {},
         context: {},
       },
     })
@@ -171,7 +179,7 @@ describe('the MCP endpoint', () => {
       value: {
         tile: {
           ...glimpse(root),
-          children: { 1: { ...glimpse(child), children: { 2: glimpse(grandchild) } } },
+          branches: { 1: { ...glimpse(child), branches: { 2: glimpse(grandchild) } } },
         },
         parent: null,
       },

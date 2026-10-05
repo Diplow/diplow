@@ -12,8 +12,16 @@ export type Direction = (typeof directions)[number]
 export const contextDirections = [-1, -2, -3, -4, -5, -6] as const
 export type ContextDirection = (typeof contextDirections)[number]
 
-/** Where a Tile stands under its parent: a Child's Direction, or a Context slot. */
-export type Slot = Direction | ContextDirection
+/**
+ * A Leaf's slot: one of its parent's six Leaf Directions, which are their own beside the six Branch
+ * Directions, so a Leaf and a Branch may share a Direction.
+ */
+interface LeafSlot {
+  readonly leaf: Direction
+}
+
+/** Where a Tile stands under its parent: a Branch's Direction, a Leaf's, or a Context slot. */
+export type Slot = Direction | LeafSlot | ContextDirection
 
 /** What a reader finds in a Tile. */
 export interface Content {
@@ -37,6 +45,20 @@ const among =
 export const isDirection = among(directions)
 
 export const isContextDirection = among(contextDirections)
+
+/** How far past its Direction a row stores a Leaf: beyond the six Branch slots, 7 to 12. */
+const leafOffset = directions.length
+
+/** The direction a row stands in for this slot: a Leaf's stored past the six Branch slots. */
+export const rowDirection = (slot: Slot): number =>
+  typeof slot === 'number' ? slot : slot.leaf + leafOffset
+
+/** The Direction of the Leaf a row's direction stands for; `undefined` for any other slot. */
+export function leafOf(direction: number | null): Direction | undefined {
+  if (direction === null) return undefined
+  const leaf = direction - leafOffset
+  return isDirection(leaf) ? leaf : undefined
+}
 
 /** The most characters a Preview holds, as a reader counts them. */
 export const previewLimit = 350

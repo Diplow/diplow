@@ -173,7 +173,7 @@ function drawerOf(system: SystemTile, tree: TileNode, change: Change) {
     if (parent === undefined) return undefined
     return {
       kind: 'add',
-      key: `${change.parent}:${String(change.slot)}`,
+      key: `${change.parent}:${JSON.stringify(change.slot)}`,
       title: m.system_add_title(),
       description:
         ringOf(change.slot) === 'children'

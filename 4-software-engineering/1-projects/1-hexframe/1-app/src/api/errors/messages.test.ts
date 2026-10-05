@@ -16,6 +16,7 @@ import {
 import {
   DirectionTaken,
   HelpReadOnly,
+  LeafHoldsNothing,
   MovedUnderItself,
   PreviewTooLong,
   RootFixed,
@@ -108,6 +109,10 @@ describe('the message table', () => {
     ],
     [new MovedUnderItself(), "A tile can't move under itself or one of its own children."],
     [new RootFixed(), "Your root tile is you: it can't be moved or deleted."],
+    [
+      new LeafHoldsNothing(),
+      "A leaf is a single file: nothing goes under it, and a tile with anything below it can't become one.",
+    ],
     [new HelpReadOnly(), "Help is hexframe's guide: everyone reads it, nobody changes it."],
   ])("words Mapping's %s in its own sentence", (failure, sentence) => {
     expect(messageFor(failure, 'moveTile')).toBe(sentence)
@@ -138,6 +143,10 @@ describe('the message table', () => {
     [
       new RootFixed(),
       'Votre tuile racine, c’est vous : elle ne peut être ni déplacée ni supprimée.',
+    ],
+    [
+      new LeafHoldsNothing(),
+      'Une feuille est un seul fichier : rien ne va dessous, et une tuile qui a quelque chose dessous ne peut pas en devenir une.',
     ],
     [
       new HelpReadOnly(),

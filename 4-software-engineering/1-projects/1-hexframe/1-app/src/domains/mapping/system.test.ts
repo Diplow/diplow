@@ -45,21 +45,22 @@ describe('the System these rows hold', () => {
 
   it('places a Child by its Direction and a Context Tile by its slot, each with its own below', () => {
     const root = systemOf(rows)
-    expect(Object.keys(root?.children ?? {})).toEqual(['2'])
-    expect(root?.children[2]).toMatchObject({ _tag: 'Tile', ...content('child') })
-    expect(root?.children[2]?.children[6]).toEqual({
+    expect(Object.keys(root?.branches ?? {})).toEqual(['2'])
+    expect(root?.branches[2]).toMatchObject({ _tag: 'Tile', ...content('child') })
+    expect(root?.branches[2]?.branches[6]).toEqual({
       _tag: 'Tile',
       ...content('grandchild'),
-      children: {},
+      branches: {},
+      leaves: {},
       context: {},
     })
     expect(root?.context).toEqual({
-      [-1]: { _tag: 'Tile', ...content('principle'), children: {}, context: {} },
+      [-1]: { _tag: 'Tile', ...content('principle'), branches: {}, leaves: {}, context: {} },
     })
   })
 
   it('resolves a Reference to its Tile, and shows one whose target is no Tile as broken', () => {
-    const context = systemOf(rows)?.children[2]?.context
+    const context = systemOf(rows)?.branches[2]?.context
     expect(context).toEqual({
       [-1]: { _tag: 'Reference', tile: content('root') },
       [-2]: { _tag: 'BrokenReference', target: 'gone' },
@@ -70,6 +71,38 @@ describe('the System these rows hold', () => {
   it('is none without a Root', () => {
     expect(systemOf([])).toBeUndefined()
     expect(systemOf([tile('orphan', 'gone', 1)])).toBeUndefined()
+  })
+})
+
+describe('Leaves beside Branches', () => {
+  // A Root with a Branch in Direction 2 and a Leaf in the same Direction, stored past the six Branch
+  // slots, and a Child under the Branch.
+  const both = [tile('root', null, null), tile('branch', 'root', 2), tile('leaf', 'root', 8)]
+  const withChild = [...both, tile('below', 'branch', 1)]
+
+  it('reads a Leaf by its Direction, beside the Branch sharing it, with nothing below it', () => {
+    const root = systemOf(withChild)
+    expect(root?.leaves).toEqual({ 2: { _tag: 'Tile', ...content('leaf') } })
+    expect(root?.branches[2]).toMatchObject({ id: 'branch', branches: { 1: { id: 'below' } } })
+  })
+
+  it('reads a Leaf to a depth the same way, with only the fields asked', () => {
+    const read = both.map(({ id, parentId, direction, target, title }) => ({
+      id,
+      parentId,
+      direction,
+      target,
+      content: { title },
+    }))
+    const [root] = read
+    expect(root && readOf(root, { rows: read, depth: 1, pointedAt: [] })).toEqual({
+      _tag: 'Tile',
+      id: 'root',
+      title: 'root',
+      branches: { 2: { _tag: 'Tile', id: 'branch', title: 'branch' } },
+      leaves: { 2: { _tag: 'Tile', id: 'leaf', title: 'leaf' } },
+      context: {},
+    })
   })
 })
 
@@ -128,17 +161,18 @@ describe('a Tile read to a depth', () => {
       id: 'root',
       title: 'root',
     })
-    const child = readOf(opened('root'), { rows: titled, depth: 1, pointedAt }).children?.[2]
+    const child = readOf(opened('root'), { rows: titled, depth: 1, pointedAt }).branches?.[2]
     expect(child).toEqual({ _tag: 'Tile', id: 'child', title: 'child' })
     const deeper = readOf(opened('root'), { rows: titled, depth: 2, pointedAt })
-    expect(deeper.children?.[2]?.children).toEqual({
+    expect(deeper.branches?.[2]?.branches).toEqual({
       6: { _tag: 'Tile', id: 'grandchild', title: 'grandchild' },
     })
     expect(deeper.context?.[-1]).toEqual({
       _tag: 'Tile',
       id: 'principle',
       title: 'principle',
-      children: {},
+      branches: {},
+      leaves: {},
       context: {},
     })
   })
@@ -146,7 +180,7 @@ describe('a Tile read to a depth', () => {
   it('gives each Tile only the fields its rows carry', () => {
     const bare = titled.map((row) => ({ ...row, content: {} }))
     const root = bare.find((row) => row.id === 'root')
-    expect(root && readOf(root, { rows: bare, depth: 1, pointedAt }).children?.[2]).toEqual({
+    expect(root && readOf(root, { rows: bare, depth: 1, pointedAt }).branches?.[2]).toEqual({
       _tag: 'Tile',
       id: 'child',
     })

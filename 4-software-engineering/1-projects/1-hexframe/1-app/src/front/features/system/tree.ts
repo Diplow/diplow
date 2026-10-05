@@ -1,6 +1,8 @@
-// The System as the canvas draws it. Mapping keeps each Tile's Children by Direction and its Context
-// by slot, −1 to −6, where a slot holds a Tile of its own or a Reference; the canvas takes TileNodes,
-// whose Context is keyed by Direction. Pure: what the canvas shows of a Tile is decided here.
+// The System as the canvas draws it. Mapping keeps each Tile's Branches and Leaves by Direction and
+// its Context by slot, −1 to −6, where a slot holds a Tile of its own or a Reference; the canvas takes
+// TileNodes, whose Children are the Branches, Leaves not drawn yet, and whose Context is keyed by
+// Direction. Pure: what the canvas shows of a Tile is decided here.
+import type { Slot } from '#/api/mapping/mapping'
 import type { SystemTile } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import { directions, type Direction } from '#/front/ui/hex/geometry/geometry'
@@ -27,7 +29,7 @@ export function canvasTree(tile: SystemTile): TileNode {
   const children: NonNullable<TileNode['children']> = {}
   const context: NonNullable<TileNode['context']> = {}
   for (const direction of directions) {
-    const child = tile.children[direction]
+    const child = tile.branches[direction]
     if (child !== undefined) children[direction] = canvasTree(child)
     const entry = tile.context[contextSlot[direction]]
     if (entry !== undefined)
@@ -68,8 +70,12 @@ export const swapsWith = (system: SystemTile, moving: TileNode, tile: TileNode) 
 export const slotOf = (ring: Ring, direction: Direction) =>
   ring === 'children' ? direction : contextSlot[direction]
 
-/** Where a slot stands: among its parent's Children, 1 to 6, or in its Context, −1 to −6. */
-export const ringOf = (slot: number): Ring => (slot > 0 ? 'children' : 'context')
+/**
+ * Where a slot stands: among its parent's Children, a Branch's 1 to 6 or a Leaf's, or in its Context,
+ * −1 to −6.
+ */
+export const ringOf = (slot: typeof Slot.Type): Ring =>
+  typeof slot === 'number' && slot < 0 ? 'context' : 'children'
 
 /**
  * The Tile of this id, anywhere in the System, Context Tiles included, with the Tile it stands under;
@@ -83,7 +89,7 @@ export function tileIn(
   if (system.id === id) return { tile: system, parent }
   for (const direction of directions) {
     const entry = system.context[contextSlot[direction]]
-    for (const below of [system.children[direction], entry?._tag === 'Tile' ? entry : undefined]) {
+    for (const below of [system.branches[direction], entry?._tag === 'Tile' ? entry : undefined]) {
       const found = below && tileIn(below, id, system)
       if (found) return found
     }
