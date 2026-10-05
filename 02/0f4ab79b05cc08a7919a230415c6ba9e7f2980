@@ -1,0 +1,21 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/mcp.test.ts
+  s_c6607867f8f345::t_c8ca05d9f4161d 67-75
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/__snapshots__/mcp.test.ts.snap
+  s_c6607867f8f345::t_0bb84c97d7bf53 1-448
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "020f4ab79b05cc08a7919a230415c6ba9e7f2980",
+  "prompts": {},
+  "sessions": {
+    "s_c6607867f8f345": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4f8f3c2-2717-4700-ac6f-29d6bae7bf9e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
