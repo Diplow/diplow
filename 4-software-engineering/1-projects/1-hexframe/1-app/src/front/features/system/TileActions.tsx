@@ -1,5 +1,6 @@
-// What the user can do to the centered Tile: edit it, move it, export it, delete it, and, on an empty
-// System's Root, import a vault; and the form a new Tile or an edited one is written in, or an import,
+// What the user can do to the centered Tile: edit it, move it, export it, delete it, grow a Leaf into a
+// Branch or shrink a bare Branch into a Leaf, and, on an empty System's Root, import a vault; a Leaf
+// that isn't Markdown shows its Body as code. And the form a new Tile or an edited one is written in, or an import,
 // in a drawer, where an empty slot offers a new Tile or an import. The drawer's open state and the
 // move under way are the URL's. A refusal shows where its channel sends it: on the form's field, in
 // the import's report, or in a toast.
@@ -19,6 +20,7 @@ import { Button } from '#/front/ui/inputs/controls/button'
 import { useAppForm } from '#/front/ui/inputs/forms/form'
 import { ConfirmDialog } from '#/front/ui/overlays/ConfirmDialog'
 import { Drawer } from '#/front/ui/overlays/Drawer'
+import { CodeBlock } from '#/front/ui/data/Markdown'
 import { Card } from '#/front/ui/surfaces/Card'
 
 import {
@@ -32,7 +34,8 @@ import {
   type SystemSearch,
 } from './search'
 import { Import } from './import/Import'
-import { isContextSlot, isEmptySystem, tileIn } from './tree'
+import { type KindChange, useCenteredTileState } from './state/useCenteredTileState'
+import { isContextSlot, isEmptySystem, isLeafSlot, tileIn } from './tree'
 
 interface TileActionsProps {
   /** The System's Root, with everything below it. */
@@ -49,6 +52,7 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
   // A broken Reference, centered, stands for no Tile: there is nothing to act on.
   const found = tileIn(system, center.id)
   const parent = found?.parent
+  const { code, kindChange } = useCenteredTileState(system, center.id)
   const begin = (change: Change) => {
     onSearchChange(withChange(search, change))
   }
@@ -65,6 +69,8 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
                 : m.system_root_description()
               : center.preview
           }
+          code={code}
+          kindChange={kindChange}
           onEdit={() => {
             begin({ kind: 'edit', id: found.tile.id })
           }}
@@ -109,6 +115,10 @@ interface CenteredTileProps {
   id: string
   title: string
   description: string
+  /** The Body shown as code under the title: a Leaf's that isn't Markdown. */
+  code?: string | undefined
+  /** Grows a Leaf into a Branch, or shrinks a Branch with nothing below it into a Leaf. */
+  kindChange?: KindChange | undefined
   onEdit: () => void
   onMove?: () => void
   /** What follows once the Tile is deleted; the Root, which is never deleted, has none. */
@@ -121,6 +131,8 @@ function CenteredTile({
   id,
   title,
   description,
+  code,
+  kindChange,
   onEdit,
   onMove,
   onDeleted,
@@ -145,6 +157,16 @@ function CenteredTile({
           {onMove && (
             <Button variant="outline" size="sm" onClick={onMove}>
               {m.system_move()}
+            </Button>
+          )}
+          {kindChange && (
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={kindChange.pending}
+              onClick={kindChange.change}
+            >
+              {kindChange.label}
             </Button>
           )}
           <Button
@@ -175,7 +197,9 @@ function CenteredTile({
           )}
         </div>
       }
-    />
+    >
+      {code !== undefined && <CodeBlock code={code} label={title} />}
+    </Card>
   )
 }
 
@@ -232,9 +256,7 @@ function drawerOf(system: SystemTile, tree: TileNode, change: Change) {
       kind: 'add',
       key: `${change.parent}:${JSON.stringify(change.slot)}`,
       title: m.system_add_title(),
-      description: isContextSlot(change.slot)
-        ? m.system_add_in_context({ title: parent.title })
-        : m.system_add_under({ title: parent.title }),
+      description: whereIn(change.slot, parent.title),
       parent: change.parent,
       slot: change.slot,
     } as const
@@ -272,11 +294,15 @@ function importDrawerOf(tree: TileNode, place: Extract<Change, { kind: 'import' 
     kind: 'import',
     key: `${place.parent}:${JSON.stringify(place.slot)}`,
     title: m.system_import_here(),
-    description: isContextSlot(place.slot)
-      ? m.system_add_in_context({ title: parent.title })
-      : m.system_add_under({ title: parent.title }),
+    description: whereIn(place.slot, parent.title),
     place,
   } as const
+}
+
+/** Where an empty slot stands, as its drawer says it: in a Tile's Context, a Leaf under it, or under it. */
+function whereIn(slot: Extract<Change, { kind: 'add' }>['slot'], title: string) {
+  if (isContextSlot(slot)) return m.system_add_in_context({ title })
+  return isLeafSlot(slot) ? m.system_add_leaf_under({ title }) : m.system_add_under({ title })
 }
 
 /** What an empty slot offers, a new Tile or an import, each as the change it opens on that slot. */

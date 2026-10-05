@@ -86,14 +86,36 @@ describe('canvasTree', () => {
 })
 
 describe('tileIn', () => {
-  it('finds a Tile anywhere, Context Tiles included, with the Tile it stands under', () => {
-    expect(tileIn(system, 'root')).toEqual({ tile: system, parent: undefined })
-    expect(tileIn(system, 'a3')).toEqual({ tile: a.branches[3], parent: a })
-    expect(tileIn(system, 'deep')).toEqual({ tile: why.branches[2], parent: why })
+  it('finds the Root, under nothing', () => {
+    expect(tileIn(system, 'root')).toEqual({ kind: 'root', tile: system, parent: undefined })
   })
 
-  it('finds a Leaf, with the Tile it stands under', () => {
-    expect(tileIn(system, 'notes')).toEqual({ tile: system.leaves[1], parent: system })
+  it('finds a Branch anywhere, with the Tile it stands under and its Direction', () => {
+    expect(tileIn(system, 'a3')).toEqual({
+      kind: 'branch',
+      tile: a.branches[3],
+      parent: a,
+      direction: 3,
+    })
+    expect(tileIn(system, 'deep')).toEqual({
+      kind: 'branch',
+      tile: why.branches[2],
+      parent: why,
+      direction: 2,
+    })
+  })
+
+  it('finds a Context Tile, with the Tile it stands under and its slot', () => {
+    expect(tileIn(system, 'why')).toEqual({ kind: 'context', tile: why, parent: system, slot: -1 })
+  })
+
+  it('finds a Leaf, with the Tile it stands under and its Direction', () => {
+    expect(tileIn(system, 'notes')).toEqual({
+      kind: 'leaf',
+      tile: system.leaves[1],
+      parent: system,
+      direction: 1,
+    })
   })
 
   it('finds no Tile behind a broken Reference, nor an unknown id', () => {
@@ -141,10 +163,13 @@ describe('slotOf and isContextSlot', () => {
     expect(slotOf('context', 3, leaf)).toBe(-3)
   })
 
-  it('is no slot where the Tile would change kind, nor for a new Tile in a ring of Leaves', () => {
+  it('is a Leaf slot for a new Tile in a ring of Leaves', () => {
+    expect(slotOf('leaves', 3)).toEqual({ leaf: 3 })
+  })
+
+  it('is no slot where a moving Tile would change kind', () => {
     expect(slotOf('branches', 3, leaf)).toBeUndefined()
     expect(slotOf('leaves', 3, branch)).toBeUndefined()
-    expect(slotOf('leaves', 3)).toBeUndefined()
   })
 
   it('tells a Context slot from a Branch’s or a Leaf’s', () => {

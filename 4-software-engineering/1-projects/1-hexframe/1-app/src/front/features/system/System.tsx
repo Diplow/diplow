@@ -1,5 +1,6 @@
-// The user's System on the canvas. A click on an empty slot opens the new Tile's form there, or, while
-// a Tile is being moved, moves it there; meanwhile every other Tile offers to swap places with it.
+// The user's System on the canvas. A click on an empty slot opens the new Tile's form there, a Leaf's
+// in a ring of Leaves, or, while a Tile is being moved, moves it there; meanwhile every other Tile
+// offers to swap places with it.
 // Like the canvas, it holds no state: the view and the change under way are the URL's, and it hands
 // the next search params to the route.
 import { cn } from 'cn'
@@ -50,9 +51,14 @@ export function System({ system, tree, search, onSearchChange, className }: Syst
     const place = placeOf(target)
     if (place === undefined) return undefined
     const { title } = target.parent
+    const labels = {
+      children: m.system_add_child,
+      branches: m.system_add_child,
+      leaves: m.system_add_leaf,
+      context: m.system_add_context,
+    }
     return {
-      label:
-        target.ring === 'context' ? m.system_add_context({ title }) : m.system_add_child({ title }),
+      label: labels[target.ring]({ title }),
       onSelect: () => {
         onSearchChange(withChange(search, { kind: 'add', ...place }))
       },

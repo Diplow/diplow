@@ -7,6 +7,7 @@ import { EmptyState } from '../feedback/states'
 import { GallerySection, GalleryState } from '../gallery'
 import { Button } from '../inputs/controls/button'
 import { DataTable, type DataColumn } from './DataTable'
+import { CodeBlock } from './Markdown'
 
 interface TileRow {
   id: string
@@ -69,20 +70,36 @@ export function DataGallery() {
     { label: m.dev_ui_state_empty(), rows: noRows },
   ]
   return (
-    <GallerySection name="DataTable">
-      {states.map((state) => (
-        <GalleryState key={state.label} label={state.label}>
-          <div className="w-[28rem] max-w-full">
-            <DataTable
-              caption={m.dev_ui_table_caption()}
-              columns={columns}
-              rows={state.rows}
-              rowId={tileId}
-              empty={empty}
-            />
-          </div>
+    <>
+      <GallerySection name="DataTable">
+        {states.map((state) => (
+          <GalleryState key={state.label} label={state.label}>
+            <div className="w-[28rem] max-w-full">
+              <DataTable
+                caption={m.dev_ui_table_caption()}
+                columns={columns}
+                rows={state.rows}
+                rowId={tileId}
+                empty={empty}
+              />
+            </div>
+          </GalleryState>
+        ))}
+      </GallerySection>
+      <GallerySection name="CodeBlock">
+        <GalleryState label={m.dev_ui_state_verbatim_file()}>
+          <CodeBlock code={sampleCode} label="run.yaml" className="w-[28rem]" />
         </GalleryState>
-      ))}
-    </GallerySection>
+      </GallerySection>
+    </>
   )
 }
+
+// A file that isn't Markdown, as a Leaf keeps it: a line longer than the box scrolls.
+const sampleCode = `version: 1
+team: Hexframe
+gates:
+  unit:
+    - pnpm --dir 4-software-engineering/1-projects/1-hexframe install --frozen-lockfile
+    - pnpm --dir 4-software-engineering/1-projects/1-hexframe check
+`
