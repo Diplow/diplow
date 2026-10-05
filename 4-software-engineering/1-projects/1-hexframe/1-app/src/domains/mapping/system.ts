@@ -18,16 +18,19 @@ import {
   type Tile,
 } from './tile'
 
-/** A Leaf in its System: one file's worth, a Tile with nothing below it and no Context. */
-interface LeafTile extends Tile {
+/** A Tile as its System holds it, before what stands below it. */
+interface FoundTile extends Tile {
   readonly _tag: 'Tile'
 }
+
+/** A Leaf in its System: one file's worth, a Tile with nothing below it and no Context. */
+type LeafTile = FoundTile
 
 /**
  * A Tile in its System: its Branches and its Leaves, its Children, each by Direction, and its Context
  * by slot. A Branch, the Root or a Context Tile alike.
  */
-export interface SystemTile extends LeafTile {
+export interface SystemTile extends FoundTile {
   readonly branches: Partial<Record<Direction, SystemTile>>
   readonly leaves: Partial<Record<Direction, LeafTile>>
   readonly context: Partial<Record<ContextDirection, SystemTile | Reference | BrokenReference>>
@@ -130,11 +133,11 @@ export function systemOf(rows: ReadonlyArray<TileRow>): SystemTile | undefined {
 
   const refer = (target: string) => referenceTo(target, byId.get(target), tileOf)
 
-  const leaf = (row: TileRow): LeafTile => ({ _tag: 'Tile', ...tileOf(row) })
+  const found = (row: TileRow): FoundTile => ({ _tag: 'Tile', ...tileOf(row) })
 
   const place = (row: TileRow): SystemTile => ({
-    ...leaf(row),
-    ...slotsOf(under.get(row.id) ?? [], { place, leaf, refer }),
+    ...found(row),
+    ...slotsOf(under.get(row.id) ?? [], { place, leaf: found, refer }),
   })
 
   const root = under.get(null)?.[0]
@@ -155,18 +158,21 @@ export type FieldsAsked<O extends Field, F extends Field> = ColumnsAsked<O, F>
 /** A Tile a Reference points at, as a read shows it: what a reader needs to decide to open it. */
 type Glimpse = Pick<Tile, 'id' | 'title' | 'preview'>
 
-/** A Leaf as a read finds it: its id and only the fields asked, and never anything below it. */
-type ReadLeaf<F extends Field> = Pick<Tile, 'id'> &
+/** A Tile as a read finds it, before what stands below it: its id and only the fields asked. */
+type ReadBase<F extends Field> = Pick<Tile, 'id'> &
   Pick<Content, F> & {
     readonly _tag: 'Tile'
   }
+
+/** A Leaf as a read finds it: its id and only the fields asked, and never anything below it. */
+type ReadLeaf<F extends Field> = ReadBase<F>
 
 /**
  * A Tile as a read to a depth finds it: its id and only the fields asked. Above the depth's last
  * generation it holds its Branches, its Leaves and its Context; at the last one, where the read
  * stopped, none of them.
  */
-export type ReadTile<F extends Field> = ReadLeaf<F> & {
+export type ReadTile<F extends Field> = ReadBase<F> & {
   readonly branches?: Partial<Record<Direction, ReadTile<F>>>
   readonly leaves?: Partial<Record<Direction, ReadLeaf<F>>>
   readonly context?: Partial<
@@ -214,13 +220,13 @@ export function readOf<F extends Field>(
   const refer = (target: string) =>
     referenceTo(target, targets.get(target), (row) => ({ id: row.id, ...row.content }))
 
-  const leaf = (row: TileRowWith<F>): ReadLeaf<F> => ({ _tag: 'Tile', id: row.id, ...row.content })
+  const found = (row: TileRowWith<F>): ReadBase<F> => ({ _tag: 'Tile', id: row.id, ...row.content })
 
   const place = (row: TileRowWith<F>, generation: number): ReadTile<F> => {
-    const tile = leaf(row)
+    const tile = found(row)
     if (generation === depth) return tile
     const next = (below: TileRowWith<F>) => place(below, generation + 1)
-    return { ...tile, ...slotsOf(under.get(row.id) ?? [], { place: next, leaf, refer }) }
+    return { ...tile, ...slotsOf(under.get(row.id) ?? [], { place: next, leaf: found, refer }) }
   }
 
   return place(opened, 0)

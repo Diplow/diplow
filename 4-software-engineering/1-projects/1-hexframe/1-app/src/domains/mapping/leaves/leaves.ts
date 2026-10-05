@@ -21,10 +21,14 @@ export const notLeaf = (parent: TileRow) =>
   isLeaf(parent) ? Effect.fail(new LeafHoldsNothing()) : Effect.succeed(parent)
 
 /**
- * Refuses to put the Tile of this id in a slot of this row direction when the slot is a Leaf's and the
- * Tile holds anything: it moves to a Branch slot first, or what it holds moves out.
+ * Refuses to put the Tile of this id in the slot a row direction names when the slot is a Leaf's and
+ * the Tile holds anything: what it holds moves out first, or it takes a Branch slot instead.
  */
-export const fitsIn = (rows: ReadonlyArray<TileRow>, id: string, direction: number | null) =>
-  leafOf(direction) !== undefined && holdsAnything(rows, id)
+export const holdsNothingIfLeaf = (
+  rows: ReadonlyArray<TileRow>,
+  id: string,
+  direction: TileRow['direction'],
+) =>
+  isLeaf({ direction }) && holdsAnything(rows, id)
     ? Effect.fail(new LeafHoldsNothing())
     : Effect.void

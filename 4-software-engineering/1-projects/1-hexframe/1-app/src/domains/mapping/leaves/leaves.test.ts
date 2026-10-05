@@ -1,15 +1,73 @@
-import { expect, layer } from '@effect/vitest'
+import { describe, expect, it, layer } from '@effect/vitest'
 import { Effect, Layer } from 'effect'
 
 import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
-import { layer as tilesLayer } from '#/repositories/database/tiles/tiles'
+import { type TileRow, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
 import * as Mapping from '../mapping'
 import { type Direction, directions, system } from '../mapping'
+import { leafOf, rowDirection } from '../tile'
+import { holdsNothingIfLeaf, notLeaf } from './leaves'
 
-// Leaves beside Branches, over PGlite: a Tile holds six of each in their own Directions, a Leaf holds
-// nothing, and a Tile changes kind only by moving, with nothing below it when it takes a Leaf slot.
+// Leaves beside Branches: first where a Leaf slot is stored and what a Leaf may hold, on rows made by
+// hand; then over PGlite, a Tile holds six of each in their own Directions, a Leaf holds nothing, and
+// a Tile changes kind only by moving, with nothing below it when it takes a Leaf slot.
+
+describe('where a Leaf slot is stored', () => {
+  it('stores a Leaf past the six Branch slots, and reads its Direction back', () => {
+    const stored = directions.map((direction) => rowDirection({ leaf: direction }))
+    expect(stored).toEqual([7, 8, 9, 10, 11, 12])
+    expect(stored.map(leafOf)).toEqual([...directions])
+  })
+
+  it('stores a Branch and a Context slot as they are, and reads neither as a Leaf', () => {
+    const slots = [1, 6, -1, -6] as const
+    expect(slots.map((slot) => rowDirection(slot))).toEqual([...slots])
+    expect([null, 0, 1, 6, -1, -6, 13].map(leafOf)).toEqual(Array(7).fill(undefined))
+  })
+})
+
+describe('what a Leaf may hold, on rows made by hand', () => {
+  const row = (id: string, parentId: string | null, direction: number | null): TileRow => ({
+    id,
+    parentId,
+    direction,
+    title: id,
+    preview: '',
+    body: '',
+    target: null,
+  })
+  // A Root with a Leaf in Direction 1, a bare Branch in Direction 1 and a Branch holding a Child.
+  const rows = [
+    row('root', null, null),
+    row('leaf', 'root', 7),
+    row('bare', 'root', 1),
+    row('full', 'root', 2),
+    row('inside', 'full', -3),
+  ]
+  const refusal = { _tag: 'LeafHoldsNothing', kind: 'Conflict' }
+
+  it.effect('puts nothing under a Leaf, and lets anything under a Branch', () =>
+    Effect.gen(function* () {
+      expect(yield* Effect.flip(notLeaf(row('leaf', 'root', 7)))).toMatchObject(refusal)
+      expect(yield* notLeaf(row('bare', 'root', 1))).toMatchObject({ id: 'bare' })
+    }),
+  )
+
+  it.effect('takes into a Leaf slot only a Tile with nothing below it', () =>
+    Effect.gen(function* () {
+      expect(yield* Effect.flip(holdsNothingIfLeaf(rows, 'full', 9))).toMatchObject(refusal)
+      for (const [id, direction] of [
+        ['bare', 9],
+        ['full', 3],
+        ['full', -1],
+      ] as const) {
+        yield* holdsNothingIfLeaf(rows, id, direction)
+      }
+    }),
+  )
+})
 
 const TestTiles = tilesLayer.pipe(Layer.provideMerge(TestDatabase))
 

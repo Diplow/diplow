@@ -11,7 +11,7 @@ import { Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/
 
 import { DirectionTaken, HelpReadOnly, MovedUnderItself, RootFixed, TileNotFound } from './errors'
 import { findInHelp, type HelpLanguage, isHelpId } from './help/help'
-import { fitsIn, notLeaf } from './leaves/leaves'
+import { holdsNothingIfLeaf, notLeaf } from './leaves/leaves'
 import {
   type Depth,
   type Field,
@@ -268,7 +268,7 @@ export const moveTile = (accountId: string, id: string, to: Placement) =>
       if (row.parentId === to.parent && row.direction === direction) return
       if (below(rows, id).has(to.parent)) return yield* new MovedUnderItself()
       yield* freeSlot(rows, to)
-      yield* fitsIn(rows, id, direction)
+      yield* holdsNothingIfLeaf(rows, id, direction)
       yield* writes.update(id, { parentId: to.parent, direction })
     }),
   )
@@ -286,8 +286,8 @@ export const swapTiles = (accountId: string, a: string, b: string) =>
       const second = yield* Effect.flatMap(tileIn(rows, b), notRoot)
       if (a === b) return
       if (below(rows, a).has(b) || below(rows, b).has(a)) return yield* new MovedUnderItself()
-      yield* fitsIn(rows, a, second.direction)
-      yield* fitsIn(rows, b, first.direction)
+      yield* holdsNothingIfLeaf(rows, a, second.direction)
+      yield* holdsNothingIfLeaf(rows, b, first.direction)
       yield* writes.swap(a, b)
     }),
   )

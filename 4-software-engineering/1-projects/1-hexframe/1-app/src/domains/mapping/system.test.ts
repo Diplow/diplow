@@ -74,6 +74,38 @@ describe('the System these rows hold', () => {
   })
 })
 
+describe('Leaves beside Branches', () => {
+  // A Root with a Branch in Direction 2 and a Leaf in the same Direction, stored past the six Branch
+  // slots, and a Child under the Branch.
+  const both = [tile('root', null, null), tile('branch', 'root', 2), tile('leaf', 'root', 8)]
+  const withChild = [...both, tile('below', 'branch', 1)]
+
+  it('reads a Leaf by its Direction, beside the Branch sharing it, with nothing below it', () => {
+    const root = systemOf(withChild)
+    expect(root?.leaves).toEqual({ 2: { _tag: 'Tile', ...content('leaf') } })
+    expect(root?.branches[2]).toMatchObject({ id: 'branch', branches: { 1: { id: 'below' } } })
+  })
+
+  it('reads a Leaf to a depth the same way, with only the fields asked', () => {
+    const read = both.map(({ id, parentId, direction, target, title }) => ({
+      id,
+      parentId,
+      direction,
+      target,
+      content: { title },
+    }))
+    const [root] = read
+    expect(root && readOf(root, { rows: read, depth: 1, pointedAt: [] })).toEqual({
+      _tag: 'Tile',
+      id: 'root',
+      title: 'root',
+      branches: { 2: { _tag: 'Tile', id: 'branch', title: 'branch' } },
+      leaves: { 2: { _tag: 'Tile', id: 'leaf', title: 'leaf' } },
+      context: {},
+    })
+  })
+})
+
 describe('reading rows by id and by slot', () => {
   it('finds a Tile by its id, never a Reference', () => {
     expect(tileRow(rows, 'child')?.id).toBe('child')
