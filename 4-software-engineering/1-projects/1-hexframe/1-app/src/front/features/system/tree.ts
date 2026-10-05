@@ -2,18 +2,19 @@
 // its Context by slot, −1 to −6, where a slot holds a Tile of its own or a Reference; the canvas takes
 // TileNodes, with the same Branches and Leaves, a Leaf marked as one, and the Context keyed by
 // Direction. Pure: what the canvas shows of a Tile is decided here.
-import { type Direction, directions, type Slot, type SystemTile } from '#/domains/mapping/entities'
+import {
+  contextSlotOf,
+  type ContextDirection,
+  type Direction,
+  directions,
+  type LeafTile,
+  type Slot,
+  type SystemTile,
+} from '#/domains/mapping/entities'
 import { m } from '#/paraglide/messages'
 import type { FrameKind, TileNode } from '#/front/ui/hex/view/tiles'
 
-type ContextSlot = keyof SystemTile['context']
-type ContextEntry = NonNullable<SystemTile['context'][ContextSlot]>
-
-/** A Leaf as the client holds it: a Tile with nothing below it. */
-type LeafTile = NonNullable<SystemTile['leaves'][Direction]>
-
-/** Each Direction's Context slot: the same Direction, negated. */
-const contextSlot: Record<Direction, ContextSlot> = { 1: -1, 2: -2, 3: -3, 4: -4, 5: -5, 6: -6 }
+type ContextEntry = NonNullable<SystemTile['context'][ContextDirection]>
 
 /**
  * A Tile's title as a reader sees it. Only the Root is ever untitled: Mapping adds it that way, until
@@ -35,7 +36,7 @@ export function canvasTree(tile: SystemTile): TileNode {
     if (branch !== undefined) branches[direction] = canvasTree(branch)
     const leaf = tile.leaves[direction]
     if (leaf !== undefined) leaves[direction] = leafNode(leaf)
-    const entry = tile.context[contextSlot[direction]]
+    const entry = tile.context[contextSlotOf(direction)]
     if (entry !== undefined)
       context[direction] = contextNode(entry, `${tile.id}:${String(-direction)}`)
   }
@@ -98,7 +99,7 @@ export function slotOf(ring: FrameKind, direction: Direction, going?: TileNode):
     case 'leaves':
       return going === undefined || leaf ? { leaf: direction } : undefined
     case 'context':
-      return contextSlot[direction]
+      return contextSlotOf(direction)
   }
 }
 
@@ -109,7 +110,7 @@ export function slotOf(ring: FrameKind, direction: Direction, going?: TileNode):
 export type Found =
   | { kind: 'leaf'; tile: LeafTile; parent: SystemTile; direction: Direction }
   | { kind: 'branch'; tile: SystemTile; parent: SystemTile; direction: Direction }
-  | { kind: 'context'; tile: SystemTile; parent: SystemTile; slot: ContextSlot }
+  | { kind: 'context'; tile: SystemTile; parent: SystemTile; slot: ContextDirection }
   | { kind: 'root'; tile: SystemTile; parent: undefined }
 
 /**
@@ -127,7 +128,7 @@ function below(parent: SystemTile, id: string): Found | undefined {
     if (leaf?.id === id) return { kind: 'leaf', tile: leaf, parent, direction }
     const branch = parent.branches[direction]
     if (branch?.id === id) return { kind: 'branch', tile: branch, parent, direction }
-    const slot = contextSlot[direction]
+    const slot = contextSlotOf(direction)
     const entry = parent.context[slot]
     const tile = entry?._tag === 'Tile' ? entry : undefined
     if (tile?.id === id) return { kind: 'context', tile, parent, slot }

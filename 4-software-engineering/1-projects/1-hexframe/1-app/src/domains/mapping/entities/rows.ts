@@ -1,6 +1,8 @@
 // The rows a System is read from, as Mapping reads them. Mapping declares the shapes it reads, and the
 // tiles repository's rows satisfy them structurally, so nothing here imports the repository and the
-// front may read a System by the same types (`entities/index.ts`). Pure.
+// front may read a System by the same types (`entities/index.ts`). Everything in `entities/` takes
+// these; only the application service and `landing/`, which call the repository, name its `TileRow`,
+// whose rows they pass on as `Row`s. Pure.
 import type { Content } from './tile'
 
 /** What a row's `config` holds: a folder's naming, either part of it left out when not set. */
@@ -32,7 +34,8 @@ export type KeptPart = 'name' | 'config' | 'frontmatter'
 
 /**
  * A row as a read from one Tile finds it: where it stands, whether it is a Reference, and, apart, only
- * the fields of its content asked.
+ * the fields of its content asked. The repository selects such a row flat (`TileRowWith`), and
+ * `withContent` nests it here, as it nests one of Help's notes.
  */
 export interface RowWith<F extends keyof Content> {
   readonly id: string
@@ -42,7 +45,10 @@ export interface RowWith<F extends keyof Content> {
   readonly content: Pick<Content, F>
 }
 
-/** What a read from one Tile asks of it, and of each Tile below it. */
+/**
+ * What a read from one Tile asks of it, and of each Tile below it: the repository's `ColumnsAsked`
+ * seen from Mapping, which a repository, importing no domain, declares again.
+ */
 export interface FieldsAsked<O extends keyof Content, F extends keyof Content> {
   readonly opened: ReadonlyArray<O>
   readonly below: ReadonlyArray<F>

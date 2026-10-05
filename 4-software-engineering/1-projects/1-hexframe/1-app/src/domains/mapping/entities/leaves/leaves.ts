@@ -8,7 +8,7 @@ import { Effect } from 'effect'
 import { LeafHoldsNothing } from '../../errors'
 import type { Row } from '../rows'
 import type { SystemTile } from '../system'
-import { type Slot, leafOf } from '../tile'
+import { isLeafSlot, leafOf, type Slot } from '../tile'
 
 /** Whether a row stands in a Leaf slot. */
 const isLeaf = (row: Pick<Row, 'direction'>) => leafOf(row.direction) !== undefined
@@ -18,9 +18,7 @@ const isLeaf = (row: Pick<Row, 'direction'>) => leafOf(row.direction) !== undefi
  * alone, its plan a Leaf.
  */
 export const onlyALeafIn = (slot: Slot, planned: { readonly _tag: 'Tile' | 'Leaf' }) =>
-  typeof slot !== 'number' && planned._tag !== 'Leaf'
-    ? Effect.fail(new LeafHoldsNothing())
-    : Effect.void
+  isLeafSlot(slot) && planned._tag !== 'Leaf' ? Effect.fail(new LeafHoldsNothing()) : Effect.void
 
 /** What stands below a Tile of a System, each kind by its slots. */
 type Below = Pick<SystemTile, 'branches' | 'leaves' | 'context'>

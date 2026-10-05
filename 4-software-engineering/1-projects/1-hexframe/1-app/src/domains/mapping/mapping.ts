@@ -17,7 +17,6 @@ import {
   below,
   checked,
   type Content,
-  type ContextDirection,
   type Depth,
   type Field,
   type FieldsAsked,
@@ -35,7 +34,7 @@ import {
   type ToKeep,
   withContent,
 } from './entities'
-import type { Placement } from './operations'
+import type { Placement, ReferenceSlot } from './operations'
 
 export { HelpId, helpRoot, helpSystem } from './help/help'
 
@@ -322,7 +321,7 @@ export const deleteTile = (accountId: string, id: string) =>
  */
 export const createReference = (
   accountId: string,
-  { parent, slot, target }: { parent: string; slot: ContextDirection; target: string },
+  { parent, slot, target }: ReferenceSlot & { target: string },
 ) =>
   changing(accountId, [parent, target], (rows, writes) =>
     Effect.gen(function* () {
@@ -333,10 +332,7 @@ export const createReference = (
   )
 
 /** Empties a Context slot holding a Reference; the Tile it pointed at is untouched. */
-export const deleteReference = (
-  accountId: string,
-  { parent, slot }: { parent: string; slot: ContextDirection },
-) =>
+export const deleteReference = (accountId: string, { parent, slot }: ReferenceSlot) =>
   changing(accountId, [parent], (rows, writes) =>
     Effect.gen(function* () {
       yield* tileIn(rows, parent)

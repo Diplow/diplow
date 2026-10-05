@@ -14,6 +14,18 @@ export const contextDirections = [-1, -2, -3, -4, -5, -6] as const
 export const ContextDirection = Schema.Literals(contextDirections)
 export type ContextDirection = typeof ContextDirection.Type
 
+const contextSlots: Record<Direction, ContextDirection> = {
+  1: -1,
+  2: -2,
+  3: -3,
+  4: -4,
+  5: -5,
+  6: -6,
+}
+
+/** The Context slot in a Direction: the Direction, negated. */
+export const contextSlotOf = (direction: Direction): ContextDirection => contextSlots[direction]
+
 /**
  * A Leaf's slot: one of its parent's six Leaf Directions, which are their own beside the six Branch
  * Directions, so a Leaf and a Branch may share a Direction.

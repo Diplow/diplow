@@ -7,7 +7,7 @@ import { Effect } from 'effect'
 
 import * as Iam from '#/domains/iam/iam'
 import type { Content, Field } from '#/domains/mapping/entities'
-import type { Placement } from '#/domains/mapping/operations'
+import type { Placement, ReferenceSlot } from '#/domains/mapping/operations'
 import * as Landing from '#/domains/mapping/landing/landing'
 import * as Mapping from '#/domains/mapping/mapping'
 import type { Locale } from '#/paraglide/runtime'
@@ -23,9 +23,6 @@ const forAccount = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, 
 /** Runs a change for the signed-in Account, in one transaction: it commits whole, or not at all. */
 const changeForAccount = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, E, R>) =>
   forAccount((accountId) => transactional(operation(accountId)))
-
-/** A Context slot, as Mapping takes it: the id of the Tile that holds it and its slot, -1 to -6. */
-type ReferenceSlot = Parameters<typeof Mapping.deleteReference>[1]
 
 /** The Account's System: its Root, the user, with everything below it. */
 export const system = forAccount(Mapping.system)

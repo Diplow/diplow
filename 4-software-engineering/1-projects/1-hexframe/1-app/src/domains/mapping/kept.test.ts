@@ -1,12 +1,13 @@
-import { expect, layer } from '@effect/vitest'
+import { describe, expect, it, layer } from '@effect/vitest'
 import { Effect, Layer, Schema } from 'effect'
 import { expectTypeOf } from 'vitest'
 
 import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
+import type { TileConfigColumn } from '#/repositories/database/schema'
 import { layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
-import { configured, Frontmatter, named } from './entities'
+import { configured, Frontmatter, named, type StoredConfig } from './entities'
 import { exportOf } from './files/files'
 import * as Mapping from './mapping'
 import { system } from './mapping'
@@ -131,5 +132,11 @@ layer(TestTiles)('what a Tile keeps, over the tiles repository', (it) => {
     expectTypeOf<string>().not.toExtend<NonNullable<Given['name']>>()
     expectTypeOf<{ fileName: string }>().not.toExtend<NonNullable<Given['config']>>()
     expectTypeOf<Record<string, string>>().not.toExtend<NonNullable<Given['frontmatter']>>()
+  })
+})
+
+describe('a Tile config, as Mapping and the tiles repository each declare it', () => {
+  it('names the same parts on both sides, so a part added to the column is a part Mapping checks', () => {
+    expectTypeOf<keyof StoredConfig>().toEqualTypeOf<keyof TileConfigColumn>()
   })
 })
