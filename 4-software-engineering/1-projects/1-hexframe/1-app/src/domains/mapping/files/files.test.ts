@@ -78,7 +78,7 @@ const link = (id: string) => `https://hexframe.test/map?tile=${id}`
 /** The export of the Tile of this id, which the System holds. */
 function exported(id: string): ReadonlyArray<File> {
   if (system === undefined) throw new Error('These rows hold a Root')
-  const files = exportOf(system, id, link)
+  const files = exportOf(system, id, link)?.files
   if (files === undefined) throw new Error(`The System holds ${id}`)
   return files
 }
@@ -228,8 +228,15 @@ describe('a Tile exported with what is below it', () => {
     expect(read(exported('notes'), '1-notes.md').fields).toMatchObject({ id: 'notes', parent: '.' })
   })
 
-  it('is nothing for an id the System does not hold', () => {
+  it('is named by its Tile’s slug, a Leaf’s and the Root’s alike', () => {
+    expect(exportOf(system, 'games', link)?.slug).toBe('games')
+    expect(exportOf(system, 'json', link)?.slug).toBe('package-json')
+    expect(exportOf(system, 'root', link)?.slug).toBe('ulysse')
+  })
+
+  it('is nothing for an id the System does not hold, nor for a Reference', () => {
     expect(exportOf(system, 'gone', link)).toBeUndefined()
+    expect(exportOf(system, 'to-leadership', link)).toBeUndefined()
   })
 })
 
@@ -257,7 +264,7 @@ describe('Help, exported', () => {
   it.effect('reads like any Tile: a file per Tile, each one read back whole', () =>
     Effect.gen(function* () {
       const help = yield* helpSystem('en')
-      const files = exportOf(help, help.id, link) ?? []
+      const files = exportOf(help, help.id, link)?.files ?? []
       const ids = files.map((file) => (read(files, file.path).fields as { id: string }).id)
       expect(ids).toContain(help.id)
       expect(new Set(ids).size).toBe(files.length)

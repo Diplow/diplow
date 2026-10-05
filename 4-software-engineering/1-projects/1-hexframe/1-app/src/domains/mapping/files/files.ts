@@ -8,12 +8,18 @@ import { defaultNaming, inherited } from '../kept/naming'
 import type { BrokenReference, LeafTile, Reference, SystemTile } from '../system'
 import type { ContextDirection, Direction } from '../tile'
 import { type Fields, markdownOf, yamlOf } from './frontmatter'
-import { type EntryKind, type ToName, isVerbatim, namesIn, ownFileName } from './names'
+import { type EntryKind, type ToName, isVerbatim, namesIn, ownFileName, slugOf } from './names'
 
 /** One file of an export: its path from the export's root, and its text. */
 export interface File {
   readonly path: string
   readonly content: string
+}
+
+/** An export: the files it holds, and the slug of its Tile's Title, which names what carries them. */
+export interface Export {
+  readonly slug: string
+  readonly files: ReadonlyArray<File>
 }
 
 /**
@@ -226,24 +232,21 @@ function rootConfig({ tile, naming }: { tile: SystemTile; naming: Naming }): Fie
 }
 
 /**
- * The files the export of the Tile of this id holds, it and everything below it, from the System's
- * Root down; `undefined` when the System holds no Tile of this id. The Tile's own file sits at the
- * export's root, or, for a Leaf, is the export's one file. A Reference whose Tile is exported too
- * links it by its path, `[[1-a/CLAUDE]]`; any other, broken ones included, by `link`. Throws, a
- * defect, rather than write a name that isn't one path segment.
+ * The export of the Tile of this id, it and everything below it, from the System's Root down: the
+ * files it holds and its Tile's slug; `undefined` when the System holds no Tile of this id. The Tile's
+ * own file sits at the export's root, or, for a Leaf, is the export's one file. A Reference whose
+ * Tile is exported too links it by its path, `[[1-a/CLAUDE]]`; any other, broken ones included, by
+ * `link`. Throws, a defect, rather than write a name that isn't one path segment.
  */
-export function exportOf(
-  system: SystemTile,
-  id: string,
-  link: LinkOf,
-): ReadonlyArray<File> | undefined {
+export function exportOf(system: SystemTile, id: string, link: LinkOf): Export | undefined {
   const found = find(system, id, defaultNaming)
   if (found === undefined) return undefined
+  const slug = slugOf(found.tile.title)
   if (found._tag === 'Leaf') {
-    return filesOf({ ...found, folder: '' }, { links: new Map(), link })
+    return { slug, files: filesOf({ ...found, folder: '' }, { links: new Map(), link }) }
   }
   const [root, ...below] = placed(found.tile, '', found.naming)
   const all = root === undefined ? below : [{ ...root, config: rootConfig(found) }, ...below]
   const links = linksOf(all)
-  return all.flatMap((written) => filesOf(written, { links, link }))
+  return { slug, files: all.flatMap((written) => filesOf(written, { links, link })) }
 }

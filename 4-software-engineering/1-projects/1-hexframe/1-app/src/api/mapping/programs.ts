@@ -8,7 +8,10 @@ import { Effect } from 'effect'
 import * as Iam from '#/domains/iam/iam'
 import * as Mapping from '#/domains/mapping/mapping'
 import type { Locale } from '#/paraglide/runtime'
+import { HttpExchange } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
+
+import { tileLink } from './download'
 
 /** Runs an operation for the signed-in Account: the one the request proves, never one a caller sends. */
 const forAccount = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, E, R>) =>
@@ -48,6 +51,18 @@ export const readTile = <F extends Mapping.Field>(
 export const openTile = <F extends Mapping.Field>(
   input: Omit<Parameters<typeof Mapping.openTile<F>>[1], 'language'>,
 ) => forAccount((accountId) => Mapping.openTile(accountId, { ...input, language: 'en' }))
+
+/**
+ * A Tile of the Account's System and everything below it, zipped: the archive's name and its bytes,
+ * streamed. A Reference whose Tile is left out links it on the site the request reached.
+ */
+export const exportTile = ({ id }: { id: string }) =>
+  forAccount((accountId) =>
+    Effect.gen(function* () {
+      const { url } = yield* HttpExchange
+      return yield* Mapping.exportTile(accountId, { id, link: tileLink(url) })
+    }),
+  )
 
 export const createTile = (input: Parameters<typeof Mapping.createTile>[1]) =>
   changeForAccount((accountId) => Mapping.createTile(accountId, input))

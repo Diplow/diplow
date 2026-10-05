@@ -1,7 +1,7 @@
 // Mapping's server functions: one per operation, for the signed-in Account, which the middleware has
 // already put on the context as its Session, and `help`, Help whole, for any visitor. Each validates
 // its input, then hands its program (./programs.ts) to the helper; its type lists the errors it can
-// fail with.
+// fail with. `exportTile` answers its zip as a download (./download.ts).
 import { createServerFn } from '@tanstack/react-start'
 import { Schema } from 'effect'
 
@@ -9,6 +9,7 @@ import { contextDirections, directions } from '#/domains/mapping/tile'
 import { locales } from '#/paraglide/runtime'
 
 import { run } from '../server/run'
+import { asDownload } from './download'
 import * as Mapping from './programs'
 
 /** A Tile's id: a UUID, as the tiles repository makes every one, so nothing else reaches the domain. */
@@ -82,6 +83,15 @@ export const system = createServerFn({ method: 'GET' })
 export const help = createServerFn({ method: 'GET' })
   .validator(Schema.toStandardSchemaV1(HelpLanguage))
   .handler(({ data, context }) => run(context, Mapping.help(data)))
+
+/**
+ * A Tile of the Account's System and everything below it, as a zip to download, `<slug>.zip`: on the
+ * Root, the whole System. Its bytes stream as they are zipped, so an export past the 4.5 MB to
+ * which Vercel caps a buffered answer still downloads; a failure answers as any server function's.
+ */
+export const exportTile = createServerFn({ method: 'GET' })
+  .validator(Schema.toStandardSchemaV1(TileRef))
+  .handler(async ({ data, context }) => asDownload(await run(context, Mapping.exportTile(data))))
 
 export const createTile = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(NewTile))

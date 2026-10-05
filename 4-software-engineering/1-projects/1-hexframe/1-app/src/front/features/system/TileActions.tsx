@@ -1,10 +1,11 @@
-// What the user can do to the centered Tile: edit it, move it, delete it; and the form a new Tile or an
-// edited one is written in, in a drawer. The drawer's open state and the move under way are the URL's.
+// What the user can do to the centered Tile: edit it, move it, export it, delete it; and the form a new
+// Tile or an edited one is written in, in a drawer. The drawer's open state and the move under way are the URL's.
 // A refusal shows where its channel sends it: on the form's field, or in a toast.
 import {
   useCreateTileSubmit,
   useDeleteTile,
   useEditTileSubmit,
+  useExportTile,
   type SystemTile,
   type TileContent,
   type TileSubmit,
@@ -52,6 +53,7 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
     <>
       {found !== undefined && (
         <CenteredTile
+          id={found.tile.id}
           title={center.title}
           description={parent === undefined ? m.system_root_description() : center.preview}
           onEdit={() => {
@@ -62,19 +64,13 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
             onMove: () => {
               begin({ kind: 'move', id: found.tile.id })
             },
-            deletion: {
-              id: found.tile.id,
-              // The centered Tile is gone, and everything below it: the view, as it is by then,
-              // centers on the Tile it stood under, and a change under way ends only if it named one
-              // of the Tiles gone.
-              onDeleted: () => {
-                onSearchChange((current) =>
-                  withoutTile(
-                    withView(current, centerOn(tree, viewOf(current), parent.id)),
-                    center,
-                  ),
-                )
-              },
+            // The centered Tile is gone, and everything below it: the view, as it is by then,
+            // centers on the Tile it stood under, and a change under way ends only if it named one
+            // of the Tiles gone.
+            onDeleted: () => {
+              onSearchChange((current) =>
+                withoutTile(withView(current, centerOn(tree, viewOf(current), parent.id)), center),
+              )
             },
           })}
         />
@@ -93,16 +89,19 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
 }
 
 interface CenteredTileProps {
+  /** The centered Tile's id, which its export and its delete name. */
+  id: string
   title: string
   description: string
   onEdit: () => void
   onMove?: () => void
-  /** The Tile a delete deletes, and what follows once it is gone; the Root has none. */
-  deletion?: { id: string; onDeleted: () => void }
+  /** What follows once the Tile is deleted; the Root, which is never deleted, has none. */
+  onDeleted?: () => void
 }
 
-function CenteredTile({ title, description, onEdit, onMove, deletion }: CenteredTileProps) {
+function CenteredTile({ id, title, description, onEdit, onMove, onDeleted }: CenteredTileProps) {
   const remove = useDeleteTile()
+  const exporting = useExportTile()
   return (
     <Card
       title={title}
@@ -117,7 +116,17 @@ function CenteredTile({ title, description, onEdit, onMove, deletion }: Centered
               {m.system_move()}
             </Button>
           )}
-          {deletion && (
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={exporting.isPending}
+            onClick={() => {
+              exporting.mutate({ id })
+            }}
+          >
+            {m.system_export()}
+          </Button>
+          {onDeleted && (
             <ConfirmDialog
               trigger={
                 <Button variant="outline" size="sm">
@@ -129,7 +138,7 @@ function CenteredTile({ title, description, onEdit, onMove, deletion }: Centered
               confirmLabel={m.system_delete()}
               destructive
               onConfirm={() => {
-                remove.mutate({ id: deletion.id }, { onSuccess: deletion.onDeleted })
+                remove.mutate({ id }, { onSuccess: onDeleted })
               }}
             />
           )}

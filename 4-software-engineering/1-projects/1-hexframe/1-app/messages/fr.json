@@ -203,6 +203,7 @@
   "system_swap_with": "Échanger avec {title}",
   "system_edit": "Modifier",
   "system_move": "Déplacer",
+  "system_export": "Exporter",
   "system_delete": "Supprimer",
   "system_delete_title": "Supprimer {title} ?",
   "system_delete_description": "{title} et tout ce qui est en dessous seront supprimés, et les références vers eux apparaîtront brisées. C’est définitif.",

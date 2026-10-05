@@ -1,11 +1,12 @@
-// Mapping on the client: one TanStack Query hook per read and per write, over its server functions
-// (src/api/mapping/mapping.ts). The System is one query, read whole; every write reads it again once
-// it settles, failed or not, since a refusal (a slot taken meanwhile, a Tile gone) says the page is
-// behind.
+// Mapping on the client: one TanStack Query hook per read and per write, and the export, over its
+// server functions (src/api/mapping/mapping.ts). The System is one query, read whole; every write
+// reads it again once it settles, failed or not, since a refusal (a slot taken meanwhile, a Tile gone)
+// says the page is behind.
 // Failures go to their channels (../channels.ts): a hook's caller handles none.
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import type { Failure, Outcome } from '#/api/errors/failure'
+import { type Download, downloaded } from '#/api/mapping/download'
 import {
   type NewReference,
   type NewTile,
@@ -19,6 +20,7 @@ import {
   deleteReference,
   deleteTile,
   editTile,
+  exportTile,
   help,
   moveTile,
   swapTiles,
@@ -92,6 +94,34 @@ export const useCreateReference = () =>
 /** Empties a Context slot holding a Reference. */
 export const useDeleteReference = () =>
   useSystemWrite('deleteReference', (data: typeof ReferenceSlot.Type) => deleteReference({ data }))
+
+/**
+ * Exports a Tile and everything below it, the whole System from the Root: the browser saves
+ * `<slug>.zip`. Nothing changes, so the System is not read again; a refusal goes to a write's
+ * channel, a toast.
+ */
+export const useExportTile = () =>
+  useMutation({
+    ...write('exportTile', async (data: typeof TileRef.Type) =>
+      downloaded(await exportTile({ data })),
+    ),
+    onSuccess: save,
+  })
+
+/** Has the browser save a file, as a click on a link to it would. */
+function save({ name, blob }: Download) {
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = name
+  document.body.append(link)
+  link.click()
+  link.remove()
+  // Some browsers read the file from its URL a while after the click: the URL outlives it by a minute.
+  setTimeout(() => {
+    URL.revokeObjectURL(url)
+  }, 60_000)
+}
 
 /** The fields a Tile's form edits, which an edit compares one by one. */
 const contentFields = ['title', 'preview', 'body'] as const
