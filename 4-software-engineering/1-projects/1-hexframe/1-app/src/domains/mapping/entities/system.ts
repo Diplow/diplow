@@ -215,15 +215,24 @@ export function systemOf({ root, tiles }: System): SystemTile {
 
   const refer = (target: string) => referenceTo(target, tileAt(target), tileOf)
 
-  // A Reference stands in a Context slot only (`systemFrom`): among Branches and Leaves it is none.
-  const place = (tile: FoundTile): SystemTile => ({
-    ...tile,
-    ...slotsOf(under.get(tile.id) ?? [], (held) => held.slot, {
-      place: (held) => (held._tag === 'Tile' ? place(unplaced(held)) : undefined),
-      leaf: (held) => (held._tag === 'Tile' ? unplaced(held) : undefined),
-      hold: (held) => (held._tag === 'Reference' ? refer(held.target) : place(unplaced(held))),
-    }),
-  })
+  // Its Tiles take its slots, a Branch's, a Leaf's or a Context one; its References only a Context one.
+  const place = (tile: FoundTile): SystemTile => {
+    const held = under.get(tile.id) ?? []
+    const placedTile = (below: PlacedTile): SystemTile => place(unplaced(below))
+    const slots = slotsOf(
+      held.filter((below) => below._tag === 'Tile'),
+      (below) => below.slot,
+      {
+        place: placedTile,
+        leaf: unplaced,
+        hold: (below): SystemTile | Reference | BrokenReference => placedTile(below),
+      },
+    )
+    for (const below of held) {
+      if (below._tag === 'Reference') slots.context[below.slot] = refer(below.target)
+    }
+    return { ...tile, ...slots }
+  }
 
   return place(root)
 }
