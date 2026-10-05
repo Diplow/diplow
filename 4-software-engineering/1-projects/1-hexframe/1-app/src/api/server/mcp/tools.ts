@@ -4,7 +4,7 @@
 // will take the same table and run a `write` entry's program only once the user accepts its Proposal.
 import { Effect, Schema } from 'effect'
 
-import type { Field } from '#/domains/mapping/mapping'
+import { depths, fields as allFields, type Field } from '#/domains/mapping/mapping'
 
 import type { Failure } from '../../errors/failure'
 import { Id } from '../../mapping/mapping'
@@ -26,7 +26,6 @@ export interface Tool<I = unknown> {
 
 const tool = <I>(entry: Tool<I>) => entry
 
-const allFields: ReadonlyArray<Field> = ['title', 'preview', 'body']
 const glimpseFields: ReadonlyArray<Field> = ['title', 'preview']
 
 /** The fields a read asks of each Tile: at least one, each once, these when none are given. */
@@ -86,7 +85,7 @@ const map = tool({
     directions,
   input: Schema.Struct({
     id: Schema.optionalKey(TileId),
-    depth: Schema.Literals([0, 1, 2, 3])
+    depth: Schema.Literals(depths)
       .annotate({ description: 'How many generations below the Tile: 0 to 3, 2 when not given.' })
       .pipe(Schema.withDecodingDefaultKey(Effect.succeed(2 as const))),
     fields: Fields(

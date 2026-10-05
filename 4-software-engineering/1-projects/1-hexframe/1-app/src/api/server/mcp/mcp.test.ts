@@ -1,12 +1,18 @@
 import { Client, StreamableHTTPClientTransport } from '@modelcontextprotocol/client'
 import { Exit, Option } from 'effect'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import * as Iam from '#/domains/iam/iam'
 
 import * as Mapping from '../../mapping/programs'
-import { noKey, run, type StartContext } from '../run'
+import { noKey, provenKey, run, type StartContext } from '../run'
 import { methodNotAllowed, serveMcp } from './mcp'
+
+// The Key's lookup as it runs, but where a test makes it fail as a database that is down would.
+vi.mock('../run', async (original) => {
+  const actual = await original<typeof import('../run')>()
+  return { ...actual, provenKey: vi.fn(actual.provenKey) }
+})
 
 // The MCP endpoint, driven by the SDK's own client over the handler, on the runtime's Better Auth and
 // tiles over PGlite: an Account signs up, issues a Key, and an agent reads its System with it.
@@ -243,6 +249,22 @@ describe('the MCP endpoint', () => {
       expect(await response.json()).toMatchObject({ error: { message: /^SignedOut: / } })
       await expect(connect(headers)).rejects.toThrow()
     }
+  })
+
+  it('answers a Key it could not check with 500, unread, and no challenge', async () => {
+    vi.mocked(provenKey).mockResolvedValueOnce(Exit.die(new Error('the database is down')))
+    const request = new Request(endpoint, {
+      method: 'POST',
+      headers: { ...bearer('hf_any'), 'content-type': 'application/json' },
+      body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'tools/list' }),
+    })
+    const response = await serveMcp(request)
+    expect(response.status).toBe(500)
+    expect(response.headers.get('www-authenticate')).toBeNull()
+    expect(request.bodyUsed).toBe(false)
+    const { error } = (await response.json()) as { error: { message: string } }
+    expect(error.message).toMatch(/^Unexpected: .+ \(request [0-9a-f-]{36}\)$/)
+    expect(error.message).not.toContain('database')
   })
 
   it('answers GET and DELETE with 405: a stateless endpoint has no stream and no session', () => {
