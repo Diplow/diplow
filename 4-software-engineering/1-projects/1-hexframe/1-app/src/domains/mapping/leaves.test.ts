@@ -21,7 +21,7 @@ import {
 // rules on rows and Systems made by hand are in `entities/leaves/leaves.test.ts`.
 
 /** The Account's System, read flat, as its tree: what the canvas draws, as the client builds it. */
-const systemTree = (accountId: string) => Effect.map(Mapping.system(accountId), systemOf)
+const tree = (accountId: string) => Effect.map(Mapping.system(accountId), systemOf)
 
 const TestTiles = tilesLayer.pipe(Layer.provideMerge(TestDatabase))
 
@@ -50,7 +50,7 @@ const leaf = (direction: Direction) => ({ leaf: direction })
 /** The Account's System, read once so its Root exists, with a Branch and a Leaf in Direction 1. */
 const withBoth = Effect.gen(function* () {
   const accountId = crypto.randomUUID()
-  const root = yield* systemTree(accountId)
+  const root = yield* tree(accountId)
   const branch = yield* createTile(accountId, { parent: root.id, slot: 1, ...content('Branch') })
   const file = yield* createTile(accountId, { parent: root.id, slot: leaf(1), ...content('Leaf') })
   return { accountId, root, branch, file }
@@ -63,7 +63,7 @@ layer(TestTiles)('Leaves beside Branches, over PGlite', (it) => {
   it.effect('holds six Leaves beside six Branches, and refuses a seventh of either', () =>
     Effect.gen(function* () {
       const accountId = crypto.randomUUID()
-      const root = yield* systemTree(accountId)
+      const root = yield* tree(accountId)
       for (const direction of directions) {
         const name = String(direction)
         yield* createTile(accountId, { parent: root.id, slot: direction, ...content(`B${name}`) })
@@ -81,7 +81,7 @@ layer(TestTiles)('Leaves beside Branches, over PGlite', (it) => {
           kind: 'Conflict',
         })
       }
-      const { branches, leaves } = yield* systemTree(accountId)
+      const { branches, leaves } = yield* tree(accountId)
       expect(Object.values(branches).map(({ title }) => title)).toEqual(
         directions.map((direction) => `B${String(direction)}`),
       )
@@ -98,7 +98,7 @@ layer(TestTiles)('Leaves beside Branches, over PGlite', (it) => {
   it.effect('lets a Leaf and a Branch share a Direction, and reads each in its own place', () =>
     Effect.gen(function* () {
       const { accountId, branch, file } = yield* withBoth
-      const found = yield* systemTree(accountId)
+      const found = yield* tree(accountId)
       expect(found.branches).toEqual({
         1: { _tag: 'Tile', ...branch, branches: {}, leaves: {}, context: {} },
       })
@@ -125,7 +125,7 @@ layer(TestTiles)('Leaves beside Branches, over PGlite', (it) => {
         body: 'Rewritten',
       })
       yield* deleteTile(accountId, file.id)
-      expect((yield* systemTree(accountId)).leaves).toEqual({})
+      expect((yield* tree(accountId)).leaves).toEqual({})
     }),
   )
 
@@ -141,7 +141,7 @@ layer(TestTiles)('Leaves beside Branches, over PGlite', (it) => {
       expect(yield* refused(createReference(accountId, reference))).toMatchObject({
         _tag: 'LeafHoldsNothing',
       })
-      expect((yield* systemTree(accountId)).leaves[1]).toEqual({ _tag: 'Tile', ...file })
+      expect((yield* tree(accountId)).leaves[1]).toEqual({ _tag: 'Tile', ...file })
     }),
   )
 
@@ -156,12 +156,12 @@ layer(TestTiles)('Leaves beside Branches, over PGlite', (it) => {
           slot: 1,
           ...content('Below'),
         })
-        let found = yield* systemTree(accountId)
+        let found = yield* tree(accountId)
         expect(found.leaves).toEqual({})
         expect(found.branches[3]?.branches[1]).toMatchObject({ id: grown.id })
 
         yield* moveTile(accountId, branch.id, { parent: root.id, slot: leaf(5) })
-        found = yield* systemTree(accountId)
+        found = yield* tree(accountId)
         expect(found.leaves).toEqual({ 5: { _tag: 'Tile', ...branch } })
         expect(Object.keys(found.branches)).toEqual(['3'])
       }),
@@ -181,7 +181,7 @@ layer(TestTiles)('Leaves beside Branches, over PGlite', (it) => {
       expect(
         yield* refused(moveTile(accountId, other.id, { parent: file.id, slot: 1 })),
       ).toMatchObject({ _tag: 'LeafHoldsNothing' })
-      const found = yield* systemTree(accountId)
+      const found = yield* tree(accountId)
       expect(Object.keys(found.branches)).toEqual(['1', '2'])
       expect(Object.keys(found.leaves)).toEqual(['1'])
     }),
@@ -202,7 +202,7 @@ layer(TestTiles)('Leaves beside Branches, over PGlite', (it) => {
         })
       }
       yield* swapTiles(accountId, file.id, branch.id)
-      const found = yield* systemTree(accountId)
+      const found = yield* tree(accountId)
       expect(found.leaves).toEqual({ 1: { _tag: 'Tile', ...branch } })
       expect(found.branches[1]).toMatchObject({ id: file.id, branches: {}, leaves: {} })
       expect(found.branches[2]?.branches[1]).toMatchObject({ title: 'Inside' })

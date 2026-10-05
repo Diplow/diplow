@@ -127,6 +127,24 @@ describe("Mapping's server functions", () => {
     expect((await value(run(context, Mapping.system))).root.id).toBe(first.root.id)
   })
 
+  it('reads each Tile and Reference below the Root by id, where it stands', async () => {
+    const { context, root, child } = await withAChild()
+    const leaf = await value(
+      run(context, Mapping.createTile({ parent: child.id, slot: { leaf: 2 }, ...content('Leaf') })),
+    )
+    await value(
+      run(context, Mapping.createReference({ parent: child.id, slot: -3, target: root.id })),
+    )
+    const { tiles } = await value(run(context, Mapping.system))
+    expect(tiles[child.id]).toEqual({ _tag: 'Tile', ...child, parent: root.id, slot: 1 })
+    expect(tiles[leaf.id]).toEqual({ _tag: 'Tile', ...leaf, parent: child.id, slot: { leaf: 2 } })
+    const references = Object.values(tiles).filter((held) => held._tag === 'Reference')
+    expect(references).toEqual([
+      { _tag: 'Reference', id: references[0]?.id, parent: child.id, slot: -3, target: root.id },
+    ])
+    expect(Object.keys(tiles)).toHaveLength(3)
+  })
+
   it('creates, edits, moves and deletes a Tile, and the System reads them back', async () => {
     const { context, root, child } = await withAChild()
     expect(child).toEqual({ id: child.id, ...content('Child') })

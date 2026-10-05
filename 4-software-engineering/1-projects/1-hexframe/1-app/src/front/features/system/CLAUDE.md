@@ -12,7 +12,7 @@ preview: >-
 ---
 # system
 
-What home shows: the user's own System, read whole through `useSystem` (`front/client/mapping/queries.ts`, [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE|front]]), drawn by the canvas, and changed from it. The route composes it with the breadcrumb, and passes both the System's Tiles as the canvas draws them.
+What home shows: the user's own System, read whole through `useSystem` (`front/client/mapping/queries.ts`, [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE|front]]), its tree drawn by the canvas, and changed from it. The route composes it with the breadcrumb, and passes both the System's Tiles as the canvas draws them.
 
 - **Create**: a click on an empty slot opens the new Tile's form for that slot: a Branch in a ring of Children or of Branches, a Leaf in a ring of Leaves, a Context Tile in a Context ring; the drawer offers **New tile** or **Import here**, the same slot either way, and says when it is a Leaf's.
 - **Import**: into an empty slot, a zip, a folder, picked or dropped, or one file, the only thing a Leaf slot takes; into an empty System, its untitled Root without Preview nor Body and with nothing below (Mapping's `isEmptySystem`, from its door), a vault, from **Import a vault** on the Root's card, and it becomes the Root. The browser leaves out what Mapping's reading would and says before sending what the server would refuse; the drawer then reports the Tiles created and every file left out or skipped, and why, or, refused, every fault on its path, nothing written.

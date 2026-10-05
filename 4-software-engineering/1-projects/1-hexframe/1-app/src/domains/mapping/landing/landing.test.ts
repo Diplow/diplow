@@ -20,7 +20,7 @@ import { type ImportPlace, importTiles, planImport } from './landing'
 // to this System, to another's and to nothing; nothing written when refused; two copies for two.
 
 /** The Account's System, read flat, as its tree: what the canvas draws, as the client builds it. */
-const systemTree = (accountId: string) => Effect.map(Mapping.system(accountId), systemOf)
+const tree = (accountId: string) => Effect.map(Mapping.system(accountId), systemOf)
 
 const TestLayers = Layer.mergeAll(tilesLayer.pipe(Layer.provideMerge(TestDatabase)), zipLayer)
 
@@ -60,7 +60,7 @@ const content = (title: string) => ({ title, preview: `${title}, in short.`, bod
 /** An Account no other test uses, its System read once so its Root exists. */
 const someone = Effect.gen(function* () {
   const accountId = crypto.randomUUID()
-  const root = yield* systemTree(accountId)
+  const root = yield* tree(accountId)
   return { accountId, root }
 })
 
@@ -102,7 +102,7 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
       Effect.gen(function* () {
         const { accountId, root } = yield* someone
         const report = yield* land(accountId, { _tag: 'Slot', parent: root.id, slot: 3 })
-        const landed = (yield* systemTree(accountId)).branches[3]
+        const landed = (yield* tree(accountId)).branches[3]
         vaultLanded(landed)
         expect(landed).toMatchObject({ id: report.id, name: 'vault' })
         expect(report).toEqual({ id: report.id, tiles: 5, references: 1, skipped: [] })
@@ -113,7 +113,7 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
     Effect.gen(function* () {
       const { accountId, root } = yield* someone
       yield* land(accountId, { _tag: 'Slot', parent: root.id, slot: -4 })
-      const held = (yield* systemTree(accountId)).context[-4]
+      const held = (yield* tree(accountId)).context[-4]
       vaultLanded(held?._tag === 'Tile' ? held : undefined)
     }),
   )
@@ -127,7 +127,7 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
         expect(yield* Effect.flip(land(accountId, place))).toMatchObject({
           _tag: 'LeafHoldsNothing',
         })
-        expect(yield* systemTree(accountId)).toMatchObject({
+        expect(yield* tree(accountId)).toMatchObject({
           branches: {},
           leaves: {},
           context: {},
@@ -135,7 +135,7 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
         const plan = yield* planOfFile('STACK.md', '---\ntitle: Stack\n---\n\nThe stack.\n')
         const report = yield* transactional(importTiles(accountId, { plan, place }))
         expect(report).toMatchObject({ tiles: 1, references: 0 })
-        expect((yield* systemTree(accountId)).leaves[2]).toMatchObject({
+        expect((yield* tree(accountId)).leaves[2]).toMatchObject({
           id: report.id,
           title: 'Stack',
           body: '\nThe stack.\n',
@@ -149,7 +149,7 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
       const accountId = crypto.randomUUID()
       // The System was never read: landing adds its Root first.
       const report = yield* land(accountId, { _tag: 'Root' })
-      const root = yield* systemTree(accountId)
+      const root = yield* tree(accountId)
       vaultLanded(root)
       expect(root.id).toBe(report.id)
       expect(report).toMatchObject({ tiles: 5, references: 1 })
@@ -163,7 +163,7 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
       expect(yield* Effect.flip(land(named.accountId, { _tag: 'Root' }))).toMatchObject({
         _tag: 'DirectionTaken',
       })
-      expect(yield* systemTree(named.accountId)).toMatchObject({ title: 'Ulysse', branches: {} })
+      expect(yield* tree(named.accountId)).toMatchObject({ title: 'Ulysse', branches: {} })
       // An untitled Root holding a Preview or a Body written before its name is no empty System.
       for (const written of [{ preview: 'Me, in short.' }, { body: '# Me' }]) {
         const untitled = yield* someone
@@ -173,7 +173,7 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
         expect(yield* Effect.flip(land(untitled.accountId, { _tag: 'Root' }))).toMatchObject({
           _tag: 'DirectionTaken',
         })
-        expect(yield* systemTree(untitled.accountId)).toMatchObject({ title: '', ...written })
+        expect(yield* tree(untitled.accountId)).toMatchObject({ title: '', ...written })
       }
     }),
   )
@@ -206,7 +206,7 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
         _tag: 'DirectionTaken',
         kind: 'Conflict',
       })
-      const after = yield* systemTree(accountId)
+      const after = yield* tree(accountId)
       expect(idsOf(after)).toEqual([root.id, taken.id])
     }),
   )
@@ -239,7 +239,7 @@ layer(TestLayers)('what an import writes, over PGlite', (it) => {
       }
       const report = yield* land(accountId, { _tag: 'Slot', parent: root.id, slot: 2 }, files, link)
       expect(report).toMatchObject({ tiles: 1, references: 4 })
-      const context = (yield* systemTree(accountId)).branches[2]?.context
+      const context = (yield* tree(accountId)).branches[2]?.context
       expect(context?.[-1]).toMatchObject({ _tag: 'Reference', tile: { id: own.id, title: 'Own' } })
       for (const slot of [-2, -3, -4] as const) {
         expect(context?.[slot]).toMatchObject({ _tag: 'BrokenReference' })
@@ -268,7 +268,7 @@ layer(TestLayers)('what an import writes, over PGlite', (it) => {
         _tag: 'ImportRefused',
         faults: [{ path: '2-tools.md', fault: 'PreviewTooLong' }],
       })
-      expect(idsOf(yield* systemTree(accountId))).toEqual([root.id])
+      expect(idsOf(yield* tree(accountId))).toEqual([root.id])
     }),
   )
 
@@ -277,7 +277,7 @@ layer(TestLayers)('what an import writes, over PGlite', (it) => {
       const { accountId, root } = yield* someone
       const first = yield* land(accountId, { _tag: 'Slot', parent: root.id, slot: 1 })
       const second = yield* land(accountId, { _tag: 'Slot', parent: root.id, slot: 2 })
-      const after = yield* systemTree(accountId)
+      const after = yield* tree(accountId)
       vaultLanded(after.branches[1])
       vaultLanded(after.branches[2])
       const [one, two] = [after.branches[1], after.branches[2]].map((tile) =>
@@ -310,7 +310,7 @@ layer(TestLayers)('what an import writes, over PGlite', (it) => {
         references: 0,
         skipped: [{ path: '.DS_Store', reason: 'DotFile' }],
       })
-      const big = (yield* systemTree(accountId)).branches[6]
+      const big = (yield* tree(accountId)).branches[6]
       expect(big === undefined ? 0 : idsOf(big).length).toBe(report.tiles)
     }),
   )

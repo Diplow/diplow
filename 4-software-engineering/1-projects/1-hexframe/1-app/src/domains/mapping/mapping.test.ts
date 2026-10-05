@@ -6,20 +6,13 @@ import { type Database, type InTransaction, transactional } from '#/repositories
 import { TestDatabase } from '#/repositories/database/testing'
 import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
-import {
-  type ContextDirection,
-  type Depth,
-  type Direction,
-  type Field,
-  type ReadTile,
-  type SystemTile,
-  systemOf,
-} from './entities'
+import type { ContextDirection, Depth, Direction, Field, ReadTile, SystemTile } from './entities'
+import { systemOf } from './entities'
 import * as Mapping from './mapping'
 import * as Operations from './operations'
 
 /** The Account's System, read flat, as its tree: what the canvas draws, as the client builds it. */
-const systemTree = (accountId: string) => Effect.map(Mapping.system(accountId), systemOf)
+const tree = (accountId: string) => Effect.map(Mapping.system(accountId), systemOf)
 
 const TestTiles = tilesLayer.pipe(Layer.provideMerge(TestDatabase))
 
@@ -64,7 +57,7 @@ const nothingBelow = { branches: {}, leaves: {}, context: {} }
 /** The Account's System, read once so its Root exists, and a Child of the Root in Direction 1. */
 const withAChild = Effect.gen(function* () {
   const accountId = someone()
-  const root = yield* systemTree(accountId)
+  const root = yield* tree(accountId)
   const child = yield* createTile(accountId, { parent: root.id, slot: 1, ...content('Child') })
   return { accountId, root, child }
 })
@@ -96,7 +89,7 @@ layer(TestTiles)('a System and its Tiles, over PGlite', (it) => {
   it.effect('adds the Root, untitled, the first time a System is read, and only then', () =>
     Effect.gen(function* () {
       const accountId = someone()
-      const [first, second] = yield* Effect.all([systemTree(accountId), systemTree(accountId)], {
+      const [first, second] = yield* Effect.all([tree(accountId), tree(accountId)], {
         concurrency: 'unbounded',
       })
       expect(first).toEqual({
@@ -108,50 +101,15 @@ layer(TestTiles)('a System and its Tiles, over PGlite', (it) => {
         ...nothingBelow,
       })
       expect(second.id).toBe(first.id)
-      expect((yield* systemTree(accountId)).id).toBe(first.id)
-      expect((yield* systemTree(someone())).id).not.toBe(first.id)
+      expect((yield* tree(accountId)).id).toBe(first.id)
+      expect((yield* tree(someone())).id).not.toBe(first.id)
     }),
-  )
-
-  it.effect(
-    'reads the System flat, owned by its Account: each Tile and Reference where it stands',
-    () =>
-      Effect.gen(function* () {
-        const accountId = someone()
-        const { root } = yield* Mapping.system(accountId)
-        const child = yield* createTile(accountId, {
-          parent: root.id,
-          slot: 1,
-          ...content('Child'),
-        })
-        const leaf = yield* createTile(accountId, {
-          parent: child.id,
-          slot: { leaf: 2 },
-          ...content('Leaf'),
-        })
-        yield* createReference(accountId, { parent: child.id, slot: -3, target: root.id })
-        const read = yield* Mapping.system(accountId)
-        expect(read.owned).toBe(true)
-        expect(read.root).toEqual({ _tag: 'Tile', id: root.id, ...untitledContent })
-        expect(read.tiles[child.id]).toEqual({ _tag: 'Tile', ...child, parent: root.id, slot: 1 })
-        expect(read.tiles[leaf.id]).toEqual({
-          _tag: 'Tile',
-          ...leaf,
-          parent: child.id,
-          slot: { leaf: 2 },
-        })
-        const references = Object.values(read.tiles).filter((held) => held._tag === 'Reference')
-        expect(references).toEqual([
-          { _tag: 'Reference', id: references[0]?.id, parent: child.id, slot: -3, target: root.id },
-        ])
-        expect(Object.keys(read.tiles)).toHaveLength(3)
-      }),
   )
 
   it.effect('names the user by the Root’s Title, edited like any Tile’s', () =>
     Effect.gen(function* () {
       const accountId = someone()
-      const root = yield* systemTree(accountId)
+      const root = yield* tree(accountId)
       yield* editTile(accountId, root.id, { body: 'Written before any name.' })
       const named = yield* editTile(accountId, root.id, { title: '  Ada Lovelace ' })
       expect(named).toEqual({
@@ -160,7 +118,7 @@ layer(TestTiles)('a System and its Tiles, over PGlite', (it) => {
         preview: '',
         body: 'Written before any name.',
       })
-      expect((yield* systemTree(accountId)).title).toBe('Ada Lovelace')
+      expect((yield* tree(accountId)).title).toBe('Ada Lovelace')
       expect(yield* editTile(accountId, root.id, {})).toEqual(named)
     }),
   )
@@ -168,7 +126,7 @@ layer(TestTiles)('a System and its Tiles, over PGlite', (it) => {
   it.effect('holds six Children, one per Direction, and refuses a seventh', () =>
     Effect.gen(function* () {
       const accountId = someone()
-      const root = yield* systemTree(accountId)
+      const root = yield* tree(accountId)
       const directions: ReadonlyArray<Direction> = [1, 2, 3, 4, 5, 6]
       for (const slot of directions) {
         yield* createTile(accountId, { parent: root.id, slot, ...content(`Child ${String(slot)}`) })
@@ -179,7 +137,7 @@ layer(TestTiles)('a System and its Tiles, over PGlite', (it) => {
         ...content('Seventh'),
       }).pipe(Effect.flip)
       expect(seventh).toMatchObject({ _tag: 'DirectionTaken', kind: 'Conflict' })
-      const { branches } = yield* systemTree(accountId)
+      const { branches } = yield* tree(accountId)
       expect(Object.values(branches).map((child) => child.title)).toEqual(
         directions.map((slot) => `Child ${String(slot)}`),
       )
@@ -196,7 +154,7 @@ layer(TestTiles)('a System and its Tiles, over PGlite', (it) => {
       })
       yield* createTile(accountId, { parent: principle.id, slot: 2, ...content('Detail') })
       expect(child).toEqual({ id: child.id, ...content('Child') })
-      const found = yield* systemTree(accountId)
+      const found = yield* tree(accountId)
       expect(found.id).toBe(root.id)
       expect(found.branches[1]).toMatchObject({ _tag: 'Tile', ...child })
       expect(found.branches[1]?.context[-1]).toMatchObject({ _tag: 'Tile', ...principle })
@@ -250,7 +208,7 @@ layer(TestTiles)('moving and deleting Tiles, over PGlite', (it) => {
     Effect.gen(function* () {
       const { accountId, root, child } = yield* withAChild
       const intruder = someone()
-      yield* systemTree(intruder)
+      yield* tree(intruder)
       const attempts: ReadonlyArray<Effect.Effect<unknown, object, Database | Tiles>> = [
         createTile(intruder, { parent: root.id, slot: 2, ...content('Intruder') }),
         editTile(intruder, child.id, { title: 'Taken over' }),
@@ -264,7 +222,7 @@ layer(TestTiles)('moving and deleting Tiles, over PGlite', (it) => {
           kind: 'NotFound',
         })
       }
-      expect(outline(yield* systemTree(accountId))).toEqual({
+      expect(outline(yield* tree(accountId))).toEqual({
         title: '',
         branches: { 1: { title: 'Child', branches: {}, context: {} } },
         context: {},
@@ -282,7 +240,7 @@ layer(TestTiles)('moving and deleting Tiles, over PGlite', (it) => {
       })
       yield* createTile(accountId, { parent: child.id, slot: 6, ...content('Grandchild') })
       yield* moveTile(accountId, child.id, { parent: sibling.id, slot: 2 })
-      expect(outline(yield* systemTree(accountId))).toEqual({
+      expect(outline(yield* tree(accountId))).toEqual({
         title: '',
         branches: {
           4: {
@@ -301,7 +259,7 @@ layer(TestTiles)('moving and deleting Tiles, over PGlite', (it) => {
       })
       yield* moveTile(accountId, child.id, { parent: sibling.id, slot: -3 })
       yield* moveTile(accountId, child.id, { parent: sibling.id, slot: -3 })
-      const moved = (yield* systemTree(accountId)).branches[4]
+      const moved = (yield* tree(accountId)).branches[4]
       expect(Object.keys(moved?.branches ?? {})).toEqual([])
       expect(moved?.context[-3]).toMatchObject({ title: 'Child' })
     }),
@@ -349,11 +307,7 @@ layer(TestTiles)('moving and deleting Tiles, over PGlite', (it) => {
         ...content('Grandchild'),
       })
       yield* deleteTile(accountId, child.id)
-      expect(outline(yield* systemTree(accountId))).toEqual({
-        title: '',
-        branches: {},
-        context: {},
-      })
+      expect(outline(yield* tree(accountId))).toEqual({ title: '', branches: {}, context: {} })
       const gone = yield* editTile(accountId, grandchild.id, { title: 'Still here?' }).pipe(
         Effect.flip,
       )
@@ -393,12 +347,12 @@ layer(TestTiles)('swapping Tiles, over PGlite', (it) => {
       yield* createReference(accountId, { parent: root.id, slot: -3, target: child.id })
       yield* swapTiles(accountId, child.id, other.id)
       const swapped = { Other: '/1', Aside: 'Other/-2', Child: '/4', Below: 'Child/6', P: '/-1' }
-      expect(places(yield* systemTree(accountId))).toEqual(swapped)
+      expect(places(yield* tree(accountId))).toEqual(swapped)
       yield* swapTiles(accountId, child.id, child.id)
       yield* swapTiles(accountId, child.id, aside.id)
-      expect(places(yield* systemTree(accountId))).toMatchObject({ Aside: '/4', Child: 'Other/-2' })
+      expect(places(yield* tree(accountId))).toMatchObject({ Aside: '/4', Child: 'Other/-2' })
       yield* swapTiles(accountId, principle.id, child.id)
-      const across = yield* systemTree(accountId)
+      const across = yield* tree(accountId)
       expect(places(across)).toEqual({ ...swapped, Aside: '/4', Child: '/-1', P: 'Other/-2' })
       expect(across.context[-3]).toMatchObject({ _tag: 'Reference', tile: { id: child.id } })
     }),
@@ -424,7 +378,7 @@ layer(TestTiles)('swapping Tiles, over PGlite', (it) => {
       for (const [refused, tag] of refusals) {
         expect(yield* Effect.flip(refused)).toMatchObject({ _tag: tag })
       }
-      expect(places(yield* systemTree(accountId))).toEqual({ Child: '/1', Below: 'Child/2' })
+      expect(places(yield* tree(accountId))).toEqual({ Child: '/1', Below: 'Child/2' })
     }),
   )
 })
@@ -442,7 +396,7 @@ layer(TestTiles)('References, over PGlite', (it) => {
         })
         yield* createReference(accountId, { parent: child.id, slot: -2, target: shared.id })
         yield* moveTile(accountId, shared.id, { parent: root.id, slot: 6 })
-        const held = yield* systemTree(accountId)
+        const held = yield* tree(accountId)
         expect(held.branches[1]?.context[-2]).toEqual({ _tag: 'Reference', tile: shared })
         expect(outline(held)).toEqual({
           title: '',
@@ -453,7 +407,7 @@ layer(TestTiles)('References, over PGlite', (it) => {
           context: {},
         })
         yield* deleteTile(accountId, shared.id)
-        const broken = yield* systemTree(accountId)
+        const broken = yield* tree(accountId)
         expect(broken.branches[1]?.context[-2]).toEqual({
           _tag: 'BrokenReference',
           target: shared.id,
@@ -493,7 +447,7 @@ layer(TestTiles)('References, over PGlite', (it) => {
         expect(held).toMatchObject({ _tag: 'DirectionTaken' })
         yield* deleteReference(accountId, { parent: root.id, slot: -1 })
         yield* deleteReference(accountId, { parent: root.id, slot: -1 })
-        expect(outline(yield* systemTree(accountId))).toEqual({
+        expect(outline(yield* tree(accountId))).toEqual({
           title: '',
           branches: { 1: { title: 'Child', branches: {}, context: {} } },
           context: {},
@@ -505,7 +459,7 @@ layer(TestTiles)('References, over PGlite', (it) => {
     Effect.gen(function* () {
       const { accountId, root, child } = yield* withAChild
       yield* createReference(accountId, { parent: root.id, slot: -4, target: child.id })
-      const { context } = yield* systemTree(accountId)
+      const { context } = yield* tree(accountId)
       expect(context[-4]).toEqual({ _tag: 'Reference', tile: child })
       const beside = yield* createTile(accountId, {
         parent: root.id,
@@ -513,10 +467,7 @@ layer(TestTiles)('References, over PGlite', (it) => {
         ...content('Beside'),
       })
       yield* deleteReference(accountId, { parent: root.id, slot: -5 })
-      expect((yield* systemTree(accountId)).context[-5]).toMatchObject({
-        _tag: 'Tile',
-        id: beside.id,
-      })
+      expect((yield* tree(accountId)).context[-5]).toMatchObject({ _tag: 'Tile', id: beside.id })
     }),
   )
 })
@@ -528,7 +479,7 @@ layer(TestTiles)('References, over PGlite', (it) => {
  */
 const fourDeep = Effect.gen(function* () {
   const accountId = someone()
-  const root = yield* systemTree(accountId)
+  const root = yield* tree(accountId)
   yield* editTile(accountId, root.id, content('Ada'))
   const ids = [root.id]
   for (const title of ['Child', 'Grandchild', 'Great-grandchild', 'Fourth']) {
@@ -569,7 +520,7 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
         tile: { _tag: 'Tile', id: read.tile.id, ...untitledContent, ...nothingBelow },
         parent: null,
       })
-      expect((yield* systemTree(accountId)).id).toBe(read.tile.id)
+      expect((yield* tree(accountId)).id).toBe(read.tile.id)
       expect((yield* readTile(accountId, { depth: 0, fields: [] })).tile.id).toBe(read.tile.id)
     }),
   )
