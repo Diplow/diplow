@@ -5,6 +5,7 @@ import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 import { type TileRow, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
+import { keepsNothing } from '../kept/kept'
 import * as Mapping from '../mapping'
 import { type Direction, directions, system } from '../mapping'
 import { leafOf, rowDirection } from '../tile'
@@ -37,6 +38,7 @@ describe('what a Leaf may hold, on rows made by hand', () => {
     preview: '',
     body: '',
     target: null,
+    ...keepsNothing,
   })
   // A Root with a Leaf in Direction 1, a bare Branch in Direction 1 and a Branch holding a Child.
   const rows = [

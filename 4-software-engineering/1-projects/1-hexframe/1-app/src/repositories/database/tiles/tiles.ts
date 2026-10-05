@@ -9,11 +9,12 @@ import { alias } from 'drizzle-orm/pg-core'
 import { Context, Effect, Layer } from 'effect'
 
 import { Database, InTransaction } from '../database'
-import { tile } from '../schema'
+import { type TileConfigColumn, tile } from '../schema'
 
 /**
  * One row of the `tile` table, as the Account that owns it reads it. A Root has no parent and no
- * direction; a row with a `target` is a Reference to the row of that id.
+ * direction; a row with a `target` is a Reference to the row of that id. `name`, `config` and
+ * `frontmatter` are what an imported file carried, null when it carried nothing.
  */
 export interface TileRow {
   readonly id: string
@@ -23,7 +24,13 @@ export interface TileRow {
   readonly preview: string
   readonly body: string
   readonly target: string | null
+  readonly name: string | null
+  readonly config: TileConfigColumn | null
+  readonly frontmatter: Readonly<Record<string, string | number | boolean>> | null
 }
+
+/** The columns keeping what an imported file carried, which only a new row is given. */
+type KeptColumn = 'name' | 'config' | 'frontmatter'
 
 /** The columns holding what a Tile says, which a read from one Tile names one by one. */
 export type ContentColumn = 'title' | 'preview' | 'body'
@@ -60,7 +67,7 @@ export const withContent = <C extends ContentColumn>(
     direction,
     target,
     ...content
-  }: Omit<TileRow, ContentColumn> & Partial<Pick<TileRow, ContentColumn>>,
+  }: Omit<TileRow, ContentColumn | KeptColumn> & Partial<Pick<TileRow, ContentColumn>>,
   columns: ReadonlyArray<C>,
 ): TileRowWith<C> => ({ id, parentId, direction, target, content: contentWith(content, columns) })
 
@@ -76,20 +83,21 @@ export interface Generations<O extends ContentColumn, C extends ContentColumn> {
   readonly below: ReadonlyArray<TileRowWith<C>>
 }
 
-/** A row to add under a parent. Its id is made here. */
-type NewTileRow = Omit<TileRow, 'id' | 'parentId' | 'direction'> & {
-  readonly parentId: string
-  readonly direction: number
-}
+/** A row to add under a parent, keeping what an imported file carried or not. Its id is made here. */
+type NewTileRow = Omit<TileRow, 'id' | 'parentId' | 'direction' | KeptColumn> &
+  Partial<Pick<TileRow, KeptColumn>> & {
+    readonly parentId: string
+    readonly direction: number
+  }
 
 /** What a change may write, to the System it locked only, inside the same transaction. */
 export interface Writes {
   /** Adds a row and answers its id. */
   readonly insert: (row: NewTileRow) => Effect.Effect<string, never, InTransaction>
-  /** Changes the columns given; with none, writes nothing. */
+  /** Changes the columns given, never what an imported file carried; with none, writes nothing. */
   readonly update: (
     id: string,
-    changes: Partial<Omit<NewTileRow, 'target'>>,
+    changes: Partial<Omit<NewTileRow, 'target' | KeptColumn>>,
   ) => Effect.Effect<void, never, InTransaction>
   /** Deletes a row and every row below it. */
   readonly remove: (id: string) => Effect.Effect<void, never, InTransaction>
@@ -155,7 +163,10 @@ const placeColumns = {
 /** What a Tile says. */
 const contentColumns = { title: tile.title, preview: tile.preview, body: tile.body }
 
-const columns = { ...placeColumns, ...contentColumns }
+/** What an imported file carried. */
+const keptColumns = { name: tile.name, config: tile.config, frontmatter: tile.frontmatter }
+
+const columns = { ...placeColumns, ...contentColumns, ...keptColumns }
 
 /** The rows standing under another, for a row to find what lies below it. */
 const under = alias(tile, 'under')

@@ -18,6 +18,13 @@ export class PreviewTooLong extends Schema.TaggedError<PreviewTooLong>()(
 ) {}
 
 /**
+ * A name a Tile keeps or a Tile config sets isn't one path segment: it is `.` or `..`, holds a `/`, a
+ * `\` or a control character, or runs over 255 bytes; or a folder pattern fills in nothing. Named on
+ * the field at fault, `name` or `config`.
+ */
+export class NameInvalid extends Schema.TaggedError<NameInvalid>()('NameInvalid', invalid) {}
+
+/**
  * The slot, a Branch's or a Leaf's Direction or a Context slot, already holds a Tile or a Reference. A
  * seventh Branch or a seventh Leaf is refused this way: the user regroups some Children under a new
  * one, by moving them.
@@ -60,6 +67,7 @@ export const mappingFailures = [
   TileNotFound,
   TitleMissing,
   PreviewTooLong,
+  NameInvalid,
   DirectionTaken,
   MovedUnderItself,
   LeafHoldsNothing,

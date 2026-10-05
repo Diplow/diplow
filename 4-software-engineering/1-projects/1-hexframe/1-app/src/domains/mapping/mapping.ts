@@ -11,6 +11,7 @@ import { Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/
 
 import { DirectionTaken, HelpReadOnly, MovedUnderItself, RootFixed, TileNotFound } from './errors'
 import { findInHelp, type HelpLanguage, isHelpId } from './help/help'
+import type { ToKeep } from './kept/kept'
 import { holdsNothingIfLeaf, notLeaf } from './leaves/leaves'
 import {
   type Depth,
@@ -230,15 +231,26 @@ const notRoot = (row: TileRow) =>
 
 /**
  * Adds a Tile in a free slot under a Tile of the System, never under a Leaf: a Branch, a Leaf, or a
- * Tile of its Context.
+ * Tile of its Context. An import gives it what it keeps from its files, each part already checked
+ * (`./kept/kept.ts`); nothing else does, and no later change touches them.
  */
-export const createTile = (accountId: string, { parent, slot, ...content }: Placement & Content) =>
+export const createTile = (
+  accountId: string,
+  { parent, slot, name, config, frontmatter, ...content }: Placement & Content & ToKeep,
+) =>
   changing(accountId, [parent], (rows, writes) =>
     Effect.gen(function* () {
       const valid = yield* checked(content)
       yield* freeSlot(rows, { parent, slot })
       const direction = rowDirection(slot)
-      const id = yield* writes.insert({ parentId: parent, direction, target: null, ...valid })
+      const kept = { name, config, frontmatter }
+      const id = yield* writes.insert({
+        parentId: parent,
+        direction,
+        target: null,
+        ...valid,
+        ...kept,
+      })
       return { id, ...valid } satisfies Tile
     }),
   )

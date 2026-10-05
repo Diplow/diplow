@@ -9,6 +9,7 @@
 import type { TileRow } from '#/repositories/database/tiles/tiles'
 import { missingFrom, noteOf } from '#/repositories/help/note'
 
+import { keepsNothing } from '../kept/kept'
 import { directions, fitsPreview, previewLimit } from '../tile'
 
 /** A folder's name, `3-children` or `.1-six-at-most`: a Child's Direction, or a Context slot. */
@@ -65,7 +66,14 @@ function rowOf(
   if (typeof content === 'string') return content
   const parentId = slots.length === 0 ? null : [root, ...slots.slice(0, -1)].join('/')
   const id = [root, ...slots].join('/')
-  return { id, parentId, direction: slots.at(-1) ?? null, target: null, ...content }
+  return {
+    id,
+    parentId,
+    direction: slots.at(-1) ?? null,
+    target: null,
+    ...content,
+    ...keepsNothing,
+  }
 }
 
 /**
