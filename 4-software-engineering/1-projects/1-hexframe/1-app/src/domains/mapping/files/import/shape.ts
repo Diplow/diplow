@@ -12,7 +12,6 @@ import {
 import {
   bodyFiles,
   isMarkdown,
-  linesOf,
   readLimit,
   type Ring,
   type Slot,
@@ -75,19 +74,13 @@ export const isMarkdownFile = (name: string) => isMarkdown(name)
 export const titleFromNameOf = (name: string, kind: EntryKind) => titleFromName(name, kind)
 
 /**
- * A Markdown file's frontmatter, as YAML lines, and its Body, cut where the shape cuts them: the
- * frontmatter opens with a `---` first line and closes with the next one, else there is none and the
- * whole file is Body. The Body is kept as written, its line endings included.
+ * A Markdown file's frontmatter, as YAML, and its Body, as the shape splits them: the frontmatter
+ * opens with a `---` first line and closes with the next one, else it is empty and the whole file is
+ * Body; every line ending of the Body is `\n`.
  */
-export function markdownOf(text: string): { frontmatter: string | undefined; body: string } {
-  const lines = linesOf(text)
-  const split = splitFrontmatter(text)
-  // With a block, the shape's Body has fewer lines than the file: the block's and its two fences.
-  if (split.body.split('\n').length === lines.length) return { frontmatter: undefined, body: text }
-  // The Body starts after the line ending that closes the block, the fences' two lines counted.
-  const ending = [...text.matchAll(/\r\n?|[\n\u2028\u2029]/g)][split.frontmatter.length + 1]
-  const body = ending === undefined ? '' : text.slice(ending.index + ending[0].length)
-  return { frontmatter: split.frontmatter.join('\n'), body }
+export function markdownOf(text: string): { frontmatter: string; body: string } {
+  const { frontmatter, body } = splitFrontmatter(text)
+  return { frontmatter: frontmatter.join('\n'), body }
 }
 
 /**

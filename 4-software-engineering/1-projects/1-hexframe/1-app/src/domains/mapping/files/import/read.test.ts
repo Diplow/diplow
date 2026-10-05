@@ -106,7 +106,7 @@ describe('a vault folder, read as the shape reads it', () => {
     expect(branches[2]?.leaves[1]).toMatchObject({
       title: 'Todo',
       preview: '',
-      body: '# To do, no frontmatter\r\nkept as written',
+      body: '# To do, no frontmatter\nkept as written',
     })
   })
 
@@ -165,9 +165,10 @@ describe('a Reference, read from a Context folder’s `reference`', () => {
     file('.3-to-mine/CLAUDE.md', reference(appLink('42'))),
     file('.4-elsewhere/CLAUDE.md', reference('https://example.com/?center=42')),
     file('.5-missing/CLAUDE.md', reference('[[nowhere/CLAUDE]]')),
+    file('.6-to-reference/CLAUDE.md', reference('[[.1-to-games/CLAUDE]]')),
   ])
 
-  it('points inside the import by path, at an app link’s Tile by id, else at nothing', () => {
+  it('points inside the import by path, at an app link’s Tile by id, else at nothing, never at a Reference', () => {
     const { context } = rootOf(vault)
     expect(context).toEqual({
       [-1]: { _tag: 'Reference', path: '.1-to-games', target: { _tag: 'Inside', path: '1-games' } },
@@ -179,6 +180,11 @@ describe('a Reference, read from a Context folder’s `reference`', () => {
       [-3]: { _tag: 'Reference', path: '.3-to-mine', target: { _tag: 'Linked', id: '42' } },
       [-4]: { _tag: 'Reference', path: '.4-elsewhere', target: { _tag: 'Broken' } },
       [-5]: { _tag: 'Reference', path: '.5-missing', target: { _tag: 'Broken' } },
+      [-6]: {
+        _tag: 'Reference',
+        path: '.6-to-reference',
+        target: { _tag: 'Broken' },
+      },
     })
   })
 
@@ -246,6 +252,7 @@ describe('an import refused', () => {
         file('content/kept/CLAUDE.md', note('nested: { a: 1 }')),
         file('settings/config/.hexframe/config.yaml', 'fileName: a/b\n'),
         file('settings/excluded/.hexframe/exclusions.yaml', 'nothing: here\n'),
+        file('settings/huge/.hexframe/exclusions.yaml', `# ${'x'.repeat(1_000_000)}`),
         file('.1-ref/CLAUDE.md', note('reference: "[[STACK]]"')),
         file('.1-ref/inside.md', ''),
       ]),
@@ -268,10 +275,11 @@ describe('an import refused', () => {
         { path: 'content/kept/CLAUDE.md', fault: 'FrontmatterInvalid' },
         { path: 'settings/config/.hexframe/config.yaml', fault: 'ConfigInvalid' },
         { path: 'settings/excluded/.hexframe/exclusions.yaml', fault: 'ExclusionsInvalid' },
+        { path: 'settings/huge/.hexframe/exclusions.yaml', fault: 'FileTooLarge' },
         { path: '.1-ref', fault: 'ReferenceHoldsSomething' },
       ]),
     )
-    expect(faults).toHaveLength(17)
+    expect(faults).toHaveLength(18)
   })
 
   it('reads a folder 16 deep, the deepest an import goes', () => {

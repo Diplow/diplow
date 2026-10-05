@@ -4,7 +4,7 @@
 // the shape settles is repaired (a folder without a title takes its name, an unnumbered name the first
 // free Direction); what a System can't hold, binaries and dot files, is skipped and reported; anything
 // else wrong refuses the whole import, every fault at once. Pure: an import plan, or `ImportRefused`.
-import { Result } from 'effect'
+import { Option, Result, Schema } from 'effect'
 
 import { type ImportFault, ImportRefused } from '../../errors'
 import { type Frontmatter, keepable, type Naming, reservedKeys } from '../../kept/kept'
@@ -108,33 +108,41 @@ const nothingRead: { readonly fields: Fields; readonly body: string } = {
   body: '',
 }
 
-/** A frontmatter value a Tile reads as text: a string as it is, a number or a boolean as written. */
-function scalar(value: unknown): string | undefined | null {
-  if (value === undefined || value === null) return undefined
-  if (typeof value === 'string') return value
-  if (typeof value === 'number' || typeof value === 'boolean') return String(value)
-  return null
-}
+/** A value a Tile reads as text: a string, or a number or a boolean as YAML wrote it; empty, none. */
+const Text = Schema.NullOr(Schema.Union([Schema.String, Schema.Finite, Schema.Boolean]))
+
+/** What a Tile reads of a frontmatter's keys: its Title, its Preview and the Reference it holds. */
+const Said = Schema.Struct({
+  title: Schema.optionalKey(Text),
+  preview: Schema.optionalKey(Text),
+  reference: Schema.optionalKey(Text),
+})
+
+const saidIn = Schema.decodeUnknownOption(Said)
+
+const asText = (value: string | number | boolean | null | undefined) =>
+  value === null || value === undefined ? undefined : String(value)
 
 /**
  * The fields of a frontmatter: its Title, Preview and Reference, then the keys it keeps, every key an
  * export writes itself dropped first, `id` among them; `undefined` when it isn't YAML of keys and
  * values, holds a list where a Tile reads text, or keeps what a Tile can't.
  */
-function fieldsOf(yaml: string | undefined): Fields | undefined {
-  const all = yaml === undefined ? {} : mappingIn(yaml)
-  if (all === undefined) return undefined
-  const [title, preview, reference] = [all.title, all.preview, all.reference].map(scalar)
-  if (title === null || preview === null || reference === null) return undefined
+function fieldsOf(yaml: string): Fields | undefined {
+  const all = mappingIn(yaml)
+  const said = Option.getOrUndefined(saidIn(all))
+  if (all === undefined || said === undefined) return undefined
   const kept = Object.fromEntries(
     Object.entries(all).filter(([key]) => !reservedKeys.includes(key)),
   )
-  if (Object.keys(kept).length > 0 && !keepable.frontmatter(kept)) return undefined
+  const keeps = Object.keys(kept).length > 0
+  const frontmatter = keeps && keepable.frontmatter(kept) ? kept : undefined
+  if (keeps && frontmatter === undefined) return undefined
   return {
-    title,
-    preview: preview ?? '',
-    reference,
-    ...(keepable.frontmatter(kept) && Object.keys(kept).length > 0 ? { frontmatter: kept } : {}),
+    title: asText(said.title),
+    preview: asText(said.preview) ?? '',
+    reference: asText(said.reference),
+    ...(frontmatter === undefined ? {} : { frontmatter }),
   }
 }
 
@@ -226,8 +234,8 @@ function configIn(text: string) {
 }
 
 /**
- * What a folder's `.hexframe/` says: the config it sets and the names it leaves out. A file there that
- * isn't text, or can't be read as what it holds, is a fault.
+ * What a folder's `.hexframe/` says: the config it sets and the names it leaves out. A file there past
+ * the shape's limit, that isn't text, or that can't be read as what it holds, is a fault.
  */
 function settingsOf(folder: Folder, path: string, reading: Reading) {
   const own = folder.folders.get(settings.folder)
@@ -238,9 +246,14 @@ function settingsOf(folder: Folder, path: string, reading: Reading) {
   ) => {
     const bytes = own?.files.get(name)
     if (bytes === undefined) return undefined
+    const at = join(join(path, settings.folder), name)
+    if (bytes.length > fileLimit) {
+      fault(reading, at, 'FileTooLarge')
+      return undefined
+    }
     const text = textOf(bytes)
     const parsed = text === undefined ? undefined : parse(text)
-    if (parsed === undefined) fault(reading, join(join(path, settings.folder), name), why)
+    if (parsed === undefined) fault(reading, at, why)
     return parsed
   }
   return {
@@ -319,8 +332,7 @@ function ownOf(
   const name = ownFilesFor(naming.fileName).find((own) => texts.has(own))
   if (name === undefined) return { read: nothingRead }
   const path = join(at.path, name)
-  linkable(reading, path, at.path)
-  return { name, read: fileRead(path, texts.get(name) ?? '', reading) }
+  return { name, path, read: fileRead(path, texts.get(name) ?? '', reading) }
 }
 
 /**
@@ -351,6 +363,8 @@ function folderOf(
     if (shown.folders.length + leaves.length > 0) fault(reading, at.path, 'ReferenceHoldsSomething')
     return { _tag: 'Reference', path: at.path, target: reference }
   }
+  // Only a Tile is a Reference's target: its file is linked once the folder is known to read as one.
+  if (own.path !== undefined) linkable(reading, own.path, at.path)
   const seating = seatingIn({ folders: shown.folders, files: leaves })
   ringFaults(at.path, seating, reading)
   return {
