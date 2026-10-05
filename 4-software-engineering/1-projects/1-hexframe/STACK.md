@@ -61,7 +61,7 @@ Every folder under `1-app/src/` holds at most 6 child folders and 6 files. The r
 | Domains | Effect programs, one folder per domain; a service only when it holds state | The business logic, in the domain's language |
 | Repositories | Effect layers over Drizzle, Better Auth, Stripe | The technical complexity |
 
-An import only points down, and only the API layer composes domains. The direction and its lint now live in [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE|1-app]], each layer's rules in its own folder: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]], [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE|domains]], [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/CLAUDE|repositories]].
+An import only points down, and only the API layer composes domains. One door skips the API layer: the front may import a domain's entities and operations, which are pure by what they are (below, "Domains"). The direction and its lint now live in [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE|1-app]], each layer's rules in its own folder: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]], [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE|domains]], [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/CLAUDE|repositories]].
 
 ## Effect stops at the server function
 
@@ -120,6 +120,22 @@ Vitest with `@effect/vitest`.
 ## Domains
 
 Each domain introduces its language with a short story in its `CLAUDE.md`: what it is about and the problems it solves, not an exhaustive glossary. What a domain may import and hold now lives in [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE|domains]].
+
+Every domain has the same shape, and its folders say what the code is, in the words of domain-driven design, never a technical property of it:
+
+| Path | Holds |
+|---|---|
+| `<domain>.ts` | The application service, the domain's entry, which the API layer calls: it loads through the repositories, decides, writes and publishes. Effect, and impure |
+| `errors.ts` | Its refusals, each with a kind |
+| `entities/` | Its entities, value objects and aggregate, with their invariants, behind an `index.ts` |
+| `operations/` | Its Operations, changes described as data; the events they make, facts in the past tense; and `decide` and `evolve`, behind an `index.ts` |
+| `<concept>/` | A sub-model with a life of its own, as Mapping's Help |
+
+A domain decides in two pure functions, the Decider: `decide(state, operation)` returns a refusal or the events the operation makes, and `evolve(state, event)` returns the state after one. The application service runs them on the state it locked, writes one change per event, and the events reach the bus once the transaction commits; who acted rides on the bus's envelope, which the API layer fills, never in a domain's event. The client runs the same two functions over the state it caches to show a write before the server answers, so a rule exists once and the two sides never disagree on what an operation does.
+
+Entities and operations are pure by what they are, so the front may import them: a domain's `entities/index.ts`, `operations/index.ts` and `errors.ts` are the one door from the front into the domains. Nothing reachable through it touches a repository, the application service, a concept folder, another domain or Node, not even through a type-only import: a domain declares the shapes it reads, and the repository's rows satisfy them. The domain's types are then the front's types, and an adapter stands only where a shape really changes, at the repository and on the wire. A domain grows the shape lazily: IAM gets `entities/` the day it has something to put there.
+
+The project "hexframe app: Optimistic writes and patterns" builds this shape and its lint; until it lands, the front reaches a domain only through the API layer.
 
 ### IAM
 
