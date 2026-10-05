@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { type Entry, unzipped, zipped } from './zip'
+import { unzipped } from './testing'
+import { type Entry, zipped } from './zip'
 
 /** Every byte a stream sends, and how many reads it took. */
 async function drained(stream: ReadableStream<Uint8Array>) {

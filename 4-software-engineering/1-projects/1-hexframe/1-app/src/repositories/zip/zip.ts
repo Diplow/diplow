@@ -1,9 +1,8 @@
-// Zip archives, over fflate, the one module that imports it (dependency-cruiser.config.ts, `sdks`): a
-// list of files streamed into an archive, one file deflated each time the reader asks for more, and an
-// archive read back into its files. It speaks paths and bytes; Mapping decides which files an export
+// Zip archives, over fflate, imported by this folder only (dependency-cruiser.config.ts, `sdks`): a
+// list of files streamed into an archive, one file deflated each time the reader asks for more. It speaks paths and bytes; Mapping decides which files an export
 // holds (src/domains/mapping/files/).
 import { Context, Layer } from 'effect'
-import { Zip as Archive, ZipDeflate, strFromU8, strToU8, unzipSync } from 'fflate'
+import { Zip as Archive, ZipDeflate, strToU8 } from 'fflate'
 
 /** One file of an archive: its path from the archive's root, and its text. */
 export interface Entry {
@@ -52,13 +51,6 @@ export function zipped(entries: ReadonlyArray<Entry>): ReadableStream<Uint8Array
       archive?.terminate()
     },
   })
-}
-
-/** An archive's files, read back whole, in the order it holds them; a folder's own entry left out. */
-export function unzipped(archive: Uint8Array): ReadonlyArray<Entry> {
-  return Object.entries(unzipSync(archive))
-    .filter(([path]) => !path.endsWith('/'))
-    .map(([path, bytes]) => ({ path, content: strFromU8(bytes) }))
 }
 
 /** Zip, as the server's runtime sees it: a list of files streamed into an archive. */

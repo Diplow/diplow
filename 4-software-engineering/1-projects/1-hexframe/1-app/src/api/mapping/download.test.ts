@@ -4,7 +4,7 @@ import { describe, expect, expectTypeOf, it } from 'vitest'
 import type { SignedOut } from '#/domains/iam/errors'
 import type { TileNotFound } from '#/domains/mapping/errors'
 import { exportOf } from '#/domains/mapping/files/files'
-import { unzipped } from '#/repositories/zip/zip'
+import { unzipped } from '#/repositories/zip/testing'
 
 import type { Unexpected } from '../errors/failure'
 import { noKey, run, type StartContext } from '../server/run'

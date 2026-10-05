@@ -18,7 +18,7 @@ The layer under [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains
 | `auth/` | Better Auth over the database, called through its server API, with its test harness; its Stripe plugin comes with Entitlements: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE\|auth]] |
 | `help/` | Help's notes, the app's `help/` folder bundled into the server at build time, and the reader of a note's frontmatter: no SDK, but the errands of fetching and parsing, which Mapping leaves here: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/help/CLAUDE\|help]] |
 | `observability/` | Sentry and PostHog, on both sides: where errors, traces and the leveled event log go, and the flag that raises one user's verbosity. Plain functions for the browser, Effect services for the server's runtime: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/CLAUDE\|observability]] |
-| `zip/` | fflate: a list of files streamed into a zip archive, for an export, through the `Zip` service on the server, and an archive read back: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/zip/CLAUDE\|zip]] |
+| `zip/` | fflate: a list of files streamed into a zip archive, for an export, through the `Zip` service on the server, and, for tests, an archive read back: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/zip/CLAUDE\|zip]] |
 
 ## Rules
 
