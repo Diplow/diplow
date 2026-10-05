@@ -8,6 +8,15 @@ import { type Tiles, layer as tilesLayer } from '#/repositories/database/tiles/t
 
 import * as Mapping from '../mapping'
 import { previewLimit } from '../entities'
+import {
+  CreateReference,
+  CreateTile,
+  DeleteReference,
+  DeleteTile,
+  EditTile,
+  MoveTile,
+  SwapTiles,
+} from '../operations'
 import { help } from './help'
 import { vaultOf } from './vault'
 
@@ -146,36 +155,60 @@ layer(TestTiles)('Help, refused to every write in Mapping itself', (it) => {
       const accountId = someone()
       const root = yield* Mapping.system(accountId)
       const own = yield* transactional(
-        Mapping.createTile(accountId, {
-          parent: root.id,
-          slot: 1,
-          title: 'Own',
-          preview: 'Own, in short.',
-          body: '',
-        }),
+        Mapping.createTile(
+          accountId,
+          new CreateTile({
+            parent: root.id,
+            slot: 1,
+            title: 'Own',
+            preview: 'Own, in short.',
+            body: '',
+          }),
+        ),
       )
       const content = { title: 'Mine', preview: 'Mine.', body: '' }
+      // Operations naming Help's ids, which their schemas refuse: built past the checks, as a caller
+      // whose schema let them through would, so Mapping is seen refusing them itself.
+      const unchecked = { disableChecks: true }
       const attempts: ReadonlyArray<
         Effect.Effect<unknown, { readonly _tag: string }, InTransaction | Tiles>
       > = [
-        Mapping.createTile(accountId, { parent: 'help', slot: 1, ...content }),
-        Mapping.createTile(accountId, {
-          parent: 'help/3',
-          slot: -2,
-          title: '',
-          preview: '',
-          body: '',
-        }),
-        Mapping.editTile(accountId, 'help/3', { title: 'Mine' }),
-        Mapping.moveTile(accountId, 'help/3', { parent: root.id, slot: 2 }),
-        Mapping.moveTile(accountId, own.id, { parent: 'help/3', slot: 2 }),
-        Mapping.swapTiles(accountId, own.id, 'help/3'),
-        Mapping.swapTiles(accountId, 'help/-1', own.id),
-        Mapping.deleteTile(accountId, 'help/6/2'),
-        Mapping.deleteTile(accountId, 'help/../../x'),
-        Mapping.createReference(accountId, { parent: own.id, slot: -1, target: 'help/2' }),
-        Mapping.createReference(accountId, { parent: 'help', slot: -2, target: own.id }),
-        Mapping.deleteReference(accountId, { parent: 'help', slot: -1 }),
+        Mapping.createTile(
+          accountId,
+          new CreateTile({ parent: 'help', slot: 1, ...content }, unchecked),
+        ),
+        Mapping.createTile(
+          accountId,
+          new CreateTile(
+            { parent: 'help/3', slot: -2, title: '', preview: '', body: '' },
+            unchecked,
+          ),
+        ),
+        Mapping.editTile(accountId, new EditTile({ id: 'help/3', title: 'Mine' }, unchecked)),
+        Mapping.moveTile(
+          accountId,
+          new MoveTile({ id: 'help/3', parent: root.id, slot: 2 }, unchecked),
+        ),
+        Mapping.moveTile(
+          accountId,
+          new MoveTile({ id: own.id, parent: 'help/3', slot: 2 }, unchecked),
+        ),
+        Mapping.swapTiles(accountId, new SwapTiles({ a: own.id, b: 'help/3' }, unchecked)),
+        Mapping.swapTiles(accountId, new SwapTiles({ a: 'help/-1', b: own.id }, unchecked)),
+        Mapping.deleteTile(accountId, new DeleteTile({ id: 'help/6/2' }, unchecked)),
+        Mapping.deleteTile(accountId, new DeleteTile({ id: 'help/../../x' }, unchecked)),
+        Mapping.createReference(
+          accountId,
+          new CreateReference({ parent: own.id, slot: -1, target: 'help/2' }, unchecked),
+        ),
+        Mapping.createReference(
+          accountId,
+          new CreateReference({ parent: 'help', slot: -2, target: own.id }, unchecked),
+        ),
+        Mapping.deleteReference(
+          accountId,
+          new DeleteReference({ parent: 'help', slot: -1 }, unchecked),
+        ),
       ]
       for (const attempt of attempts) {
         expect(yield* Effect.flip(transactional(attempt))).toMatchObject({

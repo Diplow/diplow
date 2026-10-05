@@ -12,6 +12,7 @@ import { helpRoot } from '../help/help'
 import type { SystemTile } from '../entities'
 import * as Mapping from '../mapping'
 import { system } from '../mapping'
+import { CreateTile, EditTile } from '../operations'
 import { type ImportPlace, importTiles, planImport } from './landing'
 
 // An import landed in a System over PGlite, as the API layer runs it: the plan read outside any
@@ -150,7 +151,9 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
         _tag: 'DirectionTaken',
       })
       const named = yield* someone
-      yield* transactional(Mapping.editTile(named.accountId, named.root.id, { title: 'Ulysse' }))
+      yield* transactional(
+        Mapping.editTile(named.accountId, new EditTile({ id: named.root.id, title: 'Ulysse' })),
+      )
       expect(yield* Effect.flip(land(named.accountId, { _tag: 'Root' }))).toMatchObject({
         _tag: 'DirectionTaken',
       })
@@ -158,7 +161,9 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
       // An untitled Root holding a Preview or a Body written before its name is no empty System.
       for (const written of [{ preview: 'Me, in short.' }, { body: '# Me' }]) {
         const untitled = yield* someone
-        yield* transactional(Mapping.editTile(untitled.accountId, untitled.root.id, written))
+        yield* transactional(
+          Mapping.editTile(untitled.accountId, new EditTile({ id: untitled.root.id, ...written })),
+        )
         expect(yield* Effect.flip(land(untitled.accountId, { _tag: 'Root' }))).toMatchObject({
           _tag: 'DirectionTaken',
         })
@@ -183,7 +188,10 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
       const { accountId, root } = yield* someone
       const plan = yield* planOf(vault)
       const taken = yield* transactional(
-        Mapping.createTile(accountId, { parent: root.id, slot: 4, ...content('First') }),
+        Mapping.createTile(
+          accountId,
+          new CreateTile({ parent: root.id, slot: 4, ...content('First') }),
+        ),
       )
       const place = { _tag: 'Slot', parent: root.id, slot: 4 } as const
       expect(
@@ -203,11 +211,17 @@ layer(TestLayers)('what an import writes, over PGlite', (it) => {
     Effect.gen(function* () {
       const { accountId, root } = yield* someone
       const own = yield* transactional(
-        Mapping.createTile(accountId, { parent: root.id, slot: 1, ...content('Own') }),
+        Mapping.createTile(
+          accountId,
+          new CreateTile({ parent: root.id, slot: 1, ...content('Own') }),
+        ),
       )
       const other = yield* someone
       const foreign = yield* transactional(
-        Mapping.createTile(other.accountId, { parent: other.root.id, slot: 1, ...content('Not') }),
+        Mapping.createTile(
+          other.accountId,
+          new CreateTile({ parent: other.root.id, slot: 1, ...content('Not') }),
+        ),
       )
       const link: IdOfLink = (text) => /^app:(.+)$/.exec(text)?.[1]
       const files = {

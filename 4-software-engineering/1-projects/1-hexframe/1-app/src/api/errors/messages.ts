@@ -1,17 +1,22 @@
 // The message table: the sentence a failure shows, in the page's language. The server's own sentence
 // never reaches the screen.
 import type { Kind } from '#/domains/kind'
+import type { OperationName } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 
 import type { Failure } from './failure'
 
+/**
+ * The call an entry is narrowed to, by the scope it names: one of Mapping's Operations by its name,
+ * which its server function bears and the MCP tool that runs it names too, or another server function
+ * by its own.
+ */
+type Scope = OperationName | 'importTiles' | 'submitDevTitle'
+
 interface Entry {
   tag: Failure['_tag']
-  /**
-   * Narrows the entry to one operation, by the scope its call names: the server function's name,
-   * which the MCP tool that runs the same program names too.
-   */
-  scope?: string
+  /** Narrows the entry to one call, by the scope the call names. */
+  scope?: Scope
   message: () => string
 }
 

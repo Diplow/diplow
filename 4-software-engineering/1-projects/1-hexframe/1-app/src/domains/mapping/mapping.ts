@@ -4,7 +4,7 @@
 // Every operation is for one Account, which the API layer takes from IAM's Session. A change runs in
 // the transaction the API layer opens around it (`transactional`): its type requires one. Beside each
 // Account's System, every Account reads Help (./help/help.ts), which no change may name.
-import { Effect } from 'effect'
+import { Effect, Struct } from 'effect'
 
 import type { InTransaction } from '#/repositories/database/database'
 import { Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/tiles'
@@ -34,7 +34,16 @@ import {
   type ToKeep,
   withContent,
 } from './entities'
-import type { Placement, ReferenceSlot } from './operations'
+import type {
+  CreateReference,
+  CreateTile,
+  DeleteReference,
+  DeleteTile,
+  EditTile,
+  MoveTile,
+  Placement,
+  SwapTiles,
+} from './operations'
 
 export { HelpId, helpRoot, helpSystem } from './help/help'
 
@@ -234,15 +243,17 @@ const notRoot = (row: TileRow) =>
 /**
  * Adds a Tile in a free slot under a Tile of the System, never under a Leaf: a Branch, a Leaf, or a
  * Tile of its Context. An import gives it what it keeps from its files, each part already checked
- * (`./kept/kept.ts`); nothing else does, and no later change touches them.
+ * (`entities/kept/`); nothing else does, and no later change touches them. The id the Operation may
+ * carry is not honoured yet: Mapping makes it.
  */
 export const createTile = (
   accountId: string,
-  { parent, slot, name, config, frontmatter, ...content }: Placement & Content & ToKeep,
+  { parent, slot, title, preview, body }: CreateTile,
+  { name, config, frontmatter }: ToKeep = {},
 ) =>
   changing(accountId, [parent], (rows, writes) =>
     Effect.gen(function* () {
-      const valid = yield* checked(content)
+      const valid = yield* checked({ title, preview, body })
       yield* freeSlot(rows, { parent, slot })
       const direction = rowDirection(slot)
       const kept = { name, config, frontmatter }
@@ -257,11 +268,12 @@ export const createTile = (
     }),
   )
 
-/** Changes what a Tile says: any of its Title, its Preview and its Body. */
-export const editTile = (accountId: string, id: string, changes: Partial<Content>) =>
-  changing(accountId, [id], (rows, writes) =>
+/** Changes what a Tile says: any of its Title, its Preview and its Body, as the Operation gives them. */
+export const editTile = (accountId: string, operation: EditTile) =>
+  changing(accountId, [operation.id], (rows, writes) =>
     Effect.gen(function* () {
-      const valid = yield* checked(changes)
+      const { id } = operation
+      const valid = yield* checked(Struct.omit(operation, ['_tag', 'id']))
       const { title, preview, body } = yield* tileIn(rows, id)
       yield* writes.update(id, valid)
       return { id, title, preview, body, ...valid } satisfies Tile
@@ -274,16 +286,16 @@ export const editTile = (accountId: string, id: string, changes: Partial<Content
  * so a Leaf grows into a Branch, and a bare Branch shrinks into a Leaf, by moving. References to it
  * follow, since they hold its id.
  */
-export const moveTile = (accountId: string, id: string, to: Placement) =>
-  changing(accountId, [id, to.parent], (rows, writes) =>
+export const moveTile = (accountId: string, { id, parent, slot }: MoveTile) =>
+  changing(accountId, [id, parent], (rows, writes) =>
     Effect.gen(function* () {
       const row = yield* Effect.flatMap(tileIn(rows, id), notRoot)
-      const direction = rowDirection(to.slot)
-      if (row.parentId === to.parent && row.direction === direction) return
-      if (below(rows, id).has(to.parent)) return yield* new MovedUnderItself()
-      yield* freeSlot(rows, to)
+      const direction = rowDirection(slot)
+      if (row.parentId === parent && row.direction === direction) return
+      if (below(rows, id).has(parent)) return yield* new MovedUnderItself()
+      yield* freeSlot(rows, { parent, slot })
       yield* holdsNothingIfLeaf(rows, id, direction)
-      yield* writes.update(id, { parentId: to.parent, direction })
+      yield* writes.update(id, { parentId: parent, direction })
     }),
   )
 
@@ -293,7 +305,7 @@ export const moveTile = (accountId: string, id: string, to: Placement) =>
  * other, which would put one below itself, nor hold anything when it takes a Leaf slot. References to
  * them follow, since they hold their ids.
  */
-export const swapTiles = (accountId: string, a: string, b: string) =>
+export const swapTiles = (accountId: string, { a, b }: SwapTiles) =>
   changing(accountId, [a, b], (rows, writes) =>
     Effect.gen(function* () {
       const first = yield* Effect.flatMap(tileIn(rows, a), notRoot)
@@ -307,7 +319,7 @@ export const swapTiles = (accountId: string, a: string, b: string) =>
   )
 
 /** Deletes a Tile and everything below it. A Reference to any of them stays, broken. */
-export const deleteTile = (accountId: string, id: string) =>
+export const deleteTile = (accountId: string, { id }: DeleteTile) =>
   changing(accountId, [id], (rows, writes) =>
     Effect.gen(function* () {
       yield* Effect.flatMap(tileIn(rows, id), notRoot)
@@ -319,10 +331,7 @@ export const deleteTile = (accountId: string, id: string) =>
  * Puts a Reference to a Tile of the System in a free Context slot of another, or of itself, never of a
  * Leaf, which has no Context.
  */
-export const createReference = (
-  accountId: string,
-  { parent, slot, target }: ReferenceSlot & { target: string },
-) =>
+export const createReference = (accountId: string, { parent, slot, target }: CreateReference) =>
   changing(accountId, [parent, target], (rows, writes) =>
     Effect.gen(function* () {
       yield* tileIn(rows, target)
@@ -332,7 +341,7 @@ export const createReference = (
   )
 
 /** Empties a Context slot holding a Reference; the Tile it pointed at is untouched. */
-export const deleteReference = (accountId: string, { parent, slot }: ReferenceSlot) =>
+export const deleteReference = (accountId: string, { parent, slot }: DeleteReference) =>
   changing(accountId, [parent], (rows, writes) =>
     Effect.gen(function* () {
       yield* tileIn(rows, parent)

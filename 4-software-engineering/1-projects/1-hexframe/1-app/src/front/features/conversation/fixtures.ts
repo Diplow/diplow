@@ -45,14 +45,14 @@ export function conversationFixture(now: Date): Entry[] {
       kind: 'operation',
       id: 'o1',
       at: at(3, 18, 10),
-      operation: 'created',
+      operation: 'CreateTile',
       tile: tile('leadership'),
     },
     {
       kind: 'operation',
       id: 'o2',
       at: at(3, 18, 12),
-      operation: 'created',
+      operation: 'CreateTile',
       tile: tile('software-engineering'),
     },
     {
@@ -69,7 +69,13 @@ export function conversationFixture(now: Date): Entry[] {
       navigation: 'expanded',
       tile: tile('projects'),
     },
-    { kind: 'operation', id: 'o3', at: at(1, 21, 45), operation: 'edited', tile: tile('hexframe') },
+    {
+      kind: 'operation',
+      id: 'o3',
+      at: at(1, 21, 45),
+      operation: 'EditTile',
+      tile: tile('hexframe'),
+    },
     {
       kind: 'navigation',
       id: 'n3',
@@ -88,7 +94,7 @@ export function conversationFixture(now: Date): Entry[] {
       kind: 'operation',
       id: 'o4',
       at: at(1, 21, 50),
-      operation: 'moved',
+      operation: 'MoveTile',
       tile: tile('principles'),
     },
     {
@@ -105,7 +111,7 @@ export function conversationFixture(now: Date): Entry[] {
       navigation: 'centered',
       tile: tile('ulysse'),
     },
-    { kind: 'operation', id: 'o5', at: today(4), operation: 'deleted', tile: drafts },
+    { kind: 'operation', id: 'o5', at: today(4), operation: 'DeleteTile', tile: drafts },
     said('m3', today(2), 'user', 'What would you add to Games?'),
     said(
       'm4',

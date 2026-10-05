@@ -3,61 +3,65 @@
 // its input, then hands its program (./programs.ts) to the helper; its type lists the errors it can
 // fail with. `exportTile` answers its zip as a download (./files/download.ts); `importTiles` takes a form.
 import { createServerFn } from '@tanstack/react-start'
-import { Schema } from 'effect'
+import { Schema, Struct } from 'effect'
 
-import { ContextDirection, contentBounds, Slot } from '#/domains/mapping/entities'
+import { Slot } from '#/domains/mapping/entities'
+import {
+  CreateReference,
+  CreateTile,
+  DeleteReference,
+  DeleteTile,
+  EditTile,
+  MoveTile,
+  SwapTiles,
+  TileId,
+} from '#/domains/mapping/operations'
 import { locales } from '#/paraglide/runtime'
 
 import { run } from '../server/run'
 import { asDownload } from './files/download'
 import * as Mapping from './programs'
 
-/** A Tile's id: a UUID, as the tiles repository makes every one, so nothing else reaches the domain. */
-export const Id = Schema.String.check(Schema.isUUID())
-
 /**
- * What a Tile says, bounded here, so nothing unbounded reaches the domain: what a Title and a Preview
- * must be is Mapping's to say, on the field at fault. The Preview's bound is in UTF-16 units, far
- * above the 350 characters Mapping counts, since one character a reader sees can take several.
+ * An Operation as its server function takes it: its fields, bounded by Mapping, without its tag,
+ * which the function's name already says.
  */
-const content = {
-  title: Schema.String.check(Schema.isMaxLength(contentBounds.title)),
-  preview: Schema.String.check(Schema.isMaxLength(8_000)),
-  body: Schema.String.check(Schema.isMaxLength(contentBounds.body)),
-}
+const input = <F extends Schema.Struct.Fields>({ fields }: { readonly fields: F }) =>
+  Schema.Struct(Struct.omit(fields, ['_tag']))
 
 /** A Tile, by its id. */
-export const TileRef = Schema.Struct({ id: Id })
+export const TileRef = Schema.Struct({ id: TileId })
 
-/** A new Tile, in a free slot under a Tile of the System: a Branch, a Leaf or a Context Tile. */
-export const NewTile = Schema.Struct({ parent: Id, slot: Slot, ...content })
+/**
+ * A new Tile, in a free slot under a Tile of the System: a Branch, a Leaf or a Context Tile. Without
+ * the id a caller may choose, which Mapping does not honour yet.
+ */
+export const NewTile = Schema.Struct(Struct.omit(CreateTile.fields, ['_tag', 'id']))
 
 /** A Tile's id and whichever of its Title, Preview and Body change. */
-export const TileEdit = Schema.Struct({
-  id: Id,
-  title: Schema.optionalKey(content.title),
-  preview: Schema.optionalKey(content.preview),
-  body: Schema.optionalKey(content.body),
-})
+export const TileEdit = input(EditTile)
 
 /** A Tile, and the free slot under another Tile, or its own parent, it moves to. */
-export const TileMove = Schema.Struct({ id: Id, parent: Id, slot: Slot })
+export const TileMove = input(MoveTile)
 
 /** Two Tiles, by their ids, which trade places. */
-export const TileSwap = Schema.Struct({ a: Id, b: Id })
+export const TileSwap = input(SwapTiles)
 
-/** A Context slot, by the Tile that holds it. */
-export const ReferenceSlot = Schema.Struct({ parent: Id, slot: ContextDirection })
+/** A Tile to delete, by its id. */
+export const TileDelete = input(DeleteTile)
 
 /** A Reference to put in a free Context slot: the Tile it points at, by its id. */
-export const NewReference = Schema.Struct({ parent: Id, slot: ContextDirection, target: Id })
+export const NewReference = input(CreateReference)
+
+/** A Context slot, by the Tile that holds it. */
+export const ReferenceSlot = input(DeleteReference)
 
 /**
  * Where an import lands: a free slot under a Tile of the System, a Branch's, a Leaf's or a Context
  * slot, or the Root of an empty System.
  */
 const ImportPlace = Schema.Union([
-  Schema.Struct({ _tag: Schema.tag('Slot'), parent: Id, slot: Slot }),
+  Schema.Struct({ _tag: Schema.tag('Slot'), parent: TileId, slot: Slot }),
   Schema.Struct({ _tag: Schema.tag('Root') }),
 ])
 
@@ -127,7 +131,7 @@ export const swapTiles = createServerFn({ method: 'POST' })
   .handler(({ data, context }) => run(context, Mapping.swapTiles(data)))
 
 export const deleteTile = createServerFn({ method: 'POST' })
-  .validator(Schema.toStandardSchemaV1(TileRef))
+  .validator(Schema.toStandardSchemaV1(TileDelete))
   .handler(({ data, context }) => run(context, Mapping.deleteTile(data)))
 
 export const createReference = createServerFn({ method: 'POST' })

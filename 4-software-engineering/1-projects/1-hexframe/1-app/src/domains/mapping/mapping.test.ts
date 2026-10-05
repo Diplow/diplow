@@ -9,24 +9,31 @@ import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 import type { ContextDirection, Depth, Direction, Field, ReadTile, SystemTile } from './entities'
 import * as Mapping from './mapping'
 import { system } from './mapping'
+import * as Operations from './operations'
 
 const TestTiles = tilesLayer.pipe(Layer.provideMerge(TestDatabase))
 
-/** A change as the API layer runs it: in the transaction it opens. */
-const inTransaction =
-  <Args extends ReadonlyArray<unknown>, A, E, R>(
-    change: (...args: Args) => Effect.Effect<A, E, R>,
-  ) =>
-  (...args: Args) =>
-    transactional(change(...args))
-
-const createTile = inTransaction(Mapping.createTile)
-const editTile = inTransaction(Mapping.editTile)
-const moveTile = inTransaction(Mapping.moveTile)
-const swapTiles = inTransaction(Mapping.swapTiles)
-const deleteTile = inTransaction(Mapping.deleteTile)
-const createReference = inTransaction(Mapping.createReference)
-const deleteReference = inTransaction(Mapping.deleteReference)
+/**
+ * A change as the API layer runs it: its Operation, made from its fields, in the transaction the
+ * layer opens.
+ */
+const createTile = (accountId: string, fields: Omit<Operations.CreateTile, '_tag'>) =>
+  transactional(Mapping.createTile(accountId, new Operations.CreateTile(fields)))
+const editTile = (
+  accountId: string,
+  id: string,
+  changes: Omit<Operations.EditTile, '_tag' | 'id'>,
+) => transactional(Mapping.editTile(accountId, new Operations.EditTile({ id, ...changes })))
+const moveTile = (accountId: string, id: string, to: Omit<Operations.MoveTile, '_tag' | 'id'>) =>
+  transactional(Mapping.moveTile(accountId, new Operations.MoveTile({ id, ...to })))
+const swapTiles = (accountId: string, a: string, b: string) =>
+  transactional(Mapping.swapTiles(accountId, new Operations.SwapTiles({ a, b })))
+const deleteTile = (accountId: string, id: string) =>
+  transactional(Mapping.deleteTile(accountId, new Operations.DeleteTile({ id })))
+const createReference = (accountId: string, fields: Omit<Operations.CreateReference, '_tag'>) =>
+  transactional(Mapping.createReference(accountId, new Operations.CreateReference(fields)))
+const deleteReference = (accountId: string, fields: Omit<Operations.DeleteReference, '_tag'>) =>
+  transactional(Mapping.deleteReference(accountId, new Operations.DeleteReference(fields)))
 
 /** A read of the Account's own System, where the language Help is read in plays no part. */
 const readTile = <F extends Field>(
