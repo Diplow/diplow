@@ -11,7 +11,8 @@ preview: >-
   signed in, how Mapping reads one Tile to a depth, how two Tiles swap,
   in the database and on the canvas, where the MCP endpoint sits, what it
   answers and how a request's context reaches its tools, and how Help comes
-  in French and opens at /help.
+  in French and opens at /help, and how a real Claude Code accepts the
+  server without touching the user's own config.
 ---
 # Decisions
 
@@ -99,3 +100,7 @@ The vault shape claude-mod and the Obsidian plugin read takes a folder's `CLAUDE
 ### DEC-20 At `/help` a Body opens in a drawer from the centered Tile's card, shown as written
 
 HEX-50. The ticket asked that a Tile open its Body "as on home". On home, a Body shows in the drawer of the centered Tile's form, as the Markdown it is written in, since `ui/` has no Markdown renderer and a feature never adds to `ui/`. So `/help` gives the centered Tile's card a Read button that opens a drawer with its Title, Preview and Body, the Body shown as written, whitespace kept. Which Body is open lives in the URL (`open`), as home's form does, so a link opens the same drawer. A view change keeps it. The help feature takes the canvas's Tiles and the open Tile from the route, which reads them through the system feature's `canvasTree` and `tileIn`, since a feature never imports another. The header links to Help on every page, apart from the signed-in Account's links (DEC-6), since anyone reads it. Rendering Markdown is a `ui/` component, which would reach home's Bodies too, and a ticket of its own.
+
+### DEC-21 The acceptance's scratch config is a project-scoped `.mcp.json` in a scratch folder, loaded alone
+
+HEX-51. The ticket asked for `claude mcp add` in a scratch config, so the user's own stays untouched. Its default scope, local, writes into the user's `~/.claude.json`. So the run adds the server with `--scope project` in a scratch folder outside the repo, which writes only that folder's `.mcp.json`, and runs `claude -p --mcp-config .mcp.json --strict-mcp-config --allowedTools mcp__hexframe` there: the server loads from that file alone, and its tools run with no prompt. The Key lives in that folder and nowhere else, and the PGlite Account it proves dies with the dev server. The run signs up and issues the Key in a browser on the dev server, as a user does. The MCP folder's CLAUDE.md tells the steps, so the acceptance stays script-free and anyone can run it again.
