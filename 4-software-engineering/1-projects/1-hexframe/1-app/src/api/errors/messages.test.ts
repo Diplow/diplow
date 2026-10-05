@@ -15,6 +15,7 @@ import {
 } from '#/domains/iam/errors'
 import {
   DirectionTaken,
+  HelpReadOnly,
   MovedUnderItself,
   PreviewTooLong,
   RootFixed,
@@ -107,6 +108,7 @@ describe('the message table', () => {
     ],
     [new MovedUnderItself(), "A tile can't move under itself or one of its own children."],
     [new RootFixed(), "Your root tile is you: it can't be moved or deleted."],
+    [new HelpReadOnly(), "Help is hexframe's guide: everyone reads it, nobody changes it."],
   ])("words Mapping's %s in its own sentence", (failure, sentence) => {
     expect(messageFor(failure, 'moveTile')).toBe(sentence)
   })
@@ -136,6 +138,10 @@ describe('the message table', () => {
     [
       new RootFixed(),
       'Votre tuile racine, c’est vous : elle ne peut être ni déplacée ni supprimée.',
+    ],
+    [
+      new HelpReadOnly(),
+      'L’aide est le guide de hexframe : tout le monde la lit, personne ne la modifie.',
     ],
   ])("words Mapping's %s in French too", (failure, sentence) => {
     overwriteGetLocale(() => 'fr')

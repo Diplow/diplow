@@ -71,6 +71,10 @@ describe('the tool table, as an agent lists it', () => {
     const description = (name: string) => tools.find((tool) => tool.name === name)?.description
     for (const tool of tools.filter(({ annotations }) => annotations?.readOnlyHint === false)) {
       expect(tool.description).toMatch(/TileNotFound: .+; map or open_tile/)
+      expect(tool.description).toMatch(/HelpReadOnly: that Tile is Help's/)
+    }
+    for (const name of ['open_tile', 'map']) {
+      expect(description(name)).toMatch(/Help, hexframe's own guide, .+ id "help"/)
     }
     expect(description('create_tile')).toMatch(
       /6 Children at most, so one more is refused: regroup .+ by moving them/,
@@ -83,6 +87,40 @@ describe('the tool table, as an agent lists it', () => {
       expect(description(name)).toMatch(/RootFixed: .+ MovedUnderItself: /)
     }
     expect(description('delete_tile')).toMatch(/for good: no tool brings it back/)
+  })
+})
+
+describe('Help, through the MCP endpoint', () => {
+  it('says what hexframe is, and points an agent to Help', async () => {
+    const { secret } = await signedUp()
+    const client = await connect(bearer(secret))
+    const instructions = client.getInstructions() ?? ''
+    expect(instructions.split('\n')).toHaveLength(2)
+    expect(instructions).toMatch(/^Hexframe holds the user's System/)
+    expect(instructions).toContain('open_tile({ id: "help" })')
+  })
+
+  it('reads Help through the same tools as a System, by its paths', async () => {
+    const { secret } = await signedUp()
+    const client = await connect(bearer(secret))
+    const opened = await call(client, 'open_tile', { id: 'help' })
+    expect(opened).toMatchObject({
+      value: {
+        tile: { _tag: 'Tile', id: 'help', title: 'Hexframe' },
+        parent: null,
+        children: { 1: { _tag: 'Tile', id: 'help/1' }, 6: { _tag: 'Tile', id: 'help/6' } },
+        context: { '-1': { _tag: 'Tile', id: 'help/-1' } },
+      },
+    })
+    expect(opened).toHaveProperty('value.tile.body')
+    expect(await call(client, 'map', { id: 'help/3' })).toMatchObject({
+      value: {
+        tile: { _tag: 'Tile', id: 'help/3', context: { '-1': { _tag: 'Tile', id: 'help/3/-1' } } },
+        parent: { id: 'help', title: 'Hexframe' },
+      },
+    })
+    const { error } = await call(client, 'open_tile', { id: 'help/1/1' })
+    expect(error).toMatch(/^TileNotFound: .+ \(request [0-9a-f-]{36}\)$/)
   })
 })
 
@@ -155,6 +193,8 @@ describe('the MCP endpoint', () => {
       [{ fields: [] }, 'fields'],
       [{ fields: ['title', 'title'] }, 'fields'],
       [{ id: 'not-an-id' }, 'id'],
+      [{ id: 'help/../../x' }, 'id'],
+      [{ id: 'help/3/' }, 'id'],
     ] as const) {
       const { error } = await call(client, 'map', args)
       expect(error).toMatch(new RegExp(`^Input validation error: .*${field}: `))

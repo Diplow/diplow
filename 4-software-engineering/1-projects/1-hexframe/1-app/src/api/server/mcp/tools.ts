@@ -10,6 +10,8 @@ import {
   depths,
   directions as childDirections,
   fields as allFields,
+  HelpId,
+  helpRoot,
   previewLimit,
   type Field,
 } from '#/domains/mapping/mapping'
@@ -59,9 +61,15 @@ const Fields = (fallback: ReadonlyArray<Field>, description: string) =>
     .annotate({ description })
     .pipe(Schema.withDecodingDefaultKey(Effect.succeed(fallback)))
 
-const TileId = Id.annotate({
-  description: "A Tile's id, as open_tile and map answer it. Without one, the Root: the user.",
+const TileId = Schema.Union([Id, HelpId]).annotate({
+  description:
+    "A Tile's id, as open_tile and map answer it: a Tile of the user's System, or of Help, from " +
+    `its Root, "${helpRoot}". Without one, the user's Root: the user.`,
 })
+
+const help =
+  "Help, hexframe's own guide, is a System every user reads and none writes, from its Root, id " +
+  `"${helpRoot}": open it to learn what a System, a Tile, a Direction or Context is.`
 
 const directions =
   'Children say what a Tile does, keyed by Direction, 1 to 6 (NW, NE, E, SE, SW, W); its Context ' +
@@ -77,7 +85,7 @@ const openTile = tool({
     'fields asked), its parent, and its Children and Context, each with its Title and Preview only. ' +
     'Without an id, opens the Root, which is the user. Read a System as its author laid it out: ' +
     "open a Tile, read its Children's Previews, then open only the ones that matter to your task. " +
-    directions,
+    `${directions} ${help}`,
   input: Schema.Struct({
     id: Schema.optionalKey(TileId),
     fields: Fields(
@@ -102,11 +110,11 @@ const map = tool({
   name: 'map',
   kind: 'read',
   description:
-    "Maps the user's System below a Tile, the Root when no id is given, several generations at " +
+    "Maps the user's System, or Help, below a Tile, the Root when no id is given, several generations at " +
     'once: depth 0 to 3, 2 when not given, each Tile with its Title and Preview. Use it to find ' +
     'where something lives, then open_tile what matters; ask for body only when you need every ' +
     'Body below, since it costs far more. ' +
-    directions,
+    `${directions} ${help}`,
   input: Schema.Struct({
     id: Schema.optionalKey(TileId),
     depth: Schema.Literals(depths)
@@ -159,6 +167,9 @@ const refusal = {
   TitleMissing: 'the Title is empty; give one.',
   PreviewTooLong: `the Preview is over ${String(previewLimit)} characters; shorten it.`,
   RootFixed: 'the Root is the user; it is never moved, swapped nor deleted.',
+  HelpReadOnly:
+    "that Tile is Help's, which every user reads and none writes; change a Tile of the user's " +
+    'System instead.',
 } as const
 
 /** What a slot taken means where a Child goes: the regrouping a seventh Child asks for. */
@@ -195,6 +206,7 @@ const createTile = write({
     DirectionTaken: takenChild,
     TitleMissing: refusal.TitleMissing,
     PreviewTooLong: refusal.PreviewTooLong,
+    HelpReadOnly: refusal.HelpReadOnly,
   },
   input: NewTile.mapFields(
     Struct.evolve({
@@ -218,6 +230,7 @@ const editTile = write({
     TileNotFound: refusal.TileNotFound,
     TitleMissing: refusal.TitleMissing,
     PreviewTooLong: refusal.PreviewTooLong,
+    HelpReadOnly: refusal.HelpReadOnly,
   },
   input: TileEdit.mapFields(
     Struct.evolve({
@@ -245,6 +258,7 @@ const moveTile = write({
     RootFixed: refusal.RootFixed,
     MovedUnderItself:
       'a Tile cannot move under itself or anything below it; pick a parent outside it.',
+    HelpReadOnly: refusal.HelpReadOnly,
   },
   input: TileMove.mapFields(
     Struct.evolve({
@@ -267,6 +281,7 @@ const swapTiles = write({
     TileNotFound: refusal.TileNotFound,
     RootFixed: refusal.RootFixed,
     MovedUnderItself: 'neither Tile may lie below the other; move one of them instead.',
+    HelpReadOnly: refusal.HelpReadOnly,
   },
   input: TileSwap.mapFields(
     Struct.evolve({
@@ -284,7 +299,11 @@ const deleteTile = write({
   description:
     'Deletes a Tile and everything below it, for good: no tool brings it back. References to ' +
     'any of them stay, broken. Answers null.',
-  refusals: { TileNotFound: refusal.TileNotFound, RootFixed: refusal.RootFixed },
+  refusals: {
+    TileNotFound: refusal.TileNotFound,
+    RootFixed: refusal.RootFixed,
+    HelpReadOnly: refusal.HelpReadOnly,
+  },
   input: TileRef.mapFields(
     Struct.evolve({
       id: (field) =>
@@ -301,7 +320,11 @@ const createReference = write({
     "Puts a Reference in a free Context slot of a Tile: a link to another Tile of the user's " +
     'System, by id, that follows it when it moves and shows broken once it is deleted. Answers ' +
     'null.',
-  refusals: { TileNotFound: refusal.TileNotFound, DirectionTaken: refusal.DirectionTaken },
+  refusals: {
+    TileNotFound: refusal.TileNotFound,
+    DirectionTaken: refusal.DirectionTaken,
+    HelpReadOnly: refusal.HelpReadOnly,
+  },
   input: NewReference.mapFields(
     Struct.evolve({
       parent: (field) => field.annotate({ description: described.holder }),
@@ -322,7 +345,7 @@ const deleteReference = write({
   description:
     'Empties a Context slot holding a Reference. The Tile it pointed at is untouched; a slot ' +
     'holding a Tile, or nothing, is left as it is. Answers null.',
-  refusals: { TileNotFound: refusal.TileNotFound },
+  refusals: { TileNotFound: refusal.TileNotFound, HelpReadOnly: refusal.HelpReadOnly },
   input: ReferenceSlot.mapFields(
     Struct.evolve({
       parent: (field) => field.annotate({ description: described.holder }),

@@ -46,6 +46,9 @@ const graphemes = new Intl.Segmenter()
 /** Characters as a reader counts them: an emoji of several code points is one. */
 const length = (text: string) => Array.from(graphemes.segment(text)).length
 
+/** Whether a Preview holds in its 350 characters, counted as a reader counts them. */
+export const fitsPreview = (preview: string) => length(preview) <= previewLimit
+
 /**
  * The content as Mapping keeps it, its Title trimmed, or the error on the field at fault. Only the
  * fields given are checked, so an edit of the Body alone never trips on a Title nobody wrote yet.
@@ -55,7 +58,7 @@ export function checked<C extends Partial<Content>>(
 ): Effect.Effect<C, TitleMissing | PreviewTooLong> {
   const title = content.title?.trim()
   if (title === '') return Effect.fail(new TitleMissing({ fields: ['title'] }))
-  if (content.preview !== undefined && length(content.preview) > previewLimit) {
+  if (content.preview !== undefined && !fitsPreview(content.preview)) {
     return Effect.fail(new PreviewTooLong({ fields: ['preview'] }))
   }
   return Effect.succeed(title === undefined ? content : { ...content, title })

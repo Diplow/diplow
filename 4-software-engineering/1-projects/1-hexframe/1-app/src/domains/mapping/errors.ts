@@ -38,6 +38,14 @@ export class MovedUnderItself extends Schema.TaggedError<MovedUnderItself>()('Mo
   kind: kind('Conflict'),
 }) {}
 
+/**
+ * Help is hexframe's own System, which every Account reads and none writes: a change naming one of its
+ * Tiles is refused, whichever end of a move or a swap it is.
+ */
+export class HelpReadOnly extends Schema.TaggedError<HelpReadOnly>()('HelpReadOnly', {
+  kind: kind('Forbidden'),
+}) {}
+
 export const mappingFailures = [
   TileNotFound,
   TitleMissing,
@@ -45,4 +53,5 @@ export const mappingFailures = [
   DirectionTaken,
   MovedUnderItself,
   RootFixed,
+  HelpReadOnly,
 ] as const

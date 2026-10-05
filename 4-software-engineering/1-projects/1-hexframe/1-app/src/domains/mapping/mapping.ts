@@ -2,13 +2,15 @@
 // what matters most. Each Account has one System, whose Root is the user. The tiles repository keeps
 // the rows (src/repositories/database/tiles/); Mapping decides what a change may do, then writes it.
 // Every operation is for one Account, which the API layer takes from IAM's Session. A change runs in
-// the transaction the API layer opens around it (`transactional`): its type requires one.
+// the transaction the API layer opens around it (`transactional`): its type requires one. Beside each
+// Account's System, every Account reads Help (./help/help.ts), which no change may name.
 import { Effect } from 'effect'
 
 import type { InTransaction } from '#/repositories/database/database'
 import { Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/tiles'
 
-import { DirectionTaken, MovedUnderItself, RootFixed, TileNotFound } from './errors'
+import { DirectionTaken, HelpReadOnly, MovedUnderItself, RootFixed, TileNotFound } from './errors'
+import { isHelpId, readHelp } from './help/help'
 import {
   type Depth,
   type Field,
@@ -21,6 +23,7 @@ import {
 } from './system'
 import { type Content, type ContextDirection, type Slot, type Tile, checked } from './tile'
 
+export { HelpId, helpRoot } from './help/help'
 export { depths, fields } from './system'
 export { directions, previewLimit } from './tile'
 export type { Depth, Field, ReadTile, SystemTile } from './system'
@@ -54,12 +57,22 @@ interface Read<F extends Field> {
 }
 
 /**
- * A Tile of the Account's System, its Root when no id is given, read `depth` generations down with
- * only the fields asked of each Tile, and its parent. A Reference shows the id, Title and Preview of
- * the Tile it points at. A Body is read only when asked, and a Tile of another System is
- * `TileNotFound`. Reading the Root adds it, as `system` does.
+ * A Tile of the Account's System, its Root when no id is given, or a Tile of Help by its id, read
+ * `depth` generations down with only the fields asked of each Tile, and its parent. A Reference shows
+ * the id, Title and Preview of the Tile it points at. A Body is read only when asked, and a Tile of
+ * another System is `TileNotFound`, as is a Help id no Tile of Help has. Reading the Root adds it, as
+ * `system` does.
  */
 export const readTile = <F extends Field>(
+  accountId: string,
+  { id, depth, fields }: { id?: string | undefined; depth: Depth; fields: ReadonlyArray<F> },
+): Effect.Effect<Read<F>, TileNotFound, Tiles> =>
+  id !== undefined && isHelpId(id)
+    ? readHelp(id, { depth, fields })
+    : readOwn(accountId, { id, depth, fields })
+
+/** A Tile of the Account's System, its Root when no id is given, as `readTile` reads it. */
+const readOwn = <F extends Field>(
   accountId: string,
   { id, depth, fields }: { id?: string | undefined; depth: Depth; fields: ReadonlyArray<F> },
 ) =>
@@ -87,15 +100,27 @@ export const readTile = <F extends Field>(
   )
 
 /**
- * A change to the Account's System, on its rows as they stand once its Root is locked: alone until
- * the transaction around it ends, so what it checked still holds when it writes.
+ * Refuses a change that names a Tile of Help, whichever schema let its ids through: Help is read by
+ * every Account and written by none.
+ */
+const outsideHelp = (ids: ReadonlyArray<string>) =>
+  ids.some(isHelpId) ? Effect.fail(new HelpReadOnly()) : Effect.void
+
+/**
+ * A change to the Account's System, naming these Tiles, none of them Help's, on its rows as they
+ * stand once its Root is locked: alone until the transaction around it ends, so what it checked still
+ * holds when it writes.
  */
 const changing = <A, E>(
   accountId: string,
+  names: ReadonlyArray<string>,
   change: (rows: ReadonlyArray<TileRow>, writes: Writes) => Effect.Effect<A, E, InTransaction>,
 ) =>
-  Tiles.use((tiles) =>
-    Effect.flatMap(tiles.lock(accountId), (rows) => change(rows, tiles.writes(accountId))),
+  Effect.andThen(
+    outsideHelp(names),
+    Tiles.use((tiles) =>
+      Effect.flatMap(tiles.lock(accountId), (rows) => change(rows, tiles.writes(accountId))),
+    ),
   )
 
 const tileIn = (rows: ReadonlyArray<TileRow>, id: string) => {
@@ -115,43 +140,33 @@ const notRoot = (row: TileRow) =>
   row.parentId === null ? Effect.fail(new RootFixed()) : Effect.succeed(row)
 
 /** Adds a Tile in a free slot under a Tile of the System: a Child, or a Tile of its Context. */
-export const createTile = (accountId: string, input: Placement & Content) =>
-  Effect.gen(function* () {
-    const { parent, slot, ...content } = input
-    const valid = yield* checked(content)
-    return yield* changing(accountId, (rows, writes) =>
-      Effect.gen(function* () {
-        yield* freeSlot(rows, { parent, slot })
-        const id = yield* writes.insert({
-          parentId: parent,
-          direction: slot,
-          target: null,
-          ...valid,
-        })
-        return { id, ...valid } satisfies Tile
-      }),
-    )
-  })
+export const createTile = (accountId: string, { parent, slot, ...content }: Placement & Content) =>
+  changing(accountId, [parent], (rows, writes) =>
+    Effect.gen(function* () {
+      const valid = yield* checked(content)
+      yield* freeSlot(rows, { parent, slot })
+      const id = yield* writes.insert({ parentId: parent, direction: slot, target: null, ...valid })
+      return { id, ...valid } satisfies Tile
+    }),
+  )
 
 /** Changes what a Tile says: any of its Title, its Preview and its Body. */
 export const editTile = (accountId: string, id: string, changes: Partial<Content>) =>
-  Effect.gen(function* () {
-    const valid = yield* checked(changes)
-    return yield* changing(accountId, (rows, writes) =>
-      Effect.gen(function* () {
-        const { title, preview, body } = yield* tileIn(rows, id)
-        yield* writes.update(id, valid)
-        return { id, title, preview, body, ...valid } satisfies Tile
-      }),
-    )
-  })
+  changing(accountId, [id], (rows, writes) =>
+    Effect.gen(function* () {
+      const valid = yield* checked(changes)
+      const { title, preview, body } = yield* tileIn(rows, id)
+      yield* writes.update(id, valid)
+      return { id, title, preview, body, ...valid } satisfies Tile
+    }),
+  )
 
 /**
  * Moves a Tile, and everything below it, to a free slot under another Tile of the System, or to
  * another slot of the same parent. References to it follow, since they hold its id.
  */
 export const moveTile = (accountId: string, id: string, to: Placement) =>
-  changing(accountId, (rows, writes) =>
+  changing(accountId, [id, to.parent], (rows, writes) =>
     Effect.gen(function* () {
       const row = yield* Effect.flatMap(tileIn(rows, id), notRoot)
       if (row.parentId === to.parent && row.direction === to.slot) return
@@ -167,7 +182,7 @@ export const moveTile = (accountId: string, id: string, to: Placement) =>
  * other, which would put one below itself. References to them follow, since they hold their ids.
  */
 export const swapTiles = (accountId: string, a: string, b: string) =>
-  changing(accountId, (rows, writes) =>
+  changing(accountId, [a, b], (rows, writes) =>
     Effect.gen(function* () {
       for (const id of [a, b]) yield* Effect.flatMap(tileIn(rows, id), notRoot)
       if (a === b) return
@@ -178,7 +193,7 @@ export const swapTiles = (accountId: string, a: string, b: string) =>
 
 /** Deletes a Tile and everything below it. A Reference to any of them stays, broken. */
 export const deleteTile = (accountId: string, id: string) =>
-  changing(accountId, (rows, writes) =>
+  changing(accountId, [id], (rows, writes) =>
     Effect.gen(function* () {
       yield* Effect.flatMap(tileIn(rows, id), notRoot)
       yield* writes.remove(id)
@@ -190,7 +205,7 @@ export const createReference = (
   accountId: string,
   { parent, slot, target }: { parent: string; slot: ContextDirection; target: string },
 ) =>
-  changing(accountId, (rows, writes) =>
+  changing(accountId, [parent, target], (rows, writes) =>
     Effect.gen(function* () {
       yield* tileIn(rows, target)
       yield* freeSlot(rows, { parent, slot })
@@ -203,7 +218,7 @@ export const deleteReference = (
   accountId: string,
   { parent, slot }: { parent: string; slot: ContextDirection },
 ) =>
-  changing(accountId, (rows, writes) =>
+  changing(accountId, [parent], (rows, writes) =>
     Effect.gen(function* () {
       yield* tileIn(rows, parent)
       const held = rowAt(rows, parent, slot)
