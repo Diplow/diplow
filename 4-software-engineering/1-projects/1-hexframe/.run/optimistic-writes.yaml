@@ -77,7 +77,7 @@ halting:
     - Never write to a production Neon database, a live Stripe account, or any third-party account outside a test mode or a preview.
     - Never add a beta or alpha dependency outside a seam that STACK.md names.
     - Never import one domain from another, or a third-party SDK from anywhere but its repository; the one exception is the MCP server's SDK, in the API layer's MCP folder, as STACK.md says. fflate lives in `repositories/zip/`, which, like observability, offers the browser plain functions through the API layer.
-    - Never let the front import a domain past its door (its `entities/index.ts`, `operations/index.ts` and `errors.ts`), nor let anything reachable through that door touch a repository, the application service, a concept folder, another domain or Node, not even through a type-only import.
+    - Never let the front import a domain past its door (its `entities/index.ts`, `operations/index.ts` and `errors.ts`), nor let anything reachable through that door touch a repository, the application service, a concept folder, another domain, Node, the environment or the config, not even through a type-only import.
     - Never exceed the rule of 6; when a folder is full, regroup and record the regrouping in the register.
     - Never touch a ticket, branch or pull request of another project.
   # The repo's own tooling and review setup, hexframe's STACK.md (the bar the
