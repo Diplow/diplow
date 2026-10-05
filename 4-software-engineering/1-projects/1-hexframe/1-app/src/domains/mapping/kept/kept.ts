@@ -4,6 +4,7 @@
 // takes, so only a checked value reaches the tiles repository. Pure.
 import { Effect, Schema } from 'effect'
 
+import type { TileConfigColumn } from '#/repositories/database/schema'
 import type { KeptColumn, TileRow } from '#/repositories/database/tiles/tiles'
 
 import { NameInvalid } from '../errors'
@@ -63,21 +64,26 @@ export function isFolderPattern(pattern: string): boolean {
   )
 }
 
-/** How the files of a Tile and of the Tiles below it are named. */
-export interface Naming {
-  /** The name of a folder's own file, `CLAUDE.md` by default. */
-  readonly fileName: string
-  /** The name of a Branch's folder, `<n>-<slug>` by default. */
-  readonly folderPattern: string
-}
+/**
+ * How the files of a Tile and of the Tiles below it are named, every part a Tile config may set: the
+ * name of a folder's own file, `CLAUDE.md` by default, and the pattern of a Branch's folder,
+ * `<n>-<slug>` by default.
+ */
+export type Naming = { readonly [Part in keyof TileConfigColumn]-?: string }
+
+/** The check of each part a Tile config sets: every part its column holds, and no other. */
+const namingParts = {
+  fileName: Segment,
+  folderPattern: Schema.String.check(Schema.makeFilter(isFolderPattern)),
+} satisfies Record<keyof Naming, Schema.Top>
 
 /**
  * A Tile config: what a `.hexframe/` folder holds in the app, for now the naming, inherited by
  * everything below the Tile until a Tile below sets its own. Either part not set is the Tile above's.
  */
 const TileConfig = Schema.Struct({
-  fileName: Schema.optionalKey(Segment),
-  folderPattern: Schema.optionalKey(Schema.String.check(Schema.makeFilter(isFolderPattern))),
+  fileName: Schema.optionalKey(namingParts.fileName),
+  folderPattern: Schema.optionalKey(namingParts.folderPattern),
 }).pipe(Schema.brand('TileConfig'))
 type TileConfig = typeof TileConfig.Type
 

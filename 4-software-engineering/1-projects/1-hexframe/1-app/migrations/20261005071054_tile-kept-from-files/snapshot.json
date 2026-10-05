@@ -1,7 +1,7 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "68e87808-d157-49ea-98f9-a70e1b6d6124",
+  "id": "7c726e87-cd04-4cae-9ca6-259e3b633ffd",
   "prevIds": [
     "12592588-295f-4dad-ba00-57dd757a3e8e"
   ],
@@ -790,7 +790,7 @@
       "table": "tile"
     },
     {
-      "type": "jsonb",
+      "type": "json",
       "typeSchema": null,
       "notNull": false,
       "dimensions": 0,

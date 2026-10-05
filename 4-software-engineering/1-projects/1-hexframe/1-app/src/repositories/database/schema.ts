@@ -9,6 +9,7 @@ import {
   check,
   index,
   integer,
+  json,
   jsonb,
   pgTable,
   smallint,
@@ -162,7 +163,7 @@ export type FrontmatterColumn = Readonly<Record<string, string | number | boolea
  * broken. `account_id` has no key to `user`: Mapping ignores IAM (hexframe-v0-mapping DEC-1).
  * `name`, `config` and `frontmatter` keep what an imported file carried, each null when it carried
  * nothing: the name it was imported under, its folder's settings and the frontmatter keys Mapping has no
- * use for, both as JSON objects. Mapping bounds them before writing them and decides what they mean.
+ * use for, both as JSON objects, the latter in its file's order. Mapping bounds them before writing them and decides what they mean.
  */
 export const tile = pgTable(
   'tile',
@@ -177,7 +178,8 @@ export const tile = pgTable(
     target: text('target'),
     name: text('name'),
     config: jsonb('config').$type<TileConfigColumn>(),
-    frontmatter: jsonb('frontmatter').$type<FrontmatterColumn>(),
+    // json, not jsonb, which would sort the keys: Frontmatter keeps the order its file gave.
+    frontmatter: json('frontmatter').$type<FrontmatterColumn>(),
   },
   (table) => [
     index('tile_accountId_idx').on(table.accountId),

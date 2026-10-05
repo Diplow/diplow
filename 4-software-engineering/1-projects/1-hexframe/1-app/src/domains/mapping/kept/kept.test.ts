@@ -280,12 +280,16 @@ layer(TestTiles)('what a Tile keeps, over the tiles repository', (it) => {
         frontmatter,
       })
       yield* transactional(Mapping.editTile(accountId, tile.id, content('Do a ticket')))
-      expect((yield* system(accountId)).context[-2]).toMatchObject({
+      const read = (yield* system(accountId)).context[-2]
+      expect(read).toMatchObject({
         title: 'Do a ticket',
         name: 'do-ticket',
         config: { fileName: 'SKILL.md' },
         frontmatter: given,
       })
+      // In the order the file gave them, which a store sorting keys by length would lose.
+      const kept = read?._tag === 'Tile' ? read.frontmatter : undefined
+      expect(Object.keys(kept ?? {})).toEqual(['owner', 'description', 'weight', 'draft'])
     }),
   )
 
