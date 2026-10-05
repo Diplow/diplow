@@ -53,7 +53,7 @@ export const moveTile = createServerFn({ method: 'POST' })
 | a write | `Invalid`, on a form's submit | the form's fields |
 | a write | anything else | one toast |
 
-- **The message table** is keyed by `_tag`, optionally narrowed by a scope (the server function's name, which the call names, and which the MCP tool running the same operation names too), first match wins, with a fallback per kind, in both languages. The server's own sentence never reaches the screen.
+- **The message table** is keyed by `_tag`, optionally narrowed by a scope (the server function's name, which the call names, and which the MCP tool running the same operation names too; for a change to a System, the name of Mapping's Operation, which the type of the table's `scope` takes from the union), first match wins, with a fallback per kind, in both languages. The server's own sentence never reaches the screen.
 - **A feature writes no error handling**: components never `try/catch` a call, reducers never hold an error. The QueryClient, `submitWrite` and `settleSubmit` (`src/front/client/`) send each failure to its channel:
   - a read a page shows is `useQuery(read({ scope, key, call }))`, inside a `ReadBoundary`;
   - a read that frames every page is `useQuery(read({ scope, key, call, frame: true }))`, with no boundary: its failure is reported and it renders nothing;

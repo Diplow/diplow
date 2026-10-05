@@ -6,8 +6,9 @@ preview: >-
   The choices the autonomous run made while giving hexframe's domains one
   shape and making Mapping's writes optimistic, where a ticket left room: the
   row shapes Mapping declares, what operations/ holds before its Operations,
-  how Mapping regrouped to make room for entities/, and what of a domain the
-  front and the API layer import through the door.
+  how Mapping regrouped to make room for entities/, what of a domain the
+  front and the API layer import through the door, and how Mapping's
+  Operations became values the service, the API and the client share.
 ---
 # Decisions
 
@@ -34,3 +35,15 @@ HEX-63, [#72](https://github.com/Diplow/diplow/pull/72). The custom rules in `sc
 ### DEC-6 STACK.md still says the door is to come, for the phase close to change
 
 HEX-63, [#72](https://github.com/Diplow/diplow/pull/72). `STACK.md` ("Domains") says that until this project lands, the front reaches a domain only through the API layer and events reach the bus as they are published. The door and its two rules are now in place, which cubic's local review on #72 found the sentence contradicting. `STACK.md` is frozen for this run, so it stays as written; the app's, the domains' and the front's `CLAUDE.md` files say what holds now, and this entry is the line for the phase-close ticket, which lists for me what the project changes in `STACK.md`: the door and its lint are built, the Decider and the held events are what remains.
+
+### DEC-7 The service runs an Operation by one function per tag, each taking its class
+
+HEX-64. The ticket leaves the call open: `run(accountId, operation)` or one function per tag. `mapping.ts` keeps one function per Operation, named by it (`moveTile(accountId, operation: MoveTile)`), because their answers differ: a create and an edit answer the Tile, the others nothing, and a `run` over the union would widen every server function's and MCP write's answer to a union its caller narrows again. `decide`, in HEX-66, is where one function meets the whole union. `createTile` takes what an import keeps (a Name, a Tile config, Frontmatter) as a third argument, since only an import sets them and they are no part of the Operation. The tests that prove Mapping refuses Help's ids itself build their Operations with `disableChecks`, as a caller whose schema let a Help id through would; every other test builds them through their checks.
+
+### DEC-8 A server function and an MCP write take the Operation's fields, without its tag; a create without its `id` until Mapping honours it
+
+HEX-64. The bounds the server functions declared (a UUID per id, a Title, a Preview and a Body each within its bound) move into `operations/operation.ts`, with `TileId`, so each Operation refuses what the server functions refused, and `api/mapping/mapping.ts` derives each input from its Operation's `fields` with the `_tag` left out (`Struct.omit`). The tag stays out of the wire because the function's name already says it, and because an MCP write lists its input to agents: a `_tag` property would change every write's schema, which the ticket keeps as it was. A program makes the Operation from the decoded fields with `new`, which checks them again, cheaply, so nothing past its schema reaches the service. `NewTile`, and so `create_tile`, leaves out the `id` a `CreateTile` declares: until HEX-68 honours it, a caller sending one would get a Tile under another id with no word of it. `mcp.test.ts` pins every tool as an agent lists it in a snapshot written before the change, which still matches after it.
+
+### DEC-9 An Operation's name is its tag in camelCase; the timeline names an operation by its tag
+
+HEX-64. `OperationName`, `Uncapitalize<Operation['_tag']>`, is the one name of an Operation outside its tag: the service's function that runs it, its server function, the MCP write's `operation`, the scope the message table narrows a refusal by and the client's write hooks scope by, all `swapTiles`. The message table's `scope` is typed by it, beside `importTiles` and `submitDevTitle`, the two other calls it narrows. The Conversation's timeline names an operation by its tag rather than four verbs of its own, so it gains a swap and the Reference's create and delete, each with its sentence in English and French. `ReferenceSlot`, the interface DEC-2 put in `operations/`, goes: `CreateReference` and `DeleteReference` carry it. `Placement` stays, for `freeSlot` and the import's place.
