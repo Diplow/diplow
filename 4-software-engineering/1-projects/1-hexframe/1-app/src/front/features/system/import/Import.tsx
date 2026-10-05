@@ -104,7 +104,7 @@ function Choosing({ fileOnly, importing, actions }: ChoosingProps) {
           </>
         )}
       </div>
-      <p className="text-xs text-muted-foreground">{m.system_import_hint()}</p>
+      {!fileOnly && <p className="text-xs text-muted-foreground">{m.system_import_hint()}</p>}
       {/* The pickers the buttons open; an input forgets its files, so the same ones can be picked again. */}
       <Input
         ref={folderPicker}

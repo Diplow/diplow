@@ -236,7 +236,7 @@
   "system_import_landed": "Imported. Tiles created: {tiles}.",
   "system_import_left_out": "Left out",
   "system_import_faults": "At fault",
-  "system_import_whole": "The whole import",
+  "system_import_whole": "The folder or zip itself",
   "system_import_again": "Import something else",
   "system_import_reason_excluded": "Excluded",
   "system_import_reason_dot_file": "A dot file",

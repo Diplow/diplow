@@ -94,10 +94,26 @@ async function readOf({ path, kind, blob }: GivenFile) {
 }
 
 /**
- * A folder's files, without what a reading leaves out, checked against the bounds the server unpacks
- * within and its verdict on every path, then zipped, at most 4 MB, named by the folder.
+ * The one folder every file sits in, when there is one and no file beside it: a zip that wraps its
+ * folder in one more, as macOS's Compress writes it once its `__MACOSX` dot files are left out.
  */
-async function folder(name: string, files: ReadonlyArray<GivenFile>): Promise<Prepared> {
+function wrapperOf(files: ReadonlyArray<{ readonly path: string }>): string | undefined {
+  const [first] = files
+  const [top] = first?.path.split('/') ?? []
+  if (top === undefined || first?.path === top) return undefined
+  return files.every(({ path }) => path.startsWith(`${top}/`)) ? top : undefined
+}
+
+/**
+ * A folder's files, without what a reading leaves out, checked against the bounds the server unpacks
+ * within and its verdict on every path, then zipped, at most 4 MB, named by the folder. With
+ * `unwrap`, a zip's files that all sit in one folder are that folder's, named by it.
+ */
+async function folder(
+  given: string,
+  files: ReadonlyArray<GivenFile>,
+  { unwrap = false } = {},
+): Promise<Prepared> {
   const settings = new Map(
     await Promise.all(
       files
@@ -108,7 +124,13 @@ async function folder(name: string, files: ReadonlyArray<GivenFile>): Promise<Pr
   const { kept, leftOut } = leftOutOf(files, settings)
   const read = await Promise.all(kept.map(readOf))
   for (const { path, binary } of read) if (binary) leftOut.push({ path, reason: 'Binary' })
-  const sent = read.filter(({ binary }) => !binary)
+  const texts = read.filter(({ binary }) => !binary)
+  const wrapper = unwrap ? wrapperOf(texts) : undefined
+  const name = wrapper ?? given
+  const sent =
+    wrapper === undefined
+      ? texts
+      : texts.map((file) => ({ ...file, path: file.path.slice(wrapper.length + 1) }))
   const past = refusedFor(pastBounds(sent), leftOut)
   if (past !== undefined) return past
   const entries: ReadonlyArray<ArchiveEntry> = sent.map(({ path, kind, bytes }) => ({
@@ -143,7 +165,7 @@ async function unzippedOf(file: File): Promise<Prepared> {
       ? []
       : [{ path, kind, blob: () => Promise.resolve(new Blob([bytes.slice()])) }],
   )
-  return folder(file.name.replace(/\.zip$/i, ''), files)
+  return folder(file.name.replace(/\.zip$/i, ''), files, { unwrap: true })
 }
 
 /**

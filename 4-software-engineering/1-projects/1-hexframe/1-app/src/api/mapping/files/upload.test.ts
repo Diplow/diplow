@@ -173,6 +173,23 @@ describe('a zip the user gave', () => {
     )
   })
 
+  it('is its one folder when it wraps it in one more, as macOS’s Compress does', async () => {
+    const ready = await readyOf(
+      zip(
+        {
+          'notes/CLAUDE.md': '---\ntitle: Notes\n---\n',
+          'notes/1-a/CLAUDE.md': '',
+          '__MACOSX/notes/._CLAUDE.md': png,
+        },
+        'Archive.zip',
+      ),
+    )
+    expect(ready).toMatchObject({ upload: { name: 'notes.zip' } })
+    expect([...ready.files].sort()).toEqual(['1-a/CLAUDE.md', 'CLAUDE.md'])
+    const beside = await readyOf(zip({ 'notes/CLAUDE.md': '', 'README.md': '' }))
+    expect(beside).toMatchObject({ upload: { name: 'vault.zip' } })
+  })
+
   it('is refused when it can’t be read, or where the server would refuse its paths', async () => {
     const garbage: Given = { _tag: 'Zip', file: new File(['not a zip'], 'vault.zip') }
     expect((await refusedOf(garbage)).faults).toEqual([{ path: '', fault: 'ArchiveUnreadable' }])

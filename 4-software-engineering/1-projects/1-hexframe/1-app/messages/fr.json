@@ -236,7 +236,7 @@
   "system_import_landed": "Importé. Tuiles créées : {tiles}.",
   "system_import_left_out": "Laissés de côté",
   "system_import_faults": "En faute",
-  "system_import_whole": "L’import entier",
+  "system_import_whole": "Le dossier ou le zip lui-même",
   "system_import_again": "Importer autre chose",
   "system_import_reason_excluded": "Exclu",
   "system_import_reason_dot_file": "Un fichier caché",
