@@ -9,7 +9,7 @@ import { contentBounds, contextDirections, directions } from '#/domains/mapping/
 import { locales } from '#/paraglide/runtime'
 
 import { run } from '../server/run'
-import { asDownload } from './download'
+import { asDownload } from './files/download'
 import * as Mapping from './programs'
 
 /** A Tile's id: a UUID, as the tiles repository makes every one, so nothing else reaches the domain. */

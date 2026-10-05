@@ -23,6 +23,28 @@ export const archiveBounds: UnpackBounds = {
 }
 
 /**
+ * The faults of a folder's files against the bounds an archive unpacks within, as a sender checks
+ * them before it zips the files, by their sizes: more files than an archive may hold, each file past
+ * the shape's 1 MB, and the file at which the whole passes 16 MB. None when the files fit.
+ */
+export function pastBounds(
+  files: ReadonlyArray<{ readonly path: string; readonly size: number }>,
+): Array<ImportFault> {
+  if (files.length > archiveBounds.entries) return [{ path: '', fault: 'TooManyEntries' }]
+  const faults: Array<ImportFault> = []
+  let total = 0
+  for (const { path, size } of files) {
+    if (size > archiveBounds.entryBytes) faults.push({ path, fault: 'FileTooLarge' })
+    const before = total
+    total += size
+    if (before <= archiveBounds.totalBytes && total > archiveBounds.totalBytes) {
+      faults.push({ path, fault: 'UnpackedTooLarge' })
+    }
+  }
+  return faults
+}
+
+/**
  * The most an import uploads, in bytes: 4 MB, below the 4.5 MB to which Vercel caps a request's body.
  * A larger import goes through storage first, later.
  */

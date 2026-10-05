@@ -12,10 +12,10 @@ import type {
 import { uploadLimit } from '#/domains/mapping/landing/landing'
 import { archiveOf } from '#/repositories/zip/testing'
 
-import { noKey, run, type StartContext } from '../server/run'
+import { noKey, run, type StartContext } from '../../server/run'
 import { tileLink, tileOfLink } from './download'
-import { ImportUpload } from './mapping'
-import * as Mapping from './programs'
+import { ImportUpload } from '../mapping'
+import * as Mapping from '../programs'
 
 // An import as it crosses the wire: a form encoded by the server function's schema and decoded back,
 // as Start hands it to the handler, then the program through the helper, on the runtime's

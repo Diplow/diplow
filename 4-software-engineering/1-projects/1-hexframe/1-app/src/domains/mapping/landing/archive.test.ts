@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import type { ArchiveEntry, Unpacked } from '#/repositories/zip/unzip'
 
 import type { ImportFault } from '../errors'
-import { archiveBounds, folderOf, pathFault } from './archive'
+import { archiveBounds, folderOf, pastBounds, pathFault } from './archive'
 
 // The verdict on an archive's entries, on entry lists made by hand: every path that isn't plain, a
 // symlink, an entry too deep, two paths a case-blind disk would merge, each a fault on its path, all
@@ -128,5 +128,33 @@ describe("an archive's entries, judged", () => {
 
   it('bounds an archive at 2,000 entries, the shape’s 1 MB a file, 16 MB in all', () => {
     expect(archiveBounds).toEqual({ entries: 2_000, entryBytes: 1_000_000, totalBytes: 16_000_000 })
+  })
+})
+
+describe('a folder’s files against the bounds, before they are zipped', () => {
+  const sized = (path: string, size: number) => ({ path, size })
+
+  it('lets files within the bounds through', () => {
+    expect(pastBounds([])).toEqual([])
+    expect(pastBounds([sized('a.md', 1_000_000), sized('b.md', 10)])).toEqual([])
+  })
+
+  it('refuses more files than an archive holds, before anything else', () => {
+    const many = Array.from({ length: 2_001 }, (_, index) =>
+      sized(`${String(index)}.md`, 2_000_000),
+    )
+    expect(pastBounds(many)).toEqual([{ path: '', fault: 'TooManyEntries' }])
+    expect(pastBounds(many.slice(1)).length).toBeGreaterThan(1)
+  })
+
+  it('names each file past 1 MB, and the one at which the whole passes 16 MB', () => {
+    const files = [
+      sized('big.md', 1_000_001),
+      ...Array.from({ length: 16 }, (_, index) => sized(`${String(index)}.md`, 1_000_000)),
+    ]
+    expect(pastBounds(files)).toEqual([
+      { path: 'big.md', fault: 'FileTooLarge' },
+      { path: '14.md', fault: 'UnpackedTooLarge' },
+    ])
   })
 })

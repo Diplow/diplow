@@ -6,7 +6,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import type { Failure, Outcome } from '#/api/errors/failure'
-import { type Download, downloaded } from '#/api/mapping/download'
+import { type Download, downloaded } from '#/api/mapping/files/download'
 import {
   type NewReference,
   type NewTile,

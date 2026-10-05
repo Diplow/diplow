@@ -14,7 +14,7 @@ import { mappingIn } from '../frontmatter'
 import type { EntryKind } from '../names'
 import type {
   IdOfLink,
-  ImportFile,
+  LeftOut,
   ImportPlan,
   ImportSource,
   PlannedLeaf,
@@ -40,27 +40,35 @@ import {
 /** How many folders deep an import goes below its root. */
 export const depthLimit = 16
 
-/** A folder of an import, as its file list draws it. */
-interface Folder {
-  readonly files: Map<string, Uint8Array>
-  readonly folders: Map<string, Folder>
+/** The folders a file list draws, each file by its name holding what `T` keeps of it. */
+interface Tree<T> {
+  readonly files: Map<string, T>
+  readonly folders: Map<string, Tree<T>>
 }
 
-const emptyFolder = (): Folder => ({ files: new Map(), folders: new Map() })
+/** A folder of an import, as its file list draws it, each file by its bytes. */
+type Folder = Tree<Uint8Array>
+
+const emptyTree = <T>(): Tree<T> => ({ files: new Map(), folders: new Map() })
+
+const emptyFolder = (): Folder => emptyTree()
 
 /** The folders a file list draws, from its root: a folder is there when a file is below it. */
-function treeOf(files: ReadonlyArray<ImportFile>): Folder {
-  const root = emptyFolder()
-  for (const { path, bytes } of files) {
-    const segments = path.split('/')
+function treeOf<F extends { readonly path: string }, T>(
+  files: ReadonlyArray<F>,
+  keep: (file: F) => T,
+): Tree<T> {
+  const root = emptyTree<T>()
+  for (const file of files) {
+    const segments = file.path.split('/')
     const name = segments.pop() ?? ''
     let folder = root
     for (const segment of segments) {
-      const below = folder.folders.get(segment) ?? emptyFolder()
+      const below = folder.folders.get(segment) ?? emptyTree<T>()
       folder.folders.set(segment, below)
       folder = below
     }
-    folder.files.set(name, bytes)
+    folder.files.set(name, keep(file))
   }
   return root
 }
@@ -475,7 +483,11 @@ function rootOf(source: ImportSource, reading: Reading): Draft | PlannedLeaf | u
       naming: defaultNaming,
       depth: 0,
     } as const
-    const root = folderOf(treeOf(source.files), at, reading)
+    const root = folderOf(
+      treeOf(source.files, ({ bytes }) => bytes),
+      at,
+      reading,
+    )
     return root?._tag === 'Tile' ? root : undefined
   }
   const { path, bytes } = source.file
@@ -485,4 +497,77 @@ function rootOf(source: ImportSource, reading: Reading): Draft | PlannedLeaf | u
     reading,
   ).values()
   return text === undefined ? undefined : leafRead({ path, name: path }, text, reading)
+}
+
+/** Whether a path names one of the `.hexframe/` files a reading reads: a folder's config, its exclusions. */
+export function isSettingsFile(path: string): boolean {
+  const [folder, name] = path.split('/').slice(-2)
+  return folder === settings.folder && (name === settings.config || name === settings.exclusions)
+}
+
+/**
+ * Whether bytes are a binary's, which a reading skips: not UTF-8, or holding a NUL. With `head`, they
+ * are only a file's first bytes, which may end inside a character.
+ */
+export function isBinary(bytes: Uint8Array, head = false): boolean {
+  if (!head) return textOf(bytes) === undefined
+  try {
+    return new TextDecoder('utf-8', { fatal: true }).decode(bytes, { stream: true }).includes('\0')
+  } catch {
+    return true
+  }
+}
+
+/**
+ * What a sender leaves out of a folder's files before uploading them, by their names alone, as a
+ * reading would: the names a folder's exclusions leave out, with those every folder leaves out (a
+ * folder once, nothing below it), a `.hexframe/` folder but for the files a reading reads there, and
+ * dot files. `settings` holds the bytes of the files `isSettingsFile` names, which the sender reads
+ * first, by their paths: a folder's exclusions apply as they will on the server, and one that can't be
+ * read leaves nothing out, for the server to refuse. Binaries, which only their bytes tell, are
+ * `isBinary`'s. The reading on the server decides again, whatever was sent.
+ */
+export function leftOutOf<F extends { readonly path: string }>(
+  files: ReadonlyArray<F>,
+  settingsBytes: ReadonlyMap<string, Uint8Array>,
+): { kept: Array<F>; leftOut: Array<LeftOut> } {
+  const kept: Array<F> = []
+  const leftOut: Array<LeftOut> = []
+  const exclusionsAt = (path: string) => {
+    const bytes = settingsBytes.get(join(join(path, settings.folder), settings.exclusions))
+    const text =
+      bytes === undefined || bytes.length > settingsBounds.bytes ? undefined : textOf(bytes)
+    return (text === undefined ? undefined : exclusionsBounded(text)) ?? []
+  }
+  const walk = (tree: Tree<F>, path: string) => {
+    const shown = shownIn(
+      { folders: [...tree.folders.keys()], files: [...tree.files.keys()] },
+      exclusionsAt(path),
+    )
+    for (const [name, file] of tree.files) {
+      const at = join(path, name)
+      if (!shown.files.includes(name)) leftOut.push({ path: at, reason: 'Excluded' })
+      else if (isDotFile(name)) leftOut.push({ path: at, reason: 'DotFile' })
+      else kept.push(file)
+    }
+    for (const [name, below] of tree.folders) {
+      const at = join(path, name)
+      if (name === settings.folder) settingsIn(below, at)
+      else if (shown.folders.includes(name)) walk(below, at)
+      else leftOut.push({ path: at, reason: 'Excluded' })
+    }
+  }
+  const settingsIn = (tree: Tree<F>, path: string) => {
+    for (const [name, file] of tree.files) {
+      if (isSettingsFile(join(path, name))) kept.push(file)
+      else leftOut.push({ path: join(path, name), reason: 'Excluded' })
+    }
+    for (const name of tree.folders.keys())
+      leftOut.push({ path: join(path, name), reason: 'Excluded' })
+  }
+  walk(
+    treeOf(files, (file) => file),
+    '',
+  )
+  return { kept, leftOut }
 }

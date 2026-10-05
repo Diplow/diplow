@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
 import { unzipped } from './testing'
-import { type Entry, zipped } from './zip'
+import { unpacked } from './unzip'
+import { archived, type Entry, zipped } from './zip'
 
 /** Every byte a stream sends, and how many reads it took. */
 async function drained(stream: ReadableStream<Uint8Array>) {
@@ -46,5 +47,27 @@ describe('a list of files, zipped', () => {
     const { bytes, reads } = await drained(stream)
     expect(reads).toBeGreaterThan(entries.length)
     expect(unzipped(new Uint8Array([...(first.value ?? []), ...bytes]))).toEqual(entries)
+  })
+})
+
+describe('a list of files, zipped whole', () => {
+  it('unpacks as the same files and bytes, in their order, within any bounds they fit', () => {
+    const files = [
+      { path: 'CLAUDE.md', bytes: new TextEncoder().encode('---\ntitle: Vault\n---\n') },
+      { path: '.1-why/CLAUDE.md', bytes: new TextEncoder().encode('Café, 日本語') },
+      { path: '1-a/.hexframe/exclusions.yaml', bytes: new TextEncoder().encode('exclude: [x]') },
+    ]
+    const bounds = { entries: 3, entryBytes: 100, totalBytes: 300 }
+    expect(unpacked(archived(files), bounds)).toEqual({
+      _tag: 'Unpacked',
+      entries: files.map((file) => ({ ...file, kind: 'File' })),
+    })
+  })
+
+  it('makes an empty archive of no files', () => {
+    expect(unpacked(archived([]), { entries: 0, entryBytes: 0, totalBytes: 0 })).toEqual({
+      _tag: 'Unpacked',
+      entries: [],
+    })
   })
 })

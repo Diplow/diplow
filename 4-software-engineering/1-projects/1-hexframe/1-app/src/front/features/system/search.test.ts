@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { TileNode } from '#/front/ui/hex/geometry/layout'
 
-import { tileLink } from '#/api/mapping/download'
+import { tileLink } from '#/api/mapping/files/download'
 
 import { changeOf, readSystemSearch, viewOf, withChange, withoutTile, withView } from './search'
 
