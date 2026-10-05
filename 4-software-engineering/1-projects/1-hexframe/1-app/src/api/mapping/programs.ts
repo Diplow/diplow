@@ -7,6 +7,7 @@ import { Effect } from 'effect'
 
 import * as Iam from '#/domains/iam/iam'
 import * as Mapping from '#/domains/mapping/mapping'
+import type { Locale } from '#/paraglide/runtime'
 import { transactional } from '#/repositories/database/database'
 
 /** Runs an operation for the signed-in Account: the one the request proves, never one a caller sends. */
@@ -27,12 +28,18 @@ type ReferenceSlot = Parameters<typeof Mapping.deleteReference>[1]
 export const system = forAccount(Mapping.system)
 
 /**
+ * Help whole, in the page's language, for any visitor: no Account reads it, so it asks for none. The
+ * app's locales are the languages Help is written in, which its type requires.
+ */
+export const help = ({ language }: { language: Locale }) => Mapping.helpSystem(language)
+
+/**
  * A Tile of the Account's System, its Root when no id is given, read to a depth with only the fields
- * asked: what the MCP's reads are made of.
+ * asked: what the MCP's reads are made of. An agent reads Help in English there.
  */
 export const readTile = <F extends Mapping.Field>(
-  input: Parameters<typeof Mapping.readTile<F>>[1],
-) => forAccount((accountId) => Mapping.readTile(accountId, input))
+  input: Omit<Parameters<typeof Mapping.readTile<F>>[1], 'language'>,
+) => forAccount((accountId) => Mapping.readTile(accountId, { ...input, language: 'en' }))
 
 export const createTile = (input: Parameters<typeof Mapping.createTile>[1]) =>
   changeForAccount((accountId) => Mapping.createTile(accountId, input))

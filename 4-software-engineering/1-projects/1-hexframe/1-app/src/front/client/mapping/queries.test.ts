@@ -17,6 +17,7 @@ import {
   useDeleteTile,
   useEditTile,
   useEditTileSubmit,
+  useHelp,
   useMoveTile,
   useSwapTiles,
   useSystem,
@@ -27,6 +28,7 @@ import {
 // A refusal is what the client receives, its wire form: the front never imports a domain.
 vi.mock('#/api/mapping/mapping', () => ({
   system: vi.fn(),
+  help: vi.fn(),
   createTile: vi.fn(),
   editTile: vi.fn(),
   moveTile: vi.fn(),
@@ -99,6 +101,19 @@ describe("Mapping's hooks", () => {
       expect(result.current.system.data).toEqual(root)
     })
     expect(Mapping.system).toHaveBeenCalledWith({ data: undefined })
+  })
+
+  it('read Help in the language asked, each language a query of its own', async () => {
+    answering(undefined)
+    vi.mocked(Mapping.help).mockImplementation((({ data }: { data: { language: string } }) =>
+      Promise.resolve({ ok: true, value: { ...root, id: 'help', title: data.language } })) as never)
+    const { result } = render(() => ({ en: useHelp('en'), fr: useHelp('fr') }))
+    await waitFor(() => {
+      expect(result.current.hook.fr.data).toMatchObject({ id: 'help', title: 'fr' })
+    })
+    expect(result.current.hook.en.data).toMatchObject({ id: 'help', title: 'en' })
+    expect(Mapping.help).toHaveBeenCalledWith({ data: { language: 'en' } })
+    expect(Mapping.help).toHaveBeenCalledWith({ data: { language: 'fr' } })
   })
 
   it.each([

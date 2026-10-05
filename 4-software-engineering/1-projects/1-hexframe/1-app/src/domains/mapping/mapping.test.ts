@@ -14,7 +14,6 @@ import {
   type Field,
   type ReadTile,
   type SystemTile,
-  readTile,
   system,
 } from './mapping'
 
@@ -35,6 +34,12 @@ const swapTiles = inTransaction(Mapping.swapTiles)
 const deleteTile = inTransaction(Mapping.deleteTile)
 const createReference = inTransaction(Mapping.createReference)
 const deleteReference = inTransaction(Mapping.deleteReference)
+
+/** A read of the Account's own System, where the language Help is read in plays no part. */
+const readTile = <F extends Field>(
+  accountId: string,
+  read: Omit<Parameters<typeof Mapping.readTile<F>>[1], 'language'>,
+) => Mapping.readTile(accountId, { ...read, language: 'en' })
 
 /** An Account no other test uses, so each test stands on its own. */
 const someone = () => crypto.randomUUID()

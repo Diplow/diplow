@@ -16,6 +16,7 @@ import type {
 import type { Failure } from '../errors/failure'
 import { noKey, run, type Services, type StartContext } from '../server/run'
 import {
+  HelpLanguage,
   NewReference,
   NewTile,
   ReferenceSlot,
@@ -90,6 +91,15 @@ describe("Mapping's server functions", () => {
       failure: { _tag: 'SignedOut', kind: 'Unauthenticated' },
       requestId: 'req-mapping',
     })
+  })
+
+  it('reads Help whole for anyone, signed out included, in the language asked', async () => {
+    const english = await value(run(request(false), Mapping.help({ language: 'en' })))
+    const french = await value(run(request(), Mapping.help({ language: 'fr' })))
+    expect(english).toMatchObject({ _tag: 'Tile', id: 'help', title: 'Hexframe' })
+    expect(english.children[5]).toMatchObject({ id: 'help/5', title: 'Operations' })
+    expect(french.children[5]).toMatchObject({ id: 'help/5', title: 'Les opérations' })
+    expect(french.children[5]?.body).toMatch(/Déplacer/)
   })
 
   it('runs for an Account its Key proves as for one its Session proves', async () => {
@@ -221,6 +231,7 @@ describe("the errors Mapping's server functions can fail with", () => {
   it('are each listed by its type, a write refusing Help', () => {
     type ErrorOf<P> = P extends Effect.Effect<unknown, infer E, unknown> ? E : never
     expectTypeOf<ErrorOf<typeof Mapping.system>>().toEqualTypeOf<SignedOut>()
+    expectTypeOf<ErrorOf<ReturnType<typeof Mapping.help>>>().toEqualTypeOf<never>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createTile>>>().toEqualTypeOf<
       SignedOut | TitleMissing | PreviewTooLong | TileNotFound | DirectionTaken | HelpReadOnly
     >()
@@ -266,6 +277,18 @@ describe("the schemas Mapping's server functions validate by", () => {
     ])
     expect(accepts(TileMove, { id: t, parent: p, slot: 3 })).toBe(true)
     expect(accepts(TileMove, { id: t, parent: p, slot: 9 })).toBe(false)
+  })
+
+  it("read Help in one of the app's languages, nothing else", () => {
+    expect(['en', 'fr'].map((language) => accepts(HelpLanguage, { language }))).toEqual([
+      true,
+      true,
+    ])
+    expect(['de', '', undefined].map((language) => accepts(HelpLanguage, { language }))).toEqual([
+      false,
+      false,
+      false,
+    ])
   })
 
   it('swap two Tiles named by their ids', () => {

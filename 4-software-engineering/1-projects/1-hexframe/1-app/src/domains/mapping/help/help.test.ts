@@ -1,6 +1,6 @@
-import { expect, layer } from '@effect/vitest'
+import { expect, it, layer } from '@effect/vitest'
 import { Effect, Layer } from 'effect'
-import { describe, it } from 'vitest'
+import { describe } from 'vitest'
 
 import { type InTransaction, transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
@@ -24,28 +24,59 @@ const note = (title: string, preview = `${title}, in short.`) =>
 
 describe('Help, as the build bundles it from the real folder', () => {
   it('reads every folder as a Tile, its id the path of its slots from the Root', () => {
-    expect(help.problems).toEqual([])
-    const ids = help.rows.map(({ id }) => id)
+    expect(help.en.problems).toEqual([])
+    const ids = help.en.rows.map(({ id }) => id)
     expect(ids).toEqual(
       expect.arrayContaining(['help', 'help/-1', 'help/1', 'help/3', 'help/3/-1', 'help/6/2']),
     )
-    expect(help.rows.find(({ id }) => id === 'help')).toMatchObject({
+    expect(help.en.rows.find(({ id }) => id === 'help')).toMatchObject({
       title: 'Hexframe',
       target: null,
       parentId: null,
       direction: null,
     })
-    expect(help.rows.find(({ id }) => id === 'help/3/-1')).toMatchObject({
+    expect(help.en.rows.find(({ id }) => id === 'help/3/-1')).toMatchObject({
       parentId: 'help/3',
       direction: -1,
     })
   })
+
+  it('reads it in French too, every Tile at the same id, its words translated', () => {
+    expect(help.fr.problems).toEqual([])
+    const placeOf = ({ id, parentId, direction }: (typeof help.fr.rows)[number]) => ({
+      id,
+      parentId,
+      direction,
+    })
+    expect(help.fr.rows.map(placeOf)).toEqual(help.en.rows.map(placeOf))
+    expect(help.fr.rows.find(({ id }) => id === 'help/2')).toMatchObject({ title: 'Les tuiles' })
+    expect(help.en.rows.find(({ id }) => id === 'help/2')).toMatchObject({ title: 'Tiles' })
+  })
+})
+
+describe('Help whole, as /help draws it', () => {
+  it.effect('reads the Root with everything below it in the language asked, Bodies included', () =>
+    Effect.gen(function* () {
+      const english = yield* Mapping.helpSystem('en')
+      const french = yield* Mapping.helpSystem('fr')
+      expect(english).toMatchObject({ _tag: 'Tile', id: 'help', title: 'Hexframe' })
+      expect(english.children[2]).toMatchObject({ id: 'help/2', title: 'Tiles' })
+      expect(french.children[2]).toMatchObject({ id: 'help/2', title: 'Les tuiles' })
+      expect(french.children[2]?.body).toMatch(/Une tuile est l’unité d’un système/)
+      expect(french.context[-1]).toMatchObject({ _tag: 'Tile', id: 'help/-1' })
+      expect(french.children[3]?.context[-1]).toMatchObject({
+        id: 'help/3/-1',
+        title: 'Six au plus',
+      })
+    }),
+  )
 })
 
 layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
   it.effect('opens its Root with its Children and its Context, to the depth asked', () =>
     Effect.gen(function* () {
       const read = yield* Mapping.readTile(someone(), {
+        language: 'en',
         id: 'help',
         depth: 1,
         fields: ['title', 'preview'],
@@ -62,7 +93,12 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
 
   it.effect('opens a Tile below with the fields asked, and names its parent', () =>
     Effect.gen(function* () {
-      const read = yield* Mapping.readTile(someone(), { id: 'help/3', depth: 1, fields: ['body'] })
+      const read = yield* Mapping.readTile(someone(), {
+        language: 'en',
+        id: 'help/3',
+        depth: 1,
+        fields: ['body'],
+      })
       expect(read.parent).toEqual({ id: 'help', title: 'Hexframe' })
       expect(read.tile).toMatchObject({ _tag: 'Tile', id: 'help/3' })
       expect(read.tile.body).toMatch(/Directions/)
@@ -71,12 +107,33 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
     }),
   )
 
+  it.effect('opens the same Tile in French, at the same id', () =>
+    Effect.gen(function* () {
+      const read = yield* Mapping.readTile(someone(), {
+        id: 'help/3',
+        depth: 1,
+        fields: ['title'],
+        language: 'fr',
+      })
+      expect(read.parent).toEqual({ id: 'help', title: 'Hexframe' })
+      expect(read.tile).toMatchObject({
+        _tag: 'Tile',
+        id: 'help/3',
+        title: 'Enfants et directions',
+      })
+      expect(read.tile.context?.[-1]).toMatchObject({ id: 'help/3/-1', title: 'Six au plus' })
+    }),
+  )
+
   it.effect('finds no Tile at an id Help has none at, a path that climbs out included', () =>
     Effect.gen(function* () {
       for (const id of ['help/7', 'help/1/1/1', 'help/../../x', 'help/3/../../package.json']) {
-        const refused = yield* Mapping.readTile(someone(), { id, depth: 0, fields: ['body'] }).pipe(
-          Effect.flip,
-        )
+        const refused = yield* Mapping.readTile(someone(), {
+          language: 'en',
+          id,
+          depth: 0,
+          fields: ['body'],
+        }).pipe(Effect.flip)
         expect(refused).toMatchObject({ _tag: 'TileNotFound', kind: 'NotFound' })
       }
     }),
@@ -134,11 +191,15 @@ layer(TestTiles)('Help, refused to every write in Mapping itself', (it) => {
 
 describe('a vault folder read as Tiles', () => {
   it('names each Tile by the slots of its folders: a Child by its Direction, Context below zero', () => {
-    const { rows, problems } = vaultOf('help', {
-      '': note('Root'),
-      '2-tiles': note('Tiles'),
-      '2-tiles/.4-why': note('Why'),
-    })
+    const { rows, problems } = vaultOf(
+      'help',
+      {
+        '': note('Root'),
+        '2-tiles': note('Tiles'),
+        '2-tiles/.4-why': note('Why'),
+      },
+      'CLAUDE.md',
+    )
     expect(problems).toEqual([])
     expect(rows.map(({ id, parentId, direction }) => [id, parentId, direction])).toEqual([
       ['help', null, null],
@@ -148,23 +209,27 @@ describe('a vault folder read as Tiles', () => {
   })
 
   it('names every folder that reads as no Tile, and why', () => {
-    const { rows, problems } = vaultOf('help', {
-      '': note('Root'),
-      '1-bare': '# No frontmatter',
-      '2-long': note('Long', 'x'.repeat(previewLimit + 1)),
-      '3-missing': undefined,
-      '3-missing/1-orphan': note('Orphan'),
-      '4-twin': note('Twin'),
-      '4-other-twin': note('Other twin'),
-      '5-untitled': '---\nparent: help\nowner: diplo\npreview: Short.\n---\n',
-      notes: note('Unnumbered'),
-    })
+    const { rows, problems } = vaultOf(
+      'help',
+      {
+        '': note('Root'),
+        '1-bare': '# No frontmatter',
+        '2-long': note('Long', 'x'.repeat(previewLimit + 1)),
+        '3-missing': undefined,
+        '3-missing/1-orphan': note('Orphan'),
+        '4-twin': note('Twin'),
+        '4-other-twin': note('Other twin'),
+        '5-untitled': '---\nparent: help\nowner: diplo\npreview: Short.\n---\n',
+        notes: note('Unnumbered'),
+      },
+      'CLAUDE.md',
+    )
     expect(problems).toEqual([
       '1-bare: its CLAUDE.md opens with no frontmatter',
-      '2-long: its Preview is over 350 characters',
+      '2-long: its CLAUDE.md has a Preview over 350 characters',
       '3-missing: no CLAUDE.md',
       '4-twin: another folder already stands in its slot',
-      '5-untitled: its frontmatter has no title',
+      '5-untitled: its CLAUDE.md has no title',
       'notes: a folder is named <n>-<slug> for a Child, .<n>-<slug> for Context',
       'help/3/1: the folder above it reads as no Tile',
     ])
@@ -172,7 +237,7 @@ describe('a vault folder read as Tiles', () => {
   })
 
   it('finds no Root in a folder whose own note reads as none', () => {
-    expect(vaultOf('help', { '': undefined }).problems).toEqual([
+    expect(vaultOf('help', { '': undefined }, 'CLAUDE.md').problems).toEqual([
       '.: no CLAUDE.md',
       '.: the Root reads as no Tile',
     ])

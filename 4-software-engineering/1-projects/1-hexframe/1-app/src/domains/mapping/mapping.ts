@@ -8,6 +8,7 @@ import { Effect } from 'effect'
 
 import type { InTransaction } from '#/repositories/database/database'
 import { Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/tiles'
+import type { Language as HelpLanguage } from '#/repositories/help/note'
 
 import { DirectionTaken, HelpReadOnly, MovedUnderItself, RootFixed, TileNotFound } from './errors'
 import { isHelpId, readHelp } from './help/help'
@@ -23,7 +24,7 @@ import {
 } from './system'
 import { type Content, type ContextDirection, type Slot, type Tile, checked } from './tile'
 
-export { HelpId, helpRoot } from './help/help'
+export { HelpId, helpRoot, helpSystem } from './help/help'
 export { depths, fields } from './system'
 export { directions, previewLimit } from './tile'
 export type { Depth, Field, ReadTile, SystemTile } from './system'
@@ -60,15 +61,20 @@ interface Read<F extends Field> {
  * A Tile of the Account's System, its Root when no id is given, or a Tile of Help by its id, read
  * `depth` generations down with only the fields asked of each Tile, and its parent. A Reference shows
  * the id, Title and Preview of the Tile it points at. A Body is read only when asked, and a Tile of
- * another System is `TileNotFound`, as is a Help id no Tile of Help has. Reading the Root adds it, as
- * `system` does.
+ * another System is `TileNotFound`, as is a Help id no Tile of Help has. A Tile of Help is read in
+ * `language`, which the caller picks. Reading the Root adds it, as `system` does.
  */
 export const readTile = <F extends Field>(
   accountId: string,
-  { id, depth, fields }: { id?: string | undefined; depth: Depth; fields: ReadonlyArray<F> },
+  {
+    id,
+    depth,
+    fields,
+    language,
+  }: { id?: string | undefined; depth: Depth; fields: ReadonlyArray<F>; language: HelpLanguage },
 ): Effect.Effect<Read<F>, TileNotFound, Tiles> =>
   id !== undefined && isHelpId(id)
-    ? readHelp(id, { depth, fields })
+    ? readHelp(id, { depth, fields, language })
     : readOwn(accountId, { id, depth, fields })
 
 /** A Tile of the Account's System, its Root when no id is given, as `readTile` reads it. */

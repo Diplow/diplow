@@ -1,7 +1,7 @@
 // A vault folder read as a System's rows, in the shape a System exports to: a folder per Tile,
 // `<n>-<slug>/` for a Child in Direction n and `.<n>-<slug>/` for a Tile of its Context in slot -n,
-// each with a `CLAUDE.md` whose frontmatter holds the Tile's Title and Preview and whose rest is its
-// Body. Pure: the notes come in as text, from whoever read or bundled them, the help repository
+// each with a note, a `CLAUDE.md` or its twin in another language, whose frontmatter holds the Tile's
+// Title and Preview and whose rest is its Body. Pure: the notes come in as text, from whoever read or bundled them, the help repository
 // splits each into its frontmatter and its Body, and what keeps a folder from reading as a Tile comes
 // out as a problem, named. claude-mod's shape reads a whole vault for every medium; this reads the
 // narrower vault a System exports to, and the two merge once the app reads a user's vault
@@ -22,15 +22,20 @@ function slotOf(name: string): number | undefined {
   return match[1] === '.' ? -direction : direction
 }
 
-/** The content of a folder's note, or what keeps it from being a Tile's. */
-function contentOf(text: string | undefined): Pick<TileRow, 'title' | 'preview' | 'body'> | string {
-  if (text === undefined) return 'no CLAUDE.md'
+/** The content of a folder's note, named `file`, or what keeps it from being a Tile's. */
+function contentOf(
+  text: string | undefined,
+  file: string,
+): Pick<TileRow, 'title' | 'preview' | 'body'> | string {
+  if (text === undefined) return `no ${file}`
   const note = noteOf(text)
-  if (note === undefined) return 'its CLAUDE.md opens with no frontmatter'
+  if (note === undefined) return `its ${file} opens with no frontmatter`
   const missing = missingFrom(note)
-  if (missing.length > 0) return `its frontmatter has no ${missing.join(', ')}`
+  if (missing.length > 0) return `its ${file} has no ${missing.join(', ')}`
   const { title = '', preview = '' } = note.fields
-  if (!fitsPreview(preview)) return `its Preview is over ${String(previewLimit)} characters`
+  if (!fitsPreview(preview)) {
+    return `its ${file} has a Preview over ${String(previewLimit)} characters`
+  }
   return { title, preview, body: note.body }
 }
 
@@ -41,12 +46,16 @@ export interface Vault {
 }
 
 /** The row of the Tile a folder's note makes, by the folder's path, or what keeps it from being one. */
-function rowOf(root: string, path: string, text: string | undefined): TileRow | string {
+function rowOf(
+  { root, file }: { root: string; file: string },
+  path: string,
+  text: string | undefined,
+): TileRow | string {
   const slots = path === '' ? [] : path.split('/').map(slotOf)
   if (!slots.every((slot) => slot !== undefined)) {
     return 'a folder is named <n>-<slug> for a Child, .<n>-<slug> for Context'
   }
-  const content = contentOf(text)
+  const content = contentOf(text, file)
   if (typeof content === 'string') return content
   const parentId = slots.length === 0 ? null : [root, ...slots.slice(0, -1)].join('/')
   const id = [root, ...slots].join('/')
@@ -54,17 +63,22 @@ function rowOf(root: string, path: string, text: string | undefined): TileRow | 
 }
 
 /**
- * The Tiles of a vault folder whose Root has the id `root`, from the `CLAUDE.md` of each of its
- * folders, keyed by the folder's path from the vault folder (`''` for the Root itself,
- * `3-children/.1-six-at-most` below it), `undefined` for a folder that has none. A Tile's id is the
- * path of slots from the Root: `root`, `root/3`, `root/3/-1`.
+ * The Tiles of a vault folder whose Root has the id `root`, from the note of each of its folders, a
+ * file named `file` (`CLAUDE.md`, or a language's twin, `CLAUDE.fr.md`), keyed by the folder's path
+ * from the vault folder (`''` for the Root itself, `3-children/.1-six-at-most` below it), `undefined`
+ * for a folder that has none. A Tile's id is the path of slots from the Root, `root`, `root/3`,
+ * `root/3/-1`, whatever the language its notes are written in.
  */
-export function vaultOf(root: string, notes: Readonly<Record<string, string | undefined>>): Vault {
+export function vaultOf(
+  root: string,
+  notes: Readonly<Record<string, string | undefined>>,
+  file: string,
+): Vault {
   const rows = new Map<string, TileRow>()
   const problems: string[] = []
   const refuse = (path: string, why: string) => problems.push(`${path || '.'}: ${why}`)
   for (const path of Object.keys(notes).sort()) {
-    const row = rowOf(root, path, notes[path])
+    const row = rowOf({ root, file }, path, notes[path])
     if (typeof row === 'string') refuse(path, row)
     else if (rows.has(row.id)) refuse(path, 'another folder already stands in its slot')
     else rows.set(row.id, row)
