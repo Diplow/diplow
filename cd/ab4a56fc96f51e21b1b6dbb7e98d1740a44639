@@ -1,0 +1,60 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/import/state/useImportState.ts
+  s_c6607867f8f345::t_5d9af9c2b32f8f 5
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/tile.ts
+  s_c6607867f8f345::t_5d9af9c2b32f8f 31-37,66
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-optimistic-writes-and-patterns/decisions.md
+  s_c6607867f8f345::t_9230a100c16d99 16,20,24,28,32
+  s_c6607867f8f345::t_dbd82e2df60f5d 14
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.test.ts
+  s_c6607867f8f345::t_a2f3415fa8e263 31
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useCenteredTileState.test.ts
+  s_c6607867f8f345::t_a2f3415fa8e263 17
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/leaves/leaves.test.ts
+  s_c6607867f8f345::t_3e1daaba082828 7,28-31
+  s_c6607867f8f345::t_5d9af9c2b32f8f 26-27
+  s_c6607867f8f345::t_f0af5786980e16 32
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/iam/keys.test.ts
+  s_c6607867f8f345::t_a2f3415fa8e263 16
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/upload.ts
+  s_c6607867f8f345::t_a2f3415fa8e263 23
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_c6607867f8f345::t_45dafc52257dad 36,87,108-111
+  s_c6607867f8f345::t_73836c0869f4fc 85-86
+  s_c6607867f8f345::t_5d9af9c2b32f8f 103
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE.md
+  s_c6607867f8f345::t_dbd82e2df60f5d 27
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE.md
+  s_c6607867f8f345::t_dbd82e2df60f5d 25
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/tiles.ts
+  s_c6607867f8f345::t_45dafc52257dad 39-40,42-43
+  s_c6607867f8f345::t_67356f55c31f63 321-323
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/CLAUDE.md
+  s_c6607867f8f345::t_dbd82e2df60f5d 19-20,26
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/CLAUDE.md
+  s_c6607867f8f345::t_a2f3415fa8e263 30
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/TileActions.tsx
+  s_c6607867f8f345::t_5d9af9c2b32f8f 8-12,43
+  s_c6607867f8f345::t_cab996bcb20323 7
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.test.ts
+  s_c6607867f8f345::t_5d9af9c2b32f8f 6,140
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/import/state/useImportState.test.ts
+  s_c6607867f8f345::t_a2f3415fa8e263 16
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.test.ts
+  s_c6607867f8f345::t_45dafc52257dad 566-568
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cdab4a56fc96f51e21b1b6dbb7e98d1740a44639",
+  "prompts": {},
+  "sessions": {
+    "s_c6607867f8f345": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4f8f3c2-2717-4700-ac6f-29d6bae7bf9e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
