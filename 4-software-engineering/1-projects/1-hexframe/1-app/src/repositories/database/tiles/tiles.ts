@@ -9,7 +9,7 @@ import { alias } from 'drizzle-orm/pg-core'
 import { Context, Effect, Layer } from 'effect'
 
 import { Database, InTransaction } from '../database'
-import { type TileConfigColumn, tile } from '../schema'
+import { type FrontmatterColumn, type TileConfigColumn, tile } from '../schema'
 
 /**
  * One row of the `tile` table, as the Account that owns it reads it. A Root has no parent and no
@@ -26,11 +26,11 @@ export interface TileRow {
   readonly target: string | null
   readonly name: string | null
   readonly config: TileConfigColumn | null
-  readonly frontmatter: Readonly<Record<string, string | number | boolean>> | null
+  readonly frontmatter: FrontmatterColumn | null
 }
 
-/** The columns keeping what an imported file carried, which only a new row is given. */
-type KeptColumn = 'name' | 'config' | 'frontmatter'
+/** The columns keeping what an imported file carried: null when it carried nothing. */
+export type KeptColumn = 'name' | 'config' | 'frontmatter'
 
 /** The columns holding what a Tile says, which a read from one Tile names one by one. */
 export type ContentColumn = 'title' | 'preview' | 'body'
@@ -94,10 +94,10 @@ type NewTileRow = Omit<TileRow, 'id' | 'parentId' | 'direction' | KeptColumn> &
 export interface Writes {
   /** Adds a row and answers its id. */
   readonly insert: (row: NewTileRow) => Effect.Effect<string, never, InTransaction>
-  /** Changes the columns given, never what an imported file carried; with none, writes nothing. */
+  /** Changes the columns given; with none, writes nothing. */
   readonly update: (
     id: string,
-    changes: Partial<Omit<NewTileRow, 'target' | KeptColumn>>,
+    changes: Partial<Omit<NewTileRow, 'target'>>,
   ) => Effect.Effect<void, never, InTransaction>
   /** Deletes a row and every row below it. */
   readonly remove: (id: string) => Effect.Effect<void, never, InTransaction>

@@ -147,6 +147,9 @@ export interface TileConfigColumn {
   readonly folderPattern?: string | undefined
 }
 
+/** What a `tile` row's `frontmatter` holds: the keys an imported file carried, each a scalar. */
+export type FrontmatterColumn = Readonly<Record<string, string | number | boolean>>
+
 // Mapping's (./tiles/tiles.ts): every Tile of every System, and the References standing in Context slots.
 
 /**
@@ -174,7 +177,7 @@ export const tile = pgTable(
     target: text('target'),
     name: text('name'),
     config: jsonb('config').$type<TileConfigColumn>(),
-    frontmatter: jsonb('frontmatter').$type<Readonly<Record<string, string | number | boolean>>>(),
+    frontmatter: jsonb('frontmatter').$type<FrontmatterColumn>(),
   },
   (table) => [
     index('tile_accountId_idx').on(table.accountId),

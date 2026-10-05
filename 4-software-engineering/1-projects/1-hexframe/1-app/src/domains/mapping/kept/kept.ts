@@ -4,7 +4,7 @@
 // takes, so only a checked value reaches the tiles repository. Pure.
 import { Effect, Schema } from 'effect'
 
-import type { TileRow } from '#/repositories/database/tiles/tiles'
+import type { KeptColumn, TileRow } from '#/repositories/database/tiles/tiles'
 
 import { NameInvalid } from '../errors'
 
@@ -146,14 +146,10 @@ export const configured = (config: Partial<Naming>) =>
   )
 
 /** What a Tile keeps from its files, as a read finds it: each part only when its file carried it. */
-export interface Kept {
-  readonly name?: string
-  readonly config?: Partial<Naming>
-  readonly frontmatter?: Readonly<Record<string, string | number | boolean>>
-}
+export type Kept = { readonly [K in KeptColumn]?: NonNullable<TileRow[K]> }
 
 /** What a row keeps from its files, as a Tile shows it: a part its file carried nothing for is absent. */
-export const keptOf = ({ name, config, frontmatter }: Pick<TileRow, keyof Kept>): Kept => ({
+export const keptOf = ({ name, config, frontmatter }: Pick<TileRow, KeptColumn>): Kept => ({
   ...(name === null ? {} : { name }),
   ...(config === null ? {} : { config }),
   ...(frontmatter === null ? {} : { frontmatter }),
@@ -164,4 +160,4 @@ export const keepsNothing = {
   name: null,
   config: null,
   frontmatter: null,
-} as const satisfies Pick<TileRow, keyof Kept>
+} as const satisfies Pick<TileRow, KeptColumn>

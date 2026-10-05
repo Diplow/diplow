@@ -1,5 +1,6 @@
 import { describe, expect, it, layer } from '@effect/vitest'
 import { Effect, Layer, Schema } from 'effect'
+import { expectTypeOf } from 'vitest'
 
 import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
@@ -288,21 +289,19 @@ layer(TestTiles)('what a Tile keeps, over the tiles repository', (it) => {
     }),
   )
 
-  it.effect(
-    'stores nothing it was not given, and refuses a bad segment before anything is stored',
-    () =>
-      Effect.gen(function* () {
-        const { accountId, root } = yield* aSystem
-        yield* createTile(accountId, { parent: root.id, slot: 5, ...content('Plain') })
-        const plain = (yield* system(accountId)).branches[5]
-        for (const part of ['name', 'config', 'frontmatter']) expect(plain).not.toHaveProperty(part)
-        const refused = yield* Effect.flip(
-          Effect.flatMap(named('../outside'), (name) =>
-            createTile(accountId, { parent: root.id, slot: 6, ...content('Out'), name }),
-          ),
-        )
-        expect(refused).toMatchObject({ _tag: 'NameInvalid', fields: ['name'] })
-        expect((yield* system(accountId)).branches[6]).toBeUndefined()
-      }),
+  it.effect('stores nothing it was not given', () =>
+    Effect.gen(function* () {
+      const { accountId, root } = yield* aSystem
+      yield* createTile(accountId, { parent: root.id, slot: 5, ...content('Plain') })
+      const plain = (yield* system(accountId)).branches[5]
+      for (const part of ['name', 'config', 'frontmatter']) expect(plain).not.toHaveProperty(part)
+    }),
   )
+
+  it('stores only what was checked: a write takes a decoded Name, Tile config and Frontmatter', () => {
+    type Given = Parameters<typeof Mapping.createTile>[1]
+    expectTypeOf<string>().not.toExtend<NonNullable<Given['name']>>()
+    expectTypeOf<{ fileName: string }>().not.toExtend<NonNullable<Given['config']>>()
+    expectTypeOf<Record<string, string>>().not.toExtend<NonNullable<Given['frontmatter']>>()
+  })
 })
