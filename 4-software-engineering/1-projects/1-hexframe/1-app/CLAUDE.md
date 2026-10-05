@@ -57,6 +57,7 @@ Every folder under `1-app/src/` is a node: at most 6 child folders and 6 files, 
 | Dead code: files, exports, dependencies | `knip` |
 | Cognitive complexity at most 15 | `eslint-plugin-sonarjs` |
 | At most 150 lines per function, 5 parameters (an object beyond), 600 lines per file, blank lines and comments aside | ESLint core |
+| The MCP server's SDK (`@modelcontextprotocol/*`) imported by `src/api/server/mcp/` only, the one SDK no repository holds | `dependency-cruiser` |
 | No `zod`, however it is imported: validation is Effect Schema | `dependency-cruiser` |
 | Radix, TanStack Table, TanStack Form, the Markdown renderer, TanStack Hotkeys and Sonner imported by `src/front/ui/` only | `dependency-cruiser` |
 | No hex and no Tailwind palette name (`bg-zinc-900`, `text-white`) in a string under `src/`: colour is a theme token | ESLint `no-restricted-syntax` |
