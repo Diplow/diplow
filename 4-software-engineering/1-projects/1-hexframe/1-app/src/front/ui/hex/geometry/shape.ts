@@ -74,8 +74,11 @@ export const canvasSize = { width: viewWidth * scale, height: viewHeight * scale
 /** The gap a hex leaves to its neighbors, as a share of its radius: the layout's hexes touch. */
 const gap = 0.05
 
-/** The Tiles the shape's Frames name, by the path each stands under, and the clashes found. */
-interface Named {
+/**
+ * What building the shape's Frames writes down, so the placements read back as the System's own:
+ * each Tile by the path it stands under, and each clashing Leaf with the Branch it clashes with.
+ */
+interface Ledger {
   tiles: Map<string, TileNode>
   clashes: Map<string, TileNode>
 }
@@ -85,21 +88,21 @@ interface Named {
  * view opens followed by what it holds.
  */
 export function layoutCanvas(shown: ShownView): CanvasHex[] {
-  const named: Named = { tiles: new Map(), clashes: new Map() }
-  const placements = layoutView(viewOf(shown, named))
-  return placements.flatMap((placement) => hexOf(placement, placements, shown, named))
+  const ledger: Ledger = { tiles: new Map(), clashes: new Map() }
+  const placements = layoutView(viewOf(shown, ledger))
+  return placements.flatMap((placement) => hexOf(placement, placements, shown, ledger))
 }
 
 /** The shape's view of `shown`: a Frame of the center, and one of each Branch it opens. */
-function viewOf(shown: ShownView, named: Named): FrameView | CollapsedView {
-  const frame = frameOf(shown.center, named)
+function viewOf(shown: ShownView, ledger: Ledger): FrameView | CollapsedView {
+  const frame = frameOf(shown.center, ledger)
   if (shown.frame === undefined) return { frame }
   const expanded: Partial<Record<Direction, FrameView>> = {}
   for (const direction of directions) {
     const kind = shown.expanded[direction]
     const branch = shown.center.branches?.[direction]
     if (kind !== undefined && branch !== undefined) {
-      expanded[direction] = { frame: frameOf(branch, named), frameKind: kind }
+      expanded[direction] = { frame: frameOf(branch, ledger), frameKind: kind }
     }
   }
   return { frame, frameKind: shown.frame, ...(shown.inner && { inner: shown.inner }), expanded }
@@ -109,28 +112,29 @@ function viewOf(shown: ShownView, named: Named): FrameView | CollapsedView {
  * A Tile as the shape's Frame, its rings those the Tile offers (`kindsOf`): Children, or Branches and
  * Leaves past six, then Context. A Leaf offers none.
  */
-function frameOf(tile: TileNode, named: Named): Frame {
-  const own = shapeTile(tile, tile.id, named)
+function frameOf(tile: TileNode, ledger: Ledger): Frame {
+  const own = enter(ledger, tile, tile.id)
   const kinds = kindsOf(tile)
   if (kinds.length === 0) return { tile: own, rings: {} }
   // A Context Tile may be a Reference to a Tile drawn elsewhere, so it stands under its slot.
-  const context = ringOf('context', tile.context, named, (d) => `${tile.id}:context:${String(d)}`)
+  const context = ringOf('context', tile.context, ledger, (d) => `${tile.id}:context:${String(d)}`)
   const rings: Rings<Member> = kinds.includes('children')
-    ? { children: childrenOf(tile, named), context }
+    ? { children: childrenOf(tile, ledger), context }
     : {
-        branches: ringOf('branch', tile.branches, named),
-        leaves: ringOf('leaf', tile.leaves, named),
+        branches: ringOf('branch', tile.branches, ledger),
+        leaves: ringOf('leaf', tile.leaves, ledger),
         context,
       }
   return { tile: own, rings }
 }
 
 /**
- * The shape's Tile for one of the System's, standing under `path`, which it is found by again: a
- * Branch's or a Leaf's id, unique in a System, or a Context Tile's slot.
+ * Writes one of the System's Tiles in the ledger under `path`, and returns the shape's Tile for it,
+ * which the placements name by that path: a Branch's or a Leaf's id, unique in a System, or a Context
+ * Tile's slot.
  */
-function shapeTile(tile: TileNode, path: string, named: Named): Tile {
-  named.tiles.set(path, tile)
+function enter(ledger: Ledger, tile: TileNode, path: string): Tile {
+  ledger.tiles.set(path, tile)
   return { path, title: tile.title, preview: tile.preview }
 }
 
@@ -138,14 +142,14 @@ function shapeTile(tile: TileNode, path: string, named: Named): Tile {
 function ringOf(
   kind: MemberKind,
   held: Partial<Record<Direction, TileNode>> | undefined,
-  named: Named,
+  ledger: Ledger,
   pathOf: (direction: Direction, tile: TileNode) => string = (_, tile) => tile.id,
 ): SeatedRing<Member> {
   const members: SeatedRing<Member>['members'] = {}
   for (const direction of directions) {
     const tile = held?.[direction]
     if (tile !== undefined) {
-      members[direction] = { kind, tile: shapeTile(tile, pathOf(direction, tile), named) }
+      members[direction] = { kind, tile: enter(ledger, tile, pathOf(direction, tile)) }
     }
   }
   return { overflowing: false, members }
@@ -156,8 +160,8 @@ function ringOf(
  * they sit, each Leaf in its own Direction when that is free, then the Leaves left over in the free
  * Directions in order. A Leaf whose Direction a Branch holds is a clash.
  */
-function childrenOf(tile: TileNode, named: Named): SeatedChildren<Member> {
-  const { members } = ringOf('branch', tile.branches, named)
+function childrenOf(tile: TileNode, ledger: Ledger): SeatedChildren<Member> {
+  const { members } = ringOf('branch', tile.branches, ledger)
   const clashes: Clash[] = []
   const leftOver: TileNode[] = []
   for (const direction of directions) {
@@ -165,16 +169,16 @@ function childrenOf(tile: TileNode, named: Named): SeatedChildren<Member> {
     const branch = tile.branches?.[direction]
     if (leaf === undefined) continue
     if (branch === undefined) {
-      members[direction] = { kind: 'leaf', tile: shapeTile(leaf, leaf.id, named) }
+      members[direction] = { kind: 'leaf', tile: enter(ledger, leaf, leaf.id) }
       continue
     }
     clashes.push({ direction, leaf: leaf.id, branch: branch.id })
-    named.clashes.set(leaf.id, branch)
+    ledger.clashes.set(leaf.id, branch)
     leftOver.push(leaf)
   }
   for (const leaf of leftOver) {
     const free = directions.find((direction) => members[direction] === undefined)
-    if (free !== undefined) members[free] = { kind: 'leaf', tile: shapeTile(leaf, leaf.id, named) }
+    if (free !== undefined) members[free] = { kind: 'leaf', tile: enter(ledger, leaf, leaf.id) }
   }
   return { overflowing: false, members, clashes }
 }
@@ -184,12 +188,12 @@ function hexOf(
   placement: Placement,
   placements: readonly Placement[],
   shown: ShownView,
-  named: Named,
+  ledger: Ledger,
 ): CanvasHex[] {
   const drawn = { hex: scaled(placement), generation: placement.generation }
   if (placement.kind === 'empty') {
     const hub = hubOf(placement, placements)
-    const parent = hub && named.tiles.get(hub.tile.path)
+    const parent = hub && ledger.tiles.get(hub.tile.path)
     if (hub === undefined || parent === undefined) return []
     const ring = ringAround(hub, shown)
     const key = `empty:${hub.tile.path}:${ring}:${String(placement.direction)}`
@@ -198,14 +202,14 @@ function hexOf(
     ]
   }
   const { path } = placement.tile
-  const tile = named.tiles.get(path)
+  const tile = ledger.tiles.get(path)
   if (tile === undefined) return []
   if (placement.opened === true) {
     return [{ ...drawn, kind: 'ground', key: `ground:${path}`, ring: openedInto(placement, shown) }]
   }
   if (placement.list !== undefined) {
     const names = placement.list.ring.candidates.map(
-      ({ name }) => named.tiles.get(name)?.title ?? name,
+      ({ name }) => ledger.tiles.get(name)?.title ?? name,
     )
     return [
       { ...drawn, kind: 'list', key: `list:${path}`, tile, ring: placement.list.frameKind, names },
@@ -215,7 +219,7 @@ function hexOf(
   if (placement.kind === 'center') return [{ ...drawn, kind: 'tile', key, tile, role: 'center' }]
   const { direction, memberKind } = placement
   const role = isOpenBranch(placement, shown) ? 'hub' : memberKind
-  const clash = memberKind === 'leaf' ? named.clashes.get(tile.id) : undefined
+  const clash = memberKind === 'leaf' ? ledger.clashes.get(tile.id) : undefined
   return [{ ...drawn, kind: 'tile', key, tile, role, direction, ...(clash && { clash }) }]
 }
 
