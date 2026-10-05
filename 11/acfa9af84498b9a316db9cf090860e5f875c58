@@ -1,0 +1,27 @@
+4-software-engineering/1-projects/1-hexframe/1-app/package.json
+  s_ed89c634a0e6b3::t_c8b9f4a299050c 20,48
+4-software-engineering/1-projects/1-hexframe/1-app/dependency-cruiser.config.ts
+  s_ed89c634a0e6b3::t_633ad931d33ad4 53-56
+  s_ed89c634a0e6b3::t_109bbf2eac8f4b 96-101
+  s_ed89c634a0e6b3::t_aeb123c3504c80 95
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/lint.test.ts
+  s_ed89c634a0e6b3::t_d390f03e619768 163-185
+4-software-engineering/1-projects/1-hexframe/pnpm-lock.yaml
+  s_ed89c634a0e6b3::t_2d940bee33dac1 19-21,98-100,1005-1016,3398-3405,3981-3984,5231-5249,7393-7398,7945-7946
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "11acfa9af84498b9a316db9cf090860e5f875c58",
+  "prompts": {},
+  "sessions": {
+    "s_ed89c634a0e6b3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bfdaae8a-87ed-4a58-8630-209d0ea6e784",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
