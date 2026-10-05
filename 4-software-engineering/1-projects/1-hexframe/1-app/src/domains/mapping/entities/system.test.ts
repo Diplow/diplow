@@ -1,13 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
-import type { TileRow, TileRowWith } from '#/repositories/database/tiles/tiles'
-
 import { keepsNothing } from './kept/kept'
+import type { Row, RowWith } from './rows'
 import { below, readOf, rowAt, systemOf, tileRow } from './system'
 
 // The pure reading of the tiles repository's rows, on rows made by hand: no database.
 
-const tile = (id: string, parentId: string | null, direction: number | null): TileRow => ({
+const tile = (id: string, parentId: string | null, direction: number | null): Row => ({
   id,
   parentId,
   direction,
@@ -18,7 +17,7 @@ const tile = (id: string, parentId: string | null, direction: number | null): Ti
   ...keepsNothing,
 })
 
-const reference = (id: string, parentId: string, direction: number, target: string): TileRow => ({
+const reference = (id: string, parentId: string, direction: number, target: string): Row => ({
   ...tile(id, parentId, direction),
   title: '',
   preview: '',
@@ -30,7 +29,7 @@ const content = (id: string) => ({ id, title: id, preview: `${id}, in short.`, b
 
 // A Root with a Child in Direction 2, a Tile in its Context slot -1, and, under the Child, a
 // Grandchild in Direction 6 and three References: to the Root, to a deleted Tile, to a Reference.
-const rows: ReadonlyArray<TileRow> = [
+const rows: ReadonlyArray<Row> = [
   reference('ref-to-ref', 'child', -3, 'ref-to-root'),
   tile('grandchild', 'child', 6),
   reference('ref-to-root', 'child', -1, 'root'),
@@ -131,7 +130,7 @@ describe('reading rows by id and by slot', () => {
 })
 
 /** The rows above as a read from one Tile gives them, with only the Title asked. */
-const titled = rows.map(({ id, parentId, direction, target, title }): TileRowWith<'title'> => ({
+const titled = rows.map(({ id, parentId, direction, target, title }): RowWith<'title'> => ({
   id,
   parentId,
   direction,
@@ -141,7 +140,7 @@ const titled = rows.map(({ id, parentId, direction, target, title }): TileRowWit
 
 /** The rows of the Tiles the References above point at, as the read gives them. */
 const pointedAt = rows.map(
-  ({ id, parentId, direction, target, title, preview }): TileRowWith<'title' | 'preview'> => ({
+  ({ id, parentId, direction, target, title, preview }): RowWith<'title' | 'preview'> => ({
     id,
     parentId,
     direction,

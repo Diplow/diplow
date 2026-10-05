@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Schema } from 'effect'
 
 import type { Failure, Outcome } from '#/api/errors/failure'
+import type { SystemTile } from '#/domains/mapping/entities'
 import { type Download, downloaded } from '#/api/mapping/files/download'
 import { type Given, type LeftOut, type Prepared, prepared } from './upload'
 import {
@@ -45,12 +46,6 @@ const systemScope = 'system'
  */
 export const useSystem = () =>
   useQuery(read({ scope: systemScope, key: [], call: () => system({ data: undefined }) }))
-
-/**
- * A Tile of the Account's System as the client holds it, with its Branches and its Leaves by
- * Direction, its Context by slot, and everything below them. The System is its Root.
- */
-export type SystemTile = NonNullable<ReturnType<typeof useSystem>['data']>
 
 /**
  * Help whole, in the page's language, Bodies included, read as the System is. Anyone reads it, so it

@@ -6,8 +6,7 @@ import { splitFrontmatter } from '../../../../../2-claude-mod/hooks/shape/node'
 import type { TileRow } from '#/repositories/database/tiles/tiles'
 
 import { helpSystem } from '../help/help'
-import { isSegment, keepsNothing } from '../kept/kept'
-import { systemOf } from '../system'
+import { isSegment, keepsNothing, systemOf } from '../entities'
 import { type File, exportOf } from './files'
 import { yamlOf } from './frontmatter'
 

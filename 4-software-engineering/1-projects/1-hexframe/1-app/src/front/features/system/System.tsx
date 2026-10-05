@@ -20,7 +20,7 @@ import {
   type SearchChange,
   type SystemSearch,
 } from './search'
-import type { SystemTile } from '#/front/client/mapping/queries'
+import type { SystemTile } from '#/domains/mapping/entities'
 
 import { slotOf, swapsWith } from './tree'
 

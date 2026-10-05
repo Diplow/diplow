@@ -3,8 +3,7 @@
 // under the folder pattern in force. Then every name that would not read back in its Direction, the
 // way the shape seats a folder's names, or that another name of the folder takes, gets its number.
 // Pure.
-import { type Naming, isSegment } from '../kept/kept'
-import { type Direction, directions } from '../tile'
+import { type Direction, directions, isSegment, type Naming } from '../entities'
 
 /** What an entry of a folder is, as the shape reads it: a folder, a dot folder, a file. */
 export type EntryKind = 'branch' | 'context' | 'leaf'

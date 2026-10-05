@@ -5,7 +5,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { Schema } from 'effect'
 
-import { contentBounds, contextDirections, directions } from '#/domains/mapping/tile'
+import { ContextDirection, contentBounds, Slot } from '#/domains/mapping/entities'
 import { locales } from '#/paraglide/runtime'
 
 import { run } from '../server/run'
@@ -14,19 +14,6 @@ import * as Mapping from './programs'
 
 /** A Tile's id: a UUID, as the tiles repository makes every one, so nothing else reaches the domain. */
 export const Id = Schema.String.check(Schema.isUUID())
-
-/** A Child's Direction and a Context slot, as Mapping names them. */
-const Direction = Schema.Literals(directions)
-const ContextDirection = Schema.Literals(contextDirections)
-
-/** A Leaf's slot: one of its parent's six Leaf Directions, beside the six its Branches take. */
-const LeafSlot = Schema.Struct({ leaf: Direction })
-
-/**
- * Where a Tile stands under its parent: a Branch's Direction, 1 to 6, a Leaf's, `{ leaf: 1 }` to
- * `{ leaf: 6 }`, or a Context slot, −1 to −6.
- */
-export const Slot = Schema.Union([Direction, LeafSlot, ContextDirection])
 
 /**
  * What a Tile says, bounded here, so nothing unbounded reaches the domain: what a Title and a Preview

@@ -7,7 +7,7 @@ import { TestDatabase } from '#/repositories/database/testing'
 import { type Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
 import * as Mapping from '../mapping'
-import { previewLimit } from '../tile'
+import { previewLimit } from '../entities'
 import { help } from './help'
 import { vaultOf } from './vault'
 

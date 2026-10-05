@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import * as Mapping from '#/api/mapping/mapping'
 import { makeQueryClient } from '#/front/client/channels'
-import type { SystemTile } from '#/front/client/mapping/queries'
+import type { SystemTile } from '#/domains/mapping/entities'
 import { m } from '#/paraglide/messages'
 import { toast } from '#/front/ui/feedback/Toaster'
 

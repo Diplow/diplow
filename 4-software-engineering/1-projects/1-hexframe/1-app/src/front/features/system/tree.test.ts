@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import type { SystemTile } from '#/front/client/mapping/queries'
+import type { SystemTile } from '#/domains/mapping/entities'
 import { m } from '#/paraglide/messages'
 
 import { canvasTree, isContextSlot, isLeafSlot, slotOf, swapsWith, tileIn } from './tree'

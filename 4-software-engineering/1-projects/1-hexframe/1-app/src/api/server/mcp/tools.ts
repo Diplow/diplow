@@ -10,11 +10,10 @@ import {
   depths,
   directions as childDirections,
   fields as allFields,
-  HelpId,
-  helpRoot,
   previewLimit,
   type Field,
-} from '#/domains/mapping/mapping'
+} from '#/domains/mapping/entities'
+import { HelpId, helpRoot } from '#/domains/mapping/mapping'
 
 import type { Failure } from '../../errors/failure'
 import {

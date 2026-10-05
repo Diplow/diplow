@@ -6,16 +6,9 @@ import { type Database, type InTransaction, transactional } from '#/repositories
 import { TestDatabase } from '#/repositories/database/testing'
 import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
+import type { ContextDirection, Depth, Direction, Field, ReadTile, SystemTile } from './entities'
 import * as Mapping from './mapping'
-import {
-  type ContextDirection,
-  type Depth,
-  type Direction,
-  type Field,
-  type ReadTile,
-  type SystemTile,
-  system,
-} from './mapping'
+import { system } from './mapping'
 
 const TestTiles = tilesLayer.pipe(Layer.provideMerge(TestDatabase))
 

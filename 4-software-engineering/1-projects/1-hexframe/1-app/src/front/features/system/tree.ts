@@ -2,10 +2,8 @@
 // its Context by slot, −1 to −6, where a slot holds a Tile of its own or a Reference; the canvas takes
 // TileNodes, with the same Branches and Leaves, a Leaf marked as one, and the Context keyed by
 // Direction. Pure: what the canvas shows of a Tile is decided here.
-import type { Slot } from '#/api/mapping/mapping'
-import type { SystemTile } from '#/front/client/mapping/queries'
+import { type Direction, directions, type Slot, type SystemTile } from '#/domains/mapping/entities'
 import { m } from '#/paraglide/messages'
-import { directions, type Direction } from '#/front/ui/hex/geometry/geometry'
 import type { FrameKind, TileNode } from '#/front/ui/hex/view/tiles'
 
 type ContextSlot = keyof SystemTile['context']
@@ -90,11 +88,7 @@ export const swapsWith = (system: SystemTile, moving: TileNode, tile: TileNode) 
  * Nothing where a moving Tile would change kind, a Leaf in a ring of Branches or a Branch in a ring of
  * Leaves: a Tile changes kind from its card, in its own Direction.
  */
-export function slotOf(
-  ring: FrameKind,
-  direction: Direction,
-  going?: TileNode,
-): typeof Slot.Type | undefined {
+export function slotOf(ring: FrameKind, direction: Direction, going?: TileNode): Slot | undefined {
   const leaf = going?.leaf === true
   switch (ring) {
     case 'children':
@@ -109,7 +103,7 @@ export function slotOf(
 }
 
 /** Whether a slot stands in its parent's Context, −1 to −6, rather than among its Branches or Leaves. */
-export const isContextSlot = (slot: typeof Slot.Type) => typeof slot === 'number' && slot < 0
+export const isContextSlot = (slot: Slot) => typeof slot === 'number' && slot < 0
 
 /**
  * Where a Tile stands: a Leaf in its Direction under its parent, or a Tile with what it holds, under
@@ -149,4 +143,4 @@ function below(parent: SystemTile, id: string): Found | undefined {
 }
 
 /** Whether a slot is a Leaf's, which takes one file alone and nothing below it. */
-export const isLeafSlot = (slot: typeof Slot.Type) => typeof slot === 'object'
+export const isLeafSlot = (slot: Slot) => typeof slot === 'object'

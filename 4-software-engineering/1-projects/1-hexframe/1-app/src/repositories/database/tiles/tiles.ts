@@ -30,7 +30,7 @@ export interface TileRow {
 }
 
 /** The columns keeping what an imported file carried: null when it carried nothing. */
-export type KeptColumn = 'name' | 'config' | 'frontmatter'
+type KeptColumn = 'name' | 'config' | 'frontmatter'
 
 /** The columns holding what a Tile says, which a read from one Tile names one by one. */
 export type ContentColumn = 'title' | 'preview' | 'body'
@@ -48,10 +48,11 @@ export interface TileRowWith<C extends ContentColumn> {
 }
 
 /**
- * These content columns of what a Tile says, and no other: the one projection a read from one Tile
- * makes, whether its rows come from the database, here, or from Help's notes, in Mapping.
+ * These content columns of what a Tile says, and no other: the projection a read from one Tile makes.
+ * Mapping makes the same on Help's notes, with its own (`domains/mapping/entities/rows.ts`), since a
+ * repository imports no domain.
  */
-export function contentWith<C extends ContentColumn>(
+function contentWith<C extends ContentColumn>(
   content: Partial<Pick<TileRow, ContentColumn>>,
   columns: ReadonlyArray<C>,
 ): Pick<TileRow, C> {
@@ -60,7 +61,7 @@ export function contentWith<C extends ContentColumn>(
 }
 
 /** A row with only the content columns asked, apart from where it stands. */
-export const withContent = <C extends ContentColumn>(
+const withContent = <C extends ContentColumn>(
   {
     id,
     parentId,

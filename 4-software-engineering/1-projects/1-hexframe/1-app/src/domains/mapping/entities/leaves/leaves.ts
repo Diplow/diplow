@@ -5,14 +5,13 @@
 // finds it, which the front asks too, so it offers only what Mapping takes.
 import { Effect } from 'effect'
 
-import type { TileRow } from '#/repositories/database/tiles/tiles'
-
-import { LeafHoldsNothing } from '../errors'
+import { LeafHoldsNothing } from '../../errors'
+import type { Row } from '../rows'
 import type { SystemTile } from '../system'
 import { type Slot, leafOf } from '../tile'
 
 /** Whether a row stands in a Leaf slot. */
-const isLeaf = (row: Pick<TileRow, 'direction'>) => leafOf(row.direction) !== undefined
+const isLeaf = (row: Pick<Row, 'direction'>) => leafOf(row.direction) !== undefined
 
 /**
  * Refuses a Tile planned with anything below it into a Leaf slot: an import lands there only one file
@@ -30,7 +29,7 @@ type Below = Pick<SystemTile, 'branches' | 'leaves' | 'context'>
  * Whether anything stands below the Tile of this id: a Child, a Context Tile or a Reference. The rule
  * `holdsNothing` says on a System, said on the rows a change locked: the two must agree.
  */
-const holdsAnything = (rows: ReadonlyArray<TileRow>, id: string) =>
+const holdsAnything = (rows: ReadonlyArray<Row>, id: string) =>
   rows.some((row) => row.parentId === id)
 
 /**
@@ -49,7 +48,7 @@ export const isEmptySystem = (root: Below & Pick<SystemTile, 'title' | 'preview'
   [root.title, root.preview, root.body].every((text) => text === '') && holdsNothing(root)
 
 /** Refuses to put anything under this Tile when it is a Leaf: nothing is created nor moved below one. */
-export const notLeaf = (parent: TileRow) =>
+export const notLeaf = (parent: Row) =>
   isLeaf(parent) ? Effect.fail(new LeafHoldsNothing()) : Effect.succeed(parent)
 
 /**
@@ -57,9 +56,9 @@ export const notLeaf = (parent: TileRow) =>
  * the Tile holds anything: what it holds moves out first, or it takes a Branch slot instead.
  */
 export const holdsNothingIfLeaf = (
-  rows: ReadonlyArray<TileRow>,
+  rows: ReadonlyArray<Row>,
   id: string,
-  direction: TileRow['direction'],
+  direction: Row['direction'],
 ) =>
   isLeaf({ direction }) && holdsAnything(rows, id)
     ? Effect.fail(new LeafHoldsNothing())

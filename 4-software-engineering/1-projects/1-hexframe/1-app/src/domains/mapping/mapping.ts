@@ -13,44 +13,33 @@ import { Zip } from '#/repositories/zip/zip'
 import { DirectionTaken, HelpReadOnly, MovedUnderItself, RootFixed, TileNotFound } from './errors'
 import { type LinkOf, exportOf } from './files/files'
 import { findInHelp, type HelpLanguage, isHelpId } from './help/help'
-import type { ToKeep } from './kept/kept'
-import { holdsNothingIfLeaf, notLeaf } from './leaves/leaves'
 import {
+  below,
+  checked,
+  type Content,
+  type ContextDirection,
   type Depth,
   type Field,
   type FieldsAsked,
   type Found,
-  type ReadTile,
-  below,
+  holdsNothingIfLeaf,
+  notLeaf,
   readOf,
+  type ReadTile,
   rowAt,
+  rowDirection,
   showing,
   systemOf,
-  tileRow,
-} from './system'
-import {
-  type Content,
-  type ContextDirection,
-  type Slot,
   type Tile,
-  checked,
-  rowDirection,
-} from './tile'
+  tileRow,
+  type ToKeep,
+} from './entities'
+import type { Placement } from './operations'
 
 export { HelpId, helpRoot, helpSystem } from './help/help'
-export { depths, fields } from './system'
-export { directions, previewLimit } from './tile'
-export type { Depth, Field, ReadTile, SystemTile } from './system'
-export type { Content, ContextDirection, Direction } from './tile'
 
 /** The content of a Root nobody has named yet, and of every Reference, which keeps none of its own. */
 export const untitled: Content = { title: '', preview: '', body: '' }
-
-/** Where a Tile or a Reference goes: a slot under a parent Tile. */
-export interface Placement {
-  readonly parent: string
-  readonly slot: Slot
-}
 
 /**
  * The Account's System: its Root, the user, with everything below it. The first read adds the Root,

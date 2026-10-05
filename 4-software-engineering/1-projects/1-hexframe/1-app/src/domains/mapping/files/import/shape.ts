@@ -19,7 +19,7 @@ import {
   splitFrontmatter,
   titleFromName,
 } from '../../../../../../2-claude-mod/hooks/shape/node'
-import type { Direction } from '../../tile'
+import type { Direction } from '../../entities'
 import { type EntryKind, claimedBy } from '../names'
 
 /** The largest file an import reads, in bytes, as every medium does. */
