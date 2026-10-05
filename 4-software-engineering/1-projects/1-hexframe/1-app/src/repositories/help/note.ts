@@ -4,6 +4,9 @@
 // vault's notes use, so no YAML library is needed. Pure, and free of `import.meta.glob`, so the
 // build's check of Help (scripts/check-help.ts) loads it with the Vite config.
 
+/** What every note's frontmatter holds, in this vault. */
+const required = ['title', 'parent', 'owner', 'preview'] as const
+
 /** A note: the scalar fields of its frontmatter, and its Markdown after it, trimmed. */
 export interface Note {
   readonly fields: Readonly<Record<string, string>>
@@ -59,4 +62,9 @@ export function noteOf(text: string): Note | undefined {
       .join('\n')
       .trim(),
   }
+}
+
+/** The fields a note's frontmatter lacks, or holds empty, of those every note holds. */
+export function missingFrom(note: Note): ReadonlyArray<string> {
+  return required.filter((field) => (note.fields[field] ?? '').trim() === '')
 }

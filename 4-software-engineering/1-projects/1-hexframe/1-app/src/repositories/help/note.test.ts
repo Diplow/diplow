@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { helpNotes } from './help'
-import { noteOf } from './note'
+import { missingFrom, noteOf } from './note'
 
 describe('a note of a vault folder', () => {
   it('reads its frontmatter, a folded scalar joined into one line, and its Markdown', () => {
@@ -12,6 +12,15 @@ describe('a note of a vault folder', () => {
     })
     expect(noteOf('# No frontmatter')).toBeUndefined()
     expect(noteOf('---\ntitle: never closed\n')).toBeUndefined()
+  })
+})
+
+describe('the fields every note holds', () => {
+  it('names those a note lacks or holds empty', () => {
+    expect(
+      missingFrom({ fields: { title: 'A', parent: 'x', owner: '', preview: 'P' }, body: '' }),
+    ).toEqual(['owner'])
+    expect(missingFrom({ fields: {}, body: '' })).toEqual(['title', 'parent', 'owner', 'preview'])
   })
 })
 

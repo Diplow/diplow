@@ -13,6 +13,7 @@ import {
 import { Schema } from 'effect'
 
 import * as Iam from '#/domains/iam/iam'
+import { helpRoot } from '#/domains/mapping/mapping'
 
 import { decodeFailure, type EncodedFailure, type Failure } from '../../errors/failure'
 import { messageFor } from '../../errors/messages'
@@ -25,7 +26,7 @@ const implementation = { name: 'hexframe', version: '1.0.0' }
 const instructions = [
   "Hexframe holds the user's System: a hierarchy of Tiles (a Title, a Preview, a Body) whose Root " +
     'is the user, where what comes first matters most; read it in that order.',
-  'To learn how it works, open its Help: open_tile({ id: "help" }).',
+  `To learn how it works, open its Help: open_tile({ id: "${helpRoot}" }).`,
 ].join('\n')
 
 /** Each tool's input, as the SDK takes it: a Standard Schema that also describes itself in JSON Schema. */

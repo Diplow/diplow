@@ -1,7 +1,7 @@
 // What `build` checks before it bundles Help (src/domains/mapping/help/): every folder under the app's
 // `help/` reads as a Tile, its `CLAUDE.md` opening with its frontmatter, its Preview within 350
 // characters, its name a slot. The server reads Help from the bundle alone, so a folder that reads as
-// no Tile would go missing without a word; this fails the build instead, and `dev` with it.
+// no Tile would go missing without a word; this fails the build instead, and `dev` when it starts.
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { join, relative, resolve } from 'node:path'
 
@@ -24,7 +24,7 @@ export function problemsIn(folder: string): ReadonlyArray<string> {
 }
 
 /**
- * Fails the build, and `dev`, while a folder of Help reads as no Tile. The folder is found from Vite's
+ * Fails the build, and `dev` when it starts, while a folder of Help reads as no Tile. The folder is found from Vite's
  * root, as the bundle's `import.meta.glob('/help/**')` finds it, wherever Vite was started from.
  */
 export function helpChecked(folder = 'help'): Plugin {

@@ -10,7 +10,7 @@ preview: >-
 ---
 # repositories
 
-The layer under [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE|domains]]: Effect layers over the libraries that talk to the outside world, so a domain reads and writes in its own language and never meets an SDK. Each folder is the one place its SDKs may be imported (`dependency-cruiser.config.ts`, `sdks`).
+The layer under [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE|domains]]: the errands of fetching and parsing, so a domain reads and writes in its own language and never meets an SDK nor a file format. An Effect layer where a repository wraps a library that talks to the outside world; plain functions where its data is a constant of the bundle, as Help's notes are. Each folder is the one place its SDKs may be imported (`dependency-cruiser.config.ts`, `sdks`).
 
 | Folder | Holds |
 |---|---|

@@ -7,15 +7,12 @@
 // narrower vault a System exports to, and the two merge once the app reads a user's vault
 // (hexframe-app-mcp-server/decisions.md#DEC-15).
 import type { TileRow } from '#/repositories/database/tiles/tiles'
-import { noteOf } from '#/repositories/help/note'
+import { missingFrom, noteOf } from '#/repositories/help/note'
 
-import { fitsPreview, previewLimit } from '../tile'
-
-/** What every Tile's frontmatter holds, as every note of the vault's does. */
-const required = ['title', 'parent', 'owner', 'preview'] as const
+import { directions, fitsPreview, previewLimit } from '../tile'
 
 /** A folder's name, `3-children` or `.1-six-at-most`: a Child's Direction, or a Context slot. */
-const folderName = /^(\.?)([1-6])-[a-z0-9]+(?:-[a-z0-9]+)*$/
+const folderName = new RegExp(`^(\\.?)(${directions.join('|')})-[a-z0-9]+(?:-[a-z0-9]+)*$`)
 
 /** The slot a folder's name stands in, `undefined` for a name that stands in none. */
 function slotOf(name: string): number | undefined {
@@ -30,7 +27,7 @@ function contentOf(text: string | undefined): Pick<TileRow, 'title' | 'preview' 
   if (text === undefined) return 'no CLAUDE.md'
   const note = noteOf(text)
   if (note === undefined) return 'its CLAUDE.md opens with no frontmatter'
-  const missing = required.filter((field) => (note.fields[field] ?? '').trim() === '')
+  const missing = missingFrom(note)
   if (missing.length > 0) return `its frontmatter has no ${missing.join(', ')}`
   const { title = '', preview = '' } = note.fields
   if (!fitsPreview(preview)) return `its Preview is over ${String(previewLimit)} characters`
