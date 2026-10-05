@@ -108,12 +108,8 @@ export function slotOf(
   }
 }
 
-/**
- * Where a slot stands: among its parent's Children, a Branch's 1 to 6 or a Leaf's, or in its Context,
- * −1 to −6.
- */
-export const ringOf = (slot: typeof Slot.Type): 'children' | 'context' =>
-  typeof slot === 'number' && slot < 0 ? 'context' : 'children'
+/** Whether a slot stands in its parent's Context, −1 to −6, rather than among its Branches or Leaves. */
+export const isContextSlot = (slot: typeof Slot.Type) => typeof slot === 'number' && slot < 0
 
 /**
  * The Tile of this id, anywhere in the System, Leaves and Context Tiles included, with the Tile it

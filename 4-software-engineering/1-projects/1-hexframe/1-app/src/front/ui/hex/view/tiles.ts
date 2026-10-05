@@ -15,17 +15,21 @@ export interface TileNode {
   reference?: true
 }
 
+/** The Frame kinds of the ring around the center's hex. */
+export const outerKinds = ['children', 'branches', 'leaves'] as const
+
+/** The Frame kinds of the ring inside the center's hex. */
+export const innerKinds = ['leaves', 'context'] as const
+
 /**
  * Which ring a Frame shows around its Tile. Children is the Branches and the Leaves together, offered
  * when they are six or fewer in all, in place of a Branches and a Leaves ring.
  */
-export type FrameKind = 'children' | 'branches' | 'leaves' | 'context'
+export const frameKinds = ['children', 'branches', 'leaves', 'context'] as const
 
-/** The Frame kinds of the ring around the center's hex. */
-export type OuterKind = Exclude<FrameKind, 'context'>
-
-/** The Frame kinds of the ring inside the center's hex. */
-export type InnerKind = Extract<FrameKind, 'leaves' | 'context'>
+export type FrameKind = (typeof frameKinds)[number]
+export type OuterKind = (typeof outerKinds)[number]
+export type InnerKind = (typeof innerKinds)[number]
 
 /** How many Branches and Leaves a ring of Children holds at most. */
 const childrenAtMost = 6

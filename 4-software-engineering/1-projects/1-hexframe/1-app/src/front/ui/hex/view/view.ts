@@ -8,7 +8,10 @@ import { directions, type Direction } from '../geometry/geometry'
 import {
   findTile,
   firstKindOf,
+  frameKinds,
+  innerKinds,
   kindsOf,
+  outerKinds,
   type FrameKind,
   type InnerKind,
   type OuterKind,
@@ -35,9 +38,7 @@ export function readSearch<
 export const TileId = Schema.String.check(Schema.isNonEmpty(), Schema.isMaxLength(100))
 
 /** A Branch of the ring around the center, opened into a Frame kind; one the URL got wrong stays closed. */
-const opened = Schema.optionalKey(
-  orDefault(Schema.Literals(['children', 'branches', 'leaves', 'context'])),
-)
+const opened = Schema.optionalKey(orDefault(Schema.Literals(frameKinds)))
 
 /**
  * The view as the URL carries it, and the route's `validateSearch`. Every field is optional and an
@@ -49,9 +50,9 @@ export const CanvasView = Schema.Struct({
   /** The centered Tile's id; absent, the System's root. */
   center: Schema.optionalKey(orDefault(TileId)),
   /** The Frame kind of the ring around the center; absent, Children, or Branches past six. */
-  frame: Schema.optionalKey(orDefault(Schema.Literals(['children', 'branches', 'leaves']))),
+  frame: Schema.optionalKey(orDefault(Schema.Literals(outerKinds))),
   /** The ring inside the center's hex; absent, none. */
-  inner: Schema.optionalKey(orDefault(Schema.Literals(['leaves', 'context']))),
+  inner: Schema.optionalKey(orDefault(Schema.Literals(innerKinds))),
   /** The Branches of the ring around the center that open, by Direction, each into its Frame kind. */
   expanded: Schema.optionalKey(
     orDefault(Schema.Struct({ 1: opened, 2: opened, 3: opened, 4: opened, 5: opened, 6: opened })),

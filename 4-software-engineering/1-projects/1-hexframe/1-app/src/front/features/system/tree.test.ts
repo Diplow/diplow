@@ -3,7 +3,15 @@ import { describe, expect, it } from 'vitest'
 import type { SystemTile } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 
-import { canvasTree, isEmptySystem, isLeafSlot, ringOf, slotOf, swapsWith, tileIn } from './tree'
+import {
+  canvasTree,
+  isContextSlot,
+  isEmptySystem,
+  isLeafSlot,
+  slotOf,
+  swapsWith,
+  tileIn,
+} from './tree'
 
 const tile = (
   id: string,
@@ -115,7 +123,7 @@ describe('swapsWith', () => {
   })
 })
 
-describe('slotOf and ringOf', () => {
+describe('slotOf and isContextSlot', () => {
   const branch = canvasTree(system).branches?.[4]
   const leaf = canvasTree(system).leaves?.[1]
 
@@ -139,10 +147,10 @@ describe('slotOf and ringOf', () => {
     expect(slotOf('leaves', 3)).toBeUndefined()
   })
 
-  it('reads the ring back from the slot', () => {
-    expect(ringOf(6)).toBe('children')
-    expect(ringOf(-6)).toBe('context')
-    expect(ringOf({ leaf: 6 })).toBe('children')
+  it('tells a Context slot from a Branch’s or a Leaf’s', () => {
+    expect(isContextSlot(-6)).toBe(true)
+    expect(isContextSlot(6)).toBe(false)
+    expect(isContextSlot({ leaf: 6 })).toBe(false)
   })
 })
 

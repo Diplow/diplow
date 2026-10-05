@@ -32,7 +32,7 @@ import {
   type SystemSearch,
 } from './search'
 import { Import } from './import/Import'
-import { isEmptySystem, ringOf, tileIn } from './tree'
+import { isContextSlot, isEmptySystem, tileIn } from './tree'
 
 interface TileActionsProps {
   /** The System's Root, with everything below it. */
@@ -232,10 +232,9 @@ function drawerOf(system: SystemTile, tree: TileNode, change: Change) {
       kind: 'add',
       key: `${change.parent}:${JSON.stringify(change.slot)}`,
       title: m.system_add_title(),
-      description:
-        ringOf(change.slot) === 'children'
-          ? m.system_add_under({ title: parent.title })
-          : m.system_add_in_context({ title: parent.title }),
+      description: isContextSlot(change.slot)
+        ? m.system_add_in_context({ title: parent.title })
+        : m.system_add_under({ title: parent.title }),
       parent: change.parent,
       slot: change.slot,
     } as const
@@ -273,10 +272,9 @@ function importDrawerOf(tree: TileNode, place: Extract<Change, { kind: 'import' 
     kind: 'import',
     key: `${place.parent}:${JSON.stringify(place.slot)}`,
     title: m.system_import_here(),
-    description:
-      ringOf(place.slot) === 'children'
-        ? m.system_add_under({ title: parent.title })
-        : m.system_add_in_context({ title: parent.title }),
+    description: isContextSlot(place.slot)
+      ? m.system_add_in_context({ title: parent.title })
+      : m.system_add_under({ title: parent.title }),
     place,
   } as const
 }
