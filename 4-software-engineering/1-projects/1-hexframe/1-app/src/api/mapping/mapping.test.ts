@@ -6,6 +6,7 @@ import type { KeyProof, Session } from '#/domains/iam/iam'
 import type {
   DirectionTaken,
   HelpReadOnly,
+  LeafHoldsNothing,
   MovedUnderItself,
   PreviewTooLong,
   RootFixed,
@@ -97,22 +98,22 @@ describe("Mapping's server functions", () => {
     const english = await value(run(request(false), Mapping.help({ language: 'en' })))
     const french = await value(run(request(), Mapping.help({ language: 'fr' })))
     expect(english).toMatchObject({ _tag: 'Tile', id: 'help', title: 'Hexframe' })
-    expect(english.children[5]).toMatchObject({ id: 'help/5', title: 'Operations' })
-    expect(french.children[5]).toMatchObject({ id: 'help/5', title: 'Les opérations' })
-    expect(french.children[5]?.body).toMatch(/Déplacer/)
+    expect(english.branches[5]).toMatchObject({ id: 'help/5', title: 'Operations' })
+    expect(french.branches[5]).toMatchObject({ id: 'help/5', title: 'Les opérations' })
+    expect(french.branches[5]?.body).toMatch(/Déplacer/)
   })
 
   it('runs for an Account its Key proves as for one its Session proves', async () => {
     const context = request('by key')
     const root = await value(run(context, Mapping.system))
     await value(run(context, Mapping.createTile({ parent: root.id, slot: 1, ...content('Child') })))
-    expect((await value(run(context, Mapping.system))).children[1]).toMatchObject(content('Child'))
+    expect((await value(run(context, Mapping.system))).branches[1]).toMatchObject(content('Child'))
   })
 
   it("reads the Account's System, its Root added untitled on the first read", async () => {
     const context = request()
     const first = await value(run(context, Mapping.system))
-    expect(first).toMatchObject({ _tag: 'Tile', title: '', children: {}, context: {} })
+    expect(first).toMatchObject({ _tag: 'Tile', title: '', branches: {}, context: {} })
     expect((await value(run(context, Mapping.system))).id).toBe(first.id)
   })
 
@@ -124,12 +125,12 @@ describe("Mapping's server functions", () => {
     expect(edited).toEqual({ ...child, title: 'Renamed' })
 
     await value(run(context, Mapping.moveTile({ id: child.id, parent: root.id, slot: 4 })))
-    const { children } = await value(run(context, Mapping.system))
-    expect(Object.keys(children)).toEqual(['4'])
-    expect(children[4]).toMatchObject({ id: child.id, title: 'Renamed' })
+    const { branches } = await value(run(context, Mapping.system))
+    expect(Object.keys(branches)).toEqual(['4'])
+    expect(branches[4]).toMatchObject({ id: child.id, title: 'Renamed' })
 
     await value(run(context, Mapping.deleteTile({ id: child.id })))
-    expect((await value(run(context, Mapping.system))).children).toEqual({})
+    expect((await value(run(context, Mapping.system))).branches).toEqual({})
   })
 
   it('swaps two Tiles, each with everything below it, and refuses a swap along one line', async () => {
@@ -142,8 +143,8 @@ describe("Mapping's server functions", () => {
     )
     await value(run(context, Mapping.swapTiles({ a: child.id, b: other.id })))
     const swapped = await value(run(context, Mapping.system))
-    expect(swapped.children[1]).toMatchObject({ id: other.id, children: {} })
-    expect(swapped.context[-5]).toMatchObject({ id: child.id, children: { 2: grandchild } })
+    expect(swapped.branches[1]).toMatchObject({ id: other.id, branches: {} })
+    expect(swapped.context[-5]).toMatchObject({ id: child.id, branches: { 2: grandchild } })
     expect(await run(context, Mapping.swapTiles({ a: grandchild.id, b: child.id }))).toMatchObject({
       ok: false,
       failure: { _tag: 'MovedUnderItself', kind: 'Conflict' },
@@ -209,7 +210,7 @@ describe("Mapping's server functions", () => {
     const { child } = await withAChild()
     const stranger = request()
     const theirRoot = await value(run(stranger, Mapping.system))
-    expect(theirRoot.children).toEqual({})
+    expect(theirRoot.branches).toEqual({})
     const attempts: ReadonlyArray<Program> = [
       Mapping.editTile({ id: child.id, title: 'Mine now' }),
       Mapping.moveTile({ id: child.id, parent: theirRoot.id, slot: 1 }),
@@ -233,22 +234,34 @@ describe("the errors Mapping's server functions can fail with", () => {
     expectTypeOf<ErrorOf<typeof Mapping.system>>().toEqualTypeOf<SignedOut>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.help>>>().toEqualTypeOf<never>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createTile>>>().toEqualTypeOf<
-      SignedOut | TitleMissing | PreviewTooLong | TileNotFound | DirectionTaken | HelpReadOnly
+      | SignedOut
+      | TitleMissing
+      | PreviewTooLong
+      | TileNotFound
+      | DirectionTaken
+      | LeafHoldsNothing
+      | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.editTile>>>().toEqualTypeOf<
       SignedOut | TitleMissing | PreviewTooLong | TileNotFound | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.moveTile>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | RootFixed | MovedUnderItself | DirectionTaken | HelpReadOnly
+      | SignedOut
+      | TileNotFound
+      | RootFixed
+      | MovedUnderItself
+      | DirectionTaken
+      | LeafHoldsNothing
+      | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.swapTiles>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | RootFixed | MovedUnderItself | HelpReadOnly
+      SignedOut | TileNotFound | RootFixed | MovedUnderItself | LeafHoldsNothing | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.deleteTile>>>().toEqualTypeOf<
       SignedOut | TileNotFound | RootFixed | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createReference>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | DirectionTaken | HelpReadOnly
+      SignedOut | TileNotFound | DirectionTaken | LeafHoldsNothing | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.deleteReference>>>().toEqualTypeOf<
       SignedOut | TileNotFound | HelpReadOnly
@@ -261,8 +274,17 @@ describe("the schemas Mapping's server functions validate by", () => {
   const p = crypto.randomUUID()
   const t = crypto.randomUUID()
 
-  it('take a Child in Directions 1 to 6 and a Context slot in -1 to -6, nothing else', () => {
-    const at = (slot: number) => ({ parent: p, slot, ...content('Tile') })
+  it('take a Branch or a Leaf in Directions 1 to 6 and a Context slot in -1 to -6, nothing else', () => {
+    const at = (slot: unknown) => ({ parent: p, slot, ...content('Tile') })
+    const leaves = [{ leaf: 1 }, { leaf: 6 }, { leaf: 0 }, { leaf: 7 }, { leaf: -1 }, { leaf: '1' }]
+    expect(leaves.map((slot) => accepts(NewTile, at(slot)))).toEqual([
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+    ])
     expect([1, 6, -1, -6].map((slot) => accepts(NewTile, at(slot)))).toEqual([
       true,
       true,
@@ -277,6 +299,7 @@ describe("the schemas Mapping's server functions validate by", () => {
     ])
     expect(accepts(TileMove, { id: t, parent: p, slot: 3 })).toBe(true)
     expect(accepts(TileMove, { id: t, parent: p, slot: 9 })).toBe(false)
+    expect(accepts(TileMove, { id: t, parent: p, slot: { leaf: 3 } })).toBe(true)
   })
 
   it("read Help in one of the app's languages, nothing else", () => {
@@ -300,6 +323,7 @@ describe("the schemas Mapping's server functions validate by", () => {
   it('put a Reference in a Context slot only', () => {
     expect(accepts(NewReference, { parent: p, slot: -3, target: t })).toBe(true)
     expect(accepts(NewReference, { parent: p, slot: 3, target: t })).toBe(false)
+    expect(accepts(NewReference, { parent: p, slot: { leaf: 3 }, target: t })).toBe(false)
     expect(accepts(ReferenceSlot, { parent: p, slot: -3 })).toBe(true)
     expect(accepts(ReferenceSlot, { parent: p, slot: 3 })).toBe(false)
   })

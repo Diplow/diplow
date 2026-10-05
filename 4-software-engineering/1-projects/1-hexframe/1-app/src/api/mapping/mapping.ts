@@ -18,8 +18,14 @@ export const Id = Schema.String.check(Schema.isUUID())
 const Direction = Schema.Literals(directions)
 const ContextDirection = Schema.Literals(contextDirections)
 
-/** Where a Tile stands under its parent: a Child's Direction, 1 to 6, or a Context slot, −1 to −6. */
-export const Slot = Schema.Union([Direction, ContextDirection])
+/** A Leaf's slot: one of its parent's six Leaf Directions, beside the six its Branches take. */
+const LeafSlot = Schema.Struct({ leaf: Direction })
+
+/**
+ * Where a Tile stands under its parent: a Branch's Direction, 1 to 6, a Leaf's, `{ leaf: 1 }` to
+ * `{ leaf: 6 }`, or a Context slot, −1 to −6.
+ */
+export const Slot = Schema.Union([Direction, LeafSlot, ContextDirection])
 
 /**
  * What a Tile says, bounded here, so nothing unbounded reaches the domain: what a Title and a Preview
@@ -35,7 +41,7 @@ const content = {
 /** A Tile, by its id. */
 export const TileRef = Schema.Struct({ id: Id })
 
-/** A new Tile, in a free slot under a Tile of the System: a Child, or a Tile of its Context. */
+/** A new Tile, in a free slot under a Tile of the System: a Branch, a Leaf or a Context Tile. */
 export const NewTile = Schema.Struct({ parent: Id, slot: Slot, ...content })
 
 /** A Tile's id and whichever of its Title, Preview and Body change. */

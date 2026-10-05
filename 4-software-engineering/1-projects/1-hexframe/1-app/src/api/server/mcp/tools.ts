@@ -81,8 +81,11 @@ const help =
   `"${helpRoot}": open it to learn what a System, a Tile, a Direction or Context is.`
 
 const directions =
-  'Children say what a Tile does, keyed by Direction, 1 to 6 (NW, NE, E, SE, SW, W); its Context ' +
-  'says what it is, keyed -1 to -6. A Context slot may hold a Reference instead of a Tile: ' +
+  'Children say what a Tile does: its Branches (`branches`), each with Children and Context of ' +
+  'its own, keyed by Direction, 1 to 6 (NW, NE, E, SE, SW, W), and its Leaves (`leaves`), each ' +
+  'one file with nothing below it, keyed by the same six Directions, their own. Its Context ' +
+  '(`context`) says what it is, keyed -1 to -6. A Context slot may hold a Reference instead of a ' +
+  'Tile: ' +
   "`_tag: 'Reference'`, with the id, Title and Preview of the Tile it points at, or " +
   "`_tag: 'BrokenReference'` once that Tile is deleted."
 
@@ -165,25 +168,32 @@ const refusal = {
   TitleMissing: 'the Title is empty; give one.',
   PreviewTooLong: `the Preview is over ${String(previewLimit)} characters; shorten it.`,
   RootFixed: 'the Root is the user; it is never moved, swapped nor deleted.',
+  LeafHoldsNothing:
+    'a Leaf is one file, with nothing below it: nothing goes under one, and a Tile holding ' +
+    'anything takes no Leaf slot. Move the Leaf to a Branch slot first, or move out what the ' +
+    'Tile holds.',
   HelpReadOnly:
     "that Tile is Help's, which every user reads and none writes; change a Tile of the user's " +
     'System instead.',
 } as const
 
-/** What a slot taken means where a Child goes: the regrouping a seventh Child asks for. */
+/** What a slot taken means where a Child goes: the regrouping a seventh Branch or Leaf asks for. */
 const takenChild =
-  `${refusal.DirectionTaken} A Tile has ${String(childDirections.length)} Children at most, so ` +
-  'one more is refused: regroup some Children under a new one, by moving them, and the freed ' +
-  'Directions take the rest.'
+  `${refusal.DirectionTaken} A Tile has ${String(childDirections.length)} Branches and ` +
+  `${String(childDirections.length)} Leaves at most, so one more of either is refused: regroup ` +
+  'some Children under a new one, by moving them, and the freed Directions take the rest.'
 
 const placement =
-  'Directions 1 to 6 (NW, NE, E, SE, SW, W) hold the Children, which say what a Tile does; ' +
-  '-1 to -6 hold its Context, which says what it is.'
+  'Directions 1 to 6 (NW, NE, E, SE, SW, W) hold the Branches, { leaf: 1 } to { leaf: 6 } the ' +
+  'Leaves, both Children, which say what a Tile does; -1 to -6 hold its Context, which says what ' +
+  'it is. A Leaf is one file: nothing goes under it.'
 
 const described = {
   id: 'The id of the Tile, as open_tile and map answer it.',
   parent: 'The id of the Tile it goes under, as open_tile and map answer it.',
-  slot: "Where under the parent: a Child's Direction, 1 to 6, or a Context slot, -1 to -6. It must be free.",
+  slot:
+    "Where under the parent: a Branch's Direction, 1 to 6, a Leaf's, { leaf: 1 } to { leaf: 6 }, " +
+    'or a Context slot, -1 to -6. It must be free.',
   title: 'The Title: what the Tile is called, never empty.',
   preview:
     `The Preview: at most ${String(previewLimit)} characters, what a reader needs to decide ` +
@@ -197,13 +207,14 @@ const createTile = write({
   name: 'create_tile',
   operation: 'createTile',
   description:
-    "Adds a Tile to the user's System, in a free slot under a Tile: a Child, or a Tile of its " +
-    `Context. ${placement} Answers the new Tile, with its id.`,
+    "Adds a Tile to the user's System, in a free slot under a Tile: a Branch, a Leaf, or a Tile " +
+    `of its Context. ${placement} Answers the new Tile, with its id.`,
   refusals: {
     TileNotFound: refusal.TileNotFound,
     DirectionTaken: takenChild,
     TitleMissing: refusal.TitleMissing,
     PreviewTooLong: refusal.PreviewTooLong,
+    LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
   },
   input: NewTile.mapFields(
@@ -249,13 +260,16 @@ const moveTile = write({
   operation: 'moveTile',
   description:
     'Moves a Tile, with everything below it, to a free slot under another Tile or to another ' +
-    `slot of its own parent. ${placement} References to it follow it. Answers null.`,
+    `slot of its own parent. ${placement} A Leaf grows into a Branch, and a Branch with nothing ` +
+    'below it shrinks into a Leaf, by moving to the other kind of slot. References to it follow ' +
+    'it. Answers null.',
   refusals: {
     TileNotFound: refusal.TileNotFound,
     DirectionTaken: takenChild,
     RootFixed: refusal.RootFixed,
     MovedUnderItself:
       'a Tile cannot move under itself or anything below it; pick a parent outside it.',
+    LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
   },
   input: TileMove.mapFields(
@@ -274,11 +288,13 @@ const swapTiles = write({
   operation: 'swapTiles',
   description:
     'Two Tiles trade places, each with everything below it: each takes the parent and slot of ' +
-    'the other, a Child or a Context Tile alike, so it works where no slot is free. Answers null.',
+    'the other, a Branch, a Leaf or a Context Tile alike, so it works where no slot is free. ' +
+    'Answers null.',
   refusals: {
     TileNotFound: refusal.TileNotFound,
     RootFixed: refusal.RootFixed,
     MovedUnderItself: 'neither Tile may lie below the other; move one of them instead.',
+    LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
   },
   input: TileSwap.mapFields(
@@ -321,6 +337,7 @@ const createReference = write({
   refusals: {
     TileNotFound: refusal.TileNotFound,
     DirectionTaken: refusal.DirectionTaken,
+    LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
   },
   input: NewReference.mapFields(

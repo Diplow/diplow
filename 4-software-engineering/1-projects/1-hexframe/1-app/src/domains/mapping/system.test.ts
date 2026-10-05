@@ -45,21 +45,22 @@ describe('the System these rows hold', () => {
 
   it('places a Child by its Direction and a Context Tile by its slot, each with its own below', () => {
     const root = systemOf(rows)
-    expect(Object.keys(root?.children ?? {})).toEqual(['2'])
-    expect(root?.children[2]).toMatchObject({ _tag: 'Tile', ...content('child') })
-    expect(root?.children[2]?.children[6]).toEqual({
+    expect(Object.keys(root?.branches ?? {})).toEqual(['2'])
+    expect(root?.branches[2]).toMatchObject({ _tag: 'Tile', ...content('child') })
+    expect(root?.branches[2]?.branches[6]).toEqual({
       _tag: 'Tile',
       ...content('grandchild'),
-      children: {},
+      branches: {},
+      leaves: {},
       context: {},
     })
     expect(root?.context).toEqual({
-      [-1]: { _tag: 'Tile', ...content('principle'), children: {}, context: {} },
+      [-1]: { _tag: 'Tile', ...content('principle'), branches: {}, leaves: {}, context: {} },
     })
   })
 
   it('resolves a Reference to its Tile, and shows one whose target is no Tile as broken', () => {
-    const context = systemOf(rows)?.children[2]?.context
+    const context = systemOf(rows)?.branches[2]?.context
     expect(context).toEqual({
       [-1]: { _tag: 'Reference', tile: content('root') },
       [-2]: { _tag: 'BrokenReference', target: 'gone' },
@@ -128,17 +129,18 @@ describe('a Tile read to a depth', () => {
       id: 'root',
       title: 'root',
     })
-    const child = readOf(opened('root'), { rows: titled, depth: 1, pointedAt }).children?.[2]
+    const child = readOf(opened('root'), { rows: titled, depth: 1, pointedAt }).branches?.[2]
     expect(child).toEqual({ _tag: 'Tile', id: 'child', title: 'child' })
     const deeper = readOf(opened('root'), { rows: titled, depth: 2, pointedAt })
-    expect(deeper.children?.[2]?.children).toEqual({
+    expect(deeper.branches?.[2]?.branches).toEqual({
       6: { _tag: 'Tile', id: 'grandchild', title: 'grandchild' },
     })
     expect(deeper.context?.[-1]).toEqual({
       _tag: 'Tile',
       id: 'principle',
       title: 'principle',
-      children: {},
+      branches: {},
+      leaves: {},
       context: {},
     })
   })
@@ -146,7 +148,7 @@ describe('a Tile read to a depth', () => {
   it('gives each Tile only the fields its rows carry', () => {
     const bare = titled.map((row) => ({ ...row, content: {} }))
     const root = bare.find((row) => row.id === 'root')
-    expect(root && readOf(root, { rows: bare, depth: 1, pointedAt }).children?.[2]).toEqual({
+    expect(root && readOf(root, { rows: bare, depth: 1, pointedAt }).branches?.[2]).toEqual({
       _tag: 'Tile',
       id: 'child',
     })

@@ -11,6 +11,7 @@ import { Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/
 
 import { DirectionTaken, HelpReadOnly, MovedUnderItself, RootFixed, TileNotFound } from './errors'
 import { findInHelp, type HelpLanguage, isHelpId } from './help/help'
+import { fitsIn, notLeaf } from './leaves/leaves'
 import {
   type Depth,
   type Field,
@@ -24,13 +25,20 @@ import {
   systemOf,
   tileRow,
 } from './system'
-import { type Content, type ContextDirection, type Slot, type Tile, checked } from './tile'
+import {
+  type Content,
+  type ContextDirection,
+  type Slot,
+  type Tile,
+  checked,
+  rowDirection,
+} from './tile'
 
 export { HelpId, helpRoot, helpSystem } from './help/help'
 export { depths, fields } from './system'
 export { directions, previewLimit } from './tile'
-export type { Depth, Field, ReadTile, SystemTile } from './system'
-export type { Content, ContextDirection, Direction } from './tile'
+export type { Depth, Field, LeafTile, ReadLeaf, ReadTile, SystemTile } from './system'
+export type { Content, ContextDirection, Direction, LeafSlot, Slot } from './tile'
 
 /** The content of a Root nobody has named yet, and of every Reference, which keeps none of its own. */
 const untitled: Content = { title: '', preview: '', body: '' }
@@ -134,17 +142,19 @@ export const readTile = <F extends Field>(
 /** What a reader sees of a Tile beside the one opened: enough to decide whether to open it. */
 const glimpsed = ['title', 'preview'] as const satisfies ReadonlyArray<Field>
 
-/** A Tile's Children and Context, each by its Title and Preview. */
-type Around = Required<Pick<ReadTile<(typeof glimpsed)[number]>, 'children' | 'context'>>
+/** A Tile's Branches, Leaves and Context, each by its Title and Preview. */
+type Around = Required<Pick<ReadTile<(typeof glimpsed)[number]>, 'branches' | 'leaves' | 'context'>>
 
-/** A Tile opened: it with the fields asked, its parent, and its Children and Context around it. */
+/**
+ * A Tile opened: it with the fields asked, its parent, and its Branches, Leaves and Context around it.
+ */
 export type Opened<F extends Field> = Read<F> & Around
 
 /**
  * A Tile of the Account's System, its Root when no id is given, or a Tile of Help by its id, opened:
- * it with only the fields asked, its parent, and its Children and Context by Title and Preview, as a
- * reader opens a Tile before deciding which of them to open next. One read, one generation down, and
- * a Body below the Tile never leaves the database.
+ * it with only the fields asked, its parent, and its Branches, Leaves and Context by Title and
+ * Preview, as a reader opens a Tile before deciding which of them to open next. One read, one
+ * generation down, and a Body below the Tile never leaves the database.
  */
 export const openTile = <F extends Field>(
   accountId: string,
@@ -168,7 +178,8 @@ export const openTile = <F extends Field>(
       return {
         tile: readOf(showing(opened, fields), { rows: [], depth: 0, pointedAt: [] }),
         parent,
-        children: around.children ?? {},
+        branches: around.branches ?? {},
+        leaves: around.leaves ?? {},
         context: around.context ?? {},
       }
     },
@@ -203,10 +214,13 @@ const tileIn = (rows: ReadonlyArray<TileRow>, id: string) => {
   return row === undefined ? Effect.fail(new TileNotFound()) : Effect.succeed(row)
 }
 
-/** The parent Tile of a placement, once its slot is known to be free. */
+/**
+ * The parent Tile of a placement, once it is known to be no Leaf, which holds nothing, and its slot to
+ * be free.
+ */
 const freeSlot = (rows: ReadonlyArray<TileRow>, { parent, slot }: Placement) =>
-  Effect.flatMap(tileIn(rows, parent), (row) =>
-    rowAt(rows, parent, slot) === undefined
+  Effect.flatMap(Effect.flatMap(tileIn(rows, parent), notLeaf), (row) =>
+    rowAt(rows, parent, rowDirection(slot)) === undefined
       ? Effect.succeed(row)
       : Effect.fail(new DirectionTaken()),
   )
@@ -214,13 +228,17 @@ const freeSlot = (rows: ReadonlyArray<TileRow>, { parent, slot }: Placement) =>
 const notRoot = (row: TileRow) =>
   row.parentId === null ? Effect.fail(new RootFixed()) : Effect.succeed(row)
 
-/** Adds a Tile in a free slot under a Tile of the System: a Child, or a Tile of its Context. */
+/**
+ * Adds a Tile in a free slot under a Tile of the System, never under a Leaf: a Branch, a Leaf, or a
+ * Tile of its Context.
+ */
 export const createTile = (accountId: string, { parent, slot, ...content }: Placement & Content) =>
   changing(accountId, [parent], (rows, writes) =>
     Effect.gen(function* () {
       const valid = yield* checked(content)
       yield* freeSlot(rows, { parent, slot })
-      const id = yield* writes.insert({ parentId: parent, direction: slot, target: null, ...valid })
+      const direction = rowDirection(slot)
+      const id = yield* writes.insert({ parentId: parent, direction, target: null, ...valid })
       return { id, ...valid } satisfies Tile
     }),
   )
@@ -237,31 +255,39 @@ export const editTile = (accountId: string, id: string, changes: Partial<Content
   )
 
 /**
- * Moves a Tile, and everything below it, to a free slot under another Tile of the System, or to
- * another slot of the same parent. References to it follow, since they hold its id.
+ * Moves a Tile, and everything below it, to a free slot under another Tile of the System, never under
+ * a Leaf, or to another slot of the same parent. A Leaf slot takes a Tile with nothing below it only,
+ * so a Leaf grows into a Branch, and a bare Branch shrinks into a Leaf, by moving. References to it
+ * follow, since they hold its id.
  */
 export const moveTile = (accountId: string, id: string, to: Placement) =>
   changing(accountId, [id, to.parent], (rows, writes) =>
     Effect.gen(function* () {
       const row = yield* Effect.flatMap(tileIn(rows, id), notRoot)
-      if (row.parentId === to.parent && row.direction === to.slot) return
+      const direction = rowDirection(to.slot)
+      if (row.parentId === to.parent && row.direction === direction) return
       if (below(rows, id).has(to.parent)) return yield* new MovedUnderItself()
       yield* freeSlot(rows, to)
-      yield* writes.update(id, { parentId: to.parent, direction: to.slot })
+      yield* fitsIn(rows, id, direction)
+      yield* writes.update(id, { parentId: to.parent, direction })
     }),
   )
 
 /**
  * Two Tiles of the System trade places, each with everything below it: each takes the other's parent
- * and slot, a Child's Direction or a Context slot alike. Neither may be the Root, nor lie below the
- * other, which would put one below itself. References to them follow, since they hold their ids.
+ * and slot, a Branch's, a Leaf's or a Context slot alike. Neither may be the Root, nor lie below the
+ * other, which would put one below itself, nor hold anything when it takes a Leaf slot. References to
+ * them follow, since they hold their ids.
  */
 export const swapTiles = (accountId: string, a: string, b: string) =>
   changing(accountId, [a, b], (rows, writes) =>
     Effect.gen(function* () {
-      for (const id of [a, b]) yield* Effect.flatMap(tileIn(rows, id), notRoot)
+      const first = yield* Effect.flatMap(tileIn(rows, a), notRoot)
+      const second = yield* Effect.flatMap(tileIn(rows, b), notRoot)
       if (a === b) return
       if (below(rows, a).has(b) || below(rows, b).has(a)) return yield* new MovedUnderItself()
+      yield* fitsIn(rows, a, second.direction)
+      yield* fitsIn(rows, b, first.direction)
       yield* writes.swap(a, b)
     }),
   )
@@ -275,7 +301,10 @@ export const deleteTile = (accountId: string, id: string) =>
     }),
   )
 
-/** Puts a Reference to a Tile of the System in a free Context slot of another, or of itself. */
+/**
+ * Puts a Reference to a Tile of the System in a free Context slot of another, or of itself, never of a
+ * Leaf, which has no Context.
+ */
 export const createReference = (
   accountId: string,
   { parent, slot, target }: { parent: string; slot: ContextDirection; target: string },

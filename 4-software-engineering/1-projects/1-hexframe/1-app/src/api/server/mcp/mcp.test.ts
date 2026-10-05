@@ -108,7 +108,7 @@ describe('Help, through the MCP endpoint', () => {
       value: {
         tile: { _tag: 'Tile', id: 'help', title: 'Hexframe' },
         parent: null,
-        children: { 1: { _tag: 'Tile', id: 'help/1' }, 6: { _tag: 'Tile', id: 'help/6' } },
+        branches: { 1: { _tag: 'Tile', id: 'help/1' }, 6: { _tag: 'Tile', id: 'help/6' } },
         context: { '-1': { _tag: 'Tile', id: 'help/-1' } },
       },
     })
@@ -134,7 +134,8 @@ describe('the MCP endpoint', () => {
       value: {
         tile: { _tag: 'Tile', id: root.id, ...content('Ada') },
         parent: null,
-        children: { 1: glimpse(child) },
+        branches: { 1: glimpse(child) },
+        leaves: {},
         context: {
           '-1': glimpse(principles),
           '-2': {
@@ -156,7 +157,8 @@ describe('the MCP endpoint', () => {
       value: {
         tile: { _tag: 'Tile', id: child.id, title: 'Frontend' },
         parent: { id: root.id, title: 'Ada' },
-        children: { 2: glimpse(grandchild) },
+        branches: { 2: glimpse(grandchild) },
+        leaves: {},
         context: {},
       },
     })
@@ -171,7 +173,7 @@ describe('the MCP endpoint', () => {
       value: {
         tile: {
           ...glimpse(root),
-          children: { 1: { ...glimpse(child), children: { 2: glimpse(grandchild) } } },
+          branches: { 1: { ...glimpse(child), branches: { 2: glimpse(grandchild) } } },
         },
         parent: null,
       },
