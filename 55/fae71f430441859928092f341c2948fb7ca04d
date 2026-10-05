@@ -1,0 +1,39 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/mcp.ts
+  s_ed89c634a0e6b3::t_a56eea1bc9b81b 6-11,94-98,102-103,126-129
+  s_ed89c634a0e6b3::t_7b91b0e0b53aa5 1-5,12-30,32-86,89-93,110-111,113-125,130-134
+  s_ed89c634a0e6b3::t_96a182da461fd7 31,87-88
+  s_ed89c634a0e6b3::t_6ab9d2b305412f 99-101,104-109,112
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/mcp.test.ts
+  s_ed89c634a0e6b3::t_6ab9d2b305412f 90-91
+  s_ed89c634a0e6b3::t_5296bba754ea11 1-89,97-100,107,109-111,113-137,139-142,144-147,153-164,166-179,184-188,193-198,207-251
+  s_ed89c634a0e6b3::t_96a182da461fd7 92-96,101-106,180-183
+  s_ed89c634a0e6b3::t_c330377965cc61 199-206
+  s_ed89c634a0e6b3::t_77a06c713695fe 108,138,152
+  s_ed89c634a0e6b3::t_01ea86dd43962a 112,143,148-151,165,189-192
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/mcp.ts
+  s_ed89c634a0e6b3::t_62e0a58eb3334e 1-14
+4-software-engineering/1-projects/1-hexframe/1-app/src/routeTree.gen.ts
+  s_ed89c634a0e6b3::t_2ee3125b02c655 14,34-38,83,96,110,125,138,151,165,187-193,276
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/tools.ts
+  s_ed89c634a0e6b3::t_01ea86dd43962a 44-45,72-73,96
+  s_ed89c634a0e6b3::t_2fe1447b7a4c6f 7
+  s_ed89c634a0e6b3::t_80564345c57c2a 1-6,8-43,47-59,62-66,74-91,94-95,97-100
+  s_ed89c634a0e6b3::t_96a182da461fd7 60-61,67-71,92-93
+  s_ed89c634a0e6b3::t_9d25235fa2d15c 46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "55fae71f430441859928092f341c2948fb7ca04d",
+  "prompts": {},
+  "sessions": {
+    "s_ed89c634a0e6b3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bfdaae8a-87ed-4a58-8630-209d0ea6e784",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
