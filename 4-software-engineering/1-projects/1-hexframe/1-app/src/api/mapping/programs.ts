@@ -35,6 +35,9 @@ export const editTile = ({ id, ...changes }: { id: string } & Partial<Mapping.Co
 export const moveTile = ({ id, ...to }: { id: string } & Placement) =>
   changeForAccount((accountId) => Mapping.moveTile(accountId, id, to))
 
+export const swapTiles = ({ a, b }: { a: string; b: string }) =>
+  changeForAccount((accountId) => Mapping.swapTiles(accountId, a, b))
+
 export const deleteTile = ({ id }: { id: string }) =>
   changeForAccount((accountId) => Mapping.deleteTile(accountId, id))
 
