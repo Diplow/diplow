@@ -102,17 +102,7 @@ const openTile = read({
       'What to read of the opened Tile: any of title, preview, body. All three when not given.',
     ),
   }),
-  program: ({ id, fields }) =>
-    Effect.gen(function* () {
-      const opened = yield* Mapping.readTile({ id, depth: 0, fields })
-      const around = yield* Mapping.readTile({
-        id: opened.tile.id,
-        depth: 1,
-        fields: glimpseFields,
-      })
-      const { children = {}, context = {} } = around.tile
-      return { ...opened, children, context }
-    }),
+  program: Mapping.openTile,
 })
 
 const map = read({

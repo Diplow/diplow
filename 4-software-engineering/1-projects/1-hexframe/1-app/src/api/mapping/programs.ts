@@ -41,6 +41,14 @@ export const readTile = <F extends Mapping.Field>(
   input: Omit<Parameters<typeof Mapping.readTile<F>>[1], 'language'>,
 ) => forAccount((accountId) => Mapping.readTile(accountId, { ...input, language: 'en' }))
 
+/**
+ * A Tile of the Account's System, its Root when no id is given, opened: it with the fields asked, its
+ * parent, and its Children and Context by Title and Preview. An agent reads Help in English here too.
+ */
+export const openTile = <F extends Mapping.Field>(
+  input: Omit<Parameters<typeof Mapping.openTile<F>>[1], 'language'>,
+) => forAccount((accountId) => Mapping.openTile(accountId, { ...input, language: 'en' }))
+
 export const createTile = (input: Parameters<typeof Mapping.createTile>[1]) =>
   changeForAccount((accountId) => Mapping.createTile(accountId, input))
 

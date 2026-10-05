@@ -1,7 +1,12 @@
 // A System as a reader finds it, built from the repository's rows: the Root, then everything below
 // it, each Tile with its Children and its Context; or one Tile read to a depth, with only the fields
 // asked. Pure: what a row means is decided here.
-import type { TileRow, TileRowWith } from '#/repositories/database/tiles/tiles'
+import {
+  type ColumnsAsked,
+  contentWith,
+  type TileRow,
+  type TileRowWith,
+} from '#/repositories/database/tiles/tiles'
 
 import {
   type Content,
@@ -121,6 +126,9 @@ export type Field = (typeof fields)[number]
 export const depths = [0, 1, 2, 3] as const
 export type Depth = (typeof depths)[number]
 
+/** What a read asks of the Tile it opens, and of each Tile below it. */
+export type FieldsAsked<O extends Field, F extends Field> = ColumnsAsked<O, F>
+
 /** A Tile a Reference points at, as a read shows it: what a reader needs to decide to open it. */
 type Glimpse = Pick<Tile, 'id' | 'title' | 'preview'>
 
@@ -136,6 +144,24 @@ export type ReadTile<F extends Field> = Pick<Tile, 'id'> &
       Record<ContextDirection, ReadTile<F> | Reference<Glimpse> | BrokenReference>
     >
   }
+
+/**
+ * What a read from one Tile finds, before it is shaped: the Tile's row and the rows below it, each with
+ * the fields asked of it, the rows of the Tiles their References point at, and its parent, by id and
+ * Title.
+ */
+export interface Found<O extends Field, F extends Field> {
+  readonly opened: TileRowWith<O>
+  readonly rows: ReadonlyArray<TileRowWith<F>>
+  readonly pointedAt: ReadonlyArray<TileRowWith<'title' | 'preview'>>
+  readonly parent: Pick<Tile, 'id' | 'title'> | null
+}
+
+/** A row read with some fields, showing only these of them. */
+export const showing = <U extends Field, F extends U>(
+  row: TileRowWith<U>,
+  fields: ReadonlyArray<F>,
+): TileRowWith<F> => ({ ...row, content: contentWith(row.content, fields) })
 
 /**
  * The Tile of this row read `depth` generations down, from the rows reached below it and the rows of

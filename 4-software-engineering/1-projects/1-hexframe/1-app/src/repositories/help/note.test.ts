@@ -15,12 +15,12 @@ describe('a note of a vault folder', () => {
   })
 })
 
-describe('the fields every note holds', () => {
-  it('names those a note lacks or holds empty', () => {
+describe("the vault's fields every note holds", () => {
+  it("names those a note lacks or holds empty, and leaves a Tile's own to Mapping", () => {
     expect(
       missingFrom({ fields: { title: 'A', parent: 'x', owner: '', preview: 'P' }, body: '' }),
     ).toEqual(['owner'])
-    expect(missingFrom({ fields: {}, body: '' })).toEqual(['title', 'parent', 'owner', 'preview'])
+    expect(missingFrom({ fields: {}, body: '' })).toEqual(['parent', 'owner'])
   })
 })
 

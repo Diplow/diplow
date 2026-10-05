@@ -11,8 +11,11 @@
  */
 export const noteFiles = { en: 'CLAUDE.md', fr: 'CLAUDE.fr.md' } as const
 
-/** What every note's frontmatter holds, in this vault. */
-const required = ['title', 'parent', 'owner', 'preview'] as const
+/**
+ * What every note's frontmatter holds to place it in this vault. A Tile's own fields, its Title and
+ * Preview, are Mapping's to check (src/domains/mapping/help/vault.ts).
+ */
+const required = ['parent', 'owner'] as const
 
 /** A note: the scalar fields of its frontmatter, and its Markdown after it, trimmed. */
 export interface Note {
@@ -71,7 +74,7 @@ export function noteOf(text: string): Note | undefined {
   }
 }
 
-/** The fields a note's frontmatter lacks, or holds empty, of those every note holds. */
+/** The vault's fields a note's frontmatter lacks, or holds empty, of those every note holds. */
 export function missingFrom(note: Note): ReadonlyArray<string> {
   return required.filter((field) => (note.fields[field] ?? '').trim() === '')
 }

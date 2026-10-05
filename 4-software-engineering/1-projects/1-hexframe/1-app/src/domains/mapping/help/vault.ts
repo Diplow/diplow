@@ -30,9 +30,15 @@ function contentOf(
   if (text === undefined) return `no ${file}`
   const note = noteOf(text)
   if (note === undefined) return `its ${file} opens with no frontmatter`
-  const missing = missingFrom(note)
-  if (missing.length > 0) return `its ${file} has no ${missing.join(', ')}`
   const { title = '', preview = '' } = note.fields
+  // A Tile has a Title, as Mapping requires of every Tile, and a Tile of Help a Preview, since a
+  // reader opens Help by its Previews; the vault's own fields are the repository's to name.
+  const missing = [
+    ...(title.trim() === '' ? ['title'] : []),
+    ...missingFrom(note),
+    ...(preview.trim() === '' ? ['preview'] : []),
+  ]
+  if (missing.length > 0) return `its ${file} has no ${missing.join(', ')}`
   if (!fitsPreview(preview)) {
     return `its ${file} has a Preview over ${String(previewLimit)} characters`
   }

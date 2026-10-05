@@ -563,13 +563,15 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
         expect(fieldsOf(tile)).toEqual(expected)
         expect(fieldsOf(tile.children?.[1] ?? {})).toEqual(expected)
         expect(fieldsOf(tile.children?.[1]?.children?.[1] ?? {})).toEqual(expected)
-        const rows = yield* Tiles.use((tiles) =>
-          tiles.generationsFrom(accountId, { id: ids[0] ?? '', depth: 2, columns: fields }),
-        )
-        expect(rows.map((row) => Object.keys(row.content).sort())).toEqual(
-          rows.map(() => [...fields].sort()),
-        )
       }
+      const columns = { opened: ['body' as const], below: ['title' as const] }
+      const found = yield* Tiles.use((tiles) =>
+        tiles.generationsFrom(accountId, { id: ids[0] ?? '', depth: 2, columns }),
+      )
+      const rows = [found?.opened, ...(found?.below ?? [])]
+      expect(rows.map((row) => Object.keys(row?.content ?? {}))).toEqual(
+        rows.map((_, at) => (at === 0 ? ['body'] : ['title'])),
+      )
     }),
   )
 
@@ -612,9 +614,8 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
   it.effect('finds no Tile of another System, nor a deleted one, nor a Reference', () =>
     Effect.gen(function* () {
       const { accountId, ids } = yield* fourDeep
-      const { tile } = yield* readTile(accountId, { depth: 1, fields: [] })
       const reference = yield* Tiles.use((tiles) =>
-        tiles.generationsFrom(accountId, { id: tile.id, depth: 1, columns: [] }),
+        tiles.read(accountId, { title: '', preview: '', body: '' }),
       ).pipe(Effect.map((rows) => rows.find((row) => row.target !== null)?.id))
       expect(reference).toBeDefined()
       const stranger = someone()

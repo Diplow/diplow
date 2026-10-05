@@ -102,7 +102,6 @@ const refused = {
   'email-malformed': () => new EmailMalformed({ fields: ['email'] }),
   'password-length': () => new PasswordLengthInvalid({ fields: ['password'] }),
   'too-many-attempts': () => new TooManyAttempts(),
-  'api-key-name-length': () => new KeyNameInvalid({ fields: ['name'] }),
   'api-key-not-found': () => new KeyNotFound(),
 } satisfies Record<Refusal, () => unknown>
 
@@ -154,7 +153,7 @@ export const sessionOnly = Effect.gen(function* () {
 /** The fewest and the most characters a Key's name holds, so the user can tell their Keys apart. */
 const keyNameLength = { min: 1, max: 32 } as const
 
-/** The name a Key may take, or `KeyNameInvalid` on the name: 1 to 32 characters. */
+/** The name a Key may take, or `KeyNameInvalid` on the name: 1 to 32 characters. IAM's rule alone. */
 const keyNamed = (name: string): Effect.Effect<string, KeyNameInvalid> =>
   name.length >= keyNameLength.min && name.length <= keyNameLength.max
     ? Effect.succeed(name)

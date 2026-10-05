@@ -73,7 +73,6 @@ export type Refusal =
   | 'email-malformed'
   | 'password-length'
   | 'too-many-attempts'
-  | 'api-key-name-length'
   | 'api-key-not-found'
 
 export class AuthRefused extends Data.TaggedError('AuthRefused')<{ readonly reason: Refusal }> {}
@@ -113,8 +112,6 @@ const refusals: Partial<Record<string, Refusal>> = {
   INVALID_EMAIL: 'email-malformed',
   PASSWORD_TOO_SHORT: 'password-length',
   PASSWORD_TOO_LONG: 'password-length',
-  NAME_REQUIRED: 'api-key-name-length',
-  INVALID_NAME_LENGTH: 'api-key-name-length',
   KEY_NOT_FOUND: 'api-key-not-found',
 }
 
@@ -295,11 +292,10 @@ function betterAuthWith(
     plugins: [
       apiKey({
         defaultPrefix: 'hf_',
-        // A Key's name, 1 to 32 characters, refused as `api-key-name-length` otherwise: a backstop,
-        // since IAM checks the name before it asks for a Key (src/domains/iam/iam.ts).
+        // A Key always has a name. What a name may be is IAM's rule, checked before a Key is asked
+        // for (src/domains/iam/iam.ts); the plugin's own default, 1 to 32 characters, is no wider,
+        // so a name past it would die as a defect, which IAM's tests would show.
         requireName: true,
-        minimumNameLength: 1,
-        maximumNameLength: 32,
         // Its default, 10 verifications a day, would stop an MCP client within minutes.
         rateLimit: { enabled: false },
         keyExpiration: { defaultExpiresIn: null },
@@ -314,7 +310,8 @@ function betterAuthWith(
 /** The Auth service over Better Auth, signing its cookies with `secret`, reached at `baseURL`. */
 export const make = (secret: Redacted.Redacted, baseURL: BaseURL) =>
   Effect.gen(function* () {
-    const auth = betterAuthWith(secret, baseURL, yield* PromiseDatabase)
+    const database = yield* PromiseDatabase
+    const auth = betterAuthWith(secret, baseURL, database)
 
     /** Posts credentials through Better Auth's handler, so its rate limiter and origin check run. */
     const credentialed = (path: string, body: object) =>
@@ -381,7 +378,14 @@ export const make = (secret: Redacted.Redacted, baseURL: BaseURL) =>
       const verified = yield* Effect.promise(() =>
         auth.api.verifyApiKey({ body: { key: secret.value } }),
       ).pipe(Effect.flatMap((answer) => Effect.orDie(decodeVerified(answer))))
-      if (!verified.valid || verified.key === null) return Option.none<AuthBearer>()
+      if (!verified.valid || verified.key === null) {
+        // The plugin answers a failure to read its table as it answers a wrong key, `INVALID_API_KEY`
+        // both. Reading the table once more tells them apart: an outage dies as the defect it is.
+        yield* Effect.tryPromise(() =>
+          database.select({ id: apikey.id }).from(apikey).limit(1),
+        ).pipe(Effect.orDie)
+        return Option.none<AuthBearer>()
+      }
       const { id, referenceId } = verified.key
       const context = yield* Effect.promise(() => auth.$context)
       const found = yield* Effect.promise(() => context.internalAdapter.findUserById(referenceId))

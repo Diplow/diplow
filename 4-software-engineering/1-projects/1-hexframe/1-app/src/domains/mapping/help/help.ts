@@ -7,12 +7,12 @@
 // read as a file path. The build refuses a folder that reads as no Tile in either (vite.config.ts).
 import { Effect, Schema } from 'effect'
 
-import type { TileRow, TileRowWith } from '#/repositories/database/tiles/tiles'
+import { withContent } from '#/repositories/database/tiles/tiles'
 import { helpNotes } from '#/repositories/help/help'
 import { noteFiles } from '#/repositories/help/note'
 
 import { TileNotFound } from '../errors'
-import { type Depth, type Field, readOf, systemOf } from '../system'
+import { type Field, type FieldsAsked, type Found, systemOf } from '../system'
 import { contextDirections, directions } from '../tile'
 import { type Vault, vaultOf } from './vault'
 
@@ -63,37 +63,24 @@ export const helpSystem = (language: HelpLanguage) =>
       : Effect.succeed(found)
   })
 
-/** A row with only the fields asked of it, as a read from one Tile of a System gives it. */
-function withFields<F extends Field>(
-  { title, preview, body, ...place }: TileRow,
-  fields: ReadonlyArray<F>,
-): TileRowWith<F> {
-  const content = { title, preview, body }
-  // Built from the fields asked, so it holds exactly F's.
-  const asked = Object.fromEntries(fields.map((field) => [field, content[field]])) as Pick<
-    TileRow,
-    F
-  >
-  return { ...place, content: asked }
-}
-
 /**
- * A Tile of Help read `depth` generations down with only the fields asked, and its parent, as
- * Mapping's `readTile` reads one of a System, in the language asked. An id no Tile of Help has is
- * `TileNotFound`, in every language, since they share their ids.
+ * What a read from a Tile of Help finds, with only the fields asked, in the language asked, as Mapping
+ * finds one of a System: every Tile of Help is at hand, so it reads to any depth. An id no Tile of
+ * Help has is `TileNotFound`, in every language, since they share their ids.
  */
-export const readHelp = <F extends Field>(
+export const findInHelp = <O extends Field, F extends Field>(
   id: string,
-  { depth, fields, language }: { depth: Depth; fields: ReadonlyArray<F>; language: HelpLanguage },
-) =>
+  { fields, language }: { fields: FieldsAsked<O, F>; language: HelpLanguage },
+): Effect.Effect<Found<O, F>, TileNotFound> =>
   Effect.gen(function* () {
     const { rows: all } = help[language]
     const opened = all.find((row) => row.id === id)
     if (opened === undefined) return yield* new TileNotFound()
     const parent = all.find((row) => row.id === opened.parentId)
-    const rows = all.map((row) => withFields(row, fields))
     return {
-      tile: readOf(withFields(opened, fields), { rows, depth, pointedAt: [] }),
+      opened: withContent(opened, fields.opened),
+      rows: all.map((row) => withContent(row, fields.below)),
+      pointedAt: [],
       parent: parent === undefined ? null : { id: parent.id, title: parent.title },
     }
   })

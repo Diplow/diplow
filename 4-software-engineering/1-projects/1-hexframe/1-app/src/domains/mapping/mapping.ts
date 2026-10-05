@@ -10,14 +10,17 @@ import type { InTransaction } from '#/repositories/database/database'
 import { Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/tiles'
 
 import { DirectionTaken, HelpReadOnly, MovedUnderItself, RootFixed, TileNotFound } from './errors'
-import { type HelpLanguage, isHelpId, readHelp } from './help/help'
+import { findInHelp, type HelpLanguage, isHelpId } from './help/help'
 import {
   type Depth,
   type Field,
+  type FieldsAsked,
+  type Found,
   type ReadTile,
   below,
   readOf,
   rowAt,
+  showing,
   systemOf,
   tileRow,
 } from './system'
@@ -56,38 +59,41 @@ interface Read<F extends Field> {
   readonly parent: Pick<Tile, 'id' | 'title'> | null
 }
 
-/**
- * A Tile of the Account's System, its Root when no id is given, or a Tile of Help by its id, read
- * `depth` generations down with only the fields asked of each Tile, and its parent. A Reference shows
- * the id, Title and Preview of the Tile it points at. A Body is read only when asked, and a Tile of
- * another System is `TileNotFound`, as is a Help id no Tile of Help has. A Tile of Help is read in
- * `language`, which the caller picks. Reading the Root adds it, as `system` does.
- */
-export const readTile = <F extends Field>(
-  accountId: string,
-  {
-    id,
-    depth,
-    fields,
-    language,
-  }: { id?: string | undefined; depth: Depth; fields: ReadonlyArray<F>; language: HelpLanguage },
-): Effect.Effect<Read<F>, TileNotFound, Tiles> =>
-  id !== undefined && isHelpId(id)
-    ? readHelp(id, { depth, fields, language })
-    : readOwn(accountId, { id, depth, fields })
+/** Where a read starts, how far down it goes, what it asks of each Tile, and Help's language. */
+interface ReadFrom<O extends Field, F extends Field> {
+  readonly id?: string | undefined
+  readonly depth: Depth
+  readonly fields: FieldsAsked<O, F>
+  readonly language: HelpLanguage
+}
 
-/** A Tile of the Account's System, its Root when no id is given, as `readTile` reads it. */
-const readOwn = <F extends Field>(
+/**
+ * What a read from a Tile of the Account's System finds, its Root when no id is given, or from a Tile
+ * of Help by its id, `depth` generations down, with only the fields asked of the Tile and of each Tile
+ * below it. A Tile of another System is `TileNotFound`, as is a Help id no Tile of Help has. Reading
+ * the Root adds it.
+ */
+const find = <O extends Field, F extends Field>(
   accountId: string,
-  { id, depth, fields }: { id?: string | undefined; depth: Depth; fields: ReadonlyArray<F> },
+  { id, depth, fields, language }: ReadFrom<O, F>,
+): Effect.Effect<Found<O, F>, TileNotFound, Tiles> =>
+  id !== undefined && isHelpId(id)
+    ? findInHelp(id, { fields, language })
+    : findOwn(accountId, { id, depth, fields })
+
+/** What a read from a Tile of the Account's System finds, its Root when no id is given. */
+const findOwn = <O extends Field, F extends Field>(
+  accountId: string,
+  { id, depth, fields }: Omit<ReadFrom<O, F>, 'language'>,
 ) =>
   Tiles.use((tiles) =>
     Effect.gen(function* () {
       const from = id ?? (yield* tiles.root(accountId, untitled))
-      const rows = yield* tiles.generationsFrom(accountId, { id: from, depth, columns: fields })
-      const opened = tileRow(rows, from)
-      if (opened === undefined) return yield* new TileNotFound()
-      const targets = rows.flatMap(({ target }) => (target === null ? [] : [target]))
+      const found = yield* tiles.generationsFrom(accountId, { id: from, depth, columns: fields })
+      // A Reference's row is no Tile: its id names nothing to open.
+      if (found === undefined || found.opened.target !== null) return yield* new TileNotFound()
+      const { opened, below } = found
+      const targets = below.flatMap(({ target }) => (target === null ? [] : [target]))
       const parentIds = opened.parentId === null ? [] : [opened.parentId]
       const [parents, pointedAt] = yield* Effect.all(
         [
@@ -98,10 +104,74 @@ const readOwn = <F extends Field>(
       )
       const parent = parents[0]
       return {
-        tile: readOf(opened, { rows, depth, pointedAt }),
+        opened,
+        rows: below,
+        pointedAt,
         parent: parent === undefined ? null : { id: parent.id, title: parent.content.title },
-      } satisfies Read<F>
+      } satisfies Found<O, F>
     }),
+  )
+
+/**
+ * A Tile of the Account's System, its Root when no id is given, or a Tile of Help by its id, read
+ * `depth` generations down with only the fields asked of each Tile, and its parent. A Reference shows
+ * the id, Title and Preview of the Tile it points at. A Body is read only when asked, and a Tile of
+ * another System is `TileNotFound`, as is a Help id no Tile of Help has. A Tile of Help is read in
+ * `language`, which the caller picks. Reading the Root adds it, as `system` does.
+ */
+export const readTile = <F extends Field>(
+  accountId: string,
+  { fields, ...from }: Omit<ReadFrom<F, F>, 'fields'> & { readonly fields: ReadonlyArray<F> },
+) =>
+  Effect.map(
+    find(accountId, { ...from, fields: { opened: fields, below: fields } }),
+    ({ opened, rows, pointedAt, parent }): Read<F> => ({
+      tile: readOf(opened, { rows, depth: from.depth, pointedAt }),
+      parent,
+    }),
+  )
+
+/** What a reader sees of a Tile beside the one opened: enough to decide whether to open it. */
+const glimpsed = ['title', 'preview'] as const satisfies ReadonlyArray<Field>
+
+/** A Tile's Children and Context, each by its Title and Preview. */
+type Around = Required<Pick<ReadTile<(typeof glimpsed)[number]>, 'children' | 'context'>>
+
+/** A Tile opened: it with the fields asked, its parent, and its Children and Context around it. */
+export type Opened<F extends Field> = Read<F> & Around
+
+/**
+ * A Tile of the Account's System, its Root when no id is given, or a Tile of Help by its id, opened:
+ * it with only the fields asked, its parent, and its Children and Context by Title and Preview, as a
+ * reader opens a Tile before deciding which of them to open next. One read, one generation down, and
+ * a Body below the Tile never leaves the database.
+ */
+export const openTile = <F extends Field>(
+  accountId: string,
+  {
+    id,
+    fields,
+    language,
+  }: Pick<ReadFrom<F, F>, 'id' | 'language'> & {
+    readonly fields: ReadonlyArray<F>
+  },
+) =>
+  Effect.map(
+    find(accountId, {
+      id,
+      depth: 1,
+      fields: { opened: [...new Set([...fields, ...glimpsed])], below: glimpsed },
+      language,
+    }),
+    ({ opened, rows, pointedAt, parent }): Opened<F> => {
+      const around = readOf(showing(opened, glimpsed), { rows, depth: 1, pointedAt })
+      return {
+        tile: readOf(showing(opened, fields), { rows: [], depth: 0, pointedAt: [] }),
+        parent,
+        children: around.children ?? {},
+        context: around.context ?? {},
+      }
+    },
   )
 
 /**

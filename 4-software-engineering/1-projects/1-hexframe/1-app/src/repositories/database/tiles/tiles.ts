@@ -40,6 +40,42 @@ export interface TileRowWith<C extends ContentColumn> {
   readonly content: Pick<TileRow, C>
 }
 
+/**
+ * These content columns of what a Tile says, and no other: the one projection a read from one Tile
+ * makes, whether its rows come from the database, here, or from Help's notes, in Mapping.
+ */
+export function contentWith<C extends ContentColumn>(
+  content: Partial<Pick<TileRow, ContentColumn>>,
+  columns: ReadonlyArray<C>,
+): Pick<TileRow, C> {
+  // Built from the columns asked, each of them read, which a type cannot follow.
+  return Object.fromEntries(columns.map((column) => [column, content[column]])) as Pick<TileRow, C>
+}
+
+/** A row with only the content columns asked, apart from where it stands. */
+export const withContent = <C extends ContentColumn>(
+  {
+    id,
+    parentId,
+    direction,
+    target,
+    ...content
+  }: Omit<TileRow, ContentColumn> & Partial<Pick<TileRow, ContentColumn>>,
+  columns: ReadonlyArray<C>,
+): TileRowWith<C> => ({ id, parentId, direction, target, content: contentWith(content, columns) })
+
+/** What a read from one row asks of each: the content columns of that row, and of the rows below it. */
+export interface ColumnsAsked<O extends ContentColumn, C extends ContentColumn> {
+  readonly opened: ReadonlyArray<O>
+  readonly below: ReadonlyArray<C>
+}
+
+/** A read from one row: that row, then the rows below it, each with the content columns asked. */
+export interface Generations<O extends ContentColumn, C extends ContentColumn> {
+  readonly opened: TileRowWith<O>
+  readonly below: ReadonlyArray<TileRowWith<C>>
+}
+
 /** A row to add under a parent. Its id is made here. */
 type NewTileRow = Omit<TileRow, 'id' | 'parentId' | 'direction'> & {
   readonly parentId: string
@@ -79,13 +115,17 @@ export class Tiles extends Context.Service<
     readonly root: (accountId: string, root: Pick<TileRow, ContentColumn>) => Effect.Effect<string>
     /**
      * The row of this id in the Account's System, then the rows below it, `depth` generations down,
-     * one query per generation, each row with only the content columns asked. Nothing when the
-     * System holds no row of this id.
+     * one query per generation, that row and the rows below each with only the content columns
+     * asked of them. `undefined` when the System holds no row of this id.
      */
-    readonly generationsFrom: <C extends ContentColumn>(
+    readonly generationsFrom: <O extends ContentColumn, C extends ContentColumn>(
       accountId: string,
-      from: { readonly id: string; readonly depth: number; readonly columns: ReadonlyArray<C> },
-    ) => Effect.Effect<ReadonlyArray<TileRowWith<C>>>
+      from: {
+        readonly id: string
+        readonly depth: number
+        readonly columns: ColumnsAsked<O, C>
+      },
+    ) => Effect.Effect<Generations<O, C> | undefined>
     /** The rows of these ids in the Account's System, each with only the content columns asked. */
     readonly ofIds: <C extends ContentColumn>(
       accountId: string,
@@ -220,16 +260,7 @@ const make = Effect.gen(function* () {
       .where(and(ofAccount(accountId), where))
       .pipe(
         Effect.orDie,
-        Effect.map((rows) =>
-          rows.map(({ id, parentId, direction, target, ...content }) => ({
-            id,
-            parentId,
-            direction,
-            target,
-            // Built from the columns asked, which Drizzle's types cannot follow.
-            content: content as Pick<TileRow, C>,
-          })),
-        ),
+        Effect.map((rows) => rows.map((row) => withContent(row, columns))),
       )
   }
 
@@ -245,19 +276,25 @@ const make = Effect.gen(function* () {
       ),
     )
 
-  const generationsFrom = <C extends ContentColumn>(
+  const generationsFrom = <O extends ContentColumn, C extends ContentColumn>(
     accountId: string,
-    from: { readonly id: string; readonly depth: number; readonly columns: ReadonlyArray<C> },
+    from: { readonly id: string; readonly depth: number; readonly columns: ColumnsAsked<O, C> },
   ) =>
     Effect.gen(function* () {
-      let generation = yield* rowsWith(accountId, eq(tile.id, from.id), from.columns)
-      const found = [...generation]
-      for (let left = from.depth; left > 0 && generation.length > 0; left--) {
-        const parents = generation.map((row) => row.id)
-        generation = yield* rowsWith(accountId, inArray(tile.parentId, parents), from.columns)
-        found.push(...generation)
+      const [opened] = yield* rowsWith(accountId, eq(tile.id, from.id), from.columns.opened)
+      if (opened === undefined) return undefined
+      const below: Array<TileRowWith<C>> = []
+      let parents = [opened.id]
+      for (let left = from.depth; left > 0 && parents.length > 0; left--) {
+        const generation = yield* rowsWith(
+          accountId,
+          inArray(tile.parentId, parents),
+          from.columns.below,
+        )
+        below.push(...generation)
+        parents = generation.map((row) => row.id)
       }
-      return found
+      return { opened, below } satisfies Generations<O, C>
     })
 
   const ofIds = <C extends ContentColumn>(

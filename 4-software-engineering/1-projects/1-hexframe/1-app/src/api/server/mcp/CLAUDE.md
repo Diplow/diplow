@@ -37,7 +37,7 @@ The tests drive the endpoint in-process. Against a real Claude Code, the accepta
 
 | Tool | Kind | Does | Runs |
 |---|---|---|---|
-| `open_tile` | read | One Tile, the Root without an id, of the user's System or of Help, with the fields asked, its parent, and its Children and Context by Title and Preview | `readTile`, twice |
+| `open_tile` | read | One Tile, the Root without an id, of the user's System or of Help, with the fields asked, its parent, and its Children and Context by Title and Preview | `openTile` |
 | `map` | read | The System, or Help, below a Tile, 0 to 3 generations, Title and Preview unless more is asked | `readTile` |
 | `create_tile` | write | A Tile in a free slot under another: a Child, 1 to 6, or a Context Tile, −1 to −6; answers it with its id | `createTile` |
 | `edit_tile` | write | Any of a Tile's Title, Preview and Body; answers the Tile as it now reads | `editTile` |

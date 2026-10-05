@@ -15,7 +15,7 @@ Where [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/C
 | File | Holds |
 |---|---|
 | `help.ts` | `helpNotes`, by language, the text of every `CLAUDE.md` under `help/` (`en`) and of every `CLAUDE.fr.md` (`fr`), by its folder's path from there, `''` for the Root: an eager `import.meta.glob` per language, since Vite takes a glob's arguments as literals, `exhaustive` so the dot folders of Context Tiles come too |
-| `note.ts` | `noteOf`, a note split into the scalar fields of its frontmatter (`key: value`, quoted or not, and the `>` and `|` block scalars) and its Markdown, with no YAML library; `missingFrom`, the fields of `title`, `parent`, `owner` and `preview`, which every note of the vault holds, that a note lacks; and `noteFiles`, a note's name in each language, `CLAUDE.md` in English and `CLAUDE.fr.md` in French. Which languages Help is written in is Mapping's (`HelpLanguage`, `domains/mapping/help/help.ts`) |
+| `note.ts` | `noteOf`, a note split into the scalar fields of its frontmatter (`key: value`, quoted or not, and the `>` and `|` block scalars) and its Markdown, with no YAML library; `missingFrom`, the vault's fields, `parent` and `owner`, that a note lacks (a Tile's own, its Title and Preview, are Mapping's to check); and `noteFiles`, a note's name in each language, `CLAUDE.md` in English and `CLAUDE.fr.md` in French. Which languages Help is written in is Mapping's (`HelpLanguage`, `domains/mapping/help/help.ts`) |
 | `note.test.ts` | A note read, one with no frontmatter or an unclosed one, and the notes the build bundles, Context folders included, each French twin under its English note's path |
 
 ## Rules
