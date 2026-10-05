@@ -1,0 +1,28 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/mcp.test.ts
+  s_ed89c634a0e6b3::t_520f57b3dfcd67 3,8,11-16,254-267
+  s_ed89c634a0e6b3::t_445e0f0ac4e03e 268-269
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/tools.ts
+  s_ed89c634a0e6b3::t_d7c1194ad7a0cd 7,88
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/system.ts
+  s_ed89c634a0e6b3::t_d7c1194ad7a0cd 117-118,121-122
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_ed89c634a0e6b3::t_d7c1194ad7a0cd 24
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_ed89c634a0e6b3::t_1f13e3413448e3 33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d41f5214251af3290605300eaf71e91d201f0afa",
+  "prompts": {},
+  "sessions": {
+    "s_ed89c634a0e6b3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bfdaae8a-87ed-4a58-8630-209d0ea6e784",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
