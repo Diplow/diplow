@@ -1,0 +1,27 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/tiles.ts
+  s_ed89c634a0e6b3::t_204593a960a814 8,60-64,120-122,134-186,214
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/errors.ts
+  s_ed89c634a0e6b3::t_338f0c37de951f 33-36
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_ed89c634a0e6b3::t_338f0c37de951f 162-176
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.test.ts
+  s_ed89c634a0e6b3::t_1fc64f9ed4bdef 311-312,327-328,336,339
+  s_ed89c634a0e6b3::t_274814ed4baa2a 34,313-325,349-353,355-375,637
+  s_ed89c634a0e6b3::t_970dc22e7c318e 11,326,329-335,337-338,340-348,354
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0bb4cd313976eaffeb217757a0ebfae4c00f6e6c",
+  "prompts": {},
+  "sessions": {
+    "s_ed89c634a0e6b3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bfdaae8a-87ed-4a58-8630-209d0ea6e784",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
