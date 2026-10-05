@@ -60,8 +60,10 @@ const mcpFolder = 'src/api/server/mcp/'
 const filesFolder = 'src/domains/mapping/files/'
 
 // The shape (2-claude-mod/hooks/shape/), how a vault reads as a hexframe, written once for every
-// medium: Mapping reads files by its rules, so Mapping alone imports it, and only its reading rules.
+// medium: Mapping reads files by its rules, through one module that answers in Mapping's own types,
+// so that module alone imports it, and Mapping's tests, and only its reading rules.
 const shapeReadingRules = '2-claude-mod/hooks/shape/(node|exclusions)\\.ts$'
+const shapeSeam = '^src/domains/mapping/(files/import/shape\\.ts|.+\\.test\\.ts)$'
 
 const sdkOutsideItsRepository: IConfiguration['forbidden'] = Object.entries(sdks).map(
   ([repository, modules]) => ({
@@ -118,9 +120,9 @@ const config: IConfiguration = {
     {
       name: 'no-shape-outside-mapping',
       comment:
-        'The shape is imported by src/domains/mapping/ only, and only its reading rules, node.ts and exclusions.ts.',
+        'The shape is imported by src/domains/mapping/files/import/shape.ts only, and by Mapping’s tests.',
       severity: 'error',
-      from: { path: '^src/', pathNot: '^src/domains/mapping/' },
+      from: { path: '^src/', pathNot: shapeSeam },
       to: { path: '2-claude-mod/' },
     },
     {

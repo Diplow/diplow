@@ -236,6 +236,19 @@ describe('a vault folder read as Tiles', () => {
     expect(rows.map(({ id }) => id)).toEqual(['help', 'help/3/1', 'help/4'])
   })
 
+  it('names the folder of a note the import’s reading refuses, which Help’s own rules let pass', () => {
+    const { rows, problems } = vaultOf(
+      'help',
+      { '': note('Root'), '1-long': note('x'.repeat(1_001), 'Long.'), '2-flow': note('a: b') },
+      'CLAUDE.md',
+    )
+    expect(problems).toEqual([
+      '1-long: its CLAUDE.md reads as no Tile: TitleTooLong',
+      '2-flow: its CLAUDE.md reads as no Tile: FrontmatterInvalid',
+    ])
+    expect(rows).toEqual([])
+  })
+
   it('finds no Root in a folder whose own note reads as none', () => {
     expect(vaultOf('help', { '': undefined }, 'CLAUDE.md').problems).toEqual([
       '.: no CLAUDE.md',

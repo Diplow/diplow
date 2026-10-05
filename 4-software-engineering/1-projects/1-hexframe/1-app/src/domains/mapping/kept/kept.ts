@@ -134,6 +134,16 @@ export interface ToKeep {
   readonly frontmatter?: Frontmatter | undefined
 }
 
+/**
+ * Whether a value is what a Tile may keep, each part as its Schema checks it: a guard for a reader that
+ * collects every fault before it refuses, where `named` and `configured` stop at the first.
+ */
+export const keepable = {
+  name: Schema.is(Name),
+  config: Schema.is(TileConfig),
+  frontmatter: Schema.is(Frontmatter),
+}
+
 /** A Name, or `NameInvalid` on the field `name` when it isn't one path segment. */
 export const named = (name: string) =>
   Effect.mapError(

@@ -5,7 +5,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { Schema } from 'effect'
 
-import { contextDirections, directions } from '#/domains/mapping/tile'
+import { contentBounds, contextDirections, directions } from '#/domains/mapping/tile'
 import { locales } from '#/paraglide/runtime'
 
 import { run } from '../server/run'
@@ -34,9 +34,9 @@ export const Slot = Schema.Union([Direction, LeafSlot, ContextDirection])
  * above the 350 characters Mapping counts, since one character a reader sees can take several.
  */
 const content = {
-  title: Schema.String.check(Schema.isMaxLength(1_000)),
+  title: Schema.String.check(Schema.isMaxLength(contentBounds.title)),
   preview: Schema.String.check(Schema.isMaxLength(8_000)),
-  body: Schema.String.check(Schema.isMaxLength(100_000)),
+  body: Schema.String.check(Schema.isMaxLength(contentBounds.body)),
 }
 
 /** A Tile, by its id. */
