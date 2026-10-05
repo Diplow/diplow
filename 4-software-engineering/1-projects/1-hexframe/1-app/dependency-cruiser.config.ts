@@ -36,6 +36,7 @@ const sdks = {
   ],
   auth: ['better-auth', '@better-auth/.+', 'stripe'],
   observability: ['@sentry/.+', 'posthog-js', 'posthog-node'],
+  zip: ['fflate'],
 }
 
 // The UI libraries behind the design system: only src/front/ui/ imports them, and a feature builds from ui/.
