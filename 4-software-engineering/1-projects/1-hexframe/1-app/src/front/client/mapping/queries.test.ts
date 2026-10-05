@@ -18,6 +18,7 @@ import {
   useEditTile,
   useEditTileSubmit,
   useMoveTile,
+  useSwapTiles,
   useSystem,
 } from './queries'
 
@@ -29,6 +30,7 @@ vi.mock('#/api/mapping/mapping', () => ({
   createTile: vi.fn(),
   editTile: vi.fn(),
   moveTile: vi.fn(),
+  swapTiles: vi.fn(),
   deleteTile: vi.fn(),
   createReference: vi.fn(),
   deleteReference: vi.fn(),
@@ -59,6 +61,7 @@ function answering(value: unknown) {
     Mapping.createTile,
     Mapping.editTile,
     Mapping.moveTile,
+    Mapping.swapTiles,
     Mapping.deleteTile,
     Mapping.createReference,
     Mapping.deleteReference,
@@ -108,6 +111,7 @@ describe("Mapping's hooks", () => {
     }),
     writing('editTile', useEditTile, { id: 't', body: '# A' }),
     writing('moveTile', useMoveTile, { id: 't', parent: 'root', slot: -2 }),
+    writing('swapTiles', useSwapTiles, { a: 't', b: 'u' }),
     writing('deleteTile', useDeleteTile, { id: 't' }),
     writing('createReference', useCreateReference, { parent: 'root', slot: -1, target: 't' }),
     writing('deleteReference', useDeleteReference, { parent: 'root', slot: -1 }),

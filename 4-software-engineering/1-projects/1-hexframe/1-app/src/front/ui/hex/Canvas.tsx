@@ -9,7 +9,7 @@ import { m } from '#/paraglide/messages'
 import { hexHeight, hexWidth, type Direction, type Hex } from './geometry/geometry'
 import { layoutCanvas, type Ring, type TileNode } from './geometry/layout'
 import { EmptySlot, Frame } from './Frame'
-import { Tile } from './Tile'
+import { Tile, type Offer } from './Tile'
 import {
   centerOn,
   showView,
@@ -41,6 +41,11 @@ interface CanvasProps {
     label: (slot: EmptySlotTarget) => string
     onSelect: (slot: EmptySlotTarget) => void
   }
+  /**
+   * What a Tile offers to do with it beside its own click, trade places with a Tile on the move say,
+   * on a small button of its own; `undefined` for a Tile that offers nothing. Without it, none does.
+   */
+  heldSlots?: (tile: TileNode) => Offer | undefined
   className?: string
 }
 
@@ -48,7 +53,14 @@ interface CanvasProps {
 const radius = 320
 const canvas: Hex = { center: { x: hexWidth(radius) / 2, y: radius }, radius }
 
-export function Canvas({ system, view, onViewChange, emptySlots, className }: CanvasProps) {
+export function Canvas({
+  system,
+  view,
+  onViewChange,
+  emptySlots,
+  heldSlots,
+  className,
+}: CanvasProps) {
   const shown = showView(system, view)
   const placements = layoutCanvas(shown.center, shown, canvas)
   // The Tile the last single click landed on: a double-click centers it only if its first click
@@ -108,6 +120,7 @@ export function Canvas({ system, view, onViewChange, emptySlots, className }: Ca
                 onCenter={(from) => {
                   center(placement.tile, from)
                 }}
+                offer={heldSlots?.(placement.tile)}
               />
             )
           }

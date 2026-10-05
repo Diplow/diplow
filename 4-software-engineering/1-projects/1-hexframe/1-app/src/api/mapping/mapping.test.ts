@@ -214,8 +214,10 @@ describe("Mapping's server functions", () => {
       })
     }
   })
+})
 
-  it('lists, by its type, the errors each can fail with', () => {
+describe("the errors Mapping's server functions can fail with", () => {
+  it('are each listed by its type', () => {
     type ErrorOf<P> = P extends Effect.Effect<unknown, infer E, unknown> ? E : never
     expectTypeOf<ErrorOf<typeof Mapping.system>>().toEqualTypeOf<SignedOut>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createTile>>>().toEqualTypeOf<

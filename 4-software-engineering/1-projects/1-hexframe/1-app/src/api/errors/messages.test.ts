@@ -111,6 +111,16 @@ describe('the message table', () => {
     expect(messageFor(failure, 'moveTile')).toBe(sentence)
   })
 
+  it('words a swap along one line apart from a move below itself', () => {
+    expect(messageFor(new MovedUnderItself(), 'swapTiles')).toBe(
+      'Two tiles can only swap when neither lies below the other.',
+    )
+    overwriteGetLocale(() => 'fr')
+    expect(messageFor(new MovedUnderItself(), 'swapTiles')).toBe(
+      'Deux tuiles ne s’échangent que si aucune n’est sous l’autre.',
+    )
+  })
+
   it.each([
     [new TileNotFound(), 'Cette tuile n’existe pas, ou plus.'],
     [new TitleMissing({ fields: ['title'] }), 'Donnez un titre à cette tuile.'],

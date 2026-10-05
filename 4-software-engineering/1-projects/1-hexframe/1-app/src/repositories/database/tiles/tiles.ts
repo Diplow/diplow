@@ -123,66 +123,50 @@ const under = alias(tile, 'under')
 /** A query that only holds inside a transaction: it requires one, so it runs in no other. */
 const inTransaction = <A>(query: Effect.Effect<A>) => InTransaction.use(() => query)
 
-/** The service over the given database; a database failure is a defect. */
-const make = Effect.gen(function* () {
-  const database = yield* Database
-  const ofAccount = (accountId: string) => eq(tile.accountId, accountId)
-  const rootOf = (accountId: string) => and(ofAccount(accountId), isNull(tile.parentId))
-  const rowsOf = (accountId: string) =>
-    database.select(columns).from(tile).where(ofAccount(accountId)).pipe(Effect.orDie)
+const ofAccount = (accountId: string) => eq(tile.accountId, accountId)
 
-  /** Puts a row under a parent, in a direction. */
-  const place = (
-    accountId: string,
-    id: string,
-    at: { parentId: string | null; direction: number | null },
-  ) =>
-    database
-      .update(tile)
-      .set(at)
-      .where(and(ofAccount(accountId), eq(tile.id, id)))
-      .pipe(Effect.asVoid, Effect.orDie)
-
-  /**
-   * A row of the Account's System with nothing below it, so every one of its slots is free: a finite
-   * System always holds one.
-   */
-  const spare = (accountId: string) =>
-    database
+/**
+ * Two rows of the Account's System trade places. The slot index is checked row by row, never at the
+ * end of the statement, so two rows cannot trade slots in one update: the first waits under a spare
+ * row, one with nothing below it and so every slot free, which a finite System always holds, while
+ * the second takes its place.
+ */
+const swapRows = (database: Database['Service'], accountId: string, a: string, b: string) =>
+  Effect.gen(function* () {
+    const place = (id: string, at: Pick<TileRow, 'parentId' | 'direction'>) =>
+      database
+        .update(tile)
+        .set(at)
+        .where(and(ofAccount(accountId), eq(tile.id, id)))
+        .pipe(Effect.asVoid, Effect.orDie)
+    const placed = yield* database
+      .select(placeColumns)
+      .from(tile)
+      .where(and(ofAccount(accountId), inArray(tile.id, [a, b])))
+      .pipe(Effect.orDie)
+    const [spare] = yield* database
       .select({ id: tile.id })
       .from(tile)
       .leftJoin(under, eq(under.parentId, tile.id))
       .where(and(ofAccount(accountId), isNull(under.id)))
       .limit(1)
-      .pipe(
-        Effect.orDie,
-        Effect.flatMap(([found]) =>
-          found === undefined
-            ? Effect.die(new Error('A System was found with no row below which nothing stands'))
-            : Effect.succeed(found.id),
-        ),
-      )
+      .pipe(Effect.orDie)
+    const first = placed.find((row) => row.id === a)
+    const second = placed.find((row) => row.id === b)
+    if (first === undefined || second === undefined || spare === undefined) {
+      return yield* Effect.die(new Error('A swap named a row its System does not hold'))
+    }
+    yield* place(a, { parentId: spare.id, direction: 1 })
+    yield* place(b, { parentId: first.parentId, direction: first.direction })
+    yield* place(a, { parentId: second.parentId, direction: second.direction })
+  })
 
-  /**
-   * The slot index is checked row by row, never at the end of the statement, so two rows cannot trade
-   * slots in one update: the first waits in a slot of a spare row while the second takes its place.
-   */
-  const swap = (accountId: string, a: string, b: string) =>
-    Effect.gen(function* () {
-      const placed = yield* database
-        .select(placeColumns)
-        .from(tile)
-        .where(and(ofAccount(accountId), inArray(tile.id, [a, b])))
-        .pipe(Effect.orDie)
-      const first = placed.find((row) => row.id === a)
-      const second = placed.find((row) => row.id === b)
-      if (first === undefined || second === undefined) {
-        return yield* Effect.die(new Error('A swap named a row its System does not hold'))
-      }
-      yield* place(accountId, a, { parentId: yield* spare(accountId), direction: 1 })
-      yield* place(accountId, b, { parentId: first.parentId, direction: first.direction })
-      yield* place(accountId, a, { parentId: second.parentId, direction: second.direction })
-    })
+/** The service over the given database; a database failure is a defect. */
+const make = Effect.gen(function* () {
+  const database = yield* Database
+  const rootOf = (accountId: string) => and(ofAccount(accountId), isNull(tile.parentId))
+  const rowsOf = (accountId: string) =>
+    database.select(columns).from(tile).where(ofAccount(accountId)).pipe(Effect.orDie)
 
   const writes = (accountId: string): Writes => ({
     insert: (row) => {
@@ -211,7 +195,7 @@ const make = Effect.gen(function* () {
           .where(and(ofAccount(accountId), eq(tile.id, id)))
           .pipe(Effect.asVoid, Effect.orDie),
       ),
-    swap: (a, b) => inTransaction(swap(accountId, a, b)),
+    swap: (a, b) => inTransaction(swapRows(database, accountId, a, b)),
   })
 
   const ensureRoot = (accountId: string, root: Pick<TileRow, ContentColumn>) =>

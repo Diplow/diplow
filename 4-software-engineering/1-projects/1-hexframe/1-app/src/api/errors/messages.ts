@@ -29,6 +29,7 @@ const table: readonly Entry[] = [
   { tag: 'TitleMissing', message: m.error_mapping_title_missing },
   { tag: 'PreviewTooLong', message: m.error_mapping_preview_too_long },
   { tag: 'DirectionTaken', message: m.error_mapping_direction_taken },
+  { tag: 'MovedUnderItself', scope: 'swapTiles', message: m.error_mapping_swapped_in_line },
   { tag: 'MovedUnderItself', message: m.error_mapping_moved_under_itself },
   { tag: 'RootFixed', message: m.error_mapping_root_fixed },
   { tag: 'DevInvalid', scope: 'submitDevTitle', message: m.error_dev_title_missing },

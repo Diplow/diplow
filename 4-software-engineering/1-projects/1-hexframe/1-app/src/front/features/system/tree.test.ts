@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import type { SystemTile } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 
-import { canvasTree, ringOf, slotOf, tileIn } from './tree'
+import { canvasTree, ringOf, slotOf, swapsWith, tileIn } from './tree'
 
 const tile = (
   id: string,
@@ -79,6 +79,30 @@ describe('tileIn', () => {
   it('finds no Tile behind a broken Reference, nor an unknown id', () => {
     expect(tileIn(system, 'broken:root:-5')).toBeUndefined()
     expect(tileIn(system, 'nowhere')).toBeUndefined()
+  })
+})
+
+describe('swapsWith', () => {
+  const tree = canvasTree(system)
+  const moving = tree.children?.[1] ?? tree
+  const offers = (tile: typeof tree | undefined) =>
+    tile !== undefined && swapsWith(tree, moving, tile)
+
+  it('offers a swap with any Tile drawn where it stands, a Child or a Context Tile', () => {
+    expect([tree.children?.[4], tree.context?.[1], moving.children?.[3]].map(offers)).toEqual([
+      true,
+      true,
+      true,
+    ])
+  })
+
+  it('offers none with the Root, the moving Tile, a Reference or a broken one', () => {
+    expect([tree, moving, tree.context?.[2], tree.context?.[5]].map(offers)).toEqual([
+      false,
+      false,
+      false,
+      false,
+    ])
   })
 })
 
