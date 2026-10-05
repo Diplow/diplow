@@ -1,0 +1,42 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.test.ts
+  s_add1a77a88c179::t_b2bb3f609b9787 351-370
+  s_add1a77a88c179::t_2db29e120fc7ae 371-372
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/CLAUDE.md
+  s_add1a77a88c179::t_c1c6aef2145eb0 40,42,44
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_add1a77a88c179::t_c1c6aef2145eb0 44-45,68
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/system.ts
+  s_add1a77a88c179::t_2c283468bcd5f3 22,159
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_add1a77a88c179::t_1e6d40cb62510b 8-10,20-22,34-35,37,42,52
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/tile.ts
+  s_add1a77a88c179::t_2c283468bcd5f3 19
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_add1a77a88c179::t_2c283468bcd5f3 40-41
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/mcp.test.ts
+  s_add1a77a88c179::t_888eab96dcb114 80,82-88
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/writes.test.ts
+  s_add1a77a88c179::t_1c9fd44539825b 28
+  s_add1a77a88c179::t_b2bb3f609b9787 183-207
+  s_add1a77a88c179::t_07567b74b72896 208-209
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-import-export/decisions.md
+  s_add1a77a88c179::t_72c43698bbb285 1-19
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/database.test.ts
+  s_add1a77a88c179::t_2c283468bcd5f3 42,65,70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "193aa6a8049b9378b3359481dc95491ba4a86a87",
+  "prompts": {},
+  "sessions": {
+    "s_add1a77a88c179": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d3373e9-3681-410c-a221-392366b8a522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
