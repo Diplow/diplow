@@ -58,10 +58,10 @@ Every folder under `1-app/src/` holds at most 6 child folders and 6 files. The r
 |---|---|---|
 | Front | File routes, the features they compose, the design system, and the client's calls, on TanStack Router, Query and Form | What the browser shows |
 | API | Server functions (`createServerFn`) and Start middleware; raw server routes only for inbound webhooks and the MCP endpoint | Plumbing (auth, request id, logging) and the composition of domains |
-| Domains | Effect programs, one folder per domain; a service only when it holds state | The business logic, in the domain's language |
+| Domains | Effect programs, one folder per domain; an Effect `Context.Service` only when it holds state | The business logic, in the domain's language |
 | Repositories | Effect layers over Drizzle, Better Auth, Stripe | The technical complexity |
 
-An import only points down, and only the API layer composes domains. The direction and its lint now live in [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE|1-app]], each layer's rules in its own folder: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]], [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE|domains]], [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/CLAUDE|repositories]].
+An import only points down, and only the API layer composes domains. Once the project "hexframe app: Optimistic writes and patterns" lands, the front's door skips the API layer: the front may import a domain's entities, operations and errors, which are pure by what they are (below, "Domains"). The direction and its lint now live in [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE|1-app]], each layer's rules in its own folder: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]], [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE|domains]], [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/CLAUDE|repositories]].
 
 ## Effect stops at the server function
 
@@ -120,6 +120,22 @@ Vitest with `@effect/vitest`.
 ## Domains
 
 Each domain introduces its language with a short story in its `CLAUDE.md`: what it is about and the problems it solves, not an exhaustive glossary. What a domain may import and hold now lives in [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE|domains]].
+
+Every domain has the same shape, and its folders say what the code is, in the words of domain-driven design, never a technical property of it:
+
+| Path | Holds |
+|---|---|
+| `<domain>.ts` | The application service, the domain's entry, which the API layer calls: it loads through the repositories, decides, writes and publishes. Effect, and impure |
+| `errors.ts` | Its refusals, each with a kind |
+| `entities/` | Its entities, value objects and aggregate, with their invariants, behind an `index.ts` |
+| `operations/` | Its Operations, changes described as data; the events they make, facts in the past tense; and `decide` and `evolve`, behind an `index.ts` |
+| `<concept>/` | A sub-model with a life of its own, as Mapping's Help |
+
+A domain decides in two pure functions, the Decider: `decide(state, operation)` returns a refusal or the events the operation makes, and `evolve(state, event)` returns the state after one. The application service runs them on the state it locked, writes one change per event (the Root Mapping makes on a System's first read is the one write no event explains), and publishes the events, which the API layer's bus holds until the transaction commits (`transactional` runs what waits on its commit, knowing no bus); who acted rides on the bus's envelope, which the API layer fills, never in a domain's event. The client runs the same two functions over the state it caches to show a write before the server answers, so a rule exists once and the two sides never disagree on what an operation does. The client's `decide` is a preview, never a guard: a server function takes only the Operation, decoded by its schema, and the service decides again on what it loaded for the signed-in Account. Who may act on which System is the service's access check, outside `decide`, which knows no actor.
+
+Entities and operations are pure by what they are, so the front may import them: a domain's `entities/index.ts`, `operations/index.ts` and `errors.ts` are the front's door, its one way into the domains. Nothing reachable through it touches a repository, the application service, a concept folder, another domain, Node, the environment or the config, not even through a type-only import; beside `effect`, it reaches only `domains/kind.ts` and `domains/bus.ts`. A domain declares the shapes it reads, and the repository's rows satisfy them. The domain's types are then the front's types, and an adapter stands only where a shape really changes, at the repository and on the wire. A domain grows the shape lazily: IAM gets `entities/` the day it has something to put there.
+
+The project "hexframe app: Optimistic writes and patterns" builds this shape, its lint, the held events and the envelope; until it lands, the front reaches a domain only through the API layer, and events reach the bus as they are published.
 
 ### IAM
 
