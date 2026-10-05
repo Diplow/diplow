@@ -1,0 +1,33 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/import/read.ts
+  s_add1a77a88c179::t_b96b932fba0514 366-367
+  s_add1a77a88c179::t_ee8b8ce700d69b 7,111-124,131-134,138-140,142-145,237-238,249-253,256,335
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/help/vault.ts
+  s_add1a77a88c179::t_aa56960728d13e 55-58,64-65,104-106,109-110,115-116,120,126-137,139-148,164,167
+  s_add1a77a88c179::t_30dc2e11a37860 61-63,138,165-166
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/import/shape.ts
+  s_add1a77a88c179::t_b96b932fba0514 77-79,81-83
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-import-export/decisions.md
+  s_add1a77a88c179::t_0167bff936f3a6 56,58
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/help/help.test.ts
+  s_add1a77a88c179::t_b25873d7d6afd3 239-241,243-251
+  s_add1a77a88c179::t_fdd038f1dc5b91 242
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/import/read.test.ts
+  s_add1a77a88c179::t_b25873d7d6afd3 168,171,183-187,255,278,282
+  s_add1a77a88c179::t_b96b932fba0514 109
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "de5baefd8816442d82227c3a663f717d1a35e319",
+  "prompts": {},
+  "sessions": {
+    "s_add1a77a88c179": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d3373e9-3681-410c-a221-392366b8a522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
