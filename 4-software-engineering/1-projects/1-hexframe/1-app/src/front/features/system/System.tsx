@@ -40,24 +40,24 @@ export function System({ system, tree, search, onSearchChange, className }: Syst
   // empty slots add a Tile, the first of which replaces the move in the URL.
   const moving = change.kind === 'move' ? findTile(tree, change.id) : undefined
 
-  const place = (slot: EmptySlotTarget) => ({
-    parent: slot.parent.id,
-    slot: slotOf(slot.ring, slot.direction),
-  })
+  /** The slot an empty Direction stands for, for a new Tile or the moving one; none takes no click. */
+  const placeOf = (target: EmptySlotTarget, going?: TileNode) => {
+    const slot = slotOf(target.ring, target.direction, going)
+    return slot === undefined ? undefined : { parent: target.parent.id, slot }
+  }
 
-  // An empty Leaf slot takes nothing from the canvas yet: creating a Leaf there is HEX-61's.
-  const addHere = (slot: EmptySlotTarget) =>
-    slot.ring === 'leaves'
-      ? undefined
-      : {
-          label:
-            slot.ring === 'context'
-              ? m.system_add_context({ title: slot.parent.title })
-              : m.system_add_child({ title: slot.parent.title }),
-          onSelect: () => {
-            onSearchChange(withChange(search, { kind: 'add', ...place(slot) }))
-          },
-        }
+  const addHere = (target: EmptySlotTarget) => {
+    const place = placeOf(target)
+    if (place === undefined) return undefined
+    const { title } = target.parent
+    return {
+      label:
+        target.ring === 'context' ? m.system_add_context({ title }) : m.system_add_child({ title }),
+      onSelect: () => {
+        onSearchChange(withChange(search, { kind: 'add', ...place }))
+      },
+    }
+  }
 
   // One write at a time: a slot clicked while the Tile is on its way does nothing. A refusal (a slot
   // under the Tile itself, one taken meanwhile, a swap along one line) shows in a toast, and the move
@@ -70,18 +70,17 @@ export function System({ system, tree, search, onSearchChange, className }: Syst
     },
   }
 
-  const moveHere = (tile: TileNode) => (slot: EmptySlotTarget) =>
-    slot.ring === 'leaves'
-      ? undefined
-      : {
-          label:
-            slot.ring === 'context'
-              ? m.system_move_context({ tile: tile.title, title: slot.parent.title })
-              : m.system_move_child({ tile: tile.title, title: slot.parent.title }),
-          onSelect: () => {
-            if (!pending) move.mutate({ id: tile.id, ...place(slot) }, done)
-          },
-        }
+  const moveHere = (tile: TileNode) => (target: EmptySlotTarget) => {
+    const place = placeOf(target, tile)
+    if (place === undefined) return undefined
+    const names = { tile: tile.title, title: target.parent.title }
+    return {
+      label: target.ring === 'context' ? m.system_move_context(names) : m.system_move_child(names),
+      onSelect: () => {
+        if (!pending) move.mutate({ id: tile.id, ...place }, done)
+      },
+    }
+  }
 
   const swapWith = (moving: TileNode) => (held: TileNode) =>
     swapsWith(system, moving, held)

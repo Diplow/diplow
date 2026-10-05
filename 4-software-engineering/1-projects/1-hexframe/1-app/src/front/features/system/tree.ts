@@ -83,16 +83,26 @@ export const swapsWith = (system: SystemTile, moving: TileNode, tile: TileNode) 
   tileIn(system, tile.id) !== undefined
 
 /**
- * The slot a Tile takes under its parent, by the ring it is placed in: a Branch's Direction, in a ring
- * of Children or of Branches; a Leaf's, `{ leaf: n }`; or the Direction's negation in the Context.
+ * The slot an empty Direction of the canvas stands for, by the ring it is in and the Tile that goes
+ * there: a new one or a moving Branch, or a moving Leaf, which stays a Leaf. A ring of Children holds
+ * both kinds, so its Direction is a Branch's slot, or a Leaf's for a Leaf, both free there; a Context
+ * ring's is the Direction negated. Nothing where the Tile would change kind: a Leaf in a ring of
+ * Branches, or anything in a ring of Leaves but a Leaf, since creating a Leaf and growing or shrinking
+ * one are HEX-61's.
  */
-export function slotOf(ring: FrameKind, direction: Direction): typeof Slot.Type {
+export function slotOf(
+  ring: FrameKind,
+  direction: Direction,
+  going?: TileNode,
+): typeof Slot.Type | undefined {
+  const leaf = going?.leaf === true
   switch (ring) {
     case 'children':
+      return leaf ? { leaf: direction } : direction
     case 'branches':
-      return direction
+      return leaf ? undefined : direction
     case 'leaves':
-      return { leaf: direction }
+      return leaf ? { leaf: direction } : undefined
     case 'context':
       return contextSlot[direction]
   }

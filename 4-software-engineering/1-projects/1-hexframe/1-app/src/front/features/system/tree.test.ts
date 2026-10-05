@@ -116,16 +116,32 @@ describe('swapsWith', () => {
 })
 
 describe('slotOf and ringOf', () => {
-  it('is the Direction for a Branch, `{ leaf: n }` for a Leaf, its negation in the Context', () => {
-    expect(slotOf('children', 3)).toBe(3)
-    expect(slotOf('branches', 3)).toBe(3)
-    expect(slotOf('leaves', 3)).toEqual({ leaf: 3 })
-    expect(slotOf('context', 3)).toBe(-3)
+  const branch = canvasTree(system).branches?.[4]
+  const leaf = canvasTree(system).leaves?.[1]
+
+  it('is the Direction for a new Tile or a Branch, its negation in the Context', () => {
+    for (const going of [undefined, branch]) {
+      expect(slotOf('children', 3, going)).toBe(3)
+      expect(slotOf('branches', 3, going)).toBe(3)
+      expect(slotOf('context', 3, going)).toBe(-3)
+    }
+  })
+
+  it('keeps a moving Leaf a Leaf: its own slot in a ring of Children or of Leaves', () => {
+    expect(slotOf('children', 3, leaf)).toEqual({ leaf: 3 })
+    expect(slotOf('leaves', 3, leaf)).toEqual({ leaf: 3 })
+    expect(slotOf('context', 3, leaf)).toBe(-3)
+  })
+
+  it('is no slot where the Tile would change kind, nor for a new Tile in a ring of Leaves', () => {
+    expect(slotOf('branches', 3, leaf)).toBeUndefined()
+    expect(slotOf('leaves', 3, branch)).toBeUndefined()
+    expect(slotOf('leaves', 3)).toBeUndefined()
   })
 
   it('reads the ring back from the slot', () => {
-    expect(ringOf(slotOf('children', 6))).toBe('children')
-    expect(ringOf(slotOf('context', 6))).toBe('context')
+    expect(ringOf(6)).toBe('children')
+    expect(ringOf(-6)).toBe('context')
     expect(ringOf({ leaf: 6 })).toBe('children')
   })
 })
