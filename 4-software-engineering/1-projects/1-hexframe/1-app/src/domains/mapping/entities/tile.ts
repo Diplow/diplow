@@ -72,9 +72,9 @@ const among =
   (value: number): value is T =>
     (values as ReadonlyArray<number>).includes(value)
 
-export const isDirection = among(directions)
+const isDirection = among(directions)
 
-export const isContextDirection = among(contextDirections)
+const isContextDirection = among(contextDirections)
 
 /** How far past its Direction a row stores a Leaf: beyond the six Branch slots, 7 to 12. */
 const leafOffset = directions.length

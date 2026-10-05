@@ -33,13 +33,13 @@ interface Standing {
 }
 
 /** A Tile of a System below its Root, where it stands: a Branch, a Leaf or a Context Tile. */
-export interface PlacedTile extends FoundTile, Standing {}
+interface PlacedTile extends FoundTile, Standing {}
 
 /**
  * A Reference of a System, where it stands, always a Context slot: a link to the Tile of `target`, by
  * its id, so it survives a move. It has an id of its own, and no content.
  */
-export interface PlacedReference extends Standing {
+interface PlacedReference extends Standing {
   readonly _tag: 'Reference'
   readonly id: string
   readonly slot: ContextDirection
