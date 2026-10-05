@@ -29,10 +29,11 @@ const tool = <I>(entry: Tool<I>) => entry
 const allFields: ReadonlyArray<Field> = ['title', 'preview', 'body']
 const glimpseFields: ReadonlyArray<Field> = ['title', 'preview']
 
-/** The fields a read asks of each Tile: at least one, each once. */
-const Fields = (fallback: ReadonlyArray<Field>) =>
+/** The fields a read asks of each Tile: at least one, each once, these when none are given. */
+const Fields = (fallback: ReadonlyArray<Field>, description: string) =>
   Schema.Array(Schema.Literals(allFields))
     .check(Schema.isMinLength(1), Schema.isUnique())
+    .annotate({ description })
     .pipe(Schema.withDecodingDefaultKey(Effect.succeed(fallback)))
 
 const TileId = Id.annotate({
@@ -56,10 +57,10 @@ const openTile = tool({
     directions,
   input: Schema.Struct({
     id: Schema.optionalKey(TileId),
-    fields: Fields(allFields).annotate({
-      description:
-        'What to read of the opened Tile: any of title, preview, body. All three when not given.',
-    }),
+    fields: Fields(
+      allFields,
+      'What to read of the opened Tile: any of title, preview, body. All three when not given.',
+    ),
   }),
   program: ({ id, fields }) =>
     Effect.gen(function* () {
@@ -88,10 +89,10 @@ const map = tool({
     depth: Schema.Literals([0, 1, 2, 3])
       .annotate({ description: 'How many generations below the Tile: 0 to 3, 2 when not given.' })
       .pipe(Schema.withDecodingDefaultKey(Effect.succeed(2 as const))),
-    fields: Fields(glimpseFields).annotate({
-      description:
-        'What to read of each Tile: any of title, preview, body. Title and Preview when not given.',
-    }),
+    fields: Fields(
+      glimpseFields,
+      'What to read of each Tile: any of title, preview, body. Title and Preview when not given.',
+    ),
   }),
   program: ({ id, depth, fields }) => Mapping.readTile({ id, depth, fields }),
 })

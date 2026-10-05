@@ -129,7 +129,9 @@ describe('the MCP endpoint', () => {
         expect(tool.inputSchema).toMatchObject({ type: 'object' })
         expect(tool.inputSchema.required ?? []).toEqual([])
       }
-      expect(Object.keys(tools[1]?.inputSchema.properties ?? {})).toEqual(['id', 'depth', 'fields'])
+      const properties = Object.values(tools[1]?.inputSchema.properties ?? {})
+      expect(properties).toHaveLength(3)
+      for (const property of properties) expect(property).toHaveProperty('description')
     },
   )
 
