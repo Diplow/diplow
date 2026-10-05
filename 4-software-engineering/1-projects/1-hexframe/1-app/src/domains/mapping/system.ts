@@ -1,5 +1,5 @@
 // A System as a reader finds it, built from the repository's rows: the Root, then everything below
-// it, each Tile with its Children, its Branches and its Leaves, and its Context; or one Tile read to a
+// it, each Tile with its Branches and its Leaves, its Children, and its Context; or one Tile read to a
 // depth, with only the fields asked. Pure: what a row means is decided here.
 import {
   type ColumnsAsked,
@@ -24,8 +24,8 @@ interface LeafTile extends Tile {
 }
 
 /**
- * A Tile in its System: its Children, Branches and Leaves each by Direction, and its Context by slot.
- * A Branch, the Root or a Context Tile alike.
+ * A Tile in its System: its Branches and its Leaves, its Children, each by Direction, and its Context
+ * by slot. A Branch, the Root or a Context Tile alike.
  */
 export interface SystemTile extends LeafTile {
   readonly branches: Partial<Record<Direction, SystemTile>>
