@@ -179,6 +179,21 @@ describe("the server's observability", () => {
     }),
   )
 
+  it.effect('reads the flag of the Account a Key proves, at /mcp', () =>
+    Effect.gen(function* () {
+      const asked: Array<string> = []
+      const key = Exit.succeed(
+        Option.some({ account: { id: 'account-2', email: 'ada@example.com' }, keyId: 'key-1' }),
+      )
+      const request = { requestId: 'req-1', scope: 'open_tile', session: signedOut, key }
+      const log = yield* requestLog(request, 'production').pipe(
+        Effect.provide(posthog('low', asked)),
+      )
+      expect(asked).toEqual(['verbosity account-2'])
+      expect(log).toMatchObject({ verbosity: 'low', distinctId: 'account-2', anonymous: false })
+    }),
+  )
+
   it.effect('reads no flag for a request nobody is signed in to', () =>
     Effect.gen(function* () {
       const asked: Array<string> = []

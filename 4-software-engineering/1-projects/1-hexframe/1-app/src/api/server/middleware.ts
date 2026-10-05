@@ -18,9 +18,10 @@ function isPlatformRequest(request: Request): request is PlatformRequest {
 
 /**
  * The platform's `waitUntil`, which Nitro puts on the request: Vercel's on Vercel, srvx's own under
- * `pnpm dev`. Where there is none, the work still runs; nothing keeps the function up for it.
+ * `pnpm dev`. Where there is none, the work still runs; nothing keeps the function up for it. `/mcp`
+ * takes it from here too.
  */
-function waitUntilOf(request: Request): StartContext['waitUntil'] {
+export function waitUntilOf(request: Request): StartContext['waitUntil'] {
   return (promise) => {
     if (isPlatformRequest(request)) request.waitUntil(promise)
   }
