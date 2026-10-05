@@ -9,6 +9,8 @@ import {
   check,
   index,
   integer,
+  json,
+  jsonb,
   pgTable,
   smallint,
   text,
@@ -140,6 +142,15 @@ export const apikey = pgTable(
   ],
 )
 
+/** What a `tile` row's `config` holds: a folder's naming, either part of it left out when not set. */
+export interface TileConfigColumn {
+  readonly fileName?: string | undefined
+  readonly folderPattern?: string | undefined
+}
+
+/** What a `tile` row's `frontmatter` holds: the keys an imported file carried, each a scalar. */
+export type FrontmatterColumn = Readonly<Record<string, string | number | boolean>>
+
 // Mapping's (./tiles/tiles.ts): every Tile of every System, and the References standing in Context slots.
 
 /**
@@ -150,6 +161,9 @@ export const apikey = pgTable(
  * a Context slot. One row at most holds a slot; the checks refuse any other, which would hold a slot
  * no reader sees. Deleting a row deletes everything below it; a Reference to it has no key to it, so it stays,
  * broken. `account_id` has no key to `user`: Mapping ignores IAM (hexframe-v0-mapping DEC-1).
+ * `name`, `config` and `frontmatter` keep what an imported file carried, each null when it carried
+ * nothing: the name it was imported under, its folder's settings and the frontmatter keys Mapping has no
+ * use for, both as JSON objects, the latter in its file's order. Mapping bounds them before writing them and decides what they mean.
  */
 export const tile = pgTable(
   'tile',
@@ -162,6 +176,10 @@ export const tile = pgTable(
     preview: text('preview').notNull(),
     body: text('body').notNull(),
     target: text('target'),
+    name: text('name'),
+    config: jsonb('config').$type<TileConfigColumn>(),
+    // json, not jsonb, which would sort the keys: Frontmatter keeps the order its file gave.
+    frontmatter: json('frontmatter').$type<FrontmatterColumn>(),
   },
   (table) => [
     index('tile_accountId_idx').on(table.accountId),

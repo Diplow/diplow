@@ -8,6 +8,7 @@ import {
   type TileRowWith,
 } from '#/repositories/database/tiles/tiles'
 
+import { type Kept, keptOf } from './kept/kept'
 import {
   type Content,
   type ContextDirection,
@@ -18,8 +19,11 @@ import {
   type Tile,
 } from './tile'
 
-/** A Tile as its System holds it, before what stands below it. */
-interface FoundTile extends Tile {
+/**
+ * A Tile as its System holds it, before what stands below it, with what it keeps from the files it was
+ * imported from: its Name, its Tile config and its Frontmatter, each when it has one.
+ */
+interface FoundTile extends Tile, Kept {
   readonly _tag: 'Tile'
 }
 
@@ -133,7 +137,7 @@ export function systemOf(rows: ReadonlyArray<TileRow>): SystemTile | undefined {
 
   const refer = (target: string) => referenceTo(target, byId.get(target), tileOf)
 
-  const found = (row: TileRow): FoundTile => ({ _tag: 'Tile', ...tileOf(row) })
+  const found = (row: TileRow): FoundTile => ({ _tag: 'Tile', ...tileOf(row), ...keptOf(row) })
 
   const place = (row: TileRow): SystemTile => ({
     ...found(row),

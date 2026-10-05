@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { TileRow, TileRowWith } from '#/repositories/database/tiles/tiles'
 
+import { keepsNothing } from './kept/kept'
 import { below, readOf, rowAt, systemOf, tileRow } from './system'
 
 // The pure reading of the tiles repository's rows, on rows made by hand: no database.
@@ -14,6 +15,7 @@ const tile = (id: string, parentId: string | null, direction: number | null): Ti
   preview: `${id}, in short.`,
   body: `# ${id}`,
   target: null,
+  ...keepsNothing,
 })
 
 const reference = (id: string, parentId: string, direction: number, target: string): TileRow => ({
