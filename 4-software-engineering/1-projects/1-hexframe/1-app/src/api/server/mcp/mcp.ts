@@ -15,8 +15,7 @@ import * as Iam from '#/domains/iam/iam'
 
 import { decodeFailure, type EncodedFailure, type Failure } from '../../errors/failure'
 import { messageFor } from '../../errors/messages'
-import { waitUntilOf } from '../middleware'
-import { noSession, provenKey, run, type StartContext } from '../run'
+import { noSession, provenKey, run, waitUntilOf, type StartContext } from '../run'
 import { tools } from './tools'
 
 const implementation = { name: 'hexframe', version: '1.0.0' }

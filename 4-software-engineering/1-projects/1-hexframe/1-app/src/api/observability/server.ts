@@ -50,13 +50,13 @@ interface Request {
   readonly requestId: string
   readonly scope: string
   readonly session: Exit.Exit<Option.Option<Session>>
-  /** The Key `/mcp` proved; a server function has none. */
-  readonly key?: Exit.Exit<Option.Option<KeyProof>>
+  /** The Key `/mcp` proved; a server function's is always none. */
+  readonly key: Exit.Exit<Option.Option<KeyProof>>
 }
 
 /** The Account a proof names, when it was resolved and proves one. */
-const accountOf = (proof: Exit.Exit<Option.Option<Session | KeyProof>> | undefined) =>
-  proof !== undefined && Exit.isSuccess(proof)
+const accountOf = (proof: Exit.Exit<Option.Option<Session | KeyProof>>) =>
+  Exit.isSuccess(proof)
     ? Option.getOrUndefined(Option.map(proof.value, ({ account }) => account.id))
     : undefined
 

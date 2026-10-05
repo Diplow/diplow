@@ -95,6 +95,24 @@ export interface StartContext {
   readonly key: Exit.Exit<Option.Option<KeyProof>>
 }
 
+/** A request as Nitro hands it over (srvx's `ServerRequest`), with the platform's `waitUntil`. */
+type PlatformRequest = Request & Pick<StartContext, 'waitUntil'>
+
+function isPlatformRequest(request: Request): request is PlatformRequest {
+  return 'waitUntil' in request && typeof request.waitUntil === 'function'
+}
+
+/**
+ * The platform's `waitUntil`, which Nitro puts on the request: Vercel's on Vercel, srvx's own under
+ * `pnpm dev`. Where there is none, the work still runs; nothing keeps the function up for it. Both
+ * doors put it on the context they build.
+ */
+export function waitUntilOf(request: Request): StartContext['waitUntil'] {
+  return (promise) => {
+    if (isPlatformRequest(request)) request.waitUntil(promise)
+  }
+}
+
 /** A server function's Key: none, whatever its headers say, since a Key opens `/mcp` only. */
 export const noKey: StartContext['key'] = Exit.succeed(Option.none())
 

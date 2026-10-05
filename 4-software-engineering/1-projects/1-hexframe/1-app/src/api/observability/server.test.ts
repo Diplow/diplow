@@ -2,7 +2,7 @@ import { describe, expect, it } from '@effect/vitest'
 import { Cause, Effect, Exit, Layer, Option } from 'effect'
 import { vi } from 'vitest'
 
-import type { Session } from '#/domains/iam/iam'
+import type { KeyProof, Session } from '#/domains/iam/iam'
 import { Analytics, type AnalyticsEvent } from '#/repositories/observability/posthog-server'
 import { captureError, startSentry } from '#/repositories/observability/sentry'
 import { ErrorTracker, traced } from '#/repositories/observability/sentry-server'
@@ -63,13 +63,14 @@ function recorded() {
 }
 
 const signedOut: Exit.Exit<Option.Option<Session>> = Exit.succeed(Option.none())
+const noKey: Exit.Exit<Option.Option<KeyProof>> = Exit.succeed(Option.none())
 const signedIn: Exit.Exit<Option.Option<Session>> = Exit.succeed(
   Option.some({ account: { id: 'account-1', email: 'ada@example.com' }, expiresAt: new Date() }),
 )
 
 /** Runs an effect inside a request, as the helper does, at the verbosity its log resolves to. */
 const inRequest = <A, E, R>(effect: Effect.Effect<A, E, R>, session = signedOut) =>
-  Effect.flatMap(requestLog({ requestId: 'req-1', scope: 'getTile', session }), (log) =>
+  Effect.flatMap(requestLog({ requestId: 'req-1', scope: 'getTile', session, key: noKey }), (log) =>
     effect.pipe(Effect.provideService(CurrentRequestLog, log)),
   )
 
@@ -147,6 +148,7 @@ describe("the server's observability", () => {
         requestId: 'req-1',
         scope: 'getTile',
         session: signedIn,
+        key: noKey,
       }).pipe(Effect.provide(layer))
       // At high, production's level, a bus message is not sent; at low, development's, it is.
       for (const verbosity of ['high', 'low'] as const) {
@@ -162,7 +164,7 @@ describe("the server's observability", () => {
   it.effect("raises a signed-in request's verbosity by the flag PostHog serves its Account", () =>
     Effect.gen(function* () {
       const asked: Array<string> = []
-      const request = { requestId: 'req-1', scope: 'getTile', session: signedIn }
+      const request = { requestId: 'req-1', scope: 'getTile', session: signedIn, key: noKey }
       const log = yield* requestLog(request, 'production').pipe(
         Effect.provide(posthog('low', asked)),
       )
@@ -173,7 +175,7 @@ describe("the server's observability", () => {
 
   it.effect("keeps the environment's verbosity when the flag cannot be read", () =>
     Effect.gen(function* () {
-      const request = { requestId: 'req-1', scope: 'getTile', session: signedIn }
+      const request = { requestId: 'req-1', scope: 'getTile', session: signedIn, key: noKey }
       const log = yield* requestLog(request, 'production').pipe(Effect.provide(posthog(null)))
       expect(log).toMatchObject({ verbosity: 'high', distinctId: 'account-1', anonymous: false })
     }),
@@ -201,6 +203,7 @@ describe("the server's observability", () => {
         requestId: 'req-1',
         scope: 'getTile',
         session: signedOut,
+        key: noKey,
       }).pipe(Effect.provide(posthog('low', asked)))
       expect(asked).toEqual([])
       expect(log).toEqual({
@@ -258,6 +261,7 @@ describe('what no topic and no logger heard', () => {
       requestId: 'req-1',
       scope: 'getTile',
       session: signedOut,
+      key: noKey,
     })
     expect(console_).toHaveBeenCalledOnce()
     console_.mockRestore()
