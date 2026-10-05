@@ -7,10 +7,11 @@ import { TestDatabase } from '#/repositories/database/testing'
 import type { TileConfigColumn } from '#/repositories/database/schema'
 import { layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
-import { configured, Frontmatter, named, type StoredConfig } from './entities'
+import { configured, Frontmatter, named, type StoredConfig, type ToKeep } from './entities'
 import { exportOf } from './files/files'
 import * as Mapping from './mapping'
 import { system } from './mapping'
+import { CreateTile, EditTile, MoveTile, SwapTiles } from './operations'
 
 // What a Tile keeps from the files it was imported from, over PGlite: a Tile keeps them through an
 // edit, a move and a swap, and a read gives them back. The checks themselves, on values made by hand,
@@ -18,8 +19,14 @@ import { system } from './mapping'
 
 const TestTiles = tilesLayer.pipe(Layer.provideMerge(TestDatabase))
 
-const createTile = (...args: Parameters<typeof Mapping.createTile>) =>
-  transactional(Mapping.createTile(...args))
+/** A create as the API layer runs it, in a transaction, with what an import alone keeps beside it. */
+const createTile = (
+  accountId: string,
+  { name, config, frontmatter, ...fields }: Omit<CreateTile, '_tag'> & ToKeep,
+) =>
+  transactional(
+    Mapping.createTile(accountId, new CreateTile(fields), { name, config, frontmatter }),
+  )
 
 const content = (title: string) => ({ title, preview: `${title}, in short.`, body: `# ${title}` })
 
@@ -42,10 +49,14 @@ layer(TestTiles)('what a Tile keeps, over the tiles repository', (it) => {
         name,
       })
       const other = yield* createTile(accountId, { parent: root.id, slot: 2, ...content('Other') })
-      yield* transactional(Mapping.editTile(accountId, kept.id, { title: 'The stack' }))
-      yield* transactional(Mapping.moveTile(accountId, kept.id, { parent: root.id, slot: 3 }))
+      yield* transactional(
+        Mapping.editTile(accountId, new EditTile({ id: kept.id, title: 'The stack' })),
+      )
+      yield* transactional(
+        Mapping.moveTile(accountId, new MoveTile({ id: kept.id, parent: root.id, slot: 3 })),
+      )
       expect((yield* system(accountId)).branches[3]).toMatchObject({ title: 'The stack', name })
-      yield* transactional(Mapping.swapTiles(accountId, kept.id, other.id))
+      yield* transactional(Mapping.swapTiles(accountId, new SwapTiles({ a: kept.id, b: other.id })))
       const after = yield* system(accountId)
       expect(after.branches[2]).toMatchObject({ id: kept.id, name: 'STACK.md' })
       expect(after.branches[3]).not.toHaveProperty('name')
@@ -104,7 +115,9 @@ layer(TestTiles)('what a Tile keeps, over the tiles repository', (it) => {
         config,
         frontmatter,
       })
-      yield* transactional(Mapping.editTile(accountId, tile.id, content('Do a ticket')))
+      yield* transactional(
+        Mapping.editTile(accountId, new EditTile({ id: tile.id, ...content('Do a ticket') })),
+      )
       const read = (yield* system(accountId)).context[-2]
       expect(read).toMatchObject({
         title: 'Do a ticket',
@@ -128,7 +141,7 @@ layer(TestTiles)('what a Tile keeps, over the tiles repository', (it) => {
   )
 
   it('stores only what was checked: a write takes a decoded Name, Tile config and Frontmatter', () => {
-    type Given = Parameters<typeof Mapping.createTile>[1]
+    type Given = NonNullable<Parameters<typeof Mapping.createTile>[2]>
     expectTypeOf<string>().not.toExtend<NonNullable<Given['name']>>()
     expectTypeOf<{ fileName: string }>().not.toExtend<NonNullable<Given['config']>>()
     expectTypeOf<Record<string, string>>().not.toExtend<NonNullable<Given['frontmatter']>>()

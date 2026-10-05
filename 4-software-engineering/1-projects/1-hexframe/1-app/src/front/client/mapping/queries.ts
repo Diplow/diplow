@@ -8,6 +8,7 @@ import { Schema } from 'effect'
 
 import type { Failure, Outcome } from '#/api/errors/failure'
 import type { SystemTile } from '#/domains/mapping/entities'
+import type { OperationName } from '#/domains/mapping/operations'
 import { type Download, downloaded } from '#/api/mapping/files/download'
 import { type Given, type LeftOut, type Prepared, prepared } from './upload'
 import {
@@ -15,6 +16,7 @@ import {
   type NewReference,
   type NewTile,
   type ReferenceSlot,
+  type TileDelete,
   type TileEdit,
   type TileMove,
   type TileRef,
@@ -54,9 +56,9 @@ export const useSystem = () =>
 export const useHelp = (language: Locale) =>
   useQuery(read({ scope: 'help', key: [language], call: () => help({ data: { language } }) }))
 
-/** A write to the System, named by its scope, after which the System is read again. */
+/** A write to the System, scoped by the Operation it runs, after which the System is read again. */
 function useSystemWrite<I, A, E extends Failure>(
-  scope: string,
+  scope: OperationName,
   call: (input: I) => Promise<Outcome<A, E>>,
 ) {
   const client = useQueryClient()
@@ -84,7 +86,7 @@ export const useSwapTiles = () =>
 
 /** Deletes a Tile and everything below it; References to them stay, broken. */
 export const useDeleteTile = () =>
-  useSystemWrite('deleteTile', (data: typeof TileRef.Type) => deleteTile({ data }))
+  useSystemWrite('deleteTile', (data: typeof TileDelete.Type) => deleteTile({ data }))
 
 /** Puts a Reference to a Tile in a free Context slot. */
 export const useCreateReference = () =>
@@ -181,7 +183,7 @@ export type TileContent = Pick<SystemTile, (typeof contentFields)[number]>
  * on the fields it names, or in its channel, and the System is read again once the write settles.
  */
 function useSystemSubmit<A, E extends Failure>(
-  scope: string,
+  scope: OperationName,
   call: (content: TileContent) => Promise<Outcome<A, E>>,
   onSaved: () => void,
 ) {

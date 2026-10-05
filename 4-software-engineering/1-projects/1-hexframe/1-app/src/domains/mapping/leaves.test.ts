@@ -8,6 +8,14 @@ import { layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 import { type Direction, directions } from './entities'
 import * as Mapping from './mapping'
 import { system } from './mapping'
+import {
+  CreateReference,
+  CreateTile,
+  DeleteTile,
+  EditTile,
+  MoveTile,
+  SwapTiles,
+} from './operations'
 
 // Leaves beside Branches, over PGlite: a Tile holds six of each in their own Directions, a Leaf holds
 // nothing, and a Tile changes kind only by moving, with nothing below it when it takes a Leaf slot. The
@@ -15,20 +23,22 @@ import { system } from './mapping'
 
 const TestTiles = tilesLayer.pipe(Layer.provideMerge(TestDatabase))
 
-/** A change as the API layer runs it: in the transaction it opens. */
-const inTransaction =
-  <Args extends ReadonlyArray<unknown>, A, E, R>(
-    change: (...args: Args) => Effect.Effect<A, E, R>,
-  ) =>
-  (...args: Args) =>
-    transactional(change(...args))
-
-const createTile = inTransaction(Mapping.createTile)
-const editTile = inTransaction(Mapping.editTile)
-const moveTile = inTransaction(Mapping.moveTile)
-const swapTiles = inTransaction(Mapping.swapTiles)
-const deleteTile = inTransaction(Mapping.deleteTile)
-const createReference = inTransaction(Mapping.createReference)
+/**
+ * A change as the API layer runs it: its Operation, made from its fields, in the transaction the
+ * layer opens.
+ */
+const createTile = (accountId: string, fields: Omit<CreateTile, '_tag'>) =>
+  transactional(Mapping.createTile(accountId, new CreateTile(fields)))
+const editTile = (accountId: string, id: string, changes: Omit<EditTile, '_tag' | 'id'>) =>
+  transactional(Mapping.editTile(accountId, new EditTile({ id, ...changes })))
+const moveTile = (accountId: string, id: string, to: Omit<MoveTile, '_tag' | 'id'>) =>
+  transactional(Mapping.moveTile(accountId, new MoveTile({ id, ...to })))
+const swapTiles = (accountId: string, a: string, b: string) =>
+  transactional(Mapping.swapTiles(accountId, new SwapTiles({ a, b })))
+const deleteTile = (accountId: string, id: string) =>
+  transactional(Mapping.deleteTile(accountId, new DeleteTile({ id })))
+const createReference = (accountId: string, fields: Omit<CreateReference, '_tag'>) =>
+  transactional(Mapping.createReference(accountId, new CreateReference(fields)))
 
 const content = (title: string) => ({ title, preview: `${title}, in short.`, body: `# ${title}` })
 

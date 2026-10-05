@@ -6,8 +6,16 @@
 import { Effect } from 'effect'
 
 import * as Iam from '#/domains/iam/iam'
-import type { Content, Field } from '#/domains/mapping/entities'
-import type { Placement, ReferenceSlot } from '#/domains/mapping/operations'
+import type { Field } from '#/domains/mapping/entities'
+import {
+  CreateReference,
+  CreateTile,
+  DeleteReference,
+  DeleteTile,
+  EditTile,
+  MoveTile,
+  SwapTiles,
+} from '#/domains/mapping/operations'
 import * as Landing from '#/domains/mapping/landing/landing'
 import * as Mapping from '#/domains/mapping/mapping'
 import type { Locale } from '#/paraglide/runtime'
@@ -61,26 +69,29 @@ export const exportTile = ({ id }: { id: string }) =>
     }),
   )
 
-export const createTile = (input: Parameters<typeof Mapping.createTile>[1]) =>
-  changeForAccount((accountId) => Mapping.createTile(accountId, input))
+/** An Operation as a server function decodes it: its fields, without the tag its name says. */
+type Fields<O> = Omit<O, '_tag'>
 
-export const editTile = ({ id, ...changes }: { id: string } & Partial<Content>) =>
-  changeForAccount((accountId) => Mapping.editTile(accountId, id, changes))
+export const createTile = (input: Omit<Fields<CreateTile>, 'id'>) =>
+  changeForAccount((accountId) => Mapping.createTile(accountId, new CreateTile(input)))
 
-export const moveTile = ({ id, ...to }: { id: string } & Placement) =>
-  changeForAccount((accountId) => Mapping.moveTile(accountId, id, to))
+export const editTile = (input: Fields<EditTile>) =>
+  changeForAccount((accountId) => Mapping.editTile(accountId, new EditTile(input)))
 
-export const swapTiles = ({ a, b }: { a: string; b: string }) =>
-  changeForAccount((accountId) => Mapping.swapTiles(accountId, a, b))
+export const moveTile = (input: Fields<MoveTile>) =>
+  changeForAccount((accountId) => Mapping.moveTile(accountId, new MoveTile(input)))
 
-export const deleteTile = ({ id }: { id: string }) =>
-  changeForAccount((accountId) => Mapping.deleteTile(accountId, id))
+export const swapTiles = (input: Fields<SwapTiles>) =>
+  changeForAccount((accountId) => Mapping.swapTiles(accountId, new SwapTiles(input)))
 
-export const createReference = (input: ReferenceSlot & { target: string }) =>
-  changeForAccount((accountId) => Mapping.createReference(accountId, input))
+export const deleteTile = (input: Fields<DeleteTile>) =>
+  changeForAccount((accountId) => Mapping.deleteTile(accountId, new DeleteTile(input)))
 
-export const deleteReference = (input: ReferenceSlot) =>
-  changeForAccount((accountId) => Mapping.deleteReference(accountId, input))
+export const createReference = (input: Fields<CreateReference>) =>
+  changeForAccount((accountId) => Mapping.createReference(accountId, new CreateReference(input)))
+
+export const deleteReference = (input: Fields<DeleteReference>) =>
+  changeForAccount((accountId) => Mapping.deleteReference(accountId, new DeleteReference(input)))
 
 /** An upload, as the import's server function decodes it: the file, what it is, where it lands. */
 interface ImportUpload {
