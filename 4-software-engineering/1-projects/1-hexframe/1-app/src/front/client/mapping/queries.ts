@@ -13,14 +13,19 @@ import {
   type TileEdit,
   type TileMove,
   type TileRef,
+  type TileSwap,
   createReference,
   createTile,
   deleteReference,
   deleteTile,
   editTile,
+  help,
   moveTile,
+  swapTiles,
   system,
 } from '#/api/mapping/mapping'
+
+import type { Locale } from '#/paraglide/runtime'
 
 import { read, write } from '../calls'
 import { submitWrite } from '../channels'
@@ -40,6 +45,13 @@ export const useSystem = () =>
  * by slot, and everything below them. The System is its Root.
  */
 export type SystemTile = NonNullable<ReturnType<typeof useSystem>['data']>
+
+/**
+ * Help whole, in the page's language, Bodies included, read as the System is. Anyone reads it, so it
+ * never sends the user to sign in.
+ */
+export const useHelp = (language: Locale) =>
+  useQuery(read({ scope: 'help', key: [language], call: () => help({ data: { language } }) }))
 
 /** A write to the System, named by its scope, after which the System is read again. */
 function useSystemWrite<I, A, E extends Failure>(
@@ -64,6 +76,10 @@ export const useEditTile = () =>
 /** Moves a Tile, and everything below it, to a free slot. */
 export const useMoveTile = () =>
   useSystemWrite('moveTile', (data: typeof TileMove.Type) => moveTile({ data }))
+
+/** Two Tiles trade places, each with everything below it. */
+export const useSwapTiles = () =>
+  useSystemWrite('swapTiles', (data: typeof TileSwap.Type) => swapTiles({ data }))
 
 /** Deletes a Tile and everything below it; References to them stay, broken. */
 export const useDeleteTile = () =>

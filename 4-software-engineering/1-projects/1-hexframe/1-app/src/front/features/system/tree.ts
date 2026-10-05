@@ -52,6 +52,18 @@ function contextNode(entry: ContextEntry, slot: string): TileNode {
   }
 }
 
+/**
+ * Whether a Tile on the canvas offers to swap places with the moving one: a Tile of the System drawn
+ * where it stands, so neither a Reference nor a broken one, and neither the Root, which never moves,
+ * nor the moving Tile itself. A Tile above or below the moving one offers it too: Mapping refuses
+ * that swap, as it refuses a move below the Tile itself.
+ */
+export const swapsWith = (system: SystemTile, moving: TileNode, tile: TileNode) =>
+  tile.reference !== true &&
+  tile.id !== system.id &&
+  tile.id !== moving.id &&
+  tileIn(system, tile.id) !== undefined
+
 /** The slot a Tile takes under its parent: a Child's Direction, or its negation in the Context. */
 export const slotOf = (ring: Ring, direction: Direction) =>
   ring === 'children' ? direction : contextSlot[direction]

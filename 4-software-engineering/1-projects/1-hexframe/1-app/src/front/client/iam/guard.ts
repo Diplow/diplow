@@ -44,6 +44,14 @@ export function continueTo(redirect: string | undefined, accountId: string) {
 }
 
 /**
+ * Whether a route's context holds the Session `signedInOnly` put there: whether the page's guard proved
+ * one. What the header's links show by, so the key they read stays the guard's.
+ */
+export function provedSession(context: unknown) {
+  return typeof context === 'object' && context !== null && 'session' in context
+}
+
+/**
  * A route's `beforeLoad` for a page only a signed-in Account sees: puts the Session on the route's
  * context, or redirects a signed-out visit to sign-in, carrying where it was. Any other failure is the
  * route's error, as a read's would be.

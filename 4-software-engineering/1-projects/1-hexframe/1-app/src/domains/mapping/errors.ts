@@ -30,9 +30,20 @@ export class RootFixed extends Schema.TaggedError<RootFixed>()('RootFixed', {
   kind: kind('Forbidden'),
 }) {}
 
-/** A Tile cannot move below itself: under one of its own Children, or theirs. */
+/**
+ * A Tile cannot move below itself: under one of its own Children, or theirs. Nor can it swap with a
+ * Tile above or below it, which would put one of the two below itself.
+ */
 export class MovedUnderItself extends Schema.TaggedError<MovedUnderItself>()('MovedUnderItself', {
   kind: kind('Conflict'),
+}) {}
+
+/**
+ * Help is hexframe's own System, which every Account reads and none writes: a change naming one of its
+ * Tiles is refused, whichever end of a move or a swap it is.
+ */
+export class HelpReadOnly extends Schema.TaggedError<HelpReadOnly>()('HelpReadOnly', {
+  kind: kind('Forbidden'),
 }) {}
 
 export const mappingFailures = [
@@ -42,4 +53,5 @@ export const mappingFailures = [
   DirectionTaken,
   MovedUnderItself,
   RootFixed,
+  HelpReadOnly,
 ] as const

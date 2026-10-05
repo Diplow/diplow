@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import type { TileRow } from '#/repositories/database/tiles/tiles'
+import type { TileRow, TileRowWith } from '#/repositories/database/tiles/tiles'
 
-import { below, rowAt, systemOf, tileRow } from './system'
+import { below, readOf, rowAt, systemOf, tileRow } from './system'
 
 // The pure reading of the tiles repository's rows, on rows made by hand: no database.
 
@@ -92,5 +92,71 @@ describe('reading rows by id and by slot', () => {
     )
     expect(below(rows, 'principle')).toEqual(new Set(['principle']))
     expect(below(rows, 'root').size).toBe(rows.length)
+  })
+})
+
+/** The rows above as a read from one Tile gives them, with only the Title asked. */
+const titled = rows.map(({ id, parentId, direction, target, title }): TileRowWith<'title'> => ({
+  id,
+  parentId,
+  direction,
+  target,
+  content: { title },
+}))
+
+/** The rows of the Tiles the References above point at, as the read gives them. */
+const pointedAt = rows.map(
+  ({ id, parentId, direction, target, title, preview }): TileRowWith<'title' | 'preview'> => ({
+    id,
+    parentId,
+    direction,
+    target,
+    content: { title, preview },
+  }),
+)
+
+const opened = (id: string) => {
+  const row = titled.find((candidate) => candidate.id === id)
+  if (row === undefined) throw new Error(`No row ${id} in the fixture`)
+  return row
+}
+
+describe('a Tile read to a depth', () => {
+  it('stops at the depth asked, with no slots where it stopped, empty ones above', () => {
+    expect(readOf(opened('root'), { rows: titled, depth: 0, pointedAt })).toEqual({
+      _tag: 'Tile',
+      id: 'root',
+      title: 'root',
+    })
+    const child = readOf(opened('root'), { rows: titled, depth: 1, pointedAt }).children?.[2]
+    expect(child).toEqual({ _tag: 'Tile', id: 'child', title: 'child' })
+    const deeper = readOf(opened('root'), { rows: titled, depth: 2, pointedAt })
+    expect(deeper.children?.[2]?.children).toEqual({
+      6: { _tag: 'Tile', id: 'grandchild', title: 'grandchild' },
+    })
+    expect(deeper.context?.[-1]).toEqual({
+      _tag: 'Tile',
+      id: 'principle',
+      title: 'principle',
+      children: {},
+      context: {},
+    })
+  })
+
+  it('gives each Tile only the fields its rows carry', () => {
+    const bare = titled.map((row) => ({ ...row, content: {} }))
+    const root = bare.find((row) => row.id === 'root')
+    expect(root && readOf(root, { rows: bare, depth: 1, pointedAt }).children?.[2]).toEqual({
+      _tag: 'Tile',
+      id: 'child',
+    })
+  })
+
+  it('shows a Reference as its Tile’s id, Title and Preview, and one to no Tile as broken', () => {
+    expect(readOf(opened('child'), { rows: titled, depth: 1, pointedAt }).context).toEqual({
+      [-1]: { _tag: 'Reference', tile: { id: 'root', title: 'root', preview: 'root, in short.' } },
+      [-2]: { _tag: 'BrokenReference', target: 'gone' },
+      [-3]: { _tag: 'BrokenReference', target: 'ref-to-root' },
+    })
   })
 })

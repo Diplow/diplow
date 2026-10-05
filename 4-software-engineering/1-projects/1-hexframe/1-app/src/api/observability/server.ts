@@ -5,7 +5,7 @@
 // failure; the server entry (src/server.ts) starts Sentry and traces every request.
 import { Cause, Context, Effect, Exit, Layer, Logger, Option, References } from 'effect'
 
-import type { Session } from '#/domains/iam/iam'
+import type { KeyProof, Session } from '#/domains/iam/iam'
 import { Analytics, analytics } from '#/repositories/observability/posthog-server'
 import { captureError, startSentry } from '#/repositories/observability/sentry'
 import { ErrorTracker, errorTracker, traced } from '#/repositories/observability/sentry-server'
@@ -27,7 +27,7 @@ interface RequestLog {
   readonly distinctId: string
   readonly anonymous: boolean
   readonly requestId: string | undefined
-  /** The server function called. */
+  /** The server function called, or the MCP tool. */
   readonly scope: string | undefined
 }
 
@@ -50,20 +50,26 @@ interface Request {
   readonly requestId: string
   readonly scope: string
   readonly session: Exit.Exit<Option.Option<Session>>
+  /** The Key `/mcp` proved; a server function's is always none. */
+  readonly key: Exit.Exit<Option.Option<KeyProof>>
 }
+
+/** The Account a proof names, when it was resolved and proves one. */
+const accountOf = (proof: Exit.Exit<Option.Option<Session | KeyProof>>) =>
+  Exit.isSuccess(proof)
+    ? Option.getOrUndefined(Option.map(proof.value, ({ account }) => account.id))
+    : undefined
 
 /**
  * A request's log: the environment's verbosity, raised by the `verbosity` flag PostHog serves the
- * signed-in Account. Nobody signed in, no flag is read; a flag that cannot be read leaves the
- * environment's verbosity.
+ * signed-in Account, whichever proof names it. Nobody signed in, no flag is read; a flag that cannot
+ * be read leaves the environment's verbosity.
  */
 export function requestLog(
-  { requestId, scope, session }: Request,
+  { requestId, scope, session, key }: Request,
   environment: Environment = __ENVIRONMENT__,
 ): Effect.Effect<RequestLog, never, Analytics> {
-  const account = Exit.isSuccess(session)
-    ? Option.getOrUndefined(Option.map(session.value, ({ account }) => account.id))
-    : undefined
+  const account = accountOf(session) ?? accountOf(key)
   const base: RequestLog = {
     verbosity: verbosityFor(undefined, environment),
     distinctId: account ?? requestId,

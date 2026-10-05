@@ -17,7 +17,9 @@ import {
   useDeleteTile,
   useEditTile,
   useEditTileSubmit,
+  useHelp,
   useMoveTile,
+  useSwapTiles,
   useSystem,
 } from './queries'
 
@@ -26,9 +28,11 @@ import {
 // A refusal is what the client receives, its wire form: the front never imports a domain.
 vi.mock('#/api/mapping/mapping', () => ({
   system: vi.fn(),
+  help: vi.fn(),
   createTile: vi.fn(),
   editTile: vi.fn(),
   moveTile: vi.fn(),
+  swapTiles: vi.fn(),
   deleteTile: vi.fn(),
   createReference: vi.fn(),
   deleteReference: vi.fn(),
@@ -59,6 +63,7 @@ function answering(value: unknown) {
     Mapping.createTile,
     Mapping.editTile,
     Mapping.moveTile,
+    Mapping.swapTiles,
     Mapping.deleteTile,
     Mapping.createReference,
     Mapping.deleteReference,
@@ -98,6 +103,19 @@ describe("Mapping's hooks", () => {
     expect(Mapping.system).toHaveBeenCalledWith({ data: undefined })
   })
 
+  it('read Help in the language asked, each language a query of its own', async () => {
+    answering(undefined)
+    vi.mocked(Mapping.help).mockImplementation((({ data }: { data: { language: string } }) =>
+      Promise.resolve({ ok: true, value: { ...root, id: 'help', title: data.language } })) as never)
+    const { result } = render(() => ({ en: useHelp('en'), fr: useHelp('fr') }))
+    await waitFor(() => {
+      expect(result.current.hook.fr.data).toMatchObject({ id: 'help', title: 'fr' })
+    })
+    expect(result.current.hook.en.data).toMatchObject({ id: 'help', title: 'en' })
+    expect(Mapping.help).toHaveBeenCalledWith({ data: { language: 'en' } })
+    expect(Mapping.help).toHaveBeenCalledWith({ data: { language: 'fr' } })
+  })
+
   it.each([
     writing('createTile', useCreateTile, {
       parent: 'root',
@@ -108,6 +126,7 @@ describe("Mapping's hooks", () => {
     }),
     writing('editTile', useEditTile, { id: 't', body: '# A' }),
     writing('moveTile', useMoveTile, { id: 't', parent: 'root', slot: -2 }),
+    writing('swapTiles', useSwapTiles, { a: 't', b: 'u' }),
     writing('deleteTile', useDeleteTile, { id: 't' }),
     writing('createReference', useCreateReference, { parent: 'root', slot: -1, target: 't' }),
     writing('deleteReference', useDeleteReference, { parent: 'root', slot: -1 }),

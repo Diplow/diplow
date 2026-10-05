@@ -7,7 +7,7 @@ import { forget, identify } from '#/api/observability/client'
 import { session } from '#/api/iam/iam'
 
 import { CallFailed } from '../calls'
-import { continueTo, readSignInSearch, signedInOnly } from './guard'
+import { continueTo, provedSession, readSignInSearch, signedInOnly } from './guard'
 
 vi.mock('#/api/iam/iam', () => ({ session: vi.fn() }))
 vi.mock('#/api/observability/client', () => ({ identify: vi.fn(), forget: vi.fn() }))
@@ -89,6 +89,13 @@ describe('the guard of a page only a signed-in Account sees', () => {
     const found = { account, expiresAt: new Date() }
     answering({ ok: true, value: found })
     expect(await signedInOnly({ location })).toEqual({ session: found })
+  })
+
+  it("leaves a context the header's links read as signed in", async () => {
+    answering({ ok: true, value: { account, expiresAt: new Date(0) } })
+    expect(provedSession(await signedInOnly({ location }))).toBe(true)
+    expect(provedSession({})).toBe(false)
+    expect(provedSession(undefined)).toBe(false)
   })
 
   it('ties the device to the Account whose Session it found', async () => {

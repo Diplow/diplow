@@ -1,16 +1,18 @@
 // Mapping's server functions: one per operation, for the signed-in Account, which the middleware has
-// already put on the context as its Session. Each validates its input, then hands its program
-// (./programs.ts) to the helper; its type lists the errors it can fail with.
+// already put on the context as its Session, and `help`, Help whole, for any visitor. Each validates
+// its input, then hands its program (./programs.ts) to the helper; its type lists the errors it can
+// fail with.
 import { createServerFn } from '@tanstack/react-start'
 import { Schema } from 'effect'
 
 import { contextDirections, directions } from '#/domains/mapping/tile'
+import { locales } from '#/paraglide/runtime'
 
 import { run } from '../server/run'
 import * as Mapping from './programs'
 
 /** A Tile's id: a UUID, as the tiles repository makes every one, so nothing else reaches the domain. */
-const Id = Schema.String.check(Schema.isUUID())
+export const Id = Schema.String.check(Schema.isUUID())
 
 /** A Child's Direction and a Context slot, as Mapping names them. */
 const Direction = Schema.Literals(directions)
@@ -47,11 +49,17 @@ export const TileEdit = Schema.Struct({
 /** A Tile, and the free slot under another Tile, or its own parent, it moves to. */
 export const TileMove = Schema.Struct({ id: Id, parent: Id, slot: Slot })
 
+/** Two Tiles, by their ids, which trade places. */
+export const TileSwap = Schema.Struct({ a: Id, b: Id })
+
 /** A Context slot, by the Tile that holds it. */
 export const ReferenceSlot = Schema.Struct({ parent: Id, slot: ContextDirection })
 
 /** A Reference to put in a free Context slot: the Tile it points at, by its id. */
 export const NewReference = Schema.Struct({ parent: Id, slot: ContextDirection, target: Id })
+
+/** Help, in one of the app's languages: the page's, from its URL. */
+export const HelpLanguage = Schema.Struct({ language: Schema.Literals(locales) })
 
 /** A call that takes nothing. */
 const Nothing = Schema.toStandardSchemaV1(Schema.Undefined)
@@ -60,6 +68,14 @@ const Nothing = Schema.toStandardSchemaV1(Schema.Undefined)
 export const system = createServerFn({ method: 'GET' })
   .validator(Nothing)
   .handler(({ context }) => run(context, Mapping.system))
+
+/**
+ * Help whole, in the language asked: its Root with everything below it, Bodies included. Signed in or
+ * not, anyone reads it.
+ */
+export const help = createServerFn({ method: 'GET' })
+  .validator(Schema.toStandardSchemaV1(HelpLanguage))
+  .handler(({ data, context }) => run(context, Mapping.help(data)))
 
 export const createTile = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(NewTile))
@@ -72,6 +88,10 @@ export const editTile = createServerFn({ method: 'POST' })
 export const moveTile = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(TileMove))
   .handler(({ data, context }) => run(context, Mapping.moveTile(data)))
+
+export const swapTiles = createServerFn({ method: 'POST' })
+  .validator(Schema.toStandardSchemaV1(TileSwap))
+  .handler(({ data, context }) => run(context, Mapping.swapTiles(data)))
 
 export const deleteTile = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(TileRef))

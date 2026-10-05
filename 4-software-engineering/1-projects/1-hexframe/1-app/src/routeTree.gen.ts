@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './front/routes/__root'
 import { Route as IndexRouteImport } from './front/routes/index'
 import { Route as DevRouteRouteImport } from './front/routes/dev/route'
+import { Route as HelpRouteImport } from './front/routes/help'
+import { Route as McpRouteImport } from './front/routes/mcp'
 import { Route as SignInRouteImport } from './front/routes/sign-in'
 import { Route as SignUpRouteImport } from './front/routes/sign-up'
 import { Route as DevErrorsRouteImport } from './front/routes/dev/errors'
@@ -18,6 +20,7 @@ import { Route as DevHexRouteImport } from './front/routes/dev/hex'
 import { Route as DevSessionRouteImport } from './front/routes/dev/session'
 import { Route as DevSystemRouteImport } from './front/routes/dev/system'
 import { Route as DevUiRouteImport } from './front/routes/dev/ui'
+import { Route as SettingsKeysRouteImport } from './front/routes/settings/keys'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -27,6 +30,16 @@ const IndexRoute = IndexRouteImport.update({
 const DevRouteRoute = DevRouteRouteImport.update({
   id: '/dev',
   path: '/dev',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignInRoute = SignInRouteImport.update({
@@ -64,10 +77,17 @@ const DevUiRoute = DevUiRouteImport.update({
   path: '/ui',
   getParentRoute: () => DevRouteRoute,
 } as any)
+const SettingsKeysRoute = SettingsKeysRouteImport.update({
+  id: '/settings/keys',
+  path: '/settings/keys',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dev': typeof DevRouteRouteWithChildren
+  '/help': typeof HelpRoute
+  '/mcp': typeof McpRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/dev/errors': typeof DevErrorsRoute
@@ -75,10 +95,13 @@ export interface FileRoutesByFullPath {
   '/dev/session': typeof DevSessionRoute
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
+  '/settings/keys': typeof SettingsKeysRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dev': typeof DevRouteRouteWithChildren
+  '/help': typeof HelpRoute
+  '/mcp': typeof McpRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/dev/errors': typeof DevErrorsRoute
@@ -86,11 +109,14 @@ export interface FileRoutesByTo {
   '/dev/session': typeof DevSessionRoute
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
+  '/settings/keys': typeof SettingsKeysRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dev': typeof DevRouteRouteWithChildren
+  '/help': typeof HelpRoute
+  '/mcp': typeof McpRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
   '/dev/errors': typeof DevErrorsRoute
@@ -98,12 +124,15 @@ export interface FileRoutesById {
   '/dev/session': typeof DevSessionRoute
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
+  '/settings/keys': typeof SettingsKeysRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/dev'
+    | '/help'
+    | '/mcp'
     | '/sign-in'
     | '/sign-up'
     | '/dev/errors'
@@ -111,10 +140,13 @@ export interface FileRouteTypes {
     | '/dev/session'
     | '/dev/system'
     | '/dev/ui'
+    | '/settings/keys'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dev'
+    | '/help'
+    | '/mcp'
     | '/sign-in'
     | '/sign-up'
     | '/dev/errors'
@@ -122,10 +154,13 @@ export interface FileRouteTypes {
     | '/dev/session'
     | '/dev/system'
     | '/dev/ui'
+    | '/settings/keys'
   id:
     | '__root__'
     | '/'
     | '/dev'
+    | '/help'
+    | '/mcp'
     | '/sign-in'
     | '/sign-up'
     | '/dev/errors'
@@ -133,13 +168,17 @@ export interface FileRouteTypes {
     | '/dev/session'
     | '/dev/system'
     | '/dev/ui'
+    | '/settings/keys'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DevRouteRoute: typeof DevRouteRouteWithChildren
+  HelpRoute: typeof HelpRoute
+  McpRoute: typeof McpRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
+  SettingsKeysRoute: typeof SettingsKeysRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -156,6 +195,20 @@ declare module '@tanstack/react-router' {
       path: '/dev'
       fullPath: '/dev'
       preLoaderRoute: typeof DevRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sign-in': {
@@ -207,6 +260,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DevUiRouteImport
       parentRoute: typeof DevRouteRoute
     }
+    '/settings/keys': {
+      id: '/settings/keys'
+      path: '/settings/keys'
+      fullPath: '/settings/keys'
+      preLoaderRoute: typeof SettingsKeysRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -233,8 +293,11 @@ const DevRouteRouteWithChildren = DevRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DevRouteRoute: DevRouteRouteWithChildren,
+  HelpRoute: HelpRoute,
+  McpRoute: McpRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
+  SettingsKeysRoute: SettingsKeysRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

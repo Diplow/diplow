@@ -2,9 +2,10 @@ import { Effect, Exit, Option, Schema } from 'effect'
 import { describe, expect, expectTypeOf, it } from 'vitest'
 
 import type { SignedOut } from '#/domains/iam/errors'
-import type { Session } from '#/domains/iam/iam'
+import type { KeyProof, Session } from '#/domains/iam/iam'
 import type {
   DirectionTaken,
+  HelpReadOnly,
   MovedUnderItself,
   PreviewTooLong,
   RootFixed,
@@ -13,8 +14,17 @@ import type {
 } from '#/domains/mapping/errors'
 
 import type { Failure } from '../errors/failure'
-import { run, type Services, type StartContext } from '../server/run'
-import { NewReference, NewTile, ReferenceSlot, TileEdit, TileMove, TileRef } from './mapping'
+import { noKey, run, type Services, type StartContext } from '../server/run'
+import {
+  HelpLanguage,
+  NewReference,
+  NewTile,
+  ReferenceSlot,
+  TileEdit,
+  TileMove,
+  TileRef,
+  TileSwap,
+} from './mapping'
 import * as Mapping from './programs'
 
 // Mapping's server functions, as their handlers run them: the program, through the helper, on the
@@ -24,12 +34,14 @@ import * as Mapping from './programs'
 /** Any of Mapping's programs, as the helper takes it. */
 type Program = Effect.Effect<unknown, Failure, Services>
 
-/** A request from someone signed in as an Account no other test uses, or from nobody. */
-function request(signedIn = true): StartContext {
-  const session: Session = {
-    account: { id: crypto.randomUUID(), email: 'someone@example.com' },
-    expiresAt: new Date(Date.now() + 60_000),
-  }
+/**
+ * A request from someone signed in as an Account no other test uses, by a Session or by one of their
+ * Keys, or from nobody.
+ */
+function request(signedIn: boolean | 'by key' = true): StartContext {
+  const account = { id: crypto.randomUUID(), email: 'someone@example.com' }
+  const session: Session = { account, expiresAt: new Date(Date.now() + 60_000) }
+  const key: KeyProof = { account, keyId: 'key-1' }
   return {
     requestId: 'req-mapping',
     scope: 'test',
@@ -39,7 +51,8 @@ function request(signedIn = true): StartContext {
       headers: new Headers(),
       setCookies: () => undefined,
     },
-    session: Exit.succeed(signedIn ? Option.some(session) : Option.none()),
+    session: Exit.succeed(signedIn === true ? Option.some(session) : Option.none()),
+    key: signedIn === 'by key' ? Exit.succeed(Option.some(key)) : noKey,
   }
 }
 
@@ -68,6 +81,7 @@ describe("Mapping's server functions", () => {
     ['createTile', Mapping.createTile({ parent: 'p', slot: 1, ...content('Child') })],
     ['editTile', Mapping.editTile({ id: 't', title: 'Renamed' })],
     ['moveTile', Mapping.moveTile({ id: 't', parent: 'p', slot: 2 })],
+    ['swapTiles', Mapping.swapTiles({ a: 't', b: 'u' })],
     ['deleteTile', Mapping.deleteTile({ id: 't' })],
     ['createReference', Mapping.createReference({ parent: 'p', slot: -1, target: 't' })],
     ['deleteReference', Mapping.deleteReference({ parent: 'p', slot: -1 })],
@@ -77,6 +91,22 @@ describe("Mapping's server functions", () => {
       failure: { _tag: 'SignedOut', kind: 'Unauthenticated' },
       requestId: 'req-mapping',
     })
+  })
+
+  it('reads Help whole for anyone, signed out included, in the language asked', async () => {
+    const english = await value(run(request(false), Mapping.help({ language: 'en' })))
+    const french = await value(run(request(), Mapping.help({ language: 'fr' })))
+    expect(english).toMatchObject({ _tag: 'Tile', id: 'help', title: 'Hexframe' })
+    expect(english.children[5]).toMatchObject({ id: 'help/5', title: 'Operations' })
+    expect(french.children[5]).toMatchObject({ id: 'help/5', title: 'Les opérations' })
+    expect(french.children[5]?.body).toMatch(/Déplacer/)
+  })
+
+  it('runs for an Account its Key proves as for one its Session proves', async () => {
+    const context = request('by key')
+    const root = await value(run(context, Mapping.system))
+    await value(run(context, Mapping.createTile({ parent: root.id, slot: 1, ...content('Child') })))
+    expect((await value(run(context, Mapping.system))).children[1]).toMatchObject(content('Child'))
   })
 
   it("reads the Account's System, its Root added untitled on the first read", async () => {
@@ -102,6 +132,24 @@ describe("Mapping's server functions", () => {
     expect((await value(run(context, Mapping.system))).children).toEqual({})
   })
 
+  it('swaps two Tiles, each with everything below it, and refuses a swap along one line', async () => {
+    const { context, root, child } = await withAChild()
+    const other = await value(
+      run(context, Mapping.createTile({ parent: root.id, slot: -5, ...content('Other') })),
+    )
+    const grandchild = await value(
+      run(context, Mapping.createTile({ parent: child.id, slot: 2, ...content('Grandchild') })),
+    )
+    await value(run(context, Mapping.swapTiles({ a: child.id, b: other.id })))
+    const swapped = await value(run(context, Mapping.system))
+    expect(swapped.children[1]).toMatchObject({ id: other.id, children: {} })
+    expect(swapped.context[-5]).toMatchObject({ id: child.id, children: { 2: grandchild } })
+    expect(await run(context, Mapping.swapTiles({ a: grandchild.id, b: child.id }))).toMatchObject({
+      ok: false,
+      failure: { _tag: 'MovedUnderItself', kind: 'Conflict' },
+    })
+  })
+
   it('puts a Reference in a Context slot and empties it', async () => {
     const { context, root, child } = await withAChild()
     await value(
@@ -121,6 +169,7 @@ describe("Mapping's server functions", () => {
       [Mapping.createTile({ parent: root.id, slot: 1, ...content('Another') }), 'DirectionTaken'],
       [Mapping.moveTile({ id: root.id, parent: child.id, slot: 1 }), 'RootFixed'],
       [Mapping.deleteTile({ id: root.id }), 'RootFixed'],
+      [Mapping.swapTiles({ a: child.id, b: root.id }), 'RootFixed'],
       [Mapping.deleteTile({ id: crypto.randomUUID() }), 'TileNotFound'],
     ]
     for (const [program, tag] of refusals) {
@@ -165,6 +214,7 @@ describe("Mapping's server functions", () => {
       Mapping.editTile({ id: child.id, title: 'Mine now' }),
       Mapping.moveTile({ id: child.id, parent: theirRoot.id, slot: 1 }),
       Mapping.deleteTile({ id: child.id }),
+      Mapping.swapTiles({ a: child.id, b: child.id }),
       Mapping.createTile({ parent: child.id, slot: 1, ...content('Squatter') }),
       Mapping.createReference({ parent: theirRoot.id, slot: -1, target: child.id }),
     ]
@@ -175,27 +225,33 @@ describe("Mapping's server functions", () => {
       })
     }
   })
+})
 
-  it('lists, by its type, the errors each can fail with', () => {
+describe("the errors Mapping's server functions can fail with", () => {
+  it('are each listed by its type, a write refusing Help', () => {
     type ErrorOf<P> = P extends Effect.Effect<unknown, infer E, unknown> ? E : never
     expectTypeOf<ErrorOf<typeof Mapping.system>>().toEqualTypeOf<SignedOut>()
+    expectTypeOf<ErrorOf<ReturnType<typeof Mapping.help>>>().toEqualTypeOf<never>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createTile>>>().toEqualTypeOf<
-      SignedOut | TitleMissing | PreviewTooLong | TileNotFound | DirectionTaken
+      SignedOut | TitleMissing | PreviewTooLong | TileNotFound | DirectionTaken | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.editTile>>>().toEqualTypeOf<
-      SignedOut | TitleMissing | PreviewTooLong | TileNotFound
+      SignedOut | TitleMissing | PreviewTooLong | TileNotFound | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.moveTile>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | RootFixed | MovedUnderItself | DirectionTaken
+      SignedOut | TileNotFound | RootFixed | MovedUnderItself | DirectionTaken | HelpReadOnly
+    >()
+    expectTypeOf<ErrorOf<ReturnType<typeof Mapping.swapTiles>>>().toEqualTypeOf<
+      SignedOut | TileNotFound | RootFixed | MovedUnderItself | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.deleteTile>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | RootFixed
+      SignedOut | TileNotFound | RootFixed | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createReference>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | DirectionTaken
+      SignedOut | TileNotFound | DirectionTaken | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.deleteReference>>>().toEqualTypeOf<
-      SignedOut | TileNotFound
+      SignedOut | TileNotFound | HelpReadOnly
     >()
   })
 })
@@ -221,6 +277,24 @@ describe("the schemas Mapping's server functions validate by", () => {
     ])
     expect(accepts(TileMove, { id: t, parent: p, slot: 3 })).toBe(true)
     expect(accepts(TileMove, { id: t, parent: p, slot: 9 })).toBe(false)
+  })
+
+  it("read Help in one of the app's languages, nothing else", () => {
+    expect(['en', 'fr'].map((language) => accepts(HelpLanguage, { language }))).toEqual([
+      true,
+      true,
+    ])
+    expect(['de', '', undefined].map((language) => accepts(HelpLanguage, { language }))).toEqual([
+      false,
+      false,
+      false,
+    ])
+  })
+
+  it('swap two Tiles named by their ids', () => {
+    expect(accepts(TileSwap, { a: t, b: p })).toBe(true)
+    expect(accepts(TileSwap, { a: t })).toBe(false)
+    expect(accepts(TileSwap, { a: t, b: 'root' })).toBe(false)
   })
 
   it('put a Reference in a Context slot only', () => {

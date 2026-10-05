@@ -6,12 +6,16 @@ import {
   CredentialsRejected,
   EmailMalformed,
   EmailTaken,
+  KeyNameInvalid,
+  KeyNotFound,
   PasswordLengthInvalid,
+  SessionRequired,
   SignedOut,
   TooManyAttempts,
 } from '#/domains/iam/errors'
 import {
   DirectionTaken,
+  HelpReadOnly,
   MovedUnderItself,
   PreviewTooLong,
   RootFixed,
@@ -60,6 +64,12 @@ describe('the message table', () => {
     [new PasswordLengthInvalid({ fields: ['password'] }), 'Use between 8 and 128 characters.'],
     [new TooManyAttempts(), 'Too many attempts. Wait a few seconds, then try again.'],
     [new SignedOut(), 'Sign in to go on.'],
+    [
+      new SessionRequired(),
+      'Keys and your account can only be changed from a signed-in browser, not with a key.',
+    ],
+    [new KeyNameInvalid({ fields: ['name'] }), 'Give the key a name of 1 to 32 characters.'],
+    [new KeyNotFound(), "This key doesn't exist, or was already revoked."],
   ])("words IAM's %s in its own sentence", (failure, sentence) => {
     expect(messageFor(failure, 'signIn')).toBe(sentence)
   })
@@ -77,6 +87,12 @@ describe('the message table', () => {
     [new PasswordLengthInvalid({ fields: ['password'] }), 'Utilisez entre 8 et 128 caractères.'],
     [new TooManyAttempts(), 'Trop de tentatives. Patientez quelques secondes, puis réessayez.'],
     [new SignedOut(), 'Connectez-vous pour continuer.'],
+    [
+      new SessionRequired(),
+      'Les clés et votre compte ne se modifient que depuis un navigateur connecté, pas avec une clé.',
+    ],
+    [new KeyNameInvalid({ fields: ['name'] }), 'Donnez à la clé un nom de 1 à 32 caractères.'],
+    [new KeyNotFound(), 'Cette clé n’existe pas, ou a déjà été révoquée.'],
   ])("words IAM's %s in French too", (failure, sentence) => {
     overwriteGetLocale(() => 'fr')
     expect(messageFor(failure, 'signIn')).toBe(sentence)
@@ -92,8 +108,19 @@ describe('the message table', () => {
     ],
     [new MovedUnderItself(), "A tile can't move under itself or one of its own children."],
     [new RootFixed(), "Your root tile is you: it can't be moved or deleted."],
+    [new HelpReadOnly(), "Help is hexframe's guide: everyone reads it, nobody changes it."],
   ])("words Mapping's %s in its own sentence", (failure, sentence) => {
     expect(messageFor(failure, 'moveTile')).toBe(sentence)
+  })
+
+  it('words a swap along one line apart from a move below itself', () => {
+    expect(messageFor(new MovedUnderItself(), 'swapTiles')).toBe(
+      'Two tiles can only swap when neither lies below the other.',
+    )
+    overwriteGetLocale(() => 'fr')
+    expect(messageFor(new MovedUnderItself(), 'swapTiles')).toBe(
+      'Deux tuiles ne s’échangent que si aucune n’est sous l’autre.',
+    )
   })
 
   it.each([
@@ -111,6 +138,10 @@ describe('the message table', () => {
     [
       new RootFixed(),
       'Votre tuile racine, c’est vous : elle ne peut être ni déplacée ni supprimée.',
+    ],
+    [
+      new HelpReadOnly(),
+      'L’aide est le guide de hexframe : tout le monde la lit, personne ne la modifie.',
     ],
   ])("words Mapping's %s in French too", (failure, sentence) => {
     overwriteGetLocale(() => 'fr')

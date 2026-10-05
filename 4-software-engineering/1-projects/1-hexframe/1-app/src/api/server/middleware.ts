@@ -2,28 +2,12 @@
 // `context`, and the helper (./run.ts) hands it to the program as Effect services. src/start.ts runs it
 // before every server function: the request id, the platform's waitUntil, the request's headers and
 // cookies, and the Session its cookie proves. Auth is checked here, once, for every server function,
-// after `sameOriginOnly` has refused a call from another site.
+// after `sameOriginOnly` has refused a call from another site. A Key proves nothing here: `/mcp` is
+// the one door it opens (src/api/CLAUDE.md).
 import { createCsrfMiddleware, createMiddleware } from '@tanstack/react-start'
 import { getRequest, getResponseHeaders } from '@tanstack/react-start/server'
 
-import { provenSession, type StartContext } from './run'
-
-/** A request as Nitro hands it over (srvx's `ServerRequest`), with the platform's `waitUntil`. */
-type PlatformRequest = Request & Pick<StartContext, 'waitUntil'>
-
-function isPlatformRequest(request: Request): request is PlatformRequest {
-  return 'waitUntil' in request && typeof request.waitUntil === 'function'
-}
-
-/**
- * The platform's `waitUntil`, which Nitro puts on the request: Vercel's on Vercel, srvx's own under
- * `pnpm dev`. Where there is none, the work still runs; nothing keeps the function up for it.
- */
-function waitUntilOf(request: Request): StartContext['waitUntil'] {
-  return (promise) => {
-    if (isPlatformRequest(request)) request.waitUntil(promise)
-  }
-}
+import { noKey, provenSession, waitUntilOf, type StartContext } from './run'
 
 /** The request's headers, and the response's, where the cookies a call sets are appended. */
 function exchangeOf(request: Request): StartContext['exchange'] {
@@ -48,6 +32,7 @@ export const requestContext = createMiddleware({ type: 'function' }).server(
       waitUntil: waitUntilOf(request),
       exchange,
       session: await provenSession(exchange),
+      key: noKey,
     }
     return next({ context })
   },

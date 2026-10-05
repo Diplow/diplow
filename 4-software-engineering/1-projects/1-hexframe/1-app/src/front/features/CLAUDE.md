@@ -18,6 +18,8 @@ A feature is client code that shows one thing a page needs, in a domain's langua
 | `breadcrumb/` | `Breadcrumb`, the rail of the centered Tile's ancestors; a click centers one. The path comes from `pathTo` in `ui/hex/view/` |
 | `system/` | `System`, the signed-in Account's System on the canvas, and `TileActions`, what the user does to it: add a Tile in an empty slot, edit, move or delete the centered one. The view and the change under way live in the URL: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE\|system]] |
 | `access/` | `Access`, the sign-in and sign-up pages' content: one form, an email and a password, whose refusals show on their fields, then back where the user was: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/access/CLAUDE\|access]] |
+| `help/` | `HelpCanvas`, Help on the canvas, read-only, and `HelpTile`, the centered Tile's card, whose button opens its Body in a drawer. The view and the open Body live in the URL: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help/CLAUDE\|help]] |
+| `keys/` | `Keys`, the Keys page's content: issue a Key and see its secret once beside the command that adds hexframe to Claude Code, list the Account's Keys, revoke one: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/keys/CLAUDE\|keys]] |
 
 | File | Holds |
 |---|---|

@@ -1,9 +1,10 @@
 // The user's System on the canvas. A click on an empty slot opens the new Tile's form there, or, while
-// a Tile is being moved, moves it there. Like the canvas, it holds no state: the view and the change
-// under way are the URL's, and it hands the next search params to the route.
+// a Tile is being moved, moves it there; meanwhile every other Tile offers to swap places with it.
+// Like the canvas, it holds no state: the view and the change under way are the URL's, and it hands
+// the next search params to the route.
 import { cn } from 'cn'
 
-import { useMoveTile } from '#/front/client/mapping/queries'
+import { useMoveTile, useSwapTiles } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import { Canvas, type EmptySlotTarget } from '#/front/ui/hex/Canvas'
 import type { TileNode } from '#/front/ui/hex/geometry/layout'
@@ -18,9 +19,12 @@ import {
   type SearchChange,
   type SystemSearch,
 } from './search'
-import { slotOf } from './tree'
+import type { SystemTile } from '#/front/client/mapping/queries'
+
+import { slotOf, swapsWith } from './tree'
 
 interface SystemProps {
+  system: SystemTile
   /** The System's Tiles as the canvas draws them (`canvasTree`). */
   tree: TileNode
   search: SystemSearch
@@ -28,8 +32,9 @@ interface SystemProps {
   className?: string
 }
 
-export function System({ tree, search, onSearchChange, className }: SystemProps) {
+export function System({ system, tree, search, onSearchChange, className }: SystemProps) {
   const move = useMoveTile()
+  const swap = useSwapTiles()
   const change = changeOf(search)
   // A move whose Tile is gone (deleted from another tab, an old link) is no move: no banner, and the
   // empty slots add a Tile, the first of which replaces the move in the URL.
@@ -50,27 +55,36 @@ export function System({ tree, search, onSearchChange, className }: SystemProps)
     },
   }
 
+  // One write at a time: a slot clicked while the Tile is on its way does nothing. A refusal (a slot
+  // under the Tile itself, one taken meanwhile, a swap along one line) shows in a toast, and the move
+  // stays under way, so another slot can be picked. Done, it ends in the URL as it is by then,
+  // whatever view the user opened meanwhile.
+  const pending = move.isPending || swap.isPending
+  const done = {
+    onSuccess: () => {
+      onSearchChange((current) => withChange(current, { kind: 'none' }))
+    },
+  }
+
   const moveHere = (tile: TileNode) => ({
     label: ({ parent, ring }: EmptySlotTarget) =>
       ring === 'children'
         ? m.system_move_child({ tile: tile.title, title: parent.title })
         : m.system_move_context({ tile: tile.title, title: parent.title }),
     onSelect: (slot: EmptySlotTarget) => {
-      // One move at a time: a slot clicked while the Tile is on its way does nothing.
-      if (move.isPending) return
-      // A refusal (a slot under the Tile itself, one taken meanwhile) shows in a toast, and the move
-      // stays under way, so another slot can be picked. Done, it ends in the URL as it is by then,
-      // whatever view the user opened meanwhile.
-      move.mutate(
-        { id: tile.id, ...place(slot) },
-        {
-          onSuccess: () => {
-            onSearchChange((current) => withChange(current, { kind: 'none' }))
-          },
-        },
-      )
+      if (!pending) move.mutate({ id: tile.id, ...place(slot) }, done)
     },
   })
+
+  const swapWith = (moving: TileNode) => (held: TileNode) =>
+    swapsWith(system, moving, held)
+      ? {
+          label: m.system_swap_with({ title: held.title }),
+          onSelect: () => {
+            if (!pending) swap.mutate({ a: moving.id, b: held.id }, done)
+          },
+        }
+      : undefined
 
   return (
     <div className={cn('flex flex-col gap-2', className)}>
@@ -98,6 +112,7 @@ export function System({ tree, search, onSearchChange, className }: SystemProps)
           onSearchChange(withView(search, view))
         }}
         emptySlots={moving === undefined ? addHere : moveHere(moving)}
+        swapTargets={moving === undefined ? undefined : swapWith(moving)}
         className="min-h-0 w-full flex-1"
       />
     </div>

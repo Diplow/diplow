@@ -1,8 +1,11 @@
 // Mapping's repository: the `tile` table (../schema.ts), read and written one System at a time. It
 // speaks rows, not Tiles: Mapping, above, decides what a row means and which changes are allowed.
 // A change locks the System's Root first, inside the transaction the API layer opened, so two
-// changes to one System never interleave between what Mapping checked and what it wrote.
-import { and, eq, isNull } from 'drizzle-orm'
+// changes to one System never interleave between what Mapping checked and what it wrote. A read from
+// one Tile walks down a generation per query and selects only the content columns asked, so a Body
+// nobody asked for never leaves the database.
+import { type SQL, and, eq, inArray, isNull } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 import { Context, Effect, Layer } from 'effect'
 
 import { Database, InTransaction } from '../database'
@@ -22,6 +25,57 @@ export interface TileRow {
   readonly target: string | null
 }
 
+/** The columns holding what a Tile says, which a read from one Tile names one by one. */
+export type ContentColumn = 'title' | 'preview' | 'body'
+
+/**
+ * A row as a read from one Tile gives it: where it stands, whether it is a Reference, and, apart,
+ * only the content columns asked.
+ */
+export interface TileRowWith<C extends ContentColumn> {
+  readonly id: string
+  readonly parentId: string | null
+  readonly direction: number | null
+  readonly target: string | null
+  readonly content: Pick<TileRow, C>
+}
+
+/**
+ * These content columns of what a Tile says, and no other: the one projection a read from one Tile
+ * makes, whether its rows come from the database, here, or from Help's notes, in Mapping.
+ */
+export function contentWith<C extends ContentColumn>(
+  content: Partial<Pick<TileRow, ContentColumn>>,
+  columns: ReadonlyArray<C>,
+): Pick<TileRow, C> {
+  // Built from the columns asked, each of them read, which a type cannot follow.
+  return Object.fromEntries(columns.map((column) => [column, content[column]])) as Pick<TileRow, C>
+}
+
+/** A row with only the content columns asked, apart from where it stands. */
+export const withContent = <C extends ContentColumn>(
+  {
+    id,
+    parentId,
+    direction,
+    target,
+    ...content
+  }: Omit<TileRow, ContentColumn> & Partial<Pick<TileRow, ContentColumn>>,
+  columns: ReadonlyArray<C>,
+): TileRowWith<C> => ({ id, parentId, direction, target, content: contentWith(content, columns) })
+
+/** What a read from one row asks of each: the content columns of that row, and of the rows below it. */
+export interface ColumnsAsked<O extends ContentColumn, C extends ContentColumn> {
+  readonly opened: ReadonlyArray<O>
+  readonly below: ReadonlyArray<C>
+}
+
+/** A read from one row: that row, then the rows below it, each with the content columns asked. */
+export interface Generations<O extends ContentColumn, C extends ContentColumn> {
+  readonly opened: TileRowWith<O>
+  readonly below: ReadonlyArray<TileRowWith<C>>
+}
+
 /** A row to add under a parent. Its id is made here. */
 type NewTileRow = Omit<TileRow, 'id' | 'parentId' | 'direction'> & {
   readonly parentId: string
@@ -39,6 +93,11 @@ export interface Writes {
   ) => Effect.Effect<void, never, InTransaction>
   /** Deletes a row and every row below it. */
   readonly remove: (id: string) => Effect.Effect<void, never, InTransaction>
+  /**
+   * Two rows trade places, each with every row below it: each takes the other's parent and
+   * direction. Neither may be the Root, nor lie below the other: Mapping checks it first.
+   */
+  readonly swap: (a: string, b: string) => Effect.Effect<void, never, InTransaction>
 }
 
 export class Tiles extends Context.Service<
@@ -50,8 +109,29 @@ export class Tiles extends Context.Service<
      */
     readonly read: (
       accountId: string,
-      root: Pick<TileRow, 'title' | 'preview' | 'body'>,
+      root: Pick<TileRow, ContentColumn>,
     ) => Effect.Effect<ReadonlyArray<TileRow>>
+    /** The id of the Account's Root, added first with the content given when it has none. */
+    readonly root: (accountId: string, root: Pick<TileRow, ContentColumn>) => Effect.Effect<string>
+    /**
+     * The row of this id in the Account's System, then the rows below it, `depth` generations down,
+     * one query per generation, that row and the rows below each with only the content columns
+     * asked of them. `undefined` when the System holds no row of this id.
+     */
+    readonly generationsFrom: <O extends ContentColumn, C extends ContentColumn>(
+      accountId: string,
+      from: {
+        readonly id: string
+        readonly depth: number
+        readonly columns: ColumnsAsked<O, C>
+      },
+    ) => Effect.Effect<Generations<O, C> | undefined>
+    /** The rows of these ids in the Account's System, each with only the content columns asked. */
+    readonly ofIds: <C extends ContentColumn>(
+      accountId: string,
+      ids: ReadonlyArray<string>,
+      columns: ReadonlyArray<C>,
+    ) => Effect.Effect<ReadonlyArray<TileRowWith<C>>>
     /**
      * Locks the System's Root until the transaction ends, then answers its rows as they stand: no
      * other change to the System runs until then. An Account without a Root has no rows.
@@ -64,23 +144,66 @@ export class Tiles extends Context.Service<
   }
 >()('hexframe/Tiles') {}
 
-const columns = {
+/** Where a row stands, and whether it is a Reference. */
+const placeColumns = {
   id: tile.id,
   parentId: tile.parentId,
   direction: tile.direction,
-  title: tile.title,
-  preview: tile.preview,
-  body: tile.body,
   target: tile.target,
 }
+
+/** What a Tile says. */
+const contentColumns = { title: tile.title, preview: tile.preview, body: tile.body }
+
+const columns = { ...placeColumns, ...contentColumns }
+
+/** The rows standing under another, for a row to find what lies below it. */
+const under = alias(tile, 'under')
 
 /** A query that only holds inside a transaction: it requires one, so it runs in no other. */
 const inTransaction = <A>(query: Effect.Effect<A>) => InTransaction.use(() => query)
 
+const ofAccount = (accountId: string) => eq(tile.accountId, accountId)
+
+/**
+ * Two rows of the Account's System trade places. The slot index is checked row by row, never at the
+ * end of the statement, so two rows cannot trade slots in one update: the first waits under a spare
+ * row, one with nothing below it and so every slot free, which a finite System always holds, while
+ * the second takes its place.
+ */
+const swapRows = (database: Database['Service'], accountId: string, a: string, b: string) =>
+  Effect.gen(function* () {
+    const place = (id: string, at: Pick<TileRow, 'parentId' | 'direction'>) =>
+      database
+        .update(tile)
+        .set(at)
+        .where(and(ofAccount(accountId), eq(tile.id, id)))
+        .pipe(Effect.asVoid, Effect.orDie)
+    const placed = yield* database
+      .select(placeColumns)
+      .from(tile)
+      .where(and(ofAccount(accountId), inArray(tile.id, [a, b])))
+      .pipe(Effect.orDie)
+    const [spare] = yield* database
+      .select({ id: tile.id })
+      .from(tile)
+      .leftJoin(under, eq(under.parentId, tile.id))
+      .where(and(ofAccount(accountId), isNull(under.id)))
+      .limit(1)
+      .pipe(Effect.orDie)
+    const first = placed.find((row) => row.id === a)
+    const second = placed.find((row) => row.id === b)
+    if (first === undefined || second === undefined || spare === undefined) {
+      return yield* Effect.die(new Error('A swap named a row its System does not hold'))
+    }
+    yield* place(a, { parentId: spare.id, direction: 1 })
+    yield* place(b, { parentId: first.parentId, direction: first.direction })
+    yield* place(a, { parentId: second.parentId, direction: second.direction })
+  })
+
 /** The service over the given database; a database failure is a defect. */
 const make = Effect.gen(function* () {
   const database = yield* Database
-  const ofAccount = (accountId: string) => eq(tile.accountId, accountId)
   const rootOf = (accountId: string) => and(ofAccount(accountId), isNull(tile.parentId))
   const rowsOf = (accountId: string) =>
     database.select(columns).from(tile).where(ofAccount(accountId)).pipe(Effect.orDie)
@@ -112,17 +235,80 @@ const make = Effect.gen(function* () {
           .where(and(ofAccount(accountId), eq(tile.id, id)))
           .pipe(Effect.asVoid, Effect.orDie),
       ),
+    swap: (a, b) => inTransaction(swapRows(database, accountId, a, b)),
   })
 
-  const ensureRoot = (accountId: string, root: Pick<TileRow, 'title' | 'preview' | 'body'>) =>
+  const ensureRoot = (accountId: string, root: Pick<TileRow, ContentColumn>) =>
     database
       .insert(tile)
       .values({ ...root, id: crypto.randomUUID(), accountId })
       .onConflictDoNothing()
       .pipe(Effect.asVoid, Effect.orDie)
 
+  /** The Account's rows matching `where`, with only the content columns asked. */
+  const rowsWith = <C extends ContentColumn>(
+    accountId: string,
+    where: SQL,
+    columns: ReadonlyArray<C>,
+  ) => {
+    const asked: Partial<typeof contentColumns> = Object.fromEntries(
+      columns.map((column) => [column, contentColumns[column]]),
+    )
+    return database
+      .select({ ...placeColumns, ...asked })
+      .from(tile)
+      .where(and(ofAccount(accountId), where))
+      .pipe(
+        Effect.orDie,
+        Effect.map((rows) => rows.map((row) => withContent(row, columns))),
+      )
+  }
+
+  const root = (accountId: string, content: Pick<TileRow, ContentColumn>) =>
+    ensureRoot(accountId, content).pipe(
+      Effect.andThen(
+        database.select({ id: tile.id }).from(tile).where(rootOf(accountId)).pipe(Effect.orDie),
+      ),
+      Effect.flatMap(([found]) =>
+        found === undefined
+          ? Effect.die(new Error('A Root was added, then not found'))
+          : Effect.succeed(found.id),
+      ),
+    )
+
+  const generationsFrom = <O extends ContentColumn, C extends ContentColumn>(
+    accountId: string,
+    from: { readonly id: string; readonly depth: number; readonly columns: ColumnsAsked<O, C> },
+  ) =>
+    Effect.gen(function* () {
+      const [opened] = yield* rowsWith(accountId, eq(tile.id, from.id), from.columns.opened)
+      if (opened === undefined) return undefined
+      const below: Array<TileRowWith<C>> = []
+      let parents = [opened.id]
+      for (let left = from.depth; left > 0 && parents.length > 0; left--) {
+        const generation = yield* rowsWith(
+          accountId,
+          inArray(tile.parentId, parents),
+          from.columns.below,
+        )
+        below.push(...generation)
+        parents = generation.map((row) => row.id)
+      }
+      return { opened, below } satisfies Generations<O, C>
+    })
+
+  const ofIds = <C extends ContentColumn>(
+    accountId: string,
+    ids: ReadonlyArray<string>,
+    columns: ReadonlyArray<C>,
+  ) =>
+    ids.length === 0 ? Effect.succeed([]) : rowsWith(accountId, inArray(tile.id, [...ids]), columns)
+
   return Tiles.of({
     read: (accountId, root) => Effect.andThen(ensureRoot(accountId, root), rowsOf(accountId)),
+    root,
+    generationsFrom,
+    ofIds,
     lock: (accountId) =>
       inTransaction(
         database

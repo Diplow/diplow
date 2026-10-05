@@ -2,13 +2,15 @@
 // (a user, a session). IAM, above, turns them into its Accounts and Sessions. Better Auth has no route
 // of its own: every call comes from a server function, and the cookies it reads and sets travel
 // through HttpExchange. Signing up and in go through its request handler, where its rate limiter runs.
+// Its api-key plugin keeps a user's API keys, IAM's Keys, and tells whose key a request's Bearer is.
+import { apiKey } from '@better-auth/api-key'
 import type { BetterAuthOptions } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { betterAuth } from 'better-auth/minimal'
 import { Config, Context, Data, Effect, Layer, Option, Redacted, Schema } from 'effect'
 
 import { PromiseDatabase, layer as promiseLayer } from '../database/promise'
-import { account, rateLimit, session, user, verification } from '../database/schema'
+import { account, apikey, rateLimit, session, user, verification } from '../database/schema'
 
 /**
  * The HTTP request a call to Better Auth belongs to: its URL, whose origin Better Auth's endpoints are
@@ -41,13 +43,37 @@ interface Credentials {
   readonly password: string
 }
 
-/** Why Better Auth said no to credentials: the failures it reports that a user can act on. */
+/** A user's API key, as listed: never its secret, nor the hash kept of it. */
+export interface AuthApiKey {
+  readonly id: string
+  readonly name: string
+  /** Its first characters, the `hf_` prefix included, to tell it apart from the user's others. */
+  readonly start: string
+  readonly createdAt: Date
+  /** When a request it proved was last verified, if one ever was. */
+  readonly lastRequest: Date | null
+}
+
+/** An API key just created: the one time its secret is known, since only its hash is kept. */
+export interface CreatedApiKey {
+  readonly apiKey: AuthApiKey
+  readonly secret: string
+}
+
+/** The user a request's `Authorization: Bearer` API key belongs to, and which key it was. */
+export interface AuthBearer {
+  readonly user: AuthUser
+  readonly apiKeyId: string
+}
+
+/** Why Better Auth said no: the failures it reports that a user can act on. */
 export type Refusal =
   | 'credentials-rejected'
   | 'email-taken'
   | 'email-malformed'
   | 'password-length'
   | 'too-many-attempts'
+  | 'api-key-not-found'
 
 export class AuthRefused extends Data.TaggedError('AuthRefused')<{ readonly reason: Refusal }> {}
 
@@ -66,6 +92,14 @@ export class Auth extends Context.Service<
     readonly signOut: Effect.Effect<void, never, HttpExchange>
     /** The session the request's cookie proves, if it is still valid. */
     readonly session: Effect.Effect<Option.Option<AuthSession>, never, HttpExchange>
+    /** Creates an API key, named, for the user the request's session cookie proves. */
+    readonly createApiKey: (name: string) => Effect.Effect<CreatedApiKey, AuthRefused, HttpExchange>
+    /** The API keys of the user the request's session cookie proves, the newest first. */
+    readonly apiKeys: Effect.Effect<ReadonlyArray<AuthApiKey>, never, HttpExchange>
+    /** Deletes one of the API keys of the user the request's session cookie proves. */
+    readonly deleteApiKey: (id: string) => Effect.Effect<void, AuthRefused, HttpExchange>
+    /** Whose API key the request's `Authorization: Bearer` header carries, if it is a valid one. */
+    readonly bearer: Effect.Effect<Option.Option<AuthBearer>, never, HttpExchange>
   }
 >()('hexframe/Auth') {}
 
@@ -78,6 +112,7 @@ const refusals: Partial<Record<string, Refusal>> = {
   INVALID_EMAIL: 'email-malformed',
   PASSWORD_TOO_SHORT: 'password-length',
   PASSWORD_TOO_LONG: 'password-length',
+  KEY_NOT_FOUND: 'api-key-not-found',
 }
 
 /** What Better Auth answers when it says no: an error code, and a sentence for developers. */
@@ -100,10 +135,66 @@ function refusalOf(status: number, answer: unknown): Refusal | undefined {
   return code === undefined ? undefined : refusals[code]
 }
 
+/** What Better Auth's server API throws when it says no: an `APIError`, its code in its body. */
+const Thrown = Schema.Struct({ body: Schema.Struct({ code: Schema.optionalKey(Schema.String) }) })
+
+/** The refusal a call to the server API failed with, or the defect it is when no user can act on it. */
+const refusedOrDie = (thrown: unknown) => {
+  const code = Option.getOrUndefined(
+    Option.flatMap(Schema.decodeUnknownOption(Thrown)(thrown), ({ body }) =>
+      Option.fromNullishOr(body.code),
+    ),
+  )
+  const reason = code === undefined ? undefined : refusals[code]
+  return reason === undefined ? Effect.die(thrown) : Effect.fail(new AuthRefused({ reason }))
+}
+
+const User = Schema.Struct({ id: Schema.String, email: Schema.String })
+
 /** What signing up or in answers: the user, signed in. */
-const SignedIn = Schema.Struct({ user: Schema.Struct({ id: Schema.String, email: Schema.String }) })
+const SignedIn = Schema.Struct({ user: User })
 
 const decodeSignedIn = Schema.decodeUnknownEffect(SignedIn)
+
+/** An API key as the plugin answers it, its hash left out. A Key always has a name (`requireName`). */
+const ListedApiKey = Schema.Struct({
+  id: Schema.String,
+  name: Schema.String,
+  start: Schema.String,
+  createdAt: Schema.Date,
+  lastRequest: Schema.NullOr(Schema.Date),
+})
+
+/** What creating an API key answers: the key, its secret as `key`. */
+const decodeCreated = Schema.decodeUnknownEffect(
+  Schema.Struct({ ...ListedApiKey.fields, key: Schema.String }),
+)
+
+const decodeListed = Schema.decodeUnknownEffect(
+  Schema.Struct({ apiKeys: Schema.Array(ListedApiKey) }),
+)
+
+/** What verifying an API key answers: whether it is valid, and then whose it is. */
+const decodeVerified = Schema.decodeUnknownEffect(
+  Schema.Struct({
+    valid: Schema.Boolean,
+    key: Schema.NullOr(Schema.Struct({ id: Schema.String, referenceId: Schema.String })),
+  }),
+)
+
+const decodeUser = Schema.decodeUnknownEffect(Schema.NullOr(User))
+
+/** An API key's secret: the `hf_` prefix, then 64 letters. Longer is not one, and is not hashed. */
+const longestSecret = 128
+
+/** The secret an `Authorization: Bearer` header carries, if it carries one; never a cookie's. */
+function bearerOf(headers: Headers): Option.Option<string> {
+  const [scheme = '', secret = '', ...rest] = (headers.get('authorization') ?? '').split(' ')
+  const carried = scheme.toLowerCase() === 'bearer' && rest.length === 0
+  return carried && secret !== '' && secret.length <= longestSecret
+    ? Option.some(secret)
+    : Option.none()
+}
 
 /** Passes on the cookies a call set, if any. */
 const setCookies = (headers: Headers) =>
@@ -192,12 +283,26 @@ function betterAuthWith(
     baseURL,
     database: drizzleAdapter(database, {
       provider: 'pg',
-      schema: { user, session, account, verification, rateLimit },
+      schema: { user, session, account, verification, rateLimit, apikey },
     }),
     emailAndPassword: { enabled: true },
     // Per client IP, in the database so every instance counts together: signing up or in allows 3
     // attempts in 10 seconds. The IP is `x-forwarded-for`, which Vercel sets and overwrites.
     rateLimit: { enabled: true, storage: 'database' },
+    plugins: [
+      apiKey({
+        defaultPrefix: 'hf_',
+        // A Key always has a name. What a name may be is IAM's rule, checked before a Key is asked
+        // for (src/domains/iam/iam.ts); the plugin's own default, 1 to 32 characters, is no wider,
+        // so a name past it would die as a defect, which IAM's tests would show.
+        requireName: true,
+        // Its default, 10 verifications a day, would stop an MCP client within minutes.
+        rateLimit: { enabled: false },
+        keyExpiration: { defaultExpiresIn: null },
+        // A key never becomes a session: the two proofs stay apart (src/api/CLAUDE.md, "/mcp").
+        enableSessionForAPIKeys: false,
+      }),
+    ],
     telemetry: { enabled: false },
   })
 }
@@ -205,7 +310,8 @@ function betterAuthWith(
 /** The Auth service over Better Auth, signing its cookies with `secret`, reached at `baseURL`. */
 export const make = (secret: Redacted.Redacted, baseURL: BaseURL) =>
   Effect.gen(function* () {
-    const auth = betterAuthWith(secret, baseURL, yield* PromiseDatabase)
+    const database = yield* PromiseDatabase
+    const auth = betterAuthWith(secret, baseURL, database)
 
     /** Posts credentials through Better Auth's handler, so its rate limiter and origin check run. */
     const credentialed = (path: string, body: object) =>
@@ -238,6 +344,55 @@ export const make = (secret: Redacted.Redacted, baseURL: BaseURL) =>
       credentialed('/sign-in/email', { email, password })
     const signOut = exchanged((headers) => auth.api.signOut({ headers, returnHeaders: true }))
     const current = exchanged((headers) => auth.api.getSession({ headers, returnHeaders: true }))
+
+    /** A call to the server API for the request's session; a refusal a user can act on is kept. */
+    const forSession = <A>(call: (headers: Headers) => Promise<A>) =>
+      Effect.gen(function* () {
+        const { headers } = yield* HttpExchange
+        return yield* Effect.tryPromise({ try: () => call(headers), catch: (thrown) => thrown })
+      }).pipe(Effect.catch(refusedOrDie))
+
+    const createApiKey = (name: string) =>
+      forSession((headers) => auth.api.createApiKey({ body: { name }, headers })).pipe(
+        Effect.flatMap((created) => Effect.orDie(decodeCreated(created))),
+        Effect.map(({ key, ...apiKey }) => ({ apiKey, secret: key })),
+      )
+
+    const apiKeys = forSession((headers) =>
+      auth.api.listApiKeys({ query: { sortBy: 'createdAt', sortDirection: 'desc' }, headers }),
+    ).pipe(
+      Effect.flatMap((listed) => Effect.orDie(decodeListed(listed))),
+      Effect.map((listed) => listed.apiKeys),
+      Effect.orDie,
+    )
+
+    const deleteApiKey = (id: string) =>
+      Effect.asVoid(
+        forSession((headers) => auth.api.deleteApiKey({ body: { keyId: id }, headers })),
+      )
+
+    /** Verifies the Bearer's API key, then reads its user: the key's row names the user, not more. */
+    const bearer = Effect.gen(function* () {
+      const secret = bearerOf((yield* HttpExchange).headers)
+      if (Option.isNone(secret)) return Option.none<AuthBearer>()
+      const verified = yield* Effect.promise(() =>
+        auth.api.verifyApiKey({ body: { key: secret.value } }),
+      ).pipe(Effect.flatMap((answer) => Effect.orDie(decodeVerified(answer))))
+      if (!verified.valid || verified.key === null) {
+        // The plugin answers a failure to read its table as it answers a wrong key, `INVALID_API_KEY`
+        // both. Reading the table once more tells them apart: an outage dies as the defect it is.
+        yield* Effect.tryPromise(() =>
+          database.select({ id: apikey.id }).from(apikey).limit(1),
+        ).pipe(Effect.orDie)
+        return Option.none<AuthBearer>()
+      }
+      const { id, referenceId } = verified.key
+      const context = yield* Effect.promise(() => auth.$context)
+      const found = yield* Effect.promise(() => context.internalAdapter.findUserById(referenceId))
+      const owner = yield* Effect.orDie(decodeUser(found))
+      return Option.map(Option.fromNullishOr(owner), (user) => ({ user, apiKeyId: id }))
+    })
+
     return Auth.of({
       signUp,
       signIn,
@@ -248,6 +403,10 @@ export const make = (secret: Redacted.Redacted, baseURL: BaseURL) =>
           expiresAt: session.expiresAt,
         })),
       ),
+      createApiKey,
+      apiKeys,
+      deleteApiKey,
+      bearer,
     })
   })
 
