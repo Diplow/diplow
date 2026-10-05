@@ -71,7 +71,7 @@ export class HelpReadOnly extends Schema.TaggedError<HelpReadOnly>()('HelpReadOn
  * frontmatter that isn't YAML or keeps what a Tile can't; a `.hexframe/` file that can't be read; a
  * Reference's folder holding anything; and a file imported alone that holds nothing a System can.
  */
-export const importFaults = [
+const importFaults = [
   'RingOverflows',
   'DirectionClaimed',
   'TitleTooLong',

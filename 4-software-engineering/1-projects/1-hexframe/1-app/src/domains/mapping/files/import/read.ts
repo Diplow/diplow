@@ -260,8 +260,12 @@ function ringFaults(path: string, seating: Seating, reading: Reading) {
   }
 }
 
-/** Each name of a ring with the Direction it sits in. */
-const seated = (seats: ReadonlyMap<string, Direction>) => [...seats.entries()]
+/**
+ * Each name of a ring with the Direction it sits in, or none when the ring can't seat it: a ring at
+ * fault is still read whole, so the import lists every fault below it too.
+ */
+const seated = ({ candidates, seats }: Seating[EntryKind]) =>
+  candidates.map((name) => [name, seats.get(name)] as const)
 
 /** A file a `[[wikilink]]` reaches the Tile at `path` by, with and without its `.md`. */
 function linkable(reading: Reading, file: string, path: string) {
@@ -287,18 +291,21 @@ function belowOf(
       reading,
     )
   const branches: Partial<Record<Direction, Draft>> = {}
-  for (const [name, direction] of seated(seating.branch.seats)) {
+  for (const [name, direction] of seated(seating.branch)) {
     const branch = read(name, 'branch')
-    if (branch?._tag === 'Tile') branches[direction] = branch
+    if (branch?._tag === 'Tile' && direction !== undefined) branches[direction] = branch
   }
   const context: Draft['context'] = {}
-  for (const [name, direction] of seated(seating.context.seats)) {
+  for (const [name, direction] of seated(seating.context)) {
     const held = read(name, 'context')
-    if (held !== undefined) context[-direction as ContextDirection] = held
+    if (held !== undefined && direction !== undefined) {
+      context[-direction as ContextDirection] = held
+    }
   }
   const leaves: Draft['leaves'] = {}
-  for (const [name, direction] of seated(seating.leaf.seats)) {
-    leaves[direction] = leafOf({ path: join(at.path, name), name }, texts.get(name) ?? '', reading)
+  for (const [name, direction] of seated(seating.leaf)) {
+    const leaf = leafOf({ path: join(at.path, name), name }, texts.get(name) ?? '', reading)
+    if (direction !== undefined) leaves[direction] = leaf
   }
   return { branches, leaves, context }
 }
@@ -409,7 +416,9 @@ export function importOf(
     return Result.fail(
       new ImportRefused({
         fields: ['files'],
-        faults: [{ path: source._tag === 'File' ? source.file.path : '', fault: 'NothingToImport' }],
+        faults: [
+          { path: source._tag === 'File' ? source.file.path : '', fault: 'NothingToImport' },
+        ],
       }),
     )
   }

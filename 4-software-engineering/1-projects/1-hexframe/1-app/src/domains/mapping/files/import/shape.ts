@@ -95,6 +95,9 @@ export function markdownOf(text: string): { frontmatter: string | undefined; bod
  * so the ring overflows, or names of which two claim one Direction, the later in name order.
  */
 export interface Seating {
+  /** Every name of the kind, in name order, seated or not. */
+  readonly candidates: ReadonlyArray<string>
+  /** Where each name sits, when the ring seats every one. */
   readonly seats: ReadonlyMap<string, Direction>
   readonly overflows: boolean
   readonly claimed: ReadonlyArray<string>
@@ -135,6 +138,7 @@ function claimedIn(kind: EntryKind, names: ReadonlyArray<string>): ReadonlyArray
 function seatingOf(kind: EntryKind, ring: Ring<Slot> | undefined): Seating {
   const candidates = candidatesOf(ring)
   return {
+    candidates,
     seats: seatsOf(ring),
     overflows: candidates.length > 6,
     claimed: claimedIn(kind, candidates),

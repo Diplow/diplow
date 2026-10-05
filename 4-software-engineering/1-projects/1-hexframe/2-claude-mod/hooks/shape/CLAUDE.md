@@ -12,7 +12,7 @@ preview: >-
 
 How a folder of this vault reads as a hexframe, written once for every medium that shows one: claude-mod in Claude Code, the Obsidian plugin in Obsidian, the app one day. If each medium read a folder its own way, the same vault would show as two hexframes. How a medium then looks at what this reads (the Frame kind, the depth, the expansions, a list for an overflowing Frame) is view state, each medium's own: [[4-software-engineering/1-projects/1-hexframe/STACK#A vault as a hexframe|STACK]]. The layout takes the Frame kind as input, and the hexes a view opens, and a medium decides both. claude-mod opens none and gets one generation; the Obsidian plugin, the first medium to draw deeper, opens the center twice and its Branches once, as [[4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-claude-code-mod/decisions#DEC-6 The layout draws one generation until a medium draws deeper|DEC-6]] planned: [[4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-obsidian-plugin/decisions#DEC-9 The shape lays out opened hexes, and the plugin keeps which ones|DEC-9]].
 
-The app is no medium of the shape yet: it reads no vault, and `1-app/src/front/ui/hex/` keeps its own geometry, on the same lattice. The two merge when the app reads a vault.
+The app reads by the shape what an import hands it, a zipped or picked folder, through one module of Mapping (`1-app/src/domains/mapping/files/import/shape.ts`), and Help's folder through the same reader. It draws nothing by it yet: `1-app/src/front/ui/hex/` keeps its own geometry, on the same lattice, until the canvas lays itself out with `layout.ts`.
 
 ## Why it lives inside claude-mod
 
