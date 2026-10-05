@@ -119,7 +119,7 @@ describe('kept Frontmatter', () => {
       { note: 'one\ntwo' },
       { note: 'one\n---\ntitle: injected' },
       { note: 'one\r\ntwo' },
-      { note: 'one two' },
+      { note: `one${String.fromCodePoint(0x2028)}two` },
       { infinite: Number.POSITIVE_INFINITY },
     ]) {
       expect(keeps(value), JSON.stringify(value)).toBe(false)

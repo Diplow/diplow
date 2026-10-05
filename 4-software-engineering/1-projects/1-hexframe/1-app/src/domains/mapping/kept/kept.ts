@@ -15,11 +15,17 @@ const utf8 = new TextEncoder()
 
 const bytes = (text: string) => utf8.encode(text).length
 
-/** Whether a character is a control character, C0, DEL or C1: a line break among them. */
-const isControl = (character: string) => {
-  const code = character.codePointAt(0) ?? 0
-  return code <= 0x1f || (code >= 0x7f && code <= 0x9f)
+/** Whether a code point is a control character, C0, DEL or C1: a line break among them. */
+const isControl = (code: number) => code <= 0x1f || (code >= 0x7f && code <= 0x9f)
+
+/** Whether any code point of a text is one of those `refused` names. */
+function holdsAny(text: string, refused: (code: number) => boolean): boolean {
+  for (const character of text) if (refused(character.codePointAt(0) ?? 0)) return true
+  return false
 }
+
+const slash = 0x2f
+const backslash = 0x5c
 
 /**
  * Whether a name is one path segment, safe to write under a folder: not empty, never `.` or `..`, no
@@ -28,9 +34,7 @@ const isControl = (character: string) => {
  */
 export function isSegment(name: string): boolean {
   if (name === '' || name === '.' || name === '..' || bytes(name) > segmentBytes) return false
-  return ![...name].some(
-    (character) => character === '/' || character === '\\' || isControl(character),
-  )
+  return !holdsAny(name, (code) => code === slash || code === backslash || isControl(code))
 }
 
 const Segment = Schema.String.check(Schema.makeFilter(isSegment))
@@ -40,8 +44,8 @@ const Segment = Schema.String.check(Schema.makeFilter(isSegment))
  * so that it exports under it again and the `[[wikilinks]]` in Bodies still resolve. Editing the
  * Title never changes it.
  */
-export const Name = Segment.pipe(Schema.brand('Name'))
-export type Name = typeof Name.Type
+const Name = Segment.pipe(Schema.brand('Name'))
+type Name = typeof Name.Type
 
 /** What a folder pattern fills in: the Tile's Direction, and the slug of its Title. */
 const placeholder = /<n>|<slug>/
@@ -71,11 +75,11 @@ export interface Naming {
  * A Tile config: what a `.hexframe/` folder holds in the app, for now the naming, inherited by
  * everything below the Tile until a Tile below sets its own. Either part not set is the Tile above's.
  */
-export const TileConfig = Schema.Struct({
+const TileConfig = Schema.Struct({
   fileName: Schema.optionalKey(Segment),
   folderPattern: Schema.optionalKey(Schema.String.check(Schema.makeFilter(isFolderPattern))),
 }).pipe(Schema.brand('TileConfig'))
-export type TileConfig = typeof TileConfig.Type
+type TileConfig = typeof TileConfig.Type
 
 /** The keys an export writes itself, from the Tile: never kept, since the Tile is what they say. */
 const reservedKeys: ReadonlyArray<string> = ['id', 'title', 'parent', 'preview', 'reference']
@@ -87,12 +91,13 @@ const reservedKeys: ReadonlyArray<string> = ['id', 'title', 'parent', 'preview',
 const isKeptKey = (key: string) =>
   /^[\w-]{1,64}$/.test(key) && !reservedKeys.includes(key) && key !== '__proto__'
 
+/** A tab, and the two line breaks Unicode adds beyond the control characters: line, paragraph. */
+const tab = 0x09
+const lineBreaks = [0x2028, 0x2029]
+
 /** A string on one line: no line break, nor any other control character but a tab. */
 const isOneLine = (value: string) =>
-  ![...value].some(
-    (character) =>
-      character !== '\t' && (isControl(character) || character === ' ' || character === ' '),
-  )
+  !holdsAny(value, (code) => code !== tab && (isControl(code) || lineBreaks.includes(code)))
 
 /** The most keys a Tile's Frontmatter keeps, and the most bytes they take as JSON, in UTF-8. */
 const frontmatterBounds = { keys: 32, bytes: 4_096 }
