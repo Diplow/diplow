@@ -19,7 +19,7 @@ import {
 } from './tile'
 
 /** A Leaf in its System: one file's worth, a Tile with nothing below it and no Context. */
-export interface LeafTile extends Tile {
+interface LeafTile extends Tile {
   readonly _tag: 'Tile'
 }
 
@@ -156,7 +156,7 @@ export type FieldsAsked<O extends Field, F extends Field> = ColumnsAsked<O, F>
 type Glimpse = Pick<Tile, 'id' | 'title' | 'preview'>
 
 /** A Leaf as a read finds it: its id and only the fields asked, and never anything below it. */
-export type ReadLeaf<F extends Field> = Pick<Tile, 'id'> &
+type ReadLeaf<F extends Field> = Pick<Tile, 'id'> &
   Pick<Content, F> & {
     readonly _tag: 'Tile'
   }

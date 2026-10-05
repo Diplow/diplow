@@ -77,9 +77,15 @@ describe('the tool table, as an agent lists it', () => {
       expect(description(name)).toMatch(/Help, hexframe's own guide, .+ id "help"/)
     }
     expect(description('create_tile')).toMatch(
-      /6 Children at most, so one more is refused: regroup .+ by moving them/,
+      /6 Branches and 6 Leaves at most, so one more of either is refused: regroup .+ by moving them/,
     )
-    expect(description('create_reference')).not.toMatch(/one more is refused/)
+    expect(description('create_reference')).not.toMatch(/one more of either is refused/)
+    for (const name of ['create_tile', 'move_tile', 'swap_tiles', 'create_reference']) {
+      expect(description(name)).toMatch(/LeafHoldsNothing: a Leaf is one file, with nothing below/)
+    }
+    for (const name of ['edit_tile', 'delete_tile']) {
+      expect(description(name)).not.toMatch(/LeafHoldsNothing/)
+    }
     for (const name of ['create_tile', 'edit_tile']) {
       expect(description(name)).toMatch(/TitleMissing: .+ PreviewTooLong: /)
     }

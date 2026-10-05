@@ -39,7 +39,7 @@ layer(TestDatabase)('the test database', (it) => {
     }),
   )
 
-  it.effect('keeps a tile in a Direction or a Context slot, and a Root in none', () =>
+  it.effect('keeps a tile in a Branch, a Leaf or a Context slot, and a Root in none', () =>
     Effect.gen(function* () {
       const database = yield* Database
       // Each row of an Account of its own, so no unique index refuses it: only the checks may.
@@ -62,12 +62,12 @@ layer(TestDatabase)('the test database', (it) => {
       const [rootDirected, undirected, ...slots] = yield* Effect.all([
         written(null, 1),
         written(root.id, null),
-        ...[0, 7, -7, 6, -6].map((direction) => written(root.id, direction)),
+        ...[0, 13, -7, 6, -6, 7, 12].map((direction) => written(root.id, direction)),
       ])
       expect({ rootDirected, undirected, slots }).toEqual({
         rootDirected: false,
         undirected: false,
-        slots: [false, false, false, true, true],
+        slots: [false, false, false, true, true, true, true],
       })
     }),
   )

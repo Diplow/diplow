@@ -37,8 +37,8 @@ import {
 export { HelpId, helpRoot, helpSystem } from './help/help'
 export { depths, fields } from './system'
 export { directions, previewLimit } from './tile'
-export type { Depth, Field, LeafTile, ReadLeaf, ReadTile, SystemTile } from './system'
-export type { Content, ContextDirection, Direction, LeafSlot, Slot } from './tile'
+export type { Depth, Field, ReadTile, SystemTile } from './system'
+export type { Content, ContextDirection, Direction } from './tile'
 
 /** The content of a Root nobody has named yet, and of every Reference, which keeps none of its own. */
 const untitled: Content = { title: '', preview: '', body: '' }

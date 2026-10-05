@@ -16,7 +16,7 @@ export type ContextDirection = (typeof contextDirections)[number]
  * A Leaf's slot: one of its parent's six Leaf Directions, which are their own beside the six Branch
  * Directions, so a Leaf and a Branch may share a Direction.
  */
-export interface LeafSlot {
+interface LeafSlot {
   readonly leaf: Direction
 }
 

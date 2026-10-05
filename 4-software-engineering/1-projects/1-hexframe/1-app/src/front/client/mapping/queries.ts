@@ -41,8 +41,8 @@ export const useSystem = () =>
   useQuery(read({ scope: systemScope, key: [], call: () => system({ data: undefined }) }))
 
 /**
- * A Tile of the Account's System as the client holds it, with its Children by Direction, its Context
- * by slot, and everything below them. The System is its Root.
+ * A Tile of the Account's System as the client holds it, with its Branches and its Leaves by
+ * Direction, its Context by slot, and everything below them. The System is its Root.
  */
 export type SystemTile = NonNullable<ReturnType<typeof useSystem>['data']>
 
@@ -65,7 +65,7 @@ function useSystemWrite<I, A, E extends Failure>(
   })
 }
 
-/** Adds a Tile in a free slot: a Child, or a Tile of its parent's Context. */
+/** Adds a Tile in a free slot: a Branch, a Leaf, or a Tile of its parent's Context. */
 export const useCreateTile = () =>
   useSystemWrite('createTile', (data: typeof NewTile.Type) => createTile({ data }))
 

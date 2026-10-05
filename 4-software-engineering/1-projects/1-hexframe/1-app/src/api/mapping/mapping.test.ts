@@ -348,3 +348,25 @@ describe("the schemas Mapping's server functions validate by", () => {
     expect(accepts(NewReference, { parent: p, slot: -1, target: 'root' })).toBe(false)
   })
 })
+
+describe("Mapping's server functions, on Leaves", () => {
+  it('creates a Leaf beside a Branch, and refuses anything under it as it crosses the wire', async () => {
+    const { context, root, child } = await withAChild()
+    const leaf = await value(
+      run(context, Mapping.createTile({ parent: root.id, slot: { leaf: 1 }, ...content('Leaf') })),
+    )
+    const found = await value(run(context, Mapping.system))
+    expect(found.leaves).toEqual({ 1: { _tag: 'Tile', ...leaf } })
+    expect(found.branches[1]).toMatchObject({ id: child.id })
+    const under = Mapping.createTile({ parent: leaf.id, slot: -1, ...content('Under') })
+    expect(await run(context, under)).toMatchObject({
+      ok: false,
+      failure: { _tag: 'LeafHoldsNothing', kind: 'Conflict' },
+    })
+    const grandchild = Mapping.createTile({ parent: child.id, slot: 2, ...content('Grandchild') })
+    await value(run(context, grandchild))
+    expect(
+      await run(context, Mapping.moveTile({ id: child.id, parent: root.id, slot: { leaf: 2 } })),
+    ).toMatchObject({ ok: false, failure: { _tag: 'LeafHoldsNothing' } })
+  })
+})
