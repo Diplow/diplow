@@ -1,8 +1,11 @@
 // Zip archives, over fflate, imported by this folder only (dependency-cruiser.config.ts, `sdks`): a
-// list of files streamed into an archive, one file deflated each time the reader asks for more. It speaks paths and bytes; Mapping decides which files an export
-// holds (src/domains/mapping/files/).
+// list of files streamed into an archive, one file deflated each time the reader asks for more, and
+// an archive a user sends unpacked within bounds (./unzip.ts). It speaks paths and bytes; Mapping
+// decides which files an export holds and what an import's entries may be (src/domains/mapping/).
 import { Context, Layer } from 'effect'
 import { Zip as Archive, ZipDeflate, strToU8 } from 'fflate'
+
+import { unpacked } from './unzip'
 
 /** One file of an archive: its path from the archive's root, and its text. */
 export interface Entry {
@@ -53,10 +56,14 @@ export function zipped(entries: ReadonlyArray<Entry>): ReadableStream<Uint8Array
   })
 }
 
-/** Zip, as the server's runtime sees it: a list of files streamed into an archive. */
-export class Zip extends Context.Service<Zip, { readonly zipped: typeof zipped }>()(
-  'hexframe/Zip',
-) {}
+/**
+ * Zip, as the server's runtime sees it: a list of files streamed into an archive, and an archive
+ * unpacked in memory, counted as it inflates.
+ */
+export class Zip extends Context.Service<
+  Zip,
+  { readonly zipped: typeof zipped; readonly unpacked: typeof unpacked }
+>()('hexframe/Zip') {}
 
 /** Zip over fflate. */
-export const layer = Layer.succeed(Zip, { zipped })
+export const layer = Layer.succeed(Zip, { zipped, unpacked })
