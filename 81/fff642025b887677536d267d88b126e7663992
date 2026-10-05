@@ -1,0 +1,40 @@
+4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE.md
+  s_add1a77a88c179::t_8f784832eefd6a 15
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/import/shape.ts
+  s_add1a77a88c179::t_eae79ab58282e5 98-100,141
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_add1a77a88c179::t_a7827188797169 11-12
+  s_add1a77a88c179::t_8f784832eefd6a 42,45,51-53,75,79
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-import-export/decisions.md
+  s_add1a77a88c179::t_a7827188797169 10-11,51-58
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/import/round-trip.test.ts
+  s_add1a77a88c179::t_6c354cbbf299f7 1-101,106,111-158,163-169,173-175,177-180,185-212,217-236
+  s_add1a77a88c179::t_3de870dbc5c316 102-105,159-162,170-172,176,181-184,213-216
+  s_add1a77a88c179::t_89ab29ba11c43b 107,109
+  s_add1a77a88c179::t_03d303d0674a5c 108,110
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/errors.ts
+  s_add1a77a88c179::t_4258228c304d7a 74
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/import/read.test.ts
+  s_add1a77a88c179::t_d2e625a1d7c8b0 1-87,105-157,160-173,179-194,203-225,241-243,249-254,263-265,271-281
+  s_add1a77a88c179::t_a64e9e16d44c1a 88-104,158-159,174-178,195-202,234-240
+  s_add1a77a88c179::t_eae79ab58282e5 226-233,244-248,255-262,266-270
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/import/read.ts
+  s_add1a77a88c179::t_a64e9e16d44c1a 419-421
+  s_add1a77a88c179::t_eae79ab58282e5 263-268,294,296,299,301-303,306-308
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "81fff642025b887677536d267d88b126e7663992",
+  "prompts": {},
+  "sessions": {
+    "s_add1a77a88c179": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d3373e9-3681-410c-a221-392366b8a522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
