@@ -1,31 +1,19 @@
 // The canvas: one <svg>, every hex a <polygon> with a real stroke, and the text in a <foreignObject>
-// so it wraps like HTML. The viewBox is the canvas's own coordinates, so the page sizes it with CSS
-// and everything inside, text included, scales with it. The view is the caller's, from the URL: the
-// canvas only says which view comes next.
-import { useRef } from 'react'
+// so it wraps like HTML, laid out by the shape (geometry/shape.ts); above it, the rings the center
+// can show. The viewBox is the canvas's own coordinates, so the page sizes it with CSS and everything
+// inside, text included, scales with it. The view is the caller's, from the URL: the canvas only says
+// which view comes next.
+import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 
-import { hexHeight, hexWidth, type Direction, type Hex } from './geometry/geometry'
-import { layoutCanvas, type Ring, type TileNode } from './geometry/layout'
-import { EmptySlot, Frame } from './Frame'
+import { canvasSize, type EmptySlotTarget } from './geometry/shape'
+import { EmptySlot, Frame, ListHex } from './Frame'
+import { Button } from '../inputs/controls/button'
+import { useCanvasState } from './state/useCanvasState'
 import { Tile, type SwapTarget } from './Tile'
-import {
-  centerOn,
-  showView,
-  tileAction,
-  toggleContext,
-  toggleExpanded,
-  type CanvasView,
-  type TileAction,
-} from './view/view'
-
-/** An empty slot: a Direction of a Tile's Frame, or of its Context, that holds no Tile yet. */
-export interface EmptySlotTarget {
-  parent: TileNode
-  ring: Ring
-  direction: Direction
-}
+import type { FrameKind, InnerKind, OuterKind, TileNode } from './view/tiles'
+import type { CanvasView, RingChoices } from './view/view'
 
 interface CanvasProps {
   /** The System's root Tile, with everything below it. */
@@ -35,12 +23,9 @@ interface CanvasProps {
   onViewChange: (view: CanvasView) => void
   /**
    * What a click on an empty slot does, and how a screen reader names it: add a Tile there, move one
-   * there. Without it, empty slots take no click.
+   * there; `undefined` for a slot that takes no click. Without it, none does.
    */
-  emptySlots?: {
-    label: (slot: EmptySlotTarget) => string
-    onSelect: (slot: EmptySlotTarget) => void
-  }
+  emptySlots?: (slot: EmptySlotTarget) => { label: string; onSelect: () => void } | undefined
   /**
    * Whether a Tile offers to trade places with the Tile on the move, how that is named and what it
    * does, on a small button of its own; `undefined` for a Tile that offers no swap. Without it, none
@@ -50,10 +35,6 @@ interface CanvasProps {
   className?: string
 }
 
-/** The canvas's radius in its own coordinates; the text sizes are tuned to it. */
-const radius = 320
-const canvas: Hex = { center: { x: hexWidth(radius) / 2, y: radius }, radius }
-
 export function Canvas({
   system,
   view,
@@ -62,71 +43,133 @@ export function Canvas({
   swapTargets,
   className,
 }: CanvasProps) {
-  const shown = showView(system, view)
-  const placements = layoutCanvas(shown.center, shown, canvas)
-  // The Tile the last single click landed on: a double-click centers it only if its first click
-  // landed there too, since that click may have redrawn what lies under the pointer.
-  const clicked = useRef<string | undefined>(undefined)
-
-  function act(tile: TileNode, action: TileAction) {
-    if (action === 'expand' || action === 'collapse') {
-      onViewChange(toggleExpanded(system, view, tile.id))
-    } else if (action === 'show-context' || action === 'hide-context') {
-      onViewChange(toggleContext(system, view))
-    } else {
-      onViewChange(centerOn(system, view, tile.id))
-    }
-  }
-
-  function center(tile: TileNode, from: 'pointer' | 'keyboard') {
-    const again = from === 'keyboard' || clicked.current === tile.id
-    if (again && tile.id !== shown.center.id) onViewChange(centerOn(system, view, tile.id))
-  }
-
+  const { state, actions } = useCanvasState({ system, view, onViewChange })
+  const { width, height } = canvasSize
   return (
-    <svg
-      viewBox={`0 0 ${String(hexWidth(radius))} ${String(hexHeight(radius))}`}
-      role="group"
-      aria-label={m.hex_canvas_label({ title: shown.center.title })}
-      className={className}
+    <div className={cn('flex min-h-0 flex-col gap-2', className)}>
+      <RingChooser
+        title={state.center.title}
+        rings={state.rings}
+        onAround={actions.showAround}
+        onInside={actions.showInside}
+      />
+      <svg
+        viewBox={`0 0 ${String(width)} ${String(height)}`}
+        role="group"
+        aria-label={m.hex_canvas_label({ title: state.center.title })}
+        className="min-h-0 w-full flex-1"
+      >
+        {state.hexes.map((hex) => {
+          switch (hex.kind) {
+            case 'ground':
+              return <Frame key={hex.key} hex={hex} />
+            case 'empty':
+              return <EmptySlot key={hex.key} hex={hex} action={emptySlots?.(hex.slot)} />
+            case 'list':
+              return <ListHex key={hex.key} hex={hex} />
+            case 'tile':
+              return (
+                <Tile
+                  key={hex.key}
+                  hex={hex}
+                  action={actions.actionOf(hex)}
+                  onAct={(repeat) => {
+                    actions.click(hex, repeat)
+                  }}
+                  onCenter={(from) => {
+                    actions.center(hex, from)
+                  }}
+                  swap={swapTargets?.(hex.tile)}
+                />
+              )
+          }
+        })}
+      </svg>
+    </div>
+  )
+}
+
+const kindNames: Record<FrameKind, () => string> = {
+  children: m.hex_kind_children,
+  branches: m.hex_kind_branches,
+  leaves: m.hex_kind_leaves,
+  context: m.hex_kind_context,
+}
+
+interface RingChooserProps {
+  title: string
+  rings: {
+    around: OuterKind | undefined
+    inside: InnerKind | undefined
+    /** The kinds the center offers around it, and inside it beside the one around it. */
+    choices: RingChoices
+  }
+  onAround: (kind: OuterKind) => void
+  onInside: (kind: InnerKind | undefined) => void
+}
+
+/**
+ * The rings the center shows, around it and inside its hex, each a row of buttons, the one shown
+ * pressed. A row with nothing to choose is left out, so a centered Leaf shows none.
+ */
+function RingChooser({ title, rings, onAround, onInside }: RingChooserProps) {
+  const { around, inside } = rings.choices
+  if (around.length === 0) return null
+  return (
+    <div
+      role="toolbar"
+      aria-label={m.hex_rings_label({ title })}
+      className="flex flex-wrap items-center gap-x-4 gap-y-1"
     >
-      {placements.map((placement) => {
-        switch (placement.kind) {
-          case 'frame':
-            return <Frame key={placement.key} placement={placement} />
-          case 'empty': {
-            const { parent, ring, direction } = placement
-            const slot = { parent, ring, direction }
-            const action = emptySlots && {
-              label: emptySlots.label(slot),
-              onSelect: () => {
-                emptySlots.onSelect(slot)
-              },
-            }
-            return <EmptySlot key={placement.key} placement={placement} action={action} />
-          }
-          case 'tile': {
-            const action = tileAction(placement, shown)
-            return (
-              <Tile
-                key={placement.key}
-                placement={placement}
-                action={action}
-                onAct={(repeat) => {
-                  // The second click of a double-click is the double-click's, not a click of its own.
-                  if (repeat) return
-                  clicked.current = placement.tile.id
-                  act(placement.tile, action)
-                }}
-                onCenter={(from) => {
-                  center(placement.tile, from)
-                }}
-                swap={swapTargets?.(placement.tile)}
-              />
-            )
-          }
-        }
-      })}
-    </svg>
+      {around.length > 1 && (
+        <Choice
+          label={m.hex_ring_around()}
+          options={around.map((kind) => ({ value: kind, name: kindNames[kind]() }))}
+          chosen={rings.around}
+          onChoose={onAround}
+        />
+      )}
+      <Choice
+        label={m.hex_ring_inside()}
+        options={[
+          { value: undefined, name: m.hex_kind_none() },
+          ...inside.map((kind) => ({ value: kind, name: kindNames[kind]() })),
+        ]}
+        chosen={rings.inside}
+        onChoose={onInside}
+      />
+    </div>
+  )
+}
+
+interface ChoiceProps<T> {
+  label: string
+  options: { value: T; name: string }[]
+  /** The option shown; none of them while the canvas shows nothing to choose from. */
+  chosen: T | undefined
+  onChoose: (value: T) => void
+}
+
+/** A row of buttons, one per option, the chosen one pressed. */
+function Choice<T>({ label, options, chosen, onChoose }: ChoiceProps<T>) {
+  return (
+    <div role="group" aria-label={label} className="flex items-center gap-1">
+      <span aria-hidden className="pr-1 text-xs text-muted-foreground">
+        {label}
+      </span>
+      {options.map(({ value, name }) => (
+        <Button
+          key={name}
+          variant={value === chosen ? 'secondary' : 'ghost'}
+          size="xs"
+          aria-pressed={value === chosen}
+          onClick={() => {
+            onChoose(value)
+          }}
+        >
+          {name}
+        </Button>
+      ))}
+    </div>
   )
 }

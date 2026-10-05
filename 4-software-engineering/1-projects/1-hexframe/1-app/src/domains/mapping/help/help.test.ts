@@ -60,11 +60,11 @@ describe('Help whole, as /help draws it', () => {
       const english = yield* Mapping.helpSystem('en')
       const french = yield* Mapping.helpSystem('fr')
       expect(english).toMatchObject({ _tag: 'Tile', id: 'help', title: 'Hexframe' })
-      expect(english.children[2]).toMatchObject({ id: 'help/2', title: 'Tiles' })
-      expect(french.children[2]).toMatchObject({ id: 'help/2', title: 'Les tuiles' })
-      expect(french.children[2]?.body).toMatch(/Une tuile est l’unité d’un système/)
+      expect(english.branches[2]).toMatchObject({ id: 'help/2', title: 'Tiles' })
+      expect(french.branches[2]).toMatchObject({ id: 'help/2', title: 'Les tuiles' })
+      expect(french.branches[2]?.body).toMatch(/Une tuile est l’unité d’un système/)
       expect(french.context[-1]).toMatchObject({ _tag: 'Tile', id: 'help/-1' })
-      expect(french.children[3]?.context[-1]).toMatchObject({
+      expect(french.branches[3]?.context[-1]).toMatchObject({
         id: 'help/3/-1',
         title: 'Six au plus',
       })
@@ -84,9 +84,9 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
       expect(read.parent).toBeNull()
       expect(read.tile).toMatchObject({ _tag: 'Tile', id: 'help', title: 'Hexframe' })
       expect(read.tile).not.toHaveProperty('body')
-      expect(Object.keys(read.tile.children ?? {})).toEqual(['1', '2', '3', '4', '5', '6'])
-      expect(read.tile.children?.[3]).toMatchObject({ _tag: 'Tile', id: 'help/3' })
-      expect(read.tile.children?.[3]).not.toHaveProperty('children')
+      expect(Object.keys(read.tile.branches ?? {})).toEqual(['1', '2', '3', '4', '5', '6'])
+      expect(read.tile.branches?.[3]).toMatchObject({ _tag: 'Tile', id: 'help/3' })
+      expect(read.tile.branches?.[3]).not.toHaveProperty('branches')
       expect(read.tile.context?.[-1]).toMatchObject({ _tag: 'Tile', id: 'help/-1' })
     }),
   )
@@ -184,7 +184,7 @@ layer(TestTiles)('Help, refused to every write in Mapping itself', (it) => {
         })
       }
       const after = yield* Mapping.system(accountId)
-      expect(after.children[1]).toMatchObject({ id: own.id, title: 'Own', context: {} })
+      expect(after.branches[1]).toMatchObject({ id: own.id, title: 'Own', context: {} })
     }),
   )
 })
@@ -234,6 +234,19 @@ describe('a vault folder read as Tiles', () => {
       'help/3/1: the folder above it reads as no Tile',
     ])
     expect(rows.map(({ id }) => id)).toEqual(['help', 'help/3/1', 'help/4'])
+  })
+
+  it('names the folder of a note the import’s reading refuses, which Help’s own rules let pass', () => {
+    const { rows, problems } = vaultOf(
+      'help',
+      { '': note('Root'), '1-long': note('x'.repeat(1_001), 'Long.'), '2-flow': note('a: b') },
+      'CLAUDE.md',
+    )
+    expect(problems).toEqual([
+      '1-long: its CLAUDE.md reads as no Tile: TitleTooLong',
+      '2-flow: its CLAUDE.md reads as no Tile: FrontmatterInvalid',
+    ])
+    expect(rows).toEqual([])
   })
 
   it('finds no Root in a folder whose own note reads as none', () => {

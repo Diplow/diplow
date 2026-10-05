@@ -48,6 +48,9 @@ const content = (title: string) => ({ title, preview: `${title}, in short.`, bod
 
 const untitledContent = { title: '', preview: '', body: '' }
 
+/** What a Tile holds with nothing below it: no Branch, no Leaf, no Context. */
+const nothingBelow = { branches: {}, leaves: {}, context: {} }
+
 /** The Account's System, read once so its Root exists, and a Child of the Root in Direction 1. */
 const withAChild = Effect.gen(function* () {
   const accountId = someone()
@@ -69,12 +72,12 @@ function outline(tile: SystemTile): unknown {
             : '⚠',
       ] as const,
   )
-  const children = Object.entries(tile.children).map(
+  const branches = Object.entries(tile.branches).map(
     ([slot, child]) => [slot, outline(child)] as const,
   )
   return {
     title: tile.title,
-    children: Object.fromEntries(children),
+    branches: Object.fromEntries(branches),
     context: Object.fromEntries(context),
   }
 }
@@ -92,8 +95,7 @@ layer(TestTiles)('a System and its Tiles, over PGlite', (it) => {
         title: '',
         preview: '',
         body: '',
-        children: {},
-        context: {},
+        ...nothingBelow,
       })
       expect(second.id).toBe(first.id)
       expect((yield* system(accountId)).id).toBe(first.id)
@@ -132,8 +134,8 @@ layer(TestTiles)('a System and its Tiles, over PGlite', (it) => {
         ...content('Seventh'),
       }).pipe(Effect.flip)
       expect(seventh).toMatchObject({ _tag: 'DirectionTaken', kind: 'Conflict' })
-      const { children } = yield* system(accountId)
-      expect(Object.values(children).map((child) => child.title)).toEqual(
+      const { branches } = yield* system(accountId)
+      expect(Object.values(branches).map((child) => child.title)).toEqual(
         directions.map((slot) => `Child ${String(slot)}`),
       )
     }),
@@ -151,18 +153,18 @@ layer(TestTiles)('a System and its Tiles, over PGlite', (it) => {
       expect(child).toEqual({ id: child.id, ...content('Child') })
       const found = yield* system(accountId)
       expect(found.id).toBe(root.id)
-      expect(found.children[1]).toMatchObject({ _tag: 'Tile', ...child })
-      expect(found.children[1]?.context[-1]).toMatchObject({ _tag: 'Tile', ...principle })
+      expect(found.branches[1]).toMatchObject({ _tag: 'Tile', ...child })
+      expect(found.branches[1]?.context[-1]).toMatchObject({ _tag: 'Tile', ...principle })
       expect(outline(found)).toEqual({
         title: '',
-        children: {
+        branches: {
           1: {
             title: 'Child',
-            children: {},
+            branches: {},
             context: {
               [-1]: {
                 title: 'Principle',
-                children: { 2: { title: 'Detail', children: {}, context: {} } },
+                branches: { 2: { title: 'Detail', branches: {}, context: {} } },
                 context: {},
               },
             },
@@ -219,7 +221,7 @@ layer(TestTiles)('moving and deleting Tiles, over PGlite', (it) => {
       }
       expect(outline(yield* system(accountId))).toEqual({
         title: '',
-        children: { 1: { title: 'Child', children: {}, context: {} } },
+        branches: { 1: { title: 'Child', branches: {}, context: {} } },
         context: {},
       })
     }),
@@ -237,13 +239,13 @@ layer(TestTiles)('moving and deleting Tiles, over PGlite', (it) => {
       yield* moveTile(accountId, child.id, { parent: sibling.id, slot: 2 })
       expect(outline(yield* system(accountId))).toEqual({
         title: '',
-        children: {
+        branches: {
           4: {
             title: 'Sibling',
-            children: {
+            branches: {
               2: {
                 title: 'Child',
-                children: { 6: { title: 'Grandchild', children: {}, context: {} } },
+                branches: { 6: { title: 'Grandchild', branches: {}, context: {} } },
                 context: {},
               },
             },
@@ -254,8 +256,8 @@ layer(TestTiles)('moving and deleting Tiles, over PGlite', (it) => {
       })
       yield* moveTile(accountId, child.id, { parent: sibling.id, slot: -3 })
       yield* moveTile(accountId, child.id, { parent: sibling.id, slot: -3 })
-      const moved = (yield* system(accountId)).children[4]
-      expect(Object.keys(moved?.children ?? {})).toEqual([])
+      const moved = (yield* system(accountId)).branches[4]
+      expect(Object.keys(moved?.branches ?? {})).toEqual([])
       expect(moved?.context[-3]).toMatchObject({ title: 'Child' })
     }),
   )
@@ -302,7 +304,7 @@ layer(TestTiles)('moving and deleting Tiles, over PGlite', (it) => {
         ...content('Grandchild'),
       })
       yield* deleteTile(accountId, child.id)
-      expect(outline(yield* system(accountId))).toEqual({ title: '', children: {}, context: {} })
+      expect(outline(yield* system(accountId))).toEqual({ title: '', branches: {}, context: {} })
       const gone = yield* editTile(accountId, grandchild.id, { title: 'Still here?' }).pipe(
         Effect.flip,
       )
@@ -317,7 +319,7 @@ type Slot = Direction | ContextDirection
 
 /** Where each Tile below this one stands, by its Title: its parent's Title and its slot. */
 function places(tile: SystemTile): Record<string, string> {
-  const held = [...Object.entries(tile.children), ...Object.entries(tile.context)]
+  const held = [...Object.entries(tile.branches), ...Object.entries(tile.context)]
   return Object.fromEntries(
     held.flatMap(([slot, below]) =>
       below._tag === 'Tile'
@@ -392,24 +394,24 @@ layer(TestTiles)('References, over PGlite', (it) => {
         yield* createReference(accountId, { parent: child.id, slot: -2, target: shared.id })
         yield* moveTile(accountId, shared.id, { parent: root.id, slot: 6 })
         const held = yield* system(accountId)
-        expect(held.children[1]?.context[-2]).toEqual({ _tag: 'Reference', tile: shared })
+        expect(held.branches[1]?.context[-2]).toEqual({ _tag: 'Reference', tile: shared })
         expect(outline(held)).toEqual({
           title: '',
-          children: {
-            1: { title: 'Child', children: {}, context: { [-2]: '→ Shared' } },
-            6: { title: 'Shared', children: {}, context: {} },
+          branches: {
+            1: { title: 'Child', branches: {}, context: { [-2]: '→ Shared' } },
+            6: { title: 'Shared', branches: {}, context: {} },
           },
           context: {},
         })
         yield* deleteTile(accountId, shared.id)
         const broken = yield* system(accountId)
-        expect(broken.children[1]?.context[-2]).toEqual({
+        expect(broken.branches[1]?.context[-2]).toEqual({
           _tag: 'BrokenReference',
           target: shared.id,
         })
         expect(outline(broken)).toEqual({
           title: '',
-          children: { 1: { title: 'Child', children: {}, context: { [-2]: '⚠' } } },
+          branches: { 1: { title: 'Child', branches: {}, context: { [-2]: '⚠' } } },
           context: {},
         })
         const taken = yield* createTile(accountId, {
@@ -444,7 +446,7 @@ layer(TestTiles)('References, over PGlite', (it) => {
         yield* deleteReference(accountId, { parent: root.id, slot: -1 })
         expect(outline(yield* system(accountId))).toEqual({
           title: '',
-          children: { 1: { title: 'Child', children: {}, context: {} } },
+          branches: { 1: { title: 'Child', branches: {}, context: {} } },
           context: {},
         })
       }),
@@ -496,14 +498,14 @@ const fourDeep = Effect.gen(function* () {
 
 /** How many generations below a read Tile its read went: 0 where it stopped. */
 const generations = <F extends Field>(tile: ReadTile<F>): number =>
-  tile.children === undefined
+  tile.branches === undefined
     ? 0
-    : 1 + Math.max(0, ...Object.values(tile.children).map(generations))
+    : 1 + Math.max(0, ...Object.values(tile.branches).map(generations))
 
 /** The fields a read Tile carries, sorted, its tag and its slots aside. */
 const fieldsOf = (tile: object) =>
   Object.keys(tile)
-    .filter((key) => !['_tag', 'children', 'context'].includes(key))
+    .filter((key) => !['_tag', 'branches', 'leaves', 'context'].includes(key))
     .sort()
 
 layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
@@ -512,7 +514,7 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
       const accountId = someone()
       const read = yield* readTile(accountId, { depth: 1, fields: ['title', 'preview', 'body'] })
       expect(read).toEqual({
-        tile: { _tag: 'Tile', id: read.tile.id, ...untitledContent, children: {}, context: {} },
+        tile: { _tag: 'Tile', id: read.tile.id, ...untitledContent, ...nothingBelow },
         parent: null,
       })
       expect((yield* system(accountId)).id).toBe(read.tile.id)
@@ -531,7 +533,7 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
         expect(generations(below.tile)).toBe(depth)
       }
       const { tile } = yield* readTile(accountId, { depth: 3, fields: ['title'] })
-      expect(tile.children?.[1]?.children?.[1]?.children?.[1]).toEqual({
+      expect(tile.branches?.[1]?.branches?.[1]?.branches?.[1]).toEqual({
         _tag: 'Tile',
         id: ids[3],
         title: 'Great-grandchild',
@@ -540,8 +542,7 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
         _tag: 'Tile',
         id: principle,
         title: 'Principle',
-        children: {},
-        context: {},
+        ...nothingBelow,
       })
     }),
   )
@@ -561,8 +562,8 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
         const { tile } = yield* readTile(accountId, { depth: 2, fields })
         const expected = ['id', ...fields].sort()
         expect(fieldsOf(tile)).toEqual(expected)
-        expect(fieldsOf(tile.children?.[1] ?? {})).toEqual(expected)
-        expect(fieldsOf(tile.children?.[1]?.children?.[1] ?? {})).toEqual(expected)
+        expect(fieldsOf(tile.branches?.[1] ?? {})).toEqual(expected)
+        expect(fieldsOf(tile.branches?.[1]?.branches?.[1] ?? {})).toEqual(expected)
       }
       const columns = { opened: ['body' as const], below: ['title' as const] }
       const found = yield* Tiles.use((tiles) =>
@@ -585,7 +586,7 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
           _tag: 'Reference',
           tile: { id: ids[1], title: 'Child', preview: 'Child, in short.' },
         })
-        expect(tile.children?.[1]?.context?.[-1]).toEqual({
+        expect(tile.branches?.[1]?.context?.[-1]).toEqual({
           _tag: 'BrokenReference',
           target: gone,
         })
@@ -603,7 +604,8 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
         _tag: 'Tile',
         id: ids[2],
         title: 'Grandchild',
-        children: { 1: { _tag: 'Tile', id: ids[3], title: 'Great-grandchild' } },
+        branches: { 1: { _tag: 'Tile', id: ids[3], title: 'Great-grandchild' } },
+        leaves: {},
         context: {},
       })
       const child = yield* readTile(accountId, { id: ids[1], depth: 0, fields: [] })

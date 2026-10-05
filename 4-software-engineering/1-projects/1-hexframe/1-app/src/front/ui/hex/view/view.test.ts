@@ -1,16 +1,16 @@
 import { describe, expect, it } from 'vitest'
 
-import { layoutCanvas, type TileNode } from '../geometry/layout'
-
+import type { TileNode } from './tiles'
 import {
   centerOn,
-  findTile,
-  pathTo,
   readCanvasView,
+  ringChoices,
   showView,
-  tileAction,
-  toggleContext,
   toggleExpanded,
+  viewIn,
+  withFrame,
+  withInner,
+  withViewIn,
   type CanvasView,
 } from './view'
 
@@ -21,73 +21,59 @@ const tile = (id: string, more: Partial<TileNode> = {}): TileNode => ({
   ...more,
 })
 
+const leaf = (id: string) => tile(id, { leaf: true })
+
+/** Four Branches and three Leaves: seven in all, so its Branches and its Leaves show apart. */
+const many = tile('many', {
+  branches: { 1: tile('m1'), 2: tile('m2'), 3: tile('m3'), 4: tile('m4') },
+  leaves: { 1: leaf('ml1'), 2: leaf('ml2'), 3: leaf('ml3') },
+})
+
 const system = tile('root', {
-  children: {
-    1: tile('a', { children: { 3: tile('a3', { children: { 2: tile('a3b') } }) } }),
+  branches: {
+    1: tile('a', { branches: { 3: tile('a3', { branches: { 2: tile('a3b') } }) } }),
     4: tile('b'),
+    5: many,
   },
-  context: { 2: tile('why', { children: { 1: tile('why1') } }) },
+  leaves: { 2: leaf('notes') },
+  context: { 2: tile('why') },
 })
 
 describe('readCanvasView', () => {
   it('reads each field it understands', () => {
-    expect(readCanvasView({ center: 'a', expanded: ['a3'], context: true })).toEqual({
-      center: 'a',
-      expanded: ['a3'],
-      context: true,
-    })
+    const view = { center: 'a', frame: 'branches', inner: 'leaves', expanded: { 3: 'context' } }
+    expect(readCanvasView(view)).toEqual(view)
   })
 
   it('leaves out a field it cannot read, and the defaults', () => {
     expect(readCanvasView({})).toEqual({})
-    expect(readCanvasView({ center: 3, expanded: 'a', context: 'yes' })).toEqual({})
-    expect(readCanvasView({ center: '', expanded: [], context: false })).toEqual({})
+    expect(
+      readCanvasView({ center: 3, frame: 'context', inner: 'children', expanded: 'a' }),
+    ).toEqual({})
+    expect(readCanvasView({ center: '', expanded: [] })).toEqual({})
+  })
+
+  it('keeps the center alone of a link from before the shape, its expansions a list of ids', () => {
+    expect(readCanvasView({ center: 'a', expanded: ['a3'], context: true })).toEqual({
+      center: 'a',
+    })
+  })
+
+  it('drops an expansion it cannot read, and keeps the others', () => {
+    expect(readCanvasView({ expanded: { 1: 'children', 2: 'nothing', 7: 'leaves' } })).toEqual({
+      expanded: { 1: 'children' },
+    })
+    expect(readCanvasView({ center: 'x'.repeat(101) })).toEqual({})
   })
 
   it('sets every field, so a raw value the router keeps underneath is overwritten', () => {
-    const view = readCanvasView({ center: 3, expanded: 5, context: 'x' })
     // Strict, so each key must be there, set to `undefined`, not merely absent.
-    expect(view).toStrictEqual({ center: undefined, expanded: undefined, context: undefined })
-  })
-
-  it('drops an expansion list holding anything but ids', () => {
-    expect(readCanvasView({ expanded: ['a', 1], context: true })).toEqual({ context: true })
-    expect(readCanvasView({ center: 'x'.repeat(101) })).toEqual({})
-  })
-})
-
-describe('findTile', () => {
-  it('finds a Tile anywhere below the root, in a Child or a Context slot', () => {
-    expect(findTile(system, 'root')).toBe(system)
-    expect(findTile(system, 'a3b')?.id).toBe('a3b')
-    expect(findTile(system, 'why1')?.id).toBe('why1')
-    expect(findTile(system, 'nowhere')).toBeUndefined()
-  })
-})
-
-describe('pathTo', () => {
-  const ids = (id: string) => pathTo(system, id).map((tile) => tile.id)
-
-  it('goes from the root down to the Tile, both included', () => {
-    expect(ids('root')).toEqual(['root'])
-    expect(ids('a3b')).toEqual(['root', 'a', 'a3', 'a3b'])
-  })
-
-  it('goes through a Context slot', () => {
-    expect(ids('why1')).toEqual(['root', 'why', 'why1'])
-  })
-
-  it('is empty for an id no Tile has', () => {
-    expect(ids('nowhere')).toEqual([])
-  })
-
-  it('reaches the Tile itself, not a Reference to it met first', () => {
-    const referenced = tile('root', {
-      children: { 4: tile('b', { children: { 1: tile('b1') } }) },
-      context: { 1: tile('b', { reference: true }) },
+    expect(readCanvasView({ center: 3, frame: 5, inner: 5, expanded: 5 })).toStrictEqual({
+      center: undefined,
+      frame: undefined,
+      inner: undefined,
+      expanded: undefined,
     })
-    expect(pathTo(referenced, 'b').map((found) => found.id)).toEqual(['root', 'b'])
-    expect(findTile(referenced, 'b')?.children?.[1]?.id).toBe('b1')
   })
 })
 
@@ -98,82 +84,169 @@ describe('showView', () => {
     expect(showView(system, { center: 'a' }).center.id).toBe('a')
   })
 
-  it('keeps only the expansions a reader can see', () => {
-    // a3 sits inside a, which is collapsed; b is not below the center at all once a is centered.
-    expect([...showView(system, { expanded: ['a3', 'b'] }).expanded]).toEqual(['b'])
-    expect([...showView(system, { expanded: ['a3', 'a'] }).expanded]).toEqual(['a', 'a3'])
-    expect([...showView(system, { center: 'a', expanded: ['a3', 'b'] }).expanded]).toEqual(['a3'])
+  it('shows the first ring the center offers, nothing inside it and nothing open', () => {
+    expect(showView(system, {})).toMatchObject({
+      frame: 'children',
+      inner: undefined,
+      expanded: {},
+    })
+    expect(showView(system, { center: 'many' })).toMatchObject({ frame: 'branches' })
+  })
+
+  it('falls back to the first ring for one the center does not offer', () => {
+    expect(showView(system, { frame: 'leaves' }).frame).toBe('children')
+    expect(showView(system, { center: 'many', frame: 'children' }).frame).toBe('branches')
+    expect(showView(system, { center: 'many', frame: 'leaves' }).frame).toBe('leaves')
+  })
+
+  it('shows Leaves inside Branches only, and Context inside any ring', () => {
+    expect(showView(system, { inner: 'leaves' }).inner).toBeUndefined()
+    expect(showView(system, { inner: 'context' }).inner).toBe('context')
+    const many = { center: 'many', inner: 'leaves' } as const
+    expect(showView(system, many).inner).toBe('leaves')
+    expect(showView(system, { ...many, frame: 'leaves' }).inner).toBeUndefined()
+  })
+
+  it('shows a centered Leaf alone: no ring around it, none inside, nothing open', () => {
+    const view: CanvasView = { center: 'notes', frame: 'children', inner: 'context' }
+    expect(showView(system, view)).toMatchObject({
+      frame: undefined,
+      inner: undefined,
+      expanded: {},
+    })
+  })
+
+  it('opens only a Branch of the ring around the center, into a kind it offers', () => {
+    const view: CanvasView = {
+      expanded: { 1: 'context', 2: 'children', 4: 'leaves', 6: 'context' },
+    }
+    // 2 holds a Leaf and 6 nothing; b, in 4, offers no Leaves ring, so it opens into its first.
+    expect(showView(system, view).expanded).toEqual({ 1: 'context', 4: 'children' })
+  })
+
+  it('opens no Branch around a ring of Leaves', () => {
+    const view: CanvasView = { center: 'many', frame: 'leaves', expanded: { 1: 'children' } }
+    expect(showView(system, view).expanded).toEqual({})
+  })
+})
+
+describe('ringChoices', () => {
+  it('offers Children around, and Context inside, for six Branches and Leaves or fewer', () => {
+    expect(ringChoices(showView(system, {}))).toEqual({ around: ['children'], inside: ['context'] })
+  })
+
+  it('offers Branches or Leaves around past six, and Leaves inside Branches', () => {
+    const around = ['branches', 'leaves']
+    expect(ringChoices(showView(system, { center: 'many' }))).toEqual({
+      around,
+      inside: ['leaves', 'context'],
+    })
+    expect(ringChoices(showView(system, { center: 'many', frame: 'leaves' }))).toEqual({
+      around,
+      inside: ['context'],
+    })
+  })
+
+  it('offers nothing for a centered Leaf', () => {
+    expect(ringChoices(showView(system, { center: 'notes' }))).toEqual({ around: [], inside: [] })
   })
 })
 
 describe('toggleExpanded', () => {
-  it('expands a Child, then collapses it and what was open inside it', () => {
-    const open = toggleExpanded(system, {}, 'a')
-    expect(open).toEqual({ expanded: ['a'] })
-    const nested = toggleExpanded(system, open, 'a3')
-    expect(nested).toEqual({ expanded: ['a', 'a3'] })
-    expect(toggleExpanded(system, nested, 'a')).toEqual({})
+  it('opens a Branch into its first ring, then closes it', () => {
+    const open = toggleExpanded(system, {}, 1)
+    expect(open).toEqual({ expanded: { 1: 'children' } })
+    expect(toggleExpanded(system, open, 1)).toEqual({})
   })
 
-  it('keeps the rest of the view', () => {
-    expect(toggleExpanded(system, { center: 'a', context: true }, 'a3')).toEqual({
+  it('opens a Branch of more than six into its Branches', () => {
+    expect(toggleExpanded(system, {}, 5)).toEqual({ expanded: { 5: 'branches' } })
+  })
+
+  it('opens nothing where no Branch sits, and keeps the rest of the view', () => {
+    expect(toggleExpanded(system, { inner: 'context' }, 2)).toEqual({ inner: 'context' })
+    expect(toggleExpanded(system, { center: 'a', inner: 'context' }, 3)).toEqual({
       center: 'a',
-      expanded: ['a3'],
-      context: true,
+      inner: 'context',
+      expanded: { 3: 'children' },
     })
   })
 })
 
-describe('toggleContext', () => {
-  it('shows the Context, then hides it, leaving no default in the URL', () => {
-    const shown = toggleContext(system, {})
-    expect(shown).toEqual({ context: true })
-    expect(toggleContext(system, shown)).toEqual({})
+describe('withFrame', () => {
+  it('shows another ring around the center, closing what the old one opened', () => {
+    const view: CanvasView = { center: 'many', inner: 'context', expanded: { 1: 'children' } }
+    expect(withFrame(system, view, 'leaves')).toEqual({
+      center: 'many',
+      frame: 'leaves',
+      inner: 'context',
+    })
+  })
+
+  it('leaves the first ring out of the URL', () => {
+    expect(withFrame(system, { center: 'many', frame: 'leaves' }, 'branches')).toEqual({
+      center: 'many',
+    })
+  })
+
+  it('drops Leaves inside once the ring around is no longer Branches', () => {
+    expect(withFrame(system, { center: 'many', inner: 'leaves' }, 'leaves')).toEqual({
+      center: 'many',
+      frame: 'leaves',
+    })
+  })
+})
+
+describe('withInner', () => {
+  it('shows a ring inside the center, then none, leaving no default in the URL', () => {
+    const shown = withInner(system, {}, 'context')
+    expect(shown).toEqual({ inner: 'context' })
+    expect(withInner(system, shown, undefined)).toEqual({})
+  })
+
+  it('keeps what is open around', () => {
+    expect(withInner(system, { expanded: { 1: 'children' } }, 'context')).toEqual({
+      inner: 'context',
+      expanded: { 1: 'children' },
+    })
   })
 })
 
 describe('centerOn', () => {
-  it('centers a Tile, keeps the expansions below it and closes the Context', () => {
-    const view: CanvasView = { expanded: ['a', 'a3', 'b'], context: true }
-    expect(centerOn(system, view, 'a')).toEqual({ center: 'a', expanded: ['a3'] })
+  it('centers a Tile with its first ring, nothing inside and nothing open', () => {
+    expect(centerOn(system, 'a')).toEqual({ center: 'a' })
+    expect(centerOn(system, 'many')).toEqual({ center: 'many' })
   })
 
   it('leaves the center out of the URL for the root', () => {
-    expect(centerOn(system, { center: 'a' }, 'root')).toEqual({})
+    expect(centerOn(system, 'root')).toEqual({})
   })
 
-  it('centers a Context Tile too', () => {
-    expect(centerOn(system, {}, 'why')).toEqual({ center: 'why' })
+  it('centers a Context Tile and a Leaf too', () => {
+    expect(centerOn(system, 'why')).toEqual({ center: 'why' })
+    expect(centerOn(system, 'notes')).toEqual({ center: 'notes' })
   })
 })
 
-describe('tileAction', () => {
-  const canvas = { center: { x: 0, y: 0 }, radius: 300 }
+describe('viewIn and withViewIn', () => {
+  const search = { center: 'a', frame: 'children', inner: 'context', open: 'why' } as const
 
-  function actions(view: Parameters<typeof showView>[1]) {
-    const shown = showView(system, view)
-    return Object.fromEntries(
-      layoutCanvas(shown.center, shown, canvas).flatMap((placement) =>
-        placement.kind === 'tile' ? [[placement.key, tileAction(placement, shown)]] : [],
-      ),
-    )
-  }
-
-  it('shows the Context from the center, expands a Child, collapses an expanded one', () => {
-    expect(actions({ expanded: ['a'] })).toEqual({
-      'tile:root': 'show-context',
-      'tile:a': 'collapse',
-      'tile:a3': 'expand',
-      'tile:b': 'expand',
+  it('take the canvas’s part of a page’s search params', () => {
+    expect(viewIn(search)).toEqual({
+      center: 'a',
+      frame: 'children',
+      inner: 'context',
+      expanded: undefined,
     })
   })
 
-  it('hides the Context from the center drawn inside it, and centers a Context Tile', () => {
-    expect(actions({ context: true })).toEqual({
-      'tile:root': 'hide-context',
-      'tile:context:2': 'center',
-      'tile:a': 'expand',
-      'tile:b': 'expand',
+  it('set every field of the canvas’s, and keep the page’s own', () => {
+    expect(withViewIn(search, { expanded: { 1: 'children' } })).toStrictEqual({
+      center: undefined,
+      frame: undefined,
+      inner: undefined,
+      expanded: { 1: 'children' },
+      open: 'why',
     })
   })
 })

@@ -37,11 +37,11 @@ The tests drive the endpoint in-process. Against a real Claude Code, the accepta
 
 | Tool | Kind | Does | Runs |
 |---|---|---|---|
-| `open_tile` | read | One Tile, the Root without an id, of the user's System or of Help, with the fields asked, its parent, and its Children and Context by Title and Preview | `openTile` |
+| `open_tile` | read | One Tile, the Root without an id, of the user's System or of Help, with the fields asked, its parent, and its Branches, Leaves and Context by Title and Preview | `openTile` |
 | `map` | read | The System, or Help, below a Tile, 0 to 3 generations, Title and Preview unless more is asked | `readTile` |
-| `create_tile` | write | A Tile in a free slot under another: a Child, 1 to 6, or a Context Tile, −1 to −6; answers it with its id | `createTile` |
+| `create_tile` | write | A Tile in a free slot under another, never under a Leaf: a Branch, 1 to 6, a Leaf, `{ leaf: 1 }` to `{ leaf: 6 }`, or a Context Tile, −1 to −6; answers it with its id | `createTile` |
 | `edit_tile` | write | Any of a Tile's Title, Preview and Body; answers the Tile as it now reads | `editTile` |
-| `move_tile` | write | A Tile with everything below it, to a free slot | `moveTile` |
+| `move_tile` | write | A Tile with everything below it, to a free slot; a Leaf grows into a Branch, and a bare Branch shrinks into a Leaf, this way | `moveTile` |
 | `swap_tiles` | write | Two Tiles trade places, each with everything below it | `swapTiles` |
 | `delete_tile` | write, destructive | A Tile and everything below it; References to them stay, broken | `deleteTile` |
 | `create_reference` | write | A Reference to a Tile, in a free Context slot | `createReference` |

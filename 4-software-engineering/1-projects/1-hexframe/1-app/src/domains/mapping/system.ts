@@ -1,6 +1,6 @@
 // A System as a reader finds it, built from the repository's rows: the Root, then everything below
-// it, each Tile with its Children and its Context; or one Tile read to a depth, with only the fields
-// asked. Pure: what a row means is decided here.
+// it, each Tile with its Branches and its Leaves, its Children, and its Context; or one Tile read to a
+// depth, with only the fields asked. Pure: what a row means is decided here.
 import {
   type ColumnsAsked,
   contentWith,
@@ -8,30 +8,46 @@ import {
   type TileRowWith,
 } from '#/repositories/database/tiles/tiles'
 
+import { type Kept, keptOf } from './kept/kept'
 import {
   type Content,
   type ContextDirection,
   type Direction,
   isContextDirection,
   isDirection,
+  leafOf,
   type Tile,
 } from './tile'
 
-/** A Tile in its System: its Children by Direction, its Context by slot. */
-export interface SystemTile extends Tile {
+/**
+ * A Tile as its System holds it, before what stands below it, with what it keeps from the files it was
+ * imported from: its Name, its Tile config and its Frontmatter, each when it has one.
+ */
+interface FoundTile extends Tile, Kept {
   readonly _tag: 'Tile'
-  readonly children: Partial<Record<Direction, SystemTile>>
+}
+
+/** A Leaf in its System: one file's worth, a Tile with nothing below it and no Context. */
+export type LeafTile = FoundTile
+
+/**
+ * A Tile in its System: its Branches and its Leaves, its Children, each by Direction, and its Context
+ * by slot. A Branch, the Root or a Context Tile alike.
+ */
+export interface SystemTile extends FoundTile {
+  readonly branches: Partial<Record<Direction, SystemTile>>
+  readonly leaves: Partial<Record<Direction, LeafTile>>
   readonly context: Partial<Record<ContextDirection, SystemTile | Reference | BrokenReference>>
 }
 
 /** A Context slot holding a link to a Tile drawn elsewhere, by its id, so it survives a move. */
-interface Reference<T = Tile> {
+export interface Reference<T = Tile> {
   readonly _tag: 'Reference'
   readonly tile: T
 }
 
 /** A Reference whose Tile was deleted: shown as broken, it never blocked the delete. */
-interface BrokenReference {
+export interface BrokenReference {
   readonly _tag: 'BrokenReference'
   readonly target: string
 }
@@ -72,22 +88,35 @@ export function below(rows: ReadonlyArray<TileRow>, id: string): ReadonlySet<str
   return found
 }
 
-/** A Tile's Children by Direction and its Context by slot, as `place` and `refer` make them. */
-function slotsOf<R extends Placed, T, L>(
+/** How a walk down makes what it finds in each slot: a Tile, a Leaf, a Reference. */
+interface Makers<R, T, Leaf, Ref> {
+  readonly place: (row: R) => T
+  readonly leaf: (row: R) => Leaf
+  readonly refer: (target: string) => Ref
+}
+
+/**
+ * A Tile's Branches and Leaves, each by Direction, and its Context by slot, as `place`, `leaf` and
+ * `refer` make them.
+ */
+function slotsOf<R extends Placed, T, Leaf, Ref>(
   rows: ReadonlyArray<R>,
-  { place, refer }: { place: (row: R) => T; refer: (target: string) => L },
+  { place, leaf, refer }: Makers<R, T, Leaf, Ref>,
 ) {
-  const children: Partial<Record<Direction, T>> = {}
-  const context: Partial<Record<ContextDirection, T | L>> = {}
+  const branches: Partial<Record<Direction, T>> = {}
+  const leaves: Partial<Record<Direction, Leaf>> = {}
+  const context: Partial<Record<ContextDirection, T | Ref>> = {}
   for (const row of rows) {
     const { direction, target } = row
     if (direction === null) continue
-    if (isDirection(direction)) children[direction] = place(row)
+    const asLeaf = leafOf(direction)
+    if (isDirection(direction)) branches[direction] = place(row)
+    else if (asLeaf !== undefined) leaves[asLeaf] = leaf(row)
     else if (isContextDirection(direction)) {
       context[direction] = target === null ? place(row) : refer(target)
     }
   }
-  return { children, context }
+  return { branches, leaves, context }
 }
 
 /** A Reference to the Tile of this row, shown as `shown` says, or a broken one when it is gone. */
@@ -108,10 +137,11 @@ export function systemOf(rows: ReadonlyArray<TileRow>): SystemTile | undefined {
 
   const refer = (target: string) => referenceTo(target, byId.get(target), tileOf)
 
+  const found = (row: TileRow): FoundTile => ({ _tag: 'Tile', ...tileOf(row), ...keptOf(row) })
+
   const place = (row: TileRow): SystemTile => ({
-    _tag: 'Tile',
-    ...tileOf(row),
-    ...slotsOf(under.get(row.id) ?? [], { place, refer }),
+    ...found(row),
+    ...slotsOf(under.get(row.id) ?? [], { place, leaf: found, refer }),
   })
 
   const root = under.get(null)?.[0]
@@ -132,18 +162,27 @@ export type FieldsAsked<O extends Field, F extends Field> = ColumnsAsked<O, F>
 /** A Tile a Reference points at, as a read shows it: what a reader needs to decide to open it. */
 type Glimpse = Pick<Tile, 'id' | 'title' | 'preview'>
 
-/**
- * A Tile as a read to a depth finds it: its id and only the fields asked. Above the depth's last
- * generation it holds its Children and its Context; at the last one, where the read stopped, neither.
- */
-export type ReadTile<F extends Field> = Pick<Tile, 'id'> &
+/** A Tile as a read finds it, before what stands below it: its id and only the fields asked. */
+type ReadBase<F extends Field> = Pick<Tile, 'id'> &
   Pick<Content, F> & {
     readonly _tag: 'Tile'
-    readonly children?: Partial<Record<Direction, ReadTile<F>>>
-    readonly context?: Partial<
-      Record<ContextDirection, ReadTile<F> | Reference<Glimpse> | BrokenReference>
-    >
   }
+
+/** A Leaf as a read finds it: its id and only the fields asked, and never anything below it. */
+type ReadLeaf<F extends Field> = ReadBase<F>
+
+/**
+ * A Tile as a read to a depth finds it: its id and only the fields asked. Above the depth's last
+ * generation it holds its Branches, its Leaves and its Context; at the last one, where the read
+ * stopped, none of them.
+ */
+export type ReadTile<F extends Field> = ReadBase<F> & {
+  readonly branches?: Partial<Record<Direction, ReadTile<F>>>
+  readonly leaves?: Partial<Record<Direction, ReadLeaf<F>>>
+  readonly context?: Partial<
+    Record<ContextDirection, ReadTile<F> | Reference<Glimpse> | BrokenReference>
+  >
+}
 
 /**
  * What a read from one Tile finds, before it is shaped: the Tile's row and the rows below it, each with
@@ -185,11 +224,13 @@ export function readOf<F extends Field>(
   const refer = (target: string) =>
     referenceTo(target, targets.get(target), (row) => ({ id: row.id, ...row.content }))
 
+  const found = (row: TileRowWith<F>): ReadBase<F> => ({ _tag: 'Tile', id: row.id, ...row.content })
+
   const place = (row: TileRowWith<F>, generation: number): ReadTile<F> => {
-    const tile = { _tag: 'Tile' as const, id: row.id, ...row.content }
+    const tile = found(row)
     if (generation === depth) return tile
     const next = (below: TileRowWith<F>) => place(below, generation + 1)
-    return { ...tile, ...slotsOf(under.get(row.id) ?? [], { place: next, refer }) }
+    return { ...tile, ...slotsOf(under.get(row.id) ?? [], { place: next, leaf: found, refer }) }
   }
 
   return place(opened, 0)

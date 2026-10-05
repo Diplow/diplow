@@ -24,7 +24,8 @@ async function opened(client: Client, id?: string) {
   return answer as {
     tile: { id: string; title: string; preview: string; body: string }
     parent: { id: string; title: string } | null
-    children: Record<string, { _tag: string; id: string; title: string }>
+    branches: Record<string, { _tag: string; id: string; title: string }>
+    leaves: Record<string, { _tag: string; id: string; title: string }>
     context: Record<string, { _tag: string; id?: string; tile?: { id: string } }>
   }
 }
@@ -48,8 +49,8 @@ describe('the MCP write tools', () => {
       slot: -4,
       ...content('Accessibility'),
     })
-    const { children, context: slots } = await opened(client, child.id)
-    expect(children[3]).toMatchObject({ _tag: 'Tile', id, title: 'Layout' })
+    const { branches, context: slots } = await opened(client, child.id)
+    expect(branches[3]).toMatchObject({ _tag: 'Tile', id, title: 'Layout' })
     expect(slots[-4]).toMatchObject({ _tag: 'Tile', id: (context.value as { id: string }).id })
   })
 
@@ -65,20 +66,20 @@ describe('the MCP write tools', () => {
     const { client, root, child, grandchild, principles } = await anAgent()
     const moved = { id: grandchild.id, parent: root.id, slot: 2 }
     expect(await call(client, 'move_tile', moved)).toEqual({ value: null })
-    expect((await opened(client)).children[2]).toMatchObject({ id: grandchild.id })
+    expect((await opened(client)).branches[2]).toMatchObject({ id: grandchild.id })
     expect(await call(client, 'swap_tiles', { a: child.id, b: principles.id })).toEqual({
       value: null,
     })
-    const { children, context } = await opened(client)
-    expect(children[1]).toMatchObject({ id: principles.id })
+    const { branches, context } = await opened(client)
+    expect(branches[1]).toMatchObject({ id: principles.id })
     expect(context[-1]).toMatchObject({ id: child.id })
   })
 
   it('deletes a Tile with everything below it, its References left broken', async () => {
     const { client, child, grandchild } = await anAgent()
     expect(await call(client, 'delete_tile', { id: child.id })).toEqual({ value: null })
-    const { children, context } = await opened(client)
-    expect(children[1]).toBeUndefined()
+    const { branches, context } = await opened(client)
+    expect(branches[1]).toBeUndefined()
     expect(context[-2]).toEqual({ _tag: 'BrokenReference', target: child.id })
     const { error } = await call(client, 'open_tile', { id: grandchild.id })
     expect(error).toMatch(/^TileNotFound: /)
@@ -161,9 +162,9 @@ describe('the MCP write tools', () => {
     }
     expect(await opened(owner.client, owner.child.id)).toMatchObject({
       tile: { title: 'Frontend' },
-      children: { 2: { id: owner.grandchild.id } },
+      branches: { 2: { id: owner.grandchild.id } },
     })
-    expect(Object.keys((await opened(owner.client, owner.child.id)).children)).toEqual(['2'])
+    expect(Object.keys((await opened(owner.client, owner.child.id)).branches)).toEqual(['2'])
   })
 
   it('refuses every write once its Key is revoked, and writes nothing', async () => {
@@ -174,8 +175,35 @@ describe('the MCP write tools', () => {
     ).rejects.toThrow()
     await expect(call(client, 'delete_tile', { id: child.id })).rejects.toThrow()
     const owner = await connect(bearer((await value(run(signedIn, Iam.issueKey('New')))).secret))
-    const { children } = await opened(owner)
-    expect(children[2]).toBeUndefined()
-    expect(children[1]).toMatchObject({ id: child.id })
+    const { branches } = await opened(owner)
+    expect(branches[2]).toBeUndefined()
+    expect(branches[1]).toMatchObject({ id: child.id })
+  })
+})
+
+describe('the MCP write tools, on Leaves', () => {
+  it('creates a Leaf in a Leaf slot, beside a Branch, and nothing under it', async () => {
+    const { client, root } = await anAgent()
+    const created = await call(client, 'create_tile', {
+      parent: root.id,
+      slot: { leaf: 1 },
+      ...content('Readme'),
+    })
+    const { id } = created.value as { id: string }
+    const { branches, leaves } = await opened(client)
+    expect(leaves[1]).toEqual({
+      _tag: 'Tile',
+      id,
+      title: 'Readme',
+      preview: content('Readme').preview,
+    })
+    expect(branches[1]).toBeDefined()
+    const { error } = await call(client, 'create_tile', {
+      parent: id,
+      slot: 1,
+      ...content('Below'),
+    })
+    expect(error).toMatch(new RegExp(`^LeafHoldsNothing: .+ ${requestId}`))
+    expect((await opened(client, id)).branches).toEqual({})
   })
 })

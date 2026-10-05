@@ -16,6 +16,8 @@ import {
 import {
   DirectionTaken,
   HelpReadOnly,
+  ImportRefused,
+  LeafHoldsNothing,
   MovedUnderItself,
   PreviewTooLong,
   RootFixed,
@@ -108,7 +110,15 @@ describe('the message table', () => {
     ],
     [new MovedUnderItself(), "A tile can't move under itself or one of its own children."],
     [new RootFixed(), "Your root tile is you: it can't be moved or deleted."],
+    [
+      new LeafHoldsNothing(),
+      "A leaf is a single file: nothing goes under it, and a tile with anything below it can't become one.",
+    ],
     [new HelpReadOnly(), "Help is hexframe's guide: everyone reads it, nobody changes it."],
+    [
+      new ImportRefused({ fields: ['files'], faults: [{ path: '', fault: 'UploadTooLarge' }] }),
+      'This import was refused and nothing was written: each file at fault says why.',
+    ],
   ])("words Mapping's %s in its own sentence", (failure, sentence) => {
     expect(messageFor(failure, 'moveTile')).toBe(sentence)
   })
@@ -120,6 +130,16 @@ describe('the message table', () => {
     overwriteGetLocale(() => 'fr')
     expect(messageFor(new MovedUnderItself(), 'swapTiles')).toBe(
       'Deux tuiles ne s’échangent que si aucune n’est sous l’autre.',
+    )
+  })
+
+  it('words a place taken under an import apart from a slot taken under a write', () => {
+    expect(messageFor(new DirectionTaken(), 'importTiles')).toBe(
+      'This place holds something now: an import goes into an empty slot, or into an empty system.',
+    )
+    overwriteGetLocale(() => 'fr')
+    expect(messageFor(new DirectionTaken(), 'importTiles')).toBe(
+      'Cette place est prise désormais : un import va dans une place libre, ou dans un système vide.',
     )
   })
 
@@ -138,6 +158,10 @@ describe('the message table', () => {
     [
       new RootFixed(),
       'Votre tuile racine, c’est vous : elle ne peut être ni déplacée ni supprimée.',
+    ],
+    [
+      new LeafHoldsNothing(),
+      'Une feuille est un seul fichier : rien ne va dessous, et une tuile qui a quelque chose dessous ne peut pas en devenir une.',
     ],
     [
       new HelpReadOnly(),

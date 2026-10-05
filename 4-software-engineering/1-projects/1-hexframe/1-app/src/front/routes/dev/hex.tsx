@@ -15,10 +15,12 @@ export const Route = createFileRoute('/dev/hex')({
 /** The label of each fixture view; the views themselves are the fixture's, so they cannot drift. */
 const views = [
   { label: m.dev_hex_view_root, view: fixtureViews.root },
+  { label: m.dev_hex_view_split, view: fixtureViews.split },
   { label: m.dev_hex_view_expanded, view: fixtureViews.expanded },
-  { label: m.dev_hex_view_nested, view: fixtureViews.nested },
   { label: m.dev_hex_view_context, view: fixtureViews.context },
-  { label: m.dev_hex_view_centered, view: fixtureViews.centered },
+  { label: m.dev_hex_view_mixed, view: fixtureViews.mixed },
+  { label: m.dev_hex_view_two_deep, view: fixtureViews.twoDeep },
+  { label: m.dev_hex_view_leaf, view: fixtureViews.leaf },
 ]
 
 function HexCanvas() {
@@ -49,7 +51,7 @@ function HexCanvas() {
         onViewChange={(next) => {
           void navigate({ search: next })
         }}
-        className="h-[calc(100dvh-16rem)] max-w-full"
+        className="h-[calc(100dvh-16rem)] w-full max-w-5xl"
       />
     </main>
   )
