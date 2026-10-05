@@ -1,0 +1,32 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/import/shape.ts
+  s_add1a77a88c179::t_7368233819bf8a 90
+  s_add1a77a88c179::t_dd1bf7ad678202 81,99-101,150
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/help/vault.ts
+  s_add1a77a88c179::t_eca4b6136c5474 93-94
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-import-export/decisions.md
+  s_add1a77a88c179::t_a40e6fa599f7a9 56
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_add1a77a88c179::t_dd1bf7ad678202 73
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/import/read.ts
+  s_add1a77a88c179::t_dd1bf7ad678202 28,32,99,107,132,162,185,192,284,295,312,335,487
+  s_add1a77a88c179::t_eca4b6136c5474 238-253,256,268,279,384-385
+  s_add1a77a88c179::t_9b004908bc5224 237
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/import/read.test.ts
+  s_add1a77a88c179::t_eca4b6136c5474 259-261,264-265,287-288,290,293
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0d623bd3ea24ccfacc812ad2dfa74347525b2bda",
+  "prompts": {},
+  "sessions": {
+    "s_add1a77a88c179": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d3373e9-3681-410c-a221-392366b8a522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
