@@ -5,8 +5,15 @@
 // server function answers. The client turns the answer back into an `Outcome`, so its channels carry
 // the failure as any other (`front/client/`). And where an export links a Tile it leaves out, a route
 // of the front's, which the front's own tests read back, and the id an import reads back from such a
-// link. Pure: no module of the server's reaches the client here.
+// link; and which Leaf an export writes as its content alone, Mapping's rule, which the front's card
+// follows. Pure: no module of the server's reaches the client here.
 import type { Failure, Outcome } from '../../errors/failure'
+
+/**
+ * Whether an export writes a Leaf as its content alone, a file that isn't Markdown, under its Name:
+ * Mapping's rule, so the System's card shows that Leaf's Body as code exactly when its file is code.
+ */
+export { isVerbatim } from '#/domains/mapping/files/names'
 
 /** A zip as Mapping hands it over: its name, `<slug>.zip`, and its bytes, streamed. */
 interface Zipped {

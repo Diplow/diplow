@@ -71,9 +71,9 @@ function contextNode(entry: ContextEntry, slot: string): TileNode {
 /**
  * Whether a Tile on the canvas offers to swap places with the moving one: a Tile of the System drawn
  * where it stands, so neither a Reference nor a broken one, and neither the Root, which never moves,
- * nor the moving Tile itself, nor a Leaf, which trades places through its own actions (HEX-61). A
- * Tile above or below the moving one offers it too: Mapping refuses that swap, as it refuses a move
- * below the Tile itself.
+ * nor the moving Tile itself, nor a Leaf, which only moves to a free slot or changes kind from its
+ * card (`hexframe-app-import-export/decisions.md#DEC-13`). A Tile above or below the moving one offers
+ * it too: Mapping refuses that swap, as it refuses a move below the Tile itself.
  */
 export const swapsWith = (system: SystemTile, moving: TileNode, tile: TileNode) =>
   tile.reference !== true &&
@@ -84,11 +84,11 @@ export const swapsWith = (system: SystemTile, moving: TileNode, tile: TileNode) 
 
 /**
  * The slot an empty Direction of the canvas stands for, by the ring it is in and the Tile that goes
- * there: a new one or a moving Branch, or a moving Leaf, which stays a Leaf. A ring of Children holds
- * both kinds, so its Direction is a Branch's slot, or a Leaf's for a Leaf, both free there; a Context
- * ring's is the Direction negated. Nothing where the Tile would change kind: a Leaf in a ring of
- * Branches, or anything in a ring of Leaves but a Leaf, since creating a Leaf and growing or shrinking
- * one are HEX-61's.
+ * there: a new one, a moving Branch, or a moving Leaf, which stays a Leaf. A ring of Leaves holds
+ * Leaf slots, so a new Tile there is a Leaf; a ring of Children holds both kinds, so its Direction is
+ * a Branch's slot, or a Leaf's for a Leaf, both free there; a Context ring's is the Direction negated.
+ * Nothing where a moving Tile would change kind, a Leaf in a ring of Branches or a Branch in a ring of
+ * Leaves: a Tile changes kind from its card, in its own Direction.
  */
 export function slotOf(
   ring: FrameKind,
@@ -102,7 +102,7 @@ export function slotOf(
     case 'branches':
       return leaf ? undefined : direction
     case 'leaves':
-      return leaf ? { leaf: direction } : undefined
+      return going === undefined || leaf ? { leaf: direction } : undefined
     case 'context':
       return contextSlot[direction]
   }
@@ -138,8 +138,11 @@ export function tileIn(
  * empty System takes an import as its Root, which replaces the Root's Preview and Body, so a Root
  * that holds either, written before its name, is not offered one.
  */
-export const isEmptySystem = ({ title, preview, body, branches, leaves, context }: SystemTile) =>
-  [title, preview, body].every((text) => text === '') &&
+export const isEmptySystem = (root: SystemTile) =>
+  [root.title, root.preview, root.body].every((text) => text === '') && holdsNothing(root)
+
+/** Whether nothing stands below a Tile: no Branch, no Leaf, no Context Tile nor Reference. */
+export const holdsNothing = ({ branches, leaves, context }: SystemTile) =>
   [branches, leaves, context].every((below) => Object.keys(below).length === 0)
 
 /** Whether a slot is a Leaf's, which takes one file alone and nothing below it. */

@@ -141,10 +141,13 @@ describe('slotOf and isContextSlot', () => {
     expect(slotOf('context', 3, leaf)).toBe(-3)
   })
 
-  it('is no slot where the Tile would change kind, nor for a new Tile in a ring of Leaves', () => {
+  it('is a Leaf slot for a new Tile in a ring of Leaves', () => {
+    expect(slotOf('leaves', 3)).toEqual({ leaf: 3 })
+  })
+
+  it('is no slot where a moving Tile would change kind', () => {
     expect(slotOf('branches', 3, leaf)).toBeUndefined()
     expect(slotOf('leaves', 3, branch)).toBeUndefined()
-    expect(slotOf('leaves', 3)).toBeUndefined()
   })
 
   it('tells a Context slot from a Branch’s or a Leaf’s', () => {
