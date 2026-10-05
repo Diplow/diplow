@@ -13,11 +13,15 @@ const lineSeparators = /[\u2028\u2029]/
 /** Their escapes in a double-quoted YAML string. */
 const escapes: Readonly<Record<string, string>> = { '\u2028': '\\L', '\u2029': '\\P' }
 
+/** Every line ending a reader may split a file at, as the shape's `linesOf` does. */
+const lineEndings = /\r\n?|[\n\u2028\u2029]/
+
 /**
- * `fields` as YAML, one key a line. No value is folded over lines nor written as a block, so a line
- * break in it is an escape. The serializer leaves the Unicode line and paragraph separators raw, which
- * a reader splitting lines (the shape's `linesOf`) would break on: a string holding one is written
- * double-quoted, and the separator escaped there, where YAML reads `\L` and `\P` back as them.
+ * `fields` as YAML, one key a line. No value is folded over lines, a long double-quoted one included,
+ * nor written as a block, so a line break in it is an escape. The serializer leaves the Unicode line
+ * and paragraph separators raw, which a reader splitting lines (the shape's `linesOf`) would break on:
+ * a string holding one is written double-quoted, and the separator escaped there, where YAML reads
+ * `\L` and `\P` back as them. Throws, a defect, rather than return YAML with more lines than keys.
  */
 export function yamlOf(fields: Fields): string {
   const document = new Document(fields)
@@ -28,9 +32,13 @@ export function yamlOf(fields: Fields): string {
       }
     },
   })
-  return document
-    .toString({ lineWidth: 0, blockQuote: false })
+  const yaml = document
+    .toString({ lineWidth: 0, doubleQuotedMinMultiLineLength: Infinity, blockQuote: false })
     .replace(new RegExp(lineSeparators, 'g'), (separator) => escapes[separator] ?? separator)
+  if (yaml.split(lineEndings).length !== Object.keys(fields).length + 1) {
+    throw new Error('YAML was written over more lines than it has keys')
+  }
+  return yaml
 }
 
 /** A Markdown file: its frontmatter, `fields`, between its two `---` lines, then its Body as given. */

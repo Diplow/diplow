@@ -151,7 +151,7 @@ describe('the names of a folder', () => {
         ],
         { ...defaultNaming, folderPattern: '<slug>' },
       ),
-    ).toEqual(['1-same', '2-same'])
+    ).toEqual(['same', '2-same'])
   })
 
   it('give `tile` to a Title of `..` under a bare `<slug>` pattern, never `..`', () => {
@@ -174,14 +174,31 @@ describe('the names of a folder', () => {
     for (const name of names(entries)) expect(own).not.toContain(name)
   })
 
-  it('throw, a defect, rather than write a name twice or one that is no path segment', () => {
-    // A folder and a file of one name in one Direction: numbering them again cannot set them apart.
-    expect(() =>
+  it('number a name the shape would misread, however it was made, keeping what it held', () => {
+    // A slug that looks numbered, in another Direction than its number.
+    expect(
+      names([{ kind: 'branch', direction: 5, title: '3 Games' }], {
+        ...defaultNaming,
+        folderPattern: '<slug>',
+      }),
+    ).toEqual(['5-3-games'])
+    // A folder and a file that isn't Markdown, of one name in one Direction: the folder keeps it.
+    expect(
       names([
-        { kind: 'branch', direction: 3, title: '3-x', name: '3-x' },
+        { kind: 'branch', direction: 3, title: 'X', name: '3-x' },
         { kind: 'leaf', direction: 3, title: '3-x', name: '3-x', verbatim: true },
       ]),
-    ).toThrow(/cannot name/)
+    ).toEqual(['3-x', '3-3-x'])
+    // The file name a config sets, taken by a Leaf the pattern names.
+    expect(
+      names([{ kind: 'leaf', direction: 1, title: 'Intro' }], {
+        ...defaultNaming,
+        fileName: '1-intro.md',
+      }),
+    ).toEqual(['1-1-intro.md'])
+  })
+
+  it('throw, a defect, rather than write a name that is no path segment', () => {
     expect(() =>
       // Seated in Direction 1 by the shape, it takes its number, 2 bytes past a segment's 255.
       names([{ kind: 'branch', direction: 2, title: 'Long', name: 'x'.repeat(255) }]),

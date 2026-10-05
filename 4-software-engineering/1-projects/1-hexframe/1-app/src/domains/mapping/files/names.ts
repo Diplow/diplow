@@ -96,11 +96,12 @@ function nameOf({ kind, stem, verbatim }: Draft): string {
 /** The stem of a kept Name, whatever slot it was kept from: its leading dot and its `.md` dropped. */
 const stemOf = (name: string) => name.replace(/^\./, '').replace(markdown, '')
 
-/** A stem in this Direction: a numbered one renumbered, another with the number put first. */
-function withNumber(stem: string, direction: Direction): string {
-  const rest = numbered.branch.exec(stem)?.[2]
-  return `${String(direction)}-${rest ?? stem}`
-}
+/** A numbered stem renumbered to this Direction: `3-games` in Direction 5 is `5-games`. */
+const renumbered = (stem: string, direction: Direction) =>
+  stem.replace(numbered.branch, (_, __, rest: string) => `${String(direction)}-${rest}`)
+
+/** A stem with this Direction's number put first: `games` in Direction 5 is `5-games`. */
+const withNumber = (stem: string, direction: Direction) => `${String(direction)}-${stem}`
 
 /** The stem a Tile starts from: its Name's, renumbered when numbered, else the folder pattern's. */
 function stemFor(entry: ToName, folderPattern: string): string {
@@ -109,7 +110,7 @@ function stemFor(entry: ToName, folderPattern: string): string {
     return folderPattern.replaceAll('<n>', String(direction)).replaceAll('<slug>', slugOf(title))
   }
   const stem = verbatim === true ? name : stemOf(name)
-  return numbered.branch.test(stem) ? withNumber(stem, direction) : stem
+  return renumbered(stem, direction)
 }
 
 /**
@@ -120,7 +121,7 @@ function stemFor(entry: ToName, folderPattern: string): string {
 function seats(names: ReadonlyArray<string>, pattern: RegExp): ReadonlyMap<string, Direction> {
   const seated = new Map<string, Direction>()
   const taken = new Set<Direction>()
-  const sorted = [...names].sort()
+  const sorted = [...new Set(names)].sort()
   const numberOf = (name: string) => Number(pattern.exec(name)?.[1]) as Direction
   for (const name of sorted.filter((name) => pattern.test(name))) {
     if (taken.has(numberOf(name))) continue
@@ -137,7 +138,7 @@ function seats(names: ReadonlyArray<string>, pattern: RegExp): ReadonlyMap<strin
   return seated
 }
 
-/** How many times a name may take its number again: a second clash after that is a defect. */
+/** How many times a name may take its number: one still misread after that is a defect. */
 const rounds = 3
 
 /** The names of a folder, cased as a file system that ignores case compares them. */
@@ -174,15 +175,18 @@ export function namesIn(
 
 /**
  * The entries whose name would not read back where they stand: one the shape would seat in another
- * Direction, one another entry or the folder's own names share, however it is cased.
+ * Direction, one the folder's own names or an entry before it already take, however it is cased, so
+ * of two entries claiming one name the first keeps it.
  */
 function misreadIn(
   drafts: ReadonlyArray<Draft>,
   reserved: ReadonlySet<string>,
 ): ReadonlySet<Draft> {
   const names = drafts.map(nameOf)
-  const counts = new Map<string, number>()
-  for (const name of names.map(folded)) counts.set(name, (counts.get(name) ?? 0) + 1)
+  const firstOf = new Map<string, number>()
+  names.forEach((name, index) => {
+    if (!firstOf.has(folded(name))) firstOf.set(folded(name), index)
+  })
   const seated = new Map(
     (['branch', 'leaf', 'context'] as const).map((kind) => [
       kind,
@@ -197,7 +201,7 @@ function misreadIn(
       const name = names[index] ?? ''
       return (
         reserved.has(folded(name)) ||
-        (counts.get(folded(name)) ?? 0) > 1 ||
+        firstOf.get(folded(name)) !== index ||
         seated.get(entry.kind)?.get(name) !== entry.direction
       )
     }),

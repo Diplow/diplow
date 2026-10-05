@@ -52,7 +52,7 @@ const rows: ReadonlyArray<TileRow> = [
     ...row('games', 'root', 3),
     title: 'Games',
     name: '3-games',
-    frontmatter: { owner: 'diplo', weight: 2, draft: false },
+    frontmatter: { owner: 'diplo', weight: 2, draft: false, constructor: 'kept' },
   },
   reference('to-leadership', 'games', -1, 'leadership'),
   reference('to-gone', 'games', -2, 'gone'),
@@ -147,8 +147,14 @@ describe('a System exported whole', () => {
       'owner',
       'weight',
       'draft',
+      'constructor',
     ])
-    expect(games.fields).toMatchObject({ owner: 'diplo', weight: 2, draft: false })
+    expect(games.fields).toMatchObject({
+      owner: 'diplo',
+      weight: 2,
+      draft: false,
+      constructor: 'kept',
+    })
   })
 
   it('links a Reference by its Tile’s path when exported too, a broken one by its URL', () => {
@@ -233,6 +239,8 @@ describe('the YAML an export writes', () => {
       quoted: '"it\'s"',
       lines: 'one\r\ntwo\rthree\u0085four',
       separators: '\u2028---\u2029',
+      long: 'a long title that goes on and on for a while\n---\nid: injected',
+      longSeparators: `${'x'.repeat(60)}\u2028---\u2029${'y'.repeat(60)}`,
       looksTrue: 'true',
       empty: '',
       number: 3,
@@ -240,7 +248,7 @@ describe('the YAML an export writes', () => {
     }
     const yaml = yamlOf(fields)
     expect(parse(yaml)).toEqual(fields)
-    expect(yaml.split(/\r\n?|[\n\u2028\u2029]/).filter(Boolean)).toHaveLength(8)
+    expect(yaml.split(/\r\n?|[\n\u2028\u2029]/).filter(Boolean)).toHaveLength(10)
   })
 })
 
