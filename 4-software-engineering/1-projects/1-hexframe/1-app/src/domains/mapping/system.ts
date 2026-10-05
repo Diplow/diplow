@@ -28,7 +28,7 @@ interface FoundTile extends Tile, Kept {
 }
 
 /** A Leaf in its System: one file's worth, a Tile with nothing below it and no Context. */
-type LeafTile = FoundTile
+export type LeafTile = FoundTile
 
 /**
  * A Tile in its System: its Branches and its Leaves, its Children, each by Direction, and its Context
@@ -41,13 +41,13 @@ export interface SystemTile extends FoundTile {
 }
 
 /** A Context slot holding a link to a Tile drawn elsewhere, by its id, so it survives a move. */
-interface Reference<T = Tile> {
+export interface Reference<T = Tile> {
   readonly _tag: 'Reference'
   readonly tile: T
 }
 
 /** A Reference whose Tile was deleted: shown as broken, it never blocked the delete. */
-interface BrokenReference {
+export interface BrokenReference {
   readonly _tag: 'BrokenReference'
   readonly target: string
 }

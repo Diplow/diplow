@@ -54,6 +54,14 @@ const uiLibraries = [
 // one SDK a repository does not hold, imported by the API layer's MCP folder alone (STACK.md).
 const mcpFolder = 'src/api/server/mcp/'
 
+// The YAML serializer is no SDK: it reaches nothing outside the process. Mapping decides the files a
+// System exports to and reads back, so the one folder that writes and reads them imports it.
+const filesFolder = 'src/domains/mapping/files/'
+
+// The shape (2-claude-mod/hooks/shape/), how a vault reads as a hexframe, written once for every
+// medium: Mapping reads files by its rules, so Mapping alone imports it, and only its reading rules.
+const shapeReadingRules = '2-claude-mod/hooks/shape/(node|exclusions)\\.ts$'
+
 const sdkOutsideItsRepository: IConfiguration['forbidden'] = Object.entries(sdks).map(
   ([repository, modules]) => ({
     name: `no-${repository}-sdk-outside-its-repository`,
@@ -98,6 +106,29 @@ const config: IConfiguration = {
       severity: 'error',
       from: { pathNot: `^${mcpFolder}` },
       to: { path: '(^|node_modules/)@modelcontextprotocol/' },
+    },
+    {
+      name: 'no-yaml-outside-mapping-files',
+      comment: `yaml: imported by ${filesFolder} only, where Mapping writes and reads its files.`,
+      severity: 'error',
+      from: { pathNot: `^${filesFolder}` },
+      to: { path: '(^|node_modules/)yaml(/|$)' },
+    },
+    {
+      name: 'no-shape-outside-mapping',
+      comment:
+        'The shape is imported by src/domains/mapping/ only, and only its reading rules, node.ts and exclusions.ts.',
+      severity: 'error',
+      from: { path: '^src/', pathNot: '^src/domains/mapping/' },
+      to: { path: '2-claude-mod/' },
+    },
+    {
+      name: 'no-claude-mod-but-the-shape-reading-rules',
+      comment:
+        'Of claude-mod, the app imports the shape’s reading rules, node.ts and exclusions.ts, only.',
+      severity: 'error',
+      from: { path: '^src/' },
+      to: { path: '2-claude-mod/', pathNot: shapeReadingRules },
     },
     {
       name: 'no-promise-database-outside-auth',
