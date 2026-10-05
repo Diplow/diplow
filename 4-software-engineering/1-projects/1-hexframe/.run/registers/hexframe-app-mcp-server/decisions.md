@@ -7,8 +7,8 @@ preview: >-
   where a ticket left room: how a request's two proofs reach a program, what
   takes a Session, which of the api-key plugin's options it uses and which it
   leaves, the apikey table's key to its user, the Key server functions that
-  waited for their page, and how the Keys page keeps a secret and knows who
-  is signed in.
+  waited for their page, how the Keys page keeps a secret and knows who is
+  signed in, and how Mapping reads one Tile to a depth.
 ---
 # Decisions
 
@@ -41,3 +41,7 @@ HEX-44. The ticket asked for a header link to the Keys page for a signed-in Acco
 ### DEC-7 A Key's secret reaches the page through a form's submit, never a mutation, and the command's origin is read when the answer arrives
 
 HEX-44. A TanStack Query mutation keeps its result in the MutationCache after the component that ran it is gone, so the secret would outlive the screen. `useIssueKeySubmit` is a `submitWrite`, like every form's submit here: the answer goes to the caller's callback and nowhere else, and `Keys` holds it in its own state until Done or until the user leaves. A test checks that no query or mutation in the cache holds the secret. The `claude mcp add` command takes the origin from `window.location` when issuing answers, which only happens in the browser.
+
+### DEC-8 `readTile` walks down a generation per query, and a Reference always shows its Tile's Title and Preview
+
+HEX-45. Drizzle has no recursive query, and the query builder is the security bar, so the tiles repository's `generationsFrom` reads the opened row, then each generation under the last one, one query each: four at most, for a depth of 3. A Tile at the read's last generation has no `children` and no `context` at all, so a reader tells "not read" from "empty". A Reference shows its Tile's id, Title and Preview whatever fields were asked, since that is what a reader needs to decide whether to follow it, and never its Body. The opened Tile's parent and the Tiles its References point at come from one more read, `ofIds`. `readTile` takes its depth and its fields with no defaults: the MCP tools choose theirs (HEX-47). Its tests sit in `mapping.test.ts` over PGlite, and `readOf`'s in `system.test.ts` on rows made by hand, since the Mapping folder already holds six files. The queries run outside a transaction, as every read does: a move that commits between two of them can show a Tile twice or a Reference as broken in that one answer, and the next read is right. A domain opens no transaction, and a snapshot for a read can come with the API layer if a reader ever trips on it.
