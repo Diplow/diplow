@@ -106,7 +106,10 @@ function serverFor(context: StartContext) {
         annotations: annotationsOf(tool),
       },
       async (input) =>
-        resultOf(await run({ ...context, scope: tool.name }, tool.program(input)), tool.name),
+        resultOf(
+          await run({ ...context, scope: tool.name }, tool.program(input)),
+          tool.operation ?? tool.name,
+        ),
     )
   }
   return server

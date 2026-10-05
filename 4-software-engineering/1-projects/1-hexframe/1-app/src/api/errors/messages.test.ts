@@ -112,11 +112,9 @@ describe('the message table', () => {
   })
 
   it('words a swap along one line apart from a move below itself', () => {
-    for (const scope of ['swapTiles', 'swap_tiles']) {
-      expect(messageFor(new MovedUnderItself(), scope)).toBe(
-        'Two tiles can only swap when neither lies below the other.',
-      )
-    }
+    expect(messageFor(new MovedUnderItself(), 'swapTiles')).toBe(
+      'Two tiles can only swap when neither lies below the other.',
+    )
     overwriteGetLocale(() => 'fr')
     expect(messageFor(new MovedUnderItself(), 'swapTiles')).toBe(
       'Deux tuiles ne s’échangent que si aucune n’est sous l’autre.',

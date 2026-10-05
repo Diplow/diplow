@@ -38,7 +38,8 @@ export const isDirection = among(directions)
 
 export const isContextDirection = among(contextDirections)
 
-const previewLimit = 350
+/** The most characters a Preview holds, as a reader counts them. */
+export const previewLimit = 350
 
 const graphemes = new Intl.Segmenter()
 

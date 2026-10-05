@@ -6,7 +6,13 @@
 // for an agent, and runs the same program, for the Account the Key proves, in one transaction.
 import { Effect, Schema, Struct } from 'effect'
 
-import { depths, fields as allFields, type Field } from '#/domains/mapping/mapping'
+import {
+  depths,
+  directions as childDirections,
+  fields as allFields,
+  previewLimit,
+  type Field,
+} from '#/domains/mapping/mapping'
 
 import type { Failure } from '../../errors/failure'
 import {
@@ -33,6 +39,11 @@ export interface Tool<I = unknown> {
   readonly kind: ToolKind
   /** A write that erases what the user wrote, which no tool brings back: a delete. */
   readonly destructive?: true
+  /**
+   * The operation a write runs, by its server function's name: the scope the message table words
+   * its refusals by, so the table knows the operations and never the tools.
+   */
+  readonly operation?: keyof typeof Mapping
   // A method, so a table of tools with different inputs is one array: each entry decodes its own.
   program(input: I): Effect.Effect<unknown, Failure, Services>
 }
@@ -128,7 +139,8 @@ const write = <I, E extends Failure>({
   description,
   refusals,
   ...entry
-}: Omit<Tool<I>, 'kind' | 'program'> & {
+}: Omit<Tool<I>, 'kind' | 'program' | 'operation'> & {
+  readonly operation: keyof typeof Mapping
   readonly refusals: NoInfer<Refusals<E>>
   program: (input: I) => Effect.Effect<unknown, E, Services>
 }): Tool<I> => {
@@ -145,14 +157,15 @@ const refusal = {
     'that slot already holds a Tile or a Reference; open_tile on the parent shows which slots ' +
     'are free.',
   TitleMissing: 'the Title is empty; give one.',
-  PreviewTooLong: 'the Preview is over 350 characters; shorten it.',
+  PreviewTooLong: `the Preview is over ${String(previewLimit)} characters; shorten it.`,
   RootFixed: 'the Root is the user; it is never moved, swapped nor deleted.',
 } as const
 
 /** What a slot taken means where a Child goes: the regrouping a seventh Child asks for. */
 const takenChild =
-  `${refusal.DirectionTaken} A Tile has six Children at most, so a seventh is refused: regroup ` +
-  'some Children under a new one, by moving them, and the freed Directions take the rest.'
+  `${refusal.DirectionTaken} A Tile has ${String(childDirections.length)} Children at most, so ` +
+  'one more is refused: regroup some Children under a new one, by moving them, and the freed ' +
+  'Directions take the rest.'
 
 const placement =
   'Directions 1 to 6 (NW, NE, E, SE, SW, W) hold the Children, which say what a Tile does; ' +
@@ -164,7 +177,8 @@ const described = {
   slot: "Where under the parent: a Child's Direction, 1 to 6, or a Context slot, -1 to -6. It must be free.",
   title: 'The Title: what the Tile is called, never empty.',
   preview:
-    'The Preview: at most 350 characters, what a reader needs to decide whether to open the Tile.',
+    `The Preview: at most ${String(previewLimit)} characters, what a reader needs to decide ` +
+    'whether to open the Tile.',
   body: 'The Body, in Markdown: everything else the Tile says.',
   contextSlot: 'A Context slot of the parent, -1 to -6.',
   holder: 'The id of the Tile whose Context holds the Reference.',
@@ -172,6 +186,7 @@ const described = {
 
 const createTile = write({
   name: 'create_tile',
+  operation: 'createTile',
   description:
     "Adds a Tile to the user's System, in a free slot under a Tile: a Child, or a Tile of its " +
     `Context. ${placement} Answers the new Tile, with its id.`,
@@ -195,6 +210,7 @@ const createTile = write({
 
 const editTile = write({
   name: 'edit_tile',
+  operation: 'editTile',
   description:
     'Changes what a Tile says: any of its Title, its Preview and its Body, the rest left as it ' +
     "is. The Root's Title is the user's name. Answers the Tile as it now reads.",
@@ -219,6 +235,7 @@ const editTile = write({
 
 const moveTile = write({
   name: 'move_tile',
+  operation: 'moveTile',
   description:
     'Moves a Tile, with everything below it, to a free slot under another Tile or to another ' +
     `slot of its own parent. ${placement} References to it follow it. Answers null.`,
@@ -242,6 +259,7 @@ const moveTile = write({
 
 const swapTiles = write({
   name: 'swap_tiles',
+  operation: 'swapTiles',
   description:
     'Two Tiles trade places, each with everything below it: each takes the parent and slot of ' +
     'the other, a Child or a Context Tile alike, so it works where no slot is free. Answers null.',
@@ -261,6 +279,7 @@ const swapTiles = write({
 
 const deleteTile = write({
   name: 'delete_tile',
+  operation: 'deleteTile',
   destructive: true,
   description:
     'Deletes a Tile and everything below it, for good: no tool brings it back. References to ' +
@@ -277,6 +296,7 @@ const deleteTile = write({
 
 const createReference = write({
   name: 'create_reference',
+  operation: 'createReference',
   description:
     "Puts a Reference in a free Context slot of a Tile: a link to another Tile of the user's " +
     'System, by id, that follows it when it moves and shows broken once it is deleted. Answers ' +
@@ -297,6 +317,7 @@ const createReference = write({
 
 const deleteReference = write({
   name: 'delete_reference',
+  operation: 'deleteReference',
   destructive: true,
   description:
     'Empties a Context slot holding a Reference. The Tile it pointed at is untouched; a slot ' +
