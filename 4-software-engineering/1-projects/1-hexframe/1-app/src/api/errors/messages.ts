@@ -7,8 +7,11 @@ import type { Failure } from './failure'
 
 interface Entry {
   tag: Failure['_tag']
-  /** Narrows the entry to one server function, by the scope its call names. */
-  scope?: string
+  /**
+   * Narrows the entry to the calls of one operation, by the scope each names: a server function's
+   * name, and the name of the MCP tool that runs the same program.
+   */
+  scopes?: ReadonlyArray<string>
   message: () => string
 }
 
@@ -29,12 +32,15 @@ const table: readonly Entry[] = [
   { tag: 'TitleMissing', message: m.error_mapping_title_missing },
   { tag: 'PreviewTooLong', message: m.error_mapping_preview_too_long },
   { tag: 'DirectionTaken', message: m.error_mapping_direction_taken },
-  { tag: 'MovedUnderItself', scope: 'swapTiles', message: m.error_mapping_swapped_in_line },
-  { tag: 'MovedUnderItself', scope: 'swap_tiles', message: m.error_mapping_swapped_in_line },
+  {
+    tag: 'MovedUnderItself',
+    scopes: ['swapTiles', 'swap_tiles'],
+    message: m.error_mapping_swapped_in_line,
+  },
   { tag: 'MovedUnderItself', message: m.error_mapping_moved_under_itself },
   { tag: 'RootFixed', message: m.error_mapping_root_fixed },
-  { tag: 'DevInvalid', scope: 'submitDevTitle', message: m.error_dev_title_missing },
-  { tag: 'DevConflict', scope: 'submitDevTitle', message: m.error_dev_title_taken },
+  { tag: 'DevInvalid', scopes: ['submitDevTitle'], message: m.error_dev_title_missing },
+  { tag: 'DevConflict', scopes: ['submitDevTitle'], message: m.error_dev_title_taken },
   { tag: 'DevNotFound', message: m.error_dev_not_found },
 ]
 
@@ -51,7 +57,9 @@ const fallbacks: Record<Kind, () => string> = {
 /** The sentence to show for a failure met in a scope, from the table or its kind's fallback. */
 export function messageFor(failure: Failure, scope?: string): string {
   const entry = table.find(
-    (entry) => entry.tag === failure._tag && (entry.scope === undefined || entry.scope === scope),
+    (entry) =>
+      entry.tag === failure._tag &&
+      (entry.scopes === undefined || (scope !== undefined && entry.scopes.includes(scope))),
   )
   return (entry?.message ?? fallbacks[failure.kind])()
 }

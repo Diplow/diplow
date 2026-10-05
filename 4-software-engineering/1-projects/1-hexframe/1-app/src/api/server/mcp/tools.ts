@@ -120,8 +120,10 @@ const refusals = {
     'to find the right one.',
   taken:
     'DirectionTaken: that slot already holds a Tile or a Reference; open_tile on the parent shows ' +
-    'which slots are free. A Tile has six Children at most, so a seventh is refused: regroup some ' +
-    'Children under a new one, by moving them, and the freed Directions take the rest.',
+    'which slots are free.',
+  seventh:
+    'A Tile has six Children at most, so a seventh is refused: regroup some Children under a new ' +
+    'one, by moving them, and the freed Directions take the rest.',
   title: 'TitleMissing: the Title is empty; give one.',
   preview: 'PreviewTooLong: the Preview is over 350 characters; shorten it.',
   root: 'RootFixed: the Root is the user; it is never moved, swapped nor deleted.',
@@ -148,7 +150,7 @@ const createTile = tool({
   description:
     "Adds a Tile to the user's System, in a free slot under a Tile: a Child, or a Tile of its " +
     `Context. ${placement} Answers the new Tile, with its id. Refused with ${refusals.notFound} ` +
-    `${refusals.taken} ${refusals.title} ${refusals.preview}`,
+    `${refusals.taken} ${refusals.seventh} ${refusals.title} ${refusals.preview}`,
   input: NewTile.mapFields(
     Struct.evolve({
       parent: (field) => field.annotate({ description: described.parent }),
@@ -188,7 +190,7 @@ const moveTile = tool({
   description:
     'Moves a Tile, with everything below it, to a free slot under another Tile or to another ' +
     `slot of its own parent. ${placement} References to it follow it. Answers null. Refused with ` +
-    `${refusals.notFound} ${refusals.taken} ${refusals.root} MovedUnderItself: a Tile cannot ` +
+    `${refusals.notFound} ${refusals.taken} ${refusals.seventh} ${refusals.root} MovedUnderItself: a Tile cannot ` +
     'move under itself or anything below it; pick a parent outside it.',
   input: TileMove.mapFields(
     Struct.evolve({

@@ -38,7 +38,8 @@ Each runs the program of `api/mapping/programs.ts` its server function runs, a w
 
 ## Rules
 
+- **A tool is an entry of the table**: a name, a description that teaches an agent when to use it, an Effect Schema for its input, which the SDK validates as a Standard Schema and lists as JSON Schema, a `kind`, `read` or `write`, `destructive` for a write that erases what the user wrote, and the program `run` runs for it, scoped by the tool's name. It answers its program's value as JSON, `null` when it has none.
 - **A tool is its server function, seen by an agent.** Same program, same input Schema, same Account: the one the request proves. A new Mapping operation gets its tool here, and nothing in this folder decides what the System may become.
 - **A description teaches the refusals.** Each write's description names every refusal it may meet by its tag, what it means and how to get past it (a seventh Child is refused: regroup by moving), since the agent reads the tag first in the tool error.
-- **A refusal comes back as a tool error**, `<tag>: <the message table's English sentence> (at fault: <fields>) (request <id>)`, the fields only for an `Invalid` one. The message table's scope is the tool's name, so `swap_tiles` words `MovedUnderItself` as a swap, as `swapTiles` does.
+- **A refusal comes back as a tool error**, `<tag>: <the message table's English sentence> (at fault: <fields>) (request <id>)`, the fields only for an `Invalid` one. The message table's scope is the tool's name, so an entry narrowed to an operation names both its server function and its tool: `swap_tiles` words `MovedUnderItself` as a swap, as `swapTiles` does.
 - **Annotations come from the table.** Every tool says whether it only reads (`readOnlyHint`), whether it erases what the user wrote (`destructiveHint`, the deletes alone) and that it reaches nothing but the user's System (`openWorldHint: false`).

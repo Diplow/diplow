@@ -73,6 +73,7 @@ describe('the tool table, as an agent lists it', () => {
       expect(tool.description).toMatch(/TileNotFound: .+; map or open_tile/)
     }
     expect(description('create_tile')).toMatch(/a seventh is refused: regroup .+ by moving them/)
+    expect(description('create_reference')).not.toMatch(/seventh/)
     for (const name of ['create_tile', 'edit_tile']) {
       expect(description(name)).toMatch(/TitleMissing: .+ PreviewTooLong: /)
     }
