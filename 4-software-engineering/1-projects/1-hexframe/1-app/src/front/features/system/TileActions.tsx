@@ -1,6 +1,8 @@
-// What the user can do to the centered Tile: edit it, move it, export it, delete it; and the form a new
-// Tile or an edited one is written in, in a drawer. The drawer's open state and the move under way are the URL's.
-// A refusal shows where its channel sends it: on the form's field, or in a toast.
+// What the user can do to the centered Tile: edit it, move it, export it, delete it, and, on an empty
+// System's Root, import a vault; and the form a new Tile or an edited one is written in, or an import,
+// in a drawer, where an empty slot offers a new Tile or an import. The drawer's open state and the
+// move under way are the URL's. A refusal shows where its channel sends it: on the form's field, in
+// the import's report, or in a toast.
 import {
   useCreateTileSubmit,
   useDeleteTile,
@@ -29,7 +31,8 @@ import {
   type SearchChange,
   type SystemSearch,
 } from './search'
-import { ringOf, tileIn } from './tree'
+import { Import } from './import/Import'
+import { isEmptySystem, ringOf, tileIn } from './tree'
 
 interface TileActionsProps {
   /** The System's Root, with everything below it. */
@@ -55,7 +58,13 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
         <CenteredTile
           id={found.tile.id}
           title={center.title}
-          description={parent === undefined ? m.system_root_description() : center.preview}
+          description={
+            parent === undefined
+              ? isEmptySystem(system)
+                ? m.system_root_empty_description()
+                : m.system_root_description()
+              : center.preview
+          }
           onEdit={() => {
             begin({ kind: 'edit', id: found.tile.id })
           }}
@@ -73,12 +82,19 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
               )
             },
           })}
+          // An empty System invites the user to start: its Root takes a whole vault.
+          {...(isEmptySystem(system) && {
+            onImport: () => {
+              begin({ kind: 'import', place: { _tag: 'Root' } })
+            },
+          })}
         />
       )}
       <ChangeDrawer
         system={system}
         tree={tree}
         change={changeOf(search)}
+        onChange={begin}
         // A save settles later: it ends the change on the URL of that moment, not the one it was sent from.
         onDone={() => {
           onSearchChange((current) => withChange(current, { kind: 'none' }))
@@ -97,9 +113,19 @@ interface CenteredTileProps {
   onMove?: () => void
   /** What follows once the Tile is deleted; the Root, which is never deleted, has none. */
   onDeleted?: () => void
+  /** Opens a vault's import as the Root: an empty System's only. */
+  onImport?: () => void
 }
 
-function CenteredTile({ id, title, description, onEdit, onMove, onDeleted }: CenteredTileProps) {
+function CenteredTile({
+  id,
+  title,
+  description,
+  onEdit,
+  onMove,
+  onDeleted,
+  onImport,
+}: CenteredTileProps) {
   const remove = useDeleteTile()
   const exporting = useExportTile()
   return (
@@ -108,6 +134,11 @@ function CenteredTile({ id, title, description, onEdit, onMove, onDeleted }: Cen
       description={description === '' ? undefined : description}
       footer={
         <div className="flex flex-wrap gap-2">
+          {onImport && (
+            <Button size="sm" onClick={onImport}>
+              {m.system_import_vault()}
+            </Button>
+          )}
           <Button variant="outline" size="sm" onClick={onEdit}>
             {m.system_edit()}
           </Button>
@@ -152,12 +183,15 @@ interface ChangeDrawerProps {
   system: SystemTile
   tree: TileNode
   change: Change
+  /** Turns the change into another: a new Tile into an import in the same slot, and back. */
+  onChange: (change: Change) => void
   onDone: () => void
 }
 
-/** The drawer of the change under way, when it is a form: a new Tile's, or a Tile's. */
-function ChangeDrawer({ system, tree, change, onDone }: ChangeDrawerProps) {
+/** The drawer of the change under way, when it is a form: a new Tile's, an import, or a Tile's. */
+function ChangeDrawer({ system, tree, change, onChange, onDone }: ChangeDrawerProps) {
   const form = drawerOf(system, tree, change)
+  const slot = slotChoiceOf(change)
   return (
     <Drawer
       open={form !== undefined}
@@ -167,9 +201,18 @@ function ChangeDrawer({ system, tree, change, onDone }: ChangeDrawerProps) {
       title={form?.title}
       description={form?.description}
     >
+      {form !== undefined && slot !== undefined && (
+        <SlotChoice
+          choice={change.kind}
+          onChoose={(kind) => {
+            onChange(slot[kind])
+          }}
+        />
+      )}
       {form?.kind === 'add' && (
         <NewTileForm key={form.key} parent={form.parent} slot={form.slot} onSaved={onDone} />
       )}
+      {form?.kind === 'import' && <Import key={form.key} place={form.place} onDone={onDone} />}
       {form?.kind === 'edit' && <EditTileForm key={form.key} tile={form.tile} onSaved={onDone} />}
     </Drawer>
   )
@@ -192,6 +235,7 @@ function drawerOf(system: SystemTile, tree: TileNode, change: Change) {
       slot: change.slot,
     } as const
   }
+  if (change.kind === 'import') return importDrawerOf(tree, change.place)
   if (change.kind === 'edit') {
     const tile = tileIn(system, change.id)?.tile
     const node = findTile(tree, change.id)
@@ -205,6 +249,76 @@ function drawerOf(system: SystemTile, tree: TileNode, change: Change) {
     } as const
   }
   return undefined
+}
+
+/** What the drawer shows for an import: into a slot under a Tile it finds, or as the Root. */
+function importDrawerOf(tree: TileNode, place: Extract<Change, { kind: 'import' }>['place']) {
+  if (place._tag === 'Root') {
+    return {
+      kind: 'import',
+      key: 'root',
+      title: m.system_import_vault(),
+      description: m.system_import_root_description(),
+      place,
+    } as const
+  }
+  const parent = findTile(tree, place.parent)
+  if (parent === undefined) return undefined
+  return {
+    kind: 'import',
+    key: `${place.parent}:${JSON.stringify(place.slot)}`,
+    title: m.system_import_here(),
+    description:
+      ringOf(place.slot) === 'children'
+        ? m.system_add_under({ title: parent.title })
+        : m.system_add_in_context({ title: parent.title }),
+    place,
+  } as const
+}
+
+/** What an empty slot offers, a new Tile or an import, each as the change it opens on that slot. */
+function slotChoiceOf(change: Change) {
+  const at =
+    change.kind === 'add'
+      ? { parent: change.parent, slot: change.slot }
+      : change.kind === 'import' && change.place._tag === 'Slot'
+        ? change.place
+        : undefined
+  if (at === undefined) return undefined
+  return {
+    add: { kind: 'add', parent: at.parent, slot: at.slot },
+    import: { kind: 'import', place: { _tag: 'Slot', parent: at.parent, slot: at.slot } },
+  } as const satisfies Record<string, Change>
+}
+
+interface SlotChoiceProps {
+  choice: Change['kind']
+  onChoose: (kind: 'add' | 'import') => void
+}
+
+/** The two things an empty slot takes, the one chosen pressed. */
+function SlotChoice({ choice, onChoose }: SlotChoiceProps) {
+  const options = [
+    { kind: 'add', label: m.system_add_title() },
+    { kind: 'import', label: m.system_import_here() },
+  ] as const
+  return (
+    <div role="group" aria-label={m.system_import_choice()} className="mb-4 flex gap-2">
+      {options.map(({ kind, label }) => (
+        <Button
+          key={kind}
+          size="sm"
+          variant={choice === kind ? 'secondary' : 'ghost'}
+          aria-pressed={choice === kind}
+          onClick={() => {
+            onChoose(kind)
+          }}
+        >
+          {label}
+        </Button>
+      ))}
+    </div>
+  )
 }
 
 interface NewTileFormProps {

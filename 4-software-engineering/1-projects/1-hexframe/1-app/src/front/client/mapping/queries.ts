@@ -4,10 +4,13 @@
 // says the page is behind.
 // Failures go to their channels (../channels.ts): a hook's caller handles none.
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Schema } from 'effect'
 
 import type { Failure, Outcome } from '#/api/errors/failure'
 import { type Download, downloaded } from '#/api/mapping/files/download'
+import { type Given, type LeftOut, type Prepared, prepared } from '#/api/mapping/files/upload'
 import {
+  ImportUpload,
   type NewReference,
   type NewTile,
   type ReferenceSlot,
@@ -22,6 +25,7 @@ import {
   editTile,
   exportTile,
   help,
+  importTiles,
   moveTile,
   swapTiles,
   system,
@@ -29,8 +33,8 @@ import {
 
 import type { Locale } from '#/paraglide/runtime'
 
-import { read, write } from '../calls'
-import { submitWrite } from '../channels'
+import { CallFailed, read, write } from '../calls'
+import { settleSubmit, submitWrite } from '../channels'
 
 /** The System's read, by the server function's name: every mode of its query key starts with it. */
 const systemScope = 'system'
@@ -121,6 +125,56 @@ function save({ name, blob }: Download) {
   setTimeout(() => {
     URL.revokeObjectURL(url)
   }, 60_000)
+}
+
+/** Where an import lands: a free slot under a Tile, or the Root of an empty System. */
+export type ImportPlace = (typeof ImportUpload.Type)['place']
+
+/** What an import landed, as the server answers: the Tile it landed as, what it wrote and skipped. */
+type ImportReport = Extract<Awaited<ReturnType<typeof importTiles>>, { ok: true }>['value']
+
+/**
+ * What an import came to: landed, with the server's report; or refused, by the browser before it sent
+ * anything or by the server, every fault on its path, nothing written. Either way, what the browser
+ * left out before sending.
+ */
+export type Imported =
+  | {
+      readonly _tag: 'Landed'
+      readonly report: ImportReport
+      readonly leftOut: ReadonlyArray<LeftOut>
+    }
+  | Extract<Prepared, { _tag: 'Refused' }>
+
+/**
+ * Imports what the user gave into a place of the System: the browser prunes and zips it, or refuses
+ * it before sending (`api/mapping/files/upload.ts`), then the server lands it, all of it or nothing.
+ * The import is the form of its files, so its refusal, `ImportRefused`, is its answer, shown where the
+ * import was given; any other failure goes to a write's channel, a toast. The System is read again
+ * once it settles.
+ */
+export const useImportTiles = () => {
+  const client = useQueryClient()
+  return useMutation({
+    mutationFn: async ({
+      given,
+      place,
+    }: {
+      given: Given | Promise<Given>
+      place: ImportPlace
+    }): Promise<Imported> => {
+      const ready = await prepared(await given)
+      if (ready._tag === 'Refused') return ready
+      const { upload, as, leftOut } = ready
+      const form = Schema.encodeSync(ImportUpload)({ upload, as, place })
+      const submitted = await settleSubmit('importTiles', importTiles({ data: form }))
+      if (submitted.ok) return { _tag: 'Landed', report: submitted.value, leftOut }
+      const { failure, requestId } = submitted
+      if (failure._tag !== 'ImportRefused') throw new CallFailed(failure, 'importTiles', requestId)
+      return { _tag: 'Refused', faults: failure.faults, leftOut }
+    },
+    onSettled: () => client.invalidateQueries({ queryKey: [systemScope] }),
+  })
 }
 
 /** The fields a Tile's form edits, which an edit compares one by one. */

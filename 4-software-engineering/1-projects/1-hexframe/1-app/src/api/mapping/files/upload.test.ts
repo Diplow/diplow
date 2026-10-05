@@ -13,8 +13,6 @@ import { type Given, type GivenFile, type Prepared, prepared } from './upload'
 // verdict on every path, and zipped; one file sent as it is; or refused, every fault at once. Then an
 // upload it made, landed by the server function's program over PGlite.
 
-const utf8 = new TextEncoder()
-
 /** A file of a folder, by its path, holding this text or these bytes, read only when asked. */
 const given = (path: string, content: string | Uint8Array = ''): GivenFile => ({
   path,

@@ -96,3 +96,10 @@ export function tileIn(
   }
   return undefined
 }
+
+/**
+ * Whether the System is empty: its Root untitled, with nothing below it, as Mapping adds it. Only an
+ * empty System takes an import as its Root.
+ */
+export const isEmptySystem = ({ title, branches, leaves, context }: SystemTile) =>
+  title === '' && [branches, leaves, context].every((below) => Object.keys(below).length === 0)

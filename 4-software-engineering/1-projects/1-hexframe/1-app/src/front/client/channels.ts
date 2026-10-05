@@ -85,6 +85,32 @@ export function makeQueryClient() {
   })
 }
 
+/** An `Invalid` failure, which a form's submit shows on the fields it names. */
+type Invalid = Extract<Failure, { kind: 'Invalid' }>
+
+/**
+ * A submit's outcome: its value, or the `Invalid` failure the channel table shows on the form's
+ * fields. Any other failure is thrown, a CallFailed, for the caller to carry to its channel: a
+ * mutation's through the QueryClient, `submitWrite`'s itself.
+ */
+export async function settleSubmit<A, E extends Failure>(
+  scope: string,
+  call: Promise<Outcome<A, E>>,
+): Promise<
+  { ok: true; value: A } | { ok: false; failure: Invalid; requestId: string | undefined }
+> {
+  try {
+    return { ok: true, value: await settle(scope, call) }
+  } catch (error) {
+    const failed = asCallFailed(error, scope)
+    const { failure } = failed
+    if (failure.kind === 'Invalid' && channelFor('submit', failure.kind) === 'fields') {
+      return { ok: false, failure, requestId: failed.requestId }
+    }
+    throw failed
+  }
+}
+
 interface SubmitWrite<I, A, E extends Failure> {
   scope: string
   call: (input: I) => Promise<Outcome<A, E>>
@@ -102,17 +128,19 @@ export function submitWrite<I, A, E extends Failure>({
 }: SubmitWrite<I, A, E>) {
   return async ({ value }: { value: I }) => {
     try {
-      onSaved(await settle(scope, call(value)))
-      return undefined
+      const submitted = await settleSubmit(scope, call(value))
+      if (submitted.ok) {
+        onSaved(submitted.value)
+        return undefined
+      }
+      const message = messageFor(submitted.failure, scope)
+      return {
+        fields: Object.fromEntries(submitted.failure.fields.map((field) => [field, message])),
+      }
     } catch (error) {
       const failed = asCallFailed(error, scope)
-      const { failure } = failed
-      const message = messageFor(failure, scope)
-      if (failure.kind === 'Invalid' && channelFor('submit', failure.kind) === 'fields') {
-        return { fields: Object.fromEntries(failure.fields.map((field) => [field, message])) }
-      }
       raise(failed, 'submit')
-      return { form: message }
+      return { form: messageFor(failed.failure, scope) }
     }
   }
 }

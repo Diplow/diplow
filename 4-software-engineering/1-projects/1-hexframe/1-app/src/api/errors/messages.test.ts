@@ -133,6 +133,16 @@ describe('the message table', () => {
     )
   })
 
+  it('words a place taken under an import apart from a slot taken under a write', () => {
+    expect(messageFor(new DirectionTaken(), 'importTiles')).toBe(
+      'This place holds something now: an import goes into an empty slot, or into an empty system.',
+    )
+    overwriteGetLocale(() => 'fr')
+    expect(messageFor(new DirectionTaken(), 'importTiles')).toBe(
+      'Cette place est prise désormais : un import va dans une place libre, ou dans un système vide.',
+    )
+  })
+
   it.each([
     [new TileNotFound(), 'Cette tuile n’existe pas, ou plus.'],
     [new TitleMissing({ fields: ['title'] }), 'Donnez un titre à cette tuile.'],
