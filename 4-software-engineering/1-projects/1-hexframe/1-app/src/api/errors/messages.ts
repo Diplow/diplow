@@ -35,6 +35,7 @@ const table: readonly Entry[] = [
   { tag: 'MovedUnderItself', scope: 'swapTiles', message: m.error_mapping_swapped_in_line },
   { tag: 'MovedUnderItself', message: m.error_mapping_moved_under_itself },
   { tag: 'RootFixed', message: m.error_mapping_root_fixed },
+  { tag: 'HelpReadOnly', message: m.error_mapping_help_read_only },
   { tag: 'DevInvalid', scope: 'submitDevTitle', message: m.error_dev_title_missing },
   { tag: 'DevConflict', scope: 'submitDevTitle', message: m.error_dev_title_taken },
   { tag: 'DevNotFound', message: m.error_dev_not_found },

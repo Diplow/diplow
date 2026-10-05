@@ -5,6 +5,7 @@ import type { SignedOut } from '#/domains/iam/errors'
 import type { KeyProof, Session } from '#/domains/iam/iam'
 import type {
   DirectionTaken,
+  HelpReadOnly,
   MovedUnderItself,
   PreviewTooLong,
   RootFixed,
@@ -217,29 +218,29 @@ describe("Mapping's server functions", () => {
 })
 
 describe("the errors Mapping's server functions can fail with", () => {
-  it('are each listed by its type', () => {
+  it('are each listed by its type, a write refusing Help', () => {
     type ErrorOf<P> = P extends Effect.Effect<unknown, infer E, unknown> ? E : never
     expectTypeOf<ErrorOf<typeof Mapping.system>>().toEqualTypeOf<SignedOut>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createTile>>>().toEqualTypeOf<
-      SignedOut | TitleMissing | PreviewTooLong | TileNotFound | DirectionTaken
+      SignedOut | TitleMissing | PreviewTooLong | TileNotFound | DirectionTaken | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.editTile>>>().toEqualTypeOf<
-      SignedOut | TitleMissing | PreviewTooLong | TileNotFound
+      SignedOut | TitleMissing | PreviewTooLong | TileNotFound | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.moveTile>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | RootFixed | MovedUnderItself | DirectionTaken
+      SignedOut | TileNotFound | RootFixed | MovedUnderItself | DirectionTaken | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.swapTiles>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | RootFixed | MovedUnderItself
+      SignedOut | TileNotFound | RootFixed | MovedUnderItself | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.deleteTile>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | RootFixed
+      SignedOut | TileNotFound | RootFixed | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createReference>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | DirectionTaken
+      SignedOut | TileNotFound | DirectionTaken | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.deleteReference>>>().toEqualTypeOf<
-      SignedOut | TileNotFound
+      SignedOut | TileNotFound | HelpReadOnly
     >()
   })
 })

@@ -21,10 +21,12 @@ import { tools, type Tool } from './tools'
 
 const implementation = { name: 'hexframe', version: '1.0.0' }
 
-const instructions =
-  "Hexframe holds the user's System: a hierarchy of Tiles, each with a Title, a Preview and a " +
-  'Body, where what comes first is what matters most. The Root is the user. Read it as its ' +
-  "author laid it out: open a Tile, read its Children's Previews, and open only what matters."
+/** What hexframe is, in two lines, and where an agent learns the rest: Help. */
+const instructions = [
+  "Hexframe holds the user's System: a hierarchy of Tiles (a Title, a Preview, a Body) whose Root " +
+    'is the user, where what comes first matters most; read it in that order.',
+  'To learn how it works, open its Help: open_tile({ id: "help" }).',
+].join('\n')
 
 /** Each tool's input, as the SDK takes it: a Standard Schema that also describes itself in JSON Schema. */
 const inputs = new Map(

@@ -5,6 +5,7 @@ import viteReact from '@vitejs/plugin-react'
 import { nitro } from 'nitro/vite'
 import { defineConfig } from 'vite'
 
+import { helpChecked } from './scripts/check-help'
 import { environmentOf, type Environment } from './src/api/observability/levels'
 
 /** The globals src/vite-env.d.ts declares, for where the app runs; vitest.config.ts sets them too. */
@@ -21,6 +22,9 @@ export default defineConfig(({ command }) => ({
   resolve: { tsconfigPaths: true },
   define: definesFor(environmentOf(command, process.env.VERCEL_ENV)),
   plugins: [
+    // Help is bundled into the server (src/domains/mapping/help/): a folder of it that reads as no
+    // Tile fails the build.
+    helpChecked(),
     paraglideVitePlugin({
       project: './project.inlang',
       // Generated, so outside src/ and the rule of 6; `#/paraglide/*` reaches it (tsconfig.json).
