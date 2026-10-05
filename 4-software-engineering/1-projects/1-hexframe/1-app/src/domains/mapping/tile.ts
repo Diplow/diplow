@@ -60,6 +60,12 @@ export function leafOf(direction: number | null): Direction | undefined {
   return isDirection(leaf) ? leaf : undefined
 }
 
+/**
+ * The most a Title and a Body hold, in UTF-16 units: the bounds the API checks every input against,
+ * and an import every file it reads (`hexframe-v0-mapping/decisions.md#DEC-8`).
+ */
+export const contentBounds = { title: 1_000, body: 100_000 } as const
+
 /** The most characters a Preview holds, as a reader counts them. */
 export const previewLimit = 350
 

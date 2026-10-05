@@ -1,14 +1,17 @@
 // A vault folder read as a System's rows, in the shape a System exports to: a folder per Tile,
 // `<n>-<slug>/` for a Child in Direction n and `.<n>-<slug>/` for a Tile of its Context in slot -n,
 // each with a note, a `CLAUDE.md` or its twin in another language, whose frontmatter holds the Tile's
-// Title and Preview and whose rest is its Body. Pure: the notes come in as text, from whoever read or bundled them, the help repository
-// splits each into its frontmatter and its Body, and what keeps a folder from reading as a Tile comes
-// out as a problem, named. claude-mod's shape reads a whole vault for every medium; this reads the
-// narrower vault a System exports to, and the two merge once the app reads a user's vault
-// (hexframe-app-mcp-server/decisions.md#DEC-15).
+// Title and Preview and whose rest is its Body. Pure: the notes come in as text, from whoever read or
+// bundled them. Help holds its notes to more than an import does, every field written and every folder
+// numbered, and says what keeps a folder from reading as a Tile, named; the notes that pass are then
+// read the way an import reads files (`files/import/`), the app's one reader of a vault folder, each
+// language's note in the place of the folder's `CLAUDE.md`, so every language reads alike.
 import type { TileRow } from '#/repositories/database/tiles/tiles'
 import { missingFrom, noteOf } from '#/repositories/help/note'
+import { Result } from 'effect'
 
+import { importOf } from '../files/import/read'
+import type { PlannedTile } from '../files/import/plan'
 import { keepsNothing } from '../kept/kept'
 import { directions, fitsPreview, previewLimit } from '../tile'
 
@@ -23,11 +26,8 @@ function slotOf(name: string): number | undefined {
   return match[1] === '.' ? -direction : direction
 }
 
-/** The content of a folder's note, named `file`, or what keeps it from being a Tile's. */
-function contentOf(
-  text: string | undefined,
-  file: string,
-): Pick<TileRow, 'title' | 'preview' | 'body'> | string {
+/** What keeps a folder's note, named `file`, from being a Tile's in Help; `undefined` when nothing. */
+function problemOf(text: string | undefined, file: string): string | undefined {
   if (text === undefined) return `no ${file}`
   const note = noteOf(text)
   if (note === undefined) return `its ${file} opens with no frontmatter`
@@ -43,7 +43,7 @@ function contentOf(
   if (!fitsPreview(preview)) {
     return `its ${file} has a Preview over ${String(previewLimit)} characters`
   }
-  return { title, preview, body: note.body }
+  return undefined
 }
 
 /** A vault folder read: the rows of its Tiles, and what kept any of its folders from being one. */
@@ -52,27 +52,106 @@ export interface Vault {
   readonly problems: ReadonlyArray<string>
 }
 
-/** The row of the Tile a folder's note makes, by the folder's path, or what keeps it from being one. */
-function rowOf(
-  { root, file }: { root: string; file: string },
-  path: string,
-  text: string | undefined,
-): TileRow | string {
+/** Where a planned Tile stands among the rows: its id, its parent's, its slot. */
+type Place = Pick<TileRow, 'id' | 'parentId' | 'direction'>
+
+/**
+ * The rows of a planned Tile and of the Tiles below it, Context first, each id the path of its slots,
+ * but for the folders whose note Help refused, which `read` leaves out: they read as no Tile.
+ */
+function rowsOf(tile: PlannedTile, place: Place, read: ReadonlySet<string>): Array<TileRow> {
+  const below = (slot: string): Place => ({
+    id: `${place.id}/${slot}`,
+    parentId: place.id,
+    direction: Number(slot),
+  })
+  const own: Array<TileRow> = read.has(tile.path)
+    ? [
+        {
+          ...place,
+          target: null,
+          title: tile.title,
+          preview: tile.preview,
+          body: tile.body.trim(),
+          ...keepsNothing,
+        },
+      ]
+    : []
+  return [
+    ...own,
+    ...Object.entries(tile.context).flatMap(([slot, held]) =>
+      held._tag === 'Tile' ? rowsOf(held, below(slot), read) : [],
+    ),
+    ...Object.entries(tile.branches).flatMap(([slot, branch]) => rowsOf(branch, below(slot), read)),
+  ]
+}
+
+/** The folder a file read from it sits in: `''` for the Root's. */
+const folderOf = (path: string) => path.replace(/\/?[^/]*$/, '')
+
+/** The id a folder's path names, the path of its slots from `root`; none for a name that is no slot. */
+function idOf(root: string, path: string): string | undefined {
   const slots = path === '' ? [] : path.split('/').map(slotOf)
-  if (!slots.every((slot) => slot !== undefined)) {
-    return 'a folder is named <n>-<slug> for a Child, .<n>-<slug> for Context'
+  return slots.every((slot) => slot !== undefined) ? [root, ...slots].join('/') : undefined
+}
+
+/**
+ * The notes Help reads, by their folder's path, those that pass its rules and stand each in a slot of
+ * its own, the first in path order keeping it; and what keeps each other folder from reading as a Tile.
+ */
+function notesRead(
+  root: string,
+  { notes, file }: { notes: Readonly<Record<string, string | undefined>>; file: string },
+) {
+  const problems: string[] = []
+  const read = new Map<string, string>()
+  const ids = new Set<string>()
+  for (const path of Object.keys(notes).sort()) {
+    const text = notes[path]
+    const id = idOf(root, path)
+    const problem =
+      id === undefined
+        ? 'a folder is named <n>-<slug> for a Child, .<n>-<slug> for Context'
+        : problemOf(text, file)
+    if (problem !== undefined) problems.push(`${path || '.'}: ${problem}`)
+    else if (id === undefined || text === undefined || ids.has(id)) {
+      problems.push(`${path || '.'}: another folder already stands in its slot`)
+    } else {
+      ids.add(id)
+      read.set(path, text)
+    }
   }
-  const content = contentOf(text, file)
-  if (typeof content === 'string') return content
-  const parentId = slots.length === 0 ? null : [root, ...slots.slice(0, -1)].join('/')
-  const id = [root, ...slots].join('/')
+  return { read, problems }
+}
+
+const utf8 = new TextEncoder()
+
+/**
+ * The rows the notes Help reads give, read as an import reads the files of a folder, each note in the
+ * place of its folder's `CLAUDE.md`; none, with the faults the reading found, when it refuses them.
+ */
+function rowsRead(
+  root: string,
+  { read, file }: { read: ReadonlyMap<string, string>; file: string },
+) {
+  const files = [...read].map(([path, text]) => ({
+    path: path === '' ? 'CLAUDE.md' : `${path}/CLAUDE.md`,
+    bytes: utf8.encode(text),
+  }))
+  const plan = importOf({ _tag: 'Folder', name: root, files }, () => undefined)
+  if (Result.isFailure(plan)) {
+    return {
+      rows: [],
+      problems: plan.failure.faults.map(
+        ({ path, fault }) => `${folderOf(path) || '.'}: its ${file} reads as no Tile: ${fault}`,
+      ),
+    }
+  }
+  const { root: tile } = plan.success
+  const place = { id: root, parentId: null, direction: null }
   return {
-    id,
-    parentId,
-    direction: slots.at(-1) ?? null,
-    target: null,
-    ...content,
-    ...keepsNothing,
+    rows: tile._tag === 'Tile' ? rowsOf(tile, place, new Set(read.keys())) : [],
+    problems: [],
   }
 }
 
@@ -88,19 +167,17 @@ export function vaultOf(
   notes: Readonly<Record<string, string | undefined>>,
   file: string,
 ): Vault {
-  const rows = new Map<string, TileRow>()
-  const problems: string[] = []
-  const refuse = (path: string, why: string) => problems.push(`${path || '.'}: ${why}`)
-  for (const path of Object.keys(notes).sort()) {
-    const row = rowOf({ root, file }, path, notes[path])
-    if (typeof row === 'string') refuse(path, row)
-    else if (rows.has(row.id)) refuse(path, 'another folder already stands in its slot')
-    else rows.set(row.id, row)
+  const checked = notesRead(root, { notes, file })
+  const { rows, problems } = rowsRead(root, { read: checked.read, file })
+  const ids = new Set(rows.map(({ id }) => id))
+  const orphans = rows.filter(({ parentId }) => parentId !== null && !ids.has(parentId))
+  return {
+    rows,
+    problems: [
+      ...checked.problems,
+      ...problems,
+      ...(ids.has(root) ? [] : ['.: the Root reads as no Tile']),
+      ...orphans.map(({ id }) => `${id}: the folder above it reads as no Tile`),
+    ],
   }
-  if (!rows.has(root)) refuse('', 'the Root reads as no Tile')
-  const orphans = [...rows.values()].filter(
-    ({ parentId }) => parentId !== null && !rows.has(parentId),
-  )
-  for (const { id } of orphans) problems.push(`${id}: the folder above it reads as no Tile`)
-  return { rows: [...rows.values()], problems }
 }

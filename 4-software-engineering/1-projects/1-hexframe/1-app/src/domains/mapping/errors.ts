@@ -63,6 +63,47 @@ export class HelpReadOnly extends Schema.TaggedError<HelpReadOnly>()('HelpReadOn
   kind: kind('Forbidden'),
 }) {}
 
+/**
+ * What an import finds wrong in its files, each by the path at fault from the import's root (`''` the
+ * root itself): a ring of more than six Branches, Leaves or Context folders (the folder's path); two
+ * names claiming one Direction (the later in name order); a Title, a Preview or a Body past its bound;
+ * a file past the shape's 1 MB; a name that is no path segment; a folder deeper than an import goes; a
+ * frontmatter that isn't YAML or keeps what a Tile can't; a `.hexframe/` file that can't be read; a
+ * Reference's folder holding anything; and a file imported alone that holds nothing a System can.
+ */
+export const importFaults = [
+  'RingOverflows',
+  'DirectionClaimed',
+  'TitleTooLong',
+  'PreviewTooLong',
+  'BodyTooLong',
+  'FileTooLarge',
+  'NameInvalid',
+  'TooDeep',
+  'FrontmatterInvalid',
+  'ConfigInvalid',
+  'ExclusionsInvalid',
+  'ReferenceHoldsSomething',
+  'NothingToImport',
+] as const
+
+/** One fault of an import, by the path at fault. */
+export const ImportFault = Schema.Struct({
+  path: Schema.String,
+  fault: Schema.Literals(importFaults),
+})
+export type ImportFault = typeof ImportFault.Type
+
+/**
+ * An import's files hold something a System can't, or that the shape would not read back as it was
+ * written: the whole import is refused, nothing written, with every fault at once, on the field
+ * `files`.
+ */
+export class ImportRefused extends Schema.TaggedError<ImportRefused>()('ImportRefused', {
+  ...invalid,
+  faults: Schema.NonEmptyArray(ImportFault),
+}) {}
+
 export const mappingFailures = [
   TileNotFound,
   TitleMissing,

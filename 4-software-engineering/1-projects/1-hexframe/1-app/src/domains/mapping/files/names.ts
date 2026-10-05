@@ -82,6 +82,12 @@ export function slugOf(title: string): string {
 /** A name the shape seats in its number's Direction: `3-games`, `3-games.md`, `.3-games`. */
 const numbered = { branch: /^([1-6])-(.+)$/, leaf: /^([1-6])-(.+)$/, context: /^\.([1-6])-(.+)$/ }
 
+/** The Direction a name of this kind claims, `3-games` and `.3-games` 3; none for a bare name. */
+export function claimedBy(kind: EntryKind, name: string): Direction | undefined {
+  const number = numbered[kind].exec(name)?.[1]
+  return number === undefined ? undefined : (Number(number) as Direction)
+}
+
 /** A Tile being named: where it stands, and the stem its name is made of. */
 type Draft<E extends ToName = ToName> = E & { readonly stem: string }
 

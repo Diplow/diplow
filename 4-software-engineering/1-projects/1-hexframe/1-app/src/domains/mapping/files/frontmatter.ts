@@ -1,8 +1,9 @@
-// The YAML an export writes: a Markdown file's frontmatter, and a `.hexframe/config.yaml`. Written by
-// a YAML serializer, never by joining strings, so no Title, Preview or kept value can open a key of
-// its own or close the block: every value stays on its key's line, whatever line breaks it holds.
-// The one module that imports the serializer (`dependency-cruiser.config.ts`). Pure.
-import { Document, Scalar, visit } from 'yaml'
+// The YAML an export writes and an import reads: a Markdown file's frontmatter, and a
+// `.hexframe/config.yaml`. Written by a YAML serializer, never by joining strings, so no Title, Preview
+// or kept value can open a key of its own or close the block: every value stays on its key's line,
+// whatever line breaks it holds. Read back by the same library, so whatever it wrote reads as it was.
+// The one module that imports it (`dependency-cruiser.config.ts`). Pure.
+import { Document, Scalar, parseDocument, visit } from 'yaml'
 
 /** What a file's YAML says: scalar values by key, in the order they are written. */
 export type Fields = Readonly<Record<string, string | number | boolean>>
@@ -43,3 +44,23 @@ export function yamlOf(fields: Fields): string {
 
 /** A Markdown file: its frontmatter, `fields`, between its two `---` lines, then its Body as given. */
 export const markdownOf = (fields: Fields, body: string) => `---\n${yamlOf(fields)}---\n${body}`
+
+/**
+ * The keys and values a file's YAML holds, `{}` for none; `undefined` when it isn't YAML, repeats a
+ * key, holds something other than keys and values, a list or a lone scalar, or aliases too many.
+ */
+export function mappingIn(yaml: string): Readonly<Record<string, unknown>> | undefined {
+  const document = parseDocument(yaml, { uniqueKeys: true })
+  if (document.errors.length > 0) return undefined
+  let value: unknown
+  try {
+    // Throws when aliases would expand past the library's bound: a small file can't grow huge.
+    value = document.toJS()
+  } catch {
+    return undefined
+  }
+  if (value === null) return {}
+  return typeof value === 'object' && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : undefined
+}
