@@ -1,0 +1,40 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/leaves/leaves.ts
+  s_add1a77a88c179::t_baabe68bfdfbec 10,15-22
+  s_add1a77a88c179::t_d4c113c9a262ad 23
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/CLAUDE.md
+  s_add1a77a88c179::t_240cb9dafcda29 18
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/landing/archive.ts
+  s_add1a77a88c179::t_baabe68bfdfbec 6,25-40
+  s_add1a77a88c179::t_17be15c7667f4f 41
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/landing/landing.ts
+  s_add1a77a88c179::t_baabe68bfdfbec 12,23,30,152
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/import.test.ts
+  s_add1a77a88c179::t_461f777fb1e6d0 12
+  s_add1a77a88c179::t_baabe68bfdfbec 100,116
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/leaves/leaves.test.ts
+  s_add1a77a88c179::t_461f777fb1e6d0 12,74-83
+  s_add1a77a88c179::t_754051bc8eb9dc 84-88
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_add1a77a88c179::t_240cb9dafcda29 50,53
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-import-export/decisions.md
+  s_add1a77a88c179::t_240cb9dafcda29 68,70
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/programs.ts
+  s_add1a77a88c179::t_461f777fb1e6d0 105-110
+  s_add1a77a88c179::t_baabe68bfdfbec 97,102-104,111-112
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8568330c559d78cb48a1a930146f7f0490840345",
+  "prompts": {},
+  "sessions": {
+    "s_add1a77a88c179": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d3373e9-3681-410c-a221-392366b8a522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
