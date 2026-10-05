@@ -88,7 +88,7 @@ const TileConfig = Schema.Struct(Struct.map(namingParts, Schema.optionalKey))
 type TileConfig = typeof TileConfig.Type
 
 /** The keys an export writes itself, from the Tile: never kept, since the Tile is what they say. */
-const reservedKeys: ReadonlyArray<string> = ['id', 'title', 'parent', 'preview', 'reference']
+export const reservedKeys: ReadonlyArray<string> = ['id', 'title', 'parent', 'preview', 'reference']
 
 /**
  * A key Frontmatter may keep: of `[A-Za-z0-9_-]`, 64 characters at most, none an export writes, nor

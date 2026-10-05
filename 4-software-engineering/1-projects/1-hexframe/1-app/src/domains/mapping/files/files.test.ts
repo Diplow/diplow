@@ -52,7 +52,8 @@ const rows: ReadonlyArray<TileRow> = [
     ...row('games', 'root', 3),
     title: 'Games',
     name: '3-games',
-    frontmatter: { owner: 'diplo', weight: 2, draft: false, constructor: 'kept' },
+    // A key an export writes itself, which the Frontmatter schema refuses, never written from a row.
+    frontmatter: { owner: 'diplo', weight: 2, draft: false, constructor: 'kept', reference: 'x' },
   },
   reference('to-leadership', 'games', -1, 'leadership'),
   reference('to-gone', 'games', -2, 'gone'),

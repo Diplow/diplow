@@ -3,7 +3,7 @@
 // under the folder pattern in force. Then every name that would not read back in its Direction, the
 // way the shape seats a folder's names, or that another name of the folder takes, gets its number.
 // Pure.
-import { isSegment } from '../kept/kept'
+import { type Naming, isSegment } from '../kept/kept'
 import { type Direction, directions } from '../tile'
 
 /** What an entry of a folder is, as the shape reads it: a folder, a dot folder, a file. */
@@ -69,8 +69,8 @@ const ligatures: Readonly<Record<string, string>> = {
  */
 export function slugOf(title: string): string {
   const ascii = title
-    .toLowerCase()
     .normalize('NFKD')
+    .toLowerCase()
     .replace(/\p{M}/gu, '')
     .replace(/[æœßøđðłþ]/g, (letter) => ligatures[letter] ?? letter)
   const slug = ascii.replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
@@ -142,14 +142,24 @@ const rounds = 3
 /** The names of a folder, cased as a file system that ignores case compares them. */
 const folded = (name: string) => name.toLowerCase()
 
+/**
+ * The name a folder's own file is written under, the file name in force there, checked again as every
+ * name an export writes is: one path segment, and none the shape always leaves out. Throws, a defect,
+ * rather than write one that wouldn't read back as the folder's Tile.
+ */
+export function ownFileName({ fileName }: Naming): string {
+  const excluded = shapeNames.filter((name) => !markdown.test(name)).map(folded)
+  if (!isSegment(fileName) || excluded.includes(folded(fileName))) {
+    throw new Error(`An export cannot write a folder's own file as ${JSON.stringify(fileName)}`)
+  }
+  return fileName
+}
+
 /** What an entry exports as: the name it is written under, and whether as its content alone. */
 export interface Named {
   readonly exportName: string
   readonly verbatim: boolean
 }
-
-/** The naming in force in a folder, which names its entries. */
-type FolderNaming = Readonly<{ folderPattern: string; fileName: string }>
 
 /**
  * What these entries of one folder export as, in their order. `folderPattern` and `fileName` are the
@@ -161,7 +171,7 @@ type FolderNaming = Readonly<{ folderPattern: string; fileName: string }>
  */
 export function namesIn<E extends ToName>(
   entries: ReadonlyArray<E>,
-  naming: FolderNaming,
+  naming: Naming,
 ): ReadonlyArray<E & Named> {
   const drafts = draftsIn(entries, naming)
   if (drafts.some(isRenamedVerbatim)) {
@@ -183,7 +193,7 @@ const isRenamedVerbatim = (draft: Draft) => draft.verbatim === true && nameOf(dr
 /** The drafts of a folder's entries, each numbered until every one reads back where it stands. */
 function draftsIn<E extends ToName>(
   entries: ReadonlyArray<E>,
-  { folderPattern, fileName }: FolderNaming,
+  { folderPattern, fileName }: Naming,
 ): ReadonlyArray<Draft<E>> {
   const reserved = new Set([fileName, ...shapeNames].map(folded))
   let drafts: ReadonlyArray<Draft<E>> = entries.map((entry) => ({
@@ -206,8 +216,9 @@ function draftsIn<E extends ToName>(
 
 /**
  * The entries whose name would not read back where they stand: one the shape would seat in another
- * Direction, one the folder's own names or an entry before it already take, however it is cased, so
- * of two entries claiming one name the first keeps it.
+ * Direction, a Branch's or a Leaf's the shape would read as a dot folder or a dot file, one the
+ * folder's own names or an entry before it already take, however it is cased, so of two entries
+ * claiming one name the first keeps it.
  */
 function misreadIn(
   drafts: ReadonlyArray<Draft>,
@@ -232,6 +243,7 @@ function misreadIn(
       const name = names[index] ?? ''
       return (
         reserved.has(folded(name)) ||
+        (entry.kind !== 'context' && name.startsWith('.')) ||
         firstOf.get(folded(name)) !== index ||
         seated.get(entry.kind)?.get(name) !== entry.direction
       )

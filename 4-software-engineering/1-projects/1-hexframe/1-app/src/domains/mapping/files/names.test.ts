@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { isExcluded, settingsFolder } from '../../../../../2-claude-mod/hooks/shape/exclusions'
 import { bodyFiles, membersOf, sortEntries } from '../../../../../2-claude-mod/hooks/shape/node'
 import { defaultNaming } from '../kept/naming'
-import { type ToName, isVerbatim, namesIn, shapeNames, slugOf } from './names'
+import { type ToName, isVerbatim, namesIn, ownFileName, shapeNames, slugOf } from './names'
 
 // How an export names what one folder holds, on entries made by hand: the slug of a Title, a kept
 // Name dressed for its slot and renumbered, a bare name kept only where the shape would seat it again,
@@ -17,6 +17,10 @@ describe('a slug', () => {
     expect(slugOf('Straße, Øresund, Łódź')).toBe('strasse-oresund-lodz')
     expect(slugOf('  --a__b--  ')).toBe('a-b')
     expect(slugOf('v1.2 (draft)')).toBe('v1-2-draft')
+  })
+
+  it('decomposes a character before lowercasing it, so its letters survive', () => {
+    expect(slugOf('\u210Cello \uFB01ne')).toBe('hello-fine')
   })
 
   it('is `tile` when nothing is left', () => {
@@ -161,6 +165,18 @@ describe('the names of a folder', () => {
     ).toEqual(['same', '2-same'])
   })
 
+  it('number a Branch or a Leaf the pattern would name like a dot folder or a dot file', () => {
+    expect(
+      names(
+        [
+          { kind: 'branch', direction: 1, title: 'Foo' },
+          { kind: 'leaf', direction: 1, title: 'Bar' },
+        ],
+        { ...defaultNaming, folderPattern: '.x-<slug>' },
+      ),
+    ).toEqual(['1-.x-foo', '1-.x-bar.md'])
+  })
+
   it('give `tile` to a Title of `..` under a bare `<slug>` pattern, never `..`', () => {
     expect(
       names([{ kind: 'branch', direction: 1, title: '..' }], {
@@ -175,6 +191,18 @@ describe('the names of a folder', () => {
       // Seated in Direction 1 by the shape, it takes its number, 2 bytes past a segment's 255.
       names([{ kind: 'branch', direction: 2, title: 'Long', name: 'x'.repeat(255) }]),
     ).toThrow(/cannot name/)
+  })
+})
+
+describe('the name of a folder’s own file', () => {
+  it('is the file name in force', () => {
+    expect(ownFileName({ ...defaultNaming, fileName: 'SKILL.md' })).toBe('SKILL.md')
+  })
+
+  it('throws, a defect, on one that is no path segment or that the shape leaves out', () => {
+    for (const fileName of ['..', 'a/b', '.hexframe', 'NODE_MODULES', '.git']) {
+      expect(() => ownFileName({ ...defaultNaming, fileName }), fileName).toThrow(/cannot write/)
+    }
   })
 })
 

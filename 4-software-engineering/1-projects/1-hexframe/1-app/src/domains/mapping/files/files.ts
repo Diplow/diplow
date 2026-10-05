@@ -3,12 +3,12 @@
 // folder per Reference, and a `.hexframe/config.yaml` where a Tile sets its own naming. Mapping decides
 // the files; zipping them is a repository's errand, and handing them to another domain the API
 // layer's. Pure.
-import type { Naming } from '../kept/kept'
+import { type Naming, reservedKeys } from '../kept/kept'
 import { defaultNaming, inherited } from '../kept/naming'
 import type { BrokenReference, LeafTile, Reference, SystemTile } from '../system'
 import type { ContextDirection, Direction } from '../tile'
 import { type Fields, markdownOf, yamlOf } from './frontmatter'
-import { type EntryKind, type ToName, isVerbatim, namesIn } from './names'
+import { type EntryKind, type ToName, isVerbatim, namesIn, ownFileName } from './names'
 
 /** One file of an export: its path from the export's root, and its text. */
 export interface File {
@@ -118,7 +118,9 @@ function placed(tile: SystemTile, folder: string, naming: Naming): ReadonlyArray
       }
       const path = join(folder, exportName)
       if (entry._tag === 'Reference') {
-        return [{ _tag: 'Reference', held: entry.held, folder: path, fileName: naming.fileName }]
+        return [
+          { _tag: 'Reference', held: entry.held, folder: path, fileName: ownFileName(naming) },
+        ]
       }
       return placed(entry.tile, path, inherited(naming, entry.tile))
     },
@@ -138,7 +140,7 @@ function linksOf(all: ReadonlyArray<Placed>): ReadonlyMap<string, string> {
       if (written._tag === 'Reference') return []
       const path =
         written._tag === 'Folder'
-          ? join(written.folder, written.naming.fileName)
+          ? join(written.folder, ownFileName(written.naming))
           : join(written.folder, written.name)
       return [[written.tile.id, linked(path)]]
     }),
@@ -148,7 +150,7 @@ function linksOf(all: ReadonlyArray<Placed>): ReadonlyMap<string, string> {
 /** The fields every Tile's file opens with, then what it kept from its own file, in its order. */
 function fieldsOf(tile: LeafTile, folder: string): Fields {
   const own = { id: tile.id, title: tile.title, parent: parentOf(folder), preview: tile.preview }
-  const kept = Object.entries(tile.frontmatter ?? {}).filter(([key]) => !Object.hasOwn(own, key))
+  const kept = Object.entries(tile.frontmatter ?? {}).filter(([key]) => !reservedKeys.includes(key))
   return { ...own, ...Object.fromEntries(kept) }
 }
 
@@ -176,7 +178,7 @@ function filesOf(
   }
   const { tile, folder, naming, config } = written
   const file = markdownOf(fieldsOf(tile, folder), tile.body)
-  const own = { path: join(folder, naming.fileName), content: file }
+  const own = { path: join(folder, ownFileName(naming)), content: file }
   return config === undefined
     ? [own]
     : [own, { path: join(folder, '.hexframe/config.yaml'), content: yamlOf(config) }]
