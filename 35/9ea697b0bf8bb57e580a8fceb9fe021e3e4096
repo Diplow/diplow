@@ -1,0 +1,49 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/landing/archive.test.ts
+  s_add1a77a88c179::t_54df6aeae8fe4b 7,161-174
+  s_add1a77a88c179::t_3d137652af2503 175
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/CLAUDE.md
+  s_add1a77a88c179::t_83f3f08a5c6a7f 35
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/import/read.test.ts
+  s_add1a77a88c179::t_54df6aeae8fe4b 7,410-414,417-420
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/TileActions.tsx
+  s_add1a77a88c179::t_3efd254998e240 195-204,214,218-219
+  s_add1a77a88c179::t_05b35d414db0a7 220
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_add1a77a88c179::t_83f3f08a5c6a7f 52-53
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/files/upload.ts
+  s_add1a77a88c179::t_54df6aeae8fe4b 4-7,11-19,91,115,128-130
+  s_add1a77a88c179::t_3efd254998e240 144-145
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/import/Import.tsx
+  s_add1a77a88c179::t_3efd254998e240 5,16-17,22,56-63
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/import/read.ts
+  s_add1a77a88c179::t_c9eef6d3542bcd 509-511,513-514,530
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/landing/archive.ts
+  s_add1a77a88c179::t_c9eef6d3542bcd 82-92,96-101,148-152,184-185
+  s_add1a77a88c179::t_3efd254998e240 93-95
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/channels.ts
+  s_add1a77a88c179::t_64d61d539b6b82 88-94,97-99,104,111-112
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_add1a77a88c179::t_64d61d539b6b82 36,172
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/files.test.ts
+  s_add1a77a88c179::t_3efd254998e240 116-120
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/files.ts
+  s_add1a77a88c179::t_3efd254998e240 70-71,77
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-import-export/decisions.md
+  s_add1a77a88c179::t_d87c75a3d706dc 81,83,85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "359ea697b0bf8bb57e580a8fceb9fe021e3e4096",
+  "prompts": {},
+  "sessions": {
+    "s_add1a77a88c179": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d3373e9-3681-410c-a221-392366b8a522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
