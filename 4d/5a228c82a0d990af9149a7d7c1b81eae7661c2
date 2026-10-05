@@ -1,0 +1,27 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_ed89c634a0e6b3::t_8f67bf6220c066 10,31-32,35,38-41,46
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_ed89c634a0e6b3::t_8f67bf6220c066 22,41,43
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-mcp-server/decisions.md
+  s_ed89c634a0e6b3::t_8f67bf6220c066 75-86
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/CLAUDE.md
+  s_ed89c634a0e6b3::t_8f67bf6220c066 17
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/CLAUDE.md
+  s_ed89c634a0e6b3::t_8f67bf6220c066 8-9,17,20,27-28,45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4d5a228c82a0d990af9149a7d7c1b81eae7661c2",
+  "prompts": {},
+  "sessions": {
+    "s_ed89c634a0e6b3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bfdaae8a-87ed-4a58-8630-209d0ea6e784",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
