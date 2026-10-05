@@ -1,0 +1,41 @@
+4-software-engineering/1-projects/1-hexframe/1-app/help/.1-what-comes-first/CLAUDE.md
+  s_ed89c634a0e6b3::t_28c9e4320d5d95 1-15
+4-software-engineering/1-projects/1-hexframe/1-app/help/2-tiles/CLAUDE.md
+  s_ed89c634a0e6b3::t_28c9e4320d5d95 1-18
+4-software-engineering/1-projects/1-hexframe/1-app/help/6-keys-and-the-mcp/1-keys/CLAUDE.md
+  s_ed89c634a0e6b3::t_28c9e4320d5d95 1-14
+4-software-engineering/1-projects/1-hexframe/1-app/help/6-keys-and-the-mcp/2-the-mcp-server/CLAUDE.md
+  s_ed89c634a0e6b3::t_28c9e4320d5d95 1-21
+4-software-engineering/1-projects/1-hexframe/1-app/help/1-system/CLAUDE.md
+  s_ed89c634a0e6b3::t_28c9e4320d5d95 1-18
+4-software-engineering/1-projects/1-hexframe/1-app/help/4-context/1-references/CLAUDE.md
+  s_ed89c634a0e6b3::t_28c9e4320d5d95 1-20
+4-software-engineering/1-projects/1-hexframe/1-app/help/3-children-and-directions/CLAUDE.md
+  s_ed89c634a0e6b3::t_28c9e4320d5d95 1-26
+4-software-engineering/1-projects/1-hexframe/1-app/help/4-context/CLAUDE.md
+  s_ed89c634a0e6b3::t_28c9e4320d5d95 1-19
+4-software-engineering/1-projects/1-hexframe/1-app/help/3-children-and-directions/.1-six-at-most/CLAUDE.md
+  s_ed89c634a0e6b3::t_28c9e4320d5d95 1-14
+4-software-engineering/1-projects/1-hexframe/1-app/help/5-operations/CLAUDE.md
+  s_ed89c634a0e6b3::t_28c9e4320d5d95 1-22
+4-software-engineering/1-projects/1-hexframe/1-app/help/6-keys-and-the-mcp/CLAUDE.md
+  s_ed89c634a0e6b3::t_28c9e4320d5d95 1-14
+4-software-engineering/1-projects/1-hexframe/1-app/help/CLAUDE.md
+  s_ed89c634a0e6b3::t_28c9e4320d5d95 1-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8e6d9ecfd7d42949c03bc3d9fd08217b9feeac8c",
+  "prompts": {},
+  "sessions": {
+    "s_ed89c634a0e6b3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bfdaae8a-87ed-4a58-8630-209d0ea6e784",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
