@@ -1,0 +1,32 @@
+---
+title: decisions, hexframe app Optimistic writes and patterns
+parent: 4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-optimistic-writes-and-patterns
+owner: diplo
+preview: >-
+  The choices the autonomous run made while giving hexframe's domains one
+  shape and making Mapping's writes optimistic, where a ticket left room: the
+  row shapes Mapping declares, what operations/ holds before its Operations,
+  how Mapping regrouped to make room for entities/, and what of a domain the
+  front and the API layer import through the door.
+---
+# Decisions
+
+### DEC-1 Mapping declares its rows in `entities/rows.ts`, and the repository keeps a private projection of its own
+
+HEX-63. The ticket asks for "Mapping's own row shapes, which the repository's `TileRow` satisfies structurally (`contentWith` moves in)". `entities/rows.ts` declares `Row`, `RowWith`, `FieldsAsked`, `StoredConfig` and the kept parts, and Mapping's projection, `contentWith` and `withContent`, which `showing` and Help's reads use. The tiles repository still projects the rows it reads from the database the same way, and a repository imports no domain, so it keeps its own two, unexported: the one line that picks the fields asked exists twice, once on each side of the seam, rather than the domain importing the repository. `TileRow`, `TileRowWith` and the repository's `ColumnsAsked` satisfy Mapping's shapes as they stand: the compiler checks it wherever `mapping.ts` hands repository rows to a reading in `entities/`. `TileConfigColumn` stays the schema's, and `Naming` is now typed from `StoredConfig`, its twin on Mapping's side.
+
+### DEC-2 `operations/` opens with `Placement`, so its door is no dead file
+
+HEX-63. The ticket asks that `operations/` exist with its `index.ts`, filled by HEX-64. An index that exports nothing is a file nobody imports, which knip refuses, and an ignore would weaken that gate. So `operations/placement.ts` takes `Placement`, where an operation puts a Tile or a Reference, a slot under a parent Tile, which `mapping.ts` declared: `mapping.ts`, `landing/` and `api/mapping/programs.ts` import it from the door, the last in place of `Parameters<typeof Mapping.moveTile>[2]`. HEX-64's Operations carry it, or replace it.
+
+### DEC-3 Mapping regroups: `kept/` and `leaves/` move under `entities/`, their tests over PGlite to Mapping's root
+
+HEX-63. `domains/mapping/` held six files and five folders; `entities/` and `operations/` take two folders, and `tile.ts`, `system.ts` and `system.test.ts` move into `entities/` with `kept/` and `leaves/`, leaving the root `mapping.ts`, `errors.ts` and `mapping.test.ts`, and the folders `entities/`, `operations/`, `files/`, `landing/` and `help/`. `files/`, `landing/` and `help/` stay concept folders: `help/` reads the help repository and `landing/` writes through the tiles one, so neither may sit behind the door, and `files/` imports `yaml` and the shape. Nothing under `entities/` imports a repository, its tests included, so `kept.test.ts` and `leaves.test.ts` split: the checks on values and rows made by hand stay beside their modules, and the cases over PGlite, which run the application service, move to `domains/mapping/kept.test.ts` and `leaves.test.ts`. `entities/` gets a `CLAUDE.md`, which takes the rows Mapping's own tables gave `tile.ts`, `system.ts`, `kept/` and `leaves/`. Mapping's other folders import `entities/` through its `index.ts`, as the API layer and the front do, so one list says what the door offers.
+
+### DEC-4 The front and the API take entity values from the door; a concept folder's still come through the API layer
+
+HEX-63. `Direction`, `ContextDirection` and `Slot` become Effect Schemas in `entities/tile.ts`, each with its type, so the server functions decode a slot by Mapping's own schema and the System page's URL by the same one; `api/mapping/mapping.ts` no longer declares them. The front imports `Slot`, `directions`, `SystemTile`, `holdsNothing` and `isEmptySystem` from the door: `api/mapping/rules.ts` and the `ReturnType` stand-in in `front/client/mapping/queries.ts` are gone, and `features/system/tree.ts` walks a System by Mapping's `directions` rather than the canvas's. `mapping.ts` re-exports no entity any more (the MCP's tool table takes `fields`, `depths`, `directions` and `previewLimit` from the door), only Help's `HelpId`, `helpRoot` and `helpSystem`, which live in a concept folder. The ticket says the API's re-exports of domain values go; those of `files/` and `landing/` stay (`api/mapping/files/download.ts`'s `isVerbatim`, `files/upload.ts`'s reading rules and archive checks), since a concept folder is past the door and the browser still reaches it, as it reaches the zip repository's plain functions, through the API layer.
+
+### DEC-5 The door's two rules are proved on a small app written to a temporary folder
+
+HEX-63. The custom rules in `scripts/lint.test.ts` were proved by testing their regular expressions, but a reachability rule fires on a path through the graph, which no pattern test shows. The door's are proved by cruising: the test writes a small app, a domain with its door, its service and a concept folder, another domain, a repository and a page, cruises it with the app's own rules (`dependency-cruiser`'s `cruise`, its `baseDir` the temporary folder) and checks that the app as written breaks nothing, that the page importing past the door breaks `no-front-past-a-domains-door`, and that the door reaching a repository by a type-only import, the service, a concept folder, another domain or `node:fs`, a file away, breaks `no-door-reaching-past-the-pure-model`. `effect` resolves to a bare name here, as it does under `src/` once cruised, so the rule allows `effect` bare or in `node_modules/`.
