@@ -94,7 +94,7 @@ function OfferButton({ hex, offer }: { hex: Hex; offer: Offer }) {
   const { label, onSelect } = offer
   const radius = hex.radius * 0.16
   const x = hex.center.x
-  const y = hex.center.y + hex.radius * 0.72
+  const y = hex.center.y + hex.radius * 0.64
   const icon = radius * 1.2
   return (
     <Tooltip content={label}>
