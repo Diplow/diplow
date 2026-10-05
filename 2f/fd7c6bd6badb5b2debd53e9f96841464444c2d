@@ -1,0 +1,57 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/tiles.ts
+  s_add1a77a88c179::t_3e0e9547e31a77 12
+  s_add1a77a88c179::t_548b24fb999478 70
+  s_add1a77a88c179::t_adc0cbb5b13f31 16-17,27,29,32-34,86-91,97,100,166-169
+  s_add1a77a88c179::t_dac1f798b82b58 28
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/system.ts
+  s_add1a77a88c179::t_f5d5e64c96e719 11,22-26,140
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261005065014_tile-kept-from-files/snapshot.json
+  s_add1a77a88c179::t_017f120703eae5 1-1357
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261005065014_tile-kept-from-files/migration.sql
+  s_add1a77a88c179::t_017f120703eae5 1-3
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/schema.ts
+  s_add1a77a88c179::t_3e0e9547e31a77 144-149,176
+  s_add1a77a88c179::t_3bd80ce1ea6950 12,160-162,175,177
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/errors.ts
+  s_add1a77a88c179::t_6a93de79a9c8d7 70
+  s_add1a77a88c179::t_1262051b92f5d9 21-26
+  s_add1a77a88c179::t_d37ed125f9d4c2 20
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/kept/kept.ts
+  s_add1a77a88c179::t_df0ebdae5cf1f3 128-131
+  s_add1a77a88c179::t_6a25b1fb7c6652 151-155
+  s_add1a77a88c179::t_df51b0b6dd4cb3 1-82,89-106,108-110,113-127,132-150,156-162
+  s_add1a77a88c179::t_67806155cbfb56 83-88
+  s_add1a77a88c179::t_98b82e6d86b806 107,111-112
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/kept/naming.ts
+  s_add1a77a88c179::t_472cd071996999 1-36
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/kept/kept.test.ts
+  s_add1a77a88c179::t_67806155cbfb56 127
+  s_add1a77a88c179::t_49910e77ebbea3 35-46,80-94,104-106,134-136,264-269,291-306
+  s_add1a77a88c179::t_e7035d2bf535de 1-34,47-79,95-103,107-126,128-133,137-263,270-290,307-308
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_add1a77a88c179::t_2426051cee146b 14,234-235,237-240,246
+  s_add1a77a88c179::t_49910e77ebbea3 247-253
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/help/vault.ts
+  s_add1a77a88c179::t_6a93de79a9c8d7 12
+  s_add1a77a88c179::t_df0ebdae5cf1f3 69-76
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/leaves/leaves.test.ts
+  s_add1a77a88c179::t_df0ebdae5cf1f3 8,41
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/system.test.ts
+  s_add1a77a88c179::t_df0ebdae5cf1f3 5,18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2ffd7c6bd6badb5b2debd53e9f96841464444c2d",
+  "prompts": {},
+  "sessions": {
+    "s_add1a77a88c179": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d3373e9-3681-410c-a221-392366b8a522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
