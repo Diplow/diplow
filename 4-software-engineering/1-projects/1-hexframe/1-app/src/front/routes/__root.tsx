@@ -35,6 +35,7 @@ function RootDocument({ children }: { children: ReactNode }) {
       <body>
         <header className="flex items-center justify-end gap-2 p-4">
           <SignedInLinks />
+          <HelpLink />
           <LocaleSwitch />
           <ThemeToggle />
         </header>
@@ -43,6 +44,20 @@ function RootDocument({ children }: { children: ReactNode }) {
         <Scripts />
       </body>
     </html>
+  )
+}
+
+/** The design system's ghost Button, as a link; the page the user is on reads as the current one. */
+const current = 'text-muted-foreground data-[status=active]:text-foreground'
+
+/** Help, which every page links to, signed in or not: anyone reads it. */
+function HelpLink() {
+  return (
+    <Button asChild variant="ghost" size="sm" className={current}>
+      <Link to="/help" activeOptions={{ includeSearch: false }}>
+        {m.nav_help()}
+      </Link>
+    </Button>
   )
 }
 
@@ -56,8 +71,6 @@ function SignedInLinks() {
     select: (matches) => matches.some((match) => provedSession(match.context)),
   })
   if (!signedIn) return null
-  // The design system's ghost Button, as a link; the page the user is on reads as the current one.
-  const current = 'text-muted-foreground data-[status=active]:text-foreground'
   return (
     <nav aria-label={m.nav_label()} className="mr-auto flex items-center gap-1">
       <Button asChild variant="ghost" size="sm" className={current}>
