@@ -12,9 +12,6 @@ type ContextEntry = NonNullable<SystemTile['context'][ContextSlot]>
 /** Each Direction's Context slot: the same Direction, negated. */
 const contextSlot: Record<Direction, ContextSlot> = { 1: -1, 2: -2, 3: -3, 4: -4, 5: -5, 6: -6 }
 
-/** What the id of a broken Reference starts with: no Tile's id does. */
-const brokenId = 'broken:'
-
 /**
  * A Tile's title as a reader sees it. Only the Root is ever untitled: Mapping adds it that way, until
  * the user names themselves.
@@ -51,7 +48,12 @@ function contextNode(entry: ContextEntry, slot: string): TileNode {
         reference: true,
       }
     case 'BrokenReference':
-      return { id: `${brokenId}${slot}`, title: m.system_reference_broken(), preview: '' }
+      return {
+        id: `broken:${slot}`,
+        title: m.system_reference_broken(),
+        preview: '',
+        broken: true,
+      }
   }
 }
 
@@ -62,10 +64,7 @@ function contextNode(entry: ContextEntry, slot: string): TileNode {
  * as it refuses a move below the Tile itself.
  */
 export const swapsWith = (system: TileNode, moving: TileNode, tile: TileNode) =>
-  tile.reference !== true &&
-  !tile.id.startsWith(brokenId) &&
-  tile.id !== system.id &&
-  tile.id !== moving.id
+  tile.reference !== true && tile.broken !== true && tile.id !== system.id && tile.id !== moving.id
 
 /** The slot a Tile takes under its parent: a Child's Direction, or its negation in the Context. */
 export const slotOf = (ring: Ring, direction: Direction) =>

@@ -10,6 +10,8 @@ export interface TileNode {
   context?: Partial<Record<Direction, TileNode>>
   /** Drawn in place of the Tile of this id, which stands elsewhere: a search for the id skips it. */
   reference?: true
+  /** Drawn in place of a Tile that no longer exists: it stands for no Tile, and its id is no Tile's. */
+  broken?: true
 }
 
 /** What is open around the centered Tile, which is always shown as a Frame. */

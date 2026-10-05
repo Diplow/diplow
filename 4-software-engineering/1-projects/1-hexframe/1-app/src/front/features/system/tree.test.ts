@@ -61,6 +61,7 @@ describe('canvasTree', () => {
       id: 'broken:root:-5',
       title: m.system_reference_broken(),
       preview: '',
+      broken: true,
     })
   })
 
