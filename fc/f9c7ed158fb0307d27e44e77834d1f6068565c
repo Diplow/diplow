@@ -1,0 +1,27 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/zip/unzip.ts
+  s_add1a77a88c179::t_6197deadc84694 1-253
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/zip/testing.ts
+  s_add1a77a88c179::t_2fdf156fe3dd4e 1-4,14-24
+  s_add1a77a88c179::t_6e52cfb717e6ae 25
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/zip/zip.ts
+  s_add1a77a88c179::t_2fdf156fe3dd4e 2-4,8-9,59-66,69
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/zip/unzip.test.ts
+  s_add1a77a88c179::t_a46f0d718d9822 21-25,27-30,35-36
+  s_add1a77a88c179::t_cccf578f9aa378 1-20,26,31-34,37-111
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fcf9c7ed158fb0307d27e44e77834d1f6068565c",
+  "prompts": {},
+  "sessions": {
+    "s_add1a77a88c179": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d3373e9-3681-410c-a221-392366b8a522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
