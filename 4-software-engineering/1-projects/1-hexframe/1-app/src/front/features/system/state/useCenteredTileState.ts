@@ -4,10 +4,9 @@
 // same Direction of the other kind (`useMoveTile`), refused `DirectionTaken`, in a toast, when a Tile
 // of that kind already stands there. The card renders this and calls the action, nothing more.
 import { isVerbatim } from '#/api/mapping/files/download'
-import { holdsNothing, type SystemTile } from '#/domains/mapping/entities'
+import { holdsNothing, type Slot, type SystemTile } from '#/domains/mapping/entities'
 import { useMoveTile } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
-import type { Direction } from '#/front/ui/hex/geometry/geometry'
 
 import { tileIn } from '../tree'
 
@@ -29,11 +28,7 @@ interface CenteredTileState {
 export function useCenteredTileState(system: SystemTile, id: string): CenteredTileState {
   const move = useMoveTile()
   const found = tileIn(system, id)
-  const act = (
-    parent: SystemTile,
-    label: string,
-    slot: Direction | { leaf: Direction },
-  ): KindChange => ({
+  const act = (parent: SystemTile, label: string, slot: Slot): KindChange => ({
     label,
     pending: move.isPending,
     change: () => {

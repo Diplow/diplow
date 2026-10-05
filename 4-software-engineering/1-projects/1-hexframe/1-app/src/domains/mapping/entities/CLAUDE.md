@@ -11,7 +11,7 @@ preview: >-
 ---
 # entities
 
-What [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE|Mapping]] is made of, and the invariants each holds, apart from how a change loads, decides and writes (`mapping.ts`). Pure by what it is, so the front imports it: `index.ts` is part of Mapping's door, with `operations/index.ts` and `errors.ts`. Nothing reachable from it touches a repository, the application service, a concept folder, another domain, Node, the environment or the config, a type-only import included; beside `effect`, it reaches `../errors.ts`, and through it `domains/kind.ts` ([[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE|domains]], "The door").
+What [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE|Mapping]] is made of, and the invariants each holds, apart from how a change loads, decides and writes (`mapping.ts`). Pure by what it is, so the front imports it: `index.ts` is part of Mapping's door, with `operations/index.ts` and `errors.ts`, and what the door may reach is [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE|domains]]' to say ("The door").
 
 | File | Holds |
 |---|---|

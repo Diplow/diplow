@@ -158,6 +158,14 @@ const placeColumns = {
 /** What a Tile says. */
 const contentColumns = { title: tile.title, preview: tile.preview, body: tile.body }
 
+/** The content columns asked, for a select, and no other. */
+const contentColumnsOf = <C extends ContentColumn>(asked: ReadonlyArray<C>) =>
+  // Built from the columns asked, each of them, which a type cannot follow.
+  Object.fromEntries(asked.map((column) => [column, contentColumns[column]])) as Pick<
+    typeof contentColumns,
+    C
+  >
+
 /** What an imported file carried. */
 const keptColumns = { name: tile.name, config: tile.config, frontmatter: tile.frontmatter }
 
@@ -308,21 +316,12 @@ const make = Effect.gen(function* () {
     accountId: string,
     where: SQL,
     columns: ReadonlyArray<C>,
-  ) => {
-    const asked: Partial<typeof contentColumns> = Object.fromEntries(
-      columns.map((column) => [column, contentColumns[column]]),
-    )
-    return database
-      .select({ ...placeColumns, ...asked })
+  ): Effect.Effect<ReadonlyArray<TileRowWith<C>>> =>
+    database
+      .select({ ...placeColumns, ...contentColumnsOf(columns) })
       .from(tile)
       .where(and(ofAccount(accountId), where))
-      .pipe(
-        Effect.orDie,
-        // Selected with the content columns asked and no other, which the select's type, built from a
-        // Partial of them, cannot follow.
-        Effect.map((rows) => rows as ReadonlyArray<unknown> as ReadonlyArray<TileRowWith<C>>),
-      )
-  }
+      .pipe(Effect.orDie)
 
   const root = (accountId: string, content: Pick<TileRow, ContentColumn>) =>
     ensureRoot(accountId, content).pipe(
