@@ -1,0 +1,40 @@
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_ed89c634a0e6b3::t_fbba16ba455c26 223-225
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help/search.ts
+  s_ed89c634a0e6b3::t_30ac2ec7aca078 1-33
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help/Help.tsx
+  s_ed89c634a0e6b3::t_f78ff533b883a7 1-81
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_ed89c634a0e6b3::t_c93c89062fc22e 22,28-29,49-54
+  s_ed89c634a0e6b3::t_8e3c996c7e7368 55
+4-software-engineering/1-projects/1-hexframe/1-app/src/routeTree.gen.ts
+  s_ed89c634a0e6b3::t_0f6370e3397c95 14,35-39,89,103,118,134,148,162,177,200-206,296
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/help.tsx
+  s_ed89c634a0e6b3::t_f78ff533b883a7 1-75
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.test.ts
+  s_ed89c634a0e6b3::t_573525490435e3 20,31,107-116
+  s_ed89c634a0e6b3::t_720f700d70002c 106
+  s_ed89c634a0e6b3::t_8225e386f7364c 117-118
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/__root.tsx
+  s_ed89c634a0e6b3::t_fbba16ba455c26 38,50-63
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help/search.test.ts
+  s_ed89c634a0e6b3::t_30ac2ec7aca078 1-45
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_ed89c634a0e6b3::t_fbba16ba455c26 223-225
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "44a11123b76796b36b874200d8a5791953d2e4f1",
+  "prompts": {},
+  "sessions": {
+    "s_ed89c634a0e6b3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bfdaae8a-87ed-4a58-8630-209d0ea6e784",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
