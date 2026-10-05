@@ -90,8 +90,8 @@ function rowsOf(tile: PlannedTile, place: Place, read: ReadonlySet<string>): Arr
   ]
 }
 
-/** The folder a path names: a folder's own, or the one a file read from it sits in. */
-const folderOf = (path: string) => path.replace(/(^|\/)[^/]*\.md$/, '')
+/** The folder a fault's path names: a folder's own, or the one whose note it is (`noteAt`). */
+const folderOf = (path: string) => path.replace(/(^|\/)CLAUDE\.md$/, '')
 
 /**
  * The id a folder's name gives it in Help, the path of its slots from `root`; none for a name that is

@@ -256,9 +256,13 @@ describe('an import refused', () => {
         file('content/kept/CLAUDE.md', note('nested: { a: 1 }')),
         file('settings/config/.hexframe/config.yaml', 'fileName: a/b\n'),
         file('settings/excluded/.hexframe/exclusions.yaml', 'nothing: here\n'),
-        file('settings/huge/.hexframe/exclusions.yaml', `# ${'x'.repeat(1_000_000)}`),
+        file('settings/huge/.hexframe/exclusions.yaml', `# ${'x'.repeat(4_096)}`),
+        file('settings/many/.hexframe/exclusions.yaml', `exclude: [${'a,'.repeat(16)}b]`),
+        file('settings/long/.hexframe/exclusions.yaml', `exclude: [${'*'.repeat(65)}]`),
         file('.1-ref/CLAUDE.md', note('reference: "[[STACK]]"')),
         file('.1-ref/inside.md', ''),
+        file('.2-ref/CLAUDE.md', note('reference: "[[STACK]]"')),
+        file('.2-ref/.DS_Store', ''),
       ]),
     )
     expect(faults).toEqual(
@@ -280,10 +284,13 @@ describe('an import refused', () => {
         { path: 'settings/config/.hexframe/config.yaml', fault: 'ConfigInvalid' },
         { path: 'settings/excluded/.hexframe/exclusions.yaml', fault: 'ExclusionsInvalid' },
         { path: 'settings/huge/.hexframe/exclusions.yaml', fault: 'FileTooLarge' },
+        { path: 'settings/many/.hexframe/exclusions.yaml', fault: 'ExclusionsInvalid' },
+        { path: 'settings/long/.hexframe/exclusions.yaml', fault: 'ExclusionsInvalid' },
         { path: '.1-ref', fault: 'ReferenceHoldsSomething' },
+        { path: '.2-ref', fault: 'ReferenceHoldsSomething' },
       ]),
     )
-    expect(faults).toHaveLength(18)
+    expect(faults).toHaveLength(21)
   })
 
   it('reads a folder 16 deep, the deepest an import goes', () => {

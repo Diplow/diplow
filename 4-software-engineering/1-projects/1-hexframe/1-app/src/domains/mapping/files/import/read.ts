@@ -25,10 +25,11 @@ import type {
 } from './plan'
 import {
   exclusionsIn,
+  type FolderSeating,
   fileLimit,
   isDotFile,
   isMarkdownFile,
-  markdownOf,
+  splitMarkdown,
   ownFilesFor,
   seatingIn,
   settings,
@@ -95,7 +96,7 @@ const fault = (reading: Reading, path: string, why: ImportFault['fault']) => {
 }
 
 /** The fields a file's frontmatter gives a Tile, read as YAML. */
-interface Fields {
+interface TileFields {
   readonly title?: string | undefined
   readonly preview: string
   readonly reference?: string | undefined
@@ -103,7 +104,7 @@ interface Fields {
 }
 
 /** What a Tile reads from a file it doesn't have: no field, no Body. */
-const nothingRead: { readonly fields: Fields; readonly body: string } = {
+const nothingRead: { readonly fields: TileFields; readonly body: string } = {
   fields: { preview: '' },
   body: '',
 }
@@ -128,7 +129,7 @@ const asText = (value: string | number | boolean | null | undefined) =>
  * export writes itself dropped first, `id` among them; `undefined` when it isn't YAML of keys and
  * values, holds a list where a Tile reads text, or keeps what a Tile can't.
  */
-function fieldsOf(yaml: string): Fields | undefined {
+function fieldsOf(yaml: string): TileFields | undefined {
   const all = mappingIn(yaml)
   const said = Option.getOrUndefined(saidIn(all))
   if (all === undefined || said === undefined) return undefined
@@ -158,7 +159,7 @@ interface At {
 /** A Tile's content and Name, each checked against its bound, every fault on the Tile's path. */
 function contentOf(
   { path, name, kind }: Pick<At, 'path' | 'name' | 'kind'>,
-  { fields, body }: { fields: Fields; body: string },
+  { fields, body }: { fields: TileFields; body: string },
   reading: Reading,
 ) {
   const title = fields.title?.trim() || titleFromNameOf(name, kind)
@@ -181,14 +182,14 @@ function contentOf(
  * as its Body; `undefined`, with its fault, when its frontmatter can't be read.
  */
 function fileRead(path: string, text: string, reading: Reading) {
-  const { frontmatter, body } = markdownOf(text)
+  const { frontmatter, body } = splitMarkdown(text)
   const fields = fieldsOf(frontmatter)
   if (fields === undefined) fault(reading, path, 'FrontmatterInvalid')
   return fields === undefined ? undefined : { fields, body }
 }
 
 /** A Leaf from its file: a Markdown one from its frontmatter and Body, any other as it is. */
-function leafOf(at: Pick<At, 'path' | 'name'>, text: string, reading: Reading): PlannedLeaf {
+function leafRead(at: Pick<At, 'path' | 'name'>, text: string, reading: Reading): PlannedLeaf {
   const read = isMarkdownFile(at.name)
     ? fileRead(at.path, text, reading)
     : { fields: { title: at.name, preview: '' }, body: text }
@@ -234,8 +235,25 @@ function configIn(text: string) {
 }
 
 /**
+ * What a `.hexframe/` file may hold: its bytes, and the exclusions it lists and the characters of each.
+ * Every exclusion is matched against every name of its folder, so their number and length bound the
+ * work an upload can ask of the server.
+ */
+const settingsBounds = { bytes: 4_096, exclusions: 16, exclusionLength: 64 }
+
+/** The exclusions an `exclusions.yaml` lists, within their bounds; `undefined` otherwise. */
+function exclusionsBounded(text: string) {
+  const exclusions = exclusionsIn(text)
+  const bounded =
+    exclusions !== undefined &&
+    exclusions.length <= settingsBounds.exclusions &&
+    exclusions.every((item) => item.length <= settingsBounds.exclusionLength)
+  return bounded ? exclusions : undefined
+}
+
+/**
  * What a folder's `.hexframe/` says: the config it sets and the names it leaves out. A file there past
- * the shape's limit, that isn't text, or that can't be read as what it holds, is a fault.
+ * its bound, that isn't text, or that can't be read as what it holds, is a fault.
  */
 function settingsOf(folder: Folder, path: string, reading: Reading) {
   const own = folder.folders.get(settings.folder)
@@ -247,7 +265,7 @@ function settingsOf(folder: Folder, path: string, reading: Reading) {
     const bytes = own?.files.get(name)
     if (bytes === undefined) return undefined
     const at = join(join(path, settings.folder), name)
-    if (bytes.length > fileLimit) {
+    if (bytes.length > settingsBounds.bytes) {
       fault(reading, at, 'FileTooLarge')
       return undefined
     }
@@ -258,15 +276,12 @@ function settingsOf(folder: Folder, path: string, reading: Reading) {
   }
   return {
     config: read(settings.config, configIn, 'ConfigInvalid'),
-    exclusions: read(settings.exclusions, exclusionsIn, 'ExclusionsInvalid') ?? [],
+    exclusions: read(settings.exclusions, exclusionsBounded, 'ExclusionsInvalid') ?? [],
   }
 }
 
-/** Where a folder's Branches, Leaves and Context folders sit, each kind in its ring. */
-type Seating = ReturnType<typeof seatingIn>
-
 /** The faults of a folder's rings: one that overflows, names that claim a Direction already claimed. */
-function ringFaults(path: string, seating: Seating, reading: Reading) {
+function ringFaults(path: string, seating: FolderSeating, reading: Reading) {
   for (const { overflows, claimed } of Object.values(seating)) {
     if (overflows) fault(reading, path, 'RingOverflows')
     else for (const name of claimed) fault(reading, join(path, name), 'DirectionClaimed')
@@ -277,7 +292,7 @@ function ringFaults(path: string, seating: Seating, reading: Reading) {
  * Each name of a ring with the Direction it sits in, or none when the ring can't seat it: a ring at
  * fault is still read whole, so the import lists every fault below it too.
  */
-const seated = ({ candidates, seats }: Seating[EntryKind]) =>
+const seated = ({ candidates, seats }: FolderSeating[EntryKind]) =>
   candidates.map((name) => [name, seats.get(name)] as const)
 
 /** A file a `[[wikilink]]` reaches the Tile at `path` by, with and without its `.md`. */
@@ -294,7 +309,7 @@ function belowOf(
     naming,
     texts,
     seating,
-  }: { at: At; naming: Naming; texts: ReadonlyMap<string, string>; seating: Seating },
+  }: { at: At; naming: Naming; texts: ReadonlyMap<string, string>; seating: FolderSeating },
   reading: Reading,
 ): Pick<Draft, 'branches' | 'leaves' | 'context'> {
   const read = (name: string, kind: EntryKind) =>
@@ -317,7 +332,7 @@ function belowOf(
   }
   const leaves: Draft['leaves'] = {}
   for (const [name, direction] of seated(seating.leaf)) {
-    const leaf = leafOf({ path: join(at.path, name), name }, texts.get(name) ?? '', reading)
+    const leaf = leafRead({ path: join(at.path, name), name }, texts.get(name) ?? '', reading)
     if (direction !== undefined) leaves[direction] = leaf
   }
   return { branches, leaves, context }
@@ -366,7 +381,8 @@ function folderOf(
   const leaves = [...texts.keys()].filter((name) => name !== own.name && !shadowed.includes(name))
   const reference = at.kind === 'context' ? own.read?.fields.reference : undefined
   if (reference !== undefined) {
-    if (shown.folders.length + leaves.length > 0) fault(reading, at.path, 'ReferenceHoldsSomething')
+    const held = shown.folders.length + shown.files.filter((name) => name !== own.name).length
+    if (held > 0) fault(reading, at.path, 'ReferenceHoldsSomething')
     return { _tag: 'Reference', path: at.path, target: reference }
   }
   // Only a Tile is a Reference's target: its file is linked once the folder is known to read as one.
@@ -468,5 +484,5 @@ function rootOf(source: ImportSource, reading: Reading): Draft | PlannedLeaf | u
     { path: '', files: [path] },
     reading,
   ).values()
-  return text === undefined ? undefined : leafOf({ path, name: path }, text, reading)
+  return text === undefined ? undefined : leafRead({ path, name: path }, text, reading)
 }

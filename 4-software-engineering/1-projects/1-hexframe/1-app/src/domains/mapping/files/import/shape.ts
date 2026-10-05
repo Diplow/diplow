@@ -78,7 +78,7 @@ export const titleFromNameOf = (name: string, kind: EntryKind) => titleFromName(
  * opens with a `---` first line and closes with the next one, else it is empty and the whole file is
  * Body; every line ending of the Body is `\n`.
  */
-export function markdownOf(text: string): { frontmatter: string; body: string } {
+export function splitMarkdown(text: string): { frontmatter: string; body: string } {
   const { frontmatter, body } = splitFrontmatter(text)
   return { frontmatter: frontmatter.join('\n'), body }
 }
@@ -87,7 +87,7 @@ export function markdownOf(text: string): { frontmatter: string; body: string } 
  * Where each name of one kind sits in its ring, as the shape seats it, or why none can: more than six,
  * so the ring overflows, or names of which two claim one Direction, the later in name order.
  */
-export interface Seating {
+interface Seating {
   /** Every name of the kind, in name order, seated or not. */
   readonly candidates: ReadonlyArray<string>
   /** Where each name sits, when the ring seats every one. */
@@ -95,6 +95,9 @@ export interface Seating {
   readonly overflows: boolean
   readonly claimed: ReadonlyArray<string>
 }
+
+/** Where a folder's Branches, Leaves and Context folders sit, each kind in its own ring. */
+export type FolderSeating = Readonly<Record<EntryKind, Seating>>
 
 /** The candidates of a ring, in name order, wherever the shape seated them. */
 function candidatesOf(ring: Ring<Slot> | undefined): ReadonlyArray<string> {
@@ -144,7 +147,7 @@ function seatingOf(kind: EntryKind, ring: Ring<Slot> | undefined): Seating {
  * shape seats a ring of Branches or of Leaves: the numbered names in their number's Direction, the
  * others in the free ones in name order; dot files and the shape's own files are no Leaves.
  */
-export function seatingIn({ folders, files }: Listing): Readonly<Record<EntryKind, Seating>> {
+export function seatingIn({ folders, files }: Listing): FolderSeating {
   const ofFolders = sortEntries(folders.map((name) => ({ name, kind: 'dir' as const })))
   const ofFiles = sortEntries(files.map((name) => ({ name, kind: 'file' as const })))
   return {
