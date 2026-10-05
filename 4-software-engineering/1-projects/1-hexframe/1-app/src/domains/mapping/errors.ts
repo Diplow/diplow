@@ -30,7 +30,10 @@ export class RootFixed extends Schema.TaggedError<RootFixed>()('RootFixed', {
   kind: kind('Forbidden'),
 }) {}
 
-/** A Tile cannot move below itself: under one of its own Children, or theirs. */
+/**
+ * A Tile cannot move below itself: under one of its own Children, or theirs. Nor can it swap with a
+ * Tile above or below it, which would put one of the two below itself.
+ */
 export class MovedUnderItself extends Schema.TaggedError<MovedUnderItself>()('MovedUnderItself', {
   kind: kind('Conflict'),
 }) {}

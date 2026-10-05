@@ -5,6 +5,7 @@
 // one Tile walks down a generation per query and selects only the content columns asked, so a Body
 // nobody asked for never leaves the database.
 import { type SQL, and, eq, inArray, isNull } from 'drizzle-orm'
+import { alias } from 'drizzle-orm/pg-core'
 import { Context, Effect, Layer } from 'effect'
 
 import { Database, InTransaction } from '../database'
@@ -56,6 +57,11 @@ export interface Writes {
   ) => Effect.Effect<void, never, InTransaction>
   /** Deletes a row and every row below it. */
   readonly remove: (id: string) => Effect.Effect<void, never, InTransaction>
+  /**
+   * Two rows trade places, each with every row below it: each takes the other's parent and
+   * direction. Neither may be the Root, nor lie below the other: Mapping checks it first.
+   */
+  readonly swap: (a: string, b: string) => Effect.Effect<void, never, InTransaction>
 }
 
 export class Tiles extends Context.Service<
@@ -111,6 +117,9 @@ const contentColumns = { title: tile.title, preview: tile.preview, body: tile.bo
 
 const columns = { ...placeColumns, ...contentColumns }
 
+/** The rows standing under another, for a row to find what lies below it. */
+const under = alias(tile, 'under')
+
 /** A query that only holds inside a transaction: it requires one, so it runs in no other. */
 const inTransaction = <A>(query: Effect.Effect<A>) => InTransaction.use(() => query)
 
@@ -121,6 +130,59 @@ const make = Effect.gen(function* () {
   const rootOf = (accountId: string) => and(ofAccount(accountId), isNull(tile.parentId))
   const rowsOf = (accountId: string) =>
     database.select(columns).from(tile).where(ofAccount(accountId)).pipe(Effect.orDie)
+
+  /** Puts a row under a parent, in a direction. */
+  const place = (
+    accountId: string,
+    id: string,
+    at: { parentId: string | null; direction: number | null },
+  ) =>
+    database
+      .update(tile)
+      .set(at)
+      .where(and(ofAccount(accountId), eq(tile.id, id)))
+      .pipe(Effect.asVoid, Effect.orDie)
+
+  /**
+   * A row of the Account's System with nothing below it, so every one of its slots is free: a finite
+   * System always holds one.
+   */
+  const spare = (accountId: string) =>
+    database
+      .select({ id: tile.id })
+      .from(tile)
+      .leftJoin(under, eq(under.parentId, tile.id))
+      .where(and(ofAccount(accountId), isNull(under.id)))
+      .limit(1)
+      .pipe(
+        Effect.orDie,
+        Effect.flatMap(([found]) =>
+          found === undefined
+            ? Effect.die(new Error('A System was found with no row below which nothing stands'))
+            : Effect.succeed(found.id),
+        ),
+      )
+
+  /**
+   * The slot index is checked row by row, never at the end of the statement, so two rows cannot trade
+   * slots in one update: the first waits in a slot of a spare row while the second takes its place.
+   */
+  const swap = (accountId: string, a: string, b: string) =>
+    Effect.gen(function* () {
+      const placed = yield* database
+        .select(placeColumns)
+        .from(tile)
+        .where(and(ofAccount(accountId), inArray(tile.id, [a, b])))
+        .pipe(Effect.orDie)
+      const first = placed.find((row) => row.id === a)
+      const second = placed.find((row) => row.id === b)
+      if (first === undefined || second === undefined) {
+        return yield* Effect.die(new Error('A swap named a row its System does not hold'))
+      }
+      yield* place(accountId, a, { parentId: yield* spare(accountId), direction: 1 })
+      yield* place(accountId, b, { parentId: first.parentId, direction: first.direction })
+      yield* place(accountId, a, { parentId: second.parentId, direction: second.direction })
+    })
 
   const writes = (accountId: string): Writes => ({
     insert: (row) => {
@@ -149,6 +211,7 @@ const make = Effect.gen(function* () {
           .where(and(ofAccount(accountId), eq(tile.id, id)))
           .pipe(Effect.asVoid, Effect.orDie),
       ),
+    swap: (a, b) => inTransaction(swap(accountId, a, b)),
   })
 
   const ensureRoot = (accountId: string, root: Pick<TileRow, ContentColumn>) =>
