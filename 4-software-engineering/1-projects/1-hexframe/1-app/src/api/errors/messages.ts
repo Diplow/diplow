@@ -7,7 +7,10 @@ import type { Failure } from './failure'
 
 interface Entry {
   tag: Failure['_tag']
-  /** Narrows the entry to one server function, by the scope its call names. */
+  /**
+   * Narrows the entry to one operation, by the scope its call names: the server function's name,
+   * which the MCP tool that runs the same program names too.
+   */
   scope?: string
   message: () => string
 }

@@ -22,6 +22,7 @@ import {
 import { type Content, type ContextDirection, type Slot, type Tile, checked } from './tile'
 
 export { depths, fields } from './system'
+export { directions, previewLimit } from './tile'
 export type { Depth, Field, ReadTile, SystemTile } from './system'
 export type { Content, ContextDirection, Direction } from './tile'
 
