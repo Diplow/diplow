@@ -1,16 +1,22 @@
 // The browser's side of an import: what the user gave, a folder (picked or dropped), a zip or one
 // file, made into the upload `importTiles` takes, before a byte is sent. Plain functions, no server
 // function, which the client reaches as it reaches observability's: it leaves out what Mapping's
-// reading would (`leftOutOf`, `isBinary`), checks the bounds the server unpacks within and the 4 MB
-// it takes (`pastBounds`, `folderOf`, `uploadLimit`), and zips what is left through the zip
-// repository. It takes from Mapping only pure modules, never `landing/landing.ts`, which reaches the
+// reading would (`leftOutOf`, `skippedAsBinary`), unwraps a zip's one wrapping folder
+// (`wrappingFolder`), checks the bounds the server unpacks within, its verdict on every path and the
+// 4 MB it takes (`pastBounds`, `pathFaults`, `stoppedAt`, `uploadLimit`), and zips what is left
+// through the zip repository. It takes from Mapping only pure modules, never `landing/landing.ts`, which reaches the
 // database. It only prunes and warns early: the server reads and checks everything again.
-import { Result } from 'effect'
-
 import type { ImportRefused } from '#/domains/mapping/errors'
 import type { LeftOut } from '#/domains/mapping/files/import/plan'
-import { isBinary, isSettingsFile, leftOutOf } from '#/domains/mapping/files/import/read'
-import { archiveBounds, folderOf, pastBounds, uploadLimit } from '#/domains/mapping/landing/archive'
+import { isSettingsFile, leftOutOf, skippedAsBinary } from '#/domains/mapping/files/import/read'
+import {
+  archiveBounds,
+  pastBounds,
+  pathFaults,
+  stoppedAt,
+  uploadLimit,
+  wrappingFolder,
+} from '#/domains/mapping/landing/archive'
 import { type ArchiveEntry, unpacked } from '#/repositories/zip/unzip'
 import { archived } from '#/repositories/zip/zip'
 
@@ -57,7 +63,6 @@ const givenBounds = { entries: 100_000, entryBytes: 256_000_000, totalBytes: 256
 const headBytes = 8_192
 
 const tooLarge: Faults = [{ path: '', fault: 'UploadTooLarge' }]
-const unreadable: Faults = [{ path: '', fault: 'ArchiveUnreadable' }]
 
 const bytesOf = async (blob: Blob) => new Uint8Array(await blob.arrayBuffer())
 
@@ -83,25 +88,7 @@ async function readOf({ path, kind, blob }: GivenFile) {
   const whole = await blob()
   const head = whole.size > archiveBounds.entryBytes
   const bytes = await bytesOf(head ? whole.slice(0, headBytes) : whole)
-  // A folder's settings are the server's to judge: a reading reads them, text or not.
-  return {
-    path,
-    kind,
-    size: whole.size,
-    bytes,
-    binary: !isSettingsFile(path) && isBinary(bytes, head),
-  }
-}
-
-/**
- * The one folder every file sits in, when there is one and no file beside it: a zip that wraps its
- * folder in one more, as macOS's Compress writes it once its `__MACOSX` dot files are left out.
- */
-function wrapperOf(files: ReadonlyArray<{ readonly path: string }>): string | undefined {
-  const [first] = files
-  const [top] = first?.path.split('/') ?? []
-  if (top === undefined || first?.path === top) return undefined
-  return files.every(({ path }) => path.startsWith(`${top}/`)) ? top : undefined
+  return { path, kind, size: whole.size, bytes, binary: skippedAsBinary(path, bytes, head) }
 }
 
 /**
@@ -125,7 +112,7 @@ async function folder(
   const read = await Promise.all(kept.map(readOf))
   for (const { path, binary } of read) if (binary) leftOut.push({ path, reason: 'Binary' })
   const texts = read.filter(({ binary }) => !binary)
-  const wrapper = unwrap ? wrapperOf(texts) : undefined
+  const wrapper = unwrap ? wrappingFolder(texts) : undefined
   const name = wrapper ?? given
   const sent =
     wrapper === undefined
@@ -138,9 +125,9 @@ async function folder(
     kind,
     bytes,
   }))
-  const verdict = folderOf(name, { _tag: 'Unpacked', entries })
-  if (Result.isFailure(verdict)) return { _tag: 'Refused', faults: verdict.failure.faults, leftOut }
-  // The verdict refuses a symlink: every entry left is a file.
+  const refused = refusedFor(pathFaults(entries), leftOut)
+  if (refused !== undefined) return refused
+  // The verdict on the paths refuses a symlink: every entry left is a file.
   const archive = archived(entries)
   if (archive.length > uploadLimit) return { _tag: 'Refused', faults: tooLarge, leftOut }
   const upload = new File([archive.slice()], `${name}.zip`, { type: 'application/zip' })
@@ -154,12 +141,8 @@ async function folder(
 async function unzippedOf(file: File): Promise<Prepared> {
   if (file.size > givenBounds.totalBytes) return { _tag: 'Refused', faults: tooLarge, leftOut: [] }
   const opened = unpacked(await bytesOf(file), givenBounds)
-  if (opened._tag !== 'Unpacked') {
-    // Mapping's verdict on an archive that stopped unpacking is a refusal saying where.
-    const verdict = folderOf(file.name, opened)
-    const faults = Result.isFailure(verdict) ? verdict.failure.faults : unreadable
-    return { _tag: 'Refused', faults, leftOut: [] }
-  }
+  if (opened._tag !== 'Unpacked')
+    return { _tag: 'Refused', faults: [stoppedAt(opened)], leftOut: [] }
   const files = opened.entries.flatMap(({ path, kind, bytes }): Array<GivenFile> =>
     kind === 'Folder'
       ? []

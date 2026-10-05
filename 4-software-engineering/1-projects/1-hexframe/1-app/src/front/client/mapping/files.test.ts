@@ -113,6 +113,11 @@ describe('a drop', () => {
     expect(await dropped(drop(null, zip), { fileOnly: true })).toEqual({ _tag: 'File', file: zip })
   })
 
+  it('is nothing for a folder where the slot takes one file alone', () => {
+    const folder = folderEntry('vault', [fileEntry('CLAUDE.md', '# Vault')])
+    expect(dropped(drop(folder, null), { fileOnly: true })).toBeUndefined()
+  })
+
   it('is nothing when it holds no file', () => {
     expect(dropped(drop(null, null, 'string'), { fileOnly: false })).toBeUndefined()
     expect(dropped({ items: [] } as unknown as DataTransfer, { fileOnly: false })).toBeUndefined()

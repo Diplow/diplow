@@ -79,6 +79,26 @@ const stopped: Record<Exclude<Unpacked['_tag'], 'Unpacked'>, Fault> = {
   Unreadable: 'ArchiveUnreadable',
 }
 
+/** Where an archive stopped unpacking, as the fault of the import: on the entry it stopped at, if any. */
+export function stoppedAt(unpacked: Exclude<Unpacked, { _tag: 'Unpacked' }>): ImportFault {
+  return { path: 'path' in unpacked ? unpacked.path : '', fault: stopped[unpacked._tag] }
+}
+
+/**
+ * The one folder every file sits in, when there is one and no file beside it: an archive that wraps
+ * its folder in one more, as macOS's Compress writes it once its `__MACOSX` dot files are left out.
+ * A sender unwraps it, so the folder it holds is the import, named by it; the server reads the
+ * archive's root as the folder, as an export writes it.
+ */
+export function wrappingFolder(
+  files: ReadonlyArray<{ readonly path: string }>,
+): string | undefined {
+  const [first] = files
+  const [top] = first?.path.split('/') ?? []
+  if (top === undefined || first?.path === top) return undefined
+  return files.every(({ path }) => path.startsWith(`${top}/`)) ? top : undefined
+}
+
 /** An entry's path without the `/` a folder's ends with. */
 const pathOf = ({ path, kind }: ArchiveEntry) =>
   kind === 'Folder' && path.endsWith('/') ? path.slice(0, -1) : path
@@ -125,8 +145,11 @@ function clashes(seen: Map<string, Seen>, entry: ArchiveEntry, path: string): bo
   return false
 }
 
-/** Every fault of an archive's entries, in their order, one per entry at most. */
-function entryFaults(entries: ReadonlyArray<ArchiveEntry>): Array<ImportFault> {
+/**
+ * Every fault of an archive's entries, in their order, one per entry at most: the verdict on their
+ * paths, which a sender runs too before it zips a folder's files.
+ */
+export function pathFaults(entries: ReadonlyArray<ArchiveEntry>): Array<ImportFault> {
   const faults: Array<ImportFault> = []
   const seen = new Map<string, Seen>()
   for (const entry of entries) {
@@ -158,11 +181,8 @@ export function folderOf(
   name: string,
   unpacked: Unpacked,
 ): Result.Result<ImportSource, ImportRefused> {
-  if (unpacked._tag !== 'Unpacked') {
-    const path = 'path' in unpacked ? unpacked.path : ''
-    return Result.fail(refused([{ path, fault: stopped[unpacked._tag] }]))
-  }
-  const [first, ...rest] = entryFaults(unpacked.entries)
+  if (unpacked._tag !== 'Unpacked') return Result.fail(refused([stoppedAt(unpacked)]))
+  const [first, ...rest] = pathFaults(unpacked.entries)
   if (first !== undefined) return Result.fail(refused([first, ...rest]))
   const files = unpacked.entries.flatMap(({ path, kind, bytes }) =>
     kind === 'File' ? [{ path, bytes }] : [],

@@ -33,7 +33,7 @@ import {
 
 import type { Locale } from '#/paraglide/runtime'
 
-import { CallFailed, read, write } from '../calls'
+import { read, write } from '../calls'
 import { settleSubmit, submitWrite } from '../channels'
 
 /** The System's read, by the server function's name: every mode of its query key starts with it. */
@@ -169,9 +169,7 @@ export const useImportTiles = () => {
       const form = Schema.encodeSync(ImportUpload)({ upload, as, place })
       const submitted = await settleSubmit('importTiles', importTiles({ data: form }))
       if (submitted.ok) return { _tag: 'Landed', report: submitted.value, leftOut }
-      const { failure, requestId } = submitted
-      if (failure._tag !== 'ImportRefused') throw new CallFailed(failure, 'importTiles', requestId)
-      return { _tag: 'Refused', faults: failure.faults, leftOut }
+      return { _tag: 'Refused', faults: submitted.failure.faults, leftOut }
     },
     onSettled: () => client.invalidateQueries({ queryKey: [systemScope] }),
   })

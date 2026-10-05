@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import type { ArchiveEntry, Unpacked } from '#/repositories/zip/unzip'
 
 import type { ImportFault } from '../errors'
-import { archiveBounds, folderOf, pastBounds, pathFault } from './archive'
+import { archiveBounds, folderOf, pastBounds, pathFault, wrappingFolder } from './archive'
 
 // The verdict on an archive's entries, on entry lists made by hand: every path that isn't plain, a
 // symlink, an entry too deep, two paths a case-blind disk would merge, each a fault on its path, all
@@ -156,5 +156,20 @@ describe('a folder’s files against the bounds, before they are zipped', () => 
       { path: 'big.md', fault: 'FileTooLarge' },
       { path: '14.md', fault: 'UnpackedTooLarge' },
     ])
+  })
+})
+
+describe('the one folder an archive wraps its folder in', () => {
+  const paths = (...all: ReadonlyArray<string>) => all.map((path) => ({ path }))
+
+  it('is the one folder every file sits in, with no file beside it', () => {
+    expect(wrappingFolder(paths('notes/CLAUDE.md', 'notes/1-a/CLAUDE.md'))).toBe('notes')
+  })
+
+  it('is none with a file beside it, two folders, a file at the root, or no file', () => {
+    expect(wrappingFolder(paths('notes/CLAUDE.md', 'README.md'))).toBeUndefined()
+    expect(wrappingFolder(paths('a/CLAUDE.md', 'b/CLAUDE.md'))).toBeUndefined()
+    expect(wrappingFolder(paths('CLAUDE.md'))).toBeUndefined()
+    expect(wrappingFolder([])).toBeUndefined()
   })
 })

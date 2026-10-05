@@ -506,10 +506,12 @@ export function isSettingsFile(path: string): boolean {
 }
 
 /**
- * Whether bytes are a binary's, which a reading skips: not UTF-8, or holding a NUL. With `head`, they
- * are only a file's first bytes, which may end inside a character.
+ * Whether a reading skips this file as a binary, by its bytes: not UTF-8, or holding a NUL. With
+ * `head`, they are only the file's first bytes, which may end inside a character. A folder's settings
+ * are never skipped: a reading reads them, text or not, and refuses what it can't read.
  */
-export function isBinary(bytes: Uint8Array, head = false): boolean {
+export function skippedAsBinary(path: string, bytes: Uint8Array, head = false): boolean {
+  if (isSettingsFile(path)) return false
   if (!head) return textOf(bytes) === undefined
   try {
     return new TextDecoder('utf-8', { fatal: true }).decode(bytes, { stream: true }).includes('\0')
@@ -525,7 +527,7 @@ export function isBinary(bytes: Uint8Array, head = false): boolean {
  * dot files. `settings` holds the bytes of the files `isSettingsFile` names, which the sender reads
  * first, by their paths: a folder's exclusions apply as they will on the server, and one that can't be
  * read leaves nothing out, for the server to refuse. Binaries, which only their bytes tell, are
- * `isBinary`'s. The reading on the server decides again, whatever was sent.
+ * `skippedAsBinary`'s. The reading on the server decides again, whatever was sent.
  */
 export function leftOutOf<F extends { readonly path: string }>(
   files: ReadonlyArray<F>,

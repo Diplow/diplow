@@ -85,27 +85,31 @@ export function makeQueryClient() {
   })
 }
 
-/** An `Invalid` failure, which a form's submit shows on the fields it names. */
-type Invalid = Extract<Failure, { kind: 'Invalid' }>
+/**
+ * A submit's outcome: its value, or the `Invalid` failure among those its call lists, which the
+ * channel table shows on the form's fields.
+ */
+export type Submitted<A, E extends Failure> =
+  | { readonly ok: true; readonly value: A }
+  | { readonly ok: false; readonly failure: Extract<E, { kind: 'Invalid' }> }
 
 /**
- * A submit's outcome: its value, or the `Invalid` failure the channel table shows on the form's
- * fields. Any other failure is thrown, a CallFailed, for the caller to carry to its channel: a
- * mutation's through the QueryClient, `submitWrite`'s itself.
+ * Settles a submit: its value, or its `Invalid` failure, for the form to show. Any other failure is
+ * thrown, a CallFailed, for the caller to carry to its channel: a mutation's through the
+ * QueryClient, `submitWrite`'s itself.
  */
 export async function settleSubmit<A, E extends Failure>(
   scope: string,
   call: Promise<Outcome<A, E>>,
-): Promise<
-  { ok: true; value: A } | { ok: false; failure: Invalid; requestId: string | undefined }
-> {
+): Promise<Submitted<A, E>> {
   try {
     return { ok: true, value: await settle(scope, call) }
   } catch (error) {
     const failed = asCallFailed(error, scope)
     const { failure } = failed
     if (failure.kind === 'Invalid' && channelFor('submit', failure.kind) === 'fields') {
-      return { ok: false, failure, requestId: failed.requestId }
+      // The wire's failure is one the call lists, as `settle`'s value is the call's.
+      return { ok: false, failure: failure as Extract<E, { kind: 'Invalid' }> }
     }
     throw failed
   }

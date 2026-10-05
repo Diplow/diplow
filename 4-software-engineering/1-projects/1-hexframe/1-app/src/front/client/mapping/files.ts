@@ -67,12 +67,14 @@ async function filesIn(folder: FileSystemDirectoryEntry, path = ''): Promise<Arr
 
 /**
  * What a drop holds, taken while its event lasts, since its items go with it: its first file, a
- * folder read below as the browser lists it, or a file as a picked one; nothing when it holds none.
+ * folder read below as the browser lists it, or a file as a picked one; nothing when it holds none,
+ * nor for a folder where the slot takes one file alone, as its pickers offer none.
  */
 export function dropped(transfer: DataTransfer, takes: Takes): Promise<Given> | undefined {
   const item = [...transfer.items].find(({ kind }) => kind === 'file')
   const entry = item?.webkitGetAsEntry()
   if (entry && isFolder(entry)) {
+    if (takes.fileOnly) return undefined
     return filesIn(entry).then((files) => ({ _tag: 'Folder', name: entry.name, files }))
   }
   const file = item?.getAsFile()

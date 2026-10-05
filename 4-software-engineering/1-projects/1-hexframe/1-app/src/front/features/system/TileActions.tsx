@@ -192,6 +192,16 @@ interface ChangeDrawerProps {
 function ChangeDrawer({ system, tree, change, onChange, onDone }: ChangeDrawerProps) {
   const form = drawerOf(system, tree, change)
   const slot = slotChoiceOf(change)
+  // The choice stands above a new Tile's form, and above an import's pickers only, never its report.
+  const choice =
+    form !== undefined && slot !== undefined ? (
+      <SlotChoice
+        choice={change.kind}
+        onChoose={(kind) => {
+          onChange(slot[kind])
+        }}
+      />
+    ) : undefined
   return (
     <Drawer
       open={form !== undefined}
@@ -201,18 +211,13 @@ function ChangeDrawer({ system, tree, change, onChange, onDone }: ChangeDrawerPr
       title={form?.title}
       description={form?.description}
     >
-      {form !== undefined && slot !== undefined && (
-        <SlotChoice
-          choice={change.kind}
-          onChoose={(kind) => {
-            onChange(slot[kind])
-          }}
-        />
-      )}
+      {form?.kind === 'add' && choice}
       {form?.kind === 'add' && (
         <NewTileForm key={form.key} parent={form.parent} slot={form.slot} onSaved={onDone} />
       )}
-      {form?.kind === 'import' && <Import key={form.key} place={form.place} onDone={onDone} />}
+      {form?.kind === 'import' && (
+        <Import key={form.key} place={form.place} choice={choice} onDone={onDone} />
+      )}
       {form?.kind === 'edit' && <EditTileForm key={form.key} tile={form.tile} onSaved={onDone} />}
     </Drawer>
   )

@@ -2,7 +2,7 @@
 // to, the Tiles created and every file left behind, or every fault and nothing written. What it holds
 // and does is its state hook's (./state/useImportState.ts); this only shows it.
 import { cn } from 'cn'
-import { useRef, useState } from 'react'
+import { type ReactNode, useRef, useState } from 'react'
 
 import type { ImportPlace } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
@@ -13,11 +13,13 @@ import { type ReportLine, useImportState } from './state/useImportState'
 
 interface ImportProps {
   place: ImportPlace
+  /** What stands above the pickers while they wait for files, and goes once the import has answered. */
+  choice?: ReactNode
   /** Closes the drawer once the user has read the report. */
   onDone: () => void
 }
 
-export function Import({ place, onDone }: ImportProps) {
+export function Import({ place, choice, onDone }: ImportProps) {
   const { state, actions } = useImportState(place)
   if (state.phase === 'landed') {
     return (
@@ -51,7 +53,14 @@ export function Import({ place, onDone }: ImportProps) {
     )
   }
   return (
-    <Choosing fileOnly={state.fileOnly} importing={state.phase === 'importing'} actions={actions} />
+    <>
+      {choice}
+      <Choosing
+        fileOnly={state.fileOnly}
+        importing={state.phase === 'importing'}
+        actions={actions}
+      />
+    </>
   )
 }
 

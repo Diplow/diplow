@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import type { ImportFault } from '../../errors'
 import { contentBounds, previewLimit } from '../../tile'
 import type { ImportFile, ImportPlan, ImportSource, LeftOut, PlannedTile } from './plan'
-import { importOf, isBinary, isSettingsFile, leftOutOf } from './read'
+import { importOf, isSettingsFile, leftOutOf, skippedAsBinary } from './read'
 
 // Files read back into an import plan, on file lists made by hand, no zip: a vault folder read the way
 // the shape reads one, what it keeps and what it skips, its References, a file alone; then every fault
@@ -407,14 +407,16 @@ describe('what a sender leaves out before an upload', () => {
   })
 
   it('tells a binary by its bytes, whole or by its first ones, as a reading does', () => {
-    expect(isBinary(utf8.encode('# Notes, café'))).toBe(false)
-    expect(isBinary(new Uint8Array([0x89, 0x50, 0x4e, 0x47]))).toBe(true)
-    expect(isBinary(utf8.encode('a\0b'))).toBe(true)
+    // A folder's settings are read whatever they hold.
+    expect(skippedAsBinary('.hexframe/config.yaml', new Uint8Array([0xff]))).toBe(false)
+    expect(skippedAsBinary('x.md', utf8.encode('# Notes, café'))).toBe(false)
+    expect(skippedAsBinary('x.md', new Uint8Array([0x89, 0x50, 0x4e, 0x47]))).toBe(true)
+    expect(skippedAsBinary('x.md', utf8.encode('a\0b'))).toBe(true)
     // A head may end inside a character: only the bytes before it count.
     const cut = utf8.encode('café').slice(0, 4)
-    expect(isBinary(cut)).toBe(true)
-    expect(isBinary(cut, true)).toBe(false)
-    expect(isBinary(new Uint8Array([0xff, 0x41]), true)).toBe(true)
-    expect(isBinary(utf8.encode('a\0'), true)).toBe(true)
+    expect(skippedAsBinary('x.md', cut)).toBe(true)
+    expect(skippedAsBinary('x.md', cut, true)).toBe(false)
+    expect(skippedAsBinary('x.md', new Uint8Array([0xff, 0x41]), true)).toBe(true)
+    expect(skippedAsBinary('x.md', utf8.encode('a\0'), true)).toBe(true)
   })
 })
