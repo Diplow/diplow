@@ -1,0 +1,95 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/Frame.tsx
+  s_add1a77a88c179::t_51e9d083e94894 1-8,12,14-15,18,24,26,29-30,34,39,50,52,66-85
+  s_add1a77a88c179::t_0e9f72059a7839 86-88
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_add1a77a88c179::t_026707fb2a6621 101,103-112,114,117,120-122
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/geometry/geometry.ts
+  s_add1a77a88c179::t_f766e270733b3c 28
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/fixtures.ts
+  s_add1a77a88c179::t_c272347ca8de41 1-6,9-34,39-40,49,57-61,75,83-87,98-103
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help/search.test.ts
+  s_add1a77a88c179::t_571fe799e38b4a 11-16
+  s_add1a77a88c179::t_217f5b583306f0 17-23,26-27,33-34,42,45-47,50-55,59,61
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/System.tsx
+  s_add1a77a88c179::t_89f1dc94b10b58 9-11,48-60,73-84
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_add1a77a88c179::t_026707fb2a6621 101,103-112,114,117,120-122
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/view/tiles.test.ts
+  s_add1a77a88c179::t_2b0181f8b1dd01 1-88
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/view/view.ts
+  s_add1a77a88c179::t_571fe799e38b4a 38-40,157-158
+  s_add1a77a88c179::t_9875cd702910ec 1-4,7-16,37,41,44-46,51-55,57,67-68,70-74,77-80,83-93,97-99,101,103-126,128,131-133,135-138,142-144,147-156,159,162-164,167-172,174-184
+  s_add1a77a88c179::t_8ae89c717067e4 173
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/view/tiles.ts
+  s_add1a77a88c179::t_5b6b31c76a4cf9 1-76
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/geometry/shape.test.ts
+  s_add1a77a88c179::t_92e6635a72bc83 6,170,172-177
+  s_add1a77a88c179::t_a9cf19d303db3a 1-5,7-169,171,178-180
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/look.tsx
+  s_add1a77a88c179::t_893735c36a89b8 1-2,6-8,21-34,41-49,56-62,70,76-77,106-107,110,119-120,124-125,127,131,141,143,145
+  s_add1a77a88c179::t_571fe799e38b4a 35-40,50-55,80-81
+4-software-engineering/1-projects/1-hexframe/1-app/dependency-cruiser.config.ts
+  s_add1a77a88c179::t_f35b39ef8946f0 63-66,69-71,126,128,130,134-135,137,140-153
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/hex.tsx
+  s_add1a77a88c179::t_1a4fcf42501a6a 18,21-23,54
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/Canvas.tsx
+  s_add1a77a88c179::t_74e9592edf770d 15-16,99,102-103,105,107-108,115
+  s_add1a77a88c179::t_b9afda89c3aad0 2-6,10-13,26,28,46-90,92-97,100-101,104,109,111-114,116-117,119-122,124-147,150-173
+  s_add1a77a88c179::t_0ee49e8e7c4fc7 148-149
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/fixtures.ts
+  s_add1a77a88c179::t_1a4fcf42501a6a 6
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help/Help.tsx
+  s_add1a77a88c179::t_1a4fcf42501a6a 8
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/search.ts
+  s_add1a77a88c179::t_1a4fcf42501a6a 8-16,62-63,91
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/geometry/geometry.test.ts
+  s_add1a77a88c179::t_7bba98004f03bf 35-36
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/breadcrumb/Breadcrumb.tsx
+  s_add1a77a88c179::t_1a4fcf42501a6a 7-8,46
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/TileActions.tsx
+  s_add1a77a88c179::t_0ee49e8e7c4fc7 346-352
+  s_add1a77a88c179::t_1a4fcf42501a6a 16-17,81
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help/search.ts
+  s_add1a77a88c179::t_1a4fcf42501a6a 6-13,28-29,34
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/geometry/shape.ts
+  s_add1a77a88c179::t_8fe2b40ea473b8 1-21,23-24,26-108,111-112,149-150,152-159,161-165,167,169-176,178-195,199-206,213-274
+  s_add1a77a88c179::t_571fe799e38b4a 196-198,207-212
+  s_add1a77a88c179::t_9e9ed2925bde73 22,25,109-110,113-148,151,160,166,168,177
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/Tile.tsx
+  s_add1a77a88c179::t_5d2a9a4d5e9524 2-5,15,18-20,35-38,56,61-77,79,82,88,92,137,143,157-158
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/state/useCanvasState.test.ts
+  s_add1a77a88c179::t_6b8c4a0a0fdc6e 1-177
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.ts
+  s_add1a77a88c179::t_f7138505fb9385 3,9,14-16,32-33,36-39,44-45,54,74-76,80,85-99,105,109-110,116,119-120
+  s_add1a77a88c179::t_571fe799e38b4a 48-53
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/state/useCanvasState.ts
+  s_add1a77a88c179::t_69477a5e629769 1-27,29-83,86-110
+  s_add1a77a88c179::t_74e9592edf770d 84-85
+  s_add1a77a88c179::t_571fe799e38b4a 28
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/view/view.test.ts
+  s_add1a77a88c179::t_571fe799e38b4a 50-52,88-92,112-115,120-122
+  s_add1a77a88c179::t_5907a5b239ca9d 3,7,10-13,24-31,33-34,36,38-39,44-45,53,56-59,62-65,69-76,80-85,87,93,96-99,102-107,110-111,117,119,123-129,133-147,150-151,156-159,162-168,170-171,176-211,216-218,222,225-227,231-239,243-249
+  s_add1a77a88c179::t_78eeeb02f154bd 118
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/search.test.ts
+  s_add1a77a88c179::t_571fe799e38b4a 136-141
+  s_add1a77a88c179::t_217f5b583306f0 3,18,20-21,66,69-75,108-109,114-115
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.test.ts
+  s_add1a77a88c179::t_217f5b583306f0 41-48,55,87-90,99,103-104,111-114,119,121-122
+  s_add1a77a88c179::t_571fe799e38b4a 10,28,49-51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5120615267ff295c1ea155b638f4be8a8b292375",
+  "prompts": {},
+  "sessions": {
+    "s_add1a77a88c179": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d3373e9-3681-410c-a221-392366b8a522",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
