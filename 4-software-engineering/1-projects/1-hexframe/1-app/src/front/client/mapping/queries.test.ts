@@ -539,14 +539,14 @@ describe("a form's write refused, handed back", () => {
     'hand a refused create back with its message on the field it names, in %s, and no toast',
     async (language, message) => {
       overwriteGetLocale(() => language)
-      answering(undefined)
+      answering(undefined, placed)
       vi.mocked(Mapping.createTile).mockResolvedValue(refusal(titleMissing))
       const submit = await submitting(() => useCreateTileSubmit({ parent, slot: 1 }))
-      submit({ ...content, title: ' ' })
+      submit({ ...content, title: 'B' })
       await waitFor(() => {
         expect(submit.refused).toMatchObject([
           {
-            operation: { _tag: 'CreateTile', parent, slot: 1, ...content, title: ' ' },
+            operation: { _tag: 'CreateTile', parent, slot: 1, ...content, title: 'B' },
             shown: { fields: { title: message } },
           },
         ])
@@ -574,7 +574,7 @@ describe("a form's write refused, handed back", () => {
   })
 
   it('raise one toast for a refusal that names no field, and hand it back for the form', async () => {
-    answering(undefined)
+    answering(undefined, placed)
     vi.mocked(Mapping.editTile).mockResolvedValue(
       refusal({ _tag: 'TileNotFound', kind: 'NotFound' }),
     )
@@ -594,7 +594,7 @@ describe("a form's write refused, handed back", () => {
     ['the page leaves it be', () => false],
     ['no page is open to take it back', undefined],
   ] as const)('show a field refusal in a toast when %s', async (_when, take) => {
-    answering(undefined)
+    answering(undefined, placed)
     vi.mocked(Mapping.createTile).mockResolvedValue(refusal(titleMissing))
     const { result } = render(() => {
       if (take !== undefined) useSystemRefusals(take)
@@ -602,7 +602,7 @@ describe("a form's write refused, handed back", () => {
     }, makeQueryClient())
     await read(result)
     act(() => {
-      result.current.hook({ ...content, title: ' ' })
+      result.current.hook({ ...content, title: 'B' })
     })
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledExactlyOnceWith('Give this tile a title.')
