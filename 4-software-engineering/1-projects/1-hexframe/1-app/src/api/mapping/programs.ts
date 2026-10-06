@@ -32,7 +32,7 @@ const forAccount = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, 
 const changeForAccount = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, E, R>) =>
   forAccount((accountId) => transactional(operation(accountId)))
 
-/** The Account's System: its Root, the user, with everything below it. */
+/** The Account's System, flat: its Root, the user, and every Tile and Reference below it by id. */
 export const system = forAccount(Mapping.system)
 
 /**
