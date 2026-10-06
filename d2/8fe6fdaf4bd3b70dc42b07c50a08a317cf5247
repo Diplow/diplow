@@ -1,0 +1,33 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.test.ts
+  s_c6607867f8f345::t_6a95fa2a56ea29 221
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/iam/keys.ts
+  s_c6607867f8f345::t_5551f114aa5f7f 4
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE.md
+  s_c6607867f8f345::t_4ec61fff34a1a0 57,60-62
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-optimistic-writes-and-patterns/decisions.md
+  s_c6607867f8f345::t_d6ae33e7c807ee 11-12
+  s_c6607867f8f345::t_5551f114aa5f7f 59-62
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/channels.ts
+  s_c6607867f8f345::t_f61b9a06e1ab51 76-80
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/channels.test.ts
+  s_c6607867f8f345::t_6a95fa2a56ea29 1,251
+  s_c6607867f8f345::t_3f161aee164fe6 287-289
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_c6607867f8f345::t_4ec61fff34a1a0 35-36,40,49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d28fe6fdaf4bd3b70dc42b07c50a08a317cf5247",
+  "prompts": {},
+  "sessions": {
+    "s_c6607867f8f345": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4f8f3c2-2717-4700-ac6f-29d6bae7bf9e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
