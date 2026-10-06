@@ -316,7 +316,7 @@ const operate = <E>(
   })
 
 /** The id the repository makes for what a create makes, before `decide` is given it. */
-const newId = (accountId: string) => Tiles.use((tiles) => tiles.writes(accountId).newId)
+const newId = Tiles.use((tiles) => tiles.newId)
 
 /** The Tile of this id, as an Operation leaves it, for a change that answers it. */
 const answered = ({ system }: Operated, id: string) => {
@@ -333,7 +333,7 @@ const answered = ({ system }: Operated, id: string) => {
  * the Operation may carry is not honoured yet: the repository makes it.
  */
 export const createTile = (accountId: string, operation: CreateTile, kept: ToKeep = {}) =>
-  Effect.flatMap(newId(accountId), (id) =>
+  Effect.flatMap(newId, (id) =>
     Effect.flatMap(
       operate(accountId, operation, (system) => decide(system, operation, { id, kept })),
       (operated) => answered(operated, id),
@@ -373,7 +373,7 @@ export const deleteTile = (accountId: string, operation: DeleteTile) =>
  * Leaf, which has no Context.
  */
 export const createReference = (accountId: string, operation: CreateReference) =>
-  Effect.flatMap(newId(accountId), (id) =>
+  Effect.flatMap(newId, (id) =>
     Effect.asVoid(operate(accountId, operation, (system) => decide(system, operation, { id }))),
   )
 

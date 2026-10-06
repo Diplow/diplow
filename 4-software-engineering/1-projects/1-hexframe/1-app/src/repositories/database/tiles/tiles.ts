@@ -79,12 +79,7 @@ export interface BatchRow extends Omit<NewTileRow, 'parentId' | 'target'> {
 
 /** What a change may write, to the System it locked only, inside the same transaction. */
 export interface Writes {
-  /**
-   * The id a row about to be added takes, made here as every row's is, so that a change knows it
-   * before it writes the row.
-   */
-  readonly newId: Effect.Effect<string>
-  /** Adds a row under the id `newId` made for it. */
+  /** Adds a row under the id `Tiles.newId` made for it. */
   readonly insert: (
     row: NewTileRow & Pick<TileRow, 'id'>,
   ) => Effect.Effect<void, never, InTransaction>
@@ -151,6 +146,11 @@ export class Tiles extends Context.Service<
     ) => Effect.Effect<ReadonlyArray<TileRow>, never, InTransaction>
     /** What a change may write to the Account's System, once it locked it. */
     readonly writes: (accountId: string) => Writes
+    /**
+     * The id a row about to be added takes, made here as every row's is, so that a change knows it
+     * before it writes the row (`Writes.insert`).
+     */
+    readonly newId: Effect.Effect<string>
   }
 >()('hexframe/Tiles') {}
 
@@ -270,7 +270,6 @@ const make = Effect.gen(function* () {
     database.select(columns).from(tile).where(ofAccount(accountId)).pipe(Effect.orDie)
 
   const writes = (accountId: string): Writes => ({
-    newId: Effect.sync(() => crypto.randomUUID()),
     insert: (row) =>
       inTransaction(
         database
@@ -384,6 +383,7 @@ const make = Effect.gen(function* () {
           .pipe(Effect.orDie, Effect.andThen(rowsOf(accountId))),
       ),
     writes,
+    newId: Effect.sync(() => crypto.randomUUID()),
   })
 })
 
