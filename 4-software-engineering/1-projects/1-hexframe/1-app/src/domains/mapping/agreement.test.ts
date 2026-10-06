@@ -55,7 +55,9 @@ const agrees = <A, E>(accountId: string, { operation, change, made }: Run<A, E>)
     heard.length = 0
     const answer = yield* transactional(change)
     const after = yield* Mapping.system(accountId)
-    const events = Result.getOrThrow(decide(before, operation, made?.(answer, after)))
+    // An Operation that makes nothing never reads what it is given.
+    const given = made?.(answer, after) ?? { id: crypto.randomUUID() }
+    const events = Result.getOrThrow(decide(before, operation, given))
     expect(events.reduce(evolve, before)).toEqual(after)
     expect(heard).toEqual(events)
   })

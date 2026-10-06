@@ -17,7 +17,8 @@ const Body = Schema.String.check(Schema.isMaxLength(contentBounds.body))
 
 /**
  * Adds a Tile in a free slot under a Tile of the System: a Branch, a Leaf, or a Tile of its Context.
- * `id` is the one the caller chose for it; it is not honoured yet, and Mapping makes every id.
+ * `id` is the one its caller chose, so it can name the Tile before the answer comes: a Tile's already,
+ * in any System, is refused `TileIdTaken`. Without one, Mapping makes it.
  */
 export class CreateTile extends Schema.TaggedClass<CreateTile>()('CreateTile', {
   id: Schema.optionalKey(TileId),

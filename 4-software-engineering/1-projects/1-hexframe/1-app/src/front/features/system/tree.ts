@@ -117,7 +117,7 @@ export function slotOf(ring: FrameKind, direction: Direction, going?: TileNode):
  * Where a Tile stands: a Leaf in its Direction under its parent, or a Tile with what it holds, under
  * its parent in a Branch's Direction or a Context slot, or the Root, under nothing.
  */
-export type Found =
+export type Located =
   | { kind: 'leaf'; tile: LeafTile; parent: SystemTile; direction: Direction }
   | { kind: 'branch'; tile: SystemTile; parent: SystemTile; direction: Direction }
   | { kind: 'context'; tile: SystemTile; parent: SystemTile; slot: ContextDirection }
@@ -125,14 +125,14 @@ export type Found =
 
 /**
  * The Tile of this id, anywhere in the System, Leaves and Context Tiles included, and where it stands
- * (`Found`); `undefined` when no Tile has it, as for a broken Reference.
+ * (`Located`); `undefined` when no Tile has it, as for a broken Reference.
  */
-export function tileIn(system: SystemTile, id: string): Found | undefined {
+export function tileIn(system: SystemTile, id: string): Located | undefined {
   return system.id === id ? { kind: 'root', tile: system, parent: undefined } : below(system, id)
 }
 
 /** The Tile of this id below `parent`, at any depth, and where it stands. */
-function below(parent: SystemTile, id: string): Found | undefined {
+function below(parent: SystemTile, id: string): Located | undefined {
   for (const direction of directions) {
     const leaf = parent.leaves[direction]
     if (leaf?.id === id) return { kind: 'leaf', tile: leaf, parent, direction }

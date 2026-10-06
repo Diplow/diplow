@@ -304,15 +304,9 @@ const madeHere: OnTaken<never> = (taken) => Effect.die(taken)
 
 const chosen: OnTaken<TileIdTaken> = () => Effect.fail(new TileIdTaken())
 
-/** What an Operation did: the events `decide` made, in the order they were written, and the System after. */
-interface Operated {
-  readonly events: ReadonlyArray<MappingEvent>
-  readonly system: System
-}
-
 /**
  * Runs an Operation on the Account's System: locks it, loads it flat, asks `decide` through `decided`,
- * then writes one change per event, publishes the events, and answers them with the System they leave
+ * then writes one change per event, publishes the events, and answers the System they leave
  * (`evolve`). Every rule lives in `decide`: what it refuses is refused here, with nothing written and
  * nothing published. A write under an id already taken answers `onTaken`: a defect, unless the
  * Operation's caller chose the id. The bus holds what is published until the transaction commits.
@@ -334,14 +328,14 @@ const operate = <E, T = never>(
     )
     const { publish } = yield* Bus
     yield* Effect.forEach(events, publish, { discard: true })
-    return { events, system: events.reduce(evolve, system) } satisfies Operated
+    return events.reduce(evolve, system)
   })
 
 /** A fresh id, for what a create makes when its caller chose none, before `decide` is given it. */
 const newId = Tiles.use((tiles) => tiles.newId)
 
 /** The Tile of this id, as an Operation leaves it, for a change that answers it. */
-const answered = ({ system }: Operated, id: string) => {
+const answered = (system: System, id: string) => {
   const found = tileAt(system, id)
   if (found === undefined) return Effect.die(new Error('A change lost the Tile it answers'))
   const { title, preview, body } = found
@@ -357,7 +351,7 @@ const createUnder = <T>(
 ) =>
   Effect.flatMap(
     operate(accountId, operation, (system) => decide(system, operation, made), onTaken),
-    (operated) => answered(operated, made.id),
+    (system) => answered(system, made.id),
   )
 
 /** A create under an id Mapping makes, fresh: a clash on it is a defect, never `TileIdTaken`. */
@@ -385,7 +379,7 @@ export const createTile = (accountId: string, operation: CreateTile, kept: ToKee
 export const editTile = (accountId: string, operation: EditTile) =>
   Effect.flatMap(
     operate(accountId, operation, (system) => decide(system, operation)),
-    (operated) => answered(operated, operation.id),
+    (system) => answered(system, operation.id),
   )
 
 /**

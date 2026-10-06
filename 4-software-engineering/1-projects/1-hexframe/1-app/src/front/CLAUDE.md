@@ -7,7 +7,7 @@ preview: >-
   compose, the design system, and the client's side of the API, which calls
   the server functions and carries each failure to its channel. Nothing below
   it, the API layer included, may import it; it reaches the server through
-  src/api/ only.
+  src/api/ only, and a domain through its door alone.
 ---
 # front
 

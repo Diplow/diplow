@@ -1,6 +1,7 @@
 // Every error channel, provoked: a read, a read that frames every page, a write and a form's submit,
 // each ending with the outcome a button asks for, through the server function helper. The form submits
-// through a mutation, as the Tile forms do.
+// through a mutation and waits for its answer (`submitMutation`), as a form that stays open does; the
+// Tile forms close as they send and get a refusal back reopened (`useSystemRefusals`).
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'

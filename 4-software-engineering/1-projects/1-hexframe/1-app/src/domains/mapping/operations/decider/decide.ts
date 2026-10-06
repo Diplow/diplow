@@ -185,7 +185,10 @@ const deleteReference = (
   )
 }
 
-/** What a create was decided without: the id of what it makes, which its caller always gives. */
+/**
+ * The id of what a create makes, which every overload taking a create requires: absent only to the
+ * implementation, which also serves the Operations that make nothing.
+ */
 function given(made: Made | undefined): Made {
   if (made === undefined) throw new Error('A create was decided without the id of what it makes')
   return made
@@ -208,7 +211,11 @@ export function decide(
   made: Made,
 ): Decided<'CreateReference'>
 export function decide(system: System, operation: DeleteReference): Decided<'DeleteReference'>
-export function decide(system: System, operation: Operation, made?: Made): Decided
+export function decide(
+  system: System,
+  operation: Exclude<Operation, CreateTile | CreateReference>,
+): Decided
+export function decide(system: System, operation: Operation, made: Made): Decided
 export function decide(system: System, operation: Operation, made?: Made): Decided {
   if (!system.owned) return refused(new HelpReadOnly())
   switch (operation._tag) {
