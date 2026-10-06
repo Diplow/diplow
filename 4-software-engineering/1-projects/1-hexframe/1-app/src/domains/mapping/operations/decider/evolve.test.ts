@@ -1,7 +1,7 @@
-import { Result } from 'effect'
+import { Result, Schema } from 'effect'
 import { describe, expect, it } from 'vitest'
 
-import { type PlacedTile, type Slot, type System, systemOf } from '../../entities'
+import { Name, type PlacedTile, type Slot, type System, systemOf } from '../../entities'
 import {
   decide,
   evolve,
@@ -57,7 +57,7 @@ describe('evolve, a System after one of its events', () => {
         title: 'New',
         preview: '',
         body: 'Body',
-        name: 'new.md',
+        name: Schema.decodeUnknownSync(Name)('new.md'),
       }),
       new ReferenceCreated({ id: 'link', parent: 'new', slot: -3, target: 'leaf' }),
     )

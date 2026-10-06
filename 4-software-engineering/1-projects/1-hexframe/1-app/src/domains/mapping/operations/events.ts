@@ -3,20 +3,16 @@
 // Account, no Session, no Key, which the API layer puts on the bus's envelope. Pure.
 import { Schema } from 'effect'
 
-import { ContextDirection, Slot } from '../entities'
+import { ContextDirection, Frontmatter, Name, Slot, TileConfig } from '../entities'
 
-/** What a Tile kept from the file it was imported from, each part checked before (`entities/kept/`). */
+/**
+ * What a Tile keeps from the file it was imported from, each part by the Schema that checked it before
+ * it was stored (`entities/kept/`), so an event holds nothing a write would refuse.
+ */
 const kept = {
-  name: Schema.optionalKey(Schema.String),
-  config: Schema.optionalKey(
-    Schema.Struct({
-      fileName: Schema.optionalKey(Schema.String),
-      folderPattern: Schema.optionalKey(Schema.String),
-    }),
-  ),
-  frontmatter: Schema.optionalKey(
-    Schema.Record(Schema.String, Schema.Union([Schema.String, Schema.Finite, Schema.Boolean])),
-  ),
+  name: Schema.optionalKey(Name),
+  config: Schema.optionalKey(TileConfig),
+  frontmatter: Schema.optionalKey(Frontmatter),
 }
 
 /**
