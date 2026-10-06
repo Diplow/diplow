@@ -100,13 +100,13 @@ const readAgain = { ...system, root: { ...system.root, title: 'Read again' } } a
 
 /**
  * Each server function stand-in answers `value`; the System's answers the System above, then, read
- * again, `readAgain`.
+ * again, `readAgain`, each also holding the `placed` Tiles.
  */
-function answering(value: unknown) {
+function answering(value: unknown, placed: Record<string, unknown> = {}) {
   const ok = (answer: unknown) => () => Promise.resolve({ ok: true, value: answer })
   vi.mocked(Mapping.system)
-    .mockImplementationOnce(ok(system) as never)
-    .mockImplementation(ok(readAgain) as never)
+    .mockImplementationOnce(ok({ ...system, tiles: { ...system.tiles, ...placed } }) as never)
+    .mockImplementation(ok({ ...readAgain, tiles: { ...readAgain.tiles, ...placed } }) as never)
   for (const call of [
     Mapping.createTile,
     Mapping.editTile,
@@ -441,21 +441,12 @@ const parent = crypto.randomUUID()
 const tileId = crypto.randomUUID()
 
 /**
- * The System's stand-in answers as `answering` has it, both reads also holding `parent` and the Tile
- * `tileId` under it, so a create under one or an edit of the other is the server's alone to refuse:
- * the client, deciding on that System, foresees nothing and sends it.
+ * `parent`, and the Tile `tileId` under it, for a System to hold, so a create under one or an edit of
+ * the other is the server's alone to refuse: the client, deciding on that System, sends it.
  */
-function holdingTiles() {
-  const placed = {
-    [parent]: { _tag: 'Tile', id: parent, title: 'P', preview: '', body: '', parent: 'root', slot: 3 },
-    [tileId]: { _tag: 'Tile', id: tileId, ...content, parent, slot: 2 },
-  }
-  const ok = (answer: typeof system) => () =>
-    Promise.resolve({ ok: true, value: { ...answer, tiles: { ...answer.tiles, ...placed } } })
-  vi.mocked(Mapping.system)
-    .mockReset()
-    .mockImplementationOnce(ok(system) as never)
-    .mockImplementation(ok(readAgain) as never)
+const placed = {
+  [parent]: { _tag: 'Tile', id: parent, ...content, parent: 'root', slot: 3 },
+  [tileId]: { _tag: 'Tile', id: tileId, ...content, parent, slot: 2 },
 }
 
 /**
@@ -566,8 +557,7 @@ describe("a form's write refused, handed back", () => {
   )
 
   it('hand a refused edit back once the System read again has landed', async () => {
-    answering(undefined)
-    holdingTiles()
+    answering(undefined, placed)
     vi.mocked(Mapping.editTile).mockResolvedValue(refusal(titleMissing))
     const submit = await submitting(() => useEditTileSubmit({ id: tileId, ...content }))
     submit({ ...content, title: 'B' })
@@ -620,8 +610,7 @@ describe("a form's write refused, handed back", () => {
   })
 
   it('hand a refusal to a page opened while the System was read again, and raise no toast', async () => {
-    answering(undefined)
-    holdingTiles()
+    answering(undefined, placed)
     vi.mocked(Mapping.createTile).mockResolvedValue(refusal(titleMissing))
     const client = makeQueryClient()
     const { result } = render(() => useCreateTileSubmit({ parent, slot: 1 }), client)
