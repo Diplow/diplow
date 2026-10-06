@@ -218,7 +218,7 @@ describe("Mapping's hooks", () => {
 
   it('send the System’s writes one after another, each once the one before it settled', async () => {
     answering(undefined)
-    let refuse = (_: unknown) => undefined as unknown
+    let refuse: (outcome: Awaited<ReturnType<typeof Mapping.moveTile>>) => void = () => undefined
     vi.mocked(Mapping.moveTile).mockReturnValue(
       new Promise((resolve) => {
         refuse = resolve

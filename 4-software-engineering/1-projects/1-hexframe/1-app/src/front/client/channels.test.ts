@@ -1,4 +1,4 @@
-import type { Query } from '@tanstack/react-query'
+import type { MutationOptions, Query } from '@tanstack/react-query'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { toast } from '#/front/ui/feedback/Toaster'
@@ -248,7 +248,7 @@ describe("the QueryClient's channels", () => {
   })
 
   /** Runs a mutation of the client above, for the error it ends with. */
-  const executed = (options: Parameters<ReturnType<typeof client.getMutationCache>['build']>[1]) =>
+  const executed = <A>(options: MutationOptions<A, CallFailed, undefined>) =>
     client.getMutationCache().build(client, options).execute(undefined)
 
   it("raises one toast for a write's failure", async () => {
@@ -284,9 +284,9 @@ describe("the QueryClient's channels", () => {
   it('reports a write that never reached the server under the scope its key names', async () => {
     const report = vi.spyOn(console, 'error').mockImplementation(() => undefined)
     const lost = new TypeError('Failed to fetch')
-    await expect(executed(write('provokeWrite', () => Promise.reject(lost)))).rejects.toBeInstanceOf(
-      CallFailed,
-    )
+    await expect(
+      executed(write('provokeWrite', () => Promise.reject(lost))),
+    ).rejects.toBeInstanceOf(CallFailed)
     expect(report).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ cause: lost }), {
       scope: 'provokeWrite',
       kind: 'Unexpected',

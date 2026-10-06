@@ -73,8 +73,11 @@ export function makeQueryClient() {
     }),
     mutationCache: new MutationCache({
       onError: (error, _variables, _result, mutation) => {
-        const scope = String(mutation.options.mutationKey?.[0] ?? 'write')
-        raise(asCallFailed(error, scope), mutation.meta?.call ?? 'write')
+        const [scope] = mutation.options.mutationKey ?? []
+        raise(
+          asCallFailed(error, typeof scope === 'string' ? scope : 'write'),
+          mutation.meta?.call ?? 'write',
+        )
       },
     }),
     defaultOptions: {
