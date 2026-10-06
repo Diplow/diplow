@@ -136,7 +136,7 @@ const takersOf = new WeakMap<QueryClient, Set<{ readonly current: Take }>>()
  * (`unshown`), so none is lost. An import, which is no Operation, is no refusal here: its drawer
  * shows its own. Made with the client's first System write or page, and kept as long as the client.
  */
-function takersFor(client: QueryClient) {
+function listenForRefusals(client: QueryClient) {
   const known = takersOf.get(client)
   if (known !== undefined) return known
   const takers = new Set<{ readonly current: Take }>()
@@ -162,7 +162,7 @@ function takersFor(client: QueryClient) {
 }
 
 /**
- * Hands `take` each write to the System refused while the component is mounted (`takersFor`); `take`
+ * Hands `take` each write to the System refused while the component is mounted (`listenForRefusals`); `take`
  * answers whether the page shows it. React registers it once, through `useSyncExternalStore`, which
  * never re-renders here: the snapshot is always the same.
  */
@@ -172,7 +172,7 @@ export function useSystemRefusals(take: Take) {
   const latest = useRef(take)
   latest.current = take
   const subscribe = useCallback(() => {
-    const takers = takersFor(client)
+    const takers = listenForRefusals(client)
     takers.add(latest)
     return () => {
       takers.delete(latest)
@@ -203,8 +203,8 @@ function useSystemWrite<I, A, E extends Failure>(
   return useMutation({
     ...writing(scope, { as, queue: systemQueue }),
     mutationFn: (input: I) => {
-      // Its refusal reaches the page, or a toast, whether or not a page is open by then.
-      takersFor(client)
+      // Its refusal reaches a page, or a toast, whether or not a page is open by then.
+      listenForRefusals(client)
       const held = client.getQueryData(systemRead.queryKey)
       const operation = operationOf(scope, input)
       const refusal =

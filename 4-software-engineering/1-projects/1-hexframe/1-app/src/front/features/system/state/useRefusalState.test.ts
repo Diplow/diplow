@@ -171,6 +171,24 @@ describe('a refused create', () => {
     })
     expect(viewOf(page.url()).center).toBe(id.root)
   })
+  it('reopens nothing under a parent gone, and shows why in a toast', async () => {
+    const page = await rendered()
+    page.send(() => {
+      page.result.current.create.mutate({
+        id: crypto.randomUUID(),
+        parent: crypto.randomUUID(),
+        slot: 1,
+        title: 'C',
+        preview: '',
+        body: '',
+      })
+    })
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledOnce()
+    })
+    expect(changeOf(page.url())).toEqual({ kind: 'none' })
+    expect(page.reopened()).toBeUndefined()
+  })
 })
 
 describe('a refused edit', () => {

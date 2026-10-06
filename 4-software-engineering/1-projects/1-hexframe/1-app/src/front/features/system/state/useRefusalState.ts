@@ -85,7 +85,9 @@ function changeBack({ operation, system }: Refused): Back | undefined {
   const held = (id: string) => (system === undefined ? undefined : tileAt(system, id))
   switch (operation._tag) {
     case 'CreateTile': {
+      // A parent gone has no slot to open a form in.
       const { parent, slot, title, preview, body } = operation
+      if (held(parent) === undefined) return undefined
       return { change: { kind: 'add', parent, slot }, content: { title, preview, body } }
     }
     case 'EditTile': {
