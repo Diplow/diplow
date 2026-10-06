@@ -1,0 +1,52 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/System.tsx
+  s_c6607867f8f345::t_d09a4919d8f8ff 3-4,9,11,30,42,72-75,89,99
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/channels.ts
+  s_c6607867f8f345::t_61de1341abac34 14,36-37,41
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.test.ts
+  s_c6607867f8f345::t_ffe34827249eda 9,461,468-473
+  s_c6607867f8f345::t_e7c90a22bf5599 93-99,102-104,131-149,216,219,230,240,252,283,288-289,338,362,403,454,457,480,538
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useCenteredTileState.test.ts
+  s_c6607867f8f345::t_718e4ccbee8fa2 16-17,129,131-132,134-141,145,148,152,169
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/TileActions.tsx
+  s_c6607867f8f345::t_d09a4919d8f8ff 168
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_c6607867f8f345::t_a77f57d43e2cdf 68
+  s_c6607867f8f345::t_718e4ccbee8fa2 65,263-264
+  s_c6607867f8f345::t_c468add48d2956 52,254-255
+  s_c6607867f8f345::t_f3c8c973f14eb3 3-4,6-8,10-17,19,26,61-64,67,69-72,75-79,81-85,87-97,107-110,119-127
+  s_c6607867f8f345::t_4d5f6d28911c16 66
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/overlay/overlay.ts
+  s_c6607867f8f345::t_225415550de328 41
+  s_c6607867f8f345::t_eacf3b6db6f043 1-40,42-47,49-64
+  s_c6607867f8f345::t_6a89af0b9346cd 48
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/feedback/useLeaveGuard.ts
+  s_c6607867f8f345::t_486f768e8cf58a 1-17
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useCenteredTileState.ts
+  s_c6607867f8f345::t_d09a4919d8f8ff 13,32,34
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/overlay/overlay.test.ts
+  s_c6607867f8f345::t_f02c3f68992b1c 156-158
+  s_c6607867f8f345::t_ee4ba576688286 1-155,159-186,188-238,243-262
+  s_c6607867f8f345::t_6733eafc3037e1 187
+  s_c6607867f8f345::t_c407207e17482a 239-242
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/calls.ts
+  s_c6607867f8f345::t_61de1341abac34 26-36
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/feedback/useLeaveGuard.test.ts
+  s_c6607867f8f345::t_718e4ccbee8fa2 18-23,30-35
+  s_c6607867f8f345::t_ed6712c1ddca18 1-17,24-29,36-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2e5bfce3091128d97af12a088d20e7385c881f0b",
+  "prompts": {},
+  "sessions": {
+    "s_c6607867f8f345": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4f8f3c2-2717-4700-ac6f-29d6bae7bf9e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
