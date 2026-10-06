@@ -40,6 +40,7 @@ import {
   type DeleteTile,
   type EditTile,
   evolve,
+  type Made,
   type MappingEvent,
   type MoveTile,
   type Operation,
@@ -343,23 +344,51 @@ const answered = ({ system }: Operated, id: string) => {
   return Effect.succeed({ id: found.id, title, preview, body } satisfies Tile)
 }
 
+/** A create under this id, which a write under it, taken, answers by `onTaken`. */
+const createUnder = <T>(
+  accountId: string,
+  operation: CreateTile,
+  made: Made & { readonly kept: ToKeep },
+  onTaken: OnTaken<T>,
+) =>
+  Effect.flatMap(
+    operate(accountId, operation, (system) => decide(system, operation, made), onTaken),
+    (operated) => answered(operated, made.id),
+  )
+
+/** A create under an id Mapping makes, fresh: a clash on it is a defect, never `TileIdTaken`. */
+const underNewId = (accountId: string, operation: CreateTile, kept: ToKeep) =>
+  Effect.flatMap(newId, (id) => createUnder(accountId, operation, { id, kept }, madeHere))
+
+/** A create under the id its caller chose, which a Tile of any System may have: `TileIdTaken`. */
+const underChosenId = (accountId: string, operation: CreateTile, id: string, kept: ToKeep) =>
+  createUnder(accountId, operation, { id, kept }, chosen)
+
+/** A create whose caller chose no id, as an agent's through the MCP: Mapping makes it. */
+export type UnnamedCreate = CreateTile & { readonly id?: undefined }
+
+/** What a create runs: under an id Mapping makes, never refused for it, or under any. */
+export type CreatingUnnamed = ReturnType<typeof underNewId>
+export type Creating = CreatingUnnamed | ReturnType<typeof underChosenId>
+
 /**
  * Adds a Tile in a free slot under a Tile of the System, never under a Leaf: a Branch, a Leaf, or a
  * Tile of its Context, and answers it. Its id is the one the Operation carries, which its caller
  * chose so it can name the Tile before the answer comes: a Tile's already, in any System, is
  * `TileIdTaken`, and nothing is written. Without one, Mapping makes it, and its clash is a defect,
- * never a refusal. An import gives it what it keeps from its files, each part already checked
- * (`entities/kept/`); nothing else does, and no later change touches them.
+ * never a refusal, which the first signature says. An import gives it what it keeps from its files,
+ * each part already checked (`entities/kept/`); nothing else does, and no later change touches them.
  */
-export const createTile = (accountId: string, operation: CreateTile, kept: ToKeep = {}) => {
-  const create = <T>(id: string, onTaken: OnTaken<T>) =>
-    Effect.flatMap(
-      operate(accountId, operation, (system) => decide(system, operation, { id, kept }), onTaken),
-      (operated) => answered(operated, id),
-    )
+export function createTile(
+  accountId: string,
+  operation: UnnamedCreate,
+  kept?: ToKeep,
+): CreatingUnnamed
+export function createTile(accountId: string, operation: CreateTile, kept?: ToKeep): Creating
+export function createTile(accountId: string, operation: CreateTile, kept: ToKeep = {}) {
   return operation.id === undefined
-    ? Effect.flatMap(newId, (id) => create(id, madeHere))
-    : create(operation.id, chosen)
+    ? underNewId(accountId, operation, kept)
+    : underChosenId(accountId, operation, operation.id, kept)
 }
 
 /** Changes what a Tile says, any of its Title, its Preview and its Body as given, and answers it. */
