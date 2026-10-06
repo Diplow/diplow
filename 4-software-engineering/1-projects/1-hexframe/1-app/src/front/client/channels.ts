@@ -1,6 +1,7 @@
 // The channels, carried out: each failure goes where the channel table (src/api/errors/channel.ts) sends it,
-// so a feature writes no error handling. Reads and writes are wired in the QueryClient, a form's submit
-// in `submitWrite`; ReadBoundary shows what belongs in the nearest boundary.
+// so a feature writes no error handling. Reads and writes, a form's included, are wired in the
+// QueryClient, and a form shows its write's refusal through `submitMutation`; `submitWrite` is a form's
+// submit kept out of every cache, for a secret; ReadBoundary shows what belongs in the nearest boundary.
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query'
 
 import { deLocalizeHref, localizeHref } from '#/paraglide/runtime'
@@ -30,9 +31,9 @@ function signIn() {
 
 /**
  * Carries out the channels that show nothing in place: the sign-in redirect and the toast. The
- * boundary's states and a form's fields are shown where they belong, by ReadBoundary and
- * `submitWrite`. The report is the server's: it logged every failure it sent, with the request id,
- * so the client reports only a call that never reached it.
+ * boundary's states and a form's fields are shown where they belong, by ReadBoundary and the form's
+ * submit (`submitMutation`, `submitWrite`). The report is the server's: it logged every failure it
+ * sent, with the request id, so the client reports only a call that never reached it.
  */
 function raise(failed: CallFailed, call: Call) {
   const { failure, scope } = failed
@@ -60,7 +61,8 @@ function showsInBoundary(error: unknown, scope: string) {
 
 /**
  * The client's QueryClient, one per router: every read's and write's failure goes to its channel. A
- * query that did not come from `read` counts as a read, and its scope is its key's first part.
+ * query that did not come from `read` counts as a read, a mutation that did not come from `write` as a
+ * write, and the scope of either is its key's first part.
  */
 export function makeQueryClient() {
   return new QueryClient({
@@ -70,8 +72,12 @@ export function makeQueryClient() {
       },
     }),
     mutationCache: new MutationCache({
-      onError: (error) => {
-        raise(asCallFailed(error, 'write'), 'write')
+      onError: (error, _variables, _result, mutation) => {
+        const [scope] = mutation.options.mutationKey ?? []
+        raise(
+          asCallFailed(error, typeof scope === 'string' ? scope : 'write'),
+          mutation.meta?.call ?? 'write',
+        )
       },
     }),
     defaultOptions: {
@@ -95,8 +101,8 @@ export type Submitted<A, E extends Failure> =
 
 /**
  * Settles a submit: its value, or its `Invalid` failure, for the form to show. Any other failure is
- * thrown, a CallFailed, for the caller to carry to its channel: a mutation's through the
- * QueryClient, `submitWrite`'s itself.
+ * thrown, a CallFailed, for the mutation that made the call to carry to its channel, through the
+ * QueryClient.
  */
 export async function settleSubmit<A, E extends Failure>(
   scope: string,
@@ -115,6 +121,48 @@ export async function settleSubmit<A, E extends Failure>(
   }
 }
 
+/** What a form shows of its write's failure, for TanStack Form: on the fields, or on the form. */
+export type FormErrors = { fields: Record<string, string> } | { form: string }
+
+/**
+ * What a form shows of the failure its write met, which its channel has carried out already: an
+ * `Invalid` refusal's message on each field it names; any other's on the form, which keeps the submit
+ * from counting as done.
+ */
+function shownOnForm({ failure, scope }: CallFailed): FormErrors {
+  const message = messageFor(failure, scope)
+  if (failure.kind === 'Invalid' && channelFor('submit', failure.kind) === 'fields') {
+    return { fields: Object.fromEntries(failure.fields.map((field) => [field, message])) }
+  }
+  return { form: message }
+}
+
+interface SubmitMutation<V, A> {
+  /** Sends the form's value through the write's mutation, `mutateAsync`, as a `submit` (`write`). */
+  mutate: (value: V) => Promise<A>
+  onSaved: (value: A) => void
+}
+
+/**
+ * A form's submit through a mutation, as the form's `validators.onSubmitAsync`: the QueryClient carries
+ * its failure to its channel, as any write's, and the form shows the mutation's error, an `Invalid`
+ * one on the fields it names. A bug in `onSaved` is no write's failure: it is thrown, not shown.
+ */
+export function submitMutation<V, A>({ mutate, onSaved }: SubmitMutation<V, A>) {
+  return async ({ value }: { value: V }): Promise<FormErrors | undefined> => {
+    let saved: A
+    try {
+      saved = await mutate(value)
+    } catch (error) {
+      // A write's mutation throws the CallFailed its call settled to, which names its scope; anything
+      // else is Unexpected, whose message no scope narrows, and the QueryClient reported it.
+      return shownOnForm(asCallFailed(error, 'write'))
+    }
+    onSaved(saved)
+    return undefined
+  }
+}
+
 interface SubmitWrite<I, A, E extends Failure> {
   scope: string
   call: (input: I) => Promise<Outcome<A, E>>
@@ -122,29 +170,24 @@ interface SubmitWrite<I, A, E extends Failure> {
 }
 
 /**
- * A form's submit that writes, as the form's `validators.onSubmitAsync`: an `Invalid` failure shows on
- * the fields it names, any other goes to its channel and keeps the submit from counting as done.
+ * A form's submit that writes outside every cache, as the form's `validators.onSubmitAsync`, for a
+ * write whose input or answer is a secret no cache may keep: a password, a Key's secret. An `Invalid`
+ * failure shows on the fields it names, any other goes to its channel and keeps the submit from
+ * counting as done.
  */
 export function submitWrite<I, A, E extends Failure>({
   scope,
   call,
   onSaved,
 }: SubmitWrite<I, A, E>) {
-  return async ({ value }: { value: I }) => {
+  return async ({ value }: { value: I }): Promise<FormErrors | undefined> => {
     try {
-      const submitted = await settleSubmit(scope, call(value))
-      if (submitted.ok) {
-        onSaved(submitted.value)
-        return undefined
-      }
-      const message = messageFor(submitted.failure, scope)
-      return {
-        fields: Object.fromEntries(submitted.failure.fields.map((field) => [field, message])),
-      }
+      onSaved(await settle(scope, call(value)))
+      return undefined
     } catch (error) {
       const failed = asCallFailed(error, scope)
       raise(failed, 'submit')
-      return { form: messageFor(failed.failure, scope) }
+      return shownOnForm(failed)
     }
   }
 }

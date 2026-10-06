@@ -1,7 +1,7 @@
 // The Account's Keys on the client, over IAM's server functions (src/api/iam/iam.ts): the Keys, read as
 // one query; issuing one, as a form's submit; revoking one. Every write reads the Keys again once it
 // settles, failed or not. A Key's secret is in issuing's answer only: it goes to the caller, and no
-// cache keeps it, since a form's submit is no mutation.
+// cache keeps it, since issuing is no mutation but a `submitWrite`, which no cache sees.
 // Failures go to their channels (../channels.ts): a hook's caller handles none.
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 

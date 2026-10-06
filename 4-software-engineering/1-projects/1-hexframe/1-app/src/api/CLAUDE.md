@@ -54,11 +54,12 @@ export const moveTile = createServerFn({ method: 'POST' })
 | a write | anything else | one toast |
 
 - **The message table** is keyed by `_tag`, optionally narrowed by a scope (the server function's name, which the call names, and which the MCP tool running the same operation names too; for a change to a System, the name of Mapping's Operation, which the type of the table's `scope` takes from the union), first match wins, with a fallback per kind, in both languages. The server's own sentence never reaches the screen.
-- **A feature writes no error handling**: components never `try/catch` a call, reducers never hold an error. The QueryClient, `submitWrite` and `settleSubmit` (`src/front/client/`) send each failure to its channel:
+- **A feature writes no error handling**: components never `try/catch` a call, reducers never hold an error. The QueryClient, `submitMutation`, `submitWrite` and `settleSubmit` (`src/front/client/`) send each failure to its channel:
   - a read a page shows is `useQuery(read({ scope, key, call }))`, inside a `ReadBoundary`;
   - a read that frames every page is `useQuery(read({ scope, key, call, frame: true }))`, with no boundary: its failure is reported and it renders nothing;
-  - a write is `useMutation(write(scope, call))`;
-  - a form's write is `validators.onSubmitAsync: submitWrite({ scope, call, onSaved })`;
+  - a write is `useMutation(write(scope, call))`, its failure carried out by the QueryClient for the call its meta names;
+  - a form's write is a mutation too, `useMutation(write(scope, call, { as: 'submit' }))`, which the form sends through `validators.onSubmitAsync: submitMutation({ mutate: mutateAsync, onSaved })`: an `Invalid` refusal shows on the fields it names, any other in its channel;
+  - a form's write whose input or answer is a secret no cache may keep, a password or a Key's secret, is `validators.onSubmitAsync: submitWrite({ scope, call, onSaved })`, which carries its failure out itself;
   - a write whose form is not TanStack Form's, an import's files, settles through `settleSubmit`, which answers the `Invalid` failure its form shows and throws any other for the mutation's channel.
 
 Adapted from the error model of a previous project; its channels survive, its HTTP statuses become kinds.
