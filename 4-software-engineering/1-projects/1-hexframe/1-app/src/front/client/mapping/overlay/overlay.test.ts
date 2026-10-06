@@ -16,6 +16,7 @@ import {
   useCreateTileSubmit,
   useEditTile,
   useMoveTile,
+  useSwapTiles,
   useSystem,
   useSystemRefusals,
   useSystemWriting,
@@ -31,6 +32,7 @@ vi.mock('#/api/mapping/mapping', () => ({
   createTile: vi.fn(),
   editTile: vi.fn(),
   moveTile: vi.fn(),
+  swapTiles: vi.fn(),
 }))
 vi.mock('#/front/ui/feedback/Toaster', () => ({ toast: { error: vi.fn() } }))
 vi.mock('#/api/observability/client', async (original) => ({
@@ -195,6 +197,30 @@ describe('the System the page shows', () => {
     expect(first).toBeGreaterThan(0)
     expect(shownEach.slice(first).map((shown) => shown?.tiles[id.a]?.slot)).not.toContain(1)
   })
+
+  it('never swaps two Tiles back when a read lands holding their swap before its answer does', async () => {
+    const swapped = later<unknown>()
+    vi.mocked(Mapping.swapTiles).mockReturnValue(swapped.promise as never)
+    const { result, client, shownEach } = await rendered(useSwapTiles)
+    act(() => {
+      result.current.hook.mutate({ a: id.a, b: id.b })
+    })
+    await waitFor(() => {
+      expect(Mapping.swapTiles).toHaveBeenCalled()
+    })
+    expect(result.current.shown?.tiles[id.a]).toMatchObject({ slot: 2 })
+    serving(servedWith(branch(id.a, 'A', 2), branch(id.b, 'B', 1)))
+    await act(() => client.refetchQueries({ queryKey: ['system'] }))
+    await waitFor(() => {
+      expect(client.getQueryData<System>(['system', 'read'])?.tiles[id.a]).toMatchObject({
+        slot: 2,
+      })
+    })
+    expect(result.current.writing).toBe(true)
+    const first = shownEach.findIndex((shown) => shown?.tiles[id.a]?.slot === 2)
+    expect(shownEach.slice(first).map((shown) => shown?.tiles[id.a]?.slot)).not.toContain(1)
+    expect(result.current.shown?.tiles[id.b]).toMatchObject({ slot: 1 })
+  })
 })
 
 describe('a refusal foreseen', () => {
@@ -274,6 +300,19 @@ describe('the overlay', () => {
     ])
     expect(shown.tiles[id.a]).toMatchObject({ slot: 4 })
     expect(shown.tiles[id.b]).toMatchObject({ slot: 1 })
+  })
+
+  it('folds a swap the System does not hold yet, and leaves alone one it already holds', () => {
+    const swappedBack = servedWith(branch(id.a, 'A', 2), branch(id.b, 'B', 1))
+    const swap = { name: 'swapTiles', variables: { a: id.a, b: id.b } }
+    const pending = [
+      { turn: 1, ...swap, before: served },
+      { turn: 2, ...swap, before: swappedBack },
+    ]
+    expect(overlaid(served, pending.slice(0, 1)).tiles[id.a]).toMatchObject({ slot: 2 })
+    expect(overlaid(swappedBack, pending.slice(0, 1)).tiles[id.a]).toMatchObject({ slot: 2 })
+    expect(overlaid(served, pending).tiles[id.a]).toMatchObject({ slot: 1 })
+    expect(overlaid(swappedBack, pending).tiles[id.a]).toMatchObject({ slot: 1 })
   })
 
   it('reads no Operation from an import, nor from fields Mapping’s schema refuses', () => {

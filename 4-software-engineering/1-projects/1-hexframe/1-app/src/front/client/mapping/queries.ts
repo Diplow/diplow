@@ -73,12 +73,36 @@ const readAgain = (client: QueryClient) =>
 /** Whether a mutation is a write to the System, an import's included: one of its queue. */
 const inSystemQueue = (mutation: Mutation) => mutation.options.scope?.id === systemQueue
 
-/** A pending write to the System, as the overlay folds it: its turn, its name, its variables. */
+/** What a write to the System records when it is made: the System shown then, if one had landed. */
+interface Recorded {
+  readonly before: System | undefined
+}
+
+/**
+ * A pending write to the System, as the overlay folds it: its turn, its name, its variables, and the
+ * System shown when it was made.
+ */
 const pendingOf = (mutation: Mutation): Pending => ({
   turn: mutation.mutationId,
   name: mutation.options.mutationKey?.[0],
   variables: mutation.state.variables,
+  before: (mutation.state.context as Recorded | undefined)?.before,
 })
+
+/**
+ * The System shown as a write with these variables is made: the server's, with every write to it
+ * already pending folded over it, this one aside.
+ */
+function shownBefore(client: QueryClient, variables: unknown): Recorded {
+  const held = client.getQueryData(systemRead.queryKey)
+  if (held === undefined) return { before: undefined }
+  const pending = client
+    .getMutationCache()
+    .findAll({ status: 'pending', predicate: inSystemQueue })
+    .filter((mutation) => mutation.state.variables !== variables)
+    .map(pendingOf)
+  return { before: overlaid(held, pending) }
+}
 
 /**
  * The Account's System as the page shows it: the server's, with every write to it still pending
@@ -212,6 +236,7 @@ function useSystemWrite<I, A, E extends Failure>(
       if (refusal !== undefined) return Promise.reject(new Foreseen(refusal, scope))
       return settle(scope, call(input))
     },
+    onMutate: (input: I): Recorded => shownBefore(client, input),
     onSettled: () => readAgain(client),
   })
 }
