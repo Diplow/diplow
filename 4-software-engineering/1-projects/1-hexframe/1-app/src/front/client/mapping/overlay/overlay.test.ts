@@ -211,7 +211,7 @@ describe('a refusal foreseen', () => {
     expect(result.current.shown?.tiles[id.a]).toMatchObject({ slot: 1 })
   })
 
-  it('sends an untitled Tile nowhere, and hands its form why, on its field', async () => {
+  it('sends an untitled Tile nowhere, and hands its form why, on its field, once the System read again has landed', async () => {
     const refused: Refused[] = []
     const { result } = await rendered(() => {
       useSystemRefusals((refusal) => {
@@ -220,6 +220,9 @@ describe('a refusal foreseen', () => {
       })
       return useCreateTileSubmit({ parent: id.root, slot: 3 })
     })
+    // Read again, the System comes back retitled, so the refusal says which read it was handed after.
+    const readAgain = { ...served, root: { ...served.root, title: 'Read again' } }
+    serving(readAgain)
     act(() => {
       result.current.hook({ title: '', preview: '', body: '' })
     })
@@ -228,10 +231,11 @@ describe('a refusal foreseen', () => {
         {
           operation: { _tag: 'CreateTile', parent: id.root, slot: 3, title: '' },
           shown: { fields: { title: 'Give this tile a title.' } },
-          system: served,
+          system: readAgain,
         },
       ])
     })
+    expect(Mapping.system).toHaveBeenCalledTimes(2)
     expect(Mapping.createTile).not.toHaveBeenCalled()
     expect(toast.error).not.toHaveBeenCalled()
     expect(reportError).not.toHaveBeenCalled()

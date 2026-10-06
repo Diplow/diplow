@@ -100,13 +100,13 @@ const readAgain = { ...system, root: { ...system.root, title: 'Read again' } } a
 
 /**
  * Each server function stand-in answers `value`; the System's answers the System above, then, read
- * again, `readAgain`.
+ * again, `readAgain`, each also holding the `placed` Tiles.
  */
-function answering(value: unknown) {
+function answering(value: unknown, placed: Record<string, unknown> = {}) {
   const ok = (answer: unknown) => () => Promise.resolve({ ok: true, value: answer })
   vi.mocked(Mapping.system)
-    .mockImplementationOnce(ok(system) as never)
-    .mockImplementation(ok(readAgain) as never)
+    .mockImplementationOnce(ok({ ...system, tiles: { ...system.tiles, ...placed } }) as never)
+    .mockImplementation(ok({ ...readAgain, tiles: { ...readAgain.tiles, ...placed } }) as never)
   for (const call of [
     Mapping.createTile,
     Mapping.editTile,
@@ -441,6 +441,15 @@ const parent = crypto.randomUUID()
 const tileId = crypto.randomUUID()
 
 /**
+ * `parent`, and the Tile `tileId` under it, for a System to hold, so a create under one or an edit of
+ * the other is the server's alone to refuse: the client, deciding on that System, sends it.
+ */
+const placed = {
+  [parent]: { _tag: 'Tile', id: parent, ...content, parent: 'root', slot: 3 },
+  [tileId]: { _tag: 'Tile', id: tileId, ...content, parent, slot: 2 },
+}
+
+/**
  * Renders a submit hook beside the System's read, under the app's QueryClient, once the System is
  * read; what the MutationCache holds of the System's writes, as the canvas will read them; and
  * every refusal handed back, as the page's state hook takes it.
@@ -530,42 +539,44 @@ describe("a form's write refused, handed back", () => {
     'hand a refused create back with its message on the field it names, in %s, and no toast',
     async (language, message) => {
       overwriteGetLocale(() => language)
-      answering(undefined)
+      answering(undefined, placed)
       vi.mocked(Mapping.createTile).mockResolvedValue(refusal(titleMissing))
       const submit = await submitting(() => useCreateTileSubmit({ parent, slot: 1 }))
-      submit({ ...content, title: ' ' })
+      submit({ ...content, title: 'B' })
       await waitFor(() => {
         expect(submit.refused).toMatchObject([
           {
-            operation: { _tag: 'CreateTile', parent, slot: 1, ...content, title: ' ' },
+            operation: { _tag: 'CreateTile', parent, slot: 1, ...content, title: 'B' },
             shown: { fields: { title: message } },
           },
         ])
       })
       expect(toast.error).not.toHaveBeenCalled()
       expect(submit.writes()).toMatchObject([{ key: ['createTile'], status: 'error' }])
+      expect(Mapping.createTile).toHaveBeenCalledOnce()
     },
   )
 
   it('hand a refused edit back once the System read again has landed', async () => {
-    answering(undefined)
+    answering(undefined, placed)
     vi.mocked(Mapping.editTile).mockResolvedValue(refusal(titleMissing))
     const submit = await submitting(() => useEditTileSubmit({ id: tileId, ...content }))
-    submit({ ...content, title: ' ' })
+    submit({ ...content, title: 'B' })
     await waitFor(() => {
       expect(submit.refused).toMatchObject([
         {
-          operation: { _tag: 'EditTile', id: tileId, title: ' ' },
+          operation: { _tag: 'EditTile', id: tileId, title: 'B' },
           shown: { fields: { title: messageFor(decodeFailure(titleMissing), 'editTile') } },
           system: readAgain,
         },
       ])
     })
     expect(toast.error).not.toHaveBeenCalled()
+    expect(Mapping.editTile).toHaveBeenCalledOnce()
   })
 
   it('raise one toast for a refusal that names no field, and hand it back for the form', async () => {
-    answering(undefined)
+    answering(undefined, placed)
     vi.mocked(Mapping.editTile).mockResolvedValue(
       refusal({ _tag: 'TileNotFound', kind: 'NotFound' }),
     )
@@ -579,13 +590,14 @@ describe("a form's write refused, handed back", () => {
     expect(toast.error).toHaveBeenCalledExactlyOnceWith(
       "This tile doesn't exist, or no longer does.",
     )
+    expect(Mapping.editTile).toHaveBeenCalledOnce()
   })
 
   it.each([
     ['the page leaves it be', () => false],
     ['no page is open to take it back', undefined],
   ] as const)('show a field refusal in a toast when %s', async (_when, take) => {
-    answering(undefined)
+    answering(undefined, placed)
     vi.mocked(Mapping.createTile).mockResolvedValue(refusal(titleMissing))
     const { result } = render(() => {
       if (take !== undefined) useSystemRefusals(take)
@@ -593,15 +605,16 @@ describe("a form's write refused, handed back", () => {
     }, makeQueryClient())
     await read(result)
     act(() => {
-      result.current.hook({ ...content, title: ' ' })
+      result.current.hook({ ...content, title: 'B' })
     })
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledExactlyOnceWith('Give this tile a title.')
     })
+    expect(Mapping.createTile).toHaveBeenCalledOnce()
   })
 
   it('hand a refusal to a page opened while the System was read again, and raise no toast', async () => {
-    answering(undefined)
+    answering(undefined, placed)
     vi.mocked(Mapping.createTile).mockResolvedValue(refusal(titleMissing))
     const client = makeQueryClient()
     const { result } = render(() => useCreateTileSubmit({ parent, slot: 1 }), client)
@@ -613,7 +626,7 @@ describe("a form's write refused, handed back", () => {
       }) as never,
     )
     act(() => {
-      result.current.hook({ ...content, title: ' ' })
+      result.current.hook({ ...content, title: 'B' })
     })
     await waitFor(() => {
       expect(Mapping.system).toHaveBeenCalledTimes(2)
@@ -627,6 +640,7 @@ describe("a form's write refused, handed back", () => {
       expect(take).toHaveBeenCalledOnce()
     })
     expect(toast.error).not.toHaveBeenCalled()
+    expect(Mapping.createTile).toHaveBeenCalledOnce()
   })
 
   it('hand back no import, which is no Operation', async () => {
