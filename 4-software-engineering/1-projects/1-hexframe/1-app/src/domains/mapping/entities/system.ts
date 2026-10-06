@@ -14,7 +14,7 @@ import {
   isLeafSlot,
   sameSlot,
   type Slot,
-  slotOf,
+  slotOfRow,
   type Tile,
 } from './tile'
 
@@ -94,7 +94,7 @@ const foundOf = (row: Row): FoundTile => ({ _tag: 'Tile', ...tileOf(row), ...kep
  * slot; `undefined` for a row in no slot, or a Reference outside its parent's Context.
  */
 function placedOf(row: Row, parent: string): PlacedTile | PlacedReference | undefined {
-  const slot = slotOf(row.direction)
+  const slot = slotOfRow(row.direction)
   if (slot === undefined) return undefined
   if (row.target === null) return { ...foundOf(row), parent, slot }
   return isContextSlot(slot)
@@ -329,7 +329,7 @@ export function readOf<F extends Field>(
     if (generation === depth) return tile
     const next = (below: RowWith<F>) => place(below, generation + 1)
     const hold = (below: RowWith<F>) => (below.target === null ? next(below) : refer(below.target))
-    const slotIn = (below: RowWith<F>) => slotOf(below.direction)
+    const slotIn = (below: RowWith<F>) => slotOfRow(below.direction)
     return {
       ...tile,
       ...slotsOf(under.get(row.id) ?? [], slotIn, { place: next, leaf: found, hold }),

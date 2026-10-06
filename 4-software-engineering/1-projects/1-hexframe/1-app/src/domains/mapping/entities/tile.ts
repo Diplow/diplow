@@ -91,7 +91,7 @@ export function leafOf(direction: number | null): Direction | undefined {
 }
 
 /** The slot a row's direction stands for; `undefined` for the Root's, which has none, or for no slot. */
-export function slotOf(direction: number | null): Slot | undefined {
+export function slotOfRow(direction: number | null): Slot | undefined {
   if (direction === null) return undefined
   const leaf = leafOf(direction)
   if (leaf !== undefined) return { leaf }

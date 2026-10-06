@@ -88,3 +88,21 @@ export type Operation = typeof Operation.Type
  * that runs it, and the server function and the MCP write that take it.
  */
 export type OperationName = Uncapitalize<Operation['_tag']>
+
+/** Each Operation's tag by its name: exhaustive, so a member the union gains fails here until it is added. */
+const tags: { readonly [T in Operation['_tag'] as Uncapitalize<T>]: T } = {
+  createTile: 'CreateTile',
+  editTile: 'EditTile',
+  moveTile: 'MoveTile',
+  swapTiles: 'SwapTiles',
+  deleteTile: 'DeleteTile',
+  createReference: 'CreateReference',
+  deleteReference: 'DeleteReference',
+}
+
+/** Whether a name, a mutation's key say, is an Operation's. */
+export const isOperationName = (name: unknown): name is OperationName =>
+  typeof name === 'string' && Object.hasOwn(tags, name)
+
+/** An Operation's tag, by its name. */
+export const tagOf = (name: OperationName): Operation['_tag'] => tags[name]

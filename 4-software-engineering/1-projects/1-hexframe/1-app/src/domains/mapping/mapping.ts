@@ -41,7 +41,6 @@ import {
   type DeleteTile,
   type EditTile,
   evolve,
-  type Made,
   type MappingEvent,
   type MoveTile,
   type Operation,
@@ -342,26 +341,6 @@ const answered = (system: System, id: string) => {
   return Effect.succeed({ id: found.id, title, preview, body } satisfies Tile)
 }
 
-/** A create under this id, which a write under it, taken, answers by `onTaken`. */
-const createUnder = <T>(
-  accountId: string,
-  operation: CreateTile,
-  made: Made & { readonly kept: ToKeep },
-  onTaken: OnTaken<T>,
-) =>
-  Effect.flatMap(
-    operate(accountId, operation, (system) => decide(system, operation, made), onTaken),
-    (system) => answered(system, made.id),
-  )
-
-/** A create under an id Mapping makes, fresh: a clash on it is a defect, never `TileIdTaken`. */
-const underNewId = (accountId: string, operation: CreateTile, kept: ToKeep) =>
-  Effect.flatMap(newId, (id) => createUnder(accountId, operation, { id, kept }, madeHere))
-
-/** A create under the id its caller chose, which a Tile of any System may have: `TileIdTaken`. */
-const underChosenId = (accountId: string, operation: CreateTile, id: string, kept: ToKeep) =>
-  createUnder(accountId, operation, { id, kept }, chosen)
-
 /**
  * Adds a Tile in a free slot under a Tile of the System, never under a Leaf: a Branch, a Leaf, or a
  * Tile of its Context, and answers it. Its id is the one the Operation carries, which its caller
@@ -371,9 +350,18 @@ const underChosenId = (accountId: string, operation: CreateTile, id: string, kep
  * (`entities/kept/`); nothing else does, and no later change touches them.
  */
 export const createTile = (accountId: string, operation: CreateTile, kept: ToKeep = {}) =>
-  operation.id === undefined
-    ? underNewId(accountId, operation, kept)
-    : underChosenId(accountId, operation, operation.id, kept)
+  Effect.gen(function* () {
+    const id = operation.id ?? (yield* newId)
+    const onTaken: OnTaken<TileIdTaken> = operation.id === undefined ? madeHere : chosen
+    const made = { id, kept }
+    const after = yield* operate(
+      accountId,
+      operation,
+      (system) => decide(system, operation, made),
+      onTaken,
+    )
+    return yield* answered(after, id)
+  })
 
 /** Changes what a Tile says, any of its Title, its Preview and its Body as given, and answers it. */
 export const editTile = (accountId: string, operation: EditTile) =>

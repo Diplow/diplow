@@ -295,8 +295,8 @@ describe('the overlay', () => {
 
   it('folds pending writes in their turn, whatever order they are listed in', () => {
     const shown = overlaid(served, [
-      { turn: 2, name: 'moveTile', variables: { id: id.b, parent: id.root, slot: 1 } },
-      { turn: 1, name: 'moveTile', variables: { id: id.a, parent: id.root, slot: 4 } },
+      { turn: 2, operation: operationOf('moveTile', { id: id.b, parent: id.root, slot: 1 }) },
+      { turn: 1, operation: operationOf('moveTile', { id: id.a, parent: id.root, slot: 4 }) },
     ])
     expect(shown.tiles[id.a]).toMatchObject({ slot: 4 })
     expect(shown.tiles[id.b]).toMatchObject({ slot: 1 })
@@ -304,7 +304,7 @@ describe('the overlay', () => {
 
   it('folds a swap the System does not hold yet, and leaves alone one it already holds', () => {
     const swappedBack = servedWith(branch(id.a, 'A', 2), branch(id.b, 'B', 1))
-    const swap = { name: 'swapTiles', variables: { a: id.a, b: id.b } }
+    const swap = { operation: operationOf('swapTiles', { a: id.a, b: id.b }) }
     const pending = [
       { turn: 1, ...swap, before: served },
       { turn: 2, ...swap, before: swappedBack },
@@ -313,6 +313,15 @@ describe('the overlay', () => {
     expect(overlaid(swappedBack, pending.slice(0, 1)).tiles[id.a]).toMatchObject({ slot: 2 })
     expect(overlaid(served, pending).tiles[id.a]).toMatchObject({ slot: 1 })
     expect(overlaid(swappedBack, pending).tiles[id.a]).toMatchObject({ slot: 1 })
+  })
+
+  it('leaves alone a swap that moved a Leaf, once the System holds it', () => {
+    const before = servedWith(branch(id.c, 'C', { leaf: 3 }))
+    const after = servedWith(branch(id.c, 'C', 2), branch(id.b, 'B', { leaf: 3 }))
+    const swap = { turn: 1, operation: operationOf('swapTiles', { a: id.c, b: id.b }), before }
+    expect(overlaid(before, [swap]).tiles[id.c]).toMatchObject({ slot: 2 })
+    expect(overlaid(after, [swap]).tiles[id.c]).toMatchObject({ slot: 2 })
+    expect(overlaid(after, [swap]).tiles[id.b]).toMatchObject({ slot: { leaf: 3 } })
   })
 
   it('reads no Operation from an import, nor from fields Mapping’s schema refuses', () => {

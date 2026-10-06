@@ -79,13 +79,12 @@ interface Recorded {
 }
 
 /**
- * A pending write to the System, as the overlay folds it: its turn, its name, its variables, and the
- * System shown when it was made.
+ * A pending write to the System, as the overlay folds it: its turn, the Operation it sends, read back
+ * from its key and variables by Mapping's schema, and the System shown when it was made.
  */
 const pendingOf = (mutation: Mutation): Pending => ({
   turn: mutation.mutationId,
-  name: mutation.options.mutationKey?.[0],
-  variables: mutation.state.variables,
+  operation: operationOf(mutation.options.mutationKey?.[0], mutation.state.variables),
   before: (mutation.state.context as Recorded | undefined)?.before,
 })
 

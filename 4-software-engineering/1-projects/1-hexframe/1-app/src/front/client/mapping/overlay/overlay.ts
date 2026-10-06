@@ -5,17 +5,22 @@
 // pending. The same `decide` foresees a refusal before a write is sent. Pure.
 import { Option, Result, Schema } from 'effect'
 
-import type { System } from '#/domains/mapping/entities'
-import { decide, evolve, Operation, type SwapTiles } from '#/domains/mapping/operations'
+import { sameSlot, type System } from '#/domains/mapping/entities'
+import {
+  decide,
+  evolve,
+  isOperationName,
+  Operation,
+  type SwapTiles,
+  tagOf,
+} from '#/domains/mapping/operations'
 
 /** A write to the System still waiting for its answer, as the MutationCache holds it. */
 export interface Pending {
   /** Its turn: the MutationCache numbers mutations in the order they were made. */
   readonly turn: number
-  /** Its mutation's key's first part, an Operation's name for every write but an import. */
-  readonly name: unknown
-  /** Its variables, the Operation's fields without its tag. */
-  readonly variables: unknown
+  /** The Operation it sends, read once from its name and variables (`operationOf`); none for an import. */
+  readonly operation: Operation | undefined
   /**
    * The System shown when it was made, if it was recorded: a swap, the one write that undoes itself
    * when folded twice, reads there where its Tiles stood, so a read that already holds it is left alone.
@@ -31,11 +36,10 @@ const decodeOperation = Schema.decodeUnknownOption(Operation)
  * function refuses in turn.
  */
 export function operationOf(name: unknown, variables: unknown): Operation | undefined {
-  if (typeof name !== 'string' || typeof variables !== 'object' || variables === null) {
+  if (!isOperationName(name) || typeof variables !== 'object' || variables === null) {
     return undefined
   }
-  const tag = `${name.charAt(0).toUpperCase()}${name.slice(1)}`
-  return Option.getOrUndefined(decodeOperation({ ...variables, _tag: tag }))
+  return Option.getOrUndefined(decodeOperation({ ...variables, _tag: tagOf(name) }))
 }
 
 /**
@@ -58,7 +62,10 @@ function standsWhere(system: System, id: string, before: System, other: string) 
   const now = system.tiles[id]
   const then = before.tiles[other]
   return (
-    now !== undefined && then !== undefined && now.parent === then.parent && now.slot === then.slot
+    now !== undefined &&
+    then !== undefined &&
+    now.parent === then.parent &&
+    sameSlot(now.slot, then.slot)
   )
 }
 
@@ -79,8 +86,7 @@ function holdsSwap(system: System, { a, b }: SwapTiles, before: System | undefin
 export function overlaid(system: System, pending: ReadonlyArray<Pending>): System {
   return [...pending]
     .sort((a, b) => a.turn - b.turn)
-    .reduce((shown, { turn, name, variables, before }) => {
-      const operation = operationOf(name, variables)
+    .reduce((shown, { turn, operation, before }) => {
       if (operation === undefined) return shown
       if (operation._tag === 'SwapTiles' && holdsSwap(shown, operation, before)) return shown
       return Result.getOrElse(decided(shown, operation, `pending-${String(turn)}`), () => shown)
