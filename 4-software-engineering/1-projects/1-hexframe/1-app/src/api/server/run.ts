@@ -37,12 +37,6 @@ export class RequestContext extends Context.Service<
 >()('hexframe/RequestContext') {}
 
 /**
- * Who reacts to which domain event: the API layer composes domains here, one `on(Event, reaction)`
- * per subscription, as the domains that publish and react are built.
- */
-const subscriptions: ReadonlyArray<Subscription<never>> = []
-
-/**
  * Better Auth and the database, deployed: Postgres from DATABASE_URL, cookies signed with
  * BETTER_AUTH_SECRET. Under `pnpm dev` and the tests, without DATABASE_URL: Better Auth over a fresh
  * PGlite in memory, with a secret of its own, both gone when the process stops; that PGlite is the
@@ -55,21 +49,34 @@ const auth =
       )
     : Layer.orDie(Layer.merge(authLayer, databaseLayer))
 
+/** What the domains use: Better Auth, the tiles repository, Zip, and the database itself. */
+type Repositories = Auth | Database | Tiles | Zip
+
 /**
  * The repositories the domains use: Better Auth for IAM, the tiles repository and Zip for Mapping; and
  * the database itself, for the transaction a program opens (`transactional`).
  */
-const repositories: Layer.Layer<Auth | Database | Tiles | Zip> = Layer.merge(
+const repositories: Layer.Layer<Repositories> = Layer.merge(
   Layer.provideMerge(tilesLayer, auth),
   zipLayer,
 )
 
 /**
- * Every layer: the bus, the domains' services and the repositories below them, merged here as each is
- * built, and the logger that sends to PostHog and Sentry. Built once, on the first call, and shared
- * by every request.
+ * Who reacts to which domain event: the API layer composes domains here, one `on(Event, reaction)`
+ * per subscription, as the domains that publish and react are built. A reaction may use the
+ * repositories, which the bus is built over; none is wired yet.
  */
-const layer = Layer.mergeAll(serverBus(subscriptions), repositories, observability)
+const subscriptions: ReadonlyArray<Subscription<Repositories>> = []
+
+/**
+ * Every layer: the bus, built over the repositories its subscribers use, the domains' services and
+ * the repositories below them, merged here as each is built, and the logger that sends to PostHog and
+ * Sentry. Built once, on the first call, and shared by every request.
+ */
+const layer = Layer.mergeAll(
+  Layer.provideMerge(serverBus(subscriptions), repositories),
+  observability,
+)
 
 const runtime = ManagedRuntime.make(layer)
 

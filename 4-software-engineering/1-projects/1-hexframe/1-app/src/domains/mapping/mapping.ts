@@ -1,12 +1,13 @@
 // Mapping: someone lays out a System they maintain as a hierarchy of Tiles, where what comes first is
 // what matters most. Each Account has one System, whose Root is the user. The tiles repository keeps
 // the rows (src/repositories/database/tiles/); Mapping decides what an Operation does to the System
-// it locked (`decide`, ./operations/), then writes one change per event it made.
+// it locked (`decide`, ./operations/), then writes one change per event it made, and publishes them.
 // Every operation is for one Account, which the API layer takes from IAM's Session. A change runs in
 // the transaction the API layer opens around it (`transactional`): its type requires one. Beside each
 // Account's System, every Account reads Help (./help/help.ts), which no change may name.
 import { Effect, Result, Struct } from 'effect'
 
+import { Bus } from '#/domains/bus'
 import type { InTransaction } from '#/repositories/database/database'
 import { type IdTaken, Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/tiles'
 import { Zip } from '#/repositories/zip/zip'
@@ -311,9 +312,10 @@ interface Operated {
 
 /**
  * Runs an Operation on the Account's System: locks it, loads it flat, asks `decide` through `decided`,
- * then writes one change per event, and answers the events with the System they leave (`evolve`).
- * Every rule lives in `decide`: what it refuses is refused here, with nothing written. A write under
- * an id already taken answers `onTaken`: a defect, unless the Operation's caller chose the id.
+ * then writes one change per event, publishes the events, and answers them with the System they leave
+ * (`evolve`). Every rule lives in `decide`: what it refuses is refused here, with nothing written and
+ * nothing published. A write under an id already taken answers `onTaken`: a defect, unless the
+ * Operation's caller chose the id. The bus holds what is published until the transaction commits.
  */
 const operate = <E, T = never>(
   accountId: string,
@@ -330,6 +332,8 @@ const operate = <E, T = never>(
       (event) => Effect.catchTag(written(writes)(event), 'IdTaken', onTaken),
       { discard: true },
     )
+    const { publish } = yield* Bus
+    yield* Effect.forEach(events, publish, { discard: true })
     return { events, system: events.reduce(evolve, system) } satisfies Operated
   })
 

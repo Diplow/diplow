@@ -2,6 +2,7 @@ import { expect, it, layer } from '@effect/vitest'
 import { Effect, Layer } from 'effect'
 import { describe } from 'vitest'
 
+import { Bus } from '#/domains/bus'
 import { type InTransaction, transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 import { type Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
@@ -23,7 +24,10 @@ import { vaultOf } from './vault'
 // Help as the build bundles it, read through Mapping's `readTile` like a System, and refused to every
 // write; then a vault folder read from notes made by hand, and what keeps one from reading as a Tile.
 
-const TestTiles = tilesLayer.pipe(Layer.provideMerge(TestDatabase))
+/** The bus, as Mapping publishes on it: these tests hear nothing it publishes. */
+const Unheard = Layer.succeed(Bus)({ publish: () => Effect.void })
+
+const TestTiles = Layer.merge(tilesLayer.pipe(Layer.provideMerge(TestDatabase)), Unheard)
 
 /** An Account no other test uses. */
 const someone = () => crypto.randomUUID()
@@ -171,7 +175,7 @@ layer(TestTiles)('Help, refused to every write in Mapping itself', (it) => {
       // whose schema let them through would, so Mapping is seen refusing them itself.
       const unchecked = { disableChecks: true }
       const attempts: ReadonlyArray<
-        Effect.Effect<unknown, { readonly _tag: string }, InTransaction | Tiles>
+        Effect.Effect<unknown, { readonly _tag: string }, InTransaction | Tiles | Bus>
       > = [
         Mapping.createTile(
           accountId,

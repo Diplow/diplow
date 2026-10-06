@@ -132,10 +132,18 @@ describe('signedIn and sessionOnly', () => {
       Effect.provideService(CurrentKey, Option.fromNullishOr(proofs.key)),
     )
 
-  it.effect('signedIn is the Account a Session proves, or the one a Key proves', () =>
+  it.effect('signedIn is the Account a Session proves, or the one a Key proves, and by which', () =>
     Effect.gen(function* () {
-      expect(yield* on(signedIn, { session })).toEqual({ account })
-      expect(yield* on(signedIn, { key })).toEqual({ account })
+      expect(yield* on(signedIn, { session })).toEqual({ account, by: { _tag: 'Session' } })
+      expect(yield* on(signedIn, { key })).toEqual({ account, by: { _tag: 'Key', keyId: 'k-1' } })
+    }),
+  )
+
+  it.effect('signedIn takes the Session when a Session and a Key both prove the request', () =>
+    Effect.gen(function* () {
+      const other = { id: 'a-2', email: 'grace@example.com' }
+      const both = yield* on(signedIn, { session, key: { account: other, keyId: 'k-2' } })
+      expect(both).toEqual({ account, by: { _tag: 'Session' } })
     }),
   )
 

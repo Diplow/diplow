@@ -1,6 +1,7 @@
 import { expect, layer } from '@effect/vitest'
 import { Effect, Layer, Result } from 'effect'
 
+import { Bus, type DomainEvent } from '#/domains/bus'
 import { type InTransaction, transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 import { type Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
@@ -25,14 +26,20 @@ import {
 // makes on the System as it stood equals the System read back once the service ran it over PGlite.
 // The client shows a write by the same two functions, so what it shows is what the server keeps.
 
-const TestTiles = tilesLayer.pipe(Layer.provideMerge(TestDatabase))
+/** Every event the service published since `agrees` last asked, in order. */
+const heard: Array<DomainEvent> = []
+
+/** The bus, as Mapping publishes on it: it keeps what it hears. */
+const Heard = Layer.succeed(Bus)({ publish: (event) => Effect.sync(() => void heard.push(event)) })
+
+const TestTiles = Layer.merge(tilesLayer.pipe(Layer.provideMerge(TestDatabase)), Heard)
 
 const content = (title: string) => ({ title, preview: `${title}, in short.`, body: `# ${title}` })
 
 /** A change as the service runs it, of an Operation, and, for a create, what `decide` is given. */
 interface Run<A, E> {
   readonly operation: Operation
-  readonly change: Effect.Effect<A, E, Tiles | InTransaction>
+  readonly change: Effect.Effect<A, E, Tiles | Bus | InTransaction>
   /** The id the service made, read from its answer or from the System after; none but a create's. */
   readonly made?: (answer: A, after: System) => Made
 }
@@ -40,15 +47,17 @@ interface Run<A, E> {
 /**
  * Runs a change through the service, as the API layer does, in a transaction, then checks that the
  * events `decide` makes of its Operation on the System as it stood before, evolved, give the System
- * read back after.
+ * read back after, and are the events the service published, in their order.
  */
 const agrees = <A, E>(accountId: string, { operation, change, made }: Run<A, E>) =>
   Effect.gen(function* () {
     const before = yield* Mapping.system(accountId)
+    heard.length = 0
     const answer = yield* transactional(change)
     const after = yield* Mapping.system(accountId)
     const events = Result.getOrThrow(decide(before, operation, made?.(answer, after)))
     expect(events.reduce(evolve, before)).toEqual(after)
+    expect(heard).toEqual(events)
   })
 
 /**

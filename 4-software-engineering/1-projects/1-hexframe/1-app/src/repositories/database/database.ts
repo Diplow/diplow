@@ -3,7 +3,7 @@
 // `node scripts/migrate.ts` runs this file as it is, without a bundler: it imports packages only.
 import { PgClient } from '@effect/sql-pg'
 import * as PgDrizzle from 'drizzle-orm/effect-postgres'
-import { Config, Context, Effect, Layer } from 'effect'
+import { Config, Context, Effect, Layer, Option } from 'effect'
 import { isSqlError } from 'effect/unstable/sql/SqlError'
 
 /**
@@ -31,11 +31,36 @@ export class InTransaction extends Context.Service<InTransaction, true>()(
 ) {}
 
 /**
+ * Present while a program runs in the transaction `transactional` opened: defers a piece of work to
+ * its commit. The work runs once the transaction has committed, in the program's own fiber, and is
+ * dropped when it rolls back. Inside a transaction opened in another, it waits for the outer one.
+ */
+export class AfterCommit extends Context.Service<
+  AfterCommit,
+  (work: Effect.Effect<void>) => Effect.Effect<void>
+>()('hexframe/AfterCommit') {}
+
+/**
  * Runs a program in one transaction: every query made through `Database` while it runs joins it,
- * whichever repository makes it. A failure rolls back what it wrote; a database failure is a defect.
- * The API layer opens it, around the domains' operations it composes, and nothing below does.
+ * whichever repository makes it. A failure rolls back what it wrote, and drops what it deferred to
+ * the commit (`AfterCommit`); a database failure is a defect. The API layer opens it, around the
+ * domains' operations it composes, and nothing below does.
  */
 export const transactional = <A, E, R>(program: Effect.Effect<A, E, R>) =>
-  Database.use((database) =>
-    database.transaction(() => Effect.provideService(program, InTransaction, true)),
-  ).pipe(Effect.catchIf(isSqlError, Effect.die))
+  Effect.gen(function* () {
+    const deferred: Array<Effect.Effect<void>> = []
+    const defer = (work: Effect.Effect<void>) => Effect.sync(() => void deferred.push(work))
+    const value = yield* Database.use((database) =>
+      database.transaction(() =>
+        program.pipe(
+          Effect.provideService(InTransaction, true),
+          Effect.provideService(AfterCommit, defer),
+        ),
+      ),
+    ).pipe(Effect.catchIf(isSqlError, Effect.die))
+    // Committed. Inside another transaction, the work waits for that one's commit instead.
+    const outer = yield* Effect.serviceOption(AfterCommit)
+    const settle = Option.isSome(outer) ? outer.value : (work: Effect.Effect<void>) => work
+    yield* Effect.forEach(deferred, settle, { discard: true })
+    return value
+  })

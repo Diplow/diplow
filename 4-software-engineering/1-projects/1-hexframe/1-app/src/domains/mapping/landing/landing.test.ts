@@ -1,6 +1,7 @@
 import { expect, layer } from '@effect/vitest'
 import { Effect, Layer } from 'effect'
 
+import { Bus } from '#/domains/bus'
 import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
@@ -22,7 +23,14 @@ import { type ImportPlace, importTiles, planImport } from './landing'
 /** The Account's System, read flat, as its tree: what the canvas draws, as the client builds it. */
 const tree = (accountId: string) => Effect.map(Mapping.system(accountId), systemOf)
 
-const TestLayers = Layer.mergeAll(tilesLayer.pipe(Layer.provideMerge(TestDatabase)), zipLayer)
+/** The bus, as Mapping publishes on it: these tests hear nothing it publishes. */
+const Unheard = Layer.succeed(Bus)({ publish: () => Effect.void })
+
+const TestLayers = Layer.mergeAll(
+  tilesLayer.pipe(Layer.provideMerge(TestDatabase)),
+  zipLayer,
+  Unheard,
+)
 
 const noLink: IdOfLink = () => undefined
 

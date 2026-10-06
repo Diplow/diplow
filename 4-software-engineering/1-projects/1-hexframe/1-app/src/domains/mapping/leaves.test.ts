@@ -1,6 +1,7 @@
 import { expect, layer } from '@effect/vitest'
 import { Effect, Layer } from 'effect'
 
+import { Bus } from '#/domains/bus'
 import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 import { layer as tilesLayer } from '#/repositories/database/tiles/tiles'
@@ -23,7 +24,10 @@ import {
 /** The Account's System, read flat, as its tree: what the canvas draws, as the client builds it. */
 const tree = (accountId: string) => Effect.map(Mapping.system(accountId), systemOf)
 
-const TestTiles = tilesLayer.pipe(Layer.provideMerge(TestDatabase))
+/** The bus, as Mapping publishes on it: these tests hear nothing it publishes. */
+const Unheard = Layer.succeed(Bus)({ publish: () => Effect.void })
+
+const TestTiles = Layer.merge(tilesLayer.pipe(Layer.provideMerge(TestDatabase)), Unheard)
 
 /**
  * A change as the API layer runs it: its Operation, made from its fields, in the transaction the
