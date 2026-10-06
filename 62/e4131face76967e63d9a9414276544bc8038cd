@@ -1,0 +1,48 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useRefusalState.test.ts
+  s_c6607867f8f345::t_988212eba4e860 4,98-116,119,126,132-133,136-138,142-145,167,186,204,345,347,350,352,364,373-399,406,408-421,423-424
+  s_c6607867f8f345::t_1b7d063034cce9 218-239
+  s_c6607867f8f345::t_c073789bf1b7e9 275-298,322,324-325
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_c6607867f8f345::t_c6d1fd5409c3b5 21,55,125-127,129-134,136,138-159,192-194
+  s_c6607867f8f345::t_75a5d216888c25 195
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/TileActions.tsx
+  s_c6607867f8f345::t_2258716db17792 65,116,219,230,257,265
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/System.tsx
+  s_c6607867f8f345::t_9057436ec9d8d4 28,98
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useRefusalState.ts
+  s_c6607867f8f345::t_2258716db17792 12-18
+  s_c6607867f8f345::t_6f13bdf0d90389 7-8,23-31,47-49,51-56,58-63,66,71,73,76-78,86,94,101,105-108,117-120,123-127
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/channels.ts
+  s_c6607867f8f345::t_c6d1fd5409c3b5 125-133
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.ts
+  s_c6607867f8f345::t_9057436ec9d8d4 90
+  s_c6607867f8f345::t_6bbfec5e941ed0 74-79
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/overlay/overlay.test.ts
+  s_c6607867f8f345::t_330b9620965fd2 217-220
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.test.ts
+  s_c6607867f8f345::t_330b9620965fd2 448,632-635
+  s_c6607867f8f345::t_1b7d063034cce9 449-451
+  s_c6607867f8f345::t_da58c4d59867b3 591-627
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-optimistic-writes-and-patterns/decisions.md
+  s_c6607867f8f345::t_cc3844e60d8089 82,84
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_c6607867f8f345::t_cc3844e60d8089 36,40,50
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE.md
+  s_c6607867f8f345::t_cc3844e60d8089 23,28,35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "62e4131face76967e63d9a9414276544bc8038cd",
+  "prompts": {},
+  "sessions": {
+    "s_c6607867f8f345": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4f8f3c2-2717-4700-ac6f-29d6bae7bf9e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
