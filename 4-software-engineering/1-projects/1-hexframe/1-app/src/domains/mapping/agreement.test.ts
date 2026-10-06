@@ -47,8 +47,7 @@ const agrees = <A, E>(accountId: string, { operation, change, made }: Run<A, E>)
     const before = yield* Mapping.system(accountId)
     const answer = yield* transactional(change)
     const after = yield* Mapping.system(accountId)
-    const given = made?.(answer, after) ?? { id: '' }
-    const events = Result.getOrThrow(decide(before, operation, given))
+    const events = Result.getOrThrow(decide(before, operation, made?.(answer, after)))
     expect(events.reduce(evolve, before)).toEqual(after)
   })
 

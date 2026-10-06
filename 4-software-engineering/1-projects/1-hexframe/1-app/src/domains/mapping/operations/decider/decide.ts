@@ -208,7 +208,7 @@ export function decide(
   made: Made,
 ): Decided<'CreateReference'>
 export function decide(system: System, operation: DeleteReference): Decided<'DeleteReference'>
-export function decide(system: System, operation: Operation, made: Made): Decided
+export function decide(system: System, operation: Operation, made?: Made): Decided
 export function decide(system: System, operation: Operation, made?: Made): Decided {
   if (!system.owned) return refused(new HelpReadOnly())
   switch (operation._tag) {

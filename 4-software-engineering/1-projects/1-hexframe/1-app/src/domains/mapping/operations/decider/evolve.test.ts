@@ -149,8 +149,7 @@ describe('evolve folded over what decide makes', () => {
   it('lays the System out as the Operations say, one after the other', () => {
     const operations = [new SwapTiles({ a, b }), new MoveTile({ id: under, parent: b, slot: 6 })]
     const final = operations.reduce(
-      (current, operation) =>
-        Result.getOrThrow(decide(current, operation, { id: uuid() })).reduce(evolve, current),
+      (current, operation) => Result.getOrThrow(decide(current, operation)).reduce(evolve, current),
       real,
     )
     const tree = systemOf(final)

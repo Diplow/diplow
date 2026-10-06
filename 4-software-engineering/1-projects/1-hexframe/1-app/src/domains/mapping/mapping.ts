@@ -44,7 +44,6 @@ import {
   type MoveTile,
   type Operation,
   type SwapTiles,
-  type TileCreated,
 } from './operations'
 
 export { HelpId, helpRoot, helpSystem } from './help/help'
@@ -263,9 +262,6 @@ const decidedOn = (accountId: string, operation: Operation) =>
         ),
       )
 
-/** Whether an event is a Tile's create. */
-const isTileCreated = (event: MappingEvent): event is TileCreated => event._tag === 'TileCreated'
-
 /** Writes one event: the one change to the rows it stands for. */
 const written =
   (writes: Writes) =>
@@ -304,26 +300,27 @@ interface Operated {
 /**
  * Runs an Operation on the Account's System: locks it, loads it flat, asks `decide` through `decided`,
  * then writes one change per event, and answers the events with the System they leave (`evolve`).
- * Every rule lives in `decide`: what it refuses is refused here, with nothing written. `decided` is
- * given the id a create gives what it makes, the repository's, made for every Operation and used by a
- * create alone, so `decide` never makes one.
+ * Every rule lives in `decide`: what it refuses is refused here, with nothing written.
  */
 const operate = <E>(
   accountId: string,
   operation: Operation,
-  decided: (system: System, id: string) => Result.Result<ReadonlyArray<MappingEvent>, E>,
+  decided: (system: System) => Result.Result<ReadonlyArray<MappingEvent>, E>,
 ) =>
   Effect.gen(function* () {
     const system = yield* decidedOn(accountId, operation)
     const writes = (yield* Tiles).writes(accountId)
-    const events = yield* Effect.fromResult(decided(system, yield* writes.newId))
+    const events = yield* Effect.fromResult(decided(system))
     yield* Effect.forEach(events, written(writes), { discard: true })
     return { events, system: events.reduce(evolve, system) } satisfies Operated
   })
 
+/** The id the repository makes for what a create makes, before `decide` is given it. */
+const newId = (accountId: string) => Tiles.use((tiles) => tiles.writes(accountId).newId)
+
 /** The Tile of this id, as an Operation leaves it, for a change that answers it. */
-const answered = ({ system }: Operated, id: string | undefined) => {
-  const found = id === undefined ? undefined : tileAt(system, id)
+const answered = ({ system }: Operated, id: string) => {
+  const found = tileAt(system, id)
   if (found === undefined) return Effect.die(new Error('A change lost the Tile it answers'))
   const { title, preview, body } = found
   return Effect.succeed({ id: found.id, title, preview, body } satisfies Tile)
@@ -336,9 +333,11 @@ const answered = ({ system }: Operated, id: string | undefined) => {
  * the Operation may carry is not honoured yet: the repository makes it.
  */
 export const createTile = (accountId: string, operation: CreateTile, kept: ToKeep = {}) =>
-  Effect.flatMap(
-    operate(accountId, operation, (system, id) => decide(system, operation, { id, kept })),
-    (operated) => answered(operated, operated.events.find(isTileCreated)?.id),
+  Effect.flatMap(newId(accountId), (id) =>
+    Effect.flatMap(
+      operate(accountId, operation, (system) => decide(system, operation, { id, kept })),
+      (operated) => answered(operated, id),
+    ),
   )
 
 /** Changes what a Tile says, any of its Title, its Preview and its Body as given, and answers it. */
@@ -374,7 +373,9 @@ export const deleteTile = (accountId: string, operation: DeleteTile) =>
  * Leaf, which has no Context.
  */
 export const createReference = (accountId: string, operation: CreateReference) =>
-  Effect.asVoid(operate(accountId, operation, (system, id) => decide(system, operation, { id })))
+  Effect.flatMap(newId(accountId), (id) =>
+    Effect.asVoid(operate(accountId, operation, (system) => decide(system, operation, { id }))),
+  )
 
 /** Empties a Context slot holding a Reference; the Tile it pointed at is untouched. */
 export const deleteReference = (accountId: string, operation: DeleteReference) =>
