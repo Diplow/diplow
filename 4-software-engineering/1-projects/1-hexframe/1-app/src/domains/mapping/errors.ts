@@ -8,6 +8,15 @@ export class TileNotFound extends Schema.TaggedError<TileNotFound>()('TileNotFou
   kind: kind('NotFound'),
 }) {}
 
+/**
+ * The id a create was given is a Tile's already, in this System or in any other: a Tile's id is its
+ * own across every Account. It says nothing of where that Tile is, and nothing is written. The same
+ * id given twice is refused the second time.
+ */
+export class TileIdTaken extends Schema.TaggedError<TileIdTaken>()('TileIdTaken', {
+  kind: kind('Conflict'),
+}) {}
+
 /** A Tile's Title is empty. */
 export class TitleMissing extends Schema.TaggedError<TitleMissing>()('TitleMissing', invalid) {}
 
@@ -127,6 +136,7 @@ export const mappingFailures = [
   PreviewTooLong,
   NameInvalid,
   DirectionTaken,
+  TileIdTaken,
   MovedUnderItself,
   LeafHoldsNothing,
   RootFixed,

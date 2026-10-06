@@ -6,7 +6,7 @@
 // nobody asked for never leaves the database.
 import { type SQL, and, eq, inArray, isNull } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
-import { Context, Effect, Layer } from 'effect'
+import { Context, Data, Effect, Layer } from 'effect'
 
 import { Database, InTransaction } from '../database'
 import { type FrontmatterColumn, type TileConfigColumn, tile } from '../schema'
@@ -77,12 +77,21 @@ export interface BatchRow extends Omit<NewTileRow, 'parentId' | 'target'> {
   readonly target: RowRef | { readonly _tag: 'Nowhere' } | null
 }
 
+/**
+ * A row was to be added under an id a row already has, in any Account's System: `tile.id` is the
+ * table's key. Nothing was written.
+ */
+export class IdTaken extends Data.TaggedError('IdTaken')<{ readonly id: string }> {}
+
 /** What a change may write, to the System it locked only, inside the same transaction. */
 export interface Writes {
-  /** Adds a row under the id `Tiles.newId` made for it. */
+  /**
+   * Adds a row under the id it carries, made by `Tiles.newId` or chosen by a caller. An id a row of
+   * any System already has is `IdTaken`, and nothing is written.
+   */
   readonly insert: (
     row: NewTileRow & Pick<TileRow, 'id'>,
-  ) => Effect.Effect<void, never, InTransaction>
+  ) => Effect.Effect<void, IdTaken, InTransaction>
   /**
    * Adds every row of a batch, in its order, a few hundred per statement, and answers each one's id
    * by its key. A row comes after the row of the batch it stands under; a key named before it is
@@ -147,8 +156,8 @@ export class Tiles extends Context.Service<
     /** What a change may write to the Account's System, once it locked it. */
     readonly writes: (accountId: string) => Writes
     /**
-     * The id a row about to be added takes, made here as every row's is, so that a change knows it
-     * before it writes the row (`Writes.insert`).
+     * A fresh id for a row about to be added, for a change whose caller chose none, so that it knows
+     * the id before it writes the row (`Writes.insert`).
      */
     readonly newId: Effect.Effect<string>
   }
@@ -182,7 +191,7 @@ const columns = { ...placeColumns, ...contentColumns, ...keptColumns }
 const under = alias(tile, 'under')
 
 /** A query that only holds inside a transaction: it requires one, so it runs in no other. */
-const inTransaction = <A>(query: Effect.Effect<A>) => InTransaction.use(() => query)
+const inTransaction = <A, E>(query: Effect.Effect<A, E>) => InTransaction.use(() => query)
 
 const ofAccount = (accountId: string) => eq(tile.accountId, accountId)
 
@@ -275,7 +284,15 @@ const make = Effect.gen(function* () {
         database
           .insert(tile)
           .values({ ...row, accountId })
-          .pipe(Effect.asVoid, Effect.orDie),
+          // Only a clash on the key is answered: any other constraint broken is a defect.
+          .onConflictDoNothing({ target: tile.id })
+          .returning({ id: tile.id })
+          .pipe(
+            Effect.orDie,
+            Effect.flatMap((added) =>
+              added.length === 0 ? Effect.fail(new IdTaken({ id: row.id })) : Effect.void,
+            ),
+          ),
       ),
     insertAll: (rows) =>
       inTransaction(

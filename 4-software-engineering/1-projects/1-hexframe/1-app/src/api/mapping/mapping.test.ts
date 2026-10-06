@@ -10,6 +10,7 @@ import type {
   MovedUnderItself,
   PreviewTooLong,
   RootFixed,
+  TileIdTaken,
   TileNotFound,
   TitleMissing,
 } from '#/domains/mapping/errors'
@@ -236,6 +237,31 @@ describe("Mapping's server functions", () => {
     })
   })
 
+  it('creates a Tile under the id its caller chose, and refuses one taken as TileIdTaken', async () => {
+    const { context, root, child } = await withAChild()
+    const id = crypto.randomUUID()
+    const chosen = Mapping.createTile({ id, parent: root.id, slot: 2, ...content('Chosen') })
+    expect(await value(run(context, chosen))).toEqual({ id, ...content('Chosen') })
+    const stranger = request()
+    const theirRoot = await systemTree(stranger)
+    const again = [
+      [context, Mapping.createTile({ id, parent: root.id, slot: 3, ...content('Again') })],
+      [
+        stranger,
+        Mapping.createTile({ id: child.id, parent: theirRoot.id, slot: 1, ...content('Theirs') }),
+      ],
+    ] as const
+    for (const [someone, program] of again) {
+      expect(await run(someone, program)).toEqual({
+        ok: false,
+        failure: { _tag: 'TileIdTaken', kind: 'Conflict' },
+        requestId: 'req-mapping',
+      })
+    }
+    expect(Object.keys((await systemTree(context)).branches)).toEqual(['1', '2'])
+    expect((await systemTree(stranger)).branches).toEqual({})
+  })
+
   it("shows an Account nothing of another's System: its Tiles are TileNotFound", async () => {
     const { child } = await withAChild()
     const stranger = request()
@@ -264,6 +290,19 @@ describe("the errors Mapping's server functions can fail with", () => {
     expectTypeOf<ErrorOf<typeof Mapping.system>>().toEqualTypeOf<SignedOut>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.help>>>().toEqualTypeOf<never>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createTile>>>().toEqualTypeOf<
+      | SignedOut
+      | TitleMissing
+      | PreviewTooLong
+      | TileNotFound
+      | DirectionTaken
+      | TileIdTaken
+      | LeafHoldsNothing
+      | HelpReadOnly
+    >()
+    // Without an id, as the MCP's create_tile sends it, Mapping makes it: never refused for it.
+    const createdByMapping = (parent: string) =>
+      Mapping.createTile({ parent, slot: 1, title: 'A', preview: '', body: '' })
+    expectTypeOf<ErrorOf<ReturnType<typeof createdByMapping>>>().toEqualTypeOf<
       | SignedOut
       | TitleMissing
       | PreviewTooLong
@@ -369,6 +408,8 @@ describe("the schemas Mapping's server functions validate by", () => {
 
   it('take a Tile id only as a UUID', () => {
     expect(accepts(TileRef, { id: t })).toBe(true)
+    expect(accepts(NewTile, { id: t, parent: p, slot: 1, ...content('Tile') })).toBe(true)
+    expect(accepts(NewTile, { id: 'mine', parent: p, slot: 1, ...content('Tile') })).toBe(false)
     expect(['', 't', 'x'.repeat(36), `${t}x`].map((id) => accepts(TileRef, { id }))).toEqual([
       false,
       false,

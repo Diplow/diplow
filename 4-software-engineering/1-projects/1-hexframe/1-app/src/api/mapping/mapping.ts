@@ -32,10 +32,10 @@ const input = <F extends Schema.Struct.Fields>({ fields }: { readonly fields: F 
 export const TileRef = Schema.Struct({ id: TileId })
 
 /**
- * A new Tile, in a free slot under a Tile of the System: a Branch, a Leaf or a Context Tile. Without
- * the id a caller may choose, which Mapping does not honour yet.
+ * A new Tile, in a free slot under a Tile of the System: a Branch, a Leaf or a Context Tile, under
+ * the id its caller may choose, a UUID, so the client names it before the answer comes.
  */
-export const NewTile = Schema.Struct(Struct.omit(CreateTile.fields, ['_tag', 'id']))
+export const NewTile = input(CreateTile)
 
 /** A Tile's id and whichever of its Title, Preview and Body change. */
 export const TileEdit = input(EditTile)

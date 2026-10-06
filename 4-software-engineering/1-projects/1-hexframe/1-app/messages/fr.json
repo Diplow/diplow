@@ -204,6 +204,7 @@
   "error_mapping_title_missing": "Donnez un titre à cette tuile.",
   "error_mapping_preview_too_long": "Limitez l’aperçu à 350 caractères.",
   "error_mapping_direction_taken": "Cette place a déjà une tuile. Choisissez-en une libre, ou déplacez d’abord cette tuile.",
+  "error_mapping_tile_id_taken": "Cette tuile a déjà été créée. Rechargez pour voir votre système tel qu’il est.",
   "error_mapping_moved_under_itself": "Une tuile ne peut pas aller sous elle-même ni sous l’un de ses enfants.",
   "error_mapping_root_fixed": "Votre tuile racine, c’est vous : elle ne peut être ni déplacée ni supprimée.",
   "error_mapping_leaf_holds_nothing": "Une feuille est un seul fichier : rien ne va dessous, et une tuile qui a quelque chose dessous ne peut pas en devenir une.",

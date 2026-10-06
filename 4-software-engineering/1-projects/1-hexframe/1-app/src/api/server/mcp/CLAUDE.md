@@ -47,7 +47,7 @@ The tests drive the endpoint in-process. Against a real Claude Code, the accepta
 | `create_reference` | write | A Reference to a Tile, in a free Context slot | `createReference` |
 | `delete_reference` | write, destructive | Empties a Context slot that holds a Reference | `deleteReference` |
 
-Each runs the program of `api/mapping/programs.ts` its server function runs, a write in one transaction, and takes that function's input Schema (`api/mapping/mapping.ts`), a write its Operation's fields, with each field described for an agent. `create_tile` leaves out the `id` a caller may choose, as its server function does. A write that answers nothing answers `null`.
+Each runs the program of `api/mapping/programs.ts` its server function runs, a write in one transaction, and takes that function's input Schema (`api/mapping/mapping.ts`), a write its Operation's fields, with each field described for an agent. `create_tile` leaves out the `id` its server function's caller may choose (`NewTileOfAgent` in `tools.ts`): an agent reads the new Tile's in the answer, and its program, called without one, is never refused `TileIdTaken`. A write that answers nothing answers `null`.
 
 ## Rules
 

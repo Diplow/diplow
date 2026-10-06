@@ -7,6 +7,7 @@ import { Effect } from 'effect'
 
 import * as Iam from '#/domains/iam/iam'
 import type { Field } from '#/domains/mapping/entities'
+import type { TileIdTaken } from '#/domains/mapping/errors'
 import {
   CreateReference,
   CreateTile,
@@ -72,8 +73,27 @@ export const exportTile = ({ id }: { id: string }) =>
 /** An Operation as a server function decodes it: its fields, without the tag its name says. */
 type Fields<O> = Omit<O, '_tag'>
 
-export const createTile = (input: Omit<Fields<CreateTile>, 'id'>) =>
+const create = (input: Fields<CreateTile>) =>
   changeForAccount((accountId) => Mapping.createTile(accountId, new CreateTile(input)))
+
+/** A create whose caller chose no id: Mapping makes it, so it is never refused `TileIdTaken`. */
+type MadeByMapping<P> = Effect.Effect<
+  Effect.Success<P>,
+  Exclude<Effect.Error<P>, TileIdTaken>,
+  Effect.Services<P>
+>
+
+/**
+ * A create, under the id its caller chose, which a Tile of any System may already have
+ * (`TileIdTaken`), or, without one, as the MCP's `create_tile` sends it, under an id Mapping makes.
+ */
+export function createTile(
+  input: Omit<Fields<CreateTile>, 'id'> & { readonly id?: undefined },
+): MadeByMapping<ReturnType<typeof create>>
+export function createTile(input: Fields<CreateTile>): ReturnType<typeof create>
+export function createTile(input: Fields<CreateTile>) {
+  return create(input)
+}
 
 export const editTile = (input: Fields<EditTile>) =>
   changeForAccount((accountId) => Mapping.editTile(accountId, new EditTile(input)))

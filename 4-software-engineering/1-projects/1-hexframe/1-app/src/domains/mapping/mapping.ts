@@ -8,10 +8,10 @@
 import { Effect, Result, Struct } from 'effect'
 
 import type { InTransaction } from '#/repositories/database/database'
-import { Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/tiles'
+import { type IdTaken, Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/tiles'
 import { Zip } from '#/repositories/zip/zip'
 
-import { HelpReadOnly, TileNotFound } from './errors'
+import { HelpReadOnly, TileIdTaken, TileNotFound } from './errors'
 import { type LinkOf, exportOf } from './files/files'
 import { findInHelp, flatHelp, type HelpLanguage, isHelpId } from './help/help'
 import {
@@ -265,7 +265,7 @@ const decidedOn = (accountId: string, operation: Operation) =>
 /** Writes one event: the one change to the rows it stands for. */
 const written =
   (writes: Writes) =>
-  (event: MappingEvent): Effect.Effect<void, never, InTransaction> => {
+  (event: MappingEvent): Effect.Effect<void, IdTaken, InTransaction> => {
     switch (event._tag) {
       case 'TileCreated': {
         const { id, parent, slot, title, preview, body, name, config, frontmatter } = event
@@ -291,6 +291,17 @@ const written =
     }
   }
 
+/**
+ * What a write under an id a Tile of any System already has answers. An id Mapping made itself
+ * (`Tiles.newId`) is fresh, so its clash is a defect (`madeHere`); one a create's caller chose may be
+ * anyone's, and is refused `TileIdTaken` (`chosen`), saying nothing of where that Tile is.
+ */
+type OnTaken<T> = (taken: IdTaken) => Effect.Effect<never, T>
+
+const madeHere: OnTaken<never> = (taken) => Effect.die(taken)
+
+const chosen: OnTaken<TileIdTaken> = () => Effect.fail(new TileIdTaken())
+
 /** What an Operation did: the events `decide` made, in the order they were written, and the System after. */
 interface Operated {
   readonly events: ReadonlyArray<MappingEvent>
@@ -300,22 +311,28 @@ interface Operated {
 /**
  * Runs an Operation on the Account's System: locks it, loads it flat, asks `decide` through `decided`,
  * then writes one change per event, and answers the events with the System they leave (`evolve`).
- * Every rule lives in `decide`: what it refuses is refused here, with nothing written.
+ * Every rule lives in `decide`: what it refuses is refused here, with nothing written. A write under
+ * an id already taken answers `onTaken`: a defect, unless the Operation's caller chose the id.
  */
-const operate = <E>(
+const operate = <E, T = never>(
   accountId: string,
   operation: Operation,
   decided: (system: System) => Result.Result<ReadonlyArray<MappingEvent>, E>,
+  onTaken: OnTaken<T> = madeHere,
 ) =>
   Effect.gen(function* () {
     const system = yield* decidedOn(accountId, operation)
     const writes = (yield* Tiles).writes(accountId)
     const events = yield* Effect.fromResult(decided(system))
-    yield* Effect.forEach(events, written(writes), { discard: true })
+    yield* Effect.forEach(
+      events,
+      (event) => Effect.catchTag(written(writes)(event), 'IdTaken', onTaken),
+      { discard: true },
+    )
     return { events, system: events.reduce(evolve, system) } satisfies Operated
   })
 
-/** The id the repository makes for what a create makes, before `decide` is given it. */
+/** A fresh id, for what a create makes when its caller chose none, before `decide` is given it. */
 const newId = Tiles.use((tiles) => tiles.newId)
 
 /** The Tile of this id, as an Operation leaves it, for a change that answers it. */
@@ -328,17 +345,22 @@ const answered = ({ system }: Operated, id: string) => {
 
 /**
  * Adds a Tile in a free slot under a Tile of the System, never under a Leaf: a Branch, a Leaf, or a
- * Tile of its Context, and answers it. An import gives it what it keeps from its files, each part
- * already checked (`entities/kept/`); nothing else does, and no later change touches them. The id
- * the Operation may carry is not honoured yet: the repository makes it.
+ * Tile of its Context, and answers it. Its id is the one the Operation carries, which its caller
+ * chose so it can name the Tile before the answer comes: a Tile's already, in any System, is
+ * `TileIdTaken`, and nothing is written. Without one, Mapping makes it, and its clash is a defect,
+ * never a refusal. An import gives it what it keeps from its files, each part already checked
+ * (`entities/kept/`); nothing else does, and no later change touches them.
  */
-export const createTile = (accountId: string, operation: CreateTile, kept: ToKeep = {}) =>
-  Effect.flatMap(newId, (id) =>
+export const createTile = (accountId: string, operation: CreateTile, kept: ToKeep = {}) => {
+  const create = <T>(id: string, onTaken: OnTaken<T>) =>
     Effect.flatMap(
-      operate(accountId, operation, (system) => decide(system, operation, { id, kept })),
+      operate(accountId, operation, (system) => decide(system, operation, { id, kept }), onTaken),
       (operated) => answered(operated, id),
-    ),
-  )
+    )
+  return operation.id === undefined
+    ? Effect.flatMap(newId, (id) => create(id, madeHere))
+    : create(operation.id, chosen)
+}
 
 /** Changes what a Tile says, any of its Title, its Preview and its Body as given, and answers it. */
 export const editTile = (accountId: string, operation: EditTile) =>

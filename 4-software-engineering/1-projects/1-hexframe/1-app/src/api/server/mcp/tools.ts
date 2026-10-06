@@ -204,6 +204,20 @@ const described = {
   holder: 'The id of the Tile whose Context holds the Reference.',
 } as const
 
+/**
+ * A new Tile as an agent gives it: without the id a server function's caller may choose, since an
+ * agent reads the new Tile's in the answer.
+ */
+const NewTileOfAgent = NewTile.mapFields((fields) =>
+  Struct.evolve(Struct.omit(fields, ['id']), {
+    parent: (field) => field.annotate({ description: described.parent }),
+    slot: (field) => field.annotate({ description: described.slot }),
+    title: (field) => field.annotate({ description: described.title }),
+    preview: (field) => field.annotate({ description: described.preview }),
+    body: (field) => field.annotate({ description: described.body }),
+  }),
+)
+
 const createTile = write({
   name: 'create_tile',
   operation: 'createTile',
@@ -218,16 +232,9 @@ const createTile = write({
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
   },
-  input: NewTile.mapFields(
-    Struct.evolve({
-      parent: (field) => field.annotate({ description: described.parent }),
-      slot: (field) => field.annotate({ description: described.slot }),
-      title: (field) => field.annotate({ description: described.title }),
-      preview: (field) => field.annotate({ description: described.preview }),
-      body: (field) => field.annotate({ description: described.body }),
-    }),
-  ),
-  program: Mapping.createTile,
+  input: NewTileOfAgent,
+  // Called, not passed, so the create without an id is the one typed: never refused `TileIdTaken`.
+  program: (input: typeof NewTileOfAgent.Type) => Mapping.createTile(input),
 })
 
 const editTile = write({
