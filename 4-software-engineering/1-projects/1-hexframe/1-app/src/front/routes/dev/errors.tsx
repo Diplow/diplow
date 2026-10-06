@@ -141,7 +141,6 @@ function TitleForm() {
     defaultValues: { title: '' },
     validators: {
       onSubmitAsync: submitMutation({
-        scope: 'submitDevTitle',
         mutate: save.mutateAsync,
         onSaved: ({ title }) => toast.success(m.dev_errors_form_saved({ title })),
       }),

@@ -215,7 +215,6 @@ export const useCreateTileSubmit = (
 ): TileSubmit => {
   const { mutateAsync } = useCreateTile()
   return submitMutation({
-    scope: 'createTile',
     mutate: (content: TileContent) => mutateAsync({ ...where, ...content }),
     onSaved,
   })
@@ -232,7 +231,6 @@ export const useEditTileSubmit = (
 ): TileSubmit => {
   const { mutateAsync } = useEditTile()
   return submitMutation({
-    scope: 'editTile',
     mutate: (content: TileContent) => mutateAsync({ id: tile.id, ...changed(tile, content) }),
     onSaved,
   })

@@ -32,8 +32,8 @@ function signIn() {
 /**
  * Carries out the channels that show nothing in place: the sign-in redirect and the toast. The
  * boundary's states and a form's fields are shown where they belong, by ReadBoundary and the form's
- * submit (`submitMutation`, `submitWrite`). The report is the server's: it logged every failure it sent, with the request id,
- * so the client reports only a call that never reached it.
+ * submit (`submitMutation`, `submitWrite`). The report is the server's: it logged every failure it
+ * sent, with the request id, so the client reports only a call that never reached it.
  */
 function raise(failed: CallFailed, call: Call) {
   const { failure, scope } = failed
@@ -138,8 +138,6 @@ function shownOnForm({ failure, scope }: CallFailed): FormErrors {
 }
 
 interface SubmitMutation<V, A> {
-  /** The scope of the write, the one its mutation is keyed by, for a failure that names none. */
-  scope: string
   /** Sends the form's value through the write's mutation, `mutateAsync`, as a `submit` (`write`). */
   mutate: (value: V) => Promise<A>
   onSaved: (value: A) => void
@@ -150,13 +148,15 @@ interface SubmitMutation<V, A> {
  * its failure to its channel, as any write's, and the form shows the mutation's error, an `Invalid`
  * one on the fields it names.
  */
-export function submitMutation<V, A>({ scope, mutate, onSaved }: SubmitMutation<V, A>) {
+export function submitMutation<V, A>({ mutate, onSaved }: SubmitMutation<V, A>) {
   return async ({ value }: { value: V }): Promise<FormErrors | undefined> => {
     try {
       onSaved(await mutate(value))
       return undefined
     } catch (error) {
-      return shownOnForm(asCallFailed(error, scope))
+      // A write's mutation throws the CallFailed its call settled to, which names its scope; anything
+      // else is Unexpected, whose message no scope narrows.
+      return shownOnForm(asCallFailed(error, 'write'))
     }
   }
 }

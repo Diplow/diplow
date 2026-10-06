@@ -78,7 +78,6 @@ describe("a form's write through a mutation", () => {
     const client = makeQueryClient()
     const options = write('submitDevTitle', answer, { as: 'submit' })
     return submitMutation({
-      scope: 'submitDevTitle',
       mutate: (value: { title: string }) =>
         client.getMutationCache().build(client, options).execute(value),
       onSaved,
