@@ -114,6 +114,16 @@ describe("a form's write through a mutation", () => {
     expect(toast.error).toHaveBeenCalledExactlyOnceWith('That title is taken.')
     expect(onSaved).not.toHaveBeenCalled()
   })
+
+  it('throws a bug in onSaved, which no write met, rather than show it as a refusal', async () => {
+    const bug = new TypeError('a bug')
+    const saved = Promise.resolve({ ok: true as const, value: { title: 'x' } })
+    const onSaved = vi.fn(() => {
+      throw bug
+    })
+    await expect(submit(() => saved, onSaved)).rejects.toBe(bug)
+    expect(toast.error).not.toHaveBeenCalled()
+  })
 })
 
 describe('the sign-in redirect', () => {

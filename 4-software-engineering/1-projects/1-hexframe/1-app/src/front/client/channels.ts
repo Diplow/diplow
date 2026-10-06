@@ -146,18 +146,20 @@ interface SubmitMutation<V, A> {
 /**
  * A form's submit through a mutation, as the form's `validators.onSubmitAsync`: the QueryClient carries
  * its failure to its channel, as any write's, and the form shows the mutation's error, an `Invalid`
- * one on the fields it names.
+ * one on the fields it names. A bug in `onSaved` is no write's failure: it is thrown, not shown.
  */
 export function submitMutation<V, A>({ mutate, onSaved }: SubmitMutation<V, A>) {
   return async ({ value }: { value: V }): Promise<FormErrors | undefined> => {
+    let saved: A
     try {
-      onSaved(await mutate(value))
-      return undefined
+      saved = await mutate(value)
     } catch (error) {
       // A write's mutation throws the CallFailed its call settled to, which names its scope; anything
-      // else is Unexpected, whose message no scope narrows.
+      // else is Unexpected, whose message no scope narrows, and the QueryClient reported it.
       return shownOnForm(asCallFailed(error, 'write'))
     }
+    onSaved(saved)
+    return undefined
   }
 }
 
