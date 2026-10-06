@@ -134,8 +134,11 @@ export const keyProven = Auth.use((auth) => auth.bearer).pipe(
   Effect.map(Option.map(({ user, apiKeyId }): KeyProof => ({ account: user, keyId: apiKeyId }))),
 )
 
-/** The request's Account and its proof: its Session's when it has one, else its Key's, if any. */
-const signedInBy = (session: Option.Option<Session>, key: Option.Option<KeyProof>) =>
+/**
+ * The Account two proofs give, and which gave it: the Session's when there is one, else the Key's, if
+ * any. What `signedIn` reads the request by, and the API layer too, to say who acted.
+ */
+export const signedInBy = (session: Option.Option<Session>, key: Option.Option<KeyProof>) =>
   Option.orElse(
     Option.map(session, ({ account }): SignedIn => ({ account, by: { _tag: 'Session' } })),
     () =>

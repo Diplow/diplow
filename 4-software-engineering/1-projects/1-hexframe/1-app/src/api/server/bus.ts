@@ -8,7 +8,7 @@
 import { Context, Deferred, Effect, Layer, Option, PubSub, Schema } from 'effect'
 
 import { Bus, type DomainEvent } from '#/domains/bus'
-import { CurrentKey, CurrentSession, type SignedIn, signedIn } from '#/domains/iam/iam'
+import { CurrentKey, CurrentSession, type SignedIn, signedInBy } from '#/domains/iam/iam'
 import { AfterCommit } from '#/repositories/database/database'
 
 /**
@@ -58,17 +58,13 @@ interface Delivery {
 }
 
 /**
- * Who acted, as the request proves it, through IAM's `signedIn`: none outside a request, or when
- * nothing proves it.
+ * Who acted, as the request proves it, by IAM's rule: none outside a request, or when nothing proves
+ * it.
  */
 const actor = Effect.gen(function* () {
-  const session = Option.flatten(yield* Effect.serviceOption(CurrentSession))
-  const key = Option.flatten(yield* Effect.serviceOption(CurrentKey))
-  return yield* signedIn.pipe(
-    Effect.provideService(CurrentSession, session),
-    Effect.provideService(CurrentKey, key),
-    Effect.option,
-  )
+  const session = yield* Effect.serviceOption(CurrentSession)
+  const key = yield* Effect.serviceOption(CurrentKey)
+  return signedInBy(Option.flatten(session), Option.flatten(key))
 })
 
 // A bus message is logged at `medium` (../observability/levels.ts), by its tag, never its fields.
