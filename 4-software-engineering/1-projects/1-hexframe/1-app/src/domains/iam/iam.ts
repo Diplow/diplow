@@ -67,9 +67,16 @@ export interface KeyProof {
   readonly keyId: string
 }
 
-/** A signed-in request: its Account, whichever of the two proofs gave it. */
-interface SignedIn {
+/**
+ * Which of the two proofs gave a signed-in request its Account: a Session, the user at one of their
+ * devices, or one of their Keys, a program, by its id.
+ */
+type Proof = { readonly _tag: 'Session' } | { readonly _tag: 'Key'; readonly keyId: string }
+
+/** A signed-in request: its Account, and the proof that gave it. */
+export interface SignedIn {
   readonly account: Account
+  readonly by: Proof
 }
 
 /**
@@ -128,15 +135,25 @@ export const keyProven = Auth.use((auth) => auth.bearer).pipe(
 )
 
 /**
- * The request's Account, proven by its Session or by its Key, or `SignedOut`: the first step of
- * anything only a signed-in Account may do. Working on the System never asks which proof it was.
+ * The Account two proofs give, and which gave it: the Session's when there is one, else the Key's, if
+ * any. What `signedIn` reads the request by, and the API layer too, to say who acted.
+ */
+export const signedInBy = (session: Option.Option<Session>, key: Option.Option<KeyProof>) =>
+  Option.orElse(
+    Option.map(session, ({ account }): SignedIn => ({ account, by: { _tag: 'Session' } })),
+    () =>
+      Option.map(key, ({ account, keyId }): SignedIn => ({ account, by: { _tag: 'Key', keyId } })),
+  )
+
+/**
+ * The request's Account, proven by its Session or by its Key, and which proof it was, or
+ * `SignedOut`: the first step of anything only a signed-in Account may do. Working on the System
+ * never asks which proof it was; the API layer reads it to say who acted.
  */
 export const signedIn = Effect.gen(function* () {
-  const session = yield* CurrentSession
-  const key = yield* CurrentKey
-  const proof = Option.orElse(session, () => key)
-  if (Option.isNone(proof)) return yield* new SignedOut()
-  return { account: proof.value.account } satisfies SignedIn
+  const proven = signedInBy(yield* CurrentSession, yield* CurrentKey)
+  if (Option.isNone(proven)) return yield* new SignedOut()
+  return proven.value
 })
 
 /**

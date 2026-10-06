@@ -6,6 +6,7 @@ import { Context, type Effect } from 'effect'
 /**
  * A fact in the past tense, declared by the domain that emits it, in its language, as an Effect Schema
  * tagged class: `class AccountCreated extends Schema.TaggedClass<AccountCreated>()('AccountCreated', …)`.
+ * It never says who acted: the API layer puts that on the envelope it carries the event in.
  */
 export interface DomainEvent {
   readonly _tag: string
@@ -13,7 +14,8 @@ export interface DomainEvent {
 
 /**
  * Publishes a fact. It neither fails nor waits for a subscriber: a caller that needs a result calls
- * directly, since the bus is never a way to ask.
+ * directly, since the bus is never a way to ask. Published inside a transaction, it reaches
+ * subscribers once that commits, and never when it rolls back.
  */
 export class Bus extends Context.Service<
   Bus,

@@ -5,7 +5,7 @@ import { describe, expect, it, layer } from '@effect/vitest'
 import { integer, pgSchema, text } from 'drizzle-orm/pg-core'
 import { ConfigProvider, Effect, Exit } from 'effect'
 
-import { Database } from './database'
+import { AfterCommit, Database, transactional } from './database'
 import { migrated } from './migrations'
 import { PromiseDatabase, layer as promiseLayer } from './promise'
 import { tile } from './schema'
@@ -69,6 +69,59 @@ layer(TestDatabase)('the test database', (it) => {
         undirected: false,
         slots: [false, false, false, true, true, true, true],
       })
+    }),
+  )
+})
+
+layer(TestDatabase)('a transaction and the work deferred to its commit', (it) => {
+  /** Defers `work` to the commit of the transaction the program runs in. */
+  const deferring = (work: Effect.Effect<void>) => AfterCommit.use((defer) => defer(work))
+
+  it.effect(
+    'runs the deferred work once the transaction has committed, in the order deferred',
+    () =>
+      Effect.gen(function* () {
+        const seen: Array<string> = []
+        const mark = (what: string) => Effect.sync(() => void seen.push(what))
+        const value = yield* transactional(
+          Effect.gen(function* () {
+            yield* deferring(mark('first'))
+            yield* deferring(mark('second'))
+            yield* mark('inside')
+            return 'answered'
+          }),
+        )
+        expect({ value, seen }).toEqual({ value: 'answered', seen: ['inside', 'first', 'second'] })
+      }),
+  )
+
+  it.effect(
+    'drops the deferred work when the transaction rolls back, on a failure or a defect',
+    () =>
+      Effect.gen(function* () {
+        const seen: Array<string> = []
+        const mark = (what: string) => Effect.sync(() => void seen.push(what))
+        const failed = yield* transactional(
+          Effect.andThen(deferring(mark('failed')), Effect.fail('refused')),
+        ).pipe(Effect.exit)
+        const died = yield* transactional(
+          Effect.andThen(deferring(mark('died')), Effect.die(new Error('a bug'))),
+        ).pipe(Effect.exit)
+        expect([Exit.isFailure(failed), Exit.isFailure(died), seen]).toEqual([true, true, []])
+      }),
+  )
+
+  it.effect('holds the work deferred in an inner transaction until the outer one commits', () =>
+    Effect.gen(function* () {
+      const seen: Array<string> = []
+      const mark = (what: string) => Effect.sync(() => void seen.push(what))
+      yield* transactional(
+        Effect.gen(function* () {
+          yield* transactional(deferring(mark('inner')))
+          yield* mark('outer, after the inner one')
+        }),
+      )
+      expect(seen).toEqual(['outer, after the inner one', 'inner'])
     }),
   )
 })

@@ -2,6 +2,7 @@ import { describe, expect, it, layer } from '@effect/vitest'
 import { Effect, Layer, Schema } from 'effect'
 import { expectTypeOf } from 'vitest'
 
+import { Bus } from '#/domains/bus'
 import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 import type { TileConfigColumn } from '#/repositories/database/schema'
@@ -26,7 +27,10 @@ import { CreateTile, EditTile, MoveTile, SwapTiles } from './operations'
 /** The Account's System, read flat, as its tree: what the canvas draws, as the client builds it. */
 const tree = (accountId: string) => Effect.map(Mapping.system(accountId), systemOf)
 
-const TestTiles = tilesLayer.pipe(Layer.provideMerge(TestDatabase))
+/** The bus, as Mapping publishes on it: these tests hear nothing it publishes. */
+const Unheard = Layer.succeed(Bus)({ publish: () => Effect.void })
+
+const TestTiles = Layer.merge(tilesLayer.pipe(Layer.provideMerge(TestDatabase)), Unheard)
 
 /** A create as the API layer runs it, in a transaction, with what an import alone keeps beside it. */
 const createTile = (
