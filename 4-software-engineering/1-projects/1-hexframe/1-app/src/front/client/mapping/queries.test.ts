@@ -553,6 +553,7 @@ describe("a form's write refused, handed back", () => {
       })
       expect(toast.error).not.toHaveBeenCalled()
       expect(submit.writes()).toMatchObject([{ key: ['createTile'], status: 'error' }])
+      expect(Mapping.createTile).toHaveBeenCalledOnce()
     },
   )
 
@@ -571,6 +572,7 @@ describe("a form's write refused, handed back", () => {
       ])
     })
     expect(toast.error).not.toHaveBeenCalled()
+    expect(Mapping.editTile).toHaveBeenCalledOnce()
   })
 
   it('raise one toast for a refusal that names no field, and hand it back for the form', async () => {
@@ -588,6 +590,7 @@ describe("a form's write refused, handed back", () => {
     expect(toast.error).toHaveBeenCalledExactlyOnceWith(
       "This tile doesn't exist, or no longer does.",
     )
+    expect(Mapping.editTile).toHaveBeenCalledOnce()
   })
 
   it.each([
@@ -607,6 +610,7 @@ describe("a form's write refused, handed back", () => {
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledExactlyOnceWith('Give this tile a title.')
     })
+    expect(Mapping.createTile).toHaveBeenCalledOnce()
   })
 
   it('hand a refusal to a page opened while the System was read again, and raise no toast', async () => {
@@ -636,6 +640,7 @@ describe("a form's write refused, handed back", () => {
       expect(take).toHaveBeenCalledOnce()
     })
     expect(toast.error).not.toHaveBeenCalled()
+    expect(Mapping.createTile).toHaveBeenCalledOnce()
   })
 
   it('hand back no import, which is no Operation', async () => {
