@@ -204,6 +204,20 @@ const described = {
   holder: 'The id of the Tile whose Context holds the Reference.',
 } as const
 
+/**
+ * A new Tile as an agent gives it: without the id a server function's caller may choose, since an
+ * agent reads the new Tile's in the answer.
+ */
+const NewTileOfAgent = NewTile.mapFields((fields) =>
+  Struct.evolve(Struct.omit(fields, ['id']), {
+    parent: (field) => field.annotate({ description: described.parent }),
+    slot: (field) => field.annotate({ description: described.slot }),
+    title: (field) => field.annotate({ description: described.title }),
+    preview: (field) => field.annotate({ description: described.preview }),
+    body: (field) => field.annotate({ description: described.body }),
+  }),
+)
+
 const createTile = write({
   name: 'create_tile',
   operation: 'createTile',
@@ -218,16 +232,11 @@ const createTile = write({
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
   },
-  input: NewTile.mapFields(
-    Struct.evolve({
-      parent: (field) => field.annotate({ description: described.parent }),
-      slot: (field) => field.annotate({ description: described.slot }),
-      title: (field) => field.annotate({ description: described.title }),
-      preview: (field) => field.annotate({ description: described.preview }),
-      body: (field) => field.annotate({ description: described.body }),
-    }),
-  ),
-  program: Mapping.createTile,
+  input: NewTileOfAgent,
+  // An agent sends no id, so Mapping makes it, fresh: a clash on it is a defect, never a refusal
+  // to teach (`TileIdTaken` comes only to a caller that chose its id).
+  program: (input: typeof NewTileOfAgent.Type) =>
+    Effect.catchTag(Mapping.createTile(input), 'TileIdTaken', (taken) => Effect.die(taken)),
 })
 
 const editTile = write({

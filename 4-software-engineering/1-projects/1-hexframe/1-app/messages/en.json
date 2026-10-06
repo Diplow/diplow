@@ -204,6 +204,7 @@
   "error_mapping_title_missing": "Give this tile a title.",
   "error_mapping_preview_too_long": "Keep the preview to 350 characters.",
   "error_mapping_direction_taken": "This place already holds a tile. Pick a free one, or move that tile first.",
+  "error_mapping_tile_id_taken": "This tile was already created. Reload to see your system as it stands.",
   "error_mapping_moved_under_itself": "A tile can't move under itself or one of its own children.",
   "error_mapping_root_fixed": "Your root tile is you: it can't be moved or deleted.",
   "error_mapping_leaf_holds_nothing": "A leaf is a single file: nothing goes under it, and a tile with anything below it can't become one.",

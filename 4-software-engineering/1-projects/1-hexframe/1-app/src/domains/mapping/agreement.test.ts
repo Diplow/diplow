@@ -78,7 +78,7 @@ const aSystem = Effect.gen(function* () {
 })
 
 layer(TestTiles)('decide and evolve agree with the service, over PGlite', (it) => {
-  it.effect('on a Tile created, a Branch, a Leaf or a Context Tile, and one an import keeps', () =>
+  it.effect('on a Tile created, of each kind, under a chosen id, and one an import keeps', () =>
     Effect.gen(function* () {
       const { accountId, root, branch } = yield* aSystem
       const places = [
@@ -94,6 +94,14 @@ layer(TestTiles)('decide and evolve agree with the service, over PGlite', (it) =
           made: ({ id }) => ({ id }),
         })
       }
+      // The client decides a create under the id it chose, before the answer comes.
+      const id = crypto.randomUUID()
+      const chosen = new CreateTile({ id, parent: branch, slot: 5, ...content('Chosen') })
+      yield* agrees(accountId, {
+        operation: chosen,
+        change: Mapping.createTile(accountId, chosen),
+        made: () => ({ id }),
+      })
       const kept = {
         name: yield* named('STACK.md'),
         config: yield* configured({ fileName: 'SKILL.md' }),

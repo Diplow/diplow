@@ -38,6 +38,7 @@ const table: readonly Entry[] = [
   { tag: 'PreviewTooLong', message: m.error_mapping_preview_too_long },
   { tag: 'DirectionTaken', scope: 'importTiles', message: m.error_mapping_import_place_taken },
   { tag: 'DirectionTaken', message: m.error_mapping_direction_taken },
+  { tag: 'TileIdTaken', message: m.error_mapping_tile_id_taken },
   { tag: 'MovedUnderItself', scope: 'swapTiles', message: m.error_mapping_swapped_in_line },
   { tag: 'MovedUnderItself', message: m.error_mapping_moved_under_itself },
   { tag: 'RootFixed', message: m.error_mapping_root_fixed },

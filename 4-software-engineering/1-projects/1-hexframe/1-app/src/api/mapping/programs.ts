@@ -72,7 +72,11 @@ export const exportTile = ({ id }: { id: string }) =>
 /** An Operation as a server function decodes it: its fields, without the tag its name says. */
 type Fields<O> = Omit<O, '_tag'>
 
-export const createTile = (input: Omit<Fields<CreateTile>, 'id'>) =>
+/**
+ * A create, under the id its caller chose, which a Tile of any System may have (`TileIdTaken`), or
+ * under one Mapping makes.
+ */
+export const createTile = (input: Fields<CreateTile>) =>
   changeForAccount((accountId) => Mapping.createTile(accountId, new CreateTile(input)))
 
 export const editTile = (input: Fields<EditTile>) =>
