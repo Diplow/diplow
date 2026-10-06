@@ -12,10 +12,12 @@ import { m } from '#/paraglide/messages'
 
 import { makeQueryClient } from '../../channels'
 import {
+  type Refused,
   useCreateTileSubmit,
   useEditTile,
   useMoveTile,
   useSystem,
+  useSystemRefusals,
   useSystemWriting,
 } from '../queries'
 import { operationOf, overlaid, refusalOf } from './overlay'
@@ -209,16 +211,28 @@ describe('a refusal foreseen', () => {
     expect(result.current.shown?.tiles[id.a]).toMatchObject({ slot: 1 })
   })
 
-  it('sends an untitled Tile nowhere, and shows why on its field', async () => {
-    const onSaved = vi.fn()
-    const { result } = await rendered(() =>
-      useCreateTileSubmit({ parent: id.root, slot: 3 }, onSaved),
-    )
-    await expect(
-      result.current.hook({ value: { title: '', preview: '', body: '' } }),
-    ).resolves.toEqual({ fields: { title: 'Give this tile a title.' } })
+  it('sends an untitled Tile nowhere, and hands its form why, on its field', async () => {
+    const refused: Refused[] = []
+    const { result } = await rendered(() => {
+      useSystemRefusals((refusal) => {
+        refused.push(refusal)
+        return true
+      })
+      return useCreateTileSubmit({ parent: id.root, slot: 3 })
+    })
+    act(() => {
+      result.current.hook({ title: '', preview: '', body: '' })
+    })
+    await waitFor(() => {
+      expect(refused).toMatchObject([
+        {
+          operation: { _tag: 'CreateTile', parent: id.root, slot: 3, title: '' },
+          shown: { fields: { title: 'Give this tile a title.' } },
+          system: served,
+        },
+      ])
+    })
     expect(Mapping.createTile).not.toHaveBeenCalled()
-    expect(onSaved).not.toHaveBeenCalled()
     expect(toast.error).not.toHaveBeenCalled()
     expect(reportError).not.toHaveBeenCalled()
   })
@@ -227,11 +241,9 @@ describe('a refusal foreseen', () => {
 describe('the overlay', () => {
   it('folds a new Tile under the id its client chose', async () => {
     vi.mocked(Mapping.createTile).mockReturnValue(later<never>().promise)
-    const { result } = await rendered(() =>
-      useCreateTileSubmit({ parent: id.root, slot: 3 }, vi.fn()),
-    )
+    const { result } = await rendered(() => useCreateTileSubmit({ parent: id.root, slot: 3 }))
     act(() => {
-      void result.current.hook({ value: { title: 'C', preview: '', body: '' } })
+      result.current.hook({ title: 'C', preview: '', body: '' })
     })
     await waitFor(() => {
       expect(Mapping.createTile).toHaveBeenCalled()

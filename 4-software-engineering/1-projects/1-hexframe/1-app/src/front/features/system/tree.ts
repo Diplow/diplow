@@ -71,6 +71,12 @@ function contextNode(entry: ContextEntry, slot: string): TileNode {
   }
 }
 
+/** The swap of the moving Tile with another, the moving one named first, as `movingIn` reads it. */
+export const swapOf = (moving: string, held: string) => ({ a: moving, b: held })
+
+/** The Tile a swap moves, the one the move under way named (`swapOf`). */
+export const movingIn = (swap: { readonly a: string }) => swap.a
+
 /**
  * Whether a Tile on the canvas offers to swap places with the moving one: a Tile drawn where it stands,
  * so no Reference, drawn under its Tile's id, and no Leaf, which only moves to a free slot or changes
@@ -81,7 +87,7 @@ function contextNode(entry: ContextEntry, slot: string): TileNode {
  */
 export function swapsWith(system: System, moving: TileNode, tile: TileNode) {
   if (tile.reference === true || tile.leaf === true) return false
-  const swapped = decide(system, { _tag: 'SwapTiles', a: moving.id, b: tile.id })
+  const swapped = decide(system, { _tag: 'SwapTiles', ...swapOf(moving.id, tile.id) })
   return Result.isSuccess(swapped) && swapped.success.length > 0
 }
 

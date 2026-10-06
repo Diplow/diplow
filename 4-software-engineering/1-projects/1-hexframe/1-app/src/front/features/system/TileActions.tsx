@@ -2,8 +2,10 @@
 // Branch or shrink a bare Branch into a Leaf, and, on an empty System's Root, import a vault; a Leaf
 // that isn't Markdown shows its Body as code. And the form a new Tile or an edited one is written in, or an import,
 // in a drawer, where an empty slot offers a new Tile or an import. The drawer's open state and the
-// move under way are the URL's. A refusal shows where its channel sends it: on the form's field, in
-// the import's report, or in a toast.
+// move under way are the URL's. A write's change ends the moment it is sent: the drawer closes on
+// submit, a delete centers the Tile it stood under. A refusal shows where its channel sends it: on the
+// form's field, the form reopened with what the user typed (`useRefusalState`), in the import's
+// report, or in a toast.
 import {
   isContextSlot,
   isEmptySystem,
@@ -18,11 +20,12 @@ import {
   type TileContent,
   type TileSubmit,
 } from '#/front/client/mapping/queries'
+import type { FormErrors } from '#/front/client/channels'
 import { m } from '#/paraglide/messages'
 import { findTile, type TileNode } from '#/front/ui/hex/view/tiles'
 import { centerOn, showView } from '#/front/ui/hex/view/view'
 import { Button } from '#/front/ui/inputs/controls/button'
-import { useAppForm } from '#/front/ui/inputs/forms/form'
+import { openedOnRefusal, useAppForm } from '#/front/ui/inputs/forms/form'
 import { ConfirmDialog } from '#/front/ui/overlays/ConfirmDialog'
 import { Drawer } from '#/front/ui/overlays/Drawer'
 import { CodeBlock } from '#/front/ui/data/Markdown'
@@ -37,9 +40,10 @@ import {
   type Change,
   type SearchChange,
   type SystemSearch,
-} from './search'
+} from './search/search'
 import { Import } from './import/Import'
 import { type KindChange, useCenteredTileState } from './state/useCenteredTileState'
+import { type Reopened, useRefusalState } from './state/useRefusalState'
 import { tileIn } from './tree'
 
 interface TileActionsProps {
@@ -58,6 +62,8 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
   const found = tileIn(system, center.id)
   const parent = found?.parent
   const { code, kindChange } = useCenteredTileState(system, center.id)
+  const reopened = useRefusalState(search, onSearchChange)
+  const remove = useDeleteTile()
   const begin = (change: Change) => {
     onSearchChange(withChange(search, change))
   }
@@ -84,10 +90,10 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
             onMove: () => {
               begin({ kind: 'move', id: found.tile.id })
             },
-            // The centered Tile is gone, and everything below it: the view, as it is by then,
-            // centers on the Tile it stood under, and a change under way ends only if it named one
-            // of the Tiles gone.
-            onDeleted: () => {
+            // The centered Tile goes at once, and everything below it: the view centers on the Tile
+            // it stood under, and a change under way ends only if it named one of the Tiles gone.
+            onDelete: () => {
+              remove.mutate({ id: found.tile.id })
               onSearchChange((current) =>
                 withoutTile(withView(current, centerOn(tree, parent.id)), center),
               )
@@ -105,8 +111,9 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
         system={system}
         tree={tree}
         change={changeOf(search)}
+        reopened={reopened}
         onChange={begin}
-        // A save settles later: it ends the change on the URL of that moment, not the one it was sent from.
+        // Closed, or sent: the change ends at once.
         onDone={() => {
           onSearchChange((current) => withChange(current, { kind: 'none' }))
         }}
@@ -126,8 +133,8 @@ interface CenteredTileProps {
   kindChange?: KindChange | undefined
   onEdit: () => void
   onMove?: () => void
-  /** What follows once the Tile is deleted; the Root, which is never deleted, has none. */
-  onDeleted?: () => void
+  /** Deletes the Tile, once the user confirms; the Root, which is never deleted, has none. */
+  onDelete?: () => void
   /** Opens a vault's import as the Root: an empty System's only. */
   onImport?: () => void
 }
@@ -140,10 +147,9 @@ function CenteredTile({
   kindChange,
   onEdit,
   onMove,
-  onDeleted,
+  onDelete,
   onImport,
 }: CenteredTileProps) {
-  const remove = useDeleteTile()
   const exporting = useExportTile()
   return (
     <Card
@@ -184,7 +190,7 @@ function CenteredTile({
           >
             {m.system_export()}
           </Button>
-          {onDeleted && (
+          {onDelete && (
             <ConfirmDialog
               trigger={
                 <Button variant="outline" size="sm">
@@ -195,9 +201,7 @@ function CenteredTile({
               description={m.system_delete_description({ title })}
               confirmLabel={m.system_delete()}
               destructive
-              onConfirm={() => {
-                remove.mutate({ id }, { onSuccess: onDeleted })
-              }}
+              onConfirm={onDelete}
             />
           )}
         </div>
@@ -212,14 +216,18 @@ interface ChangeDrawerProps {
   system: SystemTile
   tree: TileNode
   change: Change
+  /** The form a refusal reopened, the change under way's. */
+  reopened: Reopened | undefined
   /** Turns the change into another: a new Tile into an import in the same slot, and back. */
   onChange: (change: Change) => void
   onDone: () => void
 }
 
 /** The drawer of the change under way, when it is a form: a new Tile's, an import, or a Tile's. */
-function ChangeDrawer({ system, tree, change, onChange, onDone }: ChangeDrawerProps) {
+function ChangeDrawer({ system, tree, change, reopened, onChange, onDone }: ChangeDrawerProps) {
   const form = drawerOf(system, tree, change)
+  // A refusal reopens its form afresh, keyed by its turn, with what the user typed.
+  const key = `${form?.key ?? ''}:${String(reopened?.turn ?? '')}`
   const slot = slotChoiceOf(change)
   // The choice stands above a new Tile's form, and above an import's pickers only, never its report.
   const choice =
@@ -242,12 +250,20 @@ function ChangeDrawer({ system, tree, change, onChange, onDone }: ChangeDrawerPr
     >
       {form?.kind === 'add' && choice}
       {form?.kind === 'add' && (
-        <NewTileForm key={form.key} parent={form.parent} slot={form.slot} onSaved={onDone} />
+        <NewTileForm
+          key={key}
+          parent={form.parent}
+          slot={form.slot}
+          refilled={reopened}
+          onSent={onDone}
+        />
       )}
       {form?.kind === 'import' && (
         <Import key={form.key} place={form.place} choice={choice} onDone={onDone} />
       )}
-      {form?.kind === 'edit' && <EditTileForm key={form.key} tile={form.tile} onSaved={onDone} />}
+      {form?.kind === 'edit' && (
+        <EditTileForm key={key} tile={form.tile} refilled={reopened} onSent={onDone} />
+      )}
     </Drawer>
   )
 }
@@ -355,18 +371,27 @@ function SlotChoice({ choice, onChoose }: SlotChoiceProps) {
   )
 }
 
-interface NewTileFormProps {
-  parent: string
-  slot: Extract<Change, { kind: 'add' }>['slot']
-  onSaved: () => void
+/** What a Tile's form is given beside its write: a refusal's refill, and what follows its submit. */
+interface FormOptions {
+  /** The form reopened by its write's refusal, with what the user typed; none for a fresh one. */
+  refilled: Reopened | undefined
+  /** The form is sent: the drawer closes at once, as if the write had landed. */
+  onSent: () => void
 }
 
-function NewTileForm({ parent, slot, onSaved }: NewTileFormProps) {
-  const submit = useCreateTileSubmit({ parent, slot }, onSaved)
+interface NewTileFormProps extends FormOptions {
+  parent: string
+  slot: Extract<Change, { kind: 'add' }>['slot']
+}
+
+function NewTileForm({ parent, slot, refilled, onSent }: NewTileFormProps) {
+  const submit = useCreateTileSubmit({ parent, slot })
   return (
     <TileForm
-      defaults={{ title: '', preview: '', body: '' }}
+      defaults={refilled?.content ?? { title: '', preview: '', body: '' }}
+      shown={refilled?.shown}
       submit={submit}
+      onSent={onSent}
       label={m.system_add()}
     />
   )
@@ -374,25 +399,43 @@ function NewTileForm({ parent, slot, onSaved }: NewTileFormProps) {
 
 function EditTileForm({
   tile,
-  onSaved,
-}: {
-  tile: TileContent & { id: string }
-  onSaved: () => void
-}) {
-  const submit = useEditTileSubmit(tile, onSaved)
+  refilled,
+  onSent,
+}: FormOptions & { tile: TileContent & { id: string } }) {
+  const submit = useEditTileSubmit(tile)
   const { title, preview, body } = tile
-  return <TileForm defaults={{ title, preview, body }} submit={submit} label={m.system_save()} />
+  return (
+    <TileForm
+      defaults={refilled?.content ?? { title, preview, body }}
+      shown={refilled?.shown}
+      submit={submit}
+      onSent={onSent}
+      label={m.system_save()}
+    />
+  )
 }
 
 interface TileFormProps {
   defaults: TileContent
+  /** What the form shows of its last write's refusal, reopened by it: on the fields it names. */
+  shown: FormErrors | undefined
   submit: TileSubmit
+  onSent: () => void
   label: string
 }
 
 /** A Tile's Title, Preview and Body. What each must be is Mapping's to say, on the field at fault. */
-function TileForm({ defaults, submit, label }: TileFormProps) {
-  const form = useAppForm({ defaultValues: defaults, validators: { onSubmitAsync: submit } })
+function TileForm({ defaults, shown, submit, onSent, label }: TileFormProps) {
+  const form = useAppForm({
+    defaultValues: defaults,
+    onSubmit: ({ value }) => {
+      submit(value)
+      onSent()
+    },
+    // A form reopened by a refusal shows it as a refused submit would; a refusal on no field is in
+    // its toast already.
+    ...openedOnRefusal(shown !== undefined && 'fields' in shown ? shown.fields : undefined),
+  })
   return (
     <form
       noValidate

@@ -66,8 +66,8 @@ export async function downloaded<E extends Failure>(
 
 /**
  * Where the app shows a Tile, by its id, on the site a request reached: home, centered on it, as the
- * System's page reads its search params (`front/features/system/search.ts`, whose test reads this
- * link back). An export links by it a Reference whose Tile it leaves out.
+ * System's page reads its search params (`front/features/system/search/search.ts`, whose test reads
+ * this link back). An export links by it a Reference whose Tile it leaves out.
  */
 export const tileLink =
   (requestUrl: string) =>

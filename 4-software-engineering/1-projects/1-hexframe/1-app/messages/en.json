@@ -38,6 +38,7 @@
   "dev_ui_state_with_message": "With its own message",
   "dev_ui_state_verbatim_file": "A file kept as written, a long line scrolling",
   "dev_ui_form_hint": "Leave the title empty, or write more than {limit} characters, then save",
+  "dev_ui_form_refused": "Opened on a refused submit",
   "dev_ui_form_title": "Title",
   "dev_ui_form_title_description": "What the tile is, in a few words.",
   "dev_ui_form_title_placeholder": "Leadership",
