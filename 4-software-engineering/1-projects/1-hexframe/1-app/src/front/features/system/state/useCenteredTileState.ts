@@ -32,7 +32,8 @@ export function useCenteredTileState(system: SystemTile, id: string): CenteredTi
     label,
     pending: move.isPending,
     change: () => {
-      // One write at a time: a second press while the first is on its way does nothing.
+      // The card shows the Tile of its new kind at once, offering the change back: a second press
+      // while the first is on its way, a double click, would undo it, so it does nothing.
       if (!move.isPending) move.mutate({ id, parent: parent.id, slot })
     },
   })

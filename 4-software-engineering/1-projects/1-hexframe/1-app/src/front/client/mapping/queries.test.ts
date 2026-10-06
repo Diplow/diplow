@@ -6,6 +6,7 @@ import { createElement, type ReactNode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { decodeFailure } from '#/api/errors/failure'
+import { TileId } from '#/domains/mapping/entities'
 import { messageFor } from '#/api/errors/messages'
 import * as Mapping from '#/api/mapping/mapping'
 import { toast } from '#/front/ui/feedback/Toaster'
@@ -89,10 +90,18 @@ const system = {
   owned: true,
 } as const
 
-/** Each server function stand-in answers `value`; the System's answers the System above. */
+/** The System read again after a write, told from the first read by its Root's Title. */
+const readAgain = { ...system, root: { ...system.root, title: 'Read again' } } as const
+
+/**
+ * Each server function stand-in answers `value`; the System's answers the System above, then, read
+ * again, `readAgain`.
+ */
 function answering(value: unknown) {
   const ok = (answer: unknown) => () => Promise.resolve({ ok: true, value: answer })
-  vi.mocked(Mapping.system).mockImplementation(ok(system) as never)
+  vi.mocked(Mapping.system)
+    .mockImplementationOnce(ok(system) as never)
+    .mockImplementation(ok(readAgain) as never)
   for (const call of [
     Mapping.createTile,
     Mapping.editTile,
@@ -117,6 +126,25 @@ function render<T>(
   const wrapper = ({ children }: { children: ReactNode }) =>
     createElement(QueryClientProvider, { client }, children)
   return renderHook(() => ({ system: useSystem(), hook: hook() }), { wrapper })
+}
+
+type Rendered = ReturnType<typeof render>['result']
+
+/** The flat System the page shows. */
+const shown = (result: Rendered) => result.current.system.data?.system
+
+/** Waits for the first read of the System to land. */
+async function read(result: Rendered) {
+  await waitFor(() => {
+    expect(shown(result)).toBeDefined()
+  })
+}
+
+/** Waits for the page to show the System read again. */
+async function readAgainShown(result: Rendered) {
+  await waitFor(() => {
+    expect(shown(result)).toEqual(readAgain)
+  })
 }
 
 /** A write hook's case: its server function, an input it takes, and the hook, ready to send it. */
@@ -185,12 +213,10 @@ describe("Mapping's hooks", () => {
   ])('write through $name, then read the System again', async ({ name, input, use }) => {
     answering({ id: 't' })
     const { result } = render(use)
-    await waitFor(() => {
-      expect(result.current.system.isSuccess).toBe(true)
-    })
+    await read(result)
     await expect(result.current.hook()).resolves.toEqual({ id: 't' })
     expect(Mapping[name]).toHaveBeenCalledWith({ data: input })
-    expect(Mapping.system).toHaveBeenCalledTimes(2)
+    await readAgainShown(result)
   })
 
   it('throw a refusal as a CallFailed holding it, and read the System again all the same', async () => {
@@ -201,9 +227,7 @@ describe("Mapping's hooks", () => {
       requestId: 'req-1',
     })
     const { result } = render(useDeleteTile)
-    await waitFor(() => {
-      expect(result.current.system.isSuccess).toBe(true)
-    })
+    await read(result)
     const failed = await result.current.hook
       .mutateAsync({ id: 'gone' })
       .catch((error: unknown) => error)
@@ -213,7 +237,7 @@ describe("Mapping's hooks", () => {
       failure: decodeFailure({ _tag: 'TileNotFound', kind: 'NotFound' }),
       requestId: 'req-1',
     })
-    expect(Mapping.system).toHaveBeenCalledTimes(2)
+    await readAgainShown(result)
   })
 
   it('send the System’s writes one after another, each once the one before it settled', async () => {
@@ -225,9 +249,7 @@ describe("Mapping's hooks", () => {
       }),
     )
     const { result } = render(() => ({ move: useMoveTile(), edit: useEditTile() }))
-    await waitFor(() => {
-      expect(result.current.system.isSuccess).toBe(true)
-    })
+    await read(result)
     const moved = result.current.hook.move
       .mutateAsync({ id: 't', parent: 'root', slot: 3 })
       .catch((error: unknown) => error)
@@ -258,14 +280,13 @@ describe('the export of a Tile', () => {
       saved(this.download, this.href)
     })
     const { result } = render(useExportTile)
-    await waitFor(() => {
-      expect(result.current.system.isSuccess).toBe(true)
-    })
+    await read(result)
     await result.current.hook.mutateAsync({ id: 'games' })
     expect(Mapping.exportTile).toHaveBeenCalledWith({ data: { id: 'games' } })
     expect(saved).toHaveBeenCalledWith('games.zip', 'blob:games')
     expect(document.querySelector('a[download]')).toBeNull()
-    expect(Mapping.system).toHaveBeenCalledOnce()
+    await new Promise((resolve) => setTimeout(resolve, 50))
+    expect(shown(result)).toEqual(system)
   })
 
   it('throws a refusal as a CallFailed holding it, and saves nothing', async () => {
@@ -314,9 +335,7 @@ describe('an import', () => {
   async function importing() {
     answering(undefined)
     const { result } = render(useImportTiles)
-    await waitFor(() => {
-      expect(result.current.system.isSuccess).toBe(true)
-    })
+    await read(result)
     return result
   }
 
@@ -340,9 +359,7 @@ describe('an import', () => {
       place,
       upload: { name: 'vault.zip' },
     })
-    await waitFor(() => {
-      expect(Mapping.system).toHaveBeenCalledTimes(2)
-    })
+    await readAgainShown(result)
   })
 
   it('answers the server’s refusal with every fault, what was left out beside them', async () => {
@@ -383,9 +400,7 @@ describe('an import', () => {
     )
     vi.mocked(Mapping.importTiles).mockResolvedValue({ ok: true, value: report } as never)
     const { result } = render(() => ({ move: useMoveTile(), import: useImportTiles() }))
-    await waitFor(() => {
-      expect(result.current.system.isSuccess).toBe(true)
-    })
+    await read(result)
     const moving = result.current.hook.move.mutateAsync({ id: 't', parent: 'root', slot: 3 })
     const imported = result.current.hook.import.mutateAsync({ given: folder, place })
     await waitFor(() => {
@@ -436,31 +451,33 @@ describe("Mapping's form submits", () => {
       }),
       makeQueryClient(),
     )
-    await waitFor(() => {
-      expect(result.current.system.isSuccess).toBe(true)
-    })
+    await read(result)
     return Object.assign((value: typeof content) => result.current.hook.submit({ value }), {
       writes: () => result.current.hook.writes,
+      shown: () => shown(result),
     })
   }
 
-  it('create a Tile in the slot the form was opened on, as a mutation of the System', async () => {
+  it('create a Tile in the slot the form was opened on, under an id of its choosing, as a mutation', async () => {
     answering({ id: 't' })
     const onSaved = vi.fn()
     const submit = await submitting(() =>
       useCreateTileSubmit({ parent: 'root', slot: -3 }, onSaved),
     )
     await expect(submit(content)).resolves.toBeUndefined()
-    expect(Mapping.createTile).toHaveBeenCalledWith({
-      data: { parent: 'root', slot: -3, ...content },
-    })
+    const [[{ data }]] = vi.mocked(Mapping.createTile).mock.calls as unknown as [
+      [{ data: { id: string } }],
+    ]
+    const chosen = data.id
+    expect(Schema.is(TileId)(chosen)).toBe(true)
+    expect(data).toEqual({ id: chosen, parent: 'root', slot: -3, ...content })
     expect(onSaved).toHaveBeenCalledOnce()
     await waitFor(() => {
       expect(submit.writes()).toEqual([
         {
           key: ['createTile'],
           status: 'success',
-          variables: { parent: 'root', slot: -3, ...content },
+          variables: { id: chosen, parent: 'root', slot: -3, ...content },
         },
       ])
     })
@@ -518,7 +535,7 @@ describe("Mapping's form submits", () => {
     expect(toast.error).not.toHaveBeenCalled()
     expect(onSaved).not.toHaveBeenCalled()
     await waitFor(() => {
-      expect(Mapping.system).toHaveBeenCalledTimes(2)
+      expect(submit.shown()).toEqual(readAgain)
     })
   })
 

@@ -23,6 +23,17 @@ export class CallFailed extends Error {
   }
 }
 
+/**
+ * A refusal the client foresaw, deciding as Mapping would on the System it holds, before sending: the
+ * call was never made, so the server logged nothing and there is nothing to report.
+ */
+export class Foreseen extends CallFailed {
+  constructor(failure: Failure, scope: string) {
+    super(failure, scope)
+    this.name = 'Foreseen'
+  }
+}
+
 /** Any error a call threw, as a CallFailed: what is not one already is `Unexpected`. */
 export function asCallFailed(error: unknown, scope: string): CallFailed {
   return error instanceof CallFailed
