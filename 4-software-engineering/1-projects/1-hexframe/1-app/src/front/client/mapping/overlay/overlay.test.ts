@@ -236,6 +236,26 @@ describe('a refusal foreseen', () => {
     expect(toast.error).not.toHaveBeenCalled()
     expect(reportError).not.toHaveBeenCalled()
   })
+
+  it('hands its form back at once, the System not read again, however slow the server', async () => {
+    const refused: Refused[] = []
+    const { result } = await rendered(() => {
+      useSystemRefusals((refusal) => {
+        refused.push(refusal)
+        return true
+      })
+      return useCreateTileSubmit({ parent: id.root, slot: 3 })
+    })
+    vi.mocked(Mapping.system).mockClear().mockReturnValue(later<never>().promise)
+    act(() => {
+      result.current.hook({ title: '', preview: '', body: '' })
+    })
+    await waitFor(() => {
+      expect(refused).toMatchObject([{ operation: { _tag: 'CreateTile', title: '' } }])
+    })
+    expect(Mapping.system).not.toHaveBeenCalled()
+    expect(result.current.writing).toBe(false)
+  })
 })
 
 describe('the overlay', () => {
