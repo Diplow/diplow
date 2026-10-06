@@ -1,9 +1,12 @@
-import { describe, expect, it } from '@effect/vitest'
-import { Deferred, Duration, Effect, Logger, References, Schema } from 'effect'
+import { describe, expect, it, layer } from '@effect/vitest'
+import { Deferred, Duration, Effect, Exit, Logger, Option, References, Schema } from 'effect'
 
 import { Bus, type DomainEvent } from '#/domains/bus'
+import { CurrentKey, CurrentSession } from '#/domains/iam/iam'
+import { transactional } from '#/repositories/database/database'
+import { TestDatabase } from '#/repositories/database/testing'
 
-import { WaitUntil, on, serverBus, type Subscription } from './bus'
+import { type Envelope, WaitUntil, on, serverBus, type Subscription } from './bus'
 
 // Two events, named for the test rather than in a domain's language.
 class DevHappened extends Schema.TaggedClass<DevHappened>()('DevHappened', { n: Schema.Number }) {}
@@ -128,6 +131,108 @@ describe('the server bus', () => {
       expect(lines).toEqual([
         { message: ['DevHappened published'], annotations: { bus: 'server', topic: 'bus' } },
       ])
+    }),
+  )
+})
+
+/** A bus whose one subscription keeps every envelope it hears, and what it heard. */
+const listening = () => {
+  const heard: Array<Envelope> = []
+  const keep = on(DevHappened, (event, actor) =>
+    Effect.sync(() => void heard.push({ event, actor })),
+  )
+  return { heard, bus: bus(keep) }
+}
+
+/** What the subscription heard, as tags, once the work handed to waitUntil has settled. */
+const tags = (heard: ReadonlyArray<Envelope>) => heard.map(({ event }) => event._tag)
+
+layer(TestDatabase)('the server bus, in a transaction', (it) => {
+  it.effect('holds an event published inside a transaction until it commits', () =>
+    Effect.gen(function* () {
+      const { heard, bus: listened } = listening()
+      const kept: Array<Effect.Effect<void>> = []
+      yield* Effect.gen(function* () {
+        const { publish } = yield* Bus
+        const inside = yield* transactional(
+          Effect.gen(function* () {
+            yield* publish(new DevHappened({ n: 1 }))
+            return kept.length
+          }),
+        )
+        yield* Effect.all(kept, { discard: true })
+        expect([inside, kept.length, tags(heard)]).toEqual([0, 1, ['DevHappened']])
+      }).pipe(
+        Effect.provide(listened),
+        Effect.provideService(WaitUntil, (work) => void kept.push(work)),
+      )
+    }),
+  )
+
+  it.effect(
+    'drops an event published in a transaction that rolls back, on a refusal or a defect',
+    () =>
+      Effect.gen(function* () {
+        const { heard, bus: listened } = listening()
+        const kept: Array<Effect.Effect<void>> = []
+        yield* Effect.gen(function* () {
+          const { publish } = yield* Bus
+          const refused = yield* transactional(
+            Effect.andThen(publish(new DevHappened({ n: 1 })), Effect.fail('refused')),
+          ).pipe(Effect.exit)
+          const died = yield* transactional(
+            Effect.andThen(publish(new DevHappened({ n: 2 })), Effect.die(new Error('a bug'))),
+          ).pipe(Effect.exit)
+          expect([Exit.isFailure(refused), Exit.isFailure(died)]).toEqual([true, true])
+        }).pipe(
+          Effect.provide(listened),
+          Effect.provideService(WaitUntil, (work) => void kept.push(work)),
+        )
+        expect([kept.length, heard]).toEqual([0, []])
+      }),
+  )
+})
+
+describe('the envelope', () => {
+  const account = { id: 'a-1', email: 'ada@example.com' }
+
+  /** Publishes on a request proven by a Session, a Key, or nothing, and answers what was heard. */
+  const heardOn = (proofs: { session?: boolean; keyId?: string }) =>
+    Effect.gen(function* () {
+      const { heard, bus: listened } = listening()
+      const session =
+        proofs.session === true ? Option.some({ account, expiresAt: new Date() }) : Option.none()
+      const key = Option.map(Option.fromNullishOr(proofs.keyId), (keyId) => ({ account, keyId }))
+      yield* settled(new DevHappened({ n: 1 })).pipe(
+        Effect.provide(listened),
+        Effect.provideService(CurrentSession, session),
+        Effect.provideService(CurrentKey, key),
+      )
+      return heard
+    })
+
+  it.effect(
+    'carries the event as its domain declared it, and who acted, by the proof the request gave',
+    () =>
+      Effect.gen(function* () {
+        const event = new DevHappened({ n: 1 })
+        expect(yield* heardOn({ session: true })).toEqual([
+          { event, actor: Option.some({ account, by: { _tag: 'Session' } }) },
+        ])
+        expect(yield* heardOn({ keyId: 'k-1' })).toEqual([
+          { event, actor: Option.some({ account, by: { _tag: 'Key', keyId: 'k-1' } }) },
+        ])
+      }),
+  )
+
+  it.effect('carries no actor when nothing proves the request, or outside one', () =>
+    Effect.gen(function* () {
+      const { heard, bus: listened } = listening()
+      yield* settled(new DevHappened({ n: 1 })).pipe(Effect.provide(listened))
+      expect(yield* heardOn({})).toEqual([
+        { event: new DevHappened({ n: 1 }), actor: Option.none() },
+      ])
+      expect(heard).toEqual([{ event: new DevHappened({ n: 1 }), actor: Option.none() }])
     }),
   )
 })

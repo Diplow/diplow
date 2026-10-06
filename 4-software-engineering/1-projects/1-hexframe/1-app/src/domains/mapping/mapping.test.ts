@@ -643,20 +643,18 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
 })
 
 describe('the transaction a change runs in', () => {
-  it('is required of every change, with the bus it publishes on, and opened by whoever runs it, never by Mapping', () => {
+  it('is required of every change, with the bus, and opened by whoever runs it, never by Mapping', () => {
     type Requires<F extends (...args: never[]) => Effect.Effect<unknown, unknown, unknown>> =
       Effect.Services<ReturnType<F>>
-    expectTypeOf<Requires<typeof Mapping.createTile>>().toEqualTypeOf<InTransaction | Tiles | Bus>()
-    expectTypeOf<Requires<typeof Mapping.editTile>>().toEqualTypeOf<InTransaction | Tiles | Bus>()
-    expectTypeOf<Requires<typeof Mapping.moveTile>>().toEqualTypeOf<InTransaction | Tiles | Bus>()
-    expectTypeOf<Requires<typeof Mapping.swapTiles>>().toEqualTypeOf<InTransaction | Tiles | Bus>()
-    expectTypeOf<Requires<typeof Mapping.deleteTile>>().toEqualTypeOf<InTransaction | Tiles | Bus>()
-    expectTypeOf<Requires<typeof Mapping.createReference>>().toEqualTypeOf<
-      InTransaction | Tiles | Bus
-    >()
-    expectTypeOf<Requires<typeof Mapping.deleteReference>>().toEqualTypeOf<
-      InTransaction | Tiles | Bus
-    >()
+    /** What a change requires: a transaction, the tiles repository, and the bus it publishes on. */
+    type Change = InTransaction | Tiles | Bus
+    expectTypeOf<Requires<typeof Mapping.createTile>>().toEqualTypeOf<Change>()
+    expectTypeOf<Requires<typeof Mapping.editTile>>().toEqualTypeOf<Change>()
+    expectTypeOf<Requires<typeof Mapping.moveTile>>().toEqualTypeOf<Change>()
+    expectTypeOf<Requires<typeof Mapping.swapTiles>>().toEqualTypeOf<Change>()
+    expectTypeOf<Requires<typeof Mapping.deleteTile>>().toEqualTypeOf<Change>()
+    expectTypeOf<Requires<typeof Mapping.createReference>>().toEqualTypeOf<Change>()
+    expectTypeOf<Requires<typeof Mapping.deleteReference>>().toEqualTypeOf<Change>()
     expectTypeOf<Requires<typeof Mapping.system>>().toEqualTypeOf<Tiles>()
     expectTypeOf<Requires<typeof readTile>>().toEqualTypeOf<Tiles>()
     expectTypeOf<Requires<typeof createTile>>().toEqualTypeOf<Database | Tiles | Bus>()

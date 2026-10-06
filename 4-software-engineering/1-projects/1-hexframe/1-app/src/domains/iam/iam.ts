@@ -71,7 +71,7 @@ export interface KeyProof {
  * Which of the two proofs gave a signed-in request its Account: a Session, the user at one of their
  * devices, or one of their Keys, a program, by its id.
  */
-export type Proof = { readonly _tag: 'Session' } | { readonly _tag: 'Key'; readonly keyId: string }
+type Proof = { readonly _tag: 'Session' } | { readonly _tag: 'Key'; readonly keyId: string }
 
 /** A signed-in request: its Account, and the proof that gave it. */
 export interface SignedIn {

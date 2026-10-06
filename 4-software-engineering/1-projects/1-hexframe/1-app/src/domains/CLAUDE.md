@@ -16,7 +16,7 @@ The middle layer: one folder per domain, each in its own language, and each in t
 
 | Path | Holds |
 |---|---|
-| `<domain>.ts` | The application service, the domain's entry, which the API layer calls: Effect programs whose type lists the repositories' services they use, which load, decide, write and publish. Impure |
+| `<domain>.ts` | The application service, the domain's entry, which the API layer calls: Effect programs whose type lists the repositories' services they use, and `Bus` when they publish, which load, decide, write and publish. Impure |
 | `errors.ts` | Its refusals, each with a kind (`kind.ts`) |
 | `entities/` | Its entities, value objects and aggregate, with their invariants, behind an `index.ts`. Pure |
 | `operations/` | Its Operations, changes described as data, the events they make, and `decide` and `evolve`, behind an `index.ts`. Pure |
@@ -34,4 +34,4 @@ The middle layer: one folder per domain, each in its own language, and each in t
 | File | Holds |
 |---|---|
 | `kind.ts` | The closed set of kinds the client picks a channel by, shared by every domain because it sits beside them, not in one. A domain's error carries one of the first five (`kind('Conflict')`, `...invalid`); `Unexpected`, the sixth, is no domain's to declare: `run`, in the API layer, gives it to every defect and every failure it does not know |
-| `bus.ts` | `Bus`, where a domain publishes a `DomainEvent`, a fact in its language declared with `Schema.TaggedClass`, for others to react to. The API layer builds the bus and wires who reacts: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE\|api]], "The server bus" |
+| `bus.ts` | `Bus`, where a domain publishes a `DomainEvent`, a fact in its language declared with `Schema.TaggedClass`, for others to react to, and nothing of who acted: the API layer puts the actor on the envelope it carries the event in. The API layer builds the bus, holds an event published in a transaction until it commits, and wires who reacts: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE\|api]], "The server bus" |
