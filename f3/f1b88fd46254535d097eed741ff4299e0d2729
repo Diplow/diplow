@@ -1,0 +1,47 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/TileActions.tsx
+  s_c6607867f8f345::t_5cde1e3a82844e 36,444-446
+  s_c6607867f8f345::t_0dc75fb185eb04 5-8,23,47,66-67,94-97,115,117,119,138-139,152,195,206,221-222,229,231-234,257-263,268-270,378-386,391-392,395-396,398,406-409,411-419,424-425,427,432-443,447-451
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_c6607867f8f345::t_9bace924ff9e68 138,140-141
+  s_c6607867f8f345::t_dc5785f83dd089 8-9,21,25,54-55,108-137,142-154,305-310,315,320-323,328,330-334
+  s_c6607867f8f345::t_c2b30cbdea1f14 139
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/overlay/overlay.test.ts
+  s_c6607867f8f345::t_33ded7553182ed 15,20,214-231,241,243
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.test.ts
+  s_c6607867f8f345::t_bbd61602c332d4 501
+  s_c6607867f8f345::t_095bc4d7870b87 533,538,555,560,576
+  s_c6607867f8f345::t_1dab931fb8a0ca 434,468
+  s_c6607867f8f345::t_32bbaacb1aebb7 435-456,459-467,469-470,472,517,519
+  s_c6607867f8f345::t_280a370a21808b 3,18,32,475-479,495-500,502-505,511-515,524,534,536-537,539-541,543-544,548,556,558-559,561-564,566,569,577-581,586-613
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/channels.ts
+  s_c6607867f8f345::t_56f071b90709cf 131,133
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useRefusalState.test.ts
+  s_c6607867f8f345::t_7701e38322c6ca 21-27,148-153,252-257
+  s_c6607867f8f345::t_8f6c072c3ea0a8 144,170,187,211,275,324
+  s_c6607867f8f345::t_2222c29b5dceea 1-20,28-143,145-147,154-169,171-186,188-210,212-251,258-274,276-323,325-337
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useRefusalState.ts
+  s_c6607867f8f345::t_6bfad7eb4fabfd 1-10,13-45,47,49-78,85-98
+  s_c6607867f8f345::t_f49110d2ef6503 12,79-84
+  s_c6607867f8f345::t_165a9f14dad19d 11,99-100
+  s_c6607867f8f345::t_b6a15e90fc8f9d 46,48
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/search/search.ts
+  s_c6607867f8f345::t_5cde1e3a82844e 107-112
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/System.tsx
+  s_c6607867f8f345::t_a5320e7f3cac9c 3-5,73-77,87-88,98-99
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f3f1b88fd46254535d097eed741ff4299e0d2729",
+  "prompts": {},
+  "sessions": {
+    "s_c6607867f8f345": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4f8f3c2-2717-4700-ac6f-29d6bae7bf9e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
