@@ -18,7 +18,7 @@ import {
   useSystem,
   useSystemWriting,
 } from '../queries'
-import { operationOf, overlaid } from './overlay'
+import { operationOf, overlaid, refusalOf } from './overlay'
 
 // The System the page shows while writes are on their way, over stand-ins for the server functions:
 // each write shows before its answer, a refused one stops showing without a rollback, a refetch slips
@@ -240,6 +240,15 @@ describe('the overlay', () => {
       [{ data: { id: string } }],
     ]
     expect(result.current.shown?.tiles[data.id]).toMatchObject({ title: 'C', slot: 3 })
+  })
+
+  it('foresees the refusal Mapping answers, and none for a write it lets through', () => {
+    const move = (slot: 2 | 4) => operationOf('moveTile', { id: id.a, parent: id.root, slot })
+    const taken = move(2)
+    const free = move(4)
+    if (taken === undefined || free === undefined) throw new Error('A move read as no Operation')
+    expect(refusalOf(served, taken)).toMatchObject({ _tag: 'DirectionTaken' })
+    expect(refusalOf(served, free)).toBeUndefined()
   })
 
   it('folds pending writes in their turn, whatever order they are listed in', () => {

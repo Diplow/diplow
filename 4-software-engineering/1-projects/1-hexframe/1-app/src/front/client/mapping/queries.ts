@@ -9,6 +9,7 @@
 // Failures go to their channels (../channels.ts): a hook's caller handles none.
 import {
   type Mutation,
+  type QueryClient,
   useIsMutating,
   useMutation,
   useMutationState,
@@ -60,6 +61,13 @@ const systemQueue = 'system'
 
 /** The System's read, whose cache holds the System as the server last answered it, flat. */
 const systemRead = read({ scope: systemScope, key: [], call: () => system({ data: undefined }) })
+
+/**
+ * Reads the System again once a write settles, even while no page shows it, so the next write in the
+ * queue is decided on a System that holds this one.
+ */
+const readAgain = (client: QueryClient) =>
+  client.invalidateQueries({ queryKey: [systemScope], refetchType: 'all' })
 
 /** Whether a mutation is a write to the System, an import's included: one of its queue. */
 const inSystemQueue = (mutation: Mutation) => mutation.options.scope?.id === systemQueue
@@ -125,7 +133,7 @@ function useSystemWrite<I, A, E extends Failure>(
       if (refusal !== undefined) return Promise.reject(new Foreseen(refusal, scope))
       return settle(scope, call(input))
     },
-    onSettled: () => client.invalidateQueries({ queryKey: [systemScope] }),
+    onSettled: () => readAgain(client),
   })
 }
 
@@ -236,7 +244,7 @@ export const useImportTiles = () => {
       if (submitted.ok) return { _tag: 'Landed', report: submitted.value, leftOut }
       return { _tag: 'Refused', faults: submitted.failure.faults, leftOut }
     },
-    onSettled: () => client.invalidateQueries({ queryKey: [systemScope] }),
+    onSettled: () => readAgain(client),
   })
 }
 

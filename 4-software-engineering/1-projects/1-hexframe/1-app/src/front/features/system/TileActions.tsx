@@ -165,7 +165,12 @@ function CenteredTile({
             </Button>
           )}
           {kindChange && (
-            <Button variant="outline" size="sm" onClick={kindChange.change}>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={kindChange.pending}
+              onClick={kindChange.change}
+            >
               {kindChange.label}
             </Button>
           )}
