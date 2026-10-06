@@ -38,6 +38,7 @@
   "dev_ui_state_with_message": "Avec son propre message",
   "dev_ui_state_verbatim_file": "Un fichier gardé tel quel, une longue ligne qui défile",
   "dev_ui_form_hint": "Laissez le titre vide, ou écrivez plus de {limit} caractères, puis enregistrez",
+  "dev_ui_form_refused": "Ouvert sur un envoi refusé",
   "dev_ui_form_title": "Titre",
   "dev_ui_form_title_description": "Ce qu’est la tuile, en quelques mots.",
   "dev_ui_form_title_placeholder": "Leadership",

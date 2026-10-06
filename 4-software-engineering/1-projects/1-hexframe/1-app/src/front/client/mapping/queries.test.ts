@@ -55,6 +55,9 @@ vi.mock('#/front/ui/feedback/Toaster', () => ({ toast: { error: vi.fn() } }))
 
 const titleMissing = { _tag: 'TitleMissing', kind: 'Invalid', fields: ['title'] } as const
 
+/** A server function's answer refusing with this failure, as it comes over the wire. */
+const refusal = (failure: unknown) => ({ ok: false, failure, requestId: 'req-1' }) as never
+
 afterEach(() => {
   cleanup()
   overwriteGetLocale(() => 'en')
@@ -528,11 +531,7 @@ describe("a form's write refused, handed back", () => {
     async (language, message) => {
       overwriteGetLocale(() => language)
       answering(undefined)
-      vi.mocked(Mapping.createTile).mockResolvedValue({
-        ok: false,
-        failure: titleMissing,
-        requestId: 'req-1',
-      })
+      vi.mocked(Mapping.createTile).mockResolvedValue(refusal(titleMissing))
       const submit = await submitting(() => useCreateTileSubmit({ parent, slot: 1 }))
       submit({ ...content, title: ' ' })
       await waitFor(() => {
@@ -550,11 +549,7 @@ describe("a form's write refused, handed back", () => {
 
   it('hand a refused edit back once the System read again has landed', async () => {
     answering(undefined)
-    vi.mocked(Mapping.editTile).mockResolvedValue({
-      ok: false,
-      failure: titleMissing,
-      requestId: 'req-1',
-    })
+    vi.mocked(Mapping.editTile).mockResolvedValue(refusal(titleMissing))
     const submit = await submitting(() => useEditTileSubmit({ id: tileId, ...content }))
     submit({ ...content, title: ' ' })
     await waitFor(() => {
@@ -571,11 +566,9 @@ describe("a form's write refused, handed back", () => {
 
   it('raise one toast for a refusal that names no field, and hand it back for the form', async () => {
     answering(undefined)
-    vi.mocked(Mapping.editTile).mockResolvedValue({
-      ok: false,
-      failure: { _tag: 'TileNotFound', kind: 'NotFound' },
-      requestId: 'req-1',
-    })
+    vi.mocked(Mapping.editTile).mockResolvedValue(
+      refusal({ _tag: 'TileNotFound', kind: 'NotFound' }),
+    )
     const submit = await submitting(() => useEditTileSubmit({ id: tileId, ...content }))
     submit({ ...content, body: '# B' })
     await waitFor(() => {
@@ -588,15 +581,14 @@ describe("a form's write refused, handed back", () => {
     )
   })
 
-  it('show a field refusal in a toast when the page leaves it be', async () => {
+  it.each([
+    ['the page leaves it be', () => false],
+    ['no page is open to take it back', undefined],
+  ] as const)('show a field refusal in a toast when %s', async (_when, take) => {
     answering(undefined)
-    vi.mocked(Mapping.createTile).mockResolvedValue({
-      ok: false,
-      failure: titleMissing,
-      requestId: 'req-1',
-    })
+    vi.mocked(Mapping.createTile).mockResolvedValue(refusal(titleMissing))
     const { result } = render(() => {
-      useSystemRefusals(() => false)
+      if (take !== undefined) useSystemRefusals(take)
       return useCreateTileSubmit({ parent, slot: 1 })
     }, makeQueryClient())
     await read(result)
@@ -608,21 +600,33 @@ describe("a form's write refused, handed back", () => {
     })
   })
 
-  it('show a field refusal in a toast when no page is open to take it back', async () => {
+  it('hand a refusal to a page opened while the System was read again, and raise no toast', async () => {
     answering(undefined)
-    vi.mocked(Mapping.createTile).mockResolvedValue({
-      ok: false,
-      failure: titleMissing,
-      requestId: 'req-1',
-    })
-    const { result } = render(() => useCreateTileSubmit({ parent, slot: 1 }), makeQueryClient())
+    vi.mocked(Mapping.createTile).mockResolvedValue(refusal(titleMissing))
+    const client = makeQueryClient()
+    const { result } = render(() => useCreateTileSubmit({ parent, slot: 1 }), client)
     await read(result)
+    let readAgain: (outcome: unknown) => void = () => undefined
+    vi.mocked(Mapping.system).mockReturnValue(
+      new Promise((resolve) => {
+        readAgain = resolve
+      }) as never,
+    )
     act(() => {
       result.current.hook({ ...content, title: ' ' })
     })
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledExactlyOnceWith('Give this tile a title.')
+      expect(Mapping.system).toHaveBeenCalledTimes(2)
     })
+    const take = vi.fn(() => true)
+    render(() => {
+      useSystemRefusals(take)
+    }, client)
+    readAgain({ ok: true, value: system })
+    await waitFor(() => {
+      expect(take).toHaveBeenCalledOnce()
+    })
+    expect(toast.error).not.toHaveBeenCalled()
   })
 
   it('hand back no import, which is no Operation', async () => {
@@ -636,11 +640,9 @@ describe("a form's write refused, handed back", () => {
       return useImportTiles()
     }, makeQueryClient())
     await read(result)
-    vi.mocked(Mapping.importTiles).mockResolvedValue({
-      ok: false,
-      failure: { _tag: 'DirectionTaken', kind: 'Conflict' },
-      requestId: 'req-2',
-    } as never)
+    vi.mocked(Mapping.importTiles).mockResolvedValue(
+      refusal({ _tag: 'DirectionTaken', kind: 'Conflict' }),
+    )
     const file = new File(['# Notes'], 'notes.md')
     await act(() =>
       result.current.hook

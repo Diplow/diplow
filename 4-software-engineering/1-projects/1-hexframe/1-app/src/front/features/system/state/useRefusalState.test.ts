@@ -271,7 +271,7 @@ describe('a refused delete', () => {
 })
 
 describe('refusals in turn', () => {
-  it('puts back each change as its refusal arrives, the last one standing', async () => {
+  it('puts back the first, and leaves the change it put back be when the second arrives', async () => {
     const first = later()
     const second = later()
     vi.mocked(Mapping.moveTile)
@@ -290,9 +290,9 @@ describe('refusals in turn', () => {
     })
     second.settle(directionTaken)
     await waitFor(() => {
-      expect(changeOf(page.url())).toEqual({ kind: 'move', id: id.b })
+      expect(toast.error).toHaveBeenCalledTimes(2)
     })
-    expect(toast.error).toHaveBeenCalledTimes(2)
+    expect(changeOf(page.url())).toEqual({ kind: 'move', id: id.a })
   })
 
   it('keeps the form the first reopened when a move refused next would replace it', async () => {
@@ -392,6 +392,23 @@ describe('a form the user has open', () => {
     })
     expect(changeOf(page.url())).toEqual({ kind: 'edit', id: id.b })
     expect(page.reopened()).toBeUndefined()
+  })
+})
+
+describe('a move the user has started', () => {
+  it('is left be by a move refused meanwhile, which shows in its toast', async () => {
+    const moved = later()
+    vi.mocked(Mapping.moveTile).mockReturnValue(moved.promise)
+    const page = await rendered()
+    page.send(() => {
+      page.result.current.move.mutate({ id: id.a, parent: id.root, slot: 5 })
+    })
+    page.navigate((current) => withChange(current, { kind: 'move', id: id.b }))
+    moved.settle(directionTaken)
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledExactlyOnceWith(m.error_mapping_direction_taken())
+    })
+    expect(changeOf(page.url())).toEqual({ kind: 'move', id: id.b })
   })
 })
 

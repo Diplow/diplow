@@ -4,8 +4,9 @@
 // of that moment: a create's or an edit's form reopens with what the user typed and the refusal on the
 // field it names (any other is in its toast already), a move or a swap is under way again. A delete
 // puts nothing back: the Tile shows again where it stood, the System no longer folding the write, and
-// the view stays where it is. Nor does a Tile's change of kind, which was no change in the URL. A form
-// the user has open meanwhile is theirs: the refusal leaves it be, and shows in a toast.
+// the view stays where it is. Nor does a Tile's change of kind, which was no change in the URL. A
+// change the user has under way meanwhile, a form or a move, is theirs: the refusal leaves it be, and
+// shows in a toast.
 // The components send their writes and change the URL; none of them handles a write's settle.
 import { useState } from 'react'
 
@@ -44,7 +45,8 @@ export interface Reopened {
 
 /**
  * Puts back, on the URL of the moment each refusal arrives, the change its write ended, while the
- * System's page is open; off it, or over a form the user has open, a refusal shows in a toast alone.
+ * System's page is open and no change is under way; off it, or over a change the user has under way,
+ * a form or a move, a refusal shows in a toast alone.
  * Answers the form the last refusal reopened while the change under way is still that form's: once
  * the URL leaves it, closed, sent again or replaced, it is let go, and the same slot opens blank.
  */
@@ -63,7 +65,7 @@ export function useRefusalState(
   }
   useSystemRefusals((refused) => {
     const back = changeBack(refused)
-    if (back === undefined || isForm(under)) return false
+    if (back === undefined || under.kind !== 'none') return false
     setReopened(
       'content' in back ? { turn: refused.turn, ...back, shown: refused.shown } : undefined,
     )
@@ -72,9 +74,6 @@ export function useRefusalState(
   })
   return reopened !== undefined && keyOf(reopened.change) === key ? reopened : undefined
 }
-
-/** Whether a change is a form the user has open: a new Tile's, a Tile's or an import. */
-const isForm = (change: Change) => change.kind !== 'none' && change.kind !== 'move'
 
 /** The change a refused write puts back, with the form's content for a form's write. */
 type Back =

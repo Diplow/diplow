@@ -9,7 +9,7 @@ import { Button } from './controls/button'
 import { Input } from './controls/input'
 import { Textarea } from './controls/textarea'
 import { Field } from './forms/field'
-import { useAppForm } from './forms/form'
+import { openedOnRefusal, useAppForm } from './forms/form'
 
 const variants = ['default', 'secondary', 'outline', 'ghost', 'link', 'destructive'] as const
 const sizes = ['xs', 'sm', 'default', 'lg'] as const
@@ -83,6 +83,9 @@ export function InputsGallery() {
         <GalleryState label={m.dev_ui_form_hint({ limit: previewLimit })}>
           <TileForm />
         </GalleryState>
+        <GalleryState label={m.dev_ui_form_refused()}>
+          <TileForm refused={{ title: m.dev_ui_form_title_required() }} />
+        </GalleryState>
       </GallerySection>
     </>
   )
@@ -116,9 +119,11 @@ function TextControls({ render }: { render: (props: TextControlProps) => ReactNo
 
 const previewLimit = 350
 
-function TileForm() {
+/** A Tile's form; `refused`, the fields its last submit was refused on, which it opens showing. */
+function TileForm({ refused }: { refused?: Record<string, string> }) {
   const form = useAppForm({
     defaultValues: { title: '', preview: '' },
+    ...openedOnRefusal(refused),
     onSubmit: async ({ value }) => {
       await new Promise((resolve) => setTimeout(resolve, 800))
       toast.success(m.dev_ui_form_saved({ title: value.title }))

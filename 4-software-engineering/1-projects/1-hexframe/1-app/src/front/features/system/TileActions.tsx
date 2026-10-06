@@ -25,7 +25,7 @@ import { m } from '#/paraglide/messages'
 import { findTile, type TileNode } from '#/front/ui/hex/view/tiles'
 import { centerOn, showView } from '#/front/ui/hex/view/view'
 import { Button } from '#/front/ui/inputs/controls/button'
-import { useAppForm } from '#/front/ui/inputs/forms/form'
+import { openedOnRefusal, useAppForm } from '#/front/ui/inputs/forms/form'
 import { ConfirmDialog } from '#/front/ui/overlays/ConfirmDialog'
 import { Drawer } from '#/front/ui/overlays/Drawer'
 import { CodeBlock } from '#/front/ui/data/Markdown'
@@ -432,18 +432,9 @@ function TileForm({ defaults, shown, submit, onSent, label }: TileFormProps) {
       submit(value)
       onSent()
     },
-    listeners: {
-      // A form reopened by a refusal shows it as a refused submit would: each field it names, touched,
-      // with its message; a refusal on no field is in its toast already.
-      onMount: ({ formApi }) => {
-        if (shown === undefined || !('fields' in shown)) return
-        for (const field of ['title', 'preview', 'body'] as const) {
-          if (field in shown.fields)
-            formApi.setFieldMeta(field, (meta) => ({ ...meta, isTouched: true }))
-        }
-        formApi.setErrorMap({ onSubmit: shown })
-      },
-    },
+    // A form reopened by a refusal shows it as a refused submit would; a refusal on no field is in
+    // its toast already.
+    ...openedOnRefusal(shown !== undefined && 'fields' in shown ? shown.fields : undefined),
   })
   return (
     <form

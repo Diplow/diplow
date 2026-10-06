@@ -21,7 +21,7 @@ preview: >-
 | Folder | Holds |
 |---|---|
 | `inputs/controls/` | `Button`, `Input`, `Textarea`, `ThemeToggle`, `LocaleSwitch` |
-| `inputs/forms/` | `Field` (a label, a control, its description and errors) and `useAppForm` (TanStack Form with the fields `TextField`, which takes a `type` (text, email, password) and an `autoComplete`, `TextareaField` and the `SubmitButton`) |
+| `inputs/forms/` | `Field` (a label, a control, its description and errors), `useAppForm` (TanStack Form with the fields `TextField`, which takes a `type` (text, email, password) and an `autoComplete`, `TextareaField` and the `SubmitButton`) and `openedOnRefusal`, the options of a form that opens on the refusal its last submit met, each field it names touched with its message, as a refused submit leaves it |
 | `surfaces/` | `Card`, `PageHeader` |
 | `overlays/` | `Drawer` (controlled: its open state belongs in the URL), `ConfirmDialog`, `DropdownMenu`, `Tooltip` |
 | `data/` | `DataTable`, sortable, with its loading and empty states; `Markdown.tsx`, the seam STACK.md names for a Tile's content, holding for now `CodeBlock`, text shown as written, which a Leaf that isn't Markdown shows its Body in: the Markdown renderer, when a Body is rendered, comes in there |

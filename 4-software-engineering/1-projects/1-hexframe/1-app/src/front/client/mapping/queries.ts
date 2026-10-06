@@ -122,39 +122,60 @@ export interface Refused {
 
 const nothing = () => undefined
 
-/** How many pages take refused writes back: with none open, no form will show a form's refusal. */
-let takers = 0
+/** What a page does with a refused write: answers whether it shows it, its form reopened. */
+type Take = (refused: Refused) => boolean
+
+/** The pages taking refused writes back, each by its latest `take`, per QueryClient. */
+const takersOf = new WeakMap<QueryClient, Set<{ readonly current: Take }>>()
 
 /**
- * Hands `take` each write to the System refused while the component is mounted, the moment it stops
- * being pending, once the System read again after it has landed, its channel already carried out.
- * `take` answers whether the page shows it, its form reopened; if not, a form's refusal, which its
- * channel shows on the form's fields, goes to a toast instead (`unshown`). An import, which is no
- * Operation, is no refusal here: its drawer shows its own. React subscribes to the MutationCache once,
- * through `useSyncExternalStore`, which never re-renders here: the snapshot is always the same.
+ * A QueryClient's takers of refused System writes, and the one MutationCache listener that hands
+ * each write of the System's queue to them the moment it turns `error`, once the System read again
+ * after it has landed, its channel already carried out. The takers registered then decide: if none
+ * shows a form's refusal, which its channel shows on the form's fields, it goes to a toast instead
+ * (`unshown`), so none is lost. An import, which is no Operation, is no refusal here: its drawer
+ * shows its own. Made with the client's first System write or page, and kept as long as the client.
  */
-export function useSystemRefusals(take: (refused: Refused) => boolean) {
+function takersFor(client: QueryClient) {
+  const known = takersOf.get(client)
+  if (known !== undefined) return known
+  const takers = new Set<{ readonly current: Take }>()
+  takersOf.set(client, takers)
+  client.getMutationCache().subscribe((event) => {
+    if (event.type !== 'updated' || event.action.type !== 'error') return
+    const { mutationId: turn, options, state } = event.mutation
+    if (options.scope?.id !== systemQueue) return
+    const name: unknown = options.mutationKey?.[0]
+    const operation = operationOf(name, state.variables)
+    if (operation === undefined) return
+    const failed = asCallFailed(event.action.error, String(name))
+    const refused = {
+      turn,
+      operation,
+      shown: shownOnForm(failed),
+      system: client.getQueryData(systemRead.queryKey),
+    }
+    const shown = [...takers].map((take) => take.current(refused)).includes(true)
+    if (!shown) unshown(failed, options.meta?.call ?? 'write')
+  })
+  return takers
+}
+
+/**
+ * Hands `take` each write to the System refused while the component is mounted (`takersFor`); `take`
+ * answers whether the page shows it. React registers it once, through `useSyncExternalStore`, which
+ * never re-renders here: the snapshot is always the same.
+ */
+export function useSystemRefusals(take: Take) {
   const client = useQueryClient()
-  // The latest `take`, which reads the page as it is now; the subscription stays the same.
+  // The latest `take`, which reads the page as it is now; the registration stays the same.
   const latest = useRef(take)
   latest.current = take
   const subscribe = useCallback(() => {
-    takers += 1
-    const unsubscribe = client.getMutationCache().subscribe((event) => {
-      if (event.type !== 'updated' || event.action.type !== 'error') return
-      const { mutationId: turn, options, state } = event.mutation
-      if (options.scope?.id !== systemQueue) return
-      const name: unknown = options.mutationKey?.[0]
-      const operation = operationOf(name, state.variables)
-      if (operation === undefined) return
-      const failed = asCallFailed(event.action.error, String(name))
-      const system = client.getQueryData(systemRead.queryKey)
-      const shown = latest.current({ turn, operation, shown: shownOnForm(failed), system })
-      if (!shown) unshown(failed, options.meta?.call ?? 'write')
-    })
+    const takers = takersFor(client)
+    takers.add(latest)
     return () => {
-      takers -= 1
-      unsubscribe()
+      takers.delete(latest)
     }
   }, [client])
   useSyncExternalStore(subscribe, nothing, nothing)
@@ -182,16 +203,14 @@ function useSystemWrite<I, A, E extends Failure>(
   return useMutation({
     ...writing(scope, { as, queue: systemQueue }),
     mutationFn: (input: I) => {
+      // Its refusal reaches the page, or a toast, whether or not a page is open by then.
+      takersFor(client)
       const held = client.getQueryData(systemRead.queryKey)
       const operation = operationOf(scope, input)
       const refusal =
         held === undefined || operation === undefined ? undefined : refusalOf(held, operation)
       if (refusal !== undefined) return Promise.reject(new Foreseen(refusal, scope))
       return settle(scope, call(input))
-    },
-    // With no page open to take it back, a form's refusal has no form left to show it.
-    onError: (error) => {
-      if (takers === 0) unshown(error, as)
     },
     onSettled: () => readAgain(client),
   })
