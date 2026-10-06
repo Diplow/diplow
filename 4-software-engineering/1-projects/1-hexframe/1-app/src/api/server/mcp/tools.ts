@@ -233,8 +233,10 @@ const createTile = write({
     HelpReadOnly: refusal.HelpReadOnly,
   },
   input: NewTileOfAgent,
-  // Called, not passed, so the create without an id is the one typed: never refused `TileIdTaken`.
-  program: (input: typeof NewTileOfAgent.Type) => Mapping.createTile(input),
+  // An agent sends no id, so Mapping makes it, fresh: a clash on it is a defect, never a refusal
+  // to teach (`TileIdTaken` comes only to a caller that chose its id).
+  program: (input: typeof NewTileOfAgent.Type) =>
+    Effect.catchTag(Mapping.createTile(input), 'TileIdTaken', (taken) => Effect.die(taken)),
 })
 
 const editTile = write({

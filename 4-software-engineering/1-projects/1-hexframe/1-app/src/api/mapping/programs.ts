@@ -73,24 +73,11 @@ export const exportTile = ({ id }: { id: string }) =>
 type Fields<O> = Omit<O, '_tag'>
 
 /**
- * A change of Mapping's, typed as Mapping types it, run for the signed-in Account in one transaction.
+ * A create, under the id its caller chose, which a Tile of any System may have (`TileIdTaken`), or
+ * under one Mapping makes.
  */
-type ForAccount<P> = ReturnType<
-  typeof changeForAccount<Effect.Success<P>, Effect.Error<P>, Effect.Services<P>>
->
-
-/**
- * A create, under the id its caller chose, or, without one, as the MCP's `create_tile` sends it,
- * under an id Mapping makes. Each is typed by Mapping's signature for it: only a chosen id may be
- * refused `TileIdTaken`.
- */
-export function createTile(
-  input: Omit<Fields<CreateTile>, 'id'> & { readonly id?: undefined },
-): ForAccount<Mapping.CreatingUnnamed>
-export function createTile(input: Fields<CreateTile>): ForAccount<Mapping.Creating>
-export function createTile(input: Fields<CreateTile>) {
-  return changeForAccount((accountId) => Mapping.createTile(accountId, new CreateTile(input)))
-}
+export const createTile = (input: Fields<CreateTile>) =>
+  changeForAccount((accountId) => Mapping.createTile(accountId, new CreateTile(input)))
 
 export const editTile = (input: Fields<EditTile>) =>
   changeForAccount((accountId) => Mapping.editTile(accountId, new EditTile(input)))

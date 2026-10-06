@@ -364,32 +364,18 @@ const underNewId = (accountId: string, operation: CreateTile, kept: ToKeep) =>
 const underChosenId = (accountId: string, operation: CreateTile, id: string, kept: ToKeep) =>
   createUnder(accountId, operation, { id, kept }, chosen)
 
-/** A create whose caller chose no id, as an agent's through the MCP: Mapping makes it. */
-export type UnnamedCreate = CreateTile & { readonly id?: undefined }
-
-/** What a create runs: under an id Mapping makes, never refused for it, or under any. */
-export type CreatingUnnamed = ReturnType<typeof underNewId>
-export type Creating = CreatingUnnamed | ReturnType<typeof underChosenId>
-
 /**
  * Adds a Tile in a free slot under a Tile of the System, never under a Leaf: a Branch, a Leaf, or a
  * Tile of its Context, and answers it. Its id is the one the Operation carries, which its caller
  * chose so it can name the Tile before the answer comes: a Tile's already, in any System, is
  * `TileIdTaken`, and nothing is written. Without one, Mapping makes it, and its clash is a defect,
- * never a refusal, which the first signature says. An import gives it what it keeps from its files,
- * each part already checked (`entities/kept/`); nothing else does, and no later change touches them.
+ * never a refusal. An import gives it what it keeps from its files, each part already checked
+ * (`entities/kept/`); nothing else does, and no later change touches them.
  */
-export function createTile(
-  accountId: string,
-  operation: UnnamedCreate,
-  kept?: ToKeep,
-): CreatingUnnamed
-export function createTile(accountId: string, operation: CreateTile, kept?: ToKeep): Creating
-export function createTile(accountId: string, operation: CreateTile, kept: ToKeep = {}) {
-  return operation.id === undefined
+export const createTile = (accountId: string, operation: CreateTile, kept: ToKeep = {}) =>
+  operation.id === undefined
     ? underNewId(accountId, operation, kept)
     : underChosenId(accountId, operation, operation.id, kept)
-}
 
 /** Changes what a Tile says, any of its Title, its Preview and its Body as given, and answers it. */
 export const editTile = (accountId: string, operation: EditTile) =>

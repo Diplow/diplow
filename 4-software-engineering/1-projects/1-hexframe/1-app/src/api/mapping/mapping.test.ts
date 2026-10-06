@@ -301,20 +301,6 @@ describe("the errors Mapping's server functions can fail with", () => {
       | LeafHoldsNothing
       | HelpReadOnly
     >()
-    // Without an id, as the MCP's create_tile sends it, Mapping makes it: never refused for it.
-    expectTypeOf(Mapping.createTile({ parent: 'p', slot: 1, ...content('A') })).toExtend<
-      Effect.Effect<
-        unknown,
-        | SignedOut
-        | TitleMissing
-        | PreviewTooLong
-        | TileNotFound
-        | DirectionTaken
-        | LeafHoldsNothing
-        | HelpReadOnly,
-        unknown
-      >
-    >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.editTile>>>().toEqualTypeOf<
       SignedOut | TitleMissing | PreviewTooLong | TileNotFound | HelpReadOnly
     >()
