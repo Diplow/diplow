@@ -4,7 +4,15 @@ import type { TileNode } from '#/front/ui/hex/view/tiles'
 
 import { tileLink } from '#/api/mapping/files/download'
 
-import { changeOf, readSystemSearch, viewOf, withChange, withoutTile, withView } from './search'
+import {
+  changeOf,
+  keyOf,
+  readSystemSearch,
+  viewOf,
+  withChange,
+  withoutTile,
+  withView,
+} from './search'
 
 describe('readSystemSearch', () => {
   it('centers on the Tile an export links a left-out Reference to', () => {
@@ -156,5 +164,23 @@ describe('withoutTile', () => {
       kind: 'import',
       place: { _tag: 'Root' },
     })
+  })
+})
+
+describe('keyOf', () => {
+  it('is the same for two changes alike, and differs for another slot, Tile or kind', () => {
+    expect(keyOf({ kind: 'add', parent: 'a', slot: { leaf: 2 } })).toBe(
+      keyOf({ kind: 'add', parent: 'a', slot: { leaf: 2 } }),
+    )
+    const others = [
+      keyOf({ kind: 'add', parent: 'a', slot: 2 }),
+      keyOf({ kind: 'add', parent: 'b', slot: { leaf: 2 } }),
+      keyOf({ kind: 'edit', id: 'a' }),
+      keyOf({ kind: 'move', id: 'a' }),
+      keyOf({ kind: 'none' }),
+    ]
+    expect(new Set([keyOf({ kind: 'add', parent: 'a', slot: { leaf: 2 } }), ...others]).size).toBe(
+      6,
+    )
   })
 })
