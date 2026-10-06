@@ -445,7 +445,10 @@ const tileId = crypto.randomUUID()
 async function submitting(hook: () => (value: typeof content) => void) {
   const refused: Refused[] = []
   const { result } = render(() => {
-    useSystemRefusals((refusal) => refused.push(refusal))
+    useSystemRefusals((refusal) => {
+      refused.push(refusal)
+      return true
+    })
     return {
       submit: hook(),
       writes: useMutationState({
@@ -585,11 +588,51 @@ describe("a form's write refused, handed back", () => {
     )
   })
 
+  it('show a field refusal in a toast when the page leaves it be', async () => {
+    answering(undefined)
+    vi.mocked(Mapping.createTile).mockResolvedValue({
+      ok: false,
+      failure: titleMissing,
+      requestId: 'req-1',
+    })
+    const { result } = render(() => {
+      useSystemRefusals(() => false)
+      return useCreateTileSubmit({ parent, slot: 1 })
+    }, makeQueryClient())
+    await read(result)
+    act(() => {
+      result.current.hook({ ...content, title: ' ' })
+    })
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledExactlyOnceWith('Give this tile a title.')
+    })
+  })
+
+  it('show a field refusal in a toast when no page is open to take it back', async () => {
+    answering(undefined)
+    vi.mocked(Mapping.createTile).mockResolvedValue({
+      ok: false,
+      failure: titleMissing,
+      requestId: 'req-1',
+    })
+    const { result } = render(() => useCreateTileSubmit({ parent, slot: 1 }), makeQueryClient())
+    await read(result)
+    act(() => {
+      result.current.hook({ ...content, title: ' ' })
+    })
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledExactlyOnceWith('Give this tile a title.')
+    })
+  })
+
   it('hand back no import, which is no Operation', async () => {
     answering(undefined)
     const refused: Refused[] = []
     const { result } = render(() => {
-      useSystemRefusals((refusal) => refused.push(refusal))
+      useSystemRefusals((refusal) => {
+        refused.push(refusal)
+        return true
+      })
       return useImportTiles()
     }, makeQueryClient())
     await read(result)

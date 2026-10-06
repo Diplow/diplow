@@ -4,16 +4,31 @@
 // of that moment: a create's or an edit's form reopens with what the user typed and the refusal on the
 // field it names (any other is in its toast already), a move or a swap is under way again. A delete
 // puts nothing back: the Tile shows again where it stood, the System no longer folding the write, and
-// the view stays where it is. Nor does a Tile's change of kind, which was no change in the URL.
+// the view stays where it is. Nor does a Tile's change of kind, which was no change in the URL. A form
+// the user has open meanwhile is theirs: the refusal leaves it be, and shows in a toast.
 // The components send their writes and change the URL; none of them handles a write's settle.
 import { useState } from 'react'
 
-import { type FoundTile, isLeafSlot, type PlacedTile, tileAt } from '#/domains/mapping/entities'
+import {
+  type FoundTile,
+  isLeafSlot,
+  type PlacedTile,
+  type Slot,
+  tileAt,
+} from '#/domains/mapping/entities'
 import type { MoveTile } from '#/domains/mapping/operations'
 import type { FormErrors } from '#/front/client/channels'
 import { type Refused, type TileContent, useSystemRefusals } from '#/front/client/mapping/queries'
 
-import { withChange, type Change, type SearchChange } from '../search/search'
+import {
+  changeOf,
+  keyOf,
+  withChange,
+  type Change,
+  type SearchChange,
+  type SystemSearch,
+} from '../search/search'
+import { movingIn } from '../tree'
 
 /** A Tile's form reopened by its write's refusal, with what the user typed in it. */
 export interface Reopened {
@@ -27,35 +42,39 @@ export interface Reopened {
   readonly shown: FormErrors
 }
 
-interface RefusalState {
-  /** The form the last refusal reopened, until it is sent again or closed; none for any other. */
-  readonly reopened: Reopened | undefined
-  /** Lets the reopened form go: it was sent again, or closed. */
-  readonly forget: () => void
-}
-
 /**
  * Puts back, on the URL of the moment each refusal arrives, the change its write ended, while the
- * System's page is open. Off it, a refusal shows in its toast alone.
+ * System's page is open; off it, or over a form the user has open, a refusal shows in a toast alone.
+ * Answers the form the last refusal reopened while the change under way is still that form's: once
+ * the URL leaves it, closed, sent again or replaced, it is let go, and the same slot opens blank.
  */
-export function useRefusalState(onSearchChange: (change: SearchChange) => void): RefusalState {
+export function useRefusalState(
+  search: SystemSearch,
+  onSearchChange: (change: SearchChange) => void,
+): Reopened | undefined {
+  const under = changeOf(search)
+  const key = keyOf(under)
   const [reopened, setReopened] = useState<Reopened>()
+  // The change under way at the last render: when the URL leaves a reopened form, it is let go.
+  const [seen, setSeen] = useState(key)
+  if (key !== seen) {
+    setSeen(key)
+    if (reopened !== undefined && keyOf(reopened.change) !== key) setReopened(undefined)
+  }
   useSystemRefusals((refused) => {
     const back = changeBack(refused)
-    if (back === undefined) return
-    // A move under way again closes any form, so a form reopened before it is let go.
+    if (back === undefined || isForm(under)) return false
     setReopened(
       'content' in back ? { turn: refused.turn, ...back, shown: refused.shown } : undefined,
     )
     onSearchChange((current) => withChange(current, back.change))
+    return true
   })
-  return {
-    reopened,
-    forget: () => {
-      setReopened(undefined)
-    },
-  }
+  return reopened !== undefined && keyOf(reopened.change) === key ? reopened : undefined
 }
+
+/** Whether a change is a form the user has open: a new Tile's, a Tile's or an import. */
+const isForm = (change: Change) => change.kind !== 'none' && change.kind !== 'move'
 
 /** The change a refused write puts back, with the form's content for a form's write. */
 type Back =
@@ -64,6 +83,7 @@ type Back =
 
 /** What a refused Operation puts back in the URL; nothing for one that ended no change there. */
 function changeBack({ operation, system }: Refused): Back | undefined {
+  const held = (id: string) => (system === undefined ? undefined : tileAt(system, id))
   switch (operation._tag) {
     case 'CreateTile': {
       const { parent, slot, title, preview, body } = operation
@@ -71,20 +91,21 @@ function changeBack({ operation, system }: Refused): Back | undefined {
     }
     case 'EditTile': {
       // The form held every field; the edit sent those that changed, the others are the Tile's.
-      const tile = system === undefined ? undefined : tileAt(system, operation.id)
+      const tile = held(operation.id)
       if (tile === undefined) return undefined
       const { title = tile.title, preview = tile.preview, body = tile.body } = operation
       return { change: { kind: 'edit', id: operation.id }, content: { title, preview, body } }
     }
     case 'MoveTile': {
       // A Tile gone has nothing to move, and a change of kind was sent from the card, no move.
-      const tile = system === undefined ? undefined : tileAt(system, operation.id)
+      const tile = held(operation.id)
       if (tile === undefined || changesKind(tile, operation)) return undefined
       return { change: { kind: 'move', id: operation.id } }
     }
-    case 'SwapTiles':
-      // The moving Tile is the one a swap names first (`System.tsx`).
-      return { change: { kind: 'move', id: operation.a } }
+    case 'SwapTiles': {
+      const moving = movingIn(operation)
+      return held(moving) === undefined ? undefined : { change: { kind: 'move', id: moving } }
+    }
     case 'DeleteTile':
     case 'CreateReference':
     case 'DeleteReference':
@@ -93,8 +114,14 @@ function changeBack({ operation, system }: Refused): Back | undefined {
 }
 
 /**
- * Whether a move makes a Leaf of a Branch or a Branch of a Leaf: a grow or a shrink, sent from the
- * card. A move under way never does, its slots keeping the moving Tile's kind (`slotOf`).
+ * Whether a move makes a Leaf of a Branch or a Branch of a Leaf, as Mapping has a Tile change kind: a
+ * move to the same Direction of the same parent, of the other kind. A grow or a shrink, sent from the
+ * card; a move under way never makes one, its slots keeping the moving Tile's kind (`slotOf`), or
+ * taking it into a Context.
  */
 const changesKind = (tile: FoundTile | PlacedTile, move: MoveTile) =>
-  'slot' in tile && isLeafSlot(tile.slot) !== isLeafSlot(move.slot)
+  'slot' in tile && tile.parent === move.parent && otherKindOf(tile.slot, move.slot)
+
+/** Whether two slots are one Direction, a Leaf's and a Branch's. */
+const otherKindOf = (a: Slot, b: Slot) =>
+  isLeafSlot(a) ? b === a.leaf : isLeafSlot(b) && a === b.leaf

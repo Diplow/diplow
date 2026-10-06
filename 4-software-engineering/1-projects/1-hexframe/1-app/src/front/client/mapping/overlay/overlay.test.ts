@@ -214,7 +214,10 @@ describe('a refusal foreseen', () => {
   it('sends an untitled Tile nowhere, and hands its form why, on its field', async () => {
     const refused: Refused[] = []
     const { result } = await rendered(() => {
-      useSystemRefusals((refusal) => refused.push(refusal))
+      useSystemRefusals((refusal) => {
+        refused.push(refusal)
+        return true
+      })
       return useCreateTileSubmit({ parent: id.root, slot: 3 })
     })
     act(() => {

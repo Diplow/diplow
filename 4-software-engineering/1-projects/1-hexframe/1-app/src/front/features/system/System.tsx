@@ -25,7 +25,7 @@ import {
 } from './search/search'
 import type { System as FlatSystem } from '#/domains/mapping/entities'
 
-import { slotOf, swapsWith } from './tree'
+import { slotOf, swapOf, swapsWith } from './tree'
 
 interface SystemProps {
   /** The System as the page shows it, flat, which Mapping's `decide` rules on. */
@@ -95,7 +95,7 @@ export function System({ system, tree, search, onSearchChange, className }: Syst
       ? {
           label: m.system_swap_with({ title: held.title }),
           onSelect: () => {
-            swap.mutate({ a: moving.id, b: held.id })
+            swap.mutate(swapOf(moving.id, held.id))
             sent()
           },
         }

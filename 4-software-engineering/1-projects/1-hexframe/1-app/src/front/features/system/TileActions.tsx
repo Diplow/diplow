@@ -33,7 +33,6 @@ import { Card } from '#/front/ui/surfaces/Card'
 
 import {
   changeOf,
-  keyOf,
   viewOf,
   withChange,
   withoutTile,
@@ -63,7 +62,7 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
   const found = tileIn(system, center.id)
   const parent = found?.parent
   const { code, kindChange } = useCenteredTileState(system, center.id)
-  const { reopened, forget } = useRefusalState(onSearchChange)
+  const reopened = useRefusalState(search, onSearchChange)
   const remove = useDeleteTile()
   const begin = (change: Change) => {
     onSearchChange(withChange(search, change))
@@ -114,9 +113,8 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
         change={changeOf(search)}
         reopened={reopened}
         onChange={begin}
-        // Closed, or sent: the change ends at once, and a form a refusal reopened is let go.
+        // Closed, or sent: the change ends at once.
         onDone={() => {
-          forget()
           onSearchChange((current) => withChange(current, { kind: 'none' }))
         }}
       />
@@ -218,7 +216,7 @@ interface ChangeDrawerProps {
   system: SystemTile
   tree: TileNode
   change: Change
-  /** The form a refusal reopened, shown when it is the change under way's. */
+  /** The form a refusal reopened, the change under way's. */
   reopened: Reopened | undefined
   /** Turns the change into another: a new Tile into an import in the same slot, and back. */
   onChange: (change: Change) => void
@@ -229,9 +227,7 @@ interface ChangeDrawerProps {
 function ChangeDrawer({ system, tree, change, reopened, onChange, onDone }: ChangeDrawerProps) {
   const form = drawerOf(system, tree, change)
   // A refusal reopens its form afresh, keyed by its turn, with what the user typed.
-  const refilled =
-    reopened !== undefined && keyOf(reopened.change) === keyOf(change) ? reopened : undefined
-  const key = `${form?.key ?? ''}:${String(refilled?.turn ?? '')}`
+  const key = `${form?.key ?? ''}:${String(reopened?.turn ?? '')}`
   const slot = slotChoiceOf(change)
   // The choice stands above a new Tile's form, and above an import's pickers only, never its report.
   const choice =
@@ -258,7 +254,7 @@ function ChangeDrawer({ system, tree, change, reopened, onChange, onDone }: Chan
           key={key}
           parent={form.parent}
           slot={form.slot}
-          refilled={refilled}
+          refilled={reopened}
           onSent={onDone}
         />
       )}
@@ -266,7 +262,7 @@ function ChangeDrawer({ system, tree, change, reopened, onChange, onDone }: Chan
         <Import key={form.key} place={form.place} choice={choice} onDone={onDone} />
       )}
       {form?.kind === 'edit' && (
-        <EditTileForm key={key} tile={form.tile} refilled={refilled} onSent={onDone} />
+        <EditTileForm key={key} tile={form.tile} refilled={reopened} onSent={onDone} />
       )}
     </Drawer>
   )

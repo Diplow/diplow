@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { QueryClientProvider } from '@tanstack/react-query'
 import { act, cleanup, renderHook, waitFor } from '@testing-library/react'
-import { createElement, type ReactNode } from 'react'
+import { createElement, type ReactNode, useState } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import * as Mapping from '#/api/mapping/mapping'
@@ -95,46 +95,54 @@ function later() {
   return { promise: promise as never, settle }
 }
 
+/** The page: the URL as the route holds it, each change applied to it as it stands then. */
+function usePage() {
+  const [url, setUrl] = useState<SystemSearch>({ center: id.root })
+  const navigate = (change: SearchChange) => {
+    setUrl((current) => (typeof change === 'function' ? change(current) : change))
+  }
+  return {
+    url,
+    navigate,
+    reopened: useRefusalState(url, navigate),
+    shown: useSystem().data?.system,
+    create: useCreateTile(),
+    edit: useEditTile(),
+    move: useMoveTile(),
+    swap: useSwapTiles(),
+    remove: useDeleteTile(),
+  }
+}
+
 /**
  * Renders the page's state hook beside the System's writes, under the app's QueryClient, once the
- * System is read, on a URL centered on the Root; the URL as the route would hold it, each change
- * applied to it as it stands then.
+ * System is read, on a URL centered on the Root.
  */
 async function rendered() {
   vi.mocked(Mapping.system).mockResolvedValue({ ok: true, value: served } as never)
-  let url: SystemSearch = { center: id.root }
-  const onSearchChange = (change: SearchChange) => {
-    url = typeof change === 'function' ? change(url) : change
-  }
   const client = makeQueryClient()
   const wrapper = ({ children }: { children: ReactNode }) =>
     createElement(QueryClientProvider, { client }, children)
-  const { result } = renderHook(
-    () => ({
-      state: useRefusalState(onSearchChange),
-      shown: useSystem().data?.system,
-      create: useCreateTile(),
-      edit: useEditTile(),
-      move: useMoveTile(),
-      swap: useSwapTiles(),
-      remove: useDeleteTile(),
-    }),
-    { wrapper },
-  )
+  const { result } = renderHook(usePage, { wrapper })
   await waitFor(() => {
     expect(result.current.shown).toBeDefined()
   })
   return {
     result,
-    url: () => url,
+    url: () => result.current.url,
+    reopened: () => result.current.reopened,
     /** The user goes elsewhere on the page, as a click on the canvas would. */
     navigate: (change: SearchChange) => {
-      onSearchChange(change)
+      act(() => {
+        result.current.navigate(change)
+      })
     },
     /** Sends a write, and ends the change under way at once, as the page does. */
     send: (write: () => void) => {
-      act(write)
-      onSearchChange((current) => withChange(current, { kind: 'none' }))
+      act(() => {
+        write()
+        result.current.navigate((current) => withChange(current, { kind: 'none' }))
+      })
     },
   }
 }
@@ -156,7 +164,7 @@ describe('a refused create', () => {
     await waitFor(() => {
       expect(changeOf(page.url())).toEqual({ kind: 'add', parent: id.a, slot: 4 })
     })
-    expect(page.result.current.state.reopened).toMatchObject({
+    expect(page.reopened()).toMatchObject({
       change: { kind: 'add', parent: id.a, slot: 4 },
       content: typed,
       shown: { fields: { title: m.error_mapping_title_missing() } },
@@ -175,7 +183,7 @@ describe('a refused edit', () => {
     await waitFor(() => {
       expect(changeOf(page.url())).toEqual({ kind: 'edit', id: id.b })
     })
-    expect(page.result.current.state.reopened).toMatchObject({
+    expect(page.reopened()).toMatchObject({
       change: { kind: 'edit', id: id.b },
       content: { title: ' ', preview: 'What B is', body: '# B' },
     })
@@ -193,7 +201,7 @@ describe('a refused move or swap', () => {
       expect(changeOf(page.url())).toEqual({ kind: 'move', id: id.a })
     })
     expect(toast.error).toHaveBeenCalledExactlyOnceWith(m.error_mapping_direction_taken())
-    expect(page.result.current.state.reopened).toBeUndefined()
+    expect(page.reopened()).toBeUndefined()
   })
 
   it('brings back the move of the Tile a swap moved', async () => {
@@ -205,6 +213,28 @@ describe('a refused move or swap', () => {
     await waitFor(() => {
       expect(changeOf(page.url())).toEqual({ kind: 'move', id: id.b })
     })
+  })
+
+  it('brings back the move of a Leaf taken into a Context, which changes no kind', async () => {
+    vi.mocked(Mapping.moveTile).mockResolvedValue(directionTaken)
+    const page = await rendered()
+    page.send(() => {
+      page.result.current.move.mutate({ id: id.notes, parent: id.root, slot: -3 })
+    })
+    await waitFor(() => {
+      expect(changeOf(page.url())).toEqual({ kind: 'move', id: id.notes })
+    })
+  })
+
+  it('brings no move back for a swap whose moving Tile is gone', async () => {
+    const page = await rendered()
+    page.send(() => {
+      page.result.current.swap.mutate({ a: crypto.randomUUID(), b: id.a })
+    })
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledOnce()
+    })
+    expect(changeOf(page.url())).toEqual({ kind: 'none' })
   })
 
   it('brings no move back for a Leaf grown into a Branch from its card', async () => {
@@ -242,6 +272,30 @@ describe('a refused delete', () => {
 
 describe('refusals in turn', () => {
   it('puts back each change as its refusal arrives, the last one standing', async () => {
+    const first = later()
+    const second = later()
+    vi.mocked(Mapping.moveTile)
+      .mockReturnValueOnce(first.promise)
+      .mockReturnValueOnce(second.promise)
+    const page = await rendered()
+    page.send(() => {
+      page.result.current.move.mutate({ id: id.a, parent: id.root, slot: 5 })
+    })
+    page.send(() => {
+      page.result.current.move.mutate({ id: id.b, parent: id.root, slot: 6 })
+    })
+    first.settle(directionTaken)
+    await waitFor(() => {
+      expect(changeOf(page.url())).toEqual({ kind: 'move', id: id.a })
+    })
+    second.settle(directionTaken)
+    await waitFor(() => {
+      expect(changeOf(page.url())).toEqual({ kind: 'move', id: id.b })
+    })
+    expect(toast.error).toHaveBeenCalledTimes(2)
+  })
+
+  it('keeps the form the first reopened when a move refused next would replace it', async () => {
     const created = later()
     const moved = later()
     vi.mocked(Mapping.createTile).mockReturnValue(created.promise)
@@ -263,12 +317,12 @@ describe('refusals in turn', () => {
     await waitFor(() => {
       expect(changeOf(page.url())).toEqual({ kind: 'add', parent: id.a, slot: 4 })
     })
-    expect(page.result.current.state.reopened?.content).toEqual(typed)
     moved.settle(directionTaken)
     await waitFor(() => {
-      expect(changeOf(page.url())).toEqual({ kind: 'move', id: id.b })
+      expect(toast.error).toHaveBeenCalledTimes(2)
     })
-    expect(page.result.current.state.reopened).toBeUndefined()
+    expect(changeOf(page.url())).toEqual({ kind: 'add', parent: id.a, slot: 4 })
+    expect(page.reopened()?.content).toEqual(typed)
   })
 
   it('reopens a form afresh for each refusal of the same slot', async () => {
@@ -288,17 +342,14 @@ describe('refusals in turn', () => {
     }
     create(' ')
     await waitFor(() => {
-      expect(page.result.current.state.reopened?.content.title).toBe(' ')
+      expect(page.reopened()?.content.title).toBe(' ')
     })
-    const first = page.result.current.state.reopened?.turn
-    act(() => {
-      page.result.current.state.forget()
-    })
+    const first = page.reopened()?.turn
     create('  ')
     await waitFor(() => {
-      expect(page.result.current.state.reopened?.content.title).toBe('  ')
+      expect(page.reopened()?.content.title).toBe('  ')
     })
-    expect(page.result.current.state.reopened?.turn).not.toBe(first)
+    expect(page.reopened()?.turn).not.toBe(first)
   })
 })
 
@@ -310,7 +361,7 @@ describe('a refusal arriving once the user went elsewhere', () => {
     page.send(() => {
       page.result.current.move.mutate({ id: id.a, parent: id.root, slot: 5 })
     })
-    page.navigate((current) => withChange({ ...current, center: id.b }, { kind: 'edit', id: id.b }))
+    page.navigate((current) => ({ ...current, center: id.b }))
     moved.settle(directionTaken)
     await waitFor(() => {
       expect(changeOf(page.url())).toEqual({ kind: 'move', id: id.a })
@@ -319,19 +370,57 @@ describe('a refusal arriving once the user went elsewhere', () => {
   })
 })
 
-describe('forget', () => {
-  it('lets the reopened form go once it is sent again or closed', async () => {
+describe('a form the user has open', () => {
+  it('is left be by a refusal, which shows on no field but in a toast', async () => {
+    const created = later()
+    vi.mocked(Mapping.createTile).mockReturnValue(created.promise)
+    const page = await rendered()
+    page.send(() => {
+      page.result.current.create.mutate({
+        id: crypto.randomUUID(),
+        parent: id.a,
+        slot: 4,
+        title: ' ',
+        preview: '',
+        body: '',
+      })
+    })
+    page.navigate((current) => withChange(current, { kind: 'edit', id: id.b }))
+    created.settle(titleMissing)
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledExactlyOnceWith(m.error_mapping_title_missing())
+    })
+    expect(changeOf(page.url())).toEqual({ kind: 'edit', id: id.b })
+    expect(page.reopened()).toBeUndefined()
+  })
+})
+
+describe('a reopened form', () => {
+  it('is let go once the URL leaves it, so its slot opens blank again', async () => {
     vi.mocked(Mapping.editTile).mockResolvedValue(titleMissing)
     const page = await rendered()
     page.send(() => {
       page.result.current.edit.mutate({ id: id.a, title: ' ' })
     })
     await waitFor(() => {
-      expect(page.result.current.state.reopened).toBeDefined()
+      expect(page.reopened()).toBeDefined()
     })
-    act(() => {
-      page.result.current.state.forget()
+    page.navigate((current) => withChange(current, { kind: 'add', parent: id.b, slot: 3 }))
+    expect(page.reopened()).toBeUndefined()
+    page.navigate((current) => withChange(current, { kind: 'edit', id: id.a }))
+    expect(page.reopened()).toBeUndefined()
+  })
+
+  it('stays while its own change is under way, the view changing beneath it', async () => {
+    vi.mocked(Mapping.editTile).mockResolvedValue(titleMissing)
+    const page = await rendered()
+    page.send(() => {
+      page.result.current.edit.mutate({ id: id.a, title: ' ' })
     })
-    expect(page.result.current.state.reopened).toBeUndefined()
+    await waitFor(() => {
+      expect(page.reopened()).toBeDefined()
+    })
+    page.navigate((current) => ({ ...current, center: id.a }))
+    expect(page.reopened()).toMatchObject({ change: { kind: 'edit', id: id.a } })
   })
 })

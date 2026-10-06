@@ -122,6 +122,15 @@ export async function settleSubmit<A, E extends Failure>(
   }
 }
 
+/**
+ * Carries out a form's refusal its form will never show, closed before the answer came and not
+ * reopened: what it would have shown on its fields, in a toast. Any other refusal went to its channel
+ * already, through the QueryClient.
+ */
+export function unshown({ failure, scope }: CallFailed, call: Call) {
+  if (channelFor(call, failure.kind) === 'fields') toast.error(messageFor(failure, scope))
+}
+
 /** What a form shows of its write's failure, for TanStack Form: on the fields, or on the form. */
 export type FormErrors = { fields: Record<string, string> } | { form: string }
 

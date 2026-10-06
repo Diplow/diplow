@@ -18,7 +18,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import { Schema } from 'effect'
-import { useCallback, useMemo, useSyncExternalStore } from 'react'
+import { useCallback, useMemo, useRef, useSyncExternalStore } from 'react'
 
 import type { Failure, Outcome } from '#/api/errors/failure'
 import { type System, type SystemTile, systemOf } from '#/domains/mapping/entities'
@@ -52,7 +52,7 @@ import {
 import type { Locale } from '#/paraglide/runtime'
 
 import { Foreseen, asCallFailed, read, settle, write, writing, type WriteCall } from '../calls'
-import { type FormErrors, settleSubmit, shownOnForm } from '../channels'
+import { type FormErrors, settleSubmit, shownOnForm, unshown } from '../channels'
 
 /** The System's read, by the server function's name: every mode of its query key starts with it. */
 const systemScope = 'system'
@@ -122,33 +122,41 @@ export interface Refused {
 
 const nothing = () => undefined
 
+/** How many pages take refused writes back: with none open, no form will show a form's refusal. */
+let takers = 0
+
 /**
- * Calls `react` with each write to the System refused while the component is mounted, the moment it
- * stops being pending, once the System read again after it has landed, its channel already carried
- * out. An import, which is no Operation, is no refusal here: its drawer shows its own. React
- * subscribes to the MutationCache through `useSyncExternalStore`, which never re-renders here: the
- * snapshot is always the same.
+ * Hands `take` each write to the System refused while the component is mounted, the moment it stops
+ * being pending, once the System read again after it has landed, its channel already carried out.
+ * `take` answers whether the page shows it, its form reopened; if not, a form's refusal, which its
+ * channel shows on the form's fields, goes to a toast instead (`unshown`). An import, which is no
+ * Operation, is no refusal here: its drawer shows its own. React subscribes to the MutationCache once,
+ * through `useSyncExternalStore`, which never re-renders here: the snapshot is always the same.
  */
-export function useSystemRefusals(react: (refused: Refused) => void) {
+export function useSystemRefusals(take: (refused: Refused) => boolean) {
   const client = useQueryClient()
-  const subscribe = useCallback(
-    () =>
-      client.getMutationCache().subscribe((event) => {
-        if (event.type !== 'updated' || event.action.type !== 'error') return
-        const { mutationId: turn, options, state } = event.mutation
-        if (options.scope?.id !== systemQueue) return
-        const name: unknown = options.mutationKey?.[0]
-        const operation = operationOf(name, state.variables)
-        if (operation === undefined) return
-        react({
-          turn,
-          operation,
-          shown: shownOnForm(asCallFailed(event.action.error, String(name))),
-          system: client.getQueryData(systemRead.queryKey),
-        })
-      }),
-    [client, react],
-  )
+  // The latest `take`, which reads the page as it is now; the subscription stays the same.
+  const latest = useRef(take)
+  latest.current = take
+  const subscribe = useCallback(() => {
+    takers += 1
+    const unsubscribe = client.getMutationCache().subscribe((event) => {
+      if (event.type !== 'updated' || event.action.type !== 'error') return
+      const { mutationId: turn, options, state } = event.mutation
+      if (options.scope?.id !== systemQueue) return
+      const name: unknown = options.mutationKey?.[0]
+      const operation = operationOf(name, state.variables)
+      if (operation === undefined) return
+      const failed = asCallFailed(event.action.error, String(name))
+      const system = client.getQueryData(systemRead.queryKey)
+      const shown = latest.current({ turn, operation, shown: shownOnForm(failed), system })
+      if (!shown) unshown(failed, options.meta?.call ?? 'write')
+    })
+    return () => {
+      takers -= 1
+      unsubscribe()
+    }
+  }, [client])
   useSyncExternalStore(subscribe, nothing, nothing)
 }
 
@@ -180,6 +188,10 @@ function useSystemWrite<I, A, E extends Failure>(
         held === undefined || operation === undefined ? undefined : refusalOf(held, operation)
       if (refusal !== undefined) return Promise.reject(new Foreseen(refusal, scope))
       return settle(scope, call(input))
+    },
+    // With no page open to take it back, a form's refusal has no form left to show it.
+    onError: (error) => {
+      if (takers === 0) unshown(error, as)
     },
     onSettled: () => readAgain(client),
   })
