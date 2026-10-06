@@ -1,0 +1,50 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/system.test.ts
+  s_c6607867f8f345::t_291b1a58f0e941 5
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/decider/evolve.ts
+  s_c6607867f8f345::t_291b1a58f0e941 7
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/agreement.test.ts
+  s_c6607867f8f345::t_676abed33f2094 18,20,32-39,42-43,45,50-51,92-96,103-107,119,133,146,155,163-167,172-175
+  s_c6607867f8f345::t_45cd1484eb6855 1-17,19,21-31,40-41,44,46-49,52-91,97-102,108-118,120-132,134-145,147-154,156-162,168-171,176-179
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.test.ts
+  s_c6607867f8f345::t_c0fd785b764a69 3-10,127-160,164-172
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/decider/decide.test.ts
+  s_c6607867f8f345::t_291b1a58f0e941 5-11,133,148,151-152,318,328
+  s_c6607867f8f345::t_18bf7df488c5e0 1-4,12-20,22-87,90,93-104,107-110,112-114,117-123,126-130,135-140,142-147,153-156,158,161-166,168-172,174-175,177-183,185-186,188-192,194-196,198-200,202,204-211,213-255,257-289,291-296,298-300,302-310,314-317,320-327,330-340,343-346,348-349,351-362
+  s_c6607867f8f345::t_ec9db17afdc454 21,88-89,91-92,105-106,111,115-116,124-125,132,141,157,160,167,173,176,184,187,193,197,201,203,212,256,290,297,301,319,329,341-342,347,350
+  s_c6607867f8f345::t_7d1496cf57ef66 131,134,149-150,159,311-313
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/decider/decide.ts
+  s_c6607867f8f345::t_5e640310232183 46,71-73,75-78,109-113,167-168,188-193,196-198,200,207-208,211-212,216,226
+  s_c6607867f8f345::t_d355f0b43c6fef 68
+  s_c6607867f8f345::t_291b1a58f0e941 57,60,205-206,209
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/leaves/leaves.ts
+  s_c6607867f8f345::t_291b1a58f0e941 68
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.ts
+  s_c6607867f8f345::t_36b28bf1541679 5-6,14,17,75-80,82-86
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_c6607867f8f345::t_36b28bf1541679 60,65
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_c6607867f8f345::t_c9ab6512421add 340,377
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/decider/evolve.test.ts
+  s_c6607867f8f345::t_7d1496cf57ef66 152-153
+  s_c6607867f8f345::t_02e757f9389dc6 1-89,95-101,106-151,154-162
+  s_c6607867f8f345::t_5dba22bd5e359f 90-94,102-105
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/System.tsx
+  s_c6607867f8f345::t_c0fd785b764a69 23,29
+  s_c6607867f8f345::t_36b28bf1541679 28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d82736fb07b584979425a9995a29dc2360e7cb2c",
+  "prompts": {},
+  "sessions": {
+    "s_c6607867f8f345": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4f8f3c2-2717-4700-ac6f-29d6bae7bf9e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
