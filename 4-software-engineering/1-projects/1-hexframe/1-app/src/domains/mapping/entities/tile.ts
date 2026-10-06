@@ -72,9 +72,9 @@ const among =
   (value: number): value is T =>
     (values as ReadonlyArray<number>).includes(value)
 
-export const isDirection = among(directions)
+const isDirection = among(directions)
 
-export const isContextDirection = among(contextDirections)
+const isContextDirection = among(contextDirections)
 
 /** How far past its Direction a row stores a Leaf: beyond the six Branch slots, 7 to 12. */
 const leafOffset = directions.length
@@ -88,6 +88,14 @@ export function leafOf(direction: number | null): Direction | undefined {
   if (direction === null) return undefined
   const leaf = direction - leafOffset
   return isDirection(leaf) ? leaf : undefined
+}
+
+/** The slot a row's direction stands for; `undefined` for the Root's, which has none, or for no slot. */
+export function slotOf(direction: number | null): Slot | undefined {
+  if (direction === null) return undefined
+  const leaf = leafOf(direction)
+  if (leaf !== undefined) return { leaf }
+  return isDirection(direction) || isContextDirection(direction) ? direction : undefined
 }
 
 /**

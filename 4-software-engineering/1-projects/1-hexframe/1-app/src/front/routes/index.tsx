@@ -48,8 +48,8 @@ interface SystemPageProps {
 }
 
 function SystemPage({ search, onSearchChange }: SystemPageProps) {
-  const { data: system } = useSystem()
-  if (system === undefined) {
+  const { data } = useSystem()
+  if (data === undefined) {
     return (
       <>
         <Skeleton className="h-[60dvh] lg:h-full" />
@@ -57,18 +57,19 @@ function SystemPage({ search, onSearchChange }: SystemPageProps) {
       </>
     )
   }
-  const tree = canvasTree(system)
+  const { root } = data
+  const tree = canvasTree(root)
   return (
     <>
       <System
-        system={system}
+        system={root}
         tree={tree}
         search={search}
         onSearchChange={onSearchChange}
         className="h-[80dvh] min-h-0 lg:h-full"
       />
       <aside className="grid content-start gap-4 lg:min-h-0 lg:overflow-y-auto">
-        <TileActions system={system} tree={tree} search={search} onSearchChange={onSearchChange} />
+        <TileActions system={root} tree={tree} search={search} onSearchChange={onSearchChange} />
         <Breadcrumb
           system={tree}
           view={viewOf(search)}

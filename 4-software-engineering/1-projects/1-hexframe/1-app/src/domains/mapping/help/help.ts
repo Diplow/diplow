@@ -17,6 +17,7 @@ import {
   type Field,
   type FieldsAsked,
   type Found,
+  systemFrom,
   systemOf,
   withContent,
 } from '../entities'
@@ -58,15 +59,16 @@ const helpIn = (language: HelpLanguage) =>
 export const help = { en: helpIn('en'), fr: helpIn('fr') } satisfies Record<HelpLanguage, Vault>
 
 /**
- * Help whole, in a language: its Root with everything below it, Bodies included, as `system` reads an
- * Account's System. Every visitor reads it, signed in or not, so it takes no Account.
+ * Help whole, in a language, as its tree: its Root with everything below it, Bodies included, built
+ * from Help's System, which no Account owns, as the client builds an Account's. Every visitor reads
+ * it, signed in or not, so it takes no Account.
  */
 export const helpSystem = (language: HelpLanguage) =>
   Effect.suspend(() => {
-    const found = systemOf(help[language].rows)
+    const found = systemFrom(help[language].rows, { owned: false })
     return found === undefined
       ? Effect.die(new Error(`Help in ${language} was bundled without a Root`))
-      : Effect.succeed(found)
+      : Effect.succeed(systemOf(found))
   })
 
 /**

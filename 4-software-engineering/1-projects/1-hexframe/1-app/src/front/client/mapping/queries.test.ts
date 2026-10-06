@@ -53,6 +53,7 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 
+/** The Root, untitled, as a System's tree holds it. */
 const root = {
   _tag: 'Tile',
   id: 'root',
@@ -64,10 +65,28 @@ const root = {
   context: {},
 }
 
-/** Each server function stand-in answers `value`; the System's answers the Root. */
+/** The Root's System as the server reads it, flat: a Child in Direction 2 and a Reference to it. */
+const system = {
+  root: { _tag: 'Tile', id: 'root', title: '', preview: '', body: '' },
+  tiles: {
+    child: {
+      _tag: 'Tile',
+      id: 'child',
+      title: 'Child',
+      preview: '',
+      body: '',
+      parent: 'root',
+      slot: 2,
+    },
+    reference: { _tag: 'Reference', id: 'reference', parent: 'root', slot: -1, target: 'child' },
+  },
+  owned: true,
+} as const
+
+/** Each server function stand-in answers `value`; the System's answers the System above. */
 function answering(value: unknown) {
   const ok = (answer: unknown) => () => Promise.resolve({ ok: true, value: answer })
-  vi.mocked(Mapping.system).mockImplementation(ok(root) as never)
+  vi.mocked(Mapping.system).mockImplementation(ok(system) as never)
   for (const call of [
     Mapping.createTile,
     Mapping.editTile,
@@ -103,11 +122,24 @@ function writing<I>(
 }
 
 describe("Mapping's hooks", () => {
-  it('read the System through its server function', async () => {
+  it('read the System flat through its server function, and build its tree', async () => {
     answering(undefined)
     const { result } = render(() => undefined)
+    const child = { _tag: 'Tile', id: 'child', title: 'Child', preview: '', body: '' }
     await waitFor(() => {
-      expect(result.current.system.data).toEqual(root)
+      expect(result.current.system.data).toEqual({
+        system,
+        root: {
+          ...root,
+          branches: { 2: { ...child, branches: {}, leaves: {}, context: {} } },
+          context: {
+            [-1]: {
+              _tag: 'Reference',
+              tile: { id: 'child', title: 'Child', preview: '', body: '' },
+            },
+          },
+        },
+      })
     })
     expect(Mapping.system).toHaveBeenCalledWith({ data: undefined })
   })

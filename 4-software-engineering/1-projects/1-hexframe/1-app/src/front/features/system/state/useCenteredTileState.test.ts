@@ -92,7 +92,12 @@ describe('what the card shows of a Body', () => {
 describe('a change of kind', () => {
   const answering = (outcome: unknown) => {
     vi.mocked(Mapping.moveTile).mockResolvedValue(outcome as never)
-    vi.mocked(Mapping.system).mockResolvedValue({ ok: true, value: system } as never)
+    // The System read again after the move, flat as the server answers it: what it holds plays no part.
+    const read = {
+      root: { _tag: 'Tile', id: 'root', title: '', preview: '', body: '' },
+      tiles: {},
+    } as const
+    vi.mocked(Mapping.system).mockResolvedValue({ ok: true, value: { ...read, owned: true } })
   }
 
   it('moves a Leaf to the Branch slot of its own Direction', async () => {

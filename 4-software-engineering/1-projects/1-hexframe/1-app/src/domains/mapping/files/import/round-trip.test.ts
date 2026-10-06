@@ -8,6 +8,7 @@ import {
   keepsNothing,
   type LeafTile,
   type Reference,
+  systemFrom,
   systemOf,
   type SystemTile,
 } from '../../entities'
@@ -73,8 +74,9 @@ const rows: ReadonlyArray<TileRow> = [
   { ...row('principles', 'root', -1), title: 'Line one\n---\nid: x', preview: 'a b' },
 ]
 
-const system = systemOf(rows)
-if (system === undefined) throw new Error('These rows hold a Root')
+const found = systemFrom(rows, { owned: true })
+if (found === undefined) throw new Error('These rows hold a Root')
+const system = systemOf(found)
 
 const link = (id: string) => `https://hexframe.test/?center=${id}`
 const idOfLink = (url: string) => /\?center=(.+)$/.exec(url)?.[1]

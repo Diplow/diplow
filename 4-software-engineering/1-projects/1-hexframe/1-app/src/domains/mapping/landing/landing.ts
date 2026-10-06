@@ -20,7 +20,15 @@ import type {
   ReferenceTarget,
 } from '../files/import/plan'
 import { importOf } from '../files/import/read'
-import { isEmptySystem, onlyALeafIn, rowDirection, type Slot, systemOf, tileRow } from '../entities'
+import {
+  isEmptySystem,
+  onlyALeafIn,
+  rowDirection,
+  type Slot,
+  systemFrom,
+  systemOf,
+  tileRow,
+} from '../entities'
 import { changing, freeSlot, untitled } from '../mapping'
 import type { Placement } from '../operations'
 import { type Upload, archiveBounds, folderOf } from './archive'
@@ -175,8 +183,9 @@ const asRoot = (accountId: string, plan: ImportPlan) =>
     Tiles.use((tiles) => tiles.root(accountId, untitled)),
     changing(accountId, [], (rows, writes) =>
       Effect.gen(function* () {
-        const stored = systemOf(rows)
-        if (stored === undefined) return yield* Effect.die(new Error('A Root was added, then lost'))
+        const found = systemFrom(rows, { owned: true })
+        if (found === undefined) return yield* Effect.die(new Error('A Root was added, then lost'))
+        const stored = systemOf(found)
         if (!isEmptySystem(stored)) return yield* new DirectionTaken()
         const { root } = plan
         const nameOf: NameOf = (path) =>

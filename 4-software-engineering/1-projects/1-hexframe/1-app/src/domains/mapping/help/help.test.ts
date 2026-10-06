@@ -7,7 +7,7 @@ import { TestDatabase } from '#/repositories/database/testing'
 import { type Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
 import * as Mapping from '../mapping'
-import { previewLimit } from '../entities'
+import { previewLimit, systemOf } from '../entities'
 import {
   CreateReference,
   CreateTile,
@@ -153,7 +153,7 @@ layer(TestTiles)('Help, refused to every write in Mapping itself', (it) => {
   it.effect('refuses each write that names a Help Tile, a move or a swap with one end in it', () =>
     Effect.gen(function* () {
       const accountId = someone()
-      const root = yield* Mapping.system(accountId)
+      const { root } = yield* Mapping.system(accountId)
       const own = yield* transactional(
         Mapping.createTile(
           accountId,
@@ -216,7 +216,7 @@ layer(TestTiles)('Help, refused to every write in Mapping itself', (it) => {
           kind: 'Forbidden',
         })
       }
-      const after = yield* Mapping.system(accountId)
+      const after = systemOf(yield* Mapping.system(accountId))
       expect(after.branches[1]).toMatchObject({ id: own.id, title: 'Own', context: {} })
     }),
   )

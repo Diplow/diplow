@@ -83,7 +83,10 @@ export const HelpLanguage = Schema.Struct({ language: Schema.Literals(locales) }
 /** A call that takes nothing. */
 const Nothing = Schema.toStandardSchemaV1(Schema.Undefined)
 
-/** The Account's System: its Root, the user, with everything below it, the Root added on the first read. */
+/**
+ * The Account's System, flat: its Root, the user, and every Tile and Reference below it by id, owned
+ * by the Account, the Root added on the first read. The client builds its tree.
+ */
 export const system = createServerFn({ method: 'GET' })
   .validator(Nothing)
   .handler(({ context }) => run(context, Mapping.system))
