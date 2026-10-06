@@ -1,0 +1,60 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/programs.ts
+  s_c6607867f8f345::t_affe95d8822b44 10,76,79-96
+  s_c6607867f8f345::t_b04cda74ca8abd 97
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_c6607867f8f345::t_affe95d8822b44 350-351,354
+  s_c6607867f8f345::t_ece7205096ff32 11,14,268,294-304,314-315,317,321,327-331,335,348-349,352,355,357,359-363
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_c6607867f8f345::t_d4455127c406bd 207
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_c6607867f8f345::t_38db007fc8fc8d 69
+  s_c6607867f8f345::t_9b9a2fe064cb57 30,44-45,49
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-optimistic-writes-and-patterns/decisions.md
+  s_c6607867f8f345::t_179f46bb8c5355 63-66
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/CLAUDE.md
+  s_c6607867f8f345::t_9b9a2fe064cb57 18,20,33
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/errors/messages.test.ts
+  s_c6607867f8f345::t_320b4f0c9ff7cb 24,156-158
+  s_c6607867f8f345::t_3b0a2812b1a176 112
+  s_c6607867f8f345::t_3f7c3c4e554597 159
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/agreement.test.ts
+  s_c6607867f8f345::t_f1b505f78cb539 81,97-104
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/tools.ts
+  s_c6607867f8f345::t_8d00b72c2981a2 207-220,235,237
+  s_c6607867f8f345::t_adf728827b21fd 236
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/CLAUDE.md
+  s_c6607867f8f345::t_9b9a2fe064cb57 50
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_c6607867f8f345::t_d4455127c406bd 207
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE.md
+  s_c6607867f8f345::t_9b9a2fe064cb57 27
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/tiles.ts
+  s_c6607867f8f345::t_a98e48f27b3225 194
+  s_c6607867f8f345::t_71deec00faf9ae 9,80-85,88-91,94,159-160,287-295
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.ts
+  s_c6607867f8f345::t_adf728827b21fd 35-36,38
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/errors/messages.ts
+  s_c6607867f8f345::t_d4455127c406bd 41
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.test.ts
+  s_c6607867f8f345::t_320b4f0c9ff7cb 298-305
+  s_c6607867f8f345::t_17b5891cd2ab23 13,240-264,411-412
+  s_c6607867f8f345::t_eb3f493a48fe19 293-297
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/errors.ts
+  s_c6607867f8f345::t_a25326f2babee6 11-19,139
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "33d51945e6c47d2b23cbf72418da46ee51700d1e",
+  "prompts": {},
+  "sessions": {
+    "s_c6607867f8f345": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4f8f3c2-2717-4700-ac6f-29d6bae7bf9e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
