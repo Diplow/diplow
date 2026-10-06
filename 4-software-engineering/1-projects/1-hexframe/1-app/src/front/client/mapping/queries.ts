@@ -38,7 +38,7 @@ import {
 
 import type { Locale } from '#/paraglide/runtime'
 
-import { read, write, type WriteCall } from '../calls'
+import { read, write, writing, type WriteCall } from '../calls'
 import { type FormErrors, settleSubmit, submitMutation } from '../channels'
 
 /** The System's read, by the server function's name: every mode of its query key starts with it. */
@@ -175,8 +175,7 @@ export type Imported =
 export const useImportTiles = () => {
   const client = useQueryClient()
   return useMutation({
-    mutationKey: ['importTiles'],
-    scope: { id: systemQueue },
+    ...writing('importTiles', { queue: systemQueue }),
     mutationFn: async ({
       given,
       place,

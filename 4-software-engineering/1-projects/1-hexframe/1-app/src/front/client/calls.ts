@@ -94,19 +94,28 @@ interface WriteOptions {
 }
 
 /**
- * The mutation options of a write, for `useMutation`: keyed by its scope, and carrying its call in
- * its meta, so the QueryClient sends its failure to its channel and `useMutationState` finds it.
+ * What places a write among the others, for `useMutation`: keyed by its scope, its call in its meta,
+ * so the QueryClient sends its failure to its channel and `useMutationState` finds it, and in its
+ * queue, if any. `write` builds every write on it; a write whose function `write` can't build, an
+ * import's, spreads it beside its own.
  */
+export function writing(scope: string, { as = 'write', queue }: WriteOptions = {}) {
+  return {
+    mutationKey: [scope],
+    meta: { call: as },
+    ...(queue !== undefined && { scope: { id: queue } }),
+  }
+}
+
+/** The mutation options of a write, for `useMutation`, placed by `writing`. */
 export function write<I, A, E extends Failure>(
   scope: string,
   call: (input: I) => Promise<Outcome<A, E>>,
-  { as = 'write', queue }: WriteOptions = {},
+  options: WriteOptions = {},
 ) {
   return mutationOptions({
-    mutationKey: [scope],
+    ...writing(scope, options),
     mutationFn: (input: I) => settle(scope, call(input)),
-    meta: { call: as },
-    ...(queue !== undefined && { scope: { id: queue } }),
   })
 }
 

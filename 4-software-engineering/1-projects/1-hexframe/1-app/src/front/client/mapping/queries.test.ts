@@ -373,6 +373,31 @@ describe('an import', () => {
     expect(Mapping.importTiles).not.toHaveBeenCalled()
   })
 
+  it('waits its turn behind a write to the System made before it', async () => {
+    answering(undefined)
+    let moved: (outcome: Awaited<ReturnType<typeof Mapping.moveTile>>) => void = () => undefined
+    vi.mocked(Mapping.moveTile).mockReturnValue(
+      new Promise((resolve) => {
+        moved = resolve
+      }),
+    )
+    vi.mocked(Mapping.importTiles).mockResolvedValue({ ok: true, value: report } as never)
+    const { result } = render(() => ({ move: useMoveTile(), import: useImportTiles() }))
+    await waitFor(() => {
+      expect(result.current.system.isSuccess).toBe(true)
+    })
+    const moving = result.current.hook.move.mutateAsync({ id: 't', parent: 'root', slot: 3 })
+    const imported = result.current.hook.import.mutateAsync({ given: folder, place })
+    await waitFor(() => {
+      expect(Mapping.moveTile).toHaveBeenCalled()
+    })
+    await new Promise((resolve) => setTimeout(resolve, 50))
+    expect(Mapping.importTiles).not.toHaveBeenCalled()
+    moved({ ok: true, value: undefined })
+    await moving
+    await expect(imported).resolves.toMatchObject({ _tag: 'Landed', report })
+  })
+
   it('throws any other failure as a CallFailed, for a write’s channel', async () => {
     vi.mocked(Mapping.importTiles).mockResolvedValue({
       ok: false,
