@@ -4,10 +4,9 @@
 // over it (./overlay/overlay.ts). Every write to it is a mutation keyed by its Operation's name, whose
 // variables are that Operation's fields; the Tile forms' included. The writes run one after another,
 // in order, each first decided on the System the client holds, a refusal foreseen there sent nowhere,
-// and each sent reads the System again once it settles, failed or not, since a refusal (a slot taken
+// and each reads the System again once it settles, failed or not, since a refusal (a slot taken
 // meanwhile, a Tile gone) says the page is behind. A Tile form's submit sends its write and answers
-// at once; a refused write to the System comes back through `useSystemRefusals`, a foreseen one at
-// once.
+// at once; a refused write to the System comes back through `useSystemRefusals`.
 // Failures go to their channels (../channels.ts): a hook's caller handles none.
 import {
   type Mutation,
@@ -132,8 +131,7 @@ const takersOf = new WeakMap<QueryClient, Set<{ readonly current: Take }>>()
 /**
  * A QueryClient's takers of refused System writes, and the one MutationCache listener that hands
  * each write of the System's queue to them the moment it turns `error`, once the System read again
- * after it has landed (at once for a refusal foreseen, which reads nothing), its channel already
- * carried out. The takers registered then decide: if none
+ * after it has landed, its channel already carried out. The takers registered then decide: if none
  * shows a form's refusal, which its channel shows on the form's fields, it goes to a toast instead
  * (`unshown`), so none is lost. An import, which is no Operation, is no refusal here: its drawer
  * shows its own. Made with the client's first System write or page, and kept as long as the client.
@@ -194,8 +192,7 @@ export const useHelp = (language: Locale) =>
  * A write to the System, scoped by the Operation it runs and queued behind the writes made before it.
  * Its turn come, it is decided on the System the client holds, which by then holds every write made
  * before it: a refusal foreseen there goes to its channel and nothing is sent. Settled, the System is
- * read again, and the write stays pending until that read has landed; but for a refusal foreseen,
- * which sent nothing and learned nothing the client did not hold, so it is handed back at once.
+ * read again, and the write stays pending until that read has landed.
  */
 function useSystemWrite<I, A, E extends Failure>(
   scope: OperationName,
@@ -215,7 +212,7 @@ function useSystemWrite<I, A, E extends Failure>(
       if (refusal !== undefined) return Promise.reject(new Foreseen(refusal, scope))
       return settle(scope, call(input))
     },
-    onSettled: (_data, error) => (error instanceof Foreseen ? undefined : readAgain(client)),
+    onSettled: () => readAgain(client),
   })
 }
 
