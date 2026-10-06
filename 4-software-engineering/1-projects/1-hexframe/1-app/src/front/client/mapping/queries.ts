@@ -5,7 +5,8 @@
 // variables are that Operation's fields; the Tile forms' included. The writes run one after another,
 // in order, each first decided on the System the client holds, a refusal foreseen there sent nowhere,
 // and each reads the System again once it settles, failed or not, since a refusal (a slot taken
-// meanwhile, a Tile gone) says the page is behind.
+// meanwhile, a Tile gone) says the page is behind. A Tile form's submit sends its write and answers
+// at once; a refused write to the System comes back through `useSystemRefusals`.
 // Failures go to their channels (../channels.ts): a hook's caller handles none.
 import {
   type Mutation,
@@ -17,11 +18,11 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import { Schema } from 'effect'
-import { useMemo } from 'react'
+import { useCallback, useMemo, useSyncExternalStore } from 'react'
 
 import type { Failure, Outcome } from '#/api/errors/failure'
 import { type System, type SystemTile, systemOf } from '#/domains/mapping/entities'
-import type { OperationName } from '#/domains/mapping/operations'
+import type { Operation, OperationName } from '#/domains/mapping/operations'
 import { type Download, downloaded } from '#/api/mapping/files/download'
 import { type Given, type LeftOut, type Prepared, prepared } from './upload'
 import { operationOf, overlaid, type Pending, refusalOf } from './overlay/overlay'
@@ -50,8 +51,8 @@ import {
 
 import type { Locale } from '#/paraglide/runtime'
 
-import { Foreseen, read, settle, write, writing, type WriteCall } from '../calls'
-import { type FormErrors, settleSubmit, submitMutation } from '../channels'
+import { Foreseen, asCallFailed, read, settle, write, writing, type WriteCall } from '../calls'
+import { type FormErrors, settleSubmit, shownOnForm } from '../channels'
 
 /** The System's read, by the server function's name: every mode of its query key starts with it. */
 const systemScope = 'system'
@@ -103,6 +104,53 @@ export function useSystem(): { data: { system: System; root: SystemTile } | unde
 
 /** Whether a write to the System, an import's included, is still waiting for its answer. */
 export const useSystemWriting = () => useIsMutating({ predicate: inSystemQueue }) > 0
+
+/** A write to the System refused, by the server or foreseen by the client. */
+export interface Refused {
+  /** Its turn, as the MutationCache numbers the writes in the order they were made. */
+  readonly turn: number
+  /** The Operation it sent, its variables read back by Mapping's schema. */
+  readonly operation: Operation
+  /** What its form shows of the refusal: on the fields it names, or on the form. */
+  readonly shown: FormErrors
+  /**
+   * The System as the cache holds it by then, flat, the server's, the read after the refusal landed:
+   * where the Tiles the Operation names stand. Undefined if no read of it has landed.
+   */
+  readonly system: System | undefined
+}
+
+const nothing = () => undefined
+
+/**
+ * Calls `react` with each write to the System refused while the component is mounted, the moment it
+ * stops being pending, once the System read again after it has landed, its channel already carried
+ * out. An import, which is no Operation, is no refusal here: its drawer shows its own. React
+ * subscribes to the MutationCache through `useSyncExternalStore`, which never re-renders here: the
+ * snapshot is always the same.
+ */
+export function useSystemRefusals(react: (refused: Refused) => void) {
+  const client = useQueryClient()
+  const subscribe = useCallback(
+    () =>
+      client.getMutationCache().subscribe((event) => {
+        if (event.type !== 'updated' || event.action.type !== 'error') return
+        const { mutationId: turn, options, state } = event.mutation
+        if (options.scope?.id !== systemQueue) return
+        const name: unknown = options.mutationKey?.[0]
+        const operation = operationOf(name, state.variables)
+        if (operation === undefined) return
+        react({
+          turn,
+          operation,
+          shown: shownOnForm(asCallFailed(event.action.error, String(name))),
+          system: client.getQueryData(systemRead.queryKey),
+        })
+      }),
+    [client, react],
+  )
+  useSyncExternalStore(subscribe, nothing, nothing)
+}
 
 /**
  * Help whole, in the page's language, Bodies included, read as the System is. Anyone reads it, so it
@@ -254,40 +302,36 @@ const contentFields = ['title', 'preview', 'body'] as const
 /** What a Tile's form edits: its Title, Preview and Body, one per field above. */
 export type TileContent = Pick<SystemTile, (typeof contentFields)[number]>
 
-/** A Tile form's submit, as the form's `validators.onSubmitAsync`: what the form shows, if anything. */
-export type TileSubmit = (form: { value: TileContent }) => Promise<FormErrors | undefined>
+/**
+ * A Tile form's submit: sends what the form holds as a write, queued behind the others, and answers at
+ * once, so the form closes as if the write had landed. Its refusal comes back through
+ * `useSystemRefusals`, its channel carried out: a toast, or nothing, for the reopened form to show.
+ */
+export type TileSubmit = (content: TileContent) => void
 
 /**
  * Submits a new Tile's form through `useCreateTile`: the Tile goes in this free slot, a Child or a Tile
  * of the Context, under an id the client chooses for each submit, so the page draws it before the
- * answer comes. A refusal shows on the fields it names, or in its channel.
+ * answer comes.
  */
 export const useCreateTileSubmit = (
   where: Pick<typeof NewTile.Type, 'parent' | 'slot'>,
-  onSaved: () => void,
 ): TileSubmit => {
-  const { mutateAsync } = useCreateTile()
-  return submitMutation({
-    mutate: (content: TileContent) =>
-      mutateAsync({ id: crypto.randomUUID(), ...where, ...content }),
-    onSaved,
-  })
+  const { mutate } = useCreateTile()
+  return (content) => {
+    mutate({ id: crypto.randomUUID(), ...where, ...content })
+  }
 }
 
 /**
  * Submits a Tile's form through `useEditTile`: only the fields that changed are sent, so the Body of
- * an untitled Root can be written before its name. A refusal shows on the fields it names, or in its
- * channel.
+ * an untitled Root can be written before its name.
  */
-export const useEditTileSubmit = (
-  tile: TileContent & { id: string },
-  onSaved: () => void,
-): TileSubmit => {
-  const { mutateAsync } = useEditTile()
-  return submitMutation({
-    mutate: (content: TileContent) => mutateAsync({ id: tile.id, ...changed(tile, content) }),
-    onSaved,
-  })
+export const useEditTileSubmit = (tile: TileContent & { id: string }): TileSubmit => {
+  const { mutate } = useEditTile()
+  return (content) => {
+    mutate({ id: tile.id, ...changed(tile, content) })
+  }
 }
 
 /** The fields of `after` that differ from `before`. */

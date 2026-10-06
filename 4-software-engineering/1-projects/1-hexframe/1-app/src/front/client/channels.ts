@@ -128,9 +128,9 @@ export type FormErrors = { fields: Record<string, string> } | { form: string }
 /**
  * What a form shows of the failure its write met, which its channel has carried out already: an
  * `Invalid` refusal's message on each field it names; any other's on the form, which keeps the submit
- * from counting as done.
+ * from counting as done. A Tile form reopened by its refusal shows it too (`useSystemRefusals`).
  */
-function shownOnForm({ failure, scope }: CallFailed): FormErrors {
+export function shownOnForm({ failure, scope }: CallFailed): FormErrors {
   const message = messageFor(failure, scope)
   if (failure.kind === 'Invalid' && channelFor('submit', failure.kind) === 'fields') {
     return { fields: Object.fromEntries(failure.fields.map((field) => [field, message])) }

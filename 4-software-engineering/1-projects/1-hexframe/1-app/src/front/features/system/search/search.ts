@@ -104,6 +104,12 @@ export function withChange(search: SystemSearch, change: Change): SystemSearch {
   }
 }
 
+/**
+ * A change as one string, the same for two changes alike, whatever the view: what tells a form a
+ * refusal reopened from another, in its slot or for its Tile.
+ */
+export const keyOf = (change: Change): string => JSON.stringify(withChange({}, change))
+
 /** The Tile a change names: the one it edits or moves, or the one it adds or imports under. */
 function namedBy(change: Change): string | undefined {
   switch (change.kind) {
