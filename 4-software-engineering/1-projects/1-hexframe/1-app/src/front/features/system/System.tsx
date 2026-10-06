@@ -21,7 +21,7 @@ import {
   withView,
   type SearchChange,
   type SystemSearch,
-} from './search'
+} from './search/search'
 import type { System as FlatSystem } from '#/domains/mapping/entities'
 
 import { slotOf, swapsWith } from './tree'

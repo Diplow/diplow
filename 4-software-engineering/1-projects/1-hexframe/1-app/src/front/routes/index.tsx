@@ -13,7 +13,7 @@ import {
   withView,
   type SearchChange,
   type SystemSearch,
-} from '#/front/features/system/search'
+} from '#/front/features/system/search/search'
 import { System } from '#/front/features/system/System'
 import { TileActions } from '#/front/features/system/TileActions'
 import { canvasTree } from '#/front/features/system/tree'

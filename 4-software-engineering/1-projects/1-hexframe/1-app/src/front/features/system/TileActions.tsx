@@ -37,7 +37,7 @@ import {
   type Change,
   type SearchChange,
   type SystemSearch,
-} from './search'
+} from './search/search'
 import { Import } from './import/Import'
 import { type KindChange, useCenteredTileState } from './state/useCenteredTileState'
 import { tileIn } from './tree'
