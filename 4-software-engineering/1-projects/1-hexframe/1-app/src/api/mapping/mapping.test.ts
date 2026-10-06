@@ -237,6 +237,29 @@ describe("Mapping's server functions", () => {
     })
   })
 
+  it("shows an Account nothing of another's System: its Tiles are TileNotFound", async () => {
+    const { child } = await withAChild()
+    const stranger = request()
+    const theirRoot = await systemTree(stranger)
+    expect(theirRoot.branches).toEqual({})
+    const attempts: ReadonlyArray<Program> = [
+      Mapping.editTile({ id: child.id, title: 'Mine now' }),
+      Mapping.moveTile({ id: child.id, parent: theirRoot.id, slot: 1 }),
+      Mapping.deleteTile({ id: child.id }),
+      Mapping.swapTiles({ a: child.id, b: child.id }),
+      Mapping.createTile({ parent: child.id, slot: 1, ...content('Squatter') }),
+      Mapping.createReference({ parent: theirRoot.id, slot: -1, target: child.id }),
+    ]
+    for (const attempt of attempts) {
+      expect(await run(stranger, attempt)).toMatchObject({
+        ok: false,
+        failure: { _tag: 'TileNotFound', kind: 'NotFound' },
+      })
+    }
+  })
+})
+
+describe('a create under the id its caller chose', () => {
   it('creates a Tile under the id its caller chose, and refuses one taken as TileIdTaken', async () => {
     const { context, root, child } = await withAChild()
     const id = crypto.randomUUID()
@@ -261,27 +284,6 @@ describe("Mapping's server functions", () => {
     expect(Object.keys((await systemTree(context)).branches)).toEqual(['1', '2'])
     expect((await systemTree(stranger)).branches).toEqual({})
   })
-
-  it("shows an Account nothing of another's System: its Tiles are TileNotFound", async () => {
-    const { child } = await withAChild()
-    const stranger = request()
-    const theirRoot = await systemTree(stranger)
-    expect(theirRoot.branches).toEqual({})
-    const attempts: ReadonlyArray<Program> = [
-      Mapping.editTile({ id: child.id, title: 'Mine now' }),
-      Mapping.moveTile({ id: child.id, parent: theirRoot.id, slot: 1 }),
-      Mapping.deleteTile({ id: child.id }),
-      Mapping.swapTiles({ a: child.id, b: child.id }),
-      Mapping.createTile({ parent: child.id, slot: 1, ...content('Squatter') }),
-      Mapping.createReference({ parent: theirRoot.id, slot: -1, target: child.id }),
-    ]
-    for (const attempt of attempts) {
-      expect(await run(stranger, attempt)).toMatchObject({
-        ok: false,
-        failure: { _tag: 'TileNotFound', kind: 'NotFound' },
-      })
-    }
-  })
 })
 
 describe("the errors Mapping's server functions can fail with", () => {
@@ -300,16 +302,18 @@ describe("the errors Mapping's server functions can fail with", () => {
       | HelpReadOnly
     >()
     // Without an id, as the MCP's create_tile sends it, Mapping makes it: never refused for it.
-    const createdByMapping = (parent: string) =>
-      Mapping.createTile({ parent, slot: 1, title: 'A', preview: '', body: '' })
-    expectTypeOf<ErrorOf<ReturnType<typeof createdByMapping>>>().toEqualTypeOf<
-      | SignedOut
-      | TitleMissing
-      | PreviewTooLong
-      | TileNotFound
-      | DirectionTaken
-      | LeafHoldsNothing
-      | HelpReadOnly
+    expectTypeOf(Mapping.createTile({ parent: 'p', slot: 1, ...content('A') })).toExtend<
+      Effect.Effect<
+        unknown,
+        | SignedOut
+        | TitleMissing
+        | PreviewTooLong
+        | TileNotFound
+        | DirectionTaken
+        | LeafHoldsNothing
+        | HelpReadOnly,
+        unknown
+      >
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.editTile>>>().toEqualTypeOf<
       SignedOut | TitleMissing | PreviewTooLong | TileNotFound | HelpReadOnly
