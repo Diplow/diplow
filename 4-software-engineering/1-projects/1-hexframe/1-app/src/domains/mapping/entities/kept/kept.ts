@@ -43,8 +43,8 @@ const Segment = Schema.String.check(Schema.makeFilter(isSegment))
  * so that it exports under it again and the `[[wikilinks]]` in Bodies still resolve. Editing the
  * Title never changes it.
  */
-const Name = Segment.pipe(Schema.brand('Name'))
-type Name = typeof Name.Type
+export const Name = Segment.pipe(Schema.brand('Name'))
+export type Name = typeof Name.Type
 
 /** What a folder pattern fills in: the Tile's Direction, and the slug of its Title. */
 const placeholder = /<n>|<slug>/
@@ -80,10 +80,10 @@ const namingParts = {
  * everything below the Tile until a Tile below sets its own. Either part not set is the Tile above's,
  * and a config sets at least one, since one that sets nothing is no config.
  */
-const TileConfig = Schema.Struct(Struct.map(namingParts, Schema.optionalKey))
+export const TileConfig = Schema.Struct(Struct.map(namingParts, Schema.optionalKey))
   .check(Schema.makeFilter((config: object) => Object.keys(config).length > 0))
   .pipe(Schema.brand('TileConfig'))
-type TileConfig = typeof TileConfig.Type
+export type TileConfig = typeof TileConfig.Type
 
 /** The keys an export writes itself, from the Tile: never kept, since the Tile is what they say. */
 export const reservedKeys: ReadonlyArray<string> = ['id', 'title', 'parent', 'preview', 'reference']

@@ -1,49 +1,49 @@
 // Mapping: someone lays out a System they maintain as a hierarchy of Tiles, where what comes first is
 // what matters most. Each Account has one System, whose Root is the user. The tiles repository keeps
-// the rows (src/repositories/database/tiles/); Mapping decides what a change may do, then writes it.
+// the rows (src/repositories/database/tiles/); Mapping decides what an Operation does to the System
+// it locked (`decide`, ./operations/), then writes one change per event it made.
 // Every operation is for one Account, which the API layer takes from IAM's Session. A change runs in
 // the transaction the API layer opens around it (`transactional`): its type requires one. Beside each
 // Account's System, every Account reads Help (./help/help.ts), which no change may name.
-import { Effect, Struct } from 'effect'
+import { Effect, Result, Struct } from 'effect'
 
 import type { InTransaction } from '#/repositories/database/database'
 import { Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/tiles'
 import { Zip } from '#/repositories/zip/zip'
 
-import { DirectionTaken, HelpReadOnly, MovedUnderItself, RootFixed, TileNotFound } from './errors'
+import { HelpReadOnly, TileNotFound } from './errors'
 import { type LinkOf, exportOf } from './files/files'
-import { findInHelp, type HelpLanguage, isHelpId } from './help/help'
+import { findInHelp, flatHelp, type HelpLanguage, isHelpId } from './help/help'
 import {
-  below,
-  checked,
   type Content,
   type Depth,
   type Field,
   type FieldsAsked,
   type Found,
-  holdsNothingIfLeaf,
-  notLeaf,
   readOf,
   type ReadTile,
-  rowAt,
   rowDirection,
   showing,
+  type System,
   systemFrom,
   systemOf,
   type Tile,
-  tileRow,
+  tileAt,
   type ToKeep,
   withContent,
 } from './entities'
-import type {
-  CreateReference,
-  CreateTile,
-  DeleteReference,
-  DeleteTile,
-  EditTile,
-  MoveTile,
-  Placement,
-  SwapTiles,
+import {
+  type CreateReference,
+  type CreateTile,
+  decide,
+  type DeleteReference,
+  type DeleteTile,
+  type EditTile,
+  evolve,
+  type MappingEvent,
+  type MoveTile,
+  type Operation,
+  type SwapTiles,
 } from './operations'
 
 export { HelpId, helpRoot, helpSystem } from './help/help'
@@ -207,9 +207,9 @@ const outsideHelp = (ids: ReadonlyArray<string>) =>
   ids.some(isHelpId) ? Effect.fail(new HelpReadOnly()) : Effect.void
 
 /**
- * A change to the Account's System, naming these Tiles, none of them Help's, on its rows as they
- * stand once its Root is locked: alone until the transaction around it ends, so what it checked still
- * holds when it writes.
+ * A change to the Account's System that is no Operation, `landing/`'s import, naming these Tiles, none
+ * of them Help's, on its rows as they stand once its Root is locked: alone until the transaction
+ * around it ends, so what it checked still holds when it writes.
  */
 export const changing = <A, E>(
   accountId: string,
@@ -223,63 +223,128 @@ export const changing = <A, E>(
     ),
   )
 
-const tileIn = (rows: ReadonlyArray<TileRow>, id: string) => {
-  const row = tileRow(rows, id)
-  return row === undefined ? Effect.fail(new TileNotFound()) : Effect.succeed(row)
+/** The ids an Operation names: the Tiles it changes, and those it puts something under or points at. */
+function namedBy(operation: Operation): ReadonlyArray<string> {
+  switch (operation._tag) {
+    case 'CreateTile':
+    case 'DeleteReference':
+      return [operation.parent]
+    case 'EditTile':
+    case 'DeleteTile':
+      return [operation.id]
+    case 'MoveTile':
+      return [operation.id, operation.parent]
+    case 'SwapTiles':
+      return [operation.a, operation.b]
+    case 'CreateReference':
+      return [operation.parent, operation.target]
+  }
+}
+
+/** A System no read should find without its Root: a defect, never a refusal. */
+const rooted = (found: System | undefined) =>
+  found === undefined
+    ? Effect.die(new Error('A System was decided on without a Root'))
+    : Effect.succeed(found)
+
+/**
+ * The System an Operation is decided on. Help's, which no Account owns, when it names a Tile of Help,
+ * whichever end of a move or a swap, so `decide` refuses it. Otherwise the Account's, its Root added
+ * on its first read as any read adds it, then locked until the transaction ends: no other change runs
+ * meanwhile, so what `decide` ruled on still holds when its events are written.
+ */
+const decidedOn = (accountId: string, operation: Operation) =>
+  namedBy(operation).some(isHelpId)
+    ? rooted(flatHelp('en'))
+    : Tiles.use((tiles) =>
+        Effect.andThen(tiles.root(accountId, untitled), tiles.lock(accountId)).pipe(
+          Effect.flatMap((rows) => rooted(systemFrom(rows, { owned: true }))),
+        ),
+      )
+
+/** Writes one event: the one change to the rows it stands for. */
+const written =
+  (writes: Writes) =>
+  (event: MappingEvent): Effect.Effect<void, never, InTransaction> => {
+    switch (event._tag) {
+      case 'TileCreated': {
+        const { id, parent, slot, title, preview, body, name, config, frontmatter } = event
+        const row = { id, parentId: parent, direction: rowDirection(slot), target: null }
+        return writes.insert({ ...row, title, preview, body, name, config, frontmatter })
+      }
+      case 'TileEdited':
+        return writes.update(event.id, Struct.omit(event, ['_tag', 'id']))
+      case 'TileMoved':
+        return writes.update(event.id, {
+          parentId: event.parent,
+          direction: rowDirection(event.slot),
+        })
+      case 'TilesSwapped':
+        return writes.swap(event.a, event.b)
+      case 'TileDeleted':
+      case 'ReferenceDeleted':
+        return writes.remove(event.id)
+      case 'ReferenceCreated': {
+        const { id, parent, slot, target } = event
+        return writes.insert({ id, parentId: parent, direction: slot, target, ...untitled })
+      }
+    }
+  }
+
+/** What an Operation did: the events `decide` made, in the order they were written, and the System after. */
+interface Operated {
+  readonly events: ReadonlyArray<MappingEvent>
+  readonly system: System
 }
 
 /**
- * The parent Tile of a placement, once it is known to be no Leaf, which holds nothing, and its slot to
- * be free.
+ * Runs an Operation on the Account's System: locks it, loads it flat, asks `decide` through `decided`,
+ * then writes one change per event, and answers the events with the System they leave (`evolve`).
+ * Every rule lives in `decide`: what it refuses is refused here, with nothing written.
  */
-export const freeSlot = (rows: ReadonlyArray<TileRow>, { parent, slot }: Placement) =>
-  Effect.flatMap(Effect.flatMap(tileIn(rows, parent), notLeaf), (row) =>
-    rowAt(rows, parent, rowDirection(slot)) === undefined
-      ? Effect.succeed(row)
-      : Effect.fail(new DirectionTaken()),
-  )
+const operate = <E>(
+  accountId: string,
+  operation: Operation,
+  decided: (system: System) => Result.Result<ReadonlyArray<MappingEvent>, E>,
+) =>
+  Effect.gen(function* () {
+    const system = yield* decidedOn(accountId, operation)
+    const writes = (yield* Tiles).writes(accountId)
+    const events = yield* Effect.fromResult(decided(system))
+    yield* Effect.forEach(events, written(writes), { discard: true })
+    return { events, system: events.reduce(evolve, system) } satisfies Operated
+  })
 
-const notRoot = (row: TileRow) =>
-  row.parentId === null ? Effect.fail(new RootFixed()) : Effect.succeed(row)
+/** The id the repository makes for what a create makes, before `decide` is given it. */
+const newId = Tiles.use((tiles) => tiles.newId)
+
+/** The Tile of this id, as an Operation leaves it, for a change that answers it. */
+const answered = ({ system }: Operated, id: string) => {
+  const found = tileAt(system, id)
+  if (found === undefined) return Effect.die(new Error('A change lost the Tile it answers'))
+  const { title, preview, body } = found
+  return Effect.succeed({ id: found.id, title, preview, body } satisfies Tile)
+}
 
 /**
  * Adds a Tile in a free slot under a Tile of the System, never under a Leaf: a Branch, a Leaf, or a
- * Tile of its Context. An import gives it what it keeps from its files, each part already checked
- * (`entities/kept/`); nothing else does, and no later change touches them. The id the Operation may
- * carry is not honoured yet: Mapping makes it.
+ * Tile of its Context, and answers it. An import gives it what it keeps from its files, each part
+ * already checked (`entities/kept/`); nothing else does, and no later change touches them. The id
+ * the Operation may carry is not honoured yet: the repository makes it.
  */
-export const createTile = (
-  accountId: string,
-  { parent, slot, title, preview, body }: CreateTile,
-  { name, config, frontmatter }: ToKeep = {},
-) =>
-  changing(accountId, [parent], (rows, writes) =>
-    Effect.gen(function* () {
-      const valid = yield* checked({ title, preview, body })
-      yield* freeSlot(rows, { parent, slot })
-      const direction = rowDirection(slot)
-      const kept = { name, config, frontmatter }
-      const id = yield* writes.insert({
-        parentId: parent,
-        direction,
-        target: null,
-        ...valid,
-        ...kept,
-      })
-      return { id, ...valid } satisfies Tile
-    }),
+export const createTile = (accountId: string, operation: CreateTile, kept: ToKeep = {}) =>
+  Effect.flatMap(newId, (id) =>
+    Effect.flatMap(
+      operate(accountId, operation, (system) => decide(system, operation, { id, kept })),
+      (operated) => answered(operated, id),
+    ),
   )
 
-/** Changes what a Tile says: any of its Title, its Preview and its Body, as the Operation gives them. */
+/** Changes what a Tile says, any of its Title, its Preview and its Body as given, and answers it. */
 export const editTile = (accountId: string, operation: EditTile) =>
-  changing(accountId, [operation.id], (rows, writes) =>
-    Effect.gen(function* () {
-      const { id } = operation
-      const valid = yield* checked(Struct.omit(operation, ['_tag', 'id']))
-      const { title, preview, body } = yield* tileIn(rows, id)
-      yield* writes.update(id, valid)
-      return { id, title, preview, body, ...valid } satisfies Tile
-    }),
+  Effect.flatMap(
+    operate(accountId, operation, (system) => decide(system, operation)),
+    (operated) => answered(operated, operation.id),
   )
 
 /**
@@ -288,67 +353,30 @@ export const editTile = (accountId: string, operation: EditTile) =>
  * so a Leaf grows into a Branch, and a bare Branch shrinks into a Leaf, by moving. References to it
  * follow, since they hold its id.
  */
-export const moveTile = (accountId: string, { id, parent, slot }: MoveTile) =>
-  changing(accountId, [id, parent], (rows, writes) =>
-    Effect.gen(function* () {
-      const row = yield* Effect.flatMap(tileIn(rows, id), notRoot)
-      const direction = rowDirection(slot)
-      if (row.parentId === parent && row.direction === direction) return
-      if (below(rows, id).has(parent)) return yield* new MovedUnderItself()
-      yield* freeSlot(rows, { parent, slot })
-      yield* holdsNothingIfLeaf(rows, id, direction)
-      yield* writes.update(id, { parentId: parent, direction })
-    }),
-  )
+export const moveTile = (accountId: string, operation: MoveTile) =>
+  Effect.asVoid(operate(accountId, operation, (system) => decide(system, operation)))
 
 /**
  * Two Tiles of the System trade places, each with everything below it: each takes the other's parent
- * and slot, a Branch's, a Leaf's or a Context slot alike. Neither may be the Root, nor lie below the
- * other, which would put one below itself, nor hold anything when it takes a Leaf slot. References to
- * them follow, since they hold their ids.
+ * and slot, a Branch's, a Leaf's or a Context slot alike. References to them follow, since they hold
+ * their ids.
  */
-export const swapTiles = (accountId: string, { a, b }: SwapTiles) =>
-  changing(accountId, [a, b], (rows, writes) =>
-    Effect.gen(function* () {
-      const first = yield* Effect.flatMap(tileIn(rows, a), notRoot)
-      const second = yield* Effect.flatMap(tileIn(rows, b), notRoot)
-      if (a === b) return
-      if (below(rows, a).has(b) || below(rows, b).has(a)) return yield* new MovedUnderItself()
-      yield* holdsNothingIfLeaf(rows, a, second.direction)
-      yield* holdsNothingIfLeaf(rows, b, first.direction)
-      yield* writes.swap(a, b)
-    }),
-  )
+export const swapTiles = (accountId: string, operation: SwapTiles) =>
+  Effect.asVoid(operate(accountId, operation, (system) => decide(system, operation)))
 
 /** Deletes a Tile and everything below it. A Reference to any of them stays, broken. */
-export const deleteTile = (accountId: string, { id }: DeleteTile) =>
-  changing(accountId, [id], (rows, writes) =>
-    Effect.gen(function* () {
-      yield* Effect.flatMap(tileIn(rows, id), notRoot)
-      yield* writes.remove(id)
-    }),
-  )
+export const deleteTile = (accountId: string, operation: DeleteTile) =>
+  Effect.asVoid(operate(accountId, operation, (system) => decide(system, operation)))
 
 /**
  * Puts a Reference to a Tile of the System in a free Context slot of another, or of itself, never of a
  * Leaf, which has no Context.
  */
-export const createReference = (accountId: string, { parent, slot, target }: CreateReference) =>
-  changing(accountId, [parent, target], (rows, writes) =>
-    Effect.gen(function* () {
-      yield* tileIn(rows, target)
-      yield* freeSlot(rows, { parent, slot })
-      yield* writes.insert({ parentId: parent, direction: slot, target, ...untitled })
-    }),
+export const createReference = (accountId: string, operation: CreateReference) =>
+  Effect.flatMap(newId, (id) =>
+    Effect.asVoid(operate(accountId, operation, (system) => decide(system, operation, { id }))),
   )
 
 /** Empties a Context slot holding a Reference; the Tile it pointed at is untouched. */
-export const deleteReference = (accountId: string, { parent, slot }: DeleteReference) =>
-  changing(accountId, [parent], (rows, writes) =>
-    Effect.gen(function* () {
-      yield* tileIn(rows, parent)
-      const held = rowAt(rows, parent, slot)
-      if (held === undefined || held.target === null) return
-      yield* writes.remove(held.id)
-    }),
-  )
+export const deleteReference = (accountId: string, operation: DeleteReference) =>
+  Effect.asVoid(operate(accountId, operation, (system) => decide(system, operation)))

@@ -2,6 +2,8 @@
 // its Context by slot, −1 to −6, where a slot holds a Tile of its own or a Reference; the canvas takes
 // TileNodes, with the same Branches and Leaves, a Leaf marked as one, and the Context keyed by
 // Direction. Pure: what the canvas shows of a Tile is decided here.
+import { Result } from 'effect'
+
 import {
   contextSlotOf,
   type ContextDirection,
@@ -9,8 +11,10 @@ import {
   directions,
   type LeafTile,
   type Slot,
+  type System,
   type SystemTile,
 } from '#/domains/mapping/entities'
+import { decide } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 import type { FrameKind, TileNode } from '#/front/ui/hex/view/tiles'
 
@@ -68,18 +72,18 @@ function contextNode(entry: ContextEntry, slot: string): TileNode {
 }
 
 /**
- * Whether a Tile on the canvas offers to swap places with the moving one: a Tile of the System drawn
- * where it stands, so neither a Reference nor a broken one, and neither the Root, which never moves,
- * nor the moving Tile itself, nor a Leaf, which only moves to a free slot or changes kind from its
- * card (`hexframe-app-import-export/decisions.md#DEC-13`). A Tile above or below the moving one offers
- * it too: Mapping refuses that swap, as it refuses a move below the Tile itself.
+ * Whether a Tile on the canvas offers to swap places with the moving one: a Tile drawn where it stands,
+ * so no Reference, drawn under its Tile's id, and no Leaf, which only moves to a free slot or changes
+ * kind from its card (`hexframe-app-import-export/decisions.md#DEC-13`); and a swap Mapping makes
+ * something of. The rest is `decide`'s, Mapping's own rules on the System as the server read it: the
+ * Root never moves, a Tile above or below the moving one would put one below itself, a broken
+ * Reference names no Tile, and the moving Tile with itself changes nothing.
  */
-export const swapsWith = (system: SystemTile, moving: TileNode, tile: TileNode) =>
-  tile.reference !== true &&
-  tile.leaf !== true &&
-  tile.id !== system.id &&
-  tile.id !== moving.id &&
-  tileIn(system, tile.id) !== undefined
+export function swapsWith(system: System, moving: TileNode, tile: TileNode) {
+  if (tile.reference === true || tile.leaf === true) return false
+  const swapped = decide(system, { _tag: 'SwapTiles', a: moving.id, b: tile.id })
+  return Result.isSuccess(swapped) && swapped.success.length > 0
+}
 
 /**
  * The slot an empty Direction of the canvas stands for, by the ring it is in and the Tile that goes

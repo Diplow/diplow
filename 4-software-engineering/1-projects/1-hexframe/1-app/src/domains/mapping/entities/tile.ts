@@ -1,6 +1,6 @@
 // A Tile, the unit of a System, and where one stands under its parent. Pure: what a Tile's content
 // must be is decided here, before anything is written.
-import { Effect, Schema } from 'effect'
+import { Result, Schema } from 'effect'
 
 import { PreviewTooLong, TitleMissing } from '../errors'
 
@@ -121,11 +121,14 @@ export const fitsPreview = (preview: string) => length(preview) <= previewLimit
  */
 export function checked<C extends Partial<Content>>(
   content: C,
-): Effect.Effect<C, TitleMissing | PreviewTooLong> {
+): Result.Result<C, TitleMissing | PreviewTooLong> {
   const title = content.title?.trim()
-  if (title === '') return Effect.fail(new TitleMissing({ fields: ['title'] }))
+  if (title === '') return Result.fail(new TitleMissing({ fields: ['title'] }))
   if (content.preview !== undefined && !fitsPreview(content.preview)) {
-    return Effect.fail(new PreviewTooLong({ fields: ['preview'] }))
+    return Result.fail(new PreviewTooLong({ fields: ['preview'] }))
   }
-  return Effect.succeed(title === undefined ? content : { ...content, title })
+  return Result.succeed(title === undefined ? content : { ...content, title })
 }
+
+/** Whether two slots are one: the same Direction of the same kind, or the same Context slot. */
+export const sameSlot = (a: Slot, b: Slot) => rowDirection(a) === rowDirection(b)

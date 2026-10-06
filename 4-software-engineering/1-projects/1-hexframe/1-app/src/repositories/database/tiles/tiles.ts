@@ -54,7 +54,7 @@ export interface Generations<O extends ContentColumn, C extends ContentColumn> {
   readonly below: ReadonlyArray<TileRowWith<C>>
 }
 
-/** A row to add under a parent, keeping what an imported file carried or not. Its id is made here. */
+/** A row to add under a parent, keeping what an imported file carried or not. */
 type NewTileRow = Omit<TileRow, 'id' | 'parentId' | 'direction' | KeptColumn> &
   Partial<Pick<TileRow, KeptColumn>> & {
     readonly parentId: string
@@ -79,8 +79,10 @@ export interface BatchRow extends Omit<NewTileRow, 'parentId' | 'target'> {
 
 /** What a change may write, to the System it locked only, inside the same transaction. */
 export interface Writes {
-  /** Adds a row and answers its id. */
-  readonly insert: (row: NewTileRow) => Effect.Effect<string, never, InTransaction>
+  /** Adds a row under the id `Tiles.newId` made for it. */
+  readonly insert: (
+    row: NewTileRow & Pick<TileRow, 'id'>,
+  ) => Effect.Effect<void, never, InTransaction>
   /**
    * Adds every row of a batch, in its order, a few hundred per statement, and answers each one's id
    * by its key. A row comes after the row of the batch it stands under; a key named before it is
@@ -144,6 +146,11 @@ export class Tiles extends Context.Service<
     ) => Effect.Effect<ReadonlyArray<TileRow>, never, InTransaction>
     /** What a change may write to the Account's System, once it locked it. */
     readonly writes: (accountId: string) => Writes
+    /**
+     * The id a row about to be added takes, made here as every row's is, so that a change knows it
+     * before it writes the row (`Writes.insert`).
+     */
+    readonly newId: Effect.Effect<string>
   }
 >()('hexframe/Tiles') {}
 
@@ -263,15 +270,13 @@ const make = Effect.gen(function* () {
     database.select(columns).from(tile).where(ofAccount(accountId)).pipe(Effect.orDie)
 
   const writes = (accountId: string): Writes => ({
-    insert: (row) => {
-      const id = crypto.randomUUID()
-      return inTransaction(
+    insert: (row) =>
+      inTransaction(
         database
           .insert(tile)
-          .values({ ...row, id, accountId })
-          .pipe(Effect.as(id), Effect.orDie),
-      )
-    },
+          .values({ ...row, accountId })
+          .pipe(Effect.asVoid, Effect.orDie),
+      ),
     insertAll: (rows) =>
       inTransaction(
         Effect.gen(function* () {
@@ -378,6 +383,7 @@ const make = Effect.gen(function* () {
           .pipe(Effect.orDie, Effect.andThen(rowsOf(accountId))),
       ),
     writes,
+    newId: Effect.sync(() => crypto.randomUUID()),
   })
 })
 

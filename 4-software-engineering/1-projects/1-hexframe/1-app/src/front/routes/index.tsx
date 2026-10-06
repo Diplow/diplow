@@ -57,12 +57,12 @@ function SystemPage({ search, onSearchChange }: SystemPageProps) {
       </>
     )
   }
-  const { root } = data
+  const { system, root } = data
   const tree = canvasTree(root)
   return (
     <>
       <System
-        system={root}
+        system={system}
         tree={tree}
         search={search}
         onSearchChange={onSearchChange}

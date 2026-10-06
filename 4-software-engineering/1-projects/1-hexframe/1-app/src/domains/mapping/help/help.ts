@@ -59,13 +59,20 @@ const helpIn = (language: HelpLanguage) =>
 export const help = { en: helpIn('en'), fr: helpIn('fr') } satisfies Record<HelpLanguage, Vault>
 
 /**
+ * Help as a System, flat, in a language: owned by no Account, so `decide` refuses it every change.
+ * `undefined` only for a bundle without a Root, which the build refuses.
+ */
+export const flatHelp = (language: HelpLanguage) =>
+  systemFrom(help[language].rows, { owned: false })
+
+/**
  * Help whole, in a language, as its tree: its Root with everything below it, Bodies included, built
  * from Help's System, which no Account owns, as the client builds an Account's. Every visitor reads
  * it, signed in or not, so it takes no Account.
  */
 export const helpSystem = (language: HelpLanguage) =>
   Effect.suspend(() => {
-    const found = systemFrom(help[language].rows, { owned: false })
+    const found = flatHelp(language)
     return found === undefined
       ? Effect.die(new Error(`Help in ${language} was bundled without a Root`))
       : Effect.succeed(systemOf(found))
