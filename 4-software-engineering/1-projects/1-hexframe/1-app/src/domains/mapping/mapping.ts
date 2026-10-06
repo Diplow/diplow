@@ -337,7 +337,7 @@ const answered = ({ system }: Operated, id: string | undefined) => {
  */
 export const createTile = (accountId: string, operation: CreateTile, kept: ToKeep = {}) =>
   Effect.flatMap(
-    operate(accountId, operation, (system, id) => decide(system, { ...operation, id, kept })),
+    operate(accountId, operation, (system, id) => decide(system, operation, { id, kept })),
     (operated) => answered(operated, operated.events.find(isTileCreated)?.id),
   )
 
@@ -374,9 +374,7 @@ export const deleteTile = (accountId: string, operation: DeleteTile) =>
  * Leaf, which has no Context.
  */
 export const createReference = (accountId: string, operation: CreateReference) =>
-  Effect.asVoid(
-    operate(accountId, operation, (system, id) => decide(system, { ...operation, id })),
-  )
+  Effect.asVoid(operate(accountId, operation, (system, id) => decide(system, operation, { id })))
 
 /** Empties a Context slot holding a Reference; the Tile it pointed at is untouched. */
 export const deleteReference = (accountId: string, operation: DeleteReference) =>

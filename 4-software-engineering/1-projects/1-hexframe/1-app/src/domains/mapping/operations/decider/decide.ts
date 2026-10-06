@@ -43,6 +43,7 @@ import type {
   DeleteTile,
   EditTile,
   MoveTile,
+  Operation,
   SwapTiles,
 } from '../operation'
 import { freeSlot } from '../placement'
@@ -53,20 +54,10 @@ import { freeSlot } from '../placement'
  */
 interface Refusals {
   readonly CreateTile:
-    | HelpReadOnly
-    | TitleMissing
-    | PreviewTooLong
-    | TileNotFound
-    | LeafHoldsNothing
-    | DirectionTaken
+    HelpReadOnly | TitleMissing | PreviewTooLong | TileNotFound | LeafHoldsNothing | DirectionTaken
   readonly EditTile: HelpReadOnly | TitleMissing | PreviewTooLong | TileNotFound
   readonly MoveTile:
-    | HelpReadOnly
-    | TileNotFound
-    | RootFixed
-    | MovedUnderItself
-    | DirectionTaken
-    | LeafHoldsNothing
+    HelpReadOnly | TileNotFound | RootFixed | MovedUnderItself | DirectionTaken | LeafHoldsNothing
   readonly SwapTiles: HelpReadOnly | TileNotFound | RootFixed | MovedUnderItself | LeafHoldsNothing
   readonly DeleteTile: HelpReadOnly | TileNotFound | RootFixed
   readonly CreateReference: HelpReadOnly | TileNotFound | LeafHoldsNothing | DirectionTaken
@@ -74,28 +65,17 @@ interface Refusals {
 }
 
 /** Every refusal `decide` may answer, each a Mapping error with its kind. */
-export type Refusal = Refusals[keyof Refusals]
-
-/** The id of what a create makes: `decide` is given it, and never makes one. */
-interface Made {
-  readonly id: string
-}
+type Refusal = Refusals[keyof Refusals]
 
 /**
- * A Tile's create as `decide` takes it: the id its Tile takes and, when an import makes it, what it
- * keeps from its file, each part already checked (`entities/kept/`).
+ * What a create is given beside its Operation: the id of what it makes, which `decide` never makes
+ * itself, and, for a Tile an import makes, what it keeps from its file, each part already checked
+ * (`entities/kept/`).
  */
-export type Creating = CreateTile & Made & { readonly kept?: ToKeep | undefined }
-
-/** An Operation as `decide` takes it: a create, of a Tile or a Reference, given the id it makes. */
-export type Decidable =
-  | Creating
-  | (CreateReference & Made)
-  | EditTile
-  | MoveTile
-  | SwapTiles
-  | DeleteTile
-  | DeleteReference
+export interface Made {
+  readonly id: string
+  readonly kept?: ToKeep | undefined
+}
 
 /**
  * What `decide` answers an Operation of this tag: the events it makes, in the order they apply, none
@@ -126,9 +106,12 @@ const keptParts = ({ name, config, frontmatter }: ToKeep = {}) => ({
 })
 
 /** Adds a Tile in a free slot under a Tile of the System, never under a Leaf. */
-const createTile = (system: System, operation: Creating): Decided<'CreateTile'> =>
+const createTile = (
+  system: System,
+  { parent, slot, title, preview, body }: CreateTile,
+  { id, kept }: Made,
+): Decided<'CreateTile'> =>
   Result.gen(function* () {
-    const { id, parent, slot, title, preview, body, kept } = operation
     const valid = yield* checked({ title, preview, body })
     yield* freeSlot(system, { parent, slot })
     return [new TileCreated({ id, parent, slot, ...valid, ...keptParts(kept) })]
@@ -181,10 +164,10 @@ const deleteTile = (system: System, { id }: DeleteTile): Decided<'DeleteTile'> =
 /** Puts a Reference to a Tile of the System in a free Context slot of a Tile, never of a Leaf. */
 const createReference = (
   system: System,
-  operation: CreateReference & Made,
+  { parent, slot, target }: CreateReference,
+  { id }: Made,
 ): Decided<'CreateReference'> =>
   Result.gen(function* () {
-    const { id, parent, slot, target } = operation
     if (tileAt(system, target) === undefined) return yield* refused(new TileNotFound())
     yield* freeSlot(system, { parent, slot })
     return [new ReferenceCreated({ id, parent, slot, target })]
@@ -202,24 +185,35 @@ const deleteReference = (
   )
 }
 
+/** What a create was decided without: the id of what it makes, which its caller always gives. */
+function given(made: Made | undefined): Made {
+  if (made === undefined) throw new Error('A create was decided without the id of what it makes')
+  return made
+}
+
 /**
  * What an Operation does to a System: the events it makes, in the order they apply (`evolve`), none
- * when it changes nothing, or the refusal Mapping answers it. A System no Account owns, Help's, takes
- * no change at all (`HelpReadOnly`), whatever the Operation names.
+ * when it changes nothing, or the refusal Mapping answers it. A create is given the id of what it
+ * makes (`Made`). A System no Account owns, Help's, takes no change at all (`HelpReadOnly`), whatever
+ * the Operation names.
  */
-export function decide(system: System, operation: Creating): Decided<'CreateTile'>
+export function decide(system: System, operation: CreateTile, made: Made): Decided<'CreateTile'>
 export function decide(system: System, operation: EditTile): Decided<'EditTile'>
 export function decide(system: System, operation: MoveTile): Decided<'MoveTile'>
 export function decide(system: System, operation: SwapTiles): Decided<'SwapTiles'>
 export function decide(system: System, operation: DeleteTile): Decided<'DeleteTile'>
-export function decide(system: System, operation: CreateReference & Made): Decided<'CreateReference'>
+export function decide(
+  system: System,
+  operation: CreateReference,
+  made: Made,
+): Decided<'CreateReference'>
 export function decide(system: System, operation: DeleteReference): Decided<'DeleteReference'>
-export function decide(system: System, operation: Decidable): Decided
-export function decide(system: System, operation: Decidable): Decided {
+export function decide(system: System, operation: Operation, made: Made): Decided
+export function decide(system: System, operation: Operation, made?: Made): Decided {
   if (!system.owned) return refused(new HelpReadOnly())
   switch (operation._tag) {
     case 'CreateTile':
-      return createTile(system, operation)
+      return createTile(system, operation, given(made))
     case 'EditTile':
       return editTile(system, operation)
     case 'MoveTile':
@@ -229,7 +223,7 @@ export function decide(system: System, operation: Decidable): Decided {
     case 'DeleteTile':
       return deleteTile(system, operation)
     case 'CreateReference':
-      return createReference(system, operation)
+      return createReference(system, operation, given(made))
     case 'DeleteReference':
       return deleteReference(system, operation)
   }

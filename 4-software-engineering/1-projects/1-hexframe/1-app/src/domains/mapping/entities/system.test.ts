@@ -2,16 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { keepsNothing } from './kept/kept'
 import type { Row, RowWith } from './rows'
-import {
-  below,
-  heldAt,
-  readOf,
-  type System,
-  systemFrom,
-  systemOf,
-  tileAt,
-  tileRow,
-} from './system'
+import { below, heldAt, readOf, type System, systemFrom, systemOf, tileAt, tileRow } from './system'
 
 // The pure reading of the tiles repository's rows, on rows made by hand: the System they hold, flat,
 // its tree, and a Tile read to a depth. No database.

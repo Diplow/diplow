@@ -65,6 +65,4 @@ export const holdsNothingIfLeaf = (
   id: string,
   slot: Slot,
 ): Result.Result<void, LeafHoldsNothing> =>
-  isLeafSlot(slot) && holdsAnything(system, id)
-    ? Result.fail(new LeafHoldsNothing())
-    : Result.void
+  isLeafSlot(slot) && holdsAnything(system, id) ? Result.fail(new LeafHoldsNothing()) : Result.void

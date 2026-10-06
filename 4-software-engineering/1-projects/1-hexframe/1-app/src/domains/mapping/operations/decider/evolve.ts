@@ -4,13 +4,7 @@
 // service leaves in the database, and the one the client shows before the server answers. Pure.
 import { Struct } from 'effect'
 
-import {
-  below,
-  type PlacedReference,
-  type PlacedTile,
-  type System,
-  tileAt,
-} from '../../entities'
+import { below, type PlacedReference, type PlacedTile, type System, tileAt } from '../../entities'
 import type { MappingEvent, TileEdited } from '../events'
 
 type Held = PlacedTile | PlacedReference

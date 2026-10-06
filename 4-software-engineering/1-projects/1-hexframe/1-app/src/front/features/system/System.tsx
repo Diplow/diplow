@@ -20,12 +20,13 @@ import {
   type SearchChange,
   type SystemSearch,
 } from './search'
-import type { SystemTile } from '#/domains/mapping/entities'
+import type { System as FlatSystem } from '#/domains/mapping/entities'
 
 import { slotOf, swapsWith } from './tree'
 
 interface SystemProps {
-  system: SystemTile
+  /** The System as the server read it, flat, which Mapping's `decide` rules on. */
+  system: FlatSystem
   /** The System's Tiles as the canvas draws them (`canvasTree`). */
   tree: TileNode
   search: SystemSearch

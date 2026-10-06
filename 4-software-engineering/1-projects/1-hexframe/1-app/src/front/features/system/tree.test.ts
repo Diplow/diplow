@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest'
 
-import type { SystemTile } from '#/domains/mapping/entities'
+import {
+  type PlacedTile,
+  type Slot,
+  type System,
+  type SystemTile,
+  systemOf,
+} from '#/domains/mapping/entities'
+import type { TileNode } from '#/front/ui/hex/view/tiles'
 import { m } from '#/paraglide/messages'
 
 import { canvasTree, slotOf, swapsWith, tileIn } from './tree'
@@ -117,23 +124,52 @@ describe('tileIn', () => {
 })
 
 describe('swapsWith', () => {
-  const tree = canvasTree(system)
-  const moving = tree.branches?.[1] ?? tree
-  const offers = (tile: typeof tree | undefined) =>
-    tile !== undefined && swapsWith(system, moving, tile)
+  const placed = (id: string, parent: string, slot: Slot): PlacedTile => ({
+    _tag: 'Tile',
+    id,
+    title: id.toUpperCase(),
+    preview: '',
+    body: '',
+    parent,
+    slot,
+  })
+  // The System as the server reads it, flat: the Root holds A in Direction 1, which holds A3 in
+  // Direction 3; B in Direction 4; a Leaf in Direction 1; Why in -1, which holds Deep in Direction 2;
+  // a Reference to A3 in -2 and one to a deleted Tile in -5.
+  const flat: System = {
+    root: { _tag: 'Tile', id: 'root', title: '', preview: '', body: '' },
+    tiles: {
+      a: placed('a', 'root', 1),
+      a3: placed('a3', 'a', 3),
+      b: placed('b', 'root', 4),
+      notes: placed('notes', 'root', { leaf: 1 }),
+      why: placed('why', 'root', -1),
+      deep: placed('deep', 'why', 2),
+      toA3: { _tag: 'Reference', id: 'toA3', parent: 'root', slot: -2, target: 'a3' },
+      toGone: { _tag: 'Reference', id: 'toGone', parent: 'root', slot: -5, target: 'gone' },
+    },
+    owned: true,
+  }
+  const tree = canvasTree(systemOf(flat))
+  const offers = (moving: TileNode | undefined, tile: TileNode | undefined) =>
+    moving !== undefined && tile !== undefined && swapsWith(flat, moving, tile)
 
-  it('offers a swap with any Tile drawn where it stands, a Branch or a Context Tile', () => {
-    expect([tree.branches?.[4], tree.context?.[1], moving.branches?.[3]].map(offers)).toEqual([
-      true,
-      true,
-      true,
-    ])
+  it('offers a swap with a Tile drawn where it stands, a Branch or a Context Tile, at any depth', () => {
+    const moving = tree.branches?.[1]
+    const others = [tree.branches?.[4], tree.context?.[1], tree.context?.[1]?.branches?.[2]]
+    expect(others.map((tile) => offers(moving, tile))).toEqual([true, true, true])
   })
 
   it('offers none with the Root, the moving Tile, a Leaf, a Reference or a broken one', () => {
-    expect(
-      [tree, moving, tree.leaves?.[1], tree.context?.[2], tree.context?.[5]].map(offers),
-    ).toEqual([false, false, false, false, false])
+    const moving = tree.branches?.[1]
+    const none = [tree, moving, tree.leaves?.[1], tree.context?.[2], tree.context?.[5]]
+    expect(none.map((tile) => offers(moving, tile))).toEqual([false, false, false, false, false])
+  })
+
+  it('offers none along one line, as Mapping refuses it: a Tile below the moving one, or above', () => {
+    const a = tree.branches?.[1]
+    const a3 = a?.branches?.[3]
+    expect([offers(a, a3), offers(a3, a)]).toEqual([false, false])
   })
 })
 
