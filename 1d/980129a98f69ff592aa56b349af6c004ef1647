@@ -1,0 +1,23 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/overlay/overlay.test.ts
+  s_c6607867f8f345::t_b12fa64bb6f0a4 214,223-225,234,238
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.test.ts
+  s_c6607867f8f345::t_2bcba83d1c8a7d 542,545,549,577,597,605
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-optimistic-writes-and-patterns/decisions.md
+  s_c6607867f8f345::t_933367d26b3242 86,88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1d980129a98f69ff592aa56b349af6c004ef1647",
+  "prompts": {},
+  "sessions": {
+    "s_c6607867f8f345": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a4f8f3c2-2717-4700-ac6f-29d6bae7bf9e",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
