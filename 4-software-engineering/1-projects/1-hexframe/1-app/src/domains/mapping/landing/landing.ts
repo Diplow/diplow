@@ -9,7 +9,7 @@ import type { BatchRow, RowRef, TileRow } from '#/repositories/database/tiles/ti
 import { Tiles } from '#/repositories/database/tiles/tiles'
 import { Zip } from '#/repositories/zip/zip'
 
-import { DirectionTaken } from '../errors'
+import { DirectionTaken, TileNotFound } from '../errors'
 import type {
   IdOfLink,
   ImportPlan,
@@ -29,8 +29,8 @@ import {
   systemOf,
   tileRow,
 } from '../entities'
-import { changing, freeSlot, untitled } from '../mapping'
-import type { Placement } from '../operations'
+import { changing, untitled } from '../mapping'
+import { freeSlot, type Placement } from '../operations'
 import { type Upload, archiveBounds, folderOf } from './archive'
 
 export type { Upload } from './archive'
@@ -154,9 +154,11 @@ function reportOf(
 const inSlot = (accountId: string, plan: ImportPlan, place: Placement) =>
   changing(accountId, [place.parent], (rows, writes) =>
     Effect.gen(function* () {
-      yield* freeSlot(rows, place)
+      const system = systemFrom(rows, { owned: true })
+      if (system === undefined) return yield* new TileNotFound()
+      yield* Effect.fromResult(freeSlot(system, place))
       const { root } = plan
-      yield* onlyALeafIn(place.slot, root)
+      yield* Effect.fromResult(onlyALeafIn(place.slot, root))
       const nameOf: NameOf = (path) => ({ _tag: 'Batch', key: path })
       const resolve = (target: ReferenceTarget) => targetOf(target, { rows, nameOf })
       const placed = rowOf(root, {

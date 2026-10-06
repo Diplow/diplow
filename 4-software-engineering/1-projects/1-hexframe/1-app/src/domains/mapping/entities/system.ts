@@ -12,6 +12,7 @@ import {
   type Direction,
   isContextSlot,
   isLeafSlot,
+  sameSlot,
   type Slot,
   slotOf,
   type Tile,
@@ -22,7 +23,7 @@ import {
  * from the files it was imported from: its Name, its Tile config and its Frontmatter, each when it has
  * one.
  */
-interface FoundTile extends Tile, Kept {
+export interface FoundTile extends Tile, Kept {
   readonly _tag: 'Tile'
 }
 
@@ -33,13 +34,13 @@ interface Standing {
 }
 
 /** A Tile of a System below its Root, where it stands: a Branch, a Leaf or a Context Tile. */
-interface PlacedTile extends FoundTile, Standing {}
+export interface PlacedTile extends FoundTile, Standing {}
 
 /**
  * A Reference of a System, where it stands, always a Context slot: a link to the Tile of `target`, by
  * its id, so it survives a move. It has an id of its own, and no content.
  */
-interface PlacedReference extends Standing {
+export interface PlacedReference extends Standing {
   readonly _tag: 'Reference'
   readonly id: string
   readonly slot: ContextDirection
@@ -145,16 +146,26 @@ const parentOfRow = (row: Pick<Row, 'parentId'>) => row.parentId
 export const tileRow = <R extends Walked>(rows: ReadonlyArray<R>, id: string) =>
   rows.find((row) => row.id === id && row.target === null)
 
-/** The row holding this slot of that parent, a Tile's or a Reference's. */
-export const rowAt = (rows: ReadonlyArray<Row>, parent: string, slot: number) =>
-  rows.find((row) => row.parentId === parent && row.direction === slot)
+/**
+ * The Tile of this id in a System, its Root or one placed below it; `undefined` for a Reference's id,
+ * or an id the System doesn't hold.
+ */
+export function tileAt(system: System, id: string): FoundTile | PlacedTile | undefined {
+  if (id === system.root.id) return system.root
+  const held = Object.hasOwn(system.tiles, id) ? system.tiles[id] : undefined
+  return held?._tag === 'Tile' ? held : undefined
+}
 
-/** The ids of a Tile and of everything below it. */
-export function below(rows: ReadonlyArray<Row>, id: string): ReadonlySet<string> {
-  const under = byParent(rows, parentOfRow)
+/** What holds this slot of that parent, a Tile or a Reference; `undefined` when the slot is free. */
+export const heldAt = (system: System, parent: string, slot: Slot) =>
+  Object.values(system.tiles).find((held) => held.parent === parent && sameSlot(held.slot, slot))
+
+/** The ids of a Tile of a System and of everything below it, its References included. */
+export function below(system: System, id: string): ReadonlySet<string> {
+  const under = byParent(Object.values(system.tiles), (held) => held.parent)
   const found = new Set([id])
   for (const parent of found) {
-    for (const row of under.get(parent) ?? []) found.add(row.id)
+    for (const held of under.get(parent) ?? []) found.add(held.id)
   }
   return found
 }
@@ -205,15 +216,10 @@ const unplaced = (tile: PlacedTile): FoundTile => Struct.omit(tile, ['parent', '
  * A System's tree: its Root with everything below it, each Tile with its Branches, its Leaves and its
  * Context, a Reference with the Tile it points at, or broken when it points at none.
  */
-export function systemOf({ root, tiles }: System): SystemTile {
-  const under = byParent(Object.values(tiles), (held) => held.parent)
+export function systemOf(system: System): SystemTile {
+  const under = byParent(Object.values(system.tiles), (held) => held.parent)
 
-  const tileAt = (id: string) => {
-    const held = id === root.id ? root : tiles[id]
-    return held?._tag === 'Tile' ? held : undefined
-  }
-
-  const refer = (target: string) => referenceTo(target, tileAt(target), tileOf)
+  const refer = (target: string) => referenceTo(target, tileAt(system, target), tileOf)
 
   // Its Tiles take its slots, a Branch's, a Leaf's or a Context one; its References only a Context one.
   const place = (tile: FoundTile): SystemTile => {
@@ -234,7 +240,7 @@ export function systemOf({ root, tiles }: System): SystemTile {
     return { ...tile, ...slots }
   }
 
-  return place(root)
+  return place(system.root)
 }
 
 /** What a read may ask of each Tile: its Title, its Preview, its Body. */

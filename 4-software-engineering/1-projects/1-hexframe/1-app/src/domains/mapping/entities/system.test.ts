@@ -2,7 +2,16 @@ import { describe, expect, it } from 'vitest'
 
 import { keepsNothing } from './kept/kept'
 import type { Row, RowWith } from './rows'
-import { below, readOf, rowAt, type System, systemFrom, systemOf, tileRow } from './system'
+import {
+  below,
+  heldAt,
+  readOf,
+  type System,
+  systemFrom,
+  systemOf,
+  tileAt,
+  tileRow,
+} from './system'
 
 // The pure reading of the tiles repository's rows, on rows made by hand: the System they hold, flat,
 // its tree, and a Tile read to a depth. No database.
@@ -190,25 +199,34 @@ describe('Leaves beside Branches', () => {
   })
 })
 
-describe('reading rows by id and by slot', () => {
+describe('reading a System, and its rows, by id and by slot', () => {
+  const system = systemFrom(rows, { owned: true })
+  if (system === undefined) throw new Error('These rows hold no Root')
+
   it('finds a Tile by its id, never a Reference', () => {
     expect(tileRow(rows, 'child')?.id).toBe('child')
     expect(tileRow(rows, 'ref-to-root')).toBeUndefined()
     expect(tileRow(rows, 'gone')).toBeUndefined()
+    expect(tileAt(system, 'child')).toMatchObject({ id: 'child', parent: 'root', slot: 2 })
+    expect(tileAt(system, 'root')).toBe(system.root)
+    expect(tileAt(system, 'ref-to-root')).toBeUndefined()
+    expect(tileAt(system, 'gone')).toBeUndefined()
+    expect(tileAt(system, '__proto__')).toBeUndefined()
   })
 
-  it('finds what holds a slot, a Tile or a Reference', () => {
-    expect(rowAt(rows, 'root', 2)?.id).toBe('child')
-    expect(rowAt(rows, 'child', -1)?.id).toBe('ref-to-root')
-    expect(rowAt(rows, 'root', 3)).toBeUndefined()
+  it('finds what holds a slot, a Tile or a Reference, by the slot of its kind', () => {
+    expect(heldAt(system, 'root', 2)?.id).toBe('child')
+    expect(heldAt(system, 'child', -1)?.id).toBe('ref-to-root')
+    expect(heldAt(system, 'root', 3)).toBeUndefined()
+    expect(heldAt(system, 'root', { leaf: 2 })).toBeUndefined()
   })
 
   it('finds a Tile and everything below it, nothing beside it', () => {
-    expect(below(rows, 'child')).toEqual(
+    expect(below(system, 'child')).toEqual(
       new Set(['child', 'grandchild', 'ref-to-root', 'ref-to-gone', 'ref-to-ref']),
     )
-    expect(below(rows, 'principle')).toEqual(new Set(['principle']))
-    expect(below(rows, 'root').size).toBe(rows.length)
+    expect(below(system, 'principle')).toEqual(new Set(['principle']))
+    expect(below(system, 'root').size).toBe(rows.length)
   })
 })
 
