@@ -13,8 +13,8 @@ import { toast } from '#/front/ui/feedback/Toaster'
 import { useCenteredTileState } from './useCenteredTileState'
 
 // What the centered Tile's card offers as a Child of its kind, over a stand-in for the move's server
-// function: which Tile grows, which shrinks, which neither, what each sends, and a refusal carried to
-// its toast. A refusal is what the client receives, its wire form, decoded.
+// function: which Tile grows, which shrinks, which neither, what each sends, presses queued in order,
+// and a refusal carried to its toast. A refusal is what the client receives, its wire form, decoded.
 vi.mock('#/api/mapping/mapping', () => ({ moveTile: vi.fn(), system: vi.fn() }))
 vi.mock('#/front/ui/feedback/Toaster', () => ({ toast: { error: vi.fn() } }))
 
@@ -126,26 +126,31 @@ describe('a change of kind', () => {
     })
   })
 
-  it('is on its way until the move settles, and a second press sends nothing', async () => {
+  it('sends a second press once the first move settled, in the order they were made', async () => {
     const settles: ((outcome: unknown) => void)[] = []
-    vi.mocked(Mapping.moveTile).mockReturnValue(
-      new Promise((resolve) => settles.push(resolve)) as never,
+    vi.mocked(Mapping.moveTile).mockImplementation(
+      () => new Promise((resolve) => settles.push(resolve)) as never,
     )
+    vi.mocked(Mapping.system).mockResolvedValue({
+      ok: true,
+      value: {
+        root: { _tag: 'Tile', id: 'root', title: '', preview: '', body: '' },
+        tiles: {},
+        owned: true,
+      },
+    })
     const result = render('notes')
     act(() => {
       result.current.kindChange?.change()
+      result.current.kindChange?.change()
     })
     await waitFor(() => {
-      expect(result.current.kindChange?.pending).toBe(true)
-    })
-    act(() => {
-      result.current.kindChange?.change()
+      expect(Mapping.moveTile).toHaveBeenCalledOnce()
     })
     settles[0]?.({ ok: true, value: undefined })
     await waitFor(() => {
-      expect(result.current.kindChange?.pending).toBe(false)
+      expect(Mapping.moveTile).toHaveBeenCalledTimes(2)
     })
-    expect(Mapping.moveTile).toHaveBeenCalledTimes(1)
   })
 
   it('shows a taken Direction in a toast, and stays offered', async () => {
@@ -161,6 +166,6 @@ describe('a change of kind', () => {
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(m.error_mapping_direction_taken())
     })
-    expect(result.current.kindChange).toMatchObject({ label: m.system_grow(), pending: false })
+    expect(result.current.kindChange?.label).toBe(m.system_grow())
   })
 })

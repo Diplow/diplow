@@ -10,10 +10,9 @@ import { m } from '#/paraglide/messages'
 
 import { tileIn } from '../tree'
 
-/** A Tile changing kind in its own Direction: its button's name, whether it is on its way, the act. */
+/** A Tile changing kind in its own Direction: its button's name and the act. */
 export interface KindChange {
   readonly label: string
-  readonly pending: boolean
   readonly change: () => void
 }
 
@@ -30,10 +29,9 @@ export function useCenteredTileState(system: SystemTile, id: string): CenteredTi
   const found = tileIn(system, id)
   const act = (parent: SystemTile, label: string, slot: Slot): KindChange => ({
     label,
-    pending: move.isPending,
+    // The card shows the Tile of its new kind at once; a second press waits its turn behind the first.
     change: () => {
-      // One write at a time: a second press while the first is on its way does nothing.
-      if (!move.isPending) move.mutate({ id, parent: parent.id, slot })
+      move.mutate({ id, parent: parent.id, slot })
     },
   })
   switch (found?.kind) {

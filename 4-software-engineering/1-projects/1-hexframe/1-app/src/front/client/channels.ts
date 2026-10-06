@@ -11,7 +11,7 @@ import type { Failure, Outcome } from '#/api/errors/failure'
 import { messageFor } from '#/api/errors/messages'
 import { forget, reportError } from '#/api/observability/client'
 
-import { CallFailed, asCallFailed, settle } from './calls'
+import { CallFailed, Foreseen, asCallFailed, settle } from './calls'
 
 let signingIn = false
 
@@ -33,11 +33,12 @@ function signIn() {
  * Carries out the channels that show nothing in place: the sign-in redirect and the toast. The
  * boundary's states and a form's fields are shown where they belong, by ReadBoundary and the form's
  * submit (`submitMutation`, `submitWrite`). The report is the server's: it logged every failure it
- * sent, with the request id, so the client reports only a call that never reached it.
+ * sent, with the request id, so the client reports only a call that never reached it, but for a
+ * refusal it foresaw itself (`Foreseen`), which is no fault.
  */
 function raise(failed: CallFailed, call: Call) {
   const { failure, scope } = failed
-  if (failed.requestId === undefined) {
+  if (failed.requestId === undefined && !(failed instanceof Foreseen)) {
     reportError(failed, { scope, kind: failure.kind, code: failure._tag })
   }
   const channel = channelFor(call, failure.kind)
