@@ -7,13 +7,20 @@
 // read as a file path. The build refuses a folder that reads as no Tile in either (vite.config.ts).
 import { Effect, Schema } from 'effect'
 
-import { withContent } from '#/repositories/database/tiles/tiles'
 import { helpNotes } from '#/repositories/help/help'
 import { noteFiles } from '#/repositories/help/note'
 
 import { TileNotFound } from '../errors'
-import { type Field, type FieldsAsked, type Found, systemOf } from '../system'
-import { contextDirections, directions } from '../tile'
+import {
+  contextDirections,
+  directions,
+  type Field,
+  type FieldsAsked,
+  type Found,
+  systemFrom,
+  systemOf,
+  withContent,
+} from '../entities'
 import { type Vault, vaultOf } from './vault'
 
 /** The id of Help's Root; every other Help id is a path of slots below it. */
@@ -52,15 +59,23 @@ const helpIn = (language: HelpLanguage) =>
 export const help = { en: helpIn('en'), fr: helpIn('fr') } satisfies Record<HelpLanguage, Vault>
 
 /**
- * Help whole, in a language: its Root with everything below it, Bodies included, as `system` reads an
- * Account's System. Every visitor reads it, signed in or not, so it takes no Account.
+ * Help as a System, flat, in a language: owned by no Account, so `decide` refuses it every change.
+ * `undefined` only for a bundle without a Root, which the build refuses.
+ */
+export const flatHelp = (language: HelpLanguage) =>
+  systemFrom(help[language].rows, { owned: false })
+
+/**
+ * Help whole, in a language, as its tree: its Root with everything below it, Bodies included, built
+ * from Help's System, which no Account owns, as the client builds an Account's. Every visitor reads
+ * it, signed in or not, so it takes no Account.
  */
 export const helpSystem = (language: HelpLanguage) =>
   Effect.suspend(() => {
-    const found = systemOf(help[language].rows)
+    const found = flatHelp(language)
     return found === undefined
       ? Effect.die(new Error(`Help in ${language} was bundled without a Root`))
-      : Effect.succeed(found)
+      : Effect.succeed(systemOf(found))
   })
 
 /**

@@ -1,27 +1,51 @@
 // A Tile, the unit of a System, and where one stands under its parent. Pure: what a Tile's content
 // must be is decided here, before anything is written.
-import { Effect } from 'effect'
+import { Result, Schema } from 'effect'
 
-import { PreviewTooLong, TitleMissing } from './errors'
+import { PreviewTooLong, TitleMissing } from '../errors'
 
 /** Where a Child stands in its parent's Frame: 1 NW, 2 NE, 3 E, 4 SE, 5 SW, 6 W. */
 export const directions = [1, 2, 3, 4, 5, 6] as const
-export type Direction = (typeof directions)[number]
+export const Direction = Schema.Literals(directions)
+export type Direction = typeof Direction.Type
 
 /** A Context slot, -1 to -6, in the same Directions as the Children. */
 export const contextDirections = [-1, -2, -3, -4, -5, -6] as const
-export type ContextDirection = (typeof contextDirections)[number]
+export const ContextDirection = Schema.Literals(contextDirections)
+export type ContextDirection = typeof ContextDirection.Type
+
+const contextSlots: Record<Direction, ContextDirection> = {
+  1: -1,
+  2: -2,
+  3: -3,
+  4: -4,
+  5: -5,
+  6: -6,
+}
+
+/** The Context slot in a Direction: the Direction, negated. */
+export const contextSlotOf = (direction: Direction): ContextDirection => contextSlots[direction]
 
 /**
  * A Leaf's slot: one of its parent's six Leaf Directions, which are their own beside the six Branch
  * Directions, so a Leaf and a Branch may share a Direction.
  */
-interface LeafSlot {
-  readonly leaf: Direction
-}
+const LeafSlot = Schema.Struct({ leaf: Direction })
 
-/** Where a Tile stands under its parent: a Branch's Direction, a Leaf's, or a Context slot. */
-export type Slot = Direction | LeafSlot | ContextDirection
+/**
+ * Where a Tile stands under its parent: a Branch's Direction, 1 to 6, a Leaf's, `{ leaf: 1 }` to
+ * `{ leaf: 6 }`, or a Context slot, −1 to −6. A Schema, so the API layer decodes a slot by it and a
+ * URL names one by it.
+ */
+export const Slot = Schema.Union([Direction, LeafSlot, ContextDirection])
+export type Slot = typeof Slot.Type
+
+/** Whether a slot is a Leaf's, which takes one file alone and nothing below it. */
+export const isLeafSlot = (slot: Slot): slot is typeof LeafSlot.Type => typeof slot === 'object'
+
+/** Whether a slot stands in its parent's Context, −1 to −6, rather than among its Branches or Leaves. */
+export const isContextSlot = (slot: Slot): slot is ContextDirection =>
+  typeof slot === 'number' && slot < 0
 
 /** What a reader finds in a Tile. */
 export interface Content {
@@ -36,28 +60,42 @@ export interface Tile extends Content {
   readonly id: string
 }
 
+/**
+ * A Tile's id as a caller names it: a UUID, as every Tile of a System is made, so a Help id, or any
+ * other text, names none of them.
+ */
+export const TileId = Schema.String.check(Schema.isUUID())
+
 /** A guard for one of these values, so the guards and the lists above never drift apart. */
 const among =
   <T extends number>(values: ReadonlyArray<T>) =>
   (value: number): value is T =>
     (values as ReadonlyArray<number>).includes(value)
 
-export const isDirection = among(directions)
+const isDirection = among(directions)
 
-export const isContextDirection = among(contextDirections)
+const isContextDirection = among(contextDirections)
 
 /** How far past its Direction a row stores a Leaf: beyond the six Branch slots, 7 to 12. */
 const leafOffset = directions.length
 
 /** The direction a row stands in for this slot: a Leaf's stored past the six Branch slots. */
 export const rowDirection = (slot: Slot): number =>
-  typeof slot === 'number' ? slot : slot.leaf + leafOffset
+  isLeafSlot(slot) ? slot.leaf + leafOffset : slot
 
 /** The Direction of the Leaf a row's direction stands for; `undefined` for any other slot. */
 export function leafOf(direction: number | null): Direction | undefined {
   if (direction === null) return undefined
   const leaf = direction - leafOffset
   return isDirection(leaf) ? leaf : undefined
+}
+
+/** The slot a row's direction stands for; `undefined` for the Root's, which has none, or for no slot. */
+export function slotOfRow(direction: number | null): Slot | undefined {
+  if (direction === null) return undefined
+  const leaf = leafOf(direction)
+  if (leaf !== undefined) return { leaf }
+  return isDirection(direction) || isContextDirection(direction) ? direction : undefined
 }
 
 /**
@@ -83,11 +121,14 @@ export const fitsPreview = (preview: string) => length(preview) <= previewLimit
  */
 export function checked<C extends Partial<Content>>(
   content: C,
-): Effect.Effect<C, TitleMissing | PreviewTooLong> {
+): Result.Result<C, TitleMissing | PreviewTooLong> {
   const title = content.title?.trim()
-  if (title === '') return Effect.fail(new TitleMissing({ fields: ['title'] }))
+  if (title === '') return Result.fail(new TitleMissing({ fields: ['title'] }))
   if (content.preview !== undefined && !fitsPreview(content.preview)) {
-    return Effect.fail(new PreviewTooLong({ fields: ['preview'] }))
+    return Result.fail(new PreviewTooLong({ fields: ['preview'] }))
   }
-  return Effect.succeed(title === undefined ? content : { ...content, title })
+  return Result.succeed(title === undefined ? content : { ...content, title })
 }
+
+/** Whether two slots are one: the same Direction of the same kind, or the same Context slot. */
+export const sameSlot = (a: Slot, b: Slot) => rowDirection(a) === rowDirection(b)

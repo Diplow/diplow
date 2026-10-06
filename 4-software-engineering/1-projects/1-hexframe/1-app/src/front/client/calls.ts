@@ -3,6 +3,7 @@
 // reads and writes with `read` and `write` and handles no error: the channels do (./channels.ts).
 import { mutationOptions, queryOptions, type QueryKey } from '@tanstack/react-query'
 
+import type { Call } from '#/api/errors/channel'
 import { Unexpected, decodeFailure, type Failure, type Outcome } from '#/api/errors/failure'
 
 /** A call that failed: its failure decoded, the scope it was made in, and the request id if any. */
@@ -19,6 +20,17 @@ export class CallFailed extends Error {
     this.failure = failure
     this.scope = scope
     this.requestId = requestId
+  }
+}
+
+/**
+ * A refusal the client foresaw, deciding as Mapping would on the System it holds, before sending: the
+ * call was never made, so the server logged nothing and there is nothing to report.
+ */
+export class Foreseen extends CallFailed {
+  constructor(failure: Failure, scope: string) {
+    super(failure, scope)
+    this.name = 'Foreseen'
   }
 }
 
@@ -76,17 +88,52 @@ export function read<A, E extends Failure>({ scope, key, call, frame = false }: 
   })
 }
 
-/** The mutation options of a write, for `useMutation`. */
+/**
+ * The call a write is, which picks where its failure goes: a `write`, or a form's `submit`, whose
+ * `Invalid` refusal shows on the form's fields.
+ */
+export type WriteCall = Extract<Call, 'write' | 'submit'>
+
+interface WriteOptions {
+  /** `submit` for the write a form sends; `write` when absent. */
+  as?: WriteCall
+  /**
+   * The queue the write waits its turn in: the writes of one queue run one after another, in the
+   * order they were made, each once the one before it settled, refused or not.
+   */
+  queue?: string
+}
+
+/**
+ * What places a write among the others, for `useMutation`: keyed by its scope, its call in its meta,
+ * so the QueryClient sends its failure to its channel and `useMutationState` finds it, and in its
+ * queue, if any. `write` builds every write on it; a write whose function `write` can't build, an
+ * import's, spreads it beside its own.
+ */
+export function writing(scope: string, { as = 'write', queue }: WriteOptions = {}) {
+  return {
+    mutationKey: [scope],
+    meta: { call: as },
+    ...(queue !== undefined && { scope: { id: queue } }),
+  }
+}
+
+/** The mutation options of a write, for `useMutation`, placed by `writing`. */
 export function write<I, A, E extends Failure>(
   scope: string,
   call: (input: I) => Promise<Outcome<A, E>>,
+  options: WriteOptions = {},
 ) {
-  return mutationOptions({ mutationFn: (input: I) => settle(scope, call(input)) })
+  return mutationOptions({
+    ...writing(scope, options),
+    mutationFn: (input: I) => settle(scope, call(input)),
+  })
 }
 
 declare module '@tanstack/react-query' {
   interface Register {
     defaultError: CallFailed
     queryMeta: { call: 'read' | 'frame' }
+    mutationMeta: { call: WriteCall }
   }
 }

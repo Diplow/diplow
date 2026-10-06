@@ -6,8 +6,7 @@ import { splitFrontmatter } from '../../../../../2-claude-mod/hooks/shape/node'
 import type { TileRow } from '#/repositories/database/tiles/tiles'
 
 import { helpSystem } from '../help/help'
-import { isSegment, keepsNothing } from '../kept/kept'
-import { systemOf } from '../system'
+import { isSegment, keepsNothing, systemFrom, systemOf } from '../entities'
 import { type File, exportOf } from './files'
 import { yamlOf } from './frontmatter'
 
@@ -70,14 +69,14 @@ const rows: ReadonlyArray<TileRow> = [
   { ...row('principles', 'root', -1), title: injected, preview: 'a\u2028---\u2029b' },
 ]
 
-const system = systemOf(rows)
-if (system === undefined) throw new Error('These rows hold a Root')
+const found = systemFrom(rows, { owned: true })
+if (found === undefined) throw new Error('These rows hold a Root')
+const system = systemOf(found)
 
 const link = (id: string) => `https://hexframe.test/map?tile=${id}`
 
 /** The export of the Tile of this id, which the System holds. */
 function exported(id: string): ReadonlyArray<File> {
-  if (system === undefined) throw new Error('These rows hold a Root')
   const files = exportOf(system, id, link)?.files
   if (files === undefined) throw new Error(`The System holds ${id}`)
   return files

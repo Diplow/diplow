@@ -6,7 +6,7 @@
 // nobody asked for never leaves the database.
 import { type SQL, and, eq, inArray, isNull } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
-import { Context, Effect, Layer } from 'effect'
+import { Context, Data, Effect, Layer } from 'effect'
 
 import { Database, InTransaction } from '../database'
 import { type FrontmatterColumn, type TileConfigColumn, tile } from '../schema'
@@ -30,46 +30,17 @@ export interface TileRow {
 }
 
 /** The columns keeping what an imported file carried: null when it carried nothing. */
-export type KeptColumn = 'name' | 'config' | 'frontmatter'
+type KeptColumn = 'name' | 'config' | 'frontmatter'
 
 /** The columns holding what a Tile says, which a read from one Tile names one by one. */
 export type ContentColumn = 'title' | 'preview' | 'body'
 
 /**
- * A row as a read from one Tile gives it: where it stands, whether it is a Reference, and, apart,
- * only the content columns asked.
+ * A row as a read from one Tile gives it: where it stands, whether it is a Reference, and only the
+ * content columns asked. Mapping shapes it (`domains/mapping/entities/rows.ts`).
  */
-export interface TileRowWith<C extends ContentColumn> {
-  readonly id: string
-  readonly parentId: string | null
-  readonly direction: number | null
-  readonly target: string | null
-  readonly content: Pick<TileRow, C>
-}
-
-/**
- * These content columns of what a Tile says, and no other: the one projection a read from one Tile
- * makes, whether its rows come from the database, here, or from Help's notes, in Mapping.
- */
-export function contentWith<C extends ContentColumn>(
-  content: Partial<Pick<TileRow, ContentColumn>>,
-  columns: ReadonlyArray<C>,
-): Pick<TileRow, C> {
-  // Built from the columns asked, each of them read, which a type cannot follow.
-  return Object.fromEntries(columns.map((column) => [column, content[column]])) as Pick<TileRow, C>
-}
-
-/** A row with only the content columns asked, apart from where it stands. */
-export const withContent = <C extends ContentColumn>(
-  {
-    id,
-    parentId,
-    direction,
-    target,
-    ...content
-  }: Omit<TileRow, ContentColumn | KeptColumn> & Partial<Pick<TileRow, ContentColumn>>,
-  columns: ReadonlyArray<C>,
-): TileRowWith<C> => ({ id, parentId, direction, target, content: contentWith(content, columns) })
+export type TileRowWith<C extends ContentColumn> = Omit<TileRow, ContentColumn | KeptColumn> &
+  Pick<TileRow, C>
 
 /** What a read from one row asks of each: the content columns of that row, and of the rows below it. */
 export interface ColumnsAsked<O extends ContentColumn, C extends ContentColumn> {
@@ -83,7 +54,7 @@ export interface Generations<O extends ContentColumn, C extends ContentColumn> {
   readonly below: ReadonlyArray<TileRowWith<C>>
 }
 
-/** A row to add under a parent, keeping what an imported file carried or not. Its id is made here. */
+/** A row to add under a parent, keeping what an imported file carried or not. */
 type NewTileRow = Omit<TileRow, 'id' | 'parentId' | 'direction' | KeptColumn> &
   Partial<Pick<TileRow, KeptColumn>> & {
     readonly parentId: string
@@ -106,10 +77,21 @@ export interface BatchRow extends Omit<NewTileRow, 'parentId' | 'target'> {
   readonly target: RowRef | { readonly _tag: 'Nowhere' } | null
 }
 
+/**
+ * A row was to be added under an id a row already has, in any Account's System: `tile.id` is the
+ * table's key. Nothing was written.
+ */
+export class IdTaken extends Data.TaggedError('IdTaken')<{ readonly id: string }> {}
+
 /** What a change may write, to the System it locked only, inside the same transaction. */
 export interface Writes {
-  /** Adds a row and answers its id. */
-  readonly insert: (row: NewTileRow) => Effect.Effect<string, never, InTransaction>
+  /**
+   * Adds a row under the id it carries, made by `Tiles.newId` or chosen by a caller. An id a row of
+   * any System already has is `IdTaken`, and nothing is written.
+   */
+  readonly insert: (
+    row: NewTileRow & Pick<TileRow, 'id'>,
+  ) => Effect.Effect<void, IdTaken, InTransaction>
   /**
    * Adds every row of a batch, in its order, a few hundred per statement, and answers each one's id
    * by its key. A row comes after the row of the batch it stands under; a key named before it is
@@ -173,6 +155,11 @@ export class Tiles extends Context.Service<
     ) => Effect.Effect<ReadonlyArray<TileRow>, never, InTransaction>
     /** What a change may write to the Account's System, once it locked it. */
     readonly writes: (accountId: string) => Writes
+    /**
+     * A fresh id for a row about to be added, for a change whose caller chose none, so that it knows
+     * the id before it writes the row (`Writes.insert`).
+     */
+    readonly newId: Effect.Effect<string>
   }
 >()('hexframe/Tiles') {}
 
@@ -187,6 +174,14 @@ const placeColumns = {
 /** What a Tile says. */
 const contentColumns = { title: tile.title, preview: tile.preview, body: tile.body }
 
+/** The content columns asked, for a select, and no other. */
+const contentColumnsOf = <C extends ContentColumn>(asked: ReadonlyArray<C>) =>
+  // Built from the columns asked, each of them, which a type cannot follow.
+  Object.fromEntries(asked.map((column) => [column, contentColumns[column]])) as Pick<
+    typeof contentColumns,
+    C
+  >
+
 /** What an imported file carried. */
 const keptColumns = { name: tile.name, config: tile.config, frontmatter: tile.frontmatter }
 
@@ -196,7 +191,7 @@ const columns = { ...placeColumns, ...contentColumns, ...keptColumns }
 const under = alias(tile, 'under')
 
 /** A query that only holds inside a transaction: it requires one, so it runs in no other. */
-const inTransaction = <A>(query: Effect.Effect<A>) => InTransaction.use(() => query)
+const inTransaction = <A, E>(query: Effect.Effect<A, E>) => InTransaction.use(() => query)
 
 const ofAccount = (accountId: string) => eq(tile.accountId, accountId)
 
@@ -284,15 +279,21 @@ const make = Effect.gen(function* () {
     database.select(columns).from(tile).where(ofAccount(accountId)).pipe(Effect.orDie)
 
   const writes = (accountId: string): Writes => ({
-    insert: (row) => {
-      const id = crypto.randomUUID()
-      return inTransaction(
+    insert: (row) =>
+      inTransaction(
         database
           .insert(tile)
-          .values({ ...row, id, accountId })
-          .pipe(Effect.as(id), Effect.orDie),
-      )
-    },
+          .values({ ...row, accountId })
+          // Only a clash on the key is answered: any other constraint broken is a defect.
+          .onConflictDoNothing({ target: tile.id })
+          .returning({ id: tile.id })
+          .pipe(
+            Effect.orDie,
+            Effect.flatMap((added) =>
+              added.length === 0 ? Effect.fail(new IdTaken({ id: row.id })) : Effect.void,
+            ),
+          ),
+      ),
     insertAll: (rows) =>
       inTransaction(
         Effect.gen(function* () {
@@ -337,19 +338,12 @@ const make = Effect.gen(function* () {
     accountId: string,
     where: SQL,
     columns: ReadonlyArray<C>,
-  ) => {
-    const asked: Partial<typeof contentColumns> = Object.fromEntries(
-      columns.map((column) => [column, contentColumns[column]]),
-    )
-    return database
-      .select({ ...placeColumns, ...asked })
+  ): Effect.Effect<ReadonlyArray<TileRowWith<C>>> =>
+    database
+      .select({ ...placeColumns, ...contentColumnsOf(columns) })
       .from(tile)
       .where(and(ofAccount(accountId), where))
-      .pipe(
-        Effect.orDie,
-        Effect.map((rows) => rows.map((row) => withContent(row, columns))),
-      )
-  }
+      .pipe(Effect.orDie)
 
   const root = (accountId: string, content: Pick<TileRow, ContentColumn>) =>
     ensureRoot(accountId, content).pipe(
@@ -406,6 +400,7 @@ const make = Effect.gen(function* () {
           .pipe(Effect.orDie, Effect.andThen(rowsOf(accountId))),
       ),
     writes,
+    newId: Effect.sync(() => crypto.randomUUID()),
   })
 })
 

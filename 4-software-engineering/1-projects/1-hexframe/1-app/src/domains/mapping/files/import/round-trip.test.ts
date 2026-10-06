@@ -3,14 +3,15 @@ import { describe, expect, it } from 'vitest'
 
 import type { TileRow } from '#/repositories/database/tiles/tiles'
 
-import { keepsNothing } from '../../kept/kept'
 import {
   type BrokenReference,
+  keepsNothing,
   type LeafTile,
   type Reference,
-  type SystemTile,
+  systemFrom,
   systemOf,
-} from '../../system'
+  type SystemTile,
+} from '../../entities'
 import { type File, exportOf } from '../files'
 import type { PlannedLeaf, PlannedReference, PlannedTile } from './plan'
 import { importOf } from './read'
@@ -73,8 +74,9 @@ const rows: ReadonlyArray<TileRow> = [
   { ...row('principles', 'root', -1), title: 'Line one\n---\nid: x', preview: 'a b' },
 ]
 
-const system = systemOf(rows)
-if (system === undefined) throw new Error('These rows hold a Root')
+const found = systemFrom(rows, { owned: true })
+if (found === undefined) throw new Error('These rows hold a Root')
+const system = systemOf(found)
 
 const link = (id: string) => `https://hexframe.test/?center=${id}`
 const idOfLink = (url: string) => /\?center=(.+)$/.exec(url)?.[1]

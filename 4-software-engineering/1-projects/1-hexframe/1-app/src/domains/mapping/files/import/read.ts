@@ -7,9 +7,18 @@
 import { Option, Result, Schema } from 'effect'
 
 import { type ImportFault, ImportRefused } from '../../errors'
-import { type Frontmatter, keepable, type Naming, reservedKeys } from '../../kept/kept'
-import { defaultNaming, inherited } from '../../kept/naming'
-import { contentBounds, type ContextDirection, type Direction, fitsPreview } from '../../tile'
+import {
+  contentBounds,
+  type ContextDirection,
+  defaultNaming,
+  type Direction,
+  fitsPreview,
+  type Frontmatter,
+  inherited,
+  keepable,
+  type Naming,
+  reservedKeys,
+} from '../../entities'
 import { mappingIn } from '../frontmatter'
 import type { EntryKind } from '../names'
 import type {

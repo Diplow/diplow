@@ -73,7 +73,9 @@ export const content = (title: string) => ({
  * a Reference to the Child, and a broken Reference.
  */
 export async function aSystem(signedIn: StartContext) {
-  const { id } = await value(run(signedIn, Mapping.system))
+  const {
+    root: { id },
+  } = await value(run(signedIn, Mapping.system))
   const root = await value(run(signedIn, Mapping.editTile({ id, ...content('Ada') })))
   const create = (
     parent: string,

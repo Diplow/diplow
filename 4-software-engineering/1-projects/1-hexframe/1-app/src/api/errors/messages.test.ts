@@ -21,6 +21,7 @@ import {
   MovedUnderItself,
   PreviewTooLong,
   RootFixed,
+  TileIdTaken,
   TileNotFound,
   TitleMissing,
 } from '#/domains/mapping/errors'
@@ -108,6 +109,7 @@ describe('the message table', () => {
       new DirectionTaken(),
       'This place already holds a tile. Pick a free one, or move that tile first.',
     ],
+    [new TileIdTaken(), 'This tile was already created. Reload to see your system as it stands.'],
     [new MovedUnderItself(), "A tile can't move under itself or one of its own children."],
     [new RootFixed(), "Your root tile is you: it can't be moved or deleted."],
     [
@@ -150,6 +152,10 @@ describe('the message table', () => {
     [
       new DirectionTaken(),
       'Cette place a déjà une tuile. Choisissez-en une libre, ou déplacez d’abord cette tuile.',
+    ],
+    [
+      new TileIdTaken(),
+      'Cette tuile a déjà été créée. Rechargez pour voir votre système tel qu’il est.',
     ],
     [
       new MovedUnderItself(),

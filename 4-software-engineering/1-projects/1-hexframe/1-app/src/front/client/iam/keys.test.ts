@@ -13,7 +13,7 @@ import { useIssueKeySubmit, useKeys, useRevokeKey } from './keys'
 
 // The hooks over stand-ins for IAM's server functions: what each calls, what it answers, and when the
 // Keys are read again. The server functions themselves are covered in src/api/iam/iam.test.ts. A
-// refusal is what the client receives, its wire form: the front never imports a domain.
+// refusal is what the client receives, its wire form, decoded.
 vi.mock('#/api/iam/iam', () => ({ keys: vi.fn(), issueKey: vi.fn(), revokeKey: vi.fn() }))
 
 afterEach(() => {

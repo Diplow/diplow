@@ -64,6 +64,15 @@ describe('the tool table, as an agent lists it', () => {
     },
   )
 
+  // An agent's contract: a change to how the app declares a tool's input leaves what an agent lists
+  // as it was, word for word, unless the snapshot is updated on purpose.
+  it('lists every tool as an agent has always seen it: name, description, input and annotations', async () => {
+    const { secret } = await signedUp()
+    const client = await connect(bearer(secret))
+    const { tools } = await client.listTools()
+    expect(tools).toMatchSnapshot()
+  })
+
   it('teaches each write the refusals it may meet, and how to get past them', async () => {
     const { secret } = await signedUp()
     const client = await connect(bearer(secret))

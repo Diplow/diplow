@@ -21,9 +21,9 @@ preview: >-
 | Folder | Holds |
 |---|---|
 | `inputs/controls/` | `Button`, `Input`, `Textarea`, `ThemeToggle`, `LocaleSwitch` |
-| `inputs/forms/` | `Field` (a label, a control, its description and errors) and `useAppForm` (TanStack Form with the fields `TextField`, which takes a `type` (text, email, password) and an `autoComplete`, `TextareaField` and the `SubmitButton`) |
+| `inputs/forms/` | `Field` (a label, a control, its description and errors), `useAppForm` (TanStack Form with the fields `TextField`, which takes a `type` (text, email, password) and an `autoComplete`, `TextareaField` and the `SubmitButton`) and `openedOnRefusal`, the options of a form that opens on the refusal its last submit met, each field it names touched with its message, as a refused submit leaves it |
 | `surfaces/` | `Card`, `PageHeader` |
 | `overlays/` | `Drawer` (controlled: its open state belongs in the URL), `ConfirmDialog`, `DropdownMenu`, `Tooltip` |
 | `data/` | `DataTable`, sortable, with its loading and empty states; `Markdown.tsx`, the seam STACK.md names for a Tile's content, holding for now `CodeBlock`, text shown as written, which a Leaf that isn't Markdown shows its Body in: the Markdown renderer, when a Body is rendered, comes in there |
-| `feedback/` | `Toaster` and `toast`, `Skeleton`, and in `states.tsx` `EmptyState`, `ErrorState` and `Forbidden` |
+| `feedback/` | `Toaster` and `toast`, `Skeleton`, in `states.tsx` `EmptyState`, `ErrorState` and `Forbidden`, and `useLeaveGuard`, which asks before the page is closed or reloaded while something is on its way, the browser wording the prompt |
 | `hex/` | `Canvas`, `Tile` and `Frame` on the tested geometry and view state: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex/CLAUDE\|hex]] |

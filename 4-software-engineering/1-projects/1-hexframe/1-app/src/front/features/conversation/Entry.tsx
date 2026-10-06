@@ -2,22 +2,26 @@
 // operation. Times are the reader's, in the page's language.
 import { cn } from 'cn'
 import {
+  ArrowLeftRight,
   ChevronsDownUp,
   ChevronsUpDown,
   Crosshair,
   Layers,
+  Link,
   Move,
   Pencil,
   Plus,
   Trash2,
+  Unlink,
   type LucideIcon,
 } from 'lucide-react'
 import type { ReactNode } from 'react'
 
+import type { Operation } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 
-import type { Entry, Navigation, Operation } from './timeline'
+import type { Entry, Navigation } from './timeline'
 import { TileCard } from './TileCard'
 
 export function ConversationEntry({ entry }: { entry: Entry }) {
@@ -33,7 +37,7 @@ export function ConversationEntry({ entry }: { entry: Entry }) {
       return (
         <div className="grid gap-1.5">
           <Action icon={icon} text={text()} at={entry.at} />
-          <TileCard tile={entry.tile} deleted={entry.operation === 'deleted'} />
+          <TileCard tile={entry.tile} deleted={entry.operation === 'DeleteTile'} />
         </div>
       )
     }
@@ -83,9 +87,13 @@ const navigations: Record<Navigation, { icon: LucideIcon; text: (title: string) 
   'context-hidden': { icon: Layers, text: (title) => m.conversation_context_hidden({ title }) },
 }
 
-const operations: Record<Operation, { icon: LucideIcon; text: () => string }> = {
-  created: { icon: Plus, text: m.conversation_created },
-  edited: { icon: Pencil, text: m.conversation_edited },
-  moved: { icon: Move, text: m.conversation_moved },
-  deleted: { icon: Trash2, text: m.conversation_deleted },
+/** What each of Mapping's Operations says once the user did it, in the past tense. */
+const operations: Record<Operation['_tag'], { icon: LucideIcon; text: () => string }> = {
+  CreateTile: { icon: Plus, text: m.conversation_created },
+  EditTile: { icon: Pencil, text: m.conversation_edited },
+  MoveTile: { icon: Move, text: m.conversation_moved },
+  SwapTiles: { icon: ArrowLeftRight, text: m.conversation_swapped },
+  DeleteTile: { icon: Trash2, text: m.conversation_deleted },
+  CreateReference: { icon: Link, text: m.conversation_referenced },
+  DeleteReference: { icon: Unlink, text: m.conversation_unreferenced },
 }

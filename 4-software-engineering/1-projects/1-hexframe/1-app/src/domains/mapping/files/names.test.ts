@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { isExcluded, settingsFolder } from '../../../../../2-claude-mod/hooks/shape/exclusions'
 import { bodyFiles, membersOf, sortEntries } from '../../../../../2-claude-mod/hooks/shape/node'
-import { defaultNaming } from '../kept/naming'
+import { defaultNaming } from '../entities'
 import { type ToName, isVerbatim, namesIn, ownFileName, shapeNames, slugOf } from './names'
 
 // How an export names what one folder holds, on entries made by hand: the slug of a Title, a kept

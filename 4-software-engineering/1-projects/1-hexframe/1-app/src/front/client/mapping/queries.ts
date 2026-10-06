@@ -1,19 +1,37 @@
 // Mapping on the client: one TanStack Query hook per read and per write, and the export, over its
-// server functions (src/api/mapping/mapping.ts). The System is one query, read whole; every write
-// reads it again once it settles, failed or not, since a refusal (a slot taken meanwhile, a Tile gone)
-// says the page is behind.
+// server functions (src/api/mapping/mapping.ts). The System is one query, read whole and flat, whose
+// tree the client builds; what the page shows is that System with every write still pending folded
+// over it (./overlay/overlay.ts). Every write to it is a mutation keyed by its Operation's name, whose
+// variables are that Operation's fields; the Tile forms' included. The writes run one after another,
+// in order, each first decided on the System the client holds, a refusal foreseen there sent nowhere,
+// and each reads the System again once it settles, failed or not, since a refusal (a slot taken
+// meanwhile, a Tile gone) says the page is behind. A Tile form's submit sends its write and answers
+// at once; a refused write to the System comes back through `useSystemRefusals`.
 // Failures go to their channels (../channels.ts): a hook's caller handles none.
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  type Mutation,
+  type QueryClient,
+  useIsMutating,
+  useMutation,
+  useMutationState,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { Schema } from 'effect'
+import { useCallback, useMemo, useRef, useSyncExternalStore } from 'react'
 
 import type { Failure, Outcome } from '#/api/errors/failure'
+import { type System, type SystemTile, systemOf } from '#/domains/mapping/entities'
+import type { Operation, OperationName } from '#/domains/mapping/operations'
 import { type Download, downloaded } from '#/api/mapping/files/download'
 import { type Given, type LeftOut, type Prepared, prepared } from './upload'
+import { operationOf, overlaid, type Pending, refusalOf } from './overlay/overlay'
 import {
   ImportUpload,
   type NewReference,
   type NewTile,
   type ReferenceSlot,
+  type TileDelete,
   type TileEdit,
   type TileMove,
   type TileRef,
@@ -33,24 +51,158 @@ import {
 
 import type { Locale } from '#/paraglide/runtime'
 
-import { read, write } from '../calls'
-import { settleSubmit, submitWrite } from '../channels'
+import { Foreseen, asCallFailed, read, settle, write, writing, type WriteCall } from '../calls'
+import { type FormErrors, settleSubmit, shownOnForm, unshown } from '../channels'
 
 /** The System's read, by the server function's name: every mode of its query key starts with it. */
 const systemScope = 'system'
 
-/**
- * The Account's System: its Root, the user, with everything below it. Shown inside a ReadBoundary,
- * where its failure appears; signed out, it sends the user to sign in.
- */
-export const useSystem = () =>
-  useQuery(read({ scope: systemScope, key: [], call: () => system({ data: undefined }) }))
+/** The queue every write to the System waits its turn in, so they reach the server in order. */
+const systemQueue = 'system'
+
+/** The System's read, whose cache holds the System as the server last answered it, flat. */
+const systemRead = read({ scope: systemScope, key: [], call: () => system({ data: undefined }) })
 
 /**
- * A Tile of the Account's System as the client holds it, with its Branches and its Leaves by
- * Direction, its Context by slot, and everything below them. The System is its Root.
+ * Reads the System again once a write settles, even while no page shows it, so the next write in the
+ * queue is decided on a System that holds this one.
  */
-export type SystemTile = NonNullable<ReturnType<typeof useSystem>['data']>
+const readAgain = (client: QueryClient) =>
+  client.invalidateQueries({ queryKey: [systemScope], refetchType: 'all' })
+
+/** Whether a mutation is a write to the System, an import's included: one of its queue. */
+const inSystemQueue = (mutation: Mutation) => mutation.options.scope?.id === systemQueue
+
+/** What a write to the System records when it is made: the System shown then, if one had landed. */
+interface Recorded {
+  readonly before: System | undefined
+}
+
+/**
+ * A pending write to the System, as the overlay folds it: its turn, the Operation it sends, read back
+ * from its key and variables by Mapping's schema, and the System shown when it was made.
+ */
+const pendingOf = (mutation: Mutation): Pending => ({
+  turn: mutation.mutationId,
+  operation: operationOf(mutation.options.mutationKey?.[0], mutation.state.variables),
+  before: (mutation.state.context as Recorded | undefined)?.before,
+})
+
+/**
+ * The System shown as a write with these variables is made: the server's, with every write to it
+ * already pending folded over it, this one aside.
+ */
+function shownBefore(client: QueryClient, variables: unknown): Recorded {
+  const held = client.getQueryData(systemRead.queryKey)
+  if (held === undefined) return { before: undefined }
+  const pending = client
+    .getMutationCache()
+    .findAll({ status: 'pending', predicate: inSystemQueue })
+    .filter((mutation) => mutation.state.variables !== variables)
+    .map(pendingOf)
+  return { before: overlaid(held, pending) }
+}
+
+/**
+ * The Account's System as the page shows it: the server's, with every write to it still pending
+ * folded over it in order, flat, which Mapping's `decide` rules on, and its tree, its Root, the user,
+ * with everything below it. A write that settles stops being pending once the System read again has
+ * landed, so nothing flickers between its answer and the read. Undefined until the first read lands.
+ * Shown inside a ReadBoundary, where its failure appears; signed out, it sends the user to sign in.
+ */
+export function useSystem(): { data: { system: System; root: SystemTile } | undefined } {
+  const { data } = useQuery(systemRead)
+  const pending = useMutationState({
+    filters: { status: 'pending', predicate: inSystemQueue },
+    select: pendingOf,
+  })
+  return {
+    data: useMemo(() => {
+      if (data === undefined) return undefined
+      const shown = overlaid(data, pending)
+      return { system: shown, root: systemOf(shown) }
+    }, [data, pending]),
+  }
+}
+
+/** Whether a write to the System, an import's included, is still waiting for its answer. */
+export const useSystemWriting = () => useIsMutating({ predicate: inSystemQueue }) > 0
+
+/** A write to the System refused, by the server or foreseen by the client. */
+export interface Refused {
+  /** Its turn, as the MutationCache numbers the writes in the order they were made. */
+  readonly turn: number
+  /** The Operation it sent, its variables read back by Mapping's schema. */
+  readonly operation: Operation
+  /** What its form shows of the refusal: on the fields it names, or on the form. */
+  readonly shown: FormErrors
+  /**
+   * The System as the cache holds it by then, flat, the server's, the read after the refusal landed:
+   * where the Tiles the Operation names stand. Undefined if no read of it has landed.
+   */
+  readonly system: System | undefined
+}
+
+const nothing = () => undefined
+
+/** What a page does with a refused write: answers whether it shows it, its form reopened. */
+type Take = (refused: Refused) => boolean
+
+/** The pages taking refused writes back, each by its latest `take`, per QueryClient. */
+const takersOf = new WeakMap<QueryClient, Set<{ readonly current: Take }>>()
+
+/**
+ * A QueryClient's takers of refused System writes, and the one MutationCache listener that hands
+ * each write of the System's queue to them the moment it turns `error`, once the System read again
+ * after it has landed, its channel already carried out. The takers registered then decide: if none
+ * shows a form's refusal, which its channel shows on the form's fields, it goes to a toast instead
+ * (`unshown`), so none is lost. An import, which is no Operation, is no refusal here: its drawer
+ * shows its own. Made with the client's first System write or page, and kept as long as the client.
+ */
+function listenForRefusals(client: QueryClient) {
+  const known = takersOf.get(client)
+  if (known !== undefined) return known
+  const takers = new Set<{ readonly current: Take }>()
+  takersOf.set(client, takers)
+  client.getMutationCache().subscribe((event) => {
+    if (event.type !== 'updated' || event.action.type !== 'error') return
+    const { mutationId: turn, options, state } = event.mutation
+    if (options.scope?.id !== systemQueue) return
+    const name: unknown = options.mutationKey?.[0]
+    const operation = operationOf(name, state.variables)
+    if (operation === undefined) return
+    const failed = asCallFailed(event.action.error, String(name))
+    const refused = {
+      turn,
+      operation,
+      shown: shownOnForm(failed),
+      system: client.getQueryData(systemRead.queryKey),
+    }
+    const shown = [...takers].map((take) => take.current(refused)).includes(true)
+    if (!shown) unshown(failed, options.meta?.call ?? 'write')
+  })
+  return takers
+}
+
+/**
+ * Hands `take` each write to the System refused while the component is mounted (`listenForRefusals`); `take`
+ * answers whether the page shows it. React registers it once, through `useSyncExternalStore`, which
+ * never re-renders here: the snapshot is always the same.
+ */
+export function useSystemRefusals(take: Take) {
+  const client = useQueryClient()
+  // The latest `take`, which reads the page as it is now; the registration stays the same.
+  const latest = useRef(take)
+  latest.current = take
+  const subscribe = useCallback(() => {
+    const takers = listenForRefusals(client)
+    takers.add(latest)
+    return () => {
+      takers.delete(latest)
+    }
+  }, [client])
+  useSyncExternalStore(subscribe, nothing, nothing)
+}
 
 /**
  * Help whole, in the page's language, Bodies included, read as the System is. Anyone reads it, so it
@@ -59,25 +211,48 @@ export type SystemTile = NonNullable<ReturnType<typeof useSystem>['data']>
 export const useHelp = (language: Locale) =>
   useQuery(read({ scope: 'help', key: [language], call: () => help({ data: { language } }) }))
 
-/** A write to the System, named by its scope, after which the System is read again. */
+/**
+ * A write to the System, scoped by the Operation it runs and queued behind the writes made before it.
+ * Its turn come, it is decided on the System the client holds, which by then holds every write made
+ * before it: a refusal foreseen there goes to its channel and nothing is sent. Settled, the System is
+ * read again, and the write stays pending until that read has landed.
+ */
 function useSystemWrite<I, A, E extends Failure>(
-  scope: string,
+  scope: OperationName,
   call: (input: I) => Promise<Outcome<A, E>>,
+  as: WriteCall = 'write',
 ) {
   const client = useQueryClient()
   return useMutation({
-    ...write(scope, call),
-    onSettled: () => client.invalidateQueries({ queryKey: [systemScope] }),
+    ...writing(scope, { as, queue: systemQueue }),
+    mutationFn: (input: I) => {
+      // Its refusal reaches a page, or a toast, whether or not a page is open by then.
+      listenForRefusals(client)
+      const held = client.getQueryData(systemRead.queryKey)
+      const operation = operationOf(scope, input)
+      const refusal =
+        held === undefined || operation === undefined ? undefined : refusalOf(held, operation)
+      if (refusal !== undefined) return Promise.reject(new Foreseen(refusal, scope))
+      return settle(scope, call(input))
+    },
+    onMutate: (input: I): Recorded => shownBefore(client, input),
+    onSettled: () => readAgain(client),
   })
 }
 
-/** Adds a Tile in a free slot: a Branch, a Leaf, or a Tile of its parent's Context. */
+/**
+ * Adds a Tile in a free slot: a Branch, a Leaf, or a Tile of its parent's Context. A form's write, so
+ * a refusal of what the Tile says shows on the field at fault (`useCreateTileSubmit`).
+ */
 export const useCreateTile = () =>
-  useSystemWrite('createTile', (data: typeof NewTile.Type) => createTile({ data }))
+  useSystemWrite('createTile', (data: typeof NewTile.Type) => createTile({ data }), 'submit')
 
-/** Changes any of a Tile's Title, Preview and Body. */
+/**
+ * Changes any of a Tile's Title, Preview and Body. A form's write, so a refusal of what the Tile says
+ * shows on the field at fault (`useEditTileSubmit`).
+ */
 export const useEditTile = () =>
-  useSystemWrite('editTile', (data: typeof TileEdit.Type) => editTile({ data }))
+  useSystemWrite('editTile', (data: typeof TileEdit.Type) => editTile({ data }), 'submit')
 
 /** Moves a Tile, and everything below it, to a free slot. */
 export const useMoveTile = () =>
@@ -89,7 +264,7 @@ export const useSwapTiles = () =>
 
 /** Deletes a Tile and everything below it; References to them stay, broken. */
 export const useDeleteTile = () =>
-  useSystemWrite('deleteTile', (data: typeof TileRef.Type) => deleteTile({ data }))
+  useSystemWrite('deleteTile', (data: typeof TileDelete.Type) => deleteTile({ data }))
 
 /** Puts a Reference to a Tile in a free Context slot. */
 export const useCreateReference = () =>
@@ -150,12 +325,13 @@ export type Imported =
  * Imports what the user gave into a place of the System: the browser prunes and zips it, or refuses
  * it before sending (`./upload.ts`), then the server lands it, all of it or nothing.
  * The import is the form of its files, so its refusal, `ImportRefused`, is its answer, shown where the
- * import was given; any other failure goes to a write's channel, a toast. The System is read again
- * once it settles.
+ * import was given; any other failure goes to a write's channel, a toast. It waits its turn behind
+ * the System's other writes, and the System is read again once it settles.
  */
 export const useImportTiles = () => {
   const client = useQueryClient()
   return useMutation({
+    ...writing('importTiles', { queue: systemQueue }),
     mutationFn: async ({
       given,
       place,
@@ -171,7 +347,7 @@ export const useImportTiles = () => {
       if (submitted.ok) return { _tag: 'Landed', report: submitted.value, leftOut }
       return { _tag: 'Refused', faults: submitted.failure.faults, leftOut }
     },
-    onSettled: () => client.invalidateQueries({ queryKey: [systemScope] }),
+    onSettled: () => readAgain(client),
   })
 }
 
@@ -182,46 +358,36 @@ const contentFields = ['title', 'preview', 'body'] as const
 export type TileContent = Pick<SystemTile, (typeof contentFields)[number]>
 
 /**
- * A form's submit that writes to the System, as the form's `validators.onSubmitAsync`: a refusal shows
- * on the fields it names, or in its channel, and the System is read again once the write settles.
+ * A Tile form's submit: sends what the form holds as a write, queued behind the others, and answers at
+ * once, so the form closes as if the write had landed. Its refusal comes back through
+ * `useSystemRefusals`, its channel carried out: a toast, or nothing, for the reopened form to show.
  */
-function useSystemSubmit<A, E extends Failure>(
-  scope: string,
-  call: (content: TileContent) => Promise<Outcome<A, E>>,
-  onSaved: () => void,
-) {
-  const client = useQueryClient()
-  return submitWrite({
-    scope,
-    call: (content: TileContent) =>
-      call(content).finally(() => {
-        void client.invalidateQueries({ queryKey: [systemScope] })
-      }),
-    onSaved,
-  })
-}
-
-/** Submits a new Tile's form: the Tile goes in this free slot, a Child or a Tile of the Context. */
-export const useCreateTileSubmit = (
-  where: Pick<typeof NewTile.Type, 'parent' | 'slot'>,
-  onSaved: () => void,
-) =>
-  useSystemSubmit(
-    'createTile',
-    (content) => createTile({ data: { ...where, ...content } }),
-    onSaved,
-  )
+export type TileSubmit = (content: TileContent) => void
 
 /**
- * Submits a Tile's form: only the fields that changed are sent, so the Body of an untitled Root can
- * be written before its name.
+ * Submits a new Tile's form through `useCreateTile`: the Tile goes in this free slot, a Child or a Tile
+ * of the Context, under an id the client chooses for each submit, so the page draws it before the
+ * answer comes.
  */
-export const useEditTileSubmit = (tile: TileContent & { id: string }, onSaved: () => void) =>
-  useSystemSubmit(
-    'editTile',
-    (content) => editTile({ data: { id: tile.id, ...changed(tile, content) } }),
-    onSaved,
-  )
+export const useCreateTileSubmit = (
+  where: Pick<typeof NewTile.Type, 'parent' | 'slot'>,
+): TileSubmit => {
+  const { mutate } = useCreateTile()
+  return (content) => {
+    mutate({ id: crypto.randomUUID(), ...where, ...content })
+  }
+}
+
+/**
+ * Submits a Tile's form through `useEditTile`: only the fields that changed are sent, so the Body of
+ * an untitled Root can be written before its name.
+ */
+export const useEditTileSubmit = (tile: TileContent & { id: string }): TileSubmit => {
+  const { mutate } = useEditTile()
+  return (content) => {
+    mutate({ id: tile.id, ...changed(tile, content) })
+  }
+}
 
 /** The fields of `after` that differ from `before`. */
 function changed(before: TileContent, after: TileContent): Partial<TileContent> {
@@ -231,6 +397,3 @@ function changed(before: TileContent, after: TileContent): Partial<TileContent> 
     ),
   )
 }
-
-/** A Tile form's submit, as `useCreateTileSubmit` and `useEditTileSubmit` return it. */
-export type TileSubmit = ReturnType<typeof useSystemSubmit>

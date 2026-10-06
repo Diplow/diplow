@@ -1,11 +1,13 @@
 // Every error channel, provoked: a read, a read that frames every page, a write and a form's submit,
-// each ending with the outcome a button asks for, through the server function helper.
+// each ending with the outcome a button asks for, through the server function helper. The form submits
+// through a mutation and waits for its answer (`submitMutation`), as a form that stays open does; the
+// Tile forms close as they send and get a refusal back reopened (`useSystemRefusals`).
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
 import { read, write } from '#/front/client/calls'
-import { submitWrite } from '#/front/client/channels'
+import { submitMutation } from '#/front/client/channels'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { outcomes, type ProvokedOutcome } from '#/api/dev/failures'
 import { provokeRead, provokeWrite, submitDevTitle } from '#/api/dev/provoke'
@@ -131,12 +133,16 @@ function Writes() {
 }
 
 function TitleForm() {
+  const save = useMutation(
+    write('submitDevTitle', (value: { title: string }) => submitDevTitle({ data: value }), {
+      as: 'submit',
+    }),
+  )
   const form = useAppForm({
     defaultValues: { title: '' },
     validators: {
-      onSubmitAsync: submitWrite({
-        scope: 'submitDevTitle',
-        call: (value: { title: string }) => submitDevTitle({ data: value }),
+      onSubmitAsync: submitMutation({
+        mutate: save.mutateAsync,
         onSaved: ({ title }) => toast.success(m.dev_errors_form_saved({ title })),
       }),
     },

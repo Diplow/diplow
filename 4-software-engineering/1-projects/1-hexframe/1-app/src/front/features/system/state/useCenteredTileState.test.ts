@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import * as Mapping from '#/api/mapping/mapping'
 import { makeQueryClient } from '#/front/client/channels'
-import type { SystemTile } from '#/front/client/mapping/queries'
+import type { SystemTile } from '#/domains/mapping/entities'
 import { m } from '#/paraglide/messages'
 import { toast } from '#/front/ui/feedback/Toaster'
 
@@ -14,7 +14,7 @@ import { useCenteredTileState } from './useCenteredTileState'
 
 // What the centered Tile's card offers as a Child of its kind, over a stand-in for the move's server
 // function: which Tile grows, which shrinks, which neither, what each sends, and a refusal carried to
-// its toast. A refusal is what the client receives, its wire form: the front never imports a domain.
+// its toast. A refusal is what the client receives, its wire form, decoded.
 vi.mock('#/api/mapping/mapping', () => ({ moveTile: vi.fn(), system: vi.fn() }))
 vi.mock('#/front/ui/feedback/Toaster', () => ({ toast: { error: vi.fn() } }))
 
@@ -92,7 +92,12 @@ describe('what the card shows of a Body', () => {
 describe('a change of kind', () => {
   const answering = (outcome: unknown) => {
     vi.mocked(Mapping.moveTile).mockResolvedValue(outcome as never)
-    vi.mocked(Mapping.system).mockResolvedValue({ ok: true, value: system } as never)
+    // The System read again after the move, flat as the server answers it: what it holds plays no part.
+    const read = {
+      root: { _tag: 'Tile', id: 'root', title: '', preview: '', body: '' },
+      tiles: {},
+    } as const
+    vi.mocked(Mapping.system).mockResolvedValue({ ok: true, value: { ...read, owned: true } })
   }
 
   it('moves a Leaf to the Branch slot of its own Direction', async () => {

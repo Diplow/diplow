@@ -2,7 +2,7 @@
 // only looks around, as on home. Beside it, the centered Tile's card, whose button opens its Body in a
 // drawer. Like the canvas, it holds no state: the view and the open Body are the URL's, and it hands
 // the next search params to the route.
-import type { SystemTile } from '#/front/client/mapping/queries'
+import type { SystemTile } from '#/domains/mapping/entities'
 import { m } from '#/paraglide/messages'
 import { Canvas } from '#/front/ui/hex/Canvas'
 import type { TileNode } from '#/front/ui/hex/view/tiles'

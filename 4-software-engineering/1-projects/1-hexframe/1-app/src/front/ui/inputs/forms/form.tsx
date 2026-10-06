@@ -1,4 +1,4 @@
-import { createFormHook, createFormHookContexts } from '@tanstack/react-form'
+import { type AnyFormApi, createFormHook, createFormHookContexts } from '@tanstack/react-form'
 import { Loader2 } from 'lucide-react'
 import type { ReactNode } from 'react'
 
@@ -83,3 +83,22 @@ export const { useAppForm } = createFormHook({
   fieldComponents: { TextField, TextareaField },
   formComponents: { SubmitButton },
 })
+
+/**
+ * The options of a form that opens on the refusal its last submit met, spread into `useAppForm`: it
+ * shows as a refused submit leaves a form, each field the refusal names touched, its message under
+ * it, cleared once the field changes. None, and the form opens as any other.
+ */
+export function openedOnRefusal(fields: Readonly<Record<string, string>> | undefined) {
+  return {
+    listeners: {
+      onMount: ({ formApi }: { formApi: AnyFormApi }) => {
+        if (fields === undefined) return
+        for (const name of Object.keys(fields)) {
+          formApi.setFieldMeta(name, (meta) => ({ ...meta, isTouched: true }))
+        }
+        formApi.setErrorMap({ onSubmit: { fields } })
+      },
+    },
+  }
+}

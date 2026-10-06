@@ -16,7 +16,7 @@ How [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLA
 
 | File | Holds |
 |---|---|
-| `files.ts` | `exportOf`, the files an export holds and its Tile's slug, from a System, a Tile's id and the function the caller links a Tile by: a folder per Branch, Context Tile and Reference, a file per Leaf, a `.hexframe/config.yaml` where a Tile sets its naming, the root's carrying the naming it inherits; the naming in force at each folder worked out on the way down, by `kept/naming.ts`'s `inherited` (`hexframe-app-import-export/decisions.md#DEC-8`) |
+| `files.ts` | `exportOf`, the files an export holds and its Tile's slug, from a System, a Tile's id and the function the caller links a Tile by: a folder per Branch, Context Tile and Reference, a file per Leaf, a `.hexframe/config.yaml` where a Tile sets its naming, the root's carrying the naming it inherits; the naming in force at each folder worked out on the way down, by `entities/kept/naming.ts`'s `inherited` (`hexframe-app-import-export/decisions.md#DEC-8`) |
 | `names.ts` | `namesIn`, what a folder's entries are named, a kept Name dressed for its slot or the folder pattern in force, numbered wherever the shape would not read it back in its Direction; `slugOf`; `isVerbatim`, a Leaf written as its content alone, which the API layer offers the browser too (`api/mapping/files/download.ts`) (`#DEC-7`) |
 | `frontmatter.ts` | The YAML an export writes and an import reads back, every value on its key's line (`#DEC-6`) |
 | `files.test.ts`, `names.test.ts` | On Systems and entries made by hand: every file split back as the shape splits it, every name seated where the shape's `sortEntries` seats it, the naming inherited and overridden, Help exported whole |

@@ -1,12 +1,15 @@
 // The user's System on the canvas. A click on an empty slot opens the new Tile's form there, a Leaf's
 // in a ring of Leaves, or, while a Tile is being moved, moves it there; meanwhile every other Tile
-// offers to swap places with it.
+// offers to swap places with it. A move or a swap ends the moment it is sent, and comes back if its
+// write is refused (`state/useRefusalState.ts`). While a write to the System is on its way, closing or
+// reloading the tab asks first.
 // Like the canvas, it holds no state: the view and the change under way are the URL's, and it hands
 // the next search params to the route.
 import { cn } from 'cn'
 
-import { useMoveTile, useSwapTiles } from '#/front/client/mapping/queries'
+import { useMoveTile, useSwapTiles, useSystemWriting } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
+import { useLeaveGuard } from '#/front/ui/feedback/useLeaveGuard'
 import { Canvas } from '#/front/ui/hex/Canvas'
 import type { EmptySlotTarget } from '#/front/ui/hex/geometry/shape'
 import { findTile, type TileNode } from '#/front/ui/hex/view/tiles'
@@ -19,13 +22,14 @@ import {
   withView,
   type SearchChange,
   type SystemSearch,
-} from './search'
-import type { SystemTile } from '#/front/client/mapping/queries'
+} from './search/search'
+import type { System as FlatSystem } from '#/domains/mapping/entities'
 
-import { slotOf, swapsWith } from './tree'
+import { slotOf, swapOf, swapsWith } from './tree'
 
 interface SystemProps {
-  system: SystemTile
+  /** The System as the page shows it, flat, which Mapping's `decide` rules on. */
+  system: FlatSystem
   /** The System's Tiles as the canvas draws them (`canvasTree`). */
   tree: TileNode
   search: SystemSearch
@@ -36,6 +40,7 @@ interface SystemProps {
 export function System({ system, tree, search, onSearchChange, className }: SystemProps) {
   const move = useMoveTile()
   const swap = useSwapTiles()
+  useLeaveGuard(useSystemWriting())
   const change = changeOf(search)
   // A move whose Tile is gone (deleted from another tab, an old link) is no move: no banner, and the
   // empty slots add a Tile, the first of which replaces the move in the URL.
@@ -65,15 +70,11 @@ export function System({ system, tree, search, onSearchChange, className }: Syst
     }
   }
 
-  // One write at a time: a slot clicked while the Tile is on its way does nothing. A refusal (a slot
-  // under the Tile itself, one taken meanwhile, a swap along one line) shows in a toast, and the move
-  // stays under way, so another slot can be picked. Done, it ends in the URL as it is by then,
-  // whatever view the user opened meanwhile.
-  const pending = move.isPending || swap.isPending
-  const done = {
-    onSuccess: () => {
-      onSearchChange((current) => withChange(current, { kind: 'none' }))
-    },
+  // The canvas shows the Tile where it goes at once, the writes run in the order they were made, and
+  // the move ends as it is sent. A refusal (a slot under the Tile itself, one taken meanwhile, a swap
+  // along one line) shows in a toast, and the move is under way again, so another slot can be picked.
+  const sent = () => {
+    onSearchChange((current) => withChange(current, { kind: 'none' }))
   }
 
   const moveHere = (tile: TileNode) => (target: EmptySlotTarget) => {
@@ -83,7 +84,8 @@ export function System({ system, tree, search, onSearchChange, className }: Syst
     return {
       label: target.ring === 'context' ? m.system_move_context(names) : m.system_move_child(names),
       onSelect: () => {
-        if (!pending) move.mutate({ id: tile.id, ...place }, done)
+        move.mutate({ id: tile.id, ...place })
+        sent()
       },
     }
   }
@@ -93,7 +95,8 @@ export function System({ system, tree, search, onSearchChange, className }: Syst
       ? {
           label: m.system_swap_with({ title: held.title }),
           onSelect: () => {
-            if (!pending) swap.mutate({ a: moving.id, b: held.id }, done)
+            swap.mutate(swapOf(moving.id, held.id))
+            sent()
           },
         }
       : undefined

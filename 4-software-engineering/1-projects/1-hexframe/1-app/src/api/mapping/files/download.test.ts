@@ -4,6 +4,7 @@ import { describe, expect, expectTypeOf, it } from 'vitest'
 import type { SignedOut } from '#/domains/iam/errors'
 import type { TileNotFound } from '#/domains/mapping/errors'
 import { exportOf } from '#/domains/mapping/files/files'
+import { systemOf } from '#/domains/mapping/entities'
 import { unzipped } from '#/repositories/zip/testing'
 
 import type { Unexpected } from '../../errors/failure'
@@ -42,6 +43,11 @@ async function value<A>(outcome: Promise<{ ok: true; value: A } | { ok: false }>
   return settled.value
 }
 
+/** The Account's System, read flat through its server function, as its tree, as the client builds it. */
+async function systemTree(context: StartContext) {
+  return systemOf(await value(run(context, Mapping.system)))
+}
+
 const content = (title: string) => ({ title, preview: `${title}, in short.`, body: `# ${title}` })
 
 /**
@@ -50,7 +56,7 @@ const content = (title: string) => ({ title, preview: `${title}, in short.`, bod
  */
 async function aSystem() {
   const context = request()
-  const { id: root } = await value(run(context, Mapping.system))
+  const { id: root } = await systemTree(context)
   await value(run(context, Mapping.editTile({ id: root, title: 'Ulysse Boillot' })))
   const branch = await value(
     run(context, Mapping.createTile({ parent: root, slot: 1, ...content('Games') })),
@@ -75,7 +81,7 @@ async function answered(context: StartContext, id: string) {
 describe('a Tile exported as a zip', () => {
   it('holds exactly the files the serializer writes for it, the whole System from the Root', async () => {
     const { context, root, branch } = await aSystem()
-    const system = await value(run(context, Mapping.system))
+    const system = await systemTree(context)
     for (const id of [root, branch.id]) {
       const answer = await answered(context, id)
       if (!(answer instanceof Response)) throw new Error('Expected a download')

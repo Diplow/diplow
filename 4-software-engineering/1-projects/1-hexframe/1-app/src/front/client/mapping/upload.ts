@@ -9,7 +9,6 @@ import {
   type ArchiveEntry,
   archiveBounds,
   archived,
-  type ImportRefused,
   isSettingsFile,
   type LeftOut,
   leftOutOf,
@@ -21,6 +20,7 @@ import {
   uploadFaults,
   wrappingFolder,
 } from '#/api/mapping/files/upload'
+import type { ImportRefused } from '#/domains/mapping/errors'
 
 export type { LeftOut }
 

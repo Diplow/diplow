@@ -2,29 +2,30 @@
 // teaches it in its description, bounds its input with an Effect Schema and runs one program through
 // the helper, like a server function. The MCP server (./mcp.ts) registers every entry; the Assistant
 // will take the same table and run a `write` entry's program only once the user accepts its Proposal.
-// A write takes its server function's input Schema (../../mapping/mapping.ts), each field described
-// for an agent, and runs the same program, for the Account the Key proves, in one transaction.
+// A write runs one of Mapping's Operations: it takes its server function's input Schema, the
+// Operation's fields (../../mapping/mapping.ts), each described for an agent, and runs the same
+// program, for the Account the Key proves, in one transaction.
 import { Effect, Schema, Struct } from 'effect'
 
 import {
   depths,
   directions as childDirections,
   fields as allFields,
-  HelpId,
-  helpRoot,
   previewLimit,
   type Field,
-} from '#/domains/mapping/mapping'
+  TileId,
+} from '#/domains/mapping/entities'
+import { HelpId, helpRoot } from '#/domains/mapping/mapping'
+import type { OperationName } from '#/domains/mapping/operations'
 
 import type { Failure } from '../../errors/failure'
 import {
-  Id,
   NewReference,
   NewTile,
   ReferenceSlot,
+  TileDelete,
   TileEdit,
   TileMove,
-  TileRef,
   TileSwap,
 } from '../../mapping/mapping'
 import * as Mapping from '../../mapping/programs'
@@ -48,10 +49,10 @@ interface ReadTool<I> extends ToolBase<I> {
 interface WriteTool<I> extends ToolBase<I> {
   readonly kind: 'write'
   /**
-   * The operation it runs, by its server function's name: the scope the message table words its
-   * refusals by, so the table knows the operations and never the tools.
+   * The Operation it runs, by its name, which its server function bears too: the scope the message
+   * table words its refusals by, so the table knows the Operations and never the tools.
    */
-  readonly operation: keyof typeof Mapping
+  readonly operation: OperationName
   /** It erases what the user wrote, which no tool brings back: a delete. */
   readonly destructive?: true
 }
@@ -70,7 +71,7 @@ const Fields = (fallback: ReadonlyArray<Field>, description: string) =>
     .annotate({ description })
     .pipe(Schema.withDecodingDefaultKey(Effect.succeed(fallback)))
 
-const TileId = Schema.Union([Id, HelpId]).annotate({
+const ReadId = Schema.Union([TileId, HelpId]).annotate({
   description:
     "A Tile's id, as open_tile and map answer it: a Tile of the user's System, or of Help, from " +
     `its Root, "${helpRoot}". Without one, the user's Root: the user.`,
@@ -99,7 +100,7 @@ const openTile = read({
     "open a Tile, read its Children's Previews, then open only the ones that matter to your task. " +
     `${directions} ${help}`,
   input: Schema.Struct({
-    id: Schema.optionalKey(TileId),
+    id: Schema.optionalKey(ReadId),
     fields: Fields(
       allFields,
       'What to read of the opened Tile: any of title, preview, body. All three when not given.',
@@ -118,7 +119,7 @@ const map = read({
     'Body below, since it costs far more. ' +
     `${directions} ${help}`,
   input: Schema.Struct({
-    id: Schema.optionalKey(TileId),
+    id: Schema.optionalKey(ReadId),
     depth: Schema.Literals(depths)
       .annotate({ description: 'How many generations below the Tile: 0 to 3, 2 when not given.' })
       .pipe(Schema.withDecodingDefaultKey(Effect.succeed(2 as const))),
@@ -203,6 +204,20 @@ const described = {
   holder: 'The id of the Tile whose Context holds the Reference.',
 } as const
 
+/**
+ * A new Tile as an agent gives it: without the id a server function's caller may choose, since an
+ * agent reads the new Tile's in the answer.
+ */
+const NewTileOfAgent = NewTile.mapFields((fields) =>
+  Struct.evolve(Struct.omit(fields, ['id']), {
+    parent: (field) => field.annotate({ description: described.parent }),
+    slot: (field) => field.annotate({ description: described.slot }),
+    title: (field) => field.annotate({ description: described.title }),
+    preview: (field) => field.annotate({ description: described.preview }),
+    body: (field) => field.annotate({ description: described.body }),
+  }),
+)
+
 const createTile = write({
   name: 'create_tile',
   operation: 'createTile',
@@ -217,16 +232,11 @@ const createTile = write({
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
   },
-  input: NewTile.mapFields(
-    Struct.evolve({
-      parent: (field) => field.annotate({ description: described.parent }),
-      slot: (field) => field.annotate({ description: described.slot }),
-      title: (field) => field.annotate({ description: described.title }),
-      preview: (field) => field.annotate({ description: described.preview }),
-      body: (field) => field.annotate({ description: described.body }),
-    }),
-  ),
-  program: Mapping.createTile,
+  input: NewTileOfAgent,
+  // An agent sends no id, so Mapping makes it, fresh: a clash on it is a defect, never a refusal
+  // to teach (`TileIdTaken` comes only to a caller that chose its id).
+  program: (input: typeof NewTileOfAgent.Type) =>
+    Effect.catchTag(Mapping.createTile(input), 'TileIdTaken', (taken) => Effect.die(taken)),
 })
 
 const editTile = write({
@@ -318,7 +328,7 @@ const deleteTile = write({
     RootFixed: refusal.RootFixed,
     HelpReadOnly: refusal.HelpReadOnly,
   },
-  input: TileRef.mapFields(
+  input: TileDelete.mapFields(
     Struct.evolve({
       id: (field) =>
         field.annotate({ description: `${described.id} It goes with everything below it.` }),

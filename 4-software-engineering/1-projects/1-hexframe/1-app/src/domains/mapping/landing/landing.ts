@@ -9,7 +9,7 @@ import type { BatchRow, RowRef, TileRow } from '#/repositories/database/tiles/ti
 import { Tiles } from '#/repositories/database/tiles/tiles'
 import { Zip } from '#/repositories/zip/zip'
 
-import { DirectionTaken } from '../errors'
+import { DirectionTaken, TileNotFound } from '../errors'
 import type {
   IdOfLink,
   ImportPlan,
@@ -20,10 +20,17 @@ import type {
   ReferenceTarget,
 } from '../files/import/plan'
 import { importOf } from '../files/import/read'
-import { isEmptySystem, onlyALeafIn } from '../leaves/leaves'
-import { type Placement, changing, freeSlot, untitled } from '../mapping'
-import { systemOf, tileRow } from '../system'
-import { type Slot, rowDirection } from '../tile'
+import {
+  isEmptySystem,
+  onlyALeafIn,
+  rowDirection,
+  type Slot,
+  systemFrom,
+  systemOf,
+  tileRow,
+} from '../entities'
+import { changing, untitled } from '../mapping'
+import { freeSlot, type Placement } from '../operations'
 import { type Upload, archiveBounds, folderOf } from './archive'
 
 export type { Upload } from './archive'
@@ -147,9 +154,11 @@ function reportOf(
 const inSlot = (accountId: string, plan: ImportPlan, place: Placement) =>
   changing(accountId, [place.parent], (rows, writes) =>
     Effect.gen(function* () {
-      yield* freeSlot(rows, place)
+      const system = systemFrom(rows, { owned: true })
+      if (system === undefined) return yield* new TileNotFound()
+      yield* Effect.fromResult(freeSlot(system, place))
       const { root } = plan
-      yield* onlyALeafIn(place.slot, root)
+      yield* Effect.fromResult(onlyALeafIn(place.slot, root))
       const nameOf: NameOf = (path) => ({ _tag: 'Batch', key: path })
       const resolve = (target: ReferenceTarget) => targetOf(target, { rows, nameOf })
       const placed = rowOf(root, {
@@ -176,8 +185,9 @@ const asRoot = (accountId: string, plan: ImportPlan) =>
     Tiles.use((tiles) => tiles.root(accountId, untitled)),
     changing(accountId, [], (rows, writes) =>
       Effect.gen(function* () {
-        const stored = systemOf(rows)
-        if (stored === undefined) return yield* Effect.die(new Error('A Root was added, then lost'))
+        const found = systemFrom(rows, { owned: true })
+        if (found === undefined) return yield* Effect.die(new Error('A Root was added, then lost'))
+        const stored = systemOf(found)
         if (!isEmptySystem(stored)) return yield* new DirectionTaken()
         const { root } = plan
         const nameOf: NameOf = (path) =>
