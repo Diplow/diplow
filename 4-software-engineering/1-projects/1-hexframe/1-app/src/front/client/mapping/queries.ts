@@ -1,7 +1,9 @@
 // Mapping on the client: one TanStack Query hook per read and per write, and the export, over its
 // server functions (src/api/mapping/mapping.ts). The System is one query, read whole and flat, whose
-// tree the client builds; every write reads it again once it settles, failed or not, since a refusal
-// (a slot taken meanwhile, a Tile gone) says the page is behind.
+// tree the client builds. Every write to it is a mutation keyed by its Operation's name, whose
+// variables are that Operation's fields; the Tile forms' included. The writes run one after another,
+// in order, and each reads the System again once it settles, failed or not, since a refusal (a slot
+// taken meanwhile, a Tile gone) says the page is behind.
 // Failures go to their channels (../channels.ts): a hook's caller handles none.
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Schema } from 'effect'
@@ -36,11 +38,14 @@ import {
 
 import type { Locale } from '#/paraglide/runtime'
 
-import { read, write } from '../calls'
-import { settleSubmit, submitWrite } from '../channels'
+import { read, write, type WriteCall } from '../calls'
+import { type FormErrors, settleSubmit, submitMutation } from '../channels'
 
 /** The System's read, by the server function's name: every mode of its query key starts with it. */
 const systemScope = 'system'
+
+/** The queue every write to the System waits its turn in, so they reach the server in order. */
+const systemQueue = 'system'
 
 /** The System as the server reads it, flat, and its tree, the Root with everything below it. */
 const withTree = (flat: System) => ({ system: flat, root: systemOf(flat) })
@@ -63,25 +68,35 @@ export const useSystem = () =>
 export const useHelp = (language: Locale) =>
   useQuery(read({ scope: 'help', key: [language], call: () => help({ data: { language } }) }))
 
-/** A write to the System, scoped by the Operation it runs, after which the System is read again. */
+/**
+ * A write to the System, scoped by the Operation it runs and queued behind the writes made before it,
+ * after which the System is read again.
+ */
 function useSystemWrite<I, A, E extends Failure>(
   scope: OperationName,
   call: (input: I) => Promise<Outcome<A, E>>,
+  as: WriteCall = 'write',
 ) {
   const client = useQueryClient()
   return useMutation({
-    ...write(scope, call),
+    ...write(scope, call, { as, queue: systemQueue }),
     onSettled: () => client.invalidateQueries({ queryKey: [systemScope] }),
   })
 }
 
-/** Adds a Tile in a free slot: a Branch, a Leaf, or a Tile of its parent's Context. */
+/**
+ * Adds a Tile in a free slot: a Branch, a Leaf, or a Tile of its parent's Context. A form's write, so
+ * a refusal of what the Tile says shows on the field at fault (`useCreateTileSubmit`).
+ */
 export const useCreateTile = () =>
-  useSystemWrite('createTile', (data: typeof NewTile.Type) => createTile({ data }))
+  useSystemWrite('createTile', (data: typeof NewTile.Type) => createTile({ data }), 'submit')
 
-/** Changes any of a Tile's Title, Preview and Body. */
+/**
+ * Changes any of a Tile's Title, Preview and Body. A form's write, so a refusal of what the Tile says
+ * shows on the field at fault (`useEditTileSubmit`).
+ */
 export const useEditTile = () =>
-  useSystemWrite('editTile', (data: typeof TileEdit.Type) => editTile({ data }))
+  useSystemWrite('editTile', (data: typeof TileEdit.Type) => editTile({ data }), 'submit')
 
 /** Moves a Tile, and everything below it, to a free slot. */
 export const useMoveTile = () =>
@@ -154,12 +169,14 @@ export type Imported =
  * Imports what the user gave into a place of the System: the browser prunes and zips it, or refuses
  * it before sending (`./upload.ts`), then the server lands it, all of it or nothing.
  * The import is the form of its files, so its refusal, `ImportRefused`, is its answer, shown where the
- * import was given; any other failure goes to a write's channel, a toast. The System is read again
- * once it settles.
+ * import was given; any other failure goes to a write's channel, a toast. It waits its turn behind
+ * the System's other writes, and the System is read again once it settles.
  */
 export const useImportTiles = () => {
   const client = useQueryClient()
   return useMutation({
+    mutationKey: ['importTiles'],
+    scope: { id: systemQueue },
     mutationFn: async ({
       given,
       place,
@@ -185,47 +202,41 @@ const contentFields = ['title', 'preview', 'body'] as const
 /** What a Tile's form edits: its Title, Preview and Body, one per field above. */
 export type TileContent = Pick<SystemTile, (typeof contentFields)[number]>
 
+/** A Tile form's submit, as the form's `validators.onSubmitAsync`: what the form shows, if anything. */
+export type TileSubmit = (form: { value: TileContent }) => Promise<FormErrors | undefined>
+
 /**
- * A form's submit that writes to the System, as the form's `validators.onSubmitAsync`: a refusal shows
- * on the fields it names, or in its channel, and the System is read again once the write settles.
+ * Submits a new Tile's form through `useCreateTile`: the Tile goes in this free slot, a Child or a Tile
+ * of the Context. A refusal shows on the fields it names, or in its channel.
  */
-function useSystemSubmit<A, E extends Failure>(
-  scope: OperationName,
-  call: (content: TileContent) => Promise<Outcome<A, E>>,
+export const useCreateTileSubmit = (
+  where: Pick<typeof NewTile.Type, 'parent' | 'slot'>,
   onSaved: () => void,
-) {
-  const client = useQueryClient()
-  return submitWrite({
-    scope,
-    call: (content: TileContent) =>
-      call(content).finally(() => {
-        void client.invalidateQueries({ queryKey: [systemScope] })
-      }),
+): TileSubmit => {
+  const { mutateAsync } = useCreateTile()
+  return submitMutation({
+    scope: 'createTile',
+    mutate: (content: TileContent) => mutateAsync({ ...where, ...content }),
     onSaved,
   })
 }
 
-/** Submits a new Tile's form: the Tile goes in this free slot, a Child or a Tile of the Context. */
-export const useCreateTileSubmit = (
-  where: Pick<typeof NewTile.Type, 'parent' | 'slot'>,
-  onSaved: () => void,
-) =>
-  useSystemSubmit(
-    'createTile',
-    (content) => createTile({ data: { ...where, ...content } }),
-    onSaved,
-  )
-
 /**
- * Submits a Tile's form: only the fields that changed are sent, so the Body of an untitled Root can
- * be written before its name.
+ * Submits a Tile's form through `useEditTile`: only the fields that changed are sent, so the Body of
+ * an untitled Root can be written before its name. A refusal shows on the fields it names, or in its
+ * channel.
  */
-export const useEditTileSubmit = (tile: TileContent & { id: string }, onSaved: () => void) =>
-  useSystemSubmit(
-    'editTile',
-    (content) => editTile({ data: { id: tile.id, ...changed(tile, content) } }),
+export const useEditTileSubmit = (
+  tile: TileContent & { id: string },
+  onSaved: () => void,
+): TileSubmit => {
+  const { mutateAsync } = useEditTile()
+  return submitMutation({
+    scope: 'editTile',
+    mutate: (content: TileContent) => mutateAsync({ id: tile.id, ...changed(tile, content) }),
     onSaved,
-  )
+  })
+}
 
 /** The fields of `after` that differ from `before`. */
 function changed(before: TileContent, after: TileContent): Partial<TileContent> {
@@ -235,6 +246,3 @@ function changed(before: TileContent, after: TileContent): Partial<TileContent> 
     ),
   )
 }
-
-/** A Tile form's submit, as `useCreateTileSubmit` and `useEditTileSubmit` return it. */
-export type TileSubmit = ReturnType<typeof useSystemSubmit>

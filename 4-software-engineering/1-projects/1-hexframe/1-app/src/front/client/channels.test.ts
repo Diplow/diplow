@@ -6,7 +6,7 @@ import { DevConflict, DevForbidden, DevInvalid, DevUnauthenticated } from '#/api
 import { Unexpected, encodeFailure, type Failure, type Outcome } from '#/api/errors/failure'
 
 import { CallFailed, read, write } from './calls'
-import { caught, makeQueryClient, submitWrite } from './channels'
+import { caught, makeQueryClient, submitMutation, submitWrite } from './channels'
 
 vi.mock('#/front/ui/feedback/Toaster', () => ({ toast: { error: vi.fn() } }))
 vi.mock('#/api/observability/client', async (original) => ({
@@ -57,6 +57,54 @@ describe("a form's write", () => {
       fields: { title: 'Give it a title.' },
     })
     expect(toast.error).not.toHaveBeenCalled()
+  })
+
+  it('raises one toast for any other failure, and keeps the submit from counting as done', async () => {
+    const onSaved = vi.fn()
+    expect(await submit(() => failing(new DevConflict()), onSaved)).toEqual({
+      form: 'That title is taken.',
+    })
+    expect(toast.error).toHaveBeenCalledExactlyOnceWith('That title is taken.')
+    expect(onSaved).not.toHaveBeenCalled()
+  })
+})
+
+describe("a form's write through a mutation", () => {
+  /** Submits the dev title form through a `submit` write whose server function answers `answer`. */
+  const submit = (
+    answer: () => Promise<Outcome<{ title: string }, Failure>>,
+    onSaved = vi.fn(),
+  ) => {
+    const client = makeQueryClient()
+    const options = write('submitDevTitle', answer, { as: 'submit' })
+    return submitMutation({
+      scope: 'submitDevTitle',
+      mutate: (value: { title: string }) =>
+        client.getMutationCache().build(client, options).execute(value),
+      onSaved,
+    })({ value: { title: 'x' } })
+  }
+
+  it('hands the value to onSaved and shows nothing', async () => {
+    const onSaved = vi.fn()
+    const saved = Promise.resolve({ ok: true as const, value: { title: 'x' } })
+    expect(await submit(() => saved, onSaved)).toBeUndefined()
+    expect(onSaved).toHaveBeenCalledWith({ title: 'x' })
+  })
+
+  it("shows an Invalid failure's message on the fields it names, and raises no toast", async () => {
+    expect(await submit(() => failing(new DevInvalid({ fields: ['title'] })))).toEqual({
+      fields: { title: 'Give it a title.' },
+    })
+    expect(toast.error).not.toHaveBeenCalled()
+  })
+
+  it('shows it in the page’s language', async () => {
+    const { overwriteGetLocale } = await import('#/paraglide/runtime')
+    overwriteGetLocale(() => 'fr')
+    expect(await submit(() => failing(new DevInvalid({ fields: ['title'] })))).toEqual({
+      fields: { title: 'Donnez-lui un titre.' },
+    })
   })
 
   it('raises one toast for any other failure, and keeps the submit from counting as done', async () => {
@@ -199,12 +247,64 @@ describe("the QueryClient's channels", () => {
     })
   })
 
+  /** Runs a mutation of the client above, for the error it ends with. */
+  const executed = (options: Parameters<ReturnType<typeof client.getMutationCache>['build']>[1]) =>
+    client.getMutationCache().build(client, options).execute(undefined)
+
   it("raises one toast for a write's failure", async () => {
-    const options = write('provokeWrite', () => failing(new DevForbidden()))
-    const mutation = client.getMutationCache().build(client, options)
-    await expect(mutation.execute(undefined)).rejects.toBeInstanceOf(CallFailed)
+    await expect(
+      executed(write('provokeWrite', () => failing(new DevForbidden()))),
+    ).rejects.toBeInstanceOf(CallFailed)
     expect(toast.error).toHaveBeenCalledExactlyOnceWith(
       "This belongs to someone who hasn't shared it with you.",
     )
+  })
+
+  it("raises one toast for a write's Invalid failure, which has no form to show it", async () => {
+    await expect(
+      executed(write('submitDevTitle', () => failing(new DevInvalid({ fields: ['title'] })))),
+    ).rejects.toBeInstanceOf(CallFailed)
+    expect(toast.error).toHaveBeenCalledExactlyOnceWith('Give it a title.')
+  })
+
+  it("leaves a submit's Invalid failure to the form's fields, and raises no toast", async () => {
+    const options = write('submitDevTitle', () => failing(new DevInvalid({ fields: ['title'] })), {
+      as: 'submit',
+    })
+    await expect(executed(options)).rejects.toBeInstanceOf(CallFailed)
+    expect(toast.error).not.toHaveBeenCalled()
+  })
+
+  it("raises one toast for a submit's other failure", async () => {
+    const options = write('submitDevTitle', () => failing(new DevConflict()), { as: 'submit' })
+    await expect(executed(options)).rejects.toBeInstanceOf(CallFailed)
+    expect(toast.error).toHaveBeenCalledExactlyOnceWith('That title is taken.')
+  })
+
+  it('reports a write that never reached the server under the scope its key names', async () => {
+    const report = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    const lost = new TypeError('Failed to fetch')
+    await expect(executed(write('provokeWrite', () => Promise.reject(lost)))).rejects.toBeInstanceOf(
+      CallFailed,
+    )
+    expect(report).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ cause: lost }), {
+      scope: 'provokeWrite',
+      kind: 'Unexpected',
+      code: 'Unexpected',
+    })
+  })
+
+  it('reports a mutation whose function threw no CallFailed under its key, as Unexpected', async () => {
+    const report = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+    const bug = new TypeError('a bug')
+    await expect(
+      executed({ mutationKey: ['importTiles'], mutationFn: () => Promise.reject(bug) }),
+    ).rejects.toBe(bug)
+    expect(report).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ cause: bug }), {
+      scope: 'importTiles',
+      kind: 'Unexpected',
+      code: 'Unexpected',
+    })
+    expect(toast.error).toHaveBeenCalledOnce()
   })
 })

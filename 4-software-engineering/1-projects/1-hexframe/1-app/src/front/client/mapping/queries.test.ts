@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider, useMutationState } from '@tanstack/react-query'
 import { cleanup, renderHook, waitFor } from '@testing-library/react'
 import { Schema } from 'effect'
 import { createElement, type ReactNode } from 'react'
@@ -8,8 +8,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { decodeFailure } from '#/api/errors/failure'
 import { messageFor } from '#/api/errors/messages'
 import * as Mapping from '#/api/mapping/mapping'
+import { toast } from '#/front/ui/feedback/Toaster'
+import { overwriteGetLocale } from '#/paraglide/runtime'
 
 import { CallFailed } from '../calls'
+import { makeQueryClient } from '../channels'
 import {
   useCreateReference,
   useCreateTile,
@@ -45,10 +48,13 @@ vi.mock('#/api/mapping/mapping', async (original) => ({
   exportTile: vi.fn(),
 }))
 
+vi.mock('#/front/ui/feedback/Toaster', () => ({ toast: { error: vi.fn() } }))
+
 const titleMissing = { _tag: 'TitleMissing', kind: 'Invalid', fields: ['title'] } as const
 
 afterEach(() => {
   cleanup()
+  overwriteGetLocale(() => 'en')
   vi.clearAllMocks()
   vi.restoreAllMocks()
 })
@@ -100,9 +106,14 @@ function answering(value: unknown) {
   }
 }
 
-/** Renders `hook` beside the System's read, under a QueryClient of its own. */
-function render<T>(hook: () => T) {
-  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+/**
+ * Renders `hook` beside the System's read, under a QueryClient of its own: a bare one, or the app's,
+ * which carries each failure to its channel.
+ */
+function render<T>(
+  hook: () => T,
+  client = new QueryClient({ defaultOptions: { queries: { retry: false } } }),
+) {
   const wrapper = ({ children }: { children: ReactNode }) =>
     createElement(QueryClientProvider, { client }, children)
   return renderHook(() => ({ system: useSystem(), hook: hook() }), { wrapper })
@@ -203,6 +214,32 @@ describe("Mapping's hooks", () => {
       requestId: 'req-1',
     })
     expect(Mapping.system).toHaveBeenCalledTimes(2)
+  })
+
+  it('send the System’s writes one after another, each once the one before it settled', async () => {
+    answering(undefined)
+    let refuse = (_: unknown) => undefined as unknown
+    vi.mocked(Mapping.moveTile).mockReturnValue(
+      new Promise((resolve) => {
+        refuse = resolve
+      }),
+    )
+    const { result } = render(() => ({ move: useMoveTile(), edit: useEditTile() }))
+    await waitFor(() => {
+      expect(result.current.system.isSuccess).toBe(true)
+    })
+    const moved = result.current.hook.move
+      .mutateAsync({ id: 't', parent: 'root', slot: 3 })
+      .catch((error: unknown) => error)
+    const edited = result.current.hook.edit.mutateAsync({ id: 't', title: 'B' })
+    await waitFor(() => {
+      expect(Mapping.moveTile).toHaveBeenCalled()
+    })
+    expect(Mapping.editTile).not.toHaveBeenCalled()
+    refuse({ ok: false, failure: { _tag: 'DirectionTaken', kind: 'Conflict' }, requestId: 'r' })
+    expect(await moved).toBeInstanceOf(CallFailed)
+    await expect(edited).resolves.toBeUndefined()
+    expect(Mapping.editTile).toHaveBeenCalledWith({ data: { id: 't', title: 'B' } })
   })
 })
 
@@ -355,16 +392,34 @@ describe('an import', () => {
 describe("Mapping's form submits", () => {
   const content = { title: 'A', preview: 'What A is', body: '' }
 
-  /** Renders a submit hook beside the System's read, once the System is read. */
+  /**
+   * Renders a submit hook beside the System's read, under the app's QueryClient, once the System is
+   * read; and what the MutationCache holds of the System's writes, as the canvas will read them.
+   */
   async function submitting(hook: () => (form: { value: typeof content }) => Promise<unknown>) {
-    const { result } = render(hook)
+    const { result } = render(
+      () => ({
+        submit: hook(),
+        writes: useMutationState({
+          filters: { mutationKey: [] },
+          select: ({ options, state }) => ({
+            key: options.mutationKey,
+            status: state.status,
+            variables: state.variables,
+          }),
+        }),
+      }),
+      makeQueryClient(),
+    )
     await waitFor(() => {
       expect(result.current.system.isSuccess).toBe(true)
     })
-    return (value: typeof content) => result.current.hook({ value })
+    return Object.assign((value: typeof content) => result.current.hook.submit({ value }), {
+      writes: () => result.current.hook.writes,
+    })
   }
 
-  it('create a Tile in the slot the form was opened on, then read the System again', async () => {
+  it('create a Tile in the slot the form was opened on, as a mutation of the System', async () => {
     answering({ id: 't' })
     const onSaved = vi.fn()
     const submit = await submitting(() =>
@@ -376,7 +431,13 @@ describe("Mapping's form submits", () => {
     })
     expect(onSaved).toHaveBeenCalledOnce()
     await waitFor(() => {
-      expect(Mapping.system).toHaveBeenCalledTimes(2)
+      expect(submit.writes()).toEqual([
+        {
+          key: ['createTile'],
+          status: 'success',
+          variables: { parent: 'root', slot: -3, ...content },
+        },
+      ])
     })
   })
 
@@ -388,7 +449,35 @@ describe("Mapping's form submits", () => {
     expect(Mapping.editTile).toHaveBeenCalledWith({ data: { id: 't', body: '# Me' } })
   })
 
-  it('show a refusal on the field it names, and read the System again all the same', async () => {
+  it.each([
+    ['en', 'Give this tile a title.'],
+    ['fr', 'Donnez un titre à cette tuile.'],
+  ] as const)(
+    "show a refused create's message on the field it names, in %s, and no toast",
+    async (language, message) => {
+      overwriteGetLocale(() => language)
+      answering(undefined)
+      vi.mocked(Mapping.createTile).mockResolvedValue({
+        ok: false,
+        failure: titleMissing,
+        requestId: 'req-1',
+      })
+      const onSaved = vi.fn()
+      const submit = await submitting(() =>
+        useCreateTileSubmit({ parent: 'root', slot: 1 }, onSaved),
+      )
+      await expect(submit({ ...content, title: ' ' })).resolves.toEqual({
+        fields: { title: message },
+      })
+      expect(toast.error).not.toHaveBeenCalled()
+      expect(onSaved).not.toHaveBeenCalled()
+      await waitFor(() => {
+        expect(submit.writes()).toMatchObject([{ key: ['createTile'], status: 'error' }])
+      })
+    },
+  )
+
+  it("show a refused edit's message on the field it names, and the System read again", async () => {
     answering(undefined)
     vi.mocked(Mapping.editTile).mockResolvedValue({
       ok: false,
@@ -401,9 +490,28 @@ describe("Mapping's form submits", () => {
     await expect(submit({ ...content, title: ' ' })).resolves.toEqual({
       fields: { title: messageFor(decodeFailure(titleMissing), 'editTile') },
     })
+    expect(toast.error).not.toHaveBeenCalled()
     expect(onSaved).not.toHaveBeenCalled()
     await waitFor(() => {
       expect(Mapping.system).toHaveBeenCalledTimes(2)
     })
+  })
+
+  it('raise one toast for a refusal that names no field, and keep the form open', async () => {
+    answering(undefined)
+    vi.mocked(Mapping.editTile).mockResolvedValue({
+      ok: false,
+      failure: { _tag: 'TileNotFound', kind: 'NotFound' },
+      requestId: 'req-1',
+    })
+    const onSaved = vi.fn()
+    const submit = await submitting(() => useEditTileSubmit({ id: 't', ...content }, onSaved))
+    await expect(submit({ ...content, body: '# B' })).resolves.toEqual({
+      form: "This tile doesn't exist, or no longer does.",
+    })
+    expect(toast.error).toHaveBeenCalledExactlyOnceWith(
+      "This tile doesn't exist, or no longer does.",
+    )
+    expect(onSaved).not.toHaveBeenCalled()
   })
 })
