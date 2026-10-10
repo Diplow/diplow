@@ -29,7 +29,7 @@ Signed in, issue a Key on `/settings/keys`. The page shows its secret once, and 
 claude mcp add --transport http hexframe <origin>/mcp --header "Authorization: Bearer <key>"
 ```
 
-Claude Code then lists the tools below as `mcp__hexframe__<tool>`, and the server's instructions point it at Help first. Revoking the Key on the same page cuts the agent off at its next call. Local scope, the default, keeps the Key in the user's own Claude Code config. `--scope project` writes it into the folder's `.mcp.json`, so it is for a scratch folder only, never a repo.
+Claude Code then lists the tools below as `mcp__hexframe__<tool>`, and the server's instructions point it at Help first. Revoking the Key on the same page cuts the agent off at its next call. A Turn of the Assistant connects the same way, with its Turn's Key (IAM's, short-lived, never on that page) as its bearer: the tools act for the Turn's Account, and its writes read as the Assistant's in the timeline. Local scope, the default, keeps the Key in the user's own Claude Code config. `--scope project` writes it into the folder's `.mcp.json`, so it is for a scratch folder only, never a repo.
 
 The tests drive the endpoint in-process. Against a real Claude Code, the acceptance is by hand, on `pnpm dev` without `DATABASE_URL`, so every Account lives in PGlite and dies with the server: sign up, issue a Key, add the server in a scratch folder (`claude mcp add --scope project` there, then `claude -p --mcp-config .mcp.json --strict-mcp-config --allowedTools mcp__hexframe`, so the user's own config stays untouched), and ask it to read Help, open the Root, then create, move, swap, edit, reference and delete; the canvas shows the result after a reload. HEX-51's pull request holds the log of the first one.
 

@@ -14,8 +14,10 @@ preview: >-
   the canvas names its gestures in, and how the Conversation keeps its
   Entries, names who acted and a deleted Tile, and merges and sends the user's
   navigations, and how the chat on home reads its days and follows the poll;
-  and where the sandbox repository sits, how an Account's sandbox is named,
-  kept read-only, stopped and fenced, and what of it was not seen working.
+  where the sandbox repository sits, how an Account's sandbox is named,
+  kept read-only, stopped and fenced, and what of it was not seen working;
+  and where a Turn's Key is kept and how it is read, how one Turn at a time
+  is held, and where the assistant Entitlement comes from.
 ---
 # Decisions
 
@@ -104,3 +106,13 @@ HEX-80. The ticket asked for the sandbox repository, the only importer of `@blax
 - **Not seen working against Blaxel.** No Blaxel workspace is configured where this ran, so the pass by hand (ensure, write, `ls -R`, an outbound request elsewhere than the app, stop) did not run. The egress rule, the home `/blaxel/hexframe`, `writeTree` to an absolute path, `useradd` and `setpriv` in the image, and the SIGINT are the SDK's types and the image's likely tools read, not behaviour seen; a missing tool fails `ensure` loudly rather than leave the folder writable; the phase close lists them for the first pass with a workspace.
 
 Mapping's `placesOf` answers each Tile's folder and file in the export of its Root, by the names in force where it stands now, and `systemFiles` answers the files and the places from one read, so a Turn's working folder never comes from another read than its files. Assistant owns the sandbox, a Turn's (STACK.md, "Turn"), so the API layer hands Mapping's files to Assistant's `writeSystem` (`api/assistant/programs.ts`, `systemInSandbox`) rather than reaching the repository, from which it takes nothing but plumbing.
+
+### DEC-11 A Turn's Key is IAM's own table, read by its shape; the Turn's one-at-a-time is an index, not a Decider; the Entitlement is an allowlist beside Better Auth
+
+HEX-81. The ticket left the Turn's Key's keeper to the unit, Better Auth's api-key plugin with an expiry and metadata, or IAM's own token, and the Entitlement's env var's name. Five choices followed.
+
+- **IAM's own `turn_key` table, not the plugin.** A Turn's Key lives fifteen minutes, where the plugin's expiry counts in days; it is bound to a Conversation and a Turn, which the plugin keeps only as JSON metadata; and it must never be listed among the Account's Keys, nor need a Session to be revoked, where the plugin lists every key a user has and deletes one through the request's session. A table of IAM's, through the turn-keys repository over `Database`, keeps the binding typed, the listing apart by construction, and joins the transaction that starts or ends the Turn, so a Turn and its Key are written and revoked together. The secret is `hft_` and 32 random bytes in base64url, kept as its SHA-256 alone, as Better Auth keeps a Key's: a random secret needs no salt.
+- **Read by its shape.** `keyProven` sends a Bearer secret starting `hft_` to the turn-keys repository alone, by its hash, unexpired by IAM's clock, and any other to Better Auth, so neither keeper is asked about the other's, and an expired Turn's Key never reaches Better Auth's logs as an invalid key. A Key's proof became `{ account, by }`, `by` the same `Proof` `signedIn` answers, a `TurnKey` carrying its Conversation and Turn, so the bus's envelope and a later door read the Turn from it.
+- **Its secret is redacted.** `issueTurnKey` answers it as Effect's `Redacted`, so a log or a JSON of what `startTurn` answers never shows it; only the code that starts the Turn unwraps it, for the sandbox's environment and the MCP client's config (HEX-83).
+- **One Turn at a time is the table's index.** A partial unique index on `turn (conversation_id) WHERE ended_at IS NULL`, and an insert that does nothing on its conflict, refuse a second running Turn, two started at once included, without a lock; Assistant turns the empty answer into `TurnRunning`. Assistant has no Operations nor Decider yet: the rule needs no state Assistant decides on, and the Mode and the Proposal will bring them. `startTurn` and `endTurn` are programs of the API layer and no server function, since a Turn's Key's secret must never reach a browser; HEX-83 calls them.
+- **`ASSISTANT_ACCOUNTS`, an allowlist beside Better Auth.** The `assistant` Entitlement is IAM's (`entitled`, `entitledOnly`, `EntitlementMissing`), derived when asked from `repositories/auth/allowlist.ts`, which reads the comma-separated emails, compared trimmed and case-insensitively, and stands where Stripe's plugin will. The composer reads it through `assistantAvailable` and says, beside its button, that the Assistant isn't available on the Account and its Messages are kept. `vitest.config.ts` pins the list to `entitled@example.com`, whatever the shell exports.

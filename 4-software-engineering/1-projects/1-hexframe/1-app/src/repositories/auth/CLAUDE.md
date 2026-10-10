@@ -6,8 +6,9 @@ preview: >-
   The auth repository: Better Auth and its api-key plugin over the database,
   as one Auth service in Better Auth's own terms (a user, a session, an API
   key), called from the API layer only, its cookies carried by
-  HttpExchange, sign-up and sign-in rate limited per IP. IAM, above, speaks of
-  Accounts, Sessions and Keys.
+  HttpExchange, sign-up and sign-in rate limited per IP; and the allowlist, the
+  emails let into the Assistant by hand until Stripe. IAM, above, speaks of
+  Accounts, Sessions, Keys and Entitlements.
 ---
 # auth
 
@@ -16,6 +17,7 @@ Better Auth, behind one Effect service, `Auth`: sign up, sign in, sign out, the 
 | File | Holds |
 |---|---|
 | `auth.ts` | `Auth` and `layer`, the deployed one, over `DATABASE_URL`, signing its cookies with `BETTER_AUTH_SECRET`, reached on the hosts `baseURLOf` reads from Vercel; `make`, the service for a given secret and base URL; `HttpExchange`, the request a call belongs to; `AuthRefused`, the refusals a user can act on |
+| `allowlist.ts` | `Allowlist` and its `layer`: the users let into a feature by hand, by email, compared trimmed and case-insensitively, from `ASSISTANT_ACCOUNTS`; `allowing`, the allowlist of given emails, for tests. No SDK: it stands where Stripe's plugin will, which IAM derives its Entitlements from |
 | `testing.ts` | `TestAuth`, Better Auth for real over `TestDatabase`, with a secret made for the run; `browser()`, a cookie jar that carries what one call sets to the next, from an IP of its own; and `keyClient(secret)`, a program calling with an API key in its `Authorization` header, no cookie |
 
 ## How it talks to Better Auth
@@ -35,6 +37,7 @@ The api-key plugin (`@better-auth/api-key`) keeps them in the `apikey` table ([[
 - **`hf_` and 64 letters, stored hashed.** The plugin keeps a SHA-256 hash of the secret and its first six characters (`start`), never the secret: `createApiKey` answers it once. `disableKeyHashing` stays off.
 - **A name, required** (`requireName`). What a name may be is IAM's rule, checked before a Key is asked for; the plugin's default, 1 to 32 characters, is no wider, so it never refuses one.
 - **No rate limit, no expiry.** The plugin's default limit, 10 verifications a day, would stop an MCP client within minutes; a Key lives until it is revoked. Its usage and refill columns stay unused.
+- **Not a Turn's Key.** A Turn's Key, IAM's, is kept in `turn_key` by the turn-keys repository, never by the plugin ([[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE|database]]); `bearerOf`, the secret a Bearer header carries, is exported so IAM reads it by the same rule, and sends a secret shaped as a Turn's Key there rather than here.
 - **Never a session.** `enableSessionForAPIKeys` stays off, so no Better Auth endpoint takes a key for a cookie, and `getSession` never answers from one. `bearer` reads the header itself and verifies the secret with the plugin's `verifyApiKey`, which records the use (`lastRequest`); a header that is not `Bearer <secret>`, or a secret over 128 characters, proves nothing. The plugin answers a failure to read its table as it answers a wrong key, so a secret it refuses sends `bearer` to read the table once more: a database that answers means the key is wrong, one that fails dies, and `/mcp` answers 500, never a 401 that reads like a revoked Key.
 - **Creating, listing and deleting go through the request's session cookie**, as the plugin's endpoints require, so a user only ever reaches their own keys: deleting another's is `api-key-not-found`, like deleting one that is gone. IAM refuses a request only a Key proves before any of them runs.
 
@@ -51,5 +54,6 @@ The api-key plugin (`@better-auth/api-key`) keeps them in the `apikey` table ([[
 | `BETTER_AUTH_SECRET` | every deployed environment | Signs the session cookies: 32 random bytes or more, one per environment. The layer fails to build without it |
 | `DATABASE_URL` | every deployed environment | The Postgres Better Auth reads and writes, through `PromiseDatabase` |
 | `VERCEL`, `VERCEL_ENV`, `VERCEL_URL`, `VERCEL_BRANCH_URL`, `VERCEL_PROJECT_PRODUCTION_URL` | set by Vercel at runtime | The hosts a deployment answers on, and its canonical one (`baseURLOf`) |
+| `ASSISTANT_ACCOUNTS` | where the Assistant is open, server-only | The emails of the Accounts entitled to the Assistant, separated by commas. Unset or empty, nobody is; the tests list `entitled@example.com` (`vitest.config.ts`) |
 
 Under `pnpm dev` and the tests, without `DATABASE_URL`, `src/api/server/run.ts` uses `TestAuth` instead: Better Auth over a fresh PGlite in memory, with a secret of its own, both gone when the process stops.

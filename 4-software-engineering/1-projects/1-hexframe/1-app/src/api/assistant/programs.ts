@@ -1,6 +1,7 @@
 // The programs behind Assistant's server functions (./assistant.ts): each runs for the Account the
 // request's Session proves, or fails with IAM's `SessionRequired` or `SignedOut`, and a write in the
-// transaction it opens. They sit in a module of their own because they reach the domains and the
+// transaction it opens. And a Turn's start and end, which no server function offers: the secret of
+// the Key a Turn starts with never reaches a browser. They sit in a module of their own because they reach the domains and the
 // database: the client imports the server functions, and only their handlers import this module,
 // which Start strips from the client.
 import { Effect } from 'effect'

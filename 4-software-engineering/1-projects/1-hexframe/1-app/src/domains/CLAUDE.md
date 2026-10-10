@@ -28,9 +28,9 @@ The middle layer: one folder per domain, each in its own language, and each in t
 
 | Folder | Holds |
 |---|---|
-| `iam/` | Identity and access: Accounts, their Sessions and their Keys, on Better Auth: [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE\|iam]] |
+| `iam/` | Identity and access: Accounts, their Sessions, their Keys and their Turns' Keys, on Better Auth and IAM's own table, and their Entitlements, from a list kept by hand until Stripe: [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE\|iam]] |
 | `mapping/` | The core: an Account's System, a hierarchy of Tiles in six Directions and six Context slots, and the operations on it, over the tiles repository: [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE\|mapping]] |
-| `assistant/` | A conversation with an agent that builds a System: for now the Conversation, one per Account, its Messages, every change to the System whoever made it, the imports and the user's merged navigations, over the conversations repository: [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/CLAUDE\|assistant]] |
+| `assistant/` | A conversation with an agent that builds a System: for now the Conversation, one per Account, its Messages, every change to the System whoever made it, the imports and the user's merged navigations, over the conversations repository; and its Turns, one running at most per Conversation, over the Turns repository: [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/CLAUDE\|assistant]] |
 
 | File | Holds |
 |---|---|
