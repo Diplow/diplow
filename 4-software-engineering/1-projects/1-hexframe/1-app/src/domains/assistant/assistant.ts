@@ -20,7 +20,7 @@ import { Conversations } from '#/repositories/database/conversations/conversatio
 import { type TurnRow, Turns } from '#/repositories/database/conversations/turns'
 
 import { type Launch, launchOf, processOf } from './agent/launch'
-import { type Glimpse, promptOf } from './agent/prompt'
+import { type Glimpse, type Linked, promptOf } from './agent/prompt'
 import { type AgentEvent, readLine } from './agent/stream'
 import {
   type Actor,
@@ -304,7 +304,9 @@ export interface TurnStart {
   readonly location: { readonly id: string; readonly title: string; readonly folder: string }
   /** The Message it answers. */
   readonly message: string
-  /** Today's latest Entries, and the Titles of the Tiles their navigations went to. */
+  /** The Tiles that Message links, where each lives now, in the order it links them. */
+  readonly links: ReadonlyArray<Linked>
+  /** Today's latest Entries, and the Titles of the Tiles they name by id (`namedTiles`). */
   readonly conversation: {
     readonly entries: ReadonlyArray<Entry>
     readonly titles: Readonly<Record<string, string>>
@@ -332,6 +334,7 @@ export const startAgent = (accountId: string, start: TurnStart) =>
       ...start.conversation,
       onScreen: start.onScreen,
       location: start.location,
+      links: start.links,
       help: start.help,
     })
     const { files, run } = launchOf({

@@ -6,9 +6,11 @@ import { m } from '#/paraglide/messages'
 import { toast } from '../feedback/Toaster'
 import { GallerySection, GalleryState } from '../gallery'
 import { Button } from '../inputs/controls/button'
+import { Input } from '../inputs/controls/input'
 import { ConfirmDialog } from './ConfirmDialog'
 import { Drawer } from './Drawer'
 import { DropdownMenu, type MenuEntry } from './DropdownMenu'
+import { Suggestions, suggestionsField } from './Suggestions'
 import { Tooltip } from './Tooltip'
 
 const done = (what: string) => () => {
@@ -80,6 +82,11 @@ export function OverlaysGallery() {
           />
         </GalleryState>
       </GallerySection>
+      <GallerySection name="Suggestions">
+        <GalleryState label={m.dev_ui_state_click_to_show()}>
+          <SuggestionsSpecimen />
+        </GalleryState>
+      </GallerySection>
       <GallerySection name="Tooltip">
         <GalleryState label={m.dev_ui_state_hover_or_focus()}>
           <Tooltip content={m.dev_ui_sample_copy_link()}>
@@ -128,5 +135,55 @@ function DrawerSpecimen() {
         <p className="text-sm">{m.dev_ui_sample_tile_body()}</p>
       </Drawer>
     </>
+  )
+}
+
+// On a real page, a state hook says what is offered and which is active; here a demo holds it: the
+// list shows while the field has the focus, and the arrows move the active suggestion.
+function SuggestionsSpecimen() {
+  const [open, setOpen] = useState(false)
+  const [active, setActive] = useState(0)
+  const suggestions = [
+    {
+      id: 'leadership',
+      label: m.dev_ui_sample_leadership(),
+      detail: m.dev_ui_sample_tile_preview(),
+    },
+    { id: 'education', label: m.dev_ui_sample_education() },
+    { id: 'games', label: m.dev_ui_sample_games() },
+  ]
+  const pick = (id: string) => {
+    toast(suggestions.find((suggestion) => suggestion.id === id)?.label ?? id)
+  }
+  return (
+    <Suggestions
+      id="gallery-suggestions"
+      label={m.dev_ui_sample_tile_title()}
+      open={open}
+      suggestions={suggestions}
+      active={suggestions[active]?.id}
+      onPick={pick}
+      onClose={() => {
+        setOpen(false)
+      }}
+    >
+      <Input
+        aria-label={m.dev_ui_sample_tile_title()}
+        className="max-w-72"
+        {...suggestionsField('gallery-suggestions', open, suggestions[active]?.id)}
+        onFocus={() => {
+          setOpen(true)
+        }}
+        onBlur={() => {
+          setOpen(false)
+        }}
+        onKeyDown={(event) => {
+          const by = event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0
+          if (by === 0) return
+          event.preventDefault()
+          setActive((active + by + suggestions.length) % suggestions.length)
+        }}
+      />
+    </Suggestions>
   )
 }

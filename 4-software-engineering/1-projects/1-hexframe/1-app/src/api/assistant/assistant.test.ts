@@ -6,7 +6,7 @@ import { promisify } from 'node:util'
 import { Effect, Exit, Option, Schema } from 'effect'
 import { describe, expect, expectTypeOf, it } from 'vitest'
 
-import { dayAt } from '#/domains/assistant/entities'
+import { dayAt, linkTo } from '#/domains/assistant/entities'
 import { systemFolder } from '#/repositories/agent/sandbox/sandbox'
 import type { SessionRequired, SignedOut } from '#/domains/iam/errors'
 import type { KeyProof, Session } from '#/domains/iam/iam'
@@ -293,5 +293,24 @@ describe("Assistant's schemas", () => {
     expect(
       takes(MergedNavigation, { navigation: { ...navigation, steps: [] }, sinceLast: 0 }),
     ).toBe(false)
+  })
+})
+
+describe("a Message's links", () => {
+  it('names the Tiles a Message links as they are now, none for one deleted since', async () => {
+    const { call } = request()
+    const { root } = await value(call(Mapping.system))
+    const games = await value(
+      call(Mapping.createTile({ parent: root.id, slot: 3, title: 'Games', preview: '', body: '' })),
+    )
+    const work = await value(
+      call(Mapping.createTile({ parent: root.id, slot: 4, title: 'Work', preview: '', body: '' })),
+    )
+    const text = `${linkTo(work.id)} tidy this, then ${linkTo(games.id)}`
+    const posted = await value(call(Assistant.postMessage({ text })))
+    expect(posted).toMatchObject({ _tag: 'Message', text })
+    await value(call(Mapping.deleteTile({ id: games.id, version: 1 })))
+    const { titles } = await value(call(Assistant.conversationDay({ offset: 0 })))
+    expect(titles).toEqual({ [work.id]: 'Work' })
   })
 })

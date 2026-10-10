@@ -1,7 +1,7 @@
 // What the Turn's tests set and read below Assistant and IAM, which no program of the app does: a Turn
 // that started earlier than it did, so its deadline passed without waiting for it; an Account's Turns
-// having spent the month's allowance; and whether a Turn's Key is still kept, its secret never known
-// to the test. For tests only.
+// having spent the month's allowance; whether a Turn's Key is still kept, its secret never known to
+// the test; and the Tile a Turn started in. For tests only.
 import { eq, inArray } from 'drizzle-orm'
 import { Effect } from 'effect'
 
@@ -46,5 +46,18 @@ export const turnKeyKept = (turnId: string) =>
       .pipe(
         Effect.orDie,
         Effect.map((rows) => rows.length > 0),
+      ),
+  )
+
+/** The Tile a Turn started in, by its id; none for a Turn there is not. */
+export const startedIn = (turnId: string) =>
+  Database.use((database) =>
+    database
+      .select({ location: turn.location })
+      .from(turn)
+      .where(eq(turn.id, turnId))
+      .pipe(
+        Effect.orDie,
+        Effect.map(([row]) => row?.location),
       ),
   )

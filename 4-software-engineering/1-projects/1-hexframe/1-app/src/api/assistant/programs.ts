@@ -9,7 +9,7 @@ import { Effect } from 'effect'
 import type { Redacted } from 'effect'
 
 import * as Assistant from '#/domains/assistant/assistant'
-import { type TurnEnd, visitedTiles } from '#/domains/assistant/entities'
+import { linksOf, namedTiles, type TurnEnd, turnLocation } from '#/domains/assistant/entities'
 import * as Iam from '#/domains/iam/iam'
 import type { Turn } from '#/domains/assistant/entities'
 import * as Mapping from '#/domains/mapping/mapping'
@@ -30,8 +30,9 @@ const forSession = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, 
 
 /**
  * A day of the Account's Conversation, today when no date is asked: the day, its Entries oldest
- * first, and the Titles of the Tiles its navigations went to, as the System holds them now, by id. A
- * navigation keeps a Tile's id alone; a Tile the System no longer holds has no Title there. With
+ * first, and the Titles of the Tiles its navigations went to and its Messages link, as the System
+ * holds them now, by id. A navigation and a link keep a Tile's id alone; a Tile the System no longer
+ * holds has no Title there. With
  * them, `earlier`, the instant of the latest Entry before the day, where a reader scrolling back goes
  * next, and `lastEntry`, the Entry last recorded in the Conversation, which the page's poll compares
  * with its own (`latest`). It is read first: an Entry recorded meanwhile is among the day's, and the
@@ -43,7 +44,7 @@ export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
       const lastEntry = yield* Assistant.lastEntry(accountId)
       const day = { date: date ?? (yield* Assistant.today(offsets.offset)).date, ...offsets }
       const entries = yield* Assistant.day(accountId, day)
-      const titles = yield* Mapping.titles(accountId, visitedTiles(entries))
+      const titles = yield* Mapping.titles(accountId, namedTiles(entries))
       const earlier = yield* Assistant.before(accountId, day)
       return {
         day,
@@ -173,10 +174,11 @@ type Started = Pick<typeof SentMessage.Type, 'text' | 'view' | 'offset'>
 /**
  * Starts a Turn's agent in the Account's sandbox: the System written into it, Mapping's export of its
  * Root, a Reference whose Tile is gone linked on the site the request reached (`tileLink`), whatever
- * the sandbox held gone; the Turn's prompt made of today's latest Entries, the Titles their
- * navigations went to, and the Title and Preview of the Tiles on screen; its agent started in the
- * centered Tile's folder, where Mapping places it in the same export, reaching the app at its doors
- * where the sandbox reaches it.
+ * the sandbox held gone; the Turn's prompt made of today's latest Entries and the Titles of the Tiles
+ * they name, the Title and Preview of the Tiles on screen, and the Tiles the Message links, each with
+ * its file where Mapping places it in the same export, none once deleted; its agent started in the
+ * folder of the Turn's location, the Tile the Message opens with a link to or the centered one,
+ * reaching the app at its doors where the sandbox reaches it.
  */
 const agentStarted = (
   accountId: string,
@@ -188,17 +190,34 @@ const agentStarted = (
     const { url } = yield* HttpExchange
     const { files, places } = yield* Mapping.systemFiles(accountId, tileLink(url))
     const entries = yield* Assistant.latestToday(accountId, offset)
-    const titles = yield* Mapping.titles(accountId, visitedTiles(entries))
+    const linked = linksOf(text)
+    const titles = yield* Mapping.titles(accountId, [
+      ...namedTiles(entries),
+      ...linked,
+      turn.location,
+    ])
     const onScreen = yield* Mapping.glimpses(accountId, [view.center, ...view.shown])
-    const title = onScreen.find(({ id }) => id === view.center)?.title ?? ''
+    const placeOf = (id: string) => {
+      const title = titles[id]
+      const place = places.get(id)
+      return title === undefined || place === undefined ? undefined : { title, file: place.file }
+    }
     yield* Assistant.startAgent(accountId, {
       turn,
       key,
       system: files,
       origin: new URL(url).origin,
       doors,
-      location: { id: view.center, title, folder: places.get(view.center)?.folder ?? '' },
+      location: {
+        id: turn.location,
+        title: titles[turn.location] ?? '',
+        folder: places.get(turn.location)?.folder ?? '',
+      },
       message: text,
+      links: linked.map((id) => {
+        const place = placeOf(id)
+        return place === undefined ? { id } : { id, place }
+      }),
       conversation: { entries, titles },
       onScreen,
       help: Mapping.helpRoot,
@@ -213,8 +232,8 @@ const agentStopped = (accountId: string, turnId: string) =>
 
 /**
  * Posts the user's Message in their Conversation and, when the Account may use the Assistant, starts a
- * Turn answering it, in the centered Tile, all in one transaction: refused with `TileNotFound` for a
- * center its System does not hold, `AllowanceSpent` once the month's allowance is spent and
+ * Turn answering it, all in one transaction, in the Tile the Message opens with a link to, else the
+ * centered one: refused with `TileNotFound` for a Tile its System does not hold, `AllowanceSpent` once the month's allowance is spent and
  * `TurnRunning` while another Turn runs, nothing posted. An Account without the `assistant`
  * Entitlement has its Message kept and no Turn, as the composer tells it. Its agent starts once the
  * answer has gone, through the platform's `waitUntil`; should it fail to, the Turn ends by its
@@ -226,11 +245,12 @@ export const sendMessage = (sent: typeof SentMessage.Type) =>
     if (!(yield* Iam.entitled(account, 'assistant'))) {
       return { entry: yield* transactional(Assistant.postMessage(account.id, sent.text)) }
     }
-    yield* Mapping.ownTile(account.id, sent.view.center)
+    const location = turnLocation(sent.text, sent.view.center)
+    yield* Mapping.ownTile(account.id, location)
     const { entry, turn, key, overdue } = yield* transactional(
       Effect.gen(function* () {
         const posted = yield* Assistant.postMessage(account.id, sent.text)
-        const start = { message: posted.id, location: sent.view.center }
+        const start = { message: posted.id, location }
         return { entry: posted, ...(yield* turnStarted(account.id, start)) }
       }),
     )

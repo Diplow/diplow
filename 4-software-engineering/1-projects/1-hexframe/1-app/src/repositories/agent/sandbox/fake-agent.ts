@@ -2,8 +2,8 @@
 // taking Claude Code's arguments, that replays a scripted `stream-json` stream, each event a line on its
 // standard output, as `claude -p --output-format stream-json --verbose` writes them. It opens the Tile
 // its working folder holds through the MCP its `--mcp-config` names, with the bearer given there, the
-// Message it answers its last argument, after `--`, as the Turn's launcher passes it, and
-// writes a Tile under it through the same MCP, for real, and answers. It waits `--pace` milliseconds
+// Message it answers its last argument, after `--`, as the Turn's launcher passes it, says which
+// folder it works in, writes a Tile under it through the same MCP, for real, and answers. It waits `--pace` milliseconds
 // before each tool, so a page polling every 2 s sees its steps, and a minute before answering a
 // Message that asks it to go slowly, so a Stop has something to stop. It spends nothing: it calls no
 // model. A SIGINT ends it as it ends Claude Code, with no answer.
@@ -11,6 +11,7 @@
 /** The script, as the sandbox writes it beside its boxes. */
 export const fakeAgent = String.raw`
 import { readFileSync } from 'node:fs'
+import { sep } from 'node:path'
 
 const args = process.argv.slice(2)
 const option = (name) => {
@@ -71,7 +72,11 @@ async function tool(name, input) {
 
 say({ type: 'system', subtype: 'init', session_id: 'fake', tools: [], mcp_servers: [] })
 const here = /^id: (.+)$/m.exec(readFileSync('CLAUDE.md', 'utf8'))?.[1]?.trim()
-assistant([{ type: 'text', text: 'Let me look at where you are.' }])
+// Its working folder from the System folder, which it names first, so a page shows where it ran.
+const segments = process.cwd().split(sep)
+const folder = segments.slice(segments.lastIndexOf('system') + 1).join('/')
+const where = folder === '' ? 'the System folder' : folder
+assistant([{ type: 'text', text: 'Let me look at where you are: ' + where + '.' }])
 const opened = here === undefined ? undefined : await tool('open_tile', { id: here })
 if (/slowly/i.test(message)) await wait(60_000)
 const taken = (slot) => slot in (opened?.branches ?? {}) || slot in (opened?.leaves ?? {})

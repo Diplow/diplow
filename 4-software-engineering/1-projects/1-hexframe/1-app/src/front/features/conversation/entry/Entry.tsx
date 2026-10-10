@@ -1,6 +1,8 @@
-// One Entry of the timeline: a Message, or a line saying what happened, a change to the System, an
-// import or where the user went, with who did it, or how a Turn ended when not by its answer. Titles are those the Entry carries, a navigation's
-// those the System holds now; times are the reader's, in the page's language.
+// One Entry of the timeline: a Message, its links to Tiles shown as their Titles, a click centering
+// the canvas on one, or a line saying what happened, a change to the System, an import or where the
+// user went, with who did it, or how a Turn ended when not by its answer. Titles are those the Entry
+// carries, a navigation's and a link's those the System holds now; times are the reader's, in the
+// page's language.
 import { cn } from 'cn'
 import {
   ArrowLeftRight,
@@ -23,7 +25,13 @@ import {
 } from 'lucide-react'
 import { Schema } from 'effect'
 
-import type { Actor, BadEnd, Entry } from '#/domains/assistant/entities'
+import {
+  type Actor,
+  type BadEnd,
+  type Entry,
+  type MessagePart,
+  partsOf,
+} from '#/domains/assistant/entities'
 import type { OperationEvent } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
@@ -32,10 +40,17 @@ import { Gesture } from '#/front/ui/hex/view/view'
 import type { Titles } from '../timeline/timeline'
 import { Shortened } from './Shortened'
 
-export function ConversationEntry({ entry, titles }: { entry: Entry; titles: Titles }) {
+interface EntryProps {
+  entry: Entry
+  titles: Titles
+  /** Centers the canvas on a Tile a Message links; none where there is no canvas to center. */
+  onCenter?: ((tile: string) => void) | undefined
+}
+
+export function ConversationEntry({ entry, titles, onCenter }: EntryProps) {
   switch (entry._tag) {
     case 'Message':
-      return <Message entry={entry} />
+      return <Message entry={entry} titles={titles} onCenter={onCenter} />
     case 'Navigation':
       return <NavigationLine entry={entry} titles={titles} />
     case 'Change': {
@@ -59,8 +74,17 @@ const turnEnds: Record<BadEnd, () => string> = {
   sandbox: m.conversation_turn_sandbox,
 }
 
-function Message({ entry }: { entry: Extract<Entry, { _tag: 'Message' }> }) {
+function Message({
+  entry,
+  titles,
+  onCenter,
+}: {
+  entry: Extract<Entry, { _tag: 'Message' }>
+  titles: Titles
+  onCenter: EntryProps['onCenter']
+}) {
   const mine = entry.author === 'user'
+  const shown = (tile: string) => linkText(titles, tile)
   return (
     <div className={cn('grid max-w-[85%] gap-1', mine ? 'ml-auto justify-items-end' : 'mr-auto')}>
       <p className="text-xs text-muted-foreground">
@@ -72,9 +96,63 @@ function Message({ entry }: { entry: Extract<Entry, { _tag: 'Message' }> }) {
           mine ? 'rounded-br-sm bg-primary text-primary-foreground' : 'rounded-bl-sm bg-muted',
         )}
       >
-        <Shortened text={entry.text} />
+        <Shortened parts={partsOf(entry.text)} shown={shown}>
+          {(parts) =>
+            parts.map((part, index) => (
+              // The pieces of one text, never reordered: their place is their key.
+              <Piece key={index} part={part} titles={titles} onCenter={onCenter} />
+            ))
+          }
+        </Shortened>
       </div>
     </div>
+  )
+}
+
+/** What a link shows: `@` and its Tile's Title now, "Untitled" for an untitled one; once deleted, so. */
+const linkText = (titles: Titles, tile: string) => {
+  const title = titles[tile]
+  return title === undefined ? m.conversation_link_broken() : `@${named(title)}`
+}
+
+/** One piece of a Message: its words, or a link to a Tile, a button centering it, or broken. */
+function Piece({
+  part,
+  titles,
+  onCenter,
+}: {
+  part: MessagePart
+  titles: Titles
+  onCenter: EntryProps['onCenter']
+}) {
+  if (part._tag === 'Text') return part.text
+  const { tile } = part
+  const text = linkText(titles, tile)
+  const chip = 'inline-flex items-center gap-0.5 rounded-sm px-0.5 align-baseline font-medium'
+  const title = titles[tile]
+  if (title === undefined) {
+    return (
+      <span className={cn(chip, 'line-through opacity-70')}>
+        <Unlink aria-hidden className="size-3 shrink-0 self-center" />
+        {text}
+      </span>
+    )
+  }
+  if (onCenter === undefined) return <span className={chip}>{text}</span>
+  return (
+    <button
+      type="button"
+      aria-label={m.hex_tile_center({ title: named(title) })}
+      className={cn(
+        chip,
+        'underline decoration-1 underline-offset-2 outline-none hover:decoration-2 focus-visible:ring-[3px] focus-visible:ring-ring/50',
+      )}
+      onClick={() => {
+        onCenter(tile)
+      }}
+    >
+      {text}
+    </button>
   )
 }
 

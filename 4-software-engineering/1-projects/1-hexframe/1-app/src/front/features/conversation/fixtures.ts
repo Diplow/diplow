@@ -1,11 +1,14 @@
 // A fixture Conversation for /dev/system, about the fixture System /dev/hex draws: four days of
-// Assistant's Entries, every kind at least once, a change by each kind of actor, and the Titles of the
-// Tiles its navigations went to. Its days are counted back from `now`, so the timeline always shows a
+// Assistant's Entries, every kind at least once, a change by each kind of actor, a Message linking
+// Tiles, one of them deleted since, and the Titles of the Tiles its navigations went to and its
+// Messages link; and the fixture System's Tiles, which its composer offers to `@`. Its days are counted back from `now`, so the timeline always shows a
 // today and a yesterday. Like the System, its content is the user's own, so it is not translated.
-import type { Entry } from '#/domains/assistant/entities'
+import { type Entry, linkTo } from '#/domains/assistant/entities'
 import { ulysse } from '#/front/ui/hex/fixtures'
-import { findTile } from '#/front/ui/hex/view/tiles'
+import { directions } from '#/front/ui/hex/geometry/geometry'
+import { findTile, type TileNode } from '#/front/ui/hex/view/tiles'
 
+import type { Mentionable } from './composer/mention'
 import type { Titles } from './timeline/timeline'
 
 /** A Tile of the fixture System, as a change names it. */
@@ -34,7 +37,7 @@ export function conversationFixture(now: Date): { entries: Entry[]; titles: Titl
     text,
   })
   const titles = Object.fromEntries(
-    ['software-engineering', 'projects', 'ulysse'].map((id) => [id, tile(id).title]),
+    ['software-engineering', 'projects', 'ulysse', 'games'].map((id) => [id, tile(id).title]),
   )
   const entries: Entry[] = [
     {
@@ -136,6 +139,29 @@ export function conversationFixture(now: Date): { entries: Entry[]; titles: Titl
       'agent',
       'Games has no Children yet. From what you wrote, I would start with three: the games you design, the ones you play, and what they teach about rules. Shall I propose them?',
     ),
+    said(
+      'm5',
+      today(0),
+      'user',
+      `${linkTo('games')} yes, laid out as ${linkTo('software-engineering')} is, and bring back what was in ${linkTo(drafts.id)}.`,
+    ),
   ]
   return { entries, titles }
+}
+
+/** The fixture System's Tiles a composer offers to `@`, from its Root down, never a Reference. */
+export function fixtureMentionables(): ReadonlyArray<Mentionable> {
+  const found: Mentionable[] = []
+  const walk = (node: TileNode, trail: ReadonlyArray<string>) => {
+    if (node.reference === true) return
+    found.push({ id: node.id, title: node.title, trail })
+    for (const direction of directions) {
+      for (const below of [node.branches, node.leaves, node.context]) {
+        const next = below?.[direction]
+        if (next !== undefined) walk(next, [...trail, node.title])
+      }
+    }
+  }
+  walk(ulysse, [])
+  return found
 }

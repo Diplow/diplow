@@ -2,9 +2,12 @@
 // day of the reader's calendar at a time, with the Titles of the Tiles its navigations went to. Home
 // reads it a day at a time (`useConversation`); /dev/system splits its fixtures by day. Pure; the
 // components render it.
-import { dayAt, type Entry } from '#/domains/assistant/entities'
+import { dayAt, type Entry, type MessagePart } from '#/domains/assistant/entities'
 
-/** The Titles of the Tiles a day's navigations went to, by id: a Tile deleted since has none. */
+/**
+ * The Titles of the Tiles a day names by their id alone, those its navigations went to and its
+ * Messages link, by id, as the System holds them now: a Tile deleted since has none.
+ */
 export type Titles = Readonly<Record<string, string>>
 
 /** One day of the Conversation, its Entries oldest first. */
@@ -63,4 +66,33 @@ export function excerpt(text: string, limit: number): string | undefined {
   // A word longer than half the limit is cut through rather than dropped whole.
   const words = lastSpace > limit / 2 ? cut.slice(0, lastSpace) : cut
   return `${words.join('').replace(/[\s,;:.]+$/, '')}…`
+}
+
+/** How many characters a text holds, as a reader counts them. */
+const lengthOf = (text: string) => Array.from(graphemes.segment(text)).length
+
+/**
+ * The start of a Message too long to show whole, in pieces: its words, and its links counted as the
+ * Title they show (`shown`), cut at a word within `limit` characters and ended with an ellipsis, a
+ * link that would pass it left out; `undefined` when it fits.
+ */
+export function excerptOf(
+  parts: ReadonlyArray<MessagePart>,
+  shown: (tile: string) => string,
+  limit: number,
+): ReadonlyArray<MessagePart> | undefined {
+  const kept: MessagePart[] = []
+  let left = limit
+  for (const part of parts) {
+    const length = lengthOf(part._tag === 'Text' ? part.text : shown(part.tile))
+    if (length <= left) {
+      kept.push(part)
+      left -= length
+      continue
+    }
+    const cut = part._tag === 'Text' ? excerpt(part.text, left) : undefined
+    kept.push({ _tag: 'Text', text: cut ?? '…' })
+    return kept
+  }
+  return undefined
 }

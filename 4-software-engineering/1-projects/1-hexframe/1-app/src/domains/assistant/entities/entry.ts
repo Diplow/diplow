@@ -5,6 +5,7 @@
 // the past. Assistant knows no Tile: a change names its verb and its Tiles as they came. Pure.
 import { Schema } from 'effect'
 
+import { linksOf } from './message/links'
 import { Navigation } from './navigation'
 import { BadEnd } from './turn/turn'
 
@@ -95,11 +96,16 @@ export const Ago = Schema.Int.check(Schema.isBetween({ minimum: 0, maximum: long
 /** A span of milliseconds brought within what `Ago` takes: never ahead, a day back at most. */
 export const within = (ago: number) => Math.min(Math.max(ago, 0), longestAgo)
 
-/** The Tiles some Entries' navigations went to, each once, by id: the Titles a reader needs. */
-export const visitedTiles = (entries: ReadonlyArray<Entry>): ReadonlyArray<string> => [
+/**
+ * The Tiles some Entries name by their id alone, each once: those their navigations went to, and those
+ * their Messages link. The Titles a reader joins in.
+ */
+export const namedTiles = (entries: ReadonlyArray<Entry>): ReadonlyArray<string> => [
   ...new Set(
-    entries.flatMap((entry) =>
-      entry._tag === 'Navigation' ? entry.steps.map(({ tile }) => tile) : [],
-    ),
+    entries.flatMap((entry) => {
+      if (entry._tag === 'Navigation') return entry.steps.map(({ tile }) => tile)
+      if (entry._tag === 'Message') return linksOf(entry.text)
+      return []
+    }),
   ),
 ]

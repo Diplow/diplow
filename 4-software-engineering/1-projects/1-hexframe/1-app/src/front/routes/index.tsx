@@ -7,7 +7,8 @@
 // sign-in, then back here. The page follows the System and the Conversation, so a write it did not
 // make, an agent's, a Key's or another tab's, shows on the canvas and in the timeline once the tab
 // regains focus, and every 2 s while a Turn runs. A Message is sent from the view: its center, where
-// the Turn answering it starts, and the Tiles on screen.
+// the Turn answering it starts unless it opens with a link to a Tile, and the Tiles on screen; a
+// Message's link centers the canvas on its Tile, a gesture as any other.
 import { createFileRoute } from '@tanstack/react-router'
 
 import { ReadBoundary } from '#/front/client/ReadBoundary'
@@ -31,7 +32,7 @@ import { TileActions } from '#/front/features/system/TileActions'
 import { canvasTree, onScreen } from '#/front/features/system/tree'
 import { m } from '#/paraglide/messages'
 import { Skeleton } from '#/front/ui/feedback/skeleton'
-import type { CanvasView, ViewAction } from '#/front/ui/hex/view/view'
+import { centerOn, type CanvasView, type ViewAction } from '#/front/ui/hex/view/view'
 
 export const Route = createFileRoute('/')({
   beforeLoad: signedInOnly,
@@ -55,6 +56,11 @@ function Home() {
       : (text: string) => {
           postMessage({ text, view: onScreen(canvasTree(data.root), viewOf(search)) })
         }
+  const onCenter = (tile: string) => {
+    if (data === undefined) return
+    onSearchChange(withView(search, centerOn(canvasTree(data.root), tile)))
+    publish(new Navigated({ gesture: 'center', tile }))
+  }
   return (
     <main className="grid gap-4 px-4 pb-4 lg:h-[calc(100dvh-4.25rem)] lg:grid-cols-[minmax(0,1fr)_24rem]">
       <h1 className="sr-only">{m.system_title()}</h1>
@@ -64,7 +70,12 @@ function Home() {
         </ReadBoundary>
       </div>
       <ReadBoundary>
-        <Chat onSend={onSend} turn={turn} className="h-[32rem] lg:h-auto lg:min-h-0" />
+        <Chat
+          onSend={onSend}
+          turn={turn}
+          onCenter={onCenter}
+          className="h-[32rem] lg:h-auto lg:min-h-0"
+        />
       </ReadBoundary>
     </main>
   )
