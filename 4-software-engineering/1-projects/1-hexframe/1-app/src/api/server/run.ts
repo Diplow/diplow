@@ -25,10 +25,7 @@ import {
   Conversations,
   layer as conversationsLayer,
 } from '#/repositories/database/conversations/conversations'
-import {
-  Proposals,
-  layer as proposalsLayer,
-} from '#/repositories/database/conversations/proposals'
+import { Proposals, layer as proposalsLayer } from '#/repositories/database/conversations/proposals'
 import { Turns, layer as turnsLayer } from '#/repositories/database/conversations/turns'
 import { type Database, layer as databaseLayer } from '#/repositories/database/database'
 import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'

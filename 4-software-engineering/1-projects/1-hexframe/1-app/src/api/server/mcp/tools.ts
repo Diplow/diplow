@@ -1,10 +1,11 @@
 // The tool table: what an agent may do to the System it works on, as data. Each entry names a tool,
 // teaches it in its description, bounds its input with an Effect Schema and runs one program through
-// the helper, like a server function. The MCP server (./mcp.ts) registers every entry; a write made
-// with a Turn's Key will be routed by its Turn, drafted into a Proposal in ask (STACK.md).
-// A write runs one of Mapping's Operations: it takes its server function's input Schema, the
-// Operation's fields (../../mapping/mapping.ts), each described for an agent, and runs the same
-// program, for the Account the Key proves, in one transaction.
+// the helper, like a server function. The MCP server (./mcp.ts) registers every entry. A write runs
+// one of Mapping's Operations: it takes its server function's input Schema, the Operation's fields
+// (../../mapping/mapping.ts), each described for an agent, and runs the same program, for the Account
+// the Key proves, in one transaction; made with a Turn's Key, it is routed by what Assistant decides
+// of its Turn, drafted into the Conversation's Proposal in ask, and the reads made with that Key show
+// the Proposal over the System (../../assistant/proposal/). No entry asks the Mode.
 import { Effect, Schema, Struct } from 'effect'
 
 import {
@@ -16,8 +17,18 @@ import {
   TileId,
 } from '#/domains/mapping/entities'
 import { HelpId, helpRoot } from '#/domains/mapping/mapping'
-import type { OperationName } from '#/domains/mapping/operations'
+import {
+  CreateReference,
+  CreateTile,
+  DeleteReference,
+  DeleteTile,
+  EditTile,
+  MoveTile,
+  type OperationName,
+  SwapTiles,
+} from '#/domains/mapping/operations'
 
+import * as Proposal from '../../assistant/proposal/programs'
 import type { Failure } from '../../report/errors/failure'
 import {
   NewReference,
@@ -108,7 +119,7 @@ const openTile = read({
       'What to read of the opened Tile: any of title, preview, body. All three when not given.',
     ),
   }),
-  program: Mapping.openTile,
+  program: Proposal.openTile,
 })
 
 const map = read({
@@ -130,7 +141,7 @@ const map = read({
       'What to read of each Tile: any of title, preview, body. Title and Preview when not given.',
     ),
   }),
-  program: ({ id, depth, fields }) => Mapping.readTile({ id, depth, fields }),
+  program: ({ id, depth, fields }) => Proposal.readTile({ id, depth, fields }),
 })
 
 // The writes: one per operation of Mapping. Each description says what the tool does, then, for each
@@ -248,7 +259,10 @@ const createTile = write({
   // An agent sends no id, so Mapping makes it, fresh: a clash on it is a defect, never a refusal
   // to teach (`TileIdTaken` comes only to a caller that chose its id).
   program: (input: typeof NewTileOfAgent.Type) =>
-    Effect.catchTag(Mapping.createTile(input), 'TileIdTaken', (taken) => Effect.die(taken)),
+    Proposal.written(
+      new CreateTile(input),
+      Effect.catchTag(Mapping.createTile(input), 'TileIdTaken', (taken) => Effect.die(taken)),
+    ),
 })
 
 const editTile = write({
@@ -276,7 +290,8 @@ const editTile = write({
         field.annotate({ description: `${described.body} Left as it is when not given.` }),
     }),
   ),
-  program: Mapping.editTile,
+  program: (input: typeof TileEdit.Type) =>
+    Proposal.written(new EditTile(input), Mapping.editTile(input)),
 })
 
 const moveTile = write({
@@ -306,7 +321,8 @@ const moveTile = write({
       slot: (field) => field.annotate({ description: described.slot }),
     }),
   ),
-  program: Mapping.moveTile,
+  program: (input: typeof TileMove.Type) =>
+    Proposal.written(new MoveTile(input), Mapping.moveTile(input)),
 })
 
 const swapTiles = write({
@@ -334,7 +350,8 @@ const swapTiles = write({
         field.annotate({ description: 'The version of the Tile b, as you last read it.' }),
     }),
   ),
-  program: Mapping.swapTiles,
+  program: (input: typeof TileSwap.Type) =>
+    Proposal.written(new SwapTiles(input), Mapping.swapTiles(input)),
 })
 
 const deleteTile = write({
@@ -357,7 +374,8 @@ const deleteTile = write({
       version: (field) => field.annotate({ description: described.version }),
     }),
   ),
-  program: Mapping.deleteTile,
+  program: (input: typeof TileDelete.Type) =>
+    Proposal.written(new DeleteTile(input), Mapping.deleteTile(input)),
 })
 
 const createReference = write({
@@ -385,7 +403,8 @@ const createReference = write({
         }),
     }),
   ),
-  program: Mapping.createReference,
+  program: (input: typeof NewReference.Type) =>
+    Proposal.written(new CreateReference(input), Mapping.createReference(input)),
 })
 
 const deleteReference = write({
@@ -407,7 +426,8 @@ const deleteReference = write({
       slot: (field) => field.annotate({ description: described.contextSlot }),
     }),
   ),
-  program: Mapping.deleteReference,
+  program: (input: typeof ReferenceSlot.Type) =>
+    Proposal.written(new DeleteReference(input), Mapping.deleteReference(input)),
 })
 
 /** Every tool, in the order an agent lists them: the reads, then a write per operation. */

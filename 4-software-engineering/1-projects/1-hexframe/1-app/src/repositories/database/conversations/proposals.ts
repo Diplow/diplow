@@ -11,7 +11,7 @@ import { Database, InTransaction } from '../database'
 import { conversation, proposal } from '../schema'
 
 /** An open Proposal's row: its id, its Entry, the Turn that opened it, and its drafts, as encoded. */
-export interface ProposalRow {
+interface ProposalRow {
   readonly id: string
   readonly entryId: string
   readonly turnId: string

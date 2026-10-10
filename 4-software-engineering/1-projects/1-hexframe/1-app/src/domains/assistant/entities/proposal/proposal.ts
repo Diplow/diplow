@@ -20,9 +20,6 @@ export const Fate = Schema.Literals(['open', 'accepted', 'discarded'])
 
 export type Fate = typeof Fate.Type
 
-/** How the user decides an open Proposal: accepted whole, or discarded. */
-export type Decision = Exclude<Fate, 'open'>
-
 /**
  * What becomes of a write made with a Turn's Key, which the API layer routes on: drafted into the
  * Conversation's Proposal, or applied to the System as it comes.

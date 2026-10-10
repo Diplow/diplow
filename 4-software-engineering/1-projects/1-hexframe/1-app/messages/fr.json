@@ -242,6 +242,8 @@
   "error_iam_entitlement_missing": "L’assistant n’est pas disponible sur ce compte.",
   "error_assistant_turn_running": "L’assistant répond encore. Attendez qu’il ait fini, ou arrêtez-le.",
   "error_assistant_allowance_spent": "L’enveloppe du mois de l’assistant est dépensée. Il répondra de nouveau le mois prochain.",
+  "error_assistant_proposal_closed": "Cette proposition a déjà été acceptée ou écartée.",
+  "error_assistant_proposal_stale": "Votre système a changé depuis que l’assistant a rédigé cette proposition : elle ne peut plus être acceptée en entier. Écartez-la, puis redemandez.",
   "error_mapping_tile_not_found": "Cette tuile n’existe pas, ou plus.",
   "error_mapping_title_missing": "Donnez un titre à cette tuile.",
   "error_mapping_preview_too_long": "Limitez l’aperçu à 350 caractères.",

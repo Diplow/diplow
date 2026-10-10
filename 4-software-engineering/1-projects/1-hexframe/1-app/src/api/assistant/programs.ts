@@ -20,6 +20,7 @@ import { tileLink } from '../mapping/files/download'
 import { WaitUntil } from '../server/bus'
 
 import type { DayAsked, MergedNavigation, NewMessage, SentMessage } from './assistant'
+import { proposalNow, shownTo } from './proposal/programs'
 
 /**
  * Runs an operation for the Account the request's Session proves: the Conversation is the user's,
@@ -32,16 +33,17 @@ const forSession = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, 
  * A day of the Account's Conversation, today when no date is asked: the day, its Entries oldest
  * first, and the Titles of the Tiles its navigations went to and its Messages link, as the System
  * holds them now, by id. A navigation and a link keep a Tile's id alone; a Tile the System no longer
- * holds has no Title there. With
- * them, `earlier`, the instant of the latest Entry before the day, where a reader scrolling back goes
- * next, and `lastEntry`, the Entry last recorded in the Conversation, which the page's poll compares
- * with its own (`latest`). It is read first: an Entry recorded meanwhile is among the day's, and the
- * next poll reads the day again for nothing rather than never.
+ * holds has no Title there. With them, `earlier`, the instant of the latest Entry before the day,
+ * where a reader scrolling back goes next, and `lastEntry`, the Entry last recorded in the
+ * Conversation, and `proposal`, its open Proposal and how many writes it holds, which the page's poll
+ * compares with its own (`latest`). Both are read first: an Entry recorded or a write drafted
+ * meanwhile is among the day's, and the next poll reads the day again for nothing rather than never.
  */
 export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
   forSession((accountId) =>
     Effect.gen(function* () {
       const lastEntry = yield* Assistant.lastEntry(accountId)
+      const proposal = yield* proposalNow(accountId)
       const day = { date: date ?? (yield* Assistant.today(offsets.offset)).date, ...offsets }
       const entries = yield* Assistant.day(accountId, day)
       const titles = yield* Mapping.titles(accountId, namedTiles(entries))
@@ -52,30 +54,36 @@ export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
         titles,
         ...(earlier !== undefined && { earlier }),
         ...(lastEntry !== undefined && { lastEntry }),
+        ...(proposal !== undefined && { proposal }),
       }
     }),
   )
 
 /**
  * The latest of what home shows, the smallest reads there are, which the page polls: the System's
- * Version, the id of the Entry last recorded in the Conversation, none before the first, and the Turn
- * running before its deadline, by its id, with its agent's step now. The page reads the System again
- * once the Version moved, and the Conversation once its last Entry is another, and follows closely
- * while a Turn runs.
+ * Version, the id of the Entry last recorded in the Conversation, none before the first, the Turn
+ * running before its deadline, by its id, with its agent's step now, the Conversation's Mode, and its
+ * open Proposal, by its id, with how many writes it holds. The page reads the System again once the
+ * Version moved, and the Conversation once its last Entry or its Proposal is another, and follows
+ * closely while a Turn runs.
  */
 export const latest = forSession((accountId) =>
   Effect.gen(function* () {
     const version = yield* Mapping.systemVersion(accountId)
     const lastEntry = yield* Assistant.lastEntry(accountId)
     const live = yield* Assistant.liveTurn(accountId)
+    const mode = yield* Assistant.conversationMode(accountId)
+    const proposal = yield* proposalNow(accountId)
     const turn =
       live === undefined
         ? undefined
         : { id: live.id, ...(live.step !== undefined && { step: live.step }) }
     return {
       version,
+      mode,
       ...(lastEntry !== undefined && { lastEntry }),
       ...(turn !== undefined && { turn }),
+      ...(proposal !== undefined && { proposal }),
     }
   }),
 )
@@ -173,8 +181,9 @@ type Started = Pick<typeof SentMessage.Type, 'text' | 'view' | 'offset'>
 
 /**
  * Starts a Turn's agent in the Account's sandbox: the System written into it, Mapping's export of its
- * Root, a Reference whose Tile is gone linked on the site the request reached (`tileLink`), whatever
- * the sandbox held gone; the Turn's prompt made of today's latest Entries and the Titles of the Tiles
+ * Root, with the open Proposal folded over it for a Turn that drafts, so its files and its reads
+ * agree (`shownTo`), a Reference whose Tile is gone linked on the site the request reached
+ * (`tileLink`), whatever the sandbox held gone; the Turn's prompt made of today's latest Entries and the Titles of the Tiles
  * they name, the Title and Preview of the Tiles on screen, and the Tiles the Message links, each with
  * its file where Mapping places it in the same export, none once deleted; its agent started in the
  * folder of the Turn's location, the Tile the Message opens with a link to or the centered one,
@@ -188,7 +197,8 @@ const agentStarted = (
 ) =>
   Effect.gen(function* () {
     const { url } = yield* HttpExchange
-    const { files, places } = yield* Mapping.systemFiles(accountId, tileLink(url))
+    const over = yield* shownTo(accountId, turn)
+    const { files, places } = yield* Mapping.systemFiles(accountId, tileLink(url), over)
     const entries = yield* Assistant.latestToday(accountId, offset)
     const linked = linksOf(text)
     const titles = yield* Mapping.titles(accountId, [

@@ -9,9 +9,9 @@ import type { Failure } from './failure'
 /**
  * The call an entry is narrowed to, by the scope it names: one of Mapping's Operations by its name,
  * which its server function bears and the MCP tool that runs it names too, or another server function
- * by its own.
+ * by its own, as `acceptProposal`, whose Mapping refusals all say the System moved under a Proposal.
  */
-type Scope = OperationName | 'importTiles' | 'submitDevTitle'
+type Scope = OperationName | 'importTiles' | 'acceptProposal' | 'submitDevTitle'
 
 interface Entry {
   tag: Failure['_tag']
@@ -36,6 +36,13 @@ const table: readonly Entry[] = [
   { tag: 'EntitlementMissing', message: m.error_iam_entitlement_missing },
   { tag: 'TurnRunning', message: m.error_assistant_turn_running },
   { tag: 'AllowanceSpent', message: m.error_assistant_allowance_spent },
+  { tag: 'ProposalClosed', message: m.error_assistant_proposal_closed },
+  // A Proposal's write that no longer applies, whichever refusal it meets, refuses it whole.
+  { tag: 'TileChanged', scope: 'acceptProposal', message: m.error_assistant_proposal_stale },
+  { tag: 'TileNotFound', scope: 'acceptProposal', message: m.error_assistant_proposal_stale },
+  { tag: 'DirectionTaken', scope: 'acceptProposal', message: m.error_assistant_proposal_stale },
+  { tag: 'MovedUnderItself', scope: 'acceptProposal', message: m.error_assistant_proposal_stale },
+  { tag: 'LeafHoldsNothing', scope: 'acceptProposal', message: m.error_assistant_proposal_stale },
   { tag: 'TileNotFound', message: m.error_mapping_tile_not_found },
   { tag: 'TitleMissing', message: m.error_mapping_title_missing },
   { tag: 'PreviewTooLong', message: m.error_mapping_preview_too_long },

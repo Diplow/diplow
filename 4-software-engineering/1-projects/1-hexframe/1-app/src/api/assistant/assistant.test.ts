@@ -133,16 +133,20 @@ describe("Assistant's server functions", () => {
     )
   })
 
-  it('answers the System’s Version and the Entry last recorded, which every write moves', async () => {
+  it('answers the System’s Version, the Entry last recorded, which every write moves, and the Mode', async () => {
     const { call } = request()
-    expect(await value(call(Assistant.latest))).toEqual({ version: 0 })
+    expect(await value(call(Assistant.latest))).toEqual({ version: 0, mode: 'ask' })
     const posted = await value(call(Assistant.postMessage({ text: 'Name me' })))
-    expect(await value(call(Assistant.latest))).toEqual({ version: 0, lastEntry: posted.id })
+    expect(await value(call(Assistant.latest))).toEqual({
+      version: 0,
+      mode: 'ask',
+      lastEntry: posted.id,
+    })
     const { root } = await value(call(Mapping.system))
     await value(call(Mapping.editTile({ id: root.id, version: 1, title: 'Ada' })))
     const latest = await value(call(Assistant.latest))
     const { entries } = await value(call(Assistant.conversationDay({ offset: 0 })))
-    expect(latest).toEqual({ version: 1, lastEntry: entries.at(-1)?.id })
+    expect(latest).toEqual({ version: 1, mode: 'ask', lastEntry: entries.at(-1)?.id })
     expect(latest.lastEntry).not.toBe(posted.id)
   })
 

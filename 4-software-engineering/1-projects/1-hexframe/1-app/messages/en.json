@@ -242,6 +242,8 @@
   "error_iam_entitlement_missing": "The assistant isn't available on this account.",
   "error_assistant_turn_running": "The assistant is still answering. Wait for it to finish, or stop it.",
   "error_assistant_allowance_spent": "This month's allowance for the assistant is spent. It answers again next month.",
+  "error_assistant_proposal_closed": "This proposal was already accepted or discarded.",
+  "error_assistant_proposal_stale": "Your system changed since the assistant drafted this proposal, so it can't be accepted whole. Discard it, then ask again.",
   "error_mapping_tile_not_found": "This tile doesn't exist, or no longer does.",
   "error_mapping_title_missing": "Give this tile a title.",
   "error_mapping_preview_too_long": "Keep the preview to 350 characters.",

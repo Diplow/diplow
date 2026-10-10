@@ -15,6 +15,7 @@ import {
 } from '#/repositories/database/conversations/testing'
 
 import * as Assistant from '../../assistant/programs'
+import * as Proposal from '../../assistant/proposal/programs'
 import * as Mapping from '../../mapping/programs'
 import { value } from '../mcp/testing'
 import { noSession, provenKey, run, type StartContext } from '../run'
@@ -25,7 +26,9 @@ import { doorsServed, signedUpAt } from './testing'
 // fake agent writing a Tile through `/mcp` and answering, each line it says posted to the events door,
 // all three doors served over HTTP on this machine as a deployment serves them; a Stop interrupting it;
 // a lost Turn ended by its time once the next starts; its refusals; and its Key revoked however it
-// ended. `vitest.config.ts` sets the fake agent's pace to none. No test reaches Blaxel or Anthropic.
+// ended. The Account is in apply, so its agent's write lands as it comes; a Turn in ask, its write a
+// Proposal, is `../../assistant/proposal/turn.test.ts`'s. `vitest.config.ts` sets the fake agent's
+// pace to none. No test reaches Blaxel or Anthropic.
 
 const served = doorsServed()
 
@@ -36,6 +39,7 @@ afterAll(async () => {
 const account = (async () => {
   const { origin } = await served
   const someone = await signedUpAt(origin, 'entitled@example.com')
+  await value(run(someone.signedIn, Proposal.setMode({ mode: 'apply' })))
   const { root } = await value(run(someone.signedIn, Mapping.system))
   return { ...someone, root }
 })()

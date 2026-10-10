@@ -659,13 +659,19 @@ export const discardProposal = (accountId: string, proposal: string) =>
   Effect.asVoid(operate(accountId, (state) => decide(state, new DiscardProposal({ proposal }))))
 
 /**
- * What becomes of a write one of the Account's Turns makes, which the API layer routes on: drafted
- * into the Conversation's Proposal by a Turn that started in ask, applied by one that started in apply.
- * A Turn of no Conversation of the Account's is a defect: its Key proves it.
+ * One of the Account's Turns, by its id, running or ended. A Turn of no Conversation of the Account's
+ * is a defect: the caller takes its id from the Turn's Key, which proves it.
  */
-export const route = (accountId: string, turnId: string) =>
+export const turn = (accountId: string, turnId: string) =>
   Effect.gen(function* () {
     const row = yield* Turns.use((turns) => turns.byId(accountId, turnId))
     if (row === undefined) return yield* Effect.die(new Error("A Turn's Key proved no Turn"))
-    return routeOf(yield* turnOf(row))
+    return yield* turnOf(row)
   })
+
+/**
+ * What becomes of a write one of the Account's Turns makes, which the API layer routes on: drafted
+ * into the Conversation's Proposal by a Turn that started in ask, applied by one that started in apply.
+ */
+export const route = (accountId: string, turnId: string) =>
+  Effect.map(turn(accountId, turnId), routeOf)
