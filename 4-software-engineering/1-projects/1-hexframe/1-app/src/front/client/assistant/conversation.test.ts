@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 import { act, cleanup, renderHook, waitFor } from '@testing-library/react'
 import { createElement, type ReactNode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -7,25 +7,31 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   assistantAvailable,
   conversationDay,
+  latest,
   postMessage,
   recordNavigation,
+  stopTurn,
 } from '#/api/assistant/assistant'
 
 import {
+  latestRead,
   useAssistantAvailable,
   useConversation,
   usePostMessage,
   useRecordNavigation,
+  useStopTurn,
 } from './conversation'
 
 // The Conversation's hooks over stand-ins for Assistant's server functions: what each calls, with the
-// reader's day, and when the Conversation is read again. The server functions themselves are covered
-// in src/api/assistant/assistant.test.ts.
+// reader's day, and when the Conversation is read again and the latest polled. The server functions
+// themselves are covered in src/api/assistant/assistant.test.ts.
 vi.mock('#/api/assistant/assistant', () => ({
   assistantAvailable: vi.fn(),
   conversationDay: vi.fn(),
+  latest: vi.fn(),
   postMessage: vi.fn(),
   recordNavigation: vi.fn(),
+  stopTurn: vi.fn(),
 }))
 
 afterEach(() => {
@@ -38,7 +44,9 @@ const today = { day: { date: '2026-10-10', offset: 120 }, entries: [], titles: {
 /** The server function stand-ins: today's Conversation is empty, every write succeeds. */
 function answering() {
   vi.mocked(conversationDay).mockResolvedValue({ ok: true, value: today } as never)
+  vi.mocked(latest).mockResolvedValue({ ok: true, value: { version: 0 } } as never)
   vi.mocked(postMessage).mockResolvedValue({ ok: true, value: {} } as never)
+  vi.mocked(stopTurn).mockResolvedValue({ ok: true, value: null } as never)
   vi.mocked(recordNavigation).mockResolvedValue({ ok: true, value: {} } as never)
 }
 
@@ -48,9 +56,13 @@ async function render<T>(hook: () => T) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   const wrapper = ({ children }: { children: ReactNode }) =>
     createElement(QueryClientProvider, { client }, children)
-  const rendered = renderHook(() => ({ days: useConversation(), hook: hook() }), { wrapper })
+  const rendered = renderHook(
+    () => ({ days: useConversation(), latest: useQuery(latestRead), hook: hook() }),
+    { wrapper },
+  )
   await waitFor(() => {
     expect(rendered.result.current.days.isSuccess).toBe(true)
+    expect(rendered.result.current.latest.isSuccess).toBe(true)
   })
   return rendered.result
 }
@@ -102,15 +114,31 @@ describe("the Conversation's hooks", () => {
     expect(result.current.hasNextPage).toBe(false)
   })
 
-  it('post a Message, then read the Conversation again', async () => {
+  it('post a Message from its view, with the reader’s offset, then read the Conversation again and poll', async () => {
     const result = await render(usePostMessage)
+    const view = { center: 'root', shown: ['root', 'a'] }
     act(() => {
-      result.current.hook.mutate('Hello')
+      result.current.hook.mutate({ text: 'Hello', view })
     })
     await waitFor(() => {
       expect(conversationDay).toHaveBeenCalledTimes(2)
+      expect(latest).toHaveBeenCalledTimes(2)
     })
-    expect(postMessage).toHaveBeenCalledWith({ data: { text: 'Hello' } })
+    expect(postMessage).toHaveBeenCalledWith({
+      data: { text: 'Hello', view, offset: offsetAt(new Date()) },
+    })
+  })
+
+  it('stop the Turn running, then read the Conversation again and poll', async () => {
+    const result = await render(useStopTurn)
+    act(() => {
+      result.current.hook.mutate()
+    })
+    await waitFor(() => {
+      expect(conversationDay).toHaveBeenCalledTimes(2)
+      expect(latest).toHaveBeenCalledTimes(2)
+    })
+    expect(stopTurn).toHaveBeenCalledWith({ data: undefined })
   })
 
   it.each([true, false])(

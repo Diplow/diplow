@@ -1,7 +1,9 @@
 // The sandbox on this machine, a fake of Blaxel's: each Account's sandbox a folder under a root, its
 // System folder made read-only by its modes, its processes children of this one, each in a process
-// group of its own so a kill reaches what it started. Every test runs on it, and `pnpm dev` without
-// `BL_API_KEY` (src/api/server/run.ts). No isolation: it is for the app's own commands, never a user's.
+// group of its own so a kill reaches what it started. In Claude Code's place it runs a fake agent
+// (./fake-agent.ts), unless the environment asks for Claude Code. Every test runs on it, and `pnpm dev`
+// without `BL_API_KEY` (src/api/server/run.ts). No isolation: it is for the app's own commands, never
+// a user's.
 import { type ChildProcess, spawn } from 'node:child_process'
 import { chmod, lstat, mkdir, readdir, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
@@ -9,10 +11,12 @@ import { dirname, join } from 'node:path'
 
 import { Duration, Effect, Layer, Option } from 'effect'
 
+import { fakeAgent } from './fake-agent'
 import {
   type Box,
   ended,
   inside,
+  homeOf,
   outsideTheSystem,
   type Run,
   type RunStatus,
@@ -76,9 +80,10 @@ const endedAs = (code: number | null, by: NodeJS.Signals | null): RunStatus =>
  * folder and the PATH to find its commands, killed once its time is up.
  */
 function spawned(run: Run, { cwd, home }: { cwd: string; home: string }): Child {
+  // `home` is the process's own HOME.
   const started = spawn('sh', ['-c', run.command], {
     cwd,
-    env: { PATH: process.env.PATH ?? '', HOME: join(home, workFolder), ...run.env },
+    env: { PATH: process.env.PATH ?? '', HOME: home, ...run.env },
     detached: true,
     stdio: 'ignore',
   })
@@ -107,6 +112,13 @@ function spawned(run: Run, { cwd, home }: { cwd: string; home: string }): Child 
   return child
 }
 
+/** Removes everything a folder holds but the entry named `kept`. */
+async function cleared(folder: string, kept: string): Promise<void> {
+  for (const entry of await readdir(folder)) {
+    if (entry !== kept) await rm(join(folder, entry), { recursive: true, force: true })
+  }
+}
+
 /** One Account's sandbox, a folder of this machine, its processes followed in `children`. */
 function boxAt(name: string, home: string, grace: Duration.Duration): Box {
   const children = new Map<string, Child>()
@@ -118,8 +130,13 @@ function boxAt(name: string, home: string, grace: Duration.Duration): Box {
         return yield* Effect.die(new Error(`A process named ${run.name} is running already`))
       }
       const cwd = join(home, inside(run.workingDir))
-      yield* Effect.promise(() => mkdir(cwd, { recursive: true }))
-      yield* Effect.sync(() => children.set(run.name, spawned(run, { cwd, home })))
+      const own = join(home, homeOf(run.name))
+      yield* Effect.promise(async () => {
+        await cleared(join(home, workFolder), run.name)
+        await mkdir(own, { recursive: true })
+        await mkdir(cwd, { recursive: true })
+      })
+      yield* Effect.sync(() => children.set(run.name, spawned(run, { cwd, home: own })))
     })
 
   const stop = (processName: string) =>
@@ -164,27 +181,41 @@ function boxAt(name: string, home: string, grace: Duration.Duration): Box {
   }
 }
 
+/** Which agent the sandbox on this machine runs: the fake one, at its pace, or Claude Code itself. */
+type Agent = { readonly fake: { readonly pace: number } } | 'claude'
+
 /**
  * Every Account's sandbox as a folder under `root`, named as Blaxel's would be, in the namespace
- * `local`. A stop waits `grace` for a process it interrupted before killing it.
+ * `local`, reaching the app where the request reached it. A stop waits `grace` for a process it
+ * interrupted before killing it. Its agent is the fake one, written under `root` beside the boxes,
+ * waiting `pace` milliseconds before each tool, unless `agent` asks for Claude Code.
  */
 export function makeLocal({
   root,
   grace = Duration.seconds(5),
+  agent = { fake: { pace: 2_000 } },
 }: {
   readonly root: string
   readonly grace?: Duration.Duration
+  readonly agent?: Agent
 }): Sandbox['Service'] {
   // A box per name, kept as it is being made, so two ensures at once share one, and its processes.
   const boxes = new Map<string, Promise<Box>>()
+  const script = join(root, 'fake-agent.mjs')
   return {
+    agent: agent === 'claude' ? ['claude'] : ['node', script, '--pace', String(agent.fake.pace)],
+    origin: (requested) => requested,
     ensure: (accountId: string) =>
       Effect.promise(() => {
         const name = sandboxName('local', accountId)
         const found = boxes.get(name)
         if (found !== undefined) return found
         const home = join(root, name)
-        const box = mkdir(join(home, workFolder), { recursive: true }).then(
+        const made = Promise.all([
+          mkdir(join(home, workFolder), { recursive: true }),
+          written(script, fakeAgent),
+        ])
+        const box = made.then(
           () => boxAt(name, home, grace),
           (error: unknown) => {
             // A box that could not be made is not kept: the next ensure tries again.
@@ -198,7 +229,18 @@ export function makeLocal({
   }
 }
 
+/**
+ * The agent `pnpm dev` and the tests run: Claude Code when `HEXFRAME_AGENT` is `claude`, else the fake
+ * one, at the pace `HEXFRAME_FAKE_AGENT_PACE` sets in milliseconds, 2 s by default.
+ */
+export const agentOf = (env: Readonly<Record<string, string | undefined>>): Agent => {
+  if (env.HEXFRAME_AGENT === 'claude') return 'claude'
+  const given = (env.HEXFRAME_FAKE_AGENT_PACE ?? '').trim()
+  const pace = given === '' ? Number.NaN : Number(given)
+  return { fake: { pace: Number.isFinite(pace) && pace >= 0 ? pace : 2_000 } }
+}
+
 /** The sandbox on this machine, every Account's a folder of the system's temporary one. */
 export const layer = Layer.sync(Sandbox, () =>
-  makeLocal({ root: join(tmpdir(), 'hexframe-sandboxes') }),
+  makeLocal({ root: join(tmpdir(), 'hexframe-sandboxes'), agent: agentOf(process.env) }),
 )

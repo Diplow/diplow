@@ -204,11 +204,13 @@ describe('a process', () => {
         }),
       )
       expect(yield* settled(box, 'greet')).toEqual({ state: 'completed', exitCode: 0 })
-      const [cwd, greeting] = (yield* read(box, 'work/out.txt')).split(' ')
+      const [cwd, greeting] = (yield* read(box, 'work/greet/out.txt')).split(' ')
       expect(cwd).toMatch(/\/system\/1-a$/)
       expect(greeting).toBe('hello')
       yield* box.start(run('fail', 'exit 3'))
       expect(yield* settled(box, 'fail')).toEqual({ state: 'failed', exitCode: 3 })
+      // The next process's HOME is its own: nothing the one before left in the work folder remains.
+      expect(yield* Effect.promise(() => readdir(join(box.home, 'work')))).toEqual(['fail'])
     }),
   )
 
@@ -243,7 +245,7 @@ describe('a process', () => {
       yield* Effect.sleep(Duration.millis(100))
       yield* box.stop('agent')
       expect(yield* settled(box, 'agent')).toEqual({ state: 'stopped' })
-      expect((yield* read(box, 'work/how.txt')).trim()).toBe('interrupted')
+      expect((yield* read(box, 'work/agent/how.txt')).trim()).toBe('interrupted')
     }),
   )
 

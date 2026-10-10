@@ -1,11 +1,12 @@
 // The Conversation's Entries: what its timeline holds, oldest first. A Message between the user and the
-// agent; a change to the System, whoever made it; an import; and where the user went, consecutive
-// navigations merged into one (./navigation.ts). A change and an import are recorded as Mapping
+// agent; a change to the System, whoever made it; an import; where the user went, consecutive
+// navigations merged into one (./navigation.ts); and how a Turn ended, when not by its answer. A change and an import are recorded as Mapping
 // summarized them when they happened, with who acted, and never rebuilt: the timeline is a record of
 // the past. Assistant knows no Tile: a change names its verb and its Tiles as they came. Pure.
 import { Schema } from 'effect'
 
 import { Navigation } from './navigation'
+import { BadEnd } from './turn/turn'
 
 /**
  * Who acted, as the timeline shows it: the user themselves, at one of their Sessions ("you"); one of
@@ -28,6 +29,15 @@ export const MessageText = Schema.String.check(
   Schema.isTrimmed(),
   Schema.isLengthBetween(1, longestMessage),
 )
+
+/**
+ * What the agent said, as a Message holds it: trimmed and cut to the longest a Message holds; none
+ * when it said nothing but blanks.
+ */
+export function agentText(said: string): string | undefined {
+  const text = said.trim().slice(0, longestMessage).trimEnd()
+  return text === '' ? undefined : text
+}
 
 /** A Message, by the user or by the agent. */
 const Message = Schema.TaggedStruct('Message', {
@@ -56,8 +66,11 @@ const Import = Schema.TaggedStruct('Import', {
   actor: Actor,
 })
 
+/** A Turn that ended otherwise than by its answer, and how: a Stop, a limit, its time, its sandbox. */
+const TurnEnded = Schema.TaggedStruct('TurnEnded', { how: BadEnd })
+
 /** What an Entry says, whichever kind it is: what is stored of it, and what it is decoded by. */
-export const EntryContent = Schema.Union([Message, Change, Import, Navigation])
+export const EntryContent = Schema.Union([Message, Change, Import, Navigation, TurnEnded])
 
 export type EntryContent = typeof EntryContent.Type
 

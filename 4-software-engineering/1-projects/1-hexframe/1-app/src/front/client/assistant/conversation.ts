@@ -1,10 +1,12 @@
 // The Account's Conversation on the client, over Assistant's server functions
 // (src/api/assistant/assistant.ts): read a day at a time in the reader's calendar, today first, then
-// each earlier day holding an Entry as the reader scrolls back, one query; a Message posted; a merged
-// navigation recorded; and whether the Account may use the Assistant. The two writes wait their turn
-// in the Conversation's queue, so a navigation sent before a Message reaches the server before it, and
-// each reads the Conversation again once it settles, failed or not. Failures go to their channels
-// (../channels.ts): a hook's caller handles none.
+// each earlier day holding an Entry as the reader scrolls back, one query; a Message posted, from the
+// view it was sent from, which starts a Turn; the Turn running stopped; a merged navigation recorded;
+// and whether the Account may use the Assistant. The writes wait their turn in the Conversation's
+// queue, so a navigation sent before a Message reaches the server before it, and each reads the
+// Conversation again once it settles, failed or not; a Message and a Stop poll the latest too, so the
+// page follows the Turn they started or ended. Failures go to their channels (../channels.ts): a
+// hook's caller handles none.
 import {
   infiniteQueryOptions,
   useInfiniteQuery,
@@ -16,9 +18,12 @@ import {
 import {
   assistantAvailable,
   conversationDay,
+  latest,
   type MergedNavigation,
   postMessage,
   recordNavigation,
+  type SentMessage,
+  stopTurn,
 } from '#/api/assistant/assistant'
 import { dayAt } from '#/domains/assistant/entities'
 
@@ -97,22 +102,54 @@ export const useAssistantAvailable = () =>
     }),
   )
 
+/** The System's Version, the Conversation's last Entry and the Turn running, asked of their server function. */
+export const askLatest = () => latest({ data: undefined })
+
+/** The poll's read, by the server function's name. */
+export const latestScope = 'latest'
+
+/** The poll, read alone, which `./follow.ts` follows: a frame read, whose failure shows nothing. */
+export const latestRead = read({ scope: latestScope, key: [], call: askLatest, frame: true })
+
 /** Reads the Conversation again, every day of it the page holds. */
 const readAgain = (client: ReturnType<typeof useQueryClient>) =>
   client.invalidateQueries({ queryKey: [dayScope] })
 
+/** Reads the Conversation again and polls the latest, so the page follows the Turn now. */
+const followAgain = (client: ReturnType<typeof useQueryClient>) =>
+  Promise.all([readAgain(client), client.refetchQueries({ queryKey: latestRead.queryKey })])
+
+/** How many minutes the reader's clock stands ahead of UTC now: what today is to them. */
+const offsetNow = () => offsetAt(new Date())
+
 /**
- * Posts the user's Message, trimmed and never empty, then reads the Conversation again. A feature posts
- * through the navigation sender (`features/conversation/state/`), so the navigation it follows is
- * sent before it.
+ * Posts the user's Message, trimmed and never empty, from the view it was sent from, its center and
+ * the Tiles on screen, which starts a Turn answering it when the Account may use the Assistant; then
+ * reads the Conversation again and polls the latest. A feature posts through the navigation sender
+ * (`features/conversation/state/`), so the navigation it follows is sent before it.
  */
 export const usePostMessage = () => {
   const client = useQueryClient()
   return useMutation({
-    ...write('postMessage', (text: string) => postMessage({ data: { text } }), {
-      queue: conversationQueue,
-    }),
-    onSettled: () => readAgain(client),
+    ...write(
+      'postMessage',
+      (sent: Omit<typeof SentMessage.Type, 'offset'>) =>
+        postMessage({ data: { ...sent, offset: offsetNow() } }),
+      { queue: conversationQueue },
+    ),
+    onSettled: () => followAgain(client),
+  })
+}
+
+/**
+ * Stops the Turn running, which ends it, an Entry saying so, then reads the Conversation again and
+ * polls the latest.
+ */
+export const useStopTurn = () => {
+  const client = useQueryClient()
+  return useMutation({
+    ...write('stopTurn', () => stopTurn({ data: undefined }), { queue: conversationQueue }),
+    onSettled: () => followAgain(client),
   })
 }
 

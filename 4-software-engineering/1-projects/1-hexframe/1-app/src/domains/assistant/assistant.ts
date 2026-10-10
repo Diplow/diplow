@@ -9,7 +9,9 @@
 // the files Mapping writes it as, which Assistant keeps as they came. And the Turns, each a run of the
 // agent answering a Message, one at a time per Conversation (src/repositories/database/conversations/).
 // And what a Turn spends on the model: whether a call its agent makes may go, through the model relay
-// (src/repositories/agent/anthropic/), and what it cost, recorded on the Turn (./spending/).
+// (src/repositories/agent/anthropic/), and what it cost, recorded on the Turn (./spending/). And how a
+// Turn runs: its prompt and its launcher written into the sandbox, its agent started there, and what
+// its agent says as it runs, followed (./agent/).
 import { Clock, Effect, Result, Schema } from 'effect'
 
 import { Anthropic, type Endpoint } from '#/repositories/agent/anthropic/anthropic'
@@ -17,24 +19,39 @@ import { Sandbox, type SandboxFile } from '#/repositories/agent/sandbox/sandbox'
 import { Conversations } from '#/repositories/database/conversations/conversations'
 import { type TurnRow, Turns } from '#/repositories/database/conversations/turns'
 
+import { type Launch, launchOf, processOf } from './agent/launch'
+import { type Glimpse, promptOf } from './agent/prompt'
+import { type AgentEvent, readLine } from './agent/stream'
 import {
   type Actor,
+  agentText,
   type Day,
   dayAt,
   deadlineOf,
   type Entry,
+  overdue,
   EntryContent,
+  isBadEnd,
   type Navigation,
   spanOf,
   type Summarized,
   type Turn,
   TurnEnd,
+  TurnStep,
   within,
 } from './entities'
-import { TurnRunning } from './errors'
+import { AllowanceSpent, TurnRunning } from './errors'
 import { settings } from './settings'
 import { type Allowed, allowedCall, type CallRefused } from './spending/call'
-import { charged, type Limit, limitReached, monthOf, mustWait, reserved } from './spending/limits'
+import {
+  allowanceSpent,
+  charged,
+  type Limit,
+  limitReached,
+  monthOf,
+  mustWait,
+  reserved,
+} from './spending/limits'
 
 const decoded = Schema.decodeUnknownEffect(EntryContent)
 
@@ -108,22 +125,32 @@ export const recordChange = (accountId: string, summarized: Summarized, actor: A
 /**
  * Writes the System, as the files Mapping wrote it as, into the Account's sandbox, ensured first: the
  * whole of its System folder, whatever it held before gone, then read-only. What a Turn reads at its
- * start; what changed since, it reads through the MCP.
+ * start; what changed since, it reads through the MCP. Answers the sandbox, where a Turn then starts.
  */
 export const writeSystem = (accountId: string, files: ReadonlyArray<SandboxFile>) =>
   Effect.flatMap(
     Sandbox.use((sandbox) => sandbox.ensure(accountId)),
-    (box) => box.replaceSystem(files),
+    (box) => Effect.as(box.replaceSystem(files), box),
   )
 
 const decodedEnd = Schema.decodeUnknownEffect(TurnEnd)
 
-/** A Turn as its row keeps it. One whose end Assistant cannot read back is a defect: it wrote it. */
+const decodedStep = Schema.decodeUnknownEffect(TurnStep)
+
+const encodedStep = Schema.encodeSync(TurnStep)
+
+/**
+ * A Turn as its row keeps it. One whose end or step Assistant cannot read back is a defect: it wrote
+ * them.
+ */
 const turnOf = (row: TurnRow) =>
   Effect.gen(function* () {
     const { id, conversationId, messageId, location, startedAt, spent, endedAt, end } = row
     const turn: Turn = { id, conversationId, message: messageId, location, startedAt, spent }
-    if (endedAt === null) return turn
+    if (endedAt === null) {
+      if (row.step === null) return turn
+      return { ...turn, step: yield* Effect.orDie(decodedStep(row.step)) }
+    }
     const how = yield* Effect.orDie(decodedEnd(end))
     return { ...turn, ended: { at: endedAt, how } }
   })
@@ -139,18 +166,42 @@ export const runningTurn = (accountId: string) =>
 export const deadline = (turn: Turn) => deadlineOf(turn, settings.turn.longest)
 
 /**
+ * The Turn running in the Account's Conversation before its deadline, if one does: what the page
+ * shows running. One past it is over, whatever its row says, and ends by its time once another starts.
+ */
+export const liveTurn = (accountId: string) =>
+  Effect.gen(function* () {
+    const now = new Date(yield* Clock.currentTimeMillis)
+    const running = yield* runningTurn(accountId)
+    return running === undefined || overdue(running, settings.turn.longest, now)
+      ? undefined
+      : running
+  })
+
+/**
+ * Ends the Turn running in the Account's Conversation past its deadline, which nothing ended, by its
+ * time, and answers it; none when none runs, or the one running is still in time. So a lost Turn
+ * never holds its Conversation. In the transaction the API layer opened.
+ */
+export const endOverdueTurn = (accountId: string) =>
+  Effect.gen(function* () {
+    const now = new Date(yield* Clock.currentTimeMillis)
+    const running = yield* runningTurn(accountId)
+    if (running === undefined || !overdue(running, settings.turn.longest, now)) return undefined
+    return yield* endTurn(accountId, running.id, 'time')
+  })
+
+/**
  * Starts a Turn answering one of the Account's Messages, by its Entry's id, in the Tile `location`
- * names, and answers it; `TurnRunning` while another runs in its Conversation, one at a time. One
- * still running past its deadline, which nothing ended, ends first, by its time, so a lost Turn never
- * holds its Conversation.
+ * names, and answers it: `AllowanceSpent` once the Account's Turns spent the month's allowance;
+ * `TurnRunning` while another runs in its Conversation, one at a time, one past its deadline included
+ * until `endOverdueTurn` ended it, which the caller does first, so it revokes its Key with it.
  */
 export const startTurn = (accountId: string, start: { message: string; location: string }) =>
   Effect.gen(function* () {
     const startedAt = new Date(yield* Clock.currentTimeMillis)
-    const running = yield* runningTurn(accountId)
-    if (running !== undefined && deadline(running) <= startedAt) {
-      yield* endTurn(accountId, running.id, 'time')
-    }
+    const month = yield* Turns.use((turns) => turns.spentSince(accountId, monthOf(startedAt)))
+    if (allowanceSpent(month.spent)) return yield* new AllowanceSpent()
     const row = yield* Turns.use((turns) =>
       turns.start(accountId, { messageId: start.message, location: start.location, startedAt }),
     )
@@ -160,14 +211,154 @@ export const startTurn = (accountId: string, start: { message: string; location:
 
 /**
  * Ends one of the Account's Turns, saying how, and answers it; none for one that already ended, or
- * that is not the Account's. Nothing it did is rolled back.
+ * that is not the Account's. Its step is dropped, and an Entry says how it ended unless by its
+ * answer, one ended by its time dated from its deadline. Nothing it did is rolled back.
  */
 export const endTurn = (accountId: string, turnId: string, how: TurnEnd) =>
   Effect.gen(function* () {
-    const at = new Date(yield* Clock.currentTimeMillis)
+    const now = yield* Clock.currentTimeMillis
+    const at = new Date(now)
     const row = yield* Turns.use((turns) => turns.end(accountId, turnId, { end: how, at }))
-    return row === undefined ? undefined : yield* turnOf(row)
+    if (row === undefined) return undefined
+    const ended = yield* turnOf(row)
+    if (isBadEnd(how)) {
+      const ago = how === 'time' ? now - deadline(ended).getTime() : 0
+      yield* record(accountId, { _tag: 'TurnEnded', how }, ago)
+    }
+    return ended
   })
+
+/**
+ * What became of a line of the agent's stream: no event, which no schema reads; or followed, and the
+ * Turn it ended, if it did.
+ */
+type Followed =
+  { readonly _tag: 'Malformed' } | { readonly _tag: 'Followed'; readonly ended?: Turn }
+
+/** Follows the events of a line in order; answers the Turn once one of them ended it. */
+const followed = (accountId: string, turnId: string, events: ReadonlyArray<AgentEvent>) =>
+  Effect.gen(function* () {
+    for (const event of events) {
+      const running = yield* runningTurn(accountId)
+      if (running?.id !== turnId) return undefined
+      const step = (doing: TurnStep | null) =>
+        Turns.use((turns) =>
+          turns.step(accountId, turnId, doing === null ? null : encodedStep(doing)),
+        )
+      switch (event._tag) {
+        case 'Said': {
+          const text = agentText(event.text)
+          if (text !== undefined)
+            yield* record(accountId, { _tag: 'Message', author: 'agent', text })
+          yield* step(null)
+          break
+        }
+        case 'Stepping':
+          yield* step(event.step)
+          break
+        case 'Finished':
+          return yield* endTurn(accountId, turnId, event.how)
+        case 'Exited':
+          return yield* endTurn(accountId, turnId, 'sandbox')
+      }
+    }
+    return undefined
+  })
+
+/**
+ * Follows one line of what one of the Account's running Turns' agent says (`./agent/stream.ts`), its
+ * events in order: its text kept as the agent's Messages, its step set, then dropped as it speaks
+ * again; its result ending the Turn, by its answer, its ceiling or its sandbox; its exit, the stream
+ * over, ending a Turn that gave no result by its sandbox. A line that is no event is `Malformed`, and
+ * changes nothing. Nothing for a Turn that is not running, or not the Account's. In the transaction
+ * the API layer opened.
+ */
+export const followTurn = (accountId: string, turnId: string, line: string) =>
+  Effect.gen(function* () {
+    const events = readLine(line)
+    if (events === undefined) return { _tag: 'Malformed' } satisfies Followed
+    const ended = yield* followed(accountId, turnId, events)
+    const answer: Followed = { _tag: 'Followed', ...(ended !== undefined && { ended }) }
+    return answer
+  })
+
+/**
+ * Today's latest Entries of the Account's Conversation, for a reader whose clock stands `offset`
+ * minutes ahead of UTC, oldest first: as many as a Turn's prompt holds.
+ */
+export const latestToday = (accountId: string, offset: number) =>
+  Effect.flatMap(today(offset), (asked) =>
+    Effect.map(day(accountId, asked), (entries) => entries.slice(-settings.turn.entries)),
+  )
+
+/** What starting a Turn's agent takes. */
+export interface TurnStart {
+  readonly turn: Turn
+  readonly key: Launch['key']
+  /** The System, as the files Mapping wrote it as. */
+  readonly system: ReadonlyArray<SandboxFile>
+  /** The origin the request that starts the Turn reached the app at, and the doors' paths there. */
+  readonly origin: string
+  readonly doors: Launch['doors']
+  /** The Tile the Turn starts in, its Title, and its folder from the System folder. */
+  readonly location: { readonly id: string; readonly title: string; readonly folder: string }
+  /** The Message it answers. */
+  readonly message: string
+  /** Today's latest Entries, and the Titles of the Tiles their navigations went to. */
+  readonly conversation: {
+    readonly entries: ReadonlyArray<Entry>
+    readonly titles: Readonly<Record<string, string>>
+  }
+  /** The Tiles on the user's screen, the centered one first. */
+  readonly onScreen: ReadonlyArray<Glimpse>
+  /** The id Help opens at. */
+  readonly help: string
+}
+
+/**
+ * Starts a Turn's agent in the Account's sandbox: the System written into it, whatever it held gone;
+ * its prompt, its settings and its launcher written beside the System folder; then the launcher
+ * started, detached, in the Tile's folder, the Turn's Key in its environment alone, reaching the app
+ * where the sandbox reaches it. Should a Stop have ended the Turn while it started, its agent is
+ * stopped at once: the Stop found nothing to stop yet.
+ */
+export const startAgent = (accountId: string, start: TurnStart) =>
+  Effect.gen(function* () {
+    const box = yield* writeSystem(accountId, start.system)
+    const { agent, origin } = yield* Sandbox.use((sandbox) =>
+      Effect.succeed({ agent: sandbox.agent, origin: sandbox.origin(start.origin) }),
+    )
+    const prompt = promptOf({
+      ...start.conversation,
+      onScreen: start.onScreen,
+      location: start.location,
+      help: start.help,
+    })
+    const { files, run } = launchOf({
+      turnId: start.turn.id,
+      key: start.key,
+      origin,
+      doors: start.doors,
+      home: box.home,
+      agent,
+      folder: start.location.folder,
+      message: start.message,
+      prompt,
+    })
+    yield* Effect.forEach(files, (file) => box.write(file), { discard: true })
+    yield* box.start(run)
+    if ((yield* runningTurn(accountId))?.id !== start.turn.id) yield* box.stop(run.name)
+  })
+
+/**
+ * Stops the agent of one of the Account's Turns in its sandbox: interrupted, so it ends cleanly, then
+ * killed past a grace; nothing when it no longer runs.
+ */
+export const stopAgent = (accountId: string, turnId: string) =>
+  Effect.flatMap(
+    Sandbox.use((sandbox) => sandbox.ensure(accountId)),
+    (box) => box.stop(processOf(turnId)),
+  )
 
 /** A model call a Turn's agent asks the proxy for: its endpoint, Anthropic's headers, its body's text. */
 export interface AskedCall {

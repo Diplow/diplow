@@ -22,7 +22,7 @@ const said = (text: string): EntryContent => ({ _tag: 'Message', author: 'user',
 
 /**
  * Records an Entry as the API layer does, in a transaction, through the operation its kind has: a
- * navigation `ago` milliseconds before now, anything else now.
+ * navigation `ago` milliseconds before now, anything else now. A Turn's end is recorded as it ends.
  */
 const recorded = (accountId: string, content: EntryContent, ago = 0) =>
   transactional(
@@ -30,7 +30,9 @@ const recorded = (accountId: string, content: EntryContent, ago = 0) =>
       ? postMessage(accountId, content.text)
       : content._tag === 'Navigation'
         ? recordNavigation(accountId, content, ago)
-        : recordChange(accountId, summarizedOf(content), content.actor),
+        : content._tag === 'TurnEnded'
+          ? Effect.die(new Error('A Turn’s end is recorded as the Turn ends'))
+          : recordChange(accountId, summarizedOf(content), content.actor),
   )
 
 /** A change or an import as Mapping would have summarized it, who acted left out. */

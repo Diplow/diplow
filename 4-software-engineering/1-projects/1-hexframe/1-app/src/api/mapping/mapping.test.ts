@@ -2,7 +2,7 @@ import { Effect, Exit, Option, Schema } from 'effect'
 import { describe, expect, expectTypeOf, it } from 'vitest'
 
 import type { SignedOut } from '#/domains/iam/errors'
-import type { KeyProof, Session } from '#/domains/iam/iam'
+import { type KeyProof, type Session, signedIn } from '#/domains/iam/iam'
 import type {
   DirectionTaken,
   HelpReadOnly,
@@ -16,6 +16,7 @@ import type {
   TitleMissing,
 } from '#/domains/mapping/errors'
 import { systemOf } from '#/domains/mapping/entities'
+import { glimpses, ownTile } from '#/domains/mapping/mapping'
 
 import type { Failure } from '../report/errors/failure'
 import { noKey, run, type Services, type StartContext } from '../server/run'
@@ -487,5 +488,39 @@ describe("Mapping's server functions, on Leaves", () => {
         Mapping.moveTile({ id: child.id, version: 1, parent: root.id, slot: { leaf: 2 } }),
       ),
     ).toMatchObject({ ok: false, failure: { _tag: 'LeafHoldsNothing' } })
+  })
+})
+
+/** The Account the request proves, by its id. */
+const signedInAccount = Effect.map(signedIn, ({ account }) => account.id)
+
+describe('the Tiles a Turn is shown, as Mapping reads them', () => {
+  it('glimpses Tiles by Title and Preview in the order asked, each once, none of another Account’s or unknown', async () => {
+    const { context, root, child } = await withAChild()
+    const sibling = await value(
+      run(context, Mapping.createTile({ parent: root.id, slot: 2, ...content('Sibling') })),
+    )
+    const stranger = await withAChild()
+    const ids = [sibling.id, child.id, sibling.id, crypto.randomUUID(), stranger.child.id]
+    const glimpsed = await value(
+      run(
+        context,
+        Effect.flatMap(signedInAccount, (id) => glimpses(id, ids)),
+      ),
+    )
+    expect(glimpsed).toEqual([
+      { id: sibling.id, title: 'Sibling', preview: 'Sibling, in short.' },
+      { id: child.id, title: 'Child', preview: 'Child, in short.' },
+    ])
+    const own = await run(
+      context,
+      Effect.flatMap(signedInAccount, (id) => ownTile(id, child.id)),
+    )
+    expect(own.ok).toBe(true)
+    const theirs = await run(
+      context,
+      Effect.flatMap(signedInAccount, (id) => ownTile(id, stranger.child.id)),
+    )
+    expect(theirs).toMatchObject({ ok: false, failure: { _tag: 'TileNotFound' } })
   })
 })

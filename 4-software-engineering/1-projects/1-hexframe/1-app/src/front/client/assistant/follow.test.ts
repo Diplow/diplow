@@ -12,9 +12,10 @@ import { useConversation } from './conversation'
 import { useFollowLatest } from './follow'
 
 // Following the System and the Conversation over stand-ins for the server functions: the latest of
-// both polled on focus, and every 2 s while the page follows closely, the System read again only once
-// its Version moved past the one the cache holds, the Conversation once its last Entry is another than
-// the one it read. The server functions themselves are src/api/assistant/assistant.test.ts's.
+// both polled on focus, and every 2 s while a Turn runs, the System read again only once its Version
+// moved past the one the cache holds, the Conversation once its last Entry is another than the one it
+// read, and the Turn running answered with its step. The server functions themselves are
+// src/api/assistant/assistant.test.ts's.
 vi.mock('#/api/mapping/mapping', () => ({ system: vi.fn() }))
 vi.mock('#/api/assistant/assistant', () => ({ latest: vi.fn(), conversationDay: vi.fn() }))
 
@@ -41,8 +42,18 @@ function reading(first: unknown, then: unknown) {
     .mockImplementation(() => ok(then))
 }
 
-/** What the poll answers: the System at a Version, and the Conversation's last Entry, if any. */
-type Latest = number | { version: number; lastEntry?: string }
+/**
+ * What the poll answers: the System at a Version, and the Conversation's last Entry and the Turn
+ * running, if any.
+ */
+type Latest =
+  number | { version: number; lastEntry?: string; turn?: { id: string; step?: { tool: string } } }
+
+/** A Turn running, at the System's Version, its agent at this step if any. */
+const running = (version: number, tool?: string): Latest => ({
+  version,
+  turn: { id: 'turn-1', ...(tool !== undefined && { step: { tool } }) },
+})
 
 /** The poll's stand-in answers each of these in turn, then the last again. */
 function polling(...answers: ReadonlyArray<Latest>) {
@@ -76,9 +87,9 @@ function conversing(first: unknown, then: unknown) {
 
 /**
  * The page: the System it shows, the Conversation's last Entry it shows, and the poll following
- * both, closely or not. Today's Conversation is empty unless a test says otherwise.
+ * both, with the Turn running it answers. Today's Conversation is empty unless a test says otherwise.
  */
-function render(closely = false) {
+function render() {
   if (vi.mocked(Assistant.conversationDay).getMockImplementation() === undefined)
     conversing(dayWith(), dayWith())
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
@@ -86,9 +97,9 @@ function render(closely = false) {
     createElement(QueryClientProvider, { client }, children)
   const rendered = renderHook(
     () => {
-      useFollowLatest({ closely })
+      const { turn } = useFollowLatest()
       const days = useConversation().data?.pages
-      return { system: useSystem().data?.system, said: days?.[0]?.entries.at(-1) }
+      return { system: useSystem().data?.system, said: days?.[0]?.entries.at(-1), turn }
     },
     { wrapper },
   )
@@ -182,11 +193,11 @@ describe('the page following the System', () => {
     expect(Mapping.system).toHaveBeenCalledTimes(1)
   })
 
-  it('polls every 2 s while following closely, and reads the System again once it moved', async () => {
+  it('polls every 2 s while a Turn runs, and reads the System again once it moved', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true })
     reading(systemAt(1, 'First'), systemAt(2, 'Read again'))
-    polling(1, 1, 2)
-    const { result } = render(true)
+    polling(running(1), running(1), running(2))
+    const { result } = render()
     await waitFor(() => {
       expect(result.current.system?.root.title).toBe('First')
     })
@@ -199,7 +210,28 @@ describe('the page following the System', () => {
     expect(Assistant.latest).toHaveBeenCalledTimes(3)
   })
 
-  it('polls nothing on a timer while not following closely', async () => {
+  it('answers the Turn running with its agent’s step, and stops polling on a timer once it ended', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+    reading(systemAt(1, 'First'), systemAt(2, 'Written by the agent'))
+    polling(running(1, 'open_tile'), running(1, 'create_tile'), 2)
+    const { result } = render()
+    await waitFor(() => {
+      expect(result.current.turn).toEqual({ id: 'turn-1', step: { tool: 'open_tile' } })
+    })
+    await act(() => vi.advanceTimersByTimeAsync(2_000))
+    await waitFor(() => {
+      expect(result.current.turn?.step).toEqual({ tool: 'create_tile' })
+    })
+    await act(() => vi.advanceTimersByTimeAsync(2_000))
+    await waitFor(() => {
+      expect(result.current.turn).toBeUndefined()
+    })
+    expect(result.current.system?.root.title).toBe('Written by the agent')
+    await act(() => vi.advanceTimersByTimeAsync(6_000))
+    expect(Assistant.latest).toHaveBeenCalledTimes(3)
+  })
+
+  it('polls nothing on a timer while no Turn runs', async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true })
     reading(systemAt(1, 'First'), systemAt(2, 'Never read'))
     polling(1, 2)

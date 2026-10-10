@@ -1,15 +1,17 @@
 // The programs behind Assistant's server functions (./assistant.ts): each runs for the Account the
 // request's Session proves, or fails with IAM's `SessionRequired` or `SignedOut`, and a write in the
-// transaction it opens. And a Turn's start and end, which no server function offers: the secret of
-// the Key a Turn starts with never reaches a browser. They sit in a module of their own because they reach the domains and the
-// database: the client imports the server functions, and only their handlers import this module,
-// which Start strips from the client.
+// transaction it opens. A Message sent starts a Turn answering it, its Key's secret going to the
+// sandbox alone, never to a browser; a Stop ends the Turn running; and the Turn's events, which its
+// sandbox posts through the events door, are followed. They sit in a module of their own because they
+// reach the domains and the database: the client imports the server functions, and only their
+// handlers import this module, which Start strips from the client.
 import { Effect } from 'effect'
+import type { Redacted } from 'effect'
 
 import * as Assistant from '#/domains/assistant/assistant'
 import { type TurnEnd, visitedTiles } from '#/domains/assistant/entities'
 import * as Iam from '#/domains/iam/iam'
-import { TileNotFound } from '#/domains/mapping/errors'
+import type { Turn } from '#/domains/assistant/entities'
 import * as Mapping from '#/domains/mapping/mapping'
 import { HttpExchange } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
@@ -17,7 +19,7 @@ import { transactional } from '#/repositories/database/database'
 import { tileLink } from '../mapping/files/download'
 import { WaitUntil } from '../server/bus'
 
-import type { DayAsked, MergedNavigation, NewMessage } from './assistant'
+import type { DayAsked, MergedNavigation, NewMessage, SentMessage } from './assistant'
 
 /**
  * Runs an operation for the Account the request's Session proves: the Conversation is the user's,
@@ -55,14 +57,25 @@ export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
 
 /**
  * The latest of what home shows, the smallest reads there are, which the page polls: the System's
- * Version, and the id of the Entry last recorded in the Conversation, none before the first. The page
- * reads the System again once the Version moved, and the Conversation once its last Entry is another.
+ * Version, the id of the Entry last recorded in the Conversation, none before the first, and the Turn
+ * running before its deadline, by its id, with its agent's step now. The page reads the System again
+ * once the Version moved, and the Conversation once its last Entry is another, and follows closely
+ * while a Turn runs.
  */
 export const latest = forSession((accountId) =>
   Effect.gen(function* () {
     const version = yield* Mapping.systemVersion(accountId)
     const lastEntry = yield* Assistant.lastEntry(accountId)
-    return { version, ...(lastEntry !== undefined && { lastEntry }) }
+    const live = yield* Assistant.liveTurn(accountId)
+    const turn =
+      live === undefined
+        ? undefined
+        : { id: live.id, ...(live.step !== undefined && { step: live.step }) }
+    return {
+      version,
+      ...(lastEntry !== undefined && { lastEntry }),
+      ...(turn !== undefined && { turn }),
+    }
   }),
 )
 
@@ -80,20 +93,6 @@ export const recordNavigation = ({ navigation, sinceLast }: typeof MergedNavigat
   )
 
 /**
- * The Account's System written into its sandbox, the files of Mapping's export of its Root, whatever
- * the sandbox held before gone: what a Turn reads at its start. Answers where each Tile lives in those
- * files, by id, from the same read, so a Turn starts in a Tile's folder and the prompt names a Tile's
- * path. A Reference whose Tile is gone links it on the site the request reached.
- */
-export const systemInSandbox = (accountId: string) =>
-  Effect.gen(function* () {
-    const { url } = yield* HttpExchange
-    const { files, places } = yield* Mapping.systemFiles(accountId, tileLink(url))
-    yield* Assistant.writeSystem(accountId, files)
-    return places
-  })
-
-/**
  * Whether the Account the request's Session proves may use the Assistant: its `assistant`
  * Entitlement, which the composer tells the user of when it is missing.
  */
@@ -102,28 +101,39 @@ export const assistantAvailable = Effect.flatMap(Iam.sessionOnly, ({ account }) 
 )
 
 /**
+ * Starts a Turn answering one of the Account's Messages and issues its Key, inside the transaction
+ * the caller opened: a Turn still running past its deadline ended first, by its time, its Key revoked;
+ * then Assistant's `startTurn`, refused while another runs or once the month's allowance is spent;
+ * then its Key, proving it until its maximum length has passed. Answers the Turn, its Key, and the
+ * Turn ended by its time, if one was.
+ */
+const turnStarted = (accountId: string, start: { message: string; location: string }) =>
+  Effect.gen(function* () {
+    const overdue = yield* Assistant.endOverdueTurn(accountId)
+    if (overdue !== undefined) yield* Iam.revokeTurnKey(accountId, overdue.id)
+    const turn = yield* Assistant.startTurn(accountId, start)
+    const binding = { conversationId: turn.conversationId, turnId: turn.id }
+    const key = yield* Iam.issueTurnKey(binding, Assistant.deadline(turn))
+    return { turn, key, ...(overdue !== undefined && { overdue }) }
+  })
+
+/**
  * Starts a Turn answering one of the Account's Messages, by its Entry's id, in the Tile `location`
  * names, and issues its Key, in one transaction: from a Session only, so neither a Key nor a Turn
  * starts one; for an Account with the `assistant` Entitlement, else `EntitlementMissing`; in a Tile of
- * the Account's own System, else Mapping's `TileNotFound`; and while no other runs in its
- * Conversation, else `TurnRunning`. Answers the Turn and its Key, whose secret goes
- * to the sandbox's processes alone, and which proves the Turn until its maximum length has passed. No
- * server function's yet: the code that runs the Turn calls it, and the secret never reaches a browser.
+ * the Account's own System, else Mapping's `TileNotFound`; under the month's allowance, else
+ * `AllowanceSpent`; and while no other runs in its Conversation, else `TurnRunning`. Answers the Turn
+ * and its Key, whose secret goes to the sandbox's processes alone, and which proves the Turn until its
+ * maximum length has passed. `sendMessage` starts one this way, its Message posted in the same
+ * transaction.
  */
 export const startTurn = (start: { message: string; location: string }) =>
   Effect.gen(function* () {
     const { account } = yield* Iam.sessionOnly
     yield* Iam.entitledOnly(account, 'assistant')
-    const titled = yield* Mapping.titles(account.id, [start.location])
-    if (!(start.location in titled)) return yield* new TileNotFound()
-    return yield* transactional(
-      Effect.gen(function* () {
-        const turn = yield* Assistant.startTurn(account.id, start)
-        const binding = { conversationId: turn.conversationId, turnId: turn.id }
-        const key = yield* Iam.issueTurnKey(binding, Assistant.deadline(turn))
-        return { turn, key }
-      }),
-    )
+    yield* Mapping.ownTile(account.id, start.location)
+    const { turn, key } = yield* transactional(turnStarted(account.id, start))
+    return { turn, key }
   })
 
 /**
@@ -149,6 +159,131 @@ const afterAnswering = <R>(work: Effect.Effect<void, never, R>) =>
     const services = yield* Effect.context<R>()
     const waitUntil = yield* WaitUntil
     waitUntil(Effect.provideContext(work, services))
+  })
+
+/**
+ * Where the app answers a Turn's sandbox, by path, as `front/routes/` serves them: the MCP, the model
+ * proxy, and the Turn's events.
+ */
+const doors = { mcp: '/mcp', model: '/assistant/anthropic', events: '/assistant/events' }
+
+/** What a Turn's agent starts with, beside the Turn and its Key. */
+type Started = Pick<typeof SentMessage.Type, 'text' | 'view' | 'offset'>
+
+/**
+ * Starts a Turn's agent in the Account's sandbox: the System written into it, Mapping's export of its
+ * Root, a Reference whose Tile is gone linked on the site the request reached (`tileLink`), whatever
+ * the sandbox held gone; the Turn's prompt made of today's latest Entries, the Titles their
+ * navigations went to, and the Title and Preview of the Tiles on screen; its agent started in the
+ * centered Tile's folder, where Mapping places it in the same export, reaching the app at its doors
+ * where the sandbox reaches it.
+ */
+const agentStarted = (
+  accountId: string,
+  turn: Turn,
+  key: Redacted.Redacted,
+  { text, view, offset }: Started,
+) =>
+  Effect.gen(function* () {
+    const { url } = yield* HttpExchange
+    const { files, places } = yield* Mapping.systemFiles(accountId, tileLink(url))
+    const entries = yield* Assistant.latestToday(accountId, offset)
+    const titles = yield* Mapping.titles(accountId, visitedTiles(entries))
+    const onScreen = yield* Mapping.glimpses(accountId, [view.center, ...view.shown])
+    const title = onScreen.find(({ id }) => id === view.center)?.title ?? ''
+    yield* Assistant.startAgent(accountId, {
+      turn,
+      key,
+      system: files,
+      origin: new URL(url).origin,
+      doors,
+      location: { id: view.center, title, folder: places.get(view.center)?.folder ?? '' },
+      message: text,
+      conversation: { entries, titles },
+      onScreen,
+      help: Mapping.helpRoot,
+    })
+  })
+
+/** Stops a Turn's agent in its sandbox, once its Turn ended; a failure is reported, never thrown. */
+const agentStopped = (accountId: string, turnId: string) =>
+  Assistant.stopAgent(accountId, turnId).pipe(
+    Effect.catchCause((cause) => Effect.logError("A Turn's agent was not stopped", cause)),
+  )
+
+/**
+ * Posts the user's Message in their Conversation and, when the Account may use the Assistant, starts a
+ * Turn answering it, in the centered Tile, all in one transaction: refused with `TileNotFound` for a
+ * center its System does not hold, `AllowanceSpent` once the month's allowance is spent and
+ * `TurnRunning` while another Turn runs, nothing posted. An Account without the `assistant`
+ * Entitlement has its Message kept and no Turn, as the composer tells it. Its agent starts once the
+ * answer has gone, through the platform's `waitUntil`; should it fail to, the Turn ends by its
+ * sandbox. Answers the Message's Entry, and the Turn by its id when one started.
+ */
+export const sendMessage = (sent: typeof SentMessage.Type) =>
+  Effect.gen(function* () {
+    const { account } = yield* Iam.sessionOnly
+    if (!(yield* Iam.entitled(account, 'assistant'))) {
+      return { entry: yield* transactional(Assistant.postMessage(account.id, sent.text)) }
+    }
+    yield* Mapping.ownTile(account.id, sent.view.center)
+    const { entry, turn, key, overdue } = yield* transactional(
+      Effect.gen(function* () {
+        const posted = yield* Assistant.postMessage(account.id, sent.text)
+        const start = { message: posted.id, location: sent.view.center }
+        return { entry: posted, ...(yield* turnStarted(account.id, start)) }
+      }),
+    )
+    yield* afterAnswering(
+      Effect.gen(function* () {
+        if (overdue !== undefined) yield* agentStopped(account.id, overdue.id)
+        yield* agentStarted(account.id, turn, key.secret, sent).pipe(
+          Effect.catchCause((cause) =>
+            Effect.andThen(
+              Effect.logError("A Turn's agent did not start", cause),
+              Effect.ignore(endTurn(account.id, turn.id, 'sandbox')),
+            ),
+          ),
+        )
+      }),
+    )
+    return { entry, turn: { id: turn.id } }
+  })
+
+/**
+ * Stops the Turn running in the Account's Conversation, from a Session: it ends, an Entry saying the
+ * user stopped it, and its Key is revoked, in one transaction; then, once the answer has gone, its
+ * agent is interrupted, so it ends cleanly, and killed past a grace. Nothing when none runs. Nothing it
+ * did is rolled back.
+ */
+export const stopTurn = forSession((accountId) =>
+  Effect.gen(function* () {
+    const running = yield* Assistant.runningTurn(accountId)
+    if (running === undefined) return null
+    yield* endTurn(accountId, running.id, 'stopped')
+    yield* afterAnswering(agentStopped(accountId, running.id))
+    return null
+  }),
+)
+
+/**
+ * Follows one line its sandbox posts of what a Turn's agent says, for the Turn the request's Turn's
+ * Key proves, the Account and the Turn taken from that Key, never from the line: Assistant's
+ * `followTurn`, in a transaction, and the Key revoked in the same one once the line ended the Turn.
+ * Answers whether the line was an event.
+ */
+export const turnEvent = (line: string) =>
+  Effect.gen(function* () {
+    const { account, turn } = yield* Iam.turnOnly
+    return yield* transactional(
+      Effect.gen(function* () {
+        const followed = yield* Assistant.followTurn(account.id, turn.turnId, line)
+        if (followed._tag === 'Followed' && followed.ended !== undefined) {
+          yield* Iam.revokeTurnKey(account.id, turn.turnId)
+        }
+        return followed._tag
+      }),
+    )
   })
 
 /**

@@ -18,6 +18,7 @@ import { useNavigationSender } from './useNavigationSender'
 // (`domains/assistant/entities/navigation.test.ts`).
 vi.mock('#/api/assistant/assistant', () => ({
   conversationDay: vi.fn(),
+  latest: vi.fn(),
   postMessage: vi.fn(),
   recordNavigation: vi.fn(),
 }))
@@ -28,6 +29,9 @@ afterEach(() => {
   vi.clearAllMocks()
   Object.defineProperty(document, 'visibilityState', { value: 'visible', configurable: true })
 })
+
+/** The view a Message is sent from: home's Root, centered alone. */
+const view = { center: 'root', shown: ['root'] }
 
 /** The server functions answering, each with nothing worth reading. */
 function answering() {
@@ -72,7 +76,7 @@ describe('the navigation sender', () => {
     for (const tile of tiles) gesture(tile)
     expect(recordNavigation).not.toHaveBeenCalled()
     act(() => {
-      result.current.sender.postMessage('What would you add to Games?')
+      result.current.sender.postMessage({ text: 'What would you add to Games?', view })
     })
     await waitFor(() => {
       expect(postMessage).toHaveBeenCalledTimes(1)
@@ -87,7 +91,9 @@ describe('the navigation sender', () => {
         sinceLast: expect.any(Number) as number,
       },
     ])
-    expect(postMessage).toHaveBeenCalledWith({ data: { text: 'What would you add to Games?' } })
+    expect(postMessage).toHaveBeenCalledWith({
+      data: { text: 'What would you add to Games?', view, offset: expect.any(Number) as number },
+    })
     const [navigationOrder] = vi.mocked(recordNavigation).mock.invocationCallOrder
     const [messageOrder] = vi.mocked(postMessage).mock.invocationCallOrder
     expect(navigationOrder).toBeLessThan(messageOrder ?? 0)
@@ -97,10 +103,10 @@ describe('the navigation sender', () => {
     const { result } = rendered()
     gesture('a')
     act(() => {
-      result.current.sender.postMessage('First')
+      result.current.sender.postMessage({ text: 'First', view })
     })
     act(() => {
-      result.current.sender.postMessage('Second')
+      result.current.sender.postMessage({ text: 'Second', view })
     })
     await waitFor(() => {
       expect(postMessage).toHaveBeenCalledTimes(2)

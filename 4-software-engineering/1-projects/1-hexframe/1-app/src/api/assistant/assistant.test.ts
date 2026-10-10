@@ -7,9 +7,12 @@ import { Effect, Exit, Option, Schema } from 'effect'
 import { describe, expect, expectTypeOf, it } from 'vitest'
 
 import { dayAt } from '#/domains/assistant/entities'
-import { Sandbox, systemFolder } from '#/repositories/agent/sandbox/sandbox'
+import { systemFolder } from '#/repositories/agent/sandbox/sandbox'
 import type { SessionRequired, SignedOut } from '#/domains/iam/errors'
 import type { KeyProof, Session } from '#/domains/iam/iam'
+
+import * as AssistantService from '#/domains/assistant/assistant'
+import * as MappingService from '#/domains/mapping/mapping'
 
 import * as Mapping from '../mapping/programs'
 import type { Failure } from '../report/errors/failure'
@@ -212,13 +215,17 @@ describe("Assistant's server functions", () => {
 
 describe("the System in the Account's sandbox", () => {
   /**
-   * Writes the Account's System into its sandbox, the one on this machine, as a Turn will, and
-   * answers where each Tile lives, and the System folder of the sandbox, to read.
+   * Writes the Account's System into its sandbox, the one on this machine, as a Turn's start does,
+   * Mapping's export of its Root handed to Assistant, and answers where each Tile lives, and the
+   * System folder of the sandbox, to read.
    */
   const inSandbox = (accountId: string) =>
     Effect.gen(function* () {
-      const places = yield* Assistant.systemInSandbox(accountId)
-      const box = yield* Sandbox.use((sandbox) => sandbox.ensure(accountId))
+      const { files, places } = yield* MappingService.systemFiles(
+        accountId,
+        (id) => `/?center=${id}`,
+      )
+      const box = yield* AssistantService.writeSystem(accountId, files)
       return { places: Object.fromEntries(places), folder: join(box.home, systemFolder) }
     })
 

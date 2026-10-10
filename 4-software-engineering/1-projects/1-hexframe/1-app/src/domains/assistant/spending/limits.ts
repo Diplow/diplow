@@ -53,6 +53,9 @@ export function monthOf(now: Date): Date {
   return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1))
 }
 
+/** Whether the month's allowance is spent, by what an Account's Turns spent this month. */
+export const allowanceSpent = (month: number): boolean => month >= settings.month.allowance
+
 /** Which limit holds a Turn back: its own ceiling, or the month's allowance. */
 export type Limit = 'ceiling' | 'allowance'
 
@@ -66,7 +69,7 @@ export function limitReached(spent: {
   readonly month: number
 }): Limit | undefined {
   if (spent.turn >= settings.turn.ceiling) return 'ceiling'
-  if (spent.month >= settings.month.allowance) return 'allowance'
+  if (allowanceSpent(spent.month)) return 'allowance'
   return undefined
 }
 

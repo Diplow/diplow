@@ -13,12 +13,39 @@ export type TokenKind = (typeof tokenKinds)[number]
 /** A model's price per kind of token, in dollars per million, which is millionths of a dollar each. */
 type Price = Readonly<Record<TokenKind, number>>
 
+/**
+ * The models a Turn's agent may call, each at its price: Sonnet 5.5, which the Turn works with, and
+ * Haiku 4.5, the small model Claude Code does its own chores with.
+ */
+const prices = {
+  'claude-sonnet-5-5': {
+    input: 2,
+    output: 10,
+    cacheWrite5m: 2.5,
+    cacheWrite1h: 4,
+    cacheRead: 0.2,
+  },
+  'claude-haiku-4-5': {
+    input: 1,
+    output: 5,
+    cacheWrite5m: 1.25,
+    cacheWrite1h: 2,
+    cacheRead: 0.1,
+  },
+} satisfies Record<string, Price>
+
 export const settings = {
   turn: {
     /** The longest a Turn runs, and so the longest its Key proves it: 15 minutes. */
     longest: Duration.toMillis(Duration.minutes(15)),
     /** The most a Turn spends on the model, in millionths of a dollar: $1. */
     ceiling: 1_000_000,
+    /** The model every Turn works with: no picker. */
+    model: 'claude-sonnet-5-5' satisfies keyof typeof prices,
+    /** The small model its agent does its own chores with. */
+    smallModel: 'claude-haiku-4-5' satisfies keyof typeof prices,
+    /** How many of today's latest Entries a Turn's prompt holds. */
+    entries: 50,
   },
   month: {
     /**
@@ -28,26 +55,8 @@ export const settings = {
     allowance: 10_000_000,
   },
   model: {
-    /**
-     * The models a Turn's agent may call, each at its price: Sonnet 5.5, which the Turn works with,
-     * and Haiku 4.5, the small model Claude Code does its own chores with.
-     */
-    prices: {
-      'claude-sonnet-5-5': {
-        input: 2,
-        output: 10,
-        cacheWrite5m: 2.5,
-        cacheWrite1h: 4,
-        cacheRead: 0.2,
-      },
-      'claude-haiku-4-5': {
-        input: 1,
-        output: 5,
-        cacheWrite5m: 1.25,
-        cacheWrite1h: 2,
-        cacheRead: 0.1,
-      },
-    } satisfies Record<string, Price>,
+    /** The models a Turn's agent may call, each at its price. */
+    prices,
     /** The most tokens a call may answer: a call asking for more is sent asking for this many. */
     maxTokens: 32_000,
     /** The most characters a call's body holds, Anthropic's own limit on a request. */

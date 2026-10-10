@@ -20,6 +20,10 @@ export default defineConfig({
       BL_WORKSPACE: '',
       ANTHROPIC_API_KEY: '',
       ASSISTANT_ACCOUNTS: 'entitled@example.com',
+      // The sandbox on this machine runs the fake agent, at no pace, never Claude Code itself
+      // (src/repositories/agent/sandbox/local.ts).
+      HEXFRAME_AGENT: '',
+      HEXFRAME_FAKE_AGENT_PACE: '0',
     },
   },
 })

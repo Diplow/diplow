@@ -21,7 +21,7 @@ The door a Turn's agent reaches the model through. Claude Code in the sandbox ta
 
 ## Connect a Claude Code
 
-What the code running a Turn (HEX-83) puts in the sandbox's processes' environment, the Turn's Key the one secret among them:
+What a Turn's launch puts in the sandbox's process's environment (`domains/assistant/agent/launch.ts`), the Turn's Key the one secret among them:
 
 ```sh
 ANTHROPIC_BASE_URL=<origin>/assistant/anthropic

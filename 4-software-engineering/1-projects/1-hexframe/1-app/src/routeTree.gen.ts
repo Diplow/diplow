@@ -15,6 +15,7 @@ import { Route as HelpRouteImport } from './front/routes/help'
 import { Route as McpRouteImport } from './front/routes/mcp'
 import { Route as accessSignInRouteImport } from './front/routes/(access)/sign-in'
 import { Route as accessSignUpRouteImport } from './front/routes/(access)/sign-up'
+import { Route as AssistantEventsRouteImport } from './front/routes/assistant/events'
 import { Route as DevErrorsRouteImport } from './front/routes/dev/errors'
 import { Route as DevHexRouteImport } from './front/routes/dev/hex'
 import { Route as DevSessionRouteImport } from './front/routes/dev/session'
@@ -51,6 +52,11 @@ const accessSignInRoute = accessSignInRouteImport.update({
 const accessSignUpRoute = accessSignUpRouteImport.update({
   id: '/(access)/sign-up',
   path: '/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssistantEventsRoute = AssistantEventsRouteImport.update({
+  id: '/assistant/events',
+  path: '/assistant/events',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DevErrorsRoute = DevErrorsRouteImport.update({
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/mcp': typeof McpRoute
   '/sign-in': typeof accessSignInRoute
   '/sign-up': typeof accessSignUpRoute
+  '/assistant/events': typeof AssistantEventsRoute
   '/dev/errors': typeof DevErrorsRoute
   '/dev/hex': typeof DevHexRoute
   '/dev/session': typeof DevSessionRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByTo {
   '/mcp': typeof McpRoute
   '/sign-in': typeof accessSignInRoute
   '/sign-up': typeof accessSignUpRoute
+  '/assistant/events': typeof AssistantEventsRoute
   '/dev/errors': typeof DevErrorsRoute
   '/dev/hex': typeof DevHexRoute
   '/dev/session': typeof DevSessionRoute
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/mcp': typeof McpRoute
   '/(access)/sign-in': typeof accessSignInRoute
   '/(access)/sign-up': typeof accessSignUpRoute
+  '/assistant/events': typeof AssistantEventsRoute
   '/dev/errors': typeof DevErrorsRoute
   '/dev/hex': typeof DevHexRoute
   '/dev/session': typeof DevSessionRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/sign-in'
     | '/sign-up'
+    | '/assistant/events'
     | '/dev/errors'
     | '/dev/hex'
     | '/dev/session'
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/sign-in'
     | '/sign-up'
+    | '/assistant/events'
     | '/dev/errors'
     | '/dev/hex'
     | '/dev/session'
@@ -174,6 +185,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/(access)/sign-in'
     | '/(access)/sign-up'
+    | '/assistant/events'
     | '/dev/errors'
     | '/dev/hex'
     | '/dev/session'
@@ -190,6 +202,7 @@ export interface RootRouteChildren {
   McpRoute: typeof McpRoute
   accessSignInRoute: typeof accessSignInRoute
   accessSignUpRoute: typeof accessSignUpRoute
+  AssistantEventsRoute: typeof AssistantEventsRoute
   SettingsKeysRoute: typeof SettingsKeysRoute
   AssistantAnthropicSplatRoute: typeof AssistantAnthropicSplatRoute
 }
@@ -236,6 +249,13 @@ declare module '@tanstack/react-router' {
       path: '/sign-up'
       fullPath: '/sign-up'
       preLoaderRoute: typeof accessSignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assistant/events': {
+      id: '/assistant/events'
+      path: '/assistant/events'
+      fullPath: '/assistant/events'
+      preLoaderRoute: typeof AssistantEventsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dev/errors': {
@@ -317,6 +337,7 @@ const rootRouteChildren: RootRouteChildren = {
   McpRoute: McpRoute,
   accessSignInRoute: accessSignInRoute,
   accessSignUpRoute: accessSignUpRoute,
+  AssistantEventsRoute: AssistantEventsRoute,
   SettingsKeysRoute: SettingsKeysRoute,
   AssistantAnthropicSplatRoute: AssistantAnthropicSplatRoute,
 }

@@ -1,5 +1,5 @@
 // One Entry of the timeline: a Message, or a line saying what happened, a change to the System, an
-// import or where the user went, with who did it. Titles are those the Entry carries, a navigation's
+// import or where the user went, with who did it, or how a Turn ended when not by its answer. Titles are those the Entry carries, a navigation's
 // those the System holds now; times are the reader's, in the page's language.
 import { cn } from 'cn'
 import {
@@ -16,13 +16,14 @@ import {
   Navigation as NavigationIcon,
   Pencil,
   Plus,
+  Square,
   Trash2,
   Unlink,
   type LucideIcon,
 } from 'lucide-react'
 import { Schema } from 'effect'
 
-import type { Actor, Entry } from '#/domains/assistant/entities'
+import type { Actor, BadEnd, Entry } from '#/domains/assistant/entities'
 import type { OperationEvent } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
@@ -44,7 +45,18 @@ export function ConversationEntry({ entry, titles }: { entry: Entry; titles: Tit
     }
     case 'Import':
       return <Action icon={Import} text={importText(entry)} at={entry.at} />
+    case 'TurnEnded':
+      return <Action icon={Square} text={turnEnds[entry.how]()} at={entry.at} />
   }
+}
+
+/** How a Turn ended, when not by its answer, as the timeline says it. */
+const turnEnds: Record<BadEnd, () => string> = {
+  stopped: m.conversation_turn_stopped,
+  ceiling: m.conversation_turn_ceiling,
+  allowance: m.conversation_turn_allowance,
+  time: m.conversation_turn_time,
+  sandbox: m.conversation_turn_sandbox,
 }
 
 function Message({ entry }: { entry: Extract<Entry, { _tag: 'Message' }> }) {

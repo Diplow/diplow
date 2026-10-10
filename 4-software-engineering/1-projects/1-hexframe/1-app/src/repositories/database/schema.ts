@@ -240,8 +240,10 @@ export const conversationEntry = pgTable(
  * A Turn of the agent, answering one Message of a Conversation (`message_id`, its Entry), started in
  * the Tile `location` names, which has no key to `tile`: Assistant ignores Mapping. `spent` is what it
  * spent on the model, in millionths of a dollar, and `reserved` what its calls under way reserved,
- * the most they may cost, until each settles. `ended_at` and `end` say when and how it ended, both
- * null while it runs, and `turn_running_idx` lets one run at most per Conversation. Deleting a
+ * the most they may cost, until each settles. `step` is what its agent is doing now, a read or a
+ * shell command, as Assistant encodes it, null between steps and once it ended. `ended_at` and `end`
+ * say when and how it ended, both null while it runs, and `turn_running_idx` lets one run at most per
+ * Conversation. Deleting a
  * Conversation, or the Message, deletes its Turns.
  */
 export const turn = pgTable(
@@ -258,6 +260,7 @@ export const turn = pgTable(
     startedAt: timestamp('started_at', { withTimezone: true }).notNull(),
     spent: integer('spent').default(0).notNull(),
     reserved: integer('reserved').default(0).notNull(),
+    step: jsonb('step'),
     endedAt: timestamp('ended_at', { withTimezone: true }),
     end: text('end'),
   },

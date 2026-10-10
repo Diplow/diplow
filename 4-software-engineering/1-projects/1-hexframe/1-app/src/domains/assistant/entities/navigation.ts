@@ -9,7 +9,7 @@ import { Schema } from 'effect'
 const Gesture = Schema.String.check(Schema.isPattern(/^[a-z]+(-[a-z]+)*$/), Schema.isMaxLength(32))
 
 /** A Tile, by its id as the canvas names it. */
-const TileRef = Schema.String.check(Schema.isNonEmpty(), Schema.isMaxLength(100))
+export const TileRef = Schema.String.check(Schema.isNonEmpty(), Schema.isMaxLength(100))
 
 /** One gesture, and the Tile it was made on. */
 export const Step = Schema.Struct({ gesture: Gesture, tile: TileRef })

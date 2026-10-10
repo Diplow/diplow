@@ -6,7 +6,8 @@
 // Message the chat posts included, or the page is hidden. Signed out, the guard sends the visit to
 // sign-in, then back here. The page follows the System and the Conversation, so a write it did not
 // make, an agent's, a Key's or another tab's, shows on the canvas and in the timeline once the tab
-// regains focus.
+// regains focus, and every 2 s while a Turn runs. A Message is sent from the view: its center, where
+// the Turn answering it starts, and the Tiles on screen.
 import { createFileRoute } from '@tanstack/react-router'
 
 import { ReadBoundary } from '#/front/client/ReadBoundary'
@@ -27,7 +28,7 @@ import {
 } from '#/front/features/system/search/search'
 import { System } from '#/front/features/system/System'
 import { TileActions } from '#/front/features/system/TileActions'
-import { canvasTree } from '#/front/features/system/tree'
+import { canvasTree, onScreen } from '#/front/features/system/tree'
 import { m } from '#/paraglide/messages'
 import { Skeleton } from '#/front/ui/feedback/skeleton'
 import type { CanvasView, ViewAction } from '#/front/ui/hex/view/view'
@@ -44,10 +45,16 @@ function Home() {
   const onSearchChange = (next: SearchChange) => {
     void navigate({ search: next })
   }
-  // Nothing follows them closely yet: a Turn will, while it runs.
-  useFollowLatest({ closely: false })
-  // The chat's Messages go after the navigation they follow.
+  const { turn } = useFollowLatest()
+  // The chat's Messages go after the navigation they follow, from the view they were sent from.
   const { postMessage } = useNavigationSender()
+  const { data } = useSystem()
+  const onSend =
+    data === undefined
+      ? undefined
+      : (text: string) => {
+          postMessage({ text, view: onScreen(canvasTree(data.root), viewOf(search)) })
+        }
   return (
     <main className="grid gap-4 px-4 pb-4 lg:h-[calc(100dvh-4.25rem)] lg:grid-cols-[minmax(0,1fr)_24rem]">
       <h1 className="sr-only">{m.system_title()}</h1>
@@ -57,7 +64,7 @@ function Home() {
         </ReadBoundary>
       </div>
       <ReadBoundary>
-        <Chat onSend={postMessage} className="h-[32rem] lg:h-auto lg:min-h-0" />
+        <Chat onSend={onSend} turn={turn} className="h-[32rem] lg:h-auto lg:min-h-0" />
       </ReadBoundary>
     </main>
   )
