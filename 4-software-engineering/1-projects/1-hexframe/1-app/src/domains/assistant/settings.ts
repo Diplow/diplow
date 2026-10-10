@@ -2,16 +2,14 @@
 // read from here, never spread as a constant in code.
 import { Duration } from 'effect'
 
-/** A price in dollars per million tokens, which is millionths of a dollar per token. */
-interface Price {
-  readonly input: number
-  readonly output: number
-  /** A token written to the cache for five minutes, then for an hour. */
-  readonly cacheWrite5m: number
-  readonly cacheWrite1h: number
-  /** A token read from the cache. */
-  readonly cacheRead: number
-}
+/**
+ * The kinds of token a model call is priced by: input read from no cache, output, input written to
+ * the cache for five minutes or for an hour, and input read from it.
+ */
+export type TokenKind = 'input' | 'output' | 'cacheWrite5m' | 'cacheWrite1h' | 'cacheRead'
+
+/** A model's price per kind of token, in dollars per million, which is millionths of a dollar each. */
+type Price = Readonly<Record<TokenKind, number>>
 
 export const settings = {
   turn: {

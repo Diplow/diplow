@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 
 import * as Iam from '#/domains/iam/iam'
 import { settings } from '#/domains/assistant/settings'
-import { fakeAnthropic, streamedMessage } from '#/repositories/agent/anthropic/fake'
+import { eventStream, fakeAnthropic, streamedMessage } from '#/repositories/agent/anthropic/fake'
 import { browser } from '#/repositories/auth/testing'
 import { transactional } from '#/repositories/database/database'
 
@@ -257,6 +257,58 @@ describe("a Turn's spend", () => {
     expect((await ask({ secret })).response.status).toBe(401)
     const next = await turn()
     await (await account).end(next.turn.id)
+  })
+
+  it('charges a call cut short the output it may have answered', async () => {
+    const { turn, end } = await account
+    const { turn: started, secret } = await turn()
+    // A stream that ends before its `message_stop`, as one a reader cancels does.
+    fakeAnthropic.answerWith(
+      () =>
+        new Response(
+          eventStream([
+            { type: 'message_start', message: { usage: { input_tokens: 0, output_tokens: 1 } } },
+          ]),
+          { headers: { 'content-type': 'text/event-stream' } },
+        ),
+    )
+    const cut = await ask({ secret, body: callBody({ max_tokens: 1000 }) })
+    await cut.response.text()
+    await cut.settled()
+    // 1000 output tokens of Sonnet 5.5 at $10 per million.
+    expect((await end(started.id))?.spent).toBe(10_000)
+  })
+
+  it('holds calls made at once under the ceiling, each reserving the most it may cost', async () => {
+    const { turn } = await account
+    const { secret } = await turn()
+    const streams: Array<ReadableStreamDefaultController<Uint8Array>> = []
+    fakeAnthropic.answerWith(
+      () =>
+        new Response(
+          new ReadableStream<Uint8Array>({
+            start: (controller) => {
+              streams.push(controller)
+            },
+          }),
+          { headers: { 'content-type': 'text/event-stream' } },
+        ),
+    )
+    // Each reserves 32,000 output tokens of Sonnet 5.5, $0.32: four fit under $1, a fifth does not.
+    const asked = { secret, body: callBody({ max_tokens: 32_000 }) }
+    const under = [await ask(asked), await ask(asked), await ask(asked), await ask(asked)]
+    expect(under.map(({ response }) => response.status)).toEqual([200, 200, 200, 200])
+    const held = await ask(asked)
+    expect(held.response.status).toBe(402)
+    expect(fakeAnthropic.calls()).toHaveLength(4)
+    const ended = eventStream([{ type: 'message_stop' }])
+    for (const stream of streams) {
+      stream.enqueue(new TextEncoder().encode(ended))
+      stream.close()
+    }
+    await Promise.all(
+      under.map(async ({ response, settled }) => [await response.text(), await settled()]),
+    )
   })
 
   it("ends a Turn by the month's allowance once the Account's Turns spent it", async () => {

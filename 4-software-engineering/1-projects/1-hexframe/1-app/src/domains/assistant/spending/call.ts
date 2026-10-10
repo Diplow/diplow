@@ -95,18 +95,29 @@ const Body = Schema.Struct(fields)
 
 type CallBody = typeof Body.Type
 
-/** Decodes a body's text, refusing any field, at any depth, its schema does not name. */
+/**
+ * Decodes a body's text, refusing any field its schema does not name, in the body and in every object
+ * its schema gives a shape: a tool, `thinking`, `output_config`. A message and its content blocks keep
+ * their other fields, the model's to read, once their role and type are named.
+ */
 const decodeBody = Schema.decodeUnknownResult(Schema.fromJsonString(Body), {
   onExcessProperty: 'error',
 })
 
-/** A call let through: its body, `max_tokens` capped, and the model it asks for. */
+/** `anthropic-version`, a date. */
+const isVersion = (version: string) => /^\d{4}-\d{2}-\d{2}$/.test(version)
+
+/**
+ * A call let through: its body, `max_tokens` capped and a thinking budget kept below it, the model it
+ * asks for, and the most tokens it may answer, none for a count of tokens.
+ */
 export interface Allowed {
   readonly body: CallBody
   readonly model: Model
+  readonly maxTokens: number
 }
 
-/** Why a call is refused: a body past the largest, or one the schema or the betas refuse. */
+/** Why a call is refused: a body past the largest, or one the schema or the headers refuse. */
 export type CallRefused =
   { readonly why: 'too-large' } | { readonly why: 'invalid'; readonly message: string }
 
@@ -117,30 +128,52 @@ const betasOf = (header: string | undefined) =>
     .map((beta) => beta.trim())
     .filter((beta) => beta !== '')
 
-/**
- * A call, its body's text and its `anthropic-beta`, as the proxy lets it through, or why it is
- * refused: a body past the largest, a field, a model, a tool or a content block the schema does not
- * name, or a beta the settings do not.
- */
-export function allowedCall(
-  text: string,
-  betas: string | undefined,
-): Result.Result<Allowed, CallRefused> {
-  if (text.length > settings.model.largestCall) return Result.fail({ why: 'too-large' })
-  const unnamed = betasOf(betas).filter(
+/** Why a call's headers are refused, if they are: a version no date, or a beta the settings do not name. */
+function headersRefused(headers: {
+  readonly version: string | undefined
+  readonly betas: string | undefined
+}): string | undefined {
+  if (headers.version !== undefined && !isVersion(headers.version)) {
+    return `anthropic-version is no date: ${headers.version}`
+  }
+  const unnamed = betasOf(headers.betas).filter(
     (beta) => !(settings.model.betas as ReadonlyArray<string>).includes(beta),
   )
-  if (unnamed.length > 0) {
-    return Result.fail({ why: 'invalid', message: `Unnamed betas: ${unnamed.join(', ')}` })
-  }
-  const decoded = decodeBody(text)
+  return unnamed.length > 0 ? `Unnamed betas: ${unnamed.join(', ')}` : undefined
+}
+
+/**
+ * A body with `max_tokens` capped by the settings, and a thinking budget, which must stay below it,
+ * brought below the cap too.
+ */
+function capped(body: CallBody): CallBody {
+  if (body.max_tokens === undefined) return body
+  const maxTokens = Math.min(body.max_tokens, settings.model.maxTokens)
+  const budget = body.thinking?.budget_tokens
+  const thinking =
+    body.thinking === undefined || budget === undefined || budget < maxTokens
+      ? body.thinking
+      : { ...body.thinking, budget_tokens: maxTokens - 1 }
+  return { ...body, max_tokens: maxTokens, ...(thinking !== undefined && { thinking }) }
+}
+
+/**
+ * A call, its body's text and the headers Anthropic reads, as the proxy lets it through, or why it is
+ * refused: a body past the largest, a field, a model, a tool or a content block the schema does not
+ * name, a version no date, or a beta the settings do not name.
+ */
+export function allowedCall(call: {
+  readonly body: string
+  readonly version: string | undefined
+  readonly betas: string | undefined
+}): Result.Result<Allowed, CallRefused> {
+  if (call.body.length > settings.model.largestCall) return Result.fail({ why: 'too-large' })
+  const refused = headersRefused(call)
+  if (refused !== undefined) return Result.fail({ why: 'invalid', message: refused })
+  const decoded = decodeBody(call.body)
   if (Result.isFailure(decoded)) {
     return Result.fail({ why: 'invalid', message: decoded.failure.message })
   }
-  const body = decoded.success
-  const capped =
-    body.max_tokens === undefined
-      ? body
-      : { ...body, max_tokens: Math.min(body.max_tokens, settings.model.maxTokens) }
-  return Result.succeed({ body: capped, model: body.model })
+  const body = capped(decoded.success)
+  return Result.succeed({ body, model: body.model, maxTokens: body.max_tokens ?? 0 })
 }

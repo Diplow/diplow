@@ -153,23 +153,31 @@ const afterAnswering = <R>(work: Effect.Effect<void, never, R>) =>
 
 /**
  * A model call of the Turn the request's Turn's Key proves, the Account and the Turn taken from that
- * Key, never from the call: Assistant says whether it may go and relays it. A call held back by the
- * Turn's ceiling or the month's allowance ends the Turn so, its Key revoked with it. A call relayed
- * has its cost recorded on the Turn once its answer has ended, in its own transaction, through the
- * platform's `waitUntil`, so the function stays up until it is written.
+ * Key, never from the call. Assistant admits it or not in a transaction of its own, which ends a Turn
+ * held back by its ceiling or the month's allowance, its Key revoked with it. An admitted call is
+ * relayed as it comes, outside any transaction; what it owed beyond what it reserved is settled once
+ * its answer has ended, in a transaction of its own, through the platform's `waitUntil`, so the
+ * function stays up until it is written.
  */
 export const modelCall = (asked: Assistant.AskedCall) =>
   Effect.gen(function* () {
     const { account, turn } = yield* Iam.turnOnly
-    const answer = yield* Assistant.modelCall(account.id, turn.turnId, asked)
-    if (answer._tag === 'Limited') yield* endTurn(account.id, turn.turnId, answer.limit)
-    if (answer._tag === 'Relayed') {
-      yield* afterAnswering(
-        transactional(answer.metered).pipe(
-          // An error line with its cause: Sentry gets it. The Turn spent it all the same.
-          Effect.catchCause((cause) => Effect.logError("A Turn's spend was not recorded", cause)),
-        ),
-      )
-    }
-    return answer
+    const admission = yield* transactional(
+      Effect.gen(function* () {
+        const admitted = yield* Assistant.admitCall(account.id, turn.turnId, asked)
+        if (admitted._tag === 'Limited') yield* Iam.revokeTurnKey(account.id, turn.turnId)
+        return admitted
+      }),
+    )
+    if (admission._tag !== 'Admitted') return admission
+    const { relayed, owed } = yield* Assistant.relayCall(admission)
+    yield* afterAnswering(
+      Effect.flatMap(owed, (amount) =>
+        transactional(Assistant.settleCall(account.id, turn.turnId, amount)),
+      ).pipe(
+        // An error line with its cause: Sentry gets it. The Turn keeps what the call reserved.
+        Effect.catchCause((cause) => Effect.logError("A Turn's spend was not settled", cause)),
+      ),
+    )
+    return { _tag: 'Relayed', relayed } as const
   })

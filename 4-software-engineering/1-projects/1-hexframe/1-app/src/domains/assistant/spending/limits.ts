@@ -1,31 +1,50 @@
 // What a Turn spends, and whether it may spend more: a call's usage priced by the settings' table, in
 // millionths of a dollar, and the two limits a call is held under, the Turn's own ceiling and the
-// month's allowance, the month being the sum of its Turns' spend, never a counter of its own. Pure.
-import { settings } from '../settings'
+// month's allowance, the month being the sum of its Turns' spend, never a counter of its own. A call
+// reserves the most its answer may cost before it goes, so calls made at once are held under the
+// limits too, and is charged what it used once its answer has ended, or that most when the answer was
+// cut short. Pure.
+import { settings, type TokenKind } from '../settings'
 import type { Model } from './call'
 
-/** The tokens a call used, by how they are priced. */
-export interface Used {
-  readonly input: number
-  readonly output: number
-  readonly cacheWrite5m: number
-  readonly cacheWrite1h: number
-  readonly cacheRead: number
+/** The tokens a call used, by kind, and whether its answer came whole. */
+export type Used = Readonly<Record<TokenKind, number>> & { readonly complete: boolean }
+
+const kinds: ReadonlyArray<TokenKind> = [
+  'input',
+  'output',
+  'cacheWrite5m',
+  'cacheWrite1h',
+  'cacheRead',
+]
+
+/**
+ * What tokens cost, in millionths of a dollar, rounded up: each kind at the model's price in dollars
+ * per million tokens, which is millionths of a dollar per token.
+ */
+function priced(model: Model, tokens: Readonly<Record<TokenKind, number>>): number {
+  const price = settings.model.prices[model]
+  return Math.ceil(kinds.reduce((cost, kind) => cost + tokens[kind] * price[kind], 0))
+}
+
+/** What a call reserves before it goes: the output it may answer, at its model's price. */
+export function reserved(model: Model, maxTokens: number): number {
+  return priced(model, {
+    input: 0,
+    output: maxTokens,
+    cacheWrite5m: 0,
+    cacheWrite1h: 0,
+    cacheRead: 0,
+  })
 }
 
 /**
- * What a call cost, in millionths of a dollar, rounded up: each kind of token at the model's price in
- * dollars per million tokens, which is millionths of a dollar per token.
+ * What a call cost, once its answer has ended: what it used, at its model's price; an answer cut short
+ * charged the output it may have answered, since what it used past the cut is not said.
  */
-export function priced(model: Model, used: Used): number {
-  const price = settings.model.prices[model]
-  const cost =
-    used.input * price.input +
-    used.output * price.output +
-    used.cacheWrite5m * price.cacheWrite5m +
-    used.cacheWrite1h * price.cacheWrite1h +
-    used.cacheRead * price.cacheRead
-  return Math.ceil(cost)
+export function cost(model: Model, maxTokens: number, used: Used): number {
+  const output = used.complete ? used.output : Math.max(used.output, maxTokens)
+  return priced(model, { ...used, output })
 }
 
 /** The first instant of the calendar month, UTC, that `now` falls in: where the month's spend starts. */

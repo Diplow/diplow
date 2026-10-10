@@ -14,7 +14,9 @@ export interface FakeCall {
 }
 
 /** A stream of Anthropic's events, each as a server-sent event. */
-export function eventStream(events: ReadonlyArray<{ readonly type: string }>): string {
+export function eventStream(
+  events: ReadonlyArray<{ readonly type: string; readonly [field: string]: unknown }>,
+): string {
   return events.map((event) => `event: ${event.type}\ndata: ${JSON.stringify(event)}\n\n`).join('')
 }
 

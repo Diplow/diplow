@@ -4,7 +4,9 @@
 // needs no CSRF check; serves the messages endpoint alone, and the count of its tokens; and hands the
 // call to its program (../../assistant/programs.ts), which has Assistant decide whether the Turn may
 // spend and relay it. Every refusal is answered as Anthropic answers one, so Claude Code stops.
-import type { AskedCall, CallAnswer } from '#/domains/assistant/assistant'
+import type { Effect } from 'effect'
+
+import type { AskedCall } from '#/domains/assistant/assistant'
 import { turnOnly } from '#/domains/iam/iam'
 
 import { modelCall } from '../../assistant/programs'
@@ -51,8 +53,11 @@ const limits = {
   allowance: "The Account's allowance for the month is spent.",
 } as const
 
+/** What became of a call: refused as Anthropic would refuse it, or relayed. */
+type Answer = Effect.Success<ReturnType<typeof modelCall>>
+
 /** The answer to a call Assistant ruled on: refused as Anthropic would, or Anthropic's own. */
-function answerOf(answer: CallAnswer, requestId: string): Response {
+function answerOf(answer: Answer, requestId: string): Response {
   switch (answer._tag) {
     case 'Refused':
       return answer.why === 'too-large'

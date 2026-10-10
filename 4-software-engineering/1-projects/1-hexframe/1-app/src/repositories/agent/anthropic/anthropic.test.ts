@@ -142,9 +142,13 @@ describe('what a relayed call used', () => {
                 cache_creation: { ephemeral_5m_input_tokens: 100, ephemeral_1h_input_tokens: 200 },
               },
             },
-          } as { type: string },
+          },
           { type: 'ping' },
-          { type: 'message_delta', usage: { output_tokens: 42 } } as { type: string },
+          // A delta that says `null` for a count keeps the one said before.
+          {
+            type: 'message_delta',
+            usage: { output_tokens: 42, input_tokens: null, cache_creation: null },
+          },
           { type: 'message_stop' },
         ])
         const fed = handFed()
@@ -161,6 +165,7 @@ describe('what a relayed call used', () => {
           cacheWrite5m: 100,
           cacheWrite1h: 200,
           cacheRead: 4000,
+          complete: true,
         })
       }),
   )
@@ -183,6 +188,7 @@ describe('what a relayed call used', () => {
           cacheWrite5m: 7,
           cacheWrite1h: 0,
           cacheRead: 0,
+          complete: true,
         })
       }),
   )
@@ -201,19 +207,45 @@ describe('what a relayed call used', () => {
             {
               type: 'message_start',
               message: { usage: { input_tokens: 9, output_tokens: 1 } },
-            } as {
-              type: string
             },
           ]),
         )
         yield* next(reader)
         yield* Effect.promise(() => reader.cancel('stopped'))
         expect(fed.state.cancelled).toBe(true)
-        expect(yield* relayed.usage).toMatchObject({ input: 9, output: 1 })
+        expect(yield* relayed.usage).toMatchObject({ input: 9, output: 1, complete: false })
       }),
   )
 
-  it.effect('says no usage for an answer that failed, and relays it as it came', () =>
+  it.effect('says an answer cut short upstream, before its `message_stop`, came short', () =>
+    Effect.gen(function* () {
+      const fed = handFed()
+      const { relay } = relayOver(() => streamed(fed.stream))
+      const relayed = yield* relay(call)
+      fed.send(eventStream([{ type: 'message_start', message: { usage: { input_tokens: 4 } } }]))
+      fed.close()
+      yield* text(relayed.body)
+      expect(yield* relayed.usage).toMatchObject({ input: 4, output: 0, complete: false })
+    }),
+  )
+
+  it.effect('reads a count of tokens as a whole answer that used nothing', () =>
+    Effect.gen(function* () {
+      const { relay } = relayOver(() => Response.json({ input_tokens: 12 }))
+      const relayed = yield* relay({ ...call, endpoint: 'count_tokens' })
+      expect(yield* text(relayed.body)).toBe('{"input_tokens":12}')
+      expect(yield* relayed.usage).toEqual({
+        input: 0,
+        output: 0,
+        cacheWrite5m: 0,
+        cacheWrite1h: 0,
+        cacheRead: 0,
+        complete: true,
+      })
+    }),
+  )
+
+  it.effect('says no usage for an answer Anthropic refused, and relays it as it came', () =>
     Effect.gen(function* () {
       const { relay } = relayOver(() =>
         Response.json(

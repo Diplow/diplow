@@ -53,17 +53,22 @@ export class Turns extends Context.Service<
     readonly running: (accountId: string) => Effect.Effect<TurnRow | undefined>
     /**
      * What one of the Account's Turns spent, none unless it is running, and what all its Turns started
-     * since `since` spent, that one included: the sum of their spend, which no counter keeps.
+     * since `since` spent, that one included: the sum of their spend, which no counter keeps. Inside a
+     * transaction, the Turn's row locked until it ends, so two calls of one Turn decide one at a time.
      */
     readonly spending: (
       accountId: string,
       turnId: string,
       since: Date,
-    ) => Effect.Effect<{ readonly turn: number | undefined; readonly month: number }>
+    ) => Effect.Effect<
+      { readonly turn: number | undefined; readonly month: number },
+      never,
+      InTransaction
+    >
     /**
-     * Adds `amount` to what one of the Account's Turns spent, ended or not: a call that started before
-     * it ended still cost what it cost. Nothing for another's Turn. Inside a transaction, the row
-     * locked while it adds.
+     * Adds `amount`, which may be less than nothing, to what one of the Account's Turns spent, ended or
+     * not: a call that started before it ended still cost what it cost. Nothing for another's Turn.
+     * Inside a transaction, the row locked while it adds.
      */
     readonly spend: (
       accountId: string,
@@ -156,7 +161,7 @@ const make = Effect.gen(function* () {
         Effect.map(([row]) => row),
       )
 
-  const spending = (accountId: string, turnId: string, since: Date) =>
+  const spent = (accountId: string, turnId: string, since: Date) =>
     Effect.gen(function* () {
       const [turnSpent] = yield* database
         .select({ spent: turn.spent })
@@ -168,6 +173,7 @@ const make = Effect.gen(function* () {
             isNull(turn.endedAt),
           ),
         )
+        .for('update')
         .pipe(Effect.orDie)
       const [month] = yield* database
         .select({ spent: sum(turn.spent) })
@@ -178,6 +184,9 @@ const make = Effect.gen(function* () {
         .pipe(Effect.orDie)
       return { turn: turnSpent?.spent, month: Number(month?.spent ?? 0) }
     })
+
+  const spending = (accountId: string, turnId: string, since: Date) =>
+    InTransaction.use(() => spent(accountId, turnId, since))
 
   const spend = (accountId: string, turnId: string, amount: number) =>
     InTransaction.use(() =>

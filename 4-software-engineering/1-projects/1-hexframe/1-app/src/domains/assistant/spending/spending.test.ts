@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import { settings } from '../settings'
 import { allowedCall } from './call'
-import { limitReached, monthOf, priced } from './limits'
+import { cost, limitReached, monthOf, reserved } from './limits'
 
 // What a Turn's agent may call, what a call costs, and when a Turn may spend no more: pure, on calls
 // shaped as Claude Code sends them and usage as Anthropic reports it.
@@ -41,27 +41,40 @@ const callOf = (extra: Record<string, unknown> = {}) =>
     ...extra,
   })
 
-const refusal = (text: string, betas?: string) => {
-  const allowed = allowedCall(text, betas)
+/** A call's body and headers as the proxy reads them, Claude Code's version by default. */
+const asked = (body: string, betas?: string, version = '2023-06-01') =>
+  allowedCall({ body, betas, version })
+
+const refusal = (text: string, betas?: string, version?: string) => {
+  const allowed = asked(text, betas, version)
   return Result.isFailure(allowed) ? allowed.failure : undefined
 }
 
 describe('a model call the proxy lets through', () => {
   it('takes a call of a model the settings name, with client tools and the betas they name', () => {
-    const allowed = allowedCall(callOf(), 'claude-code-20250219, interleaved-thinking-2025-05-14')
+    const allowed = asked(callOf(), 'claude-code-20250219, interleaved-thinking-2025-05-14')
     expect(Result.isSuccess(allowed) && allowed.success.model).toBe('claude-sonnet-5-5')
-    expect(Result.isSuccess(allowedCall(callOf({ model: 'claude-haiku-4-5' }), undefined))).toBe(
-      true,
-    )
+    expect(Result.isSuccess(asked(callOf({ model: 'claude-haiku-4-5' })))).toBe(true)
   })
 
   it('sends a call asking for more tokens than the cap asking for the cap, and a smaller one as it is', () => {
-    const capped = allowedCall(callOf({ max_tokens: 128_000 }), undefined)
+    const capped = asked(callOf({ max_tokens: 128_000 }))
     expect(Result.isSuccess(capped) && capped.success.body.max_tokens).toBe(
       settings.model.maxTokens,
     )
-    const small = allowedCall(callOf({ max_tokens: 100 }), undefined)
+    const small = asked(callOf({ max_tokens: 100 }))
     expect(Result.isSuccess(small) && small.success.body.max_tokens).toBe(100)
+  })
+
+  it('keeps a thinking budget below the cap, which must stay below `max_tokens`', () => {
+    const thinking = { type: 'enabled', budget_tokens: 60_000 }
+    const capped = asked(callOf({ model: 'claude-haiku-4-5', max_tokens: 64_000, thinking }))
+    expect(Result.isSuccess(capped) && capped.success.body.thinking).toEqual({
+      type: 'enabled',
+      budget_tokens: settings.model.maxTokens - 1,
+    })
+    const within = asked(callOf({ thinking: { type: 'enabled', budget_tokens: 2048 } }))
+    expect(Result.isSuccess(within) && within.success.body.thinking?.budget_tokens).toBe(2048)
   })
 
   it('takes a count of tokens, which asks for none', () => {
@@ -69,7 +82,7 @@ describe('a model call the proxy lets through', () => {
       model: 'claude-haiku-4-5',
       messages: [{ role: 'user', content: 'hi' }],
     })
-    expect(Result.isSuccess(allowedCall(counted, undefined))).toBe(true)
+    expect(Result.isSuccess(asked(counted))).toBe(true)
   })
 
   it('refuses a model the settings do not name', () => {
@@ -105,6 +118,12 @@ describe('a model call the proxy lets through', () => {
     })
   })
 
+  it('refuses an `anthropic-version` that is no date', () => {
+    expect(refusal(callOf(), undefined, '2023-06-01\r\nx-api-key: stolen')).toMatchObject({
+      why: 'invalid',
+    })
+  })
+
   it('refuses a body that is no JSON, and one past the largest call', () => {
     expect(refusal('{"model":')).toMatchObject({ why: 'invalid' })
     const huge = callOf({ system: 'x'.repeat(settings.model.largestCall) })
@@ -113,28 +132,34 @@ describe('a model call the proxy lets through', () => {
 })
 
 describe('what a call costs', () => {
+  const used = {
+    input: 1000,
+    output: 500,
+    cacheWrite5m: 2000,
+    cacheWrite1h: 100,
+    cacheRead: 10_000,
+    complete: true,
+  }
+
   it('prices each kind of token at its model’s price, in millionths of a dollar, rounded up', () => {
-    const used = {
-      input: 1000,
-      output: 500,
-      cacheWrite5m: 2000,
-      cacheWrite1h: 100,
-      cacheRead: 10_000,
-    }
     // Sonnet 5.5: 1000×2 + 500×10 + 2000×2.5 + 100×4 + 10000×0.2
-    expect(priced('claude-sonnet-5-5', used)).toBe(14_400)
+    expect(cost('claude-sonnet-5-5', 8192, used)).toBe(14_400)
     // Haiku 4.5: 1000×1 + 500×5 + 2000×1.25 + 100×2 + 10000×0.1
-    expect(priced('claude-haiku-4-5', used)).toBe(7200)
-    expect(
-      priced('claude-sonnet-5-5', {
-        ...used,
-        input: 0,
-        output: 0,
-        cacheWrite5m: 0,
-        cacheWrite1h: 0,
-        cacheRead: 3,
-      }),
-    ).toBe(1)
+    expect(cost('claude-haiku-4-5', 8192, used)).toBe(7200)
+    const read = { ...used, input: 0, output: 0, cacheWrite5m: 0, cacheWrite1h: 0, cacheRead: 3 }
+    expect(cost('claude-sonnet-5-5', 8192, read)).toBe(1)
+  })
+
+  it('charges an answer cut short the output it may have answered', () => {
+    const cut = { ...used, complete: false }
+    // Sonnet 5.5: the 500 output tokens seen become the 8192 it may have answered.
+    expect(cost('claude-sonnet-5-5', 8192, cut)).toBe(14_400 + (8192 - 500) * 10)
+    expect(cost('claude-sonnet-5-5', 100, cut)).toBe(14_400)
+  })
+
+  it('reserves, before a call goes, the output it may answer', () => {
+    expect(reserved('claude-sonnet-5-5', 32_000)).toBe(320_000)
+    expect(reserved('claude-haiku-4-5', 0)).toBe(0)
   })
 })
 
