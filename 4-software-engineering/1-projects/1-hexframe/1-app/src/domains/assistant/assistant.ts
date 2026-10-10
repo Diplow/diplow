@@ -15,10 +15,10 @@ import {
   dayAt,
   type Entry,
   EntryContent,
-  longestAgo,
   type Navigation,
   spanOf,
   type Summarized,
+  within,
 } from './entities'
 
 const decoded = Schema.decodeUnknownEffect(EntryContent)
@@ -47,7 +47,7 @@ export const today = (offset: number) =>
 const record = (accountId: string, content: EntryContent, ago = 0) =>
   Effect.gen(function* () {
     const now = yield* Clock.currentTimeMillis
-    const at = new Date(now - Math.min(Math.max(ago, 0), longestAgo))
+    const at = new Date(now - within(ago))
     const id = yield* Conversations.use((conversations) =>
       conversations.append(accountId, { at, content: encoded(content) }),
     )

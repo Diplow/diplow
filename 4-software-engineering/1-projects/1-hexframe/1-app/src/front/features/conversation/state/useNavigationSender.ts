@@ -6,7 +6,7 @@
 // way is an outbox, held between gestures, never shown, so it waits in a ref rather than in state.
 import { useCallback, useRef, useSyncExternalStore } from 'react'
 
-import { longestAgo, merged, type Navigation } from '#/domains/assistant/entities'
+import { merged, type Navigation, within } from '#/domains/assistant/entities'
 import { usePostMessage, useRecordNavigation } from '#/front/client/assistant/conversation'
 import { useEachSystemWrite } from '#/front/client/mapping/queries'
 
@@ -37,7 +37,7 @@ export function useNavigationSender(): { readonly postMessage: (text: string) =>
     if (held === undefined) return
     underWay.current = undefined
     // A day at most, as the server takes it: a tab left open longer dates it back a day.
-    const sinceLast = Math.min(Math.max(0, Date.now() - held.lastAt), longestAgo)
+    const sinceLast = within(Date.now() - held.lastAt)
     record({ navigation: held.navigation, sinceLast })
   }, [record])
 
@@ -50,8 +50,10 @@ export function useNavigationSender(): { readonly postMessage: (text: string) =>
   useFact(Navigated, navigated)
   useEachSystemWrite(send)
 
-  // The page hidden, its tab left or about to close, is the last moment the browser surely runs the
-  // request; leaving home, which unmounts the hook, sends it too.
+  // The page hidden, its tab left or about to close, is the last moment to send it; leaving home,
+  // which unmounts the hook, sends it too. A tab closing may still drop the request on its way, or
+  // before it starts, queued behind another write of the Conversation: a lost navigation is accepted,
+  // as a lost event on the bus is.
   const subscribe = useCallback(() => {
     const onChange = () => {
       if (document.visibilityState === 'hidden') send()

@@ -70,13 +70,16 @@ export type Entry = EntryContent & { readonly id: string; readonly at: Date }
 export type Summarized = Omit<typeof Change.Type, 'actor'> | Omit<typeof Import.Type, 'actor'>
 
 /** The most an Entry may date back, in milliseconds: a day. */
-export const longestAgo = 24 * 60 * 60_000
+const longestAgo = 24 * 60 * 60_000
 
 /**
  * How long before it reached the server an Entry happened, in milliseconds, a day at most: what a
  * merged navigation says of its last gesture.
  */
 export const Ago = Schema.Int.check(Schema.isBetween({ minimum: 0, maximum: longestAgo }))
+
+/** A span of milliseconds brought within what `Ago` takes: never ahead, a day back at most. */
+export const within = (ago: number) => Math.min(Math.max(ago, 0), longestAgo)
 
 /** The Tiles some Entries' navigations went to, each once, by id: the Titles a reader needs. */
 export const visitedTiles = (entries: ReadonlyArray<Entry>): ReadonlyArray<string> => [
