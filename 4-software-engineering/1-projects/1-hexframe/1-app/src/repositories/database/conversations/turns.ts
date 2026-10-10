@@ -1,5 +1,5 @@
 // Assistant's Turns: the `turn` table (../schema.ts), each a run of the agent answering one Message of
-// an Account's Conversation, read and written by Account. It speaks rows: how a Turn ended is a word
+// an Account's Conversation, in the Mode it started in, read and written by Account. It speaks rows: how a Turn ended is a word
 // Assistant decides and decodes, which the repository keeps as it is given. One Turn runs at most per
 // Conversation, which the table's `turn_running_idx` holds, so two starts at once never both run. Its
 // step, what its agent is doing now, is kept as Assistant encodes it, and dropped as it ends. What
@@ -17,6 +17,8 @@ export interface TurnRow {
   readonly conversationId: string
   readonly messageId: string
   readonly location: string
+  /** The Mode it started in, as Assistant names it. */
+  readonly mode: string
   readonly startedAt: Date
   readonly spent: number
   /** What its agent is doing now, as Assistant encoded it; null between steps and once it ended. */
@@ -31,10 +33,14 @@ export interface Spending {
   readonly month: { readonly spent: number; readonly reserved: number }
 }
 
-/** A Turn as it starts: the Message it answers, by its Entry's id, the Tile it starts in, and when. */
+/**
+ * A Turn as it starts: the Message it answers, by its Entry's id, the Tile it starts in, the Mode it
+ * starts in, and when.
+ */
 export interface TurnStart {
   readonly messageId: string
   readonly location: string
+  readonly mode: string
   readonly startedAt: Date
 }
 
@@ -70,6 +76,8 @@ export class Turns extends Context.Service<
     ) => Effect.Effect<void, never, InTransaction>
     /** The Turn running in the Account's Conversation, if one does. */
     readonly running: (accountId: string) => Effect.Effect<TurnRow | undefined>
+    /** One of the Account's Turns, by its id, running or ended; none for another's. */
+    readonly byId: (accountId: string, turnId: string) => Effect.Effect<TurnRow | undefined>
     /**
      * What one of the Account's running Turns spent and its calls under way reserved, and the same
      * summed over all its Turns started since `since`, that one included, which no counter keeps. None
@@ -108,6 +116,7 @@ const columns = {
   conversationId: turn.conversationId,
   messageId: turn.messageId,
   location: turn.location,
+  mode: turn.mode,
   startedAt: turn.startedAt,
   spent: turn.spent,
   step: turn.step,
@@ -125,7 +134,7 @@ const make = Effect.gen(function* () {
       .from(conversation)
       .where(eq(conversation.accountId, accountId))
 
-  const start = (accountId: string, { messageId, location, startedAt }: TurnStart) =>
+  const start = (accountId: string, { messageId, location, mode, startedAt }: TurnStart) =>
     InTransaction.use(() =>
       Effect.gen(function* () {
         const [message] = yield* database
@@ -149,6 +158,7 @@ const make = Effect.gen(function* () {
             conversationId: message.conversationId,
             messageId,
             location,
+            mode,
             startedAt,
           })
           .onConflictDoNothing()
@@ -197,6 +207,16 @@ const make = Effect.gen(function* () {
       .select(columns)
       .from(turn)
       .where(and(inArray(turn.conversationId, conversationOf(accountId)), isNull(turn.endedAt)))
+      .pipe(
+        Effect.orDie,
+        Effect.map(([row]) => row),
+      )
+
+  const byId = (accountId: string, turnId: string) =>
+    database
+      .select(columns)
+      .from(turn)
+      .where(and(eq(turn.id, turnId), inArray(turn.conversationId, conversationOf(accountId))))
       .pipe(
         Effect.orDie,
         Effect.map(([row]) => row),
@@ -263,7 +283,7 @@ const make = Effect.gen(function* () {
       }),
     )
 
-  return Turns.of({ start, end, step, running, spending, spentSince, charge })
+  return Turns.of({ start, end, step, running, byId, spending, spentSince, charge })
 })
 
 /** The Turns repository, over the `Database` it is given. */

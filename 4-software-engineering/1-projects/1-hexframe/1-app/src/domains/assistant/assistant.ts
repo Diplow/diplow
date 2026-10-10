@@ -11,12 +11,15 @@
 // And what a Turn spends on the model: whether a call its agent makes may go, through the model relay
 // (src/repositories/agent/anthropic/), and what it cost, recorded on the Turn (./spending/). And how a
 // Turn runs: its prompt and its launcher written into the sandbox, its agent started there, and what
-// its agent says as it runs, followed (./agent/).
+// its agent says as it runs, followed (./agent/). And the Conversation's Mode and its Proposal, the
+// writes its agent drafts in ask, decided by its Decider (./operations/) on the Conversation it
+// locked (src/repositories/database/conversations/proposals.ts).
 import { Clock, Effect, Result, Schema } from 'effect'
 
 import { Anthropic, type Endpoint } from '#/repositories/agent/anthropic/anthropic'
 import { Sandbox, type SandboxFile } from '#/repositories/agent/sandbox/sandbox'
 import { Conversations } from '#/repositories/database/conversations/conversations'
+import { type ConversationRow, Proposals } from '#/repositories/database/conversations/proposals'
 import { type TurnRow, Turns } from '#/repositories/database/conversations/turns'
 
 import { type Launch, launchOf, processOf } from './agent/launch'
@@ -31,8 +34,13 @@ import {
   type Entry,
   overdue,
   EntryContent,
+  type Fate,
+  firstMode,
   isBadEnd,
+  Mode,
   type Navigation,
+  ProposedChange,
+  routeOf,
   spanOf,
   type Summarized,
   type Turn,
@@ -41,6 +49,20 @@ import {
   within,
 } from './entities'
 import { AllowanceSpent, TurnRunning } from './errors'
+import {
+  AcceptProposal,
+  changesOf,
+  type ConversationEvent,
+  type ConversationState,
+  type Decided,
+  decide,
+  DiscardProposal,
+  Draft,
+  type DraftedWrite,
+  evolve,
+  type OpenProposal,
+  SetMode,
+} from './operations'
 import { settings } from './settings'
 import { type Allowed, allowedCall, type CallRefused } from './spending/call'
 import {
@@ -135,6 +157,8 @@ export const writeSystem = (accountId: string, files: ReadonlyArray<SandboxFile>
 
 const decodedEnd = Schema.decodeUnknownEffect(TurnEnd)
 
+const decodedMode = Schema.decodeUnknownEffect(Mode)
+
 const decodedStep = Schema.decodeUnknownEffect(TurnStep)
 
 const encodedStep = Schema.encodeSync(TurnStep)
@@ -146,7 +170,8 @@ const encodedStep = Schema.encodeSync(TurnStep)
 const turnOf = (row: TurnRow) =>
   Effect.gen(function* () {
     const { id, conversationId, messageId, location, startedAt, spent, endedAt, end } = row
-    const turn: Turn = { id, conversationId, message: messageId, location, startedAt, spent }
+    const mode = yield* Effect.orDie(decodedMode(row.mode))
+    const turn: Turn = { id, conversationId, message: messageId, location, mode, startedAt, spent }
     if (endedAt === null) {
       if (row.step === null) return turn
       return { ...turn, step: yield* Effect.orDie(decodedStep(row.step)) }
@@ -193,17 +218,24 @@ export const endOverdueTurn = (accountId: string) =>
 
 /**
  * Starts a Turn answering one of the Account's Messages, by its Entry's id, in the Tile `location`
- * names, and answers it: `AllowanceSpent` once the Account's Turns spent the month's allowance;
- * `TurnRunning` while another runs in its Conversation, one at a time, one past its deadline included
- * until `endOverdueTurn` ended it, which the caller does first, so it revokes its Key with it.
+ * names, in the Mode its Conversation is in, and answers it: `AllowanceSpent` once the Account's Turns
+ * spent the month's allowance; `TurnRunning` while another runs in its Conversation, one at a time,
+ * one past its deadline included until `endOverdueTurn` ended it, which the caller does first, so it
+ * revokes its Key with it.
  */
 export const startTurn = (accountId: string, start: { message: string; location: string }) =>
   Effect.gen(function* () {
     const startedAt = new Date(yield* Clock.currentTimeMillis)
     const month = yield* Turns.use((turns) => turns.spentSince(accountId, monthOf(startedAt)))
     if (allowanceSpent(month.spent)) return yield* new AllowanceSpent()
+    const { mode } = yield* conversationNow(accountId)
     const row = yield* Turns.use((turns) =>
-      turns.start(accountId, { messageId: start.message, location: start.location, startedAt }),
+      turns.start(accountId, {
+        messageId: start.message,
+        location: start.location,
+        mode,
+        startedAt,
+      }),
     )
     if (row === undefined) return yield* new TurnRunning()
     return yield* turnOf(row)
@@ -336,6 +368,7 @@ export const startAgent = (accountId: string, start: TurnStart) =>
       location: start.location,
       links: start.links,
       help: start.help,
+      mode: start.turn.mode,
     })
     const { files, run } = launchOf({
       turnId: start.turn.id,
@@ -451,3 +484,188 @@ export const settleCall = (
   Turns.use((turns) =>
     turns.charge(accountId, turnId, { spent: call.charged, reserved: -call.reserved }),
   )
+
+const Drafts = Schema.Array(
+  Schema.Struct({ write: Schema.Unknown, changes: Schema.Array(ProposedChange) }),
+)
+
+const decodedDrafts = Schema.decodeUnknownEffect(Drafts)
+
+const encodedDrafts = Schema.encodeSync(Drafts)
+
+/**
+ * A Conversation as its row keeps it, as the Decider decides on it, with its open Proposal's Entry.
+ * A Mode or drafts Assistant cannot read back is a defect: it wrote them.
+ */
+const stateOf = (row: ConversationRow | undefined) =>
+  Effect.gen(function* () {
+    if (row === undefined) return { state: { mode: firstMode } satisfies ConversationState }
+    const mode = yield* Effect.orDie(decodedMode(row.mode))
+    if (row.open === undefined) return { state: { mode } satisfies ConversationState }
+    const { id, entryId, turnId, drafts } = row.open
+    const open: OpenProposal = {
+      id,
+      turn: turnId,
+      drafts: yield* Effect.orDie(decodedDrafts(drafts)),
+    }
+    return { state: { mode, open } satisfies ConversationState, entry: entryId }
+  })
+
+/** The Account's Conversation's Mode and open Proposal, as they stand: `ask` and none before its first. */
+const conversationNow = (accountId: string) =>
+  Effect.map(
+    Effect.flatMap(
+      Proposals.use((proposals) => proposals.current(accountId)),
+      stateOf,
+    ),
+    ({ state }) => state,
+  )
+
+/** The Mode the Account's Conversation is in: what its next Turn takes. */
+export const conversationMode = (accountId: string) =>
+  Effect.map(conversationNow(accountId), ({ mode }) => mode)
+
+/**
+ * The Account's open Proposal, if one is, as it stands: what the reads and the files of a Turn that
+ * drafts show over the System, and the page.
+ */
+export const openProposal = (accountId: string) =>
+  Effect.map(conversationNow(accountId), ({ open }) => open)
+
+/**
+ * The Account's open Proposal, if one is, its Conversation locked until the transaction ends, so no
+ * other draft, accept nor discard decides on it meanwhile: what a draft folds over the System before
+ * Assistant hears of it, and an accept runs. In the transaction the API layer opened.
+ */
+export const lockedProposal = (accountId: string) =>
+  Effect.map(
+    Effect.flatMap(
+      Proposals.use((proposals) => proposals.locked(accountId)),
+      stateOf,
+    ),
+    ({ state }) => state.open,
+  )
+
+/** A Proposal's Entry, as the timeline shows it: its changes, and how it stands. */
+const proposalEntry = (
+  proposal: string,
+  drafts: ReadonlyArray<DraftedWrite>,
+  fate: Fate,
+): EntryContent => ({ _tag: 'Proposal', proposal, changes: changesOf({ drafts }), fate })
+
+/** What one event writes, the Conversation before and after it, and its open Proposal's Entry. */
+interface Written {
+  readonly event: ConversationEvent
+  readonly before: ConversationState
+  readonly after: ConversationState
+  readonly entry: string | undefined
+}
+
+/**
+ * Writes one event of a Conversation: the one change to its rows it stands for, and its Proposal's
+ * Entry following it. Answers the open Proposal's Entry after it.
+ */
+const written = (accountId: string, { event, before, after, entry }: Written) =>
+  Effect.gen(function* () {
+    const proposals = yield* Proposals
+    const rewrite = (id: string, content: EntryContent) =>
+      Conversations.use((conversations) => conversations.rewrite(accountId, id, encoded(content)))
+    const now = new Date(yield* Clock.currentTimeMillis)
+    switch (event._tag) {
+      case 'ModeSet':
+        yield* proposals.setMode(accountId, event.mode)
+        return entry
+      case 'ProposalOpened': {
+        const opened = yield* record(accountId, proposalEntry(event.id, [], 'open'))
+        const opening = { id: event.id, entryId: opened.id, turnId: event.turn, at: now }
+        yield* proposals.open(accountId, { ...opening, drafts: encodedDrafts([]) })
+        return opened.id
+      }
+      case 'Drafted': {
+        const drafts = after.open?.drafts ?? []
+        yield* proposals.write(accountId, event.proposal, encodedDrafts(drafts))
+        if (entry !== undefined)
+          yield* rewrite(entry, proposalEntry(event.proposal, drafts, 'open'))
+        return entry
+      }
+      case 'ProposalDecided': {
+        yield* proposals.decide(accountId, event.proposal, { fate: event.fate, at: now })
+        const drafts = before.open?.drafts ?? []
+        if (entry !== undefined)
+          yield* rewrite(entry, proposalEntry(event.proposal, drafts, event.fate))
+        return undefined
+      }
+    }
+  })
+
+/**
+ * Runs an Operation on the Account's Conversation: locks it, loads it, asks `decide` through
+ * `decided`, then writes one change per event, as `evolve` leaves the Conversation after it, and
+ * answers the Conversation they leave. What `decide` refuses is refused here, nothing written. In the
+ * transaction the API layer opened.
+ */
+const operate = <E>(accountId: string, decided: (state: ConversationState) => Decided<E>) =>
+  Effect.gen(function* () {
+    const locked = yield* Proposals.use((proposals) => proposals.locked(accountId))
+    const loaded = yield* stateOf(locked)
+    const events = yield* Effect.fromResult(decided(loaded.state))
+    let state = loaded.state
+    let entry = loaded.entry
+    for (const event of events) {
+      const after = evolve(state, event)
+      entry = yield* written(accountId, { event, before: state, after, entry })
+      state = after
+    }
+    return state
+  })
+
+/** Switches the Mode of the Account's Conversation: the Turns started from then on take it. */
+export const setMode = (accountId: string, mode: Mode) =>
+  Effect.map(
+    operate(accountId, (state) => decide(state, new SetMode({ mode }))),
+    (state) => state.mode,
+  )
+
+/**
+ * Drafts a write one of the Account's Turns made in ask into the Conversation's open Proposal, opening
+ * one with its Entry when none is, and answers the Proposal: the write as the API layer encoded it,
+ * opaque, and the changes it makes, as Mapping summarized them on the System the Proposal makes. In the
+ * transaction the API layer opened, after `lockedProposal`.
+ */
+export const draft = (
+  accountId: string,
+  turnId: string,
+  { write, changes }: { readonly write: unknown; readonly changes: ReadonlyArray<ProposedChange> },
+) =>
+  Effect.gen(function* () {
+    const proposal = crypto.randomUUID()
+    const state = yield* operate(accountId, (locked) =>
+      decide(locked, new Draft({ turn: turnId, write, changes }), { proposal }),
+    )
+    if (state.open === undefined) return yield* Effect.die(new Error('A draft left no Proposal'))
+    return state.open
+  })
+
+/**
+ * Accepts the Account's open Proposal of this id, whole: refused `ProposalClosed` when it is open no
+ * longer. The API layer runs its writes on the System in the same transaction, after `lockedProposal`,
+ * and Assistant records that the user accepted it.
+ */
+export const acceptProposal = (accountId: string, proposal: string) =>
+  Effect.asVoid(operate(accountId, (state) => decide(state, new AcceptProposal({ proposal }))))
+
+/** Discards the Account's open Proposal of this id: refused `ProposalClosed` when it is open no longer. */
+export const discardProposal = (accountId: string, proposal: string) =>
+  Effect.asVoid(operate(accountId, (state) => decide(state, new DiscardProposal({ proposal }))))
+
+/**
+ * What becomes of a write one of the Account's Turns makes, which the API layer routes on: drafted
+ * into the Conversation's Proposal by a Turn that started in ask, applied by one that started in apply.
+ * A Turn of no Conversation of the Account's is a defect: its Key proves it.
+ */
+export const route = (accountId: string, turnId: string) =>
+  Effect.gen(function* () {
+    const row = yield* Turns.use((turns) => turns.byId(accountId, turnId))
+    if (row === undefined) return yield* Effect.die(new Error("A Turn's Key proved no Turn"))
+    return routeOf(yield* turnOf(row))
+  })

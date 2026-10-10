@@ -9,7 +9,7 @@ import { Result, Schema } from 'effect'
 import { type System, TileId, tileAt } from '../../entities'
 import { decide, type Decided, type Refusal } from '../decider/decide'
 import { evolve } from '../decider/evolve'
-import { type OperationEvent, type Summary, summaryOf } from '../events'
+import { changeOf, type ChangeSummary, type OperationEvent } from '../events'
 import { Operation } from '../operation'
 
 /**
@@ -80,11 +80,11 @@ export const added = (folded: Folded, operation: Operation, made?: string) => {
 }
 
 /**
- * What a timeline tells of some events of a batch, each summarized by Mapping (`summaryOf`), the
- * Titles it does not say read from `after`, the System once they applied.
+ * What a timeline tells of some events of a batch, each a change summarized by Mapping (`changeOf`),
+ * the Titles it does not say read from `after`, the System once they applied.
  */
 export const summariesIn = (
   after: System,
   events: ReadonlyArray<OperationEvent>,
-): ReadonlyArray<Summary> =>
-  events.map((event) => summaryOf(event, (id) => tileAt(after, id)?.title ?? ''))
+): ReadonlyArray<ChangeSummary> =>
+  events.map((event) => changeOf(event, (id) => tileAt(after, id)?.title ?? ''))

@@ -1,7 +1,7 @@
 // Assistant's repository: the `conversation` and `conversation_entry` tables (../schema.ts), one
 // Conversation per Account, read and written by Account. It speaks rows: an Entry's content is a JSON
 // value Assistant encodes, decodes and bounds, which the repository keeps as it is given.
-import { and, asc, desc, eq, gte, lt } from 'drizzle-orm'
+import { and, asc, desc, eq, gte, inArray, lt } from 'drizzle-orm'
 import { Context, Effect, Layer } from 'effect'
 
 import { Database, InTransaction } from '../database'
@@ -31,6 +31,15 @@ export class Conversations extends Context.Service<
       accountId: string,
       entry: Omit<EntryRow, 'id'>,
     ) => Effect.Effect<string, never, InTransaction>
+    /**
+     * Rewrites the content of one of the Account's Entries, as Assistant encoded it again: a
+     * Proposal's, which follows it until the user decides it. Inside a transaction.
+     */
+    readonly rewrite: (
+      accountId: string,
+      entryId: string,
+      content: unknown,
+    ) => Effect.Effect<void, never, InTransaction>
     /** The Entries of the Account's Conversation within a span, oldest first; none without one. */
     readonly between: (accountId: string, span: Span) => Effect.Effect<ReadonlyArray<EntryRow>>
     /** The instant of the Account's latest Entry before an instant, excluded; none without one. */
@@ -73,6 +82,26 @@ const make = Effect.gen(function* () {
           .pipe(Effect.orDie)
         return id
       }),
+    )
+
+  const rewrite = (accountId: string, entryId: string, content: unknown) =>
+    InTransaction.use(() =>
+      database
+        .update(conversationEntry)
+        .set({ content })
+        .where(
+          and(
+            eq(conversationEntry.id, entryId),
+            inArray(
+              conversationEntry.conversationId,
+              database
+                .select({ id: conversation.id })
+                .from(conversation)
+                .where(eq(conversation.accountId, accountId)),
+            ),
+          ),
+        )
+        .pipe(Effect.orDie, Effect.asVoid),
     )
 
   const between = (accountId: string, { from, to }: Span) =>
@@ -120,7 +149,7 @@ const make = Effect.gen(function* () {
         Effect.map(([found]) => found?.id),
       )
 
-  return Conversations.of({ append, between, latestBefore, lastEntry })
+  return Conversations.of({ append, rewrite, between, latestBefore, lastEntry })
 })
 
 /** The conversations repository, over the `Database` it is given. */

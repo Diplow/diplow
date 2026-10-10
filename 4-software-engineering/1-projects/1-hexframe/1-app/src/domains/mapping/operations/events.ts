@@ -128,6 +128,9 @@ export type Summary =
     }
   | { readonly _tag: 'Import'; readonly tile: Named; readonly count: number }
 
+/** A change as Mapping summarizes it: what an Operation's event did, never an import. */
+export type ChangeSummary = Extract<Summary, { readonly _tag: 'Change' }>
+
 /** The ids an event names, the Tile it is about first, with the Title it says of it, if it says one. */
 function subjectsOf(event: MappingEvent): { tile: string; title?: string; other?: string } {
   switch (event._tag) {
@@ -154,19 +157,29 @@ export function untitledIn(event: MappingEvent): ReadonlyArray<string> {
   return [...(title === undefined ? [tile] : []), ...(other === undefined ? [] : [other])]
 }
 
-/**
- * Summarizes one of Mapping's events. A Title the event does not say is `titleOf` the Tile, as the
- * System holds it after the change, `''` once it no longer does; a deleted Tile's comes from its event,
- * since no read finds it.
- */
-export function summaryOf(event: MappingEvent, titleOf: (id: string) => string): Summary {
+/** The Tile an event is about, its Title from the event or, when it says none, `titleOf` it. */
+const aboutOf = (event: MappingEvent, titleOf: (id: string) => string) => {
   const { tile, title, other } = subjectsOf(event)
-  const about = { id: tile, title: title ?? titleOf(tile) }
-  if (event._tag === 'TilesImported') return { _tag: 'Import', tile: about, count: event.count }
+  return { about: { id: tile, title: title ?? titleOf(tile) }, other }
+}
+
+/**
+ * Summarizes an Operation's event, a change. A Title the event does not say is `titleOf` the Tile, as
+ * the System holds it after the change, `''` once it no longer does; a deleted Tile's comes from its
+ * event, since no read finds it.
+ */
+export function changeOf(event: OperationEvent, titleOf: (id: string) => string): ChangeSummary {
+  const { about, other } = aboutOf(event, titleOf)
   return {
     _tag: 'Change',
     verb: event._tag,
     tile: about,
     ...(other !== undefined && { other: { id: other, title: titleOf(other) } }),
   }
+}
+
+/** Summarizes one of Mapping's events, a change (`changeOf`) or an import, its Titles as `changeOf` reads them. */
+export function summaryOf(event: MappingEvent, titleOf: (id: string) => string): Summary {
+  if (event._tag !== 'TilesImported') return changeOf(event, titleOf)
+  return { _tag: 'Import', tile: aboutOf(event, titleOf).about, count: event.count }
 }

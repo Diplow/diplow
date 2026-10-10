@@ -1,9 +1,10 @@
 // A Turn: one run of the agent answering a Message, started afresh in a Tile's folder, the Conversation
-// its only memory. It records what it spent, what its agent is doing now, and how it ended; one runs at
-// most per Conversation. Pure.
+// its only memory, in the Mode its Conversation was in. It records what it spent, what its agent is
+// doing now, and how it ended; one runs at most per Conversation. Pure.
 import { Schema } from 'effect'
 
 import { leadingLink } from '../message/links'
+import type { Mode } from '../proposal/proposal'
 
 /** How a Turn ended when not by its answer: what the timeline tells in an Entry of its own. */
 export const BadEnd = Schema.Literals(['stopped', 'ceiling', 'allowance', 'time', 'sandbox'])
@@ -51,6 +52,8 @@ export interface Turn {
   readonly message: string
   /** The Tile it starts in, by its id. */
   readonly location: string
+  /** The Mode its Conversation was in as it started, which its writes keep until it ends. */
+  readonly mode: Mode
   readonly startedAt: Date
   /** What it spent on the model, in millionths of a dollar. */
   readonly spent: number

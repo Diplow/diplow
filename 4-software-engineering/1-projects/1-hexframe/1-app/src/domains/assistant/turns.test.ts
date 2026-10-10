@@ -3,6 +3,7 @@ import { Effect, Layer } from 'effect'
 import { TestClock } from 'effect/testing'
 
 import { layer as conversationsLayer } from '#/repositories/database/conversations/conversations'
+import { layer as proposalsLayer } from '#/repositories/database/conversations/proposals'
 import { Turns, layer as turnsLayer } from '#/repositories/database/conversations/turns'
 import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
@@ -24,7 +25,7 @@ import { settings } from './settings'
 // as the API layer does, in a transaction, one running at most per Conversation. The clock is the
 // test's, so every instant is the one written.
 
-const TestLayer = Layer.mergeAll(conversationsLayer, turnsLayer).pipe(
+const TestLayer = Layer.mergeAll(conversationsLayer, turnsLayer, proposalsLayer).pipe(
   Layer.provideMerge(TestDatabase),
 )
 

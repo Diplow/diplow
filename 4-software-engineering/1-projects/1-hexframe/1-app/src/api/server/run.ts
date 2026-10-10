@@ -25,6 +25,10 @@ import {
   Conversations,
   layer as conversationsLayer,
 } from '#/repositories/database/conversations/conversations'
+import {
+  Proposals,
+  layer as proposalsLayer,
+} from '#/repositories/database/conversations/proposals'
 import { Turns, layer as turnsLayer } from '#/repositories/database/conversations/turns'
 import { type Database, layer as databaseLayer } from '#/repositories/database/database'
 import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
@@ -90,19 +94,31 @@ const anthropic =
 
 /**
  * What the domains use: Better Auth, the allowlist and the Turn's Keys, the tiles repository, Zip, the
- * conversations and Turns repositories, the sandbox, the model relay, and the database itself.
+ * conversations, Turns and Proposals repositories, the sandbox, the model relay, and the database
+ * itself.
  */
 type Repositories =
-  Auth | Allowlist | TurnKeys | Database | Tiles | Zip | Conversations | Turns | Sandbox | Anthropic
+  | Auth
+  | Allowlist
+  | TurnKeys
+  | Database
+  | Tiles
+  | Zip
+  | Conversations
+  | Turns
+  | Proposals
+  | Sandbox
+  | Anthropic
 
 /**
  * The repositories the domains use: Better Auth, the allowlist and the Turn's Keys for IAM, the tiles
- * repository and Zip for Mapping, the conversations and Turns repositories, the sandbox and the model
- * relay for Assistant; and the database itself, for the transaction a program opens (`transactional`).
+ * repository and Zip for Mapping, the conversations, Turns and Proposals repositories, the sandbox and
+ * the model relay for Assistant; and the database itself, for the transaction a program opens
+ * (`transactional`).
  */
 const repositories: Layer.Layer<Repositories> = Layer.mergeAll(
   Layer.provideMerge(
-    Layer.mergeAll(tilesLayer, conversationsLayer, turnsLayer, turnKeysLayer),
+    Layer.mergeAll(tilesLayer, conversationsLayer, turnsLayer, proposalsLayer, turnKeysLayer),
     auth,
   ),
   allowlistLayer,

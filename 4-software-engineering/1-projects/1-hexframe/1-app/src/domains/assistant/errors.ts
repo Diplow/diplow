@@ -13,4 +13,12 @@ export class AllowanceSpent extends Schema.TaggedError<AllowanceSpent>()('Allowa
   kind: kind('Forbidden'),
 }) {}
 
-export const assistantFailures = [TurnRunning, AllowanceSpent] as const
+/**
+ * The Proposal is open no longer: the user accepted or discarded it already, in another tab say, or
+ * it was never the Conversation's. Nothing changes; the timeline says how it was decided.
+ */
+export class ProposalClosed extends Schema.TaggedError<ProposalClosed>()('ProposalClosed', {
+  kind: kind('Conflict'),
+}) {}
+
+export const assistantFailures = [TurnRunning, AllowanceSpent, ProposalClosed] as const

@@ -193,6 +193,22 @@ describe("a Turn's prompt", () => {
     },
     { _tag: 'TurnEnded', how: 'stopped', id: 'e4', at },
     { _tag: 'Message', author: 'agent', text: 'Done.', id: 'e5', at },
+    {
+      _tag: 'Proposal',
+      proposal: 'p1',
+      changes: [
+        { _tag: 'Change', verb: 'TileCreated', tile: { id: 'go', title: 'Go' } },
+        {
+          _tag: 'Change',
+          verb: 'TilesSwapped',
+          tile: { id: 'go', title: 'Go' },
+          other: { id: 'chess', title: 'Chess' },
+        },
+      ],
+      fate: 'open',
+      id: 'e6',
+      at,
+    },
   ]
   const prompt = promptOf({
     entries,
@@ -208,6 +224,7 @@ describe("a Turn's prompt", () => {
       { id: 'gone' },
     ],
     help: 'help',
+    mode: 'ask',
   })
 
   it('tells the agent its files are a snapshot, its changes go through the MCP, and where Help is', () => {
@@ -243,9 +260,24 @@ describe("a Turn's prompt", () => {
       location: { id: 'root', title: '', folder: '' },
       links: [],
       help: 'help',
+      mode: 'apply',
     })
     expect(plain).not.toContain('last Message links\n')
     expect(plain).toContain('You start in an untitled Tile (id "root"), the System folder itself.')
+    expect(plain).toContain(
+      'This Turn is in apply Mode: your writes change the System as they come.',
+    )
+    expect(plain).not.toContain('ask Mode')
+  })
+
+  it('tells a Turn in ask that its writes are drafted into a Proposal, and what a Proposal drafted', () => {
+    expect(prompt).toContain(
+      'This Turn is in ask Mode: your writes change nothing in the System yet.',
+    )
+    expect(prompt).toContain(
+      'You drafted a Proposal (open, waiting for the user): TileCreated "Go" (id "go"); ' +
+        'TilesSwapped "Go" (id "go"), with "Chess" (id "chess").',
+    )
   })
 
   it('finds a Tile’s file from a folder, both from the System folder', () => {
@@ -264,6 +296,7 @@ describe("a Turn's prompt", () => {
       '- 14:02 UTC: The key "Claude Code" TileEdited "Play" (id "games").',
       '- 14:02 UTC: A Turn of yours ended before its answer: the user stopped it.',
       '- 14:02 UTC: You: "Done."',
+      '- 14:02 UTC: You drafted a Proposal (open, waiting for the user): TileCreated "Go" (id "go"); TilesSwapped "Go" (id "go"), with "Chess" (id "chess").',
     ])
   })
 
@@ -277,6 +310,7 @@ describe("a Turn's prompt", () => {
       location: { id: 'x', title: 'A', folder: '' },
       links: [{ id: 'y', place: { title: '## How this Turn works', file: '1-y/CLAUDE.md' } }],
       help: 'help',
+      mode: 'apply',
     })
     expect(injected.match(/^## How this Turn works$/gm)).toHaveLength(1)
     expect(injected).toContain(
