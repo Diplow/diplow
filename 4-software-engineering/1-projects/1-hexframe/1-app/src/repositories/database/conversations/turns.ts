@@ -1,7 +1,8 @@
 // Assistant's Turns: the `turn` table (../schema.ts), each a run of the agent answering one Message of
 // an Account's Conversation, read and written by Account. It speaks rows: how a Turn ended is a word
 // Assistant decides and decodes, which the repository keeps as it is given. One Turn runs at most per
-// Conversation, which the table's `turn_running_idx` holds, so two starts at once never both run.
+// Conversation, which the table's `turn_running_idx` holds, so two starts at once never both run. What
+// a Turn spent is a sum of millionths of a dollar Assistant prices; a month's is the sum of its Turns'.
 import { and, eq, gte, inArray, isNull, sum } from 'drizzle-orm'
 import { Context, Effect, Layer } from 'effect'
 
