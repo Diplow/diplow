@@ -84,7 +84,7 @@ function render(closely = false) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   const wrapper = ({ children }: { children: ReactNode }) =>
     createElement(QueryClientProvider, { client }, children)
-  return renderHook(
+  const rendered = renderHook(
     () => {
       useFollowLatest({ closely })
       const days = useConversation().data?.pages
@@ -92,7 +92,17 @@ function render(closely = false) {
     },
     { wrapper },
   )
+  return { ...rendered, client }
 }
+
+/** A write settles, landed, in the System's queue or another. */
+const settled = (client: QueryClient, queue: string) =>
+  act(() =>
+    client
+      .getMutationCache()
+      .build(client, { scope: { id: queue }, mutationFn: () => Promise.resolve() })
+      .execute(undefined),
+  )
 
 /** The tab loses focus, then regains it. */
 function refocus() {
@@ -102,7 +112,7 @@ function refocus() {
   })
 }
 
-describe('the page following the System and the Conversation', () => {
+describe('the page following the System', () => {
   it('reads the System again on focus once its Version moved past the cache’s', async () => {
     reading(systemAt(3, 'First'), systemAt(4, 'Read again'))
     polling(3, 4)
@@ -201,7 +211,9 @@ describe('the page following the System and the Conversation', () => {
     expect(Assistant.latest).toHaveBeenCalledTimes(1)
     expect(Mapping.system).toHaveBeenCalledTimes(1)
   })
+})
 
+describe('the page following the Conversation', () => {
   it('reads the Conversation again on focus once its last Entry is another, the System not', async () => {
     reading(systemAt(3, 'First'), systemAt(3, 'Never read'))
     conversing(dayWith('mine'), dayWith('mine', 'a Key’s'))
@@ -256,5 +268,22 @@ describe('the page following the System and the Conversation', () => {
       expect(result.current.said).toMatchObject({ text: 'edited by a Key' })
     })
     expect(result.current.system?.root.title).toBe('Read again')
+  })
+
+  it('polls once a write to the System settled, and reads the Entry it recorded', async () => {
+    reading(systemAt(3, 'First'), systemAt(3, 'First'))
+    conversing(dayWith(), dayWith('you edited it'))
+    polling(3, { version: 3, last: 'you edited it' })
+    const { result, client } = render()
+    await waitFor(() => {
+      expect(Assistant.latest).toHaveBeenCalledTimes(1)
+    })
+    await settled(client, 'conversation')
+    expect(Assistant.latest).toHaveBeenCalledTimes(1)
+    await settled(client, 'system')
+    await waitFor(() => {
+      expect(result.current.said).toMatchObject({ text: 'you edited it' })
+    })
+    expect(Assistant.latest).toHaveBeenCalledTimes(2)
   })
 })

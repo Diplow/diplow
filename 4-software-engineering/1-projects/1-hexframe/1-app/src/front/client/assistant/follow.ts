@@ -10,7 +10,7 @@ import { type QueryClient, type QueryKey, useQuery, useQueryClient } from '@tans
 import { latest } from '#/api/assistant/assistant'
 
 import { read, settle } from '../calls'
-import { systemRead } from '../mapping/queries'
+import { systemRead, useEachSystemWrite } from '../mapping/queries'
 import { conversationRead } from './conversation'
 
 /** How often a page following closely polls, in milliseconds. */
@@ -65,11 +65,15 @@ async function polled(client: QueryClient): Promise<Latest> {
 
 /**
  * Has the page follow the System and the Conversation: the latest of both polled when the tab regains
- * focus, and every 2 s while `closely` says to, each read again once it moved. Nothing drives
- * `closely` yet: a Turn will, while it runs.
+ * focus, every 2 s while `closely` says to, and once each write to the System the page made has
+ * settled, since the server recorded it in the Conversation as it committed; each read again once it
+ * moved. Nothing drives `closely` yet: a Turn will, while it runs.
  */
 export function useFollowLatest({ closely }: { closely: boolean }) {
   const client = useQueryClient()
+  useEachSystemWrite(() => {
+    void client.refetchQueries({ queryKey: latestRead.queryKey })
+  }, 'settled')
   useQuery({
     ...latestRead,
     queryFn: () => polled(client),

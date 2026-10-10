@@ -206,10 +206,12 @@ export function useSystemRefusals(take: Take) {
 /**
  * Calls `react` the moment a write to the System is made, an import's included, while the component
  * is mounted, before the write is sent: what the Conversation's navigation sender sends the user's
- * navigation before. React subscribes once, through `useSyncExternalStore`, which never re-renders
- * here: the snapshot is always the same.
+ * navigation before. With `settled`, the moment it settled instead, landed or refused, once the read
+ * after it has landed: what the page's poll reads the Conversation again after, since the write
+ * recorded an Entry there. React subscribes once, through `useSyncExternalStore`, which never
+ * re-renders here: the snapshot is always the same.
  */
-export function useEachSystemWrite(react: () => void) {
+export function useEachSystemWrite(react: () => void, moment: 'made' | 'settled' = 'made') {
   const client = useQueryClient()
   // The latest `react`; the subscription stays the same.
   const latest = useRef(react)
@@ -217,11 +219,15 @@ export function useEachSystemWrite(react: () => void) {
   const subscribe = useCallback(
     () =>
       client.getMutationCache().subscribe((event) => {
-        if (event.type === 'added' && event.mutation.options.scope?.id === systemQueue) {
-          latest.current()
-        }
+        if (event.mutation?.options.scope?.id !== systemQueue) return
+        const now =
+          moment === 'made'
+            ? event.type === 'added'
+            : event.type === 'updated' &&
+              (event.action.type === 'success' || event.action.type === 'error')
+        if (now) latest.current()
       }),
-    [client],
+    [client, moment],
   )
   useSyncExternalStore(subscribe, nothing, nothing)
 }
