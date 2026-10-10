@@ -1,6 +1,7 @@
 // The canvas's state, as it draws it: the view the URL holds resolved against the System, its hexes,
 // the rings the center can show, and what each gesture asks of the view. The view itself stays the
-// URL's: every action hands the next one to `onViewChange`, for the route to navigate to.
+// URL's: every action hands the next one to `onViewChange`, for the route to navigate to, with the
+// gesture that asked for it and the Tile it was made on.
 import { useRef } from 'react'
 
 import { layoutCanvas, type CanvasHex } from '../geometry/shape'
@@ -13,7 +14,9 @@ import {
   withFrame,
   withInner,
   type CanvasView,
+  type Gesture,
   type ShownView,
+  type ViewAction,
 } from '../view/view'
 
 /** A hex holding a Tile, which a click acts on. */
@@ -24,10 +27,24 @@ export type TileHex = Extract<CanvasHex, { kind: 'tile' }>
  * of the ring around it opens, or closes once open; anything else is centered, having nothing to
  * open at depth 2. A double-click, or Shift+Enter, centers any Tile but the center.
  */
-export type TileAction =
+export type TileAction = Extract<
+  Gesture,
   'expand' | 'collapse' | 'show-context' | 'hide-context' | 'hide-leaves' | 'center'
+>
 
 const hiding: Record<InnerKind, TileAction> = { context: 'hide-context', leaves: 'hide-leaves' }
+const showing: Record<InnerKind, Gesture> = { context: 'show-context', leaves: 'show-leaves' }
+const around: Record<OuterKind, Gesture> = {
+  children: 'show-children-around',
+  branches: 'show-branches-around',
+  leaves: 'show-leaves-around',
+}
+
+/** The gesture that shows `kind` inside the center, or hides the ring `inner` shown there; none for no change. */
+function insideGesture(kind: InnerKind | undefined, inner: InnerKind | undefined) {
+  if (kind !== undefined) return kind === inner ? undefined : showing[kind]
+  return inner === undefined ? undefined : hiding[inner]
+}
 
 /** What a click on `hex` does in `shown`; nothing on a centered Leaf, which opens nothing. */
 function tileAction(hex: TileHex, shown: ShownView): TileAction | undefined {
@@ -50,7 +67,8 @@ interface CanvasInput {
   /** The System's root Tile, with everything below it. */
   system: TileNode
   view: CanvasView
-  onViewChange: (view: CanvasView) => void
+  /** The next view, and the gesture that asked for it on which Tile. */
+  onViewChange: (view: CanvasView, action: ViewAction) => void
 }
 
 export function useCanvasState({ system, view, onViewChange }: CanvasInput) {
@@ -59,21 +77,27 @@ export function useCanvasState({ system, view, onViewChange }: CanvasInput) {
   // landed there too, since that click may have redrawn what lies under the pointer.
   const clicked = useRef<string | undefined>(undefined)
 
+  const change = (next: CanvasView, gesture: Gesture, tile: string) => {
+    onViewChange(next, { gesture, tile })
+  }
+
   function act(hex: TileHex, action: TileAction) {
+    const tile = hex.tile.id
     switch (action) {
       case 'expand':
       case 'collapse':
-        if (hex.direction !== undefined) onViewChange(toggleExpanded(system, view, hex.direction))
+        if (hex.direction !== undefined)
+          change(toggleExpanded(system, view, hex.direction), action, tile)
         return
       case 'show-context':
-        onViewChange(withInner(system, view, 'context'))
+        change(withInner(system, view, 'context'), action, tile)
         return
       case 'hide-context':
       case 'hide-leaves':
-        onViewChange(withInner(system, view, undefined))
+        change(withInner(system, view, undefined), action, tile)
         return
       case 'center':
-        onViewChange(centerOn(system, hex.tile.id))
+        change(centerOn(system, tile), action, tile)
     }
   }
 
@@ -97,13 +121,18 @@ export function useCanvasState({ system, view, onViewChange }: CanvasInput) {
       /** A double-click, or Shift+Enter, on `hex`. */
       center: (hex: TileHex, from: 'pointer' | 'keyboard') => {
         const again = from === 'keyboard' || clicked.current === hex.key
-        if (again && hex.tile.id !== shown.center.id) onViewChange(centerOn(system, hex.tile.id))
+        if (again && hex.tile.id !== shown.center.id)
+          change(centerOn(system, hex.tile.id), 'center', hex.tile.id)
       },
+      /** Picks the ring around the center; the one shown already changes nothing. */
       showAround: (kind: OuterKind) => {
-        onViewChange(withFrame(system, view, kind))
+        if (kind !== shown.frame)
+          change(withFrame(system, view, kind), around[kind], shown.center.id)
       },
+      /** Picks the ring inside the center, or none; the one shown already changes nothing. */
       showInside: (kind: InnerKind | undefined) => {
-        onViewChange(withInner(system, view, kind))
+        const gesture = insideGesture(kind, shown.inner)
+        if (gesture !== undefined) change(withInner(system, view, kind), gesture, shown.center.id)
       },
     },
   }

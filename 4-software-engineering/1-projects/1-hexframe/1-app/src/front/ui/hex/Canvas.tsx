@@ -13,14 +13,17 @@ import { Button } from '../inputs/controls/button'
 import { useCanvasState } from './state/useCanvasState'
 import { Tile, type SwapTarget } from './Tile'
 import type { FrameKind, InnerKind, OuterKind, TileNode } from './view/tiles'
-import type { CanvasView, RingChoices } from './view/view'
+import type { CanvasView, RingChoices, ViewAction } from './view/view'
 
 interface CanvasProps {
   /** The System's root Tile, with everything below it. */
   system: TileNode
   view: CanvasView
-  /** The next view, after a click: the caller puts it in the URL. */
-  onViewChange: (view: CanvasView) => void
+  /**
+   * The next view, after a gesture: the caller puts it in the URL. `action` names the gesture and the
+   * Tile it was made on, for a caller that records where the user went.
+   */
+  onViewChange: (view: CanvasView, action: ViewAction) => void
   /**
    * What a click on an empty slot does, and how a screen reader names it: add a Tile there, move one
    * there; `undefined` for a slot that takes no click. Without it, none does.

@@ -1,16 +1,16 @@
 // The breadcrumb rail beside the canvas: the centered Tile's ancestors, from the System's root down
 // to the centered Tile. A click on an ancestor centers it; like the canvas, the rail holds no view
-// and hands the next one to the route.
+// and hands the next one to the route, with the gesture that asked for it.
 import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 import { pathTo, type TileNode } from '#/front/ui/hex/view/tiles'
-import { centerOn, showView, type CanvasView } from '#/front/ui/hex/view/view'
+import { centerOn, showView, type CanvasView, type ViewAction } from '#/front/ui/hex/view/view'
 
 interface BreadcrumbProps {
   system: TileNode
   view: CanvasView
-  onViewChange: (view: CanvasView) => void
+  onViewChange: (view: CanvasView, action: ViewAction) => void
   className?: string
 }
 
@@ -43,7 +43,7 @@ export function Breadcrumb({ system, view, onViewChange, className }: Breadcrumb
                   aria-label={m.hex_tile_center({ title: tile.title })}
                   className="mt-0.5 min-w-0 rounded-sm text-left text-sm text-muted-foreground outline-none hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
                   onClick={() => {
-                    onViewChange(centerOn(system, tile.id))
+                    onViewChange(centerOn(system, tile.id), { gesture: 'center', tile: tile.id })
                   }}
                 >
                   {tile.title}
