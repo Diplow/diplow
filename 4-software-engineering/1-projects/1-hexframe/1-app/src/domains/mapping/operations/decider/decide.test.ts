@@ -304,10 +304,10 @@ describe('decide, swapping two Tiles', () => {
 })
 
 describe('decide, deleting a Tile', () => {
-  it('deletes a Tile, with everything below it, a Leaf or a Context Tile alike', () => {
+  it('deletes a Tile, with everything below it, a Leaf or a Context Tile alike, saying its Title', () => {
     for (const tileId of [id.branch, id.leaf, id.why]) {
       expect(eventsOf(decided(new DeleteTile({ id: tileId, version: v(tileId) })))).toEqual([
-        new TileDeleted({ id: tileId }),
+        new TileDeleted({ id: tileId, title: tileId }),
       ])
     }
   })

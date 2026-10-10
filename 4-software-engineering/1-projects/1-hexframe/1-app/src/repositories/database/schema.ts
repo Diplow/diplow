@@ -1,6 +1,6 @@
 // Every table hexframe keeps, in Drizzle's schema language. `drizzle-kit generate` diffs this file
 // against the last migration's snapshot and writes the next migration into ../../../migrations/.
-// Tables arrive with the domains that own them: IAM's, then Mapping's.
+// Tables arrive with the domains that own them: IAM's, then Mapping's, then Assistant's.
 import { eq, inArray, isNull } from 'drizzle-orm'
 import {
   type AnyPgColumn,
@@ -199,4 +199,35 @@ export const tile = pgTable(
       inArray(table.direction, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, -1, -2, -3, -4, -5, -6]),
     ),
   ],
+)
+
+// Assistant's (./conversations/conversations.ts): each Account's Conversation, and its Entries.
+
+/**
+ * An Account's Conversation, one at most, added with its first Entry. `account_id` has no key to
+ * `user`, as `tile`'s has none: Assistant ignores IAM.
+ */
+export const conversation = pgTable('conversation', {
+  id: text('id').primaryKey(),
+  accountId: text('account_id').notNull().unique(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+})
+
+/**
+ * An Entry of a Conversation, at the instant it dates from: `content` is the Entry as Assistant
+ * encodes it, which Assistant decodes and bounds, never the repository. `seq` orders two Entries of
+ * the same instant as they were written. Deleting a Conversation deletes its Entries.
+ */
+export const conversationEntry = pgTable(
+  'conversation_entry',
+  {
+    id: text('id').primaryKey(),
+    conversationId: text('conversation_id')
+      .notNull()
+      .references(() => conversation.id, { onDelete: 'cascade' }),
+    at: timestamp('at', { withTimezone: true }).notNull(),
+    seq: bigint('seq', { mode: 'number' }).generatedAlwaysAsIdentity(),
+    content: jsonb('content').notNull(),
+  },
+  (table) => [index('conversation_entry_at_idx').on(table.conversationId, table.at, table.seq)],
 )

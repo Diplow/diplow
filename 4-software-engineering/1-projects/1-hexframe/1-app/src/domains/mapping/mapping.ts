@@ -74,6 +74,80 @@ export const system = (accountId: string) =>
 export const systemVersion = (accountId: string) =>
   Tiles.use((tiles) => Effect.map(tiles.systemVersion(accountId), (version) => version ?? 0))
 
+/**
+ * The Titles of the Tiles of the Account's System among these ids, by id: an id it holds no Tile of,
+ * a deleted one's or a Reference's, has none. What the timeline names a Tile by where it keeps its id.
+ */
+export const titles = (accountId: string, ids: ReadonlyArray<string>) =>
+  Tiles.use((tiles) =>
+    Effect.map(tiles.ofIds(accountId, ids, ['title']), (rows) =>
+      Object.fromEntries(
+        rows.flatMap(({ id, target, title }) => (target === null ? [[id, title] as const] : [])),
+      ),
+    ),
+  )
+
+/** A Tile as a summary names it: its id and its Title, empty when the System no longer holds it. */
+interface Named {
+  readonly id: string
+  readonly title: string
+}
+
+/**
+ * Mapping's own summary of one of its events, what a timeline tells of it: its verb, the event's tag;
+ * the Tile it is about, the one it changed or the one whose Context slot a Reference's create or
+ * delete changed; the other Tile a swap traded places with, or a Reference points at; and how many
+ * Tiles came with an import.
+ */
+export interface Summary {
+  readonly verb: MappingEvent['_tag']
+  readonly tile: Named
+  readonly other?: Named
+  readonly count?: number
+}
+
+/** The ids an event names, the Tile it is about first, with the Title it says of it, if it says one. */
+const subjectsOf = (
+  event: MappingEvent,
+): { tile: string; title?: string; other?: string; count?: number } => {
+  switch (event._tag) {
+    case 'TileCreated':
+    case 'TileDeleted':
+      return { tile: event.id, title: event.title }
+    case 'TileEdited':
+      return { tile: event.id, ...(event.title !== undefined && { title: event.title }) }
+    case 'TileMoved':
+      return { tile: event.id }
+    case 'TilesSwapped':
+      return { tile: event.a, other: event.b }
+    case 'ReferenceCreated':
+      return { tile: event.parent, other: event.target }
+    case 'ReferenceDeleted':
+      return { tile: event.parent }
+    case 'TilesImported':
+      return { tile: event.id, count: event.count }
+  }
+}
+
+/**
+ * Summarizes one of Mapping's events, for the Account whose System it changed. A Title the event does
+ * not say is read as the System holds it now, after the change; a deleted Tile's comes from its event,
+ * since no read finds it.
+ */
+export const summary = (accountId: string, event: MappingEvent) =>
+  Effect.gen(function* () {
+    const { tile, title, other, count } = subjectsOf(event)
+    const unread = [...(title === undefined ? [tile] : []), ...(other === undefined ? [] : [other])]
+    const read = yield* titles(accountId, unread)
+    const named = (id: string): Named => ({ id, title: read[id] ?? '' })
+    return {
+      verb: event._tag,
+      tile: title === undefined ? named(tile) : { id: tile, title },
+      ...(other !== undefined && { other: named(other) }),
+      ...(count !== undefined && { count }),
+    } satisfies Summary
+  })
+
 /** A Tile read from, with the id and Title of its parent, `null` for the Root. */
 interface Read<F extends Field> {
   readonly tile: ReadTile<F>

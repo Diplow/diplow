@@ -193,3 +193,10 @@ export const keys = Effect.andThen(
 /** Revokes one of the Keys of the Account the request's Session proves: it proves nothing again. */
 export const revokeKey = (id: string) =>
   Effect.andThen(sessionOnly, Auth.use((auth) => auth.deleteApiKey(id)).pipe(inIamTerms))
+
+/**
+ * The name of one of the Account's Keys, by its id, read outside any request: none once the Key is
+ * revoked. What the timeline calls a write that Key proved.
+ */
+export const keyName = (accountId: string, keyId: string) =>
+  Auth.use((auth) => auth.apiKeyName(accountId, keyId))

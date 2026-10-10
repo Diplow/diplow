@@ -7,6 +7,7 @@ import {
   CurrentKey,
   CurrentSession,
   issueKey,
+  keyName,
   keyProven,
   keys,
   proven,
@@ -155,6 +156,18 @@ layer(TestAuth)("an Account's Keys", (it) => {
         expect(refused).toMatchObject({ _tag: 'KeyNameInvalid', kind: 'Invalid', fields: ['name'] })
       }
       expect((yield* asSession(issueKey('x'.repeat(32)))).key.name).toHaveLength(32)
+    }),
+  )
+
+  it.effect('names a Key by its id outside any request, for its own Account only, until revoked', () =>
+    Effect.gen(function* () {
+      const { account, asSession } = yield* someone
+      const other = yield* someone
+      const { key } = yield* asSession(issueKey('Claude Code'))
+      expect(yield* keyName(account.id, key.id)).toEqual(Option.some('Claude Code'))
+      expect(yield* keyName(other.account.id, key.id)).toEqual(Option.none())
+      yield* asSession(revokeKey(key.id))
+      expect(yield* keyName(account.id, key.id)).toEqual(Option.none())
     }),
   )
 
