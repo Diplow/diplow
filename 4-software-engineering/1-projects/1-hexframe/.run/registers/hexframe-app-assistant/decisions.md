@@ -6,7 +6,9 @@ preview: >-
   The choices the autonomous run made while putting the Assistant beside the
   canvas, where a ticket left room: how api/, front/routes/ and the
   conversation feature regrouped to make room for it under the rule of 6,
-  and why a pending System write is read once per state of its mutation.
+  why a pending System write is read once per state of its mutation, what a
+  Tile's Version counts and how the client folds it, and where Mapping's
+  PGlite tests regrouped to make room for it.
 ---
 # Decisions
 
@@ -21,3 +23,13 @@ HEX-74, [#84](https://github.com/Diplow/diplow/pull/84). Three folders the Assis
 ### DEC-2 A pending System write is read once per state of its mutation
 
 HEX-74, [#84](https://github.com/Diplow/diplow/pull/84). The unit gate's `test` already failed on `project/assistant` before any move, one run in two, and in every run of the gates on this branch: two of `useRefusalState.test.ts`'s cases took about 2 s each alone and passed their 5 s timeout under a full run's load. A CPU profile showed renders feeding each other. `useSystem`'s `useMutationState` selected `pendingOf`, which decoded each pending write's Operation again at every MutationCache notification. A decoded Operation is a new object `replaceEqualDeep` cannot compare, so every notification rendered the page again, and each render's `useMutation` effects called `setOptions`, which notified again. `pendingOf` now keeps what it read in a `WeakMap` keyed by the mutation's state, which TanStack Query replaces at each change, so a write is read again only when it changed. The cases now take about 160 ms. No behavior changes: the same values, read once. Raising the test's timeout was the other way, refused because it hides the render loop instead of ending it.
+
+### DEC-3 A Tile's Version counts the events naming it as the Tile they change; the client sends the Version it drew
+
+HEX-75. The ticket asked for a count of the events that touched a Tile, checked on every write to an existing one, the Reference writes on the Tile whose slot they change. What counts follows from what is checked: an event counts on the Tiles whose Version a write to it names. `TileEdited`, `TileMoved` and `TilesSwapped` count on the Tiles they change; `ReferenceCreated` and `ReferenceDeleted` on the Tile holding the slot, since a Reference has no Version of its own; `TileCreated` makes one at 1 and counts on no parent, nor does a move on the parents it leaves and joins, since a create names no Version and a slot taken meanwhile is `DirectionTaken`'s. `decide` checks the Version right after finding the Tile, before every other rule but the Root's (`RootFixed`), so a stale write is refused whatever else it would meet, its no-ops included. The service writes each Tile at the Version `evolve` gave it in the System after the event, so the database and the overlay never disagree on one; `agreement.test.ts` compares them, Versions included.
+
+The screens send the Version they drew, the System with the pending writes folded over it, as the ticket said. Two things follow. A read that already holds a pending write has moved its Tiles' Versions on, so `decide` refuses folding it again: the swap's own check, which compared where its Tiles stood with where they stand (`holdsSwap` and the System recorded when a write was made), is retired, since the Version now does it for every write. And a write queued behind a refused write to the same Tile names a Version the server never gave it, so it is refused too, `TileChanged`, foreseen and sent nowhere, an edit's form reopened with what the user typed. The other way, sending the Version the server last answered, refuses every second write a user queues on one Tile before the first lands, the common case, where this one refuses only behind a refusal. An edit's form keeps the Version of the Tile it opened on for as long as it is open (`useEditTileSubmit`): the page redraws the Tile when a read lands, and a form sending the Version it is drawn at now would let a save from another tab through unseen, as the first look at it in a browser showed.
+
+### DEC-4 The agreement test moves beside the Decider, and Mapping's PGlite tests share `testing.ts`
+
+HEX-75. Every write in Mapping's PGlite tests now names a Version, and `mapping.test.ts` stood at the 600 lines its lint allows; `domains/mapping/` held six files. `agreement.test.ts` moves to `operations/decider/`, beside `decide` and `evolve` whose agreement with the service it pins: no rule keeps a test there from reaching the service, and nothing reachable through Mapping's door reaches it. The place it frees holds `testing.ts`, what `mapping.test.ts` and `leaves.test.ts` share: the tiles over PGlite with a bus that hears nothing, the System as its tree, and each change as the API layer runs it, naming each Tile at the Version it has just before. `leaves.test.ts` drops its copy of the same helpers. No test changes what it checks.
