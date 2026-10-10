@@ -1,0 +1,48 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/proxy/proxy.test.ts
+  s_c19b57f63ed6ef::t_0421ac146ee272 34-36,50-51,95,97-99,101,135-140,179-182,212,214
+  s_c19b57f63ed6ef::t_137b2cd7308a99 1-5,7-33,37-49,53-94,96,100,102-134,141-178,183-211,213,215-232,235-241,243-250,255,257,260-263,265,267-276,278-280,282-284
+  s_c19b57f63ed6ef::t_6d9e6343b7b1b2 6,52,233-234,242,251-254,256,258-259,264,266,277,281
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/run.ts
+  s_c19b57f63ed6ef::t_0421ac146ee272 96
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/anthropic/anthropic.ts
+  s_c19b57f63ed6ef::t_0421ac146ee272 74-76,103-106
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/iam.ts
+  s_c19b57f63ed6ef::t_6edc948a0fbbc0 229
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/spending/spending.test.ts
+  s_c19b57f63ed6ef::t_bc8b119546cf92 1-67,72-116,124-128,137-164
+  s_c19b57f63ed6ef::t_0421ac146ee272 68-71,117-123,129-136
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/spending/call.ts
+  s_c19b57f63ed6ef::t_6edc948a0fbbc0 96
+  s_c19b57f63ed6ef::t_0421ac146ee272 111,125-128
+4-software-engineering/1-projects/1-hexframe/1-app/vitest.config.ts
+  s_c19b57f63ed6ef::t_9a92fa1fb3187e 12-15,21
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/assistant.ts
+  s_c19b57f63ed6ef::t_0421ac146ee272 206-207,215-220
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/settings.ts
+  s_c19b57f63ed6ef::t_0421ac146ee272 36-49
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/anthropic/anthropic.test.ts
+  s_c19b57f63ed6ef::t_0d7ee9bf9c0fb4 126,128
+  s_c19b57f63ed6ef::t_0421ac146ee272 90-92,100-124,168-187,201-204
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/spending/limits.ts
+  s_c19b57f63ed6ef::t_0421ac146ee272 44-47
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/proxy/proxy.ts
+  s_c19b57f63ed6ef::t_0421ac146ee272 60-64
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/anthropic/usage.ts
+  s_c19b57f63ed6ef::t_0421ac146ee272 79-80
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1561d34153c398c6667997d24b2c61bc01d9b19e",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
