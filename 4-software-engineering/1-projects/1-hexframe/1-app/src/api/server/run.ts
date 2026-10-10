@@ -12,6 +12,11 @@ import {
   type KeyProof,
   type Session,
 } from '#/domains/iam/iam'
+import {
+  Anthropic,
+  layer as anthropicLayer,
+  hasKey,
+} from '#/repositories/agent/anthropic/anthropic'
 import { layer as blaxelLayer, hasCredentials } from '#/repositories/agent/sandbox/blaxel'
 import { Sandbox } from '#/repositories/agent/sandbox/sandbox'
 import { Allowlist, layer as allowlistLayer } from '#/repositories/auth/allowlist'
@@ -72,16 +77,37 @@ const sandbox =
     : blaxelLayer
 
 /**
+ * The model relay: to Anthropic, deployed. Under `pnpm dev` without `ANTHROPIC_API_KEY`, and in every
+ * test, whatever the shell exports (`vitest.config.ts`): a fake in this process. A build never holds
+ * that branch.
+ */
+const anthropic =
+  import.meta.env.DEV && !hasKey(process.env)
+    ? Layer.unwrap(
+        Effect.promise(async () => (await import('#/repositories/agent/anthropic/fake')).layer),
+      )
+    : anthropicLayer
+
+/**
  * What the domains use: Better Auth, the allowlist and the Turn's Keys, the tiles repository, Zip, the
- * conversations and Turns repositories, the sandbox, and the database itself.
+ * conversations and Turns repositories, the sandbox, the model relay, and the database itself.
  */
 type Repositories =
-  Auth | Allowlist | TurnKeys | Database | Tiles | Zip | Conversations | Turns | Sandbox
+  | Auth
+  | Allowlist
+  | TurnKeys
+  | Database
+  | Tiles
+  | Zip
+  | Conversations
+  | Turns
+  | Sandbox
+  | Anthropic
 
 /**
  * The repositories the domains use: Better Auth, the allowlist and the Turn's Keys for IAM, the tiles
- * repository and Zip for Mapping, the conversations and Turns repositories and the sandbox for
- * Assistant; and the database itself, for the transaction a program opens (`transactional`).
+ * repository and Zip for Mapping, the conversations and Turns repositories, the sandbox and the model
+ * relay for Assistant; and the database itself, for the transaction a program opens (`transactional`).
  */
 const repositories: Layer.Layer<Repositories> = Layer.mergeAll(
   Layer.provideMerge(
@@ -91,6 +117,7 @@ const repositories: Layer.Layer<Repositories> = Layer.mergeAll(
   allowlistLayer,
   zipLayer,
   sandbox,
+  anthropic,
 )
 
 /**
@@ -112,12 +139,16 @@ const layer = Layer.mergeAll(
 
 const runtime = ManagedRuntime.make(layer)
 
-/** The services a server function's program may use: the request's and every layer's. */
+/**
+ * The services a server function's program may use: the request's, the platform's `waitUntil`, and
+ * every layer's.
+ */
 export type Services =
   | RequestContext
   | CurrentSession
   | CurrentKey
   | HttpExchange
+  | WaitUntil
   | ManagedRuntime.ManagedRuntime.Services<typeof runtime>
 
 /** Start's `context`, as its middleware (./middleware.ts) fills it. */
@@ -156,10 +187,27 @@ export function waitUntilOf(request: Request): StartContext['waitUntil'] {
   }
 }
 
-/** A server function's Key: none, whatever its headers say, since a Key opens `/mcp` only. */
+/**
+ * What a door that a Key opens passes on of a request: where it was sent and its Bearer Key; never a
+ * cookie. `/mcp` and the doors of a Turn's sandbox build their context on it.
+ */
+export function bearerOnly(request: Request): StartContext['exchange'] {
+  const headers = new Headers()
+  const authorization = request.headers.get('authorization')
+  if (authorization !== null) headers.set('authorization', authorization)
+  return { url: request.url, headers, setCookies: () => undefined }
+}
+
+/**
+ * A server function's Key: none, whatever its headers say, since a Key opens only `/mcp` and the doors
+ * of a Turn's sandbox.
+ */
 export const noKey: StartContext['key'] = Exit.succeed(Option.none())
 
-/** An MCP call's Session: none, whatever its cookies say, since `/mcp` takes a Key alone. */
+/**
+ * The Session of a call through a door a Key opens: none, whatever its cookies say, since `/mcp` and
+ * the doors of a Turn's sandbox take a Key alone.
+ */
 export const noSession: StartContext['session'] = Exit.succeed(Option.none())
 
 const isFailure = Schema.is(Failure)
@@ -238,8 +286,8 @@ export function provenSession(
 }
 
 /**
- * The Key a request's `Authorization: Bearer` header proves, if any, for `/mcp` to put on its context
- * before it reads the body. Like `provenSession`, a failure to tell is kept, and `run` fails with it.
+ * The Key a request's `Authorization: Bearer` header proves, if any, for `/mcp` and the doors of a
+ * Turn's sandbox to put on their context before they read the body. Like `provenSession`, a failure to tell is kept, and `run` fails with it.
  */
 export function provenKey(
   exchange: HttpExchange['Service'],

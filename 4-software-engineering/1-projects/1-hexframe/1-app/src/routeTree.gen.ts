@@ -21,6 +21,7 @@ import { Route as DevSessionRouteImport } from './front/routes/dev/session'
 import { Route as DevSystemRouteImport } from './front/routes/dev/system'
 import { Route as DevUiRouteImport } from './front/routes/dev/ui'
 import { Route as SettingsKeysRouteImport } from './front/routes/settings/keys'
+import { Route as AssistantAnthropicSplatRouteImport } from './front/routes/assistant/anthropic.$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -82,6 +83,11 @@ const SettingsKeysRoute = SettingsKeysRouteImport.update({
   path: '/settings/keys',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AssistantAnthropicSplatRoute = AssistantAnthropicSplatRouteImport.update({
+  id: '/assistant/anthropic/$',
+  path: '/assistant/anthropic/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
   '/settings/keys': typeof SettingsKeysRoute
+  '/assistant/anthropic/$': typeof AssistantAnthropicSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -110,6 +117,7 @@ export interface FileRoutesByTo {
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
   '/settings/keys': typeof SettingsKeysRoute
+  '/assistant/anthropic/$': typeof AssistantAnthropicSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -125,6 +133,7 @@ export interface FileRoutesById {
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
   '/settings/keys': typeof SettingsKeysRoute
+  '/assistant/anthropic/$': typeof AssistantAnthropicSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/dev/system'
     | '/dev/ui'
     | '/settings/keys'
+    | '/assistant/anthropic/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
     | '/dev/system'
     | '/dev/ui'
     | '/settings/keys'
+    | '/assistant/anthropic/$'
   id:
     | '__root__'
     | '/'
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/dev/system'
     | '/dev/ui'
     | '/settings/keys'
+    | '/assistant/anthropic/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -179,6 +191,7 @@ export interface RootRouteChildren {
   accessSignInRoute: typeof accessSignInRoute
   accessSignUpRoute: typeof accessSignUpRoute
   SettingsKeysRoute: typeof SettingsKeysRoute
+  AssistantAnthropicSplatRoute: typeof AssistantAnthropicSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -267,6 +280,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsKeysRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/assistant/anthropic/$': {
+      id: '/assistant/anthropic/$'
+      path: '/assistant/anthropic/$'
+      fullPath: '/assistant/anthropic/$'
+      preLoaderRoute: typeof AssistantAnthropicSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -298,6 +318,7 @@ const rootRouteChildren: RootRouteChildren = {
   accessSignInRoute: accessSignInRoute,
   accessSignUpRoute: accessSignUpRoute,
   SettingsKeysRoute: SettingsKeysRoute,
+  AssistantAnthropicSplatRoute: AssistantAnthropicSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

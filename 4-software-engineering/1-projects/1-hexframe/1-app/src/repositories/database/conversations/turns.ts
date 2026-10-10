@@ -2,7 +2,7 @@
 // an Account's Conversation, read and written by Account. It speaks rows: how a Turn ended is a word
 // Assistant decides and decodes, which the repository keeps as it is given. One Turn runs at most per
 // Conversation, which the table's `turn_running_idx` holds, so two starts at once never both run.
-import { and, eq, inArray, isNull } from 'drizzle-orm'
+import { and, eq, gte, inArray, isNull, sum } from 'drizzle-orm'
 import { Context, Effect, Layer } from 'effect'
 
 import { Database, InTransaction } from '../database'
@@ -50,6 +50,25 @@ export class Turns extends Context.Service<
     ) => Effect.Effect<TurnRow | undefined, never, InTransaction>
     /** The Turn running in the Account's Conversation, if one does. */
     readonly running: (accountId: string) => Effect.Effect<TurnRow | undefined>
+    /**
+     * What one of the Account's Turns spent, none unless it is running, and what all its Turns started
+     * since `since` spent, that one included: the sum of their spend, which no counter keeps.
+     */
+    readonly spending: (
+      accountId: string,
+      turnId: string,
+      since: Date,
+    ) => Effect.Effect<{ readonly turn: number | undefined; readonly month: number }>
+    /**
+     * Adds `amount` to what one of the Account's Turns spent, ended or not: a call that started before
+     * it ended still cost what it cost. Nothing for another's Turn. Inside a transaction, the row
+     * locked while it adds.
+     */
+    readonly spend: (
+      accountId: string,
+      turnId: string,
+      amount: number,
+    ) => Effect.Effect<void, never, InTransaction>
   }
 >()('hexframe/Turns') {}
 
@@ -136,7 +155,52 @@ const make = Effect.gen(function* () {
         Effect.map(([row]) => row),
       )
 
-  return Turns.of({ start, end, running })
+  const spending = (accountId: string, turnId: string, since: Date) =>
+    Effect.gen(function* () {
+      const [turnSpent] = yield* database
+        .select({ spent: turn.spent })
+        .from(turn)
+        .where(
+          and(
+            eq(turn.id, turnId),
+            inArray(turn.conversationId, conversationOf(accountId)),
+            isNull(turn.endedAt),
+          ),
+        )
+        .pipe(Effect.orDie)
+      const [month] = yield* database
+        .select({ spent: sum(turn.spent) })
+        .from(turn)
+        .where(
+          and(inArray(turn.conversationId, conversationOf(accountId)), gte(turn.startedAt, since)),
+        )
+        .pipe(Effect.orDie)
+      return { turn: turnSpent?.spent, month: Number(month?.spent ?? 0) }
+    })
+
+  const spend = (accountId: string, turnId: string, amount: number) =>
+    InTransaction.use(() =>
+      Effect.gen(function* () {
+        const ofTheAccount = and(
+          eq(turn.id, turnId),
+          inArray(turn.conversationId, conversationOf(accountId)),
+        )
+        const [row] = yield* database
+          .select({ spent: turn.spent })
+          .from(turn)
+          .where(ofTheAccount)
+          .for('update')
+          .pipe(Effect.orDie)
+        if (row === undefined) return
+        yield* database
+          .update(turn)
+          .set({ spent: row.spent + amount })
+          .where(ofTheAccount)
+          .pipe(Effect.orDie)
+      }),
+    )
+
+  return Turns.of({ start, end, running, spending, spend })
 })
 
 /** The Turns repository, over the `Database` it is given. */

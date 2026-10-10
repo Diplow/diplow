@@ -8,9 +8,13 @@
 // Account's sandbox, where a Turn will run (src/repositories/agent/sandbox/), holding the System as
 // the files Mapping writes it as, which Assistant keeps as they came. And the Turns, each a run of the
 // agent answering a Message, one at a time per Conversation (src/repositories/database/conversations/).
-import { Clock, Effect, Schema } from 'effect'
+// And what a Turn spends on the model: whether a call its agent makes may go, through the model relay
+// (src/repositories/agent/anthropic/), and what it cost, recorded on the Turn (./spending/).
+import { Clock, Effect, Result, Schema } from 'effect'
 
+import { Anthropic, type Endpoint, type Relayed } from '#/repositories/agent/anthropic/anthropic'
 import { Sandbox, type SandboxFile } from '#/repositories/agent/sandbox/sandbox'
+import type { InTransaction } from '#/repositories/database/database'
 import { Conversations } from '#/repositories/database/conversations/conversations'
 import { type TurnRow, Turns } from '#/repositories/database/conversations/turns'
 
@@ -30,6 +34,8 @@ import {
 } from './entities'
 import { TurnRunning } from './errors'
 import { settings } from './settings'
+import { allowedCall, type CallRefused } from './spending/call'
+import { type Limit, limitReached, monthOf, priced } from './spending/limits'
 
 const decoded = Schema.decodeUnknownEffect(EntryContent)
 
@@ -162,4 +168,55 @@ export const endTurn = (accountId: string, turnId: string, how: TurnEnd) =>
     const at = new Date(yield* Clock.currentTimeMillis)
     const row = yield* Turns.use((turns) => turns.end(accountId, turnId, { end: how, at }))
     return row === undefined ? undefined : yield* turnOf(row)
+  })
+
+/** A model call a Turn's agent asks the proxy for: its endpoint, Anthropic's headers, its body's text. */
+export interface AskedCall {
+  readonly endpoint: Endpoint
+  readonly version: string | undefined
+  readonly betas: string | undefined
+  readonly body: string
+}
+
+/**
+ * What becomes of a model call: refused, by its body or its betas; held back by a limit the Turn
+ * reached, its ceiling or the month's allowance; refused since the Turn is no longer running; or
+ * relayed, the answer as it comes, with what records its cost on the Turn once its body has ended.
+ */
+export type CallAnswer =
+  | ({ readonly _tag: 'Refused' } & CallRefused)
+  | { readonly _tag: 'Limited'; readonly limit: Limit }
+  | { readonly _tag: 'TurnOver' }
+  | {
+      readonly _tag: 'Relayed'
+      readonly relayed: Omit<Relayed, 'usage'>
+      /** Records what the call cost on the Turn, once its body has ended: in a transaction. */
+      readonly metered: Effect.Effect<void, never, Turns | InTransaction>
+    }
+
+/**
+ * Decides whether a call of one of the Account's Turns may go, and relays it when it may: its body
+ * and betas as the settings let them through, `max_tokens` capped; the Turn still running, below its
+ * ceiling, and its Account's Turns this month below the allowance. The relay knows no limit: it is
+ * asked only once Assistant has said the Turn may spend.
+ */
+export const modelCall = (accountId: string, turnId: string, asked: AskedCall) =>
+  Effect.gen(function* () {
+    const allowed = allowedCall(asked.body, asked.betas)
+    if (Result.isFailure(allowed)) return { _tag: 'Refused', ...allowed.failure } satisfies CallAnswer
+    const now = new Date(yield* Clock.currentTimeMillis)
+    const spent = yield* Turns.use((turns) => turns.spending(accountId, turnId, monthOf(now)))
+    if (spent.turn === undefined) return { _tag: 'TurnOver' } satisfies CallAnswer
+    const limit = limitReached({ turn: spent.turn, month: spent.month })
+    if (limit !== undefined) return { _tag: 'Limited', limit } satisfies CallAnswer
+    const { body, model } = allowed.success
+    const { usage, ...relayed } = yield* Anthropic.use((anthropic) =>
+      anthropic.relay({ endpoint: asked.endpoint, version: asked.version, betas: asked.betas, body }),
+    )
+    const metered = Effect.flatMap(usage, (used) => {
+      const cost = used === undefined ? 0 : priced(model, used)
+      return cost === 0 ? Effect.void : Turns.use((turns) => turns.spend(accountId, turnId, cost))
+    })
+    const answer: CallAnswer = { _tag: 'Relayed', relayed, metered }
+    return answer
   })

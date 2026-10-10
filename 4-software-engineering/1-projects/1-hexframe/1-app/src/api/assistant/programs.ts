@@ -15,6 +15,7 @@ import { HttpExchange } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
 
 import { tileLink } from '../mapping/files/download'
+import { WaitUntil } from '../server/bus'
 
 import type { DayAsked, MergedNavigation, NewMessage } from './assistant'
 
@@ -138,3 +139,37 @@ export const endTurn = (accountId: string, turnId: string, how: TurnEnd) =>
       return turn
     }),
   )
+
+/**
+ * Work the platform's `waitUntil` keeps the function up for, run once the answer has gone, with the
+ * services the program had.
+ */
+const afterAnswering = <R>(work: Effect.Effect<void, never, R>) =>
+  Effect.gen(function* () {
+    const services = yield* Effect.context<R>()
+    const waitUntil = yield* WaitUntil
+    waitUntil(Effect.provideContext(work, services))
+  })
+
+/**
+ * A model call of the Turn the request's Turn's Key proves, the Account and the Turn taken from that
+ * Key, never from the call: Assistant says whether it may go and relays it. A call held back by the
+ * Turn's ceiling or the month's allowance ends the Turn so, its Key revoked with it. A call relayed
+ * has its cost recorded on the Turn once its answer has ended, in its own transaction, through the
+ * platform's `waitUntil`, so the function stays up until it is written.
+ */
+export const modelCall = (asked: Assistant.AskedCall) =>
+  Effect.gen(function* () {
+    const { account, turn } = yield* Iam.turnOnly
+    const answer = yield* Assistant.modelCall(account.id, turn.turnId, asked)
+    if (answer._tag === 'Limited') yield* endTurn(account.id, turn.turnId, answer.limit)
+    if (answer._tag === 'Relayed') {
+      yield* afterAnswering(
+        transactional(answer.metered).pipe(
+          // An error line with its cause: Sentry gets it. The Turn spent it all the same.
+          Effect.catchCause((cause) => Effect.logError("A Turn's spend was not recorded", cause)),
+        ),
+      )
+    }
+    return answer
+  })
