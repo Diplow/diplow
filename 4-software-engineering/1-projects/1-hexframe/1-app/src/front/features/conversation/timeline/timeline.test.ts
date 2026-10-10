@@ -19,7 +19,7 @@ const now = at(27, 12)
 
 describe('splitByDay', () => {
   const ids = (entries: readonly Entry[]) =>
-    splitByDay(entries, now).map((day) => [day.key, day.relative, day.entries.map((e) => e.id)])
+    splitByDay(entries, now, {}).map((day) => [day.key, day.relative, day.entries.map((e) => e.id)])
 
   it('groups the entries by local day, oldest day and oldest entry first', () => {
     const entries = [
@@ -36,18 +36,18 @@ describe('splitByDay', () => {
   })
 
   it('starts each day at its local midnight', () => {
-    const [day] = splitByDay([message('a', at(3, 18, 30))], now)
+    const [day] = splitByDay([message('a', at(3, 18, 30))], now, {})
     expect(day?.date).toEqual(new Date(2026, 8, 3))
   })
 
   it('knows yesterday across a month', () => {
     const first = new Date(2026, 9, 1, 8)
-    const [day] = splitByDay([message('a', at(30, 22))], first)
+    const [day] = splitByDay([message('a', at(30, 22))], first, {})
     expect(day?.relative).toBe('yesterday')
   })
 
   it('has no day for no entry', () => {
-    expect(splitByDay([], now)).toEqual([])
+    expect(splitByDay([], now, {})).toEqual([])
   })
 
   it('hands every day the Titles it is given', () => {

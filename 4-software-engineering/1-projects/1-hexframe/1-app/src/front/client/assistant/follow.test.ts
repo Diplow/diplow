@@ -42,7 +42,7 @@ function reading(first: unknown, then: unknown) {
 }
 
 /** What the poll answers: the System at a Version, and the Conversation's last Entry, if any. */
-type Latest = number | { version: number; last?: string }
+type Latest = number | { version: number; lastEntry?: string }
 
 /** The poll's stand-in answers each of these in turn, then the last again. */
 function polling(...answers: ReadonlyArray<Latest>) {
@@ -64,7 +64,7 @@ const dayWith = (...texts: ReadonlyArray<string>) => ({
     at: new Date(),
   })),
   titles: {},
-  ...(texts.length > 0 && { last: texts.at(-1) }),
+  ...(texts.length > 0 && { lastEntry: texts.at(-1) }),
 })
 
 /** The Conversation's stand-in answers `first`, then `then` on every read after it. */
@@ -217,7 +217,7 @@ describe('the page following the Conversation', () => {
   it('reads the Conversation again on focus once its last Entry is another, the System not', async () => {
     reading(systemAt(3, 'First'), systemAt(3, 'Never read'))
     conversing(dayWith('mine'), dayWith('mine', 'a Key’s'))
-    polling({ version: 3, last: 'mine' }, { version: 3, last: 'a Key’s' })
+    polling({ version: 3, lastEntry: 'mine' }, { version: 3, lastEntry: 'a Key’s' })
     const { result } = render()
     await waitFor(() => {
       expect(result.current.said).toMatchObject({ text: 'mine' })
@@ -237,7 +237,7 @@ describe('the page following the Conversation', () => {
   it('reads nothing again while the Conversation’s last Entry is the one it read', async () => {
     reading(systemAt(3, 'First'), systemAt(3, 'Never read'))
     conversing(dayWith('mine'), dayWith('never read'))
-    polling({ version: 3, last: 'mine' })
+    polling({ version: 3, lastEntry: 'mine' })
     const { result } = render()
     await waitFor(() => {
       expect(result.current.said).toMatchObject({ text: 'mine' })
@@ -255,7 +255,7 @@ describe('the page following the Conversation', () => {
   it('reads the System and the Conversation again together when both moved', async () => {
     reading(systemAt(3, 'First'), systemAt(4, 'Read again'))
     conversing(dayWith(), dayWith('edited by a Key'))
-    polling(3, { version: 4, last: 'edited by a Key' })
+    polling(3, { version: 4, lastEntry: 'edited by a Key' })
     const { result } = render()
     await waitFor(() => {
       expect(result.current.system?.root.title).toBe('First')
@@ -273,7 +273,7 @@ describe('the page following the Conversation', () => {
   it('polls once a write to the System settled, and reads the Entry it recorded', async () => {
     reading(systemAt(3, 'First'), systemAt(3, 'First'))
     conversing(dayWith(), dayWith('you edited it'))
-    polling(3, { version: 3, last: 'you edited it' })
+    polling(3, { version: 3, lastEntry: 'you edited it' })
     const { result, client } = render()
     await waitFor(() => {
       expect(Assistant.latest).toHaveBeenCalledTimes(1)

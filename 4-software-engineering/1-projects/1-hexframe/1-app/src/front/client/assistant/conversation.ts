@@ -18,6 +18,7 @@ import {
   postMessage,
   recordNavigation,
 } from '#/api/assistant/assistant'
+import { dayAt } from '#/domains/assistant/entities'
 
 import { settle, write } from '../calls'
 
@@ -30,11 +31,8 @@ const conversationQueue = 'conversation'
 /** How many minutes the reader's clock stands ahead of UTC at an instant. */
 const offsetAt = (at: Date) => -at.getTimezoneOffset()
 
-const pad = (n: number) => String(n).padStart(2, '0')
-
-/** The date of the reader's calendar an instant falls on, `2026-10-10`. */
-const dateOf = (at: Date) =>
-  `${String(at.getFullYear())}-${pad(at.getMonth() + 1)}-${pad(at.getDate())}`
+/** The date of the reader's calendar an instant falls on, `2026-10-10`, by Assistant's day split. */
+const dateOf = (at: Date) => dayAt(at, offsetAt(at)).date
 
 /**
  * A date of the reader's calendar, `2026-10-10`, today's when none is given, with their clock's

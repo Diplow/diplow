@@ -49,7 +49,7 @@ export const before = (accountId: string, asked: Day) =>
  * Conversation moved. None before the first.
  */
 export const lastEntry = (accountId: string) =>
-  Conversations.use((conversations) => conversations.lastWritten(accountId))
+  Conversations.use((conversations) => conversations.lastEntry(accountId))
 
 /** Today, for a reader whose clock stands `offset` minutes ahead of UTC. */
 export const today = (offset: number) =>

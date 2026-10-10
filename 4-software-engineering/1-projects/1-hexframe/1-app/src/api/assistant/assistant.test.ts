@@ -107,7 +107,7 @@ describe("Assistant's server functions", () => {
     const posted = await value(call(Assistant.postMessage({ text: 'Today' })))
     const yesterday = dayAt(new Date(Date.now() - 24 * 60 * 60_000), 0)
     const read = await value(call(Assistant.conversationDay(yesterday)))
-    expect(read).toEqual({ day: yesterday, entries: [], titles: {}, last: posted.id })
+    expect(read).toEqual({ day: yesterday, entries: [], titles: {}, lastEntry: posted.id })
   })
 
   it('says where the latest Entry before a day is, for a reader scrolling back', async () => {
@@ -128,13 +128,13 @@ describe("Assistant's server functions", () => {
     const { call } = request()
     expect(await value(call(Assistant.latest))).toEqual({ version: 0 })
     const posted = await value(call(Assistant.postMessage({ text: 'Name me' })))
-    expect(await value(call(Assistant.latest))).toEqual({ version: 0, last: posted.id })
+    expect(await value(call(Assistant.latest))).toEqual({ version: 0, lastEntry: posted.id })
     const { root } = await value(call(Mapping.system))
     await value(call(Mapping.editTile({ id: root.id, version: 1, title: 'Ada' })))
     const latest = await value(call(Assistant.latest))
     const { entries } = await value(call(Assistant.conversationDay({ offset: 0 })))
-    expect(latest).toEqual({ version: 1, last: entries.at(-1)?.id })
-    expect(latest.last).not.toBe(posted.id)
+    expect(latest).toEqual({ version: 1, lastEntry: entries.at(-1)?.id })
+    expect(latest.lastEntry).not.toBe(posted.id)
   })
 
   it('moves the System’s Version one per change, and not for a refused one', async () => {

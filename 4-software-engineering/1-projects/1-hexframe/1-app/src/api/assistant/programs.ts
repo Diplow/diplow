@@ -25,14 +25,14 @@ const forSession = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, 
  * first, and the Titles of the Tiles its navigations went to, as the System holds them now, by id. A
  * navigation keeps a Tile's id alone; a Tile the System no longer holds has no Title there. With
  * them, `earlier`, the instant of the latest Entry before the day, where a reader scrolling back goes
- * next, and `last`, the Entry last recorded in the Conversation, which the page's poll compares with
- * its own (`latest`). `last` is read first: an Entry recorded meanwhile is among the day's, and the
+ * next, and `lastEntry`, the Entry last recorded in the Conversation, which the page's poll compares
+ * with its own (`latest`). It is read first: an Entry recorded meanwhile is among the day's, and the
  * next poll reads the day again for nothing rather than never.
  */
 export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
   forSession((accountId) =>
     Effect.gen(function* () {
-      const last = yield* Assistant.lastEntry(accountId)
+      const lastEntry = yield* Assistant.lastEntry(accountId)
       const day = { date: date ?? (yield* Assistant.today(offsets.offset)).date, ...offsets }
       const entries = yield* Assistant.day(accountId, day)
       const titles = yield* Mapping.titles(accountId, visitedTiles(entries))
@@ -42,7 +42,7 @@ export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
         entries,
         titles,
         ...(earlier !== undefined && { earlier }),
-        ...(last !== undefined && { last }),
+        ...(lastEntry !== undefined && { lastEntry }),
       }
     }),
   )
@@ -55,8 +55,8 @@ export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
 export const latest = forSession((accountId) =>
   Effect.gen(function* () {
     const version = yield* Mapping.systemVersion(accountId)
-    const last = yield* Assistant.lastEntry(accountId)
-    return { version, ...(last !== undefined && { last }) }
+    const lastEntry = yield* Assistant.lastEntry(accountId)
+    return { version, ...(lastEntry !== undefined && { lastEntry }) }
   }),
 )
 

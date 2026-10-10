@@ -1,5 +1,5 @@
-// A text too long to show whole inside the timeline, a long Message: its start, cut at a word, until
-// the reader asks for the rest.
+// A text too long to show whole inside the timeline, a long Message: its first 800 characters, cut at
+// a word, until the reader asks for the rest.
 import { useState } from 'react'
 
 import { m } from '#/paraglide/messages'
@@ -7,13 +7,10 @@ import { Button } from '#/front/ui/inputs/controls/button'
 
 import { excerpt } from '../timeline/timeline'
 
-interface ShortenedProps {
-  text: string
-  /** Past this many characters, the text shows its start and a "show more". */
-  limit: number
-}
+/** Past this many characters, a text shows its start and a "show more". */
+const limit = 800
 
-export function Shortened({ text, limit }: ShortenedProps) {
+export function Shortened({ text }: { text: string }) {
   const [open, setOpen] = useState(false)
   const short = excerpt(text, limit)
   return (

@@ -1,0 +1,1 @@
+CREATE INDEX "conversation_entry_seq_idx" ON "conversation_entry" ("conversation_id","seq");

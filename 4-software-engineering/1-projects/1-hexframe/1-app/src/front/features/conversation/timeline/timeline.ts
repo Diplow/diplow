@@ -2,7 +2,7 @@
 // day of the reader's calendar at a time, with the Titles of the Tiles its navigations went to. Home
 // reads it a day at a time (`useConversation`); /dev/system splits its fixtures by day. Pure; the
 // components render it.
-import type { Entry } from '#/domains/assistant/entities'
+import { dayAt, type Entry } from '#/domains/assistant/entities'
 
 /** The Titles of the Tiles a day's navigations went to, by id: a Tile deleted since has none. */
 export type Titles = Readonly<Record<string, string>>
@@ -33,7 +33,7 @@ export function dayOf(
 }
 
 /** Entries split by the reader's local day, oldest day and oldest Entry first, all sharing `titles`. */
-export function splitByDay(entries: readonly Entry[], now: Date, titles: Titles = {}): Day[] {
+export function splitByDay(entries: readonly Entry[], now: Date, titles: Titles): Day[] {
   const days: Array<{ date: string; entries: Entry[] }> = []
   for (const entry of entries.toSorted((a, b) => a.at.getTime() - b.at.getTime())) {
     const date = dayKey(entry.at)
@@ -44,10 +44,8 @@ export function splitByDay(entries: readonly Entry[], now: Date, titles: Titles 
   return days.map((day) => dayOf({ ...day, titles }, now))
 }
 
-function dayKey(date: Date): string {
-  const pad = (n: number) => String(n).padStart(2, '0')
-  return `${String(date.getFullYear())}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
-}
+/** The date of the reader's calendar an instant falls on, `2026-09-27`, by Assistant's day split. */
+const dayKey = (at: Date) => dayAt(at, -at.getTimezoneOffset()).date
 
 /** Splits a text into what a reader sees as characters, as Mapping counts a Tile's. */
 const graphemes = new Intl.Segmenter()

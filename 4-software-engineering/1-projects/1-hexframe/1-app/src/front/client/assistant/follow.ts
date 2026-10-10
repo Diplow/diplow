@@ -37,9 +37,9 @@ const behind = {
     const held = client.getQueryData(systemRead.queryKey)
     return held !== undefined && version > held.version
   },
-  conversation: (client: QueryClient, { last }: Latest) => {
+  conversation: (client: QueryClient, { lastEntry }: Latest) => {
     const held = client.getQueryData(conversationRead.queryKey)?.pages[0]
-    return held !== undefined && last !== held.last
+    return held !== undefined && lastEntry !== held.lastEntry
   },
 }
 

@@ -39,7 +39,7 @@ export class Conversations extends Context.Service<
      * The id of the Entry last written in the Account's Conversation, whatever instant it dates
      * from; none without one.
      */
-    readonly lastWritten: (accountId: string) => Effect.Effect<string | undefined>
+    readonly lastEntry: (accountId: string) => Effect.Effect<string | undefined>
   }
 >()('hexframe/Conversations') {}
 
@@ -107,7 +107,7 @@ const make = Effect.gen(function* () {
         Effect.map(([found]) => found?.at),
       )
 
-  const lastWritten = (accountId: string) =>
+  const lastEntry = (accountId: string) =>
     database
       .select({ id: conversationEntry.id })
       .from(conversationEntry)
@@ -120,7 +120,7 @@ const make = Effect.gen(function* () {
         Effect.map(([found]) => found?.id),
       )
 
-  return Conversations.of({ append, between, latestBefore, lastWritten })
+  return Conversations.of({ append, between, latestBefore, lastEntry })
 })
 
 /** The conversations repository, over the `Database` it is given. */

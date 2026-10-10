@@ -31,9 +31,6 @@ import { Gesture } from '#/front/ui/hex/view/view'
 import type { Titles } from '../timeline/timeline'
 import { Shortened } from './Shortened'
 
-/** Past this many characters, a Message shows its start and a "show more". */
-const messageLimit = 800
-
 export function ConversationEntry({ entry, titles }: { entry: Entry; titles: Titles }) {
   switch (entry._tag) {
     case 'Message':
@@ -63,7 +60,7 @@ function Message({ entry }: { entry: Extract<Entry, { _tag: 'Message' }> }) {
           mine ? 'rounded-br-sm bg-primary text-primary-foreground' : 'rounded-bl-sm bg-muted',
         )}
       >
-        <Shortened text={entry.text} limit={messageLimit} />
+        <Shortened text={entry.text} />
       </div>
     </div>
   )
