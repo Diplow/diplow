@@ -12,6 +12,7 @@ import {
   mostOffered,
   queryAt,
   shownOf,
+  showsLink,
 } from './mention'
 
 // The composer's `@`, on a System and texts made by hand: the Tiles it offers, the search the caret
@@ -114,29 +115,72 @@ describe('what a search finds', () => {
 })
 
 describe('the link the composer inserts, and the Message it sends', () => {
+  const work = { id: 'work', title: 'Work', trail: ['Ada'] }
+
   it('replaces the `@` and what was typed with the link as it shows, the caret after it', () => {
-    expect(inserted('Ask @tea', { at: 4, text: 'tea' }, { title: 'Team' })).toEqual({
+    expect(inserted('Ask @tea', { at: 4, text: 'tea' }, '@Team')).toEqual({
       value: 'Ask @Team ',
       caret: 10,
     })
-    expect(inserted('@wo then', { at: 0, text: 'wo' }, { title: 'Work' })).toEqual({
+    expect(inserted('@wo then', { at: 0, text: 'wo' }, '@Work')).toEqual({
       value: '@Work then',
       caret: 6,
     })
   })
 
+  it('shows a link as `@` and the Title, the same again for the same Tile', () => {
+    expect(shownOf(work, [])).toBe('@Work')
+    expect(shownOf(work, [{ id: 'work', shown: '@Work' }])).toBe('@Work')
+  })
+
+  it('tells a Tile of a Title another one picked shows by the Titles above it, then a number', () => {
+    const picked = [{ id: 'notes', shown: '@Notes' }]
+    const other = { id: 'notes-2', title: 'Notes', trail: ['Ada', 'Work'] }
+    expect(shownOf(other, picked)).toBe('@Work / Notes')
+    const deeper = { id: 'notes-3', title: 'Notes', trail: ['Ada', 'Games', 'Work'] }
+    expect(shownOf(deeper, [...picked, { id: 'notes-2', shown: '@Work / Notes' }])).toBe(
+      '@Ada / Games / Work / Notes',
+    )
+    const twin = { id: 'notes-4', title: 'Notes', trail: ['Ada', 'Work'] }
+    expect(
+      shownOf(twin, [
+        ...picked,
+        { id: 'notes-2', shown: '@Work / Notes' },
+        { id: 'notes-5', shown: '@Ada / Work / Notes' },
+      ]),
+    ).toBe('@Notes (2)')
+  })
+
+  it('finds a link picked shown whole at an `@`, never one a longer word goes on from', () => {
+    const picked = [{ id: 'work', shown: '@Work' }]
+    expect(showsLink('Ask @Work now', 4, picked)).toBe(true)
+    expect(showsLink('Ask @Work', 4, picked)).toBe(true)
+    expect(showsLink('Ask @Workshop', 4, picked)).toBe(false)
+    expect(showsLink('Ask @Wor', 4, picked)).toBe(false)
+  })
+
   it('sends each link it inserted by its Tile’s id, wherever the input still shows it whole', () => {
     const links = [
-      { id: 'work', shown: shownOf({ title: 'Work' }) },
-      { id: 'team', shown: shownOf({ title: 'Work team' }) },
+      { id: 'work', shown: '@Work' },
+      { id: 'team', shown: '@Work team' },
     ]
     const sent = encoded('@Work team first, then @Work, not @Workshop nor @Wor', links)
     expect(sent).toBe(`${linkTo('team')} first, then ${linkTo('work')}, not @Workshop nor @Wor`)
     expect(partsOf(sent).filter(({ _tag }) => _tag === 'Link')).toHaveLength(2)
   })
 
+  it('sends two Tiles of one Title each by its own id', () => {
+    const links = [
+      { id: 'notes', shown: '@Notes' },
+      { id: 'notes-2', shown: '@Work / Notes' },
+    ]
+    expect(encoded('@Notes and @Work / Notes', links)).toBe(
+      `${linkTo('notes')} and ${linkTo('notes-2')}`,
+    )
+  })
+
   it('sends a link to a Title holding signs a pattern reads as its own, as written', () => {
-    const links = [{ id: 'q', shown: shownOf({ title: 'What? (1+1)' }) }]
+    const links = [{ id: 'q', shown: '@What? (1+1)' }]
     expect(encoded('@What? (1+1) now', links)).toBe(`${linkTo('q')} now`)
     expect(encoded('nothing inserted', [])).toBe('nothing inserted')
   })

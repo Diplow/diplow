@@ -58,8 +58,8 @@ export function Composer({ onSend, tiles, unavailable, busy }: ComposerProps) {
                 element.value = value
                 element.setSelectionRange(caret, caret)
               }
+              // The pick closed the search: nothing typed reopens it.
               field.handleChange(value)
-              actions.typed(value, caret)
             }
             const { isTouched, errors } = field.state.meta
             return (

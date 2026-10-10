@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { Entry } from '../entry'
 import { namedTiles } from '../entry'
-import { leadingLink, linksOf, linkTo, mostLinks, partsOf } from './links'
+import { leadingLink, linksOf, linkTo, mostLinks, partsOf, turnLocation } from './links'
 
 // A Message's links, on texts written by hand: each Tile kept by its id in the text, read back in
 // pieces, the one opening the Message told apart, and the Tiles a day names joined from its Messages
@@ -54,6 +54,11 @@ describe("a Message's links", () => {
     expect(leadingLink(`${linkTo(games)} tidy this`)).toBe(games)
     expect(leadingLink(`Tidy ${linkTo(games)}`)).toBeUndefined()
     expect(leadingLink('Tidy this')).toBeUndefined()
+  })
+
+  it('starts the Turn in the Tile the Message opens with, else in the centered one', () => {
+    expect(turnLocation(`${linkTo(games)} tidy this`, 'root')).toBe(games)
+    expect(turnLocation(`Tidy ${linkTo(games)}`, 'root')).toBe('root')
   })
 })
 

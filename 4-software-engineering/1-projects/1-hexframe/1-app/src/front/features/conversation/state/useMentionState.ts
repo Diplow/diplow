@@ -14,6 +14,7 @@ import {
   type Query,
   queryAt,
   shownOf,
+  showsLink,
 } from '../composer/mention'
 
 interface State {
@@ -28,7 +29,7 @@ interface State {
 }
 
 type Event =
-  | { readonly type: 'typed'; readonly query: Query | undefined }
+  | { readonly type: 'typed'; readonly value: string; readonly caret: number }
   | { readonly type: 'moved'; readonly by: 1 | -1; readonly offered: number }
   | { readonly type: 'closed' }
   | { readonly type: 'picked'; readonly link: Inserted }
@@ -39,7 +40,10 @@ const initial: State = { query: undefined, closed: undefined, active: 0, links: 
 function reducer(state: State, event: Event): State {
   switch (event.type) {
     case 'typed': {
-      const { query } = event
+      const found = queryAt(event.value, event.caret)
+      // The `@` of a link picked, the input still showing it whole, opens no search of its own.
+      const query =
+        found === undefined || showsLink(event.value, found.at, state.links) ? undefined : found
       if (query === undefined) return { ...state, query, closed: undefined, active: 0 }
       if (query.at === state.closed) return { ...state, query: undefined }
       const same = query.at === state.query?.at && query.text === state.query.text
@@ -75,8 +79,9 @@ export function useMentionState(tiles: ReadonlyArray<Mentionable>) {
   /** The input's value with `tile` picked for the search under way. */
   const pick = (value: string, tile: Mentionable): Edited | undefined => {
     if (query === undefined) return undefined
-    dispatch({ type: 'picked', link: { id: tile.id, shown: shownOf(tile) } })
-    return inserted(value, query, tile)
+    const shown = shownOf(tile, state.links)
+    dispatch({ type: 'picked', link: { id: tile.id, shown } })
+    return inserted(value, query, shown)
   }
 
   return {
@@ -87,9 +92,7 @@ export function useMentionState(tiles: ReadonlyArray<Mentionable>) {
        * opens no search, the input still showing it whole.
        */
       typed: (value: string, caret: number) => {
-        const found = queryAt(value, caret)
-        const picked = state.links.some(({ shown }) => value.startsWith(shown, found?.at))
-        dispatch({ type: 'typed', query: picked ? undefined : found })
+        dispatch({ type: 'typed', value, caret })
       },
       /**
        * A key pressed in the input: whether the search took it, the arrows moving the active Tile,

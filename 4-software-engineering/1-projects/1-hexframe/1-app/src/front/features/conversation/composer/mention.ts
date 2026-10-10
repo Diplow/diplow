@@ -126,24 +126,46 @@ export interface Inserted {
   readonly shown: string
 }
 
-/** How the input shows a link to a Tile: `@` and its Title. */
-export const shownOf = (tile: Pick<Mentionable, 'title'>) => `@${tile.title}`
+/** A text read as itself inside a pattern. */
+const escaped = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+/** Nothing a word goes on with: what ends a link as the input shows it. */
+const ended = '(?![\\p{L}\\p{N}])'
+
+/**
+ * How the input shows a link to a Tile: `@` and its Title, unless another Tile picked already shows
+ * so; then with the Title above it, then its whole trail, then a number, so two Tiles of one Title
+ * never show alike and each is sent by its own id.
+ */
+export function shownOf(tile: Mentionable, links: ReadonlyArray<Inserted>): string {
+  const taken = (shown: string) => links.some((link) => link.shown === shown && link.id !== tile.id)
+  const path = [...tile.trail, tile.title]
+  const tried = [
+    `@${tile.title}`,
+    `@${path.slice(-2).join(' / ')}`,
+    `@${path.join(' / ')}`,
+    ...Array.from({ length: links.length }, (_, n) => `@${tile.title} (${String(n + 2)})`),
+  ]
+  return tried.find((shown) => !taken(shown)) ?? `@${tile.title} (${String(links.length + 2)})`
+}
+
+/** Whether the input shows one of the links picked whole at `at`, nothing a word goes on with after. */
+export const showsLink = (value: string, at: number, links: ReadonlyArray<Inserted>) =>
+  links.some(({ shown }) => new RegExp(`^${escaped(shown)}${ended}`, 'u').test(value.slice(at)))
 
 /**
  * The input once a Tile is picked for a search: the `@` and what was typed after it replaced by the
- * link as it shows, and a space; and where the caret goes, after it.
+ * link as it shows (`shown`), and a space; and where the caret goes, after it.
  */
 export function inserted(
   value: string,
   query: Query,
-  tile: Pick<Mentionable, 'title'>,
+  shown: string,
 ): { readonly value: string; readonly caret: number } {
-  const link = `${shownOf(tile)} `
+  const link = `${shown} `
   const after = value.slice(query.at + 1 + query.text.length).replace(/^ /, '')
   return { value: `${value.slice(0, query.at)}${link}${after}`, caret: query.at + link.length }
 }
-
-const escaped = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
 /**
  * The Message the input sends: each link it inserted, wherever the input still shows it whole, written
@@ -155,7 +177,7 @@ export function encoded(value: string, links: ReadonlyArray<Inserted>): string {
     .sort((a, b) => b.shown.length - a.shown.length)
     .reduce(
       (text, { id, shown }) =>
-        text.replace(new RegExp(`${escaped(shown)}(?![\\p{L}\\p{N}])`, 'gu'), linkTo(id)),
+        text.replace(new RegExp(`${escaped(shown)}${ended}`, 'gu'), linkTo(id)),
       value,
     )
 }

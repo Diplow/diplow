@@ -139,6 +139,50 @@ describe("the composer's @", () => {
     expect(sent).toBe('@Work again')
   })
 
+  it('opens no search at a link picked shown whole, and one at an `@` that only starts it', () => {
+    const { result, type, key, offered } = render()
+    type('@wo')
+    key('Enter', '@wo')
+    type('@Work and @Work')
+    expect(result.current.state.open).toBe(false)
+    type('@Work and @Worka')
+    expect(result.current.state.open).toBe(false)
+    // A link picked is shown whole at its own `@` only: a shorter one searches.
+    type('@Work and @Wo')
+    expect(offered()).toEqual(['work'])
+  })
+
+  it('links two Tiles of one Title each by its own id', () => {
+    const twins: ReadonlyArray<Mentionable> = [
+      { id: 'notes', title: 'Notes', trail: ['Ada'] },
+      { id: 'work-notes', title: 'Notes', trail: ['Ada', 'Work'] },
+    ]
+    const { result } = renderHook(() => useMentionState(twins))
+    const press = (name: string, value: string) => {
+      let edited: { value: string } | undefined
+      act(() => {
+        result.current.actions.typed(value, value.length)
+      })
+      act(() => {
+        edited = result.current.actions.key(name, value).edited
+      })
+      return edited?.value ?? ''
+    }
+    const first = press('Enter', '@no')
+    const both = press('ArrowDown', `${first}@no`)
+    expect(both).toBe('')
+    let value = ''
+    act(() => {
+      value = result.current.actions.key('Enter', `${first}@no`).edited?.value ?? ''
+    })
+    expect(value).toBe('@Notes @Work / Notes ')
+    let sent = ''
+    act(() => {
+      sent = result.current.actions.sent(value.trim())
+    })
+    expect(sent).toBe(`${linkTo('notes')} ${linkTo('work-notes')}`)
+  })
+
   it('picks nothing while no search is under way', () => {
     const { result } = render()
     let picked: unknown = 'not yet'

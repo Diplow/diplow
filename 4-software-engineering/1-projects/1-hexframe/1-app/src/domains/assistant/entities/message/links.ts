@@ -48,3 +48,9 @@ export function leadingLink(text: string): string | undefined {
   const [first] = partsOf(text)
   return first?._tag === 'Link' ? first.tile : undefined
 }
+
+/**
+ * Where the Turn answering a Message starts, by its Tile's id: the Tile the Message opens with a link
+ * to, else `center`, the one centered on the view it was sent from.
+ */
+export const turnLocation = (text: string, center: string): string => leadingLink(text) ?? center

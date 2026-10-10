@@ -9,7 +9,7 @@ import { Effect } from 'effect'
 import type { Redacted } from 'effect'
 
 import * as Assistant from '#/domains/assistant/assistant'
-import { leadingLink, linksOf, namedTiles, type TurnEnd } from '#/domains/assistant/entities'
+import { linksOf, namedTiles, type TurnEnd, turnLocation } from '#/domains/assistant/entities'
 import * as Iam from '#/domains/iam/iam'
 import type { Turn } from '#/domains/assistant/entities'
 import * as Mapping from '#/domains/mapping/mapping'
@@ -172,13 +172,6 @@ const doors = { mcp: '/mcp', model: '/assistant/anthropic', events: '/assistant/
 type Started = Pick<typeof SentMessage.Type, 'text' | 'view' | 'offset'>
 
 /**
- * Where the Turn answering a Message starts, by its Tile's id: the Tile the Message opens with a link
- * to, else the one centered on the view it was sent from.
- */
-const locationOf = ({ text, view }: Pick<Started, 'text' | 'view'>) =>
-  leadingLink(text) ?? view.center
-
-/**
  * Starts a Turn's agent in the Account's sandbox: the System written into it, Mapping's export of its
  * Root, a Reference whose Tile is gone linked on the site the request reached (`tileLink`), whatever
  * the sandbox held gone; the Turn's prompt made of today's latest Entries and the Titles of the Tiles
@@ -252,7 +245,7 @@ export const sendMessage = (sent: typeof SentMessage.Type) =>
     if (!(yield* Iam.entitled(account, 'assistant'))) {
       return { entry: yield* transactional(Assistant.postMessage(account.id, sent.text)) }
     }
-    const location = locationOf(sent)
+    const location = turnLocation(sent.text, sent.view.center)
     yield* Mapping.ownTile(account.id, location)
     const { entry, turn, key, overdue } = yield* transactional(
       Effect.gen(function* () {

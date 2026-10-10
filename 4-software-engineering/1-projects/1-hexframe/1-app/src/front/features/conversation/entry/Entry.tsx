@@ -84,7 +84,7 @@ function Message({
   onCenter: EntryProps['onCenter']
 }) {
   const mine = entry.author === 'user'
-  const shown = (tile: string) => `@${linked(titles, tile)}`
+  const shown = (tile: string) => linkText(titles, tile)
   return (
     <div className={cn('grid max-w-[85%] gap-1', mine ? 'ml-auto justify-items-end' : 'mr-auto')}>
       <p className="text-xs text-muted-foreground">
@@ -109,10 +109,10 @@ function Message({
   )
 }
 
-/** The Title a link shows: the Tile's now, "Untitled" for an untitled one, none once deleted. */
-const linked = (titles: Titles, tile: string) => {
+/** What a link shows: `@` and its Tile's Title now, "Untitled" for an untitled one; once deleted, so. */
+const linkText = (titles: Titles, tile: string) => {
   const title = titles[tile]
-  return title === undefined ? m.conversation_link_broken() : named(title)
+  return title === undefined ? m.conversation_link_broken() : `@${named(title)}`
 }
 
 /** One piece of a Message: its words, or a link to a Tile, a button centering it, or broken. */
@@ -127,17 +127,18 @@ function Piece({
 }) {
   if (part._tag === 'Text') return part.text
   const { tile } = part
-  const title = titles[tile]
+  const text = linkText(titles, tile)
   const chip = 'inline-flex items-center gap-0.5 rounded-sm px-0.5 align-baseline font-medium'
+  const title = titles[tile]
   if (title === undefined) {
     return (
       <span className={cn(chip, 'line-through opacity-70')}>
         <Unlink aria-hidden className="size-3 shrink-0 self-center" />
-        {m.conversation_link_broken()}
+        {text}
       </span>
     )
   }
-  if (onCenter === undefined) return <span className={chip}>@{named(title)}</span>
+  if (onCenter === undefined) return <span className={chip}>{text}</span>
   return (
     <button
       type="button"
@@ -150,7 +151,7 @@ function Piece({
         onCenter(tile)
       }}
     >
-      @{named(title)}
+      {text}
     </button>
   )
 }
