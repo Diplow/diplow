@@ -48,7 +48,10 @@ async function tool(name, input) {
       params: { name, arguments: input },
     }),
   })
-  const answer = await response.json()
+  // The MCP answers JSON, or one event of a stream, as a client accepting both reads it.
+  const body = await response.text()
+  const data = body.split('\n').filter((line) => line.startsWith('data:'))
+  const answer = JSON.parse(data.length === 0 ? body : data.at(-1).slice('data:'.length))
   const text = answer.result?.content?.[0]?.text ?? JSON.stringify(answer.error ?? null)
   say({
     type: 'user',

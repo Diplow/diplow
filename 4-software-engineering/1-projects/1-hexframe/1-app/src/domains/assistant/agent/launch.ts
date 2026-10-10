@@ -36,7 +36,7 @@ const filesOf = (turnId: string) => `turns/${turnId}`
  * or a SIGTERM on to it, so a Stop ends its turn cleanly; posts each line it writes to the events door,
  * one after another, with the Turn's Key as its bearer; then, once it exited, `hexframe_exit`.
  */
-export const launcher = String.raw`
+const launcher = String.raw`
 import { spawn } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 import { createInterface } from 'node:readline'
