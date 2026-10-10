@@ -1,0 +1,78 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/CLAUDE.md
+  s_c19b57f63ed6ef::t_afcbc74831a979 9-10,22,28
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/local.ts
+  s_c19b57f63ed6ef::t_2e482cc8d9b400 1-68,72-73,111-122,124-132,136-163,167-200
+  s_c19b57f63ed6ef::t_85b2cdec985e42 74-89,95-99,106-110,123
+  s_c19b57f63ed6ef::t_676a70691cda3b 69-71,164-166
+  s_c19b57f63ed6ef::t_52ffaa35392bd0 90-94,100-105,133-135
+4-software-engineering/1-projects/1-hexframe/1-app/dependency-cruiser.config.ts
+  s_c19b57f63ed6ef::t_b2b65d5a4d9fb3 28-29,41,89
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/assistant.ts
+  s_c19b57f63ed6ef::t_708e0ff16adbde 7-9,12,95-105
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-assistant/decisions.md
+  s_c19b57f63ed6ef::t_b1e05b25f5d5a1 16-18,93-95,97-106
+  s_c19b57f63ed6ef::t_7f20bc3b1e4f76 96
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/CLAUDE.md
+  s_c19b57f63ed6ef::t_83728dd2c0c435 1-19,21,23-28,30-38
+  s_c19b57f63ed6ef::t_cb05f763d33cbb 29
+  s_c19b57f63ed6ef::t_d16addb7a61dc6 20,22
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/programs.ts
+  s_c19b57f63ed6ef::t_d7cf979069de19 12,15-16,78-91
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/sandbox.test.ts
+  s_c19b57f63ed6ef::t_4ac523f6997a38 1-2,5,17-27,29-33
+  s_c19b57f63ed6ef::t_4d2d5be02b77b2 195
+  s_c19b57f63ed6ef::t_f42b7db7503a78 3-4,6-16,28,34-35,37-72,75-76,90-194,196-257
+  s_c19b57f63ed6ef::t_676a70691cda3b 36,73-74,77-89
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/CLAUDE.md
+  s_c19b57f63ed6ef::t_9f62ffb4c0264a 10-11,29
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/lint.test.ts
+  s_c19b57f63ed6ef::t_8fb1cb8861344e 189-210
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/CLAUDE.md
+  s_c19b57f63ed6ef::t_afcbc74831a979 9-12,21,23
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/sandbox.ts
+  s_c19b57f63ed6ef::t_1ac9c6e521dd8b 36
+  s_c19b57f63ed6ef::t_feef8e27d893cb 1-35,37-100,107-122
+  s_c19b57f63ed6ef::t_676a70691cda3b 101-106
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/assistant.test.ts
+  s_c19b57f63ed6ef::t_d62ef404469669 1-5,10,54,213-241,243-253
+  s_c19b57f63ed6ef::t_676a70691cda3b 242
+  s_c19b57f63ed6ef::t_349ea2305c714a 254-256
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/blaxel.ts
+  s_c19b57f63ed6ef::t_7b55bd8a750e0a 35,137
+  s_c19b57f63ed6ef::t_4432414b4d7ccd 175
+  s_c19b57f63ed6ef::t_676a70691cda3b 196-199
+  s_c19b57f63ed6ef::t_5372cbd1af334c 1-34,36-87,91-136,138-174,176-195,200-210
+  s_c19b57f63ed6ef::t_b2b65d5a4d9fb3 88-90
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/CLAUDE.md
+  s_c19b57f63ed6ef::t_ac6d44f1d59bae 1-19
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_c19b57f63ed6ef::t_afcbc74831a979 35,83
+4-software-engineering/1-projects/1-hexframe/1-app/package.json
+  s_c19b57f63ed6ef::t_66885dd9c0c88e 19
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/blaxel.test.ts
+  s_c19b57f63ed6ef::t_4432414b4d7ccd 1-69
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE.md
+  s_c19b57f63ed6ef::t_afcbc74831a979 96
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/run.ts
+  s_c19b57f63ed6ef::t_873f7e01ea2c02 15-16,60-62,64-75,79-80,82,85
+4-software-engineering/1-projects/1-hexframe/1-app/vitest.config.ts
+  s_c19b57f63ed6ef::t_873f7e01ea2c02 12-15
+4-software-engineering/1-projects/1-hexframe/pnpm-lock.yaml
+  s_c19b57f63ed6ef::t_2cba900cab3755 16-18,431-434,924-960,1000-1003,1024-1026,1059-1062,1074-1083,1610-1613,2929-2936,2958-2969,2973-2979,2984-2987,2996-2999,3004-3011,3029-3045,3049-3051,3056-3095,3172-3178,3188-3191,3196-3198,3203-3206,3211-3218,3222-3229,3264-3271,3284-3293,3302-3313,3320-3327,3331-3346,3380-3391,3395-3402,3412-3414,3426-3428,3592-3601,3608-3617,3630-3633,3641-3648,3663-3665,3725-3739,3752-3761,3768-3770,3777-3779,3804-3807,3818-3834,3840-3847,3863-3866,3871-3877,3881-3884,3889-3893,3906-3909,3944-3951,3960-3963,3973-3980,3984-3990,4007-4009,4018-4025,4030-4034,4039-4042,4047-4055,4064-4077,4085-4087,4098-4101,4117-4122,4135-4138,4155-4158,4318-4323,4346-4373,4378-4385,4411-4414,4427-4438,4452-4465,4493-4495,4499-4502,4514-4517,4522-4524,4528-4530,4576-4578,4619-4622,4644-4650,4655-4662,4671-4674,4691-4701,4744-4756,4774-4777,4797-4810,4814-4816,4828-4832,4838-4841,4857-4860,4864-4866,4875-4894,4934-4937,4941-4965,4996-5004,5017-5020,5045-5048,5074-5077,5158-5164,5177-5180,5273-5278,5318-5328,5341-5344,5365-5373,5583-5608,5945-6002,6045-6053,6077-6078,6110-6111,6128-6149,6439-6441,7871-7879,7896-7905,7913-7921,7924-7925,7932-7933,7936-7959,7974-7989,7999-8000,8003-8033,8077-8094,8107-8108,8113-8117,8120-8123,8126-8140,8149-8158,8186-8191,8201-8212,8217-8222,8227-8230,8233-8246,8269-8277,8280-8283,8307-8308,8315-8319,8348-8357,8362-8367,8382-8383,8388-8398,8459-8460,8553-8564,8573-8613,8618-8619,8624-8625,8644-8654,8668-8682,8688-8691,8701-8713,8716-8724,8729-8730,8735-8743,8756-8757,8790-8795,8804-8805,8812-8826,8829-8834,8843-8844,8849-8852,8857-8858,8861-8862,8867-8872,8880-8889,8894-8899,8906-8909,8920-8923,8930-8931,8956-8959,9069-9072,9093-9110,9115-9122,9137-9140,9161-9166,9178-9196,9307-9308,9311-9312,9319-9323,9329-9330,9333-9334,9376-9381,9420-9421,9434-9437,9443-9449,9456-9460,9526-9539,9576-9597,9615-9616,9651-9666,9671-9672,9683-9684,9687-9702,9711-9719,9722-9723,9730-9759,9781-9782,9785-9821,9842-9865,9875-9876,9902-9907,9931-9932,9983-9986,9993-9994,10036-10039,10062-10075,10078-10082,10098-10107
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d6140282dbe183d060b057a24e577c5d91ac253f",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
