@@ -1,0 +1,23 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_c19b57f63ed6ef::t_26976ae0d869ab 40
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/assistant/conversation.test.ts
+  s_c19b57f63ed6ef::t_ad5f598c72044a 51,58
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/assistant/conversation.ts
+  s_c19b57f63ed6ef::t_de3d1ea3efab18 28-31,33,37-38,40-41,56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "471fca3d1487a4d6795bba3602b98b60cb7f0dd7",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
