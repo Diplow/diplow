@@ -14,12 +14,14 @@ import {
   TileDeleted,
   TileEdited,
   TileMoved,
+  TilesImported,
   TilesSwapped,
 } from '..'
 
 // A System after each of Mapping's events, on Systems made by hand, no database: each event changes
-// what it says and nothing else, and one naming what the System doesn't hold changes nothing. That the
-// database ends where `evolve` says is `../../agreement.test.ts`'s.
+// what it says and nothing else, one naming what the System doesn't hold changes none of its Tiles,
+// and every one counts on the System's Version. That the database ends where `evolve` says is
+// `./agreement.test.ts`'s.
 
 const placed = (id: string, parent: string, slot: Slot): PlacedTile => ({
   _tag: 'Tile',
@@ -44,6 +46,7 @@ const system: System = {
     across: { _tag: 'Reference', id: 'across', parent: 'root', slot: -2, target: 'child' },
   },
   owned: true,
+  version: 0,
 }
 
 const after = (...events: ReadonlyArray<MappingEvent>) => events.reduce(evolve, system)
@@ -143,7 +146,7 @@ describe('evolve, a System after one of its events', () => {
     expect(deleted.tiles.branch).toBe(system.tiles.branch)
   })
 
-  it('changes nothing for an event naming what the System doesn’t hold as it says', () => {
+  it('changes none of its Tiles for an event naming what the System doesn’t hold as it says', () => {
     const events = [
       new TileEdited({ id: 'gone', title: 'Gone' }),
       new TileMoved({ id: 'gone', parent: 'root', slot: 3 }),
@@ -153,7 +156,28 @@ describe('evolve, a System after one of its events', () => {
       new TileDeleted({ id: 'up' }),
       new ReferenceDeleted({ id: 'child', parent: 'branch', slot: -2 }),
     ]
-    for (const event of events) expect(evolve(system, event), event._tag).toEqual(system)
+    for (const event of events) {
+      expect(evolve(system, event), event._tag).toEqual({ ...system, version: 1 })
+    }
+  })
+
+  it('counts every event on the System’s Version, one each, whatever it changed', () => {
+    const counted = after(
+      new TileEdited({ id: 'child', title: 'Once' }),
+      new TileMoved({ id: 'leaf', parent: 'root', slot: { leaf: 2 } }),
+      new TileDeleted({ id: 'gone' }),
+      new TilesImported({ id: 'imported', count: 3 }),
+    )
+    expect(counted.version).toBe(4)
+    expect(after().version).toBe(0)
+  })
+
+  it('counts an import on the Root it filled, and on no Tile when it landed in a slot', () => {
+    const asRoot = after(new TilesImported({ id: 'root', count: 12 }))
+    expect(asRoot).toEqual({ ...system, root: { ...system.root, version: 2 }, version: 1 })
+    // The Tiles it brought aren't named by the event: a reader reads the System again.
+    const inSlot = after(new TilesImported({ id: 'imported', count: 12 }))
+    expect(inSlot).toEqual({ ...system, version: 1 })
   })
 })
 
@@ -164,6 +188,7 @@ describe('evolve folded over what decide makes', () => {
     root: { _tag: 'Tile', id: root, title: '', preview: '', body: '', version: 1 },
     tiles: { [a]: placed(a, root, 1), [b]: placed(b, root, 2), [under]: placed(under, a, -1) },
     owned: true,
+    version: 0,
   }
 
   it('lays the System out as the Operations say, one after the other', () => {
@@ -181,5 +206,16 @@ describe('evolve folded over what decide makes', () => {
     expect(tree.branches[2]?.id).toBe(a)
     expect(tree.branches[1]?.branches[6]?.id).toBe(under)
     expect(tree.branches[2]?.context).toEqual({})
+    expect(final.version).toBe(2)
+  })
+
+  it('counts nothing on the System’s Version for an Operation refused or changing nothing', () => {
+    const stale = decide(real, new MoveTile({ id: under, version: 2, parent: b, slot: 6 }))
+    expect(Result.isFailure(stale)).toBe(true)
+    const stays = Result.getOrThrow(
+      decide(real, new MoveTile({ id: a, version: 1, parent: root, slot: 1 })),
+    )
+    expect(stays).toEqual([])
+    expect(stays.reduce(evolve, real).version).toBe(real.version)
   })
 })

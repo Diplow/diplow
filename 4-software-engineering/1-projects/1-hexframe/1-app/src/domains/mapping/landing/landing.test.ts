@@ -1,7 +1,7 @@
 import { expect, layer } from '@effect/vitest'
 import { Effect, Layer } from 'effect'
 
-import { Bus } from '#/domains/bus'
+import { Bus, type DomainEvent } from '#/domains/bus'
 import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
@@ -12,13 +12,14 @@ import type { IdOfLink } from '../files/import/plan'
 import { helpRoot } from '../help/help'
 import { type SystemTile, systemOf } from '../entities'
 import * as Mapping from '../mapping'
-import { CreateTile, EditTile } from '../operations'
+import { CreateTile, EditTile, TilesImported } from '../operations'
 import { type ImportPlace, importTiles, planImport } from './landing'
 
 // An import landed in a System over PGlite, as the API layer runs it: the plan read outside any
 // transaction, then landed in one. Into a Branch, a Leaf and a Context slot, as the Root of an empty
 // System; refused into Help, into a taken slot, a folder into a Leaf slot; References inside, by link
-// to this System, to another's and to nothing; nothing written when refused; two copies for two.
+// to this System, to another's and to nothing; nothing written when refused; two copies for two. Then
+// its event: one `TilesImported` published, the System's Version counted once, none when refused.
 
 /** The Account's System, read flat, as its tree: what the canvas draws, as the client builds it. */
 const tree = (accountId: string) => Effect.map(Mapping.system(accountId), systemOf)
@@ -328,6 +329,73 @@ layer(TestLayers)('what an import writes, over PGlite', (it) => {
       })
       const big = (yield* tree(accountId)).branches[6]
       expect(big === undefined ? 0 : idsOf(big).length).toBe(report.tiles)
+    }),
+  )
+})
+
+/** Every event the import published since a test started hearing, in order. */
+const heard: Array<DomainEvent> = []
+
+const Heard = Layer.succeed(Bus)({ publish: (event) => Effect.sync(() => void heard.push(event)) })
+
+/** An import's every step but its event's, the bus hearing what it publishes. */
+const HeardLayers = Layer.mergeAll(
+  tilesLayer.pipe(Layer.provideMerge(TestDatabase)),
+  zipLayer,
+  Heard,
+)
+
+/** The System's Version as its poll reads it. */
+const versionOf = (accountId: string) => Mapping.systemVersion(accountId)
+
+layer(HeardLayers)('an import’s event, over PGlite', (it) => {
+  it.effect(
+    'publishes one TilesImported for the Tile it landed in a slot, the Version one on',
+    () =>
+      Effect.gen(function* () {
+        const { accountId, root } = yield* someone
+        const before = yield* versionOf(accountId)
+        heard.length = 0
+        const report = yield* land(accountId, { _tag: 'Slot', parent: root.id, slot: 3 })
+        // The vault's Games, its Notes, Tools and Principles came with it; its Reference is no Tile.
+        expect(heard).toEqual([new TilesImported({ id: report.id, count: 4 })])
+        expect(yield* versionOf(accountId)).toBe(before + 1)
+        expect((yield* Mapping.system(accountId)).version).toBe(before + 1)
+      }),
+  )
+
+  it.effect(
+    'publishes one for the Root it filled, both the Root’s and the System’s Version on',
+    () =>
+      Effect.gen(function* () {
+        const accountId = crypto.randomUUID()
+        expect(yield* versionOf(accountId)).toBe(0)
+        heard.length = 0
+        const report = yield* land(accountId, { _tag: 'Root' })
+        expect(heard).toEqual([new TilesImported({ id: report.id, count: 4 })])
+        const system = yield* Mapping.system(accountId)
+        expect(system).toMatchObject({ version: 1, root: { id: report.id, version: 2 } })
+      }),
+  )
+
+  it.effect('publishes nothing and counts nothing for an import refused', () =>
+    Effect.gen(function* () {
+      const { accountId, root } = yield* someone
+      yield* land(accountId, { _tag: 'Slot', parent: root.id, slot: 1 })
+      const before = yield* versionOf(accountId)
+      heard.length = 0
+      const taken = { _tag: 'Slot', parent: root.id, slot: 1 } as const
+      expect(yield* Effect.flip(land(accountId, taken))).toMatchObject({ _tag: 'DirectionTaken' })
+      const atFault = { ...vault, '../escape.md': 'x' }
+      const free = { _tag: 'Slot', parent: root.id, slot: 2 } as const
+      expect(yield* Effect.flip(land(accountId, free, atFault))).toMatchObject({
+        _tag: 'ImportRefused',
+      })
+      expect(yield* Effect.flip(land(accountId, { _tag: 'Root' }))).toMatchObject({
+        _tag: 'DirectionTaken',
+      })
+      expect(heard).toEqual([])
+      expect(yield* versionOf(accountId)).toBe(before)
     }),
   )
 })

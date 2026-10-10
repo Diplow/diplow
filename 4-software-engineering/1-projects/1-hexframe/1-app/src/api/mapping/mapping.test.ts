@@ -92,8 +92,23 @@ describe('the System, read flat', () => {
       root: { _tag: 'Tile', id: first.root.id, title: '', preview: '', body: '', version: 1 },
       tiles: {},
       owned: true,
+      version: 0,
     })
     expect((await value(run(context, Mapping.system))).root.id).toBe(first.root.id)
+  })
+
+  it('reads the System’s Version alone, 0 at first, one on per change, none for a refused one', async () => {
+    const context = request()
+    expect(await value(run(context, Mapping.systemVersion))).toBe(0)
+    const root = await systemTree(context)
+    await value(run(context, Mapping.createTile({ parent: root.id, slot: 1, ...content('One') })))
+    expect(await value(run(context, Mapping.systemVersion))).toBe(1)
+    const refused = await run(
+      context,
+      Mapping.moveTile({ id: root.id, version: 1, parent: root.id, slot: 2 }),
+    )
+    expect(refused.ok).toBe(false)
+    expect(await value(run(context, Mapping.systemVersion))).toBe(1)
   })
 
   it('reads each Tile and Reference below the Root by id, where it stands', async () => {
@@ -128,6 +143,7 @@ describe('the System, read flat', () => {
 describe("Mapping's server functions", () => {
   it.each<readonly [string, Program]>([
     ['system', Mapping.system],
+    ['systemVersion', Mapping.systemVersion],
     ['createTile', Mapping.createTile({ parent: 'p', slot: 1, ...content('Child') })],
     ['editTile', Mapping.editTile({ id: 't', version: 1, title: 'Renamed' })],
     ['moveTile', Mapping.moveTile({ id: 't', version: 1, parent: 'p', slot: 2 })],
@@ -329,6 +345,7 @@ describe("the errors Mapping's server functions can fail with", () => {
   it('are each listed by its type, a write refusing Help', () => {
     type ErrorOf<P> = P extends Effect.Effect<unknown, infer E, unknown> ? E : never
     expectTypeOf<ErrorOf<typeof Mapping.system>>().toEqualTypeOf<SignedOut>()
+    expectTypeOf<ErrorOf<typeof Mapping.systemVersion>>().toEqualTypeOf<SignedOut>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.help>>>().toEqualTypeOf<never>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createTile>>>().toEqualTypeOf<
       | SignedOut

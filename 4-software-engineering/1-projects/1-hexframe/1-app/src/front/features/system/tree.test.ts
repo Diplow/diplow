@@ -151,6 +151,7 @@ describe('swapsWith', () => {
       toGone: { _tag: 'Reference', id: 'toGone', parent: 'root', slot: -5, target: 'gone' },
     },
     owned: true,
+    version: 0,
   }
   const tree = canvasTree(systemOf(flat))
   const offers = (moving: TileNode | undefined, tile: TileNode | undefined) =>

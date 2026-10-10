@@ -76,6 +76,7 @@ const served: System = {
   root: { _tag: 'Tile', id: id.root, title: 'Me', preview: '', body: '', version: 1 },
   tiles: { [id.a]: branch(id.a, 'A', 1), [id.b]: branch(id.b, 'B', 2) },
   owned: true,
+  version: 0,
 }
 
 /** The System with these Tiles placed over the served one's. */

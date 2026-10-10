@@ -31,7 +31,7 @@ import {
   type TitleMissing,
 } from '../../errors'
 import {
-  type MappingEvent,
+  type OperationEvent,
   ReferenceCreated,
   ReferenceDeleted,
   TileCreated,
@@ -94,7 +94,7 @@ export interface Made {
  * when it changes nothing, or one of the refusals it may get.
  */
 export type Decided<Tag extends keyof Refusals = keyof Refusals> = Result.Result<
-  ReadonlyArray<MappingEvent>,
+  ReadonlyArray<OperationEvent>,
   Refusals[Tag]
 >
 

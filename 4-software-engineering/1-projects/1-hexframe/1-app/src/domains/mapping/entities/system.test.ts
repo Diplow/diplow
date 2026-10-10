@@ -15,6 +15,7 @@ const tile = (id: string, parentId: string | null, direction: number | null): Ro
   preview: `${id}, in short.`,
   body: `# ${id}`,
   version: 1,
+  systemVersion: 0,
   target: null,
   ...keepsNothing,
 })
@@ -95,6 +96,7 @@ describe('the System these rows hold, flat', () => {
       root: { _tag: 'Tile', ...content('help'), version: 1 },
       tiles: {},
       owned: false,
+      version: 0,
     })
   })
 
@@ -163,6 +165,7 @@ describe('the tree of a System, a view built from it', () => {
         'help/3': { _tag: 'Tile', ...content('help/3'), version: 1, parent: 'help', slot: 3 },
       },
       owned: false,
+      version: 0,
     }
     expect(systemOf(help)).toEqual({
       _tag: 'Tile',

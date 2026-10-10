@@ -92,6 +92,14 @@ export const system = createServerFn({ method: 'GET' })
   .handler(({ context }) => run(context, Mapping.system))
 
 /**
+ * The Version of the Account's System, how many events changed it, read alone, the smallest read there
+ * is: the page polls it, and reads the System again only once it moved.
+ */
+export const systemVersion = createServerFn({ method: 'GET' })
+  .validator(Nothing)
+  .handler(({ context }) => run(context, Mapping.systemVersion))
+
+/**
  * Help whole, in the language asked: its Root with everything below it, Bodies included. Signed in or
  * not, anyone reads it.
  */

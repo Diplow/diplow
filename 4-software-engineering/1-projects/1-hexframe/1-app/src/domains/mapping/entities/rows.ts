@@ -17,11 +17,13 @@ type StoredFrontmatter = Readonly<Record<string, string | number | boolean>>
 /**
  * One row of a System. A Root has no parent and no direction; a row with a `target` is a Reference to
  * the row of that id. `name`, `config` and `frontmatter` are what an imported file carried, null when
- * it carried nothing. `version` is its Tile's Version; a Reference's stays 1, unread.
+ * it carried nothing. `version` is its Tile's Version; a Reference's stays 1, unread. `systemVersion`
+ * is the System's Version on its Root's row, and 0, unread, on every other.
  */
 export interface Row extends Content {
   readonly id: string
   readonly version: number
+  readonly systemVersion: number
   readonly parentId: string | null
   readonly direction: number | null
   readonly target: string | null
@@ -77,7 +79,7 @@ export const withContent = <F extends keyof Content>(
     direction,
     target,
     ...content
-  }: Omit<Row, keyof Content | KeptPart> & Partial<Content>,
+  }: Omit<Row, keyof Content | KeptPart | 'systemVersion'> & Partial<Content>,
   fields: ReadonlyArray<F>,
 ): RowWith<F> => ({
   id,

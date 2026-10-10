@@ -45,6 +45,7 @@ import {
   type MappingEvent,
   type MoveTile,
   type Operation,
+  type OperationEvent,
   type SwapTiles,
 } from './operations'
 
@@ -65,6 +66,13 @@ export const system = (accountId: string) =>
     if (found === undefined) return yield* Effect.die(new Error('A System was read without a Root'))
     return found
   })
+
+/**
+ * The Version of the Account's System, how many events changed it, read alone: what a client polls to
+ * know when to read the System again. 0 before its first change, its Root not yet added included.
+ */
+export const systemVersion = (accountId: string) =>
+  Tiles.use((tiles) => tiles.systemVersion(accountId))
 
 /** A Tile read from, with the id and Title of its parent, `null` for the Root. */
 interface Read<F extends Field> {
@@ -216,7 +224,10 @@ const outsideHelp = (ids: ReadonlyArray<string>) =>
 export const changing = <A, E>(
   accountId: string,
   names: ReadonlyArray<string>,
-  change: (rows: ReadonlyArray<TileRow>, writes: Writes) => Effect.Effect<A, E, InTransaction>,
+  change: (
+    rows: ReadonlyArray<TileRow>,
+    writes: Writes,
+  ) => Effect.Effect<A, E, InTransaction | Bus>,
 ) =>
   Effect.andThen(
     outsideHelp(names),
@@ -281,7 +292,7 @@ const counted = (writes: Writes, after: System, id: string) =>
  */
 const written =
   (writes: Writes, after: System) =>
-  (event: MappingEvent): Effect.Effect<void, IdTaken, InTransaction> => {
+  (event: OperationEvent): Effect.Effect<void, IdTaken, InTransaction> => {
     switch (event._tag) {
       case 'TileCreated': {
         const { id, parent, slot, title, preview, body, name, config, frontmatter } = event
@@ -333,16 +344,33 @@ const madeHere: OnTaken<never> = (taken) => Effect.die(taken)
 const chosen: OnTaken<TileIdTaken> = () => Effect.fail(new TileIdTaken())
 
 /**
+ * Ends a change that made these events, written already: writes the System's Version as `evolve` left
+ * it in `after`, then publishes them. A change that made none leaves the Version where it was. The
+ * bus holds what is published until the transaction commits. `landing/`'s import ends this way too.
+ */
+export const published = (
+  writes: Writes,
+  { after, events }: { after: System; events: ReadonlyArray<MappingEvent> },
+) =>
+  events.length === 0
+    ? Effect.void
+    : Effect.gen(function* () {
+        yield* writes.systemVersion(after.version)
+        const { publish } = yield* Bus
+        yield* Effect.forEach(events, publish, { discard: true })
+      })
+
+/**
  * Runs an Operation on the Account's System: locks it, loads it flat, asks `decide` through `decided`,
- * then writes one change per event, as `evolve` leaves the System after it, publishes the events, and
- * answers the System they leave. Every rule lives in `decide`: what it refuses is refused here, with nothing written and
+ * then writes one change per event, as `evolve` leaves the System after it, and the System's Version,
+ * publishes the events, and answers the System they leave. Every rule lives in `decide`: what it refuses is refused here, with nothing written and
  * nothing published. A write under an id already taken answers `onTaken`: a defect, unless the
  * Operation's caller chose the id. The bus holds what is published until the transaction commits.
  */
 const operate = <E, T = never>(
   accountId: string,
   operation: Operation,
-  decided: (system: System) => Result.Result<ReadonlyArray<MappingEvent>, E>,
+  decided: (system: System) => Result.Result<ReadonlyArray<OperationEvent>, E>,
   onTaken: OnTaken<T> = madeHere,
 ) =>
   Effect.gen(function* () {
@@ -354,8 +382,7 @@ const operate = <E, T = never>(
       after = evolve(after, event)
       yield* Effect.catchTag(written(writes, after)(event), 'IdTaken', onTaken)
     }
-    const { publish } = yield* Bus
-    yield* Effect.forEach(events, publish, { discard: true })
+    yield* published(writes, { after, events })
     return after
   })
 

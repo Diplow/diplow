@@ -2,15 +2,19 @@ import { expect, layer } from '@effect/vitest'
 import { Effect, Exit, Layer, Option } from 'effect'
 
 import { CurrentKey, CurrentSession } from '#/domains/iam/iam'
-import { MappingEvent, TileCreated, TileEdited } from '#/domains/mapping/operations'
+import { MappingEvent, TileCreated, TileEdited, TilesImported } from '#/domains/mapping/operations'
+import { HttpExchange } from '#/repositories/auth/auth'
 import { TestDatabase } from '#/repositories/database/testing'
 import { layer as tilesLayer } from '#/repositories/database/tiles/tiles'
+import { archiveOf } from '#/repositories/zip/testing'
+import { layer as zipLayer } from '#/repositories/zip/zip'
 
 import { type Envelope, WaitUntil, on, serverBus } from '../server/bus'
 import * as Mapping from './programs'
 
 // Mapping's events as the API layer's bus carries them, over PGlite: every change publishes the
-// events `decide` made, once its transaction commits, with who acted on the envelope. A server
+// events `decide` made, and an import the one its plan made, once its transaction commits, with who
+// acted on the envelope. A server
 // function and an MCP write run these same programs (../server/mcp/tools.ts), proven by a Session
 // at the one door and by a Key at the other.
 
@@ -21,7 +25,18 @@ const keep = on(MappingEvent, (event, actor) =>
   Effect.sync(() => void heard.push({ event, actor })),
 )
 
-const TestLayer = Layer.merge(tilesLayer.pipe(Layer.provideMerge(TestDatabase)), serverBus([keep]))
+const TestLayer = Layer.mergeAll(
+  tilesLayer.pipe(Layer.provideMerge(TestDatabase)),
+  zipLayer,
+  serverBus([keep]),
+)
+
+/** The request an import arrives by, on a site its links read nothing of. */
+const exchange = {
+  url: 'https://hexframe.test/',
+  headers: new Headers(),
+  setCookies: () => undefined,
+}
 
 /** Someone no other test uses, and the request each of their two proofs gives. */
 function someone() {
@@ -112,5 +127,31 @@ layer(TestLayer)("Mapping's events on the bus, over PGlite", (it) => {
       const unchanged = yield* asked(Mapping.editTile({ id: root, version: 1 }), proofs)
       expect([Exit.isSuccess(unchanged.exit), unchanged.heard]).toEqual([true, []])
     }),
+  )
+
+  it.effect(
+    'publishes one TilesImported for an import, with its actor, and none when refused',
+    () =>
+      Effect.gen(function* () {
+        const { account, bySession } = someone()
+        const root = yield* rootOf(bySession)
+        const files = { 'CLAUDE.md': '---\ntitle: Vault\n---\n', '1-a/CLAUDE.md': '' }
+        const imported = (slot: 1 | 2) =>
+          Mapping.importTiles({
+            upload: new File([archiveOf(files).slice()], 'vault.zip'),
+            as: 'Zip',
+            place: { _tag: 'Slot', parent: root, slot },
+          }).pipe(Effect.provideService(HttpExchange, exchange))
+        const { exit, heard: carried } = yield* asked(imported(1), bySession)
+        const { id } = yield* exit
+        expect(carried).toEqual([
+          {
+            event: new TilesImported({ id, count: 1 }),
+            actor: Option.some({ account, by: { _tag: 'Session' } }),
+          },
+        ])
+        const taken = yield* asked(imported(1), bySession)
+        expect([Exit.isFailure(taken.exit), taken.heard]).toEqual([true, []])
+      }),
   )
 })

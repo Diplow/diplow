@@ -73,6 +73,7 @@ const served: System = {
     [id.notes]: placed(id.notes, 'Notes', { leaf: 3 }),
   },
   owned: true,
+  version: 0,
 }
 
 const titleMissing = {

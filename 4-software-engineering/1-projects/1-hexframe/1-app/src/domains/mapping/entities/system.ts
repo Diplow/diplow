@@ -52,13 +52,15 @@ export interface PlacedReference extends Standing {
 /**
  * A System, Mapping's aggregate, flat, as a change decides on it and the client holds it: its Root,
  * the one Tile without a parent; every Tile and Reference below it by id, each with its parent and
- * its slot; and whether an Account owns it. Help, which every Account reads, is owned by none, so the
- * System alone says that nothing in it may change.
+ * its slot; whether an Account owns it, Help, which every Account reads, owned by none, so the
+ * System alone says that nothing in it may change; and its Version, how many events changed it, 0
+ * before the first, which a client polls to know when to read it again.
  */
 export interface System {
   readonly root: FoundTile
   readonly tiles: Readonly<Record<string, PlacedTile | PlacedReference>>
   readonly owned: boolean
+  readonly version: number
 }
 
 /** A Leaf in its System's tree: one file's worth, a Tile with nothing below it and no Context. */
@@ -110,8 +112,9 @@ function placedOf(row: Row, parent: string): PlacedTile | PlacedReference | unde
 }
 
 /**
- * The System these rows hold, owned by an Account or, Help, by none; `undefined` when they hold no
- * Root. A row the Root is not above stays in it, out of its tree's reach.
+ * The System these rows hold, owned by an Account or, Help, by none, at the Version its Root's row
+ * keeps; `undefined` when they hold no Root. A row the Root is not above stays in it, out of its
+ * tree's reach.
  */
 export function systemFrom(
   rows: ReadonlyArray<Row>,
@@ -125,7 +128,7 @@ export function systemFrom(
       return placed === undefined ? [] : [[row.id, placed] as const]
     }),
   )
-  return { root: foundOf(root), tiles, owned }
+  return { root: foundOf(root), tiles, owned, version: root.systemVersion }
 }
 
 /** What finding a Tile's row needs of a row: its id, and whether it is a Reference. */

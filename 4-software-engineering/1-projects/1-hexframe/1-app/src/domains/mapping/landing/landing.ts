@@ -1,11 +1,13 @@
 // An import, from an upload to the Tiles it lands: `planImport` reads the upload into a plan, its
 // archive unpacked within its bounds through the zip repository, outside any transaction; then
 // `importTiles` lands the plan in the Account's System as a change does, the Root locked, its slot
-// checked, every row written in one batch, all of it or nothing. It always creates: every Tile gets a
-// new id, so importing twice makes two copies (`hexframe-app-import-export/decisions.md#DEC-11`).
+// checked, every row written in one batch, all of it or nothing, then its one event, `TilesImported`,
+// which the plan makes, counted on the System's Version and published as an Operation's are. It always
+// creates: every Tile gets a new id, so importing twice makes two copies
+// (`hexframe-app-import-export/decisions.md#DEC-11`).
 import { Effect } from 'effect'
 
-import type { BatchRow, RowRef, TileRow } from '#/repositories/database/tiles/tiles'
+import type { BatchRow, RowRef, TileRow, Writes } from '#/repositories/database/tiles/tiles'
 import { Tiles } from '#/repositories/database/tiles/tiles'
 import { Zip } from '#/repositories/zip/zip'
 
@@ -20,17 +22,19 @@ import type {
   ReferenceTarget,
 } from '../files/import/plan'
 import { importOf } from '../files/import/read'
+import { importedAs } from '../files/import/plan'
 import {
   isEmptySystem,
   onlyALeafIn,
   rowDirection,
   type Slot,
+  type System,
   systemFrom,
   systemOf,
   tileRow,
 } from '../entities'
-import { changing, untitled } from '../mapping'
-import { freeSlot, type Placement } from '../operations'
+import { changing, published, untitled } from '../mapping'
+import { evolve, freeSlot, type Placement } from '../operations'
 import { type Upload, archiveBounds, folderOf } from './archive'
 
 export type { Upload } from './archive'
@@ -148,6 +152,18 @@ function reportOf(
 }
 
 /**
+ * Ends an import landed as the Tile of this id: the plan's event counted on the System as `evolve`
+ * leaves it, its Version written, the event published.
+ */
+const landed = (
+  writes: Writes,
+  { system, plan, id }: { system: System; plan: ImportPlan; id: string },
+) => {
+  const event = importedAs(plan, id)
+  return published(writes, { after: evolve(system, event), events: [event] })
+}
+
+/**
  * A plan landed in a free slot under a Tile of the System, never under a Leaf nor in Help: its root a
  * new Tile there, with everything below it. A Leaf slot takes a plan that is one file alone.
  */
@@ -171,6 +187,7 @@ const inSlot = (accountId: string, plan: ImportPlan, place: Placement) =>
       const ids = yield* writes.insertAll(batch)
       const id = ids.get(root.path)
       if (id === undefined) return yield* Effect.die(new Error('A batch lost its first row'))
+      yield* landed(writes, { system, plan, id })
       return reportOf(batch, { id, plan, replaced: false })
     }),
   )
@@ -194,9 +211,10 @@ const asRoot = (accountId: string, plan: ImportPlan) =>
           path === root.path ? { _tag: 'Stored', id: stored.id } : { _tag: 'Batch', key: path }
         const resolve = (target: ReferenceTarget) => targetOf(target, { rows, nameOf })
         const { title, preview, body, config, frontmatter } = root
-        // The Root says what the import gave it now: a writer that read it empty is refused.
+        // The Root says what the import gave it now, its Version counted by the import's event: a
+        // writer that read it empty is refused.
         yield* writes.update(stored.id, {
-          version: stored.version + 1,
+          version: evolve(found, importedAs(plan, stored.id)).root.version,
           title,
           preview,
           body,
@@ -206,6 +224,7 @@ const asRoot = (accountId: string, plan: ImportPlan) =>
         const batch =
           root._tag === 'Tile' ? rowsBelow(root, { parent: nameOf(root.path), resolve }) : []
         yield* writes.insertAll(batch)
+        yield* landed(writes, { system: found, plan, id: stored.id })
         return reportOf(batch, { id: stored.id, plan, replaced: true })
       }),
     ),

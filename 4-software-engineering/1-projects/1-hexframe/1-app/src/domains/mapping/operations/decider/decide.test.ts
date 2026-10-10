@@ -80,6 +80,7 @@ const system: System = {
     },
   },
   owned: true,
+  version: 0,
 }
 
 /**
