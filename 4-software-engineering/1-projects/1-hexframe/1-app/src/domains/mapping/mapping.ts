@@ -87,6 +87,12 @@ export const titles = (accountId: string, ids: ReadonlyArray<string>) =>
     ),
   )
 
+/** Nothing when the id is a Tile of the Account's own System, else `TileNotFound`. */
+export const ownTile = (accountId: string, id: string) =>
+  Effect.flatMap(titles(accountId, [id]), (titled) =>
+    id in titled ? Effect.void : Effect.fail(new TileNotFound()),
+  )
+
 /**
  * The Title and Preview of the Tiles of the Account's System among these ids, in their order: an id it
  * holds no Tile of, a deleted one's or a Reference's, is left out. What a Turn's prompt shows of the

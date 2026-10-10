@@ -1,4 +1,4 @@
-import { readFile } from 'node:fs/promises'
+import { readdir, readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
 import { afterAll, describe, expect, it } from 'vitest'
@@ -116,6 +116,8 @@ describe('a Turn on every Message', () => {
       'utf8',
     )
     expect(settings).not.toMatch(/hft_/)
+    // The agent's HOME was the Turn's own, nothing else left in the work folder.
+    expect(await readdir(join(box.home, 'work'))).toEqual([`turn-${sent.turn?.id ?? ''}`])
   })
 
   it('stops on a Stop: its agent interrupted, the timeline saying so, its Key revoked', async () => {

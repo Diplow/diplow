@@ -56,6 +56,15 @@ const endOf = ({ subtype, is_error }: { subtype: string; is_error?: boolean }): 
   return subtype === 'error_max_budget_usd' ? 'ceiling' : 'sandbox'
 }
 
+/**
+ * A secret shaped as a Turn's Key, `hft_` and its characters, which an agent printing its environment
+ * would say: never kept, whether in a Message or a step.
+ */
+const keyShaped = /hft_[A-Za-z0-9_-]{16,}/g
+
+/** A text with every Key-shaped secret in it masked. */
+const masked = (text: string) => text.replaceAll(keyShaped, 'hft_…')
+
 /** The input fields that say what a tool works on, the first one given told. */
 const subjects = ['command', 'file_path', 'path', 'pattern', 'url', 'id', 'title', 'query']
 
@@ -66,15 +75,20 @@ const subjects = ['command', 'file_path', 'path', 'pattern', 'url', 'id', 'title
 function stepFor(name: string, input: Readonly<Record<string, unknown>>): TurnStep {
   const tool = name.startsWith('mcp__') ? name.split('__').slice(2).join('__') : name
   const detail = subjects.map((field) => input[field]).find((value) => typeof value === 'string')
-  return stepOf(tool, typeof detail === 'string' ? detail.replace(/\s+/g, ' ').trim() : undefined)
+  return stepOf(
+    tool,
+    typeof detail === 'string' ? masked(detail.replace(/\s+/g, ' ').trim()) : undefined,
+  )
 }
 
 /** What a message of the agent's says: its text, every text block joined, then its last tool. */
 function eventsOf(content: ReadonlyArray<typeof Block.Type>): ReadonlyArray<AgentEvent> {
-  const text = content
-    .flatMap((block) => ('text' in block ? [block.text] : []))
-    .join('\n\n')
-    .trim()
+  const text = masked(
+    content
+      .flatMap((block) => ('text' in block ? [block.text] : []))
+      .join('\n\n')
+      .trim(),
+  )
   const tool = content.findLast((block) => 'name' in block)
   return [
     ...(text === '' ? [] : [{ _tag: 'Said', text } as const]),

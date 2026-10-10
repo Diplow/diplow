@@ -6,7 +6,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { Schema } from 'effect'
 
-import { Ago, Day, MessageText, Navigation, Step } from '#/domains/assistant/entities'
+import { Ago, Day, MessageText, Navigation, TileRef } from '#/domains/assistant/entities'
 
 import { run } from '../server/run'
 import * as Assistant from './programs'
@@ -31,8 +31,8 @@ const mostShown = 100
 export const SentMessage = Schema.Struct({
   text: MessageText,
   view: Schema.Struct({
-    center: Step.fields.tile,
-    shown: Schema.Array(Step.fields.tile).check(Schema.isMaxLength(mostShown)),
+    center: TileRef,
+    shown: Schema.Array(TileRef).check(Schema.isMaxLength(mostShown)),
   }),
   offset: Day.fields.offset,
 })

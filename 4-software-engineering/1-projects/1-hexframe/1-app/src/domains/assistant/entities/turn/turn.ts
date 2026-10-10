@@ -3,15 +3,15 @@
 // most per Conversation. Pure.
 import { Schema } from 'effect'
 
-/**
- * How a Turn ended: its answer, a Stop, its own ceiling, the month's allowance, its time, or the
- * sandbox failing. Nothing is rolled back whichever it was.
- */
 /** How a Turn ended when not by its answer: what the timeline tells in an Entry of its own. */
 export const BadEnd = Schema.Literals(['stopped', 'ceiling', 'allowance', 'time', 'sandbox'])
 
 export type BadEnd = typeof BadEnd.Type
 
+/**
+ * How a Turn ended: its answer, a Stop, its own ceiling, the month's allowance, its time, or the
+ * sandbox failing. Nothing is rolled back whichever it was.
+ */
 export const TurnEnd = Schema.Literals(['answered', ...BadEnd.literals])
 
 export type TurnEnd = typeof TurnEnd.Type
@@ -61,3 +61,7 @@ export interface Turn {
 /** The latest a Turn may run until: its start, and its maximum length after it. */
 export const deadlineOf = (turn: Pick<Turn, 'startedAt'>, longest: number): Date =>
   new Date(turn.startedAt.getTime() + longest)
+
+/** Whether a Turn still running at `now` is over all the same: its deadline has come. */
+export const overdue = (turn: Pick<Turn, 'startedAt'>, longest: number, now: Date): boolean =>
+  deadlineOf(turn, longest) <= now

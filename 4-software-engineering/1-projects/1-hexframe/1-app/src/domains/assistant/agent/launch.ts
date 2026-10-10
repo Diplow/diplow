@@ -7,7 +7,12 @@
 // its MCP client's bearer: never in a file, never in the prompt. Pure.
 import { Redacted } from 'effect'
 
-import { type Run, type SandboxFile, systemFolder } from '#/repositories/agent/sandbox/sandbox'
+import {
+  type Run,
+  type SandboxFile,
+  systemFolder,
+  workFolder,
+} from '#/repositories/agent/sandbox/sandbox'
 
 import { settings } from '../settings'
 
@@ -31,8 +36,18 @@ const filesOf = (turnId: string) => `turns/${turnId}`
  */
 const launcher = String.raw`
 import { spawn } from 'node:child_process'
-import { readFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, readdirSync, rmSync } from 'node:fs'
+import { dirname, join } from 'node:path'
 import { createInterface } from 'node:readline'
+
+// A HOME of the Turn's own, everything an earlier Turn left in the work folder gone first, so no
+// setting, hook or file an agent wrote reaches the next.
+const home = process.env.HOME ?? ''
+const work = dirname(home)
+for (const entry of readdirSync(work)) {
+  if (join(work, entry) !== home) rmSync(join(work, entry), { recursive: true, force: true })
+}
+mkdirSync(home, { recursive: true })
 
 const turn = JSON.parse(readFileSync(new URL('./turn.json', import.meta.url), 'utf8'))
 const key = process.env.HEXFRAME_TURN_KEY ?? ''
@@ -145,6 +160,7 @@ export function launchOf(launch: Launch): {
       command: `exec node ${quoted(`${launch.home}/${folder}/launcher.mjs`)}`,
       workingDir: launch.folder === '' ? systemFolder : `${systemFolder}/${launch.folder}`,
       env: {
+        HOME: `${launch.home}/${workFolder}/${processOf(launch.turnId)}`,
         HEXFRAME_TURN_KEY: key,
         ANTHROPIC_AUTH_TOKEN: key,
         ANTHROPIC_BASE_URL: `${launch.origin}${launch.doors.model}`,

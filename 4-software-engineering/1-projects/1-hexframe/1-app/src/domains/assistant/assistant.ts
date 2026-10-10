@@ -29,6 +29,7 @@ import {
   dayAt,
   deadlineOf,
   type Entry,
+  overdue,
   EntryContent,
   isBadEnd,
   type Navigation,
@@ -42,7 +43,15 @@ import {
 import { AllowanceSpent, TurnRunning } from './errors'
 import { settings } from './settings'
 import { type Allowed, allowedCall, type CallRefused } from './spending/call'
-import { charged, type Limit, limitReached, monthOf, mustWait, reserved } from './spending/limits'
+import {
+  allowanceSpent,
+  charged,
+  type Limit,
+  limitReached,
+  monthOf,
+  mustWait,
+  reserved,
+} from './spending/limits'
 
 const decoded = Schema.decodeUnknownEffect(EntryContent)
 
@@ -164,7 +173,9 @@ export const liveTurn = (accountId: string) =>
   Effect.gen(function* () {
     const now = new Date(yield* Clock.currentTimeMillis)
     const running = yield* runningTurn(accountId)
-    return running !== undefined && deadline(running) > now ? running : undefined
+    return running === undefined || overdue(running, settings.turn.longest, now)
+      ? undefined
+      : running
   })
 
 /**
@@ -176,7 +187,7 @@ export const endOverdueTurn = (accountId: string) =>
   Effect.gen(function* () {
     const now = new Date(yield* Clock.currentTimeMillis)
     const running = yield* runningTurn(accountId)
-    if (running === undefined || deadline(running) > now) return undefined
+    if (running === undefined || !overdue(running, settings.turn.longest, now)) return undefined
     return yield* endTurn(accountId, running.id, 'time')
   })
 
@@ -190,7 +201,7 @@ export const startTurn = (accountId: string, start: { message: string; location:
   Effect.gen(function* () {
     const startedAt = new Date(yield* Clock.currentTimeMillis)
     const month = yield* Turns.use((turns) => turns.spentSince(accountId, monthOf(startedAt)))
-    if (month.spent >= settings.month.allowance) return yield* new AllowanceSpent()
+    if (allowanceSpent(month.spent)) return yield* new AllowanceSpent()
     const row = yield* Turns.use((turns) =>
       turns.start(accountId, { messageId: start.message, location: start.location, startedAt }),
     )
@@ -308,7 +319,8 @@ export interface TurnStart {
  * Starts a Turn's agent in the Account's sandbox: the System written into it, whatever it held gone;
  * its prompt, its settings and its launcher written beside the System folder; then the launcher
  * started, detached, in the Tile's folder, the Turn's Key in its environment alone, reaching the app
- * where the sandbox reaches it.
+ * where the sandbox reaches it. Should a Stop have ended the Turn while it started, its agent is
+ * stopped at once: the Stop found nothing to stop yet.
  */
 export const startAgent = (accountId: string, start: TurnStart) =>
   Effect.gen(function* () {
@@ -335,6 +347,7 @@ export const startAgent = (accountId: string, start: TurnStart) =>
     })
     yield* Effect.forEach(files, (file) => box.write(file), { discard: true })
     yield* box.start(run)
+    if ((yield* runningTurn(accountId))?.id !== start.turn.id) yield* box.stop(run.name)
   })
 
 /**

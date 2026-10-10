@@ -12,7 +12,6 @@ import * as Assistant from '#/domains/assistant/assistant'
 import { type TurnEnd, visitedTiles } from '#/domains/assistant/entities'
 import * as Iam from '#/domains/iam/iam'
 import type { Turn } from '#/domains/assistant/entities'
-import { TileNotFound } from '#/domains/mapping/errors'
 import * as Mapping from '#/domains/mapping/mapping'
 import { HttpExchange } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
@@ -101,12 +100,6 @@ export const assistantAvailable = Effect.flatMap(Iam.sessionOnly, ({ account }) 
   Iam.entitled(account, 'assistant'),
 )
 
-/** Mapping's `TileNotFound` unless the id is a Tile of the Account's own System. */
-const ownTile = (accountId: string, id: string) =>
-  Effect.flatMap(Mapping.titles(accountId, [id]), (titled) =>
-    id in titled ? Effect.void : Effect.fail(new TileNotFound()),
-  )
-
 /**
  * Starts a Turn answering one of the Account's Messages and issues its Key, inside the transaction
  * the caller opened: a Turn still running past its deadline ended first, by its time, its Key revoked;
@@ -138,7 +131,7 @@ export const startTurn = (start: { message: string; location: string }) =>
   Effect.gen(function* () {
     const { account } = yield* Iam.sessionOnly
     yield* Iam.entitledOnly(account, 'assistant')
-    yield* ownTile(account.id, start.location)
+    yield* Mapping.ownTile(account.id, start.location)
     const { turn, key } = yield* transactional(turnStarted(account.id, start))
     return { turn, key }
   })
@@ -183,8 +176,7 @@ type Started = Pick<typeof SentMessage.Type, 'text' | 'view' | 'offset'>
  * the sandbox held gone; the Turn's prompt made of today's latest Entries, the Titles their
  * navigations went to, and the Title and Preview of the Tiles on screen; its agent started in the
  * centered Tile's folder, where Mapping places it in the same export, reaching the app at its doors
- * where the sandbox reaches it. Should a Stop have ended the Turn while it started, the agent is
- * stopped at once: the Stop found nothing to stop yet.
+ * where the sandbox reaches it.
  */
 const agentStarted = (
   accountId: string,
@@ -211,9 +203,6 @@ const agentStarted = (
       onScreen,
       help: Mapping.helpRoot,
     })
-    if ((yield* Assistant.runningTurn(accountId))?.id !== turn.id) {
-      yield* Assistant.stopAgent(accountId, turn.id)
-    }
   })
 
 /** Stops a Turn's agent in its sandbox, once its Turn ended; a failure is reported, never thrown. */
@@ -237,7 +226,7 @@ export const sendMessage = (sent: typeof SentMessage.Type) =>
     if (!(yield* Iam.entitled(account, 'assistant'))) {
       return { entry: yield* transactional(Assistant.postMessage(account.id, sent.text)) }
     }
-    yield* ownTile(account.id, sent.view.center)
+    yield* Mapping.ownTile(account.id, sent.view.center)
     const { entry, turn, key, overdue } = yield* transactional(
       Effect.gen(function* () {
         const posted = yield* Assistant.postMessage(account.id, sent.text)

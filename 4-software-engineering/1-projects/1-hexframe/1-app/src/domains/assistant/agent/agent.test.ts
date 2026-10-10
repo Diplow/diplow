@@ -141,6 +141,23 @@ describe("what Assistant keeps of the agent's stream", () => {
     expect(readLine(JSON.stringify({ type: 'stream_event', event: {} }))).toEqual([])
   })
 
+  it('never keeps a Turn’s Key the agent says, in its text or its step', () => {
+    const secret = 'hft_abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG'
+    const said = JSON.stringify({
+      type: 'assistant',
+      message: {
+        content: [
+          { type: 'text', text: `My key is ${secret}.` },
+          { type: 'tool_use', name: 'Bash', input: { command: `echo ${secret}` } },
+        ],
+      },
+    })
+    expect(readLine(said)).toEqual([
+      { _tag: 'Said', text: 'My key is hft_….' },
+      { _tag: 'Stepping', step: { tool: 'Bash', detail: 'echo hft_…' } },
+    ])
+  })
+
   it('reads no event in a line that is no JSON or names no type', () => {
     for (const line of [
       '',
@@ -254,6 +271,7 @@ describe("a Turn's launch", () => {
 
   it('puts the Turn’s Key in the process’s environment, beside the model’s settings', () => {
     expect(launched.run.env).toEqual({
+      HOME: '/blaxel/hexframe/work/turn-turn-1',
       HEXFRAME_TURN_KEY: secret,
       ANTHROPIC_AUTH_TOKEN: secret,
       ANTHROPIC_BASE_URL: 'https://hexframe.ai/assistant/anthropic',
