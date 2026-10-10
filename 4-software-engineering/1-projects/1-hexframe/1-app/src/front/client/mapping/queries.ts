@@ -101,7 +101,6 @@ function pendingOf(mutation: Mutation): Pending {
   return pending
 }
 
-
 /**
  * The System shown as a write with these variables is made: the server's, with every write to it
  * already pending folded over it, this one aside.
