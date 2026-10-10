@@ -121,7 +121,7 @@ describe('kept Frontmatter', () => {
       expect(keeps(value), JSON.stringify(value)).toBe(false)
     }
     expect(keeps(JSON.parse('{"__proto__": "polluted"}'))).toBe(false)
-    for (const key of ['id', 'title', 'parent', 'preview', 'reference']) {
+    for (const key of ['id', 'title', 'parent', 'preview', 'version', 'reference']) {
       expect(keeps({ [key]: 'kept?' }), key).toBe(false)
     }
   })
@@ -143,6 +143,7 @@ describe('the naming in force, on rows made by hand', () => {
     title: id,
     preview: '',
     body: '',
+    version: 1,
     target: null,
     ...keepsNothing,
   })

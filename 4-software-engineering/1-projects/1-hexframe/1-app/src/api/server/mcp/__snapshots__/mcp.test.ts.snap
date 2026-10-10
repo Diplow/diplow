@@ -8,7 +8,7 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
       "openWorldHint": false,
       "readOnlyHint": true,
     },
-    "description": "Opens one Tile of the user's System: what it says (its Title, Preview and Body, or only the fields asked), its parent, and its Children and Context, each with its Title and Preview only. Without an id, opens the Root, which is the user. Read a System as its author laid it out: open a Tile, read its Children's Previews, then open only the ones that matter to your task. Children say what a Tile does: its Branches (\`branches\`), each with Children and Context of its own, keyed by Direction, 1 to 6 (NW, NE, E, SE, SW, W), and its Leaves (\`leaves\`), each one file with nothing below it, keyed by the same six Directions, their own. Its Context (\`context\`) says what it is, keyed -1 to -6. A Context slot may hold a Reference instead of a Tile: \`_tag: 'Reference'\`, with the id, Title and Preview of the Tile it points at, or \`_tag: 'BrokenReference'\` once that Tile is deleted. Help, hexframe's own guide, is a System every user reads and none writes, from its Root, id "help": open it to learn what a System, a Tile, a Direction or Context is.",
+    "description": "Opens one Tile of the user's System: what it says (its Title, Preview and Body, or only the fields asked), its parent, and its Children and Context, each with its Title and Preview only. Without an id, opens the Root, which is the user. Read a System as its author laid it out: open a Tile, read its Children's Previews, then open only the ones that matter to your task. Children say what a Tile does: its Branches (\`branches\`), each with Children and Context of its own, keyed by Direction, 1 to 6 (NW, NE, E, SE, SW, W), and its Leaves (\`leaves\`), each one file with nothing below it, keyed by the same six Directions, their own. Its Context (\`context\`) says what it is, keyed -1 to -6. A Context slot may hold a Reference instead of a Tile: \`_tag: 'Reference'\`, with the id, Title and Preview of the Tile it points at, or \`_tag: 'BrokenReference'\` once that Tile is deleted. Every Tile carries its \`version\`, how many changes touched it: a write to a Tile names the version you read of it, and is refused once the Tile changed since. Help, hexframe's own guide, is a System every user reads and none writes, from its Root, id "help": open it to learn what a System, a Tile, a Direction or Context is.",
     "inputSchema": {
       "additionalProperties": true,
       "properties": {
@@ -52,7 +52,7 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
       "openWorldHint": false,
       "readOnlyHint": true,
     },
-    "description": "Maps the user's System, or Help, below a Tile, the Root when no id is given, several generations at once: depth 0 to 3, 2 when not given, each Tile with its Title and Preview. Use it to find where something lives, then open_tile what matters; ask for body only when you need every Body below, since it costs far more. Children say what a Tile does: its Branches (\`branches\`), each with Children and Context of its own, keyed by Direction, 1 to 6 (NW, NE, E, SE, SW, W), and its Leaves (\`leaves\`), each one file with nothing below it, keyed by the same six Directions, their own. Its Context (\`context\`) says what it is, keyed -1 to -6. A Context slot may hold a Reference instead of a Tile: \`_tag: 'Reference'\`, with the id, Title and Preview of the Tile it points at, or \`_tag: 'BrokenReference'\` once that Tile is deleted. Help, hexframe's own guide, is a System every user reads and none writes, from its Root, id "help": open it to learn what a System, a Tile, a Direction or Context is.",
+    "description": "Maps the user's System, or Help, below a Tile, the Root when no id is given, several generations at once: depth 0 to 3, 2 when not given, each Tile with its Title and Preview. Use it to find where something lives, then open_tile what matters; ask for body only when you need every Body below, since it costs far more. Children say what a Tile does: its Branches (\`branches\`), each with Children and Context of its own, keyed by Direction, 1 to 6 (NW, NE, E, SE, SW, W), and its Leaves (\`leaves\`), each one file with nothing below it, keyed by the same six Directions, their own. Its Context (\`context\`) says what it is, keyed -1 to -6. A Context slot may hold a Reference instead of a Tile: \`_tag: 'Reference'\`, with the id, Title and Preview of the Tile it points at, or \`_tag: 'BrokenReference'\` once that Tile is deleted. Every Tile carries its \`version\`, how many changes touched it: a write to a Tile names the version you read of it, and is refused once the Tile changed since. Help, hexframe's own guide, is a System every user reads and none writes, from its Root, id "help": open it to learn what a System, a Tile, a Direction or Context is.",
     "inputSchema": {
       "additionalProperties": true,
       "properties": {
@@ -106,7 +106,7 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
       "openWorldHint": false,
       "readOnlyHint": false,
     },
-    "description": "Adds a Tile to the user's System, in a free slot under a Tile: a Branch, a Leaf, or a Tile of its Context. Directions 1 to 6 (NW, NE, E, SE, SW, W) hold the Branches, { leaf: 1 } to { leaf: 6 } the Leaves, both Children, which say what a Tile does; -1 to -6 hold its Context, which says what it is. A Leaf is one file: nothing goes under it. Answers the new Tile, with its id. Refused with TileNotFound: no Tile of that id in the System, deleted or never there; map or open_tile to find the right one. DirectionTaken: that slot already holds a Tile or a Reference; open_tile on the parent shows which slots are free. A Tile has 6 Branches and 6 Leaves at most, so one more of either is refused: regroup some Children under a new one, by moving them, and the freed Directions take the rest. TitleMissing: the Title is empty; give one. PreviewTooLong: the Preview is over 350 characters; shorten it. LeafHoldsNothing: a Leaf is one file, with nothing below it: nothing goes under one, and a Tile holding anything takes no Leaf slot. Move the Leaf to a Branch slot first, or move out what the Tile holds. HelpReadOnly: that Tile is Help's, which every user reads and none writes; change a Tile of the user's System instead.",
+    "description": "Adds a Tile to the user's System, in a free slot under a Tile: a Branch, a Leaf, or a Tile of its Context. Directions 1 to 6 (NW, NE, E, SE, SW, W) hold the Branches, { leaf: 1 } to { leaf: 6 } the Leaves, both Children, which say what a Tile does; -1 to -6 hold its Context, which says what it is. A Leaf is one file: nothing goes under it. Answers the new Tile, with its id and its version. Refused with TileNotFound: no Tile of that id in the System, deleted or never there; map or open_tile to find the right one. DirectionTaken: that slot already holds a Tile or a Reference; open_tile on the parent shows which slots are free. A Tile has 6 Branches and 6 Leaves at most, so one more of either is refused: regroup some Children under a new one, by moving them, and the freed Directions take the rest. TitleMissing: the Title is empty; give one. PreviewTooLong: the Preview is over 350 characters; shorten it. LeafHoldsNothing: a Leaf is one file, with nothing below it: nothing goes under one, and a Tile holding anything takes no Leaf slot. Move the Leaf to a Branch slot first, or move out what the Tile holds. HelpReadOnly: that Tile is Help's, which every user reads and none writes; change a Tile of the user's System instead.",
     "inputSchema": {
       "additionalProperties": true,
       "properties": {
@@ -196,7 +196,7 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
       "openWorldHint": false,
       "readOnlyHint": false,
     },
-    "description": "Changes what a Tile says: any of its Title, its Preview and its Body, the rest left as it is. The Root's Title is the user's name. Answers the Tile as it now reads. Refused with TileNotFound: no Tile of that id in the System, deleted or never there; map or open_tile to find the right one. TitleMissing: the Title is empty; give one. PreviewTooLong: the Preview is over 350 characters; shorten it. HelpReadOnly: that Tile is Help's, which every user reads and none writes; change a Tile of the user's System instead.",
+    "description": "Changes what a Tile says: any of its Title, its Preview and its Body, the rest left as it is. The Root's Title is the user's name. Answers the Tile as it now reads, with its new version. Refused with TileNotFound: no Tile of that id in the System, deleted or never there; map or open_tile to find the right one. TileChanged: the Tile changed since you read it, its version is no longer the one you gave, whoever changed it: open_tile it again to read what it says now and its version, then decide again and write with that version. TitleMissing: the Title is empty; give one. PreviewTooLong: the Preview is over 350 characters; shorten it. HelpReadOnly: that Tile is Help's, which every user reads and none writes; change a Tile of the user's System instead.",
     "inputSchema": {
       "additionalProperties": true,
       "properties": {
@@ -221,9 +221,16 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
           "maxLength": 1000,
           "type": "string",
         },
+        "version": {
+          "description": "The version of the Tile as you last read it, from open_tile, map or a write that answered it: refused when the Tile changed since.",
+          "maximum": 2147483647,
+          "minimum": 1,
+          "type": "integer",
+        },
       },
       "required": [
         "id",
+        "version",
       ],
       "type": "object",
     },
@@ -235,7 +242,7 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
       "openWorldHint": false,
       "readOnlyHint": false,
     },
-    "description": "Moves a Tile, with everything below it, to a free slot under another Tile or to another slot of its own parent. Directions 1 to 6 (NW, NE, E, SE, SW, W) hold the Branches, { leaf: 1 } to { leaf: 6 } the Leaves, both Children, which say what a Tile does; -1 to -6 hold its Context, which says what it is. A Leaf is one file: nothing goes under it. A Leaf grows into a Branch, and a Branch with nothing below it shrinks into a Leaf, by moving to the other kind of slot. References to it follow it. Answers null. Refused with TileNotFound: no Tile of that id in the System, deleted or never there; map or open_tile to find the right one. DirectionTaken: that slot already holds a Tile or a Reference; open_tile on the parent shows which slots are free. A Tile has 6 Branches and 6 Leaves at most, so one more of either is refused: regroup some Children under a new one, by moving them, and the freed Directions take the rest. RootFixed: the Root is the user; it is never moved, swapped nor deleted. MovedUnderItself: a Tile cannot move under itself or anything below it; pick a parent outside it. LeafHoldsNothing: a Leaf is one file, with nothing below it: nothing goes under one, and a Tile holding anything takes no Leaf slot. Move the Leaf to a Branch slot first, or move out what the Tile holds. HelpReadOnly: that Tile is Help's, which every user reads and none writes; change a Tile of the user's System instead.",
+    "description": "Moves a Tile, with everything below it, to a free slot under another Tile or to another slot of its own parent. Directions 1 to 6 (NW, NE, E, SE, SW, W) hold the Branches, { leaf: 1 } to { leaf: 6 } the Leaves, both Children, which say what a Tile does; -1 to -6 hold its Context, which says what it is. A Leaf is one file: nothing goes under it. A Leaf grows into a Branch, and a Branch with nothing below it shrinks into a Leaf, by moving to the other kind of slot. References to it follow it. Answers null. Refused with TileNotFound: no Tile of that id in the System, deleted or never there; map or open_tile to find the right one. TileChanged: the Tile changed since you read it, its version is no longer the one you gave, whoever changed it: open_tile it again to read what it says now and its version, then decide again and write with that version. DirectionTaken: that slot already holds a Tile or a Reference; open_tile on the parent shows which slots are free. A Tile has 6 Branches and 6 Leaves at most, so one more of either is refused: regroup some Children under a new one, by moving them, and the freed Directions take the rest. RootFixed: the Root is the user; it is never moved, swapped nor deleted. MovedUnderItself: a Tile cannot move under itself or anything below it; pick a parent outside it. LeafHoldsNothing: a Leaf is one file, with nothing below it: nothing goes under one, and a Tile holding anything takes no Leaf slot. Move the Leaf to a Branch slot first, or move out what the Tile holds. HelpReadOnly: that Tile is Help's, which every user reads and none writes; change a Tile of the user's System instead.",
     "inputSchema": {
       "additionalProperties": true,
       "properties": {
@@ -298,9 +305,16 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
           ],
           "description": "Where under the parent: a Branch's Direction, 1 to 6, a Leaf's, { leaf: 1 } to { leaf: 6 }, or a Context slot, -1 to -6. It must be free.",
         },
+        "version": {
+          "description": "The version of the Tile as you last read it, from open_tile, map or a write that answered it: refused when the Tile changed since.",
+          "maximum": 2147483647,
+          "minimum": 1,
+          "type": "integer",
+        },
       },
       "required": [
         "id",
+        "version",
         "parent",
         "slot",
       ],
@@ -314,7 +328,7 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
       "openWorldHint": false,
       "readOnlyHint": false,
     },
-    "description": "Two Tiles trade places, each with everything below it: each takes the parent and slot of the other, a Branch, a Leaf or a Context Tile alike, so it works where no slot is free. Answers null. Refused with TileNotFound: no Tile of that id in the System, deleted or never there; map or open_tile to find the right one. RootFixed: the Root is the user; it is never moved, swapped nor deleted. MovedUnderItself: neither Tile may lie below the other; move one of them instead. LeafHoldsNothing: a Leaf is one file, with nothing below it: nothing goes under one, and a Tile holding anything takes no Leaf slot. Move the Leaf to a Branch slot first, or move out what the Tile holds. HelpReadOnly: that Tile is Help's, which every user reads and none writes; change a Tile of the user's System instead.",
+    "description": "Two Tiles trade places, each with everything below it: each takes the parent and slot of the other, a Branch, a Leaf or a Context Tile alike, so it works where no slot is free. Answers null. Refused with TileNotFound: no Tile of that id in the System, deleted or never there; map or open_tile to find the right one. TileChanged: the Tile changed since you read it, its version is no longer the one you gave, whoever changed it: open_tile it again to read what it says now and its version, then decide again and write with that version. Either Tile may be the one that changed. RootFixed: the Root is the user; it is never moved, swapped nor deleted. MovedUnderItself: neither Tile may lie below the other; move one of them instead. LeafHoldsNothing: a Leaf is one file, with nothing below it: nothing goes under one, and a Tile holding anything takes no Leaf slot. Move the Leaf to a Branch slot first, or move out what the Tile holds. HelpReadOnly: that Tile is Help's, which every user reads and none writes; change a Tile of the user's System instead.",
     "inputSchema": {
       "additionalProperties": true,
       "properties": {
@@ -324,16 +338,30 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|[fF]{8}-[fF]{4}-[fF]{4}-[fF]{4}-[fF]{12})$",
           "type": "string",
         },
+        "aVersion": {
+          "description": "The version of the Tile a, as you last read it.",
+          "maximum": 2147483647,
+          "minimum": 1,
+          "type": "integer",
+        },
         "b": {
           "description": "The id of the Tile it trades places with.",
           "format": "uuid",
           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|[fF]{8}-[fF]{4}-[fF]{4}-[fF]{4}-[fF]{12})$",
           "type": "string",
         },
+        "bVersion": {
+          "description": "The version of the Tile b, as you last read it.",
+          "maximum": 2147483647,
+          "minimum": 1,
+          "type": "integer",
+        },
       },
       "required": [
         "a",
+        "aVersion",
         "b",
+        "bVersion",
       ],
       "type": "object",
     },
@@ -345,7 +373,7 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
       "openWorldHint": false,
       "readOnlyHint": false,
     },
-    "description": "Deletes a Tile and everything below it, for good: no tool brings it back. References to any of them stay, broken. Answers null. Refused with TileNotFound: no Tile of that id in the System, deleted or never there; map or open_tile to find the right one. RootFixed: the Root is the user; it is never moved, swapped nor deleted. HelpReadOnly: that Tile is Help's, which every user reads and none writes; change a Tile of the user's System instead.",
+    "description": "Deletes a Tile and everything below it, for good: no tool brings it back. References to any of them stay, broken. Answers null. Refused with TileNotFound: no Tile of that id in the System, deleted or never there; map or open_tile to find the right one. TileChanged: the Tile changed since you read it, its version is no longer the one you gave, whoever changed it: open_tile it again to read what it says now and its version, then decide again and write with that version. RootFixed: the Root is the user; it is never moved, swapped nor deleted. HelpReadOnly: that Tile is Help's, which every user reads and none writes; change a Tile of the user's System instead.",
     "inputSchema": {
       "additionalProperties": true,
       "properties": {
@@ -355,9 +383,16 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|[fF]{8}-[fF]{4}-[fF]{4}-[fF]{4}-[fF]{12})$",
           "type": "string",
         },
+        "version": {
+          "description": "The version of the Tile as you last read it, from open_tile, map or a write that answered it: refused when the Tile changed since.",
+          "maximum": 2147483647,
+          "minimum": 1,
+          "type": "integer",
+        },
       },
       "required": [
         "id",
+        "version",
       ],
       "type": "object",
     },
@@ -369,7 +404,7 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
       "openWorldHint": false,
       "readOnlyHint": false,
     },
-    "description": "Puts a Reference in a free Context slot of a Tile: a link to another Tile of the user's System, by id, that follows it when it moves and shows broken once it is deleted. Answers null. Refused with TileNotFound: no Tile of that id in the System, deleted or never there; map or open_tile to find the right one. DirectionTaken: that slot already holds a Tile or a Reference; open_tile on the parent shows which slots are free. LeafHoldsNothing: a Leaf is one file, with nothing below it: nothing goes under one, and a Tile holding anything takes no Leaf slot. Move the Leaf to a Branch slot first, or move out what the Tile holds. HelpReadOnly: that Tile is Help's, which every user reads and none writes; change a Tile of the user's System instead.",
+    "description": "Puts a Reference in a free Context slot of a Tile: a link to another Tile of the user's System, by id, that follows it when it moves and shows broken once it is deleted. Answers null. Refused with TileNotFound: no Tile of that id in the System, deleted or never there; map or open_tile to find the right one. TileChanged: the Tile changed since you read it, its version is no longer the one you gave, whoever changed it: open_tile it again to read what it says now and its version, then decide again and write with that version. DirectionTaken: that slot already holds a Tile or a Reference; open_tile on the parent shows which slots are free. LeafHoldsNothing: a Leaf is one file, with nothing below it: nothing goes under one, and a Tile holding anything takes no Leaf slot. Move the Leaf to a Branch slot first, or move out what the Tile holds. HelpReadOnly: that Tile is Help's, which every user reads and none writes; change a Tile of the user's System instead.",
     "inputSchema": {
       "additionalProperties": true,
       "properties": {
@@ -378,6 +413,12 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
           "format": "uuid",
           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|[fF]{8}-[fF]{4}-[fF]{4}-[fF]{4}-[fF]{12})$",
           "type": "string",
+        },
+        "parentVersion": {
+          "description": "The version of the Tile whose Context holds the slot, as you last read it: refused when it changed since.",
+          "maximum": 2147483647,
+          "minimum": 1,
+          "type": "integer",
         },
         "slot": {
           "description": "A Context slot of the parent, -1 to -6. It must be free.",
@@ -400,6 +441,7 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
       },
       "required": [
         "parent",
+        "parentVersion",
         "slot",
         "target",
       ],
@@ -413,7 +455,7 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
       "openWorldHint": false,
       "readOnlyHint": false,
     },
-    "description": "Empties a Context slot holding a Reference. The Tile it pointed at is untouched; a slot holding a Tile, or nothing, is left as it is. Answers null. Refused with TileNotFound: no Tile of that id in the System, deleted or never there; map or open_tile to find the right one. HelpReadOnly: that Tile is Help's, which every user reads and none writes; change a Tile of the user's System instead.",
+    "description": "Empties a Context slot holding a Reference. The Tile it pointed at is untouched; a slot holding a Tile, or nothing, is left as it is. Answers null. Refused with TileNotFound: no Tile of that id in the System, deleted or never there; map or open_tile to find the right one. TileChanged: the Tile changed since you read it, its version is no longer the one you gave, whoever changed it: open_tile it again to read what it says now and its version, then decide again and write with that version. HelpReadOnly: that Tile is Help's, which every user reads and none writes; change a Tile of the user's System instead.",
     "inputSchema": {
       "additionalProperties": true,
       "properties": {
@@ -422,6 +464,12 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
           "format": "uuid",
           "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|[fF]{8}-[fF]{4}-[fF]{4}-[fF]{4}-[fF]{12})$",
           "type": "string",
+        },
+        "parentVersion": {
+          "description": "The version of the Tile whose Context holds the slot, as you last read it: refused when it changed since.",
+          "maximum": 2147483647,
+          "minimum": 1,
+          "type": "integer",
         },
         "slot": {
           "description": "A Context slot of the parent, -1 to -6.",
@@ -438,6 +486,7 @@ exports[`the tool table, as an agent lists it > lists every tool as an agent has
       },
       "required": [
         "parent",
+        "parentVersion",
         "slot",
       ],
       "type": "object",

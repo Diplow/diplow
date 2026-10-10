@@ -1,13 +1,15 @@
 // The first half of Mapping's Decider: what an Operation does to a System, the events it makes, or the
 // refusal Mapping answers. Every rule of an Operation lives here, and nowhere else: the application
 // service runs it on the System it locked before it writes, and the client on the System it holds
-// before it sends, so the two never disagree on what an Operation does. Pure: the id of what a create
-// makes is given, never made here.
+// before it sends, so the two never disagree on what an Operation does. Every Operation on an existing
+// Tile names the Version its writer read of it, and is refused once that Tile changed since. Pure: the
+// id of what a create makes is given, never made here.
 import { Result, Struct } from 'effect'
 
 import {
   below,
   checked,
+  type FoundTile,
   heldAt,
   holdsNothingIfLeaf,
   type PlacedTile,
@@ -15,6 +17,7 @@ import {
   type System,
   tileAt,
   type ToKeep,
+  type Version,
 } from '../../entities'
 import {
   type DirectionTaken,
@@ -23,6 +26,7 @@ import {
   MovedUnderItself,
   type PreviewTooLong,
   RootFixed,
+  TileChanged,
   TileNotFound,
   type TitleMissing,
 } from '../../errors'
@@ -55,13 +59,21 @@ import { freeSlot } from '../placement'
 interface Refusals {
   readonly CreateTile:
     HelpReadOnly | TitleMissing | PreviewTooLong | TileNotFound | LeafHoldsNothing | DirectionTaken
-  readonly EditTile: HelpReadOnly | TitleMissing | PreviewTooLong | TileNotFound
+  readonly EditTile: HelpReadOnly | TitleMissing | PreviewTooLong | TileNotFound | TileChanged
   readonly MoveTile:
-    HelpReadOnly | TileNotFound | RootFixed | MovedUnderItself | DirectionTaken | LeafHoldsNothing
-  readonly SwapTiles: HelpReadOnly | TileNotFound | RootFixed | MovedUnderItself | LeafHoldsNothing
-  readonly DeleteTile: HelpReadOnly | TileNotFound | RootFixed
-  readonly CreateReference: HelpReadOnly | TileNotFound | LeafHoldsNothing | DirectionTaken
-  readonly DeleteReference: HelpReadOnly | TileNotFound
+    | HelpReadOnly
+    | TileNotFound
+    | TileChanged
+    | RootFixed
+    | MovedUnderItself
+    | DirectionTaken
+    | LeafHoldsNothing
+  readonly SwapTiles:
+    HelpReadOnly | TileNotFound | TileChanged | RootFixed | MovedUnderItself | LeafHoldsNothing
+  readonly DeleteTile: HelpReadOnly | TileNotFound | TileChanged | RootFixed
+  readonly CreateReference:
+    HelpReadOnly | TileNotFound | TileChanged | LeafHoldsNothing | DirectionTaken
+  readonly DeleteReference: HelpReadOnly | TileNotFound | TileChanged
 }
 
 /** Every refusal `decide` may answer, each a Mapping error with its kind. */
@@ -89,13 +101,28 @@ export type Decided<Tag extends keyof Refusals = keyof Refusals> = Result.Result
 /** A refusal, as a `Result.gen` below yields it. */
 const refused = <R extends Refusal>(refusal: R) => Result.fail(refusal)
 
-/** A Tile of the System below its Root: the Root is the user, never moved, swapped nor deleted. */
-const placed = (system: System, id: string) =>
+/** The Tile as its writer read it, at this Version: refused `TileChanged` once it moved since. */
+const unchanged = <T extends FoundTile>(tile: T, version: Version) =>
+  tile.version === version ? Result.succeed(tile) : refused(new TileChanged())
+
+/** The Tile of this id in the System, the Root included, at the Version its writer read. */
+const read = (system: System, id: string, version: Version) =>
+  Result.gen(function* () {
+    const found = tileAt(system, id)
+    if (found === undefined) return yield* refused(new TileNotFound())
+    return yield* unchanged(found, version)
+  })
+
+/**
+ * A Tile of the System below its Root, at the Version its writer read: the Root is the user, never
+ * moved, swapped nor deleted.
+ */
+const placed = (system: System, id: string, version: Version) =>
   Result.gen(function* () {
     const found = tileAt(system, id)
     if (found === undefined) return yield* refused(new TileNotFound())
     if (!('parent' in found)) return yield* refused(new RootFixed())
-    return found satisfies PlacedTile
+    return yield* unchanged<PlacedTile>(found, version)
   })
 
 /** What a Tile keeps from its file, only the parts it keeps. */
@@ -120,9 +147,9 @@ const createTile = (
 /** Changes what a Tile says, only the fields given, each checked: none given changes nothing. */
 const editTile = (system: System, operation: EditTile): Decided<'EditTile'> =>
   Result.gen(function* () {
-    const { id } = operation
-    const valid = yield* checked(Struct.omit(operation, ['_tag', 'id']))
-    if (tileAt(system, id) === undefined) return yield* refused(new TileNotFound())
+    const { id, version } = operation
+    const valid = yield* checked(Struct.omit(operation, ['_tag', 'id', 'version']))
+    yield* read(system, id, version)
     return Object.keys(valid).length === 0 ? [] : [new TileEdited({ id, ...valid })]
   })
 
@@ -130,9 +157,9 @@ const editTile = (system: System, operation: EditTile): Decided<'EditTile'> =>
  * Moves a Tile, with everything below it, to a free slot under a Tile of the System, never under a
  * Leaf nor below itself, and into a Leaf slot only holding nothing. To where it stands changes nothing.
  */
-const moveTile = (system: System, { id, parent, slot }: MoveTile): Decided<'MoveTile'> =>
+const moveTile = (system: System, { id, version, parent, slot }: MoveTile): Decided<'MoveTile'> =>
   Result.gen(function* () {
-    const moving = yield* placed(system, id)
+    const moving = yield* placed(system, id, version)
     if (moving.parent === parent && sameSlot(moving.slot, slot)) return []
     if (below(system, id).has(parent)) return yield* refused(new MovedUnderItself())
     yield* freeSlot(system, { parent, slot })
@@ -144,10 +171,10 @@ const moveTile = (system: System, { id, parent, slot }: MoveTile): Decided<'Move
  * Two Tiles trade places, each with everything below it: neither the Root, nor one below the other,
  * nor one holding anything into a Leaf slot. A Tile with itself changes nothing.
  */
-const swapTiles = (system: System, { a, b }: SwapTiles): Decided<'SwapTiles'> =>
+const swapTiles = (system: System, { a, aVersion, b, bVersion }: SwapTiles): Decided<'SwapTiles'> =>
   Result.gen(function* () {
-    const first = yield* placed(system, a)
-    const second = yield* placed(system, b)
+    const first = yield* placed(system, a, aVersion)
+    const second = yield* placed(system, b, bVersion)
     if (a === b) return []
     if (below(system, a).has(b) || below(system, b).has(a)) {
       return yield* refused(new MovedUnderItself())
@@ -158,32 +185,37 @@ const swapTiles = (system: System, { a, b }: SwapTiles): Decided<'SwapTiles'> =>
   })
 
 /** Deletes a Tile, never the Root, with everything below it. */
-const deleteTile = (system: System, { id }: DeleteTile): Decided<'DeleteTile'> =>
-  Result.map(placed(system, id), () => [new TileDeleted({ id })])
+const deleteTile = (system: System, { id, version }: DeleteTile): Decided<'DeleteTile'> =>
+  Result.map(placed(system, id, version), () => [new TileDeleted({ id })])
 
-/** Puts a Reference to a Tile of the System in a free Context slot of a Tile, never of a Leaf. */
+/**
+ * Puts a Reference to a Tile of the System in a free Context slot of a Tile, never of a Leaf, that Tile
+ * at the Version its writer read.
+ */
 const createReference = (
   system: System,
-  { parent, slot, target }: CreateReference,
+  { parent, parentVersion, slot, target }: CreateReference,
   { id }: Made,
 ): Decided<'CreateReference'> =>
   Result.gen(function* () {
     if (tileAt(system, target) === undefined) return yield* refused(new TileNotFound())
+    yield* read(system, parent, parentVersion)
     yield* freeSlot(system, { parent, slot })
     return [new ReferenceCreated({ id, parent, slot, target })]
   })
 
-/** Empties a Context slot holding a Reference: a slot holding none changes nothing. */
+/**
+ * Empties a Context slot holding a Reference, of a Tile at the Version its writer read: a slot holding
+ * none changes nothing.
+ */
 const deleteReference = (
   system: System,
-  { parent, slot }: DeleteReference,
-): Decided<'DeleteReference'> => {
-  if (tileAt(system, parent) === undefined) return refused(new TileNotFound())
-  const held = heldAt(system, parent, slot)
-  return Result.succeed(
-    held?._tag === 'Reference' ? [new ReferenceDeleted({ id: held.id, parent, slot })] : [],
-  )
-}
+  { parent, parentVersion, slot }: DeleteReference,
+): Decided<'DeleteReference'> =>
+  Result.map(read(system, parent, parentVersion), () => {
+    const held = heldAt(system, parent, slot)
+    return held?._tag === 'Reference' ? [new ReferenceDeleted({ id: held.id, parent, slot })] : []
+  })
 
 /**
  * The id of what a create makes, which every overload taking a create requires: absent only to the

@@ -68,12 +68,14 @@ layer(TestLayer)("Mapping's events on the bus, over PGlite", (it) => {
       Effect.gen(function* () {
         const { account, bySession, byKey } = someone()
         const root = yield* rootOf(bySession)
-        const edit = Mapping.editTile({ id: root, title: 'Ada Lovelace' })
+        // The second writer read the Root once the first had named it.
+        const edit = (version: number) =>
+          Mapping.editTile({ id: root, version, title: 'Ada Lovelace' })
         const event = new TileEdited({ id: root, title: 'Ada Lovelace' })
-        expect((yield* asked(edit, bySession)).heard).toEqual([
+        expect((yield* asked(edit(1), bySession)).heard).toEqual([
           { event, actor: Option.some({ account, by: { _tag: 'Session' } }) },
         ])
-        expect((yield* asked(edit, byKey('key-1'))).heard).toEqual([
+        expect((yield* asked(edit(2), byKey('key-1'))).heard).toEqual([
           { event, actor: Option.some({ account, by: { _tag: 'Key', keyId: 'key-1' } }) },
         ])
       }),
@@ -100,9 +102,14 @@ layer(TestLayer)("Mapping's events on the bus, over PGlite", (it) => {
       const { byKey } = someone()
       const proofs = byKey('key-2')
       const root = yield* rootOf(proofs)
-      const refused = yield* asked(Mapping.moveTile({ id: root, parent: root, slot: 1 }), proofs)
+      const refused = yield* asked(
+        Mapping.moveTile({ id: root, version: 1, parent: root, slot: 1 }),
+        proofs,
+      )
       expect([Exit.isFailure(refused.exit), refused.heard]).toEqual([true, []])
-      const unchanged = yield* asked(Mapping.editTile({ id: root }), proofs)
+      const stale = yield* asked(Mapping.editTile({ id: root, version: 2, title: 'Ahead' }), proofs)
+      expect([Exit.isFailure(stale.exit), stale.heard]).toEqual([true, []])
+      const unchanged = yield* asked(Mapping.editTile({ id: root, version: 1 }), proofs)
       expect([Exit.isSuccess(unchanged.exit), unchanged.heard]).toEqual([true, []])
     }),
   )

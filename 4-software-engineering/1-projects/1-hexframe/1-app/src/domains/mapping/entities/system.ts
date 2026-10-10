@@ -16,15 +16,17 @@ import {
   type Slot,
   slotOfRow,
   type Tile,
+  type Version,
 } from './tile'
 
 /**
- * A Tile as its System holds it, before where it stands and what stands below it, with what it keeps
- * from the files it was imported from: its Name, its Tile config and its Frontmatter, each when it has
- * one.
+ * A Tile as its System holds it, before where it stands and what stands below it: its Version, and
+ * what it keeps from the files it was imported from, its Name, its Tile config and its Frontmatter,
+ * each when it has one.
  */
 export interface FoundTile extends Tile, Kept {
   readonly _tag: 'Tile'
+  readonly version: Version
 }
 
 /** Where a Tile or a Reference stands in its System: under its parent, in one of its slots. */
@@ -86,8 +88,13 @@ export interface BrokenReference {
 
 const tileOf = ({ id, title, preview, body }: Tile): Tile => ({ id, title, preview, body })
 
-/** A row's Tile, with what it keeps from its files. */
-const foundOf = (row: Row): FoundTile => ({ _tag: 'Tile', ...tileOf(row), ...keptOf(row) })
+/** A row's Tile, with its Version and what it keeps from its files. */
+const foundOf = (row: Row): FoundTile => ({
+  _tag: 'Tile',
+  ...tileOf(row),
+  version: row.version,
+  ...keptOf(row),
+})
 
 /**
  * What a row below the Root holds where it stands, under `parent`: a Tile, or a Reference in a Context
@@ -254,10 +261,14 @@ export type Depth = (typeof depths)[number]
 /** A Tile a Reference points at, as a read shows it: what a reader needs to decide to open it. */
 type Glimpse = Pick<Tile, 'id' | 'title' | 'preview'>
 
-/** A Tile as a read finds it, before what stands below it: its id and only the fields asked. */
+/**
+ * A Tile as a read finds it, before what stands below it: its id, its Version, which a write to it
+ * names, and only the fields asked.
+ */
 type ReadBase<F extends Field> = Pick<Tile, 'id'> &
   Pick<Content, F> & {
     readonly _tag: 'Tile'
+    readonly version: Version
   }
 
 /** A Leaf as a read finds it: its id and only the fields asked, and never anything below it. */
@@ -322,7 +333,12 @@ export function readOf<F extends Field>(
     }))
   }
 
-  const found = (row: RowWith<F>): ReadBase<F> => ({ _tag: 'Tile', id: row.id, ...row.content })
+  const found = (row: RowWith<F>): ReadBase<F> => ({
+    _tag: 'Tile',
+    id: row.id,
+    version: row.version,
+    ...row.content,
+  })
 
   const place = (row: RowWith<F>, generation: number): ReadTile<F> => {
     const tile = found(row)

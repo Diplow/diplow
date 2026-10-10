@@ -164,6 +164,7 @@ export type FrontmatterColumn = Readonly<Record<string, string | number | boolea
  * `name`, `config` and `frontmatter` keep what an imported file carried, each null when it carried
  * nothing: the name it was imported under, its folder's settings and the frontmatter keys Mapping has no
  * use for, both as JSON objects, the latter in its file's order. Mapping bounds them before writing them and decides what they mean.
+ * `version` is the Tile's Version, which a write names to be refused once the Tile changed since.
  */
 export const tile = pgTable(
   'tile',
@@ -180,6 +181,9 @@ export const tile = pgTable(
     config: jsonb('config').$type<TileConfigColumn>(),
     // json, not jsonb, which would sort the keys: Frontmatter keeps the order its file gave.
     frontmatter: json('frontmatter').$type<FrontmatterColumn>(),
+    // A Tile's Version: how many events touched it, 1 once created. Mapping decides it; a Reference's
+    // row keeps 1, since its own create and delete count on the Tile whose Context slot they change.
+    version: integer('version').default(1).notNull(),
   },
   (table) => [
     index('tile_accountId_idx').on(table.accountId),

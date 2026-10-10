@@ -7,6 +7,7 @@ import {
   type PlacedTile,
   type Slot,
   type System,
+  tileAt,
 } from '../../entities'
 import {
   CreateReference,
@@ -48,25 +49,26 @@ const id = {
   made: uuid(),
 }
 
-const placed = (tileId: string, parent: string, slot: Slot): PlacedTile => ({
+const placed = (tileId: string, parent: string, slot: Slot, version = 1): PlacedTile => ({
   _tag: 'Tile',
   id: tileId,
   title: tileId,
   preview: '',
   body: '',
+  version,
   parent,
   slot,
 })
 
 // The Root, untitled, holds a Branch in Direction 1, which holds a Child in Direction 2; a bare Branch
 // in Direction 3; a Leaf in Direction 1, sharing it with the Branch; a Context Tile in -1; and in -2
-// a Reference to the Child.
+// a Reference to the Child. Some Tiles were changed before, so their Versions differ.
 const system: System = {
-  root: { _tag: 'Tile', id: id.root, title: '', preview: '', body: '' },
+  root: { _tag: 'Tile', id: id.root, title: '', preview: '', body: '', version: 4 },
   tiles: {
-    [id.branch]: placed(id.branch, id.root, 1),
+    [id.branch]: placed(id.branch, id.root, 1, 3),
     [id.child]: placed(id.child, id.branch, 2),
-    [id.bare]: placed(id.bare, id.root, 3),
+    [id.bare]: placed(id.bare, id.root, 3, 2),
     [id.leaf]: placed(id.leaf, id.root, { leaf: 1 }),
     [id.why]: placed(id.why, id.root, -1),
     [id.reference]: {
@@ -79,6 +81,12 @@ const system: System = {
   },
   owned: true,
 }
+
+/**
+ * The Version of the Tile of this id as the System above holds it, which a writer that read it names;
+ * 1 for an id it doesn't hold, which no Version saves.
+ */
+const v = (tileId: string) => tileAt(system, tileId)?.version ?? 1
 
 /** Help, made by hand: the same System, owned by no Account. */
 const help: System = { ...system, owned: false }
@@ -104,12 +112,17 @@ describe('decide, refusing everything on a System no Account owns', () => {
   it('refuses Help every Operation, even one its System would take', () => {
     const operations: ReadonlyArray<Operation> = [
       new CreateTile({ parent: id.root, slot: 6, ...content }),
-      new EditTile({ id: id.branch, title: 'Mine' }),
-      new MoveTile({ id: id.bare, parent: id.root, slot: 5 }),
-      new SwapTiles({ a: id.branch, b: id.bare }),
-      new DeleteTile({ id: id.bare }),
-      new CreateReference({ parent: id.root, slot: -3, target: id.bare }),
-      new DeleteReference({ parent: id.root, slot: -2 }),
+      new EditTile({ id: id.branch, version: v(id.branch), title: 'Mine' }),
+      new MoveTile({ id: id.bare, version: v(id.bare), parent: id.root, slot: 5 }),
+      new SwapTiles({ a: id.branch, aVersion: v(id.branch), b: id.bare, bVersion: v(id.bare) }),
+      new DeleteTile({ id: id.bare, version: v(id.bare) }),
+      new CreateReference({
+        parent: id.root,
+        parentVersion: v(id.root),
+        slot: -3,
+        target: id.bare,
+      }),
+      new DeleteReference({ parent: id.root, parentVersion: v(id.root), slot: -2 }),
     ]
     for (const operation of operations) {
       expect(eventsOf(decided(operation)).length, operation._tag).toBe(1)
@@ -181,26 +194,30 @@ describe('decide, creating a Tile', () => {
 
 describe('decide, editing a Tile', () => {
   it('edits only the fields given, the Title trimmed, the Root’s like any Tile’s', () => {
-    expect(eventsOf(decided(new EditTile({ id: id.root, title: ' Ada ' })))).toEqual([
-      new TileEdited({ id: id.root, title: 'Ada' }),
-    ])
-    expect(eventsOf(decided(new EditTile({ id: id.leaf, body: '' })))).toEqual([
-      new TileEdited({ id: id.leaf, body: '' }),
-    ])
+    expect(
+      eventsOf(decided(new EditTile({ id: id.root, version: v(id.root), title: ' Ada ' }))),
+    ).toEqual([new TileEdited({ id: id.root, title: 'Ada' })])
+    expect(eventsOf(decided(new EditTile({ id: id.leaf, version: v(id.leaf), body: '' })))).toEqual(
+      [new TileEdited({ id: id.leaf, body: '' })],
+    )
   })
 
   it('changes nothing when no field is given', () => {
-    expect(eventsOf(decided(new EditTile({ id: id.child })))).toEqual([])
+    expect(eventsOf(decided(new EditTile({ id: id.child, version: v(id.child) })))).toEqual([])
   })
 
   it('refuses an empty Title, a long Preview, and a Tile it doesn’t hold', () => {
-    expect(refusalOf(decided(new EditTile({ id: id.root, title: '' })))).toMatchObject({
+    expect(
+      refusalOf(decided(new EditTile({ id: id.root, version: v(id.root), title: '' }))),
+    ).toMatchObject({
       _tag: 'TitleMissing',
     })
-    const long = new EditTile({ id: id.root, preview: '😀'.repeat(351) })
+    const long = new EditTile({ id: id.root, version: v(id.root), preview: '😀'.repeat(351) })
     expect(refusalOf(decided(long))).toMatchObject({ _tag: 'PreviewTooLong' })
     for (const tileId of [id.nowhere, id.reference]) {
-      expect(refusalOf(decided(new EditTile({ id: tileId, title: 'X' })))).toMatchObject({
+      expect(
+        refusalOf(decided(new EditTile({ id: tileId, version: v(tileId), title: 'X' }))),
+      ).toMatchObject({
         _tag: 'TileNotFound',
       })
     }
@@ -209,7 +226,7 @@ describe('decide, editing a Tile', () => {
 
 describe('decide, moving a Tile', () => {
   const move = (tileId: string, parent: string, slot: Slot) =>
-    decided(new MoveTile({ id: tileId, parent, slot }))
+    decided(new MoveTile({ id: tileId, version: v(tileId), parent, slot }))
 
   it('moves it, with everything below it, to a free slot of any kind, under any Tile but a Leaf', () => {
     expect(eventsOf(move(id.branch, id.bare, -4))).toEqual([
@@ -253,7 +270,8 @@ describe('decide, moving a Tile', () => {
 })
 
 describe('decide, swapping two Tiles', () => {
-  const swap = (a: string, b: string) => decided(new SwapTiles({ a, b }))
+  const swap = (a: string, b: string) =>
+    decided(new SwapTiles({ a, aVersion: v(a), b, bVersion: v(b) }))
 
   it('swaps two Tiles of any kind, a Branch with a Context Tile or a bare Branch with a Leaf', () => {
     expect(eventsOf(swap(id.branch, id.why))).toEqual([
@@ -287,18 +305,18 @@ describe('decide, swapping two Tiles', () => {
 describe('decide, deleting a Tile', () => {
   it('deletes a Tile, with everything below it, a Leaf or a Context Tile alike', () => {
     for (const tileId of [id.branch, id.leaf, id.why]) {
-      expect(eventsOf(decided(new DeleteTile({ id: tileId })))).toEqual([
+      expect(eventsOf(decided(new DeleteTile({ id: tileId, version: v(tileId) })))).toEqual([
         new TileDeleted({ id: tileId }),
       ])
     }
   })
 
   it('refuses the Root, a Reference and a Tile it doesn’t hold', () => {
-    expect(refusalOf(decided(new DeleteTile({ id: id.root })))).toMatchObject({
+    expect(refusalOf(decided(new DeleteTile({ id: id.root, version: v(id.root) })))).toMatchObject({
       _tag: 'RootFixed',
     })
     for (const tileId of [id.reference, id.nowhere]) {
-      expect(refusalOf(decided(new DeleteTile({ id: tileId })))).toMatchObject({
+      expect(refusalOf(decided(new DeleteTile({ id: tileId, version: v(tileId) })))).toMatchObject({
         _tag: 'TileNotFound',
       })
     }
@@ -308,15 +326,19 @@ describe('decide, deleting a Tile', () => {
 describe('decide, creating and deleting a Reference', () => {
   it('puts a Reference to any Tile of the System, the Root too, in a free Context slot', () => {
     for (const target of [id.child, id.root]) {
-      expect(eventsOf(decided(new CreateReference({ parent: id.bare, slot: -1, target })))).toEqual(
-        [new ReferenceCreated({ id: id.made, parent: id.bare, slot: -1, target })],
-      )
+      expect(
+        eventsOf(
+          decided(
+            new CreateReference({ parent: id.bare, parentVersion: v(id.bare), slot: -1, target }),
+          ),
+        ),
+      ).toEqual([new ReferenceCreated({ id: id.made, parent: id.bare, slot: -1, target })])
     }
   })
 
   it('refuses a target it doesn’t hold, a slot held, and a Leaf, which has no Context', () => {
     const create = (parent: string, target: string, slot: ContextDirection = -3) =>
-      decided(new CreateReference({ parent, slot, target }))
+      decided(new CreateReference({ parent, parentVersion: v(parent), slot, target }))
     expect(refusalOf(create(id.root, id.nowhere))).toMatchObject({ _tag: 'TileNotFound' })
     expect(refusalOf(create(id.root, id.reference))).toMatchObject({ _tag: 'TileNotFound' })
     expect(refusalOf(create(id.nowhere, id.child))).toMatchObject({ _tag: 'TileNotFound' })
@@ -326,7 +348,7 @@ describe('decide, creating and deleting a Reference', () => {
 
   it('empties the slot of a Reference, and changes nothing in a slot holding none', () => {
     const empty = (parent: string, slot: ContextDirection) =>
-      decided(new DeleteReference({ parent, slot }))
+      decided(new DeleteReference({ parent, parentVersion: v(parent), slot }))
     expect(eventsOf(empty(id.root, -2))).toEqual([
       new ReferenceDeleted({ id: id.reference, parent: id.root, slot: -2 }),
     ])
@@ -336,16 +358,70 @@ describe('decide, creating and deleting a Reference', () => {
   })
 })
 
+describe('decide, on a Tile changed since its writer read it', () => {
+  /** The Version a writer read before the Tile's last change. */
+  const stale = (tileId: string) => v(tileId) - 1
+
+  it('refuses every Operation naming an existing Tile at a Version it no longer has', () => {
+    const operations: ReadonlyArray<Operation> = [
+      new EditTile({ id: id.branch, version: stale(id.branch), title: 'Mine' }),
+      new MoveTile({ id: id.bare, version: stale(id.bare), parent: id.root, slot: 5 }),
+      new DeleteTile({ id: id.bare, version: stale(id.bare) }),
+      new CreateReference({
+        parent: id.root,
+        parentVersion: stale(id.root),
+        slot: -3,
+        target: id.bare,
+      }),
+      new DeleteReference({ parent: id.root, parentVersion: stale(id.root), slot: -2 }),
+      new EditTile({ id: id.root, version: v(id.root) + 1, title: 'Ahead' }),
+    ]
+    for (const operation of operations) {
+      expect(refusalOf(decided(operation)), operation._tag).toMatchObject({
+        _tag: 'TileChanged',
+        kind: 'Conflict',
+      })
+    }
+  })
+
+  it('refuses a swap when either Tile changed, and makes it when both are as read', () => {
+    const swap = (aVersion: number, bVersion: number) =>
+      decided(new SwapTiles({ a: id.branch, aVersion, b: id.bare, bVersion }))
+    expect(refusalOf(swap(stale(id.branch), v(id.bare)))).toMatchObject({ _tag: 'TileChanged' })
+    expect(refusalOf(swap(v(id.branch), stale(id.bare)))).toMatchObject({ _tag: 'TileChanged' })
+    expect(eventsOf(swap(v(id.branch), v(id.bare)))).toHaveLength(1)
+  })
+
+  it('refuses a stale Version even where the Operation would change nothing', () => {
+    const edit = new EditTile({ id: id.child, version: v(id.child) + 1 })
+    expect(refusalOf(decided(edit))).toMatchObject({ _tag: 'TileChanged' })
+    const stay = new MoveTile({ id: id.bare, version: stale(id.bare), parent: id.root, slot: 3 })
+    expect(refusalOf(decided(stay))).toMatchObject({ _tag: 'TileChanged' })
+  })
+
+  it('answers a Tile it doesn’t hold, and the Root, before any Version', () => {
+    const gone = new DeleteTile({ id: id.nowhere, version: 7 })
+    expect(refusalOf(decided(gone))).toMatchObject({ _tag: 'TileNotFound' })
+    const root = new MoveTile({ id: id.root, version: 7, parent: id.bare, slot: 1 })
+    expect(refusalOf(decided(root))).toMatchObject({ _tag: 'RootFixed' })
+  })
+})
+
 describe("decide's events", () => {
   it('are each one of Mapping’s events, as its Schema reads them', () => {
     const operations: ReadonlyArray<Operation> = [
       new CreateTile({ parent: id.root, slot: 6, ...content }),
-      new EditTile({ id: id.branch, title: 'Mine' }),
-      new MoveTile({ id: id.bare, parent: id.root, slot: 5 }),
-      new SwapTiles({ a: id.branch, b: id.bare }),
-      new DeleteTile({ id: id.bare }),
-      new CreateReference({ parent: id.root, slot: -3, target: id.bare }),
-      new DeleteReference({ parent: id.root, slot: -2 }),
+      new EditTile({ id: id.branch, version: v(id.branch), title: 'Mine' }),
+      new MoveTile({ id: id.bare, version: v(id.bare), parent: id.root, slot: 5 }),
+      new SwapTiles({ a: id.branch, aVersion: v(id.branch), b: id.bare, bVersion: v(id.bare) }),
+      new DeleteTile({ id: id.bare, version: v(id.bare) }),
+      new CreateReference({
+        parent: id.root,
+        parentVersion: v(id.root),
+        slot: -3,
+        target: id.bare,
+      }),
+      new DeleteReference({ parent: id.root, parentVersion: v(id.root), slot: -2 }),
     ]
     const events = operations.flatMap((operation) => eventsOf(decided(operation)))
     expect(events.map((event) => event._tag)).toEqual([

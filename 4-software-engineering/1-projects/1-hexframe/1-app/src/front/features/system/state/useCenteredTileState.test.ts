@@ -32,6 +32,7 @@ const tile = (
   title: id,
   preview: `What ${id} is`,
   body: `# ${id}`,
+  version: 1,
   branches: {},
   leaves: {},
   context: {},
@@ -94,7 +95,7 @@ describe('a change of kind', () => {
     vi.mocked(Mapping.moveTile).mockResolvedValue(outcome as never)
     // The System read again after the move, flat as the server answers it: what it holds plays no part.
     const read = {
-      root: { _tag: 'Tile', id: 'root', title: '', preview: '', body: '' },
+      root: { _tag: 'Tile', id: 'root', title: '', preview: '', body: '', version: 1 },
       tiles: {},
     } as const
     vi.mocked(Mapping.system).mockResolvedValue({ ok: true, value: { ...read, owned: true } })
@@ -108,7 +109,7 @@ describe('a change of kind', () => {
     })
     await waitFor(() => {
       expect(Mapping.moveTile).toHaveBeenCalledWith({
-        data: { id: 'run.yaml', parent: 'root', slot: 4 },
+        data: { id: 'run.yaml', version: 1, parent: 'root', slot: 4 },
       })
     })
   })
@@ -121,7 +122,7 @@ describe('a change of kind', () => {
     })
     await waitFor(() => {
       expect(Mapping.moveTile).toHaveBeenCalledWith({
-        data: { id: 'bare', parent: 'root', slot: { leaf: 1 } },
+        data: { id: 'bare', version: 1, parent: 'root', slot: { leaf: 1 } },
       })
     })
   })

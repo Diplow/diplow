@@ -72,6 +72,7 @@ const root = {
   title: '',
   preview: '',
   body: '',
+  version: 1,
   branches: {},
   leaves: {},
   context: {},
@@ -79,7 +80,7 @@ const root = {
 
 /** The Root's System as the server reads it, flat: a Child in Direction 2 and a Reference to it. */
 const system = {
-  root: { _tag: 'Tile', id: 'root', title: '', preview: '', body: '' },
+  root: { _tag: 'Tile', id: 'root', title: '', preview: '', body: '', version: 1 },
   tiles: {
     child: {
       _tag: 'Tile',
@@ -87,6 +88,7 @@ const system = {
       title: 'Child',
       preview: '',
       body: '',
+      version: 1,
       parent: 'root',
       slot: 2,
     },
@@ -94,6 +96,12 @@ const system = {
   },
   owned: true,
 } as const
+
+/** A move of `t`, read at its first Version, to the Root's Direction 3. */
+const toThree = { id: 't', version: 1, parent: 'root', slot: 3 } as const
+
+/** The Root's Context slot -1, by the Root read at its first Version. */
+const rootSlot = { parent: 'root', parentVersion: 1, slot: -1 } as const
 
 /** The System read again after a write, told from the first read by its Root's Title. */
 const readAgain = { ...system, root: { ...system.root, title: 'Read again' } } as const
@@ -169,7 +177,7 @@ describe("Mapping's hooks", () => {
   it('read the System flat through its server function, and build its tree', async () => {
     answering(undefined)
     const { result } = render(() => undefined)
-    const child = { _tag: 'Tile', id: 'child', title: 'Child', preview: '', body: '' }
+    const child = { _tag: 'Tile', id: 'child', title: 'Child', preview: '', body: '', version: 1 }
     await waitFor(() => {
       expect(result.current.system.data).toEqual({
         system,
@@ -209,12 +217,12 @@ describe("Mapping's hooks", () => {
       preview: '',
       body: '',
     }),
-    writing('editTile', useEditTile, { id: 't', body: '# A' }),
-    writing('moveTile', useMoveTile, { id: 't', parent: 'root', slot: -2 }),
-    writing('swapTiles', useSwapTiles, { a: 't', b: 'u' }),
-    writing('deleteTile', useDeleteTile, { id: 't' }),
-    writing('createReference', useCreateReference, { parent: 'root', slot: -1, target: 't' }),
-    writing('deleteReference', useDeleteReference, { parent: 'root', slot: -1 }),
+    writing('editTile', useEditTile, { id: 't', version: 1, body: '# A' }),
+    writing('moveTile', useMoveTile, { id: 't', version: 1, parent: 'root', slot: -2 }),
+    writing('swapTiles', useSwapTiles, { a: 't', aVersion: 1, b: 'u', bVersion: 1 }),
+    writing('deleteTile', useDeleteTile, { id: 't', version: 1 }),
+    writing('createReference', useCreateReference, { ...rootSlot, target: 't' }),
+    writing('deleteReference', useDeleteReference, rootSlot),
   ])('write through $name, then read the System again', async ({ name, input, use }) => {
     answering({ id: 't' })
     const { result } = render(use)
@@ -234,7 +242,7 @@ describe("Mapping's hooks", () => {
     const { result } = render(useDeleteTile)
     await read(result)
     const failed = await result.current.hook
-      .mutateAsync({ id: 'gone' })
+      .mutateAsync({ id: 'gone', version: 1 })
       .catch((error: unknown) => error)
     expect(failed).toBeInstanceOf(CallFailed)
     expect(failed).toMatchObject({
@@ -255,10 +263,8 @@ describe("Mapping's hooks", () => {
     )
     const { result } = render(() => ({ move: useMoveTile(), edit: useEditTile() }))
     await read(result)
-    const moved = result.current.hook.move
-      .mutateAsync({ id: 't', parent: 'root', slot: 3 })
-      .catch((error: unknown) => error)
-    const edited = result.current.hook.edit.mutateAsync({ id: 't', title: 'B' })
+    const moved = result.current.hook.move.mutateAsync(toThree).catch((error: unknown) => error)
+    const edited = result.current.hook.edit.mutateAsync({ id: 't', version: 1, title: 'B' })
     await waitFor(() => {
       expect(Mapping.moveTile).toHaveBeenCalled()
     })
@@ -266,7 +272,7 @@ describe("Mapping's hooks", () => {
     refuse({ ok: false, failure: { _tag: 'DirectionTaken', kind: 'Conflict' }, requestId: 'r' })
     expect(await moved).toBeInstanceOf(CallFailed)
     await expect(edited).resolves.toBeUndefined()
-    expect(Mapping.editTile).toHaveBeenCalledWith({ data: { id: 't', title: 'B' } })
+    expect(Mapping.editTile).toHaveBeenCalledWith({ data: { id: 't', version: 1, title: 'B' } })
   })
 })
 
@@ -406,7 +412,7 @@ describe('an import', () => {
     vi.mocked(Mapping.importTiles).mockResolvedValue({ ok: true, value: report } as never)
     const { result } = render(() => ({ move: useMoveTile(), import: useImportTiles() }))
     await read(result)
-    const moving = result.current.hook.move.mutateAsync({ id: 't', parent: 'root', slot: 3 })
+    const moving = result.current.hook.move.mutateAsync(toThree)
     const imported = result.current.hook.import.mutateAsync({ given: folder, place })
     await waitFor(() => {
       expect(Mapping.moveTile).toHaveBeenCalled()
@@ -445,8 +451,8 @@ const tileId = crypto.randomUUID()
  * the other is the server's alone to refuse: the client, deciding on that System, sends it.
  */
 const placed = {
-  [parent]: { _tag: 'Tile', id: parent, ...content, parent: 'root', slot: 3 },
-  [tileId]: { _tag: 'Tile', id: tileId, ...content, parent, slot: 2 },
+  [parent]: { _tag: 'Tile', id: parent, ...content, version: 1, parent: 'root', slot: 3 },
+  [tileId]: { _tag: 'Tile', id: tileId, ...content, version: 1, parent, slot: 2 },
 }
 
 /**
@@ -520,13 +526,13 @@ describe("Mapping's form submits", () => {
     })
   })
 
-  it('send only the fields an edit changed', async () => {
+  it('send only the fields an edit changed, with the Version of the Tile the form opened on', async () => {
     answering({ id: 't' })
-    const tile = { id: 't', title: '', preview: '', body: '' }
+    const tile = { id: 't', version: 3, title: '', preview: '', body: '' }
     const submit = await submitting(() => useEditTileSubmit(tile))
     submit({ title: '', preview: '', body: '# Me' })
     await waitFor(() => {
-      expect(Mapping.editTile).toHaveBeenCalledWith({ data: { id: 't', body: '# Me' } })
+      expect(Mapping.editTile).toHaveBeenCalledWith({ data: { id: 't', version: 3, body: '# Me' } })
     })
   })
 })
@@ -560,7 +566,7 @@ describe("a form's write refused, handed back", () => {
   it('hand a refused edit back once the System read again has landed', async () => {
     answering(undefined, placed)
     vi.mocked(Mapping.editTile).mockResolvedValue(refusal(titleMissing))
-    const submit = await submitting(() => useEditTileSubmit({ id: tileId, ...content }))
+    const submit = await submitting(() => useEditTileSubmit({ id: tileId, version: 1, ...content }))
     submit({ ...content, title: 'B' })
     await waitFor(() => {
       expect(submit.refused).toMatchObject([
@@ -580,7 +586,7 @@ describe("a form's write refused, handed back", () => {
     vi.mocked(Mapping.editTile).mockResolvedValue(
       refusal({ _tag: 'TileNotFound', kind: 'NotFound' }),
     )
-    const submit = await submitting(() => useEditTileSubmit({ id: tileId, ...content }))
+    const submit = await submitting(() => useEditTileSubmit({ id: tileId, version: 1, ...content }))
     submit({ ...content, body: '# B' })
     await waitFor(() => {
       expect(submit.refused).toMatchObject([

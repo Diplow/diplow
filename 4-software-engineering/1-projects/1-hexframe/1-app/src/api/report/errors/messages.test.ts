@@ -21,6 +21,7 @@ import {
   MovedUnderItself,
   PreviewTooLong,
   RootFixed,
+  TileChanged,
   TileIdTaken,
   TileNotFound,
   TitleMissing,
@@ -101,6 +102,20 @@ describe('the message table', () => {
     expect(messageFor(failure, 'signIn')).toBe(sentence)
   })
 
+  it("speaks the page's language", () => {
+    overwriteGetLocale(() => 'fr')
+    expect(messageFor(new DevConflict(), 'submitDevTitle')).toBe('Ce titre est déjà pris.')
+    expect(messageFor(new DevForbidden())).toBe(
+      'Ceci appartient à quelqu’un qui ne l’a pas partagé avec vous.',
+    )
+  })
+})
+
+describe("the message table, on Mapping's refusals", () => {
+  afterEach(() => {
+    overwriteGetLocale(() => 'en')
+  })
+
   it.each([
     [new TileNotFound(), "This tile doesn't exist, or no longer does."],
     [new TitleMissing({ fields: ['title'] }), 'Give this tile a title.'],
@@ -110,6 +125,10 @@ describe('the message table', () => {
       'This place already holds a tile. Pick a free one, or move that tile first.',
     ],
     [new TileIdTaken(), 'This tile was already created. Reload to see your system as it stands.'],
+    [
+      new TileChanged(),
+      'This tile changed since you opened it, here or elsewhere. Look at it as it stands now, then try again.',
+    ],
     [new MovedUnderItself(), "A tile can't move under itself or one of its own children."],
     [new RootFixed(), "Your root tile is you: it can't be moved or deleted."],
     [
@@ -158,6 +177,10 @@ describe('the message table', () => {
       'Cette tuile a déjà été créée. Rechargez pour voir votre système tel qu’il est.',
     ],
     [
+      new TileChanged(),
+      'Cette tuile a changé depuis que vous l’avez ouverte, ici ou ailleurs. Regardez-la telle qu’elle est maintenant, puis réessayez.',
+    ],
+    [
       new MovedUnderItself(),
       'Une tuile ne peut pas aller sous elle-même ni sous l’un de ses enfants.',
     ],
@@ -176,13 +199,5 @@ describe('the message table', () => {
   ])("words Mapping's %s in French too", (failure, sentence) => {
     overwriteGetLocale(() => 'fr')
     expect(messageFor(failure, 'moveTile')).toBe(sentence)
-  })
-
-  it("speaks the page's language", () => {
-    overwriteGetLocale(() => 'fr')
-    expect(messageFor(new DevConflict(), 'submitDevTitle')).toBe('Ce titre est déjà pris.')
-    expect(messageFor(new DevForbidden())).toBe(
-      'Ceci appartient à quelqu’un qui ne l’a pas partagé avec vous.',
-    )
   })
 })

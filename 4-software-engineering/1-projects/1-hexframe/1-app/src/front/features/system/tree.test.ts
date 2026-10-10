@@ -10,7 +10,7 @@ import {
 import type { TileNode } from '#/front/ui/hex/view/tiles'
 import { m } from '#/paraglide/messages'
 
-import { canvasTree, slotOf, swapsWith, tileIn } from './tree'
+import { canvasTree, moveOf, slotOf, swapOf, swapsWith, tileIn } from './tree'
 
 const tile = (
   id: string,
@@ -21,6 +21,7 @@ const tile = (
   title: id.toUpperCase(),
   preview: `What ${id} is`,
   body: '',
+  version: 1,
   branches: {},
   leaves: {},
   context: {},
@@ -124,12 +125,13 @@ describe('tileIn', () => {
 })
 
 describe('swapsWith', () => {
-  const placed = (id: string, parent: string, slot: Slot): PlacedTile => ({
+  const placed = (id: string, parent: string, slot: Slot, version = 1): PlacedTile => ({
     _tag: 'Tile',
     id,
     title: id.toUpperCase(),
     preview: '',
     body: '',
+    version,
     parent,
     slot,
   })
@@ -137,9 +139,9 @@ describe('swapsWith', () => {
   // Direction 3; B in Direction 4; a Leaf in Direction 1; Why in -1, which holds Deep in Direction 2;
   // a Reference to A3 in -2 and one to a deleted Tile in -5.
   const flat: System = {
-    root: { _tag: 'Tile', id: 'root', title: '', preview: '', body: '' },
+    root: { _tag: 'Tile', id: 'root', title: '', preview: '', body: '', version: 1 },
     tiles: {
-      a: placed('a', 'root', 1),
+      a: placed('a', 'root', 1, 3),
       a3: placed('a3', 'a', 3),
       b: placed('b', 'root', 4),
       notes: placed('notes', 'root', { leaf: 1 }),
@@ -170,6 +172,18 @@ describe('swapsWith', () => {
     const a = tree.branches?.[1]
     const a3 = a?.branches?.[3]
     expect([offers(a, a3), offers(a3, a)]).toEqual([false, false])
+  })
+
+  it('names each Tile a move or a swap sends at the Version the System shows of it', () => {
+    expect(moveOf(flat, 'a', { parent: 'b', slot: 2 })).toEqual({
+      id: 'a',
+      version: 3,
+      parent: 'b',
+      slot: 2,
+    })
+    expect(swapOf(flat, 'a', 'b')).toEqual({ a: 'a', aVersion: 3, b: 'b', bVersion: 1 })
+    expect(moveOf(flat, 'toA3', { parent: 'b', slot: 2 })).toBeUndefined()
+    expect(swapOf(flat, 'a', 'gone')).toBeUndefined()
   })
 })
 

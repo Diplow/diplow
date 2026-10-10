@@ -166,7 +166,10 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
       })
       const named = yield* someone
       yield* transactional(
-        Mapping.editTile(named.accountId, new EditTile({ id: named.root.id, title: 'Ulysse' })),
+        Mapping.editTile(
+          named.accountId,
+          new EditTile({ id: named.root.id, version: 1, title: 'Ulysse' }),
+        ),
       )
       expect(yield* Effect.flip(land(named.accountId, { _tag: 'Root' }))).toMatchObject({
         _tag: 'DirectionTaken',
@@ -176,7 +179,10 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
       for (const written of [{ preview: 'Me, in short.' }, { body: '# Me' }]) {
         const untitled = yield* someone
         yield* transactional(
-          Mapping.editTile(untitled.accountId, new EditTile({ id: untitled.root.id, ...written })),
+          Mapping.editTile(
+            untitled.accountId,
+            new EditTile({ id: untitled.root.id, version: 1, ...written }),
+          ),
         )
         expect(yield* Effect.flip(land(untitled.accountId, { _tag: 'Root' }))).toMatchObject({
           _tag: 'DirectionTaken',

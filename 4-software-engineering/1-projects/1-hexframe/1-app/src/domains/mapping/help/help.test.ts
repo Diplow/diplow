@@ -188,30 +188,48 @@ layer(TestTiles)('Help, refused to every write in Mapping itself', (it) => {
             unchecked,
           ),
         ),
-        Mapping.editTile(accountId, new EditTile({ id: 'help/3', title: 'Mine' }, unchecked)),
-        Mapping.moveTile(
+        Mapping.editTile(
           accountId,
-          new MoveTile({ id: 'help/3', parent: root.id, slot: 2 }, unchecked),
+          new EditTile({ id: 'help/3', version: 1, title: 'Mine' }, unchecked),
         ),
         Mapping.moveTile(
           accountId,
-          new MoveTile({ id: own.id, parent: 'help/3', slot: 2 }, unchecked),
+          new MoveTile({ id: 'help/3', version: 1, parent: root.id, slot: 2 }, unchecked),
         ),
-        Mapping.swapTiles(accountId, new SwapTiles({ a: own.id, b: 'help/3' }, unchecked)),
-        Mapping.swapTiles(accountId, new SwapTiles({ a: 'help/-1', b: own.id }, unchecked)),
-        Mapping.deleteTile(accountId, new DeleteTile({ id: 'help/6/2' }, unchecked)),
-        Mapping.deleteTile(accountId, new DeleteTile({ id: 'help/../../x' }, unchecked)),
+        Mapping.moveTile(
+          accountId,
+          new MoveTile({ id: own.id, version: 1, parent: 'help/3', slot: 2 }, unchecked),
+        ),
+        Mapping.swapTiles(
+          accountId,
+          new SwapTiles({ a: own.id, aVersion: 1, b: 'help/3', bVersion: 1 }, unchecked),
+        ),
+        Mapping.swapTiles(
+          accountId,
+          new SwapTiles({ a: 'help/-1', aVersion: 1, b: own.id, bVersion: 1 }, unchecked),
+        ),
+        Mapping.deleteTile(accountId, new DeleteTile({ id: 'help/6/2', version: 1 }, unchecked)),
+        Mapping.deleteTile(
+          accountId,
+          new DeleteTile({ id: 'help/../../x', version: 1 }, unchecked),
+        ),
         Mapping.createReference(
           accountId,
-          new CreateReference({ parent: own.id, slot: -1, target: 'help/2' }, unchecked),
+          new CreateReference(
+            { parent: own.id, parentVersion: 1, slot: -1, target: 'help/2' },
+            unchecked,
+          ),
         ),
         Mapping.createReference(
           accountId,
-          new CreateReference({ parent: 'help', slot: -2, target: own.id }, unchecked),
+          new CreateReference(
+            { parent: 'help', parentVersion: 1, slot: -2, target: own.id },
+            unchecked,
+          ),
         ),
         Mapping.deleteReference(
           accountId,
-          new DeleteReference({ parent: 'help', slot: -1 }, unchecked),
+          new DeleteReference({ parent: 'help', parentVersion: 1, slot: -1 }, unchecked),
         ),
       ]
       for (const attempt of attempts) {

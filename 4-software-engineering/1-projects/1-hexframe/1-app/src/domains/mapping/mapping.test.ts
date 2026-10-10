@@ -1,46 +1,24 @@
 import { expect, layer } from '@effect/vitest'
-import { Effect, Layer } from 'effect'
+import { Effect } from 'effect'
 import { describe, expectTypeOf, it } from 'vitest'
 
-import { Bus } from '#/domains/bus'
-import { type Database, type InTransaction, transactional } from '#/repositories/database/database'
-import { TestDatabase } from '#/repositories/database/testing'
-import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
+import type { Bus } from '#/domains/bus'
+import type { Database, InTransaction } from '#/repositories/database/database'
+import { Tiles } from '#/repositories/database/tiles/tiles'
 
 import type { ContextDirection, Depth, Direction, Field, ReadTile, SystemTile } from './entities'
-import { systemOf } from './entities'
 import * as Mapping from './mapping'
-import * as Operations from './operations'
-
-/** The Account's System, read flat, as its tree: what the canvas draws, as the client builds it. */
-const tree = (accountId: string) => Effect.map(Mapping.system(accountId), systemOf)
-
-/** The bus, as Mapping publishes on it: these tests hear nothing it publishes. */
-const Unheard = Layer.succeed(Bus)({ publish: () => Effect.void })
-
-const TestTiles = Layer.merge(tilesLayer.pipe(Layer.provideMerge(TestDatabase)), Unheard)
-
-/**
- * A change as the API layer runs it: its Operation, made from its fields, in the transaction the
- * layer opens.
- */
-const createTile = (accountId: string, fields: Omit<Operations.CreateTile, '_tag'>) =>
-  transactional(Mapping.createTile(accountId, new Operations.CreateTile(fields)))
-const editTile = (
-  accountId: string,
-  id: string,
-  changes: Omit<Operations.EditTile, '_tag' | 'id'>,
-) => transactional(Mapping.editTile(accountId, new Operations.EditTile({ id, ...changes })))
-const moveTile = (accountId: string, id: string, to: Omit<Operations.MoveTile, '_tag' | 'id'>) =>
-  transactional(Mapping.moveTile(accountId, new Operations.MoveTile({ id, ...to })))
-const swapTiles = (accountId: string, a: string, b: string) =>
-  transactional(Mapping.swapTiles(accountId, new Operations.SwapTiles({ a, b })))
-const deleteTile = (accountId: string, id: string) =>
-  transactional(Mapping.deleteTile(accountId, new Operations.DeleteTile({ id })))
-const createReference = (accountId: string, fields: Omit<Operations.CreateReference, '_tag'>) =>
-  transactional(Mapping.createReference(accountId, new Operations.CreateReference(fields)))
-const deleteReference = (accountId: string, fields: Omit<Operations.DeleteReference, '_tag'>) =>
-  transactional(Mapping.deleteReference(accountId, new Operations.DeleteReference(fields)))
+import {
+  createReference,
+  createTile,
+  deleteReference,
+  deleteTile,
+  editTile,
+  moveTile,
+  swapTiles,
+  TestTiles,
+  tree,
+} from './testing'
 
 /** A read of the Account's own System, where the language Help is read in plays no part. */
 const readTile = <F extends Field>(
@@ -102,6 +80,7 @@ layer(TestTiles)('a System and its Tiles, over PGlite', (it) => {
         title: '',
         preview: '',
         body: '',
+        version: 1,
         ...nothingBelow,
       })
       expect(second.id).toBe(first.id)
@@ -116,11 +95,13 @@ layer(TestTiles)('a System and its Tiles, over PGlite', (it) => {
       const root = yield* tree(accountId)
       yield* editTile(accountId, root.id, { body: 'Written before any name.' })
       const named = yield* editTile(accountId, root.id, { title: '  Ada Lovelace ' })
+      // Counted once by each edit: an edit giving nothing below changes nothing, its Version included.
       expect(named).toEqual({
         id: root.id,
         title: 'Ada Lovelace',
         preview: '',
         body: 'Written before any name.',
+        version: 3,
       })
       expect((yield* tree(accountId)).title).toBe('Ada Lovelace')
       expect(yield* editTile(accountId, root.id, {})).toEqual(named)
@@ -157,7 +138,7 @@ layer(TestTiles)('a System and its Tiles, over PGlite', (it) => {
         ...content('Principle'),
       })
       yield* createTile(accountId, { parent: principle.id, slot: 2, ...content('Detail') })
-      expect(child).toEqual({ id: child.id, ...content('Child') })
+      expect(child).toEqual({ id: child.id, ...content('Child'), version: 1 })
       const found = yield* tree(accountId)
       expect(found.id).toBe(root.id)
       expect(found.branches[1]).toMatchObject({ _tag: 'Tile', ...child })
@@ -401,7 +382,10 @@ layer(TestTiles)('References, over PGlite', (it) => {
         yield* createReference(accountId, { parent: child.id, slot: -2, target: shared.id })
         yield* moveTile(accountId, shared.id, { parent: root.id, slot: 6 })
         const held = yield* tree(accountId)
-        expect(held.branches[1]?.context[-2]).toEqual({ _tag: 'Reference', tile: shared })
+        expect(held.branches[1]?.context[-2]).toEqual({
+          _tag: 'Reference',
+          tile: { id: shared.id, ...content('Shared') },
+        })
         expect(outline(held)).toEqual({
           title: '',
           branches: {
@@ -464,7 +448,10 @@ layer(TestTiles)('References, over PGlite', (it) => {
       const { accountId, root, child } = yield* withAChild
       yield* createReference(accountId, { parent: root.id, slot: -4, target: child.id })
       const { context } = yield* tree(accountId)
-      expect(context[-4]).toEqual({ _tag: 'Reference', tile: child })
+      expect(context[-4]).toEqual({
+        _tag: 'Reference',
+        tile: { id: child.id, ...content('Child') },
+      })
       const beside = yield* createTile(accountId, {
         parent: root.id,
         slot: -5,
@@ -521,7 +508,7 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
       const accountId = someone()
       const read = yield* readTile(accountId, { depth: 1, fields: ['title', 'preview', 'body'] })
       expect(read).toEqual({
-        tile: { _tag: 'Tile', id: read.tile.id, ...untitledContent, ...nothingBelow },
+        tile: { _tag: 'Tile', id: read.tile.id, version: 1, ...untitledContent, ...nothingBelow },
         parent: null,
       })
       expect((yield* tree(accountId)).id).toBe(read.tile.id)
@@ -543,11 +530,13 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
       expect(tile.branches?.[1]?.branches?.[1]?.branches?.[1]).toEqual({
         _tag: 'Tile',
         id: ids[3],
+        version: 1,
         title: 'Great-grandchild',
       })
       expect(tile.context?.[-1]).toEqual({
         _tag: 'Tile',
         id: principle,
+        version: 1,
         title: 'Principle',
         ...nothingBelow,
       })
@@ -567,7 +556,7 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
       ]
       for (const fields of choices) {
         const { tile } = yield* readTile(accountId, { depth: 2, fields })
-        const expected = ['id', ...fields].sort()
+        const expected = ['id', 'version', ...fields].sort()
         expect(fieldsOf(tile)).toEqual(expected)
         expect(fieldsOf(tile.branches?.[1] ?? {})).toEqual(expected)
         expect(fieldsOf(tile.branches?.[1]?.branches?.[1] ?? {})).toEqual(expected)
@@ -598,7 +587,8 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
           target: gone,
         })
         const shallow = yield* readTile(accountId, { depth: 0, fields: ['title'] })
-        expect(shallow.tile).toEqual({ _tag: 'Tile', id: ids[0], title: 'Ada' })
+        // The Root counted its edit and the Reference taking its slot -2.
+        expect(shallow.tile).toEqual({ _tag: 'Tile', id: ids[0], version: 3, title: 'Ada' })
       }),
   )
 
@@ -610,8 +600,9 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
       expect(read.tile).toEqual({
         _tag: 'Tile',
         id: ids[2],
+        version: 1,
         title: 'Grandchild',
-        branches: { 1: { _tag: 'Tile', id: ids[3], title: 'Great-grandchild' } },
+        branches: { 1: { _tag: 'Tile', id: ids[3], version: 1, title: 'Great-grandchild' } },
         leaves: {},
         context: {},
       })

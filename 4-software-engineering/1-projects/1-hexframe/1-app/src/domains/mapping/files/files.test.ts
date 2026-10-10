@@ -21,6 +21,7 @@ const row = (id: string, parentId: string | null, direction: number | null): Til
   title: id,
   preview: `${id}, in short.`,
   body: `# ${id}`,
+  version: 1,
   target: null,
   ...keepsNothing,
 })
@@ -51,8 +52,16 @@ const rows: ReadonlyArray<TileRow> = [
     ...row('games', 'root', 3),
     title: 'Games',
     name: '3-games',
-    // A key an export writes itself, which the Frontmatter schema refuses, never written from a row.
-    frontmatter: { owner: 'diplo', weight: 2, draft: false, constructor: 'kept', reference: 'x' },
+    version: 4,
+    // Keys an export writes itself, which the Frontmatter schema refuses, never written from a row.
+    frontmatter: {
+      owner: 'diplo',
+      weight: 2,
+      draft: false,
+      constructor: 'kept',
+      reference: 'x',
+      version: 9,
+    },
   },
   reference('to-leadership', 'games', -1, 'leadership'),
   reference('to-gone', 'games', -2, 'gone'),
@@ -115,9 +124,9 @@ describe('a System exported whole', () => {
     )
   })
 
-  it('opens each Tile’s file with its id, Title, parent and Preview, then its Body', () => {
+  it('opens each Tile’s file with its id, Title, parent, Preview and Version, then its Body', () => {
     expect(read(files, 'CLAUDE.md')).toMatchObject({
-      fields: { id: 'root', title: 'Ulysse', parent: '.', preview: 'root, in short.' },
+      fields: { id: 'root', title: 'Ulysse', parent: '.', preview: 'root, in short.', version: 1 },
       body: '# root',
     })
     const notes = read(files, '1-leadership/1-notes.md')
@@ -126,6 +135,7 @@ describe('a System exported whole', () => {
       title: 'Notes',
       parent: '1-leadership',
       preview: 'notes, in short.',
+      version: 1,
     })
     expect(read(files, '4-skills/.1-rules/SKILL.md').fields).toMatchObject({
       parent: '4-skills/.1-rules',
@@ -144,12 +154,14 @@ describe('a System exported whole', () => {
       'title',
       'parent',
       'preview',
+      'version',
       'owner',
       'weight',
       'draft',
       'constructor',
     ])
     expect(games.fields).toMatchObject({
+      version: 4,
       owner: 'diplo',
       weight: 2,
       draft: false,
@@ -185,12 +197,13 @@ describe('a System exported whole', () => {
 
   it('keeps every value on its key’s line, a Title holding a line break and `---` included', () => {
     const principles = read(files, '.1-line-one-id-injected/CLAUDE.md')
-    expect(principles.lines).toHaveLength(4)
+    expect(principles.lines).toHaveLength(5)
     expect(principles.fields).toEqual({
       id: 'principles',
       title: injected,
       parent: '.1-line-one-id-injected',
       preview: 'a\u2028---\u2029b',
+      version: 1,
     })
     expect(principles.body).toBe('# principles')
   })
