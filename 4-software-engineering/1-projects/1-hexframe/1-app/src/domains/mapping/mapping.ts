@@ -99,7 +99,7 @@ interface Named {
  * create or delete changed; and the other Tile a swap traded places with, or a Reference points at.
  * An import: the Tile it landed as, and how many Tiles came with it.
  */
-export type Summary =
+type Summary =
   | {
       readonly _tag: 'Change'
       readonly verb: OperationEvent['_tag']
