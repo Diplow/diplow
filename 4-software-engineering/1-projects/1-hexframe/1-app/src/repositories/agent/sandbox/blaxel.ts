@@ -39,18 +39,31 @@ function networkOf(hosts: ReadonlyArray<string>) {
   return { proxy: { allowedDomains: [...hosts] }, firewall: { rulesets: ['proxy'] } }
 }
 
+/** Whether two lists hold the same strings, in any order. */
+const sameSet = (one: ReadonlyArray<string> | undefined, other: ReadonlyArray<string>) => {
+  const now = new Set(one ?? [])
+  return now.size === new Set(other).size && other.every((item) => now.has(item))
+}
+
 /**
- * Whether a sandbox whose proxy allows `allowed` must have its network set again to reach `hosts`
- * alone: unless it allows exactly these hosts, in any order. A sandbox that allows none, made before
- * its network was set, must.
+ * Whether a sandbox with this network must have it set again to reach `hosts` alone: unless its
+ * proxy allows exactly these hosts and its firewall holds exactly the `proxy` ruleset, in any order.
+ * A sandbox made before its network was set, which has none, must.
  */
 export function networkDrifted(
-  allowed: ReadonlyArray<string> | undefined,
+  current:
+    | {
+        readonly proxy?: { readonly allowedDomains?: ReadonlyArray<string> }
+        readonly firewall?: { readonly rulesets?: ReadonlyArray<string> }
+      }
+    | undefined,
   hosts: ReadonlyArray<string>,
 ) {
-  const wanted = new Set(hosts)
-  const now = new Set(allowed ?? [])
-  return now.size !== wanted.size || [...wanted].some((host) => !now.has(host))
+  const wanted = networkOf(hosts)
+  return (
+    !sameSet(current?.proxy?.allowedDomains, wanted.proxy.allowedDomains) ||
+    !sameSet(current?.firewall?.rulesets, wanted.firewall.rulesets)
+  )
 }
 
 /** A string in single quotes, for a shell. */
@@ -181,7 +194,7 @@ function makeBlaxel({
             labels: { app: 'hexframe' },
           }),
         )
-        if (networkDrifted(sandbox.spec.network?.proxy?.allowedDomains, hosts)) {
+        if (networkDrifted(sandbox.spec.network, hosts)) {
           yield* blaxel(() => SandboxInstance.updateNetwork(name, { network }))
         }
         yield* chored(sandbox, `mkdir -p ${quoted(home)}`)
@@ -221,7 +234,12 @@ export const layer = Layer.effect(Sandbox)(
         apiKey: Config.Redacted('BL_API_KEY'),
       }),
     )
-    if (Option.isNone(credentials)) {
+    // An empty variable, as the tests set them, is no credential.
+    if (
+      Option.isNone(credentials) ||
+      credentials.value.workspace === '' ||
+      Redacted.value(credentials.value.apiKey) === ''
+    ) {
       return {
         ensure: () => Effect.die(new Error('Blaxel is not configured: BL_WORKSPACE, BL_API_KEY')),
       }

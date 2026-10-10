@@ -1,6 +1,6 @@
 // The sandbox on this machine, a fake of Blaxel's: each Account's sandbox a folder under a root, its
 // System folder made read-only by its modes, its processes children of this one, each in a process
-// group of its own so a stop reaches what it started. Every test runs on it, and `pnpm dev` without
+// group of its own so a kill reaches what it started. Every test runs on it, and `pnpm dev` without
 // `BL_API_KEY` (src/api/server/run.ts). No isolation: it is for the app's own commands, never a user's.
 import { type ChildProcess, spawn } from 'node:child_process'
 import { chmod, lstat, mkdir, readdir, rm, writeFile } from 'node:fs/promises'
@@ -51,14 +51,18 @@ async function written(path: string, content: string): Promise<void> {
   await writeFile(path, content)
 }
 
-/** Sends a signal to a child's process group, which holds what its shell started. */
-function signal(child: Child, name: NodeJS.Signals): void {
+/**
+ * Sends a signal to a child: a SIGINT to its own process, as Blaxel's layer sends it, so a command
+ * line that does not end in `exec` is caught here as there; a kill to its whole group, so nothing
+ * its shell started outlives it.
+ */
+function signal(child: Child, name: 'SIGINT' | 'SIGKILL'): void {
   const { pid } = child.process
   if (pid === undefined) return
   try {
-    process.kill(-pid, name)
+    process.kill(name === 'SIGKILL' ? -pid : pid, name)
   } catch {
-    // The group is gone already: it ended on its own meanwhile.
+    // It is gone already: it ended on its own meanwhile.
   }
 }
 
@@ -187,7 +191,14 @@ export function makeLocal({
         const found = boxes.get(name)
         if (found !== undefined) return found
         const home = join(root, name)
-        const box = mkdir(home, { recursive: true }).then(() => boxAt(name, home, grace))
+        const box = mkdir(home, { recursive: true }).then(
+          () => boxAt(name, home, grace),
+          (error: unknown) => {
+            // A box that could not be made is not kept: the next ensure tries again.
+            boxes.delete(name)
+            throw error
+          },
+        )
         boxes.set(name, box)
         return box
       }),

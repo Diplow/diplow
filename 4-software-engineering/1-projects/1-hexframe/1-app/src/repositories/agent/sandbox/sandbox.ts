@@ -29,22 +29,18 @@ export interface Run {
   readonly timeoutSeconds: number
 }
 
+/** The exit code of a process a SIGINT ended, as a shell reports it: 128 and the signal's number. */
+export const interrupted = 130
+
 /**
  * Where a process stands: running, or ended, by how it ended rather than by who ended it, so both
  * layers read it alike: well (`completed`), interrupted by a SIGINT (`stopped`), which a shell
  * reports as the exit code `interrupted`, killed (`killed`), past a stop's grace or its time, or
- * otherwise (`failed`).
+ * otherwise (`failed`); the two that ended by themselves with their exit code.
  */
-type RunState = 'running' | 'completed' | 'failed' | 'stopped' | 'killed'
-
-/** The exit code of a process a SIGINT ended, as a shell reports it: 128 and the signal's number. */
-export const interrupted = 130
-
-/** A process's state, and its exit code once it completed or failed. */
-export interface RunStatus {
-  readonly state: RunState
-  readonly exitCode?: number
-}
+export type RunStatus =
+  | { readonly state: 'running' | 'stopped' | 'killed' }
+  | { readonly state: 'completed' | 'failed'; readonly exitCode: number }
 
 /** One Account's sandbox, ensured. */
 export interface Box {

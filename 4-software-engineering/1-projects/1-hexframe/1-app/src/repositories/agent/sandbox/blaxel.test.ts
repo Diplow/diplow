@@ -55,16 +55,23 @@ describe('where a deployment’s sandboxes live', () => {
 
 describe('the layer without Blaxel’s credentials', () => {
   it.effect(
-    'builds, so the app runs, and ensuring a sandbox is a defect naming what is missing',
+    'builds, empty variables counting as none, and ensuring a sandbox is then a defect naming them',
     () =>
       Effect.gen(function* () {
-        const exit = yield* Sandbox.use((sandbox) => sandbox.ensure('account-1')).pipe(
-          Effect.provide(layer),
-          withEnv({}),
-          Effect.exit,
-        )
-        expect(Exit.hasDies(exit)).toBe(true)
-        expect(String(Exit.isFailure(exit) ? exit.cause : '')).toContain('BL_API_KEY')
+        const envs: ReadonlyArray<Record<string, string>> = [
+          {},
+          { BL_WORKSPACE: '', BL_API_KEY: '' },
+          { BL_WORKSPACE: 'w', BL_API_KEY: '' },
+        ]
+        for (const env of envs) {
+          const exit = yield* Sandbox.use((sandbox) => sandbox.ensure('account-1')).pipe(
+            Effect.provide(layer),
+            withEnv(env),
+            Effect.exit,
+          )
+          expect(Exit.hasDies(exit), JSON.stringify(env)).toBe(true)
+          expect(String(Exit.isFailure(exit) ? exit.cause : '')).toContain('BL_API_KEY')
+        }
       }),
   )
 })
@@ -72,13 +79,20 @@ describe('the layer without Blaxel’s credentials', () => {
 describe('a sandbox’s network', () => {
   const hosts = ['hexframe-abc123-team.vercel.app', 'hexframe.ai']
 
-  it('is set again unless its proxy allows exactly the deployment’s hosts, in any order', () => {
-    expect(networkDrifted([...hosts].reverse(), hosts)).toBe(false)
+  it('is set again unless its proxy allows exactly its hosts and its firewall holds the proxy', () => {
+    const network = (allowedDomains: ReadonlyArray<string>, rulesets = ['proxy']) => ({
+      proxy: { allowedDomains },
+      firewall: { rulesets },
+    })
+    expect(networkDrifted(network([...hosts].reverse()), hosts)).toBe(false)
     expect(networkDrifted(undefined, hosts)).toBe(true)
-    expect(networkDrifted([], hosts)).toBe(true)
-    expect(networkDrifted(['hexframe.ai'], hosts)).toBe(true)
-    expect(networkDrifted([...hosts, 'example.com'], hosts)).toBe(true)
-    expect(networkDrifted(['old-preview.vercel.app', 'hexframe.ai'], hosts)).toBe(true)
+    expect(networkDrifted({}, hosts)).toBe(true)
+    expect(networkDrifted(network([]), hosts)).toBe(true)
+    expect(networkDrifted(network(['hexframe.ai']), hosts)).toBe(true)
+    expect(networkDrifted(network([...hosts, 'example.com']), hosts)).toBe(true)
+    expect(networkDrifted(network(['old-preview.vercel.app', 'hexframe.ai']), hosts)).toBe(true)
+    expect(networkDrifted(network(hosts, []), hosts)).toBe(true)
+    expect(networkDrifted(network(hosts, ['default']), hosts)).toBe(true)
   })
 })
 
