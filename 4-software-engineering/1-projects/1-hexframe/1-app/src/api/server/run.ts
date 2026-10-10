@@ -14,13 +14,16 @@ import {
 } from '#/domains/iam/iam'
 import { layer as blaxelLayer, hasCredentials } from '#/repositories/agent/sandbox/blaxel'
 import { Sandbox } from '#/repositories/agent/sandbox/sandbox'
+import { Allowlist, layer as allowlistLayer } from '#/repositories/auth/allowlist'
 import { Auth, HttpExchange, layer as authLayer } from '#/repositories/auth/auth'
 import {
   Conversations,
   layer as conversationsLayer,
 } from '#/repositories/database/conversations/conversations'
+import { Turns, layer as turnsLayer } from '#/repositories/database/conversations/turns'
 import { type Database, layer as databaseLayer } from '#/repositories/database/database'
 import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
+import { TurnKeys, layer as turnKeysLayer } from '#/repositories/database/turn-keys/turn-keys'
 import { Zip, layer as zipLayer } from '#/repositories/zip/zip'
 
 import { recordedInConversation } from '../assistant/recording'
@@ -69,18 +72,23 @@ const sandbox =
     : blaxelLayer
 
 /**
- * What the domains use: Better Auth, the tiles repository, Zip, the conversations repository, the
- * sandbox, and the database itself.
+ * What the domains use: Better Auth, the allowlist and the Turn's Keys, the tiles repository, Zip, the
+ * conversations and Turns repositories, the sandbox, and the database itself.
  */
-type Repositories = Auth | Database | Tiles | Zip | Conversations | Sandbox
+type Repositories =
+  Auth | Allowlist | TurnKeys | Database | Tiles | Zip | Conversations | Turns | Sandbox
 
 /**
- * The repositories the domains use: Better Auth for IAM, the tiles repository and Zip for Mapping, the
- * conversations repository and the sandbox for Assistant; and the database itself, for the
- * transaction a program opens (`transactional`).
+ * The repositories the domains use: Better Auth, the allowlist and the Turn's Keys for IAM, the tiles
+ * repository and Zip for Mapping, the conversations and Turns repositories and the sandbox for
+ * Assistant; and the database itself, for the transaction a program opens (`transactional`).
  */
 const repositories: Layer.Layer<Repositories> = Layer.mergeAll(
-  Layer.provideMerge(Layer.merge(tilesLayer, conversationsLayer), auth),
+  Layer.provideMerge(
+    Layer.mergeAll(tilesLayer, conversationsLayer, turnsLayer, turnKeysLayer),
+    auth,
+  ),
+  allowlistLayer,
   zipLayer,
   sandbox,
 )

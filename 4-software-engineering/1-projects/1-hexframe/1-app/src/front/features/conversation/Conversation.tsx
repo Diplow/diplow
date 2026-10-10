@@ -1,6 +1,6 @@
 // The Conversation beside the canvas: its timeline a day at a time, newest at the bottom beside the
 // input, a button above the oldest day shown reading the day before, and the input the user writes to
-// the agent in.
+// the agent in, which says so when the Account may not use the Assistant.
 import { cn } from 'cn'
 import { MessagesSquare } from 'lucide-react'
 
@@ -26,12 +26,20 @@ interface ConversationProps {
   days: readonly Day[]
   /** A Message the user sent, trimmed and never empty. */
   onSend: (text: string) => void
+  /** The Account may not use the Assistant: its Messages are kept, and no agent answers them. */
+  unavailable?: boolean
   /** An earlier day holding an Entry, when there is one. */
   earlier?: Earlier | undefined
   className?: string
 }
 
-export function Conversation({ days, onSend, earlier, className }: ConversationProps) {
+export function Conversation({
+  days,
+  onSend,
+  unavailable = false,
+  earlier,
+  className,
+}: ConversationProps) {
   const now = new Date()
   const shown = days.filter((day) => day.entries.length > 0)
   return (
@@ -67,7 +75,7 @@ export function Conversation({ days, onSend, earlier, className }: ConversationP
           )}
         </div>
       </div>
-      <MessageInput onSend={onSend} />
+      <MessageInput onSend={onSend} unavailable={unavailable} />
     </section>
   )
 }
@@ -103,7 +111,13 @@ function dayLabel(day: Day, now: Date): string {
   }).format(day.date)
 }
 
-function MessageInput({ onSend }: { onSend: (text: string) => void }) {
+function MessageInput({
+  onSend,
+  unavailable,
+}: {
+  onSend: (text: string) => void
+  unavailable: boolean
+}) {
   const form = useAppForm({
     defaultValues: { message: '' },
     onSubmit: ({ value, formApi }) => {
@@ -130,7 +144,12 @@ function MessageInput({ onSend }: { onSend: (text: string) => void }) {
           />
         )}
       </form.AppField>
-      <div className="flex justify-end">
+      <div className="flex items-center justify-end gap-3">
+        {unavailable && (
+          <p className="mr-auto text-sm text-muted-foreground">
+            {m.conversation_assistant_unavailable()}
+          </p>
+        )}
         <form.AppForm>
           <form.SubmitButton>{m.conversation_send()}</form.SubmitButton>
         </form.AppForm>

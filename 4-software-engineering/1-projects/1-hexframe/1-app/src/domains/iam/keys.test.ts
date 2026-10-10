@@ -1,7 +1,8 @@
 import { expect, layer } from '@effect/vitest'
-import { Effect, Option } from 'effect'
+import { Effect, Layer, Option } from 'effect'
 
 import { browser, keyClient, TestAuth } from '#/repositories/auth/testing'
+import { layer as turnKeysLayer } from '#/repositories/database/turn-keys/turn-keys'
 
 import {
   CurrentKey,
@@ -54,7 +55,7 @@ const asKey =
       ),
     )
 
-layer(TestAuth)("an Account's Keys", (it) => {
+layer(Layer.provideMerge(turnKeysLayer, TestAuth))("an Account's Keys", (it) => {
   it.effect('issues a Key whose secret is shown once, and lists it without it', () =>
     Effect.gen(function* () {
       const { asSession } = yield* someone
@@ -88,7 +89,7 @@ layer(TestAuth)("an Account's Keys", (it) => {
       })
       expect(Option.getOrThrow(yield* keyClient(secret).request(keyProven))).toEqual({
         account,
-        keyId: key.id,
+        by: { _tag: 'Key', keyId: key.id },
       })
       const [used] = yield* asSession(keys)
       expect(used?.lastUsedAt).toBeInstanceOf(Date)

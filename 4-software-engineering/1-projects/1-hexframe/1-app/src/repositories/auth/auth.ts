@@ -98,8 +98,11 @@ export class Auth extends Context.Service<
     readonly apiKeys: Effect.Effect<ReadonlyArray<AuthApiKey>, never, HttpExchange>
     /** Deletes one of the API keys of the user the request's session cookie proves. */
     readonly deleteApiKey: (id: string) => Effect.Effect<void, AuthRefused, HttpExchange>
-    /** Whose API key the request's `Authorization: Bearer` header carries, if it is a valid one. */
-    readonly bearer: Effect.Effect<Option.Option<AuthBearer>, never, HttpExchange>
+    /**
+     * Whose API key a secret is, if it is a valid one: what a request's `Authorization: Bearer`
+     * header carries, read by `bearerOf`.
+     */
+    readonly apiKeyOwner: (secret: string) => Effect.Effect<Option.Option<AuthBearer>>
     /**
      * The name of one of a user's API keys, by its id, read outside any request: none for a key the
      * user no longer has, or never had.
@@ -197,8 +200,11 @@ const decodeNamed = Schema.decodeUnknownEffect(
 /** An API key's secret: the `hf_` prefix, then 64 letters. Longer is not one, and is not hashed. */
 const longestSecret = 128
 
-/** The secret an `Authorization: Bearer` header carries, if it carries one; never a cookie's. */
-function bearerOf(headers: Headers): Option.Option<string> {
+/**
+ * The secret an `Authorization: Bearer` header carries, if it carries one; never a cookie's. IAM reads
+ * it, then asks Better Auth whose API key it is, or the turn-keys repository whose Turn's Key.
+ */
+export function bearerOf(headers: Headers): Option.Option<string> {
   const [scheme = '', secret = '', ...rest] = (headers.get('authorization') ?? '').split(' ')
   const carried = scheme.toLowerCase() === 'bearer' && rest.length === 0
   return carried && secret !== '' && secret.length <= longestSecret
@@ -381,27 +387,26 @@ export const make = (secret: Redacted.Redacted, baseURL: BaseURL) =>
         forSession((headers) => auth.api.deleteApiKey({ body: { keyId: id }, headers })),
       )
 
-    /** Verifies the Bearer's API key, then reads its user: the key's row names the user, not more. */
-    const bearer = Effect.gen(function* () {
-      const secret = bearerOf((yield* HttpExchange).headers)
-      if (Option.isNone(secret)) return Option.none<AuthBearer>()
-      const verified = yield* Effect.promise(() =>
-        auth.api.verifyApiKey({ body: { key: secret.value } }),
-      ).pipe(Effect.flatMap((answer) => Effect.orDie(decodeVerified(answer))))
-      if (!verified.valid || verified.key === null) {
-        // The plugin answers a failure to read its table as it answers a wrong key, `INVALID_API_KEY`
-        // both. Reading the table once more tells them apart: an outage dies as the defect it is.
-        yield* Effect.tryPromise(() =>
-          database.select({ id: apikey.id }).from(apikey).limit(1),
-        ).pipe(Effect.orDie)
-        return Option.none<AuthBearer>()
-      }
-      const { id, referenceId } = verified.key
-      const context = yield* Effect.promise(() => auth.$context)
-      const found = yield* Effect.promise(() => context.internalAdapter.findUserById(referenceId))
-      const owner = yield* Effect.orDie(decodeUser(found))
-      return Option.map(Option.fromNullishOr(owner), (user) => ({ user, apiKeyId: id }))
-    })
+    /** Verifies the API key, then reads its user: the key's row names the user, not more. */
+    const apiKeyOwner = (secret: string) =>
+      Effect.gen(function* () {
+        const verified = yield* Effect.promise(() =>
+          auth.api.verifyApiKey({ body: { key: secret } }),
+        ).pipe(Effect.flatMap((answer) => Effect.orDie(decodeVerified(answer))))
+        if (!verified.valid || verified.key === null) {
+          // The plugin answers a failure to read its table as it answers a wrong key, `INVALID_API_KEY`
+          // both. Reading the table once more tells them apart: an outage dies as the defect it is.
+          yield* Effect.tryPromise(() =>
+            database.select({ id: apikey.id }).from(apikey).limit(1),
+          ).pipe(Effect.orDie)
+          return Option.none<AuthBearer>()
+        }
+        const { id, referenceId } = verified.key
+        const context = yield* Effect.promise(() => auth.$context)
+        const found = yield* Effect.promise(() => context.internalAdapter.findUserById(referenceId))
+        const owner = yield* Effect.orDie(decodeUser(found))
+        return Option.map(Option.fromNullishOr(owner), (user) => ({ user, apiKeyId: id }))
+      })
 
     /** Reads the key's row through Better Auth's own adapter, by its id and its user's. */
     const apiKeyName = (userId: string, keyId: string) =>
@@ -433,7 +438,7 @@ export const make = (secret: Redacted.Redacted, baseURL: BaseURL) =>
       createApiKey,
       apiKeys,
       deleteApiKey,
-      bearer,
+      apiKeyOwner,
       apiKeyName,
     })
   })

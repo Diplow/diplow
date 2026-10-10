@@ -6,6 +6,7 @@ import { browser, TestAuth } from '#/repositories/auth/testing'
 import {
   CurrentKey,
   CurrentSession,
+  type KeyProof,
   proven,
   sessionOnly,
   signIn,
@@ -120,7 +121,7 @@ layer(TestAuth)('IAM on Better Auth', (it) => {
 describe('signedIn and sessionOnly', () => {
   const account = { id: 'a-1', email: 'ada@example.com' }
   const session = { account, expiresAt: new Date() }
-  const key = { account, keyId: 'k-1' }
+  const key: KeyProof = { account, by: { _tag: 'Key', keyId: 'k-1' } }
 
   /** Runs `program` on a request proven by a Session, a Key, both or neither. */
   const on = <A, E>(
@@ -142,7 +143,10 @@ describe('signedIn and sessionOnly', () => {
   it.effect('signedIn takes the Session when a Session and a Key both prove the request', () =>
     Effect.gen(function* () {
       const other = { id: 'a-2', email: 'grace@example.com' }
-      const both = yield* on(signedIn, { session, key: { account: other, keyId: 'k-2' } })
+      const both = yield* on(signedIn, {
+        session,
+        key: { account: other, by: { _tag: 'Key', keyId: 'k-2' } },
+      })
       expect(both).toEqual({ account, by: { _tag: 'Session' } })
     }),
   )

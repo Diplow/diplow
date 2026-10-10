@@ -33,6 +33,8 @@ const table: readonly Entry[] = [
   { tag: 'SessionRequired', message: m.error_iam_session_required },
   { tag: 'KeyNameInvalid', message: m.error_iam_key_name_invalid },
   { tag: 'KeyNotFound', message: m.error_iam_key_not_found },
+  { tag: 'EntitlementMissing', message: m.error_iam_entitlement_missing },
+  { tag: 'TurnRunning', message: m.error_assistant_turn_running },
   { tag: 'TileNotFound', message: m.error_mapping_tile_not_found },
   { tag: 'TitleMissing', message: m.error_mapping_title_missing },
   { tag: 'PreviewTooLong', message: m.error_mapping_preview_too_long },

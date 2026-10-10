@@ -1,7 +1,8 @@
-import { Exit, Option } from 'effect'
+import { Exit, Option, Redacted } from 'effect'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { signUp } from '#/domains/iam/iam'
+import { issueTurnKey, signUp, signedIn } from '#/domains/iam/iam'
+import { transactional } from '#/repositories/database/database'
 
 import { requestContext, sameOriginOnly } from './middleware'
 import { run, type StartContext } from './run'
@@ -86,6 +87,33 @@ describe('the request context middleware', () => {
         Option.some(expect.objectContaining({ account: account.ok ? account.value : undefined })),
       ),
     )
+  })
+})
+
+describe("a Turn's Key at a server function", () => {
+  it('proves nothing: the request carries no Key, and nobody is signed in', async () => {
+    const signingUp = await passedOn()
+    await run(signingUp, signUp({ email: 'grace@example.com', password: 'lovelace1815' }))
+    const cookies = response.getSetCookie()
+    request = new Request('http://localhost/_serverFn', {
+      headers: { cookie: cookies.map((cookie) => cookie.split(';')[0]).join('; ') },
+    })
+    const turn = { conversationId: 'conversation-1', turnId: 'turn-1' }
+    const issued = await run(
+      await passedOn(),
+      transactional(issueTurnKey(turn, new Date(Date.now() + 60_000))),
+    )
+    if (!issued.ok) throw new Error('A Session issues a Turn’s Key')
+
+    request = new Request('http://localhost/_serverFn', {
+      headers: { authorization: `Bearer ${Redacted.value(issued.value.secret)}` },
+    })
+    const context = await passedOn()
+    expect(context.key).toEqual(Exit.succeed(Option.none()))
+    expect(await run(context, signedIn)).toMatchObject({
+      ok: false,
+      failure: { _tag: 'SignedOut' },
+    })
   })
 })
 

@@ -6,23 +6,30 @@
 // it Mapping's summary of each change, and Assistant records it as it came, with who acted. Every
 // write runs in the transaction the API layer opens around it: its type requires one. And the
 // Account's sandbox, where a Turn will run (src/repositories/agent/sandbox/), holding the System as
-// the files Mapping writes it as, which Assistant keeps as they came.
+// the files Mapping writes it as, which Assistant keeps as they came. And the Turns, each a run of the
+// agent answering a Message, one at a time per Conversation (src/repositories/database/conversations/).
 import { Clock, Effect, Schema } from 'effect'
 
 import { Sandbox, type SandboxFile } from '#/repositories/agent/sandbox/sandbox'
 import { Conversations } from '#/repositories/database/conversations/conversations'
+import { type TurnRow, Turns } from '#/repositories/database/conversations/turns'
 
 import {
   type Actor,
   type Day,
   dayAt,
+  deadlineOf,
   type Entry,
   EntryContent,
   type Navigation,
   spanOf,
   type Summarized,
+  type Turn,
+  TurnEnd,
   within,
 } from './entities'
+import { TurnRunning } from './errors'
+import { settings } from './settings'
 
 const decoded = Schema.decodeUnknownEffect(EntryContent)
 
@@ -103,3 +110,56 @@ export const writeSystem = (accountId: string, files: ReadonlyArray<SandboxFile>
     Sandbox.use((sandbox) => sandbox.ensure(accountId)),
     (box) => box.replaceSystem(files),
   )
+
+const decodedEnd = Schema.decodeUnknownEffect(TurnEnd)
+
+/** A Turn as its row keeps it. One whose end Assistant cannot read back is a defect: it wrote it. */
+const turnOf = (row: TurnRow) =>
+  Effect.gen(function* () {
+    const { id, conversationId, messageId, location, startedAt, spent, endedAt, end } = row
+    const turn: Turn = { id, conversationId, message: messageId, location, startedAt, spent }
+    if (endedAt === null) return turn
+    const how = yield* Effect.orDie(decodedEnd(end))
+    return { ...turn, ended: { at: endedAt, how } }
+  })
+
+/** The Turn running in the Account's Conversation, if one does. */
+export const runningTurn = (accountId: string) =>
+  Effect.flatMap(
+    Turns.use((turns) => turns.running(accountId)),
+    (row) => (row === undefined ? Effect.succeed(undefined) : turnOf(row)),
+  )
+
+/** The latest a Turn may run until, by the Assistant's settings: what its Key proves it for. */
+export const deadline = (turn: Turn) => deadlineOf(turn, settings.turn.longest)
+
+/**
+ * Starts a Turn answering one of the Account's Messages, by its Entry's id, in the Tile `location`
+ * names, and answers it; `TurnRunning` while another runs in its Conversation, one at a time. One
+ * still running past its deadline, which nothing ended, ends first, by its time, so a lost Turn never
+ * holds its Conversation.
+ */
+export const startTurn = (accountId: string, start: { message: string; location: string }) =>
+  Effect.gen(function* () {
+    const startedAt = new Date(yield* Clock.currentTimeMillis)
+    const running = yield* runningTurn(accountId)
+    if (running !== undefined && deadline(running) <= startedAt) {
+      yield* endTurn(accountId, running.id, 'time')
+    }
+    const row = yield* Turns.use((turns) =>
+      turns.start(accountId, { messageId: start.message, location: start.location, startedAt }),
+    )
+    if (row === undefined) return yield* new TurnRunning()
+    return yield* turnOf(row)
+  })
+
+/**
+ * Ends one of the Account's Turns, saying how, and answers it; none for one that already ended, or
+ * that is not the Account's. Nothing it did is rolled back.
+ */
+export const endTurn = (accountId: string, turnId: string, how: TurnEnd) =>
+  Effect.gen(function* () {
+    const at = new Date(yield* Clock.currentTimeMillis)
+    const row = yield* Turns.use((turns) => turns.end(accountId, turnId, { end: how, at }))
+    return row === undefined ? undefined : yield* turnOf(row)
+  })

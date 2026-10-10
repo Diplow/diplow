@@ -121,6 +121,7 @@ const named = (title: string) => (title === '' ? m.system_untitled() : title)
 /** Who did it, as a sentence starts: none for the user, who reads "You" in each message. */
 function actorOf(actor: Actor): string | undefined {
   if (actor._tag === 'You') return undefined
+  if (actor._tag === 'Assistant') return m.conversation_assistant()
   return actor.name === undefined
     ? m.conversation_revoked_key()
     : m.conversation_key({ name: actor.name })

@@ -49,6 +49,14 @@ export const postMessage = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(NewMessage))
   .handler(({ data, context }) => run(context, Assistant.postMessage(data)))
 
+/**
+ * Whether the Account may use the Assistant, its `assistant` Entitlement: the composer says so when
+ * it may not.
+ */
+export const assistantAvailable = createServerFn({ method: 'GET' })
+  .validator(Schema.toStandardSchemaV1(Schema.Undefined))
+  .handler(({ context }) => run(context, Assistant.assistantAvailable))
+
 /** Records a merged navigation, sent once something else enters the timeline or the page hides. */
 export const recordNavigation = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(MergedNavigation))

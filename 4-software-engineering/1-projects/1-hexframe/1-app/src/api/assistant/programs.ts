@@ -1,13 +1,15 @@
 // The programs behind Assistant's server functions (./assistant.ts): each runs for the Account the
 // request's Session proves, or fails with IAM's `SessionRequired` or `SignedOut`, and a write in the
-// transaction it opens. They sit in a module of their own because they reach the domains and the
+// transaction it opens. And a Turn's start and end, which no server function offers: the secret of
+// the Key a Turn starts with never reaches a browser. They sit in a module of their own because they reach the domains and the
 // database: the client imports the server functions, and only their handlers import this module,
 // which Start strips from the client.
 import { Effect } from 'effect'
 
 import * as Assistant from '#/domains/assistant/assistant'
-import { visitedTiles } from '#/domains/assistant/entities'
+import { type TurnEnd, visitedTiles } from '#/domains/assistant/entities'
 import * as Iam from '#/domains/iam/iam'
+import { TileNotFound } from '#/domains/mapping/errors'
 import * as Mapping from '#/domains/mapping/mapping'
 import { HttpExchange } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
@@ -89,3 +91,50 @@ export const systemInSandbox = (accountId: string) =>
     yield* Assistant.writeSystem(accountId, files)
     return places
   })
+
+/**
+ * Whether the Account the request's Session proves may use the Assistant: its `assistant`
+ * Entitlement, which the composer tells the user of when it is missing.
+ */
+export const assistantAvailable = Effect.flatMap(Iam.sessionOnly, ({ account }) =>
+  Iam.entitled(account, 'assistant'),
+)
+
+/**
+ * Starts a Turn answering one of the Account's Messages, by its Entry's id, in the Tile `location`
+ * names, and issues its Key, in one transaction: from a Session only, so neither a Key nor a Turn
+ * starts one; for an Account with the `assistant` Entitlement, else `EntitlementMissing`; in a Tile of
+ * the Account's own System, else Mapping's `TileNotFound`; and while no other runs in its
+ * Conversation, else `TurnRunning`. Answers the Turn and its Key, whose secret goes
+ * to the sandbox's processes alone, and which proves the Turn until its maximum length has passed. No
+ * server function's yet: the code that runs the Turn calls it, and the secret never reaches a browser.
+ */
+export const startTurn = (start: { message: string; location: string }) =>
+  Effect.gen(function* () {
+    const { account } = yield* Iam.sessionOnly
+    yield* Iam.entitledOnly(account, 'assistant')
+    const titled = yield* Mapping.titles(account.id, [start.location])
+    if (!(start.location in titled)) return yield* new TileNotFound()
+    return yield* transactional(
+      Effect.gen(function* () {
+        const turn = yield* Assistant.startTurn(account.id, start)
+        const binding = { conversationId: turn.conversationId, turnId: turn.id }
+        const key = yield* Iam.issueTurnKey(binding, Assistant.deadline(turn))
+        return { turn, key }
+      }),
+    )
+  })
+
+/**
+ * Ends one of the Account's Turns, saying how, and revokes its Key, in one transaction: needing no
+ * Session, since the Turn ends wherever it runs. Answers the Turn, none for one that had already
+ * ended, whose Key is revoked all the same.
+ */
+export const endTurn = (accountId: string, turnId: string, how: TurnEnd) =>
+  transactional(
+    Effect.gen(function* () {
+      const turn = yield* Assistant.endTurn(accountId, turnId, how)
+      yield* Iam.revokeTurnKey(accountId, turnId)
+      return turn
+    }),
+  )

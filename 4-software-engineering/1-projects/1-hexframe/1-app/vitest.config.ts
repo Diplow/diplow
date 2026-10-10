@@ -11,7 +11,13 @@ export default defineConfig({
     include: ['src/**/*.test.ts', 'scripts/**/*.test.ts'],
     // The server function runtime runs on an in-memory PGlite when DATABASE_URL is empty, and on the
     // sandbox of this machine when BL_API_KEY is (src/api/server/run.ts): a test never reaches a real
-    // database nor Blaxel, whatever the shell exports.
-    env: { DATABASE_URL: '', BL_API_KEY: '', BL_WORKSPACE: '' },
+    // database nor Blaxel, whatever the shell exports. One Account is entitled to the Assistant, by
+    // its email, whatever the shell lists (src/repositories/auth/allowlist.ts).
+    env: {
+      DATABASE_URL: '',
+      BL_API_KEY: '',
+      BL_WORKSPACE: '',
+      ASSISTANT_ACCOUNTS: 'entitled@example.com',
+    },
   },
 })

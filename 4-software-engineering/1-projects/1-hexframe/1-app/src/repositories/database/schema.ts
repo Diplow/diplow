@@ -235,3 +235,56 @@ export const conversationEntry = pgTable(
     index('conversation_entry_seq_idx').on(table.conversationId, table.seq),
   ],
 )
+
+/**
+ * A Turn of the agent, answering one Message of a Conversation (`message_id`, its Entry), started in
+ * the Tile `location` names, which has no key to `tile`: Assistant ignores Mapping. `spent` is what it
+ * spent on the model, in millionths of a dollar. `ended_at` and `end` say when and how it ended, both
+ * null while it runs, and `turn_running_idx` lets one run at most per Conversation. Deleting a
+ * Conversation, or the Message, deletes its Turns.
+ */
+export const turn = pgTable(
+  'turn',
+  {
+    id: text('id').primaryKey(),
+    conversationId: text('conversation_id')
+      .notNull()
+      .references(() => conversation.id, { onDelete: 'cascade' }),
+    messageId: text('message_id')
+      .notNull()
+      .references(() => conversationEntry.id, { onDelete: 'cascade' }),
+    location: text('location').notNull(),
+    startedAt: timestamp('started_at', { withTimezone: true }).notNull(),
+    spent: integer('spent').default(0).notNull(),
+    endedAt: timestamp('ended_at', { withTimezone: true }),
+    end: text('end'),
+  },
+  (table) => [
+    uniqueIndex('turn_running_idx').on(table.conversationId).where(isNull(table.endedAt)),
+    check('turn_end_check', eq(isNull(table.endedAt), isNull(table.end))),
+  ],
+)
+
+// IAM's own (./turn-keys/turn-keys.ts): a Turn's Key, which Better Auth does not keep.
+
+/**
+ * A Turn's Key, the one credential a Turn's sandbox holds: `hash` is its secret's SHA-256, never the
+ * secret. Bound to its Account, which deleting deletes it with, and to the Conversation and the Turn
+ * it was issued for, which have no key here: IAM ignores Assistant. It proves nothing past
+ * `expires_at`, and revoking it deletes it.
+ */
+export const turnKey = pgTable(
+  'turn_key',
+  {
+    id: text('id').primaryKey(),
+    accountId: text('account_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    conversationId: text('conversation_id').notNull(),
+    turnId: text('turn_id').notNull().unique(),
+    hash: text('hash').notNull().unique(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [index('turn_key_accountId_idx').on(table.accountId)],
+)

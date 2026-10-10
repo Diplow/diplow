@@ -121,7 +121,15 @@ export function conversationFixture(now: Date): { entries: Entry[]; titles: Titl
       gestures: 1,
     },
     { _tag: 'Change', id: 'c6', at: today(4), verb: 'TileDeleted', tile: drafts, actor: you },
-    said('m3', today(2), 'user', 'What would you add to Games?'),
+    said('m3', today(3), 'user', 'What would you add to Games?'),
+    {
+      _tag: 'Change',
+      id: 'c7',
+      at: today(2),
+      verb: 'TileEdited',
+      tile: tile('games'),
+      actor: { _tag: 'Assistant' },
+    },
     said(
       'm4',
       today(1),

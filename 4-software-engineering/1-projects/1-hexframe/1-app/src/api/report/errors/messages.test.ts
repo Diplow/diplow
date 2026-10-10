@@ -2,10 +2,12 @@ import { afterEach, describe, expect, it } from 'vitest'
 
 import { overwriteGetLocale } from '#/paraglide/runtime'
 
+import { TurnRunning } from '#/domains/assistant/errors'
 import {
   CredentialsRejected,
   EmailMalformed,
   EmailTaken,
+  EntitlementMissing,
   KeyNameInvalid,
   KeyNotFound,
   PasswordLengthInvalid,
@@ -100,6 +102,28 @@ describe('the message table', () => {
   ])("words IAM's %s in French too", (failure, sentence) => {
     overwriteGetLocale(() => 'fr')
     expect(messageFor(failure, 'signIn')).toBe(sentence)
+  })
+
+  it.each([
+    [
+      'en',
+      new EntitlementMissing({ entitlement: 'assistant' }),
+      "The assistant isn't available on this account.",
+    ],
+    [
+      'fr',
+      new EntitlementMissing({ entitlement: 'assistant' }),
+      'L’assistant n’est pas disponible sur ce compte.',
+    ],
+    [
+      'en',
+      new TurnRunning(),
+      'The assistant is still answering. Wait for it to finish, or stop it.',
+    ],
+    ['fr', new TurnRunning(), 'L’assistant répond encore. Attendez qu’il ait fini, ou arrêtez-le.'],
+  ] as const)("words the Assistant's refusals in %s", (locale, failure, sentence) => {
+    overwriteGetLocale(() => locale)
+    expect(messageFor(failure)).toBe(sentence)
   })
 
   it("speaks the page's language", () => {

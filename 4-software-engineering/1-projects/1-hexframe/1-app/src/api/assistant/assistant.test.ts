@@ -31,7 +31,7 @@ type Program = Effect.Effect<unknown, Failure, Services>
 function request(signedIn: boolean | 'by key' = true) {
   const account = { id: crypto.randomUUID(), email: 'someone@example.com' }
   const session: Session = { account, expiresAt: new Date(Date.now() + 60_000) }
-  const key: KeyProof = { account, keyId: 'key-1' }
+  const key: KeyProof = { account, by: { _tag: 'Key', keyId: 'key-1' } }
   const pending: Array<Promise<unknown>> = []
   const context: StartContext = {
     requestId: 'req-assistant',
