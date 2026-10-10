@@ -1,0 +1,59 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/anthropic/usage.ts
+  s_c19b57f63ed6ef::t_9077b5c26437a8 1-169
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/anthropic/fake.ts
+  s_c19b57f63ed6ef::t_9b3d4912f5056d 80-81
+  s_c19b57f63ed6ef::t_2cae2886920a47 1-79,82-95
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/anthropic/anthropic.ts
+  s_c19b57f63ed6ef::t_40f88a95d9a17f 102-109
+  s_c19b57f63ed6ef::t_51a5bb76c204d6 1-101,110
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/conversations/turns.ts
+  s_c19b57f63ed6ef::t_148b902314b179 172,178
+  s_c19b57f63ed6ef::t_95e7842db28a1a 5,53-71,158-171,173-177,179-203
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/spending/limits.ts
+  s_c19b57f63ed6ef::t_394ca48976957a 1-48
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/mcp.ts
+  s_c19b57f63ed6ef::t_d7795c5abff80c 20,134
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/anthropic/anthropic.test.ts
+  s_c19b57f63ed6ef::t_4f9acd8a15c844 2-19,22,24,26,28-31,33-34,36-37,39-42,46-48,50-53,73-74,91,97,122,159,161,181,204,228
+  s_c19b57f63ed6ef::t_7ae5841b0ee12a 1,20-21,23,25,27,32,35,38,43-45,49,54-57,59,69-72,75-90,92-96,98-112,116,119-121,123-158,160,162-180,182-203,205-227
+  s_c19b57f63ed6ef::t_8a09283251e62d 58,60-68,113-115,117-118
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/spending/call.ts
+  s_c19b57f63ed6ef::t_981ceb8bd47a9f 1-144
+4-software-engineering/1-projects/1-hexframe/1-app/src/routeTree.gen.ts
+  s_c19b57f63ed6ef::t_c2333bcdceff37 24,86-90,105,120,136,153,168,183,194,283-289,321
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/settings.ts
+  s_c19b57f63ed6ef::t_65987bd0a39075 5-15,20-78
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/assistant/anthropic.$.ts
+  s_c19b57f63ed6ef::t_c2333bcdceff37 1-18
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/programs.ts
+  s_c19b57f63ed6ef::t_c3d2f9633763d3 144-154,167-169
+  s_c19b57f63ed6ef::t_a53a5b81984561 18,142-143,155-166,170-175
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/iam.ts
+  s_c19b57f63ed6ef::t_24cb7f7d6d8ecb 228-246
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/assistant.ts
+  s_c19b57f63ed6ef::t_bab0cac7eb37b0 11-13,15,17,37-38,172-205,207-208,210,212-221
+  s_c19b57f63ed6ef::t_c798418ebf6899 206,209,211
+  s_c19b57f63ed6ef::t_82602a6a477b61 222
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/run.ts
+  s_c19b57f63ed6ef::t_d7795c5abff80c 15-19,79-90,93,96-105,109-110,120,142-145,151,190-204,207-210,289-290
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/proxy/proxy.ts
+  s_c19b57f63ed6ef::t_96250041433a82 1-6,9-13,18-93,95-116
+  s_c19b57f63ed6ef::t_ee5616cd42cfa2 7-8
+  s_c19b57f63ed6ef::t_cc6e99e35ebf00 14-17,94
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c37c5598b4c6175a70f06f14b3bb421f9914ace6",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
