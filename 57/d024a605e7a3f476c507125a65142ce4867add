@@ -1,0 +1,63 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/decider/decide.test.ts
+  s_c19b57f63ed6ef::t_ff4899636c0c9e 307,310
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/decider/decide.ts
+  s_c19b57f63ed6ef::t_ec3e0062000ac4 189
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261010165736_conversation/migration.sql
+  s_c19b57f63ed6ef::t_f22d8ebcd63076 1-16
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/keys.test.ts
+  s_c19b57f63ed6ef::t_050e9fbe5f834c 10,162-170
+  s_c19b57f63ed6ef::t_6e6b27e9c5e648 171-173
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/entry.ts
+  s_c19b57f63ed6ef::t_aaebd82857800c 1-64
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/navigation.ts
+  s_c19b57f63ed6ef::t_9eafbef8bdbea5 1-56
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/index.ts
+  s_c19b57f63ed6ef::t_19e79f15e0184c 1-6
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/navigation.test.ts
+  s_c19b57f63ed6ef::t_aeeab217337009 1-69
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/day.test.ts
+  s_c19b57f63ed6ef::t_9c1bdb340fd1e3 1-76
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261010165736_conversation/snapshot.json
+  s_c19b57f63ed6ef::t_f22d8ebcd63076 1-1591
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/auth.ts
+  s_c19b57f63ed6ef::t_77c9c6ca13377c 103-107,192-194,404-420,435
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_c19b57f63ed6ef::t_ccf52032336041 77-83,87-150
+  s_c19b57f63ed6ef::t_9d947e80923825 84-86
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/iam.ts
+  s_c19b57f63ed6ef::t_f9bc065d5310af 196-202
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/decider/evolve.test.ts
+  s_c19b57f63ed6ef::t_ec3e0062000ac4 123,145,155-156,168
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/assistant.test.ts
+  s_c19b57f63ed6ef::t_5b25c46eb1479a 1-89,95-100,102-129
+  s_c19b57f63ed6ef::t_2ed32467c9fddf 90-94,101
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/conversations/conversations.ts
+  s_c19b57f63ed6ef::t_70d3646e24ba80 1-58,70-72,78-94
+  s_c19b57f63ed6ef::t_876ab0eaff8f88 59-69,73-77
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/day.ts
+  s_c19b57f63ed6ef::t_922d84d7bb38ba 1-38
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/schema.ts
+  s_c19b57f63ed6ef::t_728db66d77a145 3,203-232
+  s_c19b57f63ed6ef::t_be89a4cf0b619c 233
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/assistant.ts
+  s_c19b57f63ed6ef::t_abbc2d28d843d2 1-44,47
+  s_c19b57f63ed6ef::t_b14392ef973af3 45-46
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/events.ts
+  s_c19b57f63ed6ef::t_ec3e0062000ac4 55-58,61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "57d024a605e7a3f476c507125a65142ce4867add",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
