@@ -1,0 +1,163 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/decider/evolve.ts
+  s_c19b57f63ed6ef::t_163f4f37412f2f 60-61
+  s_c19b57f63ed6ef::t_3ab1a7b8a91324 3-7,10-17,40-42,45-47,57,71-72,80,83-88,97-99
+  s_c19b57f63ed6ef::t_d15d29fede5490 54-56
+  s_c19b57f63ed6ef::t_ac4d97c15281be 43-44,48-53,96,102
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/report/errors/messages.ts
+  s_c19b57f63ed6ef::t_4104bc8b728a79 42
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useCenteredTileState.ts
+  s_c19b57f63ed6ef::t_93870755222cdb 7-12,36-40,46,53,59
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/system.ts
+  s_c19b57f63ed6ef::t_9eb77c68596480 19,23-25,29,91-97,264-267,271,336-341
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/help/help.test.ts
+  s_c19b57f63ed6ef::t_8a6adfb5a2da36 191-194,197,201-214,218-221,225-228,232
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/writes.test.ts
+  s_c19b57f63ed6ef::t_c4628f6c5086c1 25,46,57,59-71,73-89,94,97-98,106,116,122-123,148-150,152-175,187-195,207-209,228,249
+  s_c19b57f63ed6ef::t_d808a01e22041f 126,128
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/decider/agreement.test.ts
+  s_c19b57f63ed6ef::t_85df633bfc5595 247-250
+  s_c19b57f63ed6ef::t_e9fccb4ce1830c 9-10,23,82-93,101,114,161-167,176-183,192-197,206,214-219,225-228,256-257
+  s_c19b57f63ed6ef::t_bd205155d4ecca 26-28,67-81,236-246,251-255
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/operation.ts
+  s_c19b57f63ed6ef::t_1caa3151a4582c 7,32-35,38,47,52,55,57,63,66-69,72,77,80
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/tile.ts
+  s_c19b57f63ed6ef::t_9eb77c68596480 69-76
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/landing/landing.test.ts
+  s_c19b57f63ed6ef::t_8a6adfb5a2da36 169-172,182-185
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.test.ts
+  s_c19b57f63ed6ef::t_5e6cbcdf52fae2 180
+  s_c19b57f63ed6ef::t_6155ded0e16d5b 75,83,91,220-223,245,267,275,454-455,529,531,535,569,589
+  s_c19b57f63ed6ef::t_fdaa2fa6e98f7f 100-105,224-225,266,415
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.ts
+  s_c19b57f63ed6ef::t_b93f65baeafe33 16,75-93,108-109
+  s_c19b57f63ed6ef::t_0bd435126c7593 18,110
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/TileActions.tsx
+  s_c19b57f63ed6ef::t_b93f65baeafe33 96,404
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.test.ts
+  s_c19b57f63ed6ef::t_d808a01e22041f 223,225
+  s_c19b57f63ed6ef::t_2a45f52fd8b73b 13,92,105-108,111-118,132-140,167,169-172,174-176,181,193-195,199-200,209-212,215,218-220,230-234,251-254,260-262,267,280-283,285-290,306,344,349,357-363,366,369,372,405-407,422-426,429-437,440-445,447-448,461-463,484-487
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rows.ts
+  s_c19b57f63ed6ef::t_9eb77c68596480 20,24,37-38,43,75,82-89
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.test.ts
+  s_c19b57f63ed6ef::t_b6ce15e024919b 13,24,128,134,142,144,176-186
+  s_c19b57f63ed6ef::t_122f67555b2dab 187
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261010150736_tile-version/migration.sql
+  s_c19b57f63ed6ef::t_895971e72ffe0d 1
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/kept/kept.test.ts
+  s_c19b57f63ed6ef::t_4afd50886019a6 124
+  s_c19b57f63ed6ef::t_2c74ada6a412b6 146
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/kept/kept.ts
+  s_c19b57f63ed6ef::t_1aef5fb956ff90 89-96
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/operation.test.ts
+  s_c19b57f63ed6ef::t_388a2fd8315220 18-19,33-38,62,78,83-84,88-103,105,109-113
+  s_c19b57f63ed6ef::t_8a6adfb5a2da36 66-77,85-87
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/overlay/overlay.ts
+  s_c19b57f63ed6ef::t_2addfed00bb1ff 5-8,11-12,54-55,60
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useRefusalState.test.ts
+  s_c19b57f63ed6ef::t_d39ea845ac11ba 62,69,200,217,230,241,251,263,279,301,304,333,381,423,439,454
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261010150736_tile-version/snapshot.json
+  s_c19b57f63ed6ef::t_895971e72ffe0d 1-1370
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/System.tsx
+  s_c19b57f63ed6ef::t_b93f65baeafe33 28,80-81,84-85,90,96-98,102,107
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/tools.ts
+  s_c19b57f63ed6ef::t_31aefb722d3454 91-93,181-183,211-216,259,262,270,292,304,321,330,333,349,357,372,380,398-402,406
+  s_c19b57f63ed6ef::t_de9d211341fced 184
+  s_c19b57f63ed6ef::t_12f6830c8b6b3f 238,331,334
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/decider/decide.ts
+  s_c19b57f63ed6ef::t_e904fb94403da0 125
+  s_c19b57f63ed6ef::t_50795621cb60e3 4-6,12,20,29,62,64-76,104-120,150-152,160,162,174,176-177,188-189,191-194,197,202,207-210,213-218
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/help/vault.ts
+  s_c19b57f63ed6ef::t_8052a73d97e066 78-79
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/files.test.ts
+  s_c19b57f63ed6ef::t_118ab8111c5a57 55-64,164
+  s_c19b57f63ed6ef::t_2c74ada6a412b6 24
+  s_c19b57f63ed6ef::t_9a82033908c84d 127,129,138,157,200,206
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/import/round-trip.test.ts
+  s_c19b57f63ed6ef::t_2e9c4213f009d0 170
+  s_c19b57f63ed6ef::t_2c74ada6a412b6 30
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/leaves.test.ts
+  s_c19b57f63ed6ef::t_85df633bfc5595 2,4,7-15
+  s_c19b57f63ed6ef::t_9a82033908c84d 69,85,92-94,105,145-147,188
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/events.test.ts
+  s_c19b57f63ed6ef::t_346376c6ea8661 71-73,75,78,106,112
+  s_c19b57f63ed6ef::t_8c06f379b85d64 105,107-108,110-111
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/overlay/overlay.test.ts
+  s_c19b57f63ed6ef::t_8d4afce826a4c6 29-31,57-63,69,76,107-111,143,149,161,178-179,182,184,190,192,257-312,340,347,405-406,409-412,414,420-427,434-438,440-441,451-453,461-467
+  s_c19b57f63ed6ef::t_1638468ea63fb8 18,117-118,200,216,222,236,242,256,314-339
+  s_c19b57f63ed6ef::t_8464b6fcd68178 313,341-342
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/schema.ts
+  s_c19b57f63ed6ef::t_895971e72ffe0d 167,184-186
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/tiles.ts
+  s_c19b57f63ed6ef::t_305974279deee9 17-18,31,41-42,59-60,105,108,176-178,193,348
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/errors.ts
+  s_c19b57f63ed6ef::t_1caa3151a4582c 20-28,149
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_c19b57f63ed6ef::t_2addfed00bb1ff 84-85
+  s_c19b57f63ed6ef::t_b93f65baeafe33 374-375,377-379,382
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/system.test.ts
+  s_c19b57f63ed6ef::t_157476b6e425e0 201,203,213,215-216,267,269,288,292,295,300,314
+  s_c19b57f63ed6ef::t_7b9e4531691d8e 47,95,123,130,161,196
+  s_c19b57f63ed6ef::t_2c74ada6a412b6 17
+  s_c19b57f63ed6ef::t_2e9c4213f009d0 53-58
+  s_c19b57f63ed6ef::t_d15d29fede5490 65,73,134,140-147,162-164,170,172-179,254-263
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_c19b57f63ed6ef::t_4104bc8b728a79 209
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/import/read.test.ts
+  s_c19b57f63ed6ef::t_4afd50886019a6 54-57,134,137
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_c19b57f63ed6ef::t_713645c57efffa 304-309
+  s_c19b57f63ed6ef::t_c15ed7eb2bcfbd 34,267-281,283,292-294,296-302,312-313,316-319,337-338,352-356,359,365-368,372-375
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/decider/decide.test.ts
+  s_c19b57f63ed6ef::t_98d15093dda7cc 10,52,58,65,67,69,71,85-90,115-118,125,206,215,229,308,315,319,341,351,414-417,424
+  s_c19b57f63ed6ef::t_f8f9e89907c2a9 361-369,376-409
+  s_c19b57f63ed6ef::t_d15d29fede5490 119-124,197-202,210-212,218-220,273-274,329-335,370-375,418-423
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/files/download.test.ts
+  s_c19b57f63ed6ef::t_346376c6ea8661 60,71-79
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/testing.ts
+  s_c19b57f63ed6ef::t_e77f783e29de73 77,79,85,87-95
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/mcp.test.ts
+  s_c19b57f63ed6ef::t_206b5ecdcf00b6 20,22,25-30,55-76,108-120,122,185,208,234
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/decider/evolve.test.ts
+  s_c19b57f63ed6ef::t_ac4d97c15281be 30,38,65,75,92,97,104,114-115,128-143,164,171-174
+  s_c19b57f63ed6ef::t_a9eb4b78d41ca3 170
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/testing.ts
+  s_c19b57f63ed6ef::t_c0ce99e8541c5b 1-96
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/report/errors/messages.test.ts
+  s_c19b57f63ed6ef::t_b82b361c681440 24,128-131,179-182
+  s_c19b57f63ed6ef::t_c9512ccb65a993 105-111
+  s_c19b57f63ed6ef::t_62f835d3a46e82 112-117
+  s_c19b57f63ed6ef::t_e0173747c5dad5 118
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/leaves/leaves.test.ts
+  s_c19b57f63ed6ef::t_2c74ada6a412b6 85
+  s_c19b57f63ed6ef::t_2e9c4213f009d0 43
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.test.ts
+  s_c19b57f63ed6ef::t_c0ce99e8541c5b 5-7,11-21
+  s_c19b57f63ed6ef::t_3d1d244f8201de 2
+  s_c19b57f63ed6ef::t_8ec31452f3a893 83,98,104,141,385-388,451-454,511,533,539,559,590-591,603,605
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/kept.test.ts
+  s_c19b57f63ed6ef::t_8a6adfb5a2da36 66,69-72,75-80,140-143
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_c19b57f63ed6ef::t_4104bc8b728a79 209
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useCenteredTileState.test.ts
+  s_c19b57f63ed6ef::t_8d73b1c933506e 35,98,112,125
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/files.ts
+  s_c19b57f63ed6ef::t_1aef5fb956ff90 164-167,169-175
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/__snapshots__/mcp.test.ts.snap
+  s_c19b57f63ed6ef::t_0745285cd890ab 11,55,109,199,224-229,233,245,308-313,317,331,341-346,353-358,362,364,376,386-391,395,407,417-422,444,458,468-473,489
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "611c3829a31db679ae12c17c5daaeccf37d36c8c",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
