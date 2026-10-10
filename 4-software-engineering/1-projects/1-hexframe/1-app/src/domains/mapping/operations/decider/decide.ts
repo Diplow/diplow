@@ -56,7 +56,7 @@ import { freeSlot } from '../placement'
  * What `decide` may refuse each Operation, by its tag: Help's System refuses every one, and each
  * refuses only what its rules check, so a caller handles no refusal its Operation never gets.
  */
-interface Refusals {
+export interface Refusals {
   readonly CreateTile:
     HelpReadOnly | TitleMissing | PreviewTooLong | TileNotFound | LeafHoldsNothing | DirectionTaken
   readonly EditTile: HelpReadOnly | TitleMissing | PreviewTooLong | TileNotFound | TileChanged
@@ -77,7 +77,7 @@ interface Refusals {
 }
 
 /** Every refusal `decide` may answer, each a Mapping error with its kind. */
-type Refusal = Refusals[keyof Refusals]
+export type Refusal = Refusals[keyof Refusals]
 
 /**
  * What a create is given beside its Operation: the id of what it makes, which `decide` never makes

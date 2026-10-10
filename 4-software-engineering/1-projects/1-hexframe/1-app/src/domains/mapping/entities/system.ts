@@ -5,13 +5,14 @@
 import { Struct } from 'effect'
 
 import { type Kept, keptOf } from './kept/kept'
-import { contentWith, type Row, type RowWith } from './rows'
+import { contentWith, type FieldsAsked, type Row, type RowWith, withContent } from './rows'
 import {
   type Content,
   type ContextDirection,
   type Direction,
   isContextSlot,
   isLeafSlot,
+  rowDirection,
   sameSlot,
   type Slot,
   slotOfRow,
@@ -356,4 +357,61 @@ export function readOf<F extends Field>(
   }
 
   return place(opened, 0)
+}
+
+/** A Tile or a Reference of a System held whole, as the row a read walks. */
+type HeldRow = Omit<Row, 'systemVersion' | 'name' | 'config' | 'frontmatter'>
+
+/** A System's Tiles and References, each as the row it is read from, its Root's first. */
+function rowsOf(system: System): ReadonlyArray<HeldRow> {
+  const said = ({ id, version, title, preview, body }: FoundTile) => ({
+    id,
+    version,
+    target: null,
+    title,
+    preview,
+    body,
+  })
+  const below = Object.values(system.tiles).map((held): HeldRow => {
+    const place = { parentId: held.parent, direction: rowDirection(held.slot) }
+    return held._tag === 'Reference'
+      ? { id: held.id, ...place, version: 1, target: held.target, title: '', preview: '', body: '' }
+      : { ...said(held), ...place }
+  })
+  return [{ ...said(system.root), parentId: null, direction: null }, ...below]
+}
+
+/**
+ * What a read from one Tile finds in a System held whole, as the tiles repository finds it in the
+ * database: the Tile of this id, the Root when none is given, with the fields asked of it; the rows
+ * `depth` generations below it with those asked of them; the rows of the Tiles their References point
+ * at; and its parent. `undefined` for an id the System holds no Tile of, a Reference's included.
+ */
+export function foundIn<O extends Field, F extends Field>(
+  system: System,
+  { id, depth, fields }: { id?: string | undefined; depth: Depth; fields: FieldsAsked<O, F> },
+): Found<O, F> | undefined {
+  const rows = rowsOf(system)
+  const byId = new Map(rows.map((row) => [row.id, row]))
+  const opened = byId.get(id ?? system.root.id)
+  if (opened === undefined || opened.target !== null) return undefined
+  const under = byParent(rows, parentOfRow)
+  const below: Array<HeldRow> = []
+  let parents = [opened.id]
+  for (let left = depth; left > 0 && parents.length > 0; left--) {
+    const generation = parents.flatMap((parent) => under.get(parent) ?? [])
+    below.push(...generation)
+    parents = generation.map((row) => row.id)
+  }
+  const pointedAt = below.flatMap(({ target }) => {
+    const pointed = target === null ? undefined : byId.get(target)
+    return pointed === undefined ? [] : [withContent(pointed, ['title', 'preview'])]
+  })
+  const parent = opened.parentId === null ? undefined : byId.get(opened.parentId)
+  return {
+    opened: withContent(opened, fields.opened),
+    rows: below.map((row) => withContent(row, fields.below)),
+    pointedAt,
+    parent: parent === undefined ? null : { id: parent.id, title: parent.title },
+  }
 }
