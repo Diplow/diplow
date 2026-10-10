@@ -11,7 +11,7 @@ preview: >-
 ---
 # auth
 
-Better Auth, behind one Effect service, `Auth`: sign up, sign in, sign out, the session a request's cookie proves; and, through its api-key plugin, a user's API keys (create, list, delete) and whose key a request's `Authorization: Bearer` header carries (`bearer`). It speaks Better Auth's words (a user, a session, an API key) and knows nothing of IAM's; [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE|iam]] turns them into Accounts, Sessions and Keys. Only this folder imports `better-auth`, `@better-auth/*` and Stripe (`dependency-cruiser.config.ts`).
+Better Auth, behind one Effect service, `Auth`: sign up, sign in, sign out, the session a request's cookie proves; and, through its api-key plugin, a user's API keys (create, list, delete) and whose key a request's `Authorization: Bearer` header carries (`bearer`); and the name of one of a user's keys, by its id, read outside any request through Better Auth's own adapter (`apiKeyName`), which the Conversation labels a write that key made by. It speaks Better Auth's words (a user, a session, an API key) and knows nothing of IAM's; [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE|iam]] turns them into Accounts, Sessions and Keys. Only this folder imports `better-auth`, `@better-auth/*` and Stripe (`dependency-cruiser.config.ts`).
 
 | File | Holds |
 |---|---|

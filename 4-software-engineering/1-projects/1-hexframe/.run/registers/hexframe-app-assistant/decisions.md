@@ -10,8 +10,10 @@ preview: >-
   Tile's Version counts and how the client folds it, where Mapping's PGlite
   tests regrouped to make room for it, where the import's client files
   regrouped to make room for the poll, where the System's Version is kept,
-  what an import's event counts and what the poll reads again, and which words
-  the canvas names its gestures in.
+  what an import's event counts and what the poll reads again, which words
+  the canvas names its gestures in, and how the Conversation keeps its
+  Entries, names who acted and a deleted Tile, and merges and sends the user's
+  navigations.
 ---
 # Decisions
 
@@ -60,3 +62,17 @@ HEX-77. The ticket asked the canvas to say which gesture changed the view, on wh
 - **Picking the ring shown changes nothing.** The row used to navigate to the same view, tidied, when its pressed button was pressed again. Nothing changed there, so no gesture happened and no fact is published: the hook calls `onViewChange` only when the ring picked differs from the one shown.
 
 `Navigated` carries the gesture and the Tile's id, no time and no Title: the conversation ticket (HEX-78) merges consecutive ones and joins the Tile in.
+
+### DEC-8 The Conversation keeps its Entries as JSON, a deleted Tile's Title rides on its event, and the navigation under way waits in the page
+
+HEX-78. The ticket asked for the Assistant domain, a Conversation per Account recording Messages, every change to the System with who acted, imports and merged navigations, the bus subscription that records the changes, three server functions and the browser's navigation sender. Seven choices followed.
+
+- **A deleted Tile's Title rides on its event.** The subscription runs once the write committed, so a Tile the change deleted is gone when Mapping's summary reads it. `TileDeleted` now says the Title its Tile had, which `decide` has in hand; reading it before the commit would make the bus wait on a read, and naming it from the timeline's own past would rebuild the record. Every other Title the event does not say is read once the change committed (`Mapping.summary`, through `Mapping.titles`), so a Tile changed again meanwhile is named as it then reads.
+- **Two tables, an Entry's content one JSON column.** `conversation`, one row per Account, added with its first Entry, is where the Mode and the open Proposal will go; `conversation_entry` holds each Entry's id, instant and `content`, the Entry as Assistant's `EntryContent` encodes it. Four kinds share no field beyond their tag, so a column per field would leave most of every row empty, and the repository would have to know them; with one column it keeps what it is given, and Assistant decodes it by the schema that wrote it, a row it cannot read back being a defect. A `seq` identity orders two Entries of one instant as they were written. `account_id` has no key to `user`, as `tile`'s has none.
+- **Who acted is read when the change is recorded.** "You" for a Session; for a Key, its name, read by IAM's `keyName` through Better Auth's own adapter, since `auth/` may not import `drizzle-orm`, and absent once the Key is revoked. Putting the name on the envelope's proof was the other way: it changes what the bus carries for every subscriber, and a Key renamed would still be named as it was, which no screen allows yet.
+- **A gesture is a word Assistant keeps as it came.** A domain cannot import the canvas's `Gesture`, and DEC-7 keeps the words the canvas's own, so Assistant bounds a gesture as a lowercase word of dashes, 32 characters at most, and a Tile as the canvas names it, 100 at most, never a list of its own that could drift from the canvas's. A navigation keeps a Tile's id alone, and reading a day joins in the Titles the System holds then; a Tile deleted since is named by none.
+- **The merge rule keeps the latest twelve gestures and counts every one**, so a long wander still reads as where the user ended up, and how much they moved.
+- **A day is a date and an offset; a navigation says how long ago.** The server knows no time zone: a reader asks for a date of their calendar and how many minutes their clock stands ahead of UTC at its midnight, today by default, and a day spans from that midnight to the next. A merged navigation reaches the server once something else happens, and dates from its last gesture, which only the browser's clock saw: it sends how long ago that was, a day at most, never an instant, so two clocks never disagree on the order of the timeline.
+- **The sender is a state hook whose navigation waits in a ref**, in `features/conversation/state/`, mounted on home. The navigation under way is an outbox nothing renders, so it waits in a ref rather than in a reducer, whose state would render the page at every gesture for nothing on screen. It is sent when a Message is posted, through the hook's `postMessage`, when a write to the System is made, heard on the MutationCache (`useEachSystemWrite`), and when the page is hidden. The navigation and the Message share the Conversation's queue, so they reach the server in order. TanStack Query holds a queued write while the page is hidden, its retryer waiting for focus: a navigation sent on hiding while another write of the Conversation is still on its way goes once the page shows again.
+
+The three server functions take the Session alone (`sessionOnly`): the Conversation is the user's, and a Key reads and writes none of it. Nothing decides yet, so Assistant has no Operations, no Decider and no errors; they come with the Turn.

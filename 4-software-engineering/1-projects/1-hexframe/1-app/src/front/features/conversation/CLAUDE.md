@@ -4,8 +4,9 @@ parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/co
 owner: diplo
 preview: >-
   The Conversation beside the canvas: the Assistant's timeline split by day,
-  its entries (Messages, navigations, operations) and the message input. On
-  fixtures for now, laid out by /dev/system.
+  its entries (Messages, navigations, operations) and the message input, on
+  fixtures for now, laid out by /dev/system; and the navigation sender, which
+  merges the user's gestures and records them on home.
 ---
 # conversation
 
@@ -19,6 +20,7 @@ What the Conversation beside the canvas shows: one timeline per Account, split b
 | Folder | Holds |
 |---|---|
 | `timeline/` | The timeline's model, pure and tested: an entry is a Message, a navigation, the canvas's gesture as the `Navigated` fact carries it (`features/facts.ts`), or an operation, one of Mapping's Operations by its tag; `splitByDay`, and `excerpt`, a long Preview's start |
+| `state/` | `useNavigationSender`, mounted on home: each `Navigated` merged into the navigation under way by Assistant's merge rule, held in the page and sent as one Entry once a Message or a write to the System comes next, or the page is hidden, never one request per gesture; its `postMessage` posts a Message after the navigation it follows. The navigation under way is an outbox no one renders, so it waits in a ref (`hexframe-app-assistant/decisions.md#DEC-8`). Tested: ten gestures then a Message send one navigation then the Message, a Message alone, a write and the page hiding each sending the navigation under way, a new one started once sent |
 | `entry/` | The entries' views: `Entry.tsx`, one entry, a Message or what the user did on the canvas with its verb in the past tense, its time in the reader's language; `TileCard.tsx`, a Tile inside the Conversation, its long Preview shortened until the reader asks for the rest |
 
 The regroup into `timeline/` and `entry/` is `hexframe-app-assistant/decisions.md#DEC-1`.
