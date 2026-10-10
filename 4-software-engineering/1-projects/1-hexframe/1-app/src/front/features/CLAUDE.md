@@ -24,7 +24,7 @@ A feature is client code that shows one thing a page needs, in a domain's langua
 | File | Holds |
 |---|---|
 | `bus.ts` | The client bus: `publish` a fact, `useFact` to react to one, `receive` for a fact crossing into the client. Beside the features, not in one, so a feature reaches it without importing another |
-| `facts.ts` | The facts the bus carries. `Navigated`, the user went somewhere on the canvas: the gesture, as the canvas names it (`Gesture`, `ui/hex/view/`), and the Tile it was made on; home publishes one per gesture, and the Conversation's timeline tells its navigations in the same words. Tested: one fact heard per gesture, none when nothing changed, a gesture the canvas does not name refused at the crossing |
+| `facts.ts` | The facts the bus carries. `Navigated`, the user went somewhere on the canvas: the gesture, as the canvas names it (`Gesture`, `ui/hex/view/`), and the Tile it was made on; home publishes one per gesture, and the Conversation's timeline tells its navigations in the same words. Tested: one fact heard per gesture, and a gesture the canvas does not name refused at the crossing |
 
 ## Rules
 

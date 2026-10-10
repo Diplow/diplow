@@ -82,10 +82,9 @@ export const Gesture = Schema.Literals([
 export type Gesture = typeof Gesture.Type
 
 /** What changed the view: the gesture, and the Tile it was made on, the center for a ring's. */
-export interface ViewAction {
-  gesture: Gesture
-  tile: string
-}
+export const ViewAction = Schema.Struct({ gesture: Gesture, tile: TileId })
+
+export type ViewAction = typeof ViewAction.Type
 
 /** Reads the URL's search params, field by field: the route's `validateSearch`. */
 export const readCanvasView = readSearch(CanvasView)

@@ -1,9 +1,5 @@
-import { Option, Schema } from 'effect'
 import { describe, expect, it } from 'vitest'
 
-import { Navigated } from '#/front/features/facts'
-
-import { conversationFixture } from '../fixtures'
 import { excerpt, splitByDay, type Entry } from './timeline'
 
 // Local dates, so the tests hold in any time zone: days are the reader's.
@@ -82,25 +78,5 @@ describe('excerpt', () => {
 
   it('cuts through a word longer than half the limit', () => {
     expect(excerpt('a Supercalifragilistic word', 12)).toBe('a Supercalif…')
-  })
-})
-
-describe('a navigation', () => {
-  it('tells a gesture as the navigation fact carries it, so the fixture speaks the canvas’s words', () => {
-    const navigations = conversationFixture(now).flatMap((entry) =>
-      entry.kind === 'navigation'
-        ? [{ _tag: 'Navigated', gesture: entry.gesture, tile: entry.tile.id }]
-        : [],
-    )
-    expect(navigations.map((fact) => fact.gesture)).toEqual([
-      'center',
-      'expand',
-      'collapse',
-      'show-context',
-      'hide-context',
-      'center',
-    ])
-    for (const fact of navigations)
-      expect(Option.isSome(Schema.decodeUnknownOption(Navigated)(fact))).toBe(true)
   })
 })

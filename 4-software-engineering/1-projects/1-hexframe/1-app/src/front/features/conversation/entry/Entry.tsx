@@ -23,7 +23,9 @@ import type { Operation } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 
-import type { Entry, Navigation } from '../timeline/timeline'
+import type { Navigated } from '#/front/features/facts'
+
+import type { Entry } from '../timeline/timeline'
 import { TileCard } from './TileCard'
 
 export function ConversationEntry({ entry }: { entry: Entry }) {
@@ -82,7 +84,10 @@ function Time({ at }: { at: Date }) {
 }
 
 /** What each of the canvas's gestures says once the user made it, in the past tense. */
-const navigations: Record<Navigation, { icon: LucideIcon; text: (title: string) => string }> = {
+const navigations: Record<
+  Navigated['gesture'],
+  { icon: LucideIcon; text: (title: string) => string }
+> = {
   center: { icon: Crosshair, text: (title) => m.conversation_centered({ title }) },
   expand: { icon: ChevronsUpDown, text: (title) => m.conversation_expanded({ title }) },
   collapse: { icon: ChevronsDownUp, text: (title) => m.conversation_collapsed({ title }) },

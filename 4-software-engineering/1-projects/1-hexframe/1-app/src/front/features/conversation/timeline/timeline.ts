@@ -13,15 +13,11 @@ export interface TileSummary {
   preview: string
 }
 
-/**
- * What the user did to look at the System: the gesture the navigation fact carries, named as the
- * canvas names it, so one vocabulary runs from the canvas to the timeline.
- */
-export type Navigation = Navigated['gesture']
-
 export type Entry =
   | { kind: 'message'; id: string; at: Date; author: 'user' | 'agent'; text: string }
-  | { kind: 'navigation'; id: string; at: Date; gesture: Navigation; tile: TileSummary }
+  // What the user did to look at the System: the gesture as the navigation fact carries it, so one
+  // vocabulary runs from the canvas to the timeline.
+  | { kind: 'navigation'; id: string; at: Date; gesture: Navigated['gesture']; tile: TileSummary }
   | { kind: 'operation'; id: string; at: Date; operation: Operation['_tag']; tile: TileSummary }
 
 /** One day of the Conversation, its entries oldest first. */
