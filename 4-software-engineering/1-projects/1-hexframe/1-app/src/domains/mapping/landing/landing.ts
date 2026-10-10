@@ -194,7 +194,9 @@ const asRoot = (accountId: string, plan: ImportPlan) =>
           path === root.path ? { _tag: 'Stored', id: stored.id } : { _tag: 'Batch', key: path }
         const resolve = (target: ReferenceTarget) => targetOf(target, { rows, nameOf })
         const { title, preview, body, config, frontmatter } = root
+        // The Root says what the import gave it now: a writer that read it empty is refused.
         yield* writes.update(stored.id, {
+          version: stored.version + 1,
           title,
           preview,
           body,

@@ -102,10 +102,13 @@ export interface Writes {
   readonly insertAll: (
     rows: ReadonlyArray<BatchRow>,
   ) => Effect.Effect<ReadonlyMap<string, string>, never, InTransaction>
-  /** Changes the columns given, the Version Mapping decided among them; with none, writes nothing. */
+  /**
+   * Changes the columns given, and always the Version Mapping decided for the row, so no change to a
+   * Tile leaves its Version behind.
+   */
   readonly update: (
     id: string,
-    changes: Partial<Omit<NewTileRow, 'target'> & Pick<TileRow, 'version'>>,
+    changes: Partial<Omit<NewTileRow, 'target'>> & Pick<TileRow, 'version'>,
   ) => Effect.Effect<void, never, InTransaction>
   /** Deletes a row and every row below it. */
   readonly remove: (id: string) => Effect.Effect<void, never, InTransaction>
@@ -313,13 +316,11 @@ const make = Effect.gen(function* () {
       ),
     update: (id, changes) =>
       inTransaction(
-        Object.keys(changes).length === 0
-          ? Effect.void
-          : database
-              .update(tile)
-              .set(changes)
-              .where(and(ofAccount(accountId), eq(tile.id, id)))
-              .pipe(Effect.asVoid, Effect.orDie),
+        database
+          .update(tile)
+          .set(changes)
+          .where(and(ofAccount(accountId), eq(tile.id, id)))
+          .pipe(Effect.asVoid, Effect.orDie),
       ),
     remove: (id) =>
       inTransaction(
