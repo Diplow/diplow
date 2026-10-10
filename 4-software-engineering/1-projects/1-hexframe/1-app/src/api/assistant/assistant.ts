@@ -24,9 +24,10 @@ export const NewMessage = Schema.Struct({ text: MessageText })
 const mostShown = 100
 
 /**
- * A Message the user sends from home: its text; the view it was sent from, the centered Tile, where a
- * Turn answering it starts, and the Tiles on screen, by id, whose Previews its agent is shown; and how
- * far the reader's clock stands from UTC, which says what today is.
+ * A Message the user sends from home: its text, which links Tiles by id (`@[<id>]`); the view it was
+ * sent from, the centered Tile, where a Turn answering it starts unless the Message opens with a link,
+ * and the Tiles on screen, by id, whose Previews its agent is shown; and how far the reader's clock
+ * stands from UTC, which says what today is.
  */
 export const SentMessage = Schema.Struct({
   text: MessageText,

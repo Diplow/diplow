@@ -3,7 +3,7 @@ import { join } from 'node:path'
 
 import { afterAll, describe, expect, it } from 'vitest'
 
-import type { Entry } from '#/domains/assistant/entities'
+import { type Entry, linkTo } from '#/domains/assistant/entities'
 import { settings } from '#/domains/assistant/settings'
 import * as Iam from '#/domains/iam/iam'
 import { Sandbox } from '#/repositories/agent/sandbox/sandbox'
@@ -11,6 +11,7 @@ import {
   everyTurnSpent,
   startedAt,
   turnKeyKept,
+  turnLocation,
 } from '#/repositories/database/conversations/testing'
 
 import * as Assistant from '../../assistant/programs'
@@ -89,7 +90,7 @@ describe('a Turn on every Message', () => {
     )
     expect(said).toEqual([
       'user: Draft a Tile for me.',
-      'agent: Let me look at where you are.',
+      'agent: Let me look at where you are: the System folder.',
       expect.stringMatching(/^agent: I added "Drafted by the Assistant" under /) as string,
     ])
     expect(entries.map(changeOf).filter((told) => told !== undefined)).toEqual([
@@ -118,6 +119,62 @@ describe('a Turn on every Message', () => {
     expect(settings).not.toMatch(/hft_/)
     // The agent's HOME was the Turn's own, nothing else left in the work folder.
     expect(await readdir(join(box.home, 'work'))).toEqual([`turn-${sent.turn?.id ?? ''}`])
+  })
+
+  it('runs in the folder of the Tile a Message opens with a link to, the others its links pointed at', async () => {
+    const { signedIn, accountId, root, waited } = await account
+    // Two Tiles below the Root, far from the center: Work, in its last slot, then Team under it.
+    const tile = async (parent: string, slot: 2 | 6, title: string) => {
+      const id = crypto.randomUUID()
+      const content = { id, parent, slot, title, preview: '', body: '' }
+      await value(run(signedIn, Mapping.createTile(content)))
+      return id
+    }
+    const work = await tile(root.id, 6, 'Work')
+    const team = await tile(work, 2, 'Team')
+    const gone = crypto.randomUUID()
+    await waited()
+
+    const text = `${linkTo(team)} tidy this, as ${linkTo(work)} and ${linkTo(gone)} say`
+    const sent = await value(send(text))
+    await waited()
+    await ended(signedIn)
+    expect(await value(run(signedIn, turnLocation(sent.turn?.id ?? '')))).toBe(team)
+
+    const entries = await today(signedIn)
+    const said = entries.flatMap((entry) =>
+      entry._tag === 'Message' && entry.author === 'agent' ? [entry.text] : [],
+    )
+    expect(said.slice(-2)).toEqual([
+      expect.stringMatching(/^Let me look at where you are: 6-[\w-]+\/2-[\w-]+\.$/) as string,
+      'I added "Drafted by the Assistant" under Team.',
+    ])
+
+    const box = await value(
+      run(
+        signedIn,
+        Sandbox.use((sandbox) => sandbox.ensure(accountId)),
+      ),
+    )
+    const prompt = await readFile(join(box.home, `turns/${sent.turn?.id ?? ''}/prompt.md`), 'utf8')
+    expect(prompt).toMatch(/You start in "Team" \(id "[\w-]+"\), "6-[\w-]+\/2-[\w-]+"\./)
+    expect(prompt).toMatch(
+      /- "Team" \(id "[\w-]+"\): "6-[\w-]+\/2-[\w-]+\/CLAUDE.md" from the System folder, "CLAUDE.md" from where you start\./,
+    )
+    expect(prompt).toMatch(
+      /- "Work" \(id "[\w-]+"\): "6-[\w-]+\/CLAUDE.md" from the System folder, "..\/CLAUDE.md" from where you start\./,
+    )
+    expect(prompt).toContain(`- A Tile deleted since (id "${gone}"): no longer in the System.`)
+  })
+
+  it('starts none at a linked Tile the Account’s System does not hold, nothing posted', async () => {
+    const { signedIn } = await account
+    const before = (await today(signedIn)).length
+    expect(await send(`${linkTo(crypto.randomUUID())} over there`)).toMatchObject({
+      ok: false,
+      failure: { _tag: 'TileNotFound' },
+    })
+    expect(await today(signedIn)).toHaveLength(before)
   })
 
   it('stops on a Stop: its agent interrupted, the timeline saying so, its Key revoked', async () => {

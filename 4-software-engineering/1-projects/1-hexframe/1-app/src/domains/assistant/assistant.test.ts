@@ -7,7 +7,15 @@ import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 
 import { before, day, lastEntry, postMessage, recordChange, recordNavigation } from './assistant'
-import type { EntryContent, Navigation, Summarized } from './entities'
+import {
+  type EntryContent,
+  leadingLink,
+  linkTo,
+  namedTiles,
+  type Navigation,
+  partsOf,
+  type Summarized,
+} from './entities'
 
 // The Conversation over the conversations repository, for real, over PGlite: Entries recorded as the
 // API layer records them, in a transaction, then read back a day at a time, in their reader's day.
@@ -71,6 +79,25 @@ layer(TestLayer)('the Conversation, over PGlite', (it) => {
         })
         expect(yield* day(account, { date: '2026-10-10', offset: 0 })).toEqual([entry])
       }),
+  )
+
+  it.effect('keeps the Tiles a Message links by their ids, read back in its pieces', () =>
+    Effect.gen(function* () {
+      const account = someone()
+      yield* at('2026-10-10T09:30:00Z')
+      const [games, notes] = [crypto.randomUUID(), crypto.randomUUID()]
+      const text = `${linkTo(games)} tidy this, as ${linkTo(notes)} says`
+      yield* recorded(account, said(text))
+      const [read] = yield* day(account, { date: '2026-10-10', offset: 0 })
+      expect(read?._tag === 'Message' && partsOf(read.text)).toEqual([
+        { _tag: 'Link', tile: games },
+        { _tag: 'Text', text: ' tidy this, as ' },
+        { _tag: 'Link', tile: notes },
+        { _tag: 'Text', text: ' says' },
+      ])
+      expect(read?._tag === 'Message' && leadingLink(read.text)).toBe(games)
+      expect(namedTiles(read === undefined ? [] : [read])).toEqual([games, notes])
+    }),
   )
 
   it.effect('reads every kind of Entry back as it was recorded', () =>
