@@ -137,6 +137,20 @@ describe("Assistant's server functions", () => {
     expect(latest.last).not.toBe(posted.id)
   })
 
+  it('moves the System’s Version one per change, and not for a refused one', async () => {
+    const { call } = request()
+    const { root } = await value(call(Mapping.system))
+    await value(
+      call(Mapping.createTile({ parent: root.id, slot: 1, title: 'One', preview: '', body: '' })),
+    )
+    expect(await value(call(Assistant.latest))).toMatchObject({ version: 1 })
+    const refused = await call(
+      Mapping.moveTile({ id: root.id, version: 1, parent: root.id, slot: 2 }),
+    )
+    expect(refused.ok).toBe(false)
+    expect(await value(call(Assistant.latest))).toMatchObject({ version: 1 })
+  })
+
   it('records a merged navigation dated from its last gesture, its Tiles named as they are now', async () => {
     const { call } = request()
     const { root } = await value(call(Mapping.system))

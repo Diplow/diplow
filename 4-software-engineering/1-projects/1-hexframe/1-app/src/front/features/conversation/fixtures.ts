@@ -1,39 +1,50 @@
-// A fixture Conversation for /dev/system, about the fixture System /dev/hex draws: three days of
-// Messages, navigations and operations, every kind of entry at least once. Its days are counted back
-// from `now`, so the timeline always shows a today and a yesterday. Like the System, its content is
-// the user's own, so it is not translated.
+// A fixture Conversation for /dev/system, about the fixture System /dev/hex draws: four days of
+// Assistant's Entries, every kind at least once, a change by each kind of actor, and the Titles of the
+// Tiles its navigations went to. Its days are counted back from `now`, so the timeline always shows a
+// today and a yesterday. Like the System, its content is the user's own, so it is not translated.
+import type { Entry } from '#/domains/assistant/entities'
 import { ulysse } from '#/front/ui/hex/fixtures'
 import { findTile } from '#/front/ui/hex/view/tiles'
 
-import type { Entry, TileSummary } from './timeline/timeline'
+import type { Titles } from './timeline/timeline'
 
-function tile(id: string): TileSummary {
+/** A Tile of the fixture System, as a change names it. */
+function tile(id: string) {
   const found = findTile(ulysse, id)
   if (!found) throw new Error(`The fixture System has no Tile ${id}`)
-  return { id: found.id, title: found.title, preview: found.preview }
+  return { id: found.id, title: found.title }
 }
 
 /** A Tile the user deleted, so no longer in the System. */
-const drafts: TileSummary = {
-  id: 'drafts',
-  title: 'Drafts',
-  preview: 'Notes not yet placed anywhere.',
-}
+const drafts = { id: 'drafts', title: 'Drafts' }
 
-export function conversationFixture(now: Date): Entry[] {
+const you = { _tag: 'You' } as const
+
+export function conversationFixture(now: Date): { entries: Entry[]; titles: Titles } {
   const at = (daysAgo: number, hour: number, minute: number) =>
     new Date(now.getFullYear(), now.getMonth(), now.getDate() - daysAgo, hour, minute)
   // Today's entries are counted back from now, never before midnight, so none is in the future.
   const today = (minutesAgo: number) =>
     new Date(Math.max(at(0, 0, 0).getTime(), now.getTime() - minutesAgo * 60_000))
   const said = (id: string, when: Date, author: 'user' | 'agent', text: string): Entry => ({
-    kind: 'message',
+    _tag: 'Message',
     id,
     at: when,
     author,
     text,
   })
-  return [
+  const titles = Object.fromEntries(
+    ['software-engineering', 'projects', 'ulysse'].map((id) => [id, tile(id).title]),
+  )
+  const entries: Entry[] = [
+    {
+      _tag: 'Import',
+      id: 'i1',
+      at: at(5, 9, 30),
+      tile: tile('ulysse'),
+      count: 14,
+      actor: you,
+    },
     said('m1', at(3, 18, 2), 'user', 'Help me lay out my vault. I write about six domains.'),
     said(
       'm2',
@@ -42,76 +53,74 @@ export function conversationFixture(now: Date): Entry[] {
       'Let’s start from you: Ulysse is your root. Put the six domains around it, the one you most want a reader to open first in the first direction.',
     ),
     {
-      kind: 'operation',
-      id: 'o1',
+      _tag: 'Change',
+      id: 'c1',
       at: at(3, 18, 10),
-      operation: 'CreateTile',
+      verb: 'TileCreated',
       tile: tile('leadership'),
+      actor: you,
     },
     {
-      kind: 'operation',
-      id: 'o2',
+      _tag: 'Change',
+      id: 'c2',
       at: at(3, 18, 12),
-      operation: 'CreateTile',
+      verb: 'TileCreated',
       tile: tile('software-engineering'),
+      actor: { _tag: 'Key', name: 'Claude Code' },
     },
     {
-      kind: 'navigation',
+      _tag: 'Navigation',
       id: 'n1',
-      at: at(1, 21, 40),
-      gesture: 'center',
-      tile: tile('software-engineering'),
-    },
-    {
-      kind: 'navigation',
-      id: 'n2',
       at: at(1, 21, 41),
-      gesture: 'expand',
-      tile: tile('projects'),
+      steps: [
+        { gesture: 'center', tile: 'software-engineering' },
+        { gesture: 'expand', tile: 'projects' },
+      ],
+      gestures: 2,
     },
     {
-      kind: 'operation',
-      id: 'o3',
+      _tag: 'Change',
+      id: 'c3',
       at: at(1, 21, 45),
-      operation: 'EditTile',
+      verb: 'TileEdited',
       tile: tile('hexframe'),
+      actor: you,
     },
     {
-      kind: 'navigation',
-      id: 'n3',
-      at: at(1, 21, 46),
-      gesture: 'collapse',
-      tile: tile('projects'),
-    },
-    {
-      kind: 'navigation',
-      id: 'n4',
+      _tag: 'Navigation',
+      id: 'n2',
       at: at(1, 21, 47),
-      gesture: 'show-context',
-      tile: tile('software-engineering'),
+      steps: [
+        { gesture: 'collapse', tile: 'projects' },
+        { gesture: 'show-context', tile: 'software-engineering' },
+      ],
+      gestures: 7,
     },
     {
-      kind: 'operation',
-      id: 'o4',
+      _tag: 'Change',
+      id: 'c4',
       at: at(1, 21, 50),
-      operation: 'MoveTile',
+      verb: 'TilesSwapped',
       tile: tile('principles'),
+      other: tile('projects'),
+      actor: you,
     },
     {
-      kind: 'navigation',
-      id: 'n5',
+      _tag: 'Change',
+      id: 'c5',
+      at: at(1, 22, 5),
+      verb: 'TileMoved',
+      tile: tile('principles'),
+      actor: { _tag: 'Key' },
+    },
+    {
+      _tag: 'Navigation',
+      id: 'n3',
       at: today(5),
-      gesture: 'hide-context',
-      tile: tile('software-engineering'),
+      steps: [{ gesture: 'center', tile: 'ulysse' }],
+      gestures: 1,
     },
-    {
-      kind: 'navigation',
-      id: 'n6',
-      at: today(4),
-      gesture: 'center',
-      tile: tile('ulysse'),
-    },
-    { kind: 'operation', id: 'o5', at: today(4), operation: 'DeleteTile', tile: drafts },
+    { _tag: 'Change', id: 'c6', at: today(4), verb: 'TileDeleted', tile: drafts, actor: you },
     said('m3', today(2), 'user', 'What would you add to Games?'),
     said(
       'm4',
@@ -120,4 +129,5 @@ export function conversationFixture(now: Date): Entry[] {
       'Games has no Children yet. From what you wrote, I would start with three: the games you design, the ones you play, and what they teach about rules. Shall I propose them?',
     ),
   ]
+  return { entries, titles }
 }

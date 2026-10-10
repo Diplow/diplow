@@ -1,53 +1,47 @@
-// The Conversation as the timeline shows it on fixtures, at /dev/system: one continuous timeline per
-// Account, split by day, holding the Messages and what the user did on the canvas. Pure; the
-// components render it. The Account's own Conversation comes as Assistant's Entries
-// (`domains/assistant/entities`, `useConversationDay`), which the chat on home will show in place of
-// this model (hexframe-app-assistant/decisions.md#DEC-8).
-import type { Operation } from '#/domains/mapping/operations'
-import type { Navigated } from '#/front/features/facts'
+// The Conversation as the timeline shows it: Assistant's Entries (`domains/assistant/entities`), a
+// day of the reader's calendar at a time, with the Titles of the Tiles its navigations went to. Home
+// reads it a day at a time (`useConversation`); /dev/system splits its fixtures by day. Pure; the
+// components render it.
+import type { Entry } from '#/domains/assistant/entities'
 
-/** A Tile as the fixtures' Conversation shows it: what a reader needs to recognise it. */
-export interface TileSummary {
-  id: string
-  title: string
-  preview: string
-}
+/** The Titles of the Tiles a day's navigations went to, by id: a Tile deleted since has none. */
+export type Titles = Readonly<Record<string, string>>
 
-export type Entry =
-  | { kind: 'message'; id: string; at: Date; author: 'user' | 'agent'; text: string }
-  // What the user did to look at the System: the gesture as the navigation fact carries it, so one
-  // vocabulary runs from the canvas to the timeline.
-  | { kind: 'navigation'; id: string; at: Date; gesture: Navigated['gesture']; tile: TileSummary }
-  | { kind: 'operation'; id: string; at: Date; operation: Operation['_tag']; tile: TileSummary }
-
-/** One day of the Conversation, its entries oldest first. */
+/** One day of the Conversation, its Entries oldest first. */
 export interface Day {
-  /** The day's local date, `2026-09-27`: unique in the timeline. */
+  /** The day's date in the reader's calendar, `2026-09-27`: unique in the timeline. */
   key: string
   /** The day's local midnight. */
   date: Date
   /** Set when the day is today or yesterday, which read better than a date. */
   relative?: 'today' | 'yesterday'
-  entries: Entry[]
+  entries: readonly Entry[]
+  titles: Titles
 }
 
-/** The entries split by the reader's local day, oldest day and oldest entry first. */
-export function splitByDay(entries: readonly Entry[], now: Date): Day[] {
-  const today = dayKey(now)
-  const yesterday = dayKey(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1))
-  const days: Day[] = []
+/** A day of the reader's calendar, `2026-09-27`, holding these Entries, as the timeline shows it. */
+export function dayOf(
+  { date, entries, titles }: { date: string; entries: readonly Entry[]; titles: Titles },
+  now: Date,
+): Day {
+  const [year = 0, month = 1, day = 1] = date.split('-').map(Number)
+  const midnight = new Date(year, month - 1, day)
+  const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1)
+  const relative =
+    date === dayKey(now) ? 'today' : date === dayKey(yesterday) ? 'yesterday' : undefined
+  return { key: date, date: midnight, ...(relative && { relative }), entries, titles }
+}
+
+/** Entries split by the reader's local day, oldest day and oldest Entry first, all sharing `titles`. */
+export function splitByDay(entries: readonly Entry[], now: Date, titles: Titles = {}): Day[] {
+  const days: Array<{ date: string; entries: Entry[] }> = []
   for (const entry of entries.toSorted((a, b) => a.at.getTime() - b.at.getTime())) {
-    const key = dayKey(entry.at)
+    const date = dayKey(entry.at)
     const last = days.at(-1)
-    if (last?.key === key) {
-      last.entries.push(entry)
-      continue
-    }
-    const date = new Date(entry.at.getFullYear(), entry.at.getMonth(), entry.at.getDate())
-    const relative = key === today ? 'today' : key === yesterday ? 'yesterday' : undefined
-    days.push({ key, date, ...(relative && { relative }), entries: [entry] })
+    if (last?.date === date) last.entries.push(entry)
+    else days.push({ date, entries: [entry] })
   }
-  return days
+  return days.map((day) => dayOf({ ...day, titles }, now))
 }
 
 function dayKey(date: Date): string {

@@ -35,9 +35,6 @@ const changeForAccount = <A, E, R>(operation: (accountId: string) => Effect.Effe
 /** The Account's System, flat: its Root, the user, and every Tile and Reference below it by id. */
 export const system = forAccount(Mapping.system)
 
-/** The Version of the Account's System, read alone: what the page polls to know when to read it. */
-export const systemVersion = forAccount(Mapping.systemVersion)
-
 /**
  * Help whole, in the page's language, for any visitor: no Account reads it, so it asks for none. The
  * app's locales are the languages Help is written in, which its type requires.

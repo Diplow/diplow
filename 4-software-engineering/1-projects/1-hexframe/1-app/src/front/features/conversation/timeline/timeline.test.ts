@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'vitest'
 
-import { excerpt, splitByDay, type Entry } from './timeline'
+import type { Entry } from '#/domains/assistant/entities'
+
+import { dayOf, excerpt, splitByDay } from './timeline'
 
 // Local dates, so the tests hold in any time zone: days are the reader's.
 const at = (day: number, hour: number, minute = 0) => new Date(2026, 8, day, hour, minute)
 
 const message = (id: string, when: Date): Entry => ({
-  kind: 'message',
+  _tag: 'Message',
   id,
   at: when,
   author: 'user',
@@ -46,6 +48,31 @@ describe('splitByDay', () => {
 
   it('has no day for no entry', () => {
     expect(splitByDay([], now)).toEqual([])
+  })
+
+  it('hands every day the Titles it is given', () => {
+    const titles = { games: 'Games' }
+    const days = splitByDay([message('a', at(26, 9)), message('b', at(27, 9))], now, titles)
+    expect(days.map((day) => day.titles)).toEqual([titles, titles])
+  })
+})
+
+describe('dayOf', () => {
+  const read = { entries: [], titles: {} }
+
+  it('starts a date of the reader’s calendar at its local midnight', () => {
+    expect(dayOf({ ...read, date: '2026-03-29' }, now)).toEqual({
+      key: '2026-03-29',
+      date: new Date(2026, 2, 29),
+      entries: [],
+      titles: {},
+    })
+  })
+
+  it('says today and yesterday, by the reader’s clock', () => {
+    expect(dayOf({ ...read, date: '2026-09-27' }, now).relative).toBe('today')
+    expect(dayOf({ ...read, date: '2026-09-26' }, now).relative).toBe('yesterday')
+    expect(dayOf({ ...read, date: '2026-09-25' }, now)).not.toHaveProperty('relative')
   })
 })
 

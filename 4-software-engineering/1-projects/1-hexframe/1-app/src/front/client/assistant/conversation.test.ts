@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { conversationDay, postMessage, recordNavigation } from '#/api/assistant/assistant'
 
-import { useConversationDay, usePostMessage, useRecordNavigation } from './conversation'
+import { useConversation, usePostMessage, useRecordNavigation } from './conversation'
 
 // The Conversation's hooks over stand-ins for Assistant's server functions: what each calls, with the
 // reader's day, and when the Conversation is read again. The server functions themselves are covered
@@ -37,9 +37,9 @@ async function render<T>(hook: () => T) {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   const wrapper = ({ children }: { children: ReactNode }) =>
     createElement(QueryClientProvider, { client }, children)
-  const rendered = renderHook(() => ({ today: useConversationDay(), hook: hook() }), { wrapper })
+  const rendered = renderHook(() => ({ days: useConversation(), hook: hook() }), { wrapper })
   await waitFor(() => {
-    expect(rendered.result.current.today.isSuccess).toBe(true)
+    expect(rendered.result.current.days.isSuccess).toBe(true)
   })
   return rendered.result
 }
@@ -50,7 +50,7 @@ const offsetAt = (at: Date) => -at.getTimezoneOffset()
 describe("the Conversation's hooks", () => {
   it('read today, the reader’s own date, in their time zone', async () => {
     const result = await render(() => undefined)
-    expect(result.current.today.data).toEqual(today)
+    expect(result.current.days.data?.pages).toEqual([today])
     const now = new Date()
     const [year, month, date] = [now.getFullYear(), now.getMonth(), now.getDate()]
     expect(conversationDay).toHaveBeenCalledWith({
@@ -60,20 +60,35 @@ describe("the Conversation's hooks", () => {
         nextOffset: offsetAt(new Date(year, month, date + 1)),
       },
     })
+    expect(result.current.days.hasNextPage).toBe(false)
   })
 
-  it('read a day of the reader’s calendar, at the offsets of its midnight and the next', async () => {
-    const result = await render(() => useConversationDay('2026-03-29'))
+  it('read, scrolling back, the reader’s day holding the latest Entry before, at its offsets', async () => {
+    // Before today, the latest Entry is on 29 March 2026, at noon of the reader's clock.
+    const earlier = new Date(2026, 2, 29, 12)
+    const before = { day: { date: '2026-03-29', offset: 0 }, entries: [], titles: {} }
+    vi.mocked(conversationDay)
+      .mockResolvedValueOnce({ ok: true, value: { ...today, earlier } } as never)
+      .mockResolvedValueOnce({ ok: true, value: before } as never)
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+    const wrapper = ({ children }: { children: ReactNode }) =>
+      createElement(QueryClientProvider, { client }, children)
+    const { result } = renderHook(useConversation, { wrapper })
     await waitFor(() => {
-      expect(result.current.hook.isSuccess).toBe(true)
+      expect(result.current.hasNextPage).toBe(true)
     })
-    expect(conversationDay).toHaveBeenCalledWith({
+    await act(() => result.current.fetchNextPage())
+    await waitFor(() => {
+      expect(result.current.data?.pages).toEqual([{ ...today, earlier }, before])
+    })
+    expect(conversationDay).toHaveBeenLastCalledWith({
       data: {
         date: '2026-03-29',
         offset: offsetAt(new Date(2026, 2, 29)),
         nextOffset: offsetAt(new Date(2026, 2, 30)),
       },
     })
+    expect(result.current.hasNextPage).toBe(false)
   })
 
   it('post a Message, then read the Conversation again', async () => {

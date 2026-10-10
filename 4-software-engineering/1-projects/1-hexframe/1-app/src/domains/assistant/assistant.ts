@@ -41,9 +41,7 @@ export const day = (accountId: string, asked: Day) =>
  * reader scrolling back goes next, the days in between empty. None before the first Entry.
  */
 export const before = (accountId: string, asked: Day) =>
-  Conversations.use((conversations) =>
-    conversations.latestBefore(accountId, spanOf(asked).from),
-  )
+  Conversations.use((conversations) => conversations.latestBefore(accountId, spanOf(asked).from))
 
 /**
  * The id of the Entry last recorded in the Account's Conversation, whatever instant it dates from,
