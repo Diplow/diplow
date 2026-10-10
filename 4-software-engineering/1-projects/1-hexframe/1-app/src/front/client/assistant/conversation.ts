@@ -25,16 +25,20 @@ const conversationQueue = 'conversation'
 const offsetAt = (at: Date) => -at.getTimezoneOffset()
 
 /**
- * The reader's clock's offsets from UTC at the midnight starting a date of their calendar,
- * `2026-10-10`, today's when none is given, and at the next midnight: what the server splits the
- * Conversation's days by, a day their clock changes spanning 23 or 25 hours.
+ * A date of the reader's calendar, `2026-10-10`, today's when none is given, with their clock's
+ * offsets from UTC at its midnight and at the next: what the server splits the Conversation's days
+ * by, a day their clock changes spanning 23 or 25 hours. Today is the reader's own date, never one
+ * the server works out from an offset, which the hour a clock goes back would get wrong.
  */
-function offsetsOn(date?: string) {
+function dayOn(date?: string) {
   const now = new Date()
   const [year = now.getFullYear(), month = now.getMonth() + 1, day = now.getDate()] =
     date?.split('-').map(Number) ?? []
+  const midnight = new Date(year, month - 1, day)
+  const pad = (n: number) => String(n).padStart(2, '0')
   return {
-    offset: offsetAt(new Date(year, month - 1, day)),
+    date: `${String(year)}-${pad(month)}-${pad(day)}`,
+    offset: offsetAt(midnight),
     nextOffset: offsetAt(new Date(year, month - 1, day + 1)),
   }
 }
@@ -49,8 +53,7 @@ export const useConversationDay = (date?: string) =>
     read({
       scope: dayScope,
       key: [date ?? 'today'],
-      call: () =>
-        conversationDay({ data: { ...(date !== undefined && { date }), ...offsetsOn(date) } }),
+      call: () => conversationDay({ data: dayOn(date) }),
     }),
   )
 

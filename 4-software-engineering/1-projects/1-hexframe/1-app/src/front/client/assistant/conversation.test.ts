@@ -48,13 +48,14 @@ async function render<T>(hook: () => T) {
 const offsetAt = (at: Date) => -at.getTimezoneOffset()
 
 describe("the Conversation's hooks", () => {
-  it('read today in the reader’s time zone, no date sent', async () => {
+  it('read today, the reader’s own date, in their time zone', async () => {
     const result = await render(() => undefined)
     expect(result.current.today.data).toEqual(today)
     const now = new Date()
     const [year, month, date] = [now.getFullYear(), now.getMonth(), now.getDate()]
     expect(conversationDay).toHaveBeenCalledWith({
       data: {
+        date: [year, month + 1, date].map((n) => String(n).padStart(2, '0')).join('-'),
         offset: offsetAt(new Date(year, month, date)),
         nextOffset: offsetAt(new Date(year, month, date + 1)),
       },
