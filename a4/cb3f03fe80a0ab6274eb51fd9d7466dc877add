@@ -1,0 +1,46 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/state/useNavigationSender.test.ts
+  s_c19b57f63ed6ef::t_16c9a2611218f9 29
+  s_c19b57f63ed6ef::t_8779ab39abe629 151-154
+  s_c19b57f63ed6ef::t_7a7b580551a006 45-50
+  s_c19b57f63ed6ef::t_f3a66205dd6ead 1-28,30-44,51-150,155-165
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/assistant/conversation.ts
+  s_c19b57f63ed6ef::t_f377e30f7a7762 1-77
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/state/useNavigationSender.ts
+  s_c19b57f63ed6ef::t_2a11fa1c308865 1-71
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/assistant/conversation.test.ts
+  s_c19b57f63ed6ef::t_8780b8f2d9992f 1-96
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_c19b57f63ed6ef::t_7bf039ad963f8a 4-5,16,63-64
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/assistant.test.ts
+  s_c19b57f63ed6ef::t_091476f88783dd 2,80
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/keys.test.ts
+  s_c19b57f63ed6ef::t_091476f88783dd 162-173
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/auth.ts
+  s_c19b57f63ed6ef::t_091476f88783dd 193-195
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_c19b57f63ed6ef::t_fdff24338bb1e1 207-219,223-228
+  s_c19b57f63ed6ef::t_091476f88783dd 220-222
+  s_c19b57f63ed6ef::t_0065ae92c8fe51 206
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/recording.test.ts
+  s_c19b57f63ed6ef::t_091476f88783dd 2,92
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/day.ts
+  s_c19b57f63ed6ef::t_00829ec5daf2eb 26
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/entry.ts
+  s_c19b57f63ed6ef::t_00829ec5daf2eb 32,44,52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a4cb3f03fe80a0ab6274eb51fd9d7466dc877add",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
