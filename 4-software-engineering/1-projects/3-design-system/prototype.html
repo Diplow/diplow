@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>hexframe, mood prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500&family=Geist+Mono:wght@400&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&display=swap" rel="stylesheet">
+<style>
+  /* The colours, both themes, are the registry's (1-registry/design-system.json), read when the page loads, so
+     this page shows what an app installs. Light by structure (:root light, .dark dark), dark by default.
+     The fonts are Google's here, fontsource's in an app. */
+  :root {
+    --font-sans: 'Geist', system-ui, sans-serif;
+    --font-serif: 'Newsreader', Georgia, serif;
+    --font-mono: 'Geist Mono', ui-monospace, monospace;
+    --font-human: var(--font-serif);
+    --font-agent: var(--font-mono);
+  }
+  html:not(.ready) body { visibility: hidden; }
+  /* Switching theme, the light changes rather than flips. */
+  @property --background { syntax: '<color>'; inherits: true; initial-value: transparent; }
+  @property --foreground { syntax: '<color>'; inherits: true; initial-value: transparent; }
+  @property --muted-foreground { syntax: '<color>'; inherits: true; initial-value: transparent; }
+  @property --faint { syntax: '<color>'; inherits: true; initial-value: transparent; }
+  @property --card { syntax: '<color>'; inherits: true; initial-value: transparent; }
+  @property --border { syntax: '<color>'; inherits: true; initial-value: transparent; }
+  @property --input { syntax: '<color>'; inherits: true; initial-value: transparent; }
+  @property --human { syntax: '<color>'; inherits: true; initial-value: transparent; }
+  @property --agent { syntax: '<color>'; inherits: true; initial-value: transparent; }
+  @property --glow { syntax: '<color>'; inherits: true; initial-value: transparent; }
+  @property --halo { syntax: '<color>'; inherits: true; initial-value: transparent; }
+  @property --aura { syntax: '<color>'; inherits: true; initial-value: transparent; }
+  @property --ambient { syntax: '<color>'; inherits: true; initial-value: transparent; }
+  @property --tile { syntax: '<color>'; inherits: true; initial-value: transparent; }
+  @property --tile-fade { syntax: '<color>'; inherits: true; initial-value: transparent; }
+  html.turning { transition: --background var(--duration-turn), --foreground var(--duration-turn), --muted-foreground var(--duration-turn), --faint var(--duration-turn), --card var(--duration-turn), --border var(--duration-turn), --input var(--duration-turn), --human var(--duration-turn), --agent var(--duration-turn), --glow var(--duration-turn), --halo var(--duration-turn), --aura var(--duration-turn), --ambient var(--duration-turn), --tile var(--duration-turn), --tile-fade var(--duration-turn); }
+
+  :root { --fx: 66%; --chat-w: 460px; --zone-h: 116px; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+
+  /* Ambient light, cool, where the camera looks. */
+  .ambient {
+    position: fixed; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 70vmax 50vmax at calc(var(--fx) + 8vw) 58%, var(--ambient), transparent 70%);
+  }
+
+  svg.world { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; }
+
+  /* The warm light belongs to the centre of the system: it stays behind diplow, and from anywhere below,
+     it hints at where the centre is. */
+  .aura { fill: url(#g-aura); }
+  .core-glow { fill: url(#g-core); }
+  #core-light { opacity: var(--k, 1); }
+
+  /* A Tile is a hex, drawn by its light alone: only the centre keeps a line. Opened, its hex fades and leaves
+     the Tile at its heart and its six around it. Hidden, a Tile folds into its parent's heart; shown, it blooms out of it. */
+  .tile { transition: opacity .6s, transform var(--duration-bloom) var(--ease-glide); transition-delay: var(--d, 0s); }
+  .tile.hidden { opacity: 0; transform: scale(.45); pointer-events: none; transition-duration: .4s, var(--duration-fold); transition-delay: 0s; }
+  .hit, .self { opacity: var(--o, 1); transition: opacity .7s; outline: none; }
+  .hit[role], .self[role] { cursor: pointer; }
+  .hit[role]:hover, .self[role]:hover { opacity: min(1, calc(var(--o) + .3)); }
+  .tile.open > .hit { pointer-events: none; }
+  .tile:not(.open) > .self { pointer-events: none; }
+
+  .hex, .shex { fill: url(#g-tile); stroke: transparent; stroke-width: 1; vector-effect: non-scaling-stroke; transition: stroke .35s, opacity .6s; }
+  .tile.open > .hit > .hex { opacity: 0; }
+  .hit[role]:hover .hex, .self[role]:not(.lit):not(.core):hover .shex { fill: url(#g-hover); }
+  .hit:focus-visible .hex, .self:focus-visible .shex { stroke: var(--human); stroke-width: 1.5; }
+  .self.lit .shex { fill: url(#g-focus); stroke: var(--input); }
+  .self.core .shex { fill: url(#g-lit); }
+  .self.core.lit .shex { stroke: url(#g-stroke-lit); }
+  .glow { fill: var(--human); opacity: 0; transition: opacity .8s; }
+  .tile.empty .hex { opacity: .3; }
+  .tile.agent > .hit > .hex, .self.agent .shex { fill: url(#g-agent); }
+  .tile.agent > .hit > .glow { fill: var(--agent); opacity: .26; animation: breathe 3.2s ease-in-out infinite; }
+  .tile.agent.open > .hit > .glow { opacity: 0; animation: none; }
+  .tile.ping > .hit > .glow { animation: ping 1.8s ease-out; }
+  @keyframes breathe { 50% { opacity: .1; } }
+  @keyframes ping { 25% { opacity: .9; } }
+
+  .lbl foreignObject { pointer-events: none; overflow: visible; }
+  .clabel { transition: opacity .6s; }
+  .tile.open > .hit > .clabel { opacity: 0; }
+  .lbl.nb .p, .lbl.nb .by, .lbl.tiny .p, .lbl.tiny .by { display: none; }
+  .lbl.tiny .t { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; max-width: 100%; hyphens: auto; }
+  .label {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; color: var(--foreground); line-height: 1.15; font-family: var(--font-human); font-weight: 400; font-size: 16px;
+  }
+  .label .p { font-family: var(--font-sans); font-weight: 300; color: var(--muted-foreground); font-size: .66em; line-height: 1.4; margin-top: .7em; max-width: 90%; }
+  .self.lit .label .t { font-style: italic; }
+  .self.lit .label .p { color: color-mix(in oklab, var(--foreground) 80%, transparent); }
+  .label .by { font-family: var(--font-agent); color: var(--agent); font-size: .62em; margin-top: .6em; }
+  .tile.agent .label .t { color: var(--agent); }
+  .tile.agent .label .t { font-family: var(--font-agent); font-size: .86em; }
+  .label .plus { color: var(--faint); font-family: var(--font-sans); font-weight: 300; font-size: 1.5em; }
+
+  /* The conversation floats over the canvas: a veil edged by one curved hairline. The chat is cut along
+     that curve, so a zone, solid with a fine line on top, runs from the left edge of the screen to it. */
+  .veil {
+    position: fixed; top: 0; bottom: 0; left: 0; width: calc(var(--chat-w) + 170px); pointer-events: none;
+    backdrop-filter: blur(12px) saturate(1.05); -webkit-backdrop-filter: blur(12px);
+    background: linear-gradient(90deg, color-mix(in oklab, var(--background) 90%, transparent) 0%, color-mix(in oklab, var(--background) 74%, transparent) 62%, transparent 100%);
+    mask-image: radial-gradient(ellipse 100% 125% at 0% 50%, #000 66%, transparent 92%);
+  }
+  .chat { position: fixed; top: 0; bottom: 0; left: 0; width: calc(var(--chat-w) + 60px); display: flex; flex-direction: column; }
+  .brand { display: flex; align-items: center; gap: 10px; padding: 28px 0 0 36px; font-size: 15px; color: var(--foreground); }
+  .brand span { font-family: var(--font-serif); font-size: 20px; font-style: italic; font-weight: 300; }
+  .brand svg { width: 20px; height: 22px; }
+  .brand svg polygon { fill: none; stroke: var(--human); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+
+  .messages {
+    list-style: none; margin: 0; padding: 24px 100px 30px 36px; flex: 1; display: flex; flex-direction: column; gap: 22px;
+    overflow: auto; scrollbar-width: none; outline: none;
+    mask-image: linear-gradient(transparent, #000 28px);
+  }
+  .messages::-webkit-scrollbar { display: none; }
+  .messages > :first-child { margin-top: auto; }
+  .msg { max-width: 36em; }
+  .msg.human {
+    font-family: var(--font-human); font-size: var(--text-prose); font-weight: 300; line-height: 1.55; color: var(--foreground);
+    padding-left: 14px; border-left: 1px solid color-mix(in oklab, var(--human) 70%, transparent);
+  }
+  .msg.agent { font-family: var(--font-agent); font-size: var(--text-mono); line-height: 1.65; color: var(--muted-foreground); display: grid; grid-template-columns: 14px 1fr; gap: 10px; }
+  .msg.agent svg { width: 14px; height: 14px; margin-top: .3em; }
+  .msg.agent svg polygon { fill: none; stroke: var(--agent); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .msg.agent.cont svg { visibility: hidden; }
+  .msg.working { color: var(--agent); align-items: center; }
+  .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--agent); justify-self: center; box-shadow: 0 0 12px 2px var(--agent); animation: breathe 2.4s ease-in-out infinite; }
+
+  /* A zone: the composer's layout, reused for widgets in the conversation. Warm for you, cool for the agent. */
+  .zone {
+    --tint: var(--human);
+    position: relative;
+    background:
+      linear-gradient(90deg, transparent 15%, color-mix(in oklab, var(--tint) 9%, transparent)),
+      var(--card);
+  }
+  .zone.agent { --tint: var(--agent); }
+  .zone::before, .zone.widget::after {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--input) 45%, var(--input));
+  }
+  .zone.widget::after { top: auto; bottom: 0; }
+
+  .widget { margin: 2px -100px 2px -36px; padding: 20px 100px 20px 36px; display: grid; grid-template-columns: 54px 1fr; gap: 18px; align-items: start; }
+  .w-map { width: 54px; height: 50px; overflow: visible; margin-top: 4px; }
+  .w-map polygon { fill: none; stroke: var(--input); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .w-map .hub { fill: color-mix(in oklab, var(--foreground) 9%, transparent); }
+  .w-map .none { stroke-dasharray: 1 3; opacity: .7; }
+  .w-map .here { stroke: var(--agent); fill: color-mix(in oklab, var(--agent) 20%, transparent); }
+  .w-body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .w-kicker { font: 400 11.5px/1.5 var(--font-agent); color: var(--agent); }
+  .w-title { font: 400 21px/1.25 var(--font-human); color: var(--foreground); }
+  .w-preview { font: 300 13.5px/1.5 var(--font-sans); color: var(--muted-foreground); }
+  .w-actions { display: flex; gap: 22px; margin-top: 12px; }
+  .w-actions button { display: inline-flex; align-items: center; gap: 8px; background: none; border: 0; padding: 0; font: 400 13px var(--font-sans); color: var(--muted-foreground); cursor: pointer; }
+  .w-actions button::before { content: ''; width: 8px; height: 9px; background: currentColor; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
+  .w-actions button.primary { color: var(--agent); }
+  .w-actions button:hover { color: var(--foreground); }
+  .w-actions button:focus-visible { outline: 1px solid var(--agent); outline-offset: 4px; }
+
+  .composer { height: var(--zone-h); flex: none; display: flex; align-items: center; gap: 16px; padding: 0 66px 0 36px; }
+  .composer textarea {
+    flex: 1; resize: none; background: transparent; border: 0; outline: none; color: var(--foreground);
+    font: 300 var(--text-prose)/1.5 var(--font-human); padding: 0; max-height: 84px;
+  }
+  .composer textarea::placeholder { color: var(--faint); }
+  .send { width: 38px; height: 42px; flex: none; border: 0; padding: 0; background: none; cursor: pointer; color: var(--faint); }
+  .send svg { width: 100%; height: 100%; overflow: visible; }
+  .send polygon { fill: none; stroke: var(--input); stroke-width: 1; vector-effect: non-scaling-stroke; transition: stroke .3s, fill .3s; }
+  .send path { stroke: currentColor; transition: stroke .3s; }
+  .send.ready { color: var(--human); }
+  .send.ready polygon { stroke: var(--human); fill: color-mix(in oklab, var(--human) 12%, transparent); filter: drop-shadow(0 0 8px color-mix(in oklab, var(--human) 55%, transparent)); }
+  .send:focus-visible { outline: none; }
+  .send:focus-visible polygon { stroke: var(--human); stroke-width: 1.6; }
+
+  /* The hairline, drawn over the chat, and the conversation's scrollbar: a star riding it, lighting the stretch you see. */
+  svg.chrome { position: fixed; top: 0; left: 0; height: 100vh; pointer-events: none; overflow: visible; }
+  .edge { fill: none; stroke: url(#g-edge); stroke-width: 1; }
+  .edge-lit { fill: none; stroke: url(#g-edge-lit); stroke-width: 1.4; opacity: 0; transition: opacity .5s; }
+  .track { fill: none; stroke: transparent; stroke-width: 16; cursor: pointer; }
+  .star { opacity: 0; transition: opacity .5s; cursor: grab; }
+  .star-hit { fill: transparent; }
+  .star-glow { fill: url(#g-star); transition: transform .5s; }
+  .star-ray { fill: var(--foreground); }
+  .star-core { fill: var(--card); }
+  .dark .star-core { fill: #fff; }
+  .scrolls .edge-lit { opacity: .55; }
+  .scrolls .star { opacity: .8; pointer-events: all; }
+  .scrolls .track { pointer-events: stroke; }
+  .scrolls.stirred .edge-lit, .scrolls.held .edge-lit { opacity: 1; }
+  .scrolls.stirred .star, .scrolls.held .star, .scrolls .star:hover { opacity: 1; }
+  .stirred .star-glow, .held .star-glow, .star:hover .star-glow { transform: scale(1.6); }
+  .held .star { cursor: grabbing; }
+
+  /* The path, a thin line on the right with a point per step. */
+  .rail { position: fixed; right: 30px; top: 84px; }
+  .rail ol { list-style: none; margin: 0; padding: 18px 0; display: flex; flex-direction: column; gap: 26px; position: relative; }
+  .rail ol::before { content: ''; position: absolute; right: 3px; top: -40px; bottom: -40px; width: 1px; background: linear-gradient(transparent, var(--input) 30%, var(--input) 70%, transparent); }
+  .rail li { display: flex; justify-content: flex-end; align-items: center; gap: 14px; }
+  .rail li::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--background); border: 1px solid var(--faint); }
+  .rail li.here::after { background: var(--human); border-color: var(--human); box-shadow: 0 0 14px 2px color-mix(in oklab, var(--human) 70%, transparent); }
+  .rail button { background: none; border: 0; padding: 0; color: var(--faint); font: 300 13px/1.2 var(--font-sans); cursor: pointer; text-shadow: 0 0 12px var(--background); }
+  .rail li.here button { color: var(--foreground); }
+  .rail button:hover { color: var(--muted-foreground); }
+  .rail button:focus-visible { outline: 1px solid var(--human); outline-offset: 3px; }
+
+  /* The theme: a half-lit disc that turns with it. */
+  .theme { position: fixed; top: 22px; right: 22px; width: 30px; height: 30px; border: 0; padding: 0; background: none; color: var(--faint); cursor: pointer; border-radius: 50%; }
+  .theme svg { width: 100%; height: 100%; overflow: visible; }
+  .theme circle { fill: none; stroke: currentColor; stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .theme path { fill: currentColor; transition: transform var(--duration-turn) var(--ease-glide); }
+  .dark .theme path { transform: rotate(180deg); }
+  .theme:hover { color: var(--muted-foreground); }
+  .theme:focus-visible { outline: 1px solid var(--human); outline-offset: 3px; }
+
+  @media (max-width: 820px) {
+    .veil, svg.chrome, .messages, .rail { display: none; }
+    .chat { top: auto; width: 100%; }
+    .composer { padding-right: 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tile, .tile.hidden { transform: none; transition: opacity .3s; }
+    html.turning, .theme path { transition: none; }
+    .tile.agent > .hit > .glow, .pulse { animation: none; }
+  }
+</style>
+</head>
+<body>
+<div class="ambient"></div>
+<svg class="world" id="world-svg" role="application" aria-label="Your system">
+  <defs>
+    <linearGradient id="g-tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" style="stop-color: var(--tile)"/>
+      <stop offset="1" style="stop-color: var(--tile-fade)"/>
+    </linearGradient>
+    <linearGradient id="g-hover" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" style="stop-color: var(--tile-lit)"/>
+      <stop offset="1" style="stop-color: var(--tile-lit-fade)"/>
+    </linearGradient>
+    <linearGradient id="g-lit" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" style="stop-color: var(--glow); stop-opacity: .34"/>
+      <stop offset="1" style="stop-color: var(--glow-soft); stop-opacity: .06"/>
+    </linearGradient>
+    <linearGradient id="g-stroke-lit" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" style="stop-color: var(--glow-soft)"/>
+      <stop offset=".6" style="stop-color: var(--human)"/>
+      <stop offset="1" style="stop-color: var(--human); stop-opacity: .2"/>
+    </linearGradient>
+    <linearGradient id="g-agent" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" style="stop-color: var(--agent); stop-opacity: .14"/>
+      <stop offset="1" style="stop-color: var(--agent); stop-opacity: 0"/>
+    </linearGradient>
+    <linearGradient id="g-focus" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" style="stop-color: var(--tile-lit)"/>
+      <stop offset="1" style="stop-color: var(--tile-lit-fade)"/>
+    </linearGradient>
+    <radialGradient id="g-aura">
+      <stop offset="0" style="stop-color: var(--aura)"/>
+      <stop offset="1" style="stop-color: var(--aura); stop-opacity: 0"/>
+    </radialGradient>
+    <radialGradient id="g-core">
+      <stop offset="0" style="stop-color: var(--halo); stop-opacity: .5"/>
+      <stop offset=".42" style="stop-color: var(--halo); stop-opacity: .3"/>
+      <stop offset=".7" style="stop-color: var(--halo); stop-opacity: .08"/>
+      <stop offset="1" style="stop-color: var(--halo); stop-opacity: 0"/>
+    </radialGradient>
+    <filter id="blur0" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="44"/></filter>
+    <filter id="blur1" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="15"/></filter>
+    <filter id="blur2" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="5"/></filter>
+  </defs>
+  <g id="core-light"><circle class="aura" id="aura"/><circle class="core-glow" id="core-glow"/></g>
+  <g id="world"></g>
+</svg>
+
+<div class="veil"></div>
+
+<aside class="chat" id="chat" aria-label="Conversation with your agent">
+  <div class="brand">
+    <svg viewBox="-11 -12 22 24" aria-hidden="true"><polygon id="mark"/></svg>
+    <span>hexframe</span>
+  </div>
+  <ol class="messages" id="messages" tabindex="0" aria-label="Messages">
+    <li class="msg human">Show me where design work sits today.</li>
+    <li class="msg agent"><svg viewBox="-12 -12 24 24" aria-hidden="true"><polygon class="agent-mark"/></svg><span>Nowhere on its own. The tokens live inside hexframe's app, next to its components, and the site has none yet.</span></li>
+    <li class="msg human">I want the design system to live outside hexframe, so my site can use it too.</li>
+    <li class="msg agent"><svg viewBox="-12 -12 24 24" aria-hidden="true"><polygon class="agent-mark"/></svg><span>Then it belongs beside Projects rather than inside one. I drafted Design system east of Software engineering, next to Principles, where principles become something you can reuse.</span></li>
+    <li class="zone widget agent">
+      <svg class="w-map" id="w-map" viewBox="-27 -25 54 50" aria-hidden="true"></svg>
+      <div class="w-body">
+        <span class="w-kicker">drafted, east of Software engineering</span>
+        <span class="w-title">Design system</span>
+        <span class="w-preview">Tokens and components that hexframe and the site share.</span>
+        <div class="w-actions">
+          <button type="button" class="primary" data-go="root.4.3">Open</button>
+          <button type="button" data-go="root.4" data-ping="root.4.3">Show where</button>
+        </div>
+      </div>
+    </li>
+    <li class="msg agent"><svg viewBox="-12 -12 24 24" aria-hidden="true"><polygon class="agent-mark"/></svg><span>One choice before I write its first page: move hexframe's tokens there now, or when the site needs them?</span></li>
+    <li class="msg human">Now. And dark stays the default.</li>
+    <li class="msg agent working" id="working"><span class="pulse"></span><span>Writing the first page of Design system</span></li>
+  </ol>
+  <form class="zone composer" id="composer">
+    <textarea id="input" rows="1" placeholder="Reply, or point at a tile" aria-label="Message"></textarea>
+    <button class="send" id="send" type="submit" aria-label="Send">
+      <svg viewBox="-19 -21 38 42"><polygon id="send-hex"/><path d="M0 6V-6M-5 -1l5-5 5 5" fill="none" stroke-width="1.3"/></svg>
+    </button>
+  </form>
+</aside>
+
+<svg class="chrome" id="chrome" aria-hidden="true">
+  <defs>
+    <linearGradient id="g-edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" style="stop-color: var(--input); stop-opacity: 0"/>
+      <stop offset=".42" style="stop-color: var(--input)"/>
+      <stop offset="1" style="stop-color: var(--input)"/>
+    </linearGradient>
+    <linearGradient id="g-edge-lit" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="100">
+      <stop offset="0" style="stop-color: var(--foreground); stop-opacity: 0"/>
+      <stop offset=".5" style="stop-color: var(--foreground); stop-opacity: .8"/>
+      <stop offset="1" style="stop-color: var(--foreground); stop-opacity: 0"/>
+    </linearGradient>
+    <radialGradient id="g-star">
+      <stop offset="0" style="stop-color: var(--muted-foreground); stop-opacity: .5"/>
+      <stop offset=".35" style="stop-color: var(--muted-foreground); stop-opacity: .14"/>
+      <stop offset="1" style="stop-color: var(--muted-foreground); stop-opacity: 0"/>
+    </radialGradient>
+  </defs>
+  <path class="edge" id="edge"/>
+  <path class="edge-lit" id="edge-lit"/>
+  <path class="track" id="track"/>
+  <g class="star" id="star">
+    <circle class="star-hit" r="14"/>
+    <circle class="star-glow" r="13"/>
+    <path class="star-ray" d="M0,-10 Q.8,-.8 5,0 Q.8,.8 0,10 Q-.8,.8 -5,0 Q-.8,-.8 0,-10Z"/>
+    <circle class="star-core" r="1.5"/>
+  </g>
+</svg>
+
+<nav class="rail" aria-label="Where you are"><ol id="rail"></ol></nav>
+<button class="theme" id="theme" type="button" aria-label="Dark theme"><svg viewBox="-12 -12 24 24" aria-hidden="true"><circle r="7.5"/><path d="M0 -7.5A7.5 7.5 0 0 1 0 7.5Z"/></svg></button>
+
+<script>
+const NS = 'http://www.w3.org/2000/svg', XH = 'http://www.w3.org/1999/xhtml';
+// A frame holds its seven tiles in a hex K times their size, so every level is the same picture, upright.
+const S = 100, K = 3.2, SQ3 = Math.sqrt(3), DEG = Math.PI / 180;
+const DOMAIN = K * S;
+const ANG = { 1: -120, 2: -60, 3: 0, 4: 60, 5: 120, 6: 180 }; // 1 NW, 2 NE, 3 E, 4 SE, 5 SW, 6 W
+const at = (k, len) => [len * Math.cos(ANG[k] * DEG), len * Math.sin(ANG[k] * DEG)];
+const pts = (cx, cy, r) => Array.from({ length: 6 }, (_, i) => {
+  const a = (-90 + 60 * i) * DEG;
+  return (cx + r * Math.cos(a)).toFixed(2) + ',' + (cy + r * Math.sin(a)).toFixed(2);
+}).join(' ');
+const MAX_TITLE_PX = 22, MIN_TITLE_PX = 11;
+const $ = id => document.getElementById(id);
+
+function el(tag, attrs = {}, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+
+$('mark').setAttribute('points', pts(0, 0, 11));
+$('send-hex').setAttribute('points', pts(0, 0, 19));
+document.querySelectorAll('.agent-mark').forEach(p => p.setAttribute('points', pts(0, 0, 9).split(' ').map(q => q.split(',').reverse().join(',')).join(' ')));
+// The widget's map: Software engineering's frame, the draft's slot lit.
+el('polygon', { class: 'hub', points: pts(0, 0, 7.2) }, $('w-map'));
+for (let j = 1; j <= 6; j++) {
+  const [x, y] = at(j, SQ3 * 8);
+  el('polygon', { class: j === 3 ? 'here' : [1, 2, 6].includes(j) ? '' : 'none', points: pts(x, y, 7.2) }, $('w-map'));
+}
+
+const TREE = {
+  title: 'diplow', preview: 'Six domains, how they connect, and the depth that comes out of connecting them.',
+  children: {
+    1: { title: 'Leadership', preview: 'Leading people through change, and what agents change about leading.', children: { 1: 'Managing', 2: 'Hiring', 4: 'Feedback' } },
+    2: { title: 'Education', preview: 'Learning with direction, and helping others find theirs.', children: { 1: 'Teaching', 3: 'Learning with agents', 5: 'Curiosity' } },
+    3: { title: 'Games', preview: 'Systems you can play, and what they teach about the ones you can’t.', children: { 1: 'Riftbound', 2: 'Game design', 6: 'Chess' } },
+    4: { title: 'Software engineering', preview: 'How I build software with agents, and the principles I build it on.', children: {
+      1: { title: 'Projects', preview: 'What I build.', children: { 1: { title: 'hexframe', children: { 1: 'App', 2: 'Claude mod', 3: 'Obsidian plugin' } }, 2: 'Site' } },
+      2: { title: 'Principles', preview: 'What I build on.', children: { 1: 'Domain-driven design', 2: 'AI first', 3: 'Feedback', 4: 'Mapping modules', 5: 'Maintain&shy;ability' } },
+      3: { title: 'Design system', agent: true },
+      6: 'Tooling',
+    } },
+    5: { title: 'Startups', preview: 'Companies built around a bet on the future.', children: { 1: 'Ideas', 2: 'Fundraising', 5: 'Hexframe' } },
+    6: { title: 'Politics', preview: 'How we decide together, and where agents could help.', children: { 1: 'Projects', 3: 'Institutions', 4: 'Europe' } },
+  },
+};
+
+const world = $('world');
+const tiles = {}, order = [], labels = [];
+
+// A label lays out at 16px, then scales to its Tile: u is the world units per label pixel.
+function label(owner, parent, cx, cy, a, html, cls) {
+  const g = el('g', { class: 'lbl ' + cls }, parent);
+  const u = a * .01, w = a * 1.46 / u, h = a * 1.15 / u;
+  const fo = el('foreignObject', { x: -w / 2, y: -h / 2, width: w, height: h }, g);
+  const d = document.createElementNS(XH, 'div');
+  d.className = 'label'; d.innerHTML = html;
+  fo.appendChild(d);
+  const L = { g, fo, owner, cx, cy, a, u, fs: 1 };
+  labels.push(L);
+  return L;
+}
+const textOf = n => `<span class="t">${n.title}</span>` + (n.preview ? `<span class="p">${n.preview}</span>` : '') + (n.agent ? '<span class="by">drafting</span>' : '');
+
+// What a click does, as in the app: a Branch of the ring opens in place, or closes from its heart;
+// anything else is travelled to. A double-click, or Shift+Enter, travels to any Tile.
+let clicked, lastAct;
+function button(g, t, hub) {
+  g.setAttribute('role', 'button');
+  const act = () => { clicked = t.id; lastAct = hub ? pressHub(t.id) : press(t.id); };
+  g.addEventListener('click', e => { if (e.detail < 2) act(); });
+  // The first click may have opened what lies under the second: a double-click goes where it began.
+  g.addEventListener('dblclick', () => { if (lastAct === 'toggle' && clicked !== focus) go(clicked); });
+  g.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.shiftKey) { e.preventDefault(); if (t.id !== focus) go(t.id); }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act(); }
+  });
+}
+
+function build(node, parent, x, y, a, id, j = 0) {
+  const n = typeof node === 'string' ? { title: node } : node;
+  const t = { id, parent, x, y, a, title: n.title.replace('&shy;', ''), empty: !!n.empty, agent: !!n.agent, kids: false };
+  tiles[id] = t; order.push(t);
+  t.g = el('g', { class: 'tile hidden' + (n.agent ? ' agent' : '') + (n.empty ? ' empty' : '') }, world);
+  if (parent) {
+    const P = tiles[parent];
+    t.g.style.transformOrigin = `${P.x}px ${P.y}px`;
+    t.g.style.setProperty('--d', (j - 1) * 40 + 'ms');
+  }
+  t.hit = el('g', { class: 'hit' }, t.g);
+  if (n.agent) el('polygon', { class: 'glow', points: pts(x, y, a * .85), filter: 'url(#blur1)' }, t.hit);
+  el('polygon', { class: 'hex', points: pts(x, y, a * .95) }, t.hit);
+  if (n.empty) { label(t, t.hit, x, y, a, '<span class="plus">+</span>', 'clabel'); return t; }
+  t.clabel = label(t, t.hit, x, y, a, textOf(n), 'clabel');
+  el('title', {}, t.hit).textContent = t.title;
+  button(t.hit, t, false);
+  // Opened, the hex holds the tile itself at its heart and its six around it.
+  const r = a / K;
+  t.self = el('g', { class: 'self' + (n.agent ? ' agent' : '') + (parent ? '' : ' core') }, t.g);
+  el('polygon', { class: 'shex', points: pts(x, y, r * .95) }, t.self);
+  t.slabel = label(t, t.self, x, y, r, textOf(n), 'slabel');
+  button(t.self, t, true);
+  for (let k = 1; k <= 6; k++) {
+    const child = n.children?.[k];
+    if (child) t.kids = true;
+    const [dx, dy] = at(k, SQ3 * r);
+    build(child ?? { title: '', empty: true }, id, x + dx, y + dy, r, id + '.' + k, k);
+  }
+  return t;
+}
+build(TREE, null, 0, 0, K * DOMAIN, 'root');
+
+let focus = 'root.4';
+let cam = { x: 0, y: 0, z: 1 };
+const expanded = new Set();
+
+// Where everything sits on screen. The composer's top-right corner lies on the upper-left edge of the
+// slot south-west of the centre: the zone's height takes up what it can, the canvas shifts for the rest.
+let G;
+function layout() {
+  const W = innerWidth, H = innerHeight, mobile = W <= 820;
+  const c = mobile ? W : Math.min(500, Math.max(360, W * .31));
+  const A = (mobile ? W * .46 : Math.min(H * .43, (W - c) * .37)) / .95; // the centre Tile's radius
+  let cx = mobile ? W / 2 : c + (W - c) * .5 + W * .012;
+  const cy = H / 2, x0 = c + 18, bow = 72;
+  const xAt = y => x0 + 2 * (y / H) * (1 - y / H) * bow;
+  let top = H - 116;
+  if (!mobile) {
+    const lineX = y => cx - SQ3 / 2 * A - (y - (cy + .55 * A)) * SQ3;
+    const f = y => xAt(y) - lineX(y);
+    let lo = H - 150, hi = H - 92;
+    if (f(lo) >= 0) top = lo;
+    else if (f(hi) <= 0) top = hi;
+    else { for (let i = 0; i < 40; i++) { const m = (lo + hi) / 2; if (f(m) < 0) lo = m; else hi = m; } top = (lo + hi) / 2; }
+    cx += f(top);
+  }
+  G = { W, H, c, A, cx, cy, x0, bow, xAt, top, mobile };
+}
+
+function update(e) {
+  const p = G.A / DOMAIN * cam.z;
+  world.setAttribute('transform', `translate(${G.cx} ${G.cy}) scale(${p}) translate(${-cam.x} ${-cam.y})`);
+  light(p);
+  for (const L of labels) {
+    if (L.owner.g.classList.contains('hidden') && L.w === L.wt) continue;
+    // Titles stay readable: capped on big Tiles, kept legible and alone on small ones.
+    const px = 16 * L.u * p, tiny = L.a * p < 72;
+    let s = Math.min(1, MAX_TITLE_PX / px);
+    if (tiny) s = Math.max(s, MIN_TITLE_PX / px);
+    if (tiny !== L.tiny) { L.tiny = tiny; L.g.classList.toggle('tiny', tiny); }
+    const fs = s > 1 ? Math.round(s * 100) / 100 : 1;
+    if (fs !== L.fs) {
+      // Scaled up on a small Tile, the label's box shrinks to keep within the hex.
+      L.fs = fs;
+      const w = L.a * (fs > 1 ? 1.62 : 1.46) / L.u / fs, h = L.a * 1.15 / L.u / fs;
+      L.fo.setAttribute('x', -w / 2); L.fo.setAttribute('y', -h / 2);
+      L.fo.setAttribute('width', w); L.fo.setAttribute('height', h);
+    }
+    // A tile seen from inside its neighbour leans toward you.
+    let ox = 0, oy = 0;
+    if (L.wt !== undefined) {
+      const w = L.w = L.w0 + (L.wt - L.w0) * e;
+      const vx = cam.x - L.cx, vy = cam.y - L.cy, d = Math.hypot(vx, vy);
+      if (d > 1 && w > 0) { const off = Math.min(.7 * L.a, d) * w / d; ox = vx * off; oy = vy * off; }
+    }
+    L.g.setAttribute('transform', `translate(${L.cx + ox} ${L.cy + oy}) scale(${s * L.u})`);
+  }
+}
+
+// diplow's light follows diplow, sitting at the root's centre, but grows slower than the world as you go
+// down; once diplow leaves the screen, the light waits at the edge, toward it.
+function light(p) {
+  const r = 1.6 * G.A / K * Math.sqrt(cam.z * K);
+  const dx = -cam.x * p, dy = -cam.y * p, m = r * .3;
+  let k = 1;
+  if (G.cx + dx < -m) k = Math.min(k, (-m - G.cx) / dx);
+  if (G.cx + dx > G.W + m) k = Math.min(k, (G.W + m - G.cx) / dx);
+  if (G.cy + dy < -m) k = Math.min(k, (-m - G.cy) / dy);
+  if (G.cy + dy > G.H + m) k = Math.min(k, (G.H + m - G.cy) / dy);
+  $('core-light').setAttribute('transform', `translate(${G.cx + dx * k} ${G.cy + dy * k})`);
+  // Full behind diplow when it is the centre, a quarter softer once you are below it.
+  const below = Math.min(1, Math.max(0, Math.log(cam.z * K) / Math.log(K)));
+  $('core-light').style.setProperty('--k', (.55 + .45 * k) * (1 - .25 * below));
+  $('core-glow').setAttribute('r', r);
+  $('aura').setAttribute('r', r * 2.5);
+}
+
+// A background tab gets no animation frames; a timer still lands the camera.
+let flight = 0;
+const tick = cb => document.hidden ? setTimeout(() => cb(performance.now()), 16) : requestAnimationFrame(cb);
+function settle() { for (const L of labels) if (L.wt !== undefined) L.w = L.w0 = L.wt; }
+function fly(t, dur) {
+  const id = ++flight;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) { cam = { ...t }; settle(); update(1); return; }
+  const from = { ...cam }, start = performance.now();
+  const ease = u => u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+  const step = now => {
+    if (id !== flight) return;
+    const u = Math.min(1, (now - start) / dur), e = ease(u);
+    const z = Math.exp(Math.log(from.z) + (Math.log(t.z) - Math.log(from.z)) * e);
+    // Zooming in, the target's distance from the centre of the screen shrinks evenly; zooming out, the source's grows evenly.
+    const k = t.z > from.z * 1.01 ? 1 - (1 - e) * from.z / z : t.z < from.z * .99 ? e * t.z / z : e;
+    cam = { x: from.x + (t.x - from.x) * k, y: from.y + (t.y - from.y) * k, z };
+    update(e);
+    if (u < 1) tick(step); else settle();
+  };
+  tick(step);
+}
+
+function render() {
+  const T = tiles[focus];
+  const path = new Set();
+  for (let x = T; x; x = tiles[x.parent]) path.add(x.id);
+  for (const X of order) {
+    const inRing = X.parent === T.id, inBloom = expanded.has(X.parent);
+    const shown = !X.parent || path.has(X.parent) || inBloom, open = path.has(X.id) || expanded.has(X.id);
+    X.g.classList.toggle('hidden', !shown);
+    X.g.classList.toggle('open', open);
+    let o;
+    if (X === T || inRing || inBloom) o = 1;
+    else if (open) o = .45;
+    else o = Math.abs(X.a - T.a) < 1 && Math.hypot(X.x - T.x, X.y - T.y) < SQ3 * T.a * 1.1 ? .5 : .13;
+    X.hit.style.setProperty('--o', o);
+    if (X.empty) continue;
+    const branch = inRing && X.kids, hub = expanded.has(X.id);
+    X.hit.setAttribute('tabindex', shown && !open ? '0' : '-1');
+    X.hit.setAttribute('aria-label', (branch ? 'Open ' : 'Go to ') + X.title);
+    if (branch) X.hit.setAttribute('aria-expanded', 'false'); else X.hit.removeAttribute('aria-expanded');
+    X.self.style.setProperty('--o', !open ? 0 : X === T || hub ? 1 : X.id === T.parent ? .55 : .14);
+    X.self.classList.toggle('lit', X === T);
+    X.self.setAttribute('tabindex', open && X !== T ? '0' : '-1');
+    X.self.setAttribute('aria-label', hub ? 'Close ' + X.title : X === T ? X.title : 'Back to ' + X.title);
+    if (hub) X.self.setAttribute('aria-expanded', 'true'); else X.self.removeAttribute('aria-expanded');
+    // Neighbours' titles lean toward the open frame, so they stay on screen: closed tiles around it, and the parent at its heart.
+    X.clabel.w0 = X.clabel.w ?? 0; X.clabel.wt = shown && !open && !inRing && !inBloom ? 1 : 0;
+    X.slabel.w0 = X.slabel.w ?? 0; X.slabel.wt = X.id === T.parent ? 1 : 0;
+    for (const L of [X.clabel, X.slabel]) L.g.classList.toggle('nb', L.wt === 1);
+  }
+  rail();
+}
+
+function go(id, instant = false) {
+  const T = tiles[id];
+  if (!T || T.empty) return;
+  const levels = Math.round(Math.abs(Math.log(tiles[focus].a / T.a) / Math.log(K)));
+  focus = id;
+  expanded.clear();
+  render();
+  const target = { x: T.x, y: T.y, z: DOMAIN / T.a };
+  if (instant) { cam = target; settle(); update(1); } else fly(target, 800 + 300 * Math.min(levels, 2));
+}
+function toggle(id) {
+  if (expanded.has(id)) expanded.delete(id); else expanded.add(id);
+  render(); settle(); update(1);
+}
+function press(id) {
+  const X = tiles[id];
+  if (X.parent === focus && X.kids) { toggle(id); return 'toggle'; }
+  go(id); return 'travel';
+}
+function pressHub(id) {
+  if (expanded.has(id)) { toggle(id); return 'toggle'; }
+  if (id !== focus) { go(id); return 'travel'; }
+}
+
+function rail() {
+  const chain = [];
+  for (let x = tiles[focus]; x; x = tiles[x.parent]) chain.unshift(x);
+  $('rail').replaceChildren(...chain.map((t, i) => {
+    const li = document.createElement('li'), b = document.createElement('button');
+    b.textContent = t.title; b.onclick = () => go(t.id);
+    if (i === chain.length - 1) { li.className = 'here'; b.setAttribute('aria-current', 'location'); }
+    li.append(b); return li;
+  }));
+}
+
+// The curved hairline, and the chat cut along it.
+const chat = $('chat'), msgs = $('messages'), chromeSvg = $('chrome'), starEl = $('star');
+function chrome() {
+  const { W, H, c, xAt, top } = G, s = document.documentElement.style;
+  s.setProperty('--chat-w', c + 'px');
+  s.setProperty('--zone-h', (H - top) + 'px');
+  s.setProperty('--fx', G.cx / W * 100 + '%');
+  if (G.mobile) { chat.style.clipPath = ''; return; }
+  chromeSvg.setAttribute('width', c + 140); chromeSvg.setAttribute('viewBox', `0 0 ${c + 140} ${H}`);
+  const d = `M ${G.x0} 0 Q ${G.x0 + G.bow} ${H / 2} ${G.x0} ${H}`;
+  $('edge').setAttribute('d', d); $('edge-lit').setAttribute('d', d);
+  const curve = [];
+  for (let i = 0; i <= 48; i++) { const y = H * i / 48; curve.push(`${xAt(y).toFixed(1)}px ${y.toFixed(1)}px`); }
+  chat.style.clipPath = `polygon(0 0, ${curve.join(', ')}, 0 ${H}px)`;
+}
+
+// The scrollbar: the stretch of hairline beside the messages is its track, the star its thumb.
+let bar;
+function measure() {
+  if (G.mobile) return;
+  const r = msgs.getBoundingClientRect(), y0 = r.top + 12, len = r.height - 24;
+  const over = msgs.scrollHeight - msgs.clientHeight;
+  bar = { y0, len, over, thumb: Math.max(64, len * msgs.clientHeight / msgs.scrollHeight) };
+  let d = '';
+  for (let i = 0; i <= 24; i++) { const y = y0 + len * i / 24; d += (i ? ' L ' : 'M ') + G.xAt(y).toFixed(1) + ' ' + y.toFixed(1); }
+  $('track').setAttribute('d', d);
+  chromeSvg.classList.toggle('scrolls', over > 1);
+  star();
+}
+function star() {
+  if (!bar || bar.over <= 1) return;
+  const { y0, len, thumb, over } = bar;
+  const y = y0 + thumb / 2 + (len - thumb) * Math.min(1, msgs.scrollTop / over);
+  const slope = 2 * G.bow * (1 - 2 * y / G.H) / G.H; // the hairline's dx/dy, so the star's rays run along it
+  starEl.setAttribute('transform', `translate(${G.xAt(y).toFixed(2)} ${y.toFixed(2)}) rotate(${(-Math.atan(slope) / DEG).toFixed(2)})`);
+  $('g-edge-lit').setAttribute('y1', y - thumb / 2); $('g-edge-lit').setAttribute('y2', y + thumb / 2);
+}
+let stir;
+msgs.addEventListener('scroll', () => {
+  star();
+  chromeSvg.classList.add('stirred'); clearTimeout(stir);
+  stir = setTimeout(() => chromeSvg.classList.remove('stirred'), 900);
+}, { passive: true });
+let drag;
+starEl.addEventListener('pointerdown', e => {
+  e.preventDefault(); starEl.setPointerCapture(e.pointerId);
+  drag = { y: e.clientY, top: msgs.scrollTop }; chromeSvg.classList.add('held');
+});
+starEl.addEventListener('pointermove', e => { if (drag) msgs.scrollTop = drag.top + (e.clientY - drag.y) * bar.over / (bar.len - bar.thumb); });
+const drop = () => { drag = null; chromeSvg.classList.remove('held'); };
+starEl.addEventListener('pointerup', drop); starEl.addEventListener('pointercancel', drop);
+$('track').addEventListener('click', e => {
+  const f = (e.clientY - bar.y0 - bar.thumb / 2) / (bar.len - bar.thumb);
+  msgs.scrollTo({ top: Math.max(0, Math.min(1, f)) * bar.over, behavior: 'smooth' });
+});
+chromeSvg.addEventListener('wheel', e => { msgs.scrollTop += e.deltaY; }, { passive: true });
+
+addEventListener('keydown', e => {
+  if (e.key !== 'Escape' || document.activeElement?.id === 'input') return;
+  if (expanded.size) { expanded.clear(); render(); settle(); update(1); return; }
+  const p = tiles[focus].parent; if (p) go(p);
+});
+addEventListener('resize', () => { layout(); chrome(); measure(); update(1); });
+
+document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => {
+  go(b.dataset.go);
+  const ping = tiles[b.dataset.ping];
+  if (ping) { ping.g.classList.remove('ping'); void ping.g.getBBox(); ping.g.classList.add('ping'); setTimeout(() => ping.g.classList.remove('ping'), 1900); }
+}));
+
+const input = $('input'), send = $('send');
+input.addEventListener('input', () => { send.classList.toggle('ready', input.value.trim() !== ''); input.style.height = 'auto'; input.style.height = input.scrollHeight + 'px'; });
+input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('composer').requestSubmit(); } });
+$('composer').addEventListener('submit', e => {
+  e.preventDefault();
+  const text = input.value.trim();
+  if (!text) return;
+  const li = document.createElement('li'); li.className = 'msg human'; li.textContent = text;
+  $('working').before(li);
+  input.value = ''; input.dispatchEvent(new Event('input'));
+  measure();
+  msgs.scrollTo({ top: msgs.scrollHeight, behavior: 'smooth' });
+});
+
+// Dark by default; #light opens in the light.
+let turn;
+function setTheme(dark, animate) {
+  const root = document.documentElement;
+  if (animate) { root.classList.add('turning'); clearTimeout(turn); turn = setTimeout(() => root.classList.remove('turning'), 700); }
+  root.classList.toggle('dark', dark);
+  $('theme').setAttribute('aria-pressed', String(dark));
+  history.replaceState(null, '', location.pathname + location.search + (dark ? '' : '#light'));
+}
+$('theme').addEventListener('click', () => setTheme(!document.documentElement.classList.contains('dark'), true));
+setTheme(location.hash !== '#light', false);
+
+// The registry's tokens, as an app's styles.css would hold them: the colours by theme, the theme's
+// variables (type, easing), and the motion's durations.
+async function tokens() {
+  const ds = await fetch('1-registry/design-system.json').then(r => r.json());
+  const block = vars => Object.entries(vars).map(([k, v]) => `--${k}: ${v};`).join(' ');
+  const style = document.createElement('style');
+  style.textContent = `:root { ${block(ds.cssVars.theme)} ${block(ds.cssVars.light)} } .dark { ${block(ds.cssVars.dark)} }
+    :root { ${Object.entries(ds.css['@layer base'][':root']).map(([k, v]) => `${k}: ${v};`).join(' ')} }`;
+  document.head.prepend(style);
+}
+tokens().then(() => {
+  document.documentElement.classList.add('ready');
+  layout();
+  chrome();
+  go(focus, true);
+  msgs.scrollTop = msgs.scrollHeight;
+  measure();
+  document.fonts.ready.then(() => { msgs.scrollTop = msgs.scrollHeight; measure(); });
+}, () => {
+  document.documentElement.classList.add('ready');
+  document.body.textContent = 'The prototype reads its colours from 1-registry/design-system.json: serve this folder (python3 -m http.server) and open it from there.';
+});
+</script>
+</body>
+</html>

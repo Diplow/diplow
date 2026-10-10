@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "font-newsreader",
+  "type": "registry:font",
+  "title": "Newsreader",
+  "description": "The human's voice: your words, titles and headings.",
+  "font": {
+    "family": "'Newsreader Variable', serif",
+    "provider": "google",
+    "import": "Newsreader",
+    "variable": "--font-serif",
+    "subsets": [
+      "latin"
+    ],
+    "dependency": "@fontsource-variable/newsreader",
+    "selector": "h1, h2, h3, h4, h5, h6"
+  }
+}
