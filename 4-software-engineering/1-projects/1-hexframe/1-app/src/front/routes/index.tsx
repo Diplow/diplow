@@ -1,7 +1,8 @@
 // Home: the signed-in Account's System, on the canvas, with the centered Tile's actions and its
 // ancestors beside it. The view and the change under way live in the search params, so a link shows
 // what its sender saw; every gesture that changes the view is published on the client bus as a
-// navigation fact, for the Conversation to record. Signed out, the guard sends the visit to sign-in,
+// navigation fact, which the Conversation's navigation sender merges and records once something else
+// enters the timeline or the page is hidden. Signed out, the guard sends the visit to sign-in,
 // then back here. The page follows the System, so a write it did not make, an agent's, a Key's or
 // another tab's, shows once the tab regains focus.
 import { createFileRoute } from '@tanstack/react-router'
@@ -12,6 +13,7 @@ import { useFollowSystem } from '#/front/client/mapping/follow'
 import { useSystem } from '#/front/client/mapping/queries'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { publish } from '#/front/features/bus'
+import { useNavigationSender } from '#/front/features/conversation/state/useNavigationSender'
 import { Navigated } from '#/front/features/facts'
 import {
   readSystemSearch,
@@ -58,6 +60,8 @@ function SystemPage({ search, onSearchChange }: SystemPageProps) {
   const { data } = useSystem()
   // Nothing follows it closely yet: a Turn will, while it runs.
   useFollowSystem({ closely: false })
+  // The chat's composer, beside the canvas, will post its Messages through it.
+  useNavigationSender()
   if (data === undefined) {
     return (
       <>

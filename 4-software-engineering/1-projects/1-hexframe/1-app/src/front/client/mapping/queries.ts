@@ -204,6 +204,29 @@ export function useSystemRefusals(take: Take) {
 }
 
 /**
+ * Calls `react` the moment a write to the System is made, an import's included, while the component
+ * is mounted, before the write is sent: what the Conversation's navigation sender sends the user's
+ * navigation before. React subscribes once, through `useSyncExternalStore`, which never re-renders
+ * here: the snapshot is always the same.
+ */
+export function useEachSystemWrite(react: () => void) {
+  const client = useQueryClient()
+  // The latest `react`; the subscription stays the same.
+  const latest = useRef(react)
+  latest.current = react
+  const subscribe = useCallback(
+    () =>
+      client.getMutationCache().subscribe((event) => {
+        if (event.type === 'added' && event.mutation.options.scope?.id === systemQueue) {
+          latest.current()
+        }
+      }),
+    [client],
+  )
+  useSyncExternalStore(subscribe, nothing, nothing)
+}
+
+/**
  * Help whole, in the page's language, Bodies included, read as the System is. Anyone reads it, so it
  * never sends the user to sign in.
  */

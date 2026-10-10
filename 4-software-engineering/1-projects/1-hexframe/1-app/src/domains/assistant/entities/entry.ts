@@ -29,7 +29,7 @@ export const MessageText = Schema.String.check(
 )
 
 /** A Message, by the user or by the agent. */
-export const Message = Schema.TaggedStruct('Message', {
+const Message = Schema.TaggedStruct('Message', {
   author: Schema.Literals(['user', 'agent']),
   text: MessageText,
 })
@@ -41,7 +41,7 @@ const Named = Schema.Struct({ id: Schema.String, title: Schema.String })
  * A change to the System: its verb, as Mapping names the event (`TileMoved`), the Tile it is about,
  * the other Tile a swap traded places with or a Reference points at, and who acted.
  */
-export const Change = Schema.TaggedStruct('Change', {
+const Change = Schema.TaggedStruct('Change', {
   verb: Schema.String,
   tile: Named,
   other: Schema.optionalKey(Named),
@@ -49,7 +49,7 @@ export const Change = Schema.TaggedStruct('Change', {
 })
 
 /** An import: the Tile it landed as, how many Tiles came with it, below it, and who imported it. */
-export const Import = Schema.TaggedStruct('Import', {
+const Import = Schema.TaggedStruct('Import', {
   tile: Named,
   count: Schema.Int.check(Schema.isBetween({ minimum: 0, maximum: 2_147_483_647 })),
   actor: Actor,

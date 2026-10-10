@@ -190,7 +190,9 @@ const decodeVerified = Schema.decodeUnknownEffect(
 const decodeUser = Schema.decodeUnknownEffect(Schema.NullOr(User))
 
 /** An API key's row as the adapter finds it, its name alone read. */
-const decodeNamed = Schema.decodeUnknownEffect(Schema.NullOr(Schema.Struct({ name: Schema.String })))
+const decodeNamed = Schema.decodeUnknownEffect(
+  Schema.NullOr(Schema.Struct({ name: Schema.String })),
+)
 
 /** An API key's secret: the `hf_` prefix, then 64 letters. Longer is not one, and is not hashed. */
 const longestSecret = 128

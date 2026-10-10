@@ -1,5 +1,5 @@
 import { expect, layer } from '@effect/vitest'
-import { Clock, Effect, Layer, Option } from 'effect'
+import { Clock, Effect, Layer, Option, Struct } from 'effect'
 
 import * as Assistant from '#/domains/assistant/assistant'
 import { dayAt, type Entry } from '#/domains/assistant/entities'
@@ -89,7 +89,7 @@ const recordedFor = (accountId: string) =>
     const now = yield* Clock.currentTimeMillis
     const days = [dayAt(new Date(now - 24 * 60 * 60_000), 0), dayAt(new Date(now), 0)]
     const entries = yield* Effect.forEach(days, (day) => Assistant.day(accountId, day))
-    return entries.flat().map(({ id: _, at: __, ...content }: Entry) => content)
+    return entries.flat().map((entry: Entry) => Struct.omit(entry, ['id', 'at']))
   })
 
 /** The Root of someone's System, read once so it exists. */

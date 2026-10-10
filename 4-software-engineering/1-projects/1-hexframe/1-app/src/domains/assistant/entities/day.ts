@@ -23,7 +23,7 @@ export type Day = typeof Day.Type
 const minute = 60_000
 
 /** The date a clock `offset` minutes ahead of UTC shows at an instant. */
-export function dateAt(at: Date, offset: number): string {
+function dateAt(at: Date, offset: number): string {
   const shown = new Date(at.getTime() + offset * minute)
   return Number.isNaN(shown.getTime()) ? '' : shown.toISOString().slice(0, 10)
 }

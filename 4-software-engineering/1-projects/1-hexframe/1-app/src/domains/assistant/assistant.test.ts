@@ -1,5 +1,5 @@
 import { expect, layer } from '@effect/vitest'
-import { Effect, Layer } from 'effect'
+import { Effect, Layer, Struct } from 'effect'
 import { TestClock } from 'effect/testing'
 
 import { layer as conversationsLayer } from '#/repositories/database/conversations/conversations'
@@ -77,7 +77,7 @@ layer(TestLayer)('the Conversation, over PGlite', (it) => {
       ]
       for (const content of kinds) yield* recorded(account, content)
       const read = yield* day(account, { date: '2026-10-10', offset: 0 })
-      expect(read.map(({ id: _, at: __, ...content }) => content)).toEqual(kinds)
+      expect(read.map((entry) => Struct.omit(entry, ['id', 'at']))).toEqual(kinds)
     }),
   )
 
