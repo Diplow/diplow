@@ -68,9 +68,10 @@ export interface Box {
   /** Writes one file, its path from the home, outside the System folder: a Turn's prompt, its script. */
   readonly write: (file: SandboxFile) => Effect.Effect<void>
   /**
-   * Starts a process, detached, its HOME the work folder (`work/`); a name already running is a
-   * defect. On Blaxel it runs as a user of its own, who may write the work folder and not the
-   * System folder.
+   * Starts a process, detached, its HOME a folder of its own in the work folder, named by it
+   * (`homeOf`), everything else the work folder held gone first, so no process leaves a setting or a
+   * hook to the next; a name already running is a defect. On Blaxel it runs as a user of its own,
+   * who may write the work folder and not the System folder.
    */
   readonly start: (run: Run) => Effect.Effect<void>
   /**
@@ -104,8 +105,18 @@ export class Sandbox extends Context.Service<
 /** The folder of the home that holds the System, read-only. */
 export const systemFolder = 'system'
 
-/** The folder of the home a process writes in, its HOME. */
+/** The folder of the home a process writes in, its HOME a folder of its own there. */
 export const workFolder = 'work'
+
+/**
+ * A process's HOME, from the sandbox's home: its own folder of the work folder, by its name, which
+ * must be a plain word (`turn-<id>`). Throws, a defect, on any other: every name is the app's own.
+ */
+export function homeOf(name: string): string {
+  if (!/^[\w-]+$/.test(name))
+    throw new Error(`A process's name is a plain word: ${JSON.stringify(name)}`)
+  return `${workFolder}/${name}`
+}
 
 /**
  * The name of an Account's sandbox: a hash of the Account's id, so the id never leaves the app, and of

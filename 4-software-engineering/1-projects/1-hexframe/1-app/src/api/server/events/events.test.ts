@@ -102,6 +102,19 @@ describe("the Turn's events door", () => {
     await value(run(signedIn, Assistant.endTurn(accountId, running.id, 'answered')))
   })
 
+  it('keeps no Turn’s Key its agent says, the very Key IAM issued it included', async () => {
+    const { signedIn, accountId, turn, today, live } = await account
+    const { turn: running, secret } = await turn()
+    await post(
+      line.running('Bash', { command: `curl -H "Authorization: Bearer ${secret}"` }),
+      secret,
+    )
+    expect(JSON.stringify(await live())).not.toContain(secret)
+    await post(line.said(`My environment holds ${secret}.`), secret)
+    expect(JSON.stringify(await today())).not.toContain(secret)
+    await value(run(signedIn, Assistant.endTurn(accountId, running.id, 'answered')))
+  })
+
   it('ends the Turn by its result and revokes its Key, the answer told by its Messages alone', async () => {
     const { turn, today, live } = await account
     const { secret } = await turn()

@@ -11,6 +11,7 @@ import {
   type Box,
   ended,
   inside,
+  homeOf,
   outsideTheSystem,
   type Run,
   type RunStatus,
@@ -154,20 +155,28 @@ function boxOf(sandbox: SandboxInstance, name: string): Box {
         (normalized) => blaxel(() => sandbox.fs.write(`${home}/${normalized}`, content)),
       ),
     start: (run: Run) =>
-      Effect.asVoid(
-        blaxel(() =>
+      Effect.gen(function* () {
+        // Its own HOME, everything else the work folder held gone first.
+        const work = quoted(`${home}/${workFolder}`)
+        const own = quoted(`${home}/${homeOf(run.name)}`)
+        yield* chored(
+          sandbox,
+          `find ${work} -mindepth 1 -maxdepth 1 ! -name ${quoted(run.name)} -exec rm -rf {} + && ` +
+            `mkdir -p ${own} && chown ${user} ${own}`,
+        )
+        yield* blaxel(() =>
           sandbox.process.exec({
             name: run.name,
             // setpriv drops to the agent's user and execs, so the pid Blaxel reports stays the one
             // a stop signals.
             command: `setpriv --reuid=${user} --regid=${user} --init-groups -- sh -c ${quoted(run.command)}`,
             workingDir: `${home}/${inside(run.workingDir)}`,
-            env: { HOME: `${home}/${workFolder}`, ...run.env },
+            env: { HOME: `${home}/${homeOf(run.name)}`, ...run.env },
             keepAlive: true,
             timeout: run.timeoutSeconds,
           }),
-        ),
-      ),
+        )
+      }),
     stop,
     status: (processName: string) =>
       Effect.map(processOf(sandbox, processName), (found) =>

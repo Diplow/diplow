@@ -16,6 +16,7 @@ import {
   type Box,
   ended,
   inside,
+  homeOf,
   outsideTheSystem,
   type Run,
   type RunStatus,
@@ -79,9 +80,10 @@ const endedAs = (code: number | null, by: NodeJS.Signals | null): RunStatus =>
  * folder and the PATH to find its commands, killed once its time is up.
  */
 function spawned(run: Run, { cwd, home }: { cwd: string; home: string }): Child {
+  // `home` is the process's own HOME.
   const started = spawn('sh', ['-c', run.command], {
     cwd,
-    env: { PATH: process.env.PATH ?? '', HOME: join(home, workFolder), ...run.env },
+    env: { PATH: process.env.PATH ?? '', HOME: home, ...run.env },
     detached: true,
     stdio: 'ignore',
   })
@@ -110,6 +112,13 @@ function spawned(run: Run, { cwd, home }: { cwd: string; home: string }): Child 
   return child
 }
 
+/** Removes everything a folder holds but the entry named `kept`. */
+async function cleared(folder: string, kept: string): Promise<void> {
+  for (const entry of await readdir(folder)) {
+    if (entry !== kept) await rm(join(folder, entry), { recursive: true, force: true })
+  }
+}
+
 /** One Account's sandbox, a folder of this machine, its processes followed in `children`. */
 function boxAt(name: string, home: string, grace: Duration.Duration): Box {
   const children = new Map<string, Child>()
@@ -121,8 +130,13 @@ function boxAt(name: string, home: string, grace: Duration.Duration): Box {
         return yield* Effect.die(new Error(`A process named ${run.name} is running already`))
       }
       const cwd = join(home, inside(run.workingDir))
-      yield* Effect.promise(() => mkdir(cwd, { recursive: true }))
-      yield* Effect.sync(() => children.set(run.name, spawned(run, { cwd, home })))
+      const own = join(home, homeOf(run.name))
+      yield* Effect.promise(async () => {
+        await cleared(join(home, workFolder), run.name)
+        await mkdir(own, { recursive: true })
+        await mkdir(cwd, { recursive: true })
+      })
+      yield* Effect.sync(() => children.set(run.name, spawned(run, { cwd, home: own })))
     })
 
   const stop = (processName: string) =>

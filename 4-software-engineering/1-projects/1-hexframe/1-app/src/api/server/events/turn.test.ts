@@ -109,7 +109,7 @@ describe('a Turn on every Message', () => {
       ),
     )
     const prompt = await readFile(join(box.home, `turns/${sent.turn?.id ?? ''}/prompt.md`), 'utf8')
-    expect(prompt).toContain('User: Draft a Tile for me.')
+    expect(prompt).toContain('User: "Draft a Tile for me."')
     expect(prompt).not.toMatch(/hft_/)
     const settings = await readFile(
       join(box.home, `turns/${sent.turn?.id ?? ''}/turn.json`),

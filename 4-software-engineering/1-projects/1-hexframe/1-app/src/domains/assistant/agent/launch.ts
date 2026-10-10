@@ -7,12 +7,7 @@
 // its MCP client's bearer: never in a file, never in the prompt. Pure.
 import { Redacted } from 'effect'
 
-import {
-  type Run,
-  type SandboxFile,
-  systemFolder,
-  workFolder,
-} from '#/repositories/agent/sandbox/sandbox'
+import { type Run, type SandboxFile, systemFolder } from '#/repositories/agent/sandbox/sandbox'
 
 import { settings } from '../settings'
 
@@ -29,31 +24,27 @@ export const processOf = (turnId: string) => `turn-${turnId}`
 const filesOf = (turnId: string) => `turns/${turnId}`
 
 /**
- * The launcher: runs the agent the Turn's settings name, with their arguments, its MCP client's config
- * built here from the Turn's Key in its environment, and the Message last, after `--`; hands a SIGINT
+ * The launcher: runs the agent the Turn's settings name, with their arguments, its MCP client's config,
+ * whose bearer names the Turn's Key in its environment for the agent to expand, so the Key is on no
+ * command line, and the Message last, after `--`; hands a SIGINT
  * or a SIGTERM on to it, so a Stop ends its turn cleanly; posts each line it writes to the events door,
  * one after another, with the Turn's Key as its bearer; then, once it exited, `hexframe_exit`.
  */
 const launcher = String.raw`
 import { spawn } from 'node:child_process'
-import { mkdirSync, readFileSync, readdirSync, rmSync } from 'node:fs'
-import { dirname, join } from 'node:path'
+import { readFileSync } from 'node:fs'
 import { createInterface } from 'node:readline'
-
-// A HOME of the Turn's own, everything an earlier Turn left in the work folder gone first, so no
-// setting, hook or file an agent wrote reaches the next.
-const home = process.env.HOME ?? ''
-const work = dirname(home)
-for (const entry of readdirSync(work)) {
-  if (join(work, entry) !== home) rmSync(join(work, entry), { recursive: true, force: true })
-}
-mkdirSync(home, { recursive: true })
 
 const turn = JSON.parse(readFileSync(new URL('./turn.json', import.meta.url), 'utf8'))
 const key = process.env.HEXFRAME_TURN_KEY ?? ''
+// The agent expands the Key from its environment itself: it is on no command line.
 const mcp = JSON.stringify({
   mcpServers: {
-    hexframe: { type: 'http', url: turn.mcp, headers: { Authorization: 'Bearer ' + key } },
+    hexframe: {
+      type: 'http',
+      url: turn.mcp,
+      headers: { Authorization: 'Bearer $' + '{HEXFRAME_TURN_KEY}' },
+    },
   },
 })
 const [command, ...prefix] = turn.agent
@@ -160,7 +151,6 @@ export function launchOf(launch: Launch): {
       command: `exec node ${quoted(`${launch.home}/${folder}/launcher.mjs`)}`,
       workingDir: launch.folder === '' ? systemFolder : `${systemFolder}/${launch.folder}`,
       env: {
-        HOME: `${launch.home}/${workFolder}/${processOf(launch.turnId)}`,
         HEXFRAME_TURN_KEY: key,
         ANTHROPIC_AUTH_TOKEN: key,
         ANTHROPIC_BASE_URL: `${launch.origin}${launch.doors.model}`,

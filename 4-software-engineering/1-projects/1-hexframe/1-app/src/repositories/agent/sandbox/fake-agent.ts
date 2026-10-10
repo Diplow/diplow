@@ -21,6 +21,13 @@ const pace = Number(option('--pace') ?? '2000')
 const message = args.includes('--') ? args.slice(args.indexOf('--') + 1).join(' ') : ''
 const config = JSON.parse(option('--mcp-config') ?? '{"mcpServers":{}}')
 const server = Object.values(config.mcpServers)[0]
+// Its headers' variables expanded from the environment, as Claude Code expands them.
+const headers = Object.fromEntries(
+  Object.entries(server?.headers ?? {}).map(([name, value]) => [
+    name,
+    value.replace(/\$\{(\w+)\}/g, (_, variable) => process.env[variable] ?? ''),
+  ]),
+)
 
 const say = (event) => process.stdout.write(JSON.stringify(event) + '\n')
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -37,7 +44,7 @@ async function tool(name, input) {
   const response = await fetch(server.url, {
     method: 'POST',
     headers: {
-      ...server.headers,
+      ...headers,
       'content-type': 'application/json',
       accept: 'application/json, text/event-stream',
     },
