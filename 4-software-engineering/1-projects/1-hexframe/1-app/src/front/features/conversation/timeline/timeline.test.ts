@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { Entry } from '#/domains/assistant/entities'
 
-import { dayOf, excerpt, splitByDay } from './timeline'
+import { dayOf, excerpt, excerptOf, splitByDay } from './timeline'
 
 // Local dates, so the tests hold in any time zone: days are the reader's.
 const at = (day: number, hour: number, minute = 0) => new Date(2026, 8, day, hour, minute)
@@ -105,5 +105,29 @@ describe('excerpt', () => {
 
   it('cuts through a word longer than half the limit', () => {
     expect(excerpt('a Supercalifragilistic word', 12)).toBe('a Supercalif…')
+  })
+})
+
+describe('excerptOf', () => {
+  const shown = (tile: string) => `@${tile.toUpperCase()}`
+  const text = (words: string) => ({ _tag: 'Text', text: words }) as const
+  const link = (tile: string) => ({ _tag: 'Link', tile }) as const
+
+  it('keeps a Message that fits whole, its links counted as the Titles they show', () => {
+    expect(excerptOf([link('work'), text(' is fine')], shown, 13)).toBeUndefined()
+  })
+
+  it('cuts a Message’s words at a word, the links before kept', () => {
+    expect(excerptOf([link('work'), text(' needs a long tidy up')], shown, 16)).toEqual([
+      link('work'),
+      text(' needs a…'),
+    ])
+  })
+
+  it('leaves out a link that would pass the limit, an ellipsis in its place', () => {
+    expect(excerptOf([text('Look at '), link('everything'), text(' now')], shown, 12)).toEqual([
+      text('Look at '),
+      text('…'),
+    ])
   })
 })

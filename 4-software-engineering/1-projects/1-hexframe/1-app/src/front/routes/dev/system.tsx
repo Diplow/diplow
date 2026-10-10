@@ -1,17 +1,18 @@
 // A System as home shows it, on fixtures: the canvas with the breadcrumb above it, and the
-// Conversation beside it. The view lives in the search params, as on /dev/hex.
+// Conversation beside it, its composer offering the fixture's Tiles to `@` and a Message's link
+// centering the canvas. The view lives in the search params, as on /dev/hex.
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { Conversation } from '#/front/features/conversation/Conversation'
-import { conversationFixture } from '#/front/features/conversation/fixtures'
+import { conversationFixture, fixtureMentionables } from '#/front/features/conversation/fixtures'
 import { splitByDay } from '#/front/features/conversation/timeline/timeline'
 import type { Entry } from '#/domains/assistant/entities'
 import { m } from '#/paraglide/messages'
 import { Canvas } from '#/front/ui/hex/Canvas'
 import { ulysse } from '#/front/ui/hex/fixtures'
-import { readCanvasView, type CanvasView } from '#/front/ui/hex/view/view'
+import { centerOn, readCanvasView, type CanvasView } from '#/front/ui/hex/view/view'
 
 export const Route = createFileRoute('/dev/system')({
   validateSearch: readCanvasView,
@@ -26,6 +27,7 @@ function SystemPage() {
   // The fixture stands in for what the server will know; what the user sends is kept for the page.
   const [fixture] = useState(() => conversationFixture(new Date()))
   const [entries, setEntries] = useState(fixture.entries)
+  const [tiles] = useState(fixtureMentionables)
   const onViewChange = (next: CanvasView) => {
     void navigate({ search: next })
   }
@@ -54,6 +56,10 @@ function SystemPage() {
       <Conversation
         days={splitByDay(entries, new Date(), fixture.titles)}
         onSend={onSend}
+        tiles={tiles}
+        onCenter={(tile) => {
+          onViewChange(centerOn(ulysse, tile))
+        }}
         className="h-[32rem] lg:h-auto lg:min-h-0"
       />
     </main>

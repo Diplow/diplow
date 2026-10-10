@@ -1,7 +1,8 @@
 // The Conversation beside the canvas: its timeline a day at a time, newest at the bottom beside the
-// input, a button above the oldest day shown reading the day before, and the input the user writes to
-// the agent in, which says so when the Account may not use the Assistant. While a Turn runs, the input
-// waits, and above it the agent's step shows live beside a Stop.
+// input, a button above the oldest day shown reading the day before, a Message's link centering the
+// canvas on its Tile, and the input the user writes to the agent in, `@`ing their Tiles, which says so
+// when the Account may not use the Assistant. While a Turn runs, the input waits, and above it the
+// agent's step shows live beside a Stop.
 import { cn } from 'cn'
 import { Loader2, MessagesSquare, Square } from 'lucide-react'
 
@@ -10,8 +11,9 @@ import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 import { EmptyState } from '#/front/ui/feedback/states'
 import { Button } from '#/front/ui/inputs/controls/button'
-import { useAppForm } from '#/front/ui/inputs/forms/form'
 
+import { Composer } from './composer/Composer'
+import type { Mentionable } from './composer/mention'
 import type { Day } from './timeline/timeline'
 import { ConversationEntry } from './entry/Entry'
 
@@ -36,8 +38,12 @@ interface Earlier {
 interface ConversationProps {
   /** The days shown, oldest first, each with its Entries oldest first. */
   days: readonly Day[]
-  /** A Message the user sent, trimmed and never empty. */
+  /** A Message the user sent, trimmed and never empty, each Tile it `@`s linked by its id. */
   onSend: (text: string) => void
+  /** The Tiles the user may `@`. */
+  tiles: ReadonlyArray<Mentionable>
+  /** Centers the canvas on a Tile a Message links; none where there is no canvas. */
+  onCenter?: ((tile: string) => void) | undefined
   /** The Account may not use the Assistant: its Messages are kept, and no agent answers them. */
   unavailable?: boolean
   /** The Turn running, its agent's step now if any, and how to stop it: the input waits meanwhile. */
@@ -52,6 +58,8 @@ interface ConversationProps {
 export function Conversation({
   days,
   onSend,
+  tiles,
+  onCenter,
   unavailable = false,
   running,
   waiting = false,
@@ -89,13 +97,16 @@ export function Conversation({
               description={m.conversation_empty_description()}
             />
           ) : (
-            shown.map((day) => <DayOfEntries key={day.key} day={day} now={now} />)
+            shown.map((day) => (
+              <DayOfEntries key={day.key} day={day} now={now} onCenter={onCenter} />
+            ))
           )}
         </div>
       </div>
       {running !== undefined && <Working running={running} />}
-      <MessageInput
+      <Composer
         onSend={onSend}
+        tiles={tiles}
         unavailable={unavailable}
         busy={running !== undefined || waiting}
       />
@@ -103,7 +114,15 @@ export function Conversation({
   )
 }
 
-function DayOfEntries({ day, now }: { day: Day; now: Date }) {
+function DayOfEntries({
+  day,
+  now,
+  onCenter,
+}: {
+  day: Day
+  now: Date
+  onCenter: ConversationProps['onCenter']
+}) {
   return (
     <section className="grid gap-3">
       <h2 className="sticky top-0 z-10 -mx-4 flex justify-center bg-card py-2">
@@ -114,7 +133,7 @@ function DayOfEntries({ day, now }: { day: Day; now: Date }) {
       <ol className="grid gap-3">
         {day.entries.map((entry) => (
           <li key={entry.id}>
-            <ConversationEntry entry={entry} titles={day.titles} />
+            <ConversationEntry entry={entry} titles={day.titles} onCenter={onCenter} />
           </li>
         ))}
       </ol>
@@ -153,56 +172,5 @@ function Working({ running }: { running: Running }) {
         {m.conversation_stop()}
       </Button>
     </div>
-  )
-}
-
-function MessageInput({
-  onSend,
-  unavailable,
-  busy,
-}: {
-  onSend: (text: string) => void
-  unavailable: boolean
-  busy: boolean
-}) {
-  const form = useAppForm({
-    defaultValues: { message: '' },
-    onSubmit: ({ value, formApi }) => {
-      onSend(value.message.trim())
-      formApi.reset()
-    },
-  })
-  const written = ({ value }: { value: string }) =>
-    value.trim() === '' ? m.conversation_message_required() : undefined
-  return (
-    <form
-      noValidate
-      className="grid gap-3 border-t p-4"
-      onSubmit={(event) => {
-        event.preventDefault()
-        if (!busy) void form.handleSubmit()
-      }}
-    >
-      <fieldset disabled={busy} className="grid gap-3">
-        <form.AppField name="message" validators={{ onSubmit: written }}>
-          {(field) => (
-            <field.TextareaField
-              label={m.conversation_message_label()}
-              placeholder={m.conversation_message_placeholder()}
-            />
-          )}
-        </form.AppField>
-        <div className="flex items-center justify-end gap-3">
-          {unavailable && (
-            <p className="mr-auto text-sm text-muted-foreground">
-              {m.conversation_assistant_unavailable()}
-            </p>
-          )}
-          <form.AppForm>
-            <form.SubmitButton>{m.conversation_send()}</form.SubmitButton>
-          </form.AppForm>
-        </div>
-      </fieldset>
-    </form>
   )
 }
