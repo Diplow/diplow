@@ -81,7 +81,7 @@ halting:
     - Never let the front import a domain past its door (its `entities/index.ts`, `operations/index.ts` and `errors.ts`), nor let anything reachable through that door touch a repository, the application service, a concept folder, another domain, Node, the environment or the config, not even through a type-only import.
     - Never exceed the rule of 6; when a folder is full, regroup and record the regrouping in the register.
     - Never let a test or a gate reach Blaxel or Anthropic; they run on the fakes. A unit may reach them by hand only when their env vars are set locally, never with a key of its own making, and says so in its closing comment.
-    - Never put the platform Anthropic key, or any secret but the Turn's own Key and Vercel's bypass for automation, into a sandbox, its files, its environment or its prompt.
+    - Never put the platform Anthropic key, Vercel's bypass for automation, or any other secret into a sandbox. The Turn's own Key alone enters it, in its processes' environment and the MCP client's config, never in its prompt or its files.
     - Never touch a ticket, branch or pull request of another project.
   # The repo's own tooling and review setup, hexframe's STACK.md (the bar the
   # never list defers to; what the project changes in it, the phase-close ticket

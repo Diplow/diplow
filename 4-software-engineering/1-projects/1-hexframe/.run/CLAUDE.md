@@ -48,7 +48,7 @@ The plugin builds on the shared shape the mod's project extracts, so the order i
 /softeng:ship:run-autonomous-project "hexframe Obsidian plugin" --config 4-software-engineering/1-projects/1-hexframe/.run/obsidian-plugin.yaml
 ```
 
-The app's runs all write `1-app/` and Mapping, so they go one after the other: the MCP server's first, then Import & export's, launched once `project/mcp-server` is merged into `main`, so it is cut from a `main` that has Keys, swap and Help; then Optimistic writes and patterns', launched once `project/import-export` is merged, since every write it makes optimistic, Leaves' included, must exist first; then the Assistant's, which needs all three (the serializer, the MCP, the events after commit).
+The app's runs all write `1-app/` and Mapping, so they go one after the other: the MCP server's first, then Import & export's, launched once `project/mcp-server` is merged into `main`, so it is cut from a `main` that has Keys, swap and Help; then Optimistic writes and patterns', launched once `project/import-export` is merged, since every write it makes optimistic, Leaves' included, must exist first; then the Assistant's, which needs all three (the serializer, the MCP, the events after commit), launched once its notes and config (#83) are merged too.
 
 ```
 /softeng:ship:run-autonomous-project "hexframe app: MCP server" --config 4-software-engineering/1-projects/1-hexframe/.run/mcp-server.yaml

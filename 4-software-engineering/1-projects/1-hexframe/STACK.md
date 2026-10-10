@@ -34,7 +34,7 @@ The choices, and the rules they come with. Each rule is written here until the f
 | Tables | TanStack Table v9, inside `ui/` only |
 | Shortcuts | TanStack Hotkeys, behind a `hotkeys` seam in `ui/` |
 | Tile content | TanStack Markdown (alpha), behind a seam in `ui/`: if it disappoints, the seam is the one file that changes |
-| Building a system by conversation | Claude Code in a Blaxel sandbox, writing through the MCP server |
+| Building a system by conversation | Claude Code in a Blaxel sandbox (`@blaxel/core`, behind `repositories/sandbox/`, its seam), writing through the MCP server, its model calls relayed by the app's proxy (`repositories/anthropic/`) |
 | Agents working on a System | An MCP server at `/mcp`, on `@modelcontextprotocol/server` (v2); its rules in [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE\|api]] |
 | Effects and typed errors | Effect |
 | Validation | Effect Schema, everywhere; `zod` is banned by lint |
@@ -57,9 +57,9 @@ Every folder under `1-app/src/` holds at most 6 child folders and 6 files. The r
 | Layer | In TanStack Start | Holds |
 |---|---|---|
 | Front | File routes, the features they compose, the design system, and the client's calls, on TanStack Router, Query and Form | What the browser shows |
-| API | Server functions (`createServerFn`) and Start middleware; raw server routes only for inbound webhooks and the MCP endpoint | Plumbing (auth, request id, logging) and the composition of domains |
+| API | Server functions (`createServerFn`) and Start middleware; raw server routes only for inbound webhooks, the MCP endpoint, and the two doors the Assistant's sandbox calls: the model proxy and the Turn's events | Plumbing (auth, request id, logging) and the composition of domains |
 | Domains | Effect programs, one folder per domain; an Effect `Context.Service` only when it holds state | The business logic, in the domain's language |
-| Repositories | Effect layers over Drizzle, Better Auth, Stripe | The technical complexity |
+| Repositories | Effect layers over Drizzle, Better Auth, Stripe, Blaxel and Anthropic | The technical complexity |
 
 An import only points down, and only the API layer composes domains. Once the project "hexframe app: Optimistic writes and patterns" lands, the front's door skips the API layer: the front may import a domain's entities, operations and errors, which are pure by what they are (below, "Domains"). The direction and its lint now live in [[4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE|1-app]], each layer's rules in its own folder: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]], [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE|domains]], [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/CLAUDE|repositories]].
 
@@ -147,13 +147,13 @@ The core domain: someone lays out a System they maintain (a codebase, a team, th
 
 ### Assistant
 
-A conversation with an agent that builds a System on the user's behalf, saving every click. The agent is Claude Code in a sandbox holding the System as files, and it writes only through the MCP server, as any client holding a Key: Assistant knows nothing about Tiles.
+A conversation with an agent that builds a System on the user's behalf, saving every click. The agent is Claude Code in a sandbox holding the System as files, and it writes only through the MCP server, as any client holding a Key: Assistant knows nothing about Tiles. The API layer composes the two: it hands Assistant a summary of each of Mapping's events, folds a Proposal's Operations, which Assistant keeps opaque, through Mapping's `decide`, and runs an Accept or an undo through Mapping, whose Versions refuse one over a Tile changed since.
 
 - **Conversation**: one continuous timeline per Account, split by day. It holds the **Messages** between the user and the agent, records every change to the System whoever made it (the user, the agent, a Key), and where the user went on the canvas, consecutive navigations merged into one. Mapping never hears about views; Assistant is what records them. The Conversation is the agent's only memory.
-- **Turn**: one run of the agent answering a Message, started afresh, in the folder of the centered Tile, or of the Tile the Message opens with `@`. It reads the Conversation and the Previews of the Tiles on screen; every ancestor's `CLAUDE.md` loads by itself.
-- **Proposal**: the writes the agent made in *ask*, kept as a draft it reads through, waiting for the user: at most one open per Conversation, which a Message sent meanwhile continues, until the user accepts it whole, in one transaction, or discards it.
-- **Mode**, per Conversation, as in Claude Code: *ask* (the default) makes a Turn's writes a Proposal, *apply* runs them as they come. An applied Turn, or an accepted Proposal, is undone whole, in one transaction, refused when a Tile it touched has changed since.
-- **Turn's end**: its answer, a Stop, its own ceiling, the month's cap or its time; the timeline says which, and nothing is rolled back. Only an Account entitled to the Assistant starts one.
+- **Turn**: one run of the agent answering a Message, started afresh, in the folder of the centered Tile, or of the Tile the Message opens with `@`. It reads the Conversation and the Previews of the Tiles on screen; every ancestor's `CLAUDE.md` loads by itself. Its files are the System as the Turn started, read-only: what changed since, it reads through the MCP. Its **Key** is the only secret its sandbox holds, minted for it, handed to the MCP client and the model proxy through the environment, never its prompt or its files, and it expires with the Turn's time limit or is revoked when the Turn ends.
+- **Proposal**: the writes the agent made in *ask*, kept as a draft the MCP's reads with the Turn's Key show over the System, waiting for the user: at most one open per Conversation, which a Message sent meanwhile continues, until the user accepts it whole, in one transaction, or discards it.
+- **Mode**, per Conversation, as in Claude Code: *ask* (the default) makes a Turn's writes a Proposal, *apply* runs them as they come. An applied Turn, or an accepted Proposal, is undone whole, in one transaction, refused by Mapping when a Tile it touched has changed since.
+- **Turn's end**: its answer, a Stop, its own ceiling, the month's allowance or its time; the timeline says which, and nothing is rolled back. Only an Account with the `assistant` Entitlement starts one; the month's allowance is that Entitlement's, IAM's, and Assistant records what each Turn spends.
 
 ## A vault as a hexframe
 
