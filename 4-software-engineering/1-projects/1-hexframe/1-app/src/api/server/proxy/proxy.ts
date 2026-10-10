@@ -25,6 +25,7 @@ type ErrorType =
   | 'billing_error'
   | 'not_found_error'
   | 'request_too_large'
+  | 'rate_limit_error'
   | 'api_error'
 
 const statuses: Record<ErrorType, number> = {
@@ -33,16 +34,22 @@ const statuses: Record<ErrorType, number> = {
   billing_error: 402,
   not_found_error: 404,
   request_too_large: 413,
+  rate_limit_error: 429,
   api_error: 500,
 }
 
 /** A refusal, as Anthropic words one: its status, and `{ type: 'error', error: { type, message } }`. */
-function refusal(type: ErrorType, message: string, requestId?: string): Response {
+function refusal(
+  type: ErrorType,
+  message: string,
+  requestId?: string,
+  headers: Record<string, string> = {},
+): Response {
   return Response.json(
     { type: 'error', error: { type, message } },
     {
       status: statuses[type],
-      headers: requestId === undefined ? {} : { 'request-id': requestId },
+      headers: { ...headers, ...(requestId !== undefined && { 'request-id': requestId }) },
     },
   )
 }
@@ -69,6 +76,13 @@ function answerOf(answer: Answer, requestId: string): Response {
           )
     case 'Limited':
       return refusal('billing_error', limits[answer.limit], requestId)
+    case 'Busy':
+      return refusal(
+        'rate_limit_error',
+        'The calls under way may spend what is left: try again once they end.',
+        requestId,
+        { 'retry-after': '2' },
+      )
     case 'TurnOver':
       return refusal('authentication_error', 'This Turn has ended.', requestId)
     case 'Relayed': {

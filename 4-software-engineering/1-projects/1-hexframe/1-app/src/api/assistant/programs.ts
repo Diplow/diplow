@@ -155,9 +155,9 @@ const afterAnswering = <R>(work: Effect.Effect<void, never, R>) =>
  * A model call of the Turn the request's Turn's Key proves, the Account and the Turn taken from that
  * Key, never from the call. Assistant admits it or not in a transaction of its own, which ends a Turn
  * held back by its ceiling or the month's allowance, its Key revoked with it. An admitted call is
- * relayed as it comes, outside any transaction; what it owed beyond what it reserved is settled once
- * its answer has ended, in a transaction of its own, through the platform's `waitUntil`, so the
- * function stays up until it is written.
+ * relayed as it comes, outside any transaction, and settled once its answer has ended, in a
+ * transaction of its own, through the platform's `waitUntil`, so the function stays up until it is
+ * written; a call the relay failed to make releases what it reserved at once.
  */
 export const modelCall = (asked: Assistant.AskedCall) =>
   Effect.gen(function* () {
@@ -170,13 +170,17 @@ export const modelCall = (asked: Assistant.AskedCall) =>
       }),
     )
     if (admission._tag !== 'Admitted') return admission
-    const { relayed, owed } = yield* Assistant.relayCall(admission)
+    const settle = (charged: number) =>
+      transactional(
+        Assistant.settleCall(account.id, turn.turnId, { reserved: admission.reserved, charged }),
+      )
+    const { relayed, charged } = yield* Assistant.relayCall(admission).pipe(
+      Effect.onError(() => settle(0)),
+    )
     yield* afterAnswering(
-      Effect.flatMap(owed, (amount) =>
-        transactional(Assistant.settleCall(account.id, turn.turnId, amount)),
-      ).pipe(
+      Effect.flatMap(charged, settle).pipe(
         // An error line with its cause: Sentry gets it. The Turn keeps what the call reserved.
-        Effect.catchCause((cause) => Effect.logError("A Turn's spend was not settled", cause)),
+        Effect.catchCause((cause) => Effect.logError("A Turn's call was not settled", cause)),
       ),
     )
     return { _tag: 'Relayed', relayed } as const

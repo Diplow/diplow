@@ -2,7 +2,8 @@
 // an Account's Conversation, read and written by Account. It speaks rows: how a Turn ended is a word
 // Assistant decides and decodes, which the repository keeps as it is given. One Turn runs at most per
 // Conversation, which the table's `turn_running_idx` holds, so two starts at once never both run. What
-// a Turn spent is a sum of millionths of a dollar Assistant prices; a month's is the sum of its Turns'.
+// a Turn spent, and what its calls under way reserved, are sums of millionths of a dollar Assistant
+// prices; a month's are the sums of its Turns'.
 import { and, eq, gte, inArray, isNull, sum } from 'drizzle-orm'
 import { Context, Effect, Layer } from 'effect'
 
@@ -19,6 +20,12 @@ export interface TurnRow {
   readonly spent: number
   readonly endedAt: Date | null
   readonly end: string | null
+}
+
+/** What one of an Account's Turns, then all its Turns of a month, spent, and their calls under way reserved. */
+export interface Spending {
+  readonly turn: { readonly spent: number; readonly reserved: number }
+  readonly month: { readonly spent: number; readonly reserved: number }
 }
 
 /** A Turn as it starts: the Message it answers, by its Entry's id, the Tile it starts in, and when. */
@@ -52,30 +59,26 @@ export class Turns extends Context.Service<
     /** The Turn running in the Account's Conversation, if one does. */
     readonly running: (accountId: string) => Effect.Effect<TurnRow | undefined>
     /**
-     * What one of the Account's running Turns spent, and what all its Turns started since `since` spent,
-     * that one included: the sum of their spend, which no counter keeps. None when the Turn is not
-     * running. Inside a transaction, the Turn's row locked until it ends, so two calls of one Turn
-     * decide one at a time; one Turn runs at a time in an Account's Conversation, so its lock holds
-     * the month's sum too.
+     * What one of the Account's running Turns spent and its calls under way reserved, and the same
+     * summed over all its Turns started since `since`, that one included, which no counter keeps. None
+     * when the Turn is not running. Inside a transaction, the Turn's row locked until it ends, so two
+     * calls of one Turn decide one at a time; one Turn runs at a time in an Account's Conversation, so
+     * its lock holds the month's sums too.
      */
     readonly spending: (
       accountId: string,
       turnId: string,
       since: Date,
-    ) => Effect.Effect<
-      { readonly turn: number; readonly month: number } | undefined,
-      never,
-      InTransaction
-    >
+    ) => Effect.Effect<Spending | undefined, never, InTransaction>
     /**
-     * Adds `amount`, which may be less than nothing, to what one of the Account's Turns spent, ended or
-     * not: a call that started before it ended still cost what it cost. Nothing for another's Turn.
-     * Inside a transaction, the row locked while it adds.
+     * Adds to what one of the Account's Turns spent and to what its calls reserved, either less than
+     * nothing, ended or not: a call that started before it ended still cost what it cost. Nothing for
+     * another's Turn. Inside a transaction, the row locked while it adds.
      */
-    readonly spend: (
+    readonly charge: (
       accountId: string,
       turnId: string,
-      amount: number,
+      added: { readonly spent: number; readonly reserved: number },
     ) => Effect.Effect<void, never, InTransaction>
   }
 >()('hexframe/Turns') {}
@@ -163,10 +166,10 @@ const make = Effect.gen(function* () {
         Effect.map(([row]) => row),
       )
 
-  const spent = (accountId: string, turnId: string, since: Date) =>
+  const spentBy = (accountId: string, turnId: string, since: Date) =>
     Effect.gen(function* () {
-      const [turnSpent] = yield* database
-        .select({ spent: turn.spent })
+      const [ofTheTurn] = yield* database
+        .select({ spent: turn.spent, reserved: turn.reserved })
         .from(turn)
         .where(
           and(
@@ -177,21 +180,30 @@ const make = Effect.gen(function* () {
         )
         .for('update')
         .pipe(Effect.orDie)
-      const [month] = yield* database
-        .select({ spent: sum(turn.spent) })
+      if (ofTheTurn === undefined) return undefined
+      const [ofTheMonth] = yield* database
+        .select({ spent: sum(turn.spent), reserved: sum(turn.reserved) })
         .from(turn)
         .where(
           and(inArray(turn.conversationId, conversationOf(accountId)), gte(turn.startedAt, since)),
         )
         .pipe(Effect.orDie)
-      if (turnSpent === undefined) return undefined
-      return { turn: turnSpent.spent, month: Number(month?.spent ?? 0) }
+      const month = {
+        spent: Number(ofTheMonth?.spent ?? 0),
+        reserved: Number(ofTheMonth?.reserved ?? 0),
+      }
+      const spending: Spending = { turn: ofTheTurn, month }
+      return spending
     })
 
   const spending = (accountId: string, turnId: string, since: Date) =>
-    InTransaction.use(() => spent(accountId, turnId, since))
+    InTransaction.use(() => spentBy(accountId, turnId, since))
 
-  const spend = (accountId: string, turnId: string, amount: number) =>
+  const charge = (
+    accountId: string,
+    turnId: string,
+    added: { readonly spent: number; readonly reserved: number },
+  ) =>
     InTransaction.use(() =>
       Effect.gen(function* () {
         const ofTheAccount = and(
@@ -199,7 +211,7 @@ const make = Effect.gen(function* () {
           inArray(turn.conversationId, conversationOf(accountId)),
         )
         const [row] = yield* database
-          .select({ spent: turn.spent })
+          .select({ spent: turn.spent, reserved: turn.reserved })
           .from(turn)
           .where(ofTheAccount)
           .for('update')
@@ -207,13 +219,13 @@ const make = Effect.gen(function* () {
         if (row === undefined) return
         yield* database
           .update(turn)
-          .set({ spent: row.spent + amount })
+          .set({ spent: row.spent + added.spent, reserved: row.reserved + added.reserved })
           .where(ofTheAccount)
           .pipe(Effect.orDie)
       }),
     )
 
-  return Turns.of({ start, end, running, spending, spend })
+  return Turns.of({ start, end, running, spending, charge })
 })
 
 /** The Turns repository, over the `Database` it is given. */

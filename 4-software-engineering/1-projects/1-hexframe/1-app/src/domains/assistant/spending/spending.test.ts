@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import { settings } from '../settings'
 import { allowedCall } from './call'
-import { cost, limitReached, monthOf, reserved } from './limits'
+import { charged, limitReached, monthOf, mustWait, reserved } from './limits'
 
 // What a Turn's agent may call, what a call costs, and when a Turn may spend no more: pure, on calls
 // shaped as Claude Code sends them and usage as Anthropic reports it.
@@ -143,23 +143,28 @@ describe('what a call costs', () => {
 
   it('prices each kind of token at its model’s price, in millionths of a dollar, rounded up', () => {
     // Sonnet 5.5: 1000×2 + 500×10 + 2000×2.5 + 100×4 + 10000×0.2
-    expect(cost('claude-sonnet-5-5', 8192, used)).toBe(14_400)
+    expect(charged('claude-sonnet-5-5', 8192, used)).toBe(14_400)
     // Haiku 4.5: 1000×1 + 500×5 + 2000×1.25 + 100×2 + 10000×0.1
-    expect(cost('claude-haiku-4-5', 8192, used)).toBe(7200)
+    expect(charged('claude-haiku-4-5', 8192, used)).toBe(7200)
     const read = { ...used, input: 0, output: 0, cacheWrite5m: 0, cacheWrite1h: 0, cacheRead: 3 }
-    expect(cost('claude-sonnet-5-5', 8192, read)).toBe(1)
+    expect(charged('claude-sonnet-5-5', 8192, read)).toBe(1)
   })
 
   it('charges an answer cut short the output it may have answered', () => {
     const cut = { ...used, complete: false }
     // Sonnet 5.5: the 500 output tokens seen become the 8192 it may have answered.
-    expect(cost('claude-sonnet-5-5', 8192, cut)).toBe(14_400 + (8192 - 500) * 10)
-    expect(cost('claude-sonnet-5-5', 100, cut)).toBe(14_400)
+    expect(charged('claude-sonnet-5-5', 8192, cut)).toBe(14_400 + (8192 - 500) * 10)
+    expect(charged('claude-sonnet-5-5', 100, cut)).toBe(14_400)
   })
 
-  it('reserves, before a call goes, the output it may answer', () => {
-    expect(reserved('claude-sonnet-5-5', 32_000)).toBe(320_000)
-    expect(reserved('claude-haiku-4-5', 0)).toBe(0)
+  it('charges nothing for an answer Anthropic refused', () => {
+    expect(charged('claude-sonnet-5-5', 8192, undefined)).toBe(0)
+  })
+
+  it('reserves, before a call goes, its body as input at the dearest input price, and its output', () => {
+    // Sonnet 5.5: 32,000 output tokens at $10, 1,000 characters at $4, an hour's cache write.
+    expect(reserved('claude-sonnet-5-5', { maxTokens: 32_000, length: 1000 })).toBe(324_000)
+    expect(reserved('claude-haiku-4-5', { maxTokens: 0, length: 0 })).toBe(0)
   })
 })
 
@@ -179,6 +184,20 @@ describe('whether a Turn may spend', () => {
 
   it('names the ceiling first when a Turn reached both', () => {
     expect(limitReached({ turn: ceiling, month: allowance })).toBe('ceiling')
+  })
+
+  it('lets a call go with none under way, whatever it reserves, and makes it wait when the ones under way leave too little', () => {
+    const idle = { turn: { spent: 0, reserved: 0 }, month: { spent: 0, reserved: 0 } }
+    expect(mustWait(idle, ceiling * 2)).toBe(false)
+    const busy = { turn: { spent: 0, reserved: 600_000 }, month: { spent: 0, reserved: 600_000 } }
+    expect(mustWait(busy, ceiling - 600_000)).toBe(false)
+    expect(mustWait(busy, ceiling - 600_000 + 1)).toBe(true)
+    const monthly = {
+      turn: { spent: 0, reserved: 1 },
+      month: { spent: allowance - 10, reserved: 1 },
+    }
+    expect(mustWait(monthly, 9)).toBe(false)
+    expect(mustWait(monthly, 10)).toBe(true)
   })
 
   it('counts a month from its first instant, UTC', () => {

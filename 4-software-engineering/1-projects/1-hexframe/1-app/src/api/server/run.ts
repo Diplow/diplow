@@ -155,7 +155,8 @@ export interface StartContext {
   readonly session: Exit.Exit<Option.Option<Session>>
   /**
    * The Key the request's `Authorization: Bearer` header proves, if any, or how resolving it failed.
-   * Only `/mcp` reads the header; a server function's is always none, as `middleware.ts` sets it.
+   * Only `/mcp` and the doors of a Turn's sandbox read the header; a server function's is always
+   * none, as `middleware.ts` sets it.
    */
   readonly key: Exit.Exit<Option.Option<KeyProof>>
 }

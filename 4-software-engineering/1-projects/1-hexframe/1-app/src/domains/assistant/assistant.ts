@@ -34,7 +34,7 @@ import {
 import { TurnRunning } from './errors'
 import { settings } from './settings'
 import { type Allowed, allowedCall, type CallRefused } from './spending/call'
-import { cost, type Limit, limitReached, monthOf, reserved } from './spending/limits'
+import { charged, type Limit, limitReached, monthOf, mustWait, reserved } from './spending/limits'
 
 const decoded = Schema.decodeUnknownEffect(EntryContent)
 
@@ -188,63 +188,72 @@ interface Admitted {
 /**
  * What becomes of a model call before it goes: refused, by its body or its headers; refused since the
  * Turn is no longer running; held back by a limit the Turn reached, its ceiling or the month's
- * allowance, which ended the Turn so; or admitted, the most it may cost reserved on the Turn.
+ * allowance, which ended the Turn so; asked to wait, until the calls under way settle, since with what
+ * they reserved it would pass a limit; or admitted, the most it may cost reserved on the Turn.
  */
 type Admission =
   | ({ readonly _tag: 'Refused' } & CallRefused)
   | { readonly _tag: 'TurnOver' }
   | { readonly _tag: 'Limited'; readonly limit: Limit }
+  | { readonly _tag: 'Busy' }
   | Admitted
 
 /**
  * Decides whether a call of one of the Account's Turns may go: its body and headers as the settings
  * let them through; the Turn still running, below its ceiling, and its Account's Turns this month
- * below the allowance, what calls under way reserved included. A call held back ends the Turn by the
- * limit it reached. One admitted reserves the most its answer may cost on the Turn, so calls made at
- * once decide one after another, each seeing what the others reserved. In the transaction the API
- * layer opens, the Turn's row locked until it commits.
+ * below the allowance. A call held back ends the Turn by the limit it reached. One admitted reserves
+ * the most it may cost on the Turn, and one that would pass a limit with what the calls under way
+ * reserved waits for them, so calls made at once stay under the limits. In the transaction the API
+ * layer opens, the Turn's row locked until it commits, so they decide one after another.
  */
 export const admitCall = (accountId: string, turnId: string, asked: AskedCall) =>
   Effect.gen(function* () {
     const allowed = allowedCall(asked)
-    if (Result.isFailure(allowed))
+    if (Result.isFailure(allowed)) {
       return { _tag: 'Refused', ...allowed.failure } satisfies Admission
+    }
     const now = new Date(yield* Clock.currentTimeMillis)
-    const spent = yield* Turns.use((turns) => turns.spending(accountId, turnId, monthOf(now)))
-    if (spent === undefined) return { _tag: 'TurnOver' } satisfies Admission
-    const limit = limitReached(spent)
+    const spending = yield* Turns.use((turns) => turns.spending(accountId, turnId, monthOf(now)))
+    if (spending === undefined) return { _tag: 'TurnOver' } satisfies Admission
+    const limit = limitReached({ turn: spending.turn.spent, month: spending.month.spent })
     if (limit !== undefined) {
       yield* endTurn(accountId, turnId, limit)
       return { _tag: 'Limited', limit } satisfies Admission
     }
     const call = allowed.success
-    const reserve = reserved(call.model, call.maxTokens)
-    yield* Turns.use((turns) => turns.spend(accountId, turnId, reserve))
+    const reserve = reserved(call.model, { maxTokens: call.maxTokens, length: asked.body.length })
+    if (mustWait(spending, reserve)) return { _tag: 'Busy' } satisfies Admission
+    yield* Turns.use((turns) => turns.charge(accountId, turnId, { spent: 0, reserved: reserve }))
     const admitted: Admission = { _tag: 'Admitted', asked, call, reserved: reserve }
     return admitted
   })
 
 /**
  * Relays an admitted call through the model relay, which knows no limit, and answers Anthropic's
- * answer as it comes, with `owed`: what the call cost beyond what it reserved, less than nothing when
- * it cost less, once its answer has ended, been cut short or failed. An answer cut short is owed the
- * most it may have cost; one Anthropic refused, nothing.
+ * answer as it comes, with `charged`: what the call is charged once its answer has ended, been cut
+ * short or failed.
  */
-export const relayCall = ({ asked, call, reserved: reserve }: Admitted) =>
+export const relayCall = ({ asked, call }: Admitted) =>
   Effect.gen(function* () {
     const { usage, ...relayed } = yield* Anthropic.use((anthropic) =>
       anthropic.relay({ ...asked, body: call.body }),
     )
-    const owed = Effect.map(usage, (used) =>
-      used === undefined ? -reserve : cost(call.model, call.maxTokens, used) - reserve,
-    )
-    return { relayed, owed }
+    return {
+      relayed,
+      charged: Effect.map(usage, (used) => charged(call.model, call.maxTokens, used)),
+    }
   })
 
 /**
- * Settles what an admitted call owed the Turn, beyond or short of what it reserved, ended or not: a
- * call that started before the Turn ended still cost what it cost. In the transaction the API layer
- * opens.
+ * Settles an admitted call on its Turn, ended or not: what it reserved released, what it is charged
+ * spent, since a call that started before the Turn ended still cost what it cost. In the transaction
+ * the API layer opens.
  */
-export const settleCall = (accountId: string, turnId: string, owed: number) =>
-  owed === 0 ? Effect.void : Turns.use((turns) => turns.spend(accountId, turnId, owed))
+export const settleCall = (
+  accountId: string,
+  turnId: string,
+  call: { readonly reserved: number; readonly charged: number },
+) =>
+  Turns.use((turns) =>
+    turns.charge(accountId, turnId, { spent: call.charged, reserved: -call.reserved }),
+  )
