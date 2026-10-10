@@ -2,7 +2,7 @@ import { describe, expect, it, layer } from '@effect/vitest'
 import { Deferred, Duration, Effect, Exit, Logger, Option, References, Schema } from 'effect'
 
 import { Bus, type DomainEvent } from '#/domains/bus'
-import { CurrentKey, CurrentSession } from '#/domains/iam/iam'
+import { CurrentKey, CurrentSession, type KeyProof } from '#/domains/iam/iam'
 import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 
@@ -202,7 +202,10 @@ describe('the envelope', () => {
       const { heard, bus: listened } = listening()
       const session =
         proofs.session === true ? Option.some({ account, expiresAt: new Date() }) : Option.none()
-      const key = Option.map(Option.fromNullishOr(proofs.keyId), (keyId) => ({ account, keyId }))
+      const key = Option.map(Option.fromNullishOr(proofs.keyId), (keyId): KeyProof => ({
+        account,
+        by: { _tag: 'Key', keyId },
+      }))
       yield* settled(new DevHappened({ n: 1 })).pipe(
         Effect.provide(listened),
         Effect.provideService(CurrentSession, session),

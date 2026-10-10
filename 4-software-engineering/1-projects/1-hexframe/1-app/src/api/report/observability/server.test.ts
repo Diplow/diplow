@@ -185,7 +185,10 @@ describe("the server's observability", () => {
     Effect.gen(function* () {
       const asked: Array<string> = []
       const key = Exit.succeed(
-        Option.some({ account: { id: 'account-2', email: 'ada@example.com' }, keyId: 'key-1' }),
+        Option.some<KeyProof>({
+          account: { id: 'account-2', email: 'ada@example.com' },
+          by: { _tag: 'Key', keyId: 'key-1' },
+        }),
       )
       const request = { requestId: 'req-1', scope: 'open_tile', session: signedOut, key }
       const log = yield* requestLog(request, 'production').pipe(

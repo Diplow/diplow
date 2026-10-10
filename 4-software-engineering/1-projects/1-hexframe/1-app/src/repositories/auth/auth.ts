@@ -197,8 +197,11 @@ const decodeNamed = Schema.decodeUnknownEffect(
 /** An API key's secret: the `hf_` prefix, then 64 letters. Longer is not one, and is not hashed. */
 const longestSecret = 128
 
-/** The secret an `Authorization: Bearer` header carries, if it carries one; never a cookie's. */
-function bearerOf(headers: Headers): Option.Option<string> {
+/**
+ * The secret an `Authorization: Bearer` header carries, if it carries one; never a cookie's. IAM reads
+ * a Turn's Key's by it too, which Better Auth does not keep.
+ */
+export function bearerOf(headers: Headers): Option.Option<string> {
   const [scheme = '', secret = '', ...rest] = (headers.get('authorization') ?? '').split(' ')
   const carried = scheme.toLowerCase() === 'bearer' && rest.length === 0
   return carried && secret !== '' && secret.length <= longestSecret

@@ -1,7 +1,7 @@
 import { expect, layer } from '@effect/vitest'
 import { Effect, Exit, Layer, Option } from 'effect'
 
-import { CurrentKey, CurrentSession } from '#/domains/iam/iam'
+import { CurrentKey, CurrentSession, type KeyProof } from '#/domains/iam/iam'
 import { MappingEvent, TileCreated, TileEdited, TilesImported } from '#/domains/mapping/operations'
 import { HttpExchange } from '#/repositories/auth/auth'
 import { TestDatabase } from '#/repositories/database/testing'
@@ -45,7 +45,10 @@ function someone() {
   return {
     account,
     bySession: { session: Option.some(session), key: Option.none() },
-    byKey: (keyId: string) => ({ session: Option.none(), key: Option.some({ account, keyId }) }),
+    byKey: (keyId: string) => ({
+      session: Option.none(),
+      key: Option.some<KeyProof>({ account, by: { _tag: 'Key', keyId } }),
+    }),
   }
 }
 

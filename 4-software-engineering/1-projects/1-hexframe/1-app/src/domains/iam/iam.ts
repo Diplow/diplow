@@ -1,21 +1,30 @@
-// IAM: who someone is. An Account is someone known to hexframe; a Session, an Account's proven presence,
-// for a while, on one device; a Key, a credential it issues to a program. Better Auth keeps all three,
-// below (src/repositories/auth/); IAM speaks of them in its own words and decides what a refusal means
-// to the user. Entitlements come later.
-import { Context, Effect, Option } from 'effect'
+// IAM: who someone is, and what they may do. An Account is someone known to hexframe; a Session, an
+// Account's proven presence, for a while, on one device; a Key, a credential it issues to a program; a
+// Turn's Key, the credential of one Turn of its Assistant, short-lived. Better Auth keeps the first
+// three, below (src/repositories/auth/), and the turn-keys repository the last
+// (src/repositories/database/turn-keys/); IAM speaks of them in its own words and decides what a
+// refusal means to the user. An Entitlement, something an Account may do, is derived when asked: for
+// now from a list kept by hand (src/repositories/auth/allowlist.ts), until Stripe.
+import { Clock, Context, Effect, Option, Redacted } from 'effect'
 
+import { Allowlist } from '#/repositories/auth/allowlist'
 import {
   Auth,
   type AuthApiKey,
   type AuthRefused,
   type AuthSession,
+  HttpExchange,
   type Refusal,
+  bearerOf,
 } from '#/repositories/auth/auth'
+import { TurnKeys, isTurnKeySecret } from '#/repositories/database/turn-keys/turn-keys'
 
 import {
   CredentialsRejected,
   EmailMalformed,
   EmailTaken,
+  Entitlement,
+  EntitlementMissing,
   KeyNameInvalid,
   KeyNotFound,
   PasswordLengthInvalid,
@@ -61,17 +70,33 @@ export interface IssuedKey {
   readonly secret: string
 }
 
-/** What a Key proves of a request: whose it is, and which of their Keys it was. */
-export interface KeyProof {
-  readonly account: Account
-  readonly keyId: string
+/** What a Turn's Key is bound to, beside its Account: the Conversation and the Turn it was issued for. */
+export interface TurnBinding {
+  readonly conversationId: string
+  readonly turnId: string
+}
+
+/** A Turn's Key just issued: its secret, the one time it is known, and when it stops proving. */
+export interface IssuedTurnKey {
+  readonly secret: Redacted.Redacted
+  readonly expiresAt: Date
 }
 
 /**
- * Which of the two proofs gave a signed-in request its Account: a Session, the user at one of their
- * devices, or one of their Keys, a program, by its id.
+ * Which proof gave a signed-in request its Account: a Session, the user at one of their devices; one
+ * of their Keys, a program, by its id; or the Key of one of their Turns, the Assistant, by what it
+ * is bound to.
  */
-type Proof = { readonly _tag: 'Session' } | { readonly _tag: 'Key'; readonly keyId: string }
+type Proof =
+  | { readonly _tag: 'Session' }
+  | { readonly _tag: 'Key'; readonly keyId: string }
+  | ({ readonly _tag: 'TurnKey' } & TurnBinding)
+
+/** What a Bearer header proves of a request: whose it is, and which Key, or Turn's Key, it was. */
+export interface KeyProof {
+  readonly account: Account
+  readonly by: Exclude<Proof, { readonly _tag: 'Session' }>
+}
 
 /** A signed-in request: its Account, and the proof that gave it. */
 export interface SignedIn {
@@ -88,8 +113,9 @@ export class CurrentSession extends Context.Service<CurrentSession, Option.Optio
 ) {}
 
 /**
- * The request's Key, if its `Authorization: Bearer` header proves one: resolved once per request at
- * `/mcp`, the one door a Key opens. A server function's is always none: it never reads the header.
+ * The request's Key, or Turn's Key, if its `Authorization: Bearer` header proves one: resolved once per
+ * request at `/mcp`, the one door a Key opens, and at the two doors of a Turn's sandbox. A server
+ * function's is always none: it never reads the header.
  */
 export class CurrentKey extends Context.Service<CurrentKey, Option.Option<KeyProof>>()(
   'hexframe/iam/CurrentKey',
@@ -129,20 +155,39 @@ export const signOut = Auth.use((auth) => auth.signOut)
 /** The Session the request's cookie proves, if any: what the middleware puts on the request. */
 export const proven = Auth.use((auth) => auth.session).pipe(Effect.map(Option.map(sessionOf)))
 
-/** The Key the request's `Authorization: Bearer` header proves, if any: what `/mcp` puts on it. */
-export const keyProven = Auth.use((auth) => auth.bearer).pipe(
-  Effect.map(Option.map(({ user, apiKeyId }): KeyProof => ({ account: user, keyId: apiKeyId }))),
-)
+/**
+ * The Key the request's `Authorization: Bearer` header proves, if any: a Turn's Key, unexpired, when
+ * its secret is shaped as one, else an Account's Key. What `/mcp` puts on it.
+ */
+export const keyProven = Effect.gen(function* () {
+  const secret = bearerOf((yield* HttpExchange).headers)
+  if (Option.isNone(secret)) return Option.none<KeyProof>()
+  if (isTurnKeySecret(secret.value)) {
+    const now = new Date(yield* Clock.currentTimeMillis)
+    const turnKey = yield* TurnKeys.use((keys) => keys.proven(secret.value, now))
+    if (turnKey === undefined) return Option.none<KeyProof>()
+    const { user, conversationId, turnId } = turnKey
+    return Option.some<KeyProof>({ account: user, by: { _tag: 'TurnKey', conversationId, turnId } })
+  }
+  const key = yield* Auth.use((auth) => auth.bearer)
+  return Option.map(key, ({ user, apiKeyId }): KeyProof => ({
+    account: user,
+    by: { _tag: 'Key', keyId: apiKeyId },
+  }))
+})
 
 /**
- * The Account two proofs give, and which gave it: the Session's when there is one, else the Key's, if
- * any. What `signedIn` reads the request by, and the API layer too, to say who acted.
+ * The Account two proofs give, and which gave it: the Session's when there is one, else the Key's, a
+ * Turn's Key's included, if any. What `signedIn` reads the request by, and the API layer too, to say
+ * who acted.
  */
-export const signedInBy = (session: Option.Option<Session>, key: Option.Option<KeyProof>) =>
+export const signedInBy = (
+  session: Option.Option<Session>,
+  key: Option.Option<KeyProof>,
+): Option.Option<SignedIn> =>
   Option.orElse(
     Option.map(session, ({ account }): SignedIn => ({ account, by: { _tag: 'Session' } })),
-    () =>
-      Option.map(key, ({ account, keyId }): SignedIn => ({ account, by: { _tag: 'Key', keyId } })),
+    () => key,
   )
 
 /**
@@ -157,8 +202,9 @@ export const signedIn = Effect.gen(function* () {
 })
 
 /**
- * The request's Session, or `SessionRequired` when only a Key proves it, or `SignedOut`: the first
- * step of managing Keys and of changing the Account itself, so a leaked Key cannot keep itself alive.
+ * The request's Session, or `SessionRequired` when only a Key, or a Turn's Key, proves it, or
+ * `SignedOut`: the first step of managing Keys, of changing the Account itself, so a leaked Key cannot
+ * keep itself alive, and of starting a Turn, so a Turn starts no other.
  */
 export const sessionOnly = Effect.gen(function* () {
   const session = yield* CurrentSession
@@ -200,3 +246,32 @@ export const revokeKey = (id: string) =>
  */
 export const keyName = (accountId: string, keyId: string) =>
   Auth.use((auth) => auth.apiKeyName(accountId, keyId))
+
+/**
+ * Issues the Key of a Turn the request's Session starts, bound to its Account and to the Turn and its
+ * Conversation, proving them until `expiresAt`. Its secret is in the answer only, redacted so no log
+ * shows it: the code that starts the Turn hands it to the sandbox's processes and nothing else.
+ */
+export const issueTurnKey = (turn: TurnBinding, expiresAt: Date) =>
+  Effect.flatMap(sessionOnly, ({ account }) =>
+    TurnKeys.use((keys) => keys.issue({ accountId: account.id, ...turn }, expiresAt)),
+  ).pipe(Effect.map((secret): IssuedTurnKey => ({ secret: Redacted.make(secret), expiresAt })))
+
+/**
+ * Revokes the Key of one of the Account's Turns, once the Turn ended: it proves nothing again. Read
+ * outside any request, so it needs no Session; a Key already gone is no error.
+ */
+export const revokeTurnKey = (accountId: string, turnId: string) =>
+  TurnKeys.use((keys) => keys.revoke(accountId, turnId))
+
+type Entitlement = typeof Entitlement.Type
+
+/** Whether the Account has the Entitlement: for now, whether a list kept by hand names its email. */
+export const entitled = (account: Account, entitlement: Entitlement) =>
+  Allowlist.use((allowlist) => Effect.succeed(allowlist.allows(entitlement, account.email)))
+
+/** Nothing when the Account has the Entitlement, else `EntitlementMissing`. */
+export const entitledOnly = (account: Account, entitlement: Entitlement) =>
+  Effect.flatMap(entitled(account, entitlement), (has) =>
+    has ? Effect.void : Effect.fail(new EntitlementMissing({ entitlement })),
+  )

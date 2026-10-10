@@ -3,7 +3,14 @@ import { Clock, Effect, Layer, Option, Struct } from 'effect'
 
 import * as Assistant from '#/domains/assistant/assistant'
 import { dayAt, type Entry } from '#/domains/assistant/entities'
-import { CurrentKey, CurrentSession, issueKey, proven, signUp } from '#/domains/iam/iam'
+import {
+  CurrentKey,
+  CurrentSession,
+  type KeyProof,
+  issueKey,
+  proven,
+  signUp,
+} from '#/domains/iam/iam'
 import { EditTile } from '#/domains/mapping/operations'
 import * as MappingService from '#/domains/mapping/mapping'
 import { HttpExchange } from '#/repositories/auth/auth'
@@ -57,7 +64,10 @@ const someone = Effect.gen(function* () {
       Effect.provideService(CurrentKey, Option.none()),
     ),
   )
-  const byKey = { session: Option.none(), key: Option.some({ account, keyId: key.id }) }
+  const byKey = {
+    session: Option.none(),
+    key: Option.some<KeyProof>({ account, by: { _tag: 'Key', keyId: key.id } }),
+  }
   return { account, bySession, byKey }
 })
 

@@ -1,18 +1,20 @@
 // The Account's Conversation on the client, over Assistant's server functions
 // (src/api/assistant/assistant.ts): read a day at a time in the reader's calendar, today first, then
-// each earlier day holding an Entry as the reader scrolls back, one query; a Message posted; and a
-// merged navigation recorded. The two writes wait their turn in the
-// Conversation's queue, so a navigation sent before a Message reaches the server before it, and each
-// reads the Conversation again once it settles, failed or not. Failures go to their channels
+// each earlier day holding an Entry as the reader scrolls back, one query; a Message posted; a merged
+// navigation recorded; and whether the Account may use the Assistant. The two writes wait their turn
+// in the Conversation's queue, so a navigation sent before a Message reaches the server before it, and
+// each reads the Conversation again once it settles, failed or not. Failures go to their channels
 // (../channels.ts): a hook's caller handles none.
 import {
   infiniteQueryOptions,
   useInfiniteQuery,
   useMutation,
+  useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
 
 import {
+  assistantAvailable,
   conversationDay,
   type MergedNavigation,
   postMessage,
@@ -20,7 +22,7 @@ import {
 } from '#/api/assistant/assistant'
 import { dayAt } from '#/domains/assistant/entities'
 
-import { settle, write } from '../calls'
+import { read, settle, write } from '../calls'
 
 /** The Conversation's read, by the server function's name: every mode of its query key starts with it. */
 const dayScope = 'conversationDay'
@@ -80,6 +82,19 @@ export const conversationRead = infiniteQueryOptions({
  * whether there is one. Shown inside a ReadBoundary; signed out, it sends the user to sign in.
  */
 export const useConversation = () => useInfiniteQuery(conversationRead)
+
+/**
+ * Whether the Account may use the Assistant, its Entitlement, which the composer tells the user of when
+ * it is missing. A read a page shows; signed out, it sends the user to sign in.
+ */
+export const useAssistantAvailable = () =>
+  useQuery(
+    read({
+      scope: 'assistantAvailable',
+      key: [],
+      call: () => assistantAvailable({ data: undefined }),
+    }),
+  )
 
 /** Reads the Conversation again, every day of it the page holds. */
 const readAgain = (client: ReturnType<typeof useQueryClient>) =>

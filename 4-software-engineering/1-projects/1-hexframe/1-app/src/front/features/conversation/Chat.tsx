@@ -1,7 +1,8 @@
 // The chat on home: the Account's own Conversation, read a day at a time, today first and each earlier
 // day holding an Entry as the reader asks for it, and the input, whose Message the route posts after
-// the navigation it follows. Shown inside a ReadBoundary, which a failed read lands in.
-import { useConversation } from '#/front/client/assistant/conversation'
+// the navigation it follows, saying so when the Account may not use the Assistant. Shown inside a
+// ReadBoundary, which a failed read lands in.
+import { useAssistantAvailable, useConversation } from '#/front/client/assistant/conversation'
 import { Skeleton } from '#/front/ui/feedback/skeleton'
 
 import { Conversation } from './Conversation'
@@ -15,6 +16,7 @@ interface ChatProps {
 
 export function Chat({ onSend, className }: ChatProps) {
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useConversation()
+  const { data: available } = useAssistantAvailable()
   if (data === undefined) return <Skeleton className={className} />
   const now = new Date()
   // The pages come today first; the timeline reads oldest first.
@@ -25,6 +27,8 @@ export function Chat({ onSend, className }: ChatProps) {
     <Conversation
       days={days.toReversed()}
       onSend={onSend}
+      // Until it is read, the composer says nothing either way.
+      unavailable={available === false}
       earlier={
         hasNextPage
           ? {

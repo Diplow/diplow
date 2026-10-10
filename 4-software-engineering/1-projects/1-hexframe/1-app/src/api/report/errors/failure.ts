@@ -3,6 +3,7 @@
 // runtime: only schemas and plain data.
 import { Option, Schema } from 'effect'
 
+import { assistantFailures } from '#/domains/assistant/errors'
 import { iamFailures } from '#/domains/iam/errors'
 import { mappingFailures } from '#/domains/mapping/errors'
 
@@ -24,6 +25,7 @@ export const Failure = Schema.Union([
   Unexpected,
   ...iamFailures,
   ...mappingFailures,
+  ...assistantFailures,
   ...devFailures,
 ])
 export type Failure = typeof Failure.Type

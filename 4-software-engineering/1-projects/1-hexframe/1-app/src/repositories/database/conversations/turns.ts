@@ -1,0 +1,143 @@
+// Assistant's Turns: the `turn` table (../schema.ts), each a run of the agent answering one Message of
+// an Account's Conversation, read and written by Account. It speaks rows: how a Turn ended is a word
+// Assistant decides and decodes, which the repository keeps as it is given. One Turn runs at most per
+// Conversation, which the table's `turn_running_idx` holds, so two starts at once never both run.
+import { and, eq, inArray, isNull } from 'drizzle-orm'
+import { Context, Effect, Layer } from 'effect'
+
+import { Database, InTransaction } from '../database'
+import { conversation, conversationEntry, turn } from '../schema'
+
+/** A Turn's row: how it ended and when, both null while it runs. */
+export interface TurnRow {
+  readonly id: string
+  readonly conversationId: string
+  readonly messageId: string
+  readonly location: string
+  readonly startedAt: Date
+  readonly spent: number
+  readonly endedAt: Date | null
+  readonly end: string | null
+}
+
+/** A Turn as it starts: the Message it answers, by its Entry's id, the Tile it starts in, and when. */
+export interface TurnStart {
+  readonly messageId: string
+  readonly location: string
+  readonly startedAt: Date
+}
+
+export class Turns extends Context.Service<
+  Turns,
+  {
+    /**
+     * Starts a Turn answering one of the Account's Messages, in its Conversation, and answers its
+     * row; none while another runs there. Inside a transaction. A Message of no Conversation of the
+     * Account's is a defect: the caller hands the Entry it just recorded.
+     */
+    readonly start: (
+      accountId: string,
+      start: TurnStart,
+    ) => Effect.Effect<TurnRow | undefined, never, InTransaction>
+    /**
+     * Ends one of the Account's Turns, `end` saying how, at `at`, and answers its row; none for a Turn
+     * that already ended, or that is not the Account's. Inside a transaction.
+     */
+    readonly end: (
+      accountId: string,
+      turnId: string,
+      ended: { readonly end: string; readonly at: Date },
+    ) => Effect.Effect<TurnRow | undefined, never, InTransaction>
+    /** The Turn running in the Account's Conversation, if one does. */
+    readonly running: (accountId: string) => Effect.Effect<TurnRow | undefined>
+  }
+>()('hexframe/Turns') {}
+
+const columns = {
+  id: turn.id,
+  conversationId: turn.conversationId,
+  messageId: turn.messageId,
+  location: turn.location,
+  startedAt: turn.startedAt,
+  spent: turn.spent,
+  endedAt: turn.endedAt,
+  end: turn.end,
+}
+
+const make = Effect.gen(function* () {
+  const database = yield* Database
+
+  /** The Account's Conversation, by its id, as a subquery. */
+  const conversationOf = (accountId: string) =>
+    database
+      .select({ id: conversation.id })
+      .from(conversation)
+      .where(eq(conversation.accountId, accountId))
+
+  const start = (accountId: string, { messageId, location, startedAt }: TurnStart) =>
+    InTransaction.use(() =>
+      Effect.gen(function* () {
+        const [message] = yield* database
+          .select({ conversationId: conversationEntry.conversationId })
+          .from(conversationEntry)
+          .where(
+            and(
+              eq(conversationEntry.id, messageId),
+              inArray(conversationEntry.conversationId, conversationOf(accountId)),
+            ),
+          )
+          .pipe(Effect.orDie)
+        if (message === undefined) {
+          return yield* Effect.die(new Error("A Turn answers a Message of its Account's own"))
+        }
+        // Another running in the Conversation conflicts on `turn_running_idx`: nothing is added.
+        const [started] = yield* database
+          .insert(turn)
+          .values({
+            id: crypto.randomUUID(),
+            conversationId: message.conversationId,
+            messageId,
+            location,
+            startedAt,
+          })
+          .onConflictDoNothing()
+          .returning(columns)
+          .pipe(Effect.orDie)
+        return started
+      }),
+    )
+
+  const end = (accountId: string, turnId: string, ended: { end: string; at: Date }) =>
+    InTransaction.use(() =>
+      database
+        .update(turn)
+        .set({ end: ended.end, endedAt: ended.at })
+        .where(
+          and(
+            eq(turn.id, turnId),
+            inArray(turn.conversationId, conversationOf(accountId)),
+            isNull(turn.endedAt),
+          ),
+        )
+        .returning(columns)
+        .pipe(
+          Effect.orDie,
+          Effect.map(([row]) => row),
+        ),
+    )
+
+  const running = (accountId: string) =>
+    database
+      .select(columns)
+      .from(turn)
+      .where(and(inArray(turn.conversationId, conversationOf(accountId)), isNull(turn.endedAt)))
+      .pipe(
+        Effect.orDie,
+        Effect.map(([row]) => row),
+      )
+
+  return Turns.of({ start, end, running })
+})
+
+/** The Turns repository, over the `Database` it is given. */
+export const layer = Layer.effect(Turns)(make)

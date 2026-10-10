@@ -8,13 +8,14 @@ import { Schema } from 'effect'
 import { Navigation } from './navigation'
 
 /**
- * Who acted, as the timeline shows it: the user themselves, at one of their Sessions ("you"), or one
- * of their Keys, by its name, which a Key revoked before its write was recorded no longer has. The
- * Assistant's own Turns come next.
+ * Who acted, as the timeline shows it: the user themselves, at one of their Sessions ("you"); one of
+ * their Keys, by its name, which a Key revoked before its write was recorded no longer has; or the
+ * Assistant, in one of their Turns, by its Turn's Key.
  */
 export const Actor = Schema.Union([
   Schema.TaggedStruct('You', {}),
   Schema.TaggedStruct('Key', { name: Schema.optionalKey(Schema.String) }),
+  Schema.TaggedStruct('Assistant', {}),
 ])
 
 export type Actor = typeof Actor.Type
