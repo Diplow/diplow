@@ -12,7 +12,7 @@ import {
   type KeyProof,
   type Session,
 } from '#/domains/iam/iam'
-import { layer as blaxelLayer } from '#/repositories/agent/sandbox/blaxel'
+import { layer as blaxelLayer, hasCredentials } from '#/repositories/agent/sandbox/blaxel'
 import { Sandbox } from '#/repositories/agent/sandbox/sandbox'
 import { Auth, HttpExchange, layer as authLayer } from '#/repositories/auth/auth'
 import {
@@ -57,12 +57,12 @@ const auth =
     : Layer.orDie(Layer.merge(authLayer, databaseLayer))
 
 /**
- * Every Account's sandbox: on Blaxel, deployed. Under `pnpm dev` without BL_API_KEY, and in every
+ * Every Account's sandbox: on Blaxel, deployed. Under `pnpm dev` without Blaxel's credentials, and in every
  * test, whatever the shell exports (`vitest.config.ts`): a folder of this machine's per Account. A
  * build never holds that branch.
  */
 const sandbox =
-  import.meta.env.DEV && (process.env.BL_API_KEY ?? '') === ''
+  import.meta.env.DEV && !hasCredentials(process.env)
     ? Layer.unwrap(
         Effect.promise(async () => (await import('#/repositories/agent/sandbox/local')).layer),
       )

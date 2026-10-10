@@ -30,7 +30,7 @@ export interface Run {
 }
 
 /** The exit code of a process a SIGINT ended, as a shell reports it: 128 and the signal's number. */
-export const interrupted = 130
+const interrupted = 130
 
 /**
  * Where a process stands: running, or ended, by how it ended rather than by who ended it, so both
@@ -41,6 +41,18 @@ export const interrupted = 130
 export type RunStatus =
   | { readonly state: 'running' | 'stopped' | 'killed' }
   | { readonly state: 'completed' | 'failed'; readonly exitCode: number }
+
+/** How a process ended, as a layer learns it: its exit code, or the signal that ended it. */
+export type Ending = { readonly code: number } | { readonly signal: 'SIGINT' | 'SIGKILL' }
+
+/** A process's state by how it ended: the one rule both layers read it by. */
+export function ended(how: Ending): RunStatus {
+  if ('signal' in how) return { state: how.signal === 'SIGINT' ? 'stopped' : 'killed' }
+  if (how.code === interrupted) return { state: 'stopped' }
+  return how.code === 0
+    ? { state: 'completed', exitCode: 0 }
+    : { state: 'failed', exitCode: how.code }
+}
 
 /** One Account's sandbox, ensured. */
 export interface Box {
@@ -55,7 +67,11 @@ export interface Box {
   readonly replaceSystem: (files: ReadonlyArray<SandboxFile>) => Effect.Effect<void>
   /** Writes one file, its path from the home, outside the System folder: a Turn's prompt, its script. */
   readonly write: (file: SandboxFile) => Effect.Effect<void>
-  /** Starts a process, detached; a name already running is a defect. */
+  /**
+   * Starts a process, detached, its HOME the work folder (`work/`); a name already running is a
+   * defect. On Blaxel it runs as a user of its own, who may write the work folder and not the
+   * System folder.
+   */
   readonly start: (run: Run) => Effect.Effect<void>
   /**
    * Stops a process: interrupts it (SIGINT), so an agent ends its turn cleanly, then kills it if it
@@ -70,16 +86,16 @@ export interface Box {
 export class Sandbox extends Context.Service<
   Sandbox,
   {
-    /**
-     * The Account's sandbox, created when it has none, found when it has: on standby between Turns,
-     * deleted after a week idle, and reaching nothing but the app.
-     */
+    /** The Account's sandbox, made when it has none, found when it has. */
     readonly ensure: (accountId: string) => Effect.Effect<Box>
   }
 >()('hexframe/Sandbox') {}
 
 /** The folder of the home that holds the System, read-only. */
 export const systemFolder = 'system'
+
+/** The folder of the home a process writes in, its HOME. */
+export const workFolder = 'work'
 
 /**
  * The name of an Account's sandbox: a hash of the Account's id, so the id never leaves the app, and of

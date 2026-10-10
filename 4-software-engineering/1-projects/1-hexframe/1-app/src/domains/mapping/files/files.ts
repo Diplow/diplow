@@ -271,7 +271,7 @@ export function exportOf(system: SystemTile, id: string, link: LinkOf): Export |
 
 /** Where a Tile lives in its System's export, each path from the export's root. */
 export interface Place {
-  /** The folder a Turn there starts in: the Tile's own, or, for a Leaf, the one it hangs in. */
+  /** The folder that holds it: a Branch's or a Context Tile's own, or the one a Leaf hangs in. */
   readonly folder: string
   /** The Tile's own file: its folder's, or the Leaf's. */
   readonly file: string

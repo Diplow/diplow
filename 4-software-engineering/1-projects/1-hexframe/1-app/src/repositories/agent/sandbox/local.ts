@@ -11,8 +11,8 @@ import { Duration, Effect, Layer, Option } from 'effect'
 
 import {
   type Box,
+  ended,
   inside,
-  interrupted,
   outsideTheSystem,
   type Run,
   type RunStatus,
@@ -20,6 +20,7 @@ import {
   type SandboxFile,
   sandboxName,
   systemFolder,
+  workFolder,
 } from './sandbox'
 
 /** A process this machine started, as it stands. */
@@ -66,26 +67,18 @@ function signal(child: Child, name: 'SIGINT' | 'SIGKILL'): void {
   }
 }
 
-/**
- * A child's state once it exited, by how it ended, as Blaxel reports it: a SIGINT, or the exit code a
- * shell reports one by, `stopped`; a kill `killed`; otherwise its code.
- */
-function endedAs(code: number | null, by: NodeJS.Signals | null): RunStatus {
-  if (by === 'SIGINT' || code === interrupted) return { state: 'stopped' }
-  if (by === 'SIGKILL') return { state: 'killed' }
-  return code === 0
-    ? { state: 'completed', exitCode: 0 }
-    : { state: 'failed', exitCode: code ?? -1 }
-}
+/** A child's state once it exited, by the signal that ended it or by its exit code. */
+const endedAs = (code: number | null, by: NodeJS.Signals | null): RunStatus =>
+  by === 'SIGINT' || by === 'SIGKILL' ? ended({ signal: by }) : ended({ code: code ?? -1 })
 
 /**
- * A process started detached in its own group, in `cwd`, with its environment and the bare minimum
- * to find its commands, killed once its time is up.
+ * A process started detached in its own group, in `cwd`, with its environment, its HOME the work
+ * folder and the PATH to find its commands, killed once its time is up.
  */
 function spawned(run: Run, { cwd, home }: { cwd: string; home: string }): Child {
   const started = spawn('sh', ['-c', run.command], {
     cwd,
-    env: { PATH: process.env.PATH ?? '', HOME: home, ...run.env },
+    env: { PATH: process.env.PATH ?? '', HOME: join(home, workFolder), ...run.env },
     detached: true,
     stdio: 'ignore',
   })
@@ -191,7 +184,7 @@ export function makeLocal({
         const found = boxes.get(name)
         if (found !== undefined) return found
         const home = join(root, name)
-        const box = mkdir(home, { recursive: true }).then(
+        const box = mkdir(join(home, workFolder), { recursive: true }).then(
           () => boxAt(name, home, grace),
           (error: unknown) => {
             // A box that could not be made is not kept: the next ensure tries again.

@@ -74,6 +74,21 @@ describe('the layer without Blaxel’s credentials', () => {
         }
       }),
   )
+
+  it.effect(
+    'builds when its setup fails too, ensuring then a defect saying it could not be set up',
+    () =>
+      Effect.gen(function* () {
+        const exit = yield* Sandbox.use((sandbox) => sandbox.ensure('account-1')).pipe(
+          Effect.provide(layer),
+          // On Vercel, its hosts missing: the setup fails after the credentials were read.
+          withEnv({ BL_WORKSPACE: 'w', BL_API_KEY: 'k', VERCEL: '1' }),
+          Effect.exit,
+        )
+        expect(Exit.hasDies(exit)).toBe(true)
+        expect(String(Exit.isFailure(exit) ? exit.cause : '')).toContain('could not be set up')
+      }),
+  )
 })
 
 describe('a sandbox’s network', () => {
@@ -81,7 +96,7 @@ describe('a sandbox’s network', () => {
 
   it('is set again unless its proxy allows exactly its hosts and its firewall holds the proxy', () => {
     const network = (allowedDomains: ReadonlyArray<string>, rulesets = ['proxy']) => ({
-      proxy: { allowedDomains },
+      proxy: { allowedDomains: [...allowedDomains] },
       firewall: { rulesets },
     })
     expect(networkDrifted(network([...hosts].reverse()), hosts)).toBe(false)

@@ -271,7 +271,12 @@ describe('where each Tile lives in the System’s export', () => {
     const files = exportOf(whole, whole.id, link)?.files ?? []
     for (const [id, { folder, file }] of places) {
       expect(file.startsWith(folder), id).toBe(true)
-      if (file === '1-leadership/package.json') continue
+      expect(
+        files.some(({ path }) => path === file),
+        id,
+      ).toBe(true)
+      // A Leaf written as its content alone carries no frontmatter to check its id against.
+      if (!file.endsWith('.md')) continue
       expect(read(files, file).fields, id).toMatchObject({
         id,
         parent: folder === '' ? '.' : folder,

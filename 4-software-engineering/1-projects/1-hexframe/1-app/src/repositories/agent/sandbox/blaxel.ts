@@ -1,15 +1,16 @@
 // The sandbox on Blaxel, the one module of the app that imports `@blaxel/core`
 // (dependency-cruiser.config.ts, `sdks`): each Account's sandbox created by its name from the image
 // that holds Claude Code, deleted after a week idle, its egress through Blaxel's proxy to the app's
-// hosts alone; its System folder written in one call and made read-only; its processes started
-// detached, kept awake for their time, interrupted by a SIGINT sent from inside, then killed.
+// hosts alone; its System folder written in one call, root's and read-only; its processes started
+// detached as a user of their own, who can't write it, kept awake for their time, interrupted by a
+// SIGINT sent from inside, then killed.
 import { initialize, ResponseError, SandboxInstance } from '@blaxel/core'
-import { Config, Duration, Effect, Layer, Option, Redacted } from 'effect'
+import { Cause, Config, Duration, Effect, Layer, Option, Redacted } from 'effect'
 
 import {
   type Box,
+  ended,
   inside,
-  interrupted,
   outsideTheSystem,
   type Run,
   type RunStatus,
@@ -17,6 +18,7 @@ import {
   type SandboxFile,
   sandboxName,
   systemFolder,
+  workFolder,
 } from './sandbox'
 
 /** Blaxel's image with Claude Code on its PATH. */
@@ -27,6 +29,12 @@ const idleLifetime = '7d'
 
 /** The folder every path of a sandbox is from. */
 const home = '/blaxel/hexframe'
+
+/**
+ * The user a process runs as, made in each sandbox: root runs the layer's own commands and owns the
+ * System folder, which its modes alone could not keep from root.
+ */
+const agent = 'hexframe'
 
 /** How long a stop waits for a process it interrupted before killing it. */
 const grace = Duration.seconds(10)
@@ -51,12 +59,7 @@ const sameSet = (one: ReadonlyArray<string> | undefined, other: ReadonlyArray<st
  * A sandbox made before its network was set, which has none, must.
  */
 export function networkDrifted(
-  current:
-    | {
-        readonly proxy?: { readonly allowedDomains?: ReadonlyArray<string> }
-        readonly firewall?: { readonly rulesets?: ReadonlyArray<string> }
-      }
-    | undefined,
+  current: SandboxInstance['spec']['network'],
   hosts: ReadonlyArray<string>,
 ) {
   const wanted = networkOf(hosts)
@@ -96,18 +99,19 @@ const processOf = (sandbox: SandboxInstance, name: string) =>
     }),
   )
 
-/** A process's state as Blaxel reports it, read as the fake reads one: by how it ended. */
+/**
+ * A process's state as Blaxel reports it, read by the rule the fake reads one by (`ended`): Blaxel's
+ * kill is a SIGKILL, its own stop a stop, and a process that ended by itself by its exit code.
+ */
 export function statusFrom({
   status,
   exitCode,
 }: {
-  readonly status: RunStatus['state']
+  readonly status: 'running' | 'completed' | 'failed' | 'stopped' | 'killed'
   readonly exitCode: number
 }): RunStatus {
-  if (status === 'failed' && exitCode === interrupted) return { state: 'stopped' }
-  return status === 'completed' || status === 'failed'
-    ? { state: status, exitCode }
-    : { state: status }
+  if (status === 'running' || status === 'stopped') return { state: status }
+  return status === 'killed' ? ended({ signal: 'SIGKILL' }) : ended({ code: exitCode })
 }
 
 /** One Account's sandbox on Blaxel. */
@@ -139,7 +143,7 @@ function boxOf(sandbox: SandboxInstance, name: string): Box {
           `chmod -R u+w ${quoted(system)} 2>/dev/null; rm -rf ${quoted(system)} && mkdir -p ${quoted(system)}`,
         )
         if (tree.length > 0) yield* blaxel(() => sandbox.fs.writeTree(tree, system))
-        yield* chored(sandbox, `chmod -R a-w ${quoted(system)}`)
+        yield* chored(sandbox, `chown -R 0:0 ${quoted(system)} && chmod -R a-w ${quoted(system)}`)
       }),
     write: ({ path, content }: SandboxFile) =>
       Effect.flatMap(
@@ -151,9 +155,11 @@ function boxOf(sandbox: SandboxInstance, name: string): Box {
         blaxel(() =>
           sandbox.process.exec({
             name: run.name,
-            command: run.command,
+            // setpriv drops to the agent's user and execs, so the pid Blaxel reports stays the one
+            // a stop signals.
+            command: `setpriv --reuid=${agent} --regid=${agent} --init-groups -- sh -c ${quoted(run.command)}`,
             workingDir: `${home}/${inside(run.workingDir)}`,
-            env: { ...run.env },
+            env: { HOME: `${home}/${workFolder}`, ...run.env },
             keepAlive: true,
             timeout: run.timeoutSeconds,
           }),
@@ -197,7 +203,14 @@ function makeBlaxel({
         if (networkDrifted(sandbox.spec.network, hosts)) {
           yield* blaxel(() => SandboxInstance.updateNetwork(name, { network }))
         }
-        yield* chored(sandbox, `mkdir -p ${quoted(home)}`)
+        // The home is root's, so the agent's user renames nothing in it; the work folder is its own.
+        const work = quoted(`${home}/${workFolder}`)
+        yield* chored(
+          sandbox,
+          `mkdir -p ${work} && chown 0:0 ${quoted(home)} && chmod 755 ${quoted(home)} && ` +
+            `(id -u ${agent} >/dev/null 2>&1 || useradd --no-create-home --shell /bin/sh ${agent}) && ` +
+            `chown ${agent} ${work} && command -v setpriv >/dev/null`,
+        )
         return boxOf(sandbox, name)
       }),
   }
@@ -222,30 +235,34 @@ export const deployment = Effect.gen(function* () {
   return { namespace: canonical, hosts: [...new Set([own, ...Option.toArray(branch), canonical])] }
 })
 
+/** Whether Blaxel's workspace and key are both set, an empty variable counting as none. */
+export const hasCredentials = (env: Readonly<Record<string, string | undefined>>) =>
+  (env.BL_WORKSPACE ?? '') !== '' && (env.BL_API_KEY ?? '') !== ''
+
+/** The service when Blaxel can't be had: the app runs, and ensuring a sandbox is a defect. */
+const unavailable = (why: Error): Sandbox['Service'] => ({ ensure: () => Effect.die(why) })
+
 /**
- * The sandbox on Blaxel, its workspace and key from `BL_WORKSPACE` and `BL_API_KEY`. Without them the
- * layer still builds, so the rest of the app runs, and ensuring a sandbox is a defect.
+ * The sandbox on Blaxel, its workspace and key from `BL_WORKSPACE` and `BL_API_KEY`. It always
+ * builds, so a sandbox that can't be had never takes the rest of the app down: without credentials,
+ * or with a setup that failed, ensuring a sandbox is a defect saying why.
  */
 export const layer = Layer.effect(Sandbox)(
   Effect.gen(function* () {
-    const credentials = yield* Config.option(
-      Config.all({
-        workspace: Config.String('BL_WORKSPACE'),
-        apiKey: Config.Redacted('BL_API_KEY'),
-      }),
-    )
-    // An empty variable, as the tests set them, is no credential.
-    if (
-      Option.isNone(credentials) ||
-      credentials.value.workspace === '' ||
-      Redacted.value(credentials.value.apiKey) === ''
-    ) {
-      return {
-        ensure: () => Effect.die(new Error('Blaxel is not configured: BL_WORKSPACE, BL_API_KEY')),
-      }
+    const workspace = yield* Config.withDefault(Config.String('BL_WORKSPACE'), '')
+    const apiKey = yield* Config.withDefault(Config.Redacted('BL_API_KEY'), Redacted.make(''))
+    if (!hasCredentials({ BL_WORKSPACE: workspace, BL_API_KEY: Redacted.value(apiKey) })) {
+      return unavailable(new Error('Blaxel is not configured: BL_WORKSPACE, BL_API_KEY'))
     }
-    const { workspace, apiKey } = credentials.value
-    initialize({ workspace, apiKey: Redacted.value(apiKey) })
+    yield* Effect.sync(() => {
+      initialize({ workspace, apiKey: Redacted.value(apiKey) })
+    })
     return makeBlaxel(yield* deployment)
-  }),
-).pipe(Layer.orDie)
+  }).pipe(
+    Effect.catchCause((cause) =>
+      Effect.succeed(
+        unavailable(new Error('Blaxel could not be set up', { cause: Cause.squash(cause) })),
+      ),
+    ),
+  ),
+)

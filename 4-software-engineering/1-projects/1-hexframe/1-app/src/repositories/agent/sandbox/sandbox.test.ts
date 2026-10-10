@@ -204,7 +204,7 @@ describe('a process', () => {
         }),
       )
       expect(yield* settled(box, 'greet')).toEqual({ state: 'completed', exitCode: 0 })
-      const [cwd, greeting] = (yield* read(box, 'out.txt')).split(' ')
+      const [cwd, greeting] = (yield* read(box, 'work/out.txt')).split(' ')
       expect(cwd).toMatch(/\/system\/1-a$/)
       expect(greeting).toBe('hello')
       yield* box.start(run('fail', 'exit 3'))
@@ -243,7 +243,7 @@ describe('a process', () => {
       yield* Effect.sleep(Duration.millis(100))
       yield* box.stop('agent')
       expect(yield* settled(box, 'agent')).toEqual({ state: 'stopped' })
-      expect((yield* read(box, 'how.txt')).trim()).toBe('interrupted')
+      expect((yield* read(box, 'work/how.txt')).trim()).toBe('interrupted')
     }),
   )
 
