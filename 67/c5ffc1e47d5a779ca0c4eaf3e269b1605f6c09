@@ -1,0 +1,53 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/timeline/timeline.test.ts
+  s_c19b57f63ed6ef::t_e465bbf33060d3 22,39,45,50
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-assistant/decisions.md
+  s_c19b57f63ed6ef::t_0eaec50997cff1 85
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/assistant/conversation.ts
+  s_c19b57f63ed6ef::t_e465bbf33060d3 21,34-35
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/timeline/timeline.ts
+  s_c19b57f63ed6ef::t_e465bbf33060d3 5,36,47-48
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/assistant/follow.ts
+  s_c19b57f63ed6ef::t_e599df2ff3f5be 40,42
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/entry/Shortened.tsx
+  s_c19b57f63ed6ef::t_e465bbf33060d3 1-2,10-11,13
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/assistant.ts
+  s_c19b57f63ed6ef::t_e599df2ff3f5be 52
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261010180510_conversation-entry-seq/migration.sql
+  s_c19b57f63ed6ef::t_9bf382317ee03c 1
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/assistant.test.ts
+  s_c19b57f63ed6ef::t_e599df2ff3f5be 110,131,136-137
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_c19b57f63ed6ef::t_e599df2ff3f5be 40
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/assistant/follow.test.ts
+  s_c19b57f63ed6ef::t_e599df2ff3f5be 45,67,220,240,258,276
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/entry/Entry.tsx
+  s_c19b57f63ed6ef::t_e465bbf33060d3 63
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE.md
+  s_c19b57f63ed6ef::t_e599df2ff3f5be 28
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/CLAUDE.md
+  s_c19b57f63ed6ef::t_e599df2ff3f5be 19
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/schema.ts
+  s_c19b57f63ed6ef::t_9bf382317ee03c 232-236
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/conversations/conversations.ts
+  s_c19b57f63ed6ef::t_e599df2ff3f5be 42,110,123
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/programs.ts
+  s_c19b57f63ed6ef::t_e599df2ff3f5be 28-29,35,45,58-59
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261010180510_conversation-entry-seq/snapshot.json
+  s_c19b57f63ed6ef::t_9bf382317ee03c 1-1619
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "67c5ffc1e47d5a779ca0c4eaf3e269b1605f6c09",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
