@@ -120,7 +120,7 @@ describe('evolve, a System after one of its events', () => {
   })
 
   it('deletes a Tile with everything below it, and leaves a Reference to them elsewhere broken', () => {
-    const deleted = after(new TileDeleted({ id: 'branch' }))
+    const deleted = after(new TileDeleted({ id: 'branch', title: 'Branch' }))
     expect(Object.keys(deleted.tiles).sort()).toEqual(['across', 'leaf'])
     expect(systemOf(deleted).context[-2]).toEqual({ _tag: 'BrokenReference', target: 'child' })
   })
@@ -142,7 +142,7 @@ describe('evolve, a System after one of its events', () => {
     expect(counted.tiles.branch).toMatchObject({ version: 2 })
     expect(counted.root.version).toBe(2)
     expect(counted.tiles.leaf).toBe(system.tiles.leaf)
-    const deleted = after(new TileDeleted({ id: 'child' }))
+    const deleted = after(new TileDeleted({ id: 'child', title: 'Child' }))
     expect(deleted.tiles.branch).toBe(system.tiles.branch)
   })
 
@@ -152,8 +152,8 @@ describe('evolve, a System after one of its events', () => {
       new TileMoved({ id: 'gone', parent: 'root', slot: 3 }),
       new TileMoved({ id: 'root', parent: 'branch', slot: 3 }),
       new TilesSwapped({ a: 'gone', b: 'leaf' }),
-      new TileDeleted({ id: 'gone' }),
-      new TileDeleted({ id: 'up' }),
+      new TileDeleted({ id: 'gone', title: 'Gone' }),
+      new TileDeleted({ id: 'up', title: 'Up' }),
       new ReferenceDeleted({ id: 'child', parent: 'branch', slot: -2 }),
     ]
     for (const event of events) {
@@ -165,7 +165,7 @@ describe('evolve, a System after one of its events', () => {
     const counted = after(
       new TileEdited({ id: 'child', title: 'Once' }),
       new TileMoved({ id: 'leaf', parent: 'root', slot: { leaf: 2 } }),
-      new TileDeleted({ id: 'gone' }),
+      new TileDeleted({ id: 'gone', title: 'Gone' }),
       new TilesImported({ id: 'imported', count: 3 }),
     )
     expect(counted.version).toBe(4)

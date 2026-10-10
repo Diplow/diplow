@@ -186,7 +186,7 @@ const swapTiles = (system: System, { a, aVersion, b, bVersion }: SwapTiles): Dec
 
 /** Deletes a Tile, never the Root, with everything below it. */
 const deleteTile = (system: System, { id, version }: DeleteTile): Decided<'DeleteTile'> =>
-  Result.map(placed(system, id, version), () => [new TileDeleted({ id })])
+  Result.map(placed(system, id, version), ({ title }) => [new TileDeleted({ id, title })])
 
 /**
  * Puts a Reference to a Tile of the System in a free Context slot of a Tile, never of a Leaf, that Tile

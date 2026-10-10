@@ -14,7 +14,7 @@ A feature is client code that shows one thing a page needs, in a domain's langua
 
 | Folder | Holds |
 |---|---|
-| `conversation/` | `Conversation`, Assistant's timeline split by day, its entries and the message input, on fixtures for now: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/CLAUDE\|conversation]] |
+| `conversation/` | `Conversation`, Assistant's timeline split by day, its entries and the message input, on fixtures for now; and `useNavigationSender`, which home mounts, the user's gestures merged and recorded in their Conversation: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/CLAUDE\|conversation]] |
 | `breadcrumb/` | `Breadcrumb`, the rail of the centered Tile's ancestors; a click centers one. The path comes from `pathTo` in `ui/hex/view/` |
 | `system/` | `System`, the signed-in Account's System on the canvas, and `TileActions`, what the user does to it: add a Tile or import files in an empty slot, a Leaf in a ring of Leaves, import a vault into an empty System, edit, move, export or delete the centered one, grow a Leaf into a Branch or shrink a bare Branch into a Leaf. The view and the change under way live in the URL: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE\|system]] |
 | `access/` | `Access`, the sign-in and sign-up pages' content: one form, an email and a password, whose refusals show on their fields, then back where the user was: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/access/CLAUDE\|access]] |

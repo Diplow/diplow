@@ -100,6 +100,11 @@ export class Auth extends Context.Service<
     readonly deleteApiKey: (id: string) => Effect.Effect<void, AuthRefused, HttpExchange>
     /** Whose API key the request's `Authorization: Bearer` header carries, if it is a valid one. */
     readonly bearer: Effect.Effect<Option.Option<AuthBearer>, never, HttpExchange>
+    /**
+     * The name of one of a user's API keys, by its id, read outside any request: none for a key the
+     * user no longer has, or never had.
+     */
+    readonly apiKeyName: (userId: string, keyId: string) => Effect.Effect<Option.Option<string>>
   }
 >()('hexframe/Auth') {}
 
@@ -183,6 +188,11 @@ const decodeVerified = Schema.decodeUnknownEffect(
 )
 
 const decodeUser = Schema.decodeUnknownEffect(Schema.NullOr(User))
+
+/** An API key's row as the adapter finds it, its name alone read. */
+const decodeNamed = Schema.decodeUnknownEffect(
+  Schema.NullOr(Schema.Struct({ name: Schema.String })),
+)
 
 /** An API key's secret: the `hf_` prefix, then 64 letters. Longer is not one, and is not hashed. */
 const longestSecret = 128
@@ -393,6 +403,23 @@ export const make = (secret: Redacted.Redacted, baseURL: BaseURL) =>
       return Option.map(Option.fromNullishOr(owner), (user) => ({ user, apiKeyId: id }))
     })
 
+    /** Reads the key's row through Better Auth's own adapter, by its id and its user's. */
+    const apiKeyName = (userId: string, keyId: string) =>
+      Effect.gen(function* () {
+        const context = yield* Effect.promise(() => auth.$context)
+        const found = yield* Effect.promise(() =>
+          context.adapter.findOne({
+            model: 'apikey',
+            where: [
+              { field: 'id', value: keyId },
+              { field: 'referenceId', value: userId },
+            ],
+          }),
+        )
+        const named = yield* Effect.orDie(decodeNamed(found))
+        return Option.map(Option.fromNullishOr(named), ({ name }) => name)
+      })
+
     return Auth.of({
       signUp,
       signIn,
@@ -407,6 +434,7 @@ export const make = (secret: Redacted.Redacted, baseURL: BaseURL) =>
       apiKeys,
       deleteApiKey,
       bearer,
+      apiKeyName,
     })
   })
 

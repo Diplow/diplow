@@ -6,9 +6,9 @@ preview: >-
   The business logic, one folder per domain (IAM, Mapping, Assistant), each in
   its language and in one shape: an application service, its errors, its
   entities and operations, pure, behind the door the front may import, and its
-  concept folders. IAM and Mapping so far; beside the folders, kind.ts, the
-  closed set of kinds a domain's error carries, and bus.ts, where a domain
-  publishes its events.
+  concept folders. IAM, Mapping and Assistant's Conversation so far; beside
+  the folders, kind.ts, the closed set of kinds a domain's error carries, and
+  bus.ts, where a domain publishes its events.
 ---
 # domains
 
@@ -30,6 +30,7 @@ The middle layer: one folder per domain, each in its own language, and each in t
 |---|---|
 | `iam/` | Identity and access: Accounts, their Sessions and their Keys, on Better Auth: [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE\|iam]] |
 | `mapping/` | The core: an Account's System, a hierarchy of Tiles in six Directions and six Context slots, and the operations on it, over the tiles repository: [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE\|mapping]] |
+| `assistant/` | A conversation with an agent that builds a System: for now the Conversation, one per Account, its Messages, every change to the System whoever made it, the imports and the user's merged navigations, over the conversations repository: [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/CLAUDE\|assistant]] |
 
 | File | Holds |
 |---|---|

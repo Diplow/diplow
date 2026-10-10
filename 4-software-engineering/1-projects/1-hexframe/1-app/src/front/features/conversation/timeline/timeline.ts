@@ -1,12 +1,12 @@
-// The Conversation as the timeline shows it: one continuous timeline per Account, split by day,
-// holding the Messages and what the user did on the canvas. Pure; the components render it.
+// The Conversation as the timeline shows it on fixtures, at /dev/system: one continuous timeline per
+// Account, split by day, holding the Messages and what the user did on the canvas. Pure; the
+// components render it. The Account's own Conversation comes as Assistant's Entries
+// (`domains/assistant/entities`, `useConversationDay`), which the chat on home will show in place of
+// this model (hexframe-app-assistant/decisions.md#DEC-8).
 import type { Operation } from '#/domains/mapping/operations'
 import type { Navigated } from '#/front/features/facts'
 
-/**
- * A Tile as the Conversation shows it: what a reader needs to recognise it. It is Mapping's: the
- * Assistant domain will keep only the id, and the API will join the Title and Preview in.
- */
+/** A Tile as the fixtures' Conversation shows it: what a reader needs to recognise it. */
 export interface TileSummary {
   id: string
   title: string

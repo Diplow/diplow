@@ -52,9 +52,13 @@ export class TilesSwapped extends Schema.TaggedClass<TilesSwapped>()('TilesSwapp
   b: Schema.String,
 }) {}
 
-/** A Tile was deleted, with everything below it; a Reference to any of them elsewhere is broken. */
+/**
+ * A Tile was deleted, with everything below it; a Reference to any of them elsewhere is broken. It
+ * says the Title the Tile had, which no reader can read once it is gone: the timeline names it so.
+ */
 export class TileDeleted extends Schema.TaggedClass<TileDeleted>()('TileDeleted', {
   id: Schema.String,
+  title: Schema.String,
 }) {}
 
 /** A Reference to the Tile `target`, under the id `id`, now holds a Context slot of `parent`. */
