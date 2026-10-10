@@ -86,7 +86,7 @@ Claude Code only discovers skills sitting directly under `.claude/skills/<name>/
 
 ### Software
 
-Software lives in `4-software-engineering/1-projects/`, one project per numbered child. [[4-software-engineering/1-projects/1-hexframe/CLAUDE|hexframe]] is a pnpm monorepo whose packages are its own numbered children; its `CLAUDE.md` has the rules. The site is not started.
+Software lives in `4-software-engineering/1-projects/`, one project per numbered child. [[4-software-engineering/1-projects/1-hexframe/CLAUDE|hexframe]] is a pnpm monorepo whose packages are its own numbered children; its `CLAUDE.md` has the rules. The site is not started. The [[4-software-engineering/1-projects/3-design-system/CLAUDE|design system]] both share is a project of its own, a shadcn registry they install from by path.
 
 A domain can hold projects of its own, carrying their tooling with them. [[6-politics/1-projects/CLAUDE|Politics' projects]] hold wikipol, Obsidian vaults built from political media by Claude skills and Python scripts; it keeps its imported layout until it is cut into a hexframe.
 
