@@ -6,7 +6,7 @@ import { PromiseDatabase } from '../database/promise'
 import { apikey } from '../database/schema'
 import { TestDatabase } from '../database/testing'
 import { Auth, HttpExchange, baseURLOf, localBaseURL, make, vercelHosts } from './auth'
-import { browser, keyClient, TestAuth, testSecret } from './testing'
+import { browser, TestAuth, testSecret } from './testing'
 
 const branch = 'hexframe-app-git-fix-team.vercel.app'
 
@@ -139,10 +139,10 @@ layer(TestAuth)('a Bearer when the database fails', (it) => {
         auth.signUp({ email: 'outage@example.com', password: 'correct horse battery' }),
       )
       const { secret } = yield* device.request(auth.createApiKey('script'))
-      expect(yield* keyClient(`${secret}x`).request(auth.bearer)).toEqual(Option.none())
+      expect(yield* auth.apiKeyOwner(`${secret}x`)).toEqual(Option.none())
       const database = yield* PromiseDatabase
       yield* Effect.promise(() => database.execute('alter table apikey rename to apikey_gone'))
-      const exit = yield* Effect.exit(keyClient(secret).request(auth.bearer))
+      const exit = yield* Effect.exit(auth.apiKeyOwner(secret))
       expect(Exit.hasDies(exit)).toBe(true)
     }),
   )

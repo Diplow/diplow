@@ -27,7 +27,7 @@ export function Chat({ onSend, className }: ChatProps) {
     <Conversation
       days={days.toReversed()}
       onSend={onSend}
-      // Until it is read, the composer says nothing either way.
+      // Until it is read, or when reading it failed, the composer says nothing either way.
       unavailable={available === false}
       earlier={
         hasNextPage

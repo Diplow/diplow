@@ -85,7 +85,7 @@ export const useConversation = () => useInfiniteQuery(conversationRead)
 
 /**
  * Whether the Account may use the Assistant, its Entitlement, which the composer tells the user of when
- * it is missing. A read a page shows; signed out, it sends the user to sign in.
+ * it is missing. A read that frames the chat: its failure is reported and leaves the Conversation up.
  */
 export const useAssistantAvailable = () =>
   useQuery(
@@ -93,6 +93,7 @@ export const useAssistantAvailable = () =>
       scope: 'assistantAvailable',
       key: [],
       call: () => assistantAvailable({ data: undefined }),
+      frame: true,
     }),
   )
 

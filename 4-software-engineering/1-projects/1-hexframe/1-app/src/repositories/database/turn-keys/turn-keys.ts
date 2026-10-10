@@ -27,9 +27,12 @@ export class TurnKeys extends Context.Service<
   {
     /**
      * Issues a key bound to a user, a Conversation and a Turn, proving it until `expiresAt`, and
-     * answers its secret: the one time it is known. Expired keys of the user go meanwhile.
+     * answers its secret: the one time it is known. The user's keys expired by `now` go meanwhile.
      */
-    readonly issue: (binding: TurnKeyBinding, expiresAt: Date) => Effect.Effect<string>
+    readonly issue: (
+      binding: TurnKeyBinding,
+      when: { readonly expiresAt: Date; readonly now: Date },
+    ) => Effect.Effect<string>
     /** Whose key a secret is, and what it is bound to, if it is one and has not expired by `now`. */
     readonly proven: (secret: string, now: Date) => Effect.Effect<ProvenTurnKey | undefined>
     /** Revokes the key issued for one of a user's Turns, if it still exists: it proves nothing again. */
@@ -59,12 +62,12 @@ const hashOf = (secret: string) =>
 const make = Effect.gen(function* () {
   const database = yield* Database
 
-  const issue = (binding: TurnKeyBinding, expiresAt: Date) =>
+  const issue = (binding: TurnKeyBinding, { expiresAt, now }: { expiresAt: Date; now: Date }) =>
     Effect.gen(function* () {
       const secret = newSecret()
       yield* database
         .delete(turnKey)
-        .where(and(eq(turnKey.accountId, binding.accountId), lte(turnKey.expiresAt, new Date())))
+        .where(and(eq(turnKey.accountId, binding.accountId), lte(turnKey.expiresAt, now)))
         .pipe(Effect.orDie)
       yield* database
         .insert(turnKey)

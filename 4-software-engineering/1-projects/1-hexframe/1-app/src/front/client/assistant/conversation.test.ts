@@ -4,14 +4,25 @@ import { act, cleanup, renderHook, waitFor } from '@testing-library/react'
 import { createElement, type ReactNode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { conversationDay, postMessage, recordNavigation } from '#/api/assistant/assistant'
+import {
+  assistantAvailable,
+  conversationDay,
+  postMessage,
+  recordNavigation,
+} from '#/api/assistant/assistant'
 
-import { useConversation, usePostMessage, useRecordNavigation } from './conversation'
+import {
+  useAssistantAvailable,
+  useConversation,
+  usePostMessage,
+  useRecordNavigation,
+} from './conversation'
 
 // The Conversation's hooks over stand-ins for Assistant's server functions: what each calls, with the
 // reader's day, and when the Conversation is read again. The server functions themselves are covered
 // in src/api/assistant/assistant.test.ts.
 vi.mock('#/api/assistant/assistant', () => ({
+  assistantAvailable: vi.fn(),
   conversationDay: vi.fn(),
   postMessage: vi.fn(),
   recordNavigation: vi.fn(),
@@ -101,6 +112,18 @@ describe("the Conversation's hooks", () => {
     })
     expect(postMessage).toHaveBeenCalledWith({ data: { text: 'Hello' } })
   })
+
+  it.each([true, false])(
+    'read whether the Account may use the Assistant: %s',
+    async (available) => {
+      vi.mocked(assistantAvailable).mockResolvedValue({ ok: true, value: available } as never)
+      const result = await render(useAssistantAvailable)
+      await waitFor(() => {
+        expect(result.current.hook.data).toBe(available)
+      })
+      expect(assistantAvailable).toHaveBeenCalledWith({ data: undefined })
+    },
+  )
 
   it('record a merged navigation, then read the Conversation again', async () => {
     const result = await render(useRecordNavigation)

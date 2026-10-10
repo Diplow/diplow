@@ -1,6 +1,8 @@
 // The Accounts let into a paid feature by hand, by email, until Stripe says who pays for it: for now
 // the Assistant alone, from ASSISTANT_ACCOUNTS, server-only, a comma-separated list of emails. IAM
-// derives its Entitlements from it, when asked. Stripe's plugin takes its place here.
+// derives its Entitlements from it, when asked. Stripe's plugin takes its place here. No email is
+// verified, so an email is listed only once its Account exists: one nobody has signed up with yet
+// would go to whoever signs up with it first, while an email taken can't be signed up with again.
 import { Config, Context, Effect, Layer } from 'effect'
 
 /** A feature a user is let into by hand. */

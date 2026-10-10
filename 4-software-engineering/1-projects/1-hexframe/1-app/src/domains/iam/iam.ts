@@ -155,25 +155,37 @@ export const signOut = Auth.use((auth) => auth.signOut)
 /** The Session the request's cookie proves, if any: what the middleware puts on the request. */
 export const proven = Auth.use((auth) => auth.session).pipe(Effect.map(Option.map(sessionOf)))
 
+/** The Turn's Key a secret is, unexpired by IAM's clock, if it is one. */
+const turnKeyProven = (secret: string) =>
+  Effect.gen(function* () {
+    const now = new Date(yield* Clock.currentTimeMillis)
+    const turnKey = yield* TurnKeys.use((keys) => keys.proven(secret, now))
+    if (turnKey === undefined) return Option.none<KeyProof>()
+    const { user, conversationId, turnId } = turnKey
+    return Option.some<KeyProof>({ account: user, by: { _tag: 'TurnKey', conversationId, turnId } })
+  })
+
+/** The Account's Key a secret is, if Better Auth knows it. */
+const accountKeyProven = (secret: string) =>
+  Effect.map(
+    Auth.use((auth) => auth.apiKeyOwner(secret)),
+    Option.map(({ user, apiKeyId }): KeyProof => ({
+      account: user,
+      by: { _tag: 'Key', keyId: apiKeyId },
+    })),
+  )
+
 /**
  * The Key the request's `Authorization: Bearer` header proves, if any: a Turn's Key, unexpired, when
- * its secret is shaped as one, else an Account's Key. What `/mcp` puts on it.
+ * its secret is shaped as one, else an Account's Key; each keeper is asked of its own alone. What
+ * `/mcp` puts on the request.
  */
 export const keyProven = Effect.gen(function* () {
   const secret = bearerOf((yield* HttpExchange).headers)
   if (Option.isNone(secret)) return Option.none<KeyProof>()
-  if (isTurnKeySecret(secret.value)) {
-    const now = new Date(yield* Clock.currentTimeMillis)
-    const turnKey = yield* TurnKeys.use((keys) => keys.proven(secret.value, now))
-    if (turnKey === undefined) return Option.none<KeyProof>()
-    const { user, conversationId, turnId } = turnKey
-    return Option.some<KeyProof>({ account: user, by: { _tag: 'TurnKey', conversationId, turnId } })
-  }
-  const key = yield* Auth.use((auth) => auth.bearer)
-  return Option.map(key, ({ user, apiKeyId }): KeyProof => ({
-    account: user,
-    by: { _tag: 'Key', keyId: apiKeyId },
-  }))
+  return yield* isTurnKeySecret(secret.value)
+    ? turnKeyProven(secret.value)
+    : accountKeyProven(secret.value)
 })
 
 /**
@@ -253,9 +265,13 @@ export const keyName = (accountId: string, keyId: string) =>
  * shows it: the code that starts the Turn hands it to the sandbox's processes and nothing else.
  */
 export const issueTurnKey = (turn: TurnBinding, expiresAt: Date) =>
-  Effect.flatMap(sessionOnly, ({ account }) =>
-    TurnKeys.use((keys) => keys.issue({ accountId: account.id, ...turn }, expiresAt)),
-  ).pipe(Effect.map((secret): IssuedTurnKey => ({ secret: Redacted.make(secret), expiresAt })))
+  Effect.gen(function* () {
+    const { account } = yield* sessionOnly
+    const now = new Date(yield* Clock.currentTimeMillis)
+    return yield* TurnKeys.use((keys) =>
+      keys.issue({ accountId: account.id, ...turn }, { expiresAt, now }),
+    )
+  }).pipe(Effect.map((secret): IssuedTurnKey => ({ secret: Redacted.make(secret), expiresAt })))
 
 /**
  * Revokes the Key of one of the Account's Turns, once the Turn ended: it proves nothing again. Read
