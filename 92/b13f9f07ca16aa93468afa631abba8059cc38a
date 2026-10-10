@@ -1,0 +1,27 @@
+4-software-engineering/1-projects/3-design-system/1-registry/design-system.json
+  s_d79618abbe6a2f::t_0c3b01e511f29a 4,6
+4-software-engineering/1-projects/3-design-system/1-registry/font-geist.json
+  s_d79618abbe6a2f::t_0c3b01e511f29a 1-17
+4-software-engineering/1-projects/3-design-system/1-registry/CLAUDE.md
+  s_d79618abbe6a2f::t_4fc01a4e252117 7-9,18,24-26
+4-software-engineering/1-projects/3-design-system/CLAUDE.md
+  s_d79618abbe6a2f::t_58eb5f1690489d 8,15,19,29,31-32
+4-software-engineering/1-projects/3-design-system/DIRECTION.md
+  s_d79618abbe6a2f::t_e821ec080d69e0 30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "92b13f9f07ca16aa93468afa631abba8059cc38a",
+  "prompts": {},
+  "sessions": {
+    "s_d79618abbe6a2f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e176f409-1d47-4655-b2db-ed8115b14e5b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
