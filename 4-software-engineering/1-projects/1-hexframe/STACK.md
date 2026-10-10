@@ -34,7 +34,7 @@ The choices, and the rules they come with. Each rule is written here until the f
 | Tables | TanStack Table v9, inside `ui/` only |
 | Shortcuts | TanStack Hotkeys, behind a `hotkeys` seam in `ui/` |
 | Tile content | TanStack Markdown (alpha), behind a seam in `ui/`: if it disappoints, the seam is the one file that changes |
-| Building a system by conversation | TanStack AI |
+| Building a system by conversation | Claude Code in a Blaxel sandbox, writing through the MCP server |
 | Agents working on a System | An MCP server at `/mcp`, on `@modelcontextprotocol/server` (v2); its rules in [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE\|api]] |
 | Effects and typed errors | Effect |
 | Validation | Effect Schema, everywhere; `zod` is banned by lint |
@@ -147,11 +147,13 @@ The core domain: someone lays out a System they maintain (a codebase, a team, th
 
 ### Assistant
 
-A conversation with an agent that builds a System on the user's behalf, saving every click. Assistant knows nothing about Tiles: the API layer hands it Mapping's operations as tools.
+A conversation with an agent that builds a System on the user's behalf, saving every click. The agent is Claude Code in a sandbox holding the System as files, and it writes only through the MCP server, as any client holding a Key: Assistant knows nothing about Tiles.
 
-- **Conversation**: one continuous timeline per Account, split by day. It holds the **Messages** between the user and the agent, and records what the user did on the canvas (navigations, operations), so the agent always knows where the user is. Mapping never hears about views; Assistant is what records them.
-- **Proposal**: an operation the agent wants to run, waiting for the user.
-- **Mode**, per Conversation, as in Claude Code: *ask* (the default) makes every operation a Proposal, *apply* runs them. An applied batch can be undone.
+- **Conversation**: one continuous timeline per Account, split by day. It holds the **Messages** between the user and the agent, records every change to the System whoever made it (the user, the agent, a Key), and where the user went on the canvas, consecutive navigations merged into one. Mapping never hears about views; Assistant is what records them. The Conversation is the agent's only memory.
+- **Turn**: one run of the agent answering a Message, started afresh, in the folder of the centered Tile, or of the Tile the Message opens with `@`. It reads the Conversation and the Previews of the Tiles on screen; every ancestor's `CLAUDE.md` loads by itself.
+- **Proposal**: the writes the agent made in *ask*, kept as a draft it reads through, waiting for the user: at most one open per Conversation, which a Message sent meanwhile continues, until the user accepts it whole, in one transaction, or discards it.
+- **Mode**, per Conversation, as in Claude Code: *ask* (the default) makes a Turn's writes a Proposal, *apply* runs them as they come. An applied Turn, or an accepted Proposal, is undone whole, in one transaction, refused when a Tile it touched has changed since.
+- **Turn's end**: its answer, a Stop, its own ceiling, the month's cap or its time; the timeline says which, and nothing is rolled back. Only an Account entitled to the Assistant starts one.
 
 ## A vault as a hexframe
 
