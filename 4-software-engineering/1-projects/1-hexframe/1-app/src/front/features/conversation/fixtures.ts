@@ -5,7 +5,7 @@
 import { ulysse } from '#/front/ui/hex/fixtures'
 import { findTile } from '#/front/ui/hex/view/tiles'
 
-import type { Entry, TileSummary } from './timeline'
+import type { Entry, TileSummary } from './timeline/timeline'
 
 function tile(id: string): TileSummary {
   const found = findTile(ulysse, id)

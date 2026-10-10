@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { DevForbidden, DevInvalid } from '#/api/dev/failures'
-import { Unexpected, encodeFailure, type Outcome } from '#/api/errors/failure'
+import { Unexpected, encodeFailure, type Outcome } from '#/api/report/errors/failure'
 
 import { CallFailed, settle } from './calls'
 

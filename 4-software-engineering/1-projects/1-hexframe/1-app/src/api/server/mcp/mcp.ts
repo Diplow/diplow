@@ -15,8 +15,8 @@ import { Schema } from 'effect'
 import * as Iam from '#/domains/iam/iam'
 import { helpRoot } from '#/domains/mapping/mapping'
 
-import { decodeFailure, type EncodedFailure, type Failure } from '../../errors/failure'
-import { messageFor } from '../../errors/messages'
+import { decodeFailure, type EncodedFailure, type Failure } from '../../report/errors/failure'
+import { messageFor } from '../../report/errors/messages'
 import { noSession, provenKey, run, waitUntilOf, type StartContext } from '../run'
 import { tools, type Tool } from './tools'
 

@@ -7,7 +7,7 @@
 // of the front's, which the front's own tests read back, and the id an import reads back from such a
 // link; and which Leaf an export writes as its content alone, Mapping's rule, which the front's card
 // follows. Pure: no module of the server's reaches the client here.
-import type { Failure, Outcome } from '../../errors/failure'
+import type { Failure, Outcome } from '../../report/errors/failure'
 
 /**
  * Whether an export writes a Leaf as its content alone, a file that isn't Markdown, under its Name:

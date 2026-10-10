@@ -8,8 +8,8 @@ import { getLocale } from '#/paraglide/runtime'
 import { EmptyState } from '#/front/ui/feedback/states'
 import { useAppForm } from '#/front/ui/inputs/forms/form'
 
-import { splitByDay, type Day, type Entry } from './timeline'
-import { ConversationEntry } from './Entry'
+import { splitByDay, type Day, type Entry } from './timeline/timeline'
+import { ConversationEntry } from './entry/Entry'
 
 interface ConversationProps {
   entries: readonly Entry[]

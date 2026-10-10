@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { m } from '#/paraglide/messages'
 import { Button } from '#/front/ui/inputs/controls/button'
 
-import { excerpt, type TileSummary } from './timeline'
+import { excerpt, type TileSummary } from '../timeline/timeline'
 
 /** Past this many characters, a Preview shows its start and a "show more". */
 const previewLimit = 140

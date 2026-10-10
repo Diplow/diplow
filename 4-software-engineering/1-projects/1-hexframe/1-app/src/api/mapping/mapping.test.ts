@@ -16,7 +16,7 @@ import type {
 } from '#/domains/mapping/errors'
 import { systemOf } from '#/domains/mapping/entities'
 
-import type { Failure } from '../errors/failure'
+import type { Failure } from '../report/errors/failure'
 import { noKey, run, type Services, type StartContext } from '../server/run'
 import {
   HelpLanguage,

@@ -145,14 +145,14 @@ describe('the server function helper', () => {
   it('sends Unexpected, and hands the cause to `unobserved`, when the runtime cannot be built', async () => {
     const unobserved = vi.fn<(cause: Cause.Cause<unknown>, request: StartContext) => void>()
     vi.resetModules()
-    vi.doMock('../observability/server', async (original) => ({
+    vi.doMock('../report/observability/server', async (original) => ({
       ...(await original<object>()),
       observability: Layer.effectDiscard(Effect.die(new Error('a layer could not be built'))),
       unobserved,
     }))
     const fresh = await import('./run')
     const outcome = await fresh.run(context, Effect.succeed('never reached'))
-    vi.doUnmock('../observability/server')
+    vi.doUnmock('../report/observability/server')
     expect(outcome).toEqual({
       ok: false,
       failure: { _tag: 'Unexpected', kind: 'Unexpected' },

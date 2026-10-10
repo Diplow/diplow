@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitest/config'
 
-import { environmentOf } from './src/api/observability/levels'
+import { environmentOf } from './src/api/report/observability/levels'
 import { definesFor } from './vite.config'
 
 export default defineConfig({

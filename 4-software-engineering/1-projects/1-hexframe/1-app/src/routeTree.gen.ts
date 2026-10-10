@@ -13,8 +13,8 @@ import { Route as IndexRouteImport } from './front/routes/index'
 import { Route as DevRouteRouteImport } from './front/routes/dev/route'
 import { Route as HelpRouteImport } from './front/routes/help'
 import { Route as McpRouteImport } from './front/routes/mcp'
-import { Route as SignInRouteImport } from './front/routes/sign-in'
-import { Route as SignUpRouteImport } from './front/routes/sign-up'
+import { Route as accessSignInRouteImport } from './front/routes/(access)/sign-in'
+import { Route as accessSignUpRouteImport } from './front/routes/(access)/sign-up'
 import { Route as DevErrorsRouteImport } from './front/routes/dev/errors'
 import { Route as DevHexRouteImport } from './front/routes/dev/hex'
 import { Route as DevSessionRouteImport } from './front/routes/dev/session'
@@ -42,13 +42,13 @@ const McpRoute = McpRouteImport.update({
   path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SignInRoute = SignInRouteImport.update({
-  id: '/sign-in',
+const accessSignInRoute = accessSignInRouteImport.update({
+  id: '/(access)/sign-in',
   path: '/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SignUpRoute = SignUpRouteImport.update({
-  id: '/sign-up',
+const accessSignUpRoute = accessSignUpRouteImport.update({
+  id: '/(access)/sign-up',
   path: '/sign-up',
   getParentRoute: () => rootRouteImport,
 } as any)
@@ -88,8 +88,8 @@ export interface FileRoutesByFullPath {
   '/dev': typeof DevRouteRouteWithChildren
   '/help': typeof HelpRoute
   '/mcp': typeof McpRoute
-  '/sign-in': typeof SignInRoute
-  '/sign-up': typeof SignUpRoute
+  '/sign-in': typeof accessSignInRoute
+  '/sign-up': typeof accessSignUpRoute
   '/dev/errors': typeof DevErrorsRoute
   '/dev/hex': typeof DevHexRoute
   '/dev/session': typeof DevSessionRoute
@@ -102,8 +102,8 @@ export interface FileRoutesByTo {
   '/dev': typeof DevRouteRouteWithChildren
   '/help': typeof HelpRoute
   '/mcp': typeof McpRoute
-  '/sign-in': typeof SignInRoute
-  '/sign-up': typeof SignUpRoute
+  '/sign-in': typeof accessSignInRoute
+  '/sign-up': typeof accessSignUpRoute
   '/dev/errors': typeof DevErrorsRoute
   '/dev/hex': typeof DevHexRoute
   '/dev/session': typeof DevSessionRoute
@@ -117,8 +117,8 @@ export interface FileRoutesById {
   '/dev': typeof DevRouteRouteWithChildren
   '/help': typeof HelpRoute
   '/mcp': typeof McpRoute
-  '/sign-in': typeof SignInRoute
-  '/sign-up': typeof SignUpRoute
+  '/(access)/sign-in': typeof accessSignInRoute
+  '/(access)/sign-up': typeof accessSignUpRoute
   '/dev/errors': typeof DevErrorsRoute
   '/dev/hex': typeof DevHexRoute
   '/dev/session': typeof DevSessionRoute
@@ -161,8 +161,8 @@ export interface FileRouteTypes {
     | '/dev'
     | '/help'
     | '/mcp'
-    | '/sign-in'
-    | '/sign-up'
+    | '/(access)/sign-in'
+    | '/(access)/sign-up'
     | '/dev/errors'
     | '/dev/hex'
     | '/dev/session'
@@ -176,8 +176,8 @@ export interface RootRouteChildren {
   DevRouteRoute: typeof DevRouteRouteWithChildren
   HelpRoute: typeof HelpRoute
   McpRoute: typeof McpRoute
-  SignInRoute: typeof SignInRoute
-  SignUpRoute: typeof SignUpRoute
+  accessSignInRoute: typeof accessSignInRoute
+  accessSignUpRoute: typeof accessSignUpRoute
   SettingsKeysRoute: typeof SettingsKeysRoute
 }
 
@@ -211,18 +211,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sign-in': {
-      id: '/sign-in'
+    '/(access)/sign-in': {
+      id: '/(access)/sign-in'
       path: '/sign-in'
       fullPath: '/sign-in'
-      preLoaderRoute: typeof SignInRouteImport
+      preLoaderRoute: typeof accessSignInRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sign-up': {
-      id: '/sign-up'
+    '/(access)/sign-up': {
+      id: '/(access)/sign-up'
       path: '/sign-up'
       fullPath: '/sign-up'
-      preLoaderRoute: typeof SignUpRouteImport
+      preLoaderRoute: typeof accessSignUpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dev/errors': {
@@ -295,8 +295,8 @@ const rootRouteChildren: RootRouteChildren = {
   DevRouteRoute: DevRouteRouteWithChildren,
   HelpRoute: HelpRoute,
   McpRoute: McpRoute,
-  SignInRoute: SignInRoute,
-  SignUpRoute: SignUpRoute,
+  accessSignInRoute: accessSignInRoute,
+  accessSignUpRoute: accessSignUpRoute,
   SettingsKeysRoute: SettingsKeysRoute,
 }
 export const routeTree = rootRouteImport

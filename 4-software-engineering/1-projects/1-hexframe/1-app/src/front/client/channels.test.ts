@@ -3,13 +3,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { toast } from '#/front/ui/feedback/Toaster'
 import { DevConflict, DevForbidden, DevInvalid, DevUnauthenticated } from '#/api/dev/failures'
-import { Unexpected, encodeFailure, type Failure, type Outcome } from '#/api/errors/failure'
+import { Unexpected, encodeFailure, type Failure, type Outcome } from '#/api/report/errors/failure'
 
 import { CallFailed, read, write } from './calls'
 import { caught, makeQueryClient, submitMutation, submitWrite } from './channels'
 
 vi.mock('#/front/ui/feedback/Toaster', () => ({ toast: { error: vi.fn() } }))
-vi.mock('#/api/observability/client', async (original) => ({
+vi.mock('#/api/report/observability/client', async (original) => ({
   ...(await original<object>()),
   forget: vi.fn(),
 }))
@@ -132,8 +132,8 @@ describe('the sign-in redirect', () => {
     vi.resetModules()
     const { submitWrite: fresh } = await import('./channels')
     const { DevUnauthenticated: SignedOut } = await import('#/api/dev/failures')
-    const { encodeFailure: encode } = await import('#/api/errors/failure')
-    const { forget } = await import('#/api/observability/client')
+    const { encodeFailure: encode } = await import('#/api/report/errors/failure')
+    const { forget } = await import('#/api/report/observability/client')
     const outcome = { ok: false as const, failure: encode(new SignedOut()), requestId: 'req-1' }
     const submit = fresh({ scope: 'save', call: () => Promise.resolve(outcome), onSaved: vi.fn() })
     return Object.assign(() => submit({ value: {} }), { forget: vi.mocked(forget) })

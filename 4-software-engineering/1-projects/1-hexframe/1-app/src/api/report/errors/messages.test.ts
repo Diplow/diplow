@@ -26,7 +26,7 @@ import {
   TitleMissing,
 } from '#/domains/mapping/errors'
 
-import { DevConflict, DevForbidden, DevInvalid, DevNotFound } from '../dev/failures'
+import { DevConflict, DevForbidden, DevInvalid, DevNotFound } from '../../dev/failures'
 import { Unexpected } from './failure'
 import { messageFor } from './messages'
 

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { DevConflict, DevInvalid } from '../dev/failures'
+import { DevConflict, DevInvalid } from '../../dev/failures'
 import { Unexpected, decodeFailure, encodeFailure } from './failure'
 
 // What crosses the wire is JSON, whatever Start's serializer does on top.
