@@ -7,8 +7,10 @@ preview: >-
   canvas, where a ticket left room: how api/, front/routes/ and the
   conversation feature regrouped to make room for it under the rule of 6,
   why a pending System write is read once per state of its mutation, what a
-  Tile's Version counts and how the client folds it, and where Mapping's
-  PGlite tests regrouped to make room for it.
+  Tile's Version counts and how the client folds it, where Mapping's PGlite
+  tests regrouped to make room for it, where the import's client files
+  regrouped to make room for the poll, and where the System's Version is kept,
+  what an import's event counts and what the poll reads again.
 ---
 # Decisions
 
@@ -33,3 +35,18 @@ The screens send the Version they drew, the System with the pending writes folde
 ### DEC-4 The agreement test moves beside the Decider, and Mapping's PGlite tests share `testing.ts`
 
 HEX-75. Every write in Mapping's PGlite tests now names a Version, and `mapping.test.ts` stood at the 600 lines its lint allows; `domains/mapping/` held six files. `agreement.test.ts` moves to `operations/decider/`, beside `decide` and `evolve` whose agreement with the service it pins: no rule keeps a test there from reaching the service, and nothing reachable through Mapping's door reaches it. The place it frees holds `testing.ts`, what `mapping.test.ts` and `leaves.test.ts` share: the tiles over PGlite with a bus that hears nothing, the System as its tree, and each change as the API layer runs it, naming each Tile at the Version it has just before. `leaves.test.ts` drops its copy of the same helpers. No test changes what it checks.
+
+### DEC-5 The import's client files move into `front/client/mapping/import/`
+
+HEX-76. The poll of the System's Version needed a file and its test in `front/client/mapping/`, which held six files (`files.ts`, `upload.ts`, `queries.ts` and their tests) and `overlay/`; `queries.test.ts` stood at the 600 lines its lint allows, so the poll's tests could not join it. `files.ts` and `upload.ts`, with their tests, are the browser's side of an import, what the user hands it and how it is pruned and zipped, so they move together into `import/`. `mapping/` now holds `queries.ts`, `follow.ts` and their tests, `overlay/` and `import/`. A move, no behavior changes: `queries.ts` and `features/system/import/state/useImportState.ts` import through the new path, and the docs naming the old one follow.
+
+### DEC-6 The System's Version lives on the Root's row; an import's event counts the Tiles below the one it landed
+
+HEX-76. The ticket asked for a System Version `evolve` bumps on every event, a read of it the page polls, and an import publishing `TilesImported`, the Tile it landed and how many came with it. Three choices followed.
+
+- **Where it is kept.** A `system_version` column on `tile`, read on the Root's row, 0 on every other, unread, as a Reference's `version` stays 1. The Root's row is the one every change already locks (`Tiles.lock`), so a change reads and writes the Version under that lock and two never share one, and the poll's read is one row by the unique index on the Root, `tile_root_idx`. A `system` table beside `tile` was the other way: one more table, and a second row to lock or to keep in step with the Root's, for one integer. The column starts at 0, so a System changed before the migration counts from 0 too: a poll compares two of its reads, never a Version with a count of the past. `System.version` is a plain number from 0, not a Tile's `Version`, which starts at 1.
+- **What counts.** `evolve` counts every event one, an Operation's and an import's alike, an event naming what the System doesn't hold included: an event is a fact the service wrote, so the database counts it too, and `agreement.test.ts` keeps the two in step. A change that made none, refused or a no-op, writes no Version (`ended`, in `mapping.ts`, which writes the Version and then publishes). `Row` carries `systemVersion` on every row, 0 but on the Root's, rather than a shape of its own for the Root, so the rows a change locks and the rows a read selects stay one type, and the System is built from them in one pass. `MappingEvent` splits into `OperationEvent`, what `decide` answers and the service writes one change each, and `TilesImported`, so neither `decide` nor `written` must handle an event no Operation makes.
+- **What `TilesImported` says.** `id`, the Tile the import landed as, a new one or the Root it filled, and `count`, the Tiles that came with it below it, Branches, Leaves and Context Tiles, its References aside, since a Reference is no Tile: a timeline entry reads "imported X and n Tiles". The plan makes it (`importedAs`, `files/import/plan.ts`), pure, once the batch gave the new Tile its id. It names none of the Tiles it brought, so `evolve` counts it on the System and, as DEC-3 has it, on the Root it filled, and a reader reads the System again; the Root's Version an import as the Root writes is the one `evolve` gives, no longer counted by hand.
+
+The page polls the Version on focus, and every 2 s while `useFollowSystem` is told to follow closely, and reads the System again only when the Version moved past the one its cache holds. The System's read is no longer refetched on focus, so a focus costs one small read rather than every Body. Seen in a browser on the dev server: a Tile created through the MCP with a Key showed on an open canvas once the tab became visible again, its focus simulated by a `visibilitychange`, since the driven browser's window stays hidden.
+

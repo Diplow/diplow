@@ -1,10 +1,11 @@
-// The second half of Mapping's Decider: a System after one of its events. An event is a fact `decide`
-// already ruled on, so `evolve` checks nothing and refuses nothing; an event naming what the System
-// doesn't hold leaves it as it is. Each event counts on the Version of the Tile it changes: a create
-// makes one at 1, an edit, a move and a swap add one to each Tile they change, and a Reference's create
-// and delete to the Tile whose Context slot they change, a Reference having no Version of its own.
-// Folded over the events `decide` made, it gives the System the service leaves in the database, and
-// the one the client shows before the server answers. Pure.
+// The second half of Mapping's Decider: a System after one of its events. An event is a fact `decide`,
+// or an import, already ruled on, so `evolve` checks nothing and refuses nothing; an event naming what
+// the System doesn't hold changes none of its Tiles. Every event counts one on the System's Version,
+// and on the Version of the Tile it changes: a create makes one at 1, an edit, a move and a swap add one
+// to each Tile they change, a Reference's create and delete to the Tile whose Context slot they change,
+// a Reference having no Version of its own, and an import to the Root it fills, none to the parent of
+// a Tile it lands in a free slot. Folded over the events `decide` made, it gives the System the service
+// leaves in the database, and the one the client shows before the server answers. Pure.
 import { Struct } from 'effect'
 
 import {
@@ -15,7 +16,7 @@ import {
   type System,
   tileAt,
 } from '../../entities'
-import type { MappingEvent, TileEdited } from '../events'
+import type { MappingEvent, TileEdited, TilesImported } from '../events'
 
 type Held = PlacedTile | PlacedReference
 
@@ -73,8 +74,15 @@ function swapped(system: System, a: string, b: string): System {
   )
 }
 
-/** A System after one of its events. */
-export function evolve(system: System, event: MappingEvent): System {
+/**
+ * The System once an import landed: the Root it filled counted, since it says what the import gave it
+ * now; the Tiles it brought, which the event doesn't name, aren't in it.
+ */
+const imported = (system: System, { id }: TilesImported): System =>
+  id === system.root.id ? { ...system, root: counted(system.root) } : system
+
+/** The System's Tiles and References after one of its events, its Version not yet counted. */
+function changed(system: System, event: MappingEvent): System {
   switch (event._tag) {
     case 'TileCreated':
       return placing(system, { ...Struct.omit(event, ['_tag']), _tag: 'Tile', version: 1 })
@@ -101,5 +109,13 @@ export function evolve(system: System, event: MappingEvent): System {
       return system.tiles[event.id]?._tag === 'Reference'
         ? holding(without(system, new Set([event.id])), event.parent)
         : system
+    case 'TilesImported':
+      return imported(system, event)
   }
 }
+
+/** A System after one of its events: whatever the event changed, and its Version counted one on. */
+export const evolve = (system: System, event: MappingEvent): System => ({
+  ...changed(system, event),
+  version: system.version + 1,
+})

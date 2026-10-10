@@ -165,6 +165,7 @@ export type FrontmatterColumn = Readonly<Record<string, string | number | boolea
  * nothing: the name it was imported under, its folder's settings and the frontmatter keys Mapping has no
  * use for, both as JSON objects, the latter in its file's order. Mapping bounds them before writing them and decides what they mean.
  * `version` is the Tile's Version, which a write names to be refused once the Tile changed since.
+ * `system_version` is the System's Version, kept on its Root's row, which a client polls.
  */
 export const tile = pgTable(
   'tile',
@@ -184,6 +185,9 @@ export const tile = pgTable(
     // A Tile's Version: how many events touched it, 1 once created. Mapping decides it; a Reference's
     // row keeps 1, since its own create and delete count on the Tile whose Context slot they change.
     version: integer('version').default(1).notNull(),
+    // The System's Version, on its Root's row, the one every change locks: how many events changed
+    // the System, 0 before the first. Mapping decides it; every other row keeps 0, unread.
+    systemVersion: integer('system_version').default(0).notNull(),
   },
   (table) => [
     index('tile_accountId_idx').on(table.accountId),

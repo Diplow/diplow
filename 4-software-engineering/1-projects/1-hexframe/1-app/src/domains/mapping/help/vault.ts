@@ -75,8 +75,9 @@ function rowsOf(tile: PlannedTile, place: Place, read: ReadonlySet<string>): Arr
           title: tile.title,
           preview: tile.preview,
           body: tile.body.trim(),
-          // Help never changes: every Tile of it stays at its first Version.
+          // Help never changes: every Tile of it stays at its first Version, and Help at none.
           version: 1,
+          systemVersion: 0,
           ...keepsNothing,
         },
       ]

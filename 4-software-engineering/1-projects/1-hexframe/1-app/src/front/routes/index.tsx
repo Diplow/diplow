@@ -1,10 +1,13 @@
 // Home: the signed-in Account's System, on the canvas, with the centered Tile's actions and its
 // ancestors beside it. The view and the change under way live in the search params, so a link shows
-// what its sender saw. Signed out, the guard sends the visit to sign-in, then back here.
+// what its sender saw. Signed out, the guard sends the visit to sign-in, then back here. The page
+// follows the System, so a write it did not make, an agent's, a Key's or another tab's, shows once
+// the tab regains focus.
 import { createFileRoute } from '@tanstack/react-router'
 
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { signedInOnly } from '#/front/client/iam/guard'
+import { useFollowSystem } from '#/front/client/mapping/follow'
 import { useSystem } from '#/front/client/mapping/queries'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import {
@@ -49,6 +52,8 @@ interface SystemPageProps {
 
 function SystemPage({ search, onSearchChange }: SystemPageProps) {
   const { data } = useSystem()
+  // Nothing follows it closely yet: a Turn will, while it runs.
+  useFollowSystem({ closely: false })
   if (data === undefined) {
     return (
       <>

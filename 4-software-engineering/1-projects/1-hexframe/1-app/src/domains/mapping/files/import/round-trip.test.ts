@@ -28,6 +28,7 @@ const row = (id: string, parentId: string | null, direction: number | null): Til
   preview: `${id}, in short.`,
   body: `# ${id}\n\nLine two.\n`,
   version: 1,
+  systemVersion: 0,
   target: null,
   ...keepsNothing,
 })

@@ -1,8 +1,10 @@
 // An import, from an upload to the Tiles it lands: `planImport` reads the upload into a plan, its
 // archive unpacked within its bounds through the zip repository, outside any transaction; then
 // `importTiles` lands the plan in the Account's System as a change does, the Root locked, its slot
-// checked, every row written in one batch, all of it or nothing. It always creates: every Tile gets a
-// new id, so importing twice makes two copies (`hexframe-app-import-export/decisions.md#DEC-11`).
+// checked, every row written in one batch, all of it or nothing, then its one event, `TilesImported`,
+// which the plan makes, counted on the System's Version and published as an Operation's are. It always
+// creates: every Tile gets a new id, so importing twice makes two copies
+// (`hexframe-app-import-export/decisions.md#DEC-11`).
 import { Effect } from 'effect'
 
 import type { BatchRow, RowRef, TileRow } from '#/repositories/database/tiles/tiles'
@@ -20,6 +22,7 @@ import type {
   ReferenceTarget,
 } from '../files/import/plan'
 import { importOf } from '../files/import/read'
+import { importedAs } from '../files/import/plan'
 import {
   isEmptySystem,
   onlyALeafIn,
@@ -30,7 +33,7 @@ import {
   tileRow,
 } from '../entities'
 import { changing, untitled } from '../mapping'
-import { freeSlot, type Placement } from '../operations'
+import { evolve, freeSlot, type Placement } from '../operations'
 import { type Upload, archiveBounds, folderOf } from './archive'
 
 export type { Upload } from './archive'
@@ -171,7 +174,10 @@ const inSlot = (accountId: string, plan: ImportPlan, place: Placement) =>
       const ids = yield* writes.insertAll(batch)
       const id = ids.get(root.path)
       if (id === undefined) return yield* Effect.die(new Error('A batch lost its first row'))
-      return reportOf(batch, { id, plan, replaced: false })
+      return {
+        answer: reportOf(batch, { id, plan, replaced: false }),
+        events: [importedAs(plan, id)],
+      }
     }),
   )
 
@@ -194,9 +200,11 @@ const asRoot = (accountId: string, plan: ImportPlan) =>
           path === root.path ? { _tag: 'Stored', id: stored.id } : { _tag: 'Batch', key: path }
         const resolve = (target: ReferenceTarget) => targetOf(target, { rows, nameOf })
         const { title, preview, body, config, frontmatter } = root
-        // The Root says what the import gave it now: a writer that read it empty is refused.
+        // The Root says what the import gave it now, its Version counted by the import's event: a
+        // writer that read it empty is refused.
+        const event = importedAs(plan, stored.id)
         yield* writes.update(stored.id, {
-          version: stored.version + 1,
+          version: evolve(found, event).root.version,
           title,
           preview,
           body,
@@ -206,7 +214,10 @@ const asRoot = (accountId: string, plan: ImportPlan) =>
         const batch =
           root._tag === 'Tile' ? rowsBelow(root, { parent: nameOf(root.path), resolve }) : []
         yield* writes.insertAll(batch)
-        return reportOf(batch, { id: stored.id, plan, replaced: true })
+        return {
+          answer: reportOf(batch, { id: stored.id, plan, replaced: true }),
+          events: [event],
+        }
       }),
     ),
   )

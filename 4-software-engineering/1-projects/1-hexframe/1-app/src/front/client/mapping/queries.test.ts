@@ -95,6 +95,7 @@ const system = {
     reference: { _tag: 'Reference', id: 'reference', parent: 'root', slot: -1, target: 'child' },
   },
   owned: true,
+  version: 0,
 } as const
 
 /** A move of `t`, read at its first Version, to the Root's Direction 3. */

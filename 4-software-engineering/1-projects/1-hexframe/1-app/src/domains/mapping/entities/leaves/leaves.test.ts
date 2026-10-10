@@ -83,6 +83,7 @@ describe('what a Leaf may hold, on a System made by hand', () => {
     preview: '',
     body: '',
     version: 1,
+    systemVersion: 0,
     target: null,
     ...keepsNothing,
   })

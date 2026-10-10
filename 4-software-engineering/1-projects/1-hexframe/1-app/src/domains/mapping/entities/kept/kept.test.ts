@@ -144,6 +144,7 @@ describe('the naming in force, on rows made by hand', () => {
     preview: '',
     body: '',
     version: 1,
+    systemVersion: 0,
     target: null,
     ...keepsNothing,
   })

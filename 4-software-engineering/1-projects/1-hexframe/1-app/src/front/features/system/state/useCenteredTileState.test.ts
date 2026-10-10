@@ -97,6 +97,7 @@ describe('a change of kind', () => {
     const read = {
       root: { _tag: 'Tile', id: 'root', title: '', preview: '', body: '', version: 1 },
       tiles: {},
+      version: 0,
     } as const
     vi.mocked(Mapping.system).mockResolvedValue({ ok: true, value: { ...read, owned: true } })
   }

@@ -1,7 +1,9 @@
 // What an import reads and what it plans: the files it is handed, and the tree of Tiles it would create
 // from them, in Mapping's own words, each with what it keeps from its file; the shape's never reach it.
-// Landing a plan in a System is another step's (`hexframe-app-import-export/decisions.md#DEC-10`).
+// Landing a plan in a System is another step's (`hexframe-app-import-export/decisions.md#DEC-10`), and
+// the event it makes once landed, this one's.
 import type { Content, ContextDirection, Direction, ToKeep } from '../../entities'
+import { TilesImported } from '../../operations'
 
 /** One file handed to an import: its path from the import's root, `/` between folders, and its bytes. */
 export interface ImportFile {
@@ -77,3 +79,23 @@ export interface ImportPlan {
   readonly root: PlannedTile | PlannedLeaf
   readonly skipped: ReadonlyArray<LeftOut>
 }
+
+/** How many Tiles a planned Tile holds below it, its Branches, Leaves and Context Tiles and theirs. */
+const tilesBelow = (tile: PlannedTile | PlannedLeaf): number =>
+  tile._tag === 'Leaf'
+    ? 0
+    : [
+        ...Object.values(tile.branches),
+        ...Object.values(tile.leaves),
+        ...Object.values(tile.context),
+      ]
+        .filter((held): held is PlannedTile | PlannedLeaf => held._tag !== 'Reference')
+        .reduce((count, held) => count + 1 + tilesBelow(held), 0)
+
+/**
+ * The event a plan makes once landed as the Tile of this id, a new one in a free slot or the Root it
+ * filled: the one event no Operation makes, made here rather than by `decide`, with how many Tiles came
+ * with it.
+ */
+export const importedAs = (plan: ImportPlan, id: string) =>
+  new TilesImported({ id, count: tilesBelow(plan.root) })
