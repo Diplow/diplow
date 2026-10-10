@@ -1,7 +1,7 @@
 // The tool table: what an agent may do to the System it works on, as data. Each entry names a tool,
 // teaches it in its description, bounds its input with an Effect Schema and runs one program through
-// the helper, like a server function. The MCP server (./mcp.ts) registers every entry; the Assistant
-// will take the same table and run a `write` entry's program only once the user accepts its Proposal.
+// the helper, like a server function. The MCP server (./mcp.ts) registers every entry; a write made
+// with a Turn's Key will be routed by its Turn, drafted into a Proposal in ask (STACK.md).
 // A write runs one of Mapping's Operations: it takes its server function's input Schema, the
 // Operation's fields (../../mapping/mapping.ts), each described for an agent, and runs the same
 // program, for the Account the Key proves, in one transaction.

@@ -1,0 +1,136 @@
+# The config of the "hexframe app: Assistant" project's autonomous run, read by
+# run-autonomous-project
+# (.skills/4-softeng/1-ship/run-autonomous-project/references/contract.md
+# holds every key). It puts the chat beside the canvas on home, over a
+# Conversation that records every write, navigation and import, and runs each
+# Message as a Turn: a fresh Claude Code in the Account's Blaxel sandbox,
+# holding the System as read-only files, writing through the MCP with a Key of
+# its own, its model calls relayed and metered by the app's proxy. Then Mode,
+# Proposals and undo. The design is in the project's "Decided" section in Linear
+# and in hexframe's STACK.md ("Assistant"), which is frozen for the run. Only
+# the app is written: claude-mod, the shape included, and the Obsidian plugin
+# are frozen. Every test and gate runs on the sandbox's and the model's fakes.
+# Launched once the grill's notes (#83) are merged into main. Every ticket
+# lands on project/assistant, which I merge into main at the end:
+#
+#   /softeng:ship:run-autonomous-project "hexframe app: Assistant" --config 4-software-engineering/1-projects/1-hexframe/.run/assistant.yaml
+#
+# The run never edits this file.
+
+version: 1
+team: Hexframe
+
+repo:
+  target_branch: project/assistant
+  merge_strategy: merge
+  working_tree: shared
+
+parallelism: 1
+
+# The tickets exist, so nothing is minted.
+projects:
+  - name: "hexframe app: Assistant"
+    on_exhausted: park
+    mint_tickets: false
+
+# Tiers from .skills/model-tiers.md: judge is the strongest, work the default, fetch the cheapest.
+models:
+  phase: opus
+  unit: opus
+  planner: opus
+  fixup: opus
+  reviewer: opus
+  fetch: haiku
+
+# Run from the repo root. The install comes first so a unit that adds a
+# dependency proves its lockfile.
+gates:
+  unit:
+    - pnpm --dir 4-software-engineering/1-projects/1-hexframe install --frozen-lockfile
+    - pnpm --dir 4-software-engineering/1-projects/1-hexframe check
+    - pnpm --dir 4-software-engineering/1-projects/1-hexframe test
+  phase:
+    - pnpm --dir 4-software-engineering/1-projects/1-hexframe install --frozen-lockfile
+    - pnpm --dir 4-software-engineering/1-projects/1-hexframe check
+    - pnpm --dir 4-software-engineering/1-projects/1-hexframe test
+    - pnpm --dir 4-software-engineering/1-projects/1-hexframe build
+  fix_rounds_per_gate: 3
+
+# cubic's three agents (cubic.yaml) rank each finding P0 to P3. The run starts
+# them itself through the cubic CLI, which reviews on the Claude Code
+# subscription (`cubic auth connect claude-code`) instead of cubic's credits.
+# cubic-dev-ai's own review on the pull request needs credits, so the run
+# does not wait for it.
+reviews:
+  automated: []
+  local:
+    name: cubic
+    command: "cubic review --base origin/{target} --json"
+  max_rounds: 3
+  must_fix: [P0, P1]
+  should_fix: [P2]
+
+halting:
+  never:
+    - Never push to main, open a pull request into main, or merge anything into main.
+    - Never weaken a gate to turn it green. No skipped or deleted test, no lowered lint threshold, no rule disabled without a reason, no --no-verify.
+    - Never put a secret, a token, a Key or a .env file in a commit, a log, a comment or a pull request. Name the variable, never its value.
+    - Never write to a production Neon database, a live Stripe account, or any third-party account outside a test mode or a preview.
+    - Never add a beta or alpha dependency outside a seam that STACK.md names.
+    - Never import one domain from another, or a third-party SDK from anywhere but its repository; the one exception is the MCP server's SDK, in the API layer's MCP folder, as STACK.md says. `@blaxel/core` lives in `repositories/agent/sandbox/`; fflate lives in `repositories/zip/`, which, like observability, offers the browser plain functions through the API layer.
+    - Never let the front import a domain past its door (its `entities/index.ts`, `operations/index.ts` and `errors.ts`), nor let anything reachable through that door touch a repository, the application service, a concept folder, another domain, Node, the environment or the config, not even through a type-only import.
+    - Never exceed the rule of 6; when a folder is full, regroup and record the regrouping in the register.
+    - Never let a test or a gate reach Blaxel or Anthropic; they run on the fakes. A unit may reach them by hand only when their env vars are set locally, never with a key of its own making, and says so in its closing comment.
+    - Never put the platform Anthropic key, Vercel's bypass for automation, or any other secret into a sandbox. The Turn's own Key alone enters it, in its processes' environment and the MCP client's config, never in its prompt or its files.
+    - Never touch a ticket, branch or pull request of another project.
+  # The repo's own tooling and review setup, hexframe's STACK.md (the bar the
+  # never list defers to; what the project changes in it, the phase-close ticket
+  # lists for me), claude-mod whole, its shape included, the Obsidian plugin,
+  # and the vault's Obsidian config.
+  frozen_paths:
+    - .skills/**
+    - .claude/**
+    - .conductor/**
+    - .obsidian/**
+    - .gitattributes
+    - .mcp.json
+    - cubic.yaml
+    - 4-software-engineering/1-projects/1-hexframe/.cubic/**
+    - 4-software-engineering/1-projects/1-hexframe/STACK.md
+    - 4-software-engineering/1-projects/1-hexframe/.run/CLAUDE.md
+    - 4-software-engineering/1-projects/1-hexframe/.run/*.yaml
+    - 4-software-engineering/1-projects/1-hexframe/2-claude-mod/**
+    - 4-software-engineering/1-projects/1-hexframe/3-obsidian-plugin/**
+  # Everything of mine that is not hexframe.
+  read_only_paths:
+    - CLAUDE.md
+    - STACK.md
+    - .gitignore
+    - 1-leadership/**
+    - 2-education/**
+    - 3-games/**
+    - 5-startups/**
+    - 6-politics/**
+    - 4-software-engineering/-CLAUDE.md
+    - 4-software-engineering/2-principles/**
+    - 4-software-engineering/1-projects/CLAUDE.md
+    - 4-software-engineering/1-projects/2-site/**
+    - "**/-*"
+    - "**/-*/**"
+
+registers:
+  dir: 4-software-engineering/1-projects/1-hexframe/.run/registers
+  files: [decisions.md]
+  # .cubic/security.md: every break of the security bar is fixed, never waived.
+  security_bugs: >-
+    Nothing lands with a security finding open. When the round cap runs out
+    with a valid security finding unresolved, the pull request is not merged:
+    the unit is parked whole, kind review-exhausted, with the finding's thread
+    URL, or the round comment's URL for a local finding, in its PARK entry.
+
+summary_schema: [status, landed, register_entries, parked, interventions]
+
+linear:
+  state_in_progress: In Progress
+  state_in_review: In Review
+  state_done: Done
