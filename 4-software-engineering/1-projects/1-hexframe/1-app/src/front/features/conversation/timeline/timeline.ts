@@ -1,6 +1,7 @@
 // The Conversation as the timeline shows it: one continuous timeline per Account, split by day,
 // holding the Messages and what the user did on the canvas. Pure; the components render it.
 import type { Operation } from '#/domains/mapping/operations'
+import type { Navigated } from '#/front/features/facts'
 
 /**
  * A Tile as the Conversation shows it: what a reader needs to recognise it. It is Mapping's: the
@@ -12,12 +13,11 @@ export interface TileSummary {
   preview: string
 }
 
-/** What the user did to look at the System, in the past tense. */
-export type Navigation = 'centered' | 'expanded' | 'collapsed' | 'context-shown' | 'context-hidden'
-
 export type Entry =
   | { kind: 'message'; id: string; at: Date; author: 'user' | 'agent'; text: string }
-  | { kind: 'navigation'; id: string; at: Date; navigation: Navigation; tile: TileSummary }
+  // What the user did to look at the System: the gesture as the navigation fact carries it, so one
+  // vocabulary runs from the canvas to the timeline.
+  | { kind: 'navigation'; id: string; at: Date; gesture: Navigated['gesture']; tile: TileSummary }
   | { kind: 'operation'; id: string; at: Date; operation: Operation['_tag']; tile: TileSummary }
 
 /** One day of the Conversation, its entries oldest first. */

@@ -4,7 +4,7 @@
 // write is refused (`state/useRefusalState.ts`). While a write to the System is on its way, closing or
 // reloading the tab asks first.
 // Like the canvas, it holds no state: the view and the change under way are the URL's, and it hands
-// the next search params to the route.
+// the next view, with the gesture that asked for it, and the next search params to the route.
 import { cn } from 'cn'
 
 import { useMoveTile, useSwapTiles, useSystemWriting } from '#/front/client/mapping/queries'
@@ -13,16 +13,10 @@ import { useLeaveGuard } from '#/front/ui/feedback/useLeaveGuard'
 import { Canvas } from '#/front/ui/hex/Canvas'
 import type { EmptySlotTarget } from '#/front/ui/hex/geometry/shape'
 import { findTile, type TileNode } from '#/front/ui/hex/view/tiles'
+import type { CanvasView, ViewAction } from '#/front/ui/hex/view/view'
 import { Button } from '#/front/ui/inputs/controls/button'
 
-import {
-  changeOf,
-  viewOf,
-  withChange,
-  withView,
-  type SearchChange,
-  type SystemSearch,
-} from './search/search'
+import { changeOf, viewOf, withChange, type SearchChange, type SystemSearch } from './search/search'
 import type { System as FlatSystem } from '#/domains/mapping/entities'
 
 import { moveOf, slotOf, swapOf, swapsWith } from './tree'
@@ -33,11 +27,20 @@ interface SystemProps {
   /** The System's Tiles as the canvas draws them (`canvasTree`). */
   tree: TileNode
   search: SystemSearch
+  /** The next view, after a gesture on the canvas, and the gesture, on which Tile. */
+  onViewChange: (view: CanvasView, action: ViewAction) => void
   onSearchChange: (change: SearchChange) => void
   className?: string
 }
 
-export function System({ system, tree, search, onSearchChange, className }: SystemProps) {
+export function System({
+  system,
+  tree,
+  search,
+  onViewChange,
+  onSearchChange,
+  className,
+}: SystemProps) {
   const move = useMoveTile()
   const swap = useSwapTiles()
   useLeaveGuard(useSystemWriting())
@@ -128,9 +131,7 @@ export function System({ system, tree, search, onSearchChange, className }: Syst
       <Canvas
         system={tree}
         view={viewOf(search)}
-        onViewChange={(view) => {
-          onSearchChange(withView(search, view))
-        }}
+        onViewChange={onViewChange}
         emptySlots={moving === undefined ? addHere : moveHere(moving)}
         swapTargets={moving === undefined ? undefined : swapWith(moving)}
         className="min-h-0 w-full flex-1"

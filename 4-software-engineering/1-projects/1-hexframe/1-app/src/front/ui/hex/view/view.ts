@@ -61,6 +61,31 @@ export const CanvasView = Schema.Struct({
 
 export type CanvasView = typeof CanvasView.Type
 
+/**
+ * The gestures that change the view, as the canvas names them: centering a Tile, opening a Branch of
+ * the ring around the center or closing it, showing a ring inside the center or hiding it, and
+ * picking the ring around it. A navigation fact carries one, and the timeline tells it.
+ */
+export const Gesture = Schema.Literals([
+  'center',
+  'expand',
+  'collapse',
+  'show-context',
+  'hide-context',
+  'show-leaves',
+  'hide-leaves',
+  'show-children-around',
+  'show-branches-around',
+  'show-leaves-around',
+])
+
+export type Gesture = typeof Gesture.Type
+
+/** What changed the view: the gesture, and the Tile it was made on, the center for a ring's. */
+export const ViewAction = Schema.Struct({ gesture: Gesture, tile: TileId })
+
+export type ViewAction = typeof ViewAction.Type
+
 /** Reads the URL's search params, field by field: the route's `validateSearch`. */
 export const readCanvasView = readSearch(CanvasView)
 

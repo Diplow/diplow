@@ -9,8 +9,9 @@ preview: >-
   why a pending System write is read once per state of its mutation, what a
   Tile's Version counts and how the client folds it, where Mapping's PGlite
   tests regrouped to make room for it, where the import's client files
-  regrouped to make room for the poll, and where the System's Version is kept,
-  what an import's event counts and what the poll reads again.
+  regrouped to make room for the poll, where the System's Version is kept,
+  what an import's event counts and what the poll reads again, and which words
+  the canvas names its gestures in.
 ---
 # Decisions
 
@@ -50,3 +51,12 @@ HEX-76. The ticket asked for a System Version `evolve` bumps on every event, a r
 
 The page polls the Version on focus, and every 2 s while `useFollowSystem` is told to follow closely, and reads the System again only when the Version moved past the one its cache holds. The System's read is no longer refetched on focus, so a focus costs one small read rather than every Body. Seen in a browser on the dev server: a Tile created through the MCP with a Key showed on an open canvas once the tab became visible again, its focus simulated by a `visibilitychange`, since the driven browser's window stays hidden.
 
+### DEC-7 The canvas names ten gestures, the timeline speaks them, and picking the ring shown changes nothing
+
+HEX-77. The ticket asked the canvas to say which gesture changed the view, on which Tile, and the timeline to take the canvas's words where they differed. Three choices followed.
+
+- **Whose words.** The canvas's, imperative, as `TileAction` already had them: `center`, `expand`, `collapse`, `show-context`, `hide-context`, `hide-leaves`. The timeline's `centered`, `expanded`, `collapsed`, `context-shown` and `context-hidden` go; its entry's field is now `gesture`, typed from `Navigated['gesture']`, and its messages keep their past tense. `Gesture` and `ViewAction`, a gesture and its Tile, are Effect Schemas in `ui/hex/view/view.ts`, beside `TileId`, and `Navigated` in `features/facts.ts` is built from `ViewAction`'s fields, so the pair is declared once, decoded at a crossing, and the canvas never knows the bus.
+- **The ring row is a gesture too.** A click names five, but the row above the canvas changes the view as well, so it names its own: `show-leaves`, the one inside the center no click shows, and `show-children-around`, `show-branches-around`, `show-leaves-around` for the ring around it, the `-around` keeping the Leaves around the center apart from the Leaves inside it. Children is never offered beside another kind today (`kindsOf`), but `showAround` takes any `OuterKind`, so the name is there for it. A ring's gesture is made on the center. The breadcrumb's click is a `center` on the ancestor.
+- **Picking the ring shown changes nothing.** The row used to navigate to the same view, tidied, when its pressed button was pressed again. Nothing changed there, so no gesture happened and no fact is published: the hook calls `onViewChange` only when the ring picked differs from the one shown.
+
+`Navigated` carries the gesture and the Tile's id, no time and no Title: the conversation ticket (HEX-78) merges consecutive ones and joins the Tile in.

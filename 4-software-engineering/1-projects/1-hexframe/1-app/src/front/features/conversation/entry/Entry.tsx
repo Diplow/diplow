@@ -6,7 +6,9 @@ import {
   ChevronsDownUp,
   ChevronsUpDown,
   Crosshair,
+  Hexagon,
   Layers,
+  Leaf,
   Link,
   Move,
   Pencil,
@@ -21,7 +23,9 @@ import type { Operation } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 
-import type { Entry, Navigation } from '../timeline/timeline'
+import type { Navigated } from '#/front/features/facts'
+
+import type { Entry } from '../timeline/timeline'
 import { TileCard } from './TileCard'
 
 export function ConversationEntry({ entry }: { entry: Entry }) {
@@ -29,7 +33,7 @@ export function ConversationEntry({ entry }: { entry: Entry }) {
     case 'message':
       return <Message entry={entry} />
     case 'navigation': {
-      const { icon, text } = navigations[entry.navigation]
+      const { icon, text } = navigations[entry.gesture]
       return <Action icon={icon} text={text(entry.tile.title)} at={entry.at} />
     }
     case 'operation': {
@@ -79,12 +83,27 @@ function Time({ at }: { at: Date }) {
   return <time dateTime={at.toISOString()}>{time}</time>
 }
 
-const navigations: Record<Navigation, { icon: LucideIcon; text: (title: string) => string }> = {
-  centered: { icon: Crosshair, text: (title) => m.conversation_centered({ title }) },
-  expanded: { icon: ChevronsUpDown, text: (title) => m.conversation_expanded({ title }) },
-  collapsed: { icon: ChevronsDownUp, text: (title) => m.conversation_collapsed({ title }) },
-  'context-shown': { icon: Layers, text: (title) => m.conversation_context_shown({ title }) },
-  'context-hidden': { icon: Layers, text: (title) => m.conversation_context_hidden({ title }) },
+/** What each of the canvas's gestures says once the user made it, in the past tense. */
+const navigations: Record<
+  Navigated['gesture'],
+  { icon: LucideIcon; text: (title: string) => string }
+> = {
+  center: { icon: Crosshair, text: (title) => m.conversation_centered({ title }) },
+  expand: { icon: ChevronsUpDown, text: (title) => m.conversation_expanded({ title }) },
+  collapse: { icon: ChevronsDownUp, text: (title) => m.conversation_collapsed({ title }) },
+  'show-context': { icon: Layers, text: (title) => m.conversation_context_shown({ title }) },
+  'hide-context': { icon: Layers, text: (title) => m.conversation_context_hidden({ title }) },
+  'show-leaves': { icon: Leaf, text: (title) => m.conversation_leaves_shown({ title }) },
+  'hide-leaves': { icon: Leaf, text: (title) => m.conversation_leaves_hidden({ title }) },
+  'show-children-around': {
+    icon: Hexagon,
+    text: (title) => m.conversation_children_around({ title }),
+  },
+  'show-branches-around': {
+    icon: Hexagon,
+    text: (title) => m.conversation_branches_around({ title }),
+  },
+  'show-leaves-around': { icon: Hexagon, text: (title) => m.conversation_leaves_around({ title }) },
 }
 
 /** What each of Mapping's Operations says once the user did it, in the past tense. */
