@@ -17,7 +17,7 @@ Better Auth, behind one Effect service, `Auth`: sign up, sign in, sign out, the 
 | File | Holds |
 |---|---|
 | `auth.ts` | `Auth` and `layer`, the deployed one, over `DATABASE_URL`, signing its cookies with `BETTER_AUTH_SECRET`, reached on the hosts `baseURLOf` reads from Vercel; `make`, the service for a given secret and base URL; `HttpExchange`, the request a call belongs to; `AuthRefused`, the refusals a user can act on |
-| `allowlist.ts` | `Allowlist` and its `layer`: the users let into a feature by hand, by email, compared trimmed and case-insensitively, from `ASSISTANT_ACCOUNTS`; `allowing`, the allowlist of given emails, for tests. No SDK: it stands where Stripe's plugin will, which IAM derives its Entitlements from |
+| `allowlist.ts` | `Allowlist` and its `layer`: a check per list of users let in by hand, by email, compared trimmed and case-insensitively, `assistant` from `ASSISTANT_ACCOUNTS`; `allowing`, the allowlist of given emails, for tests. No SDK: it stands where Stripe's plugin will, which IAM derives its Entitlements from |
 | `testing.ts` | `TestAuth`, Better Auth for real over `TestDatabase`, with a secret made for the run; `browser()`, a cookie jar that carries what one call sets to the next, from an IP of its own; and `keyClient(secret)`, a program calling with an API key in its `Authorization` header, no cookie |
 
 ## How it talks to Better Auth

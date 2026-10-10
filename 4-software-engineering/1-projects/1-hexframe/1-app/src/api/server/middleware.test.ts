@@ -2,6 +2,7 @@ import { Exit, Option, Redacted } from 'effect'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { issueTurnKey, signUp, signedIn } from '#/domains/iam/iam'
+import { transactional } from '#/repositories/database/database'
 
 import { requestContext, sameOriginOnly } from './middleware'
 import { run, type StartContext } from './run'
@@ -98,7 +99,10 @@ describe("a Turn's Key at a server function", () => {
       headers: { cookie: cookies.map((cookie) => cookie.split(';')[0]).join('; ') },
     })
     const turn = { conversationId: 'conversation-1', turnId: 'turn-1' }
-    const issued = await run(await passedOn(), issueTurnKey(turn, new Date(Date.now() + 60_000)))
+    const issued = await run(
+      await passedOn(),
+      transactional(issueTurnKey(turn, new Date(Date.now() + 60_000))),
+    )
     if (!issued.ok) throw new Error('A Session issues a Turn’s Key')
 
     request = new Request('http://localhost/_serverFn', {

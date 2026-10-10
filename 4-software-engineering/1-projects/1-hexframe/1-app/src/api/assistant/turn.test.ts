@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import type { Entry } from '#/domains/assistant/entities'
 import * as Iam from '#/domains/iam/iam'
 import { browser } from '#/repositories/auth/testing'
+import { transactional } from '#/repositories/database/database'
 
 import * as Mapping from '../mapping/programs'
 import { bearer, call, connect, endpoint, value } from '../server/mcp/testing'
@@ -156,9 +157,13 @@ describe('a Turn and its Key', () => {
   it('proves nothing past its expiry', async () => {
     const { signedIn } = await entitled
     const turn = { conversationId: crypto.randomUUID(), turnId: crypto.randomUUID() }
-    const expired = await value(run(signedIn, Iam.issueTurnKey(turn, new Date(Date.now() - 1000))))
+    const expired = await value(
+      run(signedIn, transactional(Iam.issueTurnKey(turn, new Date(Date.now() - 1000)))),
+    )
     expect(await listed(bearer(Redacted.value(expired.secret)))).toBe(401)
-    const live = await value(run(signedIn, Iam.issueTurnKey(turn, new Date(Date.now() + 60_000))))
+    const live = await value(
+      run(signedIn, transactional(Iam.issueTurnKey(turn, new Date(Date.now() + 60_000)))),
+    )
     expect(await listed(bearer(Redacted.value(live.secret)))).toBe(200)
   })
 

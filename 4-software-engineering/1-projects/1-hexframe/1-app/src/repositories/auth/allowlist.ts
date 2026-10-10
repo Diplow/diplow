@@ -5,26 +5,21 @@
 // would go to whoever signs up with it first, while an email taken can't be signed up with again.
 import { Config, Context, Effect, Layer } from 'effect'
 
-/** A feature a user is let into by hand. */
-export type Feature = 'assistant'
-
 export class Allowlist extends Context.Service<
   Allowlist,
   {
-    /** Whether the user of this email is let into the feature. */
-    readonly allows: (feature: Feature, email: string) => boolean
+    /** Whether the user of this email is on the Assistant's list. */
+    readonly assistant: (email: string) => boolean
   }
 >()('hexframe/Allowlist') {}
 
 /** An email as the list compares it: trimmed, in lower case. */
 const normalized = (email: string) => email.trim().toLowerCase()
 
-/** The allowlist of these emails per feature, compared trimmed and case-insensitively. */
-export const allowing = (emails: Readonly<Record<Feature, ReadonlyArray<string>>>) => {
-  const listed = {
-    assistant: new Set(emails.assistant.map(normalized).filter((email) => email !== '')),
-  }
-  return Allowlist.of({ allows: (feature, email) => listed[feature].has(normalized(email)) })
+/** The allowlist of these emails per list, compared trimmed and case-insensitively. */
+export const allowing = (emails: { readonly assistant: ReadonlyArray<string> }) => {
+  const assistant = new Set(emails.assistant.map(normalized).filter((email) => email !== ''))
+  return Allowlist.of({ assistant: (email) => assistant.has(normalized(email)) })
 }
 
 /** The deployed allowlist, from ASSISTANT_ACCOUNTS: nobody is let in when it is unset or empty. */

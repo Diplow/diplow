@@ -23,7 +23,6 @@ import {
   CredentialsRejected,
   EmailMalformed,
   EmailTaken,
-  Entitlement,
   EntitlementMissing,
   KeyNameInvalid,
   KeyNotFound,
@@ -32,6 +31,7 @@ import {
   SignedOut,
   TooManyAttempts,
 } from './errors'
+import type { Entitlement } from './entities'
 
 interface Credentials {
   readonly email: string
@@ -280,11 +280,15 @@ export const issueTurnKey = (turn: TurnBinding, expiresAt: Date) =>
 export const revokeTurnKey = (accountId: string, turnId: string) =>
   TurnKeys.use((keys) => keys.revoke(accountId, turnId))
 
-type Entitlement = typeof Entitlement.Type
+/** The list kept by hand that each Entitlement is derived from, until Stripe. */
+const listOf: Record<Entitlement, (allowlist: Allowlist['Service']) => (email: string) => boolean> =
+  {
+    assistant: (allowlist) => allowlist.assistant,
+  }
 
 /** Whether the Account has the Entitlement: for now, whether a list kept by hand names its email. */
 export const entitled = (account: Account, entitlement: Entitlement) =>
-  Allowlist.use((allowlist) => Effect.succeed(allowlist.allows(entitlement, account.email)))
+  Allowlist.use((allowlist) => Effect.succeed(listOf[entitlement](allowlist)(account.email)))
 
 /** Nothing when the Account has the Entitlement, else `EntitlementMissing`. */
 export const entitledOnly = (account: Account, entitlement: Entitlement) =>

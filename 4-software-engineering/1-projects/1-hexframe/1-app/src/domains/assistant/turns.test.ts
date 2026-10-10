@@ -72,6 +72,28 @@ layer(TestLayer)('the Turns, over PGlite', (it) => {
     }),
   )
 
+  it.effect(
+    'ends, by its time, a Turn nothing ended past its deadline, so the next one starts',
+    () =>
+      Effect.gen(function* () {
+        const { account, message, ask } = yield* someone
+        yield* TestClock.setTime(Date.parse('2026-10-10T09:00:00Z'))
+        const lost = yield* transactional(startTurn(account, { message, location }))
+        const next = yield* ask('Are you there?')
+        yield* TestClock.adjust('14 minutes')
+        const early = yield* transactional(startTurn(account, { message: next, location })).pipe(
+          Effect.flip,
+        )
+        expect(early).toMatchObject({ _tag: 'TurnRunning' })
+
+        yield* TestClock.adjust('1 minute')
+        const started = yield* transactional(startTurn(account, { message: next, location }))
+        expect(yield* runningTurn(account)).toEqual(started)
+        const ended = yield* transactional(endTurn(account, lost.id, 'answered'))
+        expect(ended).toBeUndefined()
+      }),
+  )
+
   it.effect("lets another Account's Conversation run a Turn of its own meanwhile", () =>
     Effect.gen(function* () {
       const ada = yield* someone

@@ -4,6 +4,7 @@ import { TestClock } from 'effect/testing'
 
 import { Allowlist, allowing } from '#/repositories/auth/allowlist'
 import { browser, keyClient, TestAuth } from '#/repositories/auth/testing'
+import { transactional } from '#/repositories/database/database'
 import { layer as turnKeysLayer } from '#/repositories/database/turn-keys/turn-keys'
 
 import {
@@ -68,6 +69,14 @@ const asBearer =
       ),
     )
 
+/** A Turn's Key issued as the API layer issues it, in the transaction that starts its Turn. */
+const issuedInTransaction = (...args: Parameters<typeof issueTurnKey>) =>
+  transactional(issueTurnKey(...args))
+
+/** A Turn's Key revoked as the API layer revokes it, in the transaction that ends its Turn. */
+const revokedInTransaction = (...args: Parameters<typeof revokeTurnKey>) =>
+  transactional(revokeTurnKey(...args))
+
 /** What a Turn's Key is bound to, for a Turn no other test uses. */
 const aTurn = () => ({ conversationId: crypto.randomUUID(), turnId: crypto.randomUUID() })
 
@@ -79,7 +88,7 @@ layer(TestLayer)("a Turn's Key", (it) => {
     Effect.gen(function* () {
       const { asSession } = yield* someone
       const expiresAt = yield* inFifteenMinutes
-      const issued = yield* asSession(issueTurnKey(aTurn(), expiresAt))
+      const issued = yield* asSession(issuedInTransaction(aTurn(), expiresAt))
       expect(Redacted.value(issued.secret)).toMatch(/^hft_[A-Za-z0-9_-]{43}$/)
       expect(issued.expiresAt).toEqual(expiresAt)
       expect(JSON.stringify(issued)).not.toContain(Redacted.value(issued.secret))
@@ -90,7 +99,7 @@ layer(TestLayer)("a Turn's Key", (it) => {
     Effect.gen(function* () {
       const { account, asSession } = yield* someone
       const turn = aTurn()
-      const { secret } = yield* asSession(issueTurnKey(turn, yield* inFifteenMinutes))
+      const { secret } = yield* asSession(issuedInTransaction(turn, yield* inFifteenMinutes))
       const by = { _tag: 'TurnKey', ...turn }
       expect(
         Option.getOrThrow(yield* keyClient(Redacted.value(secret)).request(keyProven)),
@@ -102,7 +111,7 @@ layer(TestLayer)("a Turn's Key", (it) => {
   it.effect('proves nothing once it expired, by the clock', () =>
     Effect.gen(function* () {
       const { asSession } = yield* someone
-      const { secret } = yield* asSession(issueTurnKey(aTurn(), yield* inFifteenMinutes))
+      const { secret } = yield* asSession(issuedInTransaction(aTurn(), yield* inFifteenMinutes))
       yield* TestClock.adjust('14 minutes')
       expect(Option.isSome(yield* keyClient(Redacted.value(secret)).request(keyProven))).toBe(true)
       yield* TestClock.adjust('1 minute')
@@ -117,15 +126,15 @@ layer(TestLayer)("a Turn's Key", (it) => {
       const { account, asSession } = yield* someone
       const turn = aTurn()
       const other = aTurn()
-      const { secret } = yield* asSession(issueTurnKey(turn, yield* inFifteenMinutes))
-      const kept = yield* asSession(issueTurnKey(other, yield* inFifteenMinutes))
-      yield* revokeTurnKey(account.id, turn.turnId)
+      const { secret } = yield* asSession(issuedInTransaction(turn, yield* inFifteenMinutes))
+      const kept = yield* asSession(issuedInTransaction(other, yield* inFifteenMinutes))
+      yield* revokedInTransaction(account.id, turn.turnId)
       expect(yield* keyClient(Redacted.value(secret)).request(keyProven)).toEqual(Option.none())
       expect(Option.isSome(yield* keyClient(Redacted.value(kept.secret)).request(keyProven))).toBe(
         true,
       )
       // A Key already gone is no error.
-      yield* revokeTurnKey(account.id, turn.turnId)
+      yield* revokedInTransaction(account.id, turn.turnId)
     }),
   )
 
@@ -134,8 +143,8 @@ layer(TestLayer)("a Turn's Key", (it) => {
       const { asSession } = yield* someone
       const stranger = yield* someone
       const turn = aTurn()
-      const { secret } = yield* asSession(issueTurnKey(turn, yield* inFifteenMinutes))
-      yield* revokeTurnKey(stranger.account.id, turn.turnId)
+      const { secret } = yield* asSession(issuedInTransaction(turn, yield* inFifteenMinutes))
+      yield* revokedInTransaction(stranger.account.id, turn.turnId)
       expect(Option.isSome(yield* keyClient(Redacted.value(secret)).request(keyProven))).toBe(true)
     }),
   )
@@ -143,7 +152,7 @@ layer(TestLayer)("a Turn's Key", (it) => {
   it.effect('manages no Key, starts no Turn, and is never listed among the Keys', () =>
     Effect.gen(function* () {
       const { asSession } = yield* someone
-      const { secret } = yield* asSession(issueTurnKey(aTurn(), yield* inFifteenMinutes))
+      const { secret } = yield* asSession(issuedInTransaction(aTurn(), yield* inFifteenMinutes))
       const refusedBy = <A, E, R>(program: Effect.Effect<A, E, R>) =>
         Effect.map(asBearer(secret)(program).pipe(Effect.flip), (refused) => {
           expect(refused).toMatchObject({ _tag: 'SessionRequired', kind: 'Forbidden' })
@@ -152,7 +161,7 @@ layer(TestLayer)("a Turn's Key", (it) => {
       yield* refusedBy(issueKey('mine now'))
       yield* refusedBy(keys)
       yield* refusedBy(revokeKey('any'))
-      yield* refusedBy(issueTurnKey(aTurn(), yield* inFifteenMinutes))
+      yield* refusedBy(issuedInTransaction(aTurn(), yield* inFifteenMinutes))
       expect(yield* asSession(keys)).toEqual([])
     }),
   )
@@ -164,7 +173,7 @@ layer(TestLayer)("a Turn's Key", (it) => {
       const byKey = yield* keyClient(secret)
         .request(
           Effect.flatMap(keyProven, (key) =>
-            issueTurnKey(aTurn(), new Date()).pipe(
+            issuedInTransaction(aTurn(), new Date()).pipe(
               Effect.provideService(CurrentSession, Option.none()),
               Effect.provideService(CurrentKey, key),
             ),
@@ -172,7 +181,7 @@ layer(TestLayer)("a Turn's Key", (it) => {
         )
         .pipe(Effect.flip)
       expect(byKey).toMatchObject({ _tag: 'SessionRequired' })
-      const byNobody = yield* issueTurnKey(aTurn(), new Date()).pipe(
+      const byNobody = yield* issuedInTransaction(aTurn(), new Date()).pipe(
         Effect.provideService(CurrentSession, Option.none()),
         Effect.provideService(CurrentKey, Option.none()),
         Effect.flip,
@@ -184,7 +193,7 @@ layer(TestLayer)("a Turn's Key", (it) => {
   it.effect("leaves an Account's own Keys proving as they did", () =>
     Effect.gen(function* () {
       const { account, asSession } = yield* someone
-      yield* asSession(issueTurnKey(aTurn(), yield* inFifteenMinutes))
+      yield* asSession(issuedInTransaction(aTurn(), yield* inFifteenMinutes))
       const { key, secret } = yield* asSession(issueKey('script'))
       expect(Option.getOrThrow(yield* keyClient(secret).request(keyProven))).toEqual({
         account,

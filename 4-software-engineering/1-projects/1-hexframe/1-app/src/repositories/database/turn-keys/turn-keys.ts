@@ -5,7 +5,7 @@
 import { and, eq, gt, lte } from 'drizzle-orm'
 import { Context, Effect, Encoding, Layer } from 'effect'
 
-import { Database } from '../database'
+import { Database, InTransaction } from '../database'
 import { turnKey, user } from '../schema'
 
 /** What a Turn's Key is bound to: its user, and the Conversation and the Turn it was issued for. */
@@ -28,15 +28,25 @@ export class TurnKeys extends Context.Service<
     /**
      * Issues a key bound to a user, a Conversation and a Turn, proving it until `expiresAt`, and
      * answers its secret: the one time it is known. The user's keys expired by `now` go meanwhile.
+     * Inside a transaction.
      */
     readonly issue: (
       binding: TurnKeyBinding,
       when: { readonly expiresAt: Date; readonly now: Date },
-    ) => Effect.Effect<string>
-    /** Whose key a secret is, and what it is bound to, if it is one and has not expired by `now`. */
+    ) => Effect.Effect<string, never, InTransaction>
+    /**
+     * Whose key a secret is, and what it is bound to, if it is one and has not expired by `now`. The
+     * caller asks of a secret shaped as one (`isTurnKeySecret`).
+     */
     readonly proven: (secret: string, now: Date) => Effect.Effect<ProvenTurnKey | undefined>
-    /** Revokes the key issued for one of a user's Turns, if it still exists: it proves nothing again. */
-    readonly revoke: (accountId: string, turnId: string) => Effect.Effect<void>
+    /**
+     * Revokes the key issued for one of a user's Turns, if it still exists: it proves nothing again.
+     * Inside a transaction.
+     */
+    readonly revoke: (
+      accountId: string,
+      turnId: string,
+    ) => Effect.Effect<void, never, InTransaction>
   }
 >()('hexframe/TurnKeys') {}
 
@@ -63,22 +73,23 @@ const make = Effect.gen(function* () {
   const database = yield* Database
 
   const issue = (binding: TurnKeyBinding, { expiresAt, now }: { expiresAt: Date; now: Date }) =>
-    Effect.gen(function* () {
-      const secret = newSecret()
-      yield* database
-        .delete(turnKey)
-        .where(and(eq(turnKey.accountId, binding.accountId), lte(turnKey.expiresAt, now)))
-        .pipe(Effect.orDie)
-      yield* database
-        .insert(turnKey)
-        .values({ id: crypto.randomUUID(), ...binding, hash: yield* hashOf(secret), expiresAt })
-        .pipe(Effect.orDie)
-      return secret
-    })
+    InTransaction.use(() =>
+      Effect.gen(function* () {
+        const secret = newSecret()
+        yield* database
+          .delete(turnKey)
+          .where(and(eq(turnKey.accountId, binding.accountId), lte(turnKey.expiresAt, now)))
+          .pipe(Effect.orDie)
+        yield* database
+          .insert(turnKey)
+          .values({ id: crypto.randomUUID(), ...binding, hash: yield* hashOf(secret), expiresAt })
+          .pipe(Effect.orDie)
+        return secret
+      }),
+    )
 
   const proven = (secret: string, now: Date) =>
     Effect.gen(function* () {
-      if (!isTurnKeySecret(secret)) return undefined
       const [found] = yield* database
         .select({
           id: user.id,
@@ -96,10 +107,12 @@ const make = Effect.gen(function* () {
     })
 
   const revoke = (accountId: string, turnId: string) =>
-    database
-      .delete(turnKey)
-      .where(and(eq(turnKey.accountId, accountId), eq(turnKey.turnId, turnId)))
-      .pipe(Effect.orDie, Effect.asVoid)
+    InTransaction.use(() =>
+      database
+        .delete(turnKey)
+        .where(and(eq(turnKey.accountId, accountId), eq(turnKey.turnId, turnId)))
+        .pipe(Effect.orDie, Effect.asVoid),
+    )
 
   return TurnKeys.of({ issue, proven, revoke })
 })

@@ -123,13 +123,29 @@ const turnOf = (row: TurnRow) =>
     return { ...turn, ended: { at: endedAt, how } }
   })
 
+/** The Turn running in the Account's Conversation, if one does. */
+export const runningTurn = (accountId: string) =>
+  Effect.flatMap(
+    Turns.use((turns) => turns.running(accountId)),
+    (row) => (row === undefined ? Effect.succeed(undefined) : turnOf(row)),
+  )
+
+/** The latest a Turn may run until, by the Assistant's settings: what its Key proves it for. */
+export const deadline = (turn: Turn) => deadlineOf(turn, settings.turn.longest)
+
 /**
  * Starts a Turn answering one of the Account's Messages, by its Entry's id, in the Tile `location`
- * names, and answers it; `TurnRunning` while another runs in its Conversation, one at a time.
+ * names, and answers it; `TurnRunning` while another runs in its Conversation, one at a time. One
+ * still running past its deadline, which nothing ended, ends first, by its time, so a lost Turn never
+ * holds its Conversation.
  */
 export const startTurn = (accountId: string, start: { message: string; location: string }) =>
   Effect.gen(function* () {
     const startedAt = new Date(yield* Clock.currentTimeMillis)
+    const running = yield* runningTurn(accountId)
+    if (running !== undefined && deadline(running) <= startedAt) {
+      yield* endTurn(accountId, running.id, 'time')
+    }
     const row = yield* Turns.use((turns) =>
       turns.start(accountId, { messageId: start.message, location: start.location, startedAt }),
     )
@@ -147,13 +163,3 @@ export const endTurn = (accountId: string, turnId: string, how: TurnEnd) =>
     const row = yield* Turns.use((turns) => turns.end(accountId, turnId, { end: how, at }))
     return row === undefined ? undefined : yield* turnOf(row)
   })
-
-/** The Turn running in the Account's Conversation, if one does. */
-export const runningTurn = (accountId: string) =>
-  Effect.flatMap(
-    Turns.use((turns) => turns.running(accountId)),
-    (row) => (row === undefined ? Effect.succeed(undefined) : turnOf(row)),
-  )
-
-/** The latest a Turn may run until, by the Assistant's settings: what its Key proves it for. */
-export const deadline = (turn: Turn) => deadlineOf(turn, settings.turn.longest)

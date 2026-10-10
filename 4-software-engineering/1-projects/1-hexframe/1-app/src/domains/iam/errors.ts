@@ -2,6 +2,7 @@
 import { Schema } from 'effect'
 
 import { invalid, kind } from '../kind'
+import { Entitlement } from './entities'
 
 /** Nobody is signed in where a Session is needed. */
 export class SignedOut extends Schema.TaggedError<SignedOut>()('SignedOut', {
@@ -52,9 +53,6 @@ export class KeyNameInvalid extends Schema.TaggedError<KeyNameInvalid>()(
 export class KeyNotFound extends Schema.TaggedError<KeyNotFound>()('KeyNotFound', {
   kind: kind('NotFound'),
 }) {}
-
-/** Something an Account may do, derived when asked: for now, use the Assistant. */
-export const Entitlement = Schema.Literal('assistant')
 
 /** The Account may not do this: it lacks the Entitlement, until it pays for it. */
 export class EntitlementMissing extends Schema.TaggedError<EntitlementMissing>()(
