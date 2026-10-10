@@ -1,6 +1,6 @@
 ---
 title: observability
-parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability
+parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/api/report/observability
 owner: diplo
 preview: >-
   What hexframe logs and where its errors go: every line has a topic, every

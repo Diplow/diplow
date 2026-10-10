@@ -10,7 +10,7 @@ preview: >-
 ---
 # observability
 
-The seam behind which hexframe is observed: Sentry for errors and traces, PostHog for the leveled event log and the feature flag that raises one user's verbosity. Only this folder imports `@sentry/*`, `posthog-js` and `posthog-node` (`dependency-cruiser.config.ts`, `sdks`). What gets logged, and when, is the API layer's: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/observability/CLAUDE|api's observability]].
+The seam behind which hexframe is observed: Sentry for errors and traces, PostHog for the leveled event log and the feature flag that raises one user's verbosity. Only this folder imports `@sentry/*`, `posthog-js` and `posthog-node` (`dependency-cruiser.config.ts`, `sdks`). What gets logged, and when, is the API layer's: [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/report/observability/CLAUDE|api's observability]].
 
 | File | Side | Holds |
 |---|---|---|
