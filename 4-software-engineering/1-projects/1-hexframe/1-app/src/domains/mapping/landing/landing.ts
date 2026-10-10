@@ -32,7 +32,7 @@ import {
   systemOf,
   tileRow,
 } from '../entities'
-import { changing, ended, untitled } from '../mapping'
+import { changing, untitled } from '../mapping'
 import { evolve, freeSlot, type Placement } from '../operations'
 import { type Upload, archiveBounds, folderOf } from './archive'
 
@@ -175,8 +175,11 @@ const inSlot = (accountId: string, plan: ImportPlan, place: Placement) =>
       const id = ids.get(root.path)
       if (id === undefined) return yield* Effect.die(new Error('A batch lost its first row'))
       const event = importedAs(plan, id)
-      yield* ended(writes, { after: evolve(system, event), events: [event] })
-      return reportOf(batch, { id, plan, replaced: false })
+      return {
+        answer: reportOf(batch, { id, plan, replaced: false }),
+        events: [event],
+        after: evolve(system, event),
+      }
     }),
   )
 
@@ -214,8 +217,11 @@ const asRoot = (accountId: string, plan: ImportPlan) =>
         const batch =
           root._tag === 'Tile' ? rowsBelow(root, { parent: nameOf(root.path), resolve }) : []
         yield* writes.insertAll(batch)
-        yield* ended(writes, { after, events: [event] })
-        return reportOf(batch, { id: stored.id, plan, replaced: true })
+        return {
+          answer: reportOf(batch, { id: stored.id, plan, replaced: true }),
+          events: [event],
+          after,
+        }
       }),
     ),
   )

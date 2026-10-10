@@ -126,7 +126,7 @@ export interface Writes {
    */
   readonly swap: (a: string, b: string) => Effect.Effect<void, never, InTransaction>
   /** Sets the System's Version, on its Root's row, to the one Mapping decided after a change. */
-  readonly systemVersion: (version: number) => Effect.Effect<void, never, InTransaction>
+  readonly setSystemVersion: (version: number) => Effect.Effect<void, never, InTransaction>
 }
 
 export class Tiles extends Context.Service<
@@ -354,7 +354,7 @@ const make = Effect.gen(function* () {
           .pipe(Effect.asVoid, Effect.orDie),
       ),
     swap: (a, b) => inTransaction(swapRows(database, accountId, a, b)),
-    systemVersion: (version) =>
+    setSystemVersion: (version) =>
       inTransaction(
         database
           .update(tile)

@@ -7,37 +7,36 @@ import { type QueryClient, useQuery, useQueryClient } from '@tanstack/react-quer
 
 import { systemVersion } from '#/api/mapping/mapping'
 
-import { read } from '../calls'
+import { read, settle } from '../calls'
 import { systemRead } from './queries'
 
 /** How often a page following closely polls the System's Version, in milliseconds. */
 const closelyEvery = 2_000
 
-/**
- * The System's Version, read alone: a frame read, whose failure is reported and shows nothing; its
- * call, apart, which `polled` makes and follows.
- */
-const { queryFn: askVersion, ...versionRead } = read({
-  scope: 'systemVersion',
-  key: [],
-  call: () => systemVersion({ data: undefined }),
-  frame: true,
-})
+/** The System's Version's read, by the server function's name. */
+const versionScope = 'systemVersion'
+
+/** The System's Version, asked of its server function. */
+const askVersion = () => systemVersion({ data: undefined })
+
+/** The System's Version, read alone: a frame read, whose failure is reported and shows nothing. */
+const versionRead = read({ scope: versionScope, key: [], call: askVersion, frame: true })
+
+/** Whether the System the cache holds is behind this Version; not before its first read. */
+function behind(client: QueryClient, version: number) {
+  const held = client.getQueryData(systemRead.queryKey)
+  return held !== undefined && version > held.version
+}
 
 /**
- * Polls the System's Version, then reads the System again when it moved past the one the cache holds,
- * a read already on its way left to land. Nothing is read again before the System's first read.
+ * Polls the System's Version, then reads the System again while the cache is behind it: a read
+ * already on its way is left to land, and, should it have started before the Version moved, one more
+ * is made once it has.
  */
-async function polled(
-  client: QueryClient,
-  context: Parameters<NonNullable<typeof askVersion>>[0],
-): Promise<number> {
-  // `read` always builds one: its type only leaves it optional.
-  if (askVersion === undefined) throw new Error('The Version’s read has no call')
-  const version = await askVersion(context)
-  const held = client.getQueryData(systemRead.queryKey)
-  if (held !== undefined && version > held.version) {
-    void client.invalidateQueries({ queryKey: systemRead.queryKey }, { cancelRefetch: false })
+async function polled(client: QueryClient): Promise<number> {
+  const version = await settle(versionScope, askVersion())
+  for (let reads = 0; reads < 2 && behind(client, version); reads++) {
+    await client.invalidateQueries({ queryKey: systemRead.queryKey }, { cancelRefetch: false })
   }
   return version
 }
@@ -51,7 +50,7 @@ export function useFollowSystem({ closely }: { closely: boolean }) {
   const client = useQueryClient()
   useQuery({
     ...versionRead,
-    queryFn: (context) => polled(client, context),
+    queryFn: () => polled(client),
     refetchOnWindowFocus: 'always',
     refetchInterval: closely ? closelyEvery : false,
   })

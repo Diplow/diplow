@@ -103,6 +103,26 @@ describe('the page following the System', () => {
     expect(result.current?.root.title).toBe('First')
   })
 
+  it('reads once more when the read it made lands still behind the Version polled', async () => {
+    vi.mocked(Mapping.system)
+      .mockImplementationOnce(() => ok(systemAt(3, 'First')))
+      .mockImplementationOnce(() => ok(systemAt(4, 'Started before')))
+      .mockImplementation(() => ok(systemAt(5, 'Caught up')))
+    polling(3, 5)
+    const { result } = render()
+    await waitFor(() => {
+      expect(result.current?.root.title).toBe('First')
+    })
+    await waitFor(() => {
+      expect(Mapping.systemVersion).toHaveBeenCalledTimes(1)
+    })
+    refocus()
+    await waitFor(() => {
+      expect(result.current?.root.title).toBe('Caught up')
+    })
+    expect(Mapping.system).toHaveBeenCalledTimes(3)
+  })
+
   it('reads nothing again for a Version behind the cache’s, a read that landed first', async () => {
     reading(systemAt(5, 'First'), systemAt(5, 'Never read'))
     polling(4)

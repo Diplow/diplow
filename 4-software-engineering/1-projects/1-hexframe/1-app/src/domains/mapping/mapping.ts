@@ -217,9 +217,38 @@ const outsideHelp = (ids: ReadonlyArray<string>) =>
   ids.some(isHelpId) ? Effect.fail(new HelpReadOnly()) : Effect.void
 
 /**
+ * Ends a change that made these events, written already: writes the System's Version as `evolve` left
+ * it in `after`, then publishes them. A change that made none leaves the Version where it was. The
+ * bus holds what is published until the transaction commits. `changing` ends
+ * `landing/`'s import this way too.
+ */
+const ended = (
+  writes: Writes,
+  { after, events }: { after: System; events: ReadonlyArray<MappingEvent> },
+) =>
+  events.length === 0
+    ? Effect.void
+    : Effect.gen(function* () {
+        yield* writes.setSystemVersion(after.version)
+        const { publish } = yield* Bus
+        yield* Effect.forEach(events, publish, { discard: true })
+      })
+
+/**
+ * What a change that is no Operation answers once it wrote its rows: its own `answer`, the events it
+ * made and the System `evolve` leaves after them, which `changing` ends it with.
+ */
+export interface Changed<A> {
+  readonly answer: A
+  readonly events: ReadonlyArray<MappingEvent>
+  readonly after: System
+}
+
+/**
  * A change to the Account's System that is no Operation, `landing/`'s import, naming these Tiles, none
  * of them Help's, on its rows as they stand once its Root is locked: alone until the transaction
- * around it ends, so what it checked still holds when it writes.
+ * around it ends, so what it checked still holds when it writes. Once it wrote its rows, it is ended
+ * as an Operation is: the System's Version it leaves written, its events published.
  */
 export const changing = <A, E>(
   accountId: string,
@@ -227,12 +256,17 @@ export const changing = <A, E>(
   change: (
     rows: ReadonlyArray<TileRow>,
     writes: Writes,
-  ) => Effect.Effect<A, E, InTransaction | Bus>,
+  ) => Effect.Effect<Changed<A>, E, InTransaction>,
 ) =>
   Effect.andThen(
     outsideHelp(names),
     Tiles.use((tiles) =>
-      Effect.flatMap(tiles.lock(accountId), (rows) => change(rows, tiles.writes(accountId))),
+      Effect.gen(function* () {
+        const writes = tiles.writes(accountId)
+        const { answer, events, after } = yield* change(yield* tiles.lock(accountId), writes)
+        yield* ended(writes, { after, events })
+        return answer
+      }),
     ),
   )
 
@@ -342,23 +376,6 @@ type OnTaken<T> = (taken: IdTaken) => Effect.Effect<never, T>
 const madeHere: OnTaken<never> = (taken) => Effect.die(taken)
 
 const chosen: OnTaken<TileIdTaken> = () => Effect.fail(new TileIdTaken())
-
-/**
- * Ends a change that made these events, written already: writes the System's Version as `evolve` left
- * it in `after`, then publishes them. A change that made none leaves the Version where it was. The
- * bus holds what is published until the transaction commits. `landing/`'s import ends this way too.
- */
-export const ended = (
-  writes: Writes,
-  { after, events }: { after: System; events: ReadonlyArray<MappingEvent> },
-) =>
-  events.length === 0
-    ? Effect.void
-    : Effect.gen(function* () {
-        yield* writes.systemVersion(after.version)
-        const { publish } = yield* Bus
-        yield* Effect.forEach(events, publish, { discard: true })
-      })
 
 /**
  * Runs an Operation on the Account's System: locks it, loads it flat, asks `decide` through `decided`,
