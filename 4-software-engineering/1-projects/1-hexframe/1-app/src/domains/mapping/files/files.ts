@@ -147,17 +147,18 @@ function placed(tile: SystemTile, folder: string, naming: Naming): ReadonlyArray
 const partsOf = (config: NonNullable<SystemTile['config']>): Fields =>
   Object.fromEntries(Object.entries(config).filter(([, value]) => value !== undefined))
 
+/** A placed Tile's own file, from the export's root: its folder's, or a Leaf's. */
+const fileOf = (written: Exclude<Placed, { _tag: 'Reference' }>) =>
+  written._tag === 'Folder'
+    ? join(written.folder, ownFileName(written.naming))
+    : join(written.folder, written.name)
+
 /** The path a `[[wikilink]]` reaches a placed Tile by, by its id: its file's. */
 function linksOf(all: ReadonlyArray<Placed>): ReadonlyMap<string, string> {
   return new Map(
-    all.flatMap((written): ReadonlyArray<readonly [string, string]> => {
-      if (written._tag === 'Reference') return []
-      const path =
-        written._tag === 'Folder'
-          ? join(written.folder, ownFileName(written.naming))
-          : join(written.folder, written.name)
-      return [[written.tile.id, linked(path)]]
-    }),
+    all.flatMap((written): ReadonlyArray<readonly [string, string]> =>
+      written._tag === 'Reference' ? [] : [[written.tile.id, linked(fileOf(written))]],
+    ),
   )
 }
 
@@ -266,4 +267,29 @@ export function exportOf(system: SystemTile, id: string, link: LinkOf): Export |
   const all = root === undefined ? below : [{ ...root, config: rootConfig(found) }, ...below]
   const links = linksOf(all)
   return { slug, files: all.flatMap((written) => filesOf(written, { links, link })) }
+}
+
+/** Where a Tile lives in its System's export, each path from the export's root. */
+export interface Place {
+  /** The folder a Turn there starts in: the Tile's own, or, for a Leaf, the one it hangs in. */
+  readonly folder: string
+  /** The Tile's own file: its folder's, or the Leaf's. */
+  readonly file: string
+}
+
+/**
+ * Where each Tile of a System lives in the System's own export, `exportOf` from its Root, by id: the
+ * names in force where it stands now, numbered as that export numbers them, so a Tile moved or
+ * renumbered is found where the files put it. The Root's folder is `''`. A Reference has no place of
+ * its own, nor does a Tile of another System.
+ */
+export function placesOf(system: SystemTile): ReadonlyMap<string, Place> {
+  return new Map(
+    placed(system, '', inherited(defaultNaming, system)).flatMap(
+      (written): ReadonlyArray<readonly [string, Place]> =>
+        written._tag === 'Reference'
+          ? []
+          : [[written.tile.id, { folder: written.folder, file: fileOf(written) }]],
+    ),
+  )
 }
