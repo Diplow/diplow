@@ -18,7 +18,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import { Schema } from 'effect'
-import { useCallback, useMemo, useRef, useSyncExternalStore } from 'react'
+import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 
 import type { Failure, Outcome } from '#/api/report/errors/failure'
 import { type System, type SystemTile, systemOf } from '#/domains/mapping/entities'
@@ -370,16 +370,18 @@ export const useCreateTileSubmit = (
 }
 
 /**
- * Submits a Tile's form through `useEditTile`: only the fields that changed are sent, so the Body of
- * an untitled Root can be written before its name, with the Version of the Tile the form opened on,
- * so an edit made meanwhile elsewhere refuses it rather than being overwritten.
+ * Submits a Tile's form through `useEditTile`: only the fields that changed since the form opened are
+ * sent, so the Body of an untitled Root can be written before its name, with the Version of the Tile
+ * the form opened on, kept while the form lives: a change landing meanwhile, from another tab or an
+ * agent, refuses the save rather than being overwritten by it.
  */
 export const useEditTileSubmit = (
   tile: TileContent & Pick<SystemTile, 'id' | 'version'>,
 ): TileSubmit => {
   const { mutate } = useEditTile()
+  const [opened] = useState(tile)
   return (content) => {
-    mutate({ id: tile.id, version: tile.version, ...changed(tile, content) })
+    mutate({ id: opened.id, version: opened.version, ...changed(opened, content) })
   }
 }
 

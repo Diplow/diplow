@@ -120,7 +120,7 @@ async function rendered<T>(hook: () => T, system: System = served) {
   const wrapper = ({ children }: { children: ReactNode }) =>
     createElement(QueryClientProvider, { client }, children)
   const shownEach: Array<System | undefined> = []
-  const { result } = renderHook(
+  const { result, rerender } = renderHook(
     () => {
       const shown = useSystem().data?.system
       shownEach.push(shown)
@@ -131,7 +131,7 @@ async function rendered<T>(hook: () => T, system: System = served) {
   await waitFor(() => {
     expect(result.current.shown).toBeDefined()
   })
-  return { result, client, shownEach }
+  return { result, client, shownEach, rerender }
 }
 
 describe('the System the page shows', () => {
@@ -309,6 +309,23 @@ describe('a write on a Tile changed since the screen drew it', () => {
     })
     expect(Mapping.editTile).toHaveBeenCalled()
     expect(reportError).not.toHaveBeenCalled()
+  })
+
+  it('keeps the Version its form opened on, while the System read again moves the Tile on', async () => {
+    const opened = { id: id.a, version: 1, title: 'A', preview: '', body: '' }
+    let shownTile = opened
+    const { result, rerender } = await rendered(() => useEditTileSubmit(shownTile))
+    // Another tab saved A while this form stayed open: the page now draws A at its next Version.
+    shownTile = { ...opened, title: 'A, from the other tab', version: 2 }
+    rerender()
+    act(() => {
+      result.current.hook({ title: 'A, mine', preview: '', body: '' })
+    })
+    await waitFor(() => {
+      expect(Mapping.editTile).toHaveBeenCalledWith({
+        data: { id: id.a, version: 1, title: 'A, mine' },
+      })
+    })
   })
 
   it('hands an edit back, sent nowhere, when its form opened on a Version the Tile no longer has', async () => {
