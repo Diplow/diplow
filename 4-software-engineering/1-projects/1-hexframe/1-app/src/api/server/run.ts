@@ -12,6 +12,8 @@ import {
   type KeyProof,
   type Session,
 } from '#/domains/iam/iam'
+import { layer as blaxelLayer } from '#/repositories/agent/sandbox/blaxel'
+import { Sandbox } from '#/repositories/agent/sandbox/sandbox'
 import { Auth, HttpExchange, layer as authLayer } from '#/repositories/auth/auth'
 import {
   Conversations,
@@ -55,19 +57,32 @@ const auth =
     : Layer.orDie(Layer.merge(authLayer, databaseLayer))
 
 /**
- * What the domains use: Better Auth, the tiles repository, Zip, the conversations repository, and the
- * database itself.
+ * Every Account's sandbox: on Blaxel, deployed. Under `pnpm dev` without BL_API_KEY, and in every
+ * test, whatever the shell exports (`vitest.config.ts`): a folder of this machine's per Account. A
+ * build never holds that branch.
  */
-type Repositories = Auth | Database | Tiles | Zip | Conversations
+const sandbox =
+  import.meta.env.DEV && (process.env.BL_API_KEY ?? '') === ''
+    ? Layer.unwrap(
+        Effect.promise(async () => (await import('#/repositories/agent/sandbox/local')).layer),
+      )
+    : blaxelLayer
+
+/**
+ * What the domains use: Better Auth, the tiles repository, Zip, the conversations repository, the
+ * sandbox, and the database itself.
+ */
+type Repositories = Auth | Database | Tiles | Zip | Conversations | Sandbox
 
 /**
  * The repositories the domains use: Better Auth for IAM, the tiles repository and Zip for Mapping, the
- * conversations repository for Assistant; and the database itself, for the transaction a program
- * opens (`transactional`).
+ * conversations repository and the sandbox for Assistant; and the database itself, for the
+ * transaction a program opens (`transactional`).
  */
-const repositories: Layer.Layer<Repositories> = Layer.merge(
+const repositories: Layer.Layer<Repositories> = Layer.mergeAll(
   Layer.provideMerge(Layer.merge(tilesLayer, conversationsLayer), auth),
   zipLayer,
+  sandbox,
 )
 
 /**

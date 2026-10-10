@@ -13,7 +13,9 @@ preview: >-
   what an import's event counts and what the poll reads again, which words
   the canvas names its gestures in, and how the Conversation keeps its
   Entries, names who acted and a deleted Tile, and merges and sends the user's
-  navigations, and how the chat on home reads its days and follows the poll.
+  navigations, and how the chat on home reads its days and follows the poll;
+  and where the sandbox repository sits, how an Account's sandbox is named,
+  kept read-only, stopped and fenced, and what of it was not seen working.
 ---
 # Decisions
 
@@ -88,3 +90,17 @@ HEX-79. The ticket asked for the chat on home over the Account's Conversation, e
 - **The layout keeps one column for the System.** The canvas's column holds the Breadcrumb above the canvas, now one line that wraps, and the centered Tile's card below it, at most 30% of the height and scrolled past that; the chat takes the side column, 24rem wide. The Tile forms were already a drawer and stay one. `/dev/system` takes the same layout on its fixtures, which become Assistant's Entries, so one `Conversation` renders both. Who acted starts each change's sentence, "You edited Games" or "The key “CI” created Games", one message for the user and one for anyone else per verb, since French conjugates the two apart ("Vous avez créé", "La clé « CI » a créé"); an import counts with three messages, none, one and many, Paraglide's messages here carrying no plural. The Tile card a change used to show went with the Preview the fixtures had and Assistant's Entries do not carry; `excerpt` now shortens a long Message, past 800 characters, until the reader asks for the rest.
 
 Seen in a browser on the dev server, light and dark, English and French: a Root renamed, a Tile created and a Message sent each showed in the chat and stayed after a reload; two Tiles created through the MCP with a Key showed on the canvas and in the chat as "The key “local test” created …" once the tab's focus was simulated, since the driven browser's window stays hidden (DEC-6).
+
+### DEC-10 One `repositories/agent/` for the sandbox and the relay; a sandbox named by a hash, read-only by its modes, interrupted from inside, its egress set through the SDK but not yet seen
+
+HEX-80. The ticket asked for the sandbox repository, the only importer of `@blaxel/core`, an Effect service and a fake on this machine, Mapping answering where a Tile lives in its export, and the API layer writing the System into the Account's sandbox. Six choices followed, and one thing was not seen.
+
+- **Where it sits.** `repositories/` held five folders; `agent/` is the sixth, holding `sandbox/` now and `anthropic/` with the relay (HEX-82), so no regroup was needed. dependency-cruiser's `sdks` are keyed by a repository's path, `agent/sandbox` among them, its rule named `no-agent-sandbox-sdk-outside-its-repository`, which `scripts/lint.test.ts` proves fires.
+- **A Box per Account.** `ensure(accountId)` answers a `Box` whose paths are all from its home, and a Turn uses it for its files and processes, rather than naming the Account in every call. The service has no typed error: Blaxel failing is a defect, as the database failing is.
+- **The name is a hash.** `hexframe-` and 32 hex digits of the SHA-256 of a namespace and the Account's id: Blaxel never sees the id, and a preview's database, a branch of production's, holding the same Account never shares its sandbox, since the namespace is production's domain, else the branch's URL, else the deployment's, `local` off Vercel.
+- **Read-only by its modes.** The System folder is wiped, written in one `writeTree` and set `a-w`, and `write` refuses a path inside it. Modes hold against any user but root, and whether Blaxel's image runs a process as root was not seen. The Turn (HEX-83) keeps Claude Code's writing tools off (`--disallowedTools`), which holds whoever the process runs as; the phase close lists it.
+- **A stop interrupts from inside.** Blaxel's API offers a stop and a kill, neither naming SIGINT, so the layer sends `kill -INT` to the process's pid from a command it runs in the sandbox, waits 10 s, then kills. The signal reaches the process the command line became, so the Turn's script ends in `exec`. The fake signals the process group.
+- **Egress through Blaxel's proxy, set from the SDK.** The SDK's create takes Blaxel's network rules (`network.proxy.allowedDomains`, and the firewall's `proxy` ruleset so no process goes around the proxy), so a sandbox is made reaching the deployment's hosts alone, `localhost` off Vercel, and one made before its hosts changed has its network set again when ensured. Without credentials (`BL_WORKSPACE`, `BL_API_KEY`) the layer still builds and ensuring a sandbox is a defect, so a deployment without them runs as before.
+- **Not seen working against Blaxel.** No Blaxel workspace is configured where this ran, so the pass by hand (ensure, write, `ls -R`, an outbound request elsewhere than the app, stop) did not run. The egress rule, the home `/blaxel/hexframe`, `writeTree` to an absolute path, the read-only modes against the image's user and the SIGINT are the SDK's types read, not behaviour seen; the phase close lists them for the first pass with a workspace.
+
+Mapping's `placesOf` answers each Tile's folder and file in the export of its Root, by the names in force where it stands now, and `systemFiles` answers the files and the places from one read, so a Turn's working folder never comes from another read than its files. Assistant owns the sandbox, a Turn's (STACK.md, "Turn"), so the API layer hands Mapping's files to Assistant's `writeSystem` (`api/assistant/programs.ts`, `systemInSandbox`) rather than reaching the repository, from which it takes nothing but plumbing.

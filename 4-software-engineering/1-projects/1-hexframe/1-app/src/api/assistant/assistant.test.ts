@@ -1,7 +1,13 @@
+import { execFile } from 'node:child_process'
+import { readFile, rm } from 'node:fs/promises'
+import { join } from 'node:path'
+import { promisify } from 'node:util'
+
 import { Effect, Exit, Option, Schema } from 'effect'
 import { describe, expect, expectTypeOf, it } from 'vitest'
 
 import { dayAt } from '#/domains/assistant/entities'
+import { Sandbox, systemFolder } from '#/repositories/agent/sandbox/sandbox'
 import type { SessionRequired, SignedOut } from '#/domains/iam/errors'
 import type { KeyProof, Session } from '#/domains/iam/iam'
 
@@ -45,7 +51,7 @@ function request(signedIn: boolean | 'by key' = true) {
     await Promise.all(pending)
     return outcome
   }
-  return { context, call }
+  return { account, context, call }
 }
 
 /** The value of a call that must succeed. */
@@ -201,6 +207,50 @@ describe("Assistant's server functions", () => {
       SignedOut | SessionRequired
     >()
     expectTypeOf<Errors<typeof Assistant.latest>>().toEqualTypeOf<SignedOut | SessionRequired>()
+  })
+})
+
+describe("the System in the Account's sandbox", () => {
+  /**
+   * Writes the Account's System into its sandbox, the one on this machine, as a Turn will, and
+   * answers where each Tile lives, and the System folder of the sandbox, to read.
+   */
+  const inSandbox = (accountId: string) =>
+    Effect.gen(function* () {
+      const places = yield* Assistant.systemInSandbox(accountId)
+      const box = yield* Sandbox.use((sandbox) => sandbox.ensure(accountId))
+      return { places: Object.fromEntries(places), folder: join(box.home, systemFolder) }
+    })
+
+  it('holds the export of its Root, each Tile where Mapping places it, and nothing it held before', async () => {
+    const { account, call } = request()
+    const { root } = await value(call(Mapping.system))
+    await value(call(Mapping.editTile({ id: root.id, version: 1, title: 'Ada' })))
+    const games = await value(
+      call(Mapping.createTile({ parent: root.id, slot: 3, title: 'Games', preview: '', body: '' })),
+    )
+    const before = await value(call(inSandbox(account.id)))
+    try {
+      expect(before.places).toEqual({
+        [root.id]: { folder: '', file: 'CLAUDE.md' },
+        [games.id]: { folder: '3-games', file: '3-games/CLAUDE.md' },
+      })
+      const file = await readFile(join(before.folder, '3-games/CLAUDE.md'), 'utf8')
+      expect(file).toContain(`id: ${games.id}`)
+      expect(file).toContain('title: Games')
+
+      await value(call(Mapping.moveTile({ id: games.id, version: 1, parent: root.id, slot: 5 })))
+      const after = await value(call(inSandbox(account.id)))
+      expect(after.folder).toBe(before.folder)
+      expect(after.places[games.id]).toEqual({ folder: '5-games', file: '5-games/CLAUDE.md' })
+      await expect(readFile(join(after.folder, '5-games/CLAUDE.md'), 'utf8')).resolves.toContain(
+        `id: ${games.id}`,
+      )
+      await expect(readFile(join(after.folder, '3-games/CLAUDE.md'))).rejects.toThrow()
+    } finally {
+      await promisify(execFile)('chmod', ['-R', 'u+w', before.folder])
+      await rm(join(before.folder, '..'), { recursive: true, force: true })
+    }
   })
 })
 
