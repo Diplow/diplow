@@ -18,7 +18,10 @@ import * as Assistant from './programs'
 // `entitled@example.com`), its Key taken by `/mcp`, whose writes the timeline labels "Assistant",
 // then refused once the Turn ended, or expired; and refused wherever only a Session may act.
 
-/** Someone signed up with this email, and a request their Session proves. */
+/**
+ * Someone signed up with this email, a request their Session proves, a Message they posted, and their
+ * Root, the Tile a Turn starts in.
+ */
 async function signedUp(email: string) {
   const device = browser()
   const context = (): StartContext => ({
@@ -33,7 +36,8 @@ async function signedUp(email: string) {
   const session = await value(run(context(), Iam.proven))
   const signedIn: StartContext = { ...context(), session: Exit.succeed(session) }
   const asked = await value(run(signedIn, Assistant.postMessage({ text: 'Name my vault.' })))
-  return { signedIn, message: asked.id }
+  const { root } = await value(run(signedIn, Mapping.system))
+  return { signedIn, message: asked.id, location: root.id }
 }
 
 /** A request whose Bearer header carries `secret`, as `/mcp` proves it: its Key, no Session. */
@@ -82,13 +86,11 @@ async function changesRecorded(signedIn: StartContext, count: number) {
   throw new Error(`Fewer than ${String(count)} Changes were recorded`)
 }
 
-const location = 'tile-1'
-
 describe('a Turn and its Key', () => {
   const entitled = signedUp('entitled@example.com')
 
   it("starts from a Session entitled to the Assistant, with its Key, which `/mcp` takes and the timeline labels 'Assistant'", async () => {
-    const { signedIn, message } = await entitled
+    const { signedIn, message, location } = await entitled
     const { root } = await value(run(signedIn, Mapping.system))
     const { turn, key } = await value(run(signedIn, Assistant.startTurn({ message, location })))
     expect(turn).toMatchObject({ message, location, spent: 0 })
@@ -121,7 +123,7 @@ describe('a Turn and its Key', () => {
   })
 
   it('runs one at a time in a Conversation', async () => {
-    const { signedIn, message } = await entitled
+    const { signedIn, message, location } = await entitled
     const { turn } = await value(run(signedIn, Assistant.startTurn({ message, location })))
     expect(await run(signedIn, Assistant.startTurn({ message, location }))).toMatchObject({
       ok: false,
@@ -132,7 +134,7 @@ describe('a Turn and its Key', () => {
   })
 
   it('is refused, with its Key, wherever only a Session may act, a Turn started from it included', async () => {
-    const { signedIn, message } = await entitled
+    const { signedIn, message, location } = await entitled
     const { turn, key } = await value(run(signedIn, Assistant.startTurn({ message, location })))
     const byKey = await byBearer(Redacted.value(key.secret))
     const sessionOnly: ReadonlyArray<Effect.Effect<unknown, Failure, Services>> = [
@@ -154,6 +156,17 @@ describe('a Turn and its Key', () => {
     await value(run(signedIn, Assistant.endTurn(accountId, turn.id, 'stopped')))
   })
 
+  it("starts only in a Tile of the Account's own System", async () => {
+    const { signedIn, message } = await entitled
+    const stranger = await signedUp(`${crypto.randomUUID()}@example.com`)
+    for (const location of [stranger.location, crypto.randomUUID()]) {
+      expect(await run(signedIn, Assistant.startTurn({ message, location }))).toMatchObject({
+        ok: false,
+        failure: { _tag: 'TileNotFound', kind: 'NotFound' },
+      })
+    }
+  })
+
   it('proves nothing past its expiry', async () => {
     const { signedIn } = await entitled
     const turn = { conversationId: crypto.randomUUID(), turnId: crypto.randomUUID() }
@@ -171,7 +184,7 @@ describe('a Turn and its Key', () => {
     const { signedIn: entitledIn } = await entitled
     expect(await value(run(entitledIn, Assistant.assistantAvailable))).toBe(true)
 
-    const { signedIn, message } = await signedUp(`${crypto.randomUUID()}@example.com`)
+    const { signedIn, message, location } = await signedUp(`${crypto.randomUUID()}@example.com`)
     expect(await value(run(signedIn, Assistant.assistantAvailable))).toBe(false)
     expect(await run(signedIn, Assistant.startTurn({ message, location }))).toMatchObject({
       ok: false,
@@ -188,7 +201,7 @@ describe('a Turn and its Key', () => {
       session: noSession,
       key: noKey,
     }
-    expect(await run(nobody, Assistant.startTurn({ message: 'm', location }))).toMatchObject({
+    expect(await run(nobody, Assistant.startTurn({ message: 'm', location: 't' }))).toMatchObject({
       ok: false,
       failure: { _tag: 'SignedOut' },
     })

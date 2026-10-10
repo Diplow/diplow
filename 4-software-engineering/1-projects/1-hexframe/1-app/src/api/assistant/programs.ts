@@ -9,6 +9,7 @@ import { Effect } from 'effect'
 import * as Assistant from '#/domains/assistant/assistant'
 import { type TurnEnd, visitedTiles } from '#/domains/assistant/entities'
 import * as Iam from '#/domains/iam/iam'
+import { TileNotFound } from '#/domains/mapping/errors'
 import * as Mapping from '#/domains/mapping/mapping'
 import { HttpExchange } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
@@ -102,8 +103,9 @@ export const assistantAvailable = Effect.flatMap(Iam.sessionOnly, ({ account }) 
 /**
  * Starts a Turn answering one of the Account's Messages, by its Entry's id, in the Tile `location`
  * names, and issues its Key, in one transaction: from a Session only, so neither a Key nor a Turn
- * starts one; for an Account with the `assistant` Entitlement, else `EntitlementMissing`; and while no
- * other runs in its Conversation, else `TurnRunning`. Answers the Turn and its Key, whose secret goes
+ * starts one; for an Account with the `assistant` Entitlement, else `EntitlementMissing`; in a Tile of
+ * the Account's own System, else Mapping's `TileNotFound`; and while no other runs in its
+ * Conversation, else `TurnRunning`. Answers the Turn and its Key, whose secret goes
  * to the sandbox's processes alone, and which proves the Turn until its maximum length has passed. No
  * server function's yet: the code that runs the Turn calls it, and the secret never reaches a browser.
  */
@@ -111,6 +113,8 @@ export const startTurn = (start: { message: string; location: string }) =>
   Effect.gen(function* () {
     const { account } = yield* Iam.sessionOnly
     yield* Iam.entitledOnly(account, 'assistant')
+    const titled = yield* Mapping.titles(account.id, [start.location])
+    if (!(start.location in titled)) return yield* new TileNotFound()
     return yield* transactional(
       Effect.gen(function* () {
         const turn = yield* Assistant.startTurn(account.id, start)

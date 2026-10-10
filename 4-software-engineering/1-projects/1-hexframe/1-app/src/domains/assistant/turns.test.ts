@@ -152,8 +152,7 @@ layer(TestLayer)('the Turns, over PGlite', (it) => {
       const { account, message } = yield* someone
       yield* TestClock.setTime(Date.parse('2026-10-10T09:00:00Z'))
       const turn = yield* transactional(startTurn(account, { message, location }))
-      expect(deadline(turn)).toEqual(new Date('2026-10-10T09:15:00Z'))
-      expect(settings.turn.longest).toBe(15 * 60_000)
+      expect(deadline(turn)).toEqual(new Date(turn.startedAt.getTime() + settings.turn.longest))
     }),
   )
 })

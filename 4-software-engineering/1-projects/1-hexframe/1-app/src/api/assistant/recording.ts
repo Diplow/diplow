@@ -11,7 +11,6 @@ import type { Actor } from '#/domains/assistant/entities'
 import { keyName, type SignedIn } from '#/domains/iam/iam'
 import * as Mapping from '#/domains/mapping/mapping'
 import { MappingEvent } from '#/domains/mapping/operations'
-import type { Auth } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
 
 import { on } from '../server/bus'
@@ -20,12 +19,12 @@ import { on } from '../server/bus'
  * Who acted, as the timeline shows it: "you" for a Session, a Key by its name, read now, and the
  * Assistant for a Turn's Key.
  */
-const actorOf = ({ account, by }: SignedIn): Effect.Effect<Actor, never, Auth> => {
+const actorOf = ({ account, by }: SignedIn) => {
   switch (by._tag) {
     case 'Session':
-      return Effect.succeed({ _tag: 'You' })
+      return Effect.succeed<Actor>({ _tag: 'You' })
     case 'TurnKey':
-      return Effect.succeed({ _tag: 'Assistant' })
+      return Effect.succeed<Actor>({ _tag: 'Assistant' })
     case 'Key':
       return Effect.map(keyName(account.id, by.keyId), (name) =>
         Option.match(name, {
