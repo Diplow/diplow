@@ -4,9 +4,12 @@
 // went. The conversations repository keeps the Entries (src/repositories/database/conversations/);
 // Assistant decides what each Entry says and when it dates from. It knows no Tile: the API layer hands
 // it Mapping's summary of each change, and Assistant records it as it came, with who acted. Every
-// write runs in the transaction the API layer opens around it: its type requires one.
+// write runs in the transaction the API layer opens around it: its type requires one. And the
+// Account's sandbox, where a Turn will run (src/repositories/agent/sandbox/), holding the System as
+// the files Mapping writes it as, which Assistant keeps as they came.
 import { Clock, Effect, Schema } from 'effect'
 
+import { Sandbox, type SandboxFile } from '#/repositories/agent/sandbox/sandbox'
 import { Conversations } from '#/repositories/database/conversations/conversations'
 
 import {
@@ -89,3 +92,14 @@ export const recordNavigation = (accountId: string, navigation: Navigation, ago:
  */
 export const recordChange = (accountId: string, summarized: Summarized, actor: Actor) =>
   record(accountId, { ...summarized, actor })
+
+/**
+ * Writes the System, as the files Mapping wrote it as, into the Account's sandbox, ensured first: the
+ * whole of its System folder, whatever it held before gone, then read-only. What a Turn reads at its
+ * start; what changed since, it reads through the MCP.
+ */
+export const writeSystem = (accountId: string, files: ReadonlyArray<SandboxFile>) =>
+  Effect.flatMap(
+    Sandbox.use((sandbox) => sandbox.ensure(accountId)),
+    (box) => box.replaceSystem(files),
+  )

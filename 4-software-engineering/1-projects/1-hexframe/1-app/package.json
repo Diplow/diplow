@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@better-auth/api-key": "^1.7.7",
+    "@blaxel/core": "^0.3.25",
     "@effect/sql-pg": "4.0.0-rc.117",
     "@modelcontextprotocol/server": "^2.3.0",
     "@sentry/tanstackstart-react": "^11.1.0",

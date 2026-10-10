@@ -25,7 +25,8 @@ function upward(root: string, tiers: string[][]): NonNullable<IConfiguration['fo
   })
 }
 
-// Each third-party SDK is imported by its repository alone; the rest of the app sees it through that seam.
+// Each third-party SDK is imported by its repository alone, by its folder under src/repositories/; the
+// rest of the app sees it through that seam.
 const sdks = {
   database: [
     'drizzle-orm',
@@ -37,6 +38,7 @@ const sdks = {
   auth: ['better-auth', '@better-auth/.+', 'stripe'],
   observability: ['@sentry/.+', 'posthog-js', 'posthog-node'],
   zip: ['fflate'],
+  'agent/sandbox': ['@blaxel/core'],
 }
 
 // The UI libraries behind the design system: only src/front/ui/ imports them, and a feature builds from ui/.
@@ -84,7 +86,7 @@ const pureModel = [
 
 const sdkOutsideItsRepository: IConfiguration['forbidden'] = Object.entries(sdks).map(
   ([repository, modules]) => ({
-    name: `no-${repository}-sdk-outside-its-repository`,
+    name: `no-${repository.replaceAll('/', '-')}-sdk-outside-its-repository`,
     comment: `${modules.join(', ')}: imported by src/repositories/${repository}/ only.`,
     severity: 'error',
     from: { pathNot: `^src/repositories/${repository}/` },

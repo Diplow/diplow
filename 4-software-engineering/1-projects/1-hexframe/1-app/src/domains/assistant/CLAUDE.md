@@ -7,7 +7,8 @@ preview: >-
   behalf. Its Conversation first: one per Account, a continuous timeline read a
   day at a time, holding the Messages, every change to the System whoever made
   it, the imports, and where the user went, consecutive navigations merged into
-  one Entry. Knows no Tile; over the conversations repository. Turns, Mode and
+  one Entry. Knows no Tile; over the conversations repository. And the
+  Account's sandbox, holding the System as files a Turn reads. Turns, Mode and
   Proposals come next.
 ---
 # assistant
@@ -25,7 +26,7 @@ Assistant knows no Tile. A change and an import are recorded as Mapping summariz
 
 | File | Holds |
 |---|---|
-| `assistant.ts` | The application service, Assistant's entry, which the API layer calls: `day`, the Entries of one day of the Account's Conversation, oldest first; `before`, the instant of the latest Entry before a day, where a reader scrolling back goes next, the empty days between skipped; `lastEntry`, the id of the Entry last recorded, whatever instant it dates from, a navigation dated back included, which a reader compares with the one it read to know the Conversation moved; `today`, the day a reader's clock shows now; and an operation per kind of Entry Assistant records, each shaping its own Entry in the transaction the API layer opened: `postMessage`, the user's Message; `recordNavigation`, a merged navigation, dated `ago` milliseconds before now, a day at most and never ahead; `recordChange`, a change or an import as Mapping summarized it (`Summarized`, the shape Assistant reads Mapping's summary by), with who acted |
+| `assistant.ts` | The application service, Assistant's entry, which the API layer calls: `day`, the Entries of one day of the Account's Conversation, oldest first; `before`, the instant of the latest Entry before a day, where a reader scrolling back goes next, the empty days between skipped; `lastEntry`, the id of the Entry last recorded, whatever instant it dates from, a navigation dated back included, which a reader compares with the one it read to know the Conversation moved; `today`, the day a reader's clock shows now; and an operation per kind of Entry Assistant records, each shaping its own Entry in the transaction the API layer opened: `postMessage`, the user's Message; `recordNavigation`, a merged navigation, dated `ago` milliseconds before now, a day at most and never ahead; `recordChange`, a change or an import as Mapping summarized it (`Summarized`, the shape Assistant reads Mapping's summary by), with who acted. And `writeSystem`, the System, as the files Mapping wrote it as, kept as they came, written into the Account's sandbox, ensured first, the whole of its System folder, read-only, through the sandbox repository ([[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/CLAUDE\|sandbox]]) |
 | `assistant.test.ts` | The Conversation over the conversations repository, for real, over PGlite, on the test's clock: every kind of Entry read back as it was recorded, a day from its reader's midnight to the next, Entries of one instant in the order written, an Entry dated back a day at most and never ahead, another Account's Conversation out of reach, the latest Entry before a day across empty days and a reader's offset, and the Entry last recorded, a navigation dated back included |
 
 | Folder | Holds |

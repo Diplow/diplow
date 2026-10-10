@@ -186,6 +186,28 @@ describe('the MCP SDK boundary', () => {
   })
 })
 
+describe('the sandbox SDK boundary', () => {
+  const rule = depcruise.forbidden?.find(
+    ({ name }) => name === 'no-agent-sandbox-sdk-outside-its-repository',
+  ) as { from: { pathNot: string }; to: { path: string } } | undefined
+  const to = new RegExp(rule?.to.path ?? '$^')
+  const exempt = new RegExp(rule?.from.pathNot ?? '$^')
+
+  it.each([
+    '@blaxel/core',
+    '../node_modules/.pnpm/@blaxel+core@0.3.25/node_modules/@blaxel/core/dist/esm/index.js',
+  ])('holds back %s', (module) => {
+    expect(to.test(module)).toBe(true)
+  })
+
+  it('exempts the sandbox repository and nothing else, its agent/ sibling included', () => {
+    expect(exempt.test('src/repositories/agent/sandbox/blaxel.ts')).toBe(true)
+    expect(exempt.test('src/repositories/agent/anthropic/relay.ts')).toBe(false)
+    expect(exempt.test('src/domains/assistant/assistant.ts')).toBe(false)
+    expect(exempt.test('src/api/server/run.ts')).toBe(false)
+  })
+})
+
 describe('the .ts import lint', () => {
   const tsImport = /No \.ts or \.tsx in an import path under src\//
 
