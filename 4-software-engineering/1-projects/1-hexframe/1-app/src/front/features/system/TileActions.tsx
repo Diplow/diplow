@@ -93,7 +93,7 @@ export function TileActions({ system, tree, search, onSearchChange }: TileAction
             // The centered Tile goes at once, and everything below it: the view centers on the Tile
             // it stood under, and a change under way ends only if it named one of the Tiles gone.
             onDelete: () => {
-              remove.mutate({ id: found.tile.id })
+              remove.mutate({ id: found.tile.id, version: found.tile.version })
               onSearchChange((current) =>
                 withoutTile(withView(current, centerOn(tree, parent.id)), center),
               )
@@ -401,7 +401,7 @@ function EditTileForm({
   tile,
   refilled,
   onSent,
-}: FormOptions & { tile: TileContent & { id: string } }) {
+}: FormOptions & { tile: TileContent & Pick<SystemTile, 'id' | 'version'> }) {
   const submit = useEditTileSubmit(tile)
   const { title, preview, body } = tile
   return (

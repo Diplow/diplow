@@ -74,24 +74,24 @@ export const content = (title: string) => ({
  */
 export async function aSystem(signedIn: StartContext) {
   const {
-    root: { id },
+    root: { id, version },
   } = await value(run(signedIn, Mapping.system))
-  const root = await value(run(signedIn, Mapping.editTile({ id, ...content('Ada') })))
+  const named = await value(run(signedIn, Mapping.editTile({ id, version, ...content('Ada') })))
   const create = (
     parent: string,
     slot: Parameters<typeof Mapping.createTile>[0]['slot'],
     title: string,
   ) => value(run(signedIn, Mapping.createTile({ parent, slot, ...content(title) })))
-  const child = await create(root.id, 1, 'Frontend')
+  const child = await create(named.id, 1, 'Frontend')
   const grandchild = await create(child.id, 2, 'Routes')
-  const principles = await create(root.id, -1, 'Principles')
-  const gone = await create(root.id, 6, 'Gone')
-  await value(
-    run(signedIn, Mapping.createReference({ parent: root.id, slot: -2, target: child.id })),
-  )
-  await value(
-    run(signedIn, Mapping.createReference({ parent: root.id, slot: -3, target: gone.id })),
-  )
-  await value(run(signedIn, Mapping.deleteTile({ id: gone.id })))
+  const principles = await create(named.id, -1, 'Principles')
+  const gone = await create(named.id, 6, 'Gone')
+  // Each Reference counts on the Root's Version, as the Tile whose Context slot it takes.
+  const refer = (slot: -2 | -3, target: string, parentVersion: number) =>
+    value(run(signedIn, Mapping.createReference({ parent: id, parentVersion, slot, target })))
+  await refer(-2, child.id, named.version)
+  await refer(-3, gone.id, named.version + 1)
+  await value(run(signedIn, Mapping.deleteTile({ id: gone.id, version: gone.version })))
+  const root = { ...named, version: named.version + 2 }
   return { root, child, grandchild, principles, gone }
 }

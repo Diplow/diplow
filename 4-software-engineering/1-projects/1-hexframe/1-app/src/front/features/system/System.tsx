@@ -25,7 +25,7 @@ import {
 } from './search/search'
 import type { System as FlatSystem } from '#/domains/mapping/entities'
 
-import { slotOf, swapOf, swapsWith } from './tree'
+import { moveOf, slotOf, swapOf, swapsWith } from './tree'
 
 interface SystemProps {
   /** The System as the page shows it, flat, which Mapping's `decide` rules on. */
@@ -77,29 +77,34 @@ export function System({ system, tree, search, onSearchChange, className }: Syst
     onSearchChange((current) => withChange(current, { kind: 'none' }))
   }
 
+  // Each write names the Version of every Tile it changes as the canvas drew it, so a change made
+  // meanwhile elsewhere refuses it rather than being overwritten.
   const moveHere = (tile: TileNode) => (target: EmptySlotTarget) => {
     const place = placeOf(target, tile)
-    if (place === undefined) return undefined
+    const moved = place === undefined ? undefined : moveOf(system, tile.id, place)
+    if (moved === undefined) return undefined
     const names = { tile: tile.title, title: target.parent.title }
     return {
       label: target.ring === 'context' ? m.system_move_context(names) : m.system_move_child(names),
       onSelect: () => {
-        move.mutate({ id: tile.id, ...place })
+        move.mutate(moved)
         sent()
       },
     }
   }
 
-  const swapWith = (moving: TileNode) => (held: TileNode) =>
-    swapsWith(system, moving, held)
+  const swapWith = (moving: TileNode) => (held: TileNode) => {
+    const swapped = swapOf(system, moving.id, held.id)
+    return swapped !== undefined && swapsWith(system, moving, held)
       ? {
           label: m.system_swap_with({ title: held.title }),
           onSelect: () => {
-            swap.mutate(swapOf(moving.id, held.id))
+            swap.mutate(swapped)
             sent()
           },
         }
       : undefined
+  }
 
   return (
     <div className={cn('flex flex-col gap-2', className)}>

@@ -17,12 +17,17 @@ vi.mock('../run', async (original) => {
 // tiles over PGlite: an Account signs up, issues a Key, and an agent reads its System with it. The
 // writes have their own file, ./writes.test.ts.
 
-const glimpse = ({ id, title, preview }: { id: string; title: string; preview: string }) => ({
-  _tag: 'Tile',
+const glimpse = ({
   id,
+  version,
   title,
   preview,
-})
+}: {
+  id: string
+  version: number
+  title: string
+  preview: string
+}) => ({ _tag: 'Tile', id, version, title, preview })
 
 describe('the tool table, as an agent lists it', () => {
   it.each(['legacy', 'auto'] as const)(
@@ -47,12 +52,28 @@ describe('the tool table, as an agent lists it', () => {
           annotations: write,
           required: ['parent', 'slot', 'title', 'preview', 'body'],
         },
-        { name: 'edit_tile', annotations: write, required: ['id'] },
-        { name: 'move_tile', annotations: write, required: ['id', 'parent', 'slot'] },
-        { name: 'swap_tiles', annotations: write, required: ['a', 'b'] },
-        { name: 'delete_tile', annotations: erase, required: ['id'] },
-        { name: 'create_reference', annotations: write, required: ['parent', 'slot', 'target'] },
-        { name: 'delete_reference', annotations: erase, required: ['parent', 'slot'] },
+        { name: 'edit_tile', annotations: write, required: ['id', 'version'] },
+        {
+          name: 'move_tile',
+          annotations: write,
+          required: ['id', 'version', 'parent', 'slot'],
+        },
+        {
+          name: 'swap_tiles',
+          annotations: write,
+          required: ['a', 'aVersion', 'b', 'bVersion'],
+        },
+        { name: 'delete_tile', annotations: erase, required: ['id', 'version'] },
+        {
+          name: 'create_reference',
+          annotations: write,
+          required: ['parent', 'parentVersion', 'slot', 'target'],
+        },
+        {
+          name: 'delete_reference',
+          annotations: erase,
+          required: ['parent', 'parentVersion', 'slot'],
+        },
       ])
       for (const tool of tools) {
         expect(tool.description).toMatch(/Tile/)
@@ -84,7 +105,21 @@ describe('the tool table, as an agent lists it', () => {
     }
     for (const name of ['open_tile', 'map']) {
       expect(description(name)).toMatch(/Help, hexframe's own guide, .+ id "help"/)
+      expect(description(name)).toMatch(/Every Tile carries its `version`/)
     }
+    for (const name of [
+      'edit_tile',
+      'move_tile',
+      'swap_tiles',
+      'delete_tile',
+      'create_reference',
+      'delete_reference',
+    ]) {
+      expect(description(name)).toMatch(
+        /TileChanged: the Tile changed since you read it, .+ open_tile it again/,
+      )
+    }
+    expect(description('create_tile')).not.toMatch(/TileChanged/)
     expect(description('create_tile')).toMatch(
       /6 Branches and 6 Leaves at most, so one more of either is refused: regroup .+ by moving them/,
     )
@@ -147,7 +182,7 @@ describe('the MCP endpoint', () => {
     const opened = await call(client, 'open_tile')
     expect(opened).toEqual({
       value: {
-        tile: { _tag: 'Tile', id: root.id, ...content('Ada') },
+        tile: { _tag: 'Tile', id: root.id, version: root.version, ...content('Ada') },
         parent: null,
         branches: { 1: glimpse(child) },
         leaves: {},
@@ -170,7 +205,7 @@ describe('the MCP endpoint', () => {
     const client = await connect(bearer(secret))
     expect(await call(client, 'open_tile', { id: child.id, fields: ['title'] })).toEqual({
       value: {
-        tile: { _tag: 'Tile', id: child.id, title: 'Frontend' },
+        tile: { _tag: 'Tile', id: child.id, version: child.version, title: 'Frontend' },
         parent: { id: root.id, title: 'Ada' },
         branches: { 2: glimpse(grandchild) },
         leaves: {},
@@ -196,7 +231,7 @@ describe('the MCP endpoint', () => {
     expect(JSON.stringify(mapped)).not.toContain('# ')
     expect(await call(client, 'map', { id: child.id, depth: 0, fields: ['body'] })).toEqual({
       value: {
-        tile: { _tag: 'Tile', id: child.id, body: '# Frontend' },
+        tile: { _tag: 'Tile', id: child.id, version: child.version, body: '# Frontend' },
         parent: { id: root.id, title: 'Ada' },
       },
     })

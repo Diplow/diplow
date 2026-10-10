@@ -17,6 +17,15 @@ export class TileIdTaken extends Schema.TaggedError<TileIdTaken>()('TileIdTaken'
   kind: kind('Conflict'),
 }) {}
 
+/**
+ * The Tile a write names changed since its writer read it: its Version is no longer the one the write
+ * carries, whoever changed it meanwhile. Nothing is written; the writer reads the Tile again, then
+ * writes from what it read, so it never overwrites what it never saw.
+ */
+export class TileChanged extends Schema.TaggedError<TileChanged>()('TileChanged', {
+  kind: kind('Conflict'),
+}) {}
+
 /** A Tile's Title is empty. */
 export class TitleMissing extends Schema.TaggedError<TitleMissing>()('TitleMissing', invalid) {}
 
@@ -137,6 +146,7 @@ export const mappingFailures = [
   NameInvalid,
   DirectionTaken,
   TileIdTaken,
+  TileChanged,
   MovedUnderItself,
   LeafHoldsNothing,
   RootFixed,

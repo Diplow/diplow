@@ -17,10 +17,11 @@ type StoredFrontmatter = Readonly<Record<string, string | number | boolean>>
 /**
  * One row of a System. A Root has no parent and no direction; a row with a `target` is a Reference to
  * the row of that id. `name`, `config` and `frontmatter` are what an imported file carried, null when
- * it carried nothing.
+ * it carried nothing. `version` is its Tile's Version; a Reference's stays 1, unread.
  */
 export interface Row extends Content {
   readonly id: string
+  readonly version: number
   readonly parentId: string | null
   readonly direction: number | null
   readonly target: string | null
@@ -33,12 +34,13 @@ export interface Row extends Content {
 export type KeptPart = 'name' | 'config' | 'frontmatter'
 
 /**
- * A row as a read from one Tile finds it: where it stands, whether it is a Reference, and, apart, only
- * the fields of its content asked. The repository selects such a row flat (`TileRowWith`), and
+ * A row as a read from one Tile finds it: where it stands, whether it is a Reference, its Version, and,
+ * apart, only the fields of its content asked. The repository selects such a row flat (`TileRowWith`), and
  * `withContent` nests it here, as it nests one of Help's notes.
  */
 export interface RowWith<F extends keyof Content> {
   readonly id: string
+  readonly version: number
   readonly parentId: string | null
   readonly direction: number | null
   readonly target: string | null
@@ -70,10 +72,18 @@ export function contentWith<F extends keyof Content>(
 export const withContent = <F extends keyof Content>(
   {
     id,
+    version,
     parentId,
     direction,
     target,
     ...content
   }: Omit<Row, keyof Content | KeptPart> & Partial<Content>,
   fields: ReadonlyArray<F>,
-): RowWith<F> => ({ id, parentId, direction, target, content: contentWith(content, fields) })
+): RowWith<F> => ({
+  id,
+  version,
+  parentId,
+  direction,
+  target,
+  content: contentWith(content, fields),
+})

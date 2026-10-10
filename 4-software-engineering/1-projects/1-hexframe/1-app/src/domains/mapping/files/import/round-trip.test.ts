@@ -27,6 +27,7 @@ const row = (id: string, parentId: string | null, direction: number | null): Til
   title: id,
   preview: `${id}, in short.`,
   body: `# ${id}\n\nLine two.\n`,
+  version: 1,
   target: null,
   ...keepsNothing,
 })
@@ -166,6 +167,7 @@ function systemOfPlan(
   const found = (planned: PlannedTile | PlannedLeaf) => ({
     _tag: 'Tile' as const,
     id: idOf(planned.path),
+    version: 1,
     ...content(planned),
     ...(planned.name === undefined ? {} : { name: planned.name }),
   })

@@ -59,13 +59,14 @@ const placed = (tileId: string, title: string, slot: PlacedTile['slot']): Placed
   title,
   preview: `What ${title} is`,
   body: `# ${title}`,
+  version: 1,
   parent: id.root,
   slot,
 })
 
 /** The System as the server reads it: Branches `A` and `B` in Directions 1 and 2, a Leaf in 3. */
 const served: System = {
-  root: { _tag: 'Tile', id: id.root, title: 'Me', preview: '', body: '' },
+  root: { _tag: 'Tile', id: id.root, title: 'Me', preview: '', body: '', version: 1 },
   tiles: {
     [id.a]: placed(id.a, 'A', 1),
     [id.b]: placed(id.b, 'B', 2),
@@ -196,7 +197,7 @@ describe('a refused edit', () => {
     vi.mocked(Mapping.editTile).mockResolvedValue(titleMissing)
     const page = await rendered()
     page.send(() => {
-      page.result.current.edit.mutate({ id: id.b, title: ' ' })
+      page.result.current.edit.mutate({ id: id.b, version: 1, title: ' ' })
     })
     await waitFor(() => {
       expect(changeOf(page.url())).toEqual({ kind: 'edit', id: id.b })
@@ -213,7 +214,7 @@ describe('a refused move or swap', () => {
     vi.mocked(Mapping.moveTile).mockResolvedValue(directionTaken)
     const page = await rendered()
     page.send(() => {
-      page.result.current.move.mutate({ id: id.a, parent: id.root, slot: 5 })
+      page.result.current.move.mutate({ id: id.a, version: 1, parent: id.root, slot: 5 })
     })
     await waitFor(() => {
       expect(changeOf(page.url())).toEqual({ kind: 'move', id: id.a })
@@ -226,7 +227,7 @@ describe('a refused move or swap', () => {
     vi.mocked(Mapping.swapTiles).mockResolvedValue(directionTaken as never)
     const page = await rendered()
     page.send(() => {
-      page.result.current.swap.mutate({ a: id.b, b: id.a })
+      page.result.current.swap.mutate({ a: id.b, aVersion: 1, b: id.a, bVersion: 1 })
     })
     await waitFor(() => {
       expect(changeOf(page.url())).toEqual({ kind: 'move', id: id.b })
@@ -237,7 +238,7 @@ describe('a refused move or swap', () => {
     vi.mocked(Mapping.moveTile).mockResolvedValue(directionTaken)
     const page = await rendered()
     page.send(() => {
-      page.result.current.move.mutate({ id: id.notes, parent: id.root, slot: -3 })
+      page.result.current.move.mutate({ id: id.notes, version: 1, parent: id.root, slot: -3 })
     })
     await waitFor(() => {
       expect(changeOf(page.url())).toEqual({ kind: 'move', id: id.notes })
@@ -247,7 +248,7 @@ describe('a refused move or swap', () => {
   it('brings no move back for a swap whose moving Tile is gone', async () => {
     const page = await rendered()
     page.send(() => {
-      page.result.current.swap.mutate({ a: crypto.randomUUID(), b: id.a })
+      page.result.current.swap.mutate({ a: crypto.randomUUID(), aVersion: 1, b: id.a, bVersion: 1 })
     })
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledOnce()
@@ -259,7 +260,7 @@ describe('a refused move or swap', () => {
     vi.mocked(Mapping.moveTile).mockResolvedValue(directionTaken)
     const page = await rendered()
     act(() => {
-      page.result.current.move.mutate({ id: id.notes, parent: id.root, slot: 3 })
+      page.result.current.move.mutate({ id: id.notes, version: 1, parent: id.root, slot: 3 })
     })
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledOnce()
@@ -275,7 +276,7 @@ describe('a refused delete', () => {
     const page = await rendered()
     page.navigate({ center: id.a })
     act(() => {
-      page.result.current.remove.mutate({ id: id.b })
+      page.result.current.remove.mutate({ id: id.b, version: 1 })
     })
     await waitFor(() => {
       expect(page.result.current.shown?.tiles[id.b]).toBeUndefined()
@@ -297,10 +298,10 @@ describe('refusals in turn', () => {
       .mockReturnValueOnce(second.promise)
     const page = await rendered()
     page.send(() => {
-      page.result.current.move.mutate({ id: id.a, parent: id.root, slot: 5 })
+      page.result.current.move.mutate({ id: id.a, version: 1, parent: id.root, slot: 5 })
     })
     page.send(() => {
-      page.result.current.move.mutate({ id: id.b, parent: id.root, slot: 6 })
+      page.result.current.move.mutate({ id: id.b, version: 1, parent: id.root, slot: 6 })
     })
     first.settle(directionTaken)
     await waitFor(() => {
@@ -329,7 +330,7 @@ describe('refusals in turn', () => {
       })
     })
     page.send(() => {
-      page.result.current.move.mutate({ id: id.b, parent: id.root, slot: 6 })
+      page.result.current.move.mutate({ id: id.b, version: 1, parent: id.root, slot: 6 })
     })
     created.settle(directionTaken)
     await waitFor(() => {
@@ -377,7 +378,7 @@ describe('a refusal arriving once the user went elsewhere', () => {
     vi.mocked(Mapping.moveTile).mockReturnValue(moved.promise)
     const page = await rendered()
     page.send(() => {
-      page.result.current.move.mutate({ id: id.a, parent: id.root, slot: 5 })
+      page.result.current.move.mutate({ id: id.a, version: 1, parent: id.root, slot: 5 })
     })
     page.navigate((current) => ({ ...current, center: id.b }))
     moved.settle(directionTaken)
@@ -419,7 +420,7 @@ describe('a move the user has started', () => {
     vi.mocked(Mapping.moveTile).mockReturnValue(moved.promise)
     const page = await rendered()
     page.send(() => {
-      page.result.current.move.mutate({ id: id.a, parent: id.root, slot: 5 })
+      page.result.current.move.mutate({ id: id.a, version: 1, parent: id.root, slot: 5 })
     })
     page.navigate((current) => withChange(current, { kind: 'move', id: id.b }))
     moved.settle(directionTaken)
@@ -435,7 +436,7 @@ describe('a reopened form', () => {
     vi.mocked(Mapping.editTile).mockResolvedValue(titleMissing)
     const page = await rendered()
     page.send(() => {
-      page.result.current.edit.mutate({ id: id.a, title: ' ' })
+      page.result.current.edit.mutate({ id: id.a, version: 1, title: ' ' })
     })
     await waitFor(() => {
       expect(page.reopened()).toBeDefined()
@@ -450,7 +451,7 @@ describe('a reopened form', () => {
     vi.mocked(Mapping.editTile).mockResolvedValue(titleMissing)
     const page = await rendered()
     page.send(() => {
-      page.result.current.edit.mutate({ id: id.a, title: ' ' })
+      page.result.current.edit.mutate({ id: id.a, version: 1, title: ' ' })
     })
     await waitFor(() => {
       expect(page.reopened()).toBeDefined()

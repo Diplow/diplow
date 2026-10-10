@@ -18,7 +18,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import { Schema } from 'effect'
-import { useCallback, useMemo, useRef, useSyncExternalStore } from 'react'
+import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 
 import type { Failure, Outcome } from '#/api/report/errors/failure'
 import { type System, type SystemTile, systemOf } from '#/domains/mapping/entities'
@@ -73,11 +73,6 @@ const readAgain = (client: QueryClient) =>
 /** Whether a mutation is a write to the System, an import's included: one of its queue. */
 const inSystemQueue = (mutation: Mutation) => mutation.options.scope?.id === systemQueue
 
-/** What a write to the System records when it is made: the System shown then, if one had landed. */
-interface Recorded {
-  readonly before: System | undefined
-}
-
 /**
  * Each pending write read once per state of its mutation, so `useMutationState` finds the same
  * values while nothing changed: an Operation decoded again is a new object it cannot compare, and
@@ -86,8 +81,8 @@ interface Recorded {
 const pendingByState = new WeakMap<Mutation['state'], Pending>()
 
 /**
- * A pending write to the System, as the overlay folds it: its turn, the Operation it sends, read back
- * from its key and variables by Mapping's schema, and the System shown when it was made.
+ * A pending write to the System, as the overlay folds it: its turn, and the Operation it sends, read
+ * back from its key and variables by Mapping's schema.
  */
 function pendingOf(mutation: Mutation): Pending {
   const known = pendingByState.get(mutation.state)
@@ -95,25 +90,9 @@ function pendingOf(mutation: Mutation): Pending {
   const pending = {
     turn: mutation.mutationId,
     operation: operationOf(mutation.options.mutationKey?.[0], mutation.state.variables),
-    before: (mutation.state.context as Recorded | undefined)?.before,
   }
   pendingByState.set(mutation.state, pending)
   return pending
-}
-
-/**
- * The System shown as a write with these variables is made: the server's, with every write to it
- * already pending folded over it, this one aside.
- */
-function shownBefore(client: QueryClient, variables: unknown): Recorded {
-  const held = client.getQueryData(systemRead.queryKey)
-  if (held === undefined) return { before: undefined }
-  const pending = client
-    .getMutationCache()
-    .findAll({ status: 'pending', predicate: inSystemQueue })
-    .filter((mutation) => mutation.state.variables !== variables)
-    .map(pendingOf)
-  return { before: overlaid(held, pending) }
 }
 
 /**
@@ -248,7 +227,6 @@ function useSystemWrite<I, A, E extends Failure>(
       if (refusal !== undefined) return Promise.reject(new Foreseen(refusal, scope))
       return settle(scope, call(input))
     },
-    onMutate: (input: I): Recorded => shownBefore(client, input),
     onSettled: () => readAgain(client),
   })
 }
@@ -392,13 +370,18 @@ export const useCreateTileSubmit = (
 }
 
 /**
- * Submits a Tile's form through `useEditTile`: only the fields that changed are sent, so the Body of
- * an untitled Root can be written before its name.
+ * Submits a Tile's form through `useEditTile`: only the fields that changed since the form opened are
+ * sent, so the Body of an untitled Root can be written before its name, with the Version of the Tile
+ * the form opened on, kept while the form lives: a change landing meanwhile, from another tab or an
+ * agent, refuses the save rather than being overwritten by it.
  */
-export const useEditTileSubmit = (tile: TileContent & { id: string }): TileSubmit => {
+export const useEditTileSubmit = (
+  tile: TileContent & Pick<SystemTile, 'id' | 'version'>,
+): TileSubmit => {
   const { mutate } = useEditTile()
+  const [opened] = useState(tile)
   return (content) => {
-    mutate({ id: tile.id, ...changed(tile, content) })
+    mutate({ id: opened.id, version: opened.version, ...changed(opened, content) })
   }
 }
 

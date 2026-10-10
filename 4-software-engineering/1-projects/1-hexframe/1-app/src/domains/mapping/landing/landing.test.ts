@@ -160,13 +160,18 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
       const root = yield* tree(accountId)
       vaultLanded(root)
       expect(root.id).toBe(report.id)
+      // The Root now says what the import gave it, one Version on from the empty one it replaced.
+      expect(root.version).toBe(2)
       expect(report).toMatchObject({ tiles: 5, references: 1 })
       expect(yield* Effect.flip(land(accountId, { _tag: 'Root' }))).toMatchObject({
         _tag: 'DirectionTaken',
       })
       const named = yield* someone
       yield* transactional(
-        Mapping.editTile(named.accountId, new EditTile({ id: named.root.id, title: 'Ulysse' })),
+        Mapping.editTile(
+          named.accountId,
+          new EditTile({ id: named.root.id, version: 1, title: 'Ulysse' }),
+        ),
       )
       expect(yield* Effect.flip(land(named.accountId, { _tag: 'Root' }))).toMatchObject({
         _tag: 'DirectionTaken',
@@ -176,7 +181,10 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
       for (const written of [{ preview: 'Me, in short.' }, { body: '# Me' }]) {
         const untitled = yield* someone
         yield* transactional(
-          Mapping.editTile(untitled.accountId, new EditTile({ id: untitled.root.id, ...written })),
+          Mapping.editTile(
+            untitled.accountId,
+            new EditTile({ id: untitled.root.id, version: 1, ...written }),
+          ),
         )
         expect(yield* Effect.flip(land(untitled.accountId, { _tag: 'Root' }))).toMatchObject({
           _tag: 'DirectionTaken',

@@ -40,14 +40,16 @@ The tests drive the endpoint in-process. Against a real Claude Code, the accepta
 | `open_tile` | read | One Tile, the Root without an id, of the user's System or of Help, with the fields asked, its parent, and its Branches, Leaves and Context by Title and Preview | `openTile` |
 | `map` | read | The System, or Help, below a Tile, 0 to 3 generations, Title and Preview unless more is asked | `readTile` |
 | `create_tile` | write | A Tile in a free slot under another, never under a Leaf: a Branch, 1 to 6, a Leaf, `{ leaf: 1 }` to `{ leaf: 6 }`, or a Context Tile, −1 to −6; answers it with its id | `createTile` |
-| `edit_tile` | write | Any of a Tile's Title, Preview and Body; answers the Tile as it now reads | `editTile` |
-| `move_tile` | write | A Tile with everything below it, to a free slot; a Leaf grows into a Branch, and a bare Branch shrinks into a Leaf, this way | `moveTile` |
-| `swap_tiles` | write | Two Tiles trade places, each with everything below it | `swapTiles` |
-| `delete_tile` | write, destructive | A Tile and everything below it; References to them stay, broken | `deleteTile` |
-| `create_reference` | write | A Reference to a Tile, in a free Context slot | `createReference` |
-| `delete_reference` | write, destructive | Empties a Context slot that holds a Reference | `deleteReference` |
+| `edit_tile` | write | Any of a Tile's Title, Preview and Body, at the `version` read of it; answers the Tile as it now reads, at its new Version | `editTile` |
+| `move_tile` | write | A Tile with everything below it, at the `version` read of it, to a free slot; a Leaf grows into a Branch, and a bare Branch shrinks into a Leaf, this way | `moveTile` |
+| `swap_tiles` | write | Two Tiles trade places, each with everything below it, at the `aVersion` and `bVersion` read of them | `swapTiles` |
+| `delete_tile` | write, destructive | A Tile and everything below it, at the `version` read of it; References to them stay, broken | `deleteTile` |
+| `create_reference` | write | A Reference to a Tile, in a free Context slot of a Tile at the `parentVersion` read of it | `createReference` |
+| `delete_reference` | write, destructive | Empties a Context slot that holds a Reference, of a Tile at the `parentVersion` read of it | `deleteReference` |
 
 Each runs the program of `api/mapping/programs.ts` its server function runs, a write in one transaction, and takes that function's input Schema (`api/mapping/mapping.ts`), a write its Operation's fields, with each field described for an agent. `create_tile` leaves out the `id` its server function's caller may choose (`NewTileOfAgent` in `tools.ts`): an agent reads the new Tile's in the answer, and Mapping, which makes it, refuses no create for it, so the program turns a `TileIdTaken` into a defect and the description teaches none. A write that answers nothing answers `null`.
+
+**Every write to an existing Tile names the Version it read.** `open_tile` and `map` answer each Tile with its `version`, and so do `create_tile` and `edit_tile` of the Tile they answer; `edit_tile`, `move_tile` and `delete_tile` take it as `version`, `swap_tiles` as `aVersion` and `bVersion`, and the Reference writes as `parentVersion`, the Version of the Tile whose Context slot they change, each a required input. A write naming a Version its Tile no longer has, changed by the user, another client or the same agent earlier, is refused `TileChanged`, which its description teaches: read the Tile again, then decide and write from what it says now (Mapping's language, **Version**).
 
 ## Rules
 

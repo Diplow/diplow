@@ -14,7 +14,8 @@ import { type FrontmatterColumn, type TileConfigColumn, tile } from '../schema'
 /**
  * One row of the `tile` table, as the Account that owns it reads it. A Root has no parent and no
  * direction; a row with a `target` is a Reference to the row of that id. `name`, `config` and
- * `frontmatter` are what an imported file carried, null when it carried nothing.
+ * `frontmatter` are what an imported file carried, null when it carried nothing. `version` is the
+ * Tile's Version, 1 once added, which Mapping decides and a change writes.
  */
 export interface TileRow {
   readonly id: string
@@ -27,6 +28,7 @@ export interface TileRow {
   readonly name: string | null
   readonly config: TileConfigColumn | null
   readonly frontmatter: FrontmatterColumn | null
+  readonly version: number
 }
 
 /** The columns keeping what an imported file carried: null when it carried nothing. */
@@ -36,8 +38,8 @@ type KeptColumn = 'name' | 'config' | 'frontmatter'
 export type ContentColumn = 'title' | 'preview' | 'body'
 
 /**
- * A row as a read from one Tile gives it: where it stands, whether it is a Reference, and only the
- * content columns asked. Mapping shapes it (`domains/mapping/entities/rows.ts`).
+ * A row as a read from one Tile gives it: where it stands, whether it is a Reference, its Version, and
+ * only the content columns asked. Mapping shapes it (`domains/mapping/entities/rows.ts`).
  */
 export type TileRowWith<C extends ContentColumn> = Omit<TileRow, ContentColumn | KeptColumn> &
   Pick<TileRow, C>
@@ -54,8 +56,8 @@ export interface Generations<O extends ContentColumn, C extends ContentColumn> {
   readonly below: ReadonlyArray<TileRowWith<C>>
 }
 
-/** A row to add under a parent, keeping what an imported file carried or not. */
-type NewTileRow = Omit<TileRow, 'id' | 'parentId' | 'direction' | KeptColumn> &
+/** A row to add under a parent, keeping what an imported file carried or not, at Version 1. */
+type NewTileRow = Omit<TileRow, 'id' | 'parentId' | 'direction' | 'version' | KeptColumn> &
   Partial<Pick<TileRow, KeptColumn>> & {
     readonly parentId: string
     readonly direction: number
@@ -100,10 +102,13 @@ export interface Writes {
   readonly insertAll: (
     rows: ReadonlyArray<BatchRow>,
   ) => Effect.Effect<ReadonlyMap<string, string>, never, InTransaction>
-  /** Changes the columns given; with none, writes nothing. */
+  /**
+   * Changes the columns given, and always the Version Mapping decided for the row, so no change to a
+   * Tile leaves its Version behind.
+   */
   readonly update: (
     id: string,
-    changes: Partial<Omit<NewTileRow, 'target'>>,
+    changes: Partial<Omit<NewTileRow, 'target'>> & Pick<TileRow, 'version'>,
   ) => Effect.Effect<void, never, InTransaction>
   /** Deletes a row and every row below it. */
   readonly remove: (id: string) => Effect.Effect<void, never, InTransaction>
@@ -171,6 +176,9 @@ const placeColumns = {
   target: tile.target,
 }
 
+/** How many events touched a Tile: what a write names to be refused once the Tile changed since. */
+const versionColumns = { version: tile.version }
+
 /** What a Tile says. */
 const contentColumns = { title: tile.title, preview: tile.preview, body: tile.body }
 
@@ -185,7 +193,7 @@ const contentColumnsOf = <C extends ContentColumn>(asked: ReadonlyArray<C>) =>
 /** What an imported file carried. */
 const keptColumns = { name: tile.name, config: tile.config, frontmatter: tile.frontmatter }
 
-const columns = { ...placeColumns, ...contentColumns, ...keptColumns }
+const columns = { ...placeColumns, ...versionColumns, ...contentColumns, ...keptColumns }
 
 /** The rows standing under another, for a row to find what lies below it. */
 const under = alias(tile, 'under')
@@ -308,13 +316,11 @@ const make = Effect.gen(function* () {
       ),
     update: (id, changes) =>
       inTransaction(
-        Object.keys(changes).length === 0
-          ? Effect.void
-          : database
-              .update(tile)
-              .set(changes)
-              .where(and(ofAccount(accountId), eq(tile.id, id)))
-              .pipe(Effect.asVoid, Effect.orDie),
+        database
+          .update(tile)
+          .set(changes)
+          .where(and(ofAccount(accountId), eq(tile.id, id)))
+          .pipe(Effect.asVoid, Effect.orDie),
       ),
     remove: (id) =>
       inTransaction(
@@ -340,7 +346,7 @@ const make = Effect.gen(function* () {
     columns: ReadonlyArray<C>,
   ): Effect.Effect<ReadonlyArray<TileRowWith<C>>> =>
     database
-      .select({ ...placeColumns, ...contentColumnsOf(columns) })
+      .select({ ...placeColumns, ...versionColumns, ...contentColumnsOf(columns) })
       .from(tile)
       .where(and(ofAccount(accountId), where))
       .pipe(Effect.orDie)

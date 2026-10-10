@@ -31,6 +31,7 @@ import {
   type Tile,
   tileAt,
   type ToKeep,
+  type Version,
   withContent,
 } from './entities'
 import {
@@ -263,9 +264,23 @@ const decidedOn = (accountId: string, operation: Operation) =>
         ),
       )
 
-/** Writes one event: the one change to the rows it stands for. */
+/** The Version `evolve` gave the Tile of this id, for the row a change writes it to. */
+const versionIn = (after: System, id: string) => {
+  const found = tileAt(after, id)
+  if (found === undefined) return Effect.die(new Error('An event counted on a Tile it lost'))
+  return Effect.succeed({ version: found.version })
+}
+
+/** Writes the Version `evolve` gave the Tile of this id. */
+const counted = (writes: Writes, after: System, id: string) =>
+  Effect.flatMap(versionIn(after, id), (version) => writes.update(id, version))
+
+/**
+ * Writes one event: the one change to the rows it stands for, each Tile it changed at the Version
+ * `evolve` gave it in `after`, the System once the event applied.
+ */
 const written =
-  (writes: Writes) =>
+  (writes: Writes, after: System) =>
   (event: MappingEvent): Effect.Effect<void, IdTaken, InTransaction> => {
     switch (event._tag) {
       case 'TileCreated': {
@@ -274,20 +289,34 @@ const written =
         return writes.insert({ ...row, title, preview, body, name, config, frontmatter })
       }
       case 'TileEdited':
-        return writes.update(event.id, Struct.omit(event, ['_tag', 'id']))
+        return Effect.flatMap(versionIn(after, event.id), (version) =>
+          writes.update(event.id, { ...Struct.omit(event, ['_tag', 'id']), ...version }),
+        )
       case 'TileMoved':
-        return writes.update(event.id, {
-          parentId: event.parent,
-          direction: rowDirection(event.slot),
-        })
+        return Effect.flatMap(versionIn(after, event.id), (version) =>
+          writes.update(event.id, {
+            parentId: event.parent,
+            direction: rowDirection(event.slot),
+            ...version,
+          }),
+        )
       case 'TilesSwapped':
-        return writes.swap(event.a, event.b)
+        return Effect.andThen(
+          writes.swap(event.a, event.b),
+          Effect.all([counted(writes, after, event.a), counted(writes, after, event.b)], {
+            discard: true,
+          }),
+        )
       case 'TileDeleted':
-      case 'ReferenceDeleted':
         return writes.remove(event.id)
+      case 'ReferenceDeleted':
+        return Effect.andThen(writes.remove(event.id), counted(writes, after, event.parent))
       case 'ReferenceCreated': {
         const { id, parent, slot, target } = event
-        return writes.insert({ id, parentId: parent, direction: slot, target, ...untitled })
+        return Effect.andThen(
+          writes.insert({ id, parentId: parent, direction: slot, target, ...untitled }),
+          counted(writes, after, parent),
+        )
       }
     }
   }
@@ -305,8 +334,8 @@ const chosen: OnTaken<TileIdTaken> = () => Effect.fail(new TileIdTaken())
 
 /**
  * Runs an Operation on the Account's System: locks it, loads it flat, asks `decide` through `decided`,
- * then writes one change per event, publishes the events, and answers the System they leave
- * (`evolve`). Every rule lives in `decide`: what it refuses is refused here, with nothing written and
+ * then writes one change per event, as `evolve` leaves the System after it, publishes the events, and
+ * answers the System they leave. Every rule lives in `decide`: what it refuses is refused here, with nothing written and
  * nothing published. A write under an id already taken answers `onTaken`: a defect, unless the
  * Operation's caller chose the id. The bus holds what is published until the transaction commits.
  */
@@ -320,25 +349,30 @@ const operate = <E, T = never>(
     const system = yield* decidedOn(accountId, operation)
     const writes = (yield* Tiles).writes(accountId)
     const events = yield* Effect.fromResult(decided(system))
-    yield* Effect.forEach(
-      events,
-      (event) => Effect.catchTag(written(writes)(event), 'IdTaken', onTaken),
-      { discard: true },
-    )
+    let after = system
+    for (const event of events) {
+      after = evolve(after, event)
+      yield* Effect.catchTag(written(writes, after)(event), 'IdTaken', onTaken)
+    }
     const { publish } = yield* Bus
     yield* Effect.forEach(events, publish, { discard: true })
-    return events.reduce(evolve, system)
+    return after
   })
 
 /** A fresh id, for what a create makes when its caller chose none, before `decide` is given it. */
 const newId = Tiles.use((tiles) => tiles.newId)
 
-/** The Tile of this id, as an Operation leaves it, for a change that answers it. */
+/**
+ * The Tile of this id, as an Operation leaves it, for a change that answers it: with its Version, which
+ * the writer's next write to it names.
+ */
 const answered = (system: System, id: string) => {
   const found = tileAt(system, id)
   if (found === undefined) return Effect.die(new Error('A change lost the Tile it answers'))
-  const { title, preview, body } = found
-  return Effect.succeed({ id: found.id, title, preview, body } satisfies Tile)
+  const { title, preview, body, version } = found
+  return Effect.succeed({ id: found.id, title, preview, body, version } satisfies Tile & {
+    version: Version
+  })
 }
 
 /**

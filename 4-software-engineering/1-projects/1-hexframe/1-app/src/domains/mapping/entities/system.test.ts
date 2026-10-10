@@ -14,6 +14,7 @@ const tile = (id: string, parentId: string | null, direction: number | null): Ro
   title: id,
   preview: `${id}, in short.`,
   body: `# ${id}`,
+  version: 1,
   target: null,
   ...keepsNothing,
 })
@@ -43,10 +44,16 @@ const rows: ReadonlyArray<Row> = [
 describe('the System these rows hold, flat', () => {
   it('holds its Root apart, whichever row comes first, and every row below it by id', () => {
     const system = systemFrom(rows, { owned: true })
-    expect(system?.root).toEqual({ _tag: 'Tile', ...content('root') })
+    expect(system?.root).toEqual({ _tag: 'Tile', ...content('root'), version: 1 })
     expect(Object.keys(system?.tiles ?? {}).sort()).toEqual(
       ['child', 'grandchild', 'principle', 'ref-to-gone', 'ref-to-ref', 'ref-to-root'].sort(),
     )
+  })
+
+  it('gives each Tile the Version its row holds, flat and in its tree', () => {
+    const counted = rows.map((row) => (row.id === 'child' ? { ...row, version: 4 } : row))
+    expect(systemFrom(counted, { owned: true })?.tiles.child).toMatchObject({ version: 4 })
+    expect(systemOf(flat(counted)).branches[2]).toMatchObject({ version: 4 })
   })
 
   it('places each Tile by its parent and its slot, with what it keeps', () => {
@@ -55,6 +62,7 @@ describe('the System these rows hold, flat', () => {
     expect(system?.tiles.child).toEqual({
       _tag: 'Tile',
       ...content('child'),
+      version: 1,
       parent: 'root',
       slot: 2,
     })
@@ -62,6 +70,7 @@ describe('the System these rows hold, flat', () => {
     expect(system?.tiles.named).toEqual({
       _tag: 'Tile',
       ...content('named'),
+      version: 1,
       name: 'STACK.md',
       frontmatter: { owner: 'diplo' },
       parent: 'root',
@@ -83,7 +92,7 @@ describe('the System these rows hold, flat', () => {
   it('says whether an Account owns it: Help, which every Account reads, is owned by none', () => {
     expect(systemFrom(rows, { owned: true })?.owned).toBe(true)
     expect(systemFrom([tile('help', null, null)], { owned: false })).toEqual({
-      root: { _tag: 'Tile', ...content('help') },
+      root: { _tag: 'Tile', ...content('help'), version: 1 },
       tiles: {},
       owned: false,
     })
@@ -111,23 +120,31 @@ function flat(held: ReadonlyArray<Row>): System {
 
 describe('the tree of a System, a view built from it', () => {
   it('starts at the Root, without where a Tile stands', () => {
-    expect(systemOf(flat(rows))).toMatchObject({ _tag: 'Tile', ...content('root') })
+    expect(systemOf(flat(rows))).toMatchObject({ _tag: 'Tile', ...content('root'), version: 1 })
     expect(systemOf(flat(rows)).branches[2]).not.toHaveProperty('parent')
   })
 
   it('places a Child by its Direction and a Context Tile by its slot, each with its own below', () => {
     const root = systemOf(flat(rows))
     expect(Object.keys(root.branches)).toEqual(['2'])
-    expect(root.branches[2]).toMatchObject({ _tag: 'Tile', ...content('child') })
+    expect(root.branches[2]).toMatchObject({ _tag: 'Tile', ...content('child'), version: 1 })
     expect(root.branches[2]?.branches[6]).toEqual({
       _tag: 'Tile',
       ...content('grandchild'),
+      version: 1,
       branches: {},
       leaves: {},
       context: {},
     })
     expect(root.context).toEqual({
-      [-1]: { _tag: 'Tile', ...content('principle'), branches: {}, leaves: {}, context: {} },
+      [-1]: {
+        _tag: 'Tile',
+        ...content('principle'),
+        version: 1,
+        branches: {},
+        leaves: {},
+        context: {},
+      },
     })
   })
 
@@ -141,15 +158,25 @@ describe('the tree of a System, a view built from it', () => {
 
   it('draws Help’s as an Account’s', () => {
     const help: System = {
-      root: { _tag: 'Tile', ...content('help') },
-      tiles: { 'help/3': { _tag: 'Tile', ...content('help/3'), parent: 'help', slot: 3 } },
+      root: { _tag: 'Tile', ...content('help'), version: 1 },
+      tiles: {
+        'help/3': { _tag: 'Tile', ...content('help/3'), version: 1, parent: 'help', slot: 3 },
+      },
       owned: false,
     }
     expect(systemOf(help)).toEqual({
       _tag: 'Tile',
       ...content('help'),
+      version: 1,
       branches: {
-        3: { _tag: 'Tile', ...content('help/3'), branches: {}, leaves: {}, context: {} },
+        3: {
+          _tag: 'Tile',
+          ...content('help/3'),
+          version: 1,
+          branches: {},
+          leaves: {},
+          context: {},
+        },
       },
       leaves: {},
       context: {},
@@ -166,13 +193,14 @@ describe('Leaves beside Branches', () => {
   it('reads a Leaf by its Direction, beside the Branch sharing it, with nothing below it', () => {
     expect(flat(withChild).tiles.leaf).toMatchObject({ parent: 'root', slot: { leaf: 2 } })
     const root = systemOf(flat(withChild))
-    expect(root.leaves).toEqual({ 2: { _tag: 'Tile', ...content('leaf') } })
+    expect(root.leaves).toEqual({ 2: { _tag: 'Tile', ...content('leaf'), version: 1 } })
     expect(root.branches[2]).toMatchObject({ id: 'branch', branches: { 1: { id: 'below' } } })
   })
 
   it('reads a Leaf to a depth the same way, with only the fields asked', () => {
-    const read = both.map(({ id, parentId, direction, target, title }) => ({
+    const read = both.map(({ id, version, parentId, direction, target, title }) => ({
       id,
+      version,
       parentId,
       direction,
       target,
@@ -182,9 +210,10 @@ describe('Leaves beside Branches', () => {
     expect(root && readOf(root, { rows: read, depth: 1, pointedAt: [] })).toEqual({
       _tag: 'Tile',
       id: 'root',
+      version: 1,
       title: 'root',
-      branches: { 2: { _tag: 'Tile', id: 'branch', title: 'branch' } },
-      leaves: { 2: { _tag: 'Tile', id: 'leaf', title: 'leaf' } },
+      branches: { 2: { _tag: 'Tile', id: 'branch', version: 1, title: 'branch' } },
+      leaves: { 2: { _tag: 'Tile', id: 'leaf', version: 1, title: 'leaf' } },
       context: {},
     })
   })
@@ -222,18 +251,22 @@ describe('reading a System, and its rows, by id and by slot', () => {
 })
 
 /** The rows above as a read from one Tile gives them, with only the Title asked. */
-const titled = rows.map(({ id, parentId, direction, target, title }): RowWith<'title'> => ({
-  id,
-  parentId,
-  direction,
-  target,
-  content: { title },
-}))
+const titled = rows.map(
+  ({ id, version, parentId, direction, target, title }): RowWith<'title'> => ({
+    id,
+    version,
+    parentId,
+    direction,
+    target,
+    content: { title },
+  }),
+)
 
 /** The rows of the Tiles the References above point at, as the read gives them. */
 const pointedAt = rows.map(
-  ({ id, parentId, direction, target, title, preview }): RowWith<'title' | 'preview'> => ({
+  ({ id, version, parentId, direction, target, title, preview }): RowWith<'title' | 'preview'> => ({
     id,
+    version,
     parentId,
     direction,
     target,
@@ -252,17 +285,19 @@ describe('a Tile read to a depth', () => {
     expect(readOf(opened('root'), { rows: titled, depth: 0, pointedAt })).toEqual({
       _tag: 'Tile',
       id: 'root',
+      version: 1,
       title: 'root',
     })
     const child = readOf(opened('root'), { rows: titled, depth: 1, pointedAt }).branches?.[2]
-    expect(child).toEqual({ _tag: 'Tile', id: 'child', title: 'child' })
+    expect(child).toEqual({ _tag: 'Tile', id: 'child', version: 1, title: 'child' })
     const deeper = readOf(opened('root'), { rows: titled, depth: 2, pointedAt })
     expect(deeper.branches?.[2]?.branches).toEqual({
-      6: { _tag: 'Tile', id: 'grandchild', title: 'grandchild' },
+      6: { _tag: 'Tile', id: 'grandchild', version: 1, title: 'grandchild' },
     })
     expect(deeper.context?.[-1]).toEqual({
       _tag: 'Tile',
       id: 'principle',
+      version: 1,
       title: 'principle',
       branches: {},
       leaves: {},
@@ -276,6 +311,7 @@ describe('a Tile read to a depth', () => {
     expect(root && readOf(root, { rows: bare, depth: 1, pointedAt }).branches?.[2]).toEqual({
       _tag: 'Tile',
       id: 'child',
+      version: 1,
     })
   })
 

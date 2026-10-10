@@ -40,6 +40,7 @@ describe('what holds nothing, on Systems made by hand', () => {
   const tile = (id: string): SystemTile => ({
     _tag: 'Tile',
     id,
+    version: 1,
     title: id,
     preview: '',
     body: '',
@@ -81,6 +82,7 @@ describe('what a Leaf may hold, on a System made by hand', () => {
     title: id,
     preview: '',
     body: '',
+    version: 1,
     target: null,
     ...keepsNothing,
   })

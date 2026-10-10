@@ -15,6 +15,7 @@ import {
   type Refused,
   useCreateTileSubmit,
   useEditTile,
+  useEditTileSubmit,
   useMoveTile,
   useSwapTiles,
   useSystem,
@@ -25,8 +26,9 @@ import { operationOf, overlaid, refusalOf } from './overlay'
 
 // The System the page shows while writes are on their way, over stand-ins for the server functions:
 // each write shows before its answer, a refused one stops showing without a rollback, a refetch slips
-// in under what is pending, nothing flickers once a write lands, and a refusal Mapping's `decide`
-// foresees is sent nowhere. A refusal is what the client receives, its wire form, decoded.
+// in under what is pending, nothing flickers once a write lands, a write a read already holds is not
+// folded again, its Tiles' Versions moved on, and a refusal Mapping's `decide` foresees is sent
+// nowhere. A refusal is what the client receives, its wire form, decoded.
 vi.mock('#/api/mapping/mapping', () => ({
   system: vi.fn(),
   createTile: vi.fn(),
@@ -52,19 +54,26 @@ const id = {
   c: crypto.randomUUID(),
 }
 
-const branch = (tileId: string, title: string, slot: PlacedTile['slot']): PlacedTile => ({
+/** A Branch of the Root, at its first Version unless it was changed since. */
+const branch = (
+  tileId: string,
+  title: string,
+  slot: PlacedTile['slot'],
+  version = 1,
+): PlacedTile => ({
   _tag: 'Tile',
   id: tileId,
   title,
   preview: '',
   body: '',
+  version,
   parent: id.root,
   slot,
 })
 
 /** The System as the server reads it: the Root, `A` in Direction 1 and `B` in Direction 2. */
 const served: System = {
-  root: { _tag: 'Tile', id: id.root, title: 'Me', preview: '', body: '' },
+  root: { _tag: 'Tile', id: id.root, title: 'Me', preview: '', body: '', version: 1 },
   tiles: { [id.a]: branch(id.a, 'A', 1), [id.b]: branch(id.b, 'B', 2) },
   owned: true,
 }
@@ -95,18 +104,23 @@ const directionTaken = {
   failure: { _tag: 'DirectionTaken', kind: 'Conflict' },
   requestId: 'req-1',
 } as const
+const tileChanged = {
+  ok: false,
+  failure: { _tag: 'TileChanged', kind: 'Conflict' },
+  requestId: 'req-2',
+} as const
 
 /**
  * Renders `hook` beside the System as the page shows it, under the app's QueryClient, once the first
  * read has landed; and every System shown, render after render.
  */
-async function rendered<T>(hook: () => T) {
-  serving(served)
+async function rendered<T>(hook: () => T, system: System = served) {
+  serving(system)
   const client = makeQueryClient()
   const wrapper = ({ children }: { children: ReactNode }) =>
     createElement(QueryClientProvider, { client }, children)
   const shownEach: Array<System | undefined> = []
-  const { result } = renderHook(
+  const { result, rerender } = renderHook(
     () => {
       const shown = useSystem().data?.system
       shownEach.push(shown)
@@ -117,7 +131,7 @@ async function rendered<T>(hook: () => T) {
   await waitFor(() => {
     expect(result.current.shown).toBeDefined()
   })
-  return { result, client, shownEach }
+  return { result, client, shownEach, rerender }
 }
 
 describe('the System the page shows', () => {
@@ -126,13 +140,13 @@ describe('the System the page shows', () => {
     vi.mocked(Mapping.moveTile).mockReturnValue(moved.promise as never)
     const { result } = await rendered(useMoveTile)
     act(() => {
-      result.current.hook.mutate({ id: id.a, parent: id.root, slot: 4 })
+      result.current.hook.mutate({ id: id.a, version: 1, parent: id.root, slot: 4 })
     })
     await waitFor(() => {
       expect(result.current.shown?.tiles[id.a]).toMatchObject({ parent: id.root, slot: 4 })
     })
     expect(result.current.writing).toBe(true)
-    serving(servedWith(branch(id.a, 'A', 4)))
+    serving(servedWith(branch(id.a, 'A', 4, 2)))
     moved.settle(ok)
     await waitFor(() => {
       expect(result.current.writing).toBe(false)
@@ -144,7 +158,7 @@ describe('the System the page shows', () => {
     vi.mocked(Mapping.moveTile).mockReturnValue(later<never>().promise)
     const { result } = await rendered(useMoveTile)
     act(() => {
-      result.current.hook.mutate({ id: id.a, parent: id.root, slot: 4 })
+      result.current.hook.mutate({ id: id.a, version: 1, parent: id.root, slot: 4 })
     })
     await waitFor(() => {
       expect(result.current.shown?.tiles[id.a]).toMatchObject({ slot: 4 })
@@ -161,19 +175,21 @@ describe('the System the page shows', () => {
     vi.mocked(Mapping.editTile).mockReturnValue(edited.promise as never)
     const { result } = await rendered(() => ({ move: useMoveTile(), edit: useEditTile() }))
     act(() => {
-      result.current.hook.move.mutate({ id: id.a, parent: id.root, slot: 4 })
-      result.current.hook.edit.mutate({ id: id.a, title: 'A, renamed' })
+      result.current.hook.move.mutate({ id: id.a, version: 1, parent: id.root, slot: 4 })
+      result.current.hook.edit.mutate({ id: id.b, version: 1, title: 'B, renamed' })
     })
     await waitFor(() => {
-      expect(result.current.shown?.tiles[id.a]).toMatchObject({ slot: 4, title: 'A, renamed' })
+      expect(result.current.shown?.tiles[id.a]).toMatchObject({ slot: 4 })
     })
+    expect(result.current.shown?.tiles[id.b]).toMatchObject({ title: 'B, renamed' })
     moved.settle(directionTaken)
     await waitFor(() => {
       expect(Mapping.editTile).toHaveBeenCalled()
     })
     await waitFor(() => {
-      expect(result.current.shown?.tiles[id.a]).toMatchObject({ slot: 1, title: 'A, renamed' })
+      expect(result.current.shown?.tiles[id.a]).toMatchObject({ slot: 1 })
     })
+    expect(result.current.shown?.tiles[id.b]).toMatchObject({ title: 'B, renamed' })
     expect(toast.error).toHaveBeenCalledExactlyOnceWith(m.error_mapping_direction_taken())
   })
 
@@ -181,7 +197,7 @@ describe('the System the page shows', () => {
     vi.mocked(Mapping.editTile).mockReturnValue(later<never>().promise)
     const { result, client } = await rendered(useEditTile)
     act(() => {
-      result.current.hook.mutate({ id: id.b, title: 'B, renamed' })
+      result.current.hook.mutate({ id: id.b, version: 1, title: 'B, renamed' })
     })
     serving(servedWith(branch(id.c, 'C, from the Assistant', 3)))
     await act(() => client.invalidateQueries({ queryKey: ['system'] }))
@@ -197,13 +213,13 @@ describe('the System the page shows', () => {
     const readAgain = later<unknown>()
     vi.mocked(Mapping.system).mockReturnValue(readAgain.promise as never)
     act(() => {
-      result.current.hook.mutate({ id: id.a, parent: id.root, slot: 4 })
+      result.current.hook.mutate({ id: id.a, version: 1, parent: id.root, slot: 4 })
     })
     await waitFor(() => {
       expect(Mapping.system).toHaveBeenCalled()
     })
     expect(result.current.shown?.tiles[id.a]).toMatchObject({ slot: 4 })
-    readAgain.settle({ ok: true, value: servedWith(branch(id.a, 'A', 4)) })
+    readAgain.settle({ ok: true, value: servedWith(branch(id.a, 'A', 4, 2)) })
     await waitFor(() => {
       expect(result.current.writing).toBe(false)
     })
@@ -217,13 +233,13 @@ describe('the System the page shows', () => {
     vi.mocked(Mapping.swapTiles).mockReturnValue(swapped.promise as never)
     const { result, client, shownEach } = await rendered(useSwapTiles)
     act(() => {
-      result.current.hook.mutate({ a: id.a, b: id.b })
+      result.current.hook.mutate({ a: id.a, aVersion: 1, b: id.b, bVersion: 1 })
     })
     await waitFor(() => {
       expect(Mapping.swapTiles).toHaveBeenCalled()
     })
     expect(result.current.shown?.tiles[id.a]).toMatchObject({ slot: 2 })
-    serving(servedWith(branch(id.a, 'A', 2), branch(id.b, 'B', 1)))
+    serving(servedWith(branch(id.a, 'A', 2, 2), branch(id.b, 'B', 1, 2)))
     await act(() => client.refetchQueries({ queryKey: ['system'] }))
     await waitFor(() => {
       expect(client.getQueryData<System>(['system', 'read'])?.tiles[id.a]).toMatchObject({
@@ -237,11 +253,115 @@ describe('the System the page shows', () => {
   })
 })
 
+describe('a write on a Tile changed since the screen drew it', () => {
+  it('refuses a write queued on a Tile a refused write before it had changed, as the screen drew it', async () => {
+    const moved = later<unknown>()
+    vi.mocked(Mapping.moveTile).mockReturnValue(moved.promise as never)
+    const { result } = await rendered(() => ({ move: useMoveTile(), edit: useEditTile() }))
+    act(() => {
+      result.current.hook.move.mutate({ id: id.a, version: 1, parent: id.root, slot: 4 })
+    })
+    await waitFor(() => {
+      expect(result.current.shown?.tiles[id.a]).toMatchObject({ slot: 4, version: 2 })
+    })
+    // The rename names A as the screen drew it, moved: a Version the server never gave A.
+    act(() => {
+      result.current.hook.edit.mutate({ id: id.a, version: 2, title: 'A, renamed' })
+    })
+    moved.settle(directionTaken)
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(m.error_mapping_tile_changed())
+    })
+    expect(Mapping.editTile).not.toHaveBeenCalled()
+    expect(result.current.shown?.tiles[id.a]).toMatchObject({ slot: 1, title: 'A' })
+  })
+
+  it('refuses a pending edit onto its channel once the server’s System changed its Tile under it', async () => {
+    const moved = later<unknown>()
+    vi.mocked(Mapping.moveTile).mockReturnValue(moved.promise as never)
+    const { result } = await rendered(() => ({ move: useMoveTile(), edit: useEditTile() }))
+    act(() => {
+      result.current.hook.move.mutate({ id: id.b, version: 1, parent: id.root, slot: 4 })
+      result.current.hook.edit.mutate({ id: id.a, version: 1, title: 'A, mine' })
+    })
+    await waitFor(() => {
+      expect(result.current.shown?.tiles[id.a]).toMatchObject({ title: 'A, mine' })
+    })
+    // Meanwhile the Assistant renamed A: the read after the move holds its change, at A's next Version.
+    serving(servedWith(branch(id.a, 'A, the Assistant’s', 1, 2), branch(id.b, 'B', 4, 2)))
+    moved.settle(ok)
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledExactlyOnceWith(m.error_mapping_tile_changed())
+    })
+    expect(Mapping.editTile).not.toHaveBeenCalled()
+    expect(reportError).not.toHaveBeenCalled()
+    expect(result.current.shown?.tiles[id.a]).toMatchObject({ title: 'A, the Assistant’s' })
+  })
+
+  it('takes the server’s refusal onto the same channel, when the change lands after the read', async () => {
+    vi.mocked(Mapping.editTile).mockResolvedValue(tileChanged)
+    const { result } = await rendered(useEditTile)
+    act(() => {
+      result.current.hook.mutate({ id: id.a, version: 1, title: 'A, mine' })
+    })
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledExactlyOnceWith(m.error_mapping_tile_changed())
+    })
+    expect(Mapping.editTile).toHaveBeenCalled()
+    expect(reportError).not.toHaveBeenCalled()
+  })
+
+  it('keeps the Version its form opened on, while the System read again moves the Tile on', async () => {
+    const opened = { id: id.a, version: 1, title: 'A', preview: '', body: '' }
+    let shownTile = opened
+    const { result, rerender } = await rendered(() => useEditTileSubmit(shownTile))
+    // Another tab saved A while this form stayed open: the page now draws A at its next Version.
+    shownTile = { ...opened, title: 'A, from the other tab', version: 2 }
+    rerender()
+    act(() => {
+      result.current.hook({ title: 'A, mine', preview: '', body: '' })
+    })
+    await waitFor(() => {
+      expect(Mapping.editTile).toHaveBeenCalledWith({
+        data: { id: id.a, version: 1, title: 'A, mine' },
+      })
+    })
+  })
+
+  it('hands an edit back, sent nowhere, when its form opened on a Version the Tile no longer has', async () => {
+    const refused: Refused[] = []
+    // Another tab saved A meanwhile: the System this page reads holds it at its next Version.
+    const { result } = await rendered(
+      () => {
+        useSystemRefusals((refusal) => {
+          refused.push(refusal)
+          return true
+        })
+        return useEditTileSubmit({ id: id.a, version: 1, title: 'A', preview: '', body: '' })
+      },
+      servedWith(branch(id.a, 'A, from the other tab', 1, 2)),
+    )
+    act(() => {
+      result.current.hook({ title: 'A, mine', preview: '', body: '' })
+    })
+    await waitFor(() => {
+      expect(refused).toMatchObject([
+        {
+          operation: { _tag: 'EditTile', id: id.a, version: 1, title: 'A, mine' },
+          shown: { form: m.error_mapping_tile_changed() },
+        },
+      ])
+    })
+    expect(toast.error).toHaveBeenCalledExactlyOnceWith(m.error_mapping_tile_changed())
+    expect(Mapping.editTile).not.toHaveBeenCalled()
+  })
+})
+
 describe('a refusal foreseen', () => {
   it('sends a move to a taken Direction nowhere, and shows it in a toast, unreported', async () => {
     const { result } = await rendered(useMoveTile)
     act(() => {
-      result.current.hook.mutate({ id: id.a, parent: id.root, slot: 2 })
+      result.current.hook.mutate({ id: id.a, version: 1, parent: id.root, slot: 2 })
     })
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledExactlyOnceWith(m.error_mapping_direction_taken())
@@ -299,29 +419,43 @@ describe('the overlay', () => {
   })
 
   it('foresees the refusal Mapping answers, and none for a write it lets through', () => {
-    const move = (slot: 2 | 4) => operationOf('moveTile', { id: id.a, parent: id.root, slot })
+    const move = (slot: 2 | 4, version = 1) =>
+      operationOf('moveTile', { id: id.a, version, parent: id.root, slot })
     const taken = move(2)
     const free = move(4)
-    if (taken === undefined || free === undefined) throw new Error('A move read as no Operation')
+    const stale = move(4, 2)
+    if (taken === undefined || free === undefined || stale === undefined) {
+      throw new Error('A move read as no Operation')
+    }
     expect(refusalOf(served, taken)).toMatchObject({ _tag: 'DirectionTaken' })
+    expect(refusalOf(served, stale)).toMatchObject({ _tag: 'TileChanged' })
     expect(refusalOf(served, free)).toBeUndefined()
   })
 
   it('folds pending writes in their turn, whatever order they are listed in', () => {
     const shown = overlaid(served, [
-      { turn: 2, operation: operationOf('moveTile', { id: id.b, parent: id.root, slot: 1 }) },
-      { turn: 1, operation: operationOf('moveTile', { id: id.a, parent: id.root, slot: 4 }) },
+      {
+        turn: 2,
+        operation: operationOf('moveTile', { id: id.b, version: 1, parent: id.root, slot: 1 }),
+      },
+      {
+        turn: 1,
+        operation: operationOf('moveTile', { id: id.a, version: 1, parent: id.root, slot: 4 }),
+      },
     ])
     expect(shown.tiles[id.a]).toMatchObject({ slot: 4 })
     expect(shown.tiles[id.b]).toMatchObject({ slot: 1 })
   })
 
   it('folds a swap the System does not hold yet, and leaves alone one it already holds', () => {
-    const swappedBack = servedWith(branch(id.a, 'A', 2), branch(id.b, 'B', 1))
-    const swap = { operation: operationOf('swapTiles', { a: id.a, b: id.b }) }
+    // Read once the server swapped them, each Tile at its next Version.
+    const swappedBack = servedWith(branch(id.a, 'A', 2, 2), branch(id.b, 'B', 1, 2))
+    const swap = (version: number) =>
+      operationOf('swapTiles', { a: id.a, aVersion: version, b: id.b, bVersion: version })
+    // The second swaps them back, made on the screen that showed the first.
     const pending = [
-      { turn: 1, ...swap, before: served },
-      { turn: 2, ...swap, before: swappedBack },
+      { turn: 1, operation: swap(1) },
+      { turn: 2, operation: swap(2) },
     ]
     expect(overlaid(served, pending.slice(0, 1)).tiles[id.a]).toMatchObject({ slot: 2 })
     expect(overlaid(swappedBack, pending.slice(0, 1)).tiles[id.a]).toMatchObject({ slot: 2 })
@@ -331,8 +465,9 @@ describe('the overlay', () => {
 
   it('leaves alone a swap that moved a Leaf, once the System holds it', () => {
     const before = servedWith(branch(id.c, 'C', { leaf: 3 }))
-    const after = servedWith(branch(id.c, 'C', 2), branch(id.b, 'B', { leaf: 3 }))
-    const swap = { turn: 1, operation: operationOf('swapTiles', { a: id.c, b: id.b }), before }
+    const after = servedWith(branch(id.c, 'C', 2, 2), branch(id.b, 'B', { leaf: 3 }, 2))
+    const fields = { a: id.c, aVersion: 1, b: id.b, bVersion: 1 }
+    const swap = { turn: 1, operation: operationOf('swapTiles', fields) }
     expect(overlaid(before, [swap]).tiles[id.c]).toMatchObject({ slot: 2 })
     expect(overlaid(after, [swap]).tiles[id.c]).toMatchObject({ slot: 2 })
     expect(overlaid(after, [swap]).tiles[id.b]).toMatchObject({ slot: { leaf: 3 } })
@@ -340,8 +475,13 @@ describe('the overlay', () => {
 
   it('reads no Operation from an import, nor from fields Mapping’s schema refuses', () => {
     expect(operationOf('importTiles', { place: { _tag: 'Root' } })).toBeUndefined()
-    expect(operationOf('moveTile', { id: 'not-an-id', parent: id.root, slot: 4 })).toBeUndefined()
-    expect(operationOf('moveTile', { id: id.a, parent: id.root, slot: 4 })).toMatchObject({
+    expect(
+      operationOf('moveTile', { id: 'not-an-id', version: 1, parent: id.root, slot: 4 }),
+    ).toBeUndefined()
+    expect(operationOf('moveTile', { id: id.a, parent: id.root, slot: 4 })).toBeUndefined()
+    expect(
+      operationOf('moveTile', { id: id.a, version: 1, parent: id.root, slot: 4 }),
+    ).toMatchObject({
       _tag: 'MoveTile',
       id: id.a,
     })

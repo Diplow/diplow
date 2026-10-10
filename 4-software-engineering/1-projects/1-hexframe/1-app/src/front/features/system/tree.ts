@@ -13,8 +13,9 @@ import {
   type Slot,
   type System,
   type SystemTile,
+  tileAt,
 } from '#/domains/mapping/entities'
-import { decide } from '#/domains/mapping/operations'
+import { decide, type Placement } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 import type { FrameKind, TileNode } from '#/front/ui/hex/view/tiles'
 
@@ -71,8 +72,25 @@ function contextNode(entry: ContextEntry, slot: string): TileNode {
   }
 }
 
-/** The swap of the moving Tile with another, the moving one named first, as `movingIn` reads it. */
-export const swapOf = (moving: string, held: string) => ({ a: moving, b: held })
+/**
+ * The move of a Tile to a place, at the Version the System shows of it, the one the canvas drew; none
+ * when the System holds no Tile of that id.
+ */
+export function moveOf(system: System, id: string, place: Placement) {
+  const tile = tileAt(system, id)
+  return tile === undefined ? undefined : { id, version: tile.version, ...place }
+}
+
+/**
+ * The swap of the moving Tile with another, the moving one named first, as `movingIn` reads it, each
+ * at the Version the System shows of it; none when either is no Tile of the System.
+ */
+export function swapOf(system: System, moving: string, held: string) {
+  const a = tileAt(system, moving)
+  const b = tileAt(system, held)
+  if (a === undefined || b === undefined) return undefined
+  return { a: moving, aVersion: a.version, b: held, bVersion: b.version }
+}
 
 /** The Tile a swap moves, the one the move under way named (`swapOf`). */
 export const movingIn = (swap: { readonly a: string }) => swap.a
@@ -87,7 +105,9 @@ export const movingIn = (swap: { readonly a: string }) => swap.a
  */
 export function swapsWith(system: System, moving: TileNode, tile: TileNode) {
   if (tile.reference === true || tile.leaf === true) return false
-  const swapped = decide(system, { _tag: 'SwapTiles', ...swapOf(moving.id, tile.id) })
+  const swap = swapOf(system, moving.id, tile.id)
+  if (swap === undefined) return false
+  const swapped = decide(system, { _tag: 'SwapTiles', ...swap })
   return Result.isSuccess(swapped) && swapped.success.length > 0
 }
 

@@ -10,6 +10,7 @@ import type {
   MovedUnderItself,
   PreviewTooLong,
   RootFixed,
+  TileChanged,
   TileIdTaken,
   TileNotFound,
   TitleMissing,
@@ -88,7 +89,7 @@ describe('the System, read flat', () => {
     const context = request()
     const first = await value(run(context, Mapping.system))
     expect(first).toEqual({
-      root: { _tag: 'Tile', id: first.root.id, title: '', preview: '', body: '' },
+      root: { _tag: 'Tile', id: first.root.id, title: '', preview: '', body: '', version: 1 },
       tiles: {},
       owned: true,
     })
@@ -101,10 +102,20 @@ describe('the System, read flat', () => {
       run(context, Mapping.createTile({ parent: child.id, slot: { leaf: 2 }, ...content('Leaf') })),
     )
     await value(
-      run(context, Mapping.createReference({ parent: child.id, slot: -3, target: root.id })),
+      run(
+        context,
+        Mapping.createReference({ parent: child.id, parentVersion: 1, slot: -3, target: root.id }),
+      ),
     )
     const { tiles } = await value(run(context, Mapping.system))
-    expect(tiles[child.id]).toEqual({ _tag: 'Tile', ...child, parent: root.id, slot: 1 })
+    // The Reference taking a Context slot of the Child counted on its Version.
+    expect(tiles[child.id]).toEqual({
+      _tag: 'Tile',
+      ...child,
+      version: 2,
+      parent: root.id,
+      slot: 1,
+    })
     expect(tiles[leaf.id]).toEqual({ _tag: 'Tile', ...leaf, parent: child.id, slot: { leaf: 2 } })
     const references = Object.values(tiles).filter((held) => held._tag === 'Reference')
     expect(references).toEqual([
@@ -118,12 +129,15 @@ describe("Mapping's server functions", () => {
   it.each<readonly [string, Program]>([
     ['system', Mapping.system],
     ['createTile', Mapping.createTile({ parent: 'p', slot: 1, ...content('Child') })],
-    ['editTile', Mapping.editTile({ id: 't', title: 'Renamed' })],
-    ['moveTile', Mapping.moveTile({ id: 't', parent: 'p', slot: 2 })],
-    ['swapTiles', Mapping.swapTiles({ a: 't', b: 'u' })],
-    ['deleteTile', Mapping.deleteTile({ id: 't' })],
-    ['createReference', Mapping.createReference({ parent: 'p', slot: -1, target: 't' })],
-    ['deleteReference', Mapping.deleteReference({ parent: 'p', slot: -1 })],
+    ['editTile', Mapping.editTile({ id: 't', version: 1, title: 'Renamed' })],
+    ['moveTile', Mapping.moveTile({ id: 't', version: 1, parent: 'p', slot: 2 })],
+    ['swapTiles', Mapping.swapTiles({ a: 't', aVersion: 1, b: 'u', bVersion: 1 })],
+    ['deleteTile', Mapping.deleteTile({ id: 't', version: 1 })],
+    [
+      'createReference',
+      Mapping.createReference({ parent: 'p', parentVersion: 1, slot: -1, target: 't' }),
+    ],
+    ['deleteReference', Mapping.deleteReference({ parent: 'p', parentVersion: 1, slot: -1 })],
   ])('%s asks for a Session, and sends SignedOut to nobody', async (_, program) => {
     expect(await run(request(false), program)).toEqual({
       ok: false,
@@ -150,17 +164,21 @@ describe("Mapping's server functions", () => {
 
   it('creates, edits, moves and deletes a Tile, and the System reads them back', async () => {
     const { context, root, child } = await withAChild()
-    expect(child).toEqual({ id: child.id, ...content('Child') })
+    expect(child).toEqual({ id: child.id, ...content('Child'), version: 1 })
 
-    const edited = await value(run(context, Mapping.editTile({ id: child.id, title: ' Renamed ' })))
-    expect(edited).toEqual({ ...child, title: 'Renamed' })
+    const edited = await value(
+      run(context, Mapping.editTile({ id: child.id, version: 1, title: ' Renamed ' })),
+    )
+    expect(edited).toEqual({ ...child, title: 'Renamed', version: 2 })
 
-    await value(run(context, Mapping.moveTile({ id: child.id, parent: root.id, slot: 4 })))
+    await value(
+      run(context, Mapping.moveTile({ id: child.id, version: 2, parent: root.id, slot: 4 })),
+    )
     const { branches } = await systemTree(context)
     expect(Object.keys(branches)).toEqual(['4'])
     expect(branches[4]).toMatchObject({ id: child.id, title: 'Renamed' })
 
-    await value(run(context, Mapping.deleteTile({ id: child.id })))
+    await value(run(context, Mapping.deleteTile({ id: child.id, version: 3 })))
     expect((await systemTree(context)).branches).toEqual({})
   })
 
@@ -172,11 +190,14 @@ describe("Mapping's server functions", () => {
     const grandchild = await value(
       run(context, Mapping.createTile({ parent: child.id, slot: 2, ...content('Grandchild') })),
     )
-    await value(run(context, Mapping.swapTiles({ a: child.id, b: other.id })))
+    await value(
+      run(context, Mapping.swapTiles({ a: child.id, aVersion: 1, b: other.id, bVersion: 1 })),
+    )
     const swapped = await systemTree(context)
     expect(swapped.branches[1]).toMatchObject({ id: other.id, branches: {} })
     expect(swapped.context[-5]).toMatchObject({ id: child.id, branches: { 2: grandchild } })
-    expect(await run(context, Mapping.swapTiles({ a: grandchild.id, b: child.id }))).toMatchObject({
+    const inLine = Mapping.swapTiles({ a: grandchild.id, aVersion: 1, b: child.id, bVersion: 2 })
+    expect(await run(context, inLine)).toMatchObject({
       ok: false,
       failure: { _tag: 'MovedUnderItself', kind: 'Conflict' },
     })
@@ -185,24 +206,32 @@ describe("Mapping's server functions", () => {
   it('puts a Reference in a Context slot and empties it', async () => {
     const { context, root, child } = await withAChild()
     await value(
-      run(context, Mapping.createReference({ parent: root.id, slot: -2, target: child.id })),
+      run(
+        context,
+        Mapping.createReference({ parent: root.id, parentVersion: 1, slot: -2, target: child.id }),
+      ),
     )
     expect((await systemTree(context)).context).toEqual({
-      [-2]: { _tag: 'Reference', tile: child },
+      [-2]: { _tag: 'Reference', tile: { id: child.id, ...content('Child') } },
     })
 
-    await value(run(context, Mapping.deleteReference({ parent: root.id, slot: -2 })))
+    await value(
+      run(context, Mapping.deleteReference({ parent: root.id, parentVersion: 2, slot: -2 })),
+    )
     expect((await systemTree(context)).context).toEqual({})
   })
+})
 
+describe("Mapping's server functions, refusing", () => {
   it('sends a refusal as its tagged error, with its kind and the request id', async () => {
     const { context, root, child } = await withAChild()
     const refusals: ReadonlyArray<readonly [Program, string]> = [
       [Mapping.createTile({ parent: root.id, slot: 1, ...content('Another') }), 'DirectionTaken'],
-      [Mapping.moveTile({ id: root.id, parent: child.id, slot: 1 }), 'RootFixed'],
-      [Mapping.deleteTile({ id: root.id }), 'RootFixed'],
-      [Mapping.swapTiles({ a: child.id, b: root.id }), 'RootFixed'],
-      [Mapping.deleteTile({ id: crypto.randomUUID() }), 'TileNotFound'],
+      [Mapping.moveTile({ id: root.id, version: 1, parent: child.id, slot: 1 }), 'RootFixed'],
+      [Mapping.deleteTile({ id: root.id, version: 1 }), 'RootFixed'],
+      [Mapping.swapTiles({ a: child.id, aVersion: 1, b: root.id, bVersion: 1 }), 'RootFixed'],
+      [Mapping.deleteTile({ id: crypto.randomUUID(), version: 1 }), 'TileNotFound'],
+      [Mapping.editTile({ id: child.id, version: 2, title: 'Ahead' }), 'TileChanged'],
     ]
     for (const [program, tag] of refusals) {
       expect(await run(context, program)).toMatchObject({
@@ -219,18 +248,23 @@ describe("Mapping's server functions", () => {
       run(context, Mapping.createTile({ parent: child.id, slot: 3, ...content('Grandchild') })),
     )
     expect(
-      await run(context, Mapping.moveTile({ id: child.id, parent: grandchild.id, slot: 1 })),
+      await run(
+        context,
+        Mapping.moveTile({ id: child.id, version: 1, parent: grandchild.id, slot: 1 }),
+      ),
     ).toMatchObject({ ok: false, failure: { _tag: 'MovedUnderItself', kind: 'Conflict' } })
   })
 
   it('sends an Invalid content with the field at fault, for the form to show', async () => {
     const { context, child } = await withAChild()
-    expect(await run(context, Mapping.editTile({ id: child.id, title: '  ' }))).toMatchObject({
+    expect(
+      await run(context, Mapping.editTile({ id: child.id, version: 1, title: '  ' })),
+    ).toMatchObject({
       ok: false,
       failure: { _tag: 'TitleMissing', kind: 'Invalid', fields: ['title'] },
     })
     expect(
-      await run(context, Mapping.editTile({ id: child.id, preview: 'x'.repeat(351) })),
+      await run(context, Mapping.editTile({ id: child.id, version: 1, preview: 'x'.repeat(351) })),
     ).toMatchObject({
       ok: false,
       failure: { _tag: 'PreviewTooLong', kind: 'Invalid', fields: ['preview'] },
@@ -243,12 +277,17 @@ describe("Mapping's server functions", () => {
     const theirRoot = await systemTree(stranger)
     expect(theirRoot.branches).toEqual({})
     const attempts: ReadonlyArray<Program> = [
-      Mapping.editTile({ id: child.id, title: 'Mine now' }),
-      Mapping.moveTile({ id: child.id, parent: theirRoot.id, slot: 1 }),
-      Mapping.deleteTile({ id: child.id }),
-      Mapping.swapTiles({ a: child.id, b: child.id }),
+      Mapping.editTile({ id: child.id, version: 1, title: 'Mine now' }),
+      Mapping.moveTile({ id: child.id, version: 1, parent: theirRoot.id, slot: 1 }),
+      Mapping.deleteTile({ id: child.id, version: 1 }),
+      Mapping.swapTiles({ a: child.id, aVersion: 1, b: child.id, bVersion: 1 }),
       Mapping.createTile({ parent: child.id, slot: 1, ...content('Squatter') }),
-      Mapping.createReference({ parent: theirRoot.id, slot: -1, target: child.id }),
+      Mapping.createReference({
+        parent: theirRoot.id,
+        parentVersion: 1,
+        slot: -1,
+        target: child.id,
+      }),
     ]
     for (const attempt of attempts) {
       expect(await run(stranger, attempt)).toMatchObject({
@@ -264,7 +303,7 @@ describe('a create under the id its caller chose', () => {
     const { context, root, child } = await withAChild()
     const id = crypto.randomUUID()
     const chosen = Mapping.createTile({ id, parent: root.id, slot: 2, ...content('Chosen') })
-    expect(await value(run(context, chosen))).toEqual({ id, ...content('Chosen') })
+    expect(await value(run(context, chosen))).toEqual({ id, ...content('Chosen'), version: 1 })
     const stranger = request()
     const theirRoot = await systemTree(stranger)
     const again = [
@@ -302,11 +341,12 @@ describe("the errors Mapping's server functions can fail with", () => {
       | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.editTile>>>().toEqualTypeOf<
-      SignedOut | TitleMissing | PreviewTooLong | TileNotFound | HelpReadOnly
+      SignedOut | TitleMissing | PreviewTooLong | TileNotFound | TileChanged | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.moveTile>>>().toEqualTypeOf<
       | SignedOut
       | TileNotFound
+      | TileChanged
       | RootFixed
       | MovedUnderItself
       | DirectionTaken
@@ -314,16 +354,22 @@ describe("the errors Mapping's server functions can fail with", () => {
       | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.swapTiles>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | RootFixed | MovedUnderItself | LeafHoldsNothing | HelpReadOnly
+      | SignedOut
+      | TileNotFound
+      | TileChanged
+      | RootFixed
+      | MovedUnderItself
+      | LeafHoldsNothing
+      | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.deleteTile>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | RootFixed | HelpReadOnly
+      SignedOut | TileNotFound | TileChanged | RootFixed | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createReference>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | DirectionTaken | LeafHoldsNothing | HelpReadOnly
+      SignedOut | TileNotFound | TileChanged | DirectionTaken | LeafHoldsNothing | HelpReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.deleteReference>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | HelpReadOnly
+      SignedOut | TileNotFound | TileChanged | HelpReadOnly
     >()
   })
 })
@@ -356,9 +402,9 @@ describe("the schemas Mapping's server functions validate by", () => {
       false,
       false,
     ])
-    expect(accepts(TileMove, { id: t, parent: p, slot: 3 })).toBe(true)
-    expect(accepts(TileMove, { id: t, parent: p, slot: 9 })).toBe(false)
-    expect(accepts(TileMove, { id: t, parent: p, slot: { leaf: 3 } })).toBe(true)
+    expect(accepts(TileMove, { id: t, version: 1, parent: p, slot: 3 })).toBe(true)
+    expect(accepts(TileMove, { id: t, version: 1, parent: p, slot: 9 })).toBe(false)
+    expect(accepts(TileMove, { id: t, version: 1, parent: p, slot: { leaf: 3 } })).toBe(true)
   })
 
   it("read Help in one of the app's languages, nothing else", () => {
@@ -373,27 +419,33 @@ describe("the schemas Mapping's server functions validate by", () => {
     ])
   })
 
-  it('swap two Tiles named by their ids', () => {
-    expect(accepts(TileSwap, { a: t, b: p })).toBe(true)
-    expect(accepts(TileSwap, { a: t })).toBe(false)
-    expect(accepts(TileSwap, { a: t, b: 'root' })).toBe(false)
+  it('swap two Tiles named by their ids, each with the Version read of it', () => {
+    expect(accepts(TileSwap, { a: t, aVersion: 1, b: p, bVersion: 3 })).toBe(true)
+    expect(accepts(TileSwap, { a: t, aVersion: 1 })).toBe(false)
+    expect(accepts(TileSwap, { a: t, b: p })).toBe(false)
+    expect(accepts(TileSwap, { a: t, aVersion: 1, b: 'root', bVersion: 1 })).toBe(false)
   })
 
-  it('put a Reference in a Context slot only', () => {
-    expect(accepts(NewReference, { parent: p, slot: -3, target: t })).toBe(true)
-    expect(accepts(NewReference, { parent: p, slot: 3, target: t })).toBe(false)
-    expect(accepts(NewReference, { parent: p, slot: { leaf: 3 }, target: t })).toBe(false)
-    expect(accepts(ReferenceSlot, { parent: p, slot: -3 })).toBe(true)
-    expect(accepts(ReferenceSlot, { parent: p, slot: 3 })).toBe(false)
+  it('put a Reference in a Context slot only, naming the Version of the Tile holding it', () => {
+    const slot = (at: unknown) => ({ parent: p, parentVersion: 1, slot: at })
+    expect(accepts(NewReference, { ...slot(-3), target: t })).toBe(true)
+    expect(accepts(NewReference, { ...slot(3), target: t })).toBe(false)
+    expect(accepts(NewReference, { ...slot({ leaf: 3 }), target: t })).toBe(false)
+    expect(accepts(NewReference, { parent: p, slot: -3, target: t })).toBe(false)
+    expect(accepts(ReferenceSlot, slot(-3))).toBe(true)
+    expect(accepts(ReferenceSlot, slot(3))).toBe(false)
+    expect(accepts(ReferenceSlot, { parent: p, slot: -3 })).toBe(false)
   })
 
-  it('edit any of the content, and bound every string', () => {
-    expect(accepts(TileEdit, { id: t })).toBe(true)
-    expect(accepts(TileEdit, { id: t, body: '# Body' })).toBe(true)
-    expect(accepts(TileEdit, { id: t, body: 'x'.repeat(100_001) })).toBe(false)
+  it('edit any of the content, naming the Version read, and bound every string', () => {
+    expect(accepts(TileEdit, { id: t, version: 1 })).toBe(true)
+    expect(accepts(TileEdit, { id: t })).toBe(false)
+    expect(accepts(TileEdit, { id: t, version: 0 })).toBe(false)
+    expect(accepts(TileEdit, { id: t, version: 1, body: '# Body' })).toBe(true)
+    expect(accepts(TileEdit, { id: t, version: 1, body: 'x'.repeat(100_001) })).toBe(false)
     expect(accepts(NewTile, { parent: p, slot: 1, ...content('x'.repeat(1_001)) })).toBe(false)
-    expect(accepts(TileEdit, { id: t, preview: 'x'.repeat(8_000) })).toBe(true)
-    expect(accepts(TileEdit, { id: t, preview: 'x'.repeat(8_001) })).toBe(false)
+    expect(accepts(TileEdit, { id: t, version: 1, preview: 'x'.repeat(8_000) })).toBe(true)
+    expect(accepts(TileEdit, { id: t, version: 1, preview: 'x'.repeat(8_001) })).toBe(false)
   })
 
   it('take a Tile id only as a UUID', () => {
@@ -406,7 +458,9 @@ describe("the schemas Mapping's server functions validate by", () => {
       false,
       false,
     ])
-    expect(accepts(NewReference, { parent: p, slot: -1, target: 'root' })).toBe(false)
+    expect(accepts(NewReference, { parent: p, parentVersion: 1, slot: -1, target: 'root' })).toBe(
+      false,
+    )
   })
 })
 
@@ -427,7 +481,10 @@ describe("Mapping's server functions, on Leaves", () => {
     const grandchild = Mapping.createTile({ parent: child.id, slot: 2, ...content('Grandchild') })
     await value(run(context, grandchild))
     expect(
-      await run(context, Mapping.moveTile({ id: child.id, parent: root.id, slot: { leaf: 2 } })),
+      await run(
+        context,
+        Mapping.moveTile({ id: child.id, version: 1, parent: root.id, slot: { leaf: 2 } }),
+      ),
     ).toMatchObject({ ok: false, failure: { _tag: 'LeafHoldsNothing' } })
   })
 })

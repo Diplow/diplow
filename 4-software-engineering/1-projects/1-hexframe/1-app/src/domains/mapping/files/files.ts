@@ -161,9 +161,18 @@ function linksOf(all: ReadonlyArray<Placed>): ReadonlyMap<string, string> {
   )
 }
 
-/** The fields every Tile's file opens with, then what it kept from its own file, in its order. */
+/**
+ * The fields every Tile's file opens with, its Version among them, then what it kept from its own file,
+ * in its order.
+ */
 function fieldsOf(tile: LeafTile, folder: string): Fields {
-  const own = { id: tile.id, title: tile.title, parent: parentOf(folder), preview: tile.preview }
+  const own = {
+    id: tile.id,
+    title: tile.title,
+    parent: parentOf(folder),
+    preview: tile.preview,
+    version: tile.version,
+  }
   const kept = Object.entries(tile.frontmatter ?? {}).filter(([key]) => !reservedKeys.includes(key))
   return { ...own, ...Object.fromEntries(kept) }
 }
