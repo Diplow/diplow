@@ -3,8 +3,9 @@
 // its Version moved past the one the cache holds, and the Conversation once its last Entry is another
 // than the one the cache read with it. So a change the page did not make, an agent's, a Key's or
 // another tab's, shows on the canvas and in the timeline. It polls when the tab regains focus, and
-// every 2 s while a Turn runs, so the page follows its agent's steps and writes. The pending writes
-// stay folded over whatever the System's read brings (`../mapping/queries.ts`, `useSystem`).
+// every 2 s while a Turn runs, hidden or not, so the page follows its agent's steps and writes. The
+// pending writes stay folded over whatever the System's read brings (`../mapping/queries.ts`,
+// `useSystem`).
 import { type QueryClient, type QueryKey, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { settle } from '../calls'
@@ -71,6 +72,8 @@ export function useFollowLatest(): { readonly turn: LiveTurn | undefined } {
     queryFn: () => polled(client),
     refetchOnWindowFocus: 'always',
     refetchInterval: (query) => (query.state.data?.turn === undefined ? false : closelyEvery),
+    // A Turn lasts 15 minutes at most: its page keeps up with it behind another window too.
+    refetchIntervalInBackground: true,
   })
   return { turn: data?.turn }
 }
