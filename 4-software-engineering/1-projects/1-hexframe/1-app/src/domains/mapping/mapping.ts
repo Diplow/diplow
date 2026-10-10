@@ -13,7 +13,7 @@ import { type IdTaken, Tiles, type TileRow, type Writes } from '#/repositories/d
 import { Zip } from '#/repositories/zip/zip'
 
 import { HelpReadOnly, TileIdTaken, TileNotFound } from './errors'
-import { type LinkOf, exportOf } from './files/files'
+import { type LinkOf, exportOf, placesOf } from './files/files'
 import { findInHelp, flatHelp, type HelpLanguage, isHelpId } from './help/help'
 import {
   type Content,
@@ -286,6 +286,19 @@ export const exportTile = (accountId: string, { id, link }: { id: string; link: 
     if (exported === undefined) return yield* new TileNotFound()
     const { zipped } = yield* Zip
     return { name: `${exported.slug}.zip`, bytes: zipped(exported.files) }
+  })
+
+/**
+ * The Account's System as files, the export of its Root, and where each of its Tiles lives in them,
+ * by id, both from one read: a Turn's sandbox holds the files, and starts in a Tile's folder or hands
+ * the agent its path. `link` is where the app shows a Tile, for a Reference whose Tile is gone.
+ */
+export const systemFiles = (accountId: string, link: LinkOf) =>
+  Effect.gen(function* () {
+    const whole = systemOf(yield* system(accountId))
+    const exported = exportOf(whole, whole.id, link)
+    if (exported === undefined) return yield* Effect.die(new Error('A System exports its Root'))
+    return { files: exported.files, places: placesOf(whole) }
   })
 
 /**

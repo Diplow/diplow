@@ -9,7 +9,10 @@ import * as Assistant from '#/domains/assistant/assistant'
 import { visitedTiles } from '#/domains/assistant/entities'
 import * as Iam from '#/domains/iam/iam'
 import * as Mapping from '#/domains/mapping/mapping'
+import { HttpExchange } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
+
+import { tileLink } from '../mapping/files/download'
 
 import type { DayAsked, MergedNavigation, NewMessage } from './assistant'
 
@@ -72,3 +75,17 @@ export const recordNavigation = ({ navigation, sinceLast }: typeof MergedNavigat
   forSession((accountId) =>
     transactional(Assistant.recordNavigation(accountId, navigation, sinceLast)),
   )
+
+/**
+ * The Account's System written into its sandbox, the files of Mapping's export of its Root, whatever
+ * the sandbox held before gone: what a Turn reads at its start. Answers where each Tile lives in those
+ * files, by id, from the same read, so a Turn starts in a Tile's folder and the prompt names a Tile's
+ * path. A Reference whose Tile is gone links it on the site the request reached.
+ */
+export const systemInSandbox = (accountId: string) =>
+  Effect.gen(function* () {
+    const { url } = yield* HttpExchange
+    const { files, places } = yield* Mapping.systemFiles(accountId, tileLink(url))
+    yield* Assistant.writeSystem(accountId, files)
+    return places
+  })
