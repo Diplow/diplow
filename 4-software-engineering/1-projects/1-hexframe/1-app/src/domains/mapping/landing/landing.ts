@@ -174,11 +174,9 @@ const inSlot = (accountId: string, plan: ImportPlan, place: Placement) =>
       const ids = yield* writes.insertAll(batch)
       const id = ids.get(root.path)
       if (id === undefined) return yield* Effect.die(new Error('A batch lost its first row'))
-      const event = importedAs(plan, id)
       return {
         answer: reportOf(batch, { id, plan, replaced: false }),
-        events: [event],
-        after: evolve(system, event),
+        events: [importedAs(plan, id)],
       }
     }),
   )
@@ -205,9 +203,8 @@ const asRoot = (accountId: string, plan: ImportPlan) =>
         // The Root says what the import gave it now, its Version counted by the import's event: a
         // writer that read it empty is refused.
         const event = importedAs(plan, stored.id)
-        const after = evolve(found, event)
         yield* writes.update(stored.id, {
-          version: after.root.version,
+          version: evolve(found, event).root.version,
           title,
           preview,
           body,
@@ -220,7 +217,6 @@ const asRoot = (accountId: string, plan: ImportPlan) =>
         return {
           answer: reportOf(batch, { id: stored.id, plan, replaced: true }),
           events: [event],
-          after,
         }
       }),
     ),

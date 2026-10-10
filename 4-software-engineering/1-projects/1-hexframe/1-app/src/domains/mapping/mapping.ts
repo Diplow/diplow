@@ -235,13 +235,12 @@ const ended = (
       })
 
 /**
- * What a change that is no Operation answers once it wrote its rows: its own `answer`, the events it
- * made and the System `evolve` leaves after them, which `changing` ends it with.
+ * What a change that is no Operation answers once it wrote its rows: its own `answer`, and the events
+ * it made, which `changing` folds through `evolve` and ends it with.
  */
 export interface Changed<A> {
   readonly answer: A
   readonly events: ReadonlyArray<MappingEvent>
-  readonly after: System
 }
 
 /**
@@ -263,8 +262,10 @@ export const changing = <A, E>(
     Tiles.use((tiles) =>
       Effect.gen(function* () {
         const writes = tiles.writes(accountId)
-        const { answer, events, after } = yield* change(yield* tiles.lock(accountId), writes)
-        yield* ended(writes, { after, events })
+        const rows = yield* tiles.lock(accountId)
+        const { answer, events } = yield* change(rows, writes)
+        const before = yield* rooted(systemFrom(rows, { owned: true }))
+        yield* ended(writes, { after: events.reduce(evolve, before), events })
         return answer
       }),
     ),
