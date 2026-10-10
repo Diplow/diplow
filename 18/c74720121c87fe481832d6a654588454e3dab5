@@ -1,0 +1,35 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/CLAUDE.md
+  s_c19b57f63ed6ef::t_904437b8e56a40 18-21,33
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/CLAUDE.md
+  s_c19b57f63ed6ef::t_34f8d1eb145cb3 20-21
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/CLAUDE.md
+  s_c19b57f63ed6ef::t_34f8d1eb145cb3 20,25
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-assistant/decisions.md
+  s_c19b57f63ed6ef::t_19e5c54b14e82e 10-13,38-52
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE.md
+  s_c19b57f63ed6ef::t_34f8d1eb145cb3 21,27
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/landing/CLAUDE.md
+  s_c19b57f63ed6ef::t_34f8d1eb145cb3 18,20,27
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_c19b57f63ed6ef::t_904437b8e56a40 18,40,42-43,51
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/CLAUDE.md
+  s_c19b57f63ed6ef::t_34f8d1eb145cb3 26
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_c19b57f63ed6ef::t_e7dd9688731536 10-13,26,34,47,67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "18c74720121c87fe481832d6a654588454e3dab5",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
