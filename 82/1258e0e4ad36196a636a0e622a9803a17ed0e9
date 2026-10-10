@@ -1,0 +1,30 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/sandbox.ts
+  s_c19b57f63ed6ef::t_c69c07637d975b 33-36,40-43
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/local.ts
+  s_c19b57f63ed6ef::t_35e5197c0c50c3 15,65-71,102-103,181-182,185,190
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/blaxel.test.ts
+  s_c19b57f63ed6ef::t_2ce54617c9a9b9 4,8-9,71-97
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/blaxel.ts
+  s_c19b57f63ed6ef::t_461201572ee372 12,25-27,42-55,77-82,86-99,106-107,150-153,184
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/sandbox.test.ts
+  s_c19b57f63ed6ef::t_fd5508ac63975a 91-103,227-235
+  s_c19b57f63ed6ef::t_e3039060002883 236
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/CLAUDE.md
+  s_c19b57f63ed6ef::t_c26ee64a48e651 19-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "821258e0e4ad36196a636a0e622a9803a17ed0e9",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
