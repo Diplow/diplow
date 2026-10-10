@@ -1,11 +1,11 @@
 // One Entry of the timeline: a Message, its links to Tiles shown as their Titles, a click centering
 // the canvas on one, or a line saying what happened, a change to the System, an import or where the
-// user went, with who did it, or how a Turn ended when not by its answer. Titles are those the Entry
-// carries, a navigation's and a link's those the System holds now; times are the reader's, in the
-// page's language.
+// user went, with who did it, or how a Turn ended when not by its answer; or a Proposal, the changes
+// the assistant drafted, which the user accepts or discards (./Proposal.tsx). Titles are those the
+// Entry carries, a navigation's and a link's those the System holds now; times are the reader's, in
+// the page's language.
 import { cn } from 'cn'
 import {
-  ArrowLeftRight,
   ChevronsDownUp,
   ChevronsUpDown,
   Crosshair,
@@ -13,13 +13,9 @@ import {
   Import,
   Layers,
   Leaf,
-  Link,
-  Move,
   Navigation as NavigationIcon,
   Pencil,
-  Plus,
   Square,
-  Trash2,
   Unlink,
   type LucideIcon,
 } from 'lucide-react'
@@ -34,10 +30,11 @@ import {
 } from '#/domains/assistant/entities'
 import type { OperationEvent } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
-import { getLocale } from '#/paraglide/runtime'
 import { Gesture } from '#/front/ui/hex/view/view'
 
 import type { Titles } from '../timeline/timeline'
+import { isVerb, named, Time, verbIcons } from './parts'
+import { type Deciding, ProposalEntry } from './Proposal'
 import { Shortened } from './Shortened'
 
 interface EntryProps {
@@ -45,16 +42,20 @@ interface EntryProps {
   titles: Titles
   /** Centers the canvas on a Tile a Message links; none where there is no canvas to center. */
   onCenter?: ((tile: string) => void) | undefined
+  /** Accepts or discards an open Proposal; none where nobody decides one. */
+  decide?: Deciding | undefined
 }
 
-export function ConversationEntry({ entry, titles, onCenter }: EntryProps) {
+export function ConversationEntry({ entry, titles, onCenter, decide }: EntryProps) {
   switch (entry._tag) {
     case 'Message':
       return <Message entry={entry} titles={titles} onCenter={onCenter} />
     case 'Navigation':
       return <NavigationLine entry={entry} titles={titles} />
     case 'Change': {
-      const { icon, text } = isVerb(entry.verb) ? changes[entry.verb] : changed
+      const { icon, text } = isVerb(entry.verb)
+        ? { icon: verbIcons[entry.verb], text: changes[entry.verb] }
+        : changed
       const names = { title: named(entry.tile.title), other: named(entry.other?.title ?? '') }
       return <Action icon={icon} text={text(actorOf(entry.actor), names)} at={entry.at} />
     }
@@ -62,6 +63,8 @@ export function ConversationEntry({ entry, titles, onCenter }: EntryProps) {
       return <Action icon={Import} text={importText(entry)} at={entry.at} />
     case 'TurnEnded':
       return <Action icon={Square} text={turnEnds[entry.how]()} at={entry.at} />
+    case 'Proposal':
+      return <ProposalEntry entry={entry} decide={decide} />
   }
 }
 
@@ -200,14 +203,6 @@ function Action({ icon: Icon, text, detail, at }: ActionProps) {
   )
 }
 
-function Time({ at }: { at: Date }) {
-  const time = new Intl.DateTimeFormat(getLocale(), { timeStyle: 'short' }).format(at)
-  return <time dateTime={at.toISOString()}>{time}</time>
-}
-
-/** A Title as the timeline says it: an untitled Tile, the Root before its name, as "Untitled". */
-const named = (title: string) => (title === '' ? m.system_untitled() : title)
-
 /** Who did it, as a sentence starts: none for the user, who reads "You" in each message. */
 function actorOf(actor: Actor): string | undefined {
   if (actor._tag === 'You') return undefined
@@ -229,35 +224,22 @@ function by<P extends object>(
 /** The Titles a change's sentence names: the Tile it is about, and the other one, if any. */
 type Names = { title: string; other: string }
 
-interface Told {
-  icon: LucideIcon
-  text: (actor: string | undefined, names: Names) => string
-}
+/** A change's sentence, by who made it. */
+type Said = (actor: string | undefined, names: Names) => string
 
 /** What each of Mapping's changes says once it happened, in the past tense, by whom. */
-const changes: Record<OperationEvent['_tag'], Told> = {
-  TileCreated: { icon: Plus, text: by(m.conversation_created, m.conversation_created_by) },
-  TileEdited: { icon: Pencil, text: by(m.conversation_edited, m.conversation_edited_by) },
-  TileMoved: { icon: Move, text: by(m.conversation_moved, m.conversation_moved_by) },
-  TilesSwapped: {
-    icon: ArrowLeftRight,
-    text: by(m.conversation_swapped, m.conversation_swapped_by),
-  },
-  TileDeleted: { icon: Trash2, text: by(m.conversation_deleted, m.conversation_deleted_by) },
-  ReferenceCreated: {
-    icon: Link,
-    text: by(m.conversation_referenced, m.conversation_referenced_by),
-  },
-  ReferenceDeleted: {
-    icon: Unlink,
-    text: by(m.conversation_unreferenced, m.conversation_unreferenced_by),
-  },
+const changes: Record<OperationEvent['_tag'], Said> = {
+  TileCreated: by(m.conversation_created, m.conversation_created_by),
+  TileEdited: by(m.conversation_edited, m.conversation_edited_by),
+  TileMoved: by(m.conversation_moved, m.conversation_moved_by),
+  TilesSwapped: by(m.conversation_swapped, m.conversation_swapped_by),
+  TileDeleted: by(m.conversation_deleted, m.conversation_deleted_by),
+  ReferenceCreated: by(m.conversation_referenced, m.conversation_referenced_by),
+  ReferenceDeleted: by(m.conversation_unreferenced, m.conversation_unreferenced_by),
 }
 
 /** A change whose verb this page does not know yet, which Mapping may have learned since. */
-const changed: Told = { icon: Pencil, text: by(m.conversation_changed, m.conversation_changed_by) }
-
-const isVerb = (verb: string): verb is OperationEvent['_tag'] => Object.hasOwn(changes, verb)
+const changed = { icon: Pencil, text: by(m.conversation_changed, m.conversation_changed_by) }
 
 const isGesture = Schema.is(Gesture)
 

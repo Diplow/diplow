@@ -1,7 +1,7 @@
 // Following what home shows: the page polls one small read, the System's Version, the Entry last
-// recorded in the Conversation and the Turn running (`latest`), and reads the System again only once
-// its Version moved past the one the cache holds, and the Conversation once its last Entry is another
-// than the one the cache read with it. So a change the page did not make, an agent's, a Key's or
+// recorded in the Conversation, the Turn running, the Mode and the open Proposal (`latest`), and reads
+// the System again only once its Version moved past the one the cache holds, and the Conversation once
+// its last Entry or its Proposal is another than the one the cache read with it. So a change the page did not make, an agent's, a Key's or
 // another tab's, shows on the canvas and in the timeline. It polls when the tab regains focus, and
 // every 2 s while a Turn runs, hidden or not, so the page follows its agent's steps and writes. The
 // pending writes stay folded over whatever the System's read brings (`../mapping/queries.ts`,
@@ -18,18 +18,26 @@ const closelyEvery = 2_000
 /** What the poll answers. */
 type Latest = Extract<Awaited<ReturnType<typeof askLatest>>, { ok: true }>['value']
 
+/** The open Proposal as the poll and a day of the Conversation say it, its id and its writes. */
+type ProposalNow = Latest['proposal']
+
+/** Whether two reads say the same open Proposal, holding as many writes, or both none. */
+const sameProposal = (a: ProposalNow, b: ProposalNow) => a?.id === b?.id && a?.drafts === b?.drafts
+
 /**
  * Whether the System the cache holds is behind the Version polled, and the Conversation it holds
- * behind its last Entry: neither before its first read.
+ * behind its last Entry or its open Proposal, a write drafted into it since: neither before its first
+ * read.
  */
 const behind = {
   system: (client: QueryClient, { version }: Latest) => {
     const held = client.getQueryData(systemRead.queryKey)
     return held !== undefined && version > held.version
   },
-  conversation: (client: QueryClient, { lastEntry }: Latest) => {
+  conversation: (client: QueryClient, { lastEntry, proposal }: Latest) => {
     const held = client.getQueryData(conversationRead.queryKey)?.pages[0]
-    return held !== undefined && lastEntry !== held.lastEntry
+    if (held === undefined) return false
+    return lastEntry !== held.lastEntry || !sameProposal(proposal, held.proposal)
   },
 }
 
@@ -60,9 +68,13 @@ export type LiveTurn = NonNullable<Latest['turn']>
  * Has the page follow the System and the Conversation: the latest of both polled when the tab regains
  * focus, every 2 s while a Turn runs, and once each write to the System the page made has settled,
  * since the server recorded it in the Conversation as it committed; each read again once it moved.
- * Answers the Turn running, as the poll last saw it, none before its first answer.
+ * Answers the Turn running and the Conversation's Mode, as the poll last saw them, neither before its
+ * first answer.
  */
-export function useFollowLatest(): { readonly turn: LiveTurn | undefined } {
+export function useFollowLatest(): {
+  readonly turn: LiveTurn | undefined
+  readonly mode: Latest['mode'] | undefined
+} {
   const client = useQueryClient()
   useEachSystemWrite(() => {
     void client.refetchQueries({ queryKey: latestRead.queryKey })
@@ -75,5 +87,5 @@ export function useFollowLatest(): { readonly turn: LiveTurn | undefined } {
     // A Turn lasts 15 minutes at most: its page keeps up with it behind another window too.
     refetchIntervalInBackground: true,
   })
-  return { turn: data?.turn }
+  return { turn: data?.turn, mode: data?.mode }
 }

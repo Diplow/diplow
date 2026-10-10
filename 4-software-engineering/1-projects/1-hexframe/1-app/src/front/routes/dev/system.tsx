@@ -1,6 +1,7 @@
 // A System as home shows it, on fixtures: the canvas with the breadcrumb above it, and the
-// Conversation beside it, its composer offering the fixture's Tiles to `@` and a Message's link
-// centering the canvas. The view lives in the search params, as on /dev/hex.
+// Conversation beside it, its composer offering the fixture's Tiles to `@` beside the Mode's switch, a
+// Message's link centering the canvas, and its open Proposal accepted or discarded in the page alone.
+// The view lives in the search params, as on /dev/hex.
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
@@ -8,7 +9,7 @@ import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { Conversation } from '#/front/features/conversation/Conversation'
 import { conversationFixture, fixtureMentionables } from '#/front/features/conversation/fixtures'
 import { splitByDay } from '#/front/features/conversation/timeline/timeline'
-import type { Entry } from '#/domains/assistant/entities'
+import type { Entry, Fate, Mode } from '#/domains/assistant/entities'
 import { m } from '#/paraglide/messages'
 import { Canvas } from '#/front/ui/hex/Canvas'
 import { ulysse } from '#/front/ui/hex/fixtures'
@@ -28,6 +29,7 @@ function SystemPage() {
   const [fixture] = useState(() => conversationFixture(new Date()))
   const [entries, setEntries] = useState(fixture.entries)
   const [tiles] = useState(fixtureMentionables)
+  const [mode, setMode] = useState<Mode>('ask')
   const onViewChange = (next: CanvasView) => {
     void navigate({ search: next })
   }
@@ -40,6 +42,14 @@ function SystemPage() {
       text,
     }
     setEntries((before) => [...before, sent])
+  }
+  // The page decides a Proposal for itself: no server keeps the fixture's.
+  const decided = (fate: Fate) => (proposal: string) => {
+    setEntries((before) =>
+      before.map((entry) =>
+        entry._tag === 'Proposal' && entry.proposal === proposal ? { ...entry, fate } : entry,
+      ),
+    )
   }
   return (
     <main className="grid gap-4 px-4 pb-4 lg:h-[calc(100dvh-4.25rem)] lg:grid-cols-[minmax(0,1fr)_24rem]">
@@ -60,6 +70,8 @@ function SystemPage() {
         onCenter={(tile) => {
           onViewChange(centerOn(ulysse, tile))
         }}
+        mode={{ mode, choose: setMode }}
+        decide={{ accept: decided('accepted'), discard: decided('discarded'), pending: false }}
         className="h-[32rem] lg:h-auto lg:min-h-0"
       />
     </main>
