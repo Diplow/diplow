@@ -140,6 +140,20 @@ describe('the System the page shows', () => {
     expect(result.current.shown?.tiles[id.a]).toMatchObject({ slot: 4 })
   })
 
+  it('shows the same System while nothing changes, a write pending', async () => {
+    vi.mocked(Mapping.moveTile).mockReturnValue(later<never>().promise)
+    const { result } = await rendered(useMoveTile)
+    act(() => {
+      result.current.hook.mutate({ id: id.a, parent: id.root, slot: 4 })
+    })
+    await waitFor(() => {
+      expect(result.current.shown?.tiles[id.a]).toMatchObject({ slot: 4 })
+    })
+    const shown = result.current.shown
+    await act(() => new Promise((settled) => setTimeout(settled, 50)))
+    expect(result.current.shown).toBe(shown)
+  })
+
   it('stops showing a refused write, and still shows the write queued behind it', async () => {
     const moved = later<unknown>()
     const edited = later<unknown>()
