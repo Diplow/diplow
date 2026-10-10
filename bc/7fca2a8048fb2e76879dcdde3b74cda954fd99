@@ -1,0 +1,24 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_1a08a9310970dc::t_fdcfb54200d6f5 87
+4-software-engineering/1-projects/1-hexframe/STACK.md
+  s_1a08a9310970dc::t_1bda779b65572b 150,152-153
+  s_1a08a9310970dc::t_fdcfb54200d6f5 155-156
+  s_1a08a9310970dc::t_3230dd4eaebeb4 37
+  s_1a08a9310970dc::t_f373d4d21267d1 154
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bc7fca2a8048fb2e76879dcdde3b74cda954fd99",
+  "prompts": {},
+  "sessions": {
+    "s_1a08a9310970dc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7b70d2f6-e13d-453e-87de-f81155c174d2",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
