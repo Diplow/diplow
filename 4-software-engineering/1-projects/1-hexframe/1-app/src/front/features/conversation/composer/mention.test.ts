@@ -164,8 +164,10 @@ describe('the link the composer inserts, and the Message it sends', () => {
       { id: 'work', shown: '@Work' },
       { id: 'team', shown: '@Work team' },
     ]
-    const sent = encoded('@Work team first, then @Work, not @Workshop nor @Wor', links)
-    expect(sent).toBe(`${linkTo('team')} first, then ${linkTo('work')}, not @Workshop nor @Wor`)
+    const sent = encoded('@Work team first, then @Work, not @Workshop, me@Work nor @Wor', links)
+    expect(sent).toBe(
+      `${linkTo('team')} first, then ${linkTo('work')}, not @Workshop, me@Work nor @Wor`,
+    )
     expect(partsOf(sent).filter(({ _tag }) => _tag === 'Link')).toHaveLength(2)
   })
 

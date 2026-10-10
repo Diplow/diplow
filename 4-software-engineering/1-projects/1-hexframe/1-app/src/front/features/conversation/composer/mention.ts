@@ -153,22 +153,25 @@ export function shownOf(tile: Mentionable, links: ReadonlyArray<Inserted>): stri
 export const showsLink = (value: string, at: number, links: ReadonlyArray<Inserted>) =>
   links.some(({ shown }) => new RegExp(`^${escaped(shown)}${ended}`, 'u').test(value.slice(at)))
 
+/** The input's next value, and where its caret goes. */
+export interface Edited {
+  readonly value: string
+  readonly caret: number
+}
+
 /**
  * The input once a Tile is picked for a search: the `@` and what was typed after it replaced by the
  * link as it shows (`shown`), and a space; and where the caret goes, after it.
  */
-export function inserted(
-  value: string,
-  query: Query,
-  shown: string,
-): { readonly value: string; readonly caret: number } {
+export function inserted(value: string, query: Query, shown: string): Edited {
   const link = `${shown} `
   const after = value.slice(query.at + 1 + query.text.length).replace(/^ /, '')
   return { value: `${value.slice(0, query.at)}${link}${after}`, caret: query.at + link.length }
 }
 
 /**
- * The Message the input sends: each link it inserted, wherever the input still shows it whole, written
+ * The Message the input sends: each link it inserted, wherever the input still shows it whole and
+ * opening a word, written
  * by its Tile's id, the longest first so a Title another one starts with never takes its place; a
  * link the user since edited stays as they wrote it.
  */
@@ -177,7 +180,7 @@ export function encoded(value: string, links: ReadonlyArray<Inserted>): string {
     .sort((a, b) => b.shown.length - a.shown.length)
     .reduce(
       (text, { id, shown }) =>
-        text.replace(new RegExp(`${escaped(shown)}${ended}`, 'gu'), linkTo(id)),
+        text.replace(new RegExp(`(?<!\\S)${escaped(shown)}${ended}`, 'gu'), linkTo(id)),
       value,
     )
 }

@@ -11,8 +11,8 @@ import { Field } from '#/front/ui/inputs/forms/field'
 import { useAppForm } from '#/front/ui/inputs/forms/form'
 import { Suggestions, suggestionsField } from '#/front/ui/overlays/Suggestions'
 
-import { type Edited, useMentionState } from '../state/useMentionState'
-import type { Mentionable } from './mention'
+import { useMentionState } from '../state/useMentionState'
+import type { Edited, Mentionable } from './mention'
 
 interface ComposerProps {
   /** A Message the user sent, trimmed and never empty, each Tile it `@`s linked by its id. */

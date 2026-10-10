@@ -6,6 +6,7 @@
 import { useReducer } from 'react'
 
 import {
+  type Edited,
   encoded,
   type Inserted,
   inserted,
@@ -60,12 +61,6 @@ function reducer(state: State, event: Event): State {
     case 'sent':
       return initial
   }
-}
-
-/** The input's next value, and where its caret goes. */
-export interface Edited {
-  readonly value: string
-  readonly caret: number
 }
 
 /** The Account's Tiles a composer offers to `@`. */
