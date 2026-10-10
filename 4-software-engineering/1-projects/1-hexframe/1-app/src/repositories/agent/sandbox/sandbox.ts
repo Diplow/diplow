@@ -30,12 +30,17 @@ export interface Run {
 }
 
 /**
- * Where a process stands: running, ended by itself, well (`completed`) or not (`failed`), or ended by
- * a stop, which interrupted it (`stopped`) or, past its grace or its time, killed it (`killed`).
+ * Where a process stands: running, or ended, by how it ended rather than by who ended it, so both
+ * layers read it alike: well (`completed`), interrupted by a SIGINT (`stopped`), which a shell
+ * reports as the exit code `interrupted`, killed (`killed`), past a stop's grace or its time, or
+ * otherwise (`failed`).
  */
 type RunState = 'running' | 'completed' | 'failed' | 'stopped' | 'killed'
 
-/** A process's state, and its exit code once it ended by itself. */
+/** The exit code of a process a SIGINT ended, as a shell reports it: 128 and the signal's number. */
+export const interrupted = 130
+
+/** A process's state, and its exit code once it completed or failed. */
 export interface RunStatus {
   readonly state: RunState
   readonly exitCode?: number
@@ -79,9 +84,6 @@ export class Sandbox extends Context.Service<
 
 /** The folder of the home that holds the System, read-only. */
 export const systemFolder = 'system'
-
-/** How long a sandbox stays idle before it is deleted, as Blaxel writes a duration. */
-export const idleLifetime = '7d'
 
 /**
  * The name of an Account's sandbox: a hash of the Account's id, so the id never leaves the app, and of

@@ -12,6 +12,7 @@ import { Duration, Effect, Layer, Option } from 'effect'
 import {
   type Box,
   inside,
+  interrupted,
   outsideTheSystem,
   type Run,
   type RunStatus,
@@ -26,8 +27,6 @@ interface Child {
   readonly process: ChildProcess
   readonly ended: Promise<void>
   status: RunStatus
-  /** How a stop ended it, once one did: interrupted, or killed past its grace or its time. */
-  endedBy?: 'stopped' | 'killed'
 }
 
 /** Modes that make a tree read-only, or writable again by its owner. */
@@ -63,9 +62,13 @@ function signal(child: Child, name: NodeJS.Signals): void {
   }
 }
 
-/** A child's state once it exited, by its code or by the signal that ended it. */
-function endedAs(child: Child, code: number | null): RunStatus {
-  if (child.endedBy !== undefined) return { state: child.endedBy }
+/**
+ * A child's state once it exited, by how it ended, as Blaxel reports it: a SIGINT, or the exit code a
+ * shell reports one by, `stopped`; a kill `killed`; otherwise its code.
+ */
+function endedAs(code: number | null, by: NodeJS.Signals | null): RunStatus {
+  if (by === 'SIGINT' || code === interrupted) return { state: 'stopped' }
+  if (by === 'SIGKILL') return { state: 'killed' }
   return code === 0
     ? { state: 'completed', exitCode: 0 }
     : { state: 'failed', exitCode: code ?? -1 }
@@ -88,7 +91,6 @@ function spawned(run: Run, { cwd, home }: { cwd: string; home: string }): Child 
     status: { state: 'running' },
     ended: new Promise((resolve) => {
       const timer = setTimeout(() => {
-        child.endedBy = 'killed'
         signal(child, 'SIGKILL')
       }, run.timeoutSeconds * 1000)
       timer.unref()
@@ -97,8 +99,8 @@ function spawned(run: Run, { cwd, home }: { cwd: string; home: string }): Child 
         clearTimeout(timer)
         resolve()
       }
-      started.once('exit', (code) => {
-        end(endedAs(child, code))
+      started.once('exit', (code, by) => {
+        end(endedAs(code, by))
       })
       started.once('error', () => {
         end({ state: 'failed', exitCode: -1 })
@@ -127,7 +129,6 @@ function boxAt(name: string, home: string, grace: Duration.Duration): Box {
     Effect.promise(async () => {
       const child = children.get(processName)
       if (child === undefined || child.status.state !== 'running') return
-      child.endedBy = 'stopped'
       signal(child, 'SIGINT')
       const graced = new Promise<'grace'>((resolve) => {
         setTimeout(() => {
@@ -135,7 +136,6 @@ function boxAt(name: string, home: string, grace: Duration.Duration): Box {
         }, Duration.toMillis(grace)).unref()
       })
       if ((await Promise.race([child.ended, graced])) === 'grace') {
-        child.endedBy = 'killed'
         signal(child, 'SIGKILL')
         await child.ended
       }
@@ -178,16 +178,16 @@ export function makeLocal({
   readonly root: string
   readonly grace?: Duration.Duration
 }): Sandbox['Service'] {
-  const boxes = new Map<string, Box>()
+  // A box per name, kept as it is being made, so two ensures at once share one, and its processes.
+  const boxes = new Map<string, Promise<Box>>()
   return {
     ensure: (accountId: string) =>
-      Effect.promise(async () => {
+      Effect.promise(() => {
         const name = sandboxName('local', accountId)
         const found = boxes.get(name)
         if (found !== undefined) return found
         const home = join(root, name)
-        await mkdir(home, { recursive: true })
-        const box = boxAt(name, home, grace)
+        const box = mkdir(home, { recursive: true }).then(() => boxAt(name, home, grace))
         boxes.set(name, box)
         return box
       }),

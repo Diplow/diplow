@@ -8,8 +8,8 @@ import { Config, Duration, Effect, Layer, Option, Redacted } from 'effect'
 
 import {
   type Box,
-  idleLifetime,
   inside,
+  interrupted,
   outsideTheSystem,
   type Run,
   type RunStatus,
@@ -21,6 +21,9 @@ import {
 
 /** Blaxel's image with Claude Code on its PATH. */
 const image = 'blaxel/claude-code:latest'
+
+/** How long a sandbox stays idle before it is deleted. */
+const idleLifetime = '7d'
 
 /** The folder every path of a sandbox is from. */
 const home = '/blaxel/hexframe'
@@ -34,6 +37,20 @@ const chore = 60
 /** What the app's sandboxes reach: these hosts, through Blaxel's proxy, which the firewall enforces. */
 function networkOf(hosts: ReadonlyArray<string>) {
   return { proxy: { allowedDomains: [...hosts] }, firewall: { rulesets: ['proxy'] } }
+}
+
+/**
+ * Whether a sandbox whose proxy allows `allowed` must have its network set again to reach `hosts`
+ * alone: unless it allows exactly these hosts, in any order. A sandbox that allows none, made before
+ * its network was set, must.
+ */
+export function networkDrifted(
+  allowed: ReadonlyArray<string> | undefined,
+  hosts: ReadonlyArray<string>,
+) {
+  const wanted = new Set(hosts)
+  const now = new Set(allowed ?? [])
+  return now.size !== wanted.size || [...wanted].some((host) => !now.has(host))
 }
 
 /** A string in single quotes, for a shell. */
@@ -57,24 +74,28 @@ const chored = (sandbox: SandboxInstance, command: string) =>
         : Effect.void,
   )
 
-/** Where a process stands, as Blaxel reports it, its exit code once it ended by itself. */
-const statusOf = (sandbox: SandboxInstance, name: string) =>
-  Effect.orDie(
-    Effect.tryPromise({
-      try: async (): Promise<Option.Option<RunStatus>> => {
-        const found = await sandbox.process.get(name).catch((error: unknown) => {
-          if (isMissing(error)) return undefined
-          throw error
-        })
-        if (found === undefined) return Option.none()
-        const ended = found.status === 'completed' || found.status === 'failed'
-        return Option.some(
-          ended ? { state: found.status, exitCode: found.exitCode } : { state: found.status },
-        )
-      },
-      catch: (error) => error,
+/** The process of this name, as Blaxel reports it; none when the sandbox knows none. */
+const processOf = (sandbox: SandboxInstance, name: string) =>
+  blaxel(() =>
+    sandbox.process.get(name).catch((error: unknown) => {
+      if (isMissing(error)) return undefined
+      throw error
     }),
   )
+
+/** A process's state as Blaxel reports it, read as the fake reads one: by how it ended. */
+export function statusFrom({
+  status,
+  exitCode,
+}: {
+  readonly status: RunStatus['state']
+  readonly exitCode: number
+}): RunStatus {
+  if (status === 'failed' && exitCode === interrupted) return { state: 'stopped' }
+  return status === 'completed' || status === 'failed'
+    ? { state: status, exitCode }
+    : { state: status }
+}
 
 /** One Account's sandbox on Blaxel. */
 function boxOf(sandbox: SandboxInstance, name: string): Box {
@@ -82,8 +103,8 @@ function boxOf(sandbox: SandboxInstance, name: string): Box {
 
   const stop = (processName: string) =>
     Effect.gen(function* () {
-      const found = yield* blaxel(() => sandbox.process.get(processName))
-      if (found.status !== 'running') return
+      const found = yield* processOf(sandbox, processName)
+      if (found?.status !== 'running') return
       // Blaxel's own stop sends no SIGINT: the signal is sent from inside, to the process's own pid.
       if (/^\d+$/.test(found.pid)) {
         yield* chored(sandbox, `kill -INT ${found.pid} 2>/dev/null || true`)
@@ -126,7 +147,10 @@ function boxOf(sandbox: SandboxInstance, name: string): Box {
         ),
       ),
     stop,
-    status: (processName: string) => statusOf(sandbox, processName),
+    status: (processName: string) =>
+      Effect.map(processOf(sandbox, processName), (found) =>
+        Option.map(Option.fromNullishOr(found), statusFrom),
+      ),
   }
 }
 
@@ -157,8 +181,7 @@ function makeBlaxel({
             labels: { app: 'hexframe' },
           }),
         )
-        const allowed = sandbox.spec.network?.proxy?.allowedDomains ?? []
-        if (allowed.join(',') !== network.proxy.allowedDomains.join(',')) {
+        if (networkDrifted(sandbox.spec.network?.proxy?.allowedDomains, hosts)) {
           yield* blaxel(() => SandboxInstance.updateNetwork(name, { network }))
         }
         yield* chored(sandbox, `mkdir -p ${quoted(home)}`)

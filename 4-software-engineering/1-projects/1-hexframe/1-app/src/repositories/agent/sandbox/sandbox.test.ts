@@ -88,6 +88,19 @@ describe('an Account’s sandbox', () => {
         expect(first.name).toMatch(/^hexframe-[0-9a-f]{32}$/)
       }),
   )
+
+  it.live('is one for two ensures at once, its processes shared', () =>
+    Effect.gen(function* () {
+      const sandbox = yield* sandboxes()
+      const [one, other] = yield* Effect.all(
+        [sandbox.ensure('account-1'), sandbox.ensure('account-1')],
+        { concurrency: 2 },
+      )
+      expect(other).toBe(one)
+      yield* one.start(run('shared', 'exit 0'))
+      expect(Option.isSome(yield* (yield* sandbox.ensure('account-1')).status('shared'))).toBe(true)
+    }),
+  )
 })
 
 describe('its System folder', () => {
@@ -208,6 +221,16 @@ describe('a process', () => {
       const twice = yield* Effect.exit(box.start(run('long', 'sleep 2')))
       expect(Exit.hasDies(twice)).toBe(true)
       yield* box.stop('long')
+    }),
+  )
+
+  it.live('reads stopped when a SIGINT ended it, however it was sent', () =>
+    Effect.gen(function* () {
+      const box = yield* boxOfSomeone
+      yield* box.start(run('self', 'kill -INT $$; sleep 1'))
+      expect(yield* settled(box, 'self')).toEqual({ state: 'stopped' })
+      yield* box.stop('never')
+      expect(yield* box.status('never')).toEqual(Option.none())
     }),
   )
 
