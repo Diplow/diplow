@@ -4,19 +4,11 @@
 // reserves the most its answer may cost before it goes, so calls made at once are held under the
 // limits too, and is charged what it used once its answer has ended, or that most when the answer was
 // cut short. Pure.
-import { settings, type TokenKind } from '../settings'
+import { settings, type TokenKind, tokenKinds } from '../settings'
 import type { Model } from './call'
 
 /** The tokens a call used, by kind, and whether its answer came whole. */
 export type Used = Readonly<Record<TokenKind, number>> & { readonly complete: boolean }
-
-const kinds: ReadonlyArray<TokenKind> = [
-  'input',
-  'output',
-  'cacheWrite5m',
-  'cacheWrite1h',
-  'cacheRead',
-]
 
 /**
  * What tokens cost, in millionths of a dollar, rounded up: each kind at the model's price in dollars
@@ -24,7 +16,7 @@ const kinds: ReadonlyArray<TokenKind> = [
  */
 function priced(model: Model, tokens: Readonly<Record<TokenKind, number>>): number {
   const price = settings.model.prices[model]
-  return Math.ceil(kinds.reduce((cost, kind) => cost + tokens[kind] * price[kind], 0))
+  return Math.ceil(tokenKinds.reduce((cost, kind) => cost + tokens[kind] * price[kind], 0))
 }
 
 /** What a call reserves before it goes: the output it may answer, at its model's price. */

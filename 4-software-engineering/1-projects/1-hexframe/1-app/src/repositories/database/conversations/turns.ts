@@ -52,16 +52,18 @@ export class Turns extends Context.Service<
     /** The Turn running in the Account's Conversation, if one does. */
     readonly running: (accountId: string) => Effect.Effect<TurnRow | undefined>
     /**
-     * What one of the Account's Turns spent, none unless it is running, and what all its Turns started
-     * since `since` spent, that one included: the sum of their spend, which no counter keeps. Inside a
-     * transaction, the Turn's row locked until it ends, so two calls of one Turn decide one at a time.
+     * What one of the Account's running Turns spent, and what all its Turns started since `since` spent,
+     * that one included: the sum of their spend, which no counter keeps. None when the Turn is not
+     * running. Inside a transaction, the Turn's row locked until it ends, so two calls of one Turn
+     * decide one at a time; one Turn runs at a time in an Account's Conversation, so its lock holds
+     * the month's sum too.
      */
     readonly spending: (
       accountId: string,
       turnId: string,
       since: Date,
     ) => Effect.Effect<
-      { readonly turn: number | undefined; readonly month: number },
+      { readonly turn: number; readonly month: number } | undefined,
       never,
       InTransaction
     >
@@ -182,7 +184,8 @@ const make = Effect.gen(function* () {
           and(inArray(turn.conversationId, conversationOf(accountId)), gte(turn.startedAt, since)),
         )
         .pipe(Effect.orDie)
-      return { turn: turnSpent?.spent, month: Number(month?.spent ?? 0) }
+      if (turnSpent === undefined) return undefined
+      return { turn: turnSpent.spent, month: Number(month?.spent ?? 0) }
     })
 
   const spending = (accountId: string, turnId: string, since: Date) =>

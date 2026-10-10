@@ -6,7 +6,9 @@ import { Duration } from 'effect'
  * The kinds of token a model call is priced by: input read from no cache, output, input written to
  * the cache for five minutes or for an hour, and input read from it.
  */
-export type TokenKind = 'input' | 'output' | 'cacheWrite5m' | 'cacheWrite1h' | 'cacheRead'
+export const tokenKinds = ['input', 'output', 'cacheWrite5m', 'cacheWrite1h', 'cacheRead'] as const
+
+export type TokenKind = (typeof tokenKinds)[number]
 
 /** A model's price per kind of token, in dollars per million, which is millionths of a dollar each. */
 type Price = Readonly<Record<TokenKind, number>>

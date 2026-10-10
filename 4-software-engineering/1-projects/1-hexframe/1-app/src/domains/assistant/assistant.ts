@@ -180,8 +180,6 @@ export interface AskedCall {
 /** A call let through and admitted on a Turn, with what it reserved of the Turn's spend. */
 interface Admitted {
   readonly _tag: 'Admitted'
-  readonly accountId: string
-  readonly turnId: string
   readonly asked: AskedCall
   readonly call: Allowed
   readonly reserved: number
@@ -213,8 +211,8 @@ export const admitCall = (accountId: string, turnId: string, asked: AskedCall) =
       return { _tag: 'Refused', ...allowed.failure } satisfies Admission
     const now = new Date(yield* Clock.currentTimeMillis)
     const spent = yield* Turns.use((turns) => turns.spending(accountId, turnId, monthOf(now)))
-    if (spent.turn === undefined) return { _tag: 'TurnOver' } satisfies Admission
-    const limit = limitReached({ turn: spent.turn, month: spent.month })
+    if (spent === undefined) return { _tag: 'TurnOver' } satisfies Admission
+    const limit = limitReached(spent)
     if (limit !== undefined) {
       yield* endTurn(accountId, turnId, limit)
       return { _tag: 'Limited', limit } satisfies Admission
@@ -222,14 +220,7 @@ export const admitCall = (accountId: string, turnId: string, asked: AskedCall) =
     const call = allowed.success
     const reserve = reserved(call.model, call.maxTokens)
     yield* Turns.use((turns) => turns.spend(accountId, turnId, reserve))
-    const admitted: Admission = {
-      _tag: 'Admitted',
-      accountId,
-      turnId,
-      asked,
-      call,
-      reserved: reserve,
-    }
+    const admitted: Admission = { _tag: 'Admitted', asked, call, reserved: reserve }
     return admitted
   })
 
