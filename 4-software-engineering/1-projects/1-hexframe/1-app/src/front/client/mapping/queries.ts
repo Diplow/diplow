@@ -20,7 +20,7 @@ import {
 import { Schema } from 'effect'
 import { useCallback, useMemo, useRef, useSyncExternalStore } from 'react'
 
-import type { Failure, Outcome } from '#/api/errors/failure'
+import type { Failure, Outcome } from '#/api/report/errors/failure'
 import { type System, type SystemTile, systemOf } from '#/domains/mapping/entities'
 import type { Operation, OperationName } from '#/domains/mapping/operations'
 import { type Download, downloaded } from '#/api/mapping/files/download'

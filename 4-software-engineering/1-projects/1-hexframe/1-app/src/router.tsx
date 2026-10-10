@@ -2,7 +2,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { createRouter } from '@tanstack/react-router'
 
 import { makeQueryClient } from '#/front/client/channels'
-import { startObservability } from '#/api/observability/client'
+import { startObservability } from '#/api/report/observability/client'
 import { deLocalizeUrl, localizeUrl } from '#/paraglide/runtime'
 
 import { routeTree } from './routeTree.gen'

@@ -21,7 +21,7 @@ import type { Operation } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 
-import type { Entry, Navigation } from './timeline'
+import type { Entry, Navigation } from '../timeline/timeline'
 import { TileCard } from './TileCard'
 
 export function ConversationEntry({ entry }: { entry: Entry }) {

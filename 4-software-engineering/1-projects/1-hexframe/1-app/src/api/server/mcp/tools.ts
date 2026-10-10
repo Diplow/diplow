@@ -18,7 +18,7 @@ import {
 import { HelpId, helpRoot } from '#/domains/mapping/mapping'
 import type { OperationName } from '#/domains/mapping/operations'
 
-import type { Failure } from '../../errors/failure'
+import type { Failure } from '../../report/errors/failure'
 import {
   NewReference,
   NewTile,

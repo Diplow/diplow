@@ -67,7 +67,7 @@ const actor = Effect.gen(function* () {
   return signedInBy(Option.flatten(session), Option.flatten(key))
 })
 
-// A bus message is logged at `medium` (../observability/levels.ts), by its tag, never its fields.
+// A bus message is logged at `medium` (../report/observability/levels.ts), by its tag, never its fields.
 const logged = (message: string) =>
   Effect.annotateLogs(Effect.log(message), { bus: 'server', topic: 'bus' })
 

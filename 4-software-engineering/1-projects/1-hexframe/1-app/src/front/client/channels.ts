@@ -1,4 +1,4 @@
-// The channels, carried out: each failure goes where the channel table (src/api/errors/channel.ts) sends it,
+// The channels, carried out: each failure goes where the channel table (src/api/report/errors/channel.ts) sends it,
 // so a feature writes no error handling. Reads and writes, a form's included, are wired in the
 // QueryClient, and a form shows its write's refusal through `submitMutation`; `submitWrite` is a form's
 // submit kept out of every cache, for a secret; ReadBoundary shows what belongs in the nearest boundary.
@@ -6,10 +6,10 @@ import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query'
 
 import { deLocalizeHref, localizeHref } from '#/paraglide/runtime'
 import { toast } from '#/front/ui/feedback/Toaster'
-import { channelFor, type Call } from '#/api/errors/channel'
-import type { Failure, Outcome } from '#/api/errors/failure'
-import { messageFor } from '#/api/errors/messages'
-import { forget, reportError } from '#/api/observability/client'
+import { channelFor, type Call } from '#/api/report/errors/channel'
+import type { Failure, Outcome } from '#/api/report/errors/failure'
+import { messageFor } from '#/api/report/errors/messages'
+import { forget, reportError } from '#/api/report/observability/client'
 
 import { CallFailed, Foreseen, asCallFailed, settle } from './calls'
 

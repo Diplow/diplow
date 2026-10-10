@@ -5,7 +5,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { readSignInSearch } from '#/front/client/iam/guard'
 import { Access } from '#/front/features/access/Access'
 
-export const Route = createFileRoute('/sign-in')({
+export const Route = createFileRoute('/(access)/sign-in')({
   validateSearch: readSignInSearch,
   component: SignIn,
 })

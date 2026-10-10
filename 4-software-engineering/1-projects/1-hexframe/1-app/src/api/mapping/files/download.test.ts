@@ -7,7 +7,7 @@ import { exportOf } from '#/domains/mapping/files/files'
 import { systemOf } from '#/domains/mapping/entities'
 import { unzipped } from '#/repositories/zip/testing'
 
-import type { Unexpected } from '../../errors/failure'
+import type { Unexpected } from '../../report/errors/failure'
 import { noKey, run, type StartContext } from '../../server/run'
 import { asDownload, downloaded, type ExportAnswer, tileLink } from './download'
 import type { exportTile } from '../mapping'

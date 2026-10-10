@@ -5,7 +5,7 @@
 import { Option, Schema } from 'effect'
 import { useCallback, useSyncExternalStore } from 'react'
 
-import { log, reportError } from '#/api/observability/client'
+import { log, reportError } from '#/api/report/observability/client'
 
 /**
  * A fact in the past tense, declared with an Effect Schema tagged class in the language of the domain

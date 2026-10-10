@@ -6,7 +6,7 @@ import { Option, Schema } from 'effect'
 import { iamFailures } from '#/domains/iam/errors'
 import { mappingFailures } from '#/domains/mapping/errors'
 
-import { devFailures } from '../dev/failures'
+import { devFailures } from '../../dev/failures'
 
 /**
  * A failure the server does not show as it is: a defect, a repository or infrastructure error, or an

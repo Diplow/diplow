@@ -17,7 +17,7 @@ import { type Database, layer as databaseLayer } from '#/repositories/database/d
 import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 import { Zip, layer as zipLayer } from '#/repositories/zip/zip'
 
-import { Failure, Unexpected, encodeFailure, type Outcome } from '../errors/failure'
+import { Failure, Unexpected, encodeFailure, type Outcome } from '../report/errors/failure'
 import {
   CurrentRequestLog,
   called,
@@ -27,7 +27,7 @@ import {
   requestLog,
   sent,
   unobserved,
-} from '../observability/server'
+} from '../report/observability/server'
 import { WaitUntil, serverBus, type Subscription } from './bus'
 
 /** What Start's middleware knows about the request, as a program sees it. */
