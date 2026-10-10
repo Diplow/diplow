@@ -144,8 +144,12 @@ function SuggestionsSpecimen() {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState(0)
   const suggestions = [
-    { id: 'leadership', label: m.dev_ui_sample_leadership(), detail: m.dev_ui_sample_tile_title() },
-    { id: 'education', label: m.dev_ui_sample_education(), detail: m.dev_ui_sample_tile_title() },
+    {
+      id: 'leadership',
+      label: m.dev_ui_sample_leadership(),
+      detail: m.dev_ui_sample_tile_preview(),
+    },
+    { id: 'education', label: m.dev_ui_sample_education() },
     { id: 'games', label: m.dev_ui_sample_games() },
   ]
   const pick = (id: string) => {
