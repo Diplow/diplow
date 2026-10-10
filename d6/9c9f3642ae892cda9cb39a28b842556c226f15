@@ -1,0 +1,27 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/programs.ts
+  s_c19b57f63ed6ef::t_d91eb96c7c5a19 12,106-108,116-117
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/recording.ts
+  s_c19b57f63ed6ef::t_d91eb96c7c5a19 22,25,27
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/turns.test.ts
+  s_c19b57f63ed6ef::t_d91eb96c7c5a19 155
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/turn.test.ts
+  s_c19b57f63ed6ef::t_a5357791ce9d4e 21-24,39-40,93,126,137,159-169,187,204
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/CLAUDE.md
+  s_c19b57f63ed6ef::t_509dc11ef839b9 22,25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d69c9f3642ae892cda9cb39a28b842556c226f15",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
