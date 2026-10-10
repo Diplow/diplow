@@ -6,8 +6,12 @@
 // (../channels.ts): a hook's caller handles none.
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { conversationDay, postMessage, recordNavigation } from '#/api/assistant/assistant'
-import type { Navigation } from '#/domains/assistant/entities'
+import {
+  conversationDay,
+  type MergedNavigation,
+  postMessage,
+  recordNavigation,
+} from '#/api/assistant/assistant'
 
 import { read, write } from '../calls'
 
@@ -17,14 +21,22 @@ const dayScope = 'conversationDay'
 /** The queue the Conversation's writes wait their turn in, so they reach the server in order. */
 const conversationQueue = 'conversation'
 
+/** How many minutes the reader's clock stands ahead of UTC at an instant. */
+const offsetAt = (at: Date) => -at.getTimezoneOffset()
+
 /**
- * How many minutes the reader's clock stands ahead of UTC at their midnight of a date, `2026-10-10`,
- * or now: what the server splits the Conversation's days by.
+ * The reader's clock's offsets from UTC at the midnight starting a date of their calendar,
+ * `2026-10-10`, today's when none is given, and at the next midnight: what the server splits the
+ * Conversation's days by, a day their clock changes spanning 23 or 25 hours.
  */
-function offsetOn(date?: string): number {
-  if (date === undefined) return -new Date().getTimezoneOffset()
-  const [year = 0, month = 1, day = 1] = date.split('-').map(Number)
-  return -new Date(year, month - 1, day).getTimezoneOffset()
+function offsetsOn(date?: string) {
+  const now = new Date()
+  const [year = now.getFullYear(), month = now.getMonth() + 1, day = now.getDate()] =
+    date?.split('-').map(Number) ?? []
+  return {
+    offset: offsetAt(new Date(year, month - 1, day)),
+    nextOffset: offsetAt(new Date(year, month - 1, day + 1)),
+  }
 }
 
 /**
@@ -38,9 +50,7 @@ export const useConversationDay = (date?: string) =>
       scope: dayScope,
       key: [date ?? 'today'],
       call: () =>
-        conversationDay({
-          data: { ...(date !== undefined && { date }), offset: offsetOn(date) },
-        }),
+        conversationDay({ data: { ...(date !== undefined && { date }), ...offsetsOn(date) } }),
     }),
   )
 
@@ -48,7 +58,11 @@ export const useConversationDay = (date?: string) =>
 const readAgain = (client: ReturnType<typeof useQueryClient>) =>
   client.invalidateQueries({ queryKey: [dayScope] })
 
-/** Posts the user's Message, trimmed and never empty, then reads the Conversation again. */
+/**
+ * Posts the user's Message, trimmed and never empty, then reads the Conversation again. A feature posts
+ * through the navigation sender (`features/conversation/state/`), so the navigation it follows is
+ * sent before it.
+ */
 export const usePostMessage = () => {
   const client = useQueryClient()
   return useMutation({
@@ -59,19 +73,17 @@ export const usePostMessage = () => {
   })
 }
 
-/** What recording a merged navigation sends: it, and how long ago its last gesture was. */
-export interface NavigationSent {
-  readonly navigation: Navigation
-  readonly sinceLast: number
-}
-
 /** Records where the user went, merged by the browser, then reads the Conversation again. */
 export const useRecordNavigation = () => {
   const client = useQueryClient()
   return useMutation({
-    ...write('recordNavigation', (data: NavigationSent) => recordNavigation({ data }), {
-      queue: conversationQueue,
-    }),
+    ...write(
+      'recordNavigation',
+      (data: typeof MergedNavigation.Type) => recordNavigation({ data }),
+      {
+        queue: conversationQueue,
+      },
+    ),
     onSettled: () => readAgain(client),
   })
 }

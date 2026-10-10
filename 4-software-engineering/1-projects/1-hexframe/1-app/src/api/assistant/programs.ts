@@ -6,10 +6,12 @@
 import { Effect } from 'effect'
 
 import * as Assistant from '#/domains/assistant/assistant'
-import type { Day, Navigation } from '#/domains/assistant/entities'
+import { visitedTiles } from '#/domains/assistant/entities'
 import * as Iam from '#/domains/iam/iam'
 import * as Mapping from '#/domains/mapping/mapping'
 import { transactional } from '#/repositories/database/database'
+
+import type { DayAsked, MergedNavigation, NewMessage } from './assistant'
 
 /**
  * Runs an operation for the Account the request's Session proves: the Conversation is the user's,
@@ -23,36 +25,25 @@ const forSession = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, 
  * first, and the Titles of the Tiles its navigations went to, as the System holds them now, by id. A
  * navigation keeps a Tile's id alone; a Tile the System no longer holds has no Title there.
  */
-export const conversationDay = ({
-  date,
-  offset,
-}: Partial<Pick<Day, 'date'>> & Pick<Day, 'offset'>) =>
+export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
   forSession((accountId) =>
     Effect.gen(function* () {
-      const day = date === undefined ? yield* Assistant.today(offset) : { date, offset }
+      const day = { date: date ?? (yield* Assistant.today(offsets.offset)).date, ...offsets }
       const entries = yield* Assistant.day(accountId, day)
-      const visited = entries.flatMap((entry) =>
-        entry._tag === 'Navigation' ? entry.steps.map(({ tile }) => tile) : [],
-      )
-      const titles = yield* Mapping.titles(accountId, [...new Set(visited)])
+      const titles = yield* Mapping.titles(accountId, visitedTiles(entries))
       return { day, entries, titles }
     }),
   )
 
 /** Posts the user's Message in their Conversation, and answers its Entry. No agent answers yet. */
-export const postMessage = ({ text }: { readonly text: string }) =>
-  forSession((accountId) =>
-    transactional(Assistant.record(accountId, { _tag: 'Message', author: 'user', text })),
-  )
+export const postMessage = ({ text }: typeof NewMessage.Type) =>
+  forSession((accountId) => transactional(Assistant.postMessage(accountId, text)))
 
 /**
  * Records where the user went, consecutive navigations merged into one Entry by the browser, dated
  * from its last gesture, `sinceLast` milliseconds before the server received it.
  */
-export const recordNavigation = ({
-  navigation,
-  sinceLast,
-}: {
-  readonly navigation: Navigation
-  readonly sinceLast: number
-}) => forSession((accountId) => transactional(Assistant.record(accountId, navigation, sinceLast)))
+export const recordNavigation = ({ navigation, sinceLast }: typeof MergedNavigation.Type) =>
+  forSession((accountId) =>
+    transactional(Assistant.recordNavigation(accountId, navigation, sinceLast)),
+  )

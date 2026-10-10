@@ -44,23 +44,34 @@ async function render<T>(hook: () => T) {
   return rendered.result
 }
 
-/** How many minutes the test's clock stands ahead of UTC, at a date's midnight or now. */
-const offsetOn = (date?: Date) => -(date ?? new Date()).getTimezoneOffset()
+/** How many minutes the test's clock stands ahead of UTC at an instant. */
+const offsetAt = (at: Date) => -at.getTimezoneOffset()
 
 describe("the Conversation's hooks", () => {
   it('read today in the reader’s time zone, no date sent', async () => {
     const result = await render(() => undefined)
     expect(result.current.today.data).toEqual(today)
-    expect(conversationDay).toHaveBeenCalledWith({ data: { offset: offsetOn() } })
+    const now = new Date()
+    const [year, month, date] = [now.getFullYear(), now.getMonth(), now.getDate()]
+    expect(conversationDay).toHaveBeenCalledWith({
+      data: {
+        offset: offsetAt(new Date(year, month, date)),
+        nextOffset: offsetAt(new Date(year, month, date + 1)),
+      },
+    })
   })
 
-  it('read a day of the reader’s calendar, at its midnight’s offset', async () => {
+  it('read a day of the reader’s calendar, at the offsets of its midnight and the next', async () => {
     const result = await render(() => useConversationDay('2026-03-29'))
     await waitFor(() => {
       expect(result.current.hook.isSuccess).toBe(true)
     })
     expect(conversationDay).toHaveBeenCalledWith({
-      data: { date: '2026-03-29', offset: offsetOn(new Date(2026, 2, 29)) },
+      data: {
+        date: '2026-03-29',
+        offset: offsetAt(new Date(2026, 2, 29)),
+        nextOffset: offsetAt(new Date(2026, 2, 30)),
+      },
     })
   })
 

@@ -6,8 +6,8 @@ import { layer as conversationsLayer } from '#/repositories/database/conversatio
 import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 
-import { day, record } from './assistant'
-import type { EntryContent } from './entities'
+import { day, postMessage, recordChange, recordNavigation } from './assistant'
+import type { EntryContent, Navigation, Summarized } from './entities'
 
 // The Conversation over the conversations repository, for real, over PGlite: Entries recorded as the
 // API layer records them, in a transaction, then read back a day at a time, in their reader's day.
@@ -20,9 +20,29 @@ const someone = () => crypto.randomUUID()
 
 const said = (text: string): EntryContent => ({ _tag: 'Message', author: 'user', text })
 
-/** Records an Entry as the API layer does, in a transaction, `ago` milliseconds before now. */
-const recorded = (accountId: string, content: EntryContent, ago?: number) =>
-  transactional(record(accountId, content, ago))
+/**
+ * Records an Entry as the API layer does, in a transaction, through the operation its kind has: a
+ * navigation `ago` milliseconds before now, anything else now.
+ */
+const recorded = (accountId: string, content: EntryContent, ago = 0) =>
+  transactional(
+    content._tag === 'Message'
+      ? postMessage(accountId, content.text)
+      : content._tag === 'Navigation'
+        ? recordNavigation(accountId, content, ago)
+        : recordChange(accountId, summarizedOf(content), content.actor),
+  )
+
+/** A change or an import as Mapping would have summarized it, who acted left out. */
+const summarizedOf = (content: Extract<EntryContent, { _tag: 'Change' | 'Import' }>): Summarized =>
+  content._tag === 'Change' ? Struct.omit(content, ['actor']) : Struct.omit(content, ['actor'])
+
+/** A navigation of one gesture, centering this Tile. */
+const went = (tile: string): Navigation => ({
+  _tag: 'Navigation',
+  steps: [{ gesture: 'center', tile }],
+  gestures: 1,
+})
 
 /** Sets the test's clock to an instant. */
 const at = (iso: string) => TestClock.setTime(Date.parse(iso))
@@ -58,7 +78,6 @@ layer(TestLayer)('the Conversation, over PGlite', (it) => {
       const tile = { id: crypto.randomUUID(), title: 'Games' }
       const kinds: ReadonlyArray<EntryContent> = [
         said('What would you add to Games?'),
-        { _tag: 'Message', author: 'agent', text: 'Three Children, I think.' },
         { _tag: 'Change', verb: 'TileMoved', tile, actor: { _tag: 'You' } },
         {
           _tag: 'Change',
@@ -89,18 +108,15 @@ layer(TestLayer)('the Conversation, over PGlite', (it) => {
       yield* at('2026-10-10T22:01:00Z')
       yield* recorded(account, said('past midnight, in Paris'))
       yield* recorded(account, said('the same instant, written second'))
-      yield* recorded(account, said('before midnight, sent late'), 90_000)
-      expect(yield* textsOn(account, '2026-10-10', 120)).toEqual([
-        'late, in Paris',
-        'before midnight, sent late',
-      ])
+      yield* recorded(account, went('before midnight, sent late'), 90_000)
+      expect(yield* textsOn(account, '2026-10-10', 120)).toEqual(['late, in Paris', 'Navigation'])
       expect(yield* textsOn(account, '2026-10-11', 120)).toEqual([
         'past midnight, in Paris',
         'the same instant, written second',
       ])
       expect(yield* textsOn(account, '2026-10-10', 0)).toEqual([
         'late, in Paris',
-        'before midnight, sent late',
+        'Navigation',
         'past midnight, in Paris',
         'the same instant, written second',
       ])
@@ -111,8 +127,8 @@ layer(TestLayer)('the Conversation, over PGlite', (it) => {
     Effect.gen(function* () {
       const account = someone()
       yield* at('2026-10-10T12:00:00Z')
-      const long = yield* recorded(account, said('long ago'), 3 * 24 * 60 * 60_000)
-      const ahead = yield* recorded(account, said('ahead'), -60_000)
+      const long = yield* recorded(account, went('long ago'), 3 * 24 * 60 * 60_000)
+      const ahead = yield* recorded(account, went('ahead'), -60_000)
       expect(long.at).toEqual(new Date('2026-10-09T12:00:00Z'))
       expect(ahead.at).toEqual(new Date('2026-10-10T12:00:00Z'))
     }),

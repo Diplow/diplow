@@ -30,6 +30,22 @@ describe('the day split', () => {
     })
   })
 
+  it('spans 23 hours the day the clock goes forward, and 25 the day it goes back', () => {
+    // Paris: UTC+1 at midnight on 29 March 2026, UTC+2 at the next; the other way on 25 October.
+    expect(spanOf({ date: '2026-03-29', offset: 60, nextOffset: 120 })).toEqual({
+      from: instant('2026-03-28T23:00:00Z'),
+      to: instant('2026-03-29T22:00:00Z'),
+    })
+    expect(spanOf({ date: '2026-10-25', offset: 120, nextOffset: 60 })).toEqual({
+      from: instant('2026-10-24T22:00:00Z'),
+      to: instant('2026-10-25T23:00:00Z'),
+    })
+    // The day after starts where the day before ended: no instant on two days, none on neither.
+    expect(spanOf({ date: '2026-03-30', offset: 120 }).from).toEqual(
+      spanOf({ date: '2026-03-29', offset: 60, nextOffset: 120 }).to,
+    )
+  })
+
   it('splits two instants either side of a reader’s midnight onto two days', () => {
     const before = instant('2026-10-10T21:59:59.999Z')
     const after = instant('2026-10-10T22:00:00Z')
@@ -56,6 +72,7 @@ describe('a day, as a reader asks for it', () => {
       { date: '2026-10-10', offset: 0 },
       { date: '2028-02-29', offset: 840 },
       { date: '2026-12-31', offset: -840 },
+      { date: '2026-03-29', offset: 60, nextOffset: 120 },
     ]) {
       expect(decoded(input)._tag, JSON.stringify(input)).toBe('Success')
     }
@@ -69,6 +86,7 @@ describe('a day, as a reader asks for it', () => {
       { date: '10/10/2026', offset: 0 },
       { date: '2026-10-10', offset: 841 },
       { date: '2026-10-10', offset: 1.5 },
+      { date: '2026-10-10', offset: 0, nextOffset: 900 },
     ]) {
       expect(decoded(input)._tag, JSON.stringify(input)).toBe('Failure')
     }

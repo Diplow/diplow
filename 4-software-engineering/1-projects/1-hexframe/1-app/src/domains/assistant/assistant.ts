@@ -2,14 +2,24 @@
 // Conversation alone, one per Account: a continuous timeline of Entries, read a day at a time, which
 // records the Messages, every change to the System whoever made it, the imports, and where the user
 // went. The conversations repository keeps the Entries (src/repositories/database/conversations/);
-// Assistant decides what one says and when it dates from. It knows no Tile: the API layer hands it
-// Mapping's summary of each change, and Assistant records it as it came. Every write runs in the
-// transaction the API layer opens around it: its type requires one.
+// Assistant decides what each Entry says and when it dates from. It knows no Tile: the API layer hands
+// it Mapping's summary of each change, and Assistant records it as it came, with who acted. Every
+// write runs in the transaction the API layer opens around it: its type requires one.
 import { Clock, Effect, Schema } from 'effect'
 
 import { Conversations } from '#/repositories/database/conversations/conversations'
 
-import { type Day, dayAt, type Entry, EntryContent, spanOf } from './entities'
+import {
+  type Actor,
+  type Day,
+  dayAt,
+  type Entry,
+  EntryContent,
+  longestAgo,
+  type Navigation,
+  spanOf,
+  type Summarized,
+} from './entities'
 
 const decoded = Schema.decodeUnknownEffect(EntryContent)
 
@@ -30,16 +40,11 @@ export const day = (accountId: string, asked: Day) =>
 export const today = (offset: number) =>
   Effect.map(Clock.currentTimeMillis, (now) => dayAt(new Date(now), offset))
 
-/** The most a recorded Entry may date back: a day. */
-const longestAgo = 24 * 60 * 60_000
-
 /**
  * Records an Entry in the Account's Conversation, its first adding it, and answers it. It dates from
- * now, or from `ago` milliseconds before, a day at most: a merged navigation reaches the server once
- * the user did something else, and dates from its last gesture, which only the browser's clock saw,
- * so it says how long ago that was rather than when, and two clocks never disagree on the order.
+ * now, or from `ago` milliseconds before, a day at most and never ahead.
  */
-export const record = (accountId: string, content: EntryContent, ago = 0) =>
+const record = (accountId: string, content: EntryContent, ago = 0) =>
   Effect.gen(function* () {
     const now = yield* Clock.currentTimeMillis
     const at = new Date(now - Math.min(Math.max(ago, 0), longestAgo))
@@ -49,3 +54,23 @@ export const record = (accountId: string, content: EntryContent, ago = 0) =>
     const entry: Entry = { ...content, id, at }
     return entry
   })
+
+/** Posts the user's Message in their Conversation, and answers its Entry. */
+export const postMessage = (accountId: string, text: string) =>
+  record(accountId, { _tag: 'Message', author: 'user', text })
+
+/**
+ * Records where the user went, consecutive navigations the browser merged into one Entry. It dates
+ * from its last gesture, `ago` milliseconds before it reached the server: only the browser's clock
+ * saw it, so the browser says how long ago that was rather than when, and two clocks never disagree
+ * on the order of the timeline.
+ */
+export const recordNavigation = (accountId: string, navigation: Navigation, ago: number) =>
+  record(accountId, navigation, ago)
+
+/**
+ * Records a change to the System, or an import, as Mapping summarized it, with who acted: an Entry
+ * of the Conversation of the Account it changed.
+ */
+export const recordChange = (accountId: string, summarized: Summarized, actor: Actor) =>
+  record(accountId, { ...summarized, actor })

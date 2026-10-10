@@ -7,7 +7,7 @@
 import { Effect, Option } from 'effect'
 
 import * as Assistant from '#/domains/assistant/assistant'
-import type { Actor, EntryContent } from '#/domains/assistant/entities'
+import type { Actor } from '#/domains/assistant/entities'
 import { keyName, type SignedIn } from '#/domains/iam/iam'
 import * as Mapping from '#/domains/mapping/mapping'
 import { MappingEvent } from '#/domains/mapping/operations'
@@ -26,12 +26,6 @@ const actorOf = ({ account, by }: SignedIn) =>
         }),
       )
 
-/** The Entry Mapping's summary of an event makes: an import's, or a change's. */
-const entryOf = ({ verb, tile, other, count = 0 }: Mapping.Summary, actor: Actor): EntryContent =>
-  verb === 'TilesImported'
-    ? { _tag: 'Import', tile, count, actor }
-    : { _tag: 'Change', verb, tile, ...(other !== undefined && { other }), actor }
-
 /**
  * Records each of Mapping's events as an Entry of the Conversation of the Account that acted. An event
  * nobody signed in made, which no door lets through, has no Conversation to land in.
@@ -43,8 +37,8 @@ export const recordedInConversation = on(MappingEvent, (event, actor) =>
       Effect.gen(function* () {
         const accountId = signedIn.account.id
         const summary = yield* Mapping.summary(accountId, event)
-        const entry = entryOf(summary, yield* actorOf(signedIn))
-        yield* transactional(Assistant.record(accountId, entry))
+        const actor = yield* actorOf(signedIn)
+        yield* transactional(Assistant.recordChange(accountId, summary, actor))
       }),
   }),
 )

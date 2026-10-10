@@ -42,13 +42,9 @@ function rendered() {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   const wrapper = ({ children }: { children: ReactNode }) =>
     createElement(QueryClientProvider, { client }, children)
-  const { result } = renderHook(
-    () => ({ sender: useNavigationSender(), remove: useDeleteTile() }),
-    {
-      wrapper,
-    },
-  )
-  return result
+  return renderHook(() => ({ sender: useNavigationSender(), remove: useDeleteTile() }), {
+    wrapper,
+  })
 }
 
 /** The user makes a gesture on the canvas, and home publishes it. */
@@ -71,7 +67,7 @@ const visibility = (state: DocumentVisibilityState) => {
 
 describe('the navigation sender', () => {
   it('sends ten gestures then a Message as one navigation, then the Message', async () => {
-    const result = rendered()
+    const { result } = rendered()
     const tiles = Array.from({ length: 10 }, (_, n) => `tile-${String(n)}`)
     for (const tile of tiles) gesture(tile)
     expect(recordNavigation).not.toHaveBeenCalled()
@@ -98,7 +94,7 @@ describe('the navigation sender', () => {
   })
 
   it('sends a Message alone when the user went nowhere since the last one', async () => {
-    const result = rendered()
+    const { result } = rendered()
     gesture('a')
     act(() => {
       result.current.sender.postMessage('First')
@@ -113,7 +109,7 @@ describe('the navigation sender', () => {
   })
 
   it('sends the navigation under way the moment a write to the System is made', async () => {
-    const result = rendered()
+    const { result } = rendered()
     gesture('a', 'expand')
     gesture('a', 'collapse')
     act(() => {
@@ -142,6 +138,19 @@ describe('the navigation sender', () => {
     visibility('visible')
     visibility('hidden')
     expect(recordNavigation).toHaveBeenCalledTimes(1)
+  })
+
+  it('sends the navigation under way when home is left, and dates it back a day at most', async () => {
+    const now = vi.spyOn(Date, 'now')
+    const { unmount } = rendered()
+    gesture('a')
+    now.mockReturnValue(Date.now() + 3 * 24 * 60 * 60_000)
+    unmount()
+    now.mockRestore()
+    await waitFor(() => {
+      expect(recordNavigation).toHaveBeenCalledTimes(1)
+    })
+    expect(sentNavigations()[0]?.sinceLast).toBe(24 * 60 * 60_000)
   })
 
   it('starts a new navigation once one is sent', async () => {

@@ -94,22 +94,22 @@ interface Named {
 }
 
 /**
- * Mapping's own summary of one of its events, what a timeline tells of it: its verb, the event's tag;
- * the Tile it is about, the one it changed or the one whose Context slot a Reference's create or
- * delete changed; the other Tile a swap traded places with, or a Reference points at; and how many
- * Tiles came with an import.
+ * Mapping's own summary of one of its events, what a timeline tells of it. A change: its verb, the
+ * event's tag; the Tile it is about, the one it changed or the one whose Context slot a Reference's
+ * create or delete changed; and the other Tile a swap traded places with, or a Reference points at.
+ * An import: the Tile it landed as, and how many Tiles came with it.
  */
-export interface Summary {
-  readonly verb: MappingEvent['_tag']
-  readonly tile: Named
-  readonly other?: Named
-  readonly count?: number
-}
+export type Summary =
+  | {
+      readonly _tag: 'Change'
+      readonly verb: OperationEvent['_tag']
+      readonly tile: Named
+      readonly other?: Named
+    }
+  | { readonly _tag: 'Import'; readonly tile: Named; readonly count: number }
 
 /** The ids an event names, the Tile it is about first, with the Title it says of it, if it says one. */
-const subjectsOf = (
-  event: MappingEvent,
-): { tile: string; title?: string; other?: string; count?: number } => {
+const subjectsOf = (event: OperationEvent): { tile: string; title?: string; other?: string } => {
   switch (event._tag) {
     case 'TileCreated':
     case 'TileDeleted':
@@ -124,8 +124,6 @@ const subjectsOf = (
       return { tile: event.parent, other: event.target }
     case 'ReferenceDeleted':
       return { tile: event.parent }
-    case 'TilesImported':
-      return { tile: event.id, count: event.count }
   }
 }
 
@@ -136,16 +134,23 @@ const subjectsOf = (
  */
 export const summary = (accountId: string, event: MappingEvent) =>
   Effect.gen(function* () {
-    const { tile, title, other, count } = subjectsOf(event)
+    const { tile, title, other } =
+      event._tag === 'TilesImported' ? { tile: event.id } : subjectsOf(event)
     const unread = [...(title === undefined ? [tile] : []), ...(other === undefined ? [] : [other])]
     const read = yield* titles(accountId, unread)
     const named = (id: string): Named => ({ id, title: read[id] ?? '' })
-    return {
+    const about = title === undefined ? named(tile) : { id: tile, title }
+    if (event._tag === 'TilesImported') {
+      const imported: Summary = { _tag: 'Import', tile: about, count: event.count }
+      return imported
+    }
+    const change: Summary = {
+      _tag: 'Change',
       verb: event._tag,
-      tile: title === undefined ? named(tile) : { id: tile, title },
+      tile: about,
       ...(other !== undefined && { other: named(other) }),
-      ...(count !== undefined && { count }),
-    } satisfies Summary
+    }
+    return change
   })
 
 /** A Tile read from, with the id and Title of its parent, `null` for the Root. */

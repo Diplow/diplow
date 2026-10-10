@@ -1,12 +1,12 @@
 // Where the user went, sent to the Conversation: each gesture the canvas makes, published as a
 // navigation fact, merges into the navigation under way by Assistant's merge rule, kept in the page
 // and sent once something else enters the timeline, a Message or a write to the System, or once the
-// page is hidden: one request per merged navigation, never one per gesture. A Message goes after the
-// navigation it follows, in the Conversation's queue. Nothing of it is rendered: the navigation under
+// page is hidden or home is left: one request per merged navigation, never one per gesture. A Message
+// goes after the navigation it follows, in the Conversation's queue. Nothing of it is rendered: the navigation under
 // way is an outbox, held between gestures, never shown, so it waits in a ref rather than in state.
 import { useCallback, useRef, useSyncExternalStore } from 'react'
 
-import { merged, type Navigation } from '#/domains/assistant/entities'
+import { longestAgo, merged, type Navigation } from '#/domains/assistant/entities'
 import { usePostMessage, useRecordNavigation } from '#/front/client/assistant/conversation'
 import { useEachSystemWrite } from '#/front/client/mapping/queries'
 
@@ -23,7 +23,7 @@ const nothing = () => undefined
 
 /**
  * Merges the user's navigations as they go, and sends them as one Entry before anything else enters
- * the timeline, or when the page is hidden. Answers `postMessage`, which posts the user's Message
+ * the timeline, when the page is hidden, or when the hook unmounts. Answers `postMessage`, which posts the user's Message
  * after the navigation it follows. Its actions are stable, so it subscribes once.
  */
 export function useNavigationSender(): { readonly postMessage: (text: string) => void } {
@@ -36,7 +36,9 @@ export function useNavigationSender(): { readonly postMessage: (text: string) =>
     const held = underWay.current
     if (held === undefined) return
     underWay.current = undefined
-    record({ navigation: held.navigation, sinceLast: Math.max(0, Date.now() - held.lastAt) })
+    // A day at most, as the server takes it: a tab left open longer dates it back a day.
+    const sinceLast = Math.min(Math.max(0, Date.now() - held.lastAt), longestAgo)
+    record({ navigation: held.navigation, sinceLast })
   }, [record])
 
   const navigated = useCallback(({ gesture, tile }: Navigated) => {
@@ -48,7 +50,8 @@ export function useNavigationSender(): { readonly postMessage: (text: string) =>
   useFact(Navigated, navigated)
   useEachSystemWrite(send)
 
-  // The page hidden, its tab left or closed, is the last moment the navigation can still be sent.
+  // The page hidden, its tab left or about to close, is the last moment the browser surely runs the
+  // request; leaving home, which unmounts the hook, sends it too.
   const subscribe = useCallback(() => {
     const onChange = () => {
       if (document.visibilityState === 'hidden') send()
@@ -56,6 +59,7 @@ export function useNavigationSender(): { readonly postMessage: (text: string) =>
     document.addEventListener('visibilitychange', onChange)
     return () => {
       document.removeEventListener('visibilitychange', onChange)
+      send()
     }
   }, [send])
   useSyncExternalStore(subscribe, nothing, nothing)

@@ -5,16 +5,16 @@
 import { createServerFn } from '@tanstack/react-start'
 import { Schema } from 'effect'
 
-import { Day, MessageText, Navigation } from '#/domains/assistant/entities'
+import { Ago, Day, MessageText, Navigation } from '#/domains/assistant/entities'
 
 import { run } from '../server/run'
 import * as Assistant from './programs'
 
-/** A day of the Conversation, as its reader asks for it: a date of theirs, today when absent. */
-export const DayAsked = Schema.Struct({
-  date: Schema.optionalKey(Day.fields.date),
-  offset: Day.fields.offset,
-})
+/**
+ * A day of the Conversation, as its reader asks for it: a date of theirs, today when absent, and their
+ * clock's offsets from UTC at its midnight and the next.
+ */
+export const DayAsked = Schema.Struct({ ...Day.fields, date: Schema.optionalKey(Day.fields.date) })
 
 /** A Message the user posts: its text, trimmed, never empty. */
 export const NewMessage = Schema.Struct({ text: MessageText })
@@ -25,7 +25,7 @@ export const NewMessage = Schema.Struct({ text: MessageText })
  */
 export const MergedNavigation = Schema.Struct({
   navigation: Navigation,
-  sinceLast: Schema.Int.check(Schema.isBetween({ minimum: 0, maximum: 24 * 60 * 60_000 })),
+  sinceLast: Ago,
 })
 
 /**

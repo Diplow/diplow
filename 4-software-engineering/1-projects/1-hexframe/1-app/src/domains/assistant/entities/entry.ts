@@ -62,3 +62,27 @@ export type EntryContent = typeof EntryContent.Type
 
 /** An Entry of the Conversation: what it says, its id, and the instant it dates from. */
 export type Entry = EntryContent & { readonly id: string; readonly at: Date }
+
+/**
+ * A change or an import as Mapping summarized it, before Assistant says who acted: the shape
+ * Assistant reads Mapping's summary by, which Mapping's own satisfies.
+ */
+export type Summarized = Omit<typeof Change.Type, 'actor'> | Omit<typeof Import.Type, 'actor'>
+
+/** The most an Entry may date back, in milliseconds: a day. */
+export const longestAgo = 24 * 60 * 60_000
+
+/**
+ * How long before it reached the server an Entry happened, in milliseconds, a day at most: what a
+ * merged navigation says of its last gesture.
+ */
+export const Ago = Schema.Int.check(Schema.isBetween({ minimum: 0, maximum: longestAgo }))
+
+/** The Tiles some Entries' navigations went to, each once, by id: the Titles a reader needs. */
+export const visitedTiles = (entries: ReadonlyArray<Entry>): ReadonlyArray<string> => [
+  ...new Set(
+    entries.flatMap((entry) =>
+      entry._tag === 'Navigation' ? entry.steps.map(({ tile }) => tile) : [],
+    ),
+  ),
+]
