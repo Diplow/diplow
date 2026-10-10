@@ -6,7 +6,7 @@ import { layer as conversationsLayer } from '#/repositories/database/conversatio
 import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 
-import { day, postMessage, recordChange, recordNavigation } from './assistant'
+import { before, day, lastEntry, postMessage, recordChange, recordNavigation } from './assistant'
 import type { EntryContent, Navigation, Summarized } from './entities'
 
 // The Conversation over the conversations repository, for real, over PGlite: Entries recorded as the
@@ -142,6 +142,40 @@ layer(TestLayer)('the Conversation, over PGlite', (it) => {
       expect(yield* textsOn(other, '2026-10-10')).toEqual([])
       expect(yield* textsOn(account, '2026-10-09')).toEqual([])
       expect(yield* textsOn(account, '2026-10-10')).toEqual(['mine'])
+    }),
+  )
+
+  it.effect('finds the latest Entry before a day, however many empty days lie between', () =>
+    Effect.gen(function* () {
+      const [account, other] = [someone(), someone()]
+      yield* at('2026-10-03T09:00:00Z')
+      yield* recorded(account, said('a week ago'))
+      yield* at('2026-10-06T21:30:00Z')
+      const latest = yield* recorded(account, said('late, four days ago'))
+      yield* at('2026-10-10T08:00:00Z')
+      yield* recorded(account, said('today'))
+      yield* recorded(other, said('someone else’s, yesterday'), 0)
+      expect(yield* before(account, { date: '2026-10-10', offset: 0 })).toEqual(latest.at)
+      // At UTC+3, 21:30 UTC is past midnight: that Entry is on the 7th, so none before it is later.
+      expect(yield* before(account, { date: '2026-10-07', offset: 180 })).toEqual(
+        new Date('2026-10-03T09:00:00Z'),
+      )
+      expect(yield* before(account, { date: '2026-10-03', offset: 0 })).toBeUndefined()
+      expect(yield* before(someone(), { date: '2026-10-10', offset: 0 })).toBeUndefined()
+    }),
+  )
+
+  it.effect('names the Entry last recorded, a navigation dated back included', () =>
+    Effect.gen(function* () {
+      const account = someone()
+      expect(yield* lastEntry(account)).toBeUndefined()
+      yield* at('2026-10-10T12:00:00Z')
+      const message = yield* recorded(account, said('now'))
+      expect(yield* lastEntry(account)).toBe(message.id)
+      const navigation = yield* recorded(account, went('a minute ago'), 60_000)
+      expect(yield* lastEntry(account)).toBe(navigation.id)
+      yield* recorded(someone(), said('someone else’s'))
+      expect(yield* lastEntry(account)).toBe(navigation.id)
     }),
   )
 })

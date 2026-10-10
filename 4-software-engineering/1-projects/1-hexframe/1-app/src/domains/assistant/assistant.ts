@@ -36,6 +36,23 @@ export const day = (accountId: string, asked: Day) =>
       ),
   )
 
+/**
+ * The instant of the latest Entry before a day, which an earlier day of the reader's holds: where a
+ * reader scrolling back goes next, the days in between empty. None before the first Entry.
+ */
+export const before = (accountId: string, asked: Day) =>
+  Conversations.use((conversations) =>
+    conversations.latestBefore(accountId, spanOf(asked).from),
+  )
+
+/**
+ * The id of the Entry last recorded in the Account's Conversation, whatever instant it dates from,
+ * a navigation dated back included: what a reader compares with the one it read, to know the
+ * Conversation moved. None before the first.
+ */
+export const lastEntry = (accountId: string) =>
+  Conversations.use((conversations) => conversations.lastWritten(accountId))
+
 /** Today, for a reader whose clock stands `offset` minutes ahead of UTC. */
 export const today = (offset: number) =>
   Effect.map(Clock.currentTimeMillis, (now) => dayAt(new Date(now), offset))
