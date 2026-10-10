@@ -1,0 +1,62 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/assistant/conversation.ts
+  s_c19b57f63ed6ef::t_2b390832be8dff 9-14,24-26,28-30,32-39,53,61-65
+  s_c19b57f63ed6ef::t_cdaf93d7151741 80-86
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/assistant.test.ts
+  s_c19b57f63ed6ef::t_6a917251ad7cc3 10,33,35-38
+  s_c19b57f63ed6ef::t_070c13277e9c72 9,23-32,34,39-45,111-112,119,130-131
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/programs.ts
+  s_c19b57f63ed6ef::t_53c00fe71cadf5 9,14-15,28,31,33,39-40,46-49
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/state/useNavigationSender.ts
+  s_c19b57f63ed6ef::t_2b390832be8dff 4-5,9,26,39-41,53-54,62
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/entry.ts
+  s_c19b57f63ed6ef::t_f0d30ceda59728 65-69,71-88
+  s_c19b57f63ed6ef::t_cdaf93d7151741 70
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/assistant.ts
+  s_c19b57f63ed6ef::t_f0d30ceda59728 5-7,12-22,45,47,57-76
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/day.test.ts
+  s_c19b57f63ed6ef::t_8a1a7354484f8b 33-48,75,89
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/assistant.ts
+  s_c19b57f63ed6ef::t_53c00fe71cadf5 8,13-17,28
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_c19b57f63ed6ef::t_7bbf75047241c7 144-145
+  s_c19b57f63ed6ef::t_cdaf93d7151741 112
+  s_c19b57f63ed6ef::t_6d472d0f930c05 97-100,102-109,137-138,142-143,146-148,150,152-153
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/recording.ts
+  s_c19b57f63ed6ef::t_7bbf75047241c7 10,40-41
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-assistant/decisions.md
+  s_c19b57f63ed6ef::t_119fa9ad89523b 68,75-76,78
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/day.ts
+  s_c19b57f63ed6ef::t_8a1a7354484f8b 2-4,17-19,21-25,40-53
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_c19b57f63ed6ef::t_119fa9ad89523b 34
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_c19b57f63ed6ef::t_119fa9ad89523b 40
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/CLAUDE.md
+  s_c19b57f63ed6ef::t_119fa9ad89523b 19,28,33
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/CLAUDE.md
+  s_c19b57f63ed6ef::t_119fa9ad89523b 17-19
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/state/useNavigationSender.test.ts
+  s_c19b57f63ed6ef::t_6a917251ad7cc3 70,97,112,145,148
+  s_c19b57f63ed6ef::t_71a19a3497209d 45-47
+  s_c19b57f63ed6ef::t_cdaf93d7151741 143-144,146-147,149-155
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/CLAUDE.md
+  s_c19b57f63ed6ef::t_119fa9ad89523b 23
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/assistant/conversation.test.ts
+  s_c19b57f63ed6ef::t_cdaf93d7151741 47-48,54-61,64,70-74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2beb1a49b97bd6248ad5cf0c9ef70328becc4be1",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
