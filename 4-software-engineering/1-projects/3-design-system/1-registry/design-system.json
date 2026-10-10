@@ -1,16 +1,9 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "design-system",
-  "type": "registry:base",
+  "type": "registry:theme",
   "title": "diplow's design system",
-  "description": "Light before lines: surfaces drawn by their light, a warm human and a cool agent, square corners, dark by default. On shadcn's Sera style.",
-  "config": {
-    "style": "radix-sera",
-    "iconLibrary": "lucide",
-    "tailwind": {
-      "baseColor": "mauve"
-    }
-  },
+  "description": "Light before lines: surfaces drawn by their light, a warm human and a cool agent, square corners, dark by default.",
   "cssVars": {
     "theme": {
       "font-heading": "var(--font-serif)",

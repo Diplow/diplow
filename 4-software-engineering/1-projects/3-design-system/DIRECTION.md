@@ -27,4 +27,4 @@ Dark is the default and light is not an afterthought: the same rule holds in bot
 
 ## On shadcn
 
-The components start from shadcn's Sera style: square corners like a hex's, fields drawn as one underline, hairlines between sections. Sera's small uppercase labels are the one loud thing in it; the tokens do the rest.
+shadcn gives the tokens their names and, through Radix, the components their behaviour: focus, the keyboard, where a menu opens. It doesn't give the look. hexframe's components are specific to it, a tile in its states, a widget in the conversation, the menu of a tile, so each is drawn from these principles where it is used, rather than adjusted from one of shadcn's styles.

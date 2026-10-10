@@ -5,18 +5,18 @@ owner: diplo
 preview: >-
   The look hexframe and my site share: surfaces drawn by their light rather than
   by lines, a warm human and a cool agent, square corners, dark by default and
-  light as its equal. A shadcn registry on the Sera style that a project
+  light as its equal. The tokens and fonts as a shadcn registry a project
   installs by path, and the prototype it came from.
 ---
 # design system
 
 The look hexframe and my site share. It came out of a prototype, kept here: hexframe's main screen, a canvas of tiles beside a conversation with an agent. Futuristic, as hexframe is a bet on a future where agents help people explore where they want to go: large empty space and imbalance, light instead of boxes, a warm human and a cool agent. [[4-software-engineering/1-projects/3-design-system/DIRECTION|DIRECTION]] says why it looks this way, [[4-software-engineering/1-projects/3-design-system/TOKENS|TOKENS]] what each token is for.
 
-It is a shadcn registry: a project on shadcn starts from one of shadcn's styles, Sera, then installs the tokens and fonts from here. shadcn copies them into the project, which owns them from then on.
+The tokens and fonts are a shadcn registry: a project on shadcn installs them from here, and shadcn copies them into the project, which owns them from then on. The registry brings no components and no shadcn style. A project's components are drawn from the principles where they are used, on the canvas and in the conversation, and keep shadcn's token names, so a component copied from shadcn takes the look without a change.
 
 | # | Child | What it holds |
 |---|---|---|
-| 1 | [[4-software-engineering/1-projects/3-design-system/1-registry/CLAUDE\|registry]] | The items a project installs: the tokens in both themes, and the two fonts Sera doesn't bring |
+| 1 | [[4-software-engineering/1-projects/3-design-system/1-registry/CLAUDE\|registry]] | The items a project installs: the tokens in both themes, and the three fonts |
 
 | File | What it holds |
 |---|---|
@@ -26,11 +26,10 @@ It is a shadcn registry: a project on shadcn starts from one of shadcn's styles,
 
 ## Installing it
 
-In a project on shadcn with Tailwind v4 and Radix, `$DS` being the relative path to `1-registry/`:
+In a project on shadcn with Tailwind v4, `$DS` being the relative path to `1-registry/`:
 
-1. **The style.** `pnpm dlx shadcn@latest apply --preset b6aLGwKTQ` in a project that has shadcn already; it rewrites the shadcn components the project holds. A new project starts with `pnpm dlx shadcn@latest init --template start --base radix --preset b6aLGwKTQ`. The preset is [shadcn/create](https://ui.shadcn.com/create?preset=b6aLGwKTQ&base=radix)'s Sera, mauve, Geist for headings and text, Lucide, no radius.
-2. **The tokens and fonts.** `pnpm dlx shadcn@latest add $DS/font-newsreader.json $DS/font-geist-mono.json $DS/design-system.json`. After the preset, never in the same `init`: the preset would set the heading font and the radius back.
-3. **Dark by default.** The project puts `dark` on `<html>` unless the user chose light.
+1. **The tokens and fonts.** `pnpm dlx shadcn@latest add $DS/font-geist.json $DS/font-newsreader.json $DS/font-geist-mono.json $DS/design-system.json`. It touches the project's CSS and its font dependencies, never its components. A new project runs `pnpm dlx shadcn@latest init` first, with any style: its components are the project's to draw.
+2. **Dark by default.** The project puts `dark` on `<html>` unless the user chose light.
 
 ## Rules
 
