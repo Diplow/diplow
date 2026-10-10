@@ -24,7 +24,7 @@ import type { Failure, Outcome } from '#/api/report/errors/failure'
 import { type System, type SystemTile, systemOf } from '#/domains/mapping/entities'
 import type { Operation, OperationName } from '#/domains/mapping/operations'
 import { type Download, downloaded } from '#/api/mapping/files/download'
-import { type Given, type LeftOut, type Prepared, prepared } from './upload'
+import { type Given, type LeftOut, type Prepared, prepared } from './import/upload'
 import { operationOf, overlaid, type Pending, refusalOf } from './overlay/overlay'
 import {
   ImportUpload,
@@ -60,8 +60,15 @@ const systemScope = 'system'
 /** The queue every write to the System waits its turn in, so they reach the server in order. */
 const systemQueue = 'system'
 
-/** The System's read, whose cache holds the System as the server last answered it, flat. */
-const systemRead = read({ scope: systemScope, key: [], call: () => system({ data: undefined }) })
+/**
+ * The System's read, whose cache holds the System as the server last answered it, flat. Never read
+ * again on focus, every Body with it: the page polls its Version then, and reads it again only once
+ * it moved (`./follow.ts`).
+ */
+export const systemRead = {
+  ...read({ scope: systemScope, key: [], call: () => system({ data: undefined }) }),
+  refetchOnWindowFocus: false,
+}
 
 /**
  * Reads the System again once a write settles, even while no page shows it, so the next write in the
