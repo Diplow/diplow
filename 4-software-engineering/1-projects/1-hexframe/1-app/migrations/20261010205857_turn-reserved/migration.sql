@@ -1,0 +1,1 @@
+ALTER TABLE "turn" ADD COLUMN "reserved" integer DEFAULT 0 NOT NULL;

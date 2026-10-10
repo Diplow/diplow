@@ -225,6 +225,25 @@ export const sessionOnly = Effect.gen(function* () {
   return yield* new SignedOut()
 })
 
+/** A request a Turn's Key proves: its Account, and the Turn and Conversation the Key is bound to. */
+interface TurnSignedIn {
+  readonly account: Account
+  readonly turn: TurnBinding
+}
+
+/**
+ * The request's Turn's Key, its Account and the Turn it is bound to, or `SignedOut`: the first step
+ * of the doors of a Turn's sandbox, which a Turn's Key alone opens, so an Account's Key reads as
+ * nobody there.
+ */
+export const turnOnly = Effect.gen(function* () {
+  const key = yield* CurrentKey
+  if (Option.isNone(key) || key.value.by._tag !== 'TurnKey') return yield* new SignedOut()
+  const { conversationId, turnId } = key.value.by
+  const signedIn: TurnSignedIn = { account: key.value.account, turn: { conversationId, turnId } }
+  return signedIn
+})
+
 /** The fewest and the most characters a Key's name holds, so the user can tell their Keys apart. */
 const keyNameLength = { min: 1, max: 32 } as const
 

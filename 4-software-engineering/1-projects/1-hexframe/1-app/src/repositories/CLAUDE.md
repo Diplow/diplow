@@ -6,8 +6,8 @@ preview: >-
   The bottom layer: Effect layers over the SDKs that hold the technical
   complexity, one folder per SDK family: the database (Drizzle over Neon, PGlite
   in tests), auth (Better Auth, Stripe to come), observability (Sentry,
-  PostHog), zip archives (fflate) and the agent's sandbox (Blaxel); and Help's
-  notes, bundled at build time.
+  PostHog), zip archives (fflate) and the agent's sandbox (Blaxel) and model
+  relay (Anthropic, plain fetch); and Help's notes, bundled at build time.
 ---
 # repositories
 
@@ -19,7 +19,7 @@ The layer under [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains
 | `auth/` | Better Auth over the database, called through its server API, with its test harness; and the allowlist, the Accounts let into the Assistant by hand, which its Stripe plugin replaces: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE\|auth]] |
 | `help/` | Help's notes, the app's `help/` folder bundled into the server at build time, and the reader of a note's frontmatter: no SDK, but the errands of fetching and parsing, which Mapping leaves here: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/help/CLAUDE\|help]] |
 | `observability/` | Sentry and PostHog, on both sides: where errors, traces and the leveled event log go, and the flag that raises one user's verbosity. Plain functions for the browser, Effect services for the server's runtime: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/CLAUDE\|observability]] |
-| `agent/` | What a Turn of the Assistant runs on: `sandbox/`, Blaxel (`@blaxel/core`), an Account's sandbox holding its System as read-only files and running the agent's processes, and its fake on this machine for the tests and `pnpm dev`; the model relay comes next: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/CLAUDE\|agent]] |
+| `agent/` | What a Turn of the Assistant runs on: `sandbox/`, Blaxel (`@blaxel/core`), an Account's sandbox holding its System as read-only files and running the agent's processes, and its fake on this machine for the tests and `pnpm dev`; and `anthropic/`, the model relay, plain `fetch`, a Turn's calls to Anthropic with the platform's key added and their answers relayed as they come, and its fake in the process: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/CLAUDE\|agent]] |
 | `zip/` | fflate: a list of files streamed into a zip archive, for an export, and an archive a user sends unpacked in memory, counted as it inflates, for an import, through the `Zip` service on the server; plain functions for the browser, which unpacks a zip the user gave and zips an import before its upload; and, for tests, archives written and read back: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/zip/CLAUDE\|zip]] |
 
 ## Rules

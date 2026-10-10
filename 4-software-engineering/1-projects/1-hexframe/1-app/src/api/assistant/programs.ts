@@ -15,6 +15,7 @@ import { HttpExchange } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
 
 import { tileLink } from '../mapping/files/download'
+import { WaitUntil } from '../server/bus'
 
 import type { DayAsked, MergedNavigation, NewMessage } from './assistant'
 
@@ -138,3 +139,49 @@ export const endTurn = (accountId: string, turnId: string, how: TurnEnd) =>
       return turn
     }),
   )
+
+/**
+ * Work the platform's `waitUntil` keeps the function up for, run once the answer has gone, with the
+ * services the program had.
+ */
+const afterAnswering = <R>(work: Effect.Effect<void, never, R>) =>
+  Effect.gen(function* () {
+    const services = yield* Effect.context<R>()
+    const waitUntil = yield* WaitUntil
+    waitUntil(Effect.provideContext(work, services))
+  })
+
+/**
+ * A model call of the Turn the request's Turn's Key proves, the Account and the Turn taken from that
+ * Key, never from the call. Assistant admits it or not in a transaction of its own, which ends a Turn
+ * held back by its ceiling or the month's allowance, its Key revoked with it. An admitted call is
+ * relayed as it comes, outside any transaction, and settled once its answer has ended, in a
+ * transaction of its own, through the platform's `waitUntil`, so the function stays up until it is
+ * written; a call the relay failed to make releases what it reserved at once.
+ */
+export const modelCall = (asked: Assistant.AskedCall) =>
+  Effect.gen(function* () {
+    const { account, turn } = yield* Iam.turnOnly
+    const admission = yield* transactional(
+      Effect.gen(function* () {
+        const admitted = yield* Assistant.admitCall(account.id, turn.turnId, asked)
+        if (admitted._tag === 'Limited') yield* Iam.revokeTurnKey(account.id, turn.turnId)
+        return admitted
+      }),
+    )
+    if (admission._tag !== 'Admitted') return admission
+    const settle = (charged: number) =>
+      transactional(
+        Assistant.settleCall(account.id, turn.turnId, { reserved: admission.reserved, charged }),
+      )
+    const { relayed, charged } = yield* Assistant.relayCall(admission).pipe(
+      Effect.onError(() => settle(0)),
+    )
+    yield* afterAnswering(
+      Effect.flatMap(charged, settle).pipe(
+        // An error line with its cause: Sentry gets it. The Turn keeps what the call reserved.
+        Effect.catchCause((cause) => Effect.logError("A Turn's call was not settled", cause)),
+      ),
+    )
+    return { _tag: 'Relayed', relayed } as const
+  })
