@@ -1,5 +1,6 @@
 // A Turn: one run of the agent answering a Message, started afresh in a Tile's folder, the Conversation
-// its only memory. It records what it spent, and how it ended; one runs at most per Conversation. Pure.
+// its only memory. It records what it spent, what its agent is doing now, and how it ended; one runs at
+// most per Conversation. Pure.
 import { Schema } from 'effect'
 
 /**
@@ -17,6 +18,36 @@ export const TurnEnd = Schema.Literals([
 
 export type TurnEnd = typeof TurnEnd.Type
 
+/** How a Turn ended when not by its answer: what the timeline tells in an Entry of its own. */
+export const BadEnd = Schema.Literals(['stopped', 'ceiling', 'allowance', 'time', 'sandbox'])
+
+export type BadEnd = typeof BadEnd.Type
+
+/** Whether a Turn ended by its answer, or otherwise, which the timeline tells. */
+export const isBadEnd = (how: TurnEnd): how is BadEnd => how !== 'answered'
+
+/** The most characters a step's tool and its detail hold: enough to tell it, never a file's content. */
+const longestTool = 100
+const longestDetail = 200
+
+/**
+ * What a running Turn's agent is doing now, shown live and dropped once it moves on: the tool it
+ * runs, in the agent's own words (`Read`, `Bash`, `open_tile`), and what on (a path, a command, a
+ * Tile's id), cut short.
+ */
+export const TurnStep = Schema.Struct({
+  tool: Schema.String.check(Schema.isNonEmpty(), Schema.isMaxLength(longestTool)),
+  detail: Schema.optionalKey(Schema.String.check(Schema.isMaxLength(longestDetail))),
+})
+
+export type TurnStep = typeof TurnStep.Type
+
+/** A step as a tool and a detail give it, each cut to what a step holds. */
+export const stepOf = (tool: string, detail?: string): TurnStep => ({
+  tool: tool.slice(0, longestTool) || '?',
+  ...(detail !== undefined && detail !== '' && { detail: detail.slice(0, longestDetail) }),
+})
+
 /** A Turn of the agent, in a Conversation. */
 export interface Turn {
   readonly id: string
@@ -28,6 +59,8 @@ export interface Turn {
   readonly startedAt: Date
   /** What it spent on the model, in millionths of a dollar. */
   readonly spent: number
+  /** What its agent is doing now; none between steps, and once it ended. */
+  readonly step?: TurnStep
   /** When and how it ended; none while it runs. */
   readonly ended?: { readonly at: Date; readonly how: TurnEnd }
 }

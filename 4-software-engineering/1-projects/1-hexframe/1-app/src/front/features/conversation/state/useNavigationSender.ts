@@ -13,6 +13,9 @@ import { useEachSystemWrite } from '#/front/client/mapping/queries'
 import { useFact } from '../../bus'
 import { Navigated } from '../../facts'
 
+/** A Message the user sends, and the view it was sent from. */
+type Sent = Parameters<ReturnType<typeof usePostMessage>['mutate']>[0]
+
 /** The navigation under way: the gestures merged so far, and when the last was made. */
 interface UnderWay {
   readonly navigation: Navigation
@@ -26,7 +29,7 @@ const nothing = () => undefined
  * the timeline, when the page is hidden, or when the hook unmounts. Answers `postMessage`, which posts the user's Message
  * after the navigation it follows. Its actions are stable, so it subscribes once.
  */
-export function useNavigationSender(): { readonly postMessage: (text: string) => void } {
+export function useNavigationSender(): { readonly postMessage: (sent: Sent) => void } {
   const { mutate: record } = useRecordNavigation()
   const { mutate: post } = usePostMessage()
   const underWay = useRef<UnderWay | undefined>(undefined)
@@ -67,9 +70,9 @@ export function useNavigationSender(): { readonly postMessage: (text: string) =>
   useSyncExternalStore(subscribe, nothing, nothing)
 
   const postMessage = useCallback(
-    (text: string) => {
+    (sent: Sent) => {
       send()
-      post(text)
+      post(sent)
     },
     [send, post],
   )

@@ -18,6 +18,7 @@ import {
 import { decide, type Placement } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 import type { FrameKind, TileNode } from '#/front/ui/hex/view/tiles'
+import { type CanvasView, showView } from '#/front/ui/hex/view/view'
 
 type ContextEntry = NonNullable<SystemTile['context'][ContextDirection]>
 
@@ -168,4 +169,37 @@ function below(parent: SystemTile, id: string): Located | undefined {
     }
   }
   return undefined
+}
+
+/** The Tiles a ring of this kind shows around, or inside, a Tile. */
+function ringOf(tile: TileNode, kind: FrameKind | undefined): ReadonlyArray<TileNode> {
+  const of = (ring: TileNode['branches']) =>
+    directions.flatMap((direction) => ring?.[direction] ?? [])
+  switch (kind) {
+    case undefined:
+      return []
+    case 'children':
+      return [...of(tile.branches), ...of(tile.leaves)]
+    default:
+      return of(tile[kind])
+  }
+}
+
+/**
+ * What a view of the System shows, by id: the centered Tile, the System's own when the view names
+ * none it holds, and the Tiles on screen, the center first, then the ring around it, the ring inside
+ * it, and the rings its opened Branches show, each once. What a Message sent from that view tells the
+ * Assistant.
+ */
+export function onScreen(
+  tree: TileNode,
+  view: CanvasView,
+): { readonly center: string; readonly shown: ReadonlyArray<string> } {
+  const { center, frame, inner, expanded } = showView(tree, view)
+  const opened = directions.flatMap((direction) => {
+    const branch = center.branches?.[direction]
+    return branch === undefined ? [] : ringOf(branch, expanded[direction])
+  })
+  const tiles = [center, ...ringOf(center, frame), ...ringOf(center, inner), ...opened]
+  return { center: center.id, shown: [...new Set(tiles.map(({ id }) => id))] }
 }

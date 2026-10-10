@@ -396,24 +396,32 @@ describe("a Turn's spend", () => {
 
   it("ends a Turn by the month's allowance once the Account's Turns spent it", async () => {
     const { turn, end } = await account
-    // One Turn spends the whole allowance: a million output tokens of Sonnet 5.5, $10.
-    fakeAnthropic.answerWith(() =>
-      streamedMessage('Ada', { input_tokens: 0, output_tokens: settings.month.allowance / 10 }),
-    )
+    /** A call answered with this many output tokens of Sonnet 5.5, at $10 per million, settled. */
+    const spend = async (secret: string, outputTokens: number) => {
+      fakeAnthropic.answerWith(() =>
+        streamedMessage('Ada', { input_tokens: 0, output_tokens: outputTokens }),
+      )
+      const spent = await ask({ secret })
+      await spent.response.text()
+      await spent.settled()
+    }
+    // One Turn spends what is left of the allowance but a cent, whatever the tests before spent this
+    // month; the next starts below it, then spends the cent.
     const spender = await turn()
-    const spent = await ask({ secret: spender.secret })
-    await spent.response.text()
-    await spent.settled()
+    const { month } = await spendingOf(spender.turn.id)
+    await spend(spender.secret, (settings.month.allowance - month.spent - 10_000) / 10)
     await end(spender.turn.id)
-
     const { secret } = await turn()
+    await spend(secret, 2_000)
+
     const held = await ask({ secret })
     expect(held.response.status).toBe(402)
     expect(await errorOf(held.response)).toEqual({
       type: 'billing_error',
       message: "The Account's allowance for the month is spent.",
     })
-    expect(fakeAnthropic.calls()).toHaveLength(1)
+    expect(fakeAnthropic.calls()).toHaveLength(2)
     expect((await ask({ secret })).response.status).toBe(401)
+    await expect(turn()).rejects.toThrow('AllowanceSpent')
   })
 })

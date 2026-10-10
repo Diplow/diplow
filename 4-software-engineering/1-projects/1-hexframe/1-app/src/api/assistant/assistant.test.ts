@@ -7,7 +7,7 @@ import { Effect, Exit, Option, Schema } from 'effect'
 import { describe, expect, expectTypeOf, it } from 'vitest'
 
 import { dayAt } from '#/domains/assistant/entities'
-import { Sandbox, systemFolder } from '#/repositories/agent/sandbox/sandbox'
+import { systemFolder } from '#/repositories/agent/sandbox/sandbox'
 import type { SessionRequired, SignedOut } from '#/domains/iam/errors'
 import type { KeyProof, Session } from '#/domains/iam/iam'
 
@@ -217,8 +217,7 @@ describe("the System in the Account's sandbox", () => {
    */
   const inSandbox = (accountId: string) =>
     Effect.gen(function* () {
-      const places = yield* Assistant.systemInSandbox(accountId)
-      const box = yield* Sandbox.use((sandbox) => sandbox.ensure(accountId))
+      const { places, box } = yield* Assistant.systemInSandbox(accountId)
       return { places: Object.fromEntries(places), folder: join(box.home, systemFolder) }
     })
 

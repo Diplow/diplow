@@ -10,7 +10,7 @@ import {
 import type { TileNode } from '#/front/ui/hex/view/tiles'
 import { m } from '#/paraglide/messages'
 
-import { canvasTree, moveOf, slotOf, swapOf, swapsWith, tileIn } from './tree'
+import { canvasTree, moveOf, onScreen, slotOf, swapOf, swapsWith, tileIn } from './tree'
 
 const tile = (
   id: string,
@@ -213,5 +213,24 @@ describe('slotOf', () => {
   it('is no slot where a moving Tile would change kind', () => {
     expect(slotOf('branches', 3, leaf)).toBeUndefined()
     expect(slotOf('leaves', 3, branch)).toBeUndefined()
+  })
+})
+
+describe('onScreen', () => {
+  const tree = canvasTree(system)
+
+  it('shows the Root and its Children when the view names no center', () => {
+    expect(onScreen(tree, {})).toEqual({ center: 'root', shown: ['root', 'a', 'b', 'notes'] })
+  })
+
+  it('shows the ring inside the center, and the rings its opened Branches show', () => {
+    const { shown } = onScreen(tree, { inner: 'context', expanded: { 1: 'children' } })
+    // A Reference by the Tile it points at, a3 once though it shows twice; a broken one by its own id.
+    expect(shown).toEqual(['root', 'a', 'b', 'notes', 'why', 'a3', 'broken:root:-5'])
+  })
+
+  it('centers a Tile below, and falls back to the Root for one the System does not hold', () => {
+    expect(onScreen(tree, { center: 'a' })).toEqual({ center: 'a', shown: ['a', 'a3'] })
+    expect(onScreen(tree, { center: 'nowhere' }).center).toBe('root')
   })
 })

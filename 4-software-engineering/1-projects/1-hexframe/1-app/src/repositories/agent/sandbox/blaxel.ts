@@ -21,8 +21,11 @@ import {
   workFolder,
 } from './sandbox'
 
-/** Blaxel's image with Claude Code on its PATH. */
+/** Blaxel's image with Claude Code on its PATH, and Node, which a Turn's launcher runs on. */
 const image = 'blaxel/claude-code:latest'
+
+/** Claude Code, as the image holds it. */
+const agent = ['claude']
 
 /** How long a sandbox stays idle before it is deleted. */
 const idleLifetime = '7d'
@@ -34,7 +37,7 @@ const home = '/blaxel/hexframe'
  * The user a process runs as, made in each sandbox: root runs the layer's own commands and owns the
  * System folder, which its modes alone could not keep from root.
  */
-const agent = 'hexframe'
+const user = 'hexframe'
 
 /** How long a stop waits for a process it interrupted before killing it. */
 const grace = Duration.seconds(10)
@@ -157,7 +160,7 @@ function boxOf(sandbox: SandboxInstance, name: string): Box {
             name: run.name,
             // setpriv drops to the agent's user and execs, so the pid Blaxel reports stays the one
             // a stop signals.
-            command: `setpriv --reuid=${agent} --regid=${agent} --init-groups -- sh -c ${quoted(run.command)}`,
+            command: `setpriv --reuid=${user} --regid=${user} --init-groups -- sh -c ${quoted(run.command)}`,
             workingDir: `${home}/${inside(run.workingDir)}`,
             env: { HOME: `${home}/${workFolder}`, ...run.env },
             keepAlive: true,
@@ -174,18 +177,23 @@ function boxOf(sandbox: SandboxInstance, name: string): Box {
 }
 
 /**
- * Every Account's sandbox on Blaxel, in `namespace`, reaching `hosts` alone. A sandbox made before
- * the hosts changed has its network set again when it is ensured.
+ * Every Account's sandbox on Blaxel, in `namespace`, reaching `hosts` alone, and the app at its
+ * `canonical` host, the one Vercel's protection leaves open in production. A sandbox made before the
+ * hosts changed has its network set again when it is ensured.
  */
 function makeBlaxel({
   namespace,
   hosts,
+  canonical,
 }: {
   readonly namespace: string
   readonly hosts: ReadonlyArray<string>
+  readonly canonical: string | undefined
 }): Sandbox['Service'] {
   const network = networkOf(hosts)
   return {
+    agent,
+    origin: (requested) => (canonical === undefined ? requested : `https://${canonical}`),
     ensure: (accountId: string) =>
       Effect.gen(function* () {
         const name = sandboxName(namespace, accountId)
@@ -208,8 +216,8 @@ function makeBlaxel({
         yield* chored(
           sandbox,
           `mkdir -p ${work} && chown 0:0 ${quoted(home)} && chmod 755 ${quoted(home)} && ` +
-            `(id -u ${agent} >/dev/null 2>&1 || useradd --no-create-home --shell /bin/sh ${agent}) && ` +
-            `chown ${agent} ${work} && command -v setpriv >/dev/null`,
+            `(id -u ${user} >/dev/null 2>&1 || useradd --no-create-home --shell /bin/sh ${user}) && ` +
+            `chown ${user} ${work} && command -v setpriv >/dev/null`,
         )
         return boxOf(sandbox, name)
       }),
@@ -218,12 +226,13 @@ function makeBlaxel({
 
 /**
  * The hosts a Vercel deployment answers on, which its sandboxes may reach, and the one its sandboxes
- * are named in: production's domain, else its branch's, else its own. Off Vercel, `localhost`, which
- * a sandbox never reaches, and the namespace `local`.
+ * are named in and reach the app at, `canonical`: production's domain, else its branch's, else its
+ * own. Off Vercel, `localhost`, which a sandbox never reaches, the namespace `local`, and no host of
+ * its own.
  */
 export const deployment = Effect.gen(function* () {
   if (Option.isNone(yield* Config.option(Config.String('VERCEL')))) {
-    return { namespace: 'local', hosts: ['localhost'] }
+    return { namespace: 'local', hosts: ['localhost'], canonical: undefined }
   }
   const { environment, own, branch, production } = yield* Config.all({
     environment: Config.String('VERCEL_ENV'),
@@ -232,7 +241,11 @@ export const deployment = Effect.gen(function* () {
     production: Config.String('VERCEL_PROJECT_PRODUCTION_URL'),
   })
   const canonical = environment === 'production' ? production : Option.getOrElse(branch, () => own)
-  return { namespace: canonical, hosts: [...new Set([own, ...Option.toArray(branch), canonical])] }
+  return {
+    namespace: canonical,
+    hosts: [...new Set([own, ...Option.toArray(branch), canonical])],
+    canonical,
+  }
 })
 
 /** Whether Blaxel's workspace and key are both set, an empty variable counting as none. */
@@ -240,7 +253,11 @@ export const hasCredentials = (env: Readonly<Record<string, string | undefined>>
   (env.BL_WORKSPACE ?? '') !== '' && (env.BL_API_KEY ?? '') !== ''
 
 /** The service when Blaxel can't be had: the app runs, and ensuring a sandbox is a defect. */
-const unavailable = (why: Error): Sandbox['Service'] => ({ ensure: () => Effect.die(why) })
+const unavailable = (why: Error): Sandbox['Service'] => ({
+  ensure: () => Effect.die(why),
+  agent,
+  origin: (requested) => requested,
+})
 
 /**
  * The sandbox on Blaxel, its workspace and key from `BL_WORKSPACE` and `BL_API_KEY`. It always

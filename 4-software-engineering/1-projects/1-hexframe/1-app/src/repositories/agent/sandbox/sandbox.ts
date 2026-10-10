@@ -88,6 +88,16 @@ export class Sandbox extends Context.Service<
   {
     /** The Account's sandbox, made when it has none, found when it has. */
     readonly ensure: (accountId: string) => Effect.Effect<Box>
+    /**
+     * The command line that runs Claude Code in a sandbox, before its arguments: `claude` on Blaxel,
+     * whose image holds it; on this machine, a fake agent unless the environment asks for Claude Code.
+     */
+    readonly agent: ReadonlyArray<string>
+    /**
+     * The origin a sandbox reaches the app at, given the one a request reached it at: on Blaxel, the
+     * deployment's own, the one host its network lets through; on this machine, the request's.
+     */
+    readonly origin: (requested: string) => string
   }
 >()('hexframe/Sandbox') {}
 

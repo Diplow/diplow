@@ -8,4 +8,9 @@ export class TurnRunning extends Schema.TaggedError<TurnRunning>()('TurnRunning'
   kind: kind('Conflict'),
 }) {}
 
-export const assistantFailures = [TurnRunning] as const
+/** The month's allowance is spent: no Turn starts until the next month. */
+export class AllowanceSpent extends Schema.TaggedError<AllowanceSpent>()('AllowanceSpent', {
+  kind: kind('Forbidden'),
+}) {}
+
+export const assistantFailures = [TurnRunning, AllowanceSpent] as const

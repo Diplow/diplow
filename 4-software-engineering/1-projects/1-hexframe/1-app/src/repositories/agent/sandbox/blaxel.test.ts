@@ -23,17 +23,18 @@ const vercel = {
 
 describe('where a deployment’s sandboxes live', () => {
   it.effect(
-    'a preview names them in its branch’s host and lets them reach its own hosts alone',
+    'a preview names them in its branch’s host, where they reach the app, and lets them reach its own hosts alone',
     () =>
       Effect.gen(function* () {
         expect(yield* withEnv({ ...vercel, VERCEL_ENV: 'preview' })(deployment)).toEqual({
           namespace: 'hexframe-app-git-feat-team.vercel.app',
           hosts: ['hexframe-abc123-team.vercel.app', 'hexframe-app-git-feat-team.vercel.app'],
+          canonical: 'hexframe-app-git-feat-team.vercel.app',
         })
       }),
   )
 
-  it.effect('production names them in its domain, which they reach too', () =>
+  it.effect('production names them in its domain, where they reach the app', () =>
     Effect.gen(function* () {
       expect(yield* withEnv({ ...vercel, VERCEL_ENV: 'production' })(deployment)).toEqual({
         namespace: 'hexframe.ai',
@@ -42,13 +43,18 @@ describe('where a deployment’s sandboxes live', () => {
           'hexframe-app-git-feat-team.vercel.app',
           'hexframe.ai',
         ],
+        canonical: 'hexframe.ai',
       })
     }),
   )
 
   it.effect('off Vercel, in `local`, reaching localhost, which a sandbox never does', () =>
     Effect.gen(function* () {
-      expect(yield* withEnv({})(deployment)).toEqual({ namespace: 'local', hosts: ['localhost'] })
+      expect(yield* withEnv({})(deployment)).toEqual({
+        namespace: 'local',
+        hosts: ['localhost'],
+        canonical: undefined,
+      })
     }),
   )
 })

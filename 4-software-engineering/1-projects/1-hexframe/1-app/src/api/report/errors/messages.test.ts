@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 
 import { overwriteGetLocale } from '#/paraglide/runtime'
 
-import { TurnRunning } from '#/domains/assistant/errors'
+import { AllowanceSpent, TurnRunning } from '#/domains/assistant/errors'
 import {
   CredentialsRejected,
   EmailMalformed,
@@ -121,6 +121,16 @@ describe('the message table', () => {
       'The assistant is still answering. Wait for it to finish, or stop it.',
     ],
     ['fr', new TurnRunning(), 'L’assistant répond encore. Attendez qu’il ait fini, ou arrêtez-le.'],
+    [
+      'en',
+      new AllowanceSpent(),
+      "This month's allowance for the assistant is spent. It answers again next month.",
+    ],
+    [
+      'fr',
+      new AllowanceSpent(),
+      'L’enveloppe du mois de l’assistant est dépensée. Il répondra de nouveau le mois prochain.',
+    ],
   ] as const)("words the Assistant's refusals in %s", (locale, failure, sentence) => {
     overwriteGetLocale(() => locale)
     expect(messageFor(failure)).toBe(sentence)
