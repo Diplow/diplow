@@ -25,7 +25,11 @@ const Line = Schema.Union([
     type: Schema.Literal('assistant'),
     message: Schema.Struct({ content: Schema.Array(Block) }),
   }),
-  Schema.Struct({ type: Schema.Literal('result'), subtype: Schema.String }),
+  Schema.Struct({
+    type: Schema.Literal('result'),
+    subtype: Schema.String,
+    is_error: Schema.optionalKey(Schema.Boolean),
+  }),
   Schema.Struct({ type: Schema.Literal('hexframe_exit') }),
   Schema.Struct({ type: Schema.String }),
 ])
@@ -44,11 +48,11 @@ export type AgentEvent =
   | { readonly _tag: 'Exited' }
 
 /**
- * How a result ends a Turn: by its answer when it succeeded, by its ceiling when it spent its budget,
- * the second fence Claude Code holds itself to, and by its sandbox otherwise.
+ * How a result ends a Turn: by its answer when it succeeded and says no error, by its ceiling when it
+ * spent its budget, the second fence Claude Code holds itself to, and by its sandbox otherwise.
  */
-const endOf = (subtype: string): TurnEnd => {
-  if (subtype === 'success') return 'answered'
+const endOf = ({ subtype, is_error }: { subtype: string; is_error?: boolean }): TurnEnd => {
+  if (subtype === 'success' && is_error !== true) return 'answered'
   return subtype === 'error_max_budget_usd' ? 'ceiling' : 'sandbox'
 }
 
@@ -89,6 +93,6 @@ export function readLine(line: string): ReadonlyArray<AgentEvent> | undefined {
   if (Option.isNone(decoded)) return undefined
   const event = decoded.value
   if ('message' in event) return eventsOf(event.message.content)
-  if ('subtype' in event) return [{ _tag: 'Finished', how: endOf(event.subtype) }]
+  if ('subtype' in event) return [{ _tag: 'Finished', how: endOf(event) }]
   return event.type === 'hexframe_exit' ? [{ _tag: 'Exited' }] : []
 }

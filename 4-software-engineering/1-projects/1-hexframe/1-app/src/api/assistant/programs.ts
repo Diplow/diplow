@@ -94,21 +94,6 @@ export const recordNavigation = ({ navigation, sinceLast }: typeof MergedNavigat
   )
 
 /**
- * The Account's System written into its sandbox, the files of Mapping's export of its Root, whatever
- * the sandbox held before gone: what a Turn reads at its start. Answers where each Tile lives in those
- * files, by id, from the same read, so a Turn starts in a Tile's folder and the prompt names a Tile's
- * path, and the sandbox, where the Turn then starts. A Reference whose Tile is gone links it on the
- * site the request reached.
- */
-export const systemInSandbox = (accountId: string) =>
-  Effect.gen(function* () {
-    const { url } = yield* HttpExchange
-    const { files, places } = yield* Mapping.systemFiles(accountId, tileLink(url))
-    const box = yield* Assistant.writeSystem(accountId, files)
-    return { places, box }
-  })
-
-/**
  * Whether the Account the request's Session proves may use the Assistant: its `assistant`
  * Entitlement, which the composer tells the user of when it is missing.
  */
@@ -183,14 +168,23 @@ const afterAnswering = <R>(work: Effect.Effect<void, never, R>) =>
     waitUntil(Effect.provideContext(work, services))
   })
 
+/**
+ * Where the app answers a Turn's sandbox, by path, as `front/routes/` serves them: the MCP, the model
+ * proxy, and the Turn's events.
+ */
+const doors = { mcp: '/mcp', model: '/assistant/anthropic', events: '/assistant/events' }
+
 /** What a Turn's agent starts with, beside the Turn and its Key. */
 type Started = Pick<typeof SentMessage.Type, 'text' | 'view' | 'offset'>
 
 /**
- * Starts a Turn's agent in the Account's sandbox: the System written into it, whatever it held gone;
- * the Turn's prompt made of today's latest Entries, the Titles their navigations went to, and the
- * Title and Preview of the Tiles on screen; its agent started in the centered Tile's folder, reaching
- * the app where the sandbox reaches it.
+ * Starts a Turn's agent in the Account's sandbox: the System written into it, Mapping's export of its
+ * Root, a Reference whose Tile is gone linked on the site the request reached (`tileLink`), whatever
+ * the sandbox held gone; the Turn's prompt made of today's latest Entries, the Titles their
+ * navigations went to, and the Title and Preview of the Tiles on screen; its agent started in the
+ * centered Tile's folder, where Mapping places it in the same export, reaching the app at its doors
+ * where the sandbox reaches it. Should a Stop have ended the Turn while it started, the agent is
+ * stopped at once: the Stop found nothing to stop yet.
  */
 const agentStarted = (
   accountId: string,
@@ -200,21 +194,26 @@ const agentStarted = (
 ) =>
   Effect.gen(function* () {
     const { url } = yield* HttpExchange
-    const { places, box } = yield* systemInSandbox(accountId)
+    const { files, places } = yield* Mapping.systemFiles(accountId, tileLink(url))
     const entries = yield* Assistant.latestToday(accountId, offset)
     const titles = yield* Mapping.titles(accountId, visitedTiles(entries))
     const onScreen = yield* Mapping.glimpses(accountId, [view.center, ...view.shown])
     const title = onScreen.find(({ id }) => id === view.center)?.title ?? ''
-    yield* Assistant.startAgent(box, {
+    yield* Assistant.startAgent(accountId, {
       turn,
       key,
+      system: files,
       origin: new URL(url).origin,
+      doors,
       location: { id: view.center, title, folder: places.get(view.center)?.folder ?? '' },
       message: text,
       conversation: { entries, titles },
       onScreen,
       help: Mapping.helpRoot,
     })
+    if ((yield* Assistant.runningTurn(accountId))?.id !== turn.id) {
+      yield* Assistant.stopAgent(accountId, turn.id)
+    }
   })
 
 /** Stops a Turn's agent in its sandbox, once its Turn ended; a failure is reported, never thrown. */

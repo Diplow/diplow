@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { Entry } from '../entities'
 import { settings } from '../settings'
-import { doors, launchOf, processOf, withoutTools } from './launch'
+import { launchOf, processOf, withoutTools } from './launch'
 import { promptOf } from './prompt'
 import { readLine } from './stream'
 
@@ -124,6 +124,8 @@ describe("what Assistant keeps of the agent's stream", () => {
     expect(readLine(recorded.result('error_max_budget_usd'))).toEqual([
       { _tag: 'Finished', how: 'ceiling' },
     ])
+    const failed = JSON.stringify({ type: 'result', subtype: 'success', is_error: true })
+    expect(readLine(failed)).toEqual([{ _tag: 'Finished', how: 'sandbox' }])
     for (const subtype of ['error_during_execution', 'error_max_turns']) {
       expect(readLine(recorded.result(subtype))).toEqual([{ _tag: 'Finished', how: 'sandbox' }])
     }
@@ -211,12 +213,16 @@ describe("a Turn's prompt", () => {
   })
 })
 
+/** The app's doors, as the API layer names them. */
+const doors = { mcp: '/mcp', model: '/assistant/anthropic', events: '/assistant/events' }
+
 describe("a Turn's launch", () => {
   const secret = 'hft_the-turns-own-key'
   const launched = launchOf({
     turnId: 'turn-1',
     key: Redacted.make(secret),
     origin: 'https://hexframe.ai',
+    doors,
     home: '/blaxel/hexframe',
     agent: ['claude'],
     folder: '3-games',
@@ -250,7 +256,7 @@ describe("a Turn's launch", () => {
     expect(launched.run.env).toEqual({
       HEXFRAME_TURN_KEY: secret,
       ANTHROPIC_AUTH_TOKEN: secret,
-      ANTHROPIC_BASE_URL: `https://hexframe.ai${doors.model}`,
+      ANTHROPIC_BASE_URL: 'https://hexframe.ai/assistant/anthropic',
       ANTHROPIC_MODEL: settings.turn.model,
       ANTHROPIC_DEFAULT_HAIKU_MODEL: settings.turn.smallModel,
       ANTHROPIC_SMALL_FAST_MODEL: settings.turn.smallModel,
@@ -286,6 +292,7 @@ const launchArgs = () => ({
   turnId: 't',
   key: Redacted.make('hft_k'),
   origin: 'http://localhost:5173',
+  doors,
   home: '/tmp/box',
   agent: ['node', 'fake.mjs'],
   folder: '',

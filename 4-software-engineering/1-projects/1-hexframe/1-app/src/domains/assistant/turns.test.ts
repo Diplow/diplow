@@ -113,6 +113,11 @@ layer(TestLayer)('the Turns, over PGlite', (it) => {
         expect(early).toMatchObject({ _tag: 'TurnRunning' })
 
         yield* TestClock.adjust('1 minute')
+        const late = yield* transactional(startTurn(account, { message: next, location })).pipe(
+          Effect.flip,
+        )
+        expect(late).toMatchObject({ _tag: 'TurnRunning' })
+        expect((yield* transactional(endOverdueTurn(account)))?.id).toBe(lost.id)
         const started = yield* transactional(startTurn(account, { message: next, location }))
         expect(yield* runningTurn(account)).toEqual(started)
         const ended = yield* transactional(endTurn(account, lost.id, 'answered'))

@@ -9,8 +9,29 @@ import { turnOnly } from '#/domains/iam/iam'
 import { turnEvent } from '../../assistant/programs'
 import { bearerOnly, noSession, provenKey, run, waitUntilOf, type StartContext } from '../run'
 
-/** The most characters a line holds: what an agent says in one event, its tools' inputs included. */
+/** The most bytes a line holds: what an agent says in one event, its tools' inputs included. */
 const longestLine = 1024 * 1024
+
+/**
+ * The request's body as text, read a chunk at a time and given up past the longest a line holds,
+ * without reading the rest: none then. A length it declares past it is not read at all.
+ */
+async function lineOf(request: Request): Promise<string | undefined> {
+  if (Number(request.headers.get('content-length') ?? 0) > longestLine) return undefined
+  const reader = request.body?.getReader()
+  if (reader === undefined) return ''
+  const chunks: Array<Uint8Array<ArrayBuffer>> = []
+  let size = 0
+  for (let read = await reader.read(); !read.done; read = await reader.read()) {
+    size += read.value.byteLength
+    if (size > longestLine) {
+      await reader.cancel()
+      return undefined
+    }
+    chunks.push(read.value)
+  }
+  return new Blob(chunks).text()
+}
 
 /** An answer with nothing to say but its status. */
 const status = (code: number) => new Response(null, { status: code })
@@ -18,7 +39,7 @@ const status = (code: number) => new Response(null, { status: code })
 /**
  * Serves one line of a Turn's agent: proves the Turn's Key from the header alone and answers a request
  * it proves no Turn for, 401, before reading its body, or 500 when the Key could not be checked; then
- * refuses a line past the longest, 413, and one no schema reads as an event, 400; and answers 204 once
+ * refuses a line past the longest, 413, read no further than that, and one no schema reads as an event, 400; and answers 204 once
  * the line is followed, the Turn's Key revoked if it ended the Turn.
  */
 export async function serveTurnEvent(request: Request): Promise<Response> {
@@ -33,8 +54,8 @@ export async function serveTurnEvent(request: Request): Promise<Response> {
   }
   const proof = await run(context, turnOnly)
   if (!proof.ok) return status(proof.failure.kind === 'Unauthenticated' ? 401 : 500)
-  const line = await request.text()
-  if (line.length > longestLine) return status(413)
+  const line = await lineOf(request)
+  if (line === undefined) return status(413)
   const outcome = await run(context, turnEvent(line))
   if (!outcome.ok) return status(outcome.failure.kind === 'Unauthenticated' ? 401 : 500)
   return status(outcome.value === 'Malformed' ? 400 : 204)

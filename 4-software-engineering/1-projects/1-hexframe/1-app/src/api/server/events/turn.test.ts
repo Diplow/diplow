@@ -144,6 +144,24 @@ describe('a Turn on every Message', () => {
     expect(await value(run(signedIn, Assistant.stopTurn))).toBeNull()
   })
 
+  it('stops an agent whose Turn a Stop ended while it was starting', async () => {
+    const { signedIn, accountId, waited } = await account
+    const sent = await value(send('Slowly, if you start at all.'))
+    // The Stop lands before the agent started: it finds nothing to stop yet.
+    await value(run(signedIn, Assistant.stopTurn))
+    await waited()
+    const box = await value(
+      run(
+        signedIn,
+        Sandbox.use((sandbox) => sandbox.ensure(accountId)),
+      ),
+    )
+    const status = await value(run(signedIn, box.status(`turn-${sent.turn?.id ?? ''}`)))
+    expect(status).toMatchObject({ _tag: 'Some' })
+    expect(status).not.toMatchObject({ value: { state: 'running' } })
+    expect((await today(signedIn)).at(-1)).toMatchObject({ _tag: 'TurnEnded', how: 'stopped' })
+  })
+
   it('ends a lost Turn by its time once the next one starts, its Key revoked', async () => {
     const { signedIn, waited } = await account
     const lost = await value(send('Go slowly again.'))

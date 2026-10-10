@@ -15,7 +15,7 @@
 import { Clock, Effect, Result, Schema } from 'effect'
 
 import { Anthropic, type Endpoint } from '#/repositories/agent/anthropic/anthropic'
-import { type Box, Sandbox, type SandboxFile } from '#/repositories/agent/sandbox/sandbox'
+import { Sandbox, type SandboxFile } from '#/repositories/agent/sandbox/sandbox'
 import { Conversations } from '#/repositories/database/conversations/conversations'
 import { type TurnRow, Turns } from '#/repositories/database/conversations/turns'
 
@@ -116,7 +116,7 @@ export const recordChange = (accountId: string, summarized: Summarized, actor: A
 /**
  * Writes the System, as the files Mapping wrote it as, into the Account's sandbox, ensured first: the
  * whole of its System folder, whatever it held before gone, then read-only. What a Turn reads at its
- * start; what changed since, it reads through the MCP. Answers the sandbox, where the Turn then starts.
+ * start; what changed since, it reads through the MCP. Answers the sandbox, where a Turn then starts.
  */
 export const writeSystem = (accountId: string, files: ReadonlyArray<SandboxFile>) =>
   Effect.flatMap(
@@ -183,17 +183,14 @@ export const endOverdueTurn = (accountId: string) =>
 /**
  * Starts a Turn answering one of the Account's Messages, by its Entry's id, in the Tile `location`
  * names, and answers it: `AllowanceSpent` once the Account's Turns spent the month's allowance;
- * `TurnRunning` while another runs in its Conversation, one at a time. One still running past its
- * deadline ends first, by its time (`endOverdueTurn`).
+ * `TurnRunning` while another runs in its Conversation, one at a time, one past its deadline included
+ * until `endOverdueTurn` ended it, which the caller does first, so it revokes its Key with it.
  */
 export const startTurn = (accountId: string, start: { message: string; location: string }) =>
   Effect.gen(function* () {
     const startedAt = new Date(yield* Clock.currentTimeMillis)
     const month = yield* Turns.use((turns) => turns.spentSince(accountId, monthOf(startedAt)))
-    if (limitReached({ turn: 0, month: month.spent }) === 'allowance') {
-      return yield* new AllowanceSpent()
-    }
-    yield* endOverdueTurn(accountId)
+    if (month.spent >= settings.month.allowance) return yield* new AllowanceSpent()
     const row = yield* Turns.use((turns) =>
       turns.start(accountId, { messageId: start.message, location: start.location, startedAt }),
     )
@@ -283,12 +280,15 @@ export const latestToday = (accountId: string, offset: number) =>
     Effect.map(day(accountId, asked), (entries) => entries.slice(-settings.turn.entries)),
   )
 
-/** What starting a Turn's agent takes, beside the sandbox its System was written into. */
+/** What starting a Turn's agent takes. */
 export interface TurnStart {
   readonly turn: Turn
   readonly key: Launch['key']
-  /** The origin the request that starts the Turn reached the app at. */
+  /** The System, as the files Mapping wrote it as. */
+  readonly system: ReadonlyArray<SandboxFile>
+  /** The origin the request that starts the Turn reached the app at, and the doors' paths there. */
   readonly origin: string
+  readonly doors: Launch['doors']
   /** The Tile the Turn starts in, its Title, and its folder from the System folder. */
   readonly location: { readonly id: string; readonly title: string; readonly folder: string }
   /** The Message it answers. */
@@ -305,12 +305,14 @@ export interface TurnStart {
 }
 
 /**
- * Starts a Turn's agent in the sandbox its System was just written into: its prompt, its settings and
- * its launcher written beside the System folder, then the launcher started, detached, in the Tile's
- * folder, the Turn's Key in its environment alone, reaching the app where the sandbox reaches it.
+ * Starts a Turn's agent in the Account's sandbox: the System written into it, whatever it held gone;
+ * its prompt, its settings and its launcher written beside the System folder; then the launcher
+ * started, detached, in the Tile's folder, the Turn's Key in its environment alone, reaching the app
+ * where the sandbox reaches it.
  */
-export const startAgent = (box: Box, start: TurnStart) =>
+export const startAgent = (accountId: string, start: TurnStart) =>
   Effect.gen(function* () {
+    const box = yield* writeSystem(accountId, start.system)
     const { agent, origin } = yield* Sandbox.use((sandbox) =>
       Effect.succeed({ agent: sandbox.agent, origin: sandbox.origin(start.origin) }),
     )
@@ -324,6 +326,7 @@ export const startAgent = (box: Box, start: TurnStart) =>
       turnId: start.turn.id,
       key: start.key,
       origin,
+      doors: start.doors,
       home: box.home,
       agent,
       folder: start.location.folder,

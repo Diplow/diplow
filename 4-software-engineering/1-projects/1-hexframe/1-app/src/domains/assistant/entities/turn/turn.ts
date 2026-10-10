@@ -7,24 +7,17 @@ import { Schema } from 'effect'
  * How a Turn ended: its answer, a Stop, its own ceiling, the month's allowance, its time, or the
  * sandbox failing. Nothing is rolled back whichever it was.
  */
-export const TurnEnd = Schema.Literals([
-  'answered',
-  'stopped',
-  'ceiling',
-  'allowance',
-  'time',
-  'sandbox',
-])
-
-export type TurnEnd = typeof TurnEnd.Type
-
 /** How a Turn ended when not by its answer: what the timeline tells in an Entry of its own. */
 export const BadEnd = Schema.Literals(['stopped', 'ceiling', 'allowance', 'time', 'sandbox'])
 
 export type BadEnd = typeof BadEnd.Type
 
-/** Whether a Turn ended by its answer, or otherwise, which the timeline tells. */
-export const isBadEnd = (how: TurnEnd): how is BadEnd => how !== 'answered'
+export const TurnEnd = Schema.Literals(['answered', ...BadEnd.literals])
+
+export type TurnEnd = typeof TurnEnd.Type
+
+/** Whether a Turn ended otherwise than by its answer, which the timeline tells. */
+export const isBadEnd = Schema.is(BadEnd)
 
 /** The most characters a step's tool and its detail hold: enough to tell it, never a file's content. */
 const longestTool = 100

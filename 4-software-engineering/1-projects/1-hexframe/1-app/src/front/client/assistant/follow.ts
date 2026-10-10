@@ -10,7 +10,7 @@ import { type QueryClient, type QueryKey, useQuery, useQueryClient } from '@tans
 
 import { settle } from '../calls'
 import { systemRead, useEachSystemWrite } from '../mapping/queries'
-import { askLatest, conversationRead, latestRead } from './conversation'
+import { askLatest, conversationRead, latestRead, latestScope } from './conversation'
 
 /** How often a page polls while a Turn runs, in milliseconds. */
 const closelyEvery = 2_000
@@ -45,7 +45,7 @@ async function caughtUp(client: QueryClient, queryKey: QueryKey, stillBehind: ()
 
 /** Polls the latest, then reads again, side by side, whatever the cache holds behind it. */
 async function polled(client: QueryClient): Promise<Latest> {
-  const now = await settle('latest', askLatest())
+  const now = await settle(latestScope, askLatest())
   await Promise.all([
     caughtUp(client, systemRead.queryKey, () => behind.system(client, now)),
     caughtUp(client, conversationRead.queryKey, () => behind.conversation(client, now)),

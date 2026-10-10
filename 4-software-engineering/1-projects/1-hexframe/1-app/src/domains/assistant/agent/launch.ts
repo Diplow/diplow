@@ -1,22 +1,15 @@
 // How a Turn runs in its sandbox: the files written beside the System folder, a prompt, the Turn's
 // settings and the launcher, and the process started detached in the Tile's folder. The launcher, a
 // small Node script, runs the agent, Claude Code or the sandbox's fake, posts each line it writes to
-// the app's events door as it comes, so the answer is saved with the tab closed, then a line of its own
-// once the agent exited. The Turn's Key enters the sandbox once, in the process's environment, which
-// the launcher hands to the agent as its model credential and its MCP client's bearer: never in a
-// file, never in the prompt. Pure.
+// the app's events door as it comes, so the answer is saved with the tab closed, then a line of its
+// own once the agent exited; the API layer names the doors. The Turn's Key enters the sandbox once,
+// in the process's environment, which the launcher hands to the agent as its model credential and
+// its MCP client's bearer: never in a file, never in the prompt. Pure.
 import { Redacted } from 'effect'
 
 import { type Run, type SandboxFile, systemFolder } from '#/repositories/agent/sandbox/sandbox'
 
 import { settings } from '../settings'
-
-/** Where the app answers a Turn's sandbox, from its origin: the MCP, the model proxy, the events door. */
-export const doors = {
-  mcp: '/mcp',
-  model: '/assistant/anthropic',
-  events: '/assistant/events',
-} as const
 
 /**
  * The tools a Turn's agent goes without: its files are read-only and its changes go through the MCP,
@@ -88,6 +81,8 @@ export interface Launch {
   readonly key: Redacted.Redacted
   /** The origin the sandbox reaches the app at. */
   readonly origin: string
+  /** Where the app answers a Turn's sandbox there, by path: the MCP, the model proxy, the events. */
+  readonly doors: { readonly mcp: string; readonly model: string; readonly events: string }
   /** The sandbox's home, every path of it from there. */
   readonly home: string
   /** The command line that runs the agent in this sandbox, before its arguments. */
@@ -135,8 +130,8 @@ export function launchOf(launch: Launch): {
       '--no-session-persistence',
     ],
     message: launch.message,
-    mcp: `${launch.origin}${doors.mcp}`,
-    events: `${launch.origin}${doors.events}`,
+    mcp: `${launch.origin}${launch.doors.mcp}`,
+    events: `${launch.origin}${launch.doors.events}`,
   }
   const key = Redacted.value(launch.key)
   return {
@@ -152,7 +147,7 @@ export function launchOf(launch: Launch): {
       env: {
         HEXFRAME_TURN_KEY: key,
         ANTHROPIC_AUTH_TOKEN: key,
-        ANTHROPIC_BASE_URL: `${launch.origin}${doors.model}`,
+        ANTHROPIC_BASE_URL: `${launch.origin}${launch.doors.model}`,
         ANTHROPIC_MODEL: settings.turn.model,
         ANTHROPIC_DEFAULT_HAIKU_MODEL: settings.turn.smallModel,
         ANTHROPIC_SMALL_FAST_MODEL: settings.turn.smallModel,
