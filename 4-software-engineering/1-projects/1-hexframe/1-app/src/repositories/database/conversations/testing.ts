@@ -50,7 +50,7 @@ export const turnKeyKept = (turnId: string) =>
   )
 
 /** The Tile a Turn started in, by its id; none for a Turn there is not. */
-export const turnLocation = (turnId: string) =>
+export const startedIn = (turnId: string) =>
   Database.use((database) =>
     database
       .select({ location: turn.location })

@@ -8,8 +8,11 @@ import { Schema } from 'effect'
 /** A gesture, as the canvas names it (`center`, `show-context`): lowercase words joined by `-`. */
 const Gesture = Schema.String.check(Schema.isPattern(/^[a-z]+(-[a-z]+)*$/), Schema.isMaxLength(32))
 
+/** The most characters a Tile's id holds, as Assistant keeps one. */
+export const longestTileRef = 100
+
 /** A Tile, by its id as the canvas names it. */
-export const TileRef = Schema.String.check(Schema.isNonEmpty(), Schema.isMaxLength(100))
+export const TileRef = Schema.String.check(Schema.isNonEmpty(), Schema.isMaxLength(longestTileRef))
 
 /** One gesture, and the Tile it was made on. */
 export const Step = Schema.Struct({ gesture: Gesture, tile: TileRef })

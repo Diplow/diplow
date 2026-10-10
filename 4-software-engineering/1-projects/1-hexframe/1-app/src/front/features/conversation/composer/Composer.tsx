@@ -103,6 +103,8 @@ export function Composer({ onSend, tiles, unavailable, busy }: ComposerProps) {
                         actions.typed(value, selectionStart)
                       }}
                       onKeyDown={(event) => {
+                        // A key confirming an input method's composition is the composition's.
+                        if (event.nativeEvent.isComposing) return
                         const { taken, edited } = actions.key(event.key, field.state.value)
                         if (!taken) return
                         event.preventDefault()

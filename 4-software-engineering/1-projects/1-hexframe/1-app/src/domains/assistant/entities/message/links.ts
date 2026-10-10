@@ -3,12 +3,16 @@
 // Message moves the Turn answering it into that Tile; any other points the agent at it. Assistant knows
 // no Tile: an id is kept as it came, and whoever reads the Message joins in the Title the System holds
 // then, none for a Tile deleted since. Pure.
+import { longestTileRef } from '../navigation'
 
 /** A link to a Tile, as a Message's text holds it: `@[<id>]`. */
 export const linkTo = (tile: string) => `@[${tile}]`
 
-/** A link in a text, its id the letters, digits, `-` and `_` an id is made of, 100 at most. */
-const link = /@\[([\w-]{1,100})\]/g
+/**
+ * A link in a text, its id the letters, digits, `-` and `_` an id is made of, as long as a `TileRef`
+ * at most.
+ */
+const link = new RegExp(`@\\[([\\w-]{1,${String(longestTileRef)}})\\]`, 'g')
 
 /** The most links a Message holds: past them, a link's text is read as it is written. */
 export const mostLinks = 50
@@ -48,9 +52,3 @@ export function leadingLink(text: string): string | undefined {
   const [first] = partsOf(text)
   return first?._tag === 'Link' ? first.tile : undefined
 }
-
-/**
- * Where the Turn answering a Message starts, by its Tile's id: the Tile the Message opens with a link
- * to, else `center`, the one centered on the view it was sent from.
- */
-export const turnLocation = (text: string, center: string): string => leadingLink(text) ?? center

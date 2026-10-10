@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest'
 
 import type { Entry } from '../entry'
 import { namedTiles } from '../entry'
-import { leadingLink, linksOf, linkTo, mostLinks, partsOf, turnLocation } from './links'
+import { turnLocation } from '../turn/turn'
+import { leadingLink, linksOf, linkTo, mostLinks, partsOf } from './links'
 
 // A Message's links, on texts written by hand: each Tile kept by its id in the text, read back in
 // pieces, the one opening the Message told apart, and the Tiles a day names joined from its Messages

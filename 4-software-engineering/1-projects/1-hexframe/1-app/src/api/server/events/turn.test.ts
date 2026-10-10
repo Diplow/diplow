@@ -11,7 +11,7 @@ import {
   everyTurnSpent,
   startedAt,
   turnKeyKept,
-  turnLocation,
+  startedIn,
 } from '#/repositories/database/conversations/testing'
 
 import * as Assistant from '../../assistant/programs'
@@ -217,7 +217,7 @@ describe('a Turn at a Tile its Message links', () => {
     const sent = await value(send(text))
     await waited()
     await ended(signedIn)
-    expect(await value(run(signedIn, turnLocation(sent.turn?.id ?? '')))).toBe(team)
+    expect(await value(run(signedIn, startedIn(sent.turn?.id ?? '')))).toBe(team)
 
     const entries = await today(signedIn)
     const said = entries.flatMap((entry) =>

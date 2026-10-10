@@ -3,6 +3,8 @@
 // most per Conversation. Pure.
 import { Schema } from 'effect'
 
+import { leadingLink } from '../message/links'
+
 /** How a Turn ended when not by its answer: what the timeline tells in an Entry of its own. */
 export const BadEnd = Schema.Literals(['stopped', 'ceiling', 'allowance', 'time', 'sandbox'])
 
@@ -57,6 +59,13 @@ export interface Turn {
   /** When and how it ended; none while it runs. */
   readonly ended?: { readonly at: Date; readonly how: TurnEnd }
 }
+
+/**
+ * Where the Turn answering a Message starts, its location, by its Tile's id: the Tile the Message opens
+ * with a link to, else `center`, the one centered on the view it was sent from.
+ */
+export const turnLocation = (message: string, center: string): string =>
+  leadingLink(message) ?? center
 
 /** The latest a Turn may run until: its start, and its maximum length after it. */
 export const deadlineOf = (turn: Pick<Turn, 'startedAt'>, longest: number): Date =>
