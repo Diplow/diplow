@@ -18,7 +18,7 @@ What the Conversation beside the canvas shows: one timeline per Account, split b
 
 | Folder | Holds |
 |---|---|
-| `timeline/` | The timeline's model, pure and tested: an entry is a Message, a navigation or an operation, one of Mapping's Operations by its tag; `splitByDay`, and `excerpt`, a long Preview's start |
+| `timeline/` | The timeline's model, pure and tested: an entry is a Message, a navigation, the canvas's gesture as the `Navigated` fact carries it (`features/facts.ts`), or an operation, one of Mapping's Operations by its tag; `splitByDay`, and `excerpt`, a long Preview's start |
 | `entry/` | The entries' views: `Entry.tsx`, one entry, a Message or what the user did on the canvas with its verb in the past tense, its time in the reader's language; `TileCard.tsx`, a Tile inside the Conversation, its long Preview shortened until the reader asks for the rest |
 
 The regroup into `timeline/` and `entry/` is `hexframe-app-assistant/decisions.md#DEC-1`.

@@ -10,7 +10,7 @@ preview: >-
 ---
 # features
 
-A feature is client code that shows one thing a page needs, in a domain's language, built from [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]]. A route composes features; `/dev/system` lays out the first two on fixtures, the Conversation left of the canvas and the breadcrumb right of it, and home lays out the user's own System with the breadcrumb beside it.
+A feature is client code that shows one thing a page needs, in a domain's language, built from [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]]. A route composes features; `/dev/system` lays out the first two on fixtures, the Conversation left of the canvas and the breadcrumb right of it, and home lays out the user's own System with the breadcrumb beside it and publishes a `Navigated` for every gesture that changes the view, on the canvas or the breadcrumb.
 
 | Folder | Holds |
 |---|---|
@@ -24,13 +24,14 @@ A feature is client code that shows one thing a page needs, in a domain's langua
 | File | Holds |
 |---|---|
 | `bus.ts` | The client bus: `publish` a fact, `useFact` to react to one, `receive` for a fact crossing into the client. Beside the features, not in one, so a feature reaches it without importing another |
+| `facts.ts` | The facts the bus carries. `Navigated`, the user went somewhere on the canvas: the gesture, as the canvas names it (`Gesture`, `ui/hex/view/`), and the Tile it was made on; home publishes one per gesture, and the Conversation's timeline tells its navigations in the same words. Tested: one fact heard per gesture, none when nothing changed, a gesture the canvas does not name refused at the crossing |
 
 ## Rules
 
 - **A feature sits between routes and the client's side of the API.** dependency-cruiser reads `front/routes/` → `front/features/` → `front/client/` and `front/ui/` ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE|front]]): a feature reaches the server through a server function, never a repository, and of a domain only its door, pure (`entities/index.ts`, `operations/index.ts`, `errors.ts`).
 - **Features ignore each other.** A route composes them, and the client bus carries a fact from one to another; `no-feature-importing-another` says no to the import.
 - **A fact is declared once, with its schema, where both sides reach it**, as a `Schema.TaggedClass` in the past tense and in a domain's language: in `facts.ts` beside `bus.ts`, created with the first fact, never inside the feature that publishes it, which its listener may not import.
-- **A feature reacts through a state hook**: `useFact(TileCentered, actions.recordNavigation)`, passing a stable action, so the hook subscribes once. React subscribes through `useSyncExternalStore`, since `useEffect` stays in `ui/`.
+- **A feature reacts through a state hook**: `useFact(Navigated, actions.recordNavigation)`, passing a stable action, so the hook subscribes once. React subscribes through `useSyncExternalStore`, since `useEffect` stays in `ui/`.
 - **A fact crossing into the client is decoded by its schema**, through `receive`, which drops and reports one that does not decode; between features, in one page, its type is enough. Every fact is logged at `medium`, by its tag (`log('bus', …)` from the API layer's observability), and a feature that throws reacting to one is reported to Sentry.
 - **A feature builds from ui/ and never adds to it.** A missing component is a Linear ticket (see ui's rules).
-- **The view belongs to the URL**, as on the canvas: a feature that changes it calls `onViewChange` with the next view and the route navigates.
+- **The view belongs to the URL**, as on the canvas: a feature that changes it calls `onViewChange` with the next view and the gesture that asked for it, on which Tile (`ViewAction`); the route navigates, and home publishes the gesture as a `Navigated`.
