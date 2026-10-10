@@ -79,14 +79,28 @@ interface Recorded {
 }
 
 /**
+ * Each pending write read once per state of its mutation, so `useMutationState` finds the same
+ * values while nothing changed: an Operation decoded again is a new object it cannot compare, and
+ * every page holding a System write would render again at each notification of the MutationCache.
+ */
+const pendingByState = new WeakMap<Mutation['state'], Pending>()
+
+/**
  * A pending write to the System, as the overlay folds it: its turn, the Operation it sends, read back
  * from its key and variables by Mapping's schema, and the System shown when it was made.
  */
-const pendingOf = (mutation: Mutation): Pending => ({
-  turn: mutation.mutationId,
-  operation: operationOf(mutation.options.mutationKey?.[0], mutation.state.variables),
-  before: (mutation.state.context as Recorded | undefined)?.before,
-})
+function pendingOf(mutation: Mutation): Pending {
+  const known = pendingByState.get(mutation.state)
+  if (known !== undefined) return known
+  const pending = {
+    turn: mutation.mutationId,
+    operation: operationOf(mutation.options.mutationKey?.[0], mutation.state.variables),
+    before: (mutation.state.context as Recorded | undefined)?.before,
+  }
+  pendingByState.set(mutation.state, pending)
+  return pending
+}
+
 
 /**
  * The System shown as a write with these variables is made: the server's, with every write to it
