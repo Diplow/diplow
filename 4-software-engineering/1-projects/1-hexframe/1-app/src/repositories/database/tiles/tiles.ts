@@ -141,10 +141,10 @@ export class Tiles extends Context.Service<
       root: Pick<TileRow, ContentColumn>,
     ) => Effect.Effect<ReadonlyArray<TileRow>>
     /**
-     * The System's Version, read from its Root's row alone, 0 for an Account without a Root: what a
-     * client polls, so it reads every row again only once it moved.
+     * The `system_version` of the Account's Root's row, read alone, `undefined` for an Account
+     * without a Root.
      */
-    readonly systemVersion: (accountId: string) => Effect.Effect<number>
+    readonly systemVersion: (accountId: string) => Effect.Effect<number | undefined>
     /** The id of the Account's Root, added first with the content given when it has none. */
     readonly root: (accountId: string, root: Pick<TileRow, ContentColumn>) => Effect.Effect<string>
     /**
@@ -432,7 +432,7 @@ const make = Effect.gen(function* () {
         .where(rootOf(accountId))
         .pipe(
           Effect.orDie,
-          Effect.map(([found]) => found?.systemVersion ?? 0),
+          Effect.map(([found]) => found?.systemVersion),
         ),
     root,
     generationsFrom,

@@ -7,18 +7,18 @@ import { type QueryClient, useQuery, useQueryClient } from '@tanstack/react-quer
 
 import { systemVersion } from '#/api/mapping/mapping'
 
-import { read, settle } from '../calls'
+import { read } from '../calls'
 import { systemRead } from './queries'
 
 /** How often a page following closely polls the System's Version, in milliseconds. */
 const closelyEvery = 2_000
 
-/** The System's Version's read, by the server function's name. */
-const versionScope = 'systemVersion'
-
-/** The System's Version, read alone: a frame read, whose failure is reported and shows nothing. */
-const versionRead = read({
-  scope: versionScope,
+/**
+ * The System's Version, read alone: a frame read, whose failure is reported and shows nothing; its
+ * call, apart, which `polled` makes and follows.
+ */
+const { queryFn: askVersion, ...versionRead } = read({
+  scope: 'systemVersion',
   key: [],
   call: () => systemVersion({ data: undefined }),
   frame: true,
@@ -28,8 +28,13 @@ const versionRead = read({
  * Polls the System's Version, then reads the System again when it moved past the one the cache holds,
  * a read already on its way left to land. Nothing is read again before the System's first read.
  */
-async function polled(client: QueryClient): Promise<number> {
-  const version = await settle(versionScope, systemVersion({ data: undefined }))
+async function polled(
+  client: QueryClient,
+  context: Parameters<NonNullable<typeof askVersion>>[0],
+): Promise<number> {
+  // `read` always builds one: its type only leaves it optional.
+  if (askVersion === undefined) throw new Error('The Version’s read has no call')
+  const version = await askVersion(context)
   const held = client.getQueryData(systemRead.queryKey)
   if (held !== undefined && version > held.version) {
     void client.invalidateQueries({ queryKey: systemRead.queryKey }, { cancelRefetch: false })
@@ -46,7 +51,7 @@ export function useFollowSystem({ closely }: { closely: boolean }) {
   const client = useQueryClient()
   useQuery({
     ...versionRead,
-    queryFn: () => polled(client),
+    queryFn: (context) => polled(client, context),
     refetchOnWindowFocus: 'always',
     refetchInterval: closely ? closelyEvery : false,
   })

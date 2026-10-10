@@ -72,7 +72,7 @@ export const system = (accountId: string) =>
  * know when to read the System again. 0 before its first change, its Root not yet added included.
  */
 export const systemVersion = (accountId: string) =>
-  Tiles.use((tiles) => tiles.systemVersion(accountId))
+  Tiles.use((tiles) => Effect.map(tiles.systemVersion(accountId), (version) => version ?? 0))
 
 /** A Tile read from, with the id and Title of its parent, `null` for the Root. */
 interface Read<F extends Field> {
@@ -348,7 +348,7 @@ const chosen: OnTaken<TileIdTaken> = () => Effect.fail(new TileIdTaken())
  * it in `after`, then publishes them. A change that made none leaves the Version where it was. The
  * bus holds what is published until the transaction commits. `landing/`'s import ends this way too.
  */
-export const published = (
+export const ended = (
   writes: Writes,
   { after, events }: { after: System; events: ReadonlyArray<MappingEvent> },
 ) =>
@@ -382,7 +382,7 @@ const operate = <E, T = never>(
       after = evolve(after, event)
       yield* Effect.catchTag(written(writes, after)(event), 'IdTaken', onTaken)
     }
-    yield* published(writes, { after, events })
+    yield* ended(writes, { after, events })
     return after
   })
 

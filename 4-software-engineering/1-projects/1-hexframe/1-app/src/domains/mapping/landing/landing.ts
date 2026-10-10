@@ -7,7 +7,7 @@
 // (`hexframe-app-import-export/decisions.md#DEC-11`).
 import { Effect } from 'effect'
 
-import type { BatchRow, RowRef, TileRow, Writes } from '#/repositories/database/tiles/tiles'
+import type { BatchRow, RowRef, TileRow } from '#/repositories/database/tiles/tiles'
 import { Tiles } from '#/repositories/database/tiles/tiles'
 import { Zip } from '#/repositories/zip/zip'
 
@@ -28,12 +28,11 @@ import {
   onlyALeafIn,
   rowDirection,
   type Slot,
-  type System,
   systemFrom,
   systemOf,
   tileRow,
 } from '../entities'
-import { changing, published, untitled } from '../mapping'
+import { changing, ended, untitled } from '../mapping'
 import { evolve, freeSlot, type Placement } from '../operations'
 import { type Upload, archiveBounds, folderOf } from './archive'
 
@@ -152,18 +151,6 @@ function reportOf(
 }
 
 /**
- * Ends an import landed as the Tile of this id: the plan's event counted on the System as `evolve`
- * leaves it, its Version written, the event published.
- */
-const landed = (
-  writes: Writes,
-  { system, plan, id }: { system: System; plan: ImportPlan; id: string },
-) => {
-  const event = importedAs(plan, id)
-  return published(writes, { after: evolve(system, event), events: [event] })
-}
-
-/**
  * A plan landed in a free slot under a Tile of the System, never under a Leaf nor in Help: its root a
  * new Tile there, with everything below it. A Leaf slot takes a plan that is one file alone.
  */
@@ -187,7 +174,8 @@ const inSlot = (accountId: string, plan: ImportPlan, place: Placement) =>
       const ids = yield* writes.insertAll(batch)
       const id = ids.get(root.path)
       if (id === undefined) return yield* Effect.die(new Error('A batch lost its first row'))
-      yield* landed(writes, { system, plan, id })
+      const event = importedAs(plan, id)
+      yield* ended(writes, { after: evolve(system, event), events: [event] })
       return reportOf(batch, { id, plan, replaced: false })
     }),
   )
@@ -213,8 +201,10 @@ const asRoot = (accountId: string, plan: ImportPlan) =>
         const { title, preview, body, config, frontmatter } = root
         // The Root says what the import gave it now, its Version counted by the import's event: a
         // writer that read it empty is refused.
+        const event = importedAs(plan, stored.id)
+        const after = evolve(found, event)
         yield* writes.update(stored.id, {
-          version: evolve(found, importedAs(plan, stored.id)).root.version,
+          version: after.root.version,
           title,
           preview,
           body,
@@ -224,7 +214,7 @@ const asRoot = (accountId: string, plan: ImportPlan) =>
         const batch =
           root._tag === 'Tile' ? rowsBelow(root, { parent: nameOf(root.path), resolve }) : []
         yield* writes.insertAll(batch)
-        yield* landed(writes, { system: found, plan, id: stored.id })
+        yield* ended(writes, { after, events: [event] })
         return reportOf(batch, { id: stored.id, plan, replaced: true })
       }),
     ),
