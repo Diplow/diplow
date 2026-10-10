@@ -13,10 +13,15 @@ import {
   type Session,
 } from '#/domains/iam/iam'
 import { Auth, HttpExchange, layer as authLayer } from '#/repositories/auth/auth'
+import {
+  Conversations,
+  layer as conversationsLayer,
+} from '#/repositories/database/conversations/conversations'
 import { type Database, layer as databaseLayer } from '#/repositories/database/database'
 import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 import { Zip, layer as zipLayer } from '#/repositories/zip/zip'
 
+import { recordedInConversation } from '../assistant/recording'
 import { Failure, Unexpected, encodeFailure, type Outcome } from '../report/errors/failure'
 import {
   CurrentRequestLog,
@@ -49,24 +54,28 @@ const auth =
       )
     : Layer.orDie(Layer.merge(authLayer, databaseLayer))
 
-/** What the domains use: Better Auth, the tiles repository, Zip, and the database itself. */
-type Repositories = Auth | Database | Tiles | Zip
+/**
+ * What the domains use: Better Auth, the tiles repository, Zip, the conversations repository, and the
+ * database itself.
+ */
+type Repositories = Auth | Database | Tiles | Zip | Conversations
 
 /**
- * The repositories the domains use: Better Auth for IAM, the tiles repository and Zip for Mapping; and
- * the database itself, for the transaction a program opens (`transactional`).
+ * The repositories the domains use: Better Auth for IAM, the tiles repository and Zip for Mapping, the
+ * conversations repository for Assistant; and the database itself, for the transaction a program
+ * opens (`transactional`).
  */
 const repositories: Layer.Layer<Repositories> = Layer.merge(
-  Layer.provideMerge(tilesLayer, auth),
+  Layer.provideMerge(Layer.merge(tilesLayer, conversationsLayer), auth),
   zipLayer,
 )
 
 /**
  * Who reacts to which domain event: the API layer composes domains here, one `on(Event, reaction)`
- * per subscription, as the domains that publish and react are built. A reaction may use the
- * repositories, which the bus is built over; none is wired yet.
+ * per subscription. A reaction may use the repositories, which the bus is built over. Every change to
+ * a System lands in the Conversation of the Account that made it (`../assistant/recording.ts`).
  */
-const subscriptions: ReadonlyArray<Subscription<Repositories>> = []
+const subscriptions: ReadonlyArray<Subscription<Repositories>> = [recordedInConversation]
 
 /**
  * Every layer: the bus, built over the repositories its subscribers use, the domains' services and

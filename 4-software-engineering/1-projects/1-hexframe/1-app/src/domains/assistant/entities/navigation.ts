@@ -6,10 +6,7 @@
 import { Schema } from 'effect'
 
 /** A gesture, as the canvas names it (`center`, `show-context`): lowercase words joined by `-`. */
-const Gesture = Schema.String.check(
-  Schema.isPattern(/^[a-z]+(-[a-z]+)*$/),
-  Schema.isMaxLength(32),
-)
+const Gesture = Schema.String.check(Schema.isPattern(/^[a-z]+(-[a-z]+)*$/), Schema.isMaxLength(32))
 
 /** A Tile, by its id as the canvas names it. */
 const TileRef = Schema.String.check(Schema.isNonEmpty(), Schema.isMaxLength(100))

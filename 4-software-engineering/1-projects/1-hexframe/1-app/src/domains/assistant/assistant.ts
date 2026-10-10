@@ -9,7 +9,7 @@ import { Clock, Effect, Schema } from 'effect'
 
 import { Conversations } from '#/repositories/database/conversations/conversations'
 
-import { type Day, type Entry, EntryContent, spanOf } from './entities'
+import { type Day, dayAt, type Entry, EntryContent, spanOf } from './entities'
 
 const decoded = Schema.decodeUnknownEffect(EntryContent)
 
@@ -25,6 +25,10 @@ export const day = (accountId: string, asked: Day) =>
         Effect.map(Effect.orDie(decoded(content)), (entry): Entry => ({ ...entry, id, at })),
       ),
   )
+
+/** Today, for a reader whose clock stands `offset` minutes ahead of UTC. */
+export const today = (offset: number) =>
+  Effect.map(Clock.currentTimeMillis, (now) => dayAt(new Date(now), offset))
 
 /** The most a recorded Entry may date back: a day. */
 const longestAgo = 24 * 60 * 60_000

@@ -34,19 +34,21 @@ const textsOn = (accountId: string, date: string, offset = 0) =>
   )
 
 layer(TestLayer)('the Conversation, over PGlite', (it) => {
-  it.effect('records an Entry and reads it back, as it was said, at the instant it dates from', () =>
-    Effect.gen(function* () {
-      const account = someone()
-      yield* at('2026-10-10T09:00:00Z')
-      const entry = yield* recorded(account, said('Help me lay out my vault.'))
-      expect(entry).toMatchObject({
-        _tag: 'Message',
-        author: 'user',
-        text: 'Help me lay out my vault.',
-        at: new Date('2026-10-10T09:00:00Z'),
-      })
-      expect(yield* day(account, { date: '2026-10-10', offset: 0 })).toEqual([entry])
-    }),
+  it.effect(
+    'records an Entry and reads it back, as it was said, at the instant it dates from',
+    () =>
+      Effect.gen(function* () {
+        const account = someone()
+        yield* at('2026-10-10T09:00:00Z')
+        const entry = yield* recorded(account, said('Help me lay out my vault.'))
+        expect(entry).toMatchObject({
+          _tag: 'Message',
+          author: 'user',
+          text: 'Help me lay out my vault.',
+          at: new Date('2026-10-10T09:00:00Z'),
+        })
+        expect(yield* day(account, { date: '2026-10-10', offset: 0 })).toEqual([entry])
+      }),
   )
 
   it.effect('reads every kind of Entry back as it was recorded', () =>
