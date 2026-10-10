@@ -29,12 +29,20 @@ export const MergedNavigation = Schema.Struct({
 })
 
 /**
- * A day of the Account's Conversation: the day, its Entries oldest first, and the Titles of the
- * Tiles its navigations went to, by id.
+ * A day of the Account's Conversation: the day, its Entries oldest first, the Titles of the Tiles its
+ * navigations went to, by id, the instant of the latest Entry before it, and the Entry last recorded.
  */
 export const conversationDay = createServerFn({ method: 'GET' })
   .validator(Schema.toStandardSchemaV1(DayAsked))
   .handler(({ data, context }) => run(context, Assistant.conversationDay(data)))
+
+/**
+ * The latest of what home shows, polled on focus, and every 2 s while a Turn runs: the System's
+ * Version and the Conversation's last Entry.
+ */
+export const latest = createServerFn({ method: 'GET' })
+  .validator(Schema.toStandardSchemaV1(Schema.Undefined))
+  .handler(({ context }) => run(context, Assistant.latest))
 
 /** Posts the user's Message, and answers its Entry. */
 export const postMessage = createServerFn({ method: 'POST' })

@@ -61,6 +61,7 @@ const today = () => dayAt(new Date(), 0)
 describe("Assistant's server functions", () => {
   it.each<readonly [string, Program]>([
     ['conversationDay', Assistant.conversationDay({ offset: 0 })],
+    ['latest', Assistant.latest],
     ['postMessage', Assistant.postMessage({ text: 'Hello' })],
     [
       'recordNavigation',
@@ -103,10 +104,51 @@ describe("Assistant's server functions", () => {
 
   it('reads a day of the reader’s calendar, another day holding none of today’s', async () => {
     const { call } = request()
-    await value(call(Assistant.postMessage({ text: 'Today' })))
+    const posted = await value(call(Assistant.postMessage({ text: 'Today' })))
     const yesterday = dayAt(new Date(Date.now() - 24 * 60 * 60_000), 0)
     const read = await value(call(Assistant.conversationDay(yesterday)))
-    expect(read).toEqual({ day: yesterday, entries: [], titles: {} })
+    expect(read).toEqual({ day: yesterday, entries: [], titles: {}, lastEntry: posted.id })
+  })
+
+  it('says where the latest Entry before a day is, for a reader scrolling back', async () => {
+    const { call } = request()
+    expect(await value(call(Assistant.conversationDay({ offset: 0 })))).not.toHaveProperty(
+      'earlier',
+    )
+    const posted = await value(call(Assistant.postMessage({ text: 'Today' })))
+    const tomorrow = dayAt(new Date(Date.now() + 24 * 60 * 60_000), 0)
+    const read = await value(call(Assistant.conversationDay(tomorrow)))
+    expect(read).toMatchObject({ entries: [], earlier: posted.at })
+    expect(await value(call(Assistant.conversationDay({ offset: 0 })))).not.toHaveProperty(
+      'earlier',
+    )
+  })
+
+  it('answers the System’s Version and the Entry last recorded, which every write moves', async () => {
+    const { call } = request()
+    expect(await value(call(Assistant.latest))).toEqual({ version: 0 })
+    const posted = await value(call(Assistant.postMessage({ text: 'Name me' })))
+    expect(await value(call(Assistant.latest))).toEqual({ version: 0, lastEntry: posted.id })
+    const { root } = await value(call(Mapping.system))
+    await value(call(Mapping.editTile({ id: root.id, version: 1, title: 'Ada' })))
+    const latest = await value(call(Assistant.latest))
+    const { entries } = await value(call(Assistant.conversationDay({ offset: 0 })))
+    expect(latest).toEqual({ version: 1, lastEntry: entries.at(-1)?.id })
+    expect(latest.lastEntry).not.toBe(posted.id)
+  })
+
+  it('moves the System’s Version one per change, and not for a refused one', async () => {
+    const { call } = request()
+    const { root } = await value(call(Mapping.system))
+    await value(
+      call(Mapping.createTile({ parent: root.id, slot: 1, title: 'One', preview: '', body: '' })),
+    )
+    expect(await value(call(Assistant.latest))).toMatchObject({ version: 1 })
+    const refused = await call(
+      Mapping.moveTile({ id: root.id, version: 1, parent: root.id, slot: 2 }),
+    )
+    expect(refused.ok).toBe(false)
+    expect(await value(call(Assistant.latest))).toMatchObject({ version: 1 })
   })
 
   it('records a merged navigation dated from its last gesture, its Tiles named as they are now', async () => {
@@ -158,6 +200,7 @@ describe("Assistant's server functions", () => {
     expectTypeOf<Errors<ReturnType<typeof Assistant.conversationDay>>>().toEqualTypeOf<
       SignedOut | SessionRequired
     >()
+    expectTypeOf<Errors<typeof Assistant.latest>>().toEqualTypeOf<SignedOut | SessionRequired>()
   })
 })
 

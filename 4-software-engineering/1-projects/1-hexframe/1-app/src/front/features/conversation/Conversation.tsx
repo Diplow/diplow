@@ -1,26 +1,39 @@
-// The Conversation beside the canvas: its timeline split by day, newest at the bottom beside the
-// input, and the input the user writes to the agent in.
+// The Conversation beside the canvas: its timeline a day at a time, newest at the bottom beside the
+// input, a button above the oldest day shown reading the day before, and the input the user writes to
+// the agent in.
 import { cn } from 'cn'
 import { MessagesSquare } from 'lucide-react'
 
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 import { EmptyState } from '#/front/ui/feedback/states'
+import { Button } from '#/front/ui/inputs/controls/button'
 import { useAppForm } from '#/front/ui/inputs/forms/form'
 
-import { splitByDay, type Day, type Entry } from './timeline/timeline'
+import type { Day } from './timeline/timeline'
 import { ConversationEntry } from './entry/Entry'
 
+/** The day before the oldest one shown, which the reader may ask for. */
+interface Earlier {
+  /** Reads the latest earlier day holding an Entry. */
+  show: () => void
+  /** The day is on its way. */
+  pending: boolean
+}
+
 interface ConversationProps {
-  entries: readonly Entry[]
+  /** The days shown, oldest first, each with its Entries oldest first. */
+  days: readonly Day[]
   /** A Message the user sent, trimmed and never empty. */
   onSend: (text: string) => void
+  /** An earlier day holding an Entry, when there is one. */
+  earlier?: Earlier | undefined
   className?: string
 }
 
-export function Conversation({ entries, onSend, className }: ConversationProps) {
+export function Conversation({ days, onSend, earlier, className }: ConversationProps) {
   const now = new Date()
-  const days = splitByDay(entries, now)
+  const shown = days.filter((day) => day.entries.length > 0)
   return (
     <section
       aria-label={m.conversation_label()}
@@ -32,14 +45,25 @@ export function Conversation({ entries, onSend, className }: ConversationProps) 
       {/* Laid out in reverse, so the timeline opens scrolled to its newest entry. */}
       <div className="flex min-h-0 flex-1 flex-col-reverse overflow-y-auto">
         <div className="grid gap-6 p-4">
-          {days.length === 0 ? (
+          {earlier !== undefined && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="justify-self-center"
+              disabled={earlier.pending}
+              onClick={earlier.show}
+            >
+              {m.conversation_earlier()}
+            </Button>
+          )}
+          {shown.length === 0 && earlier === undefined ? (
             <EmptyState
               icon={<MessagesSquare />}
               title={m.conversation_empty_title()}
               description={m.conversation_empty_description()}
             />
           ) : (
-            days.map((day) => <DayOfEntries key={day.key} day={day} now={now} />)
+            shown.map((day) => <DayOfEntries key={day.key} day={day} now={now} />)
           )}
         </div>
       </div>
@@ -59,7 +83,7 @@ function DayOfEntries({ day, now }: { day: Day; now: Date }) {
       <ol className="grid gap-3">
         {day.entries.map((entry) => (
           <li key={entry.id}>
-            <ConversationEntry entry={entry} />
+            <ConversationEntry entry={entry} titles={day.titles} />
           </li>
         ))}
       </ol>

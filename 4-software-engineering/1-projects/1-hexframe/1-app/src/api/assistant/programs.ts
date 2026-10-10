@@ -23,17 +23,42 @@ const forSession = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, 
 /**
  * A day of the Account's Conversation, today when no date is asked: the day, its Entries oldest
  * first, and the Titles of the Tiles its navigations went to, as the System holds them now, by id. A
- * navigation keeps a Tile's id alone; a Tile the System no longer holds has no Title there.
+ * navigation keeps a Tile's id alone; a Tile the System no longer holds has no Title there. With
+ * them, `earlier`, the instant of the latest Entry before the day, where a reader scrolling back goes
+ * next, and `lastEntry`, the Entry last recorded in the Conversation, which the page's poll compares
+ * with its own (`latest`). It is read first: an Entry recorded meanwhile is among the day's, and the
+ * next poll reads the day again for nothing rather than never.
  */
 export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
   forSession((accountId) =>
     Effect.gen(function* () {
+      const lastEntry = yield* Assistant.lastEntry(accountId)
       const day = { date: date ?? (yield* Assistant.today(offsets.offset)).date, ...offsets }
       const entries = yield* Assistant.day(accountId, day)
       const titles = yield* Mapping.titles(accountId, visitedTiles(entries))
-      return { day, entries, titles }
+      const earlier = yield* Assistant.before(accountId, day)
+      return {
+        day,
+        entries,
+        titles,
+        ...(earlier !== undefined && { earlier }),
+        ...(lastEntry !== undefined && { lastEntry }),
+      }
     }),
   )
+
+/**
+ * The latest of what home shows, the smallest reads there are, which the page polls: the System's
+ * Version, and the id of the Entry last recorded in the Conversation, none before the first. The page
+ * reads the System again once the Version moved, and the Conversation once its last Entry is another.
+ */
+export const latest = forSession((accountId) =>
+  Effect.gen(function* () {
+    const version = yield* Mapping.systemVersion(accountId)
+    const lastEntry = yield* Assistant.lastEntry(accountId)
+    return { version, ...(lastEntry !== undefined && { lastEntry }) }
+  }),
+)
 
 /** Posts the user's Message in their Conversation, and answers its Entry. No agent answers yet. */
 export const postMessage = ({ text }: typeof NewMessage.Type) =>

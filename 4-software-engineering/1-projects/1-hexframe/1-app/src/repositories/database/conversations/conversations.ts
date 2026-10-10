@@ -1,7 +1,7 @@
 // Assistant's repository: the `conversation` and `conversation_entry` tables (../schema.ts), one
 // Conversation per Account, read and written by Account. It speaks rows: an Entry's content is a JSON
 // value Assistant encodes, decodes and bounds, which the repository keeps as it is given.
-import { and, asc, eq, gte, lt } from 'drizzle-orm'
+import { and, asc, desc, eq, gte, lt } from 'drizzle-orm'
 import { Context, Effect, Layer } from 'effect'
 
 import { Database, InTransaction } from '../database'
@@ -33,6 +33,13 @@ export class Conversations extends Context.Service<
     ) => Effect.Effect<string, never, InTransaction>
     /** The Entries of the Account's Conversation within a span, oldest first; none without one. */
     readonly between: (accountId: string, span: Span) => Effect.Effect<ReadonlyArray<EntryRow>>
+    /** The instant of the Account's latest Entry before an instant, excluded; none without one. */
+    readonly latestBefore: (accountId: string, before: Date) => Effect.Effect<Date | undefined>
+    /**
+     * The id of the Entry last written in the Account's Conversation, whatever instant it dates
+     * from; none without one.
+     */
+    readonly lastEntry: (accountId: string) => Effect.Effect<string | undefined>
   }
 >()('hexframe/Conversations') {}
 
@@ -87,7 +94,33 @@ const make = Effect.gen(function* () {
       .orderBy(asc(conversationEntry.at), asc(conversationEntry.seq))
       .pipe(Effect.orDie)
 
-  return Conversations.of({ append, between })
+  const latestBefore = (accountId: string, before: Date) =>
+    database
+      .select({ at: conversationEntry.at })
+      .from(conversationEntry)
+      .innerJoin(conversation, eq(conversationEntry.conversationId, conversation.id))
+      .where(and(eq(conversation.accountId, accountId), lt(conversationEntry.at, before)))
+      .orderBy(desc(conversationEntry.at))
+      .limit(1)
+      .pipe(
+        Effect.orDie,
+        Effect.map(([found]) => found?.at),
+      )
+
+  const lastEntry = (accountId: string) =>
+    database
+      .select({ id: conversationEntry.id })
+      .from(conversationEntry)
+      .innerJoin(conversation, eq(conversationEntry.conversationId, conversation.id))
+      .where(eq(conversation.accountId, accountId))
+      .orderBy(desc(conversationEntry.seq))
+      .limit(1)
+      .pipe(
+        Effect.orDie,
+        Effect.map(([found]) => found?.id),
+      )
+
+  return Conversations.of({ append, between, latestBefore, lastEntry })
 })
 
 /** The conversations repository, over the `Database` it is given. */

@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'vitest'
 
-import { excerpt, splitByDay, type Entry } from './timeline'
+import type { Entry } from '#/domains/assistant/entities'
+
+import { dayOf, excerpt, splitByDay } from './timeline'
 
 // Local dates, so the tests hold in any time zone: days are the reader's.
 const at = (day: number, hour: number, minute = 0) => new Date(2026, 8, day, hour, minute)
 
 const message = (id: string, when: Date): Entry => ({
-  kind: 'message',
+  _tag: 'Message',
   id,
   at: when,
   author: 'user',
@@ -17,7 +19,7 @@ const now = at(27, 12)
 
 describe('splitByDay', () => {
   const ids = (entries: readonly Entry[]) =>
-    splitByDay(entries, now).map((day) => [day.key, day.relative, day.entries.map((e) => e.id)])
+    splitByDay(entries, now, {}).map((day) => [day.key, day.relative, day.entries.map((e) => e.id)])
 
   it('groups the entries by local day, oldest day and oldest entry first', () => {
     const entries = [
@@ -34,18 +36,43 @@ describe('splitByDay', () => {
   })
 
   it('starts each day at its local midnight', () => {
-    const [day] = splitByDay([message('a', at(3, 18, 30))], now)
+    const [day] = splitByDay([message('a', at(3, 18, 30))], now, {})
     expect(day?.date).toEqual(new Date(2026, 8, 3))
   })
 
   it('knows yesterday across a month', () => {
     const first = new Date(2026, 9, 1, 8)
-    const [day] = splitByDay([message('a', at(30, 22))], first)
+    const [day] = splitByDay([message('a', at(30, 22))], first, {})
     expect(day?.relative).toBe('yesterday')
   })
 
   it('has no day for no entry', () => {
-    expect(splitByDay([], now)).toEqual([])
+    expect(splitByDay([], now, {})).toEqual([])
+  })
+
+  it('hands every day the Titles it is given', () => {
+    const titles = { games: 'Games' }
+    const days = splitByDay([message('a', at(26, 9)), message('b', at(27, 9))], now, titles)
+    expect(days.map((day) => day.titles)).toEqual([titles, titles])
+  })
+})
+
+describe('dayOf', () => {
+  const read = { entries: [], titles: {} }
+
+  it('starts a date of the reader’s calendar at its local midnight', () => {
+    expect(dayOf({ ...read, date: '2026-03-29' }, now)).toEqual({
+      key: '2026-03-29',
+      date: new Date(2026, 2, 29),
+      entries: [],
+      titles: {},
+    })
+  })
+
+  it('says today and yesterday, by the reader’s clock', () => {
+    expect(dayOf({ ...read, date: '2026-09-27' }, now).relative).toBe('today')
+    expect(dayOf({ ...read, date: '2026-09-26' }, now).relative).toBe('yesterday')
+    expect(dayOf({ ...read, date: '2026-09-25' }, now)).not.toHaveProperty('relative')
   })
 })
 

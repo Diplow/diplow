@@ -229,5 +229,9 @@ export const conversationEntry = pgTable(
     seq: bigint('seq', { mode: 'number' }).generatedAlwaysAsIdentity(),
     content: jsonb('content').notNull(),
   },
-  (table) => [index('conversation_entry_at_idx').on(table.conversationId, table.at, table.seq)],
+  (table) => [
+    index('conversation_entry_at_idx').on(table.conversationId, table.at, table.seq),
+    // The Entry last written, which the page polls: one row read from the end of this index.
+    index('conversation_entry_seq_idx').on(table.conversationId, table.seq),
+  ],
 )
