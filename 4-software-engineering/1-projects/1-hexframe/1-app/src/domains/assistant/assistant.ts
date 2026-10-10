@@ -203,7 +203,8 @@ export type CallAnswer =
 export const modelCall = (accountId: string, turnId: string, asked: AskedCall) =>
   Effect.gen(function* () {
     const allowed = allowedCall(asked.body, asked.betas)
-    if (Result.isFailure(allowed)) return { _tag: 'Refused', ...allowed.failure } satisfies CallAnswer
+    if (Result.isFailure(allowed))
+      return { _tag: 'Refused', ...allowed.failure } satisfies CallAnswer
     const now = new Date(yield* Clock.currentTimeMillis)
     const spent = yield* Turns.use((turns) => turns.spending(accountId, turnId, monthOf(now)))
     if (spent.turn === undefined) return { _tag: 'TurnOver' } satisfies CallAnswer
@@ -211,7 +212,12 @@ export const modelCall = (accountId: string, turnId: string, asked: AskedCall) =
     if (limit !== undefined) return { _tag: 'Limited', limit } satisfies CallAnswer
     const { body, model } = allowed.success
     const { usage, ...relayed } = yield* Anthropic.use((anthropic) =>
-      anthropic.relay({ endpoint: asked.endpoint, version: asked.version, betas: asked.betas, body }),
+      anthropic.relay({
+        endpoint: asked.endpoint,
+        version: asked.version,
+        betas: asked.betas,
+        body,
+      }),
     )
     const metered = Effect.flatMap(usage, (used) => {
       const cost = used === undefined ? 0 : priced(model, used)

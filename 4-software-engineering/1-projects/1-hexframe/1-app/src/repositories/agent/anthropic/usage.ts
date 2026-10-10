@@ -76,7 +76,8 @@ function streamReader() {
     if (!text.startsWith('data:')) return
     const event = eventOf(text.slice('data:'.length).trim())
     if (Option.isNone(event)) return
-    const said = event.value.type === 'message_start' ? event.value.message.usage : event.value.usage
+    const said =
+      event.value.type === 'message_start' ? event.value.message.usage : event.value.usage
     seen = merged(seen, said)
   }
   return {

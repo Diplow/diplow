@@ -8,8 +8,6 @@ import { Config, Context, Effect, Layer, Redacted } from 'effect'
 
 import { metered, type Usage } from './usage'
 
-export type { Usage } from './usage'
-
 /** The endpoints a Turn's agent may call: a message, and a count of a message's tokens. */
 export type Endpoint = 'messages' | 'count_tokens'
 
@@ -73,7 +71,9 @@ export function makeAnthropic(options: {
       Effect.gen(function* () {
         const apiKey = Redacted.value(options.apiKey)
         if (apiKey === '') {
-          return yield* Effect.die(new Error('The model relay is not configured: ANTHROPIC_API_KEY'))
+          return yield* Effect.die(
+            new Error('The model relay is not configured: ANTHROPIC_API_KEY'),
+          )
         }
         const request = new Request(new URL(paths[call.endpoint], options.origin), {
           method: 'POST',
@@ -100,7 +100,10 @@ export const hasKey = (env: Readonly<Record<string, string | undefined>>) =>
 /** The relay to Anthropic, its key from `ANTHROPIC_API_KEY`, a server-only variable. */
 export const layer = Layer.effect(Anthropic)(
   Effect.gen(function* () {
-    const apiKey = yield* Config.withDefault(Config.Redacted('ANTHROPIC_API_KEY'), Redacted.make(''))
+    const apiKey = yield* Config.withDefault(
+      Config.Redacted('ANTHROPIC_API_KEY'),
+      Redacted.make(''),
+    )
     return makeAnthropic({
       apiKey,
       upstream: (request) => fetch(request),

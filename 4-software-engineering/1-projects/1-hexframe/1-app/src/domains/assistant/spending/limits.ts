@@ -41,7 +41,10 @@ export type Limit = 'ceiling' | 'allowance'
  * month, its own included: its ceiling first, then the month's allowance. A Turn reaches a limit once
  * its spend is at it: a call starts below it, and may end past it.
  */
-export function limitReached(spent: { readonly turn: number; readonly month: number }): Limit | undefined {
+export function limitReached(spent: {
+  readonly turn: number
+  readonly month: number
+}): Limit | undefined {
   if (spent.turn >= settings.turn.ceiling) return 'ceiling'
   if (spent.month >= settings.month.allowance) return 'allowance'
   return undefined

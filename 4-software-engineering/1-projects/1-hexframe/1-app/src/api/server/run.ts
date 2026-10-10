@@ -93,16 +93,7 @@ const anthropic =
  * conversations and Turns repositories, the sandbox, the model relay, and the database itself.
  */
 type Repositories =
-  | Auth
-  | Allowlist
-  | TurnKeys
-  | Database
-  | Tiles
-  | Zip
-  | Conversations
-  | Turns
-  | Sandbox
-  | Anthropic
+  Auth | Allowlist | TurnKeys | Database | Tiles | Zip | Conversations | Turns | Sandbox | Anthropic
 
 /**
  * The repositories the domains use: Better Auth, the allowlist and the Turn's Keys for IAM, the tiles

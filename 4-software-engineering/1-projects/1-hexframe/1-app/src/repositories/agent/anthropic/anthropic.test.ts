@@ -87,7 +87,9 @@ describe('the model relay', () => {
         expect(request?.headers.get('anthropic-version')).toBe('2023-06-01')
         expect(request?.headers.get('anthropic-beta')).toBe(call.betas)
         expect(request?.headers.get('authorization')).toBeNull()
-        expect(yield* Effect.promise(async () => request?.json())).toEqual(call.body)
+        expect(yield* Effect.promise(async (): Promise<unknown> => request?.json())).toEqual(
+          call.body,
+        )
 
         yield* relay({ ...call, endpoint: 'count_tokens', betas: undefined })
         expect(made[1]?.url).toBe('https://anthropic.test/v1/messages/count_tokens')
@@ -95,31 +97,35 @@ describe('the model relay', () => {
       }),
   )
 
-  it.effect('relays the stream chunk by chunk, as it comes, with the headers worth passing back', () =>
-    Effect.gen(function* () {
-      const fed = handFed()
-      const { relay } = relayOver(() =>
-        streamed(fed.stream, { 'request-id': 'req_1', 'set-cookie': 'a=b' }),
-      )
-      const relayed = yield* relay(call)
-      expect(relayed.status).toBe(200)
-      expect(relayed.headers.get('request-id')).toBe('req_1')
-      expect(relayed.headers.get('set-cookie')).toBeNull()
+  it.effect(
+    'relays the stream chunk by chunk, as it comes, with the headers worth passing back',
+    () =>
+      Effect.gen(function* () {
+        const fed = handFed()
+        const { relay } = relayOver(() =>
+          streamed(fed.stream, { 'request-id': 'req_1', 'set-cookie': 'a=b' }),
+        )
+        const relayed = yield* relay(call)
+        expect(relayed.status).toBe(200)
+        expect(relayed.headers.get('request-id')).toBe('req_1')
+        expect(relayed.headers.get('set-cookie')).toBeNull()
 
-      const reader = relayed.body?.getReader()
-      if (reader === undefined) throw new Error('No body was relayed')
-      fed.send('event: ping\ndata: {"type":"ping"}\n\n')
-      expect(yield* next(reader)).toContain('ping')
-      // The next chunk is not there before upstream sends it, and is as soon as it does.
-      const later = reader.read()
-      expect(yield* settledSoon(later)).toBe(false)
-      fed.send('event: message_stop\ndata: {"type":"message_stop"}\n\n')
-      const { value } = yield* Effect.promise(() => later)
-      expect(decoder.decode(value)).toContain('message_stop')
-      fed.close()
-    }),
+        const reader = relayed.body?.getReader()
+        if (reader === undefined) throw new Error('No body was relayed')
+        fed.send('event: ping\ndata: {"type":"ping"}\n\n')
+        expect(yield* next(reader)).toContain('ping')
+        // The next chunk is not there before upstream sends it, and is as soon as it does.
+        const later = reader.read()
+        expect(yield* settledSoon(later)).toBe(false)
+        fed.send('event: message_stop\ndata: {"type":"message_stop"}\n\n')
+        const { value } = yield* Effect.promise(() => later)
+        expect(decoder.decode(value)).toContain('message_stop')
+        fed.close()
+      }),
   )
+})
 
+describe('what a relayed call used', () => {
   it.effect(
     'reads what a streamed call used from its start and its last delta, cache writes and reads apart',
     () =>
@@ -159,24 +165,26 @@ describe('the model relay', () => {
       }),
   )
 
-  it.effect("reads a plain answer's usage, a cache write without its split as a five-minute one", () =>
-    Effect.gen(function* () {
-      const { relay } = relayOver(() =>
-        Response.json({
-          type: 'message',
-          usage: { input_tokens: 3, output_tokens: 5, cache_creation_input_tokens: 7 },
-        }),
-      )
-      const relayed = yield* relay(call)
-      expect(yield* text(relayed.body)).toContain('"type":"message"')
-      expect(yield* relayed.usage).toEqual({
-        input: 3,
-        output: 5,
-        cacheWrite5m: 7,
-        cacheWrite1h: 0,
-        cacheRead: 0,
-      })
-    }),
+  it.effect(
+    "reads a plain answer's usage, a cache write without its split as a five-minute one",
+    () =>
+      Effect.gen(function* () {
+        const { relay } = relayOver(() =>
+          Response.json({
+            type: 'message',
+            usage: { input_tokens: 3, output_tokens: 5, cache_creation_input_tokens: 7 },
+          }),
+        )
+        const relayed = yield* relay(call)
+        expect(yield* text(relayed.body)).toContain('"type":"message"')
+        expect(yield* relayed.usage).toEqual({
+          input: 3,
+          output: 5,
+          cacheWrite5m: 7,
+          cacheWrite1h: 0,
+          cacheRead: 0,
+        })
+      }),
   )
 
   it.effect(
@@ -190,7 +198,10 @@ describe('the model relay', () => {
         if (reader === undefined) throw new Error('No body was relayed')
         fed.send(
           eventStream([
-            { type: 'message_start', message: { usage: { input_tokens: 9, output_tokens: 1 } } } as {
+            {
+              type: 'message_start',
+              message: { usage: { input_tokens: 9, output_tokens: 1 } },
+            } as {
               type: string
             },
           ]),

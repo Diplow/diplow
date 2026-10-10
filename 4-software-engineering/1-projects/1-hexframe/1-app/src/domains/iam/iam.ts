@@ -226,7 +226,7 @@ export const sessionOnly = Effect.gen(function* () {
 })
 
 /** A request a Turn's Key proves: its Account, and the Turn and Conversation the Key is bound to. */
-export interface TurnSignedIn {
+interface TurnSignedIn {
   readonly account: Account
   readonly turn: TurnBinding
 }

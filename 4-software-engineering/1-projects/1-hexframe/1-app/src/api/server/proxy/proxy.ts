@@ -57,7 +57,11 @@ function answerOf(answer: CallAnswer, requestId: string): Response {
     case 'Refused':
       return answer.why === 'too-large'
         ? refusal('request_too_large', 'The call is larger than the proxy takes.', requestId)
-        : refusal('invalid_request_error', `The proxy refused the call: ${answer.message}`, requestId)
+        : refusal(
+            'invalid_request_error',
+            `The proxy refused the call: ${answer.message}`,
+            requestId,
+          )
     case 'Limited':
       return refusal('billing_error', limits[answer.limit], requestId)
     case 'TurnOver':

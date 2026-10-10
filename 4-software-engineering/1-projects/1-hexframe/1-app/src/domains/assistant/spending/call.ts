@@ -93,7 +93,7 @@ const fields = {
 /** A call's body, as the proxy lets it through. */
 const Body = Schema.Struct(fields)
 
-export type CallBody = typeof Body.Type
+type CallBody = typeof Body.Type
 
 /** Decodes a body's text, refusing any field, at any depth, its schema does not name. */
 const decodeBody = Schema.decodeUnknownResult(Schema.fromJsonString(Body), {
@@ -108,8 +108,7 @@ export interface Allowed {
 
 /** Why a call is refused: a body past the largest, or one the schema or the betas refuse. */
 export type CallRefused =
-  | { readonly why: 'too-large' }
-  | { readonly why: 'invalid'; readonly message: string }
+  { readonly why: 'too-large' } | { readonly why: 'invalid'; readonly message: string }
 
 /** The betas `anthropic-beta` names, each trimmed, the empty ones dropped. */
 const betasOf = (header: string | undefined) =>
@@ -123,7 +122,10 @@ const betasOf = (header: string | undefined) =>
  * refused: a body past the largest, a field, a model, a tool or a content block the schema does not
  * name, or a beta the settings do not.
  */
-export function allowedCall(text: string, betas: string | undefined): Result.Result<Allowed, CallRefused> {
+export function allowedCall(
+  text: string,
+  betas: string | undefined,
+): Result.Result<Allowed, CallRefused> {
   if (text.length > settings.model.largestCall) return Result.fail({ why: 'too-large' })
   const unnamed = betasOf(betas).filter(
     (beta) => !(settings.model.betas as ReadonlyArray<string>).includes(beta),

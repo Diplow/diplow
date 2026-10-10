@@ -33,8 +33,20 @@ export const settings = {
      * and Haiku 4.5, the small model Claude Code does its own chores with.
      */
     prices: {
-      'claude-sonnet-5-5': { input: 2, output: 10, cacheWrite5m: 2.5, cacheWrite1h: 4, cacheRead: 0.2 },
-      'claude-haiku-4-5': { input: 1, output: 5, cacheWrite5m: 1.25, cacheWrite1h: 2, cacheRead: 0.1 },
+      'claude-sonnet-5-5': {
+        input: 2,
+        output: 10,
+        cacheWrite5m: 2.5,
+        cacheWrite1h: 4,
+        cacheRead: 0.2,
+      },
+      'claude-haiku-4-5': {
+        input: 1,
+        output: 5,
+        cacheWrite5m: 1.25,
+        cacheWrite1h: 2,
+        cacheRead: 0.1,
+      },
     } satisfies Record<string, Price>,
     /** The most tokens a call may answer: a call asking for more is sent asking for this many. */
     maxTokens: 32_000,
