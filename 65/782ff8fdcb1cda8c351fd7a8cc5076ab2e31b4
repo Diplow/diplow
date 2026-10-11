@@ -1,0 +1,24 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_683ca25b605461::t_2e6e8ee23cdeae 301,328
+  s_683ca25b605461::t_74315530fb62e2 28,219-220,273,327,329-330
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/gallery.tsx
+  s_683ca25b605461::t_74315530fb62e2 14
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/demo.ts
+  s_683ca25b605461::t_74315530fb62e2 227-232
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "65782ff8fdcb1cda8c351fd7a8cc5076ab2e31b4",
+  "prompts": {},
+  "sessions": {
+    "s_683ca25b605461": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c0bae56f-3d38-45db-b139-58912d52df08",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
