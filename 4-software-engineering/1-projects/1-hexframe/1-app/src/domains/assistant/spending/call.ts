@@ -95,11 +95,11 @@ const Tool = Schema.Struct({
 })
 
 /**
- * An edit of the context before the model reads it, under `context-management`: old tool results or
- * thinking cleared, its parameters passed through past its type.
+ * An edit of the context before the model reads it, under `context-management`, of a type the
+ * settings name, its parameters passed through past its type.
  */
 const ContextEdit = Schema.StructWithRest(
-  Schema.Struct({ type: Schema.Literals(['clear_tool_uses_20250919', 'clear_thinking_20251015']) }),
+  Schema.Struct({ type: Schema.Literals(settings.model.contextEdits) }),
   [Schema.Record(Schema.String, Schema.Unknown)],
 )
 
@@ -183,7 +183,6 @@ export interface Allowed {
  * largest call never reaches here: the proxy reads no further (`largestCall`, `../assistant.ts`).
  */
 export interface CallRefused {
-  readonly why: 'invalid'
   readonly message: string
 }
 
@@ -234,10 +233,10 @@ export function allowedCall(call: {
   readonly betas: string | undefined
 }): Result.Result<Allowed, CallRefused> {
   const refused = headersRefused(call)
-  if (refused !== undefined) return Result.fail({ why: 'invalid', message: refused })
+  if (refused !== undefined) return Result.fail({ message: refused })
   const decoded = decodeBody(call.body)
   if (Result.isFailure(decoded)) {
-    return Result.fail({ why: 'invalid', message: decoded.failure.message })
+    return Result.fail({ message: decoded.failure.message })
   }
   const body = capped(decoded.success)
   return Result.succeed({ body, model: body.model, maxTokens: body.max_tokens ?? 0 })

@@ -45,9 +45,10 @@ const callOf = (extra: Record<string, unknown> = {}) =>
 const asked = (body: string, betas?: string, version = '2023-06-01') =>
   allowedCall({ body, betas, version })
 
+/** Why a call is refused, none for one let through. */
 const refusal = (text: string, betas?: string, version?: string) => {
   const allowed = asked(text, betas, version)
-  return Result.isFailure(allowed) ? allowed.failure : undefined
+  return Result.isFailure(allowed) ? allowed.failure.message : undefined
 }
 
 describe('a model call the proxy lets through', () => {
@@ -86,17 +87,15 @@ describe('a model call the proxy lets through', () => {
   })
 
   it('refuses a model the settings do not name', () => {
-    expect(refusal(callOf({ model: 'claude-opus-5-5' }))).toMatchObject({ why: 'invalid' })
+    expect(refusal(callOf({ model: 'claude-opus-5-5' }))).toBeDefined()
   })
 
   it('refuses a field the settings do not name, at the top or deeper', () => {
     const mcp = { mcp_servers: [{ type: 'url', url: 'https://evil.test', name: 'x' }] }
-    expect(refusal(callOf(mcp))).toMatchObject({ why: 'invalid' })
-    expect(refusal(callOf({ fallbacks: 'default' }))).toMatchObject({ why: 'invalid' })
-    expect(refusal(callOf({ speed: 'fast' }))).toMatchObject({ why: 'invalid' })
-    expect(refusal(callOf({ thinking: { type: 'adaptive', other: 1 } }))).toMatchObject({
-      why: 'invalid',
-    })
+    expect(refusal(callOf(mcp))).toBeDefined()
+    expect(refusal(callOf({ fallbacks: 'default' }))).toBeDefined()
+    expect(refusal(callOf({ speed: 'fast' }))).toBeDefined()
+    expect(refusal(callOf({ thinking: { type: 'adaptive', other: 1 } }))).toBeDefined()
   })
 
   it('takes each object Anthropic gives a shape in that shape: a tool’s, its cache, the answer’s, the context’s', () => {
@@ -137,20 +136,20 @@ describe('a model call the proxy lets through', () => {
       { context_management: { edits: [], other: 1 } },
     ]
     for (const extra of outOfShape) {
-      expect(refusal(callOf(extra))).toMatchObject({ why: 'invalid' })
+      expect(refusal(callOf(extra))).toBeDefined()
     }
   })
 
   it('refuses a server tool, and its use or its result in a message', () => {
     const webFetch = { type: 'web_fetch_20260209', name: 'web_fetch' }
-    expect(refusal(callOf({ tools: [webFetch] }))).toMatchObject({ why: 'invalid' })
+    expect(refusal(callOf({ tools: [webFetch] }))).toBeDefined()
     const codeExecution = { type: 'code_execution_20260521', name: 'code_execution' }
-    expect(refusal(callOf({ tools: [codeExecution] }))).toMatchObject({ why: 'invalid' })
+    expect(refusal(callOf({ tools: [codeExecution] }))).toBeDefined()
     const serverUse = {
       role: 'assistant',
       content: [{ type: 'server_tool_use', id: 's', name: 'web_fetch', input: {} }],
     }
-    expect(refusal(callOf({ messages: [serverUse] }))).toMatchObject({ why: 'invalid' })
+    expect(refusal(callOf({ messages: [serverUse] }))).toBeDefined()
   })
 
   it('takes an image or a document held inline, in a message or a tool’s result', () => {
@@ -184,28 +183,25 @@ describe('a model call the proxy lets through', () => {
       { type: 'image' },
     ]) {
       const said = { role: 'user', content: [block] }
-      expect(refusal(callOf({ messages: [said] }))).toMatchObject({ why: 'invalid' })
+      expect(refusal(callOf({ messages: [said] }))).toBeDefined()
       const result = { type: 'tool_result', tool_use_id: 'toolu_1', content: [block] }
       const read = { role: 'user', content: [result] }
-      expect(refusal(callOf({ messages: [read] }))).toMatchObject({ why: 'invalid' })
+      expect(refusal(callOf({ messages: [read] }))).toBeDefined()
     }
   })
 
   it('refuses a beta the settings do not name, saying which', () => {
-    expect(refusal(callOf(), 'claude-code-20250219,mcp-client-2025-11-20')).toEqual({
-      why: 'invalid',
-      message: 'Unnamed betas: mcp-client-2025-11-20',
-    })
+    expect(refusal(callOf(), 'claude-code-20250219,mcp-client-2025-11-20')).toBe(
+      'Unnamed betas: mcp-client-2025-11-20',
+    )
   })
 
   it('refuses an `anthropic-version` that is no date', () => {
-    expect(refusal(callOf(), undefined, '2023-06-01\r\nx-api-key: stolen')).toMatchObject({
-      why: 'invalid',
-    })
+    expect(refusal(callOf(), undefined, '2023-06-01\r\nx-api-key: stolen')).toBeDefined()
   })
 
   it('refuses a body that is no JSON', () => {
-    expect(refusal('{"model":')).toMatchObject({ why: 'invalid' })
+    expect(refusal('{"model":')).toBeDefined()
   })
 })
 

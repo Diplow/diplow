@@ -8,26 +8,22 @@ import { Option, Schema } from 'effect'
 
 import { stepOf, type TurnEnd, type TurnStep } from '../entities'
 
+/**
+ * The input fields that say what a tool works on, its subjects, in the order the first one given as
+ * text is told.
+ */
+const subjects = ['command', 'file_path', 'path', 'pattern', 'url', 'id', 'title', 'query'] as const
+
 /** A subject of a tool's input, kept whatever it holds: one that is no text is passed over. */
 const subject = Schema.optionalKey(Schema.Unknown)
 
-/**
- * A tool's input, as Assistant reads it: the fields that say what the tool works on, its subjects,
- * in the order the first one given as text is told; every other field the tool's own, left out.
- */
-const Input = Schema.Struct({
-  command: subject,
-  file_path: subject,
-  path: subject,
-  pattern: subject,
-  url: subject,
-  id: subject,
-  title: subject,
-  query: subject,
-})
-
-/** A tool's subjects, in the order `Input` declares them. */
-const subjects = Object.keys(Input.fields) as ReadonlyArray<keyof typeof Input.fields>
+/** A tool's input, as Assistant reads it: its subjects alone, every other field the tool's own. */
+const Input = Schema.Struct(
+  Object.fromEntries(subjects.map((field) => [field, subject])) as Record<
+    (typeof subjects)[number],
+    typeof subject
+  >,
+)
 
 /** A block of an agent's message: its text, a tool it runs, or anything else, left out. */
 const Block = Schema.Union([

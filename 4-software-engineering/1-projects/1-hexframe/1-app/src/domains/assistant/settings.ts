@@ -84,6 +84,11 @@ export const settings = {
       'context_management',
     ],
     /**
+     * The edits of its context a call may ask for under `context-management`, every other refused:
+     * old tool results cleared, old thinking cleared. Never a compaction, which calls the model again.
+     */
+    contextEdits: ['clear_tool_uses_20250919', 'clear_thinking_20251015'],
+    /**
      * The betas a call may name in `anthropic-beta`, every other refused: Claude Code's own, and
      * those that change neither what the model reaches nor its price.
      */
