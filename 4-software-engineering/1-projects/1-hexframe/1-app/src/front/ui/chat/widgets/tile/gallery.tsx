@@ -39,7 +39,7 @@ export function TileWidgetGallery({ previewLimit }: { previewLimit: number }) {
           <NewTileSpecimen previewLimit={previewLimit} />
         </GalleryColumn>
       </GalleryState>
-      <GalleryState label={m.gallery_state_tile_context()}>
+      <GalleryState label={m.gallery_state_tile_widget_context()}>
         <GalleryColumn>
           <NewTileSpecimen
             previewLimit={previewLimit}
@@ -47,7 +47,7 @@ export function TileWidgetGallery({ previewLimit }: { previewLimit: number }) {
           />
         </GalleryColumn>
       </GalleryState>
-      <GalleryState label={m.gallery_state_tile_refused()}>
+      <GalleryState label={m.gallery_state_tile_widget_refused()}>
         <GalleryColumn>
           <NewTileSpecimen
             previewLimit={previewLimit}
@@ -66,7 +66,7 @@ export function TileWidgetGallery({ previewLimit }: { previewLimit: number }) {
           <ChangedSpecimen previewLimit={previewLimit} />
         </GalleryColumn>
       </GalleryState>
-      <GalleryState label={m.gallery_state_tile_draft()}>
+      <GalleryState label={m.gallery_state_tile_widget_draft()}>
         <GalleryColumn>
           <ProposalSpecimen kind="draft" previewLimit={previewLimit} />
         </GalleryColumn>

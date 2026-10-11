@@ -63,6 +63,11 @@ export function insetHex({ center, radius }: Hex, distance: number): Hex {
   return { center, radius: Math.max(0, radius - (2 * distance) / sqrt3) }
 }
 
+/** The same hex about its center, its radius times `share`. */
+export function scaled({ center, radius }: Hex, share: number): Hex {
+  return { center, radius: radius * share }
+}
+
 /** The box a hex's text sits in: taller for a few lines, or wider for a single title. */
 export function textBox({ center, radius }: Hex, shape: 'tall' | 'wide' = 'tall'): Box {
   // Tall keeps its corners a margin inside the slanted sides; wide is the band between the side

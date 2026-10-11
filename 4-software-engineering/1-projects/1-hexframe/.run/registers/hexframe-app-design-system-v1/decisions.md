@@ -14,12 +14,13 @@ preview: >-
   HEX-96 proposed went and how a finger opens them, how HEX-95 drew the
   screen, folding on its own width, a seam on a phone, and the corner's
   contrast, how the chat's pieces take their text, every ink raised to
-  4.5:1, a decided Proposal's receipt unfolding its changes, and how HEX-97
+  4.5:1, a decided Proposal's receipt unfolding its changes, how HEX-97
   built the screen on home: who holds the side in front, the breadcrumb drawn
-  as the rail, what the header keeps, and the gaps left to M3, and where
-  HEX-100 put the widgets, the chat's zone drawn once, the widgets' own field,
-  what the frame, the Proposal and the Receipt grew, and what the proposal
-  drew beyond the reference or left out of it.
+  as the rail, what the header keeps, and the gaps left to M3, where the
+  tile's proposal went, how its words fit and what marks a write on its way,
+  and where HEX-100 put the widgets, the chat's zone drawn once, the widgets'
+  own field, what the frame, the Proposal and the Receipt grew, and what the
+  proposal drew beyond the reference or left out of it.
 ---
 # Decisions
 
@@ -162,7 +163,20 @@ HEX-97. The ticket leaves the header the links HEX-103 retires: the System, Keys
 
 HEX-97. The chat's slots hold today's pieces, taken apart rather than redrawn: the timeline, its day labels on a strip of the card's ground, and today's composer with its hint lines, tall on a phone, both in `features/conversation/` until HEX-101 builds the conversation's text and the composer HEX-98 and HEX-99 proposed. The composer's zone sits on the card's ground, as the proposed composer does, so the canvas never shows through it. The centered Tile's card stays at the canvas's foot, at most 30% of its height, until HEX-102 moves the forms into the tile widget. A move's banner, which `System` drew across the canvas's top, went to its foot, above the card, since the corner now sits over the canvas's top right and covered its Cancel (cubic's third local review). Two things the screen needed to hold real content: on a phone the canvas ends above the composer, whose height the screen measures, and above the seam, whichever side is in front (cubic's second local review), so the card is never under either; and the conversation stays at its foot as it grows, home's lines arriving after the first paint, and as its scroller shrinks, the agent's step appearing above the composer, while the reader hasn't left it. After cubic's first local review the reader leaves it by scrolling up, or by acting in a conversation too short to scroll, so an earlier day they asked for stays in view, and writing at the foot brings it back; the rule is `keptAtFoot`, pure and tested in `screen/state/latest.ts`, the screen's effect wiring its listeners alone. What the screen's slots share comes from the screen too: `--screen-clear`, how far the chat's foot keeps its content from the curve, worked out from the screen's own lengths, and `cornerPlace`, where the corner sits, which Help and the specimens take. Checked in a browser, light and dark, English and French, wide and in a 390px frame; the window would not narrow and claude-in-chrome emulates no touch, so the finger's 44px targets were not looked at here.
 
-### DEC-27 The widgets go in `ui/chat/widgets/`, a folder each; signing in sits on the composer's zone; `state/` joined `layouts/`
+### DEC-27 The tile is proposed beside v0's, in `canvas/tile/`, its words fitted in `geometry/`, and a write on its way sweeps a light over it
+
+HEX-104. The proposal lives beside what it replaces: `canvas/tile/` holds `Tile`, and `Slot` and `Ground` in `places.tsx`, while `canvas/Tile.tsx`, `Frame.tsx` and `look.tsx` keep drawing the canvas until HEX-106 swaps them; `canvas/` had room for one folder and no file. `Tile` takes its content as props, its kind, its `TileWords`, its foot, its place, a write and, for a specimen or whatever points at it, a state the hand would give (`held`), so HEX-106 maps a `CanvasHex` onto it and HEX-105 adds the menu, the move and the hover card. The fit of its words (`fitWords`, `linesThatFit`) is pure and sits in `geometry/words.ts`, beside `textBox`, the box a label sits in: `tile/` had no room for it and its test once the gallery split its live frame into `specimens.tsx`. It works in px on screen: `Tile` takes `scale`, the screen px per unit of the canvas, which the camera will know (HEX-106); the gallery's frame reads it from its own width (`useScale`).
+
+What `components.html` left open, the proposal decides, for review on the pull request:
+
+- **A write on its way.** HEX-70 shows a write at once; the reference draws no mark for it. The tile shows as it will be, and once 400ms pass without the server's answer, the light sweeps over it, `animate-sweep`, the motion the reference gives loading, clipped to its hex: a write that lands at once never flickers, and nothing new is learned. With reduced motion the sweep holds still, a sheen. A screen reader hears "saving" in its description, and `aria-busy`. Refused, a destructive glow rises and fades (`animate-flare`, a new token), the tile folds back and the toast says why, as HEX-71 has it.
+- **Under a radius of 30 on screen, no words.** The reference says a tile is "a light without words" past its 11px floor without saying where; its slider stops at a slot of 34, a hex of 32. Below 30 the title no longer fits at 11px, so `fitWords` answers none and the tile keeps its name for a screen reader alone. On a phone, the members of a Branch opened in place come out near 18px and show as lights.
+- **The center's foot.** The center shows no frame at its foot, its ring around it saying the same; nor does a Branch at the heart of its ground.
+- **The note under the title wraps**, where the reference keeps it on one line and loses "from Software Engineering" past the hex.
+
+Tokens: `animate-bloom` and `animate-fold` join `duration-bloom` and `duration-fold` under their notes, and `animate-flare` gets its own; `animate-sweep`'s note now names the tile on its way.
+
+### DEC-28 The widgets go in `ui/chat/widgets/`, a folder each; signing in sits on the composer's zone; `state/` joined `layouts/`
 
 HEX-100, a proposal. The four widgets are chat components, as the `Composer` is, so they go beside it, in `ui/chat/widgets/`, a folder each (`tile/`, `keys/`, `help/`, `sign-in/`), the parts they share beside them: the place map (`Places.tsx`), the underlined field (`fields.tsx`), the count (`count.ts`) and the galleries' demo (`demo.ts`). The tile widget is one piece drawn in three files, `TileWidget` for writing, `TileProposal` for the agent's draft or edit, `TileImport` and `TileExport`, since the ticket names one widget and all of them draw the same place and words (`tile/parts.tsx`).
 
@@ -170,24 +184,24 @@ The sign-in widget is no `Widget`: it takes the `Composer`'s place at the chat's
 
 With HEX-98's `entries/`, `text/` and `state/`, `widgets/` made `ui/chat/` a seventh folder. `state/` held one hook, `useHandOffState`, where the focus goes once a piece that asked for a decision is decided: a widget's concern, so it joined the widget's frame in `layouts/`.
 
-### DEC-28 The widgets are controlled, write on their own underlined field, and take the domains' limits as props
+### DEC-29 The widgets are controlled, write on their own underlined field, and take the domains' limits as props
 
 HEX-100. The direction says a field is one underline; the shared `Field`, `Input` and `Textarea` are shadcn's boxes, and the pages that use them, Keys, signing in and the tile drawer, are the ones the one screen retires. Redrawing them would restyle those pages for nothing, so the widgets have their own field, `widgets/fields.tsx`: a quiet label, the line that draws itself in the voice as the focus comes, the count near a limit, a hint, a dot once changed, the refusal under it, said as it changes. The widgets are controlled, as the `Composer` is: what they hold, and the refusal each field shows, are props, so a feature's state hook owns them. The builds (HEX-102, HEX-103) bridge them to the features' submits, which run through TanStack Form today (`useAppForm`, `openedOnRefusal`), or move off it; whether the underline then replaces the shared `Field` is theirs to say.
 
 No piece of `ui/` imports a domain (DEC-10), so a rule a widget shows is its caller's: the tile widget takes the Preview's limit (`previewLimit`, Mapping's), the key widget a name's (`nameLimit`, IAM's, which sits outside IAM's door today: HEX-103 brings it in). The widgets keep the domain's words, a Branch, a Leaf, a Context Tile, six Directions, as the canvas's view does; the route hands the tile widget's gallery Mapping's `previewLimit` from Mapping's door, and the galleries' demo mirrors IAM's, as the composer's mirrors `mention.ts`, until IAM's door holds them.
 
-### DEC-29 The frame, the Proposal and the Receipt grew what the widgets needed, and every receipt is the conversation's
+### DEC-30 The frame, the Proposal and the Receipt grew what the widgets needed, and every receipt is the conversation's
 
 HEX-100. The widgets needed of HEX-96's `Widget` what it had not drawn, each optional, so its other users are untouched: a **`mark`** in the hex's place (the tile's place and Help's map are the frame in small, not an icon; a failure still shows the hex, to try again); a **`titleField`** in the title's place (a tile's title is written where it is read, `title` staying its name to a screen reader); an action that is its **`submit`**, which Enter in a one-line field runs, named rather than taken as the first action, since a tile changed meanwhile has no action Enter may run, and run by the widget's own keys rather than a `<form>`, so a submit coming or going never remounts what the user is typing in; an action's **`look`**, `hex` for the one solid act a form asks for, and **`destructive`**, for one that loses something. Neither Enter nor an action's shortcut runs it while it waits, nor while what was asked runs.
 
 The agent's draft of a tile is a Proposal, so `TileProposal` is HEX-98's `Proposal`, which grew a `mark`, a `kicker`, a `detail` showing its words in full or its edit where it falls, and an Edit it (`onEdit`). Every widget leaves HEX-98's `Receipt`, which grew a `tone` for the user's and the app's voices beside the agent's, through `UntilDecided`, the hand-off the `Proposal` had, now shared: the focus goes to the receipt when the widget had it, a status says the decision otherwise; while it asks, a step of its own that removes what had the focus (a Key's name giving way to its secret) gives the focus to its first control, since `useHandOffState` keeps the focus counted inside until it leaves for good. A draft taken to edit gives its title the focus as it comes.
 
-### DEC-30 What the proposal drew beyond the reference, and what it left
+### DEC-31 What the proposal drew beyond the reference, and what it left
 
 HEX-100. `components.html` draws the tile widget's new, edit, draft, the agent's edit and changed meanwhile, the key widget's three states and the help widget's three. The ticket asks more, so the proposal drew, in the reference's look: **import and export** in the tile widget, the import's pickers its actions, then its report, the export a receipt naming the zip; **refused and put back**, the user's words and the refusal on the field, cleared once the field changes; the **agent's key widget**, which shows the Keys and issues none; **the sign-in widget**, which the reference does not draw at all; and Help's search on **Help itself**, read by the route (`find.ts`, cut by the composer's `cutAround`), the topics a page leads to as `Mention`s.
 
 It left: the zone **warming** from the agent's violet to the user's amber when a draft is taken, which needs `--voice` registered as a colour (`@property`), and that would end the fallbacks written `var(--voice, …)`; the voice changes at once instead. A page's **Markdown**, shown as written until the seam's renderer comes (STACK.md: TanStack Markdown); Help's pages show their marks meanwhile. The **crossings**, the draft breathing in its slot on the canvas and Open in Help centering it (HEX-108). **Giving the page the canvas's side**, an entry of the widget's settings that does nothing yet (the screen's, HEX-97). Escape on a widget stays HEX-96's open question.
 
-### DEC-31 The place map is a radio group, by name under a finger, and a secret inks in
+### DEC-32 The place map is a radio group, by name under a finger, and a secret inks in
 
 HEX-100. The tile widget's hex is the frame it goes in (`Places`), numbered as the canvas numbers it, 1 north-west to 6 west, its free places dashed. A picked place is a choice among a few, so the map is a radio group, the arrows going round and taking the place they land on, each place named for a screen reader and in its tooltip; the help widget's map is the same, its places Help's topics. Its hexes are small, under the 44px a finger needs, so under a coarse pointer the free places show by name too, a row of words at a thumb's size. A Context tile is lit in Context's colour. The key's secret inks in from a blur the one time it shows, the reference's reveal, a token now, `--animate-ink`, with its note.

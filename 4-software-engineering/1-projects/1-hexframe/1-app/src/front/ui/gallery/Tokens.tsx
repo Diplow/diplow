@@ -50,8 +50,8 @@ export const valueNotes: readonly Note[] = [
   { tokens: ['shadow-lift'], note: m.tokens_shape_lift },
   { tokens: ['ease-glide'], note: m.tokens_motion_glide },
   { tokens: ['ease-camera'], note: m.tokens_motion_camera_ease },
-  { tokens: ['duration-bloom'], note: m.tokens_motion_bloom },
-  { tokens: ['duration-fold'], note: m.tokens_motion_fold },
+  { tokens: ['duration-bloom', 'animate-bloom'], note: m.tokens_motion_bloom },
+  { tokens: ['duration-fold', 'animate-fold'], note: m.tokens_motion_fold },
   { tokens: ['stagger-bloom'], note: m.tokens_motion_stagger },
   { tokens: ['duration-camera'], note: m.tokens_motion_camera },
   { tokens: ['duration-camera-level'], note: m.tokens_motion_camera_level },
@@ -59,6 +59,7 @@ export const valueNotes: readonly Note[] = [
   { tokens: ['animate-breathe'], note: m.tokens_motion_breathe },
   { tokens: ['animate-draw', 'animate-unfold', 'animate-rise'], note: m.tokens_motion_entrance },
   { tokens: ['animate-sweep'], note: m.tokens_motion_sweep },
+  { tokens: ['animate-flare'], note: m.tokens_motion_flare },
   { tokens: ['animate-ink'], note: m.tokens_motion_ink },
   { tokens: ['container-wide'], note: m.tokens_container_wide },
 ]

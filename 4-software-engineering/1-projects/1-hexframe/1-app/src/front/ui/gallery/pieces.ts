@@ -155,6 +155,27 @@ export const pieces = [
     note: m.gallery_note_canvas,
   },
   {
+    name: 'Tile',
+    tier: 'canvas',
+    sources: ['ui/canvas/tile/Tile.tsx'],
+    madeOf: [],
+    note: m.gallery_note_tile,
+  },
+  {
+    name: 'Slot',
+    tier: 'canvas',
+    sources: ['ui/canvas/tile/places.tsx'],
+    madeOf: [],
+    note: m.gallery_note_slot,
+  },
+  {
+    name: 'Ground',
+    tier: 'canvas',
+    sources: ['ui/canvas/tile/places.tsx'],
+    madeOf: [],
+    note: m.gallery_note_ground,
+  },
+  {
     name: 'Breadcrumb',
     tier: 'canvas',
     sources: ['features/breadcrumb/Breadcrumb.tsx'],
