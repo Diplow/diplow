@@ -1,0 +1,30 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/batch/inverse.test.ts
+  s_c19b57f63ed6ef::t_7dc3f1a308da1f 269-305
+  s_c19b57f63ed6ef::t_0c4c79e1ffb2fb 338-353
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/batch/inverse.ts
+  s_c19b57f63ed6ef::t_1d6cc9bdd28e0e 348-351,356-359
+  s_c19b57f63ed6ef::t_673c69ccf76a11 238-239,241,243,245-246,248-258,260-265,267,269-282,284-301
+  s_c19b57f63ed6ef::t_2e911603d97511 368-370
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/batch/undo.test.ts
+  s_c19b57f63ed6ef::t_43edf4be0d4f02 202-230,233-246
+  s_c19b57f63ed6ef::t_4e5d02470e0a2f 200-201,231-232,247-248
+  s_c19b57f63ed6ef::t_817136661d89a0 11-19
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/CLAUDE.md
+  s_c19b57f63ed6ef::t_89d877b08fb45f 25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c92dab64d66a9f6f790af900172275c9d7cc9d7b",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
