@@ -25,7 +25,7 @@ import {
 } from './iam'
 
 // A Turn's Key, over PGlite, Better Auth for real beside it: issued from a Session, proving its
-// Account, Conversation and Turn at a door that reads a Bearer header, until it expires or is revoked,
+// Account and its Turn at a door that reads a Bearer header, until it expires or is revoked,
 // and refused wherever only a Session may act. Then the `assistant` Entitlement, from a list kept by
 // hand. The clock is the test's: a Key's expiry is read by it.
 
