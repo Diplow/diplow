@@ -9,7 +9,9 @@ preview: >-
   how the radius scale squares every corner, the lines of STACK.md and
   claude-mod left for the phase close, where each piece of ui/ went when it
   regrouped by tier and side, and how /design-system shows the error channels,
-  reads "made of" from the code and keeps its frame outside the tiers.
+  reads "made of" from the code and keeps its frame outside the tiers; then
+  how HEX-95 drew the screen, folding on its own width, a seam on a phone,
+  and the corner's contrast.
 ---
 # Decisions
 
@@ -63,3 +65,19 @@ HEX-94. The ticket asks for "made of" and "used in" between pieces. Written by h
 ### DEC-9 The page's frame is `ui/gallery/`, outside the tiers
 
 HEX-94. The catalogue, its test and the tokens' notes would have put seven files in `ui/`, past the rule of 6. They went into a folder of their own, `ui/gallery/`, with the frame and the stylesheet's reading: every folder's `gallery.tsx` imports it, and it imports none of them, so dependency-cruiser's tiers do not name it. `tokens.ts` became `gallery/stylesheet.ts`, since `Tokens.tsx` beside it would clash with it on a filesystem that ignores case, and it now reads every token, the fonts, the sizes, the radius scale, the easings and the durations beside the colours, so each gets its note. TOKENS.md's tables became those notes; its "Phone and touch" and "Light" became prose on the page. Until HEX-112 retires `3-design-system/`, which this run may not edit, TOKENS.md keeps its copy: where the two differ, `gallery/Tokens.tsx` wins, as `ui/gallery/CLAUDE.md` says.
+
+### DEC-10 The screen folds on its own width, and the side in front is its caller's
+
+HEX-95. "Below `sm`, a phone" is read on the screen's own width, a container query, not the viewport's: on home the screen fills the viewport and the two agree, and on `/design-system` a phone's specimen folds as a phone does beside a wide one. What CSS can't do, making the side behind `inert`, waits for a `ResizeObserver` once the page is live, so the first paint is right and the keyboard is right from hydration. Which side is in front is a prop, `front` and `onFrontChange`, as the canvas's view is: HEX-97 gives it its owner and its state hook, and the crossing that brings the canvas forward when the chat points at it.
+
+### DEC-11 On a phone, a seam: the canvas peeks above the chat, the composer stays at the canvas's foot
+
+HEX-95, on the project's "To grill: the gesture that brings the canvas forward". The prototype's phone kept the composer alone over the canvas; that became the canvas in front. With the chat in front, the canvas shows through a strip at the screen's top, blurred, and the strip is the seam: a tap, a drag down, or Enter brings the canvas forward. With the canvas in front, a seam above the composer gives the chat back, by a tap, a drag up, or Enter, and the focus crosses to the seam on the other side. A drag decides past 24px, it doesn't follow the finger yet. The canvas's corner, the theme with it, belongs to the canvas, so on a phone it shows with the canvas in front only.
+
+### DEC-12 The rail's labels are muted, not faint, and the theme is the disc everywhere
+
+HEX-95. The prototype's path labels are `faint`, which reads at 3.1:1 on the ground in the dark and 3.6:1 in the light, short of 4.5:1 for 13px text; they are `muted-foreground` (7.9:1, 6.5:1), the step you are on the foreground. The disc and the seams stay `faint`, a mark needing 3:1. `ThemeToggle` became the design system's disc rather than a second atom beside the sun and moon, so the header shows it too until HEX-97 moves it to the rail's head.
+
+### DEC-13 What the screen leaves to the canvas: tiles running under the conversation, the composer on a tile's edge
+
+HEX-95. The `Screen` gives the canvas the screen right of the curve, behind a veil that fades toward it; today's `Canvas` fits its rings in that box, so its tiles reach the curve rather than running far under the conversation, and the composer's corner does not yet sit on the edge of the tile south-west of the center. Both need the canvas's camera, which knows its tiles' size and place (HEX-104, HEX-106). The ring chooser above the canvas stays where `Canvas` draws it, at the box's top left, until commands take what a menu would hold.
