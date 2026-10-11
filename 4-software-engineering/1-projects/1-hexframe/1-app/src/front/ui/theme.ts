@@ -6,10 +6,11 @@ const storageKey = 'hexframe.theme'
 
 /**
  * Inlined in `<head>`, it applies the theme before the first paint so a dark page never flashes light:
- * the stored choice if there is one, the system's preference otherwise. From then on, the class on
- * `<html>` is the one source of truth.
+ * dark, the design system's default, unless the user chose light with the toggle. The system's
+ * preference is not a choice made here, so it doesn't count. From then on, the class on `<html>` is
+ * the one source of truth.
  */
-export const themeScript = `try{var t=null;try{t=localStorage.getItem('${storageKey}')}catch(e){}if(t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('dark')}catch(e){}`
+export const themeScript = `try{var t=null;try{t=localStorage.getItem('${storageKey}')}catch(e){}if(t!=='light')document.documentElement.classList.add('dark')}catch(e){}`
 
 const listeners = new Set<() => void>()
 
@@ -24,9 +25,9 @@ function currentTheme(): Theme {
   return document.documentElement.classList.contains('dark') ? 'dark' : 'light'
 }
 
-// The server cannot know the visitor's theme; hydration starts from light and re-renders at once.
+// The server cannot know the visitor's choice; hydration starts from the default and re-renders at once.
 function serverTheme(): Theme {
-  return 'light'
+  return 'dark'
 }
 
 function setTheme(theme: Theme) {
