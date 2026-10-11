@@ -1,0 +1,142 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/tools.ts
+  s_c19b57f63ed6ef::t_ceb73df097c236 200-202,265,289,324,353,382,409,438
+  s_c19b57f63ed6ef::t_6f509a708611d9 463-484
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/iam.ts
+  s_c19b57f63ed6ef::t_fd1a8dcaaf393d 81-82,87,158-159,222,225,236,275-278,280,285
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/lint.test.ts
+  s_c19b57f63ed6ef::t_28b8a122257c42 237-278
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/errors.ts
+  s_c19b57f63ed6ef::t_e254cdd5cb718d 32-40,46
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/batch/inverse.ts
+  s_c19b57f63ed6ef::t_fd4e16706a2585 8-9
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/applied/undo.test.ts
+  s_c19b57f63ed6ef::t_c504713f814540 5,8-10,30-46
+  s_c19b57f63ed6ef::t_ffaf141c391202 47-48
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/agent/CLAUDE.md
+  s_c19b57f63ed6ef::t_4398404b5aad0f 19,22
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE.md
+  s_c19b57f63ed6ef::t_a931ab814855c1 25
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/errors.ts
+  s_c19b57f63ed6ef::t_fd4e16706a2585 78-79
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE.md
+  s_c19b57f63ed6ef::t_4398404b5aad0f 22,26,30,35
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/report/errors/messages.ts
+  s_c19b57f63ed6ef::t_c40e40f7a523d2 41
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_c19b57f63ed6ef::t_a931ab814855c1 71
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_c19b57f63ed6ef::t_8f55a4ac7cf08f 277
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_c19b57f63ed6ef::t_a6a91be8a34b3f 16,38,51
+  s_c19b57f63ed6ef::t_a931ab814855c1 56
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/CLAUDE.md
+  s_c19b57f63ed6ef::t_f18cf5f2ae82df 28
+  s_c19b57f63ed6ef::t_1ca6dea9b0297d 36
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/applied/undo.ts
+  s_c19b57f63ed6ef::t_a812b6361525db 6
+  s_c19b57f63ed6ef::t_c504713f814540 2-5,12-21
+  s_c19b57f63ed6ef::t_506b573b0024cd 22
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/CLAUDE.md
+  s_c19b57f63ed6ef::t_a6a91be8a34b3f 25
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/events/CLAUDE.md
+  s_c19b57f63ed6ef::t_4398404b5aad0f 26
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/CLAUDE.md
+  s_c19b57f63ed6ef::t_8058474af3b83d 10,41,45-46,49,55-56,58,69-70
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/report/errors/messages.test.ts
+  s_c19b57f63ed6ef::t_8f55a4ac7cf08f 5,143-144
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-assistant/decisions.md
+  s_c19b57f63ed6ef::t_1ad2c1aeb30bea 24-28,219-246
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.ts
+  s_c19b57f63ed6ef::t_62a193c5ab4f75 32,108
+  s_c19b57f63ed6ef::t_5900777c2fa046 31
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/proposals.test.ts
+  s_c19b57f63ed6ef::t_359db0acb9a7ad 65,69,79,84,294-296,301,308,317-318
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261011151814_turn-key-turn-only/snapshot.json
+  s_c19b57f63ed6ef::t_8e68af7cf1f807 1-2334
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/turn.test.ts
+  s_c19b57f63ed6ef::t_fd1a8dcaaf393d 109,179
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/turn-keys.test.ts
+  s_c19b57f63ed6ef::t_e402ce3a472038 131,137,147
+  s_c19b57f63ed6ef::t_fd1a8dcaaf393d 80-81,98,103
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/CLAUDE.md
+  s_c19b57f63ed6ef::t_1ca6dea9b0297d 20,53
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/proposal.test.ts
+  s_c19b57f63ed6ef::t_72cc93b8dc6e3a 232-235
+  s_c19b57f63ed6ef::t_8c39ae426bd509 275-305
+4-software-engineering/1-projects/1-hexframe/1-app/eslint.config.ts
+  s_c19b57f63ed6ef::t_28b8a122257c42 63-77,119-124
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/events/turn.test.ts
+  s_c19b57f63ed6ef::t_74c4eab23b916c 21,119-121
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261011151814_turn-key-turn-only/migration.sql
+  s_c19b57f63ed6ef::t_8e68af7cf1f807 1
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/middleware.test.ts
+  s_c19b57f63ed6ef::t_fd1a8dcaaf393d 103
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/assistant.ts
+  s_c19b57f63ed6ef::t_c504713f814540 43,459,481
+  s_c19b57f63ed6ef::t_18fa01fb89363e 37,422-428,437,502-504,506-507
+  s_c19b57f63ed6ef::t_c12581b713a2c2 490-492,494
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/turn/turn.test.ts
+  s_c19b57f63ed6ef::t_0150788ffd6392 16-18
+  s_c19b57f63ed6ef::t_e7be57c78f5df9 5-13,75,80-82
+  s_c19b57f63ed6ef::t_5c6d89983ce37e 1,72-74,76-79,83-85
+  s_c19b57f63ed6ef::t_d9062870363091 86
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/batch/batch.test.ts
+  s_c19b57f63ed6ef::t_2387a687cfed53 110-112
+  s_c19b57f63ed6ef::t_c5e2a90f3d0de1 21,36-37,45-47,60,66,98,102,107,120,150,175,180,193,195
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/undo/undo.ts
+  s_c19b57f63ed6ef::t_18fa01fb89363e 12,19-24,34
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_c19b57f63ed6ef::t_fd4e16706a2585 111-112,289-291,679-680
+  s_c19b57f63ed6ef::t_55d41cb081dcdc 603-604,611-617,619,628-629,631-632,659,692
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/proxy/proxy.test.ts
+  s_c19b57f63ed6ef::t_fd1a8dcaaf393d 125-128
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_c19b57f63ed6ef::t_62a193c5ab4f75 37,316
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE.md
+  s_c19b57f63ed6ef::t_4398404b5aad0f 22,30
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_c19b57f63ed6ef::t_8f55a4ac7cf08f 277
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/navigation.ts
+  s_c19b57f63ed6ef::t_f94d15e64d7e86 4-5
+  s_c19b57f63ed6ef::t_a812b6361525db 14-18
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/programs.ts
+  s_c19b57f63ed6ef::t_fd1a8dcaaf393d 141,247,314,316,334,336-337,343
+  s_c19b57f63ed6ef::t_36b7c5681d8008 23
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/turn-keys/turn-keys.ts
+  s_c19b57f63ed6ef::t_fd1a8dcaaf393d 2-4,11,17,27,92,98-99
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/CLAUDE.md
+  s_c19b57f63ed6ef::t_5900777c2fa046 18
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/undo/CLAUDE.md
+  s_c19b57f63ed6ef::t_4398404b5aad0f 16
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/agent/agent.test.ts
+  s_c19b57f63ed6ef::t_df36037bc8f3f9 254,258,260-261,289,342
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/turn/turn.ts
+  s_c19b57f63ed6ef::t_e254cdd5cb718d 4,6,81-87
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.test.ts
+  s_c19b57f63ed6ef::t_62a193c5ab4f75 30,454,457
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/programs.ts
+  s_c19b57f63ed6ef::t_fd1a8dcaaf393d 181
+  s_c19b57f63ed6ef::t_8d44c188107fb3 82-87,91-92,94-96,98-100,107-109,113-114,119-121
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/__snapshots__/mcp.test.ts.snap
+  s_c19b57f63ed6ef::t_acb6df2c1fdc67 109,199,245,331,376,407,458
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/agent/agent.ts
+  s_c19b57f63ed6ef::t_65fc9b9b4af42f 16,63-64,85
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/agent/prompt.ts
+  s_c19b57f63ed6ef::t_dd688bb9f2bcd3 2-7,41-45,158,172-173
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "65e25147e7c6def63872cc28eb2034097865bd2f",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
