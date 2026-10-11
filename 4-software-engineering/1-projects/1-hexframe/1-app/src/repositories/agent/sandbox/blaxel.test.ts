@@ -1,11 +1,17 @@
+import { spawnSync } from 'node:child_process'
+import { chmod, mkdtemp, rm, writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+
 import { describe, expect, it } from '@effect/vitest'
 import { ConfigProvider, Effect, Exit } from 'effect'
 
-import { deployment, layer, networkDrifted, statusFrom } from './blaxel'
+import { deployment, layer, networkDrifted, statusFrom, userMade } from './blaxel'
 import { Sandbox } from './sandbox'
 
 // The Blaxel layer without Blaxel: where its sandboxes are named and what they may reach, read from
-// Vercel's variables, when a sandbox's network is set again, how a process's state reads, and the
+// Vercel's variables, when a sandbox's network is set again, how a process's state reads, the shell
+// that makes the agent's user, run on this machine against stand-ins for `id` and `useradd`, and the
 // layer built without its credentials. Nothing here calls Blaxel.
 
 /** Runs an effect with these variables as its whole environment. */
@@ -128,5 +134,43 @@ describe('a process’s state, as Blaxel reports it', () => {
     expect(statusFrom({ status: 'failed', exitCode: 130 })).toEqual({ state: 'stopped' })
     expect(statusFrom({ status: 'killed', exitCode: -1 })).toEqual({ state: 'killed' })
     expect(statusFrom({ status: 'stopped', exitCode: -1 })).toEqual({ state: 'stopped' })
+  })
+})
+
+describe('the agent’s user, made in a sandbox', () => {
+  /**
+   * Runs the shell that makes `hexframe` with stand-ins for `id`, which finds the user once `$MADE` is
+   * there, `exists` saying whether it is at first, and `useradd`, which runs as `useradd` says, in
+   * shell builtins alone; answers its exit code.
+   */
+  async function madeWith(useradd: string, exists = false) {
+    const bin = await mkdtemp(join(tmpdir(), 'hexframe-useradd-test-'))
+    const made = join(bin, 'made')
+    const stand = async (name: string, script: string) => {
+      await writeFile(join(bin, name), `#!/bin/sh\n${script}\n`)
+      await chmod(join(bin, name), 0o755)
+    }
+    await stand('id', `test -e '${made}'`)
+    await stand('useradd', useradd.replaceAll('$MADE', `'${made}'`))
+    if (exists) await writeFile(made, '')
+    const { status } = spawnSync('/bin/sh', ['-c', userMade('hexframe')], {
+      env: { PATH: bin },
+    })
+    await rm(bin, { recursive: true, force: true })
+    return status
+  }
+
+  it('is made when it is not, and left as it is when it is', async () => {
+    expect(await madeWith(': > $MADE')).toBe(0)
+    expect(await madeWith('exit 1', true)).toBe(0)
+  })
+
+  it('goes on when another ensure made it first, its own useradd refused', async () => {
+    // The other ensure makes it between this one's `id` and its `useradd`, which fails as it exists.
+    expect(await madeWith(': > $MADE; exit 9')).toBe(0)
+  })
+
+  it('fails when useradd fails and no user was made', async () => {
+    expect(await madeWith('exit 1')).not.toBe(0)
   })
 })

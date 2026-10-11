@@ -59,7 +59,10 @@ export const settings = {
     prices,
     /** The most tokens a call may answer: a call asking for more is sent asking for this many. */
     maxTokens: 32_000,
-    /** The most characters a call's body holds, Anthropic's own limit on a request. */
+    /**
+     * The most bytes a call's body holds, Anthropic's own limit on a request: the proxy reads no
+     * further, and refuses the call.
+     */
     largestCall: 32 * 1024 * 1024,
     /**
      * The fields a call's body may hold, every other refused: no `mcp_servers`, no `container`, no
@@ -80,6 +83,11 @@ export const settings = {
       'output_config',
       'context_management',
     ],
+    /**
+     * The edits of its context a call may ask for under `context-management`, every other refused:
+     * old tool results cleared, old thinking cleared. Never a compaction, which calls the model again.
+     */
+    contextEdits: ['clear_tool_uses_20250919', 'clear_thinking_20251015'],
     /**
      * The betas a call may name in `anthropic-beta`, every other refused: Claude Code's own, and
      * those that change neither what the model reaches nor its price.

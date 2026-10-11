@@ -421,6 +421,12 @@ export const stopAgent = (accountId: string, turnId: string) =>
     (box) => box.stop(processOf(turnId)),
   )
 
+/**
+ * The most bytes a model call's body holds, by the settings: the proxy reads no further, and refuses
+ * the call past it, so `admitCall` never sees one.
+ */
+export const largestCall: number = settings.model.largestCall
+
 /** A model call a Turn's agent asks the proxy for: its endpoint, Anthropic's headers, its body's text. */
 export interface AskedCall {
   readonly endpoint: Endpoint
@@ -558,17 +564,18 @@ export const openProposal = (accountId: string) =>
 
 /**
  * The Account's open Proposal, if one is, its Conversation locked until the transaction ends, so no
- * other draft, accept nor discard decides on it meanwhile: what a draft folds over the System before
- * Assistant hears of it, and an accept runs. In the transaction the API layer opened.
+ * other draft, accept nor discard decides on it meanwhile: what a draft of one of its Turns folds over
+ * the System before Assistant hears of it; and whether that Turn still runs, which a draft needs, read
+ * once the lock is held, as its end takes it, so a write proven just before a Stop finds the Turn over
+ * rather than a Proposal the user decided on since. In the transaction the API layer opened.
  */
-export const lockedProposal = (accountId: string) =>
-  Effect.map(
-    Effect.flatMap(
-      Proposals.use((proposals) => proposals.locked(accountId)),
-      stateOf,
-    ),
-    ({ state }) => state.open,
-  )
+export const lockedProposal = (accountId: string, turnId: string) =>
+  Effect.gen(function* () {
+    const { state } = yield* stateOf(
+      yield* Proposals.use((proposals) => proposals.locked(accountId)),
+    )
+    return { open: state.open, running: yield* runs(accountId, turnId) }
+  })
 
 /** A Proposal's Entry, as the timeline shows it: its changes, and how it stands. */
 const proposalEntry = (
@@ -654,7 +661,7 @@ export const setMode = (accountId: string, mode: Mode) =>
  * Drafts a write one of the Account's Turns made in ask into the Conversation's open Proposal, opening
  * one with its Entry when none is, and answers the Proposal: the write as the API layer encoded it,
  * opaque, and the changes it makes, as Mapping summarized them on the System the Proposal makes. In the
- * transaction the API layer opened, after `lockedProposal`.
+ * transaction the API layer opened, after `lockedProposal` said the Turn runs.
  */
 export const draft = (
   accountId: string,
@@ -699,6 +706,10 @@ export const turn = (accountId: string, turnId: string) =>
     return yield* turnOf(row)
   })
 
+/** Whether one of the Account's Turns still runs: what a write it makes, drafted or applied, needs. */
+const runs = (accountId: string, turnId: string) =>
+  Effect.map(turn(accountId, turnId), ({ ended }) => ended === undefined)
+
 /**
  * What becomes of a write one of the Account's Turns makes, which the API layer routes on: drafted
  * into the Conversation's Proposal by a Turn that started in ask, applied by one that started in apply.
@@ -717,8 +728,7 @@ export const appliedSoFar = (accountId: string, turnId: string) =>
   Effect.gen(function* () {
     yield* Proposals.use((proposals) => proposals.locked(accountId))
     const kept = yield* Applied.use((applied) => applied.locked(accountId, turnId))
-    const running = (yield* turn(accountId, turnId)).ended === undefined
-    return { undo: kept?.undo, running }
+    return { undo: kept?.undo, running: yield* runs(accountId, turnId) }
   })
 
 /** What the Assistant applied, as the API layer hands it: what undoes it, opaque, and its changes. */

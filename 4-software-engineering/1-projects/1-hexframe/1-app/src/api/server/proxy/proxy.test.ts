@@ -232,6 +232,45 @@ describe('the model proxy', () => {
     expect(methodNotAllowed().status).toBe(405)
     await end(started.id)
   })
+
+  it('refuses a call past the largest read no further, and one cut off on the way, never rejecting, calling nothing', async () => {
+    const { turn, end } = await account
+    const { turn: started, secret } = await turn()
+    /** A call whose body comes as this stream, a chunk at a time. */
+    const streamed = (body: ReadableStream<Uint8Array>) =>
+      serveModelCall(
+        new Request(`${base}/v1/messages`, {
+          method: 'POST',
+          headers: { authorization: `Bearer ${secret}`, 'content-type': 'application/json' },
+          body,
+          duplex: 'half',
+        } as RequestInit),
+        '/v1/messages',
+      )
+    const megabyte = 1024 * 1024
+    let pulled = 0
+    const endless = new ReadableStream<Uint8Array>({
+      pull: (controller) => {
+        pulled += 1
+        controller.enqueue(new Uint8Array(megabyte))
+      },
+    })
+    const past = await streamed(endless)
+    expect(past.status).toBe(413)
+    expect(await errorOf(past)).toMatchObject({ type: 'request_too_large' })
+    expect(pulled).toBeLessThanOrEqual(settings.model.largestCall / megabyte + 2)
+
+    const cut = new ReadableStream<Uint8Array>({
+      pull: (controller) => {
+        controller.error(new Error('the client went away'))
+      },
+    })
+    const broken = await streamed(cut)
+    expect(broken.status).toBe(400)
+    expect(await errorOf(broken)).toMatchObject({ type: 'invalid_request_error' })
+    expect(fakeAnthropic.calls()).toHaveLength(0)
+    await end(started.id)
+  })
 })
 
 describe('calls under way', () => {

@@ -76,6 +76,15 @@ export function networkDrifted(
 /** A string in single quotes, for a shell. */
 const quoted = (text: string) => `'${text.replaceAll("'", `'\\''`)}'`
 
+/**
+ * The shell that makes `name` a user of the sandbox unless it is one. Two `ensure`s of a fresh sandbox
+ * may both find no such user and both run `useradd`: the one that loses finds it made, and goes on.
+ */
+export const userMade = (name: string) => {
+  const exists = `id -u ${quoted(name)} >/dev/null 2>&1`
+  return `(${exists} || useradd --no-create-home --shell /bin/sh ${quoted(name)} || ${exists})`
+}
+
 /** A call to Blaxel; its failure is a defect, the sandbox's errand having failed. */
 const blaxel = <A>(call: () => Promise<A>) => Effect.orDie(Effect.tryPromise(call))
 
@@ -225,7 +234,7 @@ function makeBlaxel({
         yield* chored(
           sandbox,
           `mkdir -p ${work} && chown 0:0 ${quoted(home)} && chmod 755 ${quoted(home)} && ` +
-            `(id -u ${user} >/dev/null 2>&1 || useradd --no-create-home --shell /bin/sh ${user}) && ` +
+            `${userMade(user)} && ` +
             `chown ${user} ${work} && command -v setpriv >/dev/null`,
         )
         return boxOf(sandbox, name)
