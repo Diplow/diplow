@@ -24,6 +24,7 @@ import { Rail } from '#/front/ui/canvas/layouts/Rail'
 import { pathTo, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { centerOn, readCanvasView, showView, type CanvasView } from '#/front/ui/canvas/view/view'
 import { ChatAtomsGallery } from '#/front/ui/chat/atoms/gallery'
+import { ComposerGallery } from '#/front/ui/chat/composer/gallery'
 import {
   GallerySection,
   GalleryState,
@@ -58,6 +59,7 @@ function DesignSystem() {
       <GalleryTier tier="crossings" />
       <GalleryTier tier="chat">
         <ConversationGallery onCenter={onCenter} />
+        <ComposerGallery />
         <ChatAtomsGallery />
       </GalleryTier>
       <GalleryTier tier="canvas">
