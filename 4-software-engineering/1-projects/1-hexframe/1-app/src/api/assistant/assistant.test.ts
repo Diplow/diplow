@@ -8,7 +8,9 @@ import { describe, expect, expectTypeOf, it } from 'vitest'
 
 import { dayAt, type Entry, linkTo } from '#/domains/assistant/entities'
 import { systemFolder } from '#/repositories/agent/sandbox/sandbox'
-import type { SessionRequired, SignedOut } from '#/domains/iam/errors'
+import type { AllowanceSpent, TurnRunning } from '#/domains/assistant/errors'
+import type { EntitlementMissing, SessionRequired, SignedOut } from '#/domains/iam/errors'
+import type { TileNotFound } from '#/domains/mapping/errors'
 import type { KeyProof, Session } from '#/domains/iam/iam'
 
 import * as Agent from '#/domains/assistant/agent/agent'
@@ -222,6 +224,9 @@ describe("Assistant's server functions", () => {
 
   it('lists, by its type, the errors each server function can fail with', () => {
     type Errors<P> = P extends Effect.Effect<unknown, infer E, unknown> ? E : never
+    expectTypeOf<Errors<ReturnType<typeof Assistant.sendMessage>>>().toEqualTypeOf<
+      SignedOut | SessionRequired | EntitlementMissing | TileNotFound | AllowanceSpent | TurnRunning
+    >()
     expectTypeOf<Errors<ReturnType<typeof Assistant.conversationDay>>>().toEqualTypeOf<
       SignedOut | SessionRequired
     >()

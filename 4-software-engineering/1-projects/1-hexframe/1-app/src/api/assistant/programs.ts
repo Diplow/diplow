@@ -144,20 +144,26 @@ const turnStarted = (accountId: string, start: { message: string; location: stri
 
 /**
  * Posts the user's Message in their Conversation and starts the Turn answering it in the Tile
- * `location` names, its Key issued, in one transaction (`turnStarted`): `AllowanceSpent` once the
- * month's allowance is spent and `TurnRunning` while another Turn runs, nothing posted. What
- * `sendMessage` runs once it checked that the Account may use the Assistant and owns the Tile, and
- * what the tests start a Turn with, its Key in hand (`server/events/testing.ts`). Answers the
+ * `location` names, its Key issued: for an Account with the `assistant` Entitlement, else
+ * `EntitlementMissing`; in a Tile of its own System, else Mapping's `TileNotFound`; then, in one
+ * transaction (`turnStarted`), `AllowanceSpent` once the month's allowance is spent and `TurnRunning`
+ * while another Turn runs, nothing posted. It checks what a Key needs itself, so no caller issues one
+ * for an Account or a Tile it should not. What `sendMessage` runs for an Account it found entitled,
+ * and what the tests start a Turn with, its Key in hand (`server/events/testing.ts`). Answers the
  * Message's Entry, the Turn, its Key, and the Turn ended by its time, if one was.
  */
-export const messageAndTurn = (accountId: string, text: string, location: string) =>
-  transactional(
-    Effect.gen(function* () {
-      const posted = yield* Assistant.postMessage(accountId, text)
-      const start = { message: posted.id, location }
-      return { entry: posted, ...(yield* turnStarted(accountId, start)) }
-    }),
-  )
+export const messageAndTurn = (account: Iam.Session['account'], text: string, location: string) =>
+  Effect.gen(function* () {
+    yield* Iam.entitledOnly(account, 'assistant')
+    yield* Mapping.ownTile(account.id, location)
+    return yield* transactional(
+      Effect.gen(function* () {
+        const posted = yield* Assistant.postMessage(account.id, text)
+        const start = { message: posted.id, location }
+        return { entry: posted, ...(yield* turnStarted(account.id, start)) }
+      }),
+    )
+  })
 
 /**
  * Ends one of the Account's Turns, saying how, and revokes its Key, in one transaction: needing no
@@ -264,8 +270,7 @@ export const sendMessage = (sent: typeof SentMessage.Type) =>
       return { entry: yield* transactional(Assistant.postMessage(account.id, sent.text)) }
     }
     const location = turnLocation(sent.text, sent.view.center)
-    yield* Mapping.ownTile(account.id, location)
-    const { entry, turn, key, overdue } = yield* messageAndTurn(account.id, sent.text, location)
+    const { entry, turn, key, overdue } = yield* messageAndTurn(account, sent.text, location)
     yield* afterAnswering(
       Effect.gen(function* () {
         if (overdue !== undefined) yield* agentStopped(account.id, overdue.id)

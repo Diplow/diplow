@@ -103,7 +103,7 @@ const drafted = <O extends Operation>(accountId: string, turnId: string, operati
   )
 
 /**
- * Runs an Operation one of the Account's Turns wrote in apply, in one transaction, by Assistant's
+ * Runs an Operation one of the Account's Turns wrote in apply, in one transaction, by `undo/`'s
  * `applyInTurn`: the Conversation locked, what undoes the Turn's writes so far read, the Operation run
  * by Mapping as its own function runs it, and what undoes them all, this one's included, kept with
  * the Turn, with the changes it made; `SignedOut` should the Turn have ended since its Key was

@@ -97,10 +97,9 @@ export async function signedUpAt(origin: string, email: string) {
 
 /**
  * A Message sent and the Turn answering it started in `location`, its Key issued, for the request's
- * Session, by the transaction `sendMessage` runs (`messageAndTurn`), its agent left unstarted, so the
- * test drives the Turn itself, its Key in hand: the Message's Entry, the Turn, its Key, and the Turn
- * ended by its time, if one was. What `sendMessage` checks first, the Entitlement and the Tile, its own
- * tests hold (`../../assistant/turn.test.ts`).
+ * Session, as `sendMessage` starts one (`messageAndTurn`), its Entitlement and its Tile checked, its
+ * agent left unstarted, so the test drives the Turn itself, its Key in hand: the Message's Entry, the
+ * Turn, its Key, and the Turn ended by its time, if one was.
  */
 export const turnStarted = (text: string, location: string) =>
-  Effect.flatMap(Iam.sessionOnly, ({ account }) => messageAndTurn(account.id, text, location))
+  Effect.flatMap(Iam.sessionOnly, ({ account }) => messageAndTurn(account, text, location))
