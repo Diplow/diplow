@@ -2,7 +2,10 @@
 // user, their six domains and the files beside them, and a little below, deep enough to open a
 // Branch two generations down, mix Branches and Leaves in a ring of Children, clash a Leaf with a
 // Branch, and split a Tile of more than six into its Branches and its Leaves. Its content is the
-// user's own, in their words, so it is not translated.
+// user's own, in their words, so it is not translated. Beside it, Help's top, which the screen shows
+// signed out, in the page's language as Help is.
+import { m } from '#/paraglide/messages'
+
 import type { TileNode } from './view/tiles'
 import type { CanvasView } from './view/view'
 
@@ -102,3 +105,21 @@ export const fixtureViews = {
   twoDeep: { center: softwareEngineering.id, expanded: { 1: 'children' } },
   leaf: { center: 'notes' },
 } satisfies Record<string, CanvasView>
+
+/** Help's top, as the canvas shows it signed out: hexframe's own System, its six topics around it. */
+export function helpFixture(): TileNode {
+  const topic = (id: string, title: string): TileNode => ({ id, title, preview: '' })
+  return {
+    id: 'help',
+    title: m.gallery_help_root(),
+    preview: '',
+    branches: {
+      1: topic('system', m.gallery_help_system()),
+      2: topic('tiles', m.gallery_help_tiles()),
+      3: topic('children-and-directions', m.gallery_help_children()),
+      4: topic('context', m.gallery_help_context()),
+      5: topic('operations', m.gallery_help_operations()),
+      6: topic('keys-and-the-mcp', m.gallery_help_keys()),
+    },
+  }
+}

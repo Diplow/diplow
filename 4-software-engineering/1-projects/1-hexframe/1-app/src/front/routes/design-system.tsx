@@ -1,37 +1,27 @@
 // The design system, for anyone, in production too, read top-down: the direction, then a section per
 // tier, the crossings, the Chat, the Canvas, the layouts and the atoms the sides share, the seams, each
 // piece in its states, then the tokens. The canvas's view lives in the search params, so a link shows
-// what its sender saw, and a Message's link in the Conversation centers it, as on home. The screen's
-// specimens are drawn here too, since they lay out both sides, which no folder of ui/ may import.
+// what its sender saw, and a Message's link in the Conversation centers it, as on home.
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { useState, type SyntheticEvent } from 'react'
 
 import { ChannelsGallery } from '#/front/client/gallery'
 import { BreadcrumbGallery } from '#/front/features/breadcrumb/gallery'
 import { ConversationGallery } from '#/front/features/conversation/gallery'
 import { m } from '#/paraglide/messages'
 import { AtomsGallery } from '#/front/ui/atoms/gallery'
-import { ThemeToggle } from '#/front/ui/atoms/controls/ThemeToggle'
 import { Canvas } from '#/front/ui/canvas/Canvas'
 import { CanvasAtomsGallery } from '#/front/ui/canvas/atoms/gallery'
 import { fixtureViews, ulysse } from '#/front/ui/canvas/fixtures'
 import { CanvasLayoutsGallery } from '#/front/ui/canvas/layouts/gallery'
-import { Rail } from '#/front/ui/canvas/layouts/Rail'
-import { pathTo, type TileNode } from '#/front/ui/canvas/view/tiles'
-import { centerOn, readCanvasView, showView, type CanvasView } from '#/front/ui/canvas/view/view'
+import { centerOn, readCanvasView, type CanvasView } from '#/front/ui/canvas/view/view'
 import { ChatAtomsGallery } from '#/front/ui/chat/atoms/gallery'
-import {
-  GallerySection,
-  GalleryState,
-  GalleryTier,
-  tierAnchor,
-  tierTitle,
-} from '#/front/ui/gallery/frame'
+import { GallerySection, GalleryTier, tierAnchor, tierTitle } from '#/front/ui/gallery/frame'
 import { anchorOf, filled, tiers } from '#/front/ui/gallery/pieces'
 import { Tokens } from '#/front/ui/gallery/Tokens'
 import { LayoutsGallery } from '#/front/ui/layouts/gallery'
-import { Screen, type Side } from '#/front/ui/layouts/screen/Screen'
 import { SeamsGallery } from '#/front/ui/seams/gallery'
+
+import { ScreenGallery } from './-design-system/screen'
 
 export const Route = createFileRoute('/design-system')({
   validateSearch: readCanvasView,
@@ -173,213 +163,5 @@ function CanvasGallery({ view, onViewChange }: CanvasGalleryProps) {
         />
       </div>
     </GallerySection>
-  )
-}
-
-/** The screen on fixtures, wide and on a phone, signed in and signed out, each holding its own view. */
-function ScreenGallery() {
-  const wide = 'h-[40rem] w-[61rem] max-w-full'
-  const phone = 'h-[42rem] w-[23.4375rem] max-w-full'
-  return (
-    <GallerySection name="Screen">
-      <GalleryState label={m.gallery_state_wide()}>
-        <ScreenSpecimen signedIn className={wide} />
-      </GalleryState>
-      <GalleryState label={m.gallery_state_phone()}>
-        <ScreenSpecimen signedIn className={phone} />
-      </GalleryState>
-      <GalleryState label={m.gallery_state_signed_out()}>
-        <ScreenSpecimen signedIn={false} className={wide} />
-      </GalleryState>
-      <GalleryState label={m.gallery_state_signed_out_phone()}>
-        <ScreenSpecimen signedIn={false} className={phone} />
-      </GalleryState>
-    </GallerySection>
-  )
-}
-
-interface Line {
-  author: 'user' | 'agent'
-  text: string
-}
-
-/**
- * One screen: the fixture System and a conversation about it signed in, Help and the sign-in widget's
- * place signed out. The conversation's lines and its composer stand in for the Chat's proposals
- * (HEX-98, HEX-99), enough to show where they sit and how the curve scrolls them.
- */
-function ScreenSpecimen({ signedIn, className }: { signedIn: boolean; className: string }) {
-  const [system] = useState(() => (signedIn ? ulysse : helpFixture()))
-  const [view, setView] = useState<CanvasView>({})
-  const [front, setFront] = useState<Side>('chat')
-  const [sent, setSent] = useState<Line[]>([])
-  const lines: Line[] = signedIn
-    ? [...conversationFixture(), ...sent]
-    : [
-        { author: 'agent', text: m.gallery_screen_signed_out_1() },
-        { author: 'agent', text: m.gallery_screen_signed_out_2() },
-      ]
-  return (
-    <Screen
-      front={front}
-      onFrontChange={setFront}
-      className={className}
-      canvas={
-        <Canvas system={system} view={view} onViewChange={setView} className="flex-1 p-4 pb-8" />
-      }
-      corner={
-        <Rail
-          head={<ThemeToggle />}
-          steps={pathTo(system, showView(system, view).center.id)}
-          onSelect={(id) => {
-            setView(centerOn(system, id))
-          }}
-        />
-      }
-      messages={<Lines lines={lines} />}
-      composer={
-        signedIn ? (
-          <Composer
-            onSend={(text) => {
-              setSent((before) => [...before, { author: 'user', text }])
-            }}
-          />
-        ) : (
-          <SignInPlace />
-        )
-      }
-    />
-  )
-}
-
-const conversationFixture = (): Line[] => [
-  { author: 'user', text: m.gallery_screen_line_1() },
-  { author: 'agent', text: m.gallery_screen_line_2() },
-  { author: 'user', text: m.gallery_screen_line_3() },
-  { author: 'agent', text: m.gallery_screen_line_4() },
-  { author: 'agent', text: m.gallery_screen_line_5() },
-  { author: 'user', text: m.gallery_screen_line_6() },
-]
-
-/** Help's top, as the canvas shows it signed out: hexframe's own System, its six topics around it. */
-function helpFixture(): TileNode {
-  const topic = (id: string, title: string): TileNode => ({ id, title, preview: '' })
-  return {
-    id: 'help',
-    title: m.gallery_help_root(),
-    preview: '',
-    branches: {
-      1: topic('system', m.gallery_help_system()),
-      2: topic('tiles', m.gallery_help_tiles()),
-      3: topic('children-and-directions', m.gallery_help_children()),
-      4: topic('context', m.gallery_help_context()),
-      5: topic('operations', m.gallery_help_operations()),
-      6: topic('keys-and-the-mcp', m.gallery_help_keys()),
-    },
-  }
-}
-
-/** Your words in a light serif with an amber rule, the agent's in mono beside its violet mark. */
-function Lines({ lines }: { lines: Line[] }) {
-  return (
-    <ol className="flex flex-col gap-[1.375rem]">
-      {lines.map((line, index) =>
-        line.author === 'user' ? (
-          <li
-            key={index}
-            // A line just sent shows at once, the conversation scrolled to it.
-            ref={index >= conversationFixture().length ? scrollIntoView : undefined}
-            className="max-w-[36em] border-l border-human/70 pl-3.5 font-human text-prose font-light"
-          >
-            {line.text}
-          </li>
-        ) : (
-          <li
-            key={index}
-            className="grid max-w-[36em] grid-cols-[0.875rem_1fr] gap-2.5 font-agent text-mono text-muted-foreground"
-          >
-            <svg viewBox="-12 -12 24 24" aria-hidden className="mt-[0.3em] size-3.5">
-              <polygon
-                points="0,-11 9.53,-5.5 9.53,5.5 0,11 -9.53,5.5 -9.53,-5.5"
-                fill="none"
-                vectorEffect="non-scaling-stroke"
-                className="stroke-agent"
-              />
-            </svg>
-            <span>{line.text}</span>
-          </li>
-        ),
-      )}
-    </ol>
-  )
-}
-
-function scrollIntoView(element: HTMLElement | null) {
-  element?.scrollIntoView({ block: 'nearest' })
-}
-
-/** A zone, the chat's foot: a solid fill with one fine line on top, warm for you. */
-const zone =
-  'relative flex min-h-[7.25rem] items-center gap-4 bg-card bg-linear-to-r from-transparent from-15% to-human/9 px-5 py-6 before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-linear-to-r before:from-transparent before:via-input before:via-45% before:to-input @min-[40rem]:pr-[4.125rem] @min-[40rem]:pl-9'
-
-/** The composer's stand-in: a line of your words, Enter to send, and the send hex, lit once ready. */
-function Composer({ onSend }: { onSend: (text: string) => void }) {
-  const [text, setText] = useState('')
-  const ready = text.trim() !== ''
-  const submit = (event?: SyntheticEvent) => {
-    event?.preventDefault()
-    if (!ready) return
-    onSend(text.trim())
-    setText('')
-  }
-  return (
-    <form className={zone} onSubmit={submit}>
-      <textarea
-        rows={1}
-        value={text}
-        onChange={(event) => {
-          setText(event.target.value)
-        }}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter' && !event.shiftKey) submit(event)
-        }}
-        placeholder={m.gallery_screen_composer()}
-        aria-label={m.conversation_message_label()}
-        className="field-sizing-content max-h-21 min-w-0 flex-1 resize-none bg-transparent font-human text-prose font-light outline-none placeholder:text-faint"
-      />
-      <button
-        type="submit"
-        aria-label={m.conversation_send()}
-        className={`group/send size-11 flex-none cursor-pointer outline-none ${ready ? 'text-human' : 'text-faint'}`}
-      >
-        <svg viewBox="-19 -21 38 42" aria-hidden className="size-full overflow-visible">
-          <polygon
-            points="0,-20 17.32,-10 17.32,10 0,20 -17.32,10 -17.32,-10"
-            vectorEffect="non-scaling-stroke"
-            className={
-              ready
-                ? 'fill-human/12 stroke-human drop-shadow-[0_0_8px_color-mix(in_oklab,var(--human)_55%,transparent)]'
-                : 'fill-none stroke-input group-focus-visible/send:stroke-human'
-            }
-          />
-          <path d="M0 6V-6M-5 -1l5-5 5 5" fill="none" strokeWidth={1.3} stroke="currentColor" />
-        </svg>
-      </button>
-    </form>
-  )
-}
-
-/** Signed out, the chat's foot is where the sign-in widget sits (HEX-100), drawn here as its place. */
-function SignInPlace() {
-  return (
-    <div className={zone}>
-      <div className="grid gap-1">
-        <span className="font-agent text-xs text-agent">{m.gallery_screen_sign_in_kicker()}</span>
-        <span className="font-human text-xl">{m.gallery_screen_sign_in_title()}</span>
-        <span className="text-sm font-light text-muted-foreground">
-          {m.gallery_screen_sign_in_text()}
-        </span>
-      </div>
-    </div>
   )
 }

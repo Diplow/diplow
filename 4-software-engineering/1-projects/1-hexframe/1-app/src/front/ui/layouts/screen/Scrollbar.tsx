@@ -5,7 +5,7 @@
 import { cn } from 'cn'
 import { useEffect, useId, useRef, useState, type MouseEvent, type RefObject } from 'react'
 
-import { bow, scrollTopAt, thumbOf, type Track } from './curve'
+import { bow, offsetAt, scrollTopAt, thumbOf, type Track } from './curve'
 
 interface ScrollbarProps {
   /** The screen, which the curve spans from top to foot. */
@@ -27,7 +27,8 @@ export function Scrollbar({ screen, scroller }: ScrollbarProps) {
   const [track, setTrack] = useState<Track>({ height: 0, top: 0, length: 0 })
   const [scroll, setScroll] = useState({ top: 0, height: 0, client: 0 })
   const [stirred, setStirred] = useState(false)
-  const [drag, setDrag] = useState<{ y: number; top: number } | undefined>(undefined)
+  // Where the pointer and the star were when the star was caught.
+  const [drag, setDrag] = useState<{ pointer: number; star: number } | undefined>(undefined)
   const stir = useRef<ReturnType<typeof setTimeout>>(undefined)
   const id = useId().replace(/[^\w-]/g, '')
 
@@ -58,8 +59,9 @@ export function Scrollbar({ screen, scroller }: ScrollbarProps) {
     const resized = new ResizeObserver(measure)
     resized.observe(frame)
     resized.observe(messages)
-    // The messages' content grows as the conversation does, which their own box doesn't show.
-    for (const child of messages.children) resized.observe(child)
+    // The messages' content grows as the conversation does, which their own box doesn't show; the
+    // screen keeps it in one element, whatever the slot holds.
+    if (messages.firstElementChild !== null) resized.observe(messages.firstElementChild)
     messages.addEventListener('scroll', onScroll, { passive: true })
     return () => {
       resized.disconnect()
@@ -154,14 +156,13 @@ export function Scrollbar({ screen, scroller }: ScrollbarProps) {
           onPointerDown={(event) => {
             event.preventDefault()
             event.currentTarget.setPointerCapture(event.pointerId)
-            setDrag({ y: event.clientY, top: scroll.top })
+            setDrag({ pointer: event.clientY, star: thumb.y })
           }}
           onPointerMove={(event) => {
             if (drag === undefined) return
             // The star follows the pointer down the track; the messages follow the star.
-            const travel = track.length - thumb.size
-            const over = scroll.height - scroll.client
-            if (travel > 0) scrollTo(drag.top + ((event.clientY - drag.y) * over) / travel, false)
+            const star = drag.star + event.clientY - drag.pointer
+            scrollTo(scrollTopAt(track, scroll, star), false)
           }}
           onPointerUp={() => {
             setDrag(undefined)
@@ -183,7 +184,7 @@ function trackPath({ height, top, length }: Track) {
   return Array.from({ length: steps + 1 }, (_, step) => {
     const y = top + (length * step) / steps
     const t = y / height
-    const x = 0.5 + 2 * t * (1 - t) * bow
+    const x = 0.5 + offsetAt(t)
     return `${step === 0 ? 'M' : 'L'}${x.toFixed(2)} ${(t * 100).toFixed(2)}`
   }).join(' ')
 }

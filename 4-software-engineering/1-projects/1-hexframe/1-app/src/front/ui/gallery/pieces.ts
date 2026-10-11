@@ -63,7 +63,7 @@ export const pieces = [
     name: 'Rail',
     tier: 'canvas',
     sources: ['ui/canvas/layouts/Rail.tsx'],
-    madeOf: [],
+    madeOf: ['ThemeToggle'],
     note: m.gallery_note_rail,
   },
   {

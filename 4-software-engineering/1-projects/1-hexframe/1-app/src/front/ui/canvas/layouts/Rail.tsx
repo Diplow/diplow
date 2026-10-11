@@ -1,12 +1,14 @@
 // The canvas's corner, top right: where you are. One thin line from the root down to the Tile you are
-// on, a point per step, with whatever heads it, the theme's disc on the screen, threaded on the line.
+// on, a point per step, with the theme's disc at its head, threaded on the line, so the corner reads
+// as one mark rather than a button beside a list.
 // Every part sits on the line's axis: the line is 1px wide and the disc and the points odd in size, so
 // each centre falls on the line's centre and the line stays one crisp pixel. Under a finger, every
 // step grows to a 44px target and the points spread to match.
 import { cn } from 'cn'
-import type { ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
+
+import { ThemeToggle } from '../../atoms/controls/ThemeToggle'
 
 interface RailStep {
   id: string
@@ -14,8 +16,6 @@ interface RailStep {
 }
 
 interface RailProps {
-  /** What heads the line: the theme's disc, 31px wide, or 44px under a finger. */
-  head: ReactNode
   /** From the root down to the Tile you are on, which is the last. */
   steps: readonly RailStep[]
   /** A step up the path chosen: the caller centers the canvas on it. */
@@ -23,11 +23,11 @@ interface RailProps {
   className?: string
 }
 
-export function Rail({ head, steps, onSelect, className }: RailProps) {
+export function Rail({ steps, onSelect, className }: RailProps) {
   return (
     <div className={cn('relative w-[31px] pointer-coarse:w-11', className)}>
-      {head}
-      {/* The line starts at the foot of the head's rim and fades out below the last point. */}
+      <ThemeToggle />
+      {/* The line starts at the foot of the disc's rim and fades out below the last point. */}
       <span
         aria-hidden
         className="absolute top-[26px] -bottom-[58px] left-[calc(50%-0.5px)] w-px bg-linear-to-b from-input from-75% to-transparent pointer-coarse:top-[33px]"

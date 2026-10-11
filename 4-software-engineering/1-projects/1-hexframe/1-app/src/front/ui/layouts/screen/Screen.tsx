@@ -16,6 +16,7 @@ import {
   type Ref,
   type RefObject,
 } from 'react'
+import { flushSync } from 'react-dom'
 
 import { m } from '#/paraglide/messages'
 
@@ -69,19 +70,16 @@ export function Screen({
     if (messages !== null) messages.scrollTop = messages.scrollHeight
   }, [])
   const chatInFront = front === 'chat'
-  // A move made from a seam hands the focus to the seam on the other side, so the keyboard can go
-  // back, rather than dropping it with the seam that went away.
+  // A move made from a seam hands the focus to the seam on the other side, once the screen has
+  // turned, so the keyboard can go back rather than lose the seam that went away. Should the caller
+  // keep the side as it was, that seam is missing or inert, and the focus stays where it is.
   const toCanvas = useRef<HTMLButtonElement>(null)
   const toChat = useRef<HTMLButtonElement>(null)
-  const fromSeam = useRef(false)
-  useEffect(() => {
-    if (!fromSeam.current) return
-    fromSeam.current = false
-    ;(front === 'chat' ? toCanvas : toChat).current?.focus()
-  }, [front])
   const move = (to: Side) => () => {
-    fromSeam.current = true
-    onFrontChange(to)
+    flushSync(() => {
+      onFrontChange(to)
+    })
+    ;(to === 'chat' ? toCanvas : toChat).current?.focus()
   }
   return (
     <div
@@ -103,10 +101,11 @@ export function Screen({
         <div
           inert={phone && !chatInFront}
           className={cn(
-            'flex min-h-0 flex-1 flex-col transition-[opacity,translate,visibility] duration-(--duration-fold) ease-glide motion-reduce:transition-none',
+            'flex min-h-0 flex-1 flex-col duration-(--duration-fold) ease-glide motion-reduce:transition-none',
+            // Visible at once when it comes back, so the seam can take the focus; hidden once faded.
             chatInFront
-              ? 'pointer-events-auto'
-              : 'invisible translate-y-6 opacity-0 @min-[40rem]:visible @min-[40rem]:translate-y-0 @min-[40rem]:opacity-100',
+              ? 'pointer-events-auto transition-[opacity,translate]'
+              : 'invisible translate-y-6 opacity-0 transition-[opacity,translate,visibility] @min-[40rem]:visible @min-[40rem]:translate-y-0 @min-[40rem]:opacity-100',
           )}
         >
           <Handle
@@ -209,7 +208,8 @@ function Brand() {
 
 /**
  * The conversation's scroller. Wide, its own scrollbar gives way to the star on the curve; it stays
- * focusable, so the keyboard scrolls it. Its content sits at its foot, the latest last.
+ * focusable, so the keyboard scrolls it. Its content sits at its foot, the latest last, in one element
+ * that stays whatever the slot holds, so the scrollbar sees it grow.
  */
 function Messages({
   scroller,
@@ -226,11 +226,11 @@ function Messages({
       role="region"
       aria-label={m.screen_messages()}
       className={cn(
-        'flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-5 pt-6 pb-7 outline-none [mask-image:linear-gradient(transparent,black_1.75rem)] focus-visible:ring-1 focus-visible:ring-human/60 focus-visible:ring-inset [&>*:first-child]:mt-auto',
+        'flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-5 pt-6 pb-7 outline-none [mask-image:linear-gradient(transparent,black_1.75rem)] focus-visible:ring-1 focus-visible:ring-human/60 focus-visible:ring-inset',
         '@min-[40rem]:pr-[6.25rem] @min-[40rem]:pl-9 @min-[40rem]:[scrollbar-width:none] @min-[40rem]:[&::-webkit-scrollbar]:hidden',
       )}
     >
-      {children}
+      <div className="mt-auto">{children}</div>
     </div>
   )
 }
@@ -249,18 +249,19 @@ const dragged = 24
 
 /**
  * The seam between the sides on a phone, a button: a tap, Enter or Space moves to the other side, and
- * so does a drag past a short way in the direction it points. A drag that moved swallows the click
- * after it, so it moves once. Hidden on a wide screen, which shows both.
+ * so does a drag past a short way in the direction it points. Any drag past that way swallows the
+ * click after it, so a drag moves once, and a drag the other way not at all. Hidden on a wide
+ * screen, which shows both.
  */
 function Handle({ ref, label, towards, onMove, className }: HandleProps) {
   const start = useRef<number | undefined>(undefined)
-  const moved = useRef(false)
+  const dragging = useRef(false)
   const onPointerUp = (event: PointerEvent) => {
     if (start.current === undefined) return
     const distance = event.clientY - start.current
     start.current = undefined
-    moved.current = towards === 'down' ? distance > dragged : distance < -dragged
-    if (moved.current) onMove()
+    dragging.current = Math.abs(distance) > dragged
+    if (dragging.current && (towards === 'down') === distance > 0) onMove()
   }
   return (
     <button
@@ -276,15 +277,15 @@ function Handle({ ref, label, towards, onMove, className }: HandleProps) {
         // Held, so the drag still ends here when the finger lifts past the seam.
         event.currentTarget.setPointerCapture(event.pointerId)
         start.current = event.clientY
-        moved.current = false
+        dragging.current = false
       }}
       onPointerUp={onPointerUp}
       onPointerCancel={() => {
         start.current = undefined
       }}
       onClick={() => {
-        if (moved.current) {
-          moved.current = false
+        if (dragging.current) {
+          dragging.current = false
           return
         }
         onMove()

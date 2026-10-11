@@ -6,7 +6,6 @@ import { useState } from 'react'
 import { m } from '#/paraglide/messages'
 
 import { Button } from '../../atoms/controls/button'
-import { ThemeToggle } from '../../atoms/controls/ThemeToggle'
 import { GallerySection, GalleryState } from '../../gallery/frame'
 import { ulysse } from '../fixtures'
 import { pathTo } from '../view/tiles'
@@ -103,7 +102,6 @@ function RailSpecimen({ from }: { from: string }) {
   return (
     <div className="relative h-72 w-80 bg-background">
       <Rail
-        head={<ThemeToggle />}
         steps={pathTo(ulysse, here)}
         onSelect={setHere}
         className="absolute top-[1.375rem] right-[1.375rem]"
