@@ -4,7 +4,9 @@
 // Conversation, which the table's `turn_running_idx` holds, so two starts at once never both run. Its
 // step, what its agent is doing now, is kept as Assistant encodes it, and dropped as it ends. What
 // a Turn spent, and what its calls under way reserved, are sums of millionths of a dollar Assistant
-// prices; a month's are the sums of its Turns'.
+// prices; a month's are the sums of its Turns'. Every write of a Turn locks its Conversation's row
+// first, as every write of the Conversation does, so two transactions that lock both lock them in one
+// order, and neither waits on the other while the other waits on it.
 import { and, eq, gte, inArray, isNull, sum } from 'drizzle-orm'
 import { Context, Effect, Layer } from 'effect'
 
@@ -124,8 +126,29 @@ const columns = {
   end: turn.end,
 }
 
+/**
+ * Runs a write of one of the Account's Turns, its Conversation's row locked first until the
+ * transaction ends: the one order of the two locks (above), lest a Said line and a Stop deadlock.
+ */
+const conversationFirstOn =
+  (database: Database['Service']) =>
+  (accountId: string) =>
+  <A, E, R>(write: Effect.Effect<A, E, R>) =>
+    InTransaction.use(() =>
+      Effect.andThen(
+        database
+          .select({ id: conversation.id })
+          .from(conversation)
+          .where(eq(conversation.accountId, accountId))
+          .for('update')
+          .pipe(Effect.orDie),
+        write,
+      ),
+    )
+
 const make = Effect.gen(function* () {
   const database = yield* Database
+  const conversationFirst = conversationFirstOn(database)
 
   /** The Account's Conversation, by its id, as a subquery. */
   const conversationOf = (accountId: string) =>
@@ -135,7 +158,7 @@ const make = Effect.gen(function* () {
       .where(eq(conversation.accountId, accountId))
 
   const start = (accountId: string, { messageId, location, mode, startedAt }: TurnStart) =>
-    InTransaction.use(() =>
+    conversationFirst(accountId)(
       Effect.gen(function* () {
         const [message] = yield* database
           .select({ conversationId: conversationEntry.conversationId })
@@ -169,7 +192,7 @@ const make = Effect.gen(function* () {
     )
 
   const end = (accountId: string, turnId: string, ended: { end: string; at: Date }) =>
-    InTransaction.use(() =>
+    conversationFirst(accountId)(
       database
         .update(turn)
         .set({ end: ended.end, endedAt: ended.at, step: null })
@@ -188,7 +211,7 @@ const make = Effect.gen(function* () {
     )
 
   const step = (accountId: string, turnId: string, doing: unknown) =>
-    InTransaction.use(() =>
+    conversationFirst(accountId)(
       database
         .update(turn)
         .set({ step: doing })
@@ -255,14 +278,14 @@ const make = Effect.gen(function* () {
     })
 
   const spending = (accountId: string, turnId: string, since: Date) =>
-    InTransaction.use(() => spentBy(accountId, turnId, since))
+    conversationFirst(accountId)(spentBy(accountId, turnId, since))
 
   const charge = (
     accountId: string,
     turnId: string,
     added: { readonly spent: number; readonly reserved: number },
   ) =>
-    InTransaction.use(() =>
+    conversationFirst(accountId)(
       Effect.gen(function* () {
         const ofTheAccount = and(
           eq(turn.id, turnId),

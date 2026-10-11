@@ -1,8 +1,9 @@
 // What the Turn's tests set and read below Assistant and IAM, which no program of the app does: a Turn
 // that started earlier than it did, so its deadline passed without waiting for it; an Account's Turns
 // having spent the month's allowance; whether a Turn's Key is still kept, its secret never known to
-// the test; and the Tile a Turn started in. For tests only.
-import { eq, inArray } from 'drizzle-orm'
+// the test; the Tile a Turn started in; and whether the transaction a test runs in locked an Account's
+// Conversation's row. For tests only.
+import { eq, inArray, sql } from 'drizzle-orm'
 import { Effect } from 'effect'
 
 import { Database } from '../database'
@@ -59,5 +60,24 @@ export const startedIn = (turnId: string) =>
       .pipe(
         Effect.orDie,
         Effect.map(([row]) => row?.location),
+      ),
+  )
+
+/**
+ * Whether the transaction this runs in holds a lock on the Account's Conversation's row: the row's
+ * `xmax` names the transaction that last locked or deleted it, this one's while it holds the lock.
+ */
+export const conversationLockedHere = (accountId: string) =>
+  Database.use((database) =>
+    database
+      .select({
+        lockedBy: sql<string>`${conversation}.xmax::text`,
+        here: sql<string>`pg_current_xact_id()::xid::text`,
+      })
+      .from(conversation)
+      .where(eq(conversation.accountId, accountId))
+      .pipe(
+        Effect.orDie,
+        Effect.map(([row]) => row !== undefined && row.lockedBy === row.here),
       ),
   )
