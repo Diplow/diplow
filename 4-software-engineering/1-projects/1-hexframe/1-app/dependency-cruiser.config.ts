@@ -13,8 +13,9 @@ const frontLayers = [['routes'], ['features'], ['client', 'ui']]
 
 // Inside the design system, top to bottom: the two sides, the Chat and the Canvas, each with its own
 // components and the atoms and layouts only it uses; then the layouts the sides share; then the atoms
-// they share. A shared piece never imports a side, nor an atom a layout.
-const uiTiers = [['chat', 'canvas'], ['layouts'], ['atoms']]
+// they share; then the seams, each a library behind one file, which any piece may draw with. A shared
+// piece never imports a side, nor an atom a layout, nor a seam anything of the design system.
+const uiTiers = [['chat', 'canvas'], ['layouts'], ['atoms'], ['seams']]
 
 /** One rule per tier below the top: it never imports a tier above it. */
 function upward(root: string, tiers: string[][]): NonNullable<IConfiguration['forbidden']> {

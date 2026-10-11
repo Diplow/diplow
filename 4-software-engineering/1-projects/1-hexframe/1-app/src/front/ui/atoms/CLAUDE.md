@@ -10,7 +10,7 @@ preview: >-
 ---
 # atoms
 
-The atoms the Chat and the Canvas share: each a control that knows nothing of hexframe. An atom one side alone uses lives in that side's `atoms/` ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]], "Rules") and comes here once the other side uses it too. An atom imports only other atoms and the files at `ui/`'s root (dependency-cruiser, `no-atoms-importing-up`).
+The atoms the Chat and the Canvas share: each a control that knows nothing of hexframe. An atom one side alone uses lives in that side's `atoms/` ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]], "Rules") and comes here once the other side uses it too. An atom imports only other atoms, the seams and the files at `ui/`'s root (dependency-cruiser, `no-atoms-importing-up`).
 
 | Path | Holds |
 |---|---|

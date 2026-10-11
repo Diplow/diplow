@@ -9,7 +9,7 @@ preview: >-
 ---
 # layouts
 
-The layouts the Chat and the Canvas share: each a shell with slots that decides where things go and how they fold on a phone. A layout one side alone uses lives in that side's `layouts/` ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]], "Rules") and comes here once the other side uses it too. A layout imports atoms and the files at `ui/`'s root, never a side (dependency-cruiser, `no-layouts-importing-up`).
+The layouts the Chat and the Canvas share: each a shell with slots that decides where things go and how they fold on a phone. A layout one side alone uses lives in that side's `layouts/` ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]], "Rules") and comes here once the other side uses it too. A layout imports atoms, the seams and the files at `ui/`'s root, never a side (dependency-cruiser, `no-layouts-importing-up`).
 
 | Path | Holds |
 |---|---|

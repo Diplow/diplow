@@ -299,10 +299,12 @@ async function violations(files: Readonly<Record<string, string>>) {
 }
 
 describe('the tiers and sides of the design system', () => {
-  // A small design system: a shared atom and layout, and a piece of each side. As written it breaks
+  // A small design system: a seam, a shared atom and layout, and a piece of each side. As written it breaks
   // no rule, each importing only below it; each case adds one import that must.
   const ui: Readonly<Record<string, string>> = {
-    'src/front/ui/atoms/button.ts': 'export const button = 1\n',
+    'src/front/ui/seams/markdown.ts': 'export const markdown = 1\n',
+    'src/front/ui/atoms/button.ts':
+      "import { markdown } from '../seams/markdown'\nexport const button = markdown\n",
     'src/front/ui/layouts/dialog.ts':
       "import { button } from '../atoms/button'\nexport const dialog = button\n",
     'src/front/ui/chat/composer.ts':
@@ -313,7 +315,7 @@ describe('the tiers and sides of the design system', () => {
   }
   const importing = (path: string) => `import * as above from '${path}'\nexport const a = above\n`
 
-  it('lets a side import its own pieces and the shared ones, and a layout an atom', async () => {
+  it('lets a side import its own pieces and the shared ones, a layout an atom, and an atom a seam', async () => {
     expect(await violations(ui)).toEqual([])
   })
 
@@ -352,6 +354,13 @@ describe('the tiers and sides of the design system', () => {
       '../layouts/dialog',
       'src/front/ui/layouts/dialog.ts',
       'no-atoms-importing-up',
+    ],
+    [
+      'a seam an atom',
+      'src/front/ui/seams/reach.ts',
+      '../atoms/button',
+      'src/front/ui/atoms/button.ts',
+      'no-seams-importing-up',
     ],
   ])('refuses %s', async (_, from, path, to, rule) => {
     expect(await violations({ ...ui, [from]: importing(path) })).toEqual([
