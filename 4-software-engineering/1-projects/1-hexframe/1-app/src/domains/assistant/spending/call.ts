@@ -1,8 +1,9 @@
 // A model call a Turn's agent makes through the app's proxy, as Assistant lets it through: its body
 // decoded by a strict schema that keeps no field the settings don't name, for the models they name,
 // with client tools alone, `max_tokens` capped; and its betas, each one the settings name. What a
-// message holds the model reads, never the app: its content blocks are checked by their type alone, so
-// no server tool's block slips in. Pure.
+// message holds the model reads, never the app: its content blocks are checked by their type, so no
+// server tool's block slips in, and an image or a document by its source too, held inline, so Anthropic
+// fetches nothing for the model and a call costs no more than its body's length says. Pure.
 import { Result, Schema } from 'effect'
 
 import { settings } from '../settings'
@@ -19,18 +20,41 @@ const typed = <const T extends ReadonlyArray<string>>(types: T) =>
     Schema.Record(Schema.String, Schema.Unknown),
   ])
 
+/** An object whose `type` is `type` and whose `source` is one of `sources`, its other fields kept. */
+const sourced = <const T extends string>(type: T, sources: ReadonlyArray<string>) =>
+  Schema.StructWithRest(Schema.Struct({ type: Schema.Literal(type), source: typed(sources) }), [
+    Schema.Record(Schema.String, Schema.Unknown),
+  ])
+
 /**
- * What a message's content may hold: what the user, the agent and its client tools say. No server
- * tool's use or result, no MCP connector's, no container's upload.
+ * An image or a document held in the call itself: an image in base64, a document in base64 or as
+ * text. Never one at a URL or among the stored files, which Anthropic would fetch for the model, at a
+ * cost the body's length does not bound.
  */
-const Block = typed([
-  'text',
-  'image',
-  'document',
-  'tool_use',
-  'tool_result',
-  'thinking',
-  'redacted_thinking',
+const Image = sourced('image', ['base64'])
+const Document = sourced('document', ['base64', 'text'])
+
+/** What a client tool's result may hold: text, and an image or a document held inline. */
+const ResultBlock = Schema.Union([typed(['text']), Image, Document])
+
+/** A client tool's result, said by its text or by blocks its result may hold. */
+const ToolResult = Schema.StructWithRest(
+  Schema.Struct({
+    type: Schema.Literal('tool_result'),
+    content: Schema.optionalKey(Schema.Union([Schema.String, Schema.Array(ResultBlock)])),
+  }),
+  [Schema.Record(Schema.String, Schema.Unknown)],
+)
+
+/**
+ * What a message's content may hold: what the user, the agent and its client tools say, an image or a
+ * document inline. No server tool's use or result, no MCP connector's, no container's upload.
+ */
+const Block = Schema.Union([
+  typed(['text', 'tool_use', 'thinking', 'redacted_thinking']),
+  Image,
+  Document,
+  ToolResult,
 ])
 
 /** A message: who says it, the user, the agent or the operator mid-conversation, and what. */
@@ -98,7 +122,7 @@ type CallBody = typeof Body.Type
 /**
  * Decodes a body's text, refusing any field its schema does not name, in the body and in every object
  * its schema gives a shape: a tool, `thinking`, `output_config`. A message and its content blocks keep
- * their other fields, the model's to read, once their role and type are named.
+ * their other fields, the model's to read, once their role, type and source are named.
  */
 const decodeBody = Schema.decodeUnknownResult(Schema.fromJsonString(Body), {
   onExcessProperty: 'error',
@@ -159,8 +183,8 @@ function capped(body: CallBody): CallBody {
 
 /**
  * A call, its body's text and the headers Anthropic reads, as the proxy lets it through, or why it is
- * refused: a body past the largest, a field, a model, a tool or a content block the schema does not
- * name, a version no date, or a beta the settings do not name.
+ * refused: a body past the largest, a field, a model, a tool, a content block or a source the schema
+ * does not name, a version no date, or a beta the settings do not name.
  */
 export function allowedCall(call: {
   readonly body: string

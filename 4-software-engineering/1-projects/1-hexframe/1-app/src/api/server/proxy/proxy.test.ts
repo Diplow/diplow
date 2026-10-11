@@ -199,7 +199,7 @@ describe('the model proxy', () => {
     await end(started.id)
   })
 
-  it('refuses another endpoint, an unnamed model, field or beta, and a body that is no JSON, calling nothing', async () => {
+  it('refuses another endpoint, an unnamed model, field or beta, a document at a URL, and a body that is no JSON, calling nothing', async () => {
     const { turn, end } = await account
     const { turn: started, secret } = await turn()
     const other = await ask({ secret, path: '/v1/models' })
@@ -210,6 +210,16 @@ describe('the model proxy', () => {
       { body: callBody({ model: 'claude-opus-5-5' }) },
       { body: callBody({ mcp_servers: [{ type: 'url', url: 'https://x.test', name: 'x' }] }) },
       { body: callBody({ tools: [{ type: 'web_fetch_20260209', name: 'web_fetch' }] }) },
+      {
+        body: callBody({
+          messages: [
+            {
+              role: 'user',
+              content: [{ type: 'document', source: { type: 'url', url: 'https://x.test/a.pdf' } }],
+            },
+          ],
+        }),
+      },
       { body: callBody(), headers: { 'anthropic-beta': 'mcp-client-2025-11-20' } },
       { body: '{"model":' },
     ]
