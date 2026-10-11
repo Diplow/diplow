@@ -10,7 +10,7 @@ import { CallFailed } from '../calls'
 import { makeQueryClient } from '../channels'
 import { useSystem } from './queries'
 
-// The System framed beside the canvas: home's chat reads the same System as the canvas, but a failed
+// The System read without throwing beside the canvas: home's chat reads the same System as the canvas, but a failed
 // read shows only in the canvas's boundary, and the chat stays up. Over a stand-in for the server
 // function, under the app's QueryClient, which throws a read's failure to the nearest boundary.
 vi.mock('#/api/mapping/mapping', async (original) => ({
@@ -38,7 +38,7 @@ class Caught extends Component<{ children: ReactNode; onCatch: (error: unknown) 
 }
 
 describe("the System's read failed", () => {
-  it('throws to the canvas’s boundary, and leaves the chat’s frame of it undefined, thrown nowhere', async () => {
+  it('throws to the canvas’s boundary, and leaves the chat’s read of it undefined, thrown nowhere', async () => {
     // React logs what a boundary caught.
     vi.spyOn(console, 'error').mockImplementation(() => undefined)
     vi.mocked(Mapping.system).mockResolvedValue({
@@ -51,7 +51,7 @@ describe("the System's read failed", () => {
     const wrapper = ({ children }: { children: ReactNode }) =>
       createElement(QueryClientProvider, { client }, createElement(Caught, { onCatch, children }))
     // The chat beside the canvas, then the canvas, each in a boundary of its own.
-    const chat = renderHook(() => useSystem({ frame: true }), { wrapper })
+    const chat = renderHook(() => useSystem({ throwing: false }), { wrapper })
     renderHook(() => useSystem(), { wrapper })
     await waitFor(() => {
       expect(onCatch).toHaveBeenCalledExactlyOnceWith(expect.any(CallFailed))

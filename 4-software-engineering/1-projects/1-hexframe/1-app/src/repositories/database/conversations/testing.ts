@@ -71,6 +71,8 @@ export const conversationLockedHere = (accountId: string) =>
   Database.use((database) =>
     database
       .select({
+        // The `sql` tag, no lint rule to disable: the query builder names no system column (`xmax`)
+        // and no transaction id. Test-only, it takes no input; the Account's id goes through `eq`.
         lockedBy: sql<string>`${conversation}.xmax::text`,
         here: sql<string>`pg_current_xact_id()::xid::text`,
       })

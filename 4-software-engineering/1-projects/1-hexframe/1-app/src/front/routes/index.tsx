@@ -49,9 +49,9 @@ function Home() {
   const { turn, mode } = useFollowLatest()
   // The chat's Messages go after the navigation they follow, from the view they were sent from.
   const { postMessage } = useNavigationSender()
-  // Outside both boundaries, the System frames what the chat sends: a failed read shows on the canvas,
-  // in its own boundary, and leaves the chat up, waiting to send.
-  const { data } = useSystem({ frame: true })
+  // Outside both boundaries, the System read without throwing for what the chat sends: a failed read
+  // shows on the canvas, in its own boundary, and leaves the chat up, waiting to send.
+  const { data } = useSystem({ throwing: false })
   const onSend =
     data === undefined
       ? undefined
