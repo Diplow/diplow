@@ -7,6 +7,7 @@ import { m } from '#/paraglide/messages'
 
 import { Button } from '../../atoms/controls/button'
 import { GallerySection, GalleryState } from '../../gallery/frame'
+import { cornerPlace } from '../../layouts/screen/Screen'
 import { ulysse } from '../fixtures'
 import { pathTo } from '../view/tiles'
 import { Card } from './Card'
@@ -133,11 +134,7 @@ function RailSpecimen({ from }: { from: string }) {
   const [here, setHere] = useState(from)
   return (
     <div className="relative h-72 w-80 bg-background">
-      <Rail
-        steps={pathTo(ulysse, here)}
-        onSelect={setHere}
-        className="absolute top-[1.375rem] right-[1.375rem]"
-      />
+      <Rail steps={pathTo(ulysse, here)} onSelect={setHere} className={cornerPlace} />
     </div>
   )
 }

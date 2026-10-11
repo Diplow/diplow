@@ -14,7 +14,9 @@ preview: >-
   HEX-96 proposed went and how a finger opens them, how HEX-95 drew the
   screen, folding on its own width, a seam on a phone, and the corner's
   contrast, how the chat's pieces take their text, every ink raised to
-  4.5:1, a decided Proposal's receipt unfolding its changes, and where the
+  4.5:1, a decided Proposal's receipt unfolding its changes, how HEX-97
+  built the screen on home: who holds the side in front, the breadcrumb drawn
+  as the rail, what the header keeps, and the gaps left to M3, and where the
   tile's proposal went, how its words fit and what marks a write on its way.
 ---
 # Decisions
@@ -142,7 +144,23 @@ HEX-98, Ulysse's answers to two of its pull request's questions. `faint` measure
 
 A decided Proposal's `Receipt` keeps its changes, folded under its line (`Change` and `Changes` moved into `Receipt.tsx`, which the Proposal's zone draws its list with too): what an accepted one changed, what a discarded one would have. Its `Fold` comes last on the line, after the time, so the keys and a screen reader reach the list as the eye does, below it; a Turn's receipt takes its changes alike.
 
-### DEC-23 The tile is proposed beside v0's, in `canvas/tile/`, its words fitted in `geometry/`, and a write on its way sweeps a light over it
+### DEC-23 The side in front is a state hook beside the screen, not the URL
+
+HEX-97. STACK's state table first asks whether a link should carry it: no, since the side in front matters on a phone alone, and a link sent from a phone opens on any width. So it is `useScreenState` (`ui/layouts/screen/state/`), tested beside it, which home and the screen's specimens on `/design-system` call, so the screen stays its caller's (DEC-16). The chat when the screen opens; `turn`, the seam; `cross`, the crossing DEC-16 left to this ticket: a Message's link centers its Tile and brings the canvas forward. On a wide screen the side in front changes nothing drawn, and waits there for the screen to fold.
+
+### DEC-24 The breadcrumb is the rail, and the theme lives at its head alone
+
+HEX-97, on cubic's P3 from HEX-95's review. `Breadcrumb` became the thin wrapper that works out the steps and draws `Rail`; the horizontal trail and its hex glyphs went, and so did the path the screen's specimens repeated. Before the System is read, or once reading it failed, it draws the rail without a step, so the theme stays reachable. Help draws it in its canvas's corner too. `ThemeToggle` left the header, and since the corner's rail is now its only user, it moved from `atoms/` to `canvas/atoms/` (ui's rule: an atom one side alone uses lives in that side). The pages without a breadcrumb, Keys, sign-in, sign-up and `/dev/session`, have no theme switch until HEX-103 retires them; `/design-system` switches it from its specimens.
+
+### DEC-25 The header keeps the language until the composer takes it
+
+HEX-97. The ticket leaves the header the links HEX-103 retires: the System, Keys, Help. The language switch stays beside them, since no other place offers it until HEX-101 builds the composer's `/language`. The header's height is written once, `--header: 4.25rem` on the document's body in `__root.tsx`, which the header takes and home's screen and Help leave themselves (cubic's first local review), so the screen fills the viewport below it with nothing to scroll; it goes with the header in HEX-103.
+
+### DEC-26 What home draws that HEX-95 didn't propose, until M3 redraws it
+
+HEX-97. The chat's slots hold today's pieces, taken apart rather than redrawn: the timeline, its day labels on a strip of the card's ground, and today's composer with its hint lines, tall on a phone, both in `features/conversation/` until HEX-101 builds the conversation's text and the composer HEX-98 and HEX-99 proposed. The composer's zone sits on the card's ground, as the proposed composer does, so the canvas never shows through it. The centered Tile's card stays at the canvas's foot, at most 30% of its height, until HEX-102 moves the forms into the tile widget. A move's banner, which `System` drew across the canvas's top, went to its foot, above the card, since the corner now sits over the canvas's top right and covered its Cancel (cubic's third local review). Two things the screen needed to hold real content: on a phone the canvas ends above the composer, whose height the screen measures, and above the seam, whichever side is in front (cubic's second local review), so the card is never under either; and the conversation stays at its foot as it grows, home's lines arriving after the first paint, and as its scroller shrinks, the agent's step appearing above the composer, while the reader hasn't left it. After cubic's first local review the reader leaves it by scrolling up, or by acting in a conversation too short to scroll, so an earlier day they asked for stays in view, and writing at the foot brings it back; the rule is `keptAtFoot`, pure and tested in `screen/state/latest.ts`, the screen's effect wiring its listeners alone. What the screen's slots share comes from the screen too: `--screen-clear`, how far the chat's foot keeps its content from the curve, worked out from the screen's own lengths, and `cornerPlace`, where the corner sits, which Help and the specimens take. Checked in a browser, light and dark, English and French, wide and in a 390px frame; the window would not narrow and claude-in-chrome emulates no touch, so the finger's 44px targets were not looked at here.
+
+### DEC-27 The tile is proposed beside v0's, in `canvas/tile/`, its words fitted in `geometry/`, and a write on its way sweeps a light over it
 
 HEX-104. The proposal lives beside what it replaces: `canvas/tile/` holds `Tile`, and `Slot` and `Ground` in `places.tsx`, while `canvas/Tile.tsx`, `Frame.tsx` and `look.tsx` keep drawing the canvas until HEX-106 swaps them; `canvas/` had room for one folder and no file. `Tile` takes its content as props, its kind, its `TileWords`, its foot, its place, a write and, for a specimen or whatever points at it, a state the hand would give (`held`), so HEX-106 maps a `CanvasHex` onto it and HEX-105 adds the menu, the move and the hover card. The fit of its words (`fitWords`, `linesThatFit`) is pure and sits in `geometry/words.ts`, beside `textBox`, the box a label sits in: `tile/` had no room for it and its test once the gallery split its live frame into `specimens.tsx`. It works in px on screen: `Tile` takes `scale`, the screen px per unit of the canvas, which the camera will know (HEX-106); the gallery's frame reads it from its own width (`useScale`).
 
@@ -154,4 +172,3 @@ What `components.html` left open, the proposal decides, for review on the pull r
 - **The note under the title wraps**, where the reference keeps it on one line and loses "from Software Engineering" past the hex.
 
 Tokens: `animate-bloom` and `animate-fold` join `duration-bloom` and `duration-fold` under their notes, and `animate-flare` gets its own; `animate-sweep`'s note now names the tile on its way.
-

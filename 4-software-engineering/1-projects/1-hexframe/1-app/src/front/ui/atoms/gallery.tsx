@@ -25,7 +25,6 @@ import { Button } from './controls/button'
 import { Input } from './controls/input'
 import { LocaleSwitch } from './controls/LocaleSwitch'
 import { Textarea } from './controls/textarea'
-import { ThemeToggle } from './controls/ThemeToggle'
 import { Field } from './forms/field'
 import { openedOnRefusal, useAppForm } from './forms/form'
 import { Menu, type MenuEntry } from './Menu'
@@ -434,20 +433,13 @@ function FeedbackGallery() {
   )
 }
 
-// Both sit in every page's header too; here they change the page itself, as there.
+// It sits in every page's header too; here it changes the page itself, as there.
 function SettingsGallery() {
   return (
-    <>
-      <GallerySection name="ThemeToggle">
-        <GalleryState label={m.gallery_state_click_to_switch()}>
-          <ThemeToggle />
-        </GalleryState>
-      </GallerySection>
-      <GallerySection name="LocaleSwitch">
-        <GalleryState label={m.gallery_state_click_to_switch()}>
-          <LocaleSwitch />
-        </GalleryState>
-      </GallerySection>
-    </>
+    <GallerySection name="LocaleSwitch">
+      <GalleryState label={m.gallery_state_click_to_switch()}>
+        <LocaleSwitch />
+      </GalleryState>
+    </GallerySection>
   )
 }

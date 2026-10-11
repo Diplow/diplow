@@ -147,7 +147,7 @@ export const pieces = [
     name: 'Breadcrumb',
     tier: 'canvas',
     sources: ['features/breadcrumb/Breadcrumb.tsx'],
-    madeOf: [],
+    madeOf: ['Rail'],
     note: m.gallery_note_breadcrumb,
   },
   {
@@ -184,6 +184,13 @@ export const pieces = [
     sources: ['ui/canvas/atoms/Tooltip.tsx'],
     madeOf: [],
     note: m.gallery_note_tooltip,
+  },
+  {
+    name: 'ThemeToggle',
+    tier: 'canvas',
+    sources: ['ui/canvas/atoms/ThemeToggle.tsx'],
+    madeOf: [],
+    note: m.gallery_note_theme_toggle,
   },
   {
     name: 'Screen',
@@ -310,13 +317,6 @@ export const pieces = [
     sources: ['ui/atoms/skeleton.tsx'],
     madeOf: [],
     note: m.gallery_note_skeleton,
-  },
-  {
-    name: 'ThemeToggle',
-    tier: 'atoms',
-    sources: ['ui/atoms/controls/ThemeToggle.tsx'],
-    madeOf: [],
-    note: m.gallery_note_theme_toggle,
   },
   {
     name: 'LocaleSwitch',
