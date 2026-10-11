@@ -3,9 +3,8 @@ title: Domain design agent
 parent: 4-software-engineering/1-projects/1-hexframe/.cubic
 owner: diplo
 preview: >-
-  cubic's domain design agent for hexframe: the domain-design skill's review
-  mode on hexframe's layers, domains and a domain's shape. It flags code in the
-  wrong place, says why, and where it goes.
+  cubic's domain design agent for hexframe: flags code in the wrong layer or
+  domain, says why and where it goes.
 ---
 # Domain design agent
 
@@ -25,7 +24,7 @@ Nothing below the front, the API included, imports it. The front reaches a domai
 ## The domains
 
 - **IAM**: Account, Session, Key, Entitlement. A Session or a Key proving its Account signs a request in; managing Keys and the Account takes a Session. Better Auth and its Stripe plugin are repositories below IAM. An Entitlement is derived from what the Account pays for, never stored beside Stripe. No domain says "billing".
-- **Mapping**: System (the aggregate, flat by id; its tree is a view), Tile, Child, Context, Frame, Reference, and their Operations (create, edit, move, swap, delete, a Reference's create and delete) with each one's events; Help, a System no Account owns, all read and none write. The Root tile is the user; Better Auth's name is copied from its Title, never the reverse. Looking (centering, expanding, showing Context) is view state owned by the URL, not Mapping.
+- **Mapping**: System (the aggregate, flat by id; its tree is a view), Tile, Child, Context, Frame, Reference, and their Operations (create, edit, move, swap, delete, a Reference's create and delete) with each one's events; Help, a System no Account owns, every Account reads and none writes. The Root tile is the user; the name Better Auth keeps is copied from its Title, never the reverse. Looking (centering, expanding, showing Context) is view state owned by the URL, not Mapping.
 - **Assistant**: Conversation, Message, Turn, Proposal, Mode. It knows nothing of Tiles: its agent writes through the MCP with a Turn's Key, and the API composes it with Mapping.
 
 A name crossing these lines (a `Tile` in Assistant, a `billing` folder, view state in a Mapping service) is a finding.
@@ -54,12 +53,12 @@ A name crossing these lines (a `Tile` in Assistant, a `billing` folder, view sta
 2. **The API calls a domain's service, never its repository.** API code (server function, middleware, webhook route, MCP tool) reaching a Drizzle table, a repository's service or a third-party client goes through `<domain>.ts` instead. The MCP SDK is no such client: like Start, it is the framework serving `/mcp`, imported by the MCP folder alone. A one-line service delegating to the repository is fine: the API depends on the domain's entry, not its infrastructure. Plumbing is exempt, owning no query a domain should: `transactional`, the runtime's layers, the request's `HttpExchange`, the observability seam.
 3. **Decision vs errand (domain vs repository).** Ask of each branch "why is it this way?" A business, product or security answer is a decision: domain. A technical one (fetch, serialize, retry) is an errand: repository. Weigh size: a one-line decision hoisted into its own module can cost more than it saves.
 4. **Pure first.** Once data is loaded, most decisions are values in, values out: pure functions with plain unit tests, an operation's in `decide`. A service orchestrates only where it truly interleaves with I/O. A decision buried in an effectful service, untested alone, is a finding.
-5. **A decision lives with the vocabulary it speaks.** A derived or cross-cutting concept (access, pricing, eligibility) gets no bridging domain by reflex. Split decision from enforcement: the decision goes to the domain whose words it uses, the consumer keeps enforcement. A rule split from its vocabulary makes every decision reach across.
+5. **A decision lives with the vocabulary it speaks.** A derived or cross-cutting concept (access, pricing, eligibility) gets no bridging domain by reflex. Split decision from enforcement: the decision goes to the domain whose words it uses, the consumer keeps only enforcement. A rule split from its vocabulary makes every decision reach across.
 6. **The one essential cross-domain read stays.** When a decision truly needs another domain's state, the API reads it and passes it in. A snapshot copied in to dodge the read drifts; a stale authorization copy is a security bug.
 7. **No duplicated, re-wrapped type.** A type commented as mirroring another domain's, plus a loop copying one into the other, is the boundary smell. The consumer declares the narrow shape it reads, in its words; the owner's value satisfies it structurally. A shape mirroring the owner field for field means the concept belongs to one domain.
 8. **A reason, not a bare boolean.** A decision a human may have to justify returns a discriminated union or a domain error, not `true`/`false`. Errors are tagged classes declared by their domain in its language (`EntitlementMissing`), each of one kind: `Unauthenticated`, `Forbidden`, `Invalid`, `NotFound`, `Conflict`, `Unexpected`. A domain error declared elsewhere, or a repository failure leaking past the domain instead of collapsing to `Unexpected`, is a finding.
 9. **Events belong to the domain that emits them.** A fact in the past tense, in its domain's language, with an Effect Schema, made by `decide`, published once the transaction commits. Who acted rides on the bus's envelope, filled by the API; once that envelope carries it, an actor, Session or Key in a domain's event is a finding. So is a subscription wired in a domain, or the bus used to ask for a result: a caller needing an answer calls directly.
-10. **Projection vs source of truth.** Derived state fresh only if several upstream sources are is a rebuildable projection, not a source of truth. When the diff caches one, ask what rebuilds it for each source; flag a source with no rebuild trigger.
+10. **Projection vs source of truth.** Derived state whose freshness depends on several upstream sources is a rebuildable projection, not a source of truth. When the diff caches one, ask what rebuilds it for each source; flag the cache when a change in any source has no rebuild trigger.
 
 ## Honesty rails
 
