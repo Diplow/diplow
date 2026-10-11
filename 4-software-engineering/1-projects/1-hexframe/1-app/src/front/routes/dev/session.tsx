@@ -7,9 +7,9 @@ import { write } from '#/front/client/calls'
 import { signedInOnly } from '#/front/client/iam/guard'
 import { signOut } from '#/api/iam/iam'
 import { m } from '#/paraglide/messages'
-import { Button } from '#/front/ui/inputs/controls/button'
-import { Card } from '#/front/ui/surfaces/Card'
-import { PageHeader } from '#/front/ui/surfaces/PageHeader'
+import { Button } from '#/front/ui/atoms/controls/button'
+import { Card } from '#/front/ui/canvas/layouts/Card'
+import { PageHeader } from '#/front/ui/layouts/PageHeader'
 
 export const Route = createFileRoute('/dev/session')({
   beforeLoad: signedInOnly,

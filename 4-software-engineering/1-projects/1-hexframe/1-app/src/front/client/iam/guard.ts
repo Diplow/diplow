@@ -6,7 +6,7 @@ import { redirect, type ParsedLocation } from '@tanstack/react-router'
 import { Schema } from 'effect'
 
 import { localizeHref } from '#/paraglide/runtime'
-import { orDefault, readSearch } from '#/front/ui/hex/view/view'
+import { orDefault, readSearch } from '#/front/ui/canvas/view/view'
 import { channelFor } from '#/api/report/errors/channel'
 import { forget, identify } from '#/api/report/observability/client'
 import { session } from '#/api/iam/iam'

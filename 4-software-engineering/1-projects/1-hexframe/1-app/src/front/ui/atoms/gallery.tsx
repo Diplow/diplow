@@ -1,20 +1,33 @@
-import { Plus } from 'lucide-react'
+// The atoms every side shares, in /dev/ui: the controls, the forms, the menu, the toasts, the skeleton.
+import { Copy, MoreHorizontal, Pencil, Plus, Share2, Trash2 } from 'lucide-react'
 import type { ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { toast } from '../feedback/Toaster'
 import { GallerySection, GalleryState } from '../gallery'
 import { Button } from './controls/button'
 import { Input } from './controls/input'
 import { Textarea } from './controls/textarea'
+import { DropdownMenu, type MenuEntry } from './DropdownMenu'
 import { Field } from './forms/field'
 import { openedOnRefusal, useAppForm } from './forms/form'
+import { Skeleton } from './skeleton'
+import { toast } from './Toaster'
 
 const variants = ['default', 'secondary', 'outline', 'ghost', 'link', 'destructive'] as const
 const sizes = ['xs', 'sm', 'default', 'lg'] as const
 
-export function InputsGallery() {
+export function AtomsGallery() {
+  return (
+    <>
+      <ControlsGallery />
+      <MenuGallery />
+      <FeedbackGallery />
+    </>
+  )
+}
+
+function ControlsGallery() {
   return (
     <>
       <GallerySection name="Button">
@@ -166,5 +179,99 @@ function TileForm({ refused }: { refused?: Record<string, string> }) {
         </form.AppForm>
       </div>
     </form>
+  )
+}
+
+const done = (what: string) => () => {
+  toast(what)
+}
+
+// Messages are read at render, in the request's locale, never at module load.
+const menuEntries = (): MenuEntry[] => [
+  { label: m.dev_ui_sample_edit(), icon: <Pencil />, onSelect: done(m.dev_ui_sample_edit()) },
+  {
+    label: m.dev_ui_sample_copy_link(),
+    icon: <Copy />,
+    onSelect: done(m.dev_ui_sample_copy_link()),
+  },
+  {
+    label: m.dev_ui_sample_share(),
+    icon: <Share2 />,
+    onSelect: done(m.dev_ui_sample_share()),
+    disabled: true,
+  },
+  'separator',
+  {
+    label: m.dev_ui_sample_delete(),
+    icon: <Trash2 />,
+    onSelect: done(m.dev_ui_sample_delete()),
+    destructive: true,
+  },
+]
+
+function MenuGallery() {
+  return (
+    <GallerySection name="DropdownMenu">
+      <GalleryState label={m.dev_ui_state_menu()}>
+        <DropdownMenu
+          label={m.dev_ui_sample_tile_title()}
+          entries={menuEntries()}
+          trigger={
+            <Button variant="outline" size="icon" aria-label={m.dev_ui_sample_actions()}>
+              <MoreHorizontal />
+            </Button>
+          }
+        />
+      </GalleryState>
+    </GallerySection>
+  )
+}
+
+const showLoading = () => {
+  const id = toast.loading(m.dev_ui_toast_loading_message())
+  setTimeout(() => toast.success(m.dev_ui_toast_success_message(), { id }), 1500)
+}
+
+function FeedbackGallery() {
+  const toasts = [
+    { label: m.dev_ui_toast_plain(), show: () => toast(m.dev_ui_toast_plain_message()) },
+    {
+      label: m.dev_ui_toast_success(),
+      show: () => toast.success(m.dev_ui_toast_success_message()),
+    },
+    { label: m.dev_ui_toast_info(), show: () => toast.info(m.dev_ui_toast_info_message()) },
+    {
+      label: m.dev_ui_toast_warning(),
+      show: () => toast.warning(m.dev_ui_toast_warning_message()),
+    },
+    { label: m.dev_ui_toast_error(), show: () => toast.error(m.dev_ui_toast_error_message()) },
+    // A loading toast stays until it is settled; the demo settles it as a save would.
+    { label: m.dev_ui_toast_loading(), show: showLoading },
+  ]
+  return (
+    <>
+      <GallerySection name="Toaster">
+        <GalleryState label={m.dev_ui_state_click_to_show()}>
+          <div className="flex flex-wrap gap-2">
+            {toasts.map(({ label, show }) => (
+              <Button key={label} variant="outline" onClick={show}>
+                {label}
+              </Button>
+            ))}
+          </div>
+        </GalleryState>
+      </GallerySection>
+      <GallerySection name="Skeleton">
+        <GalleryState label={m.dev_ui_state_loading()}>
+          <div className="flex w-72 items-center gap-4">
+            <Skeleton className="size-12 rounded-full" />
+            <div className="grid flex-1 gap-2">
+              <Skeleton className="h-4 w-3/4" />
+              <Skeleton className="h-4 w-1/2" />
+            </div>
+          </div>
+        </GalleryState>
+      </GallerySection>
+    </>
   )
 }

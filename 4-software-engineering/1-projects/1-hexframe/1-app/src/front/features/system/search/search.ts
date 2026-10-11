@@ -1,11 +1,11 @@
-// What the System's page carries in its URL: the canvas's view (front/ui/hex/view), and the change the user
+// What the System's page carries in its URL: the canvas's view (front/ui/canvas/view), and the change the user
 // has under way, if any: a new Tile's form, an import, a Tile's form, or a Tile to move. A link shows
 // the page as its sender saw it, the open form included. Every function here is pure.
 import { Schema } from 'effect'
 
 import { Slot } from '#/domains/mapping/entities'
 import type { ImportPlace } from '#/front/client/mapping/queries'
-import { findTile, type TileNode } from '#/front/ui/hex/view/tiles'
+import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 import {
   CanvasView,
   orDefault,
@@ -13,7 +13,7 @@ import {
   TileId,
   viewIn,
   withViewIn,
-} from '#/front/ui/hex/view/view'
+} from '#/front/ui/canvas/view/view'
 
 /** What `import` says for the Root of an empty System, where a Tile's id goes otherwise. */
 const rootPlace = 'root'

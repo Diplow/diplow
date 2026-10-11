@@ -3,7 +3,7 @@ import type { ReactElement, ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { Button } from '../inputs/controls/button'
+import { Button } from '../atoms/controls/button'
 
 interface ConfirmDialogProps {
   /** The control that asks for confirmation, a Button most often. */

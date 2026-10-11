@@ -17,8 +17,8 @@ import {
 } from '#/domains/mapping/entities'
 import { decide, type Placement } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
-import type { FrameKind, TileNode } from '#/front/ui/hex/view/tiles'
-import { type CanvasView, showView } from '#/front/ui/hex/view/view'
+import type { FrameKind, TileNode } from '#/front/ui/canvas/view/tiles'
+import { type CanvasView, showView } from '#/front/ui/canvas/view/view'
 
 type ContextEntry = NonNullable<SystemTile['context'][ContextDirection]>
 

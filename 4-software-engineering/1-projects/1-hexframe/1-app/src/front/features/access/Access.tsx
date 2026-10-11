@@ -6,9 +6,9 @@ import { submitWrite } from '#/front/client/channels'
 import { continueTo } from '#/front/client/iam/guard'
 import { signIn, signUp } from '#/api/iam/iam'
 import { m } from '#/paraglide/messages'
-import { useAppForm } from '#/front/ui/inputs/forms/form'
-import { Card } from '#/front/ui/surfaces/Card'
-import { PageHeader } from '#/front/ui/surfaces/PageHeader'
+import { useAppForm } from '#/front/ui/atoms/forms/form'
+import { Card } from '#/front/ui/canvas/layouts/Card'
+import { PageHeader } from '#/front/ui/layouts/PageHeader'
 
 type Mode = 'sign-in' | 'sign-up'
 

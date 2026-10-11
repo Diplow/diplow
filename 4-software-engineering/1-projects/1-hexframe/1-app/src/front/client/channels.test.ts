@@ -1,14 +1,14 @@
 import type { MutationOptions, Query } from '@tanstack/react-query'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { toast } from '#/front/ui/feedback/Toaster'
+import { toast } from '#/front/ui/atoms/Toaster'
 import { DevConflict, DevForbidden, DevInvalid, DevUnauthenticated } from '#/api/dev/failures'
 import { Unexpected, encodeFailure, type Failure, type Outcome } from '#/api/report/errors/failure'
 
 import { CallFailed, read, write } from './calls'
 import { caught, makeQueryClient, submitMutation, submitWrite } from './channels'
 
-vi.mock('#/front/ui/feedback/Toaster', () => ({ toast: { error: vi.fn() } }))
+vi.mock('#/front/ui/atoms/Toaster', () => ({ toast: { error: vi.fn() } }))
 vi.mock('#/api/report/observability/client', async (original) => ({
   ...(await original<object>()),
   forget: vi.fn(),

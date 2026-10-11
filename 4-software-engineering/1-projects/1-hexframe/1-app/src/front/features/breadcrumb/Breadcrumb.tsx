@@ -5,8 +5,8 @@ import { cn } from 'cn'
 import { ChevronRight } from 'lucide-react'
 
 import { m } from '#/paraglide/messages'
-import { pathTo, type TileNode } from '#/front/ui/hex/view/tiles'
-import { centerOn, showView, type CanvasView, type ViewAction } from '#/front/ui/hex/view/view'
+import { pathTo, type TileNode } from '#/front/ui/canvas/view/tiles'
+import { centerOn, showView, type CanvasView, type ViewAction } from '#/front/ui/canvas/view/view'
 
 interface BreadcrumbProps {
   system: TileNode

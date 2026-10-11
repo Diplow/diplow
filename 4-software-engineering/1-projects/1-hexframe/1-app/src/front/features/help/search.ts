@@ -1,4 +1,4 @@
-// What the Help page carries in its URL: the canvas's view (front/ui/hex/view), as on home, and the
+// What the Help page carries in its URL: the canvas's view (front/ui/canvas/view), as on home, and the
 // Tile whose Body is open, if any. A link shows Help as its sender saw it, the open Body included.
 // Every function here is pure.
 import { Schema } from 'effect'
@@ -10,7 +10,7 @@ import {
   TileId,
   viewIn,
   withViewIn,
-} from '#/front/ui/hex/view/view'
+} from '#/front/ui/canvas/view/view'
 
 /** The page's search params, and the route's `validateSearch`: the view, then the open Body. */
 const HelpSearch = Schema.Struct({

@@ -8,7 +8,7 @@ import type { MouseEvent } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { Tooltip } from '../overlays/Tooltip'
+import { Tooltip } from './atoms/Tooltip'
 import { textBox, type Hex } from './geometry/geometry'
 import { buttonKeys } from './keys'
 import { HexShape, polygonPoints, showsPreview, strokeWidth, TileLabel } from './look'

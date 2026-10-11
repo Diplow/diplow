@@ -15,7 +15,7 @@ import {
   useSwapTiles,
   useSystem,
 } from '#/front/client/mapping/queries'
-import { toast } from '#/front/ui/feedback/Toaster'
+import { toast } from '#/front/ui/atoms/Toaster'
 import { m } from '#/paraglide/messages'
 
 import {
@@ -39,7 +39,7 @@ vi.mock('#/api/mapping/mapping', () => ({
   swapTiles: vi.fn(),
   deleteTile: vi.fn(),
 }))
-vi.mock('#/front/ui/feedback/Toaster', () => ({ toast: { error: vi.fn() } }))
+vi.mock('#/front/ui/atoms/Toaster', () => ({ toast: { error: vi.fn() } }))
 
 afterEach(() => {
   cleanup()

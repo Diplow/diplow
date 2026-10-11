@@ -4,7 +4,7 @@ import { type ReactNode, useState } from 'react'
 
 import type { MessagePart } from '#/domains/assistant/entities'
 import { m } from '#/paraglide/messages'
-import { Button } from '#/front/ui/inputs/controls/button'
+import { Button } from '#/front/ui/atoms/controls/button'
 
 import { excerptOf } from '../timeline/timeline'
 

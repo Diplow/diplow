@@ -2,10 +2,10 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 
 import { m } from '#/paraglide/messages'
-import { Canvas } from '#/front/ui/hex/Canvas'
-import { fixtureViews, ulysse } from '#/front/ui/hex/fixtures'
-import { readCanvasView } from '#/front/ui/hex/view/view'
-import { PageHeader } from '#/front/ui/surfaces/PageHeader'
+import { Canvas } from '#/front/ui/canvas/Canvas'
+import { fixtureViews, ulysse } from '#/front/ui/canvas/fixtures'
+import { readCanvasView } from '#/front/ui/canvas/view/view'
+import { PageHeader } from '#/front/ui/layouts/PageHeader'
 
 export const Route = createFileRoute('/dev/hex')({
   validateSearch: readCanvasView,

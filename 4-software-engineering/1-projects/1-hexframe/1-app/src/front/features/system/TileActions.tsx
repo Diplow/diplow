@@ -22,14 +22,14 @@ import {
 } from '#/front/client/mapping/queries'
 import type { FormErrors } from '#/front/client/channels'
 import { m } from '#/paraglide/messages'
-import { findTile, type TileNode } from '#/front/ui/hex/view/tiles'
-import { centerOn, showView } from '#/front/ui/hex/view/view'
-import { Button } from '#/front/ui/inputs/controls/button'
-import { openedOnRefusal, useAppForm } from '#/front/ui/inputs/forms/form'
-import { ConfirmDialog } from '#/front/ui/overlays/ConfirmDialog'
-import { Drawer } from '#/front/ui/overlays/Drawer'
-import { CodeBlock } from '#/front/ui/data/Markdown'
-import { Card } from '#/front/ui/surfaces/Card'
+import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
+import { centerOn, showView } from '#/front/ui/canvas/view/view'
+import { Button } from '#/front/ui/atoms/controls/button'
+import { openedOnRefusal, useAppForm } from '#/front/ui/atoms/forms/form'
+import { ConfirmDialog } from '#/front/ui/layouts/ConfirmDialog'
+import { Drawer } from '#/front/ui/canvas/layouts/Drawer'
+import { CodeBlock } from '#/front/ui/seams/Markdown'
+import { Card } from '#/front/ui/canvas/layouts/Card'
 
 import {
   changeOf,

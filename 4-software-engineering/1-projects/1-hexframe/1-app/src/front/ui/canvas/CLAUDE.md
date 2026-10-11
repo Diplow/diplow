@@ -1,16 +1,18 @@
 ---
-title: hex
-parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/hex
+title: canvas
+parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas
 owner: diplo
 preview: >-
-  The hex canvas: one SVG, every hex a polygon, text as HTML in a
-  foreignObject, laid out by the shape's layoutView through one adapter. Pure
-  geometry and view state below, a state hook, then Tile, Frame and Canvas on
-  top. The view (center, its rings, the Branches it opens) lives in the URL.
+  The Canvas, the side of the screen that shows the System: one SVG, every hex
+  a polygon, text as HTML in a foreignObject, laid out by the shape's
+  layoutView through one adapter. Pure geometry and view state below, a state
+  hook, then Tile, Frame and Canvas on top, and the atoms and layouts only the
+  canvas uses. The view (center, its rings, the Branches it opens) lives in
+  the URL.
 ---
-# hex
+# canvas
 
-The canvas a System is seen through. HEX-9 picked SVG: one `<svg>` whose viewBox is the canvas's own coordinates, every hex a `<polygon>` with a real stroke, and the text as HTML inside a `<foreignObject>`, so it wraps like the rest of the page. The page sizes the `<svg>` with CSS and everything inside scales with it.
+The Canvas, the side of hexframe's screen a System is seen through ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]], "hexframe's screen, in words"). It never imports the Chat (dependency-cruiser, `no-side-importing-the-other`): a piece both use moves to `ui/atoms/` or `ui/layouts/`. HEX-9 picked SVG: one `<svg>` whose viewBox is the canvas's own coordinates, every hex a `<polygon>` with a real stroke, and the text as HTML inside a `<foreignObject>`, so it wraps like the rest of the page. The page sizes the `<svg>` with CSS and everything inside scales with it.
 
 The canvas is a medium of the [[4-software-engineering/1-projects/1-hexframe/2-claude-mod/hooks/shape/CLAUDE|shape]], as claude-mod and the Obsidian plugin are: the shape's `layoutView` (`2-claude-mod/hooks/shape/layout.ts`) places its hexes, so a System lays out in the app as a vault lays out in Claude Code and in Obsidian. `geometry/shape.ts` is the one module of the app that imports it, by relative path (dependency-cruiser): it turns the System and the view into the shape's Frames, a Tile's id standing in for a folder's path, and answers in the canvas's own words. The shape's `Direction`, `Tile`, `Frame` and `Placement` go no further than it.
 
@@ -23,6 +25,8 @@ The canvas is a medium of the [[4-software-engineering/1-projects/1-hexframe/2-c
 | `Tile.tsx`, `Frame.tsx` | `Tile`, a button with its title always and its preview when there is room, a hover card with both in full and, for a clashing Leaf, the Branch it is numbered as, and, when the caller gives it a `SwapTarget`, a second small button at the foot of its hex, apart from the Tile's, that swaps; `Frame`, the ground of a hex opened into a ring, `EmptySlot`, inert, or a button with a plus when the caller gives it an action, and `ListHex`, a ring too full to place, as a list |
 | `keys.ts` | `buttonKeys`, the keys of a shape that stands for a button, shared by `Tile` and `EmptySlot`: Enter acts going down, once per press; Space acts coming up, and going down only keeps the page from scrolling |
 | `look.tsx` | Colours from theme tokens (`--context` for the Context's teal, `--warning` for a clash), the stroke, and the label's type scale |
+| `atoms/` | The atoms the canvas alone uses: `Tooltip.tsx`, `Tooltip`, a short label on hover and on focus, which a Tile's hover card is drawn with; `useLeaveGuard.ts`, `useLeaveGuard`, which asks before the page is closed or reloaded while a write to the System is on its way, the browser wording the prompt, tested. `gallery.tsx`, `CanvasAtomsGallery`, on `/dev/ui` |
+| `layouts/` | The layouts the canvas alone uses, around it on the System's and Help's pages: `Card.tsx`, `Card`, the centered Tile's card below the canvas, a title, a description, an action at its header's end and a footer; `Drawer.tsx`, `Drawer`, where a Tile's forms, an import, or the Body of a Tile of Help open, controlled, since whether it is open is something a link carries. `gallery.tsx`, `CanvasLayoutsGallery`, on `/dev/ui` |
 | `fixtures.ts` | The System `/dev/hex` and `/dev/system` draw, the top of this vault with Leaves beside its Branches, and the views `/dev/hex` links to |
 
 ## Rules

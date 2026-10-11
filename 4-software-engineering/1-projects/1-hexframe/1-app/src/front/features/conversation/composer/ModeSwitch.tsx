@@ -3,7 +3,7 @@
 // The switch says which is on, and a line under it what that means; the next Turn takes it.
 import type { Mode } from '#/domains/assistant/entities'
 import { m } from '#/paraglide/messages'
-import { Button } from '#/front/ui/inputs/controls/button'
+import { Button } from '#/front/ui/atoms/controls/button'
 
 /** The Mode the Conversation is in, and how to switch it. */
 export interface ModeChoice {

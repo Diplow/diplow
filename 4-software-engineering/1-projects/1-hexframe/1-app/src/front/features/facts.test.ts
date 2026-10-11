@@ -2,8 +2,8 @@
 import { cleanup, renderHook } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { useCanvasState, type TileHex } from '#/front/ui/hex/state/useCanvasState'
-import type { TileNode } from '#/front/ui/hex/view/tiles'
+import { useCanvasState, type TileHex } from '#/front/ui/canvas/state/useCanvasState'
+import type { TileNode } from '#/front/ui/canvas/view/tiles'
 
 import { publish, receive, useFact } from './bus'
 import { Navigated } from './facts'

@@ -4,7 +4,7 @@ import { QueryErrorResetBoundary } from '@tanstack/react-query'
 import { CatchBoundary, useLocation } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 
-import { ErrorState, Forbidden } from '#/front/ui/feedback/states'
+import { ErrorState, Forbidden } from '#/front/ui/layouts/states'
 import { channelFor } from '#/api/report/errors/channel'
 import { messageFor } from '#/api/report/errors/messages'
 

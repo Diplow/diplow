@@ -11,7 +11,7 @@ import { readHelpSearch, viewOf, withView, type HelpSearch } from '#/front/featu
 import { canvasTree, tileIn } from '#/front/features/system/tree'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
-import { Skeleton } from '#/front/ui/feedback/skeleton'
+import { Skeleton } from '#/front/ui/atoms/skeleton'
 
 export const Route = createFileRoute('/help')({
   validateSearch: readHelpSearch,

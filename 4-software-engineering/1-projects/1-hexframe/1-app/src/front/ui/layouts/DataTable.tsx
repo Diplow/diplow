@@ -12,7 +12,7 @@ import { useMemo, type ReactNode } from 'react'
 
 import { getLocale } from '#/paraglide/runtime'
 
-import { Skeleton } from '../feedback/skeleton'
+import { Skeleton } from '../atoms/skeleton'
 
 /** A column, described without TanStack Table: a feature never imports it. */
 export interface DataColumn<TRow> {

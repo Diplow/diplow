@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import * as Mapping from '#/api/mapping/mapping'
 import { reportError } from '#/api/report/observability/client'
 import type { PlacedTile, System } from '#/domains/mapping/entities'
-import { toast } from '#/front/ui/feedback/Toaster'
+import { toast } from '#/front/ui/atoms/Toaster'
 import { m } from '#/paraglide/messages'
 
 import { makeQueryClient } from '../../channels'
@@ -36,7 +36,7 @@ vi.mock('#/api/mapping/mapping', () => ({
   moveTile: vi.fn(),
   swapTiles: vi.fn(),
 }))
-vi.mock('#/front/ui/feedback/Toaster', () => ({ toast: { error: vi.fn() } }))
+vi.mock('#/front/ui/atoms/Toaster', () => ({ toast: { error: vi.fn() } }))
 vi.mock('#/api/report/observability/client', async (original) => ({
   ...(await original<object>()),
   reportError: vi.fn(),

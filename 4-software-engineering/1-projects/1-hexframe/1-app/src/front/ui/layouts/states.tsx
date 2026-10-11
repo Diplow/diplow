@@ -5,7 +5,7 @@ import type { ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { Button } from '../inputs/controls/button'
+import { Button } from '../atoms/controls/button'
 
 interface NoticeProps {
   icon?: ReactNode

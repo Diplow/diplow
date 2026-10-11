@@ -9,7 +9,7 @@ import { m } from '#/paraglide/messages'
 
 import { canvasSize, type EmptySlotTarget } from './geometry/shape'
 import { EmptySlot, Frame, ListHex } from './Frame'
-import { Button } from '../inputs/controls/button'
+import { Button } from '../atoms/controls/button'
 import { useCanvasState } from './state/useCanvasState'
 import { Tile, type SwapTarget } from './Tile'
 import type { FrameKind, InnerKind, OuterKind, TileNode } from './view/tiles'
