@@ -1,4 +1,4 @@
-// A fixture Conversation for /dev/system, about the fixture System /dev/hex draws: four days of
+// A fixture Conversation for /design-system, about the fixture System its canvas draws: four days of
 // Assistant's Entries, every kind at least once, a change by each kind of actor, a Message linking
 // Tiles, one of them deleted since, a Proposal accepted and one open, a Turn's change applied, which
 // it offers to undo, and the Titles of the Tiles its navigations went to and its Messages link; and

@@ -1,6 +1,6 @@
 // The Conversation as the timeline shows it: Assistant's Entries (`domains/assistant/entities`), a
 // day of the reader's calendar at a time, with the Titles of the Tiles its navigations went to. Home
-// reads it a day at a time (`useConversation`); /dev/system splits its fixtures by day. Pure; the
+// reads it a day at a time (`useConversation`); /design-system splits its fixtures by day. Pure; the
 // components render it.
 import { dayAt, type Entry, type MessagePart } from '#/domains/assistant/entities'
 

@@ -35,7 +35,7 @@ export const tierAnchor = (tier: Tier) => `tier-${tier}`
 export function GalleryTier({ tier, children }: { tier: Tier; children?: ReactNode }) {
   if (!filled(tier)) return null
   return (
-    <section id={tierAnchor(tier)} className="grid scroll-mt-6 gap-8">
+    <section id={tierAnchor(tier)} className="grid scroll-mt-6 grid-cols-[minmax(0,1fr)] gap-8">
       <header className="grid gap-2 border-t border-input pt-8">
         <h2 className="text-3xl font-light">{tierTitles[tier]()}</h2>
         <p className="max-w-prose text-muted-foreground">{tierNotes[tier]()}</p>
@@ -49,7 +49,10 @@ export function GalleryTier({ tier, children }: { tier: Tier; children?: ReactNo
 export function GallerySection({ name, children }: { name: PieceName; children: ReactNode }) {
   const piece = pieceNamed(name)
   return (
-    <section id={anchorOf(name)} className="grid scroll-mt-6 gap-4 border-t pt-6">
+    <section
+      id={anchorOf(name)}
+      className="grid scroll-mt-6 grid-cols-[minmax(0,1fr)] gap-4 border-t pt-6"
+    >
       <div className="grid gap-2">
         <h3 className="font-mono text-lg font-semibold">{name}</h3>
         <p className="max-w-prose text-sm text-muted-foreground">{piece.note()}</p>
@@ -81,7 +84,7 @@ function PieceLinks({ label, names }: { label: string; names: readonly string[] 
 
 export function GalleryState({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <figure className="grid max-w-full min-w-0 gap-2 [&>*]:max-w-full">
+    <figure className="grid max-w-full min-w-0 grid-cols-[minmax(0,1fr)] gap-2 [&>*]:max-w-full">
       <figcaption className="text-xs text-muted-foreground">{label}</figcaption>
       {children}
     </figure>

@@ -77,7 +77,7 @@ const values = valueTokens(css)
 
 export function Tokens() {
   return (
-    <section id="tokens" className="grid scroll-mt-6 gap-8">
+    <section id="tokens" className="grid scroll-mt-6 grid-cols-[minmax(0,1fr)] gap-8">
       <header className="grid gap-2 border-t border-input pt-8">
         <h2 className="text-3xl font-light">{m.tokens_title()}</h2>
         <p className="max-w-prose text-muted-foreground">{m.tokens_intro()}</p>
@@ -145,7 +145,7 @@ function Row({ note, children }: { note: string; children: ReactNode }) {
 
 function Swatch({ token: { name, foreground } }: { token: ColorToken }) {
   return (
-    <span className="grid w-28 gap-1">
+    <span className="grid w-44 gap-1">
       <span
         className="flex h-12 items-center justify-center border text-lg font-semibold"
         // `@theme inline` defines no `--color-*` variable, so a swatch reads the variable behind the token.

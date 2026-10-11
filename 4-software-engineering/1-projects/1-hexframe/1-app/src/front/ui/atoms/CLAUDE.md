@@ -20,4 +20,4 @@ The atoms no single side owns, each a control that knows nothing of hexframe: th
 | `DropdownMenu.tsx` | `DropdownMenu`, a menu of entries, each a label, an icon and what it does, a destructive one in the destructive colour, separated where an entry says `'separator'` |
 | `Toaster.tsx` | `Toaster` and `toast`, Sonner with its colours pointed at the theme's tokens |
 | `skeleton.tsx` | `Skeleton`, a placeholder in the shape of content still loading |
-| `gallery.tsx` | `AtomsGallery`, every atom here in its states, on `/dev/ui` |
+| `gallery.tsx` | `AtomsGallery`, every atom here in its states, on `/design-system` |

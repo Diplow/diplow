@@ -1,8 +1,8 @@
-// A fixture System for /dev/hex and /dev/system: the top of this very vault, the user, their six
-// domains and the files beside them, and a little below, deep enough to open a Branch two
-// generations down, mix Branches and Leaves in a ring of Children, clash a Leaf with a Branch, and
-// split a Tile of more than six into its Branches and its Leaves. Its content is the user's own, in
-// their words, so it is not translated.
+// A fixture System for /design-system's canvas and Conversation: the top of this very vault, the
+// user, their six domains and the files beside them, and a little below, deep enough to open a
+// Branch two generations down, mix Branches and Leaves in a ring of Children, clash a Leaf with a
+// Branch, and split a Tile of more than six into its Branches and its Leaves. Its content is the
+// user's own, in their words, so it is not translated.
 import type { TileNode } from './view/tiles'
 import type { CanvasView } from './view/view'
 

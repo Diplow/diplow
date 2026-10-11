@@ -7,8 +7,9 @@ preview: >-
   hexframe's, where a ticket left room: what each use of the retired brand
   colour became, what "dark by default" leaves of the system's preference,
   how the radius scale squares every corner, the lines of STACK.md and
-  claude-mod left for the phase close, and where each piece of ui/ went when
-  it regrouped by tier and side.
+  claude-mod left for the phase close, where each piece of ui/ went when it
+  regrouped by tier and side, and how /design-system shows the error channels,
+  reads "made of" from the code and keeps its frame outside the tiers.
 ---
 # Decisions
 
@@ -50,3 +51,15 @@ dependency-cruiser holds the result, the seams below the shared atoms (`no-side-
 ### DEC-6 Two frozen pages still name `ui/hex/` and "six folders"
 
 HEX-93. `2-claude-mod/hooks/shape/CLAUDE.md` links the canvas as `1-app/src/front/ui/hex/CLAUDE` and names `1-app/src/front/ui/hex/`; the folder is now `ui/canvas/`, so its wikilink is broken. STACK.md's "Design system" section says `ui/` holds its components "in six folders"; it now holds five, by tier and side. Both files are frozen for this run, so both lines stay. The phase close lists them for Ulysse: `ui/hex/` becomes `ui/canvas/` in claude-mod's page, and STACK.md's sentence can drop the count or say "by tier and side".
+
+### DEC-7 `/dev/errors`' channels became states, and the calls that provoked them went
+
+HEX-94. `/dev/errors` provoked each channel through server functions that answered `NotFound` outside dev and previews, so on a page served in production they could show nothing. `/design-system` shows the channels instead as `ReadBoundary` (`ReadFailure`), a toast and a form show them, on failures made up for the page, with no call made (`client/gallery.tsx`). With the page gone, `api/dev/provoke.ts` and `programs.ts` had no caller, so they went too. `api/dev/failures.ts` stays: its failures, one per kind, are what the tests of the error model and of the client's channels fail with, and the refused read the page shows is one of them. Two leftovers keep no production caller: the message table's entries scoped to `submitDevTitle`, which its tests use to prove a scope narrows a message, and `submitMutation`, a form that stays open until its answer, which no form uses yet. Both are left for whoever builds that form or retires them.
+
+### DEC-8 "Made of" is read from a piece's files, and a feature or the client can be a piece
+
+HEX-94. The ticket asks for "made of" and "used in" between pieces. Written by hand, they would drift from the code, so `gallery/pieces.ts` names each piece's files and its "made of", and `pieces.test.ts` reads the same list from those files' imports, through the files that are no piece of their own; "used in" is read back from it. The reading is a file's, not a component's: `EmptyState`, `ErrorState` and `Forbidden` share `layouts/states.tsx`, so all three read as made of `Button`, though only `ErrorState` draws one. The page shows two features' pieces where `/dev/system` showed them, the `Conversation` in the Chat and the `Breadcrumb` in the Canvas, and the client's channels among the layouts the sides share, since what they show is `ErrorState`, `Forbidden` and the toast. `ThemeToggle` and `LocaleSwitch`, which only the header showed, got their sections too, and the seams come after the atoms, where the ticket's order did not place them.
+
+### DEC-9 The page's frame is `ui/gallery/`, outside the tiers
+
+HEX-94. The catalogue, its test and the tokens' notes would have put seven files in `ui/`, past the rule of 6. They went into a folder of their own, `ui/gallery/`, with the frame and the stylesheet's reading: every folder's `gallery.tsx` imports it, and it imports none of them, so dependency-cruiser's tiers do not name it. `tokens.ts` became `gallery/stylesheet.ts`, since `Tokens.tsx` beside it would clash with it on a filesystem that ignores case, and it now reads every token, the fonts, the sizes, the radius scale, the easings and the durations beside the colours, so each gets its note. TOKENS.md's tables became those notes; its "Phone and touch" and "Light" became prose on the page.

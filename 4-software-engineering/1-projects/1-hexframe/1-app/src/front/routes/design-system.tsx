@@ -43,7 +43,7 @@ function DesignSystem() {
     void navigate({ search: centerOn(ulysse, tile), hash: anchorOf('Canvas') })
   }
   return (
-    <main className="mx-auto grid max-w-5xl gap-16 px-6 pb-16">
+    <main className="mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)] gap-16 px-6 pb-16">
       <Direction />
       <GalleryTier tier="crossings" />
       <GalleryTier tier="chat">

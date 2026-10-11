@@ -18,4 +18,4 @@ The layouts no single side owns, each a shell with slots that decides where thin
 | `DataTable.tsx` | `DataTable`, sortable, with its loading and empty states; it takes `DataColumn`s, so a feature never sees TanStack Table. Its one user, the Keys page, is one the one screen retires |
 | `PageHeader.tsx` | `PageHeader`, the top of a page: its one `<h1>`, what the page is for and what can be done from it. Its users are pages the one screen retires |
 | `states.tsx` | What a place shows instead of its content: `EmptyState`, nothing yet and how to add the first; `ErrorState`, a read that failed, with a retry and the request id; `Forbidden`, a read the user may not make |
-| `gallery.tsx` | `LayoutsGallery`, every layout here in its states, on `/dev/ui` |
+| `gallery.tsx` | `LayoutsGallery`, every layout here in its states, on `/design-system` |

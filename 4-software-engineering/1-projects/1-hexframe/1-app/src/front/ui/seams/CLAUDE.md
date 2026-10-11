@@ -14,6 +14,6 @@ A seam is one file a library sits behind, so swapping the library changes that f
 | Path | Holds |
 |---|---|
 | `Markdown.tsx` | The seam for a Tile's content, holding for now `CodeBlock`, text shown as written, which a Leaf that isn't Markdown shows its Body in: the Markdown renderer, when a Body is rendered, comes in here |
-| `gallery.tsx` | `SeamsGallery`, `CodeBlock` on `/dev/ui` |
+| `gallery.tsx` | `SeamsGallery`, `CodeBlock` on `/design-system` |
 
 The hotkeys seam STACK.md names for TanStack Hotkeys comes here too, with the first shortcut.
