@@ -27,6 +27,7 @@ const you = { _tag: 'You' } as const
 /** A Proposal the user accepted: a Reference the assistant drafted, which landed. */
 const acceptedProposal = (at: Date): Entry => ({
   _tag: 'Proposal',
+  undone: false,
   id: 'p1',
   at,
   proposal: 'proposal-accepted',

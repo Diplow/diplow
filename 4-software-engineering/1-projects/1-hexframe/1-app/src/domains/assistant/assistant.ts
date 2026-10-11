@@ -708,14 +708,17 @@ export const route = (accountId: string, turnId: string) =>
 
 /**
  * What undoes the writes one of the Account's Turns applied so far, as the API layer handed it,
- * opaque; none before its first. The Conversation locked until the transaction ends, so two writes of
- * one Turn never both build on it, nor an undo run meanwhile. In the transaction the API layer opened.
+ * opaque, none before its first, and whether the Turn still runs, which a write it makes needs. The
+ * Conversation locked until the transaction ends, as its end locks it to offer the Undo, so a write
+ * lands before the offer or finds the Turn over, and two writes of one Turn never both build on what
+ * undoes them. In the transaction the API layer opened.
  */
 export const appliedSoFar = (accountId: string, turnId: string) =>
   Effect.gen(function* () {
     yield* Proposals.use((proposals) => proposals.locked(accountId))
     const kept = yield* Applied.use((applied) => applied.locked(accountId, turnId))
-    return kept?.undo
+    const running = (yield* turn(accountId, turnId)).ended === undefined
+    return { undo: kept?.undo, running }
   })
 
 /** What the Assistant applied, as the API layer hands it: what undoes it, opaque, and its changes. */
@@ -725,29 +728,53 @@ export interface Applying {
 }
 
 /**
- * Keeps what undoes the writes one of the Account's Turns applied, this one's included, and adds the
- * changes it made to theirs: what its Entry offers to undo once the Turn ended, at once for a Turn
- * that ended meanwhile. In the transaction the API layer opened, after `appliedSoFar`.
+ * Keeps what undoes the writes one of the Account's running Turns applied, this one's included, and
+ * adds the changes it made to theirs: what its Entry offers to undo once the Turn ended. In the
+ * transaction the API layer opened, after `appliedSoFar` said the Turn runs.
  */
 export const turnApplied = (accountId: string, turnId: string, { undo, changes }: Applying) =>
   Effect.gen(function* () {
     const kept = yield* Applied.use((applied) => applied.locked(accountId, turnId))
     const total = (kept?.changes ?? 0) + changes
     yield* Applied.use((applied) => applied.keep(accountId, turnId, { undo, changes: total }))
-    // A write that landed as its Turn ended, the Turn's Key proven just before, is offered now.
-    const ended = (yield* turn(accountId, turnId)).ended !== undefined
-    yield* offerUndo(accountId, turnId, { ended })
   })
 
 /**
  * Keeps what undoes the writes of a Proposal the user accepted, which its Entry offers to undo from
- * then on. In the transaction the API layer opened, after `acceptProposal`.
+ * then on, saying so (`undone: false`), so a Proposal accepted before undos were kept offers none. In
+ * the transaction the API layer opened, after `acceptProposal`.
  */
 export const proposalApplied = (
   accountId: string,
   { id, entry }: { readonly id: string; readonly entry: string },
   { undo, changes }: Applying,
-) => Applied.use((applied) => applied.keep(accountId, id, { undo, changes, entryId: entry }))
+) =>
+  Effect.gen(function* () {
+    yield* Applied.use((applied) => applied.keep(accountId, id, { undo, changes, entryId: entry }))
+    yield* rewritten(accountId, entry, (content) =>
+      content._tag === 'Proposal' ? { ...content, undone: false } : undefined,
+    )
+  })
+
+/**
+ * Rewrites one of the Account's Entries as `change` says, the Entry as Assistant decoded it. An Entry
+ * Assistant cannot read back, or that `change` has nothing for, is a defect: Assistant wrote it.
+ */
+const rewritten = (
+  accountId: string,
+  entry: string,
+  change: (content: EntryContent) => EntryContent | undefined,
+) =>
+  Effect.gen(function* () {
+    const content = yield* Conversations.use((conversations) =>
+      conversations.entry(accountId, entry),
+    )
+    const after = change(yield* Effect.orDie(decoded(content)))
+    if (after === undefined) return yield* Effect.die(new Error('An Entry took no such change'))
+    yield* Conversations.use((conversations) =>
+      conversations.rewrite(accountId, entry, encoded(after)),
+    )
+  })
 
 /**
  * Undoes what one of the Account's Turns applied, or a Proposal it accepted, by its id, once: marked
@@ -763,14 +790,6 @@ export const undo = (accountId: string, id: string) =>
     const undone = yield* Effect.fromResult(undoing(kept))
     const now = new Date(yield* Clock.currentTimeMillis)
     yield* Applied.use((applied) => applied.undone(accountId, id, now))
-    const content = yield* Conversations.use((conversations) =>
-      conversations.entry(accountId, undone.entryId),
-    )
-    // An Entry Assistant cannot read back, or that offers no Undo, is a defect: it wrote them.
-    const said = undoneEntry(yield* Effect.orDie(decoded(content)))
-    if (said === undefined) return yield* Effect.die(new Error('An Entry offered no Undo'))
-    yield* Conversations.use((conversations) =>
-      conversations.rewrite(accountId, undone.entryId, encoded(said)),
-    )
+    yield* rewritten(accountId, undone.entryId, undoneEntry)
     return undone.undo
   })

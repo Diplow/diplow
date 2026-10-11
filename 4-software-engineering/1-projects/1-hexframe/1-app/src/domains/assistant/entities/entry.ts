@@ -75,9 +75,9 @@ export type ProposedChange = typeof ProposedChange.Type
 
 /**
  * A Proposal: the changes the agent drafted in ask, in the order it drafted them, as Mapping summarized
- * each, and how the user decided it, open until they do, and, once accepted, whether the user undid
- * it. Its Entry dates from its first draft, and follows it: each later draft adds its changes, the
- * user's decision its fate, and an undo says so.
+ * each, and how the user decided it, open until they do, and, once accepted with what undoes it
+ * kept, whether the user undid it. Its Entry dates from its first draft, and follows it: each later
+ * draft adds its changes, the user's decision its fate, and an undo says so.
  */
 const Proposal = Schema.TaggedStruct('Proposal', {
   proposal: Schema.String,

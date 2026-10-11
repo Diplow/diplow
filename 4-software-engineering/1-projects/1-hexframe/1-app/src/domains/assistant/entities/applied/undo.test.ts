@@ -29,15 +29,17 @@ const applied = (undone: boolean): EntryContent => ({
 
 describe('undoneEntry and offersUndo, the Entries that offer an Undo', () => {
   it('says an accepted Proposal and a Turn applied undone, once', () => {
-    expect(undoneEntry(proposal('accepted'))).toEqual(proposal('accepted', true))
+    expect(undoneEntry(proposal('accepted', false))).toEqual(proposal('accepted', true))
     expect(undoneEntry(applied(false))).toEqual(applied(true))
-    expect(offersUndo(proposal('accepted'))).toBe(true)
+    expect(offersUndo(proposal('accepted', false))).toBe(true)
     expect(offersUndo(applied(false))).toBe(true)
   })
 
   it('offers none for an open, discarded or undone Proposal, a Turn undone, or another Entry', () => {
     for (const entry of [
       proposal('open'),
+      // Accepted before what undoes it was kept: nothing to undo.
+      proposal('accepted'),
       proposal('discarded'),
       proposal('accepted', true),
       applied(true),

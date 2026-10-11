@@ -7,12 +7,13 @@ import type { EntryContent } from '../entry'
 
 /**
  * An Entry that offers to undo what the Assistant applied, once the user undid it: an accepted
- * Proposal's or an applied Turn's, said undone. None for any other, which offers no Undo.
+ * Proposal's, which says it may be undone once what undoes it was kept (`undone: false`), or an
+ * applied Turn's, said undone. None for any other, which offers no Undo.
  */
 export function undoneEntry(content: EntryContent): EntryContent | undefined {
   switch (content._tag) {
     case 'Proposal':
-      return content.fate === 'accepted' && content.undone !== true
+      return content.fate === 'accepted' && content.undone === false
         ? { ...content, undone: true }
         : undefined
     case 'TurnApplied':

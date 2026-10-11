@@ -12,6 +12,7 @@ import { Effect, Schema } from 'effect'
 import * as Assistant from '#/domains/assistant/assistant'
 import type { Mode } from '#/domains/assistant/entities'
 import { type OpenProposal, writesOf } from '#/domains/assistant/operations'
+import { SignedOut } from '#/domains/iam/errors'
 import * as Iam from '#/domains/iam/iam'
 import type { Field } from '#/domains/mapping/entities'
 import * as Mapping from '#/domains/mapping/mapping'
@@ -94,7 +95,8 @@ const drafted = <O extends Operation>(accountId: string, turnId: string, operati
 
 /**
  * Applies an Operation one of the Account's Turns wrote in apply, in one transaction: the Conversation
- * locked, what undoes the Turn's writes so far read, the Operation run by Mapping as its own function
+ * locked, `SignedOut` should the Turn have ended since its Key was proven, what undoes the Turn's
+ * writes so far read, the Operation run by Mapping as its own function
  * runs it, and what undoes them all, this one's included, kept with the Turn, with the changes it
  * made. Answers, for a create or an edit, the Tile as it now stands, with its Version, as the write's
  * own program would.
@@ -102,7 +104,10 @@ const drafted = <O extends Operation>(accountId: string, turnId: string, operati
 const applied = <O extends Operation>(accountId: string, turnId: string, operation: O) =>
   transactional(
     Effect.gen(function* () {
-      const earlier = yield* undoOf(yield* Assistant.appliedSoFar(accountId, turnId))
+      const so = yield* Assistant.appliedSoFar(accountId, turnId)
+      // The Turn ended since its Key was proven: its Key no longer proves it.
+      if (!so.running) return yield* new SignedOut()
+      const earlier = yield* undoOf(so.undo)
       const run = yield* Mapping.applied(accountId, operation, earlier)
       const undo = encodedUndo(run.undo)
       yield* Assistant.turnApplied(accountId, turnId, { undo, changes: run.changes })

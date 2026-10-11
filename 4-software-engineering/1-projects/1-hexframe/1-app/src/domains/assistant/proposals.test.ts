@@ -237,9 +237,9 @@ layer(TestLayer)('what the Assistant applied, undone once, over PGlite', (it) =>
       const { account, turn } = yield* someone
       yield* transactional(setMode(account, 'apply'))
       const applying = yield* turn('Write it.')
-      expect(yield* transactional(appliedSoFar(account, applying.id))).toBeUndefined()
+      expect((yield* transactional(appliedSoFar(account, applying.id))).undo).toBeUndefined()
       yield* transactional(turnApplied(account, applying.id, { undo: 'first', changes: 2 }))
-      expect(yield* transactional(appliedSoFar(account, applying.id))).toBe('first')
+      expect((yield* transactional(appliedSoFar(account, applying.id))).undo).toBe('first')
       yield* transactional(turnApplied(account, applying.id, { undo: 'both', changes: 1 }))
       const running = yield* transactional(undo(account, applying.id)).pipe(Effect.flip)
       expect(running._tag).toBe('NothingToUndo')
@@ -269,24 +269,25 @@ layer(TestLayer)('what the Assistant applied, undone once, over PGlite', (it) =>
   )
 
   it.effect(
-    'offers no Undo for writes that changed nothing, and one landing as its Turn ended at once',
+    'offers no Undo for writes that changed nothing, and says when a Turn no longer runs',
     () =>
       Effect.gen(function* () {
         yield* TestClock.setTime(Date.parse('2026-10-10T13:00:00Z'))
         const { account, turn } = yield* someone
         yield* transactional(setMode(account, 'apply'))
         const still = yield* turn('Move nothing.')
+        expect(yield* transactional(appliedSoFar(account, still.id))).toEqual({
+          undo: undefined,
+          running: true,
+        })
         yield* transactional(turnApplied(account, still.id, { undo: 'none', changes: 0 }))
         yield* transactional(endTurn(account, still.id, 'answered'))
         expect(yield* entriesOn(account, 'TurnApplied')).toEqual([])
-
-        const late = yield* turn('Write as you end.')
-        yield* transactional(endTurn(account, late.id, 'answered'))
-        yield* transactional(turnApplied(account, late.id, { undo: 'late', changes: 1 }))
-        expect(yield* entriesOn(account, 'TurnApplied')).toMatchObject([
-          { turn: late.id, changes: 1 },
-        ])
-        expect(yield* transactional(undo(account, late.id))).toBe('late')
+        // A write that reaches it now is refused by the API layer: its Key proves the Turn no longer.
+        expect(yield* transactional(appliedSoFar(account, still.id))).toEqual({
+          undo: 'none',
+          running: false,
+        })
       }),
   )
 })
