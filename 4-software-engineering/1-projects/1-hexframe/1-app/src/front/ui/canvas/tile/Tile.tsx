@@ -250,7 +250,13 @@ export function Tile(props: TileProps) {
                 'aria-label': action.label,
                 className: 'group cursor-pointer outline-none',
                 onClick: action.onSelect,
-                ...buttonKeys({ onEnter: action.onSelect, onSpace: action.onSelect }),
+                // ⇧↵ is no click: it goes in, a line of the tile's menu (`canvas/tile/menu/`).
+                ...buttonKeys({
+                  onEnter: (event) => {
+                    if (!event.shiftKey) action.onSelect()
+                  },
+                  onSpace: action.onSelect,
+                }),
               })}
           aria-description={description}
           aria-busy={pending || undefined}
@@ -316,7 +322,7 @@ function Light(props: TileProps & { id: string }) {
           'transition-opacity duration-300',
           lit ? 'opacity-100' : 'opacity-0',
           action !== undefined && 'group-hover:opacity-100 group-focus-visible:opacity-100',
-          // Its menu open, or its card, it stays lit: Radix marks what opened them.
+          // Its menu open, it stays lit: Radix marks what opened it.
           hand !== undefined && 'group-data-[state=open]:opacity-100',
         )}
       />

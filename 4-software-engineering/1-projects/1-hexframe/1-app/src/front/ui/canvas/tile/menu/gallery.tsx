@@ -12,7 +12,7 @@ import { ulysse } from '../../fixtures'
 import { directions, neighbor, type Hex } from '../../geometry/geometry'
 import type { TileNode } from '../../view/tiles'
 import { Slot } from '../places'
-import { fixture, ring, useScale, wordsOf } from '../specimens'
+import { fixture, ring, trades, useScale, wordsOf } from '../specimens'
 import { Tile, type TileLook } from '../Tile'
 import type { PickerFrame } from './Picker'
 import { TileMenu, TileMenuDrawn, useFinger, verbName } from './TileMenu'
@@ -46,12 +46,18 @@ function countBelow(tile: TileNode): number {
   )
 }
 
+/**
+ * Whether a tile of the fixture System can turn into the other kind: a Branch holding nothing, a
+ * Leaf. On home, Mapping's `decide` says so, a Direction taken included.
+ */
+const turnsOf = (tile: TileNode) => tile.leaf === true || countBelow(tile) === 0
+
 /** A tile's children as a picker draws them: a Branch trades places, a Leaf doesn't. */
 function frameOf(tile: TileNode): PickerFrame {
   const members: PickerFrame['members'] = {}
   for (const direction of directions) {
     const child = tile.branches?.[direction] ?? tile.leaves?.[direction]
-    if (child !== undefined) members[direction] = { title: child.title, swaps: !child.leaf }
+    if (child !== undefined) members[direction] = { title: child.title, swaps: trades(child) }
   }
   return { hub: tile.title, members }
 }
@@ -62,7 +68,7 @@ const centerFrame: PickerFrame = {
   members: Object.fromEntries(
     Object.entries(ring).map(([direction, seated]) => [
       direction,
-      { title: seated.tile.title, swaps: seated.look.kind === 'branch' },
+      { title: seated.tile.title, swaps: trades(seated.tile) },
     ]),
   ),
 }
@@ -164,8 +170,8 @@ function ActingFrame() {
           )
         }
         const { tile, look } = seated
-        // A ring too full is no tile, and has no menu; Software Engineering's has none.
-        if (look.kind === 'list') return null
+        // Software Engineering's ring holds Branches and Leaves alone.
+        if (look.kind !== 'branch' && look.kind !== 'leaf') return null
         return (
           <Acting
             key={tile.id}
@@ -175,6 +181,7 @@ function ActingFrame() {
               at: direction,
               parent: center.title,
               below: countBelow(tile),
+              turns: turnsOf(tile),
             }}
             look={look}
             tile={tile}
@@ -259,13 +266,14 @@ function drawnSamples(): DrawnSample[] {
         title: projects.title,
         at: 1,
         below: countBelow(projects),
+        turns: turnsOf(projects),
         ...inRing,
       },
       frames: { holds: frameOf(projects), standsIn: centerFrame },
     },
     {
       name: m.gallery_state_tile_menu_leaf(),
-      subject: { kind: 'leaf', title: fixture('notes').title, at: 3, ...inRing },
+      subject: { kind: 'leaf', title: fixture('notes').title, at: 3, turns: true, ...inRing },
       frames: { standsIn: centerFrame },
     },
     {

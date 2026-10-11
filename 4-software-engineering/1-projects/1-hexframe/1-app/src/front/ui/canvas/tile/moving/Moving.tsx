@@ -3,22 +3,15 @@
 // "Here" under the pointer; each Branch offering to trade places by a disc at its foot, apart from its
 // own click; the rest stepped back; and a banner saying what moves, with its way out. A drag starts it
 // under a mouse or a pen and never under a finger, whose way is the menu or the M key (`partOf`
-// says what each place offers).
+// says what each place offers, `drag.ts` follows the drag).
 import { cn } from 'cn'
 import { ArrowLeftRight } from 'lucide-react'
-import {
-  useEffect,
-  useRef,
-  useState,
-  type PointerEvent,
-  type ReactNode,
-  type RefObject,
-} from 'react'
+import type { ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Act } from '../../../atoms/controls/act'
-import type { Hex, Point } from '../../geometry/geometry'
+import type { Hex } from '../../geometry/geometry'
 import { buttonKeys, type Action } from '../../keys'
 import { points } from '../light'
 import type { TileLook } from '../Tile'
@@ -185,72 +178,4 @@ export function SwapDisc({
       />
     </g>
   )
-}
-
-/** A drag under way: how far it went from where it started, in the canvas's units, and where it is. */
-export interface Dragged {
-  offset: Point
-  at: Point
-}
-
-interface DragHandlers {
-  /** Once it has gone past a few units: a press that stays put is a click. */
-  onStart: () => void
-  onMove?: (dragged: Dragged) => void
-  /** Let go, where it was; or cancelled, nowhere. */
-  onDrop: (dragged: Dragged | undefined) => void
-}
-
-/** How far a press goes, in the canvas's units, before it is a drag rather than a click. */
-const threshold = 6
-
-/**
- * A tile dragged across an <svg>, in its own units. `press` starts it from a pointer going down on the
- * tile, a mouse's main button or a pen; a finger never drags, since it pans and scrolls. The drag is
- * the hook's state until it is let go.
- */
-export function useDrag(svg: RefObject<SVGSVGElement | null>) {
-  const [dragged, setDragged] = useState<Dragged>()
-  const stop = useRef<() => void>(undefined)
-  useEffect(
-    () => () => {
-      stop.current?.()
-    },
-    [],
-  )
-  const press = (event: PointerEvent, handlers: DragHandlers) => {
-    if (event.pointerType === 'touch' || event.button !== 0 || !svg.current) return
-    const toUnits = svg.current.getScreenCTM()?.inverse()
-    if (toUnits === undefined) return
-    const unitsOf = (x: number, y: number) => new DOMPoint(x, y).matrixTransform(toUnits)
-    const start = unitsOf(event.clientX, event.clientY)
-    let current: Dragged | undefined
-    const move = (next: globalThis.PointerEvent) => {
-      const at = unitsOf(next.clientX, next.clientY)
-      const offset = { x: at.x - start.x, y: at.y - start.y }
-      if (current === undefined && Math.hypot(offset.x, offset.y) <= threshold) return
-      if (current === undefined) handlers.onStart()
-      current = { offset, at: { x: at.x, y: at.y } }
-      setDragged(current)
-      handlers.onMove?.(current)
-    }
-    const end = (cancelled: boolean) => () => {
-      stop.current?.()
-      if (current === undefined) return
-      setDragged(undefined)
-      handlers.onDrop(cancelled ? undefined : current)
-    }
-    const up = end(false)
-    const cancel = end(true)
-    stop.current = () => {
-      removeEventListener('pointermove', move)
-      removeEventListener('pointerup', up)
-      removeEventListener('pointercancel', cancel)
-      stop.current = undefined
-    }
-    addEventListener('pointermove', move)
-    addEventListener('pointerup', up)
-    addEventListener('pointercancel', cancel)
-  }
-  return { dragged, press }
 }

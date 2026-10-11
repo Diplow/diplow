@@ -4,9 +4,9 @@ import type { Direction, Point } from '../../geometry/geometry'
 import { dropAt, landed, partOf, takes, type Seats } from './move'
 
 const seats: Seats = {
-  1: { id: 'projects', swaps: true },
-  2: { id: 'principles', swaps: true },
-  3: { id: 'notes', swaps: false },
+  1: { swaps: true },
+  2: { swaps: true },
+  3: { swaps: false },
 }
 
 describe('a tile on the move', () => {

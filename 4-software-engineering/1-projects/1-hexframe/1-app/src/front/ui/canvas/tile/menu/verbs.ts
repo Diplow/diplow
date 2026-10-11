@@ -10,18 +10,27 @@ import type { TileLook } from '../Tile'
 /** The kinds a menu opens on: a ring too full is no tile, and has none. */
 type MenuKind = Exclude<TileLook['kind'], 'list'>
 
-/** What a menu acts on: a tile, by its kind and where it stands, or a free slot. */
+/** What a menu says of a tile, beyond its kind and its place. */
+interface Words {
+  title: string
+  /** The tile it is in: the one the center backs out to, the frame one in the ring moves in. */
+  parent?: string
+  /** How many tiles are below it, which deleting it takes along. */
+  below?: number
+  /**
+   * Whether it can turn into the other kind, a Branch into a Leaf or a Leaf into a Branch: Mapping's
+   * `decide` says, which its caller asks.
+   */
+  turns?: boolean
+}
+
+/**
+ * What a menu acts on: a tile, by its kind and where it stands, at the center or in a Direction of
+ * the ring, the root only ever at the center; or a free slot.
+ */
 export type Subject =
-  | {
-      kind: MenuKind
-      title: string
-      /** At the center, or in the ring around it, in a Direction. */
-      at: 'center' | Direction
-      /** The tile it is in: the one the center backs out to, the frame one in the ring moves in. */
-      parent?: string
-      /** How many tiles are below it, which deleting it takes along. */
-      below?: number
-    }
+  | (Words & { kind: 'root' | 'untitled'; at: 'center' })
+  | (Words & { kind: Exclude<MenuKind, 'root' | 'untitled'>; at: 'center' | Direction })
   | { kind: 'slot'; at: Direction; parent: string }
 
 /** A line of a tile's menu; `add`, `move` and `copy` open a submenu. */
@@ -60,15 +69,15 @@ export type Act =
 type Group = readonly (Verb | false | undefined)[]
 
 /** The groups of a tile in the ring, by its kind. */
-function ringGroups(subject: Extract<Subject, { title: string }>): readonly Group[] {
-  const bare = (subject.below ?? 0) === 0
-  switch (subject.kind) {
-    case 'root':
-    case 'untitled':
+function ringGroups(
+  kind: Exclude<MenuKind, 'root' | 'untitled'>,
+  turns: boolean,
+): readonly Group[] {
+  switch (kind) {
     case 'branch':
       return [
         ['open', 'go-in', 'show-context'],
-        ['edit', bare && 'make-leaf'],
+        ['edit', turns && 'make-leaf'],
         ['add', 'move'],
         ['ask-agent'],
         ['copy', 'export'],
@@ -77,7 +86,7 @@ function ringGroups(subject: Extract<Subject, { title: string }>): readonly Grou
     case 'leaf':
       return [
         ['open', 'show-context'],
-        ['edit', 'make-branch'],
+        ['edit', turns && 'make-branch'],
         ['move'],
         ['ask-agent'],
         ['copy', 'export'],
@@ -117,7 +126,7 @@ export function groupsOf(subject: Subject): Verb[][] {
       ? [['new-tile', 'import'], ['ask-agent']]
       : subject.at === 'center'
         ? centerGroups(subject)
-        : ringGroups(subject)
+        : ringGroups(subject.kind, subject.turns === true)
   return groups
     .map((group) => group.filter((verb): verb is Verb => typeof verb === 'string'))
     .filter((group) => group.length > 0)
@@ -138,8 +147,7 @@ export function clickOf(
     return subject.kind === 'leaf' || subject.kind === 'draft' ? undefined : 'show-context'
   }
   if (subject.kind === 'broken') return undefined
-  const opensInPlace = subject.kind === 'branch' || subject.kind === 'root'
-  return opensInPlace && finger ? 'go-in' : 'open'
+  return subject.kind === 'branch' && finger ? 'go-in' : 'open'
 }
 
 const directionNames: Record<Direction, () => string> = {

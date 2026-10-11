@@ -3,9 +3,8 @@
 // has. Pure: the frame's pieces draw it, its caller sends the write.
 import { directions, type Direction, type Point } from '../../geometry/geometry'
 
-/** A tile seated in a Direction of the frame, and whether it can trade places with the one moving. */
-interface Seat {
-  id: string
+/** A tile seated in a Direction of the frame: whether it can trade places with the one moving. */
+export interface Seat {
   /** A Branch offers to trade places; a Leaf, a Reference and the rest take no part. */
   swaps: boolean
 }

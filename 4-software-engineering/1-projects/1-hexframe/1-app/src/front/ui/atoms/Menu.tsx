@@ -216,13 +216,13 @@ function openSubmenu(content: HTMLElement, index: number) {
 }
 
 // An entry's key on the thing, focused, the menu shut, runs it there; a submenu's opens the menu at
-// it. Enter and Space stay the thing's own, its click.
+// it. Enter and Space alone stay the thing's own, its click.
 function runOnTheThing(
   event: KeyboardEvent<HTMLElement>,
   entries: readonly MenuEntry[],
   opening: { current: number | undefined },
 ) {
-  if (event.key === 'Enter' || event.key === ' ') return
+  if (linesKey(event)) return
   const index = shortcutIndex(entries, event)
   const entry = entries[index]
   if (entry === undefined || entry === 'separator' || isToggle(entry)) return
@@ -295,11 +295,18 @@ const KitContext = createContext<Kit>(dropdownKit)
 const line =
   'relative grid w-full cursor-pointer grid-cols-[1rem_1fr_auto] items-center gap-[0.6875rem] px-3.5 py-[0.4375rem] text-left text-muted-foreground outline-none select-none data-highlighted:bg-linear-to-r data-highlighted:from-foreground/8 data-highlighted:to-foreground/3 data-highlighted:text-foreground data-disabled:pointer-events-none data-disabled:opacity-40 pointer-coarse:min-h-11 [&_svg]:size-[0.9375rem] [&_svg]:stroke-[1.4] [&_svg]:text-faint data-highlighted:[&_svg]:text-foreground'
 
+// The line between two groups of entries.
+const rule = 'my-1.5 h-px bg-linear-to-r from-border to-transparent'
+
 const tones = {
   agent: 'text-agent [&_svg]:text-agent data-highlighted:text-agent',
   destructive:
     'text-destructive data-highlighted:bg-linear-to-r data-highlighted:from-destructive/14 data-highlighted:to-transparent data-highlighted:text-destructive [&_svg]:text-destructive data-highlighted:[&_svg]:text-destructive',
 } as const
+
+/** A line's voice: the agent's violet, the destructive red, or the menu's own. */
+const toneOf = (item: MenuItem | undefined) =>
+  item?.tone === undefined ? undefined : tones[item.tone]
 
 function Lines({ entries, kit }: { entries: readonly MenuEntry[]; kit: Kit }) {
   return (
@@ -314,7 +321,7 @@ function Lines({ entries, kit }: { entries: readonly MenuEntry[]; kit: Kit }) {
 function Entry({ entry, index, kit }: { entry: MenuEntry; index: number; kit: Kit }) {
   const { parts } = kit
   if (entry === 'separator') {
-    return <parts.Separator className="my-1.5 h-px bg-linear-to-r from-border to-transparent" />
+    return <parts.Separator className={rule} />
   }
   if (isToggle(entry)) {
     return (
@@ -343,7 +350,7 @@ function Entry({ entry, index, kit }: { entry: MenuEntry; index: number; kit: Ki
       onSelect={entry.onSelect}
       disabled={entry.disabled}
       aria-keyshortcuts={entry.shortcut && ariaShortcut(entry.shortcut)}
-      className={cn(line, entry.tone !== undefined && tones[entry.tone])}
+      className={cn(line, toneOf(entry))}
     >
       <LineWords {...entry} />
     </parts.Item>
@@ -463,13 +470,7 @@ export function MenuDrawn({
       <ul>
         {entries.map((entry, index) => {
           if (entry === 'separator') {
-            return (
-              <li
-                key={index}
-                aria-hidden
-                className="my-1.5 h-px bg-linear-to-r from-border to-transparent"
-              />
-            )
+            return <li key={index} aria-hidden className={rule} />
           }
           const shortcut = shortcutOf(entry)
           const item = isToggle(entry) || isSubmenu(entry) ? undefined : entry
@@ -477,12 +478,9 @@ export function MenuDrawn({
             <li
               key={index}
               aria-keyshortcuts={shortcut && ariaShortcut(shortcut)}
-              className={cn(
-                line,
-                'cursor-default',
-                item?.tone !== undefined && tones[item.tone],
-                item?.disabled === true && 'opacity-40',
-              )}
+              // Marked as Radix marks a disabled line, so the line's own look dims it.
+              data-disabled={item?.disabled === true ? '' : undefined}
+              className={cn(line, 'cursor-default', toneOf(item))}
             >
               <LineWords
                 icon={entry.icon}

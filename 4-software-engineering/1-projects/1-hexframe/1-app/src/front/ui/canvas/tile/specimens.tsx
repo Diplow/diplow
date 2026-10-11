@@ -30,6 +30,12 @@ export function branchOf(tile: TileNode): TileLook {
   return { kind: 'branch', words: wordsOf(tile), foot }
 }
 
+/**
+ * Whether a tile of the fixture System trades places with one on the move: a Branch does. On home,
+ * Mapping's `swapsWith` says so.
+ */
+export const trades = (tile: TileNode) => tile.leaf !== true
+
 /** The ring of Software Engineering, seated as the shape seats it, the reading list beside Principles. */
 export const ring: Partial<Record<Direction, { tile: TileNode; look: TileLook }>> = {
   1: { tile: fixture('projects'), look: branchOf(fixture('projects')) },

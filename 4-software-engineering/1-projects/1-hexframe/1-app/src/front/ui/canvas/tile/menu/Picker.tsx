@@ -11,6 +11,7 @@ import { m } from '#/paraglide/messages'
 import { MenuChoice } from '../../../atoms/Menu'
 import { directions, neighbor, type Direction, type Hex } from '../../geometry/geometry'
 import { points } from '../light'
+import type { Seat } from '../moving/move'
 
 /** What a choice does, and its words, which the line under the frame says while it is lit. */
 interface PickerChoice {
@@ -22,15 +23,15 @@ interface PickerChoice {
 export interface PickerFrame {
   hub: string
   /** A Direction holding no tile is free; a Branch trades places with a tile moving in. */
-  members: Partial<Record<Direction, { title: string; swaps: boolean }>>
+  members: Partial<Record<Direction, Seat & { title: string }>>
 }
 
 interface PickerProps {
   frame: PickerFrame
   /** Where the tile acting stands, when it is in this frame. */
   self?: Direction | undefined
-  /** What choosing a free slot does, or nothing where none can be chosen. */
-  free: (direction: Direction) => PickerChoice | undefined
+  /** What choosing a free slot does. */
+  free: (direction: Direction) => PickerChoice
   /** What choosing a taken one does, a swap, or nothing where it can't trade places. */
   taken?: (direction: Direction) => PickerChoice | undefined
 }
@@ -40,7 +41,7 @@ const width = 172
 const height = 160
 const origin = { x: 0, y: 0 }
 
-/** Words cut to fit a small hex: a long title's first word, or its first letters. */
+/** Words cut to fit a small hex: past `room` letters, its first ones and an ellipsis. */
 const cut = (title: string, room: number) =>
   title.length <= room ? title : `${title.slice(0, room - 1)}…`
 

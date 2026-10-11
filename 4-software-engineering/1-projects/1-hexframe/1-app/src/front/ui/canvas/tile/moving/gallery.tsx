@@ -15,10 +15,11 @@ import type { TileNode } from '../../view/tiles'
 import { noop, Specimen } from '../gallery'
 import { directionName } from '../menu/verbs'
 import { Slot } from '../places'
-import { branchOf, fixture, ring, useScale, wordsOf } from '../specimens'
+import { branchOf, fixture, ring, trades, useScale, wordsOf } from '../specimens'
 import { Tile, type TileLook } from '../Tile'
 import { dropAt, landed, partOf, type Seats } from './move'
-import { Aside, LandingSlot, Lifted, MoveBanner, SwapDisc, useDrag, withoutFoot } from './Moving'
+import { unitsIn, useDrag } from './drag'
+import { Aside, LandingSlot, Lifted, MoveBanner, SwapDisc, withoutFoot } from './Moving'
 
 export function MovingGallery() {
   const projects = branchOf(fixture('projects'))
@@ -108,10 +109,7 @@ const hearts = Object.fromEntries(
 
 const seatsOf = (frame: Frame): Seats =>
   Object.fromEntries(
-    Object.entries(frame).map(([direction, seated]) => [
-      direction,
-      { id: seated.tile.id, swaps: seated.look.kind === 'branch' },
-    ]),
+    Object.entries(frame).map(([direction, seated]) => [direction, { swaps: trades(seated.tile) }]),
   )
 
 /** A CSS duration, `600ms` or `0.6s`, in milliseconds; none with reduced motion. */
@@ -133,7 +131,7 @@ function useMove(svg: RefObject<SVGSVGElement | null>) {
   const [landing, setLanding] = useState<Landing>()
   const [over, setOver] = useState<Direction>()
   const [refuses, setRefuses] = useState(false)
-  const { dragged, press } = useDrag(svg)
+  const { dragged, press } = useDrag(unitsIn(svg))
   const timers = useRef<ReturnType<typeof setTimeout>[]>([])
   // Each tile's shape, by its id, to give it the focus back once it has landed or stopped.
   const tiles = useRef(new Map<string, HTMLElement>())

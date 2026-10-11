@@ -22,9 +22,10 @@ describe('what a tile offers', () => {
     ])
   })
 
-  it('lets a Branch with nothing below it become a Leaf, and a Leaf a Branch', () => {
-    expect(groupsOf({ ...branch, below: 0 })[1]).toEqual(['edit', 'make-leaf'])
-    expect(groupsOf({ ...branch, kind: 'leaf', below: 0 })[1]).toEqual(['edit', 'make-branch'])
+  it('turns a tile into the other kind only where its caller says Mapping allows it', () => {
+    expect(groupsOf({ ...branch, turns: true })[1]).toEqual(['edit', 'make-leaf'])
+    expect(groupsOf({ ...branch, kind: 'leaf', turns: true })[1]).toEqual(['edit', 'make-branch'])
+    expect(groupsOf({ ...branch, kind: 'leaf' })[1]).toEqual(['edit'])
   })
 
   it('adds nothing to a Leaf, which holds no tile', () => {
