@@ -31,6 +31,11 @@ interface ActProps extends ComponentProps<'button'> {
   tone?: Tone
   /** Its shortcut, drawn after its word so the action teaches it. Whoever owns the key binds it. */
   shortcut?: Shortcut
+  /**
+   * What it does is on its way: it does nothing more, said disabled, yet keeps the focus it has, which
+   * `disabled` would drop to the page.
+   */
+  waits?: boolean
 }
 
 // The ink of a text action, and the light a solid one is cut from.
@@ -48,25 +53,29 @@ export function Act({
   look = 'text',
   tone = 'quiet',
   shortcut,
+  waits = false,
   className,
   children,
   type = 'button',
+  onClick,
   ...props
 }: ActProps) {
   return (
     <button
       type={type}
       aria-keyshortcuts={shortcut && ariaShortcut(shortcut)}
+      aria-disabled={waits || undefined}
+      onClick={waits ? undefined : onClick}
       className={cn(
         'inline-flex cursor-pointer items-center gap-2 text-[0.8125rem] whitespace-nowrap transition-colors focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-(--voice,var(--human)) disabled:cursor-default pointer-coarse:min-h-11',
         look === 'text'
           ? [
               textTones[tone],
-              'before:size-2 before:shrink-0 before:bg-current before:[clip-path:polygon(50%_0,100%_25%,100%_75%,50%_100%,0_75%,0_25%)] hover:text-foreground disabled:text-faint disabled:opacity-60',
+              'before:size-2 before:shrink-0 before:bg-current before:[clip-path:polygon(50%_0,100%_25%,100%_75%,50%_100%,0_75%,0_25%)] hover:text-foreground disabled:text-faint disabled:opacity-60 aria-disabled:cursor-default aria-disabled:text-faint aria-disabled:opacity-60',
             ]
           : [
               hexTones[tone],
-              'h-[2.125rem] px-5 [clip-path:polygon(9px_0,calc(100%-9px)_0,100%_50%,calc(100%-9px)_100%,9px_100%,0_50%)] disabled:opacity-35 pointer-coarse:h-11',
+              'h-[2.125rem] px-5 [clip-path:polygon(9px_0,calc(100%-9px)_0,100%_50%,calc(100%-9px)_100%,9px_100%,0_50%)] disabled:opacity-35 aria-disabled:cursor-default aria-disabled:opacity-35 pointer-coarse:h-11',
             ],
         className,
       )}

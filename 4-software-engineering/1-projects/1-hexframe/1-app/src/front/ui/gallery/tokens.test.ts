@@ -100,7 +100,57 @@ describe('the theme', () => {
       expect(unlisted, theme).toEqual([])
     }
   })
+
+  // Every colour text is set in, against the ground and a card: WCAG's 4.5:1 for small text.
+  it.each([
+    'foreground',
+    'muted-foreground',
+    'faint',
+    'human',
+    'agent',
+    'destructive',
+    'success',
+    'warning',
+    'info',
+  ])('reads %s at 4.5:1 at least, on the ground and on a card, in both themes', (ink) => {
+    for (const [theme, selector] of Object.entries(themes)) {
+      const values = declared(selector)
+      for (const ground of ['background', 'card']) {
+        const ratio = contrast(values.get(ink) ?? '', values.get(ground) ?? '')
+        expect(ratio, `${ink} on ${ground}, ${theme}`).toBeGreaterThanOrEqual(4.5)
+      }
+    }
+  })
 })
+
+/** WCAG's contrast between two opaque `oklch(L C h)`, each clipped to sRGB as a browser draws it. */
+function contrast(one: string, other: string) {
+  const [a, b] = [luminance(one), luminance(other)].sort((x, y) => y - x)
+  return ((a ?? 0) + 0.05) / ((b ?? 0) + 0.05)
+}
+
+function luminance(colour: string) {
+  const [L = Number.NaN, C = Number.NaN, h = Number.NaN] =
+    /^oklch\(([\d.]+) ([\d.]+) ([\d.]+)\)$/.exec(colour)?.slice(1).map(Number) ?? []
+  const [a, b] = [C * Math.cos((h * Math.PI) / 180), C * Math.sin((h * Math.PI) / 180)]
+  const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3
+  const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3
+  const s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3
+  const linear = [
+    4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+    -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+    -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
+  ].map((channel) => {
+    // Clipped where it is drawn, in the encoded space, then back to light.
+    const encoded = Math.min(
+      1,
+      Math.max(0, channel <= 0.0031308 ? 12.92 * channel : 1.055 * channel ** (1 / 2.4) - 0.055),
+    )
+    return encoded <= 0.04045 ? encoded / 12.92 : ((encoded + 0.055) / 1.055) ** 2.4
+  })
+  const [r = 0, g = 0, bl = 0] = linear
+  return 0.2126 * r + 0.7152 * g + 0.0722 * bl
+}
 
 describe('valueTokens', () => {
   it("reads the theme beside its colours, a line height aside, then the base layer's :root", () => {

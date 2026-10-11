@@ -27,7 +27,10 @@ import { ChatAtomsGallery } from '#/front/ui/chat/atoms/gallery'
 import { Composer } from '#/front/ui/chat/composer/Composer'
 import { modeChoices } from '#/front/ui/chat/composer/demo'
 import { ComposerGallery } from '#/front/ui/chat/composer/gallery'
+import { ChatEntriesGallery } from '#/front/ui/chat/entries/gallery'
 import { ChatLayoutsGallery } from '#/front/ui/chat/layouts/gallery'
+import { ChatTextGallery } from '#/front/ui/chat/text/gallery'
+import { Message } from '#/front/ui/chat/text/Message'
 import {
   GallerySection,
   GalleryState,
@@ -63,6 +66,8 @@ function DesignSystem() {
       <GalleryTier tier="chat">
         <ConversationGallery onCenter={onCenter} />
         <ComposerGallery />
+        <ChatTextGallery />
+        <ChatEntriesGallery />
         <ChatLayoutsGallery />
         <ChatAtomsGallery />
       </GalleryTier>
@@ -237,9 +242,8 @@ interface ScreenSpecimenProps {
 
 /**
  * One screen: a System and a conversation about it signed in, with the Composer at its foot, Help and
- * the sign-in widget's place signed out. The conversation's lines stand in for the Chat's proposal
- * (HEX-98), enough to show where they sit and how the curve scrolls them; they join ui/ once it draws
- * them.
+ * the sign-in widget's place signed out. The conversation's lines are the Chat's `Message`s, enough to
+ * show where they sit and how the curve scrolls them.
  */
 function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
   const [view, setView] = useState<CanvasView>({})
@@ -292,36 +296,23 @@ const screenLines = (): Line[] => [
   { author: 'user', text: m.gallery_screen_line_6() },
 ]
 
-/** Your words in a light serif with an amber rule, the agent's in mono beside its violet mark. */
+/** The conversation in its two voices (`Message`), the mark on the first of an agent's run alone. */
 function Lines({ lines }: { lines: Line[] }) {
   return (
     <ol className="flex flex-col gap-[1.375rem]">
-      {lines.map((line, index) =>
-        line.author === 'user' ? (
-          <li
-            key={index}
-            ref={line.sent ? scrollToFoot : undefined}
-            className="max-w-[36em] border-l border-human/70 pl-3.5 font-human text-prose font-light"
-          >
-            {line.text}
-          </li>
-        ) : (
-          <li
-            key={index}
-            className="grid max-w-[36em] grid-cols-[0.875rem_1fr] gap-2.5 font-agent text-mono text-muted-foreground"
-          >
-            <svg viewBox="-12 -12 24 24" aria-hidden className="mt-[0.3em] size-3.5">
-              <polygon
-                points="0,-11 9.53,-5.5 9.53,5.5 0,11 -9.53,5.5 -9.53,-5.5"
-                fill="none"
-                vectorEffect="non-scaling-stroke"
-                className="stroke-agent"
-              />
-            </svg>
-            <span>{line.text}</span>
-          </li>
-        ),
-      )}
+      {lines.map((line, index) => (
+        <li key={index} ref={line.sent ? scrollToFoot : undefined}>
+          {line.author === 'user' ? (
+            <Message voice="human" words={[line.text]} />
+          ) : (
+            <Message
+              voice="agent"
+              words={[line.text]}
+              continued={lines[index - 1]?.author === 'agent'}
+            />
+          )}
+        </li>
+      ))}
     </ol>
   )
 }

@@ -25,6 +25,8 @@ interface WidgetAction {
   shortcut?: Shortcut
   /** Pushed to the row's end, apart: a way out such as Discard. */
   apart?: boolean
+  /** What was asked is on its way: the action does nothing more, yet keeps the focus it has. */
+  waits?: boolean
 }
 
 interface ZoneProps {
@@ -96,7 +98,7 @@ function Zone({
     if (folded || event.defaultPrevented) return
     if (!(event.target instanceof Node) || !event.currentTarget.contains(event.target)) return
     const action = actions.find(({ shortcut }) => pressed(shortcut, event))
-    if (action === undefined) return
+    if (action === undefined || action.waits === true) return
     event.preventDefault()
     action.onSelect()
   }
@@ -181,6 +183,7 @@ function Zone({
                       key={action.label}
                       tone={index === 0 ? 'voice' : 'quiet'}
                       shortcut={action.shortcut}
+                      waits={action.waits === true}
                       onClick={action.onSelect}
                       className={cn(action.apart === true && 'ml-auto')}
                     >

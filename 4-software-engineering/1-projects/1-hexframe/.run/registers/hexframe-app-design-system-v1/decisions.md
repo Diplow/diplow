@@ -11,9 +11,10 @@ preview: >-
   regrouped by tier and side, how /design-system shows the error channels,
   reads "made of" from the code and keeps its frame outside the tiers, what
   the composer's proposal kept and changed of the reference, where the frames
-  HEX-96 proposed went and how a finger opens them, and how HEX-95 drew the
+  HEX-96 proposed went and how a finger opens them, how HEX-95 drew the
   screen, folding on its own width, a seam on a phone, and the corner's
-  contrast.
+  contrast, how the chat's pieces take their text, every ink raised to
+  4.5:1, and a decided Proposal's receipt unfolding its changes.
 ---
 # Decisions
 
@@ -127,3 +128,15 @@ HEX-95. The `Screen` gives the canvas the screen right of the curve, behind a ve
 ### DEC-20 The screen's specimens stay in the route, and signed out they read Help itself
 
 HEX-95, cubic's reviews. Moved out of the route body to a folder the router skips, `routes/-design-system/`, the specimens were encrypted on GitHub: `.gitattributes` hands every name starting with `-` to transcrypt, and CI checks out without the key. They went back into `design-system.tsx`. The signed-out specimens first drew a hand-made Help, its titles copied into messages, a second copy of a System Mapping owns; they read Help itself now, `useHelp` in the page's language inside a `ReadBoundary`, as `/help` does, so they show what a visitor signed out sees and cannot drift from `help/`.
+
+### DEC-21 The chat's text is `Words`, and the Proposal is a `Widget` that leaves a `Receipt`
+
+HEX-98. No piece of `ui/` imports a domain, the canvas's included, and a component takes its content as props, so the chat's pieces take no Assistant's Entry. Where they name a state the domain names too, a Proposal's `Fate`, they keep their own union: HEX-101 hands them the domain's, which stops compiling should the domain grow a member `ui/` cannot draw. Each takes its text as `Words` (`ui/chat/text/words.tsx`): plain words, a tile named (a `Mention`'s props) and who acted, by name, in the order the sentence's language puts them. A feature reads its message with a mark in each tile's place and weaves the tiles in (`weave`, beside `Words`, tested), so a sentence is never split into fragments a translator can't reorder. The pieces of `components.html#text` became `Message` (both voices, one piece, since they share the column and the copy), `Thinking`, `Mention`, `Events` (a navigation, a change, the live step and a Turn's end as lines, by who acted, a run of reads folded), `DaySplit`, `Proposal` and `Receipt` (what an accepted Proposal and a Turn that applied its changes both leave, with the Undo), and the chat's atom `Fold`, the one line that opens what it hides, and `HexMark`, no piece of its own. HEX-101 wires these into `features/conversation/`, which still draws v0's look meanwhile.
+
+HEX-96's frames landed while this was in review, and the two met. HEX-98 had its own `Act` in `ui/chat/atoms/`; it gave way to HEX-96's, the atom both sides share (DEC-12), each of its uses kept. The Proposal had drawn its own zone until the widget's frame landed: it is a `Widget` in the agent's voice now, its changes the body, Accept its first action with ⌘↵, Discard apart and asked through `Dialog`, which supersedes `ConfirmDialog` (DEC-11). Decided, it leaves HEX-98's `Receipt` rather than the widget's `done` line: the receipt takes the focus the widget had, says it was undone, keeps the changes folded under it and writes the time in the reader's zone, none of which the widget's line does. So two lines say what a decision left for now, the widget's `done` and `Receipt`; which one stays is a question on HEX-98's pull request. HEX-95's screen landed after: its specimens' conversation, drawn by hand until the chat's text was proposed, is the `Message`s now.
+
+### DEC-22 Every ink reads at 4.5:1, `faint` included, and a decided Proposal's receipt unfolds its changes
+
+HEX-98, Ulysse's answers to two of its pull request's questions. `faint` measured 3.1:1 on the ground in dark and 3.6:1 in light, and in light `destructive` 4.1:1, `human` 3.3:1, `warning` 3.4:1 and `success` 4.2:1, under the 4.5:1 small text needs. Each rose, its hue and chroma kept, to just past 4.5:1 on the ground and on a card: `faint` to L 0.595 in dark and 0.527 in light, in light `human` to 0.532 (`ring`, `sidebar-ring` and `chart-1` with it, the same amber), `destructive` to 0.533, `warning` to 0.545, `success` to 0.507 (`chart-5` follows `faint`). Dark's other inks already passed. `gallery/tokens.test.ts` now holds every ink to it, in both themes, so a token cannot fall under again unnoticed. The values part from `3-design-system/`'s, frozen until HEX-112 retires it; the app's are the ones that count. So `Fold`, which had moved to `muted-foreground` for its contrast alone, is `faint` again, as `components.html` draws it; the composer's quiet text (DEC-10) and the rail's labels (DEC-18), moved for the same reason, could go back too, each left to its next ticket.
+
+A decided Proposal's `Receipt` keeps its changes, folded under its line (`Change` and `Changes` moved into `Receipt.tsx`, which the Proposal's zone draws its list with too): what an accepted one changed, what a discarded one would have. Its `Fold` comes last on the line, after the time, so the keys and a screen reader reach the list as the eye does, below it; a Turn's receipt takes its changes alike.
