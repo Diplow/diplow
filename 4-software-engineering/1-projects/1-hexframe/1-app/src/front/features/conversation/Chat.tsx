@@ -30,7 +30,6 @@ import { m } from '#/paraglide/messages'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
 
 import { mentionablesOf } from './composer/mention'
-import { modeOf } from './composer/typing'
 import { ConversationFoot, Timeline } from './Conversation'
 import { dayOf, latestUndoable } from './timeline/timeline'
 
@@ -146,13 +145,14 @@ export function ChatComposer({ onSend, turn, mode }: ChatComposerProps) {
   return (
     <ConversationFoot
       onSend={(text) => onSend?.(text)}
-      onCommand={(command) => {
-        if (command === 'undo') {
-          if (undoable !== undefined) undo(undoable)
-        } else if (modeOf[command] !== shownMode) switching.mutate(modeOf[command])
-      }}
+      onUndo={
+        undoable === undefined || undoing
+          ? undefined
+          : () => {
+              undo(undoable)
+            }
+      }
       tiles={tiles ?? []}
-      undoable={undoable !== undefined && !undoing}
       // Until it is read, or when reading it failed, the composer says nothing either way.
       unavailable={available === false}
       running={

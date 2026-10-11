@@ -103,12 +103,12 @@ describe('messageWords', () => {
 describe('proposedOf', () => {
   const created = { _tag: 'Change' as const, verb: 'TileCreated', tile: drafts }
 
-  it('draws a Tile a Proposal creates as the agent’s draft until it is accepted', () => {
-    expect(tile(proposedOf(created, naming, false).words.at(-1))).toEqual({
+  it('draws a Tile a Proposal creates as the agent’s draft while it is open, gone once not', () => {
+    expect(tile(proposedOf(created, naming, true).words.at(-1))).toEqual({
       title: 'Drafts',
       standing: 'draft',
     })
-    expect(tile(proposedOf(created, naming, true).words.at(-1))).toEqual({
+    expect(tile(proposedOf(created, naming, false).words.at(-1))).toEqual({
       title: 'Drafts',
       standing: 'gone',
     })

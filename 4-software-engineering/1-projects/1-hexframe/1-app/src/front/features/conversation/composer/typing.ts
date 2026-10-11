@@ -101,14 +101,15 @@ export function marksOf(
   { value, links }: Field,
   among: ReadonlyArray<Command>,
 ): ReadonlyArray<Mark> {
-  const pointed = links.flatMap(({ shown }) =>
-    Array.from(value.matchAll(wholeLink(shown)), (found) => ({
-      from: found.index,
-      to: found.index + found[0].length,
-      kind: 'tile' as const,
-    })),
-  )
-  return [...commandMarkOf(value, among), ...pointed]
+  const marks: Mark[] = [...commandMarkOf(value, among)]
+  // The longest first, as the Message sends them, so a link another starts with never takes its place.
+  for (const { shown } of [...links].sort((a, b) => b.shown.length - a.shown.length)) {
+    for (const found of value.matchAll(wholeLink(shown))) {
+      const mark = { from: found.index, to: found.index + found[0].length, kind: 'tile' as const }
+      if (!marks.some(({ from, to }) => mark.from < to && from < mark.to)) marks.push(mark)
+    }
+  }
+  return marks
 }
 
 /** What a pick does to the field: its next value and caret, the link it picked if any, or a language. */

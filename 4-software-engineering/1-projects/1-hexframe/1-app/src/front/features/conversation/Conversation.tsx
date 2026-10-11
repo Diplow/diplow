@@ -23,7 +23,7 @@ import { Message } from '#/front/ui/chat/text/Message'
 import { EmptyState } from '#/front/ui/layouts/states'
 
 import type { Mentionable } from './composer/mention'
-import { type Offering, offered, type RunCommand } from './composer/typing'
+import { modeOf, type Offering, offered } from './composer/typing'
 import { EntryBlock } from './entry/Entry'
 import type { Deciding } from './entry/parts'
 import { blocksOf, messageWords, type Naming } from './entry/words'
@@ -74,12 +74,10 @@ interface ModeChoice {
 interface FootProps {
   /** A Message the user sent, trimmed and never empty, each Tile it `@`s linked by its id. */
   onSend: (text: string) => void
-  /** A command the page runs with what the agent does: the Mode, or an Undo. */
-  onCommand: (command: Exclude<RunCommand, 'language'>) => void
+  /** Undoes the latest the agent applied, which `/undo` runs; none while nothing may be undone. */
+  onUndo?: (() => void) | undefined
   /** The Tiles the user may `@`. */
   tiles: ReadonlyArray<Mentionable>
-  /** Whether something the agent applied may be undone now. */
-  undoable?: boolean
   /** The Account may not use the Assistant: its Messages are kept, and no agent answers them. */
   unavailable?: boolean
   /** The Turn running, and how to stop it: the field waits meanwhile. */
@@ -244,21 +242,23 @@ function goTo(locale: string) {
 
 /**
  * The composer, through its state hook: a pick put in the field, its caret after it, or the language
- * gone to; a Message sent as words, or a command the field opens with run, the words after it sent
- * once it ran.
+ * gone to; a Message sent as words, or a command the field opens with run, the Mode's by its switch,
+ * `/undo` by `onUndo`, the words after it sent once it ran.
  */
 export function ConversationFoot({
   onSend,
-  onCommand,
   tiles,
-  undoable = false,
+  onUndo,
   unavailable = false,
   running,
   sending = false,
   waiting = false,
   mode,
 }: FootProps) {
-  const among = offered({ modes: mode !== undefined && !unavailable, undoable } satisfies Offering)
+  const among = offered({
+    modes: mode !== undefined && !unavailable,
+    undoable: onUndo !== undefined,
+  } satisfies Offering)
   const { state, actions } = useComposerState(tiles, among)
   const field = useRef<HTMLTextAreaElement>(null)
   return (
@@ -290,8 +290,10 @@ export function ConversationFoot({
         else if ('message' in submitted) onSend(submitted.message)
         else {
           // The command first, then the words after it, as the Message they are.
-          onCommand(submitted.command)
-          if (submitted.then !== undefined) onSend(submitted.then)
+          const { command, then } = submitted
+          if (command === 'undo') onUndo?.()
+          else if (mode !== undefined && modeOf[command] !== mode.mode) mode.choose(modeOf[command])
+          if (then !== undefined) onSend(then)
         }
       }}
       sending={sending}

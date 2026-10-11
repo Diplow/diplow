@@ -256,10 +256,10 @@ const proposed: Record<OperationEvent['_tag'], (inputs: Record<Two, string>) => 
 
 /**
  * A change a Proposal drafted, its verb's icon and what it would do; a Tile it creates is the agent's
- * draft until it is accepted. A verb this page does not know yet said plainly.
+ * draft while the Proposal is open, deleted once discarded or undone. A verb this page does not know yet said plainly.
  */
-export function proposedOf(change: ProposedChange, naming: Naming, accepted: boolean): Change {
-  const drafted = !accepted && change.verb === 'TileCreated'
+export function proposedOf(change: ProposedChange, naming: Naming, open: boolean): Change {
+  const drafted = open && change.verb === 'TileCreated'
   const pieces = {
     title: recorded(change.tile, naming, drafted),
     other: change.other === undefined ? named('') : recorded(change.other, naming),

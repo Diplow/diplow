@@ -173,25 +173,15 @@ interface OnItsWay {
   readonly refused: boolean
 }
 
-/**
- * Each Message on its way read once per state of its write, so `useMutationState` finds the same
- * values while nothing changed, and the timeline does not draw again at each notification.
- */
-const onItsWayByState = new WeakMap<Mutation['state'], OnItsWay | undefined>()
-
 /** A write that posts a Message, as the timeline shows it; none should its variables not decode. */
-function onItsWayOf(mutation: Mutation): OnItsWay | undefined {
-  if (onItsWayByState.has(mutation.state)) return onItsWayByState.get(mutation.state)
-  const onItsWay = Option.getOrUndefined(
+const onItsWayOf = (mutation: Mutation): OnItsWay | undefined =>
+  Option.getOrUndefined(
     Option.map(decodeSent(mutation.state.variables), (sent) => ({
       id: mutation.mutationId,
       sent,
       refused: mutation.state.status === 'error',
     })),
   )
-  onItsWayByState.set(mutation.state, onItsWay)
-  return onItsWay
-}
 
 /**
  * The Messages the user posted that the Conversation does not hold, oldest first: each on its way
@@ -278,8 +268,11 @@ export const useDiscardProposal = () => {
   })
 }
 
+/** The write that undoes what was applied, by its server function's name. */
+const undoScope = 'undo'
+
 /** Whether an Undo is on its way, whichever part of the page asked for it. */
-export const useUndoing = () => useIsMutating({ mutationKey: ['undo'] }) > 0
+export const useUndoing = () => useIsMutating({ mutationKey: [undoScope] }) > 0
 
 /**
  * Undoes what a Turn applied, or an accepted Proposal, by its id, then reads the Conversation again
@@ -288,7 +281,7 @@ export const useUndoing = () => useIsMutating({ mutationKey: ['undo'] }) > 0
 export const useUndo = () => {
   const client = useQueryClient()
   return useMutation({
-    ...write('undo', (applied: string) => undo({ data: { applied } }), {
+    ...write(undoScope, (applied: string) => undo({ data: { applied } }), {
       queue: conversationQueue,
     }),
     onSettled: () => followAgain(client),

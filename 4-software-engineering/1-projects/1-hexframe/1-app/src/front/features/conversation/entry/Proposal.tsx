@@ -1,7 +1,7 @@
 // A Proposal in the timeline, on the widget the proposal drew (`Proposal`, ui's `chat/entries/`): the
 // changes the agent drafted in ask, each in its verb's words and icon, the Tiles named by the Titles
-// Mapping gave them on the System the Proposal makes, a Tile it creates the agent's draft until it is
-// accepted. While it is open the user accepts it whole or discards it, asked first; once decided it
+// Mapping gave them on the System the Proposal makes, a Tile it creates the agent's draft while it is
+// open. While it is open the user accepts it whole or discards it, asked first; once decided it
 // leaves its receipt, its changes folded under it, and once accepted its Undo, until it is undone.
 import { type Entry, offersUndo } from '#/domains/assistant/entities'
 import { m } from '#/paraglide/messages'
@@ -24,7 +24,7 @@ export function ProposalEntry({ entry, naming, decide }: ProposalProps) {
       title={
         count === 1 ? m.conversation_proposal_title_one() : m.conversation_proposal_title({ count })
       }
-      changes={changes.map((change) => proposedOf(change, naming, fate === 'accepted'))}
+      changes={changes.map((change) => proposedOf(change, naming, fate === 'open'))}
       // Assistant's own: should it grow a fate the widget cannot draw, this stops compiling.
       fate={fate}
       at={entry.at}

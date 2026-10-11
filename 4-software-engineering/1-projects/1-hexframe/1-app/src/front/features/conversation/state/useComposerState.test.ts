@@ -21,6 +21,7 @@ const tiles: ReadonlyArray<Mentionable> = [
   { id: 'root', title: 'Ada', trail: [] },
   { id: 'work', title: 'Work', trail: ['Ada'] },
   { id: 'team', title: 'Team', trail: ['Ada', 'Work'] },
+  { id: 'lead', title: 'Team lead', trail: ['Ada'] },
 ]
 
 function render(offering = { modes: true, undoable: true }) {
@@ -152,6 +153,19 @@ describe("the composer's @", () => {
     expect(result.current.state.typing).toBeUndefined()
     type('Ask @Team about it ')
     expect(send()).toEqual({ message: `Ask ${linkTo('team')} about it` })
+  })
+
+  it('marks a link another starts with once, the longer whole', () => {
+    const { result, type, pick } = render()
+    type('@te')
+    pick('lead')
+    type('@Team lead @te')
+    pick('team')
+    type('@Team lead @Team')
+    expect(result.current.state.marks).toEqual([
+      { from: 0, to: 10, kind: 'tile' },
+      { from: 11, to: 16, kind: 'tile' },
+    ])
   })
 
   it('marks nothing once a link picked is edited, and sends it as written', () => {
