@@ -8,7 +8,7 @@ import { useEffect, useRef } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { cutAround } from './commands'
+import { cutAround } from '../atoms/cut'
 
 /** A command: its icon, its name, what it takes and what it does. */
 interface CommandRow {
@@ -76,7 +76,7 @@ export function List({ id, listing, active, onHover, onPick }: ListProps) {
     })
   }, [id, active])
   return (
-    <div className="absolute inset-x-0 bottom-full z-30 flex max-h-[min(19rem,45dvh)] flex-col bg-popover text-popover-foreground shadow-lg before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-linear-to-r before:from-input before:to-input/30 motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1.5">
+    <div className="absolute bottom-full left-0 right-[var(--screen-foot-inset,0px)] z-30 flex max-h-[min(19rem,45dvh)] flex-col bg-popover text-popover-foreground shadow-lg before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-linear-to-r before:from-input before:to-input/30 motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1.5">
       <div
         ref={box}
         id={id}
@@ -88,7 +88,7 @@ export function List({ id, listing, active, onHover, onPick }: ListProps) {
           <div key={group.label} role="group" aria-labelledby={`${id}-group-${String(index)}`}>
             <div
               id={`${id}-group-${String(index)}`}
-              className="px-4 pt-2 pb-1 font-mono text-[0.65625rem] text-muted-foreground sm:px-9"
+              className="px-4 pt-2 pb-1 font-mono text-[0.65625rem] text-muted-foreground @wide:px-9"
             >
               {group.label}
             </div>
@@ -100,11 +100,11 @@ export function List({ id, listing, active, onHover, onPick }: ListProps) {
                 aria-selected={row.id === active}
                 lang={row.kind === 'choice' ? row.lang : undefined}
                 className={cn(
-                  'group/row relative grid cursor-default items-baseline gap-3 px-4 py-1.5 sm:px-9 pointer-coarse:min-h-11 pointer-coarse:items-center',
+                  'group/row relative grid cursor-default items-baseline gap-3 px-4 py-1.5 @wide:px-9 pointer-coarse:min-h-11 pointer-coarse:items-center',
                   // The title or the name first; what tells it apart gives way.
                   'grid-cols-[1rem_minmax(0,auto)_minmax(0,1fr)]',
                   row.id === active &&
-                    'bg-linear-to-r from-human/11 to-human/2 to-70% before:absolute before:inset-y-1.5 before:left-1.5 before:w-px before:bg-human sm:before:left-5.5',
+                    'bg-linear-to-r from-human/11 to-human/2 to-70% before:absolute before:inset-y-1.5 before:left-1.5 before:w-px before:bg-human @wide:before:left-5.5',
                 )}
                 // A press keeps the focus in the field; the click then picks.
                 onMouseDown={(event) => {
@@ -123,12 +123,12 @@ export function List({ id, listing, active, onHover, onPick }: ListProps) {
           </div>
         ))}
         {rows.length === 0 && (
-          <p className="px-4 py-3 text-sm font-light text-muted-foreground sm:px-9">
+          <p className="px-4 py-3 text-sm font-light text-muted-foreground @wide:px-9">
             {listing.none}
           </p>
         )}
       </div>
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t px-4 py-2 text-xs font-light text-muted-foreground sm:px-9 pointer-coarse:hidden">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t px-4 py-2 text-xs font-light text-muted-foreground @wide:px-9 pointer-coarse:hidden">
         <Keys keys={['↑', '↓']} does={m.composer_keys_move()} />
         <Keys keys={['↵']} does={m.composer_keys_take()} />
         <Keys keys={['esc']} does={m.composer_keys_leave()} />

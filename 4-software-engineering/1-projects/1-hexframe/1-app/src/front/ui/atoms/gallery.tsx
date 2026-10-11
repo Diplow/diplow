@@ -23,7 +23,6 @@ import { GallerySection, GalleryState } from '../gallery/frame'
 import { Act, voiceOf } from './controls/act'
 import { Button } from './controls/button'
 import { Input } from './controls/input'
-import { LocaleSwitch } from './controls/LocaleSwitch'
 import { Textarea } from './controls/textarea'
 import { Field } from './forms/field'
 import { openedOnRefusal, useAppForm } from './forms/form'
@@ -41,7 +40,6 @@ export function AtomsGallery() {
       <ActGallery />
       <MenuGallery />
       <FeedbackGallery />
-      <SettingsGallery />
     </>
   )
 }
@@ -430,16 +428,5 @@ function FeedbackGallery() {
         </GalleryState>
       </GallerySection>
     </>
-  )
-}
-
-// It sits in every page's header too; here it changes the page itself, as there.
-function SettingsGallery() {
-  return (
-    <GallerySection name="LocaleSwitch">
-      <GalleryState label={m.gallery_state_click_to_switch()}>
-        <LocaleSwitch />
-      </GalleryState>
-    </GallerySection>
   )
 }

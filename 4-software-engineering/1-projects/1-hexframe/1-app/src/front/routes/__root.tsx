@@ -6,7 +6,6 @@ import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 import { Toaster } from '#/front/ui/atoms/Toaster'
 import { Button } from '#/front/ui/atoms/controls/button'
-import { LocaleSwitch } from '#/front/ui/atoms/controls/LocaleSwitch'
 import { themeScript } from '#/front/ui/theme'
 
 import appCss from '../styles.css?url'
@@ -37,7 +36,6 @@ function RootDocument({ children }: { children: ReactNode }) {
         <header className="flex h-(--header) items-center justify-end gap-2 px-4">
           <SignedInLinks />
           <HelpLink />
-          <LocaleSwitch />
         </header>
         {children}
         <Toaster />

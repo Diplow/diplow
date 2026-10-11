@@ -1,8 +1,8 @@
 // Home: the one screen, signed in. The Account's System on the canvas, the centered Tile's card at its
 // foot, where you are in the canvas's corner, the theme at its head, and the chat, over the Account's
 // Conversation, its composer at its foot: wide, side by side along the curve; on a phone, one side in
-// front, the chat when the page opens, the seam turning it, and a Message's link bringing the canvas
-// forward. The view and the change under way live in the search params, so a link shows what its
+// front, the chat when the page opens, the seam turning it, and a Tile the chat names bringing the
+// canvas forward. The view and the change under way live in the search params, so a link shows what its
 // sender saw; a Tile's form opens as a drawer. Every gesture that changes the view is published on the
 // client bus as a navigation fact, which the Conversation's navigation sender merges and records once
 // something else enters the timeline, a Message the chat posts included, or the page is hidden. Signed
@@ -10,7 +10,8 @@
 // Conversation, so a write it did not make, an agent's, a Key's or another tab's, shows on the canvas
 // and in the timeline once the tab regains focus, and every 2 s while a Turn runs. A Message is sent
 // from the view: its center, where the Turn answering it starts unless it opens with a link to a Tile,
-// and the Tiles on screen; a Message's link centers the canvas on its Tile, a gesture as any other.
+// and the Tiles on screen; a refused one is posted again when the chat retries it. A Tile the chat
+// names centers the canvas on it, a gesture as any other.
 import { createFileRoute } from '@tanstack/react-router'
 import { useMemo } from 'react'
 
@@ -72,7 +73,7 @@ function Home() {
     onSearchChange(withView(search, view))
     publish(new Navigated(action))
   }
-  // A Message's link crosses to the canvas: centered on its Tile, the canvas comes forward.
+  // A Tile the chat names crosses to the canvas: centered on it, the canvas comes forward.
   const onCenter = (tile: string) => {
     if (tree === undefined) return
     onViewChange(centerOn(tree, tile), { gesture: 'center', tile })
@@ -97,17 +98,13 @@ function Home() {
         corner={<Breadcrumb system={tree} view={viewOf(search)} onViewChange={onViewChange} />}
         messages={
           <ReadBoundary>
-            <ChatTimeline onCenter={onCenter} />
+            <ChatTimeline onCenter={onCenter} turn={turn} resend={postMessage} />
           </ReadBoundary>
         }
         composer={
-          // On the card's ground, as the composer's proposal is, so the canvas behind it never shows
-          // through; clear of the curve, as the screen says.
-          <div className="bg-card @wide:pr-(--screen-clear)">
-            <ReadBoundary>
-              <ChatComposer onSend={onSend} turn={turn} mode={mode} />
-            </ReadBoundary>
-          </div>
+          <ReadBoundary>
+            <ChatComposer onSend={onSend} turn={turn} mode={mode} />
+          </ReadBoundary>
         }
       />
     </main>

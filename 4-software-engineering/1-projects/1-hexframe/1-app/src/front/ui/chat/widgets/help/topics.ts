@@ -2,7 +2,7 @@
 // where it leads, and what `/help` and a few words find, a title first, each with the sentence it shows
 // in, cut around it (Help's Bodies are Markdown, read here as plain sentences). HEX-103 moves them
 // beside Help's reads.
-import { cutAround, type Cut } from '../../composer/commands'
+import { cutAround, type Cut } from '../../atoms/cut'
 import { places, type Place } from '../Places'
 
 /** A topic of Help, as the widget reads it. */
