@@ -13,7 +13,7 @@ import { cn } from 'cn'
 import { m } from '#/paraglide/messages'
 
 import { directions, neighbor, type Direction, type Hex, type Point } from '../geometry/geometry'
-import { buttonKeys } from '../keys'
+import { buttonKeys, type Action } from '../keys'
 import { BlurDef, FadeDef, points, scaled, Sweep, tint, type Fade } from './light'
 import { fitWords, linesThatFit, type Fit } from '../geometry/words'
 
@@ -78,7 +78,7 @@ export type TileProps = TileLook & {
   held?: Held
   motion?: TileMotion
   /** What a click does, and its name for a screen reader; without it, the tile is no button. */
-  action?: { label: string; onSelect: () => void }
+  action?: Action
   /** Screen px per unit of the hex, so the words fit the tile's size on screen. 1 by default. */
   scale?: number
 }
@@ -361,9 +361,9 @@ const noteTones: Partial<Record<TileKind, string>> = {
 }
 
 /**
- * Its words, in the box its size gives them: the title always, in italics at the center; under a
- * radius of 72 on screen, alone; otherwise the preview below it, as many lines as fit, then the word
- * under them. Under a radius of 30, none: the tile is its light, and its name is for a screen reader.
+ * Its words, in the box its size on screen gives them (`fitWords`): the title, in italics at the
+ * center, alone on a small tile; on a larger one the preview below it, as many lines as fit, then the
+ * word under them. On the smallest, none: the tile is its light, and its name is for a screen reader.
  */
 function Words(props: TileProps) {
   const fit = fitWords(props.hex.radius * (props.scale ?? 1))
@@ -376,9 +376,18 @@ function Fitted(props: TileProps & { fit: Fit }) {
   const { hex, kind, words, place = 'ring', scale = 1, fit } = props
   const alone = fit.preview === undefined
   const label = useRef<HTMLDivElement>(null)
+  // What sets the height above the preview: its words, and the title's type, which its place and
+  // kind choose.
   const lines = usePreviewLines(
     label,
-    [words.title, words.preview, words.note, clashOf(props), fit.title].join('|'),
+    [
+      words.title,
+      words.preview,
+      words.note,
+      clashOf(props),
+      fit.title,
+      titleClass(props, alone),
+    ].join('|'),
   )
   const width = fit.width / scale
   const height = fit.height / scale

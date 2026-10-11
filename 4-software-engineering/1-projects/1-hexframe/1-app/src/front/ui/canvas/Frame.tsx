@@ -6,7 +6,7 @@ import { m } from '#/paraglide/messages'
 
 import { textBox } from './geometry/geometry'
 import type { CanvasHex } from './geometry/shape'
-import { buttonKeys } from './keys'
+import { buttonKeys, type Action } from './keys'
 import { HexShape, polygonPoints, strokeWidth } from './look'
 
 type Of<Kind extends CanvasHex['kind']> = Extract<CanvasHex, { kind: Kind }>
@@ -23,7 +23,7 @@ export function Frame({ hex }: { hex: Of<'ground'> }) {
 interface EmptySlotProps {
   hex: Of<'empty'>
   /** What a click on the slot does, and its name for a screen reader; without it, the slot is inert. */
-  action?: { label: string; onSelect: () => void } | undefined
+  action?: Action | undefined
 }
 
 /** A Direction of a ring that holds no Tile yet: a button, with a plus, when it has an action. */

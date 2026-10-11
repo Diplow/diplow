@@ -4,13 +4,13 @@
 // a sweep of light; and the ground a hex gives way to when it opens in place, faint, or teal and
 // dashed under the center's Context.
 import type { Hex } from '../geometry/geometry'
-import { buttonKeys } from '../keys'
+import { buttonKeys, type Action } from '../keys'
 import { points, Sweep, tint } from './light'
 
 interface SlotProps {
   hex: Hex
   /** What a click on the slot does, and its name for a screen reader; without it, nothing can be added. */
-  action?: { label: string; onSelect: () => void } | undefined
+  action?: Action | undefined
   /** Tiles will be here once they load. */
   loading?: boolean
 }

@@ -145,10 +145,16 @@ function useOpened(svg: RefObject<SVGSVGElement | null>) {
         setOpened(undefined)
         setFolding(false)
       },
-      still ? 0 : parseFloat(duration),
+      still ? 0 : milliseconds(duration),
     )
   }
   return { opened, folding, open, fold }
+}
+
+/** A CSS duration, `500ms` or `0.5s`, in milliseconds. */
+function milliseconds(duration: string): number {
+  const value = parseFloat(duration)
+  return duration.trim().endsWith('ms') ? value : value * 1000
 }
 
 interface OpenedProps {
