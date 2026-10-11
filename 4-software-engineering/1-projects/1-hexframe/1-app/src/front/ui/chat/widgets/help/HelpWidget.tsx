@@ -5,13 +5,15 @@
 // grouped by where they work. Controlled: the topic, what was found and what each pick does are its
 // caller's.
 import { BookOpen, Keyboard, Search } from 'lucide-react'
-import { Fragment, type ReactNode } from 'react'
+import { Fragment } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Keys } from '../../../atoms/keys'
+import { HexMark } from '../../atoms/hex'
 import { Widget } from '../../layouts/Widget'
-import { Places, places, type Place } from '../Places'
+import { Mention } from '../../text/Mention'
+import { namesOf, Places, places, type Place } from '../Places'
 import type { Found } from './find'
 import { shortcuts } from './shortcuts'
 
@@ -32,6 +34,7 @@ interface Reading {
   onPlace: (place: Place) => void
   /** Where to read on: the tiles it leads to, as mentions. */
   readOn: ReadonlyArray<{ readonly id: string; readonly title: string }>
+  /** A mention taken: as any mention, it centers the canvas on that tile, Help, and the widget turns to it. */
   onReadOn: (id: string) => void
   /** Centers the canvas on Help at this topic. */
   onOpenInHelp: () => void
@@ -75,9 +78,7 @@ function Topic({
   onAsk,
   onDismiss,
 }: Reading) {
-  const names = Object.fromEntries(
-    places.map((place) => [place, frame.titles[place] ?? m.widget_help_no_topic()]),
-  ) as Record<Place, string>
+  const names = namesOf((place) => frame.titles[place] ?? m.widget_help_no_topic())
   const taken = places.filter((place) => frame.titles[place] !== undefined)
   return (
     <Widget
@@ -114,35 +115,19 @@ function Topic({
               {m.widget_help_read_on()}
             </span>
             {readOn.map(({ id, title: on }) => (
-              <Named
-                key={id}
-                onClick={() => {
-                  onReadOn(id)
-                }}
-              >
-                {on}
-              </Named>
+              <span key={id} className="text-[0.8125rem] font-light">
+                <Mention
+                  title={on}
+                  onCenter={() => {
+                    onReadOn(id)
+                  }}
+                />
+              </span>
             ))}
           </nav>
         )}
       </div>
     </Widget>
-  )
-}
-
-/**
- * A tile named, as the conversation names one: a small hex before its title, underlined faintly, a
- * button that opens it here. The conversation's own mention comes with its text (HEX-98).
- */
-function Named({ onClick, children }: { onClick: () => void; children: ReactNode }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="cursor-pointer text-[0.8125rem] font-light text-foreground underline decoration-foreground/22 underline-offset-[3px] transition-[text-decoration-color] outline-none before:mr-[0.3em] before:inline-block before:h-[0.6em] before:w-[0.52em] before:bg-foreground/40 before:align-[0.02em] before:[clip-path:polygon(50%_0,100%_25%,100%_75%,50%_100%,0_75%,0_25%)] hover:decoration-current focus-visible:decoration-current focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-(--voice) pointer-coarse:min-h-11"
-    >
-      {children}
-    </button>
   )
 }
 
@@ -167,13 +152,7 @@ function Results({ typed, found, onFound, onDismiss }: Searching) {
                 }}
                 className="group/found grid w-full cursor-pointer grid-cols-[0.875rem_1fr] gap-3 py-2.5 text-left outline-none focus-visible:outline-1 focus-visible:-outline-offset-1 focus-visible:outline-(--voice)"
               >
-                <svg viewBox="-8 -8 16 16" aria-hidden className="mt-1 size-3.5 overflow-visible">
-                  <polygon
-                    points="0,-7 6.06,-3.5 6.06,3.5 0,7 -6.06,3.5 -6.06,-3.5"
-                    vectorEffect="non-scaling-stroke"
-                    className="fill-foreground/9 stroke-input group-hover/found:stroke-foreground"
-                  />
-                </svg>
+                <HexMark className="mt-1 size-3.5 fill-foreground/9 stroke-input group-hover/found:stroke-foreground" />
                 <span className="grid gap-0.5">
                   <span className="font-human text-[0.9375rem] leading-tight text-foreground decoration-input underline-offset-[3px] group-hover/found:underline">
                     {title}

@@ -10,6 +10,16 @@ export type Place = 1 | 2 | 3 | 4 | 5 | 6
 
 export const places: readonly Place[] = [1, 2, 3, 4, 5, 6]
 
+/** Each place's name, from what stands there or where it lies. */
+export const namesOf = (name: (place: Place) => string): Record<Place, string> => ({
+  1: name(1),
+  2: name(2),
+  3: name(3),
+  4: name(4),
+  5: name(5),
+  6: name(6),
+})
+
 /** A hex's radius in the map, and the gap between two. */
 const radius = 7.2
 const gap = 0.8

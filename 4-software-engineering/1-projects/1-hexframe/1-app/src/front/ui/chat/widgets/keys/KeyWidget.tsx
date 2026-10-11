@@ -13,11 +13,10 @@ import { m } from '#/paraglide/messages'
 
 import { toast } from '../../../atoms/Toaster'
 import { Dialog } from '../../../layouts/Dialog'
+import { UntilDecided } from '../../entries/Receipt'
 import { Widget } from '../../layouts/Widget'
+import { weave } from '../../text/words'
 import { Field } from '../fields'
-
-/** The most characters a Key's name holds: IAM's. */
-const nameLimit = 32
 
 /** One of the Account's Keys, as its row shows it, its dates already worded by its caller. */
 export interface KeyRow {
@@ -36,6 +35,8 @@ interface Issuing {
   state: 'issue'
   name: string
   onNameChange: (name: string) => void
+  /** The most characters a name holds, as a reader counts them: IAM's, read by the caller. */
+  nameLimit: number
   /** Why the name was refused, on the field. */
   refused?: string | undefined
   /** On its way to IAM. */
@@ -68,50 +69,60 @@ interface Listed {
 interface Issued {
   state: 'done'
   name: string
-  at?: string
+  at: Date
 }
 
 type KeyWidgetProps = Issuing | Shown | Listed | Issued
 
-/** The key widget: issuing a Key, its secret shown once, the Keys given, or its receipt. */
+/**
+ * The key widget: issuing a Key, its secret shown once, the Keys given, or once done its receipt, which
+ * names the Key and never its secret, the focus handed to it.
+ */
 export function KeyWidget(props: KeyWidgetProps) {
-  switch (props.state) {
-    case 'issue':
-      return <Issue {...props} />
-    case 'shown':
-      return <Secret {...props} />
-    case 'list':
-      return <Keys {...props} />
-    case 'done':
-      return (
-        <Widget
-          voice="app"
-          state="done"
-          receipt={{
-            text: (
-              <>
-                {m.widget_key_issued()} <b>{props.name}</b>
-              </>
-            ),
-            at: props.at,
-          }}
-        />
-      )
-  }
+  return (
+    <UntilDecided
+      receipt={
+        props.state === 'done'
+          ? {
+              words: weave(m.widget_key_issued, { name: { name: props.name } }),
+              at: props.at,
+              tone: 'app',
+            }
+          : undefined
+      }
+    >
+      {props.state === 'issue' && <Issue {...props} />}
+      {props.state === 'shown' && <Secret {...props} />}
+      {props.state === 'list' && <Keys {...props} />}
+    </UntilDecided>
+  )
 }
 
-function Issue({ name, onNameChange, refused, sending = false, onIssue, onLater }: Issuing) {
+function Issue({
+  name,
+  onNameChange,
+  nameLimit,
+  refused,
+  sending = false,
+  onIssue,
+  onLater,
+}: Issuing) {
   return (
     <Widget
       voice="app"
-      form
-      state={sending ? 'working' : 'waiting'}
       icon={<KeyRound />}
       kicker={m.widget_key_kicker()}
       title={m.widget_key_connect()}
       subtitle={m.widget_key_what()}
       actions={[
-        { label: m.widget_key_create(), look: 'hex', onSelect: onIssue },
+        // On its way, it waits: a second press would issue a second Key.
+        {
+          label: m.widget_key_create(),
+          look: 'hex',
+          submit: true,
+          waits: sending,
+          onSelect: onIssue,
+        },
         { label: m.widget_key_later(), onSelect: onLater },
       ]}
       onDismiss={onLater}
@@ -228,7 +239,9 @@ function Copyable({
 }
 
 function Keys({ keys, onRevoke, onNew, onDone, byAgent = false }: Listed) {
+  // The Key asked about stays while the dialog closes, so its name never blanks on the way out.
   const [revoking, setRevoking] = useState<KeyRow | undefined>(undefined)
+  const [asking, setAsking] = useState(false)
   return (
     <>
       <Widget
@@ -273,6 +286,7 @@ function Keys({ keys, onRevoke, onNew, onDone, byAgent = false }: Listed) {
                   aria-label={m.keys_revoke_named({ name: key.name })}
                   onClick={() => {
                     setRevoking(key)
+                    setAsking(true)
                   }}
                   className="grid size-[1.625rem] cursor-pointer place-items-center text-muted-foreground opacity-0 transition-opacity duration-200 outline-none group-hover/key:opacity-100 group-focus-within/key:opacity-100 hover:text-destructive focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-destructive pointer-coarse:size-11 pointer-coarse:opacity-100 [&_svg]:size-[0.9375rem]"
                 >
@@ -284,16 +298,14 @@ function Keys({ keys, onRevoke, onNew, onDone, byAgent = false }: Listed) {
         </ul>
       </Widget>
       <Dialog
-        open={revoking !== undefined}
-        onOpenChange={(open) => {
-          if (!open) setRevoking(undefined)
-        }}
+        open={asking}
+        onOpenChange={setAsking}
         kicker={m.widget_key_revoke_kicker()}
         title={m.keys_revoke_title({ name: revoking?.name ?? '' })}
         confirmLabel={m.keys_revoke()}
         onConfirm={() => {
           if (revoking !== undefined) onRevoke(revoking.id)
-          setRevoking(undefined)
+          setAsking(false)
         }}
       >
         {m.keys_revoke_description({ name: revoking?.name ?? '' })}

@@ -1,115 +1,61 @@
 // The help widget on /design-system, on Help itself, read in the page's language and handed over by
 // the route, which `ui/` can't read: turn its pages by the map or by what they lead to, search it, see
-// the shortcuts. Opening in Help and asking the agent show in a toast.
-import { useState, type ReactNode } from 'react'
+// the shortcuts. The way around is the demo's (`../demo.ts`); opening in Help and asking the agent show
+// in a toast.
+import { useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { toast } from '../../../atoms/Toaster'
-import { GallerySection, GalleryState } from '../../../gallery/frame'
+import { GalleryColumn, GallerySection, GalleryState } from '../../../gallery/frame'
+import { said } from '../../samples'
+import { follow, pathTo, readOnOf, topicsOf, type HelpNode } from '../demo'
 import { places, type Place } from '../Places'
-import { topicsFor, type HelpTopic } from './find'
+import { topicsFor } from './find'
 import { HelpWidget } from './HelpWidget'
-
-/** A topic of Help and the six below it, as the route hands Help over. */
-export interface HelpNode extends HelpTopic {
-  readonly children: Partial<Readonly<Record<Place, HelpNode>>>
-}
 
 export function HelpWidgetGallery({ help }: { help: HelpNode }) {
   return (
     <GallerySection name="HelpWidget">
       <GalleryState label={m.gallery_state_help_topic()}>
-        <Column>
+        <GalleryColumn>
           <Reading help={help} />
-        </Column>
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_help_search()}>
-        <Column>
+        <GalleryColumn>
           <Searching help={help} typed={m.gallery_help_search_sample()} />
-        </Column>
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_help_none()}>
-        <Column>
+        <GalleryColumn>
           <Searching help={help} typed="xyzzy" />
-        </Column>
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_help_keys()}>
-        <Column>
+        <GalleryColumn>
           <HelpWidget state="keys" onDismiss={said(m.ui_widget_dismiss())} />
-        </Column>
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_widget_phone()}>
-        <Column phone>
+        <GalleryColumn phone>
           <Reading help={help} />
-        </Column>
+        </GalleryColumn>
       </GalleryState>
     </GallerySection>
   )
 }
 
-const said = (what: string) => () => {
-  toast(what)
-}
+/** Where the specimen opens: Help's third topic, Children and Directions. */
+const first: readonly Place[] = [3]
 
-function Column({ phone = false, children }: { phone?: boolean; children: ReactNode }) {
-  return (
-    <div
-      className={
-        phone ? 'grid w-[23.4375rem] max-w-full gap-4' : 'grid w-[37.5rem] max-w-full gap-4'
-      }
-    >
-      {children}
-    </div>
-  )
-}
-
-/** The topic a path of places leads to from Help's Root, and the topics on the way. */
-function follow(help: HelpNode, path: readonly Place[]) {
-  const trail = [help]
-  for (const place of path) {
-    const next = trail.at(-1)?.children[place]
-    if (next === undefined) break
-    trail.push(next)
-  }
-  return trail
-}
-
-/** Every topic of Help, the Root first, then each topic's six in their order. */
-function topicsOf(node: HelpNode): HelpNode[] {
-  return [
-    node,
-    ...places.flatMap((place) => {
-      const child = node.children[place]
-      return child === undefined ? [] : topicsOf(child)
-    }),
-  ]
-}
-
-/** The places that lead from the Root to a topic, found by its id. */
-function pathTo(node: HelpNode, id: string): Place[] | undefined {
-  if (node.id === id) return []
-  for (const place of places) {
-    const child = node.children[place]
-    const below = child === undefined ? undefined : pathTo(child, id)
-    if (below !== undefined) return [place, ...below]
-  }
-  return undefined
-}
-
-// A topic, read where it stands: a pick on the map turns to a neighbour, a mention reads on, deeper
-// or to the next two around.
+// A topic, read where it stands: a pick on the map turns to a neighbour, a topic it leads to reads on.
 function Reading({ help }: { help: HelpNode }) {
-  const [path, setPath] = useState<readonly Place[]>([3])
+  const [path, setPath] = useState(first)
   const trail = follow(help, path)
   const topic = trail.at(-1) ?? help
   const parent = trail.at(-2)
-  const lit = path.at(-1)
-  const below = places.flatMap((place) => topic.children[place] ?? [])
-  const around =
-    lit === undefined || parent === undefined
-      ? []
-      : [1, 2].flatMap((step) => parent.children[(((lit - 1 + step) % 6) + 1) as Place] ?? [])
+  const frame = parent ?? topic
   return (
     <HelpWidget
       state="topic"
@@ -120,31 +66,32 @@ function Reading({ help }: { help: HelpNode }) {
       frame={{
         titles: Object.fromEntries(
           places.flatMap((place) => {
-            const child = (parent ?? topic).children[place]
+            const child = frame.children[place]
             return child === undefined ? [] : [[place, child.title]]
           }),
         ),
-        lit: parent === undefined ? undefined : lit,
+        lit: parent === undefined ? undefined : path.at(-1),
       }}
       onPlace={(place) => {
         setPath(parent === undefined ? [place] : [...path.slice(0, -1), place])
       }}
-      readOn={(below.length > 0 ? below : around).map(({ id, title }) => ({ id, title }))}
+      readOn={readOnOf(help, path).map(({ id, title }) => ({ id, title }))}
       onReadOn={(id) => {
         setPath(pathTo(help, id) ?? path)
       }}
       onOpenInHelp={said(m.widget_help_open())}
       onAsk={said(m.widget_help_ask())}
       onDismiss={() => {
-        setPath([3])
+        setPath(first)
       }}
     />
   )
 }
 
 // What `/help` and a few words find, retyped here in a field of the page's own.
-function Searching({ help, typed: first }: { help: HelpNode; typed: string }) {
-  const [typed, setTyped] = useState(first)
+function Searching({ help, typed: firstTyped }: { help: HelpNode; typed: string }) {
+  const [typed, setTyped] = useState(firstTyped)
+  const topics = topicsOf(help)
   return (
     <>
       <label className="grid gap-1 text-xs text-muted-foreground">
@@ -160,9 +107,9 @@ function Searching({ help, typed: first }: { help: HelpNode; typed: string }) {
       <HelpWidget
         state="search"
         typed={typed}
-        found={topicsFor(topicsOf(help), typed)}
+        found={topicsFor(topics, typed)}
         onFound={(id) => {
-          toast(topicsOf(help).find((topic) => topic.id === id)?.title ?? id)
+          toast(topics.find((topic) => topic.id === id)?.title ?? id)
         }}
         onDismiss={said(m.ui_widget_dismiss())}
       />

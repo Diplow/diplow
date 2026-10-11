@@ -1,6 +1,6 @@
-// The key widget on /design-system, live on fixture Keys: name one and create it, see its secret
-// once, be done with it, find it among the Keys, revoke one. Nothing is issued: the secret is a
-// fixture's, and what would reach IAM shows in a toast.
+// The key widget on /design-system, live on sample Keys: name one and create it, see its secret once,
+// be done with it, find the Keys, revoke one. Nothing is issued: the secret is plainly a sample's, and
+// what would reach IAM shows in a toast; what IAM would refuse is the demo's (`../demo.ts`).
 import { RotateCcw } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 
@@ -8,103 +8,72 @@ import { m } from '#/paraglide/messages'
 
 import { Act } from '../../../atoms/controls/act'
 import { toast } from '../../../atoms/Toaster'
-import { GallerySection, GalleryState } from '../../../gallery/frame'
-import { lengthOf } from '../count'
+import { GalleryColumn, GallerySection, GalleryState } from '../../../gallery/frame'
+import { said } from '../../samples'
+import { nameLimit, nameRefusalOf } from '../demo'
 import { KeyWidget, type KeyRow } from './KeyWidget'
 
 export function KeyWidgetGallery() {
   return (
     <GallerySection name="KeyWidget">
       <GalleryState label={m.gallery_state_key_live()}>
-        <Column>
+        <GalleryColumn>
           <LiveKey />
-        </Column>
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_key_refused()}>
-        <Column>
-          <KeyWidget
-            state="issue"
-            name=""
-            onNameChange={said(m.widget_key_name())}
-            refused={m.error_iam_key_name_invalid()}
-            onIssue={said(m.widget_key_create())}
-            onLater={said(m.widget_key_later())}
-          />
-        </Column>
+        <GalleryColumn>
+          <LiveKey refused />
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_key_shown()}>
-        <Column>
-          <KeyWidget
-            state="shown"
-            name={fixtureName}
-            secret={fixtureSecret}
-            command={commandOf(fixtureSecret)}
-            onDone={said(m.keys_done())}
-          />
-        </Column>
+        <GalleryColumn>
+          <Shown />
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_key_list()}>
-        <Column>
+        <GalleryColumn>
           <ListedKeys />
-        </Column>
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_key_by_agent()}>
-        <Column>
-          <KeyWidget
-            state="list"
-            byAgent
-            keys={fixtureKeys()}
-            onRevoke={said(m.keys_revoke())}
-            onNew={said(m.widget_key_new())}
-            onDone={said(m.keys_done())}
-          />
-        </Column>
+        <GalleryColumn>
+          <ListedKeys byAgent />
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_widget_phone()}>
-        <Column phone>
-          <KeyWidget
-            state="shown"
-            name={fixtureName}
-            secret={fixtureSecret}
-            command={commandOf(fixtureSecret)}
-            onDone={said(m.keys_done())}
-          />
-        </Column>
+        <GalleryColumn phone>
+          <Shown />
+        </GalleryColumn>
       </GalleryState>
     </GallerySection>
   )
 }
 
-const said = (what: string) => () => {
-  toast(what)
-}
+/** A secret of the shape IAM issues, plainly a sample's: it opens nothing. */
+const sampleSecret = 'hf_a3fEXAMPLE0not0a0key0EXAMPLE0not0a0key0'
 
-function Column({ phone = false, children }: { phone?: boolean; children: ReactNode }) {
-  return (
-    <div
-      className={
-        phone ? 'grid w-[23.4375rem] max-w-full gap-4' : 'grid w-[37.5rem] max-w-full gap-4'
-      }
-    >
-      {children}
-    </div>
-  )
-}
-
-const fixtureName = 'Claude Code, laptop'
-
-/** A secret of the shape IAM issues, plainly a fixture's: it opens nothing. */
-const fixtureSecret = 'hf_a3fEXAMPLE0not0a0key0EXAMPLE0not0a0key0'
-
-/** The command, as the keys feature words it (`features/keys/command.ts`), for this page's origin. */
+/** The command, as the keys feature words it (`features/keys/command.ts`), for hexframe's origin. */
 const commandOf = (secret: string) =>
   `claude mcp add --transport http hexframe https://hexframe.ai/mcp --header "Authorization: Bearer ${secret}"`
 
+function Shown() {
+  return (
+    <KeyWidget
+      state="shown"
+      name={m.gallery_tile_sample_by()}
+      secret={sampleSecret}
+      command={commandOf(sampleSecret)}
+      onDone={said(m.keys_done())}
+    />
+  )
+}
+
 /** The Account's Keys, their dates worded as the caller would. */
-const fixtureKeys = (): KeyRow[] => [
+const sampleKeys = (): KeyRow[] => [
   {
     id: 'laptop',
-    name: fixtureName,
+    name: m.gallery_tile_sample_by(),
     start: 'hf_a3f',
     made: m.gallery_key_made_1(),
     used: m.gallery_key_used_1(),
@@ -112,7 +81,7 @@ const fixtureKeys = (): KeyRow[] => [
   },
   {
     id: 'obsidian',
-    name: 'Obsidian, desktop',
+    name: m.gallery_key_name_2(),
     start: 'hf_k9q',
     made: m.gallery_key_made_2(),
     used: m.gallery_key_used_2(),
@@ -120,7 +89,7 @@ const fixtureKeys = (): KeyRow[] => [
   },
   {
     id: 'backup',
-    name: 'Backup script',
+    name: m.gallery_key_name_3(),
     start: 'hf_x1c',
     made: m.gallery_key_made_3(),
     used: m.widget_key_never_used(),
@@ -128,11 +97,12 @@ const fixtureKeys = (): KeyRow[] => [
   },
 ]
 
-function ListedKeys() {
-  const [keys, setKeys] = useState(fixtureKeys)
+function ListedKeys({ byAgent = false }: { byAgent?: boolean }) {
+  const [keys, setKeys] = useState(sampleKeys)
   return (
     <KeyWidget
       state="list"
+      byAgent={byAgent}
       keys={keys}
       onRevoke={(id) => {
         const gone = keys.find((key) => key.id === id)
@@ -141,18 +111,20 @@ function ListedKeys() {
       }}
       onNew={said(m.widget_key_new())}
       onDone={() => {
-        setKeys(fixtureKeys())
+        setKeys(sampleKeys())
       }}
     />
   )
 }
 
-// From the first key to its receipt: a name checked as IAM would, the secret shown once, Done, then
-// the Keys with the new one first.
-function LiveKey() {
+// From the first key to its receipt: a name checked as IAM would, the secret shown once, Done.
+function LiveKey({ refused: refusedAtFirst = false }: { refused?: boolean }) {
+  const [now] = useState(() => new Date())
   const [state, setState] = useState<'issue' | 'shown' | 'done'>('issue')
   const [name, setName] = useState('')
-  const [refused, setRefused] = useState<string | undefined>(undefined)
+  const [refused, setRefused] = useState<string | undefined>(
+    refusedAtFirst ? m.error_iam_key_name_invalid() : undefined,
+  )
   const again = () => {
     setState('issue')
     setName('')
@@ -164,15 +136,16 @@ function LiveKey() {
       <KeyWidget
         state="issue"
         name={name}
+        nameLimit={nameLimit}
         onNameChange={(next) => {
           setName(next)
           setRefused(undefined)
         }}
         refused={refused}
         onIssue={() => {
-          const length = lengthOf(name.trim())
-          if (length === 0 || length > 32) setRefused(m.error_iam_key_name_invalid())
-          else setState('shown')
+          const refusal = nameRefusalOf(name)
+          setRefused(refusal)
+          if (refusal === undefined) setState('shown')
         }}
         onLater={again}
       />
@@ -182,14 +155,14 @@ function LiveKey() {
       <KeyWidget
         state="shown"
         name={name.trim()}
-        secret={fixtureSecret}
-        command={commandOf(fixtureSecret)}
+        secret={sampleSecret}
+        command={commandOf(sampleSecret)}
         onDone={() => {
           setState('done')
         }}
       />
     )
-  } else widget = <KeyWidget state="done" name={name.trim()} at="14:09" />
+  } else widget = <KeyWidget state="done" name={name.trim()} at={now} />
   return (
     <>
       {widget}

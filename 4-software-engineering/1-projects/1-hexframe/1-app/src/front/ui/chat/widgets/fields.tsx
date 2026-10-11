@@ -4,7 +4,7 @@
 // was changed, and its count near its limit; under it what was refused, said as it changes. Every
 // field is controlled: what it holds is its widget's caller's.
 import { cn } from 'cn'
-import { useId, type ReactNode, type Ref } from 'react'
+import { useId, type ReactNode } from 'react'
 
 import { countOf, type CountTone } from './count'
 
@@ -32,7 +32,6 @@ interface FieldProps {
   aside?: ReactNode
   /** Shown in the control's place while it is set: the page read as it will be. */
   shown?: ReactNode
-  fieldRef?: Ref<HTMLInputElement & HTMLTextAreaElement>
 }
 
 const countTones: Record<CountTone, string> = {
@@ -56,7 +55,6 @@ export function Field({
   placeholder,
   aside,
   shown,
-  fieldRef,
 }: FieldProps) {
   const id = useId()
   const errorId = `${id}-error`
@@ -101,9 +99,9 @@ export function Field({
       <Underlined invalid={invalid}>
         {shown ??
           (look === 'line' ? (
-            <input ref={fieldRef} type={type} {...control} />
+            <input type={type} {...control} />
           ) : (
-            <textarea ref={fieldRef} rows={look === 'prose' ? 4 : 3} {...control} />
+            <textarea rows={look === 'prose' ? 4 : 3} {...control} />
           ))}
       </Underlined>
       <p id={errorId} aria-live="polite" className="text-xs text-destructive empty:hidden">
@@ -145,27 +143,18 @@ interface TitleFieldProps {
   onChange: (value: string) => void
   error?: string | undefined
   placeholder?: string
-  fieldRef?: Ref<HTMLInputElement>
 }
 
 /**
  * A title written where it is read: in the user's serif at the widget's title size, underlined only
  * while the pointer is over it or the focus in it, its refusal under it.
  */
-export function TitleField({
-  label,
-  value,
-  onChange,
-  error,
-  placeholder,
-  fieldRef,
-}: TitleFieldProps) {
+export function TitleField({ label, value, onChange, error, placeholder }: TitleFieldProps) {
   const errorId = useId()
   const invalid = error !== undefined
   return (
     <div className="grid gap-1">
       <input
-        ref={fieldRef}
         value={value}
         aria-label={label}
         placeholder={placeholder}
@@ -187,7 +176,7 @@ export function TitleField({
   )
 }
 
-interface ChoiceProps<T extends string> {
+interface ChoiceProps<T extends string | number> {
   /** The group's name, for a screen reader: "Kind". */
   label: string
   choices: ReadonlyArray<{ readonly id: T; readonly label: string }>
@@ -199,7 +188,7 @@ interface ChoiceProps<T extends string> {
 }
 
 /** A few words to choose among, the one on underlined in the voice, what it means after them. */
-export function Choice<T extends string>({
+export function Choice<T extends string | number>({
   label,
   choices,
   on,
@@ -215,7 +204,7 @@ export function Choice<T extends string>({
     >
       {choices.map((choice) => (
         <button
-          key={choice.id}
+          key={String(choice.id)}
           type="button"
           aria-pressed={choice.id === on}
           onClick={() => {

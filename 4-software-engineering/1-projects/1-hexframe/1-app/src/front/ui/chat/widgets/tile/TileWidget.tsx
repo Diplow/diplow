@@ -1,37 +1,41 @@
 // A tile written in the conversation, as a widget whose title is the tile's title: amber while the
 // words are the user's. Its hex is the place: the frame the tile goes in, its slot lit; creating, the
 // free slots are dashed and a pick moves the tile there. Then the kind, the preview with its count, and
-// the page, in the user's serif, with Write and Preview. Editing, each changed field carries a dot and
-// Save sends only those; the tile changed meanwhile, the user's words stay and the widget says who
-// changed what. A refused write comes back as it left, the user's words put back and the refusal on
-// the field at fault. Controlled: the words, the place and what each action does are its caller's.
+// the page, in the user's serif, written or read. Editing, each changed field carries a dot and Save
+// sends only those; the tile changed meanwhile, the user's words stay, the widget says who changed
+// what, and Enter decides nothing. A refused write comes back as it left, the user's words put back and
+// the refusal on the field at fault. Once written, its receipt, the focus handed to it. Controlled: the
+// words, the place and what each action does are its caller's.
 import { Maximize2, Pencil } from 'lucide-react'
 import { useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Dialog } from '../../../layouts/Dialog'
+import { UntilDecided } from '../../entries/Receipt'
 import { Widget } from '../../layouts/Widget'
+import type { MentionProps } from '../../text/Mention'
+import { weave } from '../../text/words'
 import { Choice, Field, TitleField } from '../fields'
 import type { Place } from '../Places'
-import { Diff, type Segment } from './Proposal'
 import {
+  fieldNames,
   kinds,
   PlaceMark,
   placeNames,
-  previewLimit,
-  receiptOf,
   whereOf,
-  type Done,
   type TileField,
   type TileKind,
   type TilePlace,
   type TileWords,
 } from './parts'
+import { Diff, type Segment } from './Proposal'
 
 interface Form {
   words: TileWords
   onWordsChange: (words: TileWords) => void
+  /** The most characters a Preview holds, as a reader counts them: Mapping's, read by the caller. */
+  previewLimit: number
   /** Why its last write was refused, on the field at fault; the words it sent are put back. */
   refused?: Partial<Record<TileField, string>> | undefined
   onCancel: () => void
@@ -75,14 +79,49 @@ interface Editing extends Form {
   changed?: Changed | undefined
 }
 
+/** Once a write is sent, the widget leaves its receipt: what was done, to which tile, where. */
+interface Done {
+  mode: 'done'
+  did: 'created' | 'edited' | 'deleted'
+  /** The tile, named as the conversation names one: a click centers the canvas on it. */
+  tile: MentionProps
+  where: TilePlace
+  at: Date
+  onUndo?: (() => void) | undefined
+  undone?: boolean
+}
+
 type TileWidgetProps = Creating | Editing | Done
 
-/** A tile's widget: a new tile, an edit, or once written, its receipt. */
+const did = {
+  created: m.widget_tile_created,
+  edited: m.widget_tile_edited,
+  deleted: m.widget_tile_deleted,
+}
+
+/** A tile's widget: a new tile, an edit, or once written its receipt, the focus handed to it. */
 export function TileWidget(props: TileWidgetProps) {
   if (props.mode === 'done') {
-    return <Widget voice="human" state="done" receipt={receiptOf(props)} />
+    const { tile, where, at, onUndo, undone } = props
+    return (
+      <UntilDecided
+        receipt={{
+          words: weave(did[props.did], { tile: { tile }, where: whereOf(where) }),
+          at,
+          tone: 'human',
+          onUndo,
+          undone,
+        }}
+      >
+        {null}
+      </UntilDecided>
+    )
   }
-  return props.mode === 'new' ? <NewTile {...props} /> : <EditTile {...props} />
+  return (
+    <UntilDecided receipt={undefined}>
+      {props.mode === 'new' ? <NewTile {...props} /> : <EditTile {...props} />}
+    </UntilDecided>
+  )
 }
 
 function NewTile(props: Creating) {
@@ -90,7 +129,6 @@ function NewTile(props: Creating) {
   return (
     <Widget
       voice="human"
-      form
       mark={
         <PlaceMark where={where} label={m.widget_tile_place()} onPick={onPlaceChange} picking />
       }
@@ -101,6 +139,7 @@ function NewTile(props: Creating) {
         {
           label: m.widget_tile_create(),
           shortcut: { key: 'Enter', mod: true },
+          submit: true,
           onSelect: onCreate,
         },
         { label: m.ui_cancel(), onSelect: onCancel },
@@ -122,11 +161,9 @@ function NewTile(props: Creating) {
         {/* A finger can't hit the map's small hexes: the free places, by name, at a thumb's size. */}
         <Choice
           label={m.widget_tile_place()}
-          choices={where.free.map((place) => ({ id: String(place), label: placeNames[place]() }))}
-          on={String(where.place)}
-          onChoose={(place) => {
-            onPlaceChange(Number(place) as Place)
-          }}
+          choices={where.free.map((place) => ({ id: place, label: placeNames[place]() }))}
+          on={where.place}
+          onChoose={onPlaceChange}
           className="hidden pointer-coarse:flex"
         />
         <Words {...props} />
@@ -142,7 +179,6 @@ function EditTile(props: Editing) {
     <>
       <Widget
         voice="human"
-        form
         mark={<PlaceMark where={where} label={m.widget_tile_place()} />}
         kicker={taken ? m.widget_tile_taken_kicker() : m.widget_tile_edit_kicker()}
         title={words.title}
@@ -153,6 +189,7 @@ function EditTile(props: Editing) {
                 {
                   label: m.system_save(),
                   shortcut: { key: 'Enter', mod: true },
+                  submit: true,
                   onSelect: onSave,
                 },
                 { label: m.ui_cancel(), onSelect: onCancel },
@@ -169,7 +206,8 @@ function EditTile(props: Editing) {
                       },
                     ]),
               ]
-            : [
+            : // Someone else's change stands: each way on is a choice, none Enter's.
+              [
                 { label: m.widget_tile_save_over(), onSelect: changed.onSaveOver },
                 { label: m.widget_tile_compare(), onSelect: changed.onCompare },
                 { label: m.widget_tile_take_theirs(), onSelect: changed.onTakeTheirs, apart: true },
@@ -232,6 +270,7 @@ function Title({ words, onWordsChange, refused }: Form) {
 function Words({
   words,
   onWordsChange,
+  previewLimit,
   refused,
   edited = [],
 }: Form & { edited?: readonly TileField[] }) {
@@ -267,7 +306,7 @@ function Words({
   )
 }
 
-/** Write and Preview, which switch the page in place. */
+/** Write and Read, which switch the page in place, each to itself. */
 function WriteOrRead({
   reading,
   onReadingChange,
@@ -278,15 +317,15 @@ function WriteOrRead({
   return (
     <span role="group" aria-label={m.widget_tile_page()} className="flex gap-3.5">
       {[
-        { label: m.widget_tile_write(), on: !reading },
-        { label: m.widget_tile_read(), on: reading },
-      ].map(({ label, on }) => (
+        { label: m.widget_tile_write(), reads: false },
+        { label: m.widget_tile_read(), reads: true },
+      ].map(({ label, reads }) => (
         <button
           key={label}
           type="button"
-          aria-pressed={on}
+          aria-pressed={reading === reads}
           onClick={() => {
-            onReadingChange(!reading)
+            onReadingChange(reads)
           }}
           className="cursor-pointer text-muted-foreground outline-none hover:text-foreground focus-visible:underline focus-visible:underline-offset-4 aria-pressed:text-foreground pointer-coarse:min-h-11"
         >
@@ -339,10 +378,4 @@ function ChangedMeanwhile({ changed }: { changed: Changed }) {
       ))}
     </div>
   )
-}
-
-const fieldNames: Record<TileField, () => string> = {
-  title: m.system_field_title,
-  preview: m.system_field_preview,
-  body: m.widget_tile_page,
 }

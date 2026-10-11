@@ -8,7 +8,10 @@ import { useRef, useState, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
+import { UntilDecided } from '../../entries/Receipt'
 import { Widget } from '../../layouts/Widget'
+import type { MentionProps } from '../../text/Mention'
+import { weave } from '../../text/words'
 import { PlaceMark, whereOf, type TilePlace } from './parts'
 
 /** A path an import left out or refused, or the whole import, and why. */
@@ -206,8 +209,8 @@ function Lines({ title, lines }: { title: string; lines: readonly ReportLine[] }
 }
 
 interface ExportProps {
-  /** The tile exported, with everything below it. */
-  title: string
+  /** The tile exported, with everything below it, named as the conversation names one. */
+  tile: MentionProps
   /** How many tiles below it go along. */
   below: number
   phase: 'working' | 'done' | 'failed'
@@ -215,14 +218,14 @@ interface ExportProps {
   file?: string
   /** Why it failed. */
   reason?: string
-  at?: string
+  at: Date
   onRetry: () => void
   onDismiss: () => void
 }
 
 /** A tile and everything below it, saved as a zip: working a moment, then its receipt. */
 export function TileExport({
-  title,
+  tile,
   below,
   phase,
   file = '',
@@ -231,40 +234,39 @@ export function TileExport({
   onRetry,
   onDismiss,
 }: ExportProps) {
-  if (phase === 'done') {
-    return (
-      <Widget
-        voice="human"
-        state="done"
-        receipt={{
-          text: (
-            <>
-              {m.widget_export_did()} <b>{title}</b>,{' '}
-              {m.widget_export_receipt({ below: String(below), file })}
-            </>
-          ),
-          at,
-        }}
-      />
-    )
-  }
   const failed = phase === 'failed'
   return (
-    <Widget
-      voice="human"
-      state={failed ? 'failed' : 'working'}
-      icon={<PackageOpen />}
-      kicker={failed ? m.widget_export_failed_kicker() : m.widget_export_kicker()}
-      title={title}
-      subtitle={m.widget_export_what({ below: String(below) })}
-      actions={failed ? [{ label: m.ui_retry(), onSelect: onRetry }] : []}
-      onDismiss={onDismiss}
+    <UntilDecided
+      receipt={
+        phase === 'done'
+          ? {
+              words: weave(m.widget_export_receipt, {
+                tile: { tile },
+                below: String(below),
+                file,
+              }),
+              at,
+              tone: 'human',
+            }
+          : undefined
+      }
     >
-      {failed && reason !== undefined ? (
-        <p className="text-[0.84375rem] leading-normal font-light text-muted-foreground">
-          {reason}
-        </p>
-      ) : undefined}
-    </Widget>
+      <Widget
+        voice="human"
+        state={failed ? 'failed' : 'working'}
+        icon={<PackageOpen />}
+        kicker={failed ? m.widget_export_failed_kicker() : m.widget_export_kicker()}
+        title={tile.title}
+        subtitle={m.widget_export_what({ below: String(below) })}
+        actions={failed ? [{ label: m.ui_retry(), onSelect: onRetry }] : []}
+        onDismiss={onDismiss}
+      >
+        {failed && reason !== undefined ? (
+          <p className="text-[0.84375rem] leading-normal font-light text-muted-foreground">
+            {reason}
+          </p>
+        ) : undefined}
+      </Widget>
+    </UntilDecided>
   )
 }

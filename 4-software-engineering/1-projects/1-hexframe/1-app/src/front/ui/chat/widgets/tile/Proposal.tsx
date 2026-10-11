@@ -1,13 +1,24 @@
-// What the agent drafts for a tile, waiting on the user in its violet: a new tile's words read as
-// they will be, or an edit shown where it falls, what goes struck in faint, what comes on a violet
-// ground. Accept takes it; Edit it hands it over, the widget turning to the user's amber; Discard
-// throws it away.
+// What the agent drafts for a tile, waiting on the user in its violet: a Proposal (`entries/`) whose
+// changes are shown in full, a new tile's words read as they will be, or an edit where it falls, what
+// goes struck in faint, what comes on a violet ground, its hex the place the tile goes. Accept takes
+// it; Edit it hands it to the user's own widget; Discard asks first. Decided, it leaves the Proposal's
+// receipt, its change folded under it.
+import { HexagonIcon, Pencil } from 'lucide-react'
 import { Fragment, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { Widget } from '../../layouts/Widget'
-import { PlaceMark, whereOf, type TileField, type TilePlace, type TileWords } from './parts'
+import { type Fate, Proposal } from '../../entries/Proposal'
+import type { MentionProps } from '../../text/Mention'
+import { weave } from '../../text/words'
+import {
+  fieldNames,
+  PlaceMark,
+  whereOf,
+  type TileField,
+  type TilePlace,
+  type TileWords,
+} from './parts'
 
 /** A stretch of a field an edit keeps, takes out or puts in. */
 export interface Segment {
@@ -23,10 +34,17 @@ interface FieldChange {
 
 interface Decisions {
   where: TilePlace
+  /** The tile, named as the conversation names one, in the receipt's change. */
+  tile: MentionProps
+  fate: Fate
+  at: Date
+  undone?: boolean
   onAccept: () => void
   /** Takes the draft to edit it: the tile widget, in the user's voice, holding the agent's words. */
-  onEditIt: () => void
+  onEdit: () => void
   onDiscard: () => void
+  onUndo?: (() => void) | undefined
+  pending?: boolean
 }
 
 interface Drafted extends Decisions {
@@ -36,70 +54,64 @@ interface Drafted extends Decisions {
 
 interface Edited extends Decisions {
   kind: 'edit'
-  title: string
   changes: readonly FieldChange[]
-}
-
-const fieldNames: Record<TileField, () => string> = {
-  title: m.system_field_title,
-  preview: m.system_field_preview,
-  body: m.widget_tile_page,
 }
 
 /** The agent's draft of a new tile, or its edit of one, waiting on the user. */
 export function TileProposal(props: Drafted | Edited) {
-  const { where, onAccept, onEditIt, onDiscard } = props
+  const { where, tile, fate, at, undone, onAccept, onEdit, onDiscard, onUndo, pending } = props
   const drafted = props.kind === 'draft'
+  const fields = drafted
+    ? ''
+    : props.changes.map(({ field }) => fieldNames[field]().toLocaleLowerCase()).join(', ')
   return (
-    <Widget
-      voice="agent"
-      mark={<PlaceMark where={where} label={m.widget_tile_place()} />}
+    <Proposal
+      title={tile.title}
       kicker={
         drafted
           ? m.widget_tile_drafted_kicker({ where: whereOf(where) })
           : m.widget_tile_proposed_kicker()
       }
-      title={drafted ? props.words.title : props.title}
-      subtitle={
+      summary={drafted ? undefined : m.widget_tile_proposed_changes({ fields })}
+      mark={<PlaceMark where={where} label={m.widget_tile_place()} />}
+      changes={[
         drafted
-          ? undefined
-          : m.widget_tile_proposed_changes({
-              fields: props.changes
-                .map(({ field }) => fieldNames[field]().toLocaleLowerCase())
-                .join(', '),
-            })
-      }
-      actions={[
-        {
-          label: m.gallery_sample_accept(),
-          shortcut: { key: 'Enter', mod: true },
-          onSelect: onAccept,
-        },
-        { label: m.widget_tile_edit_it(), onSelect: onEditIt },
-        { label: m.widget_tile_discard(), onSelect: onDiscard, apart: true },
+          ? {
+              icon: HexagonIcon,
+              words: weave(m.widget_tile_change_create, { tile: { tile }, where: whereOf(where) }),
+            }
+          : { icon: Pencil, words: weave(m.widget_tile_change_edit, { tile: { tile }, fields }) },
       ]}
-      onDismiss={onDiscard}
-    >
-      <div className="grid gap-3.5">
-        {drafted ? (
-          <>
-            <Read label={m.system_field_preview()}>{props.words.preview}</Read>
-            <Read label={m.widget_tile_page()} prose>
-              {props.words.body}
-            </Read>
-          </>
-        ) : (
-          props.changes.map(({ field, segments }) => (
-            <Diff
-              key={field}
-              label={fieldNames[field]()}
-              segments={segments}
-              prose={field === 'body'}
-            />
-          ))
-        )}
-      </div>
-    </Widget>
+      detail={
+        <div className="grid gap-3.5">
+          {drafted ? (
+            <>
+              <Read label={m.system_field_preview()}>{props.words.preview}</Read>
+              <Read label={m.widget_tile_page()} prose>
+                {props.words.body}
+              </Read>
+            </>
+          ) : (
+            props.changes.map(({ field, segments }) => (
+              <Diff
+                key={field}
+                label={fieldNames[field]()}
+                segments={segments}
+                prose={field === 'body'}
+              />
+            ))
+          )}
+        </div>
+      }
+      fate={fate}
+      at={at}
+      undone={undone}
+      onAccept={onAccept}
+      onEdit={onEdit}
+      onDiscard={onDiscard}
+      onUndo={onUndo}
+      pending={pending}
+    />
   )
 }
 

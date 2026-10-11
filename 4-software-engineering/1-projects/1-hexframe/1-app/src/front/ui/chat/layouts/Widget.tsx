@@ -39,6 +39,11 @@ interface WidgetAction {
   look?: 'text' | 'hex'
   /** It loses something, and says so in the destructive voice: a tile's Delete. */
   destructive?: boolean
+  /**
+   * Enter in one of the widget's fields runs it, as a click does: the widget is a form, this its
+   * submit. One action at most; none where Enter must not decide, a save over someone else's change.
+   */
+  submit?: boolean
 }
 
 interface ZoneProps {
@@ -68,8 +73,6 @@ interface ZoneProps {
   onDismiss?: () => void
   /** Folded at first; the user folds and unfolds it after. */
   defaultFolded?: boolean
-  /** It is a form: Enter in one of its fields runs its first action, as a click on it does. */
-  form?: boolean
 }
 
 interface DoneProps {
@@ -110,7 +113,6 @@ function Zone({
   settings = [],
   onDismiss,
   defaultFolded = false,
-  form = false,
 }: ZoneProps) {
   const [folded, setFolded] = useState(defaultFolded)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -126,9 +128,10 @@ function Zone({
     event.preventDefault()
     action.onSelect()
   }
-  // A form runs its first action on Enter in a field, through the browser's own submit.
-  const Surface = form ? 'form' : 'section'
-  const submit = form ? actions[0] : undefined
+  // With a submit, the widget is a form: Enter in a field runs it through the browser's own submit,
+  // never while it waits, nor while what was asked runs.
+  const submit = actions.find((action) => action.submit === true)
+  const Surface = submit === undefined ? 'section' : 'form'
   return (
     <Collapsible.Root
       open={!folded}
@@ -146,7 +149,7 @@ function Zone({
           noValidate: true,
           onSubmit: (event: SyntheticEvent) => {
             event.preventDefault()
-            submit.onSelect()
+            if (submit.waits !== true && state !== 'working') submit.onSelect()
           },
         })}
         className={cn(
@@ -212,7 +215,7 @@ function Zone({
                   {state === 'working' ? <LinesToCome /> : children}
                 </div>
               )}
-              <Actions actions={actions} submit={submit} />
+              <Actions actions={actions} />
             </Collapsible.Content>
           </div>
         </div>
@@ -260,15 +263,9 @@ function Mark({
 
 /**
  * Its actions in a row, the first the one it expects, in its voice, one that loses something in the
- * destructive voice; a form's first submits it.
+ * destructive voice, its submit the form's.
  */
-function Actions({
-  actions,
-  submit,
-}: {
-  actions: readonly WidgetAction[]
-  submit: WidgetAction | undefined
-}) {
+function Actions({ actions }: { actions: readonly WidgetAction[] }) {
   if (actions.length === 0) return null
   return (
     <div
@@ -281,12 +278,12 @@ function Actions({
       {actions.map((action, index) => (
         <Act
           key={action.label}
-          type={action === submit ? 'submit' : 'button'}
+          type={action.submit === true ? 'submit' : 'button'}
           look={action.look}
           tone={index === 0 || action.destructive === true ? 'voice' : 'quiet'}
           shortcut={action.shortcut}
           waits={action.waits === true}
-          onClick={action === submit ? undefined : action.onSelect}
+          onClick={action.submit === true ? undefined : action.onSelect}
           className={cn(
             action.destructive === true && voiceOf('destructive'),
             action.apart === true && 'ml-auto',

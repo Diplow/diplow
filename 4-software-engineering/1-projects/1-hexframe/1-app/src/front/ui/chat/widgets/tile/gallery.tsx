@@ -1,34 +1,31 @@
-// The tile widget on /design-system, each state live on the fixture System: write a tile, pick its
-// place on the map, create it and undo it; edit one, delete it; take the agent's draft; meet a tile
-// changed meanwhile; import a vault and export a tile. What would reach the server shows in a toast.
+// The tile widget on /design-system, each state live on the chat's sample tiles: write a tile, pick
+// its place on the map, create it and undo it; edit one, delete it; take the agent's draft; meet a tile
+// changed meanwhile; import a vault and export a tile. What would reach the server shows in a toast;
+// what Mapping would refuse is the demo's (`../demo.ts`).
+import { ClientOnly } from '@tanstack/react-router'
 import { RotateCcw } from 'lucide-react'
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Act } from '../../../atoms/controls/act'
-import { toast } from '../../../atoms/Toaster'
-import { GallerySection, GalleryState } from '../../../gallery/frame'
-import type { Place } from '../Places'
-import { countOf } from '../count'
+import { Skeleton } from '../../../atoms/skeleton'
+import { GalleryColumn, GallerySection, GalleryState } from '../../../gallery/frame'
+import { said, sampleTiles } from '../../samples'
+import { editedOf, freeFor, previewLimit, stillRefused, tileRefusalOf } from '../demo'
 import {
   agentsEdit,
+  agentsWords,
   faultPaths,
   leftOutPaths,
   longPreview,
   meanwhile,
   newBranch,
-  parent,
   standing,
   tooling,
+  yours,
 } from './fixtures'
-import {
-  previewLimit,
-  type TileField,
-  type TileKind,
-  type TilePlace,
-  type TileWords,
-} from './parts'
+import type { TileField, TilePlace, TileWords } from './parts'
 import { TileProposal } from './Proposal'
 import { TileWidget } from './TileWidget'
 import { TileExport, TileImport } from './Transfer'
@@ -37,108 +34,102 @@ export function TileWidgetGallery() {
   return (
     <GallerySection name="TileWidget">
       <GalleryState label={m.gallery_state_tile_new()}>
-        <Column>
+        <GalleryColumn>
           <NewTileSpecimen />
-        </Column>
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_context()}>
-        <Column>
-          <NewTileSpecimen kind="context" />
-        </Column>
+        <GalleryColumn>
+          <NewTileSpecimen
+            where={{ ...newBranch(), kind: 'context', place: 2, free: freeFor.context }}
+          />
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_refused()}>
-        <Column>
+        <GalleryColumn>
           <NewTileSpecimen
-            words={{ ...tooling, preview: longPreview }}
+            words={{ ...tooling(), preview: longPreview() }}
             refused={{ preview: m.error_mapping_preview_too_long() }}
           />
-        </Column>
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_edit()}>
-        <Column>
+        <GalleryColumn>
           <EditSpecimen />
-        </Column>
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_changed()}>
-        <Column>
+        <GalleryColumn>
           <ChangedSpecimen />
-        </Column>
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_draft()}>
-        <Column>
+        <GalleryColumn>
           <ProposalSpecimen kind="draft" />
-        </Column>
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_proposed()}>
-        <Column>
+        <GalleryColumn>
           <ProposalSpecimen kind="edit" />
-        </Column>
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_import()}>
-        <Column>
+        <GalleryColumn>
           <ImportSpecimen />
-        </Column>
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_import_landed()}>
-        <Column>
+        <GalleryColumn>
           <TileImport
-            into={newBranch}
+            into={newBranch()}
             phase="landed"
             tiles={14}
             leftOut={leftOutPaths.map((where, index) => ({
               where,
-              why:
-                [
-                  m.system_import_reason_dot_file,
-                  m.system_import_reason_excluded,
-                  m.system_import_reason_binary,
-                ][index]?.() ?? '',
+              why: leftOutReasons[index]?.() ?? '',
             }))}
             {...importCalls}
           />
-        </Column>
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_import_refused()}>
-        <Column>
+        <GalleryColumn>
           <TileImport
-            into={newBranch}
+            into={newBranch()}
             phase="refused"
-            faults={faultPaths.map((where, index) => ({
-              where,
-              why:
-                [m.system_import_fault_ring_overflows, m.system_import_fault_preview_too_long][
-                  index
-                ]?.() ?? '',
-            }))}
+            faults={faultPaths.map((where, index) => ({ where, why: faults[index]?.() ?? '' }))}
             {...importCalls}
           />
-        </Column>
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_export()}>
-        <Column>
+        <GalleryColumn>
           <ExportSpecimen />
-        </Column>
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_export_failed()}>
-        <Column>
-          <TileExport
-            title={tooling.title}
-            below={12}
-            phase="failed"
-            reason={m.error_mapping_tile_not_found()}
-            onRetry={said(m.ui_retry())}
-            onDismiss={said(m.ui_widget_dismiss())}
-          />
-        </Column>
+        <GalleryColumn>
+          <ExportSpecimen failed />
+        </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_widget_phone()}>
-        <Column phone>
-          <NewTileSpecimen words={tooling} />
-        </Column>
+        <GalleryColumn phone>
+          <NewTileSpecimen words={tooling()} />
+        </GalleryColumn>
       </GalleryState>
     </GallerySection>
   )
 }
+
+const leftOutReasons = [
+  m.system_import_reason_dot_file,
+  m.system_import_reason_excluded,
+  m.system_import_reason_binary,
+]
+const faults = [m.system_import_fault_ring_overflows, m.system_import_fault_preview_too_long]
+
+/** The sample tile as the conversation names it: a click says the canvas would center on it. */
+const toolingNamed = () => sampleTiles().tooling.tile
 
 /** Runs a step after a moment, the one before it dropped, and none once the page leaves. */
 function useLater() {
@@ -155,24 +146,6 @@ function useLater() {
   }
 }
 
-/** What a real page would send, said in a toast. */
-const said = (what: string) => () => {
-  toast(what)
-}
-
-/** The conversation's column, or a phone's. */
-function Column({ phone = false, children }: { phone?: boolean; children: ReactNode }) {
-  return (
-    <div
-      className={
-        phone ? 'grid w-[23.4375rem] max-w-full gap-4' : 'grid w-[37.5rem] max-w-full gap-4'
-      }
-    >
-      {children}
-    </div>
-  )
-}
-
 /** Comes in again, to see its entrance, or after its receipt. */
 function Again({ onAgain }: { onAgain: () => void }) {
   return (
@@ -183,42 +156,20 @@ function Again({ onAgain }: { onAgain: () => void }) {
   )
 }
 
-/** The places free for each kind under Software engineering: a Leaf's and a Context's are their own. */
-const freeFor: Record<TileKind, readonly Place[]> = {
-  branch: [4, 5, 6],
-  leaf: [1, 2, 3, 5, 6],
-  context: [2, 3, 4, 5, 6],
-}
-
-/** What Mapping would refuse before sending: no title, a preview past its limit. */
-function refusalOf(words: TileWords): Partial<Record<TileField, string>> | undefined {
-  const refused = {
-    ...(words.title.trim() === '' && { title: m.error_mapping_title_missing() }),
-    ...(countOf(words.preview, previewLimit)?.tone === 'over' && {
-      preview: m.error_mapping_preview_too_long(),
-    }),
-  }
-  return Object.keys(refused).length === 0 ? undefined : refused
-}
-
 // A new tile, live: its words, its kind and its place are the specimen's; Create checks what Mapping
 // would, and either puts the words back with the refusal or leaves the receipt, which Undo takes back.
 function NewTileSpecimen({
-  kind: firstKind = 'branch',
+  where: firstWhere = newBranch(),
   words: firstWords = { title: '', preview: '', body: '' },
   refused: firstRefusal,
 }: {
-  kind?: TileKind
+  where?: TilePlace
   words?: TileWords
   refused?: Partial<Record<TileField, string>>
 }) {
+  const [now] = useState(() => new Date())
   const [words, setWords] = useState(firstWords)
-  const [where, setWhere] = useState<TilePlace>({
-    parent,
-    kind: firstKind,
-    place: freeFor[firstKind][0] ?? 6,
-    free: freeFor[firstKind],
-  })
+  const [where, setWhere] = useState(firstWhere)
   const [refused, setRefused] = useState(firstRefusal)
   const [created, setCreated] = useState(false)
   const [entrance, setEntrance] = useState(0)
@@ -232,9 +183,9 @@ function NewTileSpecimen({
         <TileWidget
           mode="done"
           did="created"
-          title={words.title}
+          tile={{ ...toolingNamed(), title: words.title }}
           where={where}
-          at="14:06"
+          at={now}
           onUndo={again}
         />
       ) : (
@@ -243,9 +194,9 @@ function NewTileSpecimen({
           mode="new"
           where={where}
           words={words}
+          previewLimit={previewLimit}
           onWordsChange={(next) => {
             setWords(next)
-            // A refusal clears from the field it named once that field changes, as a real form's does.
             setRefused(stillRefused(refused, words, next))
           }}
           refused={refused}
@@ -258,11 +209,11 @@ function NewTileSpecimen({
               ...where,
               kind,
               free,
-              place: free.includes(where.place) ? where.place : (free[0] ?? 6),
+              place: free.includes(where.place) ? where.place : (free[0] ?? where.place),
             })
           }}
           onCreate={() => {
-            const refusal = refusalOf(words)
+            const refusal = tileRefusalOf(words)
             setRefused(refusal)
             if (refusal === undefined) setCreated(true)
           }}
@@ -276,39 +227,22 @@ function NewTileSpecimen({
   )
 }
 
-/** The refusals left once the fields they named have changed. */
-function stillRefused(
-  refused: Partial<Record<TileField, string>> | undefined,
-  before: TileWords,
-  after: TileWords,
-) {
-  if (refused === undefined) return undefined
-  const left = Object.fromEntries(
-    Object.entries(refused).filter(
-      ([field]) => before[field as TileField] === after[field as TileField],
-    ),
-  )
-  return Object.keys(left).length === 0 ? undefined : left
-}
-
-/** Fields that differ from what the tile held when the widget opened. */
-const editedOf = (words: TileWords): TileField[] =>
-  (['title', 'preview', 'body'] as const).filter((field) => words[field] !== tooling[field])
-
 function EditSpecimen() {
-  const [words, setWords] = useState({
-    ...tooling,
-    preview: tooling.preview.replace(', and why', ''),
-  })
+  const [now] = useState(() => new Date())
+  const [words, setWords] = useState(yours)
   const [state, setState] = useState<'editing' | 'saved' | 'deleted'>('editing')
   if (state !== 'editing') {
     return (
       <TileWidget
         mode="done"
         did={state === 'saved' ? 'edited' : 'deleted'}
-        title={words.title}
-        where={standing}
-        at="14:08"
+        tile={{
+          ...toolingNamed(),
+          title: words.title,
+          ...(state === 'deleted' && { standing: 'gone' }),
+        }}
+        where={standing()}
+        at={now}
         onUndo={() => {
           setState('editing')
         }}
@@ -318,13 +252,14 @@ function EditSpecimen() {
   return (
     <TileWidget
       mode="edit"
-      where={standing}
+      where={standing()}
       words={words}
+      previewLimit={previewLimit}
       onWordsChange={setWords}
-      edited={editedOf(words)}
-      refused={refusalOf(words)}
+      edited={editedOf(words, tooling())}
+      refused={tileRefusalOf(words)}
       onSave={() => {
-        if (refusalOf(words) === undefined) setState('saved')
+        if (tileRefusalOf(words) === undefined) setState('saved')
       }}
       onDelete={{
         below: 4,
@@ -338,22 +273,21 @@ function EditSpecimen() {
 }
 
 function ChangedSpecimen() {
-  const [words, setWords] = useState({
-    ...tooling,
-    preview: tooling.preview.replace(', and why', ''),
-  })
+  const [words, setWords] = useState(yours)
   const [comparing, setComparing] = useState(false)
+  const { by, compared } = meanwhile()
   return (
     <TileWidget
       mode="edit"
-      where={standing}
+      where={standing()}
       words={words}
+      previewLimit={previewLimit}
       onWordsChange={setWords}
-      edited={editedOf(words)}
+      edited={editedOf(words, tooling())}
       onSave={said(m.system_save())}
       onCancel={said(m.ui_cancel())}
       changed={{
-        by: meanwhile.by,
+        by,
         fields: ['preview'],
         when: m.gallery_tile_a_minute_ago(),
         onSaveOver: said(m.widget_tile_save_over()),
@@ -361,63 +295,72 @@ function ChangedSpecimen() {
         onCompare: () => {
           setComparing(!comparing)
         },
-        compared: comparing ? meanwhile.compared : undefined,
+        compared: comparing ? compared : undefined,
       }}
     />
   )
 }
 
-// The agent's draft or edit: Accept leaves its receipt, Edit it hands it to the user's widget.
+// The agent's draft or edit: Accept leaves its receipt, Edit it hands it to the user's widget, whose
+// Save leaves the user's own receipt.
 function ProposalSpecimen({ kind }: { kind: 'draft' | 'edit' }) {
-  const [state, setState] = useState<'proposed' | 'taken' | 'accepted'>('proposed')
-  const [words, setWords] = useState(tooling)
-  const where = kind === 'draft' ? newBranch : standing
-  if (state === 'accepted') {
-    return (
+  const [now] = useState(() => new Date())
+  const [state, setState] = useState<'open' | 'accepted' | 'discarded' | 'taken' | 'saved'>('open')
+  const [words, setWords] = useState(kind === 'draft' ? tooling : agentsWords)
+  const where = kind === 'draft' ? newBranch() : standing()
+  const tile = toolingNamed()
+  if (state === 'taken' || state === 'saved') {
+    return state === 'saved' ? (
       <TileWidget
         mode="done"
         did={kind === 'draft' ? 'created' : 'edited'}
-        title={tooling.title}
+        tile={tile}
         where={where}
-        at="14:10"
+        at={now}
         onUndo={() => {
-          setState('proposed')
+          setState('open')
         }}
       />
-    )
-  }
-  if (state === 'taken') {
-    return (
+    ) : (
       <TileWidget
         mode="edit"
         taken
         where={where}
         words={words}
+        previewLimit={previewLimit}
         onWordsChange={setWords}
         edited={[]}
         onSave={() => {
-          setState('accepted')
+          setState('saved')
         }}
         onCancel={() => {
-          setState('proposed')
+          setState('open')
         }}
       />
     )
   }
   const decisions = {
     where,
+    tile,
+    fate: state,
+    at: now,
     onAccept: () => {
       setState('accepted')
     },
-    onEditIt: () => {
+    onEdit: () => {
       setState('taken')
     },
-    onDiscard: said(m.widget_tile_discard()),
+    onDiscard: () => {
+      setState('discarded')
+    },
+    onUndo: () => {
+      setState('open')
+    },
   }
   return kind === 'draft' ? (
-    <TileProposal kind="draft" words={tooling} {...decisions} />
+    <TileProposal kind="draft" words={tooling()} {...decisions} />
   ) : (
-    <TileProposal kind="edit" title={tooling.title} changes={agentsEdit} {...decisions} />
+    <TileProposal kind="edit" changes={agentsEdit()} {...decisions} />
   )
 }
 
@@ -441,7 +384,7 @@ function ImportSpecimen() {
   }
   return (
     <TileImport
-      into={newBranch}
+      into={newBranch()}
       phase={phase}
       tiles={14}
       {...importCalls}
@@ -455,29 +398,31 @@ function ImportSpecimen() {
   )
 }
 
-// An export: it works a moment, then leaves its receipt.
-function ExportSpecimen() {
-  const [phase, setPhase] = useState<'working' | 'done'>('done')
+// An export: it works a moment, then leaves its receipt; or it fails, and Try again works again. Only
+// the browser draws it, as the receipt's time is the reader's.
+function ExportSpecimen({ failed = false }: { failed?: boolean }) {
+  const [now] = useState(() => new Date())
+  const [phase, setPhase] = useState<'working' | 'done' | 'failed'>(failed ? 'failed' : 'done')
   const later = useLater()
+  const run = () => {
+    setPhase('working')
+    later(() => {
+      setPhase(failed ? 'failed' : 'done')
+    }, 1400)
+  }
   return (
-    <>
+    <ClientOnly fallback={<Skeleton className="h-12 w-full" />}>
       <TileExport
-        title={tooling.title}
+        tile={toolingNamed()}
         below={12}
         phase={phase}
         file="tooling.zip"
-        at="14:12"
-        onRetry={said(m.ui_retry())}
+        reason={m.error_mapping_tile_not_found()}
+        at={now}
+        onRetry={run}
         onDismiss={said(m.ui_widget_dismiss())}
       />
-      <Again
-        onAgain={() => {
-          setPhase('working')
-          later(() => {
-            setPhase('done')
-          }, 1400)
-        }}
-      />
-    </>
+      {!failed && <Again onAgain={run} />}
+    </ClientOnly>
   )
 }
