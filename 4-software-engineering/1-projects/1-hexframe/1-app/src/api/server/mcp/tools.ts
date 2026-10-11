@@ -465,17 +465,23 @@ export const tools: ReadonlyArray<Tool> = [
 const named = (kind: Tool['kind']) =>
   tools.flatMap((tool) => (tool.kind === kind ? [tool.name] : [])).join(', ')
 
+/** The refusal a write to a Tile changed since meets, by its tag, as the table teaches it. */
+const changed = 'TileChanged' satisfies keyof typeof refusal
+
 /**
  * The rules of the System for an agent that starts from its files, worded from this table, so a tool
- * renamed is renamed in them: each Tile a folder or a file, as Mapping exports it, the writes and the
- * reads, `TileChanged`, and where Help opens. A Turn's prompt holds them as they come.
+ * or a refusal renamed is renamed in them: what a System is, each Tile a folder or a file, as Mapping
+ * exports it, the writes and the reads, a Tile changed since, and where Help opens. A Turn's prompt
+ * holds them as they come.
  */
 export const systemRules: ReadonlyArray<string> = [
-  '- In the files, each Tile is a folder or a file, its id and version in its frontmatter.',
+  '- The System is a hierarchy of Tiles, each a Title, a Preview and a Body, whose Root is the ' +
+    'user, where what comes first matters most. In the files, each Tile is a folder or a file, its ' +
+    'id and version in its frontmatter.',
   `- Every change goes through the hexframe MCP's tools (${named('write')}), naming the ` +
     'version of the Tile you read. What changed since the Turn started, read it through the MCP ' +
     `too (${named('read')}).`,
-  '- A refusal saying the Tile changed (TileChanged, a Conflict) means someone wrote it since you ' +
+  `- A refusal saying the Tile changed (${changed}, a Conflict) means someone wrote it since you ` +
     `read it: read it again with ${openTile.name}, then decide again.`,
   `- Help, hexframe's own guide, opens at ${openTile.name}({ id: "${helpRoot}" }).`,
 ]

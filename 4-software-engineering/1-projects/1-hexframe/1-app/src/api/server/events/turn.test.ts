@@ -119,6 +119,7 @@ describe('a Turn on every Message', () => {
     // How to write the System, as the MCP's tool table words it: every tool, under its own name.
     for (const tool of tools) expect(prompt).toContain(tool.name)
     expect(prompt).toContain('open_tile({ id: "help" })')
+    expect(prompt).toContain('(TileChanged, a Conflict)')
     expect(prompt).not.toMatch(/hft_/)
     const settings = await readFile(
       join(box.home, `turns/${sent.turn?.id ?? ''}/turn.json`),
