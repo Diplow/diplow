@@ -35,7 +35,10 @@ interface Issuing {
   state: 'issue'
   name: string
   onNameChange: (name: string) => void
-  /** The most characters a name holds, as a reader counts them: IAM's, read by the caller. */
+  /**
+   * The most characters a name holds: IAM's, read by the caller. The count is a reader's, IAM's UTF-16
+   * units until HEX-115 counts as a reader does.
+   */
   nameLimit: number
   /** Why the name was refused, on the field. */
   refused?: string | undefined

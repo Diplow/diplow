@@ -1,13 +1,13 @@
-// What the widgets' state hooks will do on a real page, for /design-system alone: which places a kind
-// may take, what Mapping and IAM would refuse before writing, a refusal clearing from the field that
-// changed, and the way around Help. `ui/` knows no domain: Mapping's `previewLimit` comes from the
-// route, which reads it at Mapping's door; IAM's Key name and password lengths, outside IAM's door
-// today, are mirrored here, as the composer's demo mirrors the feature's `@` rules, until HEX-103.
+// What the widgets' state hooks will do on a real page, for /design-system alone, never for a build:
+// which places a kind may take, what Mapping and IAM would refuse before writing, a refusal clearing
+// from the field that changed. `ui/` knows no domain: Mapping's `previewLimit` comes from the
+// route, which reads it at Mapping's door; IAM's Key name and password rules, outside IAM's door
+// today, are mirrored here as IAM states them, as the composer's demo mirrors the feature's `@` rules,
+// until HEX-115 brings them to its door.
 import { m } from '#/paraglide/messages'
 
-import type { HelpTopic } from './help/find'
 import { lengthOf } from './count'
-import { places, type Place } from './Places'
+import type { Place } from './Places'
 import type { Access } from './sign-in/SignInWidget'
 import type { TileField, TileKind, TileWords } from './tile/parts'
 
@@ -53,10 +53,9 @@ export function stillRefused(
 export const editedOf = (words: TileWords, read: TileWords): TileField[] =>
   (['title', 'preview', 'body'] as const).filter((field) => words[field] !== read[field])
 
-/** What IAM would refuse of a Key's name. */
+/** What IAM would refuse of a Key's name, as IAM counts it: in UTF-16 units, untrimmed. */
 export function nameRefusalOf(name: string): string | undefined {
-  const length = lengthOf(name.trim())
-  return length === 0 || length > nameLimit ? m.error_iam_key_name_invalid() : undefined
+  return name.length < 1 || name.length > nameLimit ? m.error_iam_key_name_invalid() : undefined
 }
 
 /** What IAM would refuse before signing anyone in: a malformed email, a password out of bounds. */
@@ -73,57 +72,4 @@ export function accessRefusalOf(
     return { password: m.error_iam_password_length() }
   }
   return length === 0 ? { password: m.error_iam_credentials_rejected() } : undefined
-}
-
-/** A topic of Help and the six below it, as the route hands Help over. */
-export interface HelpNode extends HelpTopic {
-  readonly children: Partial<Readonly<Record<Place, HelpNode>>>
-}
-
-/** The topics a path of places leads through from Help's Root, the Root first; it stops at a gap. */
-export function follow(help: HelpNode, path: readonly Place[]): HelpNode[] {
-  const trail = [help]
-  for (const place of path) {
-    const next = trail.at(-1)?.children[place]
-    if (next === undefined) break
-    trail.push(next)
-  }
-  return trail
-}
-
-/** Every topic of Help, the Root first, then each topic's six in their order. */
-export function topicsOf(node: HelpNode): HelpNode[] {
-  return [
-    node,
-    ...places.flatMap((place) => {
-      const child = node.children[place]
-      return child === undefined ? [] : topicsOf(child)
-    }),
-  ]
-}
-
-/** The places that lead from the Root to a topic, by its id; none when Help holds no such topic. */
-export function placesTo(node: HelpNode, id: string): Place[] | undefined {
-  if (node.id === id) return []
-  for (const place of places) {
-    const child = node.children[place]
-    const below = child === undefined ? undefined : placesTo(child, id)
-    if (below !== undefined) return [place, ...below]
-  }
-  return undefined
-}
-
-/** The place `steps` further clockwise round a frame: after 6 west comes 1 north-west. */
-export const around = (place: Place, steps: number): Place =>
-  places[(places.indexOf(place) + steps) % places.length] ?? place
-
-/** Where a topic leads: the topics below it, or, with none, the next two round its own frame. */
-export function readOnOf(help: HelpNode, path: readonly Place[]): HelpNode[] {
-  const trail = follow(help, path)
-  const topic = trail.at(-1) ?? help
-  const below = places.flatMap((place) => topic.children[place] ?? [])
-  const parent = trail.at(-2)
-  const here = path.at(-1)
-  if (below.length > 0 || parent === undefined || here === undefined) return below
-  return [1, 2].flatMap((steps) => parent.children[around(here, steps)] ?? [])
 }

@@ -9,9 +9,8 @@ import { m } from '#/paraglide/messages'
 import { toast } from '../../../atoms/Toaster'
 import { GalleryColumn, GallerySection, GalleryState } from '../../../gallery/frame'
 import { said } from '../../samples'
-import { follow, placesTo, readOnOf, topicsOf, type HelpNode } from '../demo'
 import { places, type Place } from '../Places'
-import { topicsFor } from './find'
+import { follow, placesTo, readOnOf, topicsFor, topicsOf, type HelpNode } from './topics'
 import { HelpWidget } from './HelpWidget'
 
 export function HelpWidgetGallery({ help }: { help: HelpNode }) {

@@ -4,8 +4,7 @@
 import { m } from '#/paraglide/messages'
 
 import { freeFor } from '../demo'
-import type { Segment } from './Proposal'
-import type { TilePlace, TileWords } from './parts'
+import type { Segment, TilePlace, TileWords } from './parts'
 
 const parent = () => m.gallery_sample_chat_engineering()
 

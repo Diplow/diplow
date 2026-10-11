@@ -4,8 +4,8 @@
 // and leaves its receipt, its changes folded under it, with the Undo while one is possible. Decided
 // from the widget, the focus moves to the receipt, so the keyboard never falls back to the top of the
 // page; decided elsewhere, in another tab or by a poll, the focus stays where the user is and a status
-// says it (`UntilDecided`). A tile's draft or edit shows its words in full (`detail`), its place in the
-// hex's (`mark`), and Edit it hands it to the user's own widget.
+// says it (`UntilDecided`). What it changes may show in full (`detail`), what it is about in the hex's
+// place (`mark`), and an Edit it may hand it to the user's own widget: the tile widget's draft does so.
 import { ListChecks } from 'lucide-react'
 import { type ReactNode, useState } from 'react'
 
@@ -36,14 +36,14 @@ export interface ProposalProps {
   pending?: boolean
   /** Who proposes, and where, in its kicker; the agent, by default. */
   kicker?: string
-  /** Drawn in its hex's place: what it is about, in small, the frame a tile it drafts goes in. */
+  /** Drawn in its hex's place: what it is about, in small (`Widget`'s `mark`). */
   mark?: ReactNode
   /**
-   * What it changes, shown in full where a line each would say too little: a tile's words drafted, or
-   * its edit where it falls. Its changes still fold under its receipt.
+   * What it changes, shown in full where a line each would say too little. Its changes still fold
+   * under its receipt.
    */
   detail?: ReactNode
-  /** Takes it to edit it: the user's own widget then holds the agent's words. */
+  /** Takes it to edit it: whoever offers this hands the agent's words to the user's own widget. */
   onEdit?: (() => void) | undefined
 }
 

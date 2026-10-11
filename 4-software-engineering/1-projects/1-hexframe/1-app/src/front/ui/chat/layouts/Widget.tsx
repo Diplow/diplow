@@ -1,14 +1,7 @@
 import { cn } from 'cn'
 import { ChevronDown, ChevronRight, MoreHorizontal, RotateCw, X } from 'lucide-react'
 import { Collapsible } from 'radix-ui'
-import {
-  useId,
-  useState,
-  type CSSProperties,
-  type KeyboardEvent,
-  type ReactNode,
-  type SyntheticEvent,
-} from 'react'
+import { useId, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
@@ -40,8 +33,8 @@ interface WidgetAction {
   /** It loses something, and says so in the destructive voice: a tile's Delete. */
   destructive?: boolean
   /**
-   * Enter in one of the widget's fields runs it, as a click does: the widget is a form, this its
-   * submit. One action at most; none where Enter must not decide, a save over someone else's change.
+   * Enter in one of the widget's one-line fields runs it, as a click does: its submit. One action at
+   * most; none where Enter must not decide, a save over someone else's change.
    */
   submit?: boolean
 }
@@ -118,20 +111,21 @@ function Zone({
   const [menuOpen, setMenuOpen] = useState(false)
   const titleId = useId()
   const failed = state === 'failed'
-  // An action's key runs it while the focus is in the widget and its actions show. A key its menu or
-  // its body took stays theirs, and so does one from the menu's portal, outside the zone.
+  // An action's key runs it while the focus is in the widget and its actions show, and Enter in a
+  // one-line field runs its submit; never while the action waits, nor while what was asked runs. A key
+  // its menu or its body took stays theirs, and so does one from the menu's portal, outside the zone.
   const runShortcut = (event: KeyboardEvent<HTMLElement>) => {
-    if (folded || event.defaultPrevented) return
+    if (folded || event.defaultPrevented || event.nativeEvent.isComposing) return
     if (!(event.target instanceof Node) || !event.currentTarget.contains(event.target)) return
-    const action = actions.find(({ shortcut }) => pressed(shortcut, event))
-    if (action === undefined || action.waits === true) return
+    const action =
+      actions.find(({ shortcut }) => pressed(shortcut, event)) ??
+      (event.target instanceof HTMLInputElement && pressed({ key: 'Enter' }, event)
+        ? actions.find(({ submit }) => submit === true)
+        : undefined)
+    if (action === undefined || action.waits === true || state === 'working') return
     event.preventDefault()
     action.onSelect()
   }
-  // With a submit, the widget is a form: Enter in a field runs it through the browser's own submit,
-  // never while it waits, nor while what was asked runs.
-  const submit = actions.find((action) => action.submit === true)
-  const Surface = submit === undefined ? 'section' : 'form'
   return (
     <Collapsible.Root
       open={!folded}
@@ -140,18 +134,11 @@ function Zone({
       }}
       asChild
     >
-      <Surface
+      <section
         aria-labelledby={titleField === undefined ? titleId : undefined}
         aria-label={titleField === undefined ? undefined : title}
         aria-busy={state === 'working'}
         onKeyDown={runShortcut}
-        {...(submit !== undefined && {
-          noValidate: true,
-          onSubmit: (event: SyntheticEvent) => {
-            event.preventDefault()
-            if (submit.waits !== true && state !== 'working') submit.onSelect()
-          },
-        })}
         className={cn(
           voiceOf(failed ? 'destructive' : voice),
           // The chat's zone, tinted toward the curve by its voice, with one more fine line below.
@@ -229,7 +216,7 @@ function Zone({
           }}
           onDismiss={onDismiss}
         />
-      </Surface>
+      </section>
     </Collapsible.Root>
   )
 }
@@ -263,7 +250,7 @@ function Mark({
 
 /**
  * Its actions in a row, the first the one it expects, in its voice, one that loses something in the
- * destructive voice, its submit the form's.
+ * destructive voice.
  */
 function Actions({ actions }: { actions: readonly WidgetAction[] }) {
   if (actions.length === 0) return null
@@ -278,12 +265,11 @@ function Actions({ actions }: { actions: readonly WidgetAction[] }) {
       {actions.map((action, index) => (
         <Act
           key={action.label}
-          type={action.submit === true ? 'submit' : 'button'}
           look={action.look}
           tone={index === 0 || action.destructive === true ? 'voice' : 'quiet'}
           shortcut={action.shortcut}
           waits={action.waits === true}
-          onClick={action.submit === true ? undefined : action.onSelect}
+          onClick={action.onSelect}
           className={cn(
             action.destructive === true && voiceOf('destructive'),
             action.apart === true && 'ml-auto',

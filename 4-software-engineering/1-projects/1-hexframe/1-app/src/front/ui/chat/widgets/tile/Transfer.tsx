@@ -20,49 +20,65 @@ interface ReportLine {
   readonly why: string
 }
 
-interface ImportProps {
+interface Importing {
   /** Into this free place, or, `root`, as an empty System's Root. */
   into: TilePlace | 'root'
-  phase: 'choosing' | 'importing' | 'landed' | 'refused'
-  /** The slot takes one file alone: a Leaf's. */
-  fileOnly?: boolean
-  /** How many tiles it created, once landed. */
-  tiles?: number
-  leftOut?: readonly ReportLine[]
-  faults?: readonly ReportLine[]
-  onDrop: (files: DataTransfer) => void
-  onPickFolder: (files: FileList | null) => void
-  onPickFile: (files: FileList | null) => void
-  /** Back to the pickers, after a refusal. */
-  onAgain: () => void
   /** Read, or let go: the widget leaves. */
   onDone: () => void
 }
 
+/** Waiting for files, then working once they are given. */
+interface Choosing extends Importing {
+  phase: 'choosing' | 'importing'
+  /** The slot takes one file alone: a Leaf's. */
+  fileOnly?: boolean
+  onDrop: (files: DataTransfer) => void
+  onPickFolder: (files: FileList | null) => void
+  onPickFile: (files: FileList | null) => void
+}
+
+/** Landed: the tiles it created, and every file it left out. */
+interface Landed extends Importing {
+  phase: 'landed'
+  tiles: number
+  leftOut: readonly ReportLine[]
+}
+
+/** Refused, nothing written: every fault, and what it would have left out. */
+interface Refused extends Importing {
+  phase: 'refused'
+  faults: readonly ReportLine[]
+  leftOut: readonly ReportLine[]
+  /** Back to the pickers. */
+  onAgain: () => void
+}
+
+type ImportProps = Choosing | Landed | Refused
+
 /** An import into a free place, or as the Root: its pickers, then what it came to. */
 export function TileImport(props: ImportProps) {
-  const { into, phase, tiles = 0, leftOut = [], faults = [], onAgain, onDone } = props
+  const { into, onDone } = props
   const where = into === 'root' ? m.widget_import_as_root() : whereOf(into)
   const mark =
     into === 'root' ? undefined : <PlaceMark where={into} label={m.widget_tile_place()} />
-  if (phase === 'landed') {
+  if (props.phase === 'landed') {
     return (
       <Widget
         voice="human"
         mark={mark}
         icon={<FolderInput />}
         kicker={m.widget_import_kicker({ where })}
-        title={m.system_import_landed({ tiles: String(tiles) })}
+        title={m.system_import_landed({ tiles: String(props.tiles) })}
         actions={[{ label: m.keys_done(), onSelect: onDone }]}
         onDismiss={onDone}
       >
-        {leftOut.length > 0 ? (
-          <Lines title={m.system_import_left_out()} lines={leftOut} />
+        {props.leftOut.length > 0 ? (
+          <Lines title={m.system_import_left_out()} lines={props.leftOut} />
         ) : undefined}
       </Widget>
     )
   }
-  if (phase === 'refused') {
+  if (props.phase === 'refused') {
     return (
       <Widget
         voice="human"
@@ -71,23 +87,23 @@ export function TileImport(props: ImportProps) {
         title={m.system_import_vault()}
         subtitle={m.error_mapping_import_refused()}
         actions={[
-          { label: m.system_import_again(), onSelect: onAgain },
+          { label: m.system_import_again(), onSelect: props.onAgain },
           { label: m.ui_close(), onSelect: onDone },
         ]}
         onDismiss={onDone}
       >
         <div className="grid gap-4">
-          <Lines title={m.system_import_faults()} lines={faults} />
-          <Lines title={m.system_import_left_out()} lines={leftOut} />
+          <Lines title={m.system_import_faults()} lines={props.faults} />
+          <Lines title={m.system_import_left_out()} lines={props.leftOut} />
         </div>
       </Widget>
     )
   }
-  return <Choosing {...props} where={where} mark={mark} />
+  return <Pickers {...props} where={where} mark={mark} />
 }
 
 /** The pickers while the import waits for files, the place lit; working once they are given. */
-function Choosing({
+function Pickers({
   into,
   phase,
   fileOnly = false,
@@ -97,7 +113,7 @@ function Choosing({
   onDone,
   where,
   mark,
-}: ImportProps & { where: string; mark: ReactNode }) {
+}: Choosing & { where: string; mark: ReactNode }) {
   const folderPicker = useRef<HTMLInputElement>(null)
   const filePicker = useRef<HTMLInputElement>(null)
   const [over, setOver] = useState(false)

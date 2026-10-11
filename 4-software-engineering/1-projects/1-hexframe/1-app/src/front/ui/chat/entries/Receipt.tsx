@@ -162,39 +162,21 @@ interface UntilDecidedProps {
  * the focus to its first control rather than to the page.
  */
 export function UntilDecided({ receipt, children }: UntilDecidedProps) {
-  const { handOff, status, onFocus, onBlur } = useHandOffState(
+  const { handOff, status, focused, onFocus, onBlur } = useHandOffState(
     receipt === undefined ? 'open' : 'decided',
     receipt === undefined ? '' : plainOf(receipt.words),
   )
   const asking = useRef<HTMLDivElement>(null)
-  const held = useRef(false)
+  // The focus counted inside yet fallen to the page: a step of its own removed what held it.
   useEffect(() => {
-    const box = asking.current
-    if (!held.current || box === null) return
-    if (document.activeElement === null || document.activeElement === document.body) {
-      box.querySelector<HTMLElement>('input, textarea, button, [tabindex="0"]')?.focus()
-    }
+    if (!focused || document.activeElement !== document.body) return
+    asking.current?.querySelector<HTMLElement>('input, textarea, button, [tabindex="0"]')?.focus()
   })
   return (
     <>
       {receipt === undefined ? (
         // The focus is the widget's, or a dialog's it opened, whose events reach here through React's tree.
-        <div
-          ref={asking}
-          onFocus={() => {
-            held.current = true
-            onFocus()
-          }}
-          onBlur={(event) => {
-            // Gone elsewhere, not lost with what held it: a removed element blurs nothing.
-            if (!(
-              event.relatedTarget instanceof Node &&
-              event.currentTarget.contains(event.relatedTarget)
-            ))
-              held.current = false
-            onBlur(event)
-          }}
-        >
+        <div ref={asking} onFocus={onFocus} onBlur={onBlur}>
           {children}
         </div>
       ) : (

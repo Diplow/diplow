@@ -1,8 +1,10 @@
 // What the tile's widgets share: a tile's words and their fields' names, its kinds and what each
-// means, the six places by name, and where a tile stands, said in a few words and drawn as its place.
+// means, the six places by name, where a tile stands, said in a few words and drawn as its place, and
+// a field read rather than written, an edit shown where it falls.
 // `ui/` knows no domain, so these mirror Mapping's (`entities/tile.ts`): a Branch, a Leaf or a Context
 // Tile, in one of six Directions; how long a Preview may be is its caller's to say.
 import { cn } from 'cn'
+import { Fragment, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
@@ -97,5 +99,75 @@ export function PlaceMark({ where, label, onPick, picking = false }: PlaceMarkPr
         </span>
       )}
     </span>
+  )
+}
+
+/** A stretch of a field an edit keeps, takes out or puts in. */
+export interface Segment {
+  readonly kind: 'same' | 'gone' | 'added'
+  readonly text: string
+}
+
+/** A field read, not written: its label, then what it holds, the page in the user's serif. */
+export function Read({
+  label,
+  prose = false,
+  children,
+}: {
+  label: string
+  prose?: boolean
+  children: ReactNode
+}) {
+  return (
+    <div className="grid gap-[3px]">
+      <span className="text-[0.71875rem] text-muted-foreground">{label}</span>
+      <p
+        className={
+          prose
+            ? 'font-human text-[0.96875rem] leading-[1.55] font-light whitespace-pre-wrap text-muted-foreground'
+            : 'text-sm leading-[1.55] font-light text-muted-foreground'
+        }
+      >
+        {children}
+      </p>
+    </div>
+  )
+}
+
+/**
+ * A field's change where it falls: what goes struck in faint, what comes on the agent's violet ground,
+ * each said to a screen reader, which shows neither.
+ */
+export function Diff({
+  label,
+  segments,
+  prose = false,
+}: {
+  label: string
+  segments: readonly Segment[]
+  /** A page's, in the user's serif, its lines kept. */
+  prose?: boolean
+}) {
+  return (
+    <Read label={label} prose={prose}>
+      {segments.map((segment, index) =>
+        segment.kind === 'same' ? (
+          <Fragment key={index}>{segment.text}</Fragment>
+        ) : segment.kind === 'gone' ? (
+          <del
+            key={index}
+            className="text-faint decoration-destructive/60 decoration-from-font [text-decoration-line:line-through]"
+          >
+            <span className="sr-only">{m.widget_tile_gone()} </span>
+            {segment.text}
+          </del>
+        ) : (
+          <ins key={index} className="bg-agent/18 px-[0.15em] text-foreground no-underline">
+            <span className="sr-only">{m.widget_tile_added()} </span>
+            {segment.text}
+          </ins>
+        ),
+      )}
+    </Read>
   )
 }

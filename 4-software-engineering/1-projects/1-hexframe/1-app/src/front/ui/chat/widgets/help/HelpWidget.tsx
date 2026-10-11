@@ -14,7 +14,7 @@ import { HexMark } from '../../atoms/hex'
 import { Widget } from '../../layouts/Widget'
 import { Mention } from '../../text/Mention'
 import { namesByPlace, Places, places, type Place } from '../Places'
-import type { Found } from './find'
+import type { Found } from './topics'
 import { shortcuts } from './shortcuts'
 
 /** A topic read: what it says, and where it stands among its parent's six. */

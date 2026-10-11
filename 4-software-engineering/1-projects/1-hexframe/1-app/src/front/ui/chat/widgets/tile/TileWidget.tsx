@@ -19,17 +19,18 @@ import { weave } from '../../text/words'
 import { Choice, Field, TitleField } from '../fields'
 import type { Place } from '../Places'
 import {
+  Diff,
   fieldNames,
   kinds,
   PlaceMark,
   placeNames,
   whereOf,
+  type Segment,
   type TileField,
   type TileKind,
   type TilePlace,
   type TileWords,
 } from './parts'
-import { Diff, type Segment } from './Proposal'
 
 interface Form {
   words: TileWords

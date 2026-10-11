@@ -87,10 +87,7 @@ export function TileWidgetGallery({ previewLimit }: { previewLimit: number }) {
             into={newBranch()}
             phase="landed"
             tiles={14}
-            leftOut={leftOutPaths.map((where, index) => ({
-              where,
-              why: leftOutReasons[index]?.() ?? '',
-            }))}
+            leftOut={leftOut()}
             {...importCalls}
           />
         </GalleryColumn>
@@ -101,6 +98,7 @@ export function TileWidgetGallery({ previewLimit }: { previewLimit: number }) {
             into={newBranch()}
             phase="refused"
             faults={faultPaths.map((where, index) => ({ where, why: faults[index]?.() ?? '' }))}
+            leftOut={leftOut()}
             {...importCalls}
           />
         </GalleryColumn>
@@ -129,6 +127,9 @@ const leftOutReasons = [
   m.system_import_reason_excluded,
   m.system_import_reason_binary,
 ]
+/** What the sample import left out, each path with why. */
+const leftOut = () =>
+  leftOutPaths.map((where, index) => ({ where, why: leftOutReasons[index]?.() ?? '' }))
 const faults = [m.system_import_fault_ring_overflows, m.system_import_fault_preview_too_long]
 
 /** The sample tile as the conversation names it: a click says the canvas would center on it. */
@@ -184,8 +185,10 @@ function NewTileSpecimen({
   }
   return (
     <>
+      {/* One widget, by one key, from form to receipt, so the receipt can take the form's focus. */}
       {created ? (
         <TileWidget
+          key={entrance}
           mode="done"
           did="created"
           tile={{ ...toolingNamed(), title: words.title }}
@@ -393,18 +396,19 @@ function ImportSpecimen() {
       setPhase('landed')
     }, 1600)
   }
-  return (
+  const again = () => {
+    setPhase('choosing')
+  }
+  return phase === 'landed' ? (
+    <TileImport into={newBranch()} phase="landed" tiles={14} leftOut={leftOut()} onDone={again} />
+  ) : (
     <TileImport
       into={newBranch()}
       phase={phase}
-      tiles={14}
-      {...importCalls}
       onDrop={run}
       onPickFolder={run}
       onPickFile={run}
-      onDone={() => {
-        setPhase('choosing')
-      }}
+      onDone={again}
     />
   )
 }
