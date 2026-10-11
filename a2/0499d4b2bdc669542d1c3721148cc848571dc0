@@ -1,0 +1,88 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/CLAUDE.md
+  s_c19b57f63ed6ef::t_ee520f398b59e3 47
+  s_c19b57f63ed6ef::t_fffbe2603af787 45
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/assistant.ts
+  s_c19b57f63ed6ef::t_d504175f6cecf9 424-429
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/run.ts
+  s_c19b57f63ed6ef::t_78229e26944575 215-238,241-250
+  s_c19b57f63ed6ef::t_73301ab16358e9 239-240
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/proposal.test.ts
+  s_c19b57f63ed6ef::t_9ef4bb624ac2f3 1,6,210-239
+  s_c19b57f63ed6ef::t_477e08c5b213a7 240
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/overlays/suggestions/Suggestions.test.ts
+  s_c19b57f63ed6ef::t_6f15ab653f8c66 28-35,41
+  s_c19b57f63ed6ef::t_3d5d99a037d85f 8,13-19,45-46,51,53,58,60
+  s_c19b57f63ed6ef::t_897bc10e375c11 1-7,9-12,20-27,42-44,47-50,52,54-57,59,61-63
+  s_c19b57f63ed6ef::t_f57588b4a035ae 36-40
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/agent/CLAUDE.md
+  s_c19b57f63ed6ef::t_ee520f398b59e3 19
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/proxy/proxy.test.ts
+  s_c19b57f63ed6ef::t_38853f38a7578b 225-263
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/agent/stream.ts
+  s_c19b57f63ed6ef::t_6f15ab653f8c66 11-12,15-16,18-30
+  s_c19b57f63ed6ef::t_a55eaba52006d6 13-14,17,31,35,89
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/spending/call.ts
+  s_c19b57f63ed6ef::t_f46bbc9fe47776 3-7,38-60,67-68,73-81,112-121,124-126,136-138
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/overlays/gallery.tsx
+  s_c19b57f63ed6ef::t_61c1c9c9631431 13
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/CLAUDE.md
+  s_c19b57f63ed6ef::t_ee520f398b59e3 22,25
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/blaxel.ts
+  s_c19b57f63ed6ef::t_391792ef890c29 79-87,237
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/events/CLAUDE.md
+  s_c19b57f63ed6ef::t_70ed0ae67f8bc5 18
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE.md
+  s_c19b57f63ed6ef::t_ee520f398b59e3 26
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/settings.ts
+  s_c19b57f63ed6ef::t_7082c4580a32b5 62-65
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/events/events.ts
+  s_c19b57f63ed6ef::t_1e4cbd3b9694bf 29-31
+  s_c19b57f63ed6ef::t_6fd2023975467c 45-47
+  s_c19b57f63ed6ef::t_e474ed64f495d1 10-18
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/programs.ts
+  s_c19b57f63ed6ef::t_31e92d545836f8 81-85,90-95
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/composer/Composer.tsx
+  s_c19b57f63ed6ef::t_61c1c9c9631431 12
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/spending/CLAUDE.md
+  s_c19b57f63ed6ef::t_fffbe2603af787 17,19
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/blaxel.test.ts
+  s_c19b57f63ed6ef::t_ab3ecf90c7416b 1-5,9,13-14,139-141,145,147-154,156-163,166-169,171-175
+  s_c19b57f63ed6ef::t_0b6a38ee7aa327 142-144,146,155,164-165,170
+  s_c19b57f63ed6ef::t_800ba4b1f30feb 176
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/spending/spending.test.ts
+  s_c19b57f63ed6ef::t_b533be08a8a596 102-143
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/CLAUDE.md
+  s_c19b57f63ed6ef::t_70ed0ae67f8bc5 36
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/agent/agent.test.ts
+  s_c19b57f63ed6ef::t_1d76938e2366dd 110-123
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/proxy/proxy.ts
+  s_c19b57f63ed6ef::t_303df702d6a58a 9,13-21,110-111,134,136-138,145
+  s_c19b57f63ed6ef::t_46997c9d418566 65-68,83,135
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/overlays/suggestions/Suggestions.tsx
+  s_c19b57f63ed6ef::t_387eb69697c2f2 1-55,57-133
+  s_c19b57f63ed6ef::t_98f43777f59877 56
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/run.test.ts
+  s_c19b57f63ed6ef::t_1d48c6c6142f16 10,179-192,197-226
+  s_c19b57f63ed6ef::t_907570acc499b9 193-196
+  s_c19b57f63ed6ef::t_fa6331e78e0eee 227
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/proxy/CLAUDE.md
+  s_c19b57f63ed6ef::t_70ed0ae67f8bc5 19-20
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE.md
+  s_c19b57f63ed6ef::t_70ed0ae67f8bc5 18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a20499d4b2bdc669542d1c3721148cc848571dc0",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
