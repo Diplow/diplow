@@ -6,7 +6,7 @@
 // spend and relay it. Every refusal is answered as Anthropic answers one, so Claude Code stops.
 import type { Effect } from 'effect'
 
-import { type AskedCall, largestCall } from '#/domains/assistant/assistant'
+import { type AskedCall, largestCall } from '#/domains/assistant/spending/admission'
 import { turnOnly } from '#/domains/iam/iam'
 
 import { modelCall } from '../../assistant/programs'

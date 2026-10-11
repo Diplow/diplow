@@ -19,9 +19,6 @@ import * as Proposal from './proposal/programs'
  */
 export const DayAsked = Schema.Struct({ ...Day.fields, date: Schema.optionalKey(Day.fields.date) })
 
-/** A Message the user posts: its text, trimmed, never empty. */
-export const NewMessage = Schema.Struct({ text: MessageText })
-
 /** The most Tiles a view names as on screen: two rings of six around a center, and theirs. */
 const mostShown = 100
 

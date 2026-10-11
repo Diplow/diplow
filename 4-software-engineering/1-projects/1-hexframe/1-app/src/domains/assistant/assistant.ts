@@ -1,34 +1,25 @@
-// Assistant: a conversation with an agent that builds a System on the user's behalf. For now its
-// Conversation alone, one per Account: a continuous timeline of Entries, read a day at a time, which
-// records the Messages, every change to the System whoever made it, the imports, and where the user
-// went. The conversations repository keeps the Entries (src/repositories/database/conversations/);
-// Assistant decides what each Entry says and when it dates from. It knows no Tile: the API layer hands
-// it Mapping's summary of each change, and Assistant records it as it came, with who acted. Every
-// write runs in the transaction the API layer opens around it: its type requires one. And the
-// Account's sandbox, where a Turn will run (src/repositories/agent/sandbox/), holding the System as
-// the files Mapping writes it as, which Assistant keeps as they came. And the Turns, each a run of the
-// agent answering a Message, one at a time per Conversation (src/repositories/database/conversations/).
-// And what a Turn spends on the model: whether a call its agent makes may go, through the model relay
-// (src/repositories/agent/anthropic/), and what it cost, recorded on the Turn (./spending/). And how a
-// Turn runs: its prompt and its launcher written into the sandbox, its agent started there, and what
-// its agent says as it runs, followed (./agent/). And the Conversation's Mode and its Proposal, the
-// writes its agent drafts in ask, decided by its Decider (./operations/) on the Conversation it
-// locked (src/repositories/database/conversations/proposals.ts).
-import { Clock, Effect, Result, Schema } from 'effect'
+// Assistant's application service: the Conversation, one per Account. Its Entries, a continuous
+// timeline read a day at a time, which records the Messages, every change to the System whoever made
+// it, the imports, and where the user went; the conversations repository keeps them
+// (src/repositories/database/conversations/), and Assistant decides what each says and when it dates
+// from. It knows no Tile: the API layer hands it Mapping's summary of each change, and Assistant
+// records it as it came, with who acted. Its Turns, each a run of the agent answering one of its
+// Messages, one at a time, through the Turns repository. And its Mode and its open Proposal, the
+// writes its Turns draft in ask, decided by its Decider (./operations/) on the Conversation it locked
+// (src/repositories/database/conversations/proposals.ts), an accepted Proposal kept with what undoes
+// it. Every write runs in the transaction the API layer opens around it: its type requires one, and
+// each locks the Conversation's row first. The sub-models that run on it sit in concept folders the
+// API layer calls as directly: how a Turn's agent runs (./agent/agent.ts), what a Turn spends on the
+// model (./spending/admission.ts), and what the Assistant applied, undone once (./undo/undo.ts).
+import { Clock, Effect, Schema } from 'effect'
 
-import { Anthropic, type Endpoint } from '#/repositories/agent/anthropic/anthropic'
-import { Sandbox, type SandboxFile } from '#/repositories/agent/sandbox/sandbox'
 import { Applied } from '#/repositories/database/conversations/applied'
 import { Conversations } from '#/repositories/database/conversations/conversations'
 import { type ConversationRow, Proposals } from '#/repositories/database/conversations/proposals'
 import { type TurnRow, Turns } from '#/repositories/database/conversations/turns'
 
-import { type Launch, launchOf, processOf } from './agent/launch'
-import { type Glimpse, type Linked, promptOf } from './agent/prompt'
-import { type AgentEvent, readLine } from './agent/stream'
 import {
   type Actor,
-  agentText,
   type Day,
   dayAt,
   deadlineOf,
@@ -48,8 +39,6 @@ import {
   TurnEnd,
   TurnStep,
   offeredNow,
-  undoneEntry,
-  undoing,
   within,
 } from './entities'
 import { AllowanceSpent, TurnRunning } from './errors'
@@ -68,16 +57,7 @@ import {
   SetMode,
 } from './operations'
 import { settings } from './settings'
-import { type Allowed, allowedCall, type CallRefused } from './spending/call'
-import {
-  allowanceSpent,
-  charged,
-  type Limit,
-  limitReached,
-  monthOf,
-  mustWait,
-  reserved,
-} from './spending/limits'
+import { allowanceSpent, monthOf } from './spending/limits'
 
 const decoded = Schema.decodeUnknownEffect(EntryContent)
 
@@ -115,9 +95,10 @@ export const today = (offset: number) =>
 
 /**
  * Records an Entry in the Account's Conversation, its first adding it, and answers it. It dates from
- * now, or from `ago` milliseconds before, a day at most and never ahead.
+ * now, or from `ago` milliseconds before, a day at most and never ahead. Exported for the concept
+ * folders that record one, the agent's Messages among them.
  */
-const record = (accountId: string, content: EntryContent, ago = 0) =>
+export const record = (accountId: string, content: EntryContent, ago = 0) =>
   Effect.gen(function* () {
     const now = yield* Clock.currentTimeMillis
     const at = new Date(now - within(ago))
@@ -149,23 +130,40 @@ export const recordChange = (accountId: string, summarized: Summarized, actor: A
   record(accountId, { ...summarized, actor })
 
 /**
- * Writes the System, as the files Mapping wrote it as, into the Account's sandbox, ensured first: the
- * whole of its System folder, whatever it held before gone, then read-only. What a Turn reads at its
- * start; what changed since, it reads through the MCP. Answers the sandbox, where a Turn then starts.
+ * Rewrites one of the Account's Entries as `change` says, the Entry as Assistant decoded it. An Entry
+ * Assistant cannot read back, or that `change` has nothing for, is a defect: Assistant wrote it.
+ * Exported for `./undo/`, whose undo says so in the Entry that offered it.
  */
-export const writeSystem = (accountId: string, files: ReadonlyArray<SandboxFile>) =>
-  Effect.flatMap(
-    Sandbox.use((sandbox) => sandbox.ensure(accountId)),
-    (box) => Effect.as(box.replaceSystem(files), box),
-  )
+export const rewritten = (
+  accountId: string,
+  entry: string,
+  change: (content: EntryContent) => EntryContent | undefined,
+) =>
+  Effect.gen(function* () {
+    const content = yield* Conversations.use((conversations) =>
+      conversations.entry(accountId, entry),
+    )
+    const after = change(yield* Effect.orDie(decoded(content)))
+    if (after === undefined) return yield* Effect.die(new Error('An Entry took no such change'))
+    yield* Conversations.use((conversations) =>
+      conversations.rewrite(accountId, entry, encoded(after)),
+    )
+  })
+
+/**
+ * Locks the Account's Conversation's row until the transaction ends, adding the Conversation when it
+ * has none, and answers it as its row keeps it, its Mode and its open Proposal: the one lock every
+ * write of the Conversation, its Turns', its Proposal's and what it applied takes first, in one
+ * order, so two of them never decide on what the other is changing, and never wait on each other.
+ */
+export const lockConversation = (accountId: string) =>
+  Proposals.use((proposals) => proposals.locked(accountId))
 
 const decodedEnd = Schema.decodeUnknownEffect(TurnEnd)
 
 const decodedMode = Schema.decodeUnknownEffect(Mode)
 
 const decodedStep = Schema.decodeUnknownEffect(TurnStep)
-
-const encodedStep = Schema.encodeSync(TurnStep)
 
 /**
  * A Turn as its row keeps it. One whose end or step Assistant cannot read back is a defect: it wrote
@@ -267,12 +265,12 @@ export const endTurn = (accountId: string, turnId: string, how: TurnEnd) =>
 
 /**
  * Records what one of the Account's Turns applied in an Entry that offers to undo it, when
- * `offeredNow` says so. The Conversation locked first, as a write of the Turn locks it, so a write
- * that lands as the Turn ends is offered by one or the other.
+ * `offeredNow` says so. The Conversation locked first, as a write of the Turn locks it
+ * (`./undo/`'s `applyInTurn`), so a write that lands as the Turn ends is offered by one or the other.
  */
 const offerUndo = (accountId: string, turnId: string, turnState: { readonly ended: boolean }) =>
   Effect.gen(function* () {
-    yield* Proposals.use((proposals) => proposals.locked(accountId))
+    yield* lockConversation(accountId)
     const kept = yield* Applied.use((applied) => applied.locked(accountId, turnId))
     if (kept === undefined || !offeredNow(kept, turnState)) return
     const { changes } = kept
@@ -284,237 +282,6 @@ const offerUndo = (accountId: string, turnId: string, turnState: { readonly ende
     })
     yield* Applied.use((applied) => applied.offer(accountId, turnId, entry.id))
   })
-
-/**
- * What became of a line of the agent's stream: no event, which no schema reads; or followed, and the
- * Turn it ended, if it did.
- */
-type Followed =
-  { readonly _tag: 'Malformed' } | { readonly _tag: 'Followed'; readonly ended?: Turn }
-
-/** Follows the events of a line in order; answers the Turn once one of them ended it. */
-const followed = (accountId: string, turnId: string, events: ReadonlyArray<AgentEvent>) =>
-  Effect.gen(function* () {
-    for (const event of events) {
-      const running = yield* runningTurn(accountId)
-      if (running?.id !== turnId) return undefined
-      const step = (doing: TurnStep | null) =>
-        Turns.use((turns) =>
-          turns.step(accountId, turnId, doing === null ? null : encodedStep(doing)),
-        )
-      switch (event._tag) {
-        case 'Said': {
-          const text = agentText(event.text)
-          if (text !== undefined)
-            yield* record(accountId, { _tag: 'Message', author: 'agent', text })
-          yield* step(null)
-          break
-        }
-        case 'Stepping':
-          yield* step(event.step)
-          break
-        case 'Finished':
-          return yield* endTurn(accountId, turnId, event.how)
-        case 'Exited':
-          return yield* endTurn(accountId, turnId, 'sandbox')
-      }
-    }
-    return undefined
-  })
-
-/**
- * Follows one line of what one of the Account's running Turns' agent says (`./agent/stream.ts`), its
- * events in order: its text kept as the agent's Messages, its step set, then dropped as it speaks
- * again; its result ending the Turn, by its answer, its ceiling or its sandbox; its exit, the stream
- * over, ending a Turn that gave no result by its sandbox. A line that is no event is `Malformed`, and
- * changes nothing. Nothing for a Turn that is not running, or not the Account's. In the transaction
- * the API layer opened.
- */
-export const followTurn = (accountId: string, turnId: string, line: string) =>
-  Effect.gen(function* () {
-    const events = readLine(line)
-    if (events === undefined) return { _tag: 'Malformed' } satisfies Followed
-    const ended = yield* followed(accountId, turnId, events)
-    const answer: Followed = { _tag: 'Followed', ...(ended !== undefined && { ended }) }
-    return answer
-  })
-
-/**
- * Today's latest Entries of the Account's Conversation, for a reader whose clock stands `offset`
- * minutes ahead of UTC, oldest first: as many as a Turn's prompt holds.
- */
-export const latestToday = (accountId: string, offset: number) =>
-  Effect.flatMap(today(offset), (asked) =>
-    Effect.map(day(accountId, asked), (entries) => entries.slice(-settings.turn.entries)),
-  )
-
-/** What starting a Turn's agent takes. */
-export interface TurnStart {
-  readonly turn: Turn
-  readonly key: Launch['key']
-  /** The System, as the files Mapping wrote it as. */
-  readonly system: ReadonlyArray<SandboxFile>
-  /** The origin the request that starts the Turn reached the app at, and the doors' paths there. */
-  readonly origin: string
-  readonly doors: Launch['doors']
-  /** The Tile the Turn starts in, its Title, and its folder from the System folder. */
-  readonly location: { readonly id: string; readonly title: string; readonly folder: string }
-  /** The Message it answers. */
-  readonly message: string
-  /** The Tiles that Message links, where each lives now, in the order it links them. */
-  readonly links: ReadonlyArray<Linked>
-  /** Today's latest Entries, and the Titles of the Tiles they name by id (`namedTiles`). */
-  readonly conversation: {
-    readonly entries: ReadonlyArray<Entry>
-    readonly titles: Readonly<Record<string, string>>
-  }
-  /** The Tiles on the user's screen, the centered one first. */
-  readonly onScreen: ReadonlyArray<Glimpse>
-  /** The id Help opens at. */
-  readonly help: string
-}
-
-/**
- * Starts a Turn's agent in the Account's sandbox: the System written into it, whatever it held gone;
- * its prompt, its settings and its launcher written beside the System folder; then the launcher
- * started, detached, in the Tile's folder, the Turn's Key in its environment alone, reaching the app
- * where the sandbox reaches it. Should a Stop have ended the Turn while it started, its agent is
- * stopped at once: the Stop found nothing to stop yet.
- */
-export const startAgent = (accountId: string, start: TurnStart) =>
-  Effect.gen(function* () {
-    const box = yield* writeSystem(accountId, start.system)
-    const { agent, origin } = yield* Sandbox.use((sandbox) =>
-      Effect.succeed({ agent: sandbox.agent, origin: sandbox.origin(start.origin) }),
-    )
-    const prompt = promptOf({
-      ...start.conversation,
-      onScreen: start.onScreen,
-      location: start.location,
-      links: start.links,
-      help: start.help,
-      mode: start.turn.mode,
-    })
-    const { files, run } = launchOf({
-      turnId: start.turn.id,
-      key: start.key,
-      origin,
-      doors: start.doors,
-      home: box.home,
-      agent,
-      folder: start.location.folder,
-      message: start.message,
-      prompt,
-    })
-    yield* Effect.forEach(files, (file) => box.write(file), { discard: true })
-    yield* box.start(run)
-    if ((yield* runningTurn(accountId))?.id !== start.turn.id) yield* box.stop(run.name)
-  })
-
-/**
- * Stops the agent of one of the Account's Turns in its sandbox: interrupted, so it ends cleanly, then
- * killed past a grace; nothing when it no longer runs.
- */
-export const stopAgent = (accountId: string, turnId: string) =>
-  Effect.flatMap(
-    Sandbox.use((sandbox) => sandbox.ensure(accountId)),
-    (box) => box.stop(processOf(turnId)),
-  )
-
-/**
- * The most bytes a model call's body holds, by the settings: the proxy reads no further, and refuses
- * the call past it, so `admitCall` never sees one.
- */
-export const largestCall: number = settings.model.largestCall
-
-/** A model call a Turn's agent asks the proxy for: its endpoint, Anthropic's headers, its body's text. */
-export interface AskedCall {
-  readonly endpoint: Endpoint
-  readonly version: string | undefined
-  readonly betas: string | undefined
-  readonly body: string
-}
-
-/** A call let through and admitted on a Turn, with what it reserved of the Turn's spend. */
-interface Admitted {
-  readonly _tag: 'Admitted'
-  readonly asked: AskedCall
-  readonly call: Allowed
-  readonly reserved: number
-}
-
-/**
- * What becomes of a model call before it goes: refused, by its body or its headers; refused since the
- * Turn is no longer running; held back by a limit the Turn reached, its ceiling or the month's
- * allowance, which ended the Turn so; asked to wait, until the calls under way settle, since with what
- * they reserved it would pass a limit; or admitted, the most it may cost reserved on the Turn.
- */
-type Admission =
-  | ({ readonly _tag: 'Refused' } & CallRefused)
-  | { readonly _tag: 'TurnOver' }
-  | { readonly _tag: 'Limited'; readonly limit: Limit }
-  | { readonly _tag: 'Busy' }
-  | Admitted
-
-/**
- * Decides whether a call of one of the Account's Turns may go: its body and headers as the settings
- * let them through; the Turn still running, below its ceiling, and its Account's Turns this month
- * below the allowance. A call held back ends the Turn by the limit it reached. One admitted reserves
- * the most it may cost on the Turn, and one that would pass a limit with what the calls under way
- * reserved waits for them, so calls made at once stay under the limits. In the transaction the API
- * layer opens, the Turn's row locked until it commits, so they decide one after another.
- */
-export const admitCall = (accountId: string, turnId: string, asked: AskedCall) =>
-  Effect.gen(function* () {
-    const allowed = allowedCall(asked)
-    if (Result.isFailure(allowed)) {
-      return { _tag: 'Refused', ...allowed.failure } satisfies Admission
-    }
-    const now = new Date(yield* Clock.currentTimeMillis)
-    const spending = yield* Turns.use((turns) => turns.spending(accountId, turnId, monthOf(now)))
-    if (spending === undefined) return { _tag: 'TurnOver' } satisfies Admission
-    const limit = limitReached({ turn: spending.turn.spent, month: spending.month.spent })
-    if (limit !== undefined) {
-      yield* endTurn(accountId, turnId, limit)
-      return { _tag: 'Limited', limit } satisfies Admission
-    }
-    const call = allowed.success
-    const reserve = reserved(call.model, { maxTokens: call.maxTokens, length: asked.body.length })
-    if (mustWait(spending, reserve)) return { _tag: 'Busy' } satisfies Admission
-    yield* Turns.use((turns) => turns.charge(accountId, turnId, { spent: 0, reserved: reserve }))
-    const admitted: Admission = { _tag: 'Admitted', asked, call, reserved: reserve }
-    return admitted
-  })
-
-/**
- * Relays an admitted call through the model relay, which knows no limit, and answers Anthropic's
- * answer as it comes, with `charged`: what the call is charged once its answer has ended, been cut
- * short or failed.
- */
-export const relayCall = ({ asked, call }: Admitted) =>
-  Effect.gen(function* () {
-    const { usage, ...relayed } = yield* Anthropic.use((anthropic) =>
-      anthropic.relay({ ...asked, body: call.body }),
-    )
-    return {
-      relayed,
-      charged: Effect.map(usage, (used) => charged(call.model, call.maxTokens, used)),
-    }
-  })
-
-/**
- * Settles an admitted call on its Turn, ended or not: what it reserved released, what it is charged
- * spent, since a call that started before the Turn ended still cost what it cost. In the transaction
- * the API layer opens.
- */
-export const settleCall = (
-  accountId: string,
-  turnId: string,
-  call: { readonly reserved: number; readonly charged: number },
-) =>
-  Turns.use((turns) =>
-    turns.charge(accountId, turnId, { spent: call.charged, reserved: -call.reserved }),
-  )
 
 const Drafts = Schema.Array(
   Schema.Struct({ write: Schema.Unknown, changes: Schema.Array(ProposedChange) }),
@@ -561,21 +328,6 @@ export const conversationState = (accountId: string) =>
  */
 export const openProposal = (accountId: string) =>
   Effect.map(conversationState(accountId), ({ open }) => open)
-
-/**
- * The Account's open Proposal, if one is, its Conversation locked until the transaction ends, so no
- * other draft, accept nor discard decides on it meanwhile: what a draft of one of its Turns folds over
- * the System before Assistant hears of it; and whether that Turn still runs, which a draft needs, read
- * once the lock is held, as its end takes it, so a write proven just before a Stop finds the Turn over
- * rather than a Proposal the user decided on since. In the transaction the API layer opened.
- */
-export const lockedProposal = (accountId: string, turnId: string) =>
-  Effect.gen(function* () {
-    const { state } = yield* stateOf(
-      yield* Proposals.use((proposals) => proposals.locked(accountId)),
-    )
-    return { open: state.open, running: yield* runs(accountId, turnId) }
-  })
 
 /** A Proposal's Entry, as the timeline shows it: its changes, and how it stands. */
 const proposalEntry = (
@@ -637,8 +389,7 @@ const written = (accountId: string, { event, before, after, entry }: Written) =>
  */
 const operate = <E>(accountId: string, decided: (state: ConversationState) => Decided<E>) =>
   Effect.gen(function* () {
-    const locked = yield* Proposals.use((proposals) => proposals.locked(accountId))
-    const loaded = yield* stateOf(locked)
+    const loaded = yield* stateOf(yield* lockConversation(accountId))
     const events = yield* Effect.fromResult(decided(loaded.state))
     let state = loaded.state
     let entry = loaded.entry
@@ -657,39 +408,80 @@ export const setMode = (accountId: string, mode: Mode) =>
     ({ after }) => after.mode,
   )
 
+/** A write a Turn drafts, as the API layer hands it: the write, opaque, and the changes it makes. */
+export interface Drafting {
+  readonly write: unknown
+  readonly changes: ReadonlyArray<ProposedChange>
+}
+
 /**
- * Drafts a write one of the Account's Turns made in ask into the Conversation's open Proposal, opening
- * one with its Entry when none is, and answers the Proposal: the write as the API layer encoded it,
- * opaque, and the changes it makes, as Mapping summarized them on the System the Proposal makes. In the
- * transaction the API layer opened, after `lockedProposal` said the Turn runs.
+ * Drafts a write one of the Account's Turns made in ask into the Conversation's open Proposal, in the
+ * one order it holds in: the Conversation locked until the transaction ends, so no other draft, accept
+ * nor discard decides on the Proposal meanwhile; whether the Turn still runs read once the lock is
+ * held, as its end takes it, so a write proven just before a Stop finds the Turn over rather than a
+ * Proposal the user decided on since; then its open Proposal, if one is, given to `step`, which
+ * decides the write on the System the Proposal makes and answers it, opaque, with the changes it makes
+ * there (Mapping's, in the API layer); then the write kept in the Proposal, which it opens with its
+ * Entry when none is. Answers the Proposal as the draft leaves it, and what `step` answered; none,
+ * `step` never run, once the Turn ended. What `step` refuses is refused, nothing kept. In the
+ * transaction the API layer opened.
  */
-export const draft = (
+export const draft = <A extends Drafting, E, R>(
   accountId: string,
   turnId: string,
-  { write, changes }: { readonly write: unknown; readonly changes: ReadonlyArray<ProposedChange> },
+  step: (open: OpenProposal | undefined) => Effect.Effect<A, E, R>,
 ) =>
   Effect.gen(function* () {
+    const { state } = yield* stateOf(yield* lockConversation(accountId))
+    if (!(yield* turnRuns(accountId, turnId))) return undefined
+    const drafted = yield* step(state.open)
+    const { write, changes } = drafted
     const proposal = crypto.randomUUID()
     const { after } = yield* operate(accountId, (locked) =>
       decide(locked, new Draft({ turn: turnId, write, changes }), { proposal }),
     )
     if (after.open === undefined) return yield* Effect.die(new Error('A draft left no Proposal'))
-    return after.open
+    return { proposal: after.open, drafted }
   })
 
+/** What the Assistant applied, as the API layer hands it: what undoes it, opaque, and its changes. */
+export interface Applying {
+  readonly undo: unknown
+  readonly changes: number
+}
+
 /**
- * Accepts the Account's open Proposal of this id, whole, and answers it as it stood, with its Entry,
- * its writes for the API layer to run on the System in the same transaction, which a refusal there
- * rolls back with the accept: refused `ProposalClosed` when it is open no longer, as `decide` rules.
+ * Accepts the Account's open Proposal of this id, whole, in the one order it holds in: decided,
+ * `ProposalClosed` when it is open no longer, as `decide` rules; then `run` given it as it stood,
+ * which runs its writes on the System (Mapping's, in the API layer) and answers what undoes them and
+ * the changes they made; and that kept with the Proposal, offered by its Entry, which then says it may
+ * be undone (`undone: false`), so a Proposal accepted before undos were kept offers none. Answers what
+ * `run` answered. What `run` refuses rolls the accept back with the transaction. In the transaction
+ * the API layer opened.
  */
-export const acceptProposal = (accountId: string, proposal: string) =>
-  Effect.flatMap(
-    operate(accountId, (state) => decide(state, new AcceptProposal({ proposal }))),
-    ({ before, entry }) =>
-      before.open === undefined || entry === undefined
-        ? Effect.die(new Error('A Proposal was accepted that was not open'))
-        : Effect.succeed({ ...before.open, entry }),
-  )
+export const acceptProposal = <A extends Applying, E, R>(
+  accountId: string,
+  proposal: string,
+  run: (accepted: OpenProposal) => Effect.Effect<A, E, R>,
+) =>
+  Effect.gen(function* () {
+    const { before, entry } = yield* operate(accountId, (state) =>
+      decide(state, new AcceptProposal({ proposal })),
+    )
+    const accepted = before.open
+    if (accepted === undefined || entry === undefined) {
+      return yield* Effect.die(new Error('A Proposal was accepted that was not open'))
+    }
+    const ran = yield* run(accepted)
+    const { undo, changes } = ran
+    yield* Applied.use((applied) =>
+      applied.keep(accountId, accepted.id, { undo, changes, entryId: entry }),
+    )
+    yield* rewritten(accountId, entry, (content) =>
+      content._tag === 'Proposal' ? { ...content, undone: false } : undefined,
+    )
+    return ran
+  })
 
 /** Discards the Account's open Proposal of this id: refused `ProposalClosed` when it is open no longer. */
 export const discardProposal = (accountId: string, proposal: string) =>
@@ -706,8 +498,11 @@ export const turn = (accountId: string, turnId: string) =>
     return yield* turnOf(row)
   })
 
-/** Whether one of the Account's Turns still runs: what a write it makes, drafted or applied, needs. */
-const runs = (accountId: string, turnId: string) =>
+/**
+ * Whether one of the Account's Turns still runs: what a write it makes, drafted or applied, needs, read
+ * once the Conversation's lock is held. Exported for `./undo/`'s `applyInTurn`.
+ */
+export const turnRuns = (accountId: string, turnId: string) =>
   Effect.map(turn(accountId, turnId), ({ ended }) => ended === undefined)
 
 /**
@@ -716,90 +511,3 @@ const runs = (accountId: string, turnId: string) =>
  */
 export const route = (accountId: string, turnId: string) =>
   Effect.map(turn(accountId, turnId), routeOf)
-
-/**
- * What undoes the writes one of the Account's Turns applied so far, as the API layer handed it,
- * opaque, none before its first, and whether the Turn still runs, which a write it makes needs. The
- * Conversation locked until the transaction ends, as its end locks it to offer the Undo, so a write
- * lands before the offer or finds the Turn over, and two writes of one Turn never both build on what
- * undoes them. In the transaction the API layer opened.
- */
-export const appliedSoFar = (accountId: string, turnId: string) =>
-  Effect.gen(function* () {
-    yield* Proposals.use((proposals) => proposals.locked(accountId))
-    const kept = yield* Applied.use((applied) => applied.locked(accountId, turnId))
-    return { undo: kept?.undo, running: yield* runs(accountId, turnId) }
-  })
-
-/** What the Assistant applied, as the API layer hands it: what undoes it, opaque, and its changes. */
-export interface Applying {
-  readonly undo: unknown
-  readonly changes: number
-}
-
-/**
- * Keeps what undoes the writes one of the Account's running Turns applied, this one's included, and
- * adds the changes it made to theirs: what its Entry offers to undo once the Turn ended. In the
- * transaction the API layer opened, after `appliedSoFar` said the Turn runs.
- */
-export const turnApplied = (accountId: string, turnId: string, { undo, changes }: Applying) =>
-  Effect.gen(function* () {
-    const kept = yield* Applied.use((applied) => applied.locked(accountId, turnId))
-    const total = (kept?.changes ?? 0) + changes
-    yield* Applied.use((applied) => applied.keep(accountId, turnId, { undo, changes: total }))
-  })
-
-/**
- * Keeps what undoes the writes of a Proposal the user accepted, which its Entry offers to undo from
- * then on, saying so (`undone: false`), so a Proposal accepted before undos were kept offers none. In
- * the transaction the API layer opened, after `acceptProposal`.
- */
-export const proposalApplied = (
-  accountId: string,
-  { id, entry }: { readonly id: string; readonly entry: string },
-  { undo, changes }: Applying,
-) =>
-  Effect.gen(function* () {
-    yield* Applied.use((applied) => applied.keep(accountId, id, { undo, changes, entryId: entry }))
-    yield* rewritten(accountId, entry, (content) =>
-      content._tag === 'Proposal' ? { ...content, undone: false } : undefined,
-    )
-  })
-
-/**
- * Rewrites one of the Account's Entries as `change` says, the Entry as Assistant decoded it. An Entry
- * Assistant cannot read back, or that `change` has nothing for, is a defect: Assistant wrote it.
- */
-const rewritten = (
-  accountId: string,
-  entry: string,
-  change: (content: EntryContent) => EntryContent | undefined,
-) =>
-  Effect.gen(function* () {
-    const content = yield* Conversations.use((conversations) =>
-      conversations.entry(accountId, entry),
-    )
-    const after = change(yield* Effect.orDie(decoded(content)))
-    if (after === undefined) return yield* Effect.die(new Error('An Entry took no such change'))
-    yield* Conversations.use((conversations) =>
-      conversations.rewrite(accountId, entry, encoded(after)),
-    )
-  })
-
-/**
- * Undoes what one of the Account's Turns applied, or a Proposal it accepted, by its id, once: marked
- * undone, its Entry saying so and offering no second Undo, and what undoes it answered, opaque, for the
- * API layer to run on the System in the same transaction, which a refusal there rolls back with it.
- * `NothingToUndo` once it was undone already, for a Turn still running, or for nothing it applied.
- * The Conversation locked until the transaction ends. In the transaction the API layer opened.
- */
-export const undo = (accountId: string, id: string) =>
-  Effect.gen(function* () {
-    yield* Proposals.use((proposals) => proposals.locked(accountId))
-    const kept = yield* Applied.use((applied) => applied.locked(accountId, id))
-    const undone = yield* Effect.fromResult(undoing(kept))
-    const now = new Date(yield* Clock.currentTimeMillis)
-    yield* Applied.use((applied) => applied.undone(accountId, id, now))
-    yield* rewritten(accountId, undone.entryId, undoneEntry)
-    return undone.undo
-  })

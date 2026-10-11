@@ -6,18 +6,20 @@ import { promisify } from 'node:util'
 import { Effect, Exit, Option, Schema } from 'effect'
 import { describe, expect, expectTypeOf, it } from 'vitest'
 
-import { dayAt, linkTo } from '#/domains/assistant/entities'
+import { dayAt, type Entry, linkTo } from '#/domains/assistant/entities'
 import { systemFolder } from '#/repositories/agent/sandbox/sandbox'
-import type { SessionRequired, SignedOut } from '#/domains/iam/errors'
+import type { AllowanceSpent, TurnRunning } from '#/domains/assistant/errors'
+import type { EntitlementMissing, SessionRequired, SignedOut } from '#/domains/iam/errors'
+import type { TileNotFound } from '#/domains/mapping/errors'
 import type { KeyProof, Session } from '#/domains/iam/iam'
 
-import * as AssistantService from '#/domains/assistant/assistant'
+import * as Agent from '#/domains/assistant/agent/agent'
 import * as MappingService from '#/domains/mapping/mapping'
 
 import * as Mapping from '../mapping/programs'
 import type { Failure } from '../report/errors/failure'
 import { noKey, run, type Services, type StartContext } from '../server/run'
-import { DayAsked, MergedNavigation, NewMessage } from './assistant'
+import { DayAsked, MergedNavigation, SentMessage } from './assistant'
 import * as Assistant from './programs'
 
 // Assistant's server functions, as their handlers run them: the program, through the helper, on the
@@ -67,11 +69,26 @@ async function value<A>(outcome: Promise<{ ok: true; value: A } | { ok: false }>
 /** Today, by the server's clock, for a reader at UTC. */
 const today = () => dayAt(new Date(), 0)
 
+/**
+ * A Message sent from home as the composer sends it, centered on a Tile: for an Account the list of
+ * the Assistant does not name, as these tests' are, it is posted and starts no Turn.
+ */
+const sent = (text: string) => ({ text, view: { center: 't', shown: [] }, offset: 0 })
+
+/** The Entry of a Message sent from home (`sent`), by `sendMessage`, the composer's own program. */
+async function messagePosted(
+  call: ReturnType<typeof request>['call'],
+  text: string,
+): Promise<Entry> {
+  const { entry } = await value(call(Assistant.sendMessage(sent(text))))
+  return entry
+}
+
 describe("Assistant's server functions", () => {
   it.each<readonly [string, Program]>([
     ['conversationDay', Assistant.conversationDay({ offset: 0 })],
     ['latest', Assistant.latest],
-    ['postMessage', Assistant.postMessage({ text: 'Hello' })],
+    ['sendMessage', Assistant.sendMessage(sent('Hello'))],
     [
       'recordNavigation',
       Assistant.recordNavigation({
@@ -100,7 +117,7 @@ describe("Assistant's server functions", () => {
       entries: [],
       titles: {},
     })
-    const posted = await value(call(Assistant.postMessage({ text: 'Help me lay out my vault.' })))
+    const posted = await messagePosted(call, 'Help me lay out my vault.')
     expect(posted).toMatchObject({
       _tag: 'Message',
       author: 'user',
@@ -113,7 +130,7 @@ describe("Assistant's server functions", () => {
 
   it('reads a day of the reader’s calendar, another day holding none of today’s', async () => {
     const { call } = request()
-    const posted = await value(call(Assistant.postMessage({ text: 'Today' })))
+    const posted = await messagePosted(call, 'Today')
     const yesterday = dayAt(new Date(Date.now() - 24 * 60 * 60_000), 0)
     const read = await value(call(Assistant.conversationDay(yesterday)))
     expect(read).toEqual({ day: yesterday, entries: [], titles: {}, lastEntry: posted.id })
@@ -124,7 +141,7 @@ describe("Assistant's server functions", () => {
     expect(await value(call(Assistant.conversationDay({ offset: 0 })))).not.toHaveProperty(
       'earlier',
     )
-    const posted = await value(call(Assistant.postMessage({ text: 'Today' })))
+    const posted = await messagePosted(call, 'Today')
     const tomorrow = dayAt(new Date(Date.now() + 24 * 60 * 60_000), 0)
     const read = await value(call(Assistant.conversationDay(tomorrow)))
     expect(read).toMatchObject({ entries: [], earlier: posted.at })
@@ -136,7 +153,7 @@ describe("Assistant's server functions", () => {
   it('answers the System’s Version, the Entry last recorded, which every write moves, and the Mode', async () => {
     const { call } = request()
     expect(await value(call(Assistant.latest))).toEqual({ version: 0, mode: 'ask' })
-    const posted = await value(call(Assistant.postMessage({ text: 'Name me' })))
+    const posted = await messagePosted(call, 'Name me')
     expect(await value(call(Assistant.latest))).toEqual({
       version: 0,
       mode: 'ask',
@@ -198,7 +215,7 @@ describe("Assistant's server functions", () => {
   it('records the writes it follows beside the Messages, in the order they came', async () => {
     const { call } = request()
     const { root } = await value(call(Mapping.system))
-    await value(call(Assistant.postMessage({ text: 'Name me' })))
+    await messagePosted(call, 'Name me')
     await value(call(Mapping.editTile({ id: root.id, version: 1, title: 'Ada' })))
     const { entries } = await value(call(Assistant.conversationDay({ offset: 0 })))
     expect(entries.map(({ _tag }) => _tag)).toEqual(['Message', 'Change'])
@@ -207,8 +224,8 @@ describe("Assistant's server functions", () => {
 
   it('lists, by its type, the errors each server function can fail with', () => {
     type Errors<P> = P extends Effect.Effect<unknown, infer E, unknown> ? E : never
-    expectTypeOf<Errors<ReturnType<typeof Assistant.postMessage>>>().toEqualTypeOf<
-      SignedOut | SessionRequired
+    expectTypeOf<Errors<ReturnType<typeof Assistant.sendMessage>>>().toEqualTypeOf<
+      SignedOut | SessionRequired | EntitlementMissing | TileNotFound | AllowanceSpent | TurnRunning
     >()
     expectTypeOf<Errors<ReturnType<typeof Assistant.conversationDay>>>().toEqualTypeOf<
       SignedOut | SessionRequired
@@ -229,7 +246,7 @@ describe("the System in the Account's sandbox", () => {
         accountId,
         (id) => `/?center=${id}`,
       )
-      const box = yield* AssistantService.writeSystem(accountId, files)
+      const box = yield* Agent.writeSystem(accountId, files)
       return { places: Object.fromEntries(places), folder: join(box.home, systemFolder) }
     })
 
@@ -277,10 +294,10 @@ describe("Assistant's schemas", () => {
   })
 
   it('takes a Message trimmed, never empty, at most 10,000 characters', () => {
-    expect(takes(NewMessage, { text: 'Hello' })).toBe(true)
-    expect(takes(NewMessage, { text: 'x'.repeat(10_000) })).toBe(true)
+    expect(takes(SentMessage, sent('Hello'))).toBe(true)
+    expect(takes(SentMessage, sent('x'.repeat(10_000)))).toBe(true)
     for (const text of ['', ' Hello', 'Hello\n', 'x'.repeat(10_001)]) {
-      expect(takes(NewMessage, { text }), JSON.stringify(text)).toBe(false)
+      expect(takes(SentMessage, sent(text)), JSON.stringify(text)).toBe(false)
     }
   })
 
@@ -311,7 +328,7 @@ describe("a Message's links", () => {
       call(Mapping.createTile({ parent: root.id, slot: 4, title: 'Work', preview: '', body: '' })),
     )
     const text = `${linkTo(work.id)} tidy this, then ${linkTo(games.id)}`
-    const posted = await value(call(Assistant.postMessage({ text })))
+    const posted = await messagePosted(call, text)
     expect(posted).toMatchObject({ _tag: 'Message', text })
     await value(call(Mapping.deleteTile({ id: games.id, version: 1 })))
     const { titles } = await value(call(Assistant.conversationDay({ offset: 0 })))

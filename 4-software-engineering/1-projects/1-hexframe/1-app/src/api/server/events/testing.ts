@@ -1,15 +1,17 @@
 // What the Turn's tests share: the app's three doors a sandbox reaches, `/mcp`, the model proxy and
 // the Turn's events, served over HTTP on this machine, so a Turn's launcher and the fake agent in the
-// sandbox on this machine reach them as a real sandbox reaches a deployment; and an Account signed up
-// in a browser of its own, its requests reaching the app at that server's origin.
+// sandbox on this machine reach them as a real sandbox reaches a deployment; an Account signed up in
+// a browser of its own, its requests reaching the app at that server's origin; and a Turn started as
+// a sent Message starts one, its Key in the test's hand.
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http'
 import type { AddressInfo } from 'node:net'
 
-import { Exit, Option } from 'effect'
+import { Effect, Exit, Option } from 'effect'
 
 import * as Iam from '#/domains/iam/iam'
 import { browser } from '#/repositories/auth/testing'
 
+import { messageAndTurn } from '../../assistant/programs'
 import { serveMcp } from '../mcp/mcp'
 import { value } from '../mcp/testing'
 import { serveModelCall } from '../proxy/proxy'
@@ -92,3 +94,12 @@ export async function signedUpAt(origin: string, email: string) {
   const waited = () => Promise.all(pending.splice(0))
   return { signedIn, accountId: account.id, waited }
 }
+
+/**
+ * A Message sent and the Turn answering it started in `location`, its Key issued, for the request's
+ * Session, as `sendMessage` starts one (`messageAndTurn`), its Entitlement and its Tile checked, its
+ * agent left unstarted, so the test drives the Turn itself, its Key in hand: the Message's Entry, the
+ * Turn, its Key, and the Turn ended by its time, if one was.
+ */
+export const turnStarted = (text: string, location: string) =>
+  Effect.flatMap(Iam.sessionOnly, ({ account }) => messageAndTurn(account, text, location))

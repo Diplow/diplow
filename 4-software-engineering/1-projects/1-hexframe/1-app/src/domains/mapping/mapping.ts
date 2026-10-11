@@ -41,6 +41,7 @@ import {
   type CreateReference,
   type CreateTile,
   decide,
+  decidedOne,
   type DeleteReference,
   type DeleteTile,
   type EditTile,
@@ -50,7 +51,6 @@ import {
   type MoveTile,
   type Operation,
   type OperationEvent,
-  type Refusals,
   summariesIn,
   summaryOf,
   type SwapTiles,
@@ -625,10 +625,7 @@ export const draft = <O extends Operation>(
     yield* outsideHelp(namedBy(operation))
     const folded = yield* Effect.fromResult(whole(yield* system(accountId), over))
     const made = yield* madeFor(operation)
-    const drafted = yield* Effect.fromResult(added(folded, operation, made)).pipe(
-      // `decide`'s overloads say what each Operation may be refused; the union loses it.
-      Effect.mapError((refusal) => refusal as Refusals[O['_tag']]),
-    )
+    const drafted = yield* Effect.fromResult(added(folded, operation, made))
     const tile = yield* draftAnswer(drafted.system, operation, made)
     return {
       batched: drafted.batched,
@@ -682,7 +679,7 @@ export const runBatch = (accountId: string, batch: ReadonlyArray<Batched>) =>
  * Turn in apply writes one Operation after the other. A clash on a create's id is a defect: an
  * agent's create carries none.
  */
-export const applied = <O extends Operation>(
+export const runOperation = <O extends Operation>(
   accountId: string,
   operation: O,
   earlier: Undo | undefined,
@@ -690,14 +687,7 @@ export const applied = <O extends Operation>(
   Effect.gen(function* () {
     const made = yield* madeFor(operation)
     const { system, events, after } = yield* operate(accountId, operation, (held) =>
-      // `decide`'s overloads say what each Operation may be refused; the union loses it.
-      Result.mapError(
-        Result.map(
-          added({ system: held, events: [], left: [] }, operation, made),
-          (next) => next.events,
-        ),
-        (refusal) => refusal as Refusals[O['_tag']],
-      ),
+      Result.map(decidedOne(held, operation, made), (next) => next.events),
     )
     const tile = yield* draftAnswer(after, operation, made)
     const undo = earlier === undefined ? undoOf(system, events) : extended(earlier, system, events)

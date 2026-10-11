@@ -10,6 +10,7 @@
 import { Effect, Schema } from 'effect'
 
 import * as Assistant from '#/domains/assistant/assistant'
+import * as AssistantUndo from '#/domains/assistant/undo/undo'
 import type { Mode } from '#/domains/assistant/entities'
 import { type OpenProposal, writesOf } from '#/domains/assistant/operations'
 import { SignedOut } from '#/domains/iam/errors'
@@ -31,10 +32,11 @@ const decodedUndo = Schema.decodeUnknownEffect(Undo)
 const encodedUndo = Schema.encodeSync(Undo)
 
 /**
- * What undoes what the Assistant applied, as Mapping answered it, none before anything was. One
- * Mapping cannot read back is a defect: the API layer encoded every one by the same schema.
+ * What undoes what the Assistant applied, as Assistant kept it, decoded back into Mapping's `Undo`,
+ * none before anything was. One Mapping cannot read back is a defect: the API layer encoded every one
+ * by the same schema.
  */
-const undoOf = (kept: unknown) =>
+const keptUndo = (kept: unknown) =>
   kept === undefined ? Effect.succeed(undefined) : Effect.orDie(decodedUndo(kept))
 
 /**
@@ -77,46 +79,49 @@ export const openTile = <F extends Field>(
 ) => Effect.flatMap(shownOver, (over) => MappingPrograms.openTile({ ...input, over }))
 
 /**
- * Drafts an Operation into the Account's open Proposal, in one transaction: the Conversation locked,
- * `SignedOut` should the Turn have ended since its Key was proven, so a write proven just before a
- * Stop never lands in a Proposal the user decided on since, nor opens another; then the Operation
- * decided by Mapping on the System the Proposal makes, refused as it would be there, and written into
- * the Proposal, which the draft opens when none is. Answers, for a create or an edit, the Tile as the
- * Proposal makes it, with its Version, as the write applied would.
+ * Drafts an Operation into the Account's open Proposal, in one transaction, by Assistant's `draft`: the
+ * Conversation locked, the Operation decided by Mapping on the System the Proposal makes, refused as
+ * it would be there, and written into the Proposal, which the draft opens when none is; `SignedOut`
+ * should the Turn have ended since its Key was proven, nothing drafted, so a write proven just before
+ * a Stop never lands in a Proposal the user decided on since, nor opens another. Answers, for a create
+ * or an edit, the Tile as the Proposal makes it, with its Version, as the write applied would.
  */
 const drafted = <O extends Operation>(accountId: string, turnId: string, operation: O) =>
   transactional(
     Effect.gen(function* () {
-      const { open, running } = yield* Assistant.lockedProposal(accountId, turnId)
+      const kept = yield* Assistant.draft(accountId, turnId, (open) =>
+        Effect.gen(function* () {
+          const draft = yield* Mapping.draft(accountId, yield* batchOf(open), operation)
+          const write = encodedBatched(draft.batched)
+          return { write, changes: draft.changes, tile: draft.tile }
+        }),
+      )
       // The Turn ended since its Key was proven: its Key no longer proves it.
-      if (!running) return yield* new SignedOut()
-      const over = yield* batchOf(open)
-      const draft = yield* Mapping.draft(accountId, over, operation)
-      const write = encodedBatched(draft.batched)
-      yield* Assistant.draft(accountId, turnId, { write, changes: draft.changes })
-      return draft.tile
+      if (kept === undefined) return yield* new SignedOut()
+      return kept.drafted.tile
     }),
   )
 
 /**
- * Applies an Operation one of the Account's Turns wrote in apply, in one transaction: the Conversation
- * locked, `SignedOut` should the Turn have ended since its Key was proven, what undoes the Turn's
- * writes so far read, the Operation run by Mapping as its own function
- * runs it, and what undoes them all, this one's included, kept with the Turn, with the changes it
- * made. Answers, for a create or an edit, the Tile as it now stands, with its Version, as the write's
- * own program would.
+ * Runs an Operation one of the Account's Turns wrote in apply, in one transaction, by `undo/`'s
+ * `applyInTurn`: the Conversation locked, what undoes the Turn's writes so far read, the Operation run
+ * by Mapping as its own function runs it, and what undoes them all, this one's included, kept with
+ * the Turn, with the changes it made; `SignedOut` should the Turn have ended since its Key was
+ * proven, nothing run. Answers, for a create or an edit, the Tile as it now stands, with its Version,
+ * as the write's own program would.
  */
-const applied = <O extends Operation>(accountId: string, turnId: string, operation: O) =>
+const ranForTurn = <O extends Operation>(accountId: string, turnId: string, operation: O) =>
   transactional(
     Effect.gen(function* () {
-      const so = yield* Assistant.appliedSoFar(accountId, turnId)
+      const ran = yield* AssistantUndo.applyInTurn(accountId, turnId, (soFar) =>
+        Effect.gen(function* () {
+          const run = yield* Mapping.runOperation(accountId, operation, yield* keptUndo(soFar))
+          return { undo: encodedUndo(run.undo), changes: run.changes, tile: run.tile }
+        }),
+      )
       // The Turn ended since its Key was proven: its Key no longer proves it.
-      if (!so.running) return yield* new SignedOut()
-      const earlier = yield* undoOf(so.undo)
-      const run = yield* Mapping.applied(accountId, operation, earlier)
-      const undo = encodedUndo(run.undo)
-      yield* Assistant.turnApplied(accountId, turnId, { undo, changes: run.changes })
-      return run.tile
+      if (ran === undefined) return yield* new SignedOut()
+      return ran.tile
     }),
   )
 
@@ -134,7 +139,7 @@ export const written = <O extends Operation, A, E, R>(
     const { account, by } = yield* Iam.signedIn
     if (by._tag !== 'TurnKey') return yield* apply(operation)
     if ((yield* Assistant.route(account.id, by.turnId)) === 'apply') {
-      return yield* applied(account.id, by.turnId, operation)
+      return yield* ranForTurn(account.id, by.turnId, operation)
     }
     return yield* drafted(account.id, by.turnId, operation)
   })
@@ -172,19 +177,21 @@ export const conversationNow = (accountId: string) =>
 export const acceptProposal = ({ proposal }: { readonly proposal: string }) =>
   Effect.flatMap(Iam.sessionOnly, ({ account }) =>
     transactional(
-      Effect.gen(function* () {
-        const accepted = yield* Assistant.acceptProposal(account.id, proposal)
-        const { conversationId, id } = yield* Assistant.turn(account.id, accepted.turn)
-        const assistant: Iam.SignedIn = {
-          account,
-          by: { _tag: 'TurnKey', conversationId, turnId: id },
-        }
-        const batch = yield* batchOf(accepted)
-        const run = yield* actingAs(assistant)(Mapping.runBatch(account.id, batch))
-        const undo = encodedUndo(run.undo)
-        yield* Assistant.proposalApplied(account.id, accepted, { undo, changes: run.changes })
-        return null
-      }),
+      Effect.as(
+        Assistant.acceptProposal(account.id, proposal, (accepted) =>
+          Effect.gen(function* () {
+            const { conversationId, id } = yield* Assistant.turn(account.id, accepted.turn)
+            const assistant: Iam.SignedIn = {
+              account,
+              by: { _tag: 'TurnKey', conversationId, turnId: id },
+            }
+            const batch = yield* batchOf(accepted)
+            const run = yield* actingAs(assistant)(Mapping.runBatch(account.id, batch))
+            return { undo: encodedUndo(run.undo), changes: run.changes }
+          }),
+        ),
+        null,
+      ),
     ),
   )
 
@@ -205,8 +212,8 @@ export const undo = ({ applied: id }: { readonly applied: string }) =>
   forSession((accountId) =>
     transactional(
       Effect.gen(function* () {
-        const undone = yield* Effect.orDie(decodedUndo(yield* Assistant.undo(accountId, id)))
-        yield* Mapping.undo(accountId, undone)
+        const inverse = yield* Effect.orDie(decodedUndo(yield* AssistantUndo.undo(accountId, id)))
+        yield* Mapping.undo(accountId, inverse)
         return null
       }),
     ),

@@ -9,7 +9,7 @@ import { Result, Schema } from 'effect'
 
 import { Frontmatter, Name, type System, TileConfig, TileId, tileAt } from '../../entities'
 import { BatchOutdated } from '../../errors'
-import { decide, type Decided, type Refusal } from '../decider/decide'
+import { decide, type Decided, type Refusal, type Refusals } from '../decider/decide'
 import { evolve } from '../decider/evolve'
 import { changeOf, type ChangeSummary, type OperationEvent } from '../events'
 import { Operation } from '../operation'
@@ -52,8 +52,14 @@ function decided(system: System, { operation, made, kept }: Batched): Decided {
   return decide(system, operation)
 }
 
+/** One step of a fold: the events a batched Operation makes on a System and the System after them. */
+interface Step {
+  readonly events: ReadonlyArray<OperationEvent>
+  readonly system: System
+}
+
 /** A batched Operation on a System: its events and the System after them, or its refusal. */
-const applied = (system: System, batched: Batched) =>
+const afterOne = (system: System, batched: Batched): Result.Result<Step, Refusal> =>
   Result.map(decided(system, batched), (events) => ({
     events,
     system: events.reduce(evolve, system),
@@ -67,7 +73,7 @@ const applied = (system: System, batched: Batched) =>
 export const fold = (system: System, batch: ReadonlyArray<Batched>): Folded =>
   batch.reduce<Folded>(
     (folded, batched) =>
-      Result.match(applied(folded.system, batched), {
+      Result.match(afterOne(folded.system, batched), {
         onSuccess: (next) => ({ ...folded, ...next, events: [...folded.events, ...next.events] }),
         onFailure: (refusal) => ({ ...folded, left: [...folded.left, refusal] }),
       }),
@@ -86,15 +92,28 @@ export const whole = (
   return folded.left.length === 0 ? Result.succeed(folded) : Result.fail(new BatchOutdated())
 }
 
+/** An Operation as a batch keeps it, a create with `made`, the id of what it makes. */
+const batchedOf = (operation: Operation, made: string | undefined): Batched =>
+  made === undefined ? { operation } : { operation, made }
+
+/**
+ * One Operation decided on a System, a create given `made`, the id of what it makes: the events it
+ * makes and the System after them, or what `decide` refuses it there, typed by its tag as `decide`'s
+ * overloads type it, which the union `decided` goes through loses, so it is said once, here.
+ */
+export const decidedOne = <O extends Operation>(system: System, operation: O, made?: string) =>
+  afterOne(system, batchedOf(operation, made)) as Result.Result<Step, Refusals[O['_tag']]>
+
 /**
  * One more Operation for a batch already folded over a System: decided on the System the batch
- * makes, refused as `decide` refuses it there, a create given `made`, the id of what it makes. Answers
- * it as the batch keeps it, the events it makes, and the System after them.
+ * makes, refused as `decide` refuses it there (`decidedOne`), a create given `made`, the id of what
+ * it makes. Answers it as the batch keeps it, the events it makes, and the System after them.
  */
-export const added = (folded: Folded, operation: Operation, made?: string) => {
-  const batched: Batched = made === undefined ? { operation } : { operation, made }
-  return Result.map(applied(folded.system, batched), (next) => ({ batched, ...next }))
-}
+export const added = <O extends Operation>(folded: Folded, operation: O, made?: string) =>
+  Result.map(decidedOne(folded.system, operation, made), (next) => ({
+    batched: batchedOf(operation, made),
+    ...next,
+  }))
 
 /**
  * What a timeline tells of some events of a batch, each a change summarized by Mapping (`changeOf`),
