@@ -1,0 +1,37 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE.md
+  s_80ba83442acf8f::t_d46c7634168788 29
+  s_80ba83442acf8f::t_22056d287751c7 2-3,6-11,13,15,28
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/atoms/CLAUDE.md
+  s_80ba83442acf8f::t_fb671234538cdb 1-22
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-design-system-v1/decisions.md
+  s_80ba83442acf8f::t_e39d252932c293 9-11,37-42,44-52
+  s_80ba83442acf8f::t_1a7e80874866a4 43
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE.md
+  s_80ba83442acf8f::t_51dd7100f2b29f 6-11,15-34,36-42,46-65
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/seams/CLAUDE.md
+  s_80ba83442acf8f::t_7c2de86329f6ab 12
+  s_80ba83442acf8f::t_fb671234538cdb 1-11,13-19
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/CLAUDE.md
+  s_80ba83442acf8f::t_7c2de86329f6ab 17
+  s_80ba83442acf8f::t_fb671234538cdb 1-16
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_80ba83442acf8f::t_b2fe0565c77074 58,76
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/CLAUDE.md
+  s_80ba83442acf8f::t_fb671234538cdb 1-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "918906ac8465e56f5f46c0d7ef6b6100160d7ad3",
+  "prompts": {},
+  "sessions": {
+    "s_80ba83442acf8f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8bba7661-f8f8-412a-8fc8-35832d250e88",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
