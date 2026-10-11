@@ -56,12 +56,16 @@ const cut = cutAlongCurve('var(--screen-edge)')
 /** How far the curve bows past the chat's edge, which the chat's column has to hold. */
 const bulge = `${String(reach)}px`
 
+/** What the chat's column holds past the bulge, as `--screen-margin`, so the curve's line isn't cut. */
+const margin = '0.375rem'
+
 /**
  * How far the chat's foot keeps its content in from the column's right, as `--screen-clear`: back
- * inside the chat's width, past the 1.125rem to the edge, the bulge and the column's 0.375rem, with as
- * much again to spare, so nothing reaches the curve. A slot's ground runs on under it to the cut.
+ * inside the chat's width, past the 1.125rem to the edge, the bulge and the column's margin, with the
+ * margin again to spare, so nothing reaches the curve. A slot's ground runs on under it to the cut.
  */
-const clear = 'calc(var(--screen-edge) - var(--screen-chat) + var(--screen-bulge) + 0.75rem)'
+const clear =
+  'calc(var(--screen-edge) - var(--screen-chat) + var(--screen-bulge) + 2 * var(--screen-margin))'
 
 /**
  * The seam above the composer while the canvas is in front, as `--screen-seam`: on a phone the canvas
@@ -109,6 +113,7 @@ export function Screen({
           '--screen-chat': chatWidth,
           '--screen-edge': edge,
           '--screen-bulge': bulge,
+          '--screen-margin': margin,
           '--screen-clear': clear,
           '--screen-seam': seam,
           '--screen-cut': cut,
@@ -121,7 +126,7 @@ export function Screen({
         aria-label={m.screen_chat()}
         className={cn(
           'pointer-events-none absolute inset-0 z-20 flex flex-col',
-          '@wide:pointer-events-auto @wide:right-auto @wide:w-[calc(var(--screen-edge)+var(--screen-bulge)+0.375rem)] @wide:[clip-path:var(--screen-cut)]',
+          '@wide:pointer-events-auto @wide:right-auto @wide:w-[calc(var(--screen-edge)+var(--screen-bulge)+var(--screen-margin))] @wide:[clip-path:var(--screen-cut)]',
         )}
       >
         <div

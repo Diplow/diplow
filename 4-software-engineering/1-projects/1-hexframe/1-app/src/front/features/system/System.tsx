@@ -111,6 +111,14 @@ export function System({
 
   return (
     <div className={cn('flex flex-col gap-2', className)}>
+      <Canvas
+        system={tree}
+        view={viewOf(search)}
+        onViewChange={onViewChange}
+        emptySlots={moving === undefined ? addHere : moveHere(moving)}
+        swapTargets={moving === undefined ? undefined : swapWith(moving)}
+        className="min-h-0 w-full flex-1"
+      />
       {moving !== undefined && (
         <div
           role="status"
@@ -128,14 +136,6 @@ export function System({
           </Button>
         </div>
       )}
-      <Canvas
-        system={tree}
-        view={viewOf(search)}
-        onViewChange={onViewChange}
-        emptySlots={moving === undefined ? addHere : moveHere(moving)}
-        swapTargets={moving === undefined ? undefined : swapWith(moving)}
-        className="min-h-0 w-full flex-1"
-      />
     </div>
   )
 }
