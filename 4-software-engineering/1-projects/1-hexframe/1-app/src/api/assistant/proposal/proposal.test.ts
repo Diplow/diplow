@@ -7,6 +7,7 @@ import { CreateTile } from '#/domains/mapping/operations'
 import { browser } from '#/repositories/auth/testing'
 
 import * as Mapping from '../../mapping/programs'
+import { turnStarted as sentTurn } from '../../server/events/testing'
 import { bearer, call, connect, content, value } from '../../server/mcp/testing'
 import { noKey, noSession, provenKey, run, type StartContext } from '../../server/run'
 import * as Assistant from '../programs'
@@ -44,10 +45,7 @@ const someone = signedUp()
 async function turnStarted(text: string) {
   const { signedIn } = await someone
   const { root } = await value(run(signedIn, Mapping.system))
-  const asked = await value(run(signedIn, Assistant.postMessage({ text })))
-  const { turn, key } = await value(
-    run(signedIn, Assistant.startTurn({ message: asked.id, location: root.id })),
-  )
+  const { turn, key } = await value(run(signedIn, sentTurn(text, root.id)))
   const client = await connect(bearer(Redacted.value(key.secret)))
   const end = async () => {
     await client.close()
@@ -211,10 +209,7 @@ describe('a Turn in ask', () => {
   it('refuses a write its Key proved just before the Turn ended, drafting nothing, opening no Proposal', async () => {
     const { signedIn, accountId } = await someone
     const { root } = await value(run(signedIn, Mapping.system))
-    const asked = await value(run(signedIn, Assistant.postMessage({ text: 'One last thing.' })))
-    const { turn, key } = await value(
-      run(signedIn, Assistant.startTurn({ message: asked.id, location: root.id })),
-    )
+    const { turn, key } = await value(run(signedIn, sentTurn('One last thing.', root.id)))
     const exchange = {
       url: 'http://localhost/mcp',
       headers: new Headers(bearer(Redacted.value(key.secret))),

@@ -8,7 +8,7 @@ import * as Mapping from '../../mapping/programs'
 import { value } from '../mcp/testing'
 import { run } from '../run'
 import { serveTurnEvent } from './events'
-import { signedUpAt } from './testing'
+import { signedUpAt, turnStarted } from './testing'
 
 // The Turn's events door over PGlite, Better Auth for real, fed lines recorded as Claude Code writes
 // them with `-p --output-format stream-json --verbose`: a request no running Turn proves refused before
@@ -55,9 +55,8 @@ const account = (async () => {
   const { root } = await value(run(someone.signedIn, Mapping.system))
   /** Starts a Turn answering a new Message, at the Root, and answers it with its Key's secret. */
   const turn = async () => {
-    const asked = await value(run(someone.signedIn, Assistant.postMessage({ text: 'Help me.' })))
     const { turn: started, key } = await value(
-      run(someone.signedIn, Assistant.startTurn({ message: asked.id, location: root.id })),
+      run(someone.signedIn, turnStarted('Help me.', root.id)),
     )
     return { turn: started, secret: Redacted.value(key.secret) }
   }

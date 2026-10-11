@@ -180,7 +180,7 @@ export interface Allowed {
 
 /**
  * Why a call is refused: its body or its headers out of what the settings name. A body past the
- * largest call never reaches here: the proxy reads no further (`largestCall`, `../assistant.ts`).
+ * largest call never reaches here: the proxy reads no further (`largestCall`, `./admission.ts`).
  */
 export interface CallRefused {
   readonly message: string

@@ -7,6 +7,7 @@ import { browser } from '#/repositories/auth/testing'
 import { transactional } from '#/repositories/database/database'
 
 import * as Mapping from '../mapping/programs'
+import { turnStarted } from '../server/events/testing'
 import { bearer, call, connect, endpoint, value } from '../server/mcp/testing'
 import { serveMcp } from '../server/mcp/mcp'
 import type { Failure } from '../report/errors/failure'
@@ -16,13 +17,11 @@ import * as Proposal from './proposal/programs'
 
 // A Turn and its Key, through the helper, on the runtime's repositories over PGlite, Better Auth for
 // real: started from a Session for an Account the allowlist names (`vitest.config.ts` names
-// `entitled@example.com`), its Key taken by `/mcp`, whose writes the timeline labels "Assistant",
-// then refused once the Turn ended, or expired; and refused wherever only a Session may act.
+// `entitled@example.com`), by the transaction `sendMessage` runs, its Key taken by `/mcp`, whose
+// writes the timeline labels "Assistant", then refused once the Turn ended, or expired; refused
+// wherever only a Session may act; and what `sendMessage` checks before it starts one.
 
-/**
- * Someone signed up with this email, a request their Session proves, a Message they posted, and their
- * Root, the Tile a Turn starts in.
- */
+/** Someone signed up with this email, a request their Session proves, and their Root. */
 async function signedUp(email: string) {
   const device = browser()
   const context = (): StartContext => ({
@@ -36,10 +35,16 @@ async function signedUp(email: string) {
   await value(run(context(), Iam.signUp({ email, password: 'lovelace1815' })))
   const session = await value(run(context(), Iam.proven))
   const signedIn: StartContext = { ...context(), session: Exit.succeed(session) }
-  const asked = await value(run(signedIn, Assistant.postMessage({ text: 'Name my vault.' })))
   const { root } = await value(run(signedIn, Mapping.system))
-  return { signedIn, message: asked.id, location: root.id }
+  return { signedIn, location: root.id }
 }
+
+/** A Message sent from home, its view centered on `center`, as the composer sends it. */
+const sent = (text: string, center: string) => ({
+  text,
+  view: { center, shown: [center] },
+  offset: 0,
+})
 
 /** A request whose Bearer header carries `secret`, as `/mcp` proves it: its Key, no Session. */
 async function byBearer(secret: string): Promise<StartContext> {
@@ -91,12 +96,12 @@ describe('a Turn and its Key', () => {
   const entitled = signedUp('entitled@example.com')
 
   it("starts from a Session entitled to the Assistant, with its Key, which `/mcp` takes and the timeline labels 'Assistant'", async () => {
-    const { signedIn, message, location } = await entitled
+    const { signedIn, location } = await entitled
     // In apply, the Turn's writes land as they come; in ask, they are drafted (./proposal/).
     await value(run(signedIn, Proposal.setMode({ mode: 'apply' })))
     const { root } = await value(run(signedIn, Mapping.system))
-    const { turn, key } = await value(run(signedIn, Assistant.startTurn({ message, location })))
-    expect(turn).toMatchObject({ message, location, spent: 0 })
+    const { entry, turn, key } = await value(run(signedIn, turnStarted('Name my vault.', location)))
+    expect(turn).toMatchObject({ message: entry.id, location, spent: 0 })
     expect(key.expiresAt).toEqual(new Date(turn.startedAt.getTime() + 15 * 60_000))
 
     const secret = Redacted.value(key.secret)
@@ -126,9 +131,13 @@ describe('a Turn and its Key', () => {
   })
 
   it('runs one at a time in a Conversation', async () => {
-    const { signedIn, message, location } = await entitled
-    const { turn } = await value(run(signedIn, Assistant.startTurn({ message, location })))
-    expect(await run(signedIn, Assistant.startTurn({ message, location }))).toMatchObject({
+    const { signedIn, location } = await entitled
+    const { turn } = await value(run(signedIn, turnStarted('One.', location)))
+    expect(await run(signedIn, turnStarted('Two.', location))).toMatchObject({
+      ok: false,
+      failure: { _tag: 'TurnRunning', kind: 'Conflict' },
+    })
+    expect(await run(signedIn, Assistant.sendMessage(sent('Two.', location)))).toMatchObject({
       ok: false,
       failure: { _tag: 'TurnRunning', kind: 'Conflict' },
     })
@@ -137,12 +146,11 @@ describe('a Turn and its Key', () => {
   })
 
   it('is refused, with its Key, wherever only a Session may act, a Turn started from it included', async () => {
-    const { signedIn, message, location } = await entitled
-    const { turn, key } = await value(run(signedIn, Assistant.startTurn({ message, location })))
+    const { signedIn, location } = await entitled
+    const { turn, key } = await value(run(signedIn, turnStarted('Name my vault.', location)))
     const byKey = await byBearer(Redacted.value(key.secret))
     const sessionOnly: ReadonlyArray<Effect.Effect<unknown, Failure, Services>> = [
-      Assistant.startTurn({ message, location }),
-      Assistant.postMessage({ text: 'Me again' }),
+      Assistant.sendMessage(sent('Me again', location)),
       Assistant.latest,
       Assistant.assistantAvailable,
       Iam.issueKey('mine now'),
@@ -160,10 +168,10 @@ describe('a Turn and its Key', () => {
   })
 
   it("starts only in a Tile of the Account's own System", async () => {
-    const { signedIn, message } = await entitled
+    const { signedIn } = await entitled
     const stranger = await signedUp(`${crypto.randomUUID()}@example.com`)
     for (const location of [stranger.location, crypto.randomUUID()]) {
-      expect(await run(signedIn, Assistant.startTurn({ message, location }))).toMatchObject({
+      expect(await run(signedIn, Assistant.sendMessage(sent('Here.', location)))).toMatchObject({
         ok: false,
         failure: { _tag: 'TileNotFound', kind: 'NotFound' },
       })
@@ -183,16 +191,16 @@ describe('a Turn and its Key', () => {
     expect(await listed(bearer(Redacted.value(live.secret)))).toBe(200)
   })
 
-  it('is refused EntitlementMissing for an Account the list does not name, which the composer is told', async () => {
+  it('starts none for an Account the list does not name, its Message kept, which the composer is told', async () => {
     const { signedIn: entitledIn } = await entitled
     expect(await value(run(entitledIn, Assistant.assistantAvailable))).toBe(true)
 
-    const { signedIn, message, location } = await signedUp(`${crypto.randomUUID()}@example.com`)
+    const { signedIn, location } = await signedUp(`${crypto.randomUUID()}@example.com`)
     expect(await value(run(signedIn, Assistant.assistantAvailable))).toBe(false)
-    expect(await run(signedIn, Assistant.startTurn({ message, location }))).toMatchObject({
-      ok: false,
-      failure: { _tag: 'EntitlementMissing', kind: 'Forbidden', entitlement: 'assistant' },
-    })
+    const answered = await value(run(signedIn, Assistant.sendMessage(sent('Hello.', location))))
+    expect(answered).not.toHaveProperty('turn')
+    expect(answered.entry).toMatchObject({ _tag: 'Message', author: 'user', text: 'Hello.' })
+    expect(await value(run(signedIn, Assistant.latest))).not.toHaveProperty('turn')
   })
 
   it('starts nowhere without a Session', async () => {
@@ -204,7 +212,7 @@ describe('a Turn and its Key', () => {
       session: noSession,
       key: noKey,
     }
-    expect(await run(nobody, Assistant.startTurn({ message: 'm', location: 't' }))).toMatchObject({
+    expect(await run(nobody, Assistant.sendMessage(sent('m', 't')))).toMatchObject({
       ok: false,
       failure: { _tag: 'SignedOut' },
     })

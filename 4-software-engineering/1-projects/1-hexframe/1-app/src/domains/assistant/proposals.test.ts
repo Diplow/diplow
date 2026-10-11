@@ -11,24 +11,20 @@ import { TestDatabase } from '#/repositories/database/testing'
 
 import {
   acceptProposal,
-  appliedSoFar,
   conversationState,
   day,
   discardProposal,
   draft,
   endTurn,
-  lockedProposal,
   openProposal,
   postMessage,
-  proposalApplied,
   route,
   setMode,
   startTurn,
-  turnApplied,
-  undo,
 } from './assistant'
 import type { Entry, ProposedChange } from './entities'
 import { changesOf, writesOf } from './operations'
+import { applyInTurn, undo } from './undo/undo'
 
 // The Mode and the Proposal over the conversations, Turns and Proposals repositories, for real, over
 // PGlite: a Conversation in ask until switched, a Turn taking the Mode it started in, which its writes
@@ -60,13 +56,35 @@ const change = (title: string): ProposedChange => ({
   tile: { id: title.toLowerCase(), title },
 })
 
-/** Drafts a write making one change into the Account's Proposal, as the API layer does. */
+/**
+ * Drafts a write making one change into the Account's Proposal, as the API layer does, its step
+ * answering the write and its change, for a Turn still running, and answers the Proposal as it leaves
+ * it.
+ */
 const drafted = (account: string, turn: string, title: string) =>
-  transactional(
-    Effect.andThen(
-      lockedProposal(account, turn),
-      draft(account, turn, { write: { title }, changes: [change(title)] }),
+  Effect.flatMap(
+    transactional(
+      draft(account, turn, () => Effect.succeed({ write: { title }, changes: [change(title)] })),
     ),
+    (kept) =>
+      kept === undefined
+        ? Effect.die(new Error('The Turn no longer runs'))
+        : Effect.succeed(kept.proposal),
+  )
+
+/** Accepts the Account's Proposal of this id, its writes run as `undo` undoes them. */
+const accepted = (account: string, proposal: string, undo: unknown = { mapping: 0 }) =>
+  transactional(acceptProposal(account, proposal, () => Effect.succeed({ undo, changes: 1 })))
+
+/**
+ * Applies a write of one of the Account's Turns, as the API layer does, its run answering what undoes
+ * the Turn's writes, this one's included, and its changes: what the run was given, what undoes the
+ * Turn's writes so far, or none, the run never run, once the Turn ended.
+ */
+const applied = (account: string, turn: string, kept: { undo: unknown; changes: number }) =>
+  Effect.map(
+    transactional(applyInTurn(account, turn, (soFar) => Effect.succeed({ ...kept, soFar }))),
+    (ran) => (ran === undefined ? undefined : { soFar: ran.soFar }),
   )
 
 /** The 10th of October 2026, UTC, where these tests' clock stands. */
@@ -149,9 +167,9 @@ layer(TestLayer)('the Mode and the Proposal, over PGlite', (it) => {
         const { account, turn } = yield* someone
         const asking = yield* turn('Lay out Work.')
         const opened = yield* drafted(account, asking.id, 'Work')
-        yield* transactional(acceptProposal(account, opened.id))
+        yield* accepted(account, opened.id)
         expect(yield* openProposal(account)).toBeUndefined()
-        const again = yield* transactional(acceptProposal(account, opened.id)).pipe(Effect.flip)
+        const again = yield* accepted(account, opened.id).pipe(Effect.flip)
         expect(again).toMatchObject({ _tag: 'ProposalClosed', kind: 'Conflict' })
         const discarded = yield* transactional(discardProposal(account, opened.id)).pipe(
           Effect.flip,
@@ -188,9 +206,7 @@ layer(TestLayer)('the Mode and the Proposal, over PGlite', (it) => {
       const ada = yield* someone
       const grace = yield* someone
       const theirs = yield* drafted(ada.account, (yield* ada.turn('Work.')).id, 'Work')
-      const refused = yield* transactional(acceptProposal(grace.account, theirs.id)).pipe(
-        Effect.flip,
-      )
+      const refused = yield* accepted(grace.account, theirs.id).pipe(Effect.flip)
       expect(refused._tag).toBe('ProposalClosed')
       expect((yield* openProposal(ada.account))?.id).toBe(theirs.id)
       expect(yield* openProposal(grace.account)).toBeUndefined()
@@ -204,8 +220,7 @@ layer(TestLayer)('what the Assistant applied, undone once, over PGlite', (it) =>
       yield* TestClock.setTime(Date.parse('2026-10-10T12:00:00Z'))
       const { account, turn } = yield* someone
       const opened = yield* drafted(account, (yield* turn('Work.')).id, 'Work')
-      const accepted = yield* transactional(acceptProposal(account, opened.id))
-      yield* transactional(proposalApplied(account, accepted, { undo: { mapping: 1 }, changes: 1 }))
+      yield* accepted(account, opened.id, { mapping: 1 })
       expect(yield* transactional(undo(account, opened.id))).toEqual({ mapping: 1 })
       expect(yield* proposalsOn(account)).toMatchObject([{ fate: 'accepted', undone: true }])
       const again = yield* transactional(undo(account, opened.id)).pipe(Effect.flip)
@@ -224,8 +239,7 @@ layer(TestLayer)('what the Assistant applied, undone once, over PGlite', (it) =>
       const none = yield* transactional(undo(ada.account, discarded.id)).pipe(Effect.flip)
       expect(none._tag).toBe('NothingToUndo')
       const kept = yield* drafted(ada.account, working.id, 'More')
-      const accepted = yield* transactional(acceptProposal(ada.account, kept.id))
-      yield* transactional(proposalApplied(ada.account, accepted, { undo: 1, changes: 1 }))
+      yield* accepted(ada.account, kept.id, 1)
       const theirs = yield* transactional(undo(grace.account, kept.id)).pipe(Effect.flip)
       expect(theirs._tag).toBe('NothingToUndo')
     }),
@@ -237,10 +251,10 @@ layer(TestLayer)('what the Assistant applied, undone once, over PGlite', (it) =>
       const { account, turn } = yield* someone
       yield* transactional(setMode(account, 'apply'))
       const applying = yield* turn('Write it.')
-      expect((yield* transactional(appliedSoFar(account, applying.id))).undo).toBeUndefined()
-      yield* transactional(turnApplied(account, applying.id, { undo: 'first', changes: 2 }))
-      expect((yield* transactional(appliedSoFar(account, applying.id))).undo).toBe('first')
-      yield* transactional(turnApplied(account, applying.id, { undo: 'both', changes: 1 }))
+      const first = yield* applied(account, applying.id, { undo: 'first', changes: 2 })
+      expect(first).toEqual({ soFar: undefined })
+      const both = yield* applied(account, applying.id, { undo: 'both', changes: 1 })
+      expect(both).toEqual({ soFar: 'first' })
       const running = yield* transactional(undo(account, applying.id)).pipe(Effect.flip)
       expect(running._tag).toBe('NothingToUndo')
       expect(yield* entriesOn(account, 'TurnApplied')).toEqual([])
@@ -276,37 +290,39 @@ layer(TestLayer)('what the Assistant applied, undone once, over PGlite', (it) =>
         const { account, turn } = yield* someone
         yield* transactional(setMode(account, 'apply'))
         const still = yield* turn('Move nothing.')
-        expect(yield* transactional(appliedSoFar(account, still.id))).toEqual({
-          undo: undefined,
-          running: true,
-        })
-        yield* transactional(turnApplied(account, still.id, { undo: 'none', changes: 0 }))
+        const nothing = yield* applied(account, still.id, { undo: 'none', changes: 0 })
+        expect(nothing).toEqual({ soFar: undefined })
         yield* transactional(endTurn(account, still.id, 'answered'))
         expect(yield* entriesOn(account, 'TurnApplied')).toEqual([])
-        // A write that reaches it now is refused by the API layer: its Key proves the Turn no longer.
-        expect(yield* transactional(appliedSoFar(account, still.id))).toEqual({
-          undo: 'none',
-          running: false,
-        })
+        // A write that reaches it now is not run: the API layer refuses it, its Key proving the Turn
+        // no longer.
+        expect(yield* applied(account, still.id, { undo: 'late', changes: 1 })).toBeUndefined()
+        expect(yield* entriesOn(account, 'TurnApplied')).toEqual([])
       }),
   )
 
-  it.effect('says, with the Proposal a Turn drafts into, whether the Turn still runs', () =>
+  it.effect('drafts nothing for a Turn that ended, its step never run', () =>
     Effect.gen(function* () {
       yield* TestClock.setTime(Date.parse('2026-10-10T14:00:00Z'))
       const { account, turn } = yield* someone
       const asking = yield* turn('Draft one.')
-      expect(yield* transactional(lockedProposal(account, asking.id))).toEqual({
-        open: undefined,
-        running: true,
-      })
       const opened = yield* drafted(account, asking.id, 'Work')
       yield* transactional(endTurn(account, asking.id, 'stopped'))
       // A draft that reaches it now is refused by the API layer: its Key proves the Turn no longer.
-      expect(yield* transactional(lockedProposal(account, asking.id))).toMatchObject({
-        open: { id: opened.id },
-        running: false,
-      })
+      let stepped = false
+      const late = yield* transactional(
+        draft(account, asking.id, () =>
+          Effect.sync(() => {
+            stepped = true
+            return { write: { title: 'Late' }, changes: [change('Late')] }
+          }),
+        ),
+      )
+      expect(late).toBeUndefined()
+      expect(stepped).toBe(false)
+      const open = yield* openProposal(account)
+      expect(open?.id).toBe(opened.id)
+      expect(open && writesOf(open)).toEqual([{ title: 'Work' }])
     }),
   )
 })

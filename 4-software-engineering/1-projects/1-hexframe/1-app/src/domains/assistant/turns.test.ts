@@ -10,12 +10,12 @@ import { Turns, layer as turnsLayer } from '#/repositories/database/conversation
 import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 
+import { followTurn } from './agent/agent'
 import {
   day,
   deadline,
   endOverdueTurn,
   endTurn,
-  followTurn,
   liveTurn,
   postMessage,
   runningTurn,

@@ -10,6 +10,7 @@ import { transactional } from '#/repositories/database/database'
 
 import * as Assistant from '../../assistant/programs'
 import * as Mapping from '../../mapping/programs'
+import { turnStarted } from '../events/testing'
 import { value } from '../mcp/testing'
 import { noKey, run, type StartContext } from '../run'
 import { methodNotAllowed, serveModelCall } from './proxy'
@@ -37,14 +38,11 @@ async function signedUp() {
   )
   const session = await value(run(context(), Iam.proven))
   const signedIn: StartContext = { ...context(), session: Exit.succeed(session) }
-  const asked = await value(run(signedIn, Assistant.postMessage({ text: 'Name my vault.' })))
   const { root } = await value(run(signedIn, Mapping.system))
   const accountId = (await value(run(signedIn, Iam.signedIn))).account.id
   /** Starts a Turn, and answers it with its Key's secret. */
   const turn = async () => {
-    const started = await value(
-      run(signedIn, Assistant.startTurn({ message: asked.id, location: root.id })),
-    )
+    const started = await value(run(signedIn, turnStarted('Name my vault.', root.id)))
     return { turn: started.turn, secret: Redacted.value(started.key.secret) }
   }
   /** Ends a Turn, as the code running it does. */
