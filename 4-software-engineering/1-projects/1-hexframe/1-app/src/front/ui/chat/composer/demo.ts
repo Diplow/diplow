@@ -1,8 +1,9 @@
 // What the composer's state hook will do on a real page, done here for /design-system alone, on a
 // fixture System: what the caret stands in lists, what the field shows marked, and what a pick puts in
 // the field. A `/` lists the commands only at the very start of a Message, an `@` the Tiles anywhere a
-// word starts; a command that takes a Tile opens the `@` search at once, the language lists the
-// languages, each in its own words. The Tiles are the user's own words, not translated.
+// word starts, by the rules of the feature's `@` (`features/conversation/composer/mention.ts`, which
+// `ui/` cannot import); a command that takes a Tile opens the `@` search at once, the language lists
+// the languages, each in its own words. The Tiles are the user's own words, not translated.
 import { m } from '#/paraglide/messages'
 import { getLocale, locales } from '#/paraglide/runtime'
 
@@ -11,8 +12,9 @@ import {
   commandGroups,
   commands,
   commandsMatching,
+  cutAround,
   groupNames,
-  marked,
+  namesOf,
   takesNames,
 } from './commands'
 import type { Mark } from './Composer'
@@ -52,11 +54,7 @@ export interface Typing {
 
 /** The command a name opens a Message with, in any language for the language. */
 const commandNamed = (name: string): Command | undefined =>
-  commands.find((command) =>
-    command.id === 'language'
-      ? locales.some((locale) => m.composer_command_language({}, { locale }) === name)
-      : command.name() === name,
-  )
+  commands.find((command) => namesOf(command).includes(name))
 
 /** Where the first command of a group stands among those found. */
 const firstOf = (found: ReadonlyArray<Command>, group: Command['group']) => {
@@ -68,10 +66,7 @@ const commandRow = (command: Command): Row => ({
   kind: 'command',
   id: command.id,
   name: command.name(),
-  takes:
-    command.takes === undefined || command.takes === 'language'
-      ? undefined
-      : takesNames[command.takes](),
+  takes: command.takes === undefined ? undefined : takesNames[command.takes](),
   does: command.does(),
   icon: command.icon,
 })
@@ -120,7 +115,7 @@ export function typingAt(value: string, caret: number): Typing | undefined {
           {
             label: m.composer_group_languages(),
             rows: locales
-              .filter((locale) => typed === '' || marked(ownName(locale), typed) !== undefined)
+              .filter((locale) => typed === '' || cutAround(ownName(locale), typed) !== undefined)
               .map((locale): Row => ({
                 kind: 'choice',
                 id: locale,
@@ -134,26 +129,47 @@ export function typingAt(value: string, caret: number): Typing | undefined {
       },
     }
   }
-  const tile = /(^|\s)@([^@\n]{0,30})$/.exec(before)
-  if (tile === null) return undefined
-  const typed = tile[2] ?? ''
-  const from = before.length - typed.length - 1
-  const found = tiles.filter(({ title }) => {
-    const cut = marked(title, typed)
-    return typed === '' || (cut !== undefined && /(^|\s)$/.test(cut.before))
-  })
-  // Past a space with nothing found, the user is writing, not searching.
-  if (found.length === 0 && /\s/.test(typed)) return undefined
+  return tileTyping(before)
+}
+
+/** The most characters a search reads after its `@`, and the most Tiles it offers, as the feature's. */
+const longestQuery = 40
+const mostOffered = 8
+
+/** How well a Title answers a search: starting with it, then a word starting with it, then holding it. */
+function rank(title: string, typed: string): number | undefined {
+  const cut = cutAround(title, typed)
+  if (cut === undefined) return typed === '' ? 0 : undefined
+  if (cut.before === '') return 0
+  return /[\s\p{P}]$/u.test(cut.before) ? 1 : 2
+}
+
+/**
+ * The `@` search the caret stands in: the last `@` before it, opening a word, with no line break since
+ * and at most `longestQuery` characters typed; its Tiles, the best first, then the nearest the Root.
+ */
+function tileTyping(before: string): Typing | undefined {
+  const from = before.lastIndexOf('@')
+  if (from === -1 || (from > 0 && !/\s/.test(before.charAt(from - 1)))) return undefined
+  const typed = before.slice(from + 1)
+  if (typed.length > longestQuery || /[\n\r]/.test(typed) || typed.startsWith(' ')) return undefined
+  const found = tiles
+    .flatMap((tile, order) => {
+      const ranked = rank(tile.title, typed.trim())
+      return ranked === undefined ? [] : [{ tile, ranked, order }]
+    })
+    .sort((a, b) => a.ranked - b.ranked || a.order - b.order)
+    .slice(0, mostOffered)
   return {
     kind: 'tile',
     from,
     listing: {
       label: m.composer_tiles_label(),
-      typed,
+      typed: typed.trim(),
       groups: [
         {
           label: groupNames.tiles(),
-          rows: found.slice(0, 8).map((each): Row => ({ kind: 'tile', ...each })),
+          rows: found.map(({ tile }): Row => ({ kind: 'tile', ...tile })),
         },
       ].filter((group) => group.rows.length > 0),
       none: m.composer_none_tile({ typed }),

@@ -30,7 +30,7 @@ export const commandGroups = ['tiles', 'agent', 'you'] as const
 type CommandGroup = (typeof commandGroups)[number]
 
 /** What a command takes after its name: a Tile, which opens the `@` search at once, or a word. */
-type Takes = 'tile' | 'where' | 'topic' | 'language'
+type Takes = 'tile' | 'where' | 'topic'
 
 export interface Command {
   /** The command, whatever the language. */
@@ -50,8 +50,8 @@ export const groupNames: Record<CommandGroup, () => string> = {
   you: m.composer_group_you,
 }
 
-/** What a command shows it takes, after its name; the language none, its name says it already. */
-export const takesNames: Record<Exclude<Takes, 'language'>, () => string> = {
+/** What a command shows it takes, after its name. */
+export const takesNames: Record<Takes, () => string> = {
   tile: m.composer_takes_tile,
   where: m.composer_takes_where,
   topic: m.composer_takes_topic,
@@ -138,7 +138,6 @@ export const commands: ReadonlyArray<Command> = [
     id: 'language',
     group: 'you',
     name: m.composer_command_language,
-    takes: 'language',
     does: m.composer_command_language_does,
     icon: Languages,
   },
@@ -168,16 +167,18 @@ export const commands: ReadonlyArray<Command> = [
 
 /** A text compared as a reader would: lower case, accents aside, one character for one. */
 const folded = (text: string) =>
-  Array.from(text, (character) =>
-    character
+  Array.from(text, (character) => {
+    const plain = character
       .normalize('NFD')
       .replace(/\p{Diacritic}/gu, '')
       .toLowerCase()
-      .charAt(0),
-  ).join('')
+      .charAt(0)
+    // A mark already apart from its letter, in decomposed text, keeps its place.
+    return plain === '' ? character : plain
+  }).join('')
 
 /** The names a command answers to: its own, and the language's in every language. */
-const namesOf = (command: Command) =>
+export const namesOf = (command: Command) =>
   command.id === 'language'
     ? locales.map((locale) => m.composer_command_language({}, { locale }))
     : [command.name()]
@@ -204,14 +205,14 @@ export function commandsMatching(typed: string): ReadonlyArray<Command> {
 }
 
 /** A text cut around what was typed, where it first shows in it, case and accents aside. */
-export interface Marked {
+export interface Cut {
   readonly before: string
   readonly match: string
   readonly after: string
 }
 
 /** Where `typed` first shows in `text`; none when it does not, or nothing was typed. */
-export function marked(text: string, typed: string): Marked | undefined {
+export function cutAround(text: string, typed: string): Cut | undefined {
   if (typed === '') return undefined
   const at = folded(text).indexOf(folded(typed))
   if (at === -1) return undefined

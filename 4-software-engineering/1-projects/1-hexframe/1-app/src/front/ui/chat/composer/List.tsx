@@ -8,7 +8,7 @@ import { useEffect, useRef } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { marked } from './commands'
+import { cutAround } from './commands'
 
 /** A command: its icon, its name, what it takes and what it does. */
 interface CommandRow {
@@ -173,7 +173,7 @@ function RowContent({ row, typed, on }: { row: Row; typed: string; on: boolean }
 function CommandContent({ row, typed, on }: { row: CommandRow; typed: string; on: boolean }) {
   const Icon = row.icon
   // What was typed shows where the name starts with it; a command found by its words shows none.
-  const cut = marked(row.name, typed)
+  const cut = cutAround(row.name, typed)
   const typedPart = cut?.before === '' ? cut.match : ''
   return (
     <>
@@ -219,7 +219,7 @@ function TileContent({ row, typed, on }: { row: TileRow; typed: string; on: bool
           on ? 'text-foreground' : 'text-foreground/80',
         )}
       >
-        <Marked text={row.title} typed={typed} />
+        <Highlighted text={row.title} typed={typed} />
       </span>
       <span className="truncate text-right text-[0.71875rem] font-light text-muted-foreground">
         {row.path}
@@ -237,7 +237,7 @@ function ChoiceContent({ row, typed, on }: { row: ChoiceRow; typed: string; on: 
         <span />
       )}
       <span className={on ? 'text-foreground' : 'text-foreground/80'}>
-        <Marked text={row.label} typed={typed} />
+        <Highlighted text={row.label} typed={typed} />
       </span>
       {row.current === true && (
         <span className="text-right text-[0.71875rem] font-light text-muted-foreground">
@@ -248,9 +248,9 @@ function ChoiceContent({ row, typed, on }: { row: ChoiceRow; typed: string; on: 
   )
 }
 
-/** A text, what was typed marked in it. */
-function Marked({ text, typed }: { text: string; typed: string }) {
-  const cut = marked(text, typed)
+/** A text, what was typed highlighted in it. */
+function Highlighted({ text, typed }: { text: string; typed: string }) {
+  const cut = cutAround(text, typed)
   if (cut === undefined) return text
   return (
     <>

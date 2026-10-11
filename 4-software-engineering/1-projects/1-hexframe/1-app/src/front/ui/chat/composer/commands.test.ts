@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { commandGroups, commands, commandsMatching, marked } from './commands'
+import { commandGroups, commands, commandsMatching, cutAround } from './commands'
 
 const ids = (typed: string) => commandsMatching(typed).map((command) => command.id)
 
@@ -33,18 +33,26 @@ describe('commandsMatching', () => {
   })
 })
 
-describe('marked', () => {
+describe('cutAround', () => {
   it('cuts a text around what was typed, where it first shows, case and accents aside', () => {
-    expect(marked('Déplacer', 'depl')).toEqual({ before: '', match: 'Dépl', after: 'acer' })
-    expect(marked('Software engineering', 'ENG')).toEqual({
+    expect(cutAround('Déplacer', 'depl')).toEqual({ before: '', match: 'Dépl', after: 'acer' })
+    expect(cutAround('Software engineering', 'ENG')).toEqual({
       before: 'Software ',
       match: 'eng',
       after: 'ineering',
     })
   })
 
-  it('marks nothing when nothing was typed, or what was typed is not there', () => {
-    expect(marked('Projects', '')).toBeUndefined()
-    expect(marked('Projects', 'site')).toBeUndefined()
+  it('keeps its place in decomposed text, a mark apart from its letter', () => {
+    expect(cutAround('De\u0301placer', 'pla')).toEqual({
+      before: 'De\u0301',
+      match: 'pla',
+      after: 'cer',
+    })
+  })
+
+  it('cuts nothing when nothing was typed, or what was typed is not there', () => {
+    expect(cutAround('Projects', '')).toBeUndefined()
+    expect(cutAround('Projects', 'site')).toBeUndefined()
   })
 })

@@ -19,8 +19,12 @@ export interface Mark {
   readonly kind: 'command' | 'tile'
 }
 
-/** What the agent may do: ask before changing anything, or apply its changes, with undo. */
-type Mode = 'ask' | 'apply'
+/** One of what the agent may be let do, a Mode: its id, its name on the switch, and what it means. */
+interface ModeChoice {
+  readonly id: string
+  readonly label: string
+  readonly means: string
+}
 
 interface ComposerProps {
   value: string
@@ -46,8 +50,9 @@ interface ComposerProps {
   waiting?: boolean
   /** The Account may not use the Assistant: its Messages are kept, none is answered. */
   unavailable?: boolean
-  /** The Mode and its switch; none before it is read. */
-  mode?: { mode: Mode; choose: (mode: Mode) => void } | undefined
+  /** The Modes, the one on and how to switch it, its caller's from Assistant's; none before it is read. */
+  mode?:
+    { choices: ReadonlyArray<ModeChoice>; on: string; choose: (id: string) => void } | undefined
   className?: string
 }
 
@@ -92,8 +97,10 @@ export function Composer({
       )}
       onSubmit={(event) => {
         event.preventDefault()
-        if (running !== undefined) running.stop()
-        else if (ready) onSend()
+        // Only the Stop submits while a Turn runs, and once.
+        if (running !== undefined) {
+          if (!running.stopping) running.stop()
+        } else if (ready) onSend()
       }}
     >
       {open && (
@@ -115,7 +122,7 @@ export function Composer({
             aria-hidden
             className="pointer-events-none absolute inset-0 overflow-hidden pb-1.5 font-human text-prose font-light break-words whitespace-pre-wrap text-foreground"
           >
-            <Marked value={value} marks={marks} />
+            <FieldText value={value} marks={marks} />
           </div>
           <textarea
             ref={fieldRef}
@@ -162,9 +169,10 @@ export function Composer({
                   (event.key === 'Tab' || (event.key === 'Enter' && !event.shiftKey))
                 )
                   onPick(active)
-                else if (event.key === 'Enter' && !event.shiftKey)
-                  event.currentTarget.form?.requestSubmit()
-                else return false
+                // Enter sends what is ready, never a Stop: that is the button's alone.
+                else if (event.key === 'Enter' && !event.shiftKey) {
+                  if (ready) event.currentTarget.form?.requestSubmit()
+                } else return false
                 return true
               })()
               if (taken) event.preventDefault()
@@ -185,7 +193,7 @@ export function Composer({
 }
 
 /** The field's value, each mark in its look, so the field and what is drawn under it agree. */
-function Marked({ value, marks }: { value: string; marks: ReadonlyArray<Mark> }) {
+function FieldText({ value, marks }: { value: string; marks: ReadonlyArray<Mark> }) {
   const sorted = [...marks].sort((a, b) => a.from - b.from)
   const parts: ReactNode[] = []
   let at = 0
@@ -258,14 +266,8 @@ function SendButton({
   )
 }
 
-/** Each Mode, as the switch names it and the line a screen reader hears explains it. */
-const modes: ReadonlyArray<{ mode: Mode; label: () => string; means: () => string }> = [
-  { mode: 'ask', label: m.composer_mode_ask, means: m.conversation_mode_ask_hint },
-  { mode: 'apply', label: m.composer_mode_apply, means: m.conversation_mode_apply_hint },
-]
-
 /** What the agent may do, under the field, the Mode on in the agent's violet. */
-function ModeSwitch({ mode, choose }: NonNullable<ComposerProps['mode']>) {
+function ModeSwitch({ choices, on, choose }: NonNullable<ComposerProps['mode']>) {
   const means = useId()
   return (
     <div
@@ -274,21 +276,21 @@ function ModeSwitch({ mode, choose }: NonNullable<ComposerProps['mode']>) {
       aria-describedby={means}
       className="flex items-center gap-3 font-mono text-[0.65625rem] text-muted-foreground"
     >
-      {modes.map((each) => (
+      {choices.map((choice) => (
         <button
-          key={each.mode}
+          key={choice.id}
           type="button"
-          aria-pressed={each.mode === mode}
+          aria-pressed={choice.id === on}
           className="outline-none hover:text-foreground focus-visible:underline focus-visible:underline-offset-4 aria-pressed:text-agent pointer-coarse:min-h-11"
           onClick={() => {
-            if (each.mode !== mode) choose(each.mode)
+            if (choice.id !== on) choose(choice.id)
           }}
         >
-          {each.label()}
+          {choice.label}
         </button>
       ))}
       <span id={means} className="sr-only">
-        {modes.find((each) => each.mode === mode)?.means()}
+        {choices.find((choice) => choice.id === on)?.means}
       </span>
     </div>
   )

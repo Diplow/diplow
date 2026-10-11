@@ -74,4 +74,6 @@ HEX-99, a proposal. `components.html#commands` drew the composer on a contentedi
 - **The step above the composer is HEX-98's**, the conversation's "thinking": the composer shows a Turn running by its field waiting and send becoming Stop, and nothing else.
 - **Quiet text is `muted-foreground`, not `faint`.** `faint` on `card` is 2.96:1 in dark and 4.09:1 in light, under the 4.5:1 text needs; the reference set the mode, the key hints, the descriptions and the paths in it. `faint` stays on the inactive rows' icons, which say nothing their names don't.
 
+- **`ui/` knows no domain.** No piece of `ui/` imports one, so the Composer takes the Modes as choices its caller builds from Assistant's `Mode`, and the gallery's demo follows the feature's `@` rules (`mention.ts`, 40 characters, ranked, 8 at most) rather than importing them. The commands sit in `ui/chat/composer/commands.ts` while they are a proposal, since the page can only show what `ui/` holds; HEX-101, which runs them through the client's hooks, moves them beside the feature's `@`, and `List` and `cutAround` stay.
+
 The commands are the reference's, the theme aside, which goes to the breadcrumb's head (Q8), with the language and signing out added; which ones stay is an open question on the pull request, as is amber text in light, 3.75:1 on `card`, the tokens' own.

@@ -87,7 +87,7 @@ function Specimen({
   const [value, setValue] = useState(initial)
   const [caret, setCaret] = useState(initial.length)
   const [left, setLeft] = useState(!listed)
-  const [mode, setMode] = useState<'ask' | 'apply'>('ask')
+  const [mode, setMode] = useState('ask')
   const [sending, setSending] = useState(sendingAtFirst)
   const [running, setRunning] = useState<{ stopping: boolean } | undefined>(
     runningAtFirst ? { stopping: false } : undefined,
@@ -156,11 +156,17 @@ function Specimen({
         }
         waiting={waiting}
         unavailable={unavailable}
-        mode={{ mode, choose: setMode }}
+        mode={{ choices: modeChoices(), on: mode, choose: setMode }}
       />
     </div>
   )
 }
+
+/** Assistant's two Modes, as a real page builds them from its `Mode`. */
+const modeChoices = () => [
+  { id: 'ask', label: m.composer_mode_ask(), means: m.conversation_mode_ask_hint() },
+  { id: 'apply', label: m.composer_mode_apply(), means: m.conversation_mode_apply_hint() },
+]
 
 /** On a phone: the composer over the keyboard, listing the commands within a thumb's reach. */
 function Phone() {
