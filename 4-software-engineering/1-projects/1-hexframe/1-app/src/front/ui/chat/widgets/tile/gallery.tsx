@@ -12,7 +12,7 @@ import { Act } from '../../../atoms/controls/act'
 import { Skeleton } from '../../../atoms/skeleton'
 import { GalleryColumn, GallerySection, GalleryState } from '../../../gallery/frame'
 import { said, sampleTiles } from '../../samples'
-import { editedOf, freeFor, previewLimit, stillRefused, tileRefusalOf } from '../demo'
+import { editedOf, freeFor, stillRefused, tileRefusalOf } from '../demo'
 import {
   agentsEdit,
   agentsWords,
@@ -30,17 +30,19 @@ import { TileProposal } from './Proposal'
 import { TileWidget } from './TileWidget'
 import { TileExport, TileImport } from './Transfer'
 
-export function TileWidgetGallery() {
+/** The tile widget's section, the Preview's limit Mapping's, which the route reads at its door. */
+export function TileWidgetGallery({ previewLimit }: { previewLimit: number }) {
   return (
     <GallerySection name="TileWidget">
       <GalleryState label={m.gallery_state_tile_new()}>
         <GalleryColumn>
-          <NewTileSpecimen />
+          <NewTileSpecimen previewLimit={previewLimit} />
         </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_context()}>
         <GalleryColumn>
           <NewTileSpecimen
+            previewLimit={previewLimit}
             where={{ ...newBranch(), kind: 'context', place: 2, free: freeFor.context }}
           />
         </GalleryColumn>
@@ -48,6 +50,7 @@ export function TileWidgetGallery() {
       <GalleryState label={m.gallery_state_tile_refused()}>
         <GalleryColumn>
           <NewTileSpecimen
+            previewLimit={previewLimit}
             words={{ ...tooling(), preview: longPreview() }}
             refused={{ preview: m.error_mapping_preview_too_long() }}
           />
@@ -55,22 +58,22 @@ export function TileWidgetGallery() {
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_edit()}>
         <GalleryColumn>
-          <EditSpecimen />
+          <EditSpecimen previewLimit={previewLimit} />
         </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_changed()}>
         <GalleryColumn>
-          <ChangedSpecimen />
+          <ChangedSpecimen previewLimit={previewLimit} />
         </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_draft()}>
         <GalleryColumn>
-          <ProposalSpecimen kind="draft" />
+          <ProposalSpecimen kind="draft" previewLimit={previewLimit} />
         </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_proposed()}>
         <GalleryColumn>
-          <ProposalSpecimen kind="edit" />
+          <ProposalSpecimen kind="edit" previewLimit={previewLimit} />
         </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_import()}>
@@ -114,7 +117,7 @@ export function TileWidgetGallery() {
       </GalleryState>
       <GalleryState label={m.gallery_state_widget_phone()}>
         <GalleryColumn phone>
-          <NewTileSpecimen words={tooling()} />
+          <NewTileSpecimen previewLimit={previewLimit} words={tooling()} />
         </GalleryColumn>
       </GalleryState>
     </GallerySection>
@@ -159,10 +162,12 @@ function Again({ onAgain }: { onAgain: () => void }) {
 // A new tile, live: its words, its kind and its place are the specimen's; Create checks what Mapping
 // would, and either puts the words back with the refusal or leaves the receipt, which Undo takes back.
 function NewTileSpecimen({
+  previewLimit,
   where: firstWhere = newBranch(),
   words: firstWords = { title: '', preview: '', body: '' },
   refused: firstRefusal,
 }: {
+  previewLimit: number
   where?: TilePlace
   words?: TileWords
   refused?: Partial<Record<TileField, string>>
@@ -213,7 +218,7 @@ function NewTileSpecimen({
             })
           }}
           onCreate={() => {
-            const refusal = tileRefusalOf(words)
+            const refusal = tileRefusalOf(words, previewLimit)
             setRefused(refusal)
             if (refusal === undefined) setCreated(true)
           }}
@@ -227,7 +232,7 @@ function NewTileSpecimen({
   )
 }
 
-function EditSpecimen() {
+function EditSpecimen({ previewLimit }: { previewLimit: number }) {
   const [now] = useState(() => new Date())
   const [words, setWords] = useState(yours)
   const [state, setState] = useState<'editing' | 'saved' | 'deleted'>('editing')
@@ -257,9 +262,9 @@ function EditSpecimen() {
       previewLimit={previewLimit}
       onWordsChange={setWords}
       edited={editedOf(words, tooling())}
-      refused={tileRefusalOf(words)}
+      refused={tileRefusalOf(words, previewLimit)}
       onSave={() => {
-        if (tileRefusalOf(words) === undefined) setState('saved')
+        if (tileRefusalOf(words, previewLimit) === undefined) setState('saved')
       }}
       onDelete={{
         below: 4,
@@ -272,7 +277,7 @@ function EditSpecimen() {
   )
 }
 
-function ChangedSpecimen() {
+function ChangedSpecimen({ previewLimit }: { previewLimit: number }) {
   const [words, setWords] = useState(yours)
   const [comparing, setComparing] = useState(false)
   const { by, compared } = meanwhile()
@@ -303,7 +308,13 @@ function ChangedSpecimen() {
 
 // The agent's draft or edit: Accept leaves its receipt, Edit it hands it to the user's widget, whose
 // Save leaves the user's own receipt.
-function ProposalSpecimen({ kind }: { kind: 'draft' | 'edit' }) {
+function ProposalSpecimen({
+  kind,
+  previewLimit,
+}: {
+  kind: 'draft' | 'edit'
+  previewLimit: number
+}) {
   const [now] = useState(() => new Date())
   const [state, setState] = useState<'open' | 'accepted' | 'discarded' | 'taken' | 'saved'>('open')
   const [words, setWords] = useState(kind === 'draft' ? tooling : agentsWords)

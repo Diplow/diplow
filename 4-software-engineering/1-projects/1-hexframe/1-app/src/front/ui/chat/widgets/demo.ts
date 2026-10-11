@@ -1,8 +1,8 @@
 // What the widgets' state hooks will do on a real page, for /design-system alone: which places a kind
 // may take, what Mapping and IAM would refuse before writing, a refusal clearing from the field that
-// changed, and the way around Help. `ui/` knows no domain, so the limits are mirrored here, as the
-// composer's demo mirrors the feature's `@` rules: Mapping's `previewLimit`, IAM's Key name and
-// password lengths. The builds read them from their domains.
+// changed, and the way around Help. `ui/` knows no domain: Mapping's `previewLimit` comes from the
+// route, which reads it at Mapping's door; IAM's Key name and password lengths, outside IAM's door
+// today, are mirrored here, as the composer's demo mirrors the feature's `@` rules, until HEX-103.
 import { m } from '#/paraglide/messages'
 
 import type { HelpTopic } from './help/find'
@@ -10,9 +10,6 @@ import { lengthOf } from './count'
 import { places, type Place } from './Places'
 import type { Access } from './sign-in/SignInWidget'
 import type { TileField, TileKind, TileWords } from './tile/parts'
-
-/** Mapping's `previewLimit`: the most characters a Preview holds, as a reader counts them. */
-export const previewLimit = 350
 
 /** IAM's: the most characters a Key's name holds. */
 export const nameLimit = 32
@@ -26,8 +23,8 @@ export const freeFor: Record<TileKind, readonly Place[]> = {
 
 type Refused = Partial<Record<TileField, string>>
 
-/** What Mapping would refuse before writing a tile: no title, a preview past its limit. */
-export function tileRefusalOf(words: TileWords): Refused | undefined {
+/** What Mapping would refuse before writing a tile: no title, a preview past `previewLimit`. */
+export function tileRefusalOf(words: TileWords, previewLimit: number): Refused | undefined {
   const refused: Refused = {
     ...(words.title.trim() === '' && { title: m.error_mapping_title_missing() }),
     ...(lengthOf(words.preview) > previewLimit && {
@@ -106,11 +103,11 @@ export function topicsOf(node: HelpNode): HelpNode[] {
 }
 
 /** The places that lead from the Root to a topic, by its id; none when Help holds no such topic. */
-export function pathTo(node: HelpNode, id: string): Place[] | undefined {
+export function placesTo(node: HelpNode, id: string): Place[] | undefined {
   if (node.id === id) return []
   for (const place of places) {
     const child = node.children[place]
-    const below = child === undefined ? undefined : pathTo(child, id)
+    const below = child === undefined ? undefined : placesTo(child, id)
     if (below !== undefined) return [place, ...below]
   }
   return undefined

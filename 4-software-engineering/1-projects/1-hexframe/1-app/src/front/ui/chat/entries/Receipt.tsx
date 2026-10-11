@@ -157,18 +157,44 @@ interface UntilDecidedProps {
 /**
  * What asks until it is decided, then the receipt it leaves. Decided from inside, the focus it held
  * goes to the receipt, so the keyboard never falls back to the top of the page; decided elsewhere, the
- * focus stays where the user is and a status says it (`useHandOffState`).
+ * focus stays where the user is and a status says it (`useHandOffState`). While it asks, a step of its
+ * own that takes away what had the focus (a Key's name giving way to its secret) gives
+ * the focus to its first control rather than to the page.
  */
 export function UntilDecided({ receipt, children }: UntilDecidedProps) {
   const { handOff, status, onFocus, onBlur } = useHandOffState(
     receipt === undefined ? 'open' : 'decided',
     receipt === undefined ? '' : plainOf(receipt.words),
   )
+  const asking = useRef<HTMLDivElement>(null)
+  const held = useRef(false)
+  useEffect(() => {
+    const box = asking.current
+    if (!held.current || box === null) return
+    if (document.activeElement === null || document.activeElement === document.body) {
+      box.querySelector<HTMLElement>('input, textarea, button, [tabindex="0"]')?.focus()
+    }
+  })
   return (
     <>
       {receipt === undefined ? (
         // The focus is the widget's, or a dialog's it opened, whose events reach here through React's tree.
-        <div onFocus={onFocus} onBlur={onBlur}>
+        <div
+          ref={asking}
+          onFocus={() => {
+            held.current = true
+            onFocus()
+          }}
+          onBlur={(event) => {
+            // Gone elsewhere, not lost with what held it: a removed element blurs nothing.
+            if (!(
+              event.relatedTarget instanceof Node &&
+              event.currentTarget.contains(event.relatedTarget)
+            ))
+              held.current = false
+            onBlur(event)
+          }}
+        >
           {children}
         </div>
       ) : (

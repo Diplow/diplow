@@ -74,7 +74,10 @@ interface Editing extends Form {
   onSave: () => void
   /** Deletes it, once the user confirms; how many tiles go below it. The Root has none. */
   onDelete?: { below: number; confirm: () => void } | undefined
-  /** It was the agent's draft, taken to edit: the kicker says so. */
+  /**
+   * It was the agent's draft, taken to edit: the kicker says so, and its title takes the focus as it
+   * comes, since the Edit it that opened it is gone.
+   */
   taken?: boolean
   changed?: Changed | undefined
 }
@@ -101,25 +104,25 @@ const did = {
 
 /** A tile's widget: a new tile, an edit, or once written its receipt, the focus handed to it. */
 export function TileWidget(props: TileWidgetProps) {
-  if (props.mode === 'done') {
-    const { tile, where, at, onUndo, undone } = props
-    return (
-      <UntilDecided
-        receipt={{
-          words: weave(did[props.did], { tile: { tile }, where: whereOf(where) }),
-          at,
-          tone: 'human',
-          onUndo,
-          undone,
-        }}
-      >
-        {null}
-      </UntilDecided>
-    )
-  }
   return (
-    <UntilDecided receipt={undefined}>
-      {props.mode === 'new' ? <NewTile {...props} /> : <EditTile {...props} />}
+    <UntilDecided
+      receipt={
+        props.mode === 'done'
+          ? {
+              words: weave(did[props.did], {
+                tile: { tile: props.tile },
+                where: whereOf(props.where),
+              }),
+              at: props.at,
+              tone: 'human',
+              onUndo: props.onUndo,
+              undone: props.undone,
+            }
+          : undefined
+      }
+    >
+      {props.mode === 'new' && <NewTile {...props} />}
+      {props.mode === 'edit' && <EditTile {...props} />}
     </UntilDecided>
   )
 }
@@ -182,7 +185,7 @@ function EditTile(props: Editing) {
         mark={<PlaceMark where={where} label={m.widget_tile_place()} />}
         kicker={taken ? m.widget_tile_taken_kicker() : m.widget_tile_edit_kicker()}
         title={words.title}
-        titleField={<Title {...props} />}
+        titleField={<Title {...props} takesFocus={taken} />}
         actions={
           changed === undefined
             ? [
@@ -252,9 +255,15 @@ function settingsOf({ onExpand }: Form) {
 }
 
 /** The title, written where it is read. */
-function Title({ words, onWordsChange, refused }: Form) {
+function Title({
+  words,
+  onWordsChange,
+  refused,
+  takesFocus = false,
+}: Form & { takesFocus?: boolean }) {
   return (
     <TitleField
+      takesFocus={takesFocus}
       label={m.system_field_title()}
       placeholder={m.system_untitled()}
       value={words.title}

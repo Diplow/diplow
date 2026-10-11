@@ -18,9 +18,6 @@ export interface Found {
   readonly excerpt: Cut
 }
 
-/** The most topics a search shows: a few to choose among, not an index. */
-const most = 6
-
 /** Markdown's marks dropped, so a sentence reads as it is read. */
 const plain = (markdown: string) =>
   markdown
@@ -46,7 +43,7 @@ function excerptOf(topic: HelpTopic, typed: string): Cut | undefined {
 
 /**
  * The topics `typed` shows in, case and accents aside: those whose title holds it first, then the
- * others, each in Help's order, six at most. None for nothing typed.
+ * others, each in Help's order. None for nothing typed.
  */
 export function topicsFor(topics: readonly HelpTopic[], typed: string): Found[] {
   const text = typed.trim()
@@ -63,5 +60,5 @@ export function topicsFor(topics: readonly HelpTopic[], typed: string): Found[] 
       })
     } else if (excerpt !== undefined) told.push({ id: topic.id, title: topic.title, excerpt })
   }
-  return [...titled, ...told].slice(0, most)
+  return [...titled, ...told]
 }

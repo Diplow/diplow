@@ -143,18 +143,30 @@ interface TitleFieldProps {
   onChange: (value: string) => void
   error?: string | undefined
   placeholder?: string
+  /** It takes the focus as it comes, when what opened it is gone. */
+  takesFocus?: boolean
 }
 
 /**
  * A title written where it is read: in the user's serif at the widget's title size, underlined only
  * while the pointer is over it or the focus in it, its refusal under it.
  */
-export function TitleField({ label, value, onChange, error, placeholder }: TitleFieldProps) {
+export function TitleField({
+  label,
+  value,
+  onChange,
+  error,
+  placeholder,
+  takesFocus = false,
+}: TitleFieldProps) {
   const errorId = useId()
   const invalid = error !== undefined
   return (
     <div className="grid gap-1">
       <input
+        // Set only by a step the user just took, never on a page's first paint: the widget replaced the
+        // act that had the focus.
+        autoFocus={takesFocus}
         value={value}
         aria-label={label}
         placeholder={placeholder}

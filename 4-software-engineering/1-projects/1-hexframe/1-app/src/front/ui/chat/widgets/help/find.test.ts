@@ -68,10 +68,10 @@ describe('topicsFor', () => {
     ).toBe('déplacer'.slice(0, 5))
   })
 
-  it('shows six at most', () => {
+  it('finds every topic it shows in, however many', () => {
     const many = Array.from({ length: 9 }, (_, index) =>
       topic(String(index), `Tile ${String(index)}`, ''),
     )
-    expect(topicsFor(many, 'tile')).toHaveLength(6)
+    expect(topicsFor(many, 'tile')).toHaveLength(9)
   })
 })

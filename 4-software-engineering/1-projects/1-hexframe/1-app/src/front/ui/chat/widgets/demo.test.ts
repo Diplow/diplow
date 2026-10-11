@@ -8,7 +8,7 @@ import {
   editedOf,
   follow,
   nameRefusalOf,
-  pathTo,
+  placesTo,
   readOnOf,
   stillRefused,
   tileRefusalOf,
@@ -20,12 +20,12 @@ const words = { title: 'Tooling', preview: 'What I use.', body: '' }
 
 describe('the tile widget’s demo', () => {
   it('refuses no title and a preview past its limit, each on its field', () => {
-    expect(tileRefusalOf(words)).toBeUndefined()
-    expect(tileRefusalOf({ ...words, title: '  ', preview: 'a'.repeat(351) })).toEqual({
+    expect(tileRefusalOf(words, 350)).toBeUndefined()
+    expect(tileRefusalOf({ ...words, title: '  ', preview: 'a'.repeat(351) }, 350)).toEqual({
       title: m.error_mapping_title_missing(),
       preview: m.error_mapping_preview_too_long(),
     })
-    expect(tileRefusalOf({ ...words, preview: '👩‍💻'.repeat(350) })).toBeUndefined()
+    expect(tileRefusalOf({ ...words, preview: '👩‍💻'.repeat(350) }, 350)).toBeUndefined()
   })
 
   it('clears a refusal once its field changes, and only then', () => {
@@ -94,9 +94,9 @@ describe('the way around Help', () => {
   })
 
   it('finds the path to a topic by its id', () => {
-    expect(pathTo(help, 'six')).toEqual([3, 1])
-    expect(pathTo(help, 'root')).toEqual([])
-    expect(pathTo(help, 'nowhere')).toBeUndefined()
+    expect(placesTo(help, 'six')).toEqual([3, 1])
+    expect(placesTo(help, 'root')).toEqual([])
+    expect(placesTo(help, 'nowhere')).toBeUndefined()
   })
 
   it('goes round a frame clockwise, west to north-west', () => {

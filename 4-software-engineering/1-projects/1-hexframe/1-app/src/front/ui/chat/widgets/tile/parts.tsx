@@ -6,7 +6,7 @@ import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 
-import { namesOf, Places, type Place } from '../Places'
+import { namesByPlace, Places, type Place } from '../Places'
 
 /** What a reader finds in a tile, as the widget writes it. */
 export interface TileWords {
@@ -74,7 +74,7 @@ interface PlaceMarkProps {
  * Creating, its name under the map, since the map alone tells a direction to the eye only.
  */
 export function PlaceMark({ where, label, onPick, picking = false }: PlaceMarkProps) {
-  const names = namesOf((place) =>
+  const names = namesByPlace((place) =>
     where.free.includes(place) || place === where.place
       ? placeNames[place]()
       : m.widget_tile_place_taken({ place: placeNames[place]() }),

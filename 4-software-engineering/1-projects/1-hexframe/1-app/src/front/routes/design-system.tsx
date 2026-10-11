@@ -6,7 +6,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
-import type { SystemTile } from '#/domains/mapping/entities'
+import { previewLimit, type SystemTile } from '#/domains/mapping/entities'
 import { ChannelsGallery } from '#/front/client/gallery'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { useHelp } from '#/front/client/mapping/queries'
@@ -76,7 +76,7 @@ function DesignSystem() {
         <ComposerGallery />
         <ChatTextGallery />
         <ChatEntriesGallery />
-        <TileWidgetGallery />
+        <TileWidgetGallery previewLimit={previewLimit} />
         <KeyWidgetGallery />
         <ReadBoundary>
           <HelpGallery />

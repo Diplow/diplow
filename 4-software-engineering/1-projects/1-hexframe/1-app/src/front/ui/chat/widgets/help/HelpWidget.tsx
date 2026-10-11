@@ -13,7 +13,7 @@ import { Keys } from '../../../atoms/keys'
 import { HexMark } from '../../atoms/hex'
 import { Widget } from '../../layouts/Widget'
 import { Mention } from '../../text/Mention'
-import { namesOf, Places, places, type Place } from '../Places'
+import { namesByPlace, Places, places, type Place } from '../Places'
 import type { Found } from './find'
 import { shortcuts } from './shortcuts'
 
@@ -78,7 +78,7 @@ function Topic({
   onAsk,
   onDismiss,
 }: Reading) {
-  const names = namesOf((place) => frame.titles[place] ?? m.widget_help_no_topic())
+  const names = namesByPlace((place) => frame.titles[place] ?? m.widget_help_no_topic())
   const taken = places.filter((place) => frame.titles[place] !== undefined)
   return (
     <Widget
@@ -131,6 +131,9 @@ function Topic({
   )
 }
 
+/** The most topics a search shows: a few to choose among, not an index. */
+const shownAtMost = 6
+
 function Results({ typed, found, onFound, onDismiss }: Searching) {
   return (
     <Widget
@@ -143,7 +146,7 @@ function Results({ typed, found, onFound, onDismiss }: Searching) {
     >
       {found.length > 0 ? (
         <ul className="grid">
-          {found.map(({ id, title, excerpt }) => (
+          {found.slice(0, shownAtMost).map(({ id, title, excerpt }) => (
             <li key={id} className="border-t border-border last:border-b">
               <button
                 type="button"

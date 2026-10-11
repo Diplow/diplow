@@ -9,7 +9,7 @@ import { m } from '#/paraglide/messages'
 import { toast } from '../../../atoms/Toaster'
 import { GalleryColumn, GallerySection, GalleryState } from '../../../gallery/frame'
 import { said } from '../../samples'
-import { follow, pathTo, readOnOf, topicsOf, type HelpNode } from '../demo'
+import { follow, placesTo, readOnOf, topicsOf, type HelpNode } from '../demo'
 import { places, type Place } from '../Places'
 import { topicsFor } from './find'
 import { HelpWidget } from './HelpWidget'
@@ -77,7 +77,7 @@ function Reading({ help }: { help: HelpNode }) {
       }}
       readOn={readOnOf(help, path).map(({ id, title }) => ({ id, title }))}
       onReadOn={(id) => {
-        setPath(pathTo(help, id) ?? path)
+        setPath(placesTo(help, id) ?? path)
       }}
       onOpenInHelp={said(m.widget_help_open())}
       onAsk={said(m.widget_help_ask())}

@@ -11,7 +11,7 @@ export type Place = 1 | 2 | 3 | 4 | 5 | 6
 export const places: readonly Place[] = [1, 2, 3, 4, 5, 6]
 
 /** Each place's name, from what stands there or where it lies. */
-export const namesOf = (name: (place: Place) => string): Record<Place, string> => ({
+export const namesByPlace = (name: (place: Place) => string): Record<Place, string> => ({
   1: name(1),
   2: name(2),
   3: name(3),
