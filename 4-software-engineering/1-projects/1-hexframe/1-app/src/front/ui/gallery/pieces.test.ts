@@ -96,7 +96,20 @@ describe('the pieces', () => {
   it.each(pieces.map((piece) => [piece.name, piece] as const))(
     '%s is made of what its files import',
     (_, { sources, madeOf }) => {
-      expect([...madeOf]).toEqual(reached(sources))
+      expect(
+        madeOf.filter((part) => !reached(sources).includes(part)),
+        'not imported',
+      ).toEqual([])
+    },
+  )
+
+  // A piece alone in its files names all they import; pieces sharing a file share its imports.
+  it.each(Array.from(new Set(pieces.map(({ sources }) => sources.join()))))(
+    'what %s imports is a part of the pieces drawn in it',
+    (files) => {
+      const drawn = pieces.filter(({ sources }) => sources.join() === files)
+      const named = new Set(drawn.flatMap(({ madeOf }) => madeOf as readonly string[]))
+      expect(reached(drawn[0]?.sources ?? []).filter((part) => !named.has(part))).toEqual([])
     },
   )
 

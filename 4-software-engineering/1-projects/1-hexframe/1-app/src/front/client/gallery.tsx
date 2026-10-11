@@ -1,9 +1,9 @@
 // The channels on /design-system: what a failure shows, in each place the channel table sends it, on
-// failures made up for the page. No call is made: the boundary, the toast and the form show them as
-// they would show a call's.
-import { DevForbidden } from '#/api/dev/failures'
+// domains' refusals and an Unexpected. No call is made: the boundary, the toast and the form show them
+// as they would show a call's.
 import { Unexpected } from '#/api/report/errors/failure'
 import { messageFor } from '#/api/report/errors/messages'
+import { SessionRequired } from '#/domains/iam/errors'
 import { TileChanged, TileNotFound, TitleMissing } from '#/domains/mapping/errors'
 import { m } from '#/paraglide/messages'
 import { Button } from '#/front/ui/atoms/controls/button'
@@ -23,16 +23,17 @@ const retry = () => {
 
 export function ChannelsGallery() {
   const reads = [
-    { label: m.gallery_channels_read_failed(), failure: new Unexpected() },
-    { label: m.gallery_channels_read_missing(), failure: new TileNotFound() },
-    { label: m.gallery_channels_read_refused(), failure: new DevForbidden() },
+    { label: m.gallery_channels_read_failed(), scope: 'system', failure: new Unexpected() },
+    { label: m.gallery_channels_read_missing(), scope: 'system', failure: new TileNotFound() },
+    // The Keys, read with a Key where only a Session may.
+    { label: m.gallery_channels_read_refused(), scope: 'keys', failure: new SessionRequired() },
   ]
   return (
     <GallerySection name="channels">
-      {reads.map(({ label, failure }) => (
+      {reads.map(({ label, scope, failure }) => (
         <GalleryState key={label} label={label}>
           <div className="w-80">
-            <ReadFailure error={new CallFailed(failure, 'system', requestId)} onRetry={retry} />
+            <ReadFailure error={new CallFailed(failure, scope, requestId)} onRetry={retry} />
           </div>
         </GalleryState>
       ))}

@@ -13,7 +13,10 @@ interface Entry {
   readonly tier: Tier
   /** The files it is drawn in, from `src/front/`. */
   readonly sources: readonly string[]
-  /** The pieces its files import, through files that are no piece of their own. */
+  /**
+   * The pieces its files import, through files that are no piece of their own. Pieces that share a
+   * file share its imports between them: each names those it draws.
+   */
   readonly madeOf: readonly string[]
   /** What it is for and why, in a sentence or two. */
   readonly note: () => string
@@ -109,7 +112,7 @@ export const pieces = [
     name: 'EmptyState',
     tier: 'layouts',
     sources: ['ui/layouts/states.tsx'],
-    madeOf: ['Button'],
+    madeOf: [],
     note: m.gallery_note_empty_state,
   },
   {
@@ -123,7 +126,7 @@ export const pieces = [
     name: 'Forbidden',
     tier: 'layouts',
     sources: ['ui/layouts/states.tsx'],
-    madeOf: ['Button'],
+    madeOf: [],
     note: m.gallery_note_forbidden,
   },
   {

@@ -1,6 +1,6 @@
 // A failure of each kind a domain may declare, named for its kind, not in a domain's language, so nobody
 // mistakes them for Mapping's or IAM's: the stand-ins the tests of the error model and of the client's
-// channels fail with, and the refused read /design-system shows in its boundary.
+// channels fail with, where no domain's refusal is the point.
 import { Schema } from 'effect'
 
 import { invalid, kind } from '#/domains/kind'
@@ -16,7 +16,7 @@ export class DevForbidden extends Schema.TaggedError<DevForbidden>()('DevForbidd
 
 export class DevInvalid extends Schema.TaggedError<DevInvalid>()('DevInvalid', invalid) {}
 
-export class DevNotFound extends Schema.TaggedError<DevNotFound>()('DevNotFound', {
+class DevNotFound extends Schema.TaggedError<DevNotFound>()('DevNotFound', {
   kind: kind('NotFound'),
 }) {}
 
