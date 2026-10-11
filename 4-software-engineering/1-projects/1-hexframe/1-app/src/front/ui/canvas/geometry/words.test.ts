@@ -61,7 +61,7 @@ describe('linesThatFit', () => {
   })
 
   it('forgives a measure rounded down by a pixel', () => {
-    expect(linesThatFit({ box: 69, above: 13, lineHeight: 14 })).toBe(4)
+    expect(linesThatFit({ box: 68, above: 13, lineHeight: 14 })).toBe(4)
   })
 
   it('leaves none when not one line fits, or when nothing was measured', () => {

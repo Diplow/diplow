@@ -7,6 +7,7 @@ import {
   insetHex,
   neighbor,
   opposite,
+  scaled,
   textBox,
   type Hex,
   type Point,
@@ -86,6 +87,12 @@ describe('insetHex', () => {
   it('moves each side inwards by the distance', () => {
     const apothem = (hex: Hex) => (Math.sqrt(3) / 2) * hex.radius
     expect(apothem(origin) - apothem(insetHex(origin, 1))).toBeCloseTo(1)
+  })
+})
+
+describe('scaled', () => {
+  it('keeps the center and multiplies the radius', () => {
+    expect(scaled(origin, 0.85)).toEqual({ center: origin.center, radius: 8.5 })
   })
 })
 

@@ -40,7 +40,7 @@ const ring: Partial<Record<Direction, { tile: TileNode; look: TileLook }>> = {
     look: {
       kind: 'leaf',
       words: wordsOf(fixture('reading-list')),
-      clash: m.tile_clash({ branch: 'Principles' }),
+      clash: 'Principles',
     },
   },
 }

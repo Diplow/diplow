@@ -10,11 +10,6 @@ export function points(hex: Hex): string {
     .join(' ')
 }
 
-/** The same hex, smaller or larger by `share` of its radius. */
-export function scaled({ center, radius }: Hex, share: number): Hex {
-  return { center, radius: radius * share }
-}
-
 /** A colour at `percent` of its strength, the rest see-through. */
 export function tint(token: string, percent: number): string {
   return `color-mix(in oklab, var(--${token}) ${String(percent)}%, transparent)`

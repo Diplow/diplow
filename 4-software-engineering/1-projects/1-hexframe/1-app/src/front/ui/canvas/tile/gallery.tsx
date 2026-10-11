@@ -149,16 +149,14 @@ const kindSamples: readonly KindSample[] = [
     note: m.gallery_tile_reference,
     tile: {
       kind: 'reference',
-      words: {
-        ...wordsOf(fixture('principles')),
-        note: m.tile_reference_from({ place: 'Software Engineering' }),
-      },
+      words: wordsOf(fixture('principles')),
+      from: 'Software Engineering',
     },
   },
   {
     name: m.gallery_state_tile_broken,
     note: m.gallery_tile_broken,
-    tile: { kind: 'broken', words: { title: m.tile_broken_title(), note: m.tile_broken_note() } },
+    tile: { kind: 'broken', words: { title: m.tile_broken_title() } },
   },
   {
     name: m.gallery_state_tile_untitled,
@@ -174,7 +172,7 @@ const kindSamples: readonly KindSample[] = [
     tile: {
       kind: 'leaf',
       words: wordsOf(fixture('reading-list')),
-      clash: m.tile_clash({ branch: 'Principles' }),
+      clash: 'Principles',
     },
   },
   {
@@ -189,7 +187,7 @@ const kindSamples: readonly KindSample[] = [
   {
     name: m.gallery_state_tile_draft,
     note: m.gallery_tile_draft,
-    tile: { kind: 'draft', words: { ...wordsOf(fixture('obsidian')), note: m.tile_drafting() } },
+    tile: { kind: 'draft', words: wordsOf(fixture('obsidian')) },
   },
 ]
 
@@ -383,7 +381,7 @@ const presets: Record<Preset, () => TileLook> = {
   file: () => ({ kind: 'leaf', words: wordsOf(fixture('diplow-hexframe')), file: true }),
   draft: () => ({
     kind: 'draft',
-    words: { ...wordsOf(fixture('obsidian')), note: m.tile_drafting() },
+    words: wordsOf(fixture('obsidian')),
   }),
 }
 
@@ -464,7 +462,7 @@ function TileWordsSpecimen() {
             }}
             className="accent-human pointer-coarse:h-11"
           />
-          <output className="font-mono text-faint">{readout(radius)}</output>
+          <output className="font-mono text-faint">{readout(Math.round(radius * scale))}</output>
         </label>
       </GalleryState>
       <GalleryState label={m.gallery_state_tile_strip()}>

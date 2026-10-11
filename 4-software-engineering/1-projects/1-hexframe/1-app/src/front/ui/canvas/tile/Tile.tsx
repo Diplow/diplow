@@ -12,10 +12,17 @@ import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 
-import { directions, neighbor, type Direction, type Hex, type Point } from '../geometry/geometry'
+import {
+  directions,
+  neighbor,
+  scaled,
+  type Direction,
+  type Hex,
+  type Point,
+} from '../geometry/geometry'
 import { buttonKeys, type Action } from '../keys'
-import { BlurDef, FadeDef, points, scaled, Sweep, tint, type Fade } from './light'
-import { fitWords, linesThatFit, type Fit } from '../geometry/words'
+import { BlurDef, FadeDef, points, Sweep, tint, type Fade } from './light'
+import { fitWords, linesThatFit } from '../geometry/words'
 
 /**
  * Where it stands: in a ring, at the center, at the heart of a Branch opened in place, beside the
@@ -39,12 +46,10 @@ export interface TileMotion {
   order?: number
 }
 
-/** A tile's words: its title, its preview, and a word under them. */
+/** A tile's words: its title, and its preview. */
 export interface TileWords {
   title: string
   preview?: string
-  /** Where a Reference lives, that a Reference is broken, that the agent drafts it. */
-  note?: string
 }
 
 /** What a tile is, which its light says before its words do, with what that kind alone takes. */
@@ -58,15 +63,20 @@ export type TileLook = { words: TileWords } & (
       kind: 'leaf'
       /** A Leaf that isn't Markdown: its title is its file's name, in mono. */
       file?: boolean
-      /** The Branch it is numbered as, which the shape seated it beside: in ember under its title. */
+      /** The title of the Branch it is numbered as, which the shape seated it beside. */
       clash?: string
+    }
+  | {
+      kind: 'reference'
+      /** Where the tile it points at lives. */
+      from: string
     }
   | {
       kind: 'list'
       /** A ring too full: the names it holds. */
       names: readonly string[]
     }
-  | { kind: 'untitled' | 'context' | 'reference' | 'broken' | 'draft' }
+  | { kind: 'untitled' | 'context' | 'broken' | 'draft' }
 )
 
 type TileKind = TileLook['kind']
@@ -87,6 +97,48 @@ export type TileProps = TileLook & {
 const clashOf = (look: TileLook) => (look.kind === 'leaf' ? look.clash : undefined)
 const footOf = (look: TileLook) =>
   look.kind === 'root' || look.kind === 'branch' ? look.foot : undefined
+
+/** The word under its title and preview, in its tone: where a Reference lives, a clash, a draft. */
+interface Note {
+  text: string
+  tone: string
+}
+
+function noteOf(look: TileLook): Note | undefined {
+  switch (look.kind) {
+    case 'leaf':
+      return look.clash === undefined
+        ? undefined
+        : { text: m.tile_clash({ branch: look.clash }), tone: 'text-warning' }
+    case 'reference':
+      return { text: m.tile_reference_from({ place: look.from }), tone: 'text-context' }
+    case 'broken':
+      return { text: m.tile_broken_note(), tone: 'text-faint' }
+    case 'draft':
+      return { text: m.tile_drafting(), tone: 'text-agent' }
+    default:
+      return undefined
+  }
+}
+
+/** Its words in the canvas's own units, fitted to its size on screen; none on the smallest tile. */
+interface Sized {
+  title: number
+  preview: number | undefined
+  width: number
+  height: number
+}
+
+function sizedOf(hex: Hex, scale: number): Sized | undefined {
+  const fit = fitWords(hex.radius * scale)
+  if (fit === undefined) return undefined
+  return {
+    title: fit.title / scale,
+    preview: fit.preview === undefined ? undefined : fit.preview / scale,
+    width: fit.width / scale,
+    height: fit.height / scale,
+  }
+}
 
 interface Lights {
   rest: Fade
@@ -153,13 +205,19 @@ const opacities: Record<TilePlace, string> = {
 }
 
 export function Tile(props: TileProps) {
-  const { hex, kind, words, place = 'ring', write, held, motion, action } = props
+  const { hex, kind, words, place = 'ring', write, held, motion, action, scale = 1 } = props
   const id = useId()
   const pending = write === 'pending'
+  const sized = sizedOf(hex, scale)
+  // At the center and at a heart, the ring around it says what the foot would; elsewhere the foot
+  // comes with the preview, once there is room for more than the title.
+  const foot =
+    place === 'center' || place === 'heart' || sized?.preview === undefined
+      ? undefined
+      : footOf(props)
   const description = [
     kindNames[kind](),
-    words.note,
-    clashOf(props),
+    noteOf(props)?.text,
     pending ? m.tile_write_pending() : undefined,
     write === 'refused' ? m.tile_write_refused() : undefined,
   ]
@@ -198,8 +256,9 @@ export function Tile(props: TileProps) {
           style={origin(hex.center)}
         >
           <Light {...props} id={id} />
+          {foot === undefined ? null : <Foot hex={hex} kids={foot} scale={scale} />}
           {pending ? <Sweep hex={hex} /> : null}
-          <Words {...props} />
+          {sized === undefined ? null : <Words {...props} sized={sized} />}
         </g>
       </g>
     </g>
@@ -224,16 +283,11 @@ function rimOf(props: TileProps, id: string): Rim | undefined {
   return { color: kind === 'root' || kind === 'untitled' ? `url(#${id}-rim)` : 'var(--input)' }
 }
 
-/** Its fill, lit or not, its lines, the lights around it, and its frame in small at its foot. */
+/** Its fill, lit or not, its lines, and the lights around it. */
 function Light(props: TileProps & { id: string }) {
-  const { hex, kind, place = 'ring', held, action, scale = 1, id } = props
+  const { hex, kind, place = 'ring', held, action, id } = props
   const lit = place === 'center' || place === 'heart' || held === 'pointed' || held === 'pressed'
   const rim = rimOf(props, id)
-  const foot = footOf(props)
-  // At the center and at a heart, the ring around it says what the foot would; and the foot comes
-  // with the preview, once there is room for more than the title.
-  const showsFoot =
-    place !== 'center' && place !== 'heart' && fitWords(hex.radius * scale)?.preview !== undefined
   return (
     <>
       <defs>
@@ -282,7 +336,6 @@ function Light(props: TileProps & { id: string }) {
           held === 'focused' ? 'opacity-100' : 'opacity-0 group-focus-visible:opacity-100',
         )}
       />
-      {showsFoot && foot !== undefined ? <Foot hex={hex} kids={foot} unit={1 / scale} /> : null}
     </>
   )
 }
@@ -321,9 +374,10 @@ function Glows({ hex, kind, id }: TileProps & { id: string }) {
 }
 
 /** A Branch's frame in small, at its foot: its heart, and a dot lit where each child is. */
-function Foot({ hex, kids, unit }: { hex: Hex; kids: readonly Direction[]; unit: number }) {
+function Foot({ hex, kids, scale }: { hex: Hex; kids: readonly Direction[]; scale: number }) {
   const { center, radius } = hex
-  const dot = Math.min(3.6, Math.max(2.3, (radius / unit) * 0.034)) * unit
+  // Its dots between 2.3 and 3.6px on screen.
+  const dot = Math.min(3.6, Math.max(2.3, radius * scale * 0.034)) / scale
   const heart = { x: center.x, y: center.y + radius * 0.84 - dot * 3.3 }
   const ring = { center: heart, radius: dot * 1.12 }
   return (
@@ -355,55 +409,29 @@ const kindNames: Record<TileKind, () => string> = {
   list: m.tile_kind_list,
 }
 
-const noteTones: Partial<Record<TileKind, string>> = {
-  reference: 'text-context',
-  draft: 'text-agent',
-}
-
 /**
  * Its words, in the box its size on screen gives them (`fitWords`): the title, in italics at the
  * center, alone on a small tile; on a larger one the preview below it, as many lines as fit, then the
- * word under them. On the smallest, none: the tile is its light, and its name is for a screen reader.
+ * word under them.
  */
-function Words(props: TileProps) {
-  const fit = fitWords(props.hex.radius * (props.scale ?? 1))
-  if (fit === undefined) return null
-  return <Fitted {...props} fit={fit} />
-}
-
-/** Its words, once its size gives them a box. */
-function Fitted(props: TileProps & { fit: Fit }) {
-  const { hex, kind, words, place = 'ring', scale = 1, fit } = props
-  const alone = fit.preview === undefined
+function Words(props: TileProps & { sized: Sized }) {
+  const { hex, kind, words, place = 'ring', sized } = props
+  const alone = sized.preview === undefined
   const label = useRef<HTMLDivElement>(null)
-  // What sets the height above the preview: its words, and the title's type, which its place and
-  // kind choose.
-  const lines = usePreviewLines(
-    label,
-    [
-      words.title,
-      words.preview,
-      words.note,
-      clashOf(props),
-      fit.title,
-      titleClass(props, alone),
-    ].join('|'),
-  )
-  const width = fit.width / scale
-  const height = fit.height / scale
+  const lines = usePreviewLines(label)
   return (
     <foreignObject
-      x={hex.center.x - width / 2}
-      y={hex.center.y - height / 2}
-      width={width}
-      height={height}
+      x={hex.center.x - sized.width / 2}
+      y={hex.center.y - sized.height / 2}
+      width={sized.width}
+      height={sized.height}
       className="pointer-events-none overflow-visible"
     >
       <div
         ref={label}
         aria-hidden
         className="flex size-full flex-col items-center justify-center overflow-hidden text-center hyphens-auto text-foreground select-none"
-        style={{ fontSize: fit.title / scale }}
+        style={{ fontSize: sized.title }}
       >
         <span className={titleClass(props, alone)}>{words.title}</span>
         {!alone && words.preview ? (
@@ -414,7 +442,7 @@ function Fitted(props: TileProps & { fit: Fit }) {
               (place === 'center' || kind === 'root') && 'text-foreground/80',
             )}
             style={{
-              fontSize: (fit.preview ?? 0) / scale,
+              fontSize: sized.preview,
               display: lines === 0 ? 'none' : '-webkit-box',
               WebkitBoxOrient: 'vertical',
               WebkitLineClamp: lines,
@@ -444,12 +472,10 @@ function titleClass(look: TileLook & { place?: TilePlace }, alone: boolean): str
 
 /** What sits under the title and the preview: a ring too full's names, then the word under them. */
 function Below(look: TileLook) {
-  const { kind, words } = look
-  const clash = clashOf(look)
-  const note = clash ?? words.note
+  const note = noteOf(look)
   return (
     <>
-      {kind === 'list' ? (
+      {look.kind === 'list' ? (
         <span className="mt-[.7em] shrink-0 font-mono text-[.6em] leading-[1.55] text-muted-foreground">
           {look.names.map((name) => (
             <span key={name} className="block">
@@ -462,13 +488,13 @@ function Below(look: TileLook) {
         <span
           className={cn(
             'mt-[.75em] max-w-full shrink-0 font-agent text-[.6em] leading-[1.3] text-balance',
-            clash === undefined ? (noteTones[kind] ?? 'text-faint') : 'text-warning',
+            note.tone,
           )}
         >
-          {kind === 'reference' ? (
+          {look.kind === 'reference' ? (
             <Link aria-hidden className="mr-[.45em] inline size-[1.15em] align-[-0.2em]" />
           ) : null}
-          {note}
+          {note.text}
         </span>
       )}
     </>
@@ -476,41 +502,38 @@ function Below(look: TileLook) {
 }
 
 /**
- * How many lines of the preview the box holds under what sits above it, measured once laid out and
- * again once the fonts have loaded; unknown before the first layout, where the box clips them.
+ * How many lines of the preview the box holds under what sits above it: measured after every render,
+ * since anything drawn beside the preview may have changed its height, and again once the fonts have
+ * loaded; unknown before the first layout, where the box clips them.
  */
-function usePreviewLines(
-  label: RefObject<HTMLDivElement | null>,
-  content: string,
-): number | undefined {
+function usePreviewLines(label: RefObject<HTMLDivElement | null>): number | undefined {
   const [lines, setLines] = useState<number>()
-  useLayoutEffect(() => {
-    const measure = () => {
-      const box = label.current
-      const preview = box?.querySelector<HTMLElement>('[data-preview]')
-      if (!box || !preview) return
-      const style = getComputedStyle(preview)
-      const above = [...box.children]
-        .filter((child) => child !== preview)
-        .reduce(
-          (sum, child) =>
-            sum +
-            (child as HTMLElement).offsetHeight +
-            parseFloat(getComputedStyle(child).marginTop),
-          parseFloat(style.marginTop),
-        )
-      setLines(
-        linesThatFit({ box: box.clientHeight, above, lineHeight: parseFloat(style.lineHeight) }),
+  const measure = () => {
+    const box = label.current
+    const preview = box?.querySelector<HTMLElement>('[data-preview]')
+    if (!box || !preview) return
+    const style = getComputedStyle(preview)
+    const above = [...box.children]
+      .filter((child) => child !== preview)
+      .reduce(
+        (sum, child) =>
+          sum + (child as HTMLElement).offsetHeight + parseFloat(getComputedStyle(child).marginTop),
+        parseFloat(style.marginTop),
       )
-    }
+    setLines(
+      linesThatFit({ box: box.clientHeight, above, lineHeight: parseFloat(style.lineHeight) }),
+    )
+  }
+  useLayoutEffect(measure)
+  // Once: the fonts load a single time, and every later render measures on its own.
+  useLayoutEffect(() => {
     let live = true
-    measure()
     void document.fonts.ready.then(() => {
       if (live) measure()
     })
     return () => {
       live = false
     }
-  }, [label, content])
+  }, [])
   return lines
 }
