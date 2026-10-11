@@ -1,0 +1,54 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/Screen.tsx
+  s_683ca25b605461::t_a67c8541c43f18 117,149,157,198,208,246,291
+  s_683ca25b605461::t_8fd786923dce02 23,55-57,69,81,93-98,107,128-130,145,165-170,175-176,182,230,234,249-251
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_683ca25b605461::t_c3caa57545af69 18
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/styles.css
+  s_683ca25b605461::t_a67c8541c43f18 192-193
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_683ca25b605461::t_a67c8541c43f18 328
+  s_683ca25b605461::t_aeb974d8c9e47f 4-5,7,10-11,14,16-17,23-25,27-33,37,182-327,329-390
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/Tokens.tsx
+  s_683ca25b605461::t_a67c8541c43f18 59
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/curve.test.ts
+  s_683ca25b605461::t_d92e8a13cceb4f 5,10,37-58
+  s_683ca25b605461::t_a6c73b3d3d9863 59
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/Scrollbar.tsx
+  s_683ca25b605461::t_d92e8a13cceb4f 26,144-194
+  s_683ca25b605461::t_a67c8541c43f18 44
+  s_683ca25b605461::t_21bcf8696539fa 8,73-78,82,94
+  s_683ca25b605461::t_8fd786923dce02 15-16,25
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/CLAUDE.md
+  s_683ca25b605461::t_c3caa57545af69 18
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/curve.ts
+  s_683ca25b605461::t_21bcf8696539fa 32-38,69-74
+  s_683ca25b605461::t_078aebb2856465 75-76
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_683ca25b605461::t_a67c8541c43f18 481,517
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_683ca25b605461::t_a67c8541c43f18 481,517
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/fixtures.ts
+  s_683ca25b605461::t_aeb974d8c9e47f 5
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/CLAUDE.md
+  s_683ca25b605461::t_c3caa57545af69 19
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-design-system-v1/decisions.md
+  s_683ca25b605461::t_c3caa57545af69 71,84-87
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/CLAUDE.md
+  s_683ca25b605461::t_c3caa57545af69 32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "64f339fc877b3e3214f9502d61c301b3725a96c1",
+  "prompts": {},
+  "sessions": {
+    "s_683ca25b605461": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c0bae56f-3d38-45db-b139-58912d52df08",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
