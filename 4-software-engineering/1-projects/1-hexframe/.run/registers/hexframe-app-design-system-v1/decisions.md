@@ -9,7 +9,8 @@ preview: >-
   how the radius scale squares every corner, the lines of STACK.md and
   claude-mod left for the phase close, where each piece of ui/ went when it
   regrouped by tier and side, and how /design-system shows the error channels,
-  reads "made of" from the code and keeps its frame outside the tiers.
+  reads "made of" from the code and keeps its frame outside the tiers; how the
+  chat's pieces take their text, and why its controls keep the second ink.
 ---
 # Decisions
 
@@ -63,3 +64,11 @@ HEX-94. The ticket asks for "made of" and "used in" between pieces. Written by h
 ### DEC-9 The page's frame is `ui/gallery/`, outside the tiers
 
 HEX-94. The catalogue, its test and the tokens' notes would have put seven files in `ui/`, past the rule of 6. They went into a folder of their own, `ui/gallery/`, with the frame and the stylesheet's reading: every folder's `gallery.tsx` imports it, and it imports none of them, so dependency-cruiser's tiers do not name it. `tokens.ts` became `gallery/stylesheet.ts`, since `Tokens.tsx` beside it would clash with it on a filesystem that ignores case, and it now reads every token, the fonts, the sizes, the radius scale, the easings and the durations beside the colours, so each gets its note. TOKENS.md's tables became those notes; its "Phone and touch" and "Light" became prose on the page. Until HEX-112 retires `3-design-system/`, which this run may not edit, TOKENS.md keeps its copy: where the two differ, `gallery/Tokens.tsx` wins, as `ui/gallery/CLAUDE.md` says.
+
+### DEC-10 The chat's text is `Words`, and the Proposal draws its own zone until the widget's frame lands
+
+HEX-98. `ui/` imports no domain, and a component takes its content as props, so the chat's pieces could not take Assistant's Entries. Each takes its text as `Words` (`ui/chat/text/words.tsx`): plain words, a tile named (a `Mention`'s props) and who acted, by name, in the order the sentence's language puts them. A feature reads its message with a mark in each tile's place and weaves the tiles in, as the galleries do (`ui/chat/samples.ts`, `said`), so a sentence is never split into fragments a translator can't reorder. The pieces of `components.html#text` became `Message` (both voices, one piece, since they share the column and the copy), `Thinking`, `Mention`, `Events` (a navigation, a change, the live step and a Turn's end as lines, by who acted, a run of reads folded), `DaySplit`, `Proposal` and `Receipt` (what an accepted Proposal and a Turn that applied its changes both leave, with the Undo), and two chat atoms, `Act`, the text action with its hex, and `HexMark`, no piece of its own. The widget's frame is HEX-96's, in flight beside this one: the Proposal draws its zone itself, entrance included, and moves into the frame once it lands. HEX-101 wires these into `features/conversation/`, which still draws v0's look meanwhile.
+
+### DEC-11 The quiet ink falls short of a readable contrast, so the chat's controls keep the second ink
+
+HEX-98. `faint` measures 3.1:1 on the ground in dark and 3.6:1 in light, under the 4.5:1 small text needs; `destructive` measures 4.1:1 in light. `components.html` sets the folded thinking's head and a folded run of reads in `faint`: both are controls, so they take `muted-foreground` (7.9:1 and 6.5:1), lighting to the first ink under the pointer. What only accompanies a line stays `faint` as designed: a time, a tool's name, the day's name, the thinking's lines, a deleted tile. Whether `faint` and light's `destructive` should rise is a token's question, left to Ulysse on the pull request.
