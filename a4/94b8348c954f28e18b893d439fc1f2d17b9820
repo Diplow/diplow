@@ -1,0 +1,19 @@
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-design-system-v1/decisions.md
+  s_80ba83442acf8f::t_44af3f88572832 57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a494b8348c954f28e18b893d439fc1f2d17b9820",
+  "prompts": {},
+  "sessions": {
+    "s_80ba83442acf8f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8bba7661-f8f8-412a-8fc8-35832d250e88",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
