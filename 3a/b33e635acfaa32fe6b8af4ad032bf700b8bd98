@@ -23,6 +23,7 @@
   s_c19b57f63ed6ef::t_a55eaba52006d6 13-14,17,31,35,89
 4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/spending/call.ts
   s_c19b57f63ed6ef::t_f46bbc9fe47776 3-4,62-84,91-92,97-105,136-145,148-150,160-161
+  s_c19b57f63ed6ef::t_4dffa57d647fd3 5-8,162
 4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/overlays/gallery.tsx
   s_c19b57f63ed6ef::t_61c1c9c9631431 13
 4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/CLAUDE.md
@@ -45,6 +46,7 @@
   s_c19b57f63ed6ef::t_61c1c9c9631431 12
 4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/spending/CLAUDE.md
   s_c19b57f63ed6ef::t_fffbe2603af787 19
+  s_c19b57f63ed6ef::t_3a3968572b6be8 17
 4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/blaxel.test.ts
   s_c19b57f63ed6ef::t_ab3ecf90c7416b 1-5,9,13-14,139-141,145,147-154,156-163,166-169,171-175
   s_c19b57f63ed6ef::t_0b6a38ee7aa327 142-144,146,155,164-165,170
@@ -67,6 +69,7 @@
   s_c19b57f63ed6ef::t_fa6331e78e0eee 227
 4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/proxy/CLAUDE.md
   s_c19b57f63ed6ef::t_70ed0ae67f8bc5 19
+  s_c19b57f63ed6ef::t_3a3968572b6be8 20
 4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE.md
   s_c19b57f63ed6ef::t_70ed0ae67f8bc5 18
 ---
