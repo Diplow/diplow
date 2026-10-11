@@ -1,0 +1,36 @@
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-design-system-v1/decisions.md
+  s_72f05d095679e5::t_44dbe14e248da0 77-78
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/List.tsx
+  s_72f05d095679e5::t_78ad1168f360f3 11,176,222,240,251-253
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/gallery.tsx
+  s_72f05d095679e5::t_8c3892080ccecb 90,159,165-169
+  s_72f05d095679e5::t_d5fc39cdfd88a2 170
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/commands.ts
+  s_72f05d095679e5::t_78ad1168f360f3 33,53-54,170-171,175-178,181,208,215
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/demo.ts
+  s_72f05d095679e5::t_a05dc7925015a7 4-6,15,17,57,69,118,132-162,168,172
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/CLAUDE.md
+  s_72f05d095679e5::t_44dbe14e248da0 18
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/Composer.tsx
+  s_72f05d095679e5::t_17dd3277d4767b 22-27,53-54,100-103,125,172-174,196,270,279,281,283,286,289,293
+  s_72f05d095679e5::t_a05dc7925015a7 55,175
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/commands.test.ts
+  s_72f05d095679e5::t_78ad1168f360f3 3,36,38-39,46,52-56
+  s_72f05d095679e5::t_a05dc7925015a7 47-51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "227f4cb39682b51ed5be234fd12ff843b7525420",
+  "prompts": {},
+  "sessions": {
+    "s_72f05d095679e5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a1461d9d-50aa-4a6b-9bdd-6667645255b4",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
