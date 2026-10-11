@@ -1,0 +1,46 @@
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_a3747f4521fe2c::t_7487bb5961a157 254-308,531,562-578
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_a3747f4521fe2c::t_7487bb5961a157 18,47
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/commands.ts
+  s_a3747f4521fe2c::t_7487bb5961a157 1-226
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/gallery.tsx
+  s_a3747f4521fe2c::t_7487bb5961a157 1-184
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/List.tsx
+  s_a3747f4521fe2c::t_7487bb5961a157 1-264
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_a3747f4521fe2c::t_7487bb5961a157 254-308,531,562-578
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE.md
+  s_a3747f4521fe2c::t_750bcd1cdf63c1 49,64
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/pieces.ts
+  s_a3747f4521fe2c::t_7487bb5961a157 42-46
+  s_a3747f4521fe2c::t_0650c1ee44dbd3 47
+  s_a3747f4521fe2c::t_c9ee8eec1eabb6 41
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-design-system-v1/decisions.md
+  s_a3747f4521fe2c::t_750bcd1cdf63c1 12-14,69-82,93,97,101,105
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/CLAUDE.md
+  s_a3747f4521fe2c::t_7487bb5961a157 7,14,18
+  s_a3747f4521fe2c::t_750bcd1cdf63c1 8-10
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/commands.test.ts
+  s_a3747f4521fe2c::t_7487bb5961a157 1-58
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/Composer.tsx
+  s_a3747f4521fe2c::t_7487bb5961a157 1-297
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/demo.ts
+  s_a3747f4521fe2c::t_7487bb5961a157 1-226
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8f3f7c79531303557145a1e28eb0a01c9f6e10a6",
+  "prompts": {},
+  "sessions": {
+    "s_a3747f4521fe2c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "413a802a-7c21-401b-a3b5-da30ca40e94c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
