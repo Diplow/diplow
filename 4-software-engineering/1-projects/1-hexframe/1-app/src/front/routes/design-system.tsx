@@ -27,6 +27,7 @@ import { ChatAtomsGallery } from '#/front/ui/chat/atoms/gallery'
 import { Composer } from '#/front/ui/chat/composer/Composer'
 import { modeChoices } from '#/front/ui/chat/composer/demo'
 import { ComposerGallery } from '#/front/ui/chat/composer/gallery'
+import { ChatLayoutsGallery } from '#/front/ui/chat/layouts/gallery'
 import {
   GallerySection,
   GalleryState,
@@ -62,6 +63,7 @@ function DesignSystem() {
       <GalleryTier tier="chat">
         <ConversationGallery onCenter={onCenter} />
         <ComposerGallery />
+        <ChatLayoutsGallery />
         <ChatAtomsGallery />
       </GalleryTier>
       <GalleryTier tier="canvas">

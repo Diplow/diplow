@@ -1,21 +1,25 @@
 // The layouts every side shares, on /design-system: the dialog, the table, the page's header, and what a
 // place shows instead of its content.
 import { FilePlus, Plus, Rows3 } from 'lucide-react'
-import { useMemo } from 'react'
+import { cn } from 'cn'
+import { useMemo, useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 
+import { Act, voiceOf } from '../atoms/controls/act'
 import { Button } from '../atoms/controls/button'
 import { toast } from '../atoms/Toaster'
 import { GallerySection, GalleryState } from '../gallery/frame'
 import { ConfirmDialog } from './ConfirmDialog'
 import { DataTable, type DataColumn } from './DataTable'
+import { Dialog } from './Dialog'
 import { PageHeader } from './PageHeader'
 import { EmptyState, ErrorState, Forbidden } from './states'
 
 export function LayoutsGallery() {
   return (
     <>
+      <TheDialogGallery />
       <DialogGallery />
       <TableGallery />
       <HeaderGallery />
@@ -26,6 +30,114 @@ export function LayoutsGallery() {
 
 const done = (what: string) => () => {
   toast(what)
+}
+
+// Three acts that stop the user: a tile, a branch whose name is typed first, and an edit that would
+// be lost, neutral since nothing is deleted.
+function TheDialogGallery() {
+  const [open, setOpen] = useState<'tile' | 'branch' | 'discard' | undefined>()
+  const close = (next: boolean) => {
+    if (!next) setOpen(undefined)
+  }
+  const openers = [
+    { act: 'tile', label: m.gallery_dialog_delete_tile(), state: m.gallery_state_destructive() },
+    {
+      act: 'branch',
+      label: m.gallery_dialog_delete_branch(),
+      state: m.gallery_state_dialog_typed(),
+    },
+    {
+      act: 'discard',
+      label: m.gallery_dialog_discard_edit(),
+      state: m.gallery_state_dialog_neutral(),
+    },
+  ] as const
+  return (
+    <GallerySection name="Dialog">
+      {openers.map(({ act, label, state }) => (
+        <GalleryState key={act} label={state}>
+          <Act
+            tone={act === 'discard' ? 'quiet' : 'voice'}
+            className={cn(act !== 'discard' && voiceOf('destructive'))}
+            aria-haspopup="dialog"
+            onClick={() => {
+              setOpen(act)
+            }}
+          >
+            {label}
+          </Act>
+        </GalleryState>
+      ))}
+      <Dialog
+        open={open === 'tile'}
+        onOpenChange={close}
+        kicker={m.gallery_dialog_kicker_delete()}
+        title={m.gallery_dialog_tile_title()}
+        confirmLabel={m.gallery_dialog_tile_act()}
+        onConfirm={done(m.gallery_sample_deleted())}
+      >
+        <p>{m.gallery_dialog_tile_body()}</p>
+      </Dialog>
+      <Dialog
+        open={open === 'branch'}
+        onOpenChange={close}
+        kicker={m.gallery_dialog_kicker_delete()}
+        title={m.gallery_dialog_branch_title()}
+        touches={{ picture: <Touched lit={[2]} />, text: m.gallery_dialog_branch_touches() }}
+        typeToConfirm="Site"
+        confirmLabel={m.gallery_dialog_branch_act()}
+        onConfirm={done(m.gallery_sample_deleted())}
+      >
+        <p>{m.gallery_dialog_branch_body()}</p>
+      </Dialog>
+      <Dialog
+        open={open === 'discard'}
+        onOpenChange={close}
+        tone="neutral"
+        kicker={m.gallery_dialog_kicker_unsaved()}
+        title={m.gallery_dialog_discard_title()}
+        cancelLabel={m.gallery_dialog_keep_editing()}
+        confirmLabel={m.gallery_dialog_discard_act()}
+        onConfirm={done(m.gallery_dialog_discard_act())}
+      >
+        <p>{m.gallery_dialog_discard_body()}</p>
+      </Dialog>
+    </GallerySection>
+  )
+}
+
+// A hex's corners, pointy-top, around its center.
+const hexPoints = (x: number, y: number, r: number) =>
+  Array.from({ length: 6 }, (_, corner) => {
+    const angle = (Math.PI / 3) * corner - Math.PI / 2
+    return `${(x + r * Math.cos(angle)).toFixed(2)},${(y + r * Math.sin(angle)).toFixed(2)}`
+  }).join(' ')
+
+/** A frame in small, its center and the six around it, those the act takes lit in the destructive colour. */
+function Touched({ lit }: { lit: readonly number[] }) {
+  const r = 7
+  const around = Array.from({ length: 6 }, (_, slot) => {
+    const angle = (Math.PI / 3) * slot - Math.PI / 6
+    return {
+      slot: slot + 1,
+      x: Math.sqrt(3) * r * Math.cos(angle),
+      y: Math.sqrt(3) * r * Math.sin(angle),
+    }
+  })
+  return (
+    <svg viewBox="-27 -25 54 50" className="h-[2.625rem] w-[2.875rem] overflow-visible">
+      <polygon points={hexPoints(0, 0, r - 0.8)} className="fill-tile stroke-input" />
+      {around.map(({ slot, x, y }) => (
+        <polygon
+          key={slot}
+          points={hexPoints(x, y, r - 0.8)}
+          className={
+            lit.includes(slot) ? 'fill-destructive/22 stroke-destructive' : 'fill-tile stroke-none'
+          }
+        />
+      ))}
+    </svg>
+  )
 }
 
 function DialogGallery() {
