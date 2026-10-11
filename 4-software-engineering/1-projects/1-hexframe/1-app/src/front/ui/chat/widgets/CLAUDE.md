@@ -1,0 +1,29 @@
+---
+title: widgets
+parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets
+owner: diplo
+preview: >-
+  The widgets the one screen moves into the chat, proposed (HEX-100): the
+  tile's, where the tile forms, the import and the export go, the key's, the
+  help's and the sign-in's, each on the widget's frame or, for signing in, on
+  the composer's zone. Beside them the parts they share: the place map, the
+  underlined field, the count.
+---
+# widgets
+
+What used to be a drawer or a page and becomes a piece of the conversation, since hexframe is one screen (the grill of 2026-10-11, Q8): a tile's forms, Keys, Help and signing in. Proposed (HEX-100; `hexframe-app-design-system-v1/decisions.md#DEC-27` to `#DEC-31`), drawn on fixtures at `/design-system`; the builds wire them in, HEX-102 the tile's, HEX-103 the others. Each is controlled, as the `Composer` is: what it holds and what its actions do are its caller's, a state hook's on a real page. `ui/` knows no domain, so where a widget needs one of a domain's words (a Preview's 350 characters, a Key's 32) it mirrors it, and says whose it is.
+
+| Path | Holds |
+|---|---|
+| `tile/` | The tile widget. `TileWidget.tsx`, `TileWidget`: a new tile, an edit, or once written its receipt, in the user's amber; the title written where it is read (`TitleField`), the kind, the preview counted, the page in the user's serif with Write and Read; its hex is the place (`PlaceMark`), the free places dashed and picked by a click or the arrows, by name under a finger; an edit marks each field it changed, Delete asks first (`Dialog`), and a tile changed meanwhile keeps the user's words, says who changed what and compares; a refused write comes back with the user's words and the refusal on the field. `Proposal.tsx`, `TileProposal`, the agent's draft of a new tile or its edit of one, in its violet, the edit shown where it falls (`Diff`, said to a screen reader), Accept, Edit it, Discard. `Transfer.tsx`, `TileImport`, a vault into a free place or as the Root, its pickers its actions, working, then landed with what it left out, or refused with every fault; `TileExport`, working, then its receipt naming the zip, or failed. `parts.tsx`, what the three share: a tile's words, its kinds, the places by name, where a tile stands in words and drawn, the receipt. `fixtures.ts`, Tooling under Software engineering, the user's words, not translated. `gallery.tsx`, `TileWidgetGallery`, every state live |
+| `keys/` | The key widget, the app's own, no voice. `KeyWidget.tsx`, `KeyWidget`: a name for the Key (32 characters, IAM's), then the Key shown once, inking in (`animate-ink`), beside the command that uses it, each copied from its corner, one ember line saying it won't be shown again; the Keys given, a light on one used within the hour, each revoked after the `Dialog`; opened by the agent, the Keys alone, none issued; done, a receipt naming the Key, never its secret. `gallery.tsx`, `KeyWidgetGallery`, on fixture Keys and a plainly fake secret |
+| `help/` | The help widget, the app's own. `HelpWidget.tsx`, `HelpWidget`: a topic, its hex Help's own frame (`Places`), the topic lit and the map a way around, its page as written until the Markdown seam renders it, where to read on, Open in Help and Ask about it; what `/help` and a few words find; the shortcuts `?` shows (`shortcuts.ts`, proposals until TanStack Hotkeys comes, each said to a screen reader). `find.ts`, `topicsFor`, the topics a search finds, a title first, each with the sentence it shows in cut around it by the composer's `cutAround`, tested (`find.test.ts`); HEX-103 moves it beside Help's reads. `gallery.tsx`, `HelpWidgetGallery`, on Help itself, which the route reads and hands over (`HelpNode`), since `ui/` can't |
+| `sign-in/` | The sign-in widget. `SignInWidget.tsx`, `SignInWidget`: signed out, the chat's foot, on the composer's zone (`layouts/zone.ts`), the question in the agent's mono, an email and a password, the one solid act and the way between signing in and signing up, a refusal on the field at fault or under the act. `gallery.tsx`, `SignInWidgetGallery`, live, nothing reaching IAM; the signed-out `Screen`'s specimen shows it in place |
+
+| File | Holds |
+|---|---|
+| `Places.tsx` | `Places`, a frame in small in a widget's hex's place: the tile in the middle, its six places around it numbered as the canvas numbers them, one lit in the voice, the free ones dashed; where a place may be picked, a radio group, the arrows going round and taking the one they land on |
+| `fields.tsx` | The widgets' fields, on one underline that draws itself in the voice as the focus comes and turns destructive while refused: `Field`, a labelled input or textarea, its count near its limit, its hint, a dot once changed, its refusal said as it changes; `TitleField`, a title at the widget's title size; `Choice`, a few words to choose among |
+| `count.ts` | `countOf`, what a field with a limit shows of its length, from four fifths of it, ember for its last tenth, destructive past it, counted as a reader counts (`lengthOf`). Tested (`count.test.ts`) |
+
+`fields.tsx` stays the widgets' own while they are a proposal: the shared `Field` and `useAppForm` still draw the pages the one screen retires, and the builds decide whether the underline replaces them (DEC-28).

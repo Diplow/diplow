@@ -12,7 +12,7 @@ import { m } from '#/paraglide/messages'
 
 import { Dialog } from '../../layouts/Dialog'
 import { Widget } from '../layouts/Widget'
-import { useHandOffState } from '../state/useHandOffState'
+import { useHandOffState } from '../layouts/useHandOffState'
 import { type Change, Changes, Receipt } from './Receipt'
 
 /** How a Proposal stands: waiting for the user, accepted, or discarded. */

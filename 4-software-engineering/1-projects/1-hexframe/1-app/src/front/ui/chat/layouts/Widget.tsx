@@ -1,13 +1,21 @@
 import { cn } from 'cn'
 import { ChevronDown, ChevronRight, MoreHorizontal, RotateCw, X } from 'lucide-react'
 import { Collapsible } from 'radix-ui'
-import { useId, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react'
+import {
+  useId,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent,
+  type ReactNode,
+  type SyntheticEvent,
+} from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Act, voiceOf, type Voice as AnyVoice } from '../../atoms/controls/act'
 import { pressed, type Shortcut } from '../../atoms/keys'
 import { Menu, type MenuEntry } from '../../atoms/Menu'
+import { zone } from './zone'
 
 /** Whose the widget is: the agent asking, the user's own words, or the app's (a key, help). */
 type Voice = Exclude<AnyVoice, 'destructive'>
@@ -27,16 +35,27 @@ interface WidgetAction {
   apart?: boolean
   /** What was asked is on its way: the action does nothing more, yet keeps the focus it has. */
   waits?: boolean
+  /** `hex`, the one solid act a form asks for (`Act`'s look); a word otherwise. */
+  look?: 'text' | 'hex'
+  /** It loses something, and says so in the destructive voice: a tile's Delete. */
+  destructive?: boolean
 }
 
 interface ZoneProps {
   voice: Voice
   /** A line icon, drawn inside the widget's hex. */
-  icon: ReactNode
+  icon?: ReactNode
+  /**
+   * Drawn in the hex's place instead, the size of a small tile: what the widget is about, in small, such
+   * as the frame a tile goes in, its slot lit. It speaks for itself to a screen reader.
+   */
+  mark?: ReactNode
   /** Who, or what state, in a few words: "proposed by your agent". */
   kicker: string
-  /** What it is about. */
+  /** What it is about; its name to a screen reader, even where `titleField` draws it. */
   title: string
+  /** In the title's place, the field that writes it, at the title's size: a tile's title. */
+  titleField?: ReactNode
   /** One line more, hidden while folded. */
   subtitle?: string
   /** Whatever the widget is for: a list, a form, a key. While `working`, light runs over the lines to come instead. */
@@ -49,6 +68,8 @@ interface ZoneProps {
   onDismiss?: () => void
   /** Folded at first; the user folds and unfolds it after. */
   defaultFolded?: boolean
+  /** It is a form: Enter in one of its fields runs its first action, as a click on it does. */
+  form?: boolean
 }
 
 interface DoneProps {
@@ -78,8 +99,10 @@ export function Widget(props: WidgetProps) {
 function Zone({
   voice,
   icon,
+  mark,
   kicker,
   title,
+  titleField,
   subtitle,
   children,
   actions = [],
@@ -87,6 +110,7 @@ function Zone({
   settings = [],
   onDismiss,
   defaultFolded = false,
+  form = false,
 }: ZoneProps) {
   const [folded, setFolded] = useState(defaultFolded)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -102,6 +126,9 @@ function Zone({
     event.preventDefault()
     action.onSelect()
   }
+  // A form runs its first action on Enter in a field, through the browser's own submit.
+  const Surface = form ? 'form' : 'section'
+  const submit = form ? actions[0] : undefined
   return (
     <Collapsible.Root
       open={!folded}
@@ -110,21 +137,30 @@ function Zone({
       }}
       asChild
     >
-      <section
-        aria-labelledby={titleId}
+      <Surface
+        aria-labelledby={titleField === undefined ? titleId : undefined}
+        aria-label={titleField === undefined ? undefined : title}
         aria-busy={state === 'working'}
         onKeyDown={runShortcut}
+        {...(submit !== undefined && {
+          noValidate: true,
+          onSubmit: (event: SyntheticEvent) => {
+            event.preventDefault()
+            submit.onSelect()
+          },
+        })}
         className={cn(
           voiceOf(failed ? 'destructive' : voice),
-          // A solid surface with one fine line on top and one below, tinted toward the curve by its voice.
-          "group/widget relative bg-card bg-linear-to-r from-transparent from-15% to-(--voice)/9 py-5 pr-4 pl-4 before:absolute before:inset-x-0 before:top-0 before:h-px before:origin-left before:bg-linear-to-r before:from-transparent before:via-input before:via-45% before:to-input before:content-[''] after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-linear-to-r after:from-transparent after:via-input after:via-45% after:to-input after:content-[''] sm:pr-26 sm:pl-9",
+          // The chat's zone, tinted toward the curve by its voice, with one more fine line below.
+          zone,
+          "group/widget py-5 pr-4 pl-4 after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-linear-to-r after:from-transparent after:via-input after:via-45% after:to-input after:content-[''] sm:pr-26 sm:pl-9",
           voice === 'app' && !failed && 'bg-none',
           // Coming in: the line on top draws itself, the surface unfolds from it, its parts rise in turn.
           'motion-safe:animate-unfold motion-safe:before:animate-draw',
         )}
       >
         <div className="grid grid-cols-[2.25rem_1fr] gap-x-3.5 sm:grid-cols-[3.375rem_1fr] sm:gap-x-[1.125rem]">
-          <Hex working={state === 'working'}>{failed ? <RotateCw /> : icon}</Hex>
+          <Mark state={state} icon={icon} mark={mark} />
           <div className="min-w-0">
             {/* Below sm the tools sit over the head's end, so the head leaves them room. */}
             <div className="max-sm:pr-20 max-sm:pointer-coarse:pr-12">
@@ -142,16 +178,22 @@ function Zone({
                 )}
                 {kicker}
               </p>
-              <h3
-                id={titleId}
-                className={cn(
-                  'mt-px font-human text-[1.3125rem] leading-tight font-normal text-foreground',
-                  risesInTurn,
-                )}
-                style={rise(2)}
-              >
-                {title}
-              </h3>
+              {titleField === undefined ? (
+                <h3
+                  id={titleId}
+                  className={cn(
+                    'mt-px font-human text-[1.3125rem] leading-tight font-normal text-foreground',
+                    risesInTurn,
+                  )}
+                  style={rise(2)}
+                >
+                  {title}
+                </h3>
+              ) : (
+                <div className={cn('mt-px', risesInTurn)} style={rise(2)}>
+                  {titleField}
+                </div>
+              )}
               {subtitle !== undefined && !folded && (
                 <p
                   className={cn(
@@ -170,28 +212,7 @@ function Zone({
                   {state === 'working' ? <LinesToCome /> : children}
                 </div>
               )}
-              {actions.length > 0 && (
-                <div
-                  className={cn(
-                    'mt-[1.125rem] flex flex-wrap items-center gap-x-[1.375rem] gap-y-1',
-                    risesInTurn,
-                  )}
-                  style={rise(5)}
-                >
-                  {actions.map((action, index) => (
-                    <Act
-                      key={action.label}
-                      tone={index === 0 ? 'voice' : 'quiet'}
-                      shortcut={action.shortcut}
-                      waits={action.waits === true}
-                      onClick={action.onSelect}
-                      className={cn(action.apart === true && 'ml-auto')}
-                    >
-                      {action.label}
-                    </Act>
-                  ))}
-                </div>
-              )}
+              <Actions actions={actions} submit={submit} />
             </Collapsible.Content>
           </div>
         </div>
@@ -205,8 +226,76 @@ function Zone({
           }}
           onDismiss={onDismiss}
         />
-      </section>
+      </Surface>
     </Collapsible.Root>
+  )
+}
+
+/** Its hex and line icon, or the mark drawn in its place; a failure's hex says to try again. */
+function Mark({
+  state,
+  icon,
+  mark,
+}: {
+  state: Exclude<WidgetState, 'done'>
+  icon: ReactNode
+  mark: ReactNode
+}) {
+  if (mark === undefined || state === 'failed') {
+    return <Hex working={state === 'working'}>{state === 'failed' ? <RotateCw /> : icon}</Hex>
+  }
+  return (
+    <div
+      className={cn(
+        'relative mt-0.5 h-[2.125rem] w-9 text-(--voice) sm:h-[3.125rem] sm:w-[3.375rem]',
+        state === 'working' && 'motion-safe:animate-breathe',
+        risesInTurn,
+      )}
+      style={rise(0)}
+    >
+      {mark}
+    </div>
+  )
+}
+
+/**
+ * Its actions in a row, the first the one it expects, in its voice, one that loses something in the
+ * destructive voice; a form's first submits it.
+ */
+function Actions({
+  actions,
+  submit,
+}: {
+  actions: readonly WidgetAction[]
+  submit: WidgetAction | undefined
+}) {
+  if (actions.length === 0) return null
+  return (
+    <div
+      className={cn(
+        'mt-[1.125rem] flex flex-wrap items-center gap-x-[1.375rem] gap-y-1',
+        risesInTurn,
+      )}
+      style={rise(5)}
+    >
+      {actions.map((action, index) => (
+        <Act
+          key={action.label}
+          type={action === submit ? 'submit' : 'button'}
+          look={action.look}
+          tone={index === 0 || action.destructive === true ? 'voice' : 'quiet'}
+          shortcut={action.shortcut}
+          waits={action.waits === true}
+          onClick={action === submit ? undefined : action.onSelect}
+          className={cn(
+            action.destructive === true && voiceOf('destructive'),
+            action.apart === true && 'ml-auto',
+          )}
+        >
+          {action.label}
+        </Act>
+      ))}
+    </div>
   )
 }
 

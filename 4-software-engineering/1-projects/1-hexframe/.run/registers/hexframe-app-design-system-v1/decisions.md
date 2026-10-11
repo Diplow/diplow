@@ -16,7 +16,10 @@ preview: >-
   contrast, how the chat's pieces take their text, every ink raised to
   4.5:1, a decided Proposal's receipt unfolding its changes, and how HEX-97
   built the screen on home: who holds the side in front, the breadcrumb drawn
-  as the rail, what the header keeps, and the gaps left to M3.
+  as the rail, what the header keeps, and the gaps left to M3, and where
+  HEX-100 put the widgets, the chat's zone drawn once, the widgets' own field,
+  what the frame grew, and what the proposal drew beyond the reference or left
+  out of it.
 ---
 # Decisions
 
@@ -158,3 +161,34 @@ HEX-97. The ticket leaves the header the links HEX-103 retires: the System, Keys
 ### DEC-26 What home draws that HEX-95 didn't propose, until M3 redraws it
 
 HEX-97. The chat's slots hold today's pieces, taken apart rather than redrawn: the timeline, its day labels on a strip of the card's ground, and today's composer with its hint lines, tall on a phone, both in `features/conversation/` until HEX-101 builds the conversation's text and the composer HEX-98 and HEX-99 proposed. The composer's zone sits on the card's ground, as the proposed composer does, so the canvas never shows through it. The centered Tile's card stays at the canvas's foot, at most 30% of its height, until HEX-102 moves the forms into the tile widget. A move's banner, which `System` drew across the canvas's top, went to its foot, above the card, since the corner now sits over the canvas's top right and covered its Cancel (cubic's third local review). Two things the screen needed to hold real content: on a phone the canvas ends above the composer, whose height the screen measures, and above the seam, whichever side is in front (cubic's second local review), so the card is never under either; and the conversation stays at its foot as it grows, home's lines arriving after the first paint, and as its scroller shrinks, the agent's step appearing above the composer, while the reader hasn't left it. After cubic's first local review the reader leaves it by scrolling up, or by acting in a conversation too short to scroll, so an earlier day they asked for stays in view, and writing at the foot brings it back; the rule is `keptAtFoot`, pure and tested in `screen/state/latest.ts`, the screen's effect wiring its listeners alone. What the screen's slots share comes from the screen too: `--screen-clear`, how far the chat's foot keeps its content from the curve, worked out from the screen's own lengths, and `cornerPlace`, where the corner sits, which Help and the specimens take. Checked in a browser, light and dark, English and French, wide and in a 390px frame; the window would not narrow and claude-in-chrome emulates no touch, so the finger's 44px targets were not looked at here.
+
+### DEC-27 The widgets go in `ui/chat/widgets/`, a folder each, and signing in sits on the composer's zone
+
+HEX-100, a proposal. The four widgets are chat components, as the `Composer` is, so they go beside it, in `ui/chat/widgets/`, a folder each (`tile/`, `keys/`, `help/`, `sign-in/`), the parts they share beside them: the place map (`Places.tsx`), the underlined field (`fields.tsx`) and the count (`count.ts`). The tile widget is three components in one piece, `TileWidget` for writing, `TileProposal` for the agent's draft or edit, `TileImport` and `TileExport`, since the ticket names one widget and all of them draw the same place, words and receipt (`tile/parts.tsx`).
+
+The sign-in widget is no `Widget`: it takes the `Composer`'s place at the chat's foot, signed out, and has nothing to fold, dismiss or receipt. It sits on the composer's zone, as HEX-95's review asked: the zone is drawn once, `ui/chat/layouts/zone.ts`, which the `Composer`, the `Widget` and the `SignInWidget` take, and the route's hand copy, `SignInPlace` and its `zone`, went; the signed-out `Screen` specimen shows the widget itself.
+
+HEX-98's pull request, still open, adds `entries/`, `text/` and `state/` to `ui/chat/`: with `widgets/` that is seven folders, one past the rule of 6. Whichever lands second regroups.
+
+### DEC-28 The widgets are controlled and write on their own underlined field
+
+HEX-100. The direction says a field is one underline; the shared `Field`, `Input` and `Textarea` are shadcn's boxes, and the pages that use them, Keys, signing in and the tile drawer, are the ones the one screen retires. Redrawing them would restyle those pages for nothing, so the widgets have their own field, `widgets/fields.tsx`: a quiet label, the line that draws itself in the voice as the focus comes, the count near a limit, a hint, a dot once changed, the refusal under it, said as it changes. The widgets are controlled, as the `Composer` is: what they hold, and the refusal each field shows, are props, so a feature's state hook owns them. The builds (HEX-102, HEX-103) bridge them to the features' submits, which run through TanStack Form today (`useAppForm`, `openedOnRefusal`), or move off it; whether the underline then replaces the shared `Field` is theirs to say.
+
+### DEC-29 The widget's frame grew a mark, a title field, a form, and two looks of action
+
+HEX-100. The widgets needed four things of `Widget` that HEX-96 had not drawn, each optional, so its other users are untouched:
+
+- **`mark`**, drawn in the hex's place: the tile widget's place and Help's map are the frame in small, not an icon in a hex. A failure still shows the hex, to try again.
+- **`titleField`**, in the title's place: a tile's title is written where it is read. `title` stays the widget's name to a screen reader.
+- **`form`**: the zone is a form, and Enter in one of its fields runs its first action, as a click does.
+- **An action's `look`**, `hex` for the one solid act a form asks for (`Act`'s), and **`destructive`**, for one that loses something, a tile's Delete.
+
+### DEC-30 What the proposal drew beyond the reference, and what it left
+
+HEX-100. `components.html` draws the tile widget's new, edit, draft, the agent's edit and changed meanwhile, the key widget's three states and the help widget's three. The ticket asks more, so the proposal drew, in the reference's look: **import and export** in the tile widget, the import's pickers its actions, then its report, the export a receipt naming the zip; **refused and put back**, the user's words and the refusal on the field, cleared once the field changes; the **agent's key widget**, which shows the Keys and issues none; **the sign-in widget**, which the reference does not draw at all; and Help's search on **Help itself**, read by the route (`find.ts`, cut by the composer's `cutAround`).
+
+It left: the zone **warming** from the agent's violet to the user's amber when a draft is taken, which needs `--voice` registered as a colour (`@property`), and that would end the fallbacks written `var(--voice, …)`; the voice changes at once instead. A page's **Markdown**, shown as written until the seam's renderer comes (STACK.md: TanStack Markdown); Help's pages show their marks meanwhile. The **crossings**, the draft breathing in its slot on the canvas and Open in Help centering it (HEX-108). **Giving the page the canvas's side**, which is an entry of the widget's settings and does nothing yet (the screen's, HEX-97). Escape on a widget stays HEX-96's open question.
+
+### DEC-31 The place map is a radio group, by name under a finger, and a secret inks in
+
+HEX-100. The tile widget's hex is the frame it goes in (`Places`), numbered as the canvas numbers it, 1 north-west to 6 west, its free places dashed. A picked place is a choice among a few, so the map is a radio group, the arrows going round and taking the place they land on, each place named for a screen reader and in its tooltip; the help widget's map is the same, its places Help's topics. Its hexes are small, under the 44px a finger needs, so under a coarse pointer the free places show by name too, a row of words at a thumb's size. A Context tile is lit in Context's colour. The quiet text is `muted-foreground`, as DEC-10 set; the widget's own kicker in the app's voice stays `faint`, the frame's. The key's secret inks in from a blur the one time it shows, the reference's reveal, a token now, `--animate-ink`, with its note.
