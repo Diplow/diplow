@@ -20,7 +20,7 @@ import { tileLink } from '../mapping/files/download'
 import { WaitUntil } from '../server/bus'
 
 import type { DayAsked, MergedNavigation, NewMessage, SentMessage } from './assistant'
-import { proposalNow, shownTo } from './proposal/programs'
+import { conversationNow, shownTo } from './proposal/programs'
 
 /**
  * Runs an operation for the Account the request's Session proves: the Conversation is the user's,
@@ -43,7 +43,7 @@ export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
   forSession((accountId) =>
     Effect.gen(function* () {
       const lastEntry = yield* Assistant.lastEntry(accountId)
-      const proposal = yield* proposalNow(accountId)
+      const { proposal } = yield* conversationNow(accountId)
       const day = { date: date ?? (yield* Assistant.today(offsets.offset)).date, ...offsets }
       const entries = yield* Assistant.day(accountId, day)
       const titles = yield* Mapping.titles(accountId, namedTiles(entries))
@@ -72,8 +72,7 @@ export const latest = forSession((accountId) =>
     const version = yield* Mapping.systemVersion(accountId)
     const lastEntry = yield* Assistant.lastEntry(accountId)
     const live = yield* Assistant.liveTurn(accountId)
-    const mode = yield* Assistant.conversationMode(accountId)
-    const proposal = yield* proposalNow(accountId)
+    const { mode, proposal } = yield* conversationNow(accountId)
     const turn =
       live === undefined
         ? undefined

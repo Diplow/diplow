@@ -55,6 +55,7 @@ import {
   summaryOf,
   type SwapTiles,
   untitledIn,
+  whole,
 } from './operations'
 
 export { HelpId, helpRoot, helpSystem } from './help/help'
@@ -632,15 +633,13 @@ export const draft = <O extends Operation>(
  * locked, the batch folded over the System as it stands, each Operation decided on what the ones
  * before it made, a create under the id it was drafted with. One that no longer applies, a Tile it
  * names changed since (`TileChanged`, by the Version it carries) or gone, refuses the whole batch with
- * its refusal, nothing written nor published; else every event is written and published as an
- * Operation's are. A batch naming a Tile of Help is `HelpReadOnly`.
+ * its refusal, nothing written nor published (`whole`); else every event is written and published
+ * as an Operation's are. A batch naming a Tile of Help is `HelpReadOnly`.
  */
 export const runBatch = (accountId: string, batch: ReadonlyArray<Batched>) =>
   Effect.gen(function* () {
     yield* outsideHelp(batch.flatMap(({ operation }) => namedBy(operation)))
     const system = yield* locked(accountId)
-    const folded = fold(system, batch)
-    const [first] = folded.left
-    if (first !== undefined) return yield* Effect.fail(first.refusal)
-    yield* writtenAll(accountId, system, folded.events, madeHere)
+    const { events } = yield* Effect.fromResult(whole(system, batch))
+    yield* writtenAll(accountId, system, events, madeHere)
   })

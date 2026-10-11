@@ -228,7 +228,7 @@ export const startTurn = (accountId: string, start: { message: string; location:
     const startedAt = new Date(yield* Clock.currentTimeMillis)
     const month = yield* Turns.use((turns) => turns.spentSince(accountId, monthOf(startedAt)))
     if (allowanceSpent(month.spent)) return yield* new AllowanceSpent()
-    const { mode } = yield* conversationNow(accountId)
+    const { mode } = yield* conversationState(accountId)
     const row = yield* Turns.use((turns) =>
       turns.start(accountId, {
         messageId: start.message,
@@ -511,8 +511,11 @@ const stateOf = (row: ConversationRow | undefined) =>
     return { state: { mode, open } satisfies ConversationState, entry: entryId }
   })
 
-/** The Account's Conversation's Mode and open Proposal, as they stand: `ask` and none before its first. */
-const conversationNow = (accountId: string) =>
+/**
+ * The Account's Conversation as it stands, in one read: the Mode its next Turn takes, and its open
+ * Proposal, if one is, what the page shows; `ask` and none before its first Entry.
+ */
+export const conversationState = (accountId: string) =>
   Effect.map(
     Effect.flatMap(
       Proposals.use((proposals) => proposals.current(accountId)),
@@ -521,16 +524,12 @@ const conversationNow = (accountId: string) =>
     ({ state }) => state,
   )
 
-/** The Mode the Account's Conversation is in: what its next Turn takes. */
-export const conversationMode = (accountId: string) =>
-  Effect.map(conversationNow(accountId), ({ mode }) => mode)
-
 /**
  * The Account's open Proposal, if one is, as it stands: what the reads and the files of a Turn that
- * drafts show over the System, and the page.
+ * drafts show over the System.
  */
 export const openProposal = (accountId: string) =>
-  Effect.map(conversationNow(accountId), ({ open }) => open)
+  Effect.map(conversationState(accountId), ({ open }) => open)
 
 /**
  * The Account's open Proposal, if one is, its Conversation locked until the transaction ends, so no
@@ -601,8 +600,8 @@ const written = (accountId: string, { event, before, after, entry }: Written) =>
 /**
  * Runs an Operation on the Account's Conversation: locks it, loads it, asks `decide` through
  * `decided`, then writes one change per event, as `evolve` leaves the Conversation after it, and
- * answers the Conversation they leave. What `decide` refuses is refused here, nothing written. In the
- * transaction the API layer opened.
+ * answers the Conversation as it stood before and as they leave it. What `decide` refuses is refused
+ * here, nothing written. In the transaction the API layer opened.
  */
 const operate = <E>(accountId: string, decided: (state: ConversationState) => Decided<E>) =>
   Effect.gen(function* () {
@@ -616,14 +615,14 @@ const operate = <E>(accountId: string, decided: (state: ConversationState) => De
       entry = yield* written(accountId, { event, before: state, after, entry })
       state = after
     }
-    return state
+    return { before: loaded.state, after: state }
   })
 
 /** Switches the Mode of the Account's Conversation: the Turns started from then on take it. */
 export const setMode = (accountId: string, mode: Mode) =>
   Effect.map(
     operate(accountId, (state) => decide(state, new SetMode({ mode }))),
-    (state) => state.mode,
+    ({ after }) => after.mode,
   )
 
 /**
@@ -639,20 +638,26 @@ export const draft = (
 ) =>
   Effect.gen(function* () {
     const proposal = crypto.randomUUID()
-    const state = yield* operate(accountId, (locked) =>
+    const { after } = yield* operate(accountId, (locked) =>
       decide(locked, new Draft({ turn: turnId, write, changes }), { proposal }),
     )
-    if (state.open === undefined) return yield* Effect.die(new Error('A draft left no Proposal'))
-    return state.open
+    if (after.open === undefined) return yield* Effect.die(new Error('A draft left no Proposal'))
+    return after.open
   })
 
 /**
- * Accepts the Account's open Proposal of this id, whole: refused `ProposalClosed` when it is open no
- * longer. The API layer runs its writes on the System in the same transaction, after `lockedProposal`,
- * and Assistant records that the user accepted it.
+ * Accepts the Account's open Proposal of this id, whole, and answers it as it stood, its writes for
+ * the API layer to run on the System in the same transaction, which a refusal there rolls back with
+ * the accept: refused `ProposalClosed` when it is open no longer, as `decide` rules.
  */
 export const acceptProposal = (accountId: string, proposal: string) =>
-  Effect.asVoid(operate(accountId, (state) => decide(state, new AcceptProposal({ proposal }))))
+  Effect.flatMap(
+    operate(accountId, (state) => decide(state, new AcceptProposal({ proposal }))),
+    ({ before }) =>
+      before.open === undefined
+        ? Effect.die(new Error('A Proposal was accepted that was not open'))
+        : Effect.succeed(before.open),
+  )
 
 /** Discards the Account's open Proposal of this id: refused `ProposalClosed` when it is open no longer. */
 export const discardProposal = (accountId: string, proposal: string) =>

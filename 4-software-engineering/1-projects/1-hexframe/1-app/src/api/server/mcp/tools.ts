@@ -259,9 +259,8 @@ const createTile = write({
   // An agent sends no id, so Mapping makes it, fresh: a clash on it is a defect, never a refusal
   // to teach (`TileIdTaken` comes only to a caller that chose its id).
   program: (input: typeof NewTileOfAgent.Type) =>
-    Proposal.written(
-      new CreateTile(input),
-      Effect.catchTag(Mapping.createTile(input), 'TileIdTaken', (taken) => Effect.die(taken)),
+    Proposal.written(new CreateTile(input), (operation) =>
+      Effect.catchTag(Mapping.createTile(operation), 'TileIdTaken', (taken) => Effect.die(taken)),
     ),
 })
 
@@ -290,8 +289,7 @@ const editTile = write({
         field.annotate({ description: `${described.body} Left as it is when not given.` }),
     }),
   ),
-  program: (input: typeof TileEdit.Type) =>
-    Proposal.written(new EditTile(input), Mapping.editTile(input)),
+  program: (input: typeof TileEdit.Type) => Proposal.written(new EditTile(input), Mapping.editTile),
 })
 
 const moveTile = write({
@@ -321,8 +319,7 @@ const moveTile = write({
       slot: (field) => field.annotate({ description: described.slot }),
     }),
   ),
-  program: (input: typeof TileMove.Type) =>
-    Proposal.written(new MoveTile(input), Mapping.moveTile(input)),
+  program: (input: typeof TileMove.Type) => Proposal.written(new MoveTile(input), Mapping.moveTile),
 })
 
 const swapTiles = write({
@@ -351,7 +348,7 @@ const swapTiles = write({
     }),
   ),
   program: (input: typeof TileSwap.Type) =>
-    Proposal.written(new SwapTiles(input), Mapping.swapTiles(input)),
+    Proposal.written(new SwapTiles(input), Mapping.swapTiles),
 })
 
 const deleteTile = write({
@@ -375,7 +372,7 @@ const deleteTile = write({
     }),
   ),
   program: (input: typeof TileDelete.Type) =>
-    Proposal.written(new DeleteTile(input), Mapping.deleteTile(input)),
+    Proposal.written(new DeleteTile(input), Mapping.deleteTile),
 })
 
 const createReference = write({
@@ -404,7 +401,7 @@ const createReference = write({
     }),
   ),
   program: (input: typeof NewReference.Type) =>
-    Proposal.written(new CreateReference(input), Mapping.createReference(input)),
+    Proposal.written(new CreateReference(input), Mapping.createReference),
 })
 
 const deleteReference = write({
@@ -427,7 +424,7 @@ const deleteReference = write({
     }),
   ),
   program: (input: typeof ReferenceSlot.Type) =>
-    Proposal.written(new DeleteReference(input), Mapping.deleteReference(input)),
+    Proposal.written(new DeleteReference(input), Mapping.deleteReference),
 })
 
 /** Every tool, in the order an agent lists them: the reads, then a write per operation. */

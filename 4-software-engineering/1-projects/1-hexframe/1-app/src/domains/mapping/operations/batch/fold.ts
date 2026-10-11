@@ -70,6 +70,19 @@ export const fold = (system: System, batch: ReadonlyArray<Batched>): Folded =>
   )
 
 /**
+ * A batch folded over a System whole, as it runs for good: all of it, or refused by the refusal of the
+ * first Operation that no longer applies, the rest of it with it.
+ */
+export const whole = (
+  system: System,
+  batch: ReadonlyArray<Batched>,
+): Result.Result<Folded, Refusal> => {
+  const folded = fold(system, batch)
+  const [first] = folded.left
+  return first === undefined ? Result.succeed(folded) : Result.fail(first.refusal)
+}
+
+/**
  * One more Operation for a batch already folded over a System: decided on the System the batch
  * makes, refused as `decide` refuses it there, a create given `made`, the id of what it makes. Answers
  * it as the batch keeps it, the events it makes, and the System after them.

@@ -6,7 +6,7 @@ import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 import { layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
-import { tileAt } from '../../entities'
+import { fields, foundIn, readOf, tileAt } from '../../entities'
 import * as Mapping from '../../mapping'
 import {
   type Batched,
@@ -20,8 +20,9 @@ import {
 
 // A batch over the Account's System, over PGlite: Operations drafted into it, decided on the System it
 // makes and written nowhere, the Tiles it creates under the ids they were given; reads and files
-// showing it over the System; and the batch run for good, all of it or nothing, refused whole once a
-// Tile it names changed since. The fold itself is `./fold.test.ts`'s.
+// showing it over the System, a read of the System held whole agreeing with the database's; and the
+// batch run for good, all of it or nothing, refused whole once a Tile it names changed since. The fold
+// itself is `./fold.test.ts`'s.
 
 /** Every event the service published since a test last emptied it, in order. */
 const heard: Array<DomainEvent> = []
@@ -186,5 +187,56 @@ layer(TestTiles)('a batch over the System', (it) => {
       expect(yield* Mapping.system(accountId)).toEqual(before)
       expect(heard).toEqual([])
     }),
+  )
+})
+
+layer(TestTiles)('a System held whole', (it) => {
+  it.effect(
+    'reads a System held whole as the database reads it, at every depth, from any Tile',
+    () =>
+      Effect.gen(function* () {
+        const accountId = crypto.randomUUID()
+        const root = (yield* Mapping.system(accountId)).root.id
+        const create = (parent: string, slot: CreateTile['slot'], title: string) =>
+          Effect.map(
+            transactional(
+              Mapping.createTile(accountId, new CreateTile({ parent, slot, ...content(title) })),
+            ),
+            ({ id }) => id,
+          )
+        const work = yield* create(root, 1, 'Work')
+        const team = yield* create(work, 2, 'Team')
+        yield* create(team, { leaf: 3 }, 'Notes')
+        yield* create(root, -1, 'Values')
+        const gone = yield* create(root, 4, 'Gone')
+        const version = (id: string) =>
+          Effect.map(Mapping.system(accountId), (held) => tileAt(held, id)?.version ?? 1)
+        const refer = (slot: -2 | -3, target: string) =>
+          Effect.flatMap(version(root), (parentVersion) =>
+            transactional(
+              Mapping.createReference(
+                accountId,
+                new CreateReference({ parent: root, parentVersion, slot, target }),
+              ),
+            ),
+          )
+        yield* refer(-2, team)
+        yield* refer(-3, gone)
+        yield* transactional(
+          Mapping.deleteTile(accountId, new DeleteTile({ id: gone, version: 1 })),
+        )
+        const held = yield* Mapping.system(accountId)
+        for (const id of [undefined, work, team]) {
+          for (const depth of [0, 1, 2, 3] as const) {
+            const read = yield* Mapping.readTile(accountId, { id, depth, fields, language: 'en' })
+            const found = foundIn(held, { id, depth, fields: { opened: fields, below: fields } })
+            if (found === undefined) throw new Error('The System held whole has no such Tile')
+            expect(
+              readOf(found.opened, { rows: found.rows, depth, pointedAt: found.pointedAt }),
+            ).toEqual(read.tile)
+            expect(found.parent).toEqual(read.parent)
+          }
+        }
+      }),
   )
 })

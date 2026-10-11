@@ -13,6 +13,7 @@ import {
   MoveTile,
   type Operation,
   summariesIn,
+  whole,
 } from '..'
 
 // A batch folded over a System, on Systems made by hand, no database: each Operation decided on what
@@ -110,6 +111,19 @@ describe('fold, a batch over a System', () => {
     expect(() =>
       fold(system, [batched(new CreateTile({ parent: id.root, slot: 2, ...content('Lost') }))]),
     ).toThrow('A batched create lost the id of what it makes')
+  })
+})
+
+describe('whole, a batch as it runs for good', () => {
+  it('folds all of it, or is refused by the first Operation that no longer applies', () => {
+    expect(whole(system, work)).toEqual(Result.succeed(fold(system, work)))
+    const stale = [
+      batched(new EditTile({ id: id.branch, version: 3, title: 'Fine' })),
+      batched(new MoveTile({ id: id.branch, version: 3, parent: id.root, slot: 4 })),
+      batched(new DeleteTile({ id: uuid(), version: 1 })),
+    ]
+    const refused = whole(system, stale)
+    expect(Result.isFailure(refused) && refused.failure._tag).toBe('TileChanged')
   })
 })
 

@@ -10,7 +10,7 @@ import { TestDatabase } from '#/repositories/database/testing'
 
 import {
   acceptProposal,
-  conversationMode,
+  conversationState,
   day,
   discardProposal,
   draft,
@@ -79,13 +79,13 @@ layer(TestLayer)('the Mode and the Proposal, over PGlite', (it) => {
     () =>
       Effect.gen(function* () {
         const { account, turn } = yield* someone
-        expect(yield* conversationMode(account)).toBe('ask')
+        expect((yield* conversationState(account)).mode).toBe('ask')
         const asking = yield* turn('Draft it.')
         expect(asking.mode).toBe('ask')
         expect(yield* route(account, asking.id)).toBe('draft')
 
         expect(yield* transactional(setMode(account, 'apply'))).toBe('apply')
-        expect(yield* conversationMode(account)).toBe('apply')
+        expect((yield* conversationState(account)).mode).toBe('apply')
         // A Turn keeps the Mode it started in.
         expect(yield* route(account, asking.id)).toBe('draft')
         yield* transactional(endTurn(account, asking.id, 'answered'))
@@ -98,7 +98,7 @@ layer(TestLayer)('the Mode and the Proposal, over PGlite', (it) => {
     Effect.gen(function* () {
       const account = crypto.randomUUID()
       yield* transactional(setMode(account, 'apply'))
-      expect(yield* conversationMode(account)).toBe('apply')
+      expect((yield* conversationState(account)).mode).toBe('apply')
       expect(yield* openProposal(account)).toBeUndefined()
     }),
   )

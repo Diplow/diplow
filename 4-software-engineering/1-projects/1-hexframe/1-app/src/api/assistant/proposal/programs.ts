@@ -78,17 +78,18 @@ const drafted = <O extends Operation>(accountId: string, turnId: string, operati
 
 /**
  * A write made through the MCP, routed by what Assistant decides: drafted into the Proposal when a
- * Turn's Key that drafts made it, `apply`, the write's own program, otherwise. The tool table names
- * the Operation and its program, and never asks the Mode.
+ * Turn's Key that drafts made it, `apply`d otherwise, the write's own program given the same
+ * Operation, so the two never part. The tool table names the Operation and its program, and never asks
+ * the Mode.
  */
 export const written = <O extends Operation, A, E, R>(
   operation: O,
-  apply: Effect.Effect<A, E, R>,
+  apply: (operation: O) => Effect.Effect<A, E, R>,
 ) =>
   Effect.gen(function* () {
     const { account, by } = yield* Iam.signedIn
-    if (by._tag !== 'TurnKey') return yield* apply
-    if ((yield* Assistant.route(account.id, by.turnId)) === 'apply') return yield* apply
+    if (by._tag !== 'TurnKey') return yield* apply(operation)
+    if ((yield* Assistant.route(account.id, by.turnId)) === 'apply') return yield* apply(operation)
     return yield* drafted(account.id, by.turnId, operation)
   })
 
@@ -104,37 +105,34 @@ export const setMode = ({ mode }: { readonly mode: Mode }) =>
   forSession((accountId) => transactional(Assistant.setMode(accountId, mode)))
 
 /**
- * The open Proposal of the Account's Conversation as the page follows it, its id and how many writes
- * it holds, none when none is open: what the poll and each day of the Conversation answer, so a draft
- * reads the Conversation again.
+ * The Account's Conversation as the page follows it: its Mode, and its open Proposal by its id and how
+ * many writes it holds, none when none is open, which the poll and each day of the Conversation
+ * answer, so a draft reads the Conversation again. One read.
  */
-export const proposalNow = (accountId: string) =>
-  Effect.map(Assistant.openProposal(accountId), (open) =>
-    open === undefined ? undefined : { id: open.id, drafts: open.drafts.length },
-  )
+export const conversationNow = (accountId: string) =>
+  Effect.map(Assistant.conversationState(accountId), ({ mode, open }) => ({
+    mode,
+    ...(open !== undefined && { proposal: { id: open.id, drafts: open.drafts.length } }),
+  }))
 
 /**
- * Accepts the Account's open Proposal of this id, whole, in one transaction: its writes run by
- * Mapping on the System as it stands, under the Root's lock, all of them or none, each event published
- * as the Assistant's, by the Turn whose write opened it; refused as Mapping refuses the first that no
- * longer applies, a Tile changed since (`TileChanged`, by the Version it names) or gone, nothing
- * written; `ProposalClosed` once it is open no longer.
+ * Accepts the Account's open Proposal of this id, whole, in one transaction: Assistant accepts it,
+ * `ProposalClosed` once it is open no longer, then its writes run by Mapping on the System as it
+ * stands, under the Root's lock, all of them or none, each event published as the Assistant's, by the
+ * Turn whose write opened it; refused as Mapping refuses the first that no longer applies, a Tile
+ * changed since (`TileChanged`, by the Version it names) or gone, the accept rolled back with it.
  */
 export const acceptProposal = ({ proposal }: { readonly proposal: string }) =>
-  forSession((accountId) =>
+  Effect.flatMap(Iam.sessionOnly, ({ account }) =>
     transactional(
       Effect.gen(function* () {
-        const open = yield* Assistant.lockedProposal(accountId)
-        if (open?.id === proposal) {
-          const { account } = yield* Iam.sessionOnly
-          const { conversationId, id } = yield* Assistant.turn(accountId, open.turn)
-          const assistant: Iam.SignedIn = {
-            account,
-            by: { _tag: 'TurnKey', conversationId, turnId: id },
-          }
-          yield* actingAs(assistant)(Mapping.runBatch(accountId, yield* batchOf(open)))
+        const accepted = yield* Assistant.acceptProposal(account.id, proposal)
+        const { conversationId, id } = yield* Assistant.turn(account.id, accepted.turn)
+        const assistant: Iam.SignedIn = {
+          account,
+          by: { _tag: 'TurnKey', conversationId, turnId: id },
         }
-        yield* Assistant.acceptProposal(accountId, proposal)
+        yield* actingAs(assistant)(Mapping.runBatch(account.id, yield* batchOf(accepted)))
         return null
       }),
     ),
