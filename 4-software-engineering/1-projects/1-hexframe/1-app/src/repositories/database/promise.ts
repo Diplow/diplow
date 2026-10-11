@@ -25,7 +25,7 @@ const pool = Effect.acquireRelease(
     })
     pool.on('error', (error) => {
       // A pool callback runs outside any program, so no logger hears it: straight to Sentry, and to the
-      // server's console, as the runtime's own failures go (api/observability/server.ts, `unobserved`).
+      // server's console, as the runtime's own failures go (api/report/observability/server.ts, `unobserved`).
       const tags = { kind: 'Unexpected', code: 'Unexpected', scope: 'databasePool' }
       captureError(error, tags)
       console.error('An idle database connection failed', tags, error.message)

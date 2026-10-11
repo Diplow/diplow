@@ -1,12 +1,25 @@
-// Home: the signed-in Account's System, on the canvas, with the centered Tile's actions and its
-// ancestors beside it. The view and the change under way live in the search params, so a link shows
-// what its sender saw. Signed out, the guard sends the visit to sign-in, then back here.
+// Home: the signed-in Account's System, on the canvas, the centered Tile's ancestors above it and its
+// card below, and the chat beside it, over the Account's Conversation. The view and the change under
+// way live in the search params, so a link shows what its sender saw; a Tile's form opens as a drawer.
+// Every gesture that changes the view is published on the client bus as a navigation fact, which the
+// Conversation's navigation sender merges and records once something else enters the timeline, a
+// Message the chat posts included, or the page is hidden. Signed out, the guard sends the visit to
+// sign-in, then back here. The page follows the System and the Conversation, so a write it did not
+// make, an agent's, a Key's or another tab's, shows on the canvas and in the timeline once the tab
+// regains focus, and every 2 s while a Turn runs. A Message is sent from the view: its center, where
+// the Turn answering it starts unless it opens with a link to a Tile, and the Tiles on screen; a
+// Message's link centers the canvas on its Tile, a gesture as any other.
 import { createFileRoute } from '@tanstack/react-router'
 
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { signedInOnly } from '#/front/client/iam/guard'
+import { useFollowLatest } from '#/front/client/assistant/follow'
 import { useSystem } from '#/front/client/mapping/queries'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
+import { publish } from '#/front/features/bus'
+import { Chat } from '#/front/features/conversation/Chat'
+import { useNavigationSender } from '#/front/features/conversation/state/useNavigationSender'
+import { Navigated } from '#/front/features/facts'
 import {
   readSystemSearch,
   viewOf,
@@ -16,9 +29,10 @@ import {
 } from '#/front/features/system/search/search'
 import { System } from '#/front/features/system/System'
 import { TileActions } from '#/front/features/system/TileActions'
-import { canvasTree } from '#/front/features/system/tree'
+import { canvasTree, onScreen } from '#/front/features/system/tree'
 import { m } from '#/paraglide/messages'
 import { Skeleton } from '#/front/ui/feedback/skeleton'
+import { centerOn, type CanvasView, type ViewAction } from '#/front/ui/hex/view/view'
 
 export const Route = createFileRoute('/')({
   beforeLoad: signedInOnly,
@@ -32,11 +46,39 @@ function Home() {
   const onSearchChange = (next: SearchChange) => {
     void navigate({ search: next })
   }
+  const { turn, mode } = useFollowLatest()
+  // The chat's Messages go after the navigation they follow, from the view they were sent from.
+  const { postMessage } = useNavigationSender()
+  // Outside both boundaries, the System read without throwing for what the chat sends: a failed read
+  // shows on the canvas, in its own boundary, and leaves the chat up, waiting to send.
+  const { data } = useSystem({ throwing: false })
+  const onSend =
+    data === undefined
+      ? undefined
+      : (text: string) => {
+          postMessage({ text, view: onScreen(canvasTree(data.root), viewOf(search)) })
+        }
+  const onCenter = (tile: string) => {
+    if (data === undefined) return
+    onSearchChange(withView(search, centerOn(canvasTree(data.root), tile)))
+    publish(new Navigated({ gesture: 'center', tile }))
+  }
   return (
-    <main className="grid gap-4 px-4 pb-4 lg:h-[calc(100dvh-4.25rem)] lg:grid-cols-[minmax(0,1fr)_18rem]">
+    <main className="grid gap-4 px-4 pb-4 lg:h-[calc(100dvh-4.25rem)] lg:grid-cols-[minmax(0,1fr)_24rem]">
       <h1 className="sr-only">{m.system_title()}</h1>
+      <div className="grid min-h-0 content-start gap-3 lg:grid-rows-[auto_minmax(0,1fr)_auto] lg:content-stretch">
+        <ReadBoundary>
+          <SystemPage search={search} onSearchChange={onSearchChange} />
+        </ReadBoundary>
+      </div>
       <ReadBoundary>
-        <SystemPage search={search} onSearchChange={onSearchChange} />
+        <Chat
+          onSend={onSend}
+          turn={turn}
+          mode={mode}
+          onCenter={onCenter}
+          className="h-[32rem] lg:h-auto lg:min-h-0"
+        />
       </ReadBoundary>
     </main>
   )
@@ -52,32 +94,32 @@ function SystemPage({ search, onSearchChange }: SystemPageProps) {
   if (data === undefined) {
     return (
       <>
+        <Skeleton className="h-5 w-48" />
         <Skeleton className="h-[60dvh] lg:h-full" />
-        <Skeleton className="h-40" />
+        <Skeleton className="h-32" />
       </>
     )
   }
   const { system, root } = data
   const tree = canvasTree(root)
+  const onViewChange = (view: CanvasView, action: ViewAction) => {
+    onSearchChange(withView(search, view))
+    publish(new Navigated(action))
+  }
   return (
     <>
+      <Breadcrumb system={tree} view={viewOf(search)} onViewChange={onViewChange} />
       <System
         system={system}
         tree={tree}
         search={search}
+        onViewChange={onViewChange}
         onSearchChange={onSearchChange}
-        className="h-[80dvh] min-h-0 lg:h-full"
+        className="h-[70dvh] min-h-0 lg:h-full"
       />
-      <aside className="grid content-start gap-4 lg:min-h-0 lg:overflow-y-auto">
+      <div className="lg:max-h-[30dvh] lg:overflow-y-auto">
         <TileActions system={root} tree={tree} search={search} onSearchChange={onSearchChange} />
-        <Breadcrumb
-          system={tree}
-          view={viewOf(search)}
-          onViewChange={(view) => {
-            onSearchChange(withView(search, view))
-          }}
-        />
-      </aside>
+      </div>
     </>
   )
 }

@@ -4,7 +4,12 @@
 // same Direction of the other kind (`useMoveTile`), refused `DirectionTaken`, in a toast, when a Tile
 // of that kind already stands there. The card renders this and calls the action, nothing more.
 import { isVerbatim } from '#/api/mapping/files/download'
-import { holdsNothing, type Slot, type SystemTile } from '#/domains/mapping/entities'
+import {
+  type FoundTile,
+  holdsNothing,
+  type Slot,
+  type SystemTile,
+} from '#/domains/mapping/entities'
 import { useMoveTile } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 
@@ -28,26 +33,30 @@ interface CenteredTileState {
 export function useCenteredTileState(system: SystemTile, id: string): CenteredTileState {
   const move = useMoveTile()
   const found = tileIn(system, id)
-  const act = (parent: SystemTile, label: string, slot: Slot): KindChange => ({
+  const act = (
+    { tile, parent }: { tile: FoundTile; parent: SystemTile },
+    label: string,
+    slot: Slot,
+  ): KindChange => ({
     label,
     pending: move.isPending,
     change: () => {
       // The card shows the Tile of its new kind at once, offering the change back: a second press
       // while the first is on its way, a double click, would undo it, so it does nothing.
-      if (!move.isPending) move.mutate({ id, parent: parent.id, slot })
+      if (!move.isPending) move.mutate({ id, version: tile.version, parent: parent.id, slot })
     },
   })
   switch (found?.kind) {
     case 'leaf':
       return {
         code: isVerbatim(found.tile) ? found.tile.body : undefined,
-        kindChange: act(found.parent, m.system_grow(), found.direction),
+        kindChange: act(found, m.system_grow(), found.direction),
       }
     case 'branch':
       return {
         code: undefined,
         kindChange: holdsNothing(found.tile)
-          ? act(found.parent, m.system_shrink(), { leaf: found.direction })
+          ? act(found, m.system_shrink(), { leaf: found.direction })
           : undefined,
       }
     default:

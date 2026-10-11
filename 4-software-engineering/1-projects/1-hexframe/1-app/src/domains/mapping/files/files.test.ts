@@ -7,7 +7,7 @@ import type { TileRow } from '#/repositories/database/tiles/tiles'
 
 import { helpSystem } from '../help/help'
 import { isSegment, keepsNothing, systemFrom, systemOf } from '../entities'
-import { type File, exportOf } from './files'
+import { type File, exportOf, placesOf } from './files'
 import { yamlOf } from './frontmatter'
 
 // A Tile and everything below it written as files, on a System made by hand from rows, no database:
@@ -21,6 +21,8 @@ const row = (id: string, parentId: string | null, direction: number | null): Til
   title: id,
   preview: `${id}, in short.`,
   body: `# ${id}`,
+  version: 1,
+  systemVersion: 0,
   target: null,
   ...keepsNothing,
 })
@@ -51,8 +53,16 @@ const rows: ReadonlyArray<TileRow> = [
     ...row('games', 'root', 3),
     title: 'Games',
     name: '3-games',
-    // A key an export writes itself, which the Frontmatter schema refuses, never written from a row.
-    frontmatter: { owner: 'diplo', weight: 2, draft: false, constructor: 'kept', reference: 'x' },
+    version: 4,
+    // Keys an export writes itself, which the Frontmatter schema refuses, never written from a row.
+    frontmatter: {
+      owner: 'diplo',
+      weight: 2,
+      draft: false,
+      constructor: 'kept',
+      reference: 'x',
+      version: 9,
+    },
   },
   reference('to-leadership', 'games', -1, 'leadership'),
   reference('to-gone', 'games', -2, 'gone'),
@@ -115,9 +125,9 @@ describe('a System exported whole', () => {
     )
   })
 
-  it('opens each Tile’s file with its id, Title, parent and Preview, then its Body', () => {
+  it('opens each Tile’s file with its id, Title, parent, Preview and Version, then its Body', () => {
     expect(read(files, 'CLAUDE.md')).toMatchObject({
-      fields: { id: 'root', title: 'Ulysse', parent: '.', preview: 'root, in short.' },
+      fields: { id: 'root', title: 'Ulysse', parent: '.', preview: 'root, in short.', version: 1 },
       body: '# root',
     })
     const notes = read(files, '1-leadership/1-notes.md')
@@ -126,6 +136,7 @@ describe('a System exported whole', () => {
       title: 'Notes',
       parent: '1-leadership',
       preview: 'notes, in short.',
+      version: 1,
     })
     expect(read(files, '4-skills/.1-rules/SKILL.md').fields).toMatchObject({
       parent: '4-skills/.1-rules',
@@ -144,12 +155,14 @@ describe('a System exported whole', () => {
       'title',
       'parent',
       'preview',
+      'version',
       'owner',
       'weight',
       'draft',
       'constructor',
     ])
     expect(games.fields).toMatchObject({
+      version: 4,
       owner: 'diplo',
       weight: 2,
       draft: false,
@@ -185,12 +198,13 @@ describe('a System exported whole', () => {
 
   it('keeps every value on its key’s line, a Title holding a line break and `---` included', () => {
     const principles = read(files, '.1-line-one-id-injected/CLAUDE.md')
-    expect(principles.lines).toHaveLength(4)
+    expect(principles.lines).toHaveLength(5)
     expect(principles.fields).toEqual({
       id: 'principles',
       title: injected,
       parent: '.1-line-one-id-injected',
       preview: 'a\u2028---\u2029b',
+      version: 1,
     })
     expect(principles.body).toBe('# principles')
   })
@@ -236,6 +250,85 @@ describe('a Tile exported with what is below it', () => {
   it('is nothing for an id the System does not hold, nor for a Reference', () => {
     expect(exportOf(system, 'gone', link)).toBeUndefined()
     expect(exportOf(system, 'to-leadership', link)).toBeUndefined()
+  })
+})
+
+describe('where each Tile lives in the System’s export', () => {
+  /** The System these rows hold, as a tree. */
+  const systemWith = (rows: ReadonlyArray<TileRow>) => {
+    const held = systemFrom(rows, { owned: true })
+    if (held === undefined) throw new Error('These rows hold a Root')
+    return systemOf(held)
+  }
+
+  /**
+   * Checks every place against the System's export from its Root: a file there, opening with the
+   * Tile's id unless written as its content alone, and saying it hangs in the place's folder.
+   */
+  const checkedAgainstTheExport = (rows: ReadonlyArray<TileRow>) => {
+    const whole = systemWith(rows)
+    const places = placesOf(whole)
+    const files = exportOf(whole, whole.id, link)?.files ?? []
+    for (const [id, { folder, file }] of places) {
+      expect(file.startsWith(folder), id).toBe(true)
+      expect(
+        files.some(({ path }) => path === file),
+        id,
+      ).toBe(true)
+      // A Leaf written as its content alone carries no frontmatter to check its id against.
+      if (!file.endsWith('.md')) continue
+      expect(read(files, file).fields, id).toMatchObject({
+        id,
+        parent: folder === '' ? '.' : folder,
+      })
+    }
+    return places
+  }
+
+  it('is each Tile’s folder and file as the export writes them, Leaves, Context and naming alike', () => {
+    const places = checkedAgainstTheExport(rows)
+    expect(Object.fromEntries(places)).toEqual({
+      root: { folder: '', file: 'CLAUDE.md' },
+      leadership: { folder: '1-leadership', file: '1-leadership/CLAUDE.md' },
+      notes: { folder: '1-leadership', file: '1-leadership/1-notes.md' },
+      json: { folder: '1-leadership', file: '1-leadership/package.json' },
+      games: { folder: '3-games', file: '3-games/CLAUDE.md' },
+      skills: { folder: '4-skills', file: '4-skills/SKILL.md' },
+      'do-ticket': { folder: '4-skills/do-ticket', file: '4-skills/do-ticket/SKILL.md' },
+      rules: { folder: '4-skills/.1-rules', file: '4-skills/.1-rules/SKILL.md' },
+      dots: { folder: '4-skills/.1-rules/tile', file: '4-skills/.1-rules/tile/SKILL.md' },
+      ecoles: {
+        folder: '4-skills/.1-rules/ecoles-francaises',
+        file: '4-skills/.1-rules/ecoles-francaises/SKILL.md',
+      },
+      principles: {
+        folder: '.1-line-one-id-injected',
+        file: '.1-line-one-id-injected/CLAUDE.md',
+      },
+    })
+  })
+
+  it('follows a Tile moved, its kept Name renumbered, and what moved with it', () => {
+    const moved = rows.map((row) =>
+      row.id === 'games'
+        ? { ...row, direction: 5 }
+        : row.id === 'notes'
+          ? { ...row, parentId: 'games' }
+          : row,
+    )
+    const places = checkedAgainstTheExport(moved)
+    expect(places.get('games')).toEqual({ folder: '5-games', file: '5-games/CLAUDE.md' })
+    expect(places.get('notes')).toEqual({ folder: '5-games', file: '5-games/1-notes.md' })
+    expect(places.get('leadership')).toEqual({
+      folder: '1-leadership',
+      file: '1-leadership/CLAUDE.md',
+    })
+  })
+
+  it('has no place for a Reference, nor for an id the System does not hold', () => {
+    const places = placesOf(system)
+    expect(places.has('to-leadership')).toBe(false)
+    expect(places.has('gone')).toBe(false)
   })
 })
 

@@ -66,6 +66,14 @@ export interface Tile extends Content {
  */
 export const TileId = Schema.String.check(Schema.isUUID())
 
+/**
+ * A Tile's Version: how many events touched it, 1 once created. A write to an existing Tile names the
+ * Version it read, and is refused once the Tile changed since (`TileChanged`), so no writer overwrites
+ * what it never saw. Bounded as the column that stores it.
+ */
+export const Version = Schema.Int.check(Schema.isBetween({ minimum: 1, maximum: 2_147_483_647 }))
+export type Version = typeof Version.Type
+
 /** A guard for one of these values, so the guards and the lists above never drift apart. */
 const among =
   <T extends number>(values: ReadonlyArray<T>) =>

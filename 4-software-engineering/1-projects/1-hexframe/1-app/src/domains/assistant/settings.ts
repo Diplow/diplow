@@ -1,0 +1,109 @@
+// The Assistant's settings: one value for every Account, in one place, until credits exist. A limit is
+// read from here, never spread as a constant in code.
+import { Duration } from 'effect'
+
+/**
+ * The kinds of token a model call is priced by: input read from no cache, output, input written to
+ * the cache for five minutes or for an hour, and input read from it.
+ */
+export const tokenKinds = ['input', 'output', 'cacheWrite5m', 'cacheWrite1h', 'cacheRead'] as const
+
+export type TokenKind = (typeof tokenKinds)[number]
+
+/** A model's price per kind of token, in dollars per million, which is millionths of a dollar each. */
+type Price = Readonly<Record<TokenKind, number>>
+
+/**
+ * The models a Turn's agent may call, each at its price: Sonnet 5.5, which the Turn works with, and
+ * Haiku 4.5, the small model Claude Code does its own chores with.
+ */
+const prices = {
+  'claude-sonnet-5-5': {
+    input: 2,
+    output: 10,
+    cacheWrite5m: 2.5,
+    cacheWrite1h: 4,
+    cacheRead: 0.2,
+  },
+  'claude-haiku-4-5': {
+    input: 1,
+    output: 5,
+    cacheWrite5m: 1.25,
+    cacheWrite1h: 2,
+    cacheRead: 0.1,
+  },
+} satisfies Record<string, Price>
+
+export const settings = {
+  turn: {
+    /** The longest a Turn runs, and so the longest its Key proves it: 15 minutes. */
+    longest: Duration.toMillis(Duration.minutes(15)),
+    /** The most a Turn spends on the model, in millionths of a dollar: $1. */
+    ceiling: 1_000_000,
+    /** The model every Turn works with: no picker. */
+    model: 'claude-sonnet-5-5' satisfies keyof typeof prices,
+    /** The small model its agent does its own chores with. */
+    smallModel: 'claude-haiku-4-5' satisfies keyof typeof prices,
+    /** How many of today's latest Entries a Turn's prompt holds. */
+    entries: 50,
+  },
+  month: {
+    /**
+     * The most an Account's Turns spend on the model in a calendar month, UTC, in millionths of a
+     * dollar: $10, until credits exist.
+     */
+    allowance: 10_000_000,
+  },
+  model: {
+    /** The models a Turn's agent may call, each at its price. */
+    prices,
+    /** The most tokens a call may answer: a call asking for more is sent asking for this many. */
+    maxTokens: 32_000,
+    /**
+     * The most bytes a call's body holds, Anthropic's own limit on a request: the proxy reads no
+     * further, and refuses the call.
+     */
+    largestCall: 32 * 1024 * 1024,
+    /**
+     * The fields a call's body may hold, every other refused: no `mcp_servers`, no `container`, no
+     * `fallbacks`, no `speed`, nothing that reaches past the model or changes its price.
+     */
+    fields: [
+      'model',
+      'messages',
+      'system',
+      'tools',
+      'tool_choice',
+      'max_tokens',
+      'metadata',
+      'stream',
+      'temperature',
+      'stop_sequences',
+      'thinking',
+      'output_config',
+      'context_management',
+    ],
+    /**
+     * The edits of its context a call may ask for under `context-management`, every other refused:
+     * old tool results cleared, old thinking cleared. Never a compaction, which calls the model again.
+     */
+    contextEdits: ['clear_tool_uses_20250919', 'clear_thinking_20251015'],
+    /**
+     * The betas a call may name in `anthropic-beta`, every other refused: Claude Code's own, and
+     * those that change neither what the model reaches nor its price.
+     */
+    betas: [
+      'claude-code-20250219',
+      'interleaved-thinking-2025-05-14',
+      'context-management-2025-06-27',
+      'effort-2025-11-24',
+      'prompt-caching-scope-2026-01-05',
+      'extended-cache-ttl-2025-04-11',
+      'token-counting-2024-11-01',
+      'structured-outputs-2025-12-15',
+      'mid-conversation-system-2026-04-07',
+      'thinking-display-updates-2026-08-18',
+      'redact-thinking-2026-02-12',
+    ],
+  },
+} as const

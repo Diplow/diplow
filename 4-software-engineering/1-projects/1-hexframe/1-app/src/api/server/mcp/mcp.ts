@@ -15,9 +15,9 @@ import { Schema } from 'effect'
 import * as Iam from '#/domains/iam/iam'
 import { helpRoot } from '#/domains/mapping/mapping'
 
-import { decodeFailure, type EncodedFailure, type Failure } from '../../errors/failure'
-import { messageFor } from '../../errors/messages'
-import { noSession, provenKey, run, waitUntilOf, type StartContext } from '../run'
+import { decodeFailure, type EncodedFailure, type Failure } from '../../report/errors/failure'
+import { messageFor } from '../../report/errors/messages'
+import { bearerOnly, noSession, provenKey, run, waitUntilOf, type StartContext } from '../run'
 import { tools, type Tool } from './tools'
 
 const implementation = { name: 'hexframe', version: '1.0.0' }
@@ -33,14 +33,6 @@ const instructions = [
 const inputs = new Map(
   tools.map((tool) => [tool, Schema.toStandardJSONSchemaV1(Schema.toStandardSchemaV1(tool.input))]),
 )
-
-/** What the door passes on of a request: where it was sent and its Bearer Key; never a cookie. */
-function exchangeOf(request: Request): StartContext['exchange'] {
-  const headers = new Headers()
-  const authorization = request.headers.get('authorization')
-  if (authorization !== null) headers.set('authorization', authorization)
-  return { url: request.url, headers, setCookies: () => undefined }
-}
 
 interface Refusal {
   readonly failure: EncodedFailure<Failure>
@@ -139,7 +131,7 @@ const handler = createMcpHandler(
  * proves nothing for before reading its body; then hands the request to the SDK.
  */
 export async function serveMcp(request: Request): Promise<Response> {
-  const exchange = exchangeOf(request)
+  const exchange = bearerOnly(request)
   const context: StartContext = {
     requestId: crypto.randomUUID(),
     scope: 'mcp',

@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import * as Iam from '#/domains/iam/iam'
 import { browser, keyClient } from '#/repositories/auth/testing'
 
-import type { Failure } from '../errors/failure'
+import type { Failure } from '../report/errors/failure'
 import { noKey, run, type Services, type StartContext } from '../server/run'
 import { Credentials, KeyId, KeyName } from './iam'
 

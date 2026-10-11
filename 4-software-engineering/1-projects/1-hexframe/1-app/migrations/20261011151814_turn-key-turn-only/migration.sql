@@ -1,0 +1,1 @@
+ALTER TABLE "turn_key" DROP COLUMN "conversation_id";

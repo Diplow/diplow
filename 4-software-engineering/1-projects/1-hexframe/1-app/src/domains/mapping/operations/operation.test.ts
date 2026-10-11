@@ -15,7 +15,8 @@ import {
 
 // Mapping's Operations as data: each decodes by its tag from what a caller sends, and refuses what
 // Mapping's server functions refused before they took an Operation's fields: a slot out of its six,
-// a Reference outside the Context, an id that is no UUID, a string past its bound.
+// a Reference outside the Context, an id that is no UUID, a string past its bound, a write to an
+// existing Tile without the Version its writer read.
 
 /** Whether an Operation decodes from this, as a caller would send it. */
 const decodes = (input: unknown) => Option.isSome(Schema.decodeUnknownOption(Operation)(input))
@@ -29,12 +30,12 @@ describe("Mapping's Operations", () => {
     const decode = Schema.decodeUnknownSync(Operation)
     const given = [
       { _tag: 'CreateTile', parent: p, slot: 1, ...content },
-      { _tag: 'EditTile', id: t, title: 'Renamed' },
-      { _tag: 'MoveTile', id: t, parent: p, slot: { leaf: 2 } },
-      { _tag: 'SwapTiles', a: t, b: p },
-      { _tag: 'DeleteTile', id: t },
-      { _tag: 'CreateReference', parent: p, slot: -3, target: t },
-      { _tag: 'DeleteReference', parent: p, slot: -3 },
+      { _tag: 'EditTile', id: t, version: 1, title: 'Renamed' },
+      { _tag: 'MoveTile', id: t, version: 1, parent: p, slot: { leaf: 2 } },
+      { _tag: 'SwapTiles', a: t, aVersion: 1, b: p, bVersion: 2 },
+      { _tag: 'DeleteTile', id: t, version: 3 },
+      { _tag: 'CreateReference', parent: p, parentVersion: 1, slot: -3, target: t },
+      { _tag: 'DeleteReference', parent: p, parentVersion: 1, slot: -3 },
     ]
     const classes = [
       CreateTile,
@@ -58,32 +59,58 @@ describe("Mapping's Operations", () => {
     expect(slots.map((slot) => decodes(at(slot)))).toEqual(slots.map(() => true))
     const outside = [0, 7, -7, 1.5, { leaf: 0 }, { leaf: 7 }, { leaf: -1 }, { leaf: '1' }]
     expect(outside.map((slot) => decodes(at(slot)))).toEqual(outside.map(() => false))
-    expect(decodes({ _tag: 'MoveTile', id: t, parent: p, slot: 9 })).toBe(false)
+    expect(decodes({ _tag: 'MoveTile', id: t, version: 1, parent: p, slot: 9 })).toBe(false)
   })
 
   it('put a Reference in a Context slot only', () => {
-    expect(decodes({ _tag: 'CreateReference', parent: p, slot: 3, target: t })).toBe(false)
-    expect(decodes({ _tag: 'CreateReference', parent: p, slot: { leaf: 3 }, target: t })).toBe(
-      false,
-    )
-    expect(decodes({ _tag: 'DeleteReference', parent: p, slot: 3 })).toBe(false)
+    expect(
+      decodes({ _tag: 'CreateReference', parent: p, parentVersion: 1, slot: 3, target: t }),
+    ).toBe(false)
+    expect(
+      decodes({
+        _tag: 'CreateReference',
+        parent: p,
+        parentVersion: 1,
+        slot: { leaf: 3 },
+        target: t,
+      }),
+    ).toBe(false)
+    expect(decodes({ _tag: 'DeleteReference', parent: p, parentVersion: 1, slot: 3 })).toBe(false)
   })
 
   it('name every Tile by a UUID, and only by one: no Help id, no other text', () => {
     for (const id of ['', 't', 'help', 'help/3', 'x'.repeat(36), `${t}x`]) {
-      expect(decodes({ _tag: 'DeleteTile', id })).toBe(false)
-      expect(decodes({ _tag: 'SwapTiles', a: t, b: id })).toBe(false)
-      expect(decodes({ _tag: 'CreateReference', parent: p, slot: -1, target: id })).toBe(false)
+      expect(decodes({ _tag: 'DeleteTile', id, version: 1 })).toBe(false)
+      expect(decodes({ _tag: 'SwapTiles', a: t, aVersion: 1, b: id, bVersion: 1 })).toBe(false)
+      expect(
+        decodes({ _tag: 'CreateReference', parent: p, parentVersion: 1, slot: -1, target: id }),
+      ).toBe(false)
     }
-    expect(() => new MoveTile({ id: 'help/3', parent: p, slot: 2 })).toThrow()
+    expect(() => new MoveTile({ id: 'help/3', version: 1, parent: p, slot: 2 })).toThrow()
+  })
+
+  it('require the Version its writer read of each existing Tile, a whole number from 1', () => {
+    const versioned = [
+      { _tag: 'EditTile', id: t },
+      { _tag: 'MoveTile', id: t, parent: p, slot: 2 },
+      { _tag: 'SwapTiles', a: t, b: p, bVersion: 1 },
+      { _tag: 'DeleteTile', id: t },
+      { _tag: 'CreateReference', parent: p, slot: -3, target: t },
+      { _tag: 'DeleteReference', parent: p, slot: -3 },
+    ]
+    expect(versioned.map(decodes)).toEqual(versioned.map(() => false))
+    for (const version of [0, -1, 1.5, '2', 2_147_483_648]) {
+      expect(decodes({ _tag: 'DeleteTile', id: t, version })).toBe(false)
+    }
+    expect(decodes({ _tag: 'DeleteTile', id: t, version: 2_147_483_647 })).toBe(true)
   })
 
   it('bound every string, a Preview in UTF-16 units far above the 350 characters Mapping counts', () => {
-    expect(decodes({ _tag: 'EditTile', id: t })).toBe(true)
-    expect(decodes({ _tag: 'EditTile', id: t, body: 'x'.repeat(100_000) })).toBe(true)
-    expect(decodes({ _tag: 'EditTile', id: t, body: 'x'.repeat(100_001) })).toBe(false)
-    expect(decodes({ _tag: 'EditTile', id: t, preview: 'x'.repeat(8_000) })).toBe(true)
-    expect(decodes({ _tag: 'EditTile', id: t, preview: 'x'.repeat(8_001) })).toBe(false)
+    expect(decodes({ _tag: 'EditTile', id: t, version: 1 })).toBe(true)
+    expect(decodes({ _tag: 'EditTile', id: t, version: 1, body: 'x'.repeat(100_000) })).toBe(true)
+    expect(decodes({ _tag: 'EditTile', id: t, version: 1, body: 'x'.repeat(100_001) })).toBe(false)
+    expect(decodes({ _tag: 'EditTile', id: t, version: 1, preview: 'x'.repeat(8_000) })).toBe(true)
+    expect(decodes({ _tag: 'EditTile', id: t, version: 1, preview: 'x'.repeat(8_001) })).toBe(false)
     const titled = (title: string) => ({
       _tag: 'CreateTile',
       parent: p,

@@ -7,7 +7,7 @@ import { HttpExchange } from '#/repositories/auth/auth'
 
 import { DevConflict, DevInvalid } from '../dev/failures'
 import { WaitUntil } from './bus'
-import { noKey, RequestContext, run, type StartContext } from './run'
+import { bodyOf, noKey, RequestContext, run, type StartContext } from './run'
 
 // A signed-out request.
 const context: StartContext = {
@@ -145,14 +145,14 @@ describe('the server function helper', () => {
   it('sends Unexpected, and hands the cause to `unobserved`, when the runtime cannot be built', async () => {
     const unobserved = vi.fn<(cause: Cause.Cause<unknown>, request: StartContext) => void>()
     vi.resetModules()
-    vi.doMock('../observability/server', async (original) => ({
+    vi.doMock('../report/observability/server', async (original) => ({
       ...(await original<object>()),
       observability: Layer.effectDiscard(Effect.die(new Error('a layer could not be built'))),
       unobserved,
     }))
     const fresh = await import('./run')
     const outcome = await fresh.run(context, Effect.succeed('never reached'))
-    vi.doUnmock('../observability/server')
+    vi.doUnmock('../report/observability/server')
     expect(outcome).toEqual({
       ok: false,
       failure: { _tag: 'Unexpected', kind: 'Unexpected' },
@@ -174,5 +174,54 @@ describe('the server function helper', () => {
       ok: false,
       failure: { _tag: 'Unexpected' },
     })
+  })
+})
+
+describe('a body a door reads', () => {
+  /** A POST whose body comes as this stream, a chunk at a time. */
+  const streamed = (body: ReadableStream<Uint8Array>, headers: Record<string, string> = {}) =>
+    new Request('http://localhost/door', {
+      method: 'POST',
+      headers,
+      body,
+      duplex: 'half',
+    } as RequestInit)
+
+  it('reads a body within the longest whole, and none as empty', async () => {
+    const posted = new Request('http://localhost/door', { method: 'POST', body: 'héllo' })
+    expect(await bodyOf(posted, 6)).toEqual({ _tag: 'Read', text: 'héllo' })
+    expect(await bodyOf(new Request('http://localhost/door'), 6)).toEqual({
+      _tag: 'Read',
+      text: '',
+    })
+  })
+
+  it('refuses a body past the longest, in bytes: unread when its length says so, read no further otherwise', async () => {
+    const declared = new Request('http://localhost/door', {
+      method: 'POST',
+      headers: { 'content-length': '7' },
+      body: 'héllo!',
+    })
+    expect(await bodyOf(declared, 6)).toEqual({ _tag: 'TooLarge' })
+    expect(declared.bodyUsed).toBe(false)
+
+    let pulled = 0
+    const endless = new ReadableStream<Uint8Array>({
+      pull: (controller) => {
+        pulled += 1
+        controller.enqueue(new Uint8Array(4))
+      },
+    })
+    expect(await bodyOf(streamed(endless), 10)).toEqual({ _tag: 'TooLarge' })
+    expect(pulled).toBeLessThanOrEqual(5)
+  })
+
+  it('answers a body cut off on the way Broken, never a rejection', async () => {
+    const cut = new ReadableStream<Uint8Array>({
+      pull: (controller) => {
+        controller.error(new Error('the client went away'))
+      },
+    })
+    expect(await bodyOf(streamed(cut), 10)).toEqual({ _tag: 'Broken' })
   })
 })

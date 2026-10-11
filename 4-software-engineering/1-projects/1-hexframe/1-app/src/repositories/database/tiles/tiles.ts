@@ -14,7 +14,9 @@ import { type FrontmatterColumn, type TileConfigColumn, tile } from '../schema'
 /**
  * One row of the `tile` table, as the Account that owns it reads it. A Root has no parent and no
  * direction; a row with a `target` is a Reference to the row of that id. `name`, `config` and
- * `frontmatter` are what an imported file carried, null when it carried nothing.
+ * `frontmatter` are what an imported file carried, null when it carried nothing. `version` is the
+ * Tile's Version, 1 once added, which Mapping decides and a change writes; `systemVersion`, on the
+ * Root's row, the System's, 0 once added, which a change writes too, and 0 on every other row.
  */
 export interface TileRow {
   readonly id: string
@@ -27,6 +29,8 @@ export interface TileRow {
   readonly name: string | null
   readonly config: TileConfigColumn | null
   readonly frontmatter: FrontmatterColumn | null
+  readonly version: number
+  readonly systemVersion: number
 }
 
 /** The columns keeping what an imported file carried: null when it carried nothing. */
@@ -36,10 +40,13 @@ type KeptColumn = 'name' | 'config' | 'frontmatter'
 export type ContentColumn = 'title' | 'preview' | 'body'
 
 /**
- * A row as a read from one Tile gives it: where it stands, whether it is a Reference, and only the
- * content columns asked. Mapping shapes it (`domains/mapping/entities/rows.ts`).
+ * A row as a read from one Tile gives it: where it stands, whether it is a Reference, its Version, and
+ * only the content columns asked. Mapping shapes it (`domains/mapping/entities/rows.ts`).
  */
-export type TileRowWith<C extends ContentColumn> = Omit<TileRow, ContentColumn | KeptColumn> &
+export type TileRowWith<C extends ContentColumn> = Omit<
+  TileRow,
+  ContentColumn | KeptColumn | 'systemVersion'
+> &
   Pick<TileRow, C>
 
 /** What a read from one row asks of each: the content columns of that row, and of the rows below it. */
@@ -54,8 +61,11 @@ export interface Generations<O extends ContentColumn, C extends ContentColumn> {
   readonly below: ReadonlyArray<TileRowWith<C>>
 }
 
-/** A row to add under a parent, keeping what an imported file carried or not. */
-type NewTileRow = Omit<TileRow, 'id' | 'parentId' | 'direction' | KeptColumn> &
+/** A row to add under a parent, keeping what an imported file carried or not, at Version 1. */
+type NewTileRow = Omit<
+  TileRow,
+  'id' | 'parentId' | 'direction' | 'version' | 'systemVersion' | KeptColumn
+> &
   Partial<Pick<TileRow, KeptColumn>> & {
     readonly parentId: string
     readonly direction: number
@@ -100,10 +110,13 @@ export interface Writes {
   readonly insertAll: (
     rows: ReadonlyArray<BatchRow>,
   ) => Effect.Effect<ReadonlyMap<string, string>, never, InTransaction>
-  /** Changes the columns given; with none, writes nothing. */
+  /**
+   * Changes the columns given, and always the Version Mapping decided for the row, so no change to a
+   * Tile leaves its Version behind.
+   */
   readonly update: (
     id: string,
-    changes: Partial<Omit<NewTileRow, 'target'>>,
+    changes: Partial<Omit<NewTileRow, 'target'>> & Pick<TileRow, 'version'>,
   ) => Effect.Effect<void, never, InTransaction>
   /** Deletes a row and every row below it. */
   readonly remove: (id: string) => Effect.Effect<void, never, InTransaction>
@@ -112,6 +125,8 @@ export interface Writes {
    * direction. Neither may be the Root, nor lie below the other: Mapping checks it first.
    */
   readonly swap: (a: string, b: string) => Effect.Effect<void, never, InTransaction>
+  /** Sets the System's Version, on its Root's row, to the one Mapping decided after a change. */
+  readonly setSystemVersion: (version: number) => Effect.Effect<void, never, InTransaction>
 }
 
 export class Tiles extends Context.Service<
@@ -125,6 +140,11 @@ export class Tiles extends Context.Service<
       accountId: string,
       root: Pick<TileRow, ContentColumn>,
     ) => Effect.Effect<ReadonlyArray<TileRow>>
+    /**
+     * The `system_version` of the Account's Root's row, read alone, `undefined` for an Account
+     * without a Root.
+     */
+    readonly systemVersion: (accountId: string) => Effect.Effect<number | undefined>
     /** The id of the Account's Root, added first with the content given when it has none. */
     readonly root: (accountId: string, root: Pick<TileRow, ContentColumn>) => Effect.Effect<string>
     /**
@@ -171,6 +191,12 @@ const placeColumns = {
   target: tile.target,
 }
 
+/** How many events touched a Tile: what a write names to be refused once the Tile changed since. */
+const versionColumns = { version: tile.version }
+
+/** How many events changed the System: on its Root's row, read with every row of a System. */
+const systemVersionColumns = { systemVersion: tile.systemVersion }
+
 /** What a Tile says. */
 const contentColumns = { title: tile.title, preview: tile.preview, body: tile.body }
 
@@ -185,7 +211,13 @@ const contentColumnsOf = <C extends ContentColumn>(asked: ReadonlyArray<C>) =>
 /** What an imported file carried. */
 const keptColumns = { name: tile.name, config: tile.config, frontmatter: tile.frontmatter }
 
-const columns = { ...placeColumns, ...contentColumns, ...keptColumns }
+const columns = {
+  ...placeColumns,
+  ...versionColumns,
+  ...systemVersionColumns,
+  ...contentColumns,
+  ...keptColumns,
+}
 
 /** The rows standing under another, for a row to find what lies below it. */
 const under = alias(tile, 'under')
@@ -308,13 +340,11 @@ const make = Effect.gen(function* () {
       ),
     update: (id, changes) =>
       inTransaction(
-        Object.keys(changes).length === 0
-          ? Effect.void
-          : database
-              .update(tile)
-              .set(changes)
-              .where(and(ofAccount(accountId), eq(tile.id, id)))
-              .pipe(Effect.asVoid, Effect.orDie),
+        database
+          .update(tile)
+          .set(changes)
+          .where(and(ofAccount(accountId), eq(tile.id, id)))
+          .pipe(Effect.asVoid, Effect.orDie),
       ),
     remove: (id) =>
       inTransaction(
@@ -324,6 +354,14 @@ const make = Effect.gen(function* () {
           .pipe(Effect.asVoid, Effect.orDie),
       ),
     swap: (a, b) => inTransaction(swapRows(database, accountId, a, b)),
+    setSystemVersion: (version) =>
+      inTransaction(
+        database
+          .update(tile)
+          .set({ systemVersion: version })
+          .where(rootOf(accountId))
+          .pipe(Effect.asVoid, Effect.orDie),
+      ),
   })
 
   const ensureRoot = (accountId: string, root: Pick<TileRow, ContentColumn>) =>
@@ -340,7 +378,7 @@ const make = Effect.gen(function* () {
     columns: ReadonlyArray<C>,
   ): Effect.Effect<ReadonlyArray<TileRowWith<C>>> =>
     database
-      .select({ ...placeColumns, ...contentColumnsOf(columns) })
+      .select({ ...placeColumns, ...versionColumns, ...contentColumnsOf(columns) })
       .from(tile)
       .where(and(ofAccount(accountId), where))
       .pipe(Effect.orDie)
@@ -387,6 +425,15 @@ const make = Effect.gen(function* () {
 
   return Tiles.of({
     read: (accountId, root) => Effect.andThen(ensureRoot(accountId, root), rowsOf(accountId)),
+    systemVersion: (accountId) =>
+      database
+        .select(systemVersionColumns)
+        .from(tile)
+        .where(rootOf(accountId))
+        .pipe(
+          Effect.orDie,
+          Effect.map(([found]) => found?.systemVersion),
+        ),
     root,
     generationsFrom,
     ofIds,

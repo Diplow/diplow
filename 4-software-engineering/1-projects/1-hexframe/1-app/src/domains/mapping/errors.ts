@@ -17,6 +17,15 @@ export class TileIdTaken extends Schema.TaggedError<TileIdTaken>()('TileIdTaken'
   kind: kind('Conflict'),
 }) {}
 
+/**
+ * The Tile a write names changed since its writer read it: its Version is no longer the one the write
+ * carries, whoever changed it meanwhile. Nothing is written; the writer reads the Tile again, then
+ * writes from what it read, so it never overwrites what it never saw.
+ */
+export class TileChanged extends Schema.TaggedError<TileChanged>()('TileChanged', {
+  kind: kind('Conflict'),
+}) {}
+
 /** A Tile's Title is empty. */
 export class TitleMissing extends Schema.TaggedError<TitleMissing>()('TitleMissing', invalid) {}
 
@@ -61,6 +70,15 @@ export class MovedUnderItself extends Schema.TaggedError<MovedUnderItself>()('Mo
  * Leaf grows into a Branch, and a Branch with nothing below it shrinks into a Leaf, by moving.
  */
 export class LeafHoldsNothing extends Schema.TaggedError<LeafHoldsNothing>()('LeafHoldsNothing', {
+  kind: kind('Conflict'),
+}) {}
+
+/**
+ * A batch no longer applies whole to the System: a Tile one of its Operations names changed or went
+ * since it was added, so it neither runs nor takes another Operation. Nothing is written; whoever
+ * keeps the batch drops it, and batches again from the System as it stands.
+ */
+export class BatchOutdated extends Schema.TaggedError<BatchOutdated>()('BatchOutdated', {
   kind: kind('Conflict'),
 }) {}
 
@@ -137,9 +155,11 @@ export const mappingFailures = [
   NameInvalid,
   DirectionTaken,
   TileIdTaken,
+  TileChanged,
   MovedUnderItself,
   LeafHoldsNothing,
   RootFixed,
   HelpReadOnly,
+  BatchOutdated,
   ImportRefused,
 ] as const

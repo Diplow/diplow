@@ -28,8 +28,8 @@ import * as Mapping from './programs'
 const input = <F extends Schema.Struct.Fields>({ fields }: { readonly fields: F }) =>
   Schema.Struct(Struct.omit(fields, ['_tag']))
 
-/** A Tile, by its id. */
-export const TileRef = Schema.Struct({ id: TileId })
+/** The Tile an export zips, by its id. */
+export const TileExport = Schema.Struct({ id: TileId })
 
 /**
  * A new Tile, in a free slot under a Tile of the System: a Branch, a Leaf or a Context Tile, under
@@ -105,7 +105,7 @@ export const help = createServerFn({ method: 'GET' })
  * which Vercel caps a buffered answer still downloads; a failure answers as any server function's.
  */
 export const exportTile = createServerFn({ method: 'GET' })
-  .validator(Schema.toStandardSchemaV1(TileRef))
+  .validator(Schema.toStandardSchemaV1(TileExport))
   .handler(async ({ data, context }) => asDownload(await run(context, Mapping.exportTile(data))))
 
 /**

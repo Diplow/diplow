@@ -58,16 +58,33 @@ interface Delivery {
 }
 
 /**
- * Who acted, as the request proves it, by IAM's rule: none outside a request, or when nothing proves
- * it.
+ * Who a program acts as, when it is not who the request proves: the Assistant, by the Turn whose
+ * writes a user accepted, for the changes an accepted Proposal makes (`actingAs`).
+ */
+class ActingAs extends Context.Service<ActingAs, SignedIn>()('hexframe/ActingAs') {}
+
+/**
+ * Runs a program as `signedIn` acted, for the bus: each event it publishes rides in an envelope saying
+ * so, whoever the request proves. It proves nothing: IAM still reads the request's own proofs.
+ */
+export const actingAs =
+  (signedIn: SignedIn) =>
+  <A, E, R>(program: Effect.Effect<A, E, R>): Effect.Effect<A, E, Exclude<R, ActingAs>> =>
+    Effect.provideService(program, ActingAs, signedIn)
+
+/**
+ * Who acted, as the request proves it, by IAM's rule, unless the program acts as another
+ * (`actingAs`): none outside a request, or when nothing proves it.
  */
 const actor = Effect.gen(function* () {
+  const acting = yield* Effect.serviceOption(ActingAs)
+  if (Option.isSome(acting)) return acting
   const session = yield* Effect.serviceOption(CurrentSession)
   const key = yield* Effect.serviceOption(CurrentKey)
   return signedInBy(Option.flatten(session), Option.flatten(key))
 })
 
-// A bus message is logged at `medium` (../observability/levels.ts), by its tag, never its fields.
+// A bus message is logged at `medium` (../report/observability/levels.ts), by its tag, never its fields.
 const logged = (message: string) =>
   Effect.annotateLogs(Effect.log(message), { bus: 'server', topic: 'bus' })
 

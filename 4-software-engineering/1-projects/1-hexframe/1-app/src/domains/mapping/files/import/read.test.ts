@@ -51,7 +51,10 @@ function faultsOf(source: ImportSource): ReadonlyArray<ImportFault> {
 
 describe('a vault folder, read as the shape reads it', () => {
   const vault = folder([
-    file('CLAUDE.md', note('id: old\ntitle: Ulysse\npreview: Who I am.\nowner: diplo', '# Me\n')),
+    file(
+      'CLAUDE.md',
+      note('id: old\ntitle: Ulysse\npreview: Who I am.\nversion: 7\nowner: diplo', '# Me\n'),
+    ),
     file('1-leadership/CLAUDE.md', note('title: Leadership\npreview: Leading.', 'Lead.')),
     file('notes/todo.md', '# To do, no frontmatter\r\nkept as written'),
     file('STACK.md', note('title: Stack\npreview: The stack.\nweight: 2\ndraft: false')),
@@ -128,9 +131,10 @@ describe('a vault folder, read as the shape reads it', () => {
     expect(Object.keys(root.context)).toEqual(['-1', '-2'])
   })
 
-  it('ignores the `id` a file carries and every key an export writes itself, keeping the rest', () => {
+  it('ignores the `id` and the `version` a file carries, every key an export writes itself, keeping the rest', () => {
     const root = rootOf(vault)
     expect(root).not.toHaveProperty('id')
+    expect(root).not.toHaveProperty('version')
     expect(root.frontmatter).toEqual({ owner: 'diplo' })
   })
 })

@@ -4,8 +4,8 @@ import { cleanup, renderHook, waitFor } from '@testing-library/react'
 import { createElement, type ReactNode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { decodeFailure } from '#/api/errors/failure'
-import { messageFor } from '#/api/errors/messages'
+import { decodeFailure } from '#/api/report/errors/failure'
+import { messageFor } from '#/api/report/errors/messages'
 import { issueKey, keys, revokeKey } from '#/api/iam/iam'
 
 import { CallFailed } from '../calls'

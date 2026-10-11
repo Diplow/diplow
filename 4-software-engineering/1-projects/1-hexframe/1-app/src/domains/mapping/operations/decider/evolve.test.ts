@@ -14,12 +14,14 @@ import {
   TileDeleted,
   TileEdited,
   TileMoved,
+  TilesImported,
   TilesSwapped,
 } from '..'
 
 // A System after each of Mapping's events, on Systems made by hand, no database: each event changes
-// what it says and nothing else, and one naming what the System doesn't hold changes nothing. That the
-// database ends where `evolve` says is `../../agreement.test.ts`'s.
+// what it says and nothing else, one naming what the System doesn't hold changes none of its Tiles,
+// and every one counts on the System's Version. That the database ends where `evolve` says is
+// `./agreement.test.ts`'s.
 
 const placed = (id: string, parent: string, slot: Slot): PlacedTile => ({
   _tag: 'Tile',
@@ -27,6 +29,7 @@ const placed = (id: string, parent: string, slot: Slot): PlacedTile => ({
   title: id,
   preview: `${id}, in short.`,
   body: `# ${id}`,
+  version: 1,
   parent,
   slot,
 })
@@ -34,7 +37,7 @@ const placed = (id: string, parent: string, slot: Slot): PlacedTile => ({
 // The Root holds a Branch in Direction 1, which holds a Child in Direction 2 and, in -1, a Reference
 // to the Root; a Leaf in Direction 1; and in -2 a Reference to the Child.
 const system: System = {
-  root: { _tag: 'Tile', id: 'root', title: 'Ada', preview: '', body: '' },
+  root: { _tag: 'Tile', id: 'root', title: 'Ada', preview: '', body: '', version: 1 },
   tiles: {
     branch: placed('branch', 'root', 1),
     child: placed('child', 'branch', 2),
@@ -43,6 +46,7 @@ const system: System = {
     across: { _tag: 'Reference', id: 'across', parent: 'root', slot: -2, target: 'child' },
   },
   owned: true,
+  version: 0,
 }
 
 const after = (...events: ReadonlyArray<MappingEvent>) => events.reduce(evolve, system)
@@ -61,6 +65,7 @@ describe('evolve, a System after one of its events', () => {
       }),
       new ReferenceCreated({ id: 'link', parent: 'new', slot: -3, target: 'leaf' }),
     )
+    // Created at Version 1, then counted once more by the Reference taking one of its Context slots.
     expect(created.tiles.new).toEqual({
       _tag: 'Tile',
       id: 'new',
@@ -70,6 +75,7 @@ describe('evolve, a System after one of its events', () => {
       preview: '',
       body: 'Body',
       name: 'new.md',
+      version: 2,
     })
     expect(created.tiles.link).toEqual({
       _tag: 'Reference',
@@ -86,18 +92,19 @@ describe('evolve, a System after one of its events', () => {
       new TileEdited({ id: 'root', title: 'Ada Lovelace' }),
       new TileEdited({ id: 'child', preview: '', body: 'New body' }),
     )
-    expect(edited.root).toEqual({ ...system.root, title: 'Ada Lovelace' })
+    expect(edited.root).toEqual({ ...system.root, title: 'Ada Lovelace', version: 2 })
     expect(edited.tiles.child).toEqual({
       ...placed('child', 'branch', 2),
       preview: '',
       body: 'New body',
+      version: 2,
     })
     expect(edited.tiles.branch).toBe(system.tiles.branch)
   })
 
   it('moves a Tile, and what stands below it follows, still under it', () => {
     const moved = after(new TileMoved({ id: 'branch', parent: 'root', slot: -5 }))
-    expect(moved.tiles.branch).toMatchObject({ parent: 'root', slot: -5 })
+    expect(moved.tiles.branch).toMatchObject({ parent: 'root', slot: -5, version: 2 })
     expect(moved.tiles.child).toBe(system.tiles.child)
     expect(systemOf(moved).context[-5]).toMatchObject({
       id: 'branch',
@@ -107,13 +114,13 @@ describe('evolve, a System after one of its events', () => {
 
   it('trades two Tiles’ places, each with what stands below it', () => {
     const swapped = after(new TilesSwapped({ a: 'branch', b: 'leaf' }))
-    expect(swapped.tiles.branch).toMatchObject({ parent: 'root', slot: { leaf: 1 } })
-    expect(swapped.tiles.leaf).toMatchObject({ parent: 'root', slot: 1 })
+    expect(swapped.tiles.branch).toMatchObject({ parent: 'root', slot: { leaf: 1 }, version: 2 })
+    expect(swapped.tiles.leaf).toMatchObject({ parent: 'root', slot: 1, version: 2 })
     expect(swapped.tiles.child).toBe(system.tiles.child)
   })
 
   it('deletes a Tile with everything below it, and leaves a Reference to them elsewhere broken', () => {
-    const deleted = after(new TileDeleted({ id: 'branch' }))
+    const deleted = after(new TileDeleted({ id: 'branch', title: 'Branch' }))
     expect(Object.keys(deleted.tiles).sort()).toEqual(['across', 'leaf'])
     expect(systemOf(deleted).context[-2]).toEqual({ _tag: 'BrokenReference', target: 'child' })
   })
@@ -121,19 +128,56 @@ describe('evolve, a System after one of its events', () => {
   it('empties a Reference’s slot, its Tile untouched', () => {
     const emptied = after(new ReferenceDeleted({ id: 'across', parent: 'root', slot: -2 }))
     expect(Object.keys(emptied.tiles).sort()).toEqual(['branch', 'child', 'leaf', 'up'])
+    expect(emptied.tiles.child).toBe(system.tiles.child)
   })
 
-  it('changes nothing for an event naming what the System doesn’t hold as it says', () => {
+  it('counts each event on the Version of every Tile it changes, and on no other', () => {
+    const counted = after(
+      new TileEdited({ id: 'child', title: 'Once' }),
+      new TileEdited({ id: 'child', title: 'Twice' }),
+      new ReferenceDeleted({ id: 'up', parent: 'branch', slot: -1 }),
+      new ReferenceCreated({ id: 'down', parent: 'root', slot: -3, target: 'child' }),
+    )
+    expect(counted.tiles.child).toMatchObject({ version: 3 })
+    expect(counted.tiles.branch).toMatchObject({ version: 2 })
+    expect(counted.root.version).toBe(2)
+    expect(counted.tiles.leaf).toBe(system.tiles.leaf)
+    const deleted = after(new TileDeleted({ id: 'child', title: 'Child' }))
+    expect(deleted.tiles.branch).toBe(system.tiles.branch)
+  })
+
+  it('changes none of its Tiles for an event naming what the System doesn’t hold as it says', () => {
     const events = [
       new TileEdited({ id: 'gone', title: 'Gone' }),
       new TileMoved({ id: 'gone', parent: 'root', slot: 3 }),
       new TileMoved({ id: 'root', parent: 'branch', slot: 3 }),
       new TilesSwapped({ a: 'gone', b: 'leaf' }),
-      new TileDeleted({ id: 'gone' }),
-      new TileDeleted({ id: 'up' }),
+      new TileDeleted({ id: 'gone', title: 'Gone' }),
+      new TileDeleted({ id: 'up', title: 'Up' }),
       new ReferenceDeleted({ id: 'child', parent: 'branch', slot: -2 }),
     ]
-    for (const event of events) expect(evolve(system, event), event._tag).toEqual(system)
+    for (const event of events) {
+      expect(evolve(system, event), event._tag).toEqual({ ...system, version: 1 })
+    }
+  })
+
+  it('counts every event on the System’s Version, one each, whatever it changed', () => {
+    const counted = after(
+      new TileEdited({ id: 'child', title: 'Once' }),
+      new TileMoved({ id: 'leaf', parent: 'root', slot: { leaf: 2 } }),
+      new TileDeleted({ id: 'gone', title: 'Gone' }),
+      new TilesImported({ id: 'imported', count: 3 }),
+    )
+    expect(counted.version).toBe(4)
+    expect(after().version).toBe(0)
+  })
+
+  it('counts an import on the Root it filled, and on no Tile when it landed in a slot', () => {
+    const asRoot = after(new TilesImported({ id: 'root', count: 12 }))
+    expect(asRoot).toEqual({ ...system, root: { ...system.root, version: 2 }, version: 1 })
+    // The Tiles it brought aren't named by the event: a reader reads the System again.
+    const inSlot = after(new TilesImported({ id: 'imported', count: 12 }))
+    expect(inSlot).toEqual({ ...system, version: 1 })
   })
 })
 
@@ -141,13 +185,18 @@ describe('evolve folded over what decide makes', () => {
   const uuid = () => crypto.randomUUID()
   const [root, a, b, under] = [uuid(), uuid(), uuid(), uuid()]
   const real: System = {
-    root: { _tag: 'Tile', id: root, title: '', preview: '', body: '' },
+    root: { _tag: 'Tile', id: root, title: '', preview: '', body: '', version: 1 },
     tiles: { [a]: placed(a, root, 1), [b]: placed(b, root, 2), [under]: placed(under, a, -1) },
     owned: true,
+    version: 0,
   }
 
   it('lays the System out as the Operations say, one after the other', () => {
-    const operations = [new SwapTiles({ a, b }), new MoveTile({ id: under, parent: b, slot: 6 })]
+    // The swap counts on a and b alone, so the move still finds `under` at its first Version.
+    const operations = [
+      new SwapTiles({ a, aVersion: 1, b, bVersion: 1 }),
+      new MoveTile({ id: under, version: 1, parent: b, slot: 6 }),
+    ]
     const final = operations.reduce(
       (current, operation) => Result.getOrThrow(decide(current, operation)).reduce(evolve, current),
       real,
@@ -157,5 +206,16 @@ describe('evolve folded over what decide makes', () => {
     expect(tree.branches[2]?.id).toBe(a)
     expect(tree.branches[1]?.branches[6]?.id).toBe(under)
     expect(tree.branches[2]?.context).toEqual({})
+    expect(final.version).toBe(2)
+  })
+
+  it('counts nothing on the System’s Version for an Operation refused or changing nothing', () => {
+    const stale = decide(real, new MoveTile({ id: under, version: 2, parent: b, slot: 6 }))
+    expect(Result.isFailure(stale)).toBe(true)
+    const stays = Result.getOrThrow(
+      decide(real, new MoveTile({ id: a, version: 1, parent: root, slot: 1 })),
+    )
+    expect(stays).toEqual([])
+    expect(stays.reduce(evolve, real).version).toBe(real.version)
   })
 })

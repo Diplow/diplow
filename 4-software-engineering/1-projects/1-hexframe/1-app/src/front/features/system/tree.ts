@@ -13,10 +13,12 @@ import {
   type Slot,
   type System,
   type SystemTile,
+  tileAt,
 } from '#/domains/mapping/entities'
-import { decide } from '#/domains/mapping/operations'
+import { decide, type Placement } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 import type { FrameKind, TileNode } from '#/front/ui/hex/view/tiles'
+import { type CanvasView, showView } from '#/front/ui/hex/view/view'
 
 type ContextEntry = NonNullable<SystemTile['context'][ContextDirection]>
 
@@ -71,8 +73,25 @@ function contextNode(entry: ContextEntry, slot: string): TileNode {
   }
 }
 
-/** The swap of the moving Tile with another, the moving one named first, as `movingIn` reads it. */
-export const swapOf = (moving: string, held: string) => ({ a: moving, b: held })
+/**
+ * The move of a Tile to a place, at the Version the System shows of it, the one the canvas drew; none
+ * when the System holds no Tile of that id.
+ */
+export function moveOf(system: System, id: string, place: Placement) {
+  const tile = tileAt(system, id)
+  return tile === undefined ? undefined : { id, version: tile.version, ...place }
+}
+
+/**
+ * The swap of the moving Tile with another, the moving one named first, as `movingIn` reads it, each
+ * at the Version the System shows of it; none when either is no Tile of the System.
+ */
+export function swapOf(system: System, moving: string, held: string) {
+  const a = tileAt(system, moving)
+  const b = tileAt(system, held)
+  if (a === undefined || b === undefined) return undefined
+  return { a: moving, aVersion: a.version, b: held, bVersion: b.version }
+}
 
 /** The Tile a swap moves, the one the move under way named (`swapOf`). */
 export const movingIn = (swap: { readonly a: string }) => swap.a
@@ -87,7 +106,9 @@ export const movingIn = (swap: { readonly a: string }) => swap.a
  */
 export function swapsWith(system: System, moving: TileNode, tile: TileNode) {
   if (tile.reference === true || tile.leaf === true) return false
-  const swapped = decide(system, { _tag: 'SwapTiles', ...swapOf(moving.id, tile.id) })
+  const swap = swapOf(system, moving.id, tile.id)
+  if (swap === undefined) return false
+  const swapped = decide(system, { _tag: 'SwapTiles', ...swap })
   return Result.isSuccess(swapped) && swapped.success.length > 0
 }
 
@@ -148,4 +169,37 @@ function below(parent: SystemTile, id: string): Located | undefined {
     }
   }
   return undefined
+}
+
+/** The Tiles a ring of this kind shows around, or inside, a Tile. */
+function ringOf(tile: TileNode, kind: FrameKind | undefined): ReadonlyArray<TileNode> {
+  const of = (ring: TileNode['branches']) =>
+    directions.flatMap((direction) => ring?.[direction] ?? [])
+  switch (kind) {
+    case undefined:
+      return []
+    case 'children':
+      return [...of(tile.branches), ...of(tile.leaves)]
+    default:
+      return of(tile[kind])
+  }
+}
+
+/**
+ * What a view of the System shows, by id: the centered Tile, the System's own when the view names
+ * none it holds, and the Tiles on screen, the center first, then the ring around it, the ring inside
+ * it, and the rings its opened Branches show, each once. What a Message sent from that view tells the
+ * Assistant.
+ */
+export function onScreen(
+  tree: TileNode,
+  view: CanvasView,
+): { readonly center: string; readonly shown: ReadonlyArray<string> } {
+  const { center, frame, inner, expanded } = showView(tree, view)
+  const opened = directions.flatMap((direction) => {
+    const branch = center.branches?.[direction]
+    return branch === undefined ? [] : ringOf(branch, expanded[direction])
+  })
+  const tiles = [center, ...ringOf(center, frame), ...ringOf(center, inner), ...opened]
+  return { center: center.id, shown: [...new Set(tiles.map(({ id }) => id))] }
 }

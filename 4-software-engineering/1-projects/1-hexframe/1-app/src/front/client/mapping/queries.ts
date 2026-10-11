@@ -18,13 +18,13 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import { Schema } from 'effect'
-import { useCallback, useMemo, useRef, useSyncExternalStore } from 'react'
+import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 
-import type { Failure, Outcome } from '#/api/errors/failure'
+import type { Failure, Outcome } from '#/api/report/errors/failure'
 import { type System, type SystemTile, systemOf } from '#/domains/mapping/entities'
 import type { Operation, OperationName } from '#/domains/mapping/operations'
 import { type Download, downloaded } from '#/api/mapping/files/download'
-import { type Given, type LeftOut, type Prepared, prepared } from './upload'
+import { type Given, type LeftOut, type Prepared, prepared } from './import/upload'
 import { operationOf, overlaid, type Pending, refusalOf } from './overlay/overlay'
 import {
   ImportUpload,
@@ -34,7 +34,7 @@ import {
   type TileDelete,
   type TileEdit,
   type TileMove,
-  type TileRef,
+  type TileExport,
   type TileSwap,
   createReference,
   createTile,
@@ -60,8 +60,15 @@ const systemScope = 'system'
 /** The queue every write to the System waits its turn in, so they reach the server in order. */
 const systemQueue = 'system'
 
-/** The System's read, whose cache holds the System as the server last answered it, flat. */
-const systemRead = read({ scope: systemScope, key: [], call: () => system({ data: undefined }) })
+/**
+ * The System's read, whose cache holds the System as the server last answered it, flat. Never read
+ * again on focus, every Body with it: the page polls its Version then, and reads it again only once
+ * it moved (`./follow.ts`).
+ */
+export const systemRead = {
+  ...read({ scope: systemScope, key: [], call: () => system({ data: undefined }) }),
+  refetchOnWindowFocus: false,
+}
 
 /**
  * Reads the System again once a write settles, even while no page shows it, so the next write in the
@@ -73,34 +80,26 @@ const readAgain = (client: QueryClient) =>
 /** Whether a mutation is a write to the System, an import's included: one of its queue. */
 const inSystemQueue = (mutation: Mutation) => mutation.options.scope?.id === systemQueue
 
-/** What a write to the System records when it is made: the System shown then, if one had landed. */
-interface Recorded {
-  readonly before: System | undefined
-}
+/**
+ * Each pending write read once per state of its mutation, so `useMutationState` finds the same
+ * values while nothing changed: an Operation decoded again is a new object it cannot compare, and
+ * every page holding a System write would render again at each notification of the MutationCache.
+ */
+const pendingByState = new WeakMap<Mutation['state'], Pending>()
 
 /**
- * A pending write to the System, as the overlay folds it: its turn, the Operation it sends, read back
- * from its key and variables by Mapping's schema, and the System shown when it was made.
+ * A pending write to the System, as the overlay folds it: its turn, and the Operation it sends, read
+ * back from its key and variables by Mapping's schema.
  */
-const pendingOf = (mutation: Mutation): Pending => ({
-  turn: mutation.mutationId,
-  operation: operationOf(mutation.options.mutationKey?.[0], mutation.state.variables),
-  before: (mutation.state.context as Recorded | undefined)?.before,
-})
-
-/**
- * The System shown as a write with these variables is made: the server's, with every write to it
- * already pending folded over it, this one aside.
- */
-function shownBefore(client: QueryClient, variables: unknown): Recorded {
-  const held = client.getQueryData(systemRead.queryKey)
-  if (held === undefined) return { before: undefined }
-  const pending = client
-    .getMutationCache()
-    .findAll({ status: 'pending', predicate: inSystemQueue })
-    .filter((mutation) => mutation.state.variables !== variables)
-    .map(pendingOf)
-  return { before: overlaid(held, pending) }
+function pendingOf(mutation: Mutation): Pending {
+  const known = pendingByState.get(mutation.state)
+  if (known !== undefined) return known
+  const pending = {
+    turn: mutation.mutationId,
+    operation: operationOf(mutation.options.mutationKey?.[0], mutation.state.variables),
+  }
+  pendingByState.set(mutation.state, pending)
+  return pending
 }
 
 /**
@@ -109,9 +108,14 @@ function shownBefore(client: QueryClient, variables: unknown): Recorded {
  * with everything below it. A write that settles stops being pending once the System read again has
  * landed, so nothing flickers between its answer and the read. Undefined until the first read lands.
  * Shown inside a ReadBoundary, where its failure appears; signed out, it sends the user to sign in.
+ * With `throwing: false`, for what shows beside the canvas, the chat: the same Query, read once,
+ * whose failure throws nothing there and leaves it undefined, the canvas's boundary showing it. Not
+ * a `frame` read, which would be a Query of its own and read the System twice.
  */
-export function useSystem(): { data: { system: System; root: SystemTile } | undefined } {
-  const { data } = useQuery(systemRead)
+export function useSystem({ throwing = true }: { throwing?: boolean } = {}): {
+  data: { system: System; root: SystemTile } | undefined
+} {
+  const { data } = useQuery(throwing ? systemRead : { ...systemRead, throwOnError: false })
   const pending = useMutationState({
     filters: { status: 'pending', predicate: inSystemQueue },
     select: pendingOf,
@@ -205,6 +209,35 @@ export function useSystemRefusals(take: Take) {
 }
 
 /**
+ * Calls `react` the moment a write to the System is made, an import's included, while the component
+ * is mounted, before the write is sent: what the Conversation's navigation sender sends the user's
+ * navigation before. With `settled`, the moment it settled instead, landed or refused, once the read
+ * after it has landed: what the page's poll reads the Conversation again after, since the write
+ * recorded an Entry there. React subscribes once, through `useSyncExternalStore`, which never
+ * re-renders here: the snapshot is always the same.
+ */
+export function useEachSystemWrite(react: () => void, moment: 'made' | 'settled' = 'made') {
+  const client = useQueryClient()
+  // The latest `react`; the subscription stays the same.
+  const latest = useRef(react)
+  latest.current = react
+  const subscribe = useCallback(
+    () =>
+      client.getMutationCache().subscribe((event) => {
+        if (event.mutation?.options.scope?.id !== systemQueue) return
+        const now =
+          moment === 'made'
+            ? event.type === 'added'
+            : event.type === 'updated' &&
+              (event.action.type === 'success' || event.action.type === 'error')
+        if (now) latest.current()
+      }),
+    [client, moment],
+  )
+  useSyncExternalStore(subscribe, nothing, nothing)
+}
+
+/**
  * Help whole, in the page's language, Bodies included, read as the System is. Anyone reads it, so it
  * never sends the user to sign in.
  */
@@ -235,7 +268,6 @@ function useSystemWrite<I, A, E extends Failure>(
       if (refusal !== undefined) return Promise.reject(new Foreseen(refusal, scope))
       return settle(scope, call(input))
     },
-    onMutate: (input: I): Recorded => shownBefore(client, input),
     onSettled: () => readAgain(client),
   })
 }
@@ -281,7 +313,7 @@ export const useDeleteReference = () =>
  */
 export const useExportTile = () =>
   useMutation({
-    ...write('exportTile', async (data: typeof TileRef.Type) =>
+    ...write('exportTile', async (data: typeof TileExport.Type) =>
       downloaded(await exportTile({ data })),
     ),
     onSuccess: save,
@@ -379,13 +411,18 @@ export const useCreateTileSubmit = (
 }
 
 /**
- * Submits a Tile's form through `useEditTile`: only the fields that changed are sent, so the Body of
- * an untitled Root can be written before its name.
+ * Submits a Tile's form through `useEditTile`: only the fields that changed since the form opened are
+ * sent, so the Body of an untitled Root can be written before its name, with the Version of the Tile
+ * the form opened on, kept while the form lives: a change landing meanwhile, from another tab or an
+ * agent, refuses the save rather than being overwritten by it.
  */
-export const useEditTileSubmit = (tile: TileContent & { id: string }): TileSubmit => {
+export const useEditTileSubmit = (
+  tile: TileContent & Pick<SystemTile, 'id' | 'version'>,
+): TileSubmit => {
   const { mutate } = useEditTile()
+  const [opened] = useState(tile)
   return (content) => {
-    mutate({ id: tile.id, ...changed(tile, content) })
+    mutate({ id: opened.id, version: opened.version, ...changed(opened, content) })
   }
 }
 

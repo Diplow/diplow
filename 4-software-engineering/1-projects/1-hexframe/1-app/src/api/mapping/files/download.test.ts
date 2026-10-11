@@ -7,7 +7,7 @@ import { exportOf } from '#/domains/mapping/files/files'
 import { systemOf } from '#/domains/mapping/entities'
 import { unzipped } from '#/repositories/zip/testing'
 
-import type { Unexpected } from '../../errors/failure'
+import type { Unexpected } from '../../report/errors/failure'
 import { noKey, run, type StartContext } from '../../server/run'
 import { asDownload, downloaded, type ExportAnswer, tileLink } from './download'
 import type { exportTile } from '../mapping'
@@ -57,7 +57,7 @@ const content = (title: string) => ({ title, preview: `${title}, in short.`, bod
 async function aSystem() {
   const context = request()
   const { id: root } = await systemTree(context)
-  await value(run(context, Mapping.editTile({ id: root, title: 'Ulysse Boillot' })))
+  await value(run(context, Mapping.editTile({ id: root, version: 1, title: 'Ulysse Boillot' })))
   const branch = await value(
     run(context, Mapping.createTile({ parent: root, slot: 1, ...content('Games') })),
   )
@@ -68,7 +68,15 @@ async function aSystem() {
     run(context, Mapping.createTile({ parent: root, slot: -1, ...content('Principles') })),
   )
   await value(
-    run(context, Mapping.createReference({ parent: branch.id, slot: -3, target: principles.id })),
+    run(
+      context,
+      Mapping.createReference({
+        parent: branch.id,
+        parentVersion: branch.version,
+        slot: -3,
+        target: principles.id,
+      }),
+    ),
   )
   return { context, root, branch }
 }

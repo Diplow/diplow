@@ -2,6 +2,7 @@
 import { Schema } from 'effect'
 
 import { invalid, kind } from '../kind'
+import { Entitlement } from './entities'
 
 /** Nobody is signed in where a Session is needed. */
 export class SignedOut extends Schema.TaggedError<SignedOut>()('SignedOut', {
@@ -53,6 +54,12 @@ export class KeyNotFound extends Schema.TaggedError<KeyNotFound>()('KeyNotFound'
   kind: kind('NotFound'),
 }) {}
 
+/** The Account may not do this: it lacks the Entitlement, until it pays for it. */
+export class EntitlementMissing extends Schema.TaggedError<EntitlementMissing>()(
+  'EntitlementMissing',
+  { kind: kind('Forbidden'), entitlement: Entitlement },
+) {}
+
 export const iamFailures = [
   SignedOut,
   CredentialsRejected,
@@ -63,4 +70,5 @@ export const iamFailures = [
   SessionRequired,
   KeyNameInvalid,
   KeyNotFound,
+  EntitlementMissing,
 ] as const

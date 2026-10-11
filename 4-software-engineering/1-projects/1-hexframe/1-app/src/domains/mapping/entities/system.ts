@@ -5,26 +5,29 @@
 import { Struct } from 'effect'
 
 import { type Kept, keptOf } from './kept/kept'
-import { contentWith, type Row, type RowWith } from './rows'
+import { contentWith, type FieldsAsked, type Row, type RowWith, withContent } from './rows'
 import {
   type Content,
   type ContextDirection,
   type Direction,
   isContextSlot,
   isLeafSlot,
+  rowDirection,
   sameSlot,
   type Slot,
   slotOfRow,
   type Tile,
+  type Version,
 } from './tile'
 
 /**
- * A Tile as its System holds it, before where it stands and what stands below it, with what it keeps
- * from the files it was imported from: its Name, its Tile config and its Frontmatter, each when it has
- * one.
+ * A Tile as its System holds it, before where it stands and what stands below it: its Version, and
+ * what it keeps from the files it was imported from, its Name, its Tile config and its Frontmatter,
+ * each when it has one.
  */
 export interface FoundTile extends Tile, Kept {
   readonly _tag: 'Tile'
+  readonly version: Version
 }
 
 /** Where a Tile or a Reference stands in its System: under its parent, in one of its slots. */
@@ -50,13 +53,15 @@ export interface PlacedReference extends Standing {
 /**
  * A System, Mapping's aggregate, flat, as a change decides on it and the client holds it: its Root,
  * the one Tile without a parent; every Tile and Reference below it by id, each with its parent and
- * its slot; and whether an Account owns it. Help, which every Account reads, is owned by none, so the
- * System alone says that nothing in it may change.
+ * its slot; whether an Account owns it, Help, which every Account reads, owned by none, so the
+ * System alone says that nothing in it may change; and its Version, how many events changed it, 0
+ * before the first, which a client polls to know when to read it again.
  */
 export interface System {
   readonly root: FoundTile
   readonly tiles: Readonly<Record<string, PlacedTile | PlacedReference>>
   readonly owned: boolean
+  readonly version: number
 }
 
 /** A Leaf in its System's tree: one file's worth, a Tile with nothing below it and no Context. */
@@ -86,8 +91,13 @@ export interface BrokenReference {
 
 const tileOf = ({ id, title, preview, body }: Tile): Tile => ({ id, title, preview, body })
 
-/** A row's Tile, with what it keeps from its files. */
-const foundOf = (row: Row): FoundTile => ({ _tag: 'Tile', ...tileOf(row), ...keptOf(row) })
+/** A row's Tile, with its Version and what it keeps from its files. */
+const foundOf = (row: Row): FoundTile => ({
+  _tag: 'Tile',
+  ...tileOf(row),
+  version: row.version,
+  ...keptOf(row),
+})
 
 /**
  * What a row below the Root holds where it stands, under `parent`: a Tile, or a Reference in a Context
@@ -103,8 +113,9 @@ function placedOf(row: Row, parent: string): PlacedTile | PlacedReference | unde
 }
 
 /**
- * The System these rows hold, owned by an Account or, Help, by none; `undefined` when they hold no
- * Root. A row the Root is not above stays in it, out of its tree's reach.
+ * The System these rows hold, owned by an Account or, Help, by none, at the Version its Root's row
+ * keeps; `undefined` when they hold no Root. A row the Root is not above stays in it, out of its
+ * tree's reach.
  */
 export function systemFrom(
   rows: ReadonlyArray<Row>,
@@ -118,7 +129,7 @@ export function systemFrom(
       return placed === undefined ? [] : [[row.id, placed] as const]
     }),
   )
-  return { root: foundOf(root), tiles, owned }
+  return { root: foundOf(root), tiles, owned, version: root.systemVersion }
 }
 
 /** What finding a Tile's row needs of a row: its id, and whether it is a Reference. */
@@ -254,10 +265,14 @@ export type Depth = (typeof depths)[number]
 /** A Tile a Reference points at, as a read shows it: what a reader needs to decide to open it. */
 type Glimpse = Pick<Tile, 'id' | 'title' | 'preview'>
 
-/** A Tile as a read finds it, before what stands below it: its id and only the fields asked. */
+/**
+ * A Tile as a read finds it, before what stands below it: its id, its Version, which a write to it
+ * names, and only the fields asked.
+ */
 type ReadBase<F extends Field> = Pick<Tile, 'id'> &
   Pick<Content, F> & {
     readonly _tag: 'Tile'
+    readonly version: Version
   }
 
 /** A Leaf as a read finds it: its id and only the fields asked, and never anything below it. */
@@ -322,7 +337,12 @@ export function readOf<F extends Field>(
     }))
   }
 
-  const found = (row: RowWith<F>): ReadBase<F> => ({ _tag: 'Tile', id: row.id, ...row.content })
+  const found = (row: RowWith<F>): ReadBase<F> => ({
+    _tag: 'Tile',
+    id: row.id,
+    version: row.version,
+    ...row.content,
+  })
 
   const place = (row: RowWith<F>, generation: number): ReadTile<F> => {
     const tile = found(row)
@@ -337,4 +357,61 @@ export function readOf<F extends Field>(
   }
 
   return place(opened, 0)
+}
+
+/** A Tile or a Reference of a System held whole, as the row a read walks. */
+type HeldRow = Omit<Row, 'systemVersion' | 'name' | 'config' | 'frontmatter'>
+
+/** A System's Tiles and References, each as the row it is read from, its Root's first. */
+function rowsOf(system: System): ReadonlyArray<HeldRow> {
+  const said = ({ id, version, title, preview, body }: FoundTile) => ({
+    id,
+    version,
+    target: null,
+    title,
+    preview,
+    body,
+  })
+  const below = Object.values(system.tiles).map((held): HeldRow => {
+    const place = { parentId: held.parent, direction: rowDirection(held.slot) }
+    return held._tag === 'Reference'
+      ? { id: held.id, ...place, version: 1, target: held.target, title: '', preview: '', body: '' }
+      : { ...said(held), ...place }
+  })
+  return [{ ...said(system.root), parentId: null, direction: null }, ...below]
+}
+
+/**
+ * What a read from one Tile finds in a System held whole, as the tiles repository finds it in the
+ * database: the Tile of this id, the Root when none is given, with the fields asked of it; the rows
+ * `depth` generations below it with those asked of them; the rows of the Tiles their References point
+ * at; and its parent. `undefined` for an id the System holds no Tile of, a Reference's included.
+ */
+export function foundIn<O extends Field, F extends Field>(
+  system: System,
+  { id, depth, fields }: { id?: string | undefined; depth: Depth; fields: FieldsAsked<O, F> },
+): Found<O, F> | undefined {
+  const rows = rowsOf(system)
+  const byId = new Map(rows.map((row) => [row.id, row]))
+  const opened = byId.get(id ?? system.root.id)
+  if (opened === undefined || opened.target !== null) return undefined
+  const under = byParent(rows, parentOfRow)
+  const below: Array<HeldRow> = []
+  let parents = [opened.id]
+  for (let left = depth; left > 0 && parents.length > 0; left--) {
+    const generation = parents.flatMap((parent) => under.get(parent) ?? [])
+    below.push(...generation)
+    parents = generation.map((row) => row.id)
+  }
+  const pointedAt = below.flatMap(({ target }) => {
+    const pointed = target === null ? undefined : byId.get(target)
+    return pointed === undefined ? [] : [withContent(pointed, ['title', 'preview'])]
+  })
+  const parent = opened.parentId === null ? undefined : byId.get(opened.parentId)
+  return {
+    opened: withContent(opened, fields.opened),
+    rows: below.map((row) => withContent(row, fields.below)),
+    pointedAt,
+    parent: parent === undefined ? null : { id: parent.id, title: parent.title },
+  }
 }

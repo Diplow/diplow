@@ -12,12 +12,29 @@ import {
   type KeyProof,
   type Session,
 } from '#/domains/iam/iam'
+import {
+  Anthropic,
+  layer as anthropicLayer,
+  hasKey,
+} from '#/repositories/agent/anthropic/anthropic'
+import { layer as blaxelLayer, hasCredentials } from '#/repositories/agent/sandbox/blaxel'
+import { Sandbox } from '#/repositories/agent/sandbox/sandbox'
+import { Allowlist, layer as allowlistLayer } from '#/repositories/auth/allowlist'
 import { Auth, HttpExchange, layer as authLayer } from '#/repositories/auth/auth'
+import { Applied, layer as appliedLayer } from '#/repositories/database/conversations/applied'
+import {
+  Conversations,
+  layer as conversationsLayer,
+} from '#/repositories/database/conversations/conversations'
+import { Proposals, layer as proposalsLayer } from '#/repositories/database/conversations/proposals'
+import { Turns, layer as turnsLayer } from '#/repositories/database/conversations/turns'
 import { type Database, layer as databaseLayer } from '#/repositories/database/database'
 import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
+import { TurnKeys, layer as turnKeysLayer } from '#/repositories/database/turn-keys/turn-keys'
 import { Zip, layer as zipLayer } from '#/repositories/zip/zip'
 
-import { Failure, Unexpected, encodeFailure, type Outcome } from '../errors/failure'
+import { recordedInConversation } from '../assistant/recording'
+import { Failure, Unexpected, encodeFailure, type Outcome } from '../report/errors/failure'
 import {
   CurrentRequestLog,
   called,
@@ -27,7 +44,7 @@ import {
   requestLog,
   sent,
   unobserved,
-} from '../observability/server'
+} from '../report/observability/server'
 import { WaitUntil, serverBus, type Subscription } from './bus'
 
 /** What Start's middleware knows about the request, as a program sees it. */
@@ -49,24 +66,79 @@ const auth =
       )
     : Layer.orDie(Layer.merge(authLayer, databaseLayer))
 
-/** What the domains use: Better Auth, the tiles repository, Zip, and the database itself. */
-type Repositories = Auth | Database | Tiles | Zip
+/**
+ * Every Account's sandbox: on Blaxel, deployed. Under `pnpm dev` without Blaxel's credentials, and in every
+ * test, whatever the shell exports (`vitest.config.ts`): a folder of this machine's per Account. A
+ * build never holds that branch.
+ */
+const sandbox =
+  import.meta.env.DEV && !hasCredentials(process.env)
+    ? Layer.unwrap(
+        Effect.promise(async () => (await import('#/repositories/agent/sandbox/local')).layer),
+      )
+    : blaxelLayer
 
 /**
- * The repositories the domains use: Better Auth for IAM, the tiles repository and Zip for Mapping; and
- * the database itself, for the transaction a program opens (`transactional`).
+ * The model relay: to Anthropic, deployed. Under `pnpm dev` without `ANTHROPIC_API_KEY`, and in every
+ * test, whatever the shell exports (`vitest.config.ts`): a fake in this process. A build never holds
+ * that branch.
  */
-const repositories: Layer.Layer<Repositories> = Layer.merge(
-  Layer.provideMerge(tilesLayer, auth),
+const anthropic =
+  import.meta.env.DEV && !hasKey(process.env)
+    ? Layer.unwrap(
+        Effect.promise(async () => (await import('#/repositories/agent/anthropic/fake')).layer),
+      )
+    : anthropicLayer
+
+/**
+ * What the domains use: Better Auth, the allowlist and the Turn's Keys, the tiles repository, Zip, the
+ * conversations, Turns, Proposals and Applied repositories, the sandbox, the model relay, and the
+ * database itself.
+ */
+type Repositories =
+  | Auth
+  | Allowlist
+  | TurnKeys
+  | Database
+  | Tiles
+  | Zip
+  | Conversations
+  | Turns
+  | Proposals
+  | Applied
+  | Sandbox
+  | Anthropic
+
+/**
+ * The repositories the domains use: Better Auth, the allowlist and the Turn's Keys for IAM, the tiles
+ * repository and Zip for Mapping, the conversations, Turns, Proposals and Applied repositories, the
+ * sandbox and the model relay for Assistant; and the database itself, for the transaction a program opens
+ * (`transactional`).
+ */
+const repositories: Layer.Layer<Repositories> = Layer.mergeAll(
+  Layer.provideMerge(
+    Layer.mergeAll(
+      tilesLayer,
+      conversationsLayer,
+      turnsLayer,
+      proposalsLayer,
+      appliedLayer,
+      turnKeysLayer,
+    ),
+    auth,
+  ),
+  allowlistLayer,
   zipLayer,
+  sandbox,
+  anthropic,
 )
 
 /**
  * Who reacts to which domain event: the API layer composes domains here, one `on(Event, reaction)`
- * per subscription, as the domains that publish and react are built. A reaction may use the
- * repositories, which the bus is built over; none is wired yet.
+ * per subscription. A reaction may use the repositories, which the bus is built over. Every change to
+ * a System lands in the Conversation of the Account that made it (`../assistant/recording.ts`).
  */
-const subscriptions: ReadonlyArray<Subscription<Repositories>> = []
+const subscriptions: ReadonlyArray<Subscription<Repositories>> = [recordedInConversation]
 
 /**
  * Every layer: the bus, built over the repositories its subscribers use, the domains' services and
@@ -80,12 +152,16 @@ const layer = Layer.mergeAll(
 
 const runtime = ManagedRuntime.make(layer)
 
-/** The services a server function's program may use: the request's and every layer's. */
+/**
+ * The services a server function's program may use: the request's, the platform's `waitUntil`, and
+ * every layer's.
+ */
 export type Services =
   | RequestContext
   | CurrentSession
   | CurrentKey
   | HttpExchange
+  | WaitUntil
   | ManagedRuntime.ManagedRuntime.Services<typeof runtime>
 
 /** Start's `context`, as its middleware (./middleware.ts) fills it. */
@@ -101,7 +177,8 @@ export interface StartContext {
   readonly session: Exit.Exit<Option.Option<Session>>
   /**
    * The Key the request's `Authorization: Bearer` header proves, if any, or how resolving it failed.
-   * Only `/mcp` reads the header; a server function's is always none, as `middleware.ts` sets it.
+   * Only `/mcp` and the doors of a Turn's sandbox read the header; a server function's is always
+   * none, as `middleware.ts` sets it.
    */
   readonly key: Exit.Exit<Option.Option<KeyProof>>
 }
@@ -124,10 +201,63 @@ export function waitUntilOf(request: Request): StartContext['waitUntil'] {
   }
 }
 
-/** A server function's Key: none, whatever its headers say, since a Key opens `/mcp` only. */
+/**
+ * What a door that a Key opens passes on of a request: where it was sent and its Bearer Key; never a
+ * cookie. `/mcp` and the doors of a Turn's sandbox build their context on it.
+ */
+export function bearerOnly(request: Request): StartContext['exchange'] {
+  const headers = new Headers()
+  const authorization = request.headers.get('authorization')
+  if (authorization !== null) headers.set('authorization', authorization)
+  return { url: request.url, headers, setCookies: () => undefined }
+}
+
+/**
+ * A request's body as a door reads it: its text, past the most bytes the door takes (`TooLarge`), or
+ * cut off on the way (`Broken`), its client gone or its stream failed.
+ */
+export type ReadBody =
+  | { readonly _tag: 'Read'; readonly text: string }
+  | { readonly _tag: 'TooLarge' }
+  | { readonly _tag: 'Broken' }
+
+/**
+ * A request's body as text, read a chunk at a time and given up past `longest` bytes without reading
+ * the rest, its stream cancelled; not read at all when the length it declares is past it. A body cut
+ * off on the way is `Broken`, never a rejection: a door answers it as it answers any refusal.
+ */
+export async function bodyOf(request: Request, longest: number): Promise<ReadBody> {
+  if (Number(request.headers.get('content-length') ?? 0) > longest) return { _tag: 'TooLarge' }
+  const reader = request.body?.getReader()
+  if (reader === undefined) return { _tag: 'Read', text: '' }
+  const chunks: Array<Uint8Array<ArrayBuffer>> = []
+  let size = 0
+  try {
+    for (let read = await reader.read(); !read.done; read = await reader.read()) {
+      size += read.value.byteLength
+      if (size > longest) {
+        // What the client sends past it is never read, whether or not the cancel lands.
+        await reader.cancel().catch(() => undefined)
+        return { _tag: 'TooLarge' }
+      }
+      chunks.push(read.value)
+    }
+  } catch {
+    return { _tag: 'Broken' }
+  }
+  return { _tag: 'Read', text: await new Blob(chunks).text() }
+}
+
+/**
+ * A server function's Key: none, whatever its headers say, since a Key opens only `/mcp` and the doors
+ * of a Turn's sandbox.
+ */
 export const noKey: StartContext['key'] = Exit.succeed(Option.none())
 
-/** An MCP call's Session: none, whatever its cookies say, since `/mcp` takes a Key alone. */
+/**
+ * The Session of a call through a door a Key opens: none, whatever its cookies say, since `/mcp` and
+ * the doors of a Turn's sandbox take a Key alone.
+ */
 export const noSession: StartContext['session'] = Exit.succeed(Option.none())
 
 const isFailure = Schema.is(Failure)
@@ -206,8 +336,8 @@ export function provenSession(
 }
 
 /**
- * The Key a request's `Authorization: Bearer` header proves, if any, for `/mcp` to put on its context
- * before it reads the body. Like `provenSession`, a failure to tell is kept, and `run` fails with it.
+ * The Key a request's `Authorization: Bearer` header proves, if any, for `/mcp` and the doors of a
+ * Turn's sandbox to put on their context before they read the body. Like `provenSession`, a failure to tell is kept, and `run` fails with it.
  */
 export function provenKey(
   exchange: HttpExchange['Service'],

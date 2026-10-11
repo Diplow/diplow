@@ -4,7 +4,7 @@
 // Operation may do to a System is the service's to decide.
 import { Schema } from 'effect'
 
-import { ContextDirection, contentBounds, Slot, TileId } from '../entities'
+import { ContextDirection, contentBounds, Slot, TileId, Version } from '../entities'
 
 /**
  * What a Tile says, bounded so nothing unbounded reaches the service, which says what a Title and a
@@ -29,9 +29,13 @@ export class CreateTile extends Schema.TaggedClass<CreateTile>()('CreateTile', {
   body: Body,
 }) {}
 
-/** Changes what a Tile says: whichever of its Title, Preview and Body it gives. */
+/**
+ * Changes what a Tile says: whichever of its Title, Preview and Body it gives. Every Operation on an
+ * existing Tile carries the `version` its writer read of it, refused `TileChanged` once it moved.
+ */
 export class EditTile extends Schema.TaggedClass<EditTile>()('EditTile', {
   id: TileId,
+  version: Version,
   title: Schema.optionalKey(Title),
   preview: Schema.optionalKey(Preview),
   body: Schema.optionalKey(Body),
@@ -40,31 +44,40 @@ export class EditTile extends Schema.TaggedClass<EditTile>()('EditTile', {
 /** Moves a Tile, with everything below it, to a free slot under another Tile, or of its own parent. */
 export class MoveTile extends Schema.TaggedClass<MoveTile>()('MoveTile', {
   id: TileId,
+  version: Version,
   parent: TileId,
   slot: Slot,
 }) {}
 
-/** Two Tiles trade places, each with everything below it. */
+/** Two Tiles trade places, each with everything below it, each named with the Version read of it. */
 export class SwapTiles extends Schema.TaggedClass<SwapTiles>()('SwapTiles', {
   a: TileId,
+  aVersion: Version,
   b: TileId,
+  bVersion: Version,
 }) {}
 
 /** Deletes a Tile and everything below it. */
 export class DeleteTile extends Schema.TaggedClass<DeleteTile>()('DeleteTile', {
   id: TileId,
+  version: Version,
 }) {}
 
-/** Puts a Reference to `target` in a free Context slot of the Tile `parent`. */
+/**
+ * Puts a Reference to `target` in a free Context slot of the Tile `parent`, named with the Version
+ * read of it: a Reference has none of its own, so its writes count on the Tile whose slot they change.
+ */
 export class CreateReference extends Schema.TaggedClass<CreateReference>()('CreateReference', {
   parent: TileId,
+  parentVersion: Version,
   slot: ContextDirection,
   target: TileId,
 }) {}
 
-/** Empties a Context slot of the Tile `parent` that holds a Reference. */
+/** Empties a Context slot of the Tile `parent`, named with the Version read of it, that holds a Reference. */
 export class DeleteReference extends Schema.TaggedClass<DeleteReference>()('DeleteReference', {
   parent: TileId,
+  parentVersion: Version,
   slot: ContextDirection,
 }) {}
 

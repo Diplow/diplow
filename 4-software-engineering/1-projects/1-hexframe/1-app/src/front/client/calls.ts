@@ -3,8 +3,8 @@
 // reads and writes with `read` and `write` and handles no error: the channels do (./channels.ts).
 import { mutationOptions, queryOptions, type QueryKey } from '@tanstack/react-query'
 
-import type { Call } from '#/api/errors/channel'
-import { Unexpected, decodeFailure, type Failure, type Outcome } from '#/api/errors/failure'
+import type { Call } from '#/api/report/errors/channel'
+import { Unexpected, decodeFailure, type Failure, type Outcome } from '#/api/report/errors/failure'
 
 /** A call that failed: its failure decoded, the scope it was made in, and the request id if any. */
 export class CallFailed extends Error {

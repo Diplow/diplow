@@ -63,13 +63,21 @@ layer(TestTiles)('what a Tile keeps, over the tiles repository', (it) => {
       })
       const other = yield* createTile(accountId, { parent: root.id, slot: 2, ...content('Other') })
       yield* transactional(
-        Mapping.editTile(accountId, new EditTile({ id: kept.id, title: 'The stack' })),
+        Mapping.editTile(accountId, new EditTile({ id: kept.id, version: 1, title: 'The stack' })),
       )
       yield* transactional(
-        Mapping.moveTile(accountId, new MoveTile({ id: kept.id, parent: root.id, slot: 3 })),
+        Mapping.moveTile(
+          accountId,
+          new MoveTile({ id: kept.id, version: 2, parent: root.id, slot: 3 }),
+        ),
       )
       expect((yield* tree(accountId)).branches[3]).toMatchObject({ title: 'The stack', name })
-      yield* transactional(Mapping.swapTiles(accountId, new SwapTiles({ a: kept.id, b: other.id })))
+      yield* transactional(
+        Mapping.swapTiles(
+          accountId,
+          new SwapTiles({ a: kept.id, aVersion: 3, b: other.id, bVersion: 1 }),
+        ),
+      )
       const after = yield* tree(accountId)
       expect(after.branches[2]).toMatchObject({ id: kept.id, name: 'STACK.md' })
       expect(after.branches[3]).not.toHaveProperty('name')
@@ -129,7 +137,10 @@ layer(TestTiles)('what a Tile keeps, over the tiles repository', (it) => {
         frontmatter,
       })
       yield* transactional(
-        Mapping.editTile(accountId, new EditTile({ id: tile.id, ...content('Do a ticket') })),
+        Mapping.editTile(
+          accountId,
+          new EditTile({ id: tile.id, version: 1, ...content('Do a ticket') }),
+        ),
       )
       const read = (yield* tree(accountId)).context[-2]
       expect(read).toMatchObject({

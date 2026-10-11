@@ -5,8 +5,8 @@ import { CatchBoundary, useLocation } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 
 import { ErrorState, Forbidden } from '#/front/ui/feedback/states'
-import { channelFor } from '#/api/errors/channel'
-import { messageFor } from '#/api/errors/messages'
+import { channelFor } from '#/api/report/errors/channel'
+import { messageFor } from '#/api/report/errors/messages'
 
 import { asCallFailed } from './calls'
 import { caught } from './channels'

@@ -12,8 +12,8 @@ import type { InTransaction } from '#/repositories/database/database'
 import { type IdTaken, Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/tiles'
 import { Zip } from '#/repositories/zip/zip'
 
-import { HelpReadOnly, TileIdTaken, TileNotFound } from './errors'
-import { type LinkOf, exportOf } from './files/files'
+import { BatchOutdated, HelpReadOnly, TileIdTaken, TileNotFound } from './errors'
+import { type LinkOf, exportOf, placesOf } from './files/files'
 import { findInHelp, flatHelp, type HelpLanguage, isHelpId } from './help/help'
 import {
   type Content,
@@ -21,6 +21,7 @@ import {
   type Field,
   type FieldsAsked,
   type Found,
+  foundIn,
   readOf,
   type ReadTile,
   rowDirection,
@@ -31,20 +32,34 @@ import {
   type Tile,
   tileAt,
   type ToKeep,
+  type Version,
   withContent,
 } from './entities'
 import {
+  added,
+  type Batched,
   type CreateReference,
   type CreateTile,
   decide,
+  decidedOne,
   type DeleteReference,
   type DeleteTile,
   type EditTile,
   evolve,
+  fold,
   type MappingEvent,
   type MoveTile,
   type Operation,
+  type OperationEvent,
+  summariesIn,
+  summaryOf,
   type SwapTiles,
+  type Undo,
+  undone,
+  undoOf,
+  untitledIn,
+  whole,
+  extended,
 } from './operations'
 
 export { HelpId, helpRoot, helpSystem } from './help/help'
@@ -65,18 +80,79 @@ export const system = (accountId: string) =>
     return found
   })
 
+/**
+ * The Version of the Account's System, how many events changed it, read alone: what a client polls to
+ * know when to read the System again. 0 before its first change, its Root not yet added included.
+ */
+export const systemVersion = (accountId: string) =>
+  Tiles.use((tiles) => Effect.map(tiles.systemVersion(accountId), (version) => version ?? 0))
+
+/**
+ * The Titles of the Tiles of the Account's System among these ids, by id: an id it holds no Tile of,
+ * a deleted one's or a Reference's, has none. What the timeline names a Tile by where it keeps its id.
+ */
+export const titles = (accountId: string, ids: ReadonlyArray<string>) =>
+  Tiles.use((tiles) =>
+    Effect.map(tiles.ofIds(accountId, ids, ['title']), (rows) =>
+      Object.fromEntries(
+        rows.flatMap(({ id, target, title }) => (target === null ? [[id, title] as const] : [])),
+      ),
+    ),
+  )
+
+/** Nothing when the id is a Tile of the Account's own System, else `TileNotFound`. */
+export const ownTile = (accountId: string, id: string) =>
+  Effect.flatMap(titles(accountId, [id]), (titled) =>
+    id in titled ? Effect.void : Effect.fail(new TileNotFound()),
+  )
+
+/**
+ * The Title and Preview of the Tiles of the Account's System among these ids, in their order: an id it
+ * holds no Tile of, a deleted one's or a Reference's, is left out: a glimpse of each, for a reader
+ * shown several at once.
+ */
+export const glimpses = (accountId: string, ids: ReadonlyArray<string>) =>
+  Tiles.use((tiles) =>
+    Effect.map(tiles.ofIds(accountId, ids, ['title', 'preview']), (rows) => {
+      const found = new Map(
+        rows.flatMap(({ id, target, title, preview }) =>
+          target === null ? [[id, { id, title, preview }] as const] : [],
+        ),
+      )
+      return [...new Set(ids)].flatMap((id) => {
+        const glimpse = found.get(id)
+        return glimpse === undefined ? [] : [glimpse]
+      })
+    }),
+  )
+
+/**
+ * Summarizes one of Mapping's events, for the Account whose System it changed (`summaryOf`). A Title
+ * the event does not say is read as the System holds it now, after the change; a deleted Tile's comes
+ * from its event, since no read finds it.
+ */
+export const summary = (accountId: string, event: MappingEvent) =>
+  Effect.map(titles(accountId, untitledIn(event)), (read) =>
+    summaryOf(event, (id) => read[id] ?? ''),
+  )
+
 /** A Tile read from, with the id and Title of its parent, `null` for the Root. */
 interface Read<F extends Field> {
   readonly tile: ReadTile<F>
   readonly parent: Pick<Tile, 'id' | 'title'> | null
 }
 
-/** Where a read starts, how far down it goes, what it asks of each Tile, and Help's language. */
+/**
+ * Where a read starts, how far down it goes, what it asks of each Tile, and Help's language; and the
+ * batch it shows folded over the System, Operations kept to run later, none when it reads the
+ * System as it stands.
+ */
 interface ReadFrom<O extends Field, F extends Field> {
   readonly id?: string | undefined
   readonly depth: Depth
   readonly fields: FieldsAsked<O, F>
   readonly language: HelpLanguage
+  readonly over?: ReadonlyArray<Batched> | undefined
 }
 
 /**
@@ -87,11 +163,15 @@ interface ReadFrom<O extends Field, F extends Field> {
  */
 const find = <O extends Field, F extends Field>(
   accountId: string,
-  { id, depth, fields, language }: ReadFrom<O, F>,
-): Effect.Effect<Found<O, F>, TileNotFound, Tiles> =>
-  id !== undefined && isHelpId(id)
-    ? findInHelp(id, { fields, language })
-    : findOwn(accountId, { id, depth, fields })
+  { id, depth, fields, language, over = [] }: ReadFrom<O, F>,
+): Effect.Effect<Found<O, F>, TileNotFound, Tiles> => {
+  if (id !== undefined && isHelpId(id)) return findInHelp(id, { fields, language })
+  if (over.length === 0) return findOwn(accountId, { id, depth, fields })
+  return Effect.flatMap(system(accountId), (held) => {
+    const found = foundIn(fold(held, over).system, { id, depth, fields })
+    return found === undefined ? Effect.fail(new TileNotFound()) : Effect.succeed(found)
+  })
+}
 
 /** What a reader sees of a Tile beside the one opened: enough to decide whether to open it. */
 const glimpsed = ['title', 'preview'] as const satisfies ReadonlyArray<Field>
@@ -99,7 +179,7 @@ const glimpsed = ['title', 'preview'] as const satisfies ReadonlyArray<Field>
 /** What a read from a Tile of the Account's System finds, its Root when no id is given. */
 const findOwn = <O extends Field, F extends Field>(
   accountId: string,
-  { id, depth, fields }: Omit<ReadFrom<O, F>, 'language'>,
+  { id, depth, fields }: Omit<ReadFrom<O, F>, 'language' | 'over'>,
 ) =>
   Tiles.use((tiles) =>
     Effect.gen(function* () {
@@ -129,7 +209,8 @@ const findOwn = <O extends Field, F extends Field>(
  * `depth` generations down with only the fields asked of each Tile, and its parent. A Reference shows
  * the id, Title and Preview of the Tile it points at. A Body is read only when asked, and a Tile of
  * another System is `TileNotFound`, as is a Help id no Tile of Help has. A Tile of Help is read in
- * `language`, which the caller picks. Reading the Root adds it, as `system` does.
+ * `language`, which the caller picks. Reading the Root adds it, as `system` does. With a batch `over`
+ * it, the System it reads is the one the batch makes (`fold`).
  */
 export const readTile = <F extends Field>(
   accountId: string,
@@ -155,7 +236,8 @@ export type Opened<F extends Field> = Read<F> & Around
  * A Tile of the Account's System, its Root when no id is given, or a Tile of Help by its id, opened:
  * it with only the fields asked, its parent, and its Branches, Leaves and Context by Title and
  * Preview, as a reader opens a Tile before deciding which of them to open next. One read, one
- * generation down, and a Body below the Tile never leaves the database.
+ * generation down, and a Body below the Tile never leaves the database. With a batch `over` it, the
+ * System it reads is the one the batch makes (`fold`).
  */
 export const openTile = <F extends Field>(
   accountId: string,
@@ -163,7 +245,8 @@ export const openTile = <F extends Field>(
     id,
     fields,
     language,
-  }: Pick<ReadFrom<F, F>, 'id' | 'language'> & {
+    over,
+  }: Pick<ReadFrom<F, F>, 'id' | 'language' | 'over'> & {
     readonly fields: ReadonlyArray<F>
   },
 ) =>
@@ -173,6 +256,7 @@ export const openTile = <F extends Field>(
       depth: 1,
       fields: { opened: [...new Set([...fields, ...glimpsed])], below: glimpsed },
       language,
+      over,
     }),
     ({ opened, rows, pointedAt, parent }): Opened<F> => {
       const around = readOf(showing(opened, glimpsed), { rows, depth: 1, pointedAt })
@@ -201,6 +285,20 @@ export const exportTile = (accountId: string, { id, link }: { id: string; link: 
   })
 
 /**
+ * The Account's System as files, the export of its Root, and where each of its Tiles lives in them,
+ * by id, both from one read, so a reader of the files finds a Tile's folder or file by its id. `link`
+ * is where the app shows a Tile, for a Reference whose Tile is gone. With a batch `over` it, the
+ * System the batch makes (`fold`), as the reads through it show it.
+ */
+export const systemFiles = (accountId: string, link: LinkOf, over: ReadonlyArray<Batched> = []) =>
+  Effect.gen(function* () {
+    const whole = systemOf(fold(yield* system(accountId), over).system)
+    const exported = exportOf(whole, whole.id, link)
+    if (exported === undefined) return yield* Effect.die(new Error('A System exports its Root'))
+    return { files: exported.files, places: placesOf(whole) }
+  })
+
+/**
  * Refuses a change that names a Tile of Help, whichever schema let its ids through: Help is read by
  * every Account and written by none.
  */
@@ -208,19 +306,57 @@ const outsideHelp = (ids: ReadonlyArray<string>) =>
   ids.some(isHelpId) ? Effect.fail(new HelpReadOnly()) : Effect.void
 
 /**
+ * Ends a change that made these events, written already: writes the System's Version as `evolve` left
+ * it in `after`, then publishes them. A change that made none leaves the Version where it was. The
+ * bus holds what is published until the transaction commits. `changing` ends
+ * `landing/`'s import this way too.
+ */
+const ended = (
+  writes: Writes,
+  { after, events }: { after: System; events: ReadonlyArray<MappingEvent> },
+) =>
+  events.length === 0
+    ? Effect.void
+    : Effect.gen(function* () {
+        yield* writes.setSystemVersion(after.version)
+        const { publish } = yield* Bus
+        yield* Effect.forEach(events, publish, { discard: true })
+      })
+
+/**
+ * What a change that is no Operation answers once it wrote its rows: its own `answer`, and the events
+ * it made, which `changing` folds through `evolve` and ends it with.
+ */
+export interface Changed<A> {
+  readonly answer: A
+  readonly events: ReadonlyArray<MappingEvent>
+}
+
+/**
  * A change to the Account's System that is no Operation, `landing/`'s import, naming these Tiles, none
  * of them Help's, on its rows as they stand once its Root is locked: alone until the transaction
- * around it ends, so what it checked still holds when it writes.
+ * around it ends, so what it checked still holds when it writes. Once it wrote its rows, it is ended
+ * as an Operation is: the System's Version it leaves written, its events published.
  */
 export const changing = <A, E>(
   accountId: string,
   names: ReadonlyArray<string>,
-  change: (rows: ReadonlyArray<TileRow>, writes: Writes) => Effect.Effect<A, E, InTransaction>,
+  change: (
+    rows: ReadonlyArray<TileRow>,
+    writes: Writes,
+  ) => Effect.Effect<Changed<A>, E, InTransaction>,
 ) =>
   Effect.andThen(
     outsideHelp(names),
     Tiles.use((tiles) =>
-      Effect.flatMap(tiles.lock(accountId), (rows) => change(rows, tiles.writes(accountId))),
+      Effect.gen(function* () {
+        const writes = tiles.writes(accountId)
+        const rows = yield* tiles.lock(accountId)
+        const { answer, events } = yield* change(rows, writes)
+        const before = yield* rooted(systemFrom(rows, { owned: true }))
+        yield* ended(writes, { after: events.reduce(evolve, before), events })
+        return answer
+      }),
     ),
   )
 
@@ -255,18 +391,37 @@ const rooted = (found: System | undefined) =>
  * meanwhile, so what `decide` ruled on still holds when its events are written.
  */
 const decidedOn = (accountId: string, operation: Operation) =>
-  namedBy(operation).some(isHelpId)
-    ? rooted(flatHelp('en'))
-    : Tiles.use((tiles) =>
-        Effect.andThen(tiles.root(accountId, untitled), tiles.lock(accountId)).pipe(
-          Effect.flatMap((rows) => rooted(systemFrom(rows, { owned: true }))),
-        ),
-      )
+  namedBy(operation).some(isHelpId) ? rooted(flatHelp('en')) : locked(accountId)
 
-/** Writes one event: the one change to the rows it stands for. */
+/**
+ * The Account's System, its Root added on its first read as any read adds it, then locked until the
+ * transaction ends: no other change runs meanwhile.
+ */
+const locked = (accountId: string) =>
+  Tiles.use((tiles) =>
+    Effect.andThen(tiles.root(accountId, untitled), tiles.lock(accountId)).pipe(
+      Effect.flatMap((rows) => rooted(systemFrom(rows, { owned: true }))),
+    ),
+  )
+
+/** The Version `evolve` gave the Tile of this id, for the row a change writes it to. */
+const versionIn = (after: System, id: string) => {
+  const found = tileAt(after, id)
+  if (found === undefined) return Effect.die(new Error('An event counted on a Tile it lost'))
+  return Effect.succeed({ version: found.version })
+}
+
+/** Writes the Version `evolve` gave the Tile of this id. */
+const counted = (writes: Writes, after: System, id: string) =>
+  Effect.flatMap(versionIn(after, id), (version) => writes.update(id, version))
+
+/**
+ * Writes one event: the one change to the rows it stands for, each Tile it changed at the Version
+ * `evolve` gave it in `after`, the System once the event applied.
+ */
 const written =
-  (writes: Writes) =>
-  (event: MappingEvent): Effect.Effect<void, IdTaken, InTransaction> => {
+  (writes: Writes, after: System) =>
+  (event: OperationEvent): Effect.Effect<void, IdTaken, InTransaction> => {
     switch (event._tag) {
       case 'TileCreated': {
         const { id, parent, slot, title, preview, body, name, config, frontmatter } = event
@@ -274,20 +429,34 @@ const written =
         return writes.insert({ ...row, title, preview, body, name, config, frontmatter })
       }
       case 'TileEdited':
-        return writes.update(event.id, Struct.omit(event, ['_tag', 'id']))
+        return Effect.flatMap(versionIn(after, event.id), (version) =>
+          writes.update(event.id, { ...Struct.omit(event, ['_tag', 'id']), ...version }),
+        )
       case 'TileMoved':
-        return writes.update(event.id, {
-          parentId: event.parent,
-          direction: rowDirection(event.slot),
-        })
+        return Effect.flatMap(versionIn(after, event.id), (version) =>
+          writes.update(event.id, {
+            parentId: event.parent,
+            direction: rowDirection(event.slot),
+            ...version,
+          }),
+        )
       case 'TilesSwapped':
-        return writes.swap(event.a, event.b)
+        return Effect.andThen(
+          writes.swap(event.a, event.b),
+          Effect.all([counted(writes, after, event.a), counted(writes, after, event.b)], {
+            discard: true,
+          }),
+        )
       case 'TileDeleted':
-      case 'ReferenceDeleted':
         return writes.remove(event.id)
+      case 'ReferenceDeleted':
+        return Effect.andThen(writes.remove(event.id), counted(writes, after, event.parent))
       case 'ReferenceCreated': {
         const { id, parent, slot, target } = event
-        return writes.insert({ id, parentId: parent, direction: slot, target, ...untitled })
+        return Effect.andThen(
+          writes.insert({ id, parentId: parent, direction: slot, target, ...untitled }),
+          counted(writes, after, parent),
+        )
       }
     }
   }
@@ -305,40 +474,59 @@ const chosen: OnTaken<TileIdTaken> = () => Effect.fail(new TileIdTaken())
 
 /**
  * Runs an Operation on the Account's System: locks it, loads it flat, asks `decide` through `decided`,
- * then writes one change per event, publishes the events, and answers the System they leave
- * (`evolve`). Every rule lives in `decide`: what it refuses is refused here, with nothing written and
- * nothing published. A write under an id already taken answers `onTaken`: a defect, unless the
+ * then writes one change per event, as `evolve` leaves the System after it, and the System's Version,
+ * publishes the events, and answers the System it ran on, the events and the System they leave. Every rule lives in `decide`: what it
+ * refuses is refused here, with nothing written and nothing published. A write under an id already taken answers `onTaken`: a defect, unless the
  * Operation's caller chose the id. The bus holds what is published until the transaction commits.
  */
 const operate = <E, T = never>(
   accountId: string,
   operation: Operation,
-  decided: (system: System) => Result.Result<ReadonlyArray<MappingEvent>, E>,
+  decided: (system: System) => Result.Result<ReadonlyArray<OperationEvent>, E>,
   onTaken: OnTaken<T> = madeHere,
 ) =>
   Effect.gen(function* () {
     const system = yield* decidedOn(accountId, operation)
-    const writes = (yield* Tiles).writes(accountId)
     const events = yield* Effect.fromResult(decided(system))
-    yield* Effect.forEach(
-      events,
-      (event) => Effect.catchTag(written(writes)(event), 'IdTaken', onTaken),
-      { discard: true },
-    )
-    const { publish } = yield* Bus
-    yield* Effect.forEach(events, publish, { discard: true })
-    return events.reduce(evolve, system)
+    return { system, events, after: yield* writtenAll(accountId, system, events, onTaken) }
+  })
+
+/**
+ * Writes the events a change made on the System it locked, one change each, as `evolve` leaves the
+ * System after it, then ends it (`ended`), and answers the System they leave. A write under an id
+ * already taken answers `onTaken`.
+ */
+const writtenAll = <T>(
+  accountId: string,
+  system: System,
+  events: ReadonlyArray<OperationEvent>,
+  onTaken: OnTaken<T>,
+) =>
+  Effect.gen(function* () {
+    const writes = (yield* Tiles).writes(accountId)
+    let after = system
+    for (const event of events) {
+      after = evolve(after, event)
+      yield* Effect.catchTag(written(writes, after)(event), 'IdTaken', onTaken)
+    }
+    yield* ended(writes, { after, events })
+    return after
   })
 
 /** A fresh id, for what a create makes when its caller chose none, before `decide` is given it. */
 const newId = Tiles.use((tiles) => tiles.newId)
 
-/** The Tile of this id, as an Operation leaves it, for a change that answers it. */
+/**
+ * The Tile of this id, as an Operation leaves it, for a change that answers it: with its Version, which
+ * the writer's next write to it names.
+ */
 const answered = (system: System, id: string) => {
   const found = tileAt(system, id)
   if (found === undefined) return Effect.die(new Error('A change lost the Tile it answers'))
-  const { title, preview, body } = found
-  return Effect.succeed({ id: found.id, title, preview, body } satisfies Tile)
+  const { title, preview, body, version } = found
+  return Effect.succeed({ id: found.id, title, preview, body, version } satisfies Tile & {
+    version: Version
+  })
 }
 
 /**
@@ -354,7 +542,7 @@ export const createTile = (accountId: string, operation: CreateTile, kept: ToKee
     const id = operation.id ?? (yield* newId)
     const onTaken: OnTaken<TileIdTaken> = operation.id === undefined ? madeHere : chosen
     const made = { id, kept }
-    const after = yield* operate(
+    const { after } = yield* operate(
       accountId,
       operation,
       (system) => decide(system, operation, made),
@@ -367,7 +555,7 @@ export const createTile = (accountId: string, operation: CreateTile, kept: ToKee
 export const editTile = (accountId: string, operation: EditTile) =>
   Effect.flatMap(
     operate(accountId, operation, (system) => decide(system, operation)),
-    (system) => answered(system, operation.id),
+    ({ after }) => answered(after, operation.id),
   )
 
 /**
@@ -403,3 +591,122 @@ export const createReference = (accountId: string, operation: CreateReference) =
 /** Empties a Context slot holding a Reference; the Tile it pointed at is untouched. */
 export const deleteReference = (accountId: string, operation: DeleteReference) =>
   Effect.asVoid(operate(accountId, operation, (system) => decide(system, operation)))
+
+/** The id of what an Operation makes, a create's own when it carries one, else a fresh one; none for others. */
+const madeFor = (operation: Operation) =>
+  operation._tag === 'CreateTile' && operation.id !== undefined
+    ? Effect.succeed<string | undefined>(operation.id)
+    : operation._tag === 'CreateTile' || operation._tag === 'CreateReference'
+      ? newId
+      : Effect.succeed(undefined)
+
+/** The Tile a change answers, for a create or an edit, as it leaves the System, with its Version. */
+const tileAnswered = (after: System, operation: Operation, made: string | undefined) => {
+  if (operation._tag === 'CreateTile' && made !== undefined) return answered(after, made)
+  if (operation._tag === 'EditTile') return answered(after, operation.id)
+  return Effect.succeed(undefined)
+}
+
+/**
+ * Adds an Operation to a batch kept over the Account's System, writing nothing: `BatchOutdated` once
+ * the batch no longer applies whole (`whole`), so nothing is added to a batch that can no longer run;
+ * else decided by `decide` on the System the batch makes, refused as it would be there, a create given
+ * the id of what it makes now, fresh, so it keeps that id each time the batch is folded again. Answers
+ * it as the batch keeps it, Mapping's summary of each event it makes there, and, for a create or an
+ * edit, the Tile as the batch now makes it, with its Version, which the writer's next write to it
+ * names. `decide` refuses each Operation only what its overload says, so the refusal is typed by it.
+ */
+export const addToBatch = <O extends Operation>(
+  accountId: string,
+  over: ReadonlyArray<Batched>,
+  operation: O,
+) =>
+  Effect.gen(function* () {
+    yield* outsideHelp(namedBy(operation))
+    const folded = yield* Effect.fromResult(whole(yield* system(accountId), over))
+    const made = yield* madeFor(operation)
+    const next = yield* Effect.fromResult(added(folded, operation, made))
+    const tile = yield* tileAnswered(next.system, operation, made)
+    return {
+      batched: next.batched,
+      changes: summariesIn(next.system, next.events),
+      ...(tile !== undefined && { tile }),
+    }
+  })
+
+/**
+ * Runs a batch on the Account's System as it stands, its Root locked, all of it or nothing, folded by
+ * `folding`: one that no longer applies refuses the whole, `BatchOutdated`, nothing written nor
+ * published; else every event is written and published as an Operation's are, a write under an id
+ * already taken answering `onTaken`. Answers the System it ran on and the events it made.
+ */
+const ranWhole = <T>(
+  accountId: string,
+  batch: ReadonlyArray<Batched>,
+  { folding, onTaken }: { folding: typeof whole; onTaken: OnTaken<T> },
+) =>
+  Effect.gen(function* () {
+    yield* outsideHelp(batch.flatMap(({ operation }) => namedBy(operation)))
+    const system = yield* locked(accountId)
+    const { events } = yield* Effect.fromResult(folding(system, batch))
+    yield* writtenAll(accountId, system, events, onTaken)
+    return { system, events }
+  })
+
+/**
+ * Runs a batch on the Account's System, in the transaction around it, all of it or nothing: its Root
+ * locked, the batch folded over the System as it stands, each Operation decided on what the ones
+ * before it made, a create under the id it was added with. One that no longer applies, a Tile it
+ * names changed since, by the Version it carries, or gone, refuses the whole batch, `BatchOutdated`,
+ * nothing written nor published (`whole`); else every event is written and published as an
+ * Operation's are. A batch naming a Tile of Help is `HelpReadOnly`. Answers how many events it made
+ * and what undoes it (`undoOf`), from the System it ran on.
+ */
+export const runBatch = (accountId: string, batch: ReadonlyArray<Batched>) =>
+  Effect.map(
+    ranWhole(accountId, batch, { folding: whole, onTaken: madeHere }),
+    ({ system, events }) => ({
+      undo: undoOf(system, events),
+      changes: events.length,
+    }),
+  )
+
+/**
+ * Runs an Operation on the Account's System by the same `operate` as an Operation's own function, a
+ * create under its id or a fresh one, and answers, beside the Tile as it now stands for a create or
+ * an edit, how many events it made and what undoes it: its inverse, from the System it ran on, after
+ * `earlier`, the undo of what ran before it in the same batch, when one is given (`extended`), as a
+ * batch that runs in several goes runs one Operation after the other. A clash on a create's id is a
+ * defect: such a create carries none.
+ */
+export const runOperation = <O extends Operation>(
+  accountId: string,
+  operation: O,
+  earlier: Undo | undefined,
+) =>
+  Effect.gen(function* () {
+    const made = yield* madeFor(operation)
+    const { system, events, after } = yield* operate(accountId, operation, (held) =>
+      Result.map(decidedOne(held, operation, made), (next) => next.events),
+    )
+    const tile = yield* tileAnswered(after, operation, made)
+    const undo = earlier === undefined ? undoOf(system, events) : extended(earlier, system, events)
+    return { undo, changes: events.length, ...(tile !== undefined && { tile }) }
+  })
+
+/**
+ * Undoes a batch that ran, in the transaction around it, all of it or nothing: its inverse run on the
+ * Account's System as it stands, under its Root's lock, each event written and published as an
+ * Operation's are. Refused whole, `BatchOutdated`, once a Tile it touched changed since, by the Version
+ * its inverse names, or a Tile it made holds what another writer put below it since (`undone`), or the
+ * undo was `Outdated` already: nothing written nor published.
+ */
+export const undo = (accountId: string, undoing: Undo) =>
+  undoing._tag === 'Outdated'
+    ? Effect.fail(new BatchOutdated())
+    : Effect.asVoid(
+        ranWhole(accountId, undoing.batch, {
+          folding: undone,
+          onTaken: () => Effect.fail(new BatchOutdated()),
+        }),
+      )

@@ -6,9 +6,9 @@ preview: >-
   The business logic, one folder per domain (IAM, Mapping, Assistant), each in
   its language and in one shape: an application service, its errors, its
   entities and operations, pure, behind the door the front may import, and its
-  concept folders. IAM and Mapping so far; beside the folders, kind.ts, the
-  closed set of kinds a domain's error carries, and bus.ts, where a domain
-  publishes its events.
+  concept folders. IAM, Mapping and Assistant's Conversation so far; beside
+  the folders, kind.ts, the closed set of kinds a domain's error carries, and
+  bus.ts, where a domain publishes its events.
 ---
 # domains
 
@@ -22,14 +22,15 @@ The middle layer: one folder per domain, each in its own language, and each in t
 | `operations/` | Its Operations, changes described as data, the events they make, and `decide` and `evolve`, behind an `index.ts`. Pure |
 | `<concept>/` | A sub-model with a life of its own, as Mapping's Help; one may hold a change of its own that the API layer calls as directly as the service, when the service's folder is full (Mapping's import, `mapping/landing/landing.ts`, `hexframe-app-import-export/decisions.md#DEC-11`) |
 
-"Operation" names a change as data; the functions that run one are the application service's. A domain becomes a service of its own only when it holds state or configuration. It never opens a transaction: a change requires one (`InTransaction`), and the API layer opens it, as STACK tells it. Domains ignore each other; only [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]] composes them. A domain grows the shape lazily: IAM gets `entities/` the day it has something to put there.
+"Operation" names a change as data; the functions that run one are the application service's. A domain becomes a service of its own only when it holds state or configuration. It never opens a transaction: a change requires one (`InTransaction`), and the API layer opens it, as STACK tells it. A lint holds it: under `domains/`, `transactional` is imported by test code alone, a `*.test.ts` or the `testing.ts` a domain's tests share, test code by its name, which only a test or another `testing.ts` imports (`eslint.config.ts`, dependency-cruiser's `no-program-importing-a-domains-testing`, `hexframe-app-assistant/decisions.md#DEC-24`). Domains ignore each other; only [[4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE|api]] composes them. A domain grows the shape lazily: IAM got `entities/` with its first value object, the Entitlement, and has no `operations/` yet.
 
 **The door.** A domain's `entities/index.ts`, `operations/index.ts` and `errors.ts` are the front's one way into it, so a rule, a value or a type of the domain's reaches the browser as the domain's own, never a copy. Nothing reachable through them touches a repository, the application service, a concept folder, another domain, Node, the environment or the config, not even through a type-only import: beside `effect`, they reach only the domain's own `entities/`, `operations/` and `errors.ts`, `kind.ts` and `bus.ts`. A domain declares the shapes it reads (Mapping's `entities/rows.ts`), and the repository's rows satisfy them. dependency-cruiser holds both sides, `no-front-past-a-domains-door` and `no-door-reaching-past-the-pure-model`, and `scripts/lint.test.ts` proves each fires.
 
 | Folder | Holds |
 |---|---|
-| `iam/` | Identity and access: Accounts, their Sessions and their Keys, on Better Auth: [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE\|iam]] |
+| `iam/` | Identity and access: Accounts, their Sessions, their Keys and their Turns' Keys, on Better Auth and IAM's own table, and their Entitlements, from a list kept by hand until Stripe: [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE\|iam]] |
 | `mapping/` | The core: an Account's System, a hierarchy of Tiles in six Directions and six Context slots, and the operations on it, over the tiles repository: [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE\|mapping]] |
+| `assistant/` | A conversation with an agent that builds a System: for now the Conversation, one per Account, its Messages, every change to the System whoever made it, the imports and the user's merged navigations, over the conversations repository; and its Turns, one running at most per Conversation, over the Turns repository, each Claude Code started in the Account's sandbox and followed as it writes, spending on the model under its ceiling and the month's allowance, its calls relayed by the model relay; and its Mode, ask or apply, and the Proposal its Turns' writes become in ask, decided by its own Decider, over the Proposals repository; and what it applied, undone once, over the Applied repository: [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/CLAUDE\|assistant]] |
 
 | File | Holds |
 |---|---|

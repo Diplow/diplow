@@ -2,15 +2,15 @@ import { isRedirect } from '@tanstack/react-router'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { DevUnauthenticated } from '#/api/dev/failures'
-import { Unexpected, encodeFailure, type Failure, type Outcome } from '#/api/errors/failure'
-import { forget, identify } from '#/api/observability/client'
+import { Unexpected, encodeFailure, type Failure, type Outcome } from '#/api/report/errors/failure'
+import { forget, identify } from '#/api/report/observability/client'
 import { session } from '#/api/iam/iam'
 
 import { CallFailed } from '../calls'
 import { continueTo, provedSession, readSignInSearch, signedInOnly } from './guard'
 
 vi.mock('#/api/iam/iam', () => ({ session: vi.fn() }))
-vi.mock('#/api/observability/client', () => ({ identify: vi.fn(), forget: vi.fn() }))
+vi.mock('#/api/report/observability/client', () => ({ identify: vi.fn(), forget: vi.fn() }))
 
 const answering = (outcome: Outcome<unknown, Failure>) => {
   vi.mocked(session).mockResolvedValue(outcome as never)

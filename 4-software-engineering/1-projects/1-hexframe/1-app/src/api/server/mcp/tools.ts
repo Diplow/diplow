@@ -1,10 +1,11 @@
 // The tool table: what an agent may do to the System it works on, as data. Each entry names a tool,
 // teaches it in its description, bounds its input with an Effect Schema and runs one program through
-// the helper, like a server function. The MCP server (./mcp.ts) registers every entry; a write made
-// with a Turn's Key will be routed by its Turn, drafted into a Proposal in ask (STACK.md).
-// A write runs one of Mapping's Operations: it takes its server function's input Schema, the
-// Operation's fields (../../mapping/mapping.ts), each described for an agent, and runs the same
-// program, for the Account the Key proves, in one transaction.
+// the helper, like a server function. The MCP server (./mcp.ts) registers every entry. A write runs
+// one of Mapping's Operations: it takes its server function's input Schema, the Operation's fields
+// (../../mapping/mapping.ts), each described for an agent, and runs the same program, for the Account
+// the Key proves, in one transaction; made with a Turn's Key, it is routed by what Assistant decides
+// of its Turn, drafted into the Conversation's Proposal in ask, and the reads made with that Key show
+// the Proposal over the System (../../assistant/proposal/). No entry asks the Mode.
 import { Effect, Schema, Struct } from 'effect'
 
 import {
@@ -16,9 +17,19 @@ import {
   TileId,
 } from '#/domains/mapping/entities'
 import { HelpId, helpRoot } from '#/domains/mapping/mapping'
-import type { OperationName } from '#/domains/mapping/operations'
+import {
+  CreateReference,
+  CreateTile,
+  DeleteReference,
+  DeleteTile,
+  EditTile,
+  MoveTile,
+  type OperationName,
+  SwapTiles,
+} from '#/domains/mapping/operations'
 
-import type { Failure } from '../../errors/failure'
+import * as Proposal from '../../assistant/proposal/programs'
+import type { Failure } from '../../report/errors/failure'
 import {
   NewReference,
   NewTile,
@@ -88,7 +99,9 @@ const directions =
   '(`context`) says what it is, keyed -1 to -6. A Context slot may hold a Reference instead of a ' +
   'Tile: ' +
   "`_tag: 'Reference'`, with the id, Title and Preview of the Tile it points at, or " +
-  "`_tag: 'BrokenReference'` once that Tile is deleted."
+  "`_tag: 'BrokenReference'` once that Tile is deleted. Every Tile carries its `version`, how many " +
+  'changes touched it: a write to a Tile names the version you read of it, and is refused once ' +
+  'the Tile changed since.'
 
 const openTile = read({
   name: 'open_tile',
@@ -106,7 +119,7 @@ const openTile = read({
       'What to read of the opened Tile: any of title, preview, body. All three when not given.',
     ),
   }),
-  program: Mapping.openTile,
+  program: Proposal.openTile,
 })
 
 const map = read({
@@ -128,7 +141,7 @@ const map = read({
       'What to read of each Tile: any of title, preview, body. Title and Preview when not given.',
     ),
   }),
-  program: ({ id, depth, fields }) => Mapping.readTile({ id, depth, fields }),
+  program: ({ id, depth, fields }) => Proposal.readTile({ id, depth, fields }),
 })
 
 // The writes: one per operation of Mapping. Each description says what the tool does, then, for each
@@ -176,6 +189,17 @@ const refusal = {
   HelpReadOnly:
     "that Tile is Help's, which every user reads and none writes; change a Tile of the user's " +
     'System instead.',
+  TileChanged:
+    'the Tile changed since you read it, its version is no longer the one you gave, whoever ' +
+    'changed it: open_tile it again to read what it says now and its version, then decide again ' +
+    'and write with that version.',
+  BatchOutdated:
+    "in ask, your writes are drafted into the user's Proposal, and it no longer applies to the " +
+    'System: the user changed a Tile it names since. Write nothing more; say so in your answer, ' +
+    'so the user discards it and asks again.',
+  TurnOver:
+    'your Turn of the Assistant has ended, by its answer, a Stop, its time or its budget, and an ' +
+    'ended Turn writes nothing: write nothing more, and end your answer.',
 } as const
 
 /** What a slot taken means where a Child goes: the regrouping a seventh Branch or Leaf asks for. */
@@ -202,6 +226,12 @@ const described = {
   body: 'The Body, in Markdown: everything else the Tile says.',
   contextSlot: 'A Context slot of the parent, -1 to -6.',
   holder: 'The id of the Tile whose Context holds the Reference.',
+  version:
+    'The version of the Tile as you last read it, from open_tile, map or a write that answered it: ' +
+    'refused when the Tile changed since.',
+  holderVersion:
+    'The version of the Tile whose Context holds the slot, as you last read it: refused when it ' +
+    'changed since.',
 } as const
 
 /**
@@ -223,7 +253,7 @@ const createTile = write({
   operation: 'createTile',
   description:
     "Adds a Tile to the user's System, in a free slot under a Tile: a Branch, a Leaf, or a Tile " +
-    `of its Context. ${placement} Answers the new Tile, with its id.`,
+    `of its Context. ${placement} Answers the new Tile, with its id and its version.`,
   refusals: {
     TileNotFound: refusal.TileNotFound,
     DirectionTaken: takenChild,
@@ -231,12 +261,16 @@ const createTile = write({
     PreviewTooLong: refusal.PreviewTooLong,
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
+    BatchOutdated: refusal.BatchOutdated,
+    TurnOver: refusal.TurnOver,
   },
   input: NewTileOfAgent,
   // An agent sends no id, so Mapping makes it, fresh: a clash on it is a defect, never a refusal
   // to teach (`TileIdTaken` comes only to a caller that chose its id).
   program: (input: typeof NewTileOfAgent.Type) =>
-    Effect.catchTag(Mapping.createTile(input), 'TileIdTaken', (taken) => Effect.die(taken)),
+    Proposal.written(new CreateTile(input), (operation) =>
+      Effect.catchTag(Mapping.createTile(operation), 'TileIdTaken', (taken) => Effect.die(taken)),
+    ),
 })
 
 const editTile = write({
@@ -244,16 +278,20 @@ const editTile = write({
   operation: 'editTile',
   description:
     'Changes what a Tile says: any of its Title, its Preview and its Body, the rest left as it ' +
-    "is. The Root's Title is the user's name. Answers the Tile as it now reads.",
+    "is. The Root's Title is the user's name. Answers the Tile as it now reads, with its new version.",
   refusals: {
     TileNotFound: refusal.TileNotFound,
+    TileChanged: refusal.TileChanged,
     TitleMissing: refusal.TitleMissing,
     PreviewTooLong: refusal.PreviewTooLong,
     HelpReadOnly: refusal.HelpReadOnly,
+    BatchOutdated: refusal.BatchOutdated,
+    TurnOver: refusal.TurnOver,
   },
   input: TileEdit.mapFields(
     Struct.evolve({
       id: (field) => field.annotate({ description: described.id }),
+      version: (field) => field.annotate({ description: described.version }),
       title: (field) =>
         field.annotate({ description: `${described.title} Left as it is when not given.` }),
       preview: (field) =>
@@ -262,7 +300,7 @@ const editTile = write({
         field.annotate({ description: `${described.body} Left as it is when not given.` }),
     }),
   ),
-  program: Mapping.editTile,
+  program: (input: typeof TileEdit.Type) => Proposal.written(new EditTile(input), Mapping.editTile),
 })
 
 const moveTile = write({
@@ -275,22 +313,26 @@ const moveTile = write({
     'it. Answers null.',
   refusals: {
     TileNotFound: refusal.TileNotFound,
+    TileChanged: refusal.TileChanged,
     DirectionTaken: takenChild,
     RootFixed: refusal.RootFixed,
     MovedUnderItself:
       'a Tile cannot move under itself or anything below it; pick a parent outside it.',
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
+    BatchOutdated: refusal.BatchOutdated,
+    TurnOver: refusal.TurnOver,
   },
   input: TileMove.mapFields(
     Struct.evolve({
       id: (field) =>
         field.annotate({ description: `${described.id} It moves with everything below it.` }),
+      version: (field) => field.annotate({ description: described.version }),
       parent: (field) => field.annotate({ description: described.parent }),
       slot: (field) => field.annotate({ description: described.slot }),
     }),
   ),
-  program: Mapping.moveTile,
+  program: (input: typeof TileMove.Type) => Proposal.written(new MoveTile(input), Mapping.moveTile),
 })
 
 const swapTiles = write({
@@ -302,18 +344,26 @@ const swapTiles = write({
     'Answers null.',
   refusals: {
     TileNotFound: refusal.TileNotFound,
+    TileChanged: `${refusal.TileChanged} Either Tile may be the one that changed.`,
     RootFixed: refusal.RootFixed,
     MovedUnderItself: 'neither Tile may lie below the other; move one of them instead.',
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
+    BatchOutdated: refusal.BatchOutdated,
+    TurnOver: refusal.TurnOver,
   },
   input: TileSwap.mapFields(
     Struct.evolve({
       a: (field) => field.annotate({ description: 'The id of one Tile.' }),
+      aVersion: (field) =>
+        field.annotate({ description: 'The version of the Tile a, as you last read it.' }),
       b: (field) => field.annotate({ description: 'The id of the Tile it trades places with.' }),
+      bVersion: (field) =>
+        field.annotate({ description: 'The version of the Tile b, as you last read it.' }),
     }),
   ),
-  program: Mapping.swapTiles,
+  program: (input: typeof TileSwap.Type) =>
+    Proposal.written(new SwapTiles(input), Mapping.swapTiles),
 })
 
 const deleteTile = write({
@@ -325,16 +375,21 @@ const deleteTile = write({
     'any of them stay, broken. Answers null.',
   refusals: {
     TileNotFound: refusal.TileNotFound,
+    TileChanged: refusal.TileChanged,
     RootFixed: refusal.RootFixed,
     HelpReadOnly: refusal.HelpReadOnly,
+    BatchOutdated: refusal.BatchOutdated,
+    TurnOver: refusal.TurnOver,
   },
   input: TileDelete.mapFields(
     Struct.evolve({
       id: (field) =>
         field.annotate({ description: `${described.id} It goes with everything below it.` }),
+      version: (field) => field.annotate({ description: described.version }),
     }),
   ),
-  program: Mapping.deleteTile,
+  program: (input: typeof TileDelete.Type) =>
+    Proposal.written(new DeleteTile(input), Mapping.deleteTile),
 })
 
 const createReference = write({
@@ -346,13 +401,17 @@ const createReference = write({
     'null.',
   refusals: {
     TileNotFound: refusal.TileNotFound,
+    TileChanged: refusal.TileChanged,
     DirectionTaken: refusal.DirectionTaken,
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
+    BatchOutdated: refusal.BatchOutdated,
+    TurnOver: refusal.TurnOver,
   },
   input: NewReference.mapFields(
     Struct.evolve({
       parent: (field) => field.annotate({ description: described.holder }),
+      parentVersion: (field) => field.annotate({ description: described.holderVersion }),
       slot: (field) => field.annotate({ description: `${described.contextSlot} It must be free.` }),
       target: (field) =>
         field.annotate({
@@ -360,7 +419,8 @@ const createReference = write({
         }),
     }),
   ),
-  program: Mapping.createReference,
+  program: (input: typeof NewReference.Type) =>
+    Proposal.written(new CreateReference(input), Mapping.createReference),
 })
 
 const deleteReference = write({
@@ -370,14 +430,22 @@ const deleteReference = write({
   description:
     'Empties a Context slot holding a Reference. The Tile it pointed at is untouched; a slot ' +
     'holding a Tile, or nothing, is left as it is. Answers null.',
-  refusals: { TileNotFound: refusal.TileNotFound, HelpReadOnly: refusal.HelpReadOnly },
+  refusals: {
+    TileNotFound: refusal.TileNotFound,
+    TileChanged: refusal.TileChanged,
+    HelpReadOnly: refusal.HelpReadOnly,
+    BatchOutdated: refusal.BatchOutdated,
+    TurnOver: refusal.TurnOver,
+  },
   input: ReferenceSlot.mapFields(
     Struct.evolve({
       parent: (field) => field.annotate({ description: described.holder }),
+      parentVersion: (field) => field.annotate({ description: described.holderVersion }),
       slot: (field) => field.annotate({ description: described.contextSlot }),
     }),
   ),
-  program: Mapping.deleteReference,
+  program: (input: typeof ReferenceSlot.Type) =>
+    Proposal.written(new DeleteReference(input), Mapping.deleteReference),
 })
 
 /** Every tool, in the order an agent lists them: the reads, then a write per operation. */
@@ -391,4 +459,29 @@ export const tools: ReadonlyArray<Tool> = [
   deleteTile,
   createReference,
   deleteReference,
+]
+
+/** The names of the tools of one kind, in the table's order. */
+const named = (kind: Tool['kind']) =>
+  tools.flatMap((tool) => (tool.kind === kind ? [tool.name] : [])).join(', ')
+
+/** The refusal a write to a Tile changed since meets, by its tag, as the table teaches it. */
+const changed = 'TileChanged' satisfies keyof typeof refusal
+
+/**
+ * The rules of the System for an agent that starts from its files, worded from this table, so a tool
+ * or a refusal renamed is renamed in them: what a System is, each Tile a folder or a file, as Mapping
+ * exports it, the writes and the reads, a Tile changed since, and where Help opens. A Turn's prompt
+ * holds them as they come.
+ */
+export const systemRules: ReadonlyArray<string> = [
+  '- The System is a hierarchy of Tiles, each a Title, a Preview and a Body, whose Root is the ' +
+    'user, where what comes first matters most. In the files, each Tile is a folder or a file, its ' +
+    'id and version in its frontmatter.',
+  `- Every change goes through the hexframe MCP's tools (${named('write')}), naming the ` +
+    'version of the Tile you read. What changed since the Turn started, read it through the MCP ' +
+    `too (${named('read')}).`,
+  `- A refusal saying the Tile changed (${changed}, a Conflict) means someone wrote it since you ` +
+    `read it: read it again with ${openTile.name}, then decide again.`,
+  `- Help, hexframe's own guide, opens at ${openTile.name}({ id: "${helpRoot}" }).`,
 ]

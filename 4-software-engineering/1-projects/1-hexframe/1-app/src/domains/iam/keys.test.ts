@@ -1,12 +1,14 @@
 import { expect, layer } from '@effect/vitest'
-import { Effect, Option } from 'effect'
+import { Effect, Layer, Option } from 'effect'
 
 import { browser, keyClient, TestAuth } from '#/repositories/auth/testing'
+import { layer as turnKeysLayer } from '#/repositories/database/turn-keys/turn-keys'
 
 import {
   CurrentKey,
   CurrentSession,
   issueKey,
+  keyName,
   keyProven,
   keys,
   proven,
@@ -53,7 +55,7 @@ const asKey =
       ),
     )
 
-layer(TestAuth)("an Account's Keys", (it) => {
+layer(Layer.provideMerge(turnKeysLayer, TestAuth))("an Account's Keys", (it) => {
   it.effect('issues a Key whose secret is shown once, and lists it without it', () =>
     Effect.gen(function* () {
       const { asSession } = yield* someone
@@ -87,7 +89,7 @@ layer(TestAuth)("an Account's Keys", (it) => {
       })
       expect(Option.getOrThrow(yield* keyClient(secret).request(keyProven))).toEqual({
         account,
-        keyId: key.id,
+        by: { _tag: 'Key', keyId: key.id },
       })
       const [used] = yield* asSession(keys)
       expect(used?.lastUsedAt).toBeInstanceOf(Date)
@@ -156,6 +158,20 @@ layer(TestAuth)("an Account's Keys", (it) => {
       }
       expect((yield* asSession(issueKey('x'.repeat(32)))).key.name).toHaveLength(32)
     }),
+  )
+
+  it.effect(
+    'names a Key by its id outside any request, for its own Account only, until revoked',
+    () =>
+      Effect.gen(function* () {
+        const { account, asSession } = yield* someone
+        const other = yield* someone
+        const { key } = yield* asSession(issueKey('Claude Code'))
+        expect(yield* keyName(account.id, key.id)).toEqual(Option.some('Claude Code'))
+        expect(yield* keyName(other.account.id, key.id)).toEqual(Option.none())
+        yield* asSession(revokeKey(key.id))
+        expect(yield* keyName(account.id, key.id)).toEqual(Option.none())
+      }),
   )
 
   it.effect('sends nobody signed in to sign in', () =>

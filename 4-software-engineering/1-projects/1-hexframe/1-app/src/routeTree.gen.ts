@@ -13,14 +13,16 @@ import { Route as IndexRouteImport } from './front/routes/index'
 import { Route as DevRouteRouteImport } from './front/routes/dev/route'
 import { Route as HelpRouteImport } from './front/routes/help'
 import { Route as McpRouteImport } from './front/routes/mcp'
-import { Route as SignInRouteImport } from './front/routes/sign-in'
-import { Route as SignUpRouteImport } from './front/routes/sign-up'
+import { Route as accessSignInRouteImport } from './front/routes/(access)/sign-in'
+import { Route as accessSignUpRouteImport } from './front/routes/(access)/sign-up'
+import { Route as AssistantEventsRouteImport } from './front/routes/assistant/events'
 import { Route as DevErrorsRouteImport } from './front/routes/dev/errors'
 import { Route as DevHexRouteImport } from './front/routes/dev/hex'
 import { Route as DevSessionRouteImport } from './front/routes/dev/session'
 import { Route as DevSystemRouteImport } from './front/routes/dev/system'
 import { Route as DevUiRouteImport } from './front/routes/dev/ui'
 import { Route as SettingsKeysRouteImport } from './front/routes/settings/keys'
+import { Route as AssistantAnthropicSplatRouteImport } from './front/routes/assistant/anthropic.$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -42,14 +44,19 @@ const McpRoute = McpRouteImport.update({
   path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SignInRoute = SignInRouteImport.update({
-  id: '/sign-in',
+const accessSignInRoute = accessSignInRouteImport.update({
+  id: '/(access)/sign-in',
   path: '/sign-in',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SignUpRoute = SignUpRouteImport.update({
-  id: '/sign-up',
+const accessSignUpRoute = accessSignUpRouteImport.update({
+  id: '/(access)/sign-up',
   path: '/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssistantEventsRoute = AssistantEventsRouteImport.update({
+  id: '/assistant/events',
+  path: '/assistant/events',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DevErrorsRoute = DevErrorsRouteImport.update({
@@ -82,34 +89,43 @@ const SettingsKeysRoute = SettingsKeysRouteImport.update({
   path: '/settings/keys',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AssistantAnthropicSplatRoute = AssistantAnthropicSplatRouteImport.update({
+  id: '/assistant/anthropic/$',
+  path: '/assistant/anthropic/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dev': typeof DevRouteRouteWithChildren
   '/help': typeof HelpRoute
   '/mcp': typeof McpRoute
-  '/sign-in': typeof SignInRoute
-  '/sign-up': typeof SignUpRoute
+  '/sign-in': typeof accessSignInRoute
+  '/sign-up': typeof accessSignUpRoute
+  '/assistant/events': typeof AssistantEventsRoute
   '/dev/errors': typeof DevErrorsRoute
   '/dev/hex': typeof DevHexRoute
   '/dev/session': typeof DevSessionRoute
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
   '/settings/keys': typeof SettingsKeysRoute
+  '/assistant/anthropic/$': typeof AssistantAnthropicSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dev': typeof DevRouteRouteWithChildren
   '/help': typeof HelpRoute
   '/mcp': typeof McpRoute
-  '/sign-in': typeof SignInRoute
-  '/sign-up': typeof SignUpRoute
+  '/sign-in': typeof accessSignInRoute
+  '/sign-up': typeof accessSignUpRoute
+  '/assistant/events': typeof AssistantEventsRoute
   '/dev/errors': typeof DevErrorsRoute
   '/dev/hex': typeof DevHexRoute
   '/dev/session': typeof DevSessionRoute
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
   '/settings/keys': typeof SettingsKeysRoute
+  '/assistant/anthropic/$': typeof AssistantAnthropicSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -117,14 +133,16 @@ export interface FileRoutesById {
   '/dev': typeof DevRouteRouteWithChildren
   '/help': typeof HelpRoute
   '/mcp': typeof McpRoute
-  '/sign-in': typeof SignInRoute
-  '/sign-up': typeof SignUpRoute
+  '/(access)/sign-in': typeof accessSignInRoute
+  '/(access)/sign-up': typeof accessSignUpRoute
+  '/assistant/events': typeof AssistantEventsRoute
   '/dev/errors': typeof DevErrorsRoute
   '/dev/hex': typeof DevHexRoute
   '/dev/session': typeof DevSessionRoute
   '/dev/system': typeof DevSystemRoute
   '/dev/ui': typeof DevUiRoute
   '/settings/keys': typeof SettingsKeysRoute
+  '/assistant/anthropic/$': typeof AssistantAnthropicSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -135,12 +153,14 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/sign-in'
     | '/sign-up'
+    | '/assistant/events'
     | '/dev/errors'
     | '/dev/hex'
     | '/dev/session'
     | '/dev/system'
     | '/dev/ui'
     | '/settings/keys'
+    | '/assistant/anthropic/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -149,26 +169,30 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/sign-in'
     | '/sign-up'
+    | '/assistant/events'
     | '/dev/errors'
     | '/dev/hex'
     | '/dev/session'
     | '/dev/system'
     | '/dev/ui'
     | '/settings/keys'
+    | '/assistant/anthropic/$'
   id:
     | '__root__'
     | '/'
     | '/dev'
     | '/help'
     | '/mcp'
-    | '/sign-in'
-    | '/sign-up'
+    | '/(access)/sign-in'
+    | '/(access)/sign-up'
+    | '/assistant/events'
     | '/dev/errors'
     | '/dev/hex'
     | '/dev/session'
     | '/dev/system'
     | '/dev/ui'
     | '/settings/keys'
+    | '/assistant/anthropic/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -176,9 +200,11 @@ export interface RootRouteChildren {
   DevRouteRoute: typeof DevRouteRouteWithChildren
   HelpRoute: typeof HelpRoute
   McpRoute: typeof McpRoute
-  SignInRoute: typeof SignInRoute
-  SignUpRoute: typeof SignUpRoute
+  accessSignInRoute: typeof accessSignInRoute
+  accessSignUpRoute: typeof accessSignUpRoute
+  AssistantEventsRoute: typeof AssistantEventsRoute
   SettingsKeysRoute: typeof SettingsKeysRoute
+  AssistantAnthropicSplatRoute: typeof AssistantAnthropicSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -211,18 +237,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sign-in': {
-      id: '/sign-in'
+    '/(access)/sign-in': {
+      id: '/(access)/sign-in'
       path: '/sign-in'
       fullPath: '/sign-in'
-      preLoaderRoute: typeof SignInRouteImport
+      preLoaderRoute: typeof accessSignInRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sign-up': {
-      id: '/sign-up'
+    '/(access)/sign-up': {
+      id: '/(access)/sign-up'
       path: '/sign-up'
       fullPath: '/sign-up'
-      preLoaderRoute: typeof SignUpRouteImport
+      preLoaderRoute: typeof accessSignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assistant/events': {
+      id: '/assistant/events'
+      path: '/assistant/events'
+      fullPath: '/assistant/events'
+      preLoaderRoute: typeof AssistantEventsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dev/errors': {
@@ -267,6 +300,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsKeysRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/assistant/anthropic/$': {
+      id: '/assistant/anthropic/$'
+      path: '/assistant/anthropic/$'
+      fullPath: '/assistant/anthropic/$'
+      preLoaderRoute: typeof AssistantAnthropicSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -295,9 +335,11 @@ const rootRouteChildren: RootRouteChildren = {
   DevRouteRoute: DevRouteRouteWithChildren,
   HelpRoute: HelpRoute,
   McpRoute: McpRoute,
-  SignInRoute: SignInRoute,
-  SignUpRoute: SignUpRoute,
+  accessSignInRoute: accessSignInRoute,
+  accessSignUpRoute: accessSignUpRoute,
+  AssistantEventsRoute: AssistantEventsRoute,
   SettingsKeysRoute: SettingsKeysRoute,
+  AssistantAnthropicSplatRoute: AssistantAnthropicSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
