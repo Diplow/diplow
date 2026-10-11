@@ -24,12 +24,20 @@ function glyphs({ key, shift = false, mod = false }: Shortcut): string[] {
   return [...(mod ? ['⌘'] : []), ...(shift ? ['⇧'] : []), glyph]
 }
 
-/** The shortcut as `aria-keyshortcuts` names it, so a screen reader says it. */
-export const ariaShortcut = ({ key, shift = false, mod = false }: Shortcut) =>
-  (mod ? 'Meta+' : '') + (shift ? 'Shift+' : '') + (key === ' ' ? 'Space' : key)
+/**
+ * The shortcut as `aria-keyshortcuts` names it, so a screen reader says it: with `mod`, both the
+ * command key and Control, as `pressed` takes either.
+ */
+export function ariaShortcut({ key, shift = false, mod = false }: Shortcut): string {
+  const rest = (shift ? 'Shift+' : '') + (key === ' ' ? 'Space' : key)
+  return mod ? `Meta+${rest} Control+${rest}` : rest
+}
 
-/** Whether a key press is the shortcut, its modifiers included. */
-export const pressed = (shortcut: Shortcut | undefined, event: KeyboardEvent) =>
+/** What `pressed` reads of a key press. */
+type Press = Pick<KeyboardEvent, 'key' | 'shiftKey' | 'metaKey' | 'ctrlKey' | 'altKey'>
+
+/** Whether a key press is the shortcut, its modifiers included: the command key or Control for `mod`. */
+export const pressed = (shortcut: Shortcut | undefined, event: Press) =>
   shortcut !== undefined &&
   shortcut.key.toLowerCase() === event.key.toLowerCase() &&
   (shortcut.shift ?? false) === event.shiftKey &&

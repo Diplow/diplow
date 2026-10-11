@@ -73,9 +73,6 @@ function Column({ children }: { children: ReactNode }) {
   return <div className="grid w-[37.5rem] max-w-full gap-6">{children}</div>
 }
 
-/** Where the proposal stands: a zone in one of its states, or its receipt once done. */
-type Stage = WidgetState | 'done'
-
 // The agent's proposal to split a tile, as the conversation would show it in each state.
 function Proposal({
   state,
@@ -84,7 +81,7 @@ function Proposal({
   onUndo = done(m.ui_undo()),
   onDismiss = done(m.ui_widget_dismiss()),
 }: {
-  state: Stage
+  state: WidgetState
   defaultFolded?: boolean
   onAccept?: () => void
   onUndo?: () => void
@@ -182,7 +179,7 @@ function Changes() {
 // One widget that runs: accepting it works a moment then leaves its receipt, undo brings it back,
 // and its entrance replays on demand.
 function LiveWidget() {
-  const [state, setState] = useState<Stage>('waiting')
+  const [state, setState] = useState<WidgetState>('waiting')
   const [entrance, setEntrance] = useState(0)
   // The work in flight, cancelled when the proposal is undone or comes in again.
   const working = useRef<ReturnType<typeof setTimeout>>(undefined)

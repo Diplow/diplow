@@ -1,5 +1,6 @@
 // The atoms every side shares, on /design-system: the controls, the forms, the menu, the toasts, the
 // skeleton, the theme and the language.
+import { cn } from 'cn'
 import {
   Check,
   CornerDownLeft,
@@ -19,7 +20,7 @@ import { useState, type ReactNode } from 'react'
 import { m } from '#/paraglide/messages'
 
 import { GallerySection, GalleryState } from '../gallery/frame'
-import { Act } from './controls/act'
+import { Act, voiceOf } from './controls/act'
 import { Button } from './controls/button'
 import { Input } from './controls/input'
 import { LocaleSwitch } from './controls/LocaleSwitch'
@@ -333,7 +334,7 @@ function ActGallery() {
   return (
     <GallerySection name="Act">
       <GalleryState label={m.gallery_state_variants()}>
-        <div className="flex flex-wrap items-center gap-6 [--voice:var(--agent)]">
+        <div className={cn('flex flex-wrap items-center gap-6', voiceOf('agent'))}>
           <Act
             tone="voice"
             shortcut={{ key: 'Enter', mod: true }}
@@ -358,7 +359,7 @@ function ActGallery() {
           <Act
             look="hex"
             tone="voice"
-            className="[--voice:var(--human)]"
+            className={voiceOf('human')}
             onClick={done(m.gallery_sample_save())}
           >
             {m.gallery_sample_save()}

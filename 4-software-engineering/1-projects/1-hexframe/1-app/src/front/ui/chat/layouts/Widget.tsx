@@ -5,18 +5,18 @@ import { useId, useState, type CSSProperties, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { Act } from '../../atoms/controls/act'
+import { Act, voiceOf, type Voice as AnyVoice } from '../../atoms/controls/act'
 import type { Shortcut } from '../../atoms/keys'
 import { Menu, type MenuEntry } from '../../atoms/Menu'
 
 /** Whose the widget is: the agent asking, the user's own words, or the app's (a key, help). */
-type Voice = 'agent' | 'human' | 'app'
+type Voice = Exclude<AnyVoice, 'destructive'>
 
 /**
- * Where a zone stands: `waiting` on the user, `working` while what was asked runs, `failed` with a
- * way to try again. Once `done`, the widget is its receipt alone. Folded or open is the user's.
+ * Where it stands: `waiting` on the user, `working` while what was asked runs, `failed` with a way to
+ * try again, `done` once it ran, the widget then its receipt alone. Folded or open is the user's.
  */
-export type WidgetState = 'waiting' | 'working' | 'failed'
+export type WidgetState = 'waiting' | 'working' | 'failed' | 'done'
 
 interface WidgetAction {
   label: string
@@ -41,7 +41,7 @@ interface ZoneProps {
   children?: ReactNode
   /** Its actions; the first is the one it expects, in its voice. */
   actions?: readonly WidgetAction[]
-  state?: WidgetState
+  state?: Exclude<WidgetState, 'done'>
   /** Its settings, in the menu behind its tools, above folding and dismissing. */
   settings?: readonly MenuEntry[]
   onDismiss?: () => void
@@ -57,12 +57,6 @@ interface DoneProps {
 }
 
 type WidgetProps = ZoneProps | DoneProps
-
-const voices: Record<Voice, string> = {
-  agent: '[--voice:var(--agent)]',
-  human: '[--voice:var(--human)]',
-  app: '[--voice:var(--foreground)]',
-}
 
 // Each part rises after the line and the surface, one after another.
 const rise = (step: number): CSSProperties => ({
@@ -108,7 +102,7 @@ function Zone({
         aria-labelledby={titleId}
         aria-busy={state === 'working'}
         className={cn(
-          failed ? '[--voice:var(--destructive)]' : voices[voice],
+          voiceOf(failed ? 'destructive' : voice),
           // A solid surface with one fine line on top and one below, tinted toward the curve by its voice.
           "group/widget relative bg-card bg-linear-to-r from-transparent from-15% to-(--voice)/9 py-5 pr-4 pl-4 before:absolute before:inset-x-0 before:top-0 before:h-px before:origin-left before:bg-linear-to-r before:from-transparent before:via-input before:via-45% before:to-input before:content-[''] after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-linear-to-r after:from-transparent after:via-input after:via-45% after:to-input after:content-[''] sm:pr-26 sm:pl-9",
           voice === 'app' && !failed && 'bg-none',
@@ -325,7 +319,7 @@ function Receipt({ voice, receipt }: DoneProps) {
     <p
       role="status"
       className={cn(
-        voices[voice],
+        voiceOf(voice),
         'flex items-center gap-2.5 px-4 font-agent text-[0.78125rem] leading-normal text-muted-foreground motion-safe:animate-rise sm:px-9 [&_b]:font-normal [&_b]:text-foreground',
       )}
     >

@@ -1,6 +1,6 @@
 import { cn } from 'cn'
 import { HoverCard as Card } from 'radix-ui'
-import { useId, useState, type ReactElement } from 'react'
+import { useId, useRef, useState, type ReactElement } from 'react'
 
 interface HoverCardProps {
   /** The tile it tells of; it must take a ref, focus and an `aria-describedby`, as a button does. */
@@ -27,10 +27,20 @@ const noteTones = {
  */
 export function HoverCard({ children, place, title, description, note }: HoverCardProps) {
   const [open, setOpen] = useState(false)
+  // Pressed since the pointer came in: a click is no hover, so the card Radix would open after the
+  // delay stays shut until the pointer leaves.
+  const pressed = useRef(false)
   const describedBy = useId()
   return (
     <>
-      <Card.Root open={open} onOpenChange={setOpen} openDelay={420} closeDelay={80}>
+      <Card.Root
+        open={open}
+        onOpenChange={(next) => {
+          if (!next || !pressed.current) setOpen(next)
+        }}
+        openDelay={420}
+        closeDelay={80}
+      >
         <Card.Trigger
           asChild
           aria-describedby={describedBy}
@@ -41,7 +51,11 @@ export function HoverCard({ children, place, title, description, note }: HoverCa
             if (event.currentTarget.matches(':focus-visible')) setOpen(true)
           }}
           onPointerDown={() => {
+            pressed.current = true
             setOpen(false)
+          }}
+          onPointerLeave={() => {
+            pressed.current = false
           }}
         >
           {children}

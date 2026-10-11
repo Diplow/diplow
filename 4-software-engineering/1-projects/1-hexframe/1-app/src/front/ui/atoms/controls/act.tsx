@@ -5,6 +5,19 @@ import { ariaShortcut, Keys, type Shortcut } from '../keys'
 
 type Tone = 'quiet' | 'voice' | 'destructive'
 
+/** Whose a surface is, which its `voice` actions speak in: the agent's, the human's, the app's, or lost. */
+export type Voice = 'agent' | 'human' | 'app' | 'destructive'
+
+const voices: Record<Voice, string> = {
+  agent: '[--voice:var(--agent)]',
+  human: '[--voice:var(--human)]',
+  app: '[--voice:var(--foreground)]',
+  destructive: '[--voice:var(--destructive)]',
+}
+
+/** The class a surface takes so the `Act`s on it, and its own lines, speak in its voice. */
+export const voiceOf = (voice: Voice) => voices[voice]
+
 interface ActProps extends ComponentProps<'button'> {
   /**
    * `text`, a quiet action led by a small hex; `hex`, the one solid action a dialog or a form asks for,
@@ -12,8 +25,8 @@ interface ActProps extends ComponentProps<'button'> {
    */
   look?: 'text' | 'hex'
   /**
-   * `quiet` in the muted ink; `voice` in the voice of the surface it sits on (`--voice`: the agent's
-   * violet, the human's amber), for the action it expects; `destructive` for what is lost.
+   * `quiet` in the muted ink; `voice` in the voice of the surface it sits on (`voiceOf`), for the
+   * action it expects; `destructive` for what is lost.
    */
   tone?: Tone
   /** Its shortcut, drawn after its word so the action teaches it. Whoever owns the key binds it. */

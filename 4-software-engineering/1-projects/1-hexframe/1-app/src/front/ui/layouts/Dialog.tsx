@@ -4,7 +4,7 @@ import { useId, useState, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { Act } from '../atoms/controls/act'
+import { Act, voiceOf } from '../atoms/controls/act'
 
 interface DialogProps {
   /** Controlled: a dialog opens from a widget's action or a menu's entry, not from a trigger of its own. */
@@ -63,6 +63,10 @@ export function Dialog({
           className="fixed inset-0 z-50 bg-background/62 backdrop-blur-[5px] backdrop-saturate-[.85] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 motion-reduce:animate-none"
         />
         <AlertDialog.Content
+          // Escape leaves as the dim does: not once a name is typed.
+          onEscapeKeyDown={(event) => {
+            if (typed !== '') event.preventDefault()
+          }}
           onOpenAutoFocus={(event) => {
             // Focus starts on the way out, Radix's default, or on the name to type when there is one.
             if (typeToConfirm === undefined) return
@@ -70,7 +74,7 @@ export function Dialog({
             document.getElementById(fieldId)?.focus()
           }}
           className={cn(
-            tone === 'destructive' ? '[--voice:var(--destructive)]' : '[--voice:var(--foreground)]',
+            voiceOf(tone === 'destructive' ? 'destructive' : 'app'),
             // A risen surface, square, a line on top in its voice that draws itself as it opens.
             'risen fixed z-50 grid px-6 pt-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] outline-none [--rim:linear-gradient(90deg,var(--voice),color-mix(in_oklab,var(--voice)_10%,transparent))] before:origin-left motion-safe:before:animate-draw',
             // A phone: a sheet from the bottom, the screen's width.
