@@ -9,7 +9,7 @@ import { decodeFailure } from '#/api/report/errors/failure'
 import { TileId } from '#/domains/mapping/entities'
 import { messageFor } from '#/api/report/errors/messages'
 import * as Mapping from '#/api/mapping/mapping'
-import { toast } from '#/front/ui/feedback/Toaster'
+import { toast } from '#/front/ui/atoms/Toaster'
 import { overwriteGetLocale } from '#/paraglide/runtime'
 
 import { CallFailed } from '../calls'
@@ -51,7 +51,7 @@ vi.mock('#/api/mapping/mapping', async (original) => ({
   exportTile: vi.fn(),
 }))
 
-vi.mock('#/front/ui/feedback/Toaster', () => ({ toast: { error: vi.fn() } }))
+vi.mock('#/front/ui/atoms/Toaster', () => ({ toast: { error: vi.fn() } }))
 
 const titleMissing = { _tag: 'TitleMissing', kind: 'Invalid', fields: ['title'] } as const
 

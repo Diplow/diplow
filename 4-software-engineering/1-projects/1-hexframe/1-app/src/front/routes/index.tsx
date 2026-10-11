@@ -31,8 +31,8 @@ import { System } from '#/front/features/system/System'
 import { TileActions } from '#/front/features/system/TileActions'
 import { canvasTree, onScreen } from '#/front/features/system/tree'
 import { m } from '#/paraglide/messages'
-import { Skeleton } from '#/front/ui/feedback/skeleton'
-import { centerOn, type CanvasView, type ViewAction } from '#/front/ui/hex/view/view'
+import { Skeleton } from '#/front/ui/atoms/skeleton'
+import { centerOn, type CanvasView, type ViewAction } from '#/front/ui/canvas/view/view'
 
 export const Route = createFileRoute('/')({
   beforeLoad: signedInOnly,

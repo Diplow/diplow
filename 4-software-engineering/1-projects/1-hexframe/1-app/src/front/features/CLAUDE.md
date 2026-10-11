@@ -16,7 +16,7 @@ A feature is client code that shows one thing a page needs, in a domain's langua
 | Folder | Holds |
 |---|---|
 | `conversation/` | `Chat`, home's chat over the Account's Conversation, read a day at a time; `Conversation`, Assistant's timeline a day at a time, its Entries, a Message's links centering the canvas, and the message input, which `@`s the Account's Tiles, all of which `/dev/system` lays out on fixtures; and `useNavigationSender`, which home mounts, the user's gestures merged and recorded in their Conversation, and its Messages posted after them: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/CLAUDE\|conversation]] |
-| `breadcrumb/` | `Breadcrumb`, the centered Tile's ancestors in one line above the canvas, wrapping when long; a click centers one. The path comes from `pathTo` in `ui/hex/view/` |
+| `breadcrumb/` | `Breadcrumb`, the centered Tile's ancestors in one line above the canvas, wrapping when long; a click centers one. The path comes from `pathTo` in `ui/canvas/view/` |
 | `system/` | `System`, the signed-in Account's System on the canvas, and `TileActions`, what the user does to it: add a Tile or import files in an empty slot, a Leaf in a ring of Leaves, import a vault into an empty System, edit, move, export or delete the centered one, grow a Leaf into a Branch or shrink a bare Branch into a Leaf. The view and the change under way live in the URL: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE\|system]] |
 | `access/` | `Access`, the sign-in and sign-up pages' content: one form, an email and a password, whose refusals show on their fields, then back where the user was: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/access/CLAUDE\|access]] |
 | `help/` | `HelpCanvas`, Help on the canvas, read-only, and `HelpTile`, the centered Tile's card, whose button opens its Body in a drawer. The view and the open Body live in the URL: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help/CLAUDE\|help]] |
@@ -25,7 +25,7 @@ A feature is client code that shows one thing a page needs, in a domain's langua
 | File | Holds |
 |---|---|
 | `bus.ts` | The client bus: `publish` a fact, `useFact` to react to one, `receive` for a fact crossing into the client. Beside the features, not in one, so a feature reaches it without importing another |
-| `facts.ts` | The facts the bus carries. `Navigated`, the user went somewhere on the canvas: the gesture, as the canvas names it (`Gesture`, `ui/hex/view/`), and the Tile it was made on; home publishes one per gesture, and the Conversation's timeline tells its navigations in the same words. Tested: one fact heard per gesture, and a gesture the canvas does not name refused at the crossing |
+| `facts.ts` | The facts the bus carries. `Navigated`, the user went somewhere on the canvas: the gesture, as the canvas names it (`Gesture`, `ui/canvas/view/`), and the Tile it was made on; home publishes one per gesture, and the Conversation's timeline tells its navigations in the same words. Tested: one fact heard per gesture, and a gesture the canvas does not name refused at the crossing |
 
 ## Rules
 

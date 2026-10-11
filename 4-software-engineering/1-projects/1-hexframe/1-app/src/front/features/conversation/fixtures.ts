@@ -5,9 +5,9 @@
 // the fixture System's Tiles, which its composer offers to `@`. Its days are counted back from `now`, so the timeline always shows a today and a yesterday.
 // Like the System, its content is the user's own, so it is not translated.
 import { type Entry, linkTo } from '#/domains/assistant/entities'
-import { ulysse } from '#/front/ui/hex/fixtures'
-import { directions } from '#/front/ui/hex/geometry/geometry'
-import { findTile, type TileNode } from '#/front/ui/hex/view/tiles'
+import { ulysse } from '#/front/ui/canvas/fixtures'
+import { directions } from '#/front/ui/canvas/geometry/geometry'
+import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 
 import type { Mentionable } from './composer/mention'
 import type { Titles } from './timeline/timeline'

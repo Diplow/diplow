@@ -7,7 +7,7 @@ import {
   type SystemTile,
   systemOf,
 } from '#/domains/mapping/entities'
-import type { TileNode } from '#/front/ui/hex/view/tiles'
+import type { TileNode } from '#/front/ui/canvas/view/tiles'
 import { m } from '#/paraglide/messages'
 
 import { canvasTree, moveOf, onScreen, slotOf, swapOf, swapsWith, tileIn } from './tree'

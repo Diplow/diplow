@@ -4,12 +4,12 @@
 // the next search params to the route.
 import type { SystemTile } from '#/domains/mapping/entities'
 import { m } from '#/paraglide/messages'
-import { Canvas } from '#/front/ui/hex/Canvas'
-import type { TileNode } from '#/front/ui/hex/view/tiles'
-import { showView } from '#/front/ui/hex/view/view'
-import { Button } from '#/front/ui/inputs/controls/button'
-import { Drawer } from '#/front/ui/overlays/Drawer'
-import { Card } from '#/front/ui/surfaces/Card'
+import { Canvas } from '#/front/ui/canvas/Canvas'
+import type { TileNode } from '#/front/ui/canvas/view/tiles'
+import { showView } from '#/front/ui/canvas/view/view'
+import { Button } from '#/front/ui/atoms/controls/button'
+import { Drawer } from '#/front/ui/canvas/layouts/Drawer'
+import { Card } from '#/front/ui/canvas/layouts/Card'
 
 import { viewOf, withOpen, withView, type HelpSearch } from './search'
 

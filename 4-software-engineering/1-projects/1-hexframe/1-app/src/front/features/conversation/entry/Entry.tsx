@@ -31,7 +31,7 @@ import {
 } from '#/domains/assistant/entities'
 import type { OperationEvent } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
-import { Gesture } from '#/front/ui/hex/view/view'
+import { Gesture } from '#/front/ui/canvas/view/view'
 
 import type { Titles } from '../timeline/timeline'
 import { isVerb, named, Time, verbIcons } from './parts'

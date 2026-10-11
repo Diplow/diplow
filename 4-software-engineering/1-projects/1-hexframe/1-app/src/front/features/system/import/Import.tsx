@@ -6,8 +6,8 @@ import { type ReactNode, useRef, useState } from 'react'
 
 import type { ImportPlace } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
-import { Button } from '#/front/ui/inputs/controls/button'
-import { Input } from '#/front/ui/inputs/controls/input'
+import { Button } from '#/front/ui/atoms/controls/button'
+import { Input } from '#/front/ui/atoms/controls/input'
 
 import { type ReportLine, useImportState } from './state/useImportState'
 

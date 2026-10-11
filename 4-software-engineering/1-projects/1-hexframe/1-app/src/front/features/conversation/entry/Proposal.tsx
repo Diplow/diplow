@@ -13,8 +13,8 @@ import {
 } from '#/domains/assistant/entities'
 import type { OperationEvent } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
-import { Button } from '#/front/ui/inputs/controls/button'
-import { ConfirmDialog } from '#/front/ui/overlays/ConfirmDialog'
+import { Button } from '#/front/ui/atoms/controls/button'
+import { ConfirmDialog } from '#/front/ui/layouts/ConfirmDialog'
 
 import { type Deciding, isVerb, named, Time, UndoButton, verbIcons } from './parts'
 

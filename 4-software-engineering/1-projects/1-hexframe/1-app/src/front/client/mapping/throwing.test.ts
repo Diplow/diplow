@@ -18,7 +18,7 @@ vi.mock('#/api/mapping/mapping', async (original) => ({
   system: vi.fn(),
 }))
 
-vi.mock('#/front/ui/feedback/Toaster', () => ({ toast: { error: vi.fn() } }))
+vi.mock('#/front/ui/atoms/Toaster', () => ({ toast: { error: vi.fn() } }))
 
 afterEach(() => {
   cleanup()

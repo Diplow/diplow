@@ -1,13 +1,15 @@
-// The design system on one page: every colour token as a swatch, then every ui/ component in every state.
+// The design system on one page: every colour token as a swatch, then every ui/ component in every state,
+// tier by tier, the shared atoms and layouts first, then each side's own, then the seams.
 import { createFileRoute } from '@tanstack/react-router'
 
 import { m } from '#/paraglide/messages'
-import { DataGallery } from '#/front/ui/data/gallery'
-import { FeedbackGallery } from '#/front/ui/feedback/gallery'
-import { InputsGallery } from '#/front/ui/inputs/gallery'
-import { OverlaysGallery } from '#/front/ui/overlays/gallery'
-import { SurfacesGallery } from '#/front/ui/surfaces/gallery'
-import { PageHeader } from '#/front/ui/surfaces/PageHeader'
+import { AtomsGallery } from '#/front/ui/atoms/gallery'
+import { CanvasAtomsGallery } from '#/front/ui/canvas/atoms/gallery'
+import { CanvasLayoutsGallery } from '#/front/ui/canvas/layouts/gallery'
+import { ChatAtomsGallery } from '#/front/ui/chat/atoms/gallery'
+import { LayoutsGallery } from '#/front/ui/layouts/gallery'
+import { PageHeader } from '#/front/ui/layouts/PageHeader'
+import { SeamsGallery } from '#/front/ui/seams/gallery'
 import { colorTokens, type ColorToken } from '#/front/ui/tokens'
 
 import css from '../../styles.css?raw'
@@ -31,11 +33,12 @@ function Gallery() {
           ))}
         </ul>
       </section>
-      <InputsGallery />
-      <SurfacesGallery />
-      <OverlaysGallery />
-      <DataGallery />
-      <FeedbackGallery />
+      <AtomsGallery />
+      <LayoutsGallery />
+      <ChatAtomsGallery />
+      <CanvasAtomsGallery />
+      <CanvasLayoutsGallery />
+      <SeamsGallery />
     </main>
   )
 }

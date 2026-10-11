@@ -8,7 +8,7 @@ import * as Mapping from '#/api/mapping/mapping'
 import { makeQueryClient } from '#/front/client/channels'
 import type { SystemTile } from '#/domains/mapping/entities'
 import { m } from '#/paraglide/messages'
-import { toast } from '#/front/ui/feedback/Toaster'
+import { toast } from '#/front/ui/atoms/Toaster'
 
 import { useCenteredTileState } from './useCenteredTileState'
 
@@ -16,7 +16,7 @@ import { useCenteredTileState } from './useCenteredTileState'
 // function: which Tile grows, which shrinks, which neither, what each sends, and a refusal carried to
 // its toast. A refusal is what the client receives, its wire form, decoded.
 vi.mock('#/api/mapping/mapping', () => ({ moveTile: vi.fn(), system: vi.fn() }))
-vi.mock('#/front/ui/feedback/Toaster', () => ({ toast: { error: vi.fn() } }))
+vi.mock('#/front/ui/atoms/Toaster', () => ({ toast: { error: vi.fn() } }))
 
 afterEach(() => {
   cleanup()

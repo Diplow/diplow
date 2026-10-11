@@ -5,7 +5,7 @@
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query'
 
 import { deLocalizeHref, localizeHref } from '#/paraglide/runtime'
-import { toast } from '#/front/ui/feedback/Toaster'
+import { toast } from '#/front/ui/atoms/Toaster'
 import { channelFor, type Call } from '#/api/report/errors/channel'
 import type { Failure, Outcome } from '#/api/report/errors/failure'
 import { messageFor } from '#/api/report/errors/messages'

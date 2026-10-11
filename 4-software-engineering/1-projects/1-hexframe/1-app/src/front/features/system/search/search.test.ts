@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import type { TileNode } from '#/front/ui/hex/view/tiles'
+import type { TileNode } from '#/front/ui/canvas/view/tiles'
 
 import { tileLink } from '#/api/mapping/files/download'
 

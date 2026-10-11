@@ -2,7 +2,7 @@
 // one and a feature that reacts to it both reach it without importing each other.
 import { Schema } from 'effect'
 
-import { ViewAction } from '#/front/ui/hex/view/view'
+import { ViewAction } from '#/front/ui/canvas/view/view'
 
 /**
  * The user went somewhere on the canvas: the gesture they made, as the canvas names it, and the Tile

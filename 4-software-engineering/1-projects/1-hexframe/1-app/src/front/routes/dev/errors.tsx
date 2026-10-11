@@ -12,12 +12,12 @@ import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { outcomes, type ProvokedOutcome } from '#/api/dev/failures'
 import { provokeRead, provokeWrite, submitDevTitle } from '#/api/dev/provoke'
 import { m } from '#/paraglide/messages'
-import { Skeleton } from '#/front/ui/feedback/skeleton'
-import { toast } from '#/front/ui/feedback/Toaster'
-import { Button } from '#/front/ui/inputs/controls/button'
-import { useAppForm } from '#/front/ui/inputs/forms/form'
-import { Card } from '#/front/ui/surfaces/Card'
-import { PageHeader } from '#/front/ui/surfaces/PageHeader'
+import { Skeleton } from '#/front/ui/atoms/skeleton'
+import { toast } from '#/front/ui/atoms/Toaster'
+import { Button } from '#/front/ui/atoms/controls/button'
+import { useAppForm } from '#/front/ui/atoms/forms/form'
+import { Card } from '#/front/ui/canvas/layouts/Card'
+import { PageHeader } from '#/front/ui/layouts/PageHeader'
 
 export const Route = createFileRoute('/dev/errors')({
   component: ErrorsPage,

@@ -17,7 +17,7 @@ import {
 import type { OperationEvent } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
-import { Button } from '#/front/ui/inputs/controls/button'
+import { Button } from '#/front/ui/atoms/controls/button'
 
 /**
  * How the user decides on what the assistant did: an open Proposal accepted or discarded, by its id,

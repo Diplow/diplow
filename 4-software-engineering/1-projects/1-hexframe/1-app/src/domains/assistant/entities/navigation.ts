@@ -1,6 +1,6 @@
 // Where the user went on the canvas, as the Conversation keeps it: consecutive navigations merged into
 // one Entry, the gestures in the order they came, the latest kept, and how many were merged. The
-// canvas names the gestures (`front/ui/hex/view/view.ts`); the Conversation keeps each word as it came,
+// canvas names the gestures (`front/ui/canvas/view/view.ts`); the Conversation keeps each word as it came,
 // knowing none of them, as it knows no Tile but by its id (`TileRef`). The browser merges as the user
 // goes, and sends the merged Entry once something else enters the timeline. Pure.
 import { Schema } from 'effect'

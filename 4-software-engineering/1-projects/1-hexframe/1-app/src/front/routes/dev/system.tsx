@@ -11,9 +11,9 @@ import { conversationFixture, fixtureMentionables } from '#/front/features/conve
 import { splitByDay } from '#/front/features/conversation/timeline/timeline'
 import { type Entry, type Fate, type Mode, undoneEntry } from '#/domains/assistant/entities'
 import { m } from '#/paraglide/messages'
-import { Canvas } from '#/front/ui/hex/Canvas'
-import { ulysse } from '#/front/ui/hex/fixtures'
-import { centerOn, readCanvasView, type CanvasView } from '#/front/ui/hex/view/view'
+import { Canvas } from '#/front/ui/canvas/Canvas'
+import { ulysse } from '#/front/ui/canvas/fixtures'
+import { centerOn, readCanvasView, type CanvasView } from '#/front/ui/canvas/view/view'
 
 export const Route = createFileRoute('/dev/system')({
   validateSearch: readCanvasView,

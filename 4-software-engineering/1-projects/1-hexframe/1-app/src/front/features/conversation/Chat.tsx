@@ -21,7 +21,7 @@ import {
 import type { LiveTurn } from '#/front/client/assistant/follow'
 import { useSystem } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
-import { Skeleton } from '#/front/ui/feedback/skeleton'
+import { Skeleton } from '#/front/ui/atoms/skeleton'
 
 import { mentionablesOf } from './composer/mention'
 import { Conversation } from './Conversation'
