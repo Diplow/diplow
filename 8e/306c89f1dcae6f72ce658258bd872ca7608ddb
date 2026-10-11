@@ -1,12 +1,16 @@
 4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/spending/CLAUDE.md
   s_c19b57f63ed6ef::t_aaa65db8d6d6a1 6-11,15
+  s_c19b57f63ed6ef::t_e44eb635477de8 19
 4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/assistant.ts
   s_c19b57f63ed6ef::t_6e11d263a60c7d 268-269
   s_c19b57f63ed6ef::t_e56cc88c500b9b 1-15,60,98-99,101,133-135,137-160,273,392,411-416,418-419,423-424,429,432,435,437-438,444,447-452,454-460,462-484
+  s_c19b57f63ed6ef::t_d62f1594ddf53d 420-422,425-427,436,501-505
 4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/agent/CLAUDE.md
   s_c19b57f63ed6ef::t_aaa65db8d6d6a1 6-10,14,18
 4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/spending/admission.ts
   s_c19b57f63ed6ef::t_5f6e948b3eee24 1-12,14-16,23-110
+  s_c19b57f63ed6ef::t_72d08ecca00b9a 22
+  s_c19b57f63ed6ef::t_d62f1594ddf53d 13,17-21
 4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/events/events.test.ts
   s_c19b57f63ed6ef::t_9690a234cc74ef 11,59
 4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/proxy/proxy.test.ts
@@ -23,32 +27,47 @@
   s_c19b57f63ed6ef::t_550f9ad8660726 24
 4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/proposal.test.ts
   s_c19b57f63ed6ef::t_9690a234cc74ef 10,48
+  s_c19b57f63ed6ef::t_cdb8d82939c202 212
 4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/proposal/proposal.test.ts
   s_c19b57f63ed6ef::t_75ab9b7a66793f 1-17
 4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/programs.ts
   s_c19b57f63ed6ef::t_7877bc966742b8 13,35-37,39,82-83,93-97,106-111,113,116-121,123-124,142,180-194,215-216
+  s_c19b57f63ed6ef::t_d62f1594ddf53d 84-87,92,98,100-101
 4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/turns.test.ts
   s_c19b57f63ed6ef::t_6e11d263a60c7d 13
 4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/undo/undo.ts
   s_c19b57f63ed6ef::t_6873208635e1c1 1-11,13-32,34-56
+  s_c19b57f63ed6ef::t_d62f1594ddf53d 12,33
 4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/proposals.test.ts
   s_c19b57f63ed6ef::t_971f2cbcb541c8 27,59-60,63,66-67,73-87,170,172,209,223,242,254-257,293-294,297-299
   s_c19b57f63ed6ef::t_795b329aa3f349 300
+  s_c19b57f63ed6ef::t_e34b7178252c2f 61-62,65,69-72
+  s_c19b57f63ed6ef::t_fc8c497b643d17 304,312-325
 4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/turn/turn.test.ts
   s_c19b57f63ed6ef::t_ff5a282822e3a7 1-61
 4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/CLAUDE.md
   s_c19b57f63ed6ef::t_b1dd4929f07250 48,55-56,58
+  s_c19b57f63ed6ef::t_d3e126100e1a06 54
+  s_c19b57f63ed6ef::t_d098e28a13ed91 45,49
 4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/undo.test.ts
   s_c19b57f63ed6ef::t_9690a234cc74ef 9,47
 4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/events/CLAUDE.md
   s_c19b57f63ed6ef::t_d1ae7d1e9118fa 19
 4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-assistant/decisions.md
   s_c19b57f63ed6ef::t_8b7057ba798d84 22-24,203-208,211-213
+  s_c19b57f63ed6ef::t_75e7e57c0ec7e5 209-210
 4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/assistant.test.ts
   s_c19b57f63ed6ef::t_9c628f883605ee 14,20,70-76,78-84,89,244,292-293,295
   s_c19b57f63ed6ef::t_3df056f17e7621 9,77,118,131,142,154,216,326
 4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/CLAUDE.md
   s_c19b57f63ed6ef::t_cb785a0659eb37 27-28,30-31,43-44
+  s_c19b57f63ed6ef::t_65e192a796a109 36
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/proxy/proxy.ts
+  s_c19b57f63ed6ef::t_d62f1594ddf53d 9
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/proxy/CLAUDE.md
+  s_c19b57f63ed6ef::t_d3e126100e1a06 19
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/spending/call.ts
+  s_c19b57f63ed6ef::t_d62f1594ddf53d 183
 ---
 {
   "schema_version": "authorship/3.0.0",
