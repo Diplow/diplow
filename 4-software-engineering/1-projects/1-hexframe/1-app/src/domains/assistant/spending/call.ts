@@ -178,9 +178,14 @@ export interface Allowed {
   readonly maxTokens: number
 }
 
-/** Why a call is refused: a body past the largest, or one the schema or the headers refuse. */
-export type CallRefused =
-  { readonly why: 'too-large' } | { readonly why: 'invalid'; readonly message: string }
+/**
+ * Why a call is refused: its body or its headers out of what the settings name. A body past the
+ * largest call never reaches here: the proxy reads no further (`largestCall`, `../assistant.ts`).
+ */
+export interface CallRefused {
+  readonly why: 'invalid'
+  readonly message: string
+}
 
 /** The betas `anthropic-beta` names, each trimmed, the empty ones dropped. */
 const betasOf = (header: string | undefined) =>
@@ -220,15 +225,14 @@ function capped(body: CallBody): CallBody {
 
 /**
  * A call, its body's text and the headers Anthropic reads, as the proxy lets it through, or why it is
- * refused: a body past the largest, a field, a model, a tool, a content block or a source the schema
- * does not name, a version no date, or a beta the settings do not name.
+ * refused: a field, a model, a tool, a content block or a source the schema does not name, a version
+ * no date, or a beta the settings do not name.
  */
 export function allowedCall(call: {
   readonly body: string
   readonly version: string | undefined
   readonly betas: string | undefined
 }): Result.Result<Allowed, CallRefused> {
-  if (call.body.length > settings.model.largestCall) return Result.fail({ why: 'too-large' })
   const refused = headersRefused(call)
   if (refused !== undefined) return Result.fail({ why: 'invalid', message: refused })
   const decoded = decodeBody(call.body)

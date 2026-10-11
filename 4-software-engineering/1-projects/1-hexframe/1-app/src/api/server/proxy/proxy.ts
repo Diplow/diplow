@@ -62,10 +62,6 @@ function refusal(
   )
 }
 
-/** A call past the largest the proxy takes, refused as Anthropic refuses one. */
-const tooLarge = (requestId: string) =>
-  refusal('request_too_large', 'The call is larger than the proxy takes.', requestId)
-
 /** What each limit says to the agent, whose Turn it ended. */
 const limits = {
   ceiling: 'This Turn reached its ceiling: it spent what one Turn may.',
@@ -79,13 +75,11 @@ type Answer = Effect.Success<ReturnType<typeof modelCall>>
 function answerOf(answer: Answer, requestId: string): Response {
   switch (answer._tag) {
     case 'Refused':
-      return answer.why === 'too-large'
-        ? tooLarge(requestId)
-        : refusal(
-            'invalid_request_error',
-            `The proxy refused the call: ${answer.message}`,
-            requestId,
-          )
+      return refusal(
+        'invalid_request_error',
+        `The proxy refused the call: ${answer.message}`,
+        requestId,
+      )
     case 'Limited':
       return refusal('billing_error', limits[answer.limit], requestId)
     case 'Busy':
@@ -132,7 +126,9 @@ export async function serveModelCall(request: Request, path: string): Promise<Re
     return refusal('not_found_error', 'The proxy serves the messages endpoint alone.', requestId)
   }
   const body = await bodyOf(request, largestCall)
-  if (body._tag === 'TooLarge') return tooLarge(requestId)
+  if (body._tag === 'TooLarge') {
+    return refusal('request_too_large', 'The call is larger than the proxy takes.', requestId)
+  }
   if (body._tag === 'Broken') {
     return refusal('invalid_request_error', 'The call was cut off on the way.', requestId)
   }

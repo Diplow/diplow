@@ -64,7 +64,7 @@ const change = (title: string): ProposedChange => ({
 const drafted = (account: string, turn: string, title: string) =>
   transactional(
     Effect.andThen(
-      lockedProposal(account),
+      lockedProposal(account, turn),
       draft(account, turn, { write: { title }, changes: [change(title)] }),
     ),
   )
@@ -289,5 +289,24 @@ layer(TestLayer)('what the Assistant applied, undone once, over PGlite', (it) =>
           running: false,
         })
       }),
+  )
+
+  it.effect('says, with the Proposal a Turn drafts into, whether the Turn still runs', () =>
+    Effect.gen(function* () {
+      yield* TestClock.setTime(Date.parse('2026-10-10T14:00:00Z'))
+      const { account, turn } = yield* someone
+      const asking = yield* turn('Draft one.')
+      expect(yield* transactional(lockedProposal(account, asking.id))).toEqual({
+        open: undefined,
+        running: true,
+      })
+      const opened = yield* drafted(account, asking.id, 'Work')
+      yield* transactional(endTurn(account, asking.id, 'stopped'))
+      // A draft that reaches it now is refused by the API layer: its Key proves the Turn no longer.
+      expect(yield* transactional(lockedProposal(account, asking.id))).toMatchObject({
+        open: { id: opened.id },
+        running: false,
+      })
+    }),
   )
 })

@@ -6,6 +6,8 @@ import { cn } from 'cn'
 import { Popover } from 'radix-ui'
 import { type ReactElement, useEffect, useRef } from 'react'
 
+import { inField } from './field'
+
 /** One suggestion: its id, what it says, and what tells it apart, quieter. */
 interface Suggestion {
   readonly id: string
@@ -86,9 +88,7 @@ export function Suggestions({
           // A press in the field is the user still typing, or moving the caret: no click away. With no
           // Trigger, Radix would read it as one, and the search would end for that `@`.
           onInteractOutside={(event) => {
-            if (event.target instanceof Node && field.current?.contains(event.target) === true) {
-              event.preventDefault()
-            }
+            if (inField(field.current, event.target)) event.preventDefault()
           }}
           className="z-50 w-(--radix-popover-trigger-width) max-w-[min(24rem,90vw)] origin-(--radix-popover-content-transform-origin) animate-in rounded-md border bg-popover p-1 text-popover-foreground shadow-md fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
         >

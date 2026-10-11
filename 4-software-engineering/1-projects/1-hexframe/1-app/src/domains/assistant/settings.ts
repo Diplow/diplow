@@ -61,7 +61,7 @@ export const settings = {
     maxTokens: 32_000,
     /**
      * The most bytes a call's body holds, Anthropic's own limit on a request: the proxy reads no
-     * further, and a body of more characters than that is more bytes still.
+     * further, and refuses the call.
      */
     largestCall: 32 * 1024 * 1024,
     /**

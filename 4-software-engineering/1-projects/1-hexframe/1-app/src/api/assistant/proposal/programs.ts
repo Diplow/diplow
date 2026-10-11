@@ -87,11 +87,9 @@ export const openTile = <F extends Field>(
 const drafted = <O extends Operation>(accountId: string, turnId: string, operation: O) =>
   transactional(
     Effect.gen(function* () {
-      const open = yield* Assistant.lockedProposal(accountId)
+      const { open, running } = yield* Assistant.lockedProposal(accountId, turnId)
       // The Turn ended since its Key was proven: its Key no longer proves it.
-      if ((yield* Assistant.turn(accountId, turnId)).ended !== undefined) {
-        return yield* new SignedOut()
-      }
+      if (!running) return yield* new SignedOut()
       const over = yield* batchOf(open)
       const draft = yield* Mapping.draft(accountId, over, operation)
       const write = encodedBatched(draft.batched)

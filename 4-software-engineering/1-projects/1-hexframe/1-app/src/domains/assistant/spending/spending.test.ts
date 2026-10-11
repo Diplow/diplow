@@ -204,10 +204,8 @@ describe('a model call the proxy lets through', () => {
     })
   })
 
-  it('refuses a body that is no JSON, and one past the largest call', () => {
+  it('refuses a body that is no JSON', () => {
     expect(refusal('{"model":')).toMatchObject({ why: 'invalid' })
-    const huge = callOf({ system: 'x'.repeat(settings.model.largestCall) })
-    expect(refusal(huge)).toEqual({ why: 'too-large' })
   })
 })
 
