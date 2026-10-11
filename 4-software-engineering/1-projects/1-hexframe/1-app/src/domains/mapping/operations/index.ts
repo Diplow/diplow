@@ -2,6 +2,7 @@
 // `decide` and `evolve`, the Decider the server and the client share, so a rule exists once. Part of
 // Mapping's door, so the front may import it (src/domains/CLAUDE.md, "The door").
 export * from './batch/fold'
+export * from './batch/inverse'
 export * from './decider/decide'
 export * from './decider/evolve'
 export * from './events'

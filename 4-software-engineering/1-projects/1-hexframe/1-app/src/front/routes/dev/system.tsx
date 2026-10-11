@@ -9,7 +9,7 @@ import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { Conversation } from '#/front/features/conversation/Conversation'
 import { conversationFixture, fixtureMentionables } from '#/front/features/conversation/fixtures'
 import { splitByDay } from '#/front/features/conversation/timeline/timeline'
-import type { Entry, Fate, Mode } from '#/domains/assistant/entities'
+import { type Entry, type Fate, type Mode, undoneEntry } from '#/domains/assistant/entities'
 import { m } from '#/paraglide/messages'
 import { Canvas } from '#/front/ui/hex/Canvas'
 import { ulysse } from '#/front/ui/hex/fixtures'
@@ -51,6 +51,17 @@ function SystemPage() {
       ),
     )
   }
+  // And undoes what was applied for itself, the Entry saying so (Assistant's `undoneEntry`).
+  const undo = (applied: string) => {
+    setEntries((before) =>
+      before.map((entry) => {
+        const offers =
+          (entry._tag === 'Proposal' && entry.proposal === applied) ||
+          (entry._tag === 'TurnApplied' && entry.turn === applied)
+        return offers ? { ...entry, ...undoneEntry(entry) } : entry
+      }),
+    )
+  }
   return (
     <main className="grid gap-4 px-4 pb-4 lg:h-[calc(100dvh-4.25rem)] lg:grid-cols-[minmax(0,1fr)_24rem]">
       <h1 className="sr-only">{m.dev_system_title()}</h1>
@@ -71,7 +82,12 @@ function SystemPage() {
           onViewChange(centerOn(ulysse, tile))
         }}
         mode={{ mode, choose: setMode }}
-        decide={{ accept: decided('accepted'), discard: decided('discarded'), pending: false }}
+        decide={{
+          accept: decided('accepted'),
+          discard: decided('discarded'),
+          undo,
+          pending: false,
+        }}
         className="h-[32rem] lg:h-auto lg:min-h-0"
       />
     </main>

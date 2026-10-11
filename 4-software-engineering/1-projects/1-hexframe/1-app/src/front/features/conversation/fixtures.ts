@@ -1,8 +1,8 @@
 // A fixture Conversation for /dev/system, about the fixture System /dev/hex draws: four days of
 // Assistant's Entries, every kind at least once, a change by each kind of actor, a Message linking
-// Tiles, one of them deleted since, a Proposal accepted and one open, and the Titles of the Tiles its
-// navigations went to and its Messages link; and the fixture System's Tiles, which its composer offers
-// to `@`. Its days are counted back from `now`, so the timeline always shows a today and a yesterday.
+// Tiles, one of them deleted since, a Proposal accepted and one open, a Turn's change applied, which
+// it offers to undo, and the Titles of the Tiles its navigations went to and its Messages link; and
+// the fixture System's Tiles, which its composer offers to `@`. Its days are counted back from `now`, so the timeline always shows a today and a yesterday.
 // Like the System, its content is the user's own, so it is not translated.
 import { type Entry, linkTo } from '#/domains/assistant/entities'
 import { ulysse } from '#/front/ui/hex/fixtures'
@@ -27,6 +27,7 @@ const you = { _tag: 'You' } as const
 /** A Proposal the user accepted: a Reference the assistant drafted, which landed. */
 const acceptedProposal = (at: Date): Entry => ({
   _tag: 'Proposal',
+  undone: false,
   id: 'p1',
   at,
   proposal: 'proposal-accepted',
@@ -166,6 +167,7 @@ export function conversationFixture(now: Date): { entries: Entry[]; titles: Titl
       tile: tile('games'),
       actor: { _tag: 'Assistant' },
     },
+    { _tag: 'TurnApplied', id: 'a1', at: today(2), turn: 'turn-games', changes: 1, undone: false },
     said(
       'm4',
       today(1),

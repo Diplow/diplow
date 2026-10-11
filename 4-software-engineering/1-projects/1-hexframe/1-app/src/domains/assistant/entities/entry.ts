@@ -75,13 +75,25 @@ export type ProposedChange = typeof ProposedChange.Type
 
 /**
  * A Proposal: the changes the agent drafted in ask, in the order it drafted them, as Mapping summarized
- * each, and how the user decided it, open until they do. Its Entry dates from its first draft, and
- * follows it: each later draft adds its changes, and the user's decision its fate.
+ * each, and how the user decided it, open until they do, and, once accepted with what undoes it
+ * kept, whether the user undid it. Its Entry dates from its first draft, and follows it: each later
+ * draft adds its changes, the user's decision its fate, and an undo says so.
  */
 const Proposal = Schema.TaggedStruct('Proposal', {
   proposal: Schema.String,
   changes: Schema.Array(ProposedChange),
   fate: Fate,
+  undone: Schema.optionalKey(Schema.Boolean),
+})
+
+/**
+ * What a Turn in apply wrote, told once it ended: the Turn, how many changes its writes made, and
+ * whether the user undid them. Each change has its own Entry besides, by the Assistant.
+ */
+const TurnApplied = Schema.TaggedStruct('TurnApplied', {
+  turn: Schema.String,
+  changes: Schema.Int.check(Schema.isBetween({ minimum: 0, maximum: 2_147_483_647 })),
+  undone: Schema.Boolean,
 })
 
 /** An import: the Tile it landed as, how many Tiles came with it, below it, and who imported it. */
@@ -95,7 +107,15 @@ const Import = Schema.TaggedStruct('Import', {
 const TurnEnded = Schema.TaggedStruct('TurnEnded', { how: BadEnd })
 
 /** What an Entry says, whichever kind it is: what is stored of it, and what it is decoded by. */
-export const EntryContent = Schema.Union([Message, Change, Import, Navigation, TurnEnded, Proposal])
+export const EntryContent = Schema.Union([
+  Message,
+  Change,
+  Import,
+  Navigation,
+  TurnEnded,
+  Proposal,
+  TurnApplied,
+])
 
 export type EntryContent = typeof EntryContent.Type
 

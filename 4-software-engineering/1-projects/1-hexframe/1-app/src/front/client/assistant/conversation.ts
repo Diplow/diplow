@@ -28,6 +28,7 @@ import {
   type SentMessage,
   setMode,
   stopTurn,
+  undo,
 } from '#/api/assistant/assistant'
 import { dayAt, type Mode } from '#/domains/assistant/entities'
 
@@ -202,6 +203,20 @@ export const useDiscardProposal = () => {
   const client = useQueryClient()
   return useMutation({
     ...write('discardProposal', (proposal: string) => discardProposal({ data: { proposal } }), {
+      queue: conversationQueue,
+    }),
+    onSettled: () => followAgain(client),
+  })
+}
+
+/**
+ * Undoes what a Turn applied, or an accepted Proposal, by its id, then reads the Conversation again
+ * and polls the latest, so the System it put back is read again too.
+ */
+export const useUndo = () => {
+  const client = useQueryClient()
+  return useMutation({
+    ...write('undo', (applied: string) => undo({ data: { applied } }), {
       queue: conversationQueue,
     }),
     onSettled: () => followAgain(client),

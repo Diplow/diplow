@@ -93,7 +93,8 @@ function lineOf(entry: Entry, titles: PromptOf['titles']): string {
     case 'Proposal': {
       const changes =
         entry.changes.length === 0 ? 'nothing yet' : entry.changes.map(changeLine).join('; ')
-      return `You drafted a Proposal (${fates[entry.fate]}): ${changes}.`
+      const fate = entry.undone === true ? 'the user accepted it, then undid it' : fates[entry.fate]
+      return `You drafted a Proposal (${fate}): ${changes}.`
     }
     case 'Import':
       return `${actorOf(entry.actor)} imported ${named(entry.tile.title, entry.tile.id)} and ${String(entry.count)} Tiles below it.`
@@ -105,6 +106,10 @@ function lineOf(entry: Entry, titles: PromptOf['titles']): string {
     }
     case 'TurnEnded':
       return `A Turn of yours ended before its answer: ${ends[entry.how]}.`
+    case 'TurnApplied': {
+      const made = entry.changes === 1 ? '1 change' : `${String(entry.changes)} changes`
+      return `A Turn of yours in apply made ${made}${entry.undone ? ', which the user undid' : ''}.`
+    }
   }
 }
 

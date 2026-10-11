@@ -30,8 +30,8 @@ const said = (text: string): EntryContent => ({ _tag: 'Message', author: 'user',
 
 /**
  * Records an Entry as the API layer does, in a transaction, through the operation its kind has: a
- * navigation `ago` milliseconds before now, anything else now. A Turn's end is recorded as it ends,
- * and a Proposal as its agent drafts it.
+ * navigation `ago` milliseconds before now, anything else now. A Turn's end and what it applied are
+ * recorded as it ends, and a Proposal as its agent drafts it.
  */
 const recorded = (accountId: string, content: EntryContent, ago = 0) =>
   transactional(
@@ -39,8 +39,10 @@ const recorded = (accountId: string, content: EntryContent, ago = 0) =>
       ? postMessage(accountId, content.text)
       : content._tag === 'Navigation'
         ? recordNavigation(accountId, content, ago)
-        : content._tag === 'TurnEnded' || content._tag === 'Proposal'
-          ? Effect.die(new Error('A Turn’s end and a Proposal are recorded as they happen'))
+        : content._tag === 'TurnEnded' ||
+            content._tag === 'Proposal' ||
+            content._tag === 'TurnApplied'
+          ? Effect.die(new Error('A Turn’s end and what it did are recorded as they happen'))
           : recordChange(accountId, summarizedOf(content), content.actor),
   )
 

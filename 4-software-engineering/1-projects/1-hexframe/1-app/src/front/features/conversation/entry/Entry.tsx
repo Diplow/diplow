@@ -1,7 +1,8 @@
 // One Entry of the timeline: a Message, its links to Tiles shown as their Titles, a click centering
 // the canvas on one, or a line saying what happened, a change to the System, an import or where the
 // user went, with who did it, or how a Turn ended when not by its answer; or a Proposal, the changes
-// the assistant drafted, which the user accepts or discards (./Proposal.tsx). Titles are those the
+// the assistant drafted, which the user accepts or discards, then may undo (./Proposal.tsx); or what a
+// Turn in apply wrote, which the user may undo (./Applied.tsx). Titles are those the
 // Entry carries, a navigation's and a link's those the System holds now; times are the reader's, in
 // the page's language.
 import { cn } from 'cn'
@@ -34,7 +35,9 @@ import { Gesture } from '#/front/ui/hex/view/view'
 
 import type { Titles } from '../timeline/timeline'
 import { isVerb, named, Time, verbIcons } from './parts'
-import { type Deciding, ProposalEntry } from './Proposal'
+import { AppliedEntry } from './Applied'
+import type { Deciding } from './parts'
+import { ProposalEntry } from './Proposal'
 import { Shortened } from './Shortened'
 
 interface EntryProps {
@@ -42,7 +45,7 @@ interface EntryProps {
   titles: Titles
   /** Centers the canvas on a Tile a Message links; none where there is no canvas to center. */
   onCenter?: ((tile: string) => void) | undefined
-  /** Accepts or discards an open Proposal; none where nobody decides one. */
+  /** Accepts or discards an open Proposal, or undoes what was applied; none where nobody decides. */
   decide?: Deciding | undefined
 }
 
@@ -65,6 +68,8 @@ export function ConversationEntry({ entry, titles, onCenter, decide }: EntryProp
       return <Action icon={Square} text={turnEnds[entry.how]()} at={entry.at} />
     case 'Proposal':
       return <ProposalEntry entry={entry} decide={decide} />
+    case 'TurnApplied':
+      return <AppliedEntry entry={entry} decide={decide} />
   }
 }
 

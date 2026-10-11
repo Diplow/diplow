@@ -21,6 +21,7 @@ import { layer as blaxelLayer, hasCredentials } from '#/repositories/agent/sandb
 import { Sandbox } from '#/repositories/agent/sandbox/sandbox'
 import { Allowlist, layer as allowlistLayer } from '#/repositories/auth/allowlist'
 import { Auth, HttpExchange, layer as authLayer } from '#/repositories/auth/auth'
+import { Applied, layer as appliedLayer } from '#/repositories/database/conversations/applied'
 import {
   Conversations,
   layer as conversationsLayer,
@@ -91,8 +92,8 @@ const anthropic =
 
 /**
  * What the domains use: Better Auth, the allowlist and the Turn's Keys, the tiles repository, Zip, the
- * conversations, Turns and Proposals repositories, the sandbox, the model relay, and the database
- * itself.
+ * conversations, Turns, Proposals and Applied repositories, the sandbox, the model relay, and the
+ * database itself.
  */
 type Repositories =
   | Auth
@@ -104,18 +105,26 @@ type Repositories =
   | Conversations
   | Turns
   | Proposals
+  | Applied
   | Sandbox
   | Anthropic
 
 /**
  * The repositories the domains use: Better Auth, the allowlist and the Turn's Keys for IAM, the tiles
- * repository and Zip for Mapping, the conversations, Turns and Proposals repositories, the sandbox and
- * the model relay for Assistant; and the database itself, for the transaction a program opens
+ * repository and Zip for Mapping, the conversations, Turns, Proposals and Applied repositories, the
+ * sandbox and the model relay for Assistant; and the database itself, for the transaction a program opens
  * (`transactional`).
  */
 const repositories: Layer.Layer<Repositories> = Layer.mergeAll(
   Layer.provideMerge(
-    Layer.mergeAll(tilesLayer, conversationsLayer, turnsLayer, proposalsLayer, turnKeysLayer),
+    Layer.mergeAll(
+      tilesLayer,
+      conversationsLayer,
+      turnsLayer,
+      proposalsLayer,
+      appliedLayer,
+      turnKeysLayer,
+    ),
     auth,
   ),
   allowlistLayer,

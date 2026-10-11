@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 
 import { overwriteGetLocale } from '#/paraglide/runtime'
 
-import { AllowanceSpent, TurnRunning } from '#/domains/assistant/errors'
+import { AllowanceSpent, NothingToUndo, TurnRunning } from '#/domains/assistant/errors'
 import {
   CredentialsRejected,
   EmailMalformed,
@@ -16,6 +16,7 @@ import {
   TooManyAttempts,
 } from '#/domains/iam/errors'
 import {
+  BatchOutdated,
   DirectionTaken,
   HelpReadOnly,
   ImportRefused,
@@ -40,6 +41,14 @@ describe('the message table', () => {
 
   it('takes the entry scoped to the call first', () => {
     expect(messageFor(new DevConflict(), 'submitDevTitle')).toBe('That title is taken.')
+  })
+
+  it('tells an undo refused once a Tile it touched changed since, and one undone already', () => {
+    expect(messageFor(new BatchOutdated(), 'undo')).toBe(
+      "A tile these changes touched has changed since, so they can't be undone. Undo what changed it first, or change it back by hand.",
+    )
+    expect(messageFor(new BatchOutdated(), 'acceptProposal')).toMatch(/^Your system changed since/)
+    expect(messageFor(new NothingToUndo())).toBe('There is nothing left to undo here.')
   })
 
   it("falls back to the kind's sentence outside that scope", () => {

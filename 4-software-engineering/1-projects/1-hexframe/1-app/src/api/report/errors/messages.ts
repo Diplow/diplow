@@ -11,7 +11,7 @@ import type { Failure } from './failure'
  * which its server function bears and the MCP tool that runs it names too, or another server function
  * by its own.
  */
-type Scope = OperationName | 'importTiles' | 'submitDevTitle'
+type Scope = OperationName | 'importTiles' | 'undo' | 'submitDevTitle'
 
 interface Entry {
   tag: Failure['_tag']
@@ -37,6 +37,7 @@ const table: readonly Entry[] = [
   { tag: 'TurnRunning', message: m.error_assistant_turn_running },
   { tag: 'AllowanceSpent', message: m.error_assistant_allowance_spent },
   { tag: 'ProposalClosed', message: m.error_assistant_proposal_closed },
+  { tag: 'NothingToUndo', message: m.error_assistant_nothing_to_undo },
   { tag: 'TileNotFound', message: m.error_mapping_tile_not_found },
   { tag: 'TitleMissing', message: m.error_mapping_title_missing },
   { tag: 'PreviewTooLong', message: m.error_mapping_preview_too_long },
@@ -49,6 +50,7 @@ const table: readonly Entry[] = [
   { tag: 'RootFixed', message: m.error_mapping_root_fixed },
   { tag: 'LeafHoldsNothing', message: m.error_mapping_leaf_holds_nothing },
   { tag: 'HelpReadOnly', message: m.error_mapping_help_read_only },
+  { tag: 'BatchOutdated', scope: 'undo', message: m.error_assistant_undo_outdated },
   { tag: 'BatchOutdated', message: m.error_mapping_batch_outdated },
   { tag: 'ImportRefused', message: m.error_mapping_import_refused },
   { tag: 'DevInvalid', scope: 'submitDevTitle', message: m.error_dev_title_missing },

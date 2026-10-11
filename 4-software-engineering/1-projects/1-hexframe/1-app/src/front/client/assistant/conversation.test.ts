@@ -14,6 +14,7 @@ import {
   recordNavigation,
   setMode,
   stopTurn,
+  undo,
 } from '#/api/assistant/assistant'
 
 import {
@@ -26,6 +27,7 @@ import {
   useRecordNavigation,
   useSetMode,
   useStopTurn,
+  useUndo,
 } from './conversation'
 
 // The Conversation's hooks over stand-ins for Assistant's server functions: what each calls, with the
@@ -41,6 +43,7 @@ vi.mock('#/api/assistant/assistant', () => ({
   recordNavigation: vi.fn(),
   setMode: vi.fn(),
   stopTurn: vi.fn(),
+  undo: vi.fn(),
 }))
 
 afterEach(() => {
@@ -60,6 +63,7 @@ function answering() {
   vi.mocked(setMode).mockResolvedValue({ ok: true, value: 'apply' } as never)
   vi.mocked(acceptProposal).mockResolvedValue({ ok: true, value: null } as never)
   vi.mocked(discardProposal).mockResolvedValue({ ok: true, value: null } as never)
+  vi.mocked(undo).mockResolvedValue({ ok: true, value: null } as never)
 }
 
 /** Renders `hook` beside today's Conversation, under a QueryClient of its own, once it is read. */
@@ -213,4 +217,16 @@ describe("the Conversation's hooks", () => {
       expect(call).toHaveBeenCalledWith({ data: { proposal: 'proposal-1' } })
     },
   )
+
+  it('undoes what was applied by its id, then reads the Conversation again and polls', async () => {
+    const result = await render(useUndo)
+    act(() => {
+      result.current.hook.mutate('turn-1')
+    })
+    await waitFor(() => {
+      expect(conversationDay).toHaveBeenCalledTimes(2)
+      expect(latest).toHaveBeenCalledTimes(2)
+    })
+    expect(undo).toHaveBeenCalledWith({ data: { applied: 'turn-1' } })
+  })
 })

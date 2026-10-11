@@ -1,28 +1,26 @@
 // A Proposal in the timeline: the changes the assistant drafted in ask, each a line naming its verb and
 // its Tiles by the Titles Mapping gave them on the System the Proposal makes, as a change names them,
 // then how it stands. While it is open, the user accepts it whole or discards it, a discard asked
-// first; once decided, it says how.
+// first; once decided, it says how, and once accepted it offers to undo it, until it is undone.
 import { cn } from 'cn'
 import { Check, ListChecks, Pencil, X } from 'lucide-react'
 
-import type { Entry, Fate, ProposedChange } from '#/domains/assistant/entities'
+import {
+  type Entry,
+  type Fate,
+  offersUndo,
+  type ProposedChange,
+} from '#/domains/assistant/entities'
 import type { OperationEvent } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 import { Button } from '#/front/ui/inputs/controls/button'
 import { ConfirmDialog } from '#/front/ui/overlays/ConfirmDialog'
 
-import { isVerb, named, Time, verbIcons } from './parts'
-
-/** How the user decides an open Proposal, by its id, and whether a decision is on its way. */
-export interface Deciding {
-  accept: (proposal: string) => void
-  discard: (proposal: string) => void
-  pending: boolean
-}
+import { type Deciding, isVerb, named, Time, UndoButton, verbIcons } from './parts'
 
 interface ProposalProps {
   entry: Extract<Entry, { _tag: 'Proposal' }>
-  /** None where nobody decides it: it then only says how it stands. */
+  /** None where nobody decides it, nor undoes it: it then only says how it stands. */
   decide?: Deciding | undefined
 }
 
@@ -38,14 +36,23 @@ export function ProposalEntry({ entry, decide }: ProposalProps) {
         <span className="min-w-0 flex-1 font-medium text-foreground">
           {m.conversation_proposal_title()}
         </span>
-        <span className={fates[fate].className}>{fates[fate].label()}</span>
+        {entry.undone === true ? (
+          <span>{m.conversation_proposal_undone()}</span>
+        ) : (
+          <span className={fates[fate].className}>{fates[fate].label()}</span>
+        )}
         <span aria-hidden>·</span>
         <Time at={entry.at} />
       </p>
       {changes.length === 0 ? (
         <p className="text-xs text-muted-foreground">{m.conversation_proposal_empty()}</p>
       ) : (
-        <ul className={cn('grid gap-1 text-sm', fate === 'discarded' && 'opacity-60')}>
+        <ul
+          className={cn(
+            'grid gap-1 text-sm',
+            (fate === 'discarded' || entry.undone === true) && 'opacity-60',
+          )}
+        >
           {changes.map((change, index) => (
             // The changes of one Proposal, never reordered: their place is their key.
             <ProposedLine key={index} change={change} />
@@ -80,6 +87,9 @@ export function ProposalEntry({ entry, decide }: ProposalProps) {
             {m.conversation_proposal_accept()}
           </Button>
         </div>
+      )}
+      {offersUndo(entry) && decide !== undefined && (
+        <UndoButton applied={proposal} decide={decide} />
       )}
     </section>
   )
