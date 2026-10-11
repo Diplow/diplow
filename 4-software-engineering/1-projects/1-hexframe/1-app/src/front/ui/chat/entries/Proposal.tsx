@@ -8,13 +8,14 @@
 import { cn } from 'cn'
 import type { LucideIcon } from 'lucide-react'
 import { ListChecks } from 'lucide-react'
-import { type FocusEvent, useState } from 'react'
+import type { FocusEvent } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { ConfirmDialog } from '../../layouts/ConfirmDialog'
 import { Act } from '../atoms/controls'
 import { HexMark } from '../atoms/hex'
+import { useHandOffState } from '../state/useHandOffState'
 import { Said, type Words } from '../text/words'
 import { Receipt } from './Receipt'
 
@@ -49,31 +50,14 @@ export function Proposal(props: ProposalProps) {
   const { title, fate, at, undone = false, onUndo, pending = false } = props
   const decided =
     fate === 'accepted' ? m.chat_proposal_accepted({ title }) : m.chat_proposal_discarded({ title })
-  // Whether the focus is in the zone, whether the receipt takes it, and what the status says, each set
-  // as the fate moves: the receipt takes the focus the zone had, else the status says the decision.
-  const [shown, setShown] = useState(fate)
-  const [focused, setFocused] = useState(false)
-  const [handOff, setHandOff] = useState(false)
-  const [status, setStatus] = useState('')
-  if (shown !== fate) {
-    setShown(fate)
-    setHandOff(shown === 'open' && focused)
-    setFocused(false)
-    setStatus(shown === 'open' && !focused ? decided : '')
-  }
+  const { handOff, status, onFocus, onBlur } = useHandOffState(
+    fate === 'open' ? 'open' : 'decided',
+    decided,
+  )
   return (
     <>
       {fate === 'open' ? (
-        <Zone
-          {...props}
-          onFocus={() => {
-            setFocused(true)
-          }}
-          onBlur={(event) => {
-            // The focus left for good, not for the dialog Discard opens, which focuses within it next.
-            if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false)
-          }}
-        />
+        <Zone {...props} onFocus={onFocus} onBlur={onBlur} />
       ) : (
         <Receipt
           takesFocus={handOff}
