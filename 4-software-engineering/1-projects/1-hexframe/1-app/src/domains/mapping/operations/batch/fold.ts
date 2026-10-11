@@ -7,20 +7,29 @@
 // (`whole`, `BatchOutdated`). Pure.
 import { Result, Schema } from 'effect'
 
-import { type System, TileId, tileAt } from '../../entities'
+import { Frontmatter, Name, type System, TileConfig, TileId, tileAt } from '../../entities'
 import { BatchOutdated } from '../../errors'
 import { decide, type Decided, type Refusal } from '../decider/decide'
 import { evolve } from '../decider/evolve'
 import { changeOf, type ChangeSummary, type OperationEvent } from '../events'
 import { Operation } from '../operation'
 
+/** What a Tile kept from its files, each part by the Schema that checked it before it was stored. */
+export const KeptParts = Schema.Struct({
+  name: Schema.optionalKey(Name),
+  config: Schema.optionalKey(TileConfig),
+  frontmatter: Schema.optionalKey(Frontmatter),
+})
+
 /**
  * An Operation as a batch keeps it, decided once already: a create with `made`, the id of what it
- * makes, given when it was first decided, so every fold makes it under that id.
+ * makes, given when it was first decided, so every fold makes it under that id; and, for a Tile an
+ * undo makes again, `kept`, what it kept from its files.
  */
 export const Batched = Schema.Struct({
   operation: Operation,
   made: Schema.optionalKey(TileId),
+  kept: Schema.optionalKey(KeptParts),
 })
 export type Batched = typeof Batched.Type
 
@@ -35,8 +44,8 @@ export interface Folded {
 }
 
 /** What a batched Operation makes on a System, decided as `decide` decides it. */
-function decided(system: System, { operation, made }: Batched): Decided {
-  if (made !== undefined) return decide(system, operation, { id: made })
+function decided(system: System, { operation, made, kept }: Batched): Decided {
+  if (made !== undefined) return decide(system, operation, { id: made, kept })
   if (operation._tag === 'CreateTile' || operation._tag === 'CreateReference') {
     throw new Error('A batched create lost the id of what it makes')
   }
