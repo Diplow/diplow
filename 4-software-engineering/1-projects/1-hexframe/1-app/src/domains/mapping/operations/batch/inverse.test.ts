@@ -266,6 +266,43 @@ describe("inverse, what refuses a batch's undo and what it cannot make again", (
     expect(back.tiles[id.link]).toEqual(system.tiles[id.link])
   })
 
+  it('puts a Reference back as soon as its Tile is, before the undo of an older event deletes it', () => {
+    const reference = (held: System) =>
+      new CreateReference({
+        parent: id.team,
+        parentVersion: versionOf(held, id.team),
+        slot: -1,
+        target: id.home,
+      })
+    const { events, after } = ran(
+      system,
+      reference,
+      (held) => new DeleteTile({ id: id.home, version: versionOf(held, id.home) }),
+      (held) =>
+        new DeleteReference({ parent: id.team, parentVersion: versionOf(held, id.team), slot: -1 }),
+    )
+    expect(said(undoneOn(after, undoOf(system, events)))).toEqual(said(system))
+  })
+
+  it('undoes a Reference made under a Tile the batch made, its Tile deleted, then itself', () => {
+    const made = uuid()
+    const { events, after } = ran(
+      system,
+      () => new CreateTile({ id: made, parent: id.root, slot: 3, ...content('Plans') }),
+      (held) =>
+        new CreateReference({
+          parent: made,
+          parentVersion: versionOf(held, made),
+          slot: -1,
+          target: id.home,
+        }),
+      (held) => new DeleteTile({ id: id.home, version: versionOf(held, id.home) }),
+      (held) =>
+        new DeleteReference({ parent: made, parentVersion: versionOf(held, made), slot: -1 }),
+    )
+    expect(said(undoneOn(after, undoOf(system, events)))).toEqual(said(system))
+  })
+
   it('leaves out a Reference broken before the batch, which no create can make', () => {
     const broken = { ...system, tiles: Struct.omit(system.tiles, [id.home]) }
     const { events, after } = ran(
@@ -296,6 +333,22 @@ describe('extended, the undo of a batch that grows', () => {
     )
     const undo = extended(undoOf(system, first.events), first.after, second.events)
     expect(said(undoneOn(second.after, undo))).toEqual(said(system))
+  })
+
+  it('puts back a Reference a later run deleted, whose Tile an earlier run deleted', () => {
+    const first = ran(
+      system,
+      (held) => new DeleteTile({ id: id.home, version: versionOf(held, id.home) }),
+    )
+    const second = ran(
+      first.after,
+      (held) =>
+        new DeleteReference({ parent: id.work, parentVersion: versionOf(held, id.work), slot: -1 }),
+    )
+    const undo = extended(undoOf(system, first.events), first.after, second.events)
+    const back = undoneOn(second.after, undo)
+    expect(said(back)).toEqual(said(system))
+    expect(back.tiles[id.link]).toEqual(system.tiles[id.link])
   })
 
   it('is outdated, for good, once a Tile an earlier run touched changed before the next one', () => {

@@ -111,6 +111,44 @@ describe('a model call the proxy lets through', () => {
     expect(refusal(callOf({ messages: [serverUse] }))).toMatchObject({ why: 'invalid' })
   })
 
+  it('takes an image or a document held inline, in a message or a tool’s result', () => {
+    const image = {
+      type: 'image',
+      source: { type: 'base64', media_type: 'image/png', data: 'iVBO' },
+    }
+    const pdf = {
+      type: 'document',
+      source: { type: 'base64', media_type: 'application/pdf', data: 'JVBE' },
+    }
+    const text = {
+      type: 'document',
+      source: { type: 'text', media_type: 'text/plain', data: 'Ada' },
+    }
+    const said = { role: 'user', content: [image, pdf, text] }
+    expect(Result.isSuccess(asked(callOf({ messages: [said] })))).toBe(true)
+    const result = { type: 'tool_result', tool_use_id: 'toolu_1', content: [image, pdf] }
+    const read = { role: 'user', content: [result] }
+    expect(Result.isSuccess(asked(callOf({ messages: [read] })))).toBe(true)
+  })
+
+  it('refuses an image or a document Anthropic would fetch, at a URL or among the stored files', () => {
+    const url = { type: 'url', url: 'https://evil.test/huge.pdf' }
+    const file = { type: 'file', file_id: 'file_1' }
+    for (const block of [
+      { type: 'image', source: url },
+      { type: 'document', source: url },
+      { type: 'image', source: file },
+      { type: 'document', source: file },
+      { type: 'image' },
+    ]) {
+      const said = { role: 'user', content: [block] }
+      expect(refusal(callOf({ messages: [said] }))).toMatchObject({ why: 'invalid' })
+      const result = { type: 'tool_result', tool_use_id: 'toolu_1', content: [block] }
+      const read = { role: 'user', content: [result] }
+      expect(refusal(callOf({ messages: [read] }))).toMatchObject({ why: 'invalid' })
+    }
+  })
+
   it('refuses a beta the settings do not name, saying which', () => {
     expect(refusal(callOf(), 'claude-code-20250219,mcp-client-2025-11-20')).toEqual({
       why: 'invalid',

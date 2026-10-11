@@ -5,6 +5,7 @@ import { TestClock } from 'effect/testing'
 import { layer as appliedLayer } from '#/repositories/database/conversations/applied'
 import { layer as conversationsLayer } from '#/repositories/database/conversations/conversations'
 import { layer as proposalsLayer } from '#/repositories/database/conversations/proposals'
+import { conversationLockedHere } from '#/repositories/database/conversations/testing'
 import { Turns, layer as turnsLayer } from '#/repositories/database/conversations/turns'
 import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
@@ -311,6 +312,35 @@ layer(TestLayer)('a Turn as it runs, over PGlite', (it) => {
         _tag: 'Followed',
       })
       expect(yield* runningTurn(account)).toEqual(turn)
+    }),
+  )
+
+  // Two transactions locking the same two rows in opposite orders deadlock, which one connection to
+  // PGlite cannot show: a Said line records the agent's Message, the Conversation's row locked, then
+  // drops the step, the Turn's; a Stop or a limit ends the Turn, then records how. So every write of a
+  // Turn locks its Conversation first, which a transaction holding nothing else shows.
+  it.effect("locks the Conversation's row before a Turn's on every write of the Turn", () =>
+    Effect.gen(function* () {
+      const { account, message } = yield* someone
+      const turn = yield* transactional(startTurn(account, { message, location }))
+      const locks = <A, R>(write: Effect.Effect<A, never, R>) =>
+        transactional(Effect.andThen(write, conversationLockedHere(account)))
+
+      expect(yield* locks(runningTurn(account))).toBe(false)
+      expect(yield* locks(Turns.use((turns) => turns.step(account, turn.id, null)))).toBe(true)
+      expect(
+        yield* locks(Turns.use((turns) => turns.spending(account, turn.id, new Date(0)))),
+      ).toBe(true)
+      expect(
+        yield* locks(
+          Turns.use((turns) => turns.charge(account, turn.id, { spent: 0, reserved: 0 })),
+        ),
+      ).toBe(true)
+      expect(
+        yield* locks(
+          Turns.use((turns) => turns.end(account, turn.id, { end: 'stopped', at: new Date(0) })),
+        ),
+      ).toBe(true)
     }),
   )
 })

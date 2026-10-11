@@ -41,7 +41,8 @@ interface ChatProps {
 
 export function Chat({ onSend, turn, mode, onCenter, className }: ChatProps) {
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useConversation()
-  const { data: system } = useSystem()
+  // The System read without throwing: a failed read shows on the canvas, and the chat stays up.
+  const { data: system } = useSystem({ throwing: false })
   const root = system?.root
   const tiles = useMemo(
     () => (root === undefined ? [] : mentionablesOf(root, m.system_untitled())),

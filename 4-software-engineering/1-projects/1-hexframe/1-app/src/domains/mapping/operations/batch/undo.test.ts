@@ -8,7 +8,15 @@ import { layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
 import { type System, tileAt } from '../../entities'
 import * as Mapping from '../../mapping'
-import { CreateReference, CreateTile, DeleteTile, EditTile, MoveTile, type Undo } from '..'
+import {
+  CreateReference,
+  CreateTile,
+  DeleteReference,
+  DeleteTile,
+  EditTile,
+  MoveTile,
+  type Undo,
+} from '..'
 
 // An undo over the database, over PGlite: a batch run whole answers what undoes it, and the undo puts
 // the System back as it stood, a deleted Tile under its id, each event published as an Operation's;
@@ -187,5 +195,54 @@ layer(TestTiles)('an undo over the System', (it) => {
       )
       expect(refused._tag).toBe('TileChanged')
     }),
+  )
+})
+
+layer(TestTiles)('an undo of a Reference whose Tile its batch deleted before it', (it) => {
+  it.effect(
+    'undoes a batch that put a Reference under a Tile it made, deleted its Tile, then it',
+    () =>
+      Effect.gen(function* () {
+        const { accountId, root, team } = yield* seeded
+        const before = yield* Mapping.system(accountId)
+        const plans = crypto.randomUUID()
+        const { undo } = yield* transactional(
+          Mapping.runBatch(accountId, [
+            {
+              operation: new CreateTile({ parent: root, slot: 3, ...content('Plans') }),
+              made: plans,
+            },
+            {
+              operation: new CreateReference({
+                parent: plans,
+                parentVersion: 1,
+                slot: -1,
+                target: team,
+              }),
+              made: crypto.randomUUID(),
+            },
+            { operation: new DeleteTile({ id: team, version: 1 }) },
+            { operation: new DeleteReference({ parent: plans, parentVersion: 2, slot: -1 }) },
+          ]),
+        )
+        yield* undone(accountId, undo)
+        expect(said(yield* Mapping.system(accountId))).toEqual(said(before))
+      }),
+  )
+
+  it.effect(
+    'puts back a Reference a later write deleted, whose Tile an earlier write deleted',
+    () =>
+      Effect.gen(function* () {
+        const { accountId, root, team } = yield* seeded
+        const before = yield* Mapping.system(accountId)
+        const remove = new DeleteTile({ id: team, version: 1 })
+        const first = yield* transactional(Mapping.applied(accountId, remove, undefined))
+        const parentVersion = yield* versionOf(accountId, root)
+        const unlink = new DeleteReference({ parent: root, parentVersion, slot: -1 })
+        const second = yield* transactional(Mapping.applied(accountId, unlink, first.undo))
+        yield* undone(accountId, second.undo)
+        expect(said(yield* Mapping.system(accountId))).toEqual(said(before))
+      }),
   )
 })

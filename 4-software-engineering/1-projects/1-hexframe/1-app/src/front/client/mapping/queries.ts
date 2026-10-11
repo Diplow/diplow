@@ -108,9 +108,14 @@ function pendingOf(mutation: Mutation): Pending {
  * with everything below it. A write that settles stops being pending once the System read again has
  * landed, so nothing flickers between its answer and the read. Undefined until the first read lands.
  * Shown inside a ReadBoundary, where its failure appears; signed out, it sends the user to sign in.
+ * With `throwing: false`, for what shows beside the canvas, the chat: the same Query, read once,
+ * whose failure throws nothing there and leaves it undefined, the canvas's boundary showing it. Not
+ * a `frame` read, which would be a Query of its own and read the System twice.
  */
-export function useSystem(): { data: { system: System; root: SystemTile } | undefined } {
-  const { data } = useQuery(systemRead)
+export function useSystem({ throwing = true }: { throwing?: boolean } = {}): {
+  data: { system: System; root: SystemTile } | undefined
+} {
+  const { data } = useQuery(throwing ? systemRead : { ...systemRead, throwOnError: false })
   const pending = useMutationState({
     filters: { status: 'pending', predicate: inSystemQueue },
     select: pendingOf,
