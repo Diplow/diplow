@@ -14,4 +14,4 @@ The Chat, the side of hexframe's screen that shows the Conversation, where the u
 
 | Path | Holds |
 |---|---|
-| `atoms/` | `Suggestions.tsx`, `Suggestions`, a list over the field it suggests for, which keeps the focus and the keys, a click in the field never closing it (`field.ts`, `inField`, tested), the field named a combobox controlling it by `suggestionsField`, the active suggestion kept in view, a click picking one; the composer's `@` search shows the Tiles in it. `gallery.tsx`, `ChatAtomsGallery`, on `/dev/ui` |
+| `atoms/` | `Suggestions.tsx`, `Suggestions`, a list over the field it suggests for, which keeps the focus and the keys, a click in the field never closing it (`field.ts`, `inField`, tested), the field named a combobox controlling it by `suggestionsField`, the active suggestion kept in view, a click picking one; the composer's `@` search shows the Tiles in it. `gallery.tsx`, `ChatAtomsGallery`, on `/design-system` |

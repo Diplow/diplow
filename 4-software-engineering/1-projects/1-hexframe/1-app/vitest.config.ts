@@ -5,7 +5,7 @@ import { definesFor } from './vite.config'
 
 export default defineConfig({
   resolve: { tsconfigPaths: true },
-  // Tests run as `pnpm dev` does: the /dev pages and their server functions are on.
+  // Tests run as `pnpm dev` does: the /dev pages are on.
   define: definesFor(environmentOf('serve', undefined)),
   test: {
     include: ['src/**/*.test.ts', 'scripts/**/*.test.ts'],

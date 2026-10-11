@@ -30,7 +30,7 @@ import {
   TitleMissing,
 } from '#/domains/mapping/errors'
 
-import { DevConflict, DevForbidden, DevInvalid, DevNotFound } from '../../dev/failures'
+import { DevConflict, DevForbidden, DevInvalid } from '../../dev/failures'
 import { Unexpected } from './failure'
 import { messageFor } from './messages'
 
@@ -40,7 +40,9 @@ describe('the message table', () => {
   })
 
   it('takes the entry scoped to the call first', () => {
-    expect(messageFor(new DevConflict(), 'submitDevTitle')).toBe('That title is taken.')
+    expect(messageFor(new DirectionTaken(), 'importTiles')).toBe(
+      'This place holds something now: an import goes into an empty slot, or into an empty system.',
+    )
   })
 
   it('tells an undo refused once a Tile it touched changed since, and one undone already', () => {
@@ -51,21 +53,23 @@ describe('the message table', () => {
     expect(messageFor(new NothingToUndo())).toBe('There is nothing left to undo here.')
   })
 
-  it("falls back to the kind's sentence outside that scope", () => {
-    expect(messageFor(new DevConflict(), 'provokeWrite')).toBe(
-      'This changed in the meantime. Reload, then try again.',
+  it("takes the tag's general entry outside that scope", () => {
+    expect(messageFor(new DirectionTaken(), 'createTile')).toBe(
+      'This place already holds a tile. Pick a free one, or move that tile first.',
     )
-    expect(messageFor(new DevInvalid({ fields: ['title'] }))).toBe('Some fields need another look.')
   })
 
   it('takes an unscoped entry in every scope', () => {
-    const sentence =
-      "This dev record doesn't exist. (The table's entry for DevNotFound, in every scope.)"
-    expect(messageFor(new DevNotFound(), 'provokeRead')).toBe(sentence)
-    expect(messageFor(new DevNotFound())).toBe(sentence)
+    const sentence = "This tile doesn't exist, or no longer does."
+    expect(messageFor(new TileNotFound(), 'editTile')).toBe(sentence)
+    expect(messageFor(new TileNotFound())).toBe(sentence)
   })
 
   it('has a sentence for a kind no entry names', () => {
+    expect(messageFor(new DevConflict(), 'editTile')).toBe(
+      'This changed in the meantime. Reload, then try again.',
+    )
+    expect(messageFor(new DevInvalid({ fields: ['title'] }))).toBe('Some fields need another look.')
     expect(messageFor(new DevForbidden())).toBe(
       "This belongs to someone who hasn't shared it with you.",
     )
@@ -149,7 +153,9 @@ describe('the message table', () => {
 
   it("speaks the page's language", () => {
     overwriteGetLocale(() => 'fr')
-    expect(messageFor(new DevConflict(), 'submitDevTitle')).toBe('Ce titre est déjà pris.')
+    expect(messageFor(new DirectionTaken(), 'importTiles')).toBe(
+      'Cette place est prise désormais : un import va dans une place libre, ou dans un système vide.',
+    )
     expect(messageFor(new DevForbidden())).toBe(
       'Ceci appartient à quelqu’un qui ne l’a pas partagé avec vous.',
     )

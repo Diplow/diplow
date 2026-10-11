@@ -1,4 +1,4 @@
-// The layouts every side shares, in /dev/ui: the dialog, the table, the page's header, and what a
+// The layouts every side shares, on /design-system: the dialog, the table, the page's header, and what a
 // place shows instead of its content.
 import { FilePlus, Plus, Rows3 } from 'lucide-react'
 import { useMemo } from 'react'
@@ -7,7 +7,7 @@ import { m } from '#/paraglide/messages'
 
 import { Button } from '../atoms/controls/button'
 import { toast } from '../atoms/Toaster'
-import { GallerySection, GalleryState } from '../gallery'
+import { GallerySection, GalleryState } from '../gallery/frame'
 import { ConfirmDialog } from './ConfirmDialog'
 import { DataTable, type DataColumn } from './DataTable'
 import { PageHeader } from './PageHeader'
@@ -31,22 +31,22 @@ const done = (what: string) => () => {
 function DialogGallery() {
   return (
     <GallerySection name="ConfirmDialog">
-      <GalleryState label={m.dev_ui_state_default()}>
+      <GalleryState label={m.gallery_state_default()}>
         <ConfirmDialog
-          trigger={<Button variant="outline">{m.dev_ui_sample_publish()}</Button>}
-          title={m.dev_ui_sample_publish_title()}
-          description={m.dev_ui_sample_publish_description()}
-          confirmLabel={m.dev_ui_sample_publish()}
-          onConfirm={done(m.dev_ui_sample_published())}
+          trigger={<Button variant="outline">{m.gallery_sample_publish()}</Button>}
+          title={m.gallery_sample_publish_title()}
+          description={m.gallery_sample_publish_description()}
+          confirmLabel={m.gallery_sample_publish()}
+          onConfirm={done(m.gallery_sample_published())}
         />
       </GalleryState>
-      <GalleryState label={m.dev_ui_state_destructive()}>
+      <GalleryState label={m.gallery_state_destructive()}>
         <ConfirmDialog
-          trigger={<Button variant="destructive">{m.dev_ui_sample_delete()}</Button>}
-          title={m.dev_ui_sample_delete_title()}
-          description={m.dev_ui_sample_delete_description()}
-          confirmLabel={m.dev_ui_sample_delete()}
-          onConfirm={done(m.dev_ui_sample_deleted())}
+          trigger={<Button variant="destructive">{m.gallery_sample_delete()}</Button>}
+          title={m.gallery_sample_delete_title()}
+          description={m.gallery_sample_delete_description()}
+          confirmLabel={m.gallery_sample_delete()}
+          onConfirm={done(m.gallery_sample_deleted())}
           destructive
         />
       </GalleryState>
@@ -63,12 +63,12 @@ interface TileRow {
 
 // The six domains of the vault, as a System's first children; titles are messages, read at render.
 const tileRows = (): TileRow[] => [
-  { id: 'leadership', title: m.dev_ui_sample_leadership(), direction: 1, children: 4 },
-  { id: 'education', title: m.dev_ui_sample_education(), direction: 2, children: 6 },
-  { id: 'games', title: m.dev_ui_sample_games(), direction: 3, children: 2 },
-  { id: 'software', title: m.dev_ui_sample_software(), direction: 4, children: 5 },
-  { id: 'startups', title: m.dev_ui_sample_startups(), direction: 5, children: 3 },
-  { id: 'politics', title: m.dev_ui_sample_politics(), direction: 6, children: 1 },
+  { id: 'leadership', title: m.gallery_sample_leadership(), direction: 1, children: 4 },
+  { id: 'education', title: m.gallery_sample_education(), direction: 2, children: 6 },
+  { id: 'games', title: m.gallery_sample_games(), direction: 3, children: 2 },
+  { id: 'software', title: m.gallery_sample_software(), direction: 4, children: 5 },
+  { id: 'startups', title: m.gallery_sample_startups(), direction: 5, children: 3 },
+  { id: 'politics', title: m.gallery_sample_politics(), direction: 6, children: 1 },
 ]
 const noRows: TileRow[] = []
 
@@ -76,14 +76,14 @@ const noRows: TileRow[] = []
 const tileColumns = (): DataColumn<TileRow>[] => [
   {
     id: 'title',
-    header: m.dev_ui_table_title(),
+    header: m.gallery_table_title(),
     cell: (row) => row.title,
     sortValue: (row) => row.title,
   },
-  { id: 'direction', header: m.dev_ui_table_direction(), cell: (row) => row.direction },
+  { id: 'direction', header: m.gallery_table_direction(), cell: (row) => row.direction },
   {
     id: 'children',
-    header: m.dev_ui_table_children(),
+    header: m.gallery_table_children(),
     cell: (row) => row.children,
     sortValue: (row) => row.children,
     align: 'end',
@@ -99,20 +99,20 @@ function TableGallery() {
   const empty = (
     <EmptyState
       icon={<Rows3 />}
-      title={m.dev_ui_empty_title()}
-      description={m.dev_ui_empty_description()}
+      title={m.gallery_empty_title()}
+      description={m.gallery_empty_description()}
       action={
         <Button size="sm">
           <Plus />
-          {m.dev_ui_sample_new_tile()}
+          {m.gallery_sample_new_tile()}
         </Button>
       }
     />
   )
   const states = [
-    { label: m.dev_ui_state_rows_sortable(), rows },
-    { label: m.dev_ui_state_loading(), rows: undefined },
-    { label: m.dev_ui_state_empty(), rows: noRows },
+    { label: m.gallery_state_rows_sortable(), rows },
+    { label: m.gallery_state_loading(), rows: undefined },
+    { label: m.gallery_state_empty(), rows: noRows },
   ]
   return (
     <GallerySection name="DataTable">
@@ -120,7 +120,7 @@ function TableGallery() {
         <GalleryState key={state.label} label={state.label}>
           <div className="w-[28rem] max-w-full">
             <DataTable
-              caption={m.dev_ui_table_caption()}
+              caption={m.gallery_table_caption()}
               columns={columns}
               rows={state.rows}
               rowId={tileId}
@@ -136,23 +136,23 @@ function TableGallery() {
 function HeaderGallery() {
   return (
     <GallerySection name="PageHeader">
-      <GalleryState label={m.dev_ui_state_complete()}>
+      <GalleryState label={m.gallery_state_complete()}>
         <div className="w-[36rem] max-w-full">
           <PageHeader
-            title={m.dev_ui_sample_page_title()}
-            description={m.dev_ui_sample_page_description()}
+            title={m.gallery_sample_page_title()}
+            description={m.gallery_sample_page_description()}
             actions={
               <Button>
                 <Plus />
-                {m.dev_ui_sample_new_tile()}
+                {m.gallery_sample_new_tile()}
               </Button>
             }
           />
         </div>
       </GalleryState>
-      <GalleryState label={m.dev_ui_state_title_only()}>
+      <GalleryState label={m.gallery_state_title_only()}>
         <div className="w-[36rem] max-w-full">
-          <PageHeader title={m.dev_ui_sample_page_title()} />
+          <PageHeader title={m.gallery_sample_page_title()} />
         </div>
       </GalleryState>
     </GallerySection>
@@ -160,55 +160,55 @@ function HeaderGallery() {
 }
 
 const retry = () => {
-  toast(m.dev_ui_sample_retrying())
+  toast(m.gallery_sample_retrying())
 }
 
 function StatesGallery() {
   return (
     <>
       <GallerySection name="EmptyState">
-        <GalleryState label={m.dev_ui_state_with_action()}>
+        <GalleryState label={m.gallery_state_with_action()}>
           <div className="w-80">
             <EmptyState
               icon={<FilePlus />}
-              title={m.dev_ui_empty_title()}
-              description={m.dev_ui_empty_description()}
+              title={m.gallery_empty_title()}
+              description={m.gallery_empty_description()}
               action={
                 <Button size="sm">
                   <Plus />
-                  {m.dev_ui_sample_new_tile()}
+                  {m.gallery_sample_new_tile()}
                 </Button>
               }
             />
           </div>
         </GalleryState>
-        <GalleryState label={m.dev_ui_state_title_only()}>
+        <GalleryState label={m.gallery_state_title_only()}>
           <div className="w-80">
-            <EmptyState title={m.dev_ui_empty_title()} />
+            <EmptyState title={m.gallery_empty_title()} />
           </div>
         </GalleryState>
       </GallerySection>
       <GallerySection name="ErrorState">
-        <GalleryState label={m.dev_ui_state_with_retry()}>
+        <GalleryState label={m.gallery_state_with_retry()}>
           <div className="w-80">
             <ErrorState requestId="req_01J9Z8X7W6V5" onRetry={retry} />
           </div>
         </GalleryState>
-        <GalleryState label={m.dev_ui_state_with_message()}>
+        <GalleryState label={m.gallery_state_with_message()}>
           <div className="w-80">
-            <ErrorState message={m.dev_ui_sample_error_message()} />
+            <ErrorState message={m.gallery_sample_error_message()} />
           </div>
         </GalleryState>
       </GallerySection>
       <GallerySection name="Forbidden">
-        <GalleryState label={m.dev_ui_state_default()}>
+        <GalleryState label={m.gallery_state_default()}>
           <div className="w-80">
             <Forbidden />
           </div>
         </GalleryState>
-        <GalleryState label={m.dev_ui_state_with_message()}>
+        <GalleryState label={m.gallery_state_with_message()}>
           <div className="w-80">
-            <Forbidden message={m.dev_ui_sample_forbidden_message()} />
+            <Forbidden message={m.gallery_sample_forbidden_message()} />
           </div>
         </GalleryState>
       </GallerySection>

@@ -6,9 +6,10 @@ preview: >-
   The design system: why hexframe looks the way it does (six principles, one
   screen with two sides), the words for its screen (the Chat, the Canvas, the
   crossings; components, atoms and layouts), then its closed list, by tier and
-  side, in atoms/, layouts/, chat/, canvas/ and seams/. Only ui/ imports Radix
-  and the other UI libraries; colour comes from theme tokens; dark by default,
-  light as its equal.
+  side, in atoms/, layouts/, chat/, canvas/ and seams/, shown top-down at
+  /design-system from gallery/. Only ui/ imports Radix and the other UI
+  libraries; colour comes from theme tokens; dark by default, light as its
+  equal.
 ---
 # ui
 
@@ -35,7 +36,7 @@ hexframe is one screen, with no menu and no page to go to. Everything happens in
 
 hexframe is one screen with two **sides**, and nothing to navigate outside them. The **Chat** shows the Conversation: the user and the agent act there, and whatever a menu would do happens there. The **Canvas** shows the System: it carries what they act on, and the way through it. The **crossings** are where one side answers the other, both ways: a tile named in the chat lights up on the canvas, a tile centered on the canvas is where the agent works next.
 
-A side is made of **components**, a chat component or a canvas component, built from **atoms**, a control that knows nothing of hexframe (a button, a field), inside **layouts**, a shell with slots that decides where things go and how they fold on a phone (the widget's frame, the dialog's). An atom or a layout lives in the side that uses it, and is shared once the other side uses it too. The width picks the layout, a phone showing one side at a time; a finger picks the behaviour, at any width. TOKENS.md, in `4-software-engineering/1-projects/3-design-system/`, says where each begins.
+A side is made of **components**, a chat component or a canvas component, built from **atoms**, a control that knows nothing of hexframe (a button, a field), inside **layouts**, a shell with slots that decides where things go and how they fold on a phone (the widget's frame, the dialog's). An atom or a layout lives in the side that uses it, and is shared once the other side uses it too. The width picks the layout, a phone showing one side at a time; a finger picks the behaviour, at any width. The tokens on `/design-system` say where each begins (`gallery/Tokens.tsx`).
 
 ## The closed list
 
@@ -48,18 +49,17 @@ A side is made of **components**, a chat component or a canvas component, built 
 | `chat/` | The Chat's own pieces: for now one atom, `Suggestions`: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/CLAUDE\|chat]] |
 | `canvas/` | The Canvas: `Canvas`, `Tile` and `Frame` on the tested geometry and view state, and its own atoms and layouts, `Tooltip`, `useLeaveGuard`, `Card`, `Drawer`: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE\|canvas]] |
 | `seams/` | The seams STACK.md names in `ui/`, each one file that changes when its library comes or goes: for now the Markdown one, `CodeBlock`: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/seams/CLAUDE\|seams]] |
+| `gallery/` | `/design-system`, the page that shows all of it, top-down, and the frame every folder's `gallery.tsx` draws its pieces in, outside the tiers: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/CLAUDE\|gallery]] |
 
 | File | Holds |
 |---|---|
 | `theme.ts` | The theme's state, `useThemeState`, and `themeScript`, which paints dark before the first paint unless the user chose light. Tested |
-| `tokens.ts` | `colorTokens`, every colour token read from `styles.css`, for `/dev/ui`'s swatches and `tokens.test.ts`, which checks each has a value in both themes and a line in `@theme inline` |
-| `gallery.tsx` | `GallerySection` and `GalleryState`, the frame of `/dev/ui` that every folder's `gallery.tsx` shows its pieces in |
 
 ## Rules
 
 - **A piece's folder is its tier and its side.** A piece's side is the side of the screen it is used on, counting the features that draw each: `features/conversation/` draws the Chat, `features/system/`, `features/help/` and `features/breadcrumb/` the Canvas; the root's header, Access, Keys and the `/dev` pages are on no side, since the one screen retires them (`hexframe-app-design-system-v1/decisions.md#DEC-5`, in `.run/registers/`). A component belongs to the side it draws; an atom or a layout sits in `<side>/atoms/` or `<side>/layouts/` while one side uses it, and moves to `atoms/` or `layouts/` here once the other side uses it too. A piece whose only users are pages the one screen retires (`PageHeader`, `DataTable`) stays where it fits until its last user goes. dependency-cruiser holds the order, sides above shared layouts above shared atoms above the seams, and keeps the sides apart (`no-side-importing-the-other`, `no-layouts-importing-up`, `no-atoms-importing-up`, `no-seams-importing-up`); `scripts/lint.test.ts` proves each fires. The rule places atoms and layouts, not words: a feature of one side may still read the other side's model where a crossing carries it, as the Conversation tells a navigation in the canvas's `Gesture` (`canvas/view/`); features ignore each other already (`no-feature-importing-another`).
 - **Only `ui/` imports the UI libraries**: Radix, TanStack Table, TanStack Form, the Markdown renderer, TanStack Hotkeys and Sonner; `dependency-cruiser.config.ts` says no elsewhere. No raw `<table>` or `<dialog>` outside it, and colour comes from theme tokens, never a palette name or a hex: `eslint.config.ts` says no to both. `scripts/lint.test.ts` proves those rules still fire.
 - **A component takes its content as props** (`title`, `entries`, `columns`), not as a family of parts to assemble, so a feature cannot rebuild it differently. `DataTable` takes `DataColumn`s, so a feature never sees TanStack Table.
-- **Dark by default, light as its equal.** The tokens and the three fonts are in `src/front/styles.css`, installed from the design system's registry, the theme's state in `theme.ts`. A token keeps shadcn's name when it means what shadcn means; the others are named for what they are in hexframe, chiefly `human` (the human's amber) and `agent` (the agent's violet), the only colours of the interface itself. `brand` is gone, and `warning` is an ember orange, so amber keeps one meaning. What each token is for: TOKENS.md. A new colour gets a value in both themes and a line in `@theme inline`, which `tokens.test.ts` checks, and a foreground if text sits on it.
-- **`/dev/ui` shows it all**, in dev and on previews: every colour token as a swatch, read from `styles.css` by `tokens.ts` so it cannot miss one, then every piece in every state, tier by tier, the shared atoms and layouts first, then each side's own, then the seams. Each folder shows its own pieces in its `gallery.tsx`; a new piece gets its section there. `ThemeToggle` and `LocaleSwitch` sit in every page's header instead, and the canvas has `/dev/hex`.
+- **Dark by default, light as its equal.** The tokens and the three fonts are in `src/front/styles.css`, installed from the design system's registry, the theme's state in `theme.ts`. A token keeps shadcn's name when it means what shadcn means; the others are named for what they are in hexframe, chiefly `human` (the human's amber) and `agent` (the agent's violet), the only colours of the interface itself. `brand` is gone, and `warning` is an ember orange, so amber keeps one meaning. What each token is for: its note on `/design-system`, in `gallery/Tokens.tsx`. A new token gets a note there, a new colour a value in both themes and a line in `@theme inline` too, all of which `gallery/tokens.test.ts` checks, and a foreground if text sits on it.
 - **The list grows by request.** The first one: `Button`, `Input`, `Textarea`, `Field` and `useAppForm`, `Card`, `PageHeader`, `Drawer`, `ConfirmDialog`, `DropdownMenu`, `Tooltip`, `Suggestions` (HEX-84), `Toaster`, `Skeleton`, `EmptyState`, `ErrorState`, `Forbidden`, `DataTable`, `CodeBlock`, and the canvas, `Canvas`.
+

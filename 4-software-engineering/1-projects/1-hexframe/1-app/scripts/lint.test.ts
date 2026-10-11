@@ -106,7 +106,8 @@ describe('the Effect run lint', () => {
     "import { Effect } from 'effect'\nEffect['runSync'](Effect.void)\n",
     "import { Effect } from 'effect'\nconst { runFork } = Effect\nrunFork(Effect.void)\n",
   ]
-  const files = [feature, inUi, 'src/api/dev/provoke.ts']
+  // A server function's file runs no program either: the helper does.
+  const files = [feature, inUi, 'src/api/iam/iam.ts']
 
   it.each(files.flatMap((file) => runs.map((code) => [file, code] as const)))(
     'refuses a program run in %s: %s',

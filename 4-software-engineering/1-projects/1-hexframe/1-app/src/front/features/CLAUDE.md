@@ -7,16 +7,16 @@ preview: >-
   folder each, built from ui/ and composed by a route, with the client bus
   between them. Home lays out the user's own System on the canvas, the
   breadcrumb above it, and the chat beside it over their Conversation;
-  /dev/system lays out the same on fixtures.
+  /design-system lays out the Conversation and the breadcrumb on fixtures.
 ---
 # features
 
-A feature is client code that shows one thing a page needs, in a domain's language, built from [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]]. A route composes features: home lays out the user's own System on the canvas, the breadcrumb above it and the centered Tile's card below, the chat beside it in the side column over the Account's Conversation, and publishes a `Navigated` for every gesture that changes the view, on the canvas or the breadcrumb; `/dev/system` lays out the same on fixtures.
+A feature is client code that shows one thing a page needs, in a domain's language, built from [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]]. A route composes features: home lays out the user's own System on the canvas, the breadcrumb above it and the centered Tile's card below, the chat beside it in the side column over the Account's Conversation, and publishes a `Navigated` for every gesture that changes the view, on the canvas or the breadcrumb; `/design-system` shows the Conversation and the breadcrumb on fixtures, a Message's link centering the canvas there.
 
 | Folder | Holds |
 |---|---|
-| `conversation/` | `Chat`, home's chat over the Account's Conversation, read a day at a time; `Conversation`, Assistant's timeline a day at a time, its Entries, a Message's links centering the canvas, and the message input, which `@`s the Account's Tiles, all of which `/dev/system` lays out on fixtures; and `useNavigationSender`, which home mounts, the user's gestures merged and recorded in their Conversation, and its Messages posted after them: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/CLAUDE\|conversation]] |
-| `breadcrumb/` | `Breadcrumb`, the centered Tile's ancestors in one line above the canvas, wrapping when long; a click centers one. The path comes from `pathTo` in `ui/canvas/view/` |
+| `conversation/` | `Chat`, home's chat over the Account's Conversation, read a day at a time; `Conversation`, Assistant's timeline a day at a time, its Entries, a Message's links centering the canvas, and the message input, which `@`s the Account's Tiles, all of which `/design-system` lays out on fixtures (`gallery.tsx`); and `useNavigationSender`, which home mounts, the user's gestures merged and recorded in their Conversation, and its Messages posted after them: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/CLAUDE\|conversation]] |
+| `breadcrumb/` | `Breadcrumb`, the centered Tile's ancestors in one line above the canvas, wrapping when long; a click centers one. The path comes from `pathTo` in `ui/canvas/view/`. `gallery.tsx`, `BreadcrumbGallery`, on `/design-system`, following its canvas |
 | `system/` | `System`, the signed-in Account's System on the canvas, and `TileActions`, what the user does to it: add a Tile or import files in an empty slot, a Leaf in a ring of Leaves, import a vault into an empty System, edit, move, export or delete the centered one, grow a Leaf into a Branch or shrink a bare Branch into a Leaf. The view and the change under way live in the URL: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE\|system]] |
 | `access/` | `Access`, the sign-in and sign-up pages' content: one form, an email and a password, whose refusals show on their fields, then back where the user was: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/access/CLAUDE\|access]] |
 | `help/` | `HelpCanvas`, Help on the canvas, read-only, and `HelpTile`, the centered Tile's card, whose button opens its Body in a drawer. The view and the open Body live in the URL: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help/CLAUDE\|help]] |
