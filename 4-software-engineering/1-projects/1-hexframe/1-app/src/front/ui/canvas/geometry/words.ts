@@ -13,7 +13,10 @@ const aloneBelow = 72
 const wordlessBelow = 30
 /** The box the words sit in, as a share of the radius: centered lines leave the slanted sides alone. */
 const box = { width: 1.46, height: 1.15 }
-/** A title alone, larger than its share, takes the hex's widest band instead. */
+/**
+ * A title alone takes the hex's widest band instead: its two lines at most sit in the middle, where
+ * the slanted sides leave room, and the box's corners stay empty.
+ */
 const aloneWidth = 1.62
 
 export interface Fit {
@@ -32,16 +35,22 @@ export interface Fit {
 export function fitWords(radius: number): Fit | undefined {
   if (radius < wordlessBelow) return undefined
   const laid = titleShare * radius
-  const alone = radius < aloneBelow
-  const title = Math.max(Math.min(laid, titleMax), alone ? titleMin : 0)
-  // How much the words were scaled from their share: below 1 once capped, above it once held at 11px.
-  const scale = title / laid
-  const grown = scale > 1
+  if (radius < aloneBelow) {
+    return {
+      title: Math.max(Math.min(laid, titleMax), titleMin),
+      preview: undefined,
+      width: radius * aloneWidth,
+      height: radius * box.height,
+      capped: false,
+    }
+  }
+  // Below 1 once the title stopped at 22px: the box stops with it.
+  const scale = Math.min(1, titleMax / laid)
   return {
-    title,
-    preview: alone ? undefined : (title * 2) / 3,
-    width: radius * (grown ? aloneWidth : box.width * scale),
-    height: radius * box.height * (grown ? 1 : scale),
+    title: laid * scale,
+    preview: (laid * scale * 2) / 3,
+    width: radius * box.width * scale,
+    height: radius * box.height * scale,
     capped: scale < 1,
   }
 }

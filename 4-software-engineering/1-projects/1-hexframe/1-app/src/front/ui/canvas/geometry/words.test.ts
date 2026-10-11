@@ -38,17 +38,18 @@ describe('fitWords', () => {
     expect(fitting(30)).toBeDefined()
   })
 
-  it("gives a title held at 11px the hex's widest band", () => {
-    const fit = fitWords(40)
-    expect(fit.width).toBeCloseTo(40 * 1.62)
-    expect(fit.height).toBeCloseTo(40 * 1.15)
+  it("gives a title alone the hex's widest band, at any radius it shows alone", () => {
+    for (const radius of [40, 70, 71]) {
+      const fit = fitWords(radius)
+      expect(fit.width).toBeCloseTo(radius * 1.62)
+      expect(fit.height).toBeCloseTo(radius * 1.15)
+    }
   })
 
-  it('keeps the box inside the hex, whose slanted sides cut its corners', () => {
+  it('keeps the box with a preview inside the hex, whose slanted sides cut its corners', () => {
     // A pointy-top hex of radius r is r - |x| / √3 tall above its center at x.
-    for (const radius of [34, 72, 100, 138, 200]) {
+    for (const radius of [72, 100, 138, 200]) {
       const { width, height } = fitWords(radius)
-      if (radius < 72) continue
       expect(height / 2).toBeLessThanOrEqual(radius - width / 2 / Math.sqrt(3))
     }
   })

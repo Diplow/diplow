@@ -17,10 +17,6 @@ import { buttonKeys } from '../keys'
 import { BlurDef, FadeDef, points, scaled, Sweep, tint, type Fade } from './light'
 import { fitWords, linesThatFit, type Fit } from '../geometry/words'
 
-/** What a tile is, which its light says before its words do. */
-export type TileKind =
-  'root' | 'untitled' | 'branch' | 'leaf' | 'context' | 'reference' | 'broken' | 'draft' | 'list'
-
 /**
  * Where it stands: in a ring, at the center, at the heart of a Branch opened in place, beside the
  * frame, or further out.
@@ -33,32 +29,50 @@ type Held = 'pointed' | 'focused' | 'pressed'
 /** A write on the tile, still on its way or refused. */
 type TileWrite = 'pending' | 'refused'
 
-/** Blooming out of its parent's heart, or folding back into it, `delay` ms after its elder. */
+/**
+ * Blooming out of its parent's heart, or folding back into it, `order` siblings after its eldest,
+ * each `--stagger-bloom` apart.
+ */
 export interface TileMotion {
   way: 'bloom' | 'fold'
   from: Point
-  delay?: number
+  order?: number
 }
 
-/** A tile's words: its title, its preview, a word under them, and a ring too full's names. */
+/** A tile's words: its title, its preview, and a word under them. */
 export interface TileWords {
   title: string
   preview?: string
   /** Where a Reference lives, that a Reference is broken, that the agent drafts it. */
   note?: string
-  names?: readonly string[]
 }
 
-export interface TileProps {
+/** What a tile is, which its light says before its words do, with what that kind alone takes. */
+export type TileLook = { words: TileWords } & (
+  | {
+      kind: 'root' | 'branch'
+      /** The Directions its children hold, drawn small at its foot. */
+      foot?: readonly Direction[]
+    }
+  | {
+      kind: 'leaf'
+      /** A Leaf that isn't Markdown: its title is its file's name, in mono. */
+      file?: boolean
+      /** The Branch it is numbered as, which the shape seated it beside: in ember under its title. */
+      clash?: string
+    }
+  | {
+      kind: 'list'
+      /** A ring too full: the names it holds. */
+      names: readonly string[]
+    }
+  | { kind: 'untitled' | 'context' | 'reference' | 'broken' | 'draft' }
+)
+
+type TileKind = TileLook['kind']
+
+export type TileProps = TileLook & {
   hex: Hex
-  kind: TileKind
-  words: TileWords
-  /** The Directions its children hold, drawn small at a Branch's or the root's foot. */
-  foot?: readonly Direction[]
-  /** A Leaf that isn't Markdown: its title is its file's name, in mono. */
-  file?: boolean
-  /** What the shape couldn't seat as asked, in ember under the title. */
-  clash?: string
   place?: TilePlace
   write?: TileWrite
   held?: Held
@@ -68,6 +82,11 @@ export interface TileProps {
   /** Screen px per unit of the hex, so the words fit the tile's size on screen. 1 by default. */
   scale?: number
 }
+
+/** What only one kind takes, read off any tile: none for the others. */
+const clashOf = (look: TileLook) => (look.kind === 'leaf' ? look.clash : undefined)
+const footOf = (look: TileLook) =>
+  look.kind === 'root' || look.kind === 'branch' ? look.foot : undefined
 
 interface Lights {
   rest: Fade
@@ -140,7 +159,7 @@ export function Tile(props: TileProps) {
   const description = [
     kindNames[kind](),
     words.note,
-    props.clash,
+    clashOf(props),
     pending ? m.tile_write_pending() : undefined,
     write === 'refused' ? m.tile_write_refused() : undefined,
   ]
@@ -154,7 +173,7 @@ export function Tile(props: TileProps) {
         motion?.way === 'bloom' && 'motion-safe:animate-bloom',
         motion?.way === 'fold' && 'motion-safe:animate-fold motion-reduce:opacity-0',
       )}
-      style={motion && origin(motion.from, motion.delay)}
+      style={motion && origin(motion.from, motion.order)}
     >
       <g
         {...(action === undefined
@@ -187,18 +206,19 @@ export function Tile(props: TileProps) {
   )
 }
 
-/** Where a transform starts, in the canvas's own coordinates, and after how long. */
-function origin({ x, y }: Point, delay?: number): CSSProperties {
+/** Where a transform starts, in the canvas's own coordinates, and how many siblings it waits for. */
+function origin({ x, y }: Point, order?: number): CSSProperties {
   return {
     transformOrigin: `${String(x)}px ${String(y)}px`,
     transformBox: 'view-box',
-    ...(delay !== undefined && { animationDelay: `${String(delay)}ms` }),
+    ...(order !== undefined && { animationDelay: `calc(var(--stagger-bloom) * ${String(order)})` }),
   }
 }
 
 /** Its line of its own, if any: a clash's ember, its kind's hairline, or the center's steady line. */
-function rimOf({ kind, clash, place = 'ring' }: TileProps, id: string): Rim | undefined {
-  if (clash !== undefined) return ember
+function rimOf(props: TileProps, id: string): Rim | undefined {
+  const { kind, place = 'ring' } = props
+  if (clashOf(props) !== undefined) return ember
   const own = rims[kind]
   if (own !== undefined || place !== 'center') return own
   return { color: kind === 'root' || kind === 'untitled' ? `url(#${id}-rim)` : 'var(--input)' }
@@ -206,14 +226,14 @@ function rimOf({ kind, clash, place = 'ring' }: TileProps, id: string): Rim | un
 
 /** Its fill, lit or not, its lines, the lights around it, and its frame in small at its foot. */
 function Light(props: TileProps & { id: string }) {
-  const { hex, kind, foot, place = 'ring', held, action, scale = 1, id } = props
+  const { hex, kind, place = 'ring', held, action, scale = 1, id } = props
   const lit = place === 'center' || place === 'heart' || held === 'pointed' || held === 'pressed'
   const rim = rimOf(props, id)
+  const foot = footOf(props)
+  // At the center and at a heart, the ring around it says what the foot would; and the foot comes
+  // with the preview, once there is room for more than the title.
   const showsFoot =
-    (kind === 'branch' || kind === 'root') &&
-    place !== 'center' &&
-    place !== 'heart' &&
-    hex.radius * scale >= 72
+    place !== 'center' && place !== 'heart' && fitWords(hex.radius * scale)?.preview !== undefined
   return (
     <>
       <defs>
@@ -345,28 +365,20 @@ const noteTones: Partial<Record<TileKind, string>> = {
  * radius of 72 on screen, alone; otherwise the preview below it, as many lines as fit, then the word
  * under them. Under a radius of 30, none: the tile is its light, and its name is for a screen reader.
  */
-function Words({ hex, kind, words, file, clash, place = 'ring', scale = 1 }: TileProps) {
-  const fit = fitWords(hex.radius * scale)
+function Words(props: TileProps) {
+  const fit = fitWords(props.hex.radius * (props.scale ?? 1))
   if (fit === undefined) return null
-  return <Fitted {...{ hex, kind, words, file, clash, place, scale, fit }} />
+  return <Fitted {...props} fit={fit} />
 }
 
 /** Its words, once its size gives them a box. */
-function Fitted({
-  hex,
-  kind,
-  words,
-  file,
-  clash,
-  place,
-  scale,
-  fit,
-}: TileProps & { place: TilePlace; scale: number; fit: Fit }) {
+function Fitted(props: TileProps & { fit: Fit }) {
+  const { hex, kind, words, place = 'ring', scale = 1, fit } = props
   const alone = fit.preview === undefined
   const label = useRef<HTMLDivElement>(null)
   const lines = usePreviewLines(
     label,
-    [words.title, words.preview, words.note, clash, fit.title].join('|'),
+    [words.title, words.preview, words.note, clashOf(props), fit.title].join('|'),
   )
   const width = fit.width / scale
   const height = fit.height / scale
@@ -384,7 +396,7 @@ function Fitted({
         className="flex size-full flex-col items-center justify-center overflow-hidden text-center hyphens-auto text-foreground select-none"
         style={{ fontSize: fit.title / scale }}
       >
-        <span className={titleClass({ kind, file, place, alone })}>{words.title}</span>
+        <span className={titleClass(props, alone)}>{words.title}</span>
         {!alone && words.preview ? (
           <span
             data-preview
@@ -402,37 +414,35 @@ function Fitted({
             {words.preview}
           </span>
         ) : null}
-        {alone ? null : <Below kind={kind} words={words} clash={clash} />}
+        {alone ? null : <Below {...props} />}
       </div>
     </foreignObject>
   )
 }
 
 /** The title's type: the human's serif, a file's mono, the agent's for its draft, faint for none yet. */
-function titleClass({
-  kind,
-  file,
-  place,
-  alone,
-}: Pick<TileProps, 'kind' | 'file' | 'place'> & { alone: boolean }): string {
+function titleClass(look: TileLook & { place?: TilePlace }, alone: boolean): string {
+  const { kind } = look
   return cn(
     'max-w-full shrink-0 font-human leading-[1.15] break-words',
     alone ? 'line-clamp-2' : 'line-clamp-3',
-    place === 'center' && 'italic',
-    file === true && 'font-mono text-[.8em]',
+    look.place === 'center' && 'italic',
+    kind === 'leaf' && look.file === true && 'font-mono text-[.8em]',
     kind === 'draft' && 'font-agent text-[.86em] text-agent',
     (kind === 'broken' || kind === 'untitled') && 'text-faint italic',
   )
 }
 
 /** What sits under the title and the preview: a ring too full's names, then the word under them. */
-function Below({ kind, words, clash }: Pick<TileProps, 'kind' | 'words' | 'clash'>) {
+function Below(look: TileLook) {
+  const { kind, words } = look
+  const clash = clashOf(look)
   const note = clash ?? words.note
   return (
     <>
-      {words.names ? (
+      {kind === 'list' ? (
         <span className="mt-[.7em] shrink-0 font-mono text-[.6em] leading-[1.55] text-muted-foreground">
-          {words.names.map((name) => (
+          {look.names.map((name) => (
             <span key={name} className="block">
               {name}
             </span>

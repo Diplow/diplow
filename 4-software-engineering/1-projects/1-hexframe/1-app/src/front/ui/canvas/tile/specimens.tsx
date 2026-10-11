@@ -9,7 +9,7 @@ import { ulysse } from '../fixtures'
 import { directions, neighbor, type Direction, type Hex } from '../geometry/geometry'
 import { findTile, type TileNode } from '../view/tiles'
 import { Ground, Slot } from './places'
-import { Tile, type TileKind, type TileMotion, type TileWords } from './Tile'
+import { Tile, type TileLook, type TileMotion, type TileWords } from './Tile'
 
 const origin = { x: 0, y: 0 }
 
@@ -22,16 +22,28 @@ export function fixture(id: string): TileNode {
 
 export const wordsOf = ({ title, preview }: TileNode): TileWords => ({ title, preview })
 
-/** The ring of Software Engineering, seated as the shape seats it, the reading list beside Principles. */
-const ring: Partial<Record<Direction, { tile: TileNode; kind: TileKind; clash?: string }>> = {
-  1: { tile: fixture('projects'), kind: 'branch' },
-  2: { tile: fixture('principles'), kind: 'branch' },
-  3: { tile: fixture('notes'), kind: 'leaf' },
-  4: { tile: fixture('reading-list'), kind: 'leaf', clash: m.tile_clash({ branch: 'Principles' }) },
+/** A Branch of the fixture System, its frame at its foot where its children are. */
+export function branchOf(tile: TileNode): TileLook {
+  const foot = directions.filter(
+    (direction) => tile.branches?.[direction] ?? tile.leaves?.[direction],
+  )
+  return { kind: 'branch', words: wordsOf(tile), foot }
 }
 
-const footOf = (tile: TileNode) =>
-  directions.filter((direction) => tile.branches?.[direction] ?? tile.leaves?.[direction])
+/** The ring of Software Engineering, seated as the shape seats it, the reading list beside Principles. */
+const ring: Partial<Record<Direction, { tile: TileNode; look: TileLook }>> = {
+  1: { tile: fixture('projects'), look: branchOf(fixture('projects')) },
+  2: { tile: fixture('principles'), look: branchOf(fixture('principles')) },
+  3: { tile: fixture('notes'), look: { kind: 'leaf', words: wordsOf(fixture('notes')) } },
+  4: {
+    tile: fixture('reading-list'),
+    look: {
+      kind: 'leaf',
+      words: wordsOf(fixture('reading-list')),
+      clash: m.tile_clash({ branch: 'Principles' }),
+    },
+  },
+}
 
 /** The canvas's units across a frame of radius 110: three hexes wide, and a margin. */
 const frameWidth = 600
@@ -48,40 +60,27 @@ const gap = 0.95
 export function LiveFrame() {
   const svg = useRef<SVGSVGElement>(null)
   const scale = useScale(svg, frameWidth)
-  const [opened, setOpened] = useState<Direction | 'center'>()
-  const [folding, setFolding] = useState(false)
+  const { opened, folding, open, fold } = useOpened(svg)
   const center = fixture('software-engineering')
-  const fold = () => {
-    setFolding(true)
-    setTimeout(() => {
-      setOpened(undefined)
-      setFolding(false)
-    }, 500)
-  }
   const centerHex = { center: origin, radius: frameRadius }
   const ringTiles = directions.flatMap((direction) => {
     const hex = neighbor(centerHex, direction)
     const member = ring[direction]
     if (member === undefined)
       return [<Slot key={direction} hex={{ ...hex, radius: frameRadius * gap }} />]
-    const { tile, kind, clash } = member
-    if (opened === direction) {
-      return openedHex({ hex, tile, kind, folding, scale, onClose: fold })
-    }
+    const { tile, look } = member
+    if (opened === direction) return openedHex({ hex, tile, folding, scale, onClose: fold })
     return [
       <Tile
         key={tile.id}
         hex={{ ...hex, radius: frameRadius * gap }}
-        kind={kind}
-        words={wordsOf(tile)}
-        foot={kind === 'branch' ? footOf(tile) : undefined}
-        {...(clash !== undefined && { clash })}
+        {...look}
         scale={scale}
-        {...(kind === 'branch' && {
+        {...(look.kind === 'branch' && {
           action: {
             label: m.hex_tile_expand({ title: tile.title }),
             onSelect: () => {
-              setOpened(direction)
+              open(direction)
             },
           },
         })}
@@ -97,15 +96,7 @@ export function LiveFrame() {
       className="w-[min(37.5rem,calc(100vw-3rem))]"
     >
       {opened === 'center'
-        ? openedHex({
-            hex: centerHex,
-            tile: center,
-            kind: 'branch',
-            context: true,
-            folding,
-            scale,
-            onClose: fold,
-          })
+        ? openedHex({ hex: centerHex, tile: center, context: true, folding, scale, onClose: fold })
         : [
             <Tile
               key={center.id}
@@ -117,7 +108,7 @@ export function LiveFrame() {
               action={{
                 label: m.hex_tile_show_context({ title: center.title }),
                 onSelect: () => {
-                  setOpened('center')
+                  open('center')
                 },
               }}
             />,
@@ -127,10 +118,42 @@ export function LiveFrame() {
   )
 }
 
+/**
+ * What the frame has opened in place, and its fold: the six fold back for `--duration-fold`, at once
+ * with reduced motion, then it closes. Nothing opens or folds while a fold is under way.
+ */
+function useOpened(svg: RefObject<SVGSVGElement | null>) {
+  const [opened, setOpened] = useState<Direction | 'center'>()
+  const [folding, setFolding] = useState(false)
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  useEffect(
+    () => () => {
+      clearTimeout(timer.current)
+    },
+    [],
+  )
+  const open = (what: Direction | 'center') => {
+    if (!folding) setOpened(what)
+  }
+  const fold = () => {
+    if (folding || !svg.current) return
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches
+    const duration = getComputedStyle(svg.current).getPropertyValue('--duration-fold')
+    setFolding(true)
+    timer.current = setTimeout(
+      () => {
+        setOpened(undefined)
+        setFolding(false)
+      },
+      still ? 0 : parseFloat(duration),
+    )
+  }
+  return { opened, folding, open, fold }
+}
+
 interface OpenedProps {
   hex: Hex
   tile: TileNode
-  kind: TileKind
   /** The center's Context, rather than a Branch's Children. */
   context?: boolean
   folding?: boolean
@@ -138,14 +161,20 @@ interface OpenedProps {
   onClose?: () => void
 }
 
+/** A member of an opened hex, by what it is: a Context tile, a Leaf or a Branch. */
+function memberLook(member: TileNode, context: boolean): TileLook {
+  const words = { title: member.title }
+  if (context) return { kind: 'context', words }
+  return member.leaf ? { kind: 'leaf', words } : { kind: 'branch', words }
+}
+
 /**
- * A hex opened in place: its ground, the tile at its heart, under its own id, and its six blooming
+ * A hex opened in place: its ground, the Branch at its heart, under its own id, and its six blooming
  * out of it, each keyed, to be drawn among the frame's other hexes.
  */
 function openedHex({
   hex,
   tile,
-  kind,
   context = false,
   folding = false,
   scale = 1,
@@ -162,7 +191,7 @@ function openedHex({
     <Tile
       key={tile.id}
       hex={{ ...heart, radius: heart.radius * gap }}
-      kind={kind}
+      kind="branch"
       words={{ title: tile.title }}
       place={context ? 'center' : 'heart'}
       scale={scale}
@@ -175,26 +204,17 @@ function openedHex({
         },
       })}
     />,
-    ...directions.map((direction, index) => {
+    ...directions.map((direction, order) => {
       const at = { ...neighbor(heart, direction), radius: heart.radius * gap }
       const member = members?.[direction]
       const key = `${tile.id}:${String(direction)}`
-      const motion: TileMotion = {
-        way: folding ? 'fold' : 'bloom',
-        from: hex.center,
-        delay: folding ? 0 : index * 40,
-      }
+      const motion: TileMotion = folding
+        ? { way: 'fold', from: hex.center }
+        : { way: 'bloom', from: hex.center, order }
       return member === undefined ? (
         <Slot key={key} hex={at} />
       ) : (
-        <Tile
-          key={key}
-          hex={at}
-          kind={context ? 'context' : member.leaf ? 'leaf' : 'branch'}
-          words={{ title: member.title }}
-          scale={scale}
-          motion={motion}
-        />
+        <Tile key={key} hex={at} {...memberLook(member, context)} scale={scale} motion={motion} />
       )
     }),
   ]
@@ -210,13 +230,13 @@ export function OpenedSpecimen({ tile, context = false }: { tile: TileNode; cont
       height={2 * radius + 8}
       viewBox={`${String(-size / 2)} ${String(-radius - 4)} ${String(size)} ${String(2 * radius + 8)}`}
     >
-      {openedHex({ hex: { center: origin, radius }, tile, kind: 'branch', context })}
+      {openedHex({ hex: { center: origin, radius }, tile, context })}
     </svg>
   )
 }
 
 /** Screen px per unit of an <svg> `width` units wide, as CSS sizes it, kept as it resizes. */
-function useScale(svg: RefObject<SVGSVGElement | null>, width: number): number {
+export function useScale(svg: RefObject<SVGSVGElement | null>, width: number): number {
   const [scale, setScale] = useState(1)
   useEffect(() => {
     const element = svg.current

@@ -3,7 +3,7 @@
 // places it stands in, and the ground of a hex opened. Ported from components.html's #kinds, #states
 // and #words.
 import { RotateCcw } from 'lucide-react'
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
@@ -13,8 +13,8 @@ import { ulysse } from '../fixtures'
 import { directions, neighbor, type Hex } from '../geometry/geometry'
 import { fitWords } from '../geometry/words'
 import { Slot } from './places'
-import { fixture, LiveFrame, OpenedSpecimen, wordsOf } from './specimens'
-import { Tile, type TileProps } from './Tile'
+import { branchOf, fixture, LiveFrame, OpenedSpecimen, useScale, wordsOf } from './specimens'
+import { Tile, type TileLook } from './Tile'
 
 const origin = { x: 0, y: 0 }
 
@@ -110,7 +110,7 @@ function Specimen({
 interface KindSample {
   name: () => string
   note: () => string
-  tile: Omit<TileProps, 'hex'>
+  tile: TileLook
 }
 
 const kindSamples: readonly KindSample[] = [
@@ -122,12 +122,12 @@ const kindSamples: readonly KindSample[] = [
   {
     name: m.gallery_state_tile_branch,
     note: m.gallery_tile_branch,
-    tile: { kind: 'branch', words: wordsOf(fixture('projects')), foot: [1, 2] },
+    tile: branchOf(fixture('projects')),
   },
   {
     name: m.gallery_state_tile_bare_branch,
     note: m.gallery_tile_bare_branch,
-    tile: { kind: 'branch', words: wordsOf(fixture('principles')), foot: [] },
+    tile: branchOf(fixture('principles')),
   },
   {
     name: m.gallery_state_tile_leaf,
@@ -182,10 +182,8 @@ const kindSamples: readonly KindSample[] = [
     note: m.gallery_tile_list,
     tile: {
       kind: 'list',
-      words: {
-        title: m.tile_list_title({ count: 8 }),
-        names: ['Leadership', 'Education', 'Games', m.tile_list_more({ count: 5 })],
-      },
+      words: { title: m.tile_list_title({ count: 8 }) },
+      names: ['Leadership', 'Education', 'Games', m.tile_list_more({ count: 5 })],
     },
   },
   {
@@ -204,7 +202,7 @@ function TileKinds() {
 }
 
 const projects = fixture('projects')
-const projectsTile = { kind: 'branch', words: wordsOf(projects), foot: [1, 2] } as const
+const projectsTile = branchOf(projects)
 
 /** A tile you can try: hover it, focus it, press it; its click is the canvas's. */
 const tried = { label: m.gallery_sample_try_tile({ title: projects.title }), onSelect: noop }
@@ -372,7 +370,9 @@ function useSteps(steps: readonly number[], turn: number): number {
   return step
 }
 
-const presets = {
+type Preset = 'short' | 'longTitle' | 'longPreview' | 'noPreview' | 'file' | 'draft'
+
+const presets: Record<Preset, () => TileLook> = {
   short: () => ({ kind: 'branch', words: wordsOf(projects) }),
   longTitle: () => ({
     kind: 'branch',
@@ -385,9 +385,7 @@ const presets = {
     kind: 'draft',
     words: { ...wordsOf(fixture('obsidian')), note: m.tile_drafting() },
   }),
-} satisfies Record<string, () => Pick<TileProps, 'kind' | 'words' | 'file'>>
-
-type Preset = keyof typeof presets
+}
 
 const presetNames: Record<Preset, () => string> = {
   short: m.gallery_tile_words_short,
@@ -422,8 +420,11 @@ function readout(radius: number): string {
 function TileWordsSpecimen() {
   const [preset, setPreset] = useState<Preset>('short')
   const [radius, setRadius] = useState(112)
-  const tile = presets[preset]()
+  const svg = useRef<SVGSVGElement>(null)
   const box = Math.ceil(Math.sqrt(3) * 200) + 8
+  // CSS narrows the drawing on a phone: the tile is fitted to the size it shows at, as said below.
+  const scale = useScale(svg, box)
+  const tile = presets[preset]()
   return (
     <>
       <GalleryState label={m.gallery_state_tile_words()}>
@@ -443,12 +444,13 @@ function TileWordsSpecimen() {
           ))}
         </div>
         <svg
+          ref={svg}
           width={box}
           height={408}
           viewBox={`${String(-box / 2)} -204 ${String(box)} 408`}
-          className="max-w-full"
+          className="h-auto max-w-full"
         >
-          <Tile hex={{ center: origin, radius }} {...tile} />
+          <Tile hex={{ center: origin, radius }} {...tile} scale={scale} />
         </svg>
         <label className="grid max-w-96 gap-1 text-xs text-muted-foreground">
           {m.gallery_tile_words_size()}
