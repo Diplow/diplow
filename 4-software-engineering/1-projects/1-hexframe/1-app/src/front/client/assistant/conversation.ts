@@ -2,10 +2,11 @@
 // (src/api/assistant/assistant.ts): read a day at a time in the reader's calendar, today first, then
 // each earlier day holding an Entry as the reader scrolls back, one query; a Message posted, from the
 // view it was sent from, which starts a Turn; the Turn running stopped; a merged navigation recorded;
-// and whether the Account may use the Assistant. The writes wait their turn in the Conversation's
-// queue, so a navigation sent before a Message reaches the server before it, and each reads the
-// Conversation again once it settles, failed or not; a Message and a Stop poll the latest too, so the
-// page follows the Turn they started or ended. Failures go to their channels (../channels.ts): a
+// whether the Account may use the Assistant; and its Mode switched, its Proposal accepted or
+// discarded. The writes wait their turn in the Conversation's queue, so a navigation sent before a
+// Message reaches the server before it, and each reads the Conversation again once it settles, failed
+// or not; a Message, a Stop, a switch and a decided Proposal poll the latest too, so the page follows
+// the Turn they started or ended, the Mode now, and the System an accepted Proposal changed. Failures go to their channels (../channels.ts): a
 // hook's caller handles none.
 import {
   infiniteQueryOptions,
@@ -16,16 +17,19 @@ import {
 } from '@tanstack/react-query'
 
 import {
+  acceptProposal,
   assistantAvailable,
   conversationDay,
+  discardProposal,
   latest,
   type MergedNavigation,
   postMessage,
   recordNavigation,
   type SentMessage,
+  setMode,
   stopTurn,
 } from '#/api/assistant/assistant'
-import { dayAt } from '#/domains/assistant/entities'
+import { dayAt, type Mode } from '#/domains/assistant/entities'
 
 import { read, settle, write } from '../calls'
 
@@ -165,5 +169,41 @@ export const useRecordNavigation = () => {
       },
     ),
     onSettled: () => readAgain(client),
+  })
+}
+
+/** Switches the Conversation's Mode, then polls the latest, which says the Mode now. */
+export const useSetMode = () => {
+  const client = useQueryClient()
+  return useMutation({
+    ...write('setMode', (mode: Mode) => setMode({ data: { mode } }), {
+      queue: conversationQueue,
+    }),
+    onSettled: () => client.refetchQueries({ queryKey: latestRead.queryKey }),
+  })
+}
+
+/**
+ * Accepts the open Proposal of this id, whole, then reads the Conversation again and polls the
+ * latest, so the System it changed is read again too.
+ */
+export const useAcceptProposal = () => {
+  const client = useQueryClient()
+  return useMutation({
+    ...write('acceptProposal', (proposal: string) => acceptProposal({ data: { proposal } }), {
+      queue: conversationQueue,
+    }),
+    onSettled: () => followAgain(client),
+  })
+}
+
+/** Discards the open Proposal of this id, then reads the Conversation again and polls the latest. */
+export const useDiscardProposal = () => {
+  const client = useQueryClient()
+  return useMutation({
+    ...write('discardProposal', (proposal: string) => discardProposal({ data: { proposal } }), {
+      queue: conversationQueue,
+    }),
+    onSettled: () => followAgain(client),
   })
 }

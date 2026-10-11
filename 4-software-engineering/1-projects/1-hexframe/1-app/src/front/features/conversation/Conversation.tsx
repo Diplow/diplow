@@ -1,8 +1,9 @@
 // The Conversation beside the canvas: its timeline a day at a time, newest at the bottom beside the
 // input, a button above the oldest day shown reading the day before, a Message's link centering the
-// canvas on its Tile, and the input the user writes to the agent in, `@`ing their Tiles, which says so
-// when the Account may not use the Assistant. While a Turn runs, the input waits, and above it the
-// agent's step shows live beside a Stop.
+// canvas on its Tile, a Proposal accepted or discarded where it stands, and the input the user writes
+// to the agent in, `@`ing their Tiles, beside the Mode and its switch, which says so when the Account
+// may not use the Assistant. While a Turn runs, the input waits, and above it the agent's step shows
+// live beside a Stop.
 import { cn } from 'cn'
 import { Loader2, MessagesSquare, Square } from 'lucide-react'
 
@@ -14,8 +15,10 @@ import { Button } from '#/front/ui/inputs/controls/button'
 
 import { Composer } from './composer/Composer'
 import type { Mentionable } from './composer/mention'
+import type { ModeChoice } from './composer/ModeSwitch'
 import type { Day } from './timeline/timeline'
 import { ConversationEntry } from './entry/Entry'
+import type { Deciding } from './entry/Proposal'
 
 /** A Turn running, as the timeline shows it. */
 interface Running {
@@ -52,6 +55,10 @@ interface ConversationProps {
   waiting?: boolean
   /** An earlier day holding an Entry, when there is one. */
   earlier?: Earlier | undefined
+  /** The Conversation's Mode and its switch; none before it is read. */
+  mode?: ModeChoice | undefined
+  /** Accepts or discards the open Proposal; none where nobody decides one. */
+  decide?: Deciding | undefined
   className?: string
 }
 
@@ -64,6 +71,8 @@ export function Conversation({
   running,
   waiting = false,
   earlier,
+  mode,
+  decide,
   className,
 }: ConversationProps) {
   const now = new Date()
@@ -98,7 +107,7 @@ export function Conversation({
             />
           ) : (
             shown.map((day) => (
-              <DayOfEntries key={day.key} day={day} now={now} onCenter={onCenter} />
+              <DayOfEntries key={day.key} day={day} now={now} onCenter={onCenter} decide={decide} />
             ))
           )}
         </div>
@@ -109,6 +118,7 @@ export function Conversation({
         tiles={tiles}
         unavailable={unavailable}
         busy={running !== undefined || waiting}
+        mode={mode}
       />
     </section>
   )
@@ -118,10 +128,12 @@ function DayOfEntries({
   day,
   now,
   onCenter,
+  decide,
 }: {
   day: Day
   now: Date
   onCenter: ConversationProps['onCenter']
+  decide: ConversationProps['decide']
 }) {
   return (
     <section className="grid gap-3">
@@ -133,7 +145,12 @@ function DayOfEntries({
       <ol className="grid gap-3">
         {day.entries.map((entry) => (
           <li key={entry.id}>
-            <ConversationEntry entry={entry} titles={day.titles} onCenter={onCenter} />
+            <ConversationEntry
+              entry={entry}
+              titles={day.titles}
+              onCenter={onCenter}
+              decide={decide}
+            />
           </li>
         ))}
       </ol>

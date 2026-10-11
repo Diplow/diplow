@@ -13,9 +13,9 @@ import { useFollowLatest } from './follow'
 
 // Following the System and the Conversation over stand-ins for the server functions: the latest of
 // both polled on focus, and every 2 s while a Turn runs, the System read again only once its Version
-// moved past the one the cache holds, the Conversation once its last Entry is another than the one it
-// read, and the Turn running answered with its step. The server functions themselves are
-// src/api/assistant/assistant.test.ts's.
+// moved past the one the cache holds, the Conversation once its last Entry or its open Proposal is
+// another than the one it read, and the Turn running answered with its step. The server functions
+// themselves are src/api/assistant/assistant.test.ts's.
 vi.mock('#/api/mapping/mapping', () => ({ system: vi.fn() }))
 vi.mock('#/api/assistant/assistant', () => ({ latest: vi.fn(), conversationDay: vi.fn() }))
 
@@ -47,7 +47,13 @@ function reading(first: unknown, then: unknown) {
  * running, if any.
  */
 type Latest =
-  number | { version: number; lastEntry?: string; turn?: { id: string; step?: { tool: string } } }
+  | number
+  | {
+      version: number
+      lastEntry?: string
+      turn?: { id: string; step?: { tool: string } }
+      proposal?: { id: string; drafts: number }
+    }
 
 /** A Turn running, at the System's Version, its agent at this step if any. */
 const running = (version: number, tool?: string): Latest => ({
@@ -317,5 +323,33 @@ describe('the page following the Conversation', () => {
       expect(result.current.said).toMatchObject({ text: 'you edited it' })
     })
     expect(Assistant.latest).toHaveBeenCalledTimes(2)
+  })
+
+  it('reads the Conversation again once its open Proposal holds another write, its last Entry the same', async () => {
+    reading(systemAt(3, 'First'), systemAt(3, 'Never read'))
+    const drafted = (drafts: number, text: string) => ({
+      ...dayWith('opened'),
+      entries: dayWith(text).entries,
+      lastEntry: 'opened',
+      proposal: { id: 'proposal-1', drafts },
+    })
+    conversing(drafted(1, 'one draft'), drafted(2, 'two drafts'))
+    polling(
+      { version: 3, lastEntry: 'opened', proposal: { id: 'proposal-1', drafts: 1 } },
+      { version: 3, lastEntry: 'opened', proposal: { id: 'proposal-1', drafts: 2 } },
+    )
+    const { result } = render()
+    await waitFor(() => {
+      expect(result.current.said).toMatchObject({ text: 'one draft' })
+    })
+    await waitFor(() => {
+      expect(Assistant.latest).toHaveBeenCalledTimes(1)
+    })
+    expect(Assistant.conversationDay).toHaveBeenCalledTimes(1)
+    refocus()
+    await waitFor(() => {
+      expect(result.current.said).toMatchObject({ text: 'two drafts' })
+    })
+    expect(Mapping.system).toHaveBeenCalledTimes(1)
   })
 })

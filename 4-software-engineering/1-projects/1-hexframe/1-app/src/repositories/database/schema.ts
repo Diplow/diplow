@@ -201,16 +201,19 @@ export const tile = pgTable(
   ],
 )
 
-// Assistant's (./conversations/conversations.ts): each Account's Conversation, and its Entries.
+// Assistant's (./conversations/): each Account's Conversation, its Entries, its Turns and its
+// Proposals.
 
 /**
- * An Account's Conversation, one at most, added with its first Entry. `account_id` has no key to
- * `user`, as `tile`'s has none: Assistant ignores IAM.
+ * An Account's Conversation, one at most, added with its first Entry or its Mode's first switch.
+ * `account_id` has no key to `user`, as `tile`'s has none: Assistant ignores IAM. `mode` is the Mode
+ * its Turns take as they start, as Assistant names it, `ask` until the user switches it.
  */
 export const conversation = pgTable('conversation', {
   id: text('id').primaryKey(),
   accountId: text('account_id').notNull().unique(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  mode: text('mode').default('ask').notNull(),
 })
 
 /**
@@ -241,10 +244,11 @@ export const conversationEntry = pgTable(
  * the Tile `location` names, which has no key to `tile`: Assistant ignores Mapping. `spent` is what it
  * spent on the model, in millionths of a dollar, and `reserved` what its calls under way reserved,
  * the most they may cost, until each settles. `step` is what its agent is doing now, a read or a
- * shell command, as Assistant encodes it, null between steps and once it ended. `ended_at` and `end`
- * say when and how it ended, both null while it runs, and `turn_running_idx` lets one run at most per
- * Conversation. Deleting a
- * Conversation, or the Message, deletes its Turns.
+ * shell command, as Assistant encodes it, null between steps and once it ended. `mode` is the Mode
+ * its Conversation was in as it started, as Assistant names it, `apply` for the Turns that ran before
+ * there were Modes. `ended_at` and `end` say when and how it ended, both null while it runs, and
+ * `turn_running_idx` lets one run at most per Conversation. Deleting a Conversation, or the Message,
+ * deletes its Turns.
  */
 export const turn = pgTable(
   'turn',
@@ -257,6 +261,7 @@ export const turn = pgTable(
       .notNull()
       .references(() => conversationEntry.id, { onDelete: 'cascade' }),
     location: text('location').notNull(),
+    mode: text('mode').default('apply').notNull(),
     startedAt: timestamp('started_at', { withTimezone: true }).notNull(),
     spent: integer('spent').default(0).notNull(),
     reserved: integer('reserved').default(0).notNull(),
@@ -267,6 +272,39 @@ export const turn = pgTable(
   (table) => [
     uniqueIndex('turn_running_idx').on(table.conversationId).where(isNull(table.endedAt)),
     check('turn_end_check', eq(isNull(table.endedAt), isNull(table.end))),
+  ],
+)
+
+/**
+ * A Proposal of a Conversation: the writes a Turn's agent made in ask, kept as a draft until the user
+ * decides it. `drafts` is the array of them, in the order they were drafted, as Assistant encodes
+ * them: each write as the API layer encoded it, which neither the repository nor Assistant reads, and
+ * the changes it makes. `entry_id` is its Entry in the
+ * timeline, `turn_id` the Turn whose write opened it. `decided_at` and `fate` say when and how the user
+ * decided it, both null while it is open, and `proposal_open_idx` lets one be open at most per
+ * Conversation. Deleting a Conversation, its Entry or its Turn deletes it.
+ */
+export const proposal = pgTable(
+  'proposal',
+  {
+    id: text('id').primaryKey(),
+    conversationId: text('conversation_id')
+      .notNull()
+      .references(() => conversation.id, { onDelete: 'cascade' }),
+    entryId: text('entry_id')
+      .notNull()
+      .references(() => conversationEntry.id, { onDelete: 'cascade' }),
+    turnId: text('turn_id')
+      .notNull()
+      .references(() => turn.id, { onDelete: 'cascade' }),
+    drafts: jsonb('drafts').notNull(),
+    openedAt: timestamp('opened_at', { withTimezone: true }).notNull(),
+    decidedAt: timestamp('decided_at', { withTimezone: true }),
+    fate: text('fate'),
+  },
+  (table) => [
+    uniqueIndex('proposal_open_idx').on(table.conversationId).where(isNull(table.decidedAt)),
+    check('proposal_fate_check', eq(isNull(table.decidedAt), isNull(table.fate))),
   ],
 )
 

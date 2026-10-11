@@ -12,6 +12,7 @@ import { serveMcp } from '../server/mcp/mcp'
 import type { Failure } from '../report/errors/failure'
 import { noKey, noSession, provenKey, run, type Services, type StartContext } from '../server/run'
 import * as Assistant from './programs'
+import * as Proposal from './proposal/programs'
 
 // A Turn and its Key, through the helper, on the runtime's repositories over PGlite, Better Auth for
 // real: started from a Session for an Account the allowlist names (`vitest.config.ts` names
@@ -91,6 +92,8 @@ describe('a Turn and its Key', () => {
 
   it("starts from a Session entitled to the Assistant, with its Key, which `/mcp` takes and the timeline labels 'Assistant'", async () => {
     const { signedIn, message, location } = await entitled
+    // In apply, the Turn's writes land as they come; in ask, they are drafted (./proposal/).
+    await value(run(signedIn, Proposal.setMode({ mode: 'apply' })))
     const { root } = await value(run(signedIn, Mapping.system))
     const { turn, key } = await value(run(signedIn, Assistant.startTurn({ message, location })))
     expect(turn).toMatchObject({ message, location, spent: 0 })

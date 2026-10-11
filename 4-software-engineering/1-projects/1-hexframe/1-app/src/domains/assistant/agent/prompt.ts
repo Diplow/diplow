@@ -1,13 +1,14 @@
 // What a Turn's agent is told, appended to Claude Code's own system prompt: what it must know of the
 // Turn (its files are a read-only snapshot, every change goes through the MCP naming the Version it
-// read, a Conflict means read again, Help is a Tile it can open, `@[<id>]` links a Tile), where it
-// starts, the Tiles the user's Message links and where each lives now, the Tiles the user has on
-// screen, and today's latest Entries of the Conversation, its only memory. Every ancestor's
+// read, a Conflict means read again, in ask its writes are drafted into a Proposal, Help is a Tile it
+// can open, `@[<id>]` links a Tile), where it starts, the Tiles the user's Message links and where
+// each lives now, the Tiles the user has on screen, and today's latest Entries of the Conversation,
+// its only memory. Every ancestor's
 // `CLAUDE.md` loads by itself from its working folder, so the System's own words are not repeated.
 // What the user's System and timeline say is quoted as data, each text one JSON string in a fenced
 // block, so no Title, Preview or Message reads as one of the Turn's rules. It holds no secret, ever:
 // the Turn's Key never reaches it. Pure.
-import type { Actor, Entry } from '../entities'
+import type { Actor, Entry, Fate, Mode, ProposedChange } from '../entities'
 
 /** A Tile as the user has it on screen: its id, its Title and its Preview, as Mapping reads them. */
 export interface Glimpse {
@@ -39,6 +40,8 @@ export interface PromptOf {
   readonly links: ReadonlyArray<Linked>
   /** The id Help opens at. */
   readonly help: string
+  /** The Mode the Turn started in: whether its writes are drafted into a Proposal or applied. */
+  readonly mode: Mode
 }
 
 /** A text of the user's System or timeline, quoted: one line, its quotes and breaks escaped. */
@@ -69,15 +72,28 @@ const ends = {
   sandbox: 'its sandbox failed',
 } as const
 
+/** How a Proposal stands, as the agent reads it. */
+const fates: Record<Fate, string> = {
+  open: 'open, waiting for the user',
+  accepted: 'the user accepted it',
+  discarded: 'the user discarded it',
+}
+
+/** A change, as the agent reads it: its verb, its Tile, and the other Tile it names, if any. */
+const changeLine = ({ verb, tile, other }: ProposedChange) =>
+  `${verb} ${named(tile.title, tile.id)}${other === undefined ? '' : `, with ${named(other.title, other.id)}`}`
+
 /** One Entry, as a line of the prompt. */
 function lineOf(entry: Entry, titles: PromptOf['titles']): string {
   switch (entry._tag) {
     case 'Message':
       return `${entry.author === 'user' ? 'User' : 'You'}: ${quoted(entry.text)}`
-    case 'Change': {
-      const other =
-        entry.other === undefined ? '' : `, with ${named(entry.other.title, entry.other.id)}`
-      return `${actorOf(entry.actor)} ${entry.verb} ${named(entry.tile.title, entry.tile.id)}${other}.`
+    case 'Change':
+      return `${actorOf(entry.actor)} ${changeLine(entry)}.`
+    case 'Proposal': {
+      const changes =
+        entry.changes.length === 0 ? 'nothing yet' : entry.changes.map(changeLine).join('; ')
+      return `You drafted a Proposal (${fates[entry.fate]}): ${changes}.`
     }
     case 'Import':
       return `${actorOf(entry.actor)} imported ${named(entry.tile.title, entry.tile.id)} and ${String(entry.count)} Tiles below it.`
@@ -114,8 +130,26 @@ const linkedLine = ({ id, place }: Linked, folder: string) =>
 /** An instant as the prompt dates it: hours and minutes, UTC. */
 const timeOf = (at: Date) => `${at.toISOString().slice(11, 16)} UTC`
 
+/** What a Turn's Mode means for its writes, as a rule of the Turn. */
+const modes: Record<Mode, string> = {
+  ask:
+    '- This Turn is in ask Mode: your writes change nothing in the System yet. Each is drafted into ' +
+    'one Proposal, which the user accepts whole or discards; your reads through the MCP and the ' +
+    'files around you show the Proposal over the System, so write as you otherwise would, naming ' +
+    'the versions you read there. Say in your answer that it waits for the user.',
+  apply: '- This Turn is in apply Mode: your writes change the System as they come.',
+}
+
 /** The prompt appended to Claude Code's own, in Markdown. */
-export function promptOf({ entries, titles, onScreen, location, links, help }: PromptOf): string {
+export function promptOf({
+  entries,
+  titles,
+  onScreen,
+  location,
+  links,
+  help,
+  mode,
+}: PromptOf): string {
   const folder = location.folder === '' ? 'the System folder itself' : quoted(location.folder)
   return [
     "# You are hexframe's Assistant",
@@ -134,6 +168,7 @@ export function promptOf({ entries, titles, onScreen, location, links, help }: P
       'you read. What changed since the Turn started, read it through the MCP too (open_tile, map).',
     '- A refusal saying the Tile changed (a Conflict) means someone wrote it since you read it: ' +
       'read it again with open_tile, then decide again.',
+    modes[mode],
     `- Help, hexframe's own guide, opens at open_tile({ id: "${help}" }).`,
     '- In a Message, `@[<id>]` links a Tile by its id. A Message opening with a link starts you in ' +
       "that Tile's folder; every Tile the user's last Message links is listed below with its path.",

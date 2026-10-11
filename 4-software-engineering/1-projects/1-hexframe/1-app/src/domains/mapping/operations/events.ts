@@ -106,3 +106,80 @@ export type OperationEvent = typeof OperationEvent.Type
 /** Mapping's events, one closed union: an Operation's, and an import's. */
 export const MappingEvent = Schema.Union([...OperationEvent.members, TilesImported])
 export type MappingEvent = typeof MappingEvent.Type
+
+/** A Tile as a summary names it: its id and its Title, empty when the System no longer holds it. */
+interface Named {
+  readonly id: string
+  readonly title: string
+}
+
+/**
+ * Mapping's own summary of one of its events, what a timeline tells of it. A change: its verb, the
+ * event's tag; the Tile it is about, the one it changed or the one whose Context slot a Reference's
+ * create or delete changed; and the other Tile a swap traded places with, or a Reference points at.
+ * An import: the Tile it landed as, and how many Tiles came with it.
+ */
+export type Summary =
+  | {
+      readonly _tag: 'Change'
+      readonly verb: OperationEvent['_tag']
+      readonly tile: Named
+      readonly other?: Named
+    }
+  | { readonly _tag: 'Import'; readonly tile: Named; readonly count: number }
+
+/** A change as Mapping summarizes it: what an Operation's event did, never an import. */
+export type ChangeSummary = Extract<Summary, { readonly _tag: 'Change' }>
+
+/** The ids an event names, the Tile it is about first, with the Title it says of it, if it says one. */
+function subjectsOf(event: MappingEvent): { tile: string; title?: string; other?: string } {
+  switch (event._tag) {
+    case 'TileCreated':
+    case 'TileDeleted':
+      return { tile: event.id, title: event.title }
+    case 'TileEdited':
+      return { tile: event.id, ...(event.title !== undefined && { title: event.title }) }
+    case 'TileMoved':
+    case 'TilesImported':
+      return { tile: event.id }
+    case 'TilesSwapped':
+      return { tile: event.a, other: event.b }
+    case 'ReferenceCreated':
+      return { tile: event.parent, other: event.target }
+    case 'ReferenceDeleted':
+      return { tile: event.parent }
+  }
+}
+
+/** The Tiles an event names whose Title it does not say: those its summary reads from a System. */
+export function untitledIn(event: MappingEvent): ReadonlyArray<string> {
+  const { tile, title, other } = subjectsOf(event)
+  return [...(title === undefined ? [tile] : []), ...(other === undefined ? [] : [other])]
+}
+
+/** The Tile an event is about, its Title from the event or, when it says none, `titleOf` it. */
+const aboutOf = (event: MappingEvent, titleOf: (id: string) => string) => {
+  const { tile, title, other } = subjectsOf(event)
+  return { about: { id: tile, title: title ?? titleOf(tile) }, other }
+}
+
+/**
+ * Summarizes an Operation's event, a change. A Title the event does not say is `titleOf` the Tile, as
+ * the System holds it after the change, `''` once it no longer does; a deleted Tile's comes from its
+ * event, since no read finds it.
+ */
+export function changeOf(event: OperationEvent, titleOf: (id: string) => string): ChangeSummary {
+  const { about, other } = aboutOf(event, titleOf)
+  return {
+    _tag: 'Change',
+    verb: event._tag,
+    tile: about,
+    ...(other !== undefined && { other: { id: other, title: titleOf(other) } }),
+  }
+}
+
+/** Summarizes one of Mapping's events, a change (`changeOf`) or an import, its Titles as `changeOf` reads them. */
+export function summaryOf(event: MappingEvent, titleOf: (id: string) => string): Summary {
+  if (event._tag !== 'TilesImported') return changeOf(event, titleOf)
+  return { _tag: 'Import', tile: aboutOf(event, titleOf).about, count: event.count }
+}

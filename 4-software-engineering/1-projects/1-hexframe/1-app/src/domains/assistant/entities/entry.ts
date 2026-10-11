@@ -1,12 +1,15 @@
 // The Conversation's Entries: what its timeline holds, oldest first. A Message between the user and the
 // agent; a change to the System, whoever made it; an import; where the user went, consecutive
-// navigations merged into one (./navigation.ts); and how a Turn ended, when not by its answer. A change and an import are recorded as Mapping
-// summarized them when they happened, with who acted, and never rebuilt: the timeline is a record of
-// the past. Assistant knows no Tile: a change names its verb and its Tiles as they came. Pure.
+// navigations merged into one (./navigation.ts); how a Turn ended, when not by its answer; and a
+// Proposal, the changes its agent drafted in ask, and how the user decided it. A change and an import
+// are recorded as Mapping summarized them when they happened, with who acted, and never rebuilt: the
+// timeline is a record of the past; a Proposal's Entry alone follows it until the user decides it.
+// Assistant knows no Tile: a change names its verb and its Tiles as they came. Pure.
 import { Schema } from 'effect'
 
 import { linksOf } from './message/links'
 import { Navigation } from './navigation'
+import { Fate } from './proposal/proposal'
 import { BadEnd } from './turn/turn'
 
 /**
@@ -50,14 +53,35 @@ const Message = Schema.TaggedStruct('Message', {
 const Named = Schema.Struct({ id: Schema.String, title: Schema.String })
 
 /**
- * A change to the System: its verb, as Mapping names the event (`TileMoved`), the Tile it is about,
- * the other Tile a swap traded places with or a Reference points at, and who acted.
+ * What a change did, as Mapping summarized it: its verb, as Mapping names the event (`TileMoved`), the
+ * Tile it is about, and the other Tile a swap traded places with or a Reference points at.
  */
-const Change = Schema.TaggedStruct('Change', {
+const changed = {
   verb: Schema.String,
   tile: Named,
   other: Schema.optionalKey(Named),
-  actor: Actor,
+}
+
+/** A change to the System, as Mapping summarized it, and who acted. */
+const Change = Schema.TaggedStruct('Change', { ...changed, actor: Actor })
+
+/**
+ * A change an agent drafted into a Proposal, as Mapping summarized it on the System the Proposal
+ * makes: no one has made it yet, so no one acted.
+ */
+export const ProposedChange = Schema.TaggedStruct('Change', changed)
+
+export type ProposedChange = typeof ProposedChange.Type
+
+/**
+ * A Proposal: the changes the agent drafted in ask, in the order it drafted them, as Mapping summarized
+ * each, and how the user decided it, open until they do. Its Entry dates from its first draft, and
+ * follows it: each later draft adds its changes, and the user's decision its fate.
+ */
+const Proposal = Schema.TaggedStruct('Proposal', {
+  proposal: Schema.String,
+  changes: Schema.Array(ProposedChange),
+  fate: Fate,
 })
 
 /** An import: the Tile it landed as, how many Tiles came with it, below it, and who imported it. */
@@ -71,7 +95,7 @@ const Import = Schema.TaggedStruct('Import', {
 const TurnEnded = Schema.TaggedStruct('TurnEnded', { how: BadEnd })
 
 /** What an Entry says, whichever kind it is: what is stored of it, and what it is decoded by. */
-export const EntryContent = Schema.Union([Message, Change, Import, Navigation, TurnEnded])
+export const EntryContent = Schema.Union([Message, Change, Import, Navigation, TurnEnded, Proposal])
 
 export type EntryContent = typeof EntryContent.Type
 

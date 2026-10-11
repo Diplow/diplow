@@ -5,20 +5,26 @@ import { createElement, type ReactNode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import {
+  acceptProposal,
   assistantAvailable,
   conversationDay,
+  discardProposal,
   latest,
   postMessage,
   recordNavigation,
+  setMode,
   stopTurn,
 } from '#/api/assistant/assistant'
 
 import {
   latestRead,
+  useAcceptProposal,
   useAssistantAvailable,
   useConversation,
+  useDiscardProposal,
   usePostMessage,
   useRecordNavigation,
+  useSetMode,
   useStopTurn,
 } from './conversation'
 
@@ -26,11 +32,14 @@ import {
 // reader's day, and when the Conversation is read again and the latest polled. The server functions
 // themselves are covered in src/api/assistant/assistant.test.ts.
 vi.mock('#/api/assistant/assistant', () => ({
+  acceptProposal: vi.fn(),
   assistantAvailable: vi.fn(),
   conversationDay: vi.fn(),
+  discardProposal: vi.fn(),
   latest: vi.fn(),
   postMessage: vi.fn(),
   recordNavigation: vi.fn(),
+  setMode: vi.fn(),
   stopTurn: vi.fn(),
 }))
 
@@ -48,6 +57,9 @@ function answering() {
   vi.mocked(postMessage).mockResolvedValue({ ok: true, value: {} } as never)
   vi.mocked(stopTurn).mockResolvedValue({ ok: true, value: null } as never)
   vi.mocked(recordNavigation).mockResolvedValue({ ok: true, value: {} } as never)
+  vi.mocked(setMode).mockResolvedValue({ ok: true, value: 'apply' } as never)
+  vi.mocked(acceptProposal).mockResolvedValue({ ok: true, value: null } as never)
+  vi.mocked(discardProposal).mockResolvedValue({ ok: true, value: null } as never)
 }
 
 /** Renders `hook` beside today's Conversation, under a QueryClient of its own, once it is read. */
@@ -171,4 +183,34 @@ describe("the Conversation's hooks", () => {
     })
     expect(recordNavigation).toHaveBeenCalledWith({ data: sent })
   })
+
+  it('switch the Mode, then poll the latest, which says it', async () => {
+    const result = await render(useSetMode)
+    act(() => {
+      result.current.hook.mutate('apply')
+    })
+    await waitFor(() => {
+      expect(latest).toHaveBeenCalledTimes(2)
+    })
+    expect(setMode).toHaveBeenCalledWith({ data: { mode: 'apply' } })
+    expect(conversationDay).toHaveBeenCalledTimes(1)
+  })
+
+  it.each([
+    ['accept', useAcceptProposal, acceptProposal],
+    ['discard', useDiscardProposal, discardProposal],
+  ] as const)(
+    '%s the open Proposal, then read the Conversation again and poll',
+    async (_, hook, call) => {
+      const result = await render(hook)
+      act(() => {
+        result.current.hook.mutate('proposal-1')
+      })
+      await waitFor(() => {
+        expect(conversationDay).toHaveBeenCalledTimes(2)
+        expect(latest).toHaveBeenCalledTimes(2)
+      })
+      expect(call).toHaveBeenCalledWith({ data: { proposal: 'proposal-1' } })
+    },
+  )
 })

@@ -43,7 +43,8 @@ export const help = ({ language }: { language: Locale }) => Mapping.helpSystem(l
 
 /**
  * A Tile of the Account's System, its Root when no id is given, read to a depth with only the fields
- * asked: what the MCP's reads are made of. An agent reads Help in English there.
+ * asked: what the MCP's reads are made of, a batch `over` the System shown folded over it, the
+ * Proposal of a Turn that drafts (`../assistant/proposal/`). An agent reads Help in English there.
  */
 export const readTile = <F extends Field>(
   input: Omit<Parameters<typeof Mapping.readTile<F>>[1], 'language'>,
@@ -51,7 +52,8 @@ export const readTile = <F extends Field>(
 
 /**
  * A Tile of the Account's System, its Root when no id is given, opened: it with the fields asked, its
- * parent, and its Children and Context by Title and Preview. An agent reads Help in English here too.
+ * parent, and its Children and Context by Title and Preview, a batch `over` the System shown folded
+ * over it, as `readTile` shows it. An agent reads Help in English here too.
  */
 export const openTile = <F extends Field>(
   input: Omit<Parameters<typeof Mapping.openTile<F>>[1], 'language'>,

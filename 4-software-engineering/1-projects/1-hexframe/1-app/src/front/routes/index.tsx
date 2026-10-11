@@ -46,7 +46,7 @@ function Home() {
   const onSearchChange = (next: SearchChange) => {
     void navigate({ search: next })
   }
-  const { turn } = useFollowLatest()
+  const { turn, mode } = useFollowLatest()
   // The chat's Messages go after the navigation they follow, from the view they were sent from.
   const { postMessage } = useNavigationSender()
   const { data } = useSystem()
@@ -73,6 +73,7 @@ function Home() {
         <Chat
           onSend={onSend}
           turn={turn}
+          mode={mode}
           onCenter={onCenter}
           className="h-[32rem] lg:h-auto lg:min-h-0"
         />

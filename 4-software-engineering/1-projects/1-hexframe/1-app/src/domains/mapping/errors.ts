@@ -74,6 +74,15 @@ export class LeafHoldsNothing extends Schema.TaggedError<LeafHoldsNothing>()('Le
 }) {}
 
 /**
+ * A batch no longer applies whole to the System: a Tile one of its Operations names changed or went
+ * since it was drafted, so it neither runs nor takes another Operation. Nothing is written; whoever
+ * keeps the batch drops it, and drafts again from the System as it stands.
+ */
+export class BatchOutdated extends Schema.TaggedError<BatchOutdated>()('BatchOutdated', {
+  kind: kind('Conflict'),
+}) {}
+
+/**
  * Help is hexframe's own System, which every Account reads and none writes: a change naming one of its
  * Tiles is refused, whichever end of a move or a swap it is.
  */
@@ -151,5 +160,6 @@ export const mappingFailures = [
   LeafHoldsNothing,
   RootFixed,
   HelpReadOnly,
+  BatchOutdated,
   ImportRefused,
 ] as const

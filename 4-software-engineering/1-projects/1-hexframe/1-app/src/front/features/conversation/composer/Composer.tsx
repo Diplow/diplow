@@ -1,7 +1,7 @@
 // The message input under the timeline: the user writes to the agent, `@`s a Tile of their System by
 // its Title, keyboard first, and sends; the Message goes to the route trimmed and never empty, each
-// Tile picked linked by its id. It says beside its button when the Account may not use the Assistant,
-// and waits while a Turn runs.
+// Tile picked linked by its id. Beside its button, the Conversation's Mode and its switch, or, when
+// the Account may not use the Assistant, a line saying so; it waits while a Turn runs.
 import { useId, useRef } from 'react'
 
 import { m } from '#/paraglide/messages'
@@ -13,6 +13,7 @@ import { Suggestions, suggestionsField } from '#/front/ui/overlays/Suggestions'
 
 import { useMentionState } from '../state/useMentionState'
 import type { Edited, Mentionable } from './mention'
+import { type ModeChoice, ModeSwitch } from './ModeSwitch'
 
 interface ComposerProps {
   /** A Message the user sent, trimmed and never empty, each Tile it `@`s linked by its id. */
@@ -23,9 +24,11 @@ interface ComposerProps {
   unavailable: boolean
   /** Nothing can be sent now. */
   busy: boolean
+  /** The Conversation's Mode and its switch; none before it is read, or where there is none. */
+  mode?: ModeChoice | undefined
 }
 
-export function Composer({ onSend, tiles, unavailable, busy }: ComposerProps) {
+export function Composer({ onSend, tiles, unavailable, busy, mode }: ComposerProps) {
   const { state, actions } = useMentionState(tiles)
   const input = useRef<HTMLTextAreaElement>(null)
   const list = useId()
@@ -118,11 +121,13 @@ export function Composer({ onSend, tiles, unavailable, busy }: ComposerProps) {
             )
           }}
         </form.AppField>
-        <div className="flex items-center justify-end gap-3">
-          {unavailable && (
+        <div className="flex flex-wrap items-center justify-end gap-x-3 gap-y-2">
+          {unavailable ? (
             <p className="mr-auto text-sm text-muted-foreground">
               {m.conversation_assistant_unavailable()}
             </p>
+          ) : (
+            mode !== undefined && <ModeSwitch {...mode} />
           )}
           <form.AppForm>
             <form.SubmitButton>{m.conversation_send()}</form.SubmitButton>

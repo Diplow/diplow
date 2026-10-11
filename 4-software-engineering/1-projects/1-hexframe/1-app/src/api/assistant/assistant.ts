@@ -1,15 +1,16 @@
 // Assistant's server functions, for the Account the request's Session proves: a day of its
 // Conversation, today by default; a Message posted, which starts a Turn answering it when the Account
-// may use the Assistant, and a Stop of the Turn running; and where the user went, consecutive
-// navigations merged by the browser into one Entry. Each validates its input by Assistant's own
+// may use the Assistant, and a Stop of the Turn running; where the user went, consecutive navigations
+// merged by the browser into one Entry; and its Mode switched, and its Proposal accepted or discarded. Each validates its input by Assistant's own
 // schemas, then hands its program (./programs.ts) to the helper.
 import { createServerFn } from '@tanstack/react-start'
 import { Schema } from 'effect'
 
-import { Ago, Day, MessageText, Navigation, TileRef } from '#/domains/assistant/entities'
+import { Ago, Day, MessageText, Mode, Navigation, TileRef } from '#/domains/assistant/entities'
 
 import { run } from '../server/run'
 import * as Assistant from './programs'
+import * as Proposal from './proposal/programs'
 
 /**
  * A day of the Conversation, as its reader asks for it: a date of theirs, today when absent, and their
@@ -83,6 +84,30 @@ export const stopTurn = createServerFn({ method: 'POST' })
 export const assistantAvailable = createServerFn({ method: 'GET' })
   .validator(Schema.toStandardSchemaV1(Schema.Undefined))
   .handler(({ context }) => run(context, Assistant.assistantAvailable))
+
+/** The Mode the user switches the Conversation to. */
+const ModeChosen = Schema.Struct({ mode: Mode })
+
+/** A Proposal of the Conversation, by its id, as the page read it. */
+const ProposalRef = Schema.Struct({ proposal: Schema.String.check(Schema.isUUID()) })
+
+/** Switches the Conversation's Mode, which the Turns started from then on take; answers it. */
+export const setMode = createServerFn({ method: 'POST' })
+  .validator(Schema.toStandardSchemaV1(ModeChosen))
+  .handler(({ data, context }) => run(context, Proposal.setMode(data)))
+
+/**
+ * Accepts the Conversation's open Proposal, whole, its writes landing on the System as the
+ * Assistant's, or none of them once a Tile one names changed since.
+ */
+export const acceptProposal = createServerFn({ method: 'POST' })
+  .validator(Schema.toStandardSchemaV1(ProposalRef))
+  .handler(({ data, context }) => run(context, Proposal.acceptProposal(data)))
+
+/** Discards the Conversation's open Proposal: nothing of it reaches the System. */
+export const discardProposal = createServerFn({ method: 'POST' })
+  .validator(Schema.toStandardSchemaV1(ProposalRef))
+  .handler(({ data, context }) => run(context, Proposal.discardProposal(data)))
 
 /** Records a merged navigation, sent once something else enters the timeline or the page hides. */
 export const recordNavigation = createServerFn({ method: 'POST' })

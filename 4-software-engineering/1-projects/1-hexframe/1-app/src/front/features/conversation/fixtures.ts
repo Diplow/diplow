@@ -1,8 +1,9 @@
 // A fixture Conversation for /dev/system, about the fixture System /dev/hex draws: four days of
 // Assistant's Entries, every kind at least once, a change by each kind of actor, a Message linking
-// Tiles, one of them deleted since, and the Titles of the Tiles its navigations went to and its
-// Messages link; and the fixture System's Tiles, which its composer offers to `@`. Its days are counted back from `now`, so the timeline always shows a
-// today and a yesterday. Like the System, its content is the user's own, so it is not translated.
+// Tiles, one of them deleted since, a Proposal accepted and one open, and the Titles of the Tiles its
+// navigations went to and its Messages link; and the fixture System's Tiles, which its composer offers
+// to `@`. Its days are counted back from `now`, so the timeline always shows a today and a yesterday.
+// Like the System, its content is the user's own, so it is not translated.
 import { type Entry, linkTo } from '#/domains/assistant/entities'
 import { ulysse } from '#/front/ui/hex/fixtures'
 import { directions } from '#/front/ui/hex/geometry/geometry'
@@ -22,6 +23,37 @@ function tile(id: string) {
 const drafts = { id: 'drafts', title: 'Drafts' }
 
 const you = { _tag: 'You' } as const
+
+/** A Proposal the user accepted: a Reference the assistant drafted, which landed. */
+const acceptedProposal = (at: Date): Entry => ({
+  _tag: 'Proposal',
+  id: 'p1',
+  at,
+  proposal: 'proposal-accepted',
+  changes: [
+    { _tag: 'Change', verb: 'ReferenceCreated', tile: tile('projects'), other: tile('principles') },
+  ],
+  fate: 'accepted',
+})
+
+/** A Proposal waiting for the user: Games' Children, as the assistant drafted them. */
+const openProposal = (at: Date): Entry => {
+  const design = { id: 'design', title: 'Games I design' }
+  const play = { id: 'play', title: 'Games I play' }
+  return {
+    _tag: 'Proposal',
+    id: 'p2',
+    at,
+    proposal: 'proposal-open',
+    changes: [
+      { _tag: 'Change', verb: 'TileCreated', tile: design },
+      { _tag: 'Change', verb: 'TileCreated', tile: play },
+      { _tag: 'Change', verb: 'TileEdited', tile: tile('games') },
+      { _tag: 'Change', verb: 'TilesSwapped', tile: play, other: design },
+    ],
+    fate: 'open',
+  }
+}
 
 export function conversationFixture(now: Date): { entries: Entry[]; titles: Titles } {
   const at = (daysAgo: number, hour: number, minute: number) =>
@@ -116,6 +148,7 @@ export function conversationFixture(now: Date): { entries: Entry[]; titles: Titl
       tile: tile('principles'),
       actor: { _tag: 'Key' },
     },
+    acceptedProposal(at(1, 22, 20)),
     {
       _tag: 'Navigation',
       id: 'n3',
@@ -145,6 +178,7 @@ export function conversationFixture(now: Date): { entries: Entry[]; titles: Titl
       'user',
       `${linkTo('games')} yes, laid out as ${linkTo('software-engineering')} is, and bring back what was in ${linkTo(drafts.id)}.`,
     ),
+    openProposal(today(0)),
   ]
   return { entries, titles }
 }
