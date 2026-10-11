@@ -122,8 +122,8 @@ export const conversationNow = (accountId: string) =>
  * Accepts the Account's open Proposal of this id, whole, in one transaction: Assistant accepts it,
  * `ProposalClosed` once it is open no longer, then its writes run by Mapping on the System as it
  * stands, under the Root's lock, all of them or none, each event published as the Assistant's, by the
- * Turn whose write opened it; refused as Mapping refuses the first that no longer applies, a Tile
- * changed since (`TileChanged`, by the Version it names) or gone, the accept rolled back with it.
+ * Turn whose write opened it; `BatchOutdated` once one of them no longer applies, a Tile changed
+ * since, by the Version it names, or gone, the accept rolled back with it.
  */
 export const acceptProposal = ({ proposal }: { readonly proposal: string }) =>
   Effect.flatMap(Iam.sessionOnly, ({ account }) =>

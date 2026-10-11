@@ -9,9 +9,9 @@ import type { Failure } from './failure'
 /**
  * The call an entry is narrowed to, by the scope it names: one of Mapping's Operations by its name,
  * which its server function bears and the MCP tool that runs it names too, or another server function
- * by its own, as `acceptProposal`, whose Mapping refusals all say the System moved under a Proposal.
+ * by its own.
  */
-type Scope = OperationName | 'importTiles' | 'acceptProposal' | 'submitDevTitle'
+type Scope = OperationName | 'importTiles' | 'submitDevTitle'
 
 interface Entry {
   tag: Failure['_tag']
@@ -37,12 +37,6 @@ const table: readonly Entry[] = [
   { tag: 'TurnRunning', message: m.error_assistant_turn_running },
   { tag: 'AllowanceSpent', message: m.error_assistant_allowance_spent },
   { tag: 'ProposalClosed', message: m.error_assistant_proposal_closed },
-  // A Proposal's write that no longer applies, whichever refusal it meets, refuses it whole.
-  { tag: 'TileChanged', scope: 'acceptProposal', message: m.error_assistant_proposal_stale },
-  { tag: 'TileNotFound', scope: 'acceptProposal', message: m.error_assistant_proposal_stale },
-  { tag: 'DirectionTaken', scope: 'acceptProposal', message: m.error_assistant_proposal_stale },
-  { tag: 'MovedUnderItself', scope: 'acceptProposal', message: m.error_assistant_proposal_stale },
-  { tag: 'LeafHoldsNothing', scope: 'acceptProposal', message: m.error_assistant_proposal_stale },
   { tag: 'TileNotFound', message: m.error_mapping_tile_not_found },
   { tag: 'TitleMissing', message: m.error_mapping_title_missing },
   { tag: 'PreviewTooLong', message: m.error_mapping_preview_too_long },
@@ -55,6 +49,7 @@ const table: readonly Entry[] = [
   { tag: 'RootFixed', message: m.error_mapping_root_fixed },
   { tag: 'LeafHoldsNothing', message: m.error_mapping_leaf_holds_nothing },
   { tag: 'HelpReadOnly', message: m.error_mapping_help_read_only },
+  { tag: 'BatchOutdated', message: m.error_mapping_batch_outdated },
   { tag: 'ImportRefused', message: m.error_mapping_import_refused },
   { tag: 'DevInvalid', scope: 'submitDevTitle', message: m.error_dev_title_missing },
   { tag: 'DevConflict', scope: 'submitDevTitle', message: m.error_dev_title_taken },

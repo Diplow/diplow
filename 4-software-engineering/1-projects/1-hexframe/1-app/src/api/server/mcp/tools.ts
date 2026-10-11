@@ -193,6 +193,10 @@ const refusal = {
     'the Tile changed since you read it, its version is no longer the one you gave, whoever ' +
     'changed it: open_tile it again to read what it says now and its version, then decide again ' +
     'and write with that version.',
+  BatchOutdated:
+    "in ask, your writes are drafted into the user's Proposal, and it no longer applies to the " +
+    'System: the user changed a Tile it names since. Write nothing more; say so in your answer, ' +
+    'so the user discards it and asks again.',
 } as const
 
 /** What a slot taken means where a Child goes: the regrouping a seventh Branch or Leaf asks for. */
@@ -254,6 +258,7 @@ const createTile = write({
     PreviewTooLong: refusal.PreviewTooLong,
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
+    BatchOutdated: refusal.BatchOutdated,
   },
   input: NewTileOfAgent,
   // An agent sends no id, so Mapping makes it, fresh: a clash on it is a defect, never a refusal
@@ -276,6 +281,7 @@ const editTile = write({
     TitleMissing: refusal.TitleMissing,
     PreviewTooLong: refusal.PreviewTooLong,
     HelpReadOnly: refusal.HelpReadOnly,
+    BatchOutdated: refusal.BatchOutdated,
   },
   input: TileEdit.mapFields(
     Struct.evolve({
@@ -309,6 +315,7 @@ const moveTile = write({
       'a Tile cannot move under itself or anything below it; pick a parent outside it.',
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
+    BatchOutdated: refusal.BatchOutdated,
   },
   input: TileMove.mapFields(
     Struct.evolve({
@@ -336,6 +343,7 @@ const swapTiles = write({
     MovedUnderItself: 'neither Tile may lie below the other; move one of them instead.',
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
+    BatchOutdated: refusal.BatchOutdated,
   },
   input: TileSwap.mapFields(
     Struct.evolve({
@@ -363,6 +371,7 @@ const deleteTile = write({
     TileChanged: refusal.TileChanged,
     RootFixed: refusal.RootFixed,
     HelpReadOnly: refusal.HelpReadOnly,
+    BatchOutdated: refusal.BatchOutdated,
   },
   input: TileDelete.mapFields(
     Struct.evolve({
@@ -388,6 +397,7 @@ const createReference = write({
     DirectionTaken: refusal.DirectionTaken,
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
+    BatchOutdated: refusal.BatchOutdated,
   },
   input: NewReference.mapFields(
     Struct.evolve({
@@ -415,6 +425,7 @@ const deleteReference = write({
     TileNotFound: refusal.TileNotFound,
     TileChanged: refusal.TileChanged,
     HelpReadOnly: refusal.HelpReadOnly,
+    BatchOutdated: refusal.BatchOutdated,
   },
   input: ReferenceSlot.mapFields(
     Struct.evolve({

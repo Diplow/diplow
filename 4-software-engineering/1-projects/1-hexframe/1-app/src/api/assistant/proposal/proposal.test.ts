@@ -176,7 +176,7 @@ describe('a Turn in ask', () => {
     expect(await value(run(signedIn, Assistant.latest))).not.toHaveProperty('proposal')
   })
 
-  it('is refused whole once a Tile it names changed since, then discarded', async () => {
+  it('is refused whole once a Tile it names changed since, takes no more drafts, then is discarded', async () => {
     const { signedIn } = await someone
     const { client, root, end } = await turnStarted('Rename me.')
     await call(client, 'edit_tile', { id: root.id, version: root.version, title: 'Ada' })
@@ -190,9 +190,18 @@ describe('a Turn in ask', () => {
     if (open === undefined) throw new Error('No Proposal is open')
     const before = await value(run(signedIn, Mapping.system))
     expect(await run(signedIn, Proposal.acceptProposal({ proposal: open.proposal }))).toMatchObject(
-      { ok: false, failure: { _tag: 'TileChanged', kind: 'Conflict' } },
+      { ok: false, failure: { _tag: 'BatchOutdated', kind: 'Conflict' } },
     )
     expect(await value(run(signedIn, Mapping.system))).toEqual(before)
+    // The next Turn drafts nothing more into it, and is told why.
+    const next = await turnStarted('And more.')
+    const refused = await call(next.client, 'create_tile', {
+      parent: next.root.id,
+      slot: 4,
+      ...content('More'),
+    })
+    expect(refused.error).toMatch(/^BatchOutdated: /)
+    await next.end()
     await value(run(signedIn, Proposal.discardProposal({ proposal: open.proposal })))
     expect((await proposals()).at(-1)?.fate).toBe('discarded')
     expect(await titlesHeld()).not.toContain('Games')

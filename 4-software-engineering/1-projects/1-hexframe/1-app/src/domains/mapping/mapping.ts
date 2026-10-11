@@ -595,9 +595,10 @@ const draftAnswer = (after: System, operation: Operation, made: string | undefin
 }
 
 /**
- * Drafts an Operation into a batch kept over the Account's System, writing nothing: decided by
- * `decide` on the System the batch makes (`fold`), refused as it would be there, a create given the
- * id of what it makes now, fresh, so it keeps that id each time the batch is folded again. Answers it
+ * Drafts an Operation into a batch kept over the Account's System, writing nothing: `BatchOutdated`
+ * once the batch no longer applies whole (`whole`), so nothing is added to a batch that can no longer
+ * run; else decided by `decide` on the System the batch makes, refused as it would be there, a create
+ * given the id of what it makes now, fresh, so it keeps that id each time the batch is folded again. Answers it
  * as the batch keeps it, Mapping's summary of each event it makes there, and, for a create or an edit,
  * the Tile as the batch now makes it, with its Version, which the writer's next write to it names.
  * `decide` refuses each Operation only what its overload says, so the refusal is typed by it.
@@ -609,7 +610,7 @@ export const draft = <O extends Operation>(
 ) =>
   Effect.gen(function* () {
     yield* outsideHelp(namedBy(operation))
-    const folded = fold(yield* system(accountId), over)
+    const folded = yield* Effect.fromResult(whole(yield* system(accountId), over))
     const made =
       operation._tag === 'CreateTile'
         ? (operation.id ?? (yield* newId))
@@ -632,9 +633,9 @@ export const draft = <O extends Operation>(
  * Runs a batch on the Account's System, in the transaction around it, all of it or nothing: its Root
  * locked, the batch folded over the System as it stands, each Operation decided on what the ones
  * before it made, a create under the id it was drafted with. One that no longer applies, a Tile it
- * names changed since (`TileChanged`, by the Version it carries) or gone, refuses the whole batch with
- * its refusal, nothing written nor published (`whole`); else every event is written and published
- * as an Operation's are. A batch naming a Tile of Help is `HelpReadOnly`.
+ * names changed since, by the Version it carries, or gone, refuses the whole batch, `BatchOutdated`,
+ * nothing written nor published (`whole`); else every event is written and published as an
+ * Operation's are. A batch naming a Tile of Help is `HelpReadOnly`.
  */
 export const runBatch = (accountId: string, batch: ReadonlyArray<Batched>) =>
   Effect.gen(function* () {

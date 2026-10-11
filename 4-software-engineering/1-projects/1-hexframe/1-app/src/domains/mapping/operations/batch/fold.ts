@@ -3,10 +3,12 @@
 // on the System the batch made before it, a create given the id of what it makes then, so folding the
 // batch again over the same System makes the same Tiles under the same ids. An Operation that no longer
 // applies, a Tile changed or gone since, is left out of the fold and said so, by its refusal, so the
-// rest still folds; running the batch for good refuses the whole of it then (`mapping.ts`). Pure.
+// rest still folds for a reader; running the batch for good, or adding to it, refuses it whole then
+// (`whole`, `BatchOutdated`). Pure.
 import { Result, Schema } from 'effect'
 
 import { type System, TileId, tileAt } from '../../entities'
+import { BatchOutdated } from '../../errors'
 import { decide, type Decided, type Refusal } from '../decider/decide'
 import { evolve } from '../decider/evolve'
 import { changeOf, type ChangeSummary, type OperationEvent } from '../events'
@@ -64,16 +66,15 @@ export const fold = (system: System, batch: ReadonlyArray<Batched>): Folded =>
   )
 
 /**
- * A batch folded over a System whole, as it runs for good: all of it, or refused by the refusal of the
- * first Operation that no longer applies, the rest of it with it.
+ * A batch folded over a System whole, as it runs for good and as it takes another Operation: all of
+ * it, or `BatchOutdated` once one of its Operations no longer applies, the rest of it with it.
  */
 export const whole = (
   system: System,
   batch: ReadonlyArray<Batched>,
-): Result.Result<Folded, Refusal> => {
+): Result.Result<Folded, BatchOutdated> => {
   const folded = fold(system, batch)
-  const [first] = folded.left
-  return first === undefined ? Result.succeed(folded) : Result.fail(first)
+  return folded.left.length === 0 ? Result.succeed(folded) : Result.fail(new BatchOutdated())
 }
 
 /**

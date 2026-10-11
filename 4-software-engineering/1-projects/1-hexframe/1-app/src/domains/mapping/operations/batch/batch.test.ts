@@ -169,24 +169,31 @@ layer(TestTiles)('a batch over the System', (it) => {
     }),
   )
 
-  it.effect('refuses the whole batch once a Tile it names changed since, writing nothing', () =>
-    Effect.gen(function* () {
-      const accountId = crypto.randomUUID()
-      const root = (yield* Mapping.system(accountId)).root
-      const { batch } = yield* drafted(
-        accountId,
-        () => new CreateTile({ parent: root.id, slot: 1, ...content('Work') }),
-        () => new EditTile({ id: root.id, version: root.version, title: 'Ada' }),
-      )
-      const edit = new EditTile({ id: root.id, version: root.version, title: 'Grace' })
-      yield* transactional(Mapping.editTile(accountId, edit))
-      const before = yield* Mapping.system(accountId)
-      heard.length = 0
-      const refused = yield* Effect.flip(transactional(Mapping.runBatch(accountId, batch)))
-      expect(refused._tag).toBe('TileChanged')
-      expect(yield* Mapping.system(accountId)).toEqual(before)
-      expect(heard).toEqual([])
-    }),
+  it.effect(
+    'refuses the whole batch once a Tile it names changed since, writing nothing, nor drafting more',
+    () =>
+      Effect.gen(function* () {
+        const accountId = crypto.randomUUID()
+        const root = (yield* Mapping.system(accountId)).root
+        const { batch } = yield* drafted(
+          accountId,
+          () => new CreateTile({ parent: root.id, slot: 1, ...content('Work') }),
+          () => new EditTile({ id: root.id, version: root.version, title: 'Ada' }),
+        )
+        const edit = new EditTile({ id: root.id, version: root.version, title: 'Grace' })
+        yield* transactional(Mapping.editTile(accountId, edit))
+        const before = yield* Mapping.system(accountId)
+        heard.length = 0
+        const refused = yield* Effect.flip(transactional(Mapping.runBatch(accountId, batch)))
+        expect(refused._tag).toBe('BatchOutdated')
+        expect(yield* Mapping.system(accountId)).toEqual(before)
+        expect(heard).toEqual([])
+        // Nothing more is drafted into it: it can no longer run.
+        const more = new CreateTile({ parent: root.id, slot: 2, ...content('More') })
+        expect((yield* Effect.flip(Mapping.draft(accountId, batch, more)))._tag).toBe(
+          'BatchOutdated',
+        )
+      }),
   )
 })
 

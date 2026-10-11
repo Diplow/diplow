@@ -109,7 +109,7 @@ describe('fold, a batch over a System', () => {
 })
 
 describe('whole, a batch as it runs for good', () => {
-  it('folds all of it, or is refused by the first Operation that no longer applies', () => {
+  it('folds all of it, or is `BatchOutdated` once one of its Operations no longer applies', () => {
     expect(whole(system, work)).toEqual(Result.succeed(fold(system, work)))
     const stale = [
       batched(new EditTile({ id: id.branch, version: 3, title: 'Fine' })),
@@ -117,7 +117,7 @@ describe('whole, a batch as it runs for good', () => {
       batched(new DeleteTile({ id: uuid(), version: 1 })),
     ]
     const refused = whole(system, stale)
-    expect(Result.isFailure(refused) && refused.failure._tag).toBe('TileChanged')
+    expect(Result.isFailure(refused) && refused.failure._tag).toBe('BatchOutdated')
   })
 })
 
