@@ -1,0 +1,54 @@
+4-software-engineering/1-projects/3-design-system/CLAUDE.md
+  s_d79618abbe6a2f::t_6af6e967c14584 14
+  s_d79618abbe6a2f::t_6da86ea7c66e51 31-35
+  s_d79618abbe6a2f::t_0f8e7e04021962 26
+  s_d79618abbe6a2f::t_10285ef51845f2 15
+  s_c19b57f63ed6ef::t_2b2687763b81a7 27,36
+4-software-engineering/1-projects/3-design-system/DIRECTION.md
+  s_d79618abbe6a2f::t_06c169539dfd6f 29-31
+  s_d79618abbe6a2f::t_6aad3e324a98fb 9-10
+  s_25db2064d5580e::t_412e3fa182946a 32
+4-software-engineering/1-projects/3-design-system/TOKENS.md
+  s_d79618abbe6a2f::t_cd9e6a77dad430 8-10
+  s_d79618abbe6a2f::t_2d57a99eb3cce5 57-59
+  s_25db2064d5580e::t_5aa394f52df125 60
+4-software-engineering/1-projects/1-hexframe/.run/design-system.yaml
+  s_d79618abbe6a2f::t_1c2f2d642a4373 1-137
+4-software-engineering/1-projects/1-hexframe/.run/CLAUDE.md
+  s_d79618abbe6a2f::t_8d6226fb1230e3 8-10
+  s_d79618abbe6a2f::t_5512c0c3ced327 25
+  s_d79618abbe6a2f::t_6f9975b7118a35 62-63,66
+  s_c19b57f63ed6ef::t_b9808926c97bd4 67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "686f0d5a4d1378968f401f4a080bc0dc41608c6c",
+  "prompts": {},
+  "sessions": {
+    "s_25db2064d5580e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "620e0393-2f39-46d7-be87-29a554b9944d",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_d79618abbe6a2f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e176f409-1d47-4655-b2db-ed8115b14e5b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
