@@ -1,13 +1,13 @@
-// The seams, in /dev/ui: the Markdown one, which shows a Body that isn't Markdown as code for now.
+// The seams, on /design-system: the Markdown one, which shows a Body that isn't Markdown as code for now.
 import { m } from '#/paraglide/messages'
 
-import { GallerySection, GalleryState } from '../gallery'
+import { GallerySection, GalleryState } from '../gallery/frame'
 import { CodeBlock } from './Markdown'
 
 export function SeamsGallery() {
   return (
     <GallerySection name="CodeBlock">
-      <GalleryState label={m.dev_ui_state_verbatim_file()}>
+      <GalleryState label={m.gallery_state_verbatim_file()}>
         <CodeBlock code={sampleCode} label="run.yaml" className="w-[28rem]" />
       </GalleryState>
     </GallerySection>

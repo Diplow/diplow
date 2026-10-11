@@ -2,10 +2,11 @@ import { readFileSync } from 'node:fs'
 
 import { describe, expect, it } from 'vitest'
 
-import { colorTokens } from './tokens'
+import { colourNotes, valueNotes, type Note } from './Tokens'
+import { colorTokens, valueTokens } from './stylesheet'
 
 // Read from disk: Vitest stubs CSS imports, `?raw` included.
-const css = readFileSync(new URL('../styles.css', import.meta.url), 'utf8')
+const css = readFileSync(new URL('../../styles.css', import.meta.url), 'utf8')
 const themes = { light: /^:root \{([^}]*)\}/m, dark: /^\.dark \{([^}]*)\}/m }
 
 describe('colorTokens', () => {
@@ -92,11 +93,64 @@ describe('the theme', () => {
     }
   })
 
-  it('lists every colour the themes declare, so /dev/ui misses none', () => {
+  it('lists every colour the themes declare, so /design-system misses none', () => {
     for (const [theme, selector] of Object.entries(themes)) {
       const colours = [...declared(selector)].filter(([, value]) => value.startsWith('oklch('))
       const unlisted = colours.map(([name]) => name).filter((name) => !variables.includes(name))
       expect(unlisted, theme).toEqual([])
     }
+  })
+})
+
+describe('valueTokens', () => {
+  it("reads the theme beside its colours, a line height aside, then the base layer's :root", () => {
+    const sheet = `@theme inline {
+      --color-glow: var(--glow);
+      --font-sans: 'Geist Variable', sans-serif;
+      --text-prose: 1.125rem;
+      --text-prose--line-height: 1.55;
+      @keyframes breathe { 50% { opacity: 0.35; } }
+      --animate-breathe: breathe 3.2s ease-in-out infinite;
+    }
+    @layer base {
+      * { color: red; }
+      :root { --duration-turn: 600ms; }
+    }`
+    expect(valueTokens(sheet)).toEqual([
+      { name: 'font-sans', value: "'Geist Variable', sans-serif" },
+      { name: 'text-prose', value: '1.125rem' },
+      { name: 'animate-breathe', value: 'breathe 3.2s ease-in-out infinite' },
+      { name: 'duration-turn', value: '600ms' },
+    ])
+  })
+})
+
+describe('the notes', () => {
+  // Each token under exactly one note, and each note's tokens in the stylesheet.
+  function fits(notes: readonly Note[], names: string[]) {
+    const noted = notes.flatMap(({ tokens }) => tokens)
+    expect(
+      names.filter((name) => !noted.includes(name)),
+      'unnoted',
+    ).toEqual([])
+    expect(
+      noted.filter((name) => !names.includes(name)),
+      'not in the stylesheet',
+    ).toEqual([])
+    expect(new Set(noted).size, 'noted twice').toBe(noted.length)
+  }
+
+  it('say what every colour token is for', () => {
+    fits(
+      colourNotes,
+      colorTokens(css).map(({ name }) => name),
+    )
+  })
+
+  it('say what every other token is for: the type, the shape, the motion', () => {
+    fits(
+      valueNotes,
+      valueTokens(css).map(({ name }) => name),
+    )
   })
 })

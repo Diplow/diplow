@@ -1,11 +1,11 @@
-// The canvas's own layouts, in /dev/ui: the centered Tile's card and the drawer its forms open in.
+// The canvas's own layouts, on /design-system: the centered Tile's card and the drawer its forms open in.
 import { Settings } from 'lucide-react'
 import { useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Button } from '../../atoms/controls/button'
-import { GallerySection, GalleryState } from '../../gallery'
+import { GallerySection, GalleryState } from '../../gallery/frame'
 import { Card } from './Card'
 import { Drawer } from './Drawer'
 
@@ -13,29 +13,29 @@ export function CanvasLayoutsGallery() {
   return (
     <>
       <GallerySection name="Card">
-        <GalleryState label={m.dev_ui_state_complete()}>
+        <GalleryState label={m.gallery_state_complete()}>
           <Card
             className="w-80"
-            title={m.dev_ui_sample_tile_title()}
-            description={m.dev_ui_sample_tile_preview()}
+            title={m.gallery_sample_tile_title()}
+            description={m.gallery_sample_tile_preview()}
             action={
-              <Button size="icon-sm" variant="ghost" aria-label={m.dev_ui_sample_settings()}>
+              <Button size="icon-sm" variant="ghost" aria-label={m.gallery_sample_settings()}>
                 <Settings />
               </Button>
             }
-            footer={<Button size="sm">{m.dev_ui_sample_open()}</Button>}
+            footer={<Button size="sm">{m.gallery_sample_open()}</Button>}
           >
-            <p className="text-sm">{m.dev_ui_sample_tile_body()}</p>
+            <p className="text-sm">{m.gallery_sample_tile_body()}</p>
           </Card>
         </GalleryState>
-        <GalleryState label={m.dev_ui_state_content_only()}>
+        <GalleryState label={m.gallery_state_content_only()}>
           <Card className="w-80">
-            <p className="text-sm">{m.dev_ui_sample_tile_body()}</p>
+            <p className="text-sm">{m.gallery_sample_tile_body()}</p>
           </Card>
         </GalleryState>
       </GallerySection>
       <GallerySection name="Drawer">
-        <GalleryState label={m.dev_ui_state_click_to_open()}>
+        <GalleryState label={m.gallery_state_click_to_open()}>
           <DrawerSpecimen />
         </GalleryState>
       </GallerySection>
@@ -59,23 +59,23 @@ function DrawerSpecimen() {
           setOpen(true)
         }}
       >
-        {m.dev_ui_sample_edit()}
+        {m.gallery_sample_edit()}
       </Button>
       <Drawer
         open={open}
         onOpenChange={setOpen}
-        title={m.dev_ui_sample_tile_title()}
-        description={m.dev_ui_sample_tile_preview()}
+        title={m.gallery_sample_tile_title()}
+        description={m.gallery_sample_tile_preview()}
         footer={
           <>
             <Button variant="outline" onClick={close}>
               {m.ui_cancel()}
             </Button>
-            <Button onClick={close}>{m.dev_ui_sample_save()}</Button>
+            <Button onClick={close}>{m.gallery_sample_save()}</Button>
           </>
         }
       >
-        <p className="text-sm">{m.dev_ui_sample_tile_body()}</p>
+        <p className="text-sm">{m.gallery_sample_tile_body()}</p>
       </Drawer>
     </>
   )
