@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { ChannelsGallery } from '#/front/client/gallery'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { useHelp } from '#/front/client/mapping/queries'
+import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { BreadcrumbGallery } from '#/front/features/breadcrumb/gallery'
 import { ConversationGallery } from '#/front/features/conversation/gallery'
 import { canvasTree } from '#/front/features/system/tree'
@@ -20,9 +21,8 @@ import { Canvas } from '#/front/ui/canvas/Canvas'
 import { CanvasAtomsGallery } from '#/front/ui/canvas/atoms/gallery'
 import { fixtureViews, ulysse } from '#/front/ui/canvas/fixtures'
 import { CanvasLayoutsGallery } from '#/front/ui/canvas/layouts/gallery'
-import { Rail } from '#/front/ui/canvas/layouts/Rail'
-import { pathTo, type TileNode } from '#/front/ui/canvas/view/tiles'
-import { centerOn, readCanvasView, showView, type CanvasView } from '#/front/ui/canvas/view/view'
+import type { TileNode } from '#/front/ui/canvas/view/tiles'
+import { centerOn, readCanvasView, type CanvasView } from '#/front/ui/canvas/view/view'
 import { ChatAtomsGallery } from '#/front/ui/chat/atoms/gallery'
 import { Composer } from '#/front/ui/chat/composer/Composer'
 import { modeChoices } from '#/front/ui/chat/composer/demo'
@@ -41,7 +41,8 @@ import {
 import { anchorOf, filled, tiers } from '#/front/ui/gallery/pieces'
 import { Tokens } from '#/front/ui/gallery/Tokens'
 import { LayoutsGallery } from '#/front/ui/layouts/gallery'
-import { Screen, type Side } from '#/front/ui/layouts/screen/Screen'
+import { Screen } from '#/front/ui/layouts/screen/Screen'
+import { useScreenState } from '#/front/ui/layouts/screen/state/useScreenState'
 import { SeamsGallery } from '#/front/ui/seams/gallery'
 
 export const Route = createFileRoute('/design-system')({
@@ -247,7 +248,7 @@ interface ScreenSpecimenProps {
  */
 function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
   const [view, setView] = useState<CanvasView>({})
-  const [front, setFront] = useState<Side>('chat')
+  const { state: screen, actions: turning } = useScreenState()
   const [sent, setSent] = useState<Line[]>([])
   const lines: Line[] = signedIn
     ? [...screenLines(), ...sent]
@@ -257,20 +258,13 @@ function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
       ]
   return (
     <Screen
-      front={front}
-      onFrontChange={setFront}
+      front={screen.front}
+      onFrontChange={turning.turn}
       className={className}
       canvas={
         <Canvas system={system} view={view} onViewChange={setView} className="flex-1 p-4 pb-8" />
       }
-      corner={
-        <Rail
-          steps={pathTo(system, showView(system, view).center.id)}
-          onSelect={(id) => {
-            setView(centerOn(system, id))
-          }}
-        />
-      }
+      corner={<Breadcrumb system={system} view={view} onViewChange={setView} />}
       messages={<Lines lines={lines} />}
       composer={
         signedIn ? (

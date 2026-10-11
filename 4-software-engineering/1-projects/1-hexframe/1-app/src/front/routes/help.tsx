@@ -1,6 +1,7 @@
-// Help: the System hexframe ships, on the canvas, read-only, in the page's language, with the centered
-// Tile's card and its ancestors beside it. The view and the open Body live in the search params, so a
-// link shows what its sender saw. Anyone reads it: no guard, no sign-in.
+// Help: the System hexframe ships, on the canvas, read-only, in the page's language, its ancestors in
+// the canvas's corner, the theme at their head, and the centered Tile's card beside it. The view and
+// the open Body live in the search params, so a link shows what its sender saw. Anyone reads it: no
+// guard, no sign-in.
 import { createFileRoute } from '@tanstack/react-router'
 
 import { ReadBoundary } from '#/front/client/ReadBoundary'
@@ -54,21 +55,24 @@ function HelpPage({ search, onSearchChange }: HelpPageProps) {
   const opened = search.open === undefined ? undefined : tileIn(help, search.open)?.tile
   return (
     <>
-      <HelpCanvas
-        tree={tree}
-        search={search}
-        onSearchChange={onSearchChange}
-        className="h-[80dvh] min-h-0 w-full lg:h-full"
-      />
-      <aside className="grid content-start gap-4 lg:min-h-0 lg:overflow-y-auto">
-        <HelpTile tree={tree} search={search} onSearchChange={onSearchChange} opened={opened} />
+      <div className="relative h-[80dvh] min-h-0 lg:h-full">
+        <HelpCanvas
+          tree={tree}
+          search={search}
+          onSearchChange={onSearchChange}
+          className="size-full"
+        />
         <Breadcrumb
           system={tree}
           view={viewOf(search)}
           onViewChange={(view) => {
             onSearchChange(withView(search, view))
           }}
+          className="absolute top-[1.375rem] right-[1.375rem]"
         />
+      </div>
+      <aside className="grid content-start gap-4 lg:min-h-0 lg:overflow-y-auto">
+        <HelpTile tree={tree} search={search} onSearchChange={onSearchChange} opened={opened} />
       </aside>
     </>
   )

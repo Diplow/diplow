@@ -7,7 +7,6 @@ import { getLocale } from '#/paraglide/runtime'
 import { Toaster } from '#/front/ui/atoms/Toaster'
 import { Button } from '#/front/ui/atoms/controls/button'
 import { LocaleSwitch } from '#/front/ui/atoms/controls/LocaleSwitch'
-import { ThemeToggle } from '#/front/ui/atoms/controls/ThemeToggle'
 import { themeScript } from '#/front/ui/theme'
 
 import appCss from '../styles.css?url'
@@ -33,11 +32,12 @@ function RootDocument({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <header className="flex items-center justify-end gap-2 p-4">
+        {/* Its height is the one home's screen leaves itself: 4.25rem. The theme is at the head of where
+            you are, in the canvas's corner. */}
+        <header className="flex h-17 items-center justify-end gap-2 px-4">
           <SignedInLinks />
           <HelpLink />
           <LocaleSwitch />
-          <ThemeToggle />
         </header>
         {children}
         <Toaster />

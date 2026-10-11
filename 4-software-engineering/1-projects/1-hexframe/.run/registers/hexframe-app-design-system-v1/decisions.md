@@ -14,7 +14,9 @@ preview: >-
   HEX-96 proposed went and how a finger opens them, how HEX-95 drew the
   screen, folding on its own width, a seam on a phone, and the corner's
   contrast, how the chat's pieces take their text, every ink raised to
-  4.5:1, and a decided Proposal's receipt unfolding its changes.
+  4.5:1, a decided Proposal's receipt unfolding its changes, and how HEX-97
+  built the screen on home: who holds the side in front, the breadcrumb drawn
+  as the rail, what the header keeps, and the gaps left to M3.
 ---
 # Decisions
 
@@ -140,3 +142,19 @@ HEX-96's frames landed while this was in review, and the two met. HEX-98 had its
 HEX-98, Ulysse's answers to two of its pull request's questions. `faint` measured 3.1:1 on the ground in dark and 3.6:1 in light, and in light `destructive` 4.1:1, `human` 3.3:1, `warning` 3.4:1 and `success` 4.2:1, under the 4.5:1 small text needs. Each rose, its hue and chroma kept, to just past 4.5:1 on the ground and on a card: `faint` to L 0.595 in dark and 0.527 in light, in light `human` to 0.532 (`ring`, `sidebar-ring` and `chart-1` with it, the same amber), `destructive` to 0.533, `warning` to 0.545, `success` to 0.507 (`chart-5` follows `faint`). Dark's other inks already passed. `gallery/tokens.test.ts` now holds every ink to it, in both themes, so a token cannot fall under again unnoticed. The values part from `3-design-system/`'s, frozen until HEX-112 retires it; the app's are the ones that count. So `Fold`, which had moved to `muted-foreground` for its contrast alone, is `faint` again, as `components.html` draws it; the composer's quiet text (DEC-10) and the rail's labels (DEC-18), moved for the same reason, could go back too, each left to its next ticket.
 
 A decided Proposal's `Receipt` keeps its changes, folded under its line (`Change` and `Changes` moved into `Receipt.tsx`, which the Proposal's zone draws its list with too): what an accepted one changed, what a discarded one would have. Its `Fold` comes last on the line, after the time, so the keys and a screen reader reach the list as the eye does, below it; a Turn's receipt takes its changes alike.
+
+### DEC-23 The side in front is a state hook beside the screen, not the URL
+
+HEX-97. STACK's state table first asks whether a link should carry it: no, since the side in front matters on a phone alone, and a link sent from a phone opens on any width. So it is `useScreenState` (`ui/layouts/screen/state/`), tested beside it, which home and the screen's specimens on `/design-system` call, so the screen stays its caller's (DEC-16). The chat when the screen opens; `turn`, the seam; `cross`, the crossing DEC-16 left to this ticket: a Message's link centers its Tile and brings the canvas forward. On a wide screen the side in front changes nothing drawn, and waits there for the screen to fold.
+
+### DEC-24 The breadcrumb is the rail, and the theme lives at its head alone
+
+HEX-97, on cubic's P3 from HEX-95's review. `Breadcrumb` became the thin wrapper that works out the steps and draws `Rail`; the horizontal trail and its hex glyphs went, and so did the path the screen's specimens repeated. Before the System is read, or once reading it failed, it draws the rail without a step, so the theme stays reachable. Help draws it in its canvas's corner too. `ThemeToggle` left the header, and since the corner's rail is now its only user, it moved from `atoms/` to `canvas/atoms/` (ui's rule: an atom one side alone uses lives in that side). The pages without a breadcrumb, Keys, sign-in, sign-up and `/dev/session`, have no theme switch until HEX-103 retires them; `/design-system` switches it from its specimens.
+
+### DEC-25 The header keeps the language until the composer takes it
+
+HEX-97. The ticket leaves the header the links HEX-103 retires: the System, Keys, Help. The language switch stays beside them, since no other place offers it until HEX-101 builds the composer's `/language`. The header is `4.25rem` tall by its own class, the height home's screen leaves itself, so the screen fills the viewport below it with nothing to scroll.
+
+### DEC-26 What home draws that HEX-95 didn't propose, until M3 redraws it
+
+HEX-97. The chat's slots hold today's pieces, taken apart rather than redrawn: the timeline, its day labels on a strip of the card's ground, and today's composer with its hint lines, tall on a phone, both in `features/conversation/` until HEX-101 builds the conversation's text and the composer HEX-98 and HEX-99 proposed. The composer's zone sits on the card's ground, as the proposed composer does, so the canvas never shows through it. The centered Tile's card stays at the canvas's foot, at most 30% of its height, until HEX-102 moves the forms into the tile widget. Two things the screen needed to hold real content: on a phone the canvas ends above the composer, whose height the screen measures, so the card is never under it; and the conversation stays at its foot as it grows, home's lines arriving after the first paint, while the reader hasn't scrolled up. Checked in a browser, light and dark, English and French, wide and in a 390px frame; the window would not narrow and claude-in-chrome emulates no touch, so the finger's 44px targets were not looked at here.

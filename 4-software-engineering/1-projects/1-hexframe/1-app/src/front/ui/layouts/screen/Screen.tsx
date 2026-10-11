@@ -67,11 +67,9 @@ export function Screen({
   const screen = useRef<HTMLDivElement>(null)
   const scroller = useRef<HTMLDivElement>(null)
   const content = useRef<HTMLDivElement>(null)
-  // The conversation opens at its foot, the latest last.
-  useEffect(() => {
-    const messages = scroller.current
-    if (messages !== null) messages.scrollTop = messages.scrollHeight
-  }, [])
+  const foot = useRef<HTMLDivElement>(null)
+  useLatestShown(scroller, content)
+  useComposerHeight(screen, foot)
   const chatInFront = front === 'chat'
   // A move made from a seam hands the focus to the seam on the other side, once the screen has
   // turned, so the keyboard can go back rather than lose the seam that went away. Should the caller
@@ -139,7 +137,7 @@ export function Screen({
               className="h-11 items-center bg-linear-to-b from-transparent to-background/70"
             />
           )}
-          {composer}
+          <div ref={foot}>{composer}</div>
         </div>
       </section>
       <Scrollbar screen={screen} scroller={scroller} content={content} />
@@ -154,12 +152,70 @@ export function Screen({
       <section
         aria-label={m.screen_canvas()}
         inert={phone && chatInFront}
-        className="absolute inset-0 z-0 flex @wide:left-(--screen-edge)"
+        className="absolute inset-0 z-0 flex @max-wide:bottom-[var(--screen-composer,0px)] @wide:left-(--screen-edge)"
       >
         {canvas}
       </section>
     </div>
   )
+}
+
+/** How close to its foot the conversation still reads as at its foot, in px. */
+const atFoot = 2
+
+/**
+ * The conversation opens at its foot, the latest last, and stays there as it grows, its lines read
+ * after the screen is drawn included, while the reader hasn't scrolled up from it.
+ */
+function useLatestShown(
+  scroller: RefObject<HTMLElement | null>,
+  content: RefObject<HTMLElement | null>,
+) {
+  useEffect(() => {
+    const messages = scroller.current
+    const lines = content.current
+    if (messages === null || lines === null) return undefined
+    let pinned = true
+    const toFoot = () => {
+      messages.scrollTop = messages.scrollHeight
+    }
+    const onScroll = () => {
+      pinned = messages.scrollHeight - messages.scrollTop - messages.clientHeight <= atFoot
+    }
+    const grown = new ResizeObserver(() => {
+      if (pinned) toFoot()
+    })
+    toFoot()
+    messages.addEventListener('scroll', onScroll, { passive: true })
+    grown.observe(lines)
+    return () => {
+      messages.removeEventListener('scroll', onScroll)
+      grown.disconnect()
+    }
+  }, [scroller, content])
+}
+
+/**
+ * The composer's height, as `--screen-composer` on the screen: on a phone the canvas ends above it, so
+ * what the canvas holds at its foot is never under the composer kept there. Wide, the composer sits in
+ * the chat's column and the canvas runs to the screen's foot.
+ */
+function useComposerHeight(
+  screen: RefObject<HTMLElement | null>,
+  composer: RefObject<HTMLElement | null>,
+) {
+  useEffect(() => {
+    const element = screen.current
+    const zone = composer.current
+    if (element === null || zone === null) return undefined
+    const resized = new ResizeObserver(() => {
+      element.style.setProperty('--screen-composer', `${String(zone.offsetHeight)}px`)
+    })
+    resized.observe(zone)
+    return () => {
+      resized.disconnect()
+    }
+  }, [screen, composer])
 }
 
 /**
