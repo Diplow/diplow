@@ -27,12 +27,15 @@ import { Button } from '#/front/ui/inputs/controls/button'
 export interface Deciding {
   accept: (proposal: string) => void
   discard: (proposal: string) => void
-  undo: (batch: string) => void
+  undo: (applied: string) => void
   pending: boolean
 }
 
-/** The Undo of what the assistant applied, by its id, waiting while a decision is on its way. */
-export function UndoButton({ batch, decide }: { batch: string; decide: Deciding }) {
+/**
+ * The Undo of what the assistant applied, by the id of the Proposal or the Turn that applied it,
+ * waiting while a decision is on its way.
+ */
+export function UndoButton({ applied, decide }: { applied: string; decide: Deciding }) {
   return (
     <div className="flex justify-end">
       <Button
@@ -40,7 +43,7 @@ export function UndoButton({ batch, decide }: { batch: string; decide: Deciding 
         size="sm"
         disabled={decide.pending}
         onClick={() => {
-          decide.undo(batch)
+          decide.undo(applied)
         }}
       >
         <Undo2 aria-hidden />

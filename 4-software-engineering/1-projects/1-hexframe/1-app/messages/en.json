@@ -272,7 +272,7 @@
   "error_assistant_turn_running": "The assistant is still answering. Wait for it to finish, or stop it.",
   "error_assistant_allowance_spent": "This month's allowance for the assistant is spent. It answers again next month.",
   "error_assistant_proposal_closed": "This proposal was already accepted or discarded.",
-  "error_assistant_nothing_to_undo": "This was already undone.",
+  "error_assistant_nothing_to_undo": "There is nothing left to undo here.",
   "error_assistant_undo_outdated": "A tile these changes touched has changed since, so they can't be undone. Undo what changed it first, or change it back by hand.",
   "error_mapping_batch_outdated": "Your system changed since the assistant drafted this proposal, so it can't be accepted whole. Discard it, then ask again.",
   "error_mapping_tile_not_found": "This tile doesn't exist, or no longer does.",

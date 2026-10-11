@@ -198,7 +198,9 @@ describe("inverse, a batch's undo", () => {
     ])
     expect(said(undoneOn(after, { _tag: 'Inverse', batch: undo }))).toEqual(said(system))
   })
+})
 
+describe("inverse, what refuses a batch's undo and what it cannot make again", () => {
   it('refuses to delete a Tile it made once another writer put anything below it since', () => {
     const made = uuid()
     const { events, after } = ran(

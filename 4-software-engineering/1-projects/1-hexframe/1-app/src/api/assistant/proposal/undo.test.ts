@@ -91,9 +91,9 @@ const tileOf = (answer: { value?: unknown; error?: string }) => {
 }
 
 /** Undoes what the Assistant applied, by its id, as the user's Session. */
-const undone = async (batch: string) => {
+const undone = async (applied: string) => {
   const { signedIn } = await someone
-  return run(signedIn, Proposal.undo({ batch }))
+  return run(signedIn, Proposal.undo({ applied }))
 }
 
 describe('an accepted Proposal', () => {
@@ -192,7 +192,7 @@ describe('what a Turn in apply wrote', () => {
       session: noSession,
       key: await provenKey(exchange),
     }
-    expect(await run(byKey, Proposal.undo({ batch: turn.id }))).toMatchObject({
+    expect(await run(byKey, Proposal.undo({ applied: turn.id }))).toMatchObject({
       ok: false,
       failure: { _tag: 'SessionRequired' },
     })

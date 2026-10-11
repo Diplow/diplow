@@ -191,11 +191,11 @@ export const discardProposal = ({ proposal }: { readonly proposal: string }) =>
  * stands, under the Root's lock, each event published as the user's, the Session's; `BatchOutdated`
  * once a Tile it touched changed since, the undo rolled back with it.
  */
-export const undo = ({ batch }: { readonly batch: string }) =>
+export const undo = ({ applied: id }: { readonly applied: string }) =>
   forSession((accountId) =>
     transactional(
       Effect.gen(function* () {
-        const undone = yield* Effect.orDie(decodedUndo(yield* Assistant.undo(accountId, batch)))
+        const undone = yield* Effect.orDie(decodedUndo(yield* Assistant.undo(accountId, id)))
         yield* Mapping.undo(accountId, undone)
         return null
       }),

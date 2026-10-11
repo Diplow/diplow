@@ -48,9 +48,10 @@ import {
   TurnEnd,
   TurnStep,
   undoneEntry,
+  undoing,
   within,
 } from './entities'
-import { AllowanceSpent, NothingToUndo, TurnRunning } from './errors'
+import { AllowanceSpent, TurnRunning } from './errors'
 import {
   AcceptProposal,
   changesOf,
@@ -265,12 +266,15 @@ export const endTurn = (accountId: string, turnId: string, how: TurnEnd) =>
 
 /**
  * Records what one of the Account's Turns applied, once it ended, in an Entry that offers to undo it:
- * none for a Turn that applied nothing, or whose Entry is recorded already.
+ * none for a Turn that changed nothing, or whose Entry is recorded already. The Conversation locked
+ * first, as a write of the Turn locks it, so a write that lands as the Turn ends is offered by one
+ * or the other.
  */
 const offerUndo = (accountId: string, turnId: string) =>
   Effect.gen(function* () {
+    yield* Proposals.use((proposals) => proposals.locked(accountId))
     const kept = yield* Applied.use((applied) => applied.locked(accountId, turnId))
-    if (kept === undefined || kept.entryId !== null) return
+    if (kept === undefined || kept.entryId !== null || kept.changes === 0) return
     const { changes } = kept
     const entry = yield* record(accountId, {
       _tag: 'TurnApplied',
@@ -722,14 +726,16 @@ export interface Applying {
 
 /**
  * Keeps what undoes the writes one of the Account's Turns applied, this one's included, and adds the
- * changes it made to theirs: what its Entry offers to undo once the Turn ended. In the transaction the
- * API layer opened, after `appliedSoFar`.
+ * changes it made to theirs: what its Entry offers to undo once the Turn ended, at once for a Turn
+ * that ended meanwhile. In the transaction the API layer opened, after `appliedSoFar`.
  */
 export const turnApplied = (accountId: string, turnId: string, { undo, changes }: Applying) =>
   Effect.gen(function* () {
     const kept = yield* Applied.use((applied) => applied.locked(accountId, turnId))
     const total = (kept?.changes ?? 0) + changes
     yield* Applied.use((applied) => applied.keep(accountId, turnId, { undo, changes: total }))
+    // A write that landed as its Turn ended, the Turn's Key proven just before, is offered now.
+    if ((yield* turn(accountId, turnId)).ended !== undefined) yield* offerUndo(accountId, turnId)
   })
 
 /**
@@ -752,9 +758,10 @@ export const proposalApplied = (
 export const undo = (accountId: string, id: string) =>
   Effect.gen(function* () {
     yield* Proposals.use((proposals) => proposals.locked(accountId))
+    const kept = yield* Applied.use((applied) => applied.locked(accountId, id))
+    const undone = yield* Effect.fromResult(undoing(kept))
     const now = new Date(yield* Clock.currentTimeMillis)
-    const undone = yield* Applied.use((applied) => applied.undone(accountId, id, now))
-    if (undone === undefined) return yield* new NothingToUndo()
+    yield* Applied.use((applied) => applied.undone(accountId, id, now))
     const content = yield* Conversations.use((conversations) =>
       conversations.entry(accountId, undone.entryId),
     )

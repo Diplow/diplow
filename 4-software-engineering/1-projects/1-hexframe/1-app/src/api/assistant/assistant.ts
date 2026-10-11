@@ -114,7 +114,7 @@ export const discardProposal = createServerFn({ method: 'POST' })
  * What the Assistant applied, by its id as the page read it: a Turn that applied writes, or a Proposal
  * the user accepted.
  */
-const AppliedRef = Schema.Struct({ batch: Schema.String.check(Schema.isUUID()) })
+const AppliedRef = Schema.Struct({ applied: Schema.String.check(Schema.isUUID()) })
 
 /**
  * Undoes what a Turn applied, or an accepted Proposal, whole and once, its changes landing as the

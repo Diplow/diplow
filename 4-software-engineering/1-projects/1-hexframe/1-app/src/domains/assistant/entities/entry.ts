@@ -151,18 +151,3 @@ export const namedTiles = (entries: ReadonlyArray<Entry>): ReadonlyArray<string>
     }),
   ),
 ]
-
-/**
- * An Entry that offers to undo what the Assistant applied, once the user undid it: an accepted
- * Proposal's, `undone`, and an applied Turn's, said undone. None for any other, which offers no Undo.
- */
-export function undoneEntry(content: EntryContent): EntryContent | undefined {
-  switch (content._tag) {
-    case 'Proposal':
-      return content.fate === 'accepted' ? { ...content, fate: 'undone' } : undefined
-    case 'TurnApplied':
-      return content.undone ? undefined : { ...content, undone: true }
-    default:
-      return undefined
-  }
-}

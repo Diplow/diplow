@@ -48,7 +48,7 @@ describe('the message table', () => {
       "A tile these changes touched has changed since, so they can't be undone. Undo what changed it first, or change it back by hand.",
     )
     expect(messageFor(new BatchOutdated(), 'acceptProposal')).toMatch(/^Your system changed since/)
-    expect(messageFor(new NothingToUndo())).toBe('This was already undone.')
+    expect(messageFor(new NothingToUndo())).toBe('There is nothing left to undo here.')
   })
 
   it("falls back to the kind's sentence outside that scope", () => {

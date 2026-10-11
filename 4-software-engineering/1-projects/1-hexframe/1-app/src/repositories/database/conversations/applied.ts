@@ -1,9 +1,9 @@
 // What the Assistant applied to an Account's System, an applied Turn's writes or an accepted
 // Proposal's, and what undoes them: the `applied` table (../schema.ts), read and written by Account. It
 // speaks rows: what undoes them is a JSON value Assistant was handed, which nobody here reads. The
-// Entry that offers to undo them is set once there is one, and they are undone once at most, which
-// `undone` holds by its condition on the row it locked.
-import { and, eq, inArray, isNotNull, isNull } from 'drizzle-orm'
+// Entry that offers to undo them is set once there is one, and when they were undone; whether they
+// may be undone is Assistant's to decide, on the row `locked` holds.
+import { and, eq, inArray } from 'drizzle-orm'
 import { Context, Effect, Layer } from 'effect'
 
 import { Database, InTransaction } from '../database'
@@ -50,19 +50,12 @@ export class Applied extends Context.Service<
       id: string,
       entryId: string,
     ) => Effect.Effect<void, never, InTransaction>
-    /**
-     * Marks what one of them applied undone, at `at`, and answers what undoes it and its Entry; none
-     * when it was undone already, offers no Entry yet, or is no Account's own. Inside a transaction.
-     */
+    /** Marks what one of them applied undone, at `at`. Inside a transaction. */
     readonly undone: (
       accountId: string,
       id: string,
       at: Date,
-    ) => Effect.Effect<
-      { readonly undo: unknown; readonly entryId: string } | undefined,
-      never,
-      InTransaction
-    >
+    ) => Effect.Effect<void, never, InTransaction>
   }
 >()('hexframe/Applied') {}
 
@@ -132,16 +125,8 @@ const make = Effect.gen(function* () {
       database
         .update(applied)
         .set({ undoneAt: at })
-        .where(
-          and(ofTheAccount(accountId, id), isNull(applied.undoneAt), isNotNull(applied.entryId)),
-        )
-        .returning({ undo: applied.undo, entryId: applied.entryId })
-        .pipe(
-          Effect.orDie,
-          Effect.map(([row]) =>
-            row?.entryId == null ? undefined : { undo: row.undo, entryId: row.entryId },
-          ),
-        ),
+        .where(ofTheAccount(accountId, id))
+        .pipe(Effect.orDie, Effect.asVoid),
     )
 
   return Applied.of({ locked, keep, offer, undone })

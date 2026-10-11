@@ -108,8 +108,8 @@ export function Chat({ onSend, turn, mode, onCenter, className }: ChatProps) {
         discard: (proposal) => {
           discarding.mutate(proposal)
         },
-        undo: (batch) => {
-          undoing.mutate(batch)
+        undo: (applied) => {
+          undoing.mutate(applied)
         },
         pending: accepting.isPending || discarding.isPending || undoing.isPending,
       }}

@@ -216,7 +216,9 @@ export const useDiscardProposal = () => {
 export const useUndo = () => {
   const client = useQueryClient()
   return useMutation({
-    ...write('undo', (batch: string) => undo({ data: { batch } }), { queue: conversationQueue }),
+    ...write('undo', (applied: string) => undo({ data: { applied } }), {
+      queue: conversationQueue,
+    }),
     onSettled: () => followAgain(client),
   })
 }

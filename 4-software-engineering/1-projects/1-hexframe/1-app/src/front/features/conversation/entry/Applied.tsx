@@ -3,7 +3,7 @@
 // it stood before them, all of them or none; once undone, it says so.
 import { CheckCheck } from 'lucide-react'
 
-import type { Entry } from '#/domains/assistant/entities'
+import { type Entry, offersUndo } from '#/domains/assistant/entities'
 import { m } from '#/paraglide/messages'
 
 import { type Deciding, Time, UndoButton } from './parts'
@@ -32,7 +32,7 @@ export function AppliedEntry({ entry, decide }: AppliedProps) {
         {undone && <span aria-hidden>·</span>}
         <Time at={entry.at} />
       </p>
-      {!undone && decide !== undefined && <UndoButton batch={turn} decide={decide} />}
+      {offersUndo(entry) && decide !== undefined && <UndoButton applied={turn} decide={decide} />}
     </section>
   )
 }

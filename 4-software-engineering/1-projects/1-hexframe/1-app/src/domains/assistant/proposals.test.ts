@@ -267,4 +267,26 @@ layer(TestLayer)('what the Assistant applied, undone once, over PGlite', (it) =>
       expect(none._tag).toBe('NothingToUndo')
     }),
   )
+
+  it.effect(
+    'offers no Undo for writes that changed nothing, and one landing as its Turn ended at once',
+    () =>
+      Effect.gen(function* () {
+        yield* TestClock.setTime(Date.parse('2026-10-10T13:00:00Z'))
+        const { account, turn } = yield* someone
+        yield* transactional(setMode(account, 'apply'))
+        const still = yield* turn('Move nothing.')
+        yield* transactional(turnApplied(account, still.id, { undo: 'none', changes: 0 }))
+        yield* transactional(endTurn(account, still.id, 'answered'))
+        expect(yield* entriesOn(account, 'TurnApplied')).toEqual([])
+
+        const late = yield* turn('Write as you end.')
+        yield* transactional(endTurn(account, late.id, 'answered'))
+        yield* transactional(turnApplied(account, late.id, { undo: 'late', changes: 1 }))
+        expect(yield* entriesOn(account, 'TurnApplied')).toMatchObject([
+          { turn: late.id, changes: 1 },
+        ])
+        expect(yield* transactional(undo(account, late.id))).toBe('late')
+      }),
+  )
 })

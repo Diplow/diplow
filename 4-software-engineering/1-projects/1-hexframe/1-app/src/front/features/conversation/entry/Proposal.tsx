@@ -5,7 +5,12 @@
 import { cn } from 'cn'
 import { Check, ListChecks, Pencil, X } from 'lucide-react'
 
-import type { Entry, Fate, ProposedChange } from '#/domains/assistant/entities'
+import {
+  type Entry,
+  type Fate,
+  offersUndo,
+  type ProposedChange,
+} from '#/domains/assistant/entities'
 import type { OperationEvent } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 import { Button } from '#/front/ui/inputs/controls/button'
@@ -79,8 +84,8 @@ export function ProposalEntry({ entry, decide }: ProposalProps) {
           </Button>
         </div>
       )}
-      {fate === 'accepted' && decide !== undefined && (
-        <UndoButton batch={proposal} decide={decide} />
+      {offersUndo(entry) && decide !== undefined && (
+        <UndoButton applied={proposal} decide={decide} />
       )}
     </section>
   )
