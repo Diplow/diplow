@@ -55,6 +55,16 @@ const cut = cutAlongCurve('var(--screen-edge)')
 /** How far the curve bows past the chat's edge, which the chat's column has to hold. */
 const bulge = `${String(reach)}px`
 
+/**
+ * How far the chat's foot keeps its content in from the column's right, as `--screen-clear`: back
+ * inside the chat's width, past the 1.125rem to the edge, the bulge and the column's 0.375rem, with as
+ * much again to spare, so nothing reaches the curve. A slot's ground runs on under it to the cut.
+ */
+const clear = 'calc(var(--screen-edge) - var(--screen-chat) + var(--screen-bulge) + 0.75rem)'
+
+/** Where the canvas's corner sits, in from the screen's top right: here, on Help and on its specimens. */
+export const cornerPlace = 'absolute top-[1.375rem] right-[1.375rem]'
+
 export function Screen({
   canvas,
   corner,
@@ -68,7 +78,7 @@ export function Screen({
   const scroller = useRef<HTMLDivElement>(null)
   const content = useRef<HTMLDivElement>(null)
   const foot = useRef<HTMLDivElement>(null)
-  useLatestShown(scroller, content)
+  useLatestShown(scroller, content, foot)
   useComposerHeight(screen, foot)
   const chatInFront = front === 'chat'
   // A move made from a seam hands the focus to the seam on the other side, once the screen has
@@ -92,6 +102,7 @@ export function Screen({
           '--screen-chat': chatWidth,
           '--screen-edge': edge,
           '--screen-bulge': bulge,
+          '--screen-clear': clear,
           '--screen-cut': cut,
         } as CSSProperties
       }
@@ -141,14 +152,7 @@ export function Screen({
         </div>
       </section>
       <Scrollbar screen={screen} scroller={scroller} content={content} />
-      <div
-        className={cn(
-          'absolute top-[1.375rem] right-[1.375rem] z-30',
-          chatInFront && '@max-wide:hidden',
-        )}
-      >
-        {corner}
-      </div>
+      <div className={cn(cornerPlace, 'z-30', chatInFront && '@max-wide:hidden')}>{corner}</div>
       <section
         aria-label={m.screen_canvas()}
         inert={phone && chatInFront}
@@ -165,34 +169,57 @@ const atFoot = 2
 
 /**
  * The conversation opens at its foot, the latest last, and stays there as it grows, its lines read
- * after the screen is drawn included, while the reader hasn't scrolled up from it.
+ * after the screen is drawn included, and as it shrinks, the foot below it growing, while the reader
+ * hasn't left it. The reader leaves it by scrolling up, or by acting in a conversation too short to
+ * scroll, asking for an earlier day included: what they act on stays where it is. Writing at the
+ * chat's foot brings it back, so what they send shows.
  */
 function useLatestShown(
   scroller: RefObject<HTMLElement | null>,
   content: RefObject<HTMLElement | null>,
+  foot: RefObject<HTMLElement | null>,
 ) {
   useEffect(() => {
     const messages = scroller.current
     const lines = content.current
-    if (messages === null || lines === null) return undefined
+    const composer = foot.current
+    if (messages === null || lines === null || composer === null) return undefined
     let pinned = true
     const toFoot = () => {
       messages.scrollTop = messages.scrollHeight
     }
+    const atItsFoot = () =>
+      messages.scrollHeight - messages.scrollTop - messages.clientHeight <= atFoot
     const onScroll = () => {
-      pinned = messages.scrollHeight - messages.scrollTop - messages.clientHeight <= atFoot
+      pinned = atItsFoot()
     }
-    const grown = new ResizeObserver(() => {
+    // Acting at the foot of a conversation that scrolls keeps it there; one too short to scroll lets go.
+    const onAct = () => {
+      pinned = messages.scrollHeight > messages.clientHeight && atItsFoot()
+    }
+    const onWrite = () => {
+      pinned = true
+    }
+    const resized = new ResizeObserver(() => {
       if (pinned) toFoot()
     })
     toFoot()
     messages.addEventListener('scroll', onScroll, { passive: true })
-    grown.observe(lines)
+    messages.addEventListener('pointerdown', onAct, { capture: true, passive: true })
+    messages.addEventListener('keydown', onAct, { capture: true, passive: true })
+    composer.addEventListener('pointerdown', onWrite, { capture: true, passive: true })
+    composer.addEventListener('keydown', onWrite, { capture: true, passive: true })
+    resized.observe(lines)
+    resized.observe(messages)
     return () => {
       messages.removeEventListener('scroll', onScroll)
-      grown.disconnect()
+      messages.removeEventListener('pointerdown', onAct, { capture: true })
+      messages.removeEventListener('keydown', onAct, { capture: true })
+      composer.removeEventListener('pointerdown', onWrite, { capture: true })
+      composer.removeEventListener('keydown', onWrite, { capture: true })
+      resized.disconnect()
     }
-  }, [scroller, content])
+  }, [scroller, content, foot])
 }
 
 /**

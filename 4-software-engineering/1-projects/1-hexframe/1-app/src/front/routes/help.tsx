@@ -13,6 +13,7 @@ import { canvasTree, tileIn } from '#/front/features/system/tree'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
+import { cornerPlace } from '#/front/ui/layouts/screen/Screen'
 
 export const Route = createFileRoute('/help')({
   validateSearch: readHelpSearch,
@@ -26,7 +27,7 @@ function HelpRoute() {
     void navigate({ search: next })
   }
   return (
-    <main className="grid gap-4 px-4 pb-4 lg:h-[calc(100dvh-4.25rem)] lg:grid-cols-[minmax(0,1fr)_18rem]">
+    <main className="grid gap-4 px-4 pb-4 lg:h-[calc(100dvh-var(--header))] lg:grid-cols-[minmax(0,1fr)_18rem]">
       <h1 className="sr-only">{m.help_title()}</h1>
       <ReadBoundary>
         <HelpPage search={search} onSearchChange={onSearchChange} />
@@ -68,7 +69,7 @@ function HelpPage({ search, onSearchChange }: HelpPageProps) {
           onViewChange={(view) => {
             onSearchChange(withView(search, view))
           }}
-          className="absolute top-[1.375rem] right-[1.375rem]"
+          className={cornerPlace}
         />
       </div>
       <aside className="grid content-start gap-4 lg:min-h-0 lg:overflow-y-auto">

@@ -4,6 +4,7 @@ import { m } from '#/paraglide/messages'
 import { ulysse } from '#/front/ui/canvas/fixtures'
 import type { CanvasView, ViewAction } from '#/front/ui/canvas/view/view'
 import { GallerySection, GalleryState } from '#/front/ui/gallery/frame'
+import { cornerPlace } from '#/front/ui/layouts/screen/Screen'
 
 import { Breadcrumb } from './Breadcrumb'
 
@@ -21,7 +22,7 @@ export function BreadcrumbGallery({ view, onViewChange }: BreadcrumbGalleryProps
             system={ulysse}
             view={view}
             onViewChange={onViewChange}
-            className="absolute top-[1.375rem] right-[1.375rem]"
+            className={cornerPlace}
           />
         </div>
       </GalleryState>

@@ -12,6 +12,7 @@
 // from the view: its center, where the Turn answering it starts unless it opens with a link to a Tile,
 // and the Tiles on screen; a Message's link centers the canvas on its Tile, a gesture as any other.
 import { createFileRoute } from '@tanstack/react-router'
+import { useMemo } from 'react'
 
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { signedInOnly } from '#/front/client/iam/guard'
@@ -59,7 +60,8 @@ function Home() {
   // shows: a failed read shows on the canvas, in its own boundary, and leaves the chat up, waiting to
   // send, and the theme at the corner's head.
   const { data } = useSystem({ throwing: false })
-  const tree = data === undefined ? undefined : canvasTree(data.root)
+  const root = data?.root
+  const tree = useMemo(() => (root === undefined ? undefined : canvasTree(root)), [root])
   const onSend =
     tree === undefined
       ? undefined
@@ -77,7 +79,7 @@ function Home() {
     turning.cross()
   }
   return (
-    <main className="h-[calc(100dvh-4.25rem)]">
+    <main className="h-[calc(100dvh-var(--header))]">
       <h1 className="sr-only">{m.system_title()}</h1>
       <Screen
         front={screen.front}
@@ -100,8 +102,8 @@ function Home() {
         }
         composer={
           // On the card's ground, as the composer's proposal is, so the canvas behind it never shows
-          // through; clear of the curve, which comes back to the chat's edge at its foot.
-          <div className="bg-card @wide:pr-[3.25rem]">
+          // through; clear of the curve, as the screen says.
+          <div className="bg-card @wide:pr-(--screen-clear)">
             <ReadBoundary>
               <ChatComposer onSend={onSend} turn={turn} mode={mode} />
             </ReadBoundary>

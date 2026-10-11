@@ -31,10 +31,10 @@ function RootDocument({ children }: { children: ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <HeadContent />
       </head>
-      <body>
-        {/* Its height is the one home's screen leaves itself: 4.25rem. The theme is at the head of where
-            you are, in the canvas's corner. */}
-        <header className="flex h-17 items-center justify-end gap-2 px-4">
+      {/* The header's height, which home's screen and Help leave themselves below it. */}
+      <body className="[--header:4.25rem]">
+        {/* The theme is at the head of where you are, in the canvas's corner. */}
+        <header className="flex h-(--header) items-center justify-end gap-2 px-4">
           <SignedInLinks />
           <HelpLink />
           <LocaleSwitch />

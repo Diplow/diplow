@@ -319,7 +319,7 @@ function scrollToFoot(element: HTMLElement | null) {
 
 /** A zone, the chat's foot: a solid fill with one fine line on top, warm for you. */
 const zone =
-  'relative flex min-h-[7.25rem] items-center gap-4 bg-card bg-linear-to-r from-transparent from-15% to-human/9 px-5 py-6 before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-linear-to-r before:from-transparent before:via-input before:via-45% before:to-input @wide:pr-[4.125rem] @wide:pl-9'
+  'relative flex min-h-[7.25rem] items-center gap-4 bg-card bg-linear-to-r from-transparent from-15% to-human/9 px-5 py-6 before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-linear-to-r before:from-transparent before:via-input before:via-45% before:to-input @wide:pr-(--screen-clear) @wide:pl-9'
 
 /**
  * The Composer at the chat's foot, its padding clear of the curve, which comes back to the chat's edge
@@ -339,7 +339,7 @@ function ScreenComposer({ onSend }: { onSend: (text: string) => void }) {
         setText('')
       }}
       mode={{ choices: modeChoices(), on: mode, choose: setMode }}
-      className="sm:px-4 @wide:pr-[4.125rem] @wide:pl-9"
+      className="sm:px-4 @wide:pr-(--screen-clear) @wide:pl-9"
     />
   )
 }
