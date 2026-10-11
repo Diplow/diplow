@@ -31,13 +31,12 @@ describe('the side in front', () => {
     expect(front()).toBe('chat')
   })
 
-  it('keeps its state when turned to the side already in front', () => {
-    const { result } = render()
-    const before = result.current.state
+  it('stays when turned to the side already in front', () => {
+    const { result, front } = render()
     act(() => {
       result.current.actions.turn('chat')
     })
-    expect(result.current.state).toBe(before)
+    expect(front()).toBe('chat')
   })
 
   it('brings the canvas forward when the chat points at it', () => {
@@ -49,14 +48,24 @@ describe('the side in front', () => {
   })
 
   it('leaves the canvas in front when the chat points at it again', () => {
-    const { result } = render()
+    const { result, front } = render()
     act(() => {
       result.current.actions.cross()
     })
-    const before = result.current.state
     act(() => {
       result.current.actions.cross()
     })
-    expect(result.current.state).toBe(before)
+    expect(front()).toBe('canvas')
+  })
+
+  it('gives the chat back after a crossing once the seam turns', () => {
+    const { result, front } = render()
+    act(() => {
+      result.current.actions.cross()
+    })
+    act(() => {
+      result.current.actions.turn('chat')
+    })
+    expect(front()).toBe('chat')
   })
 })

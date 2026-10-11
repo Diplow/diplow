@@ -10,17 +10,14 @@ interface State {
   readonly front: Side
 }
 
-type Event = { readonly type: 'turned'; readonly to: Side } | { readonly type: 'crossed' }
+interface Turned {
+  readonly to: Side
+}
 
 const initial: State = { front: 'chat' }
 
-function reducer(state: State, event: Event): State {
-  switch (event.type) {
-    case 'turned':
-      return state.front === event.to ? state : { front: event.to }
-    case 'crossed':
-      return state.front === 'canvas' ? state : { front: 'canvas' }
-  }
+function reducer(state: State, { to }: Turned): State {
+  return state.front === to ? state : { front: to }
 }
 
 /** The screen's side in front, for `Screen`'s `front` and `onFrontChange`. */
@@ -31,11 +28,11 @@ export function useScreenState() {
     actions: {
       /** The seam turned the screen: a tap, a drag or the keyboard. */
       turn: (to: Side) => {
-        dispatch({ type: 'turned', to })
+        dispatch({ to })
       },
       /** The chat pointed at the canvas: the canvas comes forward to show what it pointed at. */
       cross: () => {
-        dispatch({ type: 'crossed' })
+        dispatch({ to: 'canvas' })
       },
     },
   }
