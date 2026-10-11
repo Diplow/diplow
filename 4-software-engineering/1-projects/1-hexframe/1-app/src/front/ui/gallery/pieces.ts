@@ -39,6 +39,13 @@ export const pieces = [
     note: m.gallery_note_conversation,
   },
   {
+    name: 'Composer',
+    tier: 'chat',
+    sources: ['ui/chat/composer/Composer.tsx', 'ui/chat/composer/List.tsx'],
+    madeOf: [],
+    note: m.gallery_note_composer,
+  },
+  {
     name: 'Widget',
     tier: 'chat',
     sources: ['ui/chat/layouts/Widget.tsx'],
