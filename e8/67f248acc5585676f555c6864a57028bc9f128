@@ -1,0 +1,155 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/help.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 14
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/atoms/gallery.tsx
+  s_80ba83442acf8f::t_a766f875995149 1-22
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/layouts/gallery.tsx
+  s_80ba83442acf8f::t_a766f875995149 1-82
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/atoms/gallery.tsx
+  s_80ba83442acf8f::t_a766f875995149 1-69
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/entry/Entry.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 34
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/composer/Composer.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 8-12
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.test.ts
+  s_80ba83442acf8f::t_f34b7f42945acd 12,54
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.ts
+  s_80ba83442acf8f::t_f34b7f42945acd 20-21
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help/Help.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 7-12
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/seams/gallery.tsx
+  s_80ba83442acf8f::t_a766f875995149 1-24
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/errors.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 15-20
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/system.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 14-16
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/import/Import.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 9-10
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/throwing.test.ts
+  s_80ba83442acf8f::t_f34b7f42945acd 21
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/CLAUDE.md
+  s_80ba83442acf8f::t_ab461c381913cd 32
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/entry/Proposal.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 16-17
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_80ba83442acf8f::t_46750b8d9e504e 76
+  s_80ba83442acf8f::t_ab461c381913cd 65
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/navigation.ts
+  s_80ba83442acf8f::t_f34b7f42945acd 3
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/entry/parts.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 20
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_80ba83442acf8f::t_ab461c381913cd 30,47
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/search/search.test.ts
+  s_80ba83442acf8f::t_f34b7f42945acd 3
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/entry/Shortened.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 7
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/System.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 12-17
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/TileActions.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 25-32
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.test.ts
+  s_80ba83442acf8f::t_f34b7f42945acd 10
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/breadcrumb/Breadcrumb.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 8-9
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/__root.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 7-10
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/session.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 10-12
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 34-35
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/iam/guard.ts
+  s_80ba83442acf8f::t_f34b7f42945acd 9
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useRefusalState.test.ts
+  s_80ba83442acf8f::t_f34b7f42945acd 18,42
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/lint.test.ts
+  s_80ba83442acf8f::t_92a77f9943a956 279-309,311,313-362,385
+  s_80ba83442acf8f::t_63c2e80b8c41db 310,312
+  s_80ba83442acf8f::t_f34b7f42945acd 24,161
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/CLAUDE.md
+  s_80ba83442acf8f::t_ab461c381913cd 19,28
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/Tile.tsx
+  s_80ba83442acf8f::t_89e57e4cf91d97 1-162
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/states.tsx
+  s_80ba83442acf8f::t_89e57e4cf91d97 1-106
+4-software-engineering/1-projects/1-hexframe/1-app/dependency-cruiser.config.ts
+  s_80ba83442acf8f::t_2687cc07a76caa 14-18,107-115
+  s_80ba83442acf8f::t_ab461c381913cd 78,173
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/access/Access.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 9-11
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/composer/ModeSwitch.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 6
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help/search.ts
+  s_80ba83442acf8f::t_f34b7f42945acd 1,13
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/channels.ts
+  s_80ba83442acf8f::t_f34b7f42945acd 8
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE.md
+  s_80ba83442acf8f::t_ab461c381913cd 31
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/hex.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 5-8
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useCenteredTileState.test.ts
+  s_80ba83442acf8f::t_f34b7f42945acd 11,19
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/DataTable.tsx
+  s_80ba83442acf8f::t_89e57e4cf91d97 1-163
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/facts.test.ts
+  s_80ba83442acf8f::t_f34b7f42945acd 5-6
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/Chat.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 24
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/overlay/overlay.test.ts
+  s_80ba83442acf8f::t_f34b7f42945acd 10,39
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/keys/Keys.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 17-24
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/ReadBoundary.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 7
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/ui.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 11
+  s_80ba83442acf8f::t_a766f875995149 1-2,6-10,12,36-41
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE.md
+  s_80ba83442acf8f::t_f34b7f42945acd 30
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/channels.test.ts
+  s_80ba83442acf8f::t_f34b7f42945acd 4,11
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/gallery.tsx
+  s_80ba83442acf8f::t_79825a8c88aee4 1-168,182,215-217
+  s_80ba83442acf8f::t_8a4f99a88fbe92 169-171,179-181
+  s_80ba83442acf8f::t_523d56e5c38798 183-185
+  s_877f0b673000b5::t_f5f329bf8f3620 172-178,186-189,191-212
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/Canvas.tsx
+  s_80ba83442acf8f::t_89e57e4cf91d97 1-178
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/ConfirmDialog.tsx
+  s_80ba83442acf8f::t_89e57e4cf91d97 1-54
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/search/search.ts
+  s_80ba83442acf8f::t_f34b7f42945acd 1,8,16
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE.md
+  s_80ba83442acf8f::t_f34b7f42945acd 1-38
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/Conversation.tsx
+  s_80ba83442acf8f::t_f34b7f42945acd 13-14
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/fixtures.ts
+  s_80ba83442acf8f::t_f34b7f42945acd 8-10
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/atoms/gallery.tsx
+  s_80ba83442acf8f::t_112dbe4b378784 1-277
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/facts.ts
+  s_80ba83442acf8f::t_f34b7f42945acd 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e867f248acc5585676f555c6864a57028bc9f128",
+  "prompts": {},
+  "sessions": {
+    "s_80ba83442acf8f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8bba7661-f8f8-412a-8fc8-35832d250e88",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_877f0b673000b5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-aa8bc91287cbf51e5",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
