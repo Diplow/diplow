@@ -7,7 +7,8 @@ preview: >-
   imports the MCP server's SDK. How a Claude Code connects with a Key; the tool
   table: open_tile and map read the user's System, or Help, and a write per
   Mapping operation changes the user's, each for the Account its Bearer Key
-  proves. OAuth, for clients that can't send a header, comes later.
+  proves; with a Turn's Key in ask, drafted into the Proposal, which its reads
+  show. OAuth, for clients that can't send a header, comes later.
 ---
 # mcp
 
@@ -16,7 +17,7 @@ The other door into [[4-software-engineering/1-projects/1-hexframe/1-app/src/api
 | File | Holds |
 |---|---|
 | `mcp.ts` | `serveMcp`, which proves the Bearer Key, then hands the request to the SDK with one `McpServer` built for it, its two lines of `instructions` (what hexframe is, then `open_tile({ id: "help" })`) and every tool of the table registered with its annotations; and `methodNotAllowed`, for GET and DELETE |
-| `tools.ts` | The tool table: a read, `{ name, description, input, kind: 'read', program }`, or a write, which adds its `operation`, the name of one of Mapping's Operations, and `destructive?` |
+| `tools.ts` | The tool table: a read, `{ name, description, input, kind: 'read', program }`, or a write, which adds its `operation`, the name of one of Mapping's Operations, and `destructive?`; each read and each write runs through `assistant/proposal/`'s routing, the write as its Operation and its server function's program |
 | `testing.ts` | What the tests share: an Account signed up with a Key, an MCP client over the SDK's own transport, a System to work on |
 | `mcp.test.ts` | The endpoint and the reads, over PGlite: the instructions, the tool list and its annotations, and every tool as an agent lists it, pinned word for word in `__snapshots__/`, `open_tile` and `map` on the user's System and on Help, inputs refused by their schema, a Help id that climbs out included, another Account's Tile, a request no Key proves |
 | `writes.test.ts` | The writes, over PGlite: each one, each refusal as a tool error, another Account's Tile, a Key revoked under a connected client |
@@ -48,6 +49,8 @@ The tests drive the endpoint in-process. Against a real Claude Code, the accepta
 | `delete_reference` | write, destructive | Empties a Context slot that holds a Reference, of a Tile at the `parentVersion` read of it | `deleteReference` |
 
 Each runs the program of `api/mapping/programs.ts` its server function runs, a write in one transaction, and takes that function's input Schema (`api/mapping/mapping.ts`), a write its Operation's fields, with each field described for an agent. `create_tile` leaves out the `id` its server function's caller may choose (`NewTileOfAgent` in `tools.ts`): an agent reads the new Tile's in the answer, and Mapping, which makes it, refuses no create for it, so the program turns a `TileIdTaken` into a defect and the description teaches none. A write that answers nothing answers `null`.
+
+**A Turn in ask drafts.** Every tool runs through the Assistant's routing (`api/assistant/proposal/programs.ts`): made with a Turn's Key whose Turn started in ask, a write is drafted into the Conversation's Proposal instead, decided by Mapping on the System the Proposal makes, refused as it would be there and answering as it would applied, the new Tile's id and version included, and the reads, `open_tile` and `map`, read the System with the Proposal folded over it, so an agent writes from what it reads; any other proof, a Turn in apply included, reads and writes the System as it stands. The table never asks the Mode, and the refusals each write teaches stay the same.
 
 **Every write to an existing Tile names the Version it read.** `open_tile` and `map` answer each Tile with its `version`, and so do `create_tile` and `edit_tile` of the Tile they answer; `edit_tile`, `move_tile` and `delete_tile` take it as `version`, `swap_tiles` as `aVersion` and `bVersion`, and the Reference writes as `parentVersion`, the Version of the Tile whose Context slot they change, each a required input. A write naming a Version its Tile no longer has, changed by the user, another client or the same agent earlier, is refused `TileChanged`, which its description teaches: read the Tile again, then decide and write from what it says now (Mapping's language, **Version**).
 
