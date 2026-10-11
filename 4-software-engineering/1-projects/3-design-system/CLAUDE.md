@@ -24,7 +24,7 @@ The tokens and fonts are a shadcn registry: a project on shadcn installs them fr
 | [[4-software-engineering/1-projects/3-design-system/DIRECTION\|DIRECTION]] | The six principles, and why |
 | [[4-software-engineering/1-projects/3-design-system/TOKENS\|TOKENS]] | Every token and what it is for, the type, the light and the motion |
 | `prototype.html` | The mood prototype, hexframe's main screen in both themes. It reads its colours from the registry, so it shows what a project installs. It needs a server: `python3 -m http.server` in this folder, then `localhost:8000/prototype.html` (`#light` opens in the light) |
-| `components.html` | The components it proposes for hexframe, each in its states beside its notes and open questions: the conversation's (the widgets, the composer, its text, the dialog), then the canvas's (a tile in its kinds and states, the text inside it, who acts on it, its menu, moving it). It reads the registry as the prototype does: `localhost:8000/components.html` |
+| `components.html` | The components it proposes for hexframe, each in its states beside its notes and open questions: the conversation's (the widgets, the composer, its text, the dialog), then the canvas's (a tile in its kinds and states, the text inside it, who acts on it, its menu, moving it, and the path in the corner, the theme at its head). It reads the registry as the prototype does: `localhost:8000/components.html` |
 
 ## Installing it
 

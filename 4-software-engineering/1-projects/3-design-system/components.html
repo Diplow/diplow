@@ -35,12 +35,15 @@
   .top svg.mark polygon { fill: none; stroke: var(--human); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
   .top .name { font: italic 300 20px var(--font-serif); }
   .top .page { font: 300 14px var(--font-sans); color: var(--faint); margin-left: 6px; }
-  .theme { margin-left: auto; width: 30px; height: 30px; border: 0; padding: 0; background: none; color: var(--faint); cursor: pointer; border-radius: 50%; }
-  .theme svg { width: 100%; height: 100%; overflow: visible; }
+  /* The theme: a half-lit disc that turns with it, 21px inside a 31px target. */
+  .theme { display: block; width: 31px; height: 31px; border: 0; padding: 5px; background: none; color: var(--faint); cursor: pointer; border-radius: 50%; }
+  .theme svg { display: block; width: 21px; height: 21px; overflow: visible; }
   .theme circle { fill: none; stroke: currentColor; stroke-width: 1; vector-effect: non-scaling-stroke; }
   .theme path { fill: currentColor; transition: transform var(--duration-turn) var(--ease-glide); }
   .dark .theme path { transform: rotate(180deg); }
   .theme:hover { color: var(--muted-foreground); }
+  .theme:focus-visible { outline: 1px solid var(--human); outline-offset: 3px; }
+  .top .theme { margin-left: auto; }
 
   .index { position: fixed; z-index: 20; top: 104px; bottom: 24px; left: 36px; width: 200px; overflow: auto; scrollbar-width: none; padding: 26px 0; mask-image: linear-gradient(transparent, #000 26px, #000 calc(100% - 26px), transparent); }
   .index ol { list-style: none; margin: 0; padding: 0 0 0 14px; display: flex; flex-direction: column; gap: 9px; position: relative; }
@@ -677,6 +680,25 @@
   .mv-ban kbd { margin-left: auto; }
   .moving .mv-ban { opacity: 1; transform: none; }
 
+  /* Where you are: the theme's disc at the head of one thin line, a point per step down to the tile you are on.
+     All of it sits on the line's axis: the line is 1px, the disc and the points odd in size, so each centre
+     falls on the line's centre, half a pixel off the grid, and the line stays one crisp pixel wide. */
+  .corner { position: relative; width: 600px; height: 330px; margin-top: 8px; }
+  .rail { position: absolute; top: 22px; right: 22px; width: 31px; }
+  .rail::before { content: ''; position: absolute; left: calc(50% - .5px); top: 26px; bottom: -58px; width: 1px; background: linear-gradient(var(--input) 75%, transparent); }
+  .rail ol { list-style: none; margin: 49px 0 0; padding: 0; display: flex; flex-direction: column; gap: 25px; }
+  .rail li { position: relative; height: 17px; display: flex; justify-content: center; align-items: center; }
+  .rail li::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--background); border: 1px solid var(--faint); }
+  .rail li.here::after { background: var(--human); border-color: var(--human); box-shadow: 0 0 14px 2px color-mix(in oklab, var(--human) 70%, transparent); }
+  .rail button { background: none; border: 0; color: var(--faint); cursor: pointer; }
+  .rail button:hover { color: var(--muted-foreground); }
+  .rail button:focus-visible { outline: 1px solid var(--human); outline-offset: 3px; }
+  .rail li button { position: absolute; top: 0; right: calc(50% + 3.5px + 14px); padding: 0; white-space: nowrap; font: 300 13px/17px var(--font-sans); text-shadow: 0 0 12px var(--background); }
+  .rail li.here button { color: var(--foreground); }
+  /* The axis shown: the column every part is centred in, and its centre line drawn past both ends. */
+  .rail.axis { background: color-mix(in oklab, var(--foreground) 6%, transparent); }
+  .rail.axis::after { content: ''; position: absolute; left: calc(50% - .5px); top: -22px; bottom: -80px; width: 1px; background: color-mix(in oklab, var(--foreground) 45%, transparent); pointer-events: none; }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
   }
@@ -737,7 +759,7 @@
 <header class="top">
   <svg class="mark hx" viewBox="-11 -12 22 24" aria-hidden="true"><polygon data-r="11"/></svg>
   <span class="name">hexframe</span><span class="page">components</span>
-  <button class="theme" id="theme" type="button" aria-label="Dark theme"><svg viewBox="-12 -12 24 24" aria-hidden="true"><circle r="7.5"/><path d="M0 -7.5A7.5 7.5 0 0 1 0 7.5Z"/></svg></button>
+  <button class="theme" id="theme" type="button" aria-label="Dark theme"><svg viewBox="-10.5 -10.5 21 21" aria-hidden="true"><circle r="10"/><path d="M0 -10A10 10 0 0 1 0 10Z"/></svg></button>
 </header>
 <nav class="index" aria-label="Components"><ol id="index"></ol></nav>
 
@@ -1384,6 +1406,55 @@
         <li>The tile glides to its slot (600ms, <code>ease-glide</code>) and the write is sent as it lands. Refused, it glides back with a destructive glow, and the move resumes so another slot can be picked.</li>
       </ul>
       <p class="q">The app moves by a mode from the card, with no drag. Drag is proposed here, with the menu's frame as the keyboard's way.</p>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="group">
+<h3 class="group-head">where you are</h3>
+
+<section id="path" data-title="The path">
+  <div class="sec-head">
+    <span class="num"></span>
+    <h2>The path</h2>
+    <p class="lead">Top right, where you are: one thin line from the root down to the tile you're on, a point per step, with the theme's disc at its head. The disc and the points are threaded on the line, so the corner reads as one mark rather than a button beside a list.</p>
+  </div>
+  <div class="sec-body">
+    <div>
+      <div class="ctl" id="path-ctl">
+        <button data-depth="1">At the root</button>
+        <button data-depth="2" aria-pressed="true">One level down</button>
+        <button data-depth="4">Three levels down</button>
+        <span class="sep"></span>
+        <button data-axis aria-pressed="false">Show the axis</button>
+      </div>
+      <div class="corner">
+        <div class="rail" id="path-rail">
+          <button class="theme" type="button" aria-label="Dark theme"><svg viewBox="-10.5 -10.5 21 21" aria-hidden="true"><circle r="10"/><path d="M0 -10A10 10 0 0 1 0 10Z"/></svg></button>
+          <nav aria-label="Where you are"><ol></ol></nav>
+        </div>
+      </div>
+    </div>
+    <div class="notes">
+      <h3>anatomy</h3>
+      <ul>
+        <li><b>The disc</b>, the theme: half lit, 21px in a 31px target, turning half a turn as the light changes. The line starts at the foot of its rim.</li>
+        <li><b>One line</b>, 1px of <code>input</code>, fading out below the last point.</li>
+        <li><b>A point per step</b>, hollow with a faint rim; the last, the tile you're on, lit amber with its glow.</li>
+        <li><b>A label</b> to the left of each point, 14px from it, Geist 300 at 13px, faint; the current one in the foreground.</li>
+      </ul>
+      <h3>the axis</h3>
+      <ul>
+        <li>Every part is centred on the line, none placed from the screen's edge on its own: a 31px column, the line at its centre, the disc and the points centred in it. Placed apart, they drift: the disc sat 3.5px off the line, the points 1px.</li>
+        <li>The sizes are odd (31, 21, 7, rows of 17), so each centre falls on a half pixel, where a 1px line's centre is. The line stays one crisp pixel and no circle straddles it.</li>
+      </ul>
+      <h3>behaviour</h3>
+      <ul>
+        <li>A label goes back up to that tile; the current one is <code>aria-current="location"</code>. The disc's <code>aria-pressed</code> says dark.</li>
+        <li>Below 820px the line and its points go, and the disc stays alone in the corner.</li>
+      </ul>
+      <p class="q">DIRECTION keeps amber for "you", never "here", yet the point of the tile you're on is lit amber. Should it be the neutral line the canvas gives its center, with amber only on the root's point?</p>
     </div>
   </div>
 </section>
@@ -2652,6 +2723,30 @@ function moving() {
   draw();
 }
 
+/* ---------- the path ---------- */
+// The corner's rail, from the root down to `depth` steps; a label goes back up, the disc turns the page's theme.
+function path() {
+  const chain = ['diplow', 'Software engineering', 'Projects', 'Design system'];
+  const rail = $('path-rail'), ol = rail.querySelector('ol'), ctl = $('path-ctl');
+  function show(depth) {
+    ol.replaceChildren(...chain.slice(0, depth).map((title, i) => {
+      const li = document.createElement('li'), b = document.createElement('button');
+      b.type = 'button'; b.textContent = title; b.onclick = () => show(i + 1);
+      if (i === depth - 1) { li.className = 'here'; b.setAttribute('aria-current', 'location'); }
+      li.append(b); return li;
+    }));
+    ctl.querySelectorAll('[data-depth]').forEach(c => c.setAttribute('aria-pressed', String(+c.dataset.depth === depth)));
+  }
+  ctl.querySelectorAll('[data-depth]').forEach(c => c.onclick = () => show(+c.dataset.depth));
+  const ax = ctl.querySelector('[data-axis]');
+  ax.onclick = () => ax.setAttribute('aria-pressed', String(rail.classList.toggle('axis')));
+  const disc = rail.querySelector('.theme'), pressed = () => disc.setAttribute('aria-pressed', String(document.documentElement.classList.contains('dark')));
+  disc.onclick = () => { $('theme').click(); pressed(); };
+  $('theme').addEventListener('click', pressed);
+  pressed();
+  show(2);
+}
+
 /* ---------- start ---------- */
 async function tokens() {
   const ds = await fetch('1-registry/design-system.json').then(r => r.json());
@@ -2679,6 +2774,7 @@ tokens().then(() => {
   marks();
   tileMenu();
   moving();
+  path();
   clampWords();
   document.fonts.ready.then(() => clampWords());
   document.documentElement.classList.add('ready');
