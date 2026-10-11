@@ -25,6 +25,7 @@ import { pathTo, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { centerOn, readCanvasView, showView, type CanvasView } from '#/front/ui/canvas/view/view'
 import { ChatAtomsGallery } from '#/front/ui/chat/atoms/gallery'
 import { Composer } from '#/front/ui/chat/composer/Composer'
+import { modeChoices } from '#/front/ui/chat/composer/demo'
 import { ComposerGallery } from '#/front/ui/chat/composer/gallery'
 import {
   GallerySection,
@@ -215,6 +216,8 @@ function ScreenGallery() {
 interface Line {
   author: 'user' | 'agent'
   text: string
+  /** Sent from the specimen's composer, so shown at once. */
+  sent?: true
 }
 
 /** Signed out, the canvas shows Help, read in the page's language as `/help` reads it. */
@@ -267,7 +270,7 @@ function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
         signedIn ? (
           <ScreenComposer
             onSend={(text) => {
-              setSent((before) => [...before, { author: 'user', text }])
+              setSent((before) => [...before, { author: 'user', text, sent: true }])
             }}
           />
         ) : (
@@ -295,8 +298,7 @@ function Lines({ lines }: { lines: Line[] }) {
         line.author === 'user' ? (
           <li
             key={index}
-            // A line just sent shows at once, the conversation scrolled to it.
-            ref={index >= screenLines().length ? scrollIntoView : undefined}
+            ref={line.sent ? scrollToFoot : undefined}
             className="max-w-[36em] border-l border-human/70 pl-3.5 font-human text-prose font-light"
           >
             {line.text}
@@ -322,8 +324,10 @@ function Lines({ lines }: { lines: Line[] }) {
   )
 }
 
-function scrollIntoView(element: HTMLElement | null) {
-  element?.scrollIntoView({ block: 'nearest' })
+/** A line just sent shows at once: its conversation, and not the page, scrolls to its foot. */
+function scrollToFoot(element: HTMLElement | null) {
+  const messages = element?.closest<HTMLElement>('[role="region"]')
+  if (messages) messages.scrollTop = messages.scrollHeight
 }
 
 /** A zone, the chat's foot: a solid fill with one fine line on top, warm for you. */
@@ -352,12 +356,6 @@ function ScreenComposer({ onSend }: { onSend: (text: string) => void }) {
     />
   )
 }
-
-/** Assistant's two Modes, as a real page builds them from its `Mode`. */
-const modeChoices = () => [
-  { id: 'ask', label: m.composer_mode_ask(), means: m.conversation_mode_ask_hint() },
-  { id: 'apply', label: m.composer_mode_apply(), means: m.conversation_mode_apply_hint() },
-]
 
 /** Signed out, the chat's foot is where the sign-in widget sits (HEX-100), drawn here as its place. */
 function SignInPlace() {
