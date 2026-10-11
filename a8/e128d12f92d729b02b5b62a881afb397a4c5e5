@@ -1,0 +1,31 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_c19b57f63ed6ef::t_d96defc047565d 41,52
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_c19b57f63ed6ef::t_e534c37c7ea705 111-113,115,118
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/throwing.test.ts
+  s_c19b57f63ed6ef::t_23909ea5a4a1f1 13,41,54
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/CLAUDE.md
+  s_c19b57f63ed6ef::t_5e3ffaf7b69481 23
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/Chat.tsx
+  s_c19b57f63ed6ef::t_70991a11d058c7 44-45
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_c19b57f63ed6ef::t_162be9a0078824 52-54
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/conversations/testing.ts
+  s_c19b57f63ed6ef::t_957cf983c36e12 74-75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a8e128d12f92d729b02b5b62a881afb397a4c5e5",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
