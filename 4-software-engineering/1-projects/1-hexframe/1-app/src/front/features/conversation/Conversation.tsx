@@ -18,7 +18,7 @@ import type { Mentionable } from './composer/mention'
 import type { ModeChoice } from './composer/ModeSwitch'
 import type { Day } from './timeline/timeline'
 import { ConversationEntry } from './entry/Entry'
-import type { Deciding } from './entry/Proposal'
+import type { Deciding } from './entry/parts'
 
 /** A Turn running, as the timeline shows it. */
 interface Running {
@@ -57,7 +57,10 @@ interface ConversationProps {
   earlier?: Earlier | undefined
   /** The Conversation's Mode and its switch; none before it is read. */
   mode?: ModeChoice | undefined
-  /** Accepts or discards the open Proposal; none where nobody decides one. */
+  /**
+   * Accepts or discards the open Proposal, or undoes what an accepted one or a Turn applied; none
+   * where nobody decides.
+   */
   decide?: Deciding | undefined
   className?: string
 }

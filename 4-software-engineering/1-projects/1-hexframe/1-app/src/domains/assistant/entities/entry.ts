@@ -84,6 +84,16 @@ const Proposal = Schema.TaggedStruct('Proposal', {
   fate: Fate,
 })
 
+/**
+ * What a Turn in apply wrote, told once it ended: the Turn, how many changes its writes made, and
+ * whether the user undid them. Each change has its own Entry besides, by the Assistant.
+ */
+const TurnApplied = Schema.TaggedStruct('TurnApplied', {
+  turn: Schema.String,
+  changes: Schema.Int.check(Schema.isBetween({ minimum: 0, maximum: 2_147_483_647 })),
+  undone: Schema.Boolean,
+})
+
 /** An import: the Tile it landed as, how many Tiles came with it, below it, and who imported it. */
 const Import = Schema.TaggedStruct('Import', {
   tile: Named,
@@ -95,7 +105,15 @@ const Import = Schema.TaggedStruct('Import', {
 const TurnEnded = Schema.TaggedStruct('TurnEnded', { how: BadEnd })
 
 /** What an Entry says, whichever kind it is: what is stored of it, and what it is decoded by. */
-export const EntryContent = Schema.Union([Message, Change, Import, Navigation, TurnEnded, Proposal])
+export const EntryContent = Schema.Union([
+  Message,
+  Change,
+  Import,
+  Navigation,
+  TurnEnded,
+  Proposal,
+  TurnApplied,
+])
 
 export type EntryContent = typeof EntryContent.Type
 
@@ -133,3 +151,18 @@ export const namedTiles = (entries: ReadonlyArray<Entry>): ReadonlyArray<string>
     }),
   ),
 ]
+
+/**
+ * An Entry that offers to undo what the Assistant applied, once the user undid it: an accepted
+ * Proposal's, `undone`, and an applied Turn's, said undone. None for any other, which offers no Undo.
+ */
+export function undoneEntry(content: EntryContent): EntryContent | undefined {
+  switch (content._tag) {
+    case 'Proposal':
+      return content.fate === 'accepted' ? { ...content, fate: 'undone' } : undefined
+    case 'TurnApplied':
+      return content.undone ? undefined : { ...content, undone: true }
+    default:
+      return undefined
+  }
+}

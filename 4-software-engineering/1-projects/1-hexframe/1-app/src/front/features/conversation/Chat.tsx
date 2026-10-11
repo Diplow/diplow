@@ -16,6 +16,7 @@ import {
   useDiscardProposal,
   useSetMode,
   useStopTurn,
+  useUndo,
 } from '#/front/client/assistant/conversation'
 import type { LiveTurn } from '#/front/client/assistant/follow'
 import { useSystem } from '#/front/client/mapping/queries'
@@ -51,6 +52,7 @@ export function Chat({ onSend, turn, mode, onCenter, className }: ChatProps) {
   const switching = useSetMode()
   const accepting = useAcceptProposal()
   const discarding = useDiscardProposal()
+  const undoing = useUndo()
   if (data === undefined) return <Skeleton className={className} />
   // The Mode switched to shows while the switch is on its way, then the poll says it.
   const shownMode = switching.isPending ? switching.variables : mode
@@ -106,7 +108,10 @@ export function Chat({ onSend, turn, mode, onCenter, className }: ChatProps) {
         discard: (proposal) => {
           discarding.mutate(proposal)
         },
-        pending: accepting.isPending || discarding.isPending,
+        undo: (batch) => {
+          undoing.mutate(batch)
+        },
+        pending: accepting.isPending || discarding.isPending || undoing.isPending,
       }}
       className={className}
     />

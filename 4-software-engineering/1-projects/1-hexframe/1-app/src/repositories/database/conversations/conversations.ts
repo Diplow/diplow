@@ -40,6 +40,8 @@ export class Conversations extends Context.Service<
       entryId: string,
       content: unknown,
     ) => Effect.Effect<void, never, InTransaction>
+    /** The content of one of the Account's Entries, as Assistant encoded it; none for another's. */
+    readonly entry: (accountId: string, entryId: string) => Effect.Effect<unknown>
     /** The Entries of the Account's Conversation within a span, oldest first; none without one. */
     readonly between: (accountId: string, span: Span) => Effect.Effect<ReadonlyArray<EntryRow>>
     /** The instant of the Account's latest Entry before an instant, excluded; none without one. */
@@ -104,6 +106,27 @@ const make = Effect.gen(function* () {
         .pipe(Effect.orDie, Effect.asVoid),
     )
 
+  const entry = (accountId: string, entryId: string) =>
+    database
+      .select({ content: conversationEntry.content })
+      .from(conversationEntry)
+      .where(
+        and(
+          eq(conversationEntry.id, entryId),
+          inArray(
+            conversationEntry.conversationId,
+            database
+              .select({ id: conversation.id })
+              .from(conversation)
+              .where(eq(conversation.accountId, accountId)),
+          ),
+        ),
+      )
+      .pipe(
+        Effect.orDie,
+        Effect.map(([row]) => row?.content),
+      )
+
   const between = (accountId: string, { from, to }: Span) =>
     database
       .select({
@@ -149,7 +172,7 @@ const make = Effect.gen(function* () {
         Effect.map(([found]) => found?.id),
       )
 
-  return Conversations.of({ append, rewrite, between, latestBefore, lastEntry })
+  return Conversations.of({ append, rewrite, entry, between, latestBefore, lastEntry })
 })
 
 /** The conversations repository, over the `Database` it is given. */

@@ -1,7 +1,8 @@
 // Assistant's server functions, for the Account the request's Session proves: a day of its
 // Conversation, today by default; a Message posted, which starts a Turn answering it when the Account
 // may use the Assistant, and a Stop of the Turn running; where the user went, consecutive navigations
-// merged by the browser into one Entry; and its Mode switched, and its Proposal accepted or discarded. Each validates its input by Assistant's own
+// merged by the browser into one Entry; and its Mode switched, its Proposal accepted or discarded, and
+// what a Turn applied or an accepted Proposal undone. Each validates its input by Assistant's own
 // schemas, then hands its program (./programs.ts) to the helper.
 import { createServerFn } from '@tanstack/react-start'
 import { Schema } from 'effect'
@@ -108,6 +109,20 @@ export const acceptProposal = createServerFn({ method: 'POST' })
 export const discardProposal = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(ProposalRef))
   .handler(({ data, context }) => run(context, Proposal.discardProposal(data)))
+
+/**
+ * What the Assistant applied, by its id as the page read it: a Turn that applied writes, or a Proposal
+ * the user accepted.
+ */
+const AppliedRef = Schema.Struct({ batch: Schema.String.check(Schema.isUUID()) })
+
+/**
+ * Undoes what a Turn applied, or an accepted Proposal, whole and once, its changes landing as the
+ * user's, or none of them once a Tile one touched changed since.
+ */
+export const undo = createServerFn({ method: 'POST' })
+  .validator(Schema.toStandardSchemaV1(AppliedRef))
+  .handler(({ data, context }) => run(context, Proposal.undo(data)))
 
 /** Records a merged navigation, sent once something else enters the timeline or the page hides. */
 export const recordNavigation = createServerFn({ method: 'POST' })

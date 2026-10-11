@@ -18,6 +18,7 @@ import { Clock, Effect, Result, Schema } from 'effect'
 
 import { Anthropic, type Endpoint } from '#/repositories/agent/anthropic/anthropic'
 import { Sandbox, type SandboxFile } from '#/repositories/agent/sandbox/sandbox'
+import { Applied } from '#/repositories/database/conversations/applied'
 import { Conversations } from '#/repositories/database/conversations/conversations'
 import { type ConversationRow, Proposals } from '#/repositories/database/conversations/proposals'
 import { type TurnRow, Turns } from '#/repositories/database/conversations/turns'
@@ -46,9 +47,10 @@ import {
   type Turn,
   TurnEnd,
   TurnStep,
+  undoneEntry,
   within,
 } from './entities'
-import { AllowanceSpent, TurnRunning } from './errors'
+import { AllowanceSpent, NothingToUndo, TurnRunning } from './errors'
 import {
   AcceptProposal,
   changesOf,
@@ -257,7 +259,26 @@ export const endTurn = (accountId: string, turnId: string, how: TurnEnd) =>
       const ago = how === 'time' ? now - deadline(ended).getTime() : 0
       yield* record(accountId, { _tag: 'TurnEnded', how }, ago)
     }
+    yield* offerUndo(accountId, turnId)
     return ended
+  })
+
+/**
+ * Records what one of the Account's Turns applied, once it ended, in an Entry that offers to undo it:
+ * none for a Turn that applied nothing, or whose Entry is recorded already.
+ */
+const offerUndo = (accountId: string, turnId: string) =>
+  Effect.gen(function* () {
+    const kept = yield* Applied.use((applied) => applied.locked(accountId, turnId))
+    if (kept === undefined || kept.entryId !== null) return
+    const { changes } = kept
+    const entry = yield* record(accountId, {
+      _tag: 'TurnApplied',
+      turn: turnId,
+      changes,
+      undone: false,
+    })
+    yield* Applied.use((applied) => applied.offer(accountId, turnId, entry.id))
   })
 
 /**
@@ -615,7 +636,7 @@ const operate = <E>(accountId: string, decided: (state: ConversationState) => De
       entry = yield* written(accountId, { event, before: state, after, entry })
       state = after
     }
-    return { before: loaded.state, after: state }
+    return { before: loaded.state, after: state, entry: loaded.entry }
   })
 
 /** Switches the Mode of the Account's Conversation: the Turns started from then on take it. */
@@ -646,17 +667,17 @@ export const draft = (
   })
 
 /**
- * Accepts the Account's open Proposal of this id, whole, and answers it as it stood, its writes for
- * the API layer to run on the System in the same transaction, which a refusal there rolls back with
- * the accept: refused `ProposalClosed` when it is open no longer, as `decide` rules.
+ * Accepts the Account's open Proposal of this id, whole, and answers it as it stood, with its Entry,
+ * its writes for the API layer to run on the System in the same transaction, which a refusal there
+ * rolls back with the accept: refused `ProposalClosed` when it is open no longer, as `decide` rules.
  */
 export const acceptProposal = (accountId: string, proposal: string) =>
   Effect.flatMap(
     operate(accountId, (state) => decide(state, new AcceptProposal({ proposal }))),
-    ({ before }) =>
-      before.open === undefined
+    ({ before, entry }) =>
+      before.open === undefined || entry === undefined
         ? Effect.die(new Error('A Proposal was accepted that was not open'))
-        : Effect.succeed(before.open),
+        : Effect.succeed({ ...before.open, entry }),
   )
 
 /** Discards the Account's open Proposal of this id: refused `ProposalClosed` when it is open no longer. */
@@ -680,3 +701,68 @@ export const turn = (accountId: string, turnId: string) =>
  */
 export const route = (accountId: string, turnId: string) =>
   Effect.map(turn(accountId, turnId), routeOf)
+
+/**
+ * What undoes the writes one of the Account's Turns applied so far, as the API layer handed it,
+ * opaque; none before its first. The Conversation locked until the transaction ends, so two writes of
+ * one Turn never both build on it, nor an undo run meanwhile. In the transaction the API layer opened.
+ */
+export const appliedSoFar = (accountId: string, turnId: string) =>
+  Effect.gen(function* () {
+    yield* Proposals.use((proposals) => proposals.locked(accountId))
+    const kept = yield* Applied.use((applied) => applied.locked(accountId, turnId))
+    return kept?.undo
+  })
+
+/** What the Assistant applied, as the API layer hands it: what undoes it, opaque, and its changes. */
+export interface Applying {
+  readonly undo: unknown
+  readonly changes: number
+}
+
+/**
+ * Keeps what undoes the writes one of the Account's Turns applied, this one's included, and adds the
+ * changes it made to theirs: what its Entry offers to undo once the Turn ended. In the transaction the
+ * API layer opened, after `appliedSoFar`.
+ */
+export const turnApplied = (accountId: string, turnId: string, { undo, changes }: Applying) =>
+  Effect.gen(function* () {
+    const kept = yield* Applied.use((applied) => applied.locked(accountId, turnId))
+    const total = (kept?.changes ?? 0) + changes
+    yield* Applied.use((applied) => applied.keep(accountId, turnId, { undo, changes: total }))
+  })
+
+/**
+ * Keeps what undoes the writes of a Proposal the user accepted, which its Entry offers to undo from
+ * then on. In the transaction the API layer opened, after `acceptProposal`.
+ */
+export const proposalApplied = (
+  accountId: string,
+  { id, entry }: { readonly id: string; readonly entry: string },
+  { undo, changes }: Applying,
+) => Applied.use((applied) => applied.keep(accountId, id, { undo, changes, entryId: entry }))
+
+/**
+ * Undoes what one of the Account's Turns applied, or a Proposal it accepted, by its id, once: marked
+ * undone, its Entry saying so and offering no second Undo, and what undoes it answered, opaque, for the
+ * API layer to run on the System in the same transaction, which a refusal there rolls back with it.
+ * `NothingToUndo` once it was undone already, for a Turn still running, or for nothing it applied.
+ * The Conversation locked until the transaction ends. In the transaction the API layer opened.
+ */
+export const undo = (accountId: string, id: string) =>
+  Effect.gen(function* () {
+    yield* Proposals.use((proposals) => proposals.locked(accountId))
+    const now = new Date(yield* Clock.currentTimeMillis)
+    const undone = yield* Applied.use((applied) => applied.undone(accountId, id, now))
+    if (undone === undefined) return yield* new NothingToUndo()
+    const content = yield* Conversations.use((conversations) =>
+      conversations.entry(accountId, undone.entryId),
+    )
+    // An Entry Assistant cannot read back, or that offers no Undo, is a defect: it wrote them.
+    const said = undoneEntry(yield* Effect.orDie(decoded(content)))
+    if (said === undefined) return yield* Effect.die(new Error('An Entry offered no Undo'))
+    yield* Conversations.use((conversations) =>
+      conversations.rewrite(accountId, undone.entryId, encoded(said)),
+    )
+    return undone.undo
+  })

@@ -77,6 +77,7 @@ const fates: Record<Fate, string> = {
   open: 'open, waiting for the user',
   accepted: 'the user accepted it',
   discarded: 'the user discarded it',
+  undone: 'the user accepted it, then undid it',
 }
 
 /** A change, as the agent reads it: its verb, its Tile, and the other Tile it names, if any. */
@@ -105,6 +106,8 @@ function lineOf(entry: Entry, titles: PromptOf['titles']): string {
     }
     case 'TurnEnded':
       return `A Turn of yours ended before its answer: ${ends[entry.how]}.`
+    case 'TurnApplied':
+      return `A Turn of yours in apply made ${String(entry.changes)} changes${entry.undone ? ', which the user undid' : ''}.`
   }
 }
 

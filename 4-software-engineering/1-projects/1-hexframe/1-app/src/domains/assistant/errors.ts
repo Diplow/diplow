@@ -21,4 +21,17 @@ export class ProposalClosed extends Schema.TaggedError<ProposalClosed>()('Propos
   kind: kind('Conflict'),
 }) {}
 
-export const assistantFailures = [TurnRunning, AllowanceSpent, ProposalClosed] as const
+/**
+ * Nothing is left to undo: the user undid it already, in another tab say, or it never applied
+ * anything that is the Account's to undo. Nothing changes; the timeline says it was undone.
+ */
+export class NothingToUndo extends Schema.TaggedError<NothingToUndo>()('NothingToUndo', {
+  kind: kind('Conflict'),
+}) {}
+
+export const assistantFailures = [
+  TurnRunning,
+  AllowanceSpent,
+  ProposalClosed,
+  NothingToUndo,
+] as const

@@ -308,6 +308,25 @@ export const proposal = pgTable(
   ],
 )
 
+/**
+ * What the Assistant applied to a Conversation's System, an applied Turn's writes or an accepted
+ * Proposal's, and what undoes them. `id` is the Turn's or the Proposal's; `undo` what undoes them as
+ * Assistant was handed it, which neither the repository nor Assistant reads; `changes` how many
+ * changes they made; `entry_id` the Entry that offers to undo them, null while a Turn still runs; and
+ * `undone_at` when the user undid them, null until then, once only. Deleting a Conversation, or the
+ * Entry, deletes it.
+ */
+export const applied = pgTable('applied', {
+  id: text('id').primaryKey(),
+  conversationId: text('conversation_id')
+    .notNull()
+    .references(() => conversation.id, { onDelete: 'cascade' }),
+  entryId: text('entry_id').references(() => conversationEntry.id, { onDelete: 'cascade' }),
+  undo: jsonb('undo').notNull(),
+  changes: integer('changes').default(0).notNull(),
+  undoneAt: timestamp('undone_at', { withTimezone: true }),
+})
+
 // IAM's own (./turn-keys/turn-keys.ts): a Turn's Key, which Better Auth does not keep.
 
 /**
