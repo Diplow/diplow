@@ -9,7 +9,8 @@ preview: >-
   how the radius scale squares every corner, the lines of STACK.md and
   claude-mod left for the phase close, where each piece of ui/ went when it
   regrouped by tier and side, and how /design-system shows the error channels,
-  reads "made of" from the code and keeps its frame outside the tiers.
+  reads "made of" from the code and keeps its frame outside the tiers, and
+  what the composer's proposal kept and changed of the reference.
 ---
 # Decisions
 
@@ -63,3 +64,16 @@ HEX-94. The ticket asks for "made of" and "used in" between pieces. Written by h
 ### DEC-9 The page's frame is `ui/gallery/`, outside the tiers
 
 HEX-94. The catalogue, its test and the tokens' notes would have put seven files in `ui/`, past the rule of 6. They went into a folder of their own, `ui/gallery/`, with the frame and the stylesheet's reading: every folder's `gallery.tsx` imports it, and it imports none of them, so dependency-cruiser's tiers do not name it. `tokens.ts` became `gallery/stylesheet.ts`, since `Tokens.tsx` beside it would clash with it on a filesystem that ignores case, and it now reads every token, the fonts, the sizes, the radius scale, the easings and the durations beside the colours, so each gets its note. TOKENS.md's tables became those notes; its "Phone and touch" and "Light" became prose on the page. Until HEX-112 retires `3-design-system/`, which this run may not edit, TOKENS.md keeps its copy: where the two differ, `gallery/Tokens.tsx` wins, as `ui/gallery/CLAUDE.md` says.
+
+### DEC-10 The composer is a chat component with its own list, the field a textarea with its marks drawn under it
+
+HEX-99, a proposal. `components.html#commands` drew the composer on a contenteditable, the list rising from its top line, a command a chip in amber mono. The proposal keeps the look and changes four things:
+
+- **The field stays a textarea.** The feature's `@` already works on its string, tested (`features/conversation/composer/mention.ts`); a contenteditable would bring its input methods, paste and undo back to solve. What the field marks, the command it opens with in amber and each Tile it points at underlined, is drawn under it in the same type, so the command keeps the field's serif rather than the reference's mono chip, whose other width would put the caret out of step.
+- **The list is the composer's own**, `ui/chat/composer/List.tsx`, not `Suggestions`: it rises from the composer's top line as wide as the conversation, with groups, icons, a footer of keys and a line when nothing answers, none of which `Suggestions`' popover over its field has. `Suggestions` stays for the feature's composer until HEX-101 moves it onto `Composer`, its last user.
+- **The step above the composer is HEX-98's**, the conversation's "thinking": the composer shows a Turn running by its field waiting and send becoming Stop, and nothing else.
+- **Quiet text is `muted-foreground`, not `faint`.** `faint` on `card` is 2.96:1 in dark and 4.09:1 in light, under the 4.5:1 text needs; the reference set the mode, the key hints, the descriptions and the paths in it. `faint` stays on the inactive rows' icons, which say nothing their names don't.
+
+- **`ui/` knows no domain.** No piece of `ui/` imports one, so the Composer takes the Modes as choices its caller builds from Assistant's `Mode`, and the gallery's demo follows the feature's `@` rules (`mention.ts`, 40 characters, ranked, 8 at most) rather than importing them. The commands sit in `ui/chat/composer/commands.ts` while they are a proposal, since the page can only show what `ui/` holds; HEX-101, which runs them through the client's hooks, moves them beside the feature's `@`, and `List` and `cutAround` stay.
+
+The commands are the reference's, the theme aside, which goes to the breadcrumb's head (Q8), with the language and signing out added; which ones stay is an open question on the pull request, as is amber text in light, 3.75:1 on `card`, the tokens' own.
