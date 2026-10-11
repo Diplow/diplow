@@ -11,7 +11,7 @@ import { toast } from '../../atoms/Toaster'
 import { GallerySection, GalleryState } from '../../gallery/frame'
 import { anchorOf } from '../../gallery/pieces'
 import { Composer } from './Composer'
-import { marksOf, picked, typingAt } from './demo'
+import { marksOf, modeChoices, picked, typingAt } from './demo'
 
 export function ComposerGallery() {
   return (
@@ -161,12 +161,6 @@ function Specimen({
     </div>
   )
 }
-
-/** Assistant's two Modes, as a real page builds them from its `Mode`. */
-const modeChoices = () => [
-  { id: 'ask', label: m.composer_mode_ask(), means: m.conversation_mode_ask_hint() },
-  { id: 'apply', label: m.composer_mode_apply(), means: m.conversation_mode_apply_hint() },
-]
 
 /** On a phone: the composer over the keyboard, listing the commands within a thumb's reach. */
 function Phone() {

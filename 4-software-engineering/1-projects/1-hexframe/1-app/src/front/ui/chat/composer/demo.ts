@@ -224,3 +224,9 @@ export function picked(value: string, caret: number, typing: Typing, row: string
   if (command === undefined) return { value, caret }
   return put(`/${command.name()} ${command.takes === 'tile' ? '@' : ''}`)
 }
+
+/** Assistant's two Modes, as a real page builds them from its `Mode`. */
+export const modeChoices = () => [
+  { id: 'ask', label: m.composer_mode_ask(), means: m.conversation_mode_ask_hint() },
+  { id: 'apply', label: m.composer_mode_apply(), means: m.conversation_mode_apply_hint() },
+]

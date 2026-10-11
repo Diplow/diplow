@@ -10,8 +10,10 @@ preview: >-
   claude-mod left for the phase close, where each piece of ui/ went when it
   regrouped by tier and side, how /design-system shows the error channels,
   reads "made of" from the code and keeps its frame outside the tiers, what
-  the composer's proposal kept and changed of the reference, and where the
-  frames HEX-96 proposed went and how a finger opens them.
+  the composer's proposal kept and changed of the reference, where the frames
+  HEX-96 proposed went and how a finger opens them, and how HEX-95 drew the
+  screen, folding on its own width, a seam on a phone, and the corner's
+  contrast.
 ---
 # Decisions
 
@@ -105,3 +107,23 @@ HEX-96, the project's "To grill". Below `sm` the chat fills the screen, so there
 ### DEC-15 A risen surface's shadow and the widget's entrance became tokens
 
 HEX-96. The prototype kept `--lift`, a menu's, a card's and the dialog's shadow, out of the tokens ("not tokens yet"); the frames all use it, so it is `--shadow-lift`, from `--lift`, which each theme sets. The widget's entrance, its line drawing itself, the surface unfolding and its parts rising, and the light that runs over lines still to come, are `--animate-draw`, `--animate-unfold`, `--animate-rise` and `--animate-sweep`. Each has its note on `/design-system`. The three frames that rise share one utility, `risen` (`styles.css`): the popover's light, `--shadow-lift` and a fine line on top, which the dialog draws in its voice through `--rim`.
+
+### DEC-16 The screen folds on its own width, and the side in front is its caller's
+
+HEX-95. "Below `sm`, a phone" is read on the screen's own width, a container query, not the viewport's: on home the screen fills the viewport and the two agree, and on `/design-system` a phone's specimen folds as a phone does beside a wide one. The width is written once, `--container-wide: 40rem` in `@theme`, so the classes say `@wide:` and `@max-wide:`, and the Tokens page gives it a note. What CSS can't do, making the side behind `inert`, waits for a `ResizeObserver` once the page is live, which asks the stylesheet rather than measuring again: the seam shows on a phone alone, so its display is the answer. The first paint is right, and the keyboard is right from hydration. Which side is in front is a prop, `front` and `onFrontChange`, as the canvas's view is: HEX-97 gives it its owner and its state hook, and the crossing that brings the canvas forward when the chat points at it.
+
+### DEC-17 On a phone, a seam: the canvas peeks above the chat, the composer stays at the canvas's foot
+
+HEX-95, on the project's "To grill: the gesture that brings the canvas forward". The prototype's phone kept the composer alone over the canvas; that became the canvas in front. With the chat in front, the canvas shows through a strip at the screen's top, blurred, and the strip is the seam: a tap, a drag down, or Enter brings the canvas forward. With the canvas in front, a seam above the composer gives the chat back, by a tap, a drag up, or Enter, and the focus crosses to the seam on the other side. A drag decides past 24px, it doesn't follow the finger yet. The canvas's corner, the theme with it, belongs to the canvas, so on a phone it shows with the canvas in front only.
+
+### DEC-18 The rail's labels are muted, not faint, and the theme is the disc everywhere
+
+HEX-95. The prototype's path labels are `faint`, which reads at 3.1:1 on the ground in the dark and 3.6:1 in the light, short of 4.5:1 for 13px text; they are `muted-foreground` (7.9:1, 6.5:1), the step you are on the foreground. The disc and the seams stay `faint`, a mark needing 3:1. `ThemeToggle` became the design system's disc rather than a second atom beside the sun and moon, so the header shows it too until HEX-97 moves it to the rail's head.
+
+### DEC-19 What the screen leaves to the canvas: tiles running under the conversation, the composer on a tile's edge
+
+HEX-95. The `Screen` gives the canvas the screen right of the curve, behind a veil that fades toward it; today's `Canvas` fits its rings in that box, so its tiles reach the curve rather than running far under the conversation, and the composer's corner does not yet sit on the edge of the tile south-west of the center. Both need the canvas's camera, which knows its tiles' size and place (HEX-104, HEX-106). The ring chooser above the canvas stays where `Canvas` draws it, at the box's top left, until commands take what a menu would hold.
+
+### DEC-20 The screen's specimens stay in the route, and signed out they read Help itself
+
+HEX-95, cubic's reviews. Moved out of the route body to a folder the router skips, `routes/-design-system/`, the specimens were encrypted on GitHub: `.gitattributes` hands every name starting with `-` to transcrypt, and CI checks out without the key. They went back into `design-system.tsx`. The signed-out specimens first drew a hand-made Help, its titles copied into messages, a second copy of a System Mapping owns; they read Help itself now, `useHelp` in the page's language inside a `ReadBoundary`, as `/help` does, so they show what a visitor signed out sees and cannot drift from `help/`.
