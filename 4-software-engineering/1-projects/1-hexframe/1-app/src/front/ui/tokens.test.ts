@@ -71,6 +71,11 @@ describe('the theme', () => {
     )
   }
 
+  it('reads every colour of @theme inline, so a block nested after them cuts none off', () => {
+    const declared = Array.from(css.matchAll(/--color-([\w-]+):/g), ([, name = '']) => name)
+    expect(declared.filter((name) => !variables.includes(name))).toEqual([])
+  })
+
   it('gives every colour token a value in light and in dark', () => {
     for (const [theme, selector] of Object.entries(themes)) {
       const values = declared(selector)
