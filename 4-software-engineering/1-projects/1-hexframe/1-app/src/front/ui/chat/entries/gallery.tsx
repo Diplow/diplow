@@ -13,7 +13,7 @@ import { Skeleton } from '../../atoms/skeleton'
 import { toast } from '../../atoms/Toaster'
 import { GallerySection, GalleryState } from '../../gallery/frame'
 import { minutesAgo, sampleTiles, sampleWords } from '../samples'
-import { said } from '../text/words'
+import { weave } from '../text/words'
 import { Message } from '../text/Message'
 import { Thinking } from '../text/Thinking'
 import { DaySplit } from './DaySplit'
@@ -113,27 +113,31 @@ function samplesAt(now: Date) {
   const keyName = { name: m.gallery_sample_chat_key_name() }
   const keyEdit: Happened = {
     who: 'key',
-    words: said(m.gallery_sample_chat_key_edited, { key: keyName, projects }),
+    words: weave(m.gallery_sample_chat_key_edited, { key: keyName, projects }),
     at: at(7),
   }
   const operations: Happened[] = [
     {
-      who: 'you',
-      words: said(m.gallery_sample_chat_you_created, { tooling, engineering }),
+      who: 'human',
+      words: weave(m.gallery_sample_chat_you_created, { tooling, engineering }),
       at: at(9),
     },
     {
       who: 'agent',
-      words: said(m.gallery_sample_chat_agent_moved, { site, shared }),
+      words: weave(m.gallery_sample_chat_agent_moved, { site, shared }),
       tool: 'move_tile',
       at: at(8),
     },
     keyEdit,
-    { who: 'key', words: said(m.gallery_sample_chat_revoked_deleted, { old: oldSite }), at: at(6) },
+    {
+      who: 'key',
+      words: weave(m.gallery_sample_chat_revoked_deleted, { old: oldSite }),
+      at: at(6),
+    },
   ]
   const navigation: Happened = {
-    who: 'you',
-    words: said(m.gallery_sample_chat_you_centered, { engineering }),
+    who: 'human',
+    words: weave(m.gallery_sample_chat_you_centered, { engineering }),
     detail: m.gallery_sample_chat_moves({ count: 4 }),
     at: at(5),
   }
@@ -142,7 +146,7 @@ function samplesAt(now: Date) {
     events: [
       {
         who: 'agent',
-        words: said(m.gallery_sample_chat_read, { engineering }),
+        words: weave(m.gallery_sample_chat_read, { engineering }),
         tool: 'get_tile',
         at: at(4),
       },
@@ -154,7 +158,7 @@ function samplesAt(now: Date) {
       },
       {
         who: 'agent',
-        words: said(m.gallery_sample_chat_searched, { projects }),
+        words: weave(m.gallery_sample_chat_searched, { projects }),
         tool: 'search',
         at: at(4),
       },
@@ -162,28 +166,28 @@ function samplesAt(now: Date) {
   }
   const live: Happened = {
     who: 'agent',
-    words: said(m.gallery_sample_chat_drafting, { tooling: toolingDraft }),
+    words: weave(m.gallery_sample_chat_drafting, { tooling: toolingDraft }),
     tool: 'update_tile',
     at: at(1),
     state: 'running',
   }
   const failed: Happened = {
     who: 'agent',
-    words: said(m.gallery_sample_chat_write_failed, { tooling }),
+    words: weave(m.gallery_sample_chat_write_failed, { tooling }),
     tool: 'update_tile',
     at: at(1),
     state: 'failed',
   }
   const ends: Happened[] = [
-    { who: 'you', words: [m.gallery_sample_chat_turn_stopped()], at: at(3) },
+    { who: 'human', words: [m.gallery_sample_chat_turn_stopped()], at: at(3) },
     { who: 'app', words: [m.gallery_sample_chat_turn_ceiling()], at: at(2) },
     { who: 'app', words: [m.gallery_sample_chat_turn_time()], at: at(1) },
     { who: 'app', words: [m.gallery_sample_chat_turn_sandbox()], at: at(0), state: 'failed' },
   ]
   const changes: Change[] = [
-    { icon: SquarePlus, words: said(m.gallery_sample_chat_create, { shared, projects }) },
-    { icon: Move, words: said(m.gallery_sample_chat_move, { site, shared }) },
-    { icon: Move, words: said(m.gallery_sample_chat_move, { site: designSystem, shared }) },
+    { icon: SquarePlus, words: weave(m.gallery_sample_chat_create, { shared, projects }) },
+    { icon: Move, words: weave(m.gallery_sample_chat_move, { site, shared }) },
+    { icon: Move, words: weave(m.gallery_sample_chat_move, { site: designSystem, shared }) },
   ]
   const proposal = {
     title: m.gallery_sample_chat_proposal_title(),

@@ -49,7 +49,7 @@ export const pieces = [
     name: 'Thinking',
     tier: 'chat',
     sources: ['ui/chat/text/Thinking.tsx'],
-    madeOf: [],
+    madeOf: ['Fold'],
     note: m.gallery_note_thinking,
   },
   {
@@ -63,7 +63,7 @@ export const pieces = [
     name: 'Events',
     tier: 'chat',
     sources: ['ui/chat/entries/Events.tsx'],
-    madeOf: ['Mention'],
+    madeOf: ['Mention', 'Fold'],
     note: m.gallery_note_events,
   },
   {
@@ -97,9 +97,16 @@ export const pieces = [
   {
     name: 'Act',
     tier: 'chat',
-    sources: ['ui/chat/atoms/Act.tsx'],
+    sources: ['ui/chat/atoms/controls.tsx'],
     madeOf: [],
     note: m.gallery_note_act,
+  },
+  {
+    name: 'Fold',
+    tier: 'chat',
+    sources: ['ui/chat/atoms/controls.tsx'],
+    madeOf: [],
+    note: m.gallery_note_fold,
   },
   {
     name: 'Canvas',

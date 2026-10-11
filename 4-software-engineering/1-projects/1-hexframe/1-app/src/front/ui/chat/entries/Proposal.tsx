@@ -13,7 +13,7 @@ import { type FocusEvent, useState } from 'react'
 import { m } from '#/paraglide/messages'
 
 import { ConfirmDialog } from '../../layouts/ConfirmDialog'
-import { Act } from '../atoms/Act'
+import { Act } from '../atoms/controls'
 import { HexMark } from '../atoms/hex'
 import { Said, type Words } from '../text/words'
 import { Receipt } from './Receipt'

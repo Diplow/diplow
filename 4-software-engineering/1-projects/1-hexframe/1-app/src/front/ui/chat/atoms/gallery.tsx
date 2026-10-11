@@ -1,5 +1,5 @@
-// The chat's own atoms, on /design-system: the suggestions over the composer's field, and the actions
-// set as text in the chat's flow.
+// The chat's own atoms, on /design-system: the suggestions over the composer's field, and the controls
+// set as text in the chat's flow, an action and a fold.
 import { useState } from 'react'
 
 import { m } from '#/paraglide/messages'
@@ -7,7 +7,7 @@ import { m } from '#/paraglide/messages'
 import { Input } from '../../atoms/controls/input'
 import { toast } from '../../atoms/Toaster'
 import { GallerySection, GalleryState } from '../../gallery/frame'
-import { Act } from './Act'
+import { Act, Fold } from './controls'
 import { Suggestions, suggestionsField } from './Suggestions'
 
 export function ChatAtomsGallery() {
@@ -31,6 +31,15 @@ export function ChatAtomsGallery() {
           <Act tone="agent" disabled>
             {m.chat_proposal_accept()}
           </Act>
+        </GalleryState>
+      </GallerySection>
+      <GallerySection name="Fold">
+        <GalleryState label={m.gallery_state_chat_fold()}>
+          <div className="grid gap-2 font-agent text-xs">
+            <Fold label={m.chat_thought({ seconds: 9 })}>
+              <p className="max-w-prose text-faint">{m.gallery_sample_chat_thinking()}</p>
+            </Fold>
+          </div>
         </GalleryState>
       </GallerySection>
     </>

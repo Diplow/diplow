@@ -10,7 +10,7 @@ import { m } from '#/paraglide/messages'
 
 import { Button } from '../../atoms/controls/button'
 import { toast } from '../../atoms/Toaster'
-import { Act } from '../atoms/Act'
+import { Act } from '../atoms/controls'
 import { HexMark } from '../atoms/hex'
 import { plainOf, Said, type Words } from './words'
 

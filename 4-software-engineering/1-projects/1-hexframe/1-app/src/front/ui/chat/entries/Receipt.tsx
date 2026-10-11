@@ -1,7 +1,7 @@
 // What a decision leaves in the conversation once the widget that asked for it gives its surface back:
 // one line, a small hex in the agent's voice, what was done, its Undo while one is possible, and the
 // time. An accepted Proposal and a Turn that applied its changes leave one alike; once undone, it says
-// so. It speaks up when it changes, so a screen reader hears the Undo land, and it keeps the focus its
+// so. Its Undo speaks up when it changes, so a screen reader hears the undoing land, and it keeps the focus its
 // Undo had once that is gone. Arriving, it says nothing itself: whoever swaps it in announces it, as the
 // Proposal does, or the conversation's log.
 import { cn } from 'cn'
@@ -9,7 +9,7 @@ import { useEffect, useRef } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { Act } from '../atoms/Act'
+import { Act } from '../atoms/controls'
 import { HexMark } from '../atoms/hex'
 import { Said, type Words } from '../text/words'
 import { Time } from './time'
@@ -50,7 +50,6 @@ export function Receipt({
     <p
       ref={line}
       tabIndex={-1}
-      aria-live="polite"
       className="flex flex-wrap items-center gap-x-2.5 gap-y-1 font-agent text-[0.78125rem] leading-normal text-muted-foreground outline-none"
     >
       <HexMark
@@ -64,25 +63,28 @@ export function Receipt({
       <span className={cn('min-w-0 wrap-anywhere', undone && 'text-faint')}>
         <Said words={words} voice="agent" />
       </span>
-      {undone ? (
-        <span className="text-faint">· {m.chat_receipt_undone()}</span>
-      ) : (
-        onUndo !== undefined && (
-          <Act
-            className="ml-1.5 text-[0.78125rem]"
-            disabled={pending}
-            onClick={onUndo}
-            onFocus={() => {
-              undoFocused.current = true
-            }}
-            onBlur={() => {
-              undoFocused.current = false
-            }}
-          >
-            {m.chat_receipt_undo()}
-          </Act>
-        )
-      )}
+      {/* Only what changes speaks up: the time, written once hydrated, stays out of it. */}
+      <span aria-live="polite" className="inline-flex items-center">
+        {undone ? (
+          <span className="text-faint">· {m.chat_receipt_undone()}</span>
+        ) : (
+          onUndo !== undefined && (
+            <Act
+              className="ml-1.5 text-[0.78125rem]"
+              disabled={pending}
+              onClick={onUndo}
+              onFocus={() => {
+                undoFocused.current = true
+              }}
+              onBlur={() => {
+                undoFocused.current = false
+              }}
+            >
+              {m.chat_receipt_undo()}
+            </Act>
+          )
+        )}
+      </span>
       <Time at={at} />
     </p>
   )

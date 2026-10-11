@@ -1,12 +1,12 @@
 // The agent's thinking, quieter than its words: smaller, fainter, on a dotted violet line. Live, its
 // last lines scroll past under "Thinking"; once the answer comes it folds into one line that says how
-// long it thought, open on a click. That line is a control, so it keeps the second ink: faint text
-// falls short of a readable contrast.
+// long it thought, open on a click (`Fold`).
 import { cn } from 'cn'
-import { ChevronRight, Sparkle } from 'lucide-react'
-import { useId, useState } from 'react'
+import { Sparkle } from 'lucide-react'
 
 import { m } from '#/paraglide/messages'
+
+import { Fold } from '../atoms/controls'
 
 interface ThinkingProps {
   /** Under way, or done once the answer came. */
@@ -51,33 +51,13 @@ function Live({ seconds, text }: Omit<ThinkingProps, 'state'>) {
 }
 
 function Done({ seconds, text }: Omit<ThinkingProps, 'state'>) {
-  const [open, setOpen] = useState(false)
-  const id = useId()
   return (
     <>
       <Sparkle aria-hidden className="mt-[.3em] size-3 justify-self-center" />
       <div>
-        <button
-          type="button"
-          aria-expanded={open}
-          aria-controls={id}
-          className="flex items-center gap-2 text-muted-foreground outline-offset-2 transition-colors hover:text-foreground focus-visible:outline pointer-coarse:min-h-11"
-          onClick={() => {
-            setOpen(!open)
-          }}
-        >
-          {m.chat_thought({ seconds })}
-          <ChevronRight
-            aria-hidden
-            className={cn(
-              'size-3 transition-transform duration-300 ease-glide motion-reduce:transition-none',
-              open && 'rotate-90',
-            )}
-          />
-        </button>
-        <p id={id} hidden={!open} className={cn(line, 'mt-1.5')}>
-          {text}
-        </p>
+        <Fold label={m.chat_thought({ seconds })}>
+          <p className={cn(line, 'mt-1.5')}>{text}</p>
+        </Fold>
       </div>
     </>
   )

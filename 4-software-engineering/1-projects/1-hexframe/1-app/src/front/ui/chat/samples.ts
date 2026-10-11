@@ -1,11 +1,11 @@
 // The chat's samples on /design-system: a few tiles of a System and what the user, the agent and a Key
 // say about them, every string a message in English and French, each tile woven in where its
-// language puts it (`said`). A click on a tile says in a toast that the canvas would center on it.
+// language puts it (`weave`). A click on a tile says in a toast that the canvas would center on it.
 import { m } from '#/paraglide/messages'
 
 import { toast } from '../atoms/Toaster'
 import type { MentionProps } from './text/Mention'
-import { said } from './text/words'
+import { weave } from './text/words'
 
 const tile = (
   title: string,
@@ -40,10 +40,10 @@ type Tiles = ReturnType<typeof sampleTiles>
 export function sampleWords(tiles: Tiles) {
   const { engineering, projects, tooling, site, oldSite } = tiles
   return {
-    question: said(m.gallery_sample_chat_question, { engineering }),
-    request: said(m.gallery_sample_chat_request, { old: oldSite }),
-    answer: said(m.gallery_sample_chat_answer, { tooling, projects, site }),
-    answerMore: said(m.gallery_sample_chat_answer_more, { projects }),
+    question: weave(m.gallery_sample_chat_question, { engineering }),
+    request: weave(m.gallery_sample_chat_request, { old: oldSite }),
+    answer: weave(m.gallery_sample_chat_answer, { tooling, projects, site }),
+    answerMore: weave(m.gallery_sample_chat_answer_more, { projects }),
   }
 }
 

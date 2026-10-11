@@ -4,17 +4,16 @@
 // time at the end. A run of reads folds into one line, open on a click; what changes something stays
 // out.
 import { cn } from 'cn'
-import { ChevronRight } from 'lucide-react'
-import { useId, useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 
+import { Fold } from '../atoms/controls'
 import { HexMark } from '../atoms/hex'
 import { Said, type Words } from '../text/words'
 import { Time } from './time'
 
 /** Who acted: the user, the agent, a Key from outside, or hexframe itself, a limit or a failure. */
-type Who = 'you' | 'agent' | 'key' | 'app'
+type Who = 'human' | 'agent' | 'key' | 'app'
 
 /** One thing that happened, said in a sentence that names who did it, but the agent's. */
 export interface Happened {
@@ -36,7 +35,7 @@ export interface Folded {
 }
 
 const marks: Record<Who, { hollow: boolean; className: string }> = {
-  you: { hollow: false, className: 'text-human' },
+  human: { hollow: false, className: 'text-human' },
   agent: { hollow: false, className: 'text-agent' },
   key: { hollow: true, className: 'fill-card text-faint' },
   app: { hollow: false, className: 'text-faint' },
@@ -55,7 +54,7 @@ export function Events({ lines }: { lines: ReadonlyArray<Happened | Folded> }) {
     >
       {lines.map((line, index) =>
         // The lines of one thread, never reordered: their place is their key.
-        'summary' in line ? <Fold key={index} folded={line} /> : <Line key={index} event={line} />,
+        'summary' in line ? <Run key={index} folded={line} /> : <Line key={index} event={line} />,
       )}
     </ul>
   )
@@ -82,7 +81,7 @@ function Line({ event }: { event: Happened }) {
       />
       <span className="min-w-0 wrap-anywhere">
         {who === 'agent' && <span className="sr-only">{m.chat_event_by_agent()} </span>}
-        <Said words={words} voice={who === 'you' ? 'human' : 'agent'} />
+        <Said words={words} voice={who === 'human' ? 'human' : 'agent'} />
         {detail !== undefined && <span className="text-faint"> · {detail}</span>}
         {state === 'running' && <span className="sr-only"> ({m.chat_event_running()})</span>}
         {state === 'failed' && <span className="sr-only"> ({m.chat_event_failed()})</span>}
@@ -95,36 +94,25 @@ function Line({ event }: { event: Happened }) {
   )
 }
 
-function Fold({ folded }: { folded: Folded }) {
-  const [open, setOpen] = useState(false)
-  const id = useId()
+function Run({ folded }: { folded: Folded }) {
   return (
     <li className="relative">
       <HexMark className="absolute top-[.3em] -left-6 size-2 text-agent" />
-      <button
-        type="button"
-        aria-expanded={open}
-        aria-controls={id}
-        className="flex items-center gap-2 font-mono text-xs text-muted-foreground outline-offset-2 transition-colors hover:text-foreground focus-visible:outline pointer-coarse:min-h-11"
-        onClick={() => {
-          setOpen(!open)
-        }}
+      <Fold
+        className="font-mono text-xs"
+        label={
+          <>
+            <span className="sr-only">{m.chat_event_by_agent()} </span>
+            {folded.summary}
+          </>
+        }
       >
-        <span className="sr-only">{m.chat_event_by_agent()} </span>
-        {folded.summary}
-        <ChevronRight
-          aria-hidden
-          className={cn(
-            'size-3 transition-transform duration-300 ease-glide motion-reduce:transition-none',
-            open && 'rotate-90',
-          )}
-        />
-      </button>
-      <ul id={id} hidden={!open} className={cn(thread, 'mt-2.5')}>
-        {folded.events.map((event, index) => (
-          <Line key={index} event={event} />
-        ))}
-      </ul>
+        <ul className={cn(thread, 'mt-2.5')}>
+          {folded.events.map((event, index) => (
+            <Line key={index} event={event} />
+          ))}
+        </ul>
+      </Fold>
     </li>
   )
 }
