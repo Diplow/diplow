@@ -56,7 +56,7 @@ export const valueNotes: readonly Note[] = [
   { tokens: ['duration-camera'], note: m.tokens_motion_camera },
   { tokens: ['duration-camera-level'], note: m.tokens_motion_camera_level },
   { tokens: ['duration-turn'], note: m.tokens_motion_turn },
-  { tokens: ['duration-glide'], note: m.tokens_motion_land },
+  { tokens: ['duration-glide'], note: m.tokens_motion_glide_duration },
   { tokens: ['animate-breathe'], note: m.tokens_motion_breathe },
   { tokens: ['animate-draw', 'animate-unfold', 'animate-rise'], note: m.tokens_motion_entrance },
   { tokens: ['animate-sweep'], note: m.tokens_motion_sweep },

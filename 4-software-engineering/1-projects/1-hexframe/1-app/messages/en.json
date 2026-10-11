@@ -1081,7 +1081,7 @@
   "tile_menu_import": "Import a vault here",
   "tile_picker_in": "in {hub}",
   "tile_picker_here": "here",
-  "tokens_motion_land": "A tile moved, gliding to the slot it lands in, or back to its own once refused.",
+  "tokens_motion_glide_duration": "A tile moved, gliding to the slot it lands in, or back to its own once refused.",
   "tokens_motion_ants": "The tile on the move: its rim, a dashed line in your amber, running. With reduced motion it holds still.",
   "tile_moving_banner_before": "Moving ",
   "tile_moving_banner_after": ": a free slot, or a Branch to trade places with",

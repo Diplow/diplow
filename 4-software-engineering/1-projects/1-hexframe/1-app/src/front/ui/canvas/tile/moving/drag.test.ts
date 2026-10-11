@@ -60,6 +60,19 @@ describe('a drag', () => {
     expect(onDrop).toHaveBeenCalledWith(undefined)
   })
 
+  it('lands nowhere once its move stops, the pointer still down', () => {
+    const { onDrop, onMove, hook } = pressed()
+    send('pointermove', 50, 0)
+    act(() => {
+      hook.result.current.cancel()
+    })
+    send('pointermove', 70, 0)
+    send('pointerup', 70, 0)
+    expect(onMove).toHaveBeenCalledOnce()
+    expect(onDrop).not.toHaveBeenCalled()
+    expect(hook.result.current.dragged).toBeUndefined()
+  })
+
   it('never starts under a finger, nor from another button than the main one', () => {
     for (const event of [down('touch'), down('mouse', 2)]) {
       const { onStart } = pressed(event)

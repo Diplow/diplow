@@ -37,7 +37,8 @@ export function unitsIn(svg: RefObject<SVGSVGElement | null>): Units {
 
 /**
  * `press` starts a drag from a pointer going down on a tile, a mouse's main button or a pen; the drag
- * is the hook's state until it is let go, and its listeners go with it, or with the hook.
+ * is the hook's state until it is let go, and its listeners go with it, or with the hook. `cancel`
+ * drops it where it is, landing nowhere: the move it served has stopped.
  */
 export function useDrag(units: Units) {
   const [dragged, setDragged] = useState<Dragged>()
@@ -82,5 +83,9 @@ export function useDrag(units: Units) {
     addEventListener('pointerup', up)
     addEventListener('pointercancel', cancel)
   }
-  return { dragged, press }
+  const cancel = () => {
+    stop.current?.()
+    setDragged(undefined)
+  }
+  return { dragged, press, cancel }
 }

@@ -1,8 +1,8 @@
 // A frame in small, inside a menu: where a tile is added or moved to, the place itself as the submenu
 // (HEX-105's proposal, from components.html's #menu). Its heart, then its six: a free slot dashed with
-// a plus, a taken one with its title, offering a swap where it can trade places, the tile acting
-// marked "here". A slot the hand can choose is a line of the menu (`MenuChoice`): ↑ and ↓ reach it,
-// Enter chooses it, and the line under the frame says what choosing it will do.
+// a plus, a taken one with its title, the tile acting marked "here". What each place offers is its
+// caller's (`choose`); a place the hand can choose is a line of the menu (`MenuChoice`): ↑ and ↓
+// reach it, Enter chooses it, and the line under the frame says what choosing it will do.
 import { cn } from 'cn'
 import { useState } from 'react'
 
@@ -11,7 +11,7 @@ import { m } from '#/paraglide/messages'
 import { MenuChoice } from '../../../atoms/Menu'
 import { directions, neighbor, type Direction, type Hex } from '../../geometry/geometry'
 import { points } from '../light'
-import type { Seat } from '../moving/move'
+import type { Frame, Seat } from '../moving/move'
 
 /** What a choice does, and its words, which the line under the frame says while it is lit. */
 interface PickerChoice {
@@ -20,20 +20,14 @@ interface PickerChoice {
 }
 
 /** A frame as a picker draws it: the tile at its heart, and what holds each of its Directions. */
-export interface PickerFrame {
-  hub: string
-  /** A Direction holding no tile is free; a Branch trades places with a tile moving in. */
-  members: Partial<Record<Direction, Seat & { title: string }>>
-}
+export type PickerFrame = { hub: string } & Frame<Seat & { title: string }>
 
 interface PickerProps {
   frame: PickerFrame
   /** Where the tile acting stands, when it is in this frame. */
   self?: Direction | undefined
-  /** What choosing a free slot does. */
-  free: (direction: Direction) => PickerChoice
-  /** What choosing a taken one does, a swap, or nothing where it can't trade places. */
-  taken?: (direction: Direction) => PickerChoice | undefined
+  /** What choosing a place does, or nothing where it can't be chosen. */
+  choose: (direction: Direction) => PickerChoice | undefined
 }
 
 const radius = 26
@@ -42,10 +36,13 @@ const height = 160
 const origin = { x: 0, y: 0 }
 
 /** Words cut to fit a small hex: past `room` letters, its first ones and an ellipsis. */
-const cut = (title: string, room: number) =>
-  title.length <= room ? title : `${title.slice(0, room - 1)}…`
+function cut(title: string, room: number): string {
+  // By code point, so a letter outside the basic plane is never split in two.
+  const letters = Array.from(title)
+  return letters.length <= room ? title : `${letters.slice(0, room - 1).join('')}…`
+}
 
-export function Picker({ frame, self, free, taken }: PickerProps) {
+export function Picker({ frame, self, choose }: PickerProps) {
   const [said, setSaid] = useState<string>()
   const heart = { center: origin, radius: radius * 1.06 }
   return (
@@ -62,11 +59,11 @@ export function Picker({ frame, self, free, taken }: PickerProps) {
         <Place hex={{ center: origin, radius }} look="hub" words={cut(frame.hub, 9)} />
         {directions.map((direction) => {
           const hex = { center: neighbor(heart, direction).center, radius }
-          const member = frame.members[direction]
+          const member = frame.seats[direction]
           if (direction === self) {
             return <Place key={direction} hex={hex} look="self" words={m.tile_picker_here()} />
           }
-          const choice = member === undefined ? free(direction) : taken?.(direction)
+          const choice = choose(direction)
           const place = (
             <Place
               hex={hex}

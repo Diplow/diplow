@@ -9,26 +9,37 @@ export interface Seat {
   swaps: boolean
 }
 
-/** What a frame's six Directions hold; a Direction holding nothing is free. */
-export type Seats = Partial<Record<Direction, Seat>>
+/**
+ * A frame while a tile moves in it: what holds each of its Directions, a Direction holding nothing
+ * being free, and which free ones take the tile.
+ */
+export interface Frame<S extends Seat = Seat> {
+  seats: Partial<Record<Direction, S>>
+  /**
+   * Whether a free Direction takes the tile moving, which Mapping says (`slotOf`, `decide`: a Leaf
+   * into a ring of Branches, say) and its caller asks; every one by default.
+   */
+  lands?: (direction: Direction) => boolean
+}
 
 /**
- * What a place does while a tile moves: the tile itself, lifted; a free slot, offering itself; a
- * tile that trades places, its swap at its foot; the rest, stepped back.
+ * What a place does while a tile moves: the tile itself, lifted; a free slot, offering itself, or
+ * shut where Mapping would refuse it; a tile that trades places, its swap at its foot; the rest,
+ * stepped back.
  */
-export type Part = 'lifted' | 'landing' | 'swap' | 'aside'
+export type Part = 'lifted' | 'landing' | 'shut' | 'swap' | 'aside'
 
 /** What each Direction offers the tile moving out of `from`. */
-export function partOf(seats: Seats, from: Direction, direction: Direction): Part {
+export function partOf({ seats, lands }: Frame, from: Direction, direction: Direction): Part {
   if (direction === from) return 'lifted'
   const seat = seats[direction]
-  if (seat === undefined) return 'landing'
+  if (seat === undefined) return (lands?.(direction) ?? true) ? 'landing' : 'shut'
   return seat.swaps ? 'swap' : 'aside'
 }
 
 /** Whether the tile moving out of `from` can land in `to`: a free slot, or a tile that trades. */
-export function takes(seats: Seats, from: Direction, to: Direction): boolean {
-  const part = partOf(seats, from, to)
+export function takes(frame: Frame, from: Direction, to: Direction): boolean {
+  const part = partOf(frame, from, to)
   return part === 'landing' || part === 'swap'
 }
 
@@ -58,7 +69,7 @@ export function landed<T>(
 export function dropAt(
   point: Point,
   hearts: Readonly<Record<Direction, Point>>,
-  { seats, from, reach }: { seats: Seats; from: Direction; reach: number },
+  { frame, from, reach }: { frame: Frame; from: Direction; reach: number },
 ): Direction | undefined {
   let nearest: { direction: Direction; distance: number } | undefined
   for (const [key, heart] of Object.entries(hearts)) {
@@ -68,7 +79,7 @@ export function dropAt(
       nearest = { direction, distance }
     }
   }
-  return nearest !== undefined && takes(seats, from, nearest.direction)
+  return nearest !== undefined && takes(frame, from, nearest.direction)
     ? nearest.direction
     : undefined
 }

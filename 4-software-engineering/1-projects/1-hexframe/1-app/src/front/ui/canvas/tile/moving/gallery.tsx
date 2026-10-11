@@ -17,7 +17,7 @@ import { directionName } from '../menu/verbs'
 import { Slot } from '../places'
 import { branchOf, fixture, ring, trades, useScale, wordsOf } from '../specimens'
 import { Tile, type TileLook } from '../Tile'
-import { dropAt, landed, partOf, type Seats } from './move'
+import { dropAt, landed, partOf, type Frame } from './move'
 import { unitsIn, useDrag } from './drag'
 import { Aside, LandingSlot, Lifted, MoveBanner, SwapDisc, withoutFoot } from './Moving'
 
@@ -88,7 +88,7 @@ interface Seated {
   look: TileLook
 }
 
-type Frame = Partial<Record<Direction, Seated>>
+type Ring = Partial<Record<Direction, Seated>>
 
 /** A move landing: where from and where to, gliding there, flaring once refused, or gliding back. */
 interface Landing {
@@ -107,10 +107,12 @@ const hearts = Object.fromEntries(
   directions.map((direction) => [direction, neighbor(centerHex, direction).center]),
 ) as Record<Direction, Point>
 
-const seatsOf = (frame: Frame): Seats =>
-  Object.fromEntries(
-    Object.entries(frame).map(([direction, seated]) => [direction, { swaps: trades(seated.tile) }]),
-  )
+/** The ring as a move reads it: who trades places; every free slot takes the tile on the fixture. */
+const frameOf = (ring: Ring): Frame => ({
+  seats: Object.fromEntries(
+    Object.entries(ring).map(([direction, seated]) => [direction, { swaps: trades(seated.tile) }]),
+  ),
+})
 
 /** A CSS duration, `600ms` or `0.6s`, in milliseconds; none with reduced motion. */
 function glideOf(svg: SVGSVGElement | null): number {
@@ -126,12 +128,12 @@ function glideOf(svg: SVGSVGElement | null): number {
  * back once the server refuses. The frame's state, and every gesture on it.
  */
 function useMove(svg: RefObject<SVGSVGElement | null>) {
-  const [frame, setFrame] = useState<Frame>(ring)
+  const [frame, setFrame] = useState<Ring>(ring)
   const [moving, setMoving] = useState<Direction>()
   const [landing, setLanding] = useState<Landing>()
   const [over, setOver] = useState<Direction>()
   const [refuses, setRefuses] = useState(false)
-  const { dragged, press } = useDrag(unitsIn(svg))
+  const { dragged, press, cancel } = useDrag(unitsIn(svg))
   const timers = useRef<ReturnType<typeof setTimeout>[]>([])
   // Each tile's shape, by its id, to give it the focus back once it has landed or stopped.
   const tiles = useRef(new Map<string, HTMLElement>())
@@ -141,7 +143,8 @@ function useMove(svg: RefObject<SVGSVGElement | null>) {
     },
     [],
   )
-  const seats = seatsOf(frame)
+  // What the move reads of the ring: the ring itself is what the frame draws.
+  const offers = frameOf(frame)
   const after = (ms: number, then: () => void) => {
     timers.current.push(setTimeout(then, ms))
   }
@@ -150,6 +153,8 @@ function useMove(svg: RefObject<SVGSVGElement | null>) {
   }
   const stop = () => {
     if (landing !== undefined || moving === undefined) return
+    // A tile dragged when the move stops goes back, and its drop lands nowhere.
+    cancel()
     setMoving(undefined)
     focus(frame[moving]?.tile.id)
   }
@@ -193,7 +198,7 @@ function useMove(svg: RefObject<SVGSVGElement | null>) {
   const start = (direction: Direction) => {
     if (landing === undefined && frame[direction] !== undefined) setMoving(direction)
   }
-  const reach = { seats, reach: frameRadius * 0.8 }
+  const reach = { frame: offers, reach: frameRadius * 0.8 }
   /** What a seated tile is handed: a mouse drags it, its shape kept for the focus. */
   const handOf = (direction: Direction, { id, title }: TileNode): Hand => ({
     'aria-label': title,
@@ -220,7 +225,7 @@ function useMove(svg: RefObject<SVGSVGElement | null>) {
   })
   return {
     frame,
-    seats,
+    offers,
     moving,
     landing,
     over,
@@ -259,7 +264,7 @@ function MovingFrame() {
   const svg = useRef<SVGSVGElement>(null)
   const scale = useScale(svg, frameWidth)
   const move = useMove(svg)
-  const { frame, seats, moving, landing, over, land } = move
+  const { frame, offers, moving, landing, over, land } = move
   const movingTitle = moving === undefined ? undefined : frame[moving]?.tile.title
   const center = (
     <Tile
@@ -287,11 +292,11 @@ function MovingFrame() {
         {directions.map((direction) => {
           if (frame[direction] !== undefined) return null
           const hex = { center: hearts[direction], radius: frameRadius * gap }
-          const offers =
+          const takes =
             moving !== undefined &&
             landing === undefined &&
-            partOf(seats, moving, direction) === 'landing'
-          return offers ? (
+            partOf(offers, moving, direction) === 'landing'
+          return takes ? (
             <LandingSlot
               key={`free:${String(direction)}`}
               hex={hex}
@@ -378,9 +383,9 @@ function SeatedTile({
   move: Move
   scale: number
 }) {
-  const { seats, moving, landing, over, dragged, land, handOf } = move
+  const { offers, moving, landing, over, dragged, land, handOf } = move
   const hex = { center: hearts[direction], radius: frameRadius * gap }
-  const part = moving === undefined ? undefined : partOf(seats, moving, direction)
+  const part = moving === undefined ? undefined : partOf(offers, moving, direction)
   const { x, y } = shiftOf(move, direction)
   const refused = landing?.phase === 'refused' && landing.from === direction
   const tile = (

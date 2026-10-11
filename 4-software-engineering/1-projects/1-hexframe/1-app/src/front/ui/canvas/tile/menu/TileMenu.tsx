@@ -36,9 +36,9 @@ import { m } from '#/paraglide/messages'
 
 import { Menu, MenuDrawn, type MenuEntry } from '../../../atoms/Menu'
 import type { Shortcut } from '../../../atoms/keys'
-import type { Direction } from '../../geometry/geometry'
 import type { Hand } from '../../keys'
 import { HoverCard } from '../../layouts/HoverCard'
+import { partOf } from '../moving/move'
 import { Picker, type PickerFrame } from './Picker'
 import {
   actsAtOnce,
@@ -59,7 +59,8 @@ interface TileMenuProps {
    * stands in, where it moves. A line whose frame is missing is left out.
    */
   frames?: { holds?: PickerFrame; standsIn?: PickerFrame }
-  onAct: (act: Act) => void
+  /** What a chosen line does: its act, and the words its line said, for a toast or a timeline. */
+  onAct: OnAct
   /** The tile, or the free slot, handed what its menu and its card need of it. */
   children: (hand: Hand) => ReactElement
 }
@@ -209,11 +210,19 @@ function lineOf(verb: Verb, subject: Subject): Line {
   }
 }
 
+/** What the menu hands its caller once a line is chosen: the act, and the words its line said. */
+type OnAct = (act: Act, said: string) => void
+
+/** A line that hands its act to the caller, with its own words. */
+const acting = (onAct: OnAct, act: Act, label: string) => () => {
+  onAct(act, label)
+}
+
 /** The subject's lines, its groups apart, each running its verb, the place submenus on their frame. */
 function entriesOf(
   subject: Subject,
   frames: NonNullable<TileMenuProps['frames']>,
-  onAct: (act: Act) => void,
+  onAct: OnAct,
 ): MenuEntry[] {
   return groupsOf(subject)
     .map((group) =>
@@ -222,17 +231,7 @@ function entriesOf(
         const { icon, shortcut, tone } = line
         const label = line.label()
         if (actsAtOnce(verb)) {
-          return [
-            {
-              label,
-              icon,
-              shortcut,
-              tone,
-              onSelect: () => {
-                onAct({ verb })
-              },
-            },
-          ]
+          return [{ label, icon, shortcut, tone, onSelect: acting(onAct, { verb }, label) }]
         }
         const submenu = submenuOf(verb, subject, frames, onAct)
         return submenu === undefined ? [] : [{ label, icon, shortcut, submenu }]
@@ -244,16 +243,19 @@ function entriesOf(
 
 type Submenu = Extract<MenuEntry, { submenu: unknown }>['submenu']
 
+/** A choice in a frame: its words, and the act it hands the caller with them. */
+const choice = (onAct: OnAct, act: Act, label: string) => ({
+  label,
+  onSelect: acting(onAct, act, label),
+})
+
 /** A verb's submenu, or none where its frame is missing, and its line is left out. */
 function submenuOf(
   verb: 'add' | 'move' | 'copy',
   subject: Subject,
   { holds, standsIn }: NonNullable<TileMenuProps['frames']>,
-  onAct: (act: Act) => void,
+  onAct: OnAct,
 ): Submenu | undefined {
-  const at = (act: 'add' | 'move' | 'swap', direction: Direction) => () => {
-    onAct({ verb: act, at: direction })
-  }
   switch (verb) {
     case 'add':
       if (holds === undefined) return undefined
@@ -262,72 +264,72 @@ function submenuOf(
         picture: (
           <Picker
             frame={holds}
-            free={(direction) => ({
-              label: m.tile_menu_add_at({ direction: directionName(direction), hub: holds.hub }),
-              onSelect: at('add', direction),
-            })}
+            choose={(at) =>
+              holds.seats[at] === undefined
+                ? choice(
+                    onAct,
+                    { verb: 'add', at },
+                    m.tile_menu_add_at({ direction: directionName(at), hub: holds.hub }),
+                  )
+                : undefined
+            }
           />
         ),
       }
-    case 'move':
+    case 'move': {
       if (standsIn === undefined || subject.at === 'center') return undefined
+      const from = subject.at
+      const elsewhere = m.tile_menu_move_elsewhere()
       return {
         label: m.tile_menu_move_where(),
         picture: (
           <Picker
             frame={standsIn}
-            self={subject.at}
-            free={(direction) => ({
-              label: m.tile_menu_move_to({ direction: directionName(direction) }),
-              onSelect: at('move', direction),
-            })}
-            taken={(direction) => {
-              const held = standsIn.members[direction]
-              return held?.swaps === true
-                ? {
-                    label: m.tile_menu_swap_with({ title: held.title }),
-                    onSelect: at('swap', direction),
-                  }
-                : undefined
+            self={from}
+            // The frame offers what the canvas does while the tile moves (`partOf`).
+            choose={(at) => {
+              switch (partOf(standsIn, from, at)) {
+                case 'landing':
+                  return choice(
+                    onAct,
+                    { verb: 'move', at },
+                    m.tile_menu_move_to({ direction: directionName(at) }),
+                  )
+                case 'swap':
+                  return choice(
+                    onAct,
+                    { verb: 'swap', at },
+                    m.tile_menu_swap_with({ title: standsIn.seats[at]?.title ?? '' }),
+                  )
+                default:
+                  return undefined
+              }
             }}
           />
         ),
         entries: [
           {
-            label: m.tile_menu_move_elsewhere(),
+            label: elsewhere,
             icon: <Search />,
-            onSelect: () => {
-              onAct({ verb: 'move-elsewhere' })
-            },
+            onSelect: acting(onAct, { verb: 'move-elsewhere' }, elsewhere),
           },
         ],
       }
-    case 'copy':
+    }
+    case 'copy': {
+      const copies = [
+        { verb: 'copy-link', icon: <Link />, label: m.tile_menu_copy_link() },
+        { verb: 'copy-title', icon: <Copy />, label: m.tile_menu_copy_title() },
+        { verb: 'copy-mention', icon: <AtSign />, label: m.tile_menu_copy_mention() },
+      ] as const
       return {
         label: m.tile_menu_copy(),
-        entries: [
-          {
-            label: m.tile_menu_copy_link(),
-            icon: <Link />,
-            onSelect: () => {
-              onAct({ verb: 'copy-link' })
-            },
-          },
-          {
-            label: m.tile_menu_copy_title(),
-            icon: <Copy />,
-            onSelect: () => {
-              onAct({ verb: 'copy-title' })
-            },
-          },
-          {
-            label: m.tile_menu_copy_mention(),
-            icon: <AtSign />,
-            onSelect: () => {
-              onAct({ verb: 'copy-mention' })
-            },
-          },
-        ],
+        entries: copies.map(({ verb: copy, icon, label }) => ({
+          label,
+          icon,
+          onSelect: acting(onAct, { verb: copy }, label),
+        })),
       }
+    }
   }
 }

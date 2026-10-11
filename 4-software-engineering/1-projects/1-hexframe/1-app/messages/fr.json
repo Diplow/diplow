@@ -1081,7 +1081,7 @@
   "tile_menu_import": "Importer un coffre ici",
   "tile_picker_in": "dans {hub}",
   "tile_picker_here": "ici",
-  "tokens_motion_land": "Une tuile déplacée, qui glisse jusqu’à sa place, ou revient à la sienne une fois refusée.",
+  "tokens_motion_glide_duration": "Une tuile déplacée, qui glisse jusqu’à sa place, ou revient à la sienne une fois refusée.",
   "tokens_motion_ants": "La tuile en mouvement : son bord, un trait pointillé de votre ambre, qui court. Avec moins d’animations, il reste immobile.",
   "tile_moving_banner_before": "Vous déplacez ",
   "tile_moving_banner_after": " : une place libre, ou une Branche avec qui l’échanger",

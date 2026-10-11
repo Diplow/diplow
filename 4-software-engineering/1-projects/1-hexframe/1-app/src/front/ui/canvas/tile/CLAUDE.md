@@ -1,0 +1,28 @@
+---
+title: tile
+parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile
+owner: diplo
+preview: >-
+  The tile proposed (HEX-104) and acting on it (HEX-105): a tile drawn by its
+  light alone, the places it stands in, its menu and its hover card, and what
+  the canvas draws while a tile moves. Shown on /design-system on the fixture
+  System; HEX-106 and HEX-107 put them on home.
+---
+# tile
+
+The tile and acting on it, proposed beside what home draws today ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE|canvas]]): HEX-106 puts the tile in place of `../Tile.tsx`, `../Frame.tsx` and `../look.tsx`, HEX-107 its menu, its card and its move in place of the card beside the canvas and the Move mode. The choices behind them are in the register, `hexframe-app-design-system-v1/decisions.md#DEC-27` and `#DEC-33`.
+
+| Path | Holds |
+|---|---|
+| `Tile.tsx` | `Tile`, an SVG group drawn by its light alone, by its kind (the root, untitled, a Branch, a Leaf, a Context tile, a Reference, broken, the agent's draft, a ring too full), `TileLook` a union on it, so a Branch's foot, a Leaf's file and clash, a Reference's place and a list's names go only where they mean something, the words under them its own; its place (in a ring, the center, the heart of its ground, beside the frame, far), a write on its way or refused, a state the hand would give held without it, a bloom or a fold out of its parent's heart, its siblings `--stagger-bloom` apart, its words fitted to its size on screen through `scale`; a button when its caller says what a click does, its kind and its write said to a screen reader; and a `hand`, what its menu and its hover card hand it, which makes it take the focus and keeps it lit while its menu is open |
+| `places.tsx` | `Slot`, a Direction holding no tile, a plus where a click adds one, dotted where none can, a sweep where tiles will be, taking a `hand` for its menu; `Ground`, what a hex gives way to when it opens in place, the center's Context teal and dashed |
+| `light.tsx` | What they are drawn with: the hex's points, a fade, a blur, and `Sweep`, the light that says something is on its way |
+| `menu/` | Acting on a tile where it is. `TileMenu.tsx`: `TileMenu`, the tile in its hover card and its menu, by a right click, a long press, ⇧F10 or the menu key, each line's key run on the focused tile too, each chosen line handing its caller its act and its words; `TileMenuDrawn`, a kind's menu held open; `useFinger`, whether the hand is a finger. `Picker.tsx`: `Picker`, the frame in small the Add and Move submenus show, each place offering what its caller says, the Move frame what `partOf` says. `verbs.ts`, pure and tested: what each kind offers where it stands, the root only ever at the center, grouped by distance (`groupsOf`), turning into the other kind where its caller says Mapping allows it; what a click does and a tap, which goes in (`clickOf`); its place in words (`placeOf`). `gallery.tsx`, `TileMenuGallery`: a live frame, then each kind's menu held open |
+| `moving/` | A tile on the move. `Moving.tsx`: `MoveBanner`, what moves and Stop; `Lifted`, its rim running in your amber; `LandingSlot`, a free slot offering itself; `SwapDisc`, a Branch's swap at its foot; `Aside`, the rest stepped back; `withoutFoot`, no Branch's frame at its foot while a tile moves. `move.ts`, pure and tested: a `Frame`, its seats, who trades places, and which free slots take the tile, as its caller says Mapping would; what each place offers (`partOf`), the ring once landed (`landed`) and where a drag lands (`dropAt`). `drag.ts`, `useDrag`, tested: a drag under a mouse or a pen, never a finger, past a few units, in the canvas's units (`unitsIn`), cancelled when its move stops. `gallery.tsx`, `MovingGallery`: a live frame, dragged or moved from a button, the server refusing at will, then each part held still; its `useMove` holds the move's lifecycle until HEX-107 puts it in the canvas's state hooks |
+| `gallery.tsx`, `specimens.tsx` | `TileGallery`, the tile on `/design-system`: its kinds, its states, its words from far to near, and `specimens.tsx`'s live frame, whose Branches open in place, every hex keyed so focus stays on a tile as it opens; `Specimen` and `noop`, which the menu's and the move's galleries share, and the fixture's `ring`, `trades` among it |
+
+## Rules
+
+- **What Mapping decides comes in from the caller.** Whether a tile turns into the other kind (`Subject.turns`), trades places (`Seat.swaps`) or may land in a free slot (`Frame.lands`) is Mapping's `decide`, `swapsWith` and `slotOf`; the pieces here draw the answer, and the page reads it off its fixture once.
+- **A finger never drags a tile, and its tap goes in.** `useDrag` ignores a touch; a finger moves a tile through its menu's frame, or "Somewhere else…" and a tap on a slot. Under `pointer-coarse` a tap goes into a tile (`clickOf`), since a finger has no double click.
+- **A line's key is the tile's too.** The menu shows each line's key, and that key runs it on the focused tile, the menu shut; ⇧↵ goes in, so a tile's own Enter is the plain key alone (`buttonKeys`).

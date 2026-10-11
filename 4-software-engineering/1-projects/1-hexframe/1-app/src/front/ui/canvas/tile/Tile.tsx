@@ -250,13 +250,7 @@ export function Tile(props: TileProps) {
                 'aria-label': action.label,
                 className: 'group cursor-pointer outline-none',
                 onClick: action.onSelect,
-                // ⇧↵ is no click: it goes in, a line of the tile's menu (`canvas/tile/menu/`).
-                ...buttonKeys({
-                  onEnter: (event) => {
-                    if (!event.shiftKey) action.onSelect()
-                  },
-                  onSpace: action.onSelect,
-                }),
+                ...buttonKeys({ onEnter: action.onSelect, onSpace: action.onSelect }),
               })}
           aria-description={description}
           aria-busy={pending || undefined}

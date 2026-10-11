@@ -1,17 +1,18 @@
 import { describe, expect, it } from 'vitest'
 
 import type { Direction, Point } from '../../geometry/geometry'
-import { dropAt, landed, partOf, takes, type Seats } from './move'
+import { dropAt, landed, partOf, takes, type Frame } from './move'
 
-const seats: Seats = {
+const seats = {
   1: { swaps: true },
   2: { swaps: true },
   3: { swaps: false },
 }
+const frame: Frame = { seats }
 
 describe('a tile on the move', () => {
   it('lifts, while each free slot offers itself, each Branch its swap, and the rest steps back', () => {
-    expect(([1, 2, 3, 4] as const).map((direction) => partOf(seats, 1, direction))).toEqual([
+    expect(([1, 2, 3, 4] as const).map((direction) => partOf(frame, 1, direction))).toEqual([
       'lifted',
       'swap',
       'aside',
@@ -20,10 +21,17 @@ describe('a tile on the move', () => {
   })
 
   it('lands in a free slot or on a tile that trades, never on a Leaf nor on itself', () => {
-    expect(takes(seats, 1, 4)).toBe(true)
-    expect(takes(seats, 1, 2)).toBe(true)
-    expect(takes(seats, 1, 3)).toBe(false)
-    expect(takes(seats, 1, 1)).toBe(false)
+    expect(takes(frame, 1, 4)).toBe(true)
+    expect(takes(frame, 1, 2)).toBe(true)
+    expect(takes(frame, 1, 3)).toBe(false)
+    expect(takes(frame, 1, 1)).toBe(false)
+  })
+
+  it('finds a free slot shut where its caller says Mapping would refuse the tile', () => {
+    const fussy: Frame = { seats, lands: (direction) => direction !== 4 }
+    expect(partOf(fussy, 1, 4)).toBe('shut')
+    expect(partOf(fussy, 1, 5)).toBe('landing')
+    expect(takes(fussy, 1, 4)).toBe(false)
   })
 
   it('leaves its Direction free once moved, and takes the other one’s once swapped', () => {
@@ -46,7 +54,7 @@ describe('a drag let go', () => {
     5: { x: -50, y: 87 },
     6: { x: -100, y: 0 },
   }
-  const drop = (point: Point) => dropAt(point, hearts, { seats, from: 1, reach: 40 })
+  const drop = (point: Point) => dropAt(point, hearts, { frame, from: 1, reach: 40 })
 
   it('lands on the nearest place within reach that takes it', () => {
     expect(drop({ x: 55, y: 80 })).toBe(4)
