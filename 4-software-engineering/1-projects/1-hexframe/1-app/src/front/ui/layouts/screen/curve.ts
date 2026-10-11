@@ -29,6 +29,13 @@ export function cutAlongCurve(edge: string, steps = 48): string {
   return `polygon(0 0, ${curve.join(', ')}, 0 100%)`
 }
 
+/**
+ * The curve as an SVG path, in a box as wide in px as the curve bows and 100 units tall whatever the
+ * screen's height, its line half a pixel in so it stays crisp. A quadratic through its control point
+ * at mid-height, `bow` out, so it passes `offsetAt` at every height.
+ */
+export const curvePath = `M0.5 0 Q${String(bow + 0.5)} 50 0.5 100`
+
 /** Where the messages scroll, as measured: the stretch of curve beside them is the track. */
 export interface Track {
   /** The screen's height, in px. */
@@ -57,6 +64,14 @@ export interface Thumb {
   size: number
   /** Its rays along the curve, in degrees. */
   angle: number
+}
+
+/** The stretch of curve beside the messages, in `curvePath`'s box, `steps` segments long. */
+export function trackAlongCurve({ height, top, length }: Track, steps = 24): string {
+  return Array.from({ length: steps + 1 }, (_, step) => {
+    const t = (top + (length * step) / steps) / height
+    return `${step === 0 ? 'M' : 'L'}${(0.5 + offsetAt(t)).toFixed(2)} ${(t * 100).toFixed(2)}`
+  }).join(' ')
 }
 
 /** The thumb's shortest stretch, so a long conversation still shows a star you can catch. */

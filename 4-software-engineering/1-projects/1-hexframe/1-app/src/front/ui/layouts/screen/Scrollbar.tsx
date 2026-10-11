@@ -5,70 +5,28 @@
 import { cn } from 'cn'
 import { useEffect, useId, useRef, useState, type MouseEvent, type RefObject } from 'react'
 
-import { bow, offsetAt, scrollTopAt, thumbOf, type Track } from './curve'
+import { bow, curvePath, scrollTopAt, thumbOf, trackAlongCurve, type Track } from './curve'
 
 interface ScrollbarProps {
   /** The screen, which the curve spans from top to foot. */
   screen: RefObject<HTMLElement | null>
   /** The messages' scroller, which the star follows and moves. */
   scroller: RefObject<HTMLElement | null>
+  /** What the scroller holds, whose growth its own box doesn't show. */
+  content: RefObject<HTMLElement | null>
 }
 
 /** The hairline's box: the curve's widest offset from the chat's edge, and a pixel for the line. */
 const width = bow / 2 + 1
 
-/** The curve in the box's own units: as wide as the box in px, 100 tall whatever the screen's height. */
-const path = `M0.5 0 Q${String(bow + 0.5)} 50 0.5 100`
-
 /** How long the star stays bright after the messages last moved. */
 const stirFor = 900
 
-export function Scrollbar({ screen, scroller }: ScrollbarProps) {
-  const [track, setTrack] = useState<Track>({ height: 0, top: 0, length: 0 })
-  const [scroll, setScroll] = useState({ top: 0, height: 0, client: 0 })
-  const [stirred, setStirred] = useState(false)
+export function Scrollbar({ screen, scroller, content }: ScrollbarProps) {
+  const { track, scroll, stirred } = useMeasured(screen, scroller, content)
   // Where the pointer and the star were when the star was caught.
   const [drag, setDrag] = useState<{ pointer: number; star: number } | undefined>(undefined)
-  const stir = useRef<ReturnType<typeof setTimeout>>(undefined)
   const id = useId().replace(/[^\w-]/g, '')
-
-  useEffect(() => {
-    const messages = scroller.current
-    const frame = screen.current
-    if (messages === null || frame === null) return undefined
-    const measure = () => {
-      const box = frame.getBoundingClientRect()
-      const shown = messages.getBoundingClientRect()
-      // The track keeps clear of the messages' ends, where they fade.
-      setTrack({ height: box.height, top: shown.top - box.top + 12, length: shown.height - 24 })
-      setScroll({
-        top: messages.scrollTop,
-        height: messages.scrollHeight,
-        client: messages.clientHeight,
-      })
-    }
-    const onScroll = () => {
-      measure()
-      setStirred(true)
-      clearTimeout(stir.current)
-      stir.current = setTimeout(() => {
-        setStirred(false)
-      }, stirFor)
-    }
-    measure()
-    const resized = new ResizeObserver(measure)
-    resized.observe(frame)
-    resized.observe(messages)
-    // The messages' content grows as the conversation does, which their own box doesn't show; the
-    // screen keeps it in one element, whatever the slot holds.
-    if (messages.firstElementChild !== null) resized.observe(messages.firstElementChild)
-    messages.addEventListener('scroll', onScroll, { passive: true })
-    return () => {
-      resized.disconnect()
-      messages.removeEventListener('scroll', onScroll)
-      clearTimeout(stir.current)
-    }
-  }, [screen, scroller])
 
   const thumb = thumbOf(track, scroll)
   const scrollTo = (top: number, smooth: boolean) => {
@@ -83,7 +41,7 @@ export function Scrollbar({ screen, scroller }: ScrollbarProps) {
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute inset-y-0 left-(--screen-edge) z-30 hidden @min-[40rem]:block"
+      className="pointer-events-none absolute inset-y-0 left-(--screen-edge) z-30 hidden @wide:block"
       style={{ width }}
     >
       <svg
@@ -112,11 +70,16 @@ export function Scrollbar({ screen, scroller }: ScrollbarProps) {
             </linearGradient>
           )}
         </defs>
-        <path d={path} fill="none" stroke={`url(#${id}-edge)`} vectorEffect="non-scaling-stroke" />
+        <path
+          d={curvePath}
+          fill="none"
+          stroke={`url(#${id}-edge)`}
+          vectorEffect="non-scaling-stroke"
+        />
         {thumb && (
           <>
             <path
-              d={path}
+              d={curvePath}
               fill="none"
               stroke={`url(#${id}-lit)`}
               strokeWidth={1.4}
@@ -128,7 +91,7 @@ export function Scrollbar({ screen, scroller }: ScrollbarProps) {
             />
             {/* The track: a click on the hairline beside the messages scrolls them there. */}
             <path
-              d={trackPath(track)}
+              d={trackAlongCurve(track)}
               fill="none"
               stroke="transparent"
               strokeWidth={16}
@@ -178,15 +141,57 @@ export function Scrollbar({ screen, scroller }: ScrollbarProps) {
   )
 }
 
-/** The stretch of curve beside the messages, in the box's units. */
-function trackPath({ height, top, length }: Track) {
-  const steps = 24
-  return Array.from({ length: steps + 1 }, (_, step) => {
-    const y = top + (length * step) / steps
-    const t = y / height
-    const x = 0.5 + offsetAt(t)
-    return `${step === 0 ? 'M' : 'L'}${x.toFixed(2)} ${(t * 100).toFixed(2)}`
-  }).join(' ')
+/**
+ * The track and the scroll, measured once laid out and again whenever the screen, the scroller or
+ * what it holds changes size; and whether the messages moved a moment ago, which lights the star.
+ */
+function useMeasured(
+  screen: RefObject<HTMLElement | null>,
+  scroller: RefObject<HTMLElement | null>,
+  content: RefObject<HTMLElement | null>,
+) {
+  const [track, setTrack] = useState<Track>({ height: 0, top: 0, length: 0 })
+  const [scroll, setScroll] = useState({ top: 0, height: 0, client: 0 })
+  const [stirred, setStirred] = useState(false)
+  const stir = useRef<ReturnType<typeof setTimeout>>(undefined)
+
+  useEffect(() => {
+    const messages = scroller.current
+    const frame = screen.current
+    if (messages === null || frame === null) return undefined
+    const measure = () => {
+      const box = frame.getBoundingClientRect()
+      const shown = messages.getBoundingClientRect()
+      // The track keeps clear of the messages' ends, where they fade.
+      setTrack({ height: box.height, top: shown.top - box.top + 12, length: shown.height - 24 })
+      setScroll({
+        top: messages.scrollTop,
+        height: messages.scrollHeight,
+        client: messages.clientHeight,
+      })
+    }
+    const onScroll = () => {
+      measure()
+      setStirred(true)
+      clearTimeout(stir.current)
+      stir.current = setTimeout(() => {
+        setStirred(false)
+      }, stirFor)
+    }
+    measure()
+    const resized = new ResizeObserver(measure)
+    resized.observe(frame)
+    resized.observe(messages)
+    // The messages grow as the conversation does, which the scroller's own box doesn't show.
+    if (content.current !== null) resized.observe(content.current)
+    messages.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      resized.disconnect()
+      messages.removeEventListener('scroll', onScroll)
+      clearTimeout(stir.current)
+    }
+  }, [screen, scroller, content])
+  return { track, scroll, stirred }
 }
 
 /** A four-rayed star with a soft glow, which grows while the messages move or the star is held. */

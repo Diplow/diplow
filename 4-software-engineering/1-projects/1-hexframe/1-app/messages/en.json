@@ -478,7 +478,7 @@
   "tokens_motion_turn": "A change of theme.",
   "tokens_motion_breathe": "A light that waits: the agent working, a draft.",
   "tokens_phone_title": "Phone and touch",
-  "tokens_phone": "Two questions, and neither needs a token. The width picks the layout: below Tailwind's sm, 40rem, is a phone, which shows one side at a time; a tablet keeps the wide layout. A finger picks the behaviour, at any width: under a coarse pointer nothing waits on a hover, and a target is at least 44px.",
+  "tokens_phone": "Two questions. The width picks the layout: below sm, 40rem, is a phone, which shows one side at a time, and the screen reads it on its own width (container-wide); a tablet keeps the wide layout. A finger picks the behaviour, at any width, and needs no token: under a coarse pointer nothing waits on a hover, and a target is at least 44px.",
   "tokens_light_title": "Light",
   "tokens_light_tile": "A tile fills with tile fading to tile-fade, top to foot, with no stroke. Under the pointer it brightens to tile-lit.",
   "tokens_light_center": "The center fills with tile-lit fading to tile-lit-fade, with an input line, its title in italics.",
@@ -514,11 +514,5 @@
   "gallery_screen_sign_in_kicker": "who are you?",
   "gallery_screen_sign_in_title": "Sign in",
   "gallery_screen_sign_in_text": "The sign-in widget's place: your email, then your password, here at the chat's foot, where you would write.",
-  "gallery_help_root": "Hexframe",
-  "gallery_help_system": "A System",
-  "gallery_help_tiles": "Tiles",
-  "gallery_help_children": "Children and Directions",
-  "gallery_help_context": "Context",
-  "gallery_help_operations": "Operations",
-  "gallery_help_keys": "Keys and the MCP"
+  "tokens_container_wide": "Where the screen turns wide: Tailwind's sm, read on the screen's own width rather than the window's, so a phone's specimen folds as a phone does. Below it, one side is in front."
 }

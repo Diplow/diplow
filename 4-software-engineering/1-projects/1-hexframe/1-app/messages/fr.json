@@ -478,7 +478,7 @@
   "tokens_motion_turn": "Un changement de thème.",
   "tokens_motion_breathe": "Une lumière qui attend : l'agent au travail, une ébauche.",
   "tokens_phone_title": "Téléphone et toucher",
-  "tokens_phone": "Deux questions, et aucune n'a besoin d'un jeton. La largeur choisit la mise en page : sous le sm de Tailwind, 40rem, c'est un téléphone, qui montre un côté à la fois ; une tablette garde la mise en page large. Un doigt choisit le comportement, à toute largeur : sous un pointeur grossier, rien n'attend un survol, et une cible fait au moins 44 px.",
+  "tokens_phone": "Deux questions. La largeur choisit la mise en page : sous sm, 40rem, c'est un téléphone, qui montre un côté à la fois, et l'écran la lit sur sa propre largeur (container-wide) ; une tablette garde la mise en page large. Un doigt choisit le comportement, à toute largeur, sans jeton : sous un pointeur grossier, rien n'attend un survol, et une cible fait au moins 44 px.",
   "tokens_light_title": "Lumière",
   "tokens_light_tile": "Une tuile se remplit de tile fondu vers tile-fade, de haut en bas, sans trait. Sous le pointeur, elle s'éclaire en tile-lit.",
   "tokens_light_center": "Le centre se remplit de tile-lit fondu vers tile-lit-fade, avec un trait input, son titre en italique.",
@@ -514,11 +514,5 @@
   "gallery_screen_sign_in_kicker": "qui êtes-vous ?",
   "gallery_screen_sign_in_title": "Se connecter",
   "gallery_screen_sign_in_text": "La place du widget de connexion : votre email, puis votre mot de passe, ici au pied du chat, là où vous écririez.",
-  "gallery_help_root": "Hexframe",
-  "gallery_help_system": "Un système",
-  "gallery_help_tiles": "Les tuiles",
-  "gallery_help_children": "Enfants et directions",
-  "gallery_help_context": "Le contexte",
-  "gallery_help_operations": "Les opérations",
-  "gallery_help_keys": "Les clés et le MCP"
+  "tokens_container_wide": "Là où l'écran passe en large : le sm de Tailwind, lu sur la largeur de l'écran lui-même plutôt que sur celle de la fenêtre, si bien qu'un spécimen de téléphone se replie comme un téléphone. En dessous, un côté est devant."
 }

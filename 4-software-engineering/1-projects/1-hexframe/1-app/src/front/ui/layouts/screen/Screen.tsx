@@ -20,7 +20,7 @@ import { flushSync } from 'react-dom'
 
 import { m } from '#/paraglide/messages'
 
-import { cutAlongCurve } from './curve'
+import { bow, cutAlongCurve } from './curve'
 import { Scrollbar } from './Scrollbar'
 
 /** A side of the screen; on a phone, the one in front. */
@@ -52,6 +52,9 @@ const edge = 'calc(var(--screen-chat) + 1.125rem)'
 
 const cut = cutAlongCurve('var(--screen-edge)')
 
+/** How far the curve bows past the chat's edge, which the chat's column has to hold. */
+const bulge = `${String(bow / 2)}px`
+
 export function Screen({
   canvas,
   corner,
@@ -63,7 +66,7 @@ export function Screen({
 }: ScreenProps) {
   const screen = useRef<HTMLDivElement>(null)
   const scroller = useRef<HTMLDivElement>(null)
-  const phone = usePhone(screen)
+  const content = useRef<HTMLDivElement>(null)
   // The conversation opens at its foot, the latest last.
   useEffect(() => {
     const messages = scroller.current
@@ -75,6 +78,7 @@ export function Screen({
   // keep the side as it was, that seam is missing or inert, and the focus stays where it is.
   const toCanvas = useRef<HTMLButtonElement>(null)
   const toChat = useRef<HTMLButtonElement>(null)
+  const phone = usePhone(screen, toCanvas)
   const move = (to: Side) => () => {
     flushSync(() => {
       onFrontChange(to)
@@ -86,7 +90,12 @@ export function Screen({
       ref={screen}
       className={cn('@container relative isolate overflow-hidden bg-background', className)}
       style={
-        { '--screen-chat': chatWidth, '--screen-edge': edge, '--screen-cut': cut } as CSSProperties
+        {
+          '--screen-chat': chatWidth,
+          '--screen-edge': edge,
+          '--screen-bulge': bulge,
+          '--screen-cut': cut,
+        } as CSSProperties
       }
     >
       {/* The chat comes first, so the keyboard reaches the conversation and the composer first. */}
@@ -95,7 +104,7 @@ export function Screen({
         aria-label={m.screen_chat()}
         className={cn(
           'pointer-events-none absolute inset-0 z-20 flex flex-col',
-          '@min-[40rem]:pointer-events-auto @min-[40rem]:right-auto @min-[40rem]:w-[calc(var(--screen-edge)+2.625rem)] @min-[40rem]:[clip-path:var(--screen-cut)]',
+          '@wide:pointer-events-auto @wide:right-auto @wide:w-[calc(var(--screen-edge)+var(--screen-bulge)+0.375rem)] @wide:[clip-path:var(--screen-cut)]',
         )}
       >
         <div
@@ -105,7 +114,7 @@ export function Screen({
             // Visible at once when it comes back, so the seam can take the focus; hidden once faded.
             chatInFront
               ? 'pointer-events-auto transition-[opacity,translate]'
-              : 'invisible translate-y-6 opacity-0 transition-[opacity,translate,visibility] @min-[40rem]:visible @min-[40rem]:translate-y-0 @min-[40rem]:opacity-100',
+              : 'invisible translate-y-6 opacity-0 transition-[opacity,translate,visibility] @wide:visible @wide:translate-y-0 @wide:opacity-100',
           )}
         >
           <Handle
@@ -116,7 +125,9 @@ export function Screen({
             className="h-24 items-end"
           />
           <Brand />
-          <Messages scroller={scroller}>{messages}</Messages>
+          <Messages scroller={scroller} content={content}>
+            {messages}
+          </Messages>
         </div>
         <div className="pointer-events-auto flex-none">
           {!chatInFront && (
@@ -131,11 +142,11 @@ export function Screen({
           {composer}
         </div>
       </section>
-      <Scrollbar screen={screen} scroller={scroller} />
+      <Scrollbar screen={screen} scroller={scroller} content={content} />
       <div
         className={cn(
           'absolute top-[1.375rem] right-[1.375rem] z-30',
-          chatInFront && '@max-[40rem]:hidden',
+          chatInFront && '@max-wide:hidden',
         )}
       >
         {corner}
@@ -143,7 +154,7 @@ export function Screen({
       <section
         aria-label={m.screen_canvas()}
         inert={phone && chatInFront}
-        className="absolute inset-0 z-0 flex @min-[40rem]:left-(--screen-edge)"
+        className="absolute inset-0 z-0 flex @wide:left-(--screen-edge)"
       >
         {canvas}
       </section>
@@ -151,21 +162,24 @@ export function Screen({
   )
 }
 
-/** Whether the screen is a phone's, below `sm` of its own width, once it is measured. */
-function usePhone(screen: RefObject<HTMLElement | null>) {
+/**
+ * Whether the screen is a phone's, once it is measured. The stylesheet decides, with `@wide:`, and
+ * shows the seam on a phone alone, so the seam's display is the answer, and the width it turns at is
+ * written once, as `--container-wide`.
+ */
+function usePhone(screen: RefObject<HTMLElement | null>, seam: RefObject<HTMLElement | null>) {
   const [phone, setPhone] = useState(false)
   useEffect(() => {
     const element = screen.current
     if (element === null) return undefined
-    const sm = 40 * parseFloat(getComputedStyle(document.documentElement).fontSize)
-    const resized = new ResizeObserver(([entry]) => {
-      if (entry !== undefined) setPhone(entry.contentRect.width < sm)
+    const resized = new ResizeObserver(() => {
+      if (seam.current !== null) setPhone(getComputedStyle(seam.current).display !== 'none')
     })
     resized.observe(element)
     return () => {
       resized.disconnect()
     }
-  }, [screen])
+  }, [screen, seam])
   return phone
 }
 
@@ -181,7 +195,7 @@ function Veil({ chatInFront }: { chatInFront: boolean }) {
       className={cn(
         'pointer-events-none absolute inset-0 z-10 backdrop-blur-md transition-opacity duration-(--duration-fold) motion-reduce:transition-none',
         'bg-linear-to-b from-background/20 via-background/85 via-15% to-background/90',
-        '@min-[40rem]:right-auto @min-[40rem]:w-[calc(var(--screen-chat)+10.625rem)] @min-[40rem]:bg-linear-to-r @min-[40rem]:from-background/90 @min-[40rem]:via-background/75 @min-[40rem]:via-62% @min-[40rem]:to-transparent @min-[40rem]:opacity-100 @min-[40rem]:[mask-image:radial-gradient(ellipse_100%_125%_at_0%_50%,black_66%,transparent_92%)]',
+        '@wide:right-auto @wide:w-[calc(var(--screen-chat)+10.625rem)] @wide:bg-linear-to-r @wide:from-background/90 @wide:via-background/75 @wide:via-62% @wide:to-transparent @wide:opacity-100 @wide:[mask-image:radial-gradient(ellipse_100%_125%_at_0%_50%,black_66%,transparent_92%)]',
         chatInFront ? 'opacity-100' : 'opacity-0',
       )}
     />
@@ -191,7 +205,7 @@ function Veil({ chatInFront }: { chatInFront: boolean }) {
 /** hexframe's mark, amber as the human's, and its name. */
 function Brand() {
   return (
-    <div className="flex flex-none items-center gap-2.5 px-5 pt-2 text-foreground @min-[40rem]:px-9 @min-[40rem]:pt-7">
+    <div className="flex flex-none items-center gap-2.5 px-5 pt-2 text-foreground @wide:px-9 @wide:pt-7">
       <svg viewBox="-11 -12 22 24" aria-hidden className="h-[22px] w-5">
         <polygon
           points="0,-11 9.53,-5.5 9.53,5.5 0,11 -9.53,5.5 -9.53,-5.5"
@@ -213,9 +227,11 @@ function Brand() {
  */
 function Messages({
   scroller,
+  content,
   children,
 }: {
   scroller: RefObject<HTMLDivElement | null>
+  content: RefObject<HTMLDivElement | null>
   children: ReactNode
 }) {
   return (
@@ -227,10 +243,12 @@ function Messages({
       aria-label={m.screen_messages()}
       className={cn(
         'flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-5 pt-6 pb-7 outline-none [mask-image:linear-gradient(transparent,black_1.75rem)] focus-visible:ring-1 focus-visible:ring-human/60 focus-visible:ring-inset',
-        '@min-[40rem]:pr-[6.25rem] @min-[40rem]:pl-9 @min-[40rem]:[scrollbar-width:none] @min-[40rem]:[&::-webkit-scrollbar]:hidden',
+        '@wide:pr-[6.25rem] @wide:pl-9 @wide:[scrollbar-width:none] @wide:[&::-webkit-scrollbar]:hidden',
       )}
     >
-      <div className="mt-auto">{children}</div>
+      <div ref={content} className="mt-auto">
+        {children}
+      </div>
     </div>
   )
 }
@@ -270,7 +288,7 @@ function Handle({ ref, label, towards, onMove, className }: HandleProps) {
       aria-label={label}
       title={label}
       className={cn(
-        'group/handle flex w-full flex-none touch-none justify-center pb-2 outline-none @min-[40rem]:hidden',
+        'group/handle flex w-full flex-none touch-none justify-center pb-2 outline-none @wide:hidden',
         className,
       )}
       onPointerDown={(event) => {

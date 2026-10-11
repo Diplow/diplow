@@ -2,10 +2,12 @@ import { describe, expect, it } from 'vitest'
 
 import {
   bow,
+  curvePath,
   cutAlongCurve,
   offsetAt,
   scrollTopAt,
   thumbOf,
+  trackAlongCurve,
   type Scroll,
   type Track,
 } from './curve'
@@ -29,6 +31,29 @@ describe('cutAlongCurve', () => {
         'calc(var(--edge) + 36px) 50%, calc(var(--edge) + 27px) 75%, ' +
         'calc(var(--edge) + 0px) 100%, 0 100%)',
     )
+  })
+})
+
+describe('curvePath', () => {
+  it('draws the curve offsetAt places: its ends on the edge, its middle bowed half its control point', () => {
+    const [x0 = 0, y0, cx = 0, cy, x1 = 0, y1] = (curvePath.match(/[\d.]+/g) ?? []).map(Number)
+    expect([x0, y0, x1, y1]).toEqual([0.5, 0, 0.5, 100])
+    // A quadratic passes its middle at a quarter of each end and half its control point.
+    expect(0.25 * x0 + 0.5 * cx + 0.25 * x1).toBeCloseTo(0.5 + offsetAt(0.5))
+    expect(cy).toBe(50)
+  })
+})
+
+describe('trackAlongCurve', () => {
+  it('runs on the curve from the track’s top to its foot, in the box’s units', () => {
+    const points = trackAlongCurve(track, 2)
+      .split(/[ML]/)
+      .filter((point) => point !== '')
+      .map((point) => point.trim().split(' ').map(Number))
+    expect(points).toHaveLength(3)
+    for (const [x = 0, y = 0] of points) expect(x).toBeCloseTo(0.5 + offsetAt(y / 100), 1)
+    expect(points[0]?.[1]).toBeCloseTo((track.top / track.height) * 100)
+    expect(points[2]?.[1]).toBeCloseTo(((track.top + track.length) / track.height) * 100)
   })
 })
 

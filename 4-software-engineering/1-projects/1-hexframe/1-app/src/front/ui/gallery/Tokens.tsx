@@ -56,6 +56,7 @@ export const valueNotes: readonly Note[] = [
   { tokens: ['duration-camera-level'], note: m.tokens_motion_camera_level },
   { tokens: ['duration-turn'], note: m.tokens_motion_turn },
   { tokens: ['animate-breathe'], note: m.tokens_motion_breathe },
+  { tokens: ['container-wide'], note: m.tokens_container_wide },
 ]
 
 /** The tokens read from the stylesheet, under their notes, in the notes' order; the unnoted last. */
