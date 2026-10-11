@@ -235,41 +235,70 @@ export function undone(
 }
 
 /**
+ * The steps that undo the events a batch made on `before`, the last event's first, and the System
+ * the batch left, which they run on.
+ */
+function undoing(before: System, events: ReadonlyArray<OperationEvent>) {
+  const steps: Array<ReadonlyArray<Step>> = []
+  let after = before
+  for (const event of events) {
+    steps.push(stepsOf(after, event))
+    after = evolve(after, event)
+  }
+  return { steps: steps.reverse().flat(), after }
+}
+
+/**
+ * Steps run in order on a System, each Operation made on the System the ones before it left, or
+ * `BatchOutdated` once one is refused. A Reference whose Tile is not there when its turn comes waits,
+ * and is put back as soon as a step makes that Tile again, before the next step: it stood there from
+ * then until its delete, so the undo of an older event may count on it, a delete of it or of the Tile
+ * it stands under. One whose Tile never comes back was broken before the batch, and stays out.
+ */
+function walked(system: System, steps: ReadonlyArray<Step>) {
+  const undo: Array<Batched> = []
+  let standing = system
+  let waiting: ReadonlyArray<Step> = []
+  const ran = (batched: Batched) => {
+    const after = ranOn(standing, batched)
+    if (Result.isFailure(after)) return false
+    standing = after.success
+    undo.push(batched)
+    return true
+  }
+  for (const step of steps) {
+    const batched = step(standing)
+    if (batched === undefined) {
+      waiting = [...waiting, step]
+      continue
+    }
+    if (!ran(batched)) return Result.fail(new BatchOutdated())
+    const still: Array<Step> = []
+    for (const held of waiting) {
+      const back = held(standing)
+      if (back === undefined) still.push(held)
+      else if (!ran(back)) return Result.fail(new BatchOutdated())
+    }
+    waiting = still
+  }
+  return Result.succeed(undo)
+}
+
+/**
  * The Operations that undo the events a batch made on `before`, in the order they run: the last
  * event's first, each Operation naming the Version it finds where the ones before it left the System,
  * the first ones the Versions the batch left; a Reference whose Tile is not there yet when its turn
- * comes, put back at the end, once the Tile is. A Reference already broken before the batch, and a
- * Title only the untitled Root had, are what an undo cannot make again.
+ * comes, put back as soon as the Tile is (`walked`). A Reference already broken before the batch, and
+ * a Title only the untitled Root had, are what an undo cannot make again.
  */
 export function inverse(
   before: System,
   events: ReadonlyArray<OperationEvent>,
 ): ReadonlyArray<Batched> {
-  const steps: Array<ReadonlyArray<Step>> = []
-  let system = before
-  for (const event of events) {
-    steps.push(stepsOf(system, event))
-    system = evolve(system, event)
-  }
-  const undo: Array<Batched> = []
-  const waiting: Array<Step> = []
-  const run = (batched: Batched) => {
-    const after = ranOn(system, batched)
-    if (Result.isFailure(after)) throw new Error('An undo refused what its batch left')
-    system = after.success
-    undo.push(batched)
-  }
-  for (const step of steps.reverse().flat()) {
-    const batched = step(system)
-    if (batched === undefined) waiting.push(step)
-    else run(batched)
-  }
-  // A Reference whose Tile an earlier event deleted is put back once that Tile is made again, last.
-  for (const step of waiting) {
-    const batched = step(system)
-    if (batched !== undefined) run(batched)
-  }
-  return undo
+  const { steps, after } = undoing(before, events)
+  const undo = walked(after, steps)
+  if (Result.isFailure(undo)) throw new Error('An undo refused what its batch left')
+  return undo.success
 }
 
 /** What undoes the events a batch made on `before`: their inverse. */
@@ -316,29 +345,18 @@ function readAgain(system: System, operation: Operation): Operation {
   }
 }
 
-/**
- * An undo moved on to the System it now runs from, each Operation, in order, naming the Versions the
- * ones before it leave there; `BatchOutdated` once one no longer applies.
- */
-function movedOnto(system: System, batch: ReadonlyArray<Batched>) {
-  const moved: Array<Batched> = []
-  let standing = system
-  for (const batched of batch) {
-    const again = { ...batched, operation: readAgain(standing, batched.operation) }
-    const after = ranOn(standing, again)
-    if (Result.isFailure(after)) return Result.fail(new BatchOutdated())
-    standing = after.success
-    moved.push(again)
-  }
-  return Result.succeed(moved)
-}
+/** An Operation of an earlier undo, made on the System it now runs on, naming the Versions held there. */
+const readOn =
+  (batched: Batched): Step =>
+  (system) => ({ ...batched, operation: readAgain(system, batched.operation) })
 
 /**
  * What undoes a batch that ran once more, making `events` on `before`, the System as it stood just
  * then: their inverse first, then the undo of what ran earlier, its Versions as the System holds them
- * once these are undone. `Outdated`, for good, once that earlier undo no longer applied on `before`:
- * a Tile it touched changed between the two runs, by another writer, so undoing the whole would undo
- * what that writer did.
+ * once these are undone, walked as one undo (`walked`), so a Reference this run deleted whose Tile an
+ * earlier run deleted is put back once the earlier undo makes that Tile again. `Outdated`, for good,
+ * once that earlier undo no longer applied on `before`: a Tile it touched changed between the two
+ * runs, by another writer, so undoing the whole would undo what that writer did.
  */
 export function extended(
   earlier: Undo,
@@ -347,11 +365,9 @@ export function extended(
 ): Undo {
   if (earlier._tag === 'Outdated') return earlier
   if (Result.isFailure(undone(before, earlier.batch))) return { _tag: 'Outdated' }
-  const latest = inverse(before, events)
-  const after = events.reduce(evolve, before)
-  const back = Result.getOrThrow(undone(after, latest)).system
-  return Result.match(movedOnto(back, earlier.batch), {
-    onSuccess: (moved): Undo => ({ _tag: 'Inverse', batch: [...latest, ...moved] }),
+  const { steps, after } = undoing(before, events)
+  return Result.match(walked(after, [...steps, ...earlier.batch.map(readOn)]), {
+    onSuccess: (batch): Undo => ({ _tag: 'Inverse', batch }),
     onFailure: (): Undo => ({ _tag: 'Outdated' }),
   })
 }
