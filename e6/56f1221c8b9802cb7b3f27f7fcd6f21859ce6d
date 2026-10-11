@@ -1,0 +1,40 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/Screen.tsx
+  s_683ca25b605461::t_32eb740c3d85b8 104-105,107-108
+  s_683ca25b605461::t_506335b55b8cba 73-75,81,211-212,229,233,252-254,258,263-264,280,287-288
+  s_683ca25b605461::t_0826936759afc3 19,79-80,82
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_683ca25b605461::t_6633ca15a57221 18
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/fixtures.ts
+  s_683ca25b605461::t_04208e156dd2b2 5-8,108-125
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/CLAUDE.md
+  s_683ca25b605461::t_6633ca15a57221 18
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/Scrollbar.tsx
+  s_683ca25b605461::t_5d6ee5bd5bed88 8,62-64
+  s_683ca25b605461::t_9e39db9c2b978e 30-31,159,164-165,187
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/layouts/Rail.tsx
+  s_683ca25b605461::t_86d7e6e16e2cc7 2-3,11-12,26,29-30
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/pieces.ts
+  s_683ca25b605461::t_86d7e6e16e2cc7 66
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/CLAUDE.md
+  s_683ca25b605461::t_6633ca15a57221 32
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE.md
+  s_683ca25b605461::t_86d7e6e16e2cc7 29
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_683ca25b605461::t_04208e156dd2b2 4,16,18,24-25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e656f1221c8b9802cb7b3f27f7fcd6f21859ce6d",
+  "prompts": {},
+  "sessions": {
+    "s_683ca25b605461": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c0bae56f-3d38-45db-b139-58912d52df08",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
