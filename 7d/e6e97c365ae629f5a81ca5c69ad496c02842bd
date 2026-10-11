@@ -1,0 +1,92 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/proposal/proposal.ts
+  s_c19b57f63ed6ef::t_2cf827f107d2d9 21-25
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/fixtures.ts
+  s_c19b57f63ed6ef::t_362c99df342461 4-5
+  s_c19b57f63ed6ef::t_4b49c917839240 3,169
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_c19b57f63ed6ef::t_e638a4bb62c714 198,212-216,275-276
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/report/errors/messages.test.ts
+  s_c19b57f63ed6ef::t_3b4d9e1f36d22f 5,19,46-51
+  s_c19b57f63ed6ef::t_4a7b2fe7f3abb4 52-53
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/dev/system.tsx
+  s_c19b57f63ed6ef::t_1a1bd45db50fc7 54-64,85-90
+  s_c19b57f63ed6ef::t_da77e479f65215 12
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261011005044_applied/migration.sql
+  s_c19b57f63ed6ef::t_20f184ae02be96 1-11
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261011005044_applied/snapshot.json
+  s_c19b57f63ed6ef::t_20f184ae02be96 1-2347
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/report/errors/messages.ts
+  s_c19b57f63ed6ef::t_d2d722a58864d9 14,40,53
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/entry/parts.tsx
+  s_c19b57f63ed6ef::t_e61469e8e7e558 2-4,12,20-51
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/undo.test.ts
+  s_c19b57f63ed6ef::t_3b4d9e1f36d22f 17-18,31-35,158
+  s_c19b57f63ed6ef::t_fd5a472de73a31 1-9,11-16,19-28,30,36-157,159-169,174-201
+  s_c19b57f63ed6ef::t_b53642a83ce140 10,29,170-173
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/agent/prompt.ts
+  s_c19b57f63ed6ef::t_2cf827f107d2d9 80,109-110
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/entry/Applied.tsx
+  s_c19b57f63ed6ef::t_e61469e8e7e558 1-38
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/Chat.tsx
+  s_c19b57f63ed6ef::t_32973e8b10f13d 19,55,111-114
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/conversations/applied.ts
+  s_c19b57f63ed6ef::t_468d63c64c3da9 1-151
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_c19b57f63ed6ef::t_e638a4bb62c714 198,212-216,275-276
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/conversations/conversations.ts
+  s_c19b57f63ed6ef::t_c0a43ba8e3bb1f 43-44,109-128
+  s_c19b57f63ed6ef::t_468d63c64c3da9 175
+  s_c19b57f63ed6ef::t_e5aa68c0f908a4 129
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/assistant.ts
+  s_c19b57f63ed6ef::t_f9dce8c184070c 21,50,53,262,266-283,639,670-672,677-678,680,704-768
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/run.ts
+  s_c19b57f63ed6ef::t_7d301a808fa1d2 24,95-96,108,114-115,120-127
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/proposals.test.ts
+  s_c19b57f63ed6ef::t_ad954e528d2796 204,218,221-222,226,236,260
+  s_c19b57f63ed6ef::t_7d301a808fa1d2 5,42
+  s_c19b57f63ed6ef::t_e1e20639caed82 14,23,27-28,37-40,75-76,78,81-83,200-203,205-217,219-220,223-225,227-235,237-259,261-269
+  s_c19b57f63ed6ef::t_8a0e8777b8c4f4 270
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/assistant/conversation.ts
+  s_c19b57f63ed6ef::t_39418650d779ce 31
+  s_c19b57f63ed6ef::t_f72ae6bea658d6 211-222
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/turns.test.ts
+  s_c19b57f63ed6ef::t_7d301a808fa1d2 5,29
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/entry.ts
+  s_c19b57f63ed6ef::t_2cf827f107d2d9 87-96,108-116,154-168
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/entry/Entry.tsx
+  s_c19b57f63ed6ef::t_e61469e8e7e558 4-5,38-40,48,71-72
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/assistant.test.ts
+  s_c19b57f63ed6ef::t_f9ce39a6243e30 33-34,42-45
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/schema.ts
+  s_c19b57f63ed6ef::t_20f184ae02be96 311-329
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/assistant.ts
+  s_c19b57f63ed6ef::t_2334e3746232fe 4-5,113-125
+  s_c19b57f63ed6ef::t_2644462f2601f7 126
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/Conversation.tsx
+  s_c19b57f63ed6ef::t_e61469e8e7e558 21,60-63
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/errors.ts
+  s_c19b57f63ed6ef::t_2cf827f107d2d9 24-37
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/programs.ts
+  s_c19b57f63ed6ef::t_5bbc40c91acb19 14,174,198
+  s_c19b57f63ed6ef::t_d7e798dd3a5c26 3-9,18,28-38,95-112,115-117,126-128,158-160,172-173,175,186-197,199-202
+  s_c19b57f63ed6ef::t_3ad91878f0cd4c 203
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/entry/Proposal.tsx
+  s_c19b57f63ed6ef::t_e61469e8e7e558 4,14,18,41,46,94
+  s_c19b57f63ed6ef::t_4b49c917839240 42-45,82-84
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7de6e97c365ae629f5a81ca5c69ad496c02842bd",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
