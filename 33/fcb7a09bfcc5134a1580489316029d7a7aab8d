@@ -1,5 +1,7 @@
 4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-design-system-v1/decisions.md
   s_25451ff7f6633b::t_562e926f72a5e2 14,134,148-154,156-158,160-167,169-173,175-176
+  s_25451ff7f6633b::t_32908e59a6d2bd 17-20,147,155,159,168,174
+  s_25451ff7f6633b::t_b5f3017df414f1 146
 4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
   s_25451ff7f6633b::t_fe5326041cdb22 829
   s_25451ff7f6633b::t_d3b21c3e40f963 867,906-907
@@ -26,6 +28,7 @@
 4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
   s_25451ff7f6633b::t_2427287e8adc91 9,35-39,77-82,108-127,315,381-385,387-394,396
   s_25451ff7f6633b::t_ed3d1a041132cf 395
+  s_25451ff7f6633b::t_a1fa91531e6142 277
 4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/tile/TileWidget.tsx
   s_25451ff7f6633b::t_48f94bb437ef03 16,20,30
   s_25451ff7f6633b::t_c1774e1d831901 101-105,304-308
@@ -45,6 +48,7 @@
   s_25451ff7f6633b::t_0f8bed60d2b495 4-9,11,18,38-41,47-52,55,57-58,71-72,102,105,113,129-131,140-142,145-146,148-151,154-156,181-196,229
   s_25451ff7f6633b::t_c1774e1d831901 10,147,163,215,234-287,289-300
   s_25451ff7f6633b::t_1fcc570307795a 301
+  s_25451ff7f6633b::t_5f5851b559235b 288
 4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/Places.tsx
   s_25451ff7f6633b::t_34b3089735df5f 1-123
 4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/fields.tsx
@@ -75,6 +79,7 @@
   s_25451ff7f6633b::t_816d3e6c4809f6 1-30
 4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/CLAUDE.md
   s_25451ff7f6633b::t_14771f626a819f 1-13,15-28
+  s_25451ff7f6633b::t_f67c1b7499c6c1 14,29
 4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/sign-in/gallery.tsx
   s_25451ff7f6633b::t_a022a172e54740 48
   s_25451ff7f6633b::t_cfd9f65e0556fc 1-47,49-130
@@ -95,6 +100,8 @@
   s_25451ff7f6633b::t_606393cdaec27c 1-14,16-55,59-116,123-263,267-270
 4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/CLAUDE.md
   s_25451ff7f6633b::t_b27667c58938a9 25
+  s_25451ff7f6633b::t_8814ce0185c620 26
+  s_25451ff7f6633b::t_a9bd8c12f02d70 10-12
 4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/tile/gallery.tsx
   s_25451ff7f6633b::t_3c1a9859fb54b8 5,141-155
   s_25451ff7f6633b::t_a022a172e54740 134
@@ -105,6 +112,13 @@
 4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/Composer.tsx
   s_25451ff7f6633b::t_a6b51e712272c5 13
   s_25451ff7f6633b::t_b9fbd90116dbe9 96-97
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE.md
+  s_25451ff7f6633b::t_a1fa91531e6142 64
+  s_25451ff7f6633b::t_b915426c7a0e56 49
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/CLAUDE.md
+  s_25451ff7f6633b::t_541e7806b264b1 32,34
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/entries/Proposal.tsx
+  s_25451ff7f6633b::t_a9bd8c12f02d70 15
 ---
 {
   "schema_version": "authorship/3.0.0",
