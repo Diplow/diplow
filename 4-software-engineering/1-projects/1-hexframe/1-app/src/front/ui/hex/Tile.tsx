@@ -118,7 +118,7 @@ function SwapButton({ hex, swap }: { hex: Hex; swap: SwapTarget }) {
           cx={x}
           cy={y}
           r={radius}
-          className="fill-primary stroke-background group-hover:stroke-primary-foreground group-focus-visible:stroke-ring"
+          className="fill-primary stroke-background group-hover:stroke-primary group-focus-visible:stroke-ring"
           strokeWidth={strokeWidth * 2}
         />
         <ArrowLeftRight
