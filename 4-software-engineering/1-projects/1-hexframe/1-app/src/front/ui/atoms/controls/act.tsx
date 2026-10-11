@@ -1,0 +1,76 @@
+import { cn } from 'cn'
+import type { ComponentProps } from 'react'
+
+type Tone = 'quiet' | 'voice' | 'destructive'
+
+interface ActProps extends ComponentProps<'button'> {
+  /**
+   * `text`, a quiet action led by a small hex; `hex`, the one solid action a dialog or a form asks for,
+   * a light cut as a long hex, not a box.
+   */
+  look?: 'text' | 'hex'
+  /**
+   * `quiet` in the muted ink; `voice` in the voice of the surface it sits on (`--voice`: the agent's
+   * violet, the human's amber), for the action it expects; `destructive` for what is lost.
+   */
+  tone?: Tone
+  /** Its shortcut, key by key as it is pressed, so the action teaches it. */
+  keys?: readonly string[]
+}
+
+// The ink of a text action, and the light a solid one is cut from.
+const textTones: Record<Tone, string> = {
+  quiet: 'text-muted-foreground',
+  voice: 'text-(--voice)',
+  destructive: 'text-destructive',
+}
+const hexTones: Record<Tone, string> = {
+  quiet: '[--act:var(--voice,var(--foreground))] bg-(--act)/16 text-(--act) hover:bg-(--act)/26',
+  voice: '[--act:var(--voice,var(--foreground))] bg-(--act) text-background hover:bg-(--act)/86',
+  destructive: '[--act:var(--destructive)] bg-(--act) text-background hover:bg-(--act)/86',
+}
+
+/** An action in a widget, a dialog or a receipt: a word you click, never a boxed button. */
+export function Act({
+  look = 'text',
+  tone = 'quiet',
+  keys,
+  className,
+  children,
+  type = 'button',
+  ...props
+}: ActProps) {
+  return (
+    <button
+      type={type}
+      className={cn(
+        'inline-flex cursor-pointer items-center gap-2 text-[0.8125rem] whitespace-nowrap transition-colors focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-(--voice,var(--human)) disabled:cursor-default pointer-coarse:min-h-11',
+        look === 'text'
+          ? [
+              textTones[tone],
+              'before:size-2 before:shrink-0 before:bg-current before:[clip-path:polygon(50%_0,100%_25%,100%_75%,50%_100%,0_75%,0_25%)] hover:text-foreground disabled:text-faint disabled:opacity-60',
+            ]
+          : [
+              hexTones[tone],
+              'h-[2.125rem] px-5 [clip-path:polygon(9px_0,calc(100%-9px)_0,100%_50%,calc(100%-9px)_100%,9px_100%,0_50%)] disabled:opacity-35 pointer-coarse:h-11',
+            ],
+        className,
+      )}
+      {...props}
+    >
+      {children}
+      {keys !== undefined && keys.length > 0 && (
+        <span className="ml-0.5 inline-flex gap-[3px]" aria-hidden="true">
+          {keys.map((key) => (
+            <kbd
+              key={key}
+              className="inline-block min-w-[18px] bg-current/14 px-[5px] pt-[3px] pb-0.5 text-center font-mono text-[0.65625rem] leading-none"
+            >
+              {key}
+            </kbd>
+          ))}
+        </span>
+      )}
+    </button>
+  )
+}

@@ -1,19 +1,33 @@
 // The atoms every side shares, on /design-system: the controls, the forms, the menu, the toasts, the
 // skeleton, the theme and the language.
-import { Copy, MoreHorizontal, Pencil, Plus, Share2, Trash2 } from 'lucide-react'
-import type { ReactNode } from 'react'
+import {
+  Check,
+  CornerDownLeft,
+  Eye,
+  Link2,
+  LogIn,
+  MoreHorizontal,
+  Move,
+  Pencil,
+  Pin,
+  Plus,
+  Sparkles,
+  Trash2,
+} from 'lucide-react'
+import { useState, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { GallerySection, GalleryState } from '../gallery/frame'
+import { Act } from './controls/act'
 import { Button } from './controls/button'
 import { Input } from './controls/input'
 import { LocaleSwitch } from './controls/LocaleSwitch'
 import { Textarea } from './controls/textarea'
 import { ThemeToggle } from './controls/ThemeToggle'
-import { DropdownMenu, type MenuEntry } from './DropdownMenu'
 import { Field } from './forms/field'
 import { openedOnRefusal, useAppForm } from './forms/form'
+import { Menu, type MenuEntry } from './Menu'
 import { Skeleton } from './skeleton'
 import { toast } from './Toaster'
 
@@ -24,6 +38,7 @@ export function AtomsGallery() {
   return (
     <>
       <ControlsGallery />
+      <ActGallery />
       <MenuGallery />
       <FeedbackGallery />
       <SettingsGallery />
@@ -193,42 +208,164 @@ const done = (what: string) => () => {
   toast(what)
 }
 
-// Messages are read at render, in the request's locale, never at module load.
-const menuEntries = (): MenuEntry[] => [
-  { label: m.gallery_sample_edit(), icon: <Pencil />, onSelect: done(m.gallery_sample_edit()) },
+// Messages are read at render, in the request's locale, never at module load. A tile's lines, grouped
+// by distance as its menu groups them: going there, changing it, the agent, sharing, then delete.
+const tileEntries = (): MenuEntry[] => [
   {
-    label: m.gallery_sample_copy_link(),
-    icon: <Copy />,
-    onSelect: done(m.gallery_sample_copy_link()),
+    label: m.gallery_sample_open(),
+    icon: <CornerDownLeft />,
+    shortcut: { key: 'Enter' },
+    onSelect: done(m.gallery_sample_open()),
   },
   {
-    label: m.gallery_sample_share(),
-    icon: <Share2 />,
-    onSelect: done(m.gallery_sample_share()),
+    label: m.gallery_sample_go_into(),
+    icon: <LogIn />,
+    shortcut: { key: 'Enter', shift: true },
+    onSelect: done(m.gallery_sample_go_into()),
+  },
+  'separator',
+  {
+    label: m.gallery_sample_edit(),
+    icon: <Pencil />,
+    shortcut: { key: 'e' },
+    onSelect: done(m.gallery_sample_edit()),
+  },
+  {
+    label: m.gallery_sample_move(),
+    icon: <Move />,
+    shortcut: { key: 'm' },
+    onSelect: done(m.gallery_sample_move()),
     disabled: true,
+  },
+  'separator',
+  {
+    label: m.gallery_sample_ask_agent(),
+    icon: <Sparkles />,
+    shortcut: { key: 'a' },
+    onSelect: done(m.gallery_sample_ask_agent()),
+    tone: 'agent',
+  },
+  {
+    label: m.gallery_sample_copy_link(),
+    icon: <Link2 />,
+    shortcut: { key: 'l' },
+    onSelect: done(m.gallery_sample_copy_link()),
   },
   'separator',
   {
     label: m.gallery_sample_delete(),
     icon: <Trash2 />,
+    shortcut: { key: 'Backspace' },
     onSelect: done(m.gallery_sample_delete()),
-    destructive: true,
+    tone: 'destructive',
   },
 ]
 
 function MenuGallery() {
   return (
-    <GallerySection name="DropdownMenu">
-      <GalleryState label={m.gallery_state_menu()}>
-        <DropdownMenu
+    <GallerySection name="Menu">
+      <GalleryState label={m.gallery_state_menu_context()}>
+        <Menu
+          opensOn="context"
           label={m.gallery_sample_tile_title()}
-          entries={menuEntries()}
+          header={{
+            title: m.gallery_sample_tile_title(),
+            detail: m.gallery_sample_tile_place(),
+            description: m.gallery_sample_tile_preview(),
+          }}
+          entries={tileEntries()}
           trigger={
-            <Button variant="outline" size="icon" aria-label={m.gallery_sample_actions()}>
-              <MoreHorizontal />
-            </Button>
+            <button
+              type="button"
+              aria-label={m.gallery_sample_tile_title()}
+              className="grid h-32 w-28 cursor-default place-items-center bg-tile font-human text-sm text-foreground [clip-path:polygon(50%_0,100%_25%,100%_75%,50%_100%,0_75%,0_25%)] hover:bg-tile-lit focus-visible:bg-tile-lit focus-visible:underline focus-visible:decoration-human focus-visible:underline-offset-4 focus-visible:outline-none data-[state=open]:bg-tile-lit"
+            >
+              {m.gallery_sample_tile_title()}
+            </button>
           }
         />
+      </GalleryState>
+      <GalleryState label={m.gallery_state_menu_control()}>
+        <SettingsMenu />
+      </GalleryState>
+    </GallerySection>
+  )
+}
+
+// A widget's settings, behind its control: two that stay on or off, then what it does.
+function SettingsMenu() {
+  const [pinned, setPinned] = useState(false)
+  const [foldWhenDone, setFoldWhenDone] = useState(true)
+  return (
+    <Menu
+      label={m.gallery_sample_settings()}
+      align="end"
+      entries={[
+        {
+          label: m.gallery_sample_pin(),
+          icon: <Pin />,
+          checked: pinned,
+          onCheckedChange: setPinned,
+        },
+        {
+          label: m.gallery_sample_fold_when_done(),
+          icon: <Check />,
+          checked: foldWhenDone,
+          onCheckedChange: setFoldWhenDone,
+        },
+        'separator',
+        {
+          label: m.gallery_sample_show_on_canvas(),
+          icon: <Eye />,
+          onSelect: done(m.gallery_sample_show_on_canvas()),
+        },
+      ]}
+      trigger={
+        <Button variant="ghost" size="icon" aria-label={m.gallery_sample_settings()}>
+          <MoreHorizontal />
+        </Button>
+      }
+    />
+  )
+}
+
+function ActGallery() {
+  return (
+    <GallerySection name="Act">
+      <GalleryState label={m.gallery_state_variants()}>
+        <div className="flex flex-wrap items-center gap-6 [--voice:var(--agent)]">
+          <Act tone="voice" keys={['⌘', '↵']} onClick={done(m.gallery_sample_accept())}>
+            {m.gallery_sample_accept()}
+          </Act>
+          <Act onClick={done(m.gallery_sample_show_on_canvas())}>
+            {m.gallery_sample_show_on_canvas()}
+          </Act>
+          <Act tone="destructive" onClick={done(m.gallery_sample_delete())}>
+            {m.gallery_sample_delete()}
+          </Act>
+          <Act disabled>{m.gallery_state_disabled()}</Act>
+        </div>
+      </GalleryState>
+      <GalleryState label={m.gallery_state_act_hex()}>
+        <div className="flex flex-wrap items-center gap-4">
+          <Act look="hex" onClick={done(m.gallery_sample_save())}>
+            {m.gallery_sample_save()}
+          </Act>
+          <Act
+            look="hex"
+            tone="voice"
+            className="[--voice:var(--human)]"
+            onClick={done(m.gallery_sample_save())}
+          >
+            {m.gallery_sample_save()}
+          </Act>
+          <Act look="hex" tone="destructive" onClick={done(m.gallery_sample_delete())}>
+            {m.gallery_sample_delete()}
+          </Act>
+          <Act look="hex" disabled>
+            {m.gallery_state_disabled()}
+          </Act>
+        </div>
       </GalleryState>
     </GallerySection>
   )
