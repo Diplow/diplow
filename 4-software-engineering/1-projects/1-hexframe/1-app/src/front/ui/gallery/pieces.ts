@@ -84,14 +84,14 @@ export const pieces = [
     name: 'Proposal',
     tier: 'chat',
     sources: ['ui/chat/entries/Proposal.tsx'],
-    madeOf: ['ConfirmDialog', 'Act', 'Mention', 'Receipt'],
+    madeOf: ['ConfirmDialog', 'Act', 'Receipt'],
     note: m.gallery_note_proposal,
   },
   {
     name: 'Receipt',
     tier: 'chat',
     sources: ['ui/chat/entries/Receipt.tsx'],
-    madeOf: ['Act', 'Mention'],
+    madeOf: ['Act', 'Fold', 'Mention'],
     note: m.gallery_note_receipt,
   },
   {

@@ -2,11 +2,10 @@
 // top and below, tinted violet toward the curve, since it is the agent's. Its hex, a kicker saying who
 // proposes, the title in Newsreader, then each change on a line, its icon in violet, and the actions:
 // Accept, in the agent's voice, Discard at the far end, asked first. Once decided the zone gives its
-// surface back and leaves its receipt, with the Undo while one is possible. Decided from the zone, the
+// surface back and leaves its receipt, its changes folded under it, with the Undo while one is possible. Decided from the zone, the
 // focus moves to the receipt, so the keyboard never falls back to the top of the page; decided
 // elsewhere, in another tab or by a poll, the focus stays where the user is and a status says it.
 import { cn } from 'cn'
-import type { LucideIcon } from 'lucide-react'
 import { ListChecks } from 'lucide-react'
 import type { FocusEvent } from 'react'
 
@@ -16,14 +15,7 @@ import { ConfirmDialog } from '../../layouts/ConfirmDialog'
 import { Act } from '../atoms/controls'
 import { HexMark } from '../atoms/hex'
 import { useHandOffState } from '../state/useHandOffState'
-import { Said, type Words } from '../text/words'
-import { Receipt } from './Receipt'
-
-/** One change the Proposal would make: its verb's icon and what it does. */
-export interface Change {
-  icon: LucideIcon
-  words: Words
-}
+import { type Change, Changes, Receipt } from './Receipt'
 
 /** How a Proposal stands: waiting for the user, accepted, or discarded. */
 export type Fate = 'open' | 'accepted' | 'discarded'
@@ -47,7 +39,7 @@ export interface ProposalProps {
 }
 
 export function Proposal(props: ProposalProps) {
-  const { title, fate, at, undone = false, onUndo, pending = false } = props
+  const { title, changes, fate, at, undone = false, onUndo, pending = false } = props
   const decided =
     fate === 'accepted' ? m.chat_proposal_accepted({ title }) : m.chat_proposal_discarded({ title })
   const { handOff, status, onFocus, onBlur } = useHandOffState(
@@ -63,6 +55,7 @@ export function Proposal(props: ProposalProps) {
           takesFocus={handOff}
           words={[decided]}
           at={at}
+          changes={changes}
           tone={fate === 'accepted' ? 'agent' : 'quiet'}
           onUndo={fate === 'accepted' ? onUndo : undefined}
           pending={pending}
@@ -118,20 +111,7 @@ function Zone(props: ZoneProps) {
             {m.chat_proposal_empty()}
           </p>
         ) : (
-          <ul className="mt-4 grid gap-2">
-            {changes.map(({ icon: Icon, words }, index) => (
-              // The changes of one Proposal, never reordered: their place is their key.
-              <li
-                key={index}
-                className="grid grid-cols-[0.875rem_minmax(0,1fr)] gap-2.5 text-[0.84375rem] leading-snug font-light text-muted-foreground"
-              >
-                <Icon aria-hidden strokeWidth={1.4} className="mt-0.5 size-3.5 text-agent" />
-                <span className="wrap-anywhere">
-                  <Said words={words} voice="agent" />
-                </span>
-              </li>
-            ))}
-          </ul>
+          <Changes changes={changes} className="mt-4 text-[0.84375rem]" />
         )}
         <div className="mt-4.5 flex flex-wrap items-center gap-x-5.5 gap-y-1">
           <Act tone="agent" disabled={pending} onClick={onAccept}>

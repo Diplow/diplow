@@ -1,6 +1,6 @@
 // The chat's controls, set as text. An action: a small hex, then what it does, the one a piece expects
 // in its voice, the agent's violet or the human's amber, the others quiet until pointed at. A fold:
-// what it hides, said in one line in the second ink, a chevron turning as it opens. Light, not a box,
+// what it hides, said in one line in the quiet ink, a chevron turning as it opens. Light, not a box,
 // so the chat's controls never read as a form's buttons; a finger gets a target of 44px.
 import { cn } from 'cn'
 import { ChevronRight } from 'lucide-react'
@@ -44,14 +44,16 @@ export function Act({ tone = 'quiet', type, className, children, ...props }: Act
 interface FoldProps {
   /** The one line that says what it hides. */
   label: ReactNode
-  /** Its type, `font-mono text-xs`; its ink is the second, as a control's. */
+  /** Its type, `font-mono text-xs`; its ink is the quiet one, the first under the pointer. */
   className?: string
+  /** Where what it hides goes once open, in a line that wraps: `basis-full`, below it. */
+  panelClassName?: string
   /** What it hides until opened. */
   children: ReactNode
 }
 
 /** One line that opens on a click what it hides below it, and folds it back. */
-export function Fold({ label, className, children }: FoldProps) {
+export function Fold({ label, className, panelClassName, children }: FoldProps) {
   const [open, setOpen] = useState(false)
   const id = useId()
   return (
@@ -61,7 +63,7 @@ export function Fold({ label, className, children }: FoldProps) {
         aria-expanded={open}
         aria-controls={id}
         className={cn(
-          'flex items-center gap-2 text-muted-foreground outline-offset-2 transition-colors hover:text-foreground focus-visible:outline pointer-coarse:min-h-11',
+          'flex items-center gap-2 text-faint outline-offset-2 transition-colors hover:text-foreground focus-visible:outline pointer-coarse:min-h-11',
           className,
         )}
         onClick={() => {
@@ -77,7 +79,7 @@ export function Fold({ label, className, children }: FoldProps) {
           )}
         />
       </button>
-      <div id={id} hidden={!open}>
+      <div id={id} hidden={!open} className={panelClassName}>
         {children}
       </div>
     </>

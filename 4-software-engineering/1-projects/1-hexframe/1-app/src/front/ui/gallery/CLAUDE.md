@@ -19,7 +19,7 @@ This folder is the frame of `/design-system` ("The page", below): every folder's
 | `pieces.test.ts` | Each piece's files exist, its "made of" is what they import of the other pieces, through the files that are no piece of their own, pieces sharing a file sharing its imports between them, and the catalogue runs tier by tier, top-down |
 | `stylesheet.ts` | Every token read from `styles.css`: `colorTokens`, the colours of `@theme inline`, each foreground folded into its token; `valueTokens`, the fonts, the sizes, the radius scale, the easings and the animations beside them, and the durations the base layer declares |
 | `Tokens.tsx` | The page's tokens, each under the note that says what it is for (`colourNotes`, `valueNotes`), then phone and touch, and the light. The notes moved in from `3-design-system/TOKENS.md`, and win over it until HEX-112 retires that folder |
-| `tokens.test.ts` | Every colour has a value in both themes and a line in `@theme inline`, and every token one note, no more |
+| `tokens.test.ts` | Every colour has a value in both themes and a line in `@theme inline`, every token one note, no more, and every colour text is set in reads at 4.5:1 at least on the ground and on a card, in both themes |
 
 ## The page
 

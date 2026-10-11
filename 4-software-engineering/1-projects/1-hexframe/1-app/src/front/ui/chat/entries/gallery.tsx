@@ -18,8 +18,8 @@ import { Message } from '../text/Message'
 import { Thinking } from '../text/Thinking'
 import { DaySplit } from './DaySplit'
 import { Events, type Folded, type Happened } from './Events'
-import { type Change, type Fate, Proposal, type ProposalProps } from './Proposal'
-import { Receipt } from './Receipt'
+import { type Fate, Proposal, type ProposalProps } from './Proposal'
+import { type Change, Receipt } from './Receipt'
 
 const column = 'grid w-[32rem] max-w-full gap-5'
 
@@ -89,14 +89,21 @@ export function ChatEntriesGallery() {
           <Receipt
             words={applied}
             at={at(0)}
+            changes={proposal.changes}
             onUndo={() => toast(m.gallery_sample_chat_undone())}
           />
         </Specimen>
         <Specimen label={m.gallery_state_chat_receipt_pending()}>
-          <Receipt words={applied} at={at(0)} onUndo={() => undefined} pending />
+          <Receipt
+            words={applied}
+            at={at(0)}
+            changes={proposal.changes}
+            onUndo={() => undefined}
+            pending
+          />
         </Specimen>
         <Specimen label={m.gallery_state_chat_receipt_undone()}>
-          <Receipt words={applied} at={at(0)} undone />
+          <Receipt words={applied} at={at(0)} changes={proposal.changes} undone />
         </Specimen>
       </GallerySection>
     </>
