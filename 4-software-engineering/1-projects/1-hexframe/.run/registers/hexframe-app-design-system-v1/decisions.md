@@ -8,9 +8,10 @@ preview: >-
   colour became, what "dark by default" leaves of the system's preference,
   how the radius scale squares every corner, the lines of STACK.md and
   claude-mod left for the phase close, where each piece of ui/ went when it
-  regrouped by tier and side, and how /design-system shows the error channels,
-  reads "made of" from the code and keeps its frame outside the tiers, and
-  what the composer's proposal kept and changed of the reference.
+  regrouped by tier and side, how /design-system shows the error channels,
+  reads "made of" from the code and keeps its frame outside the tiers, what
+  the composer's proposal kept and changed of the reference, and where the
+  frames HEX-96 proposed went and how a finger opens them.
 ---
 # Decisions
 
@@ -77,3 +78,30 @@ HEX-99, a proposal. `components.html#commands` drew the composer on a contentedi
 - **`ui/` knows no domain.** No piece of `ui/` imports one, so the Composer takes the Modes as choices its caller builds from Assistant's `Mode`, and the gallery's demo follows the feature's `@` rules (`mention.ts`, 40 characters, ranked, 8 at most) rather than importing them. The commands sit in `ui/chat/composer/commands.ts` while they are a proposal, since the page can only show what `ui/` holds; HEX-101, which runs them through the client's hooks, moves them beside the feature's `@`, and `List` and `cutAround` stay.
 
 The commands are the reference's, the theme aside, which goes to the breadcrumb's head (Q8), with the language and signing out added; which ones stay is an open question on the pull request, as is amber text in light, 3.75:1 on `card`, the tokens' own.
+
+### DEC-11 The frames go where their users will be, and `Menu` replaces `DropdownMenu` in place
+
+HEX-96. The ticket places the widget's frame in `ui/chat/` and says each frame goes to the side that uses it. Nothing uses the frames yet, so each went where the builds will use it, as DEC-5 placed `DropdownMenu`:
+
+- **`Widget`**, `ui/chat/layouts/`: the conversation alone draws widgets.
+- **`Dialog`**, `ui/layouts/`: a Tile's delete opens it from the canvas, a Proposal's discard and a Key's revoke from the chat, as `ConfirmDialog`, which it supersedes, is shared.
+- **`Menu`**, `ui/atoms/`: a widget's settings (the chat) and a tile's actions (the canvas) are both menus. It took `DropdownMenu`'s file: nothing used `DropdownMenu`, so the ticket's "replacing the piece it supersedes once its last user has moved" held already. It stays an atom, as `DropdownMenu` was, although the ticket calls the frames layouts: a menu is a control that knows nothing of hexframe, its header a slot, and `ui/layouts/` has room for one more file only, which `Dialog` took.
+- **`HoverCard`**, `ui/canvas/layouts/`: only a tile has one.
+
+`ConfirmDialog`, `Tooltip` and `Drawer` stay until their users move, in the builds of M3 and M4.
+
+### DEC-12 `Act`, the action the frames share, is an atom
+
+HEX-96. The widget's actions, the receipt's undo and the dialog's two are the prototype's `.act`, a word led by a small hex, and `.btn`, the one solid act cut as a long hex. Drawn inside each frame they would have been three copies, so they are one atom, `ui/atoms/controls/act.tsx`, in the voice of the surface it sits on (`--voice`). It is not `Button`'s replacement: a form's buttons are HEX-100's to redraw.
+
+### DEC-13 Under a finger, the long press opens the menu, and the menu's header says what the hover card would
+
+HEX-96, the project's "To grill". A finger can't hover, and a long press is the menu's. Rather than a second gesture (a tap that shows the card before acting, a press that shows it before the menu), the card never opens under a coarse pointer: the menu's header, a tile's title and place, shows its preview in full there too (`MenuHeader.description`). One gesture, no collision; a tap stays the tile's, which HEX-105 decides. The widget does the same with its tools: under a finger the settings' control alone shows, 44px, and folding and dismissing wait in its menu.
+
+### DEC-14 On a phone, the dialog is a sheet
+
+HEX-96, the project's "To grill". Below `sm` the chat fills the screen, so there is no column for the dialog to open over: it rises from the bottom, the screen's width, the act within the thumb's reach. Wide, it opens over the conversation's column from its left edge, 28rem, a little below the top.
+
+### DEC-15 A risen surface's shadow and the widget's entrance became tokens
+
+HEX-96. The prototype kept `--lift`, a menu's, a card's and the dialog's shadow, out of the tokens ("not tokens yet"); the frames all use it, so it is `--shadow-lift`, from `--lift`, which each theme sets. The widget's entrance, its line drawing itself, the surface unfolding and its parts rising, and the light that runs over lines still to come, are `--animate-draw`, `--animate-unfold`, `--animate-rise` and `--animate-sweep`. Each has its note on `/design-system`. The three frames that rise share one utility, `risen` (`styles.css`): the popover's light, `--shadow-lift` and a fine line on top, which the dialog draws in its voice through `--rim`.
