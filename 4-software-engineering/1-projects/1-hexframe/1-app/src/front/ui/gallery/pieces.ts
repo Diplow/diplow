@@ -130,6 +130,13 @@ export const pieces = [
     note: m.gallery_note_breadcrumb,
   },
   {
+    name: 'Rail',
+    tier: 'canvas',
+    sources: ['ui/canvas/layouts/Rail.tsx'],
+    madeOf: ['ThemeToggle'],
+    note: m.gallery_note_rail,
+  },
+  {
     name: 'HoverCard',
     tier: 'canvas',
     sources: ['ui/canvas/layouts/HoverCard.tsx'],
@@ -156,6 +163,13 @@ export const pieces = [
     sources: ['ui/canvas/atoms/Tooltip.tsx'],
     madeOf: [],
     note: m.gallery_note_tooltip,
+  },
+  {
+    name: 'Screen',
+    tier: 'layouts',
+    sources: ['ui/layouts/screen/Screen.tsx'],
+    madeOf: [],
+    note: m.gallery_note_screen,
   },
   {
     name: 'channels',
@@ -280,7 +294,7 @@ export const pieces = [
     name: 'ThemeToggle',
     tier: 'atoms',
     sources: ['ui/atoms/controls/ThemeToggle.tsx'],
-    madeOf: ['Button'],
+    madeOf: [],
     note: m.gallery_note_theme_toggle,
   },
   {

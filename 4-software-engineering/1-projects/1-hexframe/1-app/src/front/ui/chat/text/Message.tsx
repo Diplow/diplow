@@ -40,13 +40,14 @@ export function Message(props: MessageProps) {
 function Human({ words, state = 'sent', onRetry }: HumanProps) {
   return (
     <div className="group grid max-w-[36em] grid-cols-[minmax(0,1fr)_auto] gap-x-2">
+      {/* `text-prose` outside `cn`, which knows no such size, takes it for a colour and drops it. */}
       <p
-        className={cn(
-          'border-l pl-3.5 font-human text-prose font-light whitespace-pre-wrap wrap-anywhere transition-colors duration-400',
+        className={`text-prose ${cn(
+          'border-l pl-3.5 font-human font-light whitespace-pre-wrap wrap-anywhere transition-colors duration-400',
           state === 'sent' && 'border-human/70 text-foreground',
           state === 'sending' && 'border-human/25 text-muted-foreground',
           state === 'failed' && 'border-destructive text-foreground',
-        )}
+        )}`}
       >
         <span className="sr-only">{m.chat_you_said()} </span>
         <Said words={words} voice="human" />

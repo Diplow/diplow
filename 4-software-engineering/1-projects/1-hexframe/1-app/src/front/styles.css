@@ -196,6 +196,8 @@
   --animate-unfold: unfold var(--duration-bloom) 0.12s var(--ease-glide) both;
   --animate-rise: rise 0.55s var(--ease-glide) both;
   --animate-sweep: sweep 1.8s linear infinite;
+  /* Tailwind's sm, read on the screen's own width: `@wide:` and `@max-wide:`. */
+  --container-wide: 40rem;
 
   @keyframes breathe {
     50% {

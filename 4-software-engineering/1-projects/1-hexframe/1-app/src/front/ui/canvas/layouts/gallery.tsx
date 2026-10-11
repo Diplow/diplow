@@ -1,5 +1,5 @@
-// The canvas's own layouts, on /design-system: the tile's hover card, the centered Tile's card and the
-// drawer its forms open in.
+// The canvas's own layouts, on /design-system: its corner, where you are, the tile's hover card, the
+// centered Tile's card and the drawer its forms open in.
 import { Settings } from 'lucide-react'
 import { useState, type ComponentProps } from 'react'
 
@@ -7,13 +7,27 @@ import { m } from '#/paraglide/messages'
 
 import { Button } from '../../atoms/controls/button'
 import { GallerySection, GalleryState } from '../../gallery/frame'
+import { ulysse } from '../fixtures'
+import { pathTo } from '../view/tiles'
 import { Card } from './Card'
 import { Drawer } from './Drawer'
 import { HoverCard } from './HoverCard'
+import { Rail } from './Rail'
 
 export function CanvasLayoutsGallery() {
   return (
     <>
+      <GallerySection name="Rail">
+        <GalleryState label={m.gallery_state_at_the_root()}>
+          <RailSpecimen from={ulysse.id} />
+        </GalleryState>
+        <GalleryState label={m.gallery_state_one_level_down()}>
+          <RailSpecimen from="software-engineering" />
+        </GalleryState>
+        <GalleryState label={m.gallery_state_three_levels_down()}>
+          <RailSpecimen from="hexframe" />
+        </GalleryState>
+      </GallerySection>
       <GallerySection name="HoverCard">
         <GalleryState label={m.gallery_state_hover_or_focus()}>
           <HoverCard
@@ -111,6 +125,20 @@ function DrawerSpecimen() {
         <p className="text-sm">{m.gallery_sample_tile_body()}</p>
       </Drawer>
     </>
+  )
+}
+
+// The corner of a canvas on the fixture System, from a Tile down the vault; a step up centers on it.
+function RailSpecimen({ from }: { from: string }) {
+  const [here, setHere] = useState(from)
+  return (
+    <div className="relative h-72 w-80 bg-background">
+      <Rail
+        steps={pathTo(ulysse, here)}
+        onSelect={setHere}
+        className="absolute top-[1.375rem] right-[1.375rem]"
+      />
+    </div>
   )
 }
 
