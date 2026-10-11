@@ -20,6 +20,7 @@ import { Canvas } from '#/front/ui/canvas/Canvas'
 import { CanvasAtomsGallery } from '#/front/ui/canvas/atoms/gallery'
 import { fixtureViews, ulysse } from '#/front/ui/canvas/fixtures'
 import { CanvasLayoutsGallery } from '#/front/ui/canvas/layouts/gallery'
+import { TileGallery } from '#/front/ui/canvas/tile/gallery'
 import { Rail } from '#/front/ui/canvas/layouts/Rail'
 import { pathTo, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { centerOn, readCanvasView, showView, type CanvasView } from '#/front/ui/canvas/view/view'
@@ -73,6 +74,7 @@ function DesignSystem() {
       </GalleryTier>
       <GalleryTier tier="canvas">
         <CanvasGallery view={view} onViewChange={onViewChange} />
+        <TileGallery />
         <BreadcrumbGallery view={view} onViewChange={onViewChange} />
         <CanvasLayoutsGallery />
         <CanvasAtomsGallery />
