@@ -1,8 +1,8 @@
-// A batch: Operations kept to run later, as the Assistant's Proposal keeps the writes its agent drafts,
-// and the System they would make, folded over a System by the Decider. Each was decided once already,
+// A batch: Operations kept to run later, written nowhere until they run, and the System they would
+// make, folded over a System by the Decider. Each was decided once already,
 // on the System the batch made before it, a create given the id of what it makes then, so folding the
 // batch again over the same System makes the same Tiles under the same ids. An Operation that no longer
-// applies, a Tile changed or gone since, is left out of the fold and said so, by its place, so the
+// applies, a Tile changed or gone since, is left out of the fold and said so, by its refusal, so the
 // rest still folds; running the batch for good refuses the whole of it then (`mapping.ts`). Pure.
 import { Result, Schema } from 'effect'
 
@@ -22,20 +22,14 @@ export const Batched = Schema.Struct({
 })
 export type Batched = typeof Batched.Type
 
-/** One Operation of a batch the fold left out, by its place in the batch, and the refusal it met. */
-interface Left {
-  readonly at: number
-  readonly refusal: Refusal
-}
-
 /**
  * What a batch makes of a System: the System after every Operation of it that still applies, in
- * order, their events, and those it left out, by their place.
+ * order, their events, and the refusals of those it left out, in order.
  */
 export interface Folded {
   readonly system: System
   readonly events: ReadonlyArray<OperationEvent>
-  readonly left: ReadonlyArray<Left>
+  readonly left: ReadonlyArray<Refusal>
 }
 
 /** What a batched Operation makes on a System, decided as `decide` decides it. */
@@ -61,10 +55,10 @@ const applied = (system: System, batched: Batched) =>
  */
 export const fold = (system: System, batch: ReadonlyArray<Batched>): Folded =>
   batch.reduce<Folded>(
-    (folded, batched, at) =>
+    (folded, batched) =>
       Result.match(applied(folded.system, batched), {
         onSuccess: (next) => ({ ...folded, ...next, events: [...folded.events, ...next.events] }),
-        onFailure: (refusal) => ({ ...folded, left: [...folded.left, { at, refusal }] }),
+        onFailure: (refusal) => ({ ...folded, left: [...folded.left, refusal] }),
       }),
     { system, events: [], left: [] },
   )
@@ -79,7 +73,7 @@ export const whole = (
 ): Result.Result<Folded, Refusal> => {
   const folded = fold(system, batch)
   const [first] = folded.left
-  return first === undefined ? Result.succeed(folded) : Result.fail(first.refusal)
+  return first === undefined ? Result.succeed(folded) : Result.fail(first)
 }
 
 /**

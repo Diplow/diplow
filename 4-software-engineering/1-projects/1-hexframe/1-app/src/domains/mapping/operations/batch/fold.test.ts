@@ -89,10 +89,7 @@ describe('fold, a batch over a System', () => {
       batched(new DeleteTile({ id: uuid(), version: 1 })),
     ]
     const folded = fold(system, stale)
-    expect(folded.left.map(({ at, refusal }) => [at, refusal._tag])).toEqual([
-      [0, 'TileChanged'],
-      [2, 'TileNotFound'],
-    ])
+    expect(folded.left.map(({ _tag }) => _tag)).toEqual(['TileChanged', 'TileNotFound'])
     expect(tileAt(folded.system, id.branch)).toMatchObject({ title: id.branch, slot: 4 })
   })
 
@@ -101,10 +98,7 @@ describe('fold, a batch over a System', () => {
     if (create === undefined || child === undefined) throw new Error('The batch holds two creates')
     const taken = { ...system, tiles: { ...system.tiles, [uuid()]: placed(uuid(), id.root, 2) } }
     const folded = fold(taken, [create, child])
-    expect(folded.left.map(({ at, refusal }) => [at, refusal._tag])).toEqual([
-      [0, 'DirectionTaken'],
-      [1, 'TileNotFound'],
-    ])
+    expect(folded.left.map(({ _tag }) => _tag)).toEqual(['DirectionTaken', 'TileNotFound'])
   })
 
   it('refuses a create that lost the id of what it makes, a defect', () => {

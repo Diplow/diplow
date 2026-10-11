@@ -140,8 +140,8 @@ interface Read<F extends Field> {
 
 /**
  * Where a read starts, how far down it goes, what it asks of each Tile, and Help's language; and the
- * batch it shows folded over the System, a Turn's Proposal for the Turn that drafts into it, none
- * when it reads the System as it stands.
+ * batch it shows folded over the System, Operations kept to run later, none when it reads the
+ * System as it stands.
  */
 interface ReadFrom<O extends Field, F extends Field> {
   readonly id?: string | undefined
@@ -284,7 +284,7 @@ export const exportTile = (accountId: string, { id, link }: { id: string; link: 
  * The Account's System as files, the export of its Root, and where each of its Tiles lives in them,
  * by id, both from one read: a Turn's sandbox holds the files, and starts in a Tile's folder or hands
  * the agent its path. `link` is where the app shows a Tile, for a Reference whose Tile is gone. With a
- * batch `over` it, the System the batch makes (`fold`), so a Turn's files and its reads agree.
+ * batch `over` it, the System the batch makes (`fold`), as the reads through it show it.
  */
 export const systemFiles = (accountId: string, link: LinkOf, over: ReadonlyArray<Batched> = []) =>
   Effect.gen(function* () {

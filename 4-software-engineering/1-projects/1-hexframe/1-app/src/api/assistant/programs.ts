@@ -196,7 +196,7 @@ const agentStarted = (
 ) =>
   Effect.gen(function* () {
     const { url } = yield* HttpExchange
-    const over = yield* shownTo(accountId, turn)
+    const over = yield* shownTo(accountId, turn.id)
     const { files, places } = yield* Mapping.systemFiles(accountId, tileLink(url), over)
     const entries = yield* Assistant.latestToday(accountId, offset)
     const linked = linksOf(text)

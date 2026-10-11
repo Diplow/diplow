@@ -5,7 +5,7 @@
 // summarized. Pure.
 import { Schema } from 'effect'
 
-import { Mode, ProposedChange } from '../entities'
+import { Decision, Mode, ProposedChange } from '../entities'
 
 /** Switches the Conversation's Mode: the Turns started from then on take it. */
 export class SetMode extends Schema.TaggedClass<SetMode>()('SetMode', { mode: Mode }) {}
@@ -53,7 +53,7 @@ export class Drafted extends Schema.TaggedClass<Drafted>()('Drafted', {
 /** The user decided the open Proposal of this id: accepted whole, or discarded. It is open no longer. */
 export class ProposalDecided extends Schema.TaggedClass<ProposalDecided>()('ProposalDecided', {
   proposal: Schema.String,
-  fate: Schema.Literals(['accepted', 'discarded']),
+  fate: Decision,
 }) {}
 
 /** What an Operation did to a Conversation. */

@@ -8,7 +8,7 @@
 import { Effect, Schema } from 'effect'
 
 import * as Assistant from '#/domains/assistant/assistant'
-import { type Mode, routeOf, type Turn } from '#/domains/assistant/entities'
+import type { Mode } from '#/domains/assistant/entities'
 import { type OpenProposal, writesOf } from '#/domains/assistant/operations'
 import * as Iam from '#/domains/iam/iam'
 import type { Field } from '#/domains/mapping/entities'
@@ -31,13 +31,16 @@ const batchOf = (open: OpenProposal | undefined) =>
   open === undefined ? Effect.succeed([]) : Effect.orDie(decodedBatch(writesOf(open)))
 
 /**
- * The batch a Turn shows over the System, in its reads and its files: its Conversation's open
- * Proposal for a Turn that drafts, none for one that applies.
+ * The batch one of the Account's Turns shows over the System, in its reads and its files, by
+ * Assistant's `route`, as its writes are routed: its Conversation's open Proposal for a Turn that
+ * drafts, none for one that applies.
  */
-export const shownTo = (accountId: string, turn: Pick<Turn, 'mode'>) =>
-  routeOf(turn) === 'apply'
-    ? Effect.succeed([])
-    : Effect.flatMap(Assistant.openProposal(accountId), batchOf)
+export const shownTo = (accountId: string, turnId: string) =>
+  Effect.flatMap(Assistant.route(accountId, turnId), (route) =>
+    route === 'apply'
+      ? Effect.succeed([])
+      : Effect.flatMap(Assistant.openProposal(accountId), batchOf),
+  )
 
 /**
  * The batch the request's reads show over the System: the Proposal its Turn drafts into, for a request
@@ -46,7 +49,7 @@ export const shownTo = (accountId: string, turn: Pick<Turn, 'mode'>) =>
 const shownOver = Effect.gen(function* () {
   const { account, by } = yield* Iam.signedIn
   if (by._tag !== 'TurnKey') return []
-  return yield* shownTo(account.id, yield* Assistant.turn(account.id, by.turnId))
+  return yield* shownTo(account.id, by.turnId)
 })
 
 /** The MCP's `map`: a Tile read to a depth, the System as the request's Turn sees it (`shownOver`). */

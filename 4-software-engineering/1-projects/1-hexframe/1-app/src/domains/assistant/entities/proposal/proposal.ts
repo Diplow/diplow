@@ -15,8 +15,11 @@ export type Mode = typeof Mode.Type
 /** The Mode of a Conversation nobody switched yet. */
 export const firstMode: Mode = 'ask'
 
+/** How the user decides an open Proposal: accepted whole, or discarded. */
+export const Decision = Schema.Literals(['accepted', 'discarded'])
+
 /** How a Proposal stands: open, waiting for the user, or how the user decided it. */
-export const Fate = Schema.Literals(['open', 'accepted', 'discarded'])
+export const Fate = Schema.Literals(['open', ...Decision.literals])
 
 export type Fate = typeof Fate.Type
 
