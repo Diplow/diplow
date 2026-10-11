@@ -207,7 +207,7 @@ layer(TestLayer)('what the Assistant applied, undone once, over PGlite', (it) =>
       const accepted = yield* transactional(acceptProposal(account, opened.id))
       yield* transactional(proposalApplied(account, accepted, { undo: { mapping: 1 }, changes: 1 }))
       expect(yield* transactional(undo(account, opened.id))).toEqual({ mapping: 1 })
-      expect((yield* proposalsOn(account)).map(({ fate }) => fate)).toEqual(['undone'])
+      expect(yield* proposalsOn(account)).toMatchObject([{ fate: 'accepted', undone: true }])
       const again = yield* transactional(undo(account, opened.id)).pipe(Effect.flip)
       expect(again._tag).toBe('NothingToUndo')
     }),

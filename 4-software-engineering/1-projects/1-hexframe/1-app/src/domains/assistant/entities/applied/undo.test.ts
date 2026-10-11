@@ -2,17 +2,22 @@ import { Result } from 'effect'
 import { describe, expect, it } from 'vitest'
 
 import type { EntryContent } from '../entry'
-import { offersUndo, undoing, undoneEntry } from './undo'
+import { offeredNow, offersUndo, undoing, undoneEntry } from './undo'
 
-// What the Assistant applied, undone once, on Entries and rows made by hand: the Entries that offer an
-// Undo and what they say once undone, and whether what was applied may be undone. That the service
+// What the Assistant applied, undone once, on Entries and rows made by hand: when a Turn's is offered,
+// the Entries that offer an Undo and what they say once undone, and whether what was applied may be
+// undone. That the service
 // keeps and undoes it is `../../proposals.test.ts`'s.
 
-const proposal = (fate: Extract<EntryContent, { _tag: 'Proposal' }>['fate']): EntryContent => ({
+const proposal = (
+  fate: Extract<EntryContent, { _tag: 'Proposal' }>['fate'],
+  undone?: boolean,
+): EntryContent => ({
   _tag: 'Proposal',
   proposal: 'p-1',
   changes: [],
   fate,
+  ...(undone !== undefined && { undone }),
 })
 
 const applied = (undone: boolean): EntryContent => ({
@@ -24,7 +29,7 @@ const applied = (undone: boolean): EntryContent => ({
 
 describe('undoneEntry and offersUndo, the Entries that offer an Undo', () => {
   it('says an accepted Proposal and a Turn applied undone, once', () => {
-    expect(undoneEntry(proposal('accepted'))).toEqual(proposal('undone'))
+    expect(undoneEntry(proposal('accepted'))).toEqual(proposal('accepted', true))
     expect(undoneEntry(applied(false))).toEqual(applied(true))
     expect(offersUndo(proposal('accepted'))).toBe(true)
     expect(offersUndo(applied(false))).toBe(true)
@@ -34,7 +39,7 @@ describe('undoneEntry and offersUndo, the Entries that offer an Undo', () => {
     for (const entry of [
       proposal('open'),
       proposal('discarded'),
-      proposal('undone'),
+      proposal('accepted', true),
       applied(true),
       { _tag: 'TurnEnded', how: 'stopped' } as const,
     ]) {
@@ -59,5 +64,15 @@ describe('undoing, what was applied undone once', () => {
       const refused = undoing(kept)
       expect(Result.isFailure(refused) && refused.failure._tag).toBe('NothingToUndo')
     }
+  })
+})
+
+describe('offeredNow, when what a Turn applied is offered', () => {
+  it('offers it once its Turn ended, once, and only when it changed anything', () => {
+    expect(offeredNow({ changes: 2, entryId: null }, { ended: true })).toBe(true)
+    expect(offeredNow({ changes: 2, entryId: null }, { ended: false })).toBe(false)
+    expect(offeredNow({ changes: 2, entryId: 'e-1' }, { ended: true })).toBe(false)
+    expect(offeredNow({ changes: 0, entryId: null }, { ended: true })).toBe(false)
+    expect(offeredNow(undefined, { ended: true })).toBe(false)
   })
 })

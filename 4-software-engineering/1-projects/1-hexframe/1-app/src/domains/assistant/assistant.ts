@@ -47,6 +47,7 @@ import {
   type Turn,
   TurnEnd,
   TurnStep,
+  offeredNow,
   undoneEntry,
   undoing,
   within,
@@ -260,21 +261,20 @@ export const endTurn = (accountId: string, turnId: string, how: TurnEnd) =>
       const ago = how === 'time' ? now - deadline(ended).getTime() : 0
       yield* record(accountId, { _tag: 'TurnEnded', how }, ago)
     }
-    yield* offerUndo(accountId, turnId)
+    yield* offerUndo(accountId, turnId, { ended: true })
     return ended
   })
 
 /**
- * Records what one of the Account's Turns applied, once it ended, in an Entry that offers to undo it:
- * none for a Turn that changed nothing, or whose Entry is recorded already. The Conversation locked
- * first, as a write of the Turn locks it, so a write that lands as the Turn ends is offered by one
- * or the other.
+ * Records what one of the Account's Turns applied in an Entry that offers to undo it, when
+ * `offeredNow` says so. The Conversation locked first, as a write of the Turn locks it, so a write
+ * that lands as the Turn ends is offered by one or the other.
  */
-const offerUndo = (accountId: string, turnId: string) =>
+const offerUndo = (accountId: string, turnId: string, turnState: { readonly ended: boolean }) =>
   Effect.gen(function* () {
     yield* Proposals.use((proposals) => proposals.locked(accountId))
     const kept = yield* Applied.use((applied) => applied.locked(accountId, turnId))
-    if (kept === undefined || kept.entryId !== null || kept.changes === 0) return
+    if (kept === undefined || !offeredNow(kept, turnState)) return
     const { changes } = kept
     const entry = yield* record(accountId, {
       _tag: 'TurnApplied',
@@ -735,7 +735,8 @@ export const turnApplied = (accountId: string, turnId: string, { undo, changes }
     const total = (kept?.changes ?? 0) + changes
     yield* Applied.use((applied) => applied.keep(accountId, turnId, { undo, changes: total }))
     // A write that landed as its Turn ended, the Turn's Key proven just before, is offered now.
-    if ((yield* turn(accountId, turnId)).ended !== undefined) yield* offerUndo(accountId, turnId)
+    const ended = (yield* turn(accountId, turnId)).ended !== undefined
+    yield* offerUndo(accountId, turnId, { ended })
   })
 
 /**

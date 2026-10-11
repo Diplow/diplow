@@ -18,11 +18,8 @@ export const firstMode: Mode = 'ask'
 /** How the user decides an open Proposal: accepted whole, or discarded. */
 export const Decision = Schema.Literals(['accepted', 'discarded'])
 
-/**
- * How a Proposal stands: open, waiting for the user; how the user decided it; or undone, accepted
- * then undone by the user.
- */
-export const Fate = Schema.Literals(['open', ...Decision.literals, 'undone'])
+/** How a Proposal stands: open, waiting for the user, or how the user decided it. */
+export const Fate = Schema.Literals(['open', ...Decision.literals])
 
 export type Fate = typeof Fate.Type
 

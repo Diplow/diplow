@@ -120,7 +120,7 @@ describe('an accepted Proposal', () => {
       'You TileDeleted',
       'You TileDeleted',
     ])
-    expect((await entriesOf('Proposal')).map(({ fate }) => fate)).toEqual(['undone'])
+    expect(await entriesOf('Proposal')).toMatchObject([{ fate: 'accepted', undone: true }])
     expect(await undone(open.proposal)).toMatchObject({
       ok: false,
       failure: { _tag: 'NothingToUndo', kind: 'Conflict' },

@@ -172,44 +172,58 @@ describe("what Assistant keeps of the agent's stream", () => {
   })
 })
 
+const at = new Date('2026-10-10T14:02:00Z')
+
+/** Today's Entries a prompt holds, one of every kind, all at one instant. */
+const entries: ReadonlyArray<Entry> = [
+  { _tag: 'Message', author: 'user', text: 'Rename Games.', id: 'e1', at },
+  {
+    _tag: 'Navigation',
+    steps: [{ gesture: 'center', tile: 'games' }],
+    gestures: 3,
+    id: 'e2',
+    at,
+  },
+  {
+    _tag: 'Change',
+    verb: 'TileEdited',
+    tile: { id: 'games', title: 'Play' },
+    actor: { _tag: 'Key', name: 'Claude Code' },
+    id: 'e3',
+    at,
+  },
+  { _tag: 'TurnEnded', how: 'stopped', id: 'e4', at },
+  { _tag: 'Message', author: 'agent', text: 'Done.', id: 'e5', at },
+  {
+    _tag: 'Proposal',
+    proposal: 'p1',
+    changes: [
+      { _tag: 'Change', verb: 'TileCreated', tile: { id: 'go', title: 'Go' } },
+      {
+        _tag: 'Change',
+        verb: 'TilesSwapped',
+        tile: { id: 'go', title: 'Go' },
+        other: { id: 'chess', title: 'Chess' },
+      },
+    ],
+    fate: 'open',
+    id: 'e6',
+    at,
+  },
+  { _tag: 'TurnApplied', turn: 't1', changes: 3, undone: false, id: 'e7', at },
+  { _tag: 'TurnApplied', turn: 't2', changes: 1, undone: true, id: 'e8', at },
+  {
+    _tag: 'Proposal',
+    proposal: 'p0',
+    changes: [{ _tag: 'Change', verb: 'TileDeleted', tile: { id: 'old', title: 'Old' } }],
+    fate: 'accepted',
+    undone: true,
+    id: 'e9',
+    at,
+  },
+]
+
 describe("a Turn's prompt", () => {
-  const at = new Date('2026-10-10T14:02:00Z')
-  const entries: ReadonlyArray<Entry> = [
-    { _tag: 'Message', author: 'user', text: 'Rename Games.', id: 'e1', at },
-    {
-      _tag: 'Navigation',
-      steps: [{ gesture: 'center', tile: 'games' }],
-      gestures: 3,
-      id: 'e2',
-      at,
-    },
-    {
-      _tag: 'Change',
-      verb: 'TileEdited',
-      tile: { id: 'games', title: 'Play' },
-      actor: { _tag: 'Key', name: 'Claude Code' },
-      id: 'e3',
-      at,
-    },
-    { _tag: 'TurnEnded', how: 'stopped', id: 'e4', at },
-    { _tag: 'Message', author: 'agent', text: 'Done.', id: 'e5', at },
-    {
-      _tag: 'Proposal',
-      proposal: 'p1',
-      changes: [
-        { _tag: 'Change', verb: 'TileCreated', tile: { id: 'go', title: 'Go' } },
-        {
-          _tag: 'Change',
-          verb: 'TilesSwapped',
-          tile: { id: 'go', title: 'Go' },
-          other: { id: 'chess', title: 'Chess' },
-        },
-      ],
-      fate: 'open',
-      id: 'e6',
-      at,
-    },
-  ]
   const prompt = promptOf({
     entries,
     titles: { games: 'Games' },
@@ -297,6 +311,9 @@ describe("a Turn's prompt", () => {
       '- 14:02 UTC: A Turn of yours ended before its answer: the user stopped it.',
       '- 14:02 UTC: You: "Done."',
       '- 14:02 UTC: You drafted a Proposal (open, waiting for the user): TileCreated "Go" (id "go"); TilesSwapped "Go" (id "go"), with "Chess" (id "chess").',
+      '- 14:02 UTC: A Turn of yours in apply made 3 changes.',
+      '- 14:02 UTC: A Turn of yours in apply made 1 change, which the user undid.',
+      '- 14:02 UTC: You drafted a Proposal (the user accepted it, then undid it): TileDeleted "Old" (id "old").',
     ])
   })
 

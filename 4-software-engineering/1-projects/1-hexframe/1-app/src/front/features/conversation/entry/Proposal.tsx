@@ -36,7 +36,11 @@ export function ProposalEntry({ entry, decide }: ProposalProps) {
         <span className="min-w-0 flex-1 font-medium text-foreground">
           {m.conversation_proposal_title()}
         </span>
-        <span className={fates[fate].className}>{fates[fate].label()}</span>
+        {entry.undone === true ? (
+          <span>{m.conversation_proposal_undone()}</span>
+        ) : (
+          <span className={fates[fate].className}>{fates[fate].label()}</span>
+        )}
         <span aria-hidden>·</span>
         <Time at={entry.at} />
       </p>
@@ -46,7 +50,7 @@ export function ProposalEntry({ entry, decide }: ProposalProps) {
         <ul
           className={cn(
             'grid gap-1 text-sm',
-            (fate === 'discarded' || fate === 'undone') && 'opacity-60',
+            (fate === 'discarded' || entry.undone === true) && 'opacity-60',
           )}
         >
           {changes.map((change, index) => (
@@ -96,7 +100,6 @@ const fates: Record<Fate, { label: () => string; className: string }> = {
   open: { label: m.conversation_proposal_open, className: 'font-medium text-foreground' },
   accepted: { label: m.conversation_proposal_accepted, className: 'text-success' },
   discarded: { label: m.conversation_proposal_discarded, className: '' },
-  undone: { label: m.conversation_proposal_undone, className: '' },
 }
 
 /** The Titles a drafted change names: the Tile it is about, and the other one, if any. */
