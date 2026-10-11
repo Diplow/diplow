@@ -22,6 +22,8 @@ interface Words {
    * `decide` says, which its caller asks.
    */
   turns?: boolean
+  /** Whether a tile can be added inside it: Mapping's `decide` says, which its caller asks. */
+  holds?: boolean
 }
 
 /**
@@ -60,7 +62,7 @@ export const actsAtOnce = (verb: Verb): verb is Exclude<Verb, Opening> =>
   verb !== 'add' && verb !== 'move' && verb !== 'copy'
 
 /** What the menu hands its caller: a verb, one of what Copy holds, or a place picked in a frame. */
-export type Act =
+export type TileAct =
   | {
       verb: Exclude<Verb, Opening> | 'copy-link' | 'copy-title' | 'copy-mention' | 'move-elsewhere'
     }
@@ -71,14 +73,14 @@ type Group = readonly (Verb | false | undefined)[]
 /** The groups of a tile in the ring, by its kind. */
 function ringGroups(
   kind: Exclude<MenuKind, 'root' | 'untitled'>,
-  turns: boolean,
+  { turns = false, holds = false }: Pick<Words, 'turns' | 'holds'>,
 ): readonly Group[] {
   switch (kind) {
     case 'branch':
       return [
         ['open', 'go-in', 'show-context'],
         ['edit', turns && 'make-leaf'],
-        ['add', 'move'],
+        [holds && 'add', 'move'],
         ['ask-agent'],
         ['copy', 'export'],
         ['delete'],
@@ -87,13 +89,20 @@ function ringGroups(
       return [
         ['open', 'show-context'],
         ['edit', turns && 'make-branch'],
-        ['move'],
+        [holds && 'add', 'move'],
         ['ask-agent'],
         ['copy', 'export'],
         ['delete'],
       ]
     case 'context':
-      return [['open'], ['edit'], ['move'], ['ask-agent'], ['copy', 'export'], ['delete']]
+      return [
+        ['open'],
+        ['edit'],
+        [holds && 'add', 'move'],
+        ['ask-agent'],
+        ['copy', 'export'],
+        ['delete'],
+      ]
     case 'reference':
       return [['open'], ['ask-agent'], ['copy'], ['remove-reference']]
     case 'broken':
@@ -108,14 +117,14 @@ function ringGroups(
  * it neither moves nor goes, since it is where you are.
  */
 function centerGroups(subject: Extract<Subject, { title: string }>): readonly Group[] {
-  const { kind } = subject
-  const holds = kind === 'root' || kind === 'untitled' || kind === 'branch'
+  const { kind, holds = false } = subject
+  const own = kind !== 'reference' && kind !== 'broken' && kind !== 'draft'
   return [
     [subject.parent !== undefined && 'back-out', kind !== 'draft' && 'show-context'],
-    [kind !== 'reference' && kind !== 'broken' && kind !== 'draft' && 'edit'],
+    [own && 'edit'],
     [holds && 'add', kind === 'untitled' && 'import'],
     ['ask-agent'],
-    [kind !== 'broken' && 'copy', holds && 'export'],
+    [kind !== 'broken' && 'copy', own && 'export'],
   ]
 }
 
@@ -126,7 +135,7 @@ export function groupsOf(subject: Subject): Verb[][] {
       ? [['new-tile', 'import'], ['ask-agent']]
       : subject.at === 'center'
         ? centerGroups(subject)
-        : ringGroups(subject.kind, subject.turns === true)
+        : ringGroups(subject.kind, subject)
   return groups
     .map((group) => group.filter((verb): verb is Verb => typeof verb === 'string'))
     .filter((group) => group.length > 0)
@@ -151,12 +160,12 @@ export function clickOf(
 }
 
 const directionNames: Record<Direction, () => string> = {
-  1: m.direction_1,
-  2: m.direction_2,
-  3: m.direction_3,
-  4: m.direction_4,
-  5: m.direction_5,
-  6: m.direction_6,
+  1: m.direction_north_west,
+  2: m.direction_north_east,
+  3: m.direction_east,
+  4: m.direction_south_east,
+  5: m.direction_south_west,
+  6: m.direction_west,
 }
 
 /** A Direction, in words: north-west, east… */

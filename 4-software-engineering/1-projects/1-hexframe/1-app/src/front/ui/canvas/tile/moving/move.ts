@@ -5,7 +5,7 @@ import { directions, type Direction, type Point } from '../../geometry/geometry'
 
 /** A tile seated in a Direction of the frame: whether it can trade places with the one moving. */
 export interface Seat {
-  /** A Branch offers to trade places; a Leaf, a Reference and the rest take no part. */
+  /** Whether it offers to trade places, as its caller says (`swapsWith`, a Branch on home). */
   swaps: boolean
 }
 

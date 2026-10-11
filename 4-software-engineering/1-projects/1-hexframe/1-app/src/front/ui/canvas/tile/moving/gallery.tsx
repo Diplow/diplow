@@ -15,8 +15,20 @@ import type { TileNode } from '../../view/tiles'
 import { noop, Specimen } from '../gallery'
 import { directionName } from '../menu/verbs'
 import { Slot } from '../places'
-import { branchOf, fixture, ring, trades, useScale, wordsOf } from '../specimens'
-import { Tile, type TileLook } from '../Tile'
+import {
+  branchOf,
+  fixture,
+  frameHeight,
+  frameRadius,
+  frameWidth,
+  gap,
+  ring,
+  seatsOf,
+  useScale,
+  wordsOf,
+  type Ring,
+} from '../specimens'
+import { Tile } from '../Tile'
 import { dropAt, landed, partOf, type Frame } from './move'
 import { unitsIn, useDrag } from './drag'
 import { Aside, LandingSlot, Lifted, MoveBanner, SwapDisc, withoutFoot } from './Moving'
@@ -83,12 +95,7 @@ export function MovingGallery() {
 }
 
 /** A tile of the frame, and how it is drawn. */
-interface Seated {
-  tile: TileNode
-  look: TileLook
-}
-
-type Ring = Partial<Record<Direction, Seated>>
+type Seated = NonNullable<Ring[Direction]>
 
 /** A move landing: where from and where to, gliding there, flaring once refused, or gliding back. */
 interface Landing {
@@ -97,10 +104,6 @@ interface Landing {
   phase: 'glide' | 'refused' | 'back'
 }
 
-const frameWidth = 600
-const frameHeight = 560
-const frameRadius = 110
-const gap = 0.95
 const origin = { x: 0, y: 0 }
 const centerHex: Hex = { center: origin, radius: frameRadius }
 const hearts = Object.fromEntries(
@@ -108,11 +111,7 @@ const hearts = Object.fromEntries(
 ) as Record<Direction, Point>
 
 /** The ring as a move reads it: who trades places; every free slot takes the tile on the fixture. */
-const frameOf = (ring: Ring): Frame => ({
-  seats: Object.fromEntries(
-    Object.entries(ring).map(([direction, seated]) => [direction, { swaps: trades(seated.tile) }]),
-  ),
-})
+const frameOf = (seated: Ring): Frame => ({ seats: seatsOf(seated) })
 
 /** A CSS duration, `600ms` or `0.6s`, in milliseconds; none with reduced motion. */
 function glideOf(svg: SVGSVGElement | null): number {
@@ -155,6 +154,7 @@ function useMove(svg: RefObject<SVGSVGElement | null>) {
     if (landing !== undefined || moving === undefined) return
     // A tile dragged when the move stops goes back, and its drop lands nowhere.
     cancel()
+    setOver(undefined)
     setMoving(undefined)
     focus(frame[moving]?.tile.id)
   }

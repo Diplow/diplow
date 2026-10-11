@@ -112,7 +112,9 @@ export function Menu({
   const body = (kit: Kit) => (
     <>
       {header !== undefined && <Header {...header} />}
-      <Lines entries={entries} kit={kit} />
+      <KitContext value={kit}>
+        <Lines entries={entries} />
+      </KitContext>
     </>
   )
 
@@ -222,7 +224,8 @@ function runOnTheThing(
   entries: readonly MenuEntry[],
   opening: { current: number | undefined },
 ) {
-  if (linesKey(event)) return
+  // Once per press: a held key repeating would delete, or ask, again and again.
+  if (linesKey(event) || event.repeat) return
   const index = shortcutIndex(entries, event)
   const entry = entries[index]
   if (entry === undefined || entry === 'separator' || isToggle(entry)) return
@@ -289,7 +292,7 @@ const dropdownOrigin = 'origin-(--radix-dropdown-menu-content-transform-origin)'
 const contextKit: Kit = { parts: ContextMenu, origin: contextOrigin }
 const dropdownKit: Kit = { parts: DropdownMenu, origin: dropdownOrigin }
 
-/** The menu a `MenuChoice` is drawn in, whose parts it takes. */
+/** The menu its lines and a `MenuChoice` are drawn in, whose parts they take. */
 const KitContext = createContext<Kit>(dropdownKit)
 
 const line =
@@ -308,18 +311,12 @@ const tones = {
 const toneOf = (item: MenuItem | undefined) =>
   item?.tone === undefined ? undefined : tones[item.tone]
 
-function Lines({ entries, kit }: { entries: readonly MenuEntry[]; kit: Kit }) {
-  return (
-    <KitContext value={kit}>
-      {entries.map((entry, index) => (
-        <Entry key={index} entry={entry} index={index} kit={kit} />
-      ))}
-    </KitContext>
-  )
+function Lines({ entries }: { entries: readonly MenuEntry[] }) {
+  return entries.map((entry, index) => <Entry key={index} entry={entry} index={index} />)
 }
 
-function Entry({ entry, index, kit }: { entry: MenuEntry; index: number; kit: Kit }) {
-  const { parts } = kit
+function Entry({ entry, index }: { entry: MenuEntry; index: number }) {
+  const { parts } = useContext(KitContext)
   if (entry === 'separator') {
     return <parts.Separator className={rule} />
   }
@@ -343,7 +340,7 @@ function Entry({ entry, index, kit }: { entry: MenuEntry; index: number; kit: Ki
       </parts.CheckboxItem>
     )
   }
-  if (isSubmenu(entry)) return <Submenu entry={entry} index={index} kit={kit} />
+  if (isSubmenu(entry)) return <Submenu entry={entry} index={index} />
   return (
     <parts.Item
       data-entry={index}
@@ -382,7 +379,8 @@ function LineWords({
 }
 
 /** A line that opens a menu beside it, never over what the menu acts on. */
-function Submenu({ entry, index, kit }: { entry: MenuSubmenu; index: number; kit: Kit }) {
+function Submenu({ entry, index }: { entry: MenuSubmenu; index: number }) {
+  const kit = useContext(KitContext)
   const { parts } = kit
   const { submenu } = entry
   return (
@@ -404,7 +402,7 @@ function Submenu({ entry, index, kit }: { entry: MenuSubmenu; index: number; kit
           className={cn(surface, kit.origin)}
         >
           {submenu.picture}
-          {submenu.entries !== undefined && <Lines entries={submenu.entries} kit={kit} />}
+          {submenu.entries !== undefined && <Lines entries={submenu.entries} />}
         </parts.SubContent>
       </parts.Portal>
     </parts.Sub>

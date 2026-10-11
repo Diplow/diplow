@@ -12,11 +12,22 @@ import { ulysse } from '../../fixtures'
 import { directions, neighbor, type Hex } from '../../geometry/geometry'
 import type { TileNode } from '../../view/tiles'
 import { Slot } from '../places'
-import { fixture, ring, trades, useScale, wordsOf } from '../specimens'
+import {
+  fixture,
+  frameHeight,
+  frameRadius,
+  frameWidth,
+  gap,
+  ring,
+  seatsOf,
+  trades,
+  useScale,
+  wordsOf,
+} from '../specimens'
 import { Tile, type TileLook } from '../Tile'
 import type { PickerFrame } from './Picker'
 import { TileMenu, TileMenuDrawn, useFinger, verbName } from './TileMenu'
-import { clickOf, directionName, type Act, type Subject } from './verbs'
+import { clickOf, directionName, type TileAct, type Subject } from './verbs'
 
 export function TileMenuGallery() {
   return (
@@ -52,6 +63,9 @@ function countBelow(tile: TileNode): number {
  */
 const turnsOf = (tile: TileNode) => tile.leaf === true || countBelow(tile) === 0
 
+/** Whether a tile of the fixture System takes a new tile: a Branch does. On home, `decide` says. */
+const holdsOf = (tile: TileNode) => tile.leaf !== true
+
 /** A tile's children as a picker draws them: a Branch trades places, a Leaf doesn't. */
 function frameOf(tile: TileNode): PickerFrame {
   const seats: PickerFrame['seats'] = {}
@@ -63,27 +77,13 @@ function frameOf(tile: TileNode): PickerFrame {
 }
 
 /** Software Engineering's ring as a picker draws it, the reading list beside Principles. */
-const centerFrame: PickerFrame = {
-  hub: center.title,
-  seats: Object.fromEntries(
-    Object.entries(ring).map(([direction, seated]) => [
-      direction,
-      { title: seated.tile.title, swaps: trades(seated.tile) },
-    ]),
-  ),
-}
+const centerFrame: PickerFrame = { hub: center.title, seats: seatsOf(ring) }
 
 /** What would happen, in a toast: the page acts on nothing. */
-const shown = (subject: Subject) => (_act: Act, what: string) => {
+const shown = (subject: Subject) => (_act: TileAct, what: string) => {
   const title = subject.kind === 'slot' ? m.tile_menu_free_slot() : subject.title
   toast(m.gallery_tile_menu_did({ title, what }))
 }
-
-/** The canvas's units across the frame: three hexes wide, and a margin. */
-const frameWidth = 600
-const frameHeight = 560
-const frameRadius = 110
-const gap = 0.95
 
 /**
  * Software Engineering and its ring, each tile in its menu and its card, each free slot in its menu:
@@ -99,6 +99,7 @@ function ActingFrame() {
     title: center.title,
     at: 'center',
     parent: ulysse.title,
+    holds: true,
   }
   return (
     <svg
@@ -157,6 +158,7 @@ function ActingFrame() {
               parent: center.title,
               below: countBelow(tile),
               turns: turnsOf(tile),
+              holds: holdsOf(tile),
             }}
             look={look}
             tile={tile}
@@ -242,6 +244,7 @@ function drawnSamples(): DrawnSample[] {
         at: 1,
         below: countBelow(projects),
         turns: turnsOf(projects),
+        holds: true,
         ...inRing,
       },
       frames: { holds: frameOf(projects), standsIn: centerFrame },
@@ -270,17 +273,23 @@ function drawnSamples(): DrawnSample[] {
     },
     {
       name: m.gallery_state_tile_menu_center(),
-      subject: { kind: 'branch', title: center.title, at: 'center', parent: ulysse.title },
+      subject: {
+        kind: 'branch',
+        title: center.title,
+        at: 'center',
+        parent: ulysse.title,
+        holds: true,
+      },
       frames: { holds: centerFrame },
     },
     {
       name: m.gallery_state_tile_menu_root(),
-      subject: { kind: 'root', title: ulysse.title, at: 'center' },
+      subject: { kind: 'root', title: ulysse.title, at: 'center', holds: true },
       frames: { holds: frameOf(ulysse) },
     },
     {
       name: m.gallery_state_tile_menu_untitled(),
-      subject: { kind: 'untitled', title: m.tile_untitled(), at: 'center' },
+      subject: { kind: 'untitled', title: m.tile_untitled(), at: 'center', holds: true },
       frames: { holds: { hub: m.tile_untitled(), seats: {} } },
     },
     {

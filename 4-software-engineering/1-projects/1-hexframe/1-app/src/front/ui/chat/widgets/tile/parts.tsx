@@ -46,12 +46,12 @@ export const kinds = [
 
 /** Each place by its direction, as the canvas numbers them. */
 export const placeNames: Record<Place, () => string> = {
-  1: m.widget_place_north_west,
-  2: m.widget_place_north_east,
-  3: m.widget_place_east,
-  4: m.widget_place_south_east,
-  5: m.widget_place_south_west,
-  6: m.widget_place_west,
+  1: m.direction_north_west,
+  2: m.direction_north_east,
+  3: m.direction_east,
+  4: m.direction_south_east,
+  5: m.direction_south_west,
+  6: m.direction_west,
 }
 
 /** Where a tile stands, in a few words: "west in Projects", "context −6 of Projects". */

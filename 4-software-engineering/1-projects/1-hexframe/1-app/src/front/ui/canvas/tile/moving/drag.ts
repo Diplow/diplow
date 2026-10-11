@@ -36,6 +36,21 @@ export function unitsIn(svg: RefObject<SVGSVGElement | null>): Units {
 }
 
 /**
+ * A drag let go fires a click on the tile it carried, which would open it or go in: the click that
+ * follows at once is taken before anything hears it.
+ */
+function swallowNextClick() {
+  const swallow = (event: MouseEvent) => {
+    event.stopPropagation()
+    event.preventDefault()
+  }
+  addEventListener('click', swallow, { capture: true, once: true })
+  setTimeout(() => {
+    removeEventListener('click', swallow, { capture: true })
+  })
+}
+
+/**
  * `press` starts a drag from a pointer going down on a tile, a mouse's main button or a pen; the drag
  * is the hook's state until it is let go, and its listeners go with it, or with the hook. `cancel`
  * drops it where it is, landing nowhere: the move it served has stopped.
@@ -69,6 +84,7 @@ export function useDrag(units: Units) {
       stop.current?.()
       if (current === undefined) return
       setDragged(undefined)
+      if (!cancelled) swallowNextClick()
       handlers.onDrop(cancelled ? undefined : current)
     }
     const up = end(false)

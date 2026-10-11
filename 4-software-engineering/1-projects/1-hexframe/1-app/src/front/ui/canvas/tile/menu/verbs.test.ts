@@ -8,6 +8,7 @@ const branch: Subject = {
   at: 2,
   parent: 'Software engineering',
   below: 3,
+  holds: true,
 }
 
 describe('what a tile offers', () => {
@@ -28,8 +29,10 @@ describe('what a tile offers', () => {
     expect(groupsOf({ ...branch, kind: 'leaf' })[1]).toEqual(['edit'])
   })
 
-  it('adds nothing to a Leaf, which holds no tile', () => {
-    expect(groupsOf({ ...branch, kind: 'leaf' }).flat()).not.toContain('add')
+  it('adds a tile only where its caller says Mapping takes one', () => {
+    expect(groupsOf({ ...branch, kind: 'leaf', holds: false }).flat()).not.toContain('add')
+    expect(groupsOf({ ...branch, holds: false }).flat()).not.toContain('add')
+    expect(groupsOf({ ...branch, kind: 'context' }).flat()).toContain('add')
   })
 
   it('removes a Reference rather than deleting the tile it points at, and never edits it', () => {

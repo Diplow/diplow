@@ -45,7 +45,7 @@ import {
   directionName,
   groupsOf,
   placeOf,
-  type Act,
+  type TileAct,
   type Subject,
   type Verb,
 } from './verbs'
@@ -211,10 +211,10 @@ function lineOf(verb: Verb, subject: Subject): Line {
 }
 
 /** What the menu hands its caller once a line is chosen: the act, and the words its line said. */
-type OnAct = (act: Act, said: string) => void
+type OnAct = (act: TileAct, said: string) => void
 
 /** A line that hands its act to the caller, with its own words. */
-const acting = (onAct: OnAct, act: Act, label: string) => () => {
+const acting = (onAct: OnAct, act: TileAct, label: string) => () => {
   onAct(act, label)
 }
 
@@ -244,7 +244,7 @@ function entriesOf(
 type Submenu = Extract<MenuEntry, { submenu: unknown }>['submenu']
 
 /** A choice in a frame: its words, and the act it hands the caller with them. */
-const choice = (onAct: OnAct, act: Act, label: string) => ({
+const choice = (onAct: OnAct, act: TileAct, label: string) => ({
   label,
   onSelect: acting(onAct, act, label),
 })

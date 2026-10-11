@@ -45,6 +45,20 @@ describe('a drag', () => {
     expect(hook.result.current.dragged).toBeUndefined()
   })
 
+  it('takes the click a drop fires on the tile, and no later one', async () => {
+    const clicked = vi.fn()
+    document.body.addEventListener('click', clicked)
+    pressed()
+    send('pointermove', 50, 0)
+    send('pointerup', 50, 0)
+    document.body.click()
+    expect(clicked).not.toHaveBeenCalled()
+    await new Promise((resolve) => setTimeout(resolve))
+    document.body.click()
+    expect(clicked).toHaveBeenCalledOnce()
+    document.body.removeEventListener('click', clicked)
+  })
+
   it('is a click while it stays put: let go, nothing starts nor drops', () => {
     const { onStart, onDrop } = pressed()
     send('pointermove', 3, 3)
