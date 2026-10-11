@@ -30,12 +30,31 @@ describe('colorTokens', () => {
 describe('the theme', () => {
   const tokens = colorTokens(css)
 
-  it.each(['brand', 'success', 'warning', 'info', 'destructive'])(
-    'has %s, with a foreground',
-    (name) => {
-      expect(tokens).toContainEqual({ name, foreground: `${name}-foreground` })
-    },
-  )
+  it.each(['success', 'warning', 'info', 'destructive'])('has %s, with a foreground', (name) => {
+    expect(tokens).toContainEqual({ name, foreground: `${name}-foreground` })
+  })
+
+  it.each([
+    'faint',
+    'human',
+    'agent',
+    'context',
+    'glow',
+    'glow-soft',
+    'halo',
+    'aura',
+    'ambient',
+    'tile',
+    'tile-fade',
+    'tile-lit',
+    'tile-lit-fade',
+  ])('has %s, which no text sits on, so without a foreground', (name) => {
+    expect(tokens).toContainEqual({ name })
+  })
+
+  it('has no brand: the ink, the human or the agent carries what it meant', () => {
+    expect(tokens.map(({ name }) => name)).not.toContain('brand')
+  })
 
   const variables = tokens.flatMap(({ name, foreground }) =>
     foreground ? [name, foreground] : [name],

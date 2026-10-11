@@ -114,7 +114,7 @@ export function System({
       {moving !== undefined && (
         <div
           role="status"
-          className="flex items-center justify-between gap-4 rounded-lg border border-brand bg-card px-4 py-2 text-sm"
+          className="flex items-center justify-between gap-4 rounded-lg border border-human bg-card px-4 py-2 text-sm"
         >
           <span>{m.system_moving({ title: moving.title })}</span>
           <Button

@@ -80,7 +80,7 @@ function Choosing({ fileOnly, importing, actions }: ChoosingProps) {
       <div
         className={cn(
           'grid place-items-center gap-3 rounded-lg border-2 border-dashed p-6 text-center text-sm text-muted-foreground transition-colors',
-          over && 'border-brand bg-accent',
+          over && 'border-primary bg-accent',
         )}
         onDragOver={(event) => {
           event.preventDefault()
