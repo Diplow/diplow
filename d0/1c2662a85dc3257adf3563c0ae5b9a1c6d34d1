@@ -2,6 +2,8 @@
   s_f8476e3fd76903::t_be51723d0f91bd 1-2,9,14-29
 4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-design-system-v1/decisions.md
   s_f8476e3fd76903::t_31aea513592edd 133,147-149,151-153,155-157,159-160
+  s_f8476e3fd76903::t_b61b3684bd72bb 145
+  s_f8476e3fd76903::t_adcb1c80455407 17-19,146,150,154,158
 4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/__root.tsx
   s_f8476e3fd76903::t_fdd0057fa02970 35-37
 4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/state/useScreenState.test.ts
