@@ -73,13 +73,14 @@ layer(TestTiles)('an undo over the System', (it) => {
       const { accountId, root, work, team } = yield* seeded
       const before = yield* Mapping.system(accountId)
       const made = crypto.randomUUID()
-      const undo = yield* transactional(
+      const { undo, changes } = yield* transactional(
         Mapping.runBatch(accountId, [
           { operation: new CreateTile({ parent: root, slot: 3, ...content('Plans') }), made },
           { operation: new EditTile({ id: team, version: 1, title: 'Crew' }) },
           { operation: new DeleteTile({ id: work, version: 1 }) },
         ]),
       )
+      expect(changes).toBe(3)
       expect(tileAt(yield* Mapping.system(accountId), team)).toBeUndefined()
       heard.length = 0
       yield* undone(accountId, undo)
@@ -103,7 +104,7 @@ layer(TestTiles)('an undo over the System', (it) => {
   it.effect('refuses the whole undo once a Tile it touched changed since, nothing written', () =>
     Effect.gen(function* () {
       const { accountId, team } = yield* seeded
-      const undo = yield* transactional(
+      const { undo } = yield* transactional(
         Mapping.runBatch(accountId, [
           { operation: new EditTile({ id: team, version: 1, title: 'Crew' }) },
         ]),
@@ -143,6 +144,24 @@ layer(TestTiles)('an undo over the System', (it) => {
         yield* undone(accountId, third.undo)
         expect(said(yield* Mapping.system(accountId))).toEqual(said(before))
       }),
+  )
+
+  it.effect('refuses to delete a Tile it made once the user put a Tile below it since', () =>
+    Effect.gen(function* () {
+      const { accountId, root } = yield* seeded
+      const made = crypto.randomUUID()
+      const { undo } = yield* transactional(
+        Mapping.runBatch(accountId, [
+          { operation: new CreateTile({ parent: root, slot: 3, ...content('Plans') }), made },
+        ]),
+      )
+      const mine = new CreateTile({ parent: made, slot: 1, ...content('Mine') })
+      yield* transactional(Mapping.createTile(accountId, mine))
+      const before = yield* Mapping.system(accountId)
+      const refused = yield* Effect.flip(undone(accountId, undo))
+      expect(refused._tag).toBe('BatchOutdated')
+      expect(yield* Mapping.system(accountId)).toEqual(before)
+    }),
   )
 
   it.effect('is outdated once another writer changed a Tile an earlier write touched', () =>

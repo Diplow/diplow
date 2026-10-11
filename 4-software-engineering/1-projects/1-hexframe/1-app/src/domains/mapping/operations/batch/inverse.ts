@@ -4,8 +4,10 @@
 // removed, under the same ids, a Reference's create's delete and its delete's create. They run in the
 // reverse order of the events, each naming the Version it finds once the ones before it ran over what
 // the batch left, the first ones the Versions the batch left, so `decide` refuses an undo over a Tile
-// changed since (`TileChanged`). A batch that grows, an applied Turn's writes, keeps one undo of all
-// of it (`extended`). Pure (`hexframe-app-assistant/decisions.md#DEC-16`).
+// changed since (`TileChanged`); and an undo deletes a Tile its batch made only while nothing lies
+// below it, which only another writer could have put there since (`undone`). A batch that grows, an
+// applied Turn's writes, keeps one undo of all of it (`extended`). Pure
+// (`hexframe-app-assistant/decisions.md#DEC-16`).
 import { Result, Schema, Struct } from 'effect'
 
 import {
@@ -29,7 +31,7 @@ import {
   type Operation,
   SwapTiles,
 } from '../operation'
-import { Batched, KeptParts, whole } from './fold'
+import { Batched, type Folded, KeptParts, whole } from './fold'
 
 /**
  * What undoes a batch that ran: its `Inverse`, the Operations that reverse its events, in the order
@@ -193,9 +195,44 @@ function stepsOf(before: System, event: OperationEvent): ReadonlyArray<Step> {
   }
 }
 
-/** The System once one more Operation of an undo ran on it: one that no longer applies refused. */
+/**
+ * One more Operation of an undo, run on the System it stands on: refused as `decide` refuses it, a
+ * Tile changed since included, and a delete refused unless its Tile holds nothing by then. An undo
+ * deletes only a Tile its batch made, whose own Children it undid before, so anything still below
+ * it was put there by another writer since, which the undo would delete with it.
+ */
+function stepped(system: System, batched: Batched): Result.Result<Folded, BatchOutdated> {
+  const { operation } = batched
+  if (operation._tag === 'DeleteTile' && below(system, operation.id).size > 1) {
+    return Result.fail(new BatchOutdated())
+  }
+  return whole(system, [batched])
+}
+
+/** The System once one more Operation of an undo ran on it, or `BatchOutdated` (`stepped`). */
 const ranOn = (system: System, batched: Batched) =>
-  Result.map(whole(system, [batched]), (folded) => folded.system)
+  Result.map(stepped(system, batched), (folded) => folded.system)
+
+/**
+ * An undo run on a System, all of it or nothing: each Operation in order, as `stepped` runs it, and
+ * their events, or `BatchOutdated` once one is refused.
+ */
+export function undone(
+  system: System,
+  batch: ReadonlyArray<Batched>,
+): Result.Result<Folded, BatchOutdated> {
+  let folded: Folded = { system, events: [], left: [] }
+  for (const batched of batch) {
+    const next = stepped(folded.system, batched)
+    if (Result.isFailure(next)) return next
+    folded = {
+      ...folded,
+      system: next.success.system,
+      events: [...folded.events, ...next.success.events],
+    }
+  }
+  return Result.succeed(folded)
+}
 
 /**
  * The Operations that undo the events a batch made on `before`, in the order they run: the last
@@ -309,11 +346,11 @@ export function extended(
   events: ReadonlyArray<OperationEvent>,
 ): Undo {
   if (earlier._tag === 'Outdated') return earlier
-  if (Result.isFailure(whole(before, earlier.batch))) return { _tag: 'Outdated' }
+  if (Result.isFailure(undone(before, earlier.batch))) return { _tag: 'Outdated' }
   const latest = inverse(before, events)
   const after = events.reduce(evolve, before)
-  const undone = Result.getOrThrow(whole(after, latest)).system
-  return Result.match(movedOnto(undone, earlier.batch), {
+  const back = Result.getOrThrow(undone(after, latest)).system
+  return Result.match(movedOnto(back, earlier.batch), {
     onSuccess: (moved): Undo => ({ _tag: 'Inverse', batch: [...latest, ...moved] }),
     onFailure: (): Undo => ({ _tag: 'Outdated' }),
   })

@@ -11,7 +11,7 @@ import { Effect, Schema } from 'effect'
 
 import * as Assistant from '#/domains/assistant/assistant'
 import type { Mode } from '#/domains/assistant/entities'
-import { changesOf, type OpenProposal, writesOf } from '#/domains/assistant/operations'
+import { type OpenProposal, writesOf } from '#/domains/assistant/operations'
 import * as Iam from '#/domains/iam/iam'
 import type { Field } from '#/domains/mapping/entities'
 import * as Mapping from '#/domains/mapping/mapping'
@@ -170,9 +170,9 @@ export const acceptProposal = ({ proposal }: { readonly proposal: string }) =>
           by: { _tag: 'TurnKey', conversationId, turnId: id },
         }
         const batch = yield* batchOf(accepted)
-        const undo = yield* actingAs(assistant)(Mapping.runBatch(account.id, batch))
-        const changes = changesOf(accepted).length
-        yield* Assistant.proposalApplied(account.id, accepted, { undo: encodedUndo(undo), changes })
+        const run = yield* actingAs(assistant)(Mapping.runBatch(account.id, batch))
+        const undo = encodedUndo(run.undo)
+        yield* Assistant.proposalApplied(account.id, accepted, { undo, changes: run.changes })
         return null
       }),
     ),

@@ -55,6 +55,7 @@ import {
   summaryOf,
   type SwapTiles,
   type Undo,
+  undone,
   undoOf,
   untitledIn,
   whole,
@@ -474,7 +475,7 @@ const chosen: OnTaken<TileIdTaken> = () => Effect.fail(new TileIdTaken())
 /**
  * Runs an Operation on the Account's System: locks it, loads it flat, asks `decide` through `decided`,
  * then writes one change per event, as `evolve` leaves the System after it, and the System's Version,
- * publishes the events, and answers the System they leave. Every rule lives in `decide`: what it
+ * publishes the events, and answers the System it ran on, the events and the System they leave. Every rule lives in `decide`: what it
  * refuses is refused here, with nothing written and nothing published. A write under an id already taken answers `onTaken`: a defect, unless the
  * Operation's caller chose the id. The bus holds what is published until the transaction commits.
  */
@@ -486,7 +487,8 @@ const operate = <E, T = never>(
 ) =>
   Effect.gen(function* () {
     const system = yield* decidedOn(accountId, operation)
-    return yield* writtenAll(accountId, system, yield* Effect.fromResult(decided(system)), onTaken)
+    const events = yield* Effect.fromResult(decided(system))
+    return { system, events, after: yield* writtenAll(accountId, system, events, onTaken) }
   })
 
 /**
@@ -540,7 +542,7 @@ export const createTile = (accountId: string, operation: CreateTile, kept: ToKee
     const id = operation.id ?? (yield* newId)
     const onTaken: OnTaken<TileIdTaken> = operation.id === undefined ? madeHere : chosen
     const made = { id, kept }
-    const after = yield* operate(
+    const { after } = yield* operate(
       accountId,
       operation,
       (system) => decide(system, operation, made),
@@ -553,7 +555,7 @@ export const createTile = (accountId: string, operation: CreateTile, kept: ToKee
 export const editTile = (accountId: string, operation: EditTile) =>
   Effect.flatMap(
     operate(accountId, operation, (system) => decide(system, operation)),
-    (system) => answered(system, operation.id),
+    ({ after }) => answered(after, operation.id),
   )
 
 /**
@@ -636,16 +638,20 @@ export const draft = <O extends Operation>(
   })
 
 /**
- * Runs a batch on the Account's System as it stands, its Root locked, all of it or nothing: one that
- * no longer applies refuses the whole, `BatchOutdated`, nothing written nor published (`whole`); else
- * every event is written and published as an Operation's are, a write under an id already taken
- * answering `onTaken`. Answers the System it ran on and the events it made.
+ * Runs a batch on the Account's System as it stands, its Root locked, all of it or nothing, folded by
+ * `folding`: one that no longer applies refuses the whole, `BatchOutdated`, nothing written nor
+ * published; else every event is written and published as an Operation's are, a write under an id
+ * already taken answering `onTaken`. Answers the System it ran on and the events it made.
  */
-const ranWhole = <T>(accountId: string, batch: ReadonlyArray<Batched>, onTaken: OnTaken<T>) =>
+const ranWhole = <T>(
+  accountId: string,
+  batch: ReadonlyArray<Batched>,
+  { folding, onTaken }: { folding: typeof whole; onTaken: OnTaken<T> },
+) =>
   Effect.gen(function* () {
     yield* outsideHelp(batch.flatMap(({ operation }) => namedBy(operation)))
     const system = yield* locked(accountId)
-    const { events } = yield* Effect.fromResult(whole(system, batch))
+    const { events } = yield* Effect.fromResult(folding(system, batch))
     yield* writtenAll(accountId, system, events, onTaken)
     return { system, events }
   })
@@ -656,18 +662,25 @@ const ranWhole = <T>(accountId: string, batch: ReadonlyArray<Batched>, onTaken: 
  * before it made, a create under the id it was drafted with. One that no longer applies, a Tile it
  * names changed since, by the Version it carries, or gone, refuses the whole batch, `BatchOutdated`,
  * nothing written nor published (`whole`); else every event is written and published as an
- * Operation's are. A batch naming a Tile of Help is `HelpReadOnly`. Answers what undoes it (`undoOf`),
- * from the System it ran on.
+ * Operation's are. A batch naming a Tile of Help is `HelpReadOnly`. Answers how many events it made
+ * and what undoes it (`undoOf`), from the System it ran on.
  */
 export const runBatch = (accountId: string, batch: ReadonlyArray<Batched>) =>
-  Effect.map(ranWhole(accountId, batch, madeHere), ({ system, events }) => undoOf(system, events))
+  Effect.map(
+    ranWhole(accountId, batch, { folding: whole, onTaken: madeHere }),
+    ({ system, events }) => ({
+      undo: undoOf(system, events),
+      changes: events.length,
+    }),
+  )
 
 /**
- * Runs an Operation on the Account's System as an Operation's own function runs it (`operate`), a
- * create under a fresh id, and answers, beside the Tile as it now stands for a create or an edit, how
- * many events it made and what undoes it: its inverse, from the System it ran on, after `earlier`,
- * the undo of what ran before it in the same batch, when one is given (`extended`), as a Turn in
- * apply writes one Operation after the other. A clash on the id Mapping made is a defect.
+ * Runs an Operation on the Account's System by the same `operate` as an Operation's own function, a
+ * create under its id or a fresh one, and answers, beside the Tile as it now stands for a create or
+ * an edit, how many events it made and what undoes it: its inverse, from the System it ran on, after
+ * `earlier`, the undo of what ran before it in the same batch, when one is given (`extended`), as a
+ * Turn in apply writes one Operation after the other. A clash on a create's id is a defect: an
+ * agent's create carries none.
  */
 export const applied = <O extends Operation>(
   accountId: string,
@@ -676,13 +689,16 @@ export const applied = <O extends Operation>(
 ) =>
   Effect.gen(function* () {
     const made = yield* madeFor(operation)
-    const system = yield* decidedOn(accountId, operation)
-    const decided = added({ system, events: [], left: [] }, operation, made)
-    const { events } = yield* Effect.fromResult(decided).pipe(
+    const { system, events, after } = yield* operate(accountId, operation, (held) =>
       // `decide`'s overloads say what each Operation may be refused; the union loses it.
-      Effect.mapError((refusal) => refusal as Refusals[O['_tag']]),
+      Result.mapError(
+        Result.map(
+          added({ system: held, events: [], left: [] }, operation, made),
+          (next) => next.events,
+        ),
+        (refusal) => refusal as Refusals[O['_tag']],
+      ),
     )
-    const after = yield* writtenAll(accountId, system, events, madeHere)
     const tile = yield* draftAnswer(after, operation, made)
     const undo = earlier === undefined ? undoOf(system, events) : extended(earlier, system, events)
     return { undo, changes: events.length, ...(tile !== undefined && { tile }) }
@@ -692,9 +708,15 @@ export const applied = <O extends Operation>(
  * Undoes a batch that ran, in the transaction around it, all of it or nothing: its inverse run on the
  * Account's System as it stands, under its Root's lock, each event written and published as an
  * Operation's are. Refused whole, `BatchOutdated`, once a Tile it touched changed since, by the Version
- * its inverse names, or the undo was `Outdated` already: nothing written nor published.
+ * its inverse names, or a Tile it made holds what another writer put below it since (`undone`), or the
+ * undo was `Outdated` already: nothing written nor published.
  */
-export const undo = (accountId: string, undone: Undo) =>
-  undone._tag === 'Outdated'
+export const undo = (accountId: string, undoing: Undo) =>
+  undoing._tag === 'Outdated'
     ? Effect.fail(new BatchOutdated())
-    : Effect.asVoid(ranWhole(accountId, undone.batch, () => Effect.fail(new BatchOutdated())))
+    : Effect.asVoid(
+        ranWhole(accountId, undoing.batch, {
+          folding: undone,
+          onTaken: () => Effect.fail(new BatchOutdated()),
+        }),
+      )

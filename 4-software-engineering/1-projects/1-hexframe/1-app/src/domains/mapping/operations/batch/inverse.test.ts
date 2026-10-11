@@ -17,6 +17,7 @@ import {
   type OperationEvent,
   SwapTiles,
   type Undo,
+  undone,
   undoOf,
   whole,
 } from '..'
@@ -91,9 +92,9 @@ function ran(on: System, ...operations: ReadonlyArray<(held: System) => Operatio
 }
 
 /** The System an undo leaves, run whole where its batch left the System. */
-const undone = (after: System, undo: Undo) => {
+const undoneOn = (after: System, undo: Undo) => {
   if (undo._tag === 'Outdated') throw new Error('The undo is outdated')
-  return Result.getOrThrow(whole(after, undo.batch)).system
+  return Result.getOrThrow(undone(after, undo.batch)).system
 }
 
 /** The Version a System holds a Tile at. */
@@ -160,7 +161,7 @@ describe("inverse, a batch's undo", () => {
   it.each(each)('undoes %s: the System as it stood, Versions aside', (_, operation) => {
     const { events, after } = ran(system, operation)
     expect(events.length).toBeGreaterThan(0)
-    expect(said(undone(after, undoOf(system, events)))).toEqual(said(system))
+    expect(said(undoneOn(after, undoOf(system, events)))).toEqual(said(system))
   })
 
   it('makes a deleted Tile again under its id, with what it kept from its files, and its Reference', () => {
@@ -169,7 +170,7 @@ describe("inverse, a batch's undo", () => {
       (held) => new DeleteTile({ id: id.work, version: versionOf(held, id.work) }),
     )
     expect(tileAt(after, id.note)).toBeUndefined()
-    const back = undone(after, undoOf(system, events))
+    const back = undoneOn(after, undoOf(system, events))
     expect(tileAt(back, id.note)).toMatchObject({
       name: 'NOTE.md',
       parent: id.team,
@@ -195,7 +196,30 @@ describe("inverse, a batch's undo", () => {
       'DeleteTile',
       'DeleteTile',
     ])
-    expect(said(undone(after, { _tag: 'Inverse', batch: undo }))).toEqual(said(system))
+    expect(said(undoneOn(after, { _tag: 'Inverse', batch: undo }))).toEqual(said(system))
+  })
+
+  it('refuses to delete a Tile it made once another writer put anything below it since', () => {
+    const made = uuid()
+    const { events, after } = ran(
+      system,
+      () => new CreateTile({ id: made, parent: id.root, slot: 3, ...content('Plans') }),
+    )
+    const undo = inverse(system, events)
+    const child = new CreateTile({ parent: made, slot: 1, ...content('Mine') })
+    const created = eventsOf(after, child).reduce(evolve, after)
+    const home = new MoveTile({
+      id: id.home,
+      version: versionOf(after, id.home),
+      parent: made,
+      slot: 2,
+    })
+    const moved = eventsOf(after, home).reduce(evolve, after)
+    for (const since of [created, moved]) {
+      const refused = undone(since, undo)
+      expect(Result.isFailure(refused) && refused.failure._tag).toBe('BatchOutdated')
+    }
+    expect(Result.isSuccess(undone(after, undo))).toBe(true)
   })
 
   it('names the Versions the batch left, so a Tile changed since refuses the undo', () => {
@@ -235,7 +259,7 @@ describe("inverse, a batch's undo", () => {
       (held) => new DeleteTile({ id: id.home, version: versionOf(held, id.home) }),
       (held) => new DeleteTile({ id: id.work, version: versionOf(held, id.work) }),
     )
-    const back = undone(after, undoOf(system, events))
+    const back = undoneOn(after, undoOf(system, events))
     expect(tileAt(back, id.home)).toBeDefined()
     expect(back.tiles[id.link]).toEqual(system.tiles[id.link])
   })
@@ -246,7 +270,7 @@ describe("inverse, a batch's undo", () => {
       broken,
       (held) => new DeleteTile({ id: id.work, version: versionOf(held, id.work) }),
     )
-    const back = undone(after, undoOf(broken, events))
+    const back = undoneOn(after, undoOf(broken, events))
     expect(tileAt(back, id.note)).toBeDefined()
     expect(back.tiles[id.link]).toBeUndefined()
   })
@@ -269,7 +293,7 @@ describe('extended, the undo of a batch that grows', () => {
       (held) => new DeleteTile({ id: id.team, version: versionOf(held, id.team) }),
     )
     const undo = extended(undoOf(system, first.events), first.after, second.events)
-    expect(said(undone(second.after, undo))).toEqual(said(system))
+    expect(said(undoneOn(second.after, undo))).toEqual(said(system))
   })
 
   it('is outdated, for good, once a Tile an earlier run touched changed before the next one', () => {
@@ -294,7 +318,7 @@ describe('extended, the undo of a batch that grows', () => {
     const second = ran(meanwhile.after, edit('Squad'))
     const undo = extended(undoOf(system, first.events), meanwhile.after, second.events)
     const house = { ...placed(id.home, id.root, 2), title: 'House' }
-    expect(said(undone(second.after, undo))).toEqual(
+    expect(said(undoneOn(second.after, undo))).toEqual(
       said({ ...system, tiles: { ...system.tiles, [id.home]: house } }),
     )
   })
@@ -421,13 +445,13 @@ describe('inverse, over generated Systems and batches', () => {
 
   it.each(seeds)('gives back the System a batch ran on, seed %i', (seed) => {
     const { before, events, after } = generated(seed)
-    expect(said(undone(after, undoOf(before, events)))).toEqual(said(before))
+    expect(said(undoneOn(after, undoOf(before, events)))).toEqual(said(before))
   })
 
   it.each(seeds)('gives back the System a batch run twice ran on, seed %i', (seed) => {
     const { before, events, more } = generated(seed)
     const next = more()
     const undo = extended(undoOf(before, events), next.before, next.events)
-    expect(said(undone(next.after, undo))).toEqual(said(before))
+    expect(said(undoneOn(next.after, undo))).toEqual(said(before))
   })
 })
