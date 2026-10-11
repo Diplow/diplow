@@ -1,9 +1,9 @@
 // The composer's state on home: what the field holds and where its caret stands, the links picked
 // since the last Message, and whether the user left the list. From them, what the caret stands in
 // lists, a `/` the commands offered, the language the languages, an `@` the Account's Tiles; what the
-// field shows marked; what a pick puts in the field, or the language it goes to; and what a Message
-// sent is, a command to run or words for the agent, the field emptied for the next. The reading is
-// `../composer/typing.ts`, pure; this hook holds what it reads.
+// field shows marked; what a pick puts in the field, or the language it goes to; and what the field
+// submits, a command to run, words for the agent, or a language to go to, the field emptied for the
+// next. The reading is `../composer/typing.ts`, pure; this hook holds what it reads.
 import { useReducer } from 'react'
 
 import type { Command } from '#/front/ui/chat/composer/commands'
@@ -12,10 +12,10 @@ import type { Inserted, Mentionable } from '../composer/mention'
 import {
   type Field,
   marksOf,
-  type Pick,
+  type FieldPick,
   pickOf,
-  type Sent,
-  sentOf,
+  type Submitted,
+  submittedOf,
   typingAt,
 } from '../composer/typing'
 
@@ -74,16 +74,20 @@ export function useComposerState(tiles: ReadonlyArray<Mentionable>, among: Reado
        * A row taken, by its id: the field's next value and where its caret goes, for the composer to
        * set, or the language to go to. None while nothing is listed.
        */
-      pick: (row: string): Pick | undefined => {
+      pick: (row: string): FieldPick | undefined => {
         if (typing === undefined) return undefined
         const picked = pickOf(state, typing, row, tiles)
         if (!('language' in picked)) dispatch({ type: 'picked', ...picked })
         return picked
       },
-      /** What the field sends, a command or a Message, the field then emptied for the next. */
-      send: (): Sent => {
-        dispatch({ type: 'sent' })
-        return sentOf(state, among)
+      /**
+       * What the field submits, a command or a Message, the field then emptied for the next; none,
+       * the field kept, when it names a language hexframe is not in.
+       */
+      submit: (): Submitted | undefined => {
+        const submitted = submittedOf(state, among)
+        if (submitted !== undefined) dispatch({ type: 'sent' })
+        return submitted
       },
     },
   }

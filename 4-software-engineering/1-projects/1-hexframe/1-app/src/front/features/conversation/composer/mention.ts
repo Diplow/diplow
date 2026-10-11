@@ -178,9 +178,11 @@ export function inserted(value: string, query: Query, shown: string): Edited {
 export function encoded(value: string, links: ReadonlyArray<Inserted>): string {
   return [...links]
     .sort((a, b) => b.shown.length - a.shown.length)
-    .reduce(
-      (text, { id, shown }) =>
-        text.replace(new RegExp(`(?<!\\S)${escaped(shown)}${ended}`, 'gu'), linkTo(id)),
-      value,
-    )
+    .reduce((text, { id, shown }) => text.replace(wholeLink(shown), linkTo(id)), value)
 }
+
+/**
+ * Each place the input shows a link whole, opening a word and nothing a word goes on with after it:
+ * where the composer marks it, and what the Message sends by its Tile's id.
+ */
+export const wholeLink = (shown: string) => new RegExp(`(?<!\\S)${escaped(shown)}${ended}`, 'gu')

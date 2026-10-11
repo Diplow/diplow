@@ -42,11 +42,11 @@ function render(offering = { modes: true, undoable: true }) {
     return picked
   }
   const send = () => {
-    let sent: ReturnType<typeof result.current.actions.send> | undefined
+    let submitted: ReturnType<typeof result.current.actions.submit>
     act(() => {
-      sent = result.current.actions.send()
+      submitted = result.current.actions.submit()
     })
-    return sent
+    return submitted
   }
   return { result, type, rows, pick, send }
 }
@@ -76,8 +76,22 @@ describe("the composer's commands", () => {
     expect(result.current.state.value).toBe('/apply ')
     expect(result.current.state.typing).toBeUndefined()
     expect(result.current.state.marks).toEqual([{ from: 0, to: 6, kind: 'command' }])
-    expect(send()).toEqual({ command: 'apply', rest: '' })
+    expect(send()).toEqual({ command: 'apply' })
     expect(result.current.state.value).toBe('')
+  })
+
+  it('sends the words after a command once it ran, as a Message', () => {
+    const { pick, type, send } = render()
+    type('/ask what is in @wo')
+    pick('work')
+    expect(send()).toEqual({ command: 'ask', then: `what is in ${linkTo('work')}` })
+  })
+
+  it('keeps the field when the language names none hexframe is in', () => {
+    const { result, type, send } = render()
+    type('/language klingon')
+    expect(send()).toBeUndefined()
+    expect(result.current.state.value).toBe('/language klingon')
   })
 
   it('lists the languages after the language, and goes to the one picked', () => {
@@ -94,7 +108,7 @@ describe("the composer's commands", () => {
     type('/langue ')
     expect(rows()).toEqual(['en', 'fr'])
     type('/langue fr')
-    expect(send()).toEqual({ command: 'language', rest: 'fr' })
+    expect(send()).toEqual({ language: 'fr' })
   })
 
   it('sends a `/` no command offered answers as words', () => {

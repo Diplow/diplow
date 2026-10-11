@@ -212,10 +212,9 @@ export function happenedOf(entry: Told, naming: Naming): Happened {
 
 /** What an import says: the Tile it landed as, and how many came below it, by who imported it. */
 function importWords(entry: Extract<Told, { _tag: 'Import' }>, naming: Naming): Words {
-  const title = recorded(entry.tile, naming)
-  if (entry.count === 0) return by(imports.none, entry.actor, { title })
-  if (entry.count === 1) return by(imports.one, entry.actor, { title })
-  return imported(entry.actor, title, entry.count)
+  const said =
+    entry.count === 0 ? imports.none : entry.count === 1 ? imports.one : importedMany(entry.count)
+  return by(said, entry.actor, { title: recorded(entry.tile, naming) })
 }
 
 /**
@@ -234,19 +233,14 @@ function navigationOf(entry: Extract<Told, { _tag: 'Navigation' }>, naming: Nami
   return { who: 'human', words: weave(navigations[last.gesture], { title: tile }), detail, at }
 }
 
-/** An import that brought several Tiles below the one it landed as, by who imported it. */
-function imported(actor: Actor, title: Word, count: number): Words {
+/** What an import that brought several Tiles below the one it landed as says, by who imported it. */
+function importedMany(count: number): Said<'title'> {
   const many = { count: String(count) }
-  if (actor._tag === 'You') {
-    return weave((inputs) => m.conversation_imported_many({ ...inputs, ...many }), { title })
+  return {
+    mine: (inputs) => m.conversation_imported_many({ ...inputs, ...many }),
+    agents: (inputs) => m.conversation_imported_many_agent({ ...inputs, ...many }),
+    theirs: (inputs) => m.conversation_imported_many_by({ ...inputs, ...many }),
   }
-  if (actor._tag === 'Assistant') {
-    return weave((inputs) => m.conversation_imported_many_agent({ ...inputs, ...many }), { title })
-  }
-  return weave((inputs) => m.conversation_imported_many_by({ ...inputs, ...many }), {
-    title,
-    actor: keyOf(actor),
-  })
 }
 
 /** What each of Mapping's changes would do, once accepted, as a Proposal says it. */

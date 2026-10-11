@@ -10,14 +10,17 @@ import {
   commandPicked,
   commands,
   commandTypingAt,
+  languageNamed,
   openingCommand,
   type Picked,
   tileTyping,
   type Typing,
 } from '#/front/ui/chat/composer/commands'
+import type { Mode } from '#/domains/assistant/entities'
 import type { Mark } from '#/front/ui/chat/composer/Composer'
 
 import {
+  type Edited,
   encoded,
   type Inserted,
   inserted,
@@ -26,6 +29,7 @@ import {
   queryAt,
   shownOf,
   showsLink,
+  wholeLink,
 } from './mention'
 
 /**
@@ -37,6 +41,12 @@ const run = ['ask', 'apply', 'undo', 'language'] as const satisfies ReadonlyArra
 
 /** A command home runs. */
 export type RunCommand = (typeof run)[number]
+
+/** The Mode each of the Mode's commands switches to, in Assistant's words. */
+export const modeOf = { ask: 'ask', apply: 'apply' } as const satisfies Record<
+  Extract<RunCommand, 'ask' | 'apply'>,
+  Mode
+>
 
 /** What the page can do now, which decides the commands it offers. */
 export interface Offering {
@@ -86,31 +96,23 @@ export function typingAt(
   )
 }
 
-/** A text read as itself inside a pattern. */
-const escaped = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-
 /** What the field shows marked: the command it opens with, and each link picked it still shows whole. */
 export function marksOf(
   { value, links }: Field,
   among: ReadonlyArray<Command>,
 ): ReadonlyArray<Mark> {
   const pointed = links.flatMap(({ shown }) =>
-    Array.from(
-      value.matchAll(new RegExp(`(?<!\\S)${escaped(shown)}(?![\\p{L}\\p{N}])`, 'gu')),
-      (found) => ({
-        from: found.index,
-        to: found.index + found[0].length,
-        kind: 'tile' as const,
-      }),
-    ),
+    Array.from(value.matchAll(wholeLink(shown)), (found) => ({
+      from: found.index,
+      to: found.index + found[0].length,
+      kind: 'tile' as const,
+    })),
   )
   return [...commandMarkOf(value, among), ...pointed]
 }
 
 /** What a pick does to the field: its next value and caret, the link it picked if any, or a language. */
-export type Pick =
-  | { readonly value: string; readonly caret: number; readonly link?: Inserted }
-  | { readonly language: string }
+export type FieldPick = Picked | (Edited & { readonly link: Inserted })
 
 /** The pick of `row` for what the caret stands in, among the Tiles. */
 export function pickOf(
@@ -118,7 +120,7 @@ export function pickOf(
   typing: Typing,
   row: string,
   tiles: ReadonlyArray<Mentionable>,
-): Pick {
+): FieldPick {
   const command: Picked | undefined = commandPicked(field.value, field.caret, typing, row)
   if (command !== undefined) return command
   const tile = tiles.find((each) => each.id === row)
@@ -128,19 +130,30 @@ export function pickOf(
   return { ...inserted(field.value, query, shown), link: { id: tile.id, shown } }
 }
 
-/** What a Message sent is: a command offered, run with what follows its name, or words for the agent. */
-export type Sent =
-  { readonly command: RunCommand; readonly rest: string } | { readonly message: string }
-
 /**
- * What the field sends: the command it opens with, when offered; else the Message, trimmed, each link
- * picked by its Tile's id. A `/` no command offered answers is sent as words, as the list says.
+ * What the field submits: a language to go to; the Mode or an Undo, and the words after the command,
+ * if any, a Message to send once it ran; or a Message, trimmed, each link picked by its Tile's id. A
+ * `/` no command offered answers is sent as words, as the list says. None when it names a language
+ * hexframe is not in: the field keeps what was typed.
  */
-export function sentOf({ value, links }: Field, among: ReadonlyArray<Command>): Sent {
+export type Submitted =
+  | { readonly language: string }
+  | { readonly command: Exclude<RunCommand, 'language'>; readonly then?: string }
+  | { readonly message: string }
+
+export function submittedOf(
+  { value, links }: Field,
+  among: ReadonlyArray<Command>,
+): Submitted | undefined {
   const opening = openingCommand(value, among)
   const id = opening?.command.id
-  if (opening !== undefined && isRun(id)) return { command: id, rest: opening.rest }
-  return { message: encoded(value.trim(), links) }
+  if (opening === undefined || !isRun(id)) return { message: encoded(value.trim(), links) }
+  if (id === 'language') {
+    const language = languageNamed(opening.rest)
+    return language === undefined ? undefined : { language }
+  }
+  const then = encoded(opening.rest, links)
+  return then === '' ? { command: id } : { command: id, then }
 }
 
 const isRun = (id: CommandId | undefined): id is RunCommand => run.some((each) => each === id)

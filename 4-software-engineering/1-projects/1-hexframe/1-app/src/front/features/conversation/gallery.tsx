@@ -19,6 +19,7 @@ import { GallerySection, GalleryState } from '#/front/ui/gallery/frame'
 
 import { Conversation } from './Conversation'
 import { conversationFixture, fixtureMentionables } from './fixtures'
+import { modeOf } from './composer/typing'
 import { latestUndoable, splitByDay } from './timeline/timeline'
 
 const size = 'h-[36rem] w-[26rem] max-w-full'
@@ -81,7 +82,7 @@ function FixtureConversation({ onCenter }: { onCenter: (tile: string) => void })
       system={system}
       onSend={onSend}
       onCommand={(command) => {
-        if (command !== 'undo') setMode(command)
+        if (command !== 'undo') setMode(modeOf[command])
         else if (undoable !== undefined) undo(undoable)
       }}
       tiles={tiles}

@@ -22,6 +22,7 @@ import {
   useSetMode,
   useStopTurn,
   useUndo,
+  useUndoing,
 } from '#/front/client/assistant/conversation'
 import type { LiveTurn } from '#/front/client/assistant/follow'
 import { useSystem } from '#/front/client/mapping/queries'
@@ -29,6 +30,7 @@ import { m } from '#/paraglide/messages'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
 
 import { mentionablesOf } from './composer/mention'
+import { modeOf } from './composer/typing'
 import { ConversationFoot, Timeline } from './Conversation'
 import { dayOf, latestUndoable } from './timeline/timeline'
 
@@ -64,6 +66,8 @@ export function ChatTimeline({ onCenter, turn, resend }: ChatTimelineProps) {
   const accepting = useAcceptProposal()
   const discarding = useDiscardProposal()
   const undoing = useUndo()
+  // An Undo asked for by `/undo` too.
+  const undoPending = useUndoing()
   const tiles = useTiles()
   const system = useMemo(
     () => (tiles === undefined ? undefined : new Map(tiles.map(({ id, title }) => [id, title]))),
@@ -111,7 +115,7 @@ export function ChatTimeline({ onCenter, turn, resend }: ChatTimelineProps) {
         undo: (applied) => {
           undoing.mutate(applied)
         },
-        pending: accepting.isPending || discarding.isPending || undoing.isPending,
+        pending: accepting.isPending || discarding.isPending || undoPending,
       }}
     />
   )
@@ -132,7 +136,9 @@ export function ChatComposer({ onSend, turn, mode }: ChatComposerProps) {
   const { data: available } = useAssistantAvailable()
   const { mutate: stop, isPending: stopping } = useStopTurn()
   const switching = useSetMode()
-  const undoing = useUndo()
+  const { mutate: undo } = useUndo()
+  // An Undo asked for from a receipt too: `/undo` waits for it.
+  const undoing = useUndoing()
   const { messages } = useMessagesOnTheirWay()
   // The Mode switched to shows while the switch is on its way, then the poll says it.
   const shownMode = switching.isPending ? switching.variables : mode
@@ -142,11 +148,11 @@ export function ChatComposer({ onSend, turn, mode }: ChatComposerProps) {
       onSend={(text) => onSend?.(text)}
       onCommand={(command) => {
         if (command === 'undo') {
-          if (undoable !== undefined) undoing.mutate(undoable)
-        } else if (command !== shownMode) switching.mutate(command)
+          if (undoable !== undefined) undo(undoable)
+        } else if (modeOf[command] !== shownMode) switching.mutate(modeOf[command])
       }}
       tiles={tiles ?? []}
-      undoable={undoable !== undefined && !undoing.isPending}
+      undoable={undoable !== undefined && !undoing}
       // Until it is read, or when reading it failed, the composer says nothing either way.
       unavailable={available === false}
       running={

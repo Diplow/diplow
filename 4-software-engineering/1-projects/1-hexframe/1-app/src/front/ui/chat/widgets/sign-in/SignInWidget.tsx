@@ -9,7 +9,7 @@ import { useId } from 'react'
 import { m } from '#/paraglide/messages'
 
 import { Act } from '../../../atoms/controls/act'
-import { zone } from '../../layouts/zone'
+import { footPadding, zone } from '../../layouts/zone'
 import { Field } from '../fields'
 
 export type Access = 'sign-in' | 'sign-up'
@@ -75,7 +75,8 @@ export function SignInWidget({
       }}
       className={cn(
         zone,
-        'grid gap-4 px-4 pt-5 pb-6 [--voice:var(--human)] motion-safe:before:animate-draw @wide:pr-[calc(1.5rem+var(--screen-foot-inset,0px))] @wide:pl-9',
+        footPadding,
+        'grid gap-4 pt-5 pb-6 [--voice:var(--human)] motion-safe:before:animate-draw',
         className,
       )}
     >

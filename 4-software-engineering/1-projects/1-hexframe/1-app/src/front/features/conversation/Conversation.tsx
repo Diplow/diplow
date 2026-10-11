@@ -16,7 +16,6 @@ import type { Mode, TurnStep } from '#/domains/assistant/entities'
 import { m } from '#/paraglide/messages'
 import { assertIsLocale, getLocale, localizeHref } from '#/paraglide/runtime'
 import { Act } from '#/front/ui/atoms/controls/act'
-import { languageNamed } from '#/front/ui/chat/composer/commands'
 import { Composer } from '#/front/ui/chat/composer/Composer'
 import { DaySplit } from '#/front/ui/chat/entries/DaySplit'
 import { Events, type Happened } from '#/front/ui/chat/entries/Events'
@@ -75,7 +74,7 @@ interface ModeChoice {
 interface FootProps {
   /** A Message the user sent, trimmed and never empty, each Tile it `@`s linked by its id. */
   onSend: (text: string) => void
-  /** A command the page runs with what the agent does, the Mode and an Undo. */
+  /** A command the page runs with what the agent does: the Mode, or an Undo. */
   onCommand: (command: Exclude<RunCommand, 'language'>) => void
   /** The Tiles the user may `@`. */
   tiles: ReadonlyArray<Mentionable>
@@ -245,7 +244,8 @@ function goTo(locale: string) {
 
 /**
  * The composer, through its state hook: a pick put in the field, its caret after it, or the language
- * gone to; a Message sent as words, or a command the field opens with run.
+ * gone to; a Message sent as words, or a command the field opens with run, the words after it sent
+ * once it ran.
  */
 export function ConversationFoot({
   onSend,
@@ -284,12 +284,14 @@ export function ConversationFoot({
       }}
       onLeave={actions.leave}
       onSend={() => {
-        const sent = actions.send()
-        if ('message' in sent) onSend(sent.message)
-        else if (sent.command !== 'language') onCommand(sent.command)
+        const submitted = actions.submit()
+        if (submitted === undefined) return
+        if ('language' in submitted) goTo(submitted.language)
+        else if ('message' in submitted) onSend(submitted.message)
         else {
-          const locale = languageNamed(sent.rest)
-          if (locale !== undefined) goTo(locale)
+          // The command first, then the words after it, as the Message they are.
+          onCommand(submitted.command)
+          if (submitted.then !== undefined) onSend(submitted.then)
         }
       }}
       sending={sending}

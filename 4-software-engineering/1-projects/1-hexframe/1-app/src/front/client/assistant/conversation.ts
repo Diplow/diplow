@@ -12,11 +12,13 @@ import {
   infiniteQueryOptions,
   type Mutation,
   useInfiniteQuery,
+  useIsMutating,
   useMutation,
   useMutationState,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
+import { Option, Schema } from 'effect'
 
 import {
   acceptProposal,
@@ -32,7 +34,7 @@ import {
   stopTurn,
   undo,
 } from '#/api/assistant/assistant'
-import { dayAt, type Mode } from '#/domains/assistant/entities'
+import { dayAt, MessageText, type Mode, TileRef } from '#/domains/assistant/entities'
 
 import { read, settle, write } from '../calls'
 
@@ -136,6 +138,17 @@ const postScope = 'postMessage'
 export type Sent = Omit<typeof SentMessage.Type, 'offset'>
 
 /**
+ * What a write that posts a Message was called with, read back by Assistant's words for a Message and
+ * a Tile, so the timeline shows only what decodes; the server function's own schema bounds it further.
+ */
+const decodeSent = Schema.decodeUnknownOption(
+  Schema.Struct({
+    text: MessageText,
+    view: Schema.Struct({ center: TileRef, shown: Schema.Array(TileRef) }),
+  }),
+)
+
+/**
  * Posts the user's Message, trimmed and never empty, from the view it was sent from, its center and
  * the Tiles on screen, which starts a Turn answering it when the Account may use the Assistant; then
  * reads the Conversation again and polls the latest, and stays on its way until that read has landed.
@@ -164,17 +177,18 @@ interface OnItsWay {
  * Each Message on its way read once per state of its write, so `useMutationState` finds the same
  * values while nothing changed, and the timeline does not draw again at each notification.
  */
-const onItsWayByState = new WeakMap<Mutation['state'], OnItsWay>()
+const onItsWayByState = new WeakMap<Mutation['state'], OnItsWay | undefined>()
 
-function onItsWayOf(mutation: Mutation): OnItsWay {
-  const known = onItsWayByState.get(mutation.state)
-  if (known !== undefined) return known
-  const onItsWay = {
-    id: mutation.mutationId,
-    // The variables `usePostMessage` was called with: its write's key says so.
-    sent: mutation.state.variables as Sent,
-    refused: mutation.state.status === 'error',
-  }
+/** A write that posts a Message, as the timeline shows it; none should its variables not decode. */
+function onItsWayOf(mutation: Mutation): OnItsWay | undefined {
+  if (onItsWayByState.has(mutation.state)) return onItsWayByState.get(mutation.state)
+  const onItsWay = Option.getOrUndefined(
+    Option.map(decodeSent(mutation.state.variables), (sent) => ({
+      id: mutation.mutationId,
+      sent,
+      refused: mutation.state.status === 'error',
+    })),
+  )
   onItsWayByState.set(mutation.state, onItsWay)
   return onItsWay
 }
@@ -192,7 +206,7 @@ export function useMessagesOnTheirWay() {
       predicate: ({ state }) => state.status === 'pending' || state.status === 'error',
     },
     select: onItsWayOf,
-  })
+  }).filter((message) => message !== undefined)
   const forget = (id: number) => {
     const cache = client.getMutationCache()
     const write = cache.getAll().find((mutation) => mutation.mutationId === id)
@@ -263,6 +277,9 @@ export const useDiscardProposal = () => {
     onSettled: () => followAgain(client),
   })
 }
+
+/** Whether an Undo is on its way, whichever part of the page asked for it. */
+export const useUndoing = () => useIsMutating({ mutationKey: ['undo'] }) > 0
 
 /**
  * Undoes what a Turn applied, or an accepted Proposal, by its id, then reads the Conversation again

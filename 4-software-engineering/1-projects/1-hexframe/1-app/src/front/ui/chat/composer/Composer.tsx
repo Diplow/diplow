@@ -10,7 +10,7 @@ import { type ReactNode, type Ref, useId, useRef, useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { zone } from '../layouts/zone'
+import { footPadding, zone } from '../layouts/zone'
 import { type Listing, List, optionId } from './List'
 
 /** A stretch of the field shown marked: the command it opens with, or a Tile it points at. */
@@ -92,11 +92,7 @@ export function Composer({
     <form
       noValidate
       aria-busy={waits}
-      className={cn(
-        zone,
-        'grid gap-2 px-4 pt-5 pb-3 [--voice:var(--human)] @wide:pr-[calc(1.5rem+var(--screen-foot-inset,0px))] @wide:pl-9',
-        className,
-      )}
+      className={cn(zone, footPadding, 'grid gap-2 pt-5 pb-3 [--voice:var(--human)]', className)}
       onSubmit={(event) => {
         event.preventDefault()
         // Only the Stop submits while a Turn runs, and once.
