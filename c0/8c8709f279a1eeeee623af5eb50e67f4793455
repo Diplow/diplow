@@ -1,0 +1,92 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/specimens.tsx
+  s_09018015561e54::t_7c93c183df5ffa 34
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/menu/gallery.tsx
+  s_09018015561e54::t_262b1dd28a8289 12,167-168,173,197,229-232,234,257-263
+  s_09018015561e54::t_9e9f69abf7eb1e 1-11,13-166,169-172,174-196,198-228,233,235-256,264-308
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/atoms/Menu.tsx
+  s_09018015561e54::t_18708e5fbe6b8f 4-6,8-11
+  s_09018015561e54::t_196ecdd7ba0ec2 7,111,121-133,149
+  s_09018015561e54::t_c5b9d702b4a226 85,354-364,453-465,468,472-473,476-481,483-484
+  s_09018015561e54::t_8201e3e44eb08a 97-98,109-110,136-139,180-181,184-185,188-190,200-235,238-239,241-246
+  s_09018015561e54::t_a098a855664160 2,33-50,81-84,115,148,150,152,166-167,169,176-179,182-183,186-187,191-199,277-293,298-313,315,317,321,336,339,341,346,348-353,365-371,373-452,466-467,469-471,474-475,482,485-486
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/frame.tsx
+  s_09018015561e54::t_7c93c183df5ffa 95-104
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/styles.css
+  s_09018015561e54::t_a0ae952fd46cb8 202,258-262,293
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/menu/Picker.tsx
+  s_09018015561e54::t_b7878f5373106d 16
+  s_09018015561e54::t_c3020a26a19703 1-15,17-23,26-72,74-148
+  s_09018015561e54::t_908838b8e015ea 24-25,73
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/gallery.tsx
+  s_09018015561e54::t_7c93c183df5ffa 11,25,27,29,33,61,66
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/Tile.tsx
+  s_09018015561e54::t_18708e5fbe6b8f 10,24,95-96,211,239,241-252,254-266,268
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/places.tsx
+  s_09018015561e54::t_18708e5fbe6b8f 6-7,9,18-19,23,49-72
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/menu/verbs.test.ts
+  s_09018015561e54::t_def0251822d505 70-74,105
+  s_09018015561e54::t_2f3ba2aee9be68 1-69,75-104,106-108
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_09018015561e54::t_fa3e9ff0bade3f 25-26,81-82
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/pieces.ts
+  s_09018015561e54::t_fa3e9ff0bade3f 146-159
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/layouts/HoverCard.tsx
+  s_09018015561e54::t_87837942d0b30a 2,5-7,28-29,31,64
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/moving/move.test.ts
+  s_09018015561e54::t_7f2b28842b7fef 1-61
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/menu/TileMenu.tsx
+  s_09018015561e54::t_231380125c2d0c 27,31,81-115
+  s_09018015561e54::t_908838b8e015ea 278-283
+  s_09018015561e54::t_d9625f0ce07a9d 37-45,120-123,216-228,230,239,241,245,251,265
+  s_09018015561e54::t_ed031c593ff4ce 1-26,28-30,32-36,46-80,116-119,124-215,229,231-238,240,242-244,246-250,252-264,266-277,284-325
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/keys.ts
+  s_09018015561e54::t_18708e5fbe6b8f 5,35-37,40
+  s_09018015561e54::t_042fb6a8fbc445 4,38-39,41
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/menu/verbs.ts
+  s_09018015561e54::t_262b1dd28a8289 132-135
+  s_09018015561e54::t_d9625f0ce07a9d 46-52,56
+  s_09018015561e54::t_1dcb0a8381ebdc 1-45,53-55,57-131,136-184
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/Tokens.tsx
+  s_09018015561e54::t_a0ae952fd46cb8 59,64
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_09018015561e54::t_2aaa4d39785e68 928-931
+  s_09018015561e54::t_1492c31cdb38f2 875-925
+  s_09018015561e54::t_ef7e0645651fc3 932-974
+  s_09018015561e54::t_a0ae952fd46cb8 926-927
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_09018015561e54::t_a0ae952fd46cb8 926-927
+  s_09018015561e54::t_2aaa4d39785e68 928-931
+  s_09018015561e54::t_ef7e0645651fc3 932-974
+  s_09018015561e54::t_1492c31cdb38f2 875-925
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/moving/move.ts
+  s_09018015561e54::t_75d70a80e33f8a 36-44
+  s_09018015561e54::t_b7878f5373106d 7
+  s_09018015561e54::t_dc14618376c6e1 1-3,5-6,8-35,45-46,52-75
+  s_09018015561e54::t_e5853b47aef6ed 4,47-51
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/moving/Moving.tsx
+  s_09018015561e54::t_a63a6eccaff6d7 1-8,17-68,72-77,84-87,97-168,170-204,206-213,215-224,226-227,229-233,235-249
+  s_09018015561e54::t_fabc0a4919749a 80,83,205,225,228,234
+  s_09018015561e54::t_2aaa4d39785e68 9-16,69-71,78-79,81-82,88-96,169
+  s_09018015561e54::t_e5853b47aef6ed 214
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/moving/gallery.tsx
+  s_09018015561e54::t_9e6d993c072edc 5,13,126-128,130,150-152,156,191,198-201,203-207,210,217,220,226-252,254-268,270-278,281,283,292,294,296-300,321-326,332-370,372-430
+  s_09018015561e54::t_6fbbc8399df9f0 1-4,6-12,14-15,18-31,33-43,47-125,129,131-137,140-149,153-155,157-186,188-190,192-197,202,208-209,211-216,218,221-225,253,269,279-280,282,284-291,293,295,303,309-311,314-315,331,371,431-432
+  s_09018015561e54::t_75d70a80e33f8a 16-17,32,44-46,138-139,187,301-302,304-308,312-313,316-320,327-330
+  s_09018015561e54::t_a329f9a1a0d5ec 219
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c08c8709f279a1eeeee623af5eb50e67f4793455",
+  "prompts": {},
+  "sessions": {
+    "s_09018015561e54": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "80f5c16c-ef67-4b92-89fc-648f48179105",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
