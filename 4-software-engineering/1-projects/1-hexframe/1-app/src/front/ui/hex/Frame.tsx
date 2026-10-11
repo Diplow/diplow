@@ -50,7 +50,7 @@ export function EmptySlot({ hex, action }: EmptySlotProps) {
       <HexShape hex={hex} />
       <polygon
         points={polygonPoints(hex.hex)}
-        className="fill-transparent stroke-transparent group-hover:fill-muted group-hover:stroke-brand group-focus-visible:stroke-ring"
+        className="fill-transparent stroke-transparent group-hover:fill-muted group-hover:stroke-primary group-focus-visible:stroke-ring"
         strokeWidth={strokeWidth * 2}
         strokeLinejoin="round"
       />

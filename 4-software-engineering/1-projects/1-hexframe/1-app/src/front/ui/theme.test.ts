@@ -32,32 +32,30 @@ afterEach(() => {
 })
 
 describe('themeScript', () => {
-  it('follows the system preference when nothing is stored', () => {
-    prefersDark(true)
+  it('paints dark when nothing is stored', () => {
     runThemeScript()
     expect(root.classList.contains('dark')).toBe(true)
   })
 
-  it('stays light when nothing is stored and the system prefers light', () => {
+  it('stays dark when the system prefers light but the user chose nothing', () => {
+    prefersDark(false)
     runThemeScript()
-    expect(root.classList.contains('dark')).toBe(false)
+    expect(root.classList.contains('dark')).toBe(true)
   })
 
   it('treats an unknown stored value as no choice', () => {
-    prefersDark(true)
     localStorage.setItem('hexframe.theme', 'auto')
     runThemeScript()
     expect(root.classList.contains('dark')).toBe(true)
   })
 
-  it('still follows the system preference when storage is blocked', () => {
-    prefersDark(true)
+  it('still paints dark when storage is blocked', () => {
     blockStorage()
     runThemeScript()
     expect(root.classList.contains('dark')).toBe(true)
   })
 
-  it('lets a stored choice win over the system preference', () => {
+  it('applies a stored light choice, whatever the system prefers', () => {
     prefersDark(true)
     localStorage.setItem('hexframe.theme', 'light')
     runThemeScript()

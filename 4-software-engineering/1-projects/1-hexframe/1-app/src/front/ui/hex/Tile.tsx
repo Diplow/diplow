@@ -80,7 +80,7 @@ export function Tile({ hex, action, onAct, onCenter, swap }: TileProps) {
           {/* The hover and focus ring, drawn over the outline. */}
           <polygon
             points={polygonPoints(hex.hex)}
-            className="fill-none stroke-transparent group-hover:stroke-brand group-focus-visible:stroke-ring"
+            className="fill-none stroke-transparent group-hover:stroke-primary group-focus-visible:stroke-ring"
             strokeWidth={strokeWidth * 2}
             strokeLinejoin="round"
           />
@@ -118,7 +118,7 @@ function SwapButton({ hex, swap }: { hex: Hex; swap: SwapTarget }) {
           cx={x}
           cy={y}
           r={radius}
-          className="fill-brand stroke-background group-hover:stroke-brand-foreground group-focus-visible:stroke-ring"
+          className="fill-primary stroke-background group-hover:stroke-primary group-focus-visible:stroke-ring"
           strokeWidth={strokeWidth * 2}
         />
         <ArrowLeftRight
@@ -126,7 +126,7 @@ function SwapButton({ hex, swap }: { hex: Hex; swap: SwapTarget }) {
           y={y - icon / 2}
           width={icon}
           height={icon}
-          className="text-brand-foreground"
+          className="text-primary-foreground"
           aria-hidden
         />
       </g>

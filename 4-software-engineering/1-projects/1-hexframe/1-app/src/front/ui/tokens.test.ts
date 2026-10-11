@@ -25,17 +25,42 @@ describe('colorTokens', () => {
   it('reads only the @theme inline block', () => {
     expect(colorTokens(':root { --color-stray: red; }')).toEqual([])
   })
+
+  it('reads past a block nested inside it, up to the brace that closes it', () => {
+    const theme = `@theme inline {
+      --color-glow: var(--glow);
+      @keyframes breathe { 50% { opacity: 0.35; } }
+      --color-tile: var(--tile);
+    }
+    :root { --color-stray: red; }`
+    expect(colorTokens(theme)).toEqual([{ name: 'glow' }, { name: 'tile' }])
+  })
 })
 
 describe('the theme', () => {
   const tokens = colorTokens(css)
 
-  it.each(['brand', 'success', 'warning', 'info', 'destructive'])(
-    'has %s, with a foreground',
-    (name) => {
-      expect(tokens).toContainEqual({ name, foreground: `${name}-foreground` })
-    },
-  )
+  it.each(['success', 'warning', 'info', 'destructive'])('has %s, with a foreground', (name) => {
+    expect(tokens).toContainEqual({ name, foreground: `${name}-foreground` })
+  })
+
+  it.each([
+    'faint',
+    'human',
+    'agent',
+    'context',
+    'glow',
+    'glow-soft',
+    'halo',
+    'aura',
+    'ambient',
+    'tile',
+    'tile-fade',
+    'tile-lit',
+    'tile-lit-fade',
+  ])('has %s, which no text sits on, so without a foreground', (name) => {
+    expect(tokens).toContainEqual({ name })
+  })
 
   const variables = tokens.flatMap(({ name, foreground }) =>
     foreground ? [name, foreground] : [name],
@@ -51,6 +76,11 @@ describe('the theme', () => {
       ]),
     )
   }
+
+  it('reads every colour the stylesheet declares in @theme inline', () => {
+    const declared = Array.from(css.matchAll(/--color-([\w-]+):/g), ([, name = '']) => name)
+    expect(declared.filter((name) => !variables.includes(name))).toEqual([])
+  })
 
   it('gives every colour token a value in light and in dark', () => {
     for (const [theme, selector] of Object.entries(themes)) {
