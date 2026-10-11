@@ -5,8 +5,8 @@ owner: diplo
 preview: >-
   The briefs of cubic's three custom agents on hexframe pull requests:
   maintainability, domain design, security. Each is a condensed copy of the
-  skill or bar it comes from, kept under cubic's 10,000-character limit, and
-  wired in by cubic.yaml at the repo root.
+  skill or bar it comes from, kept under 9,000 characters (cubic reads
+  10,000), and wired in by cubic.yaml at the repo root.
 ---
 # cubic agents
 

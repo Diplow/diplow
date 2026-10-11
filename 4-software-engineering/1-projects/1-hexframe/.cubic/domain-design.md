@@ -24,7 +24,7 @@ Nothing below the front, the API included, imports it. The front reaches a domai
 ## The domains
 
 - **IAM**: Account, Session, Key, Entitlement. A Session or a Key proving its Account signs a request in; managing Keys and the Account takes a Session. Better Auth and its Stripe plugin are repositories below IAM. An Entitlement is derived from what the Account pays for, never stored beside Stripe. No domain says "billing".
-- **Mapping**: System (the aggregate, flat by id; its tree is a view), Tile, Child, Context, Frame, Reference, and their Operations (create, edit, move, swap, delete, a Reference's create and delete) with each one's events; Help, a System no Account owns, every Account reads and none writes. The Root tile is the user; the name Better Auth keeps is copied from its Title, never the reverse. Looking (centering, expanding, showing Context) is view state owned by the URL, not Mapping.
+- **Mapping**: System (the aggregate, flat by id; its tree is a view), Tile, Child, Context, Frame, Reference, and their Operations (create, edit, move, swap, delete, a Reference's create and delete) with each one's events; Help, a System no Account owns, which every Account reads and none writes. The Root tile is the user; the name Better Auth keeps is copied from its Title, never the reverse. Looking (centering, expanding, showing Context) is view state owned by the URL, not Mapping.
 - **Assistant**: Conversation, Message, Turn, Proposal, Mode. It knows nothing of Tiles: its agent writes through the MCP with a Turn's Key, and the API composes it with Mapping.
 
 A name crossing these lines (a `Tile` in Assistant, a `billing` folder, view state in a Mapping service) is a finding.
