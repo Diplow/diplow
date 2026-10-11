@@ -9,6 +9,7 @@ import { m } from '#/paraglide/messages'
 
 import { canvasSize, type EmptySlotTarget } from './geometry/shape'
 import { EmptySlot, Frame, ListHex } from './Frame'
+import type { Action } from './keys'
 import { Button } from '../atoms/controls/button'
 import { useCanvasState } from './state/useCanvasState'
 import { Tile, type SwapTarget } from './Tile'
@@ -28,7 +29,7 @@ interface CanvasProps {
    * What a click on an empty slot does, and how a screen reader names it: add a Tile there, move one
    * there; `undefined` for a slot that takes no click. Without it, none does.
    */
-  emptySlots?: (slot: EmptySlotTarget) => { label: string; onSelect: () => void } | undefined
+  emptySlots?: (slot: EmptySlotTarget) => Action | undefined
   /**
    * Whether a Tile offers to trade places with the Tile on the move, how that is named and what it
    * does, on a small button of its own; `undefined` for a Tile that offers no swap. Without it, none

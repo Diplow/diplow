@@ -3,6 +3,12 @@
 // going down it only keeps the page from scrolling.
 import type { KeyboardEvent } from 'react'
 
+/** What a click on a shape that stands for a button does, and its name for a screen reader. */
+export interface Action {
+  readonly label: string
+  readonly onSelect: () => void
+}
+
 interface Press {
   /** Enter, gone down; the event says which modifier was held. */
   readonly onEnter: (event: KeyboardEvent) => void
