@@ -5,8 +5,9 @@ owner: diplo
 preview: >-
   What each token of the design system is for: shadcn's colours where they mean
   the same thing, new ones for the human, the agent, the light and the tiles;
-  the three type families and their sizes; no radius; the light recipes of the
-  canvas; the motion's easings and durations. The values live in the registry.
+  the three type families and their sizes; no radius; where a phone and a
+  finger begin; the light recipes of the canvas; the motion's easings and
+  durations. The values live in the registry.
 ---
 # Tokens
 
@@ -52,6 +53,10 @@ A token keeps shadcn's name when it means what shadcn means, so every shadcn com
 ## Shape
 
 No radius: corners are square, as a hex's are. Round things are round on purpose (the dots of the path), not by a token.
+
+## Phone and touch
+
+Two separate questions, and neither needs a token of its own. The width picks the layout: below Tailwind's `sm` (40rem) is a phone, which shows one side at a time; a tablet, or a phone held sideways, keeps the wide layout. A finger picks the behaviour, at any width: under `pointer-coarse` nothing waits on a hover, and a target is at least 44px.
 
 ## Light
 

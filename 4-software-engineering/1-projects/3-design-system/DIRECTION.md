@@ -6,7 +6,8 @@ preview: >-
   Why the design system looks the way it does, as six principles: empty space
   and imbalance, light before lines, one warm light at the root, a warm human
   and a cool agent, curves as separators, and motion that tells the hierarchy.
-  Dark by default, light as its equal.
+  Dark by default, light as its equal. One screen, two sides that answer each
+  other.
 ---
 # Direction
 
@@ -24,6 +25,10 @@ What hexframe holds is a perspective, one a person crafts over a lifetime and th
 ## Dark by default, light as its equal
 
 Dark is the default and light is not an afterthought: the same rule holds in both. A surface rises toward light, white on paper by day, ink at night, so a tile is always lighter than the ground. The warm light behind the root is softer on paper, where a glow shows as a tint.
+
+## One screen, two sides
+
+hexframe is one screen, with no menu and no page to go to. Everything happens in the chat, where you and the agent act; the canvas carries what you act on, and the way through it. Each side answers the other, and that is most of the art: a tile named in the chat lights up on the canvas, the agent at work marks the tile it is in, and the tile you center on the canvas is where the agent works next. Signed out, it is the same screen: the canvas shows hexframe's help, and the chat asks who you are. On a phone the chat stays in front and the canvas behind it, as the tiles run on behind the conversation on a wide screen; the canvas comes forward when the chat points at it, then gives it back.
 
 ## On shadcn
 
