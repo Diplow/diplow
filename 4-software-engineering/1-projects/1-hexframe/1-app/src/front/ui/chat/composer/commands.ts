@@ -225,9 +225,12 @@ export interface Typing {
   readonly from: number
 }
 
-/** The command of `among` a name calls, in any language for the language. */
+/**
+ * The command of `among` a name calls, case and accents aside as the list finds it, in any language
+ * for the language.
+ */
 const commandNamed = (name: string, among: ReadonlyArray<Command> = commands) =>
-  among.find((command) => namesOf(command).includes(name))
+  among.find((command) => namesOf(command).some((each) => folded(each) === folded(name)))
 
 /** Where the first command of a group stands among those found. */
 const firstOf = (found: ReadonlyArray<Command>, group: CommandGroup) => {

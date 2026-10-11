@@ -77,6 +77,8 @@ describe('a page offering some commands', () => {
       length: '/language'.length,
       rest: 'fr',
     })
+    expect(openingCommand('/ASK', among)).toMatchObject({ command: { id: 'ask' } })
+    expect(openingCommand('/Langue fr', among)).toMatchObject({ command: { id: 'language' } })
     expect(openingCommand('/asking', among)).toBeUndefined()
     expect(openingCommand('/undo', among)).toBeUndefined()
     expect(openingCommand('ask /ask', among)).toBeUndefined()
