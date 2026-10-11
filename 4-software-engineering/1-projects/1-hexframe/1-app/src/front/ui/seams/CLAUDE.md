@@ -9,7 +9,7 @@ preview: >-
 ---
 # seams
 
-A seam is one file a library sits behind, so swapping the library changes that file and nothing else (STACK.md: beta and alpha only behind a seam). The ones STACK.md names in `ui/` live here, below the tiers, since what they wrap is a library, not a piece of the screen: any piece may draw with a seam, and a seam imports nothing of the design system (dependency-cruiser, `no-seams-importing-up`).
+A seam is one file a library sits behind, so swapping the library changes that file and nothing else (STACK.md: beta and alpha only behind a seam). The ones STACK.md names in `ui/` live here, below the tiers, since what they wrap is a library, not a piece of the screen: any piece may draw with a seam, and a seam imports no tier, neither an atom, a layout nor a side, only the files at `ui/`'s root (dependency-cruiser, `no-seams-importing-up`).
 
 | Path | Holds |
 |---|---|
