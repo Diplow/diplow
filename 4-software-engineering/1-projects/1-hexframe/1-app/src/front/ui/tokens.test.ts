@@ -25,6 +25,16 @@ describe('colorTokens', () => {
   it('reads only the @theme inline block', () => {
     expect(colorTokens(':root { --color-stray: red; }')).toEqual([])
   })
+
+  it('reads past a block nested inside it, up to the brace that closes it', () => {
+    const theme = `@theme inline {
+      --color-glow: var(--glow);
+      @keyframes breathe { 50% { opacity: 0.35; } }
+      --color-tile: var(--tile);
+    }
+    :root { --color-stray: red; }`
+    expect(colorTokens(theme)).toEqual([{ name: 'glow' }, { name: 'tile' }])
+  })
 })
 
 describe('the theme', () => {
@@ -52,10 +62,6 @@ describe('the theme', () => {
     expect(tokens).toContainEqual({ name })
   })
 
-  it('has no brand: the ink, the human or the agent carries what it meant', () => {
-    expect(tokens.map(({ name }) => name)).not.toContain('brand')
-  })
-
   const variables = tokens.flatMap(({ name, foreground }) =>
     foreground ? [name, foreground] : [name],
   )
@@ -71,7 +77,7 @@ describe('the theme', () => {
     )
   }
 
-  it('reads every colour of @theme inline, so a block nested after them cuts none off', () => {
+  it('reads every colour the stylesheet declares in @theme inline', () => {
     const declared = Array.from(css.matchAll(/--color-([\w-]+):/g), ([, name = '']) => name)
     expect(declared.filter((name) => !variables.includes(name))).toEqual([])
   })

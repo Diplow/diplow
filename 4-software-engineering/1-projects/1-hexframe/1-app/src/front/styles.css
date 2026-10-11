@@ -189,10 +189,7 @@
   --ease-glide: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-camera: cubic-bezier(0.65, 0, 0.35, 1);
   --animate-breathe: breathe 3.2s ease-in-out infinite;
-}
 
-/* Apart from the tokens above, whose block tokens.ts reads up to its first closing brace. */
-@theme {
   @keyframes breathe {
     50% {
       opacity: 0.35;
