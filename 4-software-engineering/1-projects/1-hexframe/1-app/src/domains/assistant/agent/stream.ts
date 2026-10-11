@@ -8,14 +8,31 @@ import { Option, Schema } from 'effect'
 
 import { stepOf, type TurnEnd, type TurnStep } from '../entities'
 
+/** A subject of a tool's input, kept whatever it holds: one that is no text is passed over. */
+const subject = Schema.optionalKey(Schema.Unknown)
+
+/**
+ * A tool's input, as Assistant reads it: the fields that say what the tool works on, its subjects,
+ * in the order the first one given as text is told; every other field the tool's own, left out.
+ */
+const Input = Schema.Struct({
+  command: subject,
+  file_path: subject,
+  path: subject,
+  pattern: subject,
+  url: subject,
+  id: subject,
+  title: subject,
+  query: subject,
+})
+
+/** A tool's subjects, in the order `Input` declares them. */
+const subjects = Object.keys(Input.fields) as ReadonlyArray<keyof typeof Input.fields>
+
 /** A block of an agent's message: its text, a tool it runs, or anything else, left out. */
 const Block = Schema.Union([
   Schema.Struct({ type: Schema.Literal('text'), text: Schema.String }),
-  Schema.Struct({
-    type: Schema.Literal('tool_use'),
-    name: Schema.String,
-    input: Schema.Record(Schema.String, Schema.Unknown),
-  }),
+  Schema.Struct({ type: Schema.Literal('tool_use'), name: Schema.String, input: Input }),
   Schema.Struct({ type: Schema.String }),
 ])
 
@@ -65,14 +82,11 @@ const keyShaped = /hft_[A-Za-z0-9_-]{16,}/g
 /** A text with every Key-shaped secret in it masked. */
 const masked = (text: string) => text.replaceAll(keyShaped, 'hft_…')
 
-/** The input fields that say what a tool works on, the first one given told. */
-const subjects = ['command', 'file_path', 'path', 'pattern', 'url', 'id', 'title', 'query']
-
 /**
  * A tool's step: its name, an MCP tool's without the server's prefix (`mcp__hexframe__open_tile` reads
  * `open_tile`), and the first of its input's subjects given as text.
  */
-function stepFor(name: string, input: Readonly<Record<string, unknown>>): TurnStep {
+function stepFor(name: string, input: typeof Input.Type): TurnStep {
   const tool = name.startsWith('mcp__') ? name.split('__').slice(2).join('__') : name
   const detail = subjects.map((field) => input[field]).find((value) => typeof value === 'string')
   return stepOf(

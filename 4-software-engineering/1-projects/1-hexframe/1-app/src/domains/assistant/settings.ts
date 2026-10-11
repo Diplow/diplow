@@ -59,7 +59,10 @@ export const settings = {
     prices,
     /** The most tokens a call may answer: a call asking for more is sent asking for this many. */
     maxTokens: 32_000,
-    /** The most characters a call's body holds, Anthropic's own limit on a request. */
+    /**
+     * The most bytes a call's body holds, Anthropic's own limit on a request: the proxy reads no
+     * further, and a body of more characters than that is more bytes still.
+     */
     largestCall: 32 * 1024 * 1024,
     /**
      * The fields a call's body may hold, every other refused: no `mcp_servers`, no `container`, no

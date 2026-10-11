@@ -213,6 +213,42 @@ export function bearerOnly(request: Request): StartContext['exchange'] {
 }
 
 /**
+ * A request's body as a door reads it: its text, past the most bytes the door takes (`TooLarge`), or
+ * cut off on the way (`Broken`), its client gone or its stream failed.
+ */
+export type ReadBody =
+  | { readonly _tag: 'Read'; readonly text: string }
+  | { readonly _tag: 'TooLarge' }
+  | { readonly _tag: 'Broken' }
+
+/**
+ * A request's body as text, read a chunk at a time and given up past `longest` bytes without reading
+ * the rest, its stream cancelled; not read at all when the length it declares is past it. A body cut
+ * off on the way is `Broken`, never a rejection: a door answers it as it answers any refusal.
+ */
+export async function bodyOf(request: Request, longest: number): Promise<ReadBody> {
+  if (Number(request.headers.get('content-length') ?? 0) > longest) return { _tag: 'TooLarge' }
+  const reader = request.body?.getReader()
+  if (reader === undefined) return { _tag: 'Read', text: '' }
+  const chunks: Array<Uint8Array<ArrayBuffer>> = []
+  let size = 0
+  try {
+    for (let read = await reader.read(); !read.done; read = await reader.read()) {
+      size += read.value.byteLength
+      if (size > longest) {
+        // What the client sends past it is never read, whether or not the cancel lands.
+        await reader.cancel().catch(() => undefined)
+        return { _tag: 'TooLarge' }
+      }
+      chunks.push(read.value)
+    }
+  } catch {
+    return { _tag: 'Broken' }
+  }
+  return { _tag: 'Read', text: await new Blob(chunks).text() }
+}
+
+/**
  * A server function's Key: none, whatever its headers say, since a Key opens only `/mcp` and the doors
  * of a Turn's sandbox.
  */

@@ -99,6 +99,48 @@ describe('a model call the proxy lets through', () => {
     })
   })
 
+  it('takes each object Anthropic gives a shape in that shape: a tool’s, its cache, the answer’s, the context’s', () => {
+    const tool = {
+      name: 'Read',
+      input_schema: { type: 'object', properties: {}, additionalProperties: false },
+      cache_control: { type: 'ephemeral', ttl: '1h' },
+    }
+    const shaped = callOf({
+      tools: [tool],
+      output_config: {
+        effort: 'high',
+        format: { type: 'json_schema', schema: { type: 'object', properties: {} } },
+        task_budget: { type: 'tokens', total: 64_000, remaining: 20_000 },
+      },
+      context_management: {
+        edits: [
+          { type: 'clear_tool_uses_20250919', trigger: { type: 'input_tokens', value: 100_000 } },
+          { type: 'clear_thinking_20251015', keep: 'all' },
+        ],
+      },
+    })
+    expect(Result.isSuccess(asked(shaped))).toBe(true)
+  })
+
+  it('refuses an object out of its shape: a message, a tool’s schema or cache, the answer’s, the context’s', () => {
+    const tool = (extra: Record<string, unknown>) => ({
+      tools: [{ name: 'Read', input_schema: { type: 'object' }, ...extra }],
+    })
+    const outOfShape = [
+      { messages: [{ role: 'user', content: 'hi', speed: 'fast' }] },
+      tool({ input_schema: { type: 'string' } }),
+      tool({ cache_control: { type: 'persistent' } }),
+      tool({ cache_control: { type: 'ephemeral', other: 1 } }),
+      { output_config: { format: { type: 'text' } } },
+      { output_config: { task_budget: { type: 'dollars', total: 1 } } },
+      { context_management: { edits: [{ type: 'compact_20260112' }] } },
+      { context_management: { edits: [], other: 1 } },
+    ]
+    for (const extra of outOfShape) {
+      expect(refusal(callOf(extra))).toMatchObject({ why: 'invalid' })
+    }
+  })
+
   it('refuses a server tool, and its use or its result in a message', () => {
     const webFetch = { type: 'web_fetch_20260209', name: 'web_fetch' }
     expect(refusal(callOf({ tools: [webFetch] }))).toMatchObject({ why: 'invalid' })

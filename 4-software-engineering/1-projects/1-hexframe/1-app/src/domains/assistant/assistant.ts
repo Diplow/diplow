@@ -421,6 +421,12 @@ export const stopAgent = (accountId: string, turnId: string) =>
     (box) => box.stop(processOf(turnId)),
   )
 
+/**
+ * The most bytes a model call's body holds, by the settings: the proxy reads no further, and refuses
+ * the call past it as `admitCall` would.
+ */
+export const largestCall: number = settings.model.largestCall
+
 /** A model call a Turn's agent asks the proxy for: its endpoint, Anthropic's headers, its body's text. */
 export interface AskedCall {
   readonly endpoint: Endpoint

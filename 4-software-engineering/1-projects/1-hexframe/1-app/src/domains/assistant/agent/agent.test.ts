@@ -107,6 +107,20 @@ describe("what Assistant keeps of the agent's stream", () => {
     ])
   })
 
+  it('says the first subject given as text, passing over one that is no text, reading no other field', () => {
+    const toolUse = (input: Record<string, unknown>) =>
+      JSON.stringify({
+        type: 'assistant',
+        message: { content: [{ type: 'tool_use', name: 'mcp__hexframe__open_tile', input }] },
+      })
+    expect(readLine(toolUse({ id: 42, title: 'Games', body: '# Games' }))).toEqual([
+      { _tag: 'Stepping', step: { tool: 'open_tile', detail: 'Games' } },
+    ])
+    expect(readLine(toolUse({ content: 'What the file holds.' }))).toEqual([
+      { _tag: 'Stepping', step: { tool: 'open_tile' } },
+    ])
+  })
+
   it('cuts a step short, never a file’s content', () => {
     const long = JSON.stringify({
       type: 'assistant',

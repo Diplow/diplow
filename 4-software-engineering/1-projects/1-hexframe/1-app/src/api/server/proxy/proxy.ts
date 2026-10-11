@@ -6,11 +6,19 @@
 // spend and relay it. Every refusal is answered as Anthropic answers one, so Claude Code stops.
 import type { Effect } from 'effect'
 
-import type { AskedCall } from '#/domains/assistant/assistant'
+import { type AskedCall, largestCall } from '#/domains/assistant/assistant'
 import { turnOnly } from '#/domains/iam/iam'
 
 import { modelCall } from '../../assistant/programs'
-import { bearerOnly, noSession, provenKey, run, waitUntilOf, type StartContext } from '../run'
+import {
+  bearerOnly,
+  bodyOf,
+  noSession,
+  provenKey,
+  run,
+  waitUntilOf,
+  type StartContext,
+} from '../run'
 
 /** The paths it serves, from its base URL, and the endpoint each is. */
 const endpoints: ReadonlyMap<string, AskedCall['endpoint']> = new Map([
@@ -54,6 +62,10 @@ function refusal(
   )
 }
 
+/** A call past the largest the proxy takes, refused as Anthropic refuses one. */
+const tooLarge = (requestId: string) =>
+  refusal('request_too_large', 'The call is larger than the proxy takes.', requestId)
+
 /** What each limit says to the agent, whose Turn it ended. */
 const limits = {
   ceiling: 'This Turn reached its ceiling: it spent what one Turn may.',
@@ -68,7 +80,7 @@ function answerOf(answer: Answer, requestId: string): Response {
   switch (answer._tag) {
     case 'Refused':
       return answer.why === 'too-large'
-        ? refusal('request_too_large', 'The call is larger than the proxy takes.', requestId)
+        ? tooLarge(requestId)
         : refusal(
             'invalid_request_error',
             `The proxy refused the call: ${answer.message}`,
@@ -95,7 +107,8 @@ function answerOf(answer: Answer, requestId: string): Response {
 /**
  * Serves one call of a Turn's agent, `path` the part of its URL after the base: proves the Turn's Key
  * from the header alone and answers a request it proves no Turn for before reading its body; then
- * refuses any path but the messages endpoint's, reads the body, and answers what its program decided.
+ * refuses any path but the messages endpoint's, reads the body no further than the largest call,
+ * refusing one past it or cut off on the way, and answers what its program decided.
  */
 export async function serveModelCall(request: Request, path: string): Promise<Response> {
   const exchange = bearerOnly(request)
@@ -118,13 +131,18 @@ export async function serveModelCall(request: Request, path: string): Promise<Re
   if (endpoint === undefined) {
     return refusal('not_found_error', 'The proxy serves the messages endpoint alone.', requestId)
   }
+  const body = await bodyOf(request, largestCall)
+  if (body._tag === 'TooLarge') return tooLarge(requestId)
+  if (body._tag === 'Broken') {
+    return refusal('invalid_request_error', 'The call was cut off on the way.', requestId)
+  }
   const outcome = await run(
     context,
     modelCall({
       endpoint,
       version: request.headers.get('anthropic-version') ?? undefined,
       betas: request.headers.get('anthropic-beta') ?? undefined,
-      body: await request.text(),
+      body: body.text,
     }),
   )
   if (!outcome.ok) return refusal('api_error', 'The call failed on the way.', requestId)

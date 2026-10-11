@@ -1,8 +1,9 @@
-import { Exit, Option, Redacted } from 'effect'
+import { Effect, Exit, Option, Redacted } from 'effect'
 import { describe, expect, it } from 'vitest'
 
 import type { Entry } from '#/domains/assistant/entities'
 import * as Iam from '#/domains/iam/iam'
+import { CreateTile } from '#/domains/mapping/operations'
 import { browser } from '#/repositories/auth/testing'
 
 import * as Mapping from '../../mapping/programs'
@@ -205,6 +206,37 @@ describe('a Turn in ask', () => {
     await value(run(signedIn, Proposal.discardProposal({ proposal: open.proposal })))
     expect((await proposals()).at(-1)?.fate).toBe('discarded')
     expect(await titlesHeld()).not.toContain('Games')
+  })
+
+  it('refuses a write its Key proved just before the Turn ended, drafting nothing, opening no Proposal', async () => {
+    const { signedIn, accountId } = await someone
+    const { root } = await value(run(signedIn, Mapping.system))
+    const asked = await value(run(signedIn, Assistant.postMessage({ text: 'One last thing.' })))
+    const { turn, key } = await value(
+      run(signedIn, Assistant.startTurn({ message: asked.id, location: root.id })),
+    )
+    const exchange = {
+      url: 'http://localhost/mcp',
+      headers: new Headers(bearer(Redacted.value(key.secret))),
+      setCookies: () => undefined,
+    }
+    // Its Key proven, then the Turn stopped before the write runs.
+    const byTurn: StartContext = {
+      ...signedIn,
+      exchange,
+      session: noSession,
+      key: await provenKey(exchange),
+    }
+    const before = await proposals()
+    await value(run(signedIn, Assistant.endTurn(accountId, turn.id, 'stopped')))
+    const late = new CreateTile({ parent: root.id, slot: 4, ...content('Late') })
+    const written = await run(
+      byTurn,
+      Proposal.written(late, () => Effect.die(new Error('A Turn’s write ran as its own'))),
+    )
+    expect(written).toMatchObject({ ok: false, failure: { _tag: 'SignedOut' } })
+    expect(await proposals()).toEqual(before)
+    expect(await value(run(signedIn, Assistant.latest))).not.toHaveProperty('proposal')
   })
 })
 

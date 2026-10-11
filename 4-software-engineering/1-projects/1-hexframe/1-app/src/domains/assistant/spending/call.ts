@@ -1,9 +1,11 @@
 // A model call a Turn's agent makes through the app's proxy, as Assistant lets it through: its body
 // decoded by a strict schema that keeps no field the settings don't name, for the models they name,
-// with client tools alone, `max_tokens` capped; and its betas, each one the settings name. What a
-// message holds the model reads, never the app: its content blocks are checked by their type, so no
-// server tool's block slips in, and an image or a document by its source too, held inline, so Anthropic
-// fetches nothing for the model and a call costs no more than its body's length says. Pure.
+// with client tools alone, `max_tokens` capped; and its betas, each one the settings name. Every
+// object Anthropic gives a shape has it here, but three, passed through on purpose since the model
+// reads them, never the app: a content block's fields past its type and, for an image or a document,
+// its source, held inline so Anthropic fetches nothing for the model and a call costs no more than its
+// body's length says; a JSON Schema, a tool's input or an answer's format; and an edit of the
+// context's parameters, past its type. No server tool's block slips in. Pure.
 import { Result, Schema } from 'effect'
 
 import { settings } from '../settings'
@@ -57,25 +59,49 @@ const Block = Schema.Union([
   ToolResult,
 ])
 
-/** A message: who says it, the user, the agent or the operator mid-conversation, and what. */
-const Message = Schema.StructWithRest(
-  Schema.Struct({
-    role: Schema.Literals(['user', 'assistant', 'system']),
-    content: Schema.Union([Schema.String, Schema.Array(Block)]),
-  }),
-  [Schema.Record(Schema.String, Schema.Unknown)],
-)
+/**
+ * A message: who says it, the user, the agent or the operator mid-conversation, and what; nothing
+ * else, as Anthropic takes it.
+ */
+const Message = Schema.Struct({
+  role: Schema.Literals(['user', 'assistant', 'system']),
+  content: Schema.Union([Schema.String, Schema.Array(Block)]),
+})
+
+/**
+ * A JSON Schema, an object at its root: the model reads it, so what it holds past its `type` is
+ * passed through.
+ */
+const JsonSchema = Schema.StructWithRest(Schema.Struct({ type: Schema.Literal('object') }), [
+  Schema.Record(Schema.String, Schema.Unknown),
+])
+
+/** Where a cache breakpoint falls: how long it lasts, and its scope under `prompt-caching-scope`. */
+const CacheControl = Schema.Struct({
+  type: Schema.Literal('ephemeral'),
+  ttl: Schema.optionalKey(Schema.Literals(['5m', '1h'])),
+  scope: Schema.optionalKey(Schema.String),
+})
 
 /** A client tool, run by the agent itself: never a server tool, which has a `type` of its own. */
 const Tool = Schema.Struct({
   type: Schema.optionalKey(Schema.Literal('custom')),
   name: Schema.String,
   description: Schema.optionalKey(Schema.String),
-  input_schema: Schema.Record(Schema.String, Schema.Unknown),
-  cache_control: Schema.optionalKey(Schema.Record(Schema.String, Schema.Unknown)),
+  input_schema: JsonSchema,
+  cache_control: Schema.optionalKey(CacheControl),
   strict: Schema.optionalKey(Schema.Boolean),
   eager_input_streaming: Schema.optionalKey(Schema.Boolean),
 })
+
+/**
+ * An edit of the context before the model reads it, under `context-management`: old tool results or
+ * thinking cleared, its parameters passed through past its type.
+ */
+const ContextEdit = Schema.StructWithRest(
+  Schema.Struct({ type: Schema.Literals(['clear_tool_uses_20250919', 'clear_thinking_20251015']) }),
+  [Schema.Record(Schema.String, Schema.Unknown)],
+)
 
 /** The settings' fields, each with its shape: the schema can hold no field they don't name. */
 type Field = (typeof settings.model.fields)[number]
@@ -107,11 +133,21 @@ const fields = {
   output_config: Schema.optionalKey(
     Schema.Struct({
       effort: Schema.optionalKey(Schema.Literals(['low', 'medium', 'high', 'xhigh', 'max'])),
-      format: Schema.optionalKey(Schema.Record(Schema.String, Schema.Unknown)),
-      task_budget: Schema.optionalKey(Schema.Record(Schema.String, Schema.Unknown)),
+      format: Schema.optionalKey(
+        Schema.Struct({ type: Schema.Literal('json_schema'), schema: JsonSchema }),
+      ),
+      task_budget: Schema.optionalKey(
+        Schema.Struct({
+          type: Schema.Literal('tokens'),
+          total: Schema.Int.check(Schema.isGreaterThanOrEqualTo(0)),
+          remaining: Schema.optionalKey(Schema.Int.check(Schema.isGreaterThanOrEqualTo(0))),
+        }),
+      ),
     }),
   ),
-  context_management: Schema.optionalKey(Schema.Record(Schema.String, Schema.Unknown)),
+  context_management: Schema.optionalKey(
+    Schema.Struct({ edits: Schema.optionalKey(Schema.Array(ContextEdit)) }),
+  ),
 } satisfies Record<Field, Schema.Top>
 
 /** A call's body, as the proxy lets it through. */
@@ -121,8 +157,9 @@ type CallBody = typeof Body.Type
 
 /**
  * Decodes a body's text, refusing any field its schema does not name, in the body and in every object
- * its schema gives a shape: a tool, `thinking`, `output_config`. A message and its content blocks keep
- * their other fields, the model's to read, once their role, type and source are named.
+ * its schema gives a shape: a message, a tool, a cache breakpoint, `thinking`, `output_config`,
+ * `context_management`. A content block, a JSON Schema and an edit of the context keep their other
+ * fields, the model's to read, once their type, and an image's or a document's source, are named.
  */
 const decodeBody = Schema.decodeUnknownResult(Schema.fromJsonString(Body), {
   onExcessProperty: 'error',

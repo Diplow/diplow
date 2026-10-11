@@ -10,7 +10,7 @@ import { Input } from '../inputs/controls/input'
 import { ConfirmDialog } from './ConfirmDialog'
 import { Drawer } from './Drawer'
 import { DropdownMenu, type MenuEntry } from './DropdownMenu'
-import { Suggestions, suggestionsField } from './Suggestions'
+import { Suggestions, suggestionsField } from './suggestions/Suggestions'
 import { Tooltip } from './Tooltip'
 
 const done = (what: string) => () => {

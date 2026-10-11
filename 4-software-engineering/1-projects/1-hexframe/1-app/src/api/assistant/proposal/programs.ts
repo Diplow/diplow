@@ -78,14 +78,21 @@ export const openTile = <F extends Field>(
 
 /**
  * Drafts an Operation into the Account's open Proposal, in one transaction: the Conversation locked,
- * the Operation decided by Mapping on the System the Proposal makes, refused as it would be there, and
- * written into the Proposal, which the draft opens when none is. Answers, for a create or an edit, the
- * Tile as the Proposal makes it, with its Version, as the write applied would.
+ * `SignedOut` should the Turn have ended since its Key was proven, so a write proven just before a
+ * Stop never lands in a Proposal the user decided on since, nor opens another; then the Operation
+ * decided by Mapping on the System the Proposal makes, refused as it would be there, and written into
+ * the Proposal, which the draft opens when none is. Answers, for a create or an edit, the Tile as the
+ * Proposal makes it, with its Version, as the write applied would.
  */
 const drafted = <O extends Operation>(accountId: string, turnId: string, operation: O) =>
   transactional(
     Effect.gen(function* () {
-      const over = yield* batchOf(yield* Assistant.lockedProposal(accountId))
+      const open = yield* Assistant.lockedProposal(accountId)
+      // The Turn ended since its Key was proven: its Key no longer proves it.
+      if ((yield* Assistant.turn(accountId, turnId)).ended !== undefined) {
+        return yield* new SignedOut()
+      }
+      const over = yield* batchOf(open)
       const draft = yield* Mapping.draft(accountId, over, operation)
       const write = encodedBatched(draft.batched)
       yield* Assistant.draft(accountId, turnId, { write, changes: draft.changes })

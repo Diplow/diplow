@@ -9,7 +9,7 @@ import { Textarea } from '#/front/ui/inputs/controls/textarea'
 import { errorMessages } from '#/front/ui/inputs/forms/errors'
 import { Field } from '#/front/ui/inputs/forms/field'
 import { useAppForm } from '#/front/ui/inputs/forms/form'
-import { Suggestions, suggestionsField } from '#/front/ui/overlays/Suggestions'
+import { Suggestions, suggestionsField } from '#/front/ui/overlays/suggestions/Suggestions'
 
 import { useMentionState } from '../state/useMentionState'
 import type { Edited, Mentionable } from './mention'
