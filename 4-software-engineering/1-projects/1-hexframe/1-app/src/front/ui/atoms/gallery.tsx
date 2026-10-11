@@ -334,7 +334,11 @@ function ActGallery() {
     <GallerySection name="Act">
       <GalleryState label={m.gallery_state_variants()}>
         <div className="flex flex-wrap items-center gap-6 [--voice:var(--agent)]">
-          <Act tone="voice" keys={['⌘', '↵']} onClick={done(m.gallery_sample_accept())}>
+          <Act
+            tone="voice"
+            shortcut={{ key: 'Enter', mod: true }}
+            onClick={done(m.gallery_sample_accept())}
+          >
             {m.gallery_sample_accept()}
           </Act>
           <Act onClick={done(m.gallery_sample_show_on_canvas())}>

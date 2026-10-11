@@ -1,7 +1,7 @@
 // The chat's own layouts, on /design-system: the widget's frame, in each of its states, on a
 // proposal of the agent's, and in the human's voice and the app's.
 import { Eye, HexagonIcon, KeyRound, Move, Pin, RotateCcw, Split } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
@@ -73,6 +73,9 @@ function Column({ children }: { children: ReactNode }) {
   return <div className="grid w-[37.5rem] max-w-full gap-6">{children}</div>
 }
 
+/** Where the proposal stands: a zone in one of its states, or its receipt once done. */
+type Stage = WidgetState | 'done'
+
 // The agent's proposal to split a tile, as the conversation would show it in each state.
 function Proposal({
   state,
@@ -81,18 +84,26 @@ function Proposal({
   onUndo = done(m.ui_undo()),
   onDismiss = done(m.ui_widget_dismiss()),
 }: {
-  state: WidgetState
+  state: Stage
   defaultFolded?: boolean
   onAccept?: () => void
   onUndo?: () => void
   onDismiss?: () => void
 }) {
   const [pinned, setPinned] = useState(false)
+  if (state === 'done') {
+    return (
+      <Widget
+        voice="agent"
+        state="done"
+        receipt={{ text: m.gallery_widget_receipt(), at: '14:02', onUndo }}
+      />
+    )
+  }
   const failed = state === 'failed'
   const kicker = {
     waiting: m.gallery_widget_kicker_waiting,
     working: m.gallery_widget_kicker_working,
-    done: m.gallery_widget_kicker_waiting,
     failed: m.gallery_widget_kicker_failed,
   }[state]
   return (
@@ -110,7 +121,7 @@ function Proposal({
           : [
               {
                 label: failed ? m.ui_retry() : m.gallery_sample_accept(),
-                keys: failed ? undefined : ['⌘', '↵'],
+                shortcut: failed ? undefined : { key: 'Enter', mod: true },
                 onSelect: onAccept,
               },
               {
@@ -120,7 +131,6 @@ function Proposal({
               { label: m.gallery_widget_discard(), onSelect: onDismiss, apart: true },
             ]
       }
-      receipt={{ text: m.gallery_widget_receipt(), at: '14:02', onUndo }}
       settings={[
         {
           label: m.gallery_sample_pin(),
@@ -172,28 +182,27 @@ function Changes() {
 // One widget that runs: accepting it works a moment then leaves its receipt, undo brings it back,
 // and its entrance replays on demand.
 function LiveWidget() {
-  const [state, setState] = useState<WidgetState>('waiting')
+  const [state, setState] = useState<Stage>('waiting')
   const [entrance, setEntrance] = useState(0)
+  // The work in flight, cancelled when the proposal is undone or comes in again.
+  const working = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const wait = () => {
+    clearTimeout(working.current)
+    setState('waiting')
+  }
   const accept = () => {
     setState('working')
-    setTimeout(() => {
+    working.current = setTimeout(() => {
       setState('done')
     }, 1600)
   }
   return (
     <Column>
-      <Proposal
-        key={entrance}
-        state={state}
-        onAccept={accept}
-        onUndo={() => {
-          setState('waiting')
-        }}
-      />
+      <Proposal key={entrance} state={state} onAccept={accept} onUndo={wait} />
       <Act
         className="justify-self-start"
         onClick={() => {
-          setState('waiting')
+          wait()
           setEntrance(entrance + 1)
         }}
       >

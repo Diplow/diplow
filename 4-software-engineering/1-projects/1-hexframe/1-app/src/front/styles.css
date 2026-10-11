@@ -231,6 +231,24 @@
   }
 }
 
+/* A risen surface: a menu, a card, the dialog. Lit a little above the ground, lifted by its shadow,
+   one fine line on top, or `--rim` where the line is another (the dialog's, in its voice). It sets no
+   position: the surface is placed by its own, its line by the nearest positioned box, itself. */
+@utility risen {
+  @apply bg-popover text-popover-foreground shadow-lift;
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 1px;
+    background: var(
+      --rim,
+      linear-gradient(90deg, var(--input), color-mix(in oklab, var(--input) 30%, transparent))
+    );
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

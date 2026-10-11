@@ -6,27 +6,28 @@ import { useId, useState, type CSSProperties, type ReactNode } from 'react'
 import { m } from '#/paraglide/messages'
 
 import { Act } from '../../atoms/controls/act'
+import type { Shortcut } from '../../atoms/keys'
 import { Menu, type MenuEntry } from '../../atoms/Menu'
 
 /** Whose the widget is: the agent asking, the user's own words, or the app's (a key, help). */
 type Voice = 'agent' | 'human' | 'app'
 
 /**
- * Where it stands: `waiting` on the user, `working` while what was asked runs, `done` once it ran,
- * leaving a receipt, `failed` with a way to try again. Folded or open is the user's, apart from it.
+ * Where a zone stands: `waiting` on the user, `working` while what was asked runs, `failed` with a
+ * way to try again. Once `done`, the widget is its receipt alone. Folded or open is the user's.
  */
-export type WidgetState = 'waiting' | 'working' | 'done' | 'failed'
+export type WidgetState = 'waiting' | 'working' | 'failed'
 
 interface WidgetAction {
   label: string
   onSelect: () => void
-  /** Its shortcut, key by key, so the action teaches it. */
-  keys?: readonly string[]
+  /** Its shortcut, drawn after it so the action teaches it. */
+  shortcut?: Shortcut
   /** Pushed to the row's end, apart: a way out such as Discard. */
   apart?: boolean
 }
 
-interface WidgetProps {
+interface ZoneProps {
   voice: Voice
   /** A line icon, drawn inside the widget's hex. */
   icon: ReactNode
@@ -41,14 +42,21 @@ interface WidgetProps {
   /** Its actions; the first is the one it expects, in its voice. */
   actions?: readonly WidgetAction[]
   state?: WidgetState
-  /** What stays once `done`: one line, an undo while one is possible, and when. */
-  receipt?: { text: ReactNode; at?: string; onUndo?: () => void }
   /** Its settings, in the menu behind its tools, above folding and dismissing. */
   settings?: readonly MenuEntry[]
   onDismiss?: () => void
   /** Folded at first; the user folds and unfolds it after. */
   defaultFolded?: boolean
 }
+
+interface DoneProps {
+  voice: Voice
+  /** Once what was asked ran, the zone gives its surface back and leaves this one line. */
+  state: 'done'
+  receipt: { text: ReactNode; at?: string; onUndo?: () => void }
+}
+
+type WidgetProps = ZoneProps | DoneProps
 
 const voices: Record<Voice, string> = {
   agent: '[--voice:var(--agent)]',
@@ -68,8 +76,7 @@ const risesInTurn = 'motion-safe:animate-rise'
  * a kicker, a title and a subtitle, a body, its actions, and its tools when the user reaches for them.
  */
 export function Widget(props: WidgetProps) {
-  if (props.state === 'done') return <Receipt voice={props.voice} receipt={props.receipt} />
-  return <Zone {...props} />
+  return props.state === 'done' ? <Receipt {...props} /> : <Zone {...props} />
 }
 
 function Zone({
@@ -84,7 +91,7 @@ function Zone({
   settings = [],
   onDismiss,
   defaultFolded = false,
-}: WidgetProps) {
+}: ZoneProps) {
   const [folded, setFolded] = useState(defaultFolded)
   const [menuOpen, setMenuOpen] = useState(false)
   const titleId = useId()
@@ -168,7 +175,7 @@ function Zone({
                     <Act
                       key={action.label}
                       tone={index === 0 ? 'voice' : 'quiet'}
-                      keys={action.keys}
+                      shortcut={action.shortcut}
                       onClick={action.onSelect}
                       className={cn(action.apart === true && 'ml-auto')}
                     >
@@ -313,8 +320,7 @@ const tool =
   'grid size-[1.625rem] cursor-pointer place-items-center text-faint transition-colors hover:bg-foreground/7 hover:text-foreground focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-(--voice) pointer-coarse:size-11 [&_svg]:size-[0.9375rem]'
 
 /** Once done, the zone gives its surface back and leaves one line in the conversation. */
-function Receipt({ voice, receipt }: { voice: Voice; receipt: WidgetProps['receipt'] }) {
-  if (receipt === undefined) return null
+function Receipt({ voice, receipt }: DoneProps) {
   return (
     <p
       role="status"

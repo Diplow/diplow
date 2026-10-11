@@ -48,19 +48,17 @@ export function Dialog({
   onConfirm,
 }: DialogProps) {
   const [typed, setTyped] = useState('')
+  // A name typed belongs to one opening: once closed, by Radix or by the caller, it goes.
+  if (!open && typed !== '') setTyped('')
   const fieldId = useId()
   const confirmed = typeToConfirm === undefined || typed.trim() === typeToConfirm
-  const change = (next: boolean) => {
-    if (!next) setTyped('')
-    onOpenChange(next)
-  }
   return (
-    <AlertDialog.Root open={open} onOpenChange={change}>
+    <AlertDialog.Root open={open} onOpenChange={onOpenChange}>
       <AlertDialog.Portal>
         <AlertDialog.Overlay
           // A click on the dim behind leaves, but not once a name is typed: that would lose it.
           onClick={() => {
-            if (typed === '') change(false)
+            if (typed === '') onOpenChange(false)
           }}
           className="fixed inset-0 z-50 bg-background/62 backdrop-blur-[5px] backdrop-saturate-[.85] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 motion-reduce:animate-none"
         />
@@ -74,7 +72,7 @@ export function Dialog({
           className={cn(
             tone === 'destructive' ? '[--voice:var(--destructive)]' : '[--voice:var(--foreground)]',
             // A risen surface, square, a line on top in its voice that draws itself as it opens.
-            "fixed z-50 grid bg-popover px-6 pt-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] text-popover-foreground shadow-lift outline-none before:absolute before:inset-x-0 before:top-0 before:h-px before:origin-left before:bg-linear-to-r before:from-(--voice) before:to-(--voice)/10 before:content-[''] motion-safe:before:animate-draw",
+            'risen fixed z-50 grid px-6 pt-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] outline-none [--rim:linear-gradient(90deg,var(--voice),color-mix(in_oklab,var(--voice)_10%,transparent))] before:origin-left motion-safe:before:animate-draw',
             // A phone: a sheet from the bottom, the screen's width.
             'inset-x-0 bottom-0 data-[state=open]:animate-in data-[state=open]:slide-in-from-bottom-4 data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 motion-reduce:animate-none',
             // Wide: over the conversation's column, from its left edge, a little below the top.

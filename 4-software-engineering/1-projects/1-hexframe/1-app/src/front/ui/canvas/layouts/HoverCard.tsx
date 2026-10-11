@@ -12,8 +12,6 @@ interface HoverCardProps {
   description?: string
   /** One more line, in the colour of what it says: a clash, the agent at work, a Reference. */
   note?: { text: string; tone?: 'warning' | 'agent' | 'context' }
-  /** While its menu is open, or the tile is not offered (a move, a pick), no card. */
-  disabled?: boolean
 }
 
 const noteTones = {
@@ -27,19 +25,12 @@ const noteTones = {
  * focus. A finger can't hover, so under one it never opens: the long press opens the tile's menu,
  * whose header says the same.
  */
-export function HoverCard({
-  children,
-  place,
-  title,
-  description,
-  note,
-  disabled = false,
-}: HoverCardProps) {
+export function HoverCard({ children, place, title, description, note }: HoverCardProps) {
   const [open, setOpen] = useState(false)
   const describedBy = useId()
   return (
     <>
-      <Card.Root open={open && !disabled} onOpenChange={setOpen} openDelay={420} closeDelay={80}>
+      <Card.Root open={open} onOpenChange={setOpen} openDelay={420} closeDelay={80}>
         <Card.Trigger
           asChild
           aria-describedby={describedBy}
@@ -63,7 +54,7 @@ export function HoverCard({
             collisionPadding={12}
             // The card is for the eye: what it says, a screen reader hears from the tile itself.
             aria-hidden="true"
-            className="z-50 w-[16.875rem] bg-popover px-4 pt-[0.8125rem] pb-3.5 text-popover-foreground shadow-lift before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-linear-to-r before:from-input before:to-input/30 before:content-[''] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-bottom-1 motion-reduce:animate-none pointer-coarse:hidden"
+            className="risen relative z-50 w-[16.875rem] px-4 pt-[0.8125rem] pb-3.5 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-bottom-1 motion-reduce:animate-none pointer-coarse:hidden"
           >
             <Says place={place} title={title} description={description} note={note} />
           </Card.Content>
@@ -76,7 +67,7 @@ export function HoverCard({
   )
 }
 
-function Says({ place, title, description, note }: Omit<HoverCardProps, 'children' | 'disabled'>) {
+function Says({ place, title, description, note }: Omit<HoverCardProps, 'children'>) {
   return (
     <>
       <div className="font-mono text-[0.65625rem] text-faint">{place}</div>

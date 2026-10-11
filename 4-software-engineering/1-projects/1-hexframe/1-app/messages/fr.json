@@ -539,7 +539,7 @@
   "tokens_type_mono": "Geist Mono : les mots de l'agent, et le code.",
   "tokens_type_sizes": "La taille de vos mots, 18 px, et celle de l'agent, 13,5 px. Sur le canevas, un titre est posé à 16 px et suit l'échelle de sa tuile, jamais au-dessus de 22 px ni, sur une petite tuile, sous 11 px.",
   "tokens_shape": "Aucun arrondi : les coins sont droits, comme ceux d'un hexagone. Ce qui est rond l'est exprès, pas par un jeton.",
-  "tokens_shape_lift": "L’ombre d’une surface levée : un menu, une carte, le dialogue. Profonde la nuit ; le jour une ombre violette légère, pour que le papier reste du papier.",
+  "tokens_shape_lift": "L’ombre d’une surface levée : un menu, une carte, le dialogue, chacun dessiné avec l’utilitaire risen, la lumière du popover et une fine ligne en haut. Profonde la nuit ; le jour une ombre violette légère, pour que le papier reste du papier.",
   "tokens_motion_glide": "Ce qui se pose : une éclosion, le disque du thème, la lueur de l'étoile.",
   "tokens_motion_camera_ease": "La caméra, qui accélère puis ralentit.",
   "tokens_motion_bloom": "Les enfants qui éclosent du cœur de leur parent.",

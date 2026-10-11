@@ -539,7 +539,7 @@
   "tokens_type_mono": "Geist Mono: the agent's words, and code.",
   "tokens_type_sizes": "The size of your words, 18px, and the agent's, 13.5px. On the canvas a title is laid out at 16px and scaled with its tile, never above 22px nor, on a small tile, below 11px.",
   "tokens_shape": "No radius: corners are square, as a hex's are. Round things are round on purpose, not by a token.",
-  "tokens_shape_lift": "A risen surface's shadow: a menu, a card, the dialog. Deep at night; by day a soft violet shade, so paper still reads as paper.",
+  "tokens_shape_lift": "A risen surface's shadow: a menu, a card, the dialog, each drawn with the risen utility, the popover's light and one fine line on top. Deep at night; by day a soft violet shade, so paper still reads as paper.",
   "tokens_motion_glide": "Things that settle: a bloom, the theme's disc, the star's glow.",
   "tokens_motion_camera_ease": "The camera, easing in and out.",
   "tokens_motion_bloom": "Children blooming out of their parent's heart.",

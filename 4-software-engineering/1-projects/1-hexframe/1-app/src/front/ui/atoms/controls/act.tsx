@@ -1,6 +1,8 @@
 import { cn } from 'cn'
 import type { ComponentProps } from 'react'
 
+import { ariaShortcut, Keys, type Shortcut } from '../keys'
+
 type Tone = 'quiet' | 'voice' | 'destructive'
 
 interface ActProps extends ComponentProps<'button'> {
@@ -14,8 +16,8 @@ interface ActProps extends ComponentProps<'button'> {
    * violet, the human's amber), for the action it expects; `destructive` for what is lost.
    */
   tone?: Tone
-  /** Its shortcut, key by key as it is pressed, so the action teaches it. */
-  keys?: readonly string[]
+  /** Its shortcut, drawn after its word so the action teaches it. Whoever owns the key binds it. */
+  shortcut?: Shortcut
 }
 
 // The ink of a text action, and the light a solid one is cut from.
@@ -34,7 +36,7 @@ const hexTones: Record<Tone, string> = {
 export function Act({
   look = 'text',
   tone = 'quiet',
-  keys,
+  shortcut,
   className,
   children,
   type = 'button',
@@ -43,6 +45,7 @@ export function Act({
   return (
     <button
       type={type}
+      aria-keyshortcuts={shortcut && ariaShortcut(shortcut)}
       className={cn(
         'inline-flex cursor-pointer items-center gap-2 text-[0.8125rem] whitespace-nowrap transition-colors focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-(--voice,var(--human)) disabled:cursor-default pointer-coarse:min-h-11',
         look === 'text'
@@ -59,16 +62,9 @@ export function Act({
       {...props}
     >
       {children}
-      {keys !== undefined && keys.length > 0 && (
-        <span className="ml-0.5 inline-flex gap-[3px]" aria-hidden="true">
-          {keys.map((key) => (
-            <kbd
-              key={key}
-              className="inline-block min-w-[18px] bg-current/14 px-[5px] pt-[3px] pb-0.5 text-center font-mono text-[0.65625rem] leading-none"
-            >
-              {key}
-            </kbd>
-          ))}
+      {shortcut !== undefined && (
+        <span className="ml-0.5">
+          <Keys shortcut={shortcut} />
         </span>
       )}
     </button>

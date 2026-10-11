@@ -2,11 +2,7 @@ import { cn } from 'cn'
 import { ContextMenu, DropdownMenu } from 'radix-ui'
 import type { KeyboardEvent, ReactElement, ReactNode } from 'react'
 
-/** A key that runs an entry while the menu is open: `KeyboardEvent.key`, with Shift or not. */
-export interface Shortcut {
-  key: string
-  shift?: boolean
-}
+import { ariaShortcut, Keys, pressed, type Shortcut } from './keys'
 
 interface MenuItem {
   label: string
@@ -58,28 +54,6 @@ interface MenuProps {
   onOpenChange?: (open: boolean) => void
 }
 
-const keyGlyphs: Record<string, string> = {
-  Enter: '↵',
-  Backspace: '⌫',
-  Delete: '⌦',
-  Escape: 'esc',
-  ArrowLeft: '←',
-  ArrowRight: '→',
-  ArrowUp: '↑',
-  ArrowDown: '↓',
-}
-
-/** A shortcut as the keyboard shows it: ⇧ then the key, a letter in capitals. */
-function shortcutKeys({ key, shift = false }: Shortcut): string[] {
-  const glyph = keyGlyphs[key] ?? (key.length === 1 ? key.toUpperCase() : key)
-  return shift ? ['⇧', glyph] : [glyph]
-}
-
-const matches = (shortcut: Shortcut | undefined, event: KeyboardEvent) =>
-  shortcut !== undefined &&
-  shortcut.key.toLowerCase() === event.key.toLowerCase() &&
-  (shortcut.shift ?? false) === event.shiftKey
-
 const isToggle = (entry: MenuItem | MenuToggle): entry is MenuToggle => 'checked' in entry
 
 /**
@@ -96,11 +70,12 @@ export function Menu({
   onOpenChange,
 }: MenuProps) {
   // Typing an entry's key runs it: the line is clicked, so Radix selects it and closes the menu.
-  // Taking the key first also keeps Radix's typeahead from moving the focus instead.
+  // Taking the key first also keeps Radix's typeahead from moving the focus instead. A key a line
+  // already took, Enter or Space on the highlighted one, runs that line alone.
   const runShortcut = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.metaKey || event.ctrlKey || event.altKey) return
+    if (event.defaultPrevented) return
     const index = entries.findIndex(
-      (entry) => entry !== 'separator' && !isToggle(entry) && matches(entry.shortcut, event),
+      (entry) => entry !== 'separator' && !isToggle(entry) && pressed(entry.shortcut, event),
     )
     if (index === -1) return
     event.preventDefault()
@@ -175,7 +150,7 @@ function openByKeyboard(event: KeyboardEvent<HTMLElement>) {
 // A risen surface, lit a little above the ground, a fine line on top; it opens from where it was
 // asked for, growing a little.
 const surface =
-  "relative z-50 max-h-(--radix-popper-available-height) min-w-[13.75rem] overflow-y-auto bg-popover py-1.5 text-[0.8125rem] text-popover-foreground shadow-lift before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-linear-to-r before:from-input before:to-input/30 before:content-[''] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-[0.97] data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-[0.97] data-[state=open]:duration-150 motion-reduce:animate-none"
+  'risen relative z-50 max-h-(--radix-popper-available-height) min-w-[13.75rem] overflow-y-auto py-1.5 text-[0.8125rem] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-[0.97] data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-[0.97] data-[state=open]:duration-150 motion-reduce:animate-none'
 
 function Header({ title, detail, description }: MenuHeader) {
   return (
@@ -238,18 +213,9 @@ function Entry({ entry, index, kit }: { entry: MenuEntry; index: number; kit: Ki
     >
       <span className="grid place-items-center">{entry.icon}</span>
       <span>{entry.label}</span>
-      <span className="flex gap-[3px] font-mono text-[0.65625rem] text-faint" aria-hidden="true">
-        {entry.shortcut !== undefined &&
-          shortcutKeys(entry.shortcut).map((key) => (
-            <kbd key={key} className="min-w-[18px] bg-muted px-[5px] pt-[3px] pb-0.5 text-center">
-              {key}
-            </kbd>
-          ))}
+      <span className="text-faint">
+        {entry.shortcut !== undefined && <Keys shortcut={entry.shortcut} />}
       </span>
     </kit.Item>
   )
 }
-
-/** The shortcut as `aria-keyshortcuts` names it, so a screen reader says it. */
-const ariaShortcut = ({ key, shift = false }: Shortcut) =>
-  (shift ? 'Shift+' : '') + (key === ' ' ? 'Space' : key)
