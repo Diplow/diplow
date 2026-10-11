@@ -10,8 +10,10 @@
 // hook's caller handles none.
 import {
   infiniteQueryOptions,
+  type Mutation,
   useInfiniteQuery,
   useMutation,
+  useMutationState,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
@@ -127,23 +129,76 @@ const followAgain = (client: ReturnType<typeof useQueryClient>) =>
 /** How many minutes the reader's clock stands ahead of UTC now: what today is to them. */
 const offsetNow = () => offsetAt(new Date())
 
+/** The write that posts a Message, by its server function's name. */
+const postScope = 'postMessage'
+
+/** A Message the user sends: its text, and the view it was sent from, its center and the Tiles on screen. */
+export type Sent = Omit<typeof SentMessage.Type, 'offset'>
+
 /**
  * Posts the user's Message, trimmed and never empty, from the view it was sent from, its center and
  * the Tiles on screen, which starts a Turn answering it when the Account may use the Assistant; then
- * reads the Conversation again and polls the latest. A feature posts through the navigation sender
- * (`features/conversation/state/`), so the navigation it follows is sent before it.
+ * reads the Conversation again and polls the latest, and stays on its way until that read has landed.
+ * A feature posts through the navigation sender (`features/conversation/state/`), so the navigation it
+ * follows is sent before it.
  */
 export const usePostMessage = () => {
   const client = useQueryClient()
   return useMutation({
-    ...write(
-      'postMessage',
-      (sent: Omit<typeof SentMessage.Type, 'offset'>) =>
-        postMessage({ data: { ...sent, offset: offsetNow() } }),
-      { queue: conversationQueue },
-    ),
+    ...write(postScope, (sent: Sent) => postMessage({ data: { ...sent, offset: offsetNow() } }), {
+      queue: conversationQueue,
+    }),
     onSettled: () => followAgain(client),
   })
+}
+
+/** A Message the user posted that the Conversation does not hold: on its way, or refused. */
+interface OnItsWay {
+  /** Its write's turn, which `forget` takes. */
+  readonly id: number
+  readonly sent: Sent
+  readonly refused: boolean
+}
+
+/**
+ * Each Message on its way read once per state of its write, so `useMutationState` finds the same
+ * values while nothing changed, and the timeline does not draw again at each notification.
+ */
+const onItsWayByState = new WeakMap<Mutation['state'], OnItsWay>()
+
+function onItsWayOf(mutation: Mutation): OnItsWay {
+  const known = onItsWayByState.get(mutation.state)
+  if (known !== undefined) return known
+  const onItsWay = {
+    id: mutation.mutationId,
+    // The variables `usePostMessage` was called with: its write's key says so.
+    sent: mutation.state.variables as Sent,
+    refused: mutation.state.status === 'error',
+  }
+  onItsWayByState.set(mutation.state, onItsWay)
+  return onItsWay
+}
+
+/**
+ * The Messages the user posted that the Conversation does not hold, oldest first: each on its way
+ * until the Conversation read after it has landed, or refused, its failure gone to its channel, until
+ * `forget` drops it, which a retry does before posting it again, or the page forgets the write.
+ */
+export function useMessagesOnTheirWay() {
+  const client = useQueryClient()
+  const messages = useMutationState({
+    filters: {
+      mutationKey: [postScope],
+      predicate: ({ state }) => state.status === 'pending' || state.status === 'error',
+    },
+    select: onItsWayOf,
+  })
+  const forget = (id: number) => {
+    const cache = client.getMutationCache()
+    const write = cache.getAll().find((mutation) => mutation.mutationId === id)
+    if (write !== undefined) cache.remove(write)
+  }
+  return { messages, forget }
 }
 
 /**

@@ -353,8 +353,8 @@ function scrollToFoot(element: HTMLElement | null) {
 }
 
 /**
- * The Composer at the chat's foot, its padding clear of the curve, which comes back to the chat's edge
- * there. What `/` and `@` list is the Composer's own section's.
+ * The Composer at the chat's foot, which the screen keeps clear of the curve, where it comes back to
+ * the chat's edge. What `/` and `@` list is the Composer's own section's.
  */
 function ScreenComposer({ onSend }: { onSend: (text: string) => void }) {
   const [text, setText] = useState('')
@@ -370,7 +370,6 @@ function ScreenComposer({ onSend }: { onSend: (text: string) => void }) {
         setText('')
       }}
       mode={{ choices: modeChoices(), on: mode, choose: setMode }}
-      className="sm:px-4 @wide:pr-(--screen-clear) @wide:pl-9"
     />
   )
 }
@@ -389,7 +388,6 @@ function SignInFoot() {
       password={password}
       onPasswordChange={setPassword}
       onSubmit={() => undefined}
-      className="sm:px-4 @wide:pr-(--screen-clear) @wide:pl-9"
     />
   )
 }

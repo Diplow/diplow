@@ -63,6 +63,8 @@ const margin = '0.375rem'
  * How far the chat's foot keeps its content in from the column's right, as `--screen-clear`: back
  * inside the chat's width, past the 1.125rem to the edge, the bulge and the column's margin, with the
  * margin again to spare, so nothing reaches the curve. A slot's ground runs on under it to the cut.
+ * The foot hands it to what sits there as `--screen-foot-inset`, wide only, which the Composer and the
+ * sign-in widget add to their own padding, so no caller pads them again.
  */
 const clear =
   'calc(var(--screen-edge) - var(--screen-chat) + var(--screen-bulge) + 2 * var(--screen-margin))'
@@ -161,7 +163,10 @@ export function Screen({
               className="h-(--screen-seam) items-center bg-linear-to-b from-transparent to-background/70"
             />
           )}
-          <div ref={foot}>{composer}</div>
+          {/* Wide, its zone runs on to the cut and keeps its content clear of the curve itself. */}
+          <div ref={foot} className="@wide:[--screen-foot-inset:var(--screen-clear)]">
+            {composer}
+          </div>
         </div>
       </section>
       <Scrollbar screen={screen} scroller={scroller} content={content} />

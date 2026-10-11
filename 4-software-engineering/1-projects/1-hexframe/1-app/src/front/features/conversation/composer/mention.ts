@@ -2,7 +2,7 @@
 // user types after it; the link it inserts once one is picked, shown in the input as `@` and the Tile's
 // Title; and the Message it sends, each link it inserted written as Assistant keeps it, by the Tile's id
 // (`linkTo`), whatever the Tile is called by the time someone reads it. Pure; the composer's state hook
-// (`../state/useMentionState.ts`) runs it.
+// (`../state/useComposerState.ts`) runs it, through `./typing.ts`.
 import { linkTo } from '#/domains/assistant/entities'
 import { contextSlotOf, directions, type SystemTile } from '#/domains/mapping/entities'
 

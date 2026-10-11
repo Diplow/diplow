@@ -94,7 +94,7 @@ export function Composer({
       aria-busy={waits}
       className={cn(
         zone,
-        'grid gap-2 px-4 pt-5 pb-3 [--voice:var(--human)] sm:pr-6 sm:pl-9',
+        'grid gap-2 px-4 pt-5 pb-3 [--voice:var(--human)] @wide:pr-[calc(1.5rem+var(--screen-foot-inset,0px))] @wide:pl-9',
         className,
       )}
       onSubmit={(event) => {

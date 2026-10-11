@@ -75,7 +75,7 @@ export function SignInWidget({
       }}
       className={cn(
         zone,
-        'grid gap-4 px-4 pt-5 pb-6 [--voice:var(--human)] motion-safe:before:animate-draw sm:pr-6 sm:pl-9',
+        'grid gap-4 px-4 pt-5 pb-6 [--voice:var(--human)] motion-safe:before:animate-draw @wide:pr-[calc(1.5rem+var(--screen-foot-inset,0px))] @wide:pl-9',
         className,
       )}
     >

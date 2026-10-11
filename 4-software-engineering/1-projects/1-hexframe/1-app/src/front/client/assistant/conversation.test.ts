@@ -23,6 +23,7 @@ import {
   useAssistantAvailable,
   useConversation,
   useDiscardProposal,
+  useMessagesOnTheirWay,
   usePostMessage,
   useRecordNavigation,
   useSetMode,
@@ -228,5 +229,50 @@ describe("the Conversation's hooks", () => {
       expect(latest).toHaveBeenCalledTimes(2)
     })
     expect(undo).toHaveBeenCalledWith({ data: { applied: 'turn-1' } })
+  })
+})
+
+describe('the Messages on their way', () => {
+  it('hold a Message on its way until the Conversation read after it has landed', async () => {
+    let answer: (outcome: unknown) => void = () => undefined
+    const result = await render(() => ({ post: usePostMessage(), sent: useMessagesOnTheirWay() }))
+    vi.mocked(postMessage).mockReturnValueOnce(
+      new Promise((resolve) => {
+        answer = resolve
+      }) as never,
+    )
+    const view = { center: 'root', shown: ['root'] }
+    act(() => {
+      result.current.hook.post.mutate({ text: 'Hello', view })
+    })
+    await waitFor(() => {
+      expect(result.current.hook.sent.messages).toEqual([
+        { id: expect.any(Number) as number, sent: { text: 'Hello', view }, refused: false },
+      ])
+    })
+    act(() => {
+      answer({ ok: true, value: {} })
+    })
+    await waitFor(() => {
+      expect(result.current.hook.sent.messages).toEqual([])
+    })
+    expect(conversationDay).toHaveBeenCalledTimes(2)
+  })
+
+  it('keep a refused Message until it is forgotten', async () => {
+    const result = await render(() => ({ post: usePostMessage(), sent: useMessagesOnTheirWay() }))
+    vi.mocked(postMessage).mockRejectedValueOnce(new Error('down'))
+    act(() => {
+      result.current.hook.post.mutate({ text: 'Hello', view: { center: 'root', shown: [] } })
+    })
+    await waitFor(() => {
+      expect(result.current.hook.sent.messages.map(({ refused }) => refused)).toEqual([true])
+    })
+    act(() => {
+      result.current.hook.sent.forget(result.current.hook.sent.messages[0]?.id ?? -1)
+    })
+    await waitFor(() => {
+      expect(result.current.hook.sent.messages).toEqual([])
+    })
   })
 })

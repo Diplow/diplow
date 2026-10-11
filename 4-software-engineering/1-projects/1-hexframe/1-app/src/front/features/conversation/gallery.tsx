@@ -1,20 +1,27 @@
 // The Conversation on /design-system, on fixtures: four days of Entries, the composer offering the
-// fixture's Tiles to `@` beside the Mode's switch, a Message's link handed to the page to center its
-// canvas, and the open Proposal accepted, discarded or undone in the page alone. Days and times are the
-// reader's own, so the page draws it in the browser only.
+// fixture's Tiles to `@` and the commands home runs, the Mode under its field, a Tile named handed to
+// the page to center its canvas, and the open Proposal accepted, discarded or undone in the page
+// alone, `/undo` included. Days and times are the reader's own, so the page draws it in the browser
+// only.
 import { ClientOnly } from '@tanstack/react-router'
 import { useState } from 'react'
 
-import { type Entry, type Fate, type Mode, undoneEntry } from '#/domains/assistant/entities'
+import {
+  type Entry,
+  type Fate,
+  type Mode,
+  offeringEntry,
+  undoneEntry,
+} from '#/domains/assistant/entities'
 import { m } from '#/paraglide/messages'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
 import { GallerySection, GalleryState } from '#/front/ui/gallery/frame'
 
 import { Conversation } from './Conversation'
 import { conversationFixture, fixtureMentionables } from './fixtures'
-import { splitByDay } from './timeline/timeline'
+import { latestUndoable, splitByDay } from './timeline/timeline'
 
-const size = 'h-[32rem] w-[24rem] max-w-full'
+const size = 'h-[36rem] w-[26rem] max-w-full'
 
 export function ConversationGallery({ onCenter }: { onCenter: (tile: string) => void }) {
   return (
@@ -33,6 +40,7 @@ function FixtureConversation({ onCenter }: { onCenter: (tile: string) => void })
   const [fixture] = useState(() => conversationFixture(new Date()))
   const [entries, setEntries] = useState(fixture.entries)
   const [tiles] = useState(fixtureMentionables)
+  const [system] = useState(() => new Map(tiles.map(({ id, title }) => [id, title])))
   const [mode, setMode] = useState<Mode>('ask')
   const onSend = (text: string) => {
     const sent: Entry = {
@@ -44,12 +52,15 @@ function FixtureConversation({ onCenter }: { onCenter: (tile: string) => void })
     }
     setEntries((before) => [...before, sent])
   }
-  // The page decides a Proposal for itself: no server keeps the fixture's.
+  // The page decides a Proposal for itself: no server keeps the fixture's. Accepted, it offers its
+  // Undo, as Assistant's `offeringEntry` says.
   const decided = (fate: Fate) => (proposal: string) => {
     setEntries((before) =>
-      before.map((entry) =>
-        entry._tag === 'Proposal' && entry.proposal === proposal ? { ...entry, fate } : entry,
-      ),
+      before.map((entry) => {
+        if (entry._tag !== 'Proposal' || entry.proposal !== proposal) return entry
+        const decidedEntry = { ...entry, fate }
+        return { ...decidedEntry, ...offeringEntry(decidedEntry) }
+      }),
     )
   }
   // And undoes what was applied for itself, the Entry saying so (Assistant's `undoneEntry`).
@@ -63,11 +74,18 @@ function FixtureConversation({ onCenter }: { onCenter: (tile: string) => void })
       }),
     )
   }
+  const undoable = latestUndoable(entries)
   return (
     <Conversation
       days={splitByDay(entries, new Date(), fixture.titles)}
+      system={system}
       onSend={onSend}
+      onCommand={(command) => {
+        if (command !== 'undo') setMode(command)
+        else if (undoable !== undefined) undo(undoable)
+      }}
       tiles={tiles}
+      undoable={undoable !== undefined}
       onCenter={onCenter}
       mode={{ mode, choose: setMode }}
       decide={{

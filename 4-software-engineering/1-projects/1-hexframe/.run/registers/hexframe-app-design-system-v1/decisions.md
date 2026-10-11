@@ -20,7 +20,9 @@ preview: >-
   tile's proposal went, how its words fit and what marks a write on its way,
   and where HEX-100 put the widgets, the chat's zone drawn once, the widgets'
   own field, what the frame, the Proposal and the Receipt grew, and what the
-  proposal drew beyond the reference or left out of it.
+  proposal drew beyond the reference or left out of it; and how HEX-101 built
+  the chat: the commands home runs, "the agent" in its words, what it drew
+  where the proposals drew nothing, and the screen's foot inset.
 ---
 # Decisions
 
@@ -205,3 +207,34 @@ It left: the zone **warming** from the agent's violet to the user's amber when a
 ### DEC-32 The place map is a radio group, by name under a finger, and a secret inks in
 
 HEX-100. The tile widget's hex is the frame it goes in (`Places`), numbered as the canvas numbers it, 1 north-west to 6 west, its free places dashed. A picked place is a choice among a few, so the map is a radio group, the arrows going round and taking the place they land on, each place named for a screen reader and in its tooltip; the help widget's map is the same, its places Help's topics. Its hexes are small, under the 44px a finger needs, so under a coarse pointer the free places show by name too, a row of words at a thumb's size. A Context tile is lit in Context's colour. The key's secret inks in from a blur the one time it shows, the reference's reveal, a token now, `--animate-ink`, with its note.
+
+### DEC-33 Home runs four commands, the language, the Mode and the agent's last change; the others wait for an answer
+
+HEX-101. The composer's proposal drew fourteen commands and left "which ones" open on its pull request, with no answer yet; the project's "To grill" still asks which commands replace what a menu would have held. So home offers only the ones this build can run on today's hooks and whose meaning the proposal's own words fix: `/language`, which the ticket asks for, `/ask` and `/apply`, the Mode, and `/undo`, "its last change", the latest accepted Proposal or applied Turn still offering its Undo (`latestUndoable`), offered only while there is one. `/ask` and `/apply` are offered only while the Mode shows. The tile commands, `/keys`, `/help` and `/sign-out` wait for that answer and for the builds that bring their widgets into the chat (HEX-102, HEX-103, HEX-110). `/stop` waits too, because the field waits while a Turn runs, so `/stop` can't be typed when it would do anything; Stop is the send button's place. The question is parked on the ticket (`HEX-101#PARK-1`). A `/` that no offered command answers goes as words, as the list says ("Send it as a message?").
+
+The commands stay in `ui/chat/composer/commands.ts`, where DEC-10 planned to move them beside the feature's `@`. The gallery's demo still lists all fourteen on `/design-system`, and `ui/` cannot import a feature, so the list and its reading stay where both reach them: what a `/` lists among the commands a page offers (`commandTypingAt`, its `among`), the language's list and the language a word names (`languageNamed`), the command a Message opens with (`openingCommand`), its mark and its pick. The feature says which commands it offers and runs them (`composer/typing.ts`, `state/useComposerState.ts`). `cutAround` moved to `ui/chat/atoms/cut.ts`, since `commands.ts` now builds the list's rows and `List.tsx` imported it from there.
+
+The rest of the composer is built as its proposal drew it, the PR's other questions left as they landed: the command in the field's amber serif, Stop in the send button's place, Enter sending on a phone too (`enterKeyHint="send"`), the quiet text in `muted-foreground`, and the phone's keyboard left to the screen.
+
+### DEC-34 The chat says "the agent", the actor's name in Assistant's language
+
+HEX-101, on HEX-98's question "the agent or the assistant". STACK.md's language for Assistant names the domain Assistant and the one who acts in it "the agent" ("the Messages between the user and the agent", "the agent's only memory"), and the project's own description says "the agent" throughout. So every string the chat shows names the agent: a Turn's end, what it applied, the empty conversation, and the line saying the Account may not use it, in English and in French. A change the agent made is told without naming it ("Moved Site into Shared"), with "The agent:" said to a screen reader before it, as the proposal's `Events` does; its sentences are new messages, `conversation_*_agent`. "The Assistant" stays the domain's and the entitlement's name in the code and in the docs.
+
+### DEC-35 What the build drew where the proposals drew nothing, and what it left out
+
+HEX-101. The chat is on the proposed pieces now. A few states have nothing to show on real data yet, and a few things v0 showed have no piece:
+
+- **Thinking** is unused. A running Turn carries its step but neither the agent's thinking nor when it started, so while it has no step the live line on the thread says "Thinking", breathing as the step does. **An agent's Message streaming** is unused too, since an Entry arrives whole, and so is **a run of reads folded**, since a read is no Entry.
+- **A Proposal's title** counts its changes ("3 changes to your system"), since Assistant keeps no title or summary for one; its receipt says "Accepted: 3 changes to your system". **What a Turn applied** leaves a `Receipt` without its changes folded under it, since its Entry holds their count.
+- **A long Message shows whole.** The proposal's `Message` has no "show more", so v0's `Shortened`, with `excerpt` and `excerptOf` and the tests of those two, went with it.
+- **A Message's time** is no longer shown. The proposed `Message` draws none; the events and receipts keep theirs.
+- **The empty conversation** keeps `EmptyState`, and **the day before** is asked for with a quiet `Act`, since neither proposal draws one.
+- **A Message on its way, or refused**, is the `postMessage` write, read from the MutationCache (`useMessagesOnTheirWay`), shown after the last Entry under today's split until the Conversation read after it lands, refused with its retry, which posts it again through the navigation sender.
+- **A Tile named** in a change, an import or a Proposal shows the Title it had, centering the canvas while the System holds it, the agent's draft while a Proposal not accepted creates it, struck through once deleted. A link whose Tile is gone has no Title left to show, so it says "deleted tile", struck through.
+- **Two receipts**, the widget's `done` and `Receipt`, stay as HEX-98 left them: the Proposal leaves its `Receipt`, as it landed.
+
+### DEC-36 The screen owns its foot's inset, and the header's language goes
+
+HEX-101, on HEX-95's deferred finding and Ulysse's comment on this ticket. The Composer padded itself by the viewport (`sm:`) while the screen folds on its own width (DEC-16), so each caller added `--screen-clear` by hand. The screen's foot now sets `--screen-foot-inset` to `--screen-clear`, wide only, and the Composer, its list and the sign-in widget pad on `@wide:` with it added: their zone runs on under the clear to the cut, and no caller pads them again. Home's wrapper and the specimens' overrides on `/design-system` went.
+
+`/language` is the composer's, so `LocaleSwitch` left the header and `ui/` (DEC-25 kept it there until then). The pages that are no screen yet, Keys, Help and signing in, have no language switch until HEX-103 brings them into the chat; their `/fr/…` address still reads them in French.
