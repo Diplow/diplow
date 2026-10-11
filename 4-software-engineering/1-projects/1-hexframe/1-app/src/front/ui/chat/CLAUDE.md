@@ -5,13 +5,15 @@ owner: diplo
 preview: >-
   The Chat's side of the design system, where the user and the agent act on
   the Conversation: its components, and the atoms and layouts only it uses.
-  For now one atom, Suggestions, over the composer's field. Never imports the
+  For now the Composer, proposed (HEX-99), its commands and its list, and one
+  atom, Suggestions, over the feature's composer field. Never imports the
   Canvas.
 ---
 # chat
 
-The Chat, the side of hexframe's screen that shows the Conversation, where the user and the agent act ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]], "hexframe's screen, in words"). Its components come as the proposals for the chat land (HEX-98, HEX-99, HEX-100); until then the Conversation is drawn by `features/conversation/` from the shared pieces, and the one piece only the chat uses lives here. The Chat never imports the Canvas (dependency-cruiser, `no-side-importing-the-other`): a piece both use moves to `ui/atoms/` or `ui/layouts/`.
+The Chat, the side of hexframe's screen that shows the Conversation, where the user and the agent act ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]], "hexframe's screen, in words"). Its components come as the proposals for the chat land (HEX-98, HEX-99, HEX-100), and HEX-101 wires them in; until then the Conversation is drawn by `features/conversation/` from the shared pieces. The Chat never imports the Canvas (dependency-cruiser, `no-side-importing-the-other`): a piece both use moves to `ui/atoms/` or `ui/layouts/`.
 
 | Path | Holds |
 |---|---|
+| `composer/` | The Composer, proposed (HEX-99; `hexframe-app-design-system-v1/decisions.md#DEC-10`). `Composer.tsx`, `Composer`, controlled: the field, a textarea in the user's serif, the command it opens with and each Tile it points at drawn marked under it; the field a combobox keeping the focus and the keys, the arrows moving the row, Enter or Tab taking it, Escape leaving, Enter sending, Shift+Enter a new line; the send hex, lit in amber once there is something to send, breathing while it is on its way, Stop while a Turn runs, the field waiting; under it the Mode, ask first or apply with undo, the one on in violet, or the line saying the Account may not use the Assistant; disabled while the page cannot send. `List.tsx`, `List`, what a `/` or an `@` finds, rising from the composer's top line as wide as the conversation: rows in groups, a command, a Tile or a choice, what was typed marked, the row the user is on lit with an amber line, a line when nothing answers, the keys in a footer, said to a screen reader as it changes; under a finger, rows a thumb's height and no keys. `commands.ts`, the commands that take the place of a menu, on tiles, the agent and the user, the language among them, each a message, and `commandsMatching`, what a `/` finds, the language by its name in every language, and `marked`, tested (`commands.test.ts`). `demo.ts`, what the state hook will do on a real page, for the page alone, on a fixture System. `gallery.tsx`, `ComposerGallery`, each state live on `/design-system` |
 | `atoms/` | `Suggestions.tsx`, `Suggestions`, a list over the field it suggests for, which keeps the focus and the keys, a click in the field never closing it (`field.ts`, `inField`, tested), the field named a combobox controlling it by `suggestionsField`, the active suggestion kept in view, a click picking one; the composer's `@` search shows the Tiles in it. `gallery.tsx`, `ChatAtomsGallery`, on `/design-system` |
