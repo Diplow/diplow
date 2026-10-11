@@ -1,0 +1,29 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/spending/call.ts
+  s_c19b57f63ed6ef::t_f39dc8976c5efe 38,44
+  s_c19b57f63ed6ef::t_0f1d5b115001f5 4-6,23-37,39-43,45-48,50-51,53-57,125,186-187
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/proxy/proxy.test.ts
+  s_c19b57f63ed6ef::t_1e65895ad5f753 202,213-222
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/proxy/CLAUDE.md
+  s_c19b57f63ed6ef::t_07dd148c88ac1c 20
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/spending/spending.test.ts
+  s_c19b57f63ed6ef::t_5d09c0bf159c1e 115-118
+  s_c19b57f63ed6ef::t_a9c35034a0d9c0 114,119-151
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/spending/CLAUDE.md
+  s_c19b57f63ed6ef::t_07dd148c88ac1c 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8abb8d969ed59950ffa8b57810bbac36b243399e",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": null
+    }
+  }
+}
