@@ -427,10 +427,21 @@ export function MenuChoice({ label, onSelect, onHighlight, children }: MenuChoic
       onSelect={onSelect}
       onFocus={() => onHighlight?.(true)}
       onBlur={() => onHighlight?.(false)}
+      ref={clickable}
     >
       {children}
     </parts.Item>
   )
+}
+
+// Radix runs a highlighted line on Enter by calling its `click()`, which an SVG element lacks: the
+// choice gets one that sends the click its line listens to.
+function clickable(element: Element | null) {
+  if (element && !(element instanceof HTMLElement)) {
+    Object.assign(element, {
+      click: () => element.dispatchEvent(new MouseEvent('click', { bubbles: true })),
+    })
+  }
 }
 
 /**

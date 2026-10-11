@@ -239,7 +239,11 @@ export function Tile(props: TileProps) {
       <Slot.Root {...hand}>
         <g
           {...(action === undefined
-            ? { role: 'img', 'aria-label': words.title, tabIndex: hand && 0 }
+            ? {
+                role: 'img',
+                'aria-label': words.title,
+                ...(hand && { tabIndex: 0, className: 'group outline-none' }),
+              }
             : {
                 role: 'button',
                 tabIndex: 0,
@@ -290,7 +294,7 @@ function rimOf(props: TileProps, id: string): Rim | undefined {
 
 /** Its fill, lit or not, its lines, and the lights around it. */
 function Light(props: TileProps & { id: string }) {
-  const { hex, kind, place = 'ring', held, action, id } = props
+  const { hex, kind, place = 'ring', held, action, hand, id } = props
   const lit = place === 'center' || place === 'heart' || held === 'pointed' || held === 'pressed'
   const rim = rimOf(props, id)
   return (
@@ -312,6 +316,8 @@ function Light(props: TileProps & { id: string }) {
           'transition-opacity duration-300',
           lit ? 'opacity-100' : 'opacity-0',
           action !== undefined && 'group-hover:opacity-100 group-focus-visible:opacity-100',
+          // Its menu open, or its card, it stays lit: Radix marks what opened them.
+          hand !== undefined && 'group-data-[state=open]:opacity-100',
         )}
       />
       {props.write === 'refused' ? (

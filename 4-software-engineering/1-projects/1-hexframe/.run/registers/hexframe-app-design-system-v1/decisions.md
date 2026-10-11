@@ -16,8 +16,10 @@ preview: >-
   contrast, how the chat's pieces take their text, every ink raised to
   4.5:1, a decided Proposal's receipt unfolding its changes, how HEX-97
   built the screen on home: who holds the side in front, the breadcrumb drawn
-  as the rail, what the header keeps, and the gaps left to M3, and where the
-  tile's proposal went, how its words fit and what marks a write on its way.
+  as the rail, what the header keeps, and the gaps left to M3, where the
+  tile's proposal went, how its words fit and what marks a write on its way,
+  and what acting on a tile proposes: what a tap does, the keys on a focused
+  tile, each kind's menu and how a finger moves a tile.
 ---
 # Decisions
 
@@ -172,3 +174,20 @@ What `components.html` left open, the proposal decides, for review on the pull r
 - **The note under the title wraps**, where the reference keeps it on one line and loses "from Software Engineering" past the hex.
 
 Tokens: `animate-bloom` and `animate-fold` join `duration-bloom` and `duration-fold` under their notes, and `animate-flare` gets its own; `animate-sweep`'s note now names the tile on its way.
+
+### DEC-28 Acting on a tile: a tap goes in, a line's key runs on the focused tile, and a finger moves through the menu, never by a drag
+
+HEX-105. The proposal lives in `canvas/tile/`, beside the tile it acts on: `menu/` holds `TileMenu`, the tile in its hover card and its menu, `Picker`, the frame in small a place submenu shows, and `verbs.ts`, what each kind offers, what a click and a tap do and the place the header and the card name, pure and tested; `moving/` holds `Moving.tsx`, the banner, the lifted tile, the slot offering itself, the swap's disc, the stepped-back rest and `useDrag`, and `move.ts`, what each place offers and where a drag lands, pure and tested. The shared `Menu` grew what the tile needs and knows nothing of tiles: a submenu (`MenuSubmenu`), a picture of choices inside it (`MenuChoice`, an SVG group made a line of the menu), a menu held open in place for the page (`MenuDrawn`), and, where the menu opens on its thing, a line's key run on the thing itself. `Tile` and `Slot` take a `hand`, what their menu and card hand them, merged by Radix's `Slot`; `HoverCard` hands it on, keeps its words in a `<desc>` inside an SVG, and stays shut while the menu is open. HEX-107 puts them on home.
+
+What `components.html` left open, the proposal decides, for review on the pull request:
+
+- **A tap goes in.** DEC-13 left the tap to this ticket. Under a finger (`pointer-coarse`, read by `useFinger`) a tap goes into any tile, the double click a finger lacks, its double tap zooming the page; opening a Branch in place, a click under the pointer, waits in its menu ("Open it here"), since its six would show as lights on a phone (DEC-27). The center's tap shows its Context, as its click does (`clickOf`).
+- **A line's key runs on the focused tile**, the menu shut, so the menu teaches keys that work: E edits, A asks the agent, ⇧E exports, ⌫ deletes; a submenu's key, N or M, opens the menu at it, its frame lit. Enter and Space stay the tile's click. The center's way out shows `esc`, which backs out from the focused center; with the menu open, Escape closes it, as every menu's does. Adding a tile is N, not the reference's A, which asks the agent (the menu's specimen since HEX-96), and `@`, the reference's, takes Shift on most keyboards. Copy's lines carry no key: inside a submenu, a key could not run on the tile.
+- **What each kind offers** (`groupsOf`). A Reference is removed, never deleted with the tile it points at, and not edited; one whose tile is gone offers the agent and its removal alone; the agent's draft, opening and the agent; the center backs out and neither opens, moves nor is deleted, being where you are; an untitled root is named and takes an import; a Branch with nothing below it can become a Leaf. A free slot offers a new tile, an import and the agent: no "New Context tile", since a slot of the Context ring is one already, and no "Paste", since nothing copies a tile yet.
+- **The picker trades places with a Branch only**, as the move does (#moving), where the reference's picker offered any taken slot. "Somewhere else…" starts the move on the canvas, where the tile can go further than its frame.
+- **A finger never drags a tile**: on the canvas a drag will pan (HEX-106's camera). It moves through the long press, then the menu's frame, or "Somewhere else…" and a tap on a slot; `useDrag` ignores a touch. Every swap's disc and every line is 44px under a finger.
+- **The banner has a Stop**, an `Act` showing `esc`, since a finger has no Escape. Where it sits is HEX-107's: home's sits at the canvas's foot since DEC-26.
+- **No shadow under the lifted tile.** `--lift` is a box's shadow, and an SVG group takes a filter; the tile lifts by its scale, its lit fill and its running rim. While a tile moves, no Branch shows its frame at its foot (`withoutFoot`), where its swap sits, as the reference hides it.
+- **While a menu is open its tile stays lit**, from the `data-state` Radix puts on what opened it; the reference's other tiles stepping back needs the frame, which the canvas holds, and is left to HEX-107.
+
+Tokens: `duration-glide`, 600ms, a tile gliding to where it lands or back, and `animate-ants`, the moving tile's rim, which holds still with reduced motion. `GalleryGroup`, a row's heading inside a piece's section, moved from the tile's gallery to the page's frame, which the menu's and the move's galleries share. Checked in a browser, dark and light, English and French, wide and in a 390px frame, by mouse and by keyboard alone: the menu by a right click and ⇧F10, a submenu by its key and its frame by ↑ ↓ and Enter, a line's key on the focused tile, a drag landed, a move from a button, a refusal gliding back. claude-in-chrome emulates no touch and no reduced motion, so the long press, the tap, the 44px targets and the still rim were not looked at here.

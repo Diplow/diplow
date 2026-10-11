@@ -24,7 +24,13 @@ import {
   Trash2,
   Unlink,
 } from 'lucide-react'
-import { useSyncExternalStore, type ComponentProps, type ReactElement, type ReactNode } from 'react'
+import {
+  useState,
+  useSyncExternalStore,
+  type ComponentProps,
+  type ReactElement,
+  type ReactNode,
+} from 'react'
 
 import { m } from '#/paraglide/messages'
 
@@ -62,17 +68,19 @@ export function TileMenu({ subject, card, frames = {}, onAct, children }: TileMe
   const title = subject.kind === 'slot' ? m.tile_menu_free_slot() : subject.title
   const place = placeOf(subject)
   const pass = <Pass>{children}</Pass>
+  const [menuOpen, setMenuOpen] = useState(false)
   return (
     <Menu
       opensOn="context"
       label={m.tile_menu_label({ title })}
       header={{ title, detail: place, description: card?.description }}
       entries={entriesOf(subject, frames, onAct)}
+      onOpenChange={setMenuOpen}
       trigger={
         subject.kind === 'slot' ? (
           pass
         ) : (
-          <HoverCard place={place} title={title} {...card}>
+          <HoverCard place={place} title={title} within="svg" shut={menuOpen} {...card}>
             {pass}
           </HoverCard>
         )

@@ -1,7 +1,7 @@
 // Moving a tile on /design-system, on the fixture System: a frame where a tile is dragged, or moved
-// by M or by a button, each free slot offering itself and each Branch its swap, the tile gliding to
-// where it lands, or back once the server refuses; then each part held still. Ported from
-// components.html's #moving.
+// from a button, as its menu's "Somewhere else…" would, each free slot offering itself and each
+// Branch its swap, the tile gliding to where it lands, or back once the server refuses; then each
+// part held still. Ported from components.html's #moving.
 import { useEffect, useRef, useState, type RefObject } from 'react'
 
 import { m } from '#/paraglide/messages'
@@ -18,7 +18,7 @@ import { Slot } from '../places'
 import { branchOf, fixture, ring, useScale, wordsOf } from '../specimens'
 import { Tile, type TileLook } from '../Tile'
 import { dropAt, landed, partOf, type Seats } from './move'
-import { Aside, LandingSlot, Lifted, MoveBanner, SwapDisc, useDrag } from './Moving'
+import { Aside, LandingSlot, Lifted, MoveBanner, SwapDisc, useDrag, withoutFoot } from './Moving'
 
 export function MovingGallery() {
   const projects = branchOf(fixture('projects'))
@@ -32,7 +32,7 @@ export function MovingGallery() {
       <Specimen name={m.gallery_state_moving_lifted()} note={m.gallery_moving_lifted()} radius={76}>
         {(hex) => (
           <Lifted hex={hex}>
-            <Tile hex={hex} {...projects} held="pointed" />
+            <Tile hex={hex} {...withoutFoot(projects)} held="pointed" />
           </Lifted>
         )}
       </Specimen>
@@ -57,7 +57,7 @@ export function MovingGallery() {
       <Specimen name={m.gallery_state_moving_swap()} note={m.gallery_moving_swap()} radius={76}>
         {(hex) => (
           <>
-            <Tile hex={hex} {...branchOf(fixture('principles'))} />
+            <Tile hex={hex} {...withoutFoot(branchOf(fixture('principles')))} />
             <SwapDisc
               hex={hex}
               action={{ label: m.tile_menu_swap_with({ title: 'Principles' }), onSelect: noop }}
@@ -123,8 +123,8 @@ function glideOf(svg: SVGSVGElement | null): number {
 }
 
 /**
- * A tile moving in Software Engineering's ring: dragged, or started by M on a focused tile or by a
- * button, ended by Escape or Stop, landed in a free slot or swapped with a Branch, gliding there, or
+ * A tile moving in Software Engineering's ring: dragged, or started by a button, ended by Escape or
+ * Stop, landed in a free slot or swapped with a Branch, gliding there, or
  * back once the server refuses. The frame's state, and every gesture on it.
  */
 function useMove(svg: RefObject<SVGSVGElement | null>) {
@@ -165,9 +165,9 @@ function useMove(svg: RefObject<SVGSVGElement | null>) {
       removeEventListener('keydown', onKey)
     }
   })
-  const land = (to: Direction) => {
-    if (moving === undefined || landing !== undefined) return
-    const from = moving
+  // A drag lands the tile it started on, which became the one moving after this render: it says so.
+  const land = (to: Direction, from = moving) => {
+    if (from === undefined || landing !== undefined) return
     const glide = glideOf(svg.current)
     setOver(undefined)
     setLanding({ from, to, phase: 'glide' })
@@ -196,16 +196,12 @@ function useMove(svg: RefObject<SVGSVGElement | null>) {
     if (landing === undefined && frame[direction] !== undefined) setMoving(direction)
   }
   const reach = { seats, reach: frameRadius * 0.8 }
-  /** What a seated tile is handed: M starts its move, a mouse drags it, its shape kept for focus. */
+  /** What a seated tile is handed: a mouse drags it, its shape kept for the focus. */
   const handOf = (direction: Direction, { id, title }: TileNode): Hand => ({
     'aria-label': title,
-    'aria-keyshortcuts': 'M',
     ref: (element: HTMLElement | null) => {
       if (element) tiles.current.set(id, element)
       else tiles.current.delete(id)
-    },
-    onKeyDown: (event) => {
-      if (event.key.toLowerCase() === 'm' && !event.metaKey && !event.ctrlKey) start(direction)
     },
     onPointerDown: (event) => {
       if (moving !== undefined && moving !== direction) return
@@ -219,7 +215,7 @@ function useMove(svg: RefObject<SVGSVGElement | null>) {
         onDrop: (released) => {
           const to = released && dropAt(released.at, hearts, { ...reach, from: direction })
           setOver(undefined)
-          if (to !== undefined) land(to)
+          if (to !== undefined) land(to, direction)
         },
       })
     },
@@ -257,8 +253,8 @@ function shiftOf({ dragged, moving, landing, frame }: Move, direction: Direction
 }
 
 /**
- * Software Engineering and its ring, where a tile moves: dragged, or by M on a focused tile, or by a
- * button above it; Escape or Stop ends it. "The server refuses" makes the next landing fail, so the
+ * Software Engineering and its ring, where a tile moves: dragged, or from a button above it, as its
+ * menu's "Somewhere else…" would; Escape or Stop ends it. "The server refuses" makes the next landing fail, so the
  * tile flares and glides back, and the move goes on.
  */
 function MovingFrame() {
@@ -392,7 +388,7 @@ function SeatedTile({
   const tile = (
     <Tile
       hex={hex}
-      {...seated.look}
+      {...(moving === undefined ? seated.look : withoutFoot(seated.look))}
       scale={scale}
       {...(refused && { write: 'refused' as const })}
       hand={handOf(direction, seated.tile)}

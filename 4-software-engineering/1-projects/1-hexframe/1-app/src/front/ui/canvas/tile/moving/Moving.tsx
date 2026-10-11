@@ -21,6 +21,7 @@ import { Act } from '../../../atoms/controls/act'
 import type { Hex, Point } from '../../geometry/geometry'
 import { buttonKeys, type Action } from '../../keys'
 import { points } from '../light'
+import type { TileLook } from '../Tile'
 
 /** The banner across the moving frame: what moves and how to stop, Escape or a tap on Stop. */
 export function MoveBanner({ title, onStop }: { title: string; onStop: () => void }) {
@@ -62,6 +63,12 @@ export function Lifted({ hex, children }: { hex: Hex; children: ReactNode }) {
       />
     </g>
   )
+}
+
+/** A tile as drawn while one moves: no Branch shows its frame at its foot, where its swap sits. */
+export function withoutFoot(look: TileLook): TileLook {
+  if (look.kind !== 'branch' && look.kind !== 'root') return look
+  return { kind: look.kind, words: look.words }
 }
 
 /** A place that takes no part while a tile moves: a third of its light, and no hover. */
