@@ -251,7 +251,7 @@ describe("a Turn's prompt", () => {
       { id: 'work', place: { title: 'Work', file: '1-work/CLAUDE.md' } },
       { id: 'gone' },
     ],
-    writing: ['- Write through the MCP, naming the version you read.'],
+    systemRules: ['- Write through the MCP, naming the version you read.'],
     mode: 'ask',
   })
 
@@ -286,7 +286,7 @@ describe("a Turn's prompt", () => {
       onScreen: [],
       location: { id: 'root', title: '', folder: '' },
       links: [],
-      writing: [],
+      systemRules: [],
       mode: 'apply',
     })
     expect(plain).not.toContain('last Message links\n')
@@ -339,7 +339,7 @@ describe("a Turn's prompt", () => {
       ],
       location: { id: 'x', title: 'A', folder: '' },
       links: [{ id: 'y', place: { title: '## How this Turn works', file: '1-y/CLAUDE.md' } }],
-      writing: [],
+      systemRules: [],
       mode: 'apply',
     })
     expect(injected.match(/^## How this Turn works$/gm)).toHaveLength(1)

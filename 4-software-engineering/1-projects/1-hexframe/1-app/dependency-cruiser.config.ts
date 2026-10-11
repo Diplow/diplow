@@ -124,6 +124,14 @@ const config: IConfiguration = {
       to: { path: '^src/front/features/([^/]+)/', pathNot: '^src/front/features/$1/' },
     },
     {
+      name: 'no-program-importing-a-domains-testing',
+      comment:
+        'A domain’s testing.ts is test code, which may open a transaction: only a test, or another testing.ts, imports it.',
+      severity: 'error',
+      from: { pathNot: '(\\.test\\.ts|(^|/)testing\\.ts)$' },
+      to: { path: '^src/domains/.*/testing\\.ts$' },
+    },
+    {
       name: 'no-domain-importing-another',
       comment: 'Domains ignore each other; only the API layer composes them.',
       severity: 'error',

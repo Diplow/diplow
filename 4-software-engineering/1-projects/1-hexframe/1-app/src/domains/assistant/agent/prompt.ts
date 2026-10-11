@@ -38,11 +38,8 @@ export interface PromptOf {
   readonly location: { readonly id: string; readonly title: string; readonly folder: string }
   /** The Tiles the Message answered links, in the order it links them. */
   readonly links: ReadonlyArray<Linked>
-  /**
-   * How the System is read and written, each a line of the Turn's rules, as the API layer words them
-   * from the MCP's tools: Assistant holds them as they come, naming no tool of its own.
-   */
-  readonly writing: ReadonlyArray<string>
+  /** Lines of the Turn's rules, as the API layer words them: Assistant names no tool of its own. */
+  readonly systemRules: ReadonlyArray<string>
   /** The Mode the Turn started in: whether its writes are drafted into a Proposal or applied. */
   readonly mode: Mode
 }
@@ -155,7 +152,7 @@ export function promptOf({
   onScreen,
   location,
   links,
-  writing,
+  systemRules,
   mode,
 }: PromptOf): string {
   const folder = location.folder === '' ? 'the System folder itself' : quoted(location.folder)
@@ -170,7 +167,7 @@ export function promptOf({
     '',
     '- The files around you are a read-only snapshot of the System as this Turn started: read them ' +
       'to find your way, never write them.',
-    ...writing,
+    ...systemRules,
     modes[mode],
     '- In a Message, `@[<id>]` links a Tile by its id. A Message opening with a link starts you in ' +
       "that Tile's folder; every Tile the user's last Message links is listed below with its path.",

@@ -322,6 +322,22 @@ describe('the door to a domain', () => {
   const tile = 'src/domains/d/entities/tile.ts'
   const reaching = 'no-door-reaching-past-the-pure-model'
 
+  it("refuses a program importing a domain's testing.ts, and lets a test and another testing.ts", async () => {
+    const testing = { 'src/domains/d/testing.ts': 'export const harness = 1\n' }
+    const importing = "import { harness } from './testing'\nexport const used = harness\n"
+    expect(await broken({ ...testing, 'src/domains/d/program.ts': importing })).toEqual([
+      'no-program-importing-a-domains-testing: src/domains/d/program.ts → src/domains/d/testing.ts',
+    ])
+    expect(
+      await broken({
+        ...testing,
+        'src/domains/d/d.test.ts': importing,
+        'src/domains/d/concept/testing.ts':
+          "import { harness } from '../testing'\nexport const shared = harness\n",
+      }),
+    ).toEqual([])
+  })
+
   it('lets the front import the door, and the door reach its pure model, effect, the kinds and the bus', async () => {
     expect(await broken({})).toEqual([])
   })

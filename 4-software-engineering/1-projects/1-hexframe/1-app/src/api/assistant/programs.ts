@@ -20,7 +20,7 @@ import { transactional } from '#/repositories/database/database'
 
 import { tileLink } from '../mapping/files/download'
 import { WaitUntil } from '../server/bus'
-import { writingRules } from '../server/mcp/tools'
+import { systemRules } from '../server/mcp/tools'
 
 import type { DayAsked, MergedNavigation, SentMessage } from './assistant'
 import { conversationNow, shownTo } from './proposal/programs'
@@ -244,7 +244,7 @@ const agentStarted = (
       }),
       conversation: { entries, titles },
       onScreen,
-      writing: writingRules,
+      systemRules,
     })
   })
 

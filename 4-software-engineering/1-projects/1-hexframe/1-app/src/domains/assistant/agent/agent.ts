@@ -60,8 +60,8 @@ export interface TurnStart {
   }
   /** The Tiles on the user's screen, the centered one first. */
   readonly onScreen: ReadonlyArray<Glimpse>
-  /** How the System is read and written, as the API layer words it from the MCP's tools. */
-  readonly writing: PromptOf['writing']
+  /** The rules of the System, as the API layer words them from the MCP's tools. */
+  readonly systemRules: PromptOf['systemRules']
 }
 
 /**
@@ -82,7 +82,7 @@ export const startAgent = (accountId: string, start: TurnStart) =>
       onScreen: start.onScreen,
       location: start.location,
       links: start.links,
-      writing: start.writing,
+      systemRules: start.systemRules,
       mode: start.turn.mode,
     })
     const { files, run } = launchOf({

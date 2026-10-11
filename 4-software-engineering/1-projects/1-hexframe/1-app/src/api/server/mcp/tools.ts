@@ -466,14 +466,11 @@ const named = (kind: Tool['kind']) =>
   tools.flatMap((tool) => (tool.kind === kind ? [tool.name] : [])).join(', ')
 
 /**
- * How an agent that starts from the System's files reads and writes it here, as lines of rules,
- * worded from this table, so a tool renamed is renamed in them: each Tile a folder or a file, its id
- * and version in its frontmatter, as Mapping exports it; every change through a write, naming the
- * Version read; what changed since through a read; `TileChanged` read again; and where Help opens.
- * The API layer hands them to a Turn's prompt (`domains/assistant/agent/prompt.ts`), which holds
- * them as they come.
+ * The rules of the System for an agent that starts from its files, worded from this table, so a tool
+ * renamed is renamed in them: each Tile a folder or a file, as Mapping exports it, the writes and the
+ * reads, `TileChanged`, and where Help opens. A Turn's prompt holds them as they come.
  */
-export const writingRules: ReadonlyArray<string> = [
+export const systemRules: ReadonlyArray<string> = [
   '- In the files, each Tile is a folder or a file, its id and version in its frontmatter.',
   `- Every change goes through the hexframe MCP's tools (${named('write')}), naming the ` +
     'version of the Tile you read. What changed since the Turn started, read it through the MCP ' +
