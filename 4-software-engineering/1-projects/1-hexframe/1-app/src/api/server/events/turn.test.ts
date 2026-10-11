@@ -18,6 +18,7 @@ import * as Assistant from '../../assistant/programs'
 import * as Proposal from '../../assistant/proposal/programs'
 import * as Mapping from '../../mapping/programs'
 import { value } from '../mcp/testing'
+import { tools } from '../mcp/tools'
 import { noSession, provenKey, run, type StartContext } from '../run'
 import { doorsServed, signedUpAt } from './testing'
 
@@ -115,6 +116,9 @@ describe('a Turn on every Message', () => {
     )
     const prompt = await readFile(join(box.home, `turns/${sent.turn?.id ?? ''}/prompt.md`), 'utf8')
     expect(prompt).toContain('User: "Draft a Tile for me."')
+    // How to write the System, as the MCP's tool table words it: every tool, under its own name.
+    for (const tool of tools) expect(prompt).toContain(tool.name)
+    expect(prompt).toContain('open_tile({ id: "help" })')
     expect(prompt).not.toMatch(/hft_/)
     const settings = await readFile(
       join(box.home, `turns/${sent.turn?.id ?? ''}/turn.json`),

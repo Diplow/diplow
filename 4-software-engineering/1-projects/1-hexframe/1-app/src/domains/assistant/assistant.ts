@@ -34,11 +34,13 @@ import {
   ProposedChange,
   routeOf,
   spanOf,
+  stillRunning,
   type Summarized,
   type Turn,
   TurnEnd,
   TurnStep,
   offeredNow,
+  offeringEntry,
   within,
 } from './entities'
 import { AllowanceSpent, TurnRunning } from './errors'
@@ -417,14 +419,13 @@ export interface Drafting {
 /**
  * Drafts a write one of the Account's Turns made in ask into the Conversation's open Proposal, in the
  * one order it holds in: the Conversation locked until the transaction ends, so no other draft, accept
- * nor discard decides on the Proposal meanwhile; whether the Turn still runs read once the lock is
- * held, as its end takes it, so a write proven just before a Stop finds the Turn over rather than a
- * Proposal the user decided on since; then its open Proposal, if one is, given to `step`, which
- * decides the write on the System the Proposal makes and answers it, opaque, with the changes it makes
- * there (Mapping's, in the API layer); then the write kept in the Proposal, which it opens with its
- * Entry when none is. Answers the Proposal as the draft leaves it, and what `step` answered; none,
- * `step` never run, once the Turn ended. What `step` refuses is refused, nothing kept. In the
- * transaction the API layer opened.
+ * nor discard decides on the Proposal meanwhile; the Turn read once the lock is held, as its end takes
+ * it, `TurnOver` once it ended (`stillRunning`), so a write proven just before a Stop finds the Turn
+ * over rather than a Proposal the user decided on since; then its open Proposal, if one is, given to
+ * `step`, which decides the write on the System the Proposal makes and answers it, opaque, with the
+ * changes it makes there (Mapping's, in the API layer); then the write kept in the Proposal, which it
+ * opens with its Entry when none is. Answers the Proposal as the draft leaves it, and what `step`
+ * answered. What `step` refuses is refused, nothing kept. In the transaction the API layer opened.
  */
 export const draft = <A extends Drafting, E, R>(
   accountId: string,
@@ -433,7 +434,7 @@ export const draft = <A extends Drafting, E, R>(
 ) =>
   Effect.gen(function* () {
     const { state } = yield* stateOf(yield* lockConversation(accountId))
-    if (!(yield* turnRuns(accountId, turnId))) return undefined
+    yield* writingTurn(accountId, turnId)
     const drafted = yield* step(state.open)
     const { write, changes } = drafted
     const proposal = crypto.randomUUID()
@@ -455,7 +456,7 @@ export interface Applying {
  * `ProposalClosed` when it is open no longer, as `decide` rules; then `run` given it as it stood,
  * which runs its writes on the System (Mapping's, in the API layer) and answers what undoes them and
  * the changes they made; and that kept with the Proposal, offered by its Entry, which then says it may
- * be undone (`undone: false`), so a Proposal accepted before undos were kept offers none. Answers what
+ * be undone (`offeringEntry`), so a Proposal accepted before undos were kept offers none. Answers what
  * `run` answered. What `run` refuses rolls the accept back with the transaction. In the transaction
  * the API layer opened.
  */
@@ -477,9 +478,7 @@ export const acceptProposal = <A extends Applying, E, R>(
     yield* Applied.use((applied) =>
       applied.keep(accountId, accepted.id, { undo, changes, entryId: entry }),
     )
-    yield* rewritten(accountId, entry, (content) =>
-      content._tag === 'Proposal' ? { ...content, undone: false } : undefined,
-    )
+    yield* rewritten(accountId, entry, offeringEntry)
     return ran
   })
 
@@ -488,10 +487,11 @@ export const discardProposal = (accountId: string, proposal: string) =>
   Effect.asVoid(operate(accountId, (state) => decide(state, new DiscardProposal({ proposal }))))
 
 /**
- * One of the Account's Turns, by its id, running or ended. A Turn of no Conversation of the Account's
- * is a defect: the caller takes its id from the Turn's Key, which proves it.
+ * One of the Account's Turns, by its id, running or ended: what a write it makes and its route read.
+ * A Turn of no Conversation of the Account's is a defect: the caller takes its id from the Turn's
+ * Key, which proves it.
  */
-export const turn = (accountId: string, turnId: string) =>
+const turn = (accountId: string, turnId: string) =>
   Effect.gen(function* () {
     const row = yield* Turns.use((turns) => turns.byId(accountId, turnId))
     if (row === undefined) return yield* Effect.die(new Error("A Turn's Key proved no Turn"))
@@ -499,11 +499,12 @@ export const turn = (accountId: string, turnId: string) =>
   })
 
 /**
- * Whether one of the Account's Turns still runs: what a write it makes, drafted or applied, needs, read
- * once the Conversation's lock is held. Exported for `./undo/`'s `applyInTurn`.
+ * One of the Account's Turns as a write it makes needs it, drafted or applied, read once the
+ * Conversation's lock is held: still running, or `TurnOver` once it ended (`stillRunning`). Exported
+ * for `./undo/`'s `applyInTurn`.
  */
-export const turnRuns = (accountId: string, turnId: string) =>
-  Effect.map(turn(accountId, turnId), ({ ended }) => ended === undefined)
+export const writingTurn = (accountId: string, turnId: string) =>
+  Effect.flatMap(turn(accountId, turnId), (read) => Effect.fromResult(stillRunning(read)))
 
 /**
  * What becomes of a write one of the Account's Turns makes, which the API layer routes on: drafted

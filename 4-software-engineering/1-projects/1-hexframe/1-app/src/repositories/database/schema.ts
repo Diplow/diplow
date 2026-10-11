@@ -342,7 +342,6 @@ export const turnKey = pgTable(
     accountId: text('account_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
-    conversationId: text('conversation_id').notNull(),
     turnId: text('turn_id').notNull().unique(),
     hash: text('hash').notNull().unique(),
     expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),

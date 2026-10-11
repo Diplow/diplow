@@ -27,7 +27,7 @@ import {
   ReferenceSlot,
   TileEdit,
   TileMove,
-  TileRef,
+  TileExport,
   TileSwap,
 } from './mapping'
 import * as Mapping from './programs'
@@ -451,10 +451,10 @@ describe("the schemas Mapping's server functions validate by", () => {
   })
 
   it('take a Tile id only as a UUID', () => {
-    expect(accepts(TileRef, { id: t })).toBe(true)
+    expect(accepts(TileExport, { id: t })).toBe(true)
     expect(accepts(NewTile, { id: t, parent: p, slot: 1, ...content('Tile') })).toBe(true)
     expect(accepts(NewTile, { id: 'mine', parent: p, slot: 1, ...content('Tile') })).toBe(false)
-    expect(['', 't', 'x'.repeat(36), `${t}x`].map((id) => accepts(TileRef, { id }))).toEqual([
+    expect(['', 't', 'x'.repeat(36), `${t}x`].map((id) => accepts(TileExport, { id }))).toEqual([
       false,
       false,
       false,

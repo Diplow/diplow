@@ -108,8 +108,8 @@ export const ownTile = (accountId: string, id: string) =>
 
 /**
  * The Title and Preview of the Tiles of the Account's System among these ids, in their order: an id it
- * holds no Tile of, a deleted one's or a Reference's, is left out. What a Turn's prompt shows of the
- * Tiles on the user's screen.
+ * holds no Tile of, a deleted one's or a Reference's, is left out: a glimpse of each, for a reader
+ * shown several at once.
  */
 export const glimpses = (accountId: string, ids: ReadonlyArray<string>) =>
   Tiles.use((tiles) =>
@@ -286,9 +286,9 @@ export const exportTile = (accountId: string, { id, link }: { id: string; link: 
 
 /**
  * The Account's System as files, the export of its Root, and where each of its Tiles lives in them,
- * by id, both from one read: a Turn's sandbox holds the files, and starts in a Tile's folder or hands
- * the agent its path. `link` is where the app shows a Tile, for a Reference whose Tile is gone. With a
- * batch `over` it, the System the batch makes (`fold`), as the reads through it show it.
+ * by id, both from one read, so a reader of the files finds a Tile's folder or file by its id. `link`
+ * is where the app shows a Tile, for a Reference whose Tile is gone. With a batch `over` it, the
+ * System the batch makes (`fold`), as the reads through it show it.
  */
 export const systemFiles = (accountId: string, link: LinkOf, over: ReadonlyArray<Batched> = []) =>
   Effect.gen(function* () {
@@ -600,23 +600,23 @@ const madeFor = (operation: Operation) =>
       ? newId
       : Effect.succeed(undefined)
 
-/** The Tile a draft answers, for a create or an edit, as the batch leaves it, with its Version. */
-const draftAnswer = (after: System, operation: Operation, made: string | undefined) => {
+/** The Tile a change answers, for a create or an edit, as it leaves the System, with its Version. */
+const tileAnswered = (after: System, operation: Operation, made: string | undefined) => {
   if (operation._tag === 'CreateTile' && made !== undefined) return answered(after, made)
   if (operation._tag === 'EditTile') return answered(after, operation.id)
   return Effect.succeed(undefined)
 }
 
 /**
- * Drafts an Operation into a batch kept over the Account's System, writing nothing: `BatchOutdated`
- * once the batch no longer applies whole (`whole`), so nothing is added to a batch that can no longer
- * run; else decided by `decide` on the System the batch makes, refused as it would be there, a create
- * given the id of what it makes now, fresh, so it keeps that id each time the batch is folded again. Answers it
- * as the batch keeps it, Mapping's summary of each event it makes there, and, for a create or an edit,
- * the Tile as the batch now makes it, with its Version, which the writer's next write to it names.
- * `decide` refuses each Operation only what its overload says, so the refusal is typed by it.
+ * Adds an Operation to a batch kept over the Account's System, writing nothing: `BatchOutdated` once
+ * the batch no longer applies whole (`whole`), so nothing is added to a batch that can no longer run;
+ * else decided by `decide` on the System the batch makes, refused as it would be there, a create given
+ * the id of what it makes now, fresh, so it keeps that id each time the batch is folded again. Answers
+ * it as the batch keeps it, Mapping's summary of each event it makes there, and, for a create or an
+ * edit, the Tile as the batch now makes it, with its Version, which the writer's next write to it
+ * names. `decide` refuses each Operation only what its overload says, so the refusal is typed by it.
  */
-export const draft = <O extends Operation>(
+export const addToBatch = <O extends Operation>(
   accountId: string,
   over: ReadonlyArray<Batched>,
   operation: O,
@@ -625,11 +625,11 @@ export const draft = <O extends Operation>(
     yield* outsideHelp(namedBy(operation))
     const folded = yield* Effect.fromResult(whole(yield* system(accountId), over))
     const made = yield* madeFor(operation)
-    const drafted = yield* Effect.fromResult(added(folded, operation, made))
-    const tile = yield* draftAnswer(drafted.system, operation, made)
+    const next = yield* Effect.fromResult(added(folded, operation, made))
+    const tile = yield* tileAnswered(next.system, operation, made)
     return {
-      batched: drafted.batched,
-      changes: summariesIn(drafted.system, drafted.events),
+      batched: next.batched,
+      changes: summariesIn(next.system, next.events),
       ...(tile !== undefined && { tile }),
     }
   })
@@ -656,7 +656,7 @@ const ranWhole = <T>(
 /**
  * Runs a batch on the Account's System, in the transaction around it, all of it or nothing: its Root
  * locked, the batch folded over the System as it stands, each Operation decided on what the ones
- * before it made, a create under the id it was drafted with. One that no longer applies, a Tile it
+ * before it made, a create under the id it was added with. One that no longer applies, a Tile it
  * names changed since, by the Version it carries, or gone, refuses the whole batch, `BatchOutdated`,
  * nothing written nor published (`whole`); else every event is written and published as an
  * Operation's are. A batch naming a Tile of Help is `HelpReadOnly`. Answers how many events it made
@@ -676,8 +676,8 @@ export const runBatch = (accountId: string, batch: ReadonlyArray<Batched>) =>
  * create under its id or a fresh one, and answers, beside the Tile as it now stands for a create or
  * an edit, how many events it made and what undoes it: its inverse, from the System it ran on, after
  * `earlier`, the undo of what ran before it in the same batch, when one is given (`extended`), as a
- * Turn in apply writes one Operation after the other. A clash on a create's id is a defect: an
- * agent's create carries none.
+ * batch that runs in several goes runs one Operation after the other. A clash on a create's id is a
+ * defect: such a create carries none.
  */
 export const runOperation = <O extends Operation>(
   accountId: string,
@@ -689,7 +689,7 @@ export const runOperation = <O extends Operation>(
     const { system, events, after } = yield* operate(accountId, operation, (held) =>
       Result.map(decidedOne(held, operation, made), (next) => next.events),
     )
-    const tile = yield* draftAnswer(after, operation, made)
+    const tile = yield* tileAnswered(after, operation, made)
     const undo = earlier === undefined ? undoOf(system, events) : extended(earlier, system, events)
     return { undo, changes: events.length, ...(tile !== undefined && { tile }) }
   })

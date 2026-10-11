@@ -1,11 +1,21 @@
+import { Result } from 'effect'
 import { describe, expect, it } from 'vitest'
 
 import { linkTo } from '../message/links'
-import { deadlineOf, isBadEnd, overdue, stepOf, turnLocation } from './turn'
+import {
+  deadlineOf,
+  isBadEnd,
+  overdue,
+  stepOf,
+  stillRunning,
+  type Turn,
+  turnLocation,
+} from './turn'
 
 // A Turn's pure rules, on values made by hand: its deadline and when it is overdue, at the boundary;
-// a step cut to what it holds; the ends the timeline tells; and where the Turn answering a Message
-// starts. That the service keeps them over the Turns repository is `../../turns.test.ts`'s.
+// a step cut to what it holds; the ends the timeline tells; where the Turn answering a Message
+// starts; and a write of an ended Turn refused. That the service keeps them over the Turns repository
+// is `../../turns.test.ts`'s.
 
 const fifteenMinutes = 15 * 60_000
 
@@ -57,5 +67,20 @@ describe('turnLocation, where the Turn answering a Message starts', () => {
     expect(turnLocation(`${linkTo('work')} tidy this`, 'root')).toBe('work')
     expect(turnLocation(`tidy ${linkTo('work')}`, 'root')).toBe('root')
     expect(turnLocation('tidy this', 'root')).toBe('root')
+  })
+})
+
+describe('stillRunning, what a write of a Turn needs', () => {
+  it('lets a running Turn write', () => {
+    const running: Pick<Turn, 'ended'> = {}
+    expect(stillRunning(running)).toEqual(Result.succeed(running))
+  })
+
+  it('refuses an ended Turn TurnOver, however it ended', () => {
+    const ended: Pick<Turn, 'ended'> = {
+      ended: { at: new Date('2026-10-10T09:05:00Z'), how: 'answered' },
+    }
+    const refused = stillRunning(ended)
+    expect(Result.isFailure(refused) && refused.failure._tag).toBe('TurnOver')
   })
 })

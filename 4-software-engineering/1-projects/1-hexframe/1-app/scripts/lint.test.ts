@@ -234,6 +234,48 @@ describe('the .ts import lint', () => {
   })
 })
 
+describe('the transaction lint', () => {
+  const opens = "import { transactional } from '#/repositories/database/database'\n"
+
+  async function restrictedImports(code: string, filePath: string) {
+    const [result] = await eslint.lintText(code, { filePath })
+    return (result?.messages ?? [])
+      .filter((message) => message.ruleId === 'no-restricted-imports')
+      .map((message) => message.message)
+  }
+
+  it.each(['src/domains/mapping/mapping.ts', 'src/domains/assistant/undo/undo.ts'])(
+    'refuses a domain opening a transaction, in %s',
+    async (filePath) => {
+      const messages = await restrictedImports(opens, filePath)
+      expect(messages).toHaveLength(1)
+      expect(messages[0]).toMatch(/A domain never opens a transaction/)
+    },
+  )
+
+  it('still refuses a .ts import path in a domain', async () => {
+    const messages = await restrictedImports(
+      "import { a } from './a.ts'\n",
+      'src/domains/mapping/mapping.ts',
+    )
+    expect(messages).toHaveLength(1)
+    expect(messages[0]).toMatch(/No \.ts or \.tsx in an import path/)
+  })
+
+  it.each([
+    'src/domains/mapping/testing.ts',
+    'src/domains/mapping/mapping.test.ts',
+    'src/api/mapping/programs.ts',
+  ])('lets test code and the API layer open one, in %s', async (filePath) => {
+    expect(await restrictedImports(opens, filePath)).toEqual([])
+  })
+
+  it('lets a domain name the transaction it needs', async () => {
+    const code = "import type { InTransaction } from '#/repositories/database/database'\n"
+    expect(await restrictedImports(code, 'src/domains/mapping/mapping.ts')).toEqual([])
+  })
+})
+
 describe('the door to a domain', () => {
   // A small app, written to a folder of its own and cruised with the app's rules: a domain `d` with its
   // door, its application service and a concept folder; another domain; a repository; and a route

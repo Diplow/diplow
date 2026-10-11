@@ -70,12 +70,6 @@ export interface IssuedKey {
   readonly secret: string
 }
 
-/** What a Turn's Key is bound to, beside its Account: the Conversation and the Turn it was issued for. */
-export interface TurnBinding {
-  readonly conversationId: string
-  readonly turnId: string
-}
-
 /** A Turn's Key just issued: its secret, the one time it is known, and when it stops proving. */
 export interface IssuedTurnKey {
   readonly secret: Redacted.Redacted
@@ -84,13 +78,13 @@ export interface IssuedTurnKey {
 
 /**
  * Which proof gave a signed-in request its Account: a Session, the user at one of their devices; one
- * of their Keys, a program, by its id; or the Key of one of their Turns, the Assistant, by what it
- * is bound to.
+ * of their Keys, a program, by its id; or the Key of one of their Turns, the Assistant, by the id of
+ * the Turn it is bound to, which IAM keeps and hands back without reading.
  */
 type Proof =
   | { readonly _tag: 'Session' }
   | { readonly _tag: 'Key'; readonly keyId: string }
-  | ({ readonly _tag: 'TurnKey' } & TurnBinding)
+  | { readonly _tag: 'TurnKey'; readonly turnId: string }
 
 /** What a Bearer header proves of a request: whose it is, and which Key, or Turn's Key, it was. */
 export interface KeyProof {
@@ -161,8 +155,8 @@ const turnKeyProven = (secret: string) =>
     const now = new Date(yield* Clock.currentTimeMillis)
     const turnKey = yield* TurnKeys.use((keys) => keys.proven(secret, now))
     if (turnKey === undefined) return Option.none<KeyProof>()
-    const { user, conversationId, turnId } = turnKey
-    return Option.some<KeyProof>({ account: user, by: { _tag: 'TurnKey', conversationId, turnId } })
+    const { user, turnId } = turnKey
+    return Option.some<KeyProof>({ account: user, by: { _tag: 'TurnKey', turnId } })
   })
 
 /** The Account's Key a secret is, if Better Auth knows it. */
@@ -225,10 +219,10 @@ export const sessionOnly = Effect.gen(function* () {
   return yield* new SignedOut()
 })
 
-/** A request a Turn's Key proves: its Account, and the Turn and Conversation the Key is bound to. */
+/** A request a Turn's Key proves: its Account, and the Turn the Key is bound to, by its id. */
 interface TurnSignedIn {
   readonly account: Account
-  readonly turn: TurnBinding
+  readonly turnId: string
 }
 
 /**
@@ -239,8 +233,7 @@ interface TurnSignedIn {
 export const turnOnly = Effect.gen(function* () {
   const key = yield* CurrentKey
   if (Option.isNone(key) || key.value.by._tag !== 'TurnKey') return yield* new SignedOut()
-  const { conversationId, turnId } = key.value.by
-  const signedIn: TurnSignedIn = { account: key.value.account, turn: { conversationId, turnId } }
+  const signedIn: TurnSignedIn = { account: key.value.account, turnId: key.value.by.turnId }
   return signedIn
 })
 
@@ -279,16 +272,17 @@ export const keyName = (accountId: string, keyId: string) =>
   Auth.use((auth) => auth.apiKeyName(accountId, keyId))
 
 /**
- * Issues the Key of a Turn the request's Session starts, bound to its Account and to the Turn and its
- * Conversation, proving them until `expiresAt`. Its secret is in the answer only, redacted so no log
- * shows it: the code that starts the Turn hands it to the sandbox's processes and nothing else.
+ * Issues the Key of a Turn the request's Session starts, bound to its Account and to the Turn, by its
+ * id, which IAM keeps and hands back without reading, proving them until `expiresAt`. Its secret is
+ * in the answer only, redacted so no log shows it: the code that starts the Turn hands it to the
+ * sandbox's processes and nothing else.
  */
-export const issueTurnKey = (turn: TurnBinding, expiresAt: Date) =>
+export const issueTurnKey = (turnId: string, expiresAt: Date) =>
   Effect.gen(function* () {
     const { account } = yield* sessionOnly
     const now = new Date(yield* Clock.currentTimeMillis)
     return yield* TurnKeys.use((keys) =>
-      keys.issue({ accountId: account.id, ...turn }, { expiresAt, now }),
+      keys.issue({ accountId: account.id, turnId }, { expiresAt, now }),
     )
   }).pipe(Effect.map((secret): IssuedTurnKey => ({ secret: Redacted.make(secret), expiresAt })))
 

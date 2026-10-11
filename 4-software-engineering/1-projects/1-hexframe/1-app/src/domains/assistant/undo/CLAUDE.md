@@ -13,7 +13,7 @@ A sub-model of [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/
 
 | File | Holds |
 |---|---|
-| `undo.ts` | `applyInTurn(accountId, turnId, run)`, a write of a Turn in apply in the one order it holds in: the Conversation locked, what undoes the Turn's writes so far read, its row locked, then, the Turn still running (`turnRuns`), `run` given it, which runs the write on the System and answers what undoes them all and the changes it made (`Applying`, Mapping's, in the API layer), kept with the Turn, its changes added to theirs; none, `run` never run, once the Turn ended. `undo(accountId, id)`, what a Turn or an accepted Proposal applied, by its id, marked undone once `undoing` allows it, its Entry saying so (`undoneEntry`), answering what undoes it for the API layer to run in the same transaction; `NothingToUndo` otherwise |
+| `undo.ts` | `applyInTurn(accountId, turnId, run)`, a write of a Turn in apply in the one order it holds in: the Conversation locked, what undoes the Turn's writes so far read, its row locked, then the Turn read, `TurnOver` once it ended, `run` never run (`writingTurn`), else `run` given it, which runs the write on the System and answers what undoes them all and the changes it made (`Applying`, Mapping's, in the API layer), kept with the Turn, its changes added to theirs. `undo(accountId, id)`, what a Turn or an accepted Proposal applied, by its id, marked undone once `undoing` allows it, its Entry saying so (`undoneEntry`), answering what undoes it for the API layer to run in the same transaction; `NothingToUndo` otherwise |
 
 Tested over PGlite in `../proposals.test.ts`, and with Mapping in `api/assistant/proposal/undo.test.ts`.
 

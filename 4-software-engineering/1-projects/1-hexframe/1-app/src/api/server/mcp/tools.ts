@@ -197,6 +197,9 @@ const refusal = {
     "in ask, your writes are drafted into the user's Proposal, and it no longer applies to the " +
     'System: the user changed a Tile it names since. Write nothing more; say so in your answer, ' +
     'so the user discards it and asks again.',
+  TurnOver:
+    'your Turn of the Assistant has ended, by its answer, a Stop, its time or its budget, and an ' +
+    'ended Turn writes nothing: write nothing more, and end your answer.',
 } as const
 
 /** What a slot taken means where a Child goes: the regrouping a seventh Branch or Leaf asks for. */
@@ -259,6 +262,7 @@ const createTile = write({
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
     BatchOutdated: refusal.BatchOutdated,
+    TurnOver: refusal.TurnOver,
   },
   input: NewTileOfAgent,
   // An agent sends no id, so Mapping makes it, fresh: a clash on it is a defect, never a refusal
@@ -282,6 +286,7 @@ const editTile = write({
     PreviewTooLong: refusal.PreviewTooLong,
     HelpReadOnly: refusal.HelpReadOnly,
     BatchOutdated: refusal.BatchOutdated,
+    TurnOver: refusal.TurnOver,
   },
   input: TileEdit.mapFields(
     Struct.evolve({
@@ -316,6 +321,7 @@ const moveTile = write({
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
     BatchOutdated: refusal.BatchOutdated,
+    TurnOver: refusal.TurnOver,
   },
   input: TileMove.mapFields(
     Struct.evolve({
@@ -344,6 +350,7 @@ const swapTiles = write({
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
     BatchOutdated: refusal.BatchOutdated,
+    TurnOver: refusal.TurnOver,
   },
   input: TileSwap.mapFields(
     Struct.evolve({
@@ -372,6 +379,7 @@ const deleteTile = write({
     RootFixed: refusal.RootFixed,
     HelpReadOnly: refusal.HelpReadOnly,
     BatchOutdated: refusal.BatchOutdated,
+    TurnOver: refusal.TurnOver,
   },
   input: TileDelete.mapFields(
     Struct.evolve({
@@ -398,6 +406,7 @@ const createReference = write({
     LeafHoldsNothing: refusal.LeafHoldsNothing,
     HelpReadOnly: refusal.HelpReadOnly,
     BatchOutdated: refusal.BatchOutdated,
+    TurnOver: refusal.TurnOver,
   },
   input: NewReference.mapFields(
     Struct.evolve({
@@ -426,6 +435,7 @@ const deleteReference = write({
     TileChanged: refusal.TileChanged,
     HelpReadOnly: refusal.HelpReadOnly,
     BatchOutdated: refusal.BatchOutdated,
+    TurnOver: refusal.TurnOver,
   },
   input: ReferenceSlot.mapFields(
     Struct.evolve({
@@ -449,4 +459,26 @@ export const tools: ReadonlyArray<Tool> = [
   deleteTile,
   createReference,
   deleteReference,
+]
+
+/** The names of the tools of one kind, in the table's order. */
+const named = (kind: Tool['kind']) =>
+  tools.flatMap((tool) => (tool.kind === kind ? [tool.name] : [])).join(', ')
+
+/**
+ * How an agent that starts from the System's files reads and writes it here, as lines of rules,
+ * worded from this table, so a tool renamed is renamed in them: each Tile a folder or a file, its id
+ * and version in its frontmatter, as Mapping exports it; every change through a write, naming the
+ * Version read; what changed since through a read; `TileChanged` read again; and where Help opens.
+ * The API layer hands them to a Turn's prompt (`domains/assistant/agent/prompt.ts`), which holds
+ * them as they come.
+ */
+export const writingRules: ReadonlyArray<string> = [
+  '- In the files, each Tile is a folder or a file, its id and version in its frontmatter.',
+  `- Every change goes through the hexframe MCP's tools (${named('write')}), naming the ` +
+    'version of the Tile you read. What changed since the Turn started, read it through the MCP ' +
+    `too (${named('read')}).`,
+  '- A refusal saying the Tile changed (TileChanged, a Conflict) means someone wrote it since you ' +
+    `read it: read it again with ${openTile.name}, then decide again.`,
+  `- Help, hexframe's own guide, opens at ${openTile.name}({ id: "${helpRoot}" }).`,
 ]

@@ -274,6 +274,7 @@
   "error_assistant_proposal_closed": "This proposal was already accepted or discarded.",
   "error_assistant_nothing_to_undo": "There is nothing left to undo here.",
   "error_assistant_undo_outdated": "A tile these changes touched has changed since, so they can't be undone. Undo what changed it first, or change it back by hand.",
+  "error_assistant_turn_over": "The assistant has ended this answer, so it changes nothing more.",
   "error_mapping_batch_outdated": "Your system changed since the assistant drafted this proposal, so it can't be accepted whole. Discard it, then ask again.",
   "error_mapping_tile_not_found": "This tile doesn't exist, or no longer does.",
   "error_mapping_title_missing": "Give this tile a title.",

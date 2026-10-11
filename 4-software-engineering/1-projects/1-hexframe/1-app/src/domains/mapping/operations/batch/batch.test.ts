@@ -18,7 +18,7 @@ import {
   type Operation,
 } from '..'
 
-// A batch over the Account's System, over PGlite: Operations drafted into it, decided on the System it
+// A batch over the Account's System, over PGlite: Operations added to it, decided on the System it
 // makes and written nowhere, the Tiles it creates under the ids they were given; reads and files
 // showing it over the System, a read of the System held whole agreeing with the database's; and the
 // batch run for good, all of it or nothing, refused whole once a Tile it names changed since. The fold
@@ -33,8 +33,8 @@ const TestTiles = Layer.merge(tilesLayer.pipe(Layer.provideMerge(TestDatabase)),
 
 const content = (title: string) => ({ title, preview: `${title}, in short.`, body: `# ${title}` })
 
-/** Drafts Operations one after the other into a batch, as an agent drafting them would, and answers the batch. */
-const drafted = (
+/** Adds Operations one after the other to a batch, as a writer batching them would, and answers it. */
+const batched = (
   accountId: string,
   ...made: ReadonlyArray<(batch: ReadonlyArray<Batched>) => Operation>
 ) =>
@@ -42,9 +42,9 @@ const drafted = (
     const batch: Array<Batched> = []
     const tiles = []
     for (const operation of made) {
-      const draft = yield* Mapping.draft(accountId, batch, operation(batch))
-      batch.push(draft.batched)
-      tiles.push(draft.tile)
+      const added = yield* Mapping.addToBatch(accountId, batch, operation(batch))
+      batch.push(added.batched)
+      tiles.push(added.tile)
     }
     return { batch, tiles }
   })
@@ -57,13 +57,13 @@ const madeAt = (batch: ReadonlyArray<Batched>, at: number) => {
 }
 
 layer(TestTiles)('a batch over the System', (it) => {
-  it.effect('drafts a create, then a child under it, writing nothing, and reads show both', () =>
+  it.effect('batches a create, then a child under it, writing nothing, and reads show both', () =>
     Effect.gen(function* () {
       const accountId = crypto.randomUUID()
       const before = yield* Mapping.system(accountId)
       const root = before.root.id
       heard.length = 0
-      const { batch, tiles } = yield* drafted(
+      const { batch, tiles } = yield* batched(
         accountId,
         () => new CreateTile({ parent: root, slot: 1, ...content('Work') }),
         (so) => new CreateTile({ parent: madeAt(so, 0), slot: 2, ...content('Team') }),
@@ -95,19 +95,21 @@ layer(TestTiles)('a batch over the System', (it) => {
     }),
   )
 
-  it.effect('refuses a draft as `decide` refuses it on the System the batch makes', () =>
+  it.effect('refuses an Operation added as `decide` refuses it on the System the batch makes', () =>
     Effect.gen(function* () {
       const accountId = crypto.randomUUID()
       const root = (yield* Mapping.system(accountId)).root.id
-      const { batch } = yield* drafted(
+      const { batch } = yield* batched(
         accountId,
         () => new CreateTile({ parent: root, slot: 1, ...content('Work') }),
       )
       const taken = new CreateTile({ parent: root, slot: 1, ...content('Again') })
-      const refused = yield* Effect.flip(Mapping.draft(accountId, batch, taken))
+      const refused = yield* Effect.flip(Mapping.addToBatch(accountId, batch, taken))
       expect(refused._tag).toBe('DirectionTaken')
       const stale = new EditTile({ id: madeAt(batch, 0), version: 2, title: 'Job' })
-      expect((yield* Effect.flip(Mapping.draft(accountId, batch, stale)))._tag).toBe('TileChanged')
+      expect((yield* Effect.flip(Mapping.addToBatch(accountId, batch, stale)))._tag).toBe(
+        'TileChanged',
+      )
     }),
   )
 
@@ -115,7 +117,7 @@ layer(TestTiles)('a batch over the System', (it) => {
     Effect.gen(function* () {
       const accountId = crypto.randomUUID()
       const root = (yield* Mapping.system(accountId)).root.id
-      const { batch } = yield* drafted(
+      const { batch } = yield* batched(
         accountId,
         () => new CreateTile({ parent: root, slot: 3, ...content('Games') }),
         (so) => new CreateTile({ parent: madeAt(so, 0), slot: { leaf: 1 }, ...content('Chess') }),
@@ -145,7 +147,7 @@ layer(TestTiles)('a batch over the System', (it) => {
       const accountId = crypto.randomUUID()
       const before = yield* Mapping.system(accountId)
       const root = before.root
-      const { batch } = yield* drafted(
+      const { batch } = yield* batched(
         accountId,
         () => new CreateTile({ parent: root.id, slot: 1, ...content('Work') }),
         (so) => new CreateTile({ parent: madeAt(so, 0), slot: 2, ...content('Team') }),
@@ -170,12 +172,12 @@ layer(TestTiles)('a batch over the System', (it) => {
   )
 
   it.effect(
-    'refuses the whole batch once a Tile it names changed since, writing nothing, nor drafting more',
+    'refuses the whole batch once a Tile it names changed since, writing nothing, nor adding more',
     () =>
       Effect.gen(function* () {
         const accountId = crypto.randomUUID()
         const root = (yield* Mapping.system(accountId)).root
-        const { batch } = yield* drafted(
+        const { batch } = yield* batched(
           accountId,
           () => new CreateTile({ parent: root.id, slot: 1, ...content('Work') }),
           () => new EditTile({ id: root.id, version: root.version, title: 'Ada' }),
@@ -188,9 +190,9 @@ layer(TestTiles)('a batch over the System', (it) => {
         expect(refused._tag).toBe('BatchOutdated')
         expect(yield* Mapping.system(accountId)).toEqual(before)
         expect(heard).toEqual([])
-        // Nothing more is drafted into it: it can no longer run.
+        // Nothing more is added to it: it can no longer run.
         const more = new CreateTile({ parent: root.id, slot: 2, ...content('More') })
-        expect((yield* Effect.flip(Mapping.draft(accountId, batch, more)))._tag).toBe(
+        expect((yield* Effect.flip(Mapping.addToBatch(accountId, batch, more)))._tag).toBe(
           'BatchOutdated',
         )
       }),

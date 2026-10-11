@@ -13,7 +13,7 @@ import { day, endTurn, record, runningTurn, today } from '../assistant'
 import { agentText, type Entry, type Turn, TurnStep } from '../entities'
 import { settings } from '../settings'
 import { type Launch, launchOf, processOf } from './launch'
-import { type Glimpse, type Linked, promptOf } from './prompt'
+import { type Glimpse, type Linked, type PromptOf, promptOf } from './prompt'
 import { type AgentEvent, readLine } from './stream'
 
 const encodedStep = Schema.encodeSync(TurnStep)
@@ -60,8 +60,8 @@ export interface TurnStart {
   }
   /** The Tiles on the user's screen, the centered one first. */
   readonly onScreen: ReadonlyArray<Glimpse>
-  /** The id Help opens at. */
-  readonly help: string
+  /** How the System is read and written, as the API layer words it from the MCP's tools. */
+  readonly writing: PromptOf['writing']
 }
 
 /**
@@ -82,7 +82,7 @@ export const startAgent = (accountId: string, start: TurnStart) =>
       onScreen: start.onScreen,
       location: start.location,
       links: start.links,
-      help: start.help,
+      writing: start.writing,
       mode: start.turn.mode,
     })
     const { files, run } = launchOf({

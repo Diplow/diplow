@@ -1,8 +1,9 @@
 // A Turn: one run of the agent answering a Message, started afresh in a Tile's folder, the Conversation
 // its only memory, in the Mode its Conversation was in. It records what it spent, what its agent is
 // doing now, and how it ended; one runs at most per Conversation. Pure.
-import { Schema } from 'effect'
+import { Result, Schema } from 'effect'
 
+import { TurnOver } from '../../errors'
 import { leadingLink } from '../message/links'
 import type { Mode } from '../proposal/proposal'
 
@@ -77,3 +78,10 @@ export const deadlineOf = (turn: Pick<Turn, 'startedAt'>, longest: number): Date
 /** Whether a Turn still running at `now` is over all the same: its deadline has come. */
 export const overdue = (turn: Pick<Turn, 'startedAt'>, longest: number, now: Date): boolean =>
   deadlineOf(turn, longest) <= now
+
+/**
+ * A Turn as a write it made needs it: still running, or `TurnOver` once it ended, so an ended Turn
+ * writes nothing, drafted or applied, however its write reached Assistant.
+ */
+export const stillRunning = <T extends Pick<Turn, 'ended'>>(turn: T): Result.Result<T, TurnOver> =>
+  turn.ended === undefined ? Result.succeed(turn) : Result.fail(new TurnOver())

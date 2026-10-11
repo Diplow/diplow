@@ -274,6 +274,7 @@
   "error_assistant_proposal_closed": "Cette proposition a déjà été acceptée ou écartée.",
   "error_assistant_nothing_to_undo": "Il n’y a plus rien à annuler ici.",
   "error_assistant_undo_outdated": "Une tuile que ces changements ont touchée a changé depuis : ils ne peuvent plus être annulés. Annulez d’abord ce qui l’a changée, ou remettez-la à la main.",
+  "error_assistant_turn_over": "L’assistant a terminé cette réponse : il ne change plus rien.",
   "error_mapping_batch_outdated": "Votre système a changé depuis que l’assistant a rédigé cette proposition : elle ne peut plus être acceptée en entier. Écartez-la, puis redemandez.",
   "error_mapping_tile_not_found": "Cette tuile n’existe pas, ou plus.",
   "error_mapping_title_missing": "Donnez un titre à cette tuile.",

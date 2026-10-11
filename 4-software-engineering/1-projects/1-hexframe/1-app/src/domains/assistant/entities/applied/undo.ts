@@ -1,9 +1,24 @@
 // What the Assistant applied, an applied Turn's writes or an accepted Proposal's, undone once: when a
-// Turn's is offered, whether it may be undone, and the Entry that offered it once it was. Pure.
+// Turn's is offered, the Entry of an accepted Proposal once it offers its Undo, whether it may be
+// undone, and the Entry that offered it once it was. What was applied is an aggregate of its own, kept
+// one row per applied Turn or accepted Proposal and locked while it is decided, outside the
+// Conversation's Decider: these rules decide it, as the Turn's are decided outside it too
+// (`hexframe-app-assistant/decisions.md#DEC-23`). Pure.
 import { Result } from 'effect'
 
 import { NothingToUndo } from '../../errors'
 import type { EntryContent } from '../entry'
+
+/**
+ * The Entry of an accepted Proposal once what undoes its writes was kept: it then offers its Undo,
+ * saying it may be undone (`undone: false`), which a Proposal accepted before undos were kept never
+ * says. None for any other Entry, nor for one that offers it already.
+ */
+export function offeringEntry(content: EntryContent): EntryContent | undefined {
+  return content._tag === 'Proposal' && content.fate === 'accepted' && content.undone === undefined
+    ? { ...content, undone: false }
+    : undefined
+}
 
 /**
  * An Entry that offers to undo what the Assistant applied, once the user undid it: an accepted

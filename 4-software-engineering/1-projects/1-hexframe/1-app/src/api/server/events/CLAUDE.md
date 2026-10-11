@@ -23,5 +23,5 @@ The door a Turn's sandbox tells the app what its agent says through, so its answ
 ## Rules
 
 - **The Turn's Key, before anything else**, as at the proxy: nothing of the request is read before its Key proved a running Turn, and an Account's Key proves nothing here.
-- **The Account, the Conversation and the Turn come from the Key**, never from the line: a line naming another is followed on the Key's own.
+- **The Account and the Turn come from the Key**, never from the line: a line naming another is followed on the Key's own.
 - **The door answers a status, nothing more.** The launcher reads none; a refused line is lost, as a lost event is, and the Turn's end does not depend on it: a lost Turn ends by its time once the next one starts.

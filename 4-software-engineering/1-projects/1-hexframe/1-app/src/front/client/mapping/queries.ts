@@ -34,7 +34,7 @@ import {
   type TileDelete,
   type TileEdit,
   type TileMove,
-  type TileRef,
+  type TileExport,
   type TileSwap,
   createReference,
   createTile,
@@ -313,7 +313,7 @@ export const useDeleteReference = () =>
  */
 export const useExportTile = () =>
   useMutation({
-    ...write('exportTile', async (data: typeof TileRef.Type) =>
+    ...write('exportTile', async (data: typeof TileExport.Type) =>
       downloaded(await exportTile({ data })),
     ),
     onSuccess: save,

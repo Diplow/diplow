@@ -29,9 +29,19 @@ export class NothingToUndo extends Schema.TaggedError<NothingToUndo>()('NothingT
   kind: kind('Conflict'),
 }) {}
 
+/**
+ * The Turn that made this write ended: by its answer, a Stop, its time, its ceiling, the month's
+ * allowance or its sandbox. An ended Turn writes nothing, drafted or applied, and its Key no longer
+ * proves it, so the write is Unauthenticated. Nothing changes.
+ */
+export class TurnOver extends Schema.TaggedError<TurnOver>()('TurnOver', {
+  kind: kind('Unauthenticated'),
+}) {}
+
 export const assistantFailures = [
   TurnRunning,
   AllowanceSpent,
   ProposalClosed,
   NothingToUndo,
+  TurnOver,
 ] as const

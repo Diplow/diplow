@@ -1,8 +1,8 @@
 // Where the user went on the canvas, as the Conversation keeps it: consecutive navigations merged into
 // one Entry, the gestures in the order they came, the latest kept, and how many were merged. The
 // canvas names the gestures (`front/ui/hex/view/view.ts`); the Conversation keeps each word as it came,
-// knowing none of them, as it knows no Tile but by its id. The browser merges as the user goes, and
-// sends the merged Entry once something else enters the timeline. Pure.
+// knowing none of them, as it knows no Tile but by its id (`TileRef`). The browser merges as the user
+// goes, and sends the merged Entry once something else enters the timeline. Pure.
 import { Schema } from 'effect'
 
 /** A gesture, as the canvas names it (`center`, `show-context`): lowercase words joined by `-`. */
@@ -11,7 +11,11 @@ const Gesture = Schema.String.check(Schema.isPattern(/^[a-z]+(-[a-z]+)*$/), Sche
 /** The most characters a Tile's id holds, as Assistant keeps one. */
 export const longestTileRef = 100
 
-/** A Tile, by its id as the canvas names it. */
+/**
+ * A Tile, by its id, opaque: Assistant's one way to name a Tile of the System, a Help Tile's included,
+ * which it keeps as it came and never reads. Whether it is a Tile of the Account's System is Mapping's
+ * to say, which the API layer asks where it matters (`hexframe-app-assistant/decisions.md#DEC-18`).
+ */
 export const TileRef = Schema.String.check(Schema.isNonEmpty(), Schema.isMaxLength(longestTileRef))
 
 /** One gesture, and the Tile it was made on. */

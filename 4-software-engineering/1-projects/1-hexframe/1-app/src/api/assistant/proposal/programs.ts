@@ -13,7 +13,6 @@ import * as Assistant from '#/domains/assistant/assistant'
 import * as AssistantUndo from '#/domains/assistant/undo/undo'
 import type { Mode } from '#/domains/assistant/entities'
 import { type OpenProposal, writesOf } from '#/domains/assistant/operations'
-import { SignedOut } from '#/domains/iam/errors'
 import * as Iam from '#/domains/iam/iam'
 import type { Field } from '#/domains/mapping/entities'
 import * as Mapping from '#/domains/mapping/mapping'
@@ -80,49 +79,46 @@ export const openTile = <F extends Field>(
 
 /**
  * Drafts an Operation into the Account's open Proposal, in one transaction, by Assistant's `draft`: the
- * Conversation locked, the Operation decided by Mapping on the System the Proposal makes, refused as
- * it would be there, and written into the Proposal, which the draft opens when none is; `SignedOut`
- * should the Turn have ended since its Key was proven, nothing drafted, so a write proven just before
- * a Stop never lands in a Proposal the user decided on since, nor opens another. Answers, for a create
- * or an edit, the Tile as the Proposal makes it, with its Version, as the write applied would.
+ * Conversation locked, the Operation added by Mapping to the batch the Proposal keeps, refused as it
+ * would be on the System that batch makes, and written into the Proposal, which the draft opens when
+ * none is; Assistant's `TurnOver` should the Turn have ended since its Key was proven, nothing
+ * drafted, so a write proven just before a Stop never lands in a Proposal the user decided on since,
+ * nor opens another. Answers, for a create or an edit, the Tile as the Proposal makes it, with its
+ * Version, as the write applied would.
  */
 const drafted = <O extends Operation>(accountId: string, turnId: string, operation: O) =>
   transactional(
-    Effect.gen(function* () {
-      const kept = yield* Assistant.draft(accountId, turnId, (open) =>
+    Effect.map(
+      Assistant.draft(accountId, turnId, (open) =>
         Effect.gen(function* () {
-          const draft = yield* Mapping.draft(accountId, yield* batchOf(open), operation)
-          const write = encodedBatched(draft.batched)
-          return { write, changes: draft.changes, tile: draft.tile }
+          const added = yield* Mapping.addToBatch(accountId, yield* batchOf(open), operation)
+          const write = encodedBatched(added.batched)
+          return { write, changes: added.changes, tile: added.tile }
         }),
-      )
-      // The Turn ended since its Key was proven: its Key no longer proves it.
-      if (kept === undefined) return yield* new SignedOut()
-      return kept.drafted.tile
-    }),
+      ),
+      (kept) => kept.drafted.tile,
+    ),
   )
 
 /**
  * Runs an Operation one of the Account's Turns wrote in apply, in one transaction, by `undo/`'s
  * `applyInTurn`: the Conversation locked, what undoes the Turn's writes so far read, the Operation run
  * by Mapping as its own function runs it, and what undoes them all, this one's included, kept with
- * the Turn, with the changes it made; `SignedOut` should the Turn have ended since its Key was
- * proven, nothing run. Answers, for a create or an edit, the Tile as it now stands, with its Version,
- * as the write's own program would.
+ * the Turn, with the changes it made; Assistant's `TurnOver` should the Turn have ended since its Key
+ * was proven, nothing run. Answers, for a create or an edit, the Tile as it now stands, with its
+ * Version, as the write's own program would.
  */
 const ranForTurn = <O extends Operation>(accountId: string, turnId: string, operation: O) =>
   transactional(
-    Effect.gen(function* () {
-      const ran = yield* AssistantUndo.applyInTurn(accountId, turnId, (soFar) =>
+    Effect.map(
+      AssistantUndo.applyInTurn(accountId, turnId, (soFar) =>
         Effect.gen(function* () {
           const run = yield* Mapping.runOperation(accountId, operation, yield* keptUndo(soFar))
           return { undo: encodedUndo(run.undo), changes: run.changes, tile: run.tile }
         }),
-      )
-      // The Turn ended since its Key was proven: its Key no longer proves it.
-      if (ran === undefined) return yield* new SignedOut()
-      return ran.tile
-    }),
+      ),
+      (ran) => ran.tile,
+    ),
   )
 
 /**
@@ -180,10 +176,9 @@ export const acceptProposal = ({ proposal }: { readonly proposal: string }) =>
       Effect.as(
         Assistant.acceptProposal(account.id, proposal, (accepted) =>
           Effect.gen(function* () {
-            const { conversationId, id } = yield* Assistant.turn(account.id, accepted.turn)
             const assistant: Iam.SignedIn = {
               account,
-              by: { _tag: 'TurnKey', conversationId, turnId: id },
+              by: { _tag: 'TurnKey', turnId: accepted.turn },
             }
             const batch = yield* batchOf(accepted)
             const run = yield* actingAs(assistant)(Mapping.runBatch(account.id, batch))

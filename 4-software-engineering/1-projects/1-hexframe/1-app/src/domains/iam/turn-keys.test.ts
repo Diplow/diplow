@@ -77,8 +77,8 @@ const issuedInTransaction = (...args: Parameters<typeof issueTurnKey>) =>
 const revokedInTransaction = (...args: Parameters<typeof revokeTurnKey>) =>
   transactional(revokeTurnKey(...args))
 
-/** What a Turn's Key is bound to, for a Turn no other test uses. */
-const aTurn = () => ({ conversationId: crypto.randomUUID(), turnId: crypto.randomUUID() })
+/** The Turn a Turn's Key is bound to, by its id, one no other test uses. */
+const aTurn = () => crypto.randomUUID()
 
 /** Fifteen minutes from now, by the test's clock. */
 const inFifteenMinutes = Effect.map(Clock.currentTimeMillis, (now) => new Date(now + 900_000))
@@ -95,12 +95,12 @@ layer(TestLayer)("a Turn's Key", (it) => {
     }),
   )
 
-  it.effect('proves its Account, Conversation and Turn, and signs the request in by it', () =>
+  it.effect('proves its Account and its Turn, and signs the request in by it', () =>
     Effect.gen(function* () {
       const { account, asSession } = yield* someone
       const turn = aTurn()
       const { secret } = yield* asSession(issuedInTransaction(turn, yield* inFifteenMinutes))
-      const by = { _tag: 'TurnKey', ...turn }
+      const by = { _tag: 'TurnKey', turnId: turn }
       expect(
         Option.getOrThrow(yield* keyClient(Redacted.value(secret)).request(keyProven)),
       ).toEqual({ account, by })
@@ -128,13 +128,13 @@ layer(TestLayer)("a Turn's Key", (it) => {
       const other = aTurn()
       const { secret } = yield* asSession(issuedInTransaction(turn, yield* inFifteenMinutes))
       const kept = yield* asSession(issuedInTransaction(other, yield* inFifteenMinutes))
-      yield* revokedInTransaction(account.id, turn.turnId)
+      yield* revokedInTransaction(account.id, turn)
       expect(yield* keyClient(Redacted.value(secret)).request(keyProven)).toEqual(Option.none())
       expect(Option.isSome(yield* keyClient(Redacted.value(kept.secret)).request(keyProven))).toBe(
         true,
       )
       // A Key already gone is no error.
-      yield* revokedInTransaction(account.id, turn.turnId)
+      yield* revokedInTransaction(account.id, turn)
     }),
   )
 
@@ -144,7 +144,7 @@ layer(TestLayer)("a Turn's Key", (it) => {
       const stranger = yield* someone
       const turn = aTurn()
       const { secret } = yield* asSession(issuedInTransaction(turn, yield* inFifteenMinutes))
-      yield* revokedInTransaction(stranger.account.id, turn.turnId)
+      yield* revokedInTransaction(stranger.account.id, turn)
       expect(Option.isSome(yield* keyClient(Redacted.value(secret)).request(keyProven))).toBe(true)
     }),
   )
