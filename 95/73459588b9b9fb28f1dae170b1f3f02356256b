@@ -1,0 +1,73 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/Tokens.tsx
+  s_25451ff7f6633b::t_733dbb0394513e 53-54,62
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/places.tsx
+  s_25451ff7f6633b::t_733dbb0394513e 1-90
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-design-system-v1/decisions.md
+  s_25451ff7f6633b::t_733dbb0394513e 17
+  s_25451ff7f6633b::t_fa15c322aba2bb 19-23,166-179,187,193,199,205
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/geometry/words.test.ts
+  s_25451ff7f6633b::t_733dbb0394513e 1-72
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/CLAUDE.md
+  s_25451ff7f6633b::t_3170e710619a0a 15,31
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/styles.css
+  s_25451ff7f6633b::t_733dbb0394513e 199-201,238-255
+  s_25451ff7f6633b::t_fa15c322aba2bb 256-257
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE.md
+  s_25451ff7f6633b::t_733dbb0394513e 50
+  s_25451ff7f6633b::t_1e9d521d8608ab 64
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_25451ff7f6633b::t_3a275a83e94688 1029-1032
+  s_25451ff7f6633b::t_733dbb0394513e 726,921-1028
+  s_25451ff7f6633b::t_c4581da04eff69 768-769,772,920
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/geometry/geometry.test.ts
+  s_25451ff7f6633b::t_733dbb0394513e 10,93-95
+  s_25451ff7f6633b::t_c6df61372b7f75 96-98
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/Frame.tsx
+  s_25451ff7f6633b::t_733dbb0394513e 9,26
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_25451ff7f6633b::t_733dbb0394513e 25,91
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE.md
+  s_25451ff7f6633b::t_733dbb0394513e 9-10,21,25-28
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/geometry/geometry.ts
+  s_25451ff7f6633b::t_733dbb0394513e 66-70
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/CLAUDE.md
+  s_25451ff7f6633b::t_3170e710619a0a 26
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_25451ff7f6633b::t_733dbb0394513e 726,921-1028
+  s_25451ff7f6633b::t_3a275a83e94688 1029-1032
+  s_25451ff7f6633b::t_c4581da04eff69 768-769,772,920
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/tile/gallery.tsx
+  s_25451ff7f6633b::t_3a275a83e94688 42,50,69
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/Canvas.tsx
+  s_25451ff7f6633b::t_733dbb0394513e 12,32
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/geometry/words.ts
+  s_25451ff7f6633b::t_733dbb0394513e 1-74
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/gallery.tsx
+  s_25451ff7f6633b::t_733dbb0394513e 1-495
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/specimens.tsx
+  s_25451ff7f6633b::t_733dbb0394513e 1-259
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/Tile.tsx
+  s_25451ff7f6633b::t_733dbb0394513e 1-539
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/keys.ts
+  s_25451ff7f6633b::t_733dbb0394513e 6-11
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/pieces.ts
+  s_25451ff7f6633b::t_733dbb0394513e 157-177
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/light.tsx
+  s_25451ff7f6633b::t_733dbb0394513e 1-65
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9573459588b9b9fb28f1dae170b1f3f02356256b",
+  "prompts": {},
+  "sessions": {
+    "s_25451ff7f6633b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7064e67c-1f1f-430a-9e5e-12822aa98003",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
