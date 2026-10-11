@@ -3,7 +3,7 @@ import type { ComponentProps } from 'react'
 
 import { ariaShortcut, Keys, type Shortcut } from '../keys'
 
-type Tone = 'quiet' | 'voice' | 'destructive'
+type Tone = 'quiet' | 'voice'
 
 /** Whose a surface is, which its `voice` actions speak in: the agent's, the human's, the app's, or lost. */
 export type Voice = 'agent' | 'human' | 'app' | 'destructive'
@@ -26,7 +26,7 @@ interface ActProps extends ComponentProps<'button'> {
   look?: 'text' | 'hex'
   /**
    * `quiet` in the muted ink; `voice` in the voice of the surface it sits on (`voiceOf`), for the
-   * action it expects; `destructive` for what is lost.
+   * action it expects. What is lost is said by the voice alone: `voiceOf('destructive')`.
    */
   tone?: Tone
   /** Its shortcut, drawn after its word so the action teaches it. Whoever owns the key binds it. */
@@ -37,12 +37,10 @@ interface ActProps extends ComponentProps<'button'> {
 const textTones: Record<Tone, string> = {
   quiet: 'text-muted-foreground',
   voice: 'text-(--voice)',
-  destructive: 'text-destructive',
 }
 const hexTones: Record<Tone, string> = {
   quiet: '[--act:var(--voice,var(--foreground))] bg-(--act)/16 text-(--act) hover:bg-(--act)/26',
   voice: '[--act:var(--voice,var(--foreground))] bg-(--act) text-background hover:bg-(--act)/86',
-  destructive: '[--act:var(--destructive)] bg-(--act) text-background hover:bg-(--act)/86',
 }
 
 /** An action in a widget, a dialog or a receipt: a word you click, never a boxed button. */

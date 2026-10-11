@@ -1,7 +1,7 @@
 // The chat's own layouts, on /design-system: the widget's frame, in each of its states, on a
 // proposal of the agent's, and in the human's voice and the app's.
 import { Eye, HexagonIcon, KeyRound, Move, Pin, RotateCcw, Split } from 'lucide-react'
-import { useRef, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
@@ -181,13 +181,20 @@ function Changes() {
 function LiveWidget() {
   const [state, setState] = useState<WidgetState>('waiting')
   const [entrance, setEntrance] = useState(0)
-  // The work in flight, cancelled when the proposal is undone or comes in again.
+  // The work in flight, cancelled when the proposal is undone, comes in again or leaves the page.
   const working = useRef<ReturnType<typeof setTimeout>>(undefined)
+  useEffect(
+    () => () => {
+      clearTimeout(working.current)
+    },
+    [],
+  )
   const wait = () => {
     clearTimeout(working.current)
     setState('waiting')
   }
   const accept = () => {
+    clearTimeout(working.current)
     setState('working')
     working.current = setTimeout(() => {
       setState('done')

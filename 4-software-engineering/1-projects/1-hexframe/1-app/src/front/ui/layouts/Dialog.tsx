@@ -119,7 +119,7 @@ export function Dialog({
             <AlertDialog.Action asChild>
               <Act
                 look="hex"
-                tone={tone === 'destructive' ? 'destructive' : 'quiet'}
+                tone={tone === 'destructive' ? 'voice' : 'quiet'}
                 disabled={!confirmed}
                 onClick={onConfirm}
                 className="ml-auto"

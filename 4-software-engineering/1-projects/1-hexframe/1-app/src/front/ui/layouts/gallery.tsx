@@ -1,11 +1,12 @@
 // The layouts every side shares, on /design-system: the dialog, the table, the page's header, and what a
 // place shows instead of its content.
 import { FilePlus, Plus, Rows3 } from 'lucide-react'
+import { cn } from 'cn'
 import { useMemo, useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { Act } from '../atoms/controls/act'
+import { Act, voiceOf } from '../atoms/controls/act'
 import { Button } from '../atoms/controls/button'
 import { toast } from '../atoms/Toaster'
 import { GallerySection, GalleryState } from '../gallery/frame'
@@ -56,7 +57,8 @@ function TheDialogGallery() {
       {openers.map(({ act, label, state }) => (
         <GalleryState key={act} label={state}>
           <Act
-            tone={act === 'discard' ? 'quiet' : 'destructive'}
+            tone={act === 'discard' ? 'quiet' : 'voice'}
+            className={cn(act !== 'discard' && voiceOf('destructive'))}
             aria-haspopup="dialog"
             onClick={() => {
               setOpen(act)

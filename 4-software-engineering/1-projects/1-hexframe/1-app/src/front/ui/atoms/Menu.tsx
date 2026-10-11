@@ -56,6 +56,14 @@ interface MenuProps {
 
 const isToggle = (entry: MenuItem | MenuToggle): entry is MenuToggle => 'checked' in entry
 
+// Enter or Space with no modifier: what a highlighted line takes to run itself.
+const linesKey = (event: KeyboardEvent) =>
+  (event.key === 'Enter' || event.key === ' ') &&
+  !event.shiftKey &&
+  !event.metaKey &&
+  !event.ctrlKey &&
+  !event.altKey
+
 /**
  * A list of actions on one thing, navigable with the keyboard: behind a control, or where the thing
  * is, by a right click, a long press or ⇧F10. Each line can carry its key, which runs it.
@@ -70,16 +78,24 @@ export function Menu({
   onOpenChange,
 }: MenuProps) {
   // Typing an entry's key runs it: the line is clicked, so Radix selects it and closes the menu.
-  // Taking the key first also keeps Radix's typeahead from moving the focus instead. A key a line
-  // already took, Enter or Space on the highlighted one, runs that line alone.
+  // Taking the key first, before the highlighted line and Radix's typeahead, keeps ⇧↵ or a letter
+  // from running the lit line or moving the focus instead. Enter and Space alone are the lines' own:
+  // they run the highlighted line, and an entry's only once no line is lit and took them.
   const runShortcut = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.defaultPrevented) return
     const index = entries.findIndex(
       (entry) => entry !== 'separator' && !isToggle(entry) && pressed(entry.shortcut, event),
     )
     if (index === -1) return
     event.preventDefault()
     event.currentTarget.querySelector<HTMLElement>(`[data-entry="${String(index)}"]`)?.click()
+  }
+  const keys = {
+    onKeyDownCapture: (event: KeyboardEvent<HTMLDivElement>) => {
+      if (!linesKey(event)) runShortcut(event)
+    },
+    onKeyDown: (event: KeyboardEvent<HTMLDivElement>) => {
+      if (linesKey(event) && !event.defaultPrevented) runShortcut(event)
+    },
   }
   const body = (kit: Kit) => (
     <>
@@ -104,7 +120,7 @@ export function Menu({
         <ContextMenu.Portal>
           <ContextMenu.Content
             aria-label={label}
-            onKeyDown={runShortcut}
+            {...keys}
             className={cn(surface, 'origin-(--radix-context-menu-content-transform-origin)')}
           >
             {body(ContextMenu)}
@@ -121,7 +137,7 @@ export function Menu({
           aria-label={label}
           align={align}
           sideOffset={6}
-          onKeyDown={runShortcut}
+          {...keys}
           className={cn(surface, 'origin-(--radix-dropdown-menu-content-transform-origin)')}
         >
           {body(DropdownMenu)}

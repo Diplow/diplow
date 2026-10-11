@@ -1,12 +1,12 @@
 import { cn } from 'cn'
 import { ChevronDown, ChevronRight, MoreHorizontal, RotateCw, X } from 'lucide-react'
 import { Collapsible } from 'radix-ui'
-import { useId, useState, type CSSProperties, type ReactNode } from 'react'
+import { useId, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Act, voiceOf, type Voice as AnyVoice } from '../../atoms/controls/act'
-import type { Shortcut } from '../../atoms/keys'
+import { pressed, type Shortcut } from '../../atoms/keys'
 import { Menu, type MenuEntry } from '../../atoms/Menu'
 
 /** Whose the widget is: the agent asking, the user's own words, or the app's (a key, help). */
@@ -21,7 +21,7 @@ export type WidgetState = 'waiting' | 'working' | 'failed' | 'done'
 interface WidgetAction {
   label: string
   onSelect: () => void
-  /** Its shortcut, drawn after it so the action teaches it. */
+  /** Its shortcut, drawn after it so the action teaches it; it runs while the focus is in the widget, open. */
   shortcut?: Shortcut
   /** Pushed to the row's end, apart: a way out such as Discard. */
   apart?: boolean
@@ -90,6 +90,16 @@ function Zone({
   const [menuOpen, setMenuOpen] = useState(false)
   const titleId = useId()
   const failed = state === 'failed'
+  // An action's key runs it while the focus is in the widget and its actions show. A key its menu or
+  // its body took stays theirs, and so does one from the menu's portal, outside the zone.
+  const runShortcut = (event: KeyboardEvent<HTMLElement>) => {
+    if (folded || event.defaultPrevented) return
+    if (!(event.target instanceof Node) || !event.currentTarget.contains(event.target)) return
+    const action = actions.find(({ shortcut }) => pressed(shortcut, event))
+    if (action === undefined) return
+    event.preventDefault()
+    action.onSelect()
+  }
   return (
     <Collapsible.Root
       open={!folded}
@@ -101,6 +111,7 @@ function Zone({
       <section
         aria-labelledby={titleId}
         aria-busy={state === 'working'}
+        onKeyDown={runShortcut}
         className={cn(
           voiceOf(failed ? 'destructive' : voice),
           // A solid surface with one fine line on top and one below, tinted toward the curve by its voice.

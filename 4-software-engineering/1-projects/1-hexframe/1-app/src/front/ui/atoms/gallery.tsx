@@ -345,7 +345,11 @@ function ActGallery() {
           <Act onClick={done(m.gallery_sample_show_on_canvas())}>
             {m.gallery_sample_show_on_canvas()}
           </Act>
-          <Act tone="destructive" onClick={done(m.gallery_sample_delete())}>
+          <Act
+            tone="voice"
+            className={voiceOf('destructive')}
+            onClick={done(m.gallery_sample_delete())}
+          >
             {m.gallery_sample_delete()}
           </Act>
           <Act disabled>{m.gallery_state_disabled()}</Act>
@@ -364,7 +368,12 @@ function ActGallery() {
           >
             {m.gallery_sample_save()}
           </Act>
-          <Act look="hex" tone="destructive" onClick={done(m.gallery_sample_delete())}>
+          <Act
+            look="hex"
+            tone="voice"
+            className={voiceOf('destructive')}
+            onClick={done(m.gallery_sample_delete())}
+          >
             {m.gallery_sample_delete()}
           </Act>
           <Act look="hex" disabled>
