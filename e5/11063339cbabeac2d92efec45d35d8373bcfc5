@@ -1,0 +1,47 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/proposal/proposal.ts
+  s_c19b57f63ed6ef::t_4974e3a85e80f4 21-22
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/undo.test.ts
+  s_c19b57f63ed6ef::t_ca49e6f930342c 123
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/entry.ts
+  s_c19b57f63ed6ef::t_4974e3a85e80f4 86
+  s_c19b57f63ed6ef::t_31937d82049b2b 78-80
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/index.ts
+  s_c19b57f63ed6ef::t_63852c8631864c 10
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/proposals.test.ts
+  s_c19b57f63ed6ef::t_8b43e2ada37eb6 210
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-assistant/decisions.md
+  s_c19b57f63ed6ef::t_707b9d594b7ca7 194,197
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/entry/Proposal.tsx
+  s_c19b57f63ed6ef::t_2dd3dad5e9bf8b 39-43,53
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/agent/agent.test.ts
+  s_c19b57f63ed6ef::t_8b43e2ada37eb6 314-316
+  s_c19b57f63ed6ef::t_c4f6ff0c0c28c0 175-176,178-225
+  s_c19b57f63ed6ef::t_2f994fdb6cc2cb 177
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/CLAUDE.md
+  s_c19b57f63ed6ef::t_707b9d594b7ca7 29,37-38,57
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/applied/undo.test.ts
+  s_c19b57f63ed6ef::t_2bda188a20b165 1-78
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/applied/undo.ts
+  s_c19b57f63ed6ef::t_31937d82049b2b 1-61
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/agent/prompt.ts
+  s_c19b57f63ed6ef::t_6937e7fb9599ae 96-97
+  s_c19b57f63ed6ef::t_8b43e2ada37eb6 109-112
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/assistant.ts
+  s_c19b57f63ed6ef::t_6937e7fb9599ae 50,264,269-271,273,277,738-739
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e511063339cbabeac2d92efec45d35d8373bcfc5",
+  "prompts": {},
+  "sessions": {
+    "s_c19b57f63ed6ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "44ac69dd-a844-4e6b-8ec5-4d9737903029",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
