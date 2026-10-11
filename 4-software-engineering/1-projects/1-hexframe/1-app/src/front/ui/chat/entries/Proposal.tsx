@@ -85,25 +85,23 @@ function Open(props: OpenProps) {
         kicker={m.chat_proposal_kicker()}
         title={title}
         {...(summary === undefined ? {} : { subtitle: summary })}
-        actions={
-          // A decision on its way: nothing more to decide until it lands.
-          pending
-            ? []
-            : [
-                {
-                  label: m.chat_proposal_accept(),
-                  shortcut: { key: 'Enter', mod: true },
-                  onSelect: onAccept,
-                },
-                {
-                  label: m.chat_proposal_discard(),
-                  apart: true,
-                  onSelect: () => {
-                    setAsking(true)
-                  },
-                },
-              ]
-        }
+        actions={[
+          // A decision on its way: the actions wait, the focus kept where it is until the hand-off.
+          {
+            label: m.chat_proposal_accept(),
+            shortcut: { key: 'Enter', mod: true },
+            waits: pending,
+            onSelect: onAccept,
+          },
+          {
+            label: m.chat_proposal_discard(),
+            apart: true,
+            waits: pending,
+            onSelect: () => {
+              setAsking(true)
+            },
+          },
+        ]}
       >
         {changes.length === 0 ? (
           <p className="text-[0.84375rem] font-light text-muted-foreground">

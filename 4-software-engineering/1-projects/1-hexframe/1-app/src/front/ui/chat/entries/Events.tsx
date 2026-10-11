@@ -7,13 +7,14 @@ import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 
+import type { Voice } from '../../atoms/controls/act'
 import { Fold } from '../atoms/fold'
 import { HexMark } from '../atoms/hex'
 import { Said, type Words } from '../text/words'
 import { Time } from './time'
 
 /** Who acted: the user, the agent, a Key from outside, or hexframe itself, a limit or a failure. */
-type Who = 'human' | 'agent' | 'key' | 'app'
+type Who = Exclude<Voice, 'destructive'> | 'key'
 
 /** One thing that happened, said in a sentence that names who did it, but the agent's. */
 export interface Happened {

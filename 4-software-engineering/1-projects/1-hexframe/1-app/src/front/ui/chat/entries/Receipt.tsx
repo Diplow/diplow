@@ -106,7 +106,7 @@ export function Receipt({
           onUndo !== undefined && (
             <Act
               className="ml-1.5 text-[0.78125rem]"
-              disabled={pending}
+              waits={pending}
               onClick={onUndo}
               onFocus={() => {
                 undoFocused.current = true

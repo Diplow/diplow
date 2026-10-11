@@ -5,10 +5,11 @@ import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 
+import type { Voice as AnyVoice } from '../../atoms/controls/act'
 import { HexMark } from '../atoms/hex'
 
 /** Whose words they are: the chat's two voices, the user's and the agent's. */
-export type Voice = 'human' | 'agent'
+export type Voice = Extract<AnyVoice, 'human' | 'agent'>
 
 /** What a named tile is to the reader: there, the agent's draft, or deleted since. */
 type Standing = 'live' | 'draft' | 'gone'
