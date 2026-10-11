@@ -1,0 +1,53 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/Tile.tsx
+  s_09018015561e54::t_1605768bd74621 297,319-320
+  s_09018015561e54::t_f40d4048e7025f 242-246
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE.md
+  s_09018015561e54::t_3844e3a19a390a 25,27,30
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/menu/TileMenu.tsx
+  s_09018015561e54::t_6f3a3520a5f423 27-33,71,78,83
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/moving/gallery.tsx
+  s_09018015561e54::t_e438f800454313 2-4,126-127,256-257
+  s_09018015561e54::t_a1d8d3ebc12bf5 21,35,60,391
+  s_09018015561e54::t_2b21055e3f9a1f 168-170,218
+  s_09018015561e54::t_b78e2fc90a252d 199
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_09018015561e54::t_e438f800454313 934,955,959
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_09018015561e54::t_e438f800454313 934,955,959
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/atoms/CLAUDE.md
+  s_09018015561e54::t_3844e3a19a390a 20
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE.md
+  s_09018015561e54::t_3844e3a19a390a 50,64-65
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/CLAUDE.md
+  s_09018015561e54::t_3844e3a19a390a 17
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-design-system-v1/decisions.md
+  s_09018015561e54::t_2442069ab2329a 19-22,177-192
+  s_09018015561e54::t_3844e3a19a390a 193
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/moving/Moving.tsx
+  s_09018015561e54::t_a1d8d3ebc12bf5 24,68-70
+  s_09018015561e54::t_33bc84bbb7f9e2 71
+  s_09018015561e54::t_713214edcf77e0 72-73
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/layouts/HoverCard.tsx
+  s_09018015561e54::t_993a67aa697358 17-18,35-41,43-44,93-99
+  s_09018015561e54::t_6f3a3520a5f423 19-20,42,53,104-109
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/atoms/Menu.tsx
+  s_09018015561e54::t_993a67aa697358 430,437-438,441-444
+  s_09018015561e54::t_6ce912843fb0c8 439-440
+  s_09018015561e54::t_2446276b71ec2c 445-446
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "307ff4a762078b828a1f2749b8ead77c5ec0d7df",
+  "prompts": {},
+  "sessions": {
+    "s_09018015561e54": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "80f5c16c-ef67-4b92-89fc-648f48179105",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
