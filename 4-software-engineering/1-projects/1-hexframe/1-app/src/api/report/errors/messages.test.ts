@@ -121,31 +121,27 @@ describe('the message table', () => {
     [
       'en',
       new EntitlementMissing({ entitlement: 'assistant' }),
-      "The assistant isn't available on this account.",
+      "The agent isn't available on this account.",
     ],
     [
       'fr',
       new EntitlementMissing({ entitlement: 'assistant' }),
-      'L’assistant n’est pas disponible sur ce compte.',
+      'L’agent n’est pas disponible sur ce compte.',
     ],
-    [
-      'en',
-      new TurnRunning(),
-      'The assistant is still answering. Wait for it to finish, or stop it.',
-    ],
-    ['fr', new TurnRunning(), 'L’assistant répond encore. Attendez qu’il ait fini, ou arrêtez-le.'],
+    ['en', new TurnRunning(), 'The agent is still answering. Wait for it to finish, or stop it.'],
+    ['fr', new TurnRunning(), 'L’agent répond encore. Attendez qu’il ait fini, ou arrêtez-le.'],
     [
       'en',
       new AllowanceSpent(),
-      "This month's allowance for the assistant is spent. It answers again next month.",
+      "This month's allowance for the agent is spent. It answers again next month.",
     ],
     [
       'fr',
       new AllowanceSpent(),
-      'L’enveloppe du mois de l’assistant est dépensée. Il répondra de nouveau le mois prochain.',
+      'L’enveloppe du mois de l’agent est dépensée. Il répondra de nouveau le mois prochain.',
     ],
-    ['en', new TurnOver(), 'The assistant has ended this answer, so it changes nothing more.'],
-    ['fr', new TurnOver(), 'L’assistant a terminé cette réponse : il ne change plus rien.'],
+    ['en', new TurnOver(), 'The agent has ended this answer, so it changes nothing more.'],
+    ['fr', new TurnOver(), 'L’agent a terminé cette réponse : il ne change plus rien.'],
   ] as const)("words the Assistant's refusals in %s", (locale, failure, sentence) => {
     overwriteGetLocale(() => locale)
     expect(messageFor(failure)).toBe(sentence)
