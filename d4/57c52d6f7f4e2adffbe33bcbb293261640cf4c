@@ -1,0 +1,56 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/curve.ts
+  s_683ca25b605461::t_8a3df8df10a4f7 69-72
+  s_683ca25b605461::t_a435dda5e45a4f 1-26,28-68,73-99
+  s_683ca25b605461::t_492bf3e61783a8 27
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_683ca25b605461::t_6c7b91e4a9c5ee 4-5,14,19-21,33,66,178-328,330-385
+  s_683ca25b605461::t_492bf3e61783a8 7,329
+  s_683ca25b605461::t_65eabdae28fcfd 23-29
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/atoms/controls/ThemeToggle.tsx
+  s_683ca25b605461::t_673b90b732f86d 1-3,11-26
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/curve.test.ts
+  s_683ca25b605461::t_fb99cfbf95be06 1-2,12-52,57-81
+  s_683ca25b605461::t_8a3df8df10a4f7 3-11,53-56
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/layouts/Rail.tsx
+  s_683ca25b605461::t_d9ed7df84d78bb 60-63,67,91
+  s_683ca25b605461::t_83f5e9ec58706c 1-10,12-32,34-59,64-65,68-90,92-100
+  s_683ca25b605461::t_efd6775e9981b7 33,66
+  s_683ca25b605461::t_e55d811bccfeb5 11
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_683ca25b605461::t_f10800ca1dca6d 429,489-523
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/Scrollbar.tsx
+  s_683ca25b605461::t_8a3df8df10a4f7 1,6,76
+  s_683ca25b605461::t_492bf3e61783a8 220
+  s_683ca25b605461::t_65eabdae28fcfd 2-5,7-75,77-219,221-223
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/pieces.ts
+  s_683ca25b605461::t_1fdb08277a7591 62-68,90-96,206
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/Screen.tsx
+  s_683ca25b605461::t_2600ff3dc30e62 9-15,17-18,139,184
+  s_683ca25b605461::t_8a3df8df10a4f7 90-92
+  s_683ca25b605461::t_8c3cffade63c40 276-277
+  s_683ca25b605461::t_0c06d1da8128d6 1-8,19-22,24-65,71,86-89,93-112,114-115,117-124,126-127,129-134,136-138,140-183,185-238,240-254,256-266,268-275,278-305
+  s_683ca25b605461::t_3770a1181d6cdb 66-70
+  s_683ca25b605461::t_ae8403ce159852 16,72-85,113,116,125,128,239,255,267
+  s_683ca25b605461::t_65eabdae28fcfd 23,135
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_683ca25b605461::t_f10800ca1dca6d 429,489-523
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/layouts/gallery.tsx
+  s_683ca25b605461::t_5c82db3e89f32f 1-2,9,11-12,15,20-30,99-111
+  s_683ca25b605461::t_90b0cae5776a48 112-113
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d457c52d6f7f4e2adffbe33bcbb293261640cf4c",
+  "prompts": {},
+  "sessions": {
+    "s_683ca25b605461": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c0bae56f-3d38-45db-b139-58912d52df08",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
