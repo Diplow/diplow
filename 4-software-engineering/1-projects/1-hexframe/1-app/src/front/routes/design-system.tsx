@@ -15,6 +15,7 @@ import { fixtureViews, ulysse } from '#/front/ui/canvas/fixtures'
 import { CanvasLayoutsGallery } from '#/front/ui/canvas/layouts/gallery'
 import { centerOn, readCanvasView, type CanvasView } from '#/front/ui/canvas/view/view'
 import { ChatAtomsGallery } from '#/front/ui/chat/atoms/gallery'
+import { ComposerGallery } from '#/front/ui/chat/composer/gallery'
 import { ChatEntriesGallery } from '#/front/ui/chat/entries/gallery'
 import { ChatTextGallery } from '#/front/ui/chat/text/gallery'
 import { GallerySection, GalleryTier, tierAnchor, tierTitle } from '#/front/ui/gallery/frame'
@@ -44,6 +45,7 @@ function DesignSystem() {
       <GalleryTier tier="crossings" />
       <GalleryTier tier="chat">
         <ConversationGallery onCenter={onCenter} />
+        <ComposerGallery />
         <ChatTextGallery />
         <ChatEntriesGallery />
         <ChatAtomsGallery />

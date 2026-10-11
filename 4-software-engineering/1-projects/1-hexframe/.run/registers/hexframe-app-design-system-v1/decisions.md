@@ -9,8 +9,9 @@ preview: >-
   how the radius scale squares every corner, the lines of STACK.md and
   claude-mod left for the phase close, where each piece of ui/ went when it
   regrouped by tier and side, and how /design-system shows the error channels,
-  reads "made of" from the code and keeps its frame outside the tiers; how the
-  chat's pieces take their text, and why its controls keep the second ink.
+  reads "made of" from the code and keeps its frame outside the tiers, what
+  the composer's proposal kept and changed of the reference, how the chat's
+  pieces take their text, and what its quiet ink became to be read.
 ---
 # Decisions
 
@@ -65,10 +66,23 @@ HEX-94. The ticket asks for "made of" and "used in" between pieces. Written by h
 
 HEX-94. The catalogue, its test and the tokens' notes would have put seven files in `ui/`, past the rule of 6. They went into a folder of their own, `ui/gallery/`, with the frame and the stylesheet's reading: every folder's `gallery.tsx` imports it, and it imports none of them, so dependency-cruiser's tiers do not name it. `tokens.ts` became `gallery/stylesheet.ts`, since `Tokens.tsx` beside it would clash with it on a filesystem that ignores case, and it now reads every token, the fonts, the sizes, the radius scale, the easings and the durations beside the colours, so each gets its note. TOKENS.md's tables became those notes; its "Phone and touch" and "Light" became prose on the page. Until HEX-112 retires `3-design-system/`, which this run may not edit, TOKENS.md keeps its copy: where the two differ, `gallery/Tokens.tsx` wins, as `ui/gallery/CLAUDE.md` says.
 
-### DEC-10 The chat's text is `Words`, and the Proposal draws its own zone until the widget's frame lands
+### DEC-10 The composer is a chat component with its own list, the field a textarea with its marks drawn under it
+
+HEX-99, a proposal. `components.html#commands` drew the composer on a contenteditable, the list rising from its top line, a command a chip in amber mono. The proposal keeps the look and changes four things:
+
+- **The field stays a textarea.** The feature's `@` already works on its string, tested (`features/conversation/composer/mention.ts`); a contenteditable would bring its input methods, paste and undo back to solve. What the field marks, the command it opens with in amber and each Tile it points at underlined, is drawn under it in the same type, so the command keeps the field's serif rather than the reference's mono chip, whose other width would put the caret out of step.
+- **The list is the composer's own**, `ui/chat/composer/List.tsx`, not `Suggestions`: it rises from the composer's top line as wide as the conversation, with groups, icons, a footer of keys and a line when nothing answers, none of which `Suggestions`' popover over its field has. `Suggestions` stays for the feature's composer until HEX-101 moves it onto `Composer`, its last user.
+- **The step above the composer is HEX-98's**, the conversation's "thinking": the composer shows a Turn running by its field waiting and send becoming Stop, and nothing else.
+- **Quiet text is `muted-foreground`, not `faint`.** `faint` on `card` is 2.96:1 in dark and 4.09:1 in light, under the 4.5:1 text needs; the reference set the mode, the key hints, the descriptions and the paths in it. `faint` stays on the inactive rows' icons, which say nothing their names don't.
+
+- **`ui/` knows no domain.** No piece of `ui/` imports one, so the Composer takes the Modes as choices its caller builds from Assistant's `Mode`, and the gallery's demo follows the feature's `@` rules (`mention.ts`, 40 characters, ranked, 8 at most) rather than importing them. The commands sit in `ui/chat/composer/commands.ts` while they are a proposal, since the page can only show what `ui/` holds; HEX-101, which runs them through the client's hooks, moves them beside the feature's `@`, and `List` and `cutAround` stay.
+
+The commands are the reference's, the theme aside, which goes to the breadcrumb's head (Q8), with the language and signing out added; which ones stay is an open question on the pull request, as is amber text in light, 3.75:1 on `card`, the tokens' own.
+
+### DEC-11 The chat's text is `Words`, and the Proposal draws its own zone until the widget's frame lands
 
 HEX-98. No piece of `ui/` imports a domain, the canvas's included, and a component takes its content as props, so the chat's pieces take no Assistant's Entry. Where they name a state the domain names too, a Proposal's `Fate`, they keep their own union: HEX-101 hands them the domain's, which stops compiling should the domain grow a member `ui/` cannot draw. Each takes its text as `Words` (`ui/chat/text/words.tsx`): plain words, a tile named (a `Mention`'s props) and who acted, by name, in the order the sentence's language puts them. A feature reads its message with a mark in each tile's place and weaves the tiles in (`weave`, beside `Words`, tested), so a sentence is never split into fragments a translator can't reorder. The pieces of `components.html#text` became `Message` (both voices, one piece, since they share the column and the copy), `Thinking`, `Mention`, `Events` (a navigation, a change, the live step and a Turn's end as lines, by who acted, a run of reads folded), `DaySplit`, `Proposal` and `Receipt` (what an accepted Proposal and a Turn that applied its changes both leave, with the Undo), and the chat's atoms, `Act`, the text action with its hex, and `Fold`, the one line that opens what it hides, both in `controls.tsx`, and `HexMark`, no piece of its own. The widget's frame is HEX-96's, in flight beside this one: the Proposal draws its zone itself, entrance included, and moves into the frame once it lands. HEX-101 wires these into `features/conversation/`, which still draws v0's look meanwhile.
 
-### DEC-11 The quiet ink falls short of a readable contrast, so the chat's controls keep the second ink
+### DEC-12 The quiet ink falls short of a readable contrast, so the chat's controls keep the second ink
 
 HEX-98. `faint` measures 3.1:1 on the ground in dark and 3.6:1 in light, under the 4.5:1 small text needs; `destructive` measures 4.1:1 in light. `components.html` sets the folded thinking's head and a folded run of reads in `faint`: both are controls, so they take `muted-foreground`, held in one place, `Fold` (7.9:1 and 6.5:1), lighting to the first ink under the pointer. What only accompanies a line stays `faint` as designed: a time, a tool's name, the day's name, the thinking's lines, a deleted tile. Whether `faint` and light's `destructive` should rise is a token's question, left to Ulysse on the pull request.
