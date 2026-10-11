@@ -1,0 +1,308 @@
+// Acting on a tile on /design-system, on the fixture System: a frame whose tiles and free slots each
+// open their menu, by a right click, a long press or ⇧F10, show their card on hover or focus, and
+// take their keys; what a line or a click would do shows in a toast. Then each kind's menu, held
+// open. Ported from components.html's #menu.
+import { useRef } from 'react'
+
+import { m } from '#/paraglide/messages'
+
+import { toast } from '../../../atoms/Toaster'
+import { GalleryGroup, GallerySection, GalleryState } from '../../../gallery/frame'
+import { ulysse } from '../../fixtures'
+import { directions, neighbor, type Hex } from '../../geometry/geometry'
+import type { TileNode } from '../../view/tiles'
+import { Slot } from '../places'
+import { fixture, ring, useScale, wordsOf } from '../specimens'
+import { Tile, type TileLook } from '../Tile'
+import type { PickerFrame } from './Picker'
+import { TileMenu, TileMenuDrawn, useFinger, verbName } from './TileMenu'
+import { clickOf, directionName, type Act, type Subject } from './verbs'
+
+export function TileMenuGallery() {
+  return (
+    <GallerySection name="TileMenu">
+      <GalleryGroup title={m.gallery_tile_menu_live()} note={m.gallery_tile_menu_live_note()} />
+      <GalleryState label={m.gallery_state_tile_menu_live()}>
+        <ActingFrame />
+      </GalleryState>
+      <GalleryGroup title={m.gallery_tile_menu_kinds()} note={m.gallery_tile_menu_kinds_note()} />
+      {drawnSamples().map(({ name, subject, frames }) => (
+        <GalleryState key={name} label={name}>
+          <TileMenuDrawn subject={subject} frames={frames} />
+        </GalleryState>
+      ))}
+      <GalleryGroup title={m.gallery_tile_menu_finger()} note={m.gallery_tile_menu_finger_note()} />
+    </GallerySection>
+  )
+}
+
+const center = fixture('software-engineering')
+
+/** How many tiles are below a tile, all the way down. */
+function countBelow(tile: TileNode): number {
+  return [...Object.values(tile.branches ?? {}), ...Object.values(tile.leaves ?? {})].reduce(
+    (count, child) => count + 1 + countBelow(child),
+    0,
+  )
+}
+
+/** A tile's children as a picker draws them: a Branch trades places, a Leaf doesn't. */
+function frameOf(tile: TileNode): PickerFrame {
+  const members: PickerFrame['members'] = {}
+  for (const direction of directions) {
+    const child = tile.branches?.[direction] ?? tile.leaves?.[direction]
+    if (child !== undefined) members[direction] = { title: child.title, swaps: !child.leaf }
+  }
+  return { hub: tile.title, members }
+}
+
+/** Software Engineering's ring as a picker draws it, the reading list beside Principles. */
+const centerFrame: PickerFrame = {
+  hub: center.title,
+  members: Object.fromEntries(
+    Object.entries(ring).map(([direction, seated]) => [
+      direction,
+      { title: seated.tile.title, swaps: seated.look.kind === 'branch' },
+    ]),
+  ),
+}
+
+/** What an act is called, in its menu's words. */
+function said(act: Act, subject: Subject, frame: PickerFrame): string {
+  switch (act.verb) {
+    case 'add':
+      return m.tile_menu_add_at({
+        direction: directionName(act.at),
+        hub: subject.kind === 'slot' ? subject.parent : subject.title,
+      })
+    case 'move':
+      return m.tile_menu_move_to({ direction: directionName(act.at) })
+    case 'swap':
+      return m.tile_menu_swap_with({ title: frame.members[act.at]?.title ?? '' })
+    case 'copy-link':
+      return m.tile_menu_copy_link()
+    case 'copy-title':
+      return m.tile_menu_copy_title()
+    case 'copy-mention':
+      return m.tile_menu_copy_mention()
+    case 'move-elsewhere':
+      return m.tile_menu_move_elsewhere()
+    default:
+      return verbName(act.verb, subject)
+  }
+}
+
+/** What would happen, in a toast: the page acts on nothing. */
+const shown = (subject: Subject) => (act: Act) => {
+  const title = subject.kind === 'slot' ? m.tile_menu_free_slot() : subject.title
+  toast(m.gallery_tile_menu_did({ title, what: said(act, subject, centerFrame) }))
+}
+
+/** The canvas's units across the frame: three hexes wide, and a margin. */
+const frameWidth = 600
+const frameHeight = 560
+const frameRadius = 110
+const gap = 0.95
+
+/**
+ * Software Engineering and its ring, each tile in its menu and its card, each free slot in its menu:
+ * try a right click, a long press, ⇧F10, a key on a focused tile, a click or, under a finger, a tap.
+ */
+function ActingFrame() {
+  const svg = useRef<SVGSVGElement>(null)
+  const scale = useScale(svg, frameWidth)
+  const finger = useFinger()
+  const centerHex = { center: { x: 0, y: 0 }, radius: frameRadius }
+  const centerSubject: Subject = {
+    kind: 'branch',
+    title: center.title,
+    at: 'center',
+    parent: ulysse.title,
+  }
+  return (
+    <svg
+      ref={svg}
+      viewBox={`${String(-frameWidth / 2)} ${String(-frameHeight / 2)} ${String(frameWidth)} ${String(frameHeight)}`}
+      role="group"
+      aria-label={m.hex_canvas_label({ title: center.title })}
+      className="w-[min(37.5rem,calc(100vw-3rem))]"
+    >
+      <Acting
+        subject={centerSubject}
+        look={{ kind: 'branch', words: wordsOf(center) }}
+        tile={center}
+        frames={{ holds: centerFrame }}
+        hex={{ ...centerHex, radius: frameRadius * gap }}
+        place="center"
+        scale={scale}
+        finger={finger}
+      />
+      {directions.map((direction) => {
+        const hex = { ...neighbor(centerHex, direction), radius: frameRadius * gap }
+        const seated = ring[direction]
+        if (seated === undefined) {
+          const subject: Subject = { kind: 'slot', at: direction, parent: center.title }
+          const act = shown(subject)
+          return (
+            <TileMenu key={direction} subject={subject} onAct={act}>
+              {(hand) => (
+                <Slot
+                  hex={hex}
+                  hand={hand}
+                  action={{
+                    label: m.tile_menu_add_at({
+                      direction: directionName(direction),
+                      hub: center.title,
+                    }),
+                    onSelect: () => {
+                      act({ verb: 'new-tile' })
+                    },
+                  }}
+                />
+              )}
+            </TileMenu>
+          )
+        }
+        const { tile, look } = seated
+        // A ring too full is no tile, and has no menu; Software Engineering's has none.
+        if (look.kind === 'list') return null
+        return (
+          <Acting
+            key={tile.id}
+            subject={{
+              kind: look.kind,
+              title: tile.title,
+              at: direction,
+              parent: center.title,
+              below: countBelow(tile),
+            }}
+            look={look}
+            tile={tile}
+            frames={{ holds: frameOf(tile), standsIn: centerFrame }}
+            hex={hex}
+            scale={scale}
+            finger={finger}
+          />
+        )
+      })}
+    </svg>
+  )
+}
+
+interface ActingProps {
+  subject: Subject
+  look: TileLook
+  tile: TileNode
+  frames: { holds?: PickerFrame; standsIn?: PickerFrame }
+  hex: Hex
+  place?: 'center'
+  scale: number
+  finger: boolean
+}
+
+/** A tile of the frame in its menu and its card, its click or tap told in a toast. */
+function Acting({ subject, look, tile, frames, hex, place, scale, finger }: ActingProps) {
+  const act = shown(subject)
+  const click = clickOf(subject, finger)
+  const clash = look.kind === 'leaf' ? look.clash : undefined
+  return (
+    <TileMenu
+      subject={subject}
+      card={{
+        description: tile.preview,
+        ...(clash !== undefined && {
+          note: { text: m.tile_clash({ branch: clash }), tone: 'warning' as const },
+        }),
+      }}
+      frames={frames}
+      onAct={act}
+    >
+      {(hand) => (
+        <Tile
+          hex={hex}
+          {...look}
+          {...(place !== undefined && { place })}
+          scale={scale}
+          hand={hand}
+          {...(click !== undefined && {
+            action: {
+              label: m.gallery_tile_menu_click({
+                what: verbName(click, subject),
+                title: tile.title,
+              }),
+              onSelect: () => {
+                act({ verb: click })
+              },
+            },
+          })}
+        />
+      )}
+    </TileMenu>
+  )
+}
+
+interface DrawnSample {
+  name: string
+  subject: Subject
+  frames?: { holds?: PickerFrame; standsIn?: PickerFrame }
+}
+
+/** Each kind's menu, where it stands: read at render, in the page's language. */
+function drawnSamples(): DrawnSample[] {
+  const projects = fixture('projects')
+  const inRing = { parent: center.title }
+  return [
+    {
+      name: m.gallery_state_tile_menu_branch(),
+      subject: {
+        kind: 'branch',
+        title: projects.title,
+        at: 1,
+        below: countBelow(projects),
+        ...inRing,
+      },
+      frames: { holds: frameOf(projects), standsIn: centerFrame },
+    },
+    {
+      name: m.gallery_state_tile_menu_leaf(),
+      subject: { kind: 'leaf', title: fixture('notes').title, at: 3, ...inRing },
+      frames: { standsIn: centerFrame },
+    },
+    {
+      name: m.gallery_state_tile_menu_context(),
+      subject: { kind: 'context', title: fixture('ai-first').title, at: 2, ...inRing },
+      frames: { standsIn: centerFrame },
+    },
+    {
+      name: m.gallery_state_tile_menu_reference(),
+      subject: { kind: 'reference', title: fixture('principles').title, at: 5, ...inRing },
+    },
+    {
+      name: m.gallery_state_tile_menu_broken(),
+      subject: { kind: 'broken', title: m.tile_broken_title(), at: 6, ...inRing },
+    },
+    {
+      name: m.gallery_state_tile_menu_draft(),
+      subject: { kind: 'draft', title: fixture('obsidian').title, at: 4, ...inRing },
+    },
+    {
+      name: m.gallery_state_tile_menu_center(),
+      subject: { kind: 'branch', title: center.title, at: 'center', parent: ulysse.title },
+      frames: { holds: centerFrame },
+    },
+    {
+      name: m.gallery_state_tile_menu_root(),
+      subject: { kind: 'root', title: ulysse.title, at: 'center' },
+      frames: { holds: frameOf(ulysse) },
+    },
+    {
+      name: m.gallery_state_tile_menu_untitled(),
+      subject: { kind: 'untitled', title: m.tile_untitled(), at: 'center' },
+      frames: { holds: { hub: m.tile_untitled(), members: {} } },
+    },
+    {
+      name: m.gallery_state_tile_menu_slot(),
+      subject: { kind: 'slot', at: 5, parent: center.title },
+    },
+  ]
+}

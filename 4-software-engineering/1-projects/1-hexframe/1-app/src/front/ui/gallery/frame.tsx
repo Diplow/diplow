@@ -92,6 +92,16 @@ function PieceLinks({ label, names }: { label: string; names: readonly string[] 
   )
 }
 
+/** A row's heading inside a piece's section, the full width, and what the row shows. */
+export function GalleryGroup({ title, note }: { title: string; note: string }) {
+  return (
+    <div className="grid basis-full gap-1 border-t border-border pt-4 first:border-t-0 first:pt-0">
+      <h4 className="font-mono text-xs text-faint">{title}</h4>
+      <p className="max-w-prose text-sm text-muted-foreground">{note}</p>
+    </div>
+  )
+}
+
 export function GalleryState({ label, children }: { label: string; children: ReactNode }) {
   return (
     <figure className="grid max-w-full min-w-0 grid-cols-[minmax(0,1fr)] gap-2 [&>*]:max-w-full">

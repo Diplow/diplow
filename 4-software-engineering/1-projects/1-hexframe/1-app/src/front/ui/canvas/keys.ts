@@ -1,7 +1,8 @@
 // The keys of an SVG shape that stands for a button (`role="button"`), which the browser does not give
 // it: Enter acts as it goes down, once per press, not once per repeat; Space acts as it comes up, and
 // going down it only keeps the page from scrolling.
-import type { KeyboardEvent } from 'react'
+import type { Slot } from 'radix-ui'
+import type { ComponentProps, KeyboardEvent } from 'react'
 
 /** What a click on a shape that stands for a button does, and its name for a screen reader. */
 export interface Action {
@@ -31,3 +32,10 @@ export function buttonKeys({ onEnter, onSpace }: Press) {
     },
   }
 }
+
+/**
+ * What a trigger hands the shape it opens on, a menu's or a hover card's: its ref, its handlers and
+ * its attributes, composed with the shape's own by Radix's `Slot`, so both run. Radix types them for
+ * an HTML element; they hold on an SVG group alike.
+ */
+export type Hand = ComponentProps<typeof Slot.Root>

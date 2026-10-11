@@ -7,6 +7,7 @@
 // Its words are fitted to its size on screen (words.ts). It is an SVG group, drawn inside the
 // canvas's <svg> at its hex, and a button when its caller says what a click does.
 import { Link } from 'lucide-react'
+import { Slot } from 'radix-ui'
 import { useId, useLayoutEffect, useRef, useState, type CSSProperties, type RefObject } from 'react'
 import { cn } from 'cn'
 
@@ -20,7 +21,7 @@ import {
   type Hex,
   type Point,
 } from '../geometry/geometry'
-import { buttonKeys, type Action } from '../keys'
+import { buttonKeys, type Action, type Hand } from '../keys'
 import { BlurDef, FadeDef, points, Sweep, tint, type Fade } from './light'
 import { fitWords, linesThatFit } from '../geometry/words'
 
@@ -91,6 +92,8 @@ export type TileProps = TileLook & {
   action?: Action
   /** Screen px per unit of the hex, so the words fit the tile's size on screen. 1 by default. */
   scale?: number
+  /** What its menu and its hover card hand it; a tile handed them takes the focus, a button or not. */
+  hand?: Hand
 }
 
 /** What only one kind takes, read off any tile: none for the others. */
@@ -205,7 +208,7 @@ const opacities: Record<TilePlace, string> = {
 }
 
 export function Tile(props: TileProps) {
-  const { hex, kind, words, place = 'ring', write, held, motion, action, scale = 1 } = props
+  const { hex, kind, words, place = 'ring', write, held, motion, action, scale = 1, hand } = props
   const id = useId()
   const pending = write === 'pending'
   const sized = sizedOf(hex, scale)
@@ -233,34 +236,36 @@ export function Tile(props: TileProps) {
       )}
       style={motion && origin(motion.from, motion.order)}
     >
-      <g
-        {...(action === undefined
-          ? { role: 'img', 'aria-label': words.title }
-          : {
-              role: 'button',
-              tabIndex: 0,
-              'aria-label': action.label,
-              className: 'group cursor-pointer outline-none',
-              onClick: action.onSelect,
-              ...buttonKeys({ onEnter: action.onSelect, onSpace: action.onSelect }),
-            })}
-        aria-description={description}
-        aria-busy={pending || undefined}
-      >
+      <Slot.Root {...hand}>
         <g
-          className={cn(
-            'transition-[scale] duration-200 ease-glide motion-reduce:transition-none',
-            action !== undefined && 'group-active:scale-[.965]',
-            held === 'pressed' && 'scale-[.965]',
-          )}
-          style={origin(hex.center)}
+          {...(action === undefined
+            ? { role: 'img', 'aria-label': words.title, tabIndex: hand && 0 }
+            : {
+                role: 'button',
+                tabIndex: 0,
+                'aria-label': action.label,
+                className: 'group cursor-pointer outline-none',
+                onClick: action.onSelect,
+                ...buttonKeys({ onEnter: action.onSelect, onSpace: action.onSelect }),
+              })}
+          aria-description={description}
+          aria-busy={pending || undefined}
         >
-          <Light {...props} id={id} />
-          {foot === undefined ? null : <Foot hex={hex} kids={foot} scale={scale} />}
-          {pending ? <Sweep hex={hex} /> : null}
-          {sized === undefined ? null : <Words {...props} sized={sized} />}
+          <g
+            className={cn(
+              'transition-[scale] duration-200 ease-glide motion-reduce:transition-none',
+              action !== undefined && 'group-active:scale-[.965]',
+              held === 'pressed' && 'scale-[.965]',
+            )}
+            style={origin(hex.center)}
+          >
+            <Light {...props} id={id} />
+            {foot === undefined ? null : <Foot hex={hex} kids={foot} scale={scale} />}
+            {pending ? <Sweep hex={hex} /> : null}
+            {sized === undefined ? null : <Words {...props} sized={sized} />}
+          </g>
         </g>
-      </g>
+      </Slot.Root>
     </g>
   )
 }

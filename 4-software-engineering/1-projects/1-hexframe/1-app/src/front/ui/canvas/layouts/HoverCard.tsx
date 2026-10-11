@@ -1,8 +1,10 @@
 import { cn } from 'cn'
-import { HoverCard as Card } from 'radix-ui'
+import { HoverCard as Card, Slot } from 'radix-ui'
 import { useId, useRef, useState, type ReactElement } from 'react'
 
-interface HoverCardProps {
+import type { Hand } from '../keys'
+
+interface HoverCardProps extends Omit<Hand, 'children' | 'title'> {
   /** The tile it tells of; it must take a ref, focus and an `aria-describedby`, as a button does. */
   children: ReactElement
   /** Its kind and place, in a few words: "branch, east of Projects". */
@@ -23,9 +25,10 @@ const noteTones = {
 /**
  * What a tile cuts short, in full, beside it: after a moment under the pointer, at once on keyboard
  * focus. A finger can't hover, so under one it never opens: the long press opens the tile's menu,
- * whose header says the same.
+ * whose header says the same. What a trigger around it hands it, the tile's menu's, it hands the tile
+ * in turn, so one tile takes both.
  */
-export function HoverCard({ children, place, title, description, note }: HoverCardProps) {
+export function HoverCard({ children, place, title, description, note, ...hand }: HoverCardProps) {
   const [open, setOpen] = useState(false)
   // Pressed since the pointer came in: a click is no hover, so the card Radix would open after the
   // delay stays shut until the pointer leaves.
@@ -58,7 +61,7 @@ export function HoverCard({ children, place, title, description, note }: HoverCa
             pressed.current = false
           }}
         >
-          {children}
+          <Slot.Root {...hand}>{children}</Slot.Root>
         </Card.Trigger>
         <Card.Portal>
           <Card.Content

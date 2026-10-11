@@ -199,6 +199,7 @@
   --animate-bloom: bloom var(--duration-bloom) var(--ease-glide) both;
   --animate-fold: fold var(--duration-fold) var(--ease-glide) both;
   --animate-flare: flare 1.3s ease-out both;
+  --animate-ants: ants 0.9s linear infinite;
   /* Tailwind's sm, read on the screen's own width: `@wide:` and `@max-wide:`. */
   --container-wide: 40rem;
 
@@ -254,6 +255,11 @@
       opacity: 0;
     }
   }
+  @keyframes ants {
+    to {
+      stroke-dashoffset: -11;
+    }
+  }
 }
 
 /* A risen surface: a menu, a card, the dialog. Lit a little above the ground, lifted by its shadow,
@@ -284,6 +290,7 @@
     --duration-camera: 800ms;
     --duration-camera-level: 300ms;
     --duration-turn: 600ms;
+    --duration-glide: 600ms;
     --stagger-bloom: 40ms;
   }
   html {

@@ -31,7 +31,7 @@ export function branchOf(tile: TileNode): TileLook {
 }
 
 /** The ring of Software Engineering, seated as the shape seats it, the reading list beside Principles. */
-const ring: Partial<Record<Direction, { tile: TileNode; look: TileLook }>> = {
+export const ring: Partial<Record<Direction, { tile: TileNode; look: TileLook }>> = {
   1: { tile: fixture('projects'), look: branchOf(fixture('projects')) },
   2: { tile: fixture('principles'), look: branchOf(fixture('principles')) },
   3: { tile: fixture('notes'), look: { kind: 'leaf', words: wordsOf(fixture('notes')) } },

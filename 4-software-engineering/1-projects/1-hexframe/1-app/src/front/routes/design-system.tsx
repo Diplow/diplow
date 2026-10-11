@@ -22,6 +22,8 @@ import { CanvasAtomsGallery } from '#/front/ui/canvas/atoms/gallery'
 import { fixtureViews, ulysse } from '#/front/ui/canvas/fixtures'
 import { CanvasLayoutsGallery } from '#/front/ui/canvas/layouts/gallery'
 import { TileGallery } from '#/front/ui/canvas/tile/gallery'
+import { TileMenuGallery } from '#/front/ui/canvas/tile/menu/gallery'
+import { MovingGallery } from '#/front/ui/canvas/tile/moving/gallery'
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
 import { centerOn, readCanvasView, type CanvasView } from '#/front/ui/canvas/view/view'
 import { ChatAtomsGallery } from '#/front/ui/chat/atoms/gallery'
@@ -76,6 +78,8 @@ function DesignSystem() {
       <GalleryTier tier="canvas">
         <CanvasGallery view={view} onViewChange={onViewChange} />
         <TileGallery />
+        <TileMenuGallery />
+        <MovingGallery />
         <BreadcrumbGallery view={view} onViewChange={onViewChange} />
         <CanvasLayoutsGallery />
         <CanvasAtomsGallery />
