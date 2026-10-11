@@ -100,3 +100,22 @@ export function GalleryState({ label, children }: { label: string; children: Rea
     </figure>
   )
 }
+
+/** The conversation's column a chat specimen stands in, or, `phone`, a phone's width. */
+export function GalleryColumn({
+  phone = false,
+  children,
+}: {
+  phone?: boolean
+  children: ReactNode
+}) {
+  return (
+    <div
+      className={
+        phone ? 'grid w-[23.4375rem] max-w-full gap-4' : 'grid w-[37.5rem] max-w-full gap-4'
+      }
+    >
+      {children}
+    </div>
+  )
+}

@@ -60,6 +60,7 @@ export const valueNotes: readonly Note[] = [
   { tokens: ['animate-draw', 'animate-unfold', 'animate-rise'], note: m.tokens_motion_entrance },
   { tokens: ['animate-sweep'], note: m.tokens_motion_sweep },
   { tokens: ['animate-flare'], note: m.tokens_motion_flare },
+  { tokens: ['animate-ink'], note: m.tokens_motion_ink },
   { tokens: ['container-wide'], note: m.tokens_container_wide },
 ]
 

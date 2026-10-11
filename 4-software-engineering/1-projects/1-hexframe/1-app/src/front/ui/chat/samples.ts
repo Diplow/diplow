@@ -49,3 +49,8 @@ export function sampleWords(tiles: Tiles) {
 
 /** A moment, some minutes before now. */
 export const minutesAgo = (now: Date, minutes: number) => new Date(now.getTime() - minutes * 60_000)
+
+/** What a real page would send, said in a toast instead. */
+export const said = (what: string) => () => {
+  toast(what)
+}

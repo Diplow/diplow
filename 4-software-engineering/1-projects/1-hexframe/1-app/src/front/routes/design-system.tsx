@@ -6,6 +6,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
+import { previewLimit, type SystemTile } from '#/domains/mapping/entities'
 import { ChannelsGallery } from '#/front/client/gallery'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { useHelp } from '#/front/client/mapping/queries'
@@ -32,6 +33,12 @@ import { ChatEntriesGallery } from '#/front/ui/chat/entries/gallery'
 import { ChatLayoutsGallery } from '#/front/ui/chat/layouts/gallery'
 import { ChatTextGallery } from '#/front/ui/chat/text/gallery'
 import { Message } from '#/front/ui/chat/text/Message'
+import type { HelpNode } from '#/front/ui/chat/widgets/help/topics'
+import { HelpWidgetGallery } from '#/front/ui/chat/widgets/help/gallery'
+import { KeyWidgetGallery } from '#/front/ui/chat/widgets/keys/gallery'
+import { SignInWidgetGallery } from '#/front/ui/chat/widgets/sign-in/gallery'
+import { SignInWidget, type Access } from '#/front/ui/chat/widgets/sign-in/SignInWidget'
+import { TileWidgetGallery } from '#/front/ui/chat/widgets/tile/gallery'
 import {
   GallerySection,
   GalleryState,
@@ -70,6 +77,12 @@ function DesignSystem() {
         <ComposerGallery />
         <ChatTextGallery />
         <ChatEntriesGallery />
+        <TileWidgetGallery previewLimit={previewLimit} />
+        <KeyWidgetGallery />
+        <ReadBoundary>
+          <HelpGallery />
+        </ReadBoundary>
+        <SignInWidgetGallery />
         <ChatLayoutsGallery />
         <ChatAtomsGallery />
       </GalleryTier>
@@ -94,6 +107,26 @@ function DesignSystem() {
       <Tokens />
     </main>
   )
+}
+
+/** The help widget's section, on Help itself, read in the page's language as `/help` reads it. */
+function HelpGallery() {
+  const { data: help } = useHelp(getLocale())
+  if (help === undefined) return <Skeleton className="h-96 w-[37.5rem] max-w-full" />
+  return <HelpWidgetGallery help={helpNodeOf(help)} />
+}
+
+/** A Tile of Help and its Branches, as the help widget's specimens read them. */
+function helpNodeOf(tile: SystemTile): HelpNode {
+  return {
+    id: tile.id,
+    title: tile.title,
+    preview: tile.preview,
+    body: tile.body,
+    children: Object.fromEntries(
+      Object.entries(tile.branches).map(([place, child]) => [place, helpNodeOf(child)]),
+    ),
+  }
 }
 
 const principles = [
@@ -245,7 +278,7 @@ interface ScreenSpecimenProps {
 
 /**
  * One screen: a System and a conversation about it signed in, with the Composer at its foot, Help and
- * the sign-in widget's place signed out. The conversation's lines are the Chat's `Message`s, enough to
+ * the sign-in widget at its foot signed out. The conversation's lines are the Chat's `Message`s, enough to
  * show where they sit and how the curve scrolls them.
  */
 function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
@@ -276,7 +309,7 @@ function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
             }}
           />
         ) : (
-          <SignInPlace />
+          <SignInFoot />
         )
       }
     />
@@ -319,10 +352,6 @@ function scrollToFoot(element: HTMLElement | null) {
   if (messages) messages.scrollTop = messages.scrollHeight
 }
 
-/** A zone, the chat's foot: a solid fill with one fine line on top, warm for you. */
-const zone =
-  'relative flex min-h-[7.25rem] items-center gap-4 bg-card bg-linear-to-r from-transparent from-15% to-human/9 px-5 py-6 before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-linear-to-r before:from-transparent before:via-input before:via-45% before:to-input @wide:pr-(--screen-clear) @wide:pl-9'
-
 /**
  * The Composer at the chat's foot, its padding clear of the curve, which comes back to the chat's edge
  * there. What `/` and `@` list is the Composer's own section's.
@@ -346,17 +375,21 @@ function ScreenComposer({ onSend }: { onSend: (text: string) => void }) {
   )
 }
 
-/** Signed out, the chat's foot is where the sign-in widget sits (HEX-100), drawn here as its place. */
-function SignInPlace() {
+/** Signed out, the chat's foot is the sign-in widget, live: nothing reaches IAM from here. */
+function SignInFoot() {
+  const [access, setAccess] = useState<Access>('sign-in')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   return (
-    <div className={zone}>
-      <div className="grid gap-1">
-        <span className="font-agent text-xs text-agent">{m.gallery_screen_sign_in_kicker()}</span>
-        <span className="font-human text-xl">{m.gallery_screen_sign_in_title()}</span>
-        <span className="text-sm font-light text-muted-foreground">
-          {m.gallery_screen_sign_in_text()}
-        </span>
-      </div>
-    </div>
+    <SignInWidget
+      access={access}
+      onAccessChange={setAccess}
+      email={email}
+      onEmailChange={setEmail}
+      password={password}
+      onPasswordChange={setPassword}
+      onSubmit={() => undefined}
+      className="sm:px-4 @wide:pr-(--screen-clear) @wide:pl-9"
+    />
   )
 }

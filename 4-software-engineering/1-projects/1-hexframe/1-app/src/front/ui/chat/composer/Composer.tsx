@@ -10,6 +10,7 @@ import { type ReactNode, type Ref, useId, useRef, useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 
+import { zone } from '../layouts/zone'
 import { type Listing, List, optionId } from './List'
 
 /** A stretch of the field shown marked: the command it opens with, or a Tile it points at. */
@@ -92,7 +93,8 @@ export function Composer({
       noValidate
       aria-busy={waits}
       className={cn(
-        'relative grid gap-2 bg-[linear-gradient(90deg,transparent_15%,color-mix(in_oklab,var(--human)_9%,transparent)),var(--card)] px-4 pt-5 pb-3 before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-linear-to-r before:from-transparent before:via-input before:via-45% before:to-input sm:pr-6 sm:pl-9',
+        zone,
+        'grid gap-2 px-4 pt-5 pb-3 [--voice:var(--human)] sm:pr-6 sm:pl-9',
         className,
       )}
       onSubmit={(event) => {

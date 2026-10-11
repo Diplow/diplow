@@ -101,6 +101,14 @@ describe('the hand-off', () => {
     expect(piece.result.current).toMatchObject({ handOff: false, status: decided })
   })
 
+  it('keeps the focus inside when what held it goes, which blurs nothing, so it can be given back', () => {
+    const piece = render()
+    piece.focus()
+    expect(piece.result.current.focused).toBe(true)
+    piece.leaveForGood()
+    expect(piece.result.current.focused).toBe(false)
+  })
+
   it('starts afresh once open again, its old focus forgotten', () => {
     const piece = render()
     piece.focus()

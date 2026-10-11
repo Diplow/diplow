@@ -1,7 +1,10 @@
 // Where the news goes once what asked for a decision is decided and gives its surface back. Decided
 // from it, the focus it held moves to the receipt it leaves, so the keyboard never falls back to the
 // top of the page; decided elsewhere, in another tab or by a poll, the focus stays where the user is
-// and a status says the decision instead. A Proposal hands off so (`entries/Proposal.tsx`).
+// and a status says the decision instead. While it asks, the focus counts as inside until it leaves
+// for good, so a step of its own that removes what had the focus, which blurs nothing, finds it still
+// inside and gives it back. The Proposal and the widgets hand off so (`entries/Receipt.tsx`,
+// `UntilDecided`).
 import { type FocusEvent, useReducer } from 'react'
 
 /** Whether it still waits for a decision, or it is decided. */
@@ -57,6 +60,8 @@ export function useHandOffState(standing: Standing, decided: string) {
   return {
     handOff: state.handOff,
     status: state.status,
+    /** The focus is inside, or was when what held it went with a step of its own. */
+    focused: state.focused,
     onFocus: () => {
       dispatch({ type: 'focused' })
     },
