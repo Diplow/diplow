@@ -20,6 +20,7 @@ import { transactional } from '#/repositories/database/database'
 
 import { tileLink } from '../mapping/files/download'
 import { WaitUntil } from '../server/bus'
+import { systemRules } from '../server/mcp/tools'
 
 import type { DayAsked, MergedNavigation, SentMessage } from './assistant'
 import { conversationNow, shownTo } from './proposal/programs'
@@ -137,8 +138,7 @@ const turnStarted = (accountId: string, start: { message: string; location: stri
       (ended) => ended?.id,
     )
     const turn = yield* Assistant.startTurn(accountId, start)
-    const binding = { conversationId: turn.conversationId, turnId: turn.id }
-    const key = yield* Iam.issueTurnKey(binding, Assistant.deadline(turn))
+    const key = yield* Iam.issueTurnKey(turn.id, Assistant.deadline(turn))
     return { turn, key, ...(overdue !== undefined && { overdue }) }
   })
 
@@ -244,7 +244,7 @@ const agentStarted = (
       }),
       conversation: { entries, titles },
       onScreen,
-      help: Mapping.helpRoot,
+      systemRules,
     })
   })
 
@@ -311,9 +311,9 @@ export const stopTurn = forSession((accountId) =>
  */
 export const turnEvent = (line: string) =>
   Effect.gen(function* () {
-    const { account, turn } = yield* Iam.turnOnly
+    const { account, turnId } = yield* Iam.turnOnly
     const followed = yield* transactional(
-      revokingEnded(account.id, Agent.followTurn(account.id, turn.turnId, line), (result) =>
+      revokingEnded(account.id, Agent.followTurn(account.id, turnId, line), (result) =>
         result._tag === 'Followed' ? result.ended?.id : undefined,
       ),
     )
@@ -331,16 +331,16 @@ export const turnEvent = (line: string) =>
  */
 export const modelCall = (asked: Spending.AskedCall) =>
   Effect.gen(function* () {
-    const { account, turn } = yield* Iam.turnOnly
+    const { account, turnId } = yield* Iam.turnOnly
     const admission = yield* transactional(
-      revokingEnded(account.id, Spending.admitCall(account.id, turn.turnId, asked), (admitted) =>
-        admitted._tag === 'Limited' ? turn.turnId : undefined,
+      revokingEnded(account.id, Spending.admitCall(account.id, turnId, asked), (admitted) =>
+        admitted._tag === 'Limited' ? turnId : undefined,
       ),
     )
     if (admission._tag !== 'Admitted') return admission
     const settle = (charged: number) =>
       transactional(
-        Spending.settleCall(account.id, turn.turnId, { reserved: admission.reserved, charged }),
+        Spending.settleCall(account.id, turnId, { reserved: admission.reserved, charged }),
       )
     const { relayed, charged } = yield* Spending.relayCall(admission).pipe(
       Effect.onError(() => settle(0)),

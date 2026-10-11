@@ -106,11 +106,7 @@ describe('a Turn and its Key', () => {
 
     const secret = Redacted.value(key.secret)
     const proof = await value(run(await byBearer(secret), Iam.signedIn))
-    expect(proof.by).toEqual({
-      _tag: 'TurnKey',
-      conversationId: turn.conversationId,
-      turnId: turn.id,
-    })
+    expect(proof.by).toEqual({ _tag: 'TurnKey', turnId: turn.id })
 
     const client = await connect(bearer(secret))
     const edited = await call(client, 'edit_tile', {
@@ -180,7 +176,7 @@ describe('a Turn and its Key', () => {
 
   it('proves nothing past its expiry', async () => {
     const { signedIn } = await entitled
-    const turn = { conversationId: crypto.randomUUID(), turnId: crypto.randomUUID() }
+    const turn = crypto.randomUUID()
     const expired = await value(
       run(signedIn, transactional(Iam.issueTurnKey(turn, new Date(Date.now() - 1000)))),
     )

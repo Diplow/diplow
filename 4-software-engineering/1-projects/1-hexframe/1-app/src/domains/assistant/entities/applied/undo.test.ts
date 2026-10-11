@@ -2,12 +2,12 @@ import { Result } from 'effect'
 import { describe, expect, it } from 'vitest'
 
 import type { EntryContent } from '../entry'
-import { offeredNow, offersUndo, undoing, undoneEntry } from './undo'
+import { offeredNow, offeringEntry, offersUndo, undoing, undoneEntry } from './undo'
 
 // What the Assistant applied, undone once, on Entries and rows made by hand: when a Turn's is offered,
-// the Entries that offer an Undo and what they say once undone, and whether what was applied may be
-// undone. That the service
-// keeps and undoes it is `../../proposals.test.ts`'s.
+// an accepted Proposal's Entry once it offers its Undo, the Entries that offer an Undo and what they
+// say once undone, and whether what was applied may be undone. That the service keeps and undoes it
+// is `../../proposals.test.ts`'s.
 
 const proposal = (
   fate: Extract<EntryContent, { _tag: 'Proposal' }>['fate'],
@@ -25,6 +25,25 @@ const applied = (undone: boolean): EntryContent => ({
   turn: 't-1',
   changes: 2,
   undone,
+})
+
+describe('offeringEntry, an accepted Proposal offering its Undo', () => {
+  it('says an accepted Proposal may be undone, once', () => {
+    expect(offeringEntry(proposal('accepted'))).toEqual(proposal('accepted', false))
+    expect(offersUndo(proposal('accepted', false))).toBe(true)
+  })
+
+  it('leaves an open or discarded Proposal, one offering already, and any other Entry', () => {
+    for (const entry of [
+      proposal('open'),
+      proposal('discarded'),
+      proposal('accepted', false),
+      proposal('accepted', true),
+      applied(false),
+    ]) {
+      expect(offeringEntry(entry)).toBeUndefined()
+    }
+  })
 })
 
 describe('undoneEntry and offersUndo, the Entries that offer an Undo', () => {

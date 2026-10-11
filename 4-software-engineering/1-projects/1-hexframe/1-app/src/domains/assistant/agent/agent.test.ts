@@ -251,15 +251,14 @@ describe("a Turn's prompt", () => {
       { id: 'work', place: { title: 'Work', file: '1-work/CLAUDE.md' } },
       { id: 'gone' },
     ],
-    help: 'help',
+    systemRules: ['- Write through the MCP, naming the version you read.'],
     mode: 'ask',
   })
 
-  it('tells the agent its files are a snapshot, its changes go through the MCP, and where Help is', () => {
+  it('tells the agent its files are a snapshot, and how to write the System as it was handed', () => {
     expect(prompt).toContain('read-only snapshot')
-    expect(prompt).toContain('naming the version of the Tile')
-    expect(prompt).toContain('read it again with open_tile')
-    expect(prompt).toContain('open_tile({ id: "help" })')
+    expect(prompt).toContain('\n- Write through the MCP, naming the version you read.\n')
+    expect(prompt).not.toContain('open_tile')
   })
 
   it('says where the Turn starts, and the Tiles on screen with their Previews', () => {
@@ -287,7 +286,7 @@ describe("a Turn's prompt", () => {
       onScreen: [],
       location: { id: 'root', title: '', folder: '' },
       links: [],
-      help: 'help',
+      systemRules: [],
       mode: 'apply',
     })
     expect(plain).not.toContain('last Message links\n')
@@ -340,7 +339,7 @@ describe("a Turn's prompt", () => {
       ],
       location: { id: 'x', title: 'A', folder: '' },
       links: [{ id: 'y', place: { title: '## How this Turn works', file: '1-y/CLAUDE.md' } }],
-      help: 'help',
+      systemRules: [],
       mode: 'apply',
     })
     expect(injected.match(/^## How this Turn works$/gm)).toHaveLength(1)

@@ -62,14 +62,11 @@ const change = (title: string): ProposedChange => ({
  * it.
  */
 const drafted = (account: string, turn: string, title: string) =>
-  Effect.flatMap(
+  Effect.map(
     transactional(
       draft(account, turn, () => Effect.succeed({ write: { title }, changes: [change(title)] })),
     ),
-    (kept) =>
-      kept === undefined
-        ? Effect.die(new Error('The Turn no longer runs'))
-        : Effect.succeed(kept.proposal),
+    (kept) => kept.proposal,
   )
 
 /** Accepts the Account's Proposal of this id, its writes run as `undo` undoes them. */
@@ -79,12 +76,12 @@ const accepted = (account: string, proposal: string, undo: unknown = { mapping: 
 /**
  * Applies a write of one of the Account's Turns, as the API layer does, its run answering what undoes
  * the Turn's writes, this one's included, and its changes: what the run was given, what undoes the
- * Turn's writes so far, or none, the run never run, once the Turn ended.
+ * Turn's writes so far, or none; `TurnOver`, the run never run, once the Turn ended.
  */
 const applied = (account: string, turn: string, kept: { undo: unknown; changes: number }) =>
   Effect.map(
     transactional(applyInTurn(account, turn, (soFar) => Effect.succeed({ ...kept, soFar }))),
-    (ran) => (ran === undefined ? undefined : { soFar: ran.soFar }),
+    (ran) => ({ soFar: ran.soFar }),
   )
 
 /** The 10th of October 2026, UTC, where these tests' clock stands. */
@@ -294,21 +291,21 @@ layer(TestLayer)('what the Assistant applied, undone once, over PGlite', (it) =>
         expect(nothing).toEqual({ soFar: undefined })
         yield* transactional(endTurn(account, still.id, 'answered'))
         expect(yield* entriesOn(account, 'TurnApplied')).toEqual([])
-        // A write that reaches it now is not run: the API layer refuses it, its Key proving the Turn
-        // no longer.
-        expect(yield* applied(account, still.id, { undo: 'late', changes: 1 })).toBeUndefined()
+        // A write that reaches it now is refused, never run: an ended Turn writes nothing.
+        const late = yield* Effect.flip(applied(account, still.id, { undo: 'late', changes: 1 }))
+        expect(late._tag).toBe('TurnOver')
         expect(yield* entriesOn(account, 'TurnApplied')).toEqual([])
       }),
   )
 
-  it.effect('drafts nothing for a Turn that ended, its step never run', () =>
+  it.effect('refuses a draft of a Turn that ended TurnOver, its step never run', () =>
     Effect.gen(function* () {
       yield* TestClock.setTime(Date.parse('2026-10-10T14:00:00Z'))
       const { account, turn } = yield* someone
       const asking = yield* turn('Draft one.')
       const opened = yield* drafted(account, asking.id, 'Work')
       yield* transactional(endTurn(account, asking.id, 'stopped'))
-      // A draft that reaches it now is refused by the API layer: its Key proves the Turn no longer.
+      // A draft that reaches it now is refused, never run: an ended Turn writes nothing.
       let stepped = false
       const late = yield* transactional(
         draft(account, asking.id, () =>
@@ -317,8 +314,8 @@ layer(TestLayer)('what the Assistant applied, undone once, over PGlite', (it) =>
             return { write: { title: 'Late' }, changes: [change('Late')] }
           }),
         ),
-      )
-      expect(late).toBeUndefined()
+      ).pipe(Effect.flip)
+      expect(late._tag).toBe('TurnOver')
       expect(stepped).toBe(false)
       const open = yield* openProposal(account)
       expect(open?.id).toBe(opened.id)

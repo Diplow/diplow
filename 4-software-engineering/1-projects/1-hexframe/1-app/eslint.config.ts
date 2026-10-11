@@ -60,6 +60,21 @@ const effectRuns = [
 // A `.ts` in an import path is for what Node runs without a bundler: `scripts/migrate.ts` and the one
 // file of the app it reaches through a relative import. Everywhere else in src/ the bundler resolves.
 const migrationsFile = 'src/repositories/database/migrations.ts'
+const tsImports = {
+  regex: '\\.tsx?$',
+  message: `No .ts or .tsx in an import path under src/: the bundler resolves it. Only ${migrationsFile}, which Node runs as it is, needs one.`,
+}
+
+// A domain never opens a transaction: the API layer does, with `transactional` (src/api/CLAUDE.md,
+// "This layer owns transactions"). A domain's test may, as the API layer would, and so may the
+// `testing.ts` its tests share, which is test code by its name.
+const domainTests = ['src/domains/**/*.test.ts', 'src/domains/**/testing.ts']
+const transactionalImport = {
+  regex: 'repositories/database/database$',
+  importNames: ['transactional'],
+  message:
+    'A domain never opens a transaction: the API layer does, with transactional. Only a test, or the testing.ts its tests share, opens one.',
+}
 // The lint set from STACK.md. A rule may be disabled on the spot, but only with a `-- reason` that says why.
 export default defineConfig(
   globalIgnores(['paraglide/', 'src/routeTree.gen.ts', '.output/', '.nitro/', '.tanstack/']),
@@ -101,19 +116,12 @@ export default defineConfig(
   {
     files: ['src/**'],
     ignores: [migrationsFile],
-    rules: {
-      'no-restricted-imports': [
-        'error',
-        {
-          patterns: [
-            {
-              regex: '\\.tsx?$',
-              message: `No .ts or .tsx in an import path under src/: the bundler resolves it. Only ${migrationsFile}, which Node runs as it is, needs one.`,
-            },
-          ],
-        },
-      ],
-    },
+    rules: { 'no-restricted-imports': ['error', { patterns: [tsImports] }] },
+  },
+  {
+    files: ['src/domains/**'],
+    ignores: domainTests,
+    rules: { 'no-restricted-imports': ['error', { patterns: [tsImports, transactionalImport] }] },
   },
   {
     files: [helper],

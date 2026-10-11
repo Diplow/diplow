@@ -38,6 +38,7 @@ const table: readonly Entry[] = [
   { tag: 'AllowanceSpent', message: m.error_assistant_allowance_spent },
   { tag: 'ProposalClosed', message: m.error_assistant_proposal_closed },
   { tag: 'NothingToUndo', message: m.error_assistant_nothing_to_undo },
+  { tag: 'TurnOver', message: m.error_assistant_turn_over },
   { tag: 'TileNotFound', message: m.error_mapping_tile_not_found },
   { tag: 'TitleMissing', message: m.error_mapping_title_missing },
   { tag: 'PreviewTooLong', message: m.error_mapping_preview_too_long },

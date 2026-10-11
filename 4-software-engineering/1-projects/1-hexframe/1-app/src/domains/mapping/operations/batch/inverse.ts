@@ -5,8 +5,8 @@
 // reverse order of the events, each naming the Version it finds once the ones before it ran over what
 // the batch left, the first ones the Versions the batch left, so `decide` refuses an undo over a Tile
 // changed since (`TileChanged`); and an undo deletes a Tile its batch made only while nothing lies
-// below it, which only another writer could have put there since (`undone`). A batch that grows, an
-// applied Turn's writes, keeps one undo of all of it (`extended`). Pure
+// below it, which only another writer could have put there since (`undone`). A batch that runs in
+// several goes keeps one undo of all of it (`extended`). Pure
 // (`hexframe-app-assistant/decisions.md#DEC-16`).
 import { Result, Schema, Struct } from 'effect'
 

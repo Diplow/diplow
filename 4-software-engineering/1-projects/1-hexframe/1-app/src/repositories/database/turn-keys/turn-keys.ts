@@ -1,24 +1,22 @@
 // IAM's Turn's Keys: the `turn_key` table (../schema.ts), which Better Auth does not keep. A key is a
-// random secret, `hft_` and 43 characters, kept as its SHA-256 alone, bound to a user and to the
-// Conversation and the Turn it was issued for, until it expires or is revoked. The secret leaves this
-// folder once, in what `issue` answers.
+// random secret, `hft_` and 43 characters, kept as its SHA-256 alone, bound to a user and to the Turn
+// it was issued for, by its id, until it expires or is revoked. The secret leaves this folder once, in
+// what `issue` answers.
 import { and, eq, gt, lte } from 'drizzle-orm'
 import { Context, Effect, Encoding, Layer } from 'effect'
 
 import { Database, InTransaction } from '../database'
 import { turnKey, user } from '../schema'
 
-/** What a Turn's Key is bound to: its user, and the Conversation and the Turn it was issued for. */
+/** What a Turn's Key is bound to: its user, and the Turn it was issued for, by its id. */
 export interface TurnKeyBinding {
   readonly accountId: string
-  readonly conversationId: string
   readonly turnId: string
 }
 
-/** Whose Turn's Key a secret is, and what it is bound to: the user, by id and email. */
+/** Whose Turn's Key a secret is, and what it is bound to: the user, by id and email, and the Turn. */
 export interface ProvenTurnKey {
   readonly user: { readonly id: string; readonly email: string }
-  readonly conversationId: string
   readonly turnId: string
 }
 
@@ -26,7 +24,7 @@ export class TurnKeys extends Context.Service<
   TurnKeys,
   {
     /**
-     * Issues a key bound to a user, a Conversation and a Turn, proving it until `expiresAt`, and
+     * Issues a key bound to a user and a Turn, proving it until `expiresAt`, and
      * answers its secret: the one time it is known. The user's keys expired by `now` go meanwhile.
      * Inside a transaction.
      */
@@ -91,19 +89,14 @@ const make = Effect.gen(function* () {
   const proven = (secret: string, now: Date) =>
     Effect.gen(function* () {
       const [found] = yield* database
-        .select({
-          id: user.id,
-          email: user.email,
-          conversationId: turnKey.conversationId,
-          turnId: turnKey.turnId,
-        })
+        .select({ id: user.id, email: user.email, turnId: turnKey.turnId })
         .from(turnKey)
         .innerJoin(user, eq(turnKey.accountId, user.id))
         .where(and(eq(turnKey.hash, yield* hashOf(secret)), gt(turnKey.expiresAt, now)))
         .pipe(Effect.orDie)
       if (found === undefined) return undefined
-      const { id, email, conversationId, turnId } = found
-      return { user: { id, email }, conversationId, turnId }
+      const { id, email, turnId } = found
+      return { user: { id, email }, turnId }
     })
 
   const revoke = (accountId: string, turnId: string) =>

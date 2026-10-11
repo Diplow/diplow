@@ -331,8 +331,8 @@ export const applied = pgTable('applied', {
 
 /**
  * A Turn's Key, the one credential a Turn's sandbox holds: `hash` is its secret's SHA-256, never the
- * secret. Bound to its Account, which deleting deletes it with, and to the Conversation and the Turn
- * it was issued for, which have no key here: IAM ignores Assistant. It proves nothing past
+ * secret. Bound to its Account, which deleting deletes it with, and to the Turn it was issued for, by
+ * its id, which has no key here: IAM ignores Assistant. It proves nothing past
  * `expires_at`, and revoking it deletes it.
  */
 export const turnKey = pgTable(
@@ -342,7 +342,6 @@ export const turnKey = pgTable(
     accountId: text('account_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
-    conversationId: text('conversation_id').notNull(),
     turnId: text('turn_id').notNull().unique(),
     hash: text('hash').notNull().unique(),
     expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),

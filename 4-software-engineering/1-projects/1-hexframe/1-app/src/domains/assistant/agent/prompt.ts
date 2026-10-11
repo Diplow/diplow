@@ -1,10 +1,10 @@
 // What a Turn's agent is told, appended to Claude Code's own system prompt: what it must know of the
-// Turn (its files are a read-only snapshot, every change goes through the MCP naming the Version it
-// read, a Conflict means read again, in ask its writes are drafted into a Proposal, Help is a Tile it
-// can open, `@[<id>]` links a Tile), where it starts, the Tiles the user's Message links and where
-// each lives now, the Tiles the user has on screen, and today's latest Entries of the Conversation,
-// its only memory. Every ancestor's
-// `CLAUDE.md` loads by itself from its working folder, so the System's own words are not repeated.
+// Turn (its files are a read-only snapshot, in ask its writes are drafted into a Proposal, `@[<id>]`
+// links a Tile), how the System is read and written, as the API layer words it from the MCP's tools
+// and hands it in, where it starts, the Tiles the user's Message links and where each lives now, the
+// Tiles the user has on screen, and today's latest Entries of the Conversation, its only memory. Every
+// ancestor's `CLAUDE.md` loads by itself from its working folder, so the System's own words are not
+// repeated.
 // What the user's System and timeline say is quoted as data, each text one JSON string in a fenced
 // block, so no Title, Preview or Message reads as one of the Turn's rules. It holds no secret, ever:
 // the Turn's Key never reaches it. Pure.
@@ -38,8 +38,8 @@ export interface PromptOf {
   readonly location: { readonly id: string; readonly title: string; readonly folder: string }
   /** The Tiles the Message answered links, in the order it links them. */
   readonly links: ReadonlyArray<Linked>
-  /** The id Help opens at. */
-  readonly help: string
+  /** Lines of the Turn's rules, as the API layer words them: Assistant names no tool of its own. */
+  readonly systemRules: ReadonlyArray<string>
   /** The Mode the Turn started in: whether its writes are drafted into a Proposal or applied. */
   readonly mode: Mode
 }
@@ -140,8 +140,8 @@ const modes: Record<Mode, string> = {
   ask:
     '- This Turn is in ask Mode: your writes change nothing in the System yet. Each is drafted into ' +
     'one Proposal, which the user accepts whole or discards; your reads through the MCP and the ' +
-    'files around you show the Proposal over the System, so write as you otherwise would, naming ' +
-    'the versions you read there. Say in your answer that it waits for the user.',
+    'files around you show the Proposal over the System, so write as you otherwise would. Say in ' +
+    'your answer that it waits for the user.',
   apply: '- This Turn is in apply Mode: your writes change the System as they come.',
 }
 
@@ -152,29 +152,22 @@ export function promptOf({
   onScreen,
   location,
   links,
-  help,
+  systemRules,
   mode,
 }: PromptOf): string {
   const folder = location.folder === '' ? 'the System folder itself' : quoted(location.folder)
   return [
     "# You are hexframe's Assistant",
     '',
-    "You build and change the user's System on their behalf: a hierarchy of Tiles, each a Title, a " +
-      'Preview and a Body, whose Root is the user, where what comes first matters most. You answer ' +
-      "the user's last Message, below, then stop.",
+    "You build and change the user's System on their behalf. You answer the user's last Message, " +
+      'below, then stop.',
     '',
     '## How this Turn works',
     '',
     '- The files around you are a read-only snapshot of the System as this Turn started: read them ' +
-      'to find your way, never write them. Each Tile is a folder or a file, its id and version in ' +
-      'its frontmatter.',
-    "- Every change goes through the hexframe MCP's tools (create_tile, edit_tile, move_tile, " +
-      'swap_tiles, delete_tile, create_reference, delete_reference), naming the version of the Tile ' +
-      'you read. What changed since the Turn started, read it through the MCP too (open_tile, map).',
-    '- A refusal saying the Tile changed (a Conflict) means someone wrote it since you read it: ' +
-      'read it again with open_tile, then decide again.',
+      'to find your way, never write them.',
+    ...systemRules,
     modes[mode],
-    `- Help, hexframe's own guide, opens at open_tile({ id: "${help}" }).`,
     '- In a Message, `@[<id>]` links a Tile by its id. A Message opening with a link starts you in ' +
       "that Tile's folder; every Tile the user's last Message links is listed below with its path.",
     '- Say what you did in a few sentences once you are done: the user reads your answer beside ' +

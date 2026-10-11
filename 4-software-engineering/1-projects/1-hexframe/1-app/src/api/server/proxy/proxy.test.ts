@@ -121,9 +121,11 @@ describe('the model proxy', () => {
     expect(bad.response.status).toBe(401)
     expect(bad.request.bodyUsed).toBe(false)
 
-    const binding = { conversationId: crypto.randomUUID(), turnId: crypto.randomUUID() }
     const expired = await value(
-      run(signedIn, transactional(Iam.issueTurnKey(binding, new Date(Date.now() - 1000)))),
+      run(
+        signedIn,
+        transactional(Iam.issueTurnKey(crypto.randomUUID(), new Date(Date.now() - 1000))),
+      ),
     )
     const late = await ask({ secret: Redacted.value(expired.secret) })
     expect(late.response.status).toBe(401)

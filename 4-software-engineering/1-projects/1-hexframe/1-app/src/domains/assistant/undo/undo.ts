@@ -9,18 +9,19 @@ import { Clock, Effect } from 'effect'
 
 import { Applied } from '#/repositories/database/conversations/applied'
 
-import { type Applying, lockConversation, rewritten, turnRuns } from '../assistant'
+import { type Applying, lockConversation, rewritten, writingTurn } from '../assistant'
 import { undoing, undoneEntry } from '../entities'
 
 /**
  * Runs a write one of the Account's Turns in apply made, in the one order it holds in: the
  * Conversation locked until the transaction ends, as the Turn's end locks it to offer the Undo, so
  * the write lands before the offer or finds the Turn over; what undoes the Turn's writes so far read,
- * none before its first, its row locked; then, the Turn still running, `run` given it, which runs the
- * write and answers what undoes them all, this one's included, and the changes it made (Mapping's, in
- * the API layer); and that kept with the Turn, its changes added to theirs, for the Entry that offers
- * it once the Turn ended. Answers what `run` answered; none, `run` never run, once the Turn ended. What
- * `run` refuses is refused, nothing kept. In the transaction the API layer opened.
+ * none before its first, its row locked; then the Turn read, `TurnOver` once it ended, `run` never
+ * run (`writingTurn`); then `run` given what undoes them so far, which runs the write and answers what
+ * undoes them all, this one's included, and the changes it made (Mapping's, in the API layer); and
+ * that kept with the Turn, its changes added to theirs, for the Entry that offers it once the Turn
+ * ended. Answers what `run` answered. What `run` refuses is refused, nothing kept. In the transaction
+ * the API layer opened.
  */
 export const applyInTurn = <A extends Applying, E, R>(
   accountId: string,
@@ -30,7 +31,7 @@ export const applyInTurn = <A extends Applying, E, R>(
   Effect.gen(function* () {
     yield* lockConversation(accountId)
     const kept = yield* Applied.use((applied) => applied.locked(accountId, turnId))
-    if (!(yield* turnRuns(accountId, turnId))) return undefined
+    yield* writingTurn(accountId, turnId)
     const ran = yield* run(kept?.undo)
     const changes = (kept?.changes ?? 0) + ran.changes
     yield* Applied.use((applied) => applied.keep(accountId, turnId, { undo: ran.undo, changes }))

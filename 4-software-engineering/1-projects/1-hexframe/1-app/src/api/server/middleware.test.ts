@@ -98,10 +98,9 @@ describe("a Turn's Key at a server function", () => {
     request = new Request('http://localhost/_serverFn', {
       headers: { cookie: cookies.map((cookie) => cookie.split(';')[0]).join('; ') },
     })
-    const turn = { conversationId: 'conversation-1', turnId: 'turn-1' }
     const issued = await run(
       await passedOn(),
-      transactional(issueTurnKey(turn, new Date(Date.now() + 60_000))),
+      transactional(issueTurnKey('turn-1', new Date(Date.now() + 60_000))),
     )
     if (!issued.ok) throw new Error('A Session issues a Turn’s Key')
 

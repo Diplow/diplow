@@ -229,7 +229,10 @@ describe('a Turn in ask', () => {
       byTurn,
       Proposal.written(late, () => Effect.die(new Error('A Turn’s write ran as its own'))),
     )
-    expect(written).toMatchObject({ ok: false, failure: { _tag: 'SignedOut' } })
+    expect(written).toMatchObject({
+      ok: false,
+      failure: { _tag: 'TurnOver', kind: 'Unauthenticated' },
+    })
     expect(await proposals()).toEqual(before)
     expect(await value(run(signedIn, Assistant.latest))).not.toHaveProperty('proposal')
   })
@@ -267,6 +270,37 @@ describe('a Turn in apply, and an Account’s Key', () => {
     await call(byKey, 'create_tile', { parent: asking.root.id, slot: 5, ...content('Keyed') })
     await byKey.close()
     expect(await titlesHeld()).toContain('Keyed')
+  })
+
+  it('refuses a write its Key proved just before the Turn in apply ended, running nothing', async () => {
+    const { signedIn, accountId } = await someone
+    await value(run(signedIn, Proposal.setMode({ mode: 'apply' })))
+    const { root } = await value(run(signedIn, Mapping.system))
+    const { turn, key } = await value(run(signedIn, sentTurn('Write one more.', root.id)))
+    const exchange = {
+      url: 'http://localhost/mcp',
+      headers: new Headers(bearer(Redacted.value(key.secret))),
+      setCookies: () => undefined,
+    }
+    // Its Key proven, then the Turn stopped before the write runs.
+    const byTurn: StartContext = {
+      ...signedIn,
+      exchange,
+      session: noSession,
+      key: await provenKey(exchange),
+    }
+    await value(run(signedIn, Assistant.endTurn(accountId, turn.id, 'stopped')))
+    const late = new CreateTile({ parent: root.id, slot: 6, ...content('Too late') })
+    const written = await run(
+      byTurn,
+      Proposal.written(late, () => Effect.die(new Error('A Turn’s write ran as its own'))),
+    )
+    expect(written).toMatchObject({
+      ok: false,
+      failure: { _tag: 'TurnOver', kind: 'Unauthenticated' },
+    })
+    expect(await titlesHeld()).not.toContain('Too late')
+    await value(run(signedIn, Proposal.setMode({ mode: 'ask' })))
   })
 
   it('switches the Mode from a Session only', async () => {
