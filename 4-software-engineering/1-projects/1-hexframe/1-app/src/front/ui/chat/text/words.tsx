@@ -2,7 +2,7 @@
 // takes its text this way, so a tile reads the same in a Message, an event, a Proposal's change and a
 // receipt. A sentence keeps its order in each language: its message is read with a mark in each
 // tile's place, then cut at the marks and woven with the tiles (`weave`).
-import { Mention, type MentionProps } from './Mention'
+import { Mention, type MentionProps, type Voice } from './Mention'
 
 /** One piece of a text: words, a tile named, or who acted, by name, in the first ink. */
 export type Word = string | { readonly tile: MentionProps } | { readonly name: string }
@@ -11,7 +11,7 @@ export type Word = string | { readonly tile: MentionProps } | { readonly name: s
 export type Words = readonly Word[]
 
 /** A text drawn in the voice that says it: in the user's words, a tile's hex is amber. */
-export function Said({ words, voice }: { words: Words; voice?: 'human' | 'agent' }) {
+export function Said({ words, voice }: { words: Words; voice?: Voice }) {
   return words.map((word, index) => {
     // The pieces of one text, never reordered: their place is their key.
     if (typeof word === 'string') return word

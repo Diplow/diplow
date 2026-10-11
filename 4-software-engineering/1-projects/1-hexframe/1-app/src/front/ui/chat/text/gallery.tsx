@@ -9,7 +9,7 @@ import { Button } from '../../atoms/controls/button'
 import { toast } from '../../atoms/Toaster'
 import { GallerySection, GalleryState } from '../../gallery/frame'
 import { sampleTiles, sampleWords } from '../samples'
-import { Mention } from './Mention'
+import { Mention, type Voice } from './Mention'
 import { Message } from './Message'
 import { Thinking } from './Thinking'
 import type { Word, Words } from './words'
@@ -96,7 +96,7 @@ export function ChatTextGallery() {
 }
 
 /** A tile alone, set in the voice that names it. */
-function Voiced({ voice, children }: { voice: 'human' | 'agent'; children: ReactNode }) {
+function Voiced({ voice, children }: { voice: Voice; children: ReactNode }) {
   return (
     <p
       className={

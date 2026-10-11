@@ -7,6 +7,9 @@ import { m } from '#/paraglide/messages'
 
 import { HexMark } from '../atoms/hex'
 
+/** Whose words they are: the chat's two voices, the user's and the agent's. */
+export type Voice = 'human' | 'agent'
+
 /** What a named tile is to the reader: there, the agent's draft, or deleted since. */
 type Standing = 'live' | 'draft' | 'gone'
 
@@ -19,7 +22,7 @@ export interface MentionProps {
 
 interface Voiced extends MentionProps {
   /** Whose words name it: in the user's, its hex is amber. */
-  voice?: 'human' | 'agent' | undefined
+  voice?: Voice | undefined
 }
 
 export function Mention({ title, standing = 'live', onCenter, voice }: Voiced) {
