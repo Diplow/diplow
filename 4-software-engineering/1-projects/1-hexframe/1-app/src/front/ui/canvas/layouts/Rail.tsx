@@ -8,7 +8,7 @@ import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 
-import { ThemeToggle } from '../../atoms/controls/ThemeToggle'
+import { ThemeToggle } from '../atoms/ThemeToggle'
 
 interface RailStep {
   id: string

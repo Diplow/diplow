@@ -21,6 +21,7 @@ import { flushSync } from 'react-dom'
 import { m } from '#/paraglide/messages'
 
 import { cutAlongCurve, reach } from './curve'
+import { keptAtFoot } from './state/latest'
 import { Scrollbar } from './Scrollbar'
 
 /** A side of the screen; on a phone, the one in front. */
@@ -55,6 +56,26 @@ const cut = cutAlongCurve('var(--screen-edge)')
 /** How far the curve bows past the chat's edge, which the chat's column has to hold. */
 const bulge = `${String(reach)}px`
 
+/** What the chat's column holds past the bulge, as `--screen-margin`, so the curve's line isn't cut. */
+const margin = '0.375rem'
+
+/**
+ * How far the chat's foot keeps its content in from the column's right, as `--screen-clear`: back
+ * inside the chat's width, past the 1.125rem to the edge, the bulge and the column's margin, with the
+ * margin again to spare, so nothing reaches the curve. A slot's ground runs on under it to the cut.
+ */
+const clear =
+  'calc(var(--screen-edge) - var(--screen-chat) + var(--screen-bulge) + 2 * var(--screen-margin))'
+
+/**
+ * The seam above the composer while the canvas is in front, as `--screen-seam`: on a phone the canvas
+ * ends above it, whichever side is in front, so it never moves as the screen turns.
+ */
+const seam = '2.75rem'
+
+/** Where the canvas's corner sits, in from the screen's top right: here, on Help and on its specimens. */
+export const cornerPlace = 'absolute top-[1.375rem] right-[1.375rem]'
+
 export function Screen({
   canvas,
   corner,
@@ -67,11 +88,9 @@ export function Screen({
   const screen = useRef<HTMLDivElement>(null)
   const scroller = useRef<HTMLDivElement>(null)
   const content = useRef<HTMLDivElement>(null)
-  // The conversation opens at its foot, the latest last.
-  useEffect(() => {
-    const messages = scroller.current
-    if (messages !== null) messages.scrollTop = messages.scrollHeight
-  }, [])
+  const foot = useRef<HTMLDivElement>(null)
+  useLatestShown(scroller, content, foot)
+  useComposerHeight(screen, foot)
   const chatInFront = front === 'chat'
   // A move made from a seam hands the focus to the seam on the other side, once the screen has
   // turned, so the keyboard can go back rather than lose the seam that went away. Should the caller
@@ -94,6 +113,9 @@ export function Screen({
           '--screen-chat': chatWidth,
           '--screen-edge': edge,
           '--screen-bulge': bulge,
+          '--screen-margin': margin,
+          '--screen-clear': clear,
+          '--screen-seam': seam,
           '--screen-cut': cut,
         } as CSSProperties
       }
@@ -104,7 +126,7 @@ export function Screen({
         aria-label={m.screen_chat()}
         className={cn(
           'pointer-events-none absolute inset-0 z-20 flex flex-col',
-          '@wide:pointer-events-auto @wide:right-auto @wide:w-[calc(var(--screen-edge)+var(--screen-bulge)+0.375rem)] @wide:[clip-path:var(--screen-cut)]',
+          '@wide:pointer-events-auto @wide:right-auto @wide:w-[calc(var(--screen-edge)+var(--screen-bulge)+var(--screen-margin))] @wide:[clip-path:var(--screen-cut)]',
         )}
       >
         <div
@@ -136,30 +158,104 @@ export function Screen({
               label={m.screen_show_chat()}
               towards="up"
               onMove={move('chat')}
-              className="h-11 items-center bg-linear-to-b from-transparent to-background/70"
+              className="h-(--screen-seam) items-center bg-linear-to-b from-transparent to-background/70"
             />
           )}
-          {composer}
+          <div ref={foot}>{composer}</div>
         </div>
       </section>
       <Scrollbar screen={screen} scroller={scroller} content={content} />
-      <div
-        className={cn(
-          'absolute top-[1.375rem] right-[1.375rem] z-30',
-          chatInFront && '@max-wide:hidden',
-        )}
-      >
-        {corner}
-      </div>
+      <div className={cn(cornerPlace, 'z-30', chatInFront && '@max-wide:hidden')}>{corner}</div>
       <section
         aria-label={m.screen_canvas()}
         inert={phone && chatInFront}
-        className="absolute inset-0 z-0 flex @wide:left-(--screen-edge)"
+        className="absolute inset-0 z-0 flex @max-wide:bottom-[calc(var(--screen-composer,0px)+var(--screen-seam))] @wide:left-(--screen-edge)"
       >
         {canvas}
       </section>
     </div>
   )
+}
+
+/** How close to its foot the conversation still reads as at its foot, in px. */
+const atFoot = 2
+
+/**
+ * The conversation opens at its foot, the latest last, and stays there as it grows, its lines read
+ * after the screen is drawn included, and as it shrinks, the foot below it growing, while the reader
+ * hasn't left it. The reader leaves it by scrolling up, or by acting in a conversation too short to
+ * scroll, asking for an earlier day included: what they act on stays where it is. Writing at the
+ * chat's foot brings it back, so what they send shows.
+ */
+function useLatestShown(
+  scroller: RefObject<HTMLElement | null>,
+  content: RefObject<HTMLElement | null>,
+  foot: RefObject<HTMLElement | null>,
+) {
+  useEffect(() => {
+    const messages = scroller.current
+    const lines = content.current
+    const composer = foot.current
+    if (messages === null || lines === null || composer === null) return undefined
+    let pinned = true
+    const toFoot = () => {
+      messages.scrollTop = messages.scrollHeight
+    }
+    const atItsFoot = () =>
+      messages.scrollHeight - messages.scrollTop - messages.clientHeight <= atFoot
+    const onScroll = () => {
+      pinned = keptAtFoot({ kind: 'scrolled', atFoot: atItsFoot() })
+    }
+    const onAct = () => {
+      const scrolls = messages.scrollHeight > messages.clientHeight
+      pinned = keptAtFoot({ kind: 'acted', atFoot: atItsFoot(), scrolls })
+    }
+    const onWrite = () => {
+      pinned = keptAtFoot({ kind: 'wrote' })
+    }
+    const resized = new ResizeObserver(() => {
+      if (pinned) toFoot()
+    })
+    toFoot()
+    messages.addEventListener('scroll', onScroll, { passive: true })
+    messages.addEventListener('pointerdown', onAct, { capture: true, passive: true })
+    messages.addEventListener('keydown', onAct, { capture: true, passive: true })
+    composer.addEventListener('pointerdown', onWrite, { capture: true, passive: true })
+    composer.addEventListener('keydown', onWrite, { capture: true, passive: true })
+    resized.observe(lines)
+    resized.observe(messages)
+    return () => {
+      messages.removeEventListener('scroll', onScroll)
+      messages.removeEventListener('pointerdown', onAct, { capture: true })
+      messages.removeEventListener('keydown', onAct, { capture: true })
+      composer.removeEventListener('pointerdown', onWrite, { capture: true })
+      composer.removeEventListener('keydown', onWrite, { capture: true })
+      resized.disconnect()
+    }
+  }, [scroller, content, foot])
+}
+
+/**
+ * The composer's height, as `--screen-composer` on the screen: on a phone the canvas ends above it and
+ * the seam, so what the canvas holds at its foot is never under the composer kept there, nor the seam. Wide, the composer sits in
+ * the chat's column and the canvas runs to the screen's foot.
+ */
+function useComposerHeight(
+  screen: RefObject<HTMLElement | null>,
+  composer: RefObject<HTMLElement | null>,
+) {
+  useEffect(() => {
+    const element = screen.current
+    const zone = composer.current
+    if (element === null || zone === null) return undefined
+    const resized = new ResizeObserver(() => {
+      element.style.setProperty('--screen-composer', `${String(zone.offsetHeight)}px`)
+    })
+    resized.observe(zone)
+    return () => {
+      resized.disconnect()
+    }
+  }, [screen, composer])
 }
 
 /**

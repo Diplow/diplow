@@ -1,15 +1,18 @@
-// Home: the signed-in Account's System, on the canvas, the centered Tile's ancestors above it and its
-// card below, and the chat beside it, over the Account's Conversation. The view and the change under
-// way live in the search params, so a link shows what its sender saw; a Tile's form opens as a drawer.
-// Every gesture that changes the view is published on the client bus as a navigation fact, which the
-// Conversation's navigation sender merges and records once something else enters the timeline, a
-// Message the chat posts included, or the page is hidden. Signed out, the guard sends the visit to
-// sign-in, then back here. The page follows the System and the Conversation, so a write it did not
-// make, an agent's, a Key's or another tab's, shows on the canvas and in the timeline once the tab
-// regains focus, and every 2 s while a Turn runs. A Message is sent from the view: its center, where
-// the Turn answering it starts unless it opens with a link to a Tile, and the Tiles on screen; a
-// Message's link centers the canvas on its Tile, a gesture as any other.
+// Home: the one screen, signed in. The Account's System on the canvas, the centered Tile's card at its
+// foot, where you are in the canvas's corner, the theme at its head, and the chat, over the Account's
+// Conversation, its composer at its foot: wide, side by side along the curve; on a phone, one side in
+// front, the chat when the page opens, the seam turning it, and a Message's link bringing the canvas
+// forward. The view and the change under way live in the search params, so a link shows what its
+// sender saw; a Tile's form opens as a drawer. Every gesture that changes the view is published on the
+// client bus as a navigation fact, which the Conversation's navigation sender merges and records once
+// something else enters the timeline, a Message the chat posts included, or the page is hidden. Signed
+// out, the guard sends the visit to sign-in, then back here. The page follows the System and the
+// Conversation, so a write it did not make, an agent's, a Key's or another tab's, shows on the canvas
+// and in the timeline once the tab regains focus, and every 2 s while a Turn runs. A Message is sent
+// from the view: its center, where the Turn answering it starts unless it opens with a link to a Tile,
+// and the Tiles on screen; a Message's link centers the canvas on its Tile, a gesture as any other.
 import { createFileRoute } from '@tanstack/react-router'
+import { useMemo } from 'react'
 
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { signedInOnly } from '#/front/client/iam/guard'
@@ -17,7 +20,7 @@ import { useFollowLatest } from '#/front/client/assistant/follow'
 import { useSystem } from '#/front/client/mapping/queries'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { publish } from '#/front/features/bus'
-import { Chat } from '#/front/features/conversation/Chat'
+import { ChatComposer, ChatTimeline } from '#/front/features/conversation/Chat'
 import { useNavigationSender } from '#/front/features/conversation/state/useNavigationSender'
 import { Navigated } from '#/front/features/facts'
 import {
@@ -32,6 +35,8 @@ import { TileActions } from '#/front/features/system/TileActions'
 import { canvasTree, onScreen } from '#/front/features/system/tree'
 import { m } from '#/paraglide/messages'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
+import { Screen } from '#/front/ui/layouts/screen/Screen'
+import { useScreenState } from '#/front/ui/layouts/screen/state/useScreenState'
 import { centerOn, type CanvasView, type ViewAction } from '#/front/ui/canvas/view/view'
 
 export const Route = createFileRoute('/')({
@@ -49,37 +54,62 @@ function Home() {
   const { turn, mode } = useFollowLatest()
   // The chat's Messages go after the navigation they follow, from the view they were sent from.
   const { postMessage } = useNavigationSender()
-  // Outside both boundaries, the System read without throwing for what the chat sends: a failed read
-  // shows on the canvas, in its own boundary, and leaves the chat up, waiting to send.
+  // On a phone, the side in front.
+  const { state: screen, actions: turning } = useScreenState()
+  // Outside every boundary, the System read without throwing for what the chat sends and the corner
+  // shows: a failed read shows on the canvas, in its own boundary, and leaves the chat up, waiting to
+  // send, and the theme at the corner's head.
   const { data } = useSystem({ throwing: false })
+  const root = data?.root
+  const tree = useMemo(() => (root === undefined ? undefined : canvasTree(root)), [root])
   const onSend =
-    data === undefined
+    tree === undefined
       ? undefined
       : (text: string) => {
-          postMessage({ text, view: onScreen(canvasTree(data.root), viewOf(search)) })
+          postMessage({ text, view: onScreen(tree, viewOf(search)) })
         }
+  const onViewChange = (view: CanvasView, action: ViewAction) => {
+    onSearchChange(withView(search, view))
+    publish(new Navigated(action))
+  }
+  // A Message's link crosses to the canvas: centered on its Tile, the canvas comes forward.
   const onCenter = (tile: string) => {
-    if (data === undefined) return
-    onSearchChange(withView(search, centerOn(canvasTree(data.root), tile)))
-    publish(new Navigated({ gesture: 'center', tile }))
+    if (tree === undefined) return
+    onViewChange(centerOn(tree, tile), { gesture: 'center', tile })
+    turning.cross()
   }
   return (
-    <main className="grid gap-4 px-4 pb-4 lg:h-[calc(100dvh-4.25rem)] lg:grid-cols-[minmax(0,1fr)_24rem]">
+    <main className="h-[calc(100dvh-var(--header))]">
       <h1 className="sr-only">{m.system_title()}</h1>
-      <div className="grid min-h-0 content-start gap-3 lg:grid-rows-[auto_minmax(0,1fr)_auto] lg:content-stretch">
-        <ReadBoundary>
-          <SystemPage search={search} onSearchChange={onSearchChange} />
-        </ReadBoundary>
-      </div>
-      <ReadBoundary>
-        <Chat
-          onSend={onSend}
-          turn={turn}
-          mode={mode}
-          onCenter={onCenter}
-          className="h-[32rem] lg:h-auto lg:min-h-0"
-        />
-      </ReadBoundary>
+      <Screen
+        front={screen.front}
+        onFrontChange={turning.turn}
+        className="size-full"
+        canvas={
+          <ReadBoundary>
+            <SystemPage
+              search={search}
+              onSearchChange={onSearchChange}
+              onViewChange={onViewChange}
+            />
+          </ReadBoundary>
+        }
+        corner={<Breadcrumb system={tree} view={viewOf(search)} onViewChange={onViewChange} />}
+        messages={
+          <ReadBoundary>
+            <ChatTimeline onCenter={onCenter} />
+          </ReadBoundary>
+        }
+        composer={
+          // On the card's ground, as the composer's proposal is, so the canvas behind it never shows
+          // through; clear of the curve, as the screen says.
+          <div className="bg-card @wide:pr-(--screen-clear)">
+            <ReadBoundary>
+              <ChatComposer onSend={onSend} turn={turn} mode={mode} />
+            </ReadBoundary>
+          </div>
+        }
+      />
     </main>
   )
 }
@@ -87,39 +117,37 @@ function Home() {
 interface SystemPageProps {
   search: SystemSearch
   onSearchChange: (change: SearchChange) => void
+  onViewChange: (view: CanvasView, action: ViewAction) => void
 }
 
-function SystemPage({ search, onSearchChange }: SystemPageProps) {
+/** The canvas side: the System, and the centered Tile's card at its foot. */
+function SystemPage({ search, onSearchChange, onViewChange }: SystemPageProps) {
   const { data } = useSystem()
   if (data === undefined) {
     return (
-      <>
-        <Skeleton className="h-5 w-48" />
-        <Skeleton className="h-[60dvh] lg:h-full" />
+      <div className={side}>
+        <Skeleton className="min-h-0 flex-1" />
         <Skeleton className="h-32" />
-      </>
+      </div>
     )
   }
   const { system, root } = data
   const tree = canvasTree(root)
-  const onViewChange = (view: CanvasView, action: ViewAction) => {
-    onSearchChange(withView(search, view))
-    publish(new Navigated(action))
-  }
   return (
-    <>
-      <Breadcrumb system={tree} view={viewOf(search)} onViewChange={onViewChange} />
+    <div className={side}>
       <System
         system={system}
         tree={tree}
         search={search}
         onViewChange={onViewChange}
         onSearchChange={onSearchChange}
-        className="h-[70dvh] min-h-0 lg:h-full"
+        className="min-h-0 flex-1"
       />
-      <div className="lg:max-h-[30dvh] lg:overflow-y-auto">
+      <div className="max-h-[30%] flex-none overflow-y-auto">
         <TileActions system={root} tree={tree} search={search} onSearchChange={onSearchChange} />
       </div>
-    </>
+    </div>
   )
 }
+
+const side = 'flex min-w-0 flex-1 flex-col gap-3 p-4'

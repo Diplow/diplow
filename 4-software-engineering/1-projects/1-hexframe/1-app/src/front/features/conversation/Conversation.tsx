@@ -1,9 +1,10 @@
-// The Conversation beside the canvas: its timeline a day at a time, newest at the bottom beside the
-// input, a button above the oldest day shown reading the day before, a Message's link centering the
-// canvas on its Tile, a Proposal accepted or discarded where it stands, and the input the user writes
-// to the agent in, `@`ing their Tiles, beside the Mode and its switch, which says so when the Account
-// may not use the Assistant. While a Turn runs, the input waits, and above it the agent's step shows
-// live beside a Stop.
+// The Conversation in two parts: its timeline a day at a time, newest at the bottom, a button above the
+// oldest day shown reading the day before, a Message's link centering the canvas on its Tile, a
+// Proposal accepted or discarded where it stands; and its foot, the input the user writes to the agent
+// in, `@`ing their Tiles, beside the Mode and its switch, which says so when the Account may not use the
+// Assistant. While a Turn runs, the input waits, and above it the agent's step shows live beside a Stop.
+// Home's screen takes the two apart, the timeline beside the curve and the foot at the chat's foot;
+// `Conversation` lays them out together in a card, for /design-system.
 import { cn } from 'cn'
 import { Loader2, MessagesSquare, Square } from 'lucide-react'
 
@@ -38,25 +39,13 @@ interface Earlier {
   pending: boolean
 }
 
-interface ConversationProps {
+interface TimelineProps {
   /** The days shown, oldest first, each with its Entries oldest first. */
   days: readonly Day[]
-  /** A Message the user sent, trimmed and never empty, each Tile it `@`s linked by its id. */
-  onSend: (text: string) => void
-  /** The Tiles the user may `@`. */
-  tiles: ReadonlyArray<Mentionable>
   /** Centers the canvas on a Tile a Message links; none where there is no canvas. */
   onCenter?: ((tile: string) => void) | undefined
-  /** The Account may not use the Assistant: its Messages are kept, and no agent answers them. */
-  unavailable?: boolean
-  /** The Turn running, its agent's step now if any, and how to stop it: the input waits meanwhile. */
-  running?: Running | undefined
-  /** Nothing can be sent yet, the page still reading what a Message is sent from. */
-  waiting?: boolean
   /** An earlier day holding an Entry, when there is one. */
   earlier?: Earlier | undefined
-  /** The Conversation's Mode and its switch; none before it is read. */
-  mode?: ModeChoice | undefined
   /**
    * Accepts or discards the open Proposal, or undoes what an accepted one or a Turn applied; none
    * where nobody decides.
@@ -65,21 +54,25 @@ interface ConversationProps {
   className?: string
 }
 
-export function Conversation({
-  days,
-  onSend,
-  tiles,
-  onCenter,
-  unavailable = false,
-  running,
-  waiting = false,
-  earlier,
-  mode,
-  decide,
-  className,
-}: ConversationProps) {
-  const now = new Date()
-  const shown = days.filter((day) => day.entries.length > 0)
+interface FootProps {
+  /** A Message the user sent, trimmed and never empty, each Tile it `@`s linked by its id. */
+  onSend: (text: string) => void
+  /** The Tiles the user may `@`. */
+  tiles: ReadonlyArray<Mentionable>
+  /** The Account may not use the Assistant: its Messages are kept, and no agent answers them. */
+  unavailable?: boolean
+  /** The Turn running, its agent's step now if any, and how to stop it: the input waits meanwhile. */
+  running?: Running | undefined
+  /** Nothing can be sent yet, the page still reading what a Message is sent from. */
+  waiting?: boolean
+  /** The Conversation's Mode and its switch; none before it is read. */
+  mode?: ModeChoice | undefined
+}
+
+type ConversationProps = Omit<TimelineProps, 'className'> & FootProps & { className?: string }
+
+/** The timeline above its foot, in a card of its own, which scrolls to its newest entry. */
+export function Conversation({ className, ...props }: ConversationProps) {
   return (
     <section
       aria-label={m.conversation_label()}
@@ -90,31 +83,59 @@ export function Conversation({
     >
       {/* Laid out in reverse, so the timeline opens scrolled to its newest entry. */}
       <div className="flex min-h-0 flex-1 flex-col-reverse overflow-y-auto">
-        <div className="grid gap-6 p-4">
-          {earlier !== undefined && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="justify-self-center"
-              disabled={earlier.pending}
-              onClick={earlier.show}
-            >
-              {m.conversation_earlier()}
-            </Button>
-          )}
-          {shown.length === 0 && earlier === undefined ? (
-            <EmptyState
-              icon={<MessagesSquare />}
-              title={m.conversation_empty_title()}
-              description={m.conversation_empty_description()}
-            />
-          ) : (
-            shown.map((day) => (
-              <DayOfEntries key={day.key} day={day} now={now} onCenter={onCenter} decide={decide} />
-            ))
-          )}
-        </div>
+        <Timeline {...props} className="p-4" />
       </div>
+      <ConversationFoot {...props} />
+    </section>
+  )
+}
+
+/**
+ * The days, oldest first, the button reading the day before above them, or the empty state; no
+ * scroller of its own, so the one screen scrolls it beside its curve.
+ */
+export function Timeline({ days, onCenter, earlier, decide, className }: TimelineProps) {
+  const now = new Date()
+  const shown = days.filter((day) => day.entries.length > 0)
+  return (
+    <div className={cn('grid gap-6', className)}>
+      {earlier !== undefined && (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="justify-self-center"
+          disabled={earlier.pending}
+          onClick={earlier.show}
+        >
+          {m.conversation_earlier()}
+        </Button>
+      )}
+      {shown.length === 0 && earlier === undefined ? (
+        <EmptyState
+          icon={<MessagesSquare />}
+          title={m.conversation_empty_title()}
+          description={m.conversation_empty_description()}
+        />
+      ) : (
+        shown.map((day) => (
+          <DayOfEntries key={day.key} day={day} now={now} onCenter={onCenter} decide={decide} />
+        ))
+      )}
+    </div>
+  )
+}
+
+/** The input, and above it, while a Turn runs, the agent's step beside a Stop. */
+export function ConversationFoot({
+  onSend,
+  tiles,
+  unavailable = false,
+  running,
+  waiting = false,
+  mode,
+}: FootProps) {
+  return (
+    <>
       {running !== undefined && <Working running={running} />}
       <Composer
         onSend={onSend}
@@ -123,7 +144,7 @@ export function Conversation({
         busy={running !== undefined || waiting}
         mode={mode}
       />
-    </section>
+    </>
   )
 }
 
@@ -135,8 +156,8 @@ function DayOfEntries({
 }: {
   day: Day
   now: Date
-  onCenter: ConversationProps['onCenter']
-  decide: ConversationProps['decide']
+  onCenter: TimelineProps['onCenter']
+  decide: TimelineProps['decide']
 }) {
   return (
     <section className="grid gap-3">
