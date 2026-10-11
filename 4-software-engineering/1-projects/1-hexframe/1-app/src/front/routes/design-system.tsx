@@ -5,7 +5,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 
 import { ChannelsGallery } from '#/front/client/gallery'
-import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
+import { BreadcrumbGallery } from '#/front/features/breadcrumb/gallery'
 import { ConversationGallery } from '#/front/features/conversation/gallery'
 import { m } from '#/paraglide/messages'
 import { AtomsGallery } from '#/front/ui/atoms/gallery'
@@ -15,13 +15,7 @@ import { fixtureViews, ulysse } from '#/front/ui/canvas/fixtures'
 import { CanvasLayoutsGallery } from '#/front/ui/canvas/layouts/gallery'
 import { centerOn, readCanvasView, type CanvasView } from '#/front/ui/canvas/view/view'
 import { ChatAtomsGallery } from '#/front/ui/chat/atoms/gallery'
-import {
-  GallerySection,
-  GalleryState,
-  GalleryTier,
-  tierAnchor,
-  tierTitle,
-} from '#/front/ui/gallery/frame'
+import { GallerySection, GalleryTier, tierAnchor, tierTitle } from '#/front/ui/gallery/frame'
 import { anchorOf, filled, tiers } from '#/front/ui/gallery/pieces'
 import { Tokens } from '#/front/ui/gallery/Tokens'
 import { LayoutsGallery } from '#/front/ui/layouts/gallery'
@@ -52,11 +46,7 @@ function DesignSystem() {
       </GalleryTier>
       <GalleryTier tier="canvas">
         <CanvasGallery view={view} onViewChange={onViewChange} />
-        <GallerySection name="Breadcrumb">
-          <GalleryState label={m.gallery_state_follows_the_canvas()}>
-            <Breadcrumb system={ulysse} view={view} onViewChange={onViewChange} />
-          </GalleryState>
-        </GallerySection>
+        <BreadcrumbGallery view={view} onViewChange={onViewChange} />
         <CanvasLayoutsGallery />
         <CanvasAtomsGallery />
       </GalleryTier>

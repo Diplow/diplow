@@ -10,7 +10,7 @@ preview: >-
 ---
 # layouts
 
-The layouts no single side owns, each a shell with slots that decides where things go and how they fold on a phone: those the Chat and the Canvas share, and those whose only users are pages the one screen retires (`DataTable`, `PageHeader`), which stay where they fit until their last user goes. A layout one side alone uses lives in that side's `layouts/` ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]], "Rules") and comes here once the other side uses it too. A layout imports atoms, the seams and the files at `ui/`'s root, never a side (dependency-cruiser, `no-layouts-importing-up`).
+The layouts no single side owns, each a shell with slots that decides where things go and how they fold on a phone: those the Chat and the Canvas share, and those whose only users are pages the one screen retires (`DataTable`, `PageHeader`), which stay where they fit until their last user goes. A layout one side alone uses lives in that side's `layouts/` ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]], "Rules") and comes here once the other side uses it too. A layout imports atoms, the seams, the files at `ui/`'s root and, in its `gallery.tsx`, the page's frame in `gallery/`, never a side (dependency-cruiser, `no-layouts-importing-up`).
 
 | Path | Holds |
 |---|---|

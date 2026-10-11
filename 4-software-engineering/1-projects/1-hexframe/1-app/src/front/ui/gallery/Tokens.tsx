@@ -1,6 +1,6 @@
-// The tokens, last on /design-system: every one the stylesheet declares, read from it by `tokens.ts`,
-// grouped with what it is for. `tokens.test.ts` checks every token has its group, so none shows without
-// a word; one that had none would still show, last, under "no note yet".
+// The tokens, last on /design-system: every one the stylesheet declares, read from it by
+// `stylesheet.ts`, grouped with what it is for. `tokens.test.ts` checks every token has its group, so
+// none shows without a word; one that had none would still show, last, under "no note yet".
 import type { ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'

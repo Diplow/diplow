@@ -11,7 +11,7 @@ preview: >-
 ---
 # atoms
 
-The atoms no single side owns, each a control that knows nothing of hexframe: those the Chat and the Canvas share, and those no side uses yet (`DropdownMenu`, and `ThemeToggle` and `LocaleSwitch`, the header's), which stay where they fit until a side takes them. An atom one side alone uses lives in that side's `atoms/` ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]], "Rules") and comes here once the other side uses it too. An atom imports only other atoms, the seams and the files at `ui/`'s root (dependency-cruiser, `no-atoms-importing-up`).
+The atoms no single side owns, each a control that knows nothing of hexframe: those the Chat and the Canvas share, and those no side uses yet (`DropdownMenu`, and `ThemeToggle` and `LocaleSwitch`, the header's), which stay where they fit until a side takes them. An atom one side alone uses lives in that side's `atoms/` ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]], "Rules") and comes here once the other side uses it too. An atom imports only other atoms, the seams, the files at `ui/`'s root and, in its `gallery.tsx`, the page's frame in `gallery/` (dependency-cruiser, `no-atoms-importing-up`).
 
 | Path | Holds |
 |---|---|
