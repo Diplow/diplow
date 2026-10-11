@@ -14,15 +14,10 @@ import { Message } from './Message'
 import { Thinking } from './Thinking'
 import type { Word, Words } from './words'
 
-/** A click on a sample tile: on home the canvas centers on it; here a toast says so. */
-const centered = (title: string) => {
-  toast(m.gallery_sample_chat_centered({ title }))
-}
-
 const column = 'grid w-[32rem] max-w-full gap-4'
 
 export function ChatTextGallery() {
-  const tiles = sampleTiles(centered)
+  const tiles = sampleTiles()
   const words = sampleWords(tiles)
   return (
     <>

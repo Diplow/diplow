@@ -1,6 +1,7 @@
 // The chat's text in pieces: plain words, a tile named, and who acted, named. Every piece of the chat
 // takes its text this way, so a tile reads the same in a Message, an event, a Proposal's change and a
-// receipt, and a sentence keeps its order in each language.
+// receipt. A sentence keeps its order in each language: its message is read with a mark in each
+// tile's place, then cut at the marks and woven with the tiles (`said`).
 import { Mention, type MentionProps } from './Mention'
 
 /** One piece of a text: words, a tile named, or who acted, by name, in the first ink. */
@@ -28,3 +29,29 @@ export const plainOf = (words: Words): string =>
   words
     .map((word) => (typeof word === 'string' ? word : 'tile' in word ? word.tile.title : word.name))
     .join('')
+
+/** Where the marks a sentence is read with begin: Unicode's private use area, which no message holds. */
+const firstMark = 0xe000
+const marks = /([\uE000-\uF8FF])/
+
+/**
+ * A message about tiles as `Words`: `said(m.x, { tile })` reads the message with a mark in place of
+ * `{tile}`, then weaves the tile in where the mark landed, wherever the language put it.
+ */
+export function said<Names extends string>(
+  sentence: (inputs: Record<Names, string>) => string,
+  pieces: Record<Names, Word>,
+): Words {
+  const names = Object.keys(pieces) as Names[]
+  const inputs = Object.fromEntries(
+    names.map((name, index) => [name, String.fromCharCode(firstMark + index)]),
+  ) as Record<Names, string>
+  return sentence(inputs)
+    .split(marks)
+    .filter((part) => part !== '')
+    .map((part) => {
+      if (!marks.test(part)) return part
+      const name = names[part.charCodeAt(0) - firstMark]
+      return name === undefined ? part : pieces[name]
+    })
+}

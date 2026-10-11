@@ -12,17 +12,14 @@ import { Button } from '../../atoms/controls/button'
 import { Skeleton } from '../../atoms/skeleton'
 import { toast } from '../../atoms/Toaster'
 import { GallerySection, GalleryState } from '../../gallery/frame'
-import { minutesAgo, said, sampleTiles, sampleWords } from '../samples'
+import { minutesAgo, sampleTiles, sampleWords } from '../samples'
+import { said } from '../text/words'
 import { Message } from '../text/Message'
 import { Thinking } from '../text/Thinking'
 import { DaySplit } from './DaySplit'
 import { Events, type Folded, type Happened } from './Events'
-import { type Change, Proposal } from './Proposal'
+import { type Change, type Fate, Proposal, type ProposalProps } from './Proposal'
 import { Receipt } from './Receipt'
-
-const centered = (title: string) => {
-  toast(m.gallery_sample_chat_centered({ title }))
-}
 
 const column = 'grid w-[32rem] max-w-full gap-5'
 
@@ -108,7 +105,7 @@ export function ChatEntriesGallery() {
 
 /** The samples the entries are drawn on, their times counted back from now. */
 function samplesAt(now: Date) {
-  const tiles = sampleTiles(centered)
+  const tiles = sampleTiles()
   const words = sampleWords(tiles)
   const { engineering, projects, tooling, site, designSystem, shared, toolingDraft, oldSite } =
     tiles
@@ -231,11 +228,11 @@ function Specimen({
   )
 }
 
-type Sample = Omit<Parameters<typeof Proposal>[0], 'fate' | 'undone'>
+type Sample = Omit<ProposalProps, 'fate' | 'undone'>
 
 /** A Proposal the page decides for itself: accepted, discarded or undone here, then offered again. */
 function Deciding({ proposal }: { proposal: Sample }) {
-  const [fate, setFate] = useState<'open' | 'accepted' | 'discarded'>('open')
+  const [fate, setFate] = useState<Fate>('open')
   const [undone, setUndone] = useState(false)
   return (
     <>

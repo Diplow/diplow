@@ -2,8 +2,9 @@
 // top and below, tinted violet toward the curve, since it is the agent's. Its hex, a kicker saying who
 // proposes, the title in Newsreader, then each change on a line, its icon in violet, and the actions:
 // Accept, in the agent's voice, Discard at the far end, asked first. Once decided the zone gives its
-// surface back and leaves its receipt, with the Undo while one is possible; the focus moves to it, so
-// the keyboard never falls back to the top of the page.
+// surface back and leaves its receipt, with the Undo while one is possible. Decided from the zone, the
+// focus moves to the receipt, so the keyboard never falls back to the top of the page; decided
+// elsewhere, in another tab or by a poll, the focus stays where the user is and a status says it.
 import { cn } from 'cn'
 import type { LucideIcon } from 'lucide-react'
 import { ListChecks } from 'lucide-react'
@@ -24,9 +25,9 @@ export interface Change {
 }
 
 /** How a Proposal stands: waiting for the user, accepted, or discarded. */
-type Fate = 'open' | 'accepted' | 'discarded'
+export type Fate = 'open' | 'accepted' | 'discarded'
 
-interface ProposalProps {
+export interface ProposalProps {
   /** What it does, in a few words. */
   title: string
   /** One line under the title, quieter. */
@@ -46,37 +47,49 @@ interface ProposalProps {
 
 export function Proposal(props: ProposalProps) {
   const { title, fate, at, undone = false, onUndo, pending = false } = props
-  // Decided from the zone, the zone and the action that had the focus are gone: the receipt takes it.
-  // Decided elsewhere, in another tab, the focus stays where the user is.
+  const decided =
+    fate === 'accepted' ? m.chat_proposal_accepted({ title }) : m.chat_proposal_discarded({ title })
+  // Whether the focus is in the zone, whether the receipt takes it, and what the status says, each set
+  // as the fate moves: the receipt takes the focus the zone had, else the status says the decision.
+  const [shown, setShown] = useState(fate)
   const [focused, setFocused] = useState(false)
-  if (fate === 'open') {
-    return (
-      <Zone
-        {...props}
-        onFocus={() => {
-          setFocused(true)
-        }}
-        onBlur={(event) => {
-          // The focus left for good, not for the dialog Discard opens, which focuses within it next.
-          if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false)
-        }}
-      />
-    )
+  const [handOff, setHandOff] = useState(false)
+  const [status, setStatus] = useState('')
+  if (shown !== fate) {
+    setShown(fate)
+    setHandOff(shown === 'open' && focused)
+    setFocused(false)
+    setStatus(shown === 'open' && !focused ? decided : '')
   }
   return (
-    <Receipt
-      takesFocus={focused}
-      words={[
-        fate === 'accepted'
-          ? m.chat_proposal_accepted({ title })
-          : m.chat_proposal_discarded({ title }),
-      ]}
-      at={at}
-      tone={fate === 'accepted' ? 'agent' : 'quiet'}
-      onUndo={fate === 'accepted' ? onUndo : undefined}
-      pending={pending}
-      undone={undone}
-    />
+    <>
+      {fate === 'open' ? (
+        <Zone
+          {...props}
+          onFocus={() => {
+            setFocused(true)
+          }}
+          onBlur={(event) => {
+            // The focus left for good, not for the dialog Discard opens, which focuses within it next.
+            if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false)
+          }}
+        />
+      ) : (
+        <Receipt
+          takesFocus={handOff}
+          words={[decided]}
+          at={at}
+          tone={fate === 'accepted' ? 'agent' : 'quiet'}
+          onUndo={fate === 'accepted' ? onUndo : undefined}
+          pending={pending}
+          undone={undone}
+        />
+      )}
+      {/* Here from the start, so a screen reader hears what it comes to say. */}
+      <p role="status" className="sr-only">
+        {status}
+      </p>
+    </>
   )
 }
 
