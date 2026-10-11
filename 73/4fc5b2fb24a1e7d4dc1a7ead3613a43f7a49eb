@@ -1,0 +1,53 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/entries/Receipt.tsx
+  s_0c4a18e29f027e::t_9315ff2ed48956 2-5,9,14,19-25,33-47,51-52,67,74,84,123-124,134-137
+  s_0c4a18e29f027e::t_835e9feb144e00 125-133
+  s_0c4a18e29f027e::t_9434228e8fb9a2 26-32
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/tokens.test.ts
+  s_0c4a18e29f027e::t_790b6ba1b16db3 103-104,121,126-144,149-153
+  s_0c4a18e29f027e::t_a7a102030bf88f 105-120,122-123,145-148
+  s_0c4a18e29f027e::t_bc9f1aee28b1f0 154
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_0c4a18e29f027e::t_1301f0771a2b9b 539
+  s_0c4a18e29f027e::t_9d62a3d780d5f1 328,537
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-design-system-v1/decisions.md
+  s_0c4a18e29f027e::t_a98d188878bcfd 87,90-91
+  s_0c4a18e29f027e::t_987d6238f6fe53 14-15,89
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/pieces.ts
+  s_0c4a18e29f027e::t_9d62a3d780d5f1 94
+  s_0c4a18e29f027e::t_84468713c7543c 87
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/styles.css
+  s_0c4a18e29f027e::t_64cf235395d9f6 24,27-28,30,32,34,48,52,61,79
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/entries/gallery.tsx
+  s_0c4a18e29f027e::t_32531d768c64b0 21-22,92,97-103,106
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE.md
+  s_0c4a18e29f027e::t_7e5db463f48af3 63
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/CLAUDE.md
+  s_0c4a18e29f027e::t_1301f0771a2b9b 25
+  s_0c4a18e29f027e::t_9d62a3d780d5f1 23
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/entries/Proposal.tsx
+  s_0c4a18e29f027e::t_32531d768c64b0 5,18,42,58,114
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_0c4a18e29f027e::t_9d62a3d780d5f1 328,537
+  s_0c4a18e29f027e::t_1301f0771a2b9b 539
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/CLAUDE.md
+  s_0c4a18e29f027e::t_1301f0771a2b9b 22
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/atoms/controls.tsx
+  s_0c4a18e29f027e::t_1301f0771a2b9b 3,47,66
+  s_0c4a18e29f027e::t_628e83e9573a24 49-50,56,82
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "734fc5b2fb24a1e7d4dc1a7ead3613a43f7a49eb",
+  "prompts": {},
+  "sessions": {
+    "s_0c4a18e29f027e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ee3a2a67-a385-458c-a4b3-68145f760347",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
