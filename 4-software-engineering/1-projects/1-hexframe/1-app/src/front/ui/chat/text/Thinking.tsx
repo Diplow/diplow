@@ -6,7 +6,7 @@ import { Sparkle } from 'lucide-react'
 
 import { m } from '#/paraglide/messages'
 
-import { Fold } from '../atoms/controls'
+import { Fold } from '../atoms/fold'
 
 interface ThinkingProps {
   /** Under way, or done once the answer came. */

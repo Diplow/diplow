@@ -1,5 +1,5 @@
-// The chat's own atoms, on /design-system: the suggestions over the composer's field, and the controls
-// set as text in the chat's flow, an action and a fold.
+// The chat's own atoms, on /design-system: the suggestions over the composer's field, and the fold set
+// as text in the chat's flow.
 import { useState } from 'react'
 
 import { m } from '#/paraglide/messages'
@@ -7,7 +7,7 @@ import { m } from '#/paraglide/messages'
 import { Input } from '../../atoms/controls/input'
 import { toast } from '../../atoms/Toaster'
 import { GallerySection, GalleryState } from '../../gallery/frame'
-import { Act, Fold } from './controls'
+import { Fold } from './fold'
 import { Suggestions, suggestionsField } from './Suggestions'
 
 export function ChatAtomsGallery() {
@@ -16,21 +16,6 @@ export function ChatAtomsGallery() {
       <GallerySection name="Suggestions">
         <GalleryState label={m.gallery_state_click_to_show()}>
           <SuggestionsSpecimen />
-        </GalleryState>
-      </GallerySection>
-      <GallerySection name="Act">
-        <GalleryState label={m.gallery_state_chat_act_tones()}>
-          <div className="flex flex-wrap items-center gap-x-5.5 gap-y-2">
-            <Act tone="agent">{m.chat_proposal_accept()}</Act>
-            <Act tone="human">{m.gallery_sample_save()}</Act>
-            <Act>{m.chat_receipt_undo()}</Act>
-            <Act tone="destructive">{m.gallery_sample_delete()}</Act>
-          </div>
-        </GalleryState>
-        <GalleryState label={m.gallery_state_disabled()}>
-          <Act tone="agent" disabled>
-            {m.chat_proposal_accept()}
-          </Act>
         </GalleryState>
       </GallerySection>
       <GallerySection name="Fold">

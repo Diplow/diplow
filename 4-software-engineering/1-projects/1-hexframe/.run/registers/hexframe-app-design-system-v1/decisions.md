@@ -8,9 +8,10 @@ preview: >-
   colour became, what "dark by default" leaves of the system's preference,
   how the radius scale squares every corner, the lines of STACK.md and
   claude-mod left for the phase close, where each piece of ui/ went when it
-  regrouped by tier and side, and how /design-system shows the error channels,
+  regrouped by tier and side, how /design-system shows the error channels,
   reads "made of" from the code and keeps its frame outside the tiers, what
-  the composer's proposal kept and changed of the reference, how the chat's
+  the composer's proposal kept and changed of the reference, where the
+  frames HEX-96 proposed went and how a finger opens them, how the chat's
   pieces take their text, every ink raised to 4.5:1, and a decided Proposal's
   receipt unfolding its changes.
 ---
@@ -80,11 +81,40 @@ HEX-99, a proposal. `components.html#commands` drew the composer on a contentedi
 
 The commands are the reference's, the theme aside, which goes to the breadcrumb's head (Q8), with the language and signing out added; which ones stay is an open question on the pull request, as is amber text in light, 3.75:1 on `card`, the tokens' own.
 
-### DEC-11 The chat's text is `Words`, and the Proposal draws its own zone until the widget's frame lands
+### DEC-11 The frames go where their users will be, and `Menu` replaces `DropdownMenu` in place
 
-HEX-98. No piece of `ui/` imports a domain, the canvas's included, and a component takes its content as props, so the chat's pieces take no Assistant's Entry. Where they name a state the domain names too, a Proposal's `Fate`, they keep their own union: HEX-101 hands them the domain's, which stops compiling should the domain grow a member `ui/` cannot draw. Each takes its text as `Words` (`ui/chat/text/words.tsx`): plain words, a tile named (a `Mention`'s props) and who acted, by name, in the order the sentence's language puts them. A feature reads its message with a mark in each tile's place and weaves the tiles in (`weave`, beside `Words`, tested), so a sentence is never split into fragments a translator can't reorder. The pieces of `components.html#text` became `Message` (both voices, one piece, since they share the column and the copy), `Thinking`, `Mention`, `Events` (a navigation, a change, the live step and a Turn's end as lines, by who acted, a run of reads folded), `DaySplit`, `Proposal` and `Receipt` (what an accepted Proposal and a Turn that applied its changes both leave, with the Undo), and the chat's atoms, `Act`, the text action with its hex, and `Fold`, the one line that opens what it hides, both in `controls.tsx`, and `HexMark`, no piece of its own. The widget's frame is HEX-96's, in flight beside this one: the Proposal draws its zone itself, entrance included, and moves into the frame once it lands. HEX-101 wires these into `features/conversation/`, which still draws v0's look meanwhile.
+HEX-96. The ticket places the widget's frame in `ui/chat/` and says each frame goes to the side that uses it. Nothing uses the frames yet, so each went where the builds will use it, as DEC-5 placed `DropdownMenu`:
 
-### DEC-12 Every ink reads at 4.5:1, `faint` included, and a decided Proposal's receipt unfolds its changes
+- **`Widget`**, `ui/chat/layouts/`: the conversation alone draws widgets.
+- **`Dialog`**, `ui/layouts/`: a Tile's delete opens it from the canvas, a Proposal's discard and a Key's revoke from the chat, as `ConfirmDialog`, which it supersedes, is shared.
+- **`Menu`**, `ui/atoms/`: a widget's settings (the chat) and a tile's actions (the canvas) are both menus. It took `DropdownMenu`'s file: nothing used `DropdownMenu`, so the ticket's "replacing the piece it supersedes once its last user has moved" held already. It stays an atom, as `DropdownMenu` was, although the ticket calls the frames layouts: a menu is a control that knows nothing of hexframe, its header a slot, and `ui/layouts/` has room for one more file only, which `Dialog` took.
+- **`HoverCard`**, `ui/canvas/layouts/`: only a tile has one.
+
+`ConfirmDialog`, `Tooltip` and `Drawer` stay until their users move, in the builds of M3 and M4.
+
+### DEC-12 `Act`, the action the frames share, is an atom
+
+HEX-96. The widget's actions, the receipt's undo and the dialog's two are the prototype's `.act`, a word led by a small hex, and `.btn`, the one solid act cut as a long hex. Drawn inside each frame they would have been three copies, so they are one atom, `ui/atoms/controls/act.tsx`, in the voice of the surface it sits on (`--voice`). It is not `Button`'s replacement: a form's buttons are HEX-100's to redraw.
+
+### DEC-13 Under a finger, the long press opens the menu, and the menu's header says what the hover card would
+
+HEX-96, the project's "To grill". A finger can't hover, and a long press is the menu's. Rather than a second gesture (a tap that shows the card before acting, a press that shows it before the menu), the card never opens under a coarse pointer: the menu's header, a tile's title and place, shows its preview in full there too (`MenuHeader.description`). One gesture, no collision; a tap stays the tile's, which HEX-105 decides. The widget does the same with its tools: under a finger the settings' control alone shows, 44px, and folding and dismissing wait in its menu.
+
+### DEC-14 On a phone, the dialog is a sheet
+
+HEX-96, the project's "To grill". Below `sm` the chat fills the screen, so there is no column for the dialog to open over: it rises from the bottom, the screen's width, the act within the thumb's reach. Wide, it opens over the conversation's column from its left edge, 28rem, a little below the top.
+
+### DEC-15 A risen surface's shadow and the widget's entrance became tokens
+
+HEX-96. The prototype kept `--lift`, a menu's, a card's and the dialog's shadow, out of the tokens ("not tokens yet"); the frames all use it, so it is `--shadow-lift`, from `--lift`, which each theme sets. The widget's entrance, its line drawing itself, the surface unfolding and its parts rising, and the light that runs over lines still to come, are `--animate-draw`, `--animate-unfold`, `--animate-rise` and `--animate-sweep`. Each has its note on `/design-system`. The three frames that rise share one utility, `risen` (`styles.css`): the popover's light, `--shadow-lift` and a fine line on top, which the dialog draws in its voice through `--rim`.
+
+### DEC-16 The chat's text is `Words`, and the Proposal is a `Widget` that leaves a `Receipt`
+
+HEX-98. No piece of `ui/` imports a domain, the canvas's included, and a component takes its content as props, so the chat's pieces take no Assistant's Entry. Where they name a state the domain names too, a Proposal's `Fate`, they keep their own union: HEX-101 hands them the domain's, which stops compiling should the domain grow a member `ui/` cannot draw. Each takes its text as `Words` (`ui/chat/text/words.tsx`): plain words, a tile named (a `Mention`'s props) and who acted, by name, in the order the sentence's language puts them. A feature reads its message with a mark in each tile's place and weaves the tiles in (`weave`, beside `Words`, tested), so a sentence is never split into fragments a translator can't reorder. The pieces of `components.html#text` became `Message` (both voices, one piece, since they share the column and the copy), `Thinking`, `Mention`, `Events` (a navigation, a change, the live step and a Turn's end as lines, by who acted, a run of reads folded), `DaySplit`, `Proposal` and `Receipt` (what an accepted Proposal and a Turn that applied its changes both leave, with the Undo), and the chat's atom `Fold`, the one line that opens what it hides, and `HexMark`, no piece of its own. HEX-101 wires these into `features/conversation/`, which still draws v0's look meanwhile.
+
+HEX-96's frames landed while this was in review, and the two met. HEX-98 had its own `Act` in `ui/chat/atoms/`; it gave way to HEX-96's, the atom both sides share (DEC-12), each of its uses kept. The Proposal had drawn its own zone until the widget's frame landed: it is a `Widget` in the agent's voice now, its changes the body, Accept its first action with ⌘↵, Discard apart and asked through `Dialog`, which supersedes `ConfirmDialog` (DEC-11). Decided, it leaves HEX-98's `Receipt` rather than the widget's `done` line: the receipt takes the focus the widget had, says it was undone, keeps the changes folded under it and writes the time in the reader's zone, none of which the widget's line does. So two lines say what a decision left for now, the widget's `done` and `Receipt`; which one stays is a question on HEX-98's pull request.
+
+### DEC-17 Every ink reads at 4.5:1, `faint` included, and a decided Proposal's receipt unfolds its changes
 
 HEX-98, Ulysse's answers to two of its pull request's questions. `faint` measured 3.1:1 on the ground in dark and 3.6:1 in light, and in light `destructive` 4.1:1, `human` 3.3:1, `warning` 3.4:1 and `success` 4.2:1, under the 4.5:1 small text needs. Each rose, its hue and chroma kept, to just past 4.5:1 on the ground and on a card: `faint` to L 0.595 in dark and 0.527 in light, in light `human` to 0.532 (`ring`, `sidebar-ring` and `chart-1` with it, the same amber), `destructive` to 0.533, `warning` to 0.545, `success` to 0.507 (`chart-5` follows `faint`). Dark's other inks already passed. `gallery/tokens.test.ts` now holds every ink to it, in both themes, so a token cannot fall under again unnoticed. The values part from `3-design-system/`'s, frozen until HEX-112 retires it; the app's are the ones that count. So `Fold`, which had moved to `muted-foreground` for its contrast alone, is `faint` again, as `components.html` draws it; the composer's quiet text, moved for the same reason (DEC-10), could go back too, and is left to its next ticket.
 

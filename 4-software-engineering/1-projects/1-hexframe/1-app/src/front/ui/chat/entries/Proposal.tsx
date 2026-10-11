@@ -1,19 +1,17 @@
-// What the agent proposes in ask: a zone in the flow of messages, a solid surface with one hairline on
-// top and below, tinted violet toward the curve, since it is the agent's. Its hex, a kicker saying who
-// proposes, the title in Newsreader, then each change on a line, its icon in violet, and the actions:
-// Accept, in the agent's voice, Discard at the far end, asked first. Once decided the zone gives its
-// surface back and leaves its receipt, its changes folded under it, with the Undo while one is possible. Decided from the zone, the
-// focus moves to the receipt, so the keyboard never falls back to the top of the page; decided
-// elsewhere, in another tab or by a poll, the focus stays where the user is and a status says it.
-import { cn } from 'cn'
+// What the agent proposes in ask, on the widget's frame (`Widget`), in the agent's voice: its hex, a
+// kicker saying who proposes, the title, then each change on a line, and the actions: Accept, its ⌘↵
+// shown, Discard at the far end, asked first (`Dialog`). Once decided the widget gives its surface back
+// and leaves its receipt, its changes folded under it, with the Undo while one is possible. Decided
+// from the widget, the focus moves to the receipt, so the keyboard never falls back to the top of the
+// page; decided elsewhere, in another tab or by a poll, the focus stays where the user is and a status
+// says it.
 import { ListChecks } from 'lucide-react'
-import type { FocusEvent } from 'react'
+import { type FocusEvent, useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { ConfirmDialog } from '../../layouts/ConfirmDialog'
-import { Act } from '../atoms/controls'
-import { HexMark } from '../atoms/hex'
+import { Dialog } from '../../layouts/Dialog'
+import { Widget } from '../layouts/Widget'
 import { useHandOffState } from '../state/useHandOffState'
 import { type Change, Changes, Receipt } from './Receipt'
 
@@ -49,7 +47,7 @@ export function Proposal(props: ProposalProps) {
   return (
     <>
       {fate === 'open' ? (
-        <Zone {...props} onFocus={onFocus} onBlur={onBlur} />
+        <Open {...props} onFocus={onFocus} onBlur={onBlur} />
       ) : (
         <Receipt
           takesFocus={handOff}
@@ -70,67 +68,61 @@ export function Proposal(props: ProposalProps) {
   )
 }
 
-interface ZoneProps extends ProposalProps {
+interface OpenProps extends ProposalProps {
   onFocus: () => void
   onBlur: (event: FocusEvent<HTMLElement>) => void
 }
 
-function Zone(props: ZoneProps) {
+function Open(props: OpenProps) {
   const { title, summary, changes, onAccept, onDiscard, pending = false, onFocus, onBlur } = props
+  const [asking, setAsking] = useState(false)
   return (
-    <section
-      aria-label={m.chat_proposal_label()}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      className={cn(
-        'relative grid grid-cols-[minmax(0,1fr)] gap-x-4.5 bg-card bg-linear-to-r from-transparent from-15% to-agent/9 px-4 py-5 sm:grid-cols-[3.375rem_minmax(0,1fr)] sm:px-9',
-        // A hairline on top and below, fading in from the left, as every zone's.
-        'before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-linear-to-r before:from-transparent before:via-input before:via-45% before:to-input',
-        'after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-linear-to-r after:from-transparent after:via-input after:via-45% after:to-input',
-        'motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-1 animation-duration-500 ease-glide',
-      )}
-    >
-      <span className="relative mt-0.5 hidden h-[3.125rem] w-[3.375rem] text-agent sm:block">
-        <HexMark className="absolute inset-0 size-full fill-agent/7 stroke-agent/55" />
-        <ListChecks
-          aria-hidden
-          strokeWidth={1.3}
-          className="absolute top-1/2 left-1/2 size-[1.1875rem] -translate-1/2"
-        />
-      </span>
-      <div className="min-w-0">
-        <p className="font-agent text-[0.71875rem] leading-normal text-agent">
-          {m.chat_proposal_kicker()}
-        </p>
-        <p className="mt-px font-human text-[1.3125rem] leading-tight text-foreground">{title}</p>
-        {summary !== undefined && (
-          <p className="mt-1 text-[0.84375rem] font-light text-muted-foreground">{summary}</p>
-        )}
+    // The focus is the widget's, or the dialog's it opened, whose events reach here through React's tree.
+    <div onFocus={onFocus} onBlur={onBlur}>
+      <Widget
+        voice="agent"
+        icon={<ListChecks />}
+        kicker={m.chat_proposal_kicker()}
+        title={title}
+        {...(summary === undefined ? {} : { subtitle: summary })}
+        actions={
+          // A decision on its way: nothing more to decide until it lands.
+          pending
+            ? []
+            : [
+                {
+                  label: m.chat_proposal_accept(),
+                  shortcut: { key: 'Enter', mod: true },
+                  onSelect: onAccept,
+                },
+                {
+                  label: m.chat_proposal_discard(),
+                  apart: true,
+                  onSelect: () => {
+                    setAsking(true)
+                  },
+                },
+              ]
+        }
+      >
         {changes.length === 0 ? (
-          <p className="mt-4 text-[0.84375rem] font-light text-muted-foreground">
+          <p className="text-[0.84375rem] font-light text-muted-foreground">
             {m.chat_proposal_empty()}
           </p>
         ) : (
-          <Changes changes={changes} className="mt-4 text-[0.84375rem]" />
+          <Changes changes={changes} className="text-[0.84375rem]" />
         )}
-        <div className="mt-4.5 flex flex-wrap items-center gap-x-5.5 gap-y-1">
-          <Act tone="agent" disabled={pending} onClick={onAccept}>
-            {m.chat_proposal_accept()}
-          </Act>
-          <ConfirmDialog
-            trigger={
-              <Act className="ml-auto" disabled={pending}>
-                {m.chat_proposal_discard()}
-              </Act>
-            }
-            title={m.chat_proposal_discard_title()}
-            description={m.chat_proposal_discard_description()}
-            confirmLabel={m.chat_proposal_discard()}
-            destructive
-            onConfirm={onDiscard}
-          />
-        </div>
-      </div>
-    </section>
+      </Widget>
+      <Dialog
+        open={asking}
+        onOpenChange={setAsking}
+        kicker={m.chat_proposal_discard_kicker()}
+        title={m.chat_proposal_discard_title()}
+        confirmLabel={m.chat_proposal_discard()}
+        onConfirm={onDiscard}
+      >
+        {m.chat_proposal_discard_description()}
+      </Dialog>
+    </div>
   )
 }

@@ -4,7 +4,7 @@ parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts
 owner: diplo
 preview: >-
   The layouts no single side owns: shells with slots that decide where things
-  go, the dialog and what a place shows instead of its content, which both
+  go, the dialogs and what a place shows instead of its content, which both
   sides share, and the table and a page's header, whose pages the one screen
   retires. A layout imports atoms, never a side.
 ---
@@ -14,7 +14,8 @@ The layouts no single side owns, each a shell with slots that decides where thin
 
 | Path | Holds |
 |---|---|
-| `ConfirmDialog.tsx` | `ConfirmDialog`, a question asked before something is done: its trigger, a title, a description and the confirming button, destructive when it deletes |
+| `Dialog.tsx` | `Dialog`, the one thing that stops the user, on Radix's AlertDialog, controlled: a kicker, the act asked as a question, a paragraph of consequence, what it touches drawn and counted, a name to type for what is hardest to undo, then the quiet way out and the act (`Act`). Wide, over the conversation's column from its left edge, so the canvas stays in view; below `sm`, a sheet from the bottom. Focus starts on the way out, or on the name to type; Enter confirms from the button only; a click on the dim leaves until a name is typed |
+| `ConfirmDialog.tsx` | `ConfirmDialog`, a question asked before something is done: its trigger, a title, a description and the confirming button, destructive when it deletes. `Dialog` supersedes it once its users, a Proposal's discard, a Tile's delete and a Key's revoke, move onto it |
 | `DataTable.tsx` | `DataTable`, sortable, with its loading and empty states; it takes `DataColumn`s, so a feature never sees TanStack Table. Its one user, the Keys page, is one the one screen retires |
 | `PageHeader.tsx` | `PageHeader`, the top of a page: its one `<h1>`, what the page is for and what can be done from it. Its users are pages the one screen retires |
 | `states.tsx` | What a place shows instead of its content: `EmptyState`, nothing yet and how to add the first; `ErrorState`, a read that failed, with a retry and the request id; `Forbidden`, a read the user may not make |

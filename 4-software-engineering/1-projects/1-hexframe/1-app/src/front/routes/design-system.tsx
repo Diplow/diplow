@@ -17,6 +17,7 @@ import { centerOn, readCanvasView, type CanvasView } from '#/front/ui/canvas/vie
 import { ChatAtomsGallery } from '#/front/ui/chat/atoms/gallery'
 import { ComposerGallery } from '#/front/ui/chat/composer/gallery'
 import { ChatEntriesGallery } from '#/front/ui/chat/entries/gallery'
+import { ChatLayoutsGallery } from '#/front/ui/chat/layouts/gallery'
 import { ChatTextGallery } from '#/front/ui/chat/text/gallery'
 import { GallerySection, GalleryTier, tierAnchor, tierTitle } from '#/front/ui/gallery/frame'
 import { anchorOf, filled, tiers } from '#/front/ui/gallery/pieces'
@@ -48,6 +49,7 @@ function DesignSystem() {
         <ComposerGallery />
         <ChatTextGallery />
         <ChatEntriesGallery />
+        <ChatLayoutsGallery />
         <ChatAtomsGallery />
       </GalleryTier>
       <GalleryTier tier="canvas">

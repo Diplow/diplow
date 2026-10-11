@@ -11,7 +11,8 @@ import { useEffect, useRef } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { Act, Fold } from '../atoms/controls'
+import { Act } from '../../atoms/controls/act'
+import { Fold } from '../atoms/fold'
 import { HexMark } from '../atoms/hex'
 import { Said, type Words } from '../text/words'
 import { Time } from './time'
@@ -114,7 +115,7 @@ export function Receipt({
                 undoFocused.current = false
               }}
             >
-              {m.chat_receipt_undo()}
+              {m.ui_undo()}
             </Act>
           )
         )}

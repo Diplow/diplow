@@ -84,7 +84,7 @@ export const pieces = [
     name: 'Proposal',
     tier: 'chat',
     sources: ['ui/chat/entries/Proposal.tsx'],
-    madeOf: ['ConfirmDialog', 'Act', 'Receipt'],
+    madeOf: ['Widget', 'Dialog', 'Receipt'],
     note: m.gallery_note_proposal,
   },
   {
@@ -95,6 +95,13 @@ export const pieces = [
     note: m.gallery_note_receipt,
   },
   {
+    name: 'Widget',
+    tier: 'chat',
+    sources: ['ui/chat/layouts/Widget.tsx'],
+    madeOf: ['Act', 'Menu'],
+    note: m.gallery_note_widget,
+  },
+  {
     name: 'Suggestions',
     tier: 'chat',
     sources: ['ui/chat/atoms/Suggestions.tsx'],
@@ -102,16 +109,9 @@ export const pieces = [
     note: m.gallery_note_suggestions,
   },
   {
-    name: 'Act',
-    tier: 'chat',
-    sources: ['ui/chat/atoms/controls.tsx'],
-    madeOf: [],
-    note: m.gallery_note_act,
-  },
-  {
     name: 'Fold',
     tier: 'chat',
-    sources: ['ui/chat/atoms/controls.tsx'],
+    sources: ['ui/chat/atoms/fold.tsx'],
     madeOf: [],
     note: m.gallery_note_fold,
   },
@@ -128,6 +128,13 @@ export const pieces = [
     sources: ['features/breadcrumb/Breadcrumb.tsx'],
     madeOf: [],
     note: m.gallery_note_breadcrumb,
+  },
+  {
+    name: 'HoverCard',
+    tier: 'canvas',
+    sources: ['ui/canvas/layouts/HoverCard.tsx'],
+    madeOf: [],
+    note: m.gallery_note_hover_card,
   },
   {
     name: 'Card',
@@ -156,6 +163,13 @@ export const pieces = [
     sources: ['client/ReadBoundary.tsx', 'client/channels.ts'],
     madeOf: ['ErrorState', 'Forbidden', 'Toaster'],
     note: m.gallery_note_channels,
+  },
+  {
+    name: 'Dialog',
+    tier: 'layouts',
+    sources: ['ui/layouts/Dialog.tsx'],
+    madeOf: ['Act'],
+    note: m.gallery_note_dialog,
   },
   {
     name: 'ConfirmDialog',
@@ -207,6 +221,13 @@ export const pieces = [
     note: m.gallery_note_button,
   },
   {
+    name: 'Act',
+    tier: 'atoms',
+    sources: ['ui/atoms/controls/act.tsx'],
+    madeOf: [],
+    note: m.gallery_note_act,
+  },
+  {
     name: 'Input',
     tier: 'atoms',
     sources: ['ui/atoms/controls/input.tsx'],
@@ -235,11 +256,11 @@ export const pieces = [
     note: m.gallery_note_use_app_form,
   },
   {
-    name: 'DropdownMenu',
+    name: 'Menu',
     tier: 'atoms',
-    sources: ['ui/atoms/DropdownMenu.tsx'],
+    sources: ['ui/atoms/Menu.tsx'],
     madeOf: [],
-    note: m.gallery_note_dropdown_menu,
+    note: m.gallery_note_menu,
   },
   {
     name: 'Toaster',

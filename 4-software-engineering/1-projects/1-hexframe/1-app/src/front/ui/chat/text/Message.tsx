@@ -8,9 +8,9 @@ import { Copy } from 'lucide-react'
 
 import { m } from '#/paraglide/messages'
 
+import { Act } from '../../atoms/controls/act'
 import { Button } from '../../atoms/controls/button'
 import { toast } from '../../atoms/Toaster'
-import { Act } from '../atoms/controls'
 import { HexMark } from '../atoms/hex'
 import { plainOf, Said, type Words } from './words'
 
@@ -58,7 +58,7 @@ function Human({ words, state = 'sent', onRetry }: HumanProps) {
           <span>{m.chat_message_failed()}</span>
           {onRetry !== undefined && (
             <Act className="text-xs" onClick={onRetry}>
-              {m.chat_message_retry()}
+              {m.ui_retry()}
             </Act>
           )}
         </p>

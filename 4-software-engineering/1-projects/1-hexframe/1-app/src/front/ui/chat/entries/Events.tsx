@@ -7,7 +7,7 @@ import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 
-import { Fold } from '../atoms/controls'
+import { Fold } from '../atoms/fold'
 import { HexMark } from '../atoms/hex'
 import { Said, type Words } from '../text/words'
 import { Time } from './time'
