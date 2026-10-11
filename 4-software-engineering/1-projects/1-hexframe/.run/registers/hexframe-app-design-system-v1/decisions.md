@@ -14,7 +14,8 @@ preview: >-
   HEX-96 proposed went and how a finger opens them, how HEX-95 drew the
   screen, folding on its own width, a seam on a phone, and the corner's
   contrast, how the chat's pieces take their text, every ink raised to
-  4.5:1, and a decided Proposal's receipt unfolding its changes.
+  4.5:1, a decided Proposal's receipt unfolding its changes, and where the
+  tile's proposal went, how its words fit and what marks a write on its way.
 ---
 # Decisions
 
@@ -140,3 +141,17 @@ HEX-96's frames landed while this was in review, and the two met. HEX-98 had its
 HEX-98, Ulysse's answers to two of its pull request's questions. `faint` measured 3.1:1 on the ground in dark and 3.6:1 in light, and in light `destructive` 4.1:1, `human` 3.3:1, `warning` 3.4:1 and `success` 4.2:1, under the 4.5:1 small text needs. Each rose, its hue and chroma kept, to just past 4.5:1 on the ground and on a card: `faint` to L 0.595 in dark and 0.527 in light, in light `human` to 0.532 (`ring`, `sidebar-ring` and `chart-1` with it, the same amber), `destructive` to 0.533, `warning` to 0.545, `success` to 0.507 (`chart-5` follows `faint`). Dark's other inks already passed. `gallery/tokens.test.ts` now holds every ink to it, in both themes, so a token cannot fall under again unnoticed. The values part from `3-design-system/`'s, frozen until HEX-112 retires it; the app's are the ones that count. So `Fold`, which had moved to `muted-foreground` for its contrast alone, is `faint` again, as `components.html` draws it; the composer's quiet text (DEC-10) and the rail's labels (DEC-18), moved for the same reason, could go back too, each left to its next ticket.
 
 A decided Proposal's `Receipt` keeps its changes, folded under its line (`Change` and `Changes` moved into `Receipt.tsx`, which the Proposal's zone draws its list with too): what an accepted one changed, what a discarded one would have. Its `Fold` comes last on the line, after the time, so the keys and a screen reader reach the list as the eye does, below it; a Turn's receipt takes its changes alike.
+
+### DEC-23 The tile is proposed beside v0's, in `canvas/tile/`, its words fitted in `geometry/`, and a write on its way sweeps a light over it
+
+HEX-104. The proposal lives beside what it replaces: `canvas/tile/` holds `Tile`, and `Slot` and `Ground` in `places.tsx`, while `canvas/Tile.tsx`, `Frame.tsx` and `look.tsx` keep drawing the canvas until HEX-106 swaps them; `canvas/` had room for one folder and no file. `Tile` takes its content as props, its kind, its `TileWords`, its foot, its place, a write and, for a specimen or whatever points at it, a state the hand would give (`held`), so HEX-106 maps a `CanvasHex` onto it and HEX-105 adds the menu, the move and the hover card. The fit of its words (`fitWords`, `linesThatFit`) is pure and sits in `geometry/words.ts`, beside `textBox`, the box a label sits in: `tile/` had no room for it and its test once the gallery split its live frame into `specimens.tsx`. It works in px on screen: `Tile` takes `scale`, the screen px per unit of the canvas, which the camera will know (HEX-106); the gallery's frame reads it from its own width (`useScale`).
+
+What `components.html` left open, the proposal decides, for review on the pull request:
+
+- **A write on its way.** HEX-70 shows a write at once; the reference draws no mark for it. The tile shows as it will be, and once 400ms pass without the server's answer, the light sweeps over it, `animate-sweep`, the motion the reference gives loading, clipped to its hex: a write that lands at once never flickers, and nothing new is learned. With reduced motion the sweep holds still, a sheen. A screen reader hears "saving" in its description, and `aria-busy`. Refused, a destructive glow rises and fades (`animate-flare`, a new token), the tile folds back and the toast says why, as HEX-71 has it.
+- **Under a radius of 30 on screen, no words.** The reference says a tile is "a light without words" past its 11px floor without saying where; its slider stops at a slot of 34, a hex of 32. Below 30 the title no longer fits at 11px, so `fitWords` answers none and the tile keeps its name for a screen reader alone. On a phone, the members of a Branch opened in place come out near 18px and show as lights.
+- **The center's foot.** The center shows no frame at its foot, its ring around it saying the same; nor does a Branch at the heart of its ground.
+- **The note under the title wraps**, where the reference keeps it on one line and loses "from Software Engineering" past the hex.
+
+Tokens: `animate-bloom` and `animate-fold` join `duration-bloom` and `duration-fold` under their notes, and `animate-flare` gets its own; `animate-sweep`'s note now names the tile on its way.
+
