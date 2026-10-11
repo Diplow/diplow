@@ -20,7 +20,7 @@ import { flushSync } from 'react-dom'
 
 import { m } from '#/paraglide/messages'
 
-import { bow, cutAlongCurve } from './curve'
+import { cutAlongCurve, reach } from './curve'
 import { Scrollbar } from './Scrollbar'
 
 /** A side of the screen; on a phone, the one in front. */
@@ -53,7 +53,7 @@ const edge = 'calc(var(--screen-chat) + 1.125rem)'
 const cut = cutAlongCurve('var(--screen-edge)')
 
 /** How far the curve bows past the chat's edge, which the chat's column has to hold. */
-const bulge = `${String(bow / 2)}px`
+const bulge = `${String(reach)}px`
 
 export function Screen({
   canvas,
@@ -268,8 +268,8 @@ const dragged = 24
 /**
  * The seam between the sides on a phone, a button: a tap, Enter or Space moves to the other side, and
  * so does a drag past a short way in the direction it points. Any drag past that way swallows the
- * click after it, so a drag moves once, and a drag the other way not at all. Hidden on a wide
- * screen, which shows both.
+ * pointer's click after it, so a drag moves once, and a drag the other way not at all; Enter and
+ * Space always move. Hidden on a wide screen, which shows both.
  */
 function Handle({ ref, label, towards, onMove, className }: HandleProps) {
   const start = useRef<number | undefined>(undefined)
@@ -301,12 +301,12 @@ function Handle({ ref, label, towards, onMove, className }: HandleProps) {
       onPointerCancel={() => {
         start.current = undefined
       }}
-      onClick={() => {
-        if (dragging.current) {
-          dragging.current = false
-          return
-        }
-        onMove()
+      onClick={(event) => {
+        // A click after a drag is the drag's own, and swallowed. A keyboard's click, `detail` 0,
+        // always moves, should a touch browser have sent no click to clear the drag.
+        const afterDrag = dragging.current && event.detail !== 0
+        dragging.current = false
+        if (!afterDrag) onMove()
       }}
     >
       {/* The seam: a short curve, as every separator here is, which lights under the keyboard. */}

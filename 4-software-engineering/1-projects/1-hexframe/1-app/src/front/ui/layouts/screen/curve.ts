@@ -12,6 +12,9 @@ export function offsetAt(t: number): number {
   return 2 * t * (1 - t) * bow
 }
 
+/** How far past the chat's edge the curve reaches, at mid-height, in px: what its column has to hold. */
+export const reach = offsetAt(0.5)
+
 /** The curve's slope, its offset's change per px down a screen `height` px tall, at `t`. */
 function slopeAt(t: number, height: number): number {
   return (2 * bow * (1 - 2 * t)) / height

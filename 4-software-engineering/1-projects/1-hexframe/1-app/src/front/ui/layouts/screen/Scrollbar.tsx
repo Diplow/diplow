@@ -5,7 +5,7 @@
 import { cn } from 'cn'
 import { useEffect, useId, useRef, useState, type MouseEvent, type RefObject } from 'react'
 
-import { bow, curvePath, scrollTopAt, thumbOf, trackAlongCurve, type Track } from './curve'
+import { curvePath, reach, scrollTopAt, thumbOf, trackAlongCurve, type Track } from './curve'
 
 interface ScrollbarProps {
   /** The screen, which the curve spans from top to foot. */
@@ -16,8 +16,8 @@ interface ScrollbarProps {
   content: RefObject<HTMLElement | null>
 }
 
-/** The hairline's box: the curve's widest offset from the chat's edge, and a pixel for the line. */
-const width = bow / 2 + 1
+/** The hairline's box: as far as the curve reaches past the chat's edge, and a pixel for the line. */
+const width = reach + 1
 
 /** How long the star stays bright after the messages last moved. */
 const stirFor = 900

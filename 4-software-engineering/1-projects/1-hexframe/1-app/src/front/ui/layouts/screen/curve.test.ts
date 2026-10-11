@@ -5,6 +5,7 @@ import {
   curvePath,
   cutAlongCurve,
   offsetAt,
+  reach,
   scrollTopAt,
   thumbOf,
   trackAlongCurve,
@@ -20,6 +21,7 @@ describe('offsetAt', () => {
     expect(offsetAt(0)).toBe(0)
     expect(offsetAt(1)).toBe(0)
     expect(offsetAt(0.5)).toBe(bow / 2)
+    expect(reach).toBe(offsetAt(0.5))
   })
 })
 

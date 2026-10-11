@@ -4,7 +4,7 @@
 // what its sender saw, and a Message's link in the Conversation centers it, as on home. The Screen's
 // specimens are drawn here too, since they lay out both sides, which no folder of ui/ may import.
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { useState, type SyntheticEvent } from 'react'
+import { useState } from 'react'
 
 import { ChannelsGallery } from '#/front/client/gallery'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
@@ -24,6 +24,7 @@ import { Rail } from '#/front/ui/canvas/layouts/Rail'
 import { pathTo, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { centerOn, readCanvasView, showView, type CanvasView } from '#/front/ui/canvas/view/view'
 import { ChatAtomsGallery } from '#/front/ui/chat/atoms/gallery'
+import { Composer } from '#/front/ui/chat/composer/Composer'
 import { ComposerGallery } from '#/front/ui/chat/composer/gallery'
 import {
   GallerySection,
@@ -230,10 +231,10 @@ interface ScreenSpecimenProps {
 }
 
 /**
- * One screen: a System and a conversation about it signed in, Help and the sign-in widget's place
- * signed out. The conversation's lines and the composer stand in for the Chat's proposals (HEX-98,
- * HEX-99), enough to show where they sit and how the curve scrolls them; they join ui/ once those
- * proposals draw them.
+ * One screen: a System and a conversation about it signed in, with the Composer at its foot, Help and
+ * the sign-in widget's place signed out. The conversation's lines stand in for the Chat's proposal
+ * (HEX-98), enough to show where they sit and how the curve scrolls them; they join ui/ once it draws
+ * them.
  */
 function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
   const [view, setView] = useState<CanvasView>({})
@@ -264,7 +265,7 @@ function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
       messages={<Lines lines={lines} />}
       composer={
         signedIn ? (
-          <Composer
+          <ScreenComposer
             onSend={(text) => {
               setSent((before) => [...before, { author: 'user', text }])
             }}
@@ -329,52 +330,34 @@ function scrollIntoView(element: HTMLElement | null) {
 const zone =
   'relative flex min-h-[7.25rem] items-center gap-4 bg-card bg-linear-to-r from-transparent from-15% to-human/9 px-5 py-6 before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-linear-to-r before:from-transparent before:via-input before:via-45% before:to-input @wide:pr-[4.125rem] @wide:pl-9'
 
-/** The composer's stand-in: a line of your words, Enter to send, and the send hex, lit once ready. */
-function Composer({ onSend }: { onSend: (text: string) => void }) {
+/**
+ * The Composer at the chat's foot, its padding clear of the curve, which comes back to the chat's edge
+ * there. What `/` and `@` list is the Composer's own section's.
+ */
+function ScreenComposer({ onSend }: { onSend: (text: string) => void }) {
   const [text, setText] = useState('')
-  const ready = text.trim() !== ''
-  const submit = (event?: SyntheticEvent) => {
-    event?.preventDefault()
-    if (!ready) return
-    onSend(text.trim())
-    setText('')
-  }
+  const [mode, setMode] = useState('ask')
   return (
-    <form className={zone} onSubmit={submit}>
-      <textarea
-        rows={1}
-        value={text}
-        onChange={(event) => {
-          setText(event.target.value)
-        }}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter' && !event.shiftKey) submit(event)
-        }}
-        placeholder={m.gallery_screen_composer()}
-        aria-label={m.conversation_message_label()}
-        className="field-sizing-content max-h-21 min-w-0 flex-1 resize-none bg-transparent font-human text-prose font-light outline-none placeholder:text-faint"
-      />
-      <button
-        type="submit"
-        aria-label={m.conversation_send()}
-        className={`group/send size-11 flex-none cursor-pointer outline-none ${ready ? 'text-human' : 'text-faint'}`}
-      >
-        <svg viewBox="-19 -21 38 42" aria-hidden className="size-full overflow-visible">
-          <polygon
-            points="0,-20 17.32,-10 17.32,10 0,20 -17.32,10 -17.32,-10"
-            vectorEffect="non-scaling-stroke"
-            className={
-              ready
-                ? 'fill-human/12 stroke-human drop-shadow-[0_0_8px_color-mix(in_oklab,var(--human)_55%,transparent)]'
-                : 'fill-none stroke-input group-focus-visible/send:stroke-human'
-            }
-          />
-          <path d="M0 6V-6M-5 -1l5-5 5 5" fill="none" strokeWidth={1.3} stroke="currentColor" />
-        </svg>
-      </button>
-    </form>
+    <Composer
+      value={text}
+      onChange={setText}
+      onPick={() => undefined}
+      onLeave={() => undefined}
+      onSend={() => {
+        onSend(text.trim())
+        setText('')
+      }}
+      mode={{ choices: modeChoices(), on: mode, choose: setMode }}
+      className="sm:px-4 @wide:pr-[4.125rem] @wide:pl-9"
+    />
   )
 }
+
+/** Assistant's two Modes, as a real page builds them from its `Mode`. */
+const modeChoices = () => [
+  { id: 'ask', label: m.composer_mode_ask(), means: m.conversation_mode_ask_hint() },
+  { id: 'apply', label: m.composer_mode_apply(), means: m.conversation_mode_apply_hint() },
+]
 
 /** Signed out, the chat's foot is where the sign-in widget sits (HEX-100), drawn here as its place. */
 function SignInPlace() {
