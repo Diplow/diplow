@@ -18,8 +18,11 @@ preview: >-
   built the screen on home: who holds the side in front, the breadcrumb drawn
   as the rail, what the header keeps, and the gaps left to M3, where the
   tile's proposal went, how its words fit and what marks a write on its way,
-  and what acting on a tile proposes: what a tap does, the keys on a focused
-  tile, each kind's menu and how a finger moves a tile.
+  and where HEX-100 put the widgets, the chat's zone drawn once, the widgets'
+  own field, what the frame, the Proposal and the Receipt grew, what the
+  proposal drew beyond the reference or left out of it, and what acting on a
+  tile proposes: what a tap does, the keys on a focused tile, each kind's menu
+  and how a finger moves a tile.
 ---
 # Decisions
 
@@ -175,7 +178,37 @@ What `components.html` left open, the proposal decides, for review on the pull r
 
 Tokens: `animate-bloom` and `animate-fold` join `duration-bloom` and `duration-fold` under their notes, and `animate-flare` gets its own; `animate-sweep`'s note now names the tile on its way.
 
-### DEC-28 Acting on a tile: a tap goes in, a line's key runs on the focused tile, and a finger moves through the menu, never by a drag
+### DEC-28 The widgets go in `ui/chat/widgets/`, a folder each; signing in sits on the composer's zone; `state/` joined `layouts/`
+
+HEX-100, a proposal. The four widgets are chat components, as the `Composer` is, so they go beside it, in `ui/chat/widgets/`, a folder each (`tile/`, `keys/`, `help/`, `sign-in/`), the parts they share beside them: the place map (`Places.tsx`), the underlined field (`fields.tsx`), the count (`count.ts`) and the galleries' demo (`demo.ts`). The tile widget is one piece drawn in three files, `TileWidget` for writing, `TileProposal` for the agent's draft or edit, `TileImport` and `TileExport`, since the ticket names one widget and all of them draw the same place and words (`tile/parts.tsx`).
+
+The sign-in widget is no `Widget`: it takes the `Composer`'s place at the chat's foot, signed out, and has nothing to fold, dismiss or receipt. It sits on the composer's zone, as HEX-95's review asked: the zone is drawn once, `ui/chat/layouts/zone.ts`, which the `Composer`, the `Widget` and the `SignInWidget` take, and the route's hand copy, `SignInPlace` and its `zone`, went; the signed-out `Screen` specimen shows the widget itself.
+
+With HEX-98's `entries/`, `text/` and `state/`, `widgets/` made `ui/chat/` a seventh folder. `state/` held one hook, `useHandOffState`, where the focus goes once a piece that asked for a decision is decided: a widget's concern, so it joined the widget's frame in `layouts/`.
+
+### DEC-29 The widgets are controlled, write on their own underlined field, and take the domains' limits as props
+
+HEX-100. The direction says a field is one underline; the shared `Field`, `Input` and `Textarea` are shadcn's boxes, and the pages that use them, Keys, signing in and the tile drawer, are the ones the one screen retires. Redrawing them would restyle those pages for nothing, so the widgets have their own field, `widgets/fields.tsx`: a quiet label, the line that draws itself in the voice as the focus comes, the count near a limit, a hint, a dot once changed, the refusal under it, said as it changes. The widgets are controlled, as the `Composer` is: what they hold, and the refusal each field shows, are props, so a feature's state hook owns them. The builds (HEX-102, HEX-103) bridge them to the features' submits, which run through TanStack Form today (`useAppForm`, `openedOnRefusal`), or move off it; whether the underline then replaces the shared `Field` is theirs to say.
+
+No piece of `ui/` imports a domain (DEC-10), so a rule a widget shows is its caller's: the tile widget takes the Preview's limit (`previewLimit`, Mapping's), the key widget a name's (`nameLimit`, IAM's, which sits outside IAM's door today: HEX-103 brings it in). The widgets keep the domain's words, a Branch, a Leaf, a Context Tile, six Directions, as the canvas's view does; the route hands the tile widget's gallery Mapping's `previewLimit` from Mapping's door, and the galleries' demo mirrors IAM's, as the composer's mirrors `mention.ts`, until IAM's door holds them.
+
+### DEC-30 The frame, the Proposal and the Receipt grew what the widgets needed, and every receipt is the conversation's
+
+HEX-100. The widgets needed of HEX-96's `Widget` what it had not drawn, each optional, so its other users are untouched: a **`mark`** in the hex's place (the tile's place and Help's map are the frame in small, not an icon; a failure still shows the hex, to try again); a **`titleField`** in the title's place (a tile's title is written where it is read, `title` staying its name to a screen reader); an action that is its **`submit`**, which Enter in a one-line field runs, named rather than taken as the first action, since a tile changed meanwhile has no action Enter may run, and run by the widget's own keys rather than a `<form>`, so a submit coming or going never remounts what the user is typing in; an action's **`look`**, `hex` for the one solid act a form asks for, and **`destructive`**, for one that loses something. Neither Enter nor an action's shortcut runs it while it waits, nor while what was asked runs.
+
+The agent's draft of a tile is a Proposal, so `TileProposal` is HEX-98's `Proposal`, which grew a `mark`, a `kicker`, a `detail` showing its words in full or its edit where it falls, and an Edit it (`onEdit`). Every widget leaves HEX-98's `Receipt`, which grew a `tone` for the user's and the app's voices beside the agent's, through `UntilDecided`, the hand-off the `Proposal` had, now shared: the focus goes to the receipt when the widget had it, a status says the decision otherwise; while it asks, a step of its own that removes what had the focus (a Key's name giving way to its secret) gives the focus to its first control, since `useHandOffState` keeps the focus counted inside until it leaves for good. A draft taken to edit gives its title the focus as it comes.
+
+### DEC-31 What the proposal drew beyond the reference, and what it left
+
+HEX-100. `components.html` draws the tile widget's new, edit, draft, the agent's edit and changed meanwhile, the key widget's three states and the help widget's three. The ticket asks more, so the proposal drew, in the reference's look: **import and export** in the tile widget, the import's pickers its actions, then its report, the export a receipt naming the zip; **refused and put back**, the user's words and the refusal on the field, cleared once the field changes; the **agent's key widget**, which shows the Keys and issues none; **the sign-in widget**, which the reference does not draw at all; and Help's search on **Help itself**, read by the route (`find.ts`, cut by the composer's `cutAround`), the topics a page leads to as `Mention`s.
+
+It left: the zone **warming** from the agent's violet to the user's amber when a draft is taken, which needs `--voice` registered as a colour (`@property`), and that would end the fallbacks written `var(--voice, …)`; the voice changes at once instead. A page's **Markdown**, shown as written until the seam's renderer comes (STACK.md: TanStack Markdown); Help's pages show their marks meanwhile. The **crossings**, the draft breathing in its slot on the canvas and Open in Help centering it (HEX-108). **Giving the page the canvas's side**, an entry of the widget's settings that does nothing yet (the screen's, HEX-97). Escape on a widget stays HEX-96's open question.
+
+### DEC-32 The place map is a radio group, by name under a finger, and a secret inks in
+
+HEX-100. The tile widget's hex is the frame it goes in (`Places`), numbered as the canvas numbers it, 1 north-west to 6 west, its free places dashed. A picked place is a choice among a few, so the map is a radio group, the arrows going round and taking the place they land on, each place named for a screen reader and in its tooltip; the help widget's map is the same, its places Help's topics. Its hexes are small, under the 44px a finger needs, so under a coarse pointer the free places show by name too, a row of words at a thumb's size. A Context tile is lit in Context's colour. The key's secret inks in from a blur the one time it shows, the reference's reveal, a token now, `--animate-ink`, with its note.
+
+### DEC-33 Acting on a tile: a tap goes in, a line's key runs on the focused tile, and a finger moves through the menu, never by a drag
 
 HEX-105. The proposal lives in `canvas/tile/`, beside the tile it acts on: `menu/` holds `TileMenu`, the tile in its hover card and its menu, `Picker`, the frame in small a place submenu shows, and `verbs.ts`, what each kind offers, what a click and a tap do and the place the header and the card name, pure and tested; `moving/` holds `Moving.tsx`, the banner, the lifted tile, the slot offering itself, the swap's disc, and the stepped-back rest, `drag.ts`, `useDrag`, tested, and `move.ts`, what each place offers and where a drag lands, pure and tested. What Mapping decides stays its own: whether a tile turns into the other kind and whether a tile trades places come in from the caller (`Subject.turns`, `Seat.swaps`), which on home asks `decide` and `swapsWith`; the page reads them off its fixture once (`trades`). The lifecycle of a move, start, Escape, landing, a refusal's glide back and the focus returning, is the gallery's `useMove` for now: HEX-107 puts it in the canvas's state hooks, with their tests. The shared `Menu` grew what the tile needs and knows nothing of tiles: a submenu (`MenuSubmenu`), a picture of choices inside it (`MenuChoice`, an SVG group made a line of the menu), a menu held open in place for the page (`MenuDrawn`), and, where the menu opens on its thing, a line's key run on the thing itself. `Tile` and `Slot` take a `hand`, what their menu and card hand them, merged by Radix's `Slot`; `HoverCard` hands it on, keeps its words in a `<desc>` inside an SVG, and stays shut while the menu is open. HEX-107 puts them on home.
 

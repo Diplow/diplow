@@ -7,14 +7,15 @@
 // Proposal does, or the conversation's log.
 import { cn } from 'cn'
 import type { LucideIcon } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Act } from '../../atoms/controls/act'
 import { Fold } from '../atoms/fold'
 import { HexMark } from '../atoms/hex'
-import { Said, type Words } from '../text/words'
+import { useHandOffState } from '../layouts/useHandOffState'
+import { plainOf, Said, type Words } from '../text/words'
 import { Time } from './time'
 
 /** One change a decision makes: its verb's icon and what it does. */
@@ -46,13 +47,24 @@ export function Changes({
   )
 }
 
+/** Its hex, in the voice of whoever did it. */
+const marks = {
+  agent: 'fill-agent/20 stroke-agent',
+  human: 'fill-human/20 stroke-human',
+  app: 'fill-foreground/14 stroke-foreground',
+  quiet: 'stroke-faint',
+} as const
+
 interface ReceiptProps {
   words: Words
   at: Date
   /** What it changed, or would have: folded under its line. */
   changes?: readonly Change[]
-  /** What the agent did, in its voice; or what came to nothing, quiet. */
-  tone?: 'agent' | 'quiet'
+  /**
+   * Whose doing it was, in their voice: the agent's, the user's (a tile they wrote), the app's (a Key
+   * issued); or what came to nothing, quiet.
+   */
+  tone?: 'agent' | 'human' | 'app' | 'quiet'
   /** Puts the System back as it stood; none where nothing can be undone. */
   onUndo?: (() => void) | undefined
   /** A decision on its way: the Undo waits. */
@@ -89,14 +101,10 @@ export function Receipt({
     >
       <HexMark
         hollow={tone === 'quiet'}
-        className={cn(
-          'size-3.5',
-          tone === 'agent' ? 'fill-agent/20 stroke-agent' : 'stroke-faint',
-          undone && 'fill-none',
-        )}
+        className={cn('size-3.5', marks[tone], undone && 'fill-none')}
       />
       <span className={cn('min-w-0 wrap-anywhere', undone && 'text-faint')}>
-        <Said words={words} voice="agent" />
+        <Said words={words} voice={tone === 'human' ? 'human' : 'agent'} />
       </span>
       {/* Only what changes speaks up: the time, written once hydrated, stays out of it. */}
       <span aria-live="polite" className="inline-flex items-center">
@@ -136,5 +144,48 @@ export function Receipt({
         </Fold>
       )}
     </div>
+  )
+}
+
+interface UntilDecidedProps {
+  /** Its receipt once decided; none while it still asks. */
+  receipt: Omit<ReceiptProps, 'takesFocus'> | undefined
+  /** What asks: a widget, open. */
+  children: ReactNode
+}
+
+/**
+ * What asks until it is decided, then the receipt it leaves. Decided from inside, the focus it held
+ * goes to the receipt, so the keyboard never falls back to the top of the page; decided elsewhere, the
+ * focus stays where the user is and a status says it (`useHandOffState`). While it asks, a step of its
+ * own that takes away what had the focus (a Key's name giving way to its secret) gives
+ * the focus to its first control rather than to the page.
+ */
+export function UntilDecided({ receipt, children }: UntilDecidedProps) {
+  const { handOff, status, focused, onFocus, onBlur } = useHandOffState(
+    receipt === undefined ? 'open' : 'decided',
+    receipt === undefined ? '' : plainOf(receipt.words),
+  )
+  const asking = useRef<HTMLDivElement>(null)
+  // The focus counted inside yet fallen to the page: a step of its own removed what held it.
+  useEffect(() => {
+    if (!focused || document.activeElement !== document.body) return
+    asking.current?.querySelector<HTMLElement>('input, textarea, button, [tabindex="0"]')?.focus()
+  })
+  return (
+    <>
+      {receipt === undefined ? (
+        // The focus is the widget's, or a dialog's it opened, whose events reach here through React's tree.
+        <div ref={asking} onFocus={onFocus} onBlur={onBlur}>
+          {children}
+        </div>
+      ) : (
+        <Receipt {...receipt} takesFocus={handOff} />
+      )}
+      {/* Here from the start, so a screen reader hears what it comes to say. */}
+      <p role="status" className="sr-only">
+        {status}
+      </p>
+    </>
   )
 }

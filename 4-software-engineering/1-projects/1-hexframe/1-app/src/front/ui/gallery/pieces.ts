@@ -95,6 +95,38 @@ export const pieces = [
     note: m.gallery_note_receipt,
   },
   {
+    name: 'TileWidget',
+    tier: 'chat',
+    sources: [
+      'ui/chat/widgets/tile/TileWidget.tsx',
+      'ui/chat/widgets/tile/Proposal.tsx',
+      'ui/chat/widgets/tile/Transfer.tsx',
+    ],
+    madeOf: ['Proposal', 'Receipt', 'Mention', 'Widget', 'Dialog'],
+    note: m.gallery_note_tile_widget,
+  },
+  {
+    name: 'KeyWidget',
+    tier: 'chat',
+    sources: ['ui/chat/widgets/keys/KeyWidget.tsx'],
+    madeOf: ['Receipt', 'Mention', 'Widget', 'Dialog', 'Toaster'],
+    note: m.gallery_note_key_widget,
+  },
+  {
+    name: 'HelpWidget',
+    tier: 'chat',
+    sources: ['ui/chat/widgets/help/HelpWidget.tsx'],
+    madeOf: ['Mention', 'Widget'],
+    note: m.gallery_note_help_widget,
+  },
+  {
+    name: 'SignInWidget',
+    tier: 'chat',
+    sources: ['ui/chat/widgets/sign-in/SignInWidget.tsx'],
+    madeOf: ['Act'],
+    note: m.gallery_note_sign_in_widget,
+  },
+  {
     name: 'Widget',
     tier: 'chat',
     sources: ['ui/chat/layouts/Widget.tsx'],
