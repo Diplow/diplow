@@ -1,0 +1,62 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_e25be66b75c281::t_f84e3a2bd86a90 57,187
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/frame.tsx
+  s_e25be66b75c281::t_1797bb295e9fc0 8,37
+4-software-engineering/1-projects/1-hexframe/1-app/dependency-cruiser.config.ts
+  s_e25be66b75c281::t_7b4a127ca43503 117-132
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/light.tsx
+  s_e25be66b75c281::t_0424e6201d52e3 18-23
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/lint.test.ts
+  s_e25be66b75c281::t_7b4a127ca43503 316-317,321,368-381
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/text/Mention.tsx
+  s_e25be66b75c281::t_bbbce90bf0ac35 73-77
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_e25be66b75c281::t_a27a6ba936e09f 58
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/marks/Marks.tsx
+  s_e25be66b75c281::t_0424e6201d52e3 13,98,100,191
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/Screen.tsx
+  s_e25be66b75c281::t_3b1992212c4c7e 55-56,212-213
+  s_e25be66b75c281::t_66ae27e49c968c 33-41
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/Tile.tsx
+  s_e25be66b75c281::t_0424e6201d52e3 36,244
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/crossings.tsx
+  s_e25be66b75c281::t_4e22d89218071e 247,251,253,260,262-263,270
+  s_e25be66b75c281::t_f2c6bc15d92e3c 216-220,222,224-225,227,229-231,235,241-243
+  s_e25be66b75c281::t_5c124245ae2a01 248-249,261
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/pieces.test.ts
+  s_e25be66b75c281::t_1797bb295e9fc0 7,147-148
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-design-system-v1/decisions.md
+  s_e25be66b75c281::t_57dd33dc8af470 349,353,355,361,376
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/crossings.tsx
+  s_e25be66b75c281::t_23b13609bfbf58 9,115-117,120-122,127-128,131,133-134,136-148,163
+  s_e25be66b75c281::t_4e22d89218071e 238
+  s_e25be66b75c281::t_8f559686c0d89f 290-294
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/state/useScreenState.test.ts
+  s_e25be66b75c281::t_3b1992212c4c7e 145,150-154
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE.md
+  s_e25be66b75c281::t_a27a6ba936e09f 62
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/CLAUDE.md
+  s_e25be66b75c281::t_1797bb295e9fc0 18,32
+  s_e25be66b75c281::t_f84e3a2bd86a90 26
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/CLAUDE.md
+  s_e25be66b75c281::t_a27a6ba936e09f 25
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/state/useScreenState.ts
+  s_e25be66b75c281::t_3b1992212c4c7e 20,36-40,42-44
+  s_e25be66b75c281::t_66ae27e49c968c 10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7d8da814641b72260376f6a565260fb06c79f823",
+  "prompts": {},
+  "sessions": {
+    "s_e25be66b75c281": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d40ec224-9f1a-4356-bb2d-0a0ed5ecbb79",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
