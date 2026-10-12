@@ -28,8 +28,8 @@ import { type Given, type LeftOut, type Prepared, prepared } from './import/uplo
 import {
   importing,
   landingOf,
-  onItsWay,
-  type OnItsWay,
+  underwayOf,
+  type Underway,
   operationOf,
   overlaid,
   type Pending,
@@ -130,7 +130,7 @@ function pendingOf(mutation: Mutation): Pending {
  * a `frame` read, which would be a Query of its own and read the System twice.
  */
 export function useSystem({ throwing = true }: { throwing?: boolean } = {}): {
-  data: { system: System; root: SystemTile; writing: OnItsWay } | undefined
+  data: { system: System; root: SystemTile; underway: Underway } | undefined
 } {
   const { data } = useQuery(throwing ? systemRead : { ...systemRead, throwOnError: false })
   const pending = useMutationState({
@@ -141,7 +141,7 @@ export function useSystem({ throwing = true }: { throwing?: boolean } = {}): {
     data: useMemo(() => {
       if (data === undefined) return undefined
       const shown = overlaid(data, pending)
-      return { system: shown, root: systemOf(shown), writing: onItsWay(pending, data.root.id) }
+      return { system: shown, root: systemOf(shown), underway: underwayOf(pending, data.root.id) }
     }, [data, pending]),
   }
 }

@@ -4,7 +4,7 @@
 // `useRefusalState` does, and puts nothing back: the toast, or the form reopened, says why.
 import { useState } from 'react'
 
-import { tilesWrittenBy, type OnItsWay } from '#/front/client/mapping/overlay/overlay'
+import { tilesWrittenBy, type Underway } from '#/front/client/mapping/overlay/overlay'
 import { useSystemRefusals } from '#/front/client/mapping/queries'
 import type { EmptySlotTarget } from '#/front/ui/canvas/geometry/shape'
 import { durationOf } from '#/front/ui/canvas/state/motion'
@@ -16,10 +16,10 @@ import { standsFor } from '../tree'
 type Flaring = ReadonlyMap<string, symbol>
 
 /**
- * The writes as the canvas marks them, from `writing`, what the writes on their way change: a
+ * The writes as the canvas marks them, from `underway`, what the writes on their way change: a
  * Tile's, refused over on its way, and whether an import lands in a free slot.
  */
-export function useWritesState(writing: OnItsWay) {
+export function useWritesState(underway: Underway) {
   const [flaring, setFlaring] = useState<Flaring>(new Map())
   useSystemRefusals(({ operation }) => {
     const refusal = Symbol('refusal')
@@ -34,9 +34,9 @@ export function useWritesState(writing: OnItsWay) {
   return {
     tile: (id: string): TileWrite | undefined => {
       if (flaring.has(id)) return 'refused'
-      return writing.tiles.has(id) ? 'pending' : undefined
+      return underway.tiles.has(id) ? 'pending' : undefined
     },
     landing: ({ parent, ring, direction }: EmptySlotTarget) =>
-      writing.slots.some((at) => at.parent === parent.id && standsFor(ring, direction, at.slot)),
+      underway.slots.some((at) => at.parent === parent.id && standsFor(ring, direction, at.slot)),
   }
 }

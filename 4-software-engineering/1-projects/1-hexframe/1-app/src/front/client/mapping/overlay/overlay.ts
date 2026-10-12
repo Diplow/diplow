@@ -5,7 +5,7 @@
 // pending. Each write names the Versions of the Tiles it changes as the screen drew them, so a read
 // that already holds it, or holds a change made meanwhile elsewhere, has moved them on, and `decide`
 // refuses folding it again over that read. The same `decide` foresees a refusal before a write is
-// sent. What the writes on their way change is marked on the canvas while they are (`onItsWay`).
+// sent. What the writes on their way change is marked on the canvas while they are (`underwayOf`).
 // Pure.
 import { Option, Result, Schema } from 'effect'
 
@@ -103,7 +103,7 @@ export function tilesWrittenBy(operation: Operation): ReadonlyArray<string> {
 }
 
 /** What the writes on their way change, as the page marks them. */
-export interface OnItsWay {
+export interface Underway {
   /** The Tiles they change, by id, the Root of a System an import lands as included. */
   readonly tiles: ReadonlySet<string>
   /** The free slots imports land in, each by the Tile it stands under. */
@@ -111,7 +111,7 @@ export interface OnItsWay {
 }
 
 /** What the writes on their way to the System whose Root is `root` change. */
-export function onItsWay(pending: ReadonlyArray<Pending>, root: string): OnItsWay {
+export function underwayOf(pending: ReadonlyArray<Pending>, root: string): Underway {
   const tiles = new Set<string>()
   const slots: { parent: string; slot: Slot }[] = []
   for (const { operation, landing } of pending) {

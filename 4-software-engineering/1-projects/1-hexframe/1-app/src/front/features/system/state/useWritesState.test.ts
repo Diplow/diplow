@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import * as Mapping from '#/api/mapping/mapping'
 import type { System } from '#/domains/mapping/entities'
 import { makeQueryClient } from '#/front/client/channels'
-import type { OnItsWay } from '#/front/client/mapping/overlay/overlay'
+import type { Underway } from '#/front/client/mapping/overlay/overlay'
 import { useMoveTile, useSystem } from '#/front/client/mapping/queries'
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
 
@@ -46,17 +46,17 @@ const served: System = {
   version: 0,
 }
 
-const nothing: OnItsWay = { tiles: new Set(), slots: [] }
+const nothing: Underway = { tiles: new Set(), slots: [] }
 
 const parent: TileNode = { id: id.b, title: 'B', preview: '' }
 
-function render(writing: OnItsWay = nothing) {
+function render(underway: Underway = nothing) {
   vi.mocked(Mapping.system).mockResolvedValue({ ok: true, value: served })
   const client = makeQueryClient()
   const wrapper = ({ children }: { children: ReactNode }) =>
     createElement(QueryClientProvider, { client }, children)
   return renderHook(
-    () => ({ writes: useWritesState(writing), move: useMoveTile(), shown: useSystem().data }),
+    () => ({ writes: useWritesState(underway), move: useMoveTile(), shown: useSystem().data }),
     { wrapper },
   )
 }

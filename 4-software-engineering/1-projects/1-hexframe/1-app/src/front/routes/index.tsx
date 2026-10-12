@@ -357,14 +357,14 @@ interface SystemPageProps {
 function SystemPage({ search, onSearchChange, onViewChange, widgets, onExport }: SystemPageProps) {
   const { data } = useSystem()
   if (data === undefined) return <Loading />
-  const { system, root, writing } = data
+  const { system, root, underway } = data
   const tree: TileNode = canvasTree(root, { yours: true })
   return (
     <div className={side}>
       <System
         system={system}
         tree={tree}
-        writing={writing}
+        underway={underway}
         search={search}
         onViewChange={onViewChange}
         onSearchChange={onSearchChange}

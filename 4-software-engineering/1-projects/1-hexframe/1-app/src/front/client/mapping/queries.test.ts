@@ -192,7 +192,7 @@ describe("Mapping's hooks", () => {
             },
           },
         },
-        writing: { tiles: new Set(), slots: [] },
+        underway: { tiles: new Set(), slots: [] },
       })
     })
     expect(Mapping.system).toHaveBeenCalledWith({ data: undefined })

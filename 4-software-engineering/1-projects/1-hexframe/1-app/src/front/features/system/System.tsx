@@ -8,7 +8,7 @@
 // the next view, with the gesture that asked for it, and the next search params to the route.
 import { cn } from 'cn'
 
-import type { OnItsWay } from '#/front/client/mapping/overlay/overlay'
+import type { Underway } from '#/front/client/mapping/overlay/overlay'
 import { useMoveTile, useSwapTiles, useSystemWriting } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import { useLeaveGuard } from '#/front/ui/canvas/atoms/useLeaveGuard'
@@ -30,7 +30,7 @@ interface SystemProps {
   /** The System's Tiles as the canvas draws them (`canvasTree`). */
   tree: TileNode
   /** What the writes on their way change (`useSystem`). */
-  writing: OnItsWay
+  underway: Underway
   search: SystemSearch
   /** The next view, after a gesture on the canvas, and the gesture, on which Tile. */
   onViewChange: (view: CanvasView, action: ViewAction) => void
@@ -41,13 +41,13 @@ interface SystemProps {
 export function System({
   system,
   tree,
-  writing,
+  underway,
   search,
   onViewChange,
   onSearchChange,
   className,
 }: SystemProps) {
-  const writes = useWritesState(writing)
+  const writes = useWritesState(underway)
   const move = useMoveTile()
   const swap = useSwapTiles()
   useLeaveGuard(useSystemWriting())
@@ -123,7 +123,7 @@ export function System({
         view={viewOf(search)}
         onViewChange={onViewChange}
         emptySlots={moving === undefined ? addHere : moveHere(moving)}
-        swapTargets={moving === undefined ? undefined : swapWith(moving)}
+        move={moving === undefined ? undefined : { swapTargets: swapWith(moving) }}
         writes={writes}
         className="min-h-0 w-full flex-1"
       />

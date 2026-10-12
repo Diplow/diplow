@@ -43,11 +43,11 @@ interface CanvasProps {
    */
   emptySlots?: (slot: EmptySlotTarget) => Action | undefined
   /**
-   * Whether a Tile offers to trade places with the Tile on the move, how that is named and what it
-   * does, on a disc of its own at its foot; `undefined` for a Tile that offers no swap. Given, a tile
-   * is on the move, and no Branch shows its frame at its foot. Without it, none does.
+   * A tile on the move: no Branch shows its frame at its foot, and `swapTargets` says whether a Tile
+   * offers to trade places with it, how that is named and what it does, on a disc of its own at its
+   * foot; `undefined` for a Tile that offers no swap. Without it, nothing moves.
    */
-  swapTargets?: (tile: TileNode) => Action | undefined
+  move?: { swapTargets: (tile: TileNode) => Action | undefined }
   /** What is on its way: without it, nothing is. */
   writes?: Writes
   className?: string
@@ -58,7 +58,7 @@ export function Canvas({
   view,
   onViewChange,
   emptySlots,
-  swapTargets,
+  move,
   writes,
   className,
 }: CanvasProps) {
@@ -66,17 +66,16 @@ export function Canvas({
   const svg = useRef<SVGSVGElement>(null)
   const scale = useScale(svg, canvasSize)
   const { width, height } = canvasSize
-  const moving = swapTargets !== undefined
 
   /** A Tile's hex: the tile, by what it is and where it stands, and the swap it offers, if any. */
   const tileOf = (hex: TileHex) => {
     const action = actions.actionOf(hex)
-    const swap = swapTargets?.(hex.tile)
+    const swap = move?.swapTargets(hex.tile)
     return (
       <Fragment key={hex.key}>
         <Tile
           hex={hex.hex}
-          {...lookOf(hex, { moving })}
+          {...lookOf(hex, { moving: move !== undefined })}
           place={placeOf(hex)}
           scale={scale}
           write={writes?.tile(hex.tile.id)}

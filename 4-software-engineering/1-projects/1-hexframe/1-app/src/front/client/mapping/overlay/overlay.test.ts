@@ -22,7 +22,7 @@ import {
   useSystemRefusals,
   useSystemWriting,
 } from '../queries'
-import { landingOf, onItsWay, operationOf, overlaid, refusalOf, tilesWrittenBy } from './overlay'
+import { landingOf, underwayOf, operationOf, overlaid, refusalOf, tilesWrittenBy } from './overlay'
 
 // The System the page shows while writes are on their way, over stand-ins for the server functions:
 // each write shows before its answer, a refused one stops showing without a rollback, a refetch slips
@@ -521,7 +521,7 @@ describe('what the writes on their way change', () => {
 
   it('marks every pending write’s Tiles, the slot an import lands in, and the Root an import becomes', () => {
     const move = operation('moveTile', { id: id.a, version: 1, parent: id.root, slot: 4 })
-    const marked = onItsWay(
+    const marked = underwayOf(
       [
         { turn: 1, operation: move },
         {
@@ -553,20 +553,20 @@ describe('what the writes on their way change', () => {
     vi.mocked(Mapping.moveTile).mockReturnValue(answer.promise)
     const { result } = await rendered(() => ({
       move: useMoveTile(),
-      writing: useSystem().data?.writing,
+      underway: useSystem().data?.underway,
     }))
-    expect(result.current.hook.writing?.tiles.size).toBe(0)
+    expect(result.current.hook.underway?.tiles.size).toBe(0)
     act(() => {
       result.current.hook.move.mutate({ id: id.a, version: 1, parent: id.root, slot: 4 })
     })
     await waitFor(() => {
-      expect(result.current.hook.writing?.tiles.has(id.a)).toBe(true)
+      expect(result.current.hook.underway?.tiles.has(id.a)).toBe(true)
     })
     act(() => {
       answer.settle(ok)
     })
     await waitFor(() => {
-      expect(result.current.hook.writing?.tiles.size).toBe(0)
+      expect(result.current.hook.underway?.tiles.size).toBe(0)
     })
   })
 })
