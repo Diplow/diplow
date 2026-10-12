@@ -1,0 +1,86 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/commands.test.ts
+  s_e25be66b75c281::t_6533922af0e1b8 12,163-173
+  s_e25be66b75c281::t_7b068c55445ffa 174
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/state/useComposerState.ts
+  s_e25be66b75c281::t_264df715539dc3 10,63
+  s_e25be66b75c281::t_eb89d12b134d0d 6-7
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/demo.ts
+  s_e25be66b75c281::t_b8baaa39e8ba35 4,17
+  s_e25be66b75c281::t_317d1eab41db5e 7-8
+  s_e25be66b75c281::t_eb89d12b134d0d 204
+  s_e25be66b75c281::t_58fab6bf459493 5-6
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE.md
+  s_e25be66b75c281::t_6cd5d4643ab03e 33
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/CLAUDE.md
+  s_e25be66b75c281::t_0705fa94bb9eeb 36
+  s_e25be66b75c281::t_4c7b1dc1b94778 35
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/commands.ts
+  s_e25be66b75c281::t_b9539175458fc8 9-10
+  s_e25be66b75c281::t_3f2a13f1eddd71 392-411
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-design-system-v1/decisions.md
+  s_e25be66b75c281::t_dad6d79e48d43e 349,355,367,376
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/composer/typing.ts
+  s_e25be66b75c281::t_e9a5b7e157a7aa 3-5
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE.md
+  s_e25be66b75c281::t_6cd5d4643ab03e 33
+  s_e25be66b75c281::t_3d3ddc499e549c 26
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/CLAUDE.md
+  s_e25be66b75c281::t_ffdeb8aa31b147 18
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/crossings.tsx
+  s_e25be66b75c281::t_aa25b9c90fcdac 76-78,80,97
+  s_e25be66b75c281::t_3d3ddc499e549c 10,264,312,339,354,360,370,472
+  s_e25be66b75c281::t_cf405827b87f2d 123-124
+  s_e25be66b75c281::t_a44668f1bc173d 141
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/marks/mark.test.ts
+  s_e25be66b75c281::t_5019db428a4aa8 5
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_e25be66b75c281::t_cc0ac2b82ce564 125-128,130-131,133-134
+  s_e25be66b75c281::t_54f5da8bf30f14 129
+  s_e25be66b75c281::t_6fca2799f1fd09 132
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/crossings.tsx
+  s_e25be66b75c281::t_0b83dd9c5303ac 117-119,122-126
+  s_e25be66b75c281::t_583a672c9f1f32 442-443,447,449,452
+  s_e25be66b75c281::t_fa0bf4b005cf08 287
+  s_e25be66b75c281::t_3d3ddc499e549c 438
+  s_e25be66b75c281::t_2357e1aef967be 129-132
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/crossings.tsx
+  s_e25be66b75c281::t_5019db428a4aa8 55-58,63,69-70
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/acting.test.ts
+  s_e25be66b75c281::t_727cb26401cf18 282
+  s_e25be66b75c281::t_fe0e4a9cdb8688 283-289
+  s_e25be66b75c281::t_7b295b0ca68c1e 10,265-281,290
+  s_e25be66b75c281::t_f8c8217d428427 291-292
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/composer/mention.test.ts
+  s_e25be66b75c281::t_6e9497112e971d 5-7,75-108
+  s_e25be66b75c281::t_e22bc72e20318e 109-111
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/CLAUDE.md
+  s_e25be66b75c281::t_6cd5d4643ab03e 25
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/Canvas.tsx
+  s_e25be66b75c281::t_5019db428a4aa8 35,289-293
+  s_e25be66b75c281::t_3d3ddc499e549c 61,73,141,275
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/CLAUDE.md
+  s_e25be66b75c281::t_6cd5d4643ab03e 19
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/HoverCard.tsx
+  s_e25be66b75c281::t_20735d053d0c78 64-65
+  s_e25be66b75c281::t_b798d30dcc93c9 129
+  s_e25be66b75c281::t_4cb4137fdffeae 125-128,130-142
+  s_e25be66b75c281::t_c310ecf87b50bd 6
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/HoverCard.test.ts
+  s_e25be66b75c281::t_b798d30dcc93c9 1-42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fd2e509e688c842319f15ff1549bef6844c6fdb0",
+  "prompts": {},
+  "sessions": {
+    "s_e25be66b75c281": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d40ec224-9f1a-4356-bb2d-0a0ed5ecbb79",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
