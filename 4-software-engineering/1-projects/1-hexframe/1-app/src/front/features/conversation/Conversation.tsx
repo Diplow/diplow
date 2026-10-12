@@ -52,6 +52,8 @@ interface TimelineProps {
   days: readonly Day[]
   /** Centers the canvas on a Tile named; none where there is no canvas. */
   onCenter?: ((tile: string) => void) | undefined
+  /** What a Tile named says in its card, and its card open or shut, which the canvas lights. */
+  pointing?: Pick<Naming, 'card' | 'onPoint'> | undefined
   /** An earlier day holding an Entry, when there is one. */
   earlier?: Earlier | undefined
   /** Accepts or discards the open Proposal, or undoes what an accepted one or a Turn applied. */
@@ -88,6 +90,8 @@ interface FootProps {
   waiting?: boolean
   /** The Conversation's Mode and its switch; none before it is read. */
   mode?: ModeChoice | undefined
+  /** The `@` list's row the user is on, a Tile's by its id, or none: the canvas lights it. */
+  onPoint?: ((row: string | undefined) => void) | undefined
 }
 
 type ConversationProps = Omit<TimelineProps, 'className'> & FootProps & { className?: string }
@@ -116,6 +120,7 @@ export function Conversation({ className, ...props }: ConversationProps) {
 export function Timeline({
   days,
   onCenter,
+  pointing,
   earlier,
   decide,
   system,
@@ -148,7 +153,7 @@ export function Timeline({
               <EntryBlock
                 key={blockKey(block, index)}
                 block={block}
-                naming={{ titles: day.titles, system, onCenter }}
+                naming={{ titles: day.titles, system, onCenter, ...pointing }}
                 decide={decide}
               />
             ))}
@@ -160,7 +165,7 @@ export function Timeline({
           sending={sending}
           turn={turn}
           today={shown.at(-1)?.relative === 'today'}
-          naming={{ titles: Object.fromEntries(system ?? []), system, onCenter }}
+          naming={{ titles: Object.fromEntries(system ?? []), system, onCenter, ...pointing }}
         />
       )}
     </div>
@@ -254,6 +259,7 @@ export function ConversationFoot({
   sending = false,
   waiting = false,
   mode,
+  onPoint,
 }: FootProps) {
   const among = offered({
     modes: mode !== undefined && !unavailable,
@@ -283,6 +289,7 @@ export function ConversationFoot({
         }
       }}
       onLeave={actions.leave}
+      onPoint={onPoint}
       onSend={() => {
         const submitted = actions.submit()
         if (submitted === undefined) return

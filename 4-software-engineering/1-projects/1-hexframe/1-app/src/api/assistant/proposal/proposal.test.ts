@@ -131,15 +131,15 @@ describe('a Turn in ask', () => {
       proposal: { id: proposal?.proposal, drafts: 2 },
     })
     // The day answers the writes themselves, as Mapping batched them, each create with the id it made.
-    const day = await value(run(signedIn, Assistant.conversationDay({ offset: 0 })))
-    expect(day.proposal).toMatchObject({
-      id: proposal?.proposal,
-      drafts: 2,
-      writes: [
-        { operation: { _tag: 'CreateTile', parent: root.id, slot: 1, title: 'Work' }, made: work.id },
-        { operation: { _tag: 'CreateTile', parent: work.id, slot: 2, title: 'Team' }, made: team.id },
-      ],
-    })
+    const { proposal: shown } = await value(run(signedIn, Assistant.conversationDay({ offset: 0 })))
+    expect(shown).toMatchObject({ id: proposal?.proposal, drafts: 2 })
+    const creates = shown?.writes.map(({ operation: op, made }) =>
+      op._tag === 'CreateTile' ? [op.parent, op.slot, op.title, made] : op._tag,
+    )
+    expect(creates).toEqual([
+      [root.id, 1, 'Work', work.id],
+      [work.id, 2, 'Team', team.id],
+    ])
     await end()
   })
 
