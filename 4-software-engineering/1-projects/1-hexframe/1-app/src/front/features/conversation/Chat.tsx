@@ -13,7 +13,7 @@
 // Each is shown inside a ReadBoundary, which a failed read lands in.
 import { type ComponentProps, useMemo } from 'react'
 
-import type { Mode, Navigation } from '#/domains/assistant/entities'
+import type { Mode } from '#/domains/assistant/entities'
 import {
   type Sent,
   useAcceptProposal,
@@ -35,7 +35,7 @@ import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 
 import { mentionablesOf } from './composer/mention'
 import { ConversationFoot, Timeline } from './Conversation'
-import { dayOf, latestUndoable } from './timeline/timeline'
+import { dayOf, latestUndoable, type Went } from './timeline/timeline'
 
 /** The Account's Tiles the chat names and offers to `@`, from the System the page holds. */
 function useTiles() {
@@ -65,7 +65,7 @@ interface ChatTimelineProps {
   /** Posts a refused Message again, after the navigation it follows. */
   resend: (sent: Sent) => void
   /** Where the user went since the last navigation sent, merged, and when they last went. */
-  underWay: { readonly navigation: Navigation; readonly lastAt: number } | undefined
+  underWay: Went | undefined
 }
 
 export function ChatTimeline({ onCenter, pointing, turn, resend, underWay }: ChatTimelineProps) {
@@ -103,12 +103,8 @@ export function ChatTimeline({ onCenter, pointing, turn, resend, underWay }: Cha
           resend(sent)
         },
       }))}
-      going={recording.map(({ id, navigation, at }) => ({ id, navigation, at: new Date(at) }))}
-      underWay={
-        underWay === undefined
-          ? undefined
-          : { navigation: underWay.navigation, at: new Date(underWay.lastAt) }
-      }
+      going={recording}
+      underWay={underWay}
       turn={turn}
       earlier={
         hasNextPage

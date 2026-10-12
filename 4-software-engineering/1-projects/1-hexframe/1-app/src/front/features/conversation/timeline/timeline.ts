@@ -3,7 +3,7 @@
 // reads it a day at a time (`useConversation`); /design-system splits its fixtures by day. And what
 // the agent applied that `/undo` undoes, the latest that offers its Undo. Pure; the components render
 // it.
-import { dayAt, type Entry, offersUndo } from '#/domains/assistant/entities'
+import { dayAt, type Entry, type Navigation, offersUndo } from '#/domains/assistant/entities'
 
 /**
  * The Titles of the Tiles a day names by their id alone, those its navigations went to and its
@@ -62,8 +62,14 @@ export function latestUndoable(entries: ReadonlyArray<Entry>): string | undefine
   return undefined
 }
 
-/** A write on its way, by its turn: its `mutationId` in the MutationCache, which numbers every write. */
-interface Turned {
+/** Where the user went that the Conversation does not hold yet, and when they last went, in ms. */
+export interface Went {
+  readonly navigation: Navigation
+  readonly at: number
+}
+
+/** A write on its way, by its order: its `mutationId` in the MutationCache, which numbers each write. */
+interface Sequenced {
   readonly id: number
 }
 
@@ -74,25 +80,25 @@ export type Later<M, N> =
 
 /**
  * What comes after the last Entry, in the order it was sent: the Messages and the navigations on their
- * way, by their writes' turns, then the navigation under way, which comes last, since a Message sends
+ * way, by their writes' order, then the navigation under way, which comes last, since a Message sends
  * it first.
  */
-export function laterOf<M extends Turned, N extends Turned, U>(
+export function laterOf<M extends Sequenced, N extends Sequenced, U>(
   messages: ReadonlyArray<M>,
   navigations: ReadonlyArray<N>,
   underWay: U | undefined,
 ): ReadonlyArray<Later<M, N | U>> {
-  const sent: { turn: number; later: Later<M, N | U> }[] = [
+  const sent: { order: number; later: Later<M, N | U> }[] = [
     ...messages.map((message) => ({
-      turn: message.id,
+      order: message.id,
       later: { kind: 'message' as const, key: `message-${String(message.id)}`, message },
     })),
     ...navigations.map((went) => ({
-      turn: went.id,
+      order: went.id,
       later: { kind: 'went' as const, key: `went-${String(went.id)}`, went },
     })),
   ]
-  const ordered = sent.sort((a, b) => a.turn - b.turn).map(({ later }) => later)
+  const ordered = sent.sort((a, b) => a.order - b.order).map(({ later }) => later)
   if (underWay === undefined) return ordered
   return [...ordered, { kind: 'went', key: 'under-way', went: underWay }]
 }

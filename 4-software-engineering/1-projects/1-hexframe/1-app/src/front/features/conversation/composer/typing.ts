@@ -145,7 +145,7 @@ export function submittedOf(
 const isRun = (id: CommandId | undefined): id is RunCommand => run.some((each) => each === id)
 
 /** Where a Tile is named from outside: at the caret, as a drop names it, or first, `then` after it. */
-export type NameAt = 'caret' | { readonly first: string }
+export type NameAt = 'caret' | { readonly first: true; readonly then: string }
 
 /**
  * The field with a Tile named from outside, shown as a pick would show it, and the link it adds: at
@@ -163,7 +163,7 @@ export function namedIn(
   const edited =
     where === 'caret'
       ? namedAt(field.value, field.caret, title)
-      : namedFirst(field.value, title, where.first)
+      : namedFirst(field.value, title, where.then)
   return { ...edited, link: { id: tile.id, shown } }
 }
 
@@ -173,7 +173,7 @@ export function namedIn(
  * centered one, the words after a command being the Message; none where no Message goes, a language
  * or a command alone, nor for a Tile the page can't name.
  */
-export function placeOf(
+export function workingInOf(
   field: Field,
   {
     center,

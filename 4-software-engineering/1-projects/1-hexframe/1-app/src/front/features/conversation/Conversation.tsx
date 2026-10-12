@@ -15,7 +15,7 @@ import { cn } from 'cn'
 import { MessagesSquare } from 'lucide-react'
 import { useRef } from 'react'
 
-import type { Mode, Navigation, TurnStep } from '#/domains/assistant/entities'
+import type { Mode, TurnStep } from '#/domains/assistant/entities'
 import { m } from '#/paraglide/messages'
 import { assertIsLocale, getLocale, localizeHref } from '#/paraglide/runtime'
 import { Act } from '#/front/ui/atoms/controls/act'
@@ -32,7 +32,7 @@ import { EntryBlock } from './entry/Entry'
 import type { Deciding } from './entry/parts'
 import { blocksOf, happenedOf, messageWords, type Naming } from './entry/words'
 import { useComposerState, writeInto } from './state/useComposerState'
-import { type Day, type Later, laterOf } from './timeline/timeline'
+import { type Day, type Later, laterOf, type Went } from './timeline/timeline'
 
 /** The day before the oldest one shown, which the reader may ask for. */
 interface Earlier {
@@ -51,13 +51,7 @@ interface Sending {
   readonly retry: () => void
 }
 
-/** Where the user went that the Conversation does not hold yet, and when they went. */
-interface Went {
-  readonly navigation: Navigation
-  readonly at: Date
-}
-
-/** A navigation on its way, by its write's turn, which orders it among the Messages on theirs. */
+/** A navigation on its way, by its write's order, which places it among the Messages on theirs. */
 interface Going extends Went {
   readonly id: number
 }
@@ -234,7 +228,10 @@ function Latest({
           <Events
             key={each.key}
             lines={[
-              happenedOf({ ...each.went.navigation, id: each.key, at: each.went.at }, naming),
+              happenedOf(
+                { ...each.went.navigation, id: each.key, at: new Date(each.went.at) },
+                naming,
+              ),
             ]}
           />
         ),
@@ -341,7 +338,7 @@ export function ConversationFoot({
       waiting={waiting}
       unavailable={unavailable}
       // No Turn answers an Account that may not use the Assistant.
-      place={unavailable ? undefined : state.place}
+      place={unavailable ? undefined : state.workingIn}
       carried={carried?.title}
       onDrop={() => {
         if (carried !== undefined) actions.name(carried.id, 'caret')

@@ -7,21 +7,19 @@
 // Conversation will tell it once recorded (HEX-110), so the page holds it in state too.
 import { useCallback, useRef, useState, useSyncExternalStore } from 'react'
 
-import { merged, type Navigation, within } from '#/domains/assistant/entities'
+import { merged, within } from '#/domains/assistant/entities'
 import { usePostMessage, useRecordNavigation } from '#/front/client/assistant/conversation'
 import { useEachSystemWrite } from '#/front/client/mapping/queries'
 
 import { useFact } from '../../bus'
 import { Navigated } from '../../facts'
+import type { Went } from '../timeline/timeline'
 
 /** A Message the user sends, and the view it was sent from. */
 type Sent = Parameters<ReturnType<typeof usePostMessage>['mutate']>[0]
 
-/** The navigation under way: the gestures merged so far, and when the last was made. */
-interface UnderWay {
-  readonly navigation: Navigation
-  readonly lastAt: number
-}
+/** The navigation under way: the gestures merged so far, and when the last was made, in ms. */
+type UnderWay = Went
 
 const nothing = () => undefined
 
@@ -50,14 +48,14 @@ export function useNavigationSender(): Sender {
     underWay.current = undefined
     show(undefined)
     // A day at most, as the server takes it: a tab left open longer dates it back a day.
-    const sinceLast = within(Date.now() - held.lastAt)
+    const sinceLast = within(Date.now() - held.at)
     record({ navigation: held.navigation, sinceLast })
   }, [record])
 
   const navigated = useCallback(({ gesture, tile }: Navigated) => {
     underWay.current = {
       navigation: merged(underWay.current?.navigation, { gesture, tile }),
-      lastAt: Date.now(),
+      at: Date.now(),
     }
     show(underWay.current)
   }, [])

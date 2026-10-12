@@ -23,10 +23,10 @@ import {
   namedIn,
   type NameAt,
   pickOf,
-  placeOf,
   type Submitted,
   submittedOf,
   typingAt,
+  workingInOf,
 } from '../composer/typing'
 
 interface State extends Field {
@@ -78,6 +78,21 @@ export function writeInto(element: HTMLTextAreaElement, { value, caret }: Edited
   element.setSelectionRange(caret, caret)
 }
 
+/**
+ * The field's reducer, and the field as the last event left it, which the bus's reaction reads
+ * whenever a fact comes, so it stays the same reaction and subscribes once per set of Tiles. Every
+ * event goes through `send`, the only way in, so the two never part.
+ */
+function useField() {
+  const [state, dispatch] = useReducer(reducer, initial)
+  const latest = useRef(initial)
+  const send = useCallback((event: Event) => {
+    latest.current = reducer(latest.current, event)
+    dispatch(event)
+  }, [])
+  return { state, latest, send }
+}
+
 /** What the composer's state hook is told besides its Tiles and commands. */
 interface ComposerInput {
   /** The Tile centered on the canvas, by its id; none while the page can't say. */
@@ -96,14 +111,7 @@ export function useComposerState(
   among: ReadonlyArray<Command>,
   { center, field }: ComposerInput = {},
 ) {
-  const [state, dispatch] = useReducer(reducer, initial)
-  // The field as the last event left it, which the bus's reaction reads whenever a fact comes, so it
-  // stays the same reaction and subscribes once per set of Tiles.
-  const latest = useRef(initial)
-  const send = useCallback((event: Event) => {
-    latest.current = reducer(latest.current, event)
-    dispatch(event)
-  }, [])
+  const { state, latest, send } = useField()
   /** A Tile named from outside, written into the field, its caret just after it, the focus there. */
   const name = useCallback(
     (tile: string, where: NameAt): (Edited & { readonly link: Inserted }) | undefined => {
@@ -123,7 +131,8 @@ export function useComposerState(
   const asked = useCallback(
     ({ tile, place }: AskedAboutTile) => {
       name(tile, {
-        first:
+        first: true,
+        then:
           place === undefined ? '' : m.crossing_ask_for_one({ direction: directionName(place) }),
       })
     },
@@ -137,7 +146,7 @@ export function useComposerState(
       typing,
       marks: fieldMarksOf(state.value, state.links, among),
       /** Where the next Turn works, the Tile the Message opens with, `first`, else the centered one. */
-      place: center === undefined ? undefined : placeOf(state, { center, tiles, among }),
+      workingIn: center === undefined ? undefined : workingInOf(state, { center, tiles, among }),
     },
     actions: {
       /** The field changed, or its caret moved. */

@@ -262,8 +262,9 @@ export const useRecordNavigation = () => {
 }
 
 /**
- * Where the user went that the Conversation does not hold yet: its write's turn, and when it was sent,
- * in ms, a number the MutationCache's answers share as they are.
+ * Where the user went that the Conversation does not hold yet: its write's order, and when its last
+ * gesture was, in ms, as the server will date it, a number the MutationCache's answers share as they
+ * are.
  */
 export interface NavigationOnItsWay {
   readonly id: number
@@ -271,7 +272,9 @@ export interface NavigationOnItsWay {
   readonly at: number
 }
 
-const decodeRecorded = Schema.decodeUnknownOption(Schema.Struct({ navigation: Navigation }))
+const decodeRecorded = Schema.decodeUnknownOption(
+  Schema.Struct({ navigation: Navigation, sinceLast: Schema.Number }),
+)
 
 /**
  * The navigations the page recorded that the Conversation does not hold, oldest first, each on its
@@ -283,10 +286,11 @@ export function useNavigationsOnTheirWay(): ReadonlyArray<NavigationOnItsWay> {
     filters: { mutationKey: [recordScope], status: 'pending' },
     select: (mutation) =>
       Option.getOrUndefined(
-        Option.map(decodeRecorded(mutation.state.variables), ({ navigation }) => ({
+        Option.map(decodeRecorded(mutation.state.variables), ({ navigation, sinceLast }) => ({
           id: mutation.mutationId,
           navigation,
-          at: mutation.state.submittedAt,
+          // Dated as the server dates it, from its last gesture, so its time holds as it lands.
+          at: mutation.state.submittedAt - sinceLast,
         })),
       ),
   }).filter((going) => going !== undefined)

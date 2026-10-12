@@ -238,6 +238,12 @@ describe('the lines home leaves out', () => {
     expect(withoutOf(systems, hex('tile:notes'))).toEqual(['show-context'])
   })
 
+  it("leaves the agent's out of a broken Reference's menu, which names no Tile", () => {
+    const holding = hex('tile:holding')
+    const broken = { ...holding, tile: { ...holding.tile, broken: true as const } }
+    expect(withoutOf(systems, broken)).toEqual(['ask-agent'])
+  })
+
   it('leaves out an import as the Root, but into an empty System', () => {
     expect(withoutOf(systems, hex('tile:root'))).toEqual(['import'])
     const empty: System = { ...flat, root: { ...flat.root, title: '' }, tiles: {} }

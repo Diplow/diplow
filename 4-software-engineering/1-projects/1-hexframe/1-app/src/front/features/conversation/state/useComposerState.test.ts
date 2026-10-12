@@ -209,7 +209,7 @@ describe('a Tile named from outside', () => {
   it('is named first, what was written kept, as a menu asks the agent about it', () => {
     const { name, type, send } = render()
     type('what is missing?')
-    expect(name('team', { first: '' })).toMatchObject({
+    expect(name('team', { first: true, then: '' })).toMatchObject({
       value: '@Team what is missing?',
       caret: 6,
     })
@@ -218,9 +218,9 @@ describe('a Tile named from outside', () => {
 
   it('opens with the words its caller gives after it, and keeps one link, named again', () => {
     const { result, name, send } = render()
-    name('work', { first: 'a new tile, east: ' })
+    name('work', { first: true, then: 'a new tile, east: ' })
     expect(result.current.state.value).toBe('@Work a new tile, east: ')
-    name('work', { first: '' })
+    name('work', { first: true, then: '' })
     expect(result.current.state.value).toBe('@Work a new tile, east: ')
     expect(send()).toEqual({ message: `${linkTo('work')} a new tile, east:` })
   })
@@ -271,27 +271,27 @@ describe('a menu asking the agent', () => {
 describe('where the next Turn works', () => {
   it('is the centered Tile, until the Message opens with a link to another', () => {
     const { result, type, pick } = render({ modes: true, undoable: true }, 'work')
-    expect(result.current.state.place).toEqual({ title: 'Work', first: false })
+    expect(result.current.state.workingIn).toEqual({ title: 'Work', first: false })
     type('@Te')
     pick('team')
-    expect(result.current.state.place).toEqual({ title: 'Team', first: true })
+    expect(result.current.state.workingIn).toEqual({ title: 'Team', first: true })
     type('see @Team')
-    expect(result.current.state.place).toEqual({ title: 'Work', first: false })
+    expect(result.current.state.workingIn).toEqual({ title: 'Work', first: false })
   })
 
   it('is read off what the field sends: the words after a command, none for a command alone', () => {
     const { result, type, pick } = render({ modes: true, undoable: true }, 'work')
     type('/apply ')
-    expect(result.current.state.place).toBeUndefined()
+    expect(result.current.state.workingIn).toBeUndefined()
     type('/apply @Te')
     pick('team')
-    expect(result.current.state.place).toEqual({ title: 'Team', first: true })
+    expect(result.current.state.workingIn).toEqual({ title: 'Team', first: true })
     type('/language ')
-    expect(result.current.state.place).toBeUndefined()
+    expect(result.current.state.workingIn).toBeUndefined()
   })
 
   it('is none while the page says no center', () => {
     const { result } = render()
-    expect(result.current.state.place).toBeUndefined()
+    expect(result.current.state.workingIn).toBeUndefined()
   })
 })

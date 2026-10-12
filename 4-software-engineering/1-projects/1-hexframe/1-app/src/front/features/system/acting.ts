@@ -180,10 +180,11 @@ export function framesOf(systems: Systems, hex: TileHex) {
 
 /**
  * The lines home leaves out of a Tile's menu: a Leaf's Context, which a Leaf has none of; an import
- * as the Root, but into an empty System's.
+ * as the Root, but into an empty System's; the agent's on a broken Reference, which names no Tile.
  */
 export function withoutOf({ root }: Systems, hex: TileHex): Verb[] {
   return [
+    ...(hex.tile.broken === true ? (['ask-agent'] as const) : []),
     ...(hex.tile.leaf === true ? (['show-context'] as const) : []),
     ...(hex.tile.root !== undefined && !isEmptySystem(root) ? (['import'] as const) : []),
   ]
