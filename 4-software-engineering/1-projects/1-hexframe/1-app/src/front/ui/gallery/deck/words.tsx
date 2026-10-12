@@ -1,13 +1,14 @@
 // The deck's first two slides, words on the ground alone, before there is a screen: why hexframe
-// exists, beside a sun drawn in the root's warm light, since each person is one in hexframe's
-// universe; then the six principles its look follows, which rise one after another. The screen comes
-// with the slide after, the chat first.
+// exists, beside a sun drawn in the root's warm light, the brand's Sunstone at its heart, since each
+// person is one in hexframe's universe; then the six principles its look follows, which rise one
+// after another. The screen comes with the slide after, the chat first.
 import { cn } from 'cn'
 import type { CSSProperties } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Brand, cornerPlace } from '../../layouts/screen/Screen'
+import { Sunstone } from '../../layouts/screen/Sunstone'
 import { DeckRail, WayOn, type Go } from './Deck'
 
 /** A slide of words, on the ground alone: the brand, the corner, the words, the way on. */
@@ -140,8 +141,9 @@ const worlds = [
 ]
 
 /**
- * A sun in the root's warm light, the user's in hexframe's universe: its glow, the brand's hex at
- * its heart, and what they understand turning round it on hairline orbits. Still with reduced motion.
+ * A sun in the root's warm light, the user's in hexframe's universe: its glow, the brand's Sunstone at
+ * its heart, the six things they care about meeting in them, and what they understand turning round
+ * it on hairline orbits. Still with reduced motion.
  */
 function Sun() {
   return (
@@ -190,14 +192,8 @@ function Sun() {
             </g>
           </g>
         ))}
-        <polygon
-          points={hex(9)}
-          fill="color-mix(in oklab, var(--human) 18%, transparent)"
-          stroke="var(--human)"
-          strokeWidth={1.2}
-          vectorEffect="non-scaling-stroke"
-        />
       </svg>
+      <Sunstone className="absolute top-1/2 left-1/2 h-[17%] -translate-1/2" />
     </div>
   )
 }
