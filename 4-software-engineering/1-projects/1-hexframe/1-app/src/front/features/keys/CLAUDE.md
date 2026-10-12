@@ -3,27 +3,31 @@ title: keys
 parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/keys
 owner: diplo
 preview: >-
-  The Keys page's content: name and issue a Key, see its secret once beside
-  the command that adds hexframe to Claude Code, list the Account's Keys and
-  revoke one after a confirmation. Its actions move into the chat once the
-  Assistant exists.
+  The Account's Keys in the chat, on ui's key widget: the Keys given, each
+  revoked after a confirmation; a new one named, then its secret, shown once,
+  beside the command that adds hexframe to Claude Code; then its receipt.
+  Open while the URL says so, its step the page's.
 ---
 # keys
 
-What `/settings/keys` shows, behind `signedInOnly`. A Key is IAM's: a credential the Account issues to a program, such as Claude Code, which proves the Account at `/mcp` ([[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE|iam]]). The calls go through `front/client/iam/keys.ts` ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE|front]]).
+What home's chat shows of the Account's Keys (HEX-103), on ui's `KeyWidget` ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/CLAUDE|widgets]]). A Key is IAM's: a credential the Account issues to a program, such as Claude Code, which proves the Account at `/mcp` ([[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE|iam]]). The calls go through `front/client/iam/keys.ts` ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE|front]]).
 
-- **Issue**: a name, then the Key's secret and the `claude mcp add` command that holds it, each with a copy button. The command names the hexframe the page was served from, its origin read in the browser when the answer arrives.
-- **List**: the Keys on `DataTable`, by name, first characters, creation and last use; `EmptyState` when there is none.
-- **Revoke**: from a Key's row, once `ConfirmDialog` is confirmed.
+- **The Keys**: by name, how each secret starts, the day it was made and when it was last used, lit while used within the hour; each revoked after the `Dialog`.
+- **A new Key**: its name, then its secret and the `claude mcp add` command that holds it, each copied from its corner. The command names the hexframe the page was served from, its origin read in the browser when the answer arrives.
+- **Done**: the secret forgotten, a receipt naming the Key in its place.
 
 | File | Holds |
 |---|---|
-| `Keys.tsx` | `Keys`, the page's content: the issue form or the Key just issued, then the list, inside its `ReadBoundary` |
-| `command.ts` | `mcpCommand`, the command that adds hexframe's MCP server to Claude Code with a Key. Pure and tested |
+| `KeyWidgets.tsx` | `KeyWidgets`, the widget at the conversation's foot, its every step the one `KeyWidget`, so its hand-off moves the focus |
+| `search.ts` | `keys`, home's search param, the widget open; `withKeys`. Pure and tested |
+
+| Folder | Holds |
+|---|---|
+| `shown/` | What the widget shows of a Key: `rows.ts`, `rowOf`, a Key as its row words it; `command.ts`, `mcpCommand`, the command that adds hexframe's MCP server to Claude Code with a Key; `name.ts`, the name's limit, a mirror of IAM's until HEX-115 puts it at IAM's door. Pure, each tested beside it but the mirror |
+| `state/` | `useKeyWidgetState`, the step, the new Key's name and its refusal, and what each action does; `stepOnOpen`, the step the URL opening or closing the widget leaves. Tested over a stand-in for issuing |
 
 ## Rules
 
-- **The secret is shown once and kept nowhere.** It reaches the page in issuing's answer only, through `submitWrite`, a form's submit no cache holds, where every other form's write is a mutation; it lives in `Keys`'s state, so leaving the screen, or Done, forgets it.
+- **The secret is shown once and kept nowhere.** It reaches the page in issuing's answer only, through `submitWrite`, a form's submit no cache holds, where every other form's write is a mutation; it lives in the state hook alone, so Done, or the widget closed any other way, forgets it (`hexframe-app-design-system-v1/decisions.md#DEC-42`).
 - **A refusal takes its channel**: a name IAM refuses (`KeyNameInvalid`) shows under the field; a revoke of a Key already gone (`KeyNotFound`) in a toast.
-- **`Copyable` stays here until a second feature needs it.** It is a label, a `<code>` and `ui/`'s `Button` and `toast`, composed for the secret and the command. A feature does not add to `ui/` (ui's rules), so the day another feature wants it, a ticket moves it there with a gallery entry.
-- **These actions move into the chat once the Assistant exists.** The page is where they live until then.
+- **Whether it is open is the URL's, the step the page's**, held by home so the receipt outlives the widget.

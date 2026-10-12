@@ -11,8 +11,6 @@ import { environmentOf, type Environment } from './src/api/report/observability/
 /** The globals src/vite-env.d.ts declares, for where the app runs; vitest.config.ts sets them too. */
 export function definesFor(environment: Environment) {
   return {
-    // The /dev pages: served by `pnpm dev` and on Vercel previews, a 404 in production and in a local build.
-    __DEV_PAGES__: JSON.stringify(environment !== 'production'),
     // Where the app runs, for the verbosity it logs at (src/api/report/observability/levels.ts).
     __ENVIRONMENT__: JSON.stringify(environment),
   }

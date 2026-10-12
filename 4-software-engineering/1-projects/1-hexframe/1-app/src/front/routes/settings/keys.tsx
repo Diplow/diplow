@@ -1,11 +1,11 @@
-// The Account's Keys: issue one for a program such as Claude Code, see its secret once, revoke one.
-// Signed out, the guard sends the visit to sign-in, then back here.
-import { createFileRoute } from '@tanstack/react-router'
+// An old link to the Keys page lands on the screen, the key widget open in the chat; signed out, it
+// stays open once signed in.
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
-import { signedInOnly } from '#/front/client/iam/guard'
-import { Keys } from '#/front/features/keys/Keys'
+import { withKeys } from '#/front/features/keys/search'
 
 export const Route = createFileRoute('/settings/keys')({
-  beforeLoad: signedInOnly,
-  component: Keys,
+  beforeLoad: () => {
+    redirect({ to: '/', search: withKeys(true), replace: true, throw: true })
+  },
 })

@@ -3,25 +3,30 @@ title: help
 parent: 4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help
 owner: diplo
 preview: >-
-  Help on the canvas at /help, read-only, in the page's language, for anyone:
-  a reader centers, expands and shows the Context as on home, and the centered
-  Tile's card opens its Body in a drawer. The view and the open Body live in
-  the URL.
+  Help on home, read-only, in the page's language, for anyone: on the canvas,
+  signed out, or while its widget is open signed in, the centered Tile's card
+  at its foot, whose Read opens its page in the help widget, in the chat. The
+  view and the topic open live in the URL.
 ---
 # help
 
-What `/help` shows: Help, the System hexframe ships, read whole through `useHelp` in the page's language (`front/client/mapping/queries.ts`, [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE|front]]) and drawn by the canvas. The route composes it with the breadcrumb, and passes both Help's Tiles as the canvas draws them (`canvasTree`, from the system feature) and the Tile whose Body is open.
+What home shows of Help (HEX-103): Help, the System hexframe ships, read whole through `useHelp` in the page's language (`front/client/mapping/queries.ts`, [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE|front]]), drawn by the canvas and read in the help widget (`HelpWidget`, [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/CLAUDE|widgets]]). Signed out, Help is always on the canvas; signed in, it takes the canvas while the widget is open. The route composes it with the breadcrumb, and passes Help's Tiles as the canvas draws them (`canvasTree`, from the system feature).
 
 - **Read-only.** No empty slot takes a click and no Tile offers a swap: the canvas only changes the view, as on home.
-- **A Body opens in a drawer.** The centered Tile's card holds its Title and Preview, and a button that opens its Body, shown as written, in Markdown, as home's form shows it.
+- **A topic opens in the chat.** The centered Tile's card holds its Title and Preview, and Read, which opens its page in the help widget; the map turns the page, a topic it reads on and Open in Help center the canvas on it (`hexframe-app-design-system-v1/decisions.md#DEC-43`).
 
 | File | Holds |
 |---|---|
-| `search.ts` | The page's search params: the canvas's view, then `open`, the Tile whose Body is open, each field falling back on its own; `viewOf`, `withView`, which keeps the open Body, and `withOpen`, which keeps the view. Pure and tested |
-| `search.test.ts` | Those search params read, a field the URL got wrong falling back alone, and each change keeping the other |
-| `Help.tsx` | `HelpCanvas`, Help on the canvas, and `HelpTile`, the centered Tile's card and the drawer of the open Body |
+| `Help.tsx` | `HelpCanvas`, Help on the canvas, and `HelpTile`, the centered Tile's card |
+| `HelpWidgets.tsx` | `HelpWidgets`, the help widget on the topic the URL names |
+| `nodes.ts` | `helpNodeOf`, Mapping's Tiles as the widget's topics, and `readingOf`, what the widget shows of a topic: where it stands, its parent's titles and six, and where it reads on. Pure and tested |
+| `search.ts` | `help`, home's search param: the topic open, by its id, or `true`, Help's Root; `topicOf`, `withHelp`, and `fromHelpPage`, where an old link to the Help page lands. Pure and tested |
 
 ## Rules
 
-- **The view and the open Body belong to the URL**, as on home: a link opens Help where its sender was, the drawer included. Help's ids are the same in every language, so switching languages keeps the view.
-- **Anyone reads it.** The route has no guard, and its read asks for no Account (`hexframe-app-mcp-server/decisions.md#DEC-19`, `#DEC-20`).
+- **The view and the topic belong to the URL**, as on home: a link opens Help where its sender was, the widget included. Help's ids are the same in every language, so switching languages keeps both.
+- **Anyone reads it.** Its read asks for no Account (`hexframe-app-mcp-server/decisions.md#DEC-19`, `#DEC-20`).
+
+## Not wired
+
+What HEX-100 drew that the page cannot fill yet (`#DEC-43`): Ask about it, the search (`/help` and a few words) and the shortcuts (`?`), the page's Markdown rendered.

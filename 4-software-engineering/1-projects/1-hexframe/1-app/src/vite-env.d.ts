@@ -1,6 +1,3 @@
-/** Whether the /dev pages are served: in `pnpm dev` and on Vercel previews. Set in vite.config.ts. */
-declare const __DEV_PAGES__: boolean
-
 /** Where the app runs: `pnpm dev`, a Vercel preview, or production (a local build too). Set in vite.config.ts. */
 declare const __ENVIRONMENT__: 'development' | 'preview' | 'production'
 
