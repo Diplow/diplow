@@ -414,3 +414,23 @@ HEX-110. The crossings from the canvas to the chat are wired on home on the piec
 Left as they were: the commands the composer offers (`HEX-101#PARK-1`), the live step's Tile (`HEX-109#PARK-1`), and Drafting on home (`#DEC-49`, for the phase close).
 
 Checked in a browser on home, signed in on a local account, light and dark, English and French, wide and in a 390px frame: "the agent works in" the Root, then in Projects once centered, "named first" for a Message opening with another Tile's link; "Ask the agent about it" naming Projects first, the focus after it, by mouse wide and from the menu with the canvas in front at 390px; "Ask the agent for one" on a free slot naming the Root and "a new tile, east:"; a gesture shown at the timeline's foot as it is made, in both languages; Projects dragged off the canvas by pointer events paced as a hand's, `Carried` following the pointer, the composer lit and saying where to let go, then named at the caret, said in its live region, the move ended. A Message sent hung the local dev server's database, on `project/design-system-v1` as on this branch, so the agent's light after a send was not looked at here; touch and reduced motion were not looked at either.
+
+### DEC-51 The walk of the whole screen: reduced motion made to win, the focus given back, a free slot placed, a Button 44px under a finger; what a finger and VoiceOver still owe
+
+HEX-111. The screen walked on a local dev server rather than the branch's preview, which sits behind Vercel's login, signed out then signed in on a local account, wide and in a 390px frame, light and dark, English and French, and `/design-system`. claude-in-chrome can't press Tab, emulate touch nor turn on VoiceOver, so the walk moved the focus with `.focus()` and real key presses, emulated reduced motion and a finger by turning the stylesheet's `prefers-reduced-motion` and `pointer`/`hover` media queries on or off and answering `matchMedia` the same, and read the accessibility tree for what VoiceOver would say. Fixed where it was found:
+
+- **Reduced motion now stills what opens and closes.** `motion-reduce:animate-none` lost to `data-[state=open]:animate-in` and its `closed` twin, selectors of higher specificity, so the hover card, the menu, the dialog and the widget's fold still slid, zoomed and faded. It carries Tailwind's important mark now (`animate-none!`), the one way to outrank a state variant without rewriting each animation as `motion-safe:`; the Drawer and `ConfirmDialog`, which had no reduced motion at all, take it too.
+- **The focus is given back.** A `Dialog` has no trigger of its own, so Radix gave the focus back to nothing as it closed: a delete asked from a focused Tile and cancelled left the keyboard at the top of the page. It now gives the focus back to what had it as it opened. A tile widget left by Cancel did the same; `UntilDecided` now gives the focus it held back to what had it as the widget opened, the Tile it edits included. A decided widget still hands the focus to its receipt.
+- **A free slot says where it is.** The six free slots around a tile shared one name, "Add a tile under X"; each says its place beside it now (`aria-description`, `slotPlace`: "free, north-west"), as a Tile says its kind.
+- **A `Button` is 44px each way under a finger**, as the rest of `ui/` is: the root header's links were 32px tall and the canvas's ring chooser 24px.
+
+Found and left, for a later ticket of the project, since each changes what the screen says or draws:
+
+- **The agent's answer arrives silently for a screen reader.** The conversation is a `region`, not a `log`, and no live region tells a new Message, a Thinking or a Proposal arriving; `Receipt.tsx` already speaks of "the conversation's log". Making the timeline a log means deciding what an earlier day read in at the top says, so it waits for a VoiceOver run.
+- **A Tile tells its kind but not its place** to a screen reader ("a Branch"); its place is in the hover card, which is for the eye alone.
+- **The headings go from the page's `h1`, sr-only, to the widgets' `h3`**, with no `h2` between; the ring chooser is a `toolbar` whose buttons each take a Tab stop rather than the arrow keys.
+- **Escape doesn't leave a widget**; its Cancel does, a Tab away. The proposal drew no key for it.
+- **A widget's fields and the composer's are 31px and 34px tall under a finger**, their labels around them; a tap on the label focuses the field.
+- **Nothing signs out on home**: `/sign-out` waits with the other commands (`HEX-101#PARK-1`).
+
+Not reproduced: HEX-110's report that sending a Message hangs the dev server. Two Messages sent, on the in-memory PGlite and the fake agent, each answered with its Proposal in under five seconds.
