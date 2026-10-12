@@ -248,20 +248,6 @@ export const pieces = [
     note: m.gallery_note_confirm_dialog,
   },
   {
-    name: 'DataTable',
-    tier: 'layouts',
-    sources: ['ui/layouts/DataTable.tsx'],
-    madeOf: ['Skeleton'],
-    note: m.gallery_note_data_table,
-  },
-  {
-    name: 'PageHeader',
-    tier: 'layouts',
-    sources: ['ui/layouts/PageHeader.tsx'],
-    madeOf: [],
-    note: m.gallery_note_page_header,
-  },
-  {
     name: 'EmptyState',
     tier: 'layouts',
     sources: ['ui/layouts/states.tsx'],

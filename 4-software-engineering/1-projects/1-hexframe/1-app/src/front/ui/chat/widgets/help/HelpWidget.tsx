@@ -38,8 +38,8 @@ interface Reading {
   onReadOn: (id: string) => void
   /** Centers the canvas on Help at this topic. */
   onOpenInHelp: () => void
-  /** Asks the agent about it. */
-  onAsk: () => void
+  /** Asks the agent about it; none where no agent can be asked, and Ask about it goes. */
+  onAsk?: (() => void) | undefined
   onDismiss: () => void
 }
 
@@ -101,7 +101,7 @@ function Topic({
       subtitle={preview === '' ? undefined : preview}
       actions={[
         { label: m.widget_help_open(), onSelect: onOpenInHelp },
-        { label: m.widget_help_ask(), onSelect: onAsk },
+        ...(onAsk === undefined ? [] : [{ label: m.widget_help_ask(), onSelect: onAsk }]),
       ]}
       onDismiss={onDismiss}
     >

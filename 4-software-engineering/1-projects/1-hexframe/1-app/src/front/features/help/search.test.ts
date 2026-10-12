@@ -1,64 +1,56 @@
 import { describe, expect, it } from 'vitest'
 
-import { readHelpSearch, viewOf, withOpen, withView } from './search'
+import { fromHelpPage, readHelpSearch, topicOf, withHelp } from './search'
 
-// The Help page's search params: the view, as on home, and the open Body, each field falling back on
-// its own, and each change keeping the other.
+// Home's search param for Help, and where an old link to the Help page lands.
 
-describe("the Help page's search params", () => {
-  it('reads the view and the open Body, a field the URL got wrong falling back alone', () => {
+describe("home's search param for Help", () => {
+  it('reads a topic, or Help’s Root', () => {
+    expect(readHelpSearch({ help: 'help/3' })).toEqual({ help: 'help/3' })
+    expect(readHelpSearch({ help: true })).toEqual({ help: true })
+  })
+
+  it.each([
+    ['absent', {}],
+    ['empty', { help: '' }],
+    ['false', { help: false }],
+    ['a number', { help: 3 }],
+  ])('reads the widget closed when %s', (_, search) => {
+    expect(readHelpSearch(search)).toEqual({ help: undefined })
+  })
+
+  it('names the topic the widget reads, the Root for `true`', () => {
+    expect(topicOf({ help: 'help/3' }, 'help')).toBe('help/3')
+    expect(topicOf({ help: true }, 'help')).toBe('help')
+    expect(topicOf({ help: undefined }, 'help')).toBeUndefined()
+  })
+
+  it('writes the topic, or nothing once closed', () => {
+    expect(withHelp('help/2')).toEqual({ help: 'help/2' })
+    expect(withHelp(undefined)).toEqual({ help: undefined })
+  })
+})
+
+describe('an old link to the Help page', () => {
+  it('lands on the same view, the widget open on the Body that was', () => {
     expect(
-      readHelpSearch({
-        center: 'help/3',
-        expanded: { 1: 'children' },
-        inner: 'context',
-        open: 'help/3',
-      }),
+      fromHelpPage({ center: 'help/3', expanded: { 1: 'children' }, open: 'help/3/1' }),
     ).toEqual({
       center: 'help/3',
       frame: undefined,
-      inner: 'context',
-      expanded: { 1: 'children' },
-      open: 'help/3',
-    })
-    expect(readHelpSearch({ center: 'help/2', open: '' })).toEqual({
-      center: 'help/2',
-      frame: undefined,
       inner: undefined,
-      expanded: undefined,
-      open: undefined,
+      expanded: { 1: 'children' },
+      help: 'help/3/1',
     })
-    expect(readHelpSearch({})).toEqual({
+  })
+
+  it('opens the widget on Help’s Root when no Body was open, a field it got wrong left out', () => {
+    expect(fromHelpPage({ center: '', open: '' })).toEqual({
       center: undefined,
       frame: undefined,
       inner: undefined,
       expanded: undefined,
-      open: undefined,
+      help: true,
     })
-  })
-
-  it('changes the view and keeps the open Body', () => {
-    const search = readHelpSearch({ center: 'help/2', open: 'help/2' })
-    const next = withView(search, { center: 'help/3', expanded: { 1: 'children' } })
-    expect(next).toEqual({
-      center: 'help/3',
-      frame: undefined,
-      inner: undefined,
-      expanded: { 1: 'children' },
-      open: 'help/2',
-    })
-    expect(viewOf(next)).toEqual({
-      center: 'help/3',
-      frame: undefined,
-      inner: undefined,
-      expanded: { 1: 'children' },
-    })
-  })
-
-  it('opens a Body and closes it, keeping the view', () => {
-    const search = readHelpSearch({ center: 'help/4', inner: 'context' })
-    const opened = withOpen(search, 'help/4')
-    expect(opened).toMatchObject({ center: 'help/4', inner: 'context', open: 'help/4' })
-    expect(withOpen(opened, undefined)).toEqual({ ...search, open: undefined })
   })
 })

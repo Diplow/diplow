@@ -239,10 +239,17 @@ export function useEachSystemWrite(react: () => void, moment: 'made' | 'settled'
 
 /**
  * Help whole, in the page's language, Bodies included, read as the System is. Anyone reads it, so it
- * never sends the user to sign in.
+ * never sends the user to sign in. With `throwing: false`, for the canvas's corner beside it, the same
+ * Query, whose failure throws nothing there and leaves it undefined, the canvas's boundary showing it.
  */
-export const useHelp = (language: Locale) =>
-  useQuery(read({ scope: 'help', key: [language], call: () => help({ data: { language } }) }))
+export function useHelp(language: Locale, { throwing = true }: { throwing?: boolean } = {}) {
+  const helpRead = read({
+    scope: 'help',
+    key: [language],
+    call: () => help({ data: { language } }),
+  })
+  return useQuery(throwing ? helpRead : { ...helpRead, throwOnError: false })
+}
 
 /**
  * A write to the System, scoped by the Operation it runs and queued behind the writes made before it.

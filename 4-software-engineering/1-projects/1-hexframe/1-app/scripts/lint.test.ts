@@ -21,7 +21,7 @@ async function restrictedSyntax(code: string, filePath: string) {
 }
 
 const feature = 'src/front/routes/index.tsx'
-const inUi = 'src/front/ui/layouts/DataTable.tsx'
+const inUi = 'src/front/ui/layouts/Dialog.tsx'
 const colour = /theme token/
 
 // The first type-aware lint builds the TypeScript program of the whole app, which takes seconds on a

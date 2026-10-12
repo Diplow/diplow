@@ -1,8 +1,8 @@
-// The layouts every side shares, on /design-system: the dialog, the table, the page's header, and what a
-// place shows instead of its content.
-import { FilePlus, Plus, Rows3 } from 'lucide-react'
+// The layouts every side shares, on /design-system: the dialog, and what a place shows instead of its
+// content.
+import { FilePlus, Plus } from 'lucide-react'
 import { cn } from 'cn'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 
@@ -11,9 +11,7 @@ import { Button } from '../atoms/controls/button'
 import { toast } from '../atoms/Toaster'
 import { GallerySection, GalleryState } from '../gallery/frame'
 import { ConfirmDialog } from './ConfirmDialog'
-import { DataTable, type DataColumn } from './DataTable'
 import { Dialog } from './Dialog'
-import { PageHeader } from './PageHeader'
 import { EmptyState, ErrorState, Forbidden } from './states'
 
 export function LayoutsGallery() {
@@ -21,8 +19,6 @@ export function LayoutsGallery() {
     <>
       <TheDialogGallery />
       <DialogGallery />
-      <TableGallery />
-      <HeaderGallery />
       <StatesGallery />
     </>
   )
@@ -161,111 +157,6 @@ function DialogGallery() {
           onConfirm={done(m.gallery_sample_deleted())}
           destructive
         />
-      </GalleryState>
-    </GallerySection>
-  )
-}
-
-interface TileRow {
-  id: string
-  title: string
-  direction: number
-  children: number
-}
-
-// The six domains of the vault, as a System's first children; titles are messages, read at render.
-const tileRows = (): TileRow[] => [
-  { id: 'leadership', title: m.gallery_sample_leadership(), direction: 1, children: 4 },
-  { id: 'education', title: m.gallery_sample_education(), direction: 2, children: 6 },
-  { id: 'games', title: m.gallery_sample_games(), direction: 3, children: 2 },
-  { id: 'software', title: m.gallery_sample_software(), direction: 4, children: 5 },
-  { id: 'startups', title: m.gallery_sample_startups(), direction: 5, children: 3 },
-  { id: 'politics', title: m.gallery_sample_politics(), direction: 6, children: 1 },
-]
-const noRows: TileRow[] = []
-
-// Headers are messages, read at render in the request's locale.
-const tileColumns = (): DataColumn<TileRow>[] => [
-  {
-    id: 'title',
-    header: m.gallery_table_title(),
-    cell: (row) => row.title,
-    sortValue: (row) => row.title,
-  },
-  { id: 'direction', header: m.gallery_table_direction(), cell: (row) => row.direction },
-  {
-    id: 'children',
-    header: m.gallery_table_children(),
-    cell: (row) => row.children,
-    sortValue: (row) => row.children,
-    align: 'end',
-  },
-]
-
-const tileId = (row: TileRow) => row.id
-
-function TableGallery() {
-  // The locale changes with a full page load, so the columns are built once.
-  const columns = useMemo(tileColumns, [])
-  const rows = useMemo(tileRows, [])
-  const empty = (
-    <EmptyState
-      icon={<Rows3 />}
-      title={m.gallery_empty_title()}
-      description={m.gallery_empty_description()}
-      action={
-        <Button size="sm">
-          <Plus />
-          {m.gallery_sample_new_tile()}
-        </Button>
-      }
-    />
-  )
-  const states = [
-    { label: m.gallery_state_rows_sortable(), rows },
-    { label: m.gallery_state_loading(), rows: undefined },
-    { label: m.gallery_state_empty(), rows: noRows },
-  ]
-  return (
-    <GallerySection name="DataTable">
-      {states.map((state) => (
-        <GalleryState key={state.label} label={state.label}>
-          <div className="w-[28rem] max-w-full">
-            <DataTable
-              caption={m.gallery_table_caption()}
-              columns={columns}
-              rows={state.rows}
-              rowId={tileId}
-              empty={empty}
-            />
-          </div>
-        </GalleryState>
-      ))}
-    </GallerySection>
-  )
-}
-
-function HeaderGallery() {
-  return (
-    <GallerySection name="PageHeader">
-      <GalleryState label={m.gallery_state_complete()}>
-        <div className="w-[36rem] max-w-full">
-          <PageHeader
-            title={m.gallery_sample_page_title()}
-            description={m.gallery_sample_page_description()}
-            actions={
-              <Button>
-                <Plus />
-                {m.gallery_sample_new_tile()}
-              </Button>
-            }
-          />
-        </div>
-      </GalleryState>
-      <GalleryState label={m.gallery_state_title_only()}>
-        <div className="w-[36rem] max-w-full">
-          <PageHeader title={m.gallery_sample_page_title()} />
-        </div>
       </GalleryState>
     </GallerySection>
   )

@@ -1,15 +1,12 @@
-// Sign-in, where a signed-out visit to a guarded page, or a call that met Unauthenticated, lands:
-// `?redirect=` carries where the user was, and signing in goes back there.
-import { createFileRoute } from '@tanstack/react-router'
+// An old link to sign-in lands on the screen, which signed out signs in at the chat's foot, then goes
+// back to `?redirect=`, where the user was.
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 import { readSignInSearch } from '#/front/client/iam/guard'
-import { Access } from '#/front/features/access/Access'
 
 export const Route = createFileRoute('/(access)/sign-in')({
   validateSearch: readSignInSearch,
-  component: SignIn,
+  beforeLoad: ({ search }) => {
+    redirect({ to: '/', search, replace: true, throw: true })
+  },
 })
-
-function SignIn() {
-  return <Access mode="sign-in" redirect={Route.useSearch().redirect} />
-}

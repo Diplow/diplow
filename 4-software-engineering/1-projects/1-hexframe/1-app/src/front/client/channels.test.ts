@@ -130,7 +130,7 @@ describe("a form's write through a mutation", () => {
   })
 })
 
-describe('the sign-in redirect', () => {
+describe('the way to signing in, home signed out', () => {
   // Fresh modules for each case, so the one-redirect flag in channels.ts starts down.
   const signingIn = async () => {
     vi.resetModules()
@@ -148,7 +148,7 @@ describe('the sign-in redirect', () => {
     await submit()
     await submit()
     expect(assign).toHaveBeenCalledExactlyOnceWith(
-      `/sign-in?redirect=${encodeURIComponent('/design-system?a=1#x')}`,
+      `/?redirect=${encodeURIComponent('/design-system?a=1#x')}`,
     )
   })
 
@@ -178,7 +178,7 @@ describe('the sign-in redirect', () => {
     overwriteGetLocale(() => 'fr')
     await submit()
     expect(assign).toHaveBeenCalledExactlyOnceWith(
-      `/fr/sign-in?redirect=${encodeURIComponent('/design-system?a=1')}`,
+      `/fr/?redirect=${encodeURIComponent('/design-system?a=1')}`,
     )
   })
 

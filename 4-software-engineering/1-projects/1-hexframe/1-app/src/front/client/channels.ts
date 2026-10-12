@@ -15,10 +15,11 @@ import { CallFailed, Foreseen, asCallFailed, settle } from './calls'
 
 let signingIn = false
 
-// One redirect, however many calls fail at once, carrying where the user was, without its language
-// prefix, as the router's own redirect (./iam/guard.ts) carries it, and untying this device from the
-// Account whose Session ended, as that guard does. On the server there is no window to move: a read
-// made while rendering a page is guarded by the route's `beforeLoad`, `signedInOnly`.
+// One full load of home, however many calls fail at once, which shows it signed out, the sign-in
+// widget at the chat's foot, carrying where the user was, without its language prefix, and untying
+// this device from the Account whose Session ended, as home's read of the Session does
+// (./iam/guard.ts). On the server there is no window to move: home reads the Session in its
+// `beforeLoad`, `sessionIfAny`, before anything renders, and draws no signed-in read signed out.
 function signIn() {
   if (signingIn || typeof window === 'undefined') return
   signingIn = true
@@ -26,7 +27,7 @@ function signIn() {
   const here = deLocalizeHref(
     `${window.location.pathname}${window.location.search}${window.location.hash}`,
   )
-  window.location.assign(localizeHref(`/sign-in?redirect=${encodeURIComponent(here)}`))
+  window.location.assign(localizeHref(`/?redirect=${encodeURIComponent(here)}`))
 }
 
 /**
