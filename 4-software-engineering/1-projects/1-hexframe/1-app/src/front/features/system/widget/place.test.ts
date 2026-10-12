@@ -64,6 +64,9 @@ describe('a slot as the widget draws it', () => {
     expect(freeFor(system, 'root', 'context')).toEqual([1, 2, 4, 5, 6])
     // A Reference takes its Context slot.
     expect(freeFor(system, 'a', 'context')).toEqual([2, 3, 4, 5, 6])
+    // A Leaf holds nothing, and a Tile gone has no place at all.
+    expect(freeFor(system, 'notes', 'branch')).toEqual([])
+    expect(freeFor(system, 'gone', 'leaf')).toEqual([])
   })
 
   it('says where a Tile goes under its parent, by its Title', () => {

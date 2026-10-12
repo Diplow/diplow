@@ -53,6 +53,8 @@ export interface Reopened {
 export function useRefusalState(
   search: SystemSearch,
   onSearchChange: (change: SearchChange) => void,
+  /** A form put back, a create's or an edit's: where it shows comes to the front. */
+  onFormBack?: () => void,
 ): Reopened | undefined {
   const under = changeOf(search)
   const key = keyOf(under)
@@ -66,10 +68,10 @@ export function useRefusalState(
   useSystemRefusals((refused) => {
     const back = changeBack(refused)
     if (back === undefined || under.kind !== 'none') return false
-    setReopened(
-      'content' in back ? { turn: refused.turn, ...back, shown: refused.shown } : undefined,
-    )
+    const form = 'content' in back
+    setReopened(form ? { turn: refused.turn, ...back, shown: refused.shown } : undefined)
     onSearchChange((current) => withChange(current, back.change))
+    if (form) onFormBack?.()
     return true
   })
   return reopened !== undefined && keyOf(reopened.change) === key ? reopened : undefined

@@ -7,7 +7,12 @@
 // to draw, so its edit stays in the drawer, on the shared form, until a proposal draws it.
 import { useState } from 'react'
 
-import { previewLimit, type Slot, type System as FlatSystem } from '#/domains/mapping/entities'
+import {
+  previewLimit,
+  tileAt,
+  type Slot,
+  type System as FlatSystem,
+} from '#/domains/mapping/entities'
 import {
   type TileContent,
   type TileSubmit,
@@ -22,6 +27,7 @@ import type { MentionProps } from '#/front/ui/chat/text/Mention'
 import type { TilePlace, TileWords } from '#/front/ui/chat/widgets/tile/parts'
 import { TileWidget } from '#/front/ui/chat/widgets/tile/TileWidget'
 
+import type { Reopened } from '../state/useRefusalState'
 import { editedOf, slotForKind, slotOf, whereIn } from './place'
 import { type Refilled, useTileWordsState } from './state/useTileWordsState'
 import type { Opened, Receipt } from './state/useTileWidgetsState'
@@ -36,7 +42,7 @@ interface FormProps {
   receipt: Receipt | undefined
   /** The System as the page shows it, flat: which places are free, which Tiles still stand. */
   system: FlatSystem
-  onSent: (receipt: Receipt) => void
+  onSent: (receipt: Omit<Receipt, 'kind'>) => void
   onCancel: () => void
   /** Centers the canvas on a Tile the receipt names. */
   onCenter: (id: string) => void
@@ -48,10 +54,10 @@ interface NewTileProps extends FormProps {
   /** The Tile it goes under, its id and its Title as the canvas shows it. */
   parent: { id: string; title: string }
   slot: Slot
-  /** Another place, or another kind, picked: the slot it now goes in. */
-  onSlotChange: (slot: Slot) => void
-  /** Imports files into this slot instead. */
-  onImport: () => void
+  /** Another place, or another kind, picked: the slot it now goes in; none once it is a receipt. */
+  onSlotChange?: (slot: Slot) => void
+  /** Imports files into this slot instead; none once it is a receipt. */
+  onImport?: () => void
 }
 
 /** A new Tile's form, in the slot it was opened on, then its receipt. */
@@ -70,11 +76,11 @@ export function NewTileWidget(props: NewTileProps) {
       previewLimit={previewLimit}
       refused={state.refused}
       onPlaceChange={(place) => {
-        onSlotChange(slotOf(where.kind, place))
+        onSlotChange?.(slotOf(where.kind, place))
       }}
       onKindChange={(kind) => {
         const next = slotForKind(system, parent.id, slot, kind)
-        if (next !== undefined) onSlotChange(next)
+        if (next !== undefined) onSlotChange?.(next)
       }}
       onCreate={() => {
         props.onSent({
@@ -151,7 +157,7 @@ export function EditTileWidget(props: EditTileProps) {
  */
 function done(receipt: Receipt, { system, onCenter }: Pick<FormProps, 'system' | 'onCenter'>) {
   const { did, tile, where, at } = receipt
-  const stands = did !== 'deleted' && (system.root.id === tile.id || tile.id in system.tiles)
+  const stands = did !== 'deleted' && tileAt(system, tile.id) !== undefined
   const named: MentionProps = {
     title: tile.title,
     ...(did === 'deleted' && { standing: 'gone' }),
@@ -174,12 +180,15 @@ interface RootFormProps {
   /** The Root, when its edit is under way; none closes the drawer. */
   root: Opened | undefined
   /** What a refusal put back, as the shared form shows it. */
-  refilled: { turn: number; content: TileContent; shown: FormErrors } | undefined
+  refilled: Reopened | undefined
   onSent: () => void
   onClose: () => void
 }
 
-/** The Root's edit, in the drawer, on the shared form: the widget has no place to draw it in. */
+/**
+ * The Root's edit, in the drawer, on the shared form: the widget has no place to draw it in, until a
+ * proposal draws the Root's widget (`hexframe-app-design-system-v1/decisions.md#DEC-38`).
+ */
 export function RootDrawer({ root, refilled, onSent, onClose }: RootFormProps) {
   return (
     <Drawer

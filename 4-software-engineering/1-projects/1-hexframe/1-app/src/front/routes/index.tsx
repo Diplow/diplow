@@ -63,7 +63,7 @@ function Home() {
   const onSearchChange = (next: SearchChange) => {
     // A form, an import or an edit, opening: the tile widget comes, in front on a phone.
     if (opensWidget(search, next)) {
-      widgets.actions.opened()
+      widgets.actions.clear()
       turning.turn('chat')
     }
     void navigate({ search: next })
@@ -107,6 +107,9 @@ function Home() {
               onSearchChange={onSearchChange}
               onViewChange={onViewChange}
               widgets={widgets}
+              onExport={() => {
+                turning.turn('chat')
+              }}
             />
           </ReadBoundary>
         }
@@ -122,6 +125,9 @@ function Home() {
                 onSearchChange={onSearchChange}
                 onCenter={onCenter}
                 widgets={widgets}
+                onFormBack={() => {
+                  turning.turn('chat')
+                }}
               />
             </ReadBoundary>
           </div>
@@ -141,10 +147,12 @@ interface SystemPageProps {
   onSearchChange: (change: SearchChange) => void
   onViewChange: (view: CanvasView, action: ViewAction) => void
   widgets: TileWidgetsState
+  /** An export started from the card: the chat, which shows it, comes to the front on a phone. */
+  onExport: () => void
 }
 
 /** The canvas side: the System, and the centered Tile's card at its foot. */
-function SystemPage({ search, onSearchChange, onViewChange, widgets }: SystemPageProps) {
+function SystemPage({ search, onSearchChange, onViewChange, widgets, onExport }: SystemPageProps) {
   const { data } = useSystem()
   if (data === undefined) {
     return (
@@ -173,7 +181,13 @@ function SystemPage({ search, onSearchChange, onViewChange, widgets }: SystemPag
           tree={tree}
           search={search}
           onSearchChange={onSearchChange}
-          exporting={{ start: widgets.actions.export, pending: widgets.state.exporting }}
+          exporting={{
+            start: (exported) => {
+              widgets.actions.export(exported)
+              onExport()
+            },
+            pending: widgets.state.exporting,
+          }}
         />
       </div>
     </div>

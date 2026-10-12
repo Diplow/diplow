@@ -12,17 +12,16 @@ import {
 import { useDeleteTile } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
-import { centerOn, showView } from '#/front/ui/canvas/view/view'
+import { showView } from '#/front/ui/canvas/view/view'
 import { Button } from '#/front/ui/atoms/controls/button'
 import { ConfirmDialog } from '#/front/ui/layouts/ConfirmDialog'
 import { CodeBlock } from '#/front/ui/seams/Markdown'
 import { Card } from '#/front/ui/canvas/layouts/Card'
 
 import {
+  afterDelete,
   viewOf,
   withChange,
-  withoutTile,
-  withView,
   type Change,
   type SearchChange,
   type SystemSearch,
@@ -95,9 +94,7 @@ export function TileActions({
         // it stood under, and a change under way ends only if it named one of the Tiles gone.
         onDelete: () => {
           remove.mutate({ id: found.tile.id, version: found.tile.version })
-          onSearchChange((current) =>
-            withoutTile(withView(current, centerOn(tree, parent.id)), center),
-          )
+          onSearchChange(afterDelete(tree, parent.id, center))
         },
       })}
       // An empty System invites the user to start: its Root takes a whole vault.

@@ -1,19 +1,21 @@
 // The tile widget in Mapping's words, read from the System the page holds. The widget mirrors Mapping
 // (`ui/` knows no domain): a Branch, a Leaf or a Context Tile, in one of six places. Here a slot
 // becomes the widget's kind and place, and back; the places a kind may take under a Tile are those
-// Mapping holds nothing in; an edit's changed fields are the ones that differ from the Tile it opened
+// Mapping's own placement rule leaves free (`freeSlot`); an edit's changed fields are the ones that differ from the Tile it opened
 // on; and a refusal a form shows lands on the widget's fields. Pure.
+import { Result } from 'effect'
+
 import {
   below,
   contextSlotOf,
   directions,
-  heldAt,
   isContextSlot,
   isLeafSlot,
   type Direction,
   type Slot,
   type System,
 } from '#/domains/mapping/entities'
+import { freeSlot } from '#/domains/mapping/operations'
 import type { FormErrors } from '#/front/client/channels'
 import type { Place } from '#/front/ui/chat/widgets/Places'
 import type { TileField, TileKind, TilePlace, TileWords } from '#/front/ui/chat/widgets/tile/parts'
@@ -41,9 +43,14 @@ export function slotOf(kind: TileKind, place: Place): Slot {
   }
 }
 
-/** The places a Tile of this kind may take under `parent`: those where Mapping holds nothing. */
+/**
+ * The places a Tile of this kind may take under `parent`, as Mapping places one (`freeSlot`): those
+ * it holds nothing in, and none under a Leaf or a Tile gone.
+ */
 export const freeFor = (system: System, parent: string, kind: TileKind): Place[] =>
-  directions.filter((direction) => heldAt(system, parent, slotOf(kind, direction)) === undefined)
+  directions.filter((direction) =>
+    Result.isSuccess(freeSlot(system, { parent, slot: slotOf(kind, direction) })),
+  )
 
 /** Where a Tile goes, or stands, in `slot` under `parent`, the places free for its kind with it. */
 export function whereIn(

@@ -19,6 +19,7 @@ type Session =
 
 /** What a write sent leaves: what was done, to which Tile, where, and when. */
 export interface Receipt {
+  readonly kind: 'receipt'
   /** The key of the form it ends, which it keeps, so the one widget goes from form to receipt. */
   readonly key: string
   readonly session: Session
@@ -43,15 +44,17 @@ export interface Exporting extends Exported {
   readonly at: Date
 }
 
-type Last =
-  | { readonly kind: 'receipt'; readonly receipt: Receipt }
-  | (Exported & { readonly kind: 'export'; readonly at: Date })
+type Last = Receipt | (Exported & { readonly kind: 'export'; readonly at: Date })
 
 /** What follows a tile's widget in the chat, and the export the card starts. */
 export function useTileWidgetsState() {
   const exporting = useExportTile()
   const [last, setLast] = useState<Last>()
-  const { reset, mutate } = exporting
+  const { mutate, isPending } = exporting
+  // An export on its way runs to its end, the card's Export waiting, even once the chat lets it go.
+  const settle = () => {
+    if (!isPending) exporting.reset()
+  }
   const shown: Receipt | Exporting | undefined =
     last?.kind === 'export'
       ? {
@@ -59,28 +62,23 @@ export function useTileWidgetsState() {
           phase: exporting.isError ? 'failed' : exporting.isSuccess ? 'done' : 'working',
           file: exporting.data?.name,
         }
-      : last?.receipt
+      : last
   return {
     state: {
       shown,
       /** An export on its way: the card's Export waits. */
-      exporting: exporting.isPending,
+      exporting: isPending,
     },
     actions: {
-      /** A form opened: what followed the last one goes. */
-      opened: () => {
+      /** A form opened, or one closed unsent, or an export let go: nothing follows. */
+      clear: () => {
         setLast(undefined)
-        reset()
+        settle()
       },
       /** A form's write sent: its receipt takes the form's place. */
-      sent: (receipt: Receipt) => {
-        setLast({ kind: 'receipt', receipt })
-        reset()
-      },
-      /** A form closed unsent, or an export let go: nothing follows. */
-      closed: () => {
-        setLast(undefined)
-        reset()
+      sent: (receipt: Omit<Receipt, 'kind'>) => {
+        setLast({ kind: 'receipt', ...receipt })
+        settle()
       },
       /** Exports a Tile, everything below it with it; the browser saves the zip. */
       export: (exported: Exported) => {

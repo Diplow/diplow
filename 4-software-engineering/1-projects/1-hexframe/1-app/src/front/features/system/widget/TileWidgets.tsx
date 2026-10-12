@@ -9,16 +9,14 @@ import { useMemo } from 'react'
 import { tileAt, type System, type SystemTile } from '#/domains/mapping/entities'
 import { type ImportPlace, useDeleteTile, useSystem } from '#/front/client/mapping/queries'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
-import { centerOn } from '#/front/ui/canvas/view/view'
 import { TileExport } from '#/front/ui/chat/widgets/tile/Transfer'
 
 import { Import } from '../import/Import'
 import {
+  afterDelete,
   changeOf,
   keyOf,
   withChange,
-  withoutTile,
-  withView,
   type Change,
   type SearchChange,
   type SystemSearch,
@@ -37,12 +35,20 @@ interface TileWidgetsProps {
   onCenter: (tile: string) => void
   /** What follows a form, and the export under way: the page's, which the card shares. */
   widgets: TileWidgetsState
+  /** A form a refusal put back: on a phone, the chat comes to the front to show it. */
+  onFormBack: () => void
 }
 
-export function TileWidgets({ search, onSearchChange, onCenter, widgets }: TileWidgetsProps) {
+export function TileWidgets({
+  search,
+  onSearchChange,
+  onCenter,
+  widgets,
+  onFormBack,
+}: TileWidgetsProps) {
   // Read without throwing, as the chat does: a failed read shows on the canvas.
   const { data } = useSystem({ throwing: false })
-  const reopened = useRefusalState(search, onSearchChange)
+  const reopened = useRefusalState(search, onSearchChange, onFormBack)
   const remove = useDeleteTile()
   const root = data?.root
   const tree = useMemo(() => (root === undefined ? undefined : canvasTree(root)), [root])
@@ -62,7 +68,7 @@ export function TileWidgets({ search, onSearchChange, onCenter, widgets }: TileW
       end()
     },
     onCancel: () => {
-      widgets.actions.closed()
+      widgets.actions.clear()
       end()
     },
     begin: (next) => {
@@ -70,7 +76,7 @@ export function TileWidgets({ search, onSearchChange, onCenter, widgets }: TileW
     },
     remove: (tile, node, parent) => {
       remove.mutate({ id: tile.id, version: tile.version })
-      onSearchChange((current) => withoutTile(withView(current, centerOn(tree, parent)), node))
+      onSearchChange(afterDelete(tree, parent, node))
     },
   }
   const editsRoot = change.kind === 'edit' && change.id === root.id
@@ -94,7 +100,7 @@ interface Page {
   tree: TileNode
   reopened: Reopened | undefined
   onCenter: (id: string) => void
-  onSent: (receipt: Receipt) => void
+  onSent: (receipt: Omit<Receipt, 'kind'>) => void
   onCancel: () => void
   /** Another change under way in its place: an import in the slot a new Tile was opened on. */
   begin: (change: Change) => void
@@ -121,7 +127,7 @@ function widgetOf(change: Change, widgets: TileWidgetsState, page: Page) {
 function shownOf(widgets: TileWidgetsState, page: Page) {
   const { shown } = widgets.state
   if (shown === undefined) return null
-  return 'kind' in shown ? exportOf(shown, widgets, page) : receiptOf(shown, page)
+  return shown.kind === 'export' ? exportOf(shown, widgets, page) : receiptOf(shown, page)
 }
 
 /** A form's receipt, as the widget it ends, by the same key, so it keeps the form's focus. */
@@ -134,8 +140,6 @@ function receiptOf(receipt: Receipt, page: Page) {
       {...form}
       parent={{ id: session.parent, title: where.parent }}
       slot={slotOf(where.kind, where.place)}
-      onSlotChange={() => undefined}
-      onImport={() => undefined}
     />
   ) : (
     <EditTileWidget key={key} {...form} tile={session.opened} where={where} />
@@ -144,9 +148,7 @@ function receiptOf(receipt: Receipt, page: Page) {
 
 /** The receipt of this form, sent while the URL still holds it, unless a refusal put it back. */
 const receiptFor = (key: string, shown: Receipt | Exporting | undefined, page: Page) =>
-  shown !== undefined && !('kind' in shown) && shown.key === key && page.reopened === undefined
-    ? shown
-    : undefined
+  shown?.kind === 'receipt' && shown.key === key && page.reopened === undefined ? shown : undefined
 
 /** What a refusal put back into the widget, the change under way's: the user's words, its refusal. */
 const refilledOf = (reopened: Reopened | undefined): Refilled | undefined =>
@@ -284,7 +286,7 @@ function exportOf(exporting: Exporting, widgets: TileWidgetsState, page: Page) {
       onRetry={() => {
         widgets.actions.export({ tile, below })
       }}
-      onDismiss={widgets.actions.closed}
+      onDismiss={widgets.actions.clear}
     />
   )
 }

@@ -36,6 +36,7 @@ function render() {
 }
 
 const receipt: Receipt = {
+  kind: 'receipt',
   key: 'add:root',
   session: { kind: 'add', parent: 'root' },
   did: 'created',
@@ -55,7 +56,7 @@ describe('what follows a tile widget', () => {
     })
     expect(result.current.state.shown).toEqual(receipt)
     run((actions) => {
-      actions.opened()
+      actions.clear()
     })
     expect(result.current.state.shown).toBeUndefined()
   })
@@ -64,7 +65,7 @@ describe('what follows a tile widget', () => {
     const { result, run } = render()
     run((actions) => {
       actions.sent(receipt)
-      actions.closed()
+      actions.clear()
     })
     expect(result.current.state.shown).toBeUndefined()
   })
@@ -115,7 +116,38 @@ describe('an export', () => {
       expect(result.current.state.shown).toMatchObject({ phase: 'failed', file: undefined })
     })
     run((actions) => {
-      actions.closed()
+      actions.clear()
+    })
+    expect(result.current.state.shown).toBeUndefined()
+  })
+
+  it('runs to its end once let go, the card still waiting for it', async () => {
+    let answer: (response: Response) => void = () => undefined
+    vi.mocked(Mapping.exportTile).mockReturnValue(
+      new Promise((resolve) => {
+        answer = resolve
+      }) as never,
+    )
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:tooling')
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined)
+    const { result, run } = render()
+    run((actions) => {
+      actions.export(tooling)
+    })
+    await waitFor(() => {
+      expect(result.current.state.exporting).toBe(true)
+    })
+    run((actions) => {
+      actions.clear()
+    })
+    expect(result.current.state).toEqual({ shown: undefined, exporting: true })
+    answer(
+      new Response('PK', {
+        headers: { 'content-disposition': 'attachment; filename="tooling.zip"' },
+      }),
+    )
+    await waitFor(() => {
+      expect(result.current.state.exporting).toBe(false)
     })
     expect(result.current.state.shown).toBeUndefined()
   })

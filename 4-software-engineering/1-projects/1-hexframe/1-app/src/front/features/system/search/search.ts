@@ -8,6 +8,7 @@ import type { ImportPlace } from '#/front/client/mapping/queries'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 import {
   CanvasView,
+  centerOn,
   orDefault,
   readSearch,
   TileId,
@@ -150,3 +151,12 @@ export function opensWidget(current: SystemSearch, next: SearchChange): boolean 
     keyOf(change) !== keyOf(changeOf(current))
   )
 }
+
+/**
+ * Where a delete leaves the page, from the search params of its moment: centered on the Tile `gone`
+ * stood under, the change under way ended if it named `gone` or a Tile below it.
+ */
+export const afterDelete =
+  (tree: TileNode, parent: string, gone: TileNode) =>
+  (current: SystemSearch): SystemSearch =>
+    withoutTile(withView(current, centerOn(tree, parent)), gone)
