@@ -1,0 +1,114 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/settings/keys.tsx
+  s_fa3f3b1c338611::t_ff72dae45bbbb2 1-3,5,8-10
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_fa3f3b1c338611::t_72605937d43e0f 1-11,16-18,23,25-27,33-38,56,60,62-75,78-79,84-88,95-176,178-184,186-187,190,192-195,202-205,212-217,228-229,234,240-241,244-246,258-274,277-283,300-322,335-349,351-357,367,370,372,403-411
+  s_fa3f3b1c338611::t_be49eafe004e3c 61,89-94,350
+  s_fa3f3b1c338611::t_2135f662ff0428 177,185,188-189,191
+  s_fa3f3b1c338611::t_b7b07f36a84da5 412
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/iam/guard.test.ts
+  s_fa3f3b1c338611::t_43e9346f985976 9,29,37,39-40,50,63-64,83,89,92,94-96,103,110,115,117,122
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/(access)/sign-up.tsx
+  s_fa3f3b1c338611::t_be49eafe004e3c 10-15
+  s_fa3f3b1c338611::t_ff72dae45bbbb2 1-2,4,9,16
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/keys/state/useKeyWidgetState.ts
+  s_fa3f3b1c338611::t_5124658df72dc3 10
+  s_fa3f3b1c338611::t_be49eafe004e3c 16-21
+  s_fa3f3b1c338611::t_611e6ccb0e37e2 1-9,11-15,22-89
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help/nodes.test.ts
+  s_fa3f3b1c338611::t_c8e66b79b54631 62
+  s_fa3f3b1c338611::t_fa24db316c64f9 42-43
+  s_fa3f3b1c338611::t_9a4a14ce68b6a6 1-41,44-61,63-72
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/help/HelpWidget.tsx
+  s_fa3f3b1c338611::t_d461d301c4540b 41-42,104
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/keys/search.test.ts
+  s_fa3f3b1c338611::t_d461d301c4540b 1-22
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_fa3f3b1c338611::t_d461d301c4540b 242-243,245,251-252
+  s_fa3f3b1c338611::t_be49eafe004e3c 246-250
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/keys/KeyWidgets.tsx
+  s_fa3f3b1c338611::t_1e8c9cc31ef0bb 1-11,14-86
+  s_fa3f3b1c338611::t_5124658df72dc3 12-13
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/access/SignedOut.tsx
+  s_fa3f3b1c338611::t_3161b8bb9d9bf3 1-53
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/access/state/useSignInState.ts
+  s_fa3f3b1c338611::t_cfd06ba704b192 42,44-45,73
+  s_fa3f3b1c338611::t_6fd53d5b587e9b 1-41,43,46-72,74-83
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_fa3f3b1c338611::t_f4290cbb521acc 845
+  s_fa3f3b1c338611::t_56a5a3feb5a249 701-702
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/CLAUDE.md
+  s_fa3f3b1c338611::t_ade8bb2496a19b 16,19
+  s_fa3f3b1c338611::t_be49eafe004e3c 6-7
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/channels.ts
+  s_fa3f3b1c338611::t_e6dd5926b2707c 18-22,30
+4-software-engineering/1-projects/1-hexframe/1-app/vitest.config.ts
+  s_fa3f3b1c338611::t_af7b809d8f6f2b 8
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/(access)/sign-in.tsx
+  s_fa3f3b1c338611::t_ff72dae45bbbb2 1-3,9-11
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_fa3f3b1c338611::t_56a5a3feb5a249 278-279
+  s_fa3f3b1c338611::t_c3a78cb304f82b 9,16
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/keys/search.ts
+  s_fa3f3b1c338611::t_d461d301c4540b 1-19
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help/Help.tsx
+  s_fa3f3b1c338611::t_b3f5a6181700c8 2-4,7,9-10,12,15-16,21-22,25-29,32-34,36-50
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/__root.tsx
+  s_fa3f3b1c338611::t_6d13cb7d17ee3c 51,55,63-65,75,80-82
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/channels.test.ts
+  s_fa3f3b1c338611::t_7b39dc1dcff2b3 133,151,181
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help/search.ts
+  s_fa3f3b1c338611::t_8e53a09e993342 1-4,9-10,13-14,19,22-24,26-32,34-40
+  s_fa3f3b1c338611::t_be49eafe004e3c 7
+  s_fa3f3b1c338611::t_97596964d68f3f 8
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/keys/shown/rows.test.ts
+  s_fa3f3b1c338611::t_be49eafe004e3c 1-59
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/access/search.test.ts
+  s_fa3f3b1c338611::t_6fd53d5b587e9b 1-22
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/access/state/useSignInState.test.ts
+  s_fa3f3b1c338611::t_be49eafe004e3c 71
+  s_fa3f3b1c338611::t_3161b8bb9d9bf3 1-70,72-123
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/help.tsx
+  s_fa3f3b1c338611::t_ff72dae45bbbb2 1-3,5,8-11
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/lint.test.ts
+  s_fa3f3b1c338611::t_2feea82299a876 24
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help/nodes.ts
+  s_fa3f3b1c338611::t_b3f5a6181700c8 1-56
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/keys/state/useKeyWidgetState.test.ts
+  s_fa3f3b1c338611::t_0b7659d36bc29e 1-144
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/access/search.ts
+  s_fa3f3b1c338611::t_6fd53d5b587e9b 1-25
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/gallery.tsx
+  s_fa3f3b1c338611::t_d8c9409977c7d4 1-2
+  s_fa3f3b1c338611::t_6ce8b3c6eedd56 3,5
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help/HelpWidgets.tsx
+  s_fa3f3b1c338611::t_9a4a14ce68b6a6 1-51
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/iam.ts
+  s_fa3f3b1c338611::t_1e80ccb6b84720 1-4,43
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/iam/guard.ts
+  s_fa3f3b1c338611::t_e6dd5926b2707c 1-4,25,46-47,50-55,59-61,63,73
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_fa3f3b1c338611::t_f4290cbb521acc 845
+  s_fa3f3b1c338611::t_56a5a3feb5a249 701-702
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/help/search.test.ts
+  s_fa3f3b1c338611::t_8e53a09e993342 3,5,7-35,37,42-43,47-49,52-53
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/keys/shown/name.ts
+  s_fa3f3b1c338611::t_abd9dc25c428d7 1-7
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/keys/shown/rows.ts
+  s_fa3f3b1c338611::t_96bbf4e08a6319 1-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9e6470a3c6220c64b48d8d70a5df4fd4afdcb5a8",
+  "prompts": {},
+  "sessions": {
+    "s_fa3f3b1c338611": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d9d26f-a35f-4158-8c3c-461e16980ac0",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
