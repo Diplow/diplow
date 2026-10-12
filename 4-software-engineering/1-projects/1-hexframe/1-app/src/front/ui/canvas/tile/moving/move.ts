@@ -2,6 +2,7 @@
 // place around the center offers while it moves, where a drag let go lands, and the frame once it
 // has. Pure: the frame's pieces draw it, its caller sends the write.
 import { directions, type Direction, type Point } from '../../geometry/geometry'
+import { nearestOf } from '../../state/move/targets'
 
 /** A tile seated in a Direction of the frame: whether it can trade places with the one moving. */
 export interface Seat {
@@ -71,15 +72,7 @@ export function dropAt(
   hearts: Readonly<Record<Direction, Point>>,
   { frame, from, reach }: { frame: Frame; from: Direction; reach: number },
 ): Direction | undefined {
-  let nearest: { direction: Direction; distance: number } | undefined
-  for (const [key, heart] of Object.entries(hearts)) {
-    const direction = Number(key) as Direction
-    const distance = Math.hypot(point.x - heart.x, point.y - heart.y)
-    if (distance < reach && (nearest === undefined || distance < nearest.distance)) {
-      nearest = { direction, distance }
-    }
-  }
-  return nearest !== undefined && takes(frame, from, nearest.direction)
-    ? nearest.direction
-    : undefined
+  const places = directions.map((direction) => ({ direction, center: hearts[direction], reach }))
+  const nearest = nearestOf(point, places)?.direction
+  return nearest !== undefined && takes(frame, from, nearest) ? nearest : undefined
 }

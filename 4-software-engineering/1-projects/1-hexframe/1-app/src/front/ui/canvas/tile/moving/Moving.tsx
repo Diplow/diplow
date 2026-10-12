@@ -37,23 +37,37 @@ export function MoveBanner({ title, onStop }: { title: string; onStop: () => voi
 
 /**
  * The tile on the move, lifted a little above the rest, its rim running in your amber; dragged, it
- * follows the pointer.
+ * follows the pointer. `lifted` false draws it at rest, in the same group, so a tile that starts or
+ * stops moving keeps its element, and the focus it holds.
  */
-export function Lifted({ hex, children }: { hex: Hex; children: ReactNode }) {
+export function Lifted({
+  hex,
+  lifted = true,
+  children,
+}: {
+  hex: Hex
+  lifted?: boolean
+  children: ReactNode
+}) {
   return (
     <g
-      className="scale-105 transition-[scale] duration-200 ease-glide motion-reduce:transition-none"
+      className={cn(
+        'transition-[scale] duration-200 ease-glide motion-reduce:transition-none',
+        lifted && 'scale-105',
+      )}
       style={{ transformOrigin: `${String(hex.center.x)}px ${String(hex.center.y)}px` }}
     >
       {children}
-      <polygon
-        points={points(hex)}
-        fill="none"
-        strokeWidth={1.5}
-        strokeDasharray="6 5"
-        vectorEffect="non-scaling-stroke"
-        className="pointer-events-none stroke-human motion-safe:animate-ants"
-      />
+      {lifted && (
+        <polygon
+          points={points(hex)}
+          fill="none"
+          strokeWidth={1.5}
+          strokeDasharray="6 5"
+          vectorEffect="non-scaling-stroke"
+          className="pointer-events-none stroke-human motion-safe:animate-ants"
+        />
+      )}
     </g>
   )
 }
@@ -64,10 +78,31 @@ export function withoutFoot(look: TileLook): TileLook {
   return { kind: look.kind, words: look.words }
 }
 
-/** A place that takes no part while a tile moves: a third of its light, and no hover. */
-export function Aside({ children }: { children: ReactNode }) {
+/**
+ * A place that takes no part while a tile moves, or while another's menu is open: a third of its
+ * light, and no hover. `aside` false draws it whole, in the same group, so its light comes back
+ * over the same 450ms it stepped back in. `reachable` keeps its click, where the canvas is still
+ * taken while a tile moves, to open or center the way to a slot further off.
+ */
+export function Aside({
+  aside = true,
+  reachable = false,
+  children,
+}: {
+  aside?: boolean
+  reachable?: boolean
+  children: ReactNode
+}) {
   return (
-    <g className="pointer-events-none opacity-33 transition-opacity duration-450">{children}</g>
+    <g
+      className={cn(
+        'transition-opacity duration-450',
+        aside && 'opacity-33',
+        aside && !reachable && 'pointer-events-none',
+      )}
+    >
+      {children}
+    </g>
   )
 }
 

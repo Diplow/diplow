@@ -1,32 +1,35 @@
-// The user's System on the canvas. A click on an empty slot opens the new Tile's form there, a Leaf's
-// in a ring of Leaves, or, while a Tile is being moved, moves it there; meanwhile every other Tile
-// offers to swap places with it. A move or a swap ends the moment it is sent, and comes back if its
-// write is refused (`state/useRefusalState.ts`). Every Tile a write on its way changes shows it,
-// and flares once it is refused (`state/useWritesState.ts`). While a write to the System is on its
-// way, closing or reloading the tab asks first.
-// Like the canvas, it holds no state: the view and the change under way are the URL's, and it hands
-// the next view, with the gesture that asked for it, and the next search params to the route.
+// The user's System on the canvas, and acting on it where it is: each Tile's menu and hover card, each
+// free slot's menu, a click on a free slot opening the new Tile's form there, and a Tile moved, dragged
+// under a mouse, from its menu's frame or through "Somewhere else…", its free slots offering
+// themselves and the Tiles it can trade places with their swap. A write ends its change as it is sent,
+// and comes back if it is refused (`state/useRefusalState.ts`). Every Tile a write on its way changes
+// shows it, and flares once it is refused (`state/useWritesState.ts`). A delete asks first, in a
+// dialog. While a write to the System is on its way, closing or reloading the tab asks first.
+// Like the canvas, it holds no state of its own: the view and the change under way are the URL's,
+// and it hands the next view, with the gesture that asked for it, and the next search params to the
+// route.
 import { cn } from 'cn'
 
+import type { System as FlatSystem, SystemTile } from '#/domains/mapping/entities'
 import type { Underway } from '#/front/client/mapping/overlay/overlay'
-import { useMoveTile, useSwapTiles, useSystemWriting } from '#/front/client/mapping/queries'
+import { useSystemWriting } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import { useLeaveGuard } from '#/front/ui/canvas/atoms/useLeaveGuard'
 import { Canvas } from '#/front/ui/canvas/Canvas'
-import type { EmptySlotTarget } from '#/front/ui/canvas/geometry/shape'
-import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
+import type { TileNode } from '#/front/ui/canvas/view/tiles'
 import type { CanvasView, ViewAction } from '#/front/ui/canvas/view/view'
-import { Button } from '#/front/ui/atoms/controls/button'
+import { Dialog } from '#/front/ui/layouts/Dialog'
 
-import { changeOf, viewOf, withChange, type SearchChange, type SystemSearch } from './search/search'
-import type { System as FlatSystem } from '#/domains/mapping/entities'
-
+import { viewOf, type SearchChange, type SystemSearch } from './search/search'
+import { useActingState } from './state/useActingState'
 import { useWritesState } from './state/useWritesState'
-import { moveOf, slotOf, swapOf, swapsWith } from './tree'
+import type { Exported } from './widget/state/useTileWidgetsState'
 
 interface SystemProps {
   /** The System as the page shows it, flat, which Mapping's `decide` rules on. */
   system: FlatSystem
+  /** Its tree, Mapping's, from the Root. */
+  root: SystemTile
   /** The System's Tiles as the canvas draws them (`canvasTree`). */
   tree: TileNode
   /** What the writes on their way change (`useSystem`). */
@@ -35,115 +38,58 @@ interface SystemProps {
   /** The next view, after a gesture on the canvas, and the gesture, on which Tile. */
   onViewChange: (view: CanvasView, action: ViewAction) => void
   onSearchChange: (change: SearchChange) => void
+  /** Exports a Tile, which the chat shows. */
+  exporting: { start: (exported: Exported) => void; pending: boolean }
   className?: string
 }
 
 export function System({
   system,
+  root,
   tree,
   underway,
   search,
   onViewChange,
   onSearchChange,
+  exporting,
   className,
 }: SystemProps) {
   const writes = useWritesState(underway)
-  const move = useMoveTile()
-  const swap = useSwapTiles()
   useLeaveGuard(useSystemWriting())
-  const change = changeOf(search)
-  // A move whose Tile is gone (deleted from another tab, an old link) is no move: no banner, and the
-  // empty slots add a Tile, the first of which replaces the move in the URL.
-  const moving = change.kind === 'move' ? findTile(tree, change.id) : undefined
-
-  /** The slot an empty Direction stands for, for a new Tile or the moving one; none takes no click. */
-  const placeOf = (target: EmptySlotTarget, going?: TileNode) => {
-    const slot = slotOf(target.ring, target.direction, going)
-    return slot === undefined ? undefined : { parent: target.parent.id, slot }
-  }
-
-  const addHere = (target: EmptySlotTarget) => {
-    const place = placeOf(target)
-    if (place === undefined) return undefined
-    const { title } = target.parent
-    const labels = {
-      children: m.system_add_child,
-      branches: m.system_add_child,
-      leaves: m.system_add_leaf,
-      context: m.system_add_context,
-    }
-    return {
-      label: labels[target.ring]({ title }),
-      onSelect: () => {
-        onSearchChange(withChange(search, { kind: 'add', ...place }))
-      },
-    }
-  }
-
-  // The canvas shows the Tile where it goes at once, the writes run in the order they were made, and
-  // the move ends as it is sent. A refusal (a slot under the Tile itself, one taken meanwhile, a swap
-  // along one line) shows in a toast, and the move is under way again, so another slot can be picked.
-  const sent = () => {
-    onSearchChange((current) => withChange(current, { kind: 'none' }))
-  }
-
-  // Each write names the Version of every Tile it changes as the canvas drew it, so a change made
-  // meanwhile elsewhere refuses it rather than being overwritten.
-  const moveHere = (tile: TileNode) => (target: EmptySlotTarget) => {
-    const place = placeOf(target, tile)
-    const moved = place === undefined ? undefined : moveOf(system, tile.id, place)
-    if (moved === undefined) return undefined
-    const names = { tile: tile.title, title: target.parent.title }
-    return {
-      label: target.ring === 'context' ? m.system_move_context(names) : m.system_move_child(names),
-      onSelect: () => {
-        move.mutate(moved)
-        sent()
-      },
-    }
-  }
-
-  const swapWith = (moving: TileNode) => (held: TileNode) => {
-    const swapped = swapOf(system, moving.id, held.id)
-    return swapped !== undefined && swapsWith(system, moving, held)
-      ? {
-          label: m.system_swap_with({ title: held.title }),
-          onSelect: () => {
-            swap.mutate(swapped)
-            sent()
-          },
-        }
-      : undefined
-  }
-
+  const { acting, emptySlots, move, deleting } = useActingState({
+    systems: { root, flat: system, tree },
+    search,
+    onSearchChange,
+    exporting,
+  })
   return (
     <div className={cn('flex flex-col gap-2', className)}>
       <Canvas
         system={tree}
         view={viewOf(search)}
         onViewChange={onViewChange}
-        emptySlots={moving === undefined ? addHere : moveHere(moving)}
-        move={moving === undefined ? undefined : { swapTargets: swapWith(moving) }}
+        emptySlots={emptySlots}
+        acting={acting}
+        move={move}
         writes={writes}
         className="min-h-0 w-full flex-1"
       />
-      {moving !== undefined && (
-        <div
-          role="status"
-          className="flex items-center justify-between gap-4 rounded-lg border border-human bg-card px-4 py-2 text-sm"
-        >
-          <span>{m.system_moving({ title: moving.title })}</span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              onSearchChange(withChange(search, { kind: 'none' }))
-            }}
-          >
-            {m.ui_cancel()}
-          </Button>
-        </div>
-      )}
+      <Dialog
+        open={deleting !== undefined}
+        onOpenChange={(open) => {
+          if (!open) deleting?.cancel()
+        }}
+        kicker={m.widget_tile_delete_kicker()}
+        title={m.system_delete_title({ title: deleting?.title ?? '' })}
+        confirmLabel={
+          deleting === undefined || deleting.below === 0
+            ? m.system_delete()
+            : m.widget_tile_delete_count({ count: String(deleting.below + 1) })
+        }
+        onConfirm={() => deleting?.confirm()}
+      >
+        {m.system_delete_description({ title: deleting?.title ?? '' })}
+      </Dialog>
     </div>
   )
 }

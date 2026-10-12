@@ -122,6 +122,21 @@ describe('layoutCanvas', () => {
     ])
   })
 
+  it('names the Tile whose ring each Tile stands in, a Reference where it stands', () => {
+    const parents = (hexes: CanvasHex[]) =>
+      Object.fromEntries(only(hexes, 'tile').map(({ key, parent }) => [key, parent?.id]))
+    expect(parents(layout({ center: 'mixed', inner: 'context' }))).toMatchObject({
+      'tile:mixed': undefined,
+      'tile:b1': 'mixed',
+      'tile:l2': 'mixed',
+      'tile:mixed:context:2': 'mixed',
+    })
+    expect(parents(layout({ center: 'mixed', expanded: { 1: 'children' } }))).toMatchObject({
+      'tile:b1': 'mixed',
+      'tile:b1x': 'b1',
+    })
+  })
+
   it('opens a Branch into its own Frame, two generations deep, the Branch keeping its key', () => {
     const closed = layout({ center: 'mixed' })
     const opened = layout({ center: 'mixed', expanded: { 1: 'children' } })

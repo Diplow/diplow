@@ -1,5 +1,6 @@
 // A hex of the canvas as the tile draws it (`tile/Tile.tsx`): what it is, which its light says
-// before its words do, its words, what only its kind takes, and where it stands. Pure.
+// before its words do, its words, what only its kind takes, and where it stands; and what its hover
+// card says that the tile cuts short. Pure.
 import { m } from '#/paraglide/messages'
 
 import { directions, type Direction } from '../geometry/geometry'
@@ -87,5 +88,41 @@ export function placeOf(hex: Of<'tile'>): TilePlace {
       return 'heart'
     default:
       return 'ring'
+  }
+}
+
+/** What a Tile's hover card says beyond its title and place: its preview in full, and a note. */
+export interface CardWords {
+  description?: string
+  note?: { text: string; tone?: 'warning' | 'agent' | 'context' }
+}
+
+/**
+ * What a Tile's hover card says, as its look has it: its preview in full, where the tile cuts it;
+ * and a note in the colour of what it says: the Branch a Leaf is numbered as, where a Reference's
+ * Tile stands, a Reference whose Tile is gone, the agent drafting.
+ */
+export function cardOf(look: TileLook): CardWords {
+  const { preview } = look.words
+  return {
+    ...(preview !== undefined && preview !== '' && { description: preview }),
+    ...noteOf(look),
+  }
+}
+
+function noteOf(look: TileLook): Pick<CardWords, 'note'> {
+  switch (look.kind) {
+    case 'leaf':
+      return look.clash === undefined
+        ? {}
+        : { note: { text: m.tile_clash({ branch: look.clash }), tone: 'warning' } }
+    case 'reference':
+      return { note: { text: m.tile_reference_from({ place: look.from }), tone: 'context' } }
+    case 'broken':
+      return { note: { text: m.tile_broken_note() } }
+    case 'draft':
+      return { note: { text: m.tile_drafting(), tone: 'agent' } }
+    default:
+      return {}
   }
 }

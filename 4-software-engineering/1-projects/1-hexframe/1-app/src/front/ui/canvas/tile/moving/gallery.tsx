@@ -13,7 +13,6 @@ import { directions, neighbor, type Direction, type Hex, type Point } from '../.
 import type { Hand } from '../../keys'
 import { movingFor } from '../../state/motion'
 import { useScale } from '../../state/useScale'
-import type { TileNode } from '../../view/tiles'
 import { noop, Specimen } from '../gallery'
 import { directionName } from '../menu/verbs'
 import { Slot } from '../places'
@@ -30,8 +29,9 @@ import {
   type Ring,
 } from '../specimens'
 import { Tile } from '../Tile'
+import { useMove, type Target } from '../../state/move/useMove'
 import { dropAt, landed, partOf, type Frame } from './move'
-import { unitsIn, useDrag } from './drag'
+import { unitsIn } from './drag'
 import { Aside, LandingSlot, Lifted, MoveBanner, SwapDisc, withoutFoot } from './Moving'
 
 export function MovingGallery() {
@@ -98,13 +98,6 @@ export function MovingGallery() {
 /** A tile of the frame, and how it is drawn. */
 type Seated = NonNullable<Ring[Direction]>
 
-/** A move landing: where from and where to, gliding there, flaring once refused, or gliding back. */
-interface Landing {
-  from: Direction
-  to: Direction
-  phase: 'glide' | 'refused' | 'back'
-}
-
 const origin = { x: 0, y: 0 }
 const centerHex: Hex = { center: origin, radius: frameRadius }
 const hearts = Object.fromEntries(
@@ -114,150 +107,94 @@ const hearts = Object.fromEntries(
 /** The ring as a move reads it: who trades places; every free slot takes the tile on the fixture. */
 const frameOf = (seated: Ring): Frame => ({ seats: seatsOf(seated) })
 
+/** Where the tile of this id sits in the ring, if it does. */
+const directionOf = (seated: Ring, id: string) =>
+  directions.find((direction) => seated[direction]?.tile.id === id)
+
+/** How long a refused tile flares, then glides back, before the move goes on. */
+const refusal = () => 450 + movingFor('--duration-glide') + 40
+
 /**
- * A tile moving in Software Engineering's ring: dragged, or started by a button, ended by Escape or
- * Stop, landed in a free slot or swapped with a Branch, gliding there, or
- * back once the server refuses. The frame's state, and every gesture on it.
+ * A tile moving in Software Engineering's ring, on the canvas's `useMove`: dragged, or started by a
+ * button, ended by Escape or Stop, landed in a free slot or swapped with a Branch, gliding there, or
+ * back once "the server" refuses. The frame's state, and every gesture on it.
  */
-function useMove(svg: RefObject<SVGSVGElement | null>) {
+function useFrameMove(svg: RefObject<SVGSVGElement | null>) {
   const [frame, setFrame] = useState<Ring>(ring)
-  const [moving, setMoving] = useState<Direction>()
-  const [landing, setLanding] = useState<Landing>()
-  const [over, setOver] = useState<Direction>()
+  const [moving, setMoving] = useState<string>()
   const [refuses, setRefuses] = useState(false)
-  const { dragged, press, cancel } = useDrag(unitsIn(svg))
-  const timers = useRef<ReturnType<typeof setTimeout>[]>([])
-  // Each tile's shape, by its id, to give it the focus back once it has landed or stopped.
-  const tiles = useRef(new Map<string, HTMLElement>())
+  // The tile the page just refused, flaring, as the server's refusal would have it.
+  const [refused, setRefused] = useState<string>()
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
   useEffect(
     () => () => {
-      timers.current.forEach(clearTimeout)
+      clearTimeout(timer.current)
     },
     [],
   )
-  // What the move reads of the ring: the ring itself is what the frame draws.
   const offers = frameOf(frame)
-  const after = (ms: number, then: () => void) => {
-    timers.current.push(setTimeout(then, ms))
-  }
-  const focus = (id: string | undefined) => {
-    if (id !== undefined) tiles.current.get(id)?.focus()
-  }
-  const stop = () => {
-    if (landing !== undefined || moving === undefined) return
-    // A tile dragged when the move stops goes back, and its drop lands nowhere.
-    cancel()
-    setOver(undefined)
+  /** The landing of the tile in `from` on `to`, as the page's own server answers it. */
+  const landing = (from: Direction, to: Direction) => () => {
+    const id = frame[from]?.tile.id
+    if (refuses) {
+      setRefused(id)
+      timer.current = setTimeout(() => {
+        setRefused(undefined)
+        toast(m.gallery_moving_refused())
+      }, refusal())
+      return
+    }
+    setFrame((current) => landed(current, from, to))
     setMoving(undefined)
-    focus(frame[moving]?.tile.id)
   }
-  useEffect(() => {
-    if (moving === undefined) return
-    const onKey = (event: globalThis.KeyboardEvent) => {
-      if (event.key === 'Escape') stop()
-    }
-    addEventListener('keydown', onKey)
-    return () => {
-      removeEventListener('keydown', onKey)
-    }
+  const targetOf = (from: Direction, to: Direction): Target => ({
+    key: String(to),
+    center: hearts[to],
+    ...(frame[to] && { partner: frame[to].tile.id }),
+    land: landing(from, to),
   })
-  // A drag lands the tile it started on, which became the one moving after this render: it says so.
-  const land = (to: Direction, from = moving) => {
-    if (from === undefined || landing !== undefined) return
-    const glide = movingFor('--duration-glide')
-    setOver(undefined)
-    setLanding({ from, to, phase: 'glide' })
-    after(glide + 40, () => {
-      if (refuses) {
-        setLanding({ from, to, phase: 'refused' })
-        after(450, () => {
-          setLanding({ from, to, phase: 'back' })
-        })
-        after(450 + glide + 40, () => {
-          setLanding(undefined)
-          toast(m.gallery_moving_refused())
-        })
-        return
-      }
-      const id = frame[from]?.tile.id
-      setFrame((current) => landed(current, from, to))
-      setLanding(undefined)
-      setMoving(undefined)
-      requestAnimationFrame(() => {
-        focus(id)
-      })
-    })
-  }
-  const start = (direction: Direction) => {
-    if (landing === undefined && frame[direction] !== undefined) setMoving(direction)
-  }
-  const reach = { frame: offers, reach: frameRadius * 0.8 }
-  /** What a seated tile is handed: a mouse drags it, its shape kept for the focus. */
-  const handOf = (direction: Direction, { id, title }: TileNode): Hand => ({
-    'aria-label': title,
-    ref: (element: HTMLElement | null) => {
-      if (element) tiles.current.set(id, element)
-      else tiles.current.delete(id)
-    },
-    onPointerDown: (event) => {
-      if (moving !== undefined && moving !== direction) return
-      press(event, {
-        onStart: () => {
-          start(direction)
-        },
-        onMove: ({ at }) => {
-          setOver(dropAt(at, hearts, { ...reach, from: direction }))
-        },
-        onDrop: (released) => {
-          const to = released && dropAt(released.at, hearts, { ...reach, from: direction })
-          setOver(undefined)
-          if (to !== undefined) land(to, direction)
-        },
-      })
-    },
-  })
-  return {
-    frame,
-    offers,
+  const move = useMove({
+    units: unitsIn(svg),
     moving,
-    landing,
-    over,
-    refuses,
-    setRefuses,
-    dragged,
-    start,
-    stop,
-    land,
-    handOf,
-  }
-}
-
-type Move = ReturnType<typeof useMove>
-
-/** Where a seat is drawn, from its heart: where the drag has it, or the landing, or nowhere else. */
-function shiftOf({ dragged, moving, landing, frame }: Move, direction: Direction): Point {
-  if (dragged !== undefined && direction === moving) return dragged.offset
-  if (landing === undefined || landing.phase === 'back') return origin
-  const { from, to } = landing
-  const toward = (a: Direction, b: Direction) => ({
-    x: hearts[b].x - hearts[a].x,
-    y: hearts[b].y - hearts[a].y,
+    onStart: setMoving,
+    onStop: () => {
+      setMoving(undefined)
+    },
+    centerOf: (id) => {
+      const direction = directionOf(frame, id)
+      return direction === undefined ? undefined : hearts[direction]
+    },
+    dropAt: (point, id) => {
+      const from = directionOf(frame, id)
+      if (from === undefined) return undefined
+      const to = dropAt(point, hearts, { frame: offers, from, reach: frameRadius * 0.8 })
+      return to === undefined ? undefined : targetOf(from, to)
+    },
+    writeOf: (id) => (id === refused ? 'refused' : undefined),
   })
-  if (direction === from) return toward(from, to)
-  if (direction === to && frame[to] !== undefined) return toward(to, from)
-  return origin
+  const at = moving === undefined ? undefined : directionOf(frame, moving)
+  /** Lands the tile on the move in `to`, from a button. */
+  const landOn = (to: Direction) => {
+    if (at !== undefined) move.land(targetOf(at, to))
+  }
+  return { ...move, frame, offers, moving: at, refused, refuses, setRefuses, setMoving, landOn }
 }
+
+type Move = ReturnType<typeof useFrameMove>
+
+/** Whether a landing has its tile in the air, gliding there or back, or flaring: no other starts. */
+const inTheAir = ({ landing }: Move) => landing !== undefined && landing !== 'landed'
 
 /**
  * Software Engineering and its ring, where a tile moves: dragged, or from a button above it, as its
- * menu's "Somewhere else…" would; Escape or Stop ends it. "The server refuses" makes the next landing fail, so the
- * tile flares and glides back, and the move goes on.
+ * menu's "Somewhere else…" would; Escape or Stop ends it. "The server refuses" makes the next landing
+ * fail, so the tile flares and glides back, and the move goes on.
  */
 function MovingFrame() {
   const svg = useRef<SVGSVGElement>(null)
   const scale = useScale(svg, { width: frameWidth, height: frameHeight })
-  const move = useMove(svg)
-  const { frame, offers, moving, landing, over, land } = move
+  const move = useFrameMove(svg)
+  const { frame, offers, moving, over, dragging } = move
   const movingTitle = moving === undefined ? undefined : frame[moving]?.tile.title
   const center = (
     <Tile
@@ -281,23 +218,23 @@ function MovingFrame() {
         aria-label={m.gallery_moving_frame()}
         className="w-full touch-pan-y select-none"
       >
-        {moving === undefined ? center : <Aside>{center}</Aside>}
+        <Aside aside={moving !== undefined}>{center}</Aside>
         {directions.map((direction) => {
           if (frame[direction] !== undefined) return null
           const hex = { center: hearts[direction], radius: frameRadius * gap }
           const takes =
             moving !== undefined &&
-            landing === undefined &&
+            !inTheAir(move) &&
             partOf(offers, moving, direction) === 'landing'
           return takes ? (
             <LandingSlot
               key={`free:${String(direction)}`}
               hex={hex}
-              over={over === direction}
+              over={over === String(direction)}
               action={{
                 label: m.tile_menu_move_to({ direction: directionName(direction) }),
                 onSelect: () => {
-                  land(direction)
+                  move.landOn(direction)
                 },
               }}
             />
@@ -305,9 +242,12 @@ function MovingFrame() {
             <Slot key={`free:${String(direction)}`} hex={hex} />
           )
         })}
-        {/* The tile on the move is drawn last, above the others it is dragged over. */}
+        {/* The tile dragged is drawn last, above the others it is dragged over. */}
         {[...directions]
-          .sort((a, b) => Number(a === moving) - Number(b === moving))
+          .sort(
+            (a, b) =>
+              Number(frame[a]?.tile.id === dragging) - Number(frame[b]?.tile.id === dragging),
+          )
           .map((direction) => {
             const seated = frame[direction]
             return seated === undefined ? null : (
@@ -327,7 +267,7 @@ function MovingFrame() {
 
 /** The buttons above the frame: a tile to move, Stop, and whether the server refuses. */
 function MoveControls({ move }: { move: Move }) {
-  const { frame, moving, refuses, setRefuses, start, stop } = move
+  const { frame, moving, refuses, setRefuses, setMoving, stop } = move
   return (
     <div className="flex flex-wrap items-center gap-1">
       {(['projects', 'notes'] as const).map((id) => {
@@ -339,7 +279,7 @@ function MoveControls({ move }: { move: Move }) {
             variant={at !== undefined && at === moving ? 'secondary' : 'ghost'}
             disabled={at === undefined}
             onClick={() => {
-              if (at !== undefined) start(at)
+              if (at !== undefined && !inTheAir(move)) setMoving(id)
             }}
           >
             {m.gallery_moving_move({ title: fixture(id).title })}
@@ -376,45 +316,47 @@ function SeatedTile({
   move: Move
   scale: number
 }) {
-  const { offers, moving, landing, over, dragged, land, handOf } = move
+  const { offers, moving, over, refused, shiftOf, press, tileRef, landOn } = move
+  const { id, title } = seated.tile
   const hex = { center: hearts[direction], radius: frameRadius * gap }
   const part = moving === undefined ? undefined : partOf(offers, moving, direction)
-  const { x, y } = shiftOf(move, direction)
-  const refused = landing?.phase === 'refused' && landing.from === direction
-  const tile = (
-    <Tile
-      hex={hex}
-      {...(moving === undefined ? seated.look : withoutFoot(seated.look))}
-      scale={scale}
-      {...(refused && { write: 'refused' as const })}
-      hand={handOf(direction, seated.tile)}
-    />
-  )
+  const { by, glides } = shiftOf(id)
+  const hand: Hand = {
+    'aria-label': title,
+    ref: tileRef(id),
+    onPointerDown: (event) => {
+      press(id, event)
+    },
+  }
   return (
     <g
-      style={{ transform: `translate(${String(x)}px, ${String(y)}px)` }}
+      style={{ transform: `translate(${String(by.x)}px, ${String(by.y)}px)` }}
       className={
-        dragged !== undefined && direction === moving
-          ? undefined
-          : 'transition-transform duration-(--duration-glide) ease-glide motion-reduce:transition-none'
+        glides
+          ? 'transition-transform duration-(--duration-glide) ease-glide motion-reduce:transition-none'
+          : undefined
       }
     >
-      {part === 'lifted' ? (
-        <Lifted hex={hex}>{tile}</Lifted>
-      ) : part === 'aside' ? (
-        <Aside>{tile}</Aside>
-      ) : (
-        tile
-      )}
-      {part === 'swap' && landing === undefined ? (
+      <Aside aside={part === 'aside'}>
+        <Lifted hex={hex} lifted={part === 'lifted'}>
+          <Tile
+            hex={hex}
+            {...(moving === undefined ? seated.look : withoutFoot(seated.look))}
+            scale={scale}
+            {...(refused === id && { write: 'refused' as const })}
+            hand={hand}
+          />
+        </Lifted>
+      </Aside>
+      {part === 'swap' && !inTheAir(move) ? (
         <SwapDisc
           hex={hex}
           scale={scale}
-          over={over === direction}
+          over={over === String(direction)}
           action={{
-            label: m.tile_menu_swap_with({ title: seated.tile.title }),
+            label: m.tile_menu_swap_with({ title }),
             onSelect: () => {
-              land(direction)
+              landOn(direction)
             },
           }}
         />

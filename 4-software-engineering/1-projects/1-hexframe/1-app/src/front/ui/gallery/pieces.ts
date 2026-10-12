@@ -146,7 +146,7 @@ export const pieces = [
     name: 'Canvas',
     tier: 'canvas',
     sources: ['ui/canvas/Canvas.tsx'],
-    madeOf: ['Tile', 'Slot', 'Ground', 'Moving', 'Button'],
+    madeOf: ['Tile', 'Slot', 'Ground', 'TileMenu', 'Moving', 'Button'],
     note: m.gallery_note_canvas,
   },
   {

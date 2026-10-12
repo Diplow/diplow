@@ -58,6 +58,11 @@ export type CanvasHex =
       role: TileRole
       /** A member's Direction in its ring; the center has none. */
       direction?: Direction
+      /**
+       * The Tile whose ring it stands in: the center, or the Branch opened in place it stands in;
+       * the center stands in none. A Reference's is where it stands, not where its Tile does.
+       */
+      parent?: TileNode
       /** The Branch a Leaf of a Children ring is numbered as, whose Direction it found taken. */
       clash?: TileNode
     })
@@ -220,7 +225,22 @@ function hexOf(
   const { direction, memberKind } = placement
   const role = isOpenBranch(placement, shown) ? 'hub' : memberKind
   const clash = memberKind === 'leaf' ? ledger.clashes.get(tile.id) : undefined
-  return [{ ...drawn, kind: 'tile', key, tile, role, direction, ...(clash && { clash }) }]
+  // The center's rings, around it and inside it, stand in the center; a Branch's, opened in place,
+  // a generation further, in the Branch at their heart.
+  const hub = placement.generation === 1 ? undefined : hubOf(placement, placements)
+  const parent = hub === undefined ? shown.center : ledger.tiles.get(hub.tile.path)
+  return [
+    {
+      ...drawn,
+      kind: 'tile',
+      key,
+      tile,
+      role,
+      direction,
+      ...(parent && { parent }),
+      ...(clash && { clash }),
+    },
+  ]
 }
 
 type TileHex = Exclude<Placement, { kind: 'empty' }>
@@ -252,11 +272,12 @@ function ringAround(hub: TileHex, shown: ShownView): FrameKind {
 }
 
 /**
- * The hex an empty one sits around: one generation up, the same size, a neighbor away, as the shape
- * lays a ring around its Tile. The shape's placement of an empty hex names its Direction only.
+ * The hex a member or an empty one sits around: one generation up, the same size, a neighbor away, as
+ * the shape lays a ring around its Tile. The shape's placement of a hex in a ring names its Direction
+ * only.
  */
 function hubOf(
-  empty: Extract<Placement, { kind: 'empty' }>,
+  empty: Extract<Placement, { kind: 'empty' | 'member' }>,
   placements: readonly Placement[],
 ): TileHex | undefined {
   const at = neighbor(empty, opposite(empty.direction)).center

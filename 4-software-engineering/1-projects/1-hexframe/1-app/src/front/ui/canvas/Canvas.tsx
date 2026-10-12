@@ -2,23 +2,40 @@
 // hex opened in place, laid out by the shape (geometry/shape.ts), its words fitted to its size on
 // screen; above it, the rings the center can show. The viewBox is the canvas's own coordinates, so
 // the page sizes it with CSS and everything inside scales with it. The view is the caller's, from
-// the URL: the canvas only says which view comes next, and blooms and folds what a hex opens.
-import { Fragment, useRef } from 'react'
+// the URL: the canvas only says which view comes next, and blooms and folds what a hex opens. Where
+// its caller acts on it, each Tile has its menu and its hover card, each free slot its menu, and a
+// Tile moves, dragged or from its menu, its banner at the canvas's foot (`hexes.tsx`).
+import { useRef, useState } from 'react'
 import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 
 import { canvasSize, type EmptySlotTarget } from './geometry/shape'
+import type { Point } from './geometry/geometry'
+import {
+  SlotHexView,
+  standsFor,
+  TileHexView,
+  type Acting,
+  type Landing,
+  type Moving,
+} from './hexes'
 import type { Action } from './keys'
 import { Button } from '../atoms/controls/button'
+import { nearestOf } from './state/move/targets'
+import { useMove } from './state/move/useMove'
 import { useCanvasState, type TileAction, type TileHex } from './state/useCanvasState'
 import { useScale } from './state/useScale'
-import { SwapDisc } from './tile/moving/Moving'
-import { Ground, Slot } from './tile/places'
+import { useFinger } from './tile/menu/TileMenu'
+import { unitsIn } from './tile/moving/drag'
+import { MoveBanner } from './tile/moving/Moving'
+import { Ground } from './tile/places'
 import { Tile, type TileWrite } from './tile/Tile'
 import { listOf, lookOf, placeOf } from './view/looks'
 import type { FrameKind, InnerKind, OuterKind, TileNode } from './view/tiles'
 import type { CanvasView, RingChoices, ViewAction } from './view/view'
+
+export type { Acting, Moving } from './hexes'
 
 /** What is on its way to the System, as the canvas marks it. */
 interface Writes {
@@ -26,6 +43,23 @@ interface Writes {
   tile: (id: string) => TileWrite | undefined
   /** Whether an import on its way lands in this free slot, where its tiles will be. */
   landing: (slot: EmptySlotTarget) => boolean
+}
+
+/** Acting on what the canvas draws, where it is: each Tile's menu, each free slot's. */
+interface CanvasActing {
+  /** What a Tile's menu says of it and does; none for a Tile with no menu. */
+  tile: (hex: TileHex) => Acting | undefined
+  /** What a free slot's menu says of it and does; none for a slot with no menu. */
+  slot: (slot: EmptySlotTarget) => Acting | undefined
+}
+
+/** Moving a Tile: the one on the move, if any, and how a move starts and stops. */
+interface CanvasMove {
+  moving?: Moving | undefined
+  /** A drag starting on a Tile its menu lets move: the move starts with it, by its id. */
+  start: (id: string) => void
+  /** Escape or Stop. */
+  stop: () => void
 }
 
 interface CanvasProps {
@@ -42,61 +76,101 @@ interface CanvasProps {
    * there; `undefined` for a slot that takes no click. Without it, none does.
    */
   emptySlots?: (slot: EmptySlotTarget) => Action | undefined
+  /** Each Tile's menu and hover card, and each free slot's menu. Without it, nothing has one. */
+  acting?: CanvasActing
   /**
-   * A tile on the move: no Branch shows its frame at its foot, and `swapTargets` says whether a Tile
-   * offers to trade places with it, how that is named and what it does, on a disc of its own at its
-   * foot; `undefined` for a Tile that offers no swap. Without it, nothing moves.
+   * A Tile on the move: lifted, its free slots offering themselves where `emptySlots` lands it, the
+   * Tiles `swapTargets` names offering their swap on a disc at their foot, no Branch showing its
+   * frame there, the rest stepped back, a banner at the canvas's foot. Without it, nothing moves.
    */
-  move?: { swapTargets: (tile: TileNode) => Action | undefined }
+  move?: CanvasMove
   /** What is on its way: without it, nothing is. */
   writes?: Writes
   className?: string
 }
 
-export function Canvas({
-  system,
-  view,
-  onViewChange,
-  emptySlots,
-  move,
-  writes,
-  className,
-}: CanvasProps) {
-  const { state, actions } = useCanvasState({ system, view, onViewChange })
+export function Canvas(props: CanvasProps) {
+  const { system, view, onViewChange, emptySlots, acting, move, writes, className } = props
+  const finger = useFinger()
+  const { state, actions } = useCanvasState({ system, view, onViewChange, finger })
   const svg = useRef<SVGSVGElement>(null)
   const scale = useScale(svg, canvasSize)
   const { width, height } = canvasSize
+  // The hex whose menu is open: the other Tiles step back meanwhile.
+  const [menu, setMenu] = useState<string>()
+  const moving = move?.moving
+  const placed = centersOf(state.hexes)
+  const targets = moving === undefined ? [] : targetsOf(state.hexes, { emptySlots, moving })
+  const targetAt = new Map(targets.map((target) => [target.key, target]))
+  const gesture = useMove({
+    units: unitsIn(svg),
+    moving: moving?.id,
+    onStart: (id) => move?.start(id),
+    onStop: () => move?.stop(),
+    centerOf: (id) => placed.get(id),
+    dropAt: (point) => nearestOf(point, targets),
+    writeOf: (id) => writes?.tile(id),
+  })
+  const inTheAir = gesture.landing !== undefined && gesture.landing !== 'landed'
+  const onMenu = (key: string) => (open: boolean) => {
+    setMenu((current) => (open ? key : current === key ? undefined : current))
+  }
 
-  /** A Tile's hex: the tile, by what it is and where it stands, and the swap it offers, if any. */
+  /** A Tile's hex: the tile, by what it is and where it stands, in its menu where it has one. */
   const tileOf = (hex: TileHex) => {
     const action = actions.actionOf(hex)
-    const swap = move?.swapTargets(hex.tile)
+    const look = lookOf(hex, { moving: moving !== undefined })
     return (
-      <Fragment key={hex.key}>
-        <Tile
-          hex={hex.hex}
-          {...lookOf(hex, { moving: move !== undefined })}
-          place={placeOf(hex)}
-          scale={scale}
-          write={writes?.tile(hex.tile.id)}
-          motion={actions.motionOf(hex.key)}
-          action={
-            action && {
-              label: actionLabel(action, hex.tile.title),
-              onSelect: () => {
-                actions.click(hex)
-              },
+      <TileHexView
+        key={hex.key}
+        hex={hex}
+        look={look}
+        draw={(hand) => (
+          <Tile
+            hex={hex.hex}
+            {...look}
+            place={placeOf(hex)}
+            scale={scale}
+            write={writes?.tile(hex.tile.id)}
+            motion={actions.motionOf(hex.key)}
+            action={
+              action && {
+                label: actionLabel(action, hex.tile.title),
+                onSelect: () => {
+                  actions.click(hex)
+                },
+              }
             }
-          }
-          onGoIn={(from) => {
-            actions.center(hex, from)
-          }}
-        />
-        {swap === undefined ? null : <SwapDisc hex={hex.hex} action={swap} scale={scale} />}
-      </Fragment>
+            onGoIn={(from) => {
+              actions.center(hex, from)
+            }}
+            {...(hand && { hand })}
+          />
+        )}
+        acting={acting?.tile(hex)}
+        go={(verb) => {
+          actions.go(hex, verb)
+        }}
+        moving={moving}
+        aside={menu !== undefined && menu !== hex.key}
+        onMenu={onMenu(hex.key)}
+        shift={hex.tile.reference === undefined ? gesture.shiftOf(hex.tile.id) : still}
+        inTheAir={inTheAir}
+        swap={targetAt.get(hex.key)}
+        over={gesture.over === hex.key}
+        scale={scale}
+        tileRef={gesture.tileRef(hex.tile.id)}
+        press={(event) => {
+          gesture.press(hex.tile.id, event)
+        }}
+        land={gesture.land}
+      />
     )
   }
 
+  // The Tile dragged is drawn last, above the others it is dragged over.
+  const dragged = (hex: (typeof state.hexes)[number]) =>
+    Number(hex.kind === 'tile' && standsFor(hex, gesture.dragging))
   return (
     <div className={cn('flex min-h-0 flex-col gap-2', className)}>
       <RingChooser
@@ -110,30 +184,77 @@ export function Canvas({
         viewBox={`0 0 ${String(width)} ${String(height)}`}
         role="group"
         aria-label={m.hex_canvas_label({ title: state.center.title })}
-        className="min-h-0 w-full flex-1"
+        className="min-h-0 w-full flex-1 select-none"
       >
-        {state.hexes.map((hex) => {
-          switch (hex.kind) {
-            case 'ground':
-              return <Ground key={hex.key} hex={hex.hex} context={hex.ring === 'context'} />
-            case 'empty':
-              return (
-                <Slot
-                  key={hex.key}
-                  hex={hex.hex}
-                  action={emptySlots?.(hex.slot)}
-                  loading={writes?.landing(hex.slot) ?? false}
-                />
-              )
-            case 'list':
-              return <Tile key={hex.key} hex={hex.hex} {...listOf(hex)} scale={scale} />
-            case 'tile':
-              return tileOf(hex)
-          }
-        })}
+        {[...state.hexes]
+          .sort((a, b) => dragged(a) - dragged(b))
+          .map((hex) => {
+            switch (hex.kind) {
+              case 'ground':
+                return <Ground key={hex.key} hex={hex.hex} context={hex.ring === 'context'} />
+              case 'empty':
+                return (
+                  <SlotHexView
+                    key={hex.key}
+                    hex={hex}
+                    action={emptySlots?.(hex.slot)}
+                    landing={targetAt.get(hex.key)}
+                    loading={writes?.landing(hex.slot) ?? false}
+                    acting={acting?.slot(hex.slot)}
+                    moving={moving !== undefined}
+                    inTheAir={inTheAir}
+                    over={gesture.over === hex.key}
+                    onMenu={onMenu(hex.key)}
+                    land={gesture.land}
+                  />
+                )
+              case 'list':
+                return <Tile key={hex.key} hex={hex.hex} {...listOf(hex)} scale={scale} />
+              case 'tile':
+                return tileOf(hex)
+            }
+          })}
       </svg>
+      {moving === undefined ? null : <MoveBanner title={moving.title} onStop={gesture.stop} />}
     </div>
   )
+}
+
+const still = { by: { x: 0, y: 0 }, glides: false }
+
+type Hexes = ReturnType<typeof useCanvasState>['state']['hexes']
+
+/** Where each Tile is drawn, by its id: its own hex, never a Reference to it. */
+function centersOf(hexes: Hexes): Map<string, Point> {
+  const centers = new Map<string, Point>()
+  for (const hex of hexes) {
+    if (hex.kind === 'tile' && hex.tile.reference === undefined) {
+      centers.set(hex.tile.id, hex.hex.center)
+    }
+  }
+  return centers
+}
+
+/**
+ * Where the Tile on the move can land, as drawn, each by its hex's key: each free slot its caller
+ * lands it in, each Tile it trades places with, within most of a hex of its heart; what a click on
+ * it and a drop there do alike.
+ */
+function targetsOf(
+  hexes: Hexes,
+  { emptySlots, moving }: { emptySlots: CanvasProps['emptySlots']; moving: Moving },
+): (Landing & { reach: number })[] {
+  return hexes.flatMap((hex) => {
+    const at = { key: hex.key, center: hex.hex.center, reach: hex.hex.radius * 0.8 }
+    if (hex.kind === 'empty') {
+      const action = emptySlots?.(hex.slot)
+      return action === undefined ? [] : [{ ...at, label: action.label, land: action.onSelect }]
+    }
+    if (hex.kind !== 'tile' || standsFor(hex, moving.id)) return []
+    const swap = moving.swapTargets(hex.tile)
+    if (swap === undefined) return []
+    return [{ ...at, label: swap.label, partner: hex.tile.id, land: swap.onSelect }]
+  })
 }
 
 /** What a click on a Tile does, as a screen reader hears it on its button. */
