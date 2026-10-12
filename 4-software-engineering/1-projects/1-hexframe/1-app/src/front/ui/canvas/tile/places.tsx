@@ -17,10 +17,15 @@ interface SlotProps {
   loading?: boolean
   /** What its menu hands it, where a free slot has one. */
   hand?: Hand
+  /**
+   * Where it is, said to a screen reader beside its name, since six free slots around one tile share
+   * the name a click there gives them: "free, north-west".
+   */
+  place?: string
 }
 
 /** A Direction that holds no tile: free, with a plus where a click adds one, dotted where none can. */
-export function Slot({ hex, action, loading = false, hand }: SlotProps) {
+export function Slot({ hex, action, loading = false, hand, place }: SlotProps) {
   if (loading) {
     return (
       <g aria-hidden>
@@ -51,6 +56,7 @@ export function Slot({ hex, action, loading = false, hand }: SlotProps) {
         role="button"
         tabIndex={0}
         aria-label={label}
+        aria-description={place}
         className="group cursor-pointer outline-none"
         onClick={onSelect}
         {...buttonKeys({ onEnter: onSelect, onSpace: onSelect })}

@@ -11,7 +11,7 @@ import type { Target } from './state/move/useMove'
 import { isViewVerb, type TileHex, type ViewVerb } from './state/useCanvasState'
 import { TileMenu } from './tile/menu/TileMenu'
 import type { PickerFrame } from './tile/menu/Picker'
-import { groupsOf, type Subject, type TileAct, type Verb } from './tile/menu/verbs'
+import { groupsOf, slotPlace, type Subject, type TileAct, type Verb } from './tile/menu/verbs'
 import { markNote, type TileMark } from './tile/marks/mark'
 import { Aside, LandingSlot, Lifted, SwapDisc } from './tile/moving/Moving'
 import { Slot } from './tile/places'
@@ -181,8 +181,9 @@ export function SlotHexView(props: SlotHexProps) {
       />
     )
   }
+  const place = slotPlace(hex.slot.direction)
   if (acting === undefined || action === undefined) {
-    return <Slot hex={hex.hex} action={action} loading={props.loading} />
+    return <Slot hex={hex.hex} action={action} loading={props.loading} place={place} />
   }
   return (
     <TileMenu
@@ -191,7 +192,9 @@ export function SlotHexView(props: SlotHexProps) {
       onOpenChange={props.onMenu}
       onAct={acting.onAct}
     >
-      {(hand) => <Slot hex={hex.hex} action={action} loading={props.loading} hand={hand} />}
+      {(hand) => (
+        <Slot hex={hex.hex} action={action} loading={props.loading} hand={hand} place={place} />
+      )}
     </TileMenu>
   )
 }

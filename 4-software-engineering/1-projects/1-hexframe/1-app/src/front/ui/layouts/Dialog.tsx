@@ -1,10 +1,11 @@
 import { cn } from 'cn'
 import { AlertDialog } from 'radix-ui'
-import { useId, useState, type ReactNode } from 'react'
+import { useId, useRef, useState, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Act, voiceOf } from '../atoms/controls/act'
+import { focusHeld, giveFocusBack } from '../focus'
 
 interface DialogProps {
   /** Controlled: a dialog opens from a widget's action or a menu's entry, not from a trigger of its own. */
@@ -51,6 +52,9 @@ export function Dialog({
   // A name typed belongs to one opening: once closed, by Radix or by the caller, it goes.
   if (!open && typed !== '') setTyped('')
   const fieldId = useId()
+  // It opens from a widget's action or a menu's entry, with no trigger of its own for Radix to give
+  // the focus back to: what had the focus as it opened gets it back as it closes, if still there.
+  const opener = useRef<HTMLElement | SVGElement | null>(null)
   const confirmed = typeToConfirm === undefined || typed.trim() === typeToConfirm
   return (
     <AlertDialog.Root open={open} onOpenChange={onOpenChange}>
@@ -60,7 +64,7 @@ export function Dialog({
           onClick={() => {
             if (typed === '') onOpenChange(false)
           }}
-          className="fixed inset-0 z-50 bg-background/62 backdrop-blur-[5px] backdrop-saturate-[.85] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 motion-reduce:animate-none"
+          className="fixed inset-0 z-50 bg-background/62 backdrop-blur-[5px] backdrop-saturate-[.85] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 motion-reduce:animate-none!"
         />
         <AlertDialog.Content
           // Escape leaves as the dim does: not once a name is typed.
@@ -68,17 +72,24 @@ export function Dialog({
             if (typed !== '') event.preventDefault()
           }}
           onOpenAutoFocus={(event) => {
+            opener.current = focusHeld()
             // Focus starts on the way out, Radix's default, or on the name to type when there is one.
             if (typeToConfirm === undefined) return
             event.preventDefault()
             document.getElementById(fieldId)?.focus()
+          }}
+          onCloseAutoFocus={(event) => {
+            // Radix hands the focus over here, before anything else can take it: no need to wait for
+            // it to fall to the page, as a widget does.
+            if (giveFocusBack(opener.current)) event.preventDefault()
+            opener.current = null
           }}
           className={cn(
             voiceOf(tone === 'destructive' ? 'destructive' : 'app'),
             // A risen surface, square, a line on top in its voice that draws itself as it opens.
             'risen fixed z-50 grid px-6 pt-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] outline-none [--rim:linear-gradient(90deg,var(--voice),color-mix(in_oklab,var(--voice)_10%,transparent))] before:origin-left motion-safe:before:animate-draw',
             // A phone: a sheet from the bottom, the screen's width.
-            'inset-x-0 bottom-0 data-[state=open]:animate-in data-[state=open]:slide-in-from-bottom-4 data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 motion-reduce:animate-none',
+            'inset-x-0 bottom-0 data-[state=open]:animate-in data-[state=open]:slide-in-from-bottom-4 data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 motion-reduce:animate-none!',
             // Wide: over the conversation's column, from its left edge, a little below the top.
             'sm:inset-x-auto sm:bottom-auto sm:left-9 sm:top-[22vh] sm:w-[28rem] sm:px-[1.875rem] sm:pt-[1.625rem] sm:pb-6 sm:data-[state=open]:slide-in-from-bottom-2',
           )}

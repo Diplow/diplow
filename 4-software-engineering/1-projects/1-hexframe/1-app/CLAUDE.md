@@ -66,6 +66,7 @@ Every folder under `1-app/src/` is a node: at most 6 child folders and 6 files, 
 | No `zod`, however it is imported: validation is Effect Schema | `dependency-cruiser` |
 | Radix, TanStack Table, TanStack Form, the Markdown renderer, TanStack Hotkeys and Sonner imported by `src/front/ui/` only | `dependency-cruiser` |
 | No hex and no Tailwind palette name (`bg-zinc-900`, `text-white`) in a string under `src/`: colour is a theme token | ESLint `no-restricted-syntax` |
+| An animation on Radix's state in a class string (`data-[state=open]:animate-in`) carries `motion-reduce:animate-none!` beside it, which it outranks otherwise | ESLint `no-restricted-syntax` |
 | No raw `<table>` or `<dialog>` outside `src/front/ui/` | ESLint `no-restricted-syntax` |
 | No `useEffect` (nor `useLayoutEffect`, `useInsertionEffect`) outside `src/front/ui/`: state has an owner | ESLint `no-restricted-syntax` |
 | No Effect `run*` (`runPromise`, `runSync`, `runFork`, `runCallback`…) outside `src/api/server/run.ts`: the helper runs every program | ESLint `no-restricted-syntax` |

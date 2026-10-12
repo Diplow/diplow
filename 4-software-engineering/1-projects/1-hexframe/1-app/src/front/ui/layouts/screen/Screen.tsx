@@ -23,6 +23,7 @@ import { flushSync } from 'react-dom'
 
 import { m } from '#/paraglide/messages'
 
+import { focusHeld, focusLost, giveFocusBack } from '../../focus'
 import { cutAlongCurve, reach } from './curve'
 import { keptAtFoot } from './state/latest'
 import { Scrollbar } from './Scrollbar'
@@ -223,18 +224,14 @@ export function Screen({
  * none back. A focus that went elsewhere meanwhile, the seam's or the canvas's, stays.
  */
 function useFocusKept(chat: RefObject<HTMLElement | null>, chatShown: boolean) {
-  const kept = useRef<HTMLElement | null>(null)
+  const kept = useRef<HTMLElement | SVGElement | null>(null)
   useLayoutEffect(() => {
     if (chatShown) return
-    const held = document.activeElement
-    kept.current =
-      held instanceof HTMLElement && chat.current?.contains(held) === true ? held : null
+    const held = focusHeld()
+    kept.current = held !== null && chat.current?.contains(held) === true ? held : null
   }, [chat, chatShown])
   useEffect(() => {
-    const lost = document.activeElement === null || document.activeElement === document.body
-    if (chatShown && lost && kept.current?.isConnected === true) {
-      kept.current.focus({ preventScroll: true })
-    }
+    if (chatShown && focusLost()) giveFocusBack(kept.current, { preventScroll: true })
     if (chatShown) kept.current = null
   }, [chatShown])
 }

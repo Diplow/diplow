@@ -196,7 +196,7 @@ function Zone({
                 </p>
               )}
             </div>
-            <Collapsible.Content className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down motion-reduce:animate-none">
+            <Collapsible.Content className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down motion-reduce:animate-none!">
               {(state === 'working' || children !== undefined) && (
                 <div className={cn('pt-4', risesInTurn)} style={rise(4)}>
                   {state === 'working' ? <LinesToCome /> : children}

@@ -59,6 +59,23 @@ describe('the colour lint', () => {
   })
 })
 
+describe('the reduced motion lint', () => {
+  it.each(['data-[state=open]:animate-in fade-in-0', 'data-[state=closed]:animate-out'])(
+    'refuses %s without the reduced motion beside it',
+    async (literal) => {
+      const code = `export const a = '${literal}'\nexport const b = \`p-2 ${literal}\`\n`
+      const messages = await restrictedSyntax(code, inUi)
+      expect(messages).toHaveLength(2)
+      expect(messages.every((message) => /reduced motion/.test(message))).toBe(true)
+    },
+  )
+
+  it('lets it through with motion-reduce:animate-none! beside it', async () => {
+    const code = `export const a = 'data-[state=open]:animate-in motion-reduce:animate-none!'\nexport const b = 'animate-in motion-reduce:animate-none'\n`
+    expect(await restrictedSyntax(code, inUi)).toEqual([])
+  })
+})
+
 describe('the raw element lint', () => {
   it.each(['table', 'dialog'])('refuses a <%s> outside ui/', async (element) => {
     const messages = await restrictedSyntax(`export const e = <${element} />\n`, feature)

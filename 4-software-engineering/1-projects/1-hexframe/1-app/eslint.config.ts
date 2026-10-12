@@ -21,6 +21,17 @@ const colourLiterals = [hex, palette].flatMap((pattern) =>
   })),
 )
 
+// What opens and closes with Radix's state (`data-[state=open]:animate-in`) stills under reduced motion
+// only with `motion-reduce:animate-none!`: the state's variant outranks it without the important mark
+// (hexframe-app-design-system-v1/decisions.md#DEC-51, in .run/registers/).
+const stateAnimation = '/data-\\[state=(?:open|closed)\\]:animate-/'
+const stilled = '/motion-reduce:animate-none!/'
+const unstilledAnimations = ['Literal[value', 'TemplateElement[value.raw'].map((node) => ({
+  selector: `${node}=${stateAnimation}]:not(${node}=${stilled}])`,
+  message:
+    "An animation on Radix's state stills under reduced motion only with motion-reduce:animate-none! beside it (DEC-51).",
+}))
+
 // Only the design system (src/front/ui/) renders a table or a dialog, so each looks and behaves one way.
 const rawElements = ['table', 'dialog'].map((element) => ({
   selector: `JSXOpeningElement[name.name='${element}']`,
@@ -98,7 +109,9 @@ export default defineConfig(
   // The app's code, where colour is rendered; scripts/lint.test.ts holds the literals these rules refuse.
   {
     files: ['src/**'],
-    rules: { 'no-restricted-syntax': ['error', ...colourLiterals, ...effectRuns] },
+    rules: {
+      'no-restricted-syntax': ['error', ...colourLiterals, ...unstilledAnimations, ...effectRuns],
+    },
   },
   {
     files: ['src/**'],
@@ -107,6 +120,7 @@ export default defineConfig(
       'no-restricted-syntax': [
         'error',
         ...colourLiterals,
+        ...unstilledAnimations,
         ...rawElements,
         ...effectHooks,
         ...effectRuns,

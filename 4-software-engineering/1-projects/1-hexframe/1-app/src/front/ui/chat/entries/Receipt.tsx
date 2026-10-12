@@ -7,11 +7,12 @@
 // Proposal does, or the conversation's log.
 import { cn } from 'cn'
 import type { LucideIcon } from 'lucide-react'
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Act } from '../../atoms/controls/act'
+import { focusHeld, focusLost, giveFocusBack } from '../../focus'
 import { Fold } from '../atoms/fold'
 import { HexMark } from '../atoms/hex'
 import { useHandOffState } from '../layouts/useHandOffState'
@@ -159,7 +160,8 @@ interface UntilDecidedProps {
  * goes to the receipt, so the keyboard never falls back to the top of the page; decided elsewhere, the
  * focus stays where the user is and a status says it (`useHandOffState`). While it asks, a step of its
  * own that takes away what had the focus (a Key's name giving way to its secret) gives
- * the focus to its first control rather than to the page.
+ * the focus to its first control rather than to the page. Left with nothing decided, a Cancel, it
+ * goes, and the focus it held goes back to what had it as it opened, the tile it edits included.
  */
 export function UntilDecided({ receipt, children }: UntilDecidedProps) {
   const { handOff, status, focused, onFocus, onBlur } = useHandOffState(
@@ -169,9 +171,10 @@ export function UntilDecided({ receipt, children }: UntilDecidedProps) {
   const asking = useRef<HTMLDivElement>(null)
   // The focus counted inside yet fallen to the page: a step of its own removed what held it.
   useEffect(() => {
-    if (!focused || document.activeElement !== document.body) return
+    if (!focused || !focusLost()) return
     asking.current?.querySelector<HTMLElement>('input, textarea, button, [tabindex="0"]')?.focus()
   })
+  useFocusGivenBack(focused)
   return (
     <>
       {receipt === undefined ? (
@@ -187,5 +190,24 @@ export function UntilDecided({ receipt, children }: UntilDecidedProps) {
         {status}
       </p>
     </>
+  )
+}
+
+/**
+ * What had the focus as it opened, given the focus back once it goes holding it, so a way out that
+ * leaves nothing behind doesn't drop the keyboard to the top of the page; unless the focus went
+ * somewhere meanwhile, or what had it is gone too.
+ */
+function useFocusGivenBack(focused: boolean) {
+  const [opener] = useState(focusHeld)
+  const holds = useRef(focused)
+  useEffect(() => {
+    holds.current = focused
+  })
+  useEffect(
+    () => () => {
+      if (holds.current && focusLost()) giveFocusBack(opener)
+    },
+    [opener],
   )
 }
