@@ -9,12 +9,9 @@
 // Pure.
 import { Option, Result, Schema } from 'effect'
 
-import type { ImportUpload } from '#/api/mapping/mapping'
+import { ImportPlace } from '#/api/mapping/places'
 import type { Slot, System } from '#/domains/mapping/entities'
 import { decide, evolve, isOperationName, Operation, tagOf } from '#/domains/mapping/operations'
-
-/** Where an import lands: a free slot under a Tile, or the Root of an empty System. */
-type ImportPlace = (typeof ImportUpload.Type)['place']
 
 /** A write to the System still waiting for its answer, as the MutationCache holds it. */
 export interface Pending {
@@ -38,6 +35,20 @@ export function operationOf(name: unknown, variables: unknown): Operation | unde
     return undefined
   }
   return Option.getOrUndefined(decodeOperation({ ...variables, _tag: tagOf(name) }))
+}
+
+/** An import's name, which its mutation is keyed by. */
+export const importing = 'importTiles'
+
+const decodeLanding = Schema.decodeUnknownOption(Schema.Struct({ place: ImportPlace }))
+
+/**
+ * Where an import lands, read from its name and variables by the server function's schema: none for
+ * an Operation, nor for a place the schema refuses.
+ */
+export function landingOf(name: unknown, variables: unknown): ImportPlace | undefined {
+  if (name !== importing) return undefined
+  return Option.getOrUndefined(Option.map(decodeLanding(variables), ({ place }) => place))
 }
 
 /**

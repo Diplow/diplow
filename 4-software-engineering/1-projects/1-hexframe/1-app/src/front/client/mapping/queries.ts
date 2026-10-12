@@ -26,6 +26,8 @@ import type { Operation, OperationName } from '#/domains/mapping/operations'
 import { type Download, downloaded } from '#/api/mapping/files/download'
 import { type Given, type LeftOut, type Prepared, prepared } from './import/upload'
 import {
+  importing,
+  landingOf,
   onItsWay,
   type OnItsWay,
   operationOf,
@@ -33,6 +35,7 @@ import {
   type Pending,
   refusalOf,
 } from './overlay/overlay'
+import type { ImportPlace } from '#/api/mapping/places'
 import {
   ImportUpload,
   type NewReference,
@@ -66,10 +69,6 @@ const systemScope = 'system'
 
 /** The queue every write to the System waits its turn in, so they reach the server in order. */
 const systemQueue = 'system'
-
-/** An import's name, which its mutation is keyed by. */
-const importing = 'importTiles'
-
 /** What an import is given: the files, and where they land. */
 interface ImportVariables {
   given: Given | Promise<Given>
@@ -105,7 +104,7 @@ const pendingByState = new WeakMap<Mutation['state'], Pending>()
 
 /**
  * A pending write to the System, as the overlay folds it: its turn, and the Operation it sends, read
- * back from its key and variables by Mapping's schema.
+ * back from its key and variables by Mapping's schema, or where an import lands, by its own.
  */
 function pendingOf(mutation: Mutation): Pending {
   const known = pendingByState.get(mutation.state)
@@ -114,8 +113,7 @@ function pendingOf(mutation: Mutation): Pending {
   const pending = {
     turn: mutation.mutationId,
     operation: operationOf(name, mutation.state.variables),
-    // An import's variables are `useImportTiles`'s own, the one write of its name.
-    landing: name === importing ? (mutation.state.variables as ImportVariables).place : undefined,
+    landing: landingOf(name, mutation.state.variables),
   }
   pendingByState.set(mutation.state, pending)
   return pending
@@ -361,7 +359,7 @@ function save({ name, blob }: Download) {
 }
 
 /** Where an import lands: a free slot under a Tile, or the Root of an empty System. */
-export type ImportPlace = (typeof ImportUpload.Type)['place']
+export type { ImportPlace }
 
 /** What an import landed, as the server answers: the Tile it landed as, what it wrote and skipped. */
 type ImportReport = Extract<Awaited<ReturnType<typeof importTiles>>, { ok: true }>['value']

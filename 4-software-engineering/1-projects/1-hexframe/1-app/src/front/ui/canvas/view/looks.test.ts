@@ -64,7 +64,7 @@ describe('lookOf', () => {
 
   it('draws the Context teal, a Reference with where its Tile stands, a broken one as broken', () => {
     expect(lookOf(hexOf(node('why'), { role: 'context' }))).toMatchObject({ kind: 'context' })
-    const reference = node('principles', { reference: true, from: 'Software Engineering' })
+    const reference = node('principles', { reference: { from: 'Software Engineering' } })
     expect(lookOf(hexOf(reference, { role: 'context' }))).toEqual({
       kind: 'reference',
       words: words('principles'),
@@ -73,11 +73,6 @@ describe('lookOf', () => {
     expect(lookOf(hexOf(node('gone', { broken: true }), { role: 'context' }))).toMatchObject({
       kind: 'broken',
     })
-  })
-
-  it('draws a Reference whose place is unknown as the Context tile it stands as', () => {
-    const reference = node('principles', { reference: true })
-    expect(lookOf(hexOf(reference, { role: 'context' }))).toMatchObject({ kind: 'context' })
   })
 
   it("draws the user's Root warm, untitled until they name themselves, and asks for a vault when empty", () => {

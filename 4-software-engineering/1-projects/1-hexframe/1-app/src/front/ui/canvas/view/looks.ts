@@ -36,8 +36,7 @@ export function lookOf(hex: Of<'tile'>, { moving = false } = {}): TileLook {
 
 /**
  * What a Tile says it is, wherever it stands: a broken Reference, a Reference, the user's Root, named
- * or not; none for the others. A Reference whose place is unknown is drawn as the Context tile it
- * stands as.
+ * or not; none for the others.
  */
 function ownLook(
   tile: TileNode,
@@ -45,11 +44,7 @@ function ownLook(
   foot: { foot?: readonly Direction[] },
 ): TileLook | undefined {
   if (tile.broken === true) return { kind: 'broken', words }
-  if (tile.reference === true) {
-    return tile.from === undefined
-      ? { kind: 'context', words }
-      : { kind: 'reference', words, from: tile.from }
-  }
+  if (tile.reference !== undefined) return { kind: 'reference', words, from: tile.reference.from }
   switch (tile.root) {
     case 'named':
       return { kind: 'root', words, ...foot }

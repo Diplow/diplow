@@ -220,13 +220,6 @@ export const pieces = [
     note: m.gallery_note_drawer,
   },
   {
-    name: 'Tooltip',
-    tier: 'canvas',
-    sources: ['ui/canvas/atoms/Tooltip.tsx'],
-    madeOf: [],
-    note: m.gallery_note_tooltip,
-  },
-  {
     name: 'ThemeToggle',
     tier: 'canvas',
     sources: ['ui/canvas/atoms/ThemeToggle.tsx'],

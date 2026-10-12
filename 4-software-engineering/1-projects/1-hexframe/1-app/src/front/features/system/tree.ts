@@ -81,13 +81,12 @@ function contextNode(entry: ContextEntry, slot: string, root: SystemTile): TileN
       return nodeOf(entry, root)
     case 'Reference': {
       // The Root stands under nothing: a Reference to it is from the Root itself.
-      const found = tileIn(root, entry.tile.id)
+      const above = tileIn(root, entry.tile.id)?.parent ?? entry.tile
       return {
         id: entry.tile.id,
         title: titleOf(entry.tile.title),
         preview: entry.tile.preview,
-        reference: true,
-        ...(found && { from: titleOf((found.parent ?? found.tile).title) }),
+        reference: { from: titleOf(above.title) },
       }
     }
     case 'BrokenReference':
@@ -127,7 +126,7 @@ export const movingIn = (swap: { readonly a: string }) => swap.a
  * Reference names no Tile, and the moving Tile with itself changes nothing.
  */
 export function swapsWith(system: System, moving: TileNode, tile: TileNode) {
-  if (tile.reference === true || tile.leaf === true) return false
+  if (tile.reference !== undefined || tile.leaf === true) return false
   const swap = swapOf(system, moving.id, tile.id)
   if (swap === undefined) return false
   const swapped = decide(system, { _tag: 'SwapTiles', ...swap })

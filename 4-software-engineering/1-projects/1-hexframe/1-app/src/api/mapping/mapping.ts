@@ -5,7 +5,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { Schema, Struct } from 'effect'
 
-import { Slot, TileId } from '#/domains/mapping/entities'
+import { TileId } from '#/domains/mapping/entities'
 import {
   CreateReference,
   CreateTile,
@@ -19,6 +19,7 @@ import { locales } from '#/paraglide/runtime'
 
 import { run } from '../server/run'
 import { asDownload } from './files/download'
+import { ImportPlace } from './places'
 import * as Mapping from './programs'
 
 /**
@@ -54,15 +55,6 @@ export const NewReference = input(CreateReference)
 
 /** A Context slot, by the Tile that holds it. */
 export const ReferenceSlot = input(DeleteReference)
-
-/**
- * Where an import lands: a free slot under a Tile of the System, a Branch's, a Leaf's or a Context
- * slot, or the Root of an empty System.
- */
-const ImportPlace = Schema.Union([
-  Schema.Struct({ _tag: Schema.tag('Slot'), parent: TileId, slot: Slot }),
-  Schema.Struct({ _tag: Schema.tag('Root') }),
-])
 
 /**
  * An import as a form uploads it: `upload`, the file, a zip of a folder (`as: 'Zip'`) named by its

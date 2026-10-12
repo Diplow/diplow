@@ -191,7 +191,7 @@ export function conversationFixture(now: Date): { entries: Entry[]; titles: Titl
 export function fixtureMentionables(): ReadonlyArray<Mentionable> {
   const found: Mentionable[] = []
   const walk = (node: TileNode, trail: ReadonlyArray<string>) => {
-    if (node.reference === true) return
+    if (node.reference !== undefined) return
     found.push({ id: node.id, title: node.title, trail })
     for (const direction of directions) {
       for (const below of [node.branches, node.leaves, node.context]) {

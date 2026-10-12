@@ -30,7 +30,7 @@ const many = tile('many', {
 const system = tile('root', {
   branches: { 1: tile('a', { branches: { 3: tile('a3') } }), 4: many },
   leaves: { 2: leaf('notes') },
-  context: { 1: tile('why'), 2: tile('a', { reference: true }) },
+  context: { 1: tile('why'), 2: tile('a', { reference: { from: 'Elsewhere' } }) },
 })
 
 function render(view: CanvasView) {
@@ -180,6 +180,24 @@ describe('what an opened hex holds', () => {
       vi.advanceTimersByTime(500)
     })
     expect(onViewChange).toHaveBeenCalledExactlyOnceWith({}, { gesture: 'collapse', tile: 'a' })
+  })
+
+  it('gives a fold up for a view changed meanwhile, rather than overwriting it', () => {
+    vi.useFakeTimers()
+    document.documentElement.style.setProperty('--duration-fold', '500ms')
+    const onViewChange = vi.fn<(view: CanvasView, action: ViewAction) => void>()
+    const { result, rerender } = renderHook(
+      ({ view }: { view: CanvasView }) => useCanvasState({ system, view, onViewChange }),
+      { initialProps: { view: { expanded: { 1: 'children' } } } },
+    )
+    settled(() => {
+      result.current.actions.click(hexOf(result.current.state.hexes, 'tile:a'))
+    })
+    rerender({ view: { expanded: { 1: 'children' }, inner: 'context' } })
+    settled(() => {
+      vi.advanceTimersByTime(500)
+    })
+    expect(onViewChange).not.toHaveBeenCalled()
   })
 
   it('gives a fold up for a Tile centered meanwhile', () => {

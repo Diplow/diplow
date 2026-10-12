@@ -22,7 +22,7 @@ import {
   useSystemRefusals,
   useSystemWriting,
 } from '../queries'
-import { onItsWay, operationOf, overlaid, refusalOf, tilesWrittenBy } from './overlay'
+import { landingOf, onItsWay, operationOf, overlaid, refusalOf, tilesWrittenBy } from './overlay'
 
 // The System the page shows while writes are on their way, over stand-ins for the server functions:
 // each write shows before its answer, a refused one stops showing without a rollback, a refetch slips
@@ -535,6 +535,17 @@ describe('what the writes on their way change', () => {
     )
     expect([...marked.tiles]).toEqual([id.a, id.root])
     expect(marked.slots).toEqual([{ parent: id.b, slot: { leaf: 2 } }])
+  })
+
+  it('reads where an import lands by its schema, and nothing from an Operation or a place it refuses', () => {
+    const given = { files: [] }
+    const slot = { _tag: 'Slot', parent: id.b, slot: { leaf: 2 } }
+    expect(landingOf('importTiles', { given, place: slot })).toEqual(slot)
+    expect(landingOf('importTiles', { given, place: { _tag: 'Root' } })).toEqual({ _tag: 'Root' })
+    expect(landingOf('importTiles', { given, place: { _tag: 'Slot', parent: 'x', slot: 9 } })).toBe(
+      undefined,
+    )
+    expect(landingOf('moveTile', { place: slot })).toBeUndefined()
   })
 
   it('marks a write’s Tile while it is on its way, and no longer once it has landed', async () => {

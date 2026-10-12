@@ -549,7 +549,6 @@
   "gallery_note_breadcrumb": "Where you are on a System: the way from the root to the centered Tile, drawn as the canvas's Rail in its corner, the theme at its head; a step centers the canvas on it.",
   "gallery_note_card": "The centered Tile's card below the canvas: a title, a description, an action and a footer.",
   "gallery_note_drawer": "Where a Tile's forms, an import or a Body of Help open. Whether it is open is something a link carries, so its page holds it.",
-  "gallery_note_tooltip": "A short label on hover and on focus, which a Tile's hover card is drawn with.",
   "gallery_note_channels": "Where a failure shows, picked by its kind and by the call that met it, never by a component's author. Signed out, any call goes to sign-in; a read that frames every page shows nothing of its failure, which is reported.",
   "gallery_note_confirm_dialog": "Asks before a step that is hard to take back: a Proposal discarded, a Tile deleted.",
   "gallery_note_widget": "Everything the conversation asks of you or shows you beyond words, in one shape learned once: an icon, a kicker, a title, a body, its actions, and its tools when you reach for them. Tinted by whose it is; working, it breathes; done, it leaves one line, its receipt.",

@@ -549,7 +549,6 @@
   "gallery_note_breadcrumb": "Où vous êtes dans un Système : le chemin de la racine à la Tuile centrée, tracé comme le Rail du canevas dans son coin, le thème en tête ; une étape y centre le canevas.",
   "gallery_note_card": "La carte de la Tuile centrée sous le canevas : un titre, une description, une action et un pied.",
   "gallery_note_drawer": "Là où s'ouvrent les formulaires d'une Tuile, un import ou le Corps d'une page d'Aide. Qu'il soit ouvert, un lien le porte : c'est sa page qui le tient.",
-  "gallery_note_tooltip": "Une courte étiquette au survol et au focus, avec laquelle se dessine la fiche de survol d'une Tuile.",
   "gallery_note_channels": "Là où s'affiche un échec, choisi selon son genre et l'appel qui l'a rencontré, jamais par l'auteur d'un composant. Déconnecté, tout appel mène à la connexion ; une lecture qui encadre chaque page ne montre rien de son échec, qui est signalé.",
   "gallery_note_confirm_dialog": "Demande avant un pas difficile à défaire : une Proposition écartée, une Tuile supprimée.",
   "gallery_note_widget": "Tout ce que la conversation vous demande ou vous montre au-delà des mots, en une seule forme apprise une fois : une icône, un surtitre, un titre, un corps, ses actions, et ses outils quand vous les cherchez. Teinté par qui le porte ; en cours, il respire ; fait, il laisse une ligne, son reçu.",

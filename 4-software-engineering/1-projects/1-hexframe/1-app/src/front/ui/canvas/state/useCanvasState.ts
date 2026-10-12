@@ -135,6 +135,13 @@ export function useCanvasState({ system, view, onViewChange }: CanvasInput) {
     },
     [],
   )
+  // The view as it stands, which a fold checks before handing its own on: a view changed meanwhile,
+  // a ring picked or the browser's Back, gives the fold up rather than being overwritten.
+  const viewNow = JSON.stringify(view)
+  const latest = useRef(viewNow)
+  useEffect(() => {
+    latest.current = viewNow
+  })
 
   const change = (next: CanvasView, gesture: Gesture, tile: string) => {
     onViewChange(next, { gesture, tile })
@@ -160,7 +167,10 @@ export function useCanvasState({ system, view, onViewChange }: CanvasInput) {
     }
   }
 
-  /** Closes the hex `hex` sits at the heart of once its six have folded back, at once when nothing moves. */
+  /**
+   * Closes the hex `hex` sits at the heart of once its six have folded back, at once when nothing
+   * moves, unless the view changed meanwhile.
+   */
   function foldThen(hex: TileHex, action: TileAction) {
     const ground = hubs.get(hex.key)
     const duration = movingFor('--duration-fold')
@@ -171,7 +181,7 @@ export function useCanvasState({ system, view, onViewChange }: CanvasInput) {
     setFolding(ground)
     fold.current = setTimeout(() => {
       setFolding(undefined)
-      act(hex, action)
+      if (latest.current === viewNow) act(hex, action)
     }, duration)
   }
 

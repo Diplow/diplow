@@ -75,8 +75,7 @@ describe('canvasTree', () => {
       id: 'a3',
       title: 'A3',
       preview: 'A child',
-      reference: true,
-      from: 'A',
+      reference: { from: 'A' },
     })
   })
 
