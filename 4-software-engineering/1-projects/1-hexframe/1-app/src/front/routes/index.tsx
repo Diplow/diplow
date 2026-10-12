@@ -13,11 +13,14 @@
 // and in the timeline once the tab regains focus, and every 2 s while a Turn runs. A Message is sent
 // from the view: its center, where the Turn answering it starts unless it opens with a link to a Tile,
 // and the Tiles on screen; a refused one is posted again when the chat retries it. A Tile the chat
-// names centers the canvas on it, a gesture as any other. Signed out, the same screen: Help on the
+// names centers the canvas on it, a gesture as any other. The chat says under its field where the next
+// Turn works; a Tile's menu asks the agent through it, naming the Tile first; and a Tile dragged off
+// the canvas under a mouse or a pen is carried over the page, the composer naming it where it is let
+// go (HEX-110). Signed out, the same screen: Help on the
 // canvas, two lines from the agent, and the sign-in widget in the composer's place, which signs in or
 // up, then comes back where the user was.
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { readSignInSearch, sessionIfAny } from '#/front/client/iam/guard'
@@ -29,7 +32,7 @@ import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { publish } from '#/front/features/bus'
 import { ChatComposer, ChatTimeline } from '#/front/features/conversation/Chat'
 import { useNavigationSender } from '#/front/features/conversation/state/useNavigationSender'
-import { Navigated } from '#/front/features/facts'
+import { AskedAboutTile, Navigated } from '#/front/features/facts'
 import { HelpCanvas, HelpTile } from '#/front/features/help/Help'
 import { HelpWidgets } from '#/front/features/help/HelpWidgets'
 import { readHelpSearch, turnedTo, withHelp } from '#/front/features/help/search'
@@ -61,6 +64,7 @@ import { useScreenState } from '#/front/ui/layouts/screen/state/useScreenState'
 import type { CanvasMarks } from '#/front/ui/canvas/Canvas'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { centerOn, withViewIn, type CanvasView, type ViewAction } from '#/front/ui/canvas/view/view'
+import type { Direction } from '#/domains/mapping/entities'
 
 /**
  * Home's search params, each feature's read on its own: the System's view and change, the Keys and
@@ -207,7 +211,7 @@ function SignedIn() {
   }
   const { turn, mode } = useFollowLatest()
   // The chat's Messages go after the navigation they follow, from the view they were sent from.
-  const { postMessage } = useNavigationSender()
+  const { postMessage, underWay } = useNavigationSender()
   // Outside every boundary, the System read without throwing for what the chat sends and the corner
   // shows: a failed read shows on the canvas, in its own boundary, and leaves the chat up, waiting to
   // send, and the theme at the corner's head.
@@ -220,6 +224,8 @@ function SignedIn() {
   // What crosses from the chat to the canvas: the Tile it points at, the one it centered, where the
   // running Turn works, the changes made meanwhile, and the open Proposal.
   const marks = useMarksState({ system: data?.system, working: turn?.location })
+  // What crosses from the canvas to the chat: a Tile carried off it, for the composer to name.
+  const [carried, setCarried] = useState<{ id: string; title: string }>()
   const onViewChange = (view: CanvasView, action: ViewAction) => {
     onSearchChange(withView(search, view))
     publish(new Navigated(action))
@@ -254,6 +260,7 @@ function SignedIn() {
                 turning.turn('chat')
               }}
               marks={marks.marks}
+              onCarry={setCarried}
             />
           ),
           corner: <Breadcrumb system={tree} view={view} onViewChange={onViewChange} />,
@@ -287,6 +294,7 @@ function SignedIn() {
                 pointing={{ card: marks.cardOf, onPoint: marks.actions.point }}
                 turn={turn}
                 resend={postMessage}
+                underWay={underWay}
               />
             </ReadBoundary>
             <ReadBoundary>
@@ -334,6 +342,8 @@ function SignedIn() {
               turn={turn}
               mode={mode}
               onPoint={marks.actions.pointRow}
+              center={tree === undefined ? undefined : onScreen(tree, side.systemView).center}
+              carried={carried}
             />
           </ReadBoundary>
         }
@@ -374,11 +384,18 @@ interface SystemPageProps {
   onExport: () => void
   /** Who touches what the canvas draws, the chat's crossings among them. */
   marks: CanvasMarks
+  /** A Tile carried off the canvas, for the composer to name; none once let go. */
+  onCarry: (tile: { id: string; title: string } | undefined) => void
+}
+
+/** A Tile's menu asking the agent: the chat's composer names the Tile first. */
+const ask = (tile: string, place?: Direction) => {
+  publish(new AskedAboutTile({ tile, ...(place !== undefined && { place }) }))
 }
 
 /** The canvas side, the System's: the System, and the centered Tile's card at its foot. */
 function SystemPage(props: SystemPageProps) {
-  const { search, onSearchChange, onViewChange, widgets, onExport, marks } = props
+  const { search, onSearchChange, onViewChange, widgets, onExport, marks, onCarry } = props
   const { data } = useSystem()
   if (data === undefined) return <Loading />
   const { system, root, underway } = data
@@ -401,6 +418,8 @@ function SystemPage(props: SystemPageProps) {
           pending: widgets.state.exporting,
         }}
         marks={marks}
+        onAsk={ask}
+        onCarry={onCarry}
         className="min-h-0 flex-1"
       />
       <div className="max-h-[30%] flex-none overflow-y-auto">

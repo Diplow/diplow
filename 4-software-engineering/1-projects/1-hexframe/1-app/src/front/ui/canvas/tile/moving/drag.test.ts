@@ -31,13 +31,17 @@ function pressed(event = down()) {
 }
 
 describe('a drag', () => {
-  it('starts past a few units, follows the pointer, and lands where it is let go', () => {
+  it('starts past a few units, follows the pointer on the page too, and lands where it is let go', () => {
     const { onStart, onMove, onDrop, hook } = pressed()
     send('pointermove', 4, 0)
     expect(onStart).not.toHaveBeenCalled()
     send('pointermove', 30, 40)
     expect(onStart).toHaveBeenCalledOnce()
-    const there: Dragged = { offset: { x: 30, y: 40 }, at: { x: 30, y: 40 } }
+    const there: Dragged = {
+      offset: { x: 30, y: 40 },
+      at: { x: 30, y: 40 },
+      client: { x: 30, y: 40 },
+    }
     expect(onMove).toHaveBeenLastCalledWith(there)
     expect(hook.result.current.dragged).toEqual(there)
     send('pointerup', 30, 40)

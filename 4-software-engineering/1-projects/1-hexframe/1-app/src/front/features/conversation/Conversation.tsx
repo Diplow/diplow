@@ -2,18 +2,22 @@
 // newest at the bottom, each day under its split, what the user and the agent said in their voices,
 // what happened between them on its thread, a Proposal decided where it stands and what was applied
 // undone, a quiet action above the oldest day shown reading the day before; after the last Entry the
-// user's Messages still on their way, or refused with a retry, and the agent's step while a Turn runs.
+// user's Messages still on their way, or refused with a retry, and where they went that it doesn't
+// hold yet, the navigation under way included, and the agent's step while a Turn runs.
 // And its foot, the composer: the user writes to the agent, `@`s their Tiles, opens a command with a
 // `/`, the language among them, and sees the Mode under the field, or that the Account may not use the
-// Assistant; while a Turn runs the field waits and send becomes Stop. Home's screen takes the two apart,
+// Assistant, and where the next Turn works; while a Turn runs the field waits and send becomes Stop. A
+// Tile carried from the canvas is named where it is let go over the composer, and one a menu asks the
+// agent about is named first (HEX-110). Home's screen takes the two apart,
 // the timeline beside the curve and the foot at the chat's foot; `Conversation` lays them out
 // together, for /design-system.
 import { cn } from 'cn'
 import { MessagesSquare } from 'lucide-react'
 import { useRef } from 'react'
 
-import type { Mode, TurnStep } from '#/domains/assistant/entities'
+import type { Mode, Navigation, TurnStep } from '#/domains/assistant/entities'
 import { m } from '#/paraglide/messages'
+import { directionName } from '#/front/ui/canvas/tile/menu/verbs'
 import { assertIsLocale, getLocale, localizeHref } from '#/paraglide/runtime'
 import { Act } from '#/front/ui/atoms/controls/act'
 import { Composer } from '#/front/ui/chat/composer/Composer'
@@ -22,11 +26,13 @@ import { Events, type Happened } from '#/front/ui/chat/entries/Events'
 import { Message } from '#/front/ui/chat/text/Message'
 import { EmptyState } from '#/front/ui/layouts/states'
 
-import type { Mentionable } from './composer/mention'
-import { modeOf, type Offering, offered } from './composer/typing'
+import { useFact } from '../bus'
+import { AskedAboutTile } from '../facts'
+import type { Edited, Mentionable } from './composer/mention'
+import { modeOf, type NameAt, type Offering, offered } from './composer/typing'
 import { EntryBlock } from './entry/Entry'
 import type { Deciding } from './entry/parts'
-import { blocksOf, messageWords, type Naming } from './entry/words'
+import { blocksOf, happenedOf, messageWords, type Naming } from './entry/words'
 import { useComposerState } from './state/useComposerState'
 import type { Day } from './timeline/timeline'
 
@@ -47,6 +53,17 @@ interface Sending {
   readonly retry: () => void
 }
 
+/**
+ * Where the user went that the Conversation does not hold yet: a navigation on its way, by its write's
+ * turn, which orders it among the Messages on theirs, or the one under way, with none, which comes
+ * after them; and when they went.
+ */
+interface Going {
+  readonly id?: number | undefined
+  readonly navigation: Navigation
+  readonly at: Date
+}
+
 interface TimelineProps {
   /** The days shown, oldest first, each with its Entries oldest first. */
   days: readonly Day[]
@@ -62,6 +79,8 @@ interface TimelineProps {
   system?: ReadonlyMap<string, string> | undefined
   /** The user's Messages on their way, or refused, oldest first. */
   sending?: ReadonlyArray<Sending>
+  /** Where the user went that the Conversation does not hold yet, oldest first. */
+  going?: ReadonlyArray<Going>
   /** The Turn running, its agent's step now, if any. */
   turn?: { readonly step?: TurnStep | undefined } | undefined
   className?: string
@@ -92,6 +111,10 @@ interface FootProps {
   mode?: ModeChoice | undefined
   /** The `@` list's row the user is on, a Tile's by its id, or none: the canvas lights it. */
   onPoint?: ((row: string | undefined) => void) | undefined
+  /** The Tile centered on the canvas, by its id, where the next Turn works; none where none is. */
+  center?: string | undefined
+  /** A Tile carried from the canvas over the page, which the composer names where it is let go. */
+  carried?: { id: string; title: string } | undefined
 }
 
 type ConversationProps = Omit<TimelineProps, 'className'> & FootProps & { className?: string }
@@ -125,12 +148,13 @@ export function Timeline({
   decide,
   system,
   sending = [],
+  going = [],
   turn,
   className,
 }: TimelineProps) {
   const now = new Date()
   const shown = days.filter((day) => day.entries.length > 0)
-  const after = sending.length > 0 || turn !== undefined
+  const after = sending.length > 0 || going.length > 0 || turn !== undefined
   return (
     <div className={cn('grid gap-5', className)}>
       {earlier !== undefined && (
@@ -163,6 +187,7 @@ export function Timeline({
       {after && (
         <Latest
           sending={sending}
+          going={going}
           turn={turn}
           today={shown.at(-1)?.relative === 'today'}
           naming={{ titles: Object.fromEntries(system ?? []), system, onCenter, ...pointing }}
@@ -178,31 +203,46 @@ const blockKey = (block: ReturnType<typeof blocksOf>[number], index: number) =>
 
 /**
  * After the last Entry, under today's split if the last day shown is another: the user's Messages on
- * their way or refused, then the agent's step while a Turn runs, or that it thinks.
+ * their way or refused, and where they went, told as the timeline will tell it once recorded, then the
+ * agent's step while a Turn runs, or that it thinks.
  */
 function Latest({
   sending,
+  going,
   turn,
   today,
   naming,
 }: {
   sending: ReadonlyArray<Sending>
+  going: ReadonlyArray<Going>
   turn: TimelineProps['turn']
   today: boolean
   naming: Naming
 }) {
+  // In the order they were sent, the navigation under way last: a Message sends it first.
+  const later = [
+    ...sending.map((message) => ({ turn: message.id, message })),
+    ...going.map((went) => ({ turn: went.id ?? Infinity, went })),
+  ].sort((a, b) => a.turn - b.turn)
   return (
     <>
       {!today && <DaySplit label={m.conversation_today()} />}
-      {sending.map((message) => (
-        <Message
-          key={message.id}
-          voice="human"
-          words={messageWords(message.text, naming)}
-          state={message.refused ? 'failed' : 'sending'}
-          onRetry={message.retry}
-        />
-      ))}
+      {later.map((each) =>
+        'message' in each ? (
+          <Message
+            key={`message-${String(each.message.id)}`}
+            voice="human"
+            words={messageWords(each.message.text, naming)}
+            state={each.message.refused ? 'failed' : 'sending'}
+            onRetry={each.message.retry}
+          />
+        ) : (
+          <Events
+            key={`went-${String(each.turn)}`}
+            lines={[happenedOf({ ...each.went.navigation, id: 'going', at: each.went.at }, naming)]}
+          />
+        ),
+      )}
       {turn !== undefined && <Events lines={[stepOf(turn.step)]} />}
     </>
   )
@@ -260,13 +300,36 @@ export function ConversationFoot({
   waiting = false,
   mode,
   onPoint,
+  center,
+  carried,
 }: FootProps) {
   const among = offered({
     modes: mode !== undefined && !unavailable,
     undoable: onUndo !== undefined,
   } satisfies Offering)
-  const { state, actions } = useComposerState(tiles, among)
+  const { state, actions } = useComposerState(tiles, among, center)
   const field = useRef<HTMLTextAreaElement>(null)
+  /** The field's next value set, its caret after what was put in it. */
+  const put = ({ value, caret }: Edited) => {
+    const element = field.current
+    if (element === null) return
+    // Set on the element first, so React finds it as it is and leaves the caret be.
+    element.value = value
+    element.setSelectionRange(caret, caret)
+  }
+  /** A Tile named from outside, the focus then in the field, just after it. */
+  const name = (tile: string, where: NameAt) => {
+    const named = actions.name(tile, where)
+    if (named === undefined) return
+    put(named)
+    field.current?.focus()
+  }
+  // A menu asking the agent names its Tile first; it reads the field as it stands, as a pick does.
+  useFact(AskedAboutTile, ({ tile, place }) => {
+    name(tile, {
+      first: place === undefined ? '' : m.crossing_ask_for_one({ direction: directionName(place) }),
+    })
+  })
   return (
     <Composer
       fieldRef={field}
@@ -281,12 +344,7 @@ export function ConversationFoot({
           goTo(picked.language)
           return
         }
-        const element = field.current
-        if (element !== null) {
-          // Set on the element first, so React finds it as it is and leaves the caret be.
-          element.value = picked.value
-          element.setSelectionRange(picked.caret, picked.caret)
-        }
+        put(picked)
       }}
       onLeave={actions.leave}
       onPoint={onPoint}
@@ -307,6 +365,12 @@ export function ConversationFoot({
       running={running}
       waiting={waiting}
       unavailable={unavailable}
+      // No Turn answers an Account that may not use the Assistant.
+      place={unavailable ? undefined : state.place}
+      carried={carried?.title}
+      onDrop={() => {
+        if (carried !== undefined) name(carried.id, 'caret')
+      }}
       mode={
         mode === undefined
           ? undefined

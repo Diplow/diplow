@@ -233,22 +233,20 @@ describe('what a line sends', () => {
 })
 
 describe('the lines home leaves out', () => {
-  it("leaves the agent's out of every menu, and a Leaf's Context", () => {
-    expect(withoutOf(systems, hex('tile:holding'))).toEqual(['ask-agent'])
-    expect(withoutOf(systems, hex('tile:notes'))).toEqual(['ask-agent', 'show-context'])
+  it("keeps the agent's in every menu, and leaves a Leaf's Context out", () => {
+    expect(withoutOf(systems, hex('tile:holding'))).toEqual([])
+    expect(withoutOf(systems, hex('tile:notes'))).toEqual(['show-context'])
   })
 
   it('leaves out an import as the Root, but into an empty System', () => {
-    expect(withoutOf(systems, hex('tile:root'))).toEqual(['ask-agent', 'import'])
+    expect(withoutOf(systems, hex('tile:root'))).toEqual(['import'])
     const empty: System = { ...flat, root: { ...flat.root, title: '' }, tiles: {} }
     const bare = systemOf(empty)
     const alone = canvasTree(bare, { yours: true })
     const [center] = layoutCanvas(showView(alone, {})).filter(
       (drawn): drawn is TileHex => drawn.kind === 'tile',
     )
-    expect(center && withoutOf({ root: bare, flat: empty, tree: alone }, center)).toEqual([
-      'ask-agent',
-    ])
+    expect(center && withoutOf({ root: bare, flat: empty, tree: alone }, center)).toEqual([])
   })
 })
 

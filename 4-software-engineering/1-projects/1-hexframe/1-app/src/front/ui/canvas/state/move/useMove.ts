@@ -2,13 +2,16 @@
 // #moving): dragged under a mouse or a pen, or started by its caller, its menu's "Somewhere else…" or
 // a link; stopped by Escape or Stop; let go over a place that takes it, gliding there for
 // `--duration-glide` before its caller sends the landing; refused, flaring where it went, then gliding
-// back. Which tile moves is the caller's, the URL's on home, and so is what a landing sends: the hook
-// holds what lasts a gesture, the drag, the place lit under it, the glide, and gives the focus back
-// to the tile once it has landed or stopped.
+// back. Dragged off the canvas, where its caller says the canvas ends, the tile is carried: it lands
+// on no place there, the page carrying it for the composer to name, and let go off the canvas it
+// settles back home, the move ending (HEX-110). Which tile moves is the caller's, the URL's on home,
+// and so is what a landing sends: the hook holds what lasts a gesture, the drag, the place lit under
+// it, the glide, the carry, and gives the focus back to the tile once it has landed or stopped.
 import { useEffect, useRef, useState, type PointerEvent } from 'react'
 
 import type { Point } from '../../geometry/geometry'
 import type { TileWrite } from '../../tile/Tile'
+import { useCarry, type CarryInput } from './carry'
 import { useDrag, type Units } from '../../tile/moving/drag'
 import { movingFor } from '../../../motion'
 
@@ -38,7 +41,7 @@ interface Landing {
   phase: Phase
 }
 
-interface MoveInput {
+interface MoveInput extends CarryInput {
   /** The canvas's units, where a drag is followed (`unitsIn`). */
   units: Units
   /** The tile on the move, by its id, the caller's: none while nothing moves. */
@@ -100,13 +103,15 @@ export function useMove(input: MoveInput) {
   const tiles = useRef(new Map<string, Element>())
   // Whether the landing's write was seen on its way, so its end, no longer on its way, is seen too.
   const sent = useRef(false)
-  // A drop that came before the caller put the move it started in place, the URL's on home.
-  const [held, setHeld] = useState<{ id: string; at: Point }>()
+  // A drop that came before the caller put the move it started in place, the URL's on home: where it
+  // was let go, or nowhere, let go off the canvas, which ends the move once it is in place.
+  const [held, setHeld] = useState<{ id: string; at: Point | undefined }>()
   // The caller's latest, which a drag or a timer reads once the render it began in is gone.
   const latest = useRef(input)
   useEffect(() => {
     latest.current = input
   })
+  const carry = useCarry(latest)
   useEffect(
     () => () => {
       timers.current.forEach(clearTimeout)
@@ -152,35 +157,30 @@ export function useMove(input: MoveInput) {
     drag.cancel()
     setDragging(undefined)
     setOver(undefined)
+    carry.end()
     latest.current.onStop()
     requestAnimationFrame(() => {
       focus(id)
     })
   }
 
-  // Escape stops the move, wherever the focus is, but in a menu or a dialog, which it closes.
-  useEffect(() => {
-    if (moving === undefined) return
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') return
-      if (document.querySelector('[role="menu"], [role="dialog"], [role="alertdialog"]')) return
-      event.stopPropagation()
-      event.preventDefault()
-      stop()
+  useStopOnEscape(moving !== undefined, stop)
+
+  /** A drag let go where it is, landing on the place under it; off the canvas, its move ending. */
+  const release = (id: string, point: Point | undefined) => {
+    if (point === undefined) {
+      latest.current.onStop()
+      return
     }
-    addEventListener('keydown', onKey, { capture: true })
-    return () => {
-      removeEventListener('keydown', onKey, { capture: true })
-    }
-  })
+    const target = latest.current.dropAt(point, id)
+    if (target !== undefined) land(target, id)
+  }
 
   // A drop held for its move lands once the move is in place, and nowhere once another moves.
   useEffect(() => {
     if (held === undefined || moving === undefined) return
     setHeld(undefined)
-    if (moving !== held.id) return
-    const target = latest.current.dropAt(held.at, held.id)
-    if (target !== undefined) land(target, held.id)
+    if (moving === held.id) release(held.id, held.at)
   })
 
   // A landing's write, once sent: refused, the tile flares where it went, then glides back; settled,
@@ -218,19 +218,21 @@ export function useMove(input: MoveInput) {
         setDragging(id)
         if (latest.current.moving !== id) latest.current.onStart(id)
       },
-      onMove: ({ at: point }) => {
-        setOver(latest.current.dropAt(point, id)?.key)
+      // Off the canvas, carried by the page; over it, over a place again.
+      onMove: ({ at: point, client }) => {
+        if (carry.off(client)) carry.carry(id, client)
+        else carry.end()
+        setOver(carry.off(client) ? undefined : latest.current.dropAt(point, id)?.key)
       },
       onDrop: (released) => {
         setDragging(undefined)
         setOver(undefined)
+        carry.end()
         if (released === undefined) return
-        if (latest.current.moving !== id) {
-          setHeld({ id, at: released.at })
-          return
-        }
-        const target = latest.current.dropAt(released.at, id)
-        if (target !== undefined) land(target, id)
+        // Let go off the canvas: it lands nowhere, settling back home, and its move ends.
+        const point = carry.off(released.client) ? undefined : released.at
+        if (latest.current.moving === id) release(id, point)
+        else setHeld({ id, at: point })
       },
     })
   }
@@ -242,12 +244,15 @@ export function useMove(input: MoveInput) {
     over,
     /** Where a landing stands, or none: none other starts while its tile glides. */
     landing: landing?.phase,
+    /** The tile carried off the canvas, and where the pointer is on the page; none while none is. */
+    carried: carry.carried,
     press,
     land,
     stop,
     /** How far a tile is drawn from its place: following a drag, or a landing. */
     shiftOf: (id: string): Shift => {
-      if (drag.dragged !== undefined && id === dragging) {
+      // Carried off the canvas, the tile stays home there, the page carrying it.
+      if (drag.dragged !== undefined && id === dragging && carry.carried?.id !== id) {
         return { by: drag.dragged.offset, glides: false }
       }
       if (landing === undefined || (id !== landing.id && id !== landing.partner)) return still
@@ -259,4 +264,22 @@ export function useMove(input: MoveInput) {
       else tiles.current.delete(id)
     },
   }
+}
+
+/** Escape stops the move while one is under way, wherever the focus is, but in a menu or a dialog. */
+function useStopOnEscape(moving: boolean, stop: () => void) {
+  useEffect(() => {
+    if (!moving) return
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return
+      if (document.querySelector('[role="menu"], [role="dialog"], [role="alertdialog"]')) return
+      event.stopPropagation()
+      event.preventDefault()
+      stop()
+    }
+    addEventListener('keydown', onKey, { capture: true })
+    return () => {
+      removeEventListener('keydown', onKey, { capture: true })
+    }
+  })
 }

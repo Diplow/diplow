@@ -4,13 +4,14 @@
 // themselves and the Tiles it can trade places with their swap. A write ends its change as it is sent,
 // and comes back if it is refused (`state/useRefusalState.ts`). Every Tile a write on its way changes
 // shows it, and flares once it is refused (`state/useWritesState.ts`). A delete asks first, in a
-// dialog. While a write to the System is on its way, closing or reloading the tab asks first.
+// dialog. The agent's lines ask through the chat, and a Tile dragged off the canvas is carried over
+// the page, for the composer to name (HEX-110). While a write to the System is on its way, closing or reloading the tab asks first.
 // Like the canvas, it holds no state of its own: the view and the change under way are the URL's,
 // and it hands the next view, with the gesture that asked for it, and the next search params to the
 // route.
 import { cn } from 'cn'
 
-import type { System as FlatSystem, SystemTile } from '#/domains/mapping/entities'
+import type { Direction, System as FlatSystem, SystemTile } from '#/domains/mapping/entities'
 import type { Underway } from '#/front/client/mapping/overlay/overlay'
 import { useSystemWriting } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
@@ -42,6 +43,10 @@ interface SystemProps {
   exporting: { start: (exported: Exported) => void; pending: boolean }
   /** Who touches what the canvas draws, as the page holds it (`marks/`). */
   marks: CanvasMarks
+  /** The agent asked through the chat, from a menu: about a Tile, or for one under it at a place. */
+  onAsk: (tile: string, place?: Direction) => void
+  /** A Tile carried off the canvas, which the composer names where it is let go; none once let go. */
+  onCarry: (tile: { id: string; title: string } | undefined) => void
   className?: string
 }
 
@@ -55,6 +60,8 @@ export function System({
   onSearchChange,
   exporting,
   marks,
+  onAsk,
+  onCarry,
   className,
 }: SystemProps) {
   const writes = useWritesState(underway)
@@ -64,6 +71,7 @@ export function System({
     search,
     onSearchChange,
     exporting,
+    onAsk,
   })
   return (
     <div className={cn('flex flex-col gap-2', className)}>
@@ -76,6 +84,7 @@ export function System({
         move={move}
         writes={writes}
         marks={marks}
+        onCarry={onCarry}
         className="min-h-0 w-full flex-1"
       />
       <Dialog

@@ -24,6 +24,7 @@ import {
   useConversation,
   useDiscardProposal,
   useMessagesOnTheirWay,
+  useNavigationsOnTheirWay,
   usePostMessage,
   useRecordNavigation,
   useSetMode,
@@ -273,6 +274,61 @@ describe('the Messages on their way', () => {
     })
     await waitFor(() => {
       expect(result.current.hook.sent.messages).toEqual([])
+    })
+  })
+})
+
+describe('the navigations on their way', () => {
+  it('hold a navigation on its way until the Conversation read after it has landed', async () => {
+    let answer: (outcome: unknown) => void = () => undefined
+    const result = await render(() => ({
+      record: useRecordNavigation(),
+      going: useNavigationsOnTheirWay(),
+    }))
+    vi.mocked(recordNavigation).mockReturnValueOnce(
+      new Promise((resolve) => {
+        answer = resolve
+      }) as never,
+    )
+    const navigation = {
+      _tag: 'Navigation' as const,
+      steps: [{ gesture: 'expand', tile: 'a' }],
+      gestures: 1,
+    }
+    act(() => {
+      result.current.hook.record.mutate({ navigation, sinceLast: 0 })
+    })
+    await waitFor(() => {
+      expect(result.current.hook.going).toEqual([
+        { id: expect.any(Number) as number, navigation, at: expect.any(Number) as number },
+      ])
+    })
+    act(() => {
+      answer({ ok: true, value: {} })
+    })
+    await waitFor(() => {
+      expect(result.current.hook.going).toEqual([])
+    })
+    expect(conversationDay).toHaveBeenCalledTimes(2)
+  })
+
+  it('drop a refused navigation, as a lost one is', async () => {
+    const result = await render(() => ({
+      record: useRecordNavigation(),
+      going: useNavigationsOnTheirWay(),
+    }))
+    vi.mocked(recordNavigation).mockRejectedValueOnce(new Error('down'))
+    act(() => {
+      result.current.hook.record.mutate({
+        navigation: { _tag: 'Navigation', steps: [{ gesture: 'center', tile: 'a' }], gestures: 1 },
+        sinceLast: 0,
+      })
+    })
+    await waitFor(() => {
+      expect(recordNavigation).toHaveBeenCalledTimes(1)
+    })
+    await waitFor(() => {
+      expect(result.current.hook.going).toEqual([])
     })
   })
 })

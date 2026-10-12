@@ -3,8 +3,8 @@
 // swaps. A line that changes the URL opens a form, an import or the move there (`withChange`); one
 // that writes sends its write at once, the change ending as it is sent: a Tile moved to a free place
 // of its ring, swapped, turned into the other kind, a Reference removed, a delete once the dialog is
-// confirmed. A copy goes to the clipboard, an export to the chat. Lines that go somewhere are the
-// canvas's own. A refusal takes its channel, a toast, or brings the move back (`useRefusalState`).
+// confirmed. A copy goes to the clipboard, an export to the chat, and the agent's lines to the
+// composer, which names the Tile first (HEX-110). Lines that go somewhere are the canvas's own. A refusal takes its channel, a toast, or brings the move back (`useRefusalState`).
 import { useState } from 'react'
 
 import { tileLink } from '#/api/mapping/files/download'
@@ -19,6 +19,7 @@ import { m } from '#/paraglide/messages'
 import { localizeUrl } from '#/paraglide/runtime'
 import { toast } from '#/front/ui/atoms/Toaster'
 import type { Acting, Moving } from '#/front/ui/canvas/Canvas'
+import type { Direction } from '#/domains/mapping/entities'
 import type { EmptySlotTarget } from '#/front/ui/canvas/geometry/shape'
 import type { Action } from '#/front/ui/canvas/keys'
 import type { TileHex } from '#/front/ui/canvas/state/useCanvasState'
@@ -34,7 +35,6 @@ import {
   swapAt,
   tradeOf,
   turnOf,
-  waiting,
   withoutOf,
   type Systems,
 } from '../acting'
@@ -56,6 +56,11 @@ interface ActingInput {
   onSearchChange: (change: SearchChange) => void
   /** Exports a Tile, which the chat shows. */
   exporting: { start: (exported: Exported) => void; pending: boolean }
+  /**
+   * Asks the agent through the chat: about a Tile, or, with the place, for a new one under it there,
+   * the composer naming it first.
+   */
+  onAsk: (tile: string, place?: Direction) => void
 }
 
 /** A delete asked for from a Tile's menu, waiting on its dialog. */
@@ -94,7 +99,8 @@ const copied = {
   'copy-mention': ({ id }: TileNode) => linkTo(id),
 }
 
-export function useActingState({ systems, search, onSearchChange, exporting }: ActingInput) {
+export function useActingState(input: ActingInput) {
+  const { systems, search, onSearchChange, exporting, onAsk } = input
   const move = useMoveTile()
   const swap = useSwapTiles()
   const remove = useDeleteTile()
@@ -170,8 +176,11 @@ export function useActingState({ systems, search, onSearchChange, exporting }: A
       case 'import':
         begin({ kind: 'import', place: { _tag: 'Root' } })
         return
+      case 'ask-agent':
+        onAsk(id)
+        return
       default:
-        // Open, Go in, Show its Context and Back out are the canvas's; the agent's is left out.
+        // Open, Go in, Show its Context and Back out are the canvas's.
         return
     }
   }
@@ -194,16 +203,16 @@ export function useActingState({ systems, search, onSearchChange, exporting }: A
     }
   }
 
-  /** A free slot's menu: a new Tile there, an import into it. */
+  /** A free slot's menu: a new Tile there, an import into it, or the agent asked for one. */
   const slotActing = (target: EmptySlotTarget): Acting | undefined => {
     const place = placeOf(target)
     if (place === undefined) return undefined
     return {
       subject: { kind: 'slot', at: target.direction, parent: target.parent.title },
-      without: waiting,
       onAct: ({ verb }) => {
         if (verb === 'new-tile') begin({ kind: 'add', ...place })
         if (verb === 'import') begin({ kind: 'import', place: { _tag: 'Slot', ...place } })
+        if (verb === 'ask-agent') onAsk(target.parent.id, target.direction)
       },
     }
   }

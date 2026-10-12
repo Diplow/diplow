@@ -5,10 +5,14 @@ import { useEffect, useRef, useState, type PointerEvent, type RefObject } from '
 
 import type { Point } from '../../geometry/geometry'
 
-/** A drag under way: how far it went from where it started, in the canvas's units, and where it is. */
+/**
+ * A drag under way: how far it went from where it started, in the canvas's units, where it is, and
+ * where the pointer is on the page, which tells a drag gone off the canvas.
+ */
 export interface Dragged {
   offset: Point
   at: Point
+  client: Point
 }
 
 interface DragHandlers {
@@ -76,7 +80,7 @@ export function useDrag(units: Units) {
       const offset = { x: at.x - start.x, y: at.y - start.y }
       if (current === undefined && Math.hypot(offset.x, offset.y) <= threshold) return
       if (current === undefined) handlers.onStart()
-      current = { offset, at }
+      current = { offset, at, client: { x: next.clientX, y: next.clientY } }
       setDragged(current)
       handlers.onMove?.(current)
     }
