@@ -41,6 +41,7 @@
   --halo: oklch(0.823 0.145 71.4 / 62%);
   --aura: oklch(0.82 0.143 69.7 / 16%);
   --ambient: oklch(0.571 0.245 283.3 / 7%);
+  --dusk: oklch(0.3 0.075 292);
   --tile: oklch(1 0 0 / 92%);
   --tile-fade: oklch(1 0 0 / 50%);
   --tile-lit: oklch(1 0 0);
@@ -97,6 +98,7 @@
   --halo: oklch(0.814 0.116 70.6);
   --aura: oklch(0.724 0.145 58 / 18%);
   --ambient: oklch(0.593 0.233 285.2 / 11%);
+  --dusk: oklch(0.3 0.075 292);
   --tile: oklch(0.943 0.01 325.7 / 6%);
   --tile-fade: oklch(0.943 0.01 325.7 / 1.8%);
   --tile-lit: oklch(0.943 0.01 325.7 / 11%);
@@ -152,6 +154,7 @@
   --color-halo: var(--halo);
   --color-aura: var(--aura);
   --color-ambient: var(--ambient);
+  --color-dusk: var(--dusk);
   --color-tile: var(--tile);
   --color-tile-fade: var(--tile-fade);
   --color-tile-lit: var(--tile-lit);

@@ -30,6 +30,7 @@ export const colourNotes: readonly Note[] = [
   { tokens: ['halo'], note: m.tokens_colour_halo },
   { tokens: ['aura'], note: m.tokens_colour_aura },
   { tokens: ['ambient'], note: m.tokens_colour_ambient },
+  { tokens: ['dusk'], note: m.tokens_colour_dusk },
   { tokens: ['tile', 'tile-fade'], note: m.tokens_colour_tile },
   { tokens: ['tile-lit', 'tile-lit-fade'], note: m.tokens_colour_tile_lit },
   { tokens: ['chart-1', 'chart-2', 'chart-3', 'chart-4', 'chart-5'], note: m.tokens_colour_chart },

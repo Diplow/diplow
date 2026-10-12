@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-110 -110 220 220" fill="none">
+<defs>
+<linearGradient id="facet-g" gradientUnits="userSpaceOnUse" x1="-11" y1="-10" x2="43.3" y2="-75"><stop offset="0" stop-color="#eaad77"/><stop offset="1" stop-color="#ca9167"/></linearGradient>
+<linearGradient id="facet-h" gradientUnits="userSpaceOnUse" x1="-11" y1="-10" x2="86.6" y2="0"><stop offset="0" stop-color="#8c5d76"/><stop offset="1" stop-color="#714564"/></linearGradient>
+<linearGradient id="facet-i" gradientUnits="userSpaceOnUse" x1="-11" y1="-10" x2="43.3" y2="75"><stop offset="0" stop-color="#4e4067"/><stop offset="1" stop-color="#382954"/></linearGradient>
+<linearGradient id="facet-j" gradientUnits="userSpaceOnUse" x1="-11" y1="-10" x2="-43.3" y2="75"><stop offset="0" stop-color="#b47472"/><stop offset="1" stop-color="#975b61"/></linearGradient>
+<linearGradient id="facet-k" gradientUnits="userSpaceOnUse" x1="-11" y1="-10" x2="-86.6" y2="0"><stop offset="0" stop-color="#d79372"/><stop offset="1" stop-color="#b87862"/></linearGradient>
+<linearGradient id="facet-l" gradientUnits="userSpaceOnUse" x1="-11" y1="-10" x2="-43.3" y2="-75"><stop offset="0" stop-color="#f7e0b8"/><stop offset="1" stop-color="#d7c1a4"/></linearGradient>
+<radialGradient id="inner-m" gradientUnits="userSpaceOnUse" cx="-11" cy="-10" r="110"><stop offset="0" stop-color="#f6ddb0" stop-opacity="0.36"/><stop offset="0.3" stop-color="#f2b56a" stop-opacity="0.16"/><stop offset="0.7" stop-color="#f2b56a" stop-opacity="0.04"/><stop offset="1" stop-color="#f2b56a" stop-opacity="0"/></radialGradient>
+<linearGradient id="ridge-n" gradientUnits="userSpaceOnUse" x1="-11" y1="-10" x2="0" y2="-100"><stop offset="0" stop-color="#f6ddb0" stop-opacity="0.7"/><stop offset="1" stop-color="#f6ddb0" stop-opacity="0.12"/></linearGradient>
+<linearGradient id="ridge-o" gradientUnits="userSpaceOnUse" x1="-11" y1="-10" x2="86.6" y2="-50"><stop offset="0" stop-color="#f6ddb0" stop-opacity="0.7"/><stop offset="1" stop-color="#f6ddb0" stop-opacity="0.12"/></linearGradient>
+<linearGradient id="ridge-p" gradientUnits="userSpaceOnUse" x1="-11" y1="-10" x2="86.6" y2="50"><stop offset="0" stop-color="#f6ddb0" stop-opacity="0.7"/><stop offset="1" stop-color="#f6ddb0" stop-opacity="0.12"/></linearGradient>
+<linearGradient id="ridge-q" gradientUnits="userSpaceOnUse" x1="-11" y1="-10" x2="0" y2="100"><stop offset="0" stop-color="#f6ddb0" stop-opacity="0.7"/><stop offset="1" stop-color="#f6ddb0" stop-opacity="0.12"/></linearGradient>
+<linearGradient id="ridge-r" gradientUnits="userSpaceOnUse" x1="-11" y1="-10" x2="-86.6" y2="50"><stop offset="0" stop-color="#f6ddb0" stop-opacity="0.7"/><stop offset="1" stop-color="#f6ddb0" stop-opacity="0.12"/></linearGradient>
+<linearGradient id="ridge-s" gradientUnits="userSpaceOnUse" x1="-11" y1="-10" x2="-86.6" y2="-50"><stop offset="0" stop-color="#f6ddb0" stop-opacity="0.7"/><stop offset="1" stop-color="#f6ddb0" stop-opacity="0.12"/></linearGradient>
+<linearGradient id="rim-t" gradientUnits="userSpaceOnUse" x1="-90" y1="-100" x2="90" y2="100"><stop offset="0" stop-color="#f6ddb0"/><stop offset="0.55" stop-color="#f2b56a" stop-opacity="0.75"/><stop offset="1" stop-color="#f2b56a" stop-opacity="0.3"/></linearGradient>
+<radialGradient id="sun-u" gradientUnits="userSpaceOnUse" cx="-11" cy="-10" r="34"><stop offset="0" stop-color="#fff8ee"/><stop offset="0.18" stop-color="#f6ddb0" stop-opacity="0.85"/><stop offset="0.45" stop-color="#f2b56a" stop-opacity="0.35"/><stop offset="1" stop-color="#f2b56a" stop-opacity="0"/></radialGradient></defs>
+
+<polygon points="-11,-10 0,-100 86.6,-50" fill="url(#facet-g)"/>
+<polygon points="-11,-10 86.6,-50 86.6,50" fill="url(#facet-h)"/>
+<polygon points="-11,-10 86.6,50 0,100" fill="url(#facet-i)"/>
+<polygon points="-11,-10 0,100 -86.6,50" fill="url(#facet-j)"/>
+<polygon points="-11,-10 -86.6,50 -86.6,-50" fill="url(#facet-k)"/>
+<polygon points="-11,-10 -86.6,-50 0,-100" fill="url(#facet-l)"/>
+<polygon points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" fill="url(#inner-m)"/>
+<line x1="-11" y1="-10" x2="0" y2="-100" stroke="url(#ridge-n)" stroke-width="0.75" vector-effect="non-scaling-stroke" stroke-linecap="round"/>
+<line x1="-11" y1="-10" x2="86.6" y2="-50" stroke="url(#ridge-o)" stroke-width="0.75" vector-effect="non-scaling-stroke" stroke-linecap="round"/>
+<line x1="-11" y1="-10" x2="86.6" y2="50" stroke="url(#ridge-p)" stroke-width="0.75" vector-effect="non-scaling-stroke" stroke-linecap="round"/>
+<line x1="-11" y1="-10" x2="0" y2="100" stroke="url(#ridge-q)" stroke-width="0.75" vector-effect="non-scaling-stroke" stroke-linecap="round"/>
+<line x1="-11" y1="-10" x2="-86.6" y2="50" stroke="url(#ridge-r)" stroke-width="0.75" vector-effect="non-scaling-stroke" stroke-linecap="round"/>
+<line x1="-11" y1="-10" x2="-86.6" y2="-50" stroke="url(#ridge-s)" stroke-width="0.75" vector-effect="non-scaling-stroke" stroke-linecap="round"/>
+<polygon points="0,-100 86.6,-50 86.6,50 0,100 -86.6,50 -86.6,-50" stroke="url(#rim-t)" stroke-width="1" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
+<circle cx="-11" cy="-10" r="34" fill="url(#sun-u)"/><circle cx="-11" cy="-10" r="7" fill="#fff8ee"/>
+</svg>
