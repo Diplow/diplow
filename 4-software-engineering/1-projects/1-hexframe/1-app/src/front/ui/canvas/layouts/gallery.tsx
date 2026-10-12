@@ -1,6 +1,5 @@
-// The canvas's own layouts, on /design-system: its corner, where you are, the centered Tile's card and
-// the drawer its forms open in.
-import { Settings } from 'lucide-react'
+// The canvas's own layouts, on /design-system: its corner, where you are, and the drawer the Root's
+// edit opens in.
 import { useState } from 'react'
 
 import { m } from '#/paraglide/messages'
@@ -10,7 +9,6 @@ import { GallerySection, GalleryState } from '../../gallery/frame'
 import { cornerPlace } from '../../layouts/screen/Screen'
 import { ulysse } from '../fixtures'
 import { pathTo } from '../view/tiles'
-import { Card } from './Card'
 import { Drawer } from './Drawer'
 import { Rail } from './Rail'
 
@@ -26,28 +24,6 @@ export function CanvasLayoutsGallery() {
         </GalleryState>
         <GalleryState label={m.gallery_state_three_levels_down()}>
           <RailSpecimen from="hexframe" />
-        </GalleryState>
-      </GallerySection>
-      <GallerySection name="Card">
-        <GalleryState label={m.gallery_state_complete()}>
-          <Card
-            className="w-80"
-            title={m.gallery_sample_tile_title()}
-            description={m.gallery_sample_tile_preview()}
-            action={
-              <Button size="icon-sm" variant="ghost" aria-label={m.gallery_sample_settings()}>
-                <Settings />
-              </Button>
-            }
-            footer={<Button size="sm">{m.gallery_sample_open()}</Button>}
-          >
-            <p className="text-sm">{m.gallery_sample_tile_body()}</p>
-          </Card>
-        </GalleryState>
-        <GalleryState label={m.gallery_state_content_only()}>
-          <Card className="w-80">
-            <p className="text-sm">{m.gallery_sample_tile_body()}</p>
-          </Card>
         </GalleryState>
       </GallerySection>
       <GallerySection name="Drawer">

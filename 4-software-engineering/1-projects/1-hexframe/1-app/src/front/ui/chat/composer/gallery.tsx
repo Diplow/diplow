@@ -9,7 +9,6 @@ import { assertIsLocale, localizeHref } from '#/paraglide/runtime'
 
 import { toast } from '../../atoms/Toaster'
 import { GallerySection, GalleryState } from '../../gallery/frame'
-import { anchorOf } from '../../gallery/pieces'
 import { Composer } from './Composer'
 import { typingAt, useComposerDemo } from './demo'
 
@@ -87,7 +86,8 @@ function Specimen({
     initial,
     listed,
     onLanguage: (language) => {
-      const here = `${window.location.pathname}${window.location.search}#${anchorOf('Composer')}`
+      // The deck's address holds the slide and the piece, so the page comes back to the composer.
+      const here = `${window.location.pathname}${window.location.search}`
       window.location.assign(localizeHref(here, { locale: assertIsLocale(language) }))
     },
   })

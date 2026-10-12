@@ -235,18 +235,27 @@ describe('slotOf', () => {
 describe('onScreen', () => {
   const tree = canvasTree(system)
 
-  it('shows the Root and its Children when the view names no center', () => {
-    expect(onScreen(tree, {})).toEqual({ center: 'root', shown: ['root', 'a', 'b', 'notes'] })
+  it('shows the Root alone when the view names no center, and its Children once it opens', () => {
+    expect(onScreen(tree, {})).toEqual({ center: 'root', shown: ['root'] })
+    expect(onScreen(tree, { frame: 'children' })).toEqual({
+      center: 'root',
+      shown: ['root', 'a', 'b', 'notes'],
+    })
   })
 
   it('shows the ring inside the center, and the rings its opened Branches show', () => {
-    const { shown } = onScreen(tree, { inner: 'context', expanded: { 1: 'children' } })
+    const view = { frame: 'children', inner: 'context', expanded: { 1: 'children' } } as const
+    const { shown } = onScreen(tree, view)
     // A Reference by the Tile it points at, a3 once though it shows twice; a broken one by its own id.
     expect(shown).toEqual(['root', 'a', 'b', 'notes', 'why', 'a3', 'broken:root:-5'])
   })
 
   it('centers a Tile below, and falls back to the Root for one the System does not hold', () => {
-    expect(onScreen(tree, { center: 'a' })).toEqual({ center: 'a', shown: ['a', 'a3'] })
+    expect(onScreen(tree, { center: 'a' })).toEqual({ center: 'a', shown: ['a'] })
+    expect(onScreen(tree, { center: 'a', frame: 'children' })).toEqual({
+      center: 'a',
+      shown: ['a', 'a3'],
+    })
     expect(onScreen(tree, { center: 'nowhere' }).center).toBe('root')
   })
 })

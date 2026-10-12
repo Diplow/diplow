@@ -65,6 +65,8 @@ export type CanvasHex =
       parent?: TileNode
       /** The Branch a Leaf of a Children ring is numbered as, whose Direction it found taken. */
       clash?: TileNode
+      /** The center folded, no ring around it: the canvas's one tile, filling it. */
+      alone?: true
     })
   | (Drawn & { kind: 'ground'; ring: FrameKind })
   | (Drawn & { kind: 'empty'; slot: EmptySlotTarget })
@@ -78,6 +80,12 @@ export const canvasSize = { width: viewWidth * scale, height: viewHeight * scale
 
 /** The gap a hex leaves to its neighbors, as a share of its radius: the layout's hexes touch. */
 const gap = 0.05
+
+/**
+ * The share of the canvas a folded center takes, alone: the shape fills the canvas with it, and the
+ * app leaves the ground around it, space being the luxury.
+ */
+const aloneShare = 0.82
 
 /**
  * What building the shape's Frames writes down, so the placements read back as the System's own:
@@ -221,7 +229,7 @@ function hexOf(
     ]
   }
   const key = `tile:${path}`
-  if (placement.kind === 'center') return [{ ...drawn, kind: 'tile', key, tile, role: 'center' }]
+  if (placement.kind === 'center') return [centerOf({ ...drawn, key, tile }, shown)]
   const { direction, memberKind } = placement
   const role = isOpenBranch(placement, shown) ? 'hub' : memberKind
   const clash = memberKind === 'leaf' ? ledger.clashes.get(tile.id) : undefined
@@ -241,6 +249,17 @@ function hexOf(
       ...(clash && { clash }),
     },
   ]
+}
+
+/**
+ * The center's hex: alone and folded, the ground left around it, while no ring shows around it or
+ * inside it; else as the shape places it.
+ */
+function centerOf(drawn: Drawn & { tile: TileNode }, shown: ShownView): CanvasHex {
+  const center = { ...drawn, kind: 'tile', role: 'center' } as const
+  if (shown.frame !== undefined || shown.inner !== undefined) return center
+  const hex = { center: drawn.hex.center, radius: drawn.hex.radius * aloneShare }
+  return { ...center, hex, alone: true }
 }
 
 type TileHex = Exclude<Placement, { kind: 'empty' }>

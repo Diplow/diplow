@@ -91,8 +91,8 @@ describe('a click and a tap', () => {
     expect(clickOf({ ...branch, kind: 'leaf' }, true)).toBe('open')
   })
 
-  it('shows the center its Context, but a Leaf at the center takes none', () => {
-    expect(clickOf({ ...branch, at: 'center' }, true)).toBe('show-context')
+  it('opens the center or folds it back, but a Leaf at the center takes none', () => {
+    expect(clickOf({ ...branch, at: 'center' }, true)).toBe('open')
     expect(clickOf({ ...branch, kind: 'leaf', at: 'center' }, false)).toBeUndefined()
   })
 

@@ -143,7 +143,11 @@ function Zone({
           voiceOf(failed ? 'destructive' : voice),
           // The chat's zone, tinted toward the curve by its voice, with one more fine line below.
           zone,
-          "group/widget py-5 pr-4 pl-4 after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-linear-to-r after:from-transparent after:via-input after:via-45% after:to-input after:content-[''] sm:pr-26 sm:pl-9",
+          "group/widget py-5 after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-linear-to-r after:from-transparent after:via-input after:via-45% after:to-input after:content-['']",
+          // In the conversation it runs the chat's whole width, the curve its edge, never a box, its
+          // content where the lines are (`--chat-left`, `--chat-right`); elsewhere it keeps its own.
+          'mr-[calc(var(--chat-right,0px)*-1)] ml-[calc(var(--chat-left,0px)*-1)]',
+          'pr-[var(--chat-right,1rem)] pl-[var(--chat-left,1rem)] sm:pr-[var(--chat-right,1.5rem)] sm:pl-[var(--chat-left,2.25rem)]',
           voice === 'app' && !failed && 'bg-none',
           // Coming in: the line on top draws itself, the surface unfolds from it, its parts rise in turn.
           'motion-safe:animate-unfold motion-safe:before:animate-draw',
@@ -152,8 +156,8 @@ function Zone({
         <div className="grid grid-cols-[2.25rem_1fr] gap-x-3.5 sm:grid-cols-[3.375rem_1fr] sm:gap-x-[1.125rem]">
           <Mark state={state} icon={icon} mark={mark} />
           <div className="min-w-0">
-            {/* Below sm the tools sit over the head's end, so the head leaves them room. */}
-            <div className="max-sm:pr-20 max-sm:pointer-coarse:pr-12">
+            {/* The tools sit over the kicker and the title's end, which leave them room. */}
+            <div className="pr-20 pointer-coarse:pr-12">
               <p
                 aria-live="polite"
                 className={cn(
@@ -184,18 +188,18 @@ function Zone({
                   {titleField}
                 </div>
               )}
-              {subtitle !== undefined && !folded && (
-                <p
-                  className={cn(
-                    'mt-[3px] text-[0.84375rem] leading-normal font-light text-muted-foreground',
-                    risesInTurn,
-                  )}
-                  style={rise(3)}
-                >
-                  {subtitle}
-                </p>
-              )}
             </div>
+            {subtitle !== undefined && !folded && (
+              <p
+                className={cn(
+                  'mt-[3px] text-[0.84375rem] leading-normal font-light text-muted-foreground',
+                  risesInTurn,
+                )}
+                style={rise(3)}
+              >
+                {subtitle}
+              </p>
+            )}
             <Collapsible.Content className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down motion-reduce:animate-none!">
               {(state === 'working' || children !== undefined) && (
                 <div className={cn('pt-4', risesInTurn)} style={rise(4)}>
@@ -338,9 +342,9 @@ interface ToolsProps {
 }
 
 /**
- * Settings, fold and dismiss, in the zone's gutter toward the curve, so they never narrow the text;
- * they show on hover or focus. A finger can't hover: under one, the settings' control alone shows,
- * a full target, and folding and dismissing wait in its menu.
+ * Settings, fold and dismiss, at the head's end, where the conversation's lines end, so they never
+ * reach the curve; they show on hover or focus. A finger can't hover: under one, the settings'
+ * control alone shows, a full target, and folding and dismissing wait in its menu.
  */
 function Tools({ folded, held, onMenuOpenChange, settings, onFold, onDismiss }: ToolsProps) {
   const entries: MenuEntry[] = [
@@ -358,7 +362,7 @@ function Tools({ folded, held, onMenuOpenChange, settings, onFold, onDismiss }: 
   return (
     <div
       className={cn(
-        'absolute top-3.5 right-2 flex opacity-0 transition-opacity duration-250 group-focus-within/widget:opacity-100 group-hover/widget:opacity-100 sm:right-[1.125rem] pointer-coarse:top-2 pointer-coarse:opacity-100',
+        'absolute top-3.5 right-[var(--chat-right,0.5rem)] flex opacity-0 transition-opacity duration-250 group-focus-within/widget:opacity-100 group-hover/widget:opacity-100 sm:right-[var(--chat-right,1.125rem)] pointer-coarse:top-2 pointer-coarse:opacity-100',
         held && 'opacity-100',
       )}
     >

@@ -1,11 +1,16 @@
-// The design system, for anyone, in production too, read top-down: the direction, then a section per
-// tier, the crossings, the Chat, the Canvas, the layouts and the atoms the sides share, the seams, each
-// piece in its states, then the tokens. The canvas's view lives in the search params, so a link shows
-// what its sender saw, and a Message's link in the Conversation centers it, as on home. The Screen's
-// specimens are drawn here too, since they show the breadcrumb and Help, which ui/ can't reach. The
-// crossings are ui/crossings.tsx's, which the route hands what ui/ can't reach (HEX-108).
+// The design system, for anyone, in production too, as a deck of slides (`ui/gallery/deck/`): why
+// hexframe exists and the principles its look follows, in words on the ground alone; then the screen
+// as it builds up, the chat, then the canvas, its first tile alone and large; then where the two
+// sides answer each other, each crossing played on the whole screen; then each side's pieces and
+// those they share, one at a time, on the canvas, told in the chat; then the tokens. The slide, its
+// piece and the canvas's view live in the search params, so a link shows what its sender saw, and a
+// Message's link in the Conversation centers the canvas, as on home. What ui/ can't reach the route
+// hands it: the features' specimens, the Conversation, the breadcrumb and Help, Mapping's limit on a
+// Preview, IAM's rule for a Key's name, the timeline's words for a navigation and Assistant's rule
+// for where a Turn works (HEX-108). The Screen's specimens are drawn here, since they show the
+// breadcrumb and Help.
 import { Link, createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { merged, turnLocation, type Navigation } from '#/domains/assistant/entities'
 import { keyNameBounds, keyNameOf } from '#/domains/iam/entities'
@@ -33,94 +38,285 @@ import { MarksGallery } from '#/front/ui/canvas/tile/marks/gallery'
 import { TileMenuGallery } from '#/front/ui/canvas/tile/menu/gallery'
 import { MovingGallery } from '#/front/ui/canvas/tile/moving/gallery'
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
-import { centerOn, readCanvasView, type CanvasView } from '#/front/ui/canvas/view/view'
+import {
+  centerOn,
+  readCanvasView,
+  viewIn,
+  withViewIn,
+  type CanvasView,
+  type ViewAction,
+} from '#/front/ui/canvas/view/view'
 import { ChatAtomsGallery } from '#/front/ui/chat/atoms/gallery'
 import { Composer } from '#/front/ui/chat/composer/Composer'
 import { modeChoices } from '#/front/ui/chat/composer/demo'
 import { ComposerGallery } from '#/front/ui/chat/composer/gallery'
+import { Events } from '#/front/ui/chat/entries/Events'
 import { ChatEntriesGallery } from '#/front/ui/chat/entries/gallery'
 import { ChatLayoutsGallery } from '#/front/ui/chat/layouts/gallery'
 import { ChatTextGallery } from '#/front/ui/chat/text/gallery'
-import { Message } from '#/front/ui/chat/text/Message'
 import { HelpWidgetGallery } from '#/front/ui/chat/widgets/help/gallery'
 import { KeyWidgetGallery } from '#/front/ui/chat/widgets/keys/gallery'
 import { SignInWidgetGallery } from '#/front/ui/chat/widgets/sign-in/gallery'
 import { SignInWidget, type Access } from '#/front/ui/chat/widgets/sign-in/SignInWidget'
 import { TileWidgetGallery } from '#/front/ui/chat/widgets/tile/gallery'
-import { CrossingsGallery, type Tell, type Where } from '#/front/ui/crossings'
 import {
-  GallerySection,
-  GalleryState,
-  GalleryTier,
-  tierAnchor,
-  tierTitle,
-} from '#/front/ui/gallery/frame'
-import { anchorOf, tiers } from '#/front/ui/gallery/pieces'
+  CrossingDemo,
+  type CrossingName,
+  type CrossingParts,
+  type Tell,
+  type Where,
+} from '#/front/ui/crossings'
+import { ChapterSlide, Stage } from '#/front/ui/gallery/deck/Chapter'
+import { Lines, ScreenSlide, useDeckKeys, type Go, type Line } from '#/front/ui/gallery/deck/Deck'
+import {
+  pieceShown,
+  piecesOf,
+  readDeckSearch,
+  type ChapterId,
+  type SlideId,
+} from '#/front/ui/gallery/deck/slides'
+import { ChatPage, canvasTour } from '#/front/ui/gallery/deck/tour'
+import { WordsSlide } from '#/front/ui/gallery/deck/words'
+import { GallerySection, GalleryState, GalleryTier } from '#/front/ui/gallery/frame'
 import { Tokens } from '#/front/ui/gallery/Tokens'
 import { LayoutsGallery } from '#/front/ui/layouts/gallery'
 import { Screen } from '#/front/ui/layouts/screen/Screen'
 import { useScreenState } from '#/front/ui/layouts/screen/state/useScreenState'
 import { SeamsGallery } from '#/front/ui/seams/gallery'
 
+/** The page's search params: the deck's slide and piece, and the canvas's view. */
+const readDesignSystemSearch = (search: Record<string, unknown>) => ({
+  ...readCanvasView(search),
+  ...readDeckSearch(search),
+})
+
 export const Route = createFileRoute('/design-system')({
-  validateSearch: readCanvasView,
+  validateSearch: readDesignSystemSearch,
   component: DesignSystem,
 })
 
 function DesignSystem() {
-  const view = Route.useSearch()
+  const search = Route.useSearch()
   const navigate = Route.useNavigate()
+  const slide = search.slide ?? 'why'
+  // A slide opens on its own view of the canvas: going to another leaves the last one's behind.
+  const go: Go = (to, piece) => {
+    void navigate({ search: { slide: to, ...(piece !== undefined && { piece }) } })
+  }
+  useDeckKeys(slide, go)
+  const view = viewIn(search)
   const onViewChange = (next: CanvasView) => {
-    void navigate({ search: next, resetScroll: false })
+    void navigate({ search: (current) => withViewIn(current, next), resetScroll: false })
   }
-  // A crossing, as on home: a Tile a Message links is centered, and the page goes to the canvas.
+  // A crossing, as on home: a Tile a Message links is centered, the canvas's piece shown.
   const onCenter = (tile: string) => {
-    void navigate({ search: centerOn(ulysse, tile), hash: anchorOf('Canvas') })
+    void navigate({
+      search: { slide: 'canvas-pieces', piece: 'Canvas', ...centerOn(ulysse, tile) },
+    })
   }
+  if (slide === 'why' || slide === 'principles') return <WordsSlide slide={slide} onGo={go} />
   return (
-    <main className="mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)] gap-16 px-6 pb-16">
-      <Direction />
-      <GalleryTier tier="crossings">
-        <CrossingsGallery previewLimit={previewLimit} tell={tell} where={where} />
-      </GalleryTier>
-      <GalleryTier tier="chat">
-        <ConversationGallery onCenter={onCenter} />
-        <ComposerGallery />
-        <ChatTextGallery />
-        <ChatEntriesGallery />
-        <TileWidgetGallery previewLimit={previewLimit} />
-        <KeyWidgetGallery nameLimit={keyNameBounds.max} nameOf={keyNameOf} />
-        <ReadBoundary>
-          <HelpGallery />
-        </ReadBoundary>
-        <SignInWidgetGallery />
-        <ChatLayoutsGallery />
-        <ChatAtomsGallery />
-      </GalleryTier>
-      <GalleryTier tier="canvas">
-        <CanvasGallery view={view} onViewChange={onViewChange} />
-        <TileGallery />
-        <MarksGallery />
-        <TileMenuGallery />
-        <MovingGallery />
-        <BreadcrumbGallery view={view} onViewChange={onViewChange} />
-        <CanvasLayoutsGallery />
-        <CanvasAtomsGallery />
-      </GalleryTier>
-      <GalleryTier tier="layouts">
-        <ScreenGallery />
-        <ChannelsGallery />
-        <LayoutsGallery />
-      </GalleryTier>
-      <GalleryTier tier="atoms">
-        <AtomsGallery />
-      </GalleryTier>
-      <GalleryTier tier="seams">
-        <SeamsGallery />
-      </GalleryTier>
-      <Tokens />
+    <main className="h-dvh">
+      <h1 className="sr-only">{m.design_system_title()}</h1>
+      {/* A slide of its own: what the reader wrote on one, and its side in front, stay with it. */}
+      <Slide
+        key={slide}
+        slide={slide}
+        piece={search.piece}
+        view={view}
+        onViewChange={onViewChange}
+        onCenter={onCenter}
+        onGo={go}
+      />
     </main>
   )
+}
+
+interface SlideProps {
+  slide: Exclude<SlideId, 'why' | 'principles'>
+  /** The piece the URL names, which a chapter shows if it is one of its own. */
+  piece: string | undefined
+  view: CanvasView
+  onViewChange: (view: CanvasView) => void
+  /** A Tile a Message links, centered on the canvas's piece. */
+  onCenter: (tile: string) => void
+  onGo: Go
+}
+
+/** A slide of the screen: the chat told, and what the canvas shows of it. */
+function Slide({ slide, piece, view, onViewChange, onCenter, onGo }: SlideProps) {
+  switch (slide) {
+    case 'chat':
+      return <ScreenSlide slide="chat" onGo={onGo} canvas={<ChatPage />} />
+    case 'canvas':
+      return <CanvasSlide view={view} onViewChange={onViewChange} onGo={onGo} />
+    case 'crossings':
+      return <CrossingSlide piece={piece} onGo={onGo} />
+    case 'tokens':
+      return (
+        <ScreenSlide
+          slide="tokens"
+          onGo={onGo}
+          canvas={
+            <Stage kicker={m.design_system_title()} title={m.tokens_title()}>
+              <Tokens />
+            </Stage>
+          }
+        />
+      )
+    default:
+      return (
+        <ChapterSlide
+          chapter={slide}
+          piece={pieceShown(slide, piece)}
+          onGo={onGo}
+          specimens={
+            <Specimens
+              chapter={slide}
+              view={view}
+              onViewChange={onViewChange}
+              onCenter={onCenter}
+            />
+          }
+        />
+      )
+  }
+}
+
+/**
+ * The canvas, shown for the first time: its own tile alone and large, folded until a click opens
+ * it, the corner saying where you are, and the chat telling where you went, in home's words.
+ */
+function CanvasSlide(props: {
+  view: CanvasView
+  onViewChange: (view: CanvasView) => void
+  onGo: Go
+}) {
+  const { view, onViewChange, onGo } = props
+  // Read once, in the page's language, whose change loads the page anew.
+  const tour = useMemo(canvasTour, [])
+  const tellTour = useMemo(() => tellIn(tour), [tour])
+  const [went, setWent] = useState<readonly ViewAction[]>([])
+  const moved = (next: CanvasView, action: ViewAction) => {
+    onViewChange(next)
+    setWent([...went, action])
+  }
+  return (
+    <ScreenSlide
+      slide="canvas"
+      onGo={onGo}
+      canvas={
+        <div className="flex min-w-0 flex-1 p-4">
+          <Canvas
+            system={tour}
+            view={view}
+            onViewChange={moved}
+            looking
+            className="min-h-0 flex-1"
+          />
+        </div>
+      }
+      corner={<Breadcrumb system={tour} view={view} onViewChange={moved} />}
+      lines={went.length === 0 ? undefined : <Events lines={[tellTour(went)]} />}
+    />
+  )
+}
+
+/** Whether a piece is a crossing: every piece of the crossings' chapter is. */
+const isCrossing = (piece: string): piece is CrossingName =>
+  (piecesOf('crossings') as readonly string[]).includes(piece)
+
+/** How to try a crossing, in the chat, and on the canvas where it says. */
+const tryOf = ({ tryChat, tryCanvas }: CrossingParts) =>
+  tryCanvas === undefined
+    ? m.deck_crossing_try_chat({ chat: tryChat })
+    : m.deck_crossing_try({ chat: tryChat, canvas: tryCanvas })
+
+/** A crossing on the whole screen, its end in the chat and its end on the canvas, played afresh. */
+function CrossingSlide({ piece, onGo }: { piece: string | undefined; onGo: Go }) {
+  const shown = pieceShown('crossings', piece)
+  if (!isCrossing(shown)) return null
+  return (
+    <CrossingDemo
+      key={shown}
+      name={shown}
+      previewLimit={previewLimit}
+      tell={tell}
+      where={where}
+      frame={(parts) => (
+        <ChapterSlide
+          chapter="crossings"
+          piece={shown}
+          onGo={onGo}
+          crossing={{
+            canvas: parts.canvas,
+            end: parts.end,
+            composer: parts.composer,
+            tryIt: tryOf(parts),
+          }}
+        />
+      )}
+    />
+  )
+}
+
+interface SpecimensProps {
+  chapter: Exclude<ChapterId, 'crossings'>
+  view: CanvasView
+  onViewChange: (view: CanvasView) => void
+  onCenter: (tile: string) => void
+}
+
+/** Every gallery of a chapter's tiers, of which the piece shown alone draws its specimens. */
+function Specimens({ chapter, view, onViewChange, onCenter }: SpecimensProps) {
+  switch (chapter) {
+    case 'chat-pieces':
+      return (
+        <GalleryTier tier="chat">
+          <ConversationGallery onCenter={onCenter} />
+          <ComposerGallery />
+          <ChatTextGallery />
+          <ChatEntriesGallery />
+          <TileWidgetGallery previewLimit={previewLimit} />
+          <KeyWidgetGallery nameLimit={keyNameBounds.max} nameOf={keyNameOf} />
+          <ReadBoundary>
+            <HelpGallery />
+          </ReadBoundary>
+          <SignInWidgetGallery />
+          <ChatLayoutsGallery />
+          <ChatAtomsGallery />
+        </GalleryTier>
+      )
+    case 'canvas-pieces':
+      return (
+        <GalleryTier tier="canvas">
+          <CanvasGallery view={view} onViewChange={onViewChange} />
+          <TileGallery />
+          <MarksGallery />
+          <TileMenuGallery />
+          <MovingGallery />
+          <BreadcrumbGallery view={view} onViewChange={onViewChange} />
+          <CanvasLayoutsGallery />
+          <CanvasAtomsGallery />
+        </GalleryTier>
+      )
+    case 'shared':
+      return (
+        <>
+          <GalleryTier tier="layouts">
+            <ScreenGallery />
+            <ChannelsGallery />
+            <LayoutsGallery />
+          </GalleryTier>
+          <GalleryTier tier="atoms">
+            <AtomsGallery />
+          </GalleryTier>
+          <GalleryTier tier="seams">
+            <SeamsGallery />
+          </GalleryTier>
+        </>
+      )
+  }
 }
 
 /** Each Tile of a System, from its root down. */
@@ -131,18 +327,22 @@ const tilesIn = (tile: TileNode): TileNode[] => [
   ),
 ]
 
-/** The fixture's Titles, by id: what home's timeline names the Tiles of an entry by. */
-const titles = Object.fromEntries(tilesIn(ulysse).map(({ id, title }) => [id, title]))
-
 /**
- * A run of gestures on the crossing's canvas, in home's words: merged as home's sender merges them
- * (Assistant's `merged`), told as the conversation's timeline tells them (`happenedOf`).
+ * A run of gestures on a canvas of `system`, in home's words: merged as home's sender merges them
+ * (Assistant's `merged`), told as the conversation's timeline tells them (`happenedOf`), each Tile
+ * by its Title.
  */
-const tell: Tell = (gestures) => {
-  const navigation = gestures.reduce<Navigation | undefined>(merged, undefined)
-  if (navigation === undefined) throw new Error('A navigation is told once a gesture made it')
-  return happenedOf({ ...navigation, id: 'navigation', at: new Date() }, { titles })
+function tellIn(system: TileNode): Tell {
+  const titles = Object.fromEntries(tilesIn(system).map(({ id, title }) => [id, title]))
+  return (gestures) => {
+    const navigation = gestures.reduce<Navigation | undefined>(merged, undefined)
+    if (navigation === undefined) throw new Error('A navigation is told once a gesture made it')
+    return happenedOf({ ...navigation, id: 'navigation', at: new Date() }, { titles })
+  }
 }
+
+/** A run of gestures on a crossing's canvas, the fixture System's. */
+const tell = tellIn(ulysse)
 
 /**
  * Where the Turn answering a crossing's Message works: the Message as home's composer sends it, each
@@ -157,58 +357,10 @@ function HelpGallery() {
   return <HelpWidgetGallery help={helpNodeOf(help)} />
 }
 
-const principles = [
-  { title: m.design_system_principle_space, text: m.design_system_principle_space_text },
-  { title: m.design_system_principle_light, text: m.design_system_principle_light_text },
-  { title: m.design_system_principle_root, text: m.design_system_principle_root_text },
-  { title: m.design_system_principle_voices, text: m.design_system_principle_voices_text },
-  { title: m.design_system_principle_curves, text: m.design_system_principle_curves_text },
-  { title: m.design_system_principle_motion, text: m.design_system_principle_motion_text },
-]
-
-/** The direction, in short, and the way down the page. */
-function Direction() {
-  return (
-    <header className="grid gap-8 pt-6">
-      <div className="grid gap-4">
-        <h1 className="text-5xl font-light">{m.design_system_title()}</h1>
-        <p className="max-w-prose font-human text-prose font-light">{m.design_system_intro()}</p>
-      </div>
-      <ol className="grid gap-x-8 gap-y-4 sm:grid-cols-2">
-        {principles.map(({ title, text }) => (
-          <li key={title()} className="grid content-start gap-1">
-            <h2 className="text-lg">{title()}</h2>
-            <p className="text-sm text-muted-foreground">{text()}</p>
-          </li>
-        ))}
-      </ol>
-      <p className="max-w-prose text-sm">{m.design_system_screen()}</p>
-      <nav aria-label={m.design_system_contents()}>
-        <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-          {tiers.map((tier) => (
-            <li key={tier}>
-              <a
-                href={`#${tierAnchor(tier)}`}
-                className="text-muted-foreground hover:text-foreground"
-              >
-                {tierTitle(tier)}
-              </a>
-            </li>
-          ))}
-          <li>
-            <a href="#tokens" className="text-muted-foreground hover:text-foreground">
-              {m.tokens_title()}
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </header>
-  )
-}
-
 /** The label of each fixture view; the views themselves are the fixture's, so they cannot drift. */
 const views = [
-  { label: m.gallery_canvas_view_root, view: fixtureViews.root },
+  { label: m.gallery_canvas_view_folded, view: fixtureViews.folded },
+  { label: m.gallery_canvas_view_opened, view: fixtureViews.opened },
   { label: m.gallery_canvas_view_split, view: fixtureViews.split },
   { label: m.gallery_canvas_view_expanded, view: fixtureViews.expanded },
   { label: m.gallery_canvas_view_context, view: fixtureViews.context },
@@ -232,10 +384,9 @@ function CanvasGallery({ view, onViewChange }: CanvasGalleryProps) {
             <Link
               key={label()}
               to="/design-system"
-              search={target}
-              hash={anchorOf('Canvas')}
+              search={{ slide: 'canvas-pieces', piece: 'Canvas', ...target }}
               resetScroll={false}
-              activeOptions={{ exact: true, includeSearch: true, includeHash: false }}
+              activeOptions={{ exact: true, includeSearch: true }}
               className="px-3 py-1.5 text-sm text-muted-foreground"
               activeProps={{ className: 'bg-muted text-foreground' }}
             >
@@ -248,6 +399,7 @@ function CanvasGallery({ view, onViewChange }: CanvasGalleryProps) {
           system={ulysse}
           view={view}
           onViewChange={onViewChange}
+          looking
           className="h-[36rem] max-h-[80dvh] w-full"
         />
       </div>
@@ -284,13 +436,6 @@ function ScreenGallery() {
   )
 }
 
-interface Line {
-  author: 'user' | 'agent'
-  text: string
-  /** Sent from the specimen's composer, so shown at once. */
-  sent?: true
-}
-
 /** Signed out, the canvas shows Help, read in the page's language as `/help` reads it. */
 function SignedOutSpecimen({ className }: { className: string }) {
   const { data: help } = useHelp(getLocale())
@@ -316,8 +461,8 @@ function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
   const lines: Line[] = signedIn
     ? [...screenLines(), ...sent]
     : [
-        { author: 'agent', text: m.signed_out_help() },
-        { author: 'agent', text: m.signed_out_sign_in() },
+        { voice: 'agent', words: [m.signed_out_help()] },
+        { voice: 'agent', words: [m.signed_out_sign_in()] },
       ]
   return (
     <Screen
@@ -325,7 +470,13 @@ function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
       onFrontChange={turning.turn}
       className={className}
       canvas={
-        <Canvas system={system} view={view} onViewChange={setView} className="flex-1 p-4 pb-8" />
+        <Canvas
+          system={system}
+          view={view}
+          onViewChange={setView}
+          looking
+          className="flex-1 p-4 pb-8"
+        />
       }
       corner={<Breadcrumb system={system} view={view} onViewChange={setView} />}
       messages={<Lines lines={lines} />}
@@ -333,7 +484,7 @@ function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
         signedIn ? (
           <ScreenComposer
             onSend={(text) => {
-              setSent((before) => [...before, { author: 'user', text, sent: true }])
+              setSent((before) => [...before, { voice: 'human', words: [text], sent: true }])
             }}
           />
         ) : (
@@ -345,40 +496,13 @@ function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
 }
 
 const screenLines = (): Line[] => [
-  { author: 'user', text: m.gallery_screen_line_1() },
-  { author: 'agent', text: m.gallery_screen_line_2() },
-  { author: 'user', text: m.gallery_screen_line_3() },
-  { author: 'agent', text: m.gallery_screen_line_4() },
-  { author: 'agent', text: m.gallery_screen_line_5() },
-  { author: 'user', text: m.gallery_screen_line_6() },
+  { voice: 'human', words: [m.gallery_screen_line_1()] },
+  { voice: 'agent', words: [m.gallery_screen_line_2()] },
+  { voice: 'human', words: [m.gallery_screen_line_3()] },
+  { voice: 'agent', words: [m.gallery_screen_line_4()] },
+  { voice: 'agent', words: [m.gallery_screen_line_5()] },
+  { voice: 'human', words: [m.gallery_screen_line_6()] },
 ]
-
-/** The conversation in its two voices (`Message`), the mark on the first of an agent's run alone. */
-function Lines({ lines }: { lines: Line[] }) {
-  return (
-    <ol className="flex flex-col gap-[1.375rem]">
-      {lines.map((line, index) => (
-        <li key={index} ref={line.sent ? scrollToFoot : undefined}>
-          {line.author === 'user' ? (
-            <Message voice="human" words={[line.text]} />
-          ) : (
-            <Message
-              voice="agent"
-              words={[line.text]}
-              continued={lines[index - 1]?.author === 'agent'}
-            />
-          )}
-        </li>
-      ))}
-    </ol>
-  )
-}
-
-/** A line just sent shows at once: its conversation, and not the page, scrolls to its foot. */
-function scrollToFoot(element: HTMLElement | null) {
-  const messages = element?.closest<HTMLElement>('[role="region"]')
-  if (messages) messages.scrollTop = messages.scrollHeight
-}
 
 /**
  * The Composer at the chat's foot, which the screen keeps clear of the curve, where it comes back to

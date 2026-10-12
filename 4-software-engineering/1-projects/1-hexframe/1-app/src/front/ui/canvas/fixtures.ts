@@ -105,11 +105,12 @@ export const tooling: TileNode = {
 
 /** A view per state the canvas has to get right, named by the fixture's own Tiles. */
 export const fixtureViews = {
-  root: {},
-  split: { inner: 'leaves' },
-  expanded: { expanded: { 4: 'children' } },
-  context: { inner: 'context' },
-  mixed: { center: softwareEngineering.id, inner: 'context' },
-  twoDeep: { center: softwareEngineering.id, expanded: { 1: 'children' } },
+  folded: {},
+  opened: { frame: 'branches' },
+  split: { frame: 'branches', inner: 'leaves' },
+  expanded: { frame: 'branches', expanded: { 4: 'children' } },
+  context: { frame: 'branches', inner: 'context' },
+  mixed: { center: softwareEngineering.id, frame: 'children', inner: 'context' },
+  twoDeep: { center: softwareEngineering.id, frame: 'children', expanded: { 1: 'children' } },
   leaf: { center: 'notes' },
 } satisfies Record<string, CanvasView>

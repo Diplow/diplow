@@ -33,6 +33,9 @@ const system = tile('root', {
   context: { 1: tile('why'), 2: tile('a', { reference: { from: 'Elsewhere' } }) },
 })
 
+/** The root opened into its first ring, as a click on it leaves it. */
+const open: CanvasView = { frame: 'children' }
+
 function render(view: CanvasView, { finger = false } = {}) {
   const onViewChange = vi.fn<(view: CanvasView, action: ViewAction) => void>()
   const { result } = renderHook(() => useCanvasState({ system, view, onViewChange, finger }))
@@ -55,9 +58,13 @@ function actions(view: CanvasView, hand = { finger: false }) {
 }
 
 describe('what a click on a Tile does', () => {
-  it('shows the Context from the center, opens a Branch, and centers a Leaf', () => {
-    expect(actions({})).toEqual({
-      'tile:root': 'show-context',
+  it('opens the folded center, which stands alone', () => {
+    expect(actions({})).toEqual({ 'tile:root': 'expand' })
+  })
+
+  it('folds the open center, opens a Branch, and centers a Leaf', () => {
+    expect(actions(open)).toEqual({
+      'tile:root': 'collapse',
       'tile:a': 'expand',
       'tile:notes': 'center',
       'tile:many': 'expand',
@@ -65,20 +72,20 @@ describe('what a click on a Tile does', () => {
   })
 
   it('closes an open Branch from its own Tile, and centers what it holds, a generation further', () => {
-    expect(actions({ expanded: { 1: 'children' } })).toMatchObject({
+    expect(actions({ ...open, expanded: { 1: 'children' } })).toMatchObject({
       'tile:a': 'collapse',
       'tile:a3': 'center',
     })
   })
 
-  it('hides the ring inside the center from the center, and centers a Context Tile', () => {
-    expect(actions({ inner: 'context' })).toMatchObject({
-      'tile:root': 'hide-context',
+  it('folds the center from its heart when a ring shows inside it, and centers a Context Tile', () => {
+    expect(actions({ ...open, inner: 'context' })).toMatchObject({
+      'tile:root': 'collapse',
       'tile:root:context:1': 'center',
       'tile:root:context:2': 'center',
     })
-    expect(actions({ center: 'many', inner: 'leaves' })).toMatchObject({
-      'tile:many': 'hide-leaves',
+    expect(actions({ center: 'many', frame: 'branches', inner: 'leaves' })).toMatchObject({
+      'tile:many': 'collapse',
       'tile:ml1': 'center',
     })
   })
@@ -88,13 +95,14 @@ describe('what a click on a Tile does', () => {
   })
 
   it('goes into a Branch of the ring under a finger, which has no double click, and does the rest alike', () => {
-    expect(actions({}, { finger: true })).toEqual({
-      'tile:root': 'show-context',
+    expect(actions({}, { finger: true })).toEqual({ 'tile:root': 'expand' })
+    expect(actions(open, { finger: true })).toEqual({
+      'tile:root': 'collapse',
       'tile:a': 'center',
       'tile:notes': 'center',
       'tile:many': 'center',
     })
-    expect(actions({ expanded: { 1: 'children' } }, { finger: true })).toMatchObject({
+    expect(actions({ ...open, expanded: { 1: 'children' } }, { finger: true })).toMatchObject({
       'tile:a': 'collapse',
     })
   })
@@ -103,39 +111,51 @@ describe('what a click on a Tile does', () => {
 describe("a line of a tile's menu that goes somewhere", () => {
   it('opens a Branch of the ring in place, a finger or not, as a click does', () => {
     for (const finger of [false, true]) {
-      const { state, actions: act, onViewChange } = render({}, { finger })
+      const { state, actions: act, onViewChange } = render(open, { finger })
       act.go(hexOf(state.hexes, 'tile:a'), 'open')
       expect(onViewChange).toHaveBeenLastCalledWith(
-        { expanded: { 1: 'children' } },
+        { ...open, expanded: { 1: 'children' } },
         { gesture: 'expand', tile: 'a' },
       )
     }
   })
 
-  it('goes in, centering the Tile, and leaves the center where it is', () => {
+  it('opens the folded center, as a click does', () => {
     const { state, actions: act, onViewChange } = render({})
+    act.go(hexOf(state.hexes, 'tile:root'), 'open')
+    expect(onViewChange).toHaveBeenLastCalledWith(open, { gesture: 'expand', tile: 'root' })
+  })
+
+  it('goes in, centering the Tile alone, and leaves the center where it is', () => {
+    const { state, actions: act, onViewChange } = render(open)
     act.go(hexOf(state.hexes, 'tile:a'), 'go-in')
     expect(onViewChange).toHaveBeenLastCalledWith({ center: 'a' }, { gesture: 'center', tile: 'a' })
     act.go(hexOf(state.hexes, 'tile:root'), 'go-in')
     expect(onViewChange).toHaveBeenCalledOnce()
   })
 
-  it("shows a Tile's Context by centering it, and the center's inside it", () => {
-    const { state, actions: act, onViewChange } = render({})
+  it("shows a Tile's Context by centering it, and the center's inside it, opening it were it folded", () => {
+    const { state, actions: act, onViewChange } = render(open)
     act.go(hexOf(state.hexes, 'tile:a'), 'show-context')
     expect(onViewChange).toHaveBeenLastCalledWith(
-      { center: 'a', inner: 'context' },
+      { center: 'a', frame: 'children', inner: 'context' },
       { gesture: 'show-context', tile: 'a' },
     )
     act.go(hexOf(state.hexes, 'tile:root'), 'show-context')
     expect(onViewChange).toHaveBeenLastCalledWith(
-      { inner: 'context' },
+      { ...open, inner: 'context' },
+      { gesture: 'show-context', tile: 'root' },
+    )
+    const folded = render({})
+    folded.actions.go(hexOf(folded.state.hexes, 'tile:root'), 'show-context')
+    expect(folded.onViewChange).toHaveBeenLastCalledWith(
+      { ...open, inner: 'context' },
       { gesture: 'show-context', tile: 'root' },
     )
   })
 
   it('leaves the Context shown inside the center as it is', () => {
-    const { state, actions: act, onViewChange } = render({ inner: 'context' })
+    const { state, actions: act, onViewChange } = render({ ...open, inner: 'context' })
     act.go(hexOf(state.hexes, 'tile:root'), 'show-context')
     expect(onViewChange).not.toHaveBeenCalled()
   })
@@ -151,44 +171,41 @@ describe("a line of a tile's menu that goes somewhere", () => {
 })
 
 describe('a click', () => {
-  it('opens a Branch, then closes it', () => {
-    const closed = render({})
-    closed.actions.click(hexOf(closed.state.hexes, 'tile:a'))
-    expect(closed.onViewChange).toHaveBeenLastCalledWith(
-      { expanded: { 1: 'children' } },
-      { gesture: 'expand', tile: 'a' },
-    )
-    const open = render({ expanded: { 1: 'children' } })
-    open.actions.click(hexOf(open.state.hexes, 'tile:a'))
-    expect(open.onViewChange).toHaveBeenLastCalledWith({}, { gesture: 'collapse', tile: 'a' })
-  })
-
-  it('shows the Context inside the center, then hides it', () => {
-    const plain = render({})
-    plain.actions.click(hexOf(plain.state.hexes, 'tile:root'))
-    expect(plain.onViewChange).toHaveBeenLastCalledWith(
-      { inner: 'context' },
-      { gesture: 'show-context', tile: 'root' },
-    )
-    const shown = render({ inner: 'context' })
+  it('opens the center into its first ring, then folds it back alone, what was inside included', () => {
+    const folded = render({})
+    folded.actions.click(hexOf(folded.state.hexes, 'tile:root'))
+    expect(folded.onViewChange).toHaveBeenLastCalledWith(open, {
+      gesture: 'expand',
+      tile: 'root',
+    })
+    const shown = render({ ...open, inner: 'context' })
     shown.actions.click(hexOf(shown.state.hexes, 'tile:root'))
-    expect(shown.onViewChange).toHaveBeenLastCalledWith(
-      {},
-      { gesture: 'hide-context', tile: 'root' },
-    )
+    expect(shown.onViewChange).toHaveBeenLastCalledWith({}, { gesture: 'collapse', tile: 'root' })
   })
 
-  it('hides the Leaves inside the center', () => {
-    const { state, actions: act, onViewChange } = render({ center: 'many', inner: 'leaves' })
+  it('opens a center of more than six into its Branches, its Leaves inside it', () => {
+    const { state, actions: act, onViewChange } = render({ center: 'many' })
     act.click(hexOf(state.hexes, 'tile:many'))
     expect(onViewChange).toHaveBeenLastCalledWith(
-      { center: 'many' },
-      { gesture: 'hide-leaves', tile: 'many' },
+      { center: 'many', frame: 'branches', inner: 'leaves' },
+      { gesture: 'expand', tile: 'many' },
     )
+  })
+
+  it('opens a Branch, then closes it', () => {
+    const closed = render(open)
+    closed.actions.click(hexOf(closed.state.hexes, 'tile:a'))
+    expect(closed.onViewChange).toHaveBeenLastCalledWith(
+      { ...open, expanded: { 1: 'children' } },
+      { gesture: 'expand', tile: 'a' },
+    )
+    const opened = render({ ...open, expanded: { 1: 'children' } })
+    opened.actions.click(hexOf(opened.state.hexes, 'tile:a'))
+    expect(opened.onViewChange).toHaveBeenLastCalledWith(open, { gesture: 'collapse', tile: 'a' })
   })
 
   it('centers a Leaf, and a Reference on the Tile it points at', () => {
-    const { state, actions: act, onViewChange } = render({ inner: 'context' })
+    const { state, actions: act, onViewChange } = render({ ...open, inner: 'context' })
     act.click(hexOf(state.hexes, 'tile:notes'))
     expect(onViewChange).toHaveBeenLastCalledWith(
       { center: 'notes' },
@@ -211,16 +228,22 @@ describe('what an opened hex holds', () => {
     document.documentElement.style.removeProperty('--duration-fold')
   })
 
-  it('blooms out of its heart, each after its elder siblings; the rest stays still', () => {
-    const { state, actions } = render({ expanded: { 1: 'children' } })
+  it('blooms out of its heart, each after its elder siblings; the center stays still', () => {
+    const { state, actions } = render({ ...open, expanded: { 1: 'children' } })
     const heart = hexOf(state.hexes, 'tile:a').hex.center
     expect(actions.motionOf('tile:a3')).toEqual({ way: 'bloom', from: heart, order: 2 })
-    expect(actions.motionOf('tile:a')).toBeUndefined()
-    expect(actions.motionOf('tile:notes')).toBeUndefined()
+    expect(actions.motionOf('tile:root')).toBeUndefined()
+  })
+
+  it("blooms the center's ring out of the center's heart, each after its elder siblings", () => {
+    const { state, actions } = render(open)
+    const heart = hexOf(state.hexes, 'tile:root').hex.center
+    expect(actions.motionOf('tile:a')).toEqual({ way: 'bloom', from: heart, order: 0 })
+    expect(actions.motionOf('tile:notes')).toEqual({ way: 'bloom', from: heart, order: 1 })
   })
 
   it("blooms out of the center's heart when the center shows its Context", () => {
-    const { state, actions } = render({ inner: 'context' })
+    const { state, actions } = render({ ...open, inner: 'context' })
     const heart = hexOf(state.hexes, 'tile:root').hex.center
     expect(actions.motionOf('tile:root:context:1')).toMatchObject({ way: 'bloom', from: heart })
   })
@@ -230,18 +253,38 @@ describe('what an opened hex holds', () => {
     document.documentElement.style.setProperty('--duration-fold', '500ms')
     const onViewChange = vi.fn<(view: CanvasView, action: ViewAction) => void>()
     const { result } = renderHook(() =>
-      useCanvasState({ system, view: { expanded: { 1: 'children' } }, onViewChange }),
+      useCanvasState({ system, view: { ...open, expanded: { 1: 'children' } }, onViewChange }),
     )
     settled(() => {
       result.current.actions.click(hexOf(result.current.state.hexes, 'tile:a'))
     })
     expect(result.current.actions.motionOf('tile:a3')).toMatchObject({ way: 'fold' })
+    expect(result.current.actions.motionOf('tile:notes')).toMatchObject({ way: 'bloom' })
     result.current.actions.click(hexOf(result.current.state.hexes, 'tile:notes'))
     expect(onViewChange).not.toHaveBeenCalled()
     settled(() => {
       vi.advanceTimersByTime(500)
     })
-    expect(onViewChange).toHaveBeenCalledExactlyOnceWith({}, { gesture: 'collapse', tile: 'a' })
+    expect(onViewChange).toHaveBeenCalledExactlyOnceWith(open, { gesture: 'collapse', tile: 'a' })
+  })
+
+  it('folds the whole ring back into the center as it folds, then leaves it alone', () => {
+    vi.useFakeTimers()
+    document.documentElement.style.setProperty('--duration-fold', '500ms')
+    const onViewChange = vi.fn<(view: CanvasView, action: ViewAction) => void>()
+    const { result } = renderHook(() =>
+      useCanvasState({ system, view: { ...open, expanded: { 1: 'children' } }, onViewChange }),
+    )
+    settled(() => {
+      result.current.actions.click(hexOf(result.current.state.hexes, 'tile:root'))
+    })
+    for (const key of ['tile:a', 'tile:a3', 'tile:notes']) {
+      expect(result.current.actions.motionOf(key)).toMatchObject({ way: 'fold' })
+    }
+    settled(() => {
+      vi.advanceTimersByTime(500)
+    })
+    expect(onViewChange).toHaveBeenCalledExactlyOnceWith({}, { gesture: 'collapse', tile: 'root' })
   })
 
   it('gives a fold up for a view changed meanwhile, rather than overwriting it', () => {
@@ -250,12 +293,12 @@ describe('what an opened hex holds', () => {
     const onViewChange = vi.fn<(view: CanvasView, action: ViewAction) => void>()
     const { result, rerender } = renderHook(
       ({ view }: { view: CanvasView }) => useCanvasState({ system, view, onViewChange }),
-      { initialProps: { view: { expanded: { 1: 'children' } } } },
+      { initialProps: { view: { ...open, expanded: { 1: 'children' } } } },
     )
     settled(() => {
       result.current.actions.click(hexOf(result.current.state.hexes, 'tile:a'))
     })
-    rerender({ view: { expanded: { 1: 'children' }, inner: 'context' } })
+    rerender({ view: { ...open, expanded: { 1: 'children' }, inner: 'context' } })
     settled(() => {
       vi.advanceTimersByTime(500)
     })
@@ -267,7 +310,7 @@ describe('what an opened hex holds', () => {
     document.documentElement.style.setProperty('--duration-fold', '500ms')
     const before = vi.fn<(view: CanvasView, action: ViewAction) => void>()
     const after = vi.fn<(view: CanvasView, action: ViewAction) => void>()
-    const view: CanvasView = { expanded: { 1: 'children' } }
+    const view: CanvasView = { ...open, expanded: { 1: 'children' } }
     const { result, rerender } = renderHook(
       ({ onViewChange }) => useCanvasState({ system, view, onViewChange }),
       { initialProps: { onViewChange: before } },
@@ -280,7 +323,7 @@ describe('what an opened hex holds', () => {
       vi.advanceTimersByTime(500)
     })
     expect(before).not.toHaveBeenCalled()
-    expect(after).toHaveBeenCalledExactlyOnceWith({}, { gesture: 'collapse', tile: 'a' })
+    expect(after).toHaveBeenCalledExactlyOnceWith(open, { gesture: 'collapse', tile: 'a' })
   })
 
   it('gives a fold up for a Tile centered meanwhile', () => {
@@ -288,7 +331,7 @@ describe('what an opened hex holds', () => {
     document.documentElement.style.setProperty('--duration-fold', '500ms')
     const onViewChange = vi.fn<(view: CanvasView, action: ViewAction) => void>()
     const { result } = renderHook(() =>
-      useCanvasState({ system, view: { expanded: { 1: 'children' } }, onViewChange }),
+      useCanvasState({ system, view: { ...open, expanded: { 1: 'children' } }, onViewChange }),
     )
     settled(() => {
       result.current.actions.click(hexOf(result.current.state.hexes, 'tile:a'))
@@ -308,13 +351,13 @@ describe('what an opened hex holds', () => {
 
 describe('centering', () => {
   it('centers from the keyboard at once', () => {
-    const { state, actions: act, onViewChange } = render({})
+    const { state, actions: act, onViewChange } = render(open)
     act.center(hexOf(state.hexes, 'tile:a'), 'keyboard')
     expect(onViewChange).toHaveBeenLastCalledWith({ center: 'a' }, { gesture: 'center', tile: 'a' })
   })
 
   it('centers on a double-click only where its first click landed', () => {
-    const { state, actions: act, onViewChange } = render({})
+    const { state, actions: act, onViewChange } = render(open)
     act.center(hexOf(state.hexes, 'tile:a'), 'pointer')
     expect(onViewChange).not.toHaveBeenCalled()
     act.click(hexOf(state.hexes, 'tile:a'))
@@ -323,66 +366,8 @@ describe('centering', () => {
   })
 
   it('leaves the center where it is', () => {
-    const { state, actions: act, onViewChange } = render({})
+    const { state, actions: act, onViewChange } = render(open)
     act.center(hexOf(state.hexes, 'tile:root'), 'keyboard')
     expect(onViewChange).not.toHaveBeenCalled()
-  })
-})
-
-describe('the rings the center shows', () => {
-  it('are offered as the center offers them', () => {
-    expect(render({}).state.rings).toEqual({
-      around: 'children',
-      inside: undefined,
-      choices: { around: ['children'], inside: ['context'] },
-    })
-    expect(render({ center: 'many', inner: 'leaves' }).state.rings).toEqual({
-      around: 'branches',
-      inside: 'leaves',
-      choices: { around: ['branches', 'leaves'], inside: ['leaves', 'context'] },
-    })
-  })
-
-  it('change around the center, and inside it', () => {
-    const { actions: act, onViewChange } = render({ center: 'many', inner: 'context' })
-    act.showAround('leaves')
-    expect(onViewChange).toHaveBeenLastCalledWith(
-      { center: 'many', frame: 'leaves', inner: 'context' },
-      { gesture: 'show-leaves-around', tile: 'many' },
-    )
-    act.showInside('leaves')
-    expect(onViewChange).toHaveBeenLastCalledWith(
-      { center: 'many', inner: 'leaves' },
-      { gesture: 'show-leaves', tile: 'many' },
-    )
-    act.showInside(undefined)
-    expect(onViewChange).toHaveBeenLastCalledWith(
-      { center: 'many' },
-      { gesture: 'hide-context', tile: 'many' },
-    )
-  })
-
-  it('name the ring picked around the center, and the one shown inside it', () => {
-    const { actions: act, onViewChange } = render({ center: 'many', frame: 'leaves' })
-    act.showAround('branches')
-    expect(onViewChange).toHaveBeenLastCalledWith(
-      { center: 'many' },
-      { gesture: 'show-branches-around', tile: 'many' },
-    )
-    act.showInside('context')
-    expect(onViewChange).toHaveBeenLastCalledWith(
-      { center: 'many', frame: 'leaves', inner: 'context' },
-      { gesture: 'show-context', tile: 'many' },
-    )
-  })
-
-  it('stay as they are when the ring shown is picked again', () => {
-    const { actions: act, onViewChange } = render({ center: 'many', inner: 'leaves' })
-    act.showAround('branches')
-    act.showInside('leaves')
-    const bare = render({})
-    bare.actions.showInside(undefined)
-    expect(onViewChange).not.toHaveBeenCalled()
-    expect(bare.onViewChange).not.toHaveBeenCalled()
   })
 })

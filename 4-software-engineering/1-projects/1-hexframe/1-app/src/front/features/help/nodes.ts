@@ -1,9 +1,16 @@
 // Help as the help widget goes through it: each Tile and the six below it (`HelpNode`, ui's), read from
-// Help as Mapping hands it over, and what the widget shows of a topic, where it stands among its six,
-// its parent's titles and where it reads on. Pure.
+// Help as Mapping hands it over, what the widget shows of a topic, where it stands among its six,
+// its parent's titles and where it reads on, and the topic a few words after `/help` find. Pure.
 import type { SystemTile } from '#/domains/mapping/entities'
 import { places, type Place } from '#/front/ui/chat/widgets/Places'
-import { follow, placesTo, readOnOf, type HelpNode } from '#/front/ui/chat/widgets/help/topics'
+import {
+  follow,
+  placesTo,
+  readOnOf,
+  topicsFor,
+  topicsOf,
+  type HelpNode,
+} from '#/front/ui/chat/widgets/help/topics'
 
 /** A Tile of Help and its Branches, as the help widget reads them. */
 export function helpNodeOf(tile: SystemTile): HelpNode {
@@ -53,4 +60,12 @@ export function readingOf(help: HelpNode, id: string): Reading {
     },
     readOn: readOnOf(help, path).map(({ id: on, title }) => ({ id: on, title })),
   }
+}
+
+/**
+ * The topic a few words find, by its id, as `/help` and those words open it: the first of Help's
+ * topics they show in, a title first (`topicsFor`); none for no words, or words no topic holds.
+ */
+export function topicFound(help: HelpNode, words: string): string | undefined {
+  return topicsFor(topicsOf(help), words)[0]?.id
 }

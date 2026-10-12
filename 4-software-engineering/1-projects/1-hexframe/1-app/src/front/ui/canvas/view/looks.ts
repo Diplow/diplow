@@ -85,11 +85,14 @@ export function listOf(hex: Of<'list'>): Extract<TileLook, { kind: 'list' }> {
   }
 }
 
-/** Where a Tile's hex stands: the center, at the heart of the Branch it opened in place, or in a ring. */
+/**
+ * Where a Tile's hex stands: the center, alone when folded, at the heart of the Branch it opened in
+ * place, or in a ring.
+ */
 export function placeOf(hex: Of<'tile'>): TilePlace {
   switch (hex.role) {
     case 'center':
-      return 'center'
+      return hex.alone === true ? 'alone' : 'center'
     case 'hub':
       return 'heart'
     default:

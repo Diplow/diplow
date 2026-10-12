@@ -97,17 +97,7 @@ export const pieces = [
     name: 'Conversation',
     tier: 'chat',
     sources: ['features/conversation/Conversation.tsx'],
-    madeOf: [
-      'Composer',
-      'Message',
-      'Mention',
-      'Events',
-      'DaySplit',
-      'Proposal',
-      'Receipt',
-      'EmptyState',
-      'Act',
-    ],
+    madeOf: ['Composer', 'Message', 'Mention', 'Events', 'DaySplit', 'Proposal', 'Receipt', 'Act'],
     note: m.gallery_note_conversation,
   },
   {
@@ -216,7 +206,7 @@ export const pieces = [
     name: 'Canvas',
     tier: 'canvas',
     sources: ['ui/canvas/Canvas.tsx'],
-    madeOf: ['Tile', 'Slot', 'Ground', 'Marks', 'TileMenu', 'Moving', 'Button'],
+    madeOf: ['Tile', 'Slot', 'Ground', 'Marks', 'TileMenu', 'Moving'],
     note: m.gallery_note_canvas,
   },
   {
@@ -274,13 +264,6 @@ export const pieces = [
     sources: ['ui/canvas/layouts/Rail.tsx'],
     madeOf: ['ThemeToggle'],
     note: m.gallery_note_rail,
-  },
-  {
-    name: 'Card',
-    tier: 'canvas',
-    sources: ['ui/canvas/layouts/Card.tsx'],
-    madeOf: [],
-    note: m.gallery_note_card,
   },
   {
     name: 'Drawer',
@@ -441,6 +424,3 @@ function partsOf(entry: Entry): readonly string[] {
 export function usedIn(name: PieceName): PieceName[] {
   return pieces.filter((piece) => partsOf(piece).includes(name)).map((piece) => piece.name)
 }
-
-/** A piece's anchor on the page, which "made of" and "used in" link to. */
-export const anchorOf = (name: string) => `piece-${name}`

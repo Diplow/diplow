@@ -358,8 +358,11 @@ function Veil({ chatInFront }: { chatInFront: boolean }) {
   )
 }
 
-/** hexframe's mark, the Sunstone, lit in the human's amber, and its name. */
-function Brand() {
+/**
+ * hexframe's mark, the Sunstone, lit in the human's amber, and its name: at the chat's head, and on
+ * the deck's slides of words.
+ */
+export function Brand() {
   return (
     <div className="flex flex-none items-center gap-2.5 px-5 pt-2 text-foreground @wide:px-9 @wide:pt-7">
       <Sunstone className="h-[22px] w-5" />
@@ -371,7 +374,8 @@ function Brand() {
 /**
  * The conversation's scroller. Wide, its own scrollbar gives way to the star on the curve; it stays
  * focusable, so the keyboard scrolls it. Its content sits at its foot, the latest last, in one element
- * that stays whatever the slot holds, so the scrollbar sees it grow.
+ * that stays whatever the slot holds, so the scrollbar sees it grow. How far its lines keep from the
+ * chat's sides it hands down as `--chat-left` and `--chat-right`, so a widget runs on to them.
  */
 function Messages({
   scroller,
@@ -390,8 +394,10 @@ function Messages({
       role="region"
       aria-label={m.screen_messages()}
       className={cn(
-        'flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-5 pt-6 pb-7 outline-none [mask-image:linear-gradient(transparent,black_1.75rem)] focus-visible:ring-1 focus-visible:ring-human/60 focus-visible:ring-inset',
-        '@wide:pr-[6.25rem] @wide:pl-9 @wide:[scrollbar-width:none] @wide:[&::-webkit-scrollbar]:hidden',
+        'flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain pt-6 pb-7 outline-none [mask-image:linear-gradient(transparent,black_1.75rem)] focus-visible:ring-1 focus-visible:ring-human/60 focus-visible:ring-inset',
+        // How far its lines keep from the chat's sides, which a widget runs on past, the curve its edge.
+        '[--chat-left:1.25rem] [--chat-right:1.25rem] pr-(--chat-right) pl-(--chat-left)',
+        '@wide:[--chat-left:2.25rem] @wide:[--chat-right:6.25rem] @wide:[scrollbar-width:none] @wide:[&::-webkit-scrollbar]:hidden',
       )}
     >
       <div ref={content} className="mt-auto">

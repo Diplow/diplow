@@ -128,6 +128,7 @@ describe('listOf', () => {
 describe('placeOf', () => {
   it('puts the center at the center, an opened Branch at its heart, and the rest in a ring', () => {
     expect(placeOf(hexOf(node('a'), { role: 'center' }))).toBe('center')
+    expect(placeOf(hexOf(node('a'), { role: 'center', alone: true }))).toBe('alone')
     expect(placeOf(hexOf(node('a'), { role: 'hub' }))).toBe('heart')
     expect(placeOf(hexOf(node('a'), { role: 'leaf' }))).toBe('ring')
   })

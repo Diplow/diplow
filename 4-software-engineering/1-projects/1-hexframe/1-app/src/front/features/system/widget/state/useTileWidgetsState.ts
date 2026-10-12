@@ -1,6 +1,6 @@
 // What the chat shows of a tile once its widget is done with it: the receipt a write sent leaves, or
 // an export, working, then its receipt naming the zip, or failed. The form under way is the URL's;
-// this is what follows it, held by the page so the card on the canvas and the chat share it. One at
+// this is what follows it, held by the page so the canvas's menus and the chat share it. One at
 // a time: a form opening ends it, a write sent leaves its receipt in its place, an export takes it,
 // and a form closed unsent leaves nothing.
 import { useState } from 'react'
@@ -46,12 +46,12 @@ export interface Exporting extends Exported {
 
 type Last = Receipt | (Exported & { readonly kind: 'export'; readonly at: Date })
 
-/** What follows a tile's widget in the chat, and the export the card starts. */
+/** What follows a tile's widget in the chat, and the export a Tile's menu starts. */
 export function useTileWidgetsState() {
   const exporting = useExportTile()
   const [last, setLast] = useState<Last>()
   const { mutate, isPending } = exporting
-  // An export on its way runs to its end, the card's Export waiting, even once the chat lets it go.
+  // An export on its way runs to its end, the menu's Export waiting, even once the chat lets it go.
   const settle = () => {
     if (!isPending) exporting.reset()
   }
@@ -66,7 +66,7 @@ export function useTileWidgetsState() {
   return {
     state: {
       shown,
-      /** An export on its way: the card's Export waits. */
+      /** An export on its way: the menu's Export waits. */
       exporting: isPending,
     },
     actions: {

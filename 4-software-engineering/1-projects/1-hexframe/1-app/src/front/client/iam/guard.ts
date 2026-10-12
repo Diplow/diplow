@@ -43,19 +43,6 @@ export function continueTo(redirect: string | undefined, accountId: string) {
 }
 
 /**
- * Whether a route's context holds a Session `sessionIfAny` proved: whether the page is signed in. What
- * the header's links show by, so the key they read stays the guard's.
- */
-export function provedSession(context: unknown) {
-  return (
-    typeof context === 'object' &&
-    context !== null &&
-    'session' in context &&
-    context.session !== undefined
-  )
-}
-
-/**
  * Home's `beforeLoad`: puts the Session on the route's context, or none for a signed-out visit, which
  * home shows signed out rather than sending it away. Any other failure is the route's error, as a
  * read's would be.

@@ -12,7 +12,6 @@
 // the timeline beside the curve and the foot at the chat's foot; `Conversation` lays them out
 // together, for /design-system.
 import { cn } from 'cn'
-import { MessagesSquare } from 'lucide-react'
 import { useRef } from 'react'
 
 import type { Mode, TurnStep } from '#/domains/assistant/entities'
@@ -24,7 +23,6 @@ import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 import { DaySplit } from '#/front/ui/chat/entries/DaySplit'
 import { Events, type Happened } from '#/front/ui/chat/entries/Events'
 import { Message } from '#/front/ui/chat/text/Message'
-import { EmptyState } from '#/front/ui/layouts/states'
 
 import type { Mentionable } from './composer/mention'
 import { modeOf, type Offering, offered } from './composer/typing'
@@ -91,6 +89,10 @@ interface FootProps {
   onSend: (text: string) => void
   /** Undoes the latest the agent applied, which `/undo` runs; none while nothing may be undone. */
   onUndo?: (() => void) | undefined
+  /** Opens Help, on the topic the words after `/help` find, if any; none where the page has no Help. */
+  onHelp?: ((words: string) => void) | undefined
+  /** Opens the Account's Keys, which `/keys` runs; none where the page has none. */
+  onKeys?: (() => void) | undefined
   /** The Tiles the user may `@`. */
   tiles: ReadonlyArray<Mentionable>
   /** The Account may not use the Assistant: its Messages are kept, and no agent answers them. */
@@ -159,11 +161,8 @@ export function Timeline({
         </Act>
       )}
       {shown.length === 0 && earlier === undefined && !after ? (
-        <EmptyState
-          icon={<MessagesSquare />}
-          title={m.conversation_empty_title()}
-          description={m.conversation_empty_description()}
-        />
+        // Nothing said yet: the agent says so, in its voice, as a line of the conversation, no box.
+        <Message voice="agent" words={[m.conversation_empty()]} />
       ) : (
         shown.map((day) => (
           <section key={day.key} aria-label={dayLabel(day, now)} className="grid gap-5">
@@ -281,12 +280,15 @@ function goTo(locale: string) {
 /**
  * The composer, through its state hook: a pick put in the field, its caret after it, or the language
  * gone to; a Message sent as words, or a command the field opens with run, the Mode's by its switch,
- * `/undo` by `onUndo`, the words after it sent once it ran.
+ * `/undo` by `onUndo`, `/keys` by `onKeys`, the words after it sent once it ran, and `/help` by
+ * `onHelp`, the words after it the topic it looks for.
  */
 export function ConversationFoot({
   onSend,
   tiles,
   onUndo,
+  onHelp,
+  onKeys,
   unavailable = false,
   running,
   sending = false,
@@ -299,6 +301,8 @@ export function ConversationFoot({
   const among = offered({
     modes: mode !== undefined && !unavailable,
     undoable: onUndo !== undefined,
+    help: onHelp !== undefined,
+    keys: onKeys !== undefined,
   } satisfies Offering)
   const field = useRef<HTMLTextAreaElement>(null)
   const { state, actions } = useComposerState(tiles, among, { center, field })
@@ -324,11 +328,13 @@ export function ConversationFoot({
         const submitted = actions.submit()
         if (submitted === undefined) return
         if ('language' in submitted) goTo(submitted.language)
+        else if ('help' in submitted) onHelp?.(submitted.help)
         else if ('message' in submitted) onSend(submitted.message)
         else {
           // The command first, then the words after it, as the Message they are.
           const { command, then } = submitted
           if (command === 'undo') onUndo?.()
+          else if (command === 'keys') onKeys?.()
           else if (mode !== undefined && modeOf[command] !== mode.mode) mode.choose(modeOf[command])
           if (then !== undefined) onSend(then)
         }

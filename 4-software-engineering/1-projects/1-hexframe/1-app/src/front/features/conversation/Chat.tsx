@@ -6,11 +6,12 @@
 // way, and the agent's step while a Turn runs, as the route's poll last saw it. `ChatComposer`,
 // the composer, whose Message the route posts after the navigation it follows, saying so when the
 // Account may not use the Assistant, and where the next Turn works, the canvas's center unless the
-// Message opens with a link, naming a Tile carried from the canvas or one a menu asks the agent about; its commands switch the Mode, undo what the agent last applied, or
-// go to another language. While a Turn runs, the field waits and send becomes Stop. It offers the
-// Account's Tiles to `@`, from the System the page holds. The Mode, as the poll last saw it, shows under
-// the field, switched through `useSetMode`, the one switched to shown while the switch is on its way.
-// Each is shown inside a ReadBoundary, which a failed read lands in.
+// Message opens with a link, naming a Tile carried from the canvas or one a menu asks the agent
+// about; its commands switch the Mode, undo what the agent last applied, open Help or the Keys, or go
+// to another language. While a Turn runs, the field waits and send becomes Stop. It offers the
+// Account's Tiles to `@`, from the System the page holds. The Mode, as the poll last saw it, shows
+// under the field, switched through `useSetMode`, the one switched to shown while the switch is on
+// its way. Each is shown inside a ReadBoundary, which a failed read lands in.
 import { type ComponentProps, useMemo } from 'react'
 
 import type { Mode } from '#/domains/assistant/entities'
@@ -145,10 +146,14 @@ interface ChatComposerProps {
   center: string | undefined
   /** A Tile carried off the canvas, which the composer names where it is let go. */
   carried: CarriedTile | undefined
+  /** `/help`: Help opened on the topic the words after it find, if any, on the canvas and in the chat. */
+  onHelp: (words: string) => void
+  /** `/keys`: the Account's Keys opened in the chat. */
+  onKeys: () => void
 }
 
 export function ChatComposer(props: ChatComposerProps) {
-  const { onSend, turn, mode, onPoint, center, carried } = props
+  const { onSend, turn, mode, onPoint, center, carried, onHelp, onKeys } = props
   const tiles = useTiles()
   const entries = useEntries()
   const { data: available } = useAssistantAvailable()
@@ -171,6 +176,8 @@ export function ChatComposer(props: ChatComposerProps) {
               undo(undoable)
             }
       }
+      onHelp={onHelp}
+      onKeys={onKeys}
       tiles={tiles ?? []}
       // Until it is read, or when reading it failed, the composer says nothing either way.
       unavailable={available === false}
