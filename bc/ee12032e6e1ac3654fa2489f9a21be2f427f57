@@ -1,0 +1,43 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/useCanvasState.ts
+  s_ed767e83068d4e::t_f1a002981d9e4d 6-8,56-60,69,83-89,132-133,136,166-183,230,242,244,250-276
+  s_ed767e83068d4e::t_d1f195dd2991ee 15
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/view/looks.ts
+  s_ed767e83068d4e::t_a61f1a10e07cfb 2-3,93-128
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/move/useMove.ts
+  s_ed767e83068d4e::t_5420012a51e1ec 1-30,32-226,229-233,237-246
+  s_ed767e83068d4e::t_21134758e84adb 31,227-228,234-236
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/move/targets.test.ts
+  s_ed767e83068d4e::t_1cbb5fc47ff98d 1-24
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/move/targets.ts
+  s_ed767e83068d4e::t_1cbb5fc47ff98d 1-22
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/useCanvasState.test.ts
+  s_ed767e83068d4e::t_67faadc720b22b 36,38,50-51,89-153
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/geometry/shape.test.ts
+  s_ed767e83068d4e::t_907d19ee68dc4d 125-139
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/menu/TileMenu.tsx
+  s_ed767e83068d4e::t_992b64ad36fd8e 64-70,75-83,93-97,244,249
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/geometry/shape.ts
+  s_ed767e83068d4e::t_aff179f19bca01 61-65,228-243,275-277,280
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/view/looks.test.ts
+  s_ed767e83068d4e::t_a61f1a10e07cfb 6,135-160
+  s_ed767e83068d4e::t_932c25c54a0dcf 161
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/moving/Moving.tsx
+  s_ed767e83068d4e::t_a6dede81d6662f 40-41,43-51,54-57,61-70
+  s_ed767e83068d4e::t_7650eb069d9ab9 81-95,97-105
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bcee12032e6e1ac3654fa2489f9a21be2f427f57",
+  "prompts": {},
+  "sessions": {
+    "s_ed767e83068d4e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "cfeb8685-5b35-4a0b-a8c1-421819aa5d69",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
