@@ -13,7 +13,7 @@ preview: >-
 ---
 # ui
 
-hexframe's design system: the look, the words for its screen, and the closed list of components I own. The look was found in a prototype, then written down as tokens and fonts, and every page of it now lives here and on `/design-system`.
+hexframe's design system: the look, the words for its screen, and the closed list of components I own. The look was found in a prototype, then written down as tokens and fonts, which `src/front/styles.css` holds now; what follows is its direction and the words for its screen.
 
 ## The direction
 
