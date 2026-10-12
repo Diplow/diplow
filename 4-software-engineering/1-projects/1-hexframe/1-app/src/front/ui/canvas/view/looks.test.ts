@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { m } from '#/paraglide/messages'
 
 import type { CanvasHex } from '../geometry/shape'
-import { listOf, lookOf, placeOf } from './looks'
+import { cardOf, listOf, lookOf, placeOf } from './looks'
 import type { TileNode } from './tiles'
 
 // What the tile draws of each hex of the canvas: its kind, its words, its foot and its place, read
@@ -130,5 +130,32 @@ describe('placeOf', () => {
     expect(placeOf(hexOf(node('a'), { role: 'center' }))).toBe('center')
     expect(placeOf(hexOf(node('a'), { role: 'hub' }))).toBe('heart')
     expect(placeOf(hexOf(node('a'), { role: 'leaf' }))).toBe('ring')
+  })
+})
+
+describe('cardOf', () => {
+  it('says a preview in full, and nothing more of a plain Branch', () => {
+    expect(cardOf(lookOf(hexOf(node('work'))))).toEqual({ description: 'What work is' })
+    expect(cardOf(lookOf(hexOf(node('bare', { preview: '' }))))).toEqual({})
+  })
+
+  it('notes the Branch a Leaf is numbered as, in the warning colour', () => {
+    const notes = node('notes', { leaf: true })
+    expect(cardOf(lookOf(hexOf(notes, { role: 'leaf', clash: node('work') })))).toEqual({
+      description: 'What notes is',
+      note: { text: m.tile_clash({ branch: 'WORK' }), tone: 'warning' },
+    })
+  })
+
+  it("notes where a Reference's Tile stands, teal, and a broken one's loss", () => {
+    const reference = node('why', { reference: { from: 'Principles' } })
+    expect(cardOf(lookOf(hexOf(reference, { role: 'context' }))).note).toEqual({
+      text: m.tile_reference_from({ place: 'Principles' }),
+      tone: 'context',
+    })
+    const broken = node('gone', { broken: true, preview: '' })
+    expect(cardOf(lookOf(hexOf(broken, { role: 'context' })))).toEqual({
+      note: { text: m.tile_broken_note() },
+    })
   })
 })

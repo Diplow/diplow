@@ -61,11 +61,26 @@ interface TileMenuProps {
   frames?: { holds?: PickerFrame; standsIn?: PickerFrame }
   /** What a chosen line does: its act, and the words its line said, for a toast or a timeline. */
   onAct: OnAct
+  /**
+   * The lines its caller can't run yet, left out: the agent's, on a page whose chat isn't wired to
+   * the menu; an import, where the subject takes none.
+   */
+  without?: readonly Verb[]
+  /** Told when it opens and closes: the canvas steps the other tiles back while it is open. */
+  onOpenChange?: (open: boolean) => void
   /** The tile, or the free slot, handed what its menu and its card need of it. */
   children: (hand: Hand) => ReactElement
 }
 
-export function TileMenu({ subject, card, frames = {}, onAct, children }: TileMenuProps) {
+export function TileMenu({
+  subject,
+  card,
+  frames = {},
+  onAct,
+  without = [],
+  onOpenChange,
+  children,
+}: TileMenuProps) {
   const title = subject.kind === 'slot' ? m.tile_menu_free_slot() : subject.title
   const place = placeOf(subject)
   const pass = <Pass>{children}</Pass>
@@ -75,8 +90,11 @@ export function TileMenu({ subject, card, frames = {}, onAct, children }: TileMe
       opensOn="context"
       label={m.tile_menu_label({ title })}
       header={{ title, detail: place, description: card?.description }}
-      entries={entriesOf(subject, frames, onAct)}
-      onOpenChange={setMenuOpen}
+      entries={entriesOf(subject, frames, onAct, without)}
+      onOpenChange={(open) => {
+        setMenuOpen(open)
+        onOpenChange?.(open)
+      }}
       trigger={
         subject.kind === 'slot' ? (
           pass
@@ -223,10 +241,12 @@ function entriesOf(
   subject: Subject,
   frames: NonNullable<TileMenuProps['frames']>,
   onAct: OnAct,
+  without: readonly Verb[] = [],
 ): MenuEntry[] {
   return groupsOf(subject)
     .map((group) =>
       group.flatMap((verb): MenuEntry[] => {
+        if (without.includes(verb)) return []
         const line = lineOf(verb, subject)
         const { icon, shortcut, tone } = line
         const label = line.label()

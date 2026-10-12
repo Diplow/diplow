@@ -3,14 +3,16 @@
 // URL's: every action hands the next one to `onViewChange`, for the route to navigate to, with the
 // gesture that asked for it and the Tile it was made on. What it holds is the motion between two
 // views: what an opened hex holds blooms out of its heart, and folds back into it for
-// `--duration-fold` before the view that closes it is handed on, at once with reduced motion.
+// `--duration-fold` before the view that closes it is handed on, at once with reduced motion. Under a
+// finger, a tap on a Branch of the ring goes in, opening it in place waiting in its menu; the menu's
+// lines that go somewhere, open, go in, show the Context, back out, are gestures too.
 import { useEffect, useRef, useState } from 'react'
 
 import { directions, type Point } from '../geometry/geometry'
 import { layoutCanvas, type CanvasHex } from '../geometry/shape'
 import type { TileMotion } from '../tile/Tile'
 import { movingFor } from './motion'
-import type { InnerKind, OuterKind, TileNode } from '../view/tiles'
+import { pathTo, type InnerKind, type OuterKind, type TileNode } from '../view/tiles'
 import {
   centerOn,
   ringChoices,
@@ -51,8 +53,11 @@ function insideGesture(kind: InnerKind | undefined, inner: InnerKind | undefined
   return inner === undefined ? undefined : hiding[inner]
 }
 
-/** What a click on `hex` does in `shown`; nothing on a centered Leaf, which opens nothing. */
-function tileAction(hex: TileHex, shown: ShownView): TileAction | undefined {
+/**
+ * What a click on `hex` does in `shown`; nothing on a centered Leaf, which opens nothing. A finger has
+ * no double click to go in with: its tap on a Branch of the ring goes in, rather than opening it.
+ */
+function tileAction(hex: TileHex, shown: ShownView, finger = false): TileAction | undefined {
   switch (hex.role) {
     case 'center':
       if (shown.frame === undefined) return undefined
@@ -61,7 +66,7 @@ function tileAction(hex: TileHex, shown: ShownView): TileAction | undefined {
       return 'collapse'
     case 'branch':
       // Only the ring around the center opens its Branches; theirs are a generation further.
-      return hex.generation === 1 ? 'expand' : 'center'
+      return hex.generation === 1 && !finger ? 'expand' : 'center'
     case 'leaf':
     case 'context':
       return 'center'
@@ -74,6 +79,13 @@ interface Inside {
   from: Point
   order: number
 }
+
+/** The lines of a tile's menu that go somewhere: the view's, which the canvas runs itself. */
+export type ViewVerb = 'open' | 'go-in' | 'show-context' | 'back-out'
+
+/** Whether a menu's line is the view's to run. */
+export const isViewVerb = (verb: string): verb is ViewVerb =>
+  verb === 'open' || verb === 'go-in' || verb === 'show-context' || verb === 'back-out'
 
 /** The gestures that close an opened hex, whose six fold back into its heart first. */
 const closing = new Set<TileAction>(['collapse', 'hide-context', 'hide-leaves'])
@@ -117,9 +129,11 @@ interface CanvasInput {
   view: CanvasView
   /** The next view, and the gesture that asked for it on which Tile. */
   onViewChange: (view: CanvasView, action: ViewAction) => void
+  /** The hand is a finger (`pointer-coarse`): its tap on a Branch of the ring goes in. */
+  finger?: boolean
 }
 
-export function useCanvasState({ system, view, onViewChange }: CanvasInput) {
+export function useCanvasState({ system, view, onViewChange, finger = false }: CanvasInput) {
   const shown = showView(system, view)
   const hexes = layoutCanvas(shown)
   const { inside, hubs } = openedIn(hexes)
@@ -147,6 +161,24 @@ export function useCanvasState({ system, view, onViewChange }: CanvasInput) {
 
   const change = (next: CanvasView, gesture: Gesture, tile: string) => {
     latest.current.onViewChange(next, { gesture, tile })
+  }
+
+  /** Centers the Tile of this id, a fold under way given up for it. */
+  function centerTile(tile: string, context = false) {
+    clearTimeout(fold.current)
+    setFolding(undefined)
+    const centered = centerOn(system, tile)
+    if (context) change(withInner(system, centered, 'context'), 'show-context', tile)
+    else change(centered, 'center', tile)
+  }
+
+  /** A click, Enter or Space on `hex`, or what its menu's Open does without a finger's turn. */
+  function press(hex: TileHex, action: TileAction | undefined) {
+    if (folding !== undefined) return
+    clicked.current = hex.key
+    if (action === undefined) return
+    if (closing.has(action)) foldThen(hex, action)
+    else act(hex, action)
   }
 
   function act(hex: TileHex, action: TileAction) {
@@ -195,7 +227,7 @@ export function useCanvasState({ system, view, onViewChange }: CanvasInput) {
       rings: { around: shown.frame, inside: shown.inner, choices: ringChoices(shown) },
     },
     actions: {
-      actionOf: (hex: TileHex) => tileAction(hex, shown),
+      actionOf: (hex: TileHex) => tileAction(hex, shown, finger),
       /**
        * How a hex drawn inside one opened in place moves: blooming out of its heart, after its elder
        * siblings, or folding back into it; none for the others.
@@ -207,22 +239,41 @@ export function useCanvasState({ system, view, onViewChange }: CanvasInput) {
           ? { way: 'fold', from: at.from }
           : { way: 'bloom', from: at.from, order: at.order }
       },
-      /** A click, Enter or Space on `hex`; none while a fold is under way. */
+      /** A click, Enter or Space on `hex`, a tap under a finger; none while a fold is under way. */
       click: (hex: TileHex) => {
-        if (folding !== undefined) return
-        clicked.current = hex.key
-        const action = tileAction(hex, shown)
-        if (action === undefined) return
-        if (closing.has(action)) foldThen(hex, action)
-        else act(hex, action)
+        press(hex, tileAction(hex, shown, finger))
       },
       /** A double-click, or Shift+Enter, on `hex`, a fold under way given up for it. */
       center: (hex: TileHex, from: 'pointer' | 'keyboard') => {
         const again = from === 'keyboard' || clicked.current === hex.key
         if (!again || hex.tile.id === shown.center.id) return
-        clearTimeout(fold.current)
-        setFolding(undefined)
-        change(centerOn(system, hex.tile.id), 'center', hex.tile.id)
+        centerTile(hex.tile.id)
+      },
+      /**
+       * A line of `hex`'s menu that goes somewhere. Open does what a pointer's click does, a Branch
+       * of the ring opening in place under a finger too; Go in centers it; Show its Context centers
+       * it with its Context inside, or shows the center's; Back out centers the Tile the center
+       * stands under.
+       */
+      go: (hex: TileHex, verb: ViewVerb) => {
+        const tile = hex.tile.id
+        const centered = tile === shown.center.id
+        switch (verb) {
+          case 'open':
+            press(hex, tileAction(hex, shown))
+            return
+          case 'go-in':
+            if (!centered) centerTile(tile)
+            return
+          case 'show-context':
+            if (!centered) centerTile(tile, true)
+            else if (shown.inner !== 'context') act(hex, 'show-context')
+            return
+          case 'back-out': {
+            const parent = pathTo(system, shown.center.id).at(-2)
+            if (parent !== undefined) centerTile(parent.id)
+          }
+        }
       },
       /** Picks the ring around the center; the one shown already changes nothing. */
       showAround: (kind: OuterKind) => {
