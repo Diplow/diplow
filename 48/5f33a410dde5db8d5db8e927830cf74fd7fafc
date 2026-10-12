@@ -1,0 +1,27 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/HoverCard.tsx
+  s_6c94d00c8dfcf4::t_a348fc15e4cfbb 108
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/atoms/Menu.tsx
+  s_6c94d00c8dfcf4::t_a348fc15e4cfbb 278
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/layouts/Drawer.tsx
+  s_6c94d00c8dfcf4::t_aa4ce787eb33e7 23,27
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/ConfirmDialog.tsx
+  s_6c94d00c8dfcf4::t_aa4ce787eb33e7 32-33
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/layouts/Widget.tsx
+  s_6c94d00c8dfcf4::t_a348fc15e4cfbb 199
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "485f33a410dde5db8d5db8e927830cf74fd7fafc",
+  "prompts": {},
+  "sessions": {
+    "s_6c94d00c8dfcf4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1e6d2617-3bbe-4f2d-a798-ac7dd5ce9e37",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
