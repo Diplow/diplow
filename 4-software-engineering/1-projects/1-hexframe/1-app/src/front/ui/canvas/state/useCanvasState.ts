@@ -81,11 +81,13 @@ interface Inside {
 }
 
 /** The lines of a tile's menu that go somewhere: the view's, which the canvas runs itself. */
-export type ViewVerb = 'open' | 'go-in' | 'show-context' | 'back-out'
+const viewVerbs = ['open', 'go-in', 'show-context', 'back-out'] as const
+
+export type ViewVerb = (typeof viewVerbs)[number]
 
 /** Whether a menu's line is the view's to run. */
 export const isViewVerb = (verb: string): verb is ViewVerb =>
-  verb === 'open' || verb === 'go-in' || verb === 'show-context' || verb === 'back-out'
+  (viewVerbs as readonly string[]).includes(verb)
 
 /** The gestures that close an opened hex, whose six fold back into its heart first. */
 const closing = new Set<TileAction>(['collapse', 'hide-context', 'hide-leaves'])

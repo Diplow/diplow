@@ -36,9 +36,9 @@ import {
   type Systems,
 } from '../acting'
 import {
+  afterDelete,
   changeOf,
   withChange,
-  withoutTile,
   type Change,
   type SearchChange,
   type SystemSearch,
@@ -201,16 +201,19 @@ export function useActingState({ systems, search, onSearchChange, exporting }: A
   }
 
   const deleteOf = (gone: TileNode): Deleting | undefined => {
-    const version = tileIn(root, gone.id)?.tile.version
-    if (version === undefined) return undefined
+    const found = tileIn(root, gone.id)
+    if (found?.parent === undefined) return undefined
+    const { version } = found.tile
+    const parent = found.parent.id
     return {
       title: gone.title,
       below: tilesBelow(flat, gone.id),
       confirm: () => {
         setDeleting(undefined)
         remove.mutate({ id: gone.id, version })
-        // The view stays: the Tile goes from it, and a change under way that named it ends.
-        onSearchChange((current) => withoutTile(current, gone))
+        // As the widget's delete does: the Tile it stood under centered, a change under way that
+        // named it ended.
+        onSearchChange(afterDelete(tree, parent, gone))
       },
       cancel: () => {
         setDeleting(undefined)

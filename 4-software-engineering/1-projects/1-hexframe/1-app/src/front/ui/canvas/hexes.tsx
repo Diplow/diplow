@@ -8,7 +8,7 @@ import type { PointerEvent, ReactElement } from 'react'
 import type { EmptySlotTarget } from './geometry/shape'
 import type { Action, Hand } from './keys'
 import type { Target } from './state/move/useMove'
-import { isViewVerb, type TileHex } from './state/useCanvasState'
+import { isViewVerb, type TileHex, type ViewVerb } from './state/useCanvasState'
 import { TileMenu } from './tile/menu/TileMenu'
 import type { PickerFrame } from './tile/menu/Picker'
 import { groupsOf, type Subject, type TileAct, type Verb } from './tile/menu/verbs'
@@ -38,6 +38,9 @@ export interface Moving {
   swapTargets: (tile: TileNode) => Action | undefined
 }
 
+/** A place the tile on the move lands on, and its name for a screen reader. */
+export type Landing = Target & { label: string }
+
 /** Whether a subject's menu lets it move, and so a mouse drag it. */
 const moves = ({ subject, without = [] }: Acting) =>
   !without.includes('move') && groupsOf(subject).some((group) => group.includes('move'))
@@ -54,7 +57,7 @@ export interface TileHexProps {
   draw: (hand?: Hand) => ReactElement
   acting: Acting | undefined
   /** The line of its menu that goes somewhere, which the canvas runs. */
-  go: (verb: 'open' | 'go-in' | 'show-context' | 'back-out') => void
+  go: (verb: ViewVerb) => void
   moving: Moving | undefined
   /** Another hex's menu is open: this one steps back. */
   aside: boolean
@@ -63,6 +66,8 @@ export interface TileHexProps {
   shift: { by: { x: number; y: number }; glides: boolean }
   /** No landing may start: its tile is in the air. */
   inTheAir: boolean
+  /** The swap it offers the tile on the move, if it does. */
+  swap: Landing | undefined
   over: boolean
   scale: number
   tileRef: (element: Element | null) => void
@@ -76,9 +81,8 @@ export interface TileHexProps {
  * meanwhile; gliding as it lands.
  */
 export function TileHexView(props: TileHexProps) {
-  const { hex, look, draw, acting, moving, shift, scale } = props
+  const { hex, look, draw, acting, moving, shift, scale, swap } = props
   const self = standsFor(hex, moving?.id)
-  const swap = moving === undefined || self ? undefined : moving.swapTargets(hex.tile)
   const aside = moving === undefined ? props.aside : !self && swap === undefined
   const drags = acting !== undefined && moves(acting) && hex.tile.reference === undefined
   return (
@@ -121,12 +125,7 @@ export function TileHexView(props: TileHexProps) {
           action={{
             label: swap.label,
             onSelect: () => {
-              props.land({
-                key: hex.key,
-                center: hex.hex.center,
-                partner: hex.tile.id,
-                land: swap.onSelect,
-              })
+              props.land(swap)
             },
           }}
         />
@@ -139,6 +138,8 @@ export function TileHexView(props: TileHexProps) {
 export interface SlotHexProps {
   hex: { key: string; hex: TileHex['hex']; slot: EmptySlotTarget }
   action: Action | undefined
+  /** Where the tile on the move lands in it, if it does. */
+  landing: Landing | undefined
   loading: boolean
   acting: Acting | undefined
   moving: boolean
@@ -153,9 +154,9 @@ export interface SlotHexProps {
  * it takes the tile, dotted where it doesn't.
  */
 export function SlotHexView(props: SlotHexProps) {
-  const { hex, action, acting } = props
+  const { hex, action, acting, landing } = props
   if (props.moving) {
-    if (action === undefined || props.inTheAir) {
+    if (landing === undefined || props.inTheAir) {
       return <Slot hex={hex.hex} loading={props.loading} />
     }
     return (
@@ -163,9 +164,9 @@ export function SlotHexView(props: SlotHexProps) {
         hex={hex.hex}
         over={props.over}
         action={{
-          label: action.label,
+          label: landing.label,
           onSelect: () => {
-            props.land({ key: hex.key, center: hex.hex.center, land: action.onSelect })
+            props.land(landing)
           },
         }}
       />

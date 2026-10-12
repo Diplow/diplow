@@ -125,6 +125,18 @@ function ringOf(parent: TileNode, located: Located): Partial<Record<Direction, T
   return { ...parent.leaves, ...parent.branches }
 }
 
+/** The slot of its own kind a Tile goes to in a Direction of its ring: a Context, a Leaf or a Branch slot. */
+function slotAt(located: Located, direction: Direction): Slot {
+  switch (located.kind) {
+    case 'context':
+      return contextSlotOf(direction)
+    case 'leaf':
+      return { leaf: direction }
+    default:
+      return direction
+  }
+}
+
 /** The ring a Tile stands in, as its Move submenu draws it: whom it trades with, where it lands. */
 function standsIn(systems: Systems, hex: TileHex, located: Located): PickerFrame | undefined {
   const { flat } = systems
@@ -138,21 +150,12 @@ function standsIn(systems: Systems, hex: TileHex, located: Located): PickerFrame
       seats[direction] = { title: seated.title, swaps: swapsWith(flat, hex.tile, seated) }
     }
   }
-  const slotAt = (direction: Direction): Slot => {
-    switch (located.kind) {
-      case 'context':
-        return contextSlotOf(direction)
-      case 'leaf':
-        return { leaf: direction }
-      default:
-        return direction
-    }
-  }
   return {
     hub: parent.title,
     seats,
     lands: (direction) =>
-      allows(flat, hex.tile.id, { parent: parent.id, slot: slotAt(direction) }) !== undefined,
+      allows(flat, hex.tile.id, { parent: parent.id, slot: slotAt(located, direction) }) !==
+      undefined,
   }
 }
 
@@ -181,13 +184,13 @@ export function withoutOf({ root }: Systems, hex: TileHex): Verb[] {
 }
 
 /** The move of a Tile to the free place `at` of the ring it stands in, as Mapping would make it. */
-export function moveTo(systems: Systems, hex: TileHex, at: Direction) {
-  const located = tileIn(systems.root, hex.tile.id)
-  const lands = located && standsIn(systems, hex, located)?.lands
-  if (located === undefined || located.kind === 'root' || lands?.(at) !== true) return undefined
-  const slot: Slot =
-    located.kind === 'context' ? contextSlotOf(at) : located.kind === 'leaf' ? { leaf: at } : at
-  return moveOf(systems.flat, hex.tile.id, { parent: located.parent.id, slot })
+export function moveTo({ root, flat }: Systems, hex: TileHex, at: Direction) {
+  const located = tileIn(root, hex.tile.id)
+  const parent = hex.parent
+  if (located === undefined || located.kind === 'root' || parent === undefined) return undefined
+  // Into a free place only: a taken one is a swap.
+  if (ringOf(parent, located)[at] !== undefined) return undefined
+  return allows(flat, hex.tile.id, { parent: parent.id, slot: slotAt(located, at) })
 }
 
 /** The swap of a Tile with the one seated at `at` in the ring it stands in, where it trades. */

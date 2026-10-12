@@ -246,8 +246,11 @@ describe('a line that writes', () => {
       expect(Mapping.deleteTile).toHaveBeenCalledWith({ data: { id: 'holding', version: 1 } })
     })
     expect(result.current.deleting).toBeUndefined()
-    // The move of a Tile that went with it ends; the view stays.
-    expect(changed(onSearchChange, { move: 'inner' })).toMatchObject({ move: undefined })
+    // As the widget's delete: the Tile it stood under centered, the move of a Tile that went ends.
+    expect(changed(onSearchChange, { center: 'holding', move: 'inner' })).toMatchObject({
+      center: undefined,
+      move: undefined,
+    })
   })
 
   it('sends no delete called off', () => {

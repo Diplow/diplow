@@ -12,11 +12,18 @@ import { m } from '#/paraglide/messages'
 
 import { canvasSize, type EmptySlotTarget } from './geometry/shape'
 import type { Point } from './geometry/geometry'
-import { SlotHexView, standsFor, TileHexView, type Acting, type Moving } from './hexes'
+import {
+  SlotHexView,
+  standsFor,
+  TileHexView,
+  type Acting,
+  type Landing,
+  type Moving,
+} from './hexes'
 import type { Action } from './keys'
 import { Button } from '../atoms/controls/button'
 import { nearestOf } from './state/move/targets'
-import { useMove, type Target } from './state/move/useMove'
+import { useMove } from './state/move/useMove'
 import { useCanvasState, type TileAction, type TileHex } from './state/useCanvasState'
 import { useScale } from './state/useScale'
 import { useFinger } from './tile/menu/TileMenu'
@@ -94,6 +101,7 @@ export function Canvas(props: CanvasProps) {
   const moving = move?.moving
   const placed = centersOf(state.hexes)
   const targets = moving === undefined ? [] : targetsOf(state.hexes, { emptySlots, moving })
+  const targetAt = new Map(targets.map((target) => [target.key, target]))
   const gesture = useMove({
     units: unitsIn(svg),
     moving: moving?.id,
@@ -148,6 +156,7 @@ export function Canvas(props: CanvasProps) {
         onMenu={onMenu(hex.key)}
         shift={hex.tile.reference === undefined ? gesture.shiftOf(hex.tile.id) : still}
         inTheAir={inTheAir}
+        swap={targetAt.get(hex.key)}
         over={gesture.over === hex.key}
         scale={scale}
         tileRef={gesture.tileRef(hex.tile.id)}
@@ -189,6 +198,7 @@ export function Canvas(props: CanvasProps) {
                     key={hex.key}
                     hex={hex}
                     action={emptySlots?.(hex.slot)}
+                    landing={targetAt.get(hex.key)}
                     loading={writes?.landing(hex.slot) ?? false}
                     acting={acting?.slot(hex.slot)}
                     moving={moving !== undefined}
@@ -226,23 +236,24 @@ function centersOf(hexes: Hexes): Map<string, Point> {
 }
 
 /**
- * Where the Tile on the move can land, as drawn: each free slot its caller lands it in, each Tile it
- * trades places with, within most of a hex of its heart.
+ * Where the Tile on the move can land, as drawn, each by its hex's key: each free slot its caller
+ * lands it in, each Tile it trades places with, within most of a hex of its heart; what a click on
+ * it and a drop there do alike.
  */
 function targetsOf(
   hexes: Hexes,
   { emptySlots, moving }: { emptySlots: CanvasProps['emptySlots']; moving: Moving },
-): (Target & { reach: number })[] {
+): (Landing & { reach: number })[] {
   return hexes.flatMap((hex) => {
-    const reach = hex.hex.radius * 0.8
-    const at = { key: hex.key, center: hex.hex.center, reach }
+    const at = { key: hex.key, center: hex.hex.center, reach: hex.hex.radius * 0.8 }
     if (hex.kind === 'empty') {
       const action = emptySlots?.(hex.slot)
-      return action === undefined ? [] : [{ ...at, land: action.onSelect }]
+      return action === undefined ? [] : [{ ...at, label: action.label, land: action.onSelect }]
     }
     if (hex.kind !== 'tile' || standsFor(hex, moving.id)) return []
     const swap = moving.swapTargets(hex.tile)
-    return swap === undefined ? [] : [{ ...at, partner: hex.tile.id, land: swap.onSelect }]
+    if (swap === undefined) return []
+    return [{ ...at, label: swap.label, partner: hex.tile.id, land: swap.onSelect }]
   })
 }
 
