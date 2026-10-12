@@ -434,3 +434,12 @@ Found and left, for a later ticket of the project, since each changes what the s
 - **Nothing signs out on home**: `/sign-out` waits with the other commands (`HEX-101#PARK-1`).
 
 Not reproduced: HEX-110's report that sending a Message hangs the dev server. Two Messages sent, on the in-memory PGlite and the fake agent, each answered with its Proposal in under five seconds.
+
+### DEC-52 3-design-system/ retired: every page found in ui/, the comments naming `components.html` kept as history, DIRECTION's "On shadcn" left to git
+
+HEX-112. Before the folder went, each of its pages was looked for in hexframe's `ui/`: the six principles, "Dark by default, light as its equal" and "One screen, two sides" of `DIRECTION.md` in `ui/CLAUDE.md` (HEX-93); `TOKENS.md`'s colour, type, shape, phone and touch, light and motion as the notes of `gallery/Tokens.tsx` (HEX-94); the registry's tokens and fonts in `src/front/styles.css` and the three fontsource packages; `prototype.html` as the `Screen` (HEX-95); and each of the fourteen sections of `components.html`, from the widget to the path, as a piece of `gallery/pieces.ts` (HEX-96 to HEX-108). Nothing in `ui/` read from the folder, and neither the pnpm workspace, CI nor Vercel named it.
+
+- **The pointers went, the history stayed.** The root `STACK.md`, `1-projects/CLAUDE.md` and the hexframe docs that said "until HEX-112 retires it" (`ui/CLAUDE.md`, `ui/gallery/CLAUDE.md`, `src/front/CLAUDE.md`) no longer point at the folder: `styles.css` owns the token values, `Tokens.tsx` their notes. `2-site/CLAUDE.md` named nothing of it. The registers keep their mentions, as the ticket says.
+- **The comments naming `components.html#<section>`** (in `canvas/tile/`, `canvas/state/move/` and `canvas/tile/CLAUDE.md`) stay as they are: each names the proposal it came from beside the section, the way the registers keep their history, and the section is in the folder's last commit.
+- **A gap, recorded, not ported:** `DIRECTION.md`'s "On shadcn" paragraph, that a component is drawn from the principles where it is used rather than adjusted from one of shadcn's styles, has no paragraph of its own in `ui/CLAUDE.md`; the closed list and its rules carry it in part. It reads in the folder's last commit if a later ticket wants it written down.
+- **Left for Ulysse, frozen to the run:** `.run/CLAUDE.md` still says the run "may delete `4-software-engineering/1-projects/3-design-system/` (HEX-112)", and `.run/design-system.yaml`'s never list and comment still name the folder.
