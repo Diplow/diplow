@@ -1,11 +1,11 @@
-// A tile, drawn by its light alone (HEX-104's proposal; HEX-106 puts it on the canvas in place of
-// ../Tile.tsx). What it is, where it stands, what happens to it and who touches it change that
-// light, and never add a box: a Branch fades toward its foot, where its frame shows in small; a Leaf
-// is lit evenly; the Context is teal; the root, the only warm tile, is you. Under the pointer the
-// light rises; the keyboard's focus is the ring's amber line; the center keeps the one steady line.
-// A write still on its way sweeps a light over it; refused, it flares and its caller puts it back.
-// Its words are fitted to its size on screen (words.ts). It is an SVG group, drawn inside the
-// canvas's <svg> at its hex, and a button when its caller says what a click does.
+// A tile, drawn by its light alone (HEX-104's proposal, on the canvas since HEX-106). What it is,
+// where it stands, what happens to it and who touches it change that light, and never add a box: a
+// Branch fades toward its foot, where its frame shows in small; a Leaf is lit evenly; the Context
+// is teal; the root, the only warm tile, is you. Under the pointer the light rises; the keyboard's
+// focus is the ring's amber line; the center keeps the one steady line. A write still on its way
+// sweeps a light over it; refused, it flares and its caller puts it back. Its words are fitted to
+// its size on screen (words.ts). It is an SVG group, drawn inside the canvas's <svg> at its hex,
+// and a button when its caller says what a click does.
 import { Link } from 'lucide-react'
 import { Slot } from 'radix-ui'
 import {

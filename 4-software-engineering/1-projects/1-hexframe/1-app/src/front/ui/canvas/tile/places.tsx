@@ -1,8 +1,8 @@
-// The places a tile stands in, drawn by their light as tiles are (HEX-104's proposal; HEX-106 puts
-// them on the canvas in place of ../Frame.tsx): a free slot, with a plus only where a click adds a
-// tile; where nothing can be added, a dotted place and no plus; where tiles will be while they load,
-// a sweep of light; and the ground a hex gives way to when it opens in place, faint, or teal and
-// dashed under the center's Context.
+// The places a tile stands in, drawn by their light as tiles are (HEX-104's proposal, on the canvas
+// since HEX-106): a free slot, with a plus only where a click adds a tile; where nothing can be
+// added, a dotted place and no plus; where tiles will be while they load, a sweep of light; and the
+// ground a hex gives way to when it opens in place, faint, or teal and dashed under the center's
+// Context.
 import { Slot as Handed } from 'radix-ui'
 
 import type { Hex } from '../geometry/geometry'
