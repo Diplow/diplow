@@ -7,7 +7,9 @@
 // Tile moves, dragged or from its menu, its banner at the canvas's foot (`hexes.tsx`). Where its
 // caller says who touches what, each Tile carries its mark, the chat pointing at it lights it or its
 // way, a tile being written or proposed stands in its free slot, and a proposed move draws its arc.
-import { useRef, useState } from 'react'
+// Where its caller takes a tile carried off it, a tile dragged off the canvas follows the pointer
+// over the page, for its caller to hand on.
+import { useRef, useState, type RefObject } from 'react'
 import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
@@ -25,12 +27,13 @@ import {
 import type { Action } from './keys'
 import { Button } from '../atoms/controls/button'
 import { nearestOf } from './state/move/targets'
+import type { CarriedTile, CarryInput } from './state/move/carry'
 import { useMove } from './state/move/useMove'
 import { useCanvasState, type TileAction, type TileHex } from './state/useCanvasState'
 import { useScale } from './state/useScale'
 import { useFinger } from './tile/menu/TileMenu'
 import { unitsIn } from './tile/moving/drag'
-import { MoveBanner } from './tile/moving/Moving'
+import { Carried, MoveBanner } from './tile/moving/Moving'
 import { Arc } from './tile/marks/Marks'
 import { wayTo, type TileMark } from './tile/marks/mark'
 import { Ground } from './tile/places'
@@ -110,11 +113,16 @@ interface CanvasProps {
   writes?: Writes
   /** Who touches what it draws: without it, nobody does. */
   marks?: CanvasMarks
+  /**
+   * A Tile dragged off the canvas under a mouse or a pen, carried over the page, as it goes off; none
+   * once it comes back or is let go, which ends its move. Without it, a drag stays on the canvas.
+   */
+  onCarry?: ((tile: CarriedTile | undefined) => void) | undefined
   className?: string
 }
 
 export function Canvas(props: CanvasProps) {
-  const { system, view, onViewChange, emptySlots, acting, move, writes, marks, className } = props
+  const { system, view, onViewChange, emptySlots, acting, move, writes, marks, onCarry } = props
   const finger = useFinger()
   const { state, actions } = useCanvasState({ system, view, onViewChange, finger })
   const svg = useRef<SVGSVGElement>(null)
@@ -134,6 +142,7 @@ export function Canvas(props: CanvasProps) {
     centerOf: (id) => placed.get(id),
     dropAt: (point) => nearestOf(point, targets),
     writeOf: (id) => writes?.tile(id),
+    ...carryOf(svg, state.hexes, onCarry),
   })
   const inTheAir = gesture.landing !== undefined && gesture.landing !== 'landed'
   // While a tile moves, nothing stands in a free slot: they offer themselves to it.
@@ -202,7 +211,7 @@ export function Canvas(props: CanvasProps) {
   const dragged = (hex: (typeof state.hexes)[number]) =>
     Number(hex.kind === 'tile' && standsFor(hex, gesture.dragging))
   return (
-    <div className={cn('flex min-h-0 flex-col gap-2', className)}>
+    <div className={cn('flex min-h-0 flex-col gap-2', props.className)}>
       <RingChooser
         title={state.center.title}
         rings={state.rings}
@@ -260,9 +269,39 @@ export function Canvas(props: CanvasProps) {
         <Arcs hexes={state.hexes} arcs={marks?.arcs} />
       </svg>
       {moving === undefined ? null : <MoveBanner title={moving.title} onStop={gesture.stop} />}
+      {gesture.carried && (
+        <Carried title={titleIn(state.hexes, gesture.carried.id)} at={gesture.carried.at} />
+      )}
     </div>
   )
 }
+
+/**
+ * How a Tile dragged off the canvas is carried, where its caller takes it: off the <svg>'s box on the
+ * page, told by its id and title.
+ */
+function carryOf(
+  svg: RefObject<SVGSVGElement | null>,
+  hexes: Hexes,
+  onCarry: CanvasProps['onCarry'],
+): CarryInput {
+  if (onCarry === undefined) return {}
+  return {
+    offCanvas: (client) => !within(svg.current?.getBoundingClientRect(), client),
+    onCarry: (id) => {
+      onCarry(id === undefined ? undefined : { id, title: titleIn(hexes, id) })
+    },
+  }
+}
+
+/** Whether a point of the page is inside a box drawn on it. */
+const within = (box: DOMRect | undefined, { x, y }: Point) =>
+  box !== undefined && x >= box.left && x <= box.right && y >= box.top && y <= box.bottom
+
+/** The title of the Tile of this id, as the canvas draws it. */
+const titleIn = (hexes: Hexes, id: string) =>
+  hexes.flatMap((hex) => (hex.kind === 'tile' && hex.tile.id === id ? [hex.tile.title] : []))[0] ??
+  ''
 
 const still = { by: { x: 0, y: 0 }, glides: false }
 

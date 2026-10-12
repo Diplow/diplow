@@ -14,7 +14,8 @@ import { useNavigationSender } from './useNavigationSender'
 
 // The navigation sender, over stand-ins for the server functions: gestures published as navigation
 // facts, as home publishes them, merge into one navigation, sent once a Message, a write to the System
-// or the page hiding comes next, and never one per gesture. The merge rule itself is Assistant's
+// or the page hiding comes next, and never one per gesture; the navigation under way shown meanwhile,
+// gone once sent. The merge rule itself is Assistant's
 // (`domains/assistant/entities/navigation.test.ts`).
 vi.mock('#/api/assistant/assistant', () => ({
   conversationDay: vi.fn(),
@@ -176,5 +177,27 @@ describe('the navigation sender', () => {
       [{ gesture: 'center', tile: 'a' }],
       [{ gesture: 'show-context', tile: 'b' }],
     ])
+  })
+
+  it('shows the navigation under way as each gesture joins it, and none once it is sent', async () => {
+    const { result } = rendered()
+    expect(result.current.sender.underWay).toBeUndefined()
+    gesture('a')
+    gesture('b', 'expand')
+    expect(result.current.sender.underWay?.navigation).toEqual({
+      _tag: 'Navigation',
+      steps: [
+        { gesture: 'center', tile: 'a' },
+        { gesture: 'expand', tile: 'b' },
+      ],
+      gestures: 2,
+    })
+    act(() => {
+      result.current.sender.postMessage({ text: 'Here', view })
+    })
+    expect(result.current.sender.underWay).toBeUndefined()
+    await waitFor(() => {
+      expect(postMessage).toHaveBeenCalledTimes(1)
+    })
   })
 })

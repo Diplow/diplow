@@ -1,8 +1,10 @@
 // What the composer's field holds, read: the commands home offers and runs, what the caret stands in
 // and lists, a `/` opening the field the commands (ui's `commands.ts`), an `@` the Account's Tiles
 // (`./mention.ts`), what a pick puts in it, and what a Message sent is, a command run or words for the
-// agent; what the field shows marked is ui's `fieldMarksOf`, which the gallery's demo reads too. Pure;
-// the composer's state hook (`../state/useComposerState.ts`) runs it.
+// agent; a Tile named from outside, dropped at the caret or first as a tile's menu asks the agent;
+// and where the Turn the field's Message starts works. What the field shows marked is ui's
+// `fieldMarksOf`, which the gallery's demo reads too. Pure; the composer's state hook
+// (`../state/useComposerState.ts`) runs it.
 import {
   type Command,
   type CommandId,
@@ -10,13 +12,15 @@ import {
   commands,
   commandTypingAt,
   languageNamed,
+  namedAt,
+  namedFirst,
   openingCommand,
   type Picked,
   showsLink,
   tileTyping,
   type Typing,
 } from '#/front/ui/chat/composer/commands'
-import type { Mode } from '#/domains/assistant/entities'
+import { type Mode, turnLocation } from '#/domains/assistant/entities'
 
 import {
   type Edited,
@@ -139,3 +143,57 @@ export function submittedOf(
 }
 
 const isRun = (id: CommandId | undefined): id is RunCommand => run.some((each) => each === id)
+
+/** Where a Tile is named from outside: at the caret, as a drop names it, or first, `then` after it. */
+export type NameAt = 'caret' | { readonly first: true; readonly then: string }
+
+/**
+ * The field with a Tile named from outside, shown as a pick would show it, and the link it adds: at
+ * the caret, a tile carried from the canvas let go over the composer; or first, what was written
+ * kept, so the next Turn works there, a tile's menu asking the agent (HEX-110).
+ */
+export function namedIn(
+  field: Field,
+  tile: Mentionable,
+  where: NameAt,
+): Edited & { readonly link: Inserted } {
+  const shown = shownOf(tile, field.links)
+  // ui's naming writes the `@` itself.
+  const title = shown.slice(1)
+  const edited =
+    where === 'caret'
+      ? namedAt(field.value, field.caret, title)
+      : namedFirst(field.value, title, where.then)
+  return { ...edited, link: { id: tile.id, shown } }
+}
+
+/**
+ * Where the Turn answering what the field sends would work, the canvas centered on `center`, as
+ * Assistant decides it (`turnLocation`): the Tile the Message opens with a link to, `first`, else the
+ * centered one, the words after a command being the Message; none where no Message goes, a language
+ * or a command alone, nor for a Tile the page can't name.
+ */
+export function workingInOf(
+  field: Field,
+  {
+    center,
+    tiles,
+    among,
+  }: {
+    readonly center: string
+    readonly tiles: ReadonlyArray<Mentionable>
+    readonly among: ReadonlyArray<Command>
+  },
+): { readonly title: string; readonly first: boolean } | undefined {
+  const submitted = submittedOf(field, among)
+  const message =
+    submitted === undefined || 'language' in submitted
+      ? undefined
+      : 'message' in submitted
+        ? submitted.message
+        : submitted.then
+  if (message === undefined) return undefined
+  const location = turnLocation(message, center)
+  const tile = tiles.find(({ id }) => id === location)
+  return tile === undefined ? undefined : { title: tile.title, first: location !== center }
+}

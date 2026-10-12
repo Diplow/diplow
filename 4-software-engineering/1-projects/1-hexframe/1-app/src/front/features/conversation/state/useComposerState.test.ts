@@ -3,6 +3,8 @@ import { act, cleanup, renderHook } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import { linkTo } from '#/domains/assistant/entities'
+import { publish } from '#/front/features/bus'
+import { AskedAboutTile } from '#/front/features/facts'
 import { m } from '#/paraglide/messages'
 
 import type { Mentionable } from '../composer/mention'
@@ -13,9 +15,13 @@ import { useComposerState } from './useComposerState'
 // commands home offers, the language listing the languages, an `@` the Tiles, a pick putting its row
 // in the field, and what a Message sent is, a command run or words with each link by its Tile's id.
 // How the `@` finds and inserts is `../composer/mention.test.ts`; what the commands list is ui's
-// `commands.test.ts`.
+// `commands.test.ts`. And a Tile named from outside, at the caret or first, and where the next Turn
+// works, the canvas centered on a Tile.
 
-afterEach(cleanup)
+afterEach(() => {
+  cleanup()
+  document.body.replaceChildren()
+})
 
 const tiles: ReadonlyArray<Mentionable> = [
   { id: 'root', title: 'Ada', trail: [] },
@@ -24,9 +30,11 @@ const tiles: ReadonlyArray<Mentionable> = [
   { id: 'lead', title: 'Team lead', trail: ['Ada'] },
 ]
 
-function render(offering = { modes: true, undoable: true }) {
+function render(offering = { modes: true, undoable: true }, center?: string) {
   const among = offered(offering)
-  const { result } = renderHook(() => useComposerState(tiles, among))
+  const field = { current: document.createElement('textarea') }
+  document.body.append(field.current)
+  const { result } = renderHook(() => useComposerState(tiles, among, { center, field }))
   /** The user typed `value`, the caret at its end unless told. */
   const type = (value: string, caret = value.length) => {
     act(() => {
@@ -49,7 +57,14 @@ function render(offering = { modes: true, undoable: true }) {
     })
     return submitted
   }
-  return { result, type, rows, pick, send }
+  const name = (tile: string, where: Parameters<typeof result.current.actions.name>[1]) => {
+    let named: ReturnType<typeof result.current.actions.name>
+    act(() => {
+      named = result.current.actions.name(tile, where)
+    })
+    return named
+  }
+  return { result, type, rows, pick, send, name, field }
 }
 
 describe("the composer's commands", () => {
@@ -175,5 +190,108 @@ describe("the composer's @", () => {
     type('@Workshop')
     expect(result.current.state.marks).toEqual([])
     expect(send()).toEqual({ message: '@Workshop' })
+  })
+})
+
+describe('a Tile named from outside', () => {
+  it('is named at the caret, as a drop names it, and sent by its id', () => {
+    const { result, type, name, send } = render()
+    type('Look at  please', 8)
+    expect(name('work', 'caret')).toEqual({
+      value: 'Look at @Work please',
+      caret: 14,
+      link: { id: 'work', shown: '@Work' },
+    })
+    expect(result.current.state.value).toBe('Look at @Work please')
+    expect(send()).toEqual({ message: `Look at ${linkTo('work')} please` })
+  })
+
+  it('is named first, what was written kept, as a menu asks the agent about it', () => {
+    const { name, type, send } = render()
+    type('what is missing?')
+    expect(name('team', { first: true, then: '' })).toMatchObject({
+      value: '@Team what is missing?',
+      caret: 6,
+    })
+    expect(send()).toEqual({ message: `${linkTo('team')} what is missing?` })
+  })
+
+  it('opens with the words its caller gives after it, and keeps one link, named again', () => {
+    const { result, name, send } = render()
+    name('work', { first: true, then: 'a new tile, east: ' })
+    expect(result.current.state.value).toBe('@Work a new tile, east: ')
+    name('work', { first: true, then: '' })
+    expect(result.current.state.value).toBe('@Work a new tile, east: ')
+    expect(send()).toEqual({ message: `${linkTo('work')} a new tile, east:` })
+  })
+
+  it('tells a Tile apart from another of its Title already named, and names none it lacks', () => {
+    const twins: ReadonlyArray<Mentionable> = [
+      { id: 'a', title: 'Notes', trail: ['Ada'] },
+      { id: 'b', title: 'Notes', trail: ['Ada', 'Work'] },
+    ]
+    const { result } = renderHook(() => useComposerState(twins, []))
+    const name = (tile: string) => {
+      let named: ReturnType<typeof result.current.actions.name>
+      act(() => {
+        named = result.current.actions.name(tile, 'caret')
+      })
+      return named
+    }
+    name('a')
+    expect(name('b')).toMatchObject({ link: { id: 'b', shown: '@Work / Notes' } })
+    expect(name('gone')).toBeUndefined()
+  })
+})
+
+describe('a menu asking the agent', () => {
+  it('names its Tile first in the field, the caret after it and the focus there', () => {
+    const { result, type, field } = render()
+    type('what next?')
+    act(() => {
+      publish(new AskedAboutTile({ tile: 'work' }))
+    })
+    expect(result.current.state.value).toBe('@Work what next?')
+    expect(field.current.value).toBe('@Work what next?')
+    expect(field.current.selectionStart).toBe(6)
+    expect(document.activeElement).toBe(field.current)
+  })
+
+  it("names a free slot's Tile, then the place a new one would take", () => {
+    const { result } = render()
+    act(() => {
+      publish(new AskedAboutTile({ tile: 'root', place: 3 }))
+    })
+    expect(result.current.state.value).toBe(
+      `@Ada ${m.crossing_ask_for_one({ direction: m.direction_east() })}`,
+    )
+  })
+})
+
+describe('where the next Turn works', () => {
+  it('is the centered Tile, until the Message opens with a link to another', () => {
+    const { result, type, pick } = render({ modes: true, undoable: true }, 'work')
+    expect(result.current.state.workingIn).toEqual({ title: 'Work', first: false })
+    type('@Te')
+    pick('team')
+    expect(result.current.state.workingIn).toEqual({ title: 'Team', first: true })
+    type('see @Team')
+    expect(result.current.state.workingIn).toEqual({ title: 'Work', first: false })
+  })
+
+  it('is read off what the field sends: the words after a command, none for a command alone', () => {
+    const { result, type, pick } = render({ modes: true, undoable: true }, 'work')
+    type('/apply ')
+    expect(result.current.state.workingIn).toBeUndefined()
+    type('/apply @Te')
+    pick('team')
+    expect(result.current.state.workingIn).toEqual({ title: 'Team', first: true })
+    type('/language ')
+    expect(result.current.state.workingIn).toBeUndefined()
+  })
+
+  it('is none while the page says no center', () => {
+    const { result } = render()
+    expect(result.current.state.workingIn).toBeUndefined()
   })
 })

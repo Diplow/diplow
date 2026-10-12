@@ -2,9 +2,11 @@
 // day at a time, today first and each earlier day holding an Entry as the reader asks for it, a Tile
 // named handing its Tile to the route to center, an open Proposal accepted or discarded where it
 // stands, and what was applied undone; after it, the user's Messages still on their way, or refused
-// with a retry, and the agent's step while a Turn runs, as the route's poll last saw it. `ChatComposer`,
+// with a retry, where they went that it doesn't hold yet, each gesture joining the navigation under
+// way, and the agent's step while a Turn runs, as the route's poll last saw it. `ChatComposer`,
 // the composer, whose Message the route posts after the navigation it follows, saying so when the
-// Account may not use the Assistant; its commands switch the Mode, undo what the agent last applied, or
+// Account may not use the Assistant, and where the next Turn works, the canvas's center unless the
+// Message opens with a link, naming a Tile carried from the canvas or one a menu asks the agent about; its commands switch the Mode, undo what the agent last applied, or
 // go to another language. While a Turn runs, the field waits and send becomes Stop. It offers the
 // Account's Tiles to `@`, from the System the page holds. The Mode, as the poll last saw it, shows under
 // the field, switched through `useSetMode`, the one switched to shown while the switch is on its way.
@@ -19,6 +21,7 @@ import {
   useConversation,
   useDiscardProposal,
   useMessagesOnTheirWay,
+  useNavigationsOnTheirWay,
   useSetMode,
   useStopTurn,
   useUndo,
@@ -28,10 +31,11 @@ import type { LiveTurn } from '#/front/client/assistant/follow'
 import { useSystem } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
+import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 
 import { mentionablesOf } from './composer/mention'
 import { ConversationFoot, Timeline } from './Conversation'
-import { dayOf, latestUndoable } from './timeline/timeline'
+import { dayOf, latestUndoable, type Went } from './timeline/timeline'
 
 /** The Account's Tiles the chat names and offers to `@`, from the System the page holds. */
 function useTiles() {
@@ -60,9 +64,11 @@ interface ChatTimelineProps {
   turn: LiveTurn | undefined
   /** Posts a refused Message again, after the navigation it follows. */
   resend: (sent: Sent) => void
+  /** Where the user went since the last navigation sent, merged, and when they last went. */
+  underWay: Went | undefined
 }
 
-export function ChatTimeline({ onCenter, pointing, turn, resend }: ChatTimelineProps) {
+export function ChatTimeline({ onCenter, pointing, turn, resend, underWay }: ChatTimelineProps) {
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useConversation()
   const accepting = useAcceptProposal()
   const discarding = useDiscardProposal()
@@ -75,6 +81,7 @@ export function ChatTimeline({ onCenter, pointing, turn, resend }: ChatTimelineP
     [tiles],
   )
   const { messages, forget } = useMessagesOnTheirWay()
+  const recording = useNavigationsOnTheirWay()
   if (data === undefined) return <Skeleton className="h-40" />
   const now = new Date()
   // The pages come today first; the timeline reads oldest first.
@@ -96,6 +103,8 @@ export function ChatTimeline({ onCenter, pointing, turn, resend }: ChatTimelineP
           resend(sent)
         },
       }))}
+      going={recording}
+      underWay={underWay}
       turn={turn}
       earlier={
         hasNextPage
@@ -132,9 +141,14 @@ interface ChatComposerProps {
   mode: Mode | undefined
   /** The `@` list's row the user is on, a Tile's by its id, or none: the canvas lights it. */
   onPoint: (row: string | undefined) => void
+  /** The Tile centered on the canvas, where the next Turn works unless the Message names another. */
+  center: string | undefined
+  /** A Tile carried off the canvas, which the composer names where it is let go. */
+  carried: CarriedTile | undefined
 }
 
-export function ChatComposer({ onSend, turn, mode, onPoint }: ChatComposerProps) {
+export function ChatComposer(props: ChatComposerProps) {
+  const { onSend, turn, mode, onPoint, center, carried } = props
   const tiles = useTiles()
   const entries = useEntries()
   const { data: available } = useAssistantAvailable()
@@ -171,6 +185,8 @@ export function ChatComposer({ onSend, turn, mode, onPoint }: ChatComposerProps)
             }
       }
       onPoint={onPoint}
+      center={center}
+      carried={carried}
       sending={messages.some(({ refused }) => !refused)}
       waiting={onSend === undefined}
       mode={

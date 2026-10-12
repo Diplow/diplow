@@ -2,10 +2,13 @@
 // newest at the bottom, each day under its split, what the user and the agent said in their voices,
 // what happened between them on its thread, a Proposal decided where it stands and what was applied
 // undone, a quiet action above the oldest day shown reading the day before; after the last Entry the
-// user's Messages still on their way, or refused with a retry, and the agent's step while a Turn runs.
+// user's Messages still on their way, or refused with a retry, and where they went that it doesn't
+// hold yet, the navigation under way included, and the agent's step while a Turn runs.
 // And its foot, the composer: the user writes to the agent, `@`s their Tiles, opens a command with a
 // `/`, the language among them, and sees the Mode under the field, or that the Account may not use the
-// Assistant; while a Turn runs the field waits and send becomes Stop. Home's screen takes the two apart,
+// Assistant, and where the next Turn works; while a Turn runs the field waits and send becomes Stop. A
+// Tile carried from the canvas is named where it is let go over the composer, and one a menu asks the
+// agent about is named first (HEX-110). Home's screen takes the two apart,
 // the timeline beside the curve and the foot at the chat's foot; `Conversation` lays them out
 // together, for /design-system.
 import { cn } from 'cn'
@@ -17,6 +20,7 @@ import { m } from '#/paraglide/messages'
 import { assertIsLocale, getLocale, localizeHref } from '#/paraglide/runtime'
 import { Act } from '#/front/ui/atoms/controls/act'
 import { Composer } from '#/front/ui/chat/composer/Composer'
+import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 import { DaySplit } from '#/front/ui/chat/entries/DaySplit'
 import { Events, type Happened } from '#/front/ui/chat/entries/Events'
 import { Message } from '#/front/ui/chat/text/Message'
@@ -26,9 +30,9 @@ import type { Mentionable } from './composer/mention'
 import { modeOf, type Offering, offered } from './composer/typing'
 import { EntryBlock } from './entry/Entry'
 import type { Deciding } from './entry/parts'
-import { blocksOf, messageWords, type Naming } from './entry/words'
-import { useComposerState } from './state/useComposerState'
-import type { Day } from './timeline/timeline'
+import { blocksOf, happenedOf, messageWords, type Naming } from './entry/words'
+import { useComposerState, writeInto } from './state/useComposerState'
+import { type Day, type Later, laterOf, type Went } from './timeline/timeline'
 
 /** The day before the oldest one shown, which the reader may ask for. */
 interface Earlier {
@@ -47,6 +51,11 @@ interface Sending {
   readonly retry: () => void
 }
 
+/** A navigation on its way, by its write's order, which places it among the Messages on theirs. */
+interface Going extends Went {
+  readonly id: number
+}
+
 interface TimelineProps {
   /** The days shown, oldest first, each with its Entries oldest first. */
   days: readonly Day[]
@@ -62,6 +71,10 @@ interface TimelineProps {
   system?: ReadonlyMap<string, string> | undefined
   /** The user's Messages on their way, or refused, oldest first. */
   sending?: ReadonlyArray<Sending>
+  /** The navigations on their way, oldest first. */
+  going?: ReadonlyArray<Going>
+  /** The navigation under way, not sent yet. */
+  underWay?: Went | undefined
   /** The Turn running, its agent's step now, if any. */
   turn?: { readonly step?: TurnStep | undefined } | undefined
   className?: string
@@ -92,6 +105,10 @@ interface FootProps {
   mode?: ModeChoice | undefined
   /** The `@` list's row the user is on, a Tile's by its id, or none: the canvas lights it. */
   onPoint?: ((row: string | undefined) => void) | undefined
+  /** The Tile centered on the canvas, by its id, where the next Turn works; none where none is. */
+  center?: string | undefined
+  /** A Tile carried from the canvas over the page, which the composer names where it is let go. */
+  carried?: CarriedTile | undefined
 }
 
 type ConversationProps = Omit<TimelineProps, 'className'> & FootProps & { className?: string }
@@ -125,12 +142,15 @@ export function Timeline({
   decide,
   system,
   sending = [],
+  going = [],
+  underWay,
   turn,
   className,
 }: TimelineProps) {
   const now = new Date()
   const shown = days.filter((day) => day.entries.length > 0)
-  const after = sending.length > 0 || turn !== undefined
+  const later = laterOf(sending, going, underWay)
+  const after = later.length > 0 || turn !== undefined
   return (
     <div className={cn('grid gap-5', className)}>
       {earlier !== undefined && (
@@ -162,7 +182,7 @@ export function Timeline({
       )}
       {after && (
         <Latest
-          sending={sending}
+          later={later}
           turn={turn}
           today={shown.at(-1)?.relative === 'today'}
           naming={{ titles: Object.fromEntries(system ?? []), system, onCenter, ...pointing }}
@@ -178,15 +198,16 @@ const blockKey = (block: ReturnType<typeof blocksOf>[number], index: number) =>
 
 /**
  * After the last Entry, under today's split if the last day shown is another: the user's Messages on
- * their way or refused, then the agent's step while a Turn runs, or that it thinks.
+ * their way or refused, and where they went, told as the timeline will tell it once recorded, then the
+ * agent's step while a Turn runs, or that it thinks.
  */
 function Latest({
-  sending,
+  later,
   turn,
   today,
   naming,
 }: {
-  sending: ReadonlyArray<Sending>
+  later: ReadonlyArray<Later<Sending, Going | Went>>
   turn: TimelineProps['turn']
   today: boolean
   naming: Naming
@@ -194,15 +215,27 @@ function Latest({
   return (
     <>
       {!today && <DaySplit label={m.conversation_today()} />}
-      {sending.map((message) => (
-        <Message
-          key={message.id}
-          voice="human"
-          words={messageWords(message.text, naming)}
-          state={message.refused ? 'failed' : 'sending'}
-          onRetry={message.retry}
-        />
-      ))}
+      {later.map((each) =>
+        each.kind === 'message' ? (
+          <Message
+            key={each.key}
+            voice="human"
+            words={messageWords(each.message.text, naming)}
+            state={each.message.refused ? 'failed' : 'sending'}
+            onRetry={each.message.retry}
+          />
+        ) : (
+          <Events
+            key={each.key}
+            lines={[
+              happenedOf(
+                { ...each.went.navigation, id: each.key, at: new Date(each.went.at) },
+                naming,
+              ),
+            ]}
+          />
+        ),
+      )}
       {turn !== undefined && <Events lines={[stepOf(turn.step)]} />}
     </>
   )
@@ -260,13 +293,15 @@ export function ConversationFoot({
   waiting = false,
   mode,
   onPoint,
+  center,
+  carried,
 }: FootProps) {
   const among = offered({
     modes: mode !== undefined && !unavailable,
     undoable: onUndo !== undefined,
   } satisfies Offering)
-  const { state, actions } = useComposerState(tiles, among)
   const field = useRef<HTMLTextAreaElement>(null)
+  const { state, actions } = useComposerState(tiles, among, { center, field })
   return (
     <Composer
       fieldRef={field}
@@ -281,12 +316,7 @@ export function ConversationFoot({
           goTo(picked.language)
           return
         }
-        const element = field.current
-        if (element !== null) {
-          // Set on the element first, so React finds it as it is and leaves the caret be.
-          element.value = picked.value
-          element.setSelectionRange(picked.caret, picked.caret)
-        }
+        if (field.current !== null) writeInto(field.current, picked)
       }}
       onLeave={actions.leave}
       onPoint={onPoint}
@@ -307,6 +337,12 @@ export function ConversationFoot({
       running={running}
       waiting={waiting}
       unavailable={unavailable}
+      // No Turn answers an Account that may not use the Assistant.
+      place={unavailable ? undefined : state.workingIn}
+      carried={carried?.title}
+      onDrop={() => {
+        if (carried !== undefined) actions.name(carried.id, 'caret')
+      }}
       mode={
         mode === undefined
           ? undefined

@@ -35,7 +35,7 @@ import {
   stopTurn,
   undo,
 } from '#/api/assistant/assistant'
-import { dayAt, MessageText, type Mode, TileRef } from '#/domains/assistant/entities'
+import { dayAt, MessageText, type Mode, Navigation, TileRef } from '#/domains/assistant/entities'
 import { Batched } from '#/domains/mapping/operations'
 
 import { read, settle, write } from '../calls'
@@ -244,19 +244,56 @@ export const useStopTurn = () => {
   })
 }
 
-/** Records where the user went, merged by the browser, then reads the Conversation again. */
+/** The write that records where the user went, by its server function's name. */
+const recordScope = 'recordNavigation'
+
+/**
+ * Records where the user went, merged by the browser, then reads the Conversation again, and stays on
+ * its way until that read has landed.
+ */
 export const useRecordNavigation = () => {
   const client = useQueryClient()
   return useMutation({
-    ...write(
-      'recordNavigation',
-      (data: typeof MergedNavigation.Type) => recordNavigation({ data }),
-      {
-        queue: conversationQueue,
-      },
-    ),
+    ...write(recordScope, (data: typeof MergedNavigation.Type) => recordNavigation({ data }), {
+      queue: conversationQueue,
+    }),
     onSettled: () => readAgain(client),
   })
+}
+
+/**
+ * Where the user went that the Conversation does not hold yet: its write's order, and when its last
+ * gesture was, in ms, as the server will date it, a number the MutationCache's answers share as they
+ * are.
+ */
+export interface NavigationOnItsWay {
+  readonly id: number
+  readonly navigation: Navigation
+  readonly at: number
+}
+
+const decodeRecorded = Schema.decodeUnknownOption(
+  Schema.Struct({ navigation: Navigation, sinceLast: Schema.Number }),
+)
+
+/**
+ * The navigations the page recorded that the Conversation does not hold, oldest first, each on its
+ * way until the Conversation read after it has landed, by Assistant's schema, so the timeline tells
+ * one from the moment it is sent; a refused one is gone, as a lost navigation is.
+ */
+export function useNavigationsOnTheirWay(): ReadonlyArray<NavigationOnItsWay> {
+  return useMutationState({
+    filters: { mutationKey: [recordScope], status: 'pending' },
+    select: (mutation) =>
+      Option.getOrUndefined(
+        Option.map(decodeRecorded(mutation.state.variables), ({ navigation, sinceLast }) => ({
+          id: mutation.mutationId,
+          navigation,
+          // Dated as the server dates it, from its last gesture, so its time holds as it lands.
+          at: mutation.state.submittedAt - sinceLast,
+        })),
+      ),
+  }).filter((going) => going !== undefined)
 }
 
 /** Switches the Conversation's Mode, then polls the latest, which says the Mode now. */

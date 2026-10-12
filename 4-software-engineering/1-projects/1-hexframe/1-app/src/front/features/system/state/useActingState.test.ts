@@ -103,6 +103,7 @@ function render(search: SystemSearch = {}, { exporting = false } = {}) {
   const client = makeQueryClient()
   const onSearchChange = vi.fn<(change: SearchChange) => void>()
   const start = vi.fn()
+  const onAsk = vi.fn<(tile: string, place?: number) => void>()
   const wrapper = ({ children }: { children: ReactNode }) =>
     createElement(QueryClientProvider, { client }, children)
   const { result } = renderHook(
@@ -112,10 +113,11 @@ function render(search: SystemSearch = {}, { exporting = false } = {}) {
         search,
         onSearchChange,
         exporting: { start, pending: exporting },
+        onAsk,
       }),
     { wrapper },
   )
-  return { result, onSearchChange, start }
+  return { result, onSearchChange, start, onAsk }
 }
 
 /** The hex a view draws under this key. */
@@ -322,6 +324,31 @@ describe("a free slot's menu", () => {
       menu?.onAct({ verb: 'import' }, '')
     })
     expect(changed(onSearchChange)).toMatchObject({ import: 'root', slot: slot.direction })
+  })
+
+  it('asks the agent for one there, naming the Tile it would go under and the place', () => {
+    const { result, onAsk, onSearchChange } = render()
+    const slot = slotOf()
+    act(() => {
+      result.current.acting.slot(slot)?.onAct({ verb: 'ask-agent' }, '')
+    })
+    expect(onAsk).toHaveBeenCalledExactlyOnceWith('root', slot.direction)
+    expect(onSearchChange).not.toHaveBeenCalled()
+  })
+})
+
+describe("a Tile's agent line", () => {
+  it('asks the agent about the Tile through the chat, the URL left as it is', () => {
+    const { result, onAsk, onSearchChange } = render()
+    choose(result, 'tile:holding', { verb: 'ask-agent' })
+    expect(onAsk).toHaveBeenCalledExactlyOnceWith('holding')
+    expect(onSearchChange).not.toHaveBeenCalled()
+  })
+
+  it("is in a Tile's menu, the Root's too", () => {
+    const { result } = render()
+    expect(result.current.acting.tile(hex('tile:root'))?.without).not.toContain('ask-agent')
+    expect(result.current.acting.tile(hex('tile:holding'))?.without).not.toContain('ask-agent')
   })
 })
 

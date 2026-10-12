@@ -1,7 +1,7 @@
 // Acting on the System from the canvas, a Tile's menu as Mapping reads it: what the menu says of a
 // Tile (`Subject`: its kind, where it stands, what is below it, whether it takes a new Tile or turns
 // into the other kind), the frames its Add and Move submenus draw, each place offering what Mapping
-// would make of it, and the lines home can't run yet. What a line sends: a Tile moved to a place of
+// would make of it, and the lines home leaves out. What a line sends: a Tile moved to a place of
 // its ring or turned into the other kind, a swap, a Reference removed. Pure: Mapping's `decide`
 // rules on the flat System the page shows, so the client knows no rule of its own.
 import { Result } from 'effect'
@@ -26,9 +26,6 @@ import { pathTo, type TileNode } from '#/front/ui/canvas/view/tiles'
 
 import { moveOf, swapOf, swapsWith, tileIn, type Located } from './tree'
 import { tilesBelow } from './widget/place'
-
-/** The lines home can't run yet: the agent's, until the chat answers the menu (HEX-110). */
-export const waiting: readonly Verb[] = ['ask-agent']
 
 /** The swap of a moving Tile with another, where Mapping makes something of it; none otherwise. */
 export function tradeOf(flat: System, moving: TileNode, held: TileNode) {
@@ -182,13 +179,12 @@ export function framesOf(systems: Systems, hex: TileHex) {
 }
 
 /**
- * The lines home leaves out of a Tile's menu: the agent's, until the chat answers the menu
- * (HEX-110); a Leaf's Context, which a Leaf has none of; an import as the Root, but into an empty
- * System's.
+ * The lines home leaves out of a Tile's menu: a Leaf's Context, which a Leaf has none of; an import
+ * as the Root, but into an empty System's; the agent's on a broken Reference, which names no Tile.
  */
 export function withoutOf({ root }: Systems, hex: TileHex): Verb[] {
   return [
-    ...waiting,
+    ...(hex.tile.broken === true ? (['ask-agent'] as const) : []),
     ...(hex.tile.leaf === true ? (['show-context'] as const) : []),
     ...(hex.tile.root !== undefined && !isEmptySystem(root) ? (['import'] as const) : []),
   ]

@@ -10,8 +10,9 @@ import { useMove, type Target } from './useMove'
 
 // A tile on the move over a frame drawn by hand: a drag that starts the move with its caller, lights
 // the place under it and lands there, or nowhere; Escape and Stop; the glide before the landing is
-// sent, a swap's partner gliding the other way; and a refusal flaring where it went, then gliding
-// back. The canvas's units are the screen's, and a glide lasts 600ms.
+// sent, a swap's partner gliding the other way; a refusal flaring where it went, then gliding back;
+// and a tile carried off the canvas, past x = 200. The canvas's units are the screen's, and a glide
+// lasts 600ms.
 
 const glide = 600
 
@@ -40,9 +41,14 @@ interface Props {
   writes?: Record<string, TileWrite>
 }
 
-function render(initial: Props, targets: { at: Point; target: Target }[] = []) {
+function render(
+  initial: Props,
+  targets: { at: Point; target: Target }[] = [],
+  { carries = false } = {},
+) {
   const onStart = vi.fn()
   const onStop = vi.fn()
+  const onCarry = vi.fn()
   const hook = renderHook(
     ({ moving, centers, writes = {} }: Props) =>
       useMove({
@@ -54,10 +60,11 @@ function render(initial: Props, targets: { at: Point; target: Target }[] = []) {
         dropAt: (point) =>
           targets.find(({ at }) => Math.hypot(at.x - point.x, at.y - point.y) < 40)?.target,
         writeOf: (id) => writes[id],
+        ...(carries && { offCanvas: ({ x }: Point) => x > 200, onCarry }),
       }),
     { initialProps: initial },
   )
-  return { ...hook, onStart, onStop }
+  return { ...hook, onStart, onStop, onCarry }
 }
 
 /** A mouse going down on a tile, as React hands it over. */
@@ -261,5 +268,101 @@ describe('a landing', () => {
     rerender({ moving: undefined, centers: { a: { x: 0, y: 300 } }, writes: { a: 'refused' } })
     expect(result.current.landing).toBeUndefined()
     expect(result.current.shiftOf('a')).toEqual({ by: home, glides: false })
+  })
+})
+
+describe('a tile carried off the canvas', () => {
+  const off: Point = { x: 260, y: 30 }
+
+  it('follows the pointer over the page, landing on no place, and is no longer once back', () => {
+    const target = slot()
+    const { result, onCarry } = render(
+      { moving: 'a', centers: { a: home } },
+      [{ at: east, target }],
+      { carries: true },
+    )
+    act(() => {
+      result.current.press('a', down())
+    })
+    send('pointermove', { x: 100, y: 0 })
+    expect(result.current.over).toBe('east')
+    send('pointermove', off)
+    send('pointermove', { x: 280, y: 40 })
+    expect(onCarry).toHaveBeenCalledExactlyOnceWith('a')
+    expect(result.current.carried).toEqual({ id: 'a', at: { x: 280, y: 40 } })
+    expect(result.current.over).toBeUndefined()
+    expect(result.current.shiftOf('a')).toEqual({ by: home, glides: false })
+    send('pointermove', { x: 100, y: 0 })
+    expect(onCarry).toHaveBeenLastCalledWith(undefined)
+    expect(result.current.carried).toBeUndefined()
+    expect(result.current.over).toBe('east')
+  })
+
+  it('let go off the canvas, lands nowhere and ends its move', () => {
+    const target = slot()
+    const { result, onCarry, onStop } = render(
+      { moving: 'a', centers: { a: home } },
+      [{ at: east, target }],
+      { carries: true },
+    )
+    act(() => {
+      result.current.press('a', down())
+    })
+    send('pointermove', off)
+    send('pointerup', off)
+    expect(onCarry).toHaveBeenLastCalledWith(undefined)
+    expect(result.current.carried).toBeUndefined()
+    expect(onStop).toHaveBeenCalledOnce()
+    expect(result.current.landing).toBeUndefined()
+    after(glide + 40)
+    expect(target.land).not.toHaveBeenCalled()
+  })
+
+  it('let go off the canvas before its caller put the move in place, ends it once it has', () => {
+    const { result, rerender, onStop } = render({ moving: undefined, centers: { a: home } }, [], {
+      carries: true,
+    })
+    act(() => {
+      result.current.press('a', down())
+    })
+    send('pointermove', off)
+    send('pointerup', off)
+    expect(onStop).not.toHaveBeenCalled()
+    rerender({ moving: 'a', centers: { a: home } })
+    expect(onStop).toHaveBeenCalledOnce()
+  })
+
+  it('is carried no more once the move stops, and never without a page to carry it', () => {
+    const { result, onCarry } = render({ moving: 'a', centers: { a: home } }, [], {
+      carries: true,
+    })
+    act(() => {
+      result.current.press('a', down())
+    })
+    send('pointermove', off)
+    act(() => {
+      result.current.stop()
+    })
+    expect(onCarry).toHaveBeenLastCalledWith(undefined)
+    expect(result.current.carried).toBeUndefined()
+    const kept = render({ moving: 'a', centers: { a: home } })
+    act(() => {
+      kept.result.current.press('a', down())
+    })
+    send('pointermove', off)
+    expect(kept.result.current.carried).toBeUndefined()
+    expect(kept.onCarry).not.toHaveBeenCalled()
+  })
+
+  it('is carried no more once the canvas goes', () => {
+    const { result, unmount, onCarry } = render({ moving: 'a', centers: { a: home } }, [], {
+      carries: true,
+    })
+    act(() => {
+      result.current.press('a', down())
+    })
+    send('pointermove', off)
+    unmount()
+    expect(onCarry).toHaveBeenLastCalledWith(undefined)
   })
 })
