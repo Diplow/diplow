@@ -44,6 +44,7 @@ import {
   type SearchChange,
   type SystemSearch,
 } from '#/front/features/system/search/search'
+import { useMarksState } from '#/front/features/system/marks/useMarksState'
 import { System } from '#/front/features/system/System'
 import { CenteredTile } from '#/front/features/system/CenteredTile'
 import { canvasTree, onScreen } from '#/front/features/system/tree'
@@ -57,7 +58,8 @@ import { getLocale } from '#/paraglide/runtime'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
 import { Screen } from '#/front/ui/layouts/screen/Screen'
 import { useScreenState } from '#/front/ui/layouts/screen/state/useScreenState'
-import type { TileNode } from '#/front/ui/canvas/view/tiles'
+import type { CanvasMarks } from '#/front/ui/canvas/Canvas'
+import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { centerOn, withViewIn, type CanvasView, type ViewAction } from '#/front/ui/canvas/view/view'
 
 /**
@@ -215,18 +217,25 @@ function SignedIn() {
     () => (root === undefined ? undefined : canvasTree(root, { yours: true })),
     [root],
   )
+  // What crosses from the chat to the canvas: the Tile it points at, the one it centered, where the
+  // running Turn works, the changes made meanwhile, and the open Proposal.
+  const marks = useMarksState({ system: data?.system, working: turn?.location })
   const onViewChange = (view: CanvasView, action: ViewAction) => {
     onSearchChange(withView(search, view))
     publish(new Navigated(action))
+    marks.actions.went(action)
   }
-  // A Tile the chat names crosses to the canvas: centered on it, the canvas comes forward, the
-  // System's again should Help have had it.
+  // A Tile the chat names crosses to the canvas: centered on it, glinting as it arrives, the canvas
+  // comes forward, saying what it shows, the System's again should Help have had it.
   const onCenter = (tile: string) => {
     if (tree === undefined) return
     const view = centerOn(tree, tile)
     void navigate({ search: (current) => ({ ...withView(current, view), ...withHelp(undefined) }) })
     publish(new Navigated({ gesture: 'center', tile }))
-    turning.cross()
+    marks.actions.arrive(tile)
+    // The canvas's tree names an untitled Root already.
+    const title = findTile(tree, tile)?.title
+    turning.cross(title === undefined ? undefined : m.crossing_phone_said({ title }))
   }
   // What the canvas shows: Help while its widget is open, else the System. The URL's view is the
   // canvas's, so while Help has it the System's view is its Root, which a Message is sent from.
@@ -244,6 +253,7 @@ function SignedIn() {
               onExport={() => {
                 turning.turn('chat')
               }}
+              marks={marks.marks}
             />
           ),
           corner: <Breadcrumb system={tree} view={view} onViewChange={onViewChange} />,
@@ -265,13 +275,19 @@ function SignedIn() {
       <Screen
         front={screen.front}
         onFrontChange={turning.turn}
+        said={screen.said}
         className="size-full"
         canvas={<ReadBoundary>{side.canvas}</ReadBoundary>}
         corner={side.corner}
         messages={
           <div className="grid gap-5">
             <ReadBoundary>
-              <ChatTimeline onCenter={onCenter} turn={turn} resend={postMessage} />
+              <ChatTimeline
+                onCenter={onCenter}
+                pointing={{ card: marks.cardOf, onPoint: marks.actions.point }}
+                turn={turn}
+                resend={postMessage}
+              />
             </ReadBoundary>
             <ReadBoundary>
               <TileWidgets
@@ -313,7 +329,12 @@ function SignedIn() {
         }
         composer={
           <ReadBoundary>
-            <ChatComposer onSend={onSend} turn={turn} mode={mode} />
+            <ChatComposer
+              onSend={onSend}
+              turn={turn}
+              mode={mode}
+              onPoint={marks.actions.pointRow}
+            />
           </ReadBoundary>
         }
       />
@@ -351,10 +372,13 @@ interface SystemPageProps {
   widgets: TileWidgetsState
   /** An export started from a Tile's menu: the chat, which shows it, comes to the front on a phone. */
   onExport: () => void
+  /** Who touches what the canvas draws, the chat's crossings among them. */
+  marks: CanvasMarks
 }
 
 /** The canvas side, the System's: the System, and the centered Tile's card at its foot. */
-function SystemPage({ search, onSearchChange, onViewChange, widgets, onExport }: SystemPageProps) {
+function SystemPage(props: SystemPageProps) {
+  const { search, onSearchChange, onViewChange, widgets, onExport, marks } = props
   const { data } = useSystem()
   if (data === undefined) return <Loading />
   const { system, root, underway } = data
@@ -376,6 +400,7 @@ function SystemPage({ search, onSearchChange, onViewChange, widgets, onExport }:
           },
           pending: widgets.state.exporting,
         }}
+        marks={marks}
         className="min-h-0 flex-1"
       />
       <div className="max-h-[30%] flex-none overflow-y-auto">

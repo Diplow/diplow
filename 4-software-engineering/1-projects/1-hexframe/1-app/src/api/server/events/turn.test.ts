@@ -131,10 +131,12 @@ describe('a Turn on every Message', () => {
   })
 
   it('stops on a Stop: its agent interrupted, the timeline saying so, its Key revoked', async () => {
-    const { signedIn, accountId, waited } = await account
+    const { signedIn, accountId, waited, root } = await account
     const sent = await value(send('Go slowly, please.'))
     await waited()
     await until(async () => (await live(signedIn))?.step, 'stepped')
+    // The poll says where the Turn works, which the canvas marks: here the centered Root.
+    expect(await live(signedIn)).toMatchObject({ id: sent.turn?.id, location: root.id })
     expect(await send('And another thing.')).toMatchObject({
       ok: false,
       failure: { _tag: 'TurnRunning' },

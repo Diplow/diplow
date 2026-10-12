@@ -19,6 +19,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import { Option, Schema } from 'effect'
+import { useMemo } from 'react'
 
 import {
   acceptProposal,
@@ -35,6 +36,7 @@ import {
   undo,
 } from '#/api/assistant/assistant'
 import { dayAt, MessageText, type Mode, TileRef } from '#/domains/assistant/entities'
+import { Batched } from '#/domains/mapping/operations'
 
 import { read, settle, write } from '../calls'
 
@@ -96,6 +98,31 @@ export const conversationRead = infiniteQueryOptions({
  * whether there is one. Shown inside a ReadBoundary; signed out, it sends the user to sign in.
  */
 export const useConversation = () => useInfiniteQuery(conversationRead)
+
+/** A Proposal's writes, as Mapping batched them; none it cannot read back. */
+const decodeWrites = Schema.decodeUnknownOption(Schema.Array(Batched))
+
+/**
+ * Today as the canvas reads it, beside the chat: today's Entries, oldest first, and the open Proposal,
+ * by its id, with its writes as Mapping batched them, decoded by its schema, which the canvas folds
+ * over the System to draw what it would do; none before today is read. The same Query as the chat's,
+ * its failure left to the chat's boundary.
+ */
+export function useToday() {
+  const { data } = useInfiniteQuery({ ...conversationRead, throwOnError: false })
+  const today = data?.pages[0]
+  return useMemo(() => {
+    if (today === undefined) return undefined
+    const { entries, proposal } = today
+    return {
+      entries,
+      proposal: proposal && {
+        id: proposal.id,
+        writes: Option.getOrElse(decodeWrites(proposal.writes), () => []),
+      },
+    }
+  }, [today])
+}
 
 /**
  * Whether the Account may use the Assistant, its Entitlement, which the composer tells the user of when

@@ -9,7 +9,7 @@
 // Account's Tiles to `@`, from the System the page holds. The Mode, as the poll last saw it, shows under
 // the field, switched through `useSetMode`, the one switched to shown while the switch is on its way.
 // Each is shown inside a ReadBoundary, which a failed read lands in.
-import { useMemo } from 'react'
+import { type ComponentProps, useMemo } from 'react'
 
 import type { Mode } from '#/domains/assistant/entities'
 import {
@@ -54,13 +54,15 @@ function useEntries() {
 interface ChatTimelineProps {
   /** Centers the canvas on a Tile named. */
   onCenter: (tile: string) => void
+  /** What a Tile named says in its card, and its card open or shut, which the canvas lights. */
+  pointing: ComponentProps<typeof Timeline>['pointing']
   /** The Turn running, as the page's poll last saw it. */
   turn: LiveTurn | undefined
   /** Posts a refused Message again, after the navigation it follows. */
   resend: (sent: Sent) => void
 }
 
-export function ChatTimeline({ onCenter, turn, resend }: ChatTimelineProps) {
+export function ChatTimeline({ onCenter, pointing, turn, resend }: ChatTimelineProps) {
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useConversation()
   const accepting = useAcceptProposal()
   const discarding = useDiscardProposal()
@@ -83,6 +85,7 @@ export function ChatTimeline({ onCenter, turn, resend }: ChatTimelineProps) {
     <Timeline
       days={days.toReversed()}
       onCenter={onCenter}
+      pointing={pointing}
       system={system}
       sending={messages.map(({ id, sent, refused }) => ({
         id,
@@ -127,9 +130,11 @@ interface ChatComposerProps {
   turn: LiveTurn | undefined
   /** The Conversation's Mode, as the page's poll last saw it; none before its first answer. */
   mode: Mode | undefined
+  /** The `@` list's row the user is on, a Tile's by its id, or none: the canvas lights it. */
+  onPoint: (row: string | undefined) => void
 }
 
-export function ChatComposer({ onSend, turn, mode }: ChatComposerProps) {
+export function ChatComposer({ onSend, turn, mode, onPoint }: ChatComposerProps) {
   const tiles = useTiles()
   const entries = useEntries()
   const { data: available } = useAssistantAvailable()
@@ -165,6 +170,7 @@ export function ChatComposer({ onSend, turn, mode }: ChatComposerProps) {
               stopping,
             }
       }
+      onPoint={onPoint}
       sending={messages.some(({ refused }) => !refused)}
       waiting={onSend === undefined}
       mode={

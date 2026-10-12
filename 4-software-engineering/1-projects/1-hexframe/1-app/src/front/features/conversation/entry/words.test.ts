@@ -114,6 +114,27 @@ describe('proposedOf', () => {
     })
   })
 
+  it('gives a Tile named its card and tells while it is pointed at, the draft too, not one gone', () => {
+    const pointed: string[] = []
+    const pointing: Naming = {
+      ...naming,
+      card: (id) => (id === 'games' || id === 'drafts' ? { place: `place of ${id}` } : undefined),
+      onPoint: (id, on) => {
+        if (on) pointed.push(id)
+      },
+    }
+    const named = (word: Word | undefined) =>
+      typeof word === 'object' && 'tile' in word ? word.tile : undefined
+    const live = named(messageWords(linkTo('games'), pointing)[0])
+    expect(live?.card).toEqual({ place: 'place of games' })
+    live?.onPoint?.(true)
+    const draft = named(proposedOf(created, pointing, true).words.at(-1))
+    expect(draft?.card).toEqual({ place: 'place of drafts' })
+    draft?.onPoint?.(true)
+    expect(pointed).toEqual(['games', 'drafts'])
+    expect(named(proposedOf(created, pointing, false).words.at(-1))?.card).toBeUndefined()
+  })
+
   it('says a verb this page does not know plainly', () => {
     const unknown = { _tag: 'Change' as const, verb: 'TileGrown', tile: games }
     expect(proposedOf(unknown, naming, false).words[0]).toBe(

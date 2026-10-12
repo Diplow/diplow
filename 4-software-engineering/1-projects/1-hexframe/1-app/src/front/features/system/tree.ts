@@ -30,7 +30,7 @@ type ContextEntry = NonNullable<SystemTile['context'][ContextDirection]>
  * A Tile's title as a reader sees it. Only the Root is ever untitled: Mapping adds it that way, until
  * the user names themselves.
  */
-const titleOf = (title: string) => (title === '' ? m.system_untitled() : title)
+export const titleOf = (title: string) => (title === '' ? m.system_untitled() : title)
 
 /**
  * The System's Tiles as the canvas draws them, from its Root down. A Leaf that isn't Markdown is

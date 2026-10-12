@@ -15,7 +15,7 @@ import type { Underway } from '#/front/client/mapping/overlay/overlay'
 import { useSystemWriting } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import { useLeaveGuard } from '#/front/ui/canvas/atoms/useLeaveGuard'
-import { Canvas } from '#/front/ui/canvas/Canvas'
+import { Canvas, type CanvasMarks } from '#/front/ui/canvas/Canvas'
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
 import type { CanvasView, ViewAction } from '#/front/ui/canvas/view/view'
 import { Dialog } from '#/front/ui/layouts/Dialog'
@@ -40,6 +40,8 @@ interface SystemProps {
   onSearchChange: (change: SearchChange) => void
   /** Exports a Tile, which the chat shows. */
   exporting: { start: (exported: Exported) => void; pending: boolean }
+  /** Who touches what the canvas draws, as the page holds it (`marks/`). */
+  marks: CanvasMarks
   className?: string
 }
 
@@ -52,6 +54,7 @@ export function System({
   onViewChange,
   onSearchChange,
   exporting,
+  marks,
   className,
 }: SystemProps) {
   const writes = useWritesState(underway)
@@ -72,6 +75,7 @@ export function System({
         acting={acting}
         move={move}
         writes={writes}
+        marks={marks}
         className="min-h-0 w-full flex-1"
       />
       <Dialog

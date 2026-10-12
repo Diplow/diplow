@@ -5,7 +5,7 @@ import type { PlacedTile, System } from '#/domains/mapping/entities'
 import {
   editedOf,
   freeFor,
-  placeOf,
+  seatOf,
   refusalOf,
   slotForKind,
   slotOf,
@@ -48,14 +48,14 @@ const system: System = {
 describe('a slot as the widget draws it', () => {
   it('reads a Branch, a Leaf and a Context slot as their kind and place, and back', () => {
     const slots = [5, { leaf: 3 }, -6] as const
-    expect(slots.map(placeOf)).toEqual([
+    expect(slots.map(seatOf)).toEqual([
       { kind: 'branch', place: 5 },
       { kind: 'leaf', place: 3 },
       { kind: 'context', place: 6 },
     ])
-    expect(
-      slots.map((slot) => placeOf(slot)).map(({ kind, place }) => slotOf(kind, place)),
-    ).toEqual(slots)
+    expect(slots.map((slot) => seatOf(slot)).map(({ kind, place }) => slotOf(kind, place))).toEqual(
+      slots,
+    )
   })
 
   it('offers the places Mapping holds nothing in, for each kind', () => {

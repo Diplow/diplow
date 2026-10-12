@@ -21,7 +21,7 @@ import type { Place } from '#/front/ui/chat/widgets/Places'
 import type { TileField, TileKind, TilePlace, TileWords } from '#/front/ui/chat/widgets/tile/parts'
 
 /** A slot as the widget draws it: its kind, and its place among the six. */
-export function placeOf(slot: Slot): { kind: TileKind; place: Place } {
+export function seatOf(slot: Slot): { kind: TileKind; place: Place } {
   if (isLeafSlot(slot)) return { kind: 'leaf', place: slot.leaf }
   if (isContextSlot(slot)) return { kind: 'context', place: directionOf(slot) }
   return { kind: 'branch', place: slot }
@@ -58,7 +58,7 @@ export function whereIn(
   parent: { id: string; title: string },
   slot: Slot,
 ): TilePlace {
-  const { kind, place } = placeOf(slot)
+  const { kind, place } = seatOf(slot)
   return { parent: parent.title, kind, place, free: freeFor(system, parent.id, kind) }
 }
 
@@ -68,7 +68,7 @@ export function whereIn(
  */
 export function slotForKind(system: System, parent: string, slot: Slot, kind: TileKind) {
   const free = freeFor(system, parent, kind)
-  const { place } = placeOf(slot)
+  const { place } = seatOf(slot)
   const taken = free.includes(place) ? place : free[0]
   return taken === undefined ? undefined : slotOf(kind, taken)
 }

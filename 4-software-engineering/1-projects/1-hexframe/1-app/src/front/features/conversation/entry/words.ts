@@ -19,6 +19,7 @@ import { m } from '#/paraglide/messages'
 import { Gesture } from '#/front/ui/canvas/view/view'
 import type { Happened } from '#/front/ui/chat/entries/Events'
 import type { Change } from '#/front/ui/chat/entries/Receipt'
+import type { MentionProps } from '#/front/ui/chat/text/Mention'
 import { type Word, type Words, weave } from '#/front/ui/chat/text/words'
 
 import type { Titles } from '../timeline/timeline'
@@ -32,6 +33,27 @@ export interface Naming {
   readonly system?: ReadonlyMap<string, string> | undefined
   /** Centers the canvas on a Tile; none where there is no canvas. */
   readonly onCenter?: ((tile: string) => void) | undefined
+  /**
+   * What a Tile named says in its card, as the canvas's card says it, by its id; none where the page
+   * knows nothing more of it. A Tile with a card is pointed at while its card is open.
+   */
+  readonly card?: ((tile: string) => MentionProps['card']) | undefined
+  /** A Tile named pointed at, its card open, or no longer: the canvas lights it meanwhile (HEX-109). */
+  readonly onPoint?: ((tile: string, pointing: boolean) => void) | undefined
+}
+
+/** What a Tile named shows beside its title and tells while it is pointed at, where it has a card. */
+function pointing(tile: string, { card, onPoint }: Naming): Pick<MentionProps, 'card' | 'onPoint'> {
+  const shown = card?.(tile)
+  if (shown === undefined) return {}
+  return {
+    card: shown,
+    ...(onPoint && {
+      onPoint: (on: boolean) => {
+        onPoint(tile, on)
+      },
+    }),
+  }
 }
 
 /** What a click on a Tile named does: centers the canvas on it, where there is one. */
@@ -43,10 +65,16 @@ const centering = (tile: string, onCenter: Naming['onCenter']) =>
       }
 
 /** A Tile named by its id alone, as the System holds it now: centered on a click, or deleted since. */
-const linked = (tile: string, title: string | undefined, { onCenter }: Naming): Word =>
+const linked = (tile: string, title: string | undefined, naming: Naming): Word =>
   title === undefined
     ? { tile: { title: m.conversation_link_broken(), standing: 'gone' } }
-    : { tile: { title: named(title), onCenter: centering(tile, onCenter) } }
+    : {
+        tile: {
+          title: named(title),
+          onCenter: centering(tile, naming.onCenter),
+          ...pointing(tile, naming),
+        },
+      }
 
 /**
  * A Tile a change names, by the Title it had: there, it centers the canvas; drafted by a Proposal not
@@ -54,13 +82,18 @@ const linked = (tile: string, title: string | undefined, { onCenter }: Naming): 
  */
 function recorded(
   { id, title }: { id: string; title: string },
-  { system, onCenter }: Naming,
+  naming: Naming,
   drafted = false,
 ): Word {
+  const { system, onCenter } = naming
   const shown = named(title)
   if (system === undefined) return { tile: { title: shown } }
-  if (system.has(id)) return { tile: { title: shown, onCenter: centering(id, onCenter) } }
-  return { tile: { title: shown, standing: drafted ? 'draft' : 'gone' } }
+  if (system.has(id)) {
+    return { tile: { title: shown, onCenter: centering(id, onCenter), ...pointing(id, naming) } }
+  }
+  // The agent's draft: pointed at, it lights the ghost the canvas stands for it.
+  if (drafted) return { tile: { title: shown, standing: 'draft', ...pointing(id, naming) } }
+  return { tile: { title: shown, standing: 'gone' } }
 }
 
 /** A Message's text, each link woven in as the Tile it names now. */

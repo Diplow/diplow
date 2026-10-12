@@ -84,15 +84,19 @@ describe("the Turn's events door", () => {
   it('keeps the agent’s text as its Messages, shows its step live, then drops it as it speaks', async () => {
     const { signedIn, accountId, turn, today, live } = await account
     const { turn: running, secret } = await turn()
-    expect(await live()).toEqual({ id: running.id })
+    expect(await live()).toEqual({ id: running.id, location: running.location })
 
     expect(await post(line.running('Bash', { command: 'ls -R' }), secret)).toEqual({
       status: 204,
       read: true,
     })
-    expect(await live()).toEqual({ id: running.id, step: { tool: 'Bash', detail: 'ls -R' } })
+    expect(await live()).toEqual({
+      id: running.id,
+      location: running.location,
+      step: { tool: 'Bash', detail: 'ls -R' },
+    })
     await post(line.said('Your System holds one Tile.'), secret)
-    expect(await live()).toEqual({ id: running.id })
+    expect(await live()).toEqual({ id: running.id, location: running.location })
     expect((await today()).at(-1)).toMatchObject({
       _tag: 'Message',
       author: 'agent',
@@ -131,7 +135,7 @@ describe("the Turn's events door", () => {
       expect((await post(malformed, secret)).status, malformed).toBe(400)
     }
     expect((await post(line.said('x'.repeat(1024 * 1024 + 1)), secret)).status).toBe(413)
-    expect(await live()).toEqual({ id: running.id })
+    expect(await live()).toEqual({ id: running.id, location: running.location })
     await value(run(signedIn, Assistant.endTurn(accountId, running.id, 'answered')))
   })
 
