@@ -23,6 +23,9 @@ import {
 
 let accounts = 0
 
+/** One character to a reader, eleven UTF-16 units: a family of four, joined. */
+const family = '\u{1F468}\u200D\u{1F469}\u200D\u{1F467}\u200D\u{1F466}'
+
 /** Someone who just signed up, on a device that holds their Session. */
 const someone = Effect.gen(function* () {
   accounts += 1
@@ -152,11 +155,21 @@ layer(Layer.provideMerge(turnKeysLayer, TestAuth))("an Account's Keys", (it) => 
   it.effect('refuses a Key with no name, or one longer than 32 characters, on the name', () =>
     Effect.gen(function* () {
       const { asSession } = yield* someone
-      for (const name of ['', 'x'.repeat(33)]) {
+      for (const name of ['', '   ', 'x'.repeat(33), family.repeat(33)]) {
         const refused = yield* asSession(issueKey(name)).pipe(Effect.flip)
         expect(refused).toMatchObject({ _tag: 'KeyNameInvalid', kind: 'Invalid', fields: ['name'] })
       }
       expect((yield* asSession(issueKey('x'.repeat(32)))).key.name).toHaveLength(32)
+    }),
+  )
+
+  it.effect('counts a name as a reader does, an emoji one character, and keeps it trimmed', () =>
+    Effect.gen(function* () {
+      const { asSession } = yield* someone
+      expect((yield* asSession(issueKey(family.repeat(32)))).key.name).toBe(family.repeat(32))
+      expect((yield* asSession(issueKey(`  Claude Code ${'x'.repeat(20)}  `))).key.name).toBe(
+        `Claude Code ${'x'.repeat(20)}`,
+      )
     }),
   )
 

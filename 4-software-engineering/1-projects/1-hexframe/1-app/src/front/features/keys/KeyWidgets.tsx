@@ -3,13 +3,13 @@
 // hexframe to Claude Code; Done forgets it and leaves a receipt naming the Key, never its secret.
 // Whether it is open is the URL's, the step the page's (`state/useKeyWidgetState.ts`), which home
 // holds so the receipt outlives the widget.
+import { keyNameBounds } from '#/domains/iam/entities'
 import { useKeys, useRevokeKey } from '#/front/client/iam/keys'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 import { toast } from '#/front/ui/atoms/Toaster'
 import { KeyWidget } from '#/front/ui/chat/widgets/keys/KeyWidget'
 
-import { nameLimit } from './shown/name'
 import { rowOf } from './shown/rows'
 import type { KeyWidgetState } from './state/useKeyWidgetState'
 
@@ -60,7 +60,7 @@ export function KeyWidgets({ open, onClose, keys: { state, actions } }: KeyWidge
           state="issue"
           name={state.name}
           onNameChange={actions.name}
-          nameLimit={nameLimit}
+          nameLimit={keyNameBounds.max}
           refused={state.refused}
           sending={state.sending}
           onIssue={() => {

@@ -8,6 +8,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
 import { merged, turnLocation, type Navigation } from '#/domains/assistant/entities'
+import { keyNameBounds, keyNameOf } from '#/domains/iam/entities'
 import { previewLimit } from '#/domains/mapping/entities'
 import { ChannelsGallery } from '#/front/client/gallery'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
@@ -88,7 +89,7 @@ function DesignSystem() {
         <ChatTextGallery />
         <ChatEntriesGallery />
         <TileWidgetGallery previewLimit={previewLimit} />
-        <KeyWidgetGallery />
+        <KeyWidgetGallery nameLimit={keyNameBounds.max} nameOf={keyNameOf} />
         <ReadBoundary>
           <HelpGallery />
         </ReadBoundary>

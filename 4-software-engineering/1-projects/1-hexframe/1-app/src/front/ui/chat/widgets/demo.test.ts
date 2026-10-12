@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { m } from '#/paraglide/messages'
 
-import { accessRefusalOf, editedOf, nameRefusalOf, stillRefused, tileRefusalOf } from './demo'
+import { accessRefusalOf, editedOf, stillRefused, tileRefusalOf } from './demo'
 
 const words = { title: 'Tooling', preview: 'What I use.', body: '' }
 
@@ -32,12 +32,6 @@ describe('the tile widget’s demo', () => {
 })
 
 describe('the key and sign-in widgets’ demo', () => {
-  it('refuses an empty name and one past 32 characters, as IAM counts them', () => {
-    expect(nameRefusalOf('')).toBe(m.error_iam_key_name_invalid())
-    expect(nameRefusalOf('a'.repeat(33))).toBe(m.error_iam_key_name_invalid())
-    expect(nameRefusalOf('Claude Code, laptop')).toBeUndefined()
-  })
-
   it('refuses a malformed email first, then a password out of bounds for signing up', () => {
     expect(accessRefusalOf('sign-in', 'nope', 'secret')).toEqual({
       email: m.error_iam_email_malformed(),

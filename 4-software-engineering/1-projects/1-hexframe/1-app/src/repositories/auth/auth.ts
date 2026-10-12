@@ -308,10 +308,13 @@ function betterAuthWith(
     plugins: [
       apiKey({
         defaultPrefix: 'hf_',
-        // A Key always has a name. What a name may be is IAM's rule, checked before a Key is asked
-        // for (src/domains/iam/iam.ts); the plugin's own default, 1 to 32 characters, is no wider,
-        // so a name past it would die as a defect, which IAM's tests would show.
+        // A Key always has a name. What a name may be is IAM's rule alone, checked before a Key is
+        // asked for (src/domains/iam/entities/key.ts): 32 characters as a reader counts them, an emoji
+        // one, which may take many UTF-16 units, where the plugin counts units, 32 by default. So the
+        // plugin bounds no name's length, lest a name IAM takes die here as a defect; the API bounds
+        // what issuing sends (src/api/iam/iam.ts).
         requireName: true,
+        maximumNameLength: Number.MAX_SAFE_INTEGER,
         // Its default, 10 verifications a day, would stop an MCP client within minutes.
         rateLimit: { enabled: false },
         keyExpiration: { defaultExpiresIn: null },

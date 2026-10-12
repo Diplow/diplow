@@ -173,9 +173,12 @@ describe("IAM's Key server functions", () => {
 })
 
 describe('the schemas issuing and revoking a Key validate by', () => {
-  it('bound the name to 256 characters, a string', () => {
-    expect(Schema.is(KeyName)({ name: 'x'.repeat(256) })).toBe(true)
-    expect(Schema.is(KeyName)({ name: 'x'.repeat(257) })).toBe(false)
+  it('bound the name to 1,024 UTF-16 units, a string, room for 32 emoji of a family each', () => {
+    const family =
+      '\u{1F468}\u{1F3FB}\u200D\u{1F469}\u{1F3FB}\u200D\u{1F467}\u{1F3FB}\u200D\u{1F466}\u{1F3FB}'
+    expect(Schema.is(KeyName)({ name: family.repeat(32) })).toBe(true)
+    expect(Schema.is(KeyName)({ name: 'x'.repeat(1_024) })).toBe(true)
+    expect(Schema.is(KeyName)({ name: 'x'.repeat(1_025) })).toBe(false)
     expect(Schema.is(KeyName)({ name: 1 })).toBe(false)
   })
 
