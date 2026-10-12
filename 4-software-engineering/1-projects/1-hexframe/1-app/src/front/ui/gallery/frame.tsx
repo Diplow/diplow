@@ -1,7 +1,7 @@
 // The frame of /design-system: a section per tier, shown once a piece fills it, a section per piece,
 // with what it is for, what it is made of and where it is used, as links within the page, then one
-// labelled specimen per state.
-import { createContext, useContext, type ReactNode } from 'react'
+// labelled specimen per state; and the clock a timed specimen plays by.
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
@@ -138,4 +138,24 @@ export function GalleryColumn({
       {children}
     </div>
   )
+}
+
+/**
+ * The step a specimen's play has reached, each `steps[i]` ms after it started, started again at
+ * every `turn`: a tile's states played one after another, a crossing's Turn.
+ */
+export function useSteps(steps: readonly number[], turn: number): number {
+  const [step, setStep] = useState(0)
+  useEffect(() => {
+    setStep(0)
+    const timers = steps.slice(1).map((at, index) =>
+      setTimeout(() => {
+        setStep(index + 1)
+      }, at),
+    )
+    return () => {
+      timers.forEach(clearTimeout)
+    }
+  }, [steps, turn])
+  return step
 }

@@ -7,7 +7,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
-import { merged, type Navigation } from '#/domains/assistant/entities'
+import { linkTo, merged, turnLocation, type Navigation } from '#/domains/assistant/entities'
 import { previewLimit } from '#/domains/mapping/entities'
 import { ChannelsGallery } from '#/front/client/gallery'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
@@ -24,7 +24,7 @@ import { Skeleton } from '#/front/ui/atoms/skeleton'
 import { AtomsGallery } from '#/front/ui/atoms/gallery'
 import { Canvas } from '#/front/ui/canvas/Canvas'
 import { CanvasAtomsGallery } from '#/front/ui/canvas/atoms/gallery'
-import { mentionablesOf } from '#/front/ui/canvas/crossings'
+import { mentionablesIn } from '#/front/ui/canvas/crossings'
 import { fixtureViews, ulysse } from '#/front/ui/canvas/fixtures'
 import { CanvasLayoutsGallery } from '#/front/ui/canvas/layouts/gallery'
 import { TileGallery } from '#/front/ui/canvas/tile/gallery'
@@ -46,7 +46,7 @@ import { KeyWidgetGallery } from '#/front/ui/chat/widgets/keys/gallery'
 import { SignInWidgetGallery } from '#/front/ui/chat/widgets/sign-in/gallery'
 import { SignInWidget, type Access } from '#/front/ui/chat/widgets/sign-in/SignInWidget'
 import { TileWidgetGallery } from '#/front/ui/chat/widgets/tile/gallery'
-import { CrossingsGallery, type Tell } from '#/front/ui/crossings'
+import { CrossingsGallery, type Tell, type Where } from '#/front/ui/crossings'
 import {
   GallerySection,
   GalleryState,
@@ -80,7 +80,7 @@ function DesignSystem() {
     <main className="mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)] gap-16 px-6 pb-16">
       <Direction />
       <GalleryTier tier="crossings">
-        <CrossingsGallery previewLimit={previewLimit} tell={tell} />
+        <CrossingsGallery previewLimit={previewLimit} tell={tell} where={where} />
       </GalleryTier>
       <GalleryTier tier="chat">
         <ConversationGallery onCenter={onCenter} />
@@ -122,7 +122,7 @@ function DesignSystem() {
   )
 }
 
-const titles = Object.fromEntries(mentionablesOf(ulysse).map(({ id, title }) => [id, title]))
+const titles = Object.fromEntries(mentionablesIn(ulysse).map(({ id, title }) => [id, title]))
 
 /**
  * A run of gestures on the crossing's canvas, in home's words: merged as home's sender merges them
@@ -133,6 +133,21 @@ const tell: Tell = (gestures) => {
   if (navigation === undefined) throw new Error('A navigation is told once a gesture made it')
   return happenedOf({ ...navigation, id: 'navigation', at: new Date() }, { titles })
 }
+
+/**
+ * Where the Turn answering a crossing's Message works: the Message as Assistant reads it, each tile it
+ * names by its link (`linkTo`), then Assistant's own rule (`turnLocation`).
+ */
+const where: Where = ({ value, tiles }, center) =>
+  turnLocation(
+    [...tiles]
+      .sort((one, other) => other.from - one.from)
+      .reduce(
+        (text, { id, from, to }) => `${text.slice(0, from)}${linkTo(id)}${text.slice(to)}`,
+        value,
+      ),
+    center,
+  )
 
 /** The help widget's section, on Help itself, read in the page's language as `/help` reads it. */
 function HelpGallery() {

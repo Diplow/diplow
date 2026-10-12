@@ -95,75 +95,89 @@ interface TurnTiles {
   notes: Named
 }
 
-/** A line of the agent's, `running` while it is its step now. */
-const agents = (words: Happened['words'], at: Date, tool: string, running = false): Happened => ({
+/** A line of the agent's. */
+const agents = (words: Happened['words'], at: Date, tool: string): Happened => ({
   who: 'agent',
   words,
   tool,
   at,
-  ...(running && { state: 'running' as const }),
 })
 
-/** What the agent's Turn has done by `step`, on its thread: its reads, folded once two, then its writes. */
-function turnLines(step: number, tiles: TurnTiles, at: Date): (Happened | Folded)[] {
-  const read = [tiles.engineering, tiles.projects, tiles.principles]
-  const reads = read
-    .slice(0, Math.max(step - 1, 0))
+/** How far the agent's Turn has gone, as the chat tells it. */
+interface Told {
+  /** How many of Software Engineering, Projects and Principles it has read, in that order. */
+  read: number
+  /** The tile it reads now. */
+  reading?: keyof TurnTiles | undefined
+  /** Tooling being written, then created. */
+  writing?: boolean | undefined
+  created?: boolean | undefined
+  /** Principles being edited, then edited. */
+  editing?: boolean | undefined
+  edited?: boolean | undefined
+  answered?: boolean | undefined
+}
+
+/** What the agent's Turn has done so far, on its thread: its reads, folded once two, then its writes. */
+function turnLines(told: Told, tiles: TurnTiles, at: Date): (Happened | Folded)[] {
+  const reads = [tiles.engineering, tiles.projects, tiles.principles]
+    .slice(0, told.read)
     .map((tile) => agents(weave(m.crossing_turn_read, { title: { tile } }), at, 'get_tile'))
-  const reading = step >= 1 && step <= 3 ? read[step - 1] : undefined
   const line = (said: (inputs: Record<'title', string>) => string, tile: Named, tool: string) =>
     agents(weave(said, { title: { tile } }), at, tool)
+  const running = (
+    said: (inputs: Record<'title', string>) => string,
+    tile: Named,
+    tool: string,
+  ) => ({
+    ...line(said, tile, tool),
+    state: 'running' as const,
+  })
   return [
     ...(reads.length < 2
       ? reads
       : [{ summary: m.crossing_turn_read_count({ count: reads.length }), events: reads }]),
-    ...(reading === undefined
+    ...(told.reading === undefined
       ? []
-      : [{ ...line(m.crossing_turn_reading, reading, 'get_tile'), state: 'running' as const }]),
-    ...(step === 4
-      ? [
-          {
-            ...line(m.crossing_turn_writing, tiles.tooling, 'create_tile'),
-            state: 'running' as const,
-          },
-        ]
+      : [running(m.crossing_turn_reading, tiles[told.reading], 'get_tile')]),
+    ...(told.writing === true
+      ? [running(m.crossing_turn_writing, tiles.tooling, 'create_tile')]
       : []),
-    ...(step >= 5 ? [line(m.conversation_created_agent, tiles.tooling, 'create_tile')] : []),
-    ...(step === 5
-      ? [
-          {
-            ...line(m.crossing_turn_editing, tiles.principles, 'edit_tile'),
-            state: 'running' as const,
-          },
-        ]
+    ...(told.created === true
+      ? [line(m.conversation_created_agent, tiles.tooling, 'create_tile')]
       : []),
-    ...(step >= 6 ? [line(m.conversation_edited_agent, tiles.principles, 'edit_tile')] : []),
+    ...(told.editing === true
+      ? [running(m.crossing_turn_editing, tiles.principles, 'edit_tile')]
+      : []),
+    ...(told.edited === true
+      ? [line(m.conversation_edited_agent, tiles.principles, 'edit_tile')]
+      : []),
   ]
 }
 
 /**
- * The agent's Turn as the chat tells it, step by step, as the canvas's end marks it (`turnOnCanvas`):
- * asked, 1 to 3 it reads Software Engineering, Projects and Principles, the reads folding into one
- * line as they end; 4 it writes Tooling; 5 Tooling is created; 6 Principles edited; 7 it answers. A
- * Key's change, hollow, comes in on its own, named for the Key. Run it again, or let the Key change
- * Notes.
+ * The agent's Turn as the chat tells it, step by step, as far as `told` says it has gone (none before
+ * it runs), as the canvas's end marks it: asked; it reads Software Engineering, Projects and
+ * Principles, the reads folding into one line as they end; it writes Tooling; Tooling is created as
+ * it edits Principles; Principles is edited; it answers. A Key's change, hollow, comes in on its own,
+ * named for the Key. Run it again, or let the Key change Notes.
  */
 export function TurnLines({
-  step,
+  told,
   tiles,
   keyed,
   at,
   onRun,
   onKey,
 }: {
-  step: number
+  told: Told | undefined
   tiles: TurnTiles
   keyed: boolean
   at: Date
   onRun: () => void
   onKey: () => void
 }) {
-  const lines = turnLines(step, tiles, at)
+  const lines = told === undefined ? [] : turnLines(told, tiles, at)
   const key: Happened = {
     who: 'key',
     words: weave(m.conversation_edited_by, {
@@ -175,7 +189,7 @@ export function TurnLines({
   }
   return (
     <Browser>
-      {step === 0 ? null : (
+      {told === undefined ? null : (
         <Message
           voice="human"
           words={weave(m.crossing_turn_ask, {
@@ -185,7 +199,7 @@ export function TurnLines({
         />
       )}
       {lines.length === 0 ? null : <Events lines={lines} />}
-      {step >= 7 ? (
+      {told?.answered === true ? (
         <Message
           voice="agent"
           words={weave(m.crossing_turn_answer, {

@@ -3,12 +3,12 @@
 // places it stands in, and the ground of a hex opened. Ported from components.html's #kinds, #states
 // and #words.
 import { RotateCcw } from 'lucide-react'
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Button } from '../../atoms/controls/button'
-import { GalleryGroup, GallerySection, GalleryState } from '../../gallery/frame'
+import { GalleryGroup, GallerySection, GalleryState, useSteps } from '../../gallery/frame'
 import { ulysse } from '../fixtures'
 import { directions, neighbor, type Hex } from '../geometry/geometry'
 import { fitWords } from '../geometry/words'
@@ -340,23 +340,6 @@ export function Replayed({ name, note, play }: { name: string; note: string; pla
       {(hex) => <g key={turn}>{play.draw(hex, step)}</g>}
     </Specimen>
   )
-}
-
-/** The step reached in a play, each `steps[i]` ms after it started, started again at every turn. */
-export function useSteps(steps: readonly number[], turn: number): number {
-  const [step, setStep] = useState(0)
-  useEffect(() => {
-    setStep(0)
-    const timers = steps.slice(1).map((at, index) =>
-      setTimeout(() => {
-        setStep(index + 1)
-      }, at),
-    )
-    return () => {
-      timers.forEach(clearTimeout)
-    }
-  }, [steps, turn])
-  return step
 }
 
 type Preset = 'short' | 'longTitle' | 'longPreview' | 'noPreview' | 'file' | 'draft'

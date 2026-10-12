@@ -55,7 +55,7 @@ A side is made of **components**, a chat component or a canvas component, built 
 |---|---|
 | `theme.ts` | The theme's state, `useThemeState`, and `themeScript`, which paints dark before the first paint unless the user chose light. Tested |
 | `motion.ts` | How long a motion lasts, read from its token on the page, so the code waiting on it follows the stylesheet: `durationOf`, and `movingFor`, none with reduced motion. Both sides and the screen read it, so it moved here from `canvas/state/` (HEX-108). Tested |
-| `crossings.tsx` | `CrossingsGallery`, the crossings on `/design-system` (HEX-108), each drawn with both ends side by side, the chat's (`chat/crossings.tsx`) and the canvas's (`canvas/crossings.tsx`), joined by the state that passes between them, as home joins them through its route and the client bus (HEX-109, HEX-110). The one module of `ui/` that imports both sides, outside the tiers as the theme is; what `ui/` can't reach, Mapping's limit on a Preview and how the timeline tells a navigation, the route hands it |
+| `crossings.tsx` | `CrossingsGallery`, the crossings on `/design-system` (HEX-108), each drawn with both ends side by side, the chat's (`chat/crossings.tsx`) and the canvas's (`canvas/crossings.tsx`), joined by the state that passes between them, as home joins them through its route and the client bus (HEX-109, HEX-110). The one module of `ui/` that imports both sides, outside the tiers as the theme is; what `ui/` can't reach, Mapping's limit on a Preview, how the timeline tells a navigation and where Assistant says a Turn works (`turnLocation`), the route hands it. The agent's Turn is written there once, step by step, which both ends draw |
 
 ## Rules
 

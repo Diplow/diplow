@@ -27,8 +27,6 @@ export interface TileMark {
   unseen?: Exclude<By, 'human'>
   /** What an open Proposal would do to it: its rim dashed in violet, since it isn't done yet. */
   proposed?: Proposed
-  /** What its hover card and a screen reader say of it: who changed it and when, what is proposed. */
-  said?: string
 }
 
 const unseenSaid: Record<Exclude<By, 'human'>, () => string> = {
@@ -43,14 +41,13 @@ const proposedSaid: Record<Proposed, () => string> = {
 }
 
 /**
- * What lasts of a mark, in words, for its hover card's note and a screen reader: the agent working
- * here, then what changed it or what is proposed, in the caller's words where it has them. A light
- * that passes, the chat pointing or a glint, says nothing: the chat already says it.
+ * What lasts of a mark, in words, for its hover card's note, in the colour of who it tells of, and a
+ * screen reader: the agent working here, then what changed it or what is proposed. A light that
+ * passes, the chat pointing or a glint, says nothing: the chat already says it.
  */
 export function markNote(mark: TileMark | undefined): { text: string; tone?: 'agent' } | undefined {
   if (mark === undefined) return undefined
   const lasting =
-    mark.said ??
     (mark.unseen === undefined ? undefined : unseenSaid[mark.unseen]()) ??
     (mark.proposed === undefined ? undefined : proposedSaid[mark.proposed]())
   const text = [mark.working === true ? m.tile_mark_working() : undefined, lasting]

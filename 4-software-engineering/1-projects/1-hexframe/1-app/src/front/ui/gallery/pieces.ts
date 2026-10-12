@@ -84,7 +84,7 @@ export const pieces = [
   {
     name: 'DropToName',
     tier: 'crossings',
-    ends: { chat: ['Composer'], canvas: ['Moving'] },
+    ends: { chat: ['Composer'], canvas: ['Moving', 'Tile', 'Slot'] },
     note: m.gallery_note_crossing_drop,
   },
   {

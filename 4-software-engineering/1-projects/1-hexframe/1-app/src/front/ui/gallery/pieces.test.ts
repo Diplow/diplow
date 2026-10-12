@@ -88,6 +88,18 @@ function reached(sources: readonly string[]): string[] {
   return drawn.map(({ name }) => name).filter((name) => found.has(name))
 }
 
+/** The pieces drawn from these files, there or inside a piece drawn there, all the way down. */
+function drawnFrom(sources: readonly string[]): Set<string> {
+  const found = new Set<string>()
+  const queue = reached(sources)
+  for (let name = queue.shift(); name !== undefined; name = queue.shift()) {
+    if (found.has(name)) continue
+    found.add(name)
+    queue.push(...reached(drawn.find((piece) => piece.name === name)?.sources ?? []))
+  }
+  return found
+}
+
 describe('the pieces', () => {
   it.each(drawn.map((piece) => [piece.name, piece] as const))(
     '%s is drawn in files that exist',
@@ -157,6 +169,23 @@ describe('the crossings', () => {
           expect(tierOf.get(part), part).toBeDefined()
           expect(tierOf.get(part), part).not.toBe(other[side])
         }
+      }
+    },
+  )
+
+  // Each side's crossings are drawn in its own file; the page's, which joins them, lays out what holds
+  // both, the phone's Screen. An end names what they draw, so a piece no crossing draws is caught.
+  const joining = importsOf(join(front, 'ui/crossings.tsx')).flatMap(piecesOf)
+  const drawnAt = {
+    chat: [...drawnFrom(['ui/chat/crossings.tsx']), ...joining],
+    canvas: [...drawnFrom(['ui/canvas/crossings.tsx']), ...joining],
+  }
+
+  it.each(crossings.map((crossing) => [crossing.name, crossing] as const))(
+    '%s names at each end pieces its side draws',
+    (_, { ends }) => {
+      for (const side of ['chat', 'canvas'] as const) {
+        for (const part of ends[side]) expect(drawnAt[side], part).toContain(part)
       }
     },
   )

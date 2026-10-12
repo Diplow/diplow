@@ -90,11 +90,10 @@ export type TileLook = { words: TileWords } & (
       /** A ring too full: the names it holds. */
       names: readonly string[]
     }
-  | {
-      kind: 'draft'
-      /** Whose words are being written: the agent's, or yours, in the tile widget. */
-      voice?: 'agent' | 'human'
-    }
+  /** The agent's draft, breathing violet in its slot. */
+  | { kind: 'draft' }
+  /** A tile you are writing in the tile widget, not there yet: breathing in your amber. */
+  | { kind: 'writing' }
   /** A tile an open Proposal would create, not there yet: a ghost, with no menu of its own. */
   | { kind: 'ghost' }
   | { kind: 'untitled' | 'context' | 'broken' }
@@ -145,9 +144,9 @@ function noteOf(look: TileLook): Note | undefined {
     case 'broken':
       return { text: m.tile_broken_note(), tone: 'text-faint' }
     case 'draft':
-      return look.voice === 'human'
-        ? { text: m.tile_writing(), tone: 'text-human' }
-        : { text: m.tile_drafting(), tone: 'text-agent' }
+      return { text: m.tile_drafting(), tone: 'text-agent' }
+    case 'writing':
+      return { text: m.tile_writing(), tone: 'text-human' }
     case 'ghost':
       return { text: m.tile_proposed(), tone: 'text-agent' }
     default:
@@ -209,6 +208,7 @@ const lights: Record<TileKind, Lights> = {
   reference: teal,
   broken: { rest: evenly('transparent'), lit: evenly(tint('foreground', 4)) },
   draft: drafted('agent'),
+  writing: drafted('human'),
   ghost: { rest: evenly(tint('agent', 6)), lit: evenly(tint('agent', 11)) },
 }
 
@@ -219,9 +219,6 @@ function drafted(voice: 'agent' | 'human'): Lights {
     lit: { top: tint(voice, 22), foot: tint(voice, 4) },
   }
 }
-
-const lightsOf = (look: TileLook): Lights =>
-  look.kind === 'draft' && look.voice === 'human' ? drafted('human') : lights[look.kind]
 
 /** A line of its own: the Context's hairline, dashed where it is not done or not there. */
 interface Rim {
@@ -262,7 +259,7 @@ export function Tile(props: TileProps) {
       ? undefined
       : footOf(props)
   const description = [
-    kindNameOf(props),
+    kindNames[props.kind](),
     noteOf(props)?.text,
     markNote(mark)?.text,
     pending ? m.tile_write_pending() : undefined,
@@ -373,8 +370,8 @@ function Light(props: TileProps & { id: string }) {
   return (
     <>
       <defs>
-        <FadeDef id={`${id}-rest`} fade={lightsOf(props).rest} />
-        <FadeDef id={`${id}-lit`} fade={lightsOf(props).lit} />
+        <FadeDef id={`${id}-rest`} fade={lights[props.kind].rest} />
+        <FadeDef id={`${id}-lit`} fade={lights[props.kind].lit} />
         <FadeDef
           id={`${id}-rim`}
           fade={{ top: 'var(--glow-soft)', foot: tint('human', 20), diagonal: true }}
@@ -453,13 +450,13 @@ function Glows(props: TileProps & { id: string }) {
           className="pointer-events-none"
         />
       ) : null}
-      {props.kind === 'draft' ? (
+      {kind === 'draft' || kind === 'writing' ? (
         <polygon
           points={points(scaled(hex, 0.85))}
           filter={`url(#${id}-blur)`}
           className={cn(
             'pointer-events-none opacity-26 motion-safe:animate-breathe',
-            props.voice === 'human' ? 'fill-human' : 'fill-agent',
+            kind === 'writing' ? 'fill-human' : 'fill-agent',
           )}
         />
       ) : null}
@@ -500,15 +497,10 @@ const kindNames: Record<TileKind, () => string> = {
   reference: m.tile_kind_reference,
   broken: m.tile_kind_broken,
   draft: m.tile_kind_draft,
+  writing: m.tile_kind_draft_yours,
   ghost: m.tile_kind_ghost,
   list: m.tile_kind_list,
 }
-
-/** What it is, for a screen reader: a draft is yours or the agent's. */
-const kindNameOf = (look: TileLook) =>
-  look.kind === 'draft' && look.voice === 'human'
-    ? m.tile_kind_draft_yours()
-    : kindNames[look.kind]()
 
 /**
  * Its words, in the box its size on screen gives them (`fitWords`): the title, in italics at the
@@ -567,8 +559,7 @@ function titleClass(look: TileLook & { place?: TilePlace }, alone: boolean): str
     look.place === 'center' && 'italic',
     kind === 'leaf' && look.file === true && 'font-mono text-[.8em]',
     // The agent's words are its mono, a draft it writes or a tile it proposes; yours keep your serif.
-    ((look.kind === 'draft' && look.voice !== 'human') || kind === 'ghost') &&
-      'font-agent text-[.86em] text-agent',
+    (kind === 'draft' || kind === 'ghost') && 'font-agent text-[.86em] text-agent',
     (kind === 'broken' || kind === 'untitled') && 'text-faint italic',
   )
 }

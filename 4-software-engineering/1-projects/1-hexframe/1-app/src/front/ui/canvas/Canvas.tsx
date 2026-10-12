@@ -60,7 +60,7 @@ interface CanvasActing {
 /** A tile standing in a free slot before it is there: its id, and how it is drawn. */
 export interface Standing {
   id: string
-  look: Extract<TileLook, { kind: 'draft' | 'ghost' }>
+  look: Extract<TileLook, { kind: 'draft' | 'writing' | 'ghost' }>
 }
 
 /** Who touches what the canvas draws, as its caller says it (HEX-108). */
@@ -136,7 +136,9 @@ export function Canvas(props: CanvasProps) {
     writeOf: (id) => writes?.tile(id),
   })
   const inTheAir = gesture.landing !== undefined && gesture.landing !== 'landed'
-  const markOf = marksOf(system, state.hexes, marks)
+  // While a tile moves, nothing stands in a free slot: they offer themselves to it.
+  const standing = moving === undefined ? marks?.slot : undefined
+  const markOf = marksOf(system, state.hexes, { ...marks, slot: standing })
   const onMenu = (key: string) => (open: boolean) => {
     setMenu((current) => (open ? key : current === key ? undefined : current))
   }
@@ -145,11 +147,13 @@ export function Canvas(props: CanvasProps) {
   const tileOf = (hex: TileHex) => {
     const action = actions.actionOf(hex)
     const look = lookOf(hex, { moving: moving !== undefined })
+    const mark = hex.tile.reference === undefined ? markOf(hex.tile.id) : undefined
     return (
       <TileHexView
         key={hex.key}
         hex={hex}
         look={look}
+        mark={mark}
         draw={(hand) => (
           <Tile
             hex={hex.hex}
@@ -157,7 +161,7 @@ export function Canvas(props: CanvasProps) {
             place={placeOf(hex)}
             scale={scale}
             write={writes?.tile(hex.tile.id)}
-            mark={hex.tile.reference === undefined ? markOf(hex.tile.id) : undefined}
+            mark={mark}
             motion={actions.motionOf(hex.key)}
             action={
               action && {
@@ -219,15 +223,15 @@ export function Canvas(props: CanvasProps) {
               case 'ground':
                 return <Ground key={hex.key} hex={hex.hex} context={hex.ring === 'context'} />
               case 'empty': {
-                const standing = moving === undefined ? marks?.slot?.(hex.slot) : undefined
-                if (standing !== undefined) {
+                const stands = standing?.(hex.slot)
+                if (stands !== undefined) {
                   return (
                     <Tile
                       key={hex.key}
                       hex={hex.hex}
-                      {...standing.look}
+                      {...stands.look}
                       scale={scale}
-                      mark={markOf(standing.id)}
+                      mark={markOf(stands.id)}
                     />
                   )
                 }

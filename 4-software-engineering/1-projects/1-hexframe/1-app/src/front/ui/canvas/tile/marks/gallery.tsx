@@ -52,7 +52,7 @@ const yours = (): readonly MarkSample[] => [
   {
     name: m.gallery_state_mark_writing,
     note: m.gallery_mark_writing,
-    draw: (hex) => <Tile hex={hex} kind="draft" voice="human" words={{ title: tooling.title }} />,
+    draw: (hex) => <Tile hex={hex} kind="writing" words={{ title: tooling.title }} />,
   },
 ]
 

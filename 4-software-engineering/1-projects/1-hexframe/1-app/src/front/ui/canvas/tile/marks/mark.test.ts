@@ -69,11 +69,9 @@ describe('what lasts of a mark, in words', () => {
     expect(markNote({ proposed: 'delete' })?.text).toBe(m.tile_mark_proposed_delete())
   })
 
-  it("says it in the caller's words where it has them, after the agent at work", () => {
-    expect(
-      markNote({ working: true, unseen: 'key', said: 'Claude Code, laptop edited it' }),
-    ).toEqual({
-      text: `${m.tile_mark_working()}, Claude Code, laptop edited it`,
+  it("says the agent at work first, then what changed it, in the agent's violet", () => {
+    expect(markNote({ working: true, unseen: 'key' })).toEqual({
+      text: `${m.tile_mark_working()}, ${m.tile_mark_unseen_key()}`,
       tone: 'agent',
     })
   })

@@ -62,18 +62,38 @@ function seatOf(parent: TileNode, id: string): [Ring, Direction] | undefined {
   return undefined
 }
 
-/** What a Tile's menu and card say of where it stands in the System, as the canvas would draw it. */
-function subjectIn(system: TileNode, id: string): Subject | undefined {
+/** Whether a tile of the fixture takes a new one: one of its six places is free. */
+const holdsIn = (tile: TileNode) =>
+  directions.some(
+    (direction) =>
+      tile.branches?.[direction] === undefined && tile.leaves?.[direction] === undefined,
+  )
+
+/**
+ * What a Tile's menu and card say of where it stands, as the canvas would draw it, `center` where it
+ * is centered. The fixture's reading of what home asks Mapping through `features/system/acting.ts`'s
+ * `subjectOf`: a Branch or the root takes a new tile where one of its six places is free; nothing
+ * turns into the other kind, nor counts what is below it, which only Mapping says.
+ */
+function subjectIn(system: TileNode, id: string, center = false): Subject | undefined {
   const path = pathTo(system, id)
   const tile = path.at(-1)
   const parent = path.at(-2)
   if (tile === undefined) return undefined
-  if (parent === undefined) return { kind: 'root', title: tile.title, at: 'center' }
+  if (parent === undefined) {
+    return { kind: 'root', title: tile.title, at: 'center', holds: holdsIn(tile) }
+  }
   const seat = seatOf(parent, id)
   if (seat === undefined) return undefined
   const [ring, at] = seat
   const kind = ring === 'context' ? 'context' : tile.leaf === true ? 'leaf' : 'branch'
-  return { kind, title: tile.title, at, parent: parent.title }
+  return {
+    kind,
+    title: tile.title,
+    at: center ? 'center' : at,
+    parent: parent.title,
+    holds: kind === 'branch' && holdsIn(tile),
+  }
 }
 
 /** A Tile of the System as the chat names it: its title, and what its card says beside it. */
@@ -94,41 +114,26 @@ interface Mentionable {
   path: string
 }
 
-/** The Tiles of the System the composer's `@` finds, its Branches and Leaves, from the root down. */
-export function mentionablesOf(system: TileNode, above: readonly string[] = []): Mentionable[] {
+/**
+ * The Tiles of a System the composer's `@` finds on the page, its Branches and Leaves from the root
+ * down, each with the two Titles above it, as the feature's `mentionablesOf` reads them
+ * (`features/conversation/composer/mention.ts`, which `ui/` cannot import); the fixture holds no
+ * Reference for it to skip and no untitled Tile for it to name.
+ */
+export function mentionablesIn(system: TileNode, above: readonly string[] = []): Mentionable[] {
   const below = directions.flatMap((direction) =>
     [system.branches?.[direction], system.leaves?.[direction]].filter((tile) => tile !== undefined),
   )
   const here = [...above, system.title]
   return [
     { id: system.id, title: system.title, path: above.slice(-2).join(' / ') },
-    ...below.flatMap((tile) => mentionablesOf(tile, here)),
+    ...below.flatMap((tile) => mentionablesIn(tile, here)),
   ]
 }
 
-/** What a Tile's menu says of it on the fixture canvas: its kind, where it stands, what it holds. */
-function subjectOfHex(hex: TileHex): Subject | undefined {
-  const look = lookOf(hex)
-  const { title } = hex.tile
-  if (look.kind === 'list' || look.kind === 'ghost') return undefined
-  if (hex.role === 'center') {
-    const parent = pathTo(ulysse, hex.tile.id).at(-2)?.title
-    if (look.kind === 'root' || look.kind === 'untitled') {
-      return { kind: look.kind, title, at: 'center', holds: true }
-    }
-    return { kind: look.kind, title, at: 'center', holds: true, ...(parent && { parent }) }
-  }
-  if (look.kind === 'root' || look.kind === 'untitled' || hex.direction === undefined) {
-    return undefined
-  }
-  return {
-    kind: look.kind,
-    title,
-    at: hex.direction,
-    holds: look.kind === 'branch',
-    ...(hex.parent && { parent: hex.parent.title }),
-  }
-}
+/** What a Tile's menu says of it on the fixture canvas; none for a ring too full, which is no tile. */
+const subjectOfHex = (hex: TileHex): Subject | undefined =>
+  lookOf(hex).kind === 'list' ? undefined : subjectIn(ulysse, hex.tile.id, hex.role === 'center')
 
 /** The System with the Tile of `id` changed, wherever it stands. */
 function changed(system: TileNode, id: string, change: (tile: TileNode) => TileNode): TileNode {
@@ -156,6 +161,9 @@ const withTooling = (system: TileNode, at: Direction = 6, title = tooling.title)
     branches: { ...tile.branches, [at]: { ...tooling, title } },
   }))
 
+/** Tooling as the chat names it before it is there: its card says where it will stand. */
+export const toolingNamed = namedOf(withTooling(ulysse), tooling.id) ?? { title: tooling.title }
+
 /** Principles' preview, as the agent rewrites it. */
 const principlesEdited = (system: TileNode) =>
   changed(system, 'principles', (tile) => ({ ...tile, preview: 'What I build on, in five words.' }))
@@ -170,52 +178,78 @@ const byTile =
   (id: string): TileMark | undefined =>
     marks[id]
 
+/** How far the agent's Turn has gone, as the canvas marks it. */
+export interface TurnShown {
+  /** Its light runs round Software Engineering, where it works, until it answers. */
+  working: boolean
+  /** The tile it reads now, glinting violet once. */
+  reading?: string | undefined
+  /** Tooling being written, breathing in its slot; then created, there. */
+  writing: boolean
+  created: boolean
+  /** Principles' new preview, once edited. */
+  edited: boolean
+  /** The tile it changed just now, glinting once. */
+  changed?: string | undefined
+}
+
 /**
- * The agent's Turn as the canvas shows it, step by step, as the chat's end tells it: 1 to 3 it reads
- * Software Engineering, Projects and Principles, each glinting once, while its light runs round
- * Software Engineering, where the Turn works; 4 it writes Tooling, breathing in its slot; 5 Tooling is
- * there; 6 it edits Principles; 7 the Turn is over. What it changed keeps its dot until opened
- * (`seen`); a Key editing Notes meanwhile marks it hollow.
+ * The agent's Turn as the canvas shows it, as far as `shown` says it has gone (none before it runs),
+ * as the chat's end tells it: each tile it reads glints violet once, while its light runs round
+ * Software Engineering, where the Turn works; Tooling breathes in its slot while written, then is
+ * there; what it changed glints, then keeps its dot until opened (`seen`); a Key editing Notes
+ * meanwhile marks it hollow.
  */
-export function turnOnCanvas(step: number, seen: ReadonlySet<string>, keyed: boolean) {
+export function turnOnCanvas(
+  shown: TurnShown | undefined,
+  seen: ReadonlySet<string>,
+  keyed: boolean,
+) {
   const system =
-    step >= 6 ? principlesEdited(withTooling(ulysse)) : step >= 5 ? withTooling(ulysse) : ulysse
-  const read = ['', engineering, 'projects', 'principles'][step]
-  const written = ({ 5: 'tooling', 6: 'principles' } as Record<number, string | undefined>)[step]
-  const unseen = (id: string, from: number) => step >= from && !seen.has(id)
+    shown?.edited === true
+      ? principlesEdited(withTooling(ulysse))
+      : shown?.created === true
+        ? withTooling(ulysse)
+        : ulysse
+  const unseen = (id: string, done: boolean | undefined) => done === true && !seen.has(id)
   const marks: CanvasMarks = {
     tile: (id) => {
       const mark: TileMark = {
-        ...(id === engineering && step >= 1 && step <= 6 && { working: true }),
-        ...((id === read || id === written) && { glint: { by: 'agent', key: step } }),
-        ...(((id === 'tooling' && unseen(id, 5)) || (id === 'principles' && unseen(id, 6))) && {
-          unseen: 'agent',
+        ...(id === engineering && shown?.working === true && { working: true }),
+        ...((id === shown?.reading || id === shown?.changed) && {
+          glint: { by: 'agent', key: id },
         }),
+        ...(((id === tooling.id && unseen(id, shown?.created)) ||
+          (id === 'principles' && unseen(id, shown?.edited))) && { unseen: 'agent' }),
         ...(id === 'notes' && keyed && { glint: { by: 'key', key: 'key' } }),
         ...(id === 'notes' && keyed && !seen.has(id) && { unseen: 'key' }),
       }
       return Object.keys(mark).length === 0 ? undefined : mark
     },
     slot: (slot): Standing | undefined =>
-      step === 4 && isSlot(slot, 6)
+      shown?.writing === true && isSlot(slot, 6)
         ? { id: tooling.id, look: { kind: 'draft', words: { title: tooling.title } } }
         : undefined,
   }
   return { system, marks }
 }
 
-/** How the agent's Proposal stands, as the chat decides it. */
-export type ProposalFate = 'open' | 'accepted' | 'discarded'
+/**
+ * What the canvas draws of the agent's Proposal: what it would do, waiting on you; its changes
+ * landed; or nothing of it, the System as it was, once it is discarded or undone. The chat decides
+ * which.
+ */
+export type ProposalShown = 'waiting' | 'landed' | 'gone'
 
 /**
- * The agent's Proposal on Software Engineering, as the canvas shows it: open, Tooling a ghost west,
- * Principles' rim dashed for its edit, Notes' for its move with an arc to the south-west, the reading
- * list stepped back for its deletion; accepted, all of it there, your amber glinting on what changed;
- * discarded, or undone, the System as it was.
+ * The agent's Proposal on Software Engineering, as the canvas shows it: waiting, Tooling a ghost
+ * west, Principles' rim dashed for its edit, Notes' for its move with an arc to the south-west, the
+ * reading list stepped back for its deletion; landed, all of it there, your amber glinting on what
+ * changed; gone, the System as it was.
  */
-export function proposalOnCanvas(fate: ProposalFate, undone: boolean) {
-  if (fate === 'discarded' || undone) return { system: ulysse, marks: {} satisfies CanvasMarks }
-  if (fate === 'accepted') {
+export function proposalOnCanvas(shown: ProposalShown) {
+  if (shown === 'gone') return { system: ulysse, marks: {} satisfies CanvasMarks }
+  if (shown === 'landed') {
     const system = inEngineering(principlesEdited(withTooling(ulysse)), (tile) => {
       const { leaves = {} } = tile
       // Notes, east, goes south-west, and the reading list, numbered 2, is gone.
@@ -274,7 +308,7 @@ export function draftOnCanvas(draft: Draft, written: number) {
     marks: {
       slot: (slot): Standing | undefined =>
         isSlot(slot, draft.place)
-          ? { id: tooling.id, look: { kind: 'draft', voice: 'human', words: { title } } }
+          ? { id: tooling.id, look: { kind: 'writing', words: { title } } }
           : undefined,
     } satisfies CanvasMarks,
   }

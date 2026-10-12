@@ -20,19 +20,18 @@ import {
   engineering,
   freeInEngineering,
   glinting,
-  mentionablesOf,
+  mentionablesIn,
   namedOf,
   proposalOnCanvas,
   startView,
   titleOf,
+  toolingNamed,
   turnOnCanvas,
   type Glint,
-  type ProposalFate,
 } from './canvas/crossings'
 import { tooling, ulysse } from './canvas/fixtures'
 import type { Direction } from './canvas/geometry/geometry'
 import { Rail } from './canvas/layouts/Rail'
-import { useSteps } from './canvas/tile/gallery'
 import { pathTo, type TileNode } from './canvas/view/tiles'
 import { centerOn, showView, type CanvasView, type ViewAction } from './canvas/view/view'
 import { namedAt, namedFirst } from './chat/composer/commands'
@@ -46,29 +45,40 @@ import {
   TurnLines,
 } from './chat/crossings'
 import type { Happened } from './chat/entries/Events'
+import type { Fate } from './chat/entries/Proposal'
 import type { MentionProps } from './chat/text/Mention'
 import type { TileKind } from './chat/widgets/tile/parts'
-import { GallerySection, GalleryState } from './gallery/frame'
+import { GallerySection, GalleryState, useSteps } from './gallery/frame'
 import { Screen } from './layouts/screen/Screen'
 import { useScreenState } from './layouts/screen/state/useScreenState'
 
 /** How the conversation's timeline tells a run of gestures on the canvas, which home's words say. */
 export type Tell = (gestures: readonly ViewAction[]) => Happened
 
+/** A Message as the composer holds it: its words, and each tile it names, by its id and its stretch. */
+interface Written {
+  value: string
+  tiles: readonly { id: string; from: number; to: number }[]
+}
+
+/** Where the Turn answering a Message works, the canvas centered on `center`: Assistant's to say. */
+export type Where = (message: Written, center: string) => string
+
 /**
  * The crossings, in the catalogue's order: from the chat to the canvas, then from the canvas to the
- * chat, then on a phone. `previewLimit` is Mapping's, `tell` the timeline's, both the route's.
+ * chat, then on a phone. `previewLimit` is Mapping's, `tell` the timeline's, `where` Assistant's, all
+ * the route's.
  */
-export function CrossingsGallery({ previewLimit, tell }: { previewLimit: number; tell: Tell }) {
+export function CrossingsGallery(props: { previewLimit: number; tell: Tell; where: Where }) {
   return (
     <>
       <PointingCrossing />
       <AgentAtWorkCrossing />
       <ProposalCrossing />
-      <DraftingCrossing previewLimit={previewLimit} />
-      <NextTurnCrossing />
+      <DraftingCrossing previewLimit={props.previewLimit} />
+      <NextTurnCrossing where={props.where} />
       <MenuCrossing />
-      <NavigationCrossing tell={tell} />
+      <NavigationCrossing tell={props.tell} />
       <DropCrossing />
       <PhoneCrossing />
     </>
@@ -104,18 +114,23 @@ function Ends(props: {
 }
 
 /**
- * A tile of the System as the chat names it, with its card, what a click on it and pointing at it do;
- * one not there yet, Tooling, is the agent's draft, violet.
+ * A tile of the System as the chat names it, with its card, what a click on it and pointing at it do.
+ * One the System doesn't hold: Tooling, not there yet, is the agent's draft, violet, its card saying
+ * where it will stand, which pointing at lights where it waits; any other is gone, struck through.
  */
 const naming =
   (system: TileNode, act: { center?: (id: string) => void; point?: (id?: string) => void }) =>
-  (id: string): MentionProps => ({
-    ...(namedOf(system, id) ?? { title: tooling.title, standing: 'draft' }),
-    ...(act.center && { onCenter: () => act.center?.(id) }),
-    ...(act.point && { onPoint: (pointing: boolean) => act.point?.(pointing ? id : undefined) }),
-  })
+  (id: string): MentionProps => {
+    const named = namedOf(system, id)
+    if (named === undefined && id !== tooling.id) return { title: titleOf(id), standing: 'gone' }
+    return {
+      ...(named ?? { ...toolingNamed, standing: 'draft' }),
+      ...(named && act.center && { onCenter: () => act.center?.(id) }),
+      ...(act.point && { onPoint: (pointing: boolean) => act.point?.(pointing ? id : undefined) }),
+    }
+  }
 
-const mentionables = mentionablesOf(ulysse)
+const mentionables = mentionablesIn(ulysse)
 
 function PointingCrossing() {
   const [view, setView] = useState<CanvasView>(startView)
@@ -147,25 +162,74 @@ function PointingCrossing() {
   )
 }
 
-/** When each step of the agent's Turn comes, in ms from its start (`turnOnCanvas`, `TurnLines`). */
-const turnSteps = [0, 900, 1900, 2900, 4600, 5800, 7000]
+/** The tiles the agent's Turn touches, by their part in it, and their ids. */
+const turnIds = {
+  engineering,
+  projects: 'projects',
+  principles: 'principles',
+  tooling: tooling.id,
+  notes: 'notes',
+}
+
+type Part = Exclude<keyof typeof turnIds, 'notes'>
+
+/** A step of the agent's Turn: when it comes, and what the Turn has done by then. */
+interface TurnStep {
+  /** In ms from the Turn's start. */
+  at: number
+  /** How many of Software Engineering, Projects and Principles it has read, in that order. */
+  read: number
+  /** The tile it reads now. */
+  reading?: Part
+  writing?: boolean
+  created?: boolean
+  editing?: boolean
+  edited?: boolean
+  /** The tile it changed just now. */
+  changed?: Part
+  answered?: boolean
+}
+
+/**
+ * The agent's Turn, each step once, as both ends draw it, the chat telling it (`TurnLines`) and the
+ * canvas marking it (`turnOnCanvas`): it reads Software Engineering, Projects and Principles, working
+ * in Software Engineering; writes Tooling; Tooling is created as it edits Principles; Principles is
+ * edited; it answers.
+ */
+const turn: readonly TurnStep[] = [
+  { at: 0, read: 0, reading: 'engineering' },
+  { at: 900, read: 1, reading: 'projects' },
+  { at: 1900, read: 2, reading: 'principles' },
+  { at: 2900, read: 3, writing: true },
+  { at: 4600, read: 3, created: true, editing: true, changed: 'tooling' },
+  { at: 5800, read: 3, created: true, edited: true, changed: 'principles' },
+  { at: 7000, read: 3, created: true, edited: true, answered: true },
+]
+
+const turnTimes = turn.map(({ at }) => at)
 
 function AgentAtWorkCrossing() {
   const [run, setRun] = useState(0)
-  const played = useSteps(turnSteps, run)
-  const step = run === 0 ? 0 : played + 1
+  const played = useSteps(turnTimes, run)
+  // Nothing before the Turn first runs.
+  const now = run === 0 ? undefined : turn[played]
   const [seen, setSeen] = useState<ReadonlySet<string>>(new Set())
   const [keyed, setKeyed] = useState(false)
   const [view, setView] = useState<CanvasView>(startView)
   const [at] = useState(() => new Date())
-  const { system, marks } = turnOnCanvas(step, seen, keyed)
-  const named = naming(system, {})
-  const ids = { engineering, projects: 'projects', principles: 'principles', notes: 'notes' }
-  const tiles = { ...mapped(ids, named), tooling: named(tooling.id) }
+  const shown = now && {
+    working: now.answered !== true,
+    reading: now.reading && turnIds[now.reading],
+    writing: now.writing === true,
+    created: now.created === true,
+    edited: now.edited === true,
+    changed: now.changed && turnIds[now.changed],
+  }
+  const { system, marks } = turnOnCanvas(shown, seen, keyed)
   const chat = (
     <TurnLines
-      step={step}
-      tiles={tiles}
+      told={now}
+      tiles={mapped(turnIds, naming(system, {}))}
       keyed={keyed}
       at={at}
       onRun={() => {
@@ -205,12 +269,14 @@ function mapped<Role extends string>(
 }
 
 function ProposalCrossing() {
-  const [fate, setFate] = useState<ProposalFate>('open')
+  const [fate, setFate] = useState<Fate>('open')
   const [undone, setUndone] = useState(false)
   const [pointed, setPointed] = useState<string>()
   const [view, setView] = useState<CanvasView>(startView)
   const [at] = useState(() => new Date())
-  const { system, marks } = proposalOnCanvas(fate, undone)
+  // What the canvas draws of it: what it would do while it waits, what it did once accepted.
+  const shown = fate === 'open' ? 'waiting' : fate === 'accepted' && !undone ? 'landed' : 'gone'
+  const { system, marks } = proposalOnCanvas(shown)
   const named = naming(system, { point: setPointed })
   const ids = {
     tooling: tooling.id,
@@ -295,28 +361,37 @@ function DraftingCrossing({ previewLimit }: { previewLimit: number }) {
 /** How long the sample Turn runs once sent, in ms: its working light, then its end. */
 const sampleTurn = [0, 4000]
 
-function NextTurnCrossing() {
+/** The Message the composer holds, each tile it names found among the Tiles its `@` finds. */
+function writtenOf({ value, composer }: ReturnType<typeof useComposerDemo>): Written {
+  return {
+    value,
+    tiles: composer.marks.flatMap(({ kind, from, to }) => {
+      const named =
+        kind === 'tile' && mentionables.find(({ title }) => `@${title}` === value.slice(from, to))
+      return named ? [{ id: named.id, from, to }] : []
+    }),
+  }
+}
+
+function NextTurnCrossing({ where }: { where: Where }) {
   const [view, setView] = useState<CanvasView>(startView)
   const [sent, setSent] = useState<{ id: string; at: number }>()
   const turn = useSteps(sampleTurn, sent?.at ?? 0)
   const working = sent !== undefined && turn === 0 ? sent.id : undefined
   const demo = useComposerDemo({ among: mentionables, listed: false })
-  // The Tile the Message opens with: where the Turn works, as Assistant decides it.
-  const first = demo.composer.marks.find((mark) => mark.kind === 'tile' && mark.from === 0)
-  const opening =
-    first &&
-    mentionables.find(({ title }) => `@${title}` === demo.value.slice(first.from, first.to))
   const center = view.center ?? ulysse.id
+  // Where the Turn works, as Assistant decides it: the Tile the Message opens with, else the center.
+  const location = where(writtenOf(demo), center)
   const stop = () => {
     setSent(undefined)
   }
   const chat = (
     <ComposerEnd
       demo={demo}
-      place={{ title: opening?.title ?? titleOf(center), first: opening !== undefined }}
+      place={{ title: titleOf(location), first: location !== center }}
       running={working === undefined ? undefined : { stopping: false, stop }}
       onSend={() => {
-        setSent({ id: opening?.id ?? center, at: Date.now() })
+        setSent({ id: location, at: Date.now() })
       }}
     />
   )
