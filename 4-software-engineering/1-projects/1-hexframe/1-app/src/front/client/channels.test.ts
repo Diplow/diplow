@@ -212,6 +212,26 @@ describe('the way to signing in, home signed out', () => {
     expect(assign).toHaveBeenCalledOnce()
   })
 
+  it('loads home still where the tab refuses its storage', async () => {
+    vi.stubGlobal('window', {
+      location: {
+        href: 'http://localhost/',
+        origin: 'http://localhost',
+        pathname: '/',
+        search: '',
+        hash: '',
+        assign,
+      },
+      get sessionStorage(): Storage {
+        throw new DOMException('denied', 'SecurityError')
+      },
+    })
+    await (
+      await signingIn()
+    )()
+    expect(assign).toHaveBeenCalledOnce()
+  })
+
   it('does nothing on the server, where there is no window to move', async () => {
     vi.unstubAllGlobals()
     const submit = await signingIn()

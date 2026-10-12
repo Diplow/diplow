@@ -6,14 +6,9 @@
 import { useRef, useState } from 'react'
 
 import type { FormErrors } from '#/front/client/channels'
-import { accessSubmit } from '#/front/client/iam/access'
+import { accessSubmit, type Credentials } from '#/front/client/iam/access'
 import { continueTo } from '#/front/client/iam/guard'
 import type { Access } from '#/front/ui/chat/widgets/sign-in/SignInWidget'
-
-interface Credentials {
-  email: string
-  password: string
-}
 
 /** What the widget shows of a refusal, on the field it names. */
 export type Refused = Partial<Record<keyof Credentials, string>>

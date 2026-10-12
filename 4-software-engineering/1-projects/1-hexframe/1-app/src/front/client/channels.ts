@@ -23,7 +23,9 @@ let signingIn = false
 // loads home once in a while at most (`reloadedLately`): should home find a Session that a call then
 // refuses, the page would otherwise load itself for ever.
 function signIn() {
-  if (signingIn || typeof window === 'undefined' || reloadedLately(window.sessionStorage)) return
+  if (signingIn || typeof window === 'undefined' || reloadedLately(() => window.sessionStorage)) {
+    return
+  }
   signingIn = true
   forget()
   const here = deLocalizeHref(
@@ -40,12 +42,18 @@ const reloadPause = 10_000
 
 /**
  * Whether this channel loaded home less than `reloadPause` ago in this tab; if not, marks now. A tab
- * that keeps nothing (`storage` absent) never counts as reloaded.
+ * that keeps nothing, its storage absent or refused (a sandboxed frame, a private mode), never counts
+ * as reloaded: the channel loads home as it did before the mark.
  */
-function reloadedLately(storage: Storage | undefined) {
-  const now = Date.now()
-  if (now - Number(storage?.getItem(reloadMark) ?? 0) < reloadPause) return true
-  storage?.setItem(reloadMark, String(now))
+function reloadedLately(storage: () => Storage | undefined) {
+  try {
+    const kept = storage()
+    const now = Date.now()
+    if (now - Number(kept?.getItem(reloadMark) ?? 0) < reloadPause) return true
+    kept?.setItem(reloadMark, String(now))
+  } catch {
+    return false
+  }
   return false
 }
 

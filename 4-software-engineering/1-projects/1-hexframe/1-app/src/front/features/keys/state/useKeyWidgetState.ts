@@ -45,13 +45,19 @@ export function useKeyWidgetState(open: boolean) {
     setStep(stepOnOpen(step, open))
   }
   const submit = useIssueKeySubmit(({ key, secret }: IssuedKey) => {
-    // The origin is read in the browser, where the answer arrives: the command names this hexframe.
-    setStep({
-      kind: 'shown',
-      name: key.name,
-      secret,
-      command: mcpCommand(window.location.origin, secret),
-    })
+    // Shown only where it was asked for: a widget closed, or gone back to the Keys, while the Key was
+    // on its way forgets the secret. The origin is read in the browser, where the answer arrives, so
+    // the command names this hexframe.
+    setStep((current) =>
+      current.kind === 'issue'
+        ? {
+            kind: 'shown',
+            name: key.name,
+            secret,
+            command: mcpCommand(window.location.origin, secret),
+          }
+        : current,
+    )
     setName('')
   })
   return {

@@ -1,14 +1,12 @@
 // Signing in and signing up on the client, over IAM's server functions (src/api/iam/iam.ts): the sign-in
 // widget's submit, kept out of every cache since it carries a password (`submitWrite`), a refusal of
 // the email or the password on its field, any other on its channel. Signed in, its caller goes on.
-import { signIn, signUp } from '#/api/iam/iam'
+import { type Credentials as Sent, signIn, signUp } from '#/api/iam/iam'
 
 import { submitWrite } from '../channels'
 
-interface Credentials {
-  email: string
-  password: string
-}
+/** What signing in or up sends: an email and a password, as the server function's schema says. */
+export type Credentials = typeof Sent.Type
 
 /** Each of the two's call, by the server function's name. */
 const calls = {

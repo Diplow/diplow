@@ -118,6 +118,31 @@ describe('the key widget on home', () => {
     expect(issueKey).toHaveBeenCalledOnce()
   })
 
+  it('forgets a secret that comes back after the widget closed', async () => {
+    let answer: (value: unknown) => void = () => undefined
+    vi.mocked(issueKey).mockReturnValue(
+      new Promise((resolve) => {
+        answer = resolve
+      }) as never,
+    )
+    const { result, run, reopen } = render()
+    run((actions) => {
+      actions.issue()
+      actions.name('Laptop')
+    })
+    let sent: Promise<void> = Promise.resolve()
+    act(() => {
+      sent = result.current.actions.send()
+    })
+    reopen(false)
+    await act(async () => {
+      answer({ ok: true, value: issued, requestId: 'r' })
+      await sent
+    })
+    expect(result.current.state.step).toEqual({ kind: 'list' })
+    expect(JSON.stringify(result.current.state)).not.toContain('hf_a3fEXAMPLE')
+  })
+
   it('goes back to the Keys, not now', () => {
     const { result, run } = render()
     run((actions) => {
