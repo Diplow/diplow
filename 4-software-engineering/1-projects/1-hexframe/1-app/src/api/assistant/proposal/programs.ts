@@ -163,6 +163,23 @@ export const conversationNow = (accountId: string) =>
   }))
 
 /**
+ * The Account's open Proposal as a day of the Conversation answers it: its id, how many writes it
+ * holds, and the writes themselves, as Mapping batched them, encoded, which the canvas folds over the
+ * System the page shows to draw what the Proposal would do (HEX-109); none when none is open. One
+ * read, so the writes are the ones counted.
+ */
+export const proposalNow = (accountId: string) =>
+  Effect.flatMap(Assistant.openProposal(accountId), (open) =>
+    open === undefined
+      ? Effect.succeed(undefined)
+      : Effect.map(batchOf(open), (batch) => ({
+          id: open.id,
+          drafts: open.drafts.length,
+          writes: batch.map((batched) => encodedBatched(batched)),
+        })),
+  )
+
+/**
  * Accepts the Account's open Proposal of this id, whole, in one transaction: Assistant accepts it,
  * `ProposalClosed` once it is open no longer, then its writes run by Mapping on the System as it
  * stands, under the Root's lock, all of them or none, each event published as the Assistant's, by the
