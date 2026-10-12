@@ -54,7 +54,7 @@ import {
   tierAnchor,
   tierTitle,
 } from '#/front/ui/gallery/frame'
-import { anchorOf, filled, tiers } from '#/front/ui/gallery/pieces'
+import { anchorOf, tiers } from '#/front/ui/gallery/pieces'
 import { Tokens } from '#/front/ui/gallery/Tokens'
 import { LayoutsGallery } from '#/front/ui/layouts/gallery'
 import { Screen } from '#/front/ui/layouts/screen/Screen'
@@ -184,7 +184,7 @@ function Direction() {
       <p className="max-w-prose text-sm">{m.design_system_screen()}</p>
       <nav aria-label={m.design_system_contents()}>
         <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-          {tiers.filter(filled).map((tier) => (
+          {tiers.map((tier) => (
             <li key={tier}>
               <a
                 href={`#${tierAnchor(tier)}`}

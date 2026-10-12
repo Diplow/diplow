@@ -33,7 +33,7 @@ import {
   type Point,
 } from '../geometry/geometry'
 import { buttonKeys, type Action, type Hand } from '../keys'
-import { BlurDef, FadeDef, points, Sweep, tint, type Fade } from './light'
+import { BlurDef, FadeDef, points, proposedRim, Sweep, tint, type Fade } from './light'
 import { fitWords, linesThatFit } from '../geometry/words'
 import { MarkGlow, MarkLines } from './marks/Marks'
 import { markNote, type TileMark } from './marks/mark'
@@ -241,7 +241,7 @@ const rims: Partial<Record<TileKind, Rim>> = {
   untitled: { color: tint('glow', 55), dash: '3 4' },
   list: ember,
   // What a Proposal would create: dashed violet, since it isn't done yet.
-  ghost: { color: tint('agent', 60), dash: '4 4' },
+  ghost: proposedRim,
 }
 
 const opacities: Record<TilePlace, string> = {

@@ -6,7 +6,7 @@
 // else. It sits at ui's root, outside the tiers, as the theme does, the one module of ui/ that imports
 // both sides; what ui/ can't reach, Mapping's limit and how the timeline tells a navigation, the route
 // hands it.
-import { useState, type ReactNode } from 'react'
+import { useState, type Dispatch, type ReactNode, type SetStateAction } from 'react'
 
 import { m } from '#/paraglide/messages'
 
@@ -112,29 +112,40 @@ function Ends(props: {
   )
 }
 
+/** How the chat names Tooling while the System doesn't hold it: the agent's draft, or gone. */
+type ToolingStanding = Exclude<NonNullable<MentionProps['standing']>, 'live'>
+
 /**
  * A tile of the System as the chat names it, with its card, what a click on it and pointing at it do.
- * One the System doesn't hold: Tooling, while it is on its way (`coming`), is the agent's draft,
- * violet, its card saying where it will stand, which pointing at lights where it waits; any other,
- * and Tooling once it will never come, a Proposal discarded or undone, is gone, struck through.
+ * One the System doesn't hold is gone, struck through, but Tooling, which `standing` names: the
+ * agent's draft while it is on its way, violet, its card saying where it will stand, which pointing at
+ * lights where it waits; gone too once it will never come, a Proposal discarded or undone.
  */
 const naming =
   (
     system: TileNode,
-    act: { center?: (id: string) => void; point?: (id?: string) => void },
-    coming = true,
+    act: { center?: (id: string) => void; point?: (id: string, pointing: boolean) => void },
+    standing: ToolingStanding = 'draft',
   ) =>
   (id: string): MentionProps => {
+    const pointing = act.point && { onPoint: (on: boolean) => act.point?.(id, on) }
     const named = namedOf(system, id)
-    if (named === undefined && !(id === tooling.id && coming)) {
-      // Tooling is no Tile of the fixture, whose titles `titleOf` reads.
-      return { title: id === tooling.id ? tooling.title : titleOf(id), standing: 'gone' }
+    if (named !== undefined) {
+      return { ...named, ...(act.center && { onCenter: () => act.center?.(id) }), ...pointing }
     }
-    return {
-      ...(named ?? { ...toolingNamed, standing: 'draft' }),
-      ...(named && act.center && { onCenter: () => act.center?.(id) }),
-      ...(act.point && { onPoint: (pointing: boolean) => act.point?.(pointing ? id : undefined) }),
-    }
+    if (id !== tooling.id) return { title: titleOf(id), standing: 'gone' }
+    // Tooling is no Tile of the fixture, whose titles `titleOf` reads.
+    if (standing === 'gone') return { title: tooling.title, standing }
+    return { ...toolingNamed, standing, ...pointing }
+  }
+
+/**
+ * The tile pointed at, as each name's card opens and shuts: a card shutting clears its own tile only,
+ * so going from one name to the next keeps the next one lit.
+ */
+const pointedWith =
+  (setPointed: Dispatch<SetStateAction<string | undefined>>) => (id: string, pointing: boolean) => {
+    setPointed((current) => (pointing ? id : current === id ? undefined : current))
   }
 
 const mentionables = mentionablesIn(ulysse)
@@ -149,7 +160,7 @@ function PointingCrossing() {
       setView(centerOn(ulysse, id))
       setArrived({ id, key: Date.now() })
     },
-    point: setPointed,
+    point: pointedWith(setPointed),
   })
   const chat = (
     <>
@@ -224,15 +235,7 @@ function AgentAtWorkCrossing() {
   const [keyed, setKeyed] = useState(false)
   const [view, setView] = useState<CanvasView>(startView)
   const [at] = useState(() => new Date())
-  const shown = now && {
-    working: now.answered !== true,
-    reading: now.reading && turnIds[now.reading],
-    writing: now.writing === true,
-    created: now.created === true,
-    edited: now.edited === true,
-    changed: now.changed && turnIds[now.changed],
-  }
-  const { system, marks } = turnOnCanvas(shown, seen, keyed)
+  const { system, marks } = turnOnCanvas(now, turnIds, seen, keyed)
   const chat = (
     <TurnLines
       told={now}
@@ -284,7 +287,11 @@ function ProposalCrossing() {
   // What the canvas draws of it: what it would do while it waits, what it did once accepted.
   const shown = fate === 'open' ? 'waiting' : fate === 'accepted' && !undone ? 'landed' : 'gone'
   const { system, marks } = proposalOnCanvas(shown)
-  const named = naming(system, { point: setPointed }, shown !== 'gone')
+  const named = naming(
+    system,
+    { point: pointedWith(setPointed) },
+    shown === 'gone' ? 'gone' : 'draft',
+  )
   const ids = {
     tooling: tooling.id,
     principles: 'principles',

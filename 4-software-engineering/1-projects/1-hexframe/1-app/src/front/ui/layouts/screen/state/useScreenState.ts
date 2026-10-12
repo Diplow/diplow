@@ -7,7 +7,7 @@
 import { useEffect, useReducer } from 'react'
 
 import { durationOf } from '../../../motion'
-import type { Side } from '../Screen'
+import type { Said, Side } from '../Screen'
 
 interface State {
   readonly front: Side
@@ -17,7 +17,7 @@ interface State {
    */
   readonly glance: number
   /** What the last crossing showed, said to a screen reader, which the chat no longer shows. */
-  readonly said: string | undefined
+  readonly said: Said | undefined
 }
 
 type Event =
@@ -33,10 +33,15 @@ function reducer(state: State, event: Event): State {
       return state.front === event.to && state.glance === 0
         ? state
         : { ...state, front: event.to, glance: 0 }
-    case 'crossed':
+    case 'crossed': {
+      const said =
+        event.said === undefined
+          ? undefined
+          : { words: event.said, count: (state.said?.count ?? 0) + 1 }
       // The canvas taken already stays as it is: a crossing gives back only what it took.
-      if (state.front === 'canvas' && state.glance === 0) return { ...state, said: event.said }
-      return { front: 'canvas', glance: state.glance + 1, said: event.said }
+      if (state.front === 'canvas' && state.glance === 0) return { ...state, said }
+      return { front: 'canvas', glance: state.glance + 1, said }
+    }
     case 'glanced':
       return state.glance === event.glance ? { ...state, front: 'chat', glance: 0 } : state
   }

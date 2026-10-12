@@ -55,7 +55,7 @@ Every folder under `1-app/src/` is a node: at most 6 child folders and 6 files, 
 |---|---|
 | Strict types | ESLint flat config (`eslint.config.ts`), `typescript-eslint` strict type-checked |
 | At most 6 folders and 6 files per folder | `scripts/check-rule-of-six.ts`: no ESLint plugin counts a folder's children |
-| Layer direction, no domain importing another, no feature importing another, inside `src/front/ui/` the sides above the shared layouts above the shared atoms above the seams, and neither side importing the other, a third-party SDK imported only by its repository | `dependency-cruiser` (`dependency-cruiser.config.ts`) |
+| Layer direction, no domain importing another, no feature importing another, inside `src/front/ui/` the sides above the shared layouts above the shared atoms above the seams, neither side importing the other, and `ui/crossings.tsx` the one file joining them, which nothing in `ui/` imports, a third-party SDK imported only by its repository | `dependency-cruiser` (`dependency-cruiser.config.ts`) |
 | The front imports of a domain its door only, `entities/index.ts`, `operations/index.ts` and `errors.ts`; nothing reachable through the door reaches a repository, the application service, a concept folder, another domain or Node, type-only imports included, only `effect`, `domains/kind.ts` and `domains/bus.ts` beside the domain's own `entities/`, `operations/` and `errors.ts` | `dependency-cruiser` (`no-front-past-a-domains-door`, `no-door-reaching-past-the-pure-model`) |
 | Dead code: files, exports, dependencies | `knip` |
 | Cognitive complexity at most 15 | `eslint-plugin-sonarjs` |

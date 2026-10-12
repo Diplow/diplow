@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 
 import { describe, expect, it } from 'vitest'
 
-import { anchorOf, filled, pieces, tiers, usedIn } from './pieces'
+import { anchorOf, pieces, tiers, usedIn } from './pieces'
 
 /** The pieces drawn in files of their own: every entry but the crossings, which join two ends. */
 const drawn = pieces.filter((piece) => 'sources' in piece)
@@ -144,7 +144,8 @@ describe('the pieces', () => {
   })
 
   it('fill every tier, the crossings last, by their proposal (HEX-108)', () => {
-    expect(tiers.filter((tier) => !filled(tier))).toEqual([])
+    const empty = tiers.filter((tier) => !pieces.some((piece) => piece.tier === tier))
+    expect(empty).toEqual([])
   })
 })
 

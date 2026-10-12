@@ -30,6 +30,15 @@ import { Scrollbar } from './Scrollbar'
 /** A side of the screen; on a phone, the one in front. */
 export type Side = 'chat' | 'canvas'
 
+/**
+ * What a crossing showed, said to a screen reader, and how many were said: the same words said again
+ * are heard again.
+ */
+export interface Said {
+  readonly words: string
+  readonly count: number
+}
+
 interface ScreenProps {
   /** The Canvas side: the System, or Help signed out. It fills the screen, behind the chat. */
   canvas: ReactNode
@@ -43,8 +52,8 @@ interface ScreenProps {
   front: Side
   /** The seam turned it, or, on a phone, a hand took the canvas in front: it stays. */
   onFrontChange: (front: Side) => void
-  /** What the last crossing showed on the other side, said to a screen reader. */
-  said?: string | undefined
+  /** What the last crossing showed on the other side, said to a screen reader, each time anew. */
+  said?: Said | undefined
   className?: string
 }
 
@@ -200,7 +209,8 @@ export function Screen({
         {canvas}
       </section>
       <p aria-live="polite" className="sr-only">
-        {said}
+        {/* Drawn anew for each saying, so the same words said again are heard again. */}
+        {said === undefined ? null : <span key={said.count}>{said.words}</span>}
       </p>
     </div>
   )

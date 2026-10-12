@@ -313,10 +313,12 @@ describe('the tiers and sides of the design system', () => {
     'src/front/ui/canvas/atoms/tooltip.ts': 'export const tooltip = 1\n',
     'src/front/ui/canvas/tile.ts':
       "import { button } from '../atoms/button'\nimport { tooltip } from './atoms/tooltip'\nexport const tile = [button, tooltip]\n",
+    'src/front/ui/crossings.ts':
+      "import { composer } from './chat/composer'\nimport { tile } from './canvas/tile'\nexport const crossing = [composer, tile]\n",
   }
   const importing = (path: string) => `import * as above from '${path}'\nexport const a = above\n`
 
-  it('lets a side import its own pieces and the shared ones, a layout an atom, and an atom a seam', async () => {
+  it('lets a side import its own pieces and the shared ones, a layout an atom, an atom a seam, and the crossings both sides', async () => {
     expect(await violations(ui)).toEqual([])
   })
 
@@ -362,6 +364,20 @@ describe('the tiers and sides of the design system', () => {
       '../atoms/button',
       'src/front/ui/atoms/button.ts',
       'no-seams-importing-up',
+    ],
+    [
+      'another file at its root a side',
+      'src/front/ui/reach.ts',
+      './chat/composer',
+      'src/front/ui/chat/composer.ts',
+      'no-ui-root-joining-the-sides',
+    ],
+    [
+      'a piece the crossings',
+      'src/front/ui/layouts/reach.ts',
+      '../crossings',
+      'src/front/ui/crossings.ts',
+      'no-ui-importing-the-crossings',
     ],
   ])('refuses %s', async (_, from, path, to, rule) => {
     expect(await violations({ ...ui, [from]: importing(path) })).toEqual([

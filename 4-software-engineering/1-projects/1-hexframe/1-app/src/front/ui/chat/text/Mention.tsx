@@ -70,7 +70,11 @@ export function Mention({ title, standing = 'live', onCenter, card, onPoint, voi
   }
   const named =
     onCenter === undefined ? (
-      <span className={look}>
+      <span
+        // Its card is for the keyboard too, which reaches it as the pointer does: focus opens it.
+        {...(card !== undefined && { tabIndex: 0 })}
+        className={cn(look, card !== undefined && 'outline-offset-2 focus-visible:outline')}
+      >
         {mark}
         {title}
       </span>

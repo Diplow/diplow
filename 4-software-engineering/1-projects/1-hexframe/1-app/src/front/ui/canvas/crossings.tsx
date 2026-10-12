@@ -213,56 +213,61 @@ const byTile =
   (id: string): TileMark | undefined =>
     marks[id]
 
-/** How far the agent's Turn has gone, as the canvas marks it. */
-export interface TurnShown {
-  /** Its light runs round Software Engineering, where it works, until it answers. */
-  working: boolean
+/**
+ * A beat of the agent's Turn, as far as the canvas marks it, each tile by its part in the Turn, whose
+ * id `ids` gives: the beat as the crossing writes it once, which the chat's end tells too.
+ */
+export interface TurnShown<Part extends string> {
   /** The tile it reads now, glinting violet once. */
-  reading?: string | undefined
+  reading?: Part | undefined
   /** Tooling being written, breathing in its slot; then created, there. */
-  writing: boolean
-  created: boolean
+  writing?: boolean | undefined
+  created?: boolean | undefined
   /** Principles' new preview, once edited. */
-  edited: boolean
+  edited?: boolean | undefined
   /** The tile it changed just now, glinting once. */
-  changed?: string | undefined
+  changed?: Part | undefined
+  /** Its light runs round Software Engineering, where it works, until it answers. */
+  answered?: boolean | undefined
 }
 
 /**
- * The agent's Turn as the canvas shows it, as far as `shown` says it has gone (none before it runs),
+ * The agent's Turn as the canvas shows it, as far as `beat` says it has gone (none before it runs),
  * as the chat's end tells it: each tile it reads glints violet once, while its light runs round
  * Software Engineering, where the Turn works; Tooling breathes in its slot while written, then is
  * there; what it changed glints, then keeps its dot until opened (`seen`); a Key editing Notes
  * meanwhile marks it hollow.
  */
-export function turnOnCanvas(
-  shown: TurnShown | undefined,
+export function turnOnCanvas<Part extends string>(
+  beat: TurnShown<Part> | undefined,
+  ids: Record<Part, string>,
   seen: ReadonlySet<string>,
   keyed: boolean,
 ) {
+  const working = beat !== undefined && beat.answered !== true
+  // The tiles it reads and changes just now, each glinting once.
+  const glinted = [beat?.reading, beat?.changed].map((part) => part && ids[part])
   const system =
-    shown?.edited === true
+    beat?.edited === true
       ? principlesEdited(withTooling(ulysse))
-      : shown?.created === true
+      : beat?.created === true
         ? withTooling(ulysse)
         : ulysse
   const unseen = (id: string, done: boolean | undefined) => done === true && !seen.has(id)
   const marks: CanvasMarks = {
     tile: (id) => {
       const mark: TileMark = {
-        ...(id === engineering && shown?.working === true && { working: true }),
-        ...((id === shown?.reading || id === shown?.changed) && {
-          glint: { by: 'agent', key: id },
-        }),
-        ...(((id === tooling.id && unseen(id, shown?.created)) ||
-          (id === 'principles' && unseen(id, shown?.edited))) && { unseen: 'agent' }),
+        ...(id === engineering && working && { working: true }),
+        ...(glinted.includes(id) && { glint: { by: 'agent', key: id } }),
+        ...(((id === tooling.id && unseen(id, beat?.created)) ||
+          (id === 'principles' && unseen(id, beat?.edited))) && { unseen: 'agent' }),
         ...(id === 'notes' && keyed && { glint: { by: 'key', key: 'key' } }),
         ...(id === 'notes' && keyed && !seen.has(id) && { unseen: 'key' }),
       }
       return Object.keys(mark).length === 0 ? undefined : mark
     },
     slot: (slot): SlotStanding | undefined =>
-      shown?.writing === true && isSlot(slot, 6)
+      beat?.writing === true && isSlot(slot, 6)
         ? { id: tooling.id, look: { kind: 'draft', words: { title: tooling.title } } }
         : undefined,
   }

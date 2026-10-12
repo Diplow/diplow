@@ -10,7 +10,7 @@ import { cn } from 'cn'
 import { useId } from 'react'
 
 import { scaled, type Hex, type Point } from '../../geometry/geometry'
-import { points, tint } from '../light'
+import { points, proposedRim } from '../light'
 import type { By, TileMark } from './mark'
 
 /** How a glint or a held light is drawn, by who: a fill in their colour, or a Key's hollow line. */
@@ -95,9 +95,9 @@ export function MarkLines({
         <polygon
           points={points(hex)}
           fill="none"
-          stroke={tint('agent', 60)}
+          stroke={proposedRim.color}
           strokeWidth={1}
-          strokeDasharray="4 4"
+          strokeDasharray={proposedRim.dash}
           vectorEffect="non-scaling-stroke"
         />
       )}
@@ -188,7 +188,7 @@ export function Arc({ from, to, radius, around }: ArcProps) {
         d={`M${at(start)}Q${at(bow)} ${at(end)}`}
         fill="none"
         strokeWidth={1.2}
-        strokeDasharray="4 4"
+        strokeDasharray={proposedRim.dash}
         vectorEffect="non-scaling-stroke"
         markerEnd={`url(#${id}-head)`}
         className="stroke-agent/70"

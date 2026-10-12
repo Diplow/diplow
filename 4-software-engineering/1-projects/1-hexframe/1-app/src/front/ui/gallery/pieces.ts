@@ -442,10 +442,5 @@ export function usedIn(name: PieceName): PieceName[] {
   return pieces.filter((piece) => partsOf(piece).includes(name)).map((piece) => piece.name)
 }
 
-/** Whether a piece fills the tier, so the page shows its section. */
-export function filled(tier: Tier): boolean {
-  return pieces.some((piece) => piece.tier === tier)
-}
-
 /** A piece's anchor on the page, which "made of" and "used in" link to. */
 export const anchorOf = (name: string) => `piece-${name}`

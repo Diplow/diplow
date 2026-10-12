@@ -15,6 +15,12 @@ export function tint(token: string, percent: number): string {
   return `color-mix(in oklab, var(--${token}) ${String(percent)}%, transparent)`
 }
 
+/**
+ * What a Proposal would do and isn't done yet, dashed in the agent's violet: the rim of a ghost, of a
+ * tile it would edit or move, and the dash of a move's arc.
+ */
+export const proposedRim = { color: tint('agent', 60), dash: '4 4' }
+
 /** A fill from `top` to `foot`, straight down, or corner to corner for the root's warm light. */
 export interface Fade {
   top: string

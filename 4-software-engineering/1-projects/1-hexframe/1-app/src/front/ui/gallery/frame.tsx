@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 
 import { m } from '#/paraglide/messages'
 
-import { anchorOf, filled, pieceNamed, usedIn, type PieceName, type Tier } from './pieces'
+import { anchorOf, pieceNamed, usedIn, type PieceName, type Tier } from './pieces'
 
 const tierTitles: Record<Tier, () => string> = {
   crossings: m.design_system_tier_crossings,
@@ -34,9 +34,8 @@ export const tierAnchor = (tier: Tier) => `tier-${tier}`
 /** The tier a section is drawn under, which its pieces check against the catalogue's. */
 const TierContext = createContext<Tier | undefined>(undefined)
 
-/** A tier's section: its title, what it holds, then its pieces; nothing while no piece fills it. */
+/** A tier's section: its title, what it holds, then its pieces. */
 export function GalleryTier({ tier, children }: { tier: Tier; children?: ReactNode }) {
-  if (!filled(tier)) return null
   return (
     <TierContext value={tier}>
       <section id={tierAnchor(tier)} className="grid scroll-mt-6 grid-cols-[minmax(0,1fr)] gap-8">

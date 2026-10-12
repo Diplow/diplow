@@ -142,11 +142,15 @@ describe('a crossing', () => {
     expect(front()).toBe('canvas')
   })
 
-  it('says what it showed, for a screen reader', () => {
+  it('says what it showed, for a screen reader, the same words again as a new saying', () => {
     const { result } = render()
     act(() => {
       result.current.actions.cross('Projects, on the canvas')
     })
-    expect(result.current.state.said).toBe('Projects, on the canvas')
+    expect(result.current.state.said).toEqual({ words: 'Projects, on the canvas', count: 1 })
+    act(() => {
+      result.current.actions.cross('Projects, on the canvas')
+    })
+    expect(result.current.state.said).toEqual({ words: 'Projects, on the canvas', count: 2 })
   })
 })
