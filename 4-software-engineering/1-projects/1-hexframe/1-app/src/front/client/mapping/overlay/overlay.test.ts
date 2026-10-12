@@ -22,7 +22,7 @@ import {
   useSystemRefusals,
   useSystemWriting,
 } from '../queries'
-import { operationOf, overlaid, refusalOf } from './overlay'
+import { landingOf, underwayOf, operationOf, overlaid, refusalOf, tilesWrittenBy } from './overlay'
 
 // The System the page shows while writes are on their way, over stand-ins for the server functions:
 // each write shows before its answer, a refused one stops showing without a rollback, a refetch slips
@@ -485,6 +485,88 @@ describe('the overlay', () => {
     ).toMatchObject({
       _tag: 'MoveTile',
       id: id.a,
+    })
+  })
+})
+
+describe('what the writes on their way change', () => {
+  const operation = (name: string, fields: object) => {
+    const read = operationOf(name, fields)
+    if (read === undefined) throw new Error(`${name} read as no Operation`)
+    return read
+  }
+
+  it('names the Tile a write changes, the two a swap trades, and the Tile a Reference stands under', () => {
+    const move = operation('moveTile', { id: id.a, version: 1, parent: id.root, slot: 4 })
+    expect(tilesWrittenBy(move)).toEqual([id.a])
+    const swap = operation('swapTiles', { a: id.a, aVersion: 1, b: id.b, bVersion: 1 })
+    expect(tilesWrittenBy(swap)).toEqual([id.a, id.b])
+    const create = operation('createTile', {
+      id: id.c,
+      parent: id.root,
+      slot: 3,
+      title: 'C',
+      preview: '',
+      body: '',
+    })
+    expect(tilesWrittenBy(create)).toEqual([id.c])
+    const reference = operation('createReference', {
+      parent: id.a,
+      parentVersion: 1,
+      slot: -1,
+      target: id.b,
+    })
+    expect(tilesWrittenBy(reference)).toEqual([id.a])
+  })
+
+  it('marks every pending write’s Tiles, the slot an import lands in, and the Root an import becomes', () => {
+    const move = operation('moveTile', { id: id.a, version: 1, parent: id.root, slot: 4 })
+    const marked = underwayOf(
+      [
+        { turn: 1, operation: move },
+        {
+          turn: 2,
+          operation: undefined,
+          landing: { _tag: 'Slot', parent: id.b, slot: { leaf: 2 } },
+        },
+        { turn: 3, operation: undefined, landing: { _tag: 'Root' } },
+      ],
+      id.root,
+    )
+    expect([...marked.tiles]).toEqual([id.a, id.root])
+    expect(marked.slots).toEqual([{ parent: id.b, slot: { leaf: 2 } }])
+  })
+
+  it('reads where an import lands by its schema, and nothing from an Operation or a place it refuses', () => {
+    const given = { files: [] }
+    const slot = { _tag: 'Slot', parent: id.b, slot: { leaf: 2 } }
+    expect(landingOf('importTiles', { given, place: slot })).toEqual(slot)
+    expect(landingOf('importTiles', { given, place: { _tag: 'Root' } })).toEqual({ _tag: 'Root' })
+    expect(landingOf('importTiles', { given, place: { _tag: 'Slot', parent: 'x', slot: 9 } })).toBe(
+      undefined,
+    )
+    expect(landingOf('moveTile', { place: slot })).toBeUndefined()
+  })
+
+  it('marks a write’s Tile while it is on its way, and no longer once it has landed', async () => {
+    const answer = later<typeof ok>()
+    vi.mocked(Mapping.moveTile).mockReturnValue(answer.promise)
+    const { result } = await rendered(() => ({
+      move: useMoveTile(),
+      underway: useSystem().data?.underway,
+    }))
+    expect(result.current.hook.underway?.tiles.size).toBe(0)
+    act(() => {
+      result.current.hook.move.mutate({ id: id.a, version: 1, parent: id.root, slot: 4 })
+    })
+    await waitFor(() => {
+      expect(result.current.hook.underway?.tiles.has(id.a)).toBe(true)
+    })
+    act(() => {
+      answer.settle(ok)
+    })
+    await waitFor(() => {
+      expect(result.current.hook.underway?.tiles.size).toBe(0)
     })
   })
 })

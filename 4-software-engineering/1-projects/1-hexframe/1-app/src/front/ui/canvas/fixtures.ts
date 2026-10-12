@@ -72,6 +72,7 @@ export const ulysse: TileNode = {
   id: 'ulysse',
   title: 'Ulysse',
   preview: 'What I aim at, what I think about the world, and why.',
+  root: 'named',
   branches: {
     1: { id: 'leadership', title: 'Leadership', preview: 'Leading teams, and the people in them.' },
     2: { id: 'education', title: 'Education', preview: 'How people learn, and how to help them.' },
@@ -83,7 +84,7 @@ export const ulysse: TileNode = {
   // Six Branches and two Leaves: more than six in all, so the root shows Branches and Leaves apart.
   leaves: {
     1: leaf('vault-stack', 'Stack', 'The stack every project of the vault shares.'),
-    2: leaf('diplow-hexframe', 'diplow.hexframe', ''),
+    2: { ...leaf('diplow-hexframe', 'diplow.hexframe', ''), file: true },
   },
   context: {
     1: { id: 'purpose', title: 'Purpose', preview: 'An entry point to who I am.' },

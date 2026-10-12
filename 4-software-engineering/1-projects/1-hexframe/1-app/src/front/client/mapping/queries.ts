@@ -25,7 +25,17 @@ import { type System, type SystemTile, systemOf } from '#/domains/mapping/entiti
 import type { Operation, OperationName } from '#/domains/mapping/operations'
 import { type Download, downloaded } from '#/api/mapping/files/download'
 import { type Given, type LeftOut, type Prepared, prepared } from './import/upload'
-import { operationOf, overlaid, type Pending, refusalOf } from './overlay/overlay'
+import {
+  importing,
+  landingOf,
+  underwayOf,
+  type Underway,
+  operationOf,
+  overlaid,
+  type Pending,
+  refusalOf,
+} from './overlay/overlay'
+import type { ImportPlace } from '#/api/mapping/places'
 import {
   ImportUpload,
   type NewReference,
@@ -59,6 +69,11 @@ const systemScope = 'system'
 
 /** The queue every write to the System waits its turn in, so they reach the server in order. */
 const systemQueue = 'system'
+/** What an import is given: the files, and where they land. */
+interface ImportVariables {
+  given: Given | Promise<Given>
+  place: ImportPlace
+}
 
 /**
  * The System's read, whose cache holds the System as the server last answered it, flat. Never read
@@ -89,14 +104,16 @@ const pendingByState = new WeakMap<Mutation['state'], Pending>()
 
 /**
  * A pending write to the System, as the overlay folds it: its turn, and the Operation it sends, read
- * back from its key and variables by Mapping's schema.
+ * back from its key and variables by Mapping's schema, or where an import lands, by its own.
  */
 function pendingOf(mutation: Mutation): Pending {
   const known = pendingByState.get(mutation.state)
   if (known !== undefined) return known
+  const name = mutation.options.mutationKey?.[0]
   const pending = {
     turn: mutation.mutationId,
-    operation: operationOf(mutation.options.mutationKey?.[0], mutation.state.variables),
+    operation: operationOf(name, mutation.state.variables),
+    landing: landingOf(name, mutation.state.variables),
   }
   pendingByState.set(mutation.state, pending)
   return pending
@@ -113,7 +130,7 @@ function pendingOf(mutation: Mutation): Pending {
  * a `frame` read, which would be a Query of its own and read the System twice.
  */
 export function useSystem({ throwing = true }: { throwing?: boolean } = {}): {
-  data: { system: System; root: SystemTile } | undefined
+  data: { system: System; root: SystemTile; underway: Underway } | undefined
 } {
   const { data } = useQuery(throwing ? systemRead : { ...systemRead, throwOnError: false })
   const pending = useMutationState({
@@ -124,7 +141,7 @@ export function useSystem({ throwing = true }: { throwing?: boolean } = {}): {
     data: useMemo(() => {
       if (data === undefined) return undefined
       const shown = overlaid(data, pending)
-      return { system: shown, root: systemOf(shown) }
+      return { system: shown, root: systemOf(shown), underway: underwayOf(pending, data.root.id) }
     }, [data, pending]),
   }
 }
@@ -342,7 +359,7 @@ function save({ name, blob }: Download) {
 }
 
 /** Where an import lands: a free slot under a Tile, or the Root of an empty System. */
-export type ImportPlace = (typeof ImportUpload.Type)['place']
+export type { ImportPlace }
 
 /** What an import landed, as the server answers: the Tile it landed as, what it wrote and skipped. */
 type ImportReport = Extract<Awaited<ReturnType<typeof importTiles>>, { ok: true }>['value']
@@ -370,19 +387,13 @@ export type Imported =
 export const useImportTiles = () => {
   const client = useQueryClient()
   return useMutation({
-    ...writing('importTiles', { queue: systemQueue }),
-    mutationFn: async ({
-      given,
-      place,
-    }: {
-      given: Given | Promise<Given>
-      place: ImportPlace
-    }): Promise<Imported> => {
+    ...writing(importing, { queue: systemQueue }),
+    mutationFn: async ({ given, place }: ImportVariables): Promise<Imported> => {
       const ready = await prepared(await given)
       if (ready._tag === 'Refused') return ready
       const { upload, as, leftOut } = ready
       const form = Schema.encodeSync(ImportUpload)({ upload, as, place })
-      const submitted = await settleSubmit('importTiles', importTiles({ data: form }))
+      const submitted = await settleSubmit(importing, importTiles({ data: form }))
       if (submitted.ok) return { _tag: 'Landed', report: submitted.value, leftOut }
       return { _tag: 'Refused', faults: submitted.failure.faults, leftOut }
     },

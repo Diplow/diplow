@@ -125,7 +125,7 @@ describe('withoutTile', () => {
     leaves: { 4: { id: 'a4', title: 'A4', preview: '', leaf: true } },
     context: {
       2: { id: 'a2', title: 'A2', preview: '' },
-      3: { id: 'b', title: 'B', preview: '', reference: true },
+      3: { id: 'b', title: 'B', preview: '', reference: { from: 'A' } },
     },
   }
 

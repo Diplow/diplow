@@ -19,7 +19,7 @@ const leaf = (id: string) => tile(id, { leaf: true })
 const mixed = tile('mixed', {
   branches: { 1: tile('b1', { branches: { 4: tile('b1x') } }), 2: tile('b2'), 5: tile('b5') },
   leaves: { 2: leaf('l2'), 3: leaf('l3') },
-  context: { 1: tile('why'), 2: tile('b2', { reference: true }) },
+  context: { 1: tile('why'), 2: tile('b2', { reference: { from: 'Elsewhere' } }) },
 })
 
 // Four Branches and three Leaves: seven, so they show apart.
@@ -112,7 +112,7 @@ describe('layoutCanvas', () => {
       'tile:b2': ['branch', 2, 1],
     })
     expect(only(hexes, 'tile').find(({ key }) => key === 'tile:mixed:context:2')?.tile).toEqual(
-      tile('b2', { reference: true }),
+      tile('b2', { reference: { from: 'Elsewhere' } }),
     )
     expect(empties(hexes).filter((slot) => slot.includes('context'))).toEqual([
       'mixed context 3 1',

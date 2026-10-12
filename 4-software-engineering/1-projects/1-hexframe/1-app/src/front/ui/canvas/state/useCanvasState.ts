@@ -1,10 +1,15 @@
 // The canvas's state, as it draws it: the view the URL holds resolved against the System, its hexes,
 // the rings the center can show, and what each gesture asks of the view. The view itself stays the
 // URL's: every action hands the next one to `onViewChange`, for the route to navigate to, with the
-// gesture that asked for it and the Tile it was made on.
-import { useRef } from 'react'
+// gesture that asked for it and the Tile it was made on. What it holds is the motion between two
+// views: what an opened hex holds blooms out of its heart, and folds back into it for
+// `--duration-fold` before the view that closes it is handed on, at once with reduced motion.
+import { useEffect, useRef, useState } from 'react'
 
+import { directions, type Point } from '../geometry/geometry'
 import { layoutCanvas, type CanvasHex } from '../geometry/shape'
+import type { TileMotion } from '../tile/Tile'
+import { movingFor } from './motion'
 import type { InnerKind, OuterKind, TileNode } from '../view/tiles'
 import {
   centerOn,
@@ -63,6 +68,49 @@ function tileAction(hex: TileHex, shown: ShownView): TileAction | undefined {
   }
 }
 
+/** A hex drawn inside a hex opened in place: the ground it stands on, its heart, its turn among its six. */
+interface Inside {
+  ground: string
+  from: Point
+  order: number
+}
+
+/** The gestures that close an opened hex, whose six fold back into its heart first. */
+const closing = new Set<TileAction>(['collapse', 'hide-context', 'hide-leaves'])
+
+/**
+ * Where each hex stands among the hexes opened in place: by key, the ground of each Tile or free slot
+ * drawn inside one (`inside`), and the ground of each Tile drawn at its heart (`hubs`).
+ */
+function openedIn(hexes: readonly CanvasHex[]) {
+  const inside = new Map<string, Inside>()
+  const hubs = new Map<string, string>()
+  for (const ground of hexes) {
+    if (ground.kind !== 'ground') continue
+    for (const hex of hexes) {
+      const at = standing(hex, ground)
+      if (at === 'heart') hubs.set(hex.key, ground.key)
+      else if (at !== undefined) inside.set(hex.key, at)
+    }
+  }
+  return { inside, hubs }
+}
+
+/**
+ * Where `hex` stands on a ground: a Tile at its heart, or a Tile or a free slot inside it, within its
+ * radius, a generation further, in a Direction of its ring; or neither.
+ */
+function standing(hex: CanvasHex, ground: CanvasHex): 'heart' | Inside | undefined {
+  if (hex.kind !== 'tile' && hex.kind !== 'empty') return undefined
+  const from = ground.hex.center
+  const away = Math.hypot(hex.hex.center.x - from.x, hex.hex.center.y - from.y)
+  if (away < 1e-6) return hex.kind === 'tile' ? 'heart' : undefined
+  const direction = hex.kind === 'tile' ? hex.direction : hex.slot.direction
+  if (direction === undefined || hex.generation <= ground.generation) return undefined
+  if (away >= ground.hex.radius) return undefined
+  return { ground: ground.key, from, order: directions.indexOf(direction) }
+}
+
 interface CanvasInput {
   /** The System's root Tile, with everything below it. */
   system: TileNode
@@ -73,12 +121,32 @@ interface CanvasInput {
 
 export function useCanvasState({ system, view, onViewChange }: CanvasInput) {
   const shown = showView(system, view)
+  const hexes = layoutCanvas(shown)
+  const { inside, hubs } = openedIn(hexes)
   // The hex the last single click landed on: a double-click centers its Tile only if its first click
   // landed there too, since that click may have redrawn what lies under the pointer.
   const clicked = useRef<string | undefined>(undefined)
+  // The ground whose six fold back into its heart, and the view handed on once they have.
+  const [folding, setFolding] = useState<string>()
+  const fold = useRef<ReturnType<typeof setTimeout>>(undefined)
+  useEffect(
+    () => () => {
+      clearTimeout(fold.current)
+    },
+    [],
+  )
+  // The view as it stands, which a fold checks before handing its own on: a view changed meanwhile,
+  // a ring picked or the browser's Back, gives the fold up rather than being overwritten. And the
+  // caller's latest `onViewChange`, which the fold hands its view to, so what else the page changed
+  // meanwhile, its search params beside the view, is kept.
+  const viewNow = JSON.stringify(view)
+  const latest = useRef({ view: viewNow, onViewChange })
+  useEffect(() => {
+    latest.current = { view: viewNow, onViewChange }
+  })
 
   const change = (next: CanvasView, gesture: Gesture, tile: string) => {
-    onViewChange(next, { gesture, tile })
+    latest.current.onViewChange(next, { gesture, tile })
   }
 
   function act(hex: TileHex, action: TileAction) {
@@ -101,28 +169,60 @@ export function useCanvasState({ system, view, onViewChange }: CanvasInput) {
     }
   }
 
+  /**
+   * Closes the hex `hex` sits at the heart of once its six have folded back, at once when nothing
+   * moves, unless the view changed meanwhile.
+   */
+  function foldThen(hex: TileHex, action: TileAction) {
+    const ground = hubs.get(hex.key)
+    const duration = movingFor('--duration-fold')
+    if (ground === undefined || duration === 0) {
+      act(hex, action)
+      return
+    }
+    setFolding(ground)
+    fold.current = setTimeout(() => {
+      setFolding(undefined)
+      if (latest.current.view === viewNow) act(hex, action)
+    }, duration)
+  }
+
   return {
     state: {
       center: shown.center,
-      hexes: layoutCanvas(shown),
+      hexes,
       /** The rings shown around and inside the center, and the kinds it could show instead. */
       rings: { around: shown.frame, inside: shown.inner, choices: ringChoices(shown) },
     },
     actions: {
       actionOf: (hex: TileHex) => tileAction(hex, shown),
-      /** A click, Enter or Space on `hex`. `repeat` is the second click of a double-click. */
-      click: (hex: TileHex, repeat: boolean) => {
-        // The second click of a double-click is the double-click's, not a click of its own.
-        if (repeat) return
+      /**
+       * How a hex drawn inside one opened in place moves: blooming out of its heart, after its elder
+       * siblings, or folding back into it; none for the others.
+       */
+      motionOf: (key: string): TileMotion | undefined => {
+        const at = inside.get(key)
+        if (at === undefined) return undefined
+        return at.ground === folding
+          ? { way: 'fold', from: at.from }
+          : { way: 'bloom', from: at.from, order: at.order }
+      },
+      /** A click, Enter or Space on `hex`; none while a fold is under way. */
+      click: (hex: TileHex) => {
+        if (folding !== undefined) return
         clicked.current = hex.key
         const action = tileAction(hex, shown)
-        if (action !== undefined) act(hex, action)
+        if (action === undefined) return
+        if (closing.has(action)) foldThen(hex, action)
+        else act(hex, action)
       },
-      /** A double-click, or Shift+Enter, on `hex`. */
+      /** A double-click, or Shift+Enter, on `hex`, a fold under way given up for it. */
       center: (hex: TileHex, from: 'pointer' | 'keyboard') => {
         const again = from === 'keyboard' || clicked.current === hex.key
-        if (again && hex.tile.id !== shown.center.id)
-          change(centerOn(system, hex.tile.id), 'center', hex.tile.id)
+        if (!again || hex.tile.id === shown.center.id) return
+        clearTimeout(fold.current)
+        setFolding(undefined)
+        change(centerOn(system, hex.tile.id), 'center', hex.tile.id)
       },
       /** Picks the ring around the center; the one shown already changes nothing. */
       showAround: (kind: OuterKind) => {

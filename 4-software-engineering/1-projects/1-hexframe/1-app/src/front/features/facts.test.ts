@@ -50,7 +50,7 @@ describe('the navigation fact', () => {
     const { state, actions } = result.current
     const a = state.hexes.find((hex): hex is TileHex => hex.kind === 'tile' && hex.key === 'tile:a')
     if (a === undefined) throw new Error('No Tile a is drawn')
-    actions.click(a, false)
+    actions.click(a)
     actions.showInside('context')
     actions.center(a, 'keyboard')
     expect(heard).toEqual([

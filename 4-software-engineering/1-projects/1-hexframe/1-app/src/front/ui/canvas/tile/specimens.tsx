@@ -1,12 +1,14 @@
 // The tile's specimens in a frame, for its gallery: Software Engineering and its ring, whose Branches
 // open in place and whose center shows its Context inside it, scaled with the page, and a hex opened
 // in place at 1:1.
-import { useEffect, useRef, useState, type ReactElement, type RefObject } from 'react'
+import { useEffect, useRef, useState, type ReactElement } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { ulysse } from '../fixtures'
 import { directions, neighbor, type Direction, type Hex } from '../geometry/geometry'
+import { movingFor } from '../state/motion'
+import { useScale } from '../state/useScale'
 import { findTile, type TileNode } from '../view/tiles'
 import type { Seat } from './moving/move'
 import { Ground, Slot } from './places'
@@ -80,8 +82,8 @@ export function seatsOf(seated: Ring): Partial<Record<Direction, Seat & { title:
  */
 export function LiveFrame() {
   const svg = useRef<SVGSVGElement>(null)
-  const scale = useScale(svg, frameWidth)
-  const { opened, folding, open, fold } = useOpened(svg)
+  const scale = useScale(svg, { width: frameWidth, height: frameHeight })
+  const { opened, folding, open, fold } = useOpened()
   const center = fixture('software-engineering')
   const centerHex = { center: origin, radius: frameRadius }
   const ringTiles = directions.flatMap((direction) => {
@@ -143,7 +145,7 @@ export function LiveFrame() {
  * What the frame has opened in place, and its fold: the six fold back for `--duration-fold`, at once
  * with reduced motion, then it closes. Nothing opens or folds while a fold is under way.
  */
-function useOpened(svg: RefObject<SVGSVGElement | null>) {
+function useOpened() {
   const [opened, setOpened] = useState<Direction | 'center'>()
   const [folding, setFolding] = useState(false)
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
@@ -157,25 +159,14 @@ function useOpened(svg: RefObject<SVGSVGElement | null>) {
     if (!folding) setOpened(what)
   }
   const fold = () => {
-    if (folding || !svg.current) return
-    const still = matchMedia('(prefers-reduced-motion: reduce)').matches
-    const duration = getComputedStyle(svg.current).getPropertyValue('--duration-fold')
+    if (folding) return
     setFolding(true)
-    timer.current = setTimeout(
-      () => {
-        setOpened(undefined)
-        setFolding(false)
-      },
-      still ? 0 : milliseconds(duration),
-    )
+    timer.current = setTimeout(() => {
+      setOpened(undefined)
+      setFolding(false)
+    }, movingFor('--duration-fold'))
   }
   return { opened, folding, open, fold }
-}
-
-/** A CSS duration, `500ms` or `0.5s`, in milliseconds. */
-function milliseconds(duration: string): number {
-  const value = parseFloat(duration)
-  return duration.trim().endsWith('ms') ? value : value * 1000
 }
 
 interface OpenedProps {
@@ -260,21 +251,4 @@ export function OpenedSpecimen({ tile, context = false }: { tile: TileNode; cont
       {openedHex({ hex: { center: origin, radius }, tile, context })}
     </svg>
   )
-}
-
-/** Screen px per unit of an <svg> `width` units wide, as CSS sizes it, kept as it resizes. */
-export function useScale(svg: RefObject<SVGSVGElement | null>, width: number): number {
-  const [scale, setScale] = useState(1)
-  useEffect(() => {
-    const element = svg.current
-    if (!element) return
-    const observer = new ResizeObserver(([entry]) => {
-      if (entry) setScale(entry.contentRect.width / width)
-    })
-    observer.observe(element)
-    return () => {
-      observer.disconnect()
-    }
-  }, [svg, width])
-  return scale
 }

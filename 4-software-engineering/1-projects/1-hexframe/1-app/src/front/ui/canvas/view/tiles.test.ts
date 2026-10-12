@@ -50,7 +50,7 @@ describe('pathTo', () => {
   it('reaches the Tile itself, not a Reference to it met first', () => {
     const referenced = tile('root', {
       branches: { 4: tile('b', { branches: { 1: tile('b1') } }) },
-      context: { 1: tile('b', { reference: true }) },
+      context: { 1: tile('b', { reference: { from: 'Elsewhere' } }) },
     })
     expect(pathTo(referenced, 'b').map((found) => found.id)).toEqual(['root', 'b'])
     expect(findTile(referenced, 'b')?.branches?.[1]?.id).toBe('b1')

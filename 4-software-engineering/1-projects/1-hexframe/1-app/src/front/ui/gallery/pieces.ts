@@ -146,7 +146,7 @@ export const pieces = [
     name: 'Canvas',
     tier: 'canvas',
     sources: ['ui/canvas/Canvas.tsx'],
-    madeOf: ['Tooltip', 'Button'],
+    madeOf: ['Tile', 'Slot', 'Ground', 'Moving', 'Button'],
     note: m.gallery_note_canvas,
   },
   {
@@ -218,13 +218,6 @@ export const pieces = [
     sources: ['ui/canvas/layouts/Drawer.tsx'],
     madeOf: [],
     note: m.gallery_note_drawer,
-  },
-  {
-    name: 'Tooltip',
-    tier: 'canvas',
-    sources: ['ui/canvas/atoms/Tooltip.tsx'],
-    madeOf: [],
-    note: m.gallery_note_tooltip,
   },
   {
     name: 'ThemeToggle',
