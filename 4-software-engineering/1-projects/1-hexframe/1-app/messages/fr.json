@@ -443,6 +443,8 @@
   "system_save": "Enregistrer",
   "system_add": "Ajouter",
   "system_root_empty_description": "Cette tuile, c’est vous : son titre est votre nom. Commencez par ajouter des tuiles dans les places libres autour, ou importez un coffre.",
+  "system_copied": "Copié.",
+  "system_copy_failed": "Impossible de copier.",
   "system_import_vault": "Importer un coffre",
   "system_import_here": "Importer ici",
   "system_import_choice": "Ce qui va ici",

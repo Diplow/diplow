@@ -45,7 +45,7 @@ import {
   type SystemSearch,
 } from '#/front/features/system/search/search'
 import { System } from '#/front/features/system/System'
-import { TileActions } from '#/front/features/system/TileActions'
+import { CenteredTile } from '#/front/features/system/CenteredTile'
 import { canvasTree, onScreen } from '#/front/features/system/tree'
 import { TileWidgets } from '#/front/features/system/widget/TileWidgets'
 import {
@@ -349,7 +349,7 @@ interface SystemPageProps {
   onSearchChange: (change: SearchChange) => void
   onViewChange: (view: CanvasView, action: ViewAction) => void
   widgets: TileWidgetsState
-  /** An export started from the card: the chat, which shows it, comes to the front on a phone. */
+  /** An export started from a Tile's menu: the chat, which shows it, comes to the front on a phone. */
   onExport: () => void
 }
 
@@ -363,28 +363,22 @@ function SystemPage({ search, onSearchChange, onViewChange, widgets, onExport }:
     <div className={side}>
       <System
         system={system}
+        root={root}
         tree={tree}
         underway={underway}
         search={search}
         onViewChange={onViewChange}
         onSearchChange={onSearchChange}
+        exporting={{
+          start: (exported) => {
+            widgets.actions.export(exported)
+            onExport()
+          },
+        }}
         className="min-h-0 flex-1"
       />
       <div className="max-h-[30%] flex-none overflow-y-auto">
-        <TileActions
-          system={root}
-          flat={system}
-          tree={tree}
-          search={search}
-          onSearchChange={onSearchChange}
-          exporting={{
-            start: (exported) => {
-              widgets.actions.export(exported)
-              onExport()
-            },
-            pending: widgets.state.exporting,
-          }}
-        />
+        <CenteredTile system={root} tree={tree} search={search} onSearchChange={onSearchChange} />
       </div>
     </div>
   )

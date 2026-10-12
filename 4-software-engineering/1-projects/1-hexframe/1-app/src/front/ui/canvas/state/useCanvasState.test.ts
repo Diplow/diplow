@@ -143,10 +143,7 @@ describe("a line of a tile's menu that goes somewhere", () => {
   it('backs out to the Tile the center stands under, and nowhere from the Root', () => {
     const inside = render({ center: 'a' })
     inside.actions.go(hexOf(inside.state.hexes, 'tile:a'), 'back-out')
-    expect(inside.onViewChange).toHaveBeenLastCalledWith(
-      {},
-      { gesture: 'center', tile: 'root' },
-    )
+    expect(inside.onViewChange).toHaveBeenLastCalledWith({}, { gesture: 'center', tile: 'root' })
     const top = render({})
     top.actions.go(hexOf(top.state.hexes, 'tile:root'), 'back-out')
     expect(top.onViewChange).not.toHaveBeenCalled()

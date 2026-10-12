@@ -28,7 +28,7 @@ export interface Target {
  * A landing: the tile gliding to where it goes; landed, its write sent, drawn there until its caller
  * draws it there; refused, flaring there; or gliding back.
  */
-export type Phase = 'glide' | 'landed' | 'refused' | 'back'
+type Phase = 'glide' | 'landed' | 'refused' | 'back'
 
 interface Landing {
   id: string

@@ -443,6 +443,8 @@
   "system_save": "Save",
   "system_add": "Add",
   "system_root_empty_description": "This tile is you: its title is your name. Start by adding tiles in the empty slots around it, or import a vault.",
+  "system_copied": "Copied.",
+  "system_copy_failed": "Could not copy.",
   "system_import_vault": "Import a vault",
   "system_import_here": "Import here",
   "system_import_choice": "What goes here",
