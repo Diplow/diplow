@@ -22,7 +22,7 @@ Everything the browser shows, and the client's side of every call. It sits on to
 
 | File | Holds |
 |---|---|
-| `styles.css` | The theme's tokens, dark and light, its three fonts, and Tailwind's entry, installed from the design system's registry ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE\|ui]]) |
+| `styles.css` | The theme's tokens, dark and light, its three fonts, and Tailwind's entry; [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE\|ui]] says what each is for |
 
 Inside the front, too, an import only points down: `routes/` → `features/` → `client/` and `ui/`, side by side. A route composes features; neither the client nor the design system imports a feature or a route.
 
