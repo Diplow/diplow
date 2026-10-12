@@ -21,7 +21,7 @@ Every table hexframe keeps, and the one way to reach them: the `Database` servic
 | `promise.ts` | `PromiseDatabase` and its deployed `layer`: the same database through Drizzle's promise API over a node-postgres pool, for Better Auth's adapter. Only `auth/` may import it, and this folder's harness and tests |
 | `schema.ts` | The tables, in Drizzle's schema language: IAM's, in Better Auth's shape and under its names, its api-key plugin's `apikey` among them, with a key to `user` the plugin's own schema lacks ([[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE\|auth]]); Mapping's `tile`, a Tile or a Reference per row, with the Name, Tile config (`TileConfigColumn`) and Frontmatter (`FrontmatterColumn`) an imported file carried, each null when it carried none, the Tile's `version`, 1 when the row is added, which Mapping decides and writes, and, on the Root's row, the System's `system_version`, 0 when added, which Mapping decides and writes too; Assistant's `conversation`, one per Account at most, with the `mode` its Turns take, `ask` until switched, `conversation_entry`, an Entry at the instant it dates from, its content the JSON Assistant encodes, `seq` ordering two of one instant as they were written, `turn`, a Turn answering one Entry, the `mode` it started in, `apply` for those before Modes, what it spent and what its calls under way reserved, its agent's step, as Assistant encodes it, null between steps, how and when it ended null while it runs, `turn_running_idx` letting one run at most per Conversation, and `proposal`, the writes a Turn drafted in ask, its `drafts` as Assistant encodes them, its Entry and the Turn that opened it, how and when the user decided it null while it is open, `proposal_open_idx` letting one be open at most per Conversation, and `applied`, what an applied Turn or an accepted Proposal applied, by its id, what undoes it as Assistant hands it, its changes, the Entry that offers it, null while a Turn runs, and when it was undone, null until then; and IAM's own `turn_key`, a Turn's Key by its secret's SHA-256, bound to its Account, which deleting deletes it with, and to a Turn, by its id, with no key to it, until it expires |
 | `migrations.ts` | `migrated`, the one program that applies what the database has not recorded yet, from `migrations/` at the package's root |
-| `testing.ts` | `TestDatabase`, the integration harness: a fresh PGlite, migrated, as both services over one PGlite |
+| `testing.ts` | `TestDatabase`, the integration harness: a fresh PGlite, migrated, as both services over one PGlite; started, in a test run, from the run's template, `migratedTemplate`, an empty PGlite migrated once and dumped by `scripts/test-database.ts`, Vitest's global setup, whose path `templateVariable` names in the environment |
 
 | Folder | Holds |
 |---|---|
@@ -61,7 +61,7 @@ layer(TestDatabase)('the tiles repository', (it) => {
 })
 ```
 
-Each build of the layer is a new, empty database: the tests inside one `layer(...)` block share it, two blocks never do.
+Each build of the layer is a new, empty database: the tests inside one `layer(...)` block share it, two blocks never do. In a test run it starts from the run's template, a data directory already migrated, rather than running PGlite's initdb and every migration again: with every test file building one at once, that initdb alone took seconds, past a test's timeout. `migrated` still runs on it, a no-op. Under `pnpm dev`, with no template, it starts empty and is migrated.
 
 ## Rules
 

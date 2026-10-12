@@ -9,6 +9,9 @@ export default defineConfig({
   define: definesFor(environmentOf('serve', undefined)),
   test: {
     include: ['src/**/*.test.ts', 'scripts/**/*.test.ts'],
+    // Once per run: the migrated PGlite every TestDatabase starts from, instead of each test file
+    // running PGlite's initdb and the migrations itself (scripts/test-database.ts).
+    globalSetup: ['scripts/test-database.ts'],
     // The server function runtime runs on an in-memory PGlite when DATABASE_URL is empty, on the
     // sandbox of this machine when BL_API_KEY is, and on a fake Anthropic when ANTHROPIC_API_KEY is
     // (src/api/server/run.ts): a test never reaches a real database, Blaxel nor Anthropic, whatever
