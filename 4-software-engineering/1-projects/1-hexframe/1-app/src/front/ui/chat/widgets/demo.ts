@@ -1,18 +1,14 @@
 // What the widgets' state hooks will do on a real page, for /design-system alone, never for a build:
 // which places a kind may take, what Mapping and IAM would refuse before writing, a refusal clearing
-// from the field that changed. `ui/` knows no domain: Mapping's `previewLimit` comes from the
-// route, which reads it at Mapping's door; IAM's Key name and password rules, outside IAM's door
-// today, are mirrored here as IAM states them, as the composer's demo mirrors the feature's `@` rules,
-// until HEX-115 brings them to its door.
+// from the field that changed. `ui/` knows no domain: Mapping's `previewLimit` and IAM's Key name
+// bounds come from the route, which reads them at each domain's door; IAM's password rule, outside its
+// door, is mirrored here as IAM states it, as the composer's demo mirrors the feature's `@` rules.
 import { m } from '#/paraglide/messages'
 
 import { lengthOf } from './count'
 import type { Place } from './Places'
 import type { Access } from './sign-in/SignInWidget'
 import type { TileField, TileKind, TileWords } from './tile/parts'
-
-/** IAM's: the most characters a Key's name holds. */
-export const nameLimit = 32
 
 /** The places free for each kind under the sample tile: a Leaf's and a Context's are their own. */
 export const freeFor: Record<TileKind, readonly Place[]> = {
@@ -53,9 +49,16 @@ export function stillRefused(
 export const editedOf = (words: TileWords, read: TileWords): TileField[] =>
   (['title', 'preview', 'body'] as const).filter((field) => words[field] !== read[field])
 
-/** What IAM would refuse of a Key's name, as IAM counts it: in UTF-16 units, untrimmed. */
-export function nameRefusalOf(name: string): string | undefined {
-  return name.length < 1 || name.length > nameLimit ? m.error_iam_key_name_invalid() : undefined
+/** The fewest and the most characters a Key's name holds: IAM's, read by the route. */
+export interface NameBounds {
+  readonly min: number
+  readonly max: number
+}
+
+/** What IAM would refuse of a Key's name, as IAM counts it: trimmed, as a reader counts it. */
+export function nameRefusalOf(name: string, bounds: NameBounds): string | undefined {
+  const length = lengthOf(name.trim())
+  return length < bounds.min || length > bounds.max ? m.error_iam_key_name_invalid() : undefined
 }
 
 /** What IAM would refuse before signing anyone in: a malformed email, a password out of bounds. */

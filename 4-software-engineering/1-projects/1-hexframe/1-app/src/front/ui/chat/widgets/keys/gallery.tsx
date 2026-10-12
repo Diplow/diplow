@@ -1,6 +1,7 @@
 // The key widget on /design-system, live on sample Keys: name one and create it, see its secret once,
 // be done with it, find the Keys, revoke one. Nothing is issued: the secret is plainly a sample's, and
-// what would reach IAM shows in a toast; what IAM would refuse is the demo's (`../demo.ts`).
+// what would reach IAM shows in a toast; what IAM would refuse is the demo's (`../demo.ts`), against
+// IAM's bounds, which the route reads at its door.
 import { RotateCcw } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 
@@ -10,20 +11,20 @@ import { Act } from '../../../atoms/controls/act'
 import { toast } from '../../../atoms/Toaster'
 import { GalleryColumn, GallerySection, GalleryState } from '../../../gallery/frame'
 import { said } from '../../samples'
-import { nameLimit, nameRefusalOf } from '../demo'
+import { nameRefusalOf, type NameBounds } from '../demo'
 import { KeyWidget, type KeyRow } from './KeyWidget'
 
-export function KeyWidgetGallery() {
+export function KeyWidgetGallery({ nameBounds }: { nameBounds: NameBounds }) {
   return (
     <GallerySection name="KeyWidget">
       <GalleryState label={m.gallery_state_key_live()}>
         <GalleryColumn>
-          <LiveKey />
+          <LiveKey nameBounds={nameBounds} />
         </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_key_refused()}>
         <GalleryColumn>
-          <LiveKey refused />
+          <LiveKey nameBounds={nameBounds} refused />
         </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_key_shown()}>
@@ -118,7 +119,13 @@ function ListedKeys({ byAgent = false }: { byAgent?: boolean }) {
 }
 
 // From the first key to its receipt: a name checked as IAM would, the secret shown once, Done.
-function LiveKey({ refused: refusedAtFirst = false }: { refused?: boolean }) {
+function LiveKey({
+  nameBounds,
+  refused: refusedAtFirst = false,
+}: {
+  nameBounds: NameBounds
+  refused?: boolean
+}) {
   const [now] = useState(() => new Date())
   const [state, setState] = useState<'issue' | 'shown' | 'done'>('issue')
   const [name, setName] = useState('')
@@ -136,14 +143,14 @@ function LiveKey({ refused: refusedAtFirst = false }: { refused?: boolean }) {
       <KeyWidget
         state="issue"
         name={name}
-        nameLimit={nameLimit}
+        nameLimit={nameBounds.max}
         onNameChange={(next) => {
           setName(next)
           setRefused(undefined)
         }}
         refused={refused}
         onIssue={() => {
-          const refusal = nameRefusalOf(name)
+          const refusal = nameRefusalOf(name, nameBounds)
           setRefused(refusal)
           if (refusal === undefined) setState('shown')
         }}

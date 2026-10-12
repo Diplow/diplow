@@ -32,10 +32,16 @@ describe('the tile widget’s demo', () => {
 })
 
 describe('the key and sign-in widgets’ demo', () => {
-  it('refuses an empty name and one past 32 characters, as IAM counts them', () => {
-    expect(nameRefusalOf('')).toBe(m.error_iam_key_name_invalid())
-    expect(nameRefusalOf('a'.repeat(33))).toBe(m.error_iam_key_name_invalid())
-    expect(nameRefusalOf('Claude Code, laptop')).toBeUndefined()
+  it('refuses an empty name and one past its bounds, trimmed and counted as IAM counts them', () => {
+    const bounds = { min: 1, max: 32 }
+    const family = '\u{1F468}\u200D\u{1F469}\u200D\u{1F467}\u200D\u{1F466}'
+    expect(nameRefusalOf('', bounds)).toBe(m.error_iam_key_name_invalid())
+    expect(nameRefusalOf('   ', bounds)).toBe(m.error_iam_key_name_invalid())
+    expect(nameRefusalOf('a'.repeat(33), bounds)).toBe(m.error_iam_key_name_invalid())
+    expect(nameRefusalOf(family.repeat(33), bounds)).toBe(m.error_iam_key_name_invalid())
+    expect(nameRefusalOf(family.repeat(32), bounds)).toBeUndefined()
+    expect(nameRefusalOf(`  ${'a'.repeat(32)}  `, bounds)).toBeUndefined()
+    expect(nameRefusalOf('Claude Code, laptop', bounds)).toBeUndefined()
   })
 
   it('refuses a malformed email first, then a password out of bounds for signing up', () => {

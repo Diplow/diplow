@@ -23,7 +23,7 @@ What home's chat shows of the Account's Keys (HEX-103), on ui's `KeyWidget` ([[4
 
 | Folder | Holds |
 |---|---|
-| `shown/` | What the widget shows of a Key: `rows.ts`, `rowOf`, a Key as its row words it; `command.ts`, `mcpCommand`, the command that adds hexframe's MCP server to Claude Code with a Key; `name.ts`, the name's limit, a mirror of IAM's until HEX-115 puts it at IAM's door. Pure, each tested beside it but the mirror |
+| `shown/` | What the widget shows of a Key: `rows.ts`, `rowOf`, a Key as its row words it; `command.ts`, `mcpCommand`, the command that adds hexframe's MCP server to Claude Code with a Key. Pure, each tested beside it. The name's limit is IAM's, read at its door (`keyNameBounds`) |
 | `state/` | `useKeyWidgetState`, the step, the new Key's name and its refusal, and what each action does; `stepOnOpen`, the step the URL opening or closing the widget leaves. Tested over a stand-in for issuing |
 
 ## Rules

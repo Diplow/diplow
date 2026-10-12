@@ -31,7 +31,7 @@ import {
   SignedOut,
   TooManyAttempts,
 } from './errors'
-import type { Entitlement } from './entities'
+import { type Entitlement, keyNameOf } from './entities'
 
 interface Credentials {
   readonly email: string
@@ -237,14 +237,16 @@ export const turnOnly = Effect.gen(function* () {
   return signedIn
 })
 
-/** The fewest and the most characters a Key's name holds, so the user can tell their Keys apart. */
-const keyNameLength = { min: 1, max: 32 } as const
-
-/** The name a Key may take, or `KeyNameInvalid` on the name: 1 to 32 characters. IAM's rule alone. */
-const keyNamed = (name: string): Effect.Effect<string, KeyNameInvalid> =>
-  name.length >= keyNameLength.min && name.length <= keyNameLength.max
-    ? Effect.succeed(name)
-    : Effect.fail(new KeyNameInvalid({ fields: ['name'] }))
+/**
+ * The name a Key takes, trimmed, or `KeyNameInvalid` on the name: 1 to 32 characters, counted as a
+ * reader counts them (`keyNameOf`). IAM's rule alone.
+ */
+const keyNamed = (name: string): Effect.Effect<string, KeyNameInvalid> => {
+  const named = keyNameOf(name)
+  return named === undefined
+    ? Effect.fail(new KeyNameInvalid({ fields: ['name'] }))
+    : Effect.succeed(named)
+}
 
 /** Issues a Key, named, to the Account the request's Session proves. Its secret is in the answer only. */
 export const issueKey = (name: string) =>
