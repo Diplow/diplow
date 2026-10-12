@@ -14,14 +14,14 @@ What home's chat shows signed out (HEX-103): Help is on the canvas, and the chat
 | File | Holds |
 |---|---|
 | `SignedOut.tsx` | `SignedOutLines`, the agent's two lines, and `SignInFoot`, the sign-in widget over `state/useSignInState.ts` |
-| `search.ts` | `access`, home's search param for signing up, signing in when absent, so an old link to `/sign-up` opens on it; `accessOf` and `withAccess`. Pure and tested |
+| `search.ts` | `access`, home's search param for signing up, signing in when absent, so an old link to `/sign-up` opens on it; `accessOf` and `withAccess`; `wayBack`, where signing in goes back to, `redirect` or home with its open widgets. Pure and tested |
 
 | Folder | Holds |
 |---|---|
-| `state/` | `useSignInState`, the email and the password typed, the refusal on each, gone as that field changes, and the submit, `submitWrite` over `signIn` or `signUp`; `refusedOf`, a submit's refusals on the widget's fields. Tested over stand-ins for IAM's server functions |
+| `state/` | `useSignInState`, the email and the password typed, the refusal on each, gone as that field changes, and the submit, the client's `accessSubmit` (`front/client/iam/access.ts`), one try for two quick presses; `refusedOf`, a submit's refusals on the widget's fields. Tested over stand-ins for IAM's server functions |
 
 ## Rules
 
-- **The widget handles no error itself.** IAM names the field at fault, the message table words it, `submitWrite` hands it to the state hook; a refusal on no field goes to its channel, the toast (`hexframe-app-design-system-v1/decisions.md#DEC-42`).
+- **The widget handles no error itself.** IAM names the field at fault, the message table words it, `accessSubmit` hands it to the state hook; a refusal on no field goes to its channel, the toast (`hexframe-app-design-system-v1/decisions.md#DEC-42`).
 - **Once signed in, the way back is a full load** (`continueTo`), so the next page renders with its Session: to `redirect`, or to the screen as it stood, its open widgets kept (`#DEC-41`).
-- **A password is kept out of every cache**: the submit is `submitWrite`, never a mutation.
+- **A password is kept out of every cache**: the submit is `submitWrite`'s, never a mutation.

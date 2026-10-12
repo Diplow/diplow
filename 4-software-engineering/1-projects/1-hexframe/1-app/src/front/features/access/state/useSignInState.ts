@@ -1,12 +1,12 @@
 // What the sign-in widget holds: the email and the password typed, what IAM refused of them, on the
 // field it names, and whether the try is on its way. A field's refusal goes as the user changes it.
-// The submit is `submitWrite`'s, kept out of every cache since it carries a password: a refusal IAM
-// names a field for shows there, any other goes to its channel, the toast. Signed in, the page leaves
+// The submit is the client's (`accessSubmit`), kept out of every cache since it carries a password: a
+// refusal IAM names a field for shows there, any other goes to its channel, the toast. Signed in, the page leaves
 // for where the user was, with a full load (`continueTo`), so it renders with its Session.
 import { useRef, useState } from 'react'
 
-import { signIn, signUp } from '#/api/iam/iam'
-import { submitWrite, type FormErrors } from '#/front/client/channels'
+import type { FormErrors } from '#/front/client/channels'
+import { accessSubmit } from '#/front/client/iam/access'
 import { continueTo } from '#/front/client/iam/guard'
 import type { Access } from '#/front/ui/chat/widgets/sign-in/SignInWidget'
 
@@ -17,12 +17,6 @@ interface Credentials {
 
 /** What the widget shows of a refusal, on the field it names. */
 export type Refused = Partial<Record<keyof Credentials, string>>
-
-/** Each of the two's call and scope. */
-const calls = {
-  'sign-in': { scope: 'signIn', call: (data: Credentials) => signIn({ data }) },
-  'sign-up': { scope: 'signUp', call: (data: Credentials) => signUp({ data }) },
-} as const
 
 /**
  * The refusals a submit leaves on the widget's fields: those it names, the email's and the password's.
@@ -66,11 +60,8 @@ export function useSignInState(redirect: string | undefined) {
         if (onItsWay.current) return
         onItsWay.current = true
         setSending(true)
-        const errors = await submitWrite({
-          ...calls[access],
-          onSaved: (account) => {
-            continueTo(redirect, account.id)
-          },
+        const errors = await accessSubmit(access, (account) => {
+          continueTo(redirect, account.id)
         })({ value: credentials })
         // Signed in, the page is leaving: the act waits until it has gone.
         if (errors === undefined) return

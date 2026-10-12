@@ -23,7 +23,7 @@ import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { readSignInSearch, sessionIfAny } from '#/front/client/iam/guard'
 import { useFollowLatest } from '#/front/client/assistant/follow'
 import { useHelp, useSystem } from '#/front/client/mapping/queries'
-import { accessOf, readAccessSearch, withAccess } from '#/front/features/access/search'
+import { accessOf, readAccessSearch, wayBack, withAccess } from '#/front/features/access/search'
 import { SignedOutLines, SignInFoot } from '#/front/features/access/SignedOut'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { publish } from '#/front/features/bus'
@@ -171,7 +171,7 @@ function SignedOut() {
               })
             }}
             // Without a place to go back to, the screen as it stands, signed in.
-            redirect={search.redirect ?? `/${router.options.stringifySearch(screenOf(search))}`}
+            redirect={wayBack(search.redirect, screenOf(search), router.options.stringifySearch)}
           />
         }
       />
@@ -190,7 +190,6 @@ function SignedIn() {
   // The key widget's step: the receipt outlives the widget.
   const keys = useKeyWidgetState(search.keys === true)
   const help = useHelpNavigation(turning)
-  const helpOpen = search.help !== undefined
   const onSearchChange = (next: SearchChange) => {
     // A form, an import or an edit, opening: the tile widget comes, in front on a phone.
     if (opensWidget(search, next)) {
@@ -213,14 +212,6 @@ function SignedIn() {
   const { data } = useSystem({ throwing: false })
   const root = data?.root
   const tree = useMemo(() => (root === undefined ? undefined : canvasTree(root)), [root])
-  // While Help has the canvas, a Message is sent from the System's Root.
-  const systemView = helpOpen ? {} : viewOf(search)
-  const onSend =
-    tree === undefined
-      ? undefined
-      : (text: string) => {
-          postMessage({ text, view: onScreen(tree, systemView) })
-        }
   const onViewChange = (view: CanvasView, action: ViewAction) => {
     onSearchChange(withView(search, view))
     publish(new Navigated(action))
@@ -234,6 +225,37 @@ function SignedIn() {
     publish(new Navigated({ gesture: 'center', tile }))
     turning.cross()
   }
+  // What the canvas shows: Help while its widget is open, else the System. The URL's view is the
+  // canvas's, so while Help has it the System's view is its Root, which a Message is sent from.
+  const view = viewOf(search)
+  const side =
+    search.help === undefined
+      ? {
+          systemView: view,
+          canvas: (
+            <SystemPage
+              search={search}
+              onSearchChange={onSearchChange}
+              onViewChange={onViewChange}
+              widgets={widgets}
+              onExport={() => {
+                turning.turn('chat')
+              }}
+            />
+          ),
+          corner: <Breadcrumb system={tree} view={view} onViewChange={onViewChange} />,
+        }
+      : {
+          systemView: {},
+          canvas: <HelpSide view={view} onViewChange={help.onViewChange} onRead={help.onRead} />,
+          corner: <Breadcrumb system={help.tree} view={view} onViewChange={help.onViewChange} />,
+        }
+  const onSend =
+    tree === undefined
+      ? undefined
+      : (text: string) => {
+          postMessage({ text, view: onScreen(tree, side.systemView) })
+        }
   return (
     <main className="h-[calc(100dvh-var(--header))]">
       <h1 className="sr-only">{m.system_title()}</h1>
@@ -241,34 +263,8 @@ function SignedIn() {
         front={screen.front}
         onFrontChange={turning.turn}
         className="size-full"
-        canvas={
-          <ReadBoundary>
-            {helpOpen ? (
-              <HelpSide
-                view={viewOf(search)}
-                onViewChange={help.onViewChange}
-                onRead={help.onRead}
-              />
-            ) : (
-              <SystemPage
-                search={search}
-                onSearchChange={onSearchChange}
-                onViewChange={onViewChange}
-                widgets={widgets}
-                onExport={() => {
-                  turning.turn('chat')
-                }}
-              />
-            )}
-          </ReadBoundary>
-        }
-        corner={
-          helpOpen ? (
-            <Breadcrumb system={help.tree} view={viewOf(search)} onViewChange={help.onViewChange} />
-          ) : (
-            <Breadcrumb system={tree} view={viewOf(search)} onViewChange={onViewChange} />
-          )
-        }
+        canvas={<ReadBoundary>{side.canvas}</ReadBoundary>}
+        corner={side.corner}
         messages={
           <div className="grid gap-5">
             <ReadBoundary>
@@ -303,7 +299,9 @@ function SignedIn() {
                   onTopic={help.onTopic}
                   // Help gives the canvas back to the System, at its Root.
                   onDismiss={() => {
-                    void navigate({ search: (current) => ({ keys: current.keys }) })
+                    void navigate({
+                      search: (current) => ({ ...screenOf(current), ...withHelp(undefined) }),
+                    })
                   }}
                 />
               </ReadBoundary>

@@ -19,19 +19,34 @@ let signingIn = false
 // widget at the chat's foot, carrying where the user was, without its language prefix, and untying
 // this device from the Account whose Session ended, as home's read of the Session does
 // (./iam/guard.ts). On the server there is no window to move: home reads the Session in its
-// `beforeLoad`, `sessionIfAny`, before anything renders, and draws no signed-in read signed out. A
-// home this channel loaded already, carrying `redirect`, is not loaded again: should home find a
-// Session that a call then refuses, the page would load itself for ever.
+// `beforeLoad`, `sessionIfAny`, before anything renders, and draws no signed-in read signed out. It
+// loads home once in a while at most (`reloadedLately`): should home find a Session that a call then
+// refuses, the page would otherwise load itself for ever.
 function signIn() {
-  if (signingIn || typeof window === 'undefined') return
+  if (signingIn || typeof window === 'undefined' || reloadedLately(window.sessionStorage)) return
+  signingIn = true
+  forget()
   const here = deLocalizeHref(
     `${window.location.pathname}${window.location.search}${window.location.hash}`,
   )
-  const { pathname, searchParams } = new URL(here, window.location.origin)
-  if (pathname === '/' && searchParams.has('redirect')) return
-  signingIn = true
-  forget()
   window.location.assign(localizeHref(`/?redirect=${encodeURIComponent(here)}`))
+}
+
+/** The mark of the last load this channel made, which outlives it in the tab. */
+const reloadMark = 'hexframe:signing-in'
+
+/** How long a load this channel made keeps it from making another. */
+const reloadPause = 10_000
+
+/**
+ * Whether this channel loaded home less than `reloadPause` ago in this tab; if not, marks now. A tab
+ * that keeps nothing (`storage` absent) never counts as reloaded.
+ */
+function reloadedLately(storage: Storage | undefined) {
+  const now = Date.now()
+  if (now - Number(storage?.getItem(reloadMark) ?? 0) < reloadPause) return true
+  storage?.setItem(reloadMark, String(now))
+  return false
 }
 
 /**

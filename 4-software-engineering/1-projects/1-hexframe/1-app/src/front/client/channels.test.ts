@@ -182,20 +182,34 @@ describe('the way to signing in, home signed out', () => {
     )
   })
 
-  it('loads home no more once home was loaded by it, so a Session a call refuses never loops', async () => {
-    vi.stubGlobal('window', {
+  it('loads home once in a while at most, so a Session a call refuses never loops', async () => {
+    const kept = new Map<string, string>()
+    const storage = {
+      getItem: (key: string) => kept.get(key) ?? null,
+      setItem: (key: string, value: string) => kept.set(key, value),
+    }
+    const at = (pathname: string) => ({
       location: {
-        href: 'http://localhost/?redirect=%2Fdesign-system',
+        href: `http://localhost${pathname}`,
         origin: 'http://localhost',
-        pathname: '/',
-        search: '?redirect=%2Fdesign-system',
+        pathname,
+        search: '',
         hash: '',
         assign,
       },
+      sessionStorage: storage,
     })
-    const submit = await signingIn()
-    await submit()
-    expect(assign).not.toHaveBeenCalled()
+    vi.stubGlobal('window', at('/design-system'))
+    await (
+      await signingIn()
+    )()
+    expect(assign).toHaveBeenCalledOnce()
+    // The page loaded again, its module afresh, and a call is refused at once: no second load.
+    vi.stubGlobal('window', at('/'))
+    await (
+      await signingIn()
+    )()
+    expect(assign).toHaveBeenCalledOnce()
   })
 
   it('does nothing on the server, where there is no window to move', async () => {
