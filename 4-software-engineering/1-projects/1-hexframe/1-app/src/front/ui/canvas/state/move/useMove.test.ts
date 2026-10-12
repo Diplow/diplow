@@ -109,6 +109,23 @@ describe('a drag', () => {
     expect(target.land).toHaveBeenCalledOnce()
   })
 
+  it('lands a drop let go before its caller put the move in place, once it has', () => {
+    const target = slot()
+    const { result, rerender } = render({ moving: undefined, centers: { a: home } }, [
+      { at: east, target },
+    ])
+    act(() => {
+      result.current.press('a', down())
+    })
+    send('pointermove', { x: 100, y: 0 })
+    send('pointerup', { x: 100, y: 0 })
+    expect(result.current.landing).toBeUndefined()
+    rerender({ moving: 'a', centers: { a: home } })
+    expect(result.current.landing).toBe('glide')
+    after(glide + 40)
+    expect(target.land).toHaveBeenCalledOnce()
+  })
+
   it('lands nowhere let go over no place, the move going on', () => {
     const { result, onStop } = render({ moving: 'a', centers: { a: home } })
     act(() => {

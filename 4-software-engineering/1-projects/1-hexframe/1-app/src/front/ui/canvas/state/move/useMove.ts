@@ -100,6 +100,8 @@ export function useMove(input: MoveInput) {
   const tiles = useRef(new Map<string, Element>())
   // Whether the landing's write was seen on its way, so its end, no longer on its way, is seen too.
   const sent = useRef(false)
+  // A drop that came before the caller put the move it started in place, the URL's on home.
+  const [held, setHeld] = useState<{ id: string; at: Point }>()
   // The caller's latest, which a drag or a timer reads once the render it began in is gone.
   const latest = useRef(input)
   useEffect(() => {
@@ -172,6 +174,15 @@ export function useMove(input: MoveInput) {
     }
   })
 
+  // A drop held for its move lands once the move is in place, and nowhere once another moves.
+  useEffect(() => {
+    if (held === undefined || moving === undefined) return
+    setHeld(undefined)
+    if (moving !== held.id) return
+    const target = latest.current.dropAt(held.at, held.id)
+    if (target !== undefined) land(target, held.id)
+  })
+
   // A landing's write, once sent: refused, the tile flares where it went, then glides back; settled,
   // the landing is over.
   const write = landing && input.writeOf?.(landing.id)
@@ -213,7 +224,12 @@ export function useMove(input: MoveInput) {
       onDrop: (released) => {
         setDragging(undefined)
         setOver(undefined)
-        const target = released && latest.current.dropAt(released.at, id)
+        if (released === undefined) return
+        if (latest.current.moving !== id) {
+          setHeld({ id, at: released.at })
+          return
+        }
+        const target = latest.current.dropAt(released.at, id)
         if (target !== undefined) land(target, id)
       },
     })
