@@ -171,7 +171,7 @@ export function UntilDecided({ receipt, children }: UntilDecidedProps) {
   const asking = useRef<HTMLDivElement>(null)
   // The focus counted inside yet fallen to the page: a step of its own removed what held it.
   useEffect(() => {
-    if (!focused || document.activeElement !== document.body) return
+    if (!focused || !focusLost()) return
     asking.current?.querySelector<HTMLElement>('input, textarea, button, [tabindex="0"]')?.focus()
   })
   useFocusGivenBack(focused)
