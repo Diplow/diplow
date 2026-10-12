@@ -175,7 +175,7 @@ function writing<I>(
 }
 
 describe("Mapping's hooks", () => {
-  it('read the System flat through its server function, and build its tree', async () => {
+  it('read the System flat through its server function, and build its tree, nothing on its way', async () => {
     answering(undefined)
     const { result } = render(() => undefined)
     const child = { _tag: 'Tile', id: 'child', title: 'Child', preview: '', body: '', version: 1 }
@@ -192,6 +192,7 @@ describe("Mapping's hooks", () => {
             },
           },
         },
+        writing: { tiles: new Set(), slots: [] },
       })
     })
     expect(Mapping.system).toHaveBeenCalledWith({ data: undefined })
