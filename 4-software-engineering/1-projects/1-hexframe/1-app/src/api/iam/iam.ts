@@ -19,10 +19,12 @@ export const Credentials = Schema.Struct({
 })
 
 /**
- * What issuing a Key sends: its name. Bounded here, so nothing unbounded reaches Better Auth; what a
- * name must be is IAM's to say, on the field.
+ * What issuing a Key sends: its name. Bounded here, so nothing unbounded reaches IAM or Better Auth;
+ * what a name must be is IAM's to say, on the field. IAM counts 32 characters as a reader does, and
+ * an emoji is up to 19 UTF-16 units (a family with its skin tones), so the bound, 1,024 units, leaves
+ * room for any name of 32 of them, and its spaces, for IAM to judge.
  */
-export const KeyName = Schema.Struct({ name: Schema.String.check(Schema.isMaxLength(256)) })
+export const KeyName = Schema.Struct({ name: Schema.String.check(Schema.isMaxLength(1_024)) })
 
 /** What revoking a Key sends: its id, as Better Auth makes them: letters and digits. */
 export const KeyId = Schema.Struct({
