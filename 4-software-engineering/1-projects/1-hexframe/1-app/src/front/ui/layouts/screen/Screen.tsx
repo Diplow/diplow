@@ -27,6 +27,7 @@ import { focusHeld, focusLost, giveFocusBack } from '../../focus'
 import { cutAlongCurve, reach } from './curve'
 import { keptAtFoot } from './state/latest'
 import { Scrollbar } from './Scrollbar'
+import { Sunstone } from './Sunstone'
 
 /** A side of the screen; on a phone, the one in front. */
 export type Side = 'chat' | 'canvas'
@@ -357,19 +358,14 @@ function Veil({ chatInFront }: { chatInFront: boolean }) {
   )
 }
 
-/** hexframe's mark, amber as the human's, and its name, at the chat's head, and the deck's. */
+/**
+ * hexframe's mark, the Sunstone, lit in the human's amber, and its name: at the chat's head, and on
+ * the deck's slides of words.
+ */
 export function Brand() {
   return (
     <div className="flex flex-none items-center gap-2.5 px-5 pt-2 text-foreground @wide:px-9 @wide:pt-7">
-      <svg viewBox="-11 -12 22 24" aria-hidden className="h-[22px] w-5">
-        <polygon
-          points="0,-11 9.53,-5.5 9.53,5.5 0,11 -9.53,5.5 -9.53,-5.5"
-          fill="none"
-          strokeWidth={1.2}
-          vectorEffect="non-scaling-stroke"
-          className="stroke-human"
-        />
-      </svg>
+      <Sunstone className="h-[22px] w-5" />
       <span className="font-serif text-xl font-light italic">{m.screen_brand()}</span>
     </div>
   )

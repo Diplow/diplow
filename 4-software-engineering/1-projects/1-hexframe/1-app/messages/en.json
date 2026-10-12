@@ -619,6 +619,7 @@
   "tokens_colour_halo": "The glow behind the root, at its theme's strength: full at night, softer on paper.",
   "tokens_colour_aura": "The wide warm haze around the halo.",
   "tokens_colour_ambient": "The cool light where the canvas looks.",
+  "tokens_colour_dusk": "The night side of the brand mark, the same in both themes: the root's glow mixed into it in oklch runs through coral, rose and plum.",
   "tokens_colour_tile": "A tile's light, at its top and its foot.",
   "tokens_colour_tile_lit": "The same, brighter: the center, and a tile under the pointer.",
   "tokens_colour_chart": "The human, the agent, the Context, info, faint.",

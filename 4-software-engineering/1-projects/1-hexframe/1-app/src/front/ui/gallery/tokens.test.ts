@@ -55,6 +55,7 @@ describe('the theme', () => {
     'halo',
     'aura',
     'ambient',
+    'dusk',
     'tile',
     'tile-fade',
     'tile-lit',
