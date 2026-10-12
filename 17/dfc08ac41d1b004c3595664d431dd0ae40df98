@@ -1,0 +1,50 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/Chat.tsx
+  s_6c94d00c8dfcf4::t_8fb39d65c10bcf 12,57-58,65,88,133-134,137,173
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_6c94d00c8dfcf4::t_b73381720be8bc 47,61-62,220-222,226,228-229,235-237,255,277,284-289,331-336,374-375,379-380,402
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/entry/words.test.ts
+  s_6c94d00c8dfcf4::t_d9d52e3ea98cbc 117-137
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/System.tsx
+  s_6c94d00c8dfcf4::t_8fb39d65c10bcf 18,43-44,57,78
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/marks/useMarksState.ts
+  s_6c94d00c8dfcf4::t_5838a0250ae8a7 46
+  s_6c94d00c8dfcf4::t_94f26fda8def8c 1-45,47-77
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/marks/proposal.test.ts
+  s_6c94d00c8dfcf4::t_7235b0b10f4569 1-127
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/Conversation.tsx
+  s_6c94d00c8dfcf4::t_29d41f826a92e3 55-56,93-94,123,156,168,262,292
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/marks/useMarksState.test.ts
+  s_6c94d00c8dfcf4::t_b01821b3ff722e 1-175
+  s_6c94d00c8dfcf4::t_1e06e1b89efbd9 176-180
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/entry/words.ts
+  s_6c94d00c8dfcf4::t_fd7cadbf6d0f86 22,36-56,68,71-77,85,88,91-96
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/marks/proposal.ts
+  s_6c94d00c8dfcf4::t_8f7ee386485e32 1-10,12-13,15-106
+  s_6c94d00c8dfcf4::t_4b8e53b8cf323b 11,14
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/proposal.test.ts
+  s_6c94d00c8dfcf4::t_e2347f62af2309 136-142
+  s_6c94d00c8dfcf4::t_a9bfcbbebc6f05 134-135
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/marks/marks.test.ts
+  s_6c94d00c8dfcf4::t_d6d0aa3631dbfc 1-181
+  s_6c94d00c8dfcf4::t_1acb149e4fc84d 182-190
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/marks/marks.ts
+  s_6c94d00c8dfcf4::t_5838a0250ae8a7 72,167
+  s_6c94d00c8dfcf4::t_ea689b9538ccde 1-71,73-164,169-182
+  s_6c94d00c8dfcf4::t_27fa559fb575fe 165-166,168
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "17dfc08ac41d1b004c3595664d431dd0ae40df98",
+  "prompts": {},
+  "sessions": {
+    "s_6c94d00c8dfcf4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1e6d2617-3bbe-4f2d-a798-ac7dd5ce9e37",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
