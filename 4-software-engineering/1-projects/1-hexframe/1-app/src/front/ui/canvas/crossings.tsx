@@ -7,7 +7,7 @@ import { useRef, useState, type ComponentProps } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { Canvas, type CanvasMarks, type Standing } from './Canvas'
+import { Canvas, type CanvasMarks, type SlotStanding } from './Canvas'
 import { tooling, ulysse } from './fixtures'
 import { directions, neighbor, type Direction, type Hex, type Point } from './geometry/geometry'
 import type { EmptySlotTarget } from './geometry/shape'
@@ -73,11 +73,11 @@ const holdsIn = (tile: TileNode) =>
 /**
  * What a Tile's menu and card say of where it stands, as the canvas would draw it, `center` where it
  * is centered. The fixture's reading of what home asks Mapping through `features/system/acting.ts`'s
- * `subjectOf`, which rules on Mapping's own System, as the fixture is not: a Branch or the root takes
- * a new tile where one of its six places is free; nothing turns into the other kind, nor counts what
- * is below it, which only Mapping says.
+ * `subjectOf`, which rules on Mapping's own System, as the fixture is not: any Tile but a Leaf takes
+ * a new one where one of its six places is free; nothing turns into the other kind, nor counts what
+ * is below it, which only Mapping says. `acting.test.ts` holds it to home's on a System of each kind.
  */
-function subjectIn(system: TileNode, id: string, center = false): Subject | undefined {
+export function subjectIn(system: TileNode, id: string, center = false): Subject | undefined {
   const path = pathTo(system, id)
   const tile = path.at(-1)
   const parent = path.at(-2)
@@ -94,7 +94,7 @@ function subjectIn(system: TileNode, id: string, center = false): Subject | unde
     title: tile.title,
     at: center ? 'center' : at,
     parent: parent.title,
-    holds: kind === 'branch' && holdsIn(tile),
+    holds: kind !== 'leaf' && holdsIn(tile),
   }
 }
 
@@ -120,7 +120,8 @@ interface Mentionable {
  * The Tiles of a System the composer's `@` finds on the page, as the feature's `mentionablesOf` reads
  * Mapping's (`features/conversation/composer/mention.ts`, which `ui/` cannot import): from the root
  * down, a generation after the other, each Direction's Branch, Context Tile and Leaf, with the Titles
- * above it. The fixture holds no Reference for it to skip, and no untitled Tile to name.
+ * above it, never a Reference, nor a broken one. An untitled Tile is named as the canvas draws it.
+ * `mention.test.ts` holds it to the feature's on a System of each kind.
  */
 export function mentionablesIn(system: TileNode): Mentionable[] {
   const all: Mentionable[] = []
@@ -137,6 +138,7 @@ export function mentionablesIn(system: TileNode): Mentionable[] {
       directions.flatMap((direction) =>
         [tile.branches?.[direction], tile.context?.[direction], tile.leaves?.[direction]]
           .filter((below) => below !== undefined)
+          .filter((below) => below.reference === undefined && below.broken !== true)
           .map((below) => ({ tile: below, trail: [...trail, tile.title] })),
       ),
     )
@@ -259,7 +261,7 @@ export function turnOnCanvas(
       }
       return Object.keys(mark).length === 0 ? undefined : mark
     },
-    slot: (slot): Standing | undefined =>
+    slot: (slot): SlotStanding | undefined =>
       shown?.writing === true && isSlot(slot, 6)
         ? { id: tooling.id, look: { kind: 'draft', words: { title: tooling.title } } }
         : undefined,
@@ -307,7 +309,7 @@ export function proposalOnCanvas(shown: ProposalShown) {
         notes: { proposed: 'move' },
         'reading-list': { proposed: 'delete' },
       }),
-      slot: (slot): Standing | undefined =>
+      slot: (slot): SlotStanding | undefined =>
         isSlot(slot, 6)
           ? { id: tooling.id, look: { kind: 'ghost', words: { title: tooling.title } } }
           : undefined,
@@ -334,7 +336,7 @@ export function draftOnCanvas(draft: Draft, written: number) {
   return {
     system: ulysse,
     marks: {
-      slot: (slot): Standing | undefined =>
+      slot: (slot): SlotStanding | undefined =>
         isSlot(slot, draft.place, draft.kind === 'context')
           ? { id: tooling.id, look: { kind: 'writing', words: { title } } }
           : undefined,
@@ -349,13 +351,13 @@ export function draftOnCanvas(draft: Draft, written: number) {
 export const freeInEngineering: readonly Direction[] = [5, 6]
 
 /** A tile of the fixture, as the chat names it. */
-interface Named {
+interface NamedTile {
   id: string
   title: string
 }
 
 /** A tile carried: which, and where the pointer is on the page, once off the frame. */
-interface Carry extends Named {
+interface Carry extends NamedTile {
   at: Point | undefined
 }
 
@@ -365,7 +367,7 @@ interface Carry extends Named {
  * go; let go anywhere, it settles back home. `onCarry` tells the tile carried, and nothing once let
  * go. A finger never carries a tile, whose way is the menu's or `@`.
  */
-export function CarryFrame({ onCarry }: { onCarry: (tile: Named | undefined) => void }) {
+export function CarryFrame({ onCarry }: { onCarry: (tile: NamedTile | undefined) => void }) {
   const svg = useRef<SVGSVGElement>(null)
   const scale = useScale(svg, { width: frameWidth, height: frameHeight })
   const units = unitsIn(svg)
@@ -467,7 +469,7 @@ export function actingThroughChat({
   onAsk,
   elsewhere,
 }: {
-  onAsk: (tile: Named, where?: string) => void
+  onAsk: (tile: NamedTile, where?: string) => void
   elsewhere: (said: string) => void
 }): Pick<ComponentProps<typeof Canvas>, 'acting' | 'emptySlots'> {
   return {

@@ -7,6 +7,7 @@ import {
   type System,
   systemOf,
 } from '#/domains/mapping/entities'
+import { subjectIn } from '#/front/ui/canvas/crossings'
 import { layoutCanvas } from '#/front/ui/canvas/geometry/shape'
 import type { TileHex } from '#/front/ui/canvas/state/useCanvasState'
 import { showView, type CanvasView } from '#/front/ui/canvas/view/view'
@@ -259,5 +260,33 @@ describe('what the card shows of a Body', () => {
   it('shows no code for a Markdown Leaf, nor a Branch', () => {
     expect(codeOf(root, 'notes')).toBeUndefined()
     expect(codeOf(root, 'bare')).toBeUndefined()
+  })
+})
+
+describe("the design system's reading of a Tile, on the canvas's tiles alone", () => {
+  // `/design-system`'s crossings say what a Tile's menu says of it off the canvas's own tiles, which
+  // no Mapping System stands behind there (`ui/canvas/crossings.tsx`'s `subjectIn`): held here to
+  // home's on every Tile each view draws, but a Reference, which their fixture holds none of, and what
+  // only Mapping says, what is below a Tile and whether it turns into the other kind.
+  const views: CanvasView[] = [
+    {},
+    { inner: 'context' },
+    { center: 'holding' },
+    { center: 'framed', inner: 'context' },
+  ]
+
+  it.each(views)('says what home says of each Tile drawn in %o', (view) => {
+    const drawn = Object.values(hexesOf(view)).filter(({ tile }) => tile.reference === undefined)
+    expect(drawn.length).toBeGreaterThan(1)
+    for (const each of drawn) {
+      const home = subjectOf(systems, each)
+      expect(home).toBeDefined()
+      // What only Mapping says left out, which `toEqual` reads as never said.
+      expect(subjectIn(tree, each.tile.id, each.role === 'center')).toEqual({
+        ...home,
+        below: undefined,
+        turns: undefined,
+      })
+    }
   })
 })

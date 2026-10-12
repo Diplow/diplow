@@ -1,12 +1,11 @@
 // What the composer's field holds, read: the commands home offers and runs, what the caret stands in
 // and lists, a `/` opening the field the commands (ui's `commands.ts`), an `@` the Account's Tiles
-// (`./mention.ts`), what the field shows marked, what a pick puts in it, and what a Message sent is, a
-// command run or words for the agent. Pure; the composer's state hook (`../state/useComposerState.ts`)
-// runs it.
+// (`./mention.ts`), what a pick puts in it, and what a Message sent is, a command run or words for the
+// agent; what the field shows marked is ui's `fieldMarksOf`, which the gallery's demo reads too. Pure;
+// the composer's state hook (`../state/useComposerState.ts`) runs it.
 import {
   type Command,
   type CommandId,
-  commandMarkOf,
   commandPicked,
   commands,
   commandTypingAt,
@@ -16,10 +15,8 @@ import {
   showsLink,
   tileTyping,
   type Typing,
-  wholeLink,
 } from '#/front/ui/chat/composer/commands'
 import type { Mode } from '#/domains/assistant/entities'
-import type { Mark } from '#/front/ui/chat/composer/Composer'
 
 import {
   type Edited,
@@ -94,22 +91,6 @@ export function typingAt(
       path: trail.join(' / '),
     })),
   )
-}
-
-/** What the field shows marked: the command it opens with, and each link picked it still shows whole. */
-export function marksOf(
-  { value, links }: Field,
-  among: ReadonlyArray<Command>,
-): ReadonlyArray<Mark> {
-  const marks: Mark[] = [...commandMarkOf(value, among)]
-  // The longest first, as the Message sends them, so a link another starts with never takes its place.
-  for (const { shown } of [...links].sort((a, b) => b.shown.length - a.shown.length)) {
-    for (const found of value.matchAll(wholeLink(shown))) {
-      const mark = { from: found.index, to: found.index + found[0].length, kind: 'tile' as const }
-      if (!marks.some(({ from, to }) => mark.from < to && from < mark.to)) marks.push(mark)
-    }
-  }
-  return marks
 }
 
 /** What a pick does to the field: its next value and caret, the link it picked if any, or a language. */

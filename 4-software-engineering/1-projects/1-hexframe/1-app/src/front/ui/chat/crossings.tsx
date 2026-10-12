@@ -52,20 +52,22 @@ type CrossingProps = Pick<
   'onPoint' | 'place' | 'carried' | 'onDrop' | 'running'
 >
 
-/** The composer at the chat's foot, live on the demo's state: what is sent shows in a toast. */
+/**
+ * The composer at the chat's foot, live on the demo's state: what is sent shows in a toast, unless the
+ * crossing does something with it (`onSend`).
+ */
 export function ComposerEnd({
   demo,
   onSend,
   ...crossing
-}: CrossingProps & { demo: ReturnType<typeof useComposerDemo>; onSend?: (text: string) => void }) {
+}: CrossingProps & { demo: ReturnType<typeof useComposerDemo>; onSend?: () => void }) {
   return (
     <Composer
       {...demo.composer}
       {...crossing}
       onSend={() => {
-        const sent = demo.value.trim()
-        if (onSend === undefined) toast(m.gallery_composer_sent({ message: sent }))
-        else onSend(sent)
+        if (onSend === undefined) toast(m.gallery_composer_sent({ message: demo.value.trim() }))
+        else onSend()
         demo.clear()
       }}
     />

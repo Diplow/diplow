@@ -114,14 +114,22 @@ function Ends(props: {
 
 /**
  * A tile of the System as the chat names it, with its card, what a click on it and pointing at it do.
- * One the System doesn't hold: Tooling, not there yet, is the agent's draft, violet, its card saying
- * where it will stand, which pointing at lights where it waits; any other is gone, struck through.
+ * One the System doesn't hold: Tooling, while it is on its way (`coming`), is the agent's draft,
+ * violet, its card saying where it will stand, which pointing at lights where it waits; any other,
+ * and Tooling once it will never come, a Proposal discarded or undone, is gone, struck through.
  */
 const naming =
-  (system: TileNode, act: { center?: (id: string) => void; point?: (id?: string) => void }) =>
+  (
+    system: TileNode,
+    act: { center?: (id: string) => void; point?: (id?: string) => void },
+    coming = true,
+  ) =>
   (id: string): MentionProps => {
     const named = namedOf(system, id)
-    if (named === undefined && id !== tooling.id) return { title: titleOf(id), standing: 'gone' }
+    if (named === undefined && !(id === tooling.id && coming)) {
+      // Tooling is no Tile of the fixture, whose titles `titleOf` reads.
+      return { title: id === tooling.id ? tooling.title : titleOf(id), standing: 'gone' }
+    }
     return {
       ...(named ?? { ...toolingNamed, standing: 'draft' }),
       ...(named && act.center && { onCenter: () => act.center?.(id) }),
@@ -276,7 +284,7 @@ function ProposalCrossing() {
   // What the canvas draws of it: what it would do while it waits, what it did once accepted.
   const shown = fate === 'open' ? 'waiting' : fate === 'accepted' && !undone ? 'landed' : 'gone'
   const { system, marks } = proposalOnCanvas(shown)
-  const named = naming(system, { point: setPointed })
+  const named = naming(system, { point: setPointed }, shown !== 'gone')
   const ids = {
     tooling: tooling.id,
     principles: 'principles',
@@ -427,21 +435,21 @@ function MenuCrossing() {
 }
 
 /** What the chat holds of the specimen's navigations: each run of gestures, and a Message between. */
-type Told = readonly ViewAction[] | 'said'
+type Entry = readonly ViewAction[] | 'said'
 
 function NavigationCrossing({ tell }: { tell: Tell }) {
   const [view, setView] = useState<CanvasView>(startView)
-  const [told, setTold] = useState<readonly Told[]>([])
-  const lines = told.map((each) => (each === 'said' ? each : tell(each)))
+  const [entries, setEntries] = useState<readonly Entry[]>([])
+  const lines = entries.map((each) => (each === 'said' ? each : tell(each)))
   // A gesture joins the navigation under way, as home's sender merges it.
   const navigated = (next: CanvasView, action: ViewAction) => {
     setView(next)
-    const last = told.at(-1)
+    const last = entries.at(-1)
     const going = last === undefined || last === 'said' ? [] : last
-    setTold([...told.slice(0, going.length === 0 ? told.length : -1), [...going, action]])
+    setEntries([...entries.slice(0, going.length === 0 ? entries.length : -1), [...going, action]])
   }
   const say = () => {
-    setTold([...told, 'said'])
+    setEntries([...entries, 'said'])
   }
   return (
     <GallerySection name="NavigationEntry">

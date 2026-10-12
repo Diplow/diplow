@@ -9,6 +9,7 @@ import {
   commands,
   commandsMatching,
   commandTypingAt,
+  fieldMarksOf,
   languageNamed,
   namedAt,
   namedFirst,
@@ -158,5 +159,17 @@ describe('a link picked, as the field shows it', () => {
       Array.from(value.matchAll(wholeLink(shown)), ({ index }) => index)
     expect(at('@Work, then @Work team, not me@Work nor @Workshop', '@Work')).toEqual([0, 12])
     expect(at('@What? (1+1) now', '@What? (1+1)')).toEqual([0])
+  })
+
+  it('marks the command the field opens with, then each link shown whole, the longest first', () => {
+    const picked = [{ shown: '@Work' }, { shown: '@Work team' }]
+    expect(fieldMarksOf('/apply @Work team, then @Work', picked)).toEqual([
+      { from: 0, to: 6, kind: 'command' },
+      { from: 7, to: 17, kind: 'tile' },
+      { from: 24, to: 29, kind: 'tile' },
+    ])
+    expect(fieldMarksOf('Ask @Workshop', picked)).toEqual([])
+    const asking = commands.filter(({ id }) => id === 'ask')
+    expect(fieldMarksOf('/edit @Work', picked, asking)).toEqual([{ from: 6, to: 11, kind: 'tile' }])
   })
 })

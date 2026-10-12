@@ -25,7 +25,6 @@ import { Skeleton } from '#/front/ui/atoms/skeleton'
 import { AtomsGallery } from '#/front/ui/atoms/gallery'
 import { Canvas } from '#/front/ui/canvas/Canvas'
 import { CanvasAtomsGallery } from '#/front/ui/canvas/atoms/gallery'
-import { mentionablesIn } from '#/front/ui/canvas/crossings'
 import { fixtureViews, ulysse } from '#/front/ui/canvas/fixtures'
 import { CanvasLayoutsGallery } from '#/front/ui/canvas/layouts/gallery'
 import { TileGallery } from '#/front/ui/canvas/tile/gallery'
@@ -123,7 +122,16 @@ function DesignSystem() {
   )
 }
 
-const titles = Object.fromEntries(mentionablesIn(ulysse).map(({ id, title }) => [id, title]))
+/** Each Tile of a System, from its root down. */
+const tilesIn = (tile: TileNode): TileNode[] => [
+  tile,
+  ...[tile.branches, tile.context, tile.leaves].flatMap((ring) =>
+    Object.values(ring ?? {}).flatMap(tilesIn),
+  ),
+]
+
+/** The fixture's Titles, by id: what home's timeline names the Tiles of an entry by. */
+const titles = Object.fromEntries(tilesIn(ulysse).map(({ id, title }) => [id, title]))
 
 /**
  * A run of gestures on the crossing's canvas, in home's words: merged as home's sender merges them

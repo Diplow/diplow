@@ -32,7 +32,7 @@ import { useFinger } from './tile/menu/TileMenu'
 import { unitsIn } from './tile/moving/drag'
 import { MoveBanner } from './tile/moving/Moving'
 import { Arc } from './tile/marks/Marks'
-import { wayTo, withPointed, type TileMark } from './tile/marks/mark'
+import { wayTo, type TileMark } from './tile/marks/mark'
 import { Ground } from './tile/places'
 import { Tile, type StandingLook, type TileWrite } from './tile/Tile'
 import { listOf, lookOf, placeOf } from './view/looks'
@@ -58,7 +58,7 @@ interface CanvasActing {
 }
 
 /** A tile standing in a free slot before it is there: its id, and how it is drawn. */
-export interface Standing {
+export interface SlotStanding {
   id: string
   look: StandingLook
 }
@@ -70,7 +70,7 @@ export interface CanvasMarks {
   /** The Tile the chat points at, by its id: lit where it is drawn, its way where it isn't. */
   pointed?: string | undefined
   /** What stands in a free slot before it is there: a tile being written, one a Proposal creates. */
-  slot?: (slot: EmptySlotTarget) => Standing | undefined
+  slot?: (slot: EmptySlotTarget) => SlotStanding | undefined
   /** A Proposal's moves, each from a Tile to the free slot it would land in, drawn where both are. */
   arcs?: ReadonlyArray<{ from: string; to: { parent: string; direction: Direction } }>
 }
@@ -138,7 +138,7 @@ export function Canvas(props: CanvasProps) {
   const inTheAir = gesture.landing !== undefined && gesture.landing !== 'landed'
   // While a tile moves, nothing stands in a free slot: they offer themselves to it.
   const standing = moving === undefined ? marks?.slot : undefined
-  const markOf = marksOf(system, state.hexes, { ...marks, slot: standing })
+  const markOf = tileMarksOf(system, state.hexes, { ...marks, slot: standing })
   const onMenu = (key: string) => (open: boolean) => {
     setMenu((current) => (open ? key : current === key ? undefined : current))
   }
@@ -272,7 +272,7 @@ type Hexes = ReturnType<typeof useCanvasState>['state']['hexes']
  * Each Tile's mark, by its id: what the caller says of it, and the chat pointing at it, or at a tile
  * below it off the canvas, whose way it is. A tile standing in a slot is drawn under its own id.
  */
-function marksOf(system: TileNode, hexes: Hexes, marks: CanvasMarks | undefined) {
+function tileMarksOf(system: TileNode, hexes: Hexes, marks: CanvasMarks | undefined) {
   const pointed = marks?.pointed
   const drawn = new Set<string>()
   for (const hex of hexes) {
@@ -286,8 +286,11 @@ function marksOf(system: TileNode, hexes: Hexes, marks: CanvasMarks | undefined)
     pointed === undefined
       ? undefined
       : wayTo(pointed, pathTo(system, pointed), (id) => drawn.has(id))
-  return (id: string): TileMark | undefined =>
-    withPointed(marks?.tile?.(id), way?.id !== id ? undefined : way.way ? 'way' : 'tile')
+  return (id: string): TileMark | undefined => {
+    const mark = marks?.tile?.(id)
+    if (way?.id !== id) return mark
+    return { ...mark, pointed: way.way ? 'way' : 'tile' }
+  }
 }
 
 /** A Proposal's moves, each an arc from its Tile to the free slot it would land in, where both are drawn. */

@@ -78,12 +78,3 @@ export function wayTo(
     .find(({ id }) => drawn(id))
   return ancestor === undefined ? undefined : { id: ancestor.id, way: true }
 }
-
-/** Two marks as one: what the caller says of a tile, and the chat pointing at it or its way. */
-export function withPointed(
-  mark: TileMark | undefined,
-  pointed: TileMark['pointed'],
-): TileMark | undefined {
-  if (pointed === undefined) return mark
-  return { ...mark, pointed }
-}

@@ -6,7 +6,8 @@
 // what the caret stands in lists them (`commandTypingAt`), the command a Message opens with is marked
 // in the field (`commandMarkOf`) and run once sent (`openingCommand`), and the language lists the
 // languages, each in its own words. How the field shows a Tile's link once picked, whole, is read here
-// too (`wholeLink`, `showsLink`), so the feature's `@` and the gallery's demo read it alike. Pure.
+// too (`wholeLink`, `showsLink`), and what the field marks (`fieldMarksOf`), so the feature's `@` and
+// the gallery's demo read them alike. Pure.
 import {
   ArrowUpRight,
   Check,
@@ -386,6 +387,26 @@ export function openingCommand(
 export function commandMarkOf(value: string, among: ReadonlyArray<Command> = commands): Mark[] {
   const opening = openingCommand(value, among)
   return opening === undefined ? [] : [{ from: 0, to: opening.length, kind: 'command' }]
+}
+
+/**
+ * What the field shows marked: the command of `among` it opens with, and each link picked it still
+ * shows whole, the longest first, as a Message sends them, so a link another starts with never takes
+ * its place; never two marks over one stretch.
+ */
+export function fieldMarksOf(
+  value: string,
+  links: ReadonlyArray<{ readonly shown: string }>,
+  among: ReadonlyArray<Command> = commands,
+): Mark[] {
+  const marks = commandMarkOf(value, among)
+  for (const { shown } of [...links].sort((a, b) => b.shown.length - a.shown.length)) {
+    for (const found of value.matchAll(wholeLink(shown))) {
+      const mark = { from: found.index, to: found.index + found[0].length, kind: 'tile' as const }
+      if (!marks.some(({ from, to }) => mark.from < to && from < mark.to)) marks.push(mark)
+    }
+  }
+  return marks
 }
 
 /** What a pick does: the field's next value and caret, or a language to go to. */

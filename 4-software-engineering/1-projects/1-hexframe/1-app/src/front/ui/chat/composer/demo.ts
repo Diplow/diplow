@@ -1,19 +1,20 @@
 // What the feature's state hook does on home, done here for /design-system alone, on a fixture System
 // and every command: what the caret stands in lists, what the field shows marked, what a pick puts in
 // the field, and the links picked since the last Message. The commands' part is `commands.ts`', which
-// the feature runs too, and so is how the field shows a link picked; the rest of the `@` follows the
-// rules of the feature's (`features/conversation/composer/mention.ts`, which `ui/` cannot import), on
-// the fixture's Tiles, or on those its caller hands it, the canvas's own for the crossings. The Tiles
-// are the user's own words, not translated. `useComposerDemo` holds it all as the state hook would.
+// the feature runs too, and so are how the field shows a link picked and what it marks; the rest of
+// the `@` follows the rules of the feature's (`features/conversation/composer/mention.ts`, which `ui/`
+// cannot import), on the fixture's Tiles, or on those its caller hands it, the canvas's own for the
+// crossings. The Tiles are the user's own words, not translated. `useComposerDemo` holds it all as the
+// state hook would.
 import { useRef, useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { cutAround } from '../atoms/cut'
 import {
-  commandMarkOf,
   commandPicked,
   commandTypingAt,
+  fieldMarksOf,
   namedAt,
   namedFirst,
   type Picked,
@@ -23,7 +24,6 @@ import {
   type Typing,
   wholeLink,
 } from './commands'
-import type { Mark } from './Composer'
 import type { Row } from './List'
 
 /** A Tile the demo's `@` finds: its Title, and the Titles above it. */
@@ -109,21 +109,6 @@ function tileTypingAt(
     from,
     found.map(({ tile }): Row => ({ kind: 'tile', ...tile })),
   )
-}
-
-/**
- * What the field shows marked: the command it opens with, and each link picked it still shows whole,
- * the longest first, as the feature marks them, so a link another starts with never takes its place.
- */
-function marksOf(value: string, links: ReadonlyArray<Link>): ReadonlyArray<Mark> {
-  const marks: Mark[] = [...commandMarkOf(value)]
-  for (const { shown } of [...links].sort((a, b) => b.shown.length - a.shown.length)) {
-    for (const found of value.matchAll(wholeLink(shown))) {
-      const mark = { from: found.index, to: found.index + found[0].length, kind: 'tile' as const }
-      if (!marks.some(({ from, to }) => mark.from < to && from < mark.to)) marks.push(mark)
-    }
-  }
-  return marks
 }
 
 /** A Tile's link, as the field shows it. */
@@ -216,7 +201,7 @@ export function useComposerDemo({
         setCaret(at)
         setLeft(false)
       },
-      marks: marksOf(value, links),
+      marks: fieldMarksOf(value, links),
       listing: typing?.listing,
       onPick: (row: string) => {
         if (typing === undefined) return

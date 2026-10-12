@@ -3,7 +3,7 @@
 // it hands on to what it wraps.
 import { cn } from 'cn'
 import { HoverCard as Card, Slot } from 'radix-ui'
-import { useId, useRef, useState, type ComponentProps, type ReactElement } from 'react'
+import { useEffect, useId, useRef, useState, type ComponentProps, type ReactElement } from 'react'
 
 /**
  * What a trigger around it hands what it wraps, a menu's on a tile: its ref, its handlers and its
@@ -61,11 +61,8 @@ export function HoverCard({
   onOpenChange,
   ...hand
 }: HoverCardProps) {
-  const [open, setOpenState] = useState(false)
-  const setOpen = (next: boolean) => {
-    setOpenState(next)
-    if (next !== open) onOpenChange?.(next)
-  }
+  const [open, setOpen] = useState(false)
+  useOpenTold(open, onOpenChange)
   // Pressed since the pointer came in: a click is no hover, so the card Radix would open after the
   // delay stays shut until the pointer leaves.
   const pressed = useRef(false)
@@ -123,6 +120,24 @@ export function HoverCard({
       )}
     </>
   )
+}
+
+/**
+ * The card's opening told its caller, and its shutting, the card gone while open included, so what
+ * it lit elsewhere goes out with it: a tile named in a line the chat redraws as another.
+ */
+export function useOpenTold(open: boolean, onOpenChange: ((open: boolean) => void) | undefined) {
+  const told = useRef(onOpenChange)
+  useEffect(() => {
+    told.current = onOpenChange
+  })
+  useEffect(() => {
+    if (!open) return undefined
+    told.current?.(true)
+    return () => {
+      told.current?.(false)
+    }
+  }, [open])
 }
 
 function Says({

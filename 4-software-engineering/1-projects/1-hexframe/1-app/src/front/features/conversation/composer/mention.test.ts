@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest'
 
 import { linkTo, partsOf } from '#/domains/assistant/entities'
 import type { SystemTile } from '#/domains/mapping/entities'
+import { mentionablesIn } from '#/front/ui/canvas/crossings'
+import type { TileNode } from '#/front/ui/canvas/view/tiles'
+import { m } from '#/paraglide/messages'
 
 import {
   encoded,
@@ -66,6 +69,43 @@ describe('the Tiles the user may @', () => {
       title: 'Team',
       trail: ['Untitled', 'Work'],
     })
+  })
+})
+
+describe("the design system's `@`, on the canvas's tiles alone", () => {
+  /**
+   * The System above as the canvas draws it (`features/system/tree.ts`'s `canvasTree`, which this
+   * feature can't import): the untitled Root named so, a Reference under its Tile's id, a broken one
+   * under an id of its own.
+   */
+  const drawn: TileNode = {
+    id: 'root',
+    title: m.system_untitled(),
+    preview: '',
+    branches: {
+      1: {
+        id: 'work',
+        title: 'Work',
+        preview: '',
+        branches: { 2: { id: 'team', title: 'Team', preview: '' } },
+      },
+      4: { id: 'games', title: 'Jeux vidéo', preview: '' },
+    },
+    leaves: { 3: { id: 'notes', title: 'Notes', preview: '', leaf: true } },
+    context: {
+      1: { id: 'why', title: 'Why I work', preview: '' },
+      2: { id: 'team', title: 'Team', preview: '', reference: { from: 'Work' } },
+      3: { id: 'broken:root:-3', title: 'Broken', preview: '', broken: true },
+    },
+  }
+
+  it('finds the Tiles home finds, in its order, each with the Titles above it', () => {
+    // `/design-system`'s crossings `@` the canvas's own tiles, which no Mapping System stands behind
+    // there (`ui/canvas/crossings.tsx`'s `mentionablesIn`): held here to the feature's reading.
+    const home = mentionablesOf(system, m.system_untitled())
+    expect(mentionablesIn(drawn)).toEqual(
+      home.map(({ id, title, trail }) => ({ id, title, path: trail.join(' / ') })),
+    )
   })
 })
 

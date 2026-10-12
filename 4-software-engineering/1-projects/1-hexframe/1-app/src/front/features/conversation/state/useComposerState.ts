@@ -3,15 +3,15 @@
 // lists, a `/` the commands offered, the language the languages, an `@` the Account's Tiles; what the
 // field shows marked; what a pick puts in the field, or the language it goes to; and what the field
 // submits, a command to run, words for the agent, or a language to go to, the field emptied for the
-// next. The reading is `../composer/typing.ts`, pure; this hook holds what it reads.
+// next. The reading is `../composer/typing.ts` and, for what the field shows marked, ui's
+// `fieldMarksOf`, both pure; this hook holds what they read.
 import { useReducer } from 'react'
 
-import type { Command } from '#/front/ui/chat/composer/commands'
+import { type Command, fieldMarksOf } from '#/front/ui/chat/composer/commands'
 
 import type { Inserted, Mentionable } from '../composer/mention'
 import {
   type Field,
-  marksOf,
   type FieldPick,
   pickOf,
   type Submitted,
@@ -60,7 +60,7 @@ export function useComposerState(tiles: ReadonlyArray<Mentionable>, among: Reado
   const [state, dispatch] = useReducer(reducer, initial)
   const typing = state.left ? undefined : typingAt(state, tiles, among)
   return {
-    state: { value: state.value, typing, marks: marksOf(state, among) },
+    state: { value: state.value, typing, marks: fieldMarksOf(state.value, state.links, among) },
     actions: {
       /** The field changed, or its caret moved. */
       change: (value: string, caret: number) => {

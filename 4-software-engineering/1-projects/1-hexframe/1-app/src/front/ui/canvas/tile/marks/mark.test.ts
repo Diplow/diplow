@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { m } from '#/paraglide/messages'
 
-import { markNote, wayTo, withPointed } from './mark'
+import { markNote, wayTo } from './mark'
 
 // Who touches a tile, as the canvas tells it: where the chat's pointing shows, on the tile or on its
 // way, and what lasts of a mark in words, for its card and a screen reader.
@@ -36,13 +36,6 @@ describe('the tile the chat points at', () => {
 
   it('shows on a tile standing in a slot, which the System has no path to yet', () => {
     expect(wayTo('tooling', [], (id) => id === 'tooling')).toEqual({ id: 'tooling', way: false })
-  })
-
-  it('joins the mark the caller gives the tile, which keeps it otherwise', () => {
-    const working = { working: true }
-    expect(withPointed(working, 'way')).toEqual({ working: true, pointed: 'way' })
-    expect(withPointed(working, undefined)).toBe(working)
-    expect(withPointed(undefined, 'tile')).toEqual({ pointed: 'tile' })
   })
 })
 
