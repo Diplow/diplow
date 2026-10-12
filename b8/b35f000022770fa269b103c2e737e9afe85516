@@ -1,0 +1,26 @@
+4-software-engineering/1-projects/1-hexframe/1-app/eslint.config.ts
+  s_6c94d00c8dfcf4::t_d42fe87c01c0e9 24-34,112-114,123
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/lint.test.ts
+  s_6c94d00c8dfcf4::t_deaa68e4f09eff 62-72,74-78
+  s_6c94d00c8dfcf4::t_2aa75a6e2dfbf6 73
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_6c94d00c8dfcf4::t_2aa75a6e2dfbf6 69
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-design-system-v1/decisions.md
+  s_6c94d00c8dfcf4::t_a315d6dcc87a37 422
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b8b35f000022770fa269b103c2e737e9afe85516",
+  "prompts": {},
+  "sessions": {
+    "s_6c94d00c8dfcf4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1e6d2617-3bbe-4f2d-a798-ac7dd5ce9e37",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
