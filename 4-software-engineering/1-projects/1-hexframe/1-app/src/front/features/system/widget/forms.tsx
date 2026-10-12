@@ -18,6 +18,7 @@ import type { FormErrors } from '#/front/client/channels'
 import { m } from '#/paraglide/messages'
 import { openedOnRefusal, useAppForm } from '#/front/ui/atoms/forms/form'
 import { Drawer } from '#/front/ui/canvas/layouts/Drawer'
+import type { MentionProps } from '#/front/ui/chat/text/Mention'
 import type { TilePlace, TileWords } from '#/front/ui/chat/widgets/tile/parts'
 import { TileWidget } from '#/front/ui/chat/widgets/tile/TileWidget'
 
@@ -58,7 +59,7 @@ export function NewTileWidget(props: NewTileProps) {
   const { formKey, refilled, receipt, system, parent, slot, onSlotChange } = props
   const submit = useCreateTileSubmit({ parent: parent.id, slot })
   const { state, actions } = useTileWordsState(blank, refilled)
-  if (receipt !== undefined) return <Done {...props} receipt={receipt} />
+  if (receipt !== undefined) return <TileWidget {...done(receipt, props)} />
   const where = whereIn(system, parent, slot)
   return (
     <TileWidget
@@ -107,7 +108,7 @@ export function EditTileWidget(props: EditTileProps) {
   const submit = useEditTileSubmit(opened)
   const read = { title: opened.title, preview: opened.preview, body: opened.body }
   const { state, actions } = useTileWordsState(read, refilled)
-  if (receipt !== undefined) return <Done {...props} receipt={receipt} />
+  if (receipt !== undefined) return <TileWidget {...done(receipt, props)} />
   const sent = (did: Receipt['did'], id: string, title: string) => {
     props.onSent({
       key: formKey,
@@ -144,31 +145,29 @@ export function EditTileWidget(props: EditTileProps) {
   )
 }
 
-/** The receipt a form leaves: the Tile named, centering the canvas while it stands. */
-function Done({
-  receipt,
-  system,
-  onCenter,
-}: Pick<FormProps, 'system' | 'onCenter'> & { receipt: Receipt }) {
+/**
+ * The receipt a form leaves, the Tile named centering the canvas while it stands: the same
+ * `TileWidget` the form was, given its receipt, so the focus the form held goes to it.
+ */
+function done(receipt: Receipt, { system, onCenter }: Pick<FormProps, 'system' | 'onCenter'>) {
   const { did, tile, where, at } = receipt
   const stands = did !== 'deleted' && (system.root.id === tile.id || tile.id in system.tiles)
-  return (
-    <TileWidget
-      mode="done"
-      did={did}
-      tile={{
-        title: tile.title,
-        ...(did === 'deleted' && { standing: 'gone' }),
-        ...(stands && {
-          onCenter: () => {
-            onCenter(tile.id)
-          },
-        }),
-      }}
-      where={where}
-      at={at}
-    />
-  )
+  const named: MentionProps = {
+    title: tile.title,
+    ...(did === 'deleted' && { standing: 'gone' }),
+    ...(stands && {
+      onCenter: () => {
+        onCenter(tile.id)
+      },
+    }),
+  }
+  return {
+    mode: 'done',
+    did,
+    tile: named,
+    where,
+    at,
+  } as const
 }
 
 interface RootFormProps {

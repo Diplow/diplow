@@ -1,4 +1,4 @@
-// The import's state, as its drawer shows it: what the place takes, whether it is waiting for files,
+// The import's state, as its widget in the chat shows it: what the place takes, whether it is waiting for files,
 // at work, landed or refused, and each line of its report in the page's language. The import itself is
 // a write, Query's (`useImportTiles`); the files come from the browser's pickers and drops, read by
 // `front/client/mapping/import/files.ts`. The component renders this and calls the actions, nothing more.
@@ -63,7 +63,7 @@ const leftOutLines = ({ leftOut }: Imported) =>
   leftOut.map(({ path, reason }) => lineOf(path, reasons[reason]()))
 
 /**
- * The import as its drawer shows it: `choosing` while it waits for files, again once a failure went
+ * The import as its widget shows it: `choosing` while it waits for files, again once a failure went
  * to its toast; `importing`; `landed`, with the Tiles created and every file left out or skipped; or
  * `refused`, every fault on its path, nothing written, and what was left out beside them.
  */
