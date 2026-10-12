@@ -5,8 +5,8 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 import { fromHelpPage } from '#/front/features/help/search'
 
 export const Route = createFileRoute('/help')({
-  validateSearch: fromHelpPage,
-  beforeLoad: ({ search }) => {
-    redirect({ to: '/', search, replace: true, throw: true })
+  // Read again from the URL: the search `beforeLoad` gets keeps the raw params, `open` among them.
+  beforeLoad: ({ location }) => {
+    redirect({ to: '/', search: fromHelpPage(location.search), replace: true, throw: true })
   },
 })

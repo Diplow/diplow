@@ -21,14 +21,39 @@ interface KeyWidgetsProps {
   keys: KeyWidgetState
 }
 
-/** The key widget, open or, once Done, its receipt; nothing else. */
+/**
+ * The key widget, open or, once Done, its receipt; nothing else. Every step is the one `KeyWidget`, so
+ * React keeps it from step to step and its hand-off moves the focus: to the name as it comes, to the
+ * secret's copy, then to the receipt.
+ */
 export function KeyWidgets({ open, onClose, keys: { state, actions } }: KeyWidgetsProps) {
+  const { data } = useKeys()
+  const revoke = useRevokeKey()
   const { step } = state
   if (step.kind === 'done') return <KeyWidget state="done" name={step.name} at={step.at} />
   if (!open) return null
   switch (step.kind) {
-    case 'list':
-      return <Listed onNew={actions.issue} onDone={onClose} />
+    case 'list': {
+      if (data === undefined) return null
+      const now = new Date()
+      const locale = getLocale()
+      return (
+        <KeyWidget
+          state="list"
+          keys={data.map((key) => rowOf(key, now, locale))}
+          onRevoke={(id) => {
+            const name = data.find((key) => key.id === id)?.name ?? ''
+            // A refusal has already gone to its channel, the toast.
+            revoke.mutateAsync({ id }).then(
+              () => toast.success(m.keys_revoked({ name })),
+              () => undefined,
+            )
+          }}
+          onNew={actions.issue}
+          onDone={onClose}
+        />
+      )
+    }
     case 'issue':
       return (
         <KeyWidget
@@ -58,29 +83,4 @@ export function KeyWidgets({ open, onClose, keys: { state, actions } }: KeyWidge
         />
       )
   }
-}
-
-/** The Keys given, the newest first, each with its revoke. */
-function Listed({ onNew, onDone }: { onNew: () => void; onDone: () => void }) {
-  const { data } = useKeys()
-  const revoke = useRevokeKey()
-  if (data === undefined) return null
-  const now = new Date()
-  const locale = getLocale()
-  return (
-    <KeyWidget
-      state="list"
-      keys={data.map((key) => rowOf(key, now, locale))}
-      onRevoke={(id) => {
-        const name = data.find((key) => key.id === id)?.name ?? ''
-        // A refusal has already gone to its channel, the toast.
-        revoke.mutateAsync({ id }).then(
-          () => toast.success(m.keys_revoked({ name })),
-          () => undefined,
-        )
-      }}
-      onNew={onNew}
-      onDone={onDone}
-    />
-  )
 }

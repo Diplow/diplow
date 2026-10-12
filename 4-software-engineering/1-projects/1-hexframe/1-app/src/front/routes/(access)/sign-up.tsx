@@ -5,11 +5,11 @@ import { withAccess } from '#/front/features/access/search'
 import { readSignInSearch } from '#/front/client/iam/guard'
 
 export const Route = createFileRoute('/(access)/sign-up')({
-  validateSearch: readSignInSearch,
-  beforeLoad: ({ search }) => {
+  // Read from the URL alone: the search `beforeLoad` gets keeps every raw param.
+  beforeLoad: ({ location }) => {
     redirect({
       to: '/',
-      search: { ...search, ...withAccess('sign-up') },
+      search: { ...readSignInSearch(location.search), ...withAccess('sign-up') },
       replace: true,
       throw: true,
     })

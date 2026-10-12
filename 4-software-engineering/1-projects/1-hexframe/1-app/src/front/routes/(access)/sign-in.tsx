@@ -5,8 +5,8 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 import { readSignInSearch } from '#/front/client/iam/guard'
 
 export const Route = createFileRoute('/(access)/sign-in')({
-  validateSearch: readSignInSearch,
-  beforeLoad: ({ search }) => {
-    redirect({ to: '/', search, replace: true, throw: true })
+  // Read from the URL alone: the search `beforeLoad` gets keeps every raw param.
+  beforeLoad: ({ location }) => {
+    redirect({ to: '/', search: readSignInSearch(location.search), replace: true, throw: true })
   },
 })
