@@ -136,3 +136,17 @@ export function withoutTile(search: SystemSearch, gone: TileNode): SystemSearch 
     ? withChange(search, { kind: 'none' })
     : search
 }
+
+/**
+ * Whether going to `next` opens a form the tile widget shows, a new Tile's, an import or an edit,
+ * another than the one under way. A change that lands later, made from the search params of that
+ * moment, opens none: it is a refusal putting a form back.
+ */
+export function opensWidget(current: SystemSearch, next: SearchChange): boolean {
+  if (typeof next === 'function') return false
+  const change = changeOf(next)
+  return (
+    (change.kind === 'add' || change.kind === 'import' || change.kind === 'edit') &&
+    keyOf(change) !== keyOf(changeOf(current))
+  )
+}

@@ -7,6 +7,7 @@ import { tileLink } from '#/api/mapping/files/download'
 import {
   changeOf,
   keyOf,
+  opensWidget,
   readSystemSearch,
   viewOf,
   withChange,
@@ -181,6 +182,32 @@ describe('keyOf', () => {
     ]
     expect(new Set([keyOf({ kind: 'add', parent: 'a', slot: { leaf: 2 } }), ...others]).size).toBe(
       6,
+    )
+  })
+})
+
+describe('opensWidget', () => {
+  const none = readSystemSearch({})
+  const adding = withChange(none, { kind: 'add', parent: 'a', slot: 2 })
+
+  it('opens the widget for a new Tile, an import or an edit', () => {
+    expect(opensWidget(none, adding)).toBe(true)
+    expect(opensWidget(none, withChange(none, { kind: 'edit', id: 'a' }))).toBe(true)
+    expect(opensWidget(none, withChange(none, { kind: 'import', place: { _tag: 'Root' } }))).toBe(
+      true,
+    )
+  })
+
+  it('opens another form over the one under way, but not the same one again', () => {
+    expect(opensWidget(adding, withChange(none, { kind: 'add', parent: 'a', slot: 3 }))).toBe(true)
+    expect(opensWidget(adding, withView(adding, { center: 'b' }))).toBe(false)
+  })
+
+  it('opens none for a move, an end, or a change made later from the URL of its moment', () => {
+    expect(opensWidget(none, withChange(none, { kind: 'move', id: 'a' }))).toBe(false)
+    expect(opensWidget(adding, withChange(adding, { kind: 'none' }))).toBe(false)
+    expect(opensWidget(none, (current) => withChange(current, { kind: 'edit', id: 'a' }))).toBe(
+      false,
     )
   })
 })

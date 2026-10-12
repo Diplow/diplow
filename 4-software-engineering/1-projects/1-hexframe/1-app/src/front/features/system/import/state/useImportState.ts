@@ -49,7 +49,7 @@ const faults: Record<Fault, () => string> = {
 }
 
 /** One line of a report: where, a path or the whole import, and why. */
-export interface ReportLine {
+interface ReportLine {
   readonly where: string
   readonly why: string
 }
