@@ -53,8 +53,11 @@ export interface Reopened {
 export function useRefusalState(
   search: SystemSearch,
   onSearchChange: (change: SearchChange) => void,
-  /** A form put back, a create's or an edit's: where it shows comes to the front. */
-  onFormBack?: () => void,
+  /**
+   * Each refused write, by the Tile it wrote, and whether its form was put back, a create's or an
+   * edit's, so what said it was done can go and where the form shows can come to the front.
+   */
+  onRefused: (refusal: { tile: string | undefined; formBack: boolean }) => void,
 ): Reopened | undefined {
   const under = changeOf(search)
   const key = keyOf(under)
@@ -67,11 +70,15 @@ export function useRefusalState(
   }
   useSystemRefusals((refused) => {
     const back = changeBack(refused)
-    if (back === undefined || under.kind !== 'none') return false
+    const tile = 'id' in refused.operation ? refused.operation.id : undefined
+    if (back === undefined || under.kind !== 'none') {
+      onRefused({ tile, formBack: false })
+      return false
+    }
     const form = 'content' in back
     setReopened(form ? { turn: refused.turn, ...back, shown: refused.shown } : undefined)
     onSearchChange((current) => withChange(current, back.change))
-    if (form) onFormBack?.()
+    onRefused({ tile, formBack: form })
     return true
   })
   return reopened !== undefined && keyOf(reopened.change) === key ? reopened : undefined

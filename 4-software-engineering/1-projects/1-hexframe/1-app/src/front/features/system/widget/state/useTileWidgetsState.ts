@@ -80,6 +80,12 @@ export function useTileWidgetsState() {
         setLast({ kind: 'receipt', ...receipt })
         settle()
       },
+      /** A write to this Tile refused: a receipt saying it was done goes. */
+      refused: (tile: string) => {
+        setLast((shown) =>
+          shown?.kind === 'receipt' && shown.tile.id === tile ? undefined : shown,
+        )
+      },
       /** Exports a Tile, everything below it with it; the browser saves the zip. */
       export: (exported: Exported) => {
         setLast({ kind: 'export', ...exported, at: new Date() })

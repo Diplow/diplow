@@ -61,6 +61,19 @@ describe('what follows a tile widget', () => {
     expect(result.current.state.shown).toBeUndefined()
   })
 
+  it("goes once its Tile's write is refused, and stays for another Tile's", () => {
+    const { result, run } = render()
+    run((actions) => {
+      actions.sent(receipt)
+      actions.refused('another')
+    })
+    expect(result.current.state.shown).toEqual(receipt)
+    run((actions) => {
+      actions.refused('tooling')
+    })
+    expect(result.current.state.shown).toBeUndefined()
+  })
+
   it('is nothing once a form closes unsent', () => {
     const { result, run } = render()
     run((actions) => {

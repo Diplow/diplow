@@ -48,7 +48,11 @@ export function TileWidgets({
 }: TileWidgetsProps) {
   // Read without throwing, as the chat does: a failed read shows on the canvas.
   const { data } = useSystem({ throwing: false })
-  const reopened = useRefusalState(search, onSearchChange, onFormBack)
+  // A refused write's receipt goes, and a form put back comes to the front.
+  const reopened = useRefusalState(search, onSearchChange, ({ tile, formBack }) => {
+    if (tile !== undefined) widgets.actions.refused(tile)
+    if (formBack) onFormBack()
+  })
   const remove = useDeleteTile()
   const root = data?.root
   const tree = useMemo(() => (root === undefined ? undefined : canvasTree(root)), [root])
