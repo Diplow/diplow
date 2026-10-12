@@ -174,6 +174,10 @@ const directionNames: Record<Direction, () => string> = {
 /** A Direction, in words: north-west, east… */
 export const directionName = (direction: Direction) => directionNames[direction]()
 
+/** A free slot's place, in a few words, which a screen reader hears beside its name: "free, east". */
+export const slotPlace = (direction: Direction) =>
+  m.tile_place_ring({ kind: m.tile_word_slot(), direction: directionName(direction) })
+
 const kindWords: Record<MenuKind | 'slot', () => string> = {
   root: m.tile_word_root,
   untitled: m.tile_word_root,

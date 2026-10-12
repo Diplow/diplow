@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { actsAtOnce, clickOf, groupsOf, placeOf, type Subject } from './verbs'
+import { actsAtOnce, clickOf, groupsOf, placeOf, slotPlace, type Subject } from './verbs'
 
 const branch: Subject = {
   kind: 'branch',
@@ -108,5 +108,10 @@ describe('the place a menu and a card name', () => {
     expect(placeOf({ kind: 'root', title: 'diplow', at: 'center' })).toBe('root, the center')
     expect(placeOf({ ...branch, at: 'center' })).toBe('branch, the center, in Software engineering')
     expect(placeOf({ kind: 'slot', at: 6, parent: 'Projects' })).toBe('free, west in Projects')
+  })
+
+  it('tells a free slot from the five beside it, whose name a click gives them all', () => {
+    expect(slotPlace(1)).toBe('free, north-west')
+    expect(slotPlace(4)).toBe('free, south-east')
   })
 })
