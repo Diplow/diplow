@@ -1,0 +1,32 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/programs.ts
+  s_6c94d00c8dfcf4::t_747a58a1190888 26,41,50,69-70,84-88
+  s_6c94d00c8dfcf4::t_a1ad8c84407f94 42-44
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/events/turn.test.ts
+  s_6c94d00c8dfcf4::t_39ce7c64ce457a 134,138-139
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/programs.ts
+  s_6c94d00c8dfcf4::t_16ed0f8b249769 166-177,179-181
+  s_6c94d00c8dfcf4::t_bf4285b97f3e37 178
+  s_6c94d00c8dfcf4::t_729dabb51013e2 165
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/proposal.test.ts
+  s_6c94d00c8dfcf4::t_ae73f1468578e4 133-142
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/assistant/conversation.ts
+  s_6c94d00c8dfcf4::t_0b50b6bcaf51e9 119-122
+  s_6c94d00c8dfcf4::t_762bbbb3bc5e64 22,39,102-118,123-125
+  s_6c94d00c8dfcf4::t_c6142460b6b8f1 126
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0a67a3201892b23ed206a37304bb6f9225c364ac",
+  "prompts": {},
+  "sessions": {
+    "s_6c94d00c8dfcf4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1e6d2617-3bbe-4f2d-a798-ac7dd5ce9e37",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
