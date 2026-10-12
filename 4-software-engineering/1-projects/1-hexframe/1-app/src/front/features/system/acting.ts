@@ -25,6 +25,14 @@ import { lookOf } from '#/front/ui/canvas/view/looks'
 import { pathTo, type TileNode } from '#/front/ui/canvas/view/tiles'
 
 import { moveOf, swapOf, swapsWith, tileIn, type Located } from './tree'
+
+/** The lines home can't run yet: the agent's, until the chat answers the menu (HEX-110). */
+export const waiting: readonly Verb[] = ['ask-agent']
+
+/** The swap of a moving Tile with another, where Mapping makes something of it; none otherwise. */
+export function tradeOf(flat: System, moving: TileNode, held: TileNode) {
+  return swapsWith(flat, moving, held) ? swapOf(flat, moving.id, held.id) : undefined
+}
 import { tilesBelow } from './widget/place'
 
 /** The System three ways: its tree, Mapping's; flat, which `decide` rules on; as the canvas draws it. */
@@ -177,7 +185,7 @@ export function framesOf(systems: Systems, hex: TileHex) {
  */
 export function withoutOf({ root }: Systems, hex: TileHex): Verb[] {
   return [
-    'ask-agent',
+    ...waiting,
     ...(hex.tile.leaf === true ? (['show-context'] as const) : []),
     ...(hex.tile.root !== undefined && !isEmptySystem(root) ? (['import'] as const) : []),
   ]
@@ -188,8 +196,6 @@ export function moveTo({ root, flat }: Systems, hex: TileHex, at: Direction) {
   const located = tileIn(root, hex.tile.id)
   const parent = hex.parent
   if (located === undefined || located.kind === 'root' || parent === undefined) return undefined
-  // Into a free place only: a taken one is a swap.
-  if (ringOf(parent, located)[at] !== undefined) return undefined
   return allows(flat, hex.tile.id, { parent: parent.id, slot: slotAt(located, at) })
 }
 
@@ -199,8 +205,7 @@ export function swapAt({ root, flat }: Systems, hex: TileHex, at: Direction) {
   const parent = hex.parent
   if (located === undefined || parent === undefined) return undefined
   const seated = ringOf(parent, located)[at]
-  if (seated === undefined || !swapsWith(flat, hex.tile, seated)) return undefined
-  return swapOf(flat, hex.tile.id, seated.id)
+  return seated === undefined ? undefined : tradeOf(flat, hex.tile, seated)
 }
 
 /**

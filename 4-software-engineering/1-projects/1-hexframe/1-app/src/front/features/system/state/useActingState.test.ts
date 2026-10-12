@@ -99,7 +99,7 @@ function answering(
 
 const done = { ok: true, value: undefined }
 
-function render(search: SystemSearch = {}) {
+function render(search: SystemSearch = {}, { exporting = false } = {}) {
   const client = makeQueryClient()
   const onSearchChange = vi.fn<(change: SearchChange) => void>()
   const start = vi.fn()
@@ -111,7 +111,7 @@ function render(search: SystemSearch = {}) {
         systems: { root, flat, tree },
         search,
         onSearchChange,
-        exporting: { start },
+        exporting: { start, pending: exporting },
       }),
     { wrapper },
   )
@@ -281,6 +281,12 @@ describe('a line that opens something', () => {
     const { result, start } = render()
     choose(result, 'tile:holding', { verb: 'export' })
     expect(start).toHaveBeenCalledWith({ tile: { id: 'holding', title: 'holding' }, below: 1 })
+  })
+
+  it('exports nothing more while an export is on its way', () => {
+    const { result, start } = render({}, { exporting: true })
+    choose(result, 'tile:holding', { verb: 'export' })
+    expect(start).not.toHaveBeenCalled()
   })
 
   it("copies a Tile's title, saying so", async () => {

@@ -39,7 +39,7 @@ interface SystemProps {
   onViewChange: (view: CanvasView, action: ViewAction) => void
   onSearchChange: (change: SearchChange) => void
   /** Exports a Tile, which the chat shows. */
-  exporting: { start: (exported: Exported) => void }
+  exporting: { start: (exported: Exported) => void; pending: boolean }
   className?: string
 }
 

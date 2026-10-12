@@ -31,7 +31,9 @@ import {
   referenceAt,
   subjectOf,
   swapAt,
+  tradeOf,
   turnOf,
+  waiting,
   withoutOf,
   type Systems,
 } from '../acting'
@@ -43,7 +45,7 @@ import {
   type SearchChange,
   type SystemSearch,
 } from '../search/search'
-import { moveOf, slotOf, swapOf, swapsWith, tileIn } from '../tree'
+import { moveOf, slotOf, tileIn } from '../tree'
 import type { Exported } from '../widget/state/useTileWidgetsState'
 import { tilesBelow } from '../widget/place'
 
@@ -52,7 +54,7 @@ interface ActingInput {
   search: SystemSearch
   onSearchChange: (change: SearchChange) => void
   /** Exports a Tile, which the chat shows. */
-  exporting: { start: (exported: Exported) => void }
+  exporting: { start: (exported: Exported) => void; pending: boolean }
 }
 
 /** A delete asked for from a Tile's menu, waiting on its dialog. */
@@ -149,7 +151,9 @@ export function useActingState({ systems, search, onSearchChange, exporting }: A
         copy(copied[chosen.verb](hex.tile))
         return
       case 'export':
-        exporting.start({ tile: { id, title }, below: tilesBelow(flat, id) })
+        // One export at a time, as the chat shows one.
+        if (!exporting.pending)
+          exporting.start({ tile: { id, title }, below: tilesBelow(flat, id) })
         return
       case 'delete':
         setDeleting(hex.tile)
@@ -192,7 +196,7 @@ export function useActingState({ systems, search, onSearchChange, exporting }: A
     if (place === undefined) return undefined
     return {
       subject: { kind: 'slot', at: target.direction, parent: target.parent.title },
-      without: ['ask-agent'],
+      without: waiting,
       onAct: ({ verb }) => {
         if (verb === 'new-tile') begin({ kind: 'add', ...place })
         if (verb === 'import') begin({ kind: 'import', place: { _tag: 'Slot', ...place } })
@@ -275,8 +279,8 @@ function movingOf({ tree, search, flat, begin, sent, move, swap, addHere }: Movi
     }
   }
   const swapWith = (going: TileNode) => (held: TileNode) => {
-    const swapped = swapOf(flat, going.id, held.id)
-    return swapped !== undefined && swapsWith(flat, going, held)
+    const swapped = tradeOf(flat, going, held)
+    return swapped !== undefined
       ? {
           label: m.system_swap_with({ title: held.title }),
           onSelect: () => {

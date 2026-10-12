@@ -374,6 +374,7 @@ function SystemPage({ search, onSearchChange, onViewChange, widgets, onExport }:
             widgets.actions.export(exported)
             onExport()
           },
+          pending: widgets.state.exporting,
         }}
         className="min-h-0 flex-1"
       />
