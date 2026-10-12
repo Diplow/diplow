@@ -6,9 +6,10 @@
 // creates then moves, renames or deletes stands where, as and whether the Proposal leaves it. Pure.
 import type { Slot, System } from '#/domains/mapping/entities'
 import { type Batched, fold, type OperationEvent } from '#/domains/mapping/operations'
+import type { TileMark } from '#/front/ui/canvas/tile/marks/mark'
 
 /** What a Proposal would do to a Tile already there; one it creates is a ghost of its own. */
-type ProposedChange = 'edit' | 'move' | 'delete'
+type ProposedChange = NonNullable<TileMark['proposed']>
 
 /** A Tile a Proposal would create: where it would stand, its Title and its Preview. */
 interface Ghost {

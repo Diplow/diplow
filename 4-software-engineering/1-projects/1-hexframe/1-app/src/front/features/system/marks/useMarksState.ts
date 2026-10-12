@@ -10,7 +10,7 @@ import { useMemo, useState } from 'react'
 import type { System } from '#/domains/mapping/entities'
 import { useToday } from '#/front/client/assistant/conversation'
 
-import { acceptedOf, canvasMarksOf, cardOf, type Glint, touchesOf } from './marks'
+import { acceptedOf, type Arrival, canvasMarksOf, cardOf, touchesOf } from './marks'
 import { proposedOf } from './proposal'
 
 interface MarksInput {
@@ -23,7 +23,7 @@ interface MarksInput {
 export function useMarksState({ system, working }: MarksInput) {
   const today = useToday()
   const [pointed, setPointed] = useState<string>()
-  const [arrived, setArrived] = useState<Glint>()
+  const [arrived, setArrived] = useState<Arrival>()
   // The Entries today held as the page first read it: a change among them is no news.
   const [known, setKnown] = useState<ReadonlySet<string>>()
   // The Proposals the page saw open, whose acceptance is the user's own.
@@ -67,7 +67,8 @@ export function useMarksState({ system, working }: MarksInput) {
       },
       /** The chat centered a Tile: it glints as the canvas arrives, and the user opened it. */
       arrive: (tile: string) => {
-        setArrived({ id: tile, key: String(Date.now()) })
+        const after = touches.findLast((touch) => touch.tile === tile)?.key
+        setArrived({ id: tile, key: String(Date.now()), after })
         openTile(tile)
       },
       /** The user went to a Tile on the canvas. */

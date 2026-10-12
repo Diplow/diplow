@@ -17,10 +17,14 @@ import { standsFor, titleOf } from '../tree'
 import { placeOf as seatOf } from '../widget/place'
 import type { Proposed } from './proposal'
 
-/** A light rising once on a Tile, in the colour of who touched it, `key` rising it again. */
-export interface Glint {
+/**
+ * A Tile the chat centered, glinting in your amber as the canvas arrives, `key` rising it again;
+ * `after`, the last change to it the page held then, so a change that comes later glints its own.
+ */
+export interface Arrival {
   readonly id: string
   readonly key: string
+  readonly after?: string | undefined
 }
 
 /** A change made to a Tile since the page opened: who made it, and the Entry that tells it. */
@@ -92,7 +96,7 @@ export interface Marking {
   /** The Tile the chat points at, by its id. */
   readonly pointed?: string | undefined
   /** The Tile the chat just centered. */
-  readonly arrived?: Glint | undefined
+  readonly arrived?: Arrival | undefined
   /** The Tile the running Turn works in, its location. */
   readonly working?: string | undefined
   /** The changes made since the page opened, oldest first. */
@@ -114,8 +118,9 @@ function tileMarkOf(marking: Marking, id: string): TileMark | undefined {
     (touch): touch is Touch & { by: Exclude<By, 'human'> } =>
       touch.tile === id && touch.by !== 'human' && opened?.has(touch.key) !== true,
   )
+  // The newer of the arrival and the last change: one that comes after the arrival glints its own.
   const glint =
-    arrived?.id === id
+    arrived?.id === id && last?.key === arrived.after
       ? { by: 'human' as const, key: arrived.key }
       : last && { by: last.by, key: last.key }
   const change = proposed?.changes.get(id)

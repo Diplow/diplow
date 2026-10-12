@@ -108,6 +108,18 @@ describe('canvasMarksOf, who touches what the canvas draws', () => {
     expect(marks.pointed).toBe('c')
   })
 
+  it('glints a change that comes after the chat centered its Tile, not the arrival again', () => {
+    const touches = [{ tile: 'b', by: 'agent' as const, key: 'one' }]
+    const arrived = { id: 'b', key: '1', after: 'one' }
+    expect(canvasMarksOf({ arrived, touches }).tile?.('b')).toMatchObject({
+      glint: { by: 'human', key: '1' },
+    })
+    const later = [...touches, { tile: 'b', by: 'key' as const, key: 'two' }]
+    expect(canvasMarksOf({ arrived, touches: later }).tile?.('b')).toMatchObject({
+      glint: { by: 'key', key: 'two' },
+    })
+  })
+
   it('glints the last change to a Tile, and keeps its dot until a change of it is opened', () => {
     const touches = [
       { tile: 'a', by: 'agent' as const, key: 'one' },
