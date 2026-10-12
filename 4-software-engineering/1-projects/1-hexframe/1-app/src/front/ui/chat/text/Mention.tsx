@@ -5,6 +5,7 @@
 // (a crossing, HEX-108). A tile the agent drafts is violet until it exists; a deleted one is struck
 // through and goes nowhere.
 import { cn } from 'cn'
+import type { ComponentProps } from 'react'
 
 import { m } from '#/paraglide/messages'
 
@@ -19,12 +20,7 @@ export type Voice = Extract<AnyVoice, 'human' | 'agent'>
 type Standing = 'live' | 'draft' | 'gone'
 
 /** What a tile named shows in its card, beside its title: what the canvas's card says of the tile. */
-interface MentionCard {
-  /** Its kind and place, in a few words: "branch, east of Projects". */
-  place: string
-  description?: string | undefined
-  note?: { text: string; tone?: 'warning' | 'agent' | 'context' } | undefined
-}
+type MentionCard = Pick<ComponentProps<typeof HoverCard>, 'place' | 'description' | 'notes'>
 
 export interface MentionProps {
   title: string
@@ -99,8 +95,8 @@ export function Mention({ title, standing = 'live', onCenter, card, onPoint, voi
       side="top"
       place={card.place}
       title={title}
-      description={card.description}
-      note={card.note}
+      {...(card.description !== undefined && { description: card.description })}
+      {...(card.notes !== undefined && { notes: card.notes })}
       onOpenChange={onPoint}
     >
       {named}

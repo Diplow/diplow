@@ -1,8 +1,8 @@
 // The canvas's end of each crossing on /design-system (HEX-108), on the fixture System: a tile as the
 // chat names it, with what its card says; the Tiles the composer's `@` finds; what each tile's menu
 // says of it; what the canvas marks as the agent's Turn goes, while its Proposal is open and while a
-// tile is written; and a frame whose tiles carry off it, for the composer to name. The route joins
-// each to the chat's end (`ui/chat/crossings.tsx`), since no folder of `ui/` imports both sides.
+// tile is written; and a frame whose tiles carry off it, for the composer to name. `ui/crossings.tsx`
+// joins each to the chat's end (`ui/chat/crossings.tsx`), the one module of `ui/` importing both sides.
 import { useRef, useState, type ComponentProps } from 'react'
 
 import { m } from '#/paraglide/messages'
@@ -10,6 +10,7 @@ import { m } from '#/paraglide/messages'
 import { Canvas, type CanvasMarks, type Standing } from './Canvas'
 import { tooling, ulysse } from './fixtures'
 import { directions, neighbor, type Direction, type Hex, type Point } from './geometry/geometry'
+import type { EmptySlotTarget } from './geometry/shape'
 import type { TileHex } from './state/useCanvasState'
 import { useScale } from './state/useScale'
 import type { TileMark } from './tile/marks/mark'
@@ -72,8 +73,9 @@ const holdsIn = (tile: TileNode) =>
 /**
  * What a Tile's menu and card say of where it stands, as the canvas would draw it, `center` where it
  * is centered. The fixture's reading of what home asks Mapping through `features/system/acting.ts`'s
- * `subjectOf`: a Branch or the root takes a new tile where one of its six places is free; nothing
- * turns into the other kind, nor counts what is below it, which only Mapping says.
+ * `subjectOf`, which rules on Mapping's own System, as the fixture is not: a Branch or the root takes
+ * a new tile where one of its six places is free; nothing turns into the other kind, nor counts what
+ * is below it, which only Mapping says.
  */
 function subjectIn(system: TileNode, id: string, center = false): Subject | undefined {
   const path = pathTo(system, id)
@@ -107,7 +109,7 @@ export function namedOf(system: TileNode, id: string) {
   }
 }
 
-/** A Tile the composer's `@` finds: its Title, and the two Titles above it. */
+/** A Tile the composer's `@` finds: its Title, and the Titles above it. */
 interface Mentionable {
   id: string
   title: string
@@ -115,20 +117,31 @@ interface Mentionable {
 }
 
 /**
- * The Tiles of a System the composer's `@` finds on the page, its Branches and Leaves from the root
- * down, each with the two Titles above it, as the feature's `mentionablesOf` reads them
- * (`features/conversation/composer/mention.ts`, which `ui/` cannot import); the fixture holds no
- * Reference for it to skip and no untitled Tile for it to name.
+ * The Tiles of a System the composer's `@` finds on the page, as the feature's `mentionablesOf` reads
+ * Mapping's (`features/conversation/composer/mention.ts`, which `ui/` cannot import): from the root
+ * down, a generation after the other, each Direction's Branch, Context Tile and Leaf, with the Titles
+ * above it. The fixture holds no Reference for it to skip, and no untitled Tile to name.
  */
-export function mentionablesIn(system: TileNode, above: readonly string[] = []): Mentionable[] {
-  const below = directions.flatMap((direction) =>
-    [system.branches?.[direction], system.leaves?.[direction]].filter((tile) => tile !== undefined),
-  )
-  const here = [...above, system.title]
-  return [
-    { id: system.id, title: system.title, path: above.slice(-2).join(' / ') },
-    ...below.flatMap((tile) => mentionablesIn(tile, here)),
-  ]
+export function mentionablesIn(system: TileNode): Mentionable[] {
+  const all: Mentionable[] = []
+  let generation: { tile: TileNode; trail: readonly string[] }[] = [{ tile: system, trail: [] }]
+  while (generation.length > 0) {
+    all.push(
+      ...generation.map(({ tile, trail }) => ({
+        id: tile.id,
+        title: tile.title,
+        path: trail.join(' / '),
+      })),
+    )
+    generation = generation.flatMap(({ tile, trail }) =>
+      directions.flatMap((direction) =>
+        [tile.branches?.[direction], tile.context?.[direction], tile.leaves?.[direction]]
+          .filter((below) => below !== undefined)
+          .map((below) => ({ tile: below, trail: [...trail, tile.title] })),
+      ),
+    )
+  }
+  return all
 }
 
 /** What a Tile's menu says of it on the fixture canvas; none for a ring too full, which is no tile. */
@@ -154,12 +167,32 @@ function changed(system: TileNode, id: string, change: (tile: TileNode) => TileN
 const inEngineering = (system: TileNode, change: (tile: TileNode) => TileNode) =>
   changed(system, engineering, change)
 
-/** Tooling, written under Software Engineering, west, as the agent or the user writes it. */
-const withTooling = (system: TileNode, at: Direction = 6, title = tooling.title) =>
-  inEngineering(system, (tile) => ({
-    ...tile,
-    branches: { ...tile.branches, [at]: { ...tooling, title } },
-  }))
+/** A tile written under Software Engineering: its kind, where it goes and its title. */
+export interface Draft {
+  kind: 'branch' | 'leaf' | 'context'
+  place: Direction
+  title: string
+}
+
+/**
+ * Tooling, written under Software Engineering, in the ring of its kind, as the agent or the user
+ * writes it: a Branch west, unless the tile widget says otherwise.
+ */
+const withTooling = (
+  system: TileNode,
+  { kind = 'branch', place = 6, title = tooling.title }: Partial<Draft> = {},
+) =>
+  inEngineering(system, (tile) => {
+    const written: TileNode = { ...tooling, title, ...(kind === 'leaf' && { leaf: true }) }
+    switch (kind) {
+      case 'leaf':
+        return { ...tile, leaves: { ...tile.leaves, [place]: written } }
+      case 'context':
+        return { ...tile, context: { ...tile.context, [place]: written } }
+      case 'branch':
+        return { ...tile, branches: { ...tile.branches, [place]: written } }
+    }
+  })
 
 /** Tooling as the chat names it before it is there: its card says where it will stand. */
 export const toolingNamed = namedOf(withTooling(ulysse), tooling.id) ?? { title: tooling.title }
@@ -168,9 +201,9 @@ export const toolingNamed = namedOf(withTooling(ulysse), tooling.id) ?? { title:
 const principlesEdited = (system: TileNode) =>
   changed(system, 'principles', (tile) => ({ ...tile, preview: 'What I build on, in five words.' }))
 
-/** A free slot of Software Engineering's ring. */
-const isSlot = (slot: { parent: TileNode; direction: Direction }, at: Direction) =>
-  slot.parent.id === engineering && slot.direction === at
+/** A free slot of Software Engineering's at `at`: of its Context's ring, or else of its Children's. */
+const isSlot = (slot: EmptySlotTarget, at: Direction, context = false) =>
+  slot.parent.id === engineering && slot.direction === at && (slot.ring === 'context') === context
 
 /** Marks by Tile, from a table; none for the others. */
 const byTile =
@@ -283,21 +316,16 @@ export function proposalOnCanvas(shown: ProposalShown) {
   }
 }
 
-/** A tile written in the tile widget, under Software Engineering: where it goes and its title. */
-export interface Draft {
-  place: Direction
-  title: string
-}
-
 /**
  * A tile being written in the tile widget, as the canvas shows it: in its slot under Software
- * Engineering, breathing in your amber, its title as typed; written, it is there, glinting once.
+ * Engineering, in the ring of its kind, breathing in your amber, its title as typed; written, it is
+ * there, a Branch, a Leaf or a Context Tile, glinting once.
  */
 export function draftOnCanvas(draft: Draft, written: number) {
   const title = draft.title.trim() === '' ? m.tile_untitled() : draft.title
   if (written > 0) {
     return {
-      system: withTooling(ulysse, draft.place, title),
+      system: withTooling(ulysse, { ...draft, title }),
       marks: {
         tile: byTile({ tooling: { glint: { by: 'human', key: written } } }),
       } satisfies CanvasMarks,
@@ -307,20 +335,27 @@ export function draftOnCanvas(draft: Draft, written: number) {
     system: ulysse,
     marks: {
       slot: (slot): Standing | undefined =>
-        isSlot(slot, draft.place)
+        isSlot(slot, draft.place, draft.kind === 'context')
           ? { id: tooling.id, look: { kind: 'writing', words: { title } } }
           : undefined,
     } satisfies CanvasMarks,
   }
 }
 
-/** The free places under Software Engineering a new Branch may take, as the canvas seats its ring. */
+/**
+ * The free places under Software Engineering a new tile may take, of any kind, as the canvas seats
+ * its rings: free among its Children, and among its Context.
+ */
 export const freeInEngineering: readonly Direction[] = [5, 6]
 
-/** A tile carried: which, and where the pointer is on the page, once off the frame. */
-interface Carry {
+/** A tile of the fixture, as the chat names it. */
+interface Named {
   id: string
   title: string
+}
+
+/** A tile carried: which, and where the pointer is on the page, once off the frame. */
+interface Carry extends Named {
   at: Point | undefined
 }
 
@@ -330,7 +365,7 @@ interface Carry {
  * go; let go anywhere, it settles back home. `onCarry` tells the tile carried, and nothing once let
  * go. A finger never carries a tile, whose way is the menu's or `@`.
  */
-export function CarryFrame({ onCarry }: { onCarry: (title: string | undefined) => void }) {
+export function CarryFrame({ onCarry }: { onCarry: (tile: Named | undefined) => void }) {
   const svg = useRef<SVGSVGElement>(null)
   const scale = useScale(svg, { width: frameWidth, height: frameHeight })
   const units = unitsIn(svg)
@@ -380,7 +415,7 @@ export function CarryFrame({ onCarry }: { onCarry: (title: string | undefined) =
                 press(event, {
                   onStart: () => {
                     setCarry({ id, title, at: undefined })
-                    onCarry(title)
+                    onCarry({ id, title })
                   },
                   onMove: (moved) => {
                     setCarry({ id, title, at: offFrame(svg.current, moved.at) })
@@ -432,7 +467,7 @@ export function actingThroughChat({
   onAsk,
   elsewhere,
 }: {
-  onAsk: (title: string, where?: string) => void
+  onAsk: (tile: Named, where?: string) => void
   elsewhere: (said: string) => void
 }): Pick<ComponentProps<typeof Canvas>, 'acting' | 'emptySlots'> {
   return {
@@ -452,7 +487,7 @@ export function actingThroughChat({
         return {
           subject,
           onAct: (act, said) => {
-            if (act.verb === 'ask-agent') onAsk(hex.tile.title)
+            if (act.verb === 'ask-agent') onAsk(hex.tile)
             else elsewhere(said)
           },
         }
@@ -460,7 +495,7 @@ export function actingThroughChat({
       slot: (slot) => ({
         subject: { kind: 'slot', at: slot.direction, parent: slot.parent.title },
         onAct: (act, said) => {
-          if (act.verb === 'ask-agent') onAsk(slot.parent.title, directionName(slot.direction))
+          if (act.verb === 'ask-agent') onAsk(slot.parent, directionName(slot.direction))
           else elsewhere(said)
         },
       }),

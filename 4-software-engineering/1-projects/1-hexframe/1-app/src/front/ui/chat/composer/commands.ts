@@ -5,7 +5,8 @@
 // reader lost in a language they cannot read still finds it. A page offers those it runs (`among`):
 // what the caret stands in lists them (`commandTypingAt`), the command a Message opens with is marked
 // in the field (`commandMarkOf`) and run once sent (`openingCommand`), and the language lists the
-// languages, each in its own words. Pure.
+// languages, each in its own words. How the field shows a Tile's link once picked, whole, is read here
+// too (`wholeLink`, `showsLink`), so the feature's `@` and the gallery's demo read it alike. Pure.
 import {
   ArrowUpRight,
   Check,
@@ -347,6 +348,28 @@ export function tileTyping(before: string, from: number, rows: ReadonlyArray<Row
     },
   }
 }
+
+/** A text read as itself inside a pattern. */
+const escaped = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+/** Nothing a word goes on with: what ends a link as the field shows it. */
+const ended = '(?![\\p{L}\\p{N}])'
+
+/**
+ * Each place the field shows a link whole, as it was picked (`shown`), opening a word and nothing a
+ * word goes on with after it: where the composer marks it, and what a Message sends by its Tile's id.
+ */
+export const wholeLink = (shown: string) => new RegExp(`(?<!\\S)${escaped(shown)}${ended}`, 'gu')
+
+/**
+ * Whether the field shows one of the links picked whole at `at`, nothing a word goes on with after
+ * it: the `@` of a link picked opens no search of its own.
+ */
+export const showsLink = (
+  value: string,
+  at: number,
+  links: ReadonlyArray<{ readonly shown: string }>,
+) => links.some(({ shown }) => new RegExp(`^${escaped(shown)}${ended}`, 'u').test(value.slice(at)))
 
 /** The command of `among` a Message opens with, and what follows it; none when it opens with none. */
 export function openingCommand(

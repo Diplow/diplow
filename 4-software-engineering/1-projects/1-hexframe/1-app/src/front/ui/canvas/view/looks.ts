@@ -1,14 +1,20 @@
 // A hex of the canvas as the tile draws it (`tile/Tile.tsx`): what it is, which its light says
 // before its words do, its words, what only its kind takes, and where it stands; and what its hover
 // card says that the tile cuts short. Pure.
+import type { ComponentProps } from 'react'
+
 import { m } from '#/paraglide/messages'
 
+import type { HoverCard } from '../../layouts/HoverCard'
 import { directions, type Direction } from '../geometry/geometry'
 import type { CanvasHex } from '../geometry/shape'
-import type { TileLook, TilePlace, TileWords } from '../tile/Tile'
+import type { StandingLook, TileLook, TilePlace, TileWords } from '../tile/Tile'
 import type { TileNode } from './tiles'
 
 type Of<Kind extends CanvasHex['kind']> = Extract<CanvasHex, { kind: Kind }>
+
+/** A Tile of the System as the tile draws it: never one standing in a free slot before it is there. */
+type SystemLook = Exclude<TileLook, StandingLook>
 
 /** A list names this many of its ring at most, the rest counted after them. */
 const listed = 4
@@ -19,7 +25,7 @@ const listed = 4
  * otherwise, the center and a Branch opened in place included. While a tile moves, no Branch shows
  * its frame at its foot, where its swap sits.
  */
-export function lookOf(hex: Of<'tile'>, { moving = false } = {}): TileLook {
+export function lookOf(hex: Of<'tile'>, { moving = false } = {}): SystemLook {
   const { tile, role, clash } = hex
   const words = { title: tile.title, preview: tile.preview }
   const foot = moving ? {} : { foot: footOf(tile) }
@@ -43,7 +49,7 @@ function ownLook(
   tile: TileNode,
   words: TileWords,
   foot: { foot?: readonly Direction[] },
-): TileLook | undefined {
+): SystemLook | undefined {
   if (tile.broken === true) return { kind: 'broken', words }
   if (tile.reference !== undefined) return { kind: 'reference', words, from: tile.reference.from }
   switch (tile.root) {
@@ -91,11 +97,8 @@ export function placeOf(hex: Of<'tile'>): TilePlace {
   }
 }
 
-/** What a Tile's hover card says beyond its title and place: its preview in full, and a note. */
-export interface CardWords {
-  description?: string
-  note?: { text: string; tone?: 'warning' | 'agent' | 'context' }
-}
+/** What a Tile's hover card says beyond its title and place: its preview in full, and its notes. */
+export type CardWords = Pick<ComponentProps<typeof HoverCard>, 'description' | 'notes'>
 
 /**
  * What a Tile's hover card says, as its look has it: its preview in full, where the tile cuts it;
@@ -106,22 +109,22 @@ export function cardOf(look: TileLook): CardWords {
   const { preview } = look.words
   return {
     ...(preview !== undefined && preview !== '' && { description: preview }),
-    ...noteOf(look),
+    ...notesOf(look),
   }
 }
 
-function noteOf(look: TileLook): Pick<CardWords, 'note'> {
+function notesOf(look: TileLook): Pick<CardWords, 'notes'> {
   switch (look.kind) {
     case 'leaf':
       return look.clash === undefined
         ? {}
-        : { note: { text: m.tile_clash({ branch: look.clash }), tone: 'warning' } }
+        : { notes: [{ text: m.tile_clash({ branch: look.clash }), tone: 'warning' }] }
     case 'reference':
-      return { note: { text: m.tile_reference_from({ place: look.from }), tone: 'context' } }
+      return { notes: [{ text: m.tile_reference_from({ place: look.from }), tone: 'context' }] }
     case 'broken':
-      return { note: { text: m.tile_broken_note() } }
+      return { notes: [{ text: m.tile_broken_note() }] }
     case 'draft':
-      return { note: { text: m.tile_drafting(), tone: 'agent' } }
+      return { notes: [{ text: m.tile_drafting(), tone: 'agent' }] }
     default:
       return {}
   }

@@ -2,18 +2,19 @@
 // tier, the crossings, the Chat, the Canvas, the layouts and the atoms the sides share, the seams, each
 // piece in its states, then the tokens. The canvas's view lives in the search params, so a link shows
 // what its sender saw, and a Message's link in the Conversation centers it, as on home. The Screen's
-// specimens are drawn here too, since they lay out both sides, which no folder of ui/ may import. The
+// specimens are drawn here too, since they show the breadcrumb and Help, which ui/ can't reach. The
 // crossings are ui/crossings.tsx's, which the route hands what ui/ can't reach (HEX-108).
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
-import { linkTo, merged, turnLocation, type Navigation } from '#/domains/assistant/entities'
+import { merged, turnLocation, type Navigation } from '#/domains/assistant/entities'
 import { previewLimit } from '#/domains/mapping/entities'
 import { ChannelsGallery } from '#/front/client/gallery'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { useHelp } from '#/front/client/mapping/queries'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { BreadcrumbGallery } from '#/front/features/breadcrumb/gallery'
+import { encoded } from '#/front/features/conversation/composer/mention'
 import { happenedOf } from '#/front/features/conversation/entry/words'
 import { ConversationGallery } from '#/front/features/conversation/gallery'
 import { helpNodeOf } from '#/front/features/help/nodes'
@@ -135,19 +136,10 @@ const tell: Tell = (gestures) => {
 }
 
 /**
- * Where the Turn answering a crossing's Message works: the Message as Assistant reads it, each tile it
- * names by its link (`linkTo`), then Assistant's own rule (`turnLocation`).
+ * Where the Turn answering a crossing's Message works: the Message as home's composer sends it, each
+ * link picked written by its Tile's id (`encoded`), then Assistant's own rule (`turnLocation`).
  */
-const where: Where = ({ value, tiles }, center) =>
-  turnLocation(
-    [...tiles]
-      .sort((one, other) => other.from - one.from)
-      .reduce(
-        (text, { id, from, to }) => `${text.slice(0, from)}${linkTo(id)}${text.slice(to)}`,
-        value,
-      ),
-    center,
-  )
+const where: Where = ({ value, links }, center) => turnLocation(encoded(value, links), center)
 
 /** The help widget's section, on Help itself, read in the page's language as `/help` reads it. */
 function HelpGallery() {

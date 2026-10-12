@@ -13,6 +13,8 @@ import {
   namedAt,
   namedFirst,
   openingCommand,
+  showsLink,
+  wholeLink,
 } from './commands'
 
 const ids = (typed: string) => commandsMatching(typed).map((command) => command.id)
@@ -139,5 +141,22 @@ describe('a tile named from the canvas', () => {
       value: '@Projects tidy it',
       caret: 10,
     })
+  })
+})
+
+describe('a link picked, as the field shows it', () => {
+  it('finds a link picked shown whole at an `@`, never one a longer word goes on from', () => {
+    const picked = [{ shown: '@Work' }]
+    expect(showsLink('Ask @Work now', 4, picked)).toBe(true)
+    expect(showsLink('Ask @Work', 4, picked)).toBe(true)
+    expect(showsLink('Ask @Workshop', 4, picked)).toBe(false)
+    expect(showsLink('Ask @Wor', 4, picked)).toBe(false)
+  })
+
+  it('finds each place it shows whole, opening a word, a Title holding signs read as written', () => {
+    const at = (value: string, shown: string) =>
+      Array.from(value.matchAll(wholeLink(shown)), ({ index }) => index)
+    expect(at('@Work, then @Work team, not me@Work nor @Workshop', '@Work')).toEqual([0, 12])
+    expect(at('@What? (1+1) now', '@What? (1+1)')).toEqual([0])
   })
 })

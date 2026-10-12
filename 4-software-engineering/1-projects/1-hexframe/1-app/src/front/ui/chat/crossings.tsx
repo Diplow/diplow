@@ -1,10 +1,10 @@
 // The chat's end of each crossing on /design-system (HEX-108): the composer, live on the demo's state,
 // telling the Tile row it points at and taking what the canvas hands it; the agent naming tiles, each
 // with its card; the agent's Turn as its events tell it, step by step; its Proposal, decided here; a
-// tile written in the tile widget; and the entries navigations leave. Every tile named comes from the
-// route, the canvas's own, with what a click and pointing at it do; the route joins each end to the
-// canvas's (`ui/canvas/crossings.tsx`), since no folder of `ui/` imports both sides. The Tiles are
-// the user's words, not translated; what is said of them is. What tells a time is drawn in the
+// tile written in the tile widget; and the entries navigations leave. Every tile named is handed in by
+// `ui/crossings.tsx`, the canvas's own, with what a click and pointing at it do: it joins each end to
+// the canvas's (`ui/canvas/crossings.tsx`), the one module of `ui/` importing both sides. The Tiles
+// are the user's words, not translated; what is said of them is. What tells a time is drawn in the
 // browser alone, since the time is the reader's.
 import { ClientOnly } from '@tanstack/react-router'
 import { Move, Pencil, RotateCcw, SquarePlus, Trash2 } from 'lucide-react'
@@ -66,7 +66,7 @@ export function ComposerEnd({
         const sent = demo.value.trim()
         if (onSend === undefined) toast(m.gallery_composer_sent({ message: sent }))
         else onSend(sent)
-        demo.edit('', 0)
+        demo.clear()
       }}
     />
   )

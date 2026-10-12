@@ -6,6 +6,8 @@
 // (`Marks.tsx`), the caller says which tile carries which.
 import { m } from '#/paraglide/messages'
 
+import type { CardNote } from '../../../layouts/HoverCard'
+
 /** Who acts on a tile: you, the agent, or a Key from outside. */
 export type By = 'human' | 'agent' | 'key'
 
@@ -45,7 +47,7 @@ const proposedSaid: Record<Proposed, () => string> = {
  * screen reader: the agent working here, then what changed it or what is proposed. A light that
  * passes, the chat pointing or a glint, says nothing: the chat already says it.
  */
-export function markNote(mark: TileMark | undefined): { text: string; tone?: 'agent' } | undefined {
+export function markNote(mark: TileMark | undefined): CardNote | undefined {
   if (mark === undefined) return undefined
   const lasting =
     (mark.unseen === undefined ? undefined : unseenSaid[mark.unseen]()) ??

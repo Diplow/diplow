@@ -83,7 +83,7 @@ function Specimen({
   unavailable = false,
   className,
 }: SpecimenProps) {
-  const { value, edit, composer } = useComposerDemo({
+  const { value, clear, composer } = useComposerDemo({
     initial,
     listed,
     onLanguage: (language) => {
@@ -108,7 +108,7 @@ function Specimen({
           setTimeout(() => {
             toast(m.gallery_composer_sent({ message: sent }))
             setSending(false)
-            edit('', 0)
+            clear()
           }, 1000)
         }}
         sending={sending}

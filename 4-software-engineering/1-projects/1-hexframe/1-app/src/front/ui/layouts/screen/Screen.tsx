@@ -10,6 +10,7 @@
 import { cn } from 'cn'
 import {
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
@@ -208,26 +209,23 @@ export function Screen({
 /**
  * The focus the chat held when the canvas came forward over it, given back with it: the chat went
  * inert and the focus with it, so a crossing that gives the chat back leaves the keyboard where it
- * was. A focus that went elsewhere meanwhile, the seam's or the canvas's, stays.
+ * was. Read as the chat goes inert, before the browser lets the focus go: a chat that held none gets
+ * none back. A focus that went elsewhere meanwhile, the seam's or the canvas's, stays.
  */
 function useFocusKept(chat: RefObject<HTMLElement | null>, chatShown: boolean) {
   const kept = useRef<HTMLElement | null>(null)
-  useEffect(() => {
-    const section = chat.current
-    if (section === null) return undefined
-    const onFocus = (event: FocusEvent) => {
-      if (event.target instanceof HTMLElement) kept.current = event.target
-    }
-    section.addEventListener('focusin', onFocus)
-    return () => {
-      section.removeEventListener('focusin', onFocus)
-    }
-  }, [chat])
+  useLayoutEffect(() => {
+    if (chatShown) return
+    const held = document.activeElement
+    kept.current =
+      held instanceof HTMLElement && chat.current?.contains(held) === true ? held : null
+  }, [chat, chatShown])
   useEffect(() => {
     const lost = document.activeElement === null || document.activeElement === document.body
     if (chatShown && lost && kept.current?.isConnected === true) {
       kept.current.focus({ preventScroll: true })
     }
+    if (chatShown) kept.current = null
   }, [chatShown])
 }
 

@@ -13,8 +13,10 @@ import {
   languageNamed,
   openingCommand,
   type Picked,
+  showsLink,
   tileTyping,
   type Typing,
+  wholeLink,
 } from '#/front/ui/chat/composer/commands'
 import type { Mode } from '#/domains/assistant/entities'
 import type { Mark } from '#/front/ui/chat/composer/Composer'
@@ -28,8 +30,6 @@ import {
   type Mentionable,
   queryAt,
   shownOf,
-  showsLink,
-  wholeLink,
 } from './mention'
 
 /**

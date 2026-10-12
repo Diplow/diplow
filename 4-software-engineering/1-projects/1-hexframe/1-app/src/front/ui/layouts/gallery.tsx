@@ -241,7 +241,7 @@ function HoverCardGallery() {
           place={m.gallery_sample_leaf_place()}
           title={m.gallery_sample_leaf_title()}
           description={m.gallery_sample_leaf_preview()}
-          note={{ text: m.gallery_sample_leaf_clash(), tone: 'warning' }}
+          notes={[{ text: m.gallery_sample_leaf_clash(), tone: 'warning' }]}
         >
           <SpecimenTile>{m.gallery_sample_leaf_title()}</SpecimenTile>
         </HoverCard>
@@ -251,7 +251,7 @@ function HoverCardGallery() {
           place={m.gallery_sample_tile_place()}
           title={m.gallery_sample_tile_title()}
           description={m.gallery_sample_tile_preview()}
-          note={{ text: m.gallery_sample_agent_here(), tone: 'agent' }}
+          notes={[{ text: m.gallery_sample_agent_here(), tone: 'agent' }]}
         >
           <SpecimenTile>{m.gallery_sample_tile_title()}</SpecimenTile>
         </HoverCard>

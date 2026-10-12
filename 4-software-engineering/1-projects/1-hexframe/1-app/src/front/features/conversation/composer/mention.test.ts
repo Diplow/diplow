@@ -12,7 +12,6 @@ import {
   mostOffered,
   queryAt,
   shownOf,
-  showsLink,
 } from './mention'
 
 // The composer's `@`, on a System and texts made by hand: the Tiles it offers, the search the caret
@@ -149,14 +148,6 @@ describe('the link the composer inserts, and the Message it sends', () => {
         { id: 'notes-5', shown: '@Ada / Work / Notes' },
       ]),
     ).toBe('@Notes (2)')
-  })
-
-  it('finds a link picked shown whole at an `@`, never one a longer word goes on from', () => {
-    const picked = [{ id: 'work', shown: '@Work' }]
-    expect(showsLink('Ask @Work now', 4, picked)).toBe(true)
-    expect(showsLink('Ask @Work', 4, picked)).toBe(true)
-    expect(showsLink('Ask @Workshop', 4, picked)).toBe(false)
-    expect(showsLink('Ask @Wor', 4, picked)).toBe(false)
   })
 
   it('sends each link it inserted by its Tile’s id, wherever the input still shows it whole', () => {

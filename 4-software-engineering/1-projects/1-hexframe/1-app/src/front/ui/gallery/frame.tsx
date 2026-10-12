@@ -142,20 +142,20 @@ export function GalleryColumn({
 
 /**
  * The step a specimen's play has reached, each `steps[i]` ms after it started, started again at
- * every `turn`: a tile's states played one after another, a crossing's Turn.
+ * every `turn`: a tile's states played one after another, a crossing's Turn. A step is its play's:
+ * one an earlier play reached is no step of the next, which starts at its first, drawn at once.
  */
 export function useSteps(steps: readonly number[], turn: number): number {
-  const [step, setStep] = useState(0)
+  const [reached, setReached] = useState({ turn, step: 0 })
   useEffect(() => {
-    setStep(0)
     const timers = steps.slice(1).map((at, index) =>
       setTimeout(() => {
-        setStep(index + 1)
+        setReached({ turn, step: index + 1 })
       }, at),
     )
     return () => {
       timers.forEach(clearTimeout)
     }
   }, [steps, turn])
-  return step
+  return reached.turn === turn ? reached.step : 0
 }

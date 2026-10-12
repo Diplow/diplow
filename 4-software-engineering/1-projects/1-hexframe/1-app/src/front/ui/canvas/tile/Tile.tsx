@@ -99,6 +99,12 @@ export type TileLook = { words: TileWords } & (
   | { kind: 'untitled' | 'context' | 'broken' }
 )
 
+/**
+ * A tile standing in a free slot before it is there, the agent's draft, one you write or one a
+ * Proposal would create: no Tile of the System is drawn so.
+ */
+export type StandingLook = Extract<TileLook, { kind: 'draft' | 'writing' | 'ghost' }>
+
 type TileKind = TileLook['kind']
 
 export type TileProps = TileLook & {

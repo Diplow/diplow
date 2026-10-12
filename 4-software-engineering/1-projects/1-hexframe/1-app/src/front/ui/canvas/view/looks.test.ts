@@ -143,19 +143,18 @@ describe('cardOf', () => {
     const notes = node('notes', { leaf: true })
     expect(cardOf(lookOf(hexOf(notes, { role: 'leaf', clash: node('work') })))).toEqual({
       description: 'What notes is',
-      note: { text: m.tile_clash({ branch: 'WORK' }), tone: 'warning' },
+      notes: [{ text: m.tile_clash({ branch: 'WORK' }), tone: 'warning' }],
     })
   })
 
   it("notes where a Reference's Tile stands, teal, and a broken one's loss", () => {
     const reference = node('why', { reference: { from: 'Principles' } })
-    expect(cardOf(lookOf(hexOf(reference, { role: 'context' }))).note).toEqual({
-      text: m.tile_reference_from({ place: 'Principles' }),
-      tone: 'context',
-    })
+    expect(cardOf(lookOf(hexOf(reference, { role: 'context' }))).notes).toEqual([
+      { text: m.tile_reference_from({ place: 'Principles' }), tone: 'context' },
+    ])
     const broken = node('gone', { broken: true, preview: '' })
     expect(cardOf(lookOf(hexOf(broken, { role: 'context' })))).toEqual({
-      note: { text: m.tile_broken_note() },
+      notes: [{ text: m.tile_broken_note() }],
     })
   })
 })

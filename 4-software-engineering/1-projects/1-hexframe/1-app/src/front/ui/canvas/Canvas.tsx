@@ -34,7 +34,7 @@ import { MoveBanner } from './tile/moving/Moving'
 import { Arc } from './tile/marks/Marks'
 import { wayTo, withPointed, type TileMark } from './tile/marks/mark'
 import { Ground } from './tile/places'
-import { Tile, type TileLook, type TileWrite } from './tile/Tile'
+import { Tile, type StandingLook, type TileWrite } from './tile/Tile'
 import { listOf, lookOf, placeOf } from './view/looks'
 import { pathTo, type FrameKind, type InnerKind, type OuterKind, type TileNode } from './view/tiles'
 import type { CanvasView, RingChoices, ViewAction } from './view/view'
@@ -60,7 +60,7 @@ interface CanvasActing {
 /** A tile standing in a free slot before it is there: its id, and how it is drawn. */
 export interface Standing {
   id: string
-  look: Extract<TileLook, { kind: 'draft' | 'writing' | 'ghost' }>
+  look: StandingLook
 }
 
 /** Who touches what the canvas draws, as its caller says it (HEX-108). */

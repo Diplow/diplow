@@ -34,7 +34,6 @@ import type { Direction } from './canvas/geometry/geometry'
 import { Rail } from './canvas/layouts/Rail'
 import { pathTo, type TileNode } from './canvas/view/tiles'
 import { centerOn, showView, type CanvasView, type ViewAction } from './canvas/view/view'
-import { namedAt, namedFirst } from './chat/composer/commands'
 import { useComposerDemo } from './chat/composer/demo'
 import {
   ComposerEnd,
@@ -55,10 +54,10 @@ import { useScreenState } from './layouts/screen/state/useScreenState'
 /** How the conversation's timeline tells a run of gestures on the canvas, which home's words say. */
 export type Tell = (gestures: readonly ViewAction[]) => Happened
 
-/** A Message as the composer holds it: its words, and each tile it names, by its id and its stretch. */
+/** A Message as the composer holds it: its words, and the links picked, each Tile and how it shows. */
 interface Written {
   value: string
-  tiles: readonly { id: string; from: number; to: number }[]
+  links: readonly { id: string; shown: string }[]
 }
 
 /** Where the Turn answering a Message works, the canvas centered on `center`: Assistant's to say. */
@@ -173,8 +172,8 @@ const turnIds = {
 
 type Part = Exclude<keyof typeof turnIds, 'notes'>
 
-/** A step of the agent's Turn: when it comes, and what the Turn has done by then. */
-interface TurnStep {
+/** A beat of the sample Turn: when it comes, and what the Turn has done by then. */
+interface TurnBeat {
   /** In ms from the Turn's start. */
   at: number
   /** How many of Software Engineering, Projects and Principles it has read, in that order. */
@@ -191,12 +190,12 @@ interface TurnStep {
 }
 
 /**
- * The agent's Turn, each step once, as both ends draw it, the chat telling it (`TurnLines`) and the
+ * The agent's Turn, each beat once, as both ends draw it, the chat telling it (`TurnLines`) and the
  * canvas marking it (`turnOnCanvas`): it reads Software Engineering, Projects and Principles, working
  * in Software Engineering; writes Tooling; Tooling is created as it edits Principles; Principles is
  * edited; it answers.
  */
-const turn: readonly TurnStep[] = [
+const turn: readonly TurnBeat[] = [
   { at: 0, read: 0, reading: 'engineering' },
   { at: 900, read: 1, reading: 'projects' },
   { at: 1900, read: 2, reading: 'principles' },
@@ -329,14 +328,20 @@ function DraftingCrossing({ previewLimit }: { previewLimit: number }) {
   const [place, setPlace] = useState<Direction>(6)
   const [written, setWritten] = useState<Date>()
   const [view, setView] = useState<CanvasView>(startView)
-  const { system, marks } = draftOnCanvas({ place, title: words.title }, written?.getTime() ?? 0)
+  const draft = { kind, place, title: words.title }
+  const { system, marks } = draftOnCanvas(draft, written?.getTime() ?? 0)
   const chat = (
     <DraftingEnd
       words={words}
       onWordsChange={setWords}
       where={{ parent: titleOf(engineering), kind, place, free: freeInEngineering }}
       onPlaceChange={setPlace}
-      onKindChange={setKind}
+      onKindChange={(next) => {
+        setKind(next)
+        // The canvas shows the ring the tile goes to: Software Engineering's Context, for a Context
+        // Tile; its Children otherwise.
+        setView(next === 'context' ? { ...startView, inner: 'context' } : startView)
+      }}
       previewLimit={previewLimit}
       written={written}
       onCreate={() => {
@@ -361,18 +366,6 @@ function DraftingCrossing({ previewLimit }: { previewLimit: number }) {
 /** How long the sample Turn runs once sent, in ms: its working light, then its end. */
 const sampleTurn = [0, 4000]
 
-/** The Message the composer holds, each tile it names found among the Tiles its `@` finds. */
-function writtenOf({ value, composer }: ReturnType<typeof useComposerDemo>): Written {
-  return {
-    value,
-    tiles: composer.marks.flatMap(({ kind, from, to }) => {
-      const named =
-        kind === 'tile' && mentionables.find(({ title }) => `@${title}` === value.slice(from, to))
-      return named ? [{ id: named.id, from, to }] : []
-    }),
-  }
-}
-
 function NextTurnCrossing({ where }: { where: Where }) {
   const [view, setView] = useState<CanvasView>(startView)
   const [sent, setSent] = useState<{ id: string; at: number }>()
@@ -381,7 +374,7 @@ function NextTurnCrossing({ where }: { where: Where }) {
   const demo = useComposerDemo({ among: mentionables, listed: false })
   const center = view.center ?? ulysse.id
   // Where the Turn works, as Assistant decides it: the Tile the Message opens with, else the center.
-  const location = where(writtenOf(demo), center)
+  const location = where({ value: demo.value, links: demo.links }, center)
   const stop = () => {
     setSent(undefined)
   }
@@ -412,13 +405,10 @@ function MenuCrossing() {
   const [view, setView] = useState<CanvasView>(startView)
   const demo = useComposerDemo({ among: mentionables, listed: false })
   const acting = actingThroughChat({
-    onAsk: (title, where) => {
-      const asked = namedFirst(
-        demo.value,
-        title,
-        where && m.crossing_ask_for_one({ direction: where }),
-      )
-      demo.edit(asked.value, asked.caret, true)
+    onAsk: (tile, where) => {
+      demo.name(tile, {
+        first: where === undefined ? '' : m.crossing_ask_for_one({ direction: where }),
+      })
     },
     elsewhere: (said) => {
       toast(m.crossing_menu_elsewhere({ said }))
@@ -466,18 +456,16 @@ function NavigationCrossing({ tell }: { tell: Tell }) {
 }
 
 function DropCrossing() {
-  const [carried, setCarried] = useState<string>()
+  const [carried, setCarried] = useState<{ id: string; title: string }>()
   const demo = useComposerDemo({ among: mentionables, listed: false })
   const drop = () => {
-    if (carried === undefined) return
-    const named = namedAt(demo.value, demo.caret, carried)
-    demo.edit(named.value, named.caret, true)
+    if (carried !== undefined) demo.name(carried, 'caret')
   }
   return (
     <GallerySection name="DropToName">
       <Ends
         chatLabel={m.crossing_state_drop_chat()}
-        chat={<ComposerEnd demo={demo} carried={carried} onDrop={drop} />}
+        chat={<ComposerEnd demo={demo} carried={carried?.title} onDrop={drop} />}
         canvasLabel={m.crossing_state_canvas_drop()}
         canvas={<CarryFrame onCarry={setCarried} />}
       />

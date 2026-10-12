@@ -1,6 +1,7 @@
 // What the feature's state hook does on home, done here for /design-system alone, on a fixture System
-// and every command: what the caret stands in lists, what the field shows marked, and what a pick puts
-// in the field. The commands' part is `commands.ts`', which the feature runs too; the `@` follows the
+// and every command: what the caret stands in lists, what the field shows marked, what a pick puts in
+// the field, and the links picked since the last Message. The commands' part is `commands.ts`', which
+// the feature runs too, and so is how the field shows a link picked; the rest of the `@` follows the
 // rules of the feature's (`features/conversation/composer/mention.ts`, which `ui/` cannot import), on
 // the fixture's Tiles, or on those its caller hands it, the canvas's own for the crossings. The Tiles
 // are the user's own words, not translated. `useComposerDemo` holds it all as the state hook would.
@@ -13,10 +14,14 @@ import {
   commandMarkOf,
   commandPicked,
   commandTypingAt,
+  namedAt,
+  namedFirst,
   type Picked,
   put,
+  showsLink,
   tileTyping,
   type Typing,
+  wholeLink,
 } from './commands'
 import type { Mark } from './Composer'
 import type { Row } from './List'
@@ -46,14 +51,21 @@ const tiles: ReadonlyArray<DemoTile> = [
   ['feedback-leadership', 'Feedback', 'diplow / Leadership'],
 ].map(([id, title, path]) => ({ id, title, path }) as DemoTile)
 
+/** A link picked: the Tile, and how the field shows it, `@` and its Title. */
+interface Link {
+  readonly id: string
+  readonly shown: string
+}
+
 /** What the caret, at `caret` in `value`, stands in; nothing when it stands in no search. */
 export function typingAt(
   value: string,
   caret: number,
   among: ReadonlyArray<DemoTile> = tiles,
+  links: ReadonlyArray<Link> = [],
 ): Typing | undefined {
   const before = value.slice(0, caret)
-  return commandTypingAt(before) ?? tileTypingAt(before, among)
+  return commandTypingAt(before) ?? tileTypingAt(value, caret, among, links)
 }
 
 /** The most characters a search reads after its `@`, and the most Tiles it offers, as the feature's. */
@@ -68,23 +80,23 @@ function rank(title: string, typed: string): number | undefined {
   return /[\s\p{P}]$/u.test(cut.before) ? 1 : 2
 }
 
-/** A text read as itself inside a pattern. */
-const escaped = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-
 /**
  * The `@` search the caret stands in: the last `@` before it, opening a word, with no line break since
  * and at most `longestQuery` characters typed; its Tiles, the best first, then the nearest the Root.
- * A Tile named whole there, words going on after it that no longer Title goes on with, is a link, and
- * opens no search of its own, as the feature's `showsLink` says of a link picked.
+ * The `@` of a link picked, the field still showing it whole, opens no search of its own.
  */
-function tileTypingAt(before: string, among: ReadonlyArray<DemoTile>): Typing | undefined {
+function tileTypingAt(
+  value: string,
+  caret: number,
+  among: ReadonlyArray<DemoTile>,
+  links: ReadonlyArray<Link>,
+): Typing | undefined {
+  const before = value.slice(0, caret)
   const from = before.lastIndexOf('@')
   if (from === -1 || (from > 0 && !/\s/.test(before.charAt(from - 1)))) return undefined
   const typed = before.slice(from + 1)
   if (typed.length > longestQuery || /[\n\r]/.test(typed) || typed.startsWith(' ')) return undefined
-  const named = among.some(({ title }) => new RegExp(`^${escaped(title)}\\s`, 'u').test(typed))
-  const longer = among.some(({ title }) => title.toLowerCase().startsWith(typed.toLowerCase()))
-  if (named && !longer) return undefined
+  if (showsLink(value, from, links)) return undefined
   const found = among
     .flatMap((tile, order) => {
       const ranked = rank(tile.title, typed.trim())
@@ -99,34 +111,43 @@ function tileTypingAt(before: string, among: ReadonlyArray<DemoTile>): Typing | 
   )
 }
 
-/** What the field shows marked: the command it opens with, and each Tile it points at by its Title. */
-function marksOf(value: string, among: ReadonlyArray<DemoTile> = tiles): ReadonlyArray<Mark> {
-  const command = commandMarkOf(value)
-  const pointed = among.flatMap(({ title }) =>
-    Array.from(
-      value.matchAll(new RegExp(`(?<!\\S)@${escaped(title)}(?![\\p{L}\\p{N}])`, 'gu')),
-      (found) => ({
-        from: found.index,
-        to: found.index + found[0].length,
-        kind: 'tile' as const,
-      }),
-    ),
-  )
-  return [...command, ...pointed]
+/**
+ * What the field shows marked: the command it opens with, and each link picked it still shows whole,
+ * the longest first, as the feature marks them, so a link another starts with never takes its place.
+ */
+function marksOf(value: string, links: ReadonlyArray<Link>): ReadonlyArray<Mark> {
+  const marks: Mark[] = [...commandMarkOf(value)]
+  for (const { shown } of [...links].sort((a, b) => b.shown.length - a.shown.length)) {
+    for (const found of value.matchAll(wholeLink(shown))) {
+      const mark = { from: found.index, to: found.index + found[0].length, kind: 'tile' as const }
+      if (!marks.some(({ from, to }) => mark.from < to && from < mark.to)) marks.push(mark)
+    }
+  }
+  return marks
 }
 
-/** The pick of `row` for what the caret stands in. */
+/** A Tile's link, as the field shows it. */
+const linkOf = ({ id, title }: Pick<DemoTile, 'id' | 'title'>): Link => ({ id, shown: `@${title}` })
+
+/**
+ * The links a specimen opens with: each Tile its first words name whole, as though picked, since it
+ * opens on a Message being written.
+ */
+const linksIn = (value: string, among: ReadonlyArray<DemoTile>) =>
+  among.map(linkOf).filter(({ shown }) => wholeLink(shown).test(value))
+
+/** The pick of `row` for what the caret stands in, and the link it picked, if a Tile's. */
 function picked(
   value: string,
   caret: number,
   typing: Typing,
   row: string,
-  among: ReadonlyArray<DemoTile> = tiles,
-): Picked {
+  among: ReadonlyArray<DemoTile>,
+): Picked & { readonly link?: Link } {
   const command = commandPicked(value, caret, typing, row)
   if (command !== undefined) return command
-  const tile = among.find((each) => each.id === row)
-  return put(value, caret, typing, `@${tile?.title ?? row} `)
+  const link = linkOf(among.find((each) => each.id === row) ?? { id: row, title: row })
+  return { ...put(value, caret, typing, `${link.shown} `), link }
 }
 
 interface DemoOptions {
@@ -142,8 +163,9 @@ interface DemoOptions {
 
 /**
  * The composer as a page's state hook holds it, for a specimen: what is typed and where the caret
- * stands, what that lists, a pick, the list left, the Mode; and `edit`, the field set from outside, a
- * tile named or a Message sent, the caret where it says and the focus in the field.
+ * stands, what that lists, the links picked since the last Message, a pick, the list left, the Mode;
+ * `name`, a Tile named from outside, at the caret as a drop names it or first as a tile's menu asks
+ * the agent, then the focus in the field; and `clear`, once a Message is sent.
  */
 export function useComposerDemo({
   initial = '',
@@ -154,21 +176,16 @@ export function useComposerDemo({
   const field = useRef<HTMLTextAreaElement>(null)
   const [value, setValue] = useState(initial)
   const [caret, setCaret] = useState(initial.length)
+  const [links, setLinks] = useState(() => linksIn(initial, among))
   const [left, setLeft] = useState(!listed)
   const [mode, setMode] = useState('ask')
-  const typing = left ? undefined : typingAt(value, caret, among)
-  const edit = (next: string, at: number, focus = false) => {
+  const typing = left ? undefined : typingAt(value, caret, among, links)
+  const edit = (next: string, at: number) => {
     const element = field.current
     if (element !== null) {
       // Set on the element first, so React finds it as it is and leaves the caret be.
       element.value = next
       element.setSelectionRange(at, at)
-      // A task later: a menu whose line asked for it holds the focus until it has closed.
-      if (focus) {
-        setTimeout(() => {
-          element.focus()
-        }, 0)
-      }
     }
     setValue(next)
     setCaret(at)
@@ -177,7 +194,20 @@ export function useComposerDemo({
   return {
     value,
     caret,
-    edit,
+    links,
+    name: (tile: Pick<DemoTile, 'id' | 'title'>, where: 'caret' | { first: string }) => {
+      const named =
+        where === 'caret'
+          ? namedAt(value, caret, tile.title)
+          : namedFirst(value, tile.title, where.first)
+      edit(named.value, named.caret)
+      setLinks([...links, linkOf(tile)])
+      field.current?.focus()
+    },
+    clear: () => {
+      edit('', 0)
+      setLinks([])
+    },
     composer: {
       fieldRef: field,
       value,
@@ -186,13 +216,14 @@ export function useComposerDemo({
         setCaret(at)
         setLeft(false)
       },
-      marks: marksOf(value, among),
+      marks: marksOf(value, links),
       listing: typing?.listing,
       onPick: (row: string) => {
         if (typing === undefined) return
         const pick = picked(value, caret, typing, row, among)
         if ('language' in pick) onLanguage?.(pick.language)
         else edit(pick.value, pick.caret)
+        if (pick.link !== undefined) setLinks([...links, pick.link])
       },
       onLeave: () => {
         setLeft(true)

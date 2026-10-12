@@ -52,8 +52,8 @@ import {
 
 interface TileMenuProps {
   subject: Subject
-  /** What its hover card says beyond its title and place: its preview in full, and a note. */
-  card?: Pick<ComponentProps<typeof HoverCard>, 'description' | 'note'>
+  /** What its hover card says beyond its title and place: its preview in full, and its notes. */
+  card?: Pick<ComponentProps<typeof HoverCard>, 'description' | 'notes'>
   /**
    * The frames its place submenus draw: the one it holds, where a tile is added, and the one it
    * stands in, where it moves. A line whose frame is missing is left out.
@@ -156,6 +156,8 @@ interface Line {
   shortcut?: Shortcut
   label: () => string
   tone?: 'agent' | 'destructive'
+  /** It names the tile in the composer, whose field takes the focus. */
+  takesFocus?: boolean
 }
 
 const enter: Shortcut = { key: 'Enter' }
@@ -200,6 +202,7 @@ function lineOf(verb: Verb, subject: Subject): Line {
         shortcut: { key: 'a' },
         label: tile === undefined ? m.tile_menu_ask_for_one : m.tile_menu_ask_about,
         tone: 'agent',
+        takesFocus: true,
       }
     case 'copy':
       return { icon: <Copy />, label: m.tile_menu_copy }
@@ -247,13 +250,11 @@ function entriesOf(
     .map((group) =>
       group.flatMap((verb): MenuEntry[] => {
         if (without.includes(verb)) return []
-        const line = lineOf(verb, subject)
-        const { icon, shortcut, tone } = line
-        const label = line.label()
-        if (actsAtOnce(verb)) {
-          return [{ label, icon, shortcut, tone, onSelect: acting(onAct, { verb }, label) }]
-        }
+        const { label: words, ...line } = lineOf(verb, subject)
+        const label = words()
+        if (actsAtOnce(verb)) return [{ label, ...line, onSelect: acting(onAct, { verb }, label) }]
         const submenu = submenuOf(verb, subject, frames, onAct)
+        const { icon, shortcut } = line
         return submenu === undefined ? [] : [{ label, icon, shortcut, submenu }]
       }),
     )

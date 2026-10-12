@@ -78,10 +78,10 @@ export interface TileHexProps {
   land: (target: Target) => void
 }
 
-/** A Tile's card, its note what lasts of who touches it where something does: what happens now. */
+/** A Tile's card, its own notes, then what lasts of who touches it where something does. */
 function markedCard(card: CardWords, mark: TileMark | undefined): CardWords {
   const note = markNote(mark)
-  return note === undefined ? card : { ...card, note }
+  return note === undefined ? card : { ...card, notes: [...(card.notes ?? []), note] }
 }
 
 /**
