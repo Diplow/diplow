@@ -136,15 +136,17 @@ export function useCanvasState({ system, view, onViewChange }: CanvasInput) {
     [],
   )
   // The view as it stands, which a fold checks before handing its own on: a view changed meanwhile,
-  // a ring picked or the browser's Back, gives the fold up rather than being overwritten.
+  // a ring picked or the browser's Back, gives the fold up rather than being overwritten. And the
+  // caller's latest `onViewChange`, which the fold hands its view to, so what else the page changed
+  // meanwhile, its search params beside the view, is kept.
   const viewNow = JSON.stringify(view)
-  const latest = useRef(viewNow)
+  const latest = useRef({ view: viewNow, onViewChange })
   useEffect(() => {
-    latest.current = viewNow
+    latest.current = { view: viewNow, onViewChange }
   })
 
   const change = (next: CanvasView, gesture: Gesture, tile: string) => {
-    onViewChange(next, { gesture, tile })
+    latest.current.onViewChange(next, { gesture, tile })
   }
 
   function act(hex: TileHex, action: TileAction) {
@@ -181,7 +183,7 @@ export function useCanvasState({ system, view, onViewChange }: CanvasInput) {
     setFolding(ground)
     fold.current = setTimeout(() => {
       setFolding(undefined)
-      if (latest.current === viewNow) act(hex, action)
+      if (latest.current.view === viewNow) act(hex, action)
     }, duration)
   }
 

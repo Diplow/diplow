@@ -200,6 +200,27 @@ describe('what an opened hex holds', () => {
     expect(onViewChange).not.toHaveBeenCalled()
   })
 
+  it('hands its view to the latest onViewChange, which knows what else the page changed meanwhile', () => {
+    vi.useFakeTimers()
+    document.documentElement.style.setProperty('--duration-fold', '500ms')
+    const before = vi.fn<(view: CanvasView, action: ViewAction) => void>()
+    const after = vi.fn<(view: CanvasView, action: ViewAction) => void>()
+    const view: CanvasView = { expanded: { 1: 'children' } }
+    const { result, rerender } = renderHook(
+      ({ onViewChange }) => useCanvasState({ system, view, onViewChange }),
+      { initialProps: { onViewChange: before } },
+    )
+    settled(() => {
+      result.current.actions.click(hexOf(result.current.state.hexes, 'tile:a'))
+    })
+    rerender({ onViewChange: after })
+    settled(() => {
+      vi.advanceTimersByTime(500)
+    })
+    expect(before).not.toHaveBeenCalled()
+    expect(after).toHaveBeenCalledExactlyOnceWith({}, { gesture: 'collapse', tile: 'a' })
+  })
+
   it('gives a fold up for a Tile centered meanwhile', () => {
     vi.useFakeTimers()
     document.documentElement.style.setProperty('--duration-fold', '500ms')
