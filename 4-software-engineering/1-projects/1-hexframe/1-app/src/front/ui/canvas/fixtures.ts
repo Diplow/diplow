@@ -93,6 +93,16 @@ export const ulysse: TileNode = {
   },
 }
 
+/**
+ * A tile not there yet, which the crossings write and propose under Software Engineering: the agent's
+ * words, or the user's in the tile widget, so not translated either.
+ */
+export const tooling: TileNode = {
+  id: 'tooling',
+  title: 'Tooling',
+  preview: 'What I build with, and why.',
+}
+
 /** A view per state the canvas has to get right, named by the fixture's own Tiles. */
 export const fixtureViews = {
   root: {},

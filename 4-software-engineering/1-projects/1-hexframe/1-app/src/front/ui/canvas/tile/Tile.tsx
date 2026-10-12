@@ -3,9 +3,12 @@
 // Branch fades toward its foot, where its frame shows in small; a Leaf is lit evenly; the Context
 // is teal; the root, the only warm tile, is you. Under the pointer the light rises; the keyboard's
 // focus is the ring's amber line; the center keeps the one steady line. A write still on its way
-// sweeps a light over it; refused, it flares and its caller puts it back. Its words are fitted to
-// its size on screen (words.ts). It is an SVG group, drawn inside the canvas's <svg> at its hex,
-// and a button when its caller says what a click does.
+// sweeps a light over it; refused, it flares and its caller puts it back. Who touches it marks it
+// (`marks/`, HEX-108): the chat pointing at it, the agent at work, a change you haven't seen, what a
+// Proposal would do; a tile being written breathes in its writer's voice, and one a Proposal would
+// create waits as a ghost. Its words are fitted to its size on screen (words.ts). It is an SVG
+// group, drawn inside the canvas's <svg> at its hex, and a button when its caller says what a click
+// does.
 import { Link } from 'lucide-react'
 import { Slot } from 'radix-ui'
 import {
@@ -30,8 +33,10 @@ import {
   type Point,
 } from '../geometry/geometry'
 import { buttonKeys, type Action, type Hand } from '../keys'
-import { BlurDef, FadeDef, points, Sweep, tint, type Fade } from './light'
+import { BlurDef, FadeDef, points, proposedRim, Sweep, tint, type Fade } from './light'
 import { fitWords, linesThatFit } from '../geometry/words'
+import { MarkGlow, MarkLines } from './marks/Marks'
+import { markNote, type TileMark } from './marks/mark'
 
 /**
  * Where it stands: in a ring, at the center, at the heart of a Branch opened in place, beside the
@@ -85,8 +90,20 @@ export type TileLook = { words: TileWords } & (
       /** A ring too full: the names it holds. */
       names: readonly string[]
     }
-  | { kind: 'untitled' | 'context' | 'broken' | 'draft' }
+  /** The agent's draft, breathing violet in its slot. */
+  | { kind: 'draft' }
+  /** A tile you are writing in the tile widget, not there yet: breathing in your amber. */
+  | { kind: 'writing' }
+  /** A tile an open Proposal would create, not there yet: a ghost, with no menu of its own. */
+  | { kind: 'ghost' }
+  | { kind: 'untitled' | 'context' | 'broken' }
 )
+
+/**
+ * A tile standing in a free slot before it is there, the agent's draft, one you write or one a
+ * Proposal would create: no Tile of the System is drawn so.
+ */
+export type StandingLook = Extract<TileLook, { kind: 'draft' | 'writing' | 'ghost' }>
 
 type TileKind = TileLook['kind']
 
@@ -107,6 +124,8 @@ export type TileProps = TileLook & {
   scale?: number
   /** What its menu and its hover card hand it; a tile handed them takes the focus, a button or not. */
   hand?: Hand
+  /** Who touches it: the chat pointing at it, the agent at work, a change unseen, a Proposal. */
+  mark?: TileMark | undefined
 }
 
 /** What only one kind takes, read off any tile: none for the others. */
@@ -132,6 +151,10 @@ function noteOf(look: TileLook): Note | undefined {
       return { text: m.tile_broken_note(), tone: 'text-faint' }
     case 'draft':
       return { text: m.tile_drafting(), tone: 'text-agent' }
+    case 'writing':
+      return { text: m.tile_writing(), tone: 'text-human' }
+    case 'ghost':
+      return { text: m.tile_proposed(), tone: 'text-agent' }
     default:
       return undefined
   }
@@ -190,10 +213,17 @@ const lights: Record<TileKind, Lights> = {
   context: teal,
   reference: teal,
   broken: { rest: evenly('transparent'), lit: evenly(tint('foreground', 4)) },
-  draft: {
-    rest: { top: tint('agent', 14), foot: tint('agent', 0) },
-    lit: { top: tint('agent', 22), foot: tint('agent', 4) },
-  },
+  draft: drafted('agent'),
+  writing: drafted('human'),
+  ghost: { rest: evenly(tint('agent', 6)), lit: evenly(tint('agent', 11)) },
+}
+
+/** A tile being written, lit in its writer's voice from its top. */
+function drafted(voice: 'agent' | 'human'): Lights {
+  return {
+    rest: { top: tint(voice, 14), foot: tint(voice, 0) },
+    lit: { top: tint(voice, 22), foot: tint(voice, 4) },
+  }
 }
 
 /** A line of its own: the Context's hairline, dashed where it is not done or not there. */
@@ -210,6 +240,8 @@ const rims: Partial<Record<TileKind, Rim>> = {
   broken: { color: tint('faint', 70), dash: '2 4' },
   untitled: { color: tint('glow', 55), dash: '3 4' },
   list: ember,
+  // What a Proposal would create: dashed violet, since it isn't done yet.
+  ghost: proposedRim,
 }
 
 const opacities: Record<TilePlace, string> = {
@@ -221,8 +253,8 @@ const opacities: Record<TilePlace, string> = {
 }
 
 export function Tile(props: TileProps) {
-  const { hex, kind, words, place = 'ring', write, held, motion, action, onGoIn } = props
-  const { scale = 1, hand } = props
+  const { hex, words, place = 'ring', write, held, motion, action, onGoIn } = props
+  const { scale = 1, hand, mark } = props
   const id = useId()
   const pending = write === 'pending'
   const sized = sizedOf(hex, scale)
@@ -233,8 +265,9 @@ export function Tile(props: TileProps) {
       ? undefined
       : footOf(props)
   const description = [
-    kindNames[kind](),
+    kindNames[props.kind](),
     noteOf(props)?.text,
+    markNote(mark)?.text,
     pending ? m.tile_write_pending() : undefined,
     write === 'refused' ? m.tile_write_refused() : undefined,
   ]
@@ -244,7 +277,8 @@ export function Tile(props: TileProps) {
     <g
       className={cn(
         'transition-opacity duration-450',
-        opacities[place],
+        // A deletion proposed: the tile steps back, as what is going away, unless it is far already.
+        mark?.proposed === 'delete' && place !== 'far' ? 'opacity-40' : opacities[place],
         motion?.way === 'bloom' && 'motion-safe:animate-bloom',
         motion?.way === 'fold' && 'motion-safe:animate-fold motion-reduce:opacity-0',
       )}
@@ -331,14 +365,19 @@ function rimOf(props: TileProps, id: string): Rim | undefined {
 
 /** Its fill, lit or not, its lines, and the lights around it. */
 function Light(props: TileProps & { id: string }) {
-  const { hex, kind, place = 'ring', held, action, hand, id } = props
-  const lit = place === 'center' || place === 'heart' || held === 'pointed' || held === 'pressed'
+  const { hex, place = 'ring', held, action, hand, id, mark, scale = 1 } = props
+  const lit =
+    place === 'center' ||
+    place === 'heart' ||
+    held === 'pointed' ||
+    held === 'pressed' ||
+    mark?.pointed === 'tile'
   const rim = rimOf(props, id)
   return (
     <>
       <defs>
-        <FadeDef id={`${id}-rest`} fade={lights[kind].rest} />
-        <FadeDef id={`${id}-lit`} fade={lights[kind].lit} />
+        <FadeDef id={`${id}-rest`} fade={lights[props.kind].rest} />
+        <FadeDef id={`${id}-lit`} fade={lights[props.kind].lit} />
         <FadeDef
           id={`${id}-rim`}
           fade={{ top: 'var(--glow-soft)', foot: tint('human', 20), diagonal: true }}
@@ -357,6 +396,8 @@ function Light(props: TileProps & { id: string }) {
           hand !== undefined && 'group-data-[state=open]:opacity-100',
         )}
       />
+      {/* Over the fill, as the flare: on paper a fill nearly white would hide a light behind it. */}
+      <MarkGlow hex={hex} mark={mark} blur={`${id}-blur`} />
       {props.write === 'refused' ? (
         <polygon
           points={points(scaled(hex, 0.85))}
@@ -384,12 +425,17 @@ function Light(props: TileProps & { id: string }) {
           held === 'focused' ? 'opacity-100' : 'opacity-0 group-focus-visible:opacity-100',
         )}
       />
+      <MarkLines hex={hex} mark={mark} scale={scale} />
     </>
   )
 }
 
-/** The lights behind it: the root's halo, the draft's breathing violet, and the blur they glow by. */
-function Glows({ hex, kind, id }: TileProps & { id: string }) {
+/**
+ * The lights behind it: the root's halo, a draft breathing in its writer's voice, and the blur they,
+ * and who touches it, glow by.
+ */
+function Glows(props: TileProps & { id: string }) {
+  const { hex, kind, id } = props
   return (
     <>
       <defs>
@@ -410,11 +456,14 @@ function Glows({ hex, kind, id }: TileProps & { id: string }) {
           className="pointer-events-none"
         />
       ) : null}
-      {kind === 'draft' ? (
+      {kind === 'draft' || kind === 'writing' ? (
         <polygon
           points={points(scaled(hex, 0.85))}
           filter={`url(#${id}-blur)`}
-          className="pointer-events-none fill-agent opacity-26 motion-safe:animate-breathe"
+          className={cn(
+            'pointer-events-none opacity-26 motion-safe:animate-breathe',
+            kind === 'writing' ? 'fill-human' : 'fill-agent',
+          )}
         />
       ) : null}
     </>
@@ -454,6 +503,8 @@ const kindNames: Record<TileKind, () => string> = {
   reference: m.tile_kind_reference,
   broken: m.tile_kind_broken,
   draft: m.tile_kind_draft,
+  writing: m.tile_kind_draft_yours,
+  ghost: m.tile_kind_ghost,
   list: m.tile_kind_list,
 }
 
@@ -513,7 +564,8 @@ function titleClass(look: TileLook & { place?: TilePlace }, alone: boolean): str
     alone ? 'line-clamp-2' : 'line-clamp-3',
     look.place === 'center' && 'italic',
     kind === 'leaf' && look.file === true && 'font-mono text-[.8em]',
-    kind === 'draft' && 'font-agent text-[.86em] text-agent',
+    // The agent's words are its mono, a draft it writes or a tile it proposes; yours keep your serif.
+    (kind === 'draft' || kind === 'ghost') && 'font-agent text-[.86em] text-agent',
     (kind === 'broken' || kind === 'untitled') && 'text-faint italic',
   )
 }

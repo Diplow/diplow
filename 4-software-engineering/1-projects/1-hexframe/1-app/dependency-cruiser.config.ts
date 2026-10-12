@@ -115,6 +115,22 @@ const config: IConfiguration = {
       to: { path: '^src/front/ui/(chat|canvas)/', pathNot: '^src/front/ui/$1/' },
     },
     {
+      name: 'no-ui-root-joining-the-sides',
+      comment:
+        'Of the files at ui/’s root, outside the tiers, crossings.tsx alone imports the sides, joining them for /design-system as home’s route does.',
+      severity: 'error',
+      from: { path: '^src/front/ui/[^/]+$', pathNot: '^src/front/ui/crossings\\.tsx?$' },
+      to: { path: '^src/front/ui/(chat|canvas)/' },
+    },
+    {
+      name: 'no-ui-importing-the-crossings',
+      comment:
+        'The crossings join the sides for the page alone: the route imports ui/crossings.tsx, nothing in ui/ does.',
+      severity: 'error',
+      from: { path: '^src/front/ui/', pathNot: '^src/front/ui/crossings\\.tsx?$' },
+      to: { path: '^src/front/ui/crossings\\.tsx?$' },
+    },
+    {
       name: 'no-front-past-a-domains-door',
       comment:
         'The front reaches the server through a server function in src/api/; of a domain it imports its door only: entities/index.ts, operations/index.ts and errors.ts.',

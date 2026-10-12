@@ -12,10 +12,11 @@ import { isViewVerb, type TileHex, type ViewVerb } from './state/useCanvasState'
 import { TileMenu } from './tile/menu/TileMenu'
 import type { PickerFrame } from './tile/menu/Picker'
 import { groupsOf, type Subject, type TileAct, type Verb } from './tile/menu/verbs'
+import { markNote, type TileMark } from './tile/marks/mark'
 import { Aside, LandingSlot, Lifted, SwapDisc } from './tile/moving/Moving'
 import { Slot } from './tile/places'
 import type { TileNode } from './view/tiles'
-import { cardOf } from './view/looks'
+import { cardOf, type CardWords } from './view/looks'
 import type { TileLook } from './tile/Tile'
 
 /** What a Tile's or a free slot's menu says of it, and what its lines do. */
@@ -55,6 +56,8 @@ export interface TileHexProps {
   look: TileLook
   /** The Tile, as the canvas draws it: handed what its menu and its card need of it, if it has one. */
   draw: (hand?: Hand) => ReactElement
+  /** Who touches it, which its card says before anything else it would note. */
+  mark: TileMark | undefined
   acting: Acting | undefined
   /** The line of its menu that goes somewhere, which the canvas runs. */
   go: (verb: ViewVerb) => void
@@ -73,6 +76,12 @@ export interface TileHexProps {
   tileRef: (element: Element | null) => void
   press: (event: PointerEvent) => void
   land: (target: Target) => void
+}
+
+/** A Tile's card, its own notes, then what lasts of who touches it where something does. */
+function markedCard(card: CardWords, mark: TileMark | undefined): CardWords {
+  const note = markNote(mark)
+  return note === undefined ? card : { ...card, notes: [...(card.notes ?? []), note] }
 }
 
 /**
@@ -103,7 +112,7 @@ export function TileHexView(props: TileHexProps) {
           ) : (
             <TileMenu
               subject={acting.subject}
-              card={cardOf(look)}
+              card={markedCard(cardOf(look), props.mark)}
               {...(acting.frames && { frames: acting.frames })}
               {...(acting.without && { without: acting.without })}
               onOpenChange={props.onMenu}

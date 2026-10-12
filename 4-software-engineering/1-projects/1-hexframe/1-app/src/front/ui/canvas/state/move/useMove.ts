@@ -10,7 +10,7 @@ import { useEffect, useRef, useState, type PointerEvent } from 'react'
 import type { Point } from '../../geometry/geometry'
 import type { TileWrite } from '../../tile/Tile'
 import { useDrag, type Units } from '../../tile/moving/drag'
-import { movingFor } from '../motion'
+import { movingFor } from '../../../motion'
 
 /** Where a tile on the move can land: a free slot, or a tile it trades places with. */
 export interface Target {

@@ -4,7 +4,10 @@ import { fileURLToPath } from 'node:url'
 
 import { describe, expect, it } from 'vitest'
 
-import { anchorOf, filled, pieces, tiers, usedIn } from './pieces'
+import { anchorOf, pieces, tiers, usedIn } from './pieces'
+
+/** The pieces drawn in files of their own: every entry but the crossings, which join two ends. */
+const drawn = pieces.filter((piece) => 'sources' in piece)
 
 // `src/front/`, which every source is written from.
 const front = fileURLToPath(new URL('../../', import.meta.url))
@@ -52,7 +55,7 @@ function importsOf(file: string): Import[] {
 }
 
 const piecesIn = new Map<string, string[]>()
-for (const piece of pieces) {
+for (const piece of drawn) {
   for (const source of piece.sources) {
     const file = join(front, source)
     piecesIn.set(file, [...(piecesIn.get(file) ?? []), piece.name])
@@ -82,18 +85,30 @@ function reached(sources: readonly string[]): string[] {
       }
     }
   }
-  return pieces.map(({ name }) => name).filter((name) => found.has(name))
+  return drawn.map(({ name }) => name).filter((name) => found.has(name))
+}
+
+/** The pieces drawn from these files, there or inside a piece drawn there, all the way down. */
+function drawnFrom(sources: readonly string[]): Set<string> {
+  const found = new Set<string>()
+  const queue = reached(sources)
+  for (let name = queue.shift(); name !== undefined; name = queue.shift()) {
+    if (found.has(name)) continue
+    found.add(name)
+    queue.push(...reached(drawn.find((piece) => piece.name === name)?.sources ?? []))
+  }
+  return found
 }
 
 describe('the pieces', () => {
-  it.each(pieces.map((piece) => [piece.name, piece] as const))(
+  it.each(drawn.map((piece) => [piece.name, piece] as const))(
     '%s is drawn in files that exist',
     (_, { sources }) => {
       for (const source of sources) expect(existsSync(join(front, source)), source).toBe(true)
     },
   )
 
-  it.each(pieces.map((piece) => [piece.name, piece] as const))(
+  it.each(drawn.map((piece) => [piece.name, piece] as const))(
     '%s is made of what its files import',
     (_, { sources, madeOf }) => {
       expect(
@@ -104,12 +119,12 @@ describe('the pieces', () => {
   )
 
   // A piece alone in its files names all they import; pieces sharing a file share its imports.
-  it.each(Array.from(new Set(pieces.map(({ sources }) => sources.join()))))(
+  it.each(Array.from(new Set(drawn.map(({ sources }) => sources.join()))))(
     'what %s imports is a part of the pieces drawn in it',
     (files) => {
-      const drawn = pieces.filter(({ sources }) => sources.join() === files)
-      const named = new Set(drawn.flatMap(({ madeOf }) => madeOf as readonly string[]))
-      expect(reached(drawn[0]?.sources ?? []).filter((part) => !named.has(part))).toEqual([])
+      const sharing = drawn.filter(({ sources }) => sources.join() === files)
+      const named = new Set(sharing.flatMap(({ madeOf }) => madeOf as readonly string[]))
+      expect(reached(sharing[0]?.sources ?? []).filter((part) => !named.has(part))).toEqual([])
     },
   )
 
@@ -128,8 +143,56 @@ describe('the pieces', () => {
     expect(usedIn('Conversation')).toEqual([])
   })
 
-  it('leave a tier hidden while no piece fills it: the crossings, until the first is built', () => {
-    expect(filled('crossings')).toBe(false)
-    expect(filled('atoms')).toBe(true)
+  it('fill every tier, the crossings last, by their proposal (HEX-108)', () => {
+    const empty = tiers.filter((tier) => !pieces.some((piece) => piece.tier === tier))
+    expect(empty).toEqual([])
+  })
+})
+
+describe('the crossings', () => {
+  const crossings = pieces.filter((piece) => 'ends' in piece)
+  const tierOf = new Map<string, string>(pieces.map(({ name, tier }) => [name, tier]))
+
+  it.each(crossings.map((crossing) => [crossing.name, crossing] as const))(
+    '%s joins an end on each side, a piece of the Chat and a piece of the Canvas',
+    (_, { ends }) => {
+      expect(ends.chat.some((part) => tierOf.get(part) === 'chat')).toBe(true)
+      expect(ends.canvas.some((part) => tierOf.get(part) === 'canvas')).toBe(true)
+    },
+  )
+
+  it.each(crossings.map((crossing) => [crossing.name, crossing] as const))(
+    "%s joins pieces of the catalogue, none of the other side's at its end",
+    (_, { ends }) => {
+      const other = { chat: 'canvas', canvas: 'chat' } as const
+      for (const side of ['chat', 'canvas'] as const) {
+        for (const part of ends[side]) {
+          expect(tierOf.get(part), part).toBeDefined()
+          expect(tierOf.get(part), part).not.toBe(other[side])
+        }
+      }
+    },
+  )
+
+  // Each side's crossings are drawn in its own file; the page's, which joins them, lays out what holds
+  // both, the phone's Screen. An end names what they draw, so a piece no crossing draws is caught.
+  const joining = importsOf(join(front, 'ui/crossings.tsx')).flatMap(piecesOf)
+  const drawnAt = {
+    chat: [...drawnFrom(['ui/chat/crossings.tsx']), ...joining],
+    canvas: [...drawnFrom(['ui/canvas/crossings.tsx']), ...joining],
+  }
+
+  it.each(crossings.map((crossing) => [crossing.name, crossing] as const))(
+    '%s names at each end pieces its side draws',
+    (_, { ends }) => {
+      for (const side of ['chat', 'canvas'] as const) {
+        for (const part of ends[side]) expect(drawnAt[side], part).toContain(part)
+      }
+    },
+  )
+
+  it('read "used in" back from their ends', () => {
+    expect(usedIn('Mention')).toContain('Pointing')
+    expect(usedIn('Canvas')).toContain('NavigationEntry')
   })
 })

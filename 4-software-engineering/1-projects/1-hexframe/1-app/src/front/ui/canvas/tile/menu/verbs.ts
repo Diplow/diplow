@@ -7,8 +7,11 @@ import { m } from '#/paraglide/messages'
 import type { Direction } from '../../geometry/geometry'
 import type { TileLook } from '../Tile'
 
-/** The kinds a menu opens on: a ring too full is no tile, and has none. */
-type MenuKind = Exclude<TileLook['kind'], 'list'>
+/**
+ * The kinds a menu opens on: a ring too full is no tile, and has none; nor has a ghost, which is a
+ * Proposal's, decided in the chat, nor a tile you are writing, which is the tile widget's until made.
+ */
+type MenuKind = Exclude<TileLook['kind'], 'list' | 'ghost' | 'writing'>
 
 /** What a menu says of a tile, beyond its kind and its place. */
 interface Words {

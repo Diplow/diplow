@@ -4,13 +4,17 @@
 // list rises from the composer's top line (`List`); the field keeps the focus and the keys, the arrows
 // moving the row, Enter or Tab taking it, Escape leaving. A command and each Tile picked show marked
 // in the field. While a Turn runs the field waits and send becomes Stop. Controlled: what is typed,
-// what is listed and what a pick does are its user's, its state hook's on a real page.
+// what is listed and what a pick does are its user's, its state hook's on a real page. Its crossings
+// (HEX-108): the Tile row the user is on is told, for the canvas to light; under the field, where the
+// next Turn works; a tile carried from the canvas is offered a place, and named where it is let go.
 import { cn } from 'cn'
-import { type ReactNode, type Ref, useId, useRef, useState } from 'react'
+import { type ReactNode, type Ref, useEffect, useEffectEvent, useId, useRef, useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 
+import { HexMark } from '../atoms/hex'
 import { footPadding, zone } from '../layouts/zone'
+import { Said, weave } from '../text/words'
 import { type Listing, List, optionId } from './List'
 
 /** A stretch of the field shown marked: the command it opens with, or a Tile it points at. */
@@ -54,6 +58,17 @@ interface ComposerProps {
   /** The Modes, the one on and how to switch it, its caller's from Assistant's; none before it is read. */
   mode?:
     { choices: ReadonlyArray<ModeChoice>; on: string; choose: (id: string) => void } | undefined
+  /** The Tile row the user is on, by its id, as the list opens, moves and shuts; none off a Tile. */
+  onPoint?: ((row: string | undefined) => void) | undefined
+  /**
+   * Where the next Turn works, as Assistant decides it: the Tile the Message opens with, `first`, else
+   * the one centered on the canvas.
+   */
+  place?: { title: string; first: boolean } | undefined
+  /** A tile carried from the canvas, by its title: the composer offers to name it. */
+  carried?: string | undefined
+  /** The tile carried, let go over the composer: its caller names it in the field. */
+  onDrop?: (() => void) | undefined
   className?: string
 }
 
@@ -71,6 +86,10 @@ export function Composer({
   waiting = false,
   unavailable = false,
   mode,
+  onPoint,
+  place,
+  carried,
+  onDrop,
   className,
 }: ComposerProps) {
   const list = useId()
@@ -81,6 +100,8 @@ export function Composer({
   const active =
     on.typed === listing?.typed && rows.some((row) => row.id === on.row) ? on.row : rows[0]?.id
   const open = listing !== undefined
+  usePointing(rows.find((row) => row.id === active && open && row.kind === 'tile')?.id, onPoint)
+  const drop = useDrop(carried, onDrop)
   const waits = running !== undefined || sending
   const ready = value.trim() !== '' && !waits && !waiting
   const move = (by: number) => {
@@ -92,7 +113,16 @@ export function Composer({
     <form
       noValidate
       aria-busy={waits}
-      className={cn(zone, footPadding, 'grid gap-2 pt-5 pb-3 [--voice:var(--human)]', className)}
+      className={cn(
+        zone,
+        footPadding,
+        'grid gap-2 pt-5 pb-3 transition-[background-color,box-shadow] duration-300 [--voice:var(--human)]',
+        // A tile carried: the line on top turns your amber; over it, the zone lights to take it.
+        carried !== undefined && 'before:bg-none before:bg-human/45',
+        drop.over && 'bg-human/6 shadow-[0_-10px_28px_-18px_var(--human)] before:bg-human',
+        className,
+      )}
+      {...drop.handlers}
       onSubmit={(event) => {
         event.preventDefault()
         // Only the Stop submits while a Turn runs, and once.
@@ -179,14 +209,99 @@ export function Composer({
         </div>
         <SendButton ready={ready} running={running} sending={sending} waiting={waiting} />
       </div>
+      <Dropping carried={carried} over={drop.over} named={drop.named} />
       {unavailable ? (
         <p className="text-xs font-light text-muted-foreground">
           {m.conversation_assistant_unavailable()}
         </p>
       ) : (
-        mode !== undefined && <ModeSwitch {...mode} />
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+          {mode !== undefined && <ModeSwitch {...mode} />}
+          {place !== undefined && <Place {...place} />}
+        </div>
       )}
     </form>
+  )
+}
+
+/**
+ * A tile carried over the page: where to let it go, lit while it is over the composer; and, for a
+ * screen reader, the tile last named by a drop.
+ */
+function Dropping({ carried, over, named }: { carried?: string; over: boolean; named?: string }) {
+  return (
+    <>
+      {carried === undefined ? null : (
+        <p className={cn('text-xs font-light', over ? 'text-human' : 'text-muted-foreground')}>
+          {m.composer_drop_here({ title: carried })}
+        </p>
+      )}
+      <p aria-live="polite" className="sr-only">
+        {named === undefined ? '' : m.composer_dropped({ title: named })}
+      </p>
+    </>
+  )
+}
+
+/**
+ * Tells its caller the Tile row the user is on whenever it changes, and nothing once the composer
+ * goes, so the canvas never stays lit for a list no longer there.
+ */
+function usePointing(row: string | undefined, onPoint: ComposerProps['onPoint']) {
+  const point = useEffectEvent((pointed: string | undefined) => {
+    onPoint?.(pointed)
+  })
+  useEffect(() => {
+    point(row)
+  }, [row])
+  useEffect(
+    () => () => {
+      point(undefined)
+    },
+    [],
+  )
+}
+
+/**
+ * A tile carried from the canvas over the composer, and let go there: whether the pointer is over it
+ * meanwhile, the handlers that follow it, and the tile last named, which a screen reader hears.
+ */
+function useDrop(carried: string | undefined, onDrop: ComposerProps['onDrop']) {
+  const [over, setOver] = useState(false)
+  const [named, setNamed] = useState<string>()
+  return {
+    over: over && carried !== undefined,
+    named,
+    handlers: {
+      onPointerMove: () => {
+        if (carried !== undefined && !over) setOver(true)
+      },
+      onPointerLeave: () => {
+        setOver(false)
+      },
+      onPointerUp: () => {
+        setOver(false)
+        if (carried === undefined || onDrop === undefined) return
+        onDrop()
+        setNamed(carried)
+      },
+    },
+  }
+}
+
+/** Where the next Turn works, quietly, beside what the agent may do: neutral, since it says here. */
+function Place({ title, first }: { title: string; first: boolean }) {
+  return (
+    <p className="flex min-w-0 items-center gap-1.5 font-mono text-[0.65625rem] text-muted-foreground">
+      <HexMark className="size-2 text-foreground/40" />
+      <span className="min-w-0 truncate">
+        <Said
+          words={weave(first ? m.composer_place_first : m.composer_place, {
+            title: { name: title },
+          })}
+        />
+      </span>
+    </p>
   )
 }
 

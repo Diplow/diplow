@@ -9,8 +9,13 @@ import {
   commands,
   commandsMatching,
   commandTypingAt,
+  fieldMarksOf,
   languageNamed,
+  namedAt,
+  namedFirst,
   openingCommand,
+  showsLink,
+  wholeLink,
 } from './commands'
 
 const ids = (typed: string) => commandsMatching(typed).map((command) => command.id)
@@ -113,5 +118,58 @@ describe('languageNamed', () => {
   it('names none for nothing, or a language hexframe is not in', () => {
     expect(languageNamed('')).toBeUndefined()
     expect(languageNamed('deutsch')).toBeUndefined()
+  })
+})
+
+describe('a tile named from the canvas', () => {
+  it('lands at the caret, a space before it where a word ends there, the caret after it', () => {
+    expect(namedAt('', 0, 'Projects')).toEqual({ value: '@Projects ', caret: 10 })
+    expect(namedAt('Look at', 7, 'Projects')).toEqual({ value: 'Look at @Projects ', caret: 18 })
+    expect(namedAt('Look at  and', 8, 'Notes')).toEqual({ value: 'Look at @Notes and', caret: 15 })
+  })
+
+  it('opens the field to ask the agent about it, what was written kept after it', () => {
+    expect(namedFirst('', 'Projects')).toEqual({ value: '@Projects ', caret: 10 })
+    expect(namedFirst('tidy it', 'Projects')).toEqual({ value: '@Projects tidy it', caret: 10 })
+    expect(namedFirst('', 'Software Engineering', 'a new tile, west: ')).toEqual({
+      value: '@Software Engineering a new tile, west: ',
+      caret: 40,
+    })
+  })
+
+  it('names it once when the field opens with it already', () => {
+    expect(namedFirst('@Projects tidy it', 'Projects')).toEqual({
+      value: '@Projects tidy it',
+      caret: 10,
+    })
+  })
+})
+
+describe('a link picked, as the field shows it', () => {
+  it('finds a link picked shown whole at an `@`, never one a longer word goes on from', () => {
+    const picked = [{ shown: '@Work' }]
+    expect(showsLink('Ask @Work now', 4, picked)).toBe(true)
+    expect(showsLink('Ask @Work', 4, picked)).toBe(true)
+    expect(showsLink('Ask @Workshop', 4, picked)).toBe(false)
+    expect(showsLink('Ask @Wor', 4, picked)).toBe(false)
+  })
+
+  it('finds each place it shows whole, opening a word, a Title holding signs read as written', () => {
+    const at = (value: string, shown: string) =>
+      Array.from(value.matchAll(wholeLink(shown)), ({ index }) => index)
+    expect(at('@Work, then @Work team, not me@Work nor @Workshop', '@Work')).toEqual([0, 12])
+    expect(at('@What? (1+1) now', '@What? (1+1)')).toEqual([0])
+  })
+
+  it('marks the command the field opens with, then each link shown whole, the longest first', () => {
+    const picked = [{ shown: '@Work' }, { shown: '@Work team' }]
+    expect(fieldMarksOf('/apply @Work team, then @Work', picked)).toEqual([
+      { from: 0, to: 6, kind: 'command' },
+      { from: 7, to: 17, kind: 'tile' },
+      { from: 24, to: 29, kind: 'tile' },
+    ])
+    expect(fieldMarksOf('Ask @Workshop', picked)).toEqual([])
+    const asking = commands.filter(({ id }) => id === 'ask')
+    expect(fieldMarksOf('/edit @Work', picked, asking)).toEqual([{ from: 6, to: 11, kind: 'tile' }])
   })
 })

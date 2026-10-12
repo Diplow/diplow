@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from 'react'
 import { directions, type Point } from '../geometry/geometry'
 import { layoutCanvas, type CanvasHex } from '../geometry/shape'
 import type { TileMotion } from '../tile/Tile'
-import { movingFor } from './motion'
+import { movingFor } from '../../motion'
 import { pathTo, type InnerKind, type OuterKind, type TileNode } from '../view/tiles'
 import {
   centerOn,

@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { tilesWrittenBy, type Underway } from '#/front/client/mapping/overlay/overlay'
 import { useSystemRefusals } from '#/front/client/mapping/queries'
 import type { EmptySlotTarget } from '#/front/ui/canvas/geometry/shape'
-import { durationOf } from '#/front/ui/canvas/state/motion'
+import { durationOf } from '#/front/ui/motion'
 import type { TileWrite } from '#/front/ui/canvas/tile/Tile'
 
 import { standsFor } from '../tree'

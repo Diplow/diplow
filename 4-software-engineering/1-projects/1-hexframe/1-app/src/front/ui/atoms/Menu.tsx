@@ -18,6 +18,12 @@ interface MenuItem {
   /** Shown at the line's end, so the menu teaches it; typed with the menu open, it runs the entry. */
   shortcut?: Shortcut
   onSelect: () => void
+  /**
+   * Its action takes the focus elsewhere, to the composer's field: the menu, which holds the focus
+   * while it is open, runs it once it has let the focus go, and leaves the focus where it went rather
+   * than giving it back to its thing.
+   */
+  takesFocus?: boolean
   /** `agent` hands the thing to the agent, in its violet; `destructive` deletes or cannot be undone. */
   tone?: 'agent' | 'destructive'
   disabled?: boolean
@@ -109,11 +115,19 @@ export function Menu({
   // The submenu a key typed on the thing asked for, opened once the menu is.
   const opening = useRef<number>(undefined)
   const content = useRef<HTMLDivElement>(null)
+  // A line that takes the focus elsewhere ran: closing, the menu leaves the focus there.
+  const taken = useRef(false)
+  const leaveFocusTaken = (event: Event) => {
+    if (taken.current) event.preventDefault()
+    taken.current = false
+  }
   const body = (kit: Kit) => (
     <>
       {header !== undefined && <Header {...header} />}
       <KitContext value={kit}>
-        <Lines entries={entries} />
+        <FocusTaken value={taken}>
+          <Lines entries={entries} />
+        </FocusTaken>
       </KitContext>
     </>
   )
@@ -149,6 +163,7 @@ export function Menu({
             aria-label={label}
             {...keysOf(entries)}
             ref={content}
+            onCloseAutoFocus={leaveFocusTaken}
             className={cn(surface, contextOrigin)}
           >
             {body(contextKit)}
@@ -166,6 +181,7 @@ export function Menu({
           align={align}
           sideOffset={6}
           {...keysOf(entries)}
+          onCloseAutoFocus={leaveFocusTaken}
           className={cn(surface, dropdownOrigin)}
         >
           {body(dropdownKit)}
@@ -295,6 +311,22 @@ const dropdownKit: Kit = { parts: DropdownMenu, origin: dropdownOrigin }
 /** The menu its lines and a `MenuChoice` are drawn in, whose parts they take. */
 const KitContext = createContext<Kit>(dropdownKit)
 
+/** Whether a line of the menu that takes the focus elsewhere ran, which the menu reads as it closes. */
+const FocusTaken = createContext<{ current: boolean }>({ current: false })
+
+/**
+ * A line's action, as its menu runs it: at once, or, for one that takes the focus elsewhere, a task
+ * later, once the menu, closing, no longer holds the focus inside it, and told to the menu, which
+ * then leaves the focus where it went.
+ */
+function selected(item: MenuItem, taken: { current: boolean }) {
+  if (item.takesFocus !== true) return item.onSelect
+  return () => {
+    taken.current = true
+    setTimeout(item.onSelect, 0)
+  }
+}
+
 const line =
   'relative grid w-full cursor-pointer grid-cols-[1rem_1fr_auto] items-center gap-[0.6875rem] px-3.5 py-[0.4375rem] text-left text-muted-foreground outline-none select-none data-highlighted:bg-linear-to-r data-highlighted:from-foreground/8 data-highlighted:to-foreground/3 data-highlighted:text-foreground data-disabled:pointer-events-none data-disabled:opacity-40 pointer-coarse:min-h-11 [&_svg]:size-[0.9375rem] [&_svg]:stroke-[1.4] [&_svg]:text-faint data-highlighted:[&_svg]:text-foreground'
 
@@ -317,6 +349,7 @@ function Lines({ entries }: { entries: readonly MenuEntry[] }) {
 
 function Entry({ entry, index }: { entry: MenuEntry; index: number }) {
   const { parts } = useContext(KitContext)
+  const taken = useContext(FocusTaken)
   if (entry === 'separator') {
     return <parts.Separator className={rule} />
   }
@@ -344,7 +377,7 @@ function Entry({ entry, index }: { entry: MenuEntry; index: number }) {
   return (
     <parts.Item
       data-entry={index}
-      onSelect={entry.onSelect}
+      onSelect={selected(entry, taken)}
       disabled={entry.disabled}
       aria-keyshortcuts={entry.shortcut && ariaShortcut(entry.shortcut)}
       className={cn(line, toneOf(entry))}

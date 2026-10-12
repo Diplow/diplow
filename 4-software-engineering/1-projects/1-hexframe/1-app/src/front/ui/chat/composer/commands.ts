@@ -5,7 +5,9 @@
 // reader lost in a language they cannot read still finds it. A page offers those it runs (`among`):
 // what the caret stands in lists them (`commandTypingAt`), the command a Message opens with is marked
 // in the field (`commandMarkOf`) and run once sent (`openingCommand`), and the language lists the
-// languages, each in its own words. Pure.
+// languages, each in its own words. How the field shows a Tile's link once picked, whole, is read here
+// too (`wholeLink`, `showsLink`), and what the field marks (`fieldMarksOf`), so the feature's `@` and
+// the gallery's demo read them alike. Pure.
 import {
   ArrowUpRight,
   Check,
@@ -348,6 +350,28 @@ export function tileTyping(before: string, from: number, rows: ReadonlyArray<Row
   }
 }
 
+/** A text read as itself inside a pattern. */
+const escaped = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+/** Nothing a word goes on with: what ends a link as the field shows it. */
+const ended = '(?![\\p{L}\\p{N}])'
+
+/**
+ * Each place the field shows a link whole, as it was picked (`shown`), opening a word and nothing a
+ * word goes on with after it: where the composer marks it, and what a Message sends by its Tile's id.
+ */
+export const wholeLink = (shown: string) => new RegExp(`(?<!\\S)${escaped(shown)}${ended}`, 'gu')
+
+/**
+ * Whether the field shows one of the links picked whole at `at`, nothing a word goes on with after
+ * it: the `@` of a link picked opens no search of its own.
+ */
+export const showsLink = (
+  value: string,
+  at: number,
+  links: ReadonlyArray<{ readonly shown: string }>,
+) => links.some(({ shown }) => new RegExp(`^${escaped(shown)}${ended}`, 'u').test(value.slice(at)))
+
 /** The command of `among` a Message opens with, and what follows it; none when it opens with none. */
 export function openingCommand(
   value: string,
@@ -363,6 +387,26 @@ export function openingCommand(
 export function commandMarkOf(value: string, among: ReadonlyArray<Command> = commands): Mark[] {
   const opening = openingCommand(value, among)
   return opening === undefined ? [] : [{ from: 0, to: opening.length, kind: 'command' }]
+}
+
+/**
+ * What the field shows marked: the command of `among` it opens with, and each link picked it still
+ * shows whole, the longest first, as a Message sends them, so a link another starts with never takes
+ * its place; never two marks over one stretch.
+ */
+export function fieldMarksOf(
+  value: string,
+  links: ReadonlyArray<{ readonly shown: string }>,
+  among: ReadonlyArray<Command> = commands,
+): Mark[] {
+  const marks = commandMarkOf(value, among)
+  for (const { shown } of [...links].sort((a, b) => b.shown.length - a.shown.length)) {
+    for (const found of value.matchAll(wholeLink(shown))) {
+      const mark = { from: found.index, to: found.index + found[0].length, kind: 'tile' as const }
+      if (!marks.some(({ from, to }) => mark.from < to && from < mark.to)) marks.push(mark)
+    }
+  }
+  return marks
 }
 
 /** What a pick does: the field's next value and caret, or a language to go to. */
@@ -395,4 +439,29 @@ export function commandPicked(
   const command = commands.find((each) => each.id === row)
   if (command === undefined) return { value, caret }
   return put(value, caret, typing, `/${command.name()} ${command.takes === 'tile' ? '@' : ''}`)
+}
+
+/**
+ * The field with a tile named at the caret, as a pick puts it, a space before it where a word ends
+ * there: a tile carried from the canvas and let go over the composer (HEX-108).
+ */
+export function namedAt(value: string, caret: number, title: string) {
+  const before = value.slice(0, caret)
+  const inserted = `${before === '' || /\s$/.test(before) ? '' : ' '}@${title} `
+  return {
+    value: `${before}${inserted}${value.slice(caret).replace(/^ /, '')}`,
+    caret: caret + inserted.length,
+  }
+}
+
+/**
+ * The field with a tile named first, so the next Turn works there, `then` after it and what was
+ * written kept: a tile's menu asking the agent through the chat (HEX-108). A field that opens with
+ * that tile already keeps it.
+ */
+export function namedFirst(value: string, title: string, then = '') {
+  const named = `@${title} `
+  const kept = value.startsWith(named) ? value.slice(named.length) : value
+  const opening = `${named}${then}`
+  return { value: `${opening}${kept}`, caret: opening.length }
 }

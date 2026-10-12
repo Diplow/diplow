@@ -2,16 +2,20 @@
 // tier, the crossings, the Chat, the Canvas, the layouts and the atoms the sides share, the seams, each
 // piece in its states, then the tokens. The canvas's view lives in the search params, so a link shows
 // what its sender saw, and a Message's link in the Conversation centers it, as on home. The Screen's
-// specimens are drawn here too, since they lay out both sides, which no folder of ui/ may import.
+// specimens are drawn here too, since they show the breadcrumb and Help, which ui/ can't reach. The
+// crossings are ui/crossings.tsx's, which the route hands what ui/ can't reach (HEX-108).
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
+import { merged, turnLocation, type Navigation } from '#/domains/assistant/entities'
 import { previewLimit } from '#/domains/mapping/entities'
 import { ChannelsGallery } from '#/front/client/gallery'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { useHelp } from '#/front/client/mapping/queries'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { BreadcrumbGallery } from '#/front/features/breadcrumb/gallery'
+import { encoded } from '#/front/features/conversation/composer/mention'
+import { happenedOf } from '#/front/features/conversation/entry/words'
 import { ConversationGallery } from '#/front/features/conversation/gallery'
 import { helpNodeOf } from '#/front/features/help/nodes'
 import { canvasTree } from '#/front/features/system/tree'
@@ -24,6 +28,7 @@ import { CanvasAtomsGallery } from '#/front/ui/canvas/atoms/gallery'
 import { fixtureViews, ulysse } from '#/front/ui/canvas/fixtures'
 import { CanvasLayoutsGallery } from '#/front/ui/canvas/layouts/gallery'
 import { TileGallery } from '#/front/ui/canvas/tile/gallery'
+import { MarksGallery } from '#/front/ui/canvas/tile/marks/gallery'
 import { TileMenuGallery } from '#/front/ui/canvas/tile/menu/gallery'
 import { MovingGallery } from '#/front/ui/canvas/tile/moving/gallery'
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
@@ -41,6 +46,7 @@ import { KeyWidgetGallery } from '#/front/ui/chat/widgets/keys/gallery'
 import { SignInWidgetGallery } from '#/front/ui/chat/widgets/sign-in/gallery'
 import { SignInWidget, type Access } from '#/front/ui/chat/widgets/sign-in/SignInWidget'
 import { TileWidgetGallery } from '#/front/ui/chat/widgets/tile/gallery'
+import { CrossingsGallery, type Tell, type Where } from '#/front/ui/crossings'
 import {
   GallerySection,
   GalleryState,
@@ -48,7 +54,7 @@ import {
   tierAnchor,
   tierTitle,
 } from '#/front/ui/gallery/frame'
-import { anchorOf, filled, tiers } from '#/front/ui/gallery/pieces'
+import { anchorOf, tiers } from '#/front/ui/gallery/pieces'
 import { Tokens } from '#/front/ui/gallery/Tokens'
 import { LayoutsGallery } from '#/front/ui/layouts/gallery'
 import { Screen } from '#/front/ui/layouts/screen/Screen'
@@ -73,7 +79,9 @@ function DesignSystem() {
   return (
     <main className="mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)] gap-16 px-6 pb-16">
       <Direction />
-      <GalleryTier tier="crossings" />
+      <GalleryTier tier="crossings">
+        <CrossingsGallery previewLimit={previewLimit} tell={tell} where={where} />
+      </GalleryTier>
       <GalleryTier tier="chat">
         <ConversationGallery onCenter={onCenter} />
         <ComposerGallery />
@@ -91,6 +99,7 @@ function DesignSystem() {
       <GalleryTier tier="canvas">
         <CanvasGallery view={view} onViewChange={onViewChange} />
         <TileGallery />
+        <MarksGallery />
         <TileMenuGallery />
         <MovingGallery />
         <BreadcrumbGallery view={view} onViewChange={onViewChange} />
@@ -112,6 +121,33 @@ function DesignSystem() {
     </main>
   )
 }
+
+/** Each Tile of a System, from its root down. */
+const tilesIn = (tile: TileNode): TileNode[] => [
+  tile,
+  ...[tile.branches, tile.context, tile.leaves].flatMap((ring) =>
+    Object.values(ring ?? {}).flatMap(tilesIn),
+  ),
+]
+
+/** The fixture's Titles, by id: what home's timeline names the Tiles of an entry by. */
+const titles = Object.fromEntries(tilesIn(ulysse).map(({ id, title }) => [id, title]))
+
+/**
+ * A run of gestures on the crossing's canvas, in home's words: merged as home's sender merges them
+ * (Assistant's `merged`), told as the conversation's timeline tells them (`happenedOf`).
+ */
+const tell: Tell = (gestures) => {
+  const navigation = gestures.reduce<Navigation | undefined>(merged, undefined)
+  if (navigation === undefined) throw new Error('A navigation is told once a gesture made it')
+  return happenedOf({ ...navigation, id: 'navigation', at: new Date() }, { titles })
+}
+
+/**
+ * Where the Turn answering a crossing's Message works: the Message as home's composer sends it, each
+ * link picked written by its Tile's id (`encoded`), then Assistant's own rule (`turnLocation`).
+ */
+const where: Where = ({ value, links }, center) => turnLocation(encoded(value, links), center)
 
 /** The help widget's section, on Help itself, read in the page's language as `/help` reads it. */
 function HelpGallery() {
@@ -148,7 +184,7 @@ function Direction() {
       <p className="max-w-prose text-sm">{m.design_system_screen()}</p>
       <nav aria-label={m.design_system_contents()}>
         <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-          {tiers.filter(filled).map((tier) => (
+          {tiers.map((tier) => (
             <li key={tier}>
               <a
                 href={`#${tierAnchor(tier)}`}

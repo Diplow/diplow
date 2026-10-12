@@ -3,10 +3,12 @@
 // "Here" under the pointer; each Branch offering to trade places by a disc at its foot, apart from its
 // own click; the rest stepped back; and a banner saying what moves, with its way out. A drag starts it
 // under a mouse or a pen and never under a finger, whose way is the menu or the M key (`partOf`
-// says what each place offers, `drag.ts` follows the drag).
+// says what each place offers, `drag.ts` follows the drag). Carried off the canvas, the tile follows
+// the pointer over the page, for the composer to name where it is let go (HEX-108).
 import { cn } from 'cn'
 import { ArrowLeftRight } from 'lucide-react'
 import type { ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 
 import { m } from '#/paraglide/messages'
 
@@ -212,5 +214,31 @@ export function SwapDisc({
         aria-hidden
       />
     </g>
+  )
+}
+
+/**
+ * A tile carried off the canvas, under a mouse or a pen, following the pointer over the page: its hex
+ * and its title on a risen surface, its line in your amber, for the composer to name where it is let
+ * go (HEX-108). Drawn over the page, outside the canvas's <svg>, and for the eye alone: what takes it
+ * says so itself.
+ */
+export function Carried({ title, at }: { title: string; at: { x: number; y: number } }) {
+  return createPortal(
+    <div
+      aria-hidden
+      className="risen pointer-events-none fixed z-50 flex items-center gap-2 px-3 py-1.5 font-human text-sm text-foreground [--rim:var(--human)]"
+      style={{ left: at.x + 14, top: at.y + 12 }}
+    >
+      <svg viewBox="-10 -10 20 20" className="size-3 overflow-visible">
+        <polygon
+          points={points({ center: { x: 0, y: 0 }, radius: 9 })}
+          vectorEffect="non-scaling-stroke"
+          className="fill-human/20 stroke-human"
+        />
+      </svg>
+      {title}
+    </div>,
+    document.body,
   )
 }

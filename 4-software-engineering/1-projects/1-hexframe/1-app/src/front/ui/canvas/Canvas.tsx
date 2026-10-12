@@ -4,14 +4,16 @@
 // the page sizes it with CSS and everything inside scales with it. The view is the caller's, from
 // the URL: the canvas only says which view comes next, and blooms and folds what a hex opens. Where
 // its caller acts on it, each Tile has its menu and its hover card, each free slot its menu, and a
-// Tile moves, dragged or from its menu, its banner at the canvas's foot (`hexes.tsx`).
+// Tile moves, dragged or from its menu, its banner at the canvas's foot (`hexes.tsx`). Where its
+// caller says who touches what, each Tile carries its mark, the chat pointing at it lights it or its
+// way, a tile being written or proposed stands in its free slot, and a proposed move draws its arc.
 import { useRef, useState } from 'react'
 import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 
 import { canvasSize, type EmptySlotTarget } from './geometry/shape'
-import type { Point } from './geometry/geometry'
+import type { Direction, Point } from './geometry/geometry'
 import {
   SlotHexView,
   standsFor,
@@ -29,10 +31,12 @@ import { useScale } from './state/useScale'
 import { useFinger } from './tile/menu/TileMenu'
 import { unitsIn } from './tile/moving/drag'
 import { MoveBanner } from './tile/moving/Moving'
+import { Arc } from './tile/marks/Marks'
+import { wayTo, type TileMark } from './tile/marks/mark'
 import { Ground } from './tile/places'
-import { Tile, type TileWrite } from './tile/Tile'
+import { Tile, type StandingLook, type TileWrite } from './tile/Tile'
 import { listOf, lookOf, placeOf } from './view/looks'
-import type { FrameKind, InnerKind, OuterKind, TileNode } from './view/tiles'
+import { pathTo, type FrameKind, type InnerKind, type OuterKind, type TileNode } from './view/tiles'
 import type { CanvasView, RingChoices, ViewAction } from './view/view'
 
 export type { Acting, Moving } from './hexes'
@@ -51,6 +55,24 @@ interface CanvasActing {
   tile: (hex: TileHex) => Acting | undefined
   /** What a free slot's menu says of it and does; none for a slot with no menu. */
   slot: (slot: EmptySlotTarget) => Acting | undefined
+}
+
+/** A tile standing in a free slot before it is there: its id, and how it is drawn. */
+export interface SlotStanding {
+  id: string
+  look: StandingLook
+}
+
+/** Who touches what the canvas draws, as its caller says it (HEX-108). */
+export interface CanvasMarks {
+  /** What a Tile shows of who touches it, by its id: a Tile drawn, or a tile standing in a slot. */
+  tile?: (id: string) => TileMark | undefined
+  /** The Tile the chat points at, by its id: lit where it is drawn, its way where it isn't. */
+  pointed?: string | undefined
+  /** What stands in a free slot before it is there: a tile being written, one a Proposal creates. */
+  slot?: (slot: EmptySlotTarget) => SlotStanding | undefined
+  /** A Proposal's moves, each from a Tile to the free slot it would land in, drawn where both are. */
+  arcs?: ReadonlyArray<{ from: string; to: { parent: string; direction: Direction } }>
 }
 
 /** Moving a Tile: the one on the move, if any, and how a move starts and stops. */
@@ -86,11 +108,13 @@ interface CanvasProps {
   move?: CanvasMove
   /** What is on its way: without it, nothing is. */
   writes?: Writes
+  /** Who touches what it draws: without it, nobody does. */
+  marks?: CanvasMarks
   className?: string
 }
 
 export function Canvas(props: CanvasProps) {
-  const { system, view, onViewChange, emptySlots, acting, move, writes, className } = props
+  const { system, view, onViewChange, emptySlots, acting, move, writes, marks, className } = props
   const finger = useFinger()
   const { state, actions } = useCanvasState({ system, view, onViewChange, finger })
   const svg = useRef<SVGSVGElement>(null)
@@ -112,6 +136,9 @@ export function Canvas(props: CanvasProps) {
     writeOf: (id) => writes?.tile(id),
   })
   const inTheAir = gesture.landing !== undefined && gesture.landing !== 'landed'
+  // While a tile moves, nothing stands in a free slot: they offer themselves to it.
+  const standing = moving === undefined ? marks?.slot : undefined
+  const markOf = tileMarksOf(system, state.hexes, { ...marks, slot: standing })
   const onMenu = (key: string) => (open: boolean) => {
     setMenu((current) => (open ? key : current === key ? undefined : current))
   }
@@ -120,11 +147,13 @@ export function Canvas(props: CanvasProps) {
   const tileOf = (hex: TileHex) => {
     const action = actions.actionOf(hex)
     const look = lookOf(hex, { moving: moving !== undefined })
+    const mark = hex.tile.reference === undefined ? markOf(hex.tile.id) : undefined
     return (
       <TileHexView
         key={hex.key}
         hex={hex}
         look={look}
+        mark={mark}
         draw={(hand) => (
           <Tile
             hex={hex.hex}
@@ -132,6 +161,7 @@ export function Canvas(props: CanvasProps) {
             place={placeOf(hex)}
             scale={scale}
             write={writes?.tile(hex.tile.id)}
+            mark={mark}
             motion={actions.motionOf(hex.key)}
             action={
               action && {
@@ -192,7 +222,19 @@ export function Canvas(props: CanvasProps) {
             switch (hex.kind) {
               case 'ground':
                 return <Ground key={hex.key} hex={hex.hex} context={hex.ring === 'context'} />
-              case 'empty':
+              case 'empty': {
+                const stands = standing?.(hex.slot)
+                if (stands !== undefined) {
+                  return (
+                    <Tile
+                      key={hex.key}
+                      hex={hex.hex}
+                      {...stands.look}
+                      scale={scale}
+                      mark={markOf(stands.id)}
+                    />
+                  )
+                }
                 return (
                   <SlotHexView
                     key={hex.key}
@@ -208,12 +250,14 @@ export function Canvas(props: CanvasProps) {
                     land={gesture.land}
                   />
                 )
+              }
               case 'list':
                 return <Tile key={hex.key} hex={hex.hex} {...listOf(hex)} scale={scale} />
               case 'tile':
                 return tileOf(hex)
             }
           })}
+        <Arcs hexes={state.hexes} arcs={marks?.arcs} />
       </svg>
       {moving === undefined ? null : <MoveBanner title={moving.title} onStop={gesture.stop} />}
     </div>
@@ -223,6 +267,57 @@ export function Canvas(props: CanvasProps) {
 const still = { by: { x: 0, y: 0 }, glides: false }
 
 type Hexes = ReturnType<typeof useCanvasState>['state']['hexes']
+
+/**
+ * Each Tile's mark, by its id: what the caller says of it, and the chat pointing at it, or at a tile
+ * below it off the canvas, whose way it is. A tile standing in a slot is drawn under its own id.
+ */
+function tileMarksOf(system: TileNode, hexes: Hexes, marks: CanvasMarks | undefined) {
+  const pointed = marks?.pointed
+  const drawn = new Set<string>()
+  for (const hex of hexes) {
+    if (hex.kind === 'tile' && hex.tile.reference === undefined) drawn.add(hex.tile.id)
+    if (hex.kind === 'empty') {
+      const standing = marks?.slot?.(hex.slot)
+      if (standing !== undefined) drawn.add(standing.id)
+    }
+  }
+  const way =
+    pointed === undefined
+      ? undefined
+      : wayTo(pointed, pathTo(system, pointed), (id) => drawn.has(id))
+  return (id: string): TileMark | undefined => {
+    const mark = marks?.tile?.(id)
+    if (way?.id !== id) return mark
+    return { ...mark, pointed: way.way ? 'way' : 'tile' }
+  }
+}
+
+/** A Proposal's moves, each an arc from its Tile to the free slot it would land in, where both are drawn. */
+function Arcs({ hexes, arcs }: { hexes: Hexes; arcs: CanvasMarks['arcs'] }) {
+  if (arcs === undefined || arcs.length === 0) return null
+  const centers = centersOf(hexes)
+  return arcs.map(({ from, to }) => {
+    const start = centers.get(from)
+    const slot = hexes.find(
+      (hex) =>
+        hex.kind === 'empty' &&
+        hex.slot.parent.id === to.parent &&
+        hex.slot.direction === to.direction,
+    )
+    const heart = centers.get(to.parent)
+    if (start === undefined || slot === undefined || heart === undefined) return null
+    return (
+      <Arc
+        key={`${from}:${to.parent}:${String(to.direction)}`}
+        from={start}
+        to={slot.hex.center}
+        radius={slot.hex.radius}
+        around={heart}
+      />
+    )
+  })
+}
 
 /** Where each Tile is drawn, by its id: its own hex, never a Reference to it. */
 function centersOf(hexes: Hexes): Map<string, Point> {

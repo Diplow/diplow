@@ -1,6 +1,8 @@
 // How long a motion lasts, read from its token on the page, so the code waiting on it follows the
-// stylesheet: `--duration-fold`, `--duration-glide`, `--duration-flare`. What moves waits for nothing
-// with reduced motion; a light that only fades, the flare, lasts as long either way.
+// stylesheet: `--duration-fold`, `--duration-glide`, `--duration-flare`, and how long the canvas stays
+// in front on a phone after a crossing, `--duration-glance`. What moves waits for nothing with
+// reduced motion; a light that only fades, the flare, and a glance, last as long either way. Both
+// sides and the screen read it, so it sits beside the theme.
 
 /**
  * A duration token's value in milliseconds, `500ms` or `1.3s`, as the page's root sets it; 0 off a

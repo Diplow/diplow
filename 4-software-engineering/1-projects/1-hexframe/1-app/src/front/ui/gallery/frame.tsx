@@ -1,11 +1,11 @@
 // The frame of /design-system: a section per tier, shown once a piece fills it, a section per piece,
 // with what it is for, what it is made of and where it is used, as links within the page, then one
-// labelled specimen per state.
-import { createContext, useContext, type ReactNode } from 'react'
+// labelled specimen per state; and the clock a timed specimen plays by.
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { anchorOf, filled, pieceNamed, usedIn, type PieceName, type Tier } from './pieces'
+import { anchorOf, pieceNamed, usedIn, type PieceName, type Tier } from './pieces'
 
 const tierTitles: Record<Tier, () => string> = {
   crossings: m.design_system_tier_crossings,
@@ -34,9 +34,8 @@ export const tierAnchor = (tier: Tier) => `tier-${tier}`
 /** The tier a section is drawn under, which its pieces check against the catalogue's. */
 const TierContext = createContext<Tier | undefined>(undefined)
 
-/** A tier's section: its title, what it holds, then its pieces; nothing while no piece fills it. */
+/** A tier's section: its title, what it holds, then its pieces. */
 export function GalleryTier({ tier, children }: { tier: Tier; children?: ReactNode }) {
-  if (!filled(tier)) return null
   return (
     <TierContext value={tier}>
       <section id={tierAnchor(tier)} className="grid scroll-mt-6 grid-cols-[minmax(0,1fr)] gap-8">
@@ -50,7 +49,10 @@ export function GalleryTier({ tier, children }: { tier: Tier; children?: ReactNo
   )
 }
 
-/** A piece's section: its name, what it is for, what it is made of and where it is used, its states. */
+/**
+ * A piece's section: its name, what it is for, what it is made of, or a crossing's two ends, and where
+ * it is used, then its states.
+ */
 export function GallerySection({ name, children }: { name: PieceName; children: ReactNode }) {
   const piece = pieceNamed(name)
   const drawnUnder = useContext(TierContext)
@@ -66,7 +68,14 @@ export function GallerySection({ name, children }: { name: PieceName; children: 
       <div className="grid gap-2">
         <h3 className="font-mono text-lg font-semibold">{name}</h3>
         <p className="max-w-prose text-sm text-muted-foreground">{piece.note()}</p>
-        <PieceLinks label={m.design_system_made_of()} names={piece.madeOf} />
+        {'ends' in piece ? (
+          <>
+            <PieceLinks label={m.design_system_chat_end()} names={piece.ends.chat} />
+            <PieceLinks label={m.design_system_canvas_end()} names={piece.ends.canvas} />
+          </>
+        ) : (
+          <PieceLinks label={m.design_system_made_of()} names={piece.madeOf} />
+        )}
         <PieceLinks label={m.design_system_used_in()} names={usedIn(name)} />
       </div>
       <div className="flex flex-wrap items-start gap-8">{children}</div>
@@ -128,4 +137,24 @@ export function GalleryColumn({
       {children}
     </div>
   )
+}
+
+/**
+ * The step a specimen's play has reached, each `steps[i]` ms after it started, started again at
+ * every `turn`: a tile's states played one after another, a crossing's Turn. A step is its play's:
+ * one an earlier play reached is no step of the next, which starts at its first, drawn at once.
+ */
+export function useSteps(steps: readonly number[], turn: number): number {
+  const [reached, setReached] = useState({ turn, step: 0 })
+  useEffect(() => {
+    const timers = steps.slice(1).map((at, index) =>
+      setTimeout(() => {
+        setReached({ turn, step: index + 1 })
+      }, at),
+    )
+    return () => {
+      timers.forEach(clearTimeout)
+    }
+  }, [steps, turn])
+  return reached.turn === turn ? reached.step : 0
 }

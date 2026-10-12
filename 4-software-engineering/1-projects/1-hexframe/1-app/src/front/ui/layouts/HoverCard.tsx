@@ -1,23 +1,40 @@
+// What a tile cuts short, in full, beside it: on the canvas, the tile itself (HEX-96, HEX-105); in the
+// chat, a tile named (HEX-108). Shared by both sides, so it knows neither: what its trigger hands it,
+// it hands on to what it wraps.
 import { cn } from 'cn'
 import { HoverCard as Card, Slot } from 'radix-ui'
-import { useId, useRef, useState, type ReactElement } from 'react'
+import { useEffect, useId, useRef, useState, type ComponentProps, type ReactElement } from 'react'
 
-import type { Hand } from '../keys'
+/**
+ * What a trigger around it hands what it wraps, a menu's on a tile: its ref, its handlers and its
+ * attributes, composed by Radix's `Slot`.
+ */
+type Hand = ComponentProps<typeof Slot.Root>
 
-interface HoverCardProps extends Omit<Hand, 'children' | 'title'> {
-  /** The tile it tells of; it must take a ref, focus and an `aria-describedby`, as a button does. */
+/** A line more of what it tells of, in the colour of what it says. */
+export interface CardNote {
+  text: string
+  tone?: 'warning' | 'agent' | 'context'
+}
+
+interface HoverCardProps extends Omit<Hand, 'children' | 'title' | 'onOpenChange'> {
+  /** What it tells of; it must take a ref, focus and an `aria-describedby`, as a button does. */
   children: ReactElement
   /** Its kind and place, in a few words: "branch, east of Projects". */
   place: string
   title: string
   /** Its preview, in full where the tile cuts it. */
   description?: string
-  /** One more line, in the colour of what it says: a clash, the agent at work, a Reference. */
-  note?: { text: string; tone?: 'warning' | 'agent' | 'context' }
+  /** Lines more, each in the colour of what it says: a clash, a Reference, the agent at work. */
+  notes?: readonly CardNote[]
   /** Where the tile is drawn: inside an <svg>, which takes no <span>, its words go in a <desc>. */
   within?: 'html' | 'svg'
+  /** Where it opens: beside a tile, on its right; above a line of words, whose next ones stay free. */
+  side?: 'right' | 'top'
   /** Kept shut while something else tells of the tile: its menu, whose header says the same. */
   shut?: boolean
+  /** It opened or shut: what it tells of is pointed at meanwhile, which a crossing shows elsewhere. */
+  onOpenChange?: (open: boolean) => void
 }
 
 const noteTones = {
@@ -37,12 +54,15 @@ export function HoverCard({
   place,
   title,
   description,
-  note,
+  notes = [],
   within = 'html',
+  side = 'right',
   shut = false,
+  onOpenChange,
   ...hand
 }: HoverCardProps) {
   const [open, setOpen] = useState(false)
+  useOpenTold(open, onOpenChange)
   // Pressed since the pointer came in: a click is no hover, so the card Radix would open after the
   // delay stays shut until the pointer leaves.
   const pressed = useRef(false)
@@ -78,35 +98,54 @@ export function HoverCard({
         </Card.Trigger>
         <Card.Portal>
           <Card.Content
-            side="right"
-            align="center"
+            side={side}
+            align={side === 'right' ? 'center' : 'start'}
             sideOffset={10}
             collisionPadding={12}
-            // The card is for the eye: what it says, a screen reader hears from the tile itself.
+            // The card is for the eye: what it says, a screen reader hears from the tile itself. The
+            // pointer goes through it, so it never holds itself open over the next tile or word.
             aria-hidden="true"
-            className="risen relative z-50 w-[16.875rem] px-4 pt-[0.8125rem] pb-3.5 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-bottom-1 motion-reduce:animate-none pointer-coarse:hidden"
+            className="risen pointer-events-none relative z-50 w-[16.875rem] px-4 pt-[0.8125rem] pb-3.5 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-bottom-1 motion-reduce:animate-none pointer-coarse:hidden"
           >
-            <Says place={place} title={title} description={description} note={note} />
+            <Says place={place} title={title} description={description} notes={notes} />
           </Card.Content>
         </Card.Portal>
       </Card.Root>
       {within === 'svg' ? (
-        <desc id={describedBy}>{said([place, description, note?.text])}</desc>
+        <desc id={describedBy}>{said([place, description, ...notes.map(({ text }) => text)])}</desc>
       ) : (
         <span id={describedBy} className="sr-only">
-          {said([place, description, note?.text])}
+          {said([place, description, ...notes.map(({ text }) => text)])}
         </span>
       )}
     </>
   )
 }
 
+/**
+ * The card's opening told its caller, and its shutting, the card gone while open included, so what
+ * it lit elsewhere goes out with it: a tile named in a line the chat redraws as another.
+ */
+export function useOpenTold(open: boolean, onOpenChange: ((open: boolean) => void) | undefined) {
+  const told = useRef(onOpenChange)
+  useEffect(() => {
+    told.current = onOpenChange
+  })
+  useEffect(() => {
+    if (!open) return undefined
+    told.current?.(true)
+    return () => {
+      told.current?.(false)
+    }
+  }, [open])
+}
+
 function Says({
   place,
   title,
   description,
-  note,
-}: Omit<HoverCardProps, 'children' | 'within' | 'shut'>) {
+  notes = [],
+}: Omit<HoverCardProps, 'children' | 'within' | 'side' | 'shut'>) {
   return (
     <>
       <div className="font-mono text-[0.65625rem] text-faint">{place}</div>
@@ -118,8 +157,9 @@ function Says({
           {description}
         </div>
       )}
-      {note !== undefined && (
+      {notes.map((note) => (
         <div
+          key={note.text}
           className={cn(
             'mt-2 font-mono text-[0.6875rem] leading-snug',
             note.tone === undefined ? 'text-faint' : noteTones[note.tone],
@@ -127,7 +167,7 @@ function Says({
         >
           {note.text}
         </div>
-      )}
+      ))}
     </>
   )
 }
