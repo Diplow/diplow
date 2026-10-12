@@ -24,7 +24,7 @@ The other door into [[4-software-engineering/1-projects/1-hexframe/1-app/src/api
 
 ## Connect a Claude Code
 
-Signed in, issue a Key on `/settings/keys`. The page shows its secret once, and the command that adds hexframe to Claude Code, with this host's origin and the Key in it:
+Signed in, issue a Key in the chat's key widget (`/?keys=true`; the old `/settings/keys` lands there). It shows the Key's secret once, and the command that adds hexframe to Claude Code, with this host's origin and the Key in it:
 
 ```sh
 claude mcp add --transport http hexframe <origin>/mcp --header "Authorization: Bearer <key>"
