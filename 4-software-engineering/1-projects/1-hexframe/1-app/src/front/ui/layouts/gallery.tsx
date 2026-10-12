@@ -1,8 +1,8 @@
-// The layouts every side shares, on /design-system: the dialog, and what a place shows instead of its
-// content.
+// The layouts every side shares, on /design-system: the dialog, the hover card a tile and a tile named
+// both open, and what a place shows instead of its content.
 import { FilePlus, Plus } from 'lucide-react'
 import { cn } from 'cn'
-import { useState } from 'react'
+import { useState, type ComponentProps } from 'react'
 
 import { m } from '#/paraglide/messages'
 
@@ -12,6 +12,7 @@ import { toast } from '../atoms/Toaster'
 import { GallerySection, GalleryState } from '../gallery/frame'
 import { ConfirmDialog } from './ConfirmDialog'
 import { Dialog } from './Dialog'
+import { HoverCard } from './HoverCard'
 import { EmptyState, ErrorState, Forbidden } from './states'
 
 export function LayoutsGallery() {
@@ -19,6 +20,7 @@ export function LayoutsGallery() {
     <>
       <TheDialogGallery />
       <DialogGallery />
+      <HoverCardGallery />
       <StatesGallery />
     </>
   )
@@ -216,5 +218,89 @@ function StatesGallery() {
         </GalleryState>
       </GallerySection>
     </>
+  )
+}
+
+// What a tile cuts short, on a tile as the canvas lights it: a preview in full, a clash, the agent at
+// work; and above a line of words naming tiles, as a tile named in the chat opens it (`Mention`, the
+// Chat's), the next name within reach.
+function HoverCardGallery() {
+  return (
+    <GallerySection name="HoverCard">
+      <GalleryState label={m.gallery_state_hover_or_focus()}>
+        <HoverCard
+          place={m.gallery_sample_tile_place()}
+          title={m.gallery_sample_tile_title()}
+          description={m.gallery_sample_tile_preview_long()}
+        >
+          <SpecimenTile>{m.gallery_sample_tile_title()}</SpecimenTile>
+        </HoverCard>
+      </GalleryState>
+      <GalleryState label={m.gallery_state_hover_card_clash()}>
+        <HoverCard
+          place={m.gallery_sample_leaf_place()}
+          title={m.gallery_sample_leaf_title()}
+          description={m.gallery_sample_leaf_preview()}
+          note={{ text: m.gallery_sample_leaf_clash(), tone: 'warning' }}
+        >
+          <SpecimenTile>{m.gallery_sample_leaf_title()}</SpecimenTile>
+        </HoverCard>
+      </GalleryState>
+      <GalleryState label={m.gallery_state_hover_card_agent()}>
+        <HoverCard
+          place={m.gallery_sample_tile_place()}
+          title={m.gallery_sample_tile_title()}
+          description={m.gallery_sample_tile_preview()}
+          note={{ text: m.gallery_sample_agent_here(), tone: 'agent' }}
+        >
+          <SpecimenTile>{m.gallery_sample_tile_title()}</SpecimenTile>
+        </HoverCard>
+      </GalleryState>
+      <GalleryState label={m.gallery_state_hover_card_named()}>
+        <p className="flex gap-4 font-mono text-sm">
+          <HoverCard
+            side="top"
+            place={m.gallery_sample_tile_place()}
+            title={m.gallery_sample_tile_title()}
+            description={m.gallery_sample_tile_preview()}
+          >
+            <NamedTile>{m.gallery_sample_tile_title()}</NamedTile>
+          </HoverCard>
+          <HoverCard
+            side="top"
+            place={m.gallery_sample_leaf_place()}
+            title={m.gallery_sample_leaf_title()}
+            description={m.gallery_sample_leaf_preview()}
+          >
+            <NamedTile>{m.gallery_sample_leaf_title()}</NamedTile>
+          </HoverCard>
+        </p>
+      </GalleryState>
+    </GallerySection>
+  )
+}
+
+/** A tile named in a line of words, as the chat names one: its title, a faint underline. */
+function NamedTile(props: ComponentProps<'button'>) {
+  return (
+    <button
+      type="button"
+      {...props}
+      className="cursor-default text-foreground underline decoration-foreground/20 underline-offset-3 hover:decoration-current focus-visible:outline focus-visible:outline-offset-2"
+    />
+  )
+}
+
+/**
+ * A tile as the canvas lights it: a fill, lighter under the pointer and on focus. It hands on what the
+ * hover card gives its trigger, its ref and its handlers.
+ */
+function SpecimenTile(props: ComponentProps<'button'>) {
+  return (
+    <button
+      type="button"
+      {...props}
+      className="grid h-32 w-28 cursor-default place-items-center bg-tile px-3 text-center font-human text-sm text-foreground transition-colors [clip-path:polygon(50%_0,100%_25%,100%_75%,50%_100%,0_75%,0_25%)] hover:bg-tile-lit focus-visible:bg-tile-lit focus-visible:underline focus-visible:decoration-human focus-visible:underline-offset-4 focus-visible:outline-none"
+    />
   )
 }

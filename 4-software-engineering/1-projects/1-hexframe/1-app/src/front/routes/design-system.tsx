@@ -2,16 +2,19 @@
 // tier, the crossings, the Chat, the Canvas, the layouts and the atoms the sides share, the seams, each
 // piece in its states, then the tokens. The canvas's view lives in the search params, so a link shows
 // what its sender saw, and a Message's link in the Conversation centers it, as on home. The Screen's
-// specimens are drawn here too, since they lay out both sides, which no folder of ui/ may import.
+// specimens are drawn here too, since they lay out both sides, which no folder of ui/ may import. The
+// crossings are ui/crossings.tsx's, which the route hands what ui/ can't reach (HEX-108).
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
+import { merged, type Navigation } from '#/domains/assistant/entities'
 import { previewLimit } from '#/domains/mapping/entities'
 import { ChannelsGallery } from '#/front/client/gallery'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { useHelp } from '#/front/client/mapping/queries'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { BreadcrumbGallery } from '#/front/features/breadcrumb/gallery'
+import { happenedOf } from '#/front/features/conversation/entry/words'
 import { ConversationGallery } from '#/front/features/conversation/gallery'
 import { helpNodeOf } from '#/front/features/help/nodes'
 import { canvasTree } from '#/front/features/system/tree'
@@ -21,9 +24,11 @@ import { Skeleton } from '#/front/ui/atoms/skeleton'
 import { AtomsGallery } from '#/front/ui/atoms/gallery'
 import { Canvas } from '#/front/ui/canvas/Canvas'
 import { CanvasAtomsGallery } from '#/front/ui/canvas/atoms/gallery'
+import { mentionablesOf } from '#/front/ui/canvas/crossings'
 import { fixtureViews, ulysse } from '#/front/ui/canvas/fixtures'
 import { CanvasLayoutsGallery } from '#/front/ui/canvas/layouts/gallery'
 import { TileGallery } from '#/front/ui/canvas/tile/gallery'
+import { MarksGallery } from '#/front/ui/canvas/tile/marks/gallery'
 import { TileMenuGallery } from '#/front/ui/canvas/tile/menu/gallery'
 import { MovingGallery } from '#/front/ui/canvas/tile/moving/gallery'
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
@@ -41,6 +46,7 @@ import { KeyWidgetGallery } from '#/front/ui/chat/widgets/keys/gallery'
 import { SignInWidgetGallery } from '#/front/ui/chat/widgets/sign-in/gallery'
 import { SignInWidget, type Access } from '#/front/ui/chat/widgets/sign-in/SignInWidget'
 import { TileWidgetGallery } from '#/front/ui/chat/widgets/tile/gallery'
+import { CrossingsGallery, type Tell } from '#/front/ui/crossings'
 import {
   GallerySection,
   GalleryState,
@@ -73,7 +79,9 @@ function DesignSystem() {
   return (
     <main className="mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)] gap-16 px-6 pb-16">
       <Direction />
-      <GalleryTier tier="crossings" />
+      <GalleryTier tier="crossings">
+        <CrossingsGallery previewLimit={previewLimit} tell={tell} />
+      </GalleryTier>
       <GalleryTier tier="chat">
         <ConversationGallery onCenter={onCenter} />
         <ComposerGallery />
@@ -91,6 +99,7 @@ function DesignSystem() {
       <GalleryTier tier="canvas">
         <CanvasGallery view={view} onViewChange={onViewChange} />
         <TileGallery />
+        <MarksGallery />
         <TileMenuGallery />
         <MovingGallery />
         <BreadcrumbGallery view={view} onViewChange={onViewChange} />
@@ -111,6 +120,18 @@ function DesignSystem() {
       <Tokens />
     </main>
   )
+}
+
+const titles = Object.fromEntries(mentionablesOf(ulysse).map(({ id, title }) => [id, title]))
+
+/**
+ * A run of gestures on the crossing's canvas, in home's words: merged as home's sender merges them
+ * (Assistant's `merged`), told as the conversation's timeline tells them (`happenedOf`).
+ */
+const tell: Tell = (gestures) => {
+  const navigation = gestures.reduce<Navigation | undefined>(merged, undefined)
+  if (navigation === undefined) throw new Error('A navigation is told once a gesture made it')
+  return happenedOf({ ...navigation, id: 'navigation', at: new Date() }, { titles })
 }
 
 /** The help widget's section, on Help itself, read in the page's language as `/help` reads it. */

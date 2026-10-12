@@ -104,11 +104,12 @@ function childrenOf(tile: TileNode): PickerFrame['seats'] {
 /**
  * What a Tile's menu says of it: its kind as the canvas draws it, where it stands, the center or a
  * Direction of the ring it is in, the Tile above it, how many are below it, and whether it takes a
- * new Tile or turns into the other kind; none for a ring too full, which is no Tile.
+ * new Tile or turns into the other kind; none for a ring too full, which is no Tile, nor for a ghost,
+ * a Proposal's, which the chat decides.
  */
 export function subjectOf({ root, flat, tree }: Systems, hex: TileHex): Subject | undefined {
   const { kind } = lookOf(hex)
-  if (kind === 'list') return undefined
+  if (kind === 'list' || kind === 'ghost') return undefined
   const { id, title } = hex.tile
   const located = hex.tile.reference === undefined ? tileIn(root, id) : undefined
   const tile = located?.kind === 'leaf' ? undefined : located?.tile

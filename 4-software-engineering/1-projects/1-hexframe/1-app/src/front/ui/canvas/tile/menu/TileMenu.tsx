@@ -37,7 +37,7 @@ import { m } from '#/paraglide/messages'
 import { Menu, MenuDrawn, type MenuEntry } from '../../../atoms/Menu'
 import type { Shortcut } from '../../../atoms/keys'
 import type { Hand } from '../../keys'
-import { HoverCard } from '../../layouts/HoverCard'
+import { HoverCard } from '../../../layouts/HoverCard'
 import { partOf } from '../moving/move'
 import { Picker, type PickerFrame } from './Picker'
 import {

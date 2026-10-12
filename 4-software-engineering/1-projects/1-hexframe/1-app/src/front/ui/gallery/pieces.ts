@@ -1,6 +1,7 @@
 // Every piece /design-system shows, by tier and side, top-down: what it is for, the files it is drawn
-// in, and what it is made of. `pieces.test.ts` reads "made of" again from those files' imports, so it
-// cannot drift from the code; "used in" is read back from it.
+// in, and what it is made of; and first the crossings, each by its two ends. `pieces.test.ts` reads
+// "made of" again from those files' imports, so it cannot drift from the code, and holds each
+// crossing to an end on each side; "used in" is read back from both.
 import { m } from '#/paraglide/messages'
 
 /** The page's tiers, top-down: the crossings, each side, then what the sides share, then the seams. */
@@ -8,9 +9,10 @@ export const tiers = ['crossings', 'chat', 'canvas', 'layouts', 'atoms', 'seams'
 
 export type Tier = (typeof tiers)[number]
 
-interface Entry {
+/** A piece of a side or of what the sides share. */
+interface Piece {
   readonly name: string
-  readonly tier: Tier
+  readonly tier: Exclude<Tier, 'crossings'>
   /** The files it is drawn in, from `src/front/`. */
   readonly sources: readonly string[]
   /**
@@ -22,7 +24,75 @@ interface Entry {
   readonly note: () => string
 }
 
+/**
+ * A crossing, where one side answers the other: no file of its own, since every piece stays in its
+ * side (the grill of 2026-10-11, Q7), but an end on each, the pieces it joins in the chat and on the
+ * canvas, which the page draws side by side and home joins through its route and the client bus.
+ */
+interface Crossing {
+  readonly name: string
+  readonly tier: 'crossings'
+  readonly ends: { readonly chat: readonly string[]; readonly canvas: readonly string[] }
+  readonly note: () => string
+}
+
+type Entry = Piece | Crossing
+
 export const pieces = [
+  {
+    name: 'Pointing',
+    tier: 'crossings',
+    ends: { chat: ['Composer', 'Mention'], canvas: ['Canvas', 'Marks'] },
+    note: m.gallery_note_crossing_pointing,
+  },
+  {
+    name: 'AgentAtWork',
+    tier: 'crossings',
+    ends: { chat: ['Events', 'Message'], canvas: ['Canvas', 'Marks'] },
+    note: m.gallery_note_crossing_agent,
+  },
+  {
+    name: 'ProposalGhosts',
+    tier: 'crossings',
+    ends: { chat: ['Proposal', 'Mention'], canvas: ['Canvas', 'Marks'] },
+    note: m.gallery_note_crossing_proposal,
+  },
+  {
+    name: 'Drafting',
+    tier: 'crossings',
+    ends: { chat: ['TileWidget'], canvas: ['Canvas', 'Tile'] },
+    note: m.gallery_note_crossing_drafting,
+  },
+  {
+    name: 'NextTurn',
+    tier: 'crossings',
+    ends: { chat: ['Composer'], canvas: ['Canvas', 'Marks'] },
+    note: m.gallery_note_crossing_next_turn,
+  },
+  {
+    name: 'MenuThroughChat',
+    tier: 'crossings',
+    ends: { chat: ['Composer'], canvas: ['Canvas', 'TileMenu'] },
+    note: m.gallery_note_crossing_menu,
+  },
+  {
+    name: 'NavigationEntry',
+    tier: 'crossings',
+    ends: { chat: ['Events'], canvas: ['Canvas'] },
+    note: m.gallery_note_crossing_navigation,
+  },
+  {
+    name: 'DropToName',
+    tier: 'crossings',
+    ends: { chat: ['Composer'], canvas: ['Moving'] },
+    note: m.gallery_note_crossing_drop,
+  },
+  {
+    name: 'PhoneGlance',
+    tier: 'crossings',
+    ends: { chat: ['Mention'], canvas: ['Screen', 'Canvas'] },
+    note: m.gallery_note_crossing_phone,
+  },
   {
     name: 'Conversation',
     tier: 'chat',
@@ -44,7 +114,7 @@ export const pieces = [
     name: 'Composer',
     tier: 'chat',
     sources: ['ui/chat/composer/Composer.tsx', 'ui/chat/composer/List.tsx'],
-    madeOf: [],
+    madeOf: ['Mention'],
     note: m.gallery_note_composer,
   },
   {
@@ -65,7 +135,7 @@ export const pieces = [
     name: 'Mention',
     tier: 'chat',
     sources: ['ui/chat/text/Mention.tsx'],
-    madeOf: [],
+    madeOf: ['HoverCard'],
     note: m.gallery_note_mention,
   },
   {
@@ -146,14 +216,14 @@ export const pieces = [
     name: 'Canvas',
     tier: 'canvas',
     sources: ['ui/canvas/Canvas.tsx'],
-    madeOf: ['Tile', 'Slot', 'Ground', 'TileMenu', 'Moving', 'Button'],
+    madeOf: ['Tile', 'Slot', 'Ground', 'Marks', 'TileMenu', 'Moving', 'Button'],
     note: m.gallery_note_canvas,
   },
   {
     name: 'Tile',
     tier: 'canvas',
     sources: ['ui/canvas/tile/Tile.tsx'],
-    madeOf: [],
+    madeOf: ['Marks'],
     note: m.gallery_note_tile,
   },
   {
@@ -169,6 +239,13 @@ export const pieces = [
     sources: ['ui/canvas/tile/places.tsx'],
     madeOf: [],
     note: m.gallery_note_ground,
+  },
+  {
+    name: 'Marks',
+    tier: 'canvas',
+    sources: ['ui/canvas/tile/marks/Marks.tsx'],
+    madeOf: [],
+    note: m.gallery_note_marks,
   },
   {
     name: 'TileMenu',
@@ -197,13 +274,6 @@ export const pieces = [
     sources: ['ui/canvas/layouts/Rail.tsx'],
     madeOf: ['ThemeToggle'],
     note: m.gallery_note_rail,
-  },
-  {
-    name: 'HoverCard',
-    tier: 'canvas',
-    sources: ['ui/canvas/layouts/HoverCard.tsx'],
-    madeOf: [],
-    note: m.gallery_note_hover_card,
   },
   {
     name: 'Card',
@@ -253,6 +323,13 @@ export const pieces = [
     sources: ['ui/layouts/ConfirmDialog.tsx'],
     madeOf: ['Button'],
     note: m.gallery_note_confirm_dialog,
+  },
+  {
+    name: 'HoverCard',
+    tier: 'layouts',
+    sources: ['ui/layouts/HoverCard.tsx'],
+    madeOf: [],
+    note: m.gallery_note_hover_card,
   },
   {
     name: 'EmptyState',
@@ -355,11 +432,14 @@ export function pieceNamed(name: PieceName): Entry {
   return pieces.find((piece) => piece.name === name) as Entry
 }
 
-/** The pieces made with this one, in the page's order. */
+/** What an entry joins: a piece what it is made of, a crossing its two ends. */
+function partsOf(entry: Entry): readonly string[] {
+  return 'ends' in entry ? [...entry.ends.chat, ...entry.ends.canvas] : entry.madeOf
+}
+
+/** The pieces made with this one, and the crossings it is an end of, in the page's order. */
 export function usedIn(name: PieceName): PieceName[] {
-  return pieces
-    .filter((piece) => (piece.madeOf as readonly string[]).includes(name))
-    .map((piece) => piece.name)
+  return pieces.filter((piece) => partsOf(piece).includes(name)).map((piece) => piece.name)
 }
 
 /** Whether a piece fills the tier, so the page shows its section. */

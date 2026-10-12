@@ -270,7 +270,7 @@ function TileStates() {
 }
 
 /** A specimen that plays: when each of its steps comes, in ms from its start, and what each draws. */
-interface Play {
+export interface Play {
   steps: readonly number[]
   draw: (hex: Hex, step: number) => ReactNode
 }
@@ -315,7 +315,7 @@ const refused: Play = {
 }
 
 /** A specimen that plays once it shows, and again on its button. */
-function Replayed({ name, note, play }: { name: string; note: string; play: Play }) {
+export function Replayed({ name, note, play }: { name: string; note: string; play: Play }) {
   const [turn, setTurn] = useState(0)
   const step = useSteps(play.steps, turn)
   return (
@@ -343,7 +343,7 @@ function Replayed({ name, note, play }: { name: string; note: string; play: Play
 }
 
 /** The step reached in a play, each `steps[i]` ms after it started, started again at every turn. */
-function useSteps(steps: readonly number[], turn: number): number {
+export function useSteps(steps: readonly number[], turn: number): number {
   const [step, setStep] = useState(0)
   useEffect(() => {
     setStep(0)

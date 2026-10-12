@@ -7,7 +7,7 @@ import { m } from '#/paraglide/messages'
 
 import { ulysse } from '../fixtures'
 import { directions, neighbor, type Direction, type Hex } from '../geometry/geometry'
-import { movingFor } from '../state/motion'
+import { movingFor } from '../../motion'
 import { useScale } from '../state/useScale'
 import { findTile, type TileNode } from '../view/tiles'
 import type { Seat } from './moving/move'

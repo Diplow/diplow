@@ -149,6 +149,7 @@ export function Menu({
             aria-label={label}
             {...keysOf(entries)}
             ref={content}
+            onCloseAutoFocus={keepFocusTaken}
             className={cn(surface, contextOrigin)}
           >
             {body(contextKit)}
@@ -166,6 +167,7 @@ export function Menu({
           align={align}
           sideOffset={6}
           {...keysOf(entries)}
+          onCloseAutoFocus={keepFocusTaken}
           className={cn(surface, dropdownOrigin)}
         >
           {body(dropdownKit)}
@@ -173,6 +175,16 @@ export function Menu({
       </DropdownMenu.Portal>
     </DropdownMenu.Root>
   )
+}
+
+/**
+ * Closed, the menu gives the focus back to its thing, unless something else holds it: a line's action
+ * that takes it elsewhere, the composer's field, takes it once the menu let it go, a task later, and
+ * keeps it. With nothing lit, the menu gone, the focus is the page's, and goes back to the thing.
+ */
+function keepFocusTaken(event: Event) {
+  const holder = document.activeElement
+  if (holder !== null && holder !== document.body) event.preventDefault()
 }
 
 // Typing an entry's key runs it: the line is clicked, so Radix selects it and closes the menu; a

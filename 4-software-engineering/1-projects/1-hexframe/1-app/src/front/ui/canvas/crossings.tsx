@@ -1,0 +1,435 @@
+// The canvas's end of each crossing on /design-system (HEX-108), on the fixture System: a tile as the
+// chat names it, with what its card says; the Tiles the composer's `@` finds; what each tile's menu
+// says of it; what the canvas marks as the agent's Turn goes, while its Proposal is open and while a
+// tile is written; and a frame whose tiles carry off it, for the composer to name. The route joins
+// each to the chat's end (`ui/chat/crossings.tsx`), since no folder of `ui/` imports both sides.
+import { useRef, useState, type ComponentProps } from 'react'
+
+import { m } from '#/paraglide/messages'
+
+import { Canvas, type CanvasMarks, type Standing } from './Canvas'
+import { tooling, ulysse } from './fixtures'
+import { directions, neighbor, type Direction, type Hex, type Point } from './geometry/geometry'
+import type { TileHex } from './state/useCanvasState'
+import { useScale } from './state/useScale'
+import type { TileMark } from './tile/marks/mark'
+import { directionName, placeOf, type Subject } from './tile/menu/verbs'
+import { unitsIn, useDrag } from './tile/moving/drag'
+import { Carried, Lifted } from './tile/moving/Moving'
+import { Slot } from './tile/places'
+import { frameHeight, frameRadius, frameWidth, gap, ring } from './tile/specimens'
+import { Tile, type TileLook } from './tile/Tile'
+import { lookOf } from './view/looks'
+import { findTile, pathTo, type TileNode } from './view/tiles'
+import type { CanvasView } from './view/view'
+
+/** The tile the crossings start centered on, and the view they open on. */
+export const engineering = 'software-engineering'
+export const startView: CanvasView = { center: engineering }
+
+/** A Tile of the fixture's title, by its id; the root's for none. */
+export const titleOf = (id: string | undefined) =>
+  findTile(ulysse, id ?? ulysse.id)?.title ?? ulysse.title
+
+/** The canvas at a crossing's end, on the fixture System unless the crossing changed it. */
+export function CrossingCanvas({
+  system = ulysse,
+  ...canvas
+}: Omit<ComponentProps<typeof Canvas>, 'system' | 'className'> & { system?: TileNode }) {
+  return <Canvas system={system} {...canvas} className="h-[28rem] w-[35rem] max-w-full" />
+}
+
+/** A tile a crossing glinted on in your amber, keyed so another glint rises again. */
+export interface Glint {
+  id: string
+  key: number
+}
+
+/** The marks of a glint on its tile; none on the others. */
+export const glinting =
+  (glint: Glint | undefined) =>
+  (id: string): TileMark | undefined =>
+    glint?.id === id ? { glint: { by: 'human', key: glint.key } } : undefined
+
+type Ring = 'branches' | 'leaves' | 'context'
+
+/** The ring of `parent` a Tile stands in, and its Direction there. */
+function seatOf(parent: TileNode, id: string): [Ring, Direction] | undefined {
+  for (const ring of ['branches', 'leaves', 'context'] as const) {
+    const at = directions.find((direction) => parent[ring]?.[direction]?.id === id)
+    if (at !== undefined) return [ring, at]
+  }
+  return undefined
+}
+
+/** What a Tile's menu and card say of where it stands in the System, as the canvas would draw it. */
+function subjectIn(system: TileNode, id: string): Subject | undefined {
+  const path = pathTo(system, id)
+  const tile = path.at(-1)
+  const parent = path.at(-2)
+  if (tile === undefined) return undefined
+  if (parent === undefined) return { kind: 'root', title: tile.title, at: 'center' }
+  const seat = seatOf(parent, id)
+  if (seat === undefined) return undefined
+  const [ring, at] = seat
+  const kind = ring === 'context' ? 'context' : tile.leaf === true ? 'leaf' : 'branch'
+  return { kind, title: tile.title, at, parent: parent.title }
+}
+
+/** A Tile of the System as the chat names it: its title, and what its card says beside it. */
+export function namedOf(system: TileNode, id: string) {
+  const tile = pathTo(system, id).at(-1)
+  const subject = subjectIn(system, id)
+  if (tile === undefined || subject === undefined) return undefined
+  return {
+    title: tile.title,
+    card: { place: placeOf(subject), ...(tile.preview !== '' && { description: tile.preview }) },
+  }
+}
+
+/** A Tile the composer's `@` finds: its Title, and the two Titles above it. */
+interface Mentionable {
+  id: string
+  title: string
+  path: string
+}
+
+/** The Tiles of the System the composer's `@` finds, its Branches and Leaves, from the root down. */
+export function mentionablesOf(system: TileNode, above: readonly string[] = []): Mentionable[] {
+  const below = directions.flatMap((direction) =>
+    [system.branches?.[direction], system.leaves?.[direction]].filter((tile) => tile !== undefined),
+  )
+  const here = [...above, system.title]
+  return [
+    { id: system.id, title: system.title, path: above.slice(-2).join(' / ') },
+    ...below.flatMap((tile) => mentionablesOf(tile, here)),
+  ]
+}
+
+/** What a Tile's menu says of it on the fixture canvas: its kind, where it stands, what it holds. */
+function subjectOfHex(hex: TileHex): Subject | undefined {
+  const look = lookOf(hex)
+  const { title } = hex.tile
+  if (look.kind === 'list' || look.kind === 'ghost') return undefined
+  if (hex.role === 'center') {
+    const parent = pathTo(ulysse, hex.tile.id).at(-2)?.title
+    if (look.kind === 'root' || look.kind === 'untitled') {
+      return { kind: look.kind, title, at: 'center', holds: true }
+    }
+    return { kind: look.kind, title, at: 'center', holds: true, ...(parent && { parent }) }
+  }
+  if (look.kind === 'root' || look.kind === 'untitled' || hex.direction === undefined) {
+    return undefined
+  }
+  return {
+    kind: look.kind,
+    title,
+    at: hex.direction,
+    holds: look.kind === 'branch',
+    ...(hex.parent && { parent: hex.parent.title }),
+  }
+}
+
+/** The System with the Tile of `id` changed, wherever it stands. */
+function changed(system: TileNode, id: string, change: (tile: TileNode) => TileNode): TileNode {
+  if (system.id === id) return change(system)
+  const within = (ring: Partial<Record<Direction, TileNode>> | undefined) =>
+    ring &&
+    Object.fromEntries(
+      Object.entries(ring).map(([direction, tile]) => [direction, changed(tile, id, change)]),
+    )
+  return {
+    ...system,
+    ...(system.branches && { branches: within(system.branches) }),
+    ...(system.leaves && { leaves: within(system.leaves) }),
+  }
+}
+
+/** Software Engineering with its rings changed. */
+const inEngineering = (system: TileNode, change: (tile: TileNode) => TileNode) =>
+  changed(system, engineering, change)
+
+/** Tooling, written under Software Engineering, west, as the agent or the user writes it. */
+const withTooling = (system: TileNode, at: Direction = 6, title = tooling.title) =>
+  inEngineering(system, (tile) => ({
+    ...tile,
+    branches: { ...tile.branches, [at]: { ...tooling, title } },
+  }))
+
+/** Principles' preview, as the agent rewrites it. */
+const principlesEdited = (system: TileNode) =>
+  changed(system, 'principles', (tile) => ({ ...tile, preview: 'What I build on, in five words.' }))
+
+/** A free slot of Software Engineering's ring. */
+const isSlot = (slot: { parent: TileNode; direction: Direction }, at: Direction) =>
+  slot.parent.id === engineering && slot.direction === at
+
+/** Marks by Tile, from a table; none for the others. */
+const byTile =
+  (marks: Record<string, TileMark | undefined>) =>
+  (id: string): TileMark | undefined =>
+    marks[id]
+
+/**
+ * The agent's Turn as the canvas shows it, step by step, as the chat's end tells it: 1 to 3 it reads
+ * Software Engineering, Projects and Principles, each glinting once, while its light runs round
+ * Software Engineering, where the Turn works; 4 it writes Tooling, breathing in its slot; 5 Tooling is
+ * there; 6 it edits Principles; 7 the Turn is over. What it changed keeps its dot until opened
+ * (`seen`); a Key editing Notes meanwhile marks it hollow.
+ */
+export function turnOnCanvas(step: number, seen: ReadonlySet<string>, keyed: boolean) {
+  const system =
+    step >= 6 ? principlesEdited(withTooling(ulysse)) : step >= 5 ? withTooling(ulysse) : ulysse
+  const read = ['', engineering, 'projects', 'principles'][step]
+  const written = ({ 5: 'tooling', 6: 'principles' } as Record<number, string | undefined>)[step]
+  const unseen = (id: string, from: number) => step >= from && !seen.has(id)
+  const marks: CanvasMarks = {
+    tile: (id) => {
+      const mark: TileMark = {
+        ...(id === engineering && step >= 1 && step <= 6 && { working: true }),
+        ...((id === read || id === written) && { glint: { by: 'agent', key: step } }),
+        ...(((id === 'tooling' && unseen(id, 5)) || (id === 'principles' && unseen(id, 6))) && {
+          unseen: 'agent',
+        }),
+        ...(id === 'notes' && keyed && { glint: { by: 'key', key: 'key' } }),
+        ...(id === 'notes' && keyed && !seen.has(id) && { unseen: 'key' }),
+      }
+      return Object.keys(mark).length === 0 ? undefined : mark
+    },
+    slot: (slot): Standing | undefined =>
+      step === 4 && isSlot(slot, 6)
+        ? { id: tooling.id, look: { kind: 'draft', words: { title: tooling.title } } }
+        : undefined,
+  }
+  return { system, marks }
+}
+
+/** How the agent's Proposal stands, as the chat decides it. */
+export type ProposalFate = 'open' | 'accepted' | 'discarded'
+
+/**
+ * The agent's Proposal on Software Engineering, as the canvas shows it: open, Tooling a ghost west,
+ * Principles' rim dashed for its edit, Notes' for its move with an arc to the south-west, the reading
+ * list stepped back for its deletion; accepted, all of it there, your amber glinting on what changed;
+ * discarded, or undone, the System as it was.
+ */
+export function proposalOnCanvas(fate: ProposalFate, undone: boolean) {
+  if (fate === 'discarded' || undone) return { system: ulysse, marks: {} satisfies CanvasMarks }
+  if (fate === 'accepted') {
+    const system = inEngineering(principlesEdited(withTooling(ulysse)), (tile) => {
+      const { leaves = {} } = tile
+      // Notes, east, goes south-west, and the reading list, numbered 2, is gone.
+      const notes = leaves[3]
+      const kept = Object.entries(leaves).filter(([at]) => at !== '2' && at !== '3')
+      return { ...tile, leaves: { ...Object.fromEntries(kept), ...(notes && { 5: notes }) } }
+    })
+    const landed = new Set(['tooling', 'principles', 'notes'])
+    return {
+      system,
+      marks: {
+        tile: (id: string): TileMark | undefined =>
+          landed.has(id) ? { glint: { by: 'human', key: 'accepted' } } : undefined,
+      } satisfies CanvasMarks,
+    }
+  }
+  return {
+    system: ulysse,
+    marks: {
+      tile: byTile({
+        principles: { proposed: 'edit' },
+        notes: { proposed: 'move' },
+        'reading-list': { proposed: 'delete' },
+      }),
+      slot: (slot): Standing | undefined =>
+        isSlot(slot, 6)
+          ? { id: tooling.id, look: { kind: 'ghost', words: { title: tooling.title } } }
+          : undefined,
+      arcs: [{ from: 'notes', to: { parent: engineering, direction: 5 } }],
+    } satisfies CanvasMarks,
+  }
+}
+
+/** A tile written in the tile widget, under Software Engineering: where it goes and its title. */
+export interface Draft {
+  place: Direction
+  title: string
+}
+
+/**
+ * A tile being written in the tile widget, as the canvas shows it: in its slot under Software
+ * Engineering, breathing in your amber, its title as typed; written, it is there, glinting once.
+ */
+export function draftOnCanvas(draft: Draft, written: number) {
+  const title = draft.title.trim() === '' ? m.tile_untitled() : draft.title
+  if (written > 0) {
+    return {
+      system: withTooling(ulysse, draft.place, title),
+      marks: {
+        tile: byTile({ tooling: { glint: { by: 'human', key: written } } }),
+      } satisfies CanvasMarks,
+    }
+  }
+  return {
+    system: ulysse,
+    marks: {
+      slot: (slot): Standing | undefined =>
+        isSlot(slot, draft.place)
+          ? { id: tooling.id, look: { kind: 'draft', voice: 'human', words: { title } } }
+          : undefined,
+    } satisfies CanvasMarks,
+  }
+}
+
+/** The free places under Software Engineering a new Branch may take, as the canvas seats its ring. */
+export const freeInEngineering: readonly Direction[] = [5, 6]
+
+/** A tile carried: which, and where the pointer is on the page, once off the frame. */
+interface Carry {
+  id: string
+  title: string
+  at: Point | undefined
+}
+
+/**
+ * Software Engineering's frame, each tile carried off it under a mouse or a pen: it lifts and follows
+ * the pointer, then, once off the frame, the page carries it, for the composer to name where it is let
+ * go; let go anywhere, it settles back home. `onCarry` tells the tile carried, and nothing once let
+ * go. A finger never carries a tile, whose way is the menu's or `@`.
+ */
+export function CarryFrame({ onCarry }: { onCarry: (title: string | undefined) => void }) {
+  const svg = useRef<SVGSVGElement>(null)
+  const scale = useScale(svg, { width: frameWidth, height: frameHeight })
+  const units = unitsIn(svg)
+  const { dragged, press } = useDrag(units)
+  const [carry, setCarry] = useState<Carry>()
+  const center: Hex = { center: { x: 0, y: 0 }, radius: frameRadius }
+  const tiles: { id: string; hex: Hex; look: TileLook }[] = [
+    {
+      id: engineering,
+      hex: center,
+      look: { kind: 'branch', words: { title: 'Software Engineering' } },
+    },
+    ...directions.flatMap((direction) => {
+      const member = ring[direction]
+      return member === undefined
+        ? []
+        : [{ id: member.tile.id, hex: neighbor(center, direction), look: member.look }]
+    }),
+  ]
+  return (
+    <>
+      <svg
+        ref={svg}
+        viewBox={`${String(-frameWidth / 2)} ${String(-frameHeight / 2)} ${String(frameWidth)} ${String(frameHeight)}`}
+        className="w-[min(30rem,calc(100vw-3rem))] touch-pan-y select-none"
+      >
+        {directions
+          .filter((direction) => ring[direction] === undefined)
+          .map((direction) => (
+            <Slot
+              key={direction}
+              hex={{ ...neighbor(center, direction), radius: frameRadius * gap }}
+            />
+          ))}
+        {tiles.map(({ id, hex, look }) => {
+          const carried = carry?.id === id
+          const offset = carried && carry.at === undefined ? dragged?.offset : undefined
+          return (
+            <g
+              key={id}
+              className={carried && carry.at !== undefined ? 'opacity-40' : undefined}
+              style={
+                offset && { transform: `translate(${String(offset.x)}px, ${String(offset.y)}px)` }
+              }
+              onPointerDown={(event) => {
+                const title = look.words.title
+                press(event, {
+                  onStart: () => {
+                    setCarry({ id, title, at: undefined })
+                    onCarry(title)
+                  },
+                  onMove: (moved) => {
+                    setCarry({ id, title, at: offFrame(svg.current, moved.at) })
+                  },
+                  onDrop: () => {
+                    setCarry(undefined)
+                    onCarry(undefined)
+                  },
+                })
+              }}
+            >
+              <Lifted hex={hex} lifted={carried}>
+                <Tile
+                  hex={{ ...hex, radius: frameRadius * gap }}
+                  {...look}
+                  {...(id === engineering && { place: 'center' as const })}
+                  scale={scale}
+                />
+              </Lifted>
+            </g>
+          )
+        })}
+      </svg>
+      {carry?.at === undefined ? null : <Carried title={carry.title} at={carry.at} />}
+    </>
+  )
+}
+
+/**
+ * Where the pointer is on the page, from where the drag is in the frame's units, once it has left the
+ * frame; none while it is over it.
+ */
+function offFrame(svg: SVGSVGElement | null, at: Point): Point | undefined {
+  const toPage = svg?.getScreenCTM()
+  const box = svg?.getBoundingClientRect()
+  if (toPage == null || box === undefined) return undefined
+  const { x, y } = new DOMPoint(at.x, at.y).matrixTransform(toPage)
+  const inside = x >= box.left && x <= box.right && y >= box.top && y <= box.bottom
+  return inside ? undefined : { x, y }
+}
+
+/**
+ * The menu of each tile and free slot on the fixture canvas, acting through the chat: the agent's
+ * lines hand `onAsk` the tile to name first and, for a free slot, where the new tile would go; every
+ * other line, which home runs in its widget at the conversation's foot, goes to `elsewhere` in its
+ * own words. The lines that go somewhere are the canvas's.
+ */
+export function actingThroughChat({
+  onAsk,
+  elsewhere,
+}: {
+  onAsk: (title: string, where?: string) => void
+  elsewhere: (said: string) => void
+}): Pick<ComponentProps<typeof Canvas>, 'acting' | 'emptySlots'> {
+  return {
+    emptySlots: (slot) => ({
+      label: m.tile_menu_add_at({
+        direction: directionName(slot.direction),
+        hub: slot.parent.title,
+      }),
+      onSelect: () => {
+        elsewhere(m.tile_menu_add())
+      },
+    }),
+    acting: {
+      tile: (hex) => {
+        const subject = subjectOfHex(hex)
+        if (subject === undefined) return undefined
+        return {
+          subject,
+          onAct: (act, said) => {
+            if (act.verb === 'ask-agent') onAsk(hex.tile.title)
+            else elsewhere(said)
+          },
+        }
+      },
+      slot: (slot) => ({
+        subject: { kind: 'slot', at: slot.direction, parent: slot.parent.title },
+        onAct: (act, said) => {
+          if (act.verb === 'ask-agent') onAsk(slot.parent.title, directionName(slot.direction))
+          else elsewhere(said)
+        },
+      }),
+    },
+  }
+}

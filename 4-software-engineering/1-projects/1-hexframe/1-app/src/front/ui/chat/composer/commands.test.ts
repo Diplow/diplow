@@ -10,6 +10,8 @@ import {
   commandsMatching,
   commandTypingAt,
   languageNamed,
+  namedAt,
+  namedFirst,
   openingCommand,
 } from './commands'
 
@@ -113,5 +115,29 @@ describe('languageNamed', () => {
   it('names none for nothing, or a language hexframe is not in', () => {
     expect(languageNamed('')).toBeUndefined()
     expect(languageNamed('deutsch')).toBeUndefined()
+  })
+})
+
+describe('a tile named from the canvas', () => {
+  it('lands at the caret, a space before it where a word ends there, the caret after it', () => {
+    expect(namedAt('', 0, 'Projects')).toEqual({ value: '@Projects ', caret: 10 })
+    expect(namedAt('Look at', 7, 'Projects')).toEqual({ value: 'Look at @Projects ', caret: 18 })
+    expect(namedAt('Look at  and', 8, 'Notes')).toEqual({ value: 'Look at @Notes and', caret: 15 })
+  })
+
+  it('opens the field to ask the agent about it, what was written kept after it', () => {
+    expect(namedFirst('', 'Projects')).toEqual({ value: '@Projects ', caret: 10 })
+    expect(namedFirst('tidy it', 'Projects')).toEqual({ value: '@Projects tidy it', caret: 10 })
+    expect(namedFirst('', 'Software Engineering', 'a new tile, west: ')).toEqual({
+      value: '@Software Engineering a new tile, west: ',
+      caret: 40,
+    })
+  })
+
+  it('names it once when the field opens with it already', () => {
+    expect(namedFirst('@Projects tidy it', 'Projects')).toEqual({
+      value: '@Projects tidy it',
+      caret: 10,
+    })
   })
 })

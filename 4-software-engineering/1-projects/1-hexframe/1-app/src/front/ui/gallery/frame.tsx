@@ -50,7 +50,10 @@ export function GalleryTier({ tier, children }: { tier: Tier; children?: ReactNo
   )
 }
 
-/** A piece's section: its name, what it is for, what it is made of and where it is used, its states. */
+/**
+ * A piece's section: its name, what it is for, what it is made of, or a crossing's two ends, and where
+ * it is used, then its states.
+ */
 export function GallerySection({ name, children }: { name: PieceName; children: ReactNode }) {
   const piece = pieceNamed(name)
   const drawnUnder = useContext(TierContext)
@@ -66,7 +69,14 @@ export function GallerySection({ name, children }: { name: PieceName; children: 
       <div className="grid gap-2">
         <h3 className="font-mono text-lg font-semibold">{name}</h3>
         <p className="max-w-prose text-sm text-muted-foreground">{piece.note()}</p>
-        <PieceLinks label={m.design_system_made_of()} names={piece.madeOf} />
+        {'ends' in piece ? (
+          <>
+            <PieceLinks label={m.design_system_chat_end()} names={piece.ends.chat} />
+            <PieceLinks label={m.design_system_canvas_end()} names={piece.ends.canvas} />
+          </>
+        ) : (
+          <PieceLinks label={m.design_system_made_of()} names={piece.madeOf} />
+        )}
         <PieceLinks label={m.design_system_used_in()} names={usedIn(name)} />
       </div>
       <div className="flex flex-wrap items-start gap-8">{children}</div>

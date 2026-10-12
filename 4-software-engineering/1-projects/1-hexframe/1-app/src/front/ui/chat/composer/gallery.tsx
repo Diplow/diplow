@@ -2,7 +2,7 @@
 // demo (`demo.ts`) stands in for the state hook a real page has, on a fixture System; what is sent,
 // run or stopped shows in a toast, and a language picked goes to it, as on a real page.
 import { cn } from 'cn'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 import { assertIsLocale, localizeHref } from '#/paraglide/runtime'
@@ -11,7 +11,7 @@ import { toast } from '../../atoms/Toaster'
 import { GallerySection, GalleryState } from '../../gallery/frame'
 import { anchorOf } from '../../gallery/pieces'
 import { Composer } from './Composer'
-import { marksOf, modeChoices, picked, typingAt } from './demo'
+import { typingAt, useComposerDemo } from './demo'
 
 export function ComposerGallery() {
   return (
@@ -83,52 +83,24 @@ function Specimen({
   unavailable = false,
   className,
 }: SpecimenProps) {
-  const field = useRef<HTMLTextAreaElement>(null)
-  const [value, setValue] = useState(initial)
-  const [caret, setCaret] = useState(initial.length)
-  const [left, setLeft] = useState(!listed)
-  const [mode, setMode] = useState('ask')
+  const { value, edit, composer } = useComposerDemo({
+    initial,
+    listed,
+    onLanguage: (language) => {
+      const here = `${window.location.pathname}${window.location.search}#${anchorOf('Composer')}`
+      window.location.assign(localizeHref(here, { locale: assertIsLocale(language) }))
+    },
+  })
   const [sending, setSending] = useState(sendingAtFirst)
   const [running, setRunning] = useState<{ stopping: boolean } | undefined>(
     runningAtFirst ? { stopping: false } : undefined,
   )
-  const typing = left ? undefined : typingAt(value, caret)
   // A specimen that lists at first is tall enough for its list to rise into.
   const [tall] = useState(listed && typingAt(initial, initial.length) !== undefined)
-  const edit = (next: string, at: number) => {
-    const element = field.current
-    if (element !== null) {
-      // Set on the element first, so React finds it as it is and leaves the caret be.
-      element.value = next
-      element.setSelectionRange(at, at)
-    }
-    setValue(next)
-    setCaret(at)
-    setLeft(false)
-  }
   return (
     <div className={cn(column, tall && 'h-104', className)}>
       <Composer
-        fieldRef={field}
-        value={value}
-        onChange={(next, at) => {
-          setValue(next)
-          setCaret(at)
-          setLeft(false)
-        }}
-        marks={marksOf(value)}
-        listing={typing?.listing}
-        onPick={(row) => {
-          if (typing === undefined) return
-          const pick = picked(value, caret, typing, row)
-          if ('language' in pick) {
-            const here = `${window.location.pathname}${window.location.search}#${anchorOf('Composer')}`
-            window.location.assign(localizeHref(here, { locale: assertIsLocale(pick.language) }))
-          } else edit(pick.value, pick.caret)
-        }}
-        onLeave={() => {
-          setLeft(true)
-        }}
+        {...composer}
         onSend={() => {
           const sent = value.trim()
           setSending(true)
@@ -156,7 +128,6 @@ function Specimen({
         }
         waiting={waiting}
         unavailable={unavailable}
-        mode={{ choices: modeChoices(), on: mode, choose: setMode }}
       />
     </div>
   )

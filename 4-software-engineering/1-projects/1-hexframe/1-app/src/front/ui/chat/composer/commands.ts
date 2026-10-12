@@ -396,3 +396,28 @@ export function commandPicked(
   if (command === undefined) return { value, caret }
   return put(value, caret, typing, `/${command.name()} ${command.takes === 'tile' ? '@' : ''}`)
 }
+
+/**
+ * The field with a tile named at the caret, as a pick puts it, a space before it where a word ends
+ * there: a tile carried from the canvas and let go over the composer (HEX-108).
+ */
+export function namedAt(value: string, caret: number, title: string) {
+  const before = value.slice(0, caret)
+  const inserted = `${before === '' || /\s$/.test(before) ? '' : ' '}@${title} `
+  return {
+    value: `${before}${inserted}${value.slice(caret).replace(/^ /, '')}`,
+    caret: caret + inserted.length,
+  }
+}
+
+/**
+ * The field with a tile named first, so the next Turn works there, `then` after it and what was
+ * written kept: a tile's menu asking the agent through the chat (HEX-108). A field that opens with
+ * that tile already keeps it.
+ */
+export function namedFirst(value: string, title: string, then = '') {
+  const named = `@${title} `
+  const kept = value.startsWith(named) ? value.slice(named.length) : value
+  const opening = `${named}${then}`
+  return { value: `${opening}${kept}`, caret: opening.length }
+}

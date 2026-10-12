@@ -4,7 +4,9 @@
 // Below Tailwind's `sm`, measured on the screen itself, so a specimen on /design-system folds as a phone
 // does, one side is in front: the chat, the canvas showing through at its top, or the canvas, the
 // chat's composer kept at its foot. A handle at the seam moves between them, by a tap, a drag, or the
-// keyboard; which side is in front is the caller's, as the canvas's view is.
+// keyboard; which side is in front is the caller's, as the canvas's view is. A crossing that brings the
+// canvas forward is the caller's too: a hand on the canvas meanwhile takes it, the focus the chat lost
+// comes back with it, and what it showed is said to a screen reader (HEX-108).
 import { cn } from 'cn'
 import {
   useEffect,
@@ -38,7 +40,10 @@ interface ScreenProps {
   composer: ReactNode
   /** On a phone, the side in front; a wide screen shows both. */
   front: Side
+  /** The seam turned it, or, on a phone, a hand took the canvas in front: it stays. */
   onFrontChange: (front: Side) => void
+  /** What the last crossing showed on the other side, said to a screen reader. */
+  said?: string | undefined
   className?: string
 }
 
@@ -85,12 +90,14 @@ export function Screen({
   composer,
   front,
   onFrontChange,
+  said,
   className,
 }: ScreenProps) {
   const screen = useRef<HTMLDivElement>(null)
   const scroller = useRef<HTMLDivElement>(null)
   const content = useRef<HTMLDivElement>(null)
   const foot = useRef<HTMLDivElement>(null)
+  const chat = useRef<HTMLElement>(null)
   useLatestShown(scroller, content, foot)
   useComposerHeight(screen, foot)
   const chatInFront = front === 'chat'
@@ -100,6 +107,8 @@ export function Screen({
   const toCanvas = useRef<HTMLButtonElement>(null)
   const toChat = useRef<HTMLButtonElement>(null)
   const phone = usePhone(screen, toCanvas)
+  // Only a phone's chat goes inert behind the canvas; a wide one keeps its focus as it is.
+  useFocusKept(chat, !phone || chatInFront)
   const move = (to: Side) => () => {
     flushSync(() => {
       onFrontChange(to)
@@ -125,6 +134,7 @@ export function Screen({
       {/* The chat comes first, so the keyboard reaches the conversation and the composer first. */}
       <Veil chatInFront={chatInFront} />
       <section
+        ref={chat}
         aria-label={m.screen_chat()}
         className={cn(
           'pointer-events-none absolute inset-0 z-20 flex flex-col',
@@ -175,11 +185,50 @@ export function Screen({
         aria-label={m.screen_canvas()}
         inert={phone && chatInFront}
         className="absolute inset-0 z-0 flex @max-wide:bottom-[calc(var(--screen-composer,0px)+var(--screen-seam))] @wide:left-(--screen-edge)"
+        // On a phone, a hand on the canvas a crossing brought forward takes it: it stays in front.
+        {...(phone &&
+          !chatInFront && {
+            onPointerDownCapture: () => {
+              onFrontChange('canvas')
+            },
+            onKeyDownCapture: () => {
+              onFrontChange('canvas')
+            },
+          })}
       >
         {canvas}
       </section>
+      <p aria-live="polite" className="sr-only">
+        {said}
+      </p>
     </div>
   )
+}
+
+/**
+ * The focus the chat held when the canvas came forward over it, given back with it: the chat went
+ * inert and the focus with it, so a crossing that gives the chat back leaves the keyboard where it
+ * was. A focus that went elsewhere meanwhile, the seam's or the canvas's, stays.
+ */
+function useFocusKept(chat: RefObject<HTMLElement | null>, chatShown: boolean) {
+  const kept = useRef<HTMLElement | null>(null)
+  useEffect(() => {
+    const section = chat.current
+    if (section === null) return undefined
+    const onFocus = (event: FocusEvent) => {
+      if (event.target instanceof HTMLElement) kept.current = event.target
+    }
+    section.addEventListener('focusin', onFocus)
+    return () => {
+      section.removeEventListener('focusin', onFocus)
+    }
+  }, [chat])
+  useEffect(() => {
+    const lost = document.activeElement === null || document.activeElement === document.body
+    if (chatShown && lost && kept.current?.isConnected === true) {
+      kept.current.focus({ preventScroll: true })
+    }
+  }, [chatShown])
 }
 
 /** How close to its foot the conversation still reads as at its foot, in px. */
