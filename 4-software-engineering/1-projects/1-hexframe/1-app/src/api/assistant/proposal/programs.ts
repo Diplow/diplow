@@ -151,15 +151,17 @@ const forSession = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, 
 export const setMode = ({ mode }: { readonly mode: Mode }) =>
   forSession((accountId) => transactional(Assistant.setMode(accountId, mode)))
 
+/** An open Proposal as the page compares it, by its id and how many writes it holds. */
+const counted = (open: OpenProposal) => ({ id: open.id, drafts: open.drafts.length })
+
 /**
- * The Account's Conversation as the page follows it: its Mode, and its open Proposal by its id and how
- * many writes it holds, none when none is open, which the poll and each day of the Conversation
- * answer, so a draft reads the Conversation again. One read.
+ * The Account's Conversation as the page polls it: its Mode, and its open Proposal by its id and how
+ * many writes it holds, none when none is open, so a draft reads the Conversation again. One read.
  */
 export const conversationNow = (accountId: string) =>
   Effect.map(Assistant.conversationState(accountId), ({ mode, open }) => ({
     mode,
-    ...(open !== undefined && { proposal: { id: open.id, drafts: open.drafts.length } }),
+    ...(open !== undefined && { proposal: counted(open) }),
   }))
 
 /**
@@ -173,8 +175,7 @@ export const proposalNow = (accountId: string) =>
     open === undefined
       ? Effect.succeed(undefined)
       : Effect.map(batchOf(open), (batch) => ({
-          id: open.id,
-          drafts: open.drafts.length,
+          ...counted(open),
           writes: batch.map((batched) => encodedBatched(batched)),
         })),
   )

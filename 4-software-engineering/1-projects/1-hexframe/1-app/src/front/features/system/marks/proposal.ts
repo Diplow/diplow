@@ -22,7 +22,7 @@ interface Ghost {
 export interface Proposed {
   /** Each Tile it would create, by the id it would make. */
   readonly ghosts: ReadonlyMap<string, Ghost>
-  /** What it would do to each Tile already there, by its id: its last word on it wins, a deletion over all. */
+  /** What it would do to each Tile already there, by its id: the weightiest change wins, a deletion over a move over an edit. */
   readonly changes: ReadonlyMap<string, ProposedChange>
   /** Each Tile already there it would move, by its id: where it would land. */
   readonly moves: ReadonlyMap<string, { readonly parent: string; readonly slot: Slot }>

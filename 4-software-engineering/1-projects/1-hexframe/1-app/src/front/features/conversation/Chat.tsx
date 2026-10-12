@@ -55,7 +55,7 @@ interface ChatTimelineProps {
   /** Centers the canvas on a Tile named. */
   onCenter: (tile: string) => void
   /** What a Tile named says in its card, and its card open or shut, which the canvas lights. */
-  pointing?: ComponentProps<typeof Timeline>['pointing']
+  pointing: ComponentProps<typeof Timeline>['pointing']
   /** The Turn running, as the page's poll last saw it. */
   turn: LiveTurn | undefined
   /** Posts a refused Message again, after the navigation it follows. */
@@ -131,7 +131,7 @@ interface ChatComposerProps {
   /** The Conversation's Mode, as the page's poll last saw it; none before its first answer. */
   mode: Mode | undefined
   /** The `@` list's row the user is on, a Tile's by its id, or none: the canvas lights it. */
-  onPoint?: ((row: string | undefined) => void) | undefined
+  onPoint: (row: string | undefined) => void
 }
 
 export function ChatComposer({ onSend, turn, mode, onPoint }: ChatComposerProps) {

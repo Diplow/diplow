@@ -51,7 +51,6 @@ const proposal = (
 
 describe('touchesOf, the changes made since the page opened', () => {
   const known = new Set(['old'])
-  const none = new Set<string>()
 
   it('touches each Tile a change by the agent or a Key names, but those the page held first', () => {
     const entries = [
@@ -61,7 +60,7 @@ describe('touchesOf, the changes made since the page opened', () => {
       change('mine', 'd', you),
       change('swap', 'e', agent, 'f'),
     ]
-    expect(touchesOf(entries, { known, accepted: none })).toEqual([
+    expect(touchesOf(entries, { known, accepted: [] })).toEqual([
       { tile: 'b', by: 'agent', key: 'new' },
       { tile: 'c', by: 'key', key: 'keyed' },
       { tile: 'e', by: 'agent', key: 'swap' },
@@ -69,16 +68,23 @@ describe('touchesOf, the changes made since the page opened', () => {
     ])
   })
 
-  it("makes the user's own acceptance of a Proposal theirs, recorded as the agent's", () => {
-    const entries = [change('landed', 'b', agent)]
-    expect(touchesOf(entries, { known, accepted: new Set(['b']) })).toEqual([
+  it("makes the change the user's acceptance made theirs, once, a later one by the agent its own", () => {
+    const entries = [
+      change('before', 'b', agent),
+      proposal('seen', 'accepted', ['b']),
+      change('landed', 'b', agent),
+      change('later', 'b', agent),
+    ]
+    const accepted = acceptedOf(entries, new Set(['seen']))
+    expect(touchesOf(entries, { known: new Set(['before']), accepted })).toEqual([
       { tile: 'b', by: 'human', key: 'landed' },
+      { tile: 'b', by: 'agent', key: 'later' },
     ])
   })
 })
 
-describe('acceptedOf, the Tiles an acceptance the page saw changed', () => {
-  it('reads the Proposals accepted, not undone, that the page saw open', () => {
+describe('acceptedOf, the changes an acceptance the page saw made', () => {
+  it('reads the Proposals accepted, not undone, that the page saw open, each change by its place', () => {
     const entries = [
       proposal('seen', 'accepted', ['a', 'b']),
       proposal('before', 'accepted', ['c']),
@@ -86,7 +92,10 @@ describe('acceptedOf, the Tiles an acceptance the page saw changed', () => {
       proposal('waiting', 'open', ['e']),
     ]
     const watched = new Set(['seen', 'undone', 'waiting'])
-    expect([...acceptedOf(entries, watched)]).toEqual(['a', 'b'])
+    expect(acceptedOf(entries, watched)).toEqual([
+      { after: 0, change: 'TileEdited:a' },
+      { after: 0, change: 'TileEdited:b' },
+    ])
   })
 })
 

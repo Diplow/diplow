@@ -7,20 +7,14 @@
 // and deletions on the Tiles' rims, each move its arc. And what a Tile named in the chat says in its
 // card, as the canvas's card says it. Pure: `useMarksState` holds what changes.
 import type { Entry } from '#/domains/assistant/entities'
-import {
-  type Direction,
-  isContextSlot,
-  isLeafSlot,
-  type Slot,
-  type System,
-} from '#/domains/mapping/entities'
-import { m } from '#/paraglide/messages'
+import type { Direction, Slot, System } from '#/domains/mapping/entities'
 import type { CanvasMarks, SlotStanding } from '#/front/ui/canvas/Canvas'
 import type { By, TileMark } from '#/front/ui/canvas/tile/marks/mark'
 import { placeOf, type Subject } from '#/front/ui/canvas/tile/menu/verbs'
 import type { MentionProps } from '#/front/ui/chat/text/Mention'
 
-import { standsFor } from '../tree'
+import { standsFor, titleOf } from '../tree'
+import { placeOf as seatOf } from '../widget/place'
 import type { Proposed } from './proposal'
 
 /** A light rising once on a Tile, in the colour of who touched it, `key` rising it again. */
@@ -37,41 +31,59 @@ export interface Touch {
 }
 
 /**
- * The Tiles the user's acceptance of a Proposal changed: those of each accepted Proposal not undone
- * that the page saw open (`watched`), as its Entry names them.
+ * A change the user's acceptance of a Proposal made: the Proposal's Entry, by its place among
+ * today's, and the change, by Mapping's verb and the Tile it names, as the Proposal drafted it.
+ */
+interface Landing {
+  readonly after: number
+  readonly change: string
+}
+
+/** A change, as a Proposal drafted it and as a Change Entry records it: its verb, then its Tile. */
+const changeOf = ({ verb, tile }: { verb: string; tile: { id: string } }) => `${verb}:${tile.id}`
+
+/**
+ * The changes the user's acceptance made: each change of each accepted Proposal not undone that the
+ * page saw open (`watched`), which the Change Entries recorded after its Entry answer one for one.
  */
 export function acceptedOf(
   entries: ReadonlyArray<Entry>,
   watched: ReadonlySet<string>,
-): ReadonlySet<string> {
-  return new Set(
-    entries.flatMap((entry) =>
-      entry._tag === 'Proposal' &&
-      entry.fate === 'accepted' &&
-      entry.undone !== true &&
-      watched.has(entry.proposal)
-        ? entry.changes.flatMap(({ tile, other }) => [tile.id, ...(other ? [other.id] : [])])
-        : [],
-    ),
+): ReadonlyArray<Landing> {
+  return entries.flatMap((entry, after) =>
+    entry._tag === 'Proposal' &&
+    entry.fate === 'accepted' &&
+    entry.undone !== true &&
+    watched.has(entry.proposal)
+      ? entry.changes.map((change) => ({ after, change: changeOf(change) }))
+      : [],
   )
 }
 
 /**
  * The changes to the System recorded since the page read today first (`known`, the Entries it held
- * then), by the agent or a Key, each Tile they name touched; the user's own are left out, but those
- * their acceptance of a Proposal made, recorded as the agent's, which are theirs (`accepted`).
+ * then), by the agent or a Key, each Tile they name touched; the user's own are left out. A change
+ * the user's acceptance of a Proposal made is recorded as the agent's: the first Change by the
+ * Assistant after the Proposal's Entry that matches one of its changes is theirs (`accepted`), and
+ * each of its changes is answered once, so a later change by the agent to the same Tile stays the
+ * agent's.
  */
 export function touchesOf(
   entries: ReadonlyArray<Entry>,
-  { known, accepted }: { known: ReadonlySet<string>; accepted: ReadonlySet<string> },
+  { known, accepted }: { known: ReadonlySet<string>; accepted: ReadonlyArray<Landing> },
 ): Touch[] {
-  return entries.flatMap((entry) => {
-    if (entry._tag !== 'Change' || known.has(entry.id) || entry.actor._tag === 'You') return []
+  const owed = [...accepted]
+  return entries.flatMap((entry, at) => {
+    if (entry._tag !== 'Change' || entry.actor._tag === 'You') return []
+    const landed =
+      entry.actor._tag === 'Assistant'
+        ? owed.findIndex(({ after, change }) => after < at && change === changeOf(entry))
+        : -1
+    if (landed !== -1) owed.splice(landed, 1)
+    if (known.has(entry.id)) return []
+    const by: By = entry.actor._tag === 'Key' ? 'key' : landed === -1 ? 'agent' : 'human'
     const tiles = [entry.tile.id, ...(entry.other === undefined ? [] : [entry.other.id])]
-    return tiles.map((tile): Touch => {
-      const by: By = entry.actor._tag === 'Key' ? 'key' : accepted.has(tile) ? 'human' : 'agent'
-      return { tile, by, key: entry.id }
-    })
+    return tiles.map((tile): Touch => ({ tile, by, key: entry.id }))
   })
 }
 
@@ -91,18 +103,16 @@ export interface Marking {
   readonly proposed?: Proposed | undefined
 }
 
-/** The Direction a slot stands in under its parent: a Context slot's, negated. */
-function directionOf(slot: Slot): Direction {
-  if (isLeafSlot(slot)) return slot.leaf
-  return (isContextSlot(slot) ? -slot : slot) as Direction
-}
+/** The Direction a slot stands in under its parent, as the tile widget reads it. */
+const directionOf = (slot: Slot): Direction => seatOf(slot).place
 
 /** A Tile's mark from what the page holds, none when nothing touches it. */
 function tileMarkOf(marking: Marking, id: string): TileMark | undefined {
   const { arrived, working, touches = [], opened, proposed } = marking
   const last = touches.findLast((touch) => touch.tile === id)
   const unseen = touches.findLast(
-    (touch) => touch.tile === id && touch.by !== 'human' && opened?.has(touch.key) !== true,
+    (touch): touch is Touch & { by: Exclude<By, 'human'> } =>
+      touch.tile === id && touch.by !== 'human' && opened?.has(touch.key) !== true,
   )
   const glint =
     arrived?.id === id
@@ -112,7 +122,7 @@ function tileMarkOf(marking: Marking, id: string): TileMark | undefined {
   const mark: TileMark = {
     ...(working === id && { working: true }),
     ...(glint && { glint }),
-    ...(unseen && unseen.by !== 'human' && { unseen: unseen.by }),
+    ...(unseen && { unseen: unseen.by }),
     ...(change && { proposed: change }),
   }
   return Object.keys(mark).length === 0 ? undefined : mark
@@ -143,13 +153,10 @@ export function canvasMarksOf(marking: Marking): CanvasMarks {
   }
 }
 
-/** A Title as the chat and the canvas say it: an untitled Tile, the Root before its name, "Untitled". */
-const named = (title: string) => (title === '' ? m.system_untitled() : title)
-
-/** A Tile's kind and place, by its slot under its parent. */
+/** A Tile's kind and place, by its slot under its parent, as the tile widget reads a slot. */
 function seated(slot: Slot, parent: string): Subject {
-  const kind = isContextSlot(slot) ? 'context' : isLeafSlot(slot) ? 'leaf' : 'branch'
-  return { kind, title: '', at: directionOf(slot), parent }
+  const { kind, place } = seatOf(slot)
+  return { kind, title: '', at: place, parent }
 }
 
 /**
@@ -162,9 +169,9 @@ export function cardOf(
   proposed: Proposed | undefined,
   id: string,
 ): MentionProps['card'] {
-  const titleOf = (tile: string) => {
+  const parentTitle = (tile: string) => {
     const held = tile === system.root.id ? system.root : system.tiles[tile]
-    return named((held?._tag === 'Tile' ? held.title : proposed?.ghosts.get(tile)?.title) ?? '')
+    return titleOf((held?._tag === 'Tile' ? held.title : proposed?.ghosts.get(tile)?.title) ?? '')
   }
   const described = (preview: string) => (preview === '' ? {} : { description: preview })
   if (id === system.root.id) {
@@ -174,9 +181,15 @@ export function cardOf(
   }
   const tile = system.tiles[id]
   if (tile?._tag === 'Tile') {
-    return { place: placeOf(seated(tile.slot, titleOf(tile.parent))), ...described(tile.preview) }
+    return {
+      place: placeOf(seated(tile.slot, parentTitle(tile.parent))),
+      ...described(tile.preview),
+    }
   }
   const ghost = proposed?.ghosts.get(id)
   if (ghost === undefined) return undefined
-  return { place: placeOf(seated(ghost.slot, titleOf(ghost.parent))), ...described(ghost.preview) }
+  return {
+    place: placeOf(seated(ghost.slot, parentTitle(ghost.parent))),
+    ...described(ghost.preview),
+  }
 }

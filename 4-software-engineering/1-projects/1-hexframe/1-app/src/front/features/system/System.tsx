@@ -40,8 +40,8 @@ interface SystemProps {
   onSearchChange: (change: SearchChange) => void
   /** Exports a Tile, which the chat shows. */
   exporting: { start: (exported: Exported) => void; pending: boolean }
-  /** Who touches what the canvas draws, as the page holds it (`marks/`); without it, nobody does. */
-  marks?: CanvasMarks | undefined
+  /** Who touches what the canvas draws, as the page holds it (`marks/`). */
+  marks: CanvasMarks
   className?: string
 }
 

@@ -233,8 +233,9 @@ function SignedIn() {
     void navigate({ search: (current) => ({ ...withView(current, view), ...withHelp(undefined) }) })
     publish(new Navigated({ gesture: 'center', tile }))
     marks.actions.arrive(tile)
-    const title = findTile(tree, tile)?.title ?? ''
-    turning.cross(m.crossing_phone_said({ title: title === '' ? m.system_untitled() : title }))
+    // The canvas's tree names an untitled Root already.
+    const title = findTile(tree, tile)?.title
+    turning.cross(title === undefined ? undefined : m.crossing_phone_said({ title }))
   }
   // What the canvas shows: Help while its widget is open, else the System. The URL's view is the
   // canvas's, so while Help has it the System's view is its Root, which a Message is sent from.
