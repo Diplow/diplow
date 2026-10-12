@@ -105,7 +105,7 @@ export function HoverCard({
             // The card is for the eye: what it says, a screen reader hears from the tile itself. The
             // pointer goes through it, so it never holds itself open over the next tile or word.
             aria-hidden="true"
-            className="risen pointer-events-none relative z-50 w-[16.875rem] px-4 pt-[0.8125rem] pb-3.5 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-bottom-1 motion-reduce:animate-none pointer-coarse:hidden"
+            className="risen pointer-events-none relative z-50 w-[16.875rem] px-4 pt-[0.8125rem] pb-3.5 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-bottom-1 motion-reduce:animate-none! pointer-coarse:hidden"
           >
             <Says place={place} title={title} description={description} notes={notes} />
           </Card.Content>

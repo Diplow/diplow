@@ -275,7 +275,7 @@ function openAtTheThing(thing: HTMLElement) {
 // A risen surface, lit a little above the ground, a fine line on top; it opens from where it was
 // asked for, growing a little.
 const surface =
-  'risen relative z-50 max-h-(--radix-popper-available-height) min-w-[13.75rem] overflow-y-auto py-1.5 text-[0.8125rem] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-[0.97] data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-[0.97] data-[state=open]:duration-150 motion-reduce:animate-none'
+  'risen relative z-50 max-h-(--radix-popper-available-height) min-w-[13.75rem] overflow-y-auto py-1.5 text-[0.8125rem] data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-[0.97] data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-[0.97] data-[state=open]:duration-150 motion-reduce:animate-none!'
 
 function Header({ title, detail, description }: MenuHeader) {
   return (
