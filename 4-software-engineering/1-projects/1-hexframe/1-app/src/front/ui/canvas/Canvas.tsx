@@ -8,7 +8,7 @@
 // caller says who touches what, each Tile carries its mark, the chat pointing at it lights it or its
 // way, a tile being written or proposed stands in its free slot, and a proposed move draws its arc.
 // Where its caller takes a tile carried off it, a tile dragged off the canvas follows the pointer
-// over the page, for the composer to name.
+// over the page, for its caller to hand on.
 import { useRef, useState, type RefObject } from 'react'
 import { cn } from 'cn'
 

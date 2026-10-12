@@ -1,5 +1,5 @@
 // A tile carried off the canvas (HEX-110): dragged past where its caller says the canvas ends, the page
-// carries it, for the composer to name, its caller told as it goes off and once it comes back, is let
+// carries it, for its caller to hand on, its caller told as it goes off and once it comes back, is let
 // go, its move stops or the canvas goes. `useMove` runs it beside the drag it follows.
 import { useEffect, useRef, useState, type RefObject } from 'react'
 

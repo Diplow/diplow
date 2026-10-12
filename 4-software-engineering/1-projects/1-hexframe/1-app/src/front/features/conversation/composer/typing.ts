@@ -168,16 +168,32 @@ export function namedIn(
 }
 
 /**
- * Where the Turn answering the field's Message would work, the canvas centered on `center`, as
- * Assistant decides it (`turnLocation`): the Tile it opens with a link to, `first`, else the centered
- * one; none for a Tile the page can't name.
+ * Where the Turn answering what the field sends would work, the canvas centered on `center`, as
+ * Assistant decides it (`turnLocation`): the Tile the Message opens with a link to, `first`, else the
+ * centered one, the words after a command being the Message; none where no Message goes, a language
+ * or a command alone, nor for a Tile the page can't name.
  */
 export function placeOf(
-  { value, links }: Field,
-  center: string,
-  tiles: ReadonlyArray<Mentionable>,
+  field: Field,
+  {
+    center,
+    tiles,
+    among,
+  }: {
+    readonly center: string
+    readonly tiles: ReadonlyArray<Mentionable>
+    readonly among: ReadonlyArray<Command>
+  },
 ): { readonly title: string; readonly first: boolean } | undefined {
-  const location = turnLocation(encoded(value.trimStart(), links), center)
+  const submitted = submittedOf(field, among)
+  const message =
+    submitted === undefined || 'language' in submitted
+      ? undefined
+      : 'message' in submitted
+        ? submitted.message
+        : submitted.then
+  if (message === undefined) return undefined
+  const location = turnLocation(message, center)
   const tile = tiles.find(({ id }) => id === location)
   return tile === undefined ? undefined : { title: tile.title, first: location !== center }
 }

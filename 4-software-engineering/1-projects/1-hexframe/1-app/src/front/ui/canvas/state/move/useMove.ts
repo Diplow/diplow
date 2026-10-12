@@ -3,7 +3,7 @@
 // a link; stopped by Escape or Stop; let go over a place that takes it, gliding there for
 // `--duration-glide` before its caller sends the landing; refused, flaring where it went, then gliding
 // back. Dragged off the canvas, where its caller says the canvas ends, the tile is carried: it lands
-// on no place there, the page carrying it for the composer to name, and let go off the canvas it
+// on no place there, the page carrying it for its caller to hand on, and let go off the canvas it
 // settles back home, the move ending (HEX-110). Which tile moves is the caller's, the URL's on home,
 // and so is what a landing sends: the hook holds what lasts a gesture, the drag, the place lit under
 // it, the glide, the carry, and gives the focus back to the tile once it has landed or stopped.

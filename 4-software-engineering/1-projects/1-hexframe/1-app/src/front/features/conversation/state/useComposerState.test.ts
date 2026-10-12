@@ -279,6 +279,17 @@ describe('where the next Turn works', () => {
     expect(result.current.state.place).toEqual({ title: 'Work', first: false })
   })
 
+  it('is read off what the field sends: the words after a command, none for a command alone', () => {
+    const { result, type, pick } = render({ modes: true, undoable: true }, 'work')
+    type('/apply ')
+    expect(result.current.state.place).toBeUndefined()
+    type('/apply @Te')
+    pick('team')
+    expect(result.current.state.place).toEqual({ title: 'Team', first: true })
+    type('/language ')
+    expect(result.current.state.place).toBeUndefined()
+  })
+
   it('is none while the page says no center', () => {
     const { result } = render()
     expect(result.current.state.place).toBeUndefined()

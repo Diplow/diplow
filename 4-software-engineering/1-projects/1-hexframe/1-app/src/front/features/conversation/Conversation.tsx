@@ -26,12 +26,12 @@ import { Events, type Happened } from '#/front/ui/chat/entries/Events'
 import { Message } from '#/front/ui/chat/text/Message'
 import { EmptyState } from '#/front/ui/layouts/states'
 
-import type { Edited, Mentionable } from './composer/mention'
+import type { Mentionable } from './composer/mention'
 import { modeOf, type Offering, offered } from './composer/typing'
 import { EntryBlock } from './entry/Entry'
 import type { Deciding } from './entry/parts'
 import { blocksOf, happenedOf, messageWords, type Naming } from './entry/words'
-import { useComposerState } from './state/useComposerState'
+import { useComposerState, writeInto } from './state/useComposerState'
 import { type Day, type Later, laterOf } from './timeline/timeline'
 
 /** The day before the oldest one shown, which the reader may ask for. */
@@ -305,14 +305,6 @@ export function ConversationFoot({
   } satisfies Offering)
   const field = useRef<HTMLTextAreaElement>(null)
   const { state, actions } = useComposerState(tiles, among, { center, field })
-  /** The field's next value set, its caret after what was put in it. */
-  const put = ({ value, caret }: Edited) => {
-    const element = field.current
-    if (element === null) return
-    // Set on the element first, so React finds it as it is and leaves the caret be.
-    element.value = value
-    element.setSelectionRange(caret, caret)
-  }
   return (
     <Composer
       fieldRef={field}
@@ -327,7 +319,7 @@ export function ConversationFoot({
           goTo(picked.language)
           return
         }
-        put(picked)
+        if (field.current !== null) writeInto(field.current, picked)
       }}
       onLeave={actions.leave}
       onPoint={onPoint}

@@ -71,6 +71,13 @@ function reducer(state: State, event: Event): State {
   }
 }
 
+/** The field's next value set on its element, its caret after what was put in it. */
+export function writeInto(element: HTMLTextAreaElement, { value, caret }: Edited) {
+  // Set on the element first, so React finds it as it is and leaves the caret be.
+  element.value = value
+  element.setSelectionRange(caret, caret)
+}
+
 /** What the composer's state hook is told besides its Tiles and commands. */
 interface ComposerInput {
   /** The Tile centered on the canvas, by its id; none while the page can't say. */
@@ -106,9 +113,7 @@ export function useComposerState(
       send({ type: 'picked', ...named })
       const element = field?.current
       if (element != null) {
-        // Set on the element first, so React finds it as it is and leaves the caret be.
-        element.value = named.value
-        element.setSelectionRange(named.caret, named.caret)
+        writeInto(element, named)
         element.focus()
       }
       return named
@@ -132,7 +137,7 @@ export function useComposerState(
       typing,
       marks: fieldMarksOf(state.value, state.links, among),
       /** Where the next Turn works, the Tile the Message opens with, `first`, else the centered one. */
-      place: center === undefined ? undefined : placeOf(state, center, tiles),
+      place: center === undefined ? undefined : placeOf(state, { center, tiles, among }),
     },
     actions: {
       /** The field changed, or its caret moved. */
