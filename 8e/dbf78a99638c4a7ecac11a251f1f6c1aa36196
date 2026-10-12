@@ -1,0 +1,51 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/forms.tsx
+  s_fa3f3b1c338611::t_b885181ba1dcc5 11-15,30,45,57-60,79,83,160,183,188-191
+  s_fa3f3b1c338611::t_466ec60d6b0d35 10
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE.md
+  s_fa3f3b1c338611::t_ecf13fadbd7ef2 30
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/CLAUDE.md
+  s_fa3f3b1c338611::t_5a9de8a2b0b30c 1-34
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useRefusalState.ts
+  s_fa3f3b1c338611::t_df04cf598617d2 56-57,71-72,74
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useRefusalState.test.ts
+  s_fa3f3b1c338611::t_4d7cb9bd56b361 100-102,112,178
+  s_fa3f3b1c338611::t_9c263de280c526 229-230
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/search/search.ts
+  s_fa3f3b1c338611::t_7f37601a605453 11,154-162
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_fa3f3b1c338611::t_b081b686ee7f0c 66,110-112,128-130,150-151,155,184-190
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/state/useTileWidgetsState.test.ts
+  s_fa3f3b1c338611::t_b9aef5e20a9f87 39,59,68,119-150
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE.md
+  s_fa3f3b1c338611::t_ecf13fadbd7ef2 64
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/TileWidgets.tsx
+  s_fa3f3b1c338611::t_b081b686ee7f0c 151
+  s_fa3f3b1c338611::t_cd077107df2817 289
+  s_fa3f3b1c338611::t_1b006883eae48e 16,38-39,42-48,51,71,79,103,130
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE.md
+  s_fa3f3b1c338611::t_ecf13fadbd7ef2 38
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/TileActions.tsx
+  s_fa3f3b1c338611::t_6d03c832541c18 15,22,97
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/place.ts
+  s_fa3f3b1c338611::t_8bfe6c7a8a5382 4,6-7,18,46-49,51-53
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/place.test.ts
+  s_fa3f3b1c338611::t_8bfe6c7a8a5382 67-69
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/state/useTileWidgetsState.ts
+  s_fa3f3b1c338611::t_b9aef5e20a9f87 22,47,53-57,65,70,73-74,76,79-81
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8edbf78a99638c4a7ecac11a251f1f6c1aa36196",
+  "prompts": {},
+  "sessions": {
+    "s_fa3f3b1c338611": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d9d26f-a35f-4158-8c3c-461e16980ac0",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
