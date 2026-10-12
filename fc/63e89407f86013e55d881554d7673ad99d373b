@@ -1,0 +1,74 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/atoms/gallery.tsx
+  s_ed767e83068d4e::t_ea2c88b623350e 1-2
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/useCanvasState.ts
+  s_ed767e83068d4e::t_b9bd257eab515d 138-144,170-173,184
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.test.ts
+  s_ed767e83068d4e::t_d4cb4434782cc6 78
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/view/looks.test.ts
+  s_ed767e83068d4e::t_d4cb4434782cc6 67
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/CLAUDE.md
+  s_ed767e83068d4e::t_56b07b65f59c60 18-19
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/useScale.test.ts
+  s_ed767e83068d4e::t_e3f229e8f1bb17 10-12,14
+  s_ed767e83068d4e::t_eec96fa8b69a9f 1-9,13,15-65
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/overlay/overlay.test.ts
+  s_ed767e83068d4e::t_901143a4226fbe 25,540-548
+  s_ed767e83068d4e::t_eddcb84d23edd9 549-550
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_ed767e83068d4e::t_9ad333dc8a5f54 44
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/view/tiles.test.ts
+  s_ed767e83068d4e::t_d4cb4434782cc6 53
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE.md
+  s_ed767e83068d4e::t_9ad333dc8a5f54 22,27,43
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.ts
+  s_ed767e83068d4e::t_d4cb4434782cc6 84,89,129
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-design-system-v1/decisions.md
+  s_ed767e83068d4e::t_d9d237ef571aa2 317-318,320,325
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_ed767e83068d4e::t_51895073b297f0 38
+  s_ed767e83068d4e::t_df7c410e1eb0b0 116
+  s_ed767e83068d4e::t_71dd91b4b2382c 29-30,362
+  s_ed767e83068d4e::t_901143a4226fbe 107
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/search/search.test.ts
+  s_ed767e83068d4e::t_d4cb4434782cc6 128
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.ts
+  s_ed767e83068d4e::t_99ae7bb1e2a4e4 8
+  s_ed767e83068d4e::t_51895073b297f0 22
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE.md
+  s_ed767e83068d4e::t_9ad333dc8a5f54 50
+  s_ed767e83068d4e::t_eec96fa8b69a9f 64
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/overlay/overlay.ts
+  s_ed767e83068d4e::t_71dd91b4b2382c 40-51
+  s_ed767e83068d4e::t_51895073b297f0 12
+  s_ed767e83068d4e::t_d0baef83448edc 52-53
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/geometry/shape.test.ts
+  s_ed767e83068d4e::t_d4cb4434782cc6 22,115
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/useCanvasState.test.ts
+  s_ed767e83068d4e::t_b9bd257eab515d 185-190,192-202
+  s_ed767e83068d4e::t_d4cb4434782cc6 33
+  s_ed767e83068d4e::t_1bfae7672398a5 191
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/view/tiles.ts
+  s_ed767e83068d4e::t_d4cb4434782cc6 16-20,76
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/fixtures.ts
+  s_ed767e83068d4e::t_d4cb4434782cc6 194
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/places.ts
+  s_ed767e83068d4e::t_51895073b297f0 1-16
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/view/looks.ts
+  s_ed767e83068d4e::t_d4cb4434782cc6 39,47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fc63e89407f86013e55d881554d7673ad99d373b",
+  "prompts": {},
+  "sessions": {
+    "s_ed767e83068d4e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "cfeb8685-5b35-4a0b-a8c1-421819aa5d69",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
