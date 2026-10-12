@@ -10,11 +10,15 @@
 // hook's caller handles none.
 import {
   infiniteQueryOptions,
+  type Mutation,
   useInfiniteQuery,
+  useIsMutating,
   useMutation,
+  useMutationState,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
+import { Option, Schema } from 'effect'
 
 import {
   acceptProposal,
@@ -30,7 +34,7 @@ import {
   stopTurn,
   undo,
 } from '#/api/assistant/assistant'
-import { dayAt, type Mode } from '#/domains/assistant/entities'
+import { dayAt, MessageText, type Mode, TileRef } from '#/domains/assistant/entities'
 
 import { read, settle, write } from '../calls'
 
@@ -127,23 +131,78 @@ const followAgain = (client: ReturnType<typeof useQueryClient>) =>
 /** How many minutes the reader's clock stands ahead of UTC now: what today is to them. */
 const offsetNow = () => offsetAt(new Date())
 
+/** The write that posts a Message, by its server function's name. */
+const postScope = 'postMessage'
+
+/** A Message the user sends: its text, and the view it was sent from, its center and the Tiles on screen. */
+export type Sent = Omit<typeof SentMessage.Type, 'offset'>
+
+/**
+ * What a write that posts a Message was called with, read back by Assistant's words for a Message and
+ * a Tile, so the timeline shows only what decodes; the server function's own schema bounds it further.
+ */
+const decodeSent = Schema.decodeUnknownOption(
+  Schema.Struct({
+    text: MessageText,
+    view: Schema.Struct({ center: TileRef, shown: Schema.Array(TileRef) }),
+  }),
+)
+
 /**
  * Posts the user's Message, trimmed and never empty, from the view it was sent from, its center and
  * the Tiles on screen, which starts a Turn answering it when the Account may use the Assistant; then
- * reads the Conversation again and polls the latest. A feature posts through the navigation sender
- * (`features/conversation/state/`), so the navigation it follows is sent before it.
+ * reads the Conversation again and polls the latest, and stays on its way until that read has landed.
+ * A feature posts through the navigation sender (`features/conversation/state/`), so the navigation it
+ * follows is sent before it.
  */
 export const usePostMessage = () => {
   const client = useQueryClient()
   return useMutation({
-    ...write(
-      'postMessage',
-      (sent: Omit<typeof SentMessage.Type, 'offset'>) =>
-        postMessage({ data: { ...sent, offset: offsetNow() } }),
-      { queue: conversationQueue },
-    ),
+    ...write(postScope, (sent: Sent) => postMessage({ data: { ...sent, offset: offsetNow() } }), {
+      queue: conversationQueue,
+    }),
     onSettled: () => followAgain(client),
   })
+}
+
+/** A Message the user posted that the Conversation does not hold: on its way, or refused. */
+interface OnItsWay {
+  /** Its write's turn, which `forget` takes. */
+  readonly id: number
+  readonly sent: Sent
+  readonly refused: boolean
+}
+
+/** A write that posts a Message, as the timeline shows it; none should its variables not decode. */
+const onItsWayOf = (mutation: Mutation): OnItsWay | undefined =>
+  Option.getOrUndefined(
+    Option.map(decodeSent(mutation.state.variables), (sent) => ({
+      id: mutation.mutationId,
+      sent,
+      refused: mutation.state.status === 'error',
+    })),
+  )
+
+/**
+ * The Messages the user posted that the Conversation does not hold, oldest first: each on its way
+ * until the Conversation read after it has landed, or refused, its failure gone to its channel, until
+ * `forget` drops it, which a retry does before posting it again, or the page forgets the write.
+ */
+export function useMessagesOnTheirWay() {
+  const client = useQueryClient()
+  const messages = useMutationState({
+    filters: {
+      mutationKey: [postScope],
+      predicate: ({ state }) => state.status === 'pending' || state.status === 'error',
+    },
+    select: onItsWayOf,
+  }).filter((message) => message !== undefined)
+  const forget = (id: number) => {
+    const cache = client.getMutationCache()
+    const write = cache.getAll().find((mutation) => mutation.mutationId === id)
+    if (write !== undefined) cache.remove(write)
+  }
+  return { messages, forget }
 }
 
 /**
@@ -209,6 +268,12 @@ export const useDiscardProposal = () => {
   })
 }
 
+/** The write that undoes what was applied, by its server function's name. */
+const undoScope = 'undo'
+
+/** Whether an Undo is on its way, whichever part of the page asked for it. */
+export const useUndoing = () => useIsMutating({ mutationKey: [undoScope] }) > 0
+
 /**
  * Undoes what a Turn applied, or an accepted Proposal, by its id, then reads the Conversation again
  * and polls the latest, so the System it put back is read again too.
@@ -216,7 +281,7 @@ export const useDiscardProposal = () => {
 export const useUndo = () => {
   const client = useQueryClient()
   return useMutation({
-    ...write('undo', (applied: string) => undo({ data: { applied } }), {
+    ...write(undoScope, (applied: string) => undo({ data: { applied } }), {
       queue: conversationQueue,
     }),
     onSettled: () => followAgain(client),

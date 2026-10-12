@@ -1,8 +1,7 @@
-// Where signing in starts and ends: the guard of a page only a signed-in Account sees, which sends a
-// signed-out visit to sign-in carrying where it was, and the search params sign-in and sign-up read that
-// place back from. The client's Unauthenticated channel (../channels.ts) sends a failed call
-// there the same way.
-import { redirect, type ParsedLocation } from '@tanstack/react-router'
+// Where signing in starts and ends: home's read of the Session before it renders, which shows a
+// signed-out visit the screen signed out rather than sending it away, and the search param home reads
+// where to go once signed in from. The client's Unauthenticated channel (../channels.ts) sends a
+// failed call to home, signed out, carrying where it was.
 import { Schema } from 'effect'
 
 import { localizeHref } from '#/paraglide/runtime'
@@ -23,7 +22,7 @@ const LocalPath = Schema.String.check(
   Schema.isPattern(/^\/(?![/\\])[^\\\p{Cc}]*$/u),
 )
 
-/** Sign-in's and sign-up's search params: where to go once signed in; absent or refused, home. */
+/** Signed out, home's search param: where to go once signed in; absent or refused, home. */
 const SignInSearch = Schema.Struct({
   redirect: Schema.optionalKey(orDefault(LocalPath)),
 })
@@ -44,19 +43,24 @@ export function continueTo(redirect: string | undefined, accountId: string) {
 }
 
 /**
- * Whether a route's context holds the Session `signedInOnly` put there: whether the page's guard proved
- * one. What the header's links show by, so the key they read stays the guard's.
+ * Whether a route's context holds a Session `sessionIfAny` proved: whether the page is signed in. What
+ * the header's links show by, so the key they read stays the guard's.
  */
 export function provedSession(context: unknown) {
-  return typeof context === 'object' && context !== null && 'session' in context
+  return (
+    typeof context === 'object' &&
+    context !== null &&
+    'session' in context &&
+    context.session !== undefined
+  )
 }
 
 /**
- * A route's `beforeLoad` for a page only a signed-in Account sees: puts the Session on the route's
- * context, or redirects a signed-out visit to sign-in, carrying where it was. Any other failure is the
- * route's error, as a read's would be.
+ * Home's `beforeLoad`: puts the Session on the route's context, or none for a signed-out visit, which
+ * home shows signed out rather than sending it away. Any other failure is the route's error, as a
+ * read's would be.
  */
-export async function signedInOnly({ location }: { location: ParsedLocation }) {
+export async function sessionIfAny() {
   try {
     const proven = await settle('session', session({ data: undefined }))
     // In the browser, this device's events and flags are now the Account's (a no-op on the server).
@@ -66,8 +70,7 @@ export async function signedInOnly({ location }: { location: ParsedLocation }) {
     const failed = asCallFailed(error, 'session')
     if (channelFor('read', failed.failure.kind) === 'sign-in') {
       forget()
-      // The router's `href`, which its rewrite (src/router.tsx) already took the language prefix off.
-      redirect({ to: '/sign-in', search: { redirect: location.href }, throw: true })
+      return { session: undefined }
     }
     throw failed
   }

@@ -10,7 +10,7 @@ preview: >-
 ---
 # tile
 
-The tile and acting on it, proposed beside what home draws today ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE|canvas]]): HEX-106 puts the tile in place of `../Tile.tsx`, `../Frame.tsx` and `../look.tsx`, HEX-107 its menu, its card and its move in place of the card beside the canvas and the Move mode. The choices behind them are in the register, `hexframe-app-design-system-v1/decisions.md#DEC-27` and `#DEC-33`.
+The tile and acting on it, proposed beside what home draws today ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE|canvas]]): HEX-106 puts the tile in place of `../Tile.tsx`, `../Frame.tsx` and `../look.tsx`, HEX-107 its menu, its card and its move in place of the card beside the canvas and the Move mode. The choices behind them are in the register, `hexframe-app-design-system-v1/decisions.md#DEC-27` and `#DEC-45`.
 
 | Path | Holds |
 |---|---|

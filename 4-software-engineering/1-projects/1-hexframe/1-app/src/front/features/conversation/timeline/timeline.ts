@@ -1,8 +1,9 @@
 // The Conversation as the timeline shows it: Assistant's Entries (`domains/assistant/entities`), a
 // day of the reader's calendar at a time, with the Titles of the Tiles its navigations went to. Home
-// reads it a day at a time (`useConversation`); /design-system splits its fixtures by day. Pure; the
-// components render it.
-import { dayAt, type Entry, type MessagePart } from '#/domains/assistant/entities'
+// reads it a day at a time (`useConversation`); /design-system splits its fixtures by day. And what
+// the agent applied that `/undo` undoes, the latest that offers its Undo. Pure; the components render
+// it.
+import { dayAt, type Entry, offersUndo } from '#/domains/assistant/entities'
 
 /**
  * The Titles of the Tiles a day names by their id alone, those its navigations went to and its
@@ -50,49 +51,13 @@ export function splitByDay(entries: readonly Entry[], now: Date, titles: Titles)
 /** The date of the reader's calendar an instant falls on, `2026-09-27`, by Assistant's day split. */
 const dayKey = (at: Date) => dayAt(at, -at.getTimezoneOffset()).date
 
-/** Splits a text into what a reader sees as characters, as Mapping counts a Tile's. */
-const graphemes = new Intl.Segmenter()
-
 /**
- * The start of a text too long to show whole, cut at a word and ended with an ellipsis, or
- * `undefined` when it fits within `limit` characters and there is nothing to hide. Characters are
- * graphemes, so an emoji, even one joined from several (👩‍👩‍👧), is never cut in half.
+ * What `/undo` undoes: of the Entries, oldest first, the latest that offers its Undo, an accepted
+ * Proposal or an applied Turn, by the id the Undo takes; none when nothing may be undone.
  */
-export function excerpt(text: string, limit: number): string | undefined {
-  const characters = Array.from(graphemes.segment(text), ({ segment }) => segment)
-  if (characters.length <= limit) return undefined
-  const cut = characters.slice(0, limit)
-  const lastSpace = cut.findLastIndex((character) => /\s/.test(character))
-  // A word longer than half the limit is cut through rather than dropped whole.
-  const words = lastSpace > limit / 2 ? cut.slice(0, lastSpace) : cut
-  return `${words.join('').replace(/[\s,;:.]+$/, '')}…`
-}
-
-/** How many characters a text holds, as a reader counts them. */
-const lengthOf = (text: string) => Array.from(graphemes.segment(text)).length
-
-/**
- * The start of a Message too long to show whole, in pieces: its words, and its links counted as the
- * Title they show (`shown`), cut at a word within `limit` characters and ended with an ellipsis, a
- * link that would pass it left out; `undefined` when it fits.
- */
-export function excerptOf(
-  parts: ReadonlyArray<MessagePart>,
-  shown: (tile: string) => string,
-  limit: number,
-): ReadonlyArray<MessagePart> | undefined {
-  const kept: MessagePart[] = []
-  let left = limit
-  for (const part of parts) {
-    const length = lengthOf(part._tag === 'Text' ? part.text : shown(part.tile))
-    if (length <= left) {
-      kept.push(part)
-      left -= length
-      continue
-    }
-    const cut = part._tag === 'Text' ? excerpt(part.text, left) : undefined
-    kept.push({ _tag: 'Text', text: cut ?? '…' })
-    return kept
-  }
+export function latestUndoable(entries: ReadonlyArray<Entry>): string | undefined {
+  const latest = entries.findLast(offersUndo)
+  if (latest?._tag === 'Proposal') return latest.proposal
+  if (latest?._tag === 'TurnApplied') return latest.turn
   return undefined
 }

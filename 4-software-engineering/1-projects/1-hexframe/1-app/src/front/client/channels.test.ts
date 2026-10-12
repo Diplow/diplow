@@ -130,7 +130,7 @@ describe("a form's write through a mutation", () => {
   })
 })
 
-describe('the sign-in redirect', () => {
+describe('the way to signing in, home signed out', () => {
   // Fresh modules for each case, so the one-redirect flag in channels.ts starts down.
   const signingIn = async () => {
     vi.resetModules()
@@ -148,7 +148,7 @@ describe('the sign-in redirect', () => {
     await submit()
     await submit()
     expect(assign).toHaveBeenCalledExactlyOnceWith(
-      `/sign-in?redirect=${encodeURIComponent('/design-system?a=1#x')}`,
+      `/?redirect=${encodeURIComponent('/design-system?a=1#x')}`,
     )
   })
 
@@ -178,8 +178,58 @@ describe('the sign-in redirect', () => {
     overwriteGetLocale(() => 'fr')
     await submit()
     expect(assign).toHaveBeenCalledExactlyOnceWith(
-      `/fr/sign-in?redirect=${encodeURIComponent('/design-system?a=1')}`,
+      `/fr/?redirect=${encodeURIComponent('/design-system?a=1')}`,
     )
+  })
+
+  it('loads home once in a while at most, so a Session a call refuses never loops', async () => {
+    const kept = new Map<string, string>()
+    const storage = {
+      getItem: (key: string) => kept.get(key) ?? null,
+      setItem: (key: string, value: string) => kept.set(key, value),
+    }
+    const at = (pathname: string) => ({
+      location: {
+        href: `http://localhost${pathname}`,
+        origin: 'http://localhost',
+        pathname,
+        search: '',
+        hash: '',
+        assign,
+      },
+      sessionStorage: storage,
+    })
+    vi.stubGlobal('window', at('/design-system'))
+    await (
+      await signingIn()
+    )()
+    expect(assign).toHaveBeenCalledOnce()
+    // The page loaded again, its module afresh, and a call is refused at once: no second load.
+    vi.stubGlobal('window', at('/'))
+    await (
+      await signingIn()
+    )()
+    expect(assign).toHaveBeenCalledOnce()
+  })
+
+  it('loads home still where the tab refuses its storage', async () => {
+    vi.stubGlobal('window', {
+      location: {
+        href: 'http://localhost/',
+        origin: 'http://localhost',
+        pathname: '/',
+        search: '',
+        hash: '',
+        assign,
+      },
+      get sessionStorage(): Storage {
+        throw new DOMException('denied', 'SecurityError')
+      },
+    })
+    await (
+      await signingIn()
+    )()
+    expect(assign).toHaveBeenCalledOnce()
   })
 
   it('does nothing on the server, where there is no window to move', async () => {

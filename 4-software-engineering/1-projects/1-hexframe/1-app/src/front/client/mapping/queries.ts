@@ -239,10 +239,17 @@ export function useEachSystemWrite(react: () => void, moment: 'made' | 'settled'
 
 /**
  * Help whole, in the page's language, Bodies included, read as the System is. Anyone reads it, so it
- * never sends the user to sign in.
+ * never sends the user to sign in. With `throwing: false`, for the canvas's corner beside it, the same
+ * Query, whose failure throws nothing there and leaves it undefined, the canvas's boundary showing it.
  */
-export const useHelp = (language: Locale) =>
-  useQuery(read({ scope: 'help', key: [language], call: () => help({ data: { language } }) }))
+export function useHelp(language: Locale, { throwing = true }: { throwing?: boolean } = {}) {
+  const helpRead = read({
+    scope: 'help',
+    key: [language],
+    call: () => help({ data: { language } }),
+  })
+  return useQuery(throwing ? helpRead : { ...helpRead, throwOnError: false })
+}
 
 /**
  * A write to the System, scoped by the Operation it runs and queued behind the writes made before it.
@@ -391,10 +398,11 @@ export type TileContent = Pick<SystemTile, (typeof contentFields)[number]>
 
 /**
  * A Tile form's submit: sends what the form holds as a write, queued behind the others, and answers at
- * once, so the form closes as if the write had landed. Its refusal comes back through
- * `useSystemRefusals`, its channel carried out: a toast, or nothing, for the reopened form to show.
+ * once with the id of the Tile written, so the form closes as if the write had landed and its receipt
+ * can name the Tile. Its refusal comes back through `useSystemRefusals`, its channel carried out: a
+ * toast, or nothing, for the reopened form to show.
  */
-export type TileSubmit = (content: TileContent) => void
+export type TileSubmit = (content: TileContent) => string
 
 /**
  * Submits a new Tile's form through `useCreateTile`: the Tile goes in this free slot, a Child or a Tile
@@ -406,7 +414,9 @@ export const useCreateTileSubmit = (
 ): TileSubmit => {
   const { mutate } = useCreateTile()
   return (content) => {
-    mutate({ id: crypto.randomUUID(), ...where, ...content })
+    const id = crypto.randomUUID()
+    mutate({ id, ...where, ...content })
+    return id
   }
 }
 
@@ -423,6 +433,7 @@ export const useEditTileSubmit = (
   const [opened] = useState(tile)
   return (content) => {
     mutate({ id: opened.id, version: opened.version, ...changed(opened, content) })
+    return opened.id
   }
 }
 

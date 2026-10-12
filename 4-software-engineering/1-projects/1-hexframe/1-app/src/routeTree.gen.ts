@@ -11,13 +11,11 @@
 import { Route as rootRouteImport } from './front/routes/__root'
 import { Route as IndexRouteImport } from './front/routes/index'
 import { Route as DesignSystemRouteImport } from './front/routes/design-system'
-import { Route as DevRouteRouteImport } from './front/routes/dev/route'
 import { Route as HelpRouteImport } from './front/routes/help'
 import { Route as McpRouteImport } from './front/routes/mcp'
 import { Route as accessSignInRouteImport } from './front/routes/(access)/sign-in'
 import { Route as accessSignUpRouteImport } from './front/routes/(access)/sign-up'
 import { Route as AssistantEventsRouteImport } from './front/routes/assistant/events'
-import { Route as DevSessionRouteImport } from './front/routes/dev/session'
 import { Route as SettingsKeysRouteImport } from './front/routes/settings/keys'
 import { Route as AssistantAnthropicSplatRouteImport } from './front/routes/assistant/anthropic.$'
 
@@ -29,11 +27,6 @@ const IndexRoute = IndexRouteImport.update({
 const DesignSystemRoute = DesignSystemRouteImport.update({
   id: '/design-system',
   path: '/design-system',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DevRouteRoute = DevRouteRouteImport.update({
-  id: '/dev',
-  path: '/dev',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HelpRoute = HelpRouteImport.update({
@@ -61,11 +54,6 @@ const AssistantEventsRoute = AssistantEventsRouteImport.update({
   path: '/assistant/events',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DevSessionRoute = DevSessionRouteImport.update({
-  id: '/session',
-  path: '/session',
-  getParentRoute: () => DevRouteRoute,
-} as any)
 const SettingsKeysRoute = SettingsKeysRouteImport.update({
   id: '/settings/keys',
   path: '/settings/keys',
@@ -79,41 +67,35 @@ const AssistantAnthropicSplatRoute = AssistantAnthropicSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dev': typeof DevRouteRouteWithChildren
   '/design-system': typeof DesignSystemRoute
   '/help': typeof HelpRoute
   '/mcp': typeof McpRoute
   '/sign-in': typeof accessSignInRoute
   '/sign-up': typeof accessSignUpRoute
   '/assistant/events': typeof AssistantEventsRoute
-  '/dev/session': typeof DevSessionRoute
   '/settings/keys': typeof SettingsKeysRoute
   '/assistant/anthropic/$': typeof AssistantAnthropicSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dev': typeof DevRouteRouteWithChildren
   '/design-system': typeof DesignSystemRoute
   '/help': typeof HelpRoute
   '/mcp': typeof McpRoute
   '/sign-in': typeof accessSignInRoute
   '/sign-up': typeof accessSignUpRoute
   '/assistant/events': typeof AssistantEventsRoute
-  '/dev/session': typeof DevSessionRoute
   '/settings/keys': typeof SettingsKeysRoute
   '/assistant/anthropic/$': typeof AssistantAnthropicSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dev': typeof DevRouteRouteWithChildren
   '/design-system': typeof DesignSystemRoute
   '/help': typeof HelpRoute
   '/mcp': typeof McpRoute
   '/(access)/sign-in': typeof accessSignInRoute
   '/(access)/sign-up': typeof accessSignUpRoute
   '/assistant/events': typeof AssistantEventsRoute
-  '/dev/session': typeof DevSessionRoute
   '/settings/keys': typeof SettingsKeysRoute
   '/assistant/anthropic/$': typeof AssistantAnthropicSplatRoute
 }
@@ -121,47 +103,40 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/dev'
     | '/design-system'
     | '/help'
     | '/mcp'
     | '/sign-in'
     | '/sign-up'
     | '/assistant/events'
-    | '/dev/session'
     | '/settings/keys'
     | '/assistant/anthropic/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/dev'
     | '/design-system'
     | '/help'
     | '/mcp'
     | '/sign-in'
     | '/sign-up'
     | '/assistant/events'
-    | '/dev/session'
     | '/settings/keys'
     | '/assistant/anthropic/$'
   id:
     | '__root__'
     | '/'
-    | '/dev'
     | '/design-system'
     | '/help'
     | '/mcp'
     | '/(access)/sign-in'
     | '/(access)/sign-up'
     | '/assistant/events'
-    | '/dev/session'
     | '/settings/keys'
     | '/assistant/anthropic/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DevRouteRoute: typeof DevRouteRouteWithChildren
   DesignSystemRoute: typeof DesignSystemRoute
   HelpRoute: typeof HelpRoute
   McpRoute: typeof McpRoute
@@ -186,13 +161,6 @@ declare module '@tanstack/react-router' {
       path: '/design-system'
       fullPath: '/design-system'
       preLoaderRoute: typeof DesignSystemRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dev': {
-      id: '/dev'
-      path: '/dev'
-      fullPath: '/dev'
-      preLoaderRoute: typeof DevRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/help': {
@@ -230,13 +198,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssistantEventsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dev/session': {
-      id: '/dev/session'
-      path: '/session'
-      fullPath: '/dev/session'
-      preLoaderRoute: typeof DevSessionRouteImport
-      parentRoute: typeof DevRouteRoute
-    }
     '/settings/keys': {
       id: '/settings/keys'
       path: '/settings/keys'
@@ -254,21 +215,8 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface DevRouteRouteChildren {
-  DevSessionRoute: typeof DevSessionRoute
-}
-
-const DevRouteRouteChildren: DevRouteRouteChildren = {
-  DevSessionRoute: DevSessionRoute,
-}
-
-const DevRouteRouteWithChildren = DevRouteRoute._addFileChildren(
-  DevRouteRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DevRouteRoute: DevRouteRouteWithChildren,
   DesignSystemRoute: DesignSystemRoute,
   HelpRoute: HelpRoute,
   McpRoute: McpRoute,

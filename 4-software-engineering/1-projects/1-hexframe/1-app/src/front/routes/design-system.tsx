@@ -6,13 +6,14 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
-import { previewLimit, type SystemTile } from '#/domains/mapping/entities'
+import { previewLimit } from '#/domains/mapping/entities'
 import { ChannelsGallery } from '#/front/client/gallery'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { useHelp } from '#/front/client/mapping/queries'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { BreadcrumbGallery } from '#/front/features/breadcrumb/gallery'
 import { ConversationGallery } from '#/front/features/conversation/gallery'
+import { helpNodeOf } from '#/front/features/help/nodes'
 import { canvasTree } from '#/front/features/system/tree'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
@@ -35,7 +36,6 @@ import { ChatEntriesGallery } from '#/front/ui/chat/entries/gallery'
 import { ChatLayoutsGallery } from '#/front/ui/chat/layouts/gallery'
 import { ChatTextGallery } from '#/front/ui/chat/text/gallery'
 import { Message } from '#/front/ui/chat/text/Message'
-import type { HelpNode } from '#/front/ui/chat/widgets/help/topics'
 import { HelpWidgetGallery } from '#/front/ui/chat/widgets/help/gallery'
 import { KeyWidgetGallery } from '#/front/ui/chat/widgets/keys/gallery'
 import { SignInWidgetGallery } from '#/front/ui/chat/widgets/sign-in/gallery'
@@ -118,19 +118,6 @@ function HelpGallery() {
   const { data: help } = useHelp(getLocale())
   if (help === undefined) return <Skeleton className="h-96 w-[37.5rem] max-w-full" />
   return <HelpWidgetGallery help={helpNodeOf(help)} />
-}
-
-/** A Tile of Help and its Branches, as the help widget's specimens read them. */
-function helpNodeOf(tile: SystemTile): HelpNode {
-  return {
-    id: tile.id,
-    title: tile.title,
-    preview: tile.preview,
-    body: tile.body,
-    children: Object.fromEntries(
-      Object.entries(tile.branches).map(([place, child]) => [place, helpNodeOf(child)]),
-    ),
-  }
 }
 
 const principles = [
@@ -292,8 +279,8 @@ function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
   const lines: Line[] = signedIn
     ? [...screenLines(), ...sent]
     : [
-        { author: 'agent', text: m.gallery_screen_signed_out_1() },
-        { author: 'agent', text: m.gallery_screen_signed_out_2() },
+        { author: 'agent', text: m.signed_out_help() },
+        { author: 'agent', text: m.signed_out_sign_in() },
       ]
   return (
     <Screen
@@ -357,8 +344,8 @@ function scrollToFoot(element: HTMLElement | null) {
 }
 
 /**
- * The Composer at the chat's foot, its padding clear of the curve, which comes back to the chat's edge
- * there. What `/` and `@` list is the Composer's own section's.
+ * The Composer at the chat's foot, which the screen keeps clear of the curve, where it comes back to
+ * the chat's edge. What `/` and `@` list is the Composer's own section's.
  */
 function ScreenComposer({ onSend }: { onSend: (text: string) => void }) {
   const [text, setText] = useState('')
@@ -374,7 +361,6 @@ function ScreenComposer({ onSend }: { onSend: (text: string) => void }) {
         setText('')
       }}
       mode={{ choices: modeChoices(), on: mode, choose: setMode }}
-      className="sm:px-4 @wide:pr-(--screen-clear) @wide:pl-9"
     />
   )
 }
@@ -393,7 +379,6 @@ function SignInFoot() {
       password={password}
       onPasswordChange={setPassword}
       onSubmit={() => undefined}
-      className="sm:px-4 @wide:pr-(--screen-clear) @wide:pl-9"
     />
   )
 }

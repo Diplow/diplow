@@ -6,7 +6,6 @@ import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 import { Toaster } from '#/front/ui/atoms/Toaster'
 import { Button } from '#/front/ui/atoms/controls/button'
-import { LocaleSwitch } from '#/front/ui/atoms/controls/LocaleSwitch'
 import { themeScript } from '#/front/ui/theme'
 
 import appCss from '../styles.css?url'
@@ -37,7 +36,6 @@ function RootDocument({ children }: { children: ReactNode }) {
         <header className="flex h-(--header) items-center justify-end gap-2 px-4">
           <SignedInLinks />
           <HelpLink />
-          <LocaleSwitch />
         </header>
         {children}
         <Toaster />
@@ -50,11 +48,11 @@ function RootDocument({ children }: { children: ReactNode }) {
 /** The design system's ghost Button, as a link; the page the user is on reads as the current one. */
 const current = 'text-muted-foreground data-[status=active]:text-foreground'
 
-/** Help, which every page links to, signed in or not: anyone reads it. */
+/** Help, which every page links to, signed in or not: anyone reads it, in the chat, Help on the canvas. */
 function HelpLink() {
   return (
     <Button asChild variant="ghost" size="sm" className={current}>
-      <Link to="/help" activeOptions={{ includeSearch: false }}>
+      <Link to="/" search={{ help: true }}>
         {m.nav_help()}
       </Link>
     </Button>
@@ -62,9 +60,9 @@ function HelpLink() {
 }
 
 /**
- * The links a signed-in Account has, to its System and its Keys. A page's guard, `signedInOnly`, puts
- * the Session on its route's context: a page that proved one shows them, others show none, with no
- * call of their own.
+ * The links a signed-in Account has, to its System and its Keys, the key widget in the chat. Home's
+ * read of the Session, `sessionIfAny`, puts it on the route's context: a page that proved one shows
+ * them, others show none, with no call of their own.
  */
 function SignedInLinks() {
   const signedIn = useMatches({
@@ -74,12 +72,14 @@ function SignedInLinks() {
   return (
     <nav aria-label={m.nav_label()} className="mr-auto flex items-center gap-1">
       <Button asChild variant="ghost" size="sm" className={current}>
-        <Link to="/" activeOptions={{ exact: true, includeSearch: false }}>
+        <Link to="/" activeOptions={{ exact: true, includeSearch: false }} search={{}}>
           {m.nav_system()}
         </Link>
       </Button>
       <Button asChild variant="ghost" size="sm" className={current}>
-        <Link to="/settings/keys">{m.nav_keys()}</Link>
+        <Link to="/" search={{ keys: true }}>
+          {m.nav_keys()}
+        </Link>
       </Button>
     </nav>
   )
