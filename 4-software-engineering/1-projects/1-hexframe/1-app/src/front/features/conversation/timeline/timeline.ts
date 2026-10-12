@@ -61,3 +61,38 @@ export function latestUndoable(entries: ReadonlyArray<Entry>): string | undefine
   if (latest?._tag === 'TurnApplied') return latest.turn
   return undefined
 }
+
+/** A write on its way, by its turn: its `mutationId` in the MutationCache, which numbers every write. */
+interface Turned {
+  readonly id: number
+}
+
+/** What comes after the last Entry: a Message on its way, or where the user went. */
+export type Later<M, N> =
+  | { readonly kind: 'message'; readonly key: string; readonly message: M }
+  | { readonly kind: 'went'; readonly key: string; readonly went: N }
+
+/**
+ * What comes after the last Entry, in the order it was sent: the Messages and the navigations on their
+ * way, by their writes' turns, then the navigation under way, which comes last, since a Message sends
+ * it first.
+ */
+export function laterOf<M extends Turned, N extends Turned, U>(
+  messages: ReadonlyArray<M>,
+  navigations: ReadonlyArray<N>,
+  underWay: U | undefined,
+): ReadonlyArray<Later<M, N | U>> {
+  const sent: { turn: number; later: Later<M, N | U> }[] = [
+    ...messages.map((message) => ({
+      turn: message.id,
+      later: { kind: 'message' as const, key: `message-${String(message.id)}`, message },
+    })),
+    ...navigations.map((went) => ({
+      turn: went.id,
+      later: { kind: 'went' as const, key: `went-${String(went.id)}`, went },
+    })),
+  ]
+  const ordered = sent.sort((a, b) => a.turn - b.turn).map(({ later }) => later)
+  if (underWay === undefined) return ordered
+  return [...ordered, { kind: 'went', key: 'under-way', went: underWay }]
+}

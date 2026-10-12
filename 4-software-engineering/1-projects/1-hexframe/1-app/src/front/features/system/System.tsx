@@ -17,6 +17,7 @@ import { useSystemWriting } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import { useLeaveGuard } from '#/front/ui/canvas/atoms/useLeaveGuard'
 import { Canvas, type CanvasMarks } from '#/front/ui/canvas/Canvas'
+import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
 import type { CanvasView, ViewAction } from '#/front/ui/canvas/view/view'
 import { Dialog } from '#/front/ui/layouts/Dialog'
@@ -46,7 +47,7 @@ interface SystemProps {
   /** The agent asked through the chat, from a menu: about a Tile, or for one under it at a place. */
   onAsk: (tile: string, place?: Direction) => void
   /** A Tile carried off the canvas, which the composer names where it is let go; none once let go. */
-  onCarry: (tile: { id: string; title: string } | undefined) => void
+  onCarry: (tile: CarriedTile | undefined) => void
   className?: string
 }
 

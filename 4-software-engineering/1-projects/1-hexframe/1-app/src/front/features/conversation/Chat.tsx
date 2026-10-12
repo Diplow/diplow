@@ -31,6 +31,7 @@ import type { LiveTurn } from '#/front/client/assistant/follow'
 import { useSystem } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
+import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 
 import { mentionablesOf } from './composer/mention'
 import { ConversationFoot, Timeline } from './Conversation'
@@ -102,12 +103,12 @@ export function ChatTimeline({ onCenter, pointing, turn, resend, underWay }: Cha
           resend(sent)
         },
       }))}
-      going={[
-        ...recording.map(({ id, navigation, at }) => ({ id, navigation, at: new Date(at) })),
-        ...(underWay === undefined
-          ? []
-          : [{ navigation: underWay.navigation, at: new Date(underWay.lastAt) }]),
-      ]}
+      going={recording.map(({ id, navigation, at }) => ({ id, navigation, at: new Date(at) }))}
+      underWay={
+        underWay === undefined
+          ? undefined
+          : { navigation: underWay.navigation, at: new Date(underWay.lastAt) }
+      }
       turn={turn}
       earlier={
         hasNextPage
@@ -147,7 +148,7 @@ interface ChatComposerProps {
   /** The Tile centered on the canvas, where the next Turn works unless the Message names another. */
   center: string | undefined
   /** A Tile carried off the canvas, which the composer names where it is let go. */
-  carried: { id: string; title: string } | undefined
+  carried: CarriedTile | undefined
 }
 
 export function ChatComposer(props: ChatComposerProps) {

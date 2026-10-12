@@ -16,6 +16,12 @@ export interface CarryInput {
   onCarry?: ((id: string | undefined) => void) | undefined
 }
 
+/** A Tile carried off the canvas, as its caller hands it on: by its id, and its title. */
+export interface CarriedTile {
+  id: string
+  title: string
+}
+
 /** A tile carried off the canvas: which, and where the pointer is on the page. */
 export interface Carry {
   id: string

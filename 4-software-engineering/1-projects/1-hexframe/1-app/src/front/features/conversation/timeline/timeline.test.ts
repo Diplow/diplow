@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { Entry } from '#/domains/assistant/entities'
 
-import { dayOf, latestUndoable, splitByDay } from './timeline'
+import { dayOf, laterOf, latestUndoable, splitByDay } from './timeline'
 
 // Local dates, so the tests hold in any time zone: days are the reader's.
 const at = (day: number, hour: number, minute = 0) => new Date(2026, 8, day, hour, minute)
@@ -108,5 +108,33 @@ describe('latestUndoable', () => {
   it('undoes nothing when nothing offers its Undo', () => {
     expect(latestUndoable([message('a', now)])).toBeUndefined()
     expect(latestUndoable([])).toBeUndefined()
+  })
+})
+
+describe('laterOf', () => {
+  it('orders the Messages and navigations on their way by their writes, the one under way last', () => {
+    const later = laterOf(
+      [
+        { id: 4, text: 'second' },
+        { id: 2, text: 'first' },
+      ],
+      [
+        { id: 3, to: 'b' },
+        { id: 1, to: 'a' },
+      ],
+      { to: 'c' },
+    )
+    expect(later.map(({ key }) => key)).toEqual([
+      'went-1',
+      'message-2',
+      'went-3',
+      'message-4',
+      'under-way',
+    ])
+    expect(later.at(-1)).toEqual({ kind: 'went', key: 'under-way', went: { to: 'c' } })
+  })
+
+  it('is nothing while nothing is on its way', () => {
+    expect(laterOf([], [], undefined)).toEqual([])
   })
 })

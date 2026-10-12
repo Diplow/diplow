@@ -3,6 +3,8 @@ import { act, cleanup, renderHook } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import { linkTo } from '#/domains/assistant/entities'
+import { publish } from '#/front/features/bus'
+import { AskedAboutTile } from '#/front/features/facts'
 import { m } from '#/paraglide/messages'
 
 import type { Mentionable } from '../composer/mention'
@@ -16,7 +18,10 @@ import { useComposerState } from './useComposerState'
 // `commands.test.ts`. And a Tile named from outside, at the caret or first, and where the next Turn
 // works, the canvas centered on a Tile.
 
-afterEach(cleanup)
+afterEach(() => {
+  cleanup()
+  document.body.replaceChildren()
+})
 
 const tiles: ReadonlyArray<Mentionable> = [
   { id: 'root', title: 'Ada', trail: [] },
@@ -27,7 +32,9 @@ const tiles: ReadonlyArray<Mentionable> = [
 
 function render(offering = { modes: true, undoable: true }, center?: string) {
   const among = offered(offering)
-  const { result } = renderHook(() => useComposerState(tiles, among, center))
+  const field = { current: document.createElement('textarea') }
+  document.body.append(field.current)
+  const { result } = renderHook(() => useComposerState(tiles, among, { center, field }))
   /** The user typed `value`, the caret at its end unless told. */
   const type = (value: string, caret = value.length) => {
     act(() => {
@@ -57,7 +64,7 @@ function render(offering = { modes: true, undoable: true }, center?: string) {
     })
     return named
   }
-  return { result, type, rows, pick, send, name }
+  return { result, type, rows, pick, send, name, field }
 }
 
 describe("the composer's commands", () => {
@@ -234,6 +241,30 @@ describe('a Tile named from outside', () => {
     name('a')
     expect(name('b')).toMatchObject({ link: { id: 'b', shown: '@Work / Notes' } })
     expect(name('gone')).toBeUndefined()
+  })
+})
+
+describe('a menu asking the agent', () => {
+  it('names its Tile first in the field, the caret after it and the focus there', () => {
+    const { result, type, field } = render()
+    type('what next?')
+    act(() => {
+      publish(new AskedAboutTile({ tile: 'work' }))
+    })
+    expect(result.current.state.value).toBe('@Work what next?')
+    expect(field.current.value).toBe('@Work what next?')
+    expect(field.current.selectionStart).toBe(6)
+    expect(document.activeElement).toBe(field.current)
+  })
+
+  it("names a free slot's Tile, then the place a new one would take", () => {
+    const { result } = render()
+    act(() => {
+      publish(new AskedAboutTile({ tile: 'root', place: 3 }))
+    })
+    expect(result.current.state.value).toBe(
+      `@Ada ${m.crossing_ask_for_one({ direction: m.direction_east() })}`,
+    )
   })
 })
 

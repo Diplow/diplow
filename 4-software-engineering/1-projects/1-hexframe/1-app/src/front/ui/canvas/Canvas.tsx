@@ -27,7 +27,7 @@ import {
 import type { Action } from './keys'
 import { Button } from '../atoms/controls/button'
 import { nearestOf } from './state/move/targets'
-import type { CarryInput } from './state/move/carry'
+import type { CarriedTile, CarryInput } from './state/move/carry'
 import { useMove } from './state/move/useMove'
 import { useCanvasState, type TileAction, type TileHex } from './state/useCanvasState'
 import { useScale } from './state/useScale'
@@ -117,7 +117,7 @@ interface CanvasProps {
    * A Tile dragged off the canvas under a mouse or a pen, carried over the page, as it goes off; none
    * once it comes back or is let go, which ends its move. Without it, a drag stays on the canvas.
    */
-  onCarry?: ((tile: { id: string; title: string } | undefined) => void) | undefined
+  onCarry?: ((tile: CarriedTile | undefined) => void) | undefined
   className?: string
 }
 

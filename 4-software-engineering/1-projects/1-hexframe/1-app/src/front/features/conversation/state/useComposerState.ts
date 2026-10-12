@@ -3,12 +3,18 @@
 // lists, a `/` the commands offered, the language the languages, an `@` the Account's Tiles; what the
 // field shows marked; what a pick puts in the field, or the language it goes to; and what the field
 // submits, a command to run, words for the agent, or a language to go to, the field emptied for the
-// next; a Tile named from outside, at the caret or first; and where the next Turn works, the field's
+// next; a Tile named from outside, at the caret or first, a menu on the canvas asking the agent heard
+// on the client bus; and where the next Turn works, the field's
 // Message read as Assistant reads it, the canvas centered where the page says. The reading is `../composer/typing.ts` and, for what the field shows marked, ui's
 // `fieldMarksOf`, both pure; this hook holds what they read.
-import { useReducer } from 'react'
+import { type RefObject, useCallback, useReducer, useRef } from 'react'
 
+import { m } from '#/paraglide/messages'
 import { type Command, fieldMarksOf } from '#/front/ui/chat/composer/commands'
+import { directionName } from '#/front/ui/canvas/tile/menu/verbs'
+
+import { useFact } from '../../bus'
+import { AskedAboutTile } from '../../facts'
 
 import type { Edited, Inserted, Mentionable } from '../composer/mention'
 import {
@@ -65,16 +71,60 @@ function reducer(state: State, event: Event): State {
   }
 }
 
+/** What the composer's state hook is told besides its Tiles and commands. */
+interface ComposerInput {
+  /** The Tile centered on the canvas, by its id; none while the page can't say. */
+  center?: string | undefined
+  /** The field, which a Tile named from outside is written into, the focus then in it. */
+  field?: RefObject<HTMLTextAreaElement | null> | undefined
+}
+
 /**
  * The composer over the Account's Tiles, offering `among`, the commands the page runs now, the canvas
- * centered on `center`; none while the page can't say.
+ * centered on `center`. A menu on the canvas asking the agent (`AskedAboutTile`, on the client bus)
+ * names its Tile first in the field, a free slot's place after it.
  */
 export function useComposerState(
   tiles: ReadonlyArray<Mentionable>,
   among: ReadonlyArray<Command>,
-  center?: string,
+  { center, field }: ComposerInput = {},
 ) {
   const [state, dispatch] = useReducer(reducer, initial)
+  // The field as the last event left it, which the bus's reaction reads whenever a fact comes, so it
+  // stays the same reaction and subscribes once per set of Tiles.
+  const latest = useRef(initial)
+  const send = useCallback((event: Event) => {
+    latest.current = reducer(latest.current, event)
+    dispatch(event)
+  }, [])
+  /** A Tile named from outside, written into the field, its caret just after it, the focus there. */
+  const name = useCallback(
+    (tile: string, where: NameAt): (Edited & { readonly link: Inserted }) | undefined => {
+      const found = tiles.find(({ id }) => id === tile)
+      if (found === undefined) return undefined
+      const named = namedIn(latest.current, found, where)
+      send({ type: 'picked', ...named })
+      const element = field?.current
+      if (element != null) {
+        // Set on the element first, so React finds it as it is and leaves the caret be.
+        element.value = named.value
+        element.setSelectionRange(named.caret, named.caret)
+        element.focus()
+      }
+      return named
+    },
+    [tiles, field, send],
+  )
+  const asked = useCallback(
+    ({ tile, place }: AskedAboutTile) => {
+      name(tile, {
+        first:
+          place === undefined ? '' : m.crossing_ask_for_one({ direction: directionName(place) }),
+      })
+    },
+    [name],
+  )
+  useFact(AskedAboutTile, asked)
   const typing = state.left ? undefined : typingAt(state, tiles, among)
   return {
     state: {
@@ -87,11 +137,11 @@ export function useComposerState(
     actions: {
       /** The field changed, or its caret moved. */
       change: (value: string, caret: number) => {
-        dispatch({ type: 'changed', value, caret })
+        send({ type: 'changed', value, caret })
       },
       /** The list left, until the field changes. */
       leave: () => {
-        dispatch({ type: 'left' })
+        send({ type: 'left' })
       },
       /**
        * A row taken, by its id: the field's next value and where its caret goes, for the composer to
@@ -100,27 +150,21 @@ export function useComposerState(
       pick: (row: string): FieldPick | undefined => {
         if (typing === undefined) return undefined
         const picked = pickOf(state, typing, row, tiles)
-        if (!('language' in picked)) dispatch({ type: 'picked', ...picked })
+        if (!('language' in picked)) send({ type: 'picked', ...picked })
         return picked
       },
       /**
-       * A Tile named from outside, by its id: the field's next value and where its caret goes, for the
-       * composer to set; none for a Tile the page can't name.
+       * A Tile named from outside, by its id, at the caret as a drop names it or first: written into
+       * the field, the focus there, and answered; none for a Tile the page can't name.
        */
-      name: (tile: string, where: NameAt): (Edited & { readonly link: Inserted }) | undefined => {
-        const found = tiles.find(({ id }) => id === tile)
-        if (found === undefined) return undefined
-        const named = namedIn(state, found, where)
-        dispatch({ type: 'picked', ...named })
-        return named
-      },
+      name,
       /**
        * What the field submits, a command or a Message, the field then emptied for the next; none,
        * the field kept, when it names a language hexframe is not in.
        */
       submit: (): Submitted | undefined => {
         const submitted = submittedOf(state, among)
-        if (submitted !== undefined) dispatch({ type: 'sent' })
+        if (submitted !== undefined) send({ type: 'sent' })
         return submitted
       },
     },

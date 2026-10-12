@@ -62,6 +62,7 @@ import { Skeleton } from '#/front/ui/atoms/skeleton'
 import { Screen } from '#/front/ui/layouts/screen/Screen'
 import { useScreenState } from '#/front/ui/layouts/screen/state/useScreenState'
 import type { CanvasMarks } from '#/front/ui/canvas/Canvas'
+import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { centerOn, withViewIn, type CanvasView, type ViewAction } from '#/front/ui/canvas/view/view'
 import type { Direction } from '#/domains/mapping/entities'
@@ -225,7 +226,7 @@ function SignedIn() {
   // running Turn works, the changes made meanwhile, and the open Proposal.
   const marks = useMarksState({ system: data?.system, working: turn?.location })
   // What crosses from the canvas to the chat: a Tile carried off it, for the composer to name.
-  const [carried, setCarried] = useState<{ id: string; title: string }>()
+  const [carried, setCarried] = useState<CarriedTile>()
   const onViewChange = (view: CanvasView, action: ViewAction) => {
     onSearchChange(withView(search, view))
     publish(new Navigated(action))
@@ -385,7 +386,7 @@ interface SystemPageProps {
   /** Who touches what the canvas draws, the chat's crossings among them. */
   marks: CanvasMarks
   /** A Tile carried off the canvas, for the composer to name; none once let go. */
-  onCarry: (tile: { id: string; title: string } | undefined) => void
+  onCarry: (tile: CarriedTile | undefined) => void
 }
 
 /** A Tile's menu asking the agent: the chat's composer names the Tile first. */
