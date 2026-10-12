@@ -1,0 +1,34 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/acting.ts
+  s_ed767e83068d4e::t_4fc18d76e7f1bb 128-139,157-158,187-193
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/hexes.tsx
+  s_ed767e83068d4e::t_1b6c18e91533dd 41-43,69-70,84,128,141-142,157,159,167,169
+  s_ed767e83068d4e::t_4fc18d76e7f1bb 11,60
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE.md
+  s_ed767e83068d4e::t_2f41373cfd98b0 26
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useActingState.ts
+  s_ed767e83068d4e::t_4fc18d76e7f1bb 39,204-207,214-216
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useActingState.test.ts
+  s_ed767e83068d4e::t_361f2abb03e0b7 249-253
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-design-system-v1/decisions.md
+  s_ed767e83068d4e::t_2f41373cfd98b0 337
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/useCanvasState.ts
+  s_ed767e83068d4e::t_4fc18d76e7f1bb 84-86,90
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/Canvas.tsx
+  s_ed767e83068d4e::t_1b6c18e91533dd 15-22,26,104,159,201,239-241,246,248,251,255-256
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7a7d19620d94f0ea8f4199eb8965e158aa156af9",
+  "prompts": {},
+  "sessions": {
+    "s_ed767e83068d4e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "cfeb8685-5b35-4a0b-a8c1-421819aa5d69",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
