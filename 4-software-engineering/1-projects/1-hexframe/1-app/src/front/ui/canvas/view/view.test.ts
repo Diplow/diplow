@@ -8,7 +8,7 @@ import {
   toggleCenter,
   toggleExpanded,
   viewIn,
-  withInner,
+  withContext,
   withViewIn,
   type CanvasView,
 } from './view'
@@ -99,10 +99,9 @@ describe('showView', () => {
     expect(showView(system, { center: 'many', frame: 'leaves' }).frame).toBe('leaves')
   })
 
-  it('shows Leaves inside Branches only, and Context inside any ring, none inside a folded center', () => {
+  it('shows Leaves inside Branches only, and Context inside any ring', () => {
     expect(showView(system, { frame: 'children', inner: 'leaves' }).inner).toBeUndefined()
     expect(showView(system, { frame: 'children', inner: 'context' }).inner).toBe('context')
-    expect(showView(system, { inner: 'context' }).inner).toBeUndefined()
     const many = { center: 'many', frame: 'branches', inner: 'leaves' } as const
     expect(showView(system, many).inner).toBe('leaves')
     expect(showView(system, { ...many, frame: 'leaves' }).inner).toBeUndefined()
@@ -126,10 +125,21 @@ describe('showView', () => {
     expect(showView(system, view).expanded).toEqual({ 1: 'context', 4: 'children' })
   })
 
-  it('opens no Branch around a ring of Leaves, nor around a folded center', () => {
+  it('opens no Branch around a ring of Leaves', () => {
     const view: CanvasView = { center: 'many', frame: 'leaves', expanded: { 1: 'children' } }
     expect(showView(system, view).expanded).toEqual({})
-    expect(showView(system, { expanded: { 1: 'children' } }).expanded).toEqual({})
+  })
+
+  it('opens the first ring of a link from when it was the default, naming no ring around', () => {
+    expect(showView(system, { inner: 'context' })).toMatchObject({
+      frame: 'children',
+      inner: 'context',
+    })
+    expect(showView(system, { expanded: { 1: 'children' } })).toMatchObject({
+      frame: 'children',
+      expanded: { 1: 'children' },
+    })
+    expect(centerOn(system, 'root')).toEqual({})
   })
 })
 
@@ -184,17 +194,14 @@ describe('toggleExpanded', () => {
   })
 })
 
-describe('withInner', () => {
-  it('shows a ring inside the center, opening it were it folded, then none', () => {
-    const shown = withInner(system, {}, 'context')
-    expect(shown).toEqual({ frame: 'children', inner: 'context' })
-    expect(withInner(system, shown, undefined)).toEqual({ frame: 'children' })
-    expect(withInner(system, {}, undefined)).toEqual({})
+describe('withContext', () => {
+  it('shows the Context inside the center, opening it were it folded', () => {
+    expect(withContext(system, {})).toEqual({ frame: 'children', inner: 'context' })
   })
 
   it('keeps what is open around', () => {
     const view: CanvasView = { frame: 'children', expanded: { 1: 'children' } }
-    expect(withInner(system, view, 'context')).toEqual({ ...view, inner: 'context' })
+    expect(withContext(system, view)).toEqual({ ...view, inner: 'context' })
   })
 })
 

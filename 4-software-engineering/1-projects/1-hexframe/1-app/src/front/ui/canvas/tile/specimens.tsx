@@ -1,6 +1,6 @@
 // The tile's specimens in a frame, for its gallery: Software Engineering and its ring, whose Branches
-// open in place and whose center shows its Context inside it, scaled with the page, and a hex opened
-// in place at 1:1.
+// open in place and whose center folds its ring away and opens it again, as home's does, scaled with
+// the page, and a hex opened in place at 1:1.
 import { useEffect, useRef, useState, type ReactElement } from 'react'
 
 import { m } from '#/paraglide/messages'
@@ -74,31 +74,51 @@ export function seatsOf(seated: Ring): Partial<Record<Direction, Seat & { title:
   )
 }
 
+/** The center, alone and folded, against the frame's tiles: as large as the frame holds it. */
+const aloneRadius = 230
+
 /**
  * Software Engineering and its ring, live: a Branch of the ring opens in place, its six blooming out
- * of its heart, and folds back on a click on its heart; the center shows its Context inside it. Every
+ * of its heart, and folds back on a click on its heart; a click on the center folds its ring back into
+ * it, which leaves it alone and large, its preview whole, and opens it again, its six blooming. Every
  * hex is a child of the <svg> under a stable key, a Tile under its own id whether in the ring or at
  * the heart of its ground, so the keyboard's focus stays on it as it opens and folds.
  */
 export function LiveFrame() {
   const svg = useRef<SVGSVGElement>(null)
   const scale = useScale(svg, { width: frameWidth, height: frameHeight })
-  const { opened, folding, open, fold } = useOpened()
+  const { opened, alone, bloomed, folding, open, fold, unfold } = useOpened()
   const center = fixture('software-engineering')
   const centerHex = { center: origin, radius: frameRadius }
-  const ringTiles = directions.flatMap((direction) => {
+  const ringTiles = directions.flatMap((direction, order) => {
     const hex = neighbor(centerHex, direction)
     const member = ring[direction]
     if (member === undefined)
       return [<Slot key={direction} hex={{ ...hex, radius: frameRadius * gap }} />]
     const { tile, look } = member
-    if (opened === direction) return openedHex({ hex, tile, folding, scale, onClose: fold })
+    if (opened === direction)
+      return openedHex({
+        hex,
+        tile,
+        folding: folding !== undefined,
+        scale,
+        onClose: () => {
+          fold('branch')
+        },
+      })
+    const motion: TileMotion | undefined =
+      folding === 'ring'
+        ? { way: 'fold', from: origin }
+        : bloomed
+          ? { way: 'bloom', from: origin, order }
+          : undefined
     return [
       <Tile
         key={tile.id}
         hex={{ ...hex, radius: frameRadius * gap }}
         {...look}
         scale={scale}
+        motion={motion}
         {...(look.kind === 'branch' && {
           action: {
             label: m.hex_tile_expand({ title: tile.title }),
@@ -118,36 +138,38 @@ export function LiveFrame() {
       aria-label={m.hex_canvas_label({ title: center.title })}
       className="w-[min(37.5rem,calc(100vw-3rem))]"
     >
-      {opened === 'center'
-        ? openedHex({ hex: centerHex, tile: center, context: true, folding, scale, onClose: fold })
-        : [
-            <Tile
-              key={center.id}
-              hex={{ ...centerHex, radius: frameRadius * gap }}
-              kind="branch"
-              words={wordsOf(center)}
-              place="center"
-              scale={scale}
-              action={{
-                label: m.hex_tile_show_context({ title: center.title }),
-                onSelect: () => {
-                  open('center')
-                },
-              }}
-            />,
-          ]}
-      {ringTiles}
+      <Tile
+        key={center.id}
+        hex={{ center: origin, radius: (alone ? aloneRadius : frameRadius) * gap }}
+        kind="branch"
+        words={wordsOf(center)}
+        place={alone ? 'alone' : 'center'}
+        scale={scale}
+        action={{
+          label: (alone ? m.hex_tile_expand : m.hex_tile_collapse)({ title: center.title }),
+          onSelect: alone
+            ? unfold
+            : () => {
+                fold('ring')
+              },
+        }}
+      />
+      {!alone && ringTiles}
     </svg>
   )
 }
 
 /**
- * What the frame has opened in place, and its fold: the six fold back for `--duration-fold`, at once
- * with reduced motion, then it closes. Nothing opens or folds while a fold is under way.
+ * What the frame has opened, and its folds: a Branch of the ring opened in place, or the ring itself
+ * folded into the center, which leaves it alone. Each fold plays for `--duration-fold`, at once with
+ * reduced motion, then closes; nothing opens or folds while one is under way. The ring blooms back
+ * once it has been folded.
  */
 function useOpened() {
-  const [opened, setOpened] = useState<Direction | 'center'>()
-  const [folding, setFolding] = useState(false)
+  const [opened, setOpened] = useState<Direction>()
+  const [alone, setAlone] = useState(false)
+  const [bloomed, setBloomed] = useState(false)
+  const [folding, setFolding] = useState<'branch' | 'ring'>()
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
   useEffect(
     () => () => {
@@ -155,18 +177,24 @@ function useOpened() {
     },
     [],
   )
-  const open = (what: Direction | 'center') => {
-    if (!folding) setOpened(what)
+  const open = (direction: Direction) => {
+    if (folding === undefined) setOpened(direction)
   }
-  const fold = () => {
-    if (folding) return
-    setFolding(true)
+  const fold = (what: 'branch' | 'ring') => {
+    if (folding !== undefined) return
+    setFolding(what)
     timer.current = setTimeout(() => {
       setOpened(undefined)
-      setFolding(false)
+      if (what === 'ring') setAlone(true)
+      setFolding(undefined)
     }, movingFor('--duration-fold'))
   }
-  return { opened, folding, open, fold }
+  const unfold = () => {
+    if (folding !== undefined) return
+    setAlone(false)
+    setBloomed(true)
+  }
+  return { opened, alone, bloomed, folding, open, fold, unfold }
 }
 
 interface OpenedProps {
@@ -214,12 +242,7 @@ function openedHex({
       place={context ? 'center' : 'heart'}
       scale={scale}
       {...(onClose && {
-        action: {
-          label: context
-            ? m.hex_tile_hide_context({ title: tile.title })
-            : m.hex_tile_collapse({ title: tile.title }),
-          onSelect: onClose,
-        },
+        action: { label: m.hex_tile_collapse({ title: tile.title }), onSelect: onClose },
       })}
     />,
     ...directions.map((direction, order) => {

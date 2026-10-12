@@ -54,7 +54,6 @@ import { Events } from '#/front/ui/chat/entries/Events'
 import { ChatEntriesGallery } from '#/front/ui/chat/entries/gallery'
 import { ChatLayoutsGallery } from '#/front/ui/chat/layouts/gallery'
 import { ChatTextGallery } from '#/front/ui/chat/text/gallery'
-import { Message } from '#/front/ui/chat/text/Message'
 import { HelpWidgetGallery } from '#/front/ui/chat/widgets/help/gallery'
 import { KeyWidgetGallery } from '#/front/ui/chat/widgets/keys/gallery'
 import { SignInWidgetGallery } from '#/front/ui/chat/widgets/sign-in/gallery'
@@ -68,7 +67,7 @@ import {
   type Where,
 } from '#/front/ui/crossings'
 import { ChapterSlide, Stage } from '#/front/ui/gallery/deck/Chapter'
-import { ScreenSlide, useDeckKeys, type Go } from '#/front/ui/gallery/deck/Deck'
+import { Lines, ScreenSlide, useDeckKeys, type Go, type Line } from '#/front/ui/gallery/deck/Deck'
 import {
   pieceShown,
   piecesOf,
@@ -437,13 +436,6 @@ function ScreenGallery() {
   )
 }
 
-interface Line {
-  author: 'user' | 'agent'
-  text: string
-  /** Sent from the specimen's composer, so shown at once. */
-  sent?: true
-}
-
 /** Signed out, the canvas shows Help, read in the page's language as `/help` reads it. */
 function SignedOutSpecimen({ className }: { className: string }) {
   const { data: help } = useHelp(getLocale())
@@ -469,8 +461,8 @@ function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
   const lines: Line[] = signedIn
     ? [...screenLines(), ...sent]
     : [
-        { author: 'agent', text: m.signed_out_help() },
-        { author: 'agent', text: m.signed_out_sign_in() },
+        { voice: 'agent', words: [m.signed_out_help()] },
+        { voice: 'agent', words: [m.signed_out_sign_in()] },
       ]
   return (
     <Screen
@@ -492,7 +484,7 @@ function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
         signedIn ? (
           <ScreenComposer
             onSend={(text) => {
-              setSent((before) => [...before, { author: 'user', text, sent: true }])
+              setSent((before) => [...before, { voice: 'human', words: [text], sent: true }])
             }}
           />
         ) : (
@@ -504,40 +496,13 @@ function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
 }
 
 const screenLines = (): Line[] => [
-  { author: 'user', text: m.gallery_screen_line_1() },
-  { author: 'agent', text: m.gallery_screen_line_2() },
-  { author: 'user', text: m.gallery_screen_line_3() },
-  { author: 'agent', text: m.gallery_screen_line_4() },
-  { author: 'agent', text: m.gallery_screen_line_5() },
-  { author: 'user', text: m.gallery_screen_line_6() },
+  { voice: 'human', words: [m.gallery_screen_line_1()] },
+  { voice: 'agent', words: [m.gallery_screen_line_2()] },
+  { voice: 'human', words: [m.gallery_screen_line_3()] },
+  { voice: 'agent', words: [m.gallery_screen_line_4()] },
+  { voice: 'agent', words: [m.gallery_screen_line_5()] },
+  { voice: 'human', words: [m.gallery_screen_line_6()] },
 ]
-
-/** The conversation in its two voices (`Message`), the mark on the first of an agent's run alone. */
-function Lines({ lines }: { lines: Line[] }) {
-  return (
-    <ol className="flex flex-col gap-[1.375rem]">
-      {lines.map((line, index) => (
-        <li key={index} ref={line.sent ? scrollToFoot : undefined}>
-          {line.author === 'user' ? (
-            <Message voice="human" words={[line.text]} />
-          ) : (
-            <Message
-              voice="agent"
-              words={[line.text]}
-              continued={lines[index - 1]?.author === 'agent'}
-            />
-          )}
-        </li>
-      ))}
-    </ol>
-  )
-}
-
-/** A line just sent shows at once: its conversation, and not the page, scrolls to its foot. */
-function scrollToFoot(element: HTMLElement | null) {
-  const messages = element?.closest<HTMLElement>('[role="region"]')
-  if (messages) messages.scrollTop = messages.scrollHeight
-}
 
 /**
  * The Composer at the chat's foot, which the screen keeps clear of the curve, where it comes back to

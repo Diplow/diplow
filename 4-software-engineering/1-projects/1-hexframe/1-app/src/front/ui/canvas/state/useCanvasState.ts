@@ -18,7 +18,7 @@ import {
   showView,
   toggleCenter,
   toggleExpanded,
-  withInner,
+  withContext,
   type CanvasView,
   type Gesture,
   type ShownView,
@@ -168,7 +168,7 @@ export function useCanvasState({ system, view, onViewChange, finger = false }: C
     [],
   )
   // The view as it stands, which a fold checks before handing its own on: a view changed meanwhile,
-  // a ring picked or the browser's Back, gives the fold up rather than being overwritten. And the
+  // by a link or the browser's Back, gives the fold up rather than being overwritten. And the
   // caller's latest `onViewChange`, which the fold hands its view to, so what else the page changed
   // meanwhile, its search params beside the view, is kept.
   const viewNow = JSON.stringify(view)
@@ -186,7 +186,7 @@ export function useCanvasState({ system, view, onViewChange, finger = false }: C
     clearTimeout(fold.current)
     setFolding(undefined)
     const centered = centerOn(system, tile)
-    if (context) change(withInner(system, centered, 'context'), 'show-context', tile)
+    if (context) change(withContext(system, centered), 'show-context', tile)
     else change(centered, 'center', tile)
   }
 
@@ -209,7 +209,7 @@ export function useCanvasState({ system, view, onViewChange, finger = false }: C
           change(toggleExpanded(system, view, hex.direction), action, tile)
         return
       case 'show-context':
-        change(withInner(system, view, 'context'), action, tile)
+        change(withContext(system, view), action, tile)
         return
       case 'center':
         change(centerOn(system, tile), action, tile)

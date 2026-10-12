@@ -111,22 +111,31 @@ function insideKinds(kinds: readonly FrameKind[], frame: OuterKind | undefined):
 
 /**
  * The view resolved against the System. An unknown center falls back to the root; the center stands
- * alone unless the view opens a ring around it, one it doesn't offer opening its first; an inner ring
- * that can't sit beside the outer one falls back to none. Only a Branch of the ring around the center
- * opens, into a kind it offers, else into its first ring.
+ * alone unless the view opens a ring around it, one it doesn't offer opening its first, and so does a
+ * view that names a ring inside it or a Branch open but no ring around, as links did when the first
+ * ring was the default; an inner ring that can't sit beside the outer one falls back to none. Only a
+ * Branch of the ring around the center opens, into a kind it offers, else into its first ring.
  */
 export function showView(system: TileNode, view: CanvasView): ShownView {
   const center = (view.center === undefined ? undefined : findTile(system, view.center)) ?? system
   const kinds = kindsOf(center)
   const wanted = view.frame
   const frame =
-    wanted === undefined ? undefined : kinds.includes(wanted) ? wanted : firstKindOf(center)
+    wanted !== undefined && kinds.includes(wanted)
+      ? wanted
+      : wanted !== undefined || opensWithin(view)
+        ? firstKindOf(center)
+        : undefined
   const inner =
     view.inner !== undefined && insideKinds(kinds, frame).includes(view.inner)
       ? view.inner
       : undefined
   return { center, frame, inner, expanded: expansionsOf(center, frame, view.expanded ?? {}) }
 }
+
+/** Whether a view opens something within the center's ring, a ring inside it or a Branch. */
+const opensWithin = (view: CanvasView) =>
+  view.inner !== undefined || Object.keys(view.expanded ?? {}).length > 0
 
 /** The Branches of the ring `frame` around `center` that `wanted` opens, each into a kind it offers. */
 function expansionsOf(
@@ -175,13 +184,17 @@ export function toggleCenter(system: TileNode, view: CanvasView): CanvasView {
   return tidy(system, { center: view.center, frame: first, inner: inside })
 }
 
-/** Opens the Branch in this Direction of the ring around the center into its first ring, or closes it. */
+/**
+ * Opens the Branch in this Direction of the ring around the center into its first ring, or closes it;
+ * a folded center has no ring around to open one in.
+ */
 export function toggleExpanded(
   system: TileNode,
   view: CanvasView,
   direction: Direction,
 ): CanvasView {
   const shown = showView(system, view)
+  if (shown.frame === undefined) return tidy(system, view)
   const { [direction]: open, ...others } = shown.expanded
   const branch = shown.center.branches?.[direction]
   const first = branch === undefined ? undefined : firstKindOf(branch)
@@ -190,15 +203,10 @@ export function toggleExpanded(
   return tidy(system, { ...view, expanded })
 }
 
-/** Shows this kind inside the center's hex, opening the center's first ring were it folded, or nothing. */
-export function withInner(
-  system: TileNode,
-  view: CanvasView,
-  inner: InnerKind | undefined,
-): CanvasView {
+/** Shows the center's Context inside its hex, opening the center's first ring were it folded. */
+export function withContext(system: TileNode, view: CanvasView): CanvasView {
   const { center, frame } = showView(system, view)
-  const opened = frame ?? (inner === undefined ? undefined : firstKindOf(center))
-  return tidy(system, { ...view, frame: opened, inner })
+  return tidy(system, { ...view, frame: frame ?? firstKindOf(center), inner: 'context' })
 }
 
 /** The canvas's part of a page's search params. */

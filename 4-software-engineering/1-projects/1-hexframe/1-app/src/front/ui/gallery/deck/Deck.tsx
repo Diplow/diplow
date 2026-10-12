@@ -47,6 +47,8 @@ export type Go = (slide: SlideId, piece?: PieceName) => void
 export interface Line {
   voice: 'agent' | 'human'
   words: Words
+  /** Just written, so the chat scrolls to it. */
+  sent?: true
 }
 
 /** What the agent says on a slide of the screen, and the reader's line it answers on the chat's. */
@@ -71,13 +73,20 @@ const told: Partial<Record<SlideId, ReadonlyArray<{ voice: Line['voice']; say: (
 const toldOn = (slide: SlideId): Line[] =>
   (told[slide] ?? []).map(({ voice, say }) => ({ voice, words: [say()] }))
 
-/** The lines of the chat, each voice as the chat draws it, the agent's mark on the first of a run. */
-function Lines({ lines }: { lines: readonly Line[] }) {
+/**
+ * The lines of the chat, each voice as the chat draws it, the agent's mark on the first of a run; a
+ * line just written shows at once.
+ */
+export function Lines({ lines }: { lines: readonly Line[] }) {
   return (
     <ol className="flex flex-col gap-[1.375rem]">
       {lines.map((line, index) => (
         // The lines of one telling, never reordered: their place is their key.
-        <li key={index} className="motion-safe:animate-rise">
+        <li
+          key={index}
+          ref={line.sent ? scrollToFoot : undefined}
+          className="motion-safe:animate-rise"
+        >
           {line.voice === 'human' ? (
             <Message voice="human" words={line.words} />
           ) : (
@@ -91,6 +100,12 @@ function Lines({ lines }: { lines: readonly Line[] }) {
       ))}
     </ol>
   )
+}
+
+/** A line just written shows at once: its chat, and not the page, scrolls to its foot. */
+function scrollToFoot(element: HTMLElement | null) {
+  const messages = element?.closest<HTMLElement>('[role="region"]')
+  if (messages) messages.scrollTop = messages.scrollHeight
 }
 
 interface ScreenSlideProps {
@@ -119,7 +134,7 @@ export function ScreenSlide(props: ScreenSlideProps) {
   const [written, setWritten] = useState<readonly string[]>([])
   const answered = written.flatMap((text): Line[] => [
     { voice: 'human', words: [text] },
-    { voice: 'agent', words: [m.deck_answer()] },
+    { voice: 'agent', words: [m.deck_answer()], sent: true },
   ])
   return (
     <Screen
