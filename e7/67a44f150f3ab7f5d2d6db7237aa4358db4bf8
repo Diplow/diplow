@@ -1,0 +1,32 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/CLAUDE.md
+  s_fa3f3b1c338611::t_4480a3262c6f00 16
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/state/useTileWidgetsState.test.ts
+  s_fa3f3b1c338611::t_c59f442a81ad39 64-76
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/TileWidgets.tsx
+  s_fa3f3b1c338611::t_c59f442a81ad39 51-55
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE.md
+  s_fa3f3b1c338611::t_4480a3262c6f00 24,37
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useRefusalState.test.ts
+  s_fa3f3b1c338611::t_b2a251692e81d6 100-101,112,178-181,233
+  s_fa3f3b1c338611::t_c59f442a81ad39 299-302
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useRefusalState.ts
+  s_fa3f3b1c338611::t_b2a251692e81d6 56-60,73-77,81
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/state/useTileWidgetsState.ts
+  s_fa3f3b1c338611::t_c59f442a81ad39 83-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e767a44f150f3ab7f5d2d6db7237aa4358db4bf8",
+  "prompts": {},
+  "sessions": {
+    "s_fa3f3b1c338611": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "09d9d26f-a35f-4158-8c3c-461e16980ac0",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
