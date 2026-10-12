@@ -1,7 +1,7 @@
 // The key widget on /design-system, live on sample Keys: name one and create it, see its secret once,
 // be done with it, find the Keys, revoke one. Nothing is issued: the secret is plainly a sample's, and
-// what would reach IAM shows in a toast; what IAM would refuse is the demo's (`../demo.ts`), against
-// IAM's bounds, which the route reads at its door.
+// what would reach IAM shows in a toast; what IAM would refuse is IAM's own rule, which the route
+// reads at IAM's door and hands over, since `ui/` can't.
 import { RotateCcw } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 
@@ -11,20 +11,27 @@ import { Act } from '../../../atoms/controls/act'
 import { toast } from '../../../atoms/Toaster'
 import { GalleryColumn, GallerySection, GalleryState } from '../../../gallery/frame'
 import { said } from '../../samples'
-import { nameRefusalOf, type NameBounds } from '../demo'
 import { KeyWidget, type KeyRow } from './KeyWidget'
 
-export function KeyWidgetGallery({ nameBounds }: { nameBounds: NameBounds }) {
+/** IAM's rule for a Key's name, read by the route: its limit, and the name it keeps, or none. */
+interface NameRule {
+  /** The most characters a name holds, as a reader counts them. */
+  nameLimit: number
+  /** The name IAM would keep, trimmed, or `undefined` for one it would refuse. */
+  nameOf: (name: string) => string | undefined
+}
+
+export function KeyWidgetGallery(rule: NameRule) {
   return (
     <GallerySection name="KeyWidget">
       <GalleryState label={m.gallery_state_key_live()}>
         <GalleryColumn>
-          <LiveKey nameBounds={nameBounds} />
+          <LiveKey {...rule} />
         </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_key_refused()}>
         <GalleryColumn>
-          <LiveKey nameBounds={nameBounds} refused />
+          <LiveKey {...rule} refused />
         </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_key_shown()}>
@@ -120,12 +127,10 @@ function ListedKeys({ byAgent = false }: { byAgent?: boolean }) {
 
 // From the first key to its receipt: a name checked as IAM would, the secret shown once, Done.
 function LiveKey({
-  nameBounds,
+  nameLimit,
+  nameOf,
   refused: refusedAtFirst = false,
-}: {
-  nameBounds: NameBounds
-  refused?: boolean
-}) {
+}: NameRule & { refused?: boolean }) {
   const [now] = useState(() => new Date())
   const [state, setState] = useState<'issue' | 'shown' | 'done'>('issue')
   const [name, setName] = useState('')
@@ -143,14 +148,14 @@ function LiveKey({
       <KeyWidget
         state="issue"
         name={name}
-        nameLimit={nameBounds.max}
+        nameLimit={nameLimit}
         onNameChange={(next) => {
           setName(next)
           setRefused(undefined)
         }}
         refused={refused}
         onIssue={() => {
-          const refusal = nameRefusalOf(name, nameBounds)
+          const refusal = nameOf(name) === undefined ? m.error_iam_key_name_invalid() : undefined
           setRefused(refusal)
           if (refusal === undefined) setState('shown')
         }}
@@ -161,7 +166,7 @@ function LiveKey({
     widget = (
       <KeyWidget
         state="shown"
-        name={name.trim()}
+        name={nameOf(name) ?? name}
         secret={sampleSecret}
         command={commandOf(sampleSecret)}
         onDone={() => {
@@ -169,7 +174,7 @@ function LiveKey({
         }}
       />
     )
-  } else widget = <KeyWidget state="done" name={name.trim()} at={now} />
+  } else widget = <KeyWidget state="done" name={nameOf(name) ?? name} at={now} />
   return (
     <>
       {widget}

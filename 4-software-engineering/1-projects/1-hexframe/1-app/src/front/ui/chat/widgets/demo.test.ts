@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { m } from '#/paraglide/messages'
 
-import { accessRefusalOf, editedOf, nameRefusalOf, stillRefused, tileRefusalOf } from './demo'
+import { accessRefusalOf, editedOf, stillRefused, tileRefusalOf } from './demo'
 
 const words = { title: 'Tooling', preview: 'What I use.', body: '' }
 
@@ -32,18 +32,6 @@ describe('the tile widget’s demo', () => {
 })
 
 describe('the key and sign-in widgets’ demo', () => {
-  it('refuses an empty name and one past its bounds, trimmed and counted as IAM counts them', () => {
-    const bounds = { min: 1, max: 32 }
-    const family = '\u{1F468}\u200D\u{1F469}\u200D\u{1F467}\u200D\u{1F466}'
-    expect(nameRefusalOf('', bounds)).toBe(m.error_iam_key_name_invalid())
-    expect(nameRefusalOf('   ', bounds)).toBe(m.error_iam_key_name_invalid())
-    expect(nameRefusalOf('a'.repeat(33), bounds)).toBe(m.error_iam_key_name_invalid())
-    expect(nameRefusalOf(family.repeat(33), bounds)).toBe(m.error_iam_key_name_invalid())
-    expect(nameRefusalOf(family.repeat(32), bounds)).toBeUndefined()
-    expect(nameRefusalOf(`  ${'a'.repeat(32)}  `, bounds)).toBeUndefined()
-    expect(nameRefusalOf('Claude Code, laptop', bounds)).toBeUndefined()
-  })
-
   it('refuses a malformed email first, then a password out of bounds for signing up', () => {
     expect(accessRefusalOf('sign-in', 'nope', 'secret')).toEqual({
       email: m.error_iam_email_malformed(),

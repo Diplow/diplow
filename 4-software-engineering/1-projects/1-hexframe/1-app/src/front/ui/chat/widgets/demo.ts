@@ -1,8 +1,9 @@
 // What the widgets' state hooks will do on a real page, for /design-system alone, never for a build:
 // which places a kind may take, what Mapping and IAM would refuse before writing, a refusal clearing
-// from the field that changed. `ui/` knows no domain: Mapping's `previewLimit` and IAM's Key name
-// bounds come from the route, which reads them at each domain's door; IAM's password rule, outside its
-// door, is mirrored here as IAM states it, as the composer's demo mirrors the feature's `@` rules.
+// from the field that changed. `ui/` knows no domain: Mapping's `previewLimit` comes from the route,
+// which reads it at Mapping's door, as IAM's Key name rule does, handed to the key widget's gallery
+// whole; IAM's password rule, outside its door, is mirrored here as IAM states it, as the composer's
+// demo mirrors the feature's `@` rules.
 import { m } from '#/paraglide/messages'
 
 import { lengthOf } from './count'
@@ -48,18 +49,6 @@ export function stillRefused(
 /** The fields that differ from what the tile held when its widget opened. */
 export const editedOf = (words: TileWords, read: TileWords): TileField[] =>
   (['title', 'preview', 'body'] as const).filter((field) => words[field] !== read[field])
-
-/** The fewest and the most characters a Key's name holds: IAM's, read by the route. */
-export interface NameBounds {
-  readonly min: number
-  readonly max: number
-}
-
-/** What IAM would refuse of a Key's name, as IAM counts it: trimmed, as a reader counts it. */
-export function nameRefusalOf(name: string, bounds: NameBounds): string | undefined {
-  const length = lengthOf(name.trim())
-  return length < bounds.min || length > bounds.max ? m.error_iam_key_name_invalid() : undefined
-}
 
 /** What IAM would refuse before signing anyone in: a malformed email, a password out of bounds. */
 export function accessRefusalOf(
