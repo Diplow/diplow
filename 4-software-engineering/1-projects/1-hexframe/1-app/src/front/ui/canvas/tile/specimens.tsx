@@ -8,6 +8,7 @@ import { m } from '#/paraglide/messages'
 import { ulysse } from '../fixtures'
 import { directions, neighbor, type Direction, type Hex } from '../geometry/geometry'
 import { findTile, type TileNode } from '../view/tiles'
+import type { Seat } from './moving/move'
 import { Ground, Slot } from './places'
 import { Tile, type TileLook, type TileMotion, type TileWords } from './Tile'
 
@@ -30,8 +31,14 @@ export function branchOf(tile: TileNode): TileLook {
   return { kind: 'branch', words: wordsOf(tile), foot }
 }
 
+/**
+ * Whether a tile of the fixture System trades places with one on the move: a Branch does. On home,
+ * Mapping's `swapsWith` says so.
+ */
+export const trades = (tile: TileNode) => tile.leaf !== true
+
 /** The ring of Software Engineering, seated as the shape seats it, the reading list beside Principles. */
-const ring: Partial<Record<Direction, { tile: TileNode; look: TileLook }>> = {
+export const ring: Ring = {
   1: { tile: fixture('projects'), look: branchOf(fixture('projects')) },
   2: { tile: fixture('principles'), look: branchOf(fixture('principles')) },
   3: { tile: fixture('notes'), look: { kind: 'leaf', words: wordsOf(fixture('notes')) } },
@@ -46,10 +53,24 @@ const ring: Partial<Record<Direction, { tile: TileNode; look: TileLook }>> = {
 }
 
 /** The canvas's units across a frame of radius 110: three hexes wide, and a margin. */
-const frameWidth = 600
-const frameHeight = 560
-const frameRadius = 110
-const gap = 0.95
+export const frameWidth = 600
+export const frameHeight = 560
+export const frameRadius = 110
+/** A tile's hex against its slot's, the gap between tiles showing the ground. */
+export const gap = 0.95
+
+/** A tile and how it is drawn, seated in a Direction of a frame. */
+export type Ring = Partial<Record<Direction, { tile: TileNode; look: TileLook }>>
+
+/** A ring's seats as a move and a picker read them: each tile's title, and whether it trades. */
+export function seatsOf(seated: Ring): Partial<Record<Direction, Seat & { title: string }>> {
+  return Object.fromEntries(
+    Object.entries(seated).map(([direction, { tile }]) => [
+      direction,
+      { title: tile.title, swaps: trades(tile) },
+    ]),
+  )
+}
 
 /**
  * Software Engineering and its ring, live: a Branch of the ring opens in place, its six blooming out

@@ -171,6 +171,20 @@ export const pieces = [
     note: m.gallery_note_ground,
   },
   {
+    name: 'TileMenu',
+    tier: 'canvas',
+    sources: ['ui/canvas/tile/menu/TileMenu.tsx', 'ui/canvas/tile/menu/Picker.tsx'],
+    madeOf: ['HoverCard', 'Menu'],
+    note: m.gallery_note_tile_menu,
+  },
+  {
+    name: 'Moving',
+    tier: 'canvas',
+    sources: ['ui/canvas/tile/moving/Moving.tsx'],
+    madeOf: ['Act'],
+    note: m.gallery_note_moving,
+  },
+  {
     name: 'Breadcrumb',
     tier: 'canvas',
     sources: ['features/breadcrumb/Breadcrumb.tsx'],

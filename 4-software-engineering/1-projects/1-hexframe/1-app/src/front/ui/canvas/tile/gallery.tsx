@@ -8,7 +8,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { m } from '#/paraglide/messages'
 
 import { Button } from '../../atoms/controls/button'
-import { GallerySection, GalleryState } from '../../gallery/frame'
+import { GalleryGroup, GallerySection, GalleryState } from '../../gallery/frame'
 import { ulysse } from '../fixtures'
 import { directions, neighbor, type Hex } from '../geometry/geometry'
 import { fitWords } from '../geometry/words'
@@ -22,15 +22,15 @@ export function TileGallery() {
   return (
     <>
       <GallerySection name="Tile">
-        <Group title={m.gallery_tile_kinds()} note={m.gallery_tile_kinds_note()} />
+        <GalleryGroup title={m.gallery_tile_kinds()} note={m.gallery_tile_kinds_note()} />
         <TileKinds />
-        <Group title={m.gallery_tile_states()} note={m.gallery_tile_states_note()} />
+        <GalleryGroup title={m.gallery_tile_states()} note={m.gallery_tile_states_note()} />
         <TileStates />
-        <Group title={m.gallery_tile_frame()} note={m.gallery_tile_frame_note()} />
+        <GalleryGroup title={m.gallery_tile_frame()} note={m.gallery_tile_frame_note()} />
         <GalleryState label={m.gallery_state_tile_frame()}>
           <LiveFrame />
         </GalleryState>
-        <Group title={m.gallery_tile_words()} note={m.gallery_tile_words_note()} />
+        <GalleryGroup title={m.gallery_tile_words()} note={m.gallery_tile_words_note()} />
         <TileWordsSpecimen />
       </GallerySection>
       <GallerySection name="Slot">
@@ -58,22 +58,12 @@ export function TileGallery() {
   )
 }
 
-function noop() {
+export function noop() {
   // A specimen's click: what it does is the caller's, on the canvas.
 }
 
-/** A row's heading inside a piece's section, the full width, and what the row shows. */
-function Group({ title, note }: { title: string; note: string }) {
-  return (
-    <div className="grid basis-full gap-1 border-t border-border pt-4 first:border-t-0 first:pt-0">
-      <h4 className="font-mono text-xs text-faint">{title}</h4>
-      <p className="max-w-prose text-sm text-muted-foreground">{note}</p>
-    </div>
-  )
-}
-
 /** One tile at the center of its own drawing, at 1:1, with what it shows in a line under it. */
-function Specimen({
+export function Specimen({
   name,
   note,
   radius,

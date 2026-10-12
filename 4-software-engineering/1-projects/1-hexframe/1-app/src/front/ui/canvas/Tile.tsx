@@ -38,9 +38,11 @@ export function Tile({ hex, action, onAct, onCenter, swap }: TileProps) {
   const clash = hex.clash && m.hex_tile_clash({ branch: hex.clash.title })
   // Shift+Enter centers the Tile, as a double-click does.
   const keys = buttonKeys({
-    onEnter: (event) => {
-      if (event.shiftKey) onCenter('keyboard')
-      else onAct(false)
+    onEnter: () => {
+      onAct(false)
+    },
+    onShiftEnter: () => {
+      onCenter('keyboard')
     },
     onSpace: () => {
       onAct(false)
