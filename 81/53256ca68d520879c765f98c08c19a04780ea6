@@ -1,0 +1,25 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/marks/marks.ts
+  s_6c94d00c8dfcf4::t_8a014b519bdf7b 20-24,27,99,121,123
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/marks/marks.test.ts
+  s_6c94d00c8dfcf4::t_8a014b519bdf7b 111-122
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/marks/proposal.ts
+  s_6c94d00c8dfcf4::t_8a014b519bdf7b 9,12
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/marks/useMarksState.ts
+  s_6c94d00c8dfcf4::t_8a014b519bdf7b 13,26,70-71
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8153256ca68d520879c765f98c08c19a04780ea6",
+  "prompts": {},
+  "sessions": {
+    "s_6c94d00c8dfcf4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1e6d2617-3bbe-4f2d-a798-ac7dd5ce9e37",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
