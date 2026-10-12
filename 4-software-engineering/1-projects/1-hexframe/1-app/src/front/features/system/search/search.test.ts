@@ -5,6 +5,7 @@ import type { TileNode } from '#/front/ui/canvas/view/tiles'
 import { tileLink } from '#/api/mapping/files/download'
 
 import {
+  afterDelete,
   changeOf,
   keyOf,
   opensWidget,
@@ -209,5 +210,43 @@ describe('opensWidget', () => {
     expect(opensWidget(none, (current) => withChange(current, { kind: 'edit', id: 'a' }))).toBe(
       false,
     )
+  })
+})
+
+describe('afterDelete', () => {
+  const gone: TileNode = {
+    id: 'a',
+    title: 'A',
+    preview: '',
+    branches: { 1: { id: 'a1', title: 'A1', preview: '' } },
+  }
+  const tree: TileNode = {
+    id: 'root',
+    title: 'Root',
+    preview: '',
+    branches: {
+      2: { id: 'p', title: 'P', preview: '', branches: { 3: gone } },
+      5: { id: 'q', title: 'Q', preview: '' },
+    },
+  }
+  const deleted = afterDelete(tree, 'p', gone)
+
+  it('centers the page on the Tile the deleted one stood under', () => {
+    expect(viewOf(deleted(readSystemSearch({ center: 'a' }))).center).toBe('p')
+  })
+
+  it('ends a change that named the Tile gone or one below it', () => {
+    for (const search of [{ edit: 'a' }, { move: 'a1' }, { add: 'a1', slot: 2 }]) {
+      expect(changeOf(deleted(readSystemSearch({ center: 'a', ...search })))).toEqual({
+        kind: 'none',
+      })
+    }
+  })
+
+  it('keeps any other change under way', () => {
+    expect(changeOf(deleted(readSystemSearch({ center: 'a', edit: 'q' })))).toEqual({
+      kind: 'edit',
+      id: 'q',
+    })
   })
 })

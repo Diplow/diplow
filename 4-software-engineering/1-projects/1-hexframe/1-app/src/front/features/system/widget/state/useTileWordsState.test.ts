@@ -40,15 +40,15 @@ describe('the words of a tile widget', () => {
 
   it('open on what a refusal put back, the refusal on its field', () => {
     const typed = { ...read, title: '' }
-    const { result } = render({ turn: 1, words: typed, refused: { title: 'Name it.' } })
+    const { result } = render({ turn: 1, content: typed, shown: { fields: { title: 'Name it.' } } })
     expect(result.current.state).toEqual({ words: typed, refused: { title: 'Name it.' } })
   })
 
   it('clear a refusal from the field the user changes, and keep it on the others', () => {
     const { result, change } = render({
       turn: 1,
-      words: read,
-      refused: { title: 'Name it.', preview: 'Too long.' },
+      content: read,
+      shown: { fields: { title: 'Name it.', preview: 'Too long.' } },
     })
     change({ ...read, preview: 'Shorter' })
     expect(result.current.state.refused).toEqual({ title: 'Name it.' })
@@ -58,10 +58,10 @@ describe('the words of a tile widget', () => {
     const { result, refill, change } = render()
     change({ ...read, title: 'Mine' })
     const typed = { ...read, title: 'Taken' }
-    refill({ turn: 2, words: typed, refused: { title: 'Taken meanwhile.' } })
+    refill({ turn: 2, content: typed, shown: { fields: { title: 'Taken meanwhile.' } } })
     expect(result.current.state).toEqual({ words: typed, refused: { title: 'Taken meanwhile.' } })
     change({ ...typed, body: 'More' })
-    refill({ turn: 2, words: typed, refused: { title: 'Taken meanwhile.' } })
+    refill({ turn: 2, content: typed, shown: { fields: { title: 'Taken meanwhile.' } } })
     expect(result.current.state.words).toEqual({ ...typed, body: 'More' })
   })
 })

@@ -7,14 +7,11 @@ import { useState } from 'react'
 
 import type { TileWords } from '#/front/ui/chat/widgets/tile/parts'
 
-import { type Refusal, stillRefused } from '../place'
+import type { Reopened } from '../../state/useRefusalState'
+import { type Refusal, refusalOf, stillRefused } from '../place'
 
-/** A write refused and put back: its turn, what the user had typed, and what the widget shows of it. */
-export interface Refilled {
-  readonly turn: number
-  readonly words: TileWords
-  readonly refused: Refusal | undefined
-}
+/** A write refused and put back (`useRefusalState`): its turn, what the user typed, its refusal. */
+export type Refilled = Pick<Reopened, 'turn' | 'content' | 'shown'>
 
 interface State {
   readonly words: TileWords
@@ -24,8 +21,8 @@ interface State {
 }
 
 const fromRefill = (refilled: Refilled): State => ({
-  words: refilled.words,
-  refused: refilled.refused,
+  words: refilled.content,
+  refused: refusalOf(refilled.shown),
   turn: refilled.turn,
 })
 

@@ -24,8 +24,7 @@ import {
 import { type Reopened, useRefusalState } from '../state/useRefusalState'
 import { canvasTree, tileIn } from '../tree'
 import { EditTileWidget, NewTileWidget, RootDrawer } from './forms'
-import { refusalOf, slotOf, tilesBelow, whereIn } from './place'
-import type { Refilled } from './state/useTileWordsState'
+import { slotOf, tilesBelow, whereIn } from './place'
 import type { Exporting, Receipt, TileWidgetsState } from './state/useTileWidgetsState'
 
 interface TileWidgetsProps {
@@ -61,7 +60,7 @@ export function TileWidgets({
   const end = () => {
     onSearchChange((current) => withChange(current, { kind: 'none' }))
   }
-  const page: Page = {
+  const page: WidgetContext = {
     system: data.system,
     root,
     tree,
@@ -97,8 +96,7 @@ export function TileWidgets({
   )
 }
 
-/** What the widgets of a page share: the System, the refusal put back, and the ways on. */
-interface Page {
+interface WidgetContext {
   system: System
   root: SystemTile
   tree: TileNode
@@ -113,7 +111,7 @@ interface Page {
 }
 
 /** The widget of the change under way, when it is one; else what followed the last. */
-function widgetOf(change: Change, widgets: TileWidgetsState, page: Page) {
+function widgetOf(change: Change, widgets: TileWidgetsState, page: WidgetContext) {
   switch (change.kind) {
     case 'add':
       return newTileOf(change, widgets.state.shown, page)
@@ -128,14 +126,14 @@ function widgetOf(change: Change, widgets: TileWidgetsState, page: Page) {
 }
 
 /** The receipt a form left, or the export under way, once no form is open. */
-function shownOf(widgets: TileWidgetsState, page: Page) {
+function shownOf(widgets: TileWidgetsState, page: WidgetContext) {
   const { shown } = widgets.state
   if (shown === undefined) return null
   return shown.kind === 'export' ? exportOf(shown, widgets, page) : receiptOf(shown, page)
 }
 
 /** A form's receipt, as the widget it ends, by the same key, so it keeps the form's focus. */
-function receiptOf(receipt: Receipt, page: Page) {
+function receiptOf(receipt: Receipt, page: WidgetContext) {
   const { key, session, where } = receipt
   const form = formOf(page, key, receipt)
   return session.kind === 'add' ? (
@@ -151,14 +149,8 @@ function receiptOf(receipt: Receipt, page: Page) {
 }
 
 /** The receipt of this form, sent while the URL still holds it, unless a refusal put it back. */
-const receiptFor = (key: string, shown: Receipt | Exporting | undefined, page: Page) =>
+const receiptFor = (key: string, shown: Receipt | Exporting | undefined, page: WidgetContext) =>
   shown?.kind === 'receipt' && shown.key === key && page.reopened === undefined ? shown : undefined
-
-/** What a refusal put back into the widget, the change under way's: the user's words, its refusal. */
-const refilledOf = (reopened: Reopened | undefined): Refilled | undefined =>
-  reopened === undefined
-    ? undefined
-    : { turn: reopened.turn, words: reopened.content, refused: refusalOf(reopened.shown) }
 
 /**
  * A new Tile's widget, keyed by the Tile it goes under, so picking another place or kind keeps what
@@ -167,7 +159,7 @@ const refilledOf = (reopened: Reopened | undefined): Refilled | undefined =>
 function newTileOf(
   change: Extract<Change, { kind: 'add' }>,
   shown: Receipt | Exporting | undefined,
-  page: Page,
+  page: WidgetContext,
 ) {
   const key = `add:${change.parent}`
   const receipt = receiptFor(key, shown, page)
@@ -200,7 +192,7 @@ function newTileOf(
 function editOf(
   change: Extract<Change, { kind: 'edit' }>,
   shown: Receipt | Exporting | undefined,
-  page: Page,
+  page: WidgetContext,
 ) {
   const key = `edit:${change.id}:${String(page.reopened?.turn ?? '')}`
   const receipt = receiptFor(key, shown, page)
@@ -225,7 +217,7 @@ function editOf(
 }
 
 /** The Tile an edit is open on, below the Root, where it stands; none once it is gone. */
-function editingOf(id: string, page: Page) {
+function editingOf(id: string, page: WidgetContext) {
   const located = tileIn(page.root, id)
   const node = findTile(page.tree, id)
   const placed = tileAt(page.system, id)
@@ -242,9 +234,9 @@ function editingOf(id: string, page: Page) {
 }
 
 /** What a form takes from the page. */
-const formOf = (page: Page, key: string, receipt: Receipt | undefined) => ({
+const formOf = (page: WidgetContext, key: string, receipt: Receipt | undefined) => ({
   formKey: key,
-  refilled: refilledOf(page.reopened),
+  refilled: page.reopened,
   receipt,
   system: page.system,
   onSent: page.onSent,
@@ -253,7 +245,7 @@ const formOf = (page: Page, key: string, receipt: Receipt | undefined) => ({
 })
 
 /** An import's widget, where it lands lit; none when the Tile it goes under is gone. */
-function importOf(place: ImportPlace, page: Page) {
+function importOf(place: ImportPlace, page: WidgetContext) {
   if (place._tag === 'Root') {
     return <Import key="root" place={place} into="root" onDone={page.onCancel} />
   }
@@ -270,7 +262,7 @@ function importOf(place: ImportPlace, page: Page) {
 }
 
 /** An export the card started: working, then its receipt naming the zip, or failed with a retry. */
-function exportOf(exporting: Exporting, widgets: TileWidgetsState, page: Page) {
+function exportOf(exporting: Exporting, widgets: TileWidgetsState, page: WidgetContext) {
   const { tile, below, phase, file, at } = exporting
   const stands = tileAt(page.system, tile.id) !== undefined
   return (
