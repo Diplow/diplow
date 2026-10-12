@@ -26,6 +26,7 @@ import type { TileAct } from '#/front/ui/canvas/tile/menu/verbs'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 
 import {
+  allows,
   framesOf,
   moveTo,
   referenceAt,
@@ -45,7 +46,7 @@ import {
   type SearchChange,
   type SystemSearch,
 } from '../search/search'
-import { moveOf, slotOf, tileIn } from '../tree'
+import { slotOf, tileIn } from '../tree'
 import type { Exported } from '../widget/state/useTileWidgetsState'
 import { tilesBelow } from '../widget/place'
 
@@ -68,10 +69,13 @@ interface Deleting {
 
 /** Copies `text`, saying so; without a secure context there is no clipboard, which fails alike. */
 function copy(text: string) {
-  void navigator.clipboard.writeText(text).then(
-    () => toast(m.system_copied()),
-    () => toast.error(m.system_copy_failed()),
-  )
+  // Over plain HTTP there is no clipboard at all: that fails as a refused copy does.
+  void Promise.resolve(text)
+    .then((copied) => navigator.clipboard.writeText(copied))
+    .then(
+      () => toast(m.system_copied()),
+      () => toast.error(m.system_copy_failed()),
+    )
 }
 
 /** The slot an empty Direction stands for, for a new Tile or the moving one; none takes no click. */
@@ -267,7 +271,7 @@ function movingOf({ tree, search, flat, begin, sent, move, swap, addHere }: Movi
   const tile = change.kind === 'move' ? findTile(tree, change.id) : undefined
   const moveHere = (going: TileNode) => (target: EmptySlotTarget) => {
     const place = placeOf(target, going)
-    const moved = place === undefined ? undefined : moveOf(flat, going.id, place)
+    const moved = place === undefined ? undefined : allows(flat, going.id, place)
     if (moved === undefined) return undefined
     const names = { tile: going.title, title: target.parent.title }
     return {

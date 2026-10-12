@@ -325,6 +325,46 @@ describe("a free slot's menu", () => {
   })
 })
 
+describe('a click on a free slot', () => {
+  const free = (view: CanvasView = {}) =>
+    layoutCanvas(showView(tree, view)).flatMap((drawn) =>
+      drawn.kind === 'empty' ? [drawn.slot] : [],
+    )
+
+  it("opens the new Tile's form there, named for its ring", () => {
+    const { result, onSearchChange } = render()
+    const [slot] = free()
+    const click = slot && result.current.emptySlots(slot)
+    expect(click?.label).toBe(m.system_add_child({ title: 'Me' }))
+    act(() => {
+      click?.onSelect()
+    })
+    expect(changed(onSearchChange)).toMatchObject({ add: 'root', slot: slot?.direction })
+  })
+
+  it('moves the Tile on the move there, ending the move as it is sent', async () => {
+    answering('moveTile', done)
+    const { result, onSearchChange } = render({ move: 'bare' })
+    const [slot] = free()
+    act(() => {
+      if (slot) result.current.emptySlots(slot)?.onSelect()
+    })
+    await waitFor(() => {
+      expect(Mapping.moveTile).toHaveBeenCalledWith({
+        data: { id: 'bare', version: 1, parent: 'root', slot: slot?.direction },
+      })
+    })
+    expect(changed(onSearchChange, { move: 'bare' })).toMatchObject({ move: undefined })
+  })
+
+  it('takes no Tile where Mapping would refuse the move: under itself', () => {
+    const { result } = render({ move: 'holding', center: 'holding' })
+    expect(free({ center: 'holding' }).map((slot) => result.current.emptySlots(slot))).toEqual(
+      free({ center: 'holding' }).map(() => undefined),
+    )
+  })
+})
+
 describe('a move under way', () => {
   it('names the Tile on the move, starts on a drag and stops', () => {
     const { result, onSearchChange } = render({ move: 'bare' })

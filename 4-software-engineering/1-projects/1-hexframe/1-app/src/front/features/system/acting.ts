@@ -25,6 +25,7 @@ import { lookOf } from '#/front/ui/canvas/view/looks'
 import { pathTo, type TileNode } from '#/front/ui/canvas/view/tiles'
 
 import { moveOf, swapOf, swapsWith, tileIn, type Located } from './tree'
+import { tilesBelow } from './widget/place'
 
 /** The lines home can't run yet: the agent's, until the chat answers the menu (HEX-110). */
 export const waiting: readonly Verb[] = ['ask-agent']
@@ -33,7 +34,6 @@ export const waiting: readonly Verb[] = ['ask-agent']
 export function tradeOf(flat: System, moving: TileNode, held: TileNode) {
   return swapsWith(flat, moving, held) ? swapOf(flat, moving.id, held.id) : undefined
 }
-import { tilesBelow } from './widget/place'
 
 /** The System three ways: its tree, Mapping's; flat, which `decide` rules on; as the canvas draws it. */
 export interface Systems {
@@ -42,8 +42,11 @@ export interface Systems {
   tree: TileNode
 }
 
-/** Whether Mapping would make this move, on the System as the page shows it. */
-function allows(flat: System, id: string, place: { parent: string; slot: Slot }) {
+/**
+ * The move of a Tile to a place, where Mapping would make it on the System as the page shows it:
+ * the menu's Move frame and the canvas's landing slots alike.
+ */
+export function allows(flat: System, id: string, place: { parent: string; slot: Slot }) {
   const moved = moveOf(flat, id, place)
   if (moved === undefined) return undefined
   const decided = decide(flat, { _tag: 'MoveTile', ...moved })
