@@ -1,11 +1,12 @@
-// The frame of /design-system: a section per tier, shown once a piece fills it, a section per piece,
-// with what it is for, what it is made of and where it is used, as links within the page, then one
-// labelled specimen per state; and the clock a timed specimen plays by.
+// The frame of /design-system's pieces, which every folder's gallery draws in: each tier tells its
+// pieces the tier they are drawn under, and a piece's section draws its specimens, one labelled per
+// state, while it is the piece the deck shows (`deck/`), whose words, what it is for, what it is made
+// of and where it is used, the chat tells; and the clock a timed specimen plays by.
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { anchorOf, pieceNamed, usedIn, type PieceName, type Tier } from './pieces'
+import { pieceNamed, type PieceName, type Tier } from './pieces'
 
 const tierTitles: Record<Tier, () => string> = {
   crossings: m.design_system_tier_crossings,
@@ -25,79 +26,45 @@ const tierNotes: Record<Tier, () => string> = {
   seams: m.design_system_tier_seams_note,
 }
 
-/** A tier's title, for the page's contents. */
+/** A tier's title. */
 export const tierTitle = (tier: Tier) => tierTitles[tier]()
 
-/** A tier's anchor on the page. */
-export const tierAnchor = (tier: Tier) => `tier-${tier}`
+/** What a tier holds, in a sentence. */
+export const tierNote = (tier: Tier) => tierNotes[tier]()
 
 /** The tier a section is drawn under, which its pieces check against the catalogue's. */
 const TierContext = createContext<Tier | undefined>(undefined)
 
-/** A tier's section: its title, what it holds, then its pieces. */
+/** The piece the deck shows, whose specimens alone are drawn. */
+const ShownContext = createContext<PieceName | undefined>(undefined)
+
+/** A tier's galleries, which tells their pieces the tier they are drawn under. */
 export function GalleryTier({ tier, children }: { tier: Tier; children?: ReactNode }) {
-  return (
-    <TierContext value={tier}>
-      <section id={tierAnchor(tier)} className="grid scroll-mt-6 grid-cols-[minmax(0,1fr)] gap-8">
-        <header className="grid gap-2 border-t border-input pt-8">
-          <h2 className="text-3xl font-light">{tierTitles[tier]()}</h2>
-          <p className="max-w-prose text-muted-foreground">{tierNotes[tier]()}</p>
-        </header>
-        {children}
-      </section>
-    </TierContext>
-  )
+  return <TierContext value={tier}>{children}</TierContext>
+}
+
+/** The galleries inside, of which the specimens of `piece` alone are drawn. */
+export function ShowingPiece({ piece, children }: { piece: PieceName; children?: ReactNode }) {
+  return <ShownContext value={piece}>{children}</ShownContext>
 }
 
 /**
- * A piece's section: its name, what it is for, what it is made of, or a crossing's two ends, and where
- * it is used, then its states.
+ * A piece's section: its states, drawn while it is the piece shown; the chat tells its words. It throws
+ * when drawn under another tier than the catalogue's.
  */
 export function GallerySection({ name, children }: { name: PieceName; children: ReactNode }) {
   const piece = pieceNamed(name)
   const drawnUnder = useContext(TierContext)
+  const shown = useContext(ShownContext)
   // The catalogue says where a piece belongs; a page that draws it elsewhere is a bug, shown at once.
   if (drawnUnder !== piece.tier) {
     throw new Error(`${name} belongs to the ${piece.tier}, not to ${drawnUnder ?? 'no tier'}`)
   }
+  if (shown !== name) return null
   return (
-    <section
-      id={anchorOf(name)}
-      className="grid scroll-mt-6 grid-cols-[minmax(0,1fr)] gap-4 border-t pt-6"
-    >
-      <div className="grid gap-2">
-        <h3 className="font-mono text-lg font-semibold">{name}</h3>
-        <p className="max-w-prose text-sm text-muted-foreground">{piece.note()}</p>
-        {'ends' in piece ? (
-          <>
-            <PieceLinks label={m.design_system_chat_end()} names={piece.ends.chat} />
-            <PieceLinks label={m.design_system_canvas_end()} names={piece.ends.canvas} />
-          </>
-        ) : (
-          <PieceLinks label={m.design_system_made_of()} names={piece.madeOf} />
-        )}
-        <PieceLinks label={m.design_system_used_in()} names={usedIn(name)} />
-      </div>
-      <div className="flex flex-wrap items-start gap-8">{children}</div>
+    <section aria-label={name} className="flex flex-wrap items-start gap-x-10 gap-y-8">
+      {children}
     </section>
-  )
-}
-
-function PieceLinks({ label, names }: { label: string; names: readonly string[] }) {
-  if (names.length === 0) return null
-  return (
-    <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm">
-      <span className="text-faint">{label}</span>
-      {names.map((name) => (
-        <a
-          key={name}
-          href={`#${anchorOf(name)}`}
-          className="font-mono text-xs underline decoration-input underline-offset-4 hover:decoration-foreground"
-        >
-          {name}
-        </a>
-      ))}
-    </p>
   )
 }
 

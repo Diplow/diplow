@@ -11,9 +11,9 @@ import { subjectIn } from '#/front/ui/canvas/crossings'
 import { layoutCanvas } from '#/front/ui/canvas/geometry/shape'
 import type { TileHex } from '#/front/ui/canvas/state/useCanvasState'
 import { showView, type CanvasView } from '#/front/ui/canvas/view/view'
+import { firstKindOf } from '#/front/ui/canvas/view/tiles'
 
 import {
-  codeOf,
   framesOf,
   moveTo,
   referenceAt,
@@ -79,11 +79,17 @@ const flat: System = {
 
 const root = systemOf(flat)
 const tree = canvasTree(root, { yours: true })
+
+/** A view with the center opened into its first ring, unless it says otherwise, as a click leaves it. */
+const opened = (view: CanvasView): CanvasView => ({
+  frame: firstKindOf(showView(tree, view).center),
+  ...view,
+})
 const systems: Systems = { root, flat, tree }
 
 /** The hexes a view draws, each Tile's by its key. */
 function hexesOf(view: CanvasView = {}): Record<string, TileHex> {
-  const hexes = layoutCanvas(showView(tree, view))
+  const hexes = layoutCanvas(showView(tree, opened(view)))
   return Object.fromEntries(
     hexes.flatMap((hex) => (hex.kind === 'tile' ? [[hex.key, hex] as const] : [])),
   )
@@ -253,17 +259,6 @@ describe('the lines home leaves out', () => {
       (drawn): drawn is TileHex => drawn.kind === 'tile',
     )
     expect(center && withoutOf({ root: bare, flat: empty, tree: alone }, center)).toEqual([])
-  })
-})
-
-describe('what the card shows of a Body', () => {
-  it('shows a Leaf that isn’t Markdown as its code', () => {
-    expect(codeOf(root, 'run.yaml')).toBe('version: 1\n')
-  })
-
-  it('shows no code for a Markdown Leaf, nor a Branch', () => {
-    expect(codeOf(root, 'notes')).toBeUndefined()
-    expect(codeOf(root, 'bare')).toBeUndefined()
   })
 })
 

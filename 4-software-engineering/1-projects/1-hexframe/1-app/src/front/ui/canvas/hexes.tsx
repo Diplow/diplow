@@ -15,7 +15,7 @@ import { groupsOf, slotPlace, type Subject, type TileAct, type Verb } from './ti
 import { markNote, type TileMark } from './tile/marks/mark'
 import { Aside, LandingSlot, Lifted, SwapDisc } from './tile/moving/Moving'
 import { Slot } from './tile/places'
-import type { TileNode } from './view/tiles'
+import { pathTo, type TileNode } from './view/tiles'
 import { cardOf, type CardWords } from './view/looks'
 import type { TileLook } from './tile/Tile'
 
@@ -28,6 +28,44 @@ export interface Acting {
   without?: readonly Verb[]
   /** A chosen line that goes nowhere: the caller's. Open, Go in, Show its Context and Back out are the canvas's. */
   onAct: (act: TileAct, said: string) => void
+}
+
+/**
+ * Every line of a menu that acts rather than goes somewhere, which a canvas only looked at leaves
+ * out: a line added to the menu fails to compile until it has its place here.
+ */
+const acting: Record<Exclude<Verb, ViewVerb>, true> = {
+  edit: true,
+  'make-leaf': true,
+  'make-branch': true,
+  add: true,
+  move: true,
+  'ask-agent': true,
+  copy: true,
+  export: true,
+  delete: true,
+  'remove-reference': true,
+  'new-tile': true,
+  import: true,
+}
+
+const acts = Object.keys(acting) as Exclude<Verb, ViewVerb>[]
+
+/**
+ * A Tile's menu on a canvas only looked at, Help's or a page's: the lines that go somewhere alone,
+ * Open, Go in, Show its Context and Back out, and its hover card. The Tile is told by where it is
+ * drawn, a root in the ring as a Branch, since only the center is ever a root to its menu.
+ */
+export function lookingAt(system: TileNode, hex: TileHex, look: TileLook): Acting | undefined {
+  const { kind } = look
+  if (kind === 'list' || kind === 'ghost' || kind === 'writing') return undefined
+  const at = hex.role === 'center' ? undefined : hex.direction
+  const parent = at === undefined ? pathTo(system, hex.tile.id).at(-2) : hex.parent
+  const words = { title: hex.tile.title, ...(parent && { parent: parent.title }) }
+  const onAct = () => undefined
+  if (at === undefined) return { subject: { ...words, kind, at: 'center' }, without: acts, onAct }
+  const own = kind === 'root' || kind === 'untitled' ? 'branch' : kind
+  return { subject: { ...words, kind: own, at }, without: acts, onAct }
 }
 
 /** A Tile on the move, and which Tiles offer to trade places with it. */

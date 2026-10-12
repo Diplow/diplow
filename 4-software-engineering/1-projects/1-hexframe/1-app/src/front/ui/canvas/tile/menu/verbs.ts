@@ -145,18 +145,18 @@ export function groupsOf(subject: Subject): Verb[][] {
 }
 
 /**
- * What a click on the subject does, or a tap under a finger. The center shows its Context; in the
- * ring, a Branch opens in place and the rest go in. A finger has no double click, the pointer's way
- * to go in: its tap goes in, and opening in place waits in the menu. A free slot adds a tile; a
- * Reference whose tile is gone, or a Leaf at the center, takes none.
+ * What a click on the subject does, or a tap under a finger. The center opens into its ring, or folds
+ * back alone; in the ring, a Branch opens in place and the rest go in. A finger has no double click,
+ * the pointer's way to go in: its tap goes in, and opening in place waits in the menu. A free slot
+ * adds a tile; a Reference whose tile is gone, or a Leaf at the center, takes none.
  */
 export function clickOf(
   subject: Subject,
   finger: boolean,
-): 'new-tile' | 'show-context' | 'open' | 'go-in' | undefined {
+): 'new-tile' | 'open' | 'go-in' | undefined {
   if (subject.kind === 'slot') return 'new-tile'
   if (subject.at === 'center') {
-    return subject.kind === 'leaf' || subject.kind === 'draft' ? undefined : 'show-context'
+    return subject.kind === 'leaf' || subject.kind === 'draft' ? undefined : 'open'
   }
   if (subject.kind === 'broken') return undefined
   return subject.kind === 'branch' && finger ? 'go-in' : 'open'

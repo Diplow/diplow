@@ -69,6 +69,8 @@ interface ComposerProps {
   carried?: string | undefined
   /** The tile carried, let go over the composer: its caller names it in the field. */
   onDrop?: (() => void) | undefined
+  /** What the empty field invites; a reply, or a tile pointed at, unless its caller says otherwise. */
+  placeholder?: string | undefined
   className?: string
 }
 
@@ -90,6 +92,7 @@ export function Composer({
   place,
   carried,
   onDrop,
+  placeholder = m.composer_placeholder(),
   className,
 }: ComposerProps) {
   const list = useId()
@@ -159,7 +162,7 @@ export function Composer({
             readOnly={waits}
             disabled={waiting}
             aria-label={m.composer_label()}
-            placeholder={m.composer_placeholder()}
+            placeholder={placeholder}
             enterKeyHint="send"
             autoComplete="off"
             role="combobox"

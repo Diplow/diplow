@@ -34,11 +34,19 @@ import {
 } from './mention'
 
 /**
- * The commands home runs today: the language, and the agent's Mode and its last change. The others
- * the proposal drew wait for their answer and their builds
+ * The commands home runs today: the language, the agent's Mode and its last change, and Help and the
+ * Keys, which the header's links opened before the commands took their place. The others the
+ * proposal drew wait for their answer and their builds
  * (`hexframe-app-design-system-v1/decisions.md#DEC-33`).
  */
-const run = ['ask', 'apply', 'undo', 'language'] as const satisfies ReadonlyArray<CommandId>
+const run = [
+  'ask',
+  'apply',
+  'undo',
+  'language',
+  'help',
+  'keys',
+] as const satisfies ReadonlyArray<CommandId>
 
 /** A command home runs. */
 export type RunCommand = (typeof run)[number]
@@ -55,14 +63,28 @@ export interface Offering {
   readonly modes: boolean
   /** Something the agent applied may be undone. */
   readonly undoable: boolean
+  /** The page opens Help, on the canvas and in the chat. */
+  readonly help?: boolean
+  /** The page opens the Account's Keys, in the chat. */
+  readonly keys?: boolean
 }
 
 /** The commands offered now, in their order: those home runs, and of those, what can be done now. */
-export function offered({ modes, undoable }: Offering): ReadonlyArray<Command> {
-  const now: ReadonlySet<CommandId> = new Set(
-    run.filter((id) => (id === 'undo' ? undoable : id === 'language' || modes)),
-  )
-  return commands.filter((command) => now.has(command.id))
+export function offered({
+  modes,
+  undoable,
+  help = false,
+  keys = false,
+}: Offering): ReadonlyArray<Command> {
+  const now: Record<RunCommand, boolean> = {
+    ask: modes,
+    apply: modes,
+    undo: undoable,
+    language: true,
+    help,
+    keys,
+  }
+  return commands.filter((command) => isRun(command.id) && now[command.id])
 }
 
 /** What the field holds, and what the composer knows besides. */
@@ -117,14 +139,16 @@ export function pickOf(
 }
 
 /**
- * What the field submits: a language to go to; the Mode or an Undo, and the words after the command,
- * if any, a Message to send once it ran; or a Message, trimmed, each link picked by its Tile's id. A
- * `/` no command offered answers is sent as words, as the list says. None when it names a language
- * hexframe is not in: the field keeps what was typed.
+ * What the field submits: a language to go to; Help to open, on the topic the words after it find, if
+ * any; the Mode, an Undo or the Keys, and the words after the command, if any, a Message to send once
+ * it ran; or a Message, trimmed, each link picked by its Tile's id. A `/` no command offered answers
+ * is sent as words, as the list says. None when it names a language hexframe is not in: the field
+ * keeps what was typed.
  */
 export type Submitted =
   | { readonly language: string }
-  | { readonly command: Exclude<RunCommand, 'language'>; readonly then?: string }
+  | { readonly help: string }
+  | { readonly command: Exclude<RunCommand, 'language' | 'help'>; readonly then?: string }
   | { readonly message: string }
 
 export function submittedOf(
@@ -138,6 +162,7 @@ export function submittedOf(
     const language = languageNamed(opening.rest)
     return language === undefined ? undefined : { language }
   }
+  if (id === 'help') return { help: opening.rest }
   const then = encoded(opening.rest, links)
   return then === '' ? { command: id } : { command: id, then }
 }
@@ -187,7 +212,7 @@ export function workingInOf(
 ): { readonly title: string; readonly first: boolean } | undefined {
   const submitted = submittedOf(field, among)
   const message =
-    submitted === undefined || 'language' in submitted
+    submitted === undefined || 'language' in submitted || 'help' in submitted
       ? undefined
       : 'message' in submitted
         ? submitted.message

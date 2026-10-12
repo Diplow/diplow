@@ -2,7 +2,9 @@
 // tile, 0.16 of its radius, and stops growing at 22px, from a radius of about 138: past that, the
 // words keep their size and the light grows around them. Under a radius of 72 the title shows alone,
 // never below 11px; under a radius of 30, where 11px no longer fits, a tile is a light without words.
-// The preview, at two thirds of the title, takes as many lines as the box has left under it. Pure.
+// The preview, at two thirds of the title, takes as many lines as the box has left under it. A tile
+// standing alone at the center, folded, is read rather than glanced at: its words grow on with it,
+// up to a title of 44px, and its preview, half the title, takes the box the hex gives it. Pure.
 
 const titleShare = 0.16
 const titleMax = 22
@@ -52,6 +54,32 @@ export function fitWords(radius: number): Fit | undefined {
     width: radius * box.width * scale,
     height: radius * box.height * scale,
     capped: scale < 1,
+  }
+}
+
+/** The words of a tile alone at the center, as a share of its radius, and where they stop. */
+const lone = {
+  title: { share: 0.11, max: 44 },
+  preview: { share: 0.5, min: 15, max: 21 },
+  /** Narrower than a ring's, so a line of the preview stays a line a reader takes in. */
+  box: { width: 1.3, height: 1.1 },
+}
+
+/**
+ * The words of a tile standing alone at the center, folded, whose radius on screen is `radius` px:
+ * as a ring's until its words would grow past 22px, then growing on with it, the preview read whole.
+ */
+export function fitAlone(radius: number): Fit | undefined {
+  const title = Math.min(lone.title.share * radius, lone.title.max)
+  const ring = fitWords(radius)
+  if (ring === undefined || title <= ring.title) return ring
+  const preview = Math.min(Math.max(title * lone.preview.share, lone.preview.min), lone.preview.max)
+  return {
+    title,
+    preview,
+    width: radius * lone.box.width,
+    height: radius * lone.box.height,
+    capped: title === lone.title.max,
   }
 }
 

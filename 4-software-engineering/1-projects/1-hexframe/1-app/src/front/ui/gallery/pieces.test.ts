@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 
 import { describe, expect, it } from 'vitest'
 
-import { anchorOf, pieces, tiers, usedIn } from './pieces'
+import { pieces, tiers, usedIn } from './pieces'
 
 /** The pieces drawn in files of their own: every entry but the crossings, which join two ends. */
 const drawn = pieces.filter((piece) => 'sources' in piece)
@@ -128,8 +128,8 @@ describe('the pieces', () => {
     },
   )
 
-  it('have one name each, so each has one anchor', () => {
-    const names = pieces.map(({ name }) => anchorOf(name))
+  it('have one name each, which the deck’s address goes to', () => {
+    const names = pieces.map(({ name }) => name)
     expect(new Set(names).size).toBe(names.length)
   })
 

@@ -6,7 +6,7 @@ import { forget, identify } from '#/api/report/observability/client'
 import { session } from '#/api/iam/iam'
 
 import { CallFailed } from '../calls'
-import { continueTo, provedSession, readSignInSearch, sessionIfAny } from './guard'
+import { continueTo, readSignInSearch, sessionIfAny } from './guard'
 
 vi.mock('#/api/iam/iam', () => ({ session: vi.fn() }))
 vi.mock('#/api/report/observability/client', () => ({ identify: vi.fn(), forget: vi.fn() }))
@@ -87,15 +87,6 @@ describe("home's read of the Session", () => {
     const found = { account, expiresAt: new Date() }
     answering({ ok: true, value: found })
     expect(await sessionIfAny()).toEqual({ session: found })
-  })
-
-  it("leaves a context the header's links read as signed in, or as signed out", async () => {
-    answering({ ok: true, value: { account, expiresAt: new Date(0) } })
-    expect(provedSession(await sessionIfAny())).toBe(true)
-    answering(failing(new DevUnauthenticated()))
-    expect(provedSession(await sessionIfAny())).toBe(false)
-    expect(provedSession({})).toBe(false)
-    expect(provedSession(undefined)).toBe(false)
   })
 
   it('ties the device to the Account whose Session it found', async () => {

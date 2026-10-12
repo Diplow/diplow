@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { fitWords as fitting, linesThatFit, type Fit } from './words'
+import { fitAlone, fitWords as fitting, linesThatFit, type Fit } from './words'
 
 function fitWords(radius: number): Fit {
   const fit = fitting(radius)
@@ -51,6 +51,33 @@ describe('fitWords', () => {
     for (const radius of [72, 100, 138, 200]) {
       const { width, height } = fitWords(radius)
       expect(height / 2).toBeLessThanOrEqual(radius - width / 2 / Math.sqrt(3))
+    }
+  })
+})
+
+describe('fitAlone', () => {
+  it('fits a small tile alone as a tile of the ring', () => {
+    for (const radius of [20, 60, 120, 200]) expect(fitAlone(radius)).toEqual(fitting(radius))
+  })
+
+  it('grows its words on past 22px with the tile, up to a title of 44px', () => {
+    expect(fitAlone(300)?.title).toBeCloseTo(33)
+    expect(fitAlone(600)?.title).toBe(44)
+    expect(fitAlone(600)?.capped).toBe(true)
+  })
+
+  it('sets the preview at half the title, between 15px and 21px', () => {
+    expect(fitAlone(210)?.preview).toBe(15)
+    expect(fitAlone(360)?.preview).toBeCloseTo(19.8)
+    expect(fitAlone(600)?.preview).toBe(21)
+  })
+
+  it('gives its preview the box its hex holds, inside the slanted sides', () => {
+    for (const radius of [300, 450, 600]) {
+      const fit = fitAlone(radius)
+      if (fit === undefined) throw new Error('No words')
+      expect(fit.width).toBeCloseTo(radius * 1.3)
+      expect(fit.height / 2).toBeLessThanOrEqual(radius - fit.width / 2 / Math.sqrt(3))
     }
   })
 })

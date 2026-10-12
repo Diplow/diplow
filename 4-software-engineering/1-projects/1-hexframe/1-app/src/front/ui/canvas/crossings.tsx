@@ -24,9 +24,9 @@ import { lookOf } from './view/looks'
 import { findTile, pathTo, type TileNode } from './view/tiles'
 import type { CanvasView } from './view/view'
 
-/** The tile the crossings start centered on, and the view they open on. */
+/** The tile the crossings start centered on, and the view they open on, its ring around it. */
 export const engineering = 'software-engineering'
-export const startView: CanvasView = { center: engineering }
+export const startView: CanvasView = { center: engineering, frame: 'children' }
 
 /** A Tile of the fixture's title, by its id; the root's for none. */
 export const titleOf = (id: string | undefined) =>
@@ -37,7 +37,7 @@ export function CrossingCanvas({
   system = ulysse,
   ...canvas
 }: Omit<ComponentProps<typeof Canvas>, 'system' | 'className'> & { system?: TileNode }) {
-  return <Canvas system={system} {...canvas} className="h-[28rem] w-[35rem] max-w-full" />
+  return <Canvas system={system} {...canvas} className="min-h-0 w-full flex-1" />
 }
 
 /** A tile a crossing glinted on in your amber, keyed so another glint rises again. */

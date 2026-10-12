@@ -6,7 +6,6 @@
 // rules on the flat System the page shows, so the client knows no rule of its own.
 import { Result } from 'effect'
 
-import { isVerbatim } from '#/api/mapping/files/download'
 import {
   contextSlotOf,
   type Direction,
@@ -217,10 +216,4 @@ export function referenceAt({ flat }: Systems, hex: TileHex) {
   const version = tileAt(flat, parent.id)?.version
   if (version === undefined) return undefined
   return { parent: parent.id, parentVersion: version, slot: contextSlotOf(hex.direction) }
-}
-
-/** The Body a Tile's card shows as code: a Leaf's that isn't Markdown; none for any other Tile. */
-export function codeOf(root: SystemTile, id: string): string | undefined {
-  const found = tileIn(root, id)
-  return found?.kind === 'leaf' && isVerbatim(found.tile) ? found.tile.body : undefined
 }

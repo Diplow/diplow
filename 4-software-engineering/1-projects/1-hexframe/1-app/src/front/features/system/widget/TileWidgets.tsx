@@ -1,6 +1,6 @@
 // The tile widget in the chat, at the conversation's foot: the change under way when it is a form, a
 // new Tile's in the slot clicked, a Tile's edit or an import, as the URL holds it; once a form is
-// sent, the receipt it leaves; or an export the card started, working, then its receipt, or failed.
+// sent, the receipt it leaves; or an export a Tile's menu started, working, then its receipt, or failed.
 // One at a time, the latest. A write ends its form as it is sent, its receipt in the form's place at
 // once, and a refusal puts the form back (`useRefusalState`), the user's words with it. The Root's
 // edit opens the drawer: the widget draws no place for it.
@@ -32,7 +32,7 @@ interface TileWidgetsProps {
   onSearchChange: (change: SearchChange) => void
   /** Centers the canvas on a Tile a widget names. */
   onCenter: (tile: string) => void
-  /** What follows a form, and the export under way: the page's, which the card shares. */
+  /** What follows a form, and the export under way: the page's, which the canvas's menus share. */
   widgets: TileWidgetsState
   /** A form a refusal put back: on a phone, the chat comes to the front to show it. */
   onFormBack: () => void
@@ -261,7 +261,7 @@ function importOf(place: ImportPlace, page: WidgetContext) {
   )
 }
 
-/** An export the card started: working, then its receipt naming the zip, or failed with a retry. */
+/** An export a Tile's menu started: working, then its receipt naming the zip, or failed with a retry. */
 function exportOf(exporting: Exporting, widgets: TileWidgetsState, page: WidgetContext) {
   const { tile, below, phase, file, at } = exporting
   const stands = tileAt(page.system, tile.id) !== undefined

@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import type { SystemTile } from '#/domains/mapping/entities'
 import type { HelpNode } from '#/front/ui/chat/widgets/help/topics'
 
-import { helpNodeOf, readingOf } from './nodes'
+import { helpNodeOf, readingOf, topicFound } from './nodes'
 
 // Help as the help widget reads it: Mapping's Tiles as topics, and what a topic shows of where it
 // stands, its parent's six, and where it reads on.
@@ -68,5 +68,17 @@ describe("Help's Tiles as topics", () => {
         2: { id: 'help/2', title: 'help/2', preview: '', body: '# help/2', children: {} },
       },
     })
+  })
+})
+
+describe('the topic a few words after /help find', () => {
+  it('is the first whose title holds them, case aside, before one whose words do', () => {
+    expect(topicFound(help, 'b help/3/5')).toBe('help/3/5')
+    expect(topicFound(help, 't help/3')).toBe('help/3')
+  })
+
+  it('is none for no words, or words no topic holds', () => {
+    expect(topicFound(help, '  ')).toBeUndefined()
+    expect(topicFound(help, 'nowhere')).toBeUndefined()
   })
 })

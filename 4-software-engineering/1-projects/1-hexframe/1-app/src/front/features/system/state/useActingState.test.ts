@@ -19,6 +19,7 @@ import { layoutCanvas } from '#/front/ui/canvas/geometry/shape'
 import type { TileHex } from '#/front/ui/canvas/state/useCanvasState'
 import type { TileAct } from '#/front/ui/canvas/tile/menu/verbs'
 import { showView, type CanvasView } from '#/front/ui/canvas/view/view'
+import { firstKindOf } from '#/front/ui/canvas/view/tiles'
 
 import type { SearchChange, SystemSearch } from '../search/search'
 import { canvasTree } from '../tree'
@@ -85,6 +86,12 @@ const flat: System = {
 const root = systemOf(flat)
 const tree = canvasTree(root, { yours: true })
 
+/** A view with the center opened into its first ring, unless it says otherwise, as a click leaves it. */
+const opened = (view: CanvasView): CanvasView => ({
+  frame: firstKindOf(showView(tree, view).center),
+  ...view,
+})
+
 /** The System read again after a write, flat as the server answers it: its content plays no part. */
 function answering(
   write: 'moveTile' | 'swapTiles' | 'deleteTile' | 'deleteReference',
@@ -122,7 +129,7 @@ function render(search: SystemSearch = {}, { exporting = false } = {}) {
 
 /** The hex a view draws under this key. */
 function hex(key: string, view: CanvasView = {}): TileHex {
-  const found = layoutCanvas(showView(tree, view)).find(
+  const found = layoutCanvas(showView(tree, opened(view))).find(
     (drawn): drawn is TileHex => drawn.kind === 'tile' && drawn.key === key,
   )
   if (found === undefined) throw new Error(`No Tile is drawn under ${key}`)
@@ -306,7 +313,7 @@ describe('a line that opens something', () => {
 
 describe("a free slot's menu", () => {
   const slotOf = (view: CanvasView = {}) => {
-    const empty = layoutCanvas(showView(tree, view)).find((drawn) => drawn.kind === 'empty')
+    const empty = layoutCanvas(showView(tree, opened(view))).find((drawn) => drawn.kind === 'empty')
     if (empty?.kind !== 'empty') throw new Error('No free slot is drawn')
     return empty.slot
   }
@@ -354,7 +361,7 @@ describe("a Tile's agent line", () => {
 
 describe('a click on a free slot', () => {
   const free = (view: CanvasView = {}) =>
-    layoutCanvas(showView(tree, view)).flatMap((drawn) =>
+    layoutCanvas(showView(tree, opened(view))).flatMap((drawn) =>
       drawn.kind === 'empty' ? [drawn.slot] : [],
     )
 

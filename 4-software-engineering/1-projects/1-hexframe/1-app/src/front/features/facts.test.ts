@@ -41,17 +41,23 @@ describe('the navigation fact', () => {
     const { result } = renderHook(() =>
       useCanvasState({
         system,
-        view: {},
+        view: { frame: 'children' },
         onViewChange: (_next, action) => {
           publish(new Navigated(action))
         },
       }),
     )
     const { state, actions } = result.current
-    const a = state.hexes.find((hex): hex is TileHex => hex.kind === 'tile' && hex.key === 'tile:a')
-    if (a === undefined) throw new Error('No Tile a is drawn')
+    const tileOf = (key: string) => {
+      const found = state.hexes.find(
+        (hex): hex is TileHex => hex.kind === 'tile' && hex.key === key,
+      )
+      if (found === undefined) throw new Error(`No Tile is drawn under ${key}`)
+      return found
+    }
+    const a = tileOf('tile:a')
     actions.click(a)
-    actions.showInside('context')
+    actions.go(tileOf('tile:root'), 'show-context')
     actions.center(a, 'keyboard')
     expect(heard).toEqual([
       new Navigated({ gesture: 'expand', tile: 'a' }),

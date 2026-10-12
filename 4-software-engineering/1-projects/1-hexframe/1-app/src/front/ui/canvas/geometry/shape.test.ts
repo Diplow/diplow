@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import type { TileNode } from '../view/tiles'
+import { firstKindOf, type TileNode } from '../view/tiles'
 import { showView, type CanvasView } from '../view/view'
 
 import { hexCorners } from './geometry'
@@ -30,7 +30,9 @@ const many = tile('many', {
 
 const system = tile('root', { branches: { 1: mixed, 2: many } })
 
-const layout = (view: CanvasView) => layoutCanvas(showView(system, view))
+/** The hexes a view draws, its center opened into its first ring unless the view says otherwise. */
+const layout = (view: CanvasView) =>
+  layoutCanvas(showView(system, { frame: firstKindOf(showView(system, view).center), ...view }))
 
 type Kind = CanvasHex['kind']
 const only = <K extends Kind>(hexes: CanvasHex[], kind: K) =>
@@ -162,11 +164,30 @@ describe('layoutCanvas', () => {
     expect(empties(hexes).filter((slot) => slot.startsWith('b1'))).toHaveLength(6)
   })
 
-  it('shows a centered Leaf alone, filling the view, with no slot around it', () => {
+  it('shows a centered Leaf alone, the ground around it, with no slot around it', () => {
     const hexes = layout({ center: 'l3' })
     expect(hexes).toHaveLength(1)
-    expect(hexes[0]).toMatchObject({ kind: 'tile', role: 'center', tile: { id: 'l3' } })
-    expect(hexes[0]?.hex.radius).toBeGreaterThan(200)
+    expect(hexes[0]).toMatchObject({
+      kind: 'tile',
+      role: 'center',
+      tile: { id: 'l3' },
+      alone: true,
+    })
+    expect(hexes[0]?.hex.radius).toBeGreaterThan(150)
+    expect(hexes[0]?.hex.radius).toBeLessThan(canvasSize.height / 2)
+  })
+
+  it('shows a folded center alone, as large, its ring folded away', () => {
+    const hexes = layoutCanvas(showView(system, { center: 'mixed' }))
+    expect(hexes).toHaveLength(1)
+    expect(hexes[0]).toMatchObject({ role: 'center', tile: { id: 'mixed' }, alone: true })
+    expect(hexes[0]?.hex.radius).toBeCloseTo(layout({ center: 'l3' })[0]?.hex.radius ?? 0)
+  })
+
+  it('marks no center alone once its ring shows', () => {
+    const [center] = layout({ center: 'mixed' })
+    expect(center).toMatchObject({ role: 'center' })
+    expect(center).not.toHaveProperty('alone')
   })
 
   it('gives every hex a key of its own, in every view', () => {

@@ -85,7 +85,7 @@ describe('what follows a tile widget', () => {
 })
 
 describe('an export', () => {
-  it('works, then shows the file it saved under, the card waiting meanwhile', async () => {
+  it('works, then shows the file it saved under, the menu waiting meanwhile', async () => {
     let answer: (response: Response) => void = () => undefined
     vi.mocked(Mapping.exportTile).mockReturnValue(
       new Promise((resolve) => {
@@ -134,7 +134,7 @@ describe('an export', () => {
     expect(result.current.state.shown).toBeUndefined()
   })
 
-  it('runs to its end once let go, the card still waiting for it', async () => {
+  it('runs to its end once let go, the menu still waiting for it', async () => {
     let answer: (response: Response) => void = () => undefined
     vi.mocked(Mapping.exportTile).mockReturnValue(
       new Promise((resolve) => {

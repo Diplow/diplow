@@ -8,7 +8,7 @@ import { AskedAboutTile } from '#/front/features/facts'
 import { m } from '#/paraglide/messages'
 
 import type { Mentionable } from '../composer/mention'
-import { offered } from '../composer/typing'
+import { offered, type Offering } from '../composer/typing'
 import { useComposerState } from './useComposerState'
 
 // The composer on home as the user types, picks and sends, over Tiles made by hand: a `/` listing the
@@ -30,7 +30,7 @@ const tiles: ReadonlyArray<Mentionable> = [
   { id: 'lead', title: 'Team lead', trail: ['Ada'] },
 ]
 
-function render(offering = { modes: true, undoable: true }, center?: string) {
+function render(offering: Offering = { modes: true, undoable: true }, center?: string) {
   const among = offered(offering)
   const field = { current: document.createElement('textarea') }
   document.body.append(field.current)
@@ -125,6 +125,25 @@ describe("the composer's commands", () => {
     expect(rows()).toEqual(['en', 'fr'])
     type('/langue fr')
     expect(send()).toEqual({ language: 'fr' })
+  })
+
+  it('offers Help and the Keys where the page opens them, and not elsewhere', () => {
+    const { type, rows } = render({ modes: false, undoable: false, help: true, keys: true })
+    type('/')
+    expect(rows()).toEqual(['language', 'keys', 'help'])
+    const bare = render({ modes: false, undoable: false })
+    bare.type('/')
+    expect(bare.rows()).toEqual(['language'])
+  })
+
+  it('opens Help on the words after `/help`, which go to no agent, and the Keys on `/keys`', () => {
+    const { type, send } = render({ modes: true, undoable: true, help: true, keys: true })
+    type(`/${m.composer_command_help()} tiles and children`)
+    expect(send()).toEqual({ help: 'tiles and children' })
+    type(`/${m.composer_command_help()}`)
+    expect(send()).toEqual({ help: '' })
+    type(`/${m.composer_command_keys()}`)
+    expect(send()).toEqual({ command: 'keys' })
   })
 
   it('sends a `/` no command offered answers as words', () => {
@@ -287,6 +306,13 @@ describe('where the next Turn works', () => {
     pick('team')
     expect(result.current.state.workingIn).toEqual({ title: 'Team', first: true })
     type('/language ')
+    expect(result.current.state.workingIn).toBeUndefined()
+  })
+
+  it('is none for `/help`, whose words find a topic and go to no Turn', () => {
+    const offering = { modes: true, undoable: true, help: true }
+    const { result, type } = render(offering, 'work')
+    type(`/${m.composer_command_help()} tiles`)
     expect(result.current.state.workingIn).toBeUndefined()
   })
 

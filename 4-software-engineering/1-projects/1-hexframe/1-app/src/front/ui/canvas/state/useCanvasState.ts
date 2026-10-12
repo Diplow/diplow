@@ -1,24 +1,23 @@
 // The canvas's state, as it draws it: the view the URL holds resolved against the System, its hexes,
-// the rings the center can show, and what each gesture asks of the view. The view itself stays the
-// URL's: every action hands the next one to `onViewChange`, for the route to navigate to, with the
-// gesture that asked for it and the Tile it was made on. What it holds is the motion between two
-// views: what an opened hex holds blooms out of its heart, and folds back into it for
-// `--duration-fold` before the view that closes it is handed on, at once with reduced motion. Under a
-// finger, a tap on a Branch of the ring goes in, opening it in place waiting in its menu; the menu's
-// lines that go somewhere, open, go in, show the Context, back out, are gestures too.
+// and what each gesture asks of the view. The view itself stays the URL's: every action hands the
+// next one to `onViewChange`, for the route to navigate to, with the gesture that asked for it and the
+// Tile it was made on. What it holds is the motion between two views: what an opened hex holds, the
+// center's ring included, blooms out of its heart, and folds back into it for `--duration-fold` before
+// the view that closes it is handed on, at once with reduced motion. Under a finger, a tap on a Branch
+// of the ring goes in, opening it in place waiting in its menu; the menu's lines that go somewhere,
+// open, go in, show the Context, back out, are gestures too.
 import { useEffect, useRef, useState } from 'react'
 
 import { directions, type Point } from '../geometry/geometry'
 import { layoutCanvas, type CanvasHex } from '../geometry/shape'
 import type { TileMotion } from '../tile/Tile'
 import { movingFor } from '../../motion'
-import { pathTo, type InnerKind, type OuterKind, type TileNode } from '../view/tiles'
+import { firstKindOf, pathTo, type TileNode } from '../view/tiles'
 import {
   centerOn,
-  ringChoices,
   showView,
+  toggleCenter,
   toggleExpanded,
-  withFrame,
   withInner,
   type CanvasView,
   type Gesture,
@@ -30,28 +29,14 @@ import {
 export type TileHex = Extract<CanvasHex, { kind: 'tile' }>
 
 /**
- * What a click on a Tile does: the center shows its Context, or hides the ring inside it; a Branch
- * of the ring around it opens, or closes once open; anything else is centered, having nothing to
- * open at depth 2. A double-click, or Shift+Enter, centers any Tile but the center.
+ * What a click on a Tile does: the center opens into its ring, or folds back alone; a Branch of the
+ * ring around it opens, or closes once open; anything else is centered, having nothing to open at
+ * depth 2. A double-click, or Shift+Enter, centers any Tile but the center.
  */
-export type TileAction = Extract<
-  Gesture,
-  'expand' | 'collapse' | 'show-context' | 'hide-context' | 'hide-leaves' | 'center'
->
+export type TileAction = Extract<Gesture, 'expand' | 'collapse' | 'center'>
 
-const hiding: Record<InnerKind, TileAction> = { context: 'hide-context', leaves: 'hide-leaves' }
-const showing: Record<InnerKind, Gesture> = { context: 'show-context', leaves: 'show-leaves' }
-const around: Record<OuterKind, Gesture> = {
-  children: 'show-children-around',
-  branches: 'show-branches-around',
-  leaves: 'show-leaves-around',
-}
-
-/** The gesture that shows `kind` inside the center, or hides the ring `inner` shown there; none for no change. */
-function insideGesture(kind: InnerKind | undefined, inner: InnerKind | undefined) {
-  if (kind !== undefined) return kind === inner ? undefined : showing[kind]
-  return inner === undefined ? undefined : hiding[inner]
-}
+/** What a gesture on a Tile asks of the view: a click's, or its menu's Show its Context. */
+type TileGesture = TileAction | 'show-context'
 
 /**
  * What a click on `hex` does in `shown`; nothing on a centered Leaf, which opens nothing. A finger has
@@ -60,8 +45,8 @@ function insideGesture(kind: InnerKind | undefined, inner: InnerKind | undefined
 function tileAction(hex: TileHex, shown: ShownView, finger = false): TileAction | undefined {
   switch (hex.role) {
     case 'center':
-      if (shown.frame === undefined) return undefined
-      return shown.inner === undefined ? 'show-context' : hiding[shown.inner]
+      if (shown.frame !== undefined) return 'collapse'
+      return firstKindOf(shown.center) === undefined ? undefined : 'expand'
     case 'hub':
       return 'collapse'
     case 'branch':
@@ -89,12 +74,16 @@ export type ViewVerb = (typeof viewVerbs)[number]
 export const isViewVerb = (verb: string): verb is ViewVerb =>
   (viewVerbs as readonly string[]).includes(verb)
 
-/** The gestures that close an opened hex, whose six fold back into its heart first. */
-const closing = new Set<TileAction>(['collapse', 'hide-context', 'hide-leaves'])
+/**
+ * What folds back into the center as it folds: every hex of its ring and what they hold, keyed apart
+ * from any ground, since the center's ring stands around its hex, not inside it.
+ */
+const ring = 'ring'
 
 /**
  * Where each hex stands among the hexes opened in place: by key, the ground of each Tile or free slot
- * drawn inside one (`inside`), and the ground of each Tile drawn at its heart (`hubs`).
+ * drawn inside one, and of each in the ring around the center, the center's own `ring` (`inside`);
+ * and the ground of each Tile drawn at its heart (`hubs`).
  */
 function openedIn(hexes: readonly CanvasHex[]) {
   const inside = new Map<string, Inside>()
@@ -107,7 +96,34 @@ function openedIn(hexes: readonly CanvasHex[]) {
       else if (at !== undefined) inside.set(hex.key, at)
     }
   }
+  for (const [key, at] of centerRing(hexes, inside)) inside.set(key, at)
   return { inside, hubs }
+}
+
+/**
+ * The hexes of the ring around the center, which bloom out of its heart and fold back into it: those
+ * of the first generation in a Direction, but the ones inside its hex, which its ground holds.
+ */
+function centerRing(hexes: readonly CanvasHex[], inside: ReadonlyMap<string, Inside>) {
+  const center = hexes.find((hex) => hex.kind === 'tile' && hex.role === 'center')
+  const around = new Map<string, Inside>()
+  if (center === undefined) return around
+  for (const hex of hexes) {
+    const direction = directionOf(hex)
+    if (hex.generation !== 1 || inside.has(hex.key) || direction === undefined) continue
+    around.set(hex.key, {
+      ground: ring,
+      from: center.hex.center,
+      order: directions.indexOf(direction),
+    })
+  }
+  return around
+}
+
+/** The Direction a Tile or a free slot stands in; none for the center, a ground or a list. */
+function directionOf(hex: CanvasHex) {
+  if (hex.kind === 'tile') return hex.direction
+  return hex.kind === 'empty' ? hex.slot.direction : undefined
 }
 
 /**
@@ -179,24 +195,21 @@ export function useCanvasState({ system, view, onViewChange, finger = false }: C
     if (folding !== undefined) return
     clicked.current = hex.key
     if (action === undefined) return
-    if (closing.has(action)) foldThen(hex, action)
+    if (action === 'collapse') foldThen(hex, action)
     else act(hex, action)
   }
 
-  function act(hex: TileHex, action: TileAction) {
+  function act(hex: TileHex, action: TileGesture) {
     const tile = hex.tile.id
     switch (action) {
       case 'expand':
       case 'collapse':
-        if (hex.direction !== undefined)
+        if (hex.role === 'center') change(toggleCenter(system, view), action, tile)
+        else if (hex.direction !== undefined)
           change(toggleExpanded(system, view, hex.direction), action, tile)
         return
       case 'show-context':
         change(withInner(system, view, 'context'), action, tile)
-        return
-      case 'hide-context':
-      case 'hide-leaves':
-        change(withInner(system, view, undefined), action, tile)
         return
       case 'center':
         change(centerOn(system, tile), action, tile)
@@ -204,11 +217,11 @@ export function useCanvasState({ system, view, onViewChange, finger = false }: C
   }
 
   /**
-   * Closes the hex `hex` sits at the heart of once its six have folded back, at once when nothing
-   * moves, unless the view changed meanwhile.
+   * Closes the hex `hex` sits at the heart of, or folds the center, once what it holds has folded
+   * back into it, at once when nothing moves, unless the view changed meanwhile.
    */
   function foldThen(hex: TileHex, action: TileAction) {
-    const ground = hubs.get(hex.key)
+    const ground = hex.role === 'center' ? ring : hubs.get(hex.key)
     const duration = movingFor('--duration-fold')
     if (ground === undefined || duration === 0) {
       act(hex, action)
@@ -225,19 +238,18 @@ export function useCanvasState({ system, view, onViewChange, finger = false }: C
     state: {
       center: shown.center,
       hexes,
-      /** The rings shown around and inside the center, and the kinds it could show instead. */
-      rings: { around: shown.frame, inside: shown.inner, choices: ringChoices(shown) },
     },
     actions: {
       actionOf: (hex: TileHex) => tileAction(hex, shown, finger),
       /**
-       * How a hex drawn inside one opened in place moves: blooming out of its heart, after its elder
-       * siblings, or folding back into it; none for the others.
+       * How a hex drawn inside one opened in place, or in the center's ring, moves: blooming out of
+       * its heart, after its elder siblings, or folding back into it, all of them as the center
+       * folds; none for the others.
        */
       motionOf: (key: string): TileMotion | undefined => {
         const at = inside.get(key)
         if (at === undefined) return undefined
-        return at.ground === folding
+        return folding === ring || at.ground === folding
           ? { way: 'fold', from: at.from }
           : { way: 'bloom', from: at.from, order: at.order }
       },
@@ -276,16 +288,6 @@ export function useCanvasState({ system, view, onViewChange, finger = false }: C
             if (parent !== undefined) centerTile(parent.id)
           }
         }
-      },
-      /** Picks the ring around the center; the one shown already changes nothing. */
-      showAround: (kind: OuterKind) => {
-        if (kind !== shown.frame)
-          change(withFrame(system, view, kind), around[kind], shown.center.id)
-      },
-      /** Picks the ring inside the center, or none; the one shown already changes nothing. */
-      showInside: (kind: InnerKind | undefined) => {
-        const gesture = insideGesture(kind, shown.inner)
-        if (gesture !== undefined) change(withInner(system, view, kind), gesture, shown.center.id)
       },
     },
   }

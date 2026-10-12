@@ -34,15 +34,18 @@ import {
 } from '../geometry/geometry'
 import { buttonKeys, type Action, type Hand } from '../keys'
 import { BlurDef, FadeDef, points, proposedRim, Sweep, tint, type Fade } from './light'
-import { fitWords, linesThatFit } from '../geometry/words'
+import { fitAlone, fitWords, linesThatFit } from '../geometry/words'
 import { MarkGlow, MarkLines } from './marks/Marks'
 import { markNote, type TileMark } from './marks/mark'
 
 /**
- * Where it stands: in a ring, at the center, at the heart of a Branch opened in place, beside the
- * frame, or further out.
+ * Where it stands: in a ring, at the center, alone at the center, folded, its words read rather than
+ * glanced at, at the heart of a Branch opened in place, beside the frame, or further out.
  */
-export type TilePlace = 'ring' | 'center' | 'heart' | 'near' | 'far'
+export type TilePlace = 'ring' | 'center' | 'alone' | 'heart' | 'near' | 'far'
+
+/** At the center, folded or open: lit, its one steady line, its title in italics. */
+const centered = (place: TilePlace) => place === 'center' || place === 'alone'
 
 /** A state the hand gives, held without it: on /design-system, or by whatever points at the tile. */
 type Held = 'pointed' | 'focused' | 'pressed'
@@ -168,8 +171,8 @@ interface Sized {
   height: number
 }
 
-function sizedOf(hex: Hex, scale: number): Sized | undefined {
-  const fit = fitWords(hex.radius * scale)
+function sizedOf(hex: Hex, scale: number, place: TilePlace): Sized | undefined {
+  const fit = (place === 'alone' ? fitAlone : fitWords)(hex.radius * scale)
   if (fit === undefined) return undefined
   return {
     title: fit.title / scale,
@@ -247,6 +250,7 @@ const rims: Partial<Record<TileKind, Rim>> = {
 const opacities: Record<TilePlace, string> = {
   ring: '',
   center: '',
+  alone: '',
   heart: '',
   near: 'opacity-50',
   far: 'opacity-13',
@@ -257,9 +261,10 @@ export function Tile(props: TileProps) {
   const { scale = 1, hand, mark } = props
   const id = useId()
   const pending = write === 'pending'
-  const sized = sizedOf(hex, scale)
+  const sized = sizedOf(hex, scale, place)
   // At the center and at a heart, the ring around it says what the foot would; elsewhere the foot
-  // comes with the preview, once there is room for more than the title.
+  // comes with the preview, once there is room for more than the title, alone at the center too,
+  // where it says what opening it shows.
   const foot =
     place === 'center' || place === 'heart' || sized?.preview === undefined
       ? undefined
@@ -359,7 +364,7 @@ function rimOf(props: TileProps, id: string): Rim | undefined {
   const { kind, place = 'ring' } = props
   if (clashOf(props) !== undefined) return ember
   const own = rims[kind]
-  if (own !== undefined || place !== 'center') return own
+  if (own !== undefined || !centered(place)) return own
   return { color: kind === 'root' || kind === 'untitled' ? `url(#${id}-rim)` : 'var(--input)' }
 }
 
@@ -367,7 +372,7 @@ function rimOf(props: TileProps, id: string): Rim | undefined {
 function Light(props: TileProps & { id: string }) {
   const { hex, place = 'ring', held, action, hand, id, mark, scale = 1 } = props
   const lit =
-    place === 'center' ||
+    centered(place) ||
     place === 'heart' ||
     held === 'pointed' ||
     held === 'pressed' ||
@@ -538,7 +543,7 @@ function Words(props: TileProps & { sized: Sized }) {
             data-preview
             className={cn(
               'mt-[.7em] max-w-[90%] shrink-0 overflow-hidden font-sans font-light leading-[1.4] text-muted-foreground',
-              (place === 'center' || kind === 'root') && 'text-foreground/80',
+              (centered(place) || kind === 'root') && 'text-foreground/80',
             )}
             style={{
               fontSize: sized.preview,
@@ -562,7 +567,7 @@ function titleClass(look: TileLook & { place?: TilePlace }, alone: boolean): str
   return cn(
     'max-w-full shrink-0 font-human leading-[1.15] break-words',
     alone ? 'line-clamp-2' : 'line-clamp-3',
-    look.place === 'center' && 'italic',
+    look.place !== undefined && centered(look.place) && 'italic',
     kind === 'leaf' && look.file === true && 'font-mono text-[.8em]',
     // The agent's words are its mono, a draft it writes or a tile it proposes; yours keep your serif.
     (kind === 'draft' || kind === 'ghost') && 'font-agent text-[.86em] text-agent',

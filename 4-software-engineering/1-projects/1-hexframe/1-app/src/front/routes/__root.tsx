@@ -1,11 +1,8 @@
-import { HeadContent, Link, Scripts, createRootRoute, useMatches } from '@tanstack/react-router'
+import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 
-import { provedSession } from '#/front/client/iam/guard'
-import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 import { Toaster } from '#/front/ui/atoms/Toaster'
-import { Button } from '#/front/ui/atoms/controls/button'
 import { themeScript } from '#/front/ui/theme'
 
 import appCss from '../styles.css?url'
@@ -22,6 +19,10 @@ export const Route = createRootRoute({
   shellComponent: RootDocument,
 })
 
+/**
+ * The document, with no header: hexframe is one screen, and what a header's links did the composer's
+ * commands do, `/help` and `/keys` among them.
+ */
 function RootDocument({ children }: { children: ReactNode }) {
   return (
     // The theme script sets `<html>`'s class before React hydrates, hence the warning suppressed.
@@ -30,57 +31,11 @@ function RootDocument({ children }: { children: ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <HeadContent />
       </head>
-      {/* The header's height, which home's screen and Help leave themselves below it. */}
-      <body className="[--header:4.25rem]">
-        {/* The theme is at the head of where you are, in the canvas's corner. */}
-        <header className="flex h-(--header) items-center justify-end gap-2 px-4">
-          <SignedInLinks />
-          <HelpLink />
-        </header>
+      <body>
         {children}
         <Toaster />
         <Scripts />
       </body>
     </html>
-  )
-}
-
-/** The design system's ghost Button, as a link; the page the user is on reads as the current one. */
-const current = 'text-muted-foreground data-[status=active]:text-foreground'
-
-/** Help, which every page links to, signed in or not: anyone reads it, in the chat, Help on the canvas. */
-function HelpLink() {
-  return (
-    <Button asChild variant="ghost" size="sm" className={current}>
-      <Link to="/" search={{ help: true }}>
-        {m.nav_help()}
-      </Link>
-    </Button>
-  )
-}
-
-/**
- * The links a signed-in Account has, to its System and its Keys, the key widget in the chat. Home's
- * read of the Session, `sessionIfAny`, puts it on the route's context: a page that proved one shows
- * them, others show none, with no call of their own.
- */
-function SignedInLinks() {
-  const signedIn = useMatches({
-    select: (matches) => matches.some((match) => provedSession(match.context)),
-  })
-  if (!signedIn) return null
-  return (
-    <nav aria-label={m.nav_label()} className="mr-auto flex items-center gap-1">
-      <Button asChild variant="ghost" size="sm" className={current}>
-        <Link to="/" activeOptions={{ exact: true, includeSearch: false }} search={{}}>
-          {m.nav_system()}
-        </Link>
-      </Button>
-      <Button asChild variant="ghost" size="sm" className={current}>
-        <Link to="/" search={{ keys: true }}>
-          {m.nav_keys()}
-        </Link>
-      </Button>
-    </nav>
   )
 }

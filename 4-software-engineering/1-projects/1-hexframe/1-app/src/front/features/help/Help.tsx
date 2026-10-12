@@ -1,11 +1,10 @@
 // Help on the canvas, read-only: no empty slot takes a click and no Tile offers a swap, so a reader
-// only looks around, as on home. At the canvas's foot, the centered Tile's card, whose button opens
-// its page in the help widget, in the chat. Like the canvas, it holds no state: the view is the URL's,
-// and the route navigates.
+// only looks around, as on home, the centered topic alone and large, its preview whole, until a click
+// opens it. In the chat, under the agent's lines, its offer to read that topic's page in full, in the
+// help widget. Like the canvas, it holds no state: the view is the URL's, and the route navigates.
 import { m } from '#/paraglide/messages'
-import { Button } from '#/front/ui/atoms/controls/button'
+import { Act, voiceOf } from '#/front/ui/atoms/controls/act'
 import { Canvas } from '#/front/ui/canvas/Canvas'
-import { Card } from '#/front/ui/canvas/layouts/Card'
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
 import { showView, type CanvasView } from '#/front/ui/canvas/view/view'
 
@@ -17,36 +16,38 @@ interface HelpCanvasProps {
   className?: string
 }
 
-/** Help on the canvas, which only changes the view. */
+/**
+ * Help on the canvas, which only changes the view: each topic's menu holds the lines that go
+ * somewhere, its Context among them, beside its hover card.
+ */
 export function HelpCanvas({ tree, view, onViewChange, className }: HelpCanvasProps) {
-  return <Canvas system={tree} view={view} onViewChange={onViewChange} className={className} />
+  return (
+    <Canvas system={tree} view={view} onViewChange={onViewChange} looking className={className} />
+  )
 }
 
-interface HelpTileProps {
+interface HelpReadProps {
   tree: TileNode
   view: CanvasView
   /** Opens this Tile's page in the help widget. */
   onRead: (id: string) => void
 }
 
-/** The centered Tile's card: its Title, its Preview, and Read, which opens its page in the chat. */
-export function HelpTile({ tree, view, onRead }: HelpTileProps) {
+/**
+ * The agent's offer to read the centered topic's page in full, whose preview alone the canvas shows:
+ * a quiet act in its voice, following the canvas, where the centered Tile's card and its Read were.
+ */
+export function HelpRead({ tree, view, onRead }: HelpReadProps) {
   const center = showView(tree, view).center
   return (
-    <Card
-      title={center.title}
-      description={center.preview === '' ? undefined : center.preview}
-      footer={
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            onRead(center.id)
-          }}
-        >
-          {m.help_read()}
-        </Button>
-      }
-    />
+    <Act
+      tone="voice"
+      className={voiceOf('agent')}
+      onClick={() => {
+        onRead(center.id)
+      }}
+    >
+      {m.help_read_in_full({ title: center.title })}
+    </Act>
   )
 }
