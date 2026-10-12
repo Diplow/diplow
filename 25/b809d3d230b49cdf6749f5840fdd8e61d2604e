@@ -1,0 +1,40 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/Sunstone.tsx
+  s_53e4b15f16e541::t_4f6d5383faec30 1-143
+4-software-engineering/1-projects/1-hexframe/1-app/public/favicon.svg
+  s_53e4b15f16e541::t_4f6d5383faec30 1-34
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/CLAUDE.md
+  s_53e4b15f16e541::t_db2e8cb6a2517c 18
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/tokens.test.ts
+  s_53e4b15f16e541::t_4f6d5383faec30 58
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_53e4b15f16e541::t_4f6d5383faec30 622
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/__root.tsx
+  s_53e4b15f16e541::t_4f6d5383faec30 17-20
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_53e4b15f16e541::t_4f6d5383faec30 622
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/styles.css
+  s_53e4b15f16e541::t_4f6d5383faec30 44,101,157
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/Screen.tsx
+  s_53e4b15f16e541::t_edd74bb83521b6 361-364
+  s_53e4b15f16e541::t_4f6d5383faec30 30,368
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/Tokens.tsx
+  s_53e4b15f16e541::t_4f6d5383faec30 33
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE.md
+  s_53e4b15f16e541::t_4f6d5383faec30 24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "25b809d3d230b49cdf6749f5840fdd8e61d2604e",
+  "prompts": {},
+  "sessions": {
+    "s_53e4b15f16e541": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "140d59e5-9374-47e2-837e-f71112baf2ec",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
