@@ -97,6 +97,9 @@ function later() {
   return { promise: promise as never, settle }
 }
 
+/** What the page hears of each refused write: the Tile it wrote, and whether a form came back. */
+const onRefused = vi.fn()
+
 /** The page: the URL as the route holds it, each change applied to it as it stands then. */
 function usePage() {
   const [url, setUrl] = useState<SystemSearch>({ center: id.root })
@@ -106,7 +109,7 @@ function usePage() {
   return {
     url,
     navigate,
-    reopened: useRefusalState(url, navigate),
+    reopened: useRefusalState(url, navigate, onRefused),
     shown: useSystem().data?.system,
     create: useCreateTile(),
     edit: useEditTile(),
@@ -172,6 +175,10 @@ describe('a refused create', () => {
       shown: { fields: { title: m.error_mapping_title_missing() } },
     })
     expect(viewOf(page.url()).center).toBe(id.root)
+    expect(onRefused).toHaveBeenCalledExactlyOnceWith({
+      tile: expect.any(String) as string,
+      formBack: true,
+    })
   })
   it('reopens nothing under a parent gone, and shows why in a toast', async () => {
     const page = await rendered()
@@ -222,6 +229,8 @@ describe('a refused move or swap', () => {
     })
     expect(toast.error).toHaveBeenCalledExactlyOnceWith(m.error_mapping_direction_taken())
     expect(page.reopened()).toBeUndefined()
+    // A move comes back on the canvas: no form to bring forward.
+    expect(onRefused).toHaveBeenCalledExactlyOnceWith({ tile: id.a, formBack: false })
   })
 
   it('brings back the move of the Tile a swap moved', async () => {
@@ -287,6 +296,10 @@ describe('a refused delete', () => {
       expect(page.result.current.shown?.tiles[id.b]).toMatchObject({ slot: 2 })
     })
     expect(page.url()).toEqual({ center: id.a })
+    // The page hears it, by its Tile, so a receipt saying it was deleted can go.
+    await waitFor(() => {
+      expect(onRefused).toHaveBeenCalledExactlyOnceWith({ tile: id.b, formBack: false })
+    })
   })
 })
 

@@ -8,6 +8,7 @@ import type { ImportPlace } from '#/front/client/mapping/queries'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 import {
   CanvasView,
+  centerOn,
   orDefault,
   readSearch,
   TileId,
@@ -136,3 +137,26 @@ export function withoutTile(search: SystemSearch, gone: TileNode): SystemSearch 
     ? withChange(search, { kind: 'none' })
     : search
 }
+
+/**
+ * Whether going to `next` opens a form the tile widget shows, a new Tile's, an import or an edit,
+ * another than the one under way. A change that lands later, made from the search params of that
+ * moment, opens none: it is a refusal putting a form back.
+ */
+export function opensWidget(current: SystemSearch, next: SearchChange): boolean {
+  if (typeof next === 'function') return false
+  const change = changeOf(next)
+  return (
+    (change.kind === 'add' || change.kind === 'import' || change.kind === 'edit') &&
+    keyOf(change) !== keyOf(changeOf(current))
+  )
+}
+
+/**
+ * Where a delete leaves the page, from the search params of its moment: centered on the Tile `gone`
+ * stood under, the change under way ended if it named `gone` or a Tile below it.
+ */
+export const afterDelete =
+  (tree: TileNode, parent: string, gone: TileNode) =>
+  (current: SystemSearch): SystemSearch =>
+    withoutTile(withView(current, centerOn(tree, parent)), gone)

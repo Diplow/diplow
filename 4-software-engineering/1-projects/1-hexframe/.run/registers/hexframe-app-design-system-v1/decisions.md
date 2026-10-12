@@ -22,7 +22,10 @@ preview: >-
   own field, what the frame, the Proposal and the Receipt grew, and what the
   proposal drew beyond the reference or left out of it; and how HEX-101 built
   the chat: the commands home runs, "the agent" in its words, what it drew
-  where the proposals drew nothing, and the screen's foot inset.
+  where the proposals drew nothing, and the screen's foot inset; and how
+  HEX-102 moved the tile forms into the chat: the widget at the
+  conversation's foot, the Root's edit left in the drawer, the widget's words
+  held by a state hook, and what the proposal drew that the build left.
 ---
 # Decisions
 
@@ -238,3 +241,33 @@ HEX-101. The chat is on the proposed pieces now. A few states have nothing to sh
 HEX-101, on HEX-95's deferred finding and Ulysse's comment on this ticket. The Composer padded itself by the viewport (`sm:`) while the screen folds on its own width (DEC-16), so each caller added `--screen-clear` by hand. The screen's foot now sets `--screen-foot-inset` to `--screen-clear`, wide only, and the Composer, its list and the sign-in widget pad on `@wide:` with it added, the padding written once beside the zone (`footPadding`, `ui/chat/layouts/zone.ts`): their zone runs on under the clear to the cut, and no caller pads them again. Home's wrapper and the specimens' overrides on `/design-system` went.
 
 `/language` is the composer's, so `LocaleSwitch` left the header and `ui/` (DEC-25 kept it there until then). The pages that are no screen yet, Keys, Help and signing in, have no language switch until HEX-103 brings them into the chat; their `/fr/…` address still reads them in French.
+
+### DEC-37 The tile widget sits at the conversation's foot, its form still the URL's, what follows it the page's
+
+HEX-102. The tile widget takes the Drawer's place: a new Tile's form, an edit and an import open at the foot of the chat's timeline, under its last Entry, in the screen's messages slot, where the conversation stays at its foot (DEC-26), and a phone brings the chat to the front as one opens (`opensWidget`, `features/system/search/`). Which form is open stays in the URL: STACK's state table names "the open drawer" among what a link carries, and the widget is that drawer moved, so a link still opens the same form and the refusal machinery (`useRefusalState`) keeps working on the URL of its moment. What follows a form is no change under way, so it lives in the page (`useTileWidgetsState`, which home holds so the card on the canvas and the chat share it): the receipt a sent form leaves, by the form's own key, so the one `TileWidget` goes from form to receipt and hands it the focus, or an export, working, then its receipt naming the zip, or failed with a retry. One at a time: a form opening ends it, a sent form or an export takes its place, a form closed unsent leaves nothing.
+
+The receipt and the timeline's own line for the same change ("You created Work") both show once the Conversation is read again. The receipt is what the proposal draws and what takes the focus, and the timeline is the record that outlives the page, so both stay. The receipt comes at once, so a sent form no longer waits for the guard's round trip to close (HEX-72#PARK-1). Opening one still does, as every change to the URL makes home's guard read the Session again; that is IAM's guard and its owner's call, filed again as HEX-102#PARK-1.
+
+The centered Tile's card stays at the canvas's foot (DEC-26): its move, grow, shrink and delete have no other place until HEX-107 builds the tile's menu, and its Edit, Export and Import a vault now open the widget.
+
+### DEC-38 The Root's edit stays in the drawer, on the shared form
+
+HEX-102. The tile widget's hex is the frame a tile goes in, its place lit among its parent's six (`TilePlace`: a parent, a kind, a place), and its receipt says where the tile stands. The Root has no parent and no place, and the proposal drew no widget for it. Drawing one would be the build drawing what its proposal didn't, so the Root's edit stays in the `Drawer` on the shared `Field` and `useAppForm` (`RootDrawer`, `features/system/widget/forms.tsx`), its refusal put back as before. The `Drawer` keeps two users, this and Help's Body (HEX-103). A proposal for the Root's widget would retire both.
+
+### DEC-39 The tile widget's words are a state hook, not TanStack Form
+
+HEX-102, on PR #114's first question (DEC-29) for the tile widget. The tile form had no rule of its own on TanStack Form: what a Tile must be is Mapping's, foreseen by `decide` and put back by `useRefusalState`. So the widget's words, and the refusal on each field, cleared as that field changes, are `useTileWordsState`'s, a refusal of a later turn putting the user's words back once. The submits stay Mapping's form submits (`useCreateTileSubmit`, `useEditTileSubmit`), which now answer the Tile's id, so a receipt names the Tile it wrote. An edit's marked fields and what Save sends are the same comparison with the Tile the widget opened on. Whether the underline replaces the shared `Field` everywhere is left to HEX-103, which retires its other users, Keys and signing in.
+
+### DEC-40 What the tile widget's proposal drew that this build left
+
+HEX-102. Drawn by HEX-100, not wired here:
+
+- **Changed meanwhile.** The page knows a Tile's Version moved, not who moved it or when, and the proposal's line says both. A save over a Tile changed meanwhile is refused `TileChanged` and reopens the widget with what the user typed, its toast saying why, as the drawer did.
+- **The agent's draft and edit of a tile** (`TileProposal`). The timeline's Proposal entry is HEX-101's and stays as it landed.
+- **Undo on the user's own receipt.** The client has no undo of the user's own writes.
+- **Give the page the canvas's side** (DEC-31), still nothing to do.
+- **A failed export's reason.** The failure's channel is a toast, chosen by the call, so the widget shows that it failed and offers Try again, the reason in the toast alone.
+- **The title's focus when a new tile opens.** The widget gives it only to a draft taken to edit, so a click on a slot leaves the focus where it was, the keyboard reaching the widget at the conversation's foot.
+- **From an import back to a new tile.** The proposal draws Import here on the new tile, not the way back; Cancel ends it.
+
+From PR #114's other questions, the build takes what landed: the page read as written (the Markdown seam), the places by name under a finger, the zone not warming.

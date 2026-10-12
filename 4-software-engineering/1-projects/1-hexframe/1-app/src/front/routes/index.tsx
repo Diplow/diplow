@@ -3,7 +3,8 @@
 // Conversation, its composer at its foot: wide, side by side along the curve; on a phone, one side in
 // front, the chat when the page opens, the seam turning it, and a Tile the chat names bringing the
 // canvas forward. The view and the change under way live in the search params, so a link shows what its
-// sender saw; a Tile's form opens as a drawer. Every gesture that changes the view is published on the
+// sender saw; a Tile's form, its import and its export open in the chat, at the conversation's foot, as
+// the tile widget, which a phone brings to the front. Every gesture that changes the view is published on the
 // client bus as a navigation fact, which the Conversation's navigation sender merges and records once
 // something else enters the timeline, a Message the chat posts included, or the page is hidden. Signed
 // out, the guard sends the visit to sign-in, then back here. The page follows the System and the
@@ -25,6 +26,7 @@ import { ChatComposer, ChatTimeline } from '#/front/features/conversation/Chat'
 import { useNavigationSender } from '#/front/features/conversation/state/useNavigationSender'
 import { Navigated } from '#/front/features/facts'
 import {
+  opensWidget,
   readSystemSearch,
   viewOf,
   withView,
@@ -34,6 +36,11 @@ import {
 import { System } from '#/front/features/system/System'
 import { TileActions } from '#/front/features/system/TileActions'
 import { canvasTree, onScreen } from '#/front/features/system/tree'
+import { TileWidgets } from '#/front/features/system/widget/TileWidgets'
+import {
+  type TileWidgetsState,
+  useTileWidgetsState,
+} from '#/front/features/system/widget/state/useTileWidgetsState'
 import { m } from '#/paraglide/messages'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
 import { Screen } from '#/front/ui/layouts/screen/Screen'
@@ -49,14 +56,21 @@ export const Route = createFileRoute('/')({
 function Home() {
   const search = Route.useSearch()
   const navigate = Route.useNavigate()
+  // On a phone, the side in front.
+  const { state: screen, actions: turning } = useScreenState()
+  // What follows a tile's widget in the chat, and the export the card starts.
+  const widgets = useTileWidgetsState()
   const onSearchChange = (next: SearchChange) => {
+    // A form, an import or an edit, opening: the tile widget comes, in front on a phone.
+    if (opensWidget(search, next)) {
+      widgets.actions.clear()
+      turning.turn('chat')
+    }
     void navigate({ search: next })
   }
   const { turn, mode } = useFollowLatest()
   // The chat's Messages go after the navigation they follow, from the view they were sent from.
   const { postMessage } = useNavigationSender()
-  // On a phone, the side in front.
-  const { state: screen, actions: turning } = useScreenState()
   // Outside every boundary, the System read without throwing for what the chat sends and the corner
   // shows: a failed read shows on the canvas, in its own boundary, and leaves the chat up, waiting to
   // send, and the theme at the corner's head.
@@ -92,14 +106,31 @@ function Home() {
               search={search}
               onSearchChange={onSearchChange}
               onViewChange={onViewChange}
+              widgets={widgets}
+              onExport={() => {
+                turning.turn('chat')
+              }}
             />
           </ReadBoundary>
         }
         corner={<Breadcrumb system={tree} view={viewOf(search)} onViewChange={onViewChange} />}
         messages={
-          <ReadBoundary>
-            <ChatTimeline onCenter={onCenter} turn={turn} resend={postMessage} />
-          </ReadBoundary>
+          <div className="grid gap-5">
+            <ReadBoundary>
+              <ChatTimeline onCenter={onCenter} turn={turn} resend={postMessage} />
+            </ReadBoundary>
+            <ReadBoundary>
+              <TileWidgets
+                search={search}
+                onSearchChange={onSearchChange}
+                onCenter={onCenter}
+                widgets={widgets}
+                onFormBack={() => {
+                  turning.turn('chat')
+                }}
+              />
+            </ReadBoundary>
+          </div>
         }
         composer={
           <ReadBoundary>
@@ -115,10 +146,13 @@ interface SystemPageProps {
   search: SystemSearch
   onSearchChange: (change: SearchChange) => void
   onViewChange: (view: CanvasView, action: ViewAction) => void
+  widgets: TileWidgetsState
+  /** An export started from the card: the chat, which shows it, comes to the front on a phone. */
+  onExport: () => void
 }
 
 /** The canvas side: the System, and the centered Tile's card at its foot. */
-function SystemPage({ search, onSearchChange, onViewChange }: SystemPageProps) {
+function SystemPage({ search, onSearchChange, onViewChange, widgets, onExport }: SystemPageProps) {
   const { data } = useSystem()
   if (data === undefined) {
     return (
@@ -141,7 +175,20 @@ function SystemPage({ search, onSearchChange, onViewChange }: SystemPageProps) {
         className="min-h-0 flex-1"
       />
       <div className="max-h-[30%] flex-none overflow-y-auto">
-        <TileActions system={root} tree={tree} search={search} onSearchChange={onSearchChange} />
+        <TileActions
+          system={root}
+          flat={system}
+          tree={tree}
+          search={search}
+          onSearchChange={onSearchChange}
+          exporting={{
+            start: (exported) => {
+              widgets.actions.export(exported)
+              onExport()
+            },
+            pending: widgets.state.exporting,
+          }}
+        />
       </div>
     </div>
   )

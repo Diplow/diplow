@@ -10,12 +10,12 @@ preview: >-
   with its Undo (HEX-98); the widgets, the tile's, the key's, the help's and
   the sign-in's (HEX-100); the widget's frame (HEX-96), the chat's zone and
   the decision's hand-off; and the atoms only it uses, Fold and the text cut
-  around what was typed. Home draws the conversation with them (HEX-101).
-  Never imports the Canvas.
+  around what was typed. Home draws the conversation with them (HEX-101),
+  and the tile widget (HEX-102). Never imports the Canvas.
 ---
 # chat
 
-The Chat, the side of hexframe's screen that shows the Conversation, where the user and the agent act ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]], "hexframe's screen, in words"). Its components came as the proposals for the chat landed (HEX-98, HEX-99, HEX-100); `features/conversation/` draws home's Conversation with the text, the entries and the composer (HEX-101), and the widgets wait for their builds (HEX-102, HEX-103). The Chat never imports the Canvas (dependency-cruiser, `no-side-importing-the-other`): a piece both use moves to `ui/atoms/` or `ui/layouts/`.
+The Chat, the side of hexframe's screen that shows the Conversation, where the user and the agent act ([[4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE|ui]], "hexframe's screen, in words"). Its components came as the proposals for the chat landed (HEX-98, HEX-99, HEX-100); `features/conversation/` draws home's Conversation with the text, the entries and the composer (HEX-101), `features/system/` the tile widget at its foot (HEX-102), and the other widgets wait for their build (HEX-103). The Chat never imports the Canvas (dependency-cruiser, `no-side-importing-the-other`): a piece both use moves to `ui/atoms/` or `ui/layouts/`.
 
 Every piece takes its text as `Words` (`text/words.tsx`): plain words, a tile named, who acted by name, in the order its language says them, so a tile reads alike in a Message, an event, a Proposal's change and a receipt. A feature makes them from a message with `weave`, which reads the message with a mark in each tile's place, then weaves the tiles in where the marks landed.
 
