@@ -14,24 +14,25 @@ import { placeOf, type Subject } from '#/front/ui/canvas/tile/menu/verbs'
 import type { MentionProps } from '#/front/ui/chat/text/Mention'
 
 import { standsFor, titleOf } from '../tree'
-import { placeOf as seatOf } from '../widget/place'
+import { seatOf } from '../widget/place'
 import type { Proposed } from './proposal'
 
 /**
- * A Tile the chat centered, glinting in your amber as the canvas arrives, `key` rising it again;
- * `after`, the last change to it the page held then, so a change that comes later glints its own.
+ * A Tile the chat centered, glinting in your amber as the canvas arrives, `key` the glint's own, so
+ * another arrival rises it again; `lastEntry`, the last change to it the page held then, so a change
+ * that comes later glints its own.
  */
 export interface Arrival {
   readonly id: string
   readonly key: string
-  readonly after?: string | undefined
+  readonly lastEntry?: string | undefined
 }
 
 /** A change made to a Tile since the page opened: who made it, and the Entry that tells it. */
 export interface Touch {
   readonly tile: string
   readonly by: By
-  readonly key: string
+  readonly entry: string
 }
 
 /**
@@ -39,7 +40,7 @@ export interface Touch {
  * today's, and the change, by Mapping's verb and the Tile it names, as the Proposal drafted it.
  */
 interface Landing {
-  readonly after: number
+  readonly proposalAt: number
   readonly change: string
 }
 
@@ -54,12 +55,12 @@ export function acceptedOf(
   entries: ReadonlyArray<Entry>,
   watched: ReadonlySet<string>,
 ): ReadonlyArray<Landing> {
-  return entries.flatMap((entry, after) =>
+  return entries.flatMap((entry, proposalAt) =>
     entry._tag === 'Proposal' &&
     entry.fate === 'accepted' &&
     entry.undone !== true &&
     watched.has(entry.proposal)
-      ? entry.changes.map((change) => ({ after, change: changeOf(change) }))
+      ? entry.changes.map((change) => ({ proposalAt, change: changeOf(change) }))
       : [],
   )
 }
@@ -81,13 +82,13 @@ export function touchesOf(
     if (entry._tag !== 'Change' || entry.actor._tag === 'You') return []
     const landed =
       entry.actor._tag === 'Assistant'
-        ? owed.findIndex(({ after, change }) => after < at && change === changeOf(entry))
+        ? owed.findIndex(({ proposalAt, change }) => proposalAt < at && change === changeOf(entry))
         : -1
     if (landed !== -1) owed.splice(landed, 1)
     if (known.has(entry.id)) return []
     const by: By = entry.actor._tag === 'Key' ? 'key' : landed === -1 ? 'agent' : 'human'
     const tiles = [entry.tile.id, ...(entry.other === undefined ? [] : [entry.other.id])]
-    return tiles.map((tile): Touch => ({ tile, by, key: entry.id }))
+    return tiles.map((tile): Touch => ({ tile, by, entry: entry.id }))
   })
 }
 
@@ -103,6 +104,11 @@ export interface Marking {
   readonly touches?: ReadonlyArray<Touch>
   /** The Entries of the changes the user opened the Tile of since. */
   readonly opened?: ReadonlySet<string>
+  /**
+   * The glints that have played, by their key: a light rises once, as its change comes or the chat
+   * centers its Tile, and not again each time the Tile comes back into the view.
+   */
+  readonly played?: ReadonlySet<string>
   /** What the open Proposal would do. */
   readonly proposed?: Proposed | undefined
 }
@@ -112,17 +118,18 @@ const directionOf = (slot: Slot): Direction => seatOf(slot).place
 
 /** A Tile's mark from what the page holds, none when nothing touches it. */
 function tileMarkOf(marking: Marking, id: string): TileMark | undefined {
-  const { arrived, working, touches = [], opened, proposed } = marking
+  const { arrived, working, touches = [], opened, played, proposed } = marking
   const last = touches.findLast((touch) => touch.tile === id)
   const unseen = touches.findLast(
     (touch): touch is Touch & { by: Exclude<By, 'human'> } =>
-      touch.tile === id && touch.by !== 'human' && opened?.has(touch.key) !== true,
+      touch.tile === id && touch.by !== 'human' && opened?.has(touch.entry) !== true,
   )
   // The newer of the arrival and the last change: one that comes after the arrival glints its own.
-  const glint =
-    arrived?.id === id && last?.key === arrived.after
+  const newest =
+    arrived?.id === id && last?.entry === arrived.lastEntry
       ? { by: 'human' as const, key: arrived.key }
-      : last && { by: last.by, key: last.key }
+      : last && { by: last.by, key: last.entry }
+  const glint = newest && played?.has(newest.key) !== true ? newest : undefined
   const change = proposed?.changes.get(id)
   const mark: TileMark = {
     ...(working === id && { working: true }),

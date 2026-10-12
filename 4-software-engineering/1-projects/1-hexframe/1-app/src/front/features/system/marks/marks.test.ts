@@ -61,10 +61,10 @@ describe('touchesOf, the changes made since the page opened', () => {
       change('swap', 'e', agent, 'f'),
     ]
     expect(touchesOf(entries, { known, accepted: [] })).toEqual([
-      { tile: 'b', by: 'agent', key: 'new' },
-      { tile: 'c', by: 'key', key: 'keyed' },
-      { tile: 'e', by: 'agent', key: 'swap' },
-      { tile: 'f', by: 'agent', key: 'swap' },
+      { tile: 'b', by: 'agent', entry: 'new' },
+      { tile: 'c', by: 'key', entry: 'keyed' },
+      { tile: 'e', by: 'agent', entry: 'swap' },
+      { tile: 'f', by: 'agent', entry: 'swap' },
     ])
   })
 
@@ -77,8 +77,8 @@ describe('touchesOf, the changes made since the page opened', () => {
     ]
     const accepted = acceptedOf(entries, new Set(['seen']))
     expect(touchesOf(entries, { known: new Set(['before']), accepted })).toEqual([
-      { tile: 'b', by: 'human', key: 'landed' },
-      { tile: 'b', by: 'agent', key: 'later' },
+      { tile: 'b', by: 'human', entry: 'landed' },
+      { tile: 'b', by: 'agent', entry: 'later' },
     ])
   })
 })
@@ -93,8 +93,8 @@ describe('acceptedOf, the changes an acceptance the page saw made', () => {
     ]
     const watched = new Set(['seen', 'undone', 'waiting'])
     expect(acceptedOf(entries, watched)).toEqual([
-      { after: 0, change: 'TileEdited:a' },
-      { after: 0, change: 'TileEdited:b' },
+      { proposalAt: 0, change: 'TileEdited:a' },
+      { proposalAt: 0, change: 'TileEdited:b' },
     ])
   })
 })
@@ -109,12 +109,12 @@ describe('canvasMarksOf, who touches what the canvas draws', () => {
   })
 
   it('glints a change that comes after the chat centered its Tile, not the arrival again', () => {
-    const touches = [{ tile: 'b', by: 'agent' as const, key: 'one' }]
-    const arrived = { id: 'b', key: '1', after: 'one' }
+    const touches = [{ tile: 'b', by: 'agent' as const, entry: 'one' }]
+    const arrived = { id: 'b', key: '1', lastEntry: 'one' }
     expect(canvasMarksOf({ arrived, touches }).tile?.('b')).toMatchObject({
       glint: { by: 'human', key: '1' },
     })
-    const later = [...touches, { tile: 'b', by: 'key' as const, key: 'two' }]
+    const later = [...touches, { tile: 'b', by: 'key' as const, entry: 'two' }]
     expect(canvasMarksOf({ arrived, touches: later }).tile?.('b')).toMatchObject({
       glint: { by: 'key', key: 'two' },
     })
@@ -122,9 +122,9 @@ describe('canvasMarksOf, who touches what the canvas draws', () => {
 
   it('glints the last change to a Tile, and keeps its dot until a change of it is opened', () => {
     const touches = [
-      { tile: 'a', by: 'agent' as const, key: 'one' },
-      { tile: 'a', by: 'key' as const, key: 'two' },
-      { tile: 'b', by: 'human' as const, key: 'three' },
+      { tile: 'a', by: 'agent' as const, entry: 'one' },
+      { tile: 'a', by: 'key' as const, entry: 'two' },
+      { tile: 'b', by: 'human' as const, entry: 'three' },
     ]
     const marks = canvasMarksOf({ touches })
     expect(marks.tile?.('a')).toEqual({ glint: { by: 'key', key: 'two' }, unseen: 'key' })

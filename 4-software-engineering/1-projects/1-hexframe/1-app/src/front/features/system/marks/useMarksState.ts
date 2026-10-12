@@ -9,9 +9,18 @@ import { useMemo, useState } from 'react'
 
 import type { System } from '#/domains/mapping/entities'
 import { useToday } from '#/front/client/assistant/conversation'
+import type { Gesture, ViewAction } from '#/front/ui/canvas/view/view'
 
 import { acceptedOf, type Arrival, canvasMarksOf, cardOf, touchesOf } from './marks'
 import { proposedOf } from './proposal'
+
+/** The gestures that open a Tile or center it, which see its changes. */
+const opening: ReadonlySet<Gesture> = new Set<Gesture>([
+  'center',
+  'expand',
+  'show-context',
+  'show-leaves',
+])
 
 interface MarksInput {
   /** The System as the page shows it, flat; none before it is read. */
@@ -30,6 +39,8 @@ export function useMarksState({ system, working }: MarksInput) {
   const [watched, setWatched] = useState<ReadonlySet<string>>(new Set())
   // The changes whose Tile the user opened since.
   const [opened, setOpened] = useState<ReadonlySet<string>>(new Set())
+  // The glints that have played: the view changed since they rose.
+  const [played, setPlayed] = useState<ReadonlySet<string>>(new Set())
   // Kept as the reads come, while rendering, as React keeps what a previous render saw.
   if (known === undefined && today !== undefined) {
     setKnown(new Set(today.entries.map(({ id }) => id)))
@@ -46,11 +57,16 @@ export function useMarksState({ system, working }: MarksInput) {
     known === undefined ? [] : touchesOf(entries, { known, accepted: acceptedOf(entries, watched) })
   /** The user opened a Tile: its changes so far are seen. */
   const openTile = (tile: string) => {
-    const seen = touches.filter((touch) => touch.tile === tile).map(({ key }) => key)
+    const seen = touches.filter((touch) => touch.tile === tile).map(({ entry }) => entry)
     if (seen.length > 0) setOpened((before) => new Set([...before, ...seen]))
   }
+  /** The view changed: every glint risen so far has played, and won't rise again as a Tile remounts. */
+  const viewChanged = () => {
+    const risen = [...touches.map(({ entry }) => entry), ...(arrived ? [arrived.key] : [])]
+    setPlayed((before) => new Set([...before, ...risen]))
+  }
   return {
-    marks: canvasMarksOf({ pointed, arrived, working, touches, opened, proposed }),
+    marks: canvasMarksOf({ pointed, arrived, working, touches, opened, played, proposed }),
     /** What a Tile named in the chat says in its card; none before the System is read. */
     cardOf: (id: string) => (system === undefined ? undefined : cardOf(system, proposed, id)),
     actions: {
@@ -67,12 +83,19 @@ export function useMarksState({ system, working }: MarksInput) {
       },
       /** The chat centered a Tile: it glints as the canvas arrives, and the user opened it. */
       arrive: (tile: string) => {
-        const after = touches.findLast((touch) => touch.tile === tile)?.key
-        setArrived({ id: tile, key: String(Date.now()), after })
+        viewChanged()
+        const lastEntry = touches.findLast((touch) => touch.tile === tile)?.entry
+        setArrived({ id: tile, key: String(Date.now()), lastEntry })
         openTile(tile)
       },
-      /** The user went to a Tile on the canvas. */
-      open: openTile,
+      /**
+       * A gesture on the canvas: the glints so far have played, and a gesture that opens a Tile, or
+       * centers it, sees its changes; one that closes or hides leaves its dot.
+       */
+      went: ({ gesture, tile }: ViewAction) => {
+        viewChanged()
+        if (opening.has(gesture)) openTile(tile)
+      },
     },
   }
 }

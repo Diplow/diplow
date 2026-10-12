@@ -23,7 +23,7 @@ Where a Tile is written on home since HEX-102: in the chat, at the conversation'
 |---|---|
 | `TileWidgets.tsx` | `TileWidgets`, at the conversation's foot: the form of the change under way, or its receipt while the URL still holds it; else what followed the last form, its receipt or the export; and the Root's drawer. It is where the page reads the refused writes (`useRefusalState`) and deletes from an edit |
 | `forms.tsx` | `NewTileWidget` and `EditTileWidget`, each from form to receipt, on Mapping's form submits; `RootDrawer`, the Root's edit on the shared form |
-| `place.ts` | The widget in Mapping's words, pure: `placeOf` and `slotOf`, a slot as a kind and a place and back; `freeFor`, the places a kind may take under a Tile; `whereIn`, where a Tile goes or stands; `slotForKind`, the slot another kind takes; `tilesBelow`, the Tiles that go along with one; `editedOf`, an edit's changed fields; `refusalOf` and `stillRefused`, a refusal on the widget's fields, cleared as they change. Tested in `place.test.ts` |
+| `place.ts` | The widget in Mapping's words, pure: `seatOf` and `slotOf`, a slot as a kind and a place and back; `freeFor`, the places a kind may take under a Tile; `whereIn`, where a Tile goes or stands; `slotForKind`, the slot another kind takes; `tilesBelow`, the Tiles that go along with one; `editedOf`, an edit's changed fields; `refusalOf` and `stillRefused`, a refusal on the widget's fields, cleared as they change. Tested in `place.test.ts` |
 
 | Folder | Holds |
 |---|---|

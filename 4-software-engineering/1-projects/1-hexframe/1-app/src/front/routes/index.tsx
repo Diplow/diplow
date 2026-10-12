@@ -223,7 +223,7 @@ function SignedIn() {
   const onViewChange = (view: CanvasView, action: ViewAction) => {
     onSearchChange(withView(search, view))
     publish(new Navigated(action))
-    marks.actions.open(action.tile)
+    marks.actions.went(action)
   }
   // A Tile the chat names crosses to the canvas: centered on it, glinting as it arrives, the canvas
   // comes forward, saying what it shows, the System's again should Help have had it.

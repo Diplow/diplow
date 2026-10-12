@@ -153,10 +153,15 @@ describe('useMarksState, what crosses from the chat to the canvas', () => {
         unseen: 'agent',
       })
     })
+    // Closing a ring leaves the dot; the glint has played, and doesn't rise again as the Tile remounts.
     act(() => {
-      result.current.actions.open(id.work)
+      result.current.actions.went({ gesture: 'collapse', tile: id.work })
     })
-    expect(result.current.marks.tile?.(id.work)).toEqual({ glint: { by: 'agent', key: 'after' } })
+    expect(result.current.marks.tile?.(id.work)).toEqual({ unseen: 'agent' })
+    act(() => {
+      result.current.actions.went({ gesture: 'center', tile: id.work })
+    })
+    expect(result.current.marks.tile?.(id.work)).toBeUndefined()
   })
 
   it("stands the open Proposal's create as a ghost, then glints its acceptance in the user's amber", async () => {
