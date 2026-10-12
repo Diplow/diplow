@@ -12,6 +12,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { m } from '#/paraglide/messages'
 
 import { Act } from '../../atoms/controls/act'
+import { focusHeld, focusLost, giveFocusBack } from '../../focus'
 import { Fold } from '../atoms/fold'
 import { HexMark } from '../atoms/hex'
 import { useHandOffState } from '../layouts/useHandOffState'
@@ -198,16 +199,14 @@ export function UntilDecided({ receipt, children }: UntilDecidedProps) {
  * somewhere meanwhile, or what had it is gone too.
  */
 function useFocusGivenBack(focused: boolean) {
-  const [opener] = useState(() => (typeof document === 'undefined' ? null : document.activeElement))
+  const [opener] = useState(focusHeld)
   const holds = useRef(focused)
   useEffect(() => {
     holds.current = focused
   })
   useEffect(
     () => () => {
-      const lost = document.activeElement === null || document.activeElement === document.body
-      if (!holds.current || !lost || opener?.isConnected !== true) return
-      if (opener instanceof HTMLElement || opener instanceof SVGElement) opener.focus()
+      if (holds.current && focusLost()) giveFocusBack(opener)
     },
     [opener],
   )

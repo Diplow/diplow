@@ -5,6 +5,7 @@ import { useId, useRef, useState, type ReactNode } from 'react'
 import { m } from '#/paraglide/messages'
 
 import { Act, voiceOf } from '../atoms/controls/act'
+import { focusHeld, giveFocusBack } from '../focus'
 
 interface DialogProps {
   /** Controlled: a dialog opens from a widget's action or a menu's entry, not from a trigger of its own. */
@@ -71,17 +72,16 @@ export function Dialog({
             if (typed !== '') event.preventDefault()
           }}
           onOpenAutoFocus={(event) => {
-            const held = document.activeElement
-            opener.current = held instanceof HTMLElement || held instanceof SVGElement ? held : null
+            opener.current = focusHeld()
             // Focus starts on the way out, Radix's default, or on the name to type when there is one.
             if (typeToConfirm === undefined) return
             event.preventDefault()
             document.getElementById(fieldId)?.focus()
           }}
           onCloseAutoFocus={(event) => {
-            if (opener.current?.isConnected !== true) return
-            event.preventDefault()
-            opener.current.focus()
+            // Radix hands the focus over here, before anything else can take it: no need to wait for
+            // it to fall to the page, as a widget does.
+            if (giveFocusBack(opener.current)) event.preventDefault()
             opener.current = null
           }}
           className={cn(

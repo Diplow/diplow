@@ -23,6 +23,7 @@ import { flushSync } from 'react-dom'
 
 import { m } from '#/paraglide/messages'
 
+import { focusLost, giveFocusBack } from '../../focus'
 import { cutAlongCurve, reach } from './curve'
 import { keptAtFoot } from './state/latest'
 import { Scrollbar } from './Scrollbar'
@@ -231,10 +232,7 @@ function useFocusKept(chat: RefObject<HTMLElement | null>, chatShown: boolean) {
       held instanceof HTMLElement && chat.current?.contains(held) === true ? held : null
   }, [chat, chatShown])
   useEffect(() => {
-    const lost = document.activeElement === null || document.activeElement === document.body
-    if (chatShown && lost && kept.current?.isConnected === true) {
-      kept.current.focus({ preventScroll: true })
-    }
+    if (chatShown && focusLost()) giveFocusBack(kept.current, { preventScroll: true })
     if (chatShown) kept.current = null
   }, [chatShown])
 }
