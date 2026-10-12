@@ -1,0 +1,37 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/marks/marks.test.ts
+  s_6c94d00c8dfcf4::t_93d000a6fac540 63,71-79,81,86-87,95-98
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/marks/marks.ts
+  s_6c94d00c8dfcf4::t_f08969377c44ce 172,174
+  s_6c94d00c8dfcf4::t_ff16f97204bf80 184-187,191-194
+  s_6c94d00c8dfcf4::t_b2fb00bee39c20 10,16-17,34-47,52-59,65-69,73,75-84,86,106-107,114-115,125,156,158-159
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/System.tsx
+  s_6c94d00c8dfcf4::t_ff16f97204bf80 43-44
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/programs.ts
+  s_6c94d00c8dfcf4::t_ff16f97204bf80 154-156,158-159,164,178
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/Chat.tsx
+  s_6c94d00c8dfcf4::t_ff16f97204bf80 58,134
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-design-system-v1/decisions.md
+  s_6c94d00c8dfcf4::t_9069d504c82c85 392,399
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_6c94d00c8dfcf4::t_ff16f97204bf80 236-238
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/tree.ts
+  s_6c94d00c8dfcf4::t_b2fb00bee39c20 33
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/marks/proposal.ts
+  s_6c94d00c8dfcf4::t_b2fb00bee39c20 25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "83be38bdbe6fce95d76d148cc1fea6943ecc963c",
+  "prompts": {},
+  "sessions": {
+    "s_6c94d00c8dfcf4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1e6d2617-3bbe-4f2d-a798-ac7dd5ce9e37",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
