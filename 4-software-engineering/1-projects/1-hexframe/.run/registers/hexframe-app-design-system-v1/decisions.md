@@ -30,7 +30,10 @@ preview: >-
   out, the old pages landing on the screen, the widgets' words in state
   hooks, Help taking the canvas, and the header kept until the commands come;
   and what acting on a tile proposes: what a tap does, the keys on a focused
-  tile, each kind's menu and how a finger moves a tile.
+  tile, each kind's menu and how a finger moves a tile; and how HEX-108 drew
+  the crossings: each end in its side, joined at ui's root, who touches a
+  tile drawn on its light, over the fill and faint under the words, and what
+  it left for the builds, a live step that names no tile first.
 ---
 # Decisions
 
@@ -340,3 +343,37 @@ HEX-107. Every Tile of home's canvas sits in its `TileMenu` and hover card, ever
 Gap, for a later proposal: the hover card on a keyboard-focused tile opens as the menu closes and the focus comes back, so after a move from the menu the moving tile's card sits over its neighbour until the focus leaves; HEX-105 drew the card on focus and the menu giving the focus back, and nothing for the two together.
 
 Checked in a browser on home, signed in on a local account, dark and light, English and French, wide and in a 390px frame: the menu by a right click and on the focused tile by its keys (M opening the Move frame, ⌫ the delete's dialog, confirmed), a new tile added from the Add frame, the other tiles stepping back, a move from the frame by keyboard alone, "Somewhere else…" lifting the tile with its landing slots, swap disc and banner, a drag landed, a refused move (the server stood in for by a failing request) flaring and gliding back with the move under way again, Escape stopping it, and the hover card under the pointer. claude-in-chrome emulates neither touch nor reduced motion: the long press, the tap going in, the 44px targets and the still rim were not looked at here, and are left to HEX-111's acceptance.
+
+### DEC-48 The crossings: each end in its side, joined at ui's root; who touches a tile, on its light; what the proposal drew beyond the reference and what it left
+
+HEX-108. Every piece stays in its side (the grill of 2026-10-11, Q7): a crossing has no file of its own but an end on each side, `ui/chat/crossings.tsx` and `ui/canvas/crossings.tsx`, which `ui/crossings.tsx` joins for the page by the state that passes between them, as home's route and the client bus will (HEX-109, HEX-110). That file sits at `ui/`'s root, outside the tiers, as the theme does, the one module of `ui/` importing both sides: the route had grown past 600 lines, and a file beside it would need the `-` prefix the router skips, which transcrypt encrypts (DEC-20). What `ui/` can't reach the route hands it: Mapping's limit on a Preview, and how the timeline tells a run of gestures (Assistant's `merged`, the Conversation's `happenedOf`). The catalogue holds a crossing as an entry with two ends, the pieces it joins in the chat and on the canvas, which `pieces.test.ts` holds to a piece of each side, and "used in" reads back. Who touches a tile is `canvas/tile/marks/`, ported from `components.html#marks`: `mark.ts`, pure and tested, `Marks.tsx`, and its gallery; the `Canvas` takes `marks`, which says who touches each Tile, the Tile the chat points at, what stands in a free slot meanwhile and a Proposal's moves, its caller's to say as `writes` is. Two pieces moved where both sides reach them: `HoverCard` to `ui/layouts/`, since a tile named in the chat opens it, and `motion.ts` to `ui/`'s root, since the screen waits on `--duration-glance`.
+
+What `components.html` drew is each mark on a frame; the ticket asks for each crossing drawn with both ends, so the proposal drew nine, in the reference's look:
+
+- **Pointing**: the row of the `@` list the user is on, or a tile named in a message, hovered or focused, lights its tile in your amber; a tile not drawn lights the nearest of its ancestors that is, its way, fainter (`wayTo`); a click centers it, glinting as the canvas arrives.
+- **AgentAtWork**: a Turn as its events tell it, step by step: each tile it reads glints violet once while its light runs round the tile it works in, the reads folding into one line as they end; a tile it writes breathes in its slot, then glints; what it changed keeps a dot until opened. A Key's change comes in hollow, named for the Key.
+- **ProposalGhosts**: an open Proposal's create stands in its slot as a ghost, a new `ghost` kind, dashed violet with no menu of its own; an edit dashes the tile's rim, a move draws its arc, bowed away from the heart of its ring, a deletion steps the tile back; a change pointed at in the Proposal lights its tile; accepted, they land glinting in your amber; discarded or undone, they go.
+- **Drafting**: a tile written in the tile widget breathes in its slot in your amber, its title as typed; another place picked on the widget's map moves it; created, it glints once.
+- **NextTurn**: under the composer's field, beside the Mode, where the next Turn works, the Tile the Message opens with, else the centered one, as Assistant's `turnLocation` decides; sent, the agent's light runs round it while the Turn lasts.
+- **MenuThroughChat**: a tile's "Ask the agent about it" names the tile first in the composer, what was written kept, the focus just after it; a free slot's "Ask the agent for one" names the tile it would go under and the place; the other lines go where home already sends them, said in a toast.
+- **NavigationEntry**: each gesture on the canvas joins the navigation under way, told as the timeline tells it, until a Message comes between.
+- **DropToName**: a tile carried off the canvas under a mouse or a pen follows the pointer over the page (`Carried`), the composer lights to take it and names it at the caret, a screen reader told. A finger never carries a tile: its way is the menu's or `@`.
+- **PhoneGlance**: on a phone a crossing brings the canvas forward to show what the chat pointed at, centered and glinting, then gives the chat back after a glance (`--duration-glance`, 2.8s), the focus where it was; a hand on the canvas meanwhile, a pointer or a key, keeps it in front; a screen reader hears what was shown.
+
+Where the reference left room, or where drawing both ends showed it wrong:
+
+- **DEC-31's "draft"**, read here: a tile is drafted where it is being written, in the voice of whoever writes it, the agent's violet as the reference draws it, your amber in the tile widget; what a Proposal would create is not a draft but a ghost, waiting on your decision. So "draft" against Proposal, which DEC-46 left to HEX-109, has an answer to review.
+- **A light lies over the tile's fill.** The reference puts its glow behind the fill, which shows in dark, where a tile is 6% white, and not on paper, where it is 92% white and opaque once lit: in the light theme the chat's pointing showed nothing. Lights now lie over the fill, as a refusal's flare already did. The light the chat's pointing holds stays faint under the words, so a preview keeps 4.5:1 in both themes (it fell to 2.3:1 in dark, under the reference's 42% amber), and glows from the rim in; a glint still passes over the words once, as the flare does.
+- **The hover card opens above a tile named in a line of words**, not beside it, where it covered the next names, and lets the pointer through, for the eye alone, so it never holds itself open over the next tile or word.
+- **A menu leaves the focus where a line's action takes it.** The menu traps the focus while a line runs, then gives it back to its tile as it closes, so a line that names a tile in the composer lost its focus to the tile, and the next letters typed ran the tile's keys. A line's action now takes the focus a task later, and the menu, closing, keeps it there (`Menu`'s close).
+- **With reduced motion** the glint and the flare still fade, being lights that move nothing, the agent's light round the rim holds still, the dots and the card appear at once, and the glance lasts as long, since what the canvas showed must be seen.
+
+Left for the builds and the review:
+
+- **The live step names no tile.** Assistant's `TurnStep` is a tool and a detail, with no Tile id, so home can't yet light the tile the agent reads or writes as it goes; the specimen plays a Turn from its events as the chat tells them. HEX-109 needs Assistant to name the Tile a step touches.
+- **Home's phone crossings change**: `useScreenState`'s `cross` now gives the chat back after the glance, unless the canvas was taken meanwhile, where it kept the canvas in front, so a tile named in the chat and a Help topic centered from its widget's map glance and come back, as the ticket asks of a crossing. Home says nothing of what it showed yet (`cross`'s `said`), which its builds pass (HEX-109, HEX-110).
+- **The centered Tile's card** (DEC-47 left whether it stays to this proposal): the crossings now say under the composer where the next Turn works, the centered Tile, and its title and kind are its hover card's and its menu's; but a verbatim Leaf's Body and an empty System's Import a vault have no other place yet, so the card stays, and whether it goes is asked on the pull request.
+- **Carrying a tile off home's canvas**: the canvas's own drag is a move, so the specimen carries from a frame of its own (`CarryFrame`); how a drag that leaves the canvas becomes a carry is HEX-110's.
+- **Help's crossing**, its widget centering Help's canvas on the topic it opens, which DEC-31 left here, has been home's since HEX-103 (DEC-43), so the page draws it no second time.
+
+Checked in a browser on `/design-system`, dark and light, English and French, wide and in a 390px frame, by mouse and by keyboard alone, each crossing played end to end; a drop by pointer events paced as a hand's, since the browser's own drag lands in one step. claude-in-chrome emulates neither touch nor reduced motion, so the long press, the 44px targets, the still rim and the glance under a finger were not looked at here.
