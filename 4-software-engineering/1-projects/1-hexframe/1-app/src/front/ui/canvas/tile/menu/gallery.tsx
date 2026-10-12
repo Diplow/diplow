@@ -10,6 +10,7 @@ import { toast } from '../../../atoms/Toaster'
 import { GalleryGroup, GallerySection, GalleryState } from '../../../gallery/frame'
 import { ulysse } from '../../fixtures'
 import { directions, neighbor, type Hex } from '../../geometry/geometry'
+import { useScale } from '../../state/useScale'
 import type { TileNode } from '../../view/tiles'
 import { Slot } from '../places'
 import {
@@ -21,7 +22,6 @@ import {
   ring,
   seatsOf,
   trades,
-  useScale,
   wordsOf,
 } from '../specimens'
 import { Tile, type TileLook } from '../Tile'
@@ -91,7 +91,7 @@ const shown = (subject: Subject) => (_act: TileAct, what: string) => {
  */
 function ActingFrame() {
   const svg = useRef<SVGSVGElement>(null)
-  const scale = useScale(svg, frameWidth)
+  const scale = useScale(svg, { width: frameWidth, height: frameHeight })
   const finger = useFinger()
   const centerHex = { center: { x: 0, y: 0 }, radius: frameRadius }
   const centerSubject: Subject = {

@@ -11,6 +11,8 @@ import { toast } from '../../../atoms/Toaster'
 import { GalleryGroup, GallerySection, GalleryState } from '../../../gallery/frame'
 import { directions, neighbor, type Direction, type Hex, type Point } from '../../geometry/geometry'
 import type { Hand } from '../../keys'
+import { movingFor } from '../../state/motion'
+import { useScale } from '../../state/useScale'
 import type { TileNode } from '../../view/tiles'
 import { noop, Specimen } from '../gallery'
 import { directionName } from '../menu/verbs'
@@ -24,7 +26,6 @@ import {
   gap,
   ring,
   seatsOf,
-  useScale,
   wordsOf,
   type Ring,
 } from '../specimens'
@@ -113,14 +114,6 @@ const hearts = Object.fromEntries(
 /** The ring as a move reads it: who trades places; every free slot takes the tile on the fixture. */
 const frameOf = (seated: Ring): Frame => ({ seats: seatsOf(seated) })
 
-/** A CSS duration, `600ms` or `0.6s`, in milliseconds; none with reduced motion. */
-function glideOf(svg: SVGSVGElement | null): number {
-  if (!svg || matchMedia('(prefers-reduced-motion: reduce)').matches) return 0
-  const duration = getComputedStyle(svg).getPropertyValue('--duration-glide').trim()
-  const value = parseFloat(duration)
-  return duration.endsWith('ms') ? value : value * 1000
-}
-
 /**
  * A tile moving in Software Engineering's ring: dragged, or started by a button, ended by Escape or
  * Stop, landed in a free slot or swapped with a Branch, gliding there, or
@@ -171,7 +164,7 @@ function useMove(svg: RefObject<SVGSVGElement | null>) {
   // A drag lands the tile it started on, which became the one moving after this render: it says so.
   const land = (to: Direction, from = moving) => {
     if (from === undefined || landing !== undefined) return
-    const glide = glideOf(svg.current)
+    const glide = movingFor('--duration-glide')
     setOver(undefined)
     setLanding({ from, to, phase: 'glide' })
     after(glide + 40, () => {
@@ -262,7 +255,7 @@ function shiftOf({ dragged, moving, landing, frame }: Move, direction: Direction
  */
 function MovingFrame() {
   const svg = useRef<SVGSVGElement>(null)
-  const scale = useScale(svg, frameWidth)
+  const scale = useScale(svg, { width: frameWidth, height: frameHeight })
   const move = useMove(svg)
   const { frame, offers, moving, landing, over, land } = move
   const movingTitle = moving === undefined ? undefined : frame[moving]?.tile.title

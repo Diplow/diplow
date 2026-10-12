@@ -8,7 +8,15 @@
 // canvas's <svg> at its hex, and a button when its caller says what a click does.
 import { Link } from 'lucide-react'
 import { Slot } from 'radix-ui'
-import { useId, useLayoutEffect, useRef, useState, type CSSProperties, type RefObject } from 'react'
+import {
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type MouseEvent,
+  type RefObject,
+} from 'react'
 import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
@@ -29,13 +37,13 @@ import { fitWords, linesThatFit } from '../geometry/words'
  * Where it stands: in a ring, at the center, at the heart of a Branch opened in place, beside the
  * frame, or further out.
  */
-type TilePlace = 'ring' | 'center' | 'heart' | 'near' | 'far'
+export type TilePlace = 'ring' | 'center' | 'heart' | 'near' | 'far'
 
 /** A state the hand gives, held without it: on /design-system, or by whatever points at the tile. */
 type Held = 'pointed' | 'focused' | 'pressed'
 
 /** A write on the tile, still on its way or refused. */
-type TileWrite = 'pending' | 'refused'
+export type TileWrite = 'pending' | 'refused'
 
 /**
  * Blooming out of its parent's heart, or folding back into it, `order` siblings after its eldest,
@@ -90,6 +98,11 @@ export type TileProps = TileLook & {
   motion?: TileMotion
   /** What a click does, and its name for a screen reader; without it, the tile is no button. */
   action?: Action
+  /**
+   * Going in, centering the tile: a double click or ⇧↵, on a tile that is a button. Without it, both
+   * are left to what listens around the tile, its menu.
+   */
+  onGoIn?: (from: 'pointer' | 'keyboard') => void
   /** Screen px per unit of the hex, so the words fit the tile's size on screen. 1 by default. */
   scale?: number
   /** What its menu and its hover card hand it; a tile handed them takes the focus, a button or not. */
@@ -208,7 +221,8 @@ const opacities: Record<TilePlace, string> = {
 }
 
 export function Tile(props: TileProps) {
-  const { hex, kind, words, place = 'ring', write, held, motion, action, scale = 1, hand } = props
+  const { hex, kind, words, place = 'ring', write, held, motion, action, onGoIn } = props
+  const { scale = 1, hand } = props
   const id = useId()
   const pending = write === 'pending'
   const sized = sizedOf(hex, scale)
@@ -244,14 +258,7 @@ export function Tile(props: TileProps) {
                 'aria-label': words.title,
                 ...(hand && { tabIndex: 0, className: 'group outline-none' }),
               }
-            : {
-                role: 'button',
-                tabIndex: 0,
-                'aria-label': action.label,
-                className: 'group cursor-pointer outline-none',
-                onClick: action.onSelect,
-                ...buttonKeys({ onEnter: action.onSelect, onSpace: action.onSelect }),
-              })}
+            : pressable(action, onGoIn))}
           aria-description={description}
           aria-busy={pending || undefined}
         >
@@ -272,6 +279,36 @@ export function Tile(props: TileProps) {
       </Slot.Root>
     </g>
   )
+}
+
+/**
+ * What makes it a button: its name, a click, Enter and Space, and going in where its caller says, by
+ * a double click, the second click of which does nothing more, or by ⇧↵.
+ */
+function pressable(action: Action, onGoIn: TileProps['onGoIn']) {
+  return {
+    role: 'button',
+    tabIndex: 0,
+    'aria-label': action.label,
+    className: 'group cursor-pointer outline-none',
+    onClick: (event: MouseEvent) => {
+      if (onGoIn === undefined || event.detail < 2) action.onSelect()
+    },
+    ...(onGoIn && {
+      onDoubleClick: () => {
+        onGoIn('pointer')
+      },
+    }),
+    ...buttonKeys({
+      onEnter: action.onSelect,
+      onSpace: action.onSelect,
+      ...(onGoIn && {
+        onShiftEnter: () => {
+          onGoIn('keyboard')
+        },
+      }),
+    }),
+  }
 }
 
 /** Where a transform starts, in the canvas's own coordinates, and how many siblings it waits for. */

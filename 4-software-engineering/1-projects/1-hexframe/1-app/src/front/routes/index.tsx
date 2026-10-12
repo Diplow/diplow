@@ -211,7 +211,10 @@ function SignedIn() {
   // send, and the theme at the corner's head.
   const { data } = useSystem({ throwing: false })
   const root = data?.root
-  const tree = useMemo(() => (root === undefined ? undefined : canvasTree(root)), [root])
+  const tree = useMemo(
+    () => (root === undefined ? undefined : canvasTree(root, { yours: true })),
+    [root],
+  )
   const onViewChange = (view: CanvasView, action: ViewAction) => {
     onSearchChange(withView(search, view))
     publish(new Navigated(action))
@@ -354,13 +357,14 @@ interface SystemPageProps {
 function SystemPage({ search, onSearchChange, onViewChange, widgets, onExport }: SystemPageProps) {
   const { data } = useSystem()
   if (data === undefined) return <Loading />
-  const { system, root } = data
-  const tree: TileNode = canvasTree(root)
+  const { system, root, writing } = data
+  const tree: TileNode = canvasTree(root, { yours: true })
   return (
     <div className={side}>
       <System
         system={system}
         tree={tree}
+        writing={writing}
         search={search}
         onViewChange={onViewChange}
         onSearchChange={onSearchChange}

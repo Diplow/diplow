@@ -25,7 +25,14 @@ import { type System, type SystemTile, systemOf } from '#/domains/mapping/entiti
 import type { Operation, OperationName } from '#/domains/mapping/operations'
 import { type Download, downloaded } from '#/api/mapping/files/download'
 import { type Given, type LeftOut, type Prepared, prepared } from './import/upload'
-import { operationOf, overlaid, type Pending, refusalOf } from './overlay/overlay'
+import {
+  onItsWay,
+  type OnItsWay,
+  operationOf,
+  overlaid,
+  type Pending,
+  refusalOf,
+} from './overlay/overlay'
 import {
   ImportUpload,
   type NewReference,
@@ -59,6 +66,15 @@ const systemScope = 'system'
 
 /** The queue every write to the System waits its turn in, so they reach the server in order. */
 const systemQueue = 'system'
+
+/** An import's name, which its mutation is keyed by. */
+const importing = 'importTiles'
+
+/** What an import is given: the files, and where they land. */
+interface ImportVariables {
+  given: Given | Promise<Given>
+  place: ImportPlace
+}
 
 /**
  * The System's read, whose cache holds the System as the server last answered it, flat. Never read
@@ -94,9 +110,12 @@ const pendingByState = new WeakMap<Mutation['state'], Pending>()
 function pendingOf(mutation: Mutation): Pending {
   const known = pendingByState.get(mutation.state)
   if (known !== undefined) return known
+  const name = mutation.options.mutationKey?.[0]
   const pending = {
     turn: mutation.mutationId,
-    operation: operationOf(mutation.options.mutationKey?.[0], mutation.state.variables),
+    operation: operationOf(name, mutation.state.variables),
+    // An import's variables are `useImportTiles`'s own, the one write of its name.
+    landing: name === importing ? (mutation.state.variables as ImportVariables).place : undefined,
   }
   pendingByState.set(mutation.state, pending)
   return pending
@@ -113,7 +132,7 @@ function pendingOf(mutation: Mutation): Pending {
  * a `frame` read, which would be a Query of its own and read the System twice.
  */
 export function useSystem({ throwing = true }: { throwing?: boolean } = {}): {
-  data: { system: System; root: SystemTile } | undefined
+  data: { system: System; root: SystemTile; writing: OnItsWay } | undefined
 } {
   const { data } = useQuery(throwing ? systemRead : { ...systemRead, throwOnError: false })
   const pending = useMutationState({
@@ -124,7 +143,7 @@ export function useSystem({ throwing = true }: { throwing?: boolean } = {}): {
     data: useMemo(() => {
       if (data === undefined) return undefined
       const shown = overlaid(data, pending)
-      return { system: shown, root: systemOf(shown) }
+      return { system: shown, root: systemOf(shown), writing: onItsWay(pending, data.root.id) }
     }, [data, pending]),
   }
 }
@@ -370,19 +389,13 @@ export type Imported =
 export const useImportTiles = () => {
   const client = useQueryClient()
   return useMutation({
-    ...writing('importTiles', { queue: systemQueue }),
-    mutationFn: async ({
-      given,
-      place,
-    }: {
-      given: Given | Promise<Given>
-      place: ImportPlace
-    }): Promise<Imported> => {
+    ...writing(importing, { queue: systemQueue }),
+    mutationFn: async ({ given, place }: ImportVariables): Promise<Imported> => {
       const ready = await prepared(await given)
       if (ready._tag === 'Refused') return ready
       const { upload, as, leftOut } = ready
       const form = Schema.encodeSync(ImportUpload)({ upload, as, place })
-      const submitted = await settleSubmit('importTiles', importTiles({ data: form }))
+      const submitted = await settleSubmit(importing, importTiles({ data: form }))
       if (submitted.ok) return { _tag: 'Landed', report: submitted.value, leftOut }
       return { _tag: 'Refused', faults: submitted.failure.faults, leftOut }
     },

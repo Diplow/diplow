@@ -13,7 +13,8 @@ import { ulysse } from '../fixtures'
 import { directions, neighbor, type Hex } from '../geometry/geometry'
 import { fitWords } from '../geometry/words'
 import { Slot } from './places'
-import { branchOf, fixture, LiveFrame, OpenedSpecimen, useScale, wordsOf } from './specimens'
+import { useScale } from '../state/useScale'
+import { branchOf, fixture, LiveFrame, OpenedSpecimen, wordsOf } from './specimens'
 import { Tile, type TileLook } from './Tile'
 
 const origin = { x: 0, y: 0 }
@@ -411,7 +412,7 @@ function TileWordsSpecimen() {
   const svg = useRef<SVGSVGElement>(null)
   const box = Math.ceil(Math.sqrt(3) * 200) + 8
   // CSS narrows the drawing on a phone: the tile is fitted to the size it shows at, as said below.
-  const scale = useScale(svg, box)
+  const scale = useScale(svg, { width: box, height: 408 })
   const tile = presets[preset]()
   return (
     <>

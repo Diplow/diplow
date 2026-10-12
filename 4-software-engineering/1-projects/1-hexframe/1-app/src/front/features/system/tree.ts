@@ -1,14 +1,18 @@
 // The System as the canvas draws it. Mapping keeps each Tile's Branches and Leaves by Direction and
 // its Context by slot, −1 to −6, where a slot holds a Tile of its own or a Reference; the canvas takes
 // TileNodes, with the same Branches and Leaves, a Leaf marked as one, and the Context keyed by
-// Direction. Pure: what the canvas shows of a Tile is decided here.
+// Direction, each marked with what its light shows: the Root, a file, a Reference, broken or not. Pure: what the canvas shows of a Tile is decided here.
 import { Result } from 'effect'
 
+import { isVerbatim } from '#/api/mapping/files/download'
 import {
   contextSlotOf,
   type ContextDirection,
   type Direction,
   directions,
+  isContextSlot,
+  isEmptySystem,
+  isLeafSlot,
   type LeafTile,
   type Slot,
   type System,
@@ -29,47 +33,65 @@ type ContextEntry = NonNullable<SystemTile['context'][ContextDirection]>
 const titleOf = (title: string) => (title === '' ? m.system_untitled() : title)
 
 /**
- * The System's Tiles as the canvas draws them, from `tile` down. A Reference is drawn as the Tile it
- * points at, under that Tile's id, so centering on it and acting on it reach the Tile itself; a broken
- * one says so, under an id no Tile has.
+ * The System's Tiles as the canvas draws them, from its Root down. A Leaf that isn't Markdown is
+ * marked as a file's. A Reference is drawn as the Tile it points at, under that Tile's id, so
+ * centering on it and acting on it reach the Tile itself, with where that Tile stands; a broken one
+ * says so, under an id no Tile has. With `yours`, the Root is the user's, the Account's System's
+ * and not Help's: named, untitled, or an empty System's (Mapping's `isEmptySystem`).
  */
-export function canvasTree(tile: SystemTile): TileNode {
+export function canvasTree(root: SystemTile, { yours = false } = {}): TileNode {
+  const tree = nodeOf(root, root)
+  return yours ? { ...tree, root: rootOf(root) } : tree
+}
+
+const rootOf = (root: SystemTile): NonNullable<TileNode['root']> => {
+  if (isEmptySystem(root)) return 'empty'
+  return root.title === '' ? 'untitled' : 'named'
+}
+
+/** A Tile of the System `root` as the canvas draws it, with everything below it. */
+function nodeOf(tile: SystemTile, root: SystemTile): TileNode {
   const branches: NonNullable<TileNode['branches']> = {}
   const leaves: NonNullable<TileNode['leaves']> = {}
   const context: NonNullable<TileNode['context']> = {}
   for (const direction of directions) {
     const branch = tile.branches[direction]
-    if (branch !== undefined) branches[direction] = canvasTree(branch)
+    if (branch !== undefined) branches[direction] = nodeOf(branch, root)
     const leaf = tile.leaves[direction]
     if (leaf !== undefined) leaves[direction] = leafNode(leaf)
     const entry = tile.context[contextSlotOf(direction)]
     if (entry !== undefined)
-      context[direction] = contextNode(entry, `${tile.id}:${String(-direction)}`)
+      context[direction] = contextNode(entry, `${tile.id}:${String(-direction)}`, root)
   }
   const { id, title, preview } = tile
   return { id, title: titleOf(title), preview, branches, leaves, context }
 }
 
-const leafNode = ({ id, title, preview }: LeafTile): TileNode => ({
-  id,
-  title,
-  preview,
+const leafNode = (leaf: LeafTile): TileNode => ({
+  id: leaf.id,
+  title: leaf.title,
+  preview: leaf.preview,
   leaf: true,
+  ...(isVerbatim(leaf) && { file: true }),
 })
 
-function contextNode(entry: ContextEntry, slot: string): TileNode {
+function contextNode(entry: ContextEntry, slot: string, root: SystemTile): TileNode {
   switch (entry._tag) {
     case 'Tile':
-      return canvasTree(entry)
-    case 'Reference':
+      return nodeOf(entry, root)
+    case 'Reference': {
+      // The Root stands under nothing: a Reference to it is from the Root itself.
+      const found = tileIn(root, entry.tile.id)
       return {
         id: entry.tile.id,
         title: titleOf(entry.tile.title),
         preview: entry.tile.preview,
         reference: true,
+        ...(found && { from: titleOf((found.parent ?? found.tile).title) }),
       }
+    }
     case 'BrokenReference':
-      return { id: `broken:${slot}`, title: m.system_reference_broken(), preview: '' }
+      return { id: `broken:${slot}`, title: m.tile_broken_title(), preview: '', broken: true }
   }
 }
 
@@ -132,6 +154,17 @@ export function slotOf(ring: FrameKind, direction: Direction, going?: TileNode):
     case 'context':
       return contextSlotOf(direction)
   }
+}
+
+/**
+ * Whether an empty Direction of the canvas, in a ring of this kind, stands for this slot of Mapping's:
+ * a ring of Children's for a Branch's slot and a Leaf's alike, a ring of Branches' for a Branch's, a
+ * ring of Leaves' for a Leaf's, a Context ring's for the Direction negated.
+ */
+export function standsFor(ring: FrameKind, direction: Direction, slot: Slot): boolean {
+  if (isContextSlot(slot)) return ring === 'context' && slot === contextSlotOf(direction)
+  if (isLeafSlot(slot)) return (ring === 'children' || ring === 'leaves') && slot.leaf === direction
+  return (ring === 'children' || ring === 'branches') && slot === direction
 }
 
 /**

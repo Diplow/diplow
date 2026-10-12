@@ -11,8 +11,19 @@ export interface TileNode {
   context?: Partial<Record<Direction, TileNode>>
   /** A Leaf: one file's worth, with nothing below it and no Context, so no ring to show. */
   leaf?: true
+  /** A Leaf that isn't Markdown: its title is its file's name. */
+  file?: true
   /** Drawn in place of the Tile of this id, which stands elsewhere: a search for the id skips it. */
   reference?: true
+  /** Where the Tile a Reference points at stands: the title of the Tile it stands under. */
+  from?: string
+  /** A Reference whose Tile was deleted. */
+  broken?: true
+  /**
+   * The System's Root, the user: named, untitled, or untitled with nothing in it yet, an empty System
+   * waiting for a name or a vault.
+   */
+  root?: 'named' | 'untitled' | 'empty'
 }
 
 /** The Frame kinds of the ring around the center's hex. */

@@ -1,20 +1,32 @@
-// The canvas: one <svg>, every hex a <polygon> with a real stroke, and the text in a <foreignObject>
-// so it wraps like HTML, laid out by the shape (geometry/shape.ts); above it, the rings the center
-// can show. The viewBox is the canvas's own coordinates, so the page sizes it with CSS and everything
-// inside, text included, scales with it. The view is the caller's, from the URL: the canvas only says
-// which view comes next.
+// The canvas: one <svg>, every hex drawn by its light (tile/), a Tile, a free slot, the ground of a
+// hex opened in place, laid out by the shape (geometry/shape.ts), its words fitted to its size on
+// screen; above it, the rings the center can show. The viewBox is the canvas's own coordinates, so
+// the page sizes it with CSS and everything inside scales with it. The view is the caller's, from
+// the URL: the canvas only says which view comes next, and blooms and folds what a hex opens.
+import { Fragment, useRef } from 'react'
 import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 
 import { canvasSize, type EmptySlotTarget } from './geometry/shape'
-import { EmptySlot, Frame, ListHex } from './Frame'
 import type { Action } from './keys'
 import { Button } from '../atoms/controls/button'
-import { useCanvasState } from './state/useCanvasState'
-import { Tile, type SwapTarget } from './Tile'
+import { useCanvasState, type TileAction, type TileHex } from './state/useCanvasState'
+import { useScale } from './state/useScale'
+import { SwapDisc } from './tile/moving/Moving'
+import { Ground, Slot } from './tile/places'
+import { Tile, type TileWrite } from './tile/Tile'
+import { listOf, lookOf, placeOf } from './view/looks'
 import type { FrameKind, InnerKind, OuterKind, TileNode } from './view/tiles'
 import type { CanvasView, RingChoices, ViewAction } from './view/view'
+
+/** What is on its way to the System, as the canvas marks it. */
+interface Writes {
+  /** A Tile's write, by its id: on its way, or just refused; none for a Tile left alone. */
+  tile: (id: string) => TileWrite | undefined
+  /** Whether an import on its way lands in this free slot, where its tiles will be. */
+  landing: (slot: EmptySlotTarget) => boolean
+}
 
 interface CanvasProps {
   /** The System's root Tile, with everything below it. */
@@ -32,10 +44,12 @@ interface CanvasProps {
   emptySlots?: (slot: EmptySlotTarget) => Action | undefined
   /**
    * Whether a Tile offers to trade places with the Tile on the move, how that is named and what it
-   * does, on a small button of its own; `undefined` for a Tile that offers no swap. Without it, none
-   * does.
+   * does, on a disc of its own at its foot; `undefined` for a Tile that offers no swap. Given, a tile
+   * is on the move, and no Branch shows its frame at its foot. Without it, none does.
    */
-  swapTargets?: (tile: TileNode) => SwapTarget | undefined
+  swapTargets?: (tile: TileNode) => Action | undefined
+  /** What is on its way: without it, nothing is. */
+  writes?: Writes
   className?: string
 }
 
@@ -45,10 +59,45 @@ export function Canvas({
   onViewChange,
   emptySlots,
   swapTargets,
+  writes,
   className,
 }: CanvasProps) {
   const { state, actions } = useCanvasState({ system, view, onViewChange })
+  const svg = useRef<SVGSVGElement>(null)
+  const scale = useScale(svg, canvasSize)
   const { width, height } = canvasSize
+  const moving = swapTargets !== undefined
+
+  /** A Tile's hex: the tile, by what it is and where it stands, and the swap it offers, if any. */
+  const tileOf = (hex: TileHex) => {
+    const action = actions.actionOf(hex)
+    const swap = swapTargets?.(hex.tile)
+    return (
+      <Fragment key={hex.key}>
+        <Tile
+          hex={hex.hex}
+          {...lookOf(hex, { moving })}
+          place={placeOf(hex)}
+          scale={scale}
+          write={writes?.tile(hex.tile.id)}
+          motion={actions.motionOf(hex.key)}
+          action={
+            action && {
+              label: actionLabel(action, hex.tile.title),
+              onSelect: () => {
+                actions.click(hex)
+              },
+            }
+          }
+          onGoIn={(from) => {
+            actions.center(hex, from)
+          }}
+        />
+        {swap === undefined ? null : <SwapDisc hex={hex.hex} action={swap} scale={scale} />}
+      </Fragment>
+    )
+  }
+
   return (
     <div className={cn('flex min-h-0 flex-col gap-2', className)}>
       <RingChooser
@@ -58,6 +107,7 @@ export function Canvas({
         onInside={actions.showInside}
       />
       <svg
+        ref={svg}
         viewBox={`0 0 ${String(width)} ${String(height)}`}
         role="group"
         aria-label={m.hex_canvas_label({ title: state.center.title })}
@@ -66,31 +116,43 @@ export function Canvas({
         {state.hexes.map((hex) => {
           switch (hex.kind) {
             case 'ground':
-              return <Frame key={hex.key} hex={hex} />
+              return <Ground key={hex.key} hex={hex.hex} context={hex.ring === 'context'} />
             case 'empty':
-              return <EmptySlot key={hex.key} hex={hex} action={emptySlots?.(hex.slot)} />
-            case 'list':
-              return <ListHex key={hex.key} hex={hex} />
-            case 'tile':
               return (
-                <Tile
+                <Slot
                   key={hex.key}
-                  hex={hex}
-                  action={actions.actionOf(hex)}
-                  onAct={(repeat) => {
-                    actions.click(hex, repeat)
-                  }}
-                  onCenter={(from) => {
-                    actions.center(hex, from)
-                  }}
-                  swap={swapTargets?.(hex.tile)}
+                  hex={hex.hex}
+                  action={emptySlots?.(hex.slot)}
+                  loading={writes?.landing(hex.slot) ?? false}
                 />
               )
+            case 'list':
+              return <Tile key={hex.key} hex={hex.hex} {...listOf(hex)} scale={scale} />
+            case 'tile':
+              return tileOf(hex)
           }
         })}
       </svg>
     </div>
   )
+}
+
+/** What a click on a Tile does, as a screen reader hears it on its button. */
+function actionLabel(action: TileAction, title: string): string {
+  switch (action) {
+    case 'expand':
+      return m.hex_tile_expand({ title })
+    case 'collapse':
+      return m.hex_tile_collapse({ title })
+    case 'show-context':
+      return m.hex_tile_show_context({ title })
+    case 'hide-context':
+      return m.hex_tile_hide_context({ title })
+    case 'hide-leaves':
+      return m.hex_tile_hide_leaves({ title })
+    case 'center':
+      return m.hex_tile_center({ title })
+  }
 }
 
 const kindNames: Record<FrameKind, () => string> = {

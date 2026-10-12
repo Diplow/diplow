@@ -1,12 +1,14 @@
 // The user's System on the canvas. A click on an empty slot opens the new Tile's form there, a Leaf's
 // in a ring of Leaves, or, while a Tile is being moved, moves it there; meanwhile every other Tile
 // offers to swap places with it. A move or a swap ends the moment it is sent, and comes back if its
-// write is refused (`state/useRefusalState.ts`). While a write to the System is on its way, closing or
-// reloading the tab asks first.
+// write is refused (`state/useRefusalState.ts`). Every Tile a write on its way changes shows it,
+// and flares once it is refused (`state/useWritesState.ts`). While a write to the System is on its
+// way, closing or reloading the tab asks first.
 // Like the canvas, it holds no state: the view and the change under way are the URL's, and it hands
 // the next view, with the gesture that asked for it, and the next search params to the route.
 import { cn } from 'cn'
 
+import type { OnItsWay } from '#/front/client/mapping/overlay/overlay'
 import { useMoveTile, useSwapTiles, useSystemWriting } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import { useLeaveGuard } from '#/front/ui/canvas/atoms/useLeaveGuard'
@@ -19,6 +21,7 @@ import { Button } from '#/front/ui/atoms/controls/button'
 import { changeOf, viewOf, withChange, type SearchChange, type SystemSearch } from './search/search'
 import type { System as FlatSystem } from '#/domains/mapping/entities'
 
+import { useWritesState } from './state/useWritesState'
 import { moveOf, slotOf, swapOf, swapsWith } from './tree'
 
 interface SystemProps {
@@ -26,6 +29,8 @@ interface SystemProps {
   system: FlatSystem
   /** The System's Tiles as the canvas draws them (`canvasTree`). */
   tree: TileNode
+  /** What the writes on their way change (`useSystem`). */
+  writing: OnItsWay
   search: SystemSearch
   /** The next view, after a gesture on the canvas, and the gesture, on which Tile. */
   onViewChange: (view: CanvasView, action: ViewAction) => void
@@ -36,11 +41,13 @@ interface SystemProps {
 export function System({
   system,
   tree,
+  writing,
   search,
   onViewChange,
   onSearchChange,
   className,
 }: SystemProps) {
+  const writes = useWritesState(writing)
   const move = useMoveTile()
   const swap = useSwapTiles()
   useLeaveGuard(useSystemWriting())
@@ -117,6 +124,7 @@ export function System({
         onViewChange={onViewChange}
         emptySlots={moving === undefined ? addHere : moveHere(moving)}
         swapTargets={moving === undefined ? undefined : swapWith(moving)}
+        writes={writes}
         className="min-h-0 w-full flex-1"
       />
       {moving !== undefined && (

@@ -198,7 +198,7 @@
   --animate-sweep: sweep 1.8s linear infinite;
   --animate-bloom: bloom var(--duration-bloom) var(--ease-glide) both;
   --animate-fold: fold var(--duration-fold) var(--ease-glide) both;
-  --animate-flare: flare 1.3s ease-out both;
+  --animate-flare: flare var(--duration-flare) ease-out both;
   --animate-ants: ants 0.9s linear infinite;
   --animate-ink: ink 1.1s var(--ease-glide) both;
   /* Tailwind's sm, read on the screen's own width: `@wide:` and `@max-wide:`. */
@@ -298,6 +298,7 @@
     --duration-camera-level: 300ms;
     --duration-turn: 600ms;
     --duration-glide: 600ms;
+    --duration-flare: 1.3s;
     --stagger-bloom: 40ms;
   }
   html {
