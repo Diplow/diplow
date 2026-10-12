@@ -182,6 +182,22 @@ describe('the way to signing in, home signed out', () => {
     )
   })
 
+  it('loads home no more once home was loaded by it, so a Session a call refuses never loops', async () => {
+    vi.stubGlobal('window', {
+      location: {
+        href: 'http://localhost/?redirect=%2Fdesign-system',
+        origin: 'http://localhost',
+        pathname: '/',
+        search: '?redirect=%2Fdesign-system',
+        hash: '',
+        assign,
+      },
+    })
+    const submit = await signingIn()
+    await submit()
+    expect(assign).not.toHaveBeenCalled()
+  })
+
   it('does nothing on the server, where there is no window to move', async () => {
     vi.unstubAllGlobals()
     const submit = await signingIn()

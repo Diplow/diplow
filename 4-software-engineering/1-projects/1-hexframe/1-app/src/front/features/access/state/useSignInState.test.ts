@@ -57,6 +57,15 @@ describe('the sign-in widget on home', () => {
     expect(result.current.state.sending).toBe(true)
   })
 
+  it('sends one try for two quick presses', async () => {
+    vi.mocked(signIn).mockResolvedValue({ ok: true, value: account, requestId: 'r' } as never)
+    const { result, typed } = render()
+    typed()
+    const { submit } = result.current.actions
+    await act(() => Promise.all([submit('sign-in'), submit('sign-in')]))
+    expect(signIn).toHaveBeenCalledOnce()
+  })
+
   it('signs up through sign-up', async () => {
     vi.mocked(signUp).mockResolvedValue({ ok: true, value: account, requestId: 'r' } as never)
     const { typed, submit } = render()

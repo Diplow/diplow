@@ -106,6 +106,18 @@ describe('the key widget on home', () => {
     expect(result.current.state.refused).toBeUndefined()
   })
 
+  it('issues one Key for two quick presses', async () => {
+    vi.mocked(issueKey).mockResolvedValue({ ok: true, value: issued, requestId: 'r' } as never)
+    const { result, run } = render()
+    run((actions) => {
+      actions.issue()
+      actions.name('Laptop')
+    })
+    const { send } = result.current.actions
+    await act(() => Promise.all([send(), send()]))
+    expect(issueKey).toHaveBeenCalledOnce()
+  })
+
   it('goes back to the Keys, not now', () => {
     const { result, run } = render()
     run((actions) => {

@@ -3,7 +3,7 @@
 // The submit is `submitWrite`'s, kept out of every cache since it carries a password: a refusal IAM
 // names a field for shows there, any other goes to its channel, the toast. Signed in, the page leaves
 // for where the user was, with a full load (`continueTo`), so it renders with its Session.
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { signIn, signUp } from '#/api/iam/iam'
 import { submitWrite, type FormErrors } from '#/front/client/channels'
@@ -50,6 +50,8 @@ export function useSignInState(redirect: string | undefined) {
   const [credentials, setCredentials] = useState<Credentials>({ email: '', password: '' })
   const [refused, setRefused] = useState<Refused>()
   const [sending, setSending] = useState(false)
+  // Read at the moment of a press, not from the render before it: two quick presses send one try.
+  const onItsWay = useRef(false)
   const change = (field: keyof Credentials) => (value: string) => {
     setCredentials((before) => ({ ...before, [field]: value }))
     setRefused((before) => without(before, field))
@@ -61,7 +63,8 @@ export function useSignInState(redirect: string | undefined) {
       password: change('password'),
       /** Signs in or up with what was typed; a second press while it is on its way does nothing. */
       submit: async (access: Access) => {
-        if (sending) return
+        if (onItsWay.current) return
+        onItsWay.current = true
         setSending(true)
         const errors = await submitWrite({
           ...calls[access],
@@ -71,6 +74,7 @@ export function useSignInState(redirect: string | undefined) {
         })({ value: credentials })
         // Signed in, the page is leaving: the act waits until it has gone.
         if (errors === undefined) return
+        onItsWay.current = false
         setRefused(refusedOf(errors))
         setSending(false)
       },

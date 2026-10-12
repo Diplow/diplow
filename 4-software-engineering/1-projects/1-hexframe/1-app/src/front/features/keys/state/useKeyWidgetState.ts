@@ -3,7 +3,7 @@
 // receipt Done leaves, which stays once the widget has closed, until it opens again. The secret is in
 // this hook's state only, handed over by issuing's answer, which no cache keeps (`useIssueKeySubmit`):
 // Done forgets it, and so does leaving, the widget closed any other way.
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { type IssuedKey, useIssueKeySubmit } from '#/front/client/iam/keys'
 
@@ -36,6 +36,8 @@ export function useKeyWidgetState(open: boolean) {
   const [name, setName] = useState('')
   const [refused, setRefused] = useState<string>()
   const [sending, setSending] = useState(false)
+  // Read at the moment of a press, not from the render before it: two quick presses issue one Key.
+  const onItsWay = useRef(false)
   // The URL opened or closed the widget since the last render: the step follows, as it renders.
   const [wasOpen, setWasOpen] = useState(open)
   if (wasOpen !== open) {
@@ -72,9 +74,11 @@ export function useKeyWidgetState(open: boolean) {
       },
       /** Issues a Key by the name typed; a refusal of the name shows on its field. */
       send: async () => {
-        if (sending) return
+        if (onItsWay.current) return
+        onItsWay.current = true
         setSending(true)
         const errors = await submit({ value: { name } })
+        onItsWay.current = false
         setSending(false)
         if (errors !== undefined && 'fields' in errors) setRefused(errors.fields.name)
       },

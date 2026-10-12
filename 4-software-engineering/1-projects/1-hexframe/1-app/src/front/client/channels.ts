@@ -19,14 +19,18 @@ let signingIn = false
 // widget at the chat's foot, carrying where the user was, without its language prefix, and untying
 // this device from the Account whose Session ended, as home's read of the Session does
 // (./iam/guard.ts). On the server there is no window to move: home reads the Session in its
-// `beforeLoad`, `sessionIfAny`, before anything renders, and draws no signed-in read signed out.
+// `beforeLoad`, `sessionIfAny`, before anything renders, and draws no signed-in read signed out. A
+// home this channel loaded already, carrying `redirect`, is not loaded again: should home find a
+// Session that a call then refuses, the page would load itself for ever.
 function signIn() {
   if (signingIn || typeof window === 'undefined') return
-  signingIn = true
-  forget()
   const here = deLocalizeHref(
     `${window.location.pathname}${window.location.search}${window.location.hash}`,
   )
+  const { pathname, searchParams } = new URL(here, window.location.origin)
+  if (pathname === '/' && searchParams.has('redirect')) return
+  signingIn = true
+  forget()
   window.location.assign(localizeHref(`/?redirect=${encodeURIComponent(here)}`))
 }
 

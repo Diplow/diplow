@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { fromHelpPage, readHelpSearch, topicOf, withHelp } from './search'
+import { fromHelpPage, readHelpSearch, topicOf, turnedTo, withHelp } from './search'
 
 // Home's search param for Help, and where an old link to the Help page lands.
 
@@ -28,6 +28,25 @@ describe("home's search param for Help", () => {
   it('writes the topic, or nothing once closed', () => {
     expect(withHelp('help/2')).toEqual({ help: 'help/2' })
     expect(withHelp(undefined)).toEqual({ help: undefined })
+  })
+})
+
+describe('the widget turned to a topic', () => {
+  const current = { center: 'help/1', help: 'help/1' as const, keys: true as const }
+
+  it('keeps the view and every other param, the page turned alone', () => {
+    expect(turnedTo(current, 'help/2')).toEqual({ center: 'help/1', help: 'help/2', keys: true })
+  })
+
+  it('centers the canvas on the view given, as reading on does', () => {
+    expect(turnedTo(current, 'help/2', { center: 'help/2' })).toEqual({
+      center: 'help/2',
+      frame: undefined,
+      inner: undefined,
+      expanded: undefined,
+      help: 'help/2',
+      keys: true,
+    })
   })
 })
 

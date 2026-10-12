@@ -10,6 +10,7 @@ import { getLocale } from '#/paraglide/runtime'
 import { HelpWidget } from '#/front/ui/chat/widgets/help/HelpWidget'
 
 import { helpNodeOf, readingOf } from './nodes'
+import { topicOf } from './search'
 
 interface HelpWidgetsProps {
   /** The topic open, by its id, or `true`, Help's Root. */
@@ -25,7 +26,12 @@ export function HelpWidgets({ topic, onTopic, onDismiss }: HelpWidgetsProps) {
   const { data } = useHelp(getLocale())
   const help = useMemo(() => (data === undefined ? undefined : helpNodeOf(data)), [data])
   if (help === undefined) return null
-  const { topic: read, path, frame, readOn } = readingOf(help, topic === true ? help.id : topic)
+  const {
+    topic: read,
+    path,
+    frame,
+    readOn,
+  } = readingOf(help, topicOf({ help: topic }, help.id) ?? help.id)
   return (
     <HelpWidget
       state="topic"

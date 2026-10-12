@@ -16,7 +16,7 @@
 // names centers the canvas on it, a gesture as any other. Signed out, the same screen: Help on the
 // canvas, two lines from the agent, and the sign-in widget in the composer's place, which signs in or
 // up, then comes back where the user was.
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useMemo } from 'react'
 
 import { ReadBoundary } from '#/front/client/ReadBoundary'
@@ -32,7 +32,7 @@ import { useNavigationSender } from '#/front/features/conversation/state/useNavi
 import { Navigated } from '#/front/features/facts'
 import { HelpCanvas, HelpTile } from '#/front/features/help/Help'
 import { HelpWidgets } from '#/front/features/help/HelpWidgets'
-import { readHelpSearch, withHelp } from '#/front/features/help/search'
+import { readHelpSearch, turnedTo, withHelp } from '#/front/features/help/search'
 import { KeyWidgets } from '#/front/features/keys/KeyWidgets'
 import { readKeysSearch, withKeys } from '#/front/features/keys/search'
 import { useKeyWidgetState } from '#/front/features/keys/state/useKeyWidgetState'
@@ -85,13 +85,11 @@ function Home() {
   return session === undefined ? <SignedOut /> : <SignedIn />
 }
 
-/** What the screen holds beside the System's own search params, which a change of the System keeps. */
-const screenOf = ({ keys, help, access, redirect }: HomeSearch) => ({
-  keys,
-  help,
-  access,
-  redirect,
-})
+/**
+ * What signed-in home holds beside the System's own search params, the widgets open, which a change of
+ * the System keeps. `access` and `redirect` mean something signed out alone, so they go.
+ */
+const screenOf = ({ keys, help }: HomeSearch) => ({ keys, help })
 
 /** Help, read in the page's language as the canvas draws it, beside the canvas: never throwing. */
 function useHelpTree() {
@@ -115,14 +113,12 @@ function useHelpNavigation(turning: ReturnType<typeof useScreenState>['actions']
       go((current) => withViewIn(current, view))
     },
     onTopic: (id: string, center: boolean) => {
-      go((current) => ({
-        ...(center && tree !== undefined ? withViewIn(current, centerOn(tree, id)) : current),
-        ...withHelp(id),
-      }))
+      const view = center && tree !== undefined ? centerOn(tree, id) : undefined
+      go((current) => turnedTo(current, id, view))
       if (center) turning.cross()
     },
     onRead: (id: string) => {
-      go((current) => ({ ...current, ...withHelp(id) }))
+      go((current) => turnedTo(current, id))
       turning.turn('chat')
     },
   }
@@ -132,6 +128,7 @@ function useHelpNavigation(turning: ReturnType<typeof useScreenState>['actions']
 function SignedOut() {
   const search = Route.useSearch()
   const navigate = Route.useNavigate()
+  const router = useRouter()
   const { state: screen, actions: turning } = useScreenState()
   const help = useHelpNavigation(turning)
   const view = viewOf(search)
@@ -174,21 +171,12 @@ function SignedOut() {
               })
             }}
             // Without a place to go back to, the screen as it stands, signed in.
-            redirect={search.redirect ?? hereOf(search)}
+            redirect={search.redirect ?? `/${router.options.stringifySearch(screenOf(search))}`}
           />
         }
       />
     </main>
   )
-}
-
-/** Home with the widgets open in the chat, as a link writes it, so signing in comes back to them. */
-function hereOf({ keys, help }: HomeSearch) {
-  const params = new URLSearchParams()
-  if (keys !== undefined) params.set('keys', String(keys))
-  if (help !== undefined) params.set('help', String(help))
-  const query = params.toString()
-  return query === '' ? '/' : `/?${query}`
 }
 
 /** Signed in: the Account's System and its Conversation, the Keys and Help in the chat. */
