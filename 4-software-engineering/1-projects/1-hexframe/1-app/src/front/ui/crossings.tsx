@@ -336,8 +336,9 @@ function ProposalCrossing({ frame }: { frame: CrossingFrame }) {
 
 function DraftingCrossing({ frame, previewLimit }: { frame: CrossingFrame; previewLimit: number }) {
   const [words, setWords] = useState({ title: tooling.title, preview: tooling.preview, body: '' })
-  const [kind, setKind] = useState<TileKind>('branch')
-  const [place, setPlace] = useState<Direction>(6)
+  // A new tile is a Leaf, in the place clicked on the canvas: west of Software Engineering.
+  const kind: TileKind = 'leaf'
+  const place: Direction = 6
   const [written, setWritten] = useState<Date>()
   const [view, setView] = useState<CanvasView>(startView)
   const draft = { kind, place, title: words.title }
@@ -347,13 +348,6 @@ function DraftingCrossing({ frame, previewLimit }: { frame: CrossingFrame; previ
       words={words}
       onWordsChange={setWords}
       where={{ parent: titleOf(engineering), kind, place, free: freeInEngineering }}
-      onPlaceChange={setPlace}
-      onKindChange={(next) => {
-        setKind(next)
-        // The canvas shows the ring the tile goes to: Software Engineering's Context, for a Context
-        // Tile; its Children otherwise.
-        setView(next === 'context' ? { ...startView, inner: 'context' } : startView)
-      }}
       previewLimit={previewLimit}
       written={written}
       onCreate={() => {

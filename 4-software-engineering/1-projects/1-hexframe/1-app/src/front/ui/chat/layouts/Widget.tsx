@@ -1,13 +1,21 @@
 import { cn } from 'cn'
 import { ChevronDown, ChevronRight, MoreHorizontal, RotateCw, X } from 'lucide-react'
 import { Collapsible } from 'radix-ui'
-import { useId, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react'
+import {
+  useId,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent,
+  type ReactNode,
+} from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Act, voiceOf, type Voice as AnyVoice } from '../../atoms/controls/act'
 import { pressed, type Shortcut } from '../../atoms/keys'
 import { Menu, type MenuEntry } from '../../atoms/Menu'
+import { useAlongCurve } from '../../layouts/screen/state/useAlongCurve'
 import { zone } from './zone'
 
 /** Whose the widget is: the agent asking, the user's own words, or the app's (a key, help). */
@@ -30,6 +38,8 @@ interface WidgetAction {
   waits?: boolean
   /** `hex`, the one solid act a form asks for (`Act`'s look); a word otherwise. */
   look?: 'text' | 'hex'
+  /** A line icon saying what it does, in place of the small hex before its word. */
+  icon?: ReactNode
   /** It loses something, and says so in the destructive voice: a tile's Delete. */
   destructive?: boolean
   /**
@@ -48,8 +58,8 @@ interface ZoneProps {
    * as the frame a tile goes in, its slot lit. It speaks for itself to a screen reader.
    */
   mark?: ReactNode
-  /** Who, or what state, in a few words: "proposed by your agent". */
-  kicker: string
+  /** Who, or what state, in a few words: "proposed by your agent"; none where the title says it all. */
+  kicker?: string
   /** What it is about; its name to a screen reader, even where `titleField` draws it. */
   title: string
   /** In the title's place, the field that writes it, at the title's size: a tile's title. */
@@ -86,7 +96,8 @@ const risesInTurn = 'motion-safe:animate-rise'
 /**
  * Everything the conversation asks of the user or shows them beyond words: a zone in the flow of
  * messages, tinted toward the curve by whose it is. One shape for all of them, learned once: an icon,
- * a kicker, a title and a subtitle, a body, its actions, and its tools when the user reaches for them.
+ * a kicker and a title beside it, a subtitle, then a body and its actions the zone's whole width, and
+ * its tools riding the curve when the user reaches for them.
  */
 export function Widget(props: WidgetProps) {
   return props.state === 'done' ? <Receipt {...props} /> : <Zone {...props} />
@@ -158,20 +169,22 @@ function Zone({
           <div className="min-w-0">
             {/* The tools sit over the kicker and the title's end, which leave them room. */}
             <div className="pr-20 pointer-coarse:pr-12">
-              <p
-                aria-live="polite"
-                className={cn(
-                  'flex items-center gap-2 font-agent text-[0.71875rem] leading-normal',
-                  voice === 'app' && !failed ? 'text-faint' : 'text-(--voice)',
-                  risesInTurn,
-                )}
-                style={rise(1)}
-              >
-                {state === 'working' && (
-                  <span className="size-1.5 shrink-0 rounded-full bg-current shadow-[0_0_10px_1px_currentColor] motion-safe:animate-breathe" />
-                )}
-                {kicker}
-              </p>
+              {kicker !== undefined && (
+                <p
+                  aria-live="polite"
+                  className={cn(
+                    'flex items-center gap-2 font-agent text-[0.71875rem] leading-normal',
+                    voice === 'app' && !failed ? 'text-faint' : 'text-(--voice)',
+                    risesInTurn,
+                  )}
+                  style={rise(1)}
+                >
+                  {state === 'working' && (
+                    <span className="size-1.5 shrink-0 rounded-full bg-current shadow-[0_0_10px_1px_currentColor] motion-safe:animate-breathe" />
+                  )}
+                  {kicker}
+                </p>
+              )}
               {titleField === undefined ? (
                 <h3
                   id={titleId}
@@ -200,15 +213,16 @@ function Zone({
                 {subtitle}
               </p>
             )}
-            <Collapsible.Content className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down motion-reduce:animate-none!">
-              {(state === 'working' || children !== undefined) && (
-                <div className={cn('pt-4', risesInTurn)} style={rise(4)}>
-                  {state === 'working' ? <LinesToCome /> : children}
-                </div>
-              )}
-              <Actions actions={actions} />
-            </Collapsible.Content>
           </div>
+          {/* Below the hex and the title, its body and its actions take the zone's whole width. */}
+          <Collapsible.Content className="col-span-2 min-w-0 overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down motion-reduce:animate-none!">
+            {(state === 'working' || children !== undefined) && (
+              <div className={cn('pt-4', risesInTurn)} style={rise(4)}>
+                {state === 'working' ? <LinesToCome /> : children}
+              </div>
+            )}
+            <Actions actions={actions} />
+          </Collapsible.Content>
         </div>
         <Tools
           folded={folded}
@@ -270,6 +284,7 @@ function Actions({ actions }: { actions: readonly WidgetAction[] }) {
         <Act
           key={action.label}
           look={action.look}
+          icon={action.icon}
           tone={index === 0 || action.destructive === true ? 'voice' : 'quiet'}
           shortcut={action.shortcut}
           waits={action.waits === true}
@@ -342,11 +357,14 @@ interface ToolsProps {
 }
 
 /**
- * Settings, fold and dismiss, at the head's end, where the conversation's lines end, so they never
- * reach the curve; they show on hover or focus. A finger can't hover: under one, the settings'
- * control alone shows, a full target, and folding and dismissing wait in its menu.
+ * Settings, fold and dismiss, at the head's height, riding just inside the curve, so they slide along
+ * it as the conversation scrolls (`useAlongCurve`); where the chat is not cut, at the end of its
+ * lines. They show on hover or focus. A finger can't hover: under one, the settings' control alone
+ * shows, a full target, and folding and dismissing wait in its menu.
  */
 function Tools({ folded, held, onMenuOpenChange, settings, onFold, onDismiss }: ToolsProps) {
+  const tools = useRef<HTMLDivElement>(null)
+  useAlongCurve(tools)
   const entries: MenuEntry[] = [
     ...settings,
     ...(settings.length > 0 ? (['separator'] as const) : []),
@@ -361,6 +379,7 @@ function Tools({ folded, held, onMenuOpenChange, settings, onFold, onDismiss }: 
   ]
   return (
     <div
+      ref={tools}
       className={cn(
         'absolute top-3.5 right-[var(--chat-right,0.5rem)] flex opacity-0 transition-opacity duration-250 group-focus-within/widget:opacity-100 group-hover/widget:opacity-100 sm:right-[var(--chat-right,1.125rem)] pointer-coarse:top-2 pointer-coarse:opacity-100',
         held && 'opacity-100',

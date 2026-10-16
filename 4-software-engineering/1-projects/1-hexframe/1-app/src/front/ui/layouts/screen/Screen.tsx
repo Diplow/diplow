@@ -24,7 +24,7 @@ import { flushSync } from 'react-dom'
 import { m } from '#/paraglide/messages'
 
 import { focusHeld, focusLost, giveFocusBack } from '../../focus'
-import { cutAlongCurve, reach } from './curve'
+import { columnMargin, cutAlongCurve, reach } from './curve'
 import { keptAtFoot } from './state/latest'
 import { Scrollbar } from './Scrollbar'
 import { Sunstone } from './Sunstone'
@@ -74,7 +74,7 @@ const cut = cutAlongCurve('var(--screen-edge)')
 const bulge = `${String(reach)}px`
 
 /** What the chat's column holds past the bulge, as `--screen-margin`, so the curve's line isn't cut. */
-const margin = '0.375rem'
+const margin = `${String(columnMargin)}px`
 
 /**
  * How far the chat's foot keeps its content in from the column's right, as `--screen-clear`: back
@@ -148,6 +148,8 @@ export function Screen({
       <section
         ref={chat}
         aria-label={m.screen_chat()}
+        // What rides the curve finds the column cut along it here (`useAlongCurve`).
+        data-curve=""
         className={cn(
           'pointer-events-none absolute inset-0 z-20 flex flex-col',
           '@wide:pointer-events-auto @wide:right-auto @wide:w-[calc(var(--screen-edge)+var(--screen-bulge)+var(--screen-margin))] @wide:[clip-path:var(--screen-cut)]',

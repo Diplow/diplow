@@ -6,8 +6,8 @@ preview: >-
   The tile widget on home, at the chat's foot: a new Tile's form, an edit or
   an import, as the URL holds the change under way; once a form is sent, its
   receipt, the same widget, so it takes the focus; or the export the card
-  started. The Root's edit stays in the drawer. Mapping's slots read as the
-  widget's kinds and places.
+  started. The Root's edit is a widget too, and so is a new account's pseudo,
+  which names the Root. Mapping's slots read as the widget's kinds and places.
 ---
 # widget
 
@@ -16,13 +16,13 @@ Where a Tile is written on home since HEX-102: in the chat, at the conversation'
 - **The form is the URL's, what follows it the page's** (`hexframe-app-design-system-v1/decisions.md#DEC-37`). Which form is open, a new Tile's in its slot, an edit or an import, is the change under way in the search params, as the drawer's was, so a link opens it and a refusal puts it back on the URL of its moment (`../state/useRefusalState.ts`). What follows a form is no change: the receipt a sent form leaves, or an export, working, then its receipt naming the zip, or failed with a retry. Home holds it (`state/useTileWidgetsState.ts`), so the card on the canvas and the chat share it. One at a time: a form opening clears it, a sent form or an export takes its place, and a receipt goes once its write is refused, so it never says done of a write that wasn't.
 - **A form and its receipt are one widget.** A sent form's receipt is drawn by the same component, under the form's own key, so React keeps the one `TileWidget` and its hand-off moves the focus to the receipt. That is why a receipt carries its form's key and what the form opened on (`Session`).
 - **What the user writes is a state hook, not TanStack Form** (`#DEC-39`). Mapping says what a Tile must be, through `decide`, foreseen or on the server. The widget's words and the refusal on each field are `useTileWordsState`'s, put back once per refusal turn and cleared field by field as the user changes them. The writes go through Mapping's form submits, which answer the Tile's id for the receipt.
-- **The Root's edit stays in the drawer**, on the shared form (`RootDrawer`), since the widget draws a Tile's place among its parent's six and the Root has neither (`#DEC-38`).
-- **A new Tile's place is Mapping's.** Its hex shows its parent's six places, free as Mapping's `freeSlot` says; another place or kind picked moves the change to that slot, the widget keyed by its parent so what the user wrote stays.
+- **No drawer.** The Root's edit is the tile widget's edit with no place, a pencil in its hex, since the Root stands under nothing (it replaced `RootDrawer` and the `Drawer`, `#DEC-38`'s stopgap). While the Root is untitled, and no form nor receipt is shown, the widget asks a new account its pseudo (`NameRootWidget`), which edits the Root's Title alone; Later lets it be for the visit.
+- **A new Tile's place is where the user clicked.** Its slot comes from the canvas, a Leaf's in a ring of Children, and the widget picks neither its kind nor its place; its hex shows its parent's six places, its own lit. Its import goes into the Branch's slot of the same Direction where it is free (`importSlotOf`).
 
 | File | Holds |
 |---|---|
-| `TileWidgets.tsx` | `TileWidgets`, at the conversation's foot: the form of the change under way, or its receipt while the URL still holds it; else what followed the last form, its receipt or the export; and the Root's drawer. It is where the page reads the refused writes (`useRefusalState`) and deletes from an edit |
-| `forms.tsx` | `NewTileWidget` and `EditTileWidget`, each from form to receipt, on Mapping's form submits; `RootDrawer`, the Root's edit on the shared form |
+| `TileWidgets.tsx` | `TileWidgets`, at the conversation's foot: the form of the change under way, the Root's edit included, or its receipt while the URL still holds it; else what followed the last form, its receipt or the export; else, while the Root is untitled, a new account's pseudo. It is where the page reads the refused writes (`useRefusalState`) and deletes from an edit |
+| `forms.tsx` | `NewTileWidget`, `EditTileWidget` and `NameRootWidget`, each from form to receipt, on Mapping's form submits |
 | `place.ts` | The widget in Mapping's words, pure: `seatOf` and `slotOf`, a slot as a kind and a place and back; `freeFor`, the places a kind may take under a Tile; `whereIn`, where a Tile goes or stands; `slotForKind`, the slot another kind takes; `tilesBelow`, the Tiles that go along with one; `editedOf`, an edit's changed fields; `refusalOf` and `stillRefused`, a refusal on the widget's fields, cleared as they change. Tested in `place.test.ts` |
 
 | Folder | Holds |

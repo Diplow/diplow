@@ -83,10 +83,20 @@ function copy(text: string) {
     )
 }
 
-/** The slot an empty Direction stands for, for a new Tile or the moving one; none takes no click. */
+/** The slot an empty Direction stands for, for an import or the moving one; none takes no click. */
 function placeOf(target: EmptySlotTarget, going?: TileNode) {
   const slot = slotOf(target.ring, target.direction, going)
   return slot === undefined ? undefined : { parent: target.parent.id, slot }
+}
+
+/**
+ * The slot a new Tile takes where the user clicked: a Leaf in a ring of Children, which grows into a
+ * Branch once a Tile goes under it; else the slot the ring stands for, a Branch past six Children.
+ */
+function newTileOf(target: EmptySlotTarget) {
+  const place = placeOf(target)
+  if (place === undefined || target.ring !== 'children') return place
+  return { ...place, slot: { leaf: target.direction } }
 }
 
 /**
@@ -118,9 +128,13 @@ export function useActingState(input: ActingInput) {
   /** A line that picked a place in a frame: a new Tile there, the Tile moved there, or swapped. */
   function actAt(hex: TileHex, { verb, at }: Extract<TileAct, { at: unknown }>) {
     switch (verb) {
-      case 'add':
-        begin({ kind: 'add', parent: hex.tile.id, slot: at })
+      case 'add': {
+        // A new Tile is a Leaf; under a Leaf, which grows into a Branch first, in its queue before it.
+        const grown = hex.tile.leaf === true ? turnOf(flat, tileIn(root, hex.tile.id)) : undefined
+        if (grown !== undefined) move.mutate(grown)
+        begin({ kind: 'add', parent: hex.tile.id, slot: { leaf: at } })
         return
+      }
       case 'move': {
         const moved = moveTo(systems, hex, at)
         if (moved !== undefined) move.mutate(moved)
@@ -187,7 +201,7 @@ export function useActingState(input: ActingInput) {
 
   /** A click on a free slot, or New tile here: the new Tile's form, for that slot. */
   const addHere = (target: EmptySlotTarget): Action | undefined => {
-    const place = placeOf(target)
+    const place = newTileOf(target)
     if (place === undefined) return undefined
     const labels = {
       children: m.system_add_child,
@@ -207,10 +221,11 @@ export function useActingState(input: ActingInput) {
   const slotActing = (target: EmptySlotTarget): Acting | undefined => {
     const place = placeOf(target)
     if (place === undefined) return undefined
+    const fresh = newTileOf(target) ?? place
     return {
       subject: { kind: 'slot', at: target.direction, parent: target.parent.title },
       onAct: ({ verb }) => {
-        if (verb === 'new-tile') begin({ kind: 'add', ...place })
+        if (verb === 'new-tile') begin({ kind: 'add', ...fresh })
         if (verb === 'import') begin({ kind: 'import', place: { _tag: 'Slot', ...place } })
         if (verb === 'ask-agent') onAsk(target.parent.id, target.direction)
       },

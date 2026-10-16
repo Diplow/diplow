@@ -23,7 +23,7 @@ import type { Change } from './entries/Receipt'
 import type { MentionProps } from './text/Mention'
 import { Message } from './text/Message'
 import { weave } from './text/words'
-import type { TileKind, TilePlace, TileWords } from './widgets/tile/parts'
+import type { TilePlace, TileWords } from './widgets/tile/parts'
 import { TileWidget } from './widgets/tile/TileWidget'
 
 /** A tile named, as the route hands it: its title, its card, what a click and pointing at it do. */
@@ -285,8 +285,6 @@ interface Drafted {
   words: TileWords
   onWordsChange: (words: TileWords) => void
   where: TilePlace
-  onPlaceChange: (place: TilePlace['place']) => void
-  onKindChange: (kind: TileKind) => void
   /** Mapping's limit on a Preview, which the route reads at its door. */
   previewLimit: number
   /** When it was written; none while it is being written. */
@@ -296,7 +294,7 @@ interface Drafted {
 }
 
 /**
- * A tile written in the tile widget, in your amber, its place picked on the widget's map, while the
+ * A tile written in the tile widget, in your amber, in the place clicked on the canvas, while the
  * canvas shows it breathing in its slot; created, its receipt, with its Undo, and another to write.
  */
 export function DraftingEnd({ written, onAgain, ...draft }: Drafted) {

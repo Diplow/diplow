@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 
 import {
   bow,
+  columnMargin,
+  curveAcross,
   curvePath,
   cutAlongCurve,
   offsetAt,
@@ -22,6 +24,22 @@ describe('offsetAt', () => {
     expect(offsetAt(1)).toBe(0)
     expect(offsetAt(0.5)).toBe(bow / 2)
     expect(reach).toBe(offsetAt(0.5))
+  })
+})
+
+describe('curveAcross', () => {
+  const column = { left: 40, top: 100, width: 400, height: 800 }
+  const edge = column.left + column.width - reach - columnMargin
+
+  it('runs from the column’s edge at its top and its foot, out by its reach at mid-height', () => {
+    expect(curveAcross(column, 100)).toBe(edge)
+    expect(curveAcross(column, 900)).toBe(edge)
+    expect(curveAcross(column, 500)).toBe(edge + reach)
+  })
+
+  it('stays on the curve above and below the column, where it meets the page’s edge', () => {
+    expect(curveAcross(column, 0)).toBe(edge)
+    expect(curveAcross(column, 2000)).toBe(edge)
   })
 })
 

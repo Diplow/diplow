@@ -3,10 +3,17 @@
 // sent, the receipt it leaves; or an export a Tile's menu started, working, then its receipt, or failed.
 // One at a time, the latest. A write ends its form as it is sent, its receipt in the form's place at
 // once, and a refusal puts the form back (`useRefusalState`), the user's words with it. The Root's
-// edit opens the drawer: the widget draws no place for it.
-import { useMemo } from 'react'
+// edit is a widget too, with no place to draw, a pencil in its hex.
+import { useMemo, useState } from 'react'
 
-import { tileAt, type System, type SystemTile } from '#/domains/mapping/entities'
+import {
+  isEmptySystem,
+  isLeafSlot,
+  tileAt,
+  type Slot,
+  type System,
+  type SystemTile,
+} from '#/domains/mapping/entities'
 import { type ImportPlace, useDeleteTile, useSystem } from '#/front/client/mapping/queries'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { TileExport } from '#/front/ui/chat/widgets/tile/Transfer'
@@ -23,8 +30,8 @@ import {
 } from '../search/search'
 import { type Reopened, useRefusalState } from '../state/useRefusalState'
 import { canvasTree, tileIn } from '../tree'
-import { EditTileWidget, NewTileWidget, RootDrawer } from './forms'
-import { slotOf, tilesBelow, whereIn } from './place'
+import { EditTileWidget, NameRootWidget, NewTileWidget } from './forms'
+import { freeFor, slotOf, tilesBelow, whereIn } from './place'
 import type { Exporting, Receipt, TileWidgetsState } from './state/useTileWidgetsState'
 
 interface TileWidgetsProps {
@@ -53,6 +60,8 @@ export function TileWidgets({
     if (formBack) onFormBack()
   })
   const remove = useDeleteTile()
+  // A new account is asked its pseudo until it gives one, or says later for this visit.
+  const [later, setLater] = useState(false)
   const root = data?.root
   const tree = useMemo(() => (root === undefined ? undefined : canvasTree(root)), [root])
   if (data === undefined || root === undefined || tree === undefined) return null
@@ -82,17 +91,31 @@ export function TileWidgets({
       onSearchChange(afterDelete(tree, parent, node))
     },
   }
-  const editsRoot = change.kind === 'edit' && change.id === root.id
+  if (root.title === '' && !later && change.kind === 'none' && widgets.state.shown === undefined) {
+    return nameOf(page, () => {
+      setLater(true)
+    })
+  }
+  return widgetOf(change, widgets, page)
+}
+
+/** A new account's first question: its pseudo, which names its Root; or a vault, into an empty one. */
+function nameOf(page: WidgetContext, onLater: () => void) {
+  const { id, version, title, preview, body } = page.root
   return (
-    <>
-      {editsRoot ? shownOf(widgets, page) : widgetOf(change, widgets, page)}
-      <RootDrawer
-        root={editsRoot ? root : undefined}
-        refilled={reopened}
-        onSent={end}
-        onClose={end}
-      />
-    </>
+    <NameRootWidget
+      key="name"
+      {...formOf(page, 'name', undefined)}
+      root={{ id, version, title, preview, body }}
+      onLater={onLater}
+      onImport={
+        isEmptySystem(page.root)
+          ? () => {
+              page.begin({ kind: 'import', place: { _tag: 'Root' } })
+            }
+          : undefined
+      }
+    />
   )
 }
 
@@ -136,16 +159,19 @@ function shownOf(widgets: TileWidgetsState, page: WidgetContext) {
 function receiptOf(receipt: Receipt, page: WidgetContext) {
   const { key, session, where } = receipt
   const form = formOf(page, key, receipt)
-  return session.kind === 'add' ? (
+  if (session.kind === 'name') {
+    return <NameRootWidget key={key} {...form} root={session.root} onLater={page.onCancel} />
+  }
+  return session.kind === 'add' && where !== undefined ? (
     <NewTileWidget
       key={key}
       {...form}
       parent={{ id: session.parent, title: where.parent }}
       slot={slotOf(where.kind, where.place)}
     />
-  ) : (
+  ) : session.kind === 'edit' ? (
     <EditTileWidget key={key} {...form} tile={session.opened} where={where} />
-  )
+  ) : null
 }
 
 /** The receipt of this form, sent while the URL still holds it, unless a refusal put it back. */
@@ -172,17 +198,23 @@ function newTileOf(
       {...formOf(page, key, undefined)}
       parent={{ id: change.parent, title: parent.title }}
       slot={change.slot}
-      onSlotChange={(slot) => {
-        page.begin({ ...change, slot })
-      }}
       onImport={() => {
         page.begin({
           kind: 'import',
-          place: { _tag: 'Slot', parent: change.parent, slot: change.slot },
+          place: { _tag: 'Slot', parent: change.parent, slot: importSlotOf(page.system, change) },
         })
       }}
     />
   )
+}
+
+/**
+ * Where an import goes in the place a new Tile was opened on: a new Tile is a Leaf, but a folder
+ * takes a Branch's slot, in the same Direction where it is free; a Leaf's slot otherwise, one file.
+ */
+function importSlotOf(system: System, { parent, slot }: { parent: string; slot: Slot }): Slot {
+  if (!isLeafSlot(slot)) return slot
+  return freeFor(system, parent, 'branch').includes(slot.leaf) ? slot.leaf : slot
 }
 
 /**
@@ -197,6 +229,7 @@ function editOf(
   const key = `edit:${change.id}:${String(page.reopened?.turn ?? '')}`
   const receipt = receiptFor(key, shown, page)
   if (receipt !== undefined) return receiptOf(receipt, page)
+  if (change.id === page.root.id) return rootOf(key, page)
   const editing = editingOf(change.id, page)
   if (editing === undefined) return null
   const { tile, node, parent, where } = editing
@@ -212,6 +245,19 @@ function editOf(
           page.remove(tile, node, parent)
         },
       }}
+    />
+  )
+}
+
+/** The Root's edit: the user's own Tile, which stands under nothing and goes with nothing. */
+function rootOf(key: string, page: WidgetContext) {
+  const { id, version, title, preview, body } = page.root
+  return (
+    <EditTileWidget
+      key={key}
+      {...formOf(page, key, undefined)}
+      tile={{ id, version, title, preview, body }}
+      where={undefined}
     />
   )
 }

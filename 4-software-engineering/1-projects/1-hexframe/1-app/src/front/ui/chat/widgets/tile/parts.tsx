@@ -38,14 +38,8 @@ export interface TilePlace {
   free: readonly Place[]
 }
 
-export const kinds = [
-  { id: 'branch', label: m.widget_tile_kind_branch, means: m.widget_tile_kind_branch_means },
-  { id: 'leaf', label: m.widget_tile_kind_leaf, means: m.widget_tile_kind_leaf_means },
-  { id: 'context', label: m.widget_tile_kind_context, means: m.widget_tile_kind_context_means },
-] as const satisfies ReadonlyArray<{ id: TileKind; label: () => string; means: () => string }>
-
 /** Each place by its direction, as the canvas numbers them. */
-export const placeNames: Record<Place, () => string> = {
+const placeNames: Record<Place, () => string> = {
   1: m.direction_north_west,
   2: m.direction_north_east,
   3: m.direction_east,

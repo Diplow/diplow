@@ -12,10 +12,14 @@ import type { TilePlace } from '#/front/ui/chat/widgets/tile/parts'
 /** A Tile as its edit opened on it: its words, by its id, at the Version the page drew. */
 export type Opened = TileContent & Pick<SystemTile, 'id' | 'version'>
 
-/** The form a receipt is the end of: a new Tile's, under its parent, or a Tile's edit. */
+/**
+ * The form a receipt is the end of: a new Tile's, under its parent, a Tile's edit, or the Root named
+ * with the pseudo a new account goes by.
+ */
 type Session =
   | { readonly kind: 'add'; readonly parent: string }
   | { readonly kind: 'edit'; readonly opened: Opened }
+  | { readonly kind: 'name'; readonly root: Opened }
 
 /** What a write sent leaves: what was done, to which Tile, where, and when. */
 export interface Receipt {
@@ -23,10 +27,11 @@ export interface Receipt {
   /** The key of the form it ends, which it keeps, so the one widget goes from form to receipt. */
   readonly key: string
   readonly session: Session
-  readonly did: 'created' | 'edited' | 'deleted'
+  readonly did: 'created' | 'edited' | 'deleted' | 'named'
   /** The Tile written, by its id, which the receipt centers the canvas on while it stands. */
   readonly tile: { readonly id: string; readonly title: string }
-  readonly where: TilePlace
+  /** Where it stands; none for the Root, which stands under nothing. */
+  readonly where: TilePlace | undefined
   readonly at: Date
 }
 

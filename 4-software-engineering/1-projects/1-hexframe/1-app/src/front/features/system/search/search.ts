@@ -29,7 +29,7 @@ const SystemSearch = Schema.Struct({
   add: Schema.optionalKey(orDefault(TileId)),
   slot: Schema.optionalKey(orDefault(Slot)),
   /**
-   * Where an import lands, its drawer open: in `slot` under this Tile, or, `root`, as the Root of an
+   * Where an import lands, its widget open: in `slot` under this Tile, or, `root`, as the Root of an
    * empty System.
    */
   import: Schema.optionalKey(orDefault(ImportInto)),

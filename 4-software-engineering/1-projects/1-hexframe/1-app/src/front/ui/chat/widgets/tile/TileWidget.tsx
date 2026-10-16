@@ -1,12 +1,13 @@
 // A tile written in the conversation, as a widget whose title is the tile's title: amber while the
-// words are the user's. Its hex is the place: the frame the tile goes in, its slot lit; creating, the
-// free slots are dashed and a pick moves the tile there. Then the kind, the preview with its count, and
-// the page, in the user's serif, written or read. Editing, each changed field carries a dot and Save
+// words are the user's. Its hex is the place: the frame the tile goes in, its slot lit, where the user
+// clicked on the canvas, which says its kind too. Creating, the title alone beside it takes the focus;
+// Enter there brings the preview, with its count, and Enter in the preview the page, in the user's
+// serif, written or read, each the widget's whole width. Editing, each changed field carries a dot and Save
 // sends only those; the tile changed meanwhile, the user's words stay, the widget says who changed
 // what, and Enter decides nothing. A refused write comes back as it left, the user's words put back and
 // the refusal on the field at fault. Once written, its receipt, the focus handed to it. Controlled: the
 // words, the place and what each action does are its caller's.
-import { Maximize2, Pencil } from 'lucide-react'
+import { Check, FolderInput, Maximize2, Pencil, Plus, Trash2, UserRound, X } from 'lucide-react'
 import { useState } from 'react'
 
 import { m } from '#/paraglide/messages'
@@ -16,18 +17,14 @@ import { UntilDecided } from '../../entries/Receipt'
 import { Widget } from '../../layouts/Widget'
 import type { MentionProps } from '../../text/Mention'
 import { weave } from '../../text/words'
-import { Choice, Field, TitleField } from '../fields'
-import type { Place } from '../Places'
+import { Field, TitleField } from '../fields'
 import {
   Diff,
   fieldNames,
-  kinds,
   PlaceMark,
-  placeNames,
   whereOf,
   type Segment,
   type TileField,
-  type TileKind,
   type TilePlace,
   type TileWords,
 } from './parts'
@@ -46,10 +43,10 @@ interface Form {
 
 interface Creating extends Form {
   mode: 'new'
-  /** Where it goes: the tile it goes under, its kind and its place among the free ones. */
+  /** Where it goes, as the user clicked it on the canvas: the tile it goes under, its kind, its place. */
   where: TilePlace
-  onPlaceChange: (place: Place) => void
-  onKindChange: (kind: TileKind) => void
+  /** Opened by the user's click on the canvas: its title takes the focus as it comes. */
+  takesFocus?: boolean
   onCreate: () => void
   /** Imports a vault into this place instead. */
   onImport?: () => void
@@ -69,7 +66,8 @@ interface Changed {
 
 interface Editing extends Form {
   mode: 'edit'
-  where: TilePlace
+  /** Where it stands; none for the Root, which stands under nothing, its hex a pencil. */
+  where?: TilePlace | undefined
   /** The fields changed since the tile was read, each marked; Save sends these. */
   edited: readonly TileField[]
   onSave: () => void
@@ -86,16 +84,37 @@ interface Editing extends Form {
 /** Once a write is sent, the widget leaves its receipt: what was done, to which tile, where. */
 interface Done {
   mode: 'done'
-  did: 'created' | 'edited' | 'deleted'
+  /** `named`, the Root given the user's pseudo: the receipt says it is theirs. */
+  did: 'created' | 'edited' | 'deleted' | 'named'
   /** The tile, named as the conversation names one: a click centers the canvas on it. */
   tile: MentionProps
-  where: TilePlace
+  /** Where it stands; none for the Root. */
+  where?: TilePlace | undefined
   at: Date
   onUndo?: (() => void) | undefined
   undone?: boolean
 }
 
-type TileWidgetProps = Creating | Editing | Done
+/**
+ * A new account's first question, the agent's: the pseudo the user goes by, which names their own
+ * tile, the Root, at the heart of their System.
+ */
+interface Naming {
+  mode: 'name'
+  name: string
+  onNameChange: (name: string) => void
+  /** Why the last pseudo was refused. */
+  refused?: string | undefined
+  onName: () => void
+  /** Not now: the question goes, the Root stays untitled. */
+  onLater: () => void
+  /** Brings a vault in as the Root instead, an empty System's. */
+  onImport?: (() => void) | undefined
+  /** Asked as the account opens: its field takes the focus as it comes. */
+  takesFocus?: boolean
+}
+
+type TileWidgetProps = Creating | Editing | Done | Naming
 
 const did = {
   created: m.widget_tile_created,
@@ -110,10 +129,7 @@ export function TileWidget(props: TileWidgetProps) {
       receipt={
         props.mode === 'done'
           ? {
-              words: weave(did[props.did], {
-                tile: { tile: props.tile },
-                where: whereOf(props.where),
-              }),
+              words: receiptWords(props),
               at: props.at,
               tone: 'human',
               onUndo: props.onUndo,
@@ -124,54 +140,120 @@ export function TileWidget(props: TileWidgetProps) {
     >
       {props.mode === 'new' && <NewTile {...props} />}
       {props.mode === 'edit' && <EditTile {...props} />}
+      {props.mode === 'name' && <NameRoot {...props} />}
     </UntilDecided>
   )
 }
 
+/** What a receipt says: what was done to which tile, where, the Root's own words for the Root. */
+function receiptWords(done: Done) {
+  const tile = { tile: done.tile }
+  if (done.did === 'named') return weave(m.widget_tile_named, { tile })
+  if (done.where === undefined) return weave(m.widget_tile_root_edited, { tile })
+  return weave(did[done.did], { tile, where: whereOf(done.where) })
+}
+
+/** The agent asks the pseudo the user goes by, which becomes their own tile; Enter takes it. */
+function NameRoot(props: Naming) {
+  const { name, onNameChange, refused, onName, onLater, onImport, takesFocus = false } = props
+  return (
+    <Widget
+      voice="agent"
+      icon={<UserRound />}
+      kicker={m.widget_tile_name_kicker()}
+      title={m.widget_tile_name_title()}
+      subtitle={m.widget_tile_name_subtitle()}
+      actions={[
+        {
+          label: m.widget_tile_name_take(),
+          icon: <Check />,
+          shortcut: { key: 'Enter', mod: true },
+          submit: true,
+          onSelect: onName,
+        },
+        { label: m.widget_tile_name_later(), icon: <X />, onSelect: onLater },
+        ...(onImport === undefined
+          ? []
+          : [
+              {
+                label: m.widget_tile_name_import(),
+                icon: <FolderInput />,
+                onSelect: onImport,
+                apart: true,
+              },
+            ]),
+      ]}
+      onDismiss={onLater}
+    >
+      <Field
+        takesFocus={takesFocus}
+        label={m.widget_tile_name_field()}
+        placeholder={m.widget_tile_name_placeholder()}
+        value={name}
+        onChange={onNameChange}
+        error={refused}
+      />
+    </Widget>
+  )
+}
+
+/** How far a new tile's words go: its title alone, then its preview, then its page. */
+type Reach = 'title' | 'preview' | 'body'
+
 function NewTile(props: Creating) {
-  const { where, onPlaceChange, onKindChange, onCreate, onImport, onCancel } = props
+  const { where, onCreate, onImport, onCancel, words, takesFocus = false } = props
+  // A tile written already, a refusal's put back, shows every field it holds words in.
+  const [reach, setReach] = useState<Reach>(
+    words.body !== '' ? 'body' : words.preview !== '' ? 'preview' : 'title',
+  )
   return (
     <Widget
       voice="human"
-      mark={
-        <PlaceMark where={where} label={m.widget_tile_place()} onPick={onPlaceChange} picking />
+      mark={<PlaceMark where={where} label={m.widget_tile_place()} />}
+      title={words.title.trim() === '' ? m.system_add_title() : words.title}
+      titleField={
+        <Title
+          {...props}
+          takesFocus={takesFocus}
+          onEnter={() => {
+            setReach((at) => (at === 'title' ? 'preview' : at))
+          }}
+        />
       }
-      kicker={m.widget_tile_new_kicker({ where: whereOf(where) })}
-      title={props.words.title.trim() === '' ? m.system_add_title() : props.words.title}
-      titleField={<Title {...props} />}
       actions={[
         {
           label: m.widget_tile_create(),
+          icon: <Plus />,
           shortcut: { key: 'Enter', mod: true },
-          submit: true,
           onSelect: onCreate,
         },
-        { label: m.ui_cancel(), onSelect: onCancel },
+        { label: m.ui_cancel(), icon: <X />, onSelect: onCancel },
         ...(onImport === undefined
           ? []
-          : [{ label: m.system_import_here(), onSelect: onImport, apart: true }]),
+          : [
+              {
+                label: m.system_import_here(),
+                icon: <FolderInput />,
+                onSelect: onImport,
+                apart: true,
+              },
+            ]),
       ]}
       settings={settingsOf(props)}
       onDismiss={onCancel}
     >
-      <div className="grid gap-[1.125rem]">
-        <Choice
-          label={m.widget_tile_kind()}
-          choices={kinds.map((kind) => ({ id: kind.id, label: kind.label() }))}
-          on={where.kind}
-          onChoose={onKindChange}
-          means={kinds.find((kind) => kind.id === where.kind)?.means()}
-        />
-        {/* A finger can't hit the map's small hexes: the free places, by name, at a thumb's size. */}
-        <Choice
-          label={m.widget_tile_place()}
-          choices={where.free.map((place) => ({ id: place, label: placeNames[place]() }))}
-          on={where.place}
-          onChoose={onPlaceChange}
-          className="hidden pointer-coarse:flex"
-        />
-        <Words {...props} />
-      </div>
+      {reach !== 'title' && (
+        <div className="grid gap-[1.125rem]">
+          <Words
+            {...props}
+            body={reach === 'body'}
+            fresh
+            onPreviewEnter={() => {
+              setReach('body')
+            }}
+          />
+        </div>
+      )}
     </Widget>
   )
 }
@@ -183,7 +265,9 @@ function EditTile(props: Editing) {
     <>
       <Widget
         voice="human"
-        mark={<PlaceMark where={where} label={m.widget_tile_place()} />}
+        {...(where === undefined
+          ? { icon: <Pencil /> }
+          : { mark: <PlaceMark where={where} label={m.widget_tile_place()} /> })}
         kicker={taken ? m.widget_tile_taken_kicker() : m.widget_tile_edit_kicker()}
         title={words.title}
         titleField={<Title {...props} takesFocus={taken} />}
@@ -192,16 +276,18 @@ function EditTile(props: Editing) {
             ? [
                 {
                   label: m.system_save(),
+                  icon: <Check />,
                   shortcut: { key: 'Enter', mod: true },
                   submit: true,
                   onSelect: onSave,
                 },
-                { label: m.ui_cancel(), onSelect: onCancel },
+                { label: m.ui_cancel(), icon: <X />, onSelect: onCancel },
                 ...(onDelete === undefined
                   ? []
                   : [
                       {
                         label: m.system_delete(),
+                        icon: <Trash2 />,
                         destructive: true,
                         apart: true,
                         onSelect: () => {
@@ -255,16 +341,18 @@ function settingsOf({ onExpand }: Form) {
     : [{ label: m.widget_tile_expand(), icon: <Maximize2 />, onSelect: onExpand }]
 }
 
-/** The title, written where it is read. */
+/** The title, written where it is read; Enter there goes on, where the widget says what to. */
 function Title({
   words,
   onWordsChange,
   refused,
   takesFocus = false,
-}: Form & { takesFocus?: boolean }) {
+  onEnter,
+}: Form & { takesFocus?: boolean; onEnter?: () => void }) {
   return (
     <TitleField
       takesFocus={takesFocus}
+      onEnter={onEnter}
       label={m.system_field_title()}
       placeholder={m.system_untitled()}
       value={words.title}
@@ -276,6 +364,16 @@ function Title({
   )
 }
 
+interface WordsProps extends Form {
+  edited?: readonly TileField[]
+  /** The page shows too; a new tile's comes once its preview is validated. */
+  body?: boolean
+  /** A new tile's: each field takes the focus as it comes, the step the user took bringing it. */
+  fresh?: boolean
+  /** Enter in the preview, a new tile's: its page comes. */
+  onPreviewEnter?: () => void
+}
+
 /** The preview, counted, then the page, written or read as it will be. */
 function Words({
   words,
@@ -283,11 +381,16 @@ function Words({
   previewLimit,
   refused,
   edited = [],
-}: Form & { edited?: readonly TileField[] }) {
+  body = true,
+  fresh = false,
+  onPreviewEnter,
+}: WordsProps) {
   const [reading, setReading] = useState(false)
   return (
     <>
       <Field
+        takesFocus={fresh}
+        onEnter={onPreviewEnter}
         label={m.system_field_preview()}
         look="text"
         limit={previewLimit}
@@ -299,19 +402,22 @@ function Words({
         edited={edited.includes('preview')}
         error={refused?.preview}
       />
-      <Field
-        label={m.widget_tile_page()}
-        look="prose"
-        placeholder={m.widget_tile_page_placeholder()}
-        value={words.body}
-        onChange={(body) => {
-          onWordsChange({ ...words, body })
-        }}
-        edited={edited.includes('body')}
-        error={refused?.body}
-        aside={<WriteOrRead reading={reading} onReadingChange={setReading} />}
-        shown={reading ? <Page text={words.body} /> : undefined}
-      />
+      {body && (
+        <Field
+          takesFocus={fresh}
+          label={m.widget_tile_page()}
+          look="prose"
+          placeholder={m.widget_tile_page_placeholder()}
+          value={words.body}
+          onChange={(body) => {
+            onWordsChange({ ...words, body })
+          }}
+          edited={edited.includes('body')}
+          error={refused?.body}
+          aside={<WriteOrRead reading={reading} onReadingChange={setReading} />}
+          shown={reading ? <Page text={words.body} /> : undefined}
+        />
+      )}
     </>
   )
 }

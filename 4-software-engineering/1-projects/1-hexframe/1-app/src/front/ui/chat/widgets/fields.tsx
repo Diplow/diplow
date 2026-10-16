@@ -4,7 +4,7 @@
 // was changed, and its count near its limit; under it what was refused, said as it changes. Every
 // field is controlled: what it holds is its widget's caller's.
 import { cn } from 'cn'
-import { useId, type ReactNode } from 'react'
+import { useId, type KeyboardEvent, type ReactNode } from 'react'
 
 import { countOf, type CountTone } from './count'
 
@@ -32,6 +32,24 @@ interface FieldProps {
   aside?: ReactNode
   /** Shown in the control's place while it is set: the page read as it will be. */
   shown?: ReactNode
+  /**
+   * Enter alone validates it, Shift+Enter still breaking a line where it holds several: the widget
+   * goes on to what comes next.
+   */
+  onEnter?: (() => void) | undefined
+  /** It takes the focus as it comes, shown by the step the user just took. */
+  takesFocus?: boolean
+}
+
+/** Enter alone, not while a word is composed: what validates a field that says what Enter does. */
+function enterOf(onEnter: (() => void) | undefined) {
+  if (onEnter === undefined) return undefined
+  return (event: KeyboardEvent<HTMLElement>) => {
+    if (event.key !== 'Enter' || event.shiftKey || event.metaKey || event.ctrlKey) return
+    if (event.altKey || event.nativeEvent.isComposing) return
+    event.preventDefault()
+    onEnter()
+  }
 }
 
 const countTones: Record<CountTone, string> = {
@@ -55,6 +73,8 @@ export function Field({
   placeholder,
   aside,
   shown,
+  onEnter,
+  takesFocus = false,
 }: FieldProps) {
   const id = useId()
   const errorId = `${id}-error`
@@ -72,6 +92,9 @@ export function Field({
     onChange: (event: { target: { value: string } }) => {
       onChange(event.target.value)
     },
+    onKeyDown: enterOf(onEnter),
+    // Set only by a step the user just took, never on a page's first paint.
+    autoFocus: takesFocus,
     className: cn(
       'block w-full border-0 border-b border-input bg-transparent pt-1 pb-1.5 text-foreground caret-(--voice) outline-none placeholder:text-muted-foreground',
       look === 'prose'
@@ -145,6 +168,8 @@ interface TitleFieldProps {
   placeholder?: string
   /** It takes the focus as it comes, when what opened it is gone. */
   takesFocus?: boolean
+  /** Enter validates it: the widget goes on to what comes next. */
+  onEnter?: (() => void) | undefined
 }
 
 /**
@@ -158,6 +183,7 @@ export function TitleField({
   error,
   placeholder,
   takesFocus = false,
+  onEnter,
 }: TitleFieldProps) {
   const errorId = useId()
   const invalid = error !== undefined
@@ -176,6 +202,7 @@ export function TitleField({
         onChange={(event) => {
           onChange(event.target.value)
         }}
+        onKeyDown={enterOf(onEnter)}
         className={cn(
           'block w-full border-0 border-b border-transparent bg-transparent pb-[3px] font-human text-[1.3125rem] leading-tight text-foreground caret-(--voice) transition-colors duration-250 outline-none placeholder:text-muted-foreground placeholder:italic hover:border-input focus:border-(--voice)',
           invalid && 'border-destructive hover:border-destructive',
@@ -184,52 +211,6 @@ export function TitleField({
       <p id={errorId} aria-live="polite" className="text-xs text-destructive empty:hidden">
         {error}
       </p>
-    </div>
-  )
-}
-
-interface ChoiceProps<T extends string | number> {
-  /** The group's name, for a screen reader: "Kind". */
-  label: string
-  choices: ReadonlyArray<{ readonly id: T; readonly label: string }>
-  on: T
-  onChoose: (id: T) => void
-  /** What the choice on means, in a few words after the choices. */
-  means?: string
-  className?: string
-}
-
-/** A few words to choose among, the one on underlined in the voice, what it means after them. */
-export function Choice<T extends string | number>({
-  label,
-  choices,
-  on,
-  onChoose,
-  means,
-  className,
-}: ChoiceProps<T>) {
-  return (
-    <div
-      role="group"
-      aria-label={label}
-      className={cn('flex flex-wrap items-baseline gap-x-4 gap-y-1', className)}
-    >
-      {choices.map((choice) => (
-        <button
-          key={String(choice.id)}
-          type="button"
-          aria-pressed={choice.id === on}
-          onClick={() => {
-            onChoose(choice.id)
-          }}
-          className="cursor-pointer border-b border-transparent py-0.5 text-[0.78125rem] text-muted-foreground transition-colors outline-none hover:text-foreground focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-(--voice) aria-pressed:border-(--voice) aria-pressed:text-foreground pointer-coarse:min-h-11"
-        >
-          {choice.label}
-        </button>
-      ))}
-      {means !== undefined && (
-        <span className="text-xs font-light text-muted-foreground">{means}</span>
-      )}
     </div>
   )
 }

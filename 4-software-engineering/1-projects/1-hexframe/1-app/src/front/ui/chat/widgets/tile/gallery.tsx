@@ -1,5 +1,6 @@
-// The tile widget on /design-system, each state live on the chat's sample tiles: write a tile, pick
-// its place on the map, create it and undo it; edit one, delete it; take the agent's draft; meet a tile
+// The tile widget on /design-system, each state live on the chat's sample tiles: a new account's
+// pseudo; write a tile in the place clicked, its preview then its page coming as each is validated,
+// create it and undo it; edit one, delete it; take the agent's draft; meet a tile
 // changed meanwhile; import a vault and export a tile. What would reach the server shows in a toast;
 // what Mapping would refuse is the demo's (`../demo.ts`).
 import { ClientOnly } from '@tanstack/react-router'
@@ -34,6 +35,11 @@ import { TileExport, TileImport } from './Transfer'
 export function TileWidgetGallery({ previewLimit }: { previewLimit: number }) {
   return (
     <GallerySection name="TileWidget">
+      <GalleryState label={m.gallery_state_tile_name()}>
+        <GalleryColumn>
+          <NameSpecimen />
+        </GalleryColumn>
+      </GalleryState>
       <GalleryState label={m.gallery_state_tile_new()}>
         <GalleryColumn>
           <NewTileSpecimen previewLimit={previewLimit} />
@@ -175,7 +181,7 @@ function NewTileSpecimen({
 }) {
   const [now] = useState(() => new Date())
   const [words, setWords] = useState(firstWords)
-  const [where, setWhere] = useState(firstWhere)
+  const [where] = useState(firstWhere)
   const [refused, setRefused] = useState(firstRefusal)
   const [created, setCreated] = useState(false)
   const [entrance, setEntrance] = useState(0)
@@ -201,6 +207,7 @@ function NewTileSpecimen({
           key={entrance}
           mode="new"
           where={where}
+          takesFocus={entrance > 0}
           words={words}
           previewLimit={previewLimit}
           onWordsChange={(next) => {
@@ -208,18 +215,6 @@ function NewTileSpecimen({
             setRefused(stillRefused(refused, words, next))
           }}
           refused={refused}
-          onPlaceChange={(place) => {
-            setWhere({ ...where, place })
-          }}
-          onKindChange={(kind) => {
-            const free = freeFor[kind]
-            setWhere({
-              ...where,
-              kind,
-              free,
-              place: free.includes(where.place) ? where.place : (free[0] ?? where.place),
-            })
-          }}
           onCreate={() => {
             const refusal = tileRefusalOf(words, previewLimit)
             setRefused(refusal)
@@ -228,6 +223,47 @@ function NewTileSpecimen({
           onImport={said(m.system_import_here())}
           onExpand={said(m.widget_tile_expand())}
           onCancel={again}
+        />
+      )}
+      <Again onAgain={again} />
+    </>
+  )
+}
+
+/** A new account's first question, its pseudo, then the receipt naming its own tile. */
+function NameSpecimen() {
+  const [now] = useState(() => new Date())
+  const [name, setName] = useState('')
+  const [named, setNamed] = useState(false)
+  const [entrance, setEntrance] = useState(0)
+  const again = () => {
+    setNamed(false)
+    setName('')
+    setEntrance(entrance + 1)
+  }
+  return (
+    <>
+      {named ? (
+        <TileWidget
+          key={entrance}
+          mode="done"
+          did="named"
+          tile={{ title: name }}
+          at={now}
+          onUndo={again}
+        />
+      ) : (
+        <TileWidget
+          key={entrance}
+          mode="name"
+          name={name}
+          onNameChange={setName}
+          onName={() => {
+            if (name.trim() !== '') setNamed(true)
+          }}
+          onLater={again}
+          onImport={said(m.widget_tile_name_import())}
+          takesFocus={entrance > 0}
         />
       )}
       <Again onAgain={again} />

@@ -225,7 +225,13 @@ function lineOf(verb: Verb, subject: Subject): Line {
         tone: 'destructive',
       }
     case 'new-tile':
-      return { icon: <Plus />, shortcut: { key: 'n' }, label: m.tile_menu_new_tile }
+      // Its widget opens in the chat, its title taking the focus.
+      return {
+        icon: <Plus />,
+        shortcut: { key: 'n' },
+        label: m.tile_menu_new_tile,
+        takesFocus: true,
+      }
     case 'import':
       return { icon: <FolderInput />, shortcut: { key: 'i' }, label: m.tile_menu_import }
   }
@@ -287,11 +293,15 @@ function submenuOf(
             frame={holds}
             choose={(at) =>
               holds.seats[at] === undefined
-                ? choice(
-                    onAct,
-                    { verb: 'add', at },
-                    m.tile_menu_add_at({ direction: directionName(at), hub: holds.hub }),
-                  )
+                ? {
+                    // The new tile's widget opens in the chat, its title taking the focus.
+                    ...choice(
+                      onAct,
+                      { verb: 'add', at },
+                      m.tile_menu_add_at({ direction: directionName(at), hub: holds.hub }),
+                    ),
+                    takesFocus: true,
+                  }
                 : undefined
             }
           />

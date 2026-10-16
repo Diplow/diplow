@@ -177,7 +177,7 @@ const takersOf = new WeakMap<QueryClient, Set<{ readonly current: Take }>>()
  * each write of the System's queue to them the moment it turns `error`, once the System read again
  * after it has landed, its channel already carried out. The takers registered then decide: if none
  * shows a form's refusal, which its channel shows on the form's fields, it goes to a toast instead
- * (`unshown`), so none is lost. An import, which is no Operation, is no refusal here: its drawer
+ * (`unshown`), so none is lost. An import, which is no Operation, is no refusal here: its widget
  * shows its own. Made with the client's first System write or page, and kept as long as the client.
  */
 function listenForRefusals(client: QueryClient) {

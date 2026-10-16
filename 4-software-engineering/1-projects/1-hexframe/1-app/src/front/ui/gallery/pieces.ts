@@ -266,13 +266,6 @@ export const pieces = [
     note: m.gallery_note_rail,
   },
   {
-    name: 'Drawer',
-    tier: 'canvas',
-    sources: ['ui/canvas/layouts/Drawer.tsx'],
-    madeOf: [],
-    note: m.gallery_note_drawer,
-  },
-  {
     name: 'ThemeToggle',
     tier: 'canvas',
     sources: ['ui/canvas/atoms/ThemeToggle.tsx'],

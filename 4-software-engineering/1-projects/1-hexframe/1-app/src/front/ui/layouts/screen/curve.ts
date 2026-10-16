@@ -15,6 +15,28 @@ export function offsetAt(t: number): number {
 /** How far past the chat's edge the curve reaches, at mid-height, in px: what its column has to hold. */
 export const reach = offsetAt(0.5)
 
+/** What the chat's column holds past the bulge, in px, so the curve's line isn't cut. */
+export const columnMargin = 6
+
+/** A box on the page, in px, as `getBoundingClientRect` measures it. */
+export interface Box {
+  left: number
+  top: number
+  width: number
+  height: number
+}
+
+/**
+ * Where the curve runs across the page, in px, `y` px down the page, in the chat's `column` cut along
+ * it: the column holds the bulge and its margin past the edge the curve leaves from, and the curve's
+ * height is the column's.
+ */
+export function curveAcross(column: Box, y: number): number {
+  const edge = column.left + column.width - reach - columnMargin
+  const t = column.height <= 0 ? 0 : clamp((y - column.top) / column.height, 0, 1)
+  return edge + offsetAt(t)
+}
+
 /** The curve's slope, its offset's change per px down a screen `height` px tall, at `t`. */
 function slopeAt(t: number, height: number): number {
   return (2 * bow * (1 - 2 * t)) / height

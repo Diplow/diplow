@@ -1,15 +1,12 @@
-// The canvas's own layouts, on /design-system: its corner, where you are, and the drawer the Root's
-// edit opens in.
+// The canvas's own layouts, on /design-system: its corner, where you are.
 import { useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { Button } from '../../atoms/controls/button'
 import { GallerySection, GalleryState } from '../../gallery/frame'
 import { cornerPlace } from '../../layouts/screen/Screen'
 import { ulysse } from '../fixtures'
 import { pathTo } from '../view/tiles'
-import { Drawer } from './Drawer'
 import { Rail } from './Rail'
 
 export function CanvasLayoutsGallery() {
@@ -26,49 +23,6 @@ export function CanvasLayoutsGallery() {
           <RailSpecimen from="hexframe" />
         </GalleryState>
       </GallerySection>
-      <GallerySection name="Drawer">
-        <GalleryState label={m.gallery_state_click_to_open()}>
-          <DrawerSpecimen />
-        </GalleryState>
-      </GallerySection>
-    </>
-  )
-}
-
-// On a real page, the drawer's open state is a search param; here a demo holds it.
-function DrawerSpecimen() {
-  const [open, setOpen] = useState(false)
-  const close = () => {
-    setOpen(false)
-  }
-  return (
-    <>
-      <Button
-        variant="outline"
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        onClick={() => {
-          setOpen(true)
-        }}
-      >
-        {m.gallery_sample_edit()}
-      </Button>
-      <Drawer
-        open={open}
-        onOpenChange={setOpen}
-        title={m.gallery_sample_tile_title()}
-        description={m.gallery_sample_tile_preview()}
-        footer={
-          <>
-            <Button variant="outline" onClick={close}>
-              {m.ui_cancel()}
-            </Button>
-            <Button onClick={close}>{m.gallery_sample_save()}</Button>
-          </>
-        }
-      >
-        <p className="text-sm">{m.gallery_sample_tile_body()}</p>
-      </Drawer>
     </>
   )
 }
