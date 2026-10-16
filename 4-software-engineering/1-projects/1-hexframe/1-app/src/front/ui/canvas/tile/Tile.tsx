@@ -206,7 +206,8 @@ const teal: Lights = {
 
 const lights: Record<TileKind, Lights> = {
   root: { rest: warm(34, 6), lit: warm(46, 12) },
-  untitled: { rest: warm(15, 3), lit: warm(22, 6) },
+  // Untitled, it has no colour of its own yet, its lamp alone: the root's warm light, none of it.
+  untitled: { rest: warm(0, 0), lit: warm(0, 0) },
   branch: tile,
   list: tile,
   leaf: {
@@ -233,6 +234,8 @@ function drafted(voice: 'agent' | 'human'): Lights {
 interface Rim {
   color: string
   dash?: string
+  /** Not lit yet: the untitled root's, which lights as its light rises. */
+  unlit?: boolean
 }
 
 const ember: Rim = { color: tint('warning', 60) }
@@ -241,7 +244,6 @@ const rims: Partial<Record<TileKind, Rim>> = {
   context: { color: tint('context', 45) },
   reference: { color: tint('context', 45), dash: '3 3' },
   broken: { color: tint('faint', 70), dash: '2 4' },
-  untitled: { color: tint('glow', 55), dash: '3 4' },
   list: ember,
   // What a Proposal would create: dashed violet, since it isn't done yet.
   ghost: proposedRim,
@@ -362,13 +364,17 @@ function origin({ x, y }: Point, order?: number): CSSProperties {
   }
 }
 
-/** Its line of its own, if any: a clash's ember, its kind's hairline, or the center's steady line. */
+/**
+ * Its line of its own, if any: a clash's ember, its kind's hairline, or the center's steady line; the
+ * untitled root's unlit, since it is not there yet but for its lamp.
+ */
 function rimOf(props: TileProps, id: string): Rim | undefined {
   const { kind, place = 'ring' } = props
   if (clashOf(props) !== undefined) return ember
   const own = rims[kind]
   if (own !== undefined || !centered(place)) return own
-  return { color: kind === 'root' || kind === 'untitled' ? `url(#${id}-rim)` : 'var(--input)' }
+  if (rises(kind)) return { color: `url(#${id}-rim)`, unlit: kind === 'untitled' }
+  return { color: 'var(--input)' }
 }
 
 /** Its fill, lit or not, its lines, and the lights around it. */
@@ -421,6 +427,10 @@ function Light(props: TileProps & { id: string }) {
           strokeDasharray={rim.dash}
           strokeWidth={1}
           vectorEffect="non-scaling-stroke"
+          className={cn(
+            'transition-opacity duration-(--duration-sunrise) ease-glide motion-reduce:transition-none',
+            rim.unlit === true && 'opacity-0',
+          )}
         />
       )}
       <polygon
@@ -469,7 +479,7 @@ function Glows(props: TileProps & { id: string }) {
           fill={`url(#${id}-halo)`}
           className={cn(
             'pointer-events-none transition-[scale,opacity] duration-(--duration-sunrise) ease-glide motion-reduce:transition-none',
-            kind === 'untitled' && 'scale-[.28] opacity-50',
+            kind === 'untitled' && 'scale-[.28] opacity-75',
           )}
           style={origin(hex.center)}
         />

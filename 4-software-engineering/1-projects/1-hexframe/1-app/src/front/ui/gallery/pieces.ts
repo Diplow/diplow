@@ -262,15 +262,8 @@ export const pieces = [
     name: 'Rail',
     tier: 'canvas',
     sources: ['ui/canvas/layouts/Rail.tsx'],
-    madeOf: ['ThemeToggle'],
-    note: m.gallery_note_rail,
-  },
-  {
-    name: 'ThemeToggle',
-    tier: 'canvas',
-    sources: ['ui/canvas/atoms/ThemeToggle.tsx'],
     madeOf: [],
-    note: m.gallery_note_theme_toggle,
+    note: m.gallery_note_rail,
   },
   {
     name: 'Screen',

@@ -53,8 +53,6 @@ interface ComposerProps {
   running?: { stop: () => void; stopping: boolean } | undefined
   /** Nothing can be sent yet. */
   waiting?: boolean
-  /** The Account may not use the Assistant: its Messages are kept, none is answered. */
-  unavailable?: boolean
   /** The Modes, the one on and how to switch it, its caller's from Assistant's; none before it is read. */
   mode?:
     { choices: ReadonlyArray<ModeChoice>; on: string; choose: (id: string) => void } | undefined
@@ -86,7 +84,6 @@ export function Composer({
   sending = false,
   running,
   waiting = false,
-  unavailable = false,
   mode,
   onPoint,
   place,
@@ -213,11 +210,7 @@ export function Composer({
         <SendButton ready={ready} running={running} sending={sending} waiting={waiting} />
       </div>
       <Dropping carried={carried} over={drop.over} named={drop.named} />
-      {unavailable ? (
-        <p className="text-xs font-light text-muted-foreground">
-          {m.conversation_assistant_unavailable()}
-        </p>
-      ) : (
+      {(mode !== undefined || place !== undefined) && (
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
           {mode !== undefined && <ModeSwitch {...mode} />}
           {place !== undefined && <Place {...place} />}

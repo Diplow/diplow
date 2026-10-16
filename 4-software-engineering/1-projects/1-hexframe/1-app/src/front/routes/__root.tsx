@@ -3,7 +3,6 @@ import type { ReactNode } from 'react'
 
 import { getLocale } from '#/paraglide/runtime'
 import { Toaster } from '#/front/ui/atoms/Toaster'
-import { themeScript } from '#/front/ui/theme'
 
 import appCss from '../styles.css?url'
 
@@ -28,10 +27,9 @@ export const Route = createRootRoute({
  */
 function RootDocument({ children }: { children: ReactNode }) {
   return (
-    // The theme script sets `<html>`'s class before React hydrates, hence the warning suppressed.
-    <html lang={getLocale()} suppressHydrationWarning>
+    // hexframe is dark, its one theme.
+    <html lang={getLocale()} className="dark">
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <HeadContent />
       </head>
       <body>

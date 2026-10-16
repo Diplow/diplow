@@ -34,8 +34,8 @@ import {
 } from './mention'
 
 /**
- * The commands home runs today: the language, the agent's Mode and its last change, and Help and the
- * Keys, which the header's links opened before the commands took their place. The others the
+ * The commands home runs today: the language, the agent's Mode and its last change, Help and the
+ * Keys, which the header's links opened before the commands took their place, and signing out. The others the
  * proposal drew wait for their answer and their builds
  * (`hexframe-app-design-system-v1/decisions.md#DEC-33`).
  */
@@ -46,6 +46,7 @@ const run = [
   'language',
   'help',
   'keys',
+  'sign-out',
 ] as const satisfies ReadonlyArray<CommandId>
 
 /** A command home runs. */
@@ -67,6 +68,8 @@ export interface Offering {
   readonly help?: boolean
   /** The page opens the Account's Keys, in the chat. */
   readonly keys?: boolean
+  /** The page signs the Account out. */
+  readonly signOut?: boolean
 }
 
 /** The commands offered now, in their order: those home runs, and of those, what can be done now. */
@@ -75,6 +78,7 @@ export function offered({
   undoable,
   help = false,
   keys = false,
+  signOut = false,
 }: Offering): ReadonlyArray<Command> {
   const now: Record<RunCommand, boolean> = {
     ask: modes,
@@ -83,6 +87,7 @@ export function offered({
     language: true,
     help,
     keys,
+    'sign-out': signOut,
   }
   return commands.filter((command) => isRun(command.id) && now[command.id])
 }

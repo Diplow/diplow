@@ -4,7 +4,9 @@
 // facet's colour is the root's glow mixed into the night's `dusk` in oklch, whose hue runs from amber
 // through coral, rose and plum to indigo, so the shade side stays light and never turns grey.
 import { cn } from 'cn'
-import { useId } from 'react'
+import { useEffect, useId, useRef } from 'react'
+
+import { easingOf, movingFor } from '../../motion'
 
 const radius = 100
 const apex = { x: -11, y: -10 }
@@ -38,15 +40,21 @@ const facets = corners.map((corner, i) => {
   }
 })
 
-/** The Sunstone, as tall as its box; its sun's glow may run past it. */
-export function Sunstone({ className }: { className?: string }) {
+/**
+ * The Sunstone, as tall as its box; its sun's glow may run past it. It turns once whole around its
+ * heart each time `turns` grows, for `--duration-turn`, so whatever is done, the sun answers it.
+ */
+export function Sunstone({ className, turns = 0 }: { className?: string; turns?: number }) {
   const id = useId()
   const hex = corners.map(at).join(' ')
+  const svg = useRef<SVGSVGElement>(null)
+  useTurning(svg, turns)
   return (
     <svg
+      ref={svg}
       aria-hidden
       viewBox="-95 -110 190 220"
-      className={cn('shrink-0 overflow-visible', className)}
+      className={cn('shrink-0 overflow-visible ease-glide', className)}
     >
       <defs>
         {facets.map(({ near, far, edge }, i) => (
@@ -140,4 +148,24 @@ export function Sunstone({ className }: { className?: string }) {
       <circle cx={apex.x} cy={apex.y} r="7" className="fill-glow-soft" />
     </svg>
   )
+}
+
+/**
+ * One whole turn each time `turns` grows: a turn already on its way runs to its end and takes the
+ * ones asked meanwhile with it, so a burst of things done turns it once, never faster. Still with
+ * reduced motion.
+ */
+function useTurning(svg: { current: SVGSVGElement | null }, turns: number) {
+  const turning = useRef<Animation>(undefined)
+  const first = useRef(turns)
+  useEffect(() => {
+    const stone = svg.current
+    const lasts = movingFor('--duration-turn')
+    if (stone === null || turns === first.current || lasts === 0) return
+    if (turning.current?.playState === 'running') return
+    turning.current = stone.animate([{ rotate: '0deg' }, { rotate: '360deg' }], {
+      duration: lasts,
+      easing: easingOf(stone),
+    })
+  }, [svg, turns])
 }

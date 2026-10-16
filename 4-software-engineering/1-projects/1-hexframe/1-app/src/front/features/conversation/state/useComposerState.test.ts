@@ -146,6 +146,14 @@ describe("the composer's commands", () => {
     expect(send()).toEqual({ command: 'keys' })
   })
 
+  it('offers `/logout` where someone is signed in, and signs out on it', () => {
+    const { type, rows, send } = render({ modes: false, undoable: false, signOut: true })
+    type('/')
+    expect(rows()).toEqual(['language', 'sign-out'])
+    type(`/${m.composer_command_sign_out()}`)
+    expect(send()).toEqual({ command: 'sign-out' })
+  })
+
   it('sends a `/` no command offered answers as words', () => {
     const { type, rows, send } = render({ modes: false, undoable: false })
     type('/undo')

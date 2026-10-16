@@ -166,9 +166,13 @@ function Zone({
       >
         <div className="grid grid-cols-[2.25rem_1fr] gap-x-3.5 sm:grid-cols-[3.375rem_1fr] sm:gap-x-[1.125rem]">
           <Mark state={state} icon={icon} mark={mark} />
-          <div className="min-w-0">
-            {/* The tools sit over the kicker and the title's end, which leave them room. */}
-            <div className="pr-20 pointer-coarse:pr-12">
+          {/* Its words beside the hex, centered on it; a subtitle left empty takes no room. */}
+          <div className="min-w-0 self-center">
+            {/*
+              The tools sit over the kicker and the title's end, which leave them the room they take
+              where they ride the curve (`--along-curve`), and no more, so a title field runs on.
+            */}
+            <div className="pr-[var(--along-curve,5rem)] pointer-coarse:pr-12">
               {kicker !== undefined && (
                 <p
                   aria-live="polite"
@@ -202,7 +206,7 @@ function Zone({
                 </div>
               )}
             </div>
-            {subtitle !== undefined && !folded && (
+            {subtitle !== undefined && subtitle !== '' && !folded && (
               <p
                 className={cn(
                   'mt-[3px] text-[0.84375rem] leading-normal font-light text-muted-foreground',
@@ -255,7 +259,7 @@ function Mark({
   return (
     <div
       className={cn(
-        'relative mt-0.5 h-[2.125rem] w-9 text-(--voice) sm:h-[3.125rem] sm:w-[3.375rem]',
+        'relative h-[2.125rem] w-9 self-center text-(--voice) sm:h-[3.125rem] sm:w-[3.375rem]',
         state === 'working' && 'motion-safe:animate-breathe',
         risesInTurn,
       )}
@@ -306,7 +310,7 @@ function Hex({ working, children }: { working: boolean; children: ReactNode }) {
   return (
     <div
       className={cn(
-        'relative mt-0.5 h-[2.125rem] w-9 text-(--voice) sm:h-[3.125rem] sm:w-[3.375rem]',
+        'relative h-[2.125rem] w-9 self-center text-(--voice) sm:h-[3.125rem] sm:w-[3.375rem]',
         risesInTurn,
       )}
       style={rise(0)}

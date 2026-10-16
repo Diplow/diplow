@@ -1,14 +1,14 @@
 // The canvas's corner, top right: where you are. One thin line from the root down to the Tile you are
-// on, a point per step, with the theme's disc at its head, threaded on the line, so the corner reads
-// as one mark rather than a button beside a list.
-// Every part sits on the line's axis: the line is 1px wide and the disc and the points odd in size, so
+// on, a point per step, with hexframe's mark, the Sunstone, at its head, threaded on the line, so the
+// corner reads as one mark rather than a sign beside a list; it turns whole at each thing done.
+// Every part sits on the line's axis: the line is 1px wide and the mark and the points odd in size, so
 // each centre falls on the line's centre and the line stays one crisp pixel. Under a finger, every
 // step grows to a 44px target and the points spread to match.
 import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 
-import { ThemeToggle } from '../atoms/ThemeToggle'
+import { Sunstone } from '../../layouts/screen/Sunstone'
 
 interface RailStep {
   id: string
@@ -20,17 +20,25 @@ interface RailProps {
   steps: readonly RailStep[]
   /** A step up the path chosen: the caller centers the canvas on it. */
   onSelect: (id: string) => void
+  /** How many things were done since the page opened: the mark turns whole at each. */
+  turns?: number
   className?: string
 }
 
-export function Rail({ steps, onSelect, className }: RailProps) {
+export function Rail({ steps, onSelect, turns = 0, className }: RailProps) {
   return (
     <div className={cn('relative w-[31px] pointer-coarse:w-11', className)}>
-      <ThemeToggle />
-      {/* The line starts at the foot of the disc's rim and fades out below the last point. */}
+      <span
+        role="img"
+        aria-label={m.screen_brand()}
+        className="grid size-[31px] place-items-center pointer-coarse:size-11"
+      >
+        <Sunstone turns={turns} className="h-[23px] w-[21px]" />
+      </span>
+      {/* The line starts at the foot of the mark and fades out below the last point. */}
       <span
         aria-hidden
-        className="absolute top-[26px] -bottom-[58px] left-[calc(50%-0.5px)] w-px bg-linear-to-b from-input from-75% to-transparent pointer-coarse:top-[33px]"
+        className="absolute top-[29px] -bottom-[58px] left-[calc(50%-0.5px)] w-px bg-linear-to-b from-input from-75% to-transparent pointer-coarse:top-[33px]"
       />
       <nav aria-label={m.breadcrumb_label()}>
         <ol className="mt-[18px] flex flex-col gap-[25px] pointer-coarse:mt-1 pointer-coarse:gap-0">

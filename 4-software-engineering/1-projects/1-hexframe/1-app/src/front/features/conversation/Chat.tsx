@@ -29,6 +29,7 @@ import {
   useUndoing,
 } from '#/front/client/assistant/conversation'
 import type { LiveTurn } from '#/front/client/assistant/follow'
+import { useSignOut } from '#/front/client/iam/access'
 import { useSystem } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
@@ -160,6 +161,7 @@ export function ChatComposer(props: ChatComposerProps) {
   const { mutate: stop, isPending: stopping } = useStopTurn()
   const switching = useSetMode()
   const { mutate: undo } = useUndo()
+  const { mutate: signOut } = useSignOut()
   // An Undo asked for from a receipt too: `/undo` waits for it.
   const undoing = useUndoing()
   const { messages } = useMessagesOnTheirWay()
@@ -178,6 +180,9 @@ export function ChatComposer(props: ChatComposerProps) {
       }
       onHelp={onHelp}
       onKeys={onKeys}
+      onSignOut={() => {
+        signOut()
+      }}
       tiles={tiles ?? []}
       // Until it is read, or when reading it failed, the composer says nothing either way.
       unavailable={available === false}

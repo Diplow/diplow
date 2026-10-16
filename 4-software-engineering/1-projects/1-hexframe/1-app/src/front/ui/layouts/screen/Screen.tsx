@@ -77,14 +77,14 @@ const bulge = `${String(reach)}px`
 const margin = `${String(columnMargin)}px`
 
 /**
- * How far the chat's foot keeps its content in from the column's right, as `--screen-clear`: back
- * inside the chat's width, past the 1.125rem to the edge, the bulge and the column's margin, with the
- * margin again to spare, so nothing reaches the curve. A slot's ground runs on under it to the cut.
- * The foot hands it to what sits there as `--screen-foot-inset`, wide only, which the Composer and the
- * sign-in widget add to their own padding, so no caller pads them again.
+ * How far the chat keeps its content in from the column's right, as `--screen-clear`: past the bulge
+ * and the column's margin, to where the curve leaves the top and comes back at the foot, its nearest to
+ * the chat, then one fixed gap, so every line, field and button runs as far right as the curve lets it.
+ * A slot's ground runs on under it to the cut. The conversation's lines keep it as `--chat-right`, and
+ * the foot hands it to what sits there as `--screen-foot-inset`, wide only, which the Composer and the
+ * sign-in widget take as their padding, so no caller pads them again.
  */
-const clear =
-  'calc(var(--screen-edge) - var(--screen-chat) + var(--screen-bulge) + 2 * var(--screen-margin))'
+const clear = 'calc(var(--screen-bulge) + var(--screen-margin) + 1.25rem)'
 
 /**
  * The seam above the composer while the canvas is in front, as `--screen-seam`: on a phone the canvas
@@ -172,7 +172,6 @@ export function Screen({
             onMove={move('canvas')}
             className="h-24 items-end"
           />
-          <Brand />
           <Messages scroller={scroller} content={content}>
             {messages}
           </Messages>
@@ -399,7 +398,7 @@ function Messages({
         'flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain pt-6 pb-7 outline-none [mask-image:linear-gradient(transparent,black_1.75rem)] focus-visible:ring-1 focus-visible:ring-human/60 focus-visible:ring-inset',
         // How far its lines keep from the chat's sides, which a widget runs on past, the curve its edge.
         '[--chat-left:1.25rem] [--chat-right:1.25rem] pr-(--chat-right) pl-(--chat-left)',
-        '@wide:[--chat-left:2.25rem] @wide:[--chat-right:6.25rem] @wide:[scrollbar-width:none] @wide:[&::-webkit-scrollbar]:hidden',
+        '@wide:[--chat-left:2.25rem] @wide:[--chat-right:var(--screen-clear)] @wide:[scrollbar-width:none] @wide:[&::-webkit-scrollbar]:hidden',
       )}
     >
       <div ref={content} className="mt-auto">

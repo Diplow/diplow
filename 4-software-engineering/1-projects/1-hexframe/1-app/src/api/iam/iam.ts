@@ -1,7 +1,6 @@
-// IAM's server functions: signing up and in, the Session home reads before it renders, signed in or
-// out (front/client/iam/guard.ts), and the Account's Keys: issuing, listing, revoking. The middleware
-// has already put the request's Session on context. Signing out has no server function until the
-// composer's `/sign-out` runs one.
+// IAM's server functions: signing up, in and out, the Session home reads before it renders, signed in
+// or out (front/client/iam/guard.ts), and the Account's Keys: issuing, listing, revoking. The
+// middleware has already put the request's Session on context.
 import { createServerFn } from '@tanstack/react-start'
 import { Schema } from 'effect'
 
@@ -46,6 +45,11 @@ export const signUp = createServerFn({ method: 'POST' })
 export const signIn = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(Credentials))
   .handler(({ data, context }) => run(context, Iam.signIn(data)))
+
+/** Signs out on this device, the composer's `/logout`: its Session ended, its cookie cleared. */
+export const signOut = createServerFn({ method: 'POST' })
+  .validator(Nothing)
+  .handler(({ context }) => run(context, Iam.signOut))
 
 /** The request's Session, or `SignedOut`: what home reads before anything renders. */
 export const session = createServerFn({ method: 'GET' })

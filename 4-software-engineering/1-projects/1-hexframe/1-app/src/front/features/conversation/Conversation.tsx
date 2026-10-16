@@ -93,6 +93,8 @@ interface FootProps {
   onHelp?: ((words: string) => void) | undefined
   /** Opens the Account's Keys, which `/keys` runs; none where the page has none. */
   onKeys?: (() => void) | undefined
+  /** Signs the Account out, which `/logout` runs; none where no one is signed in. */
+  onSignOut?: (() => void) | undefined
   /** The Tiles the user may `@`. */
   tiles: ReadonlyArray<Mentionable>
   /** The Account may not use the Assistant: its Messages are kept, and no agent answers them. */
@@ -280,8 +282,8 @@ function goTo(locale: string) {
 /**
  * The composer, through its state hook: a pick put in the field, its caret after it, or the language
  * gone to; a Message sent as words, or a command the field opens with run, the Mode's by its switch,
- * `/undo` by `onUndo`, `/keys` by `onKeys`, the words after it sent once it ran, and `/help` by
- * `onHelp`, the words after it the topic it looks for.
+ * `/undo` by `onUndo`, `/keys` by `onKeys`, the words after it sent once it ran, `/help` by
+ * `onHelp`, the words after it the topic it looks for, and `/logout` by `onSignOut`, alone.
  */
 export function ConversationFoot({
   onSend,
@@ -289,6 +291,7 @@ export function ConversationFoot({
   onUndo,
   onHelp,
   onKeys,
+  onSignOut,
   unavailable = false,
   running,
   sending = false,
@@ -303,6 +306,7 @@ export function ConversationFoot({
     undoable: onUndo !== undefined,
     help: onHelp !== undefined,
     keys: onKeys !== undefined,
+    signOut: onSignOut !== undefined,
   } satisfies Offering)
   const field = useRef<HTMLTextAreaElement>(null)
   const { state, actions } = useComposerState(tiles, among, { center, field })
@@ -331,8 +335,12 @@ export function ConversationFoot({
         else if ('help' in submitted) onHelp?.(submitted.help)
         else if ('message' in submitted) onSend(submitted.message)
         else {
-          // The command first, then the words after it, as the Message they are.
+          // The command first, then the words after it, as the Message they are; none once signed out.
           const { command, then } = submitted
+          if (command === 'sign-out') {
+            onSignOut?.()
+            return
+          }
           if (command === 'undo') onUndo?.()
           else if (command === 'keys') onKeys?.()
           else if (mode !== undefined && modeOf[command] !== mode.mode) mode.choose(modeOf[command])
@@ -342,15 +350,14 @@ export function ConversationFoot({
       sending={sending}
       running={running}
       waiting={waiting}
-      unavailable={unavailable}
-      // No Turn answers an Account that may not use the Assistant.
+      // No Turn answers an Account that may not use the Assistant: neither its place nor its Mode show.
       place={unavailable ? undefined : state.workingIn}
       carried={carried?.title}
       onDrop={() => {
         if (carried !== undefined) actions.name(carried.id, 'caret')
       }}
       mode={
-        mode === undefined
+        mode === undefined || unavailable
           ? undefined
           : {
               choices: modes.map(({ id, label, means }) => ({

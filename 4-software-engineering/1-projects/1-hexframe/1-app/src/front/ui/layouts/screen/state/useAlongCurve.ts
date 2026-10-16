@@ -1,13 +1,17 @@
 // What rides the curve: an element of the conversation kept just inside the curve the chat is cut
 // along, wherever it is scrolled to, so it slides along the curve as the conversation scrolls. Only
 // wide, where the chat's column is cut (`data-curve`, the `Screen`'s); elsewhere, on a phone or off
-// the screen, it stays where its own classes put it.
+// the screen, it stays where its own classes put it. How far it reaches into its parent's content it
+// tells the parent as `--along-curve`, so what sits beside it there keeps clear of it and no further.
 import { useLayoutEffect, type RefObject } from 'react'
 
 import { curveAcross } from '../curve'
 
 /** How far inside the curve what rides it keeps, in px. */
 const inside = 10
+
+/** How far what sits beside it keeps from it, in px. */
+const beside = 8
 
 /**
  * Keeps `element`, absolutely placed in its offset parent, just inside the curve at its own height,
@@ -45,6 +49,7 @@ function ride(riding: HTMLElement, parent: HTMLElement) {
   if (column === null || getComputedStyle(column).clipPath === 'none') {
     riding.style.removeProperty('left')
     riding.style.removeProperty('right')
+    parent.style.removeProperty('--along-curve')
     return
   }
   const own = riding.getBoundingClientRect()
@@ -52,4 +57,8 @@ function ride(riding: HTMLElement, parent: HTMLElement) {
   const left = across - inside - own.width - parent.getBoundingClientRect().left
   riding.style.left = `${String(Math.round(left))}px`
   riding.style.right = 'auto'
+  // Where the parent's content ends, past which nothing beside it needs to keep clear.
+  const content = parent.clientWidth - parseFloat(getComputedStyle(parent).paddingRight)
+  const reach = Math.max(0, Math.round(content - left + beside))
+  parent.style.setProperty('--along-curve', `${String(reach)}px`)
 }

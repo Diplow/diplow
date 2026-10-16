@@ -48,9 +48,6 @@ export function ComposerGallery() {
       <GalleryState label={m.gallery_state_composer_waiting()}>
         <Specimen waiting />
       </GalleryState>
-      <GalleryState label={m.gallery_state_composer_unavailable()}>
-        <Specimen unavailable />
-      </GalleryState>
       <GalleryState label={m.gallery_state_composer_phone()}>
         <Phone />
       </GalleryState>
@@ -66,7 +63,6 @@ interface SpecimenProps {
   sending?: boolean
   running?: boolean
   waiting?: boolean
-  unavailable?: boolean
   className?: string
 }
 
@@ -79,7 +75,6 @@ function Specimen({
   sending: sendingAtFirst = false,
   running: runningAtFirst = false,
   waiting = false,
-  unavailable = false,
   className,
 }: SpecimenProps) {
   const { value, clear, composer } = useComposerDemo({
@@ -127,7 +122,6 @@ function Specimen({
               }
         }
         waiting={waiting}
-        unavailable={unavailable}
       />
     </div>
   )

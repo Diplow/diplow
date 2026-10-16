@@ -5,7 +5,7 @@ owner: diplo
 preview: >-
   @hexframe/app, the one deployable: a TanStack Start app (React 19) holding
   client and server, built by Nitro for Vercel's Node runtime. Tailwind and
-  shadcn, dark by default and light as its equal, Paraglide in English and
+  shadcn, dark its one theme, Paraglide in English and
   French, Vitest. Holds the rule of 6 inside src/ and the lint set that
   enforces it and the layers.
 ---
@@ -81,7 +81,7 @@ Every folder under `1-app/src/` is a node: at most 6 child folders and 6 files, 
 ## Rules
 
 - **The locale lives in the URL.** `/` is English, `/fr/…` French, so a link shows what its sender saw. Switching languages is a plain link and a full page load.
-- **The theme is a class on `<html>`**, set before the first paint by an inline script: dark, the design system's default, unless the stored choice is light. `useThemeState` reads and writes it.
+- **Dark is the one theme**, a class on `<html>` the document shell sets (`routes/__root.tsx`); there is nothing to choose. `styles.css` still holds the light values under `:root`, which the dark ones override, until they go.
 - **Nitro is a beta**, allowed because it sits behind a seam: its one line in `vite.config.ts`. Vercel's docs deploy TanStack Start through it.
 - **Vercel's project is `hexframe-app`**, rooted here, on Node 24 (Vercel's newest; local and CI run Node 26). It skips a build when nothing under `1-hexframe/` changed, and migrates the deployment's database before it builds (`vercel.json`). Neon's Vercel integration gives each deployment its database, `DATABASE_URL` and `DATABASE_URL_UNPOOLED`: its git branch's Neon branch on a preview, `main` in production. Every deployed environment also needs `BETTER_AUTH_SECRET`: without it, every server function answers `Unexpected`. Sentry needs `VITE_SENTRY_DSN`, PostHog `VITE_POSTHOG_KEY` and `VITE_POSTHOG_HOST`, all public and read at build time; each stays off without its own ([[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/CLAUDE|observability]]). The Assistant's sandboxes need `BL_WORKSPACE` and `BL_API_KEY`, server-only: without them the app runs and a sandbox can't be had ([[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/sandbox/CLAUDE|sandbox]]). A Turn's model calls need `ANTHROPIC_API_KEY`, server-only, the platform's key, which the model relay adds to each call and which never enters a sandbox: without it the app runs and a Turn's model answers nothing ([[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/anthropic/CLAUDE|anthropic]]). Who may use the Assistant is `ASSISTANT_ACCOUNTS`, server-only, the emails of the Accounts entitled to it, separated by commas, until Stripe: without it, nobody is ([[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE|auth]]).
 - **shadcn adds components to `src/front/ui/`**; move each into the folder it belongs to. `cn` comes from shadcn's `cn` package, not a local helper.

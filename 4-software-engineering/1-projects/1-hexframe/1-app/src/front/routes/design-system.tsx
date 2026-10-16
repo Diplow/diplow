@@ -30,7 +30,6 @@ import { getLocale } from '#/paraglide/runtime'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
 import { AtomsGallery } from '#/front/ui/atoms/gallery'
 import { Canvas } from '#/front/ui/canvas/Canvas'
-import { CanvasAtomsGallery } from '#/front/ui/canvas/atoms/gallery'
 import { fixtureViews, ulysse } from '#/front/ui/canvas/fixtures'
 import { CanvasLayoutsGallery } from '#/front/ui/canvas/layouts/gallery'
 import { TileGallery } from '#/front/ui/canvas/tile/gallery'
@@ -297,7 +296,6 @@ function Specimens({ chapter, view, onViewChange, onCenter }: SpecimensProps) {
           <MovingGallery />
           <BreadcrumbGallery view={view} onViewChange={onViewChange} />
           <CanvasLayoutsGallery />
-          <CanvasAtomsGallery />
         </GalleryTier>
       )
     case 'shared':
