@@ -50,6 +50,12 @@ interface ScreenProps {
   messages: ReactNode
   /** The zone at the chat's foot: the composer, or signed out, the sign-in widget's place. */
   composer: ReactNode
+  /**
+   * The zone at the foot held back, below the screen, while there is nothing to say to it yet: a new
+   * account asked its pseudo, the conversation running down to the foot meanwhile. It rises as this
+   * turns false.
+   */
+  composerAway?: boolean
   /** On a phone, the side in front; a wide screen shows both. */
   front: Side
   /** The seam turned it, or, on a phone, a hand took the canvas in front: it stays. */
@@ -100,6 +106,7 @@ export function Screen({
   corner,
   messages,
   composer,
+  composerAway = false,
   front,
   onFrontChange,
   said,
@@ -172,7 +179,7 @@ export function Screen({
             onMove={move('canvas')}
             className="h-24 items-end"
           />
-          <Messages scroller={scroller} content={content}>
+          <Messages scroller={scroller} content={content} footless={composerAway}>
             {messages}
           </Messages>
         </div>
@@ -186,9 +193,21 @@ export function Screen({
               className="h-(--screen-seam) items-center bg-linear-to-b from-transparent to-background/70"
             />
           )}
-          {/* Wide, its zone runs on to the cut and keeps its content clear of the curve itself. */}
-          <div ref={foot} className="@wide:[--screen-foot-inset:var(--screen-clear)]">
-            {composer}
+          {/*
+            Wide, its zone runs on to the cut and keeps its content clear of the curve itself. Held
+            back, its row closes and it waits below the screen's foot, which hides it; it rises from
+            there as its row opens.
+          */}
+          <div
+            ref={foot}
+            inert={composerAway}
+            className={cn(
+              'grid @wide:[--screen-foot-inset:var(--screen-clear)]',
+              'transition-[grid-template-rows,opacity] duration-(--duration-bloom) ease-glide motion-reduce:transition-none',
+              composerAway ? 'grid-rows-[0fr] opacity-0' : 'grid-rows-[1fr]',
+            )}
+          >
+            <div className="min-h-0">{composer}</div>
           </div>
         </div>
       </section>
@@ -381,10 +400,13 @@ export function Brand() {
 function Messages({
   scroller,
   content,
+  footless,
   children,
 }: {
   scroller: RefObject<HTMLDivElement | null>
   content: RefObject<HTMLDivElement | null>
+  /** No composer below: the last of the conversation sits on the screen's foot, as it would. */
+  footless: boolean
   children: ReactNode
 }) {
   return (
@@ -395,10 +417,12 @@ function Messages({
       role="region"
       aria-label={m.screen_messages()}
       className={cn(
-        'flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain pt-6 pb-7 outline-none [mask-image:linear-gradient(transparent,black_1.75rem)] focus-visible:ring-1 focus-visible:ring-human/60 focus-visible:ring-inset',
+        'flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain pt-6 outline-none [mask-image:linear-gradient(transparent,black_1.75rem)] focus-visible:ring-1 focus-visible:ring-human/60 focus-visible:ring-inset',
         // How far its lines keep from the chat's sides, which a widget runs on past, the curve its edge.
         '[--chat-left:1.25rem] [--chat-right:1.25rem] pr-(--chat-right) pl-(--chat-left)',
         '@wide:[--chat-left:2.25rem] @wide:[--chat-right:var(--screen-clear)] @wide:[scrollbar-width:none] @wide:[&::-webkit-scrollbar]:hidden',
+        'transition-[padding] duration-(--duration-bloom) ease-glide motion-reduce:transition-none',
+        footless ? 'pb-0' : 'pb-7',
       )}
     >
       <div ref={content} className="mt-auto">

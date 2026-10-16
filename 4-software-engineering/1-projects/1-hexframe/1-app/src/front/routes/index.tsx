@@ -1,6 +1,6 @@
 // Home: the one screen, signed in or out, filling the window. Signed in, the Account's System on the
 // canvas, its center alone and large until a click opens it, a Tile centered landing opened, where
-// you are in the canvas's corner, the theme at its head, and the chat, over the Account's
+// you are in the canvas's corner, the Sunstone at its head, and the chat, over the Account's
 // Conversation, its composer at its foot, whose `/help` and `/keys` open Help and the Keys: wide,
 // side by side along the curve; on a
 // phone, one side in front, the chat when the page opens, the seam turning it, and a Tile the chat
@@ -18,7 +18,8 @@
 // names centers the canvas on it, a gesture as any other. The chat says under its field where the next
 // Turn works; a Tile's menu asks the agent through it, naming the Tile first; and a Tile dragged off
 // the canvas under a mouse or a pen is carried over the page, the composer naming it where it is let
-// go (HEX-110). Signed out, the same screen: Help on the
+// go (HEX-110). A new account is asked its pseudo first, the composer and the corner's path held back
+// until it names the Root. Signed out, the same screen: Help on the
 // canvas, two lines from the agent and its offer to read the centered topic in full, and the sign-in
 // widget in the composer's place, which signs in or up, then comes back where the user was. While the
 // help widget is open, a topic centered on Help's canvas turns its page.
@@ -160,16 +161,21 @@ function useHelpNavigation(turning: ReturnType<typeof useScreenState>['actions']
 /**
  * The Account's System, read outside every boundary without throwing, for what the chat sends and the
  * corner shows: a failed read shows on the canvas, in its own boundary, and leaves the chat up,
- * waiting to send, and the theme at the corner's head; and its Tiles as the canvas draws them, yours.
+ * waiting to send, and the mark alone at the corner's head; and its Tiles as the canvas draws them,
+ * yours. A new account is asked its pseudo before anything else (`welcoming`): the chat holds back its
+ * composer and the corner its path (`path`), the mark alone, until the pseudo names the Root, or is
+ * let be for the visit (`later`); then they come all at once, as the Root's light rises and the
+ * question leaves its receipt.
  */
-function useYourSystem() {
+function useYourSystem(later: boolean) {
   const { data } = useSystem({ throwing: false })
   const root = data?.root
   const tree = useMemo(
     () => (root === undefined ? undefined : canvasTree(root, { yours: true })),
     [root],
   )
-  return { system: data?.system, tree }
+  const welcoming = root?.title === '' && !later
+  return { system: data?.system, tree, welcoming, path: welcoming ? undefined : tree }
 }
 
 /** `/keys`: the key widget opened at the conversation's foot, which a phone brings to the front. */
@@ -267,7 +273,7 @@ function SignedIn() {
   const { turn, mode } = useFollowLatest()
   // The chat's Messages go after the navigation they follow, from the view they were sent from.
   const { postMessage, underWay } = useNavigationSender()
-  const { system, tree } = useYourSystem()
+  const { system, tree, welcoming, path } = useYourSystem(widgets.state.later)
   // What crosses from the chat to the canvas: the Tile it points at, the one it centered, where the
   // running Turn works, the changes made meanwhile, and the open Proposal.
   const marks = useMarksState({ system, working: turn?.location })
@@ -310,7 +316,7 @@ function SignedIn() {
               onCarry={setCarried}
             />
           ),
-          corner: <Breadcrumb system={tree} view={view} onViewChange={onViewChange} />,
+          corner: <Breadcrumb system={path} view={view} onViewChange={onViewChange} />,
         }
       : {
           systemView: {},
@@ -333,6 +339,7 @@ function SignedIn() {
         className="size-full"
         canvas={<ReadBoundary>{side.canvas}</ReadBoundary>}
         corner={side.corner}
+        composerAway={welcoming}
         messages={
           <div className="grid gap-5">
             <ReadBoundary>

@@ -153,7 +153,12 @@ describe('an export', () => {
     run((actions) => {
       actions.clear()
     })
-    expect(result.current.state).toEqual({ shown: undefined, exporting: true, naming: '' })
+    expect(result.current.state).toEqual({
+      shown: undefined,
+      exporting: true,
+      naming: '',
+      later: false,
+    })
     answer(
       new Response('PK', {
         headers: { 'content-disposition': 'attachment; filename="tooling.zip"' },
@@ -197,5 +202,17 @@ describe('the pseudo being typed', () => {
       actions.clear()
     })
     expect(result.current.state.naming).toBe('')
+  })
+
+  it('is let be for the visit on later, what was typed going with it', () => {
+    const { result, run } = render()
+    run((actions) => {
+      actions.name('Uly')
+    })
+    expect(result.current.state.later).toBe(false)
+    run((actions) => {
+      actions.putOff()
+    })
+    expect(result.current.state).toMatchObject({ naming: '', later: true })
   })
 })

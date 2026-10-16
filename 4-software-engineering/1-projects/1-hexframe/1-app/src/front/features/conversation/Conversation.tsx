@@ -134,9 +134,9 @@ export function Conversation({ className, ...props }: ConversationProps) {
 }
 
 /**
- * The days, oldest first, the day before asked for above them, or the empty state; then what the user
- * sent that is on its way, and the agent's step; no scroller of its own, so the one screen scrolls it
- * beside its curve.
+ * The days, oldest first, the day before asked for above them, nothing before the first; then what
+ * the user sent that is on its way, and the agent's step; no scroller of its own, so the one screen
+ * scrolls it beside its curve.
  */
 export function Timeline({
   days,
@@ -162,25 +162,21 @@ export function Timeline({
           {m.conversation_earlier()}
         </Act>
       )}
-      {shown.length === 0 && earlier === undefined && !after ? (
-        // Nothing said yet: the agent says so, in its voice, as a line of the conversation, no box.
-        <Message voice="agent" words={[m.conversation_empty()]} />
-      ) : (
-        shown.map((day) => (
-          <section key={day.key} aria-label={dayLabel(day, now)} className="grid gap-5">
-            <DaySplit label={dayLabel(day, now)} />
-            {blocksOf(day.entries).map((block, index) => (
-              // A block is its first Entry's, never moved: a new one only comes after it.
-              <EntryBlock
-                key={blockKey(block, index)}
-                block={block}
-                naming={{ titles: day.titles, system, onCenter, ...pointing }}
-                decide={decide}
-              />
-            ))}
-          </section>
-        ))
-      )}
+      {/* Nothing said yet: nothing is shown, the conversation starting with its first line. */}
+      {shown.map((day) => (
+        <section key={day.key} aria-label={dayLabel(day, now)} className="grid gap-5">
+          <DaySplit label={dayLabel(day, now)} />
+          {blocksOf(day.entries).map((block, index) => (
+            // A block is its first Entry's, never moved: a new one only comes after it.
+            <EntryBlock
+              key={blockKey(block, index)}
+              block={block}
+              naming={{ titles: day.titles, system, onCenter, ...pointing }}
+              decide={decide}
+            />
+          ))}
+        </section>
+      ))}
       {after && (
         <Latest
           later={later}

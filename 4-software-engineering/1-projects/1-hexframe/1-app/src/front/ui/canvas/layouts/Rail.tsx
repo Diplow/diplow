@@ -1,6 +1,7 @@
 // The canvas's corner, top right: where you are. One thin line from the root down to the Tile you are
 // on, a point per step, with hexframe's mark, the Sunstone, at its head, threaded on the line, so the
 // corner reads as one mark rather than a sign beside a list; it turns whole at each thing done.
+// With no step, the mark stands alone; the line and its points come down from it once there is one.
 // Every part sits on the line's axis: the line is 1px wide and the mark and the points odd in size, so
 // each centre falls on the line's centre and the line stays one crisp pixel. Under a finger, every
 // step grows to a 44px target and the points spread to match.
@@ -16,7 +17,7 @@ interface RailStep {
 }
 
 interface RailProps {
-  /** From the root down to the Tile you are on, which is the last. */
+  /** From the root down to the Tile you are on, which is the last; none, and the mark is alone. */
   steps: readonly RailStep[]
   /** A step up the path chosen: the caller centers the canvas on it. */
   onSelect: (id: string) => void
@@ -35,25 +36,29 @@ export function Rail({ steps, onSelect, turns = 0, className }: RailProps) {
       >
         <Sunstone turns={turns} className="h-[23px] w-[21px]" />
       </span>
-      {/* The line starts at the foot of the mark and fades out below the last point. */}
-      <span
-        aria-hidden
-        className="absolute top-[29px] -bottom-[58px] left-[calc(50%-0.5px)] w-px bg-linear-to-b from-input from-75% to-transparent pointer-coarse:top-[33px]"
-      />
-      <nav aria-label={m.breadcrumb_label()}>
-        <ol className="mt-[18px] flex flex-col gap-[25px] pointer-coarse:mt-1 pointer-coarse:gap-0">
-          {steps.map((step, index) => (
-            <Step
-              key={step.id}
-              step={step}
-              here={index === steps.length - 1}
-              onSelect={() => {
-                onSelect(step.id)
-              }}
-            />
-          ))}
-        </ol>
-      </nav>
+      {steps.length > 0 && (
+        <div className="motion-safe:animate-descend">
+          {/* The line starts at the foot of the mark and fades out below the last point. */}
+          <span
+            aria-hidden
+            className="absolute top-[29px] -bottom-[58px] left-[calc(50%-0.5px)] w-px bg-linear-to-b from-input from-75% to-transparent pointer-coarse:top-[33px]"
+          />
+          <nav aria-label={m.breadcrumb_label()}>
+            <ol className="mt-[18px] flex flex-col gap-[25px] pointer-coarse:mt-1 pointer-coarse:gap-0">
+              {steps.map((step, index) => (
+                <Step
+                  key={step.id}
+                  step={step}
+                  here={index === steps.length - 1}
+                  onSelect={() => {
+                    onSelect(step.id)
+                  }}
+                />
+              ))}
+            </ol>
+          </nav>
+        </div>
+      )}
     </div>
   )
 }

@@ -4,7 +4,7 @@
 // One at a time, the latest. A write ends its form as it is sent, its receipt in the form's place at
 // once, and a refusal puts the form back (`useRefusalState`), the user's words with it. The Root's
 // edit is a widget too, with no place to draw, a pencil in its hex.
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 import {
   isEmptySystem,
@@ -60,8 +60,6 @@ export function TileWidgets({
     if (formBack) onFormBack()
   })
   const remove = useDeleteTile()
-  // A new account is asked its pseudo until it gives one, or says later for this visit.
-  const [later, setLater] = useState(false)
   const root = data?.root
   const tree = useMemo(() => (root === undefined ? undefined : canvasTree(root)), [root])
   if (data === undefined || root === undefined || tree === undefined) return null
@@ -92,11 +90,10 @@ export function TileWidgets({
       onSearchChange(afterDelete(tree, parent, node))
     },
   }
-  if (root.title === '' && !later && change.kind === 'none' && widgets.state.shown === undefined) {
-    return nameOf(page, () => {
-      setLater(true)
-      widgets.actions.name('')
-    })
+  // A new account is asked its pseudo until it gives one, or says later for this visit.
+  const asking = root.title === '' && !widgets.state.later
+  if (asking && change.kind === 'none' && widgets.state.shown === undefined) {
+    return nameOf(page, widgets.actions.putOff)
   }
   return widgetOf(change, widgets, page)
 }

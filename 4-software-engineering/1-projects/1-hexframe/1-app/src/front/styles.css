@@ -197,6 +197,7 @@
   --animate-breathe: breathe 3.2s ease-in-out infinite;
   --animate-draw: draw 0.45s var(--ease-glide) both;
   --animate-unfold: unfold var(--duration-bloom) 0.12s var(--ease-glide) both;
+  --animate-descend: descend var(--duration-bloom) var(--ease-glide) backwards;
   --animate-rise: rise 0.55s var(--ease-glide) both;
   --animate-sweep: sweep 1.8s linear infinite;
   --animate-bloom: bloom var(--duration-bloom) var(--ease-glide) both;
@@ -225,6 +226,15 @@
     }
     to {
       clip-path: inset(0 0 0 0);
+    }
+  }
+  /* Shown from its top down, what hangs past its sides and its foot included; once shown, unclipped. */
+  @keyframes descend {
+    from {
+      clip-path: inset(-4px -100vw 100% -100vw);
+    }
+    to {
+      clip-path: inset(-4px -100vw -4rem -100vw);
     }
   }
   @keyframes rise {

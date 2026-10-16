@@ -15,7 +15,7 @@ import { m } from '#/paraglide/messages'
 import { Act, voiceOf, type Voice as AnyVoice } from '../../atoms/controls/act'
 import { pressed, type Shortcut } from '../../atoms/keys'
 import { Menu, type MenuEntry } from '../../atoms/Menu'
-import { useAlongCurve } from '../../layouts/screen/state/useAlongCurve'
+import { useAlongCurve, useToCurve } from '../../layouts/screen/state/useAlongCurve'
 import { zone } from './zone'
 
 /** Whose the widget is: the agent asking, the user's own words, or the app's (a key, help). */
@@ -121,6 +121,9 @@ function Zone({
   const [folded, setFolded] = useState(defaultFolded)
   const [menuOpen, setMenuOpen] = useState(false)
   const titleId = useId()
+  // How far past the zone's content its body may run, the curve's nearest across the widget.
+  const frame = useRef<HTMLDivElement>(null)
+  useToCurve(frame)
   const failed = state === 'failed'
   // An action's key runs it while the focus is in the widget and its actions show, and Enter in a
   // one-line field runs its submit; never while the action waits, nor while what was asked runs. A key
@@ -164,7 +167,10 @@ function Zone({
           'motion-safe:animate-unfold motion-safe:before:animate-draw',
         )}
       >
-        <div className="grid grid-cols-[2.25rem_1fr] gap-x-3.5 sm:grid-cols-[3.375rem_1fr] sm:gap-x-[1.125rem]">
+        <div
+          ref={frame}
+          className="grid grid-cols-[2.25rem_1fr] gap-x-3.5 sm:grid-cols-[3.375rem_1fr] sm:gap-x-[1.125rem]"
+        >
           <Mark state={state} icon={icon} mark={mark} />
           {/* Its words beside the hex, centered on it; a subtitle left empty takes no room. */}
           <div className="min-w-0 self-center">
@@ -218,8 +224,11 @@ function Zone({
               </p>
             )}
           </div>
-          {/* Below the hex and the title, its body and its actions take the zone's whole width. */}
-          <Collapsible.Content className="col-span-2 min-w-0 overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down motion-reduce:animate-none!">
+          {/*
+            Below the hex and the title, its body and its actions take the zone's whole width, and
+            past it, wide, as far as the curve lets them at their height, the chat's gap short of it.
+          */}
+          <Collapsible.Content className="col-span-2 mr-[calc(var(--to-curve,0px)*-1)] min-w-0 overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down motion-reduce:animate-none!">
             {(state === 'working' || children !== undefined) && (
               <div className={cn('pt-4', risesInTurn)} style={rise(4)}>
                 {state === 'working' ? <LinesToCome /> : children}

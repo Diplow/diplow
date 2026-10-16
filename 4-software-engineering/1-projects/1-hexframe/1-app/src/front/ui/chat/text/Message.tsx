@@ -2,7 +2,7 @@
 // agent's in Geist Mono, smaller, in the second ink, behind a violet hex outline. While the user's are
 // sending the line dims and the words wait in grey; failed, the line turns destructive with a retry.
 // While the agent's are coming each word inks in from a slight blur, and a small violet hex breathes
-// where the next will land. Both copy from the edge of the column.
+// where the next will land. Both run the chat's width, and copy from its end, by the curve.
 import { cn } from 'cn'
 import { Copy } from 'lucide-react'
 
@@ -39,7 +39,7 @@ export function Message(props: MessageProps) {
 
 function Human({ words, state = 'sent', onRetry }: HumanProps) {
   return (
-    <div className="group grid max-w-[36em] grid-cols-[minmax(0,1fr)_auto] gap-x-2">
+    <div className="group grid grid-cols-[minmax(0,1fr)_auto] gap-x-2">
       {/* `text-prose` outside `cn`, which knows no such size, takes it for a colour and drops it. */}
       <p
         className={`text-prose ${cn(
@@ -73,7 +73,7 @@ function Agent({ words, state = 'done', continued = false }: AgentProps) {
   return (
     <div
       aria-busy={streaming}
-      className="group grid max-w-[36em] grid-cols-[0.875rem_minmax(0,1fr)_auto] gap-x-2.5 font-agent text-mono text-muted-foreground"
+      className="group grid grid-cols-[0.875rem_minmax(0,1fr)_auto] gap-x-2.5 font-agent text-mono text-muted-foreground"
     >
       <HexMark
         flat
