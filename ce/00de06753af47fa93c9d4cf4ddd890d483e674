@@ -1,0 +1,65 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/styles.css
+  s_c2fd26aff2415a::t_b4d528379b16e6 200,231-238
+  s_c2fd26aff2415a::t_295059e25e64cc 239
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE.md
+  s_c2fd26aff2415a::t_924c3d740c996a 21
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_c2fd26aff2415a::t_06b15975d90580 3,342
+  s_c2fd26aff2415a::t_a5d119bdd51dde 164-168,170,177-178,276,319
+  s_c2fd26aff2415a::t_16ee906f046d91 21-22
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/CLAUDE.md
+  s_c2fd26aff2415a::t_924c3d740c996a 26,29
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_c2fd26aff2415a::t_deca0190ab40b8 627
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/CLAUDE.md
+  s_c2fd26aff2415a::t_924c3d740c996a 21
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/text/Message.tsx
+  s_c2fd26aff2415a::t_51665cfaf1dee2 5,42,76
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/TileWidgets.tsx
+  s_c2fd26aff2415a::t_884c1cecdfb4cf 7,93-96
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/state/useTileWidgetsState.ts
+  s_c2fd26aff2415a::t_884c1cecdfb4cf 6-7,61,82-83,92,94-98
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/CLAUDE.md
+  s_c2fd26aff2415a::t_924c3d740c996a 27
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/state/useTileWidgetsState.test.ts
+  s_c2fd26aff2415a::t_884c1cecdfb4cf 156-161,206-216
+  s_c2fd26aff2415a::t_11e548ae7909d1 217
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/CLAUDE.md
+  s_c2fd26aff2415a::t_924c3d740c996a 19
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/state/useAlongCurve.ts
+  s_c2fd26aff2415a::t_b4fe1c5fed862b 6-7,18-20,26-42,51,54,57,66-72,77-78,94-112
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_c2fd26aff2415a::t_deca0190ab40b8 627
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/Conversation.tsx
+  s_c2fd26aff2415a::t_51665cfaf1dee2 165-179
+  s_c2fd26aff2415a::t_35a07f269cd0f0 137-139
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/layouts/Widget.tsx
+  s_c2fd26aff2415a::t_0073d6bfb0a188 18,227-230
+  s_c2fd26aff2415a::t_2800d5896e36ed 124-126,170-173,231
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/layouts/Rail.tsx
+  s_c2fd26aff2415a::t_b4d528379b16e6 4,20,39-61
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/CLAUDE.md
+  s_c2fd26aff2415a::t_924c3d740c996a 18
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/Tokens.tsx
+  s_c2fd26aff2415a::t_deca0190ab40b8 63
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE.md
+  s_c2fd26aff2415a::t_924c3d740c996a 31
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/Screen.tsx
+  s_c2fd26aff2415a::t_29922af4f8c9d8 53-58,109,182,196-210,403,408-409,420,424-425
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ce00de06753af47fa93c9d4cf4ddd890d483e674",
+  "prompts": {},
+  "sessions": {
+    "s_c2fd26aff2415a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3077039d-2681-4308-8b4b-5d74eaf30832",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
