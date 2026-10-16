@@ -443,7 +443,8 @@ function SystemPage(props: SystemPageProps) {
   const { data } = useSystem()
   if (data === undefined) return <Loading />
   const { system, root, underway } = data
-  const tree: TileNode = canvasTree(root, { yours: true })
+  // The pseudo a new account is typing shows on its Root as it is typed.
+  const tree: TileNode = canvasTree(root, { yours: true, naming: widgets.state.naming })
   return (
     <div className={side}>
       <System

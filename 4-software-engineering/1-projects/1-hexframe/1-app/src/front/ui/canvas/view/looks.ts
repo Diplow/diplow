@@ -43,7 +43,7 @@ export function lookOf(hex: Of<'tile'>, { moving = false } = {}): SystemLook {
 
 /**
  * What a Tile says it is, wherever it stands: a broken Reference, a Reference, the user's Root, named
- * or not; none for the others.
+ * or not, the untitled one saying nothing but the pseudo being typed for it; none for the others.
  */
 function ownLook(
   tile: TileNode,
@@ -56,9 +56,8 @@ function ownLook(
     case 'named':
       return { kind: 'root', words, ...foot }
     case 'untitled':
-      return { kind: 'untitled', words }
     case 'empty':
-      return { kind: 'untitled', words: { title: tile.title, preview: m.tile_untitled_preview() } }
+      return { kind: 'untitled', words: { title: tile.naming ?? '' } }
     case undefined:
       return undefined
   }

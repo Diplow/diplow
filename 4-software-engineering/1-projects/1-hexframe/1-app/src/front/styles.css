@@ -314,6 +314,7 @@
     --duration-flare: 1.3s;
     --duration-glint: 1.8s;
     --duration-glance: 2.8s;
+    --duration-sunrise: 1.6s;
     --stagger-bloom: 40ms;
   }
   html {

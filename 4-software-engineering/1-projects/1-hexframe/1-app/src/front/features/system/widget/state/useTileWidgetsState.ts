@@ -2,7 +2,8 @@
 // an export, working, then its receipt naming the zip, or failed. The form under way is the URL's;
 // this is what follows it, held by the page so the canvas's menus and the chat share it. One at
 // a time: a form opening ends it, a write sent leaves its receipt in its place, an export takes it,
-// and a form closed unsent leaves nothing.
+// and a form closed unsent leaves nothing. And the pseudo a new account is typing, which the canvas
+// shows on its untitled Root as it is typed, until a form opens or the user says later.
 import { useState } from 'react'
 
 import type { SystemTile } from '#/domains/mapping/entities'
@@ -55,6 +56,7 @@ type Last = Receipt | (Exported & { readonly kind: 'export'; readonly at: Date }
 export function useTileWidgetsState() {
   const exporting = useExportTile()
   const [last, setLast] = useState<Last>()
+  const [naming, setNaming] = useState('')
   const { mutate, isPending } = exporting
   // An export on its way runs to its end, the menu's Export waiting, even once the chat lets it go.
   const settle = () => {
@@ -73,13 +75,18 @@ export function useTileWidgetsState() {
       shown,
       /** An export on its way: the menu's Export waits. */
       exporting: isPending,
+      /** The pseudo being typed for the untitled Root, which its hex shows; empty while none is. */
+      naming,
     },
     actions: {
       /** A form opened, or one closed unsent, or an export let go: nothing follows. */
       clear: () => {
         setLast(undefined)
+        setNaming('')
         settle()
       },
+      /** The pseudo typed so far for the untitled Root; empty once the user lets it be. */
+      name: setNaming,
       /** A form's write sent: its receipt takes the form's place. */
       sent: (receipt: Omit<Receipt, 'kind'>) => {
         setLast({ kind: 'receipt', ...receipt })

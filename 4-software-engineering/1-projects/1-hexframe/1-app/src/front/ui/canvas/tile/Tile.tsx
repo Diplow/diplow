@@ -257,7 +257,7 @@ const opacities: Record<TilePlace, string> = {
 }
 
 export function Tile(props: TileProps) {
-  const { hex, words, place = 'ring', write, held, motion, action, onGoIn } = props
+  const { hex, place = 'ring', write, held, motion, action, onGoIn } = props
   const { scale = 1, hand, mark } = props
   const id = useId()
   const pending = write === 'pending'
@@ -294,7 +294,7 @@ export function Tile(props: TileProps) {
           {...(action === undefined
             ? {
                 role: 'img',
-                'aria-label': words.title,
+                'aria-label': nameOf(props),
                 ...(hand && { tabIndex: 0, className: 'group outline-none' }),
               }
             : pressable(action, onGoIn))}
@@ -319,6 +319,9 @@ export function Tile(props: TileProps) {
     </g>
   )
 }
+
+/** Its name for a screen reader: its title, or its kind's where its hex says nothing, untitled. */
+const nameOf = ({ kind, words }: TileLook) => (words.title === '' ? kindNames[kind]() : words.title)
 
 /**
  * What makes it a button: its name, a click, Enter and Space, and going in where its caller says, by
@@ -381,8 +384,8 @@ function Light(props: TileProps & { id: string }) {
   return (
     <>
       <defs>
-        <FadeDef id={`${id}-rest`} fade={lights[props.kind].rest} />
-        <FadeDef id={`${id}-lit`} fade={lights[props.kind].lit} />
+        <FadeDef id={`${id}-rest`} fade={lights[props.kind].rest} rising={rises(props.kind)} />
+        <FadeDef id={`${id}-lit`} fade={lights[props.kind].lit} rising={rises(props.kind)} />
         <FadeDef
           id={`${id}-rim`}
           fade={{ top: 'var(--glow-soft)', foot: tint('human', 20), diagonal: true }}
@@ -436,8 +439,14 @@ function Light(props: TileProps & { id: string }) {
 }
 
 /**
- * The lights behind it: the root's halo, a draft breathing in its writer's voice, and the blur they,
- * and who touches it, glow by.
+ * Whether its light rises as it changes: the root's, small and faint while untitled, which grows to
+ * its glow and lightens once the user names it, for `--duration-sunrise`.
+ */
+const rises = (kind: TileKind) => kind === 'root' || kind === 'untitled'
+
+/**
+ * The lights behind it: the root's halo, small while it is untitled, a draft breathing in its
+ * writer's voice, and the blur they, and who touches it, glow by.
  */
 function Glows(props: TileProps & { id: string }) {
   const { hex, kind, id } = props
@@ -452,13 +461,17 @@ function Glows(props: TileProps & { id: string }) {
         </radialGradient>
         <BlurDef id={`${id}-blur`} />
       </defs>
-      {kind === 'root' ? (
+      {rises(kind) ? (
         <circle
           cx={hex.center.x}
           cy={hex.center.y}
           r={hex.radius * 1.45}
           fill={`url(#${id}-halo)`}
-          className="pointer-events-none"
+          className={cn(
+            'pointer-events-none transition-[scale,opacity] duration-(--duration-sunrise) ease-glide motion-reduce:transition-none',
+            kind === 'untitled' && 'scale-[.28] opacity-50',
+          )}
+          style={origin(hex.center)}
         />
       ) : null}
       {kind === 'draft' || kind === 'writing' ? (
@@ -561,7 +574,10 @@ function Words(props: TileProps & { sized: Sized }) {
   )
 }
 
-/** The title's type: the human's serif, a file's mono, the agent's for its draft, faint for none yet. */
+/**
+ * The title's type: the human's serif, the untitled root's pseudo as it is typed included, a file's
+ * mono, the agent's for its draft, faint for a broken Reference.
+ */
 function titleClass(look: TileLook & { place?: TilePlace }, alone: boolean): string {
   const { kind } = look
   return cn(
@@ -571,7 +587,7 @@ function titleClass(look: TileLook & { place?: TilePlace }, alone: boolean): str
     kind === 'leaf' && look.file === true && 'font-mono text-[.8em]',
     // The agent's words are its mono, a draft it writes or a tile it proposes; yours keep your serif.
     (kind === 'draft' || kind === 'ghost') && 'font-agent text-[.86em] text-agent',
-    (kind === 'broken' || kind === 'untitled') && 'text-faint italic',
+    kind === 'broken' && 'text-faint italic',
   )
 }
 

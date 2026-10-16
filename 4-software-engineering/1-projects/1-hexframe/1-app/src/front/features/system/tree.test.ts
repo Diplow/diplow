@@ -99,6 +99,14 @@ describe('canvasTree', () => {
     const empty = { ...tile('root'), title: '', preview: '' }
     expect(canvasTree(empty, { yours: true }).root).toBe('empty')
   })
+
+  it('shows on the untitled Root the pseudo being typed, never on a named one nor Help', () => {
+    expect(canvasTree(system, { yours: true, naming: 'Uly' }).naming).toBe('Uly')
+    expect(canvasTree(system, { yours: true, naming: '  ' })).not.toHaveProperty('naming')
+    expect(canvasTree(system, { naming: 'Uly' })).not.toHaveProperty('naming')
+    const named = { ...system, title: 'Ulysse' }
+    expect(canvasTree(named, { yours: true, naming: 'Uly' })).not.toHaveProperty('naming')
+  })
 })
 
 describe('tileIn', () => {

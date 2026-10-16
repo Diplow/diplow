@@ -162,7 +162,6 @@ function NameRoot(props: Naming) {
       icon={<UserRound />}
       kicker={m.widget_tile_name_kicker()}
       title={m.widget_tile_name_title()}
-      subtitle={m.widget_tile_name_subtitle()}
       actions={[
         {
           label: m.widget_tile_name_take(),

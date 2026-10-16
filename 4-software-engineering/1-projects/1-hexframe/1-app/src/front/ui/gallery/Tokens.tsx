@@ -65,6 +65,7 @@ export const valueNotes: readonly Note[] = [
   { tokens: ['duration-glint', 'animate-glint'], note: m.tokens_motion_glint },
   { tokens: ['animate-orbit'], note: m.tokens_motion_orbit },
   { tokens: ['duration-glance'], note: m.tokens_motion_glance },
+  { tokens: ['duration-sunrise'], note: m.tokens_motion_sunrise },
   { tokens: ['animate-ants'], note: m.tokens_motion_ants },
   { tokens: ['animate-ink'], note: m.tokens_motion_ink },
   { tokens: ['container-wide'], note: m.tokens_container_wide },

@@ -25,6 +25,8 @@ export interface TileNode {
    * waiting for a name or a vault.
    */
   root?: 'named' | 'untitled' | 'empty'
+  /** The pseudo the user is typing for their untitled Root, which its hex shows as they type. */
+  naming?: string
 }
 
 /** The Frame kinds of the ring around the center's hex. */

@@ -37,11 +37,17 @@ export const titleOf = (title: string) => (title === '' ? m.system_untitled() : 
  * marked as a file's. A Reference is drawn as the Tile it points at, under that Tile's id, so
  * centering on it and acting on it reach the Tile itself, with where that Tile stands; a broken one
  * says so, under an id no Tile has. With `yours`, the Root is the user's, the Account's System's
- * and not Help's: named, untitled, or an empty System's (Mapping's `isEmptySystem`).
+ * and not Help's: named, untitled, or an empty System's (Mapping's `isEmptySystem`); untitled, it
+ * shows the pseudo the user is `naming` it with as they type it.
  */
-export function canvasTree(root: SystemTile, { yours = false } = {}): TileNode {
+export function canvasTree(
+  root: SystemTile,
+  { yours = false, naming = '' }: { yours?: boolean; naming?: string } = {},
+): TileNode {
   const tree = nodeOf(root, root)
-  return yours ? { ...tree, root: rootOf(root) } : tree
+  if (!yours) return tree
+  const kind = rootOf(root)
+  return { ...tree, root: kind, ...(kind !== 'named' && naming.trim() !== '' && { naming }) }
 }
 
 const rootOf = (root: SystemTile): NonNullable<TileNode['root']> => {

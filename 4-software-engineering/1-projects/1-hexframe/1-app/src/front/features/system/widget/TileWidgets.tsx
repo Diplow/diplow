@@ -75,6 +75,7 @@ export function TileWidgets({
     tree,
     reopened,
     onCenter,
+    naming: { name: widgets.state.naming, onNameChange: widgets.actions.name },
     onSent: (receipt) => {
       widgets.actions.sent(receipt)
       end()
@@ -94,6 +95,7 @@ export function TileWidgets({
   if (root.title === '' && !later && change.kind === 'none' && widgets.state.shown === undefined) {
     return nameOf(page, () => {
       setLater(true)
+      widgets.actions.name('')
     })
   }
   return widgetOf(change, widgets, page)
@@ -106,6 +108,7 @@ function nameOf(page: WidgetContext, onLater: () => void) {
     <NameRootWidget
       key="name"
       {...formOf(page, 'name', undefined)}
+      {...page.naming}
       root={{ id, version, title, preview, body }}
       onLater={onLater}
       onImport={
@@ -125,6 +128,8 @@ interface WidgetContext {
   tree: TileNode
   reopened: Reopened | undefined
   onCenter: (id: string) => void
+  /** The pseudo typed so far for the untitled Root, which the canvas shows as it is typed. */
+  naming: { name: string; onNameChange: (name: string) => void }
   onSent: (receipt: Omit<Receipt, 'kind'>) => void
   onCancel: () => void
   /** Another change under way in its place: an import in the slot a new Tile was opened on. */
@@ -160,7 +165,15 @@ function receiptOf(receipt: Receipt, page: WidgetContext) {
   const { key, session, where } = receipt
   const form = formOf(page, key, receipt)
   if (session.kind === 'name') {
-    return <NameRootWidget key={key} {...form} root={session.root} onLater={page.onCancel} />
+    return (
+      <NameRootWidget
+        key={key}
+        {...form}
+        {...page.naming}
+        root={session.root}
+        onLater={page.onCancel}
+      />
+    )
   }
   return session.kind === 'add' && where !== undefined ? (
     <NewTileWidget
