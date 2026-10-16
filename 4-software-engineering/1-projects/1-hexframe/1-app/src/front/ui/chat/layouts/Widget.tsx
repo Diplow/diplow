@@ -74,6 +74,8 @@ interface ZoneProps {
   /** Its settings, in the menu behind its tools, above folding and dismissing. */
   settings?: readonly MenuEntry[]
   onDismiss?: () => void
+  /** Its tools, settings, fold and dismiss; none where it is there to be answered: a pseudo asked. */
+  tools?: boolean
   /** Folded at first; the user folds and unfolds it after. */
   defaultFolded?: boolean
 }
@@ -116,6 +118,7 @@ function Zone({
   state = 'waiting',
   settings = [],
   onDismiss,
+  tools = true,
   defaultFolded = false,
 }: ZoneProps) {
   const [folded, setFolded] = useState(defaultFolded)
@@ -178,7 +181,7 @@ function Zone({
               The tools sit over the kicker and the title's end, which leave them the room they take
               where they ride the curve (`--along-curve`), and no more, so a title field runs on.
             */}
-            <div className="pr-[var(--along-curve,5rem)] pointer-coarse:pr-12">
+            <div className={cn(tools && 'pr-[var(--along-curve,5rem)] pointer-coarse:pr-12')}>
               {kicker !== undefined && (
                 <p
                   aria-live="polite"
@@ -237,16 +240,18 @@ function Zone({
             <Actions actions={actions} />
           </Collapsible.Content>
         </div>
-        <Tools
-          folded={folded}
-          held={menuOpen}
-          onMenuOpenChange={setMenuOpen}
-          settings={settings}
-          onFold={() => {
-            setFolded(!folded)
-          }}
-          onDismiss={onDismiss}
-        />
+        {tools && (
+          <Tools
+            folded={folded}
+            held={menuOpen}
+            onMenuOpenChange={setMenuOpen}
+            settings={settings}
+            onFold={() => {
+              setFolded(!folded)
+            }}
+            onDismiss={onDismiss}
+          />
+        )}
       </section>
     </Collapsible.Root>
   )

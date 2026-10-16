@@ -28,7 +28,10 @@ export interface Fade {
   diagonal?: boolean
 }
 
-/** `rising`, a change of its colours lightens it slowly, for `--duration-sunrise`, as the root's. */
+/**
+ * `rising`, a change of its colours lightens it slowly, for `--duration-sunrise`, as the root's, a
+ * stagger of the dawn after it changed (`--stagger-dawn`).
+ */
 export function FadeDef({
   id,
   fade,
@@ -39,7 +42,7 @@ export function FadeDef({
   rising?: boolean
 }) {
   const slow = rising
-    ? 'transition-[stop-color] duration-(--duration-sunrise) ease-glide motion-reduce:transition-none'
+    ? 'transition-[stop-color] duration-(--duration-sunrise) ease-glide delay-(--stagger-dawn) motion-reduce:transition-none'
     : undefined
   return (
     <linearGradient id={id} x1="0" y1="0" x2={fade.diagonal ? 1 : 0} y2="1">

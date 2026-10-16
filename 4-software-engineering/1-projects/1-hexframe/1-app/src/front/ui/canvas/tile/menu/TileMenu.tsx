@@ -68,6 +68,11 @@ interface TileMenuProps {
   without?: readonly Verb[]
   /** Told when it opens and closes: the canvas steps the other tiles back while it is open. */
   onOpenChange?: (open: boolean) => void
+  /**
+   * Not there yet, the untitled root's lamp: no card and no menu. It stays in its menu meanwhile, so
+   * the tile is the same once it wakes, its light rising rather than drawn anew.
+   */
+  asleep?: boolean
   /** The tile, or the free slot, handed what its menu and its card need of it. */
   children: (hand: Hand) => ReactElement
 }
@@ -79,6 +84,7 @@ export function TileMenu({
   onAct,
   without = [],
   onOpenChange,
+  asleep = false,
   children,
 }: TileMenuProps) {
   const title = subject.kind === 'slot' ? m.tile_menu_free_slot() : subject.title
@@ -88,6 +94,7 @@ export function TileMenu({
   return (
     <Menu
       opensOn="context"
+      disabled={asleep}
       label={m.tile_menu_label({ title })}
       header={{ title, detail: place, description: card?.description }}
       entries={entriesOf(subject, frames, onAct, without)}
@@ -99,7 +106,7 @@ export function TileMenu({
         subject.kind === 'slot' ? (
           pass
         ) : (
-          <HoverCard place={place} title={title} within="svg" shut={menuOpen} {...card}>
+          <HoverCard place={place} title={title} within="svg" shut={menuOpen || asleep} {...card}>
             {pass}
           </HoverCard>
         )

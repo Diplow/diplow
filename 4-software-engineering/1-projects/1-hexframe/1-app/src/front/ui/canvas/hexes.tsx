@@ -131,7 +131,9 @@ export function TileHexView(props: TileHexProps) {
   const { hex, look, draw, acting, moving, shift, scale, swap } = props
   const self = standsFor(hex, moving?.id)
   const aside = moving === undefined ? props.aside : !self && swap === undefined
-  const drags = acting !== undefined && moves(acting) && hex.tile.reference === undefined
+  // The untitled root, its lamp alone, is not there yet: its menu sleeps, and it never drags.
+  const asleep = look.kind === 'untitled'
+  const drags = acting !== undefined && !asleep && moves(acting) && hex.tile.reference === undefined
   return (
     <g
       ref={hex.tile.reference === undefined ? props.tileRef : undefined}
@@ -154,12 +156,14 @@ export function TileHexView(props: TileHexProps) {
               {...(acting.frames && { frames: acting.frames })}
               {...(acting.without && { without: acting.without })}
               onOpenChange={props.onMenu}
+              asleep={asleep}
               onAct={(act, said) => {
                 if (isViewVerb(act.verb)) props.go(act.verb)
                 else acting.onAct(act, said)
               }}
             >
-              {draw}
+              {/* Asleep, the tile is handed nothing, so it takes no focus either. */}
+              {(hand) => draw(asleep ? undefined : hand)}
             </TileMenu>
           )}
         </Lifted>

@@ -197,7 +197,8 @@
   --animate-breathe: breathe 3.2s ease-in-out infinite;
   --animate-draw: draw 0.45s var(--ease-glide) both;
   --animate-unfold: unfold var(--duration-bloom) 0.12s var(--ease-glide) both;
-  --animate-descend: descend var(--duration-bloom) var(--ease-glide) backwards;
+  --animate-descend: descend var(--duration-dawn) var(--ease-glide) backwards;
+  --animate-dawn: rise var(--duration-dawn) var(--ease-glide) both;
   --animate-rise: rise 0.55s var(--ease-glide) both;
   --animate-sweep: sweep 1.8s linear infinite;
   --animate-bloom: bloom var(--duration-bloom) var(--ease-glide) both;
@@ -324,7 +325,9 @@
     --duration-flare: 1.3s;
     --duration-glint: 1.8s;
     --duration-glance: 2.8s;
-    --duration-sunrise: 1.6s;
+    --duration-sunrise: 3.2s;
+    --duration-dawn: 1.6s;
+    --stagger-dawn: 0.8s;
     --stagger-bloom: 40ms;
   }
   html {

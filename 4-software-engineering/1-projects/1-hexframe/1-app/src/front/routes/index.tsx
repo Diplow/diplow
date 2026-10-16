@@ -163,18 +163,17 @@ function useHelpNavigation(turning: ReturnType<typeof useScreenState>['actions']
  * corner shows: a failed read shows on the canvas, in its own boundary, and leaves the chat up,
  * waiting to send, and the mark alone at the corner's head; and its Tiles as the canvas draws them,
  * yours. A new account is asked its pseudo before anything else (`welcoming`): the chat holds back its
- * composer and the corner its path (`path`), the mark alone, until the pseudo names the Root, or is
- * let be for the visit (`later`); then they come all at once, as the Root's light rises and the
- * question leaves its receipt.
+ * composer and the corner its path (`path`), the mark alone, until the pseudo names the Root; then
+ * they come one after another, from the corner down to the composer, as the dawn's tokens time them.
  */
-function useYourSystem(later: boolean) {
+function useYourSystem() {
   const { data } = useSystem({ throwing: false })
   const root = data?.root
   const tree = useMemo(
     () => (root === undefined ? undefined : canvasTree(root, { yours: true })),
     [root],
   )
-  const welcoming = root?.title === '' && !later
+  const welcoming = root?.title === ''
   return { system: data?.system, tree, welcoming, path: welcoming ? undefined : tree }
 }
 
@@ -273,7 +272,7 @@ function SignedIn() {
   const { turn, mode } = useFollowLatest()
   // The chat's Messages go after the navigation they follow, from the view they were sent from.
   const { postMessage, underWay } = useNavigationSender()
-  const { system, tree, welcoming, path } = useYourSystem(widgets.state.later)
+  const { system, tree, welcoming, path } = useYourSystem()
   // What crosses from the chat to the canvas: the Tile it points at, the one it centered, where the
   // running Turn works, the changes made meanwhile, and the open Proposal.
   const marks = useMarksState({ system, working: turn?.location })

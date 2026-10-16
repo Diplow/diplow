@@ -428,7 +428,7 @@ function Light(props: TileProps & { id: string }) {
           strokeWidth={1}
           vectorEffect="non-scaling-stroke"
           className={cn(
-            'transition-opacity duration-(--duration-sunrise) ease-glide motion-reduce:transition-none',
+            'transition-opacity duration-(--duration-sunrise) ease-glide delay-(--stagger-dawn) motion-reduce:transition-none',
             rim.unlit === true && 'opacity-0',
           )}
         />
@@ -450,7 +450,8 @@ function Light(props: TileProps & { id: string }) {
 
 /**
  * Whether its light rises as it changes: the root's, small and faint while untitled, which grows to
- * its glow and lightens once the user names it, for `--duration-sunrise`.
+ * its glow and lightens once the user names it, for `--duration-sunrise`, second of the dawn, once
+ * the corner's path has started down (`--stagger-dawn`).
  */
 const rises = (kind: TileKind) => kind === 'root' || kind === 'untitled'
 
@@ -478,7 +479,7 @@ function Glows(props: TileProps & { id: string }) {
           r={hex.radius * 1.45}
           fill={`url(#${id}-halo)`}
           className={cn(
-            'pointer-events-none transition-[scale,opacity] duration-(--duration-sunrise) ease-glide motion-reduce:transition-none',
+            'pointer-events-none transition-[scale,opacity] duration-(--duration-sunrise) ease-glide delay-(--stagger-dawn) motion-reduce:transition-none',
             kind === 'untitled' && 'scale-[.28] opacity-75',
           )}
           style={origin(hex.center)}

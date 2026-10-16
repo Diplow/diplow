@@ -139,8 +139,6 @@ interface NameRootProps extends FormProps {
   /** The pseudo typed so far, the page's, so the canvas shows it on the Root as it is typed. */
   name: string
   onNameChange: (name: string) => void
-  /** Not now: the question goes for this visit. */
-  onLater: () => void
   /** Imports a vault as the Root instead, an empty System's; none otherwise. */
   onImport?: (() => void) | undefined
 }
@@ -150,7 +148,7 @@ interface NameRootProps extends FormProps {
  * tile carries it on the canvas at once; then its receipt. A blank pseudo sends nothing.
  */
 export function NameRootWidget(props: NameRootProps) {
-  const { formKey, receipt, root, name, onNameChange, onLater, onImport } = props
+  const { formKey, receipt, root, name, onNameChange, onImport } = props
   const submit = useEditTileSubmit(root)
   if (receipt !== undefined) return <TileWidget {...done(receipt, props)} />
   return (
@@ -170,7 +168,6 @@ export function NameRootWidget(props: NameRootProps) {
           at: new Date(),
         })
       }}
-      onLater={onLater}
       onImport={onImport}
       takesFocus
     />

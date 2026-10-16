@@ -73,6 +73,11 @@ interface ReceiptProps {
   undone?: boolean
   /** It takes the focus as it comes: the widget that asked had it, and is gone. */
   takesFocus?: boolean
+  /**
+   * It comes in third of a new account's dawn, after the corner's path and the root's light, rising
+   * (`animate-dawn`, `--stagger-dawn`): the receipt of the pseudo taken.
+   */
+  dawning?: boolean
 }
 
 export function Receipt({
@@ -84,6 +89,7 @@ export function Receipt({
   pending = false,
   undone = false,
   takesFocus = false,
+  dawning = false,
 }: ReceiptProps) {
   const line = useRef<HTMLDivElement>(null)
   const undoFocused = useRef(false)
@@ -98,7 +104,10 @@ export function Receipt({
     <div
       ref={line}
       tabIndex={-1}
-      className="flex flex-wrap items-center gap-x-2.5 gap-y-1 font-agent text-[0.78125rem] leading-normal text-muted-foreground outline-none"
+      className={cn(
+        'flex flex-wrap items-center gap-x-2.5 gap-y-1 font-agent text-[0.78125rem] leading-normal text-muted-foreground outline-none',
+        dawning && 'motion-safe:animate-dawn [animation-delay:calc(var(--stagger-dawn)*2)]!',
+      )}
     >
       <HexMark
         hollow={tone === 'quiet'}

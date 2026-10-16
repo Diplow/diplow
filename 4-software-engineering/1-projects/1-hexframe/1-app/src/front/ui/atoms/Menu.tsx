@@ -82,6 +82,8 @@ interface MenuProps {
   align?: 'start' | 'end'
   /** Told when it opens and closes, so what it acts on stays lit while it is open. */
   onOpenChange?: (open: boolean) => void
+  /** Where it opens on its thing: nothing to act on yet, so nothing opens it, nor runs a line's key. */
+  disabled?: boolean
 }
 
 type Line = Exclude<MenuEntry, 'separator'>
@@ -111,6 +113,7 @@ export function Menu({
   entries,
   align = 'start',
   onOpenChange,
+  disabled = false,
 }: MenuProps) {
   // The submenu a key typed on the thing asked for, opened once the menu is.
   const opening = useRef<number>(undefined)
@@ -149,7 +152,9 @@ export function Menu({
       >
         <ContextMenu.Trigger
           asChild
+          disabled={disabled}
           onKeyDown={(event) => {
+            if (disabled) return
             if (opensByKeyboard(event)) openAtTheThing(event.currentTarget)
             else runOnTheThing(event, entries, opening)
           }}

@@ -97,6 +97,15 @@ describe('what a click on a Tile does', () => {
     expect(actions({ center: 'notes' })).toEqual({ 'tile:notes': undefined })
   })
 
+  it('does nothing on the untitled root, its lamp alone, not there yet', () => {
+    const untitled = { ...system, title: '', root: 'untitled' as const }
+    const { result } = renderHook(() =>
+      useCanvasState({ system: untitled, view: {}, onViewChange: vi.fn(), finger: false }),
+    )
+    const { state, actions: act } = result.current
+    expect(act.actionOf(hexOf(state.hexes, 'tile:root'))).toBeUndefined()
+  })
+
   it('goes into a Branch of the ring under a finger, which has no double click, and does the rest alike', () => {
     expect(actions({}, { finger: true })).toEqual({ 'tile:root': 'expand' })
     expect(actions(open, { finger: true })).toEqual({

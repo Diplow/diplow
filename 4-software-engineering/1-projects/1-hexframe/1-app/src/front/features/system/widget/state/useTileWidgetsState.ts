@@ -3,8 +3,7 @@
 // this is what follows it, held by the page so the canvas's menus and the chat share it. One at
 // a time: a form opening ends it, a write sent leaves its receipt in its place, an export takes it,
 // and a form closed unsent leaves nothing. And the pseudo a new account is typing, which the canvas
-// shows on its untitled Root as it is typed, until a form opens or the user says later, which the
-// page reads too: until then, the chat holds back all but the question.
+// shows on its untitled Root as it is typed, until a form opens.
 import { useState } from 'react'
 
 import type { SystemTile } from '#/domains/mapping/entities'
@@ -58,7 +57,6 @@ export function useTileWidgetsState() {
   const exporting = useExportTile()
   const [last, setLast] = useState<Last>()
   const [naming, setNaming] = useState('')
-  const [later, setLater] = useState(false)
   const { mutate, isPending } = exporting
   // An export on its way runs to its end, the menu's Export waiting, even once the chat lets it go.
   const settle = () => {
@@ -79,8 +77,6 @@ export function useTileWidgetsState() {
       exporting: isPending,
       /** The pseudo being typed for the untitled Root, which its hex shows; empty while none is. */
       naming,
-      /** The user let the pseudo be for this visit: it is asked no more. */
-      later,
     },
     actions: {
       /** A form opened, or one closed unsent, or an export let go: nothing follows. */
@@ -91,11 +87,6 @@ export function useTileWidgetsState() {
       },
       /** The pseudo typed so far for the untitled Root. */
       name: setNaming,
-      /** Not now: the pseudo is let be for this visit, and what was typed of it goes. */
-      putOff: () => {
-        setLater(true)
-        setNaming('')
-      },
       /** A form's write sent: its receipt takes the form's place. */
       sent: (receipt: Omit<Receipt, 'kind'>) => {
         setLast({ kind: 'receipt', ...receipt })

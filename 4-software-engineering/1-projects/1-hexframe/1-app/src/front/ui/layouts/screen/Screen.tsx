@@ -53,7 +53,7 @@ interface ScreenProps {
   /**
    * The zone at the foot held back, below the screen, while there is nothing to say to it yet: a new
    * account asked its pseudo, the conversation running down to the foot meanwhile. It rises as this
-   * turns false.
+   * turns false, last of the dawn, from the corner down (`--stagger-dawn`, `--duration-dawn`).
    */
   composerAway?: boolean
   /** On a phone, the side in front; a wide screen shows both. */
@@ -196,15 +196,15 @@ export function Screen({
           {/*
             Wide, its zone runs on to the cut and keeps its content clear of the curve itself. Held
             back, its row closes and it waits below the screen's foot, which hides it; it rises from
-            there as its row opens.
+            there as its row opens, fourth of the dawn, after the path, the root's light and the receipt.
           */}
           <div
             ref={foot}
             inert={composerAway}
             className={cn(
               'grid @wide:[--screen-foot-inset:var(--screen-clear)]',
-              'transition-[grid-template-rows,opacity] duration-(--duration-bloom) ease-glide motion-reduce:transition-none',
-              composerAway ? 'grid-rows-[0fr] opacity-0' : 'grid-rows-[1fr]',
+              'transition-[grid-template-rows,opacity] duration-(--duration-dawn) ease-glide motion-reduce:transition-none',
+              composerAway ? 'grid-rows-[0fr] opacity-0' : `grid-rows-[1fr] ${dawnsLast}`,
             )}
           >
             <div className="min-h-0">{composer}</div>
@@ -391,6 +391,9 @@ export function Brand() {
   )
 }
 
+/** The composer coming back, and the room it takes: fourth of a new account's dawn. */
+const dawnsLast = 'delay-[calc(var(--stagger-dawn)*3)]'
+
 /**
  * The conversation's scroller. Wide, its own scrollbar gives way to the star on the curve; it stays
  * focusable, so the keyboard scrolls it. Its content sits at its foot, the latest last, in one element
@@ -421,8 +424,8 @@ function Messages({
         // How far its lines keep from the chat's sides, which a widget runs on past, the curve its edge.
         '[--chat-left:1.25rem] [--chat-right:1.25rem] pr-(--chat-right) pl-(--chat-left)',
         '@wide:[--chat-left:2.25rem] @wide:[--chat-right:var(--screen-clear)] @wide:[scrollbar-width:none] @wide:[&::-webkit-scrollbar]:hidden',
-        'transition-[padding] duration-(--duration-bloom) ease-glide motion-reduce:transition-none',
-        footless ? 'pb-0' : 'pb-7',
+        'transition-[padding] duration-(--duration-dawn) ease-glide motion-reduce:transition-none',
+        footless ? 'pb-0' : `pb-7 ${dawnsLast}`,
       )}
     >
       <div ref={content} className="mt-auto">

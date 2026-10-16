@@ -90,16 +90,15 @@ export function TileWidgets({
       onSearchChange(afterDelete(tree, parent, node))
     },
   }
-  // A new account is asked its pseudo until it gives one, or says later for this visit.
-  const asking = root.title === '' && !widgets.state.later
-  if (asking && change.kind === 'none' && widgets.state.shown === undefined) {
-    return nameOf(page, widgets.actions.putOff)
+  // A new account is asked its pseudo until it gives one.
+  if (root.title === '' && change.kind === 'none' && widgets.state.shown === undefined) {
+    return nameOf(page)
   }
   return widgetOf(change, widgets, page)
 }
 
 /** A new account's first question: its pseudo, which names its Root; or a vault, into an empty one. */
-function nameOf(page: WidgetContext, onLater: () => void) {
+function nameOf(page: WidgetContext) {
   const { id, version, title, preview, body } = page.root
   return (
     <NameRootWidget
@@ -107,7 +106,6 @@ function nameOf(page: WidgetContext, onLater: () => void) {
       {...formOf(page, 'name', undefined)}
       {...page.naming}
       root={{ id, version, title, preview, body }}
-      onLater={onLater}
       onImport={
         isEmptySystem(page.root)
           ? () => {
@@ -162,15 +160,7 @@ function receiptOf(receipt: Receipt, page: WidgetContext) {
   const { key, session, where } = receipt
   const form = formOf(page, key, receipt)
   if (session.kind === 'name') {
-    return (
-      <NameRootWidget
-        key={key}
-        {...form}
-        {...page.naming}
-        root={session.root}
-        onLater={page.onCancel}
-      />
-    )
+    return <NameRootWidget key={key} {...form} {...page.naming} root={session.root} />
   }
   return session.kind === 'add' && where !== undefined ? (
     <NewTileWidget

@@ -106,8 +106,6 @@ interface Naming {
   /** Why the last pseudo was refused. */
   refused?: string | undefined
   onName: () => void
-  /** Not now: the question goes, the Root stays untitled. */
-  onLater: () => void
   /** Brings a vault in as the Root instead, an empty System's. */
   onImport?: (() => void) | undefined
   /** Asked as the account opens: its field takes the focus as it comes. */
@@ -134,6 +132,7 @@ export function TileWidget(props: TileWidgetProps) {
               tone: 'human',
               onUndo: props.onUndo,
               undone: props.undone,
+              dawning: props.did === 'named',
             }
           : undefined
       }
@@ -153,9 +152,12 @@ function receiptWords(done: Done) {
   return weave(did[done.did], { tile, where: whereOf(done.where) })
 }
 
-/** The agent asks the pseudo the user goes by, which becomes their own tile; Enter takes it. */
+/**
+ * The agent asks the pseudo the user goes by, which becomes their own tile; Enter takes it. It is
+ * there to be answered: no tools, no way to put it off, and its field needs no label under the question.
+ */
 function NameRoot(props: Naming) {
-  const { name, onNameChange, refused, onName, onLater, onImport, takesFocus = false } = props
+  const { name, onNameChange, refused, onName, onImport, takesFocus = false } = props
   return (
     <Widget
       voice="agent"
@@ -170,7 +172,6 @@ function NameRoot(props: Naming) {
           submit: true,
           onSelect: onName,
         },
-        { label: m.widget_tile_name_later(), icon: <X />, onSelect: onLater },
         ...(onImport === undefined
           ? []
           : [
@@ -182,11 +183,12 @@ function NameRoot(props: Naming) {
               },
             ]),
       ]}
-      onDismiss={onLater}
+      tools={false}
     >
       <Field
         takesFocus={takesFocus}
         label={m.widget_tile_name_field()}
+        labelHidden
         placeholder={m.widget_tile_name_placeholder()}
         value={name}
         onChange={onNameChange}

@@ -261,7 +261,6 @@ function NameSpecimen() {
           onName={() => {
             if (name.trim() !== '') setNamed(true)
           }}
-          onLater={again}
           onImport={said(m.widget_tile_name_import())}
           takesFocus={entrance > 0}
         />

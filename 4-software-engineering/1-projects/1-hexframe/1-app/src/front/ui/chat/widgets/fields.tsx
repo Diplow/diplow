@@ -10,6 +10,8 @@ import { countOf, type CountTone } from './count'
 
 interface FieldProps {
   label: string
+  /** Its label said to a screen reader alone, where the widget's question says it already. */
+  labelHidden?: boolean
   value: string
   onChange: (value: string) => void
   /** Why it was refused, under it; marks it invalid. */
@@ -61,6 +63,7 @@ const countTones: Record<CountTone, string> = {
 /** A labelled field on one underline, its count near its limit and its refusal under it. */
 export function Field({
   label,
+  labelHidden = false,
   value,
   onChange,
   error,
@@ -105,8 +108,13 @@ export function Field({
   }
   return (
     <div className="grid content-start gap-1">
-      <div className="flex items-baseline justify-between gap-3 text-[0.71875rem] text-muted-foreground">
-        <label htmlFor={id} className={cn(edited && editedDot)}>
+      <div
+        className={cn(
+          'flex items-baseline justify-between gap-3 text-[0.71875rem] text-muted-foreground',
+          labelHidden && aside === undefined && count === undefined && 'sr-only',
+        )}
+      >
+        <label htmlFor={id} className={cn(edited && editedDot, labelHidden && 'sr-only')}>
           {label}
         </label>
         <span className="flex items-baseline gap-3.5">
