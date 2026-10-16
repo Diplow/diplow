@@ -9,8 +9,10 @@
 // caller says who touches what, each Tile carries its mark, the chat pointing at it lights it or its
 // way, a tile being written or proposed stands in its free slot, and a proposed move draws its arc.
 // Where its caller takes a tile carried off it, a tile dragged off the canvas follows the pointer
-// over the page, for its caller to hand on.
-import { useRef, useState, type RefObject } from 'react'
+// over the page, for its caller to hand on. As the center changes, the camera flies from the last
+// view to the next (`useCamera`): into a child it zooms in, to a parent out, the last view drawn still
+// beneath the next as it flies past and fades.
+import { useRef, useState, type ReactNode, type RefObject } from 'react'
 import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
@@ -30,6 +32,7 @@ import type { Action } from './keys'
 import { nearestOf } from './state/move/targets'
 import type { CarriedTile, CarryInput } from './state/move/carry'
 import { useMove } from './state/move/useMove'
+import { useCamera } from './state/useCamera'
 import { useCanvasState, type TileAction, type TileHex } from './state/useCanvasState'
 import { useScale } from './state/useScale'
 import { useFinger } from './tile/menu/TileMenu'
@@ -37,7 +40,7 @@ import { unitsIn } from './tile/moving/drag'
 import { Carried, MoveBanner } from './tile/moving/Moving'
 import { Arc } from './tile/marks/Marks'
 import { wayTo, type TileMark } from './tile/marks/mark'
-import { Ground } from './tile/places'
+import { Ground, Slot } from './tile/places'
 import { Tile, type StandingLook, type TileWrite } from './tile/Tile'
 import { listOf, lookOf, placeOf } from './view/looks'
 import { pathTo, type TileNode } from './view/tiles'
@@ -230,48 +233,50 @@ export function Canvas(props: CanvasProps) {
         aria-label={m.hex_canvas_label({ title: state.center.title })}
         className="min-h-0 w-full flex-1 select-none"
       >
-        {[...state.hexes]
-          .sort((a, b) => dragged(a) - dragged(b))
-          .map((hex) => {
-            switch (hex.kind) {
-              case 'ground':
-                return <Ground key={hex.key} hex={hex.hex} context={hex.ring === 'context'} />
-              case 'empty': {
-                const stands = standing?.(hex.slot)
-                if (stands !== undefined) {
+        <Camera system={system} center={state.center.id} hexes={state.hexes} scale={scale}>
+          {[...state.hexes]
+            .sort((a, b) => dragged(a) - dragged(b))
+            .map((hex) => {
+              switch (hex.kind) {
+                case 'ground':
+                  return <Ground key={hex.key} hex={hex.hex} context={hex.ring === 'context'} />
+                case 'empty': {
+                  const stands = standing?.(hex.slot)
+                  if (stands !== undefined) {
+                    return (
+                      <Tile
+                        key={hex.key}
+                        hex={hex.hex}
+                        {...stands.look}
+                        scale={scale}
+                        mark={markOf(stands.id)}
+                      />
+                    )
+                  }
                   return (
-                    <Tile
+                    <SlotHexView
                       key={hex.key}
-                      hex={hex.hex}
-                      {...stands.look}
-                      scale={scale}
-                      mark={markOf(stands.id)}
+                      hex={hex}
+                      action={emptySlots?.(hex.slot)}
+                      landing={targetAt.get(hex.key)}
+                      loading={writes?.landing(hex.slot) ?? false}
+                      acting={acting?.slot(hex.slot)}
+                      moving={moving !== undefined}
+                      inTheAir={inTheAir}
+                      over={gesture.over === hex.key}
+                      onMenu={onMenu(hex.key)}
+                      land={gesture.land}
                     />
                   )
                 }
-                return (
-                  <SlotHexView
-                    key={hex.key}
-                    hex={hex}
-                    action={emptySlots?.(hex.slot)}
-                    landing={targetAt.get(hex.key)}
-                    loading={writes?.landing(hex.slot) ?? false}
-                    acting={acting?.slot(hex.slot)}
-                    moving={moving !== undefined}
-                    inTheAir={inTheAir}
-                    over={gesture.over === hex.key}
-                    onMenu={onMenu(hex.key)}
-                    land={gesture.land}
-                  />
-                )
+                case 'list':
+                  return <Tile key={hex.key} hex={hex.hex} {...listOf(hex)} scale={scale} />
+                case 'tile':
+                  return tileOf(hex)
               }
-              case 'list':
-                return <Tile key={hex.key} hex={hex.hex} {...listOf(hex)} scale={scale} />
-              case 'tile':
-                return tileOf(hex)
-            }
-          })}
-        <Arcs hexes={state.hexes} arcs={marks?.arcs} />
+            })}
+          <Arcs hexes={state.hexes} arcs={marks?.arcs} />
+        </Camera>
       </svg>
       {moving === undefined ? null : <MoveBanner title={moving.title} onStop={gesture.stop} />}
       {gesture.carried && (
@@ -279,6 +284,57 @@ export function Canvas(props: CanvasProps) {
       )}
     </div>
   )
+}
+
+interface CameraProps {
+  system: TileNode
+  /** The centered Tile's id. */
+  center: string
+  hexes: Hexes
+  scale: number
+  /** The drawing, as the canvas draws it. */
+  children: ReactNode
+}
+
+/**
+ * The drawing under the camera (`useCamera`): in a group of its own, flying as the center changes,
+ * at rest otherwise, and meanwhile the last drawing beneath it, still, which no pointer reaches and
+ * no screen reader hears, nothing in it moving but the camera.
+ */
+function Camera({ system, center, hexes, scale, children }: CameraProps) {
+  const camera = useCamera({ system, center, hexes })
+  return (
+    <>
+      {camera.still && (
+        <g
+          ref={camera.last}
+          aria-hidden
+          className="pointer-events-none origin-top-left **:animate-none!"
+        >
+          {camera.still.map((hex) => (
+            <StillHex key={hex.key} hex={hex} scale={scale} />
+          ))}
+        </g>
+      )}
+      <g ref={camera.drawing} className="origin-top-left ease-camera">
+        {children}
+      </g>
+    </>
+  )
+}
+
+/** A hex of the last drawing, as it was drawn, acting on nothing: a free slot dotted. */
+function StillHex({ hex, scale }: { hex: Hexes[number]; scale: number }) {
+  switch (hex.kind) {
+    case 'ground':
+      return <Ground hex={hex.hex} context={hex.ring === 'context'} />
+    case 'empty':
+      return <Slot hex={hex.hex} />
+    case 'list':
+      return <Tile hex={hex.hex} {...listOf(hex)} scale={scale} />
+    case 'tile':
+      return <Tile hex={hex.hex} {...lookOf(hex)} place={placeOf(hex)} scale={scale} />
+  }
 }
 
 /**

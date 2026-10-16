@@ -1,7 +1,8 @@
 // Home: the one screen, signed in or out, filling the window. Signed in, the Account's System on the
-// canvas, its center alone and large until a click opens it, where you are in the canvas's corner,
-// the theme at its head, and the chat, over the Account's Conversation, its composer at its foot, whose
-// `/help` and `/keys` open Help and the Keys: wide, side by side along the curve; on a
+// canvas, its center alone and large until a click opens it, a Tile centered landing opened, where
+// you are in the canvas's corner, the theme at its head, and the chat, over the Account's
+// Conversation, its composer at its foot, whose `/help` and `/keys` open Help and the Keys: wide,
+// side by side along the curve; on a
 // phone, one side in front, the chat when the page opens, the seam turning it, and a Tile the chat
 // names bringing the canvas forward. The view and the change under way live in the search params, so
 // a link shows what its sender saw; a Tile's form, its import and its export open in the chat, at the

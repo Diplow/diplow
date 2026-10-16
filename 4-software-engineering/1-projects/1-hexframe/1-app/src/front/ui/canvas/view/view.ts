@@ -166,22 +166,36 @@ function tidy(system: TileNode, view: CanvasView): CanvasView {
   }
 }
 
-/** Centers a Tile, alone and folded, its preview whole: nothing around it, inside it or open. */
+/**
+ * The view of `center` opened: its first ring around it and, past six, its Leaves inside it, the
+ * shape's double expansion, so every child shows at once; nothing else open. A Leaf, which opens
+ * nothing, stands alone.
+ */
+function openedOn(system: TileNode, center: string | undefined): CanvasView {
+  const tile = showView(system, { center }).center
+  const first = firstKindOf(tile)
+  const inside = first === 'branches' && kindsOf(tile).includes('leaves') ? 'leaves' : undefined
+  return tidy(system, { center, frame: first, inner: inside })
+}
+
+/**
+ * Centers a Tile as a gesture does: opened, as `toggleCenter` opens it, so the Tiles around it
+ * show as it arrives, nothing open in its ring. A Leaf, which has no ring, stands alone, its preview
+ * whole. Only its own click folds a center (`toggleCenter`); a plain URL shows the root folded.
+ */
 export function centerOn(system: TileNode, id: string): CanvasView {
-  return tidy(system, { center: id })
+  return openedOn(system, id)
 }
 
 /**
  * Opens the center, or folds it back. Opened, its first ring shows around it and, past six, its
- * Leaves inside it, the shape's double expansion, so every child shows at once; folded, it stands
- * alone again, nothing around it, inside it or open. A centered Leaf opens nothing.
+ * Leaves inside it; folded, it stands alone again, nothing around it, inside it or open. A centered
+ * Leaf opens nothing.
  */
 export function toggleCenter(system: TileNode, view: CanvasView): CanvasView {
-  const { center, frame } = showView(system, view)
+  const { frame } = showView(system, view)
   if (frame !== undefined) return tidy(system, { center: view.center })
-  const first = firstKindOf(center)
-  const inside = first === 'branches' && kindsOf(center).includes('leaves') ? 'leaves' : undefined
-  return tidy(system, { center: view.center, frame: first, inner: inside })
+  return openedOn(system, view.center)
 }
 
 /**
