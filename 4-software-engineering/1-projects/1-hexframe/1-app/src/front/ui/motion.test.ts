@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { durationOf, movingFor } from './motion'
+import { durationOf, easingOf, movingFor } from './motion'
 
 // A motion's duration read from its token on the page: in ms or in s, none where it is unset or no
 // number, and none for what moves under reduced motion, while a light that only fades keeps its own.
@@ -46,5 +46,23 @@ describe('movingFor', () => {
     expect(movingFor('--duration-fold')).toBe(500)
     reduced(true)
     expect(movingFor('--duration-fold')).toBe(0)
+  })
+})
+
+describe('easingOf', () => {
+  it('reads the curve the easing utility on an element sets', () => {
+    const element = document.createElement('div')
+    element.style.transitionTimingFunction = 'cubic-bezier(0.65, 0, 0.35, 1)'
+    document.body.append(element)
+    expect(easingOf(element)).toBe('cubic-bezier(0.65, 0, 0.35, 1)')
+    element.remove()
+  })
+
+  it('eases in and out where the element sets none, or there is none', () => {
+    const element = document.createElement('div')
+    document.body.append(element)
+    expect(easingOf(element)).toBe('ease-in-out')
+    expect(easingOf(null)).toBe('ease-in-out')
+    element.remove()
   })
 })

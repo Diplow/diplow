@@ -36,6 +36,9 @@ const system = tile('root', {
 /** The root opened into its first ring, as a click on it leaves it. */
 const open: CanvasView = { frame: 'children' }
 
+/** `a` centered, as a gesture leaves it: opened into its first ring, so its Tiles show around it. */
+const inA: CanvasView = { center: 'a', frame: 'children' }
+
 function render(view: CanvasView, { finger = false } = {}) {
   const onViewChange = vi.fn<(view: CanvasView, action: ViewAction) => void>()
   const { result } = renderHook(() => useCanvasState({ system, view, onViewChange, finger }))
@@ -126,10 +129,10 @@ describe("a line of a tile's menu that goes somewhere", () => {
     expect(onViewChange).toHaveBeenLastCalledWith(open, { gesture: 'expand', tile: 'root' })
   })
 
-  it('goes in, centering the Tile alone, and leaves the center where it is', () => {
+  it('goes in, centering the Tile opened, and leaves the center where it is', () => {
     const { state, actions: act, onViewChange } = render(open)
     act.go(hexOf(state.hexes, 'tile:a'), 'go-in')
-    expect(onViewChange).toHaveBeenLastCalledWith({ center: 'a' }, { gesture: 'center', tile: 'a' })
+    expect(onViewChange).toHaveBeenLastCalledWith(inA, { gesture: 'center', tile: 'a' })
     act.go(hexOf(state.hexes, 'tile:root'), 'go-in')
     expect(onViewChange).toHaveBeenCalledOnce()
   })
@@ -160,10 +163,10 @@ describe("a line of a tile's menu that goes somewhere", () => {
     expect(onViewChange).not.toHaveBeenCalled()
   })
 
-  it('backs out to the Tile the center stands under, and nowhere from the Root', () => {
-    const inside = render({ center: 'a' })
+  it('backs out to the Tile the center stands under, opened, and nowhere from the Root', () => {
+    const inside = render(inA)
     inside.actions.go(hexOf(inside.state.hexes, 'tile:a'), 'back-out')
-    expect(inside.onViewChange).toHaveBeenLastCalledWith({}, { gesture: 'center', tile: 'root' })
+    expect(inside.onViewChange).toHaveBeenLastCalledWith(open, { gesture: 'center', tile: 'root' })
     const top = render({})
     top.actions.go(hexOf(top.state.hexes, 'tile:root'), 'back-out')
     expect(top.onViewChange).not.toHaveBeenCalled()
@@ -204,7 +207,7 @@ describe('a click', () => {
     expect(opened.onViewChange).toHaveBeenLastCalledWith(open, { gesture: 'collapse', tile: 'a' })
   })
 
-  it('centers a Leaf, and a Reference on the Tile it points at', () => {
+  it('centers a Leaf, alone, and a Reference on the Tile it points at, opened', () => {
     const { state, actions: act, onViewChange } = render({ ...open, inner: 'context' })
     act.click(hexOf(state.hexes, 'tile:notes'))
     expect(onViewChange).toHaveBeenLastCalledWith(
@@ -212,7 +215,7 @@ describe('a click', () => {
       { gesture: 'center', tile: 'notes' },
     )
     act.click(hexOf(state.hexes, 'tile:root:context:2'))
-    expect(onViewChange).toHaveBeenLastCalledWith({ center: 'a' }, { gesture: 'center', tile: 'a' })
+    expect(onViewChange).toHaveBeenLastCalledWith(inA, { gesture: 'center', tile: 'a' })
   })
 
   it('does nothing on a centered Leaf', () => {
@@ -342,18 +345,15 @@ describe('what an opened hex holds', () => {
     settled(() => {
       vi.advanceTimersByTime(500)
     })
-    expect(onViewChange).toHaveBeenCalledExactlyOnceWith(
-      { center: 'a' },
-      { gesture: 'center', tile: 'a' },
-    )
+    expect(onViewChange).toHaveBeenCalledExactlyOnceWith(inA, { gesture: 'center', tile: 'a' })
   })
 })
 
 describe('centering', () => {
-  it('centers from the keyboard at once', () => {
+  it('centers from the keyboard at once, the Tile opened as it arrives', () => {
     const { state, actions: act, onViewChange } = render(open)
     act.center(hexOf(state.hexes, 'tile:a'), 'keyboard')
-    expect(onViewChange).toHaveBeenLastCalledWith({ center: 'a' }, { gesture: 'center', tile: 'a' })
+    expect(onViewChange).toHaveBeenLastCalledWith(inA, { gesture: 'center', tile: 'a' })
   })
 
   it('centers on a double-click only where its first click landed', () => {
@@ -362,7 +362,7 @@ describe('centering', () => {
     expect(onViewChange).not.toHaveBeenCalled()
     act.click(hexOf(state.hexes, 'tile:a'))
     act.center(hexOf(state.hexes, 'tile:a'), 'pointer')
-    expect(onViewChange).toHaveBeenLastCalledWith({ center: 'a' }, { gesture: 'center', tile: 'a' })
+    expect(onViewChange).toHaveBeenLastCalledWith(inA, { gesture: 'center', tile: 'a' })
   })
 
   it('leaves the center where it is', () => {

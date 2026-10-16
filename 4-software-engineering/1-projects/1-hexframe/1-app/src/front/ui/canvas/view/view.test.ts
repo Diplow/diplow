@@ -139,7 +139,6 @@ describe('showView', () => {
       frame: 'children',
       expanded: { 1: 'children' },
     })
-    expect(centerOn(system, 'root')).toEqual({})
   })
 })
 
@@ -206,17 +205,33 @@ describe('withContext', () => {
 })
 
 describe('centerOn', () => {
-  it('centers a Tile alone, folded, nothing inside and nothing open', () => {
-    expect(centerOn(system, 'a')).toEqual({ center: 'a' })
-    expect(centerOn(system, 'many')).toEqual({ center: 'many' })
+  it('centers a Tile opened, as its click opens it, so the Tiles around it show', () => {
+    expect(centerOn(system, 'a')).toEqual({ center: 'a', frame: 'children' })
+    expect(centerOn(system, 'many')).toEqual({
+      center: 'many',
+      frame: 'branches',
+      inner: 'leaves',
+    })
+    expect(centerOn(system, 'a')).toEqual(toggleCenter(system, { center: 'a' }))
   })
 
-  it('leaves the center out of the URL for the root', () => {
-    expect(centerOn(system, 'root')).toEqual({})
+  it('opens nothing else, what was open or inside left behind', () => {
+    const view: CanvasView = { center: 'a', frame: 'children', inner: 'context' }
+    expect(showView(system, centerOn(system, 'a3'))).toMatchObject({
+      frame: 'children',
+      inner: undefined,
+      expanded: {},
+    })
+    expect(centerOn(system, view.center ?? 'root')).toEqual({ center: 'a', frame: 'children' })
   })
 
-  it('centers a Context Tile and a Leaf too', () => {
-    expect(centerOn(system, 'why')).toEqual({ center: 'why' })
+  it('leaves the center out of the URL for the root, which a plain URL still shows folded', () => {
+    expect(centerOn(system, 'root')).toEqual({ frame: 'children' })
+    expect(showView(system, {}).frame).toBeUndefined()
+  })
+
+  it('centers a Context Tile opened, and a Leaf alone, which has no ring', () => {
+    expect(centerOn(system, 'why')).toEqual({ center: 'why', frame: 'children' })
     expect(centerOn(system, 'notes')).toEqual({ center: 'notes' })
   })
 })
