@@ -1,0 +1,28 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/entries/time.tsx
+  s_29e97d7a0b469f::t_b2c13355c5c14c 4-5,7,11-13,16-17,20,22
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/entries/Receipt.tsx
+  s_29e97d7a0b469f::t_b2c13355c5c14c 108
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/CLAUDE.md
+  s_29e97d7a0b469f::t_050fe4ac4471ec 27
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/CLAUDE.md
+  s_29e97d7a0b469f::t_050fe4ac4471ec 18
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/layouts/screen/state/useAlongCurve.ts
+  s_29e97d7a0b469f::t_c8b0fbdac3b2a4 33,39-65,68-72,74,76,79,83,100-105,112-116,125-128,135-137
+  s_29e97d7a0b469f::t_b2c13355c5c14c 7-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1b1f51c7b7a68d1baea96bd8625ceb4b386f362f",
+  "prompts": {},
+  "sessions": {
+    "s_29e97d7a0b469f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9b155743-1e11-42ef-ae2a-b6fb20f7f0ae",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
