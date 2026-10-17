@@ -5,11 +5,24 @@
 // moving the row, Enter or Tab taking it, Escape leaving. A command and each Tile picked show marked
 // in the field. While a Turn runs the field waits and send becomes Stop. Controlled: what is typed,
 // what is listed and what a pick does are its user's, its state hook's on a real page. Wide, its rows
-// and its list run on to the curve at their height, the send hex against it. Its crossings
-// (HEX-108): the Tile row the user is on is told, for the canvas to light; under the field, where the
-// next Turn works; a tile carried from the canvas is offered a place, and named where it is let go.
+// and its list run on to the curve at their height, the send hex against it. The field's words run on
+// above the hex, sitting in its corner, and beside it, a line under them left to it once they reach
+// it or the field scrolls; what the field cuts at its top or its foot fades out as it crosses it. Its
+// crossings (HEX-108): the Tile row the user is on is told, for the canvas to light; under the field,
+// where the next Turn works; a tile carried from the canvas is offered a place, and named where it is
+// let go.
 import { cn } from 'cn'
-import { type ReactNode, type Ref, useEffect, useEffectEvent, useId, useRef, useState } from 'react'
+import {
+  type ReactNode,
+  type Ref,
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
 
 import { m } from '#/paraglide/messages'
 
@@ -95,7 +108,7 @@ export function Composer({
   className,
 }: ComposerProps) {
   const list = useId()
-  const backdrop = useRef<HTMLDivElement>(null)
+  const { field, backdrop, end, send, room, follow } = useField(value, fieldRef)
   const rows = listing?.groups.flatMap((group) => group.rows) ?? []
   // The row the user is on, the first again whenever what was typed changes.
   const [on, setOn] = useState({ typed: '', row: undefined as string | undefined })
@@ -144,18 +157,11 @@ export function Composer({
           onPick={onPick}
         />
       )}
-      <div ref={toCurve} className={cn(runsToCurve, 'flex items-end gap-4')}>
-        <div className={cn('relative min-w-0 flex-1', waits && 'opacity-45')}>
-          {/* The field's text, drawn under it with what is marked, since a textarea marks nothing. */}
-          <div
-            ref={backdrop}
-            aria-hidden
-            className="pointer-events-none absolute inset-0 overflow-hidden pb-1.5 font-human text-prose font-light break-words whitespace-pre-wrap text-foreground"
-          >
-            <FieldText value={value} marks={marks} />
-          </div>
+      <div ref={toCurve} className={cn(runsToCurve, 'relative')}>
+        <div className={cn('relative', room, waits && 'opacity-45')}>
+          <Backdrop ref={backdrop} value={value} marks={marks} end={end} />
           <textarea
-            ref={fieldRef}
+            ref={field}
             rows={1}
             value={value}
             readOnly={waits}
@@ -179,10 +185,7 @@ export function Composer({
               const { value: now, selectionStart } = event.currentTarget
               if (now === value) onChange(now, selectionStart)
             }}
-            onScroll={(event) => {
-              if (backdrop.current !== null)
-                backdrop.current.scrollTop = event.currentTarget.scrollTop
-            }}
+            onScroll={follow}
             onBlur={() => {
               if (open) onLeave()
             }}
@@ -209,7 +212,13 @@ export function Composer({
             }}
           />
         </div>
-        <SendButton ready={ready} running={running} sending={sending} waiting={waiting} />
+        <SendButton
+          ref={send}
+          ready={ready}
+          running={running}
+          sending={sending}
+          waiting={waiting}
+        />
       </div>
       <Dropping carried={carried} over={drop.over} named={drop.named} />
       {(mode !== undefined || place !== undefined) && (
@@ -223,6 +232,107 @@ export function Composer({
       )}
     </form>
   )
+}
+
+/** How far the field's words keep from the send hex, in px. */
+const besideSend = 16
+
+/** How far the words cut at the field's top or foot fade out as they cross it, at most, in px. */
+const fade = 24
+
+/**
+ * The field and what is drawn under it, kept together as it is written, scrolled and resized: its
+ * room for the send hex in its corner, a line under it, once its last line reaches the hex, or the
+ * line above its tip, which rises into that line's foot, or once it scrolls, so no line it shows
+ * passes under the hex, measured before it shows; until then its words run on above the hex and
+ * beside it. And the words it cuts at its top or its foot fading out as they cross it (`follow`).
+ * With the refs it measures by: the field, its caller's too, what is drawn under it, where its words
+ * end, and the hex.
+ */
+function useField(value: string, fieldRef: Ref<HTMLTextAreaElement> | undefined) {
+  const own = useRef<HTMLTextAreaElement>(null)
+  const field = useCallback(
+    (element: HTMLTextAreaElement | null) => {
+      own.current = element
+      if (typeof fieldRef === 'function') return fieldRef(element)
+      if (fieldRef !== null && fieldRef !== undefined) fieldRef.current = element
+      return undefined
+    },
+    [fieldRef],
+  )
+  const backdrop = useRef<HTMLDivElement>(null)
+  const end = useRef<HTMLSpanElement>(null)
+  const send = useRef<HTMLButtonElement>(null)
+  const [makes, setMakes] = useState(false)
+  const follow = () => {
+    if (own.current !== null && backdrop.current !== null) cut(own.current, backdrop.current)
+  }
+  const measure = useEffectEvent(() => {
+    if (own.current === null || backdrop.current === null) return
+    if (end.current === null || send.current === null) return
+    const last = end.current.getBoundingClientRect()
+    const hex = send.current.getBoundingClientRect()
+    // The line above the last, by its pieces: where it ends against the hex's tip, at its middle.
+    const line = parseFloat(getComputedStyle(backdrop.current).lineHeight)
+    const words = document.createRange()
+    words.selectNodeContents(backdrop.current)
+    const above = Array.from(words.getClientRects()).filter(
+      (piece) => Math.abs(last.bottom - line - piece.bottom) < line / 2,
+    )
+    const tip = hex.left + hex.width / 2 - besideSend / 2
+    const scrolls = own.current.scrollHeight > own.current.clientHeight + 1
+    setMakes(
+      scrolls || last.left > hex.left - besideSend || above.some((piece) => piece.right > tip),
+    )
+    follow()
+  })
+  useLayoutEffect(() => {
+    measure()
+  }, [value])
+  useEffect(() => {
+    if (backdrop.current === null) return
+    const resized = new ResizeObserver(() => {
+      measure()
+    })
+    resized.observe(backdrop.current)
+    return () => {
+      resized.disconnect()
+    }
+  }, [])
+  const room = makes && 'mb-[calc(--spacing(1.5)+var(--text-prose)*var(--text-prose--line-height))]'
+  return { field, backdrop, end, send, room, follow }
+}
+
+/** The field's text, drawn under it with what is marked, since a textarea marks nothing. */
+function Backdrop({
+  ref,
+  ...text
+}: {
+  ref: Ref<HTMLDivElement>
+  value: string
+  marks: ReadonlyArray<Mark>
+  end: Ref<HTMLSpanElement>
+}) {
+  return (
+    <div
+      ref={ref}
+      aria-hidden
+      className="pointer-events-none absolute inset-0 overflow-hidden pb-1.5 font-human text-prose font-light break-words whitespace-pre-wrap text-foreground [mask-image:linear-gradient(to_bottom,transparent,black_var(--cut-top,0px),black_calc(100%-var(--cut-foot,0px)),transparent)]"
+    >
+      <FieldText {...text} />
+    </div>
+  )
+}
+
+/**
+ * What is drawn under the field scrolled with it, the words it cuts at its top or its foot fading out
+ * as they cross it, as far as they are scrolled past it, up to `fade`.
+ */
+function cut(field: HTMLElement, drawn: HTMLElement) {
+  drawn.scrollTop = field.scrollTop
+  const below = field.scrollHeight - field.clientHeight - field.scrollTop
+  drawn.style.setProperty('--cut-top', `${String(Math.min(field.scrollTop, fade))}px`)
+  drawn.style.setProperty('--cut-foot', `${String(Math.max(0, Math.min(below, fade)))}px`)
 }
 
 /**
@@ -306,8 +416,19 @@ function Place({ title, first }: { title: string; first: boolean }) {
   )
 }
 
-/** The field's value, each mark in its look, so the field and what is drawn under it agree. */
-function FieldText({ value, marks }: { value: string; marks: ReadonlyArray<Mark> }) {
+/**
+ * The field's value, each mark in its look, so the field and what is drawn under it agree, and `end`
+ * where its words end.
+ */
+function FieldText({
+  value,
+  marks,
+  end,
+}: {
+  value: string
+  marks: ReadonlyArray<Mark>
+  end: Ref<HTMLSpanElement>
+}) {
   const sorted = [...marks].sort((a, b) => a.from - b.from)
   const parts: ReactNode[] = []
   let at = 0
@@ -328,18 +449,24 @@ function FieldText({ value, marks }: { value: string; marks: ReadonlyArray<Mark>
     )
     at = mark.to
   }
+  parts.push(value.slice(at), <span key="end" ref={end} />)
   // A space after the text, so a last line break still takes its line.
-  parts.push(`${value.slice(at)} `)
+  parts.push(' ')
   return parts
 }
 
-/** Send, a hex in the user's amber once there is something to send; Stop while a Turn runs. */
+/**
+ * Send, a hex in the user's amber once there is something to send; Stop while a Turn runs. It sits in
+ * the field's corner, the words running on above it.
+ */
 function SendButton({
+  ref,
   ready,
   running,
   sending,
   waiting,
 }: {
+  ref: Ref<HTMLButtonElement>
   ready: boolean
   running: ComposerProps['running']
   sending: boolean
@@ -348,11 +475,12 @@ function SendButton({
   const stops = running !== undefined
   return (
     <button
+      ref={ref}
       type="submit"
       aria-label={stops ? m.composer_stop() : m.composer_send()}
       disabled={waiting || sending || running?.stopping === true}
       className={cn(
-        'group/send -mb-0.5 h-10.5 w-9.5 shrink-0 outline-none disabled:cursor-not-allowed pointer-coarse:h-12 pointer-coarse:w-11',
+        'group/send absolute right-0 -bottom-0.5 h-10.5 w-9.5 outline-none disabled:cursor-not-allowed pointer-coarse:h-12 pointer-coarse:w-11',
         stops ? 'text-foreground' : ready || sending ? 'text-human' : 'text-muted-foreground',
       )}
     >

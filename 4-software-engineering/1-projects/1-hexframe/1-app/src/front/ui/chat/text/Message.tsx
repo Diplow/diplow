@@ -4,6 +4,7 @@
 // While the agent's are coming each word inks in from a slight blur, and a small violet hex breathes
 // where the next will land. Both run on to the curve line by line, each line at its own height, and a
 // click on one copies its words, as Enter does on one the keyboard reached: no tool waits beside them.
+// Hovered, one that copies lights up, its line or its hex and its ground.
 import { cn } from 'cn'
 import { useId, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react'
 
@@ -45,8 +46,9 @@ function Human({ words, state = 'sent', onRetry }: HumanProps) {
       {/* `text-prose` outside `cn`, which knows no such size, takes it for a colour and drops it. */}
       <p
         className={`text-prose ${cn(
-          'border-l pl-3.5 font-human font-light whitespace-pre-wrap wrap-anywhere transition-colors duration-400',
-          state === 'sent' && 'border-human/70 text-foreground',
+          'border-l pl-3.5 font-human font-light whitespace-pre-wrap wrap-anywhere transition-[border-color,box-shadow,color] duration-400',
+          state === 'sent' &&
+            'border-human/70 text-foreground group-hover/message:border-human group-hover/message:shadow-[inset_6px_0_8px_-6px_var(--color-human)]',
           state === 'sending' && 'border-human/25 text-muted-foreground',
           state === 'failed' && 'border-destructive text-foreground',
         )}`}
@@ -81,7 +83,10 @@ function Agent({ words, state = 'done', continued = false }: AgentProps) {
       <HexMark
         flat
         hollow
-        className={cn('mt-[.3em] size-3.5 text-agent', continued && 'invisible')}
+        className={cn(
+          'mt-[.3em] size-3.5 text-agent transition-[fill,filter] duration-400 group-hover/message:fill-agent/25 group-hover/message:drop-shadow-[0_0_4px_var(--color-agent)]',
+          continued && 'invisible',
+        )}
       />
       <p className="whitespace-pre-wrap wrap-anywhere">
         <span className="sr-only">{m.chat_agent_said()} </span>
@@ -172,7 +177,11 @@ function Copies({ words, copies = true, busy, className, children }: CopiesProps
       {...(copies && { tabIndex: 0, 'aria-describedby': hint, onClick, onKeyDown })}
       className={cn(
         runsToCurve,
-        copies && 'cursor-copy focus-visible:outline-1 focus-visible:outline-offset-4',
+        copies && [
+          'group/message relative isolate cursor-copy focus-visible:outline-1 focus-visible:outline-offset-4',
+          // Hovered, its ground lights from its mark, fading toward the curve and softly at its ends.
+          'before:absolute before:-inset-y-1 before:left-0 before:-right-2.5 before:-z-10 before:bg-linear-to-r before:from-foreground/8 before:via-foreground/5 before:via-70% before:to-transparent before:opacity-0 before:transition-opacity before:duration-400 before:[mask-image:linear-gradient(to_bottom,transparent,black_6px,black_calc(100%-6px),transparent)] hover:before:opacity-100',
+        ],
         className,
       )}
     >
