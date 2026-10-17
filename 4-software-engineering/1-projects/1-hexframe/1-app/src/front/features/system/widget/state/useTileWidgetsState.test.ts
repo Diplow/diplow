@@ -178,6 +178,7 @@ describe('an export', () => {
       shown: undefined,
       exporting: true,
       naming: '',
+      dawning: false,
     })
     answer(
       new Response('PK', {
@@ -203,6 +204,41 @@ describe('an export', () => {
       actions.sent(receipt)
     })
     expect(result.current.state.shown).toEqual(receipt)
+  })
+})
+
+describe("a new account's dawn", () => {
+  it("plays while the pseudo's receipt shows, and not under another receipt", () => {
+    const { result, run } = render()
+    expect(result.current.state.dawning).toBe(false)
+    run((actions) => {
+      actions.sent({ ...receipt, key: 'name', did: 'named', tile: { id: 'root', title: 'Ada' } })
+    })
+    expect(result.current.state.dawning).toBe(true)
+    run((actions) => {
+      actions.sent(receipt)
+    })
+    expect(result.current.state.dawning).toBe(false)
+  })
+
+  it('is over once a form opens, or the naming is refused', () => {
+    const named = {
+      ...receipt,
+      key: 'name',
+      did: 'named' as const,
+      tile: { id: 'root', title: 'Ada' },
+    }
+    const { result, run } = render()
+    run((actions) => {
+      actions.sent(named)
+      actions.clear()
+    })
+    expect(result.current.state.dawning).toBe(false)
+    run((actions) => {
+      actions.sent(named)
+      actions.refused('root')
+    })
+    expect(result.current.state.dawning).toBe(false)
   })
 })
 

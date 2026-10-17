@@ -9,11 +9,12 @@ import { m } from '#/paraglide/messages'
 import { Button } from '../../atoms/controls/button'
 import { toast } from '../../atoms/Toaster'
 import { GallerySection, GalleryState } from '../../gallery/frame'
+import { tutorialInvitation } from '../composer/commands'
 import { said, sampleTiles, sampleWords } from '../samples'
 import { Mention, type Voice } from './Mention'
 import { Message } from './Message'
 import { Thinking } from './Thinking'
-import { weave, type Word, type Words } from './words'
+import type { Word, Words } from './words'
 
 const column = 'grid w-[32rem] max-w-full gap-4'
 
@@ -56,14 +57,7 @@ export function ChatTextGallery() {
           <div className={column}>
             <Message
               voice="agent"
-              words={weave(m.conversation_invitation, {
-                command: {
-                  command: {
-                    name: `/${m.composer_command_tutorial()}`,
-                    onRun: said(m.composer_command_tutorial_does()),
-                  },
-                },
-              })}
+              words={tutorialInvitation(said(m.composer_command_tutorial_does()))}
             />
           </div>
         </GalleryState>

@@ -38,8 +38,8 @@ import { useSystem } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
 import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
+import { tutorialInvitation } from '#/front/ui/chat/composer/commands'
 import { Message } from '#/front/ui/chat/text/Message'
-import { weave } from '#/front/ui/chat/text/words'
 
 import { mentionablesOf } from './composer/mention'
 import { ConversationFoot, Timeline } from './Conversation'
@@ -286,13 +286,5 @@ interface ChatInvitationProps {
 export function ChatInvitation({ onTutorial, dawning }: ChatInvitationProps) {
   const invited = useInvited()
   if (!invited) return null
-  return (
-    <Message
-      voice="agent"
-      words={weave(m.conversation_invitation, {
-        command: { command: { name: `/${m.composer_command_tutorial()}`, onRun: onTutorial } },
-      })}
-      dawning={dawning}
-    />
-  )
+  return <Message voice="agent" words={tutorialInvitation(onTutorial)} dawning={dawning} />
 }

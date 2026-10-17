@@ -17,8 +17,8 @@ import { directions } from '../../canvas/geometry/geometry'
 import { pathTo, type TileNode } from '../../canvas/view/tiles'
 import { centerOn, showView, type CanvasView } from '../../canvas/view/view'
 import { said } from '../../chat/samples'
+import { tutorialInvitation } from '../../chat/composer/commands'
 import { Message } from '../../chat/text/Message'
-import { weave } from '../../chat/text/words'
 import { TileWidget } from '../../chat/widgets/tile/TileWidget'
 import { ScreenSlide, type Go } from './Deck'
 
@@ -270,14 +270,7 @@ function FirstVisit({ onGo, onAgain }: { onGo: Go; onAgain: () => void }) {
             />
             <Message
               voice="agent"
-              words={weave(m.conversation_invitation, {
-                command: {
-                  command: {
-                    name: `/${m.composer_command_tutorial()}`,
-                    onRun: said(m.composer_command_tutorial_does()),
-                  },
-                },
-              })}
+              words={tutorialInvitation(said(m.composer_command_tutorial_does()))}
               dawning
             />
           </>

@@ -32,6 +32,7 @@ import { m } from '#/paraglide/messages'
 import { getLocale, locales } from '#/paraglide/runtime'
 
 import { cutAround, folded } from '../atoms/cut'
+import { weave, type Words } from '../text/words'
 import type { Mark } from './Composer'
 import type { Listing, Row } from './List'
 
@@ -83,6 +84,15 @@ const takesNames: Record<Takes, () => string> = {
   tile: m.composer_takes_tile,
   where: m.composer_takes_where,
   topic: m.composer_takes_topic,
+}
+
+/** The tutorial, which the agent invites a new account to (`tutorialInvitation`). */
+const tutorial: Command = {
+  id: 'tutorial',
+  group: 'you',
+  name: m.composer_command_tutorial,
+  does: m.composer_command_tutorial_does,
+  icon: Orbit,
 }
 
 /** The commands, group after group. */
@@ -184,13 +194,7 @@ export const commands: ReadonlyArray<Command> = [
     does: m.composer_command_help_does,
     icon: CircleHelp,
   },
-  {
-    id: 'tutorial',
-    group: 'you',
-    name: m.composer_command_tutorial,
-    does: m.composer_command_tutorial_does,
-    icon: Orbit,
-  },
+  tutorial,
   {
     id: 'sign-out',
     group: 'you',
@@ -199,6 +203,14 @@ export const commands: ReadonlyArray<Command> = [
     icon: LogOut,
   },
 ]
+
+/**
+ * The agent's line inviting a new account's first command, `/tutorial` named as it is typed, in the
+ * reader's language, which a click runs as typing it does (`onRun`): one sentence for home's chat and
+ * the onboarding slide alike (HEX-118).
+ */
+export const tutorialInvitation = (onRun: () => void): Words =>
+  weave(m.conversation_invitation, { command: { command: { name: `/${tutorial.name()}`, onRun } } })
 
 /** The names a command answers to: its own, and the language's in every language. */
 const namesOf = (command: Command) =>

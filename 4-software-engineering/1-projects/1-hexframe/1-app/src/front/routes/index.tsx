@@ -437,13 +437,7 @@ function SignedIn() {
                 }}
               />
             </ReadBoundary>
-            <ChatInvitation
-              onTutorial={openTutorial}
-              // Under the pseudo's receipt, the line comes with the dawn that receipt is part of.
-              dawning={
-                widgets.state.shown?.kind === 'receipt' && widgets.state.shown.did === 'named'
-              }
-            />
+            <ChatInvitation onTutorial={openTutorial} dawning={widgets.state.dawning} />
             {(search.keys !== undefined || keys.state.step.kind === 'done') && (
               <ReadBoundary>
                 <KeyWidgets
