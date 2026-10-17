@@ -1,0 +1,31 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/Shipped.tsx
+  s_7b92c93552a78d::t_5d68f936995532 4-5,11,27-28,35-36,38-40,48
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_7b92c93552a78d::t_7d72469f4f0392 29-31,87,93,189-192,194,196-197,199-200,203-204,222-225,229,246,259-260,398,510,577-578,583,585,598
+  s_7b92c93552a78d::t_8793cb35c30516 86
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/deck/tour.tsx
+  s_7b92c93552a78d::t_92f5d7c034d74f 6-7,14,24,26,167-170,188-190,249-250,287,356,364-371
+  s_7b92c93552a78d::t_c245ff9975d015 372-373
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/tutorial/rules.ts
+  s_7b92c93552a78d::t_ffa3a6b2263fc4 5-6,19-23,35-36,39-40,54
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_7b92c93552a78d::t_92f5d7c034d74f 358,363-366
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/tutorial/rules.test.ts
+  s_7b92c93552a78d::t_ffa3a6b2263fc4 23-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "78023f8b79109fdfcfe1f0f291ebc4fdaf94b6ed",
+  "prompts": {},
+  "sessions": {
+    "s_7b92c93552a78d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "df1e2743-42cd-4ee5-8710-130ad5db0a14",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
