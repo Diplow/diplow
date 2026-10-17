@@ -6,8 +6,9 @@
 // steps for now. Its arrival, its center alone and large, tells the center's words in turn, its
 // title, its preview, then its body in the chat (HEX-120), and lets nothing through until the body is
 // told; then the center invites a click, which opens it (HEX-121). Opened, its six around it, each
-// shows its hover card and answers nothing, the center folding back on a click. Each later step lifts
-// exactly what it introduces ("hexframe app: Tutorial" in Linear). Pure.
+// shows its hover card and answers nothing, the center folding back on a click, and its body's lines
+// and its six are shown as the same six (HEX-122), where the tutorial stops for now. Each later step
+// lifts exactly what it introduces ("hexframe app: Tutorial" in Linear). Pure.
 import type { CanvasRules, Looking } from '#/front/ui/canvas/state/useCanvasState'
 import type { CanvasView } from '#/front/ui/canvas/view/view'
 import type { ToldPart } from '#/front/ui/motion'
@@ -20,6 +21,12 @@ import type { ToldPart } from '#/front/ui/motion'
 export interface TutorialRules extends CanvasRules {
   /** The composer, at the chat's foot: held back meanwhile, as during the onboarding. */
   composer: boolean
+  /**
+   * The center's body and its ring shown as the same six (HEX-122): each numbered line of the body
+   * lit as its tile lands, then a line pointed at lighting its tile, and a tile its line, and the
+   * agent's last words.
+   */
+  sameSix: boolean
 }
 
 /** What a step of the tutorial has introduced. */
@@ -36,6 +43,8 @@ interface Step {
    * then its body in the chat (HEX-120), which stays told once the center opens.
    */
   tells: boolean
+  /** The center's body and its ring shown as the same six (HEX-122). */
+  sameSix: boolean
 }
 
 /**
@@ -48,11 +57,12 @@ const arrival = (told: ToldPart | undefined): Step => ({
   recenter: false,
   composer: false,
   tells: true,
+  sameSix: false,
 })
 
 /**
  * The center opened, its six around it, each with its hover card, its title and its preview, both
- * told already; its body stays told in the chat.
+ * told already; its body stays told in the chat, its lines and the six shown as the same six.
  */
 const opened: Step = {
   open: true,
@@ -60,6 +70,7 @@ const opened: Step = {
   recenter: false,
   composer: false,
   tells: true,
+  sameSix: true,
 }
 
 /**
@@ -77,6 +88,7 @@ export function tutorialRules(asked: CanvasView, told?: ToldPart): TutorialRules
     lets: (hex) => ({ click: step.open && hex.role === 'center', recenter: step.recenter }),
     introducesOpening: step.open,
     composer: step.composer,
+    sameSix: step.sameSix,
   }
 }
 

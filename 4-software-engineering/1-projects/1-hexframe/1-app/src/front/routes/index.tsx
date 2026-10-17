@@ -29,7 +29,9 @@
 // onboarding; the corner's mark carries the canvas back to the user's Root (HEX-119). Arrived, its
 // center alone, the agent tells its words a beat at a time, its title lit, then its preview, then its
 // body in the chat, again whenever it arrives anew (HEX-120); once the body is told, the center
-// invites the click that opens it, its six arriving one by one (HEX-121). Signed out, the same
+// invites the click that opens it, its six arriving one by one (HEX-121), each lighting the line of
+// the body that names it as it lands, then a line pointed at lighting its tile and a tile its line,
+// the agent saying they are the same six, then that yours is waiting (HEX-122). Signed out, the same
 // screen: Help on the canvas, two lines from the agent and its offer to read the centered topic in full, and the
 // sign-in widget in the composer's place, which signs in or up, then comes back where the user was.
 // While the help widget is open, a topic centered on Help's canvas turns its page.
@@ -62,6 +64,7 @@ import {
 } from '#/front/features/shipped/search'
 import { HelpRead, ShippedCanvas } from '#/front/features/shipped/Shipped'
 import type { TutorialRules } from '#/front/features/shipped/tutorial/rules'
+import { useSameSix } from '#/front/features/shipped/tutorial/six'
 import { KeyWidgets } from '#/front/features/keys/KeyWidgets'
 import { readKeysSearch, withKeys } from '#/front/features/keys/search'
 import { useKeyWidgetState } from '#/front/features/keys/state/useKeyWidgetState'
@@ -190,7 +193,8 @@ function useHelpNavigation(turning: ReturnType<typeof useScreenState>['actions']
  * holds; and, once read, while its rules have the agent tell its center's words, what it has told,
  * a beat at a time from the start whenever it plays anew, and the center's body, which it tells last,
  * in the chat, which a phone brings to the front then (HEX-120). The center is its Root while it
- * tells: the arrival's.
+ * tells: the arrival's. Opened, its body and its ring shown as the same six, each lighting the
+ * other, a line clicked or tapped bringing the canvas forward on a phone for a glance (HEX-122).
  */
 function useTutorialNavigation(
   search: HomeSearch,
@@ -204,10 +208,19 @@ function useTutorialNavigation(
   const told = useTold(data !== undefined && shippedTells(search), (part) => {
     if (part === 'body') turning.turn('chat')
   })
+  const same = useSameSix({
+    tree,
+    body: data?.body,
+    shown: shippedOnCanvas(search, told)?.rules?.sameSix === true,
+    onShow: (title) => {
+      turning.cross(m.crossing_phone_said({ title }))
+    },
+  })
   return {
     tree,
     told,
     body: data?.body,
+    ...same,
     onViewChange: (view: CanvasView) => {
       void navigate({ search: (current) => tutorialOn(current, view) })
     },
@@ -226,13 +239,15 @@ function useWayHome() {
 }
 
 /**
- * How home moves around a System hexframe ships: its Tiles, for the corner, its view, and what the
- * agent has told of its center's words, the tutorial's.
+ * How home moves around a System hexframe ships: its Tiles, for the corner, its view, what the agent
+ * has told of its center's words, and the tile pointed at, the tutorial's.
  */
 interface ShippedNavigation {
   tree: TileNode | undefined
   onViewChange: (view: CanvasView) => void
   told?: ToldPart | undefined
+  pointed?: string | undefined
+  onPoint?: ((tile: string, pointing: boolean) => void) | undefined
 }
 
 /**
@@ -250,7 +265,7 @@ function shippedSide(
   const shown = shippedOnCanvas(search, navigation.tutorial.told)
   if (shown === undefined) return undefined
   const { shipped, view, away, rules } = shown
-  const { tree, onViewChange, told } = navigation[shipped]
+  const { tree, onViewChange, told, pointed, onPoint } = navigation[shipped]
   const systemView: CanvasView = {}
   return {
     systemView,
@@ -264,6 +279,8 @@ function shippedSide(
         onViewChange={onViewChange}
         rules={rules}
         told={told}
+        pointed={pointed}
+        onPoint={onPoint}
       />
     ),
     corner: (
@@ -513,7 +530,9 @@ function SignedIn() {
               />
             </ReadBoundary>
             <ChatInvitation onTutorial={openTutorial} dawning={widgets.state.dawning} />
-            {tutorial.body !== undefined && <Told told={tutorial.told} body={[tutorial.body]} />}
+            {tutorial.body !== undefined && (
+              <Told told={tutorial.told} body={[tutorial.body]} six={tutorial.six} />
+            )}
             {(search.keys !== undefined || keys.state.step.kind === 'done') && (
               <ReadBoundary>
                 <KeyWidgets
@@ -582,13 +601,18 @@ interface ShippedSideProps {
   rules?: TutorialRules | undefined
   /** The part of the center's words the agent tells of, lit: the tutorial's. */
   told?: ToldPart | undefined
+  /** The tile pointed at, lit, and a tile pointed at handed on: the tutorial's. */
+  pointed?: string | undefined
+  onPoint?: ((tile: string, pointing: boolean) => void) | undefined
 }
 
 /**
  * The canvas side of a System hexframe ships, Help's or the tutorial's: on the canvas, read-only, the
- * tutorial by its rules, the part of its center's words the agent tells of lit.
+ * tutorial by its rules, the part of its center's words the agent tells of lit, and the tile pointed
+ * at, from its line or on the canvas.
  */
-function ShippedSide({ shipped, view, onViewChange, rules, told }: ShippedSideProps) {
+function ShippedSide(props: ShippedSideProps) {
+  const { shipped, view, onViewChange, rules, told, pointed, onPoint } = props
   // The page's language, from its URL: a shipped System's ids are the same in every language, so the
   // view holds.
   const { data } = useShipped(shipped, getLocale())
@@ -602,6 +626,8 @@ function ShippedSide({ shipped, view, onViewChange, rules, told }: ShippedSidePr
         onViewChange={onViewChange}
         rules={rules}
         told={told}
+        pointed={pointed}
+        onPoint={onPoint}
         className="min-h-0 flex-1"
       />
     </div>

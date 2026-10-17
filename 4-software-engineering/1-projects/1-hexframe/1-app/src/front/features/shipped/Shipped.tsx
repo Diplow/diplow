@@ -3,7 +3,8 @@
 // preview whole, until a click opens it, a Tile centered landing with its own around it; the tutorial
 // by its own rules, what it has not introduced yet absent (`tutorial/rules.ts`), the part of its
 // center's words the agent tells of lit, its center inviting the click that opens it once they are
-// told, its six arriving one by one, their hover cards alone. In the chat,
+// told, its six arriving one by one, their hover cards alone, a tile its body's line points at lit,
+// and a tile pointed at handed on, for the chat to light its line (HEX-122). In the chat,
 // under the agent's lines, its offer to read the centered topic of Help's page in full, in the help
 // widget. Like the canvas, it holds no state: the view is the URL's, and the route navigates.
 import { m } from '#/paraglide/messages'
@@ -27,6 +28,10 @@ interface ShippedCanvasProps {
   rules?: TutorialRules | undefined
   /** The part of the center's words the agent tells of, lit: the tutorial's, as its rules tell them. */
   told?: ToldPart | undefined
+  /** The tile pointed at, lit: the tutorial's, from the line of its center's body naming it. */
+  pointed?: string | undefined
+  /** A tile pointed at, or let go, for the chat to light the line naming it: the tutorial's. */
+  onPoint?: ((tile: string, pointing: boolean) => void) | undefined
   className?: string
 }
 
@@ -35,10 +40,11 @@ interface ShippedCanvasProps {
  * that go somewhere, its Context among them, beside its hover card (`looking`, never `acting`); the
  * tutorial's only where it lets them through, its hover card alone where it lets that through, its
  * center opening only once it lets a click through, which it then invites, its six arriving one by
- * one (HEX-121), the part of its words the agent tells of lit (HEX-120).
+ * one (HEX-121), the part of its words the agent tells of lit (HEX-120), and its six and its body's
+ * lines lighting each other (HEX-122).
  */
 export function ShippedCanvas(props: ShippedCanvasProps) {
-  const { tree, view, onViewChange, rules, told, className } = props
+  const { tree, view, onViewChange, rules, told, pointed, onPoint, className } = props
   return (
     <Canvas
       system={tree}
@@ -46,7 +52,8 @@ export function ShippedCanvas(props: ShippedCanvasProps) {
       onViewChange={onViewChange}
       looking={rules?.looking ?? 'menu'}
       {...(rules && { lets: rules.lets, introducesOpening: rules.introducesOpening })}
-      marks={{ told }}
+      marks={{ told, pointed }}
+      onPoint={onPoint}
       className={className}
     />
   )

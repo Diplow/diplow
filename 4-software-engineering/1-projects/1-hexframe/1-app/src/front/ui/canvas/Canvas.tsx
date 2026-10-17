@@ -153,6 +153,12 @@ interface CanvasProps {
    * once it comes back or is let go, which ends its move. Without it, a drag stays on the canvas.
    */
   onCarry?: ((tile: CarriedTile | undefined) => void) | undefined
+  /**
+   * A Tile pointed at, its card open under a mouse, a pen or the keyboard's focus, or its menu under
+   * a finger's long press, by its id, and let go: the canvas's end of a crossing, the chat lighting
+   * the line that names it (HEX-122). Without it, pointing at a Tile lights nothing elsewhere.
+   */
+  onPoint?: ((tile: string, pointing: boolean) => void) | undefined
   className?: string
 }
 
@@ -231,6 +237,7 @@ export function Canvas(props: CanvasProps) {
         moving={moving}
         aside={menu !== undefined && menu !== hex.key}
         onMenu={onMenu(hex.key)}
+        onPoint={pointingAt(hex.tile.id, props.onPoint)}
         shift={hex.tile.reference === undefined ? gesture.shiftOf(hex.tile.id) : still}
         inTheAir={inTheAir}
         swap={targetAt.get(hex.key)}
@@ -318,6 +325,13 @@ function lookedAt(system: TileNode, looking: Looking = false): CanvasActing | un
     slot: () => undefined,
   }
 }
+
+/** A Tile pointed at and let go, handed on by its id where the caller takes it. */
+const pointingAt = (id: string, onPoint: CanvasProps['onPoint']) =>
+  onPoint &&
+  ((pointing: boolean) => {
+    onPoint(id, pointing)
+  })
 
 /** A bloom one by one, a step apart, where the canvas introduces opening its center. */
 const paced = (motion: TileMotion | undefined, introduces: boolean) =>

@@ -27,6 +27,13 @@ describe("the tutorial's arrival", () => {
     expect(tutorialTells({})).toBe(true)
   })
 
+  it.each([undefined, 'body'] as const)(
+    'shows no line of the body as a tile while the agent has told %s, the six not there',
+    (told: ToldPart | undefined) => {
+      expect(tutorialRules({}, told).sameSix).toBe(false)
+    },
+  )
+
   it.each([undefined, 'title', 'preview'] as const)(
     'leaves every Tile without a click while the agent has told %s',
     (told: ToldPart | undefined) => {
@@ -82,6 +89,10 @@ describe("the tutorial's center opened", () => {
 
   it('keeps its body told in the chat', () => {
     expect(tutorialTells(opened)).toBe(true)
+  })
+
+  it('shows its body and its ring as the same six', () => {
+    expect(tutorialRules(opened).sameSix).toBe(true)
   })
 
   it('is where a link asking for its ring lands, whatever the agent has told', () => {

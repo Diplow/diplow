@@ -144,9 +144,12 @@ function useLanded(landing: boolean): number {
     const first = movingFor('--duration-bloom')
     const step = movingFor('--stagger-step')
     const timers = Array.from({ length: six }, (_, index) =>
-      setTimeout(() => {
-        setLanded(index + 1)
-      }, first + step * index),
+      setTimeout(
+        () => {
+          setLanded(index + 1)
+        },
+        first + step * index,
+      ),
     )
     const faded = first + step * (six - 1) + durationOf('--duration-flare')
     timers.push(
