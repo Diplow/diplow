@@ -349,6 +349,7 @@
     --stagger-dawn: 0.8s;
     --stagger-beat: 2s;
     --stagger-bloom: 40ms;
+    --stagger-step: 280ms;
   }
   html {
     color-scheme: light;

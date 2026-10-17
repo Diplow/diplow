@@ -6,7 +6,9 @@
 // sweeps a light over it; refused, it flares and its caller puts it back. Who touches it marks it
 // (`marks/`, HEX-108): the chat pointing at it, the agent at work, a change you haven't seen, what a
 // Proposal would do, the part of its words the agent tells of (HEX-120); a tile being written
-// breathes in its writer's voice, and one a Proposal would create waits as a ghost. Its words are fitted to its size on screen (words.ts). It is an SVG
+// breathes in its writer's voice, and one a Proposal would create waits as a ghost. The one thing on
+// a screen that answers, where its caller says so, invites its click, breathing in your amber at its
+// rim (HEX-121). Its words are fitted to its size on screen (words.ts). It is an SVG
 // group, drawn inside the canvas's <svg> at its hex, and a button when its caller says what a click
 // does.
 import { Link } from 'lucide-react'
@@ -55,12 +57,14 @@ export type TileWrite = 'pending' | 'refused'
 
 /**
  * Blooming out of its parent's heart, or folding back into it, `order` siblings after its eldest,
- * each `--stagger-bloom` apart.
+ * each `--stagger-bloom` apart, or, `paced`, arriving one by one, `--stagger-step` apart, as the
+ * tutorial's six do (HEX-121).
  */
 export interface TileMotion {
   way: 'bloom' | 'fold'
   from: Point
   order?: number
+  paced?: boolean
 }
 
 /** A tile's words: its title, and its preview. */
@@ -129,6 +133,11 @@ export type TileProps = TileLook & {
   hand?: Hand
   /** Who touches it: the chat pointing at it, the agent at work, a change unseen, a Proposal. */
   mark?: TileMark | undefined
+  /**
+   * The one thing on the screen that answers, a button: it invites its click without a word, its
+   * rim in your amber, since the click is yours, breathing, held still with reduced motion (HEX-121).
+   */
+  invites?: boolean
 }
 
 /** What only one kind takes, read off any tile: none for the others. */
@@ -240,6 +249,9 @@ interface Rim {
 
 const ember: Rim = { color: tint('warning', 60) }
 
+/** The rim of the one thing that answers, in your amber, since the click it invites is yours. */
+const inviting: Rim = { color: tint('human', 75) }
+
 const rims: Partial<Record<TileKind, Rim>> = {
   context: { color: tint('context', 45) },
   reference: { color: tint('context', 45), dash: '3 3' },
@@ -289,7 +301,7 @@ export function Tile(props: TileProps) {
         motion?.way === 'bloom' && 'motion-safe:animate-bloom',
         motion?.way === 'fold' && 'motion-safe:animate-fold motion-reduce:opacity-0',
       )}
-      style={motion && origin(motion.from, motion.order)}
+      style={motion && origin(motion.from, motion.order, motion.paced)}
     >
       <Slot.Root {...hand}>
         <g
@@ -355,22 +367,28 @@ function pressable(action: Action, onGoIn: TileProps['onGoIn']) {
   }
 }
 
-/** Where a transform starts, in the canvas's own coordinates, and how many siblings it waits for. */
-function origin({ x, y }: Point, order?: number): CSSProperties {
+/**
+ * Where a transform starts, in the canvas's own coordinates, and how many siblings it waits for, each
+ * a bloom's stagger apart, or a step's where it is paced.
+ */
+function origin({ x, y }: Point, order?: number, paced = false): CSSProperties {
+  const stagger = paced ? '--stagger-step' : '--stagger-bloom'
   return {
     transformOrigin: `${String(x)}px ${String(y)}px`,
     transformBox: 'view-box',
-    ...(order !== undefined && { animationDelay: `calc(var(--stagger-bloom) * ${String(order)})` }),
+    ...(order !== undefined && { animationDelay: `calc(var(${stagger}) * ${String(order)})` }),
   }
 }
 
 /**
- * Its line of its own, if any: a clash's ember, its kind's hairline, or the center's steady line; the
- * untitled root's unlit, since it is not there yet but for its lamp.
+ * Its line of its own, if any: a clash's ember, your amber where it invites its click, its kind's
+ * hairline, or the center's steady line; the untitled root's unlit, since it is not there yet but for
+ * its lamp.
  */
 function rimOf(props: TileProps, id: string): Rim | undefined {
   const { kind, place = 'ring' } = props
   if (clashOf(props) !== undefined) return ember
+  if (props.invites === true) return inviting
   const own = rims[kind]
   if (own !== undefined || !centered(place)) return own
   if (rises(kind)) return { color: `url(#${id}-rim)`, unlit: kind === 'untitled' }
@@ -457,10 +475,11 @@ const rises = (kind: TileKind) => kind === 'root' || kind === 'untitled'
 
 /**
  * The lights behind it: the root's halo, small while it is untitled, a draft breathing in its
- * writer's voice, and the blur they, and who touches it, glow by.
+ * writer's voice, the breath round the rim of the one thing that answers, and the blur they, and who
+ * touches it, glow by.
  */
 function Glows(props: TileProps & { id: string }) {
-  const { hex, kind, id } = props
+  const { hex, kind, id, invites = false } = props
   return (
     <>
       <defs>
@@ -493,6 +512,16 @@ function Glows(props: TileProps & { id: string }) {
             'pointer-events-none opacity-26 motion-safe:animate-breathe',
             kind === 'writing' ? 'fill-human' : 'fill-agent',
           )}
+        />
+      ) : null}
+      {invites ? (
+        // Round its rim, outside its fill, which hides the rest of it: a breath.
+        <polygon
+          points={points(hex)}
+          fill="none"
+          strokeWidth={hex.radius * 0.08}
+          filter={`url(#${id}-blur)`}
+          className="pointer-events-none stroke-human opacity-60 motion-safe:animate-breathe"
         />
       ) : null}
     </>

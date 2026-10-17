@@ -1,12 +1,16 @@
 // The tutorial's own rules: what it has not introduced yet is absent. The one place that says, from
 // the view the URL asks for, what the tutorial shows and what it lets through, as the canvas and the
-// chat read it: the view, each Tile's menu, what a Tile answers, the composer. No progress is kept:
-// the step follows from the view alone. For now the tutorial has one step, its arrival, its center
-// alone and large, which lets nothing through and tells the center's words in turn, its title, its
-// preview, then its body in the chat (HEX-120); each later step lifts exactly what it introduces
-// ("hexframe app: Tutorial" in Linear). Pure.
-import type { CanvasRules } from '#/front/ui/canvas/state/useCanvasState'
+// chat read it: the view, each Tile's menu and hover card, what a Tile answers, the composer. No
+// progress is kept: the step follows from the view alone, and within its arrival from what the agent
+// has told so far, a clock that plays again from the start whenever the tutorial arrives anew. Two
+// steps for now. Its arrival, its center alone and large, tells the center's words in turn, its
+// title, its preview, then its body in the chat (HEX-120), and lets nothing through until the body is
+// told; then the center invites a click, which opens it (HEX-121). Opened, its six around it, each
+// shows its hover card and answers nothing, the center folding back on a click. Each later step lifts
+// exactly what it introduces ("hexframe app: Tutorial" in Linear). Pure.
+import type { CanvasRules, Looking } from '#/front/ui/canvas/state/useCanvasState'
 import type { CanvasView } from '#/front/ui/canvas/view/view'
+import type { ToldPart } from '#/front/ui/motion'
 
 /**
  * What the tutorial shows and lets through, on a view asked for, as the canvas and the chat take it:
@@ -18,17 +22,17 @@ export interface TutorialRules extends CanvasRules {
   composer: boolean
   /**
    * The agent tells the center's words in turn, as the canvas lights each: its title, its preview,
-   * then its body in the chat (HEX-120).
+   * then its body in the chat (HEX-120), which stays told once the center opens.
    */
   tells: boolean
 }
 
 /** What a step of the tutorial has introduced. */
 interface Step {
-  /** The center opened by a click, Enter or Space. */
+  /** The center opened, or folded back, by a click, Enter or Space; and its ring shown. */
   open: boolean
-  /** A Tile's menu, and its hover card beside it. */
-  menu: boolean
+  /** A Tile's hover card, its title and its preview (`card`), and its menu beside it (`true`). */
+  looking: Looking
   /** The center moved to another Tile, going into it or out. */
   recenter: boolean
   composer: boolean
@@ -36,31 +40,54 @@ interface Step {
   tells: boolean
 }
 
-/** The arrival: the center alone and large, nothing introduced, its words told in turn. */
-const arrival: Step = { open: false, menu: false, recenter: false, composer: false, tells: true }
+/**
+ * The arrival: the center alone and large, its words told in turn, and, once its body is told,
+ * opening it, the one thing that answers.
+ */
+const arrival = (told: ToldPart | undefined): Step => ({
+  open: told === 'body',
+  looking: false,
+  recenter: false,
+  composer: false,
+  tells: true,
+})
 
 /**
- * The tutorial's rules on the view the URL asks for: what isn't introduced is left out of it, so a
- * link that names a Tile below the center, a ring or an open Branch shows the center alone, the
- * arrival, as `/tutorial` does. A Context is introduced by no step, so none shows.
+ * The center opened, its six around it, each with its hover card, its title and its preview, both
+ * told already; its body stays told in the chat.
  */
-export function tutorialRules(asked: CanvasView): TutorialRules {
-  const step = arrival
+const opened: Step = {
+  open: true,
+  looking: 'card',
+  recenter: false,
+  composer: false,
+  tells: true,
+}
+
+/**
+ * The tutorial's rules on the view the URL asks for, the agent having told `told` of its center's
+ * words: what isn't introduced is left out of it, so a link that names a Tile below the center, an
+ * open Branch or a Context shows the center as `/tutorial` does. The center's ring asked for is the
+ * opened step, whatever was told: a link may land there. A Context is introduced by no step, so none
+ * shows, nor does a Branch opened in place.
+ */
+export function tutorialRules(asked: CanvasView, told?: ToldPart): TutorialRules {
+  const step = asked.frame === undefined ? arrival(told) : opened
   return {
     view: shownWith(asked, step),
-    looking: step.menu,
+    looking: step.looking,
     lets: (hex) => ({ click: step.open && hex.role === 'center', recenter: step.recenter }),
+    introduces: step.open,
     composer: step.composer,
     tells: step.tells,
   }
 }
 
-/** A view less what a step hasn't introduced: no Tile gone into, nothing opened, no Context. */
+/** A view less what a step hasn't introduced: no Tile gone into, no Branch open, no Context. */
 function shownWith(asked: CanvasView, step: Step): CanvasView {
-  const { center, frame, expanded } = asked
+  const { center, frame } = asked
   return {
     ...(step.recenter && center !== undefined && { center }),
     ...(step.open && frame !== undefined && { frame }),
-    ...(step.open && expanded !== undefined && { expanded }),
   }
 }

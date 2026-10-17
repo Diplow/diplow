@@ -16,6 +16,7 @@ import {
   viewIn,
   withViewIn,
 } from '#/front/ui/canvas/view/view'
+import type { ToldPart } from '#/front/ui/motion'
 
 import { tutorialRules, type TutorialRules } from './tutorial/rules'
 
@@ -102,15 +103,16 @@ interface OnCanvas {
 /**
  * The System hexframe ships that has home's canvas, if one does, and its view: Help while its widget
  * is open, on the URL's view, else the tutorial while its param names it, centered by it, by its own
- * rules, what it has not introduced yet left out of the view and of what it lets through. None leaves
- * the canvas to the Account's System.
+ * rules, what it has not introduced yet left out of the view and of what it lets through, the agent
+ * having told `told` of its center's words. None leaves the canvas to the Account's System.
  */
 export function shippedOnCanvas(
   search: CanvasView & HelpSearch & TutorialSearch,
+  told?: ToldPart,
 ): OnCanvas | undefined {
   if (search.help !== undefined) return { shipped: 'help', view: viewIn(search), away: false }
   if (search.tutorial !== undefined) {
-    const rules = tutorialRules(tutorialViewOf(search))
+    const rules = tutorialRules(tutorialViewOf(search), told)
     return { shipped: 'tutorial', view: rules.view, away: true, rules }
   }
   return undefined

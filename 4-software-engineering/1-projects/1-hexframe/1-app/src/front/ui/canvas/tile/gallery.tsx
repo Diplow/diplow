@@ -219,6 +219,13 @@ const stateSamples = (): readonly StateSample[] => [
     draw: (hex) => <Tile hex={hex} kind="branch" words={wordsOf(center)} place="center" />,
   },
   {
+    name: m.gallery_state_tile_inviting,
+    note: m.gallery_tile_inviting,
+    draw: (hex) => (
+      <Tile hex={hex} kind="branch" words={wordsOf(center)} place="center" action={tried} invites />
+    ),
+  },
+  {
     name: m.gallery_state_tile_root_center,
     note: m.gallery_tile_root_center,
     draw: (hex) => <Tile hex={hex} kind="root" words={wordsOf(ulysse)} place="center" />,

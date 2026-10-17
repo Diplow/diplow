@@ -32,6 +32,7 @@ import { getLocale } from '#/paraglide/runtime'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
 import { AtomsGallery } from '#/front/ui/atoms/gallery'
 import { Canvas } from '#/front/ui/canvas/Canvas'
+import { IntroducedCanvas } from '#/front/ui/canvas/gallery'
 import { fixtureViews, ulysse } from '#/front/ui/canvas/fixtures'
 import { CanvasLayoutsGallery } from '#/front/ui/canvas/layouts/gallery'
 import { TileGallery } from '#/front/ui/canvas/tile/gallery'
@@ -354,8 +355,8 @@ const where: Where = ({ value, links }, center) => turnLocation(encoded(value, l
 
 /**
  * The onboarding, played on into the journey its invitation takes, to the tutorial, read in the
- * page's language as home reads it, beside the slide, never throwing, and shown at its arrival by its
- * own rules, as `/tutorial` lands on home, its Root's body told last in the chat.
+ * page's language as home reads it, beside the slide, never throwing, and shown by its own rules, as
+ * `/tutorial` lands on home, its Root's body told last in the chat, then opened by a click.
  */
 function OnboardingTour({ onGo }: { onGo: Go }) {
   const { data } = useShipped('tutorial', getLocale(), { throwing: false })
@@ -363,7 +364,7 @@ function OnboardingTour({ onGo }: { onGo: Go }) {
     () =>
       data === undefined
         ? undefined
-        : { system: canvasTree(data), body: data.body, ...tutorialRules({}) },
+        : { system: canvasTree(data), body: data.body, rules: tutorialRules },
     [data],
   )
   return <OnboardingSlide onGo={onGo} tutorial={tutorial} />
@@ -421,6 +422,7 @@ function CanvasGallery({ view, onViewChange }: CanvasGalleryProps) {
           looking
           className="h-[36rem] max-h-[80dvh] w-full"
         />
+        <IntroducedCanvas />
       </div>
     </GallerySection>
   )

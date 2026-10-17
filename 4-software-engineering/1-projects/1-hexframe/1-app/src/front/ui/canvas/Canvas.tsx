@@ -11,7 +11,8 @@
 // Where its caller takes a tile carried off it, a tile dragged off the canvas follows the pointer
 // over the page, for its caller to hand on. As the center changes, the camera flies from the last
 // view to the next (`useCamera`): into a child it zooms in, to a parent out, the last view drawn still
-// beneath the next as it flies past and fades.
+// beneath the next as it flies past and fades. Where its caller introduces opening the center, the
+// tutorial's, the center invites the click that would open it, and its six arrive one by one.
 import { useRef, useState, type ReactNode, type RefObject } from 'react'
 import { cn } from 'cn'
 
@@ -35,6 +36,7 @@ import { useMove } from './state/move/useMove'
 import { useCamera } from './state/useCamera'
 import {
   useCanvasState,
+  type Looking,
   type TileAction,
   type TileHex,
   type TileLets,
@@ -47,7 +49,7 @@ import { Arc } from './tile/marks/Marks'
 import type { ToldPart } from '../motion'
 import { wayTo, type TileMark } from './tile/marks/mark'
 import { Ground, Slot } from './tile/places'
-import { Tile, type StandingLook, type TileWrite } from './tile/Tile'
+import { Tile, type StandingLook, type TileMotion, type TileWrite } from './tile/Tile'
 import { listOf, lookOf, placeOf } from './view/looks'
 import { pathTo, type TileNode } from './view/tiles'
 import type { CanvasView, ViewAction } from './view/view'
@@ -120,15 +122,22 @@ interface CanvasProps {
   acting?: CanvasActing
   /**
    * A canvas only looked at, Help's or a page's: without `acting`, each Tile's menu holds the lines
-   * that go somewhere alone, Open, Go in, Show its Context, Back out, beside its hover card.
+   * that go somewhere alone, Open, Go in, Show its Context, Back out, beside its hover card; `card`,
+   * its hover card alone, no menu.
    */
-  looking?: boolean
+  looking?: Looking
   /**
    * What each Tile lets through of the gestures on it, its click and going into it, for a canvas with
    * rules of its own, the tutorial's: a Tile whose click is held back is no button, takes no focus and
    * opens nothing. Without it, every gesture goes through.
    */
   lets?: (hex: TileHex) => TileLets
+  /**
+   * Opening the center is introduced, the tutorial's: where a click would open it, the center invites
+   * that click, the one thing that answers, and its six arrive one by one, `--stagger-step` apart, in
+   * their order from the top left (HEX-121).
+   */
+  introduces?: boolean
   /**
    * A Tile on the move: lifted, its free slots offering themselves where `emptySlots` lands it, the
    * Tiles `swapTargets` names offering their swap on a disc at their foot, no Branch showing its
@@ -149,11 +158,8 @@ interface CanvasProps {
 
 export function Canvas(props: CanvasProps) {
   const { system, view, onViewChange, emptySlots, move, writes, marks, onCarry, lets } = props
-  const acting: CanvasActing | undefined =
-    props.acting ??
-    (props.looking === true
-      ? { tile: (hex) => lookingAt(system, hex, lookOf(hex)), slot: () => undefined }
-      : undefined)
+  const { introduces = false } = props
+  const acting = props.acting ?? lookedAt(system, props.looking)
   const finger = useFinger()
   const { state, actions } = useCanvasState({ system, view, onViewChange, finger, lets })
   const svg = useRef<SVGSVGElement>(null)
@@ -202,7 +208,8 @@ export function Canvas(props: CanvasProps) {
             scale={scale}
             write={writes?.tile(hex.tile.id)}
             mark={mark}
-            motion={actions.motionOf(hex.key)}
+            motion={paced(actions.motionOf(hex.key), introduces)}
+            invites={introduces && hex.role === 'center' && action === 'expand'}
             action={
               action && {
                 label: actionLabel(action, hex.tile.title),
@@ -302,6 +309,19 @@ export function Canvas(props: CanvasProps) {
     </div>
   )
 }
+
+/** What a canvas only looked at lets each Tile show: its menu and its card, its card alone, or neither. */
+function lookedAt(system: TileNode, looking: Looking = false): CanvasActing | undefined {
+  if (looking === false) return undefined
+  return {
+    tile: (hex) => lookingAt(system, hex, lookOf(hex), looking === 'card'),
+    slot: () => undefined,
+  }
+}
+
+/** A bloom one by one, a step apart, where the canvas introduces opening its center. */
+const paced = (motion: TileMotion | undefined, introduces: boolean) =>
+  motion && introduces ? { ...motion, paced: true } : motion
 
 interface CameraProps {
   system: TileNode
