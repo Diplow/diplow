@@ -1,0 +1,61 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_eb2c82211b20e8::t_8361ca02ee359f 136
+  s_eb2c82211b20e8::t_ba1cde33415180 478-481,488,492-497,499-516,520
+  s_eb2c82211b20e8::t_4b57a79e17585e 6-7,27,34-37,41,54,67,99-106,108-111,114-119,121-125,129-135,137-144,173,175,195,197,268,270,274-278
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/rights.test.ts
+  s_eb2c82211b20e8::t_aaf56ce6ae6342 146-148,152-154
+  s_eb2c82211b20e8::t_1228894a1a912f 105-116
+  s_eb2c82211b20e8::t_93c1ad798886a6 1-104,117-145,149-151,155-167
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/may.test.ts
+  s_eb2c82211b20e8::t_aaf56ce6ae6342 41,57,66,72-76,117-122,128-134,136-138,143-149,152-157,202
+  s_eb2c82211b20e8::t_c1a01d0f1498ee 1-40,42-56,58-65,67-71,77-116,123-127,135,139-142,150-151,158-195,201,203-208
+  s_eb2c82211b20e8::t_1228894a1a912f 196-200
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/report/errors/messages.ts
+  s_eb2c82211b20e8::t_a5e7bc6c90adef 53
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/may.ts
+  s_eb2c82211b20e8::t_a211ec359664ba 80,83-84,87
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/rights.ts
+  s_eb2c82211b20e8::t_e25769482ce333 105
+  s_eb2c82211b20e8::t_a211ec359664ba 156-157,161,163,166
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.test.ts
+  s_eb2c82211b20e8::t_42cc84f6f437eb 590,608-612
+  s_eb2c82211b20e8::t_89a05d8de065a3 10
+  s_eb2c82211b20e8::t_ef1a4ecca8087e 349,361,365-371,381,391,395,398-404,407,582-585
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/report/errors/messages.test.ts
+  s_eb2c82211b20e8::t_8ff0b55b778b43 24
+  s_eb2c82211b20e8::t_3933eda646f2fd 186-189,250-253
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_eb2c82211b20e8::t_a5e7bc6c90adef 404
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/tools.ts
+  s_eb2c82211b20e8::t_5ec4896561186c 189-192,267,292,328,358,388,416,446
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/testing.ts
+  s_eb2c82211b20e8::t_4099cf01c53cec 23-24,28
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/shared.test.ts
+  s_eb2c82211b20e8::t_32fa69a6f3de7e 1,3-4,7-21,23-54,56-88,92-103,107-134,164-185,204-205
+  s_eb2c82211b20e8::t_4e871fc1d9aed6 5-6
+  s_eb2c82211b20e8::t_75930c6a57861d 55
+  s_eb2c82211b20e8::t_5c50cfb8a5b3c6 2,22,89-91,104-106,135-163,186-203
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_eb2c82211b20e8::t_a5e7bc6c90adef 404
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/programs.ts
+  s_eb2c82211b20e8::t_48b98f2c4f0d7b 29-35,42,48,51-53
+  s_eb2c82211b20e8::t_a30334f40f8879 37-40
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/__snapshots__/mcp.test.ts.snap
+  s_eb2c82211b20e8::t_f615702201baa8 109,199,245,331,376,407,458
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a580b19903211459d0d379818b7713252eba5ab2",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
