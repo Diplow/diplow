@@ -2,7 +2,8 @@
 // words about the chat, its two voices drawn as the chat draws them, its curve and what it lacks; on
 // the canvas's, the first tile, alone and large, whose six tell what the canvas is, in the reader's
 // language, read at render; and on the onboarding's, a new account's first visit, played on the
-// whole screen as home plays it, from the start again at will.
+// whole screen as home plays it, into the agent's invitation to a first command, from the start again
+// at will.
 import { RotateCcw } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 
@@ -17,6 +18,7 @@ import { pathTo, type TileNode } from '../../canvas/view/tiles'
 import { centerOn, showView, type CanvasView } from '../../canvas/view/view'
 import { said } from '../../chat/samples'
 import { Message } from '../../chat/text/Message'
+import { weave } from '../../chat/text/words'
 import { TileWidget } from '../../chat/widgets/tile/TileWidget'
 import { ScreenSlide, type Go } from './Deck'
 
@@ -154,8 +156,10 @@ export function canvasTour(): TileNode {
  * (`routes/index.tsx`, `features/system/widget/`), on the same pieces: the chat asking the pseudo
  * alone, its composer held back, the corner's mark alone, the untitled root its lamp, the pseudo
  * showing on it as it is typed; then, taken, the dawn, from the corner down, its receipt saying it
- * alone, as home's timeline leaves it to the receipt. Played again from the start at will, the page
- * landing anew. What changes on home's onboarding changes here too.
+ * alone, as home's timeline leaves it to the receipt, and, once the composer rose, the agent's line
+ * inviting the first command, `/tutorial` (`features/conversation/`'s `ChatInvitation`), whose click
+ * says here what it does on home, the journey being HEX-119's. Played again from the start at will,
+ * the page landing anew. What changes on home's onboarding changes here too.
  */
 export function OnboardingSlide({ onGo }: { onGo: Go }) {
   const [play, setPlay] = useState(0)
@@ -252,17 +256,31 @@ function FirstVisit({ onGo, onAgain }: { onGo: Go; onAgain: () => void }) {
             takesFocus
           />
         ) : (
-          <TileWidget
-            mode="done"
-            did="named"
-            tile={{
-              title: named.title,
-              onCenter: () => {
-                center(yours)
-              },
-            }}
-            at={named.at}
-          />
+          <>
+            <TileWidget
+              mode="done"
+              did="named"
+              tile={{
+                title: named.title,
+                onCenter: () => {
+                  center(yours)
+                },
+              }}
+              at={named.at}
+            />
+            <Message
+              voice="agent"
+              words={weave(m.conversation_invitation, {
+                command: {
+                  command: {
+                    name: `/${m.composer_command_tutorial()}`,
+                    onRun: said(m.composer_command_tutorial_does()),
+                  },
+                },
+              })}
+              dawning
+            />
+          </>
         )
       }
     />

@@ -95,9 +95,12 @@ export const conversationRead = infiniteQueryOptions({
  * The Account's Conversation, today first, each page a day: the day, its Entries oldest first, the
  * Titles of the Tiles its navigations went to, by id, and, on every page, the Entry last recorded.
  * `fetchNextPage` reads the day before the oldest one shown that holds an Entry, `hasNextPage` saying
- * whether there is one. Shown inside a ReadBoundary; signed out, it sends the user to sign in.
+ * whether there is one. Shown inside a ReadBoundary; signed out, it sends the user to sign in. Or,
+ * `throwing: false`, the same Query read beside the chat, left undefined should it fail, its failure
+ * the chat's boundary's: what the chat invites after its receipt (HEX-118).
  */
-export const useConversation = () => useInfiniteQuery(conversationRead)
+export const useConversation = ({ throwing = true }: { throwing?: boolean } = {}) =>
+  useInfiniteQuery(throwing ? conversationRead : { ...conversationRead, throwOnError: false })
 
 /** A Proposal's writes, as Mapping batched them; none it cannot read back. */
 const decodeWrites = Schema.decodeUnknownOption(Schema.Array(Batched))

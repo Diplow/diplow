@@ -1,8 +1,16 @@
 import { describe, expect, it } from 'vitest'
 
 import type { Actor, Entry } from '#/domains/assistant/entities'
+import type { SystemTile } from '#/domains/mapping/entities'
 
-import { besideReceipt, dayOf, laterOf, latestUndoable, splitByDay } from './timeline'
+import {
+  besideReceipt,
+  dayOf,
+  invitesTutorial,
+  laterOf,
+  latestUndoable,
+  splitByDay,
+} from './timeline'
 
 // Local dates, so the tests hold in any time zone: days are the reader's.
 const at = (day: number, hour: number, minute = 0) => new Date(2026, 8, day, hour, minute)
@@ -151,6 +159,89 @@ describe('latestUndoable', () => {
   it('undoes nothing when nothing offers its Undo', () => {
     expect(latestUndoable([message('a', now)])).toBeUndefined()
     expect(latestUndoable([])).toBeUndefined()
+  })
+})
+
+describe('invitesTutorial', () => {
+  const tile = (
+    id: string,
+    title: string,
+    below: Partial<Pick<SystemTile, 'branches' | 'leaves' | 'context'>> = {},
+  ): SystemTile => ({
+    _tag: 'Tile',
+    id,
+    title,
+    preview: '',
+    body: '',
+    version: 1,
+    branches: {},
+    leaves: {},
+    context: {},
+    ...below,
+  })
+  // What the Conversation holds once a new account named its Root: the change that named it.
+  const named: Entry = {
+    _tag: 'Change',
+    id: 'named',
+    at: at(27, 9),
+    verb: 'TileEdited',
+    tile: { id: 'root', title: 'Ada' },
+    actor: { _tag: 'You' },
+  }
+  // Where the user went since: the Root opened.
+  const went: Entry = {
+    _tag: 'Navigation',
+    id: 'went',
+    at: at(27, 10),
+    steps: [{ gesture: 'expand', tile: 'root' }],
+    gestures: 1,
+  }
+  const ada = tile('root', 'Ada')
+
+  it('invites once the Root is named, nothing below it and nothing said', () => {
+    expect(invitesTutorial(ada, [], false)).toBe(true)
+    expect(invitesTutorial(ada, [named, went], false)).toBe(true)
+  })
+
+  it('invites nothing while the Root waits for its name', () => {
+    expect(invitesTutorial(tile('root', ''), [], false)).toBe(false)
+  })
+
+  it('goes once a Child stands below the Root, or a Context Tile', () => {
+    expect(
+      invitesTutorial(
+        tile('root', 'Ada', { branches: { 1: tile('work', 'Work') } }),
+        [named],
+        false,
+      ),
+    ).toBe(false)
+    expect(
+      invitesTutorial(
+        tile('root', 'Ada', { leaves: { 3: tile('notes', 'Notes') } }),
+        [named],
+        false,
+      ),
+    ).toBe(false)
+    expect(
+      invitesTutorial(
+        tile('root', 'Ada', { context: { [-1]: tile('why', 'Why') } }),
+        [named],
+        false,
+      ),
+    ).toBe(false)
+  })
+
+  it('goes once something is said: a Message held, by either voice, or one on its way', () => {
+    expect(invitesTutorial(ada, [named, message('hello', at(27, 11))], false)).toBe(false)
+    const answered: Entry = {
+      _tag: 'Message',
+      id: 'answer',
+      at: at(27, 11),
+      author: 'agent',
+      text: 'Hello, Ada.',
+    }
+    expect(invitesTutorial(ada, [named, answered], false)).toBe(false)
+    expect(invitesTutorial(ada, [named], true)).toBe(false)
   })
 })
 

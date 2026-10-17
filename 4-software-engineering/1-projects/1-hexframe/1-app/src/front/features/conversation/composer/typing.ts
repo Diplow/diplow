@@ -35,8 +35,8 @@ import {
 
 /**
  * The commands home runs today: the language, the agent's Mode and its last change, Help and the
- * Keys, which the header's links opened before the commands took their place, and signing out. The others the
- * proposal drew wait for their answer and their builds
+ * Keys, which the header's links opened before the commands took their place, the tutorial, and
+ * signing out. The others the proposal drew wait for their answer and their builds
  * (`hexframe-app-design-system-v1/decisions.md#DEC-33`).
  */
 const run = [
@@ -46,6 +46,7 @@ const run = [
   'language',
   'help',
   'keys',
+  'tutorial',
   'sign-out',
 ] as const satisfies ReadonlyArray<CommandId>
 
@@ -68,17 +69,26 @@ export interface Offering {
   readonly help?: boolean
   /** The page opens the Account's Keys, in the chat. */
   readonly keys?: boolean
+  /** The page shows the tutorial on the canvas. */
+  readonly tutorial?: boolean
   /** The page signs the Account out. */
   readonly signOut?: boolean
+  /** The command the chat invites the user to run now, offered first. */
+  readonly invited?: RunCommand | undefined
 }
 
-/** The commands offered now, in their order: those home runs, and of those, what can be done now. */
+/**
+ * The commands offered now, in their order, the one the chat invites first: those home runs, and of
+ * those, what can be done now.
+ */
 export function offered({
   modes,
   undoable,
   help = false,
   keys = false,
+  tutorial = false,
   signOut = false,
+  invited,
 }: Offering): ReadonlyArray<Command> {
   const now: Record<RunCommand, boolean> = {
     ask: modes,
@@ -87,9 +97,15 @@ export function offered({
     language: true,
     help,
     keys,
+    tutorial,
     'sign-out': signOut,
   }
-  return commands.filter((command) => isRun(command.id) && now[command.id])
+  const offering = commands.filter((command) => isRun(command.id) && now[command.id])
+  // What a `/` lists keeps this order, so the command invited comes first.
+  return [
+    ...offering.filter(({ id }) => id === invited),
+    ...offering.filter(({ id }) => id !== invited),
+  ]
 }
 
 /** What the field holds, and what the composer knows besides. */
@@ -145,10 +161,10 @@ export function pickOf(
 
 /**
  * What the field submits: a language to go to; Help to open, on the topic the words after it find, if
- * any; the Mode, an Undo or the Keys, and the words after the command, if any, a Message to send once
- * it ran; or a Message, trimmed, each link picked by its Tile's id. A `/` no command offered answers
- * is sent as words, as the list says. None when it names a language hexframe is not in: the field
- * keeps what was typed.
+ * any; the Mode, an Undo, the Keys or the tutorial, and the words after the command, if any, a Message
+ * to send once it ran; or a Message, trimmed, each link picked by its Tile's id. A `/` no command
+ * offered answers is sent as words, as the list says. None when it names a language hexframe is not
+ * in: the field keeps what was typed.
  */
 export type Submitted =
   | { readonly language: string }

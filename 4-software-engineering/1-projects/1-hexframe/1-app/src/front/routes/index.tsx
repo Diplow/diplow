@@ -21,7 +21,9 @@
 // Turn works; a Tile's menu asks the agent through it, naming the Tile first; and a Tile dragged off
 // the canvas under a mouse or a pen is carried over the page, the composer naming it where it is let
 // go (HEX-110). A new account is asked its pseudo first, the composer and the corner's path held back
-// until it names the Root. Signed out, the same screen: Help on the
+// until it names the Root; then, while its Root holds nothing and nothing was said, the agent's one
+// line after the receipt invites its first command, `/tutorial`, which the tutorial's param answers,
+// and which the composer offers first (HEX-118). Signed out, the same screen: Help on the
 // canvas, two lines from the agent and its offer to read the centered topic in full, and the sign-in
 // widget in the composer's place, which signs in or up, then comes back where the user was. While the
 // help widget is open, a topic centered on Help's canvas turns its page.
@@ -36,7 +38,7 @@ import { accessOf, readAccessSearch, wayBack, withAccess } from '#/front/feature
 import { SignedOutLines, SignInFoot } from '#/front/features/access/SignedOut'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { publish } from '#/front/features/bus'
-import { ChatComposer, ChatTimeline } from '#/front/features/conversation/Chat'
+import { ChatComposer, ChatInvitation, ChatTimeline } from '#/front/features/conversation/Chat'
 import { useNavigationSender } from '#/front/features/conversation/state/useNavigationSender'
 import { AskedAboutTile, Navigated } from '#/front/features/facts'
 import { HelpWidgets } from '#/front/features/shipped/HelpWidgets'
@@ -241,6 +243,25 @@ function useOpenKeys(turning: ReturnType<typeof useScreenState>['actions']) {
   }
 }
 
+/**
+ * `/tutorial`, typed or clicked in the agent's invitation: the tutorial on the canvas, at its Root,
+ * read-only, Help's widget closed and the System's view and change set aside, as the tutorial takes
+ * the canvas, which a phone brings to the front. The journey there is HEX-119's.
+ */
+function useOpenTutorial(turning: ReturnType<typeof useScreenState>['actions']) {
+  const navigate = Route.useNavigate()
+  return () => {
+    void navigate({
+      search: (current) => ({
+        ...screenOf(current),
+        ...withHelp(undefined),
+        ...withTutorial(true),
+      }),
+    })
+    turning.turn('canvas')
+  }
+}
+
 /** Signed out: Help on the canvas, the agent's two lines and Help's widget, and signing in. */
 function SignedOut() {
   const search = Route.useSearch()
@@ -315,6 +336,7 @@ function SignedIn() {
   const help = useHelpNavigation(turning)
   const tutorial = useTutorialNavigation(search.tutorial !== undefined)
   const openKeys = useOpenKeys(turning)
+  const openTutorial = useOpenTutorial(turning)
   const onSearchChange = (next: SearchChange) => {
     // A form, an import or an edit, opening: the tile widget comes, in front on a phone.
     if (opensWidget(search, next)) {
@@ -415,6 +437,13 @@ function SignedIn() {
                 }}
               />
             </ReadBoundary>
+            <ChatInvitation
+              onTutorial={openTutorial}
+              // Under the pseudo's receipt, the line comes with the dawn that receipt is part of.
+              dawning={
+                widgets.state.shown?.kind === 'receipt' && widgets.state.shown.did === 'named'
+              }
+            />
             {(search.keys !== undefined || keys.state.step.kind === 'done') && (
               <ReadBoundary>
                 <KeyWidgets
@@ -440,6 +469,7 @@ function SignedIn() {
               carried={carried}
               onHelp={help.onOpen}
               onKeys={openKeys}
+              onTutorial={openTutorial}
             />
           </ReadBoundary>
         }

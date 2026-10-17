@@ -6,7 +6,7 @@
 // click on one copies its words, as Enter does on one the keyboard reached: no tool waits beside them.
 // Hovered, one that copies lights up, its line or its hex and its ground.
 import { cn } from 'cn'
-import { useId, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react'
+import { useId, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
@@ -32,6 +32,11 @@ interface AgentProps {
   state?: 'done' | 'streaming'
   /** It follows another of the agent's: the mark stays on the first of a run only. */
   continued?: boolean
+  /**
+   * It comes in fifth of a new account's dawn, once the composer has risen, rising within its own
+   * line (`animate-dawn`, `--stagger-dawn`): the agent's invitation to a first command (HEX-118).
+   */
+  dawning?: boolean
 }
 
 export type MessageProps = HumanProps | AgentProps
@@ -71,9 +76,11 @@ function Human({ words, state = 'sent', onRetry }: HumanProps) {
   )
 }
 
-function Agent({ words, state = 'done', continued = false }: AgentProps) {
+function Agent({ words, state = 'done', continued = false, dawning = false }: AgentProps) {
   const streaming = state === 'streaming'
-  return (
+  // Dawning, whether it has risen to its place, after which nothing need clip it.
+  const [risen, setRisen] = useState(false)
+  const message = (
     <Copies
       words={words}
       copies={!streaming}
@@ -96,6 +103,22 @@ function Agent({ words, state = 'done', continued = false }: AgentProps) {
         )}
       </p>
     </Copies>
+  )
+  if (!dawning) return message
+  // Dawning, the conversation sits on the screen's foot until the composer rises: a line held below
+  // its place would reach past the foot, as the receipt's would (`Receipt`), so its line clips it
+  // while it rises, and no longer once it has, its outline then whole under the keyboard's focus.
+  return (
+    <div className={cn(!risen && 'motion-safe:overflow-y-clip')}>
+      <div
+        className="motion-safe:animate-dawn [animation-delay:calc(var(--stagger-dawn)*4)]!"
+        onAnimationEnd={(event) => {
+          if (event.target === event.currentTarget) setRisen(true)
+        }}
+      >
+        {message}
+      </div>
+    </div>
   )
 }
 
