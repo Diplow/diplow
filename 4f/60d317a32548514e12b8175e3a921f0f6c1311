@@ -1,0 +1,47 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/text/Message.tsx
+  s_7b92c93552a78d::t_5399fdecae8d86 19,125,141,147,266
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE.md
+  s_7b92c93552a78d::t_0c9c2ddfde1f2f 50
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE.md
+  s_7b92c93552a78d::t_bb9cacd47d0390 59
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/motion.ts
+  s_7b92c93552a78d::t_76430172aa9c52 82
+  s_7b92c93552a78d::t_5399fdecae8d86 7-8,69-81,83-92
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/marks/gallery.tsx
+  s_7b92c93552a78d::t_bf621256e75230 60-62,65-66,71
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-tutorial/decisions.md
+  s_7b92c93552a78d::t_0c9c2ddfde1f2f 57
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/CLAUDE.md
+  s_7b92c93552a78d::t_0c9c2ddfde1f2f 29
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/marks/mark.ts
+  s_7b92c93552a78d::t_5399fdecae8d86 11,39
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_7b92c93552a78d::t_5399fdecae8d86 86-87,582
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/text/gallery.tsx
+  s_7b92c93552a78d::t_5399fdecae8d86 15-16
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/Canvas.tsx
+  s_7b92c93552a78d::t_76430172aa9c52 47,414-415
+  s_7b92c93552a78d::t_5399fdecae8d86 87-91,181,389-391,393-398,413
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/Shipped.tsx
+  s_7b92c93552a78d::t_5399fdecae8d86 11,28,47
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/motion.test.ts
+  s_7b92c93552a78d::t_bb9cacd47d0390 5,140-170
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/deck/tour.tsx
+  s_7b92c93552a78d::t_5399fdecae8d86 14,24-25,287
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4f60d317a32548514e12b8175e3a921f0f6c1311",
+  "prompts": {},
+  "sessions": {
+    "s_7b92c93552a78d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "df1e2743-42cd-4ee5-8710-130ad5db0a14",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
