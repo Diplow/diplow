@@ -355,12 +355,15 @@ const where: Where = ({ value, links }, center) => turnLocation(encoded(value, l
 /**
  * The onboarding, played on into the journey its invitation takes, to the tutorial, read in the
  * page's language as home reads it, beside the slide, never throwing, and shown at its arrival by its
- * own rules, as `/tutorial` lands on home.
+ * own rules, as `/tutorial` lands on home, its Root's body told last in the chat.
  */
 function OnboardingTour({ onGo }: { onGo: Go }) {
   const { data } = useShipped('tutorial', getLocale(), { throwing: false })
   const tutorial = useMemo(
-    () => (data === undefined ? undefined : { system: canvasTree(data), ...tutorialRules({}) }),
+    () =>
+      data === undefined
+        ? undefined
+        : { system: canvasTree(data), body: data.body, ...tutorialRules({}) },
     [data],
   )
   return <OnboardingSlide onGo={onGo} tutorial={tutorial} />

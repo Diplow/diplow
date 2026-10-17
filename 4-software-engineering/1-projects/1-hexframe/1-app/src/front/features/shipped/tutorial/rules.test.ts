@@ -20,6 +20,10 @@ describe("the tutorial's arrival", () => {
     expect({ looking, composer }).toEqual({ looking: false, composer: false })
   })
 
+  it("tells its center's words in turn, its title, its preview, then its body", () => {
+    expect(tutorialRules({}).tells).toBe(true)
+  })
+
   it.each(['center', 'branch', 'leaf', 'context'] as const)(
     'leaves the %s without a click and the center where it is',
     (role) => {

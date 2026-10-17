@@ -3,14 +3,15 @@
 // the canvas's, the first tile, alone and large, whose six tell what the canvas is, in the reader's
 // language, read at render; and on the onboarding's, a new account's first visit, played on the
 // whole screen as home plays it, into the agent's invitation to a first command and the journey it
-// takes to the tutorial, from the start again at will.
+// takes to the tutorial, whose center's words the agent tells a beat at a time, from the start again
+// at will.
 import { RotateCcw } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Act } from '../../atoms/controls/act'
-import { Canvas } from '../../canvas/Canvas'
+import { Canvas, type CanvasMarks } from '../../canvas/Canvas'
 import { Journey } from '../../canvas/layouts/Journey'
 import { Rail } from '../../canvas/layouts/Rail'
 import type { CanvasRules } from '../../canvas/state/useCanvasState'
@@ -20,8 +21,9 @@ import { pathTo, type TileNode } from '../../canvas/view/tiles'
 import { centerOn, showView, type CanvasView } from '../../canvas/view/view'
 import { said } from '../../chat/samples'
 import { tutorialInvitation } from '../../chat/composer/commands'
-import { Message } from '../../chat/text/Message'
+import { Message, Told, toldInTurn, type ToldPart } from '../../chat/text/Message'
 import { TileWidget } from '../../chat/widgets/tile/TileWidget'
+import { useBeats } from '../../motion'
 import { ScreenSlide, type Go } from './Deck'
 
 /** The canvas, while the chat is told: what a chat is for, in words. */
@@ -162,6 +164,10 @@ interface TutorialArrival extends CanvasRules {
   system: TileNode
   /** The composer, held back while it is not let through. */
   composer: boolean
+  /** The agent tells its center's words in turn, as its rules have it at its arrival (HEX-120). */
+  tells: boolean
+  /** Its center's body, which the agent tells last, in the chat. */
+  body: string
 }
 
 interface OnboardingSlideProps {
@@ -179,7 +185,9 @@ interface OnboardingSlideProps {
  * inviting the first command, `/tutorial` (`features/conversation/`'s `ChatInvitation`), whose click
  * takes the journey to the tutorial's center, alone and large, the corner naming it, nothing on it
  * answering and the composer held back, as the tutorial's rules have it at its arrival
- * (`features/shipped/tutorial/rules.ts`), the corner's mark carrying the canvas back to the root.
+ * (`features/shipped/tutorial/rules.ts`), the agent telling its words a beat at a time, its title
+ * lit, then its preview, then its body in the chat (HEX-120), the corner's mark carrying the canvas
+ * back to the root.
  * Played again from the start at will, the page landing anew. What changes on home's onboarding and
  * its journey changes here too.
  */
@@ -238,6 +246,8 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
   const [away, setAway] = useState(false)
   const system = rootOf(typed, named)
   const there = away ? tutorial : undefined
+  // Arrived, what the agent has told of the center's words, a beat at a time, as on home.
+  const told = toldInTurn[useBeats(toldInTurn.length, there?.tells === true) - 1]
   const went = (next: CanvasView) => {
     setView(next)
     setDone(done + 1)
@@ -274,6 +284,7 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
                 onViewChange={() => undefined}
                 looking={there.looking}
                 lets={there.lets}
+                marks={toldOn(there, told)}
                 className="min-h-0 flex-1"
               />
             )}
@@ -342,11 +353,22 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
               )}
               dawning
             />
+            {there !== undefined && <Told told={told} body={[there.body]} />}
           </>
         )
       }
     />
   )
+}
+
+/**
+ * The part of the tutorial's center's words the agent tells of, lit on its canvas as on home's, its
+ * title or its preview; its body goes to the chat.
+ */
+function toldOn(there: TutorialArrival, told: ToldPart | undefined): CanvasMarks | undefined {
+  if (told === undefined || told === 'body') return undefined
+  const center = showView(there.system, there.view).center.id
+  return { tile: (id) => (id === center ? { told } : undefined) }
 }
 
 /** Plays the onboarding again from the start, the page landing anew. */
