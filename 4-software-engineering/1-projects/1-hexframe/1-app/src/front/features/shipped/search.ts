@@ -7,6 +7,7 @@
 // Tile whose Body was open, lands on home as these. Pure.
 import { Schema } from 'effect'
 
+import type { ShippedRoot } from '#/domains/mapping/entities'
 import {
   CanvasView,
   orDefault,
@@ -82,6 +83,19 @@ export const tutorialOn = <S extends CanvasView & TutorialSearch>(
   ...withViewIn(search, { ...view, center: undefined }),
   ...withTutorial(view.center ?? true),
 })
+
+/**
+ * The System hexframe ships that has home's canvas, if one does, and its view: Help while its widget
+ * is open, on the URL's view, else the tutorial while its param names it, centered by it. None leaves
+ * the canvas to the Account's System.
+ */
+export function shippedOnCanvas(
+  search: CanvasView & HelpSearch & TutorialSearch,
+): { shipped: ShippedRoot; view: CanvasView } | undefined {
+  if (search.help !== undefined) return { shipped: 'help', view: viewIn(search) }
+  if (search.tutorial !== undefined) return { shipped: 'tutorial', view: tutorialViewOf(search) }
+  return undefined
+}
 
 /** The Help page's search params, which an old link still carries: the view, then the open Body. */
 const readHelpPage = readSearch(

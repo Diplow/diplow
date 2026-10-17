@@ -44,18 +44,11 @@ describe('the notes of the Systems hexframe ships, as the build bundles them', (
     expect(shippedNotes.help.en['']).toMatch(/^---\ntitle: Hexframe\n/)
   })
 
-  it("holds the tutorial's apart from Help's, its Root and its six steps", () => {
-    expect(Object.keys(shippedNotes.tutorial.en).sort()).toEqual([
-      '',
-      '1-go-in',
-      '2-six-at-most',
-      '3-context',
-      '4-your-system',
-      '5-unfold',
-      '6-keep-up',
-    ])
-    expect(shippedNotes.tutorial.en['']).toMatch(/^---\ntitle: Tutorial\n/)
-    expect(Object.keys(shippedNotes.help.en)).not.toContain('1-go-in')
+  it("holds the tutorial's apart from Help's, its Root and its six numbered steps", () => {
+    const folders = Object.keys(shippedNotes.tutorial.en)
+    expect(folders).toContain('')
+    expect(folders.filter((path) => /^[1-6]-[a-z0-9-]+$/.test(path))).toHaveLength(6)
+    expect(shippedNotes.tutorial.en['']).not.toBe(shippedNotes.help.en[''])
   })
 
   it("holds each folder's French twin under the same path, apart from its English note", () => {
@@ -64,6 +57,6 @@ describe('the notes of the Systems hexframe ships, as the build bundles them', (
     }
     expect(shippedNotes.help.fr['2-tiles']).toMatch(/^---\ntitle: Les tuiles\n/)
     expect(shippedNotes.help.en['2-tiles']).toMatch(/^---\ntitle: Tiles\n/)
-    expect(shippedNotes.tutorial.fr['']).toMatch(/^---\ntitle: Tutoriel\n/)
+    expect(shippedNotes.tutorial.fr['']).not.toBe(shippedNotes.tutorial.en[''])
   })
 })

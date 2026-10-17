@@ -46,22 +46,18 @@ export const shippedOf = (id: string): ShippedRoot | undefined =>
 /** Whether an id names a System hexframe ships, Help or the tutorial (`shippedOf`). */
 export const isShippedId = (id: string) => shippedOf(id) !== undefined
 
-/** A slot, as a shipped System's id writes it: a Child's Direction or a Context slot. */
+/** A slot, as a Help id writes it: a Child's Direction or a Context slot. */
 const slot = [...directions, ...contextDirections].join('|')
 
 /**
- * A well-formed id of the System hexframe ships from this Root, as a reader may send one: the Root,
- * then the slot of each generation below it, `help/3/-1`. The id of every Tile of it has this form;
- * not every id of this form has a Tile.
+ * A well-formed Help id, as a reader may send one, which the MCP's reads take: Help's Root, then the
+ * slot of each generation below it, `help/3/-1`. The id of every Tile of Help has this form; not every
+ * id of this form has a Tile.
  */
-const idFrom = (root: ShippedRoot) =>
-  Schema.String.check(
-    Schema.isMaxLength(64),
-    Schema.isPattern(new RegExp(`^${root}(/(${slot}))*$`)),
-  )
-
-/** A well-formed Help id, which the MCP's reads take. */
-export const HelpId = idFrom(helpRoot)
+export const HelpId = Schema.String.check(
+  Schema.isMaxLength(64),
+  Schema.isPattern(new RegExp(`^${helpRoot}(/(${slot}))*$`)),
+)
 
 /**
  * The languages the shipped Systems are written in: English, and French beside it. The shipped

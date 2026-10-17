@@ -4,6 +4,7 @@ import {
   fromHelpPage,
   readHelpSearch,
   readTutorialSearch,
+  shippedOnCanvas,
   topicOf,
   turnedTo,
   tutorialOn,
@@ -137,5 +138,32 @@ describe("the tutorial's view on the canvas", () => {
       tutorial: true,
       center: undefined,
     })
+  })
+})
+
+describe("the System hexframe ships on home's canvas", () => {
+  const view = {
+    center: 'help/3',
+    frame: 'children' as const,
+    inner: undefined,
+    expanded: undefined,
+  }
+
+  it("is Help while its widget is open, on the URL's view, the tutorial named or not", () => {
+    expect(shippedOnCanvas({ ...view, help: true, tutorial: 'tutorial/2' })).toEqual({
+      shipped: 'help',
+      view,
+    })
+  })
+
+  it('is the tutorial while its param names it, centered by it', () => {
+    expect(shippedOnCanvas({ ...view, help: undefined, tutorial: 'tutorial/2' })).toEqual({
+      shipped: 'tutorial',
+      view: { ...view, center: 'tutorial/2' },
+    })
+  })
+
+  it("is none with neither named, the canvas the Account's System's", () => {
+    expect(shippedOnCanvas({ ...view, help: undefined, tutorial: undefined })).toBeUndefined()
   })
 })

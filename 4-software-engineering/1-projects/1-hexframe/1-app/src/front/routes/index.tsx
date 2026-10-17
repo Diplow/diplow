@@ -44,9 +44,9 @@ import { helpNodeOf, topicFound } from '#/front/features/shipped/nodes'
 import {
   readHelpSearch,
   readTutorialSearch,
+  shippedOnCanvas,
   turnedTo,
   tutorialOn,
-  tutorialViewOf,
   withHelp,
   withTutorial,
 } from '#/front/features/shipped/search'
@@ -187,16 +187,6 @@ function useTutorialNavigation(open: boolean) {
   }
 }
 
-/**
- * The System hexframe ships that has the canvas, if one does: Help while its widget is open, else the
- * tutorial while the URL names it; and its view, the URL's.
- */
-function shippedShown(search: HomeSearch): { shipped: ShippedRoot; view: CanvasView } | undefined {
-  if (search.help !== undefined) return { shipped: 'help', view: viewOf(search) }
-  if (search.tutorial !== undefined) return { shipped: 'tutorial', view: tutorialViewOf(search) }
-  return undefined
-}
-
 /** How home moves around a System hexframe ships: its Tiles, for the corner, and its view. */
 interface ShippedNavigation {
   tree: TileNode | undefined
@@ -209,7 +199,7 @@ interface ShippedNavigation {
  * Message is sent from.
  */
 function shippedSide(search: HomeSearch, navigation: Record<ShippedRoot, ShippedNavigation>) {
-  const shown = shippedShown(search)
+  const shown = shippedOnCanvas(search)
   if (shown === undefined) return undefined
   const { shipped, view } = shown
   const { tree, onViewChange } = navigation[shipped]

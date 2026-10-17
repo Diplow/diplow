@@ -166,10 +166,10 @@ describe("Mapping's server functions", () => {
     const french = await value(
       run(request(), Mapping.shipped({ root: 'tutorial', language: 'fr' })),
     )
-    expect(english).toMatchObject({ _tag: 'Tile', id: 'tutorial', title: 'Tutorial' })
-    expect(english.branches[1]).toMatchObject({ id: 'tutorial/1', title: 'Go in' })
-    expect(french.branches[1]).toMatchObject({ id: 'tutorial/1', title: 'Entrer' })
-    expect(french.body).toMatch(/^Ceci est le contenu/)
+    expect(english).toMatchObject({ _tag: 'Tile', id: 'tutorial' })
+    expect(english.branches[1]).toMatchObject({ id: 'tutorial/1' })
+    expect(french.branches[1]).toMatchObject({ id: 'tutorial/1' })
+    expect(french.body).not.toBe(english.body)
   })
 
   it('runs for an Account its Key proves as for one its Session proves', async () => {

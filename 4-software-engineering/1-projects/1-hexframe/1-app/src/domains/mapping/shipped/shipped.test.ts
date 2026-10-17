@@ -8,7 +8,7 @@ import { TestDatabase } from '#/repositories/database/testing'
 import { type Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
 import * as Mapping from '../mapping'
-import { previewLimit, systemOf } from '../entities'
+import { previewLimit, type Row, shippedRoots, systemOf } from '../entities'
 import {
   CreateReference,
   CreateTile,
@@ -33,6 +33,16 @@ const TestTiles = Layer.merge(tilesLayer.pipe(Layer.provideMerge(TestDatabase)),
 
 /** An Account no other test uses. */
 const someone = () => crypto.randomUUID()
+
+/**
+ * The tutorial's Tile at this id in a language, as the build bundled it: its words are Ulysse's, to
+ * change, so the tests read them from there rather than write them out.
+ */
+const tutorialAt = (language: 'en' | 'fr', id: string) =>
+  shipped.tutorial[language].rows.find((row) => row.id === id)
+
+/** Where a Tile stands, whatever it says. */
+const placeOf = ({ id, parentId, direction }: Row) => ({ id, parentId, direction })
 
 const note = (title: string, preview = `${title}, in short.`) =>
   `---\ntitle: ${title}\nparent: help\nowner: diplo\npreview: >-\n  ${preview}\n---\n# ${title}\n`
@@ -71,25 +81,40 @@ describe('Help, as the build bundles it from the real folder', () => {
   })
 })
 
-describe('the tutorial, as the build bundles it from the real folder', () => {
-  it('reads its Root and its six steps as Tiles, apart from Help, in both languages', () => {
-    for (const language of ['en', 'fr'] as const) {
-      const { rows, problems } = shipped.tutorial[language]
-      expect(problems).toEqual([])
-      expect(rows.map(({ id, parentId, direction }) => [id, parentId, direction])).toEqual([
-        ['tutorial', null, null],
-        ['tutorial/1', 'tutorial', 1],
-        ['tutorial/2', 'tutorial', 2],
-        ['tutorial/3', 'tutorial', 3],
-        ['tutorial/4', 'tutorial', 4],
-        ['tutorial/5', 'tutorial', 5],
-        ['tutorial/6', 'tutorial', 6],
-      ])
+describe('every System Mapping ships, as the build bundles it', () => {
+  it('is bundled whole, its Root first, read with no problem, in every language', () => {
+    for (const root of shippedRoots) {
+      for (const language of ['en', 'fr'] as const) {
+        const { rows, problems } = shipped[root][language]
+        expect(problems, `${root} in ${language}`).toEqual([])
+        expect(rows[0], `${root} in ${language}`).toMatchObject({ id: root, parentId: null })
+      }
     }
-    expect(shipped.tutorial.en.rows[0]).toMatchObject({ title: 'Tutorial', target: null })
-    expect(shipped.tutorial.fr.rows[0]).toMatchObject({ title: 'Tutoriel' })
-    expect(shipped.tutorial.en.rows[0]?.preview).toMatch(/^This is a preview/)
-    expect(shipped.tutorial.fr.rows[1]).toMatchObject({ id: 'tutorial/1', title: 'Entrer' })
+  })
+})
+
+describe('the tutorial, as the build bundles it from the real folder', () => {
+  it('reads its Root and its six steps as Tiles, each at the same place in both languages', () => {
+    const steps = ([1, 2, 3, 4, 5, 6] as const).map((direction) => ({
+      id: `tutorial/${String(direction)}`,
+      parentId: 'tutorial',
+      direction,
+    }))
+    expect(shipped.tutorial.en.rows.map(placeOf)).toEqual(
+      expect.arrayContaining([{ id: 'tutorial', parentId: null, direction: null }, ...steps]),
+    )
+    expect(shipped.tutorial.fr.rows.map(placeOf)).toEqual(shipped.tutorial.en.rows.map(placeOf))
+  })
+
+  it("takes its words from its own notes, apart from Help's, a Title and a Preview to each Tile", () => {
+    for (const language of ['en', 'fr'] as const) {
+      for (const { title, preview } of shipped.tutorial[language].rows) {
+        expect(title.trim()).not.toBe('')
+        expect(preview.trim()).not.toBe('')
+      }
+    }
+    expect(tutorialAt('fr', 'tutorial')?.body).not.toBe(tutorialAt('en', 'tutorial')?.body)
+    expect(tutorialAt('en', 'tutorial')?.body).not.toBe(shipped.help.en.rows[0]?.body)
   })
 
   it('names the System an id is of by its Root, and none for an id of an Account', () => {
@@ -122,24 +147,24 @@ describe('a System hexframe ships, whole, as home draws it', () => {
     }),
   )
 
-  it.effect('reads the tutorial the same way, its Root and the six steps its Body lists', () =>
+  it.effect('reads the tutorial the same way, its Root with its six steps, in each language', () =>
     Effect.gen(function* () {
-      const english = yield* Mapping.shippedSystem('tutorial', 'en')
-      const french = yield* Mapping.shippedSystem('tutorial', 'fr')
-      expect(english).toMatchObject({ _tag: 'Tile', id: 'tutorial', title: 'Tutorial' })
-      expect(english.body).toMatch(/^This is the body/)
-      expect(english.context).toEqual({})
-      expect(Object.values(english.branches).map(({ id, title }) => [id, title])).toEqual([
-        ['tutorial/1', 'Go in'],
-        ['tutorial/2', 'Six at most'],
-        ['tutorial/3', 'Context'],
-        ['tutorial/4', 'Your system'],
-        ['tutorial/5', 'Unfold'],
-        ['tutorial/6', 'Keep up'],
-      ])
-      expect(french).toMatchObject({ id: 'tutorial', title: 'Tutoriel' })
-      expect(french.branches[4]).toMatchObject({ id: 'tutorial/4', title: 'Votre système' })
-      expect(french.body).toMatch(/^Ceci est le contenu/)
+      for (const language of ['en', 'fr'] as const) {
+        const tutorial = yield* Mapping.shippedSystem('tutorial', language)
+        expect(tutorial).toMatchObject({
+          _tag: 'Tile',
+          id: 'tutorial',
+          title: tutorialAt(language, 'tutorial')?.title,
+          body: tutorialAt(language, 'tutorial')?.body,
+        })
+        for (const direction of [1, 2, 3, 4, 5, 6] as const) {
+          const id = `tutorial/${String(direction)}`
+          expect(tutorial.branches[direction]).toMatchObject({
+            id,
+            title: tutorialAt(language, id)?.title,
+          })
+        }
+      }
     }),
   )
 })
@@ -222,9 +247,16 @@ layer(TestTiles)("the tutorial, read through Mapping's readTile and openTile", (
         fields: ['title', 'preview'],
       })
       expect(read.parent).toBeNull()
-      expect(read.tile).toMatchObject({ _tag: 'Tile', id: 'tutorial', title: 'Tutoriel' })
+      expect(read.tile).toMatchObject({
+        _tag: 'Tile',
+        id: 'tutorial',
+        title: tutorialAt('fr', 'tutorial')?.title,
+      })
       expect(Object.keys(read.tile.branches ?? {})).toEqual(['1', '2', '3', '4', '5', '6'])
-      expect(read.tile.branches?.[1]).toMatchObject({ id: 'tutorial/1', title: 'Entrer' })
+      expect(read.tile.branches?.[1]).toMatchObject({
+        id: 'tutorial/1',
+        title: tutorialAt('fr', 'tutorial/1')?.title,
+      })
     }),
   )
 
@@ -235,27 +267,28 @@ layer(TestTiles)("the tutorial, read through Mapping's readTile and openTile", (
         id: 'tutorial/3',
         fields: ['title', 'body'],
       })
-      expect(opened.parent).toEqual({ id: 'tutorial', title: 'Tutorial' })
-      expect(opened.tile).toMatchObject({ _tag: 'Tile', id: 'tutorial/3', title: 'Context' })
-      expect(opened.tile.body).toMatch(/says what it is/)
-      expect(opened.branches).toEqual({})
+      expect(opened.parent).toEqual({ id: 'tutorial', title: tutorialAt('en', 'tutorial')?.title })
+      expect(opened.tile).toMatchObject({
+        _tag: 'Tile',
+        id: 'tutorial/3',
+        title: tutorialAt('en', 'tutorial/3')?.title,
+        body: tutorialAt('en', 'tutorial/3')?.body,
+      })
     }),
   )
 
-  it.effect(
-    'finds no Tile at an id the tutorial has none at, a path that climbs out included',
-    () =>
-      Effect.gen(function* () {
-        for (const id of ['tutorial/7', 'tutorial/1/1', 'tutorial/-1', 'tutorial/../help']) {
-          const refused = yield* Mapping.readTile(someone(), {
-            language: 'en',
-            id,
-            depth: 0,
-            fields: ['title'],
-          }).pipe(Effect.flip)
-          expect(refused, id).toMatchObject({ _tag: 'TileNotFound', kind: 'NotFound' })
-        }
-      }),
+  it.effect('finds no Tile at an id that no slot gives, a path that climbs out included', () =>
+    Effect.gen(function* () {
+      for (const id of ['tutorial/7', 'tutorial/0', 'tutorial/x', 'tutorial/../help']) {
+        const refused = yield* Mapping.readTile(someone(), {
+          language: 'en',
+          id,
+          depth: 0,
+          fields: ['title'],
+        }).pipe(Effect.flip)
+        expect(refused, id).toMatchObject({ _tag: 'TileNotFound', kind: 'NotFound' })
+      }
+    }),
   )
 })
 
