@@ -1,10 +1,12 @@
 // @vitest-environment happy-dom
+import { act as settled, cleanup, renderHook } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { durationOf, easingOf, movingFor } from './motion'
+import { durationOf, easingOf, movingFor, toldUpTo, useBeats, useTold } from './motion'
 
 // A motion's duration read from its token on the page: in ms or in s, none where it is unset or no
-// number, and none for what moves under reduced motion, while a light that only fades keeps its own.
+// number, and none for what moves under reduced motion, while a light that only fades keeps its own;
+// and the beats of a play, one every `--stagger-beat`, as long with reduced motion.
 
 const root = document.documentElement.style
 
@@ -14,8 +16,11 @@ function reduced(still: boolean) {
 }
 
 afterEach(() => {
+  cleanup()
+  vi.useRealTimers()
   vi.unstubAllGlobals()
   root.removeProperty('--duration-fold')
+  root.removeProperty('--stagger-beat')
 })
 
 describe('durationOf', () => {
@@ -64,5 +69,102 @@ describe('easingOf', () => {
     expect(easingOf(element)).toBe('ease-in-out')
     expect(easingOf(null)).toBe('ease-in-out')
     element.remove()
+  })
+})
+
+describe('useBeats', () => {
+  /** A play of three beats, two seconds apart, on or off. */
+  function play(playing: boolean) {
+    vi.useFakeTimers()
+    root.setProperty('--stagger-beat', '2s')
+    return renderHook((props: { playing: boolean }) => useBeats(3, props.playing), {
+      initialProps: { playing },
+    })
+  }
+
+  /** The clock moved on by `ms`, its beats landed. */
+  function after(ms: number) {
+    settled(() => {
+      vi.advanceTimersByTime(ms)
+    })
+  }
+
+  it('reaches one beat every stagger, up to its count', () => {
+    const { result } = play(true)
+    expect(result.current).toBe(0)
+    after(2000)
+    expect(result.current).toBe(1)
+    after(2000)
+    expect(result.current).toBe(2)
+    after(6000)
+    expect(result.current).toBe(3)
+  })
+
+  it('keeps its beats under reduced motion, which show without moving', () => {
+    reduced(true)
+    const { result } = play(true)
+    after(2000)
+    expect(result.current).toBe(1)
+  })
+
+  it('tells each beat as it comes', () => {
+    vi.useFakeTimers()
+    root.setProperty('--stagger-beat', '2s')
+    const heard: number[] = []
+    renderHook(() =>
+      useBeats(3, true, (beat) => {
+        heard.push(beat)
+      }),
+    )
+    after(4000)
+    expect(heard).toEqual([1, 2])
+  })
+
+  it('stays at none while it does not play', () => {
+    const { result } = play(false)
+    after(10_000)
+    expect(result.current).toBe(0)
+  })
+
+  it('plays from the start again each time it plays anew', () => {
+    const { result, rerender } = play(true)
+    after(6000)
+    rerender({ playing: false })
+    expect(result.current).toBe(0)
+    rerender({ playing: true })
+    expect(result.current).toBe(0)
+    after(2000)
+    expect(result.current).toBe(1)
+  })
+})
+
+describe('useTold', () => {
+  it("tells a tile's title, its preview, then its body, a beat apart, each heard as it comes", () => {
+    vi.useFakeTimers()
+    root.setProperty('--stagger-beat', '2s')
+    const heard: string[] = []
+    const { result } = renderHook(() =>
+      useTold(true, (part) => {
+        heard.push(part)
+      }),
+    )
+    expect(result.current).toBeUndefined()
+    settled(() => {
+      vi.advanceTimersByTime(2000)
+    })
+    expect(result.current).toBe('title')
+    settled(() => {
+      vi.advanceTimersByTime(4000)
+    })
+    expect(result.current).toBe('body')
+    expect(heard).toEqual(['title', 'preview', 'body'])
+  })
+})
+
+describe('toldUpTo', () => {
+  it('lists the parts told so far, in turn, none before the first', () => {
+    expect(toldUpTo(undefined)).toEqual([])
+    expect(toldUpTo('preview')).toEqual(['title', 'preview'])
+    expect(toldUpTo('body')).toEqual(['title', 'preview', 'body'])
   })
 })

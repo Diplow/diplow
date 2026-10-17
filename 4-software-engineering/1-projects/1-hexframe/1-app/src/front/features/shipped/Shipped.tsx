@@ -1,12 +1,14 @@
 // A System hexframe ships on the canvas, Help or the tutorial, read-only: no empty slot takes a click
 // and no Tile offers a swap, so a reader only looks around, as on home, the Root alone and large, its
 // preview whole, until a click opens it, a Tile centered landing with its own around it; the tutorial
-// by its own rules, what it has not introduced yet absent (`tutorial/rules.ts`). In the chat,
+// by its own rules, what it has not introduced yet absent (`tutorial/rules.ts`), the part of its
+// center's words the agent tells of lit. In the chat,
 // under the agent's lines, its offer to read the centered topic of Help's page in full, in the help
 // widget. Like the canvas, it holds no state: the view is the URL's, and the route navigates.
 import { m } from '#/paraglide/messages'
 import { Act, voiceOf } from '#/front/ui/atoms/controls/act'
 import { Canvas } from '#/front/ui/canvas/Canvas'
+import type { ToldPart } from '#/front/ui/motion'
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
 import { showView, type CanvasView } from '#/front/ui/canvas/view/view'
 
@@ -22,15 +24,19 @@ interface ShippedCanvasProps {
    * looking.
    */
   rules?: TutorialRules | undefined
+  /** The part of the center's words the agent tells of, lit: the tutorial's, as its rules tell them. */
+  told?: ToldPart | undefined
   className?: string
 }
 
 /**
  * A System hexframe ships on the canvas, which only changes the view: each Tile's menu holds the lines
  * that go somewhere, its Context among them, beside its hover card (`looking`, never `acting`); the
- * tutorial's only where it lets them through, its center opening only once it lets a click through.
+ * tutorial's only where it lets them through, its center opening only once it lets a click through,
+ * the part of its words the agent tells of lit (HEX-120).
  */
-export function ShippedCanvas({ tree, view, onViewChange, rules, className }: ShippedCanvasProps) {
+export function ShippedCanvas(props: ShippedCanvasProps) {
+  const { tree, view, onViewChange, rules, told, className } = props
   return (
     <Canvas
       system={tree}
@@ -38,6 +44,7 @@ export function ShippedCanvas({ tree, view, onViewChange, rules, className }: Sh
       onViewChange={onViewChange}
       looking={rules?.looking ?? true}
       {...(rules && { lets: rules.lets })}
+      marks={{ told }}
       className={className}
     />
   )

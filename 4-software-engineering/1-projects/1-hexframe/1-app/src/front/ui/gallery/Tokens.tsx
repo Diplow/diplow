@@ -72,6 +72,7 @@ export const valueNotes: readonly Note[] = [
   { tokens: ['duration-glance'], note: m.tokens_motion_glance },
   { tokens: ['duration-sunrise'], note: m.tokens_motion_sunrise },
   { tokens: ['duration-dawn', 'animate-dawn', 'stagger-dawn'], note: m.tokens_motion_dawn },
+  { tokens: ['stagger-beat'], note: m.tokens_motion_beat },
   { tokens: ['animate-ants'], note: m.tokens_motion_ants },
   { tokens: ['animate-ink'], note: m.tokens_motion_ink },
   { tokens: ['container-wide'], note: m.tokens_container_wide },

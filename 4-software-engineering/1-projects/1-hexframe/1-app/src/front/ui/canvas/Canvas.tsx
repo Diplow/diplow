@@ -44,6 +44,7 @@ import { useFinger } from './tile/menu/TileMenu'
 import { unitsIn } from './tile/moving/drag'
 import { Carried, MoveBanner } from './tile/moving/Moving'
 import { Arc } from './tile/marks/Marks'
+import type { ToldPart } from '../motion'
 import { wayTo, type TileMark } from './tile/marks/mark'
 import { Ground, Slot } from './tile/places'
 import { Tile, type StandingLook, type TileWrite } from './tile/Tile'
@@ -83,6 +84,11 @@ export interface CanvasMarks {
   pointed?: string | undefined
   /** What stands in a free slot before it is there: a tile being written, one a Proposal creates. */
   slot?: (slot: EmptySlotTarget) => SlotStanding | undefined
+  /**
+   * The part of the center's words the agent tells of, as the chat says it: its title or its preview
+   * lit, its body, told in the chat, lighting nothing (HEX-120).
+   */
+  told?: ToldPart | undefined
   /** A Proposal's moves, each from a Tile to the free slot it would land in, drawn where both are. */
   arcs?: ReadonlyArray<{ from: string; to: { parent: string; direction: Direction } }>
 }
@@ -172,7 +178,7 @@ export function Canvas(props: CanvasProps) {
   const inTheAir = gesture.landing !== undefined && gesture.landing !== 'landed'
   // While a tile moves, nothing stands in a free slot: they offer themselves to it.
   const standing = moving === undefined ? marks?.slot : undefined
-  const markOf = tileMarksOf(system, state.hexes, { ...marks, slot: standing })
+  const markOf = tileMarksOf(system, state.hexes, { ...marks, slot: standing }, state.center.id)
   const onMenu = (key: string) => (open: boolean) => {
     setMenu((current) => (open ? key : current === key ? undefined : current))
   }
@@ -380,10 +386,16 @@ const still = { by: { x: 0, y: 0 }, glides: false }
 type Hexes = ReturnType<typeof useCanvasState>['state']['hexes']
 
 /**
- * Each Tile's mark, by its id: what the caller says of it, and the chat pointing at it, or at a tile
- * below it off the canvas, whose way it is. A tile standing in a slot is drawn under its own id.
+ * Each Tile's mark, by its id: what the caller says of it, the part of the center's words the agent
+ * tells of, and the chat pointing at it, or at a tile below it off the canvas, whose way it is. A tile
+ * standing in a slot is drawn under its own id.
  */
-function tileMarksOf(system: TileNode, hexes: Hexes, marks: CanvasMarks | undefined) {
+function tileMarksOf(
+  system: TileNode,
+  hexes: Hexes,
+  marks: CanvasMarks | undefined,
+  center: string,
+) {
   const pointed = marks?.pointed
   const drawn = new Set<string>()
   for (const hex of hexes) {
@@ -398,7 +410,9 @@ function tileMarksOf(system: TileNode, hexes: Hexes, marks: CanvasMarks | undefi
       ? undefined
       : wayTo(pointed, pathTo(system, pointed), (id) => drawn.has(id))
   return (id: string): TileMark | undefined => {
-    const mark = marks?.tile?.(id)
+    const told = marks?.told
+    const mark =
+      told !== undefined && id === center ? { ...marks?.tile?.(id), told } : marks?.tile?.(id)
     if (way?.id !== id) return mark
     return { ...mark, pointed: way.way ? 'way' : 'tile' }
   }

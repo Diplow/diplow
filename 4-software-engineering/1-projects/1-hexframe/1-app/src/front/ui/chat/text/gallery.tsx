@@ -1,6 +1,6 @@
 // The chat's text on /design-system: the two voices in their states, the agent's answer coming word
-// after word, a command it names, its thinking live and folded, and a tile named, on the chat's
-// samples.
+// after word, its telling of a tile's words a beat at a time, a command it names, its thinking live
+// and folded, and a tile named, on the chat's samples.
 import { RotateCcw } from 'lucide-react'
 import { type ReactNode, useEffect, useState } from 'react'
 
@@ -12,7 +12,8 @@ import { GallerySection, GalleryState } from '../../gallery/frame'
 import { tutorialInvitation } from '../composer/commands'
 import { said, sampleTiles, sampleWords } from '../samples'
 import { Mention, type Voice } from './Mention'
-import { Message } from './Message'
+import { useTold } from '../../motion'
+import { Message, Told } from './Message'
 import { Thinking } from './Thinking'
 import type { Word, Words } from './words'
 
@@ -52,6 +53,9 @@ export function ChatTextGallery() {
         </GalleryState>
         <GalleryState label={m.gallery_state_chat_streaming()}>
           <Streaming words={words.answer} />
+        </GalleryState>
+        <GalleryState label={m.gallery_state_chat_told()}>
+          <Telling />
         </GalleryState>
         <GalleryState label={m.gallery_state_chat_command()}>
           <div className={column}>
@@ -157,6 +161,36 @@ function Streaming({ words }: { words: Words }) {
       <Message voice="agent" words={pieces.slice(0, shown)} state={done ? 'done' : 'streaming'} />
     </div>
   )
+}
+
+/**
+ * The agent telling a tile's words a beat at a time, as the tutorial's center is told, on home's
+ * clock (`--stagger-beat`), the canvas lighting each: its title, its preview, then its body, its
+ * numbered list a list; told again on a click.
+ */
+function Telling() {
+  const [turn, setTurn] = useState(0)
+  return (
+    <div className={column}>
+      <Button
+        variant="outline"
+        size="sm"
+        className="justify-self-start"
+        onClick={() => {
+          setTurn(turn + 1)
+        }}
+      >
+        <RotateCcw aria-hidden />
+        {m.gallery_replay_told()}
+      </Button>
+      <Once key={turn} />
+    </div>
+  )
+}
+
+/** One telling, from its first beat. */
+function Once() {
+  return <Told told={useTold(true)} body={[m.gallery_sample_chat_told_body()]} />
 }
 
 /** The agent thinking, its seconds counting and its lines coming, over and over. */

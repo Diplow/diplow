@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { linesOf, plainOf, weave } from './words'
+import { blocksOf, linesOf, plainOf, weave } from './words'
 
 const projects = { tile: { title: 'Projects' } }
 const site = { tile: { title: 'Site' } }
@@ -75,5 +75,41 @@ describe('linesOf', () => {
   it('leaves a text of one line, or none, as one line', () => {
     expect(linesOf(['One line'])).toEqual([['One line']])
     expect(linesOf([])).toEqual([[]])
+  })
+})
+
+describe('blocksOf', () => {
+  it('gathers the lines opening with a number and a dot into one list, the rest lines', () => {
+    const body = ['Here, the steps.\n\n1. Go in: the center.\n2. Six at most.\n\nOpen it.']
+    expect(blocksOf(body)).toEqual([
+      { line: ['Here, the steps.'] },
+      { line: [] },
+      {
+        list: [
+          { number: '1', words: ['Go in: the center.'] },
+          { number: '2', words: ['Six at most.'] },
+        ],
+      },
+      { line: [] },
+      { line: ['Open it.'] },
+    ])
+  })
+
+  it('keeps a tile an item names, and its number as written', () => {
+    expect(blocksOf(['3. Read ', projects, '\n4. Then ', site])).toEqual([
+      {
+        list: [
+          { number: '3', words: ['Read ', projects] },
+          { number: '4', words: ['Then ', site] },
+        ],
+      },
+    ])
+  })
+
+  it('leaves a line that opens with a tile, or a number without its dot, a line', () => {
+    expect(blocksOf([projects, ' 1. first\n2020 was a year'])).toEqual([
+      { line: [projects, ' 1. first'] },
+      { line: ['2020 was a year'] },
+    ])
   })
 })

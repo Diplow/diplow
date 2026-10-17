@@ -2,7 +2,8 @@
 // the view the URL asks for, what the tutorial shows and what it lets through, as the canvas and the
 // chat read it: the view, each Tile's menu, what a Tile answers, the composer. No progress is kept:
 // the step follows from the view alone. For now the tutorial has one step, its arrival, its center
-// alone and large, which lets nothing through; each later step lifts exactly what it introduces
+// alone and large, which lets nothing through and tells the center's words in turn, its title, its
+// preview, then its body in the chat (HEX-120); each later step lifts exactly what it introduces
 // ("hexframe app: Tutorial" in Linear). Pure.
 import type { CanvasRules } from '#/front/ui/canvas/state/useCanvasState'
 import type { CanvasView } from '#/front/ui/canvas/view/view'
@@ -15,6 +16,11 @@ import type { CanvasView } from '#/front/ui/canvas/view/view'
 export interface TutorialRules extends CanvasRules {
   /** The composer, at the chat's foot: held back meanwhile, as during the onboarding. */
   composer: boolean
+  /**
+   * The agent tells the center's words in turn, as the canvas lights each: its title, its preview,
+   * then its body in the chat (HEX-120).
+   */
+  tells: boolean
 }
 
 /** What a step of the tutorial has introduced. */
@@ -26,10 +32,12 @@ interface Step {
   /** The center moved to another Tile, going into it or out. */
   recenter: boolean
   composer: boolean
+  /** The center's words told in turn. */
+  tells: boolean
 }
 
-/** The arrival: the center alone and large, nothing introduced. */
-const arrival: Step = { open: false, menu: false, recenter: false, composer: false }
+/** The arrival: the center alone and large, nothing introduced, its words told in turn. */
+const arrival: Step = { open: false, menu: false, recenter: false, composer: false, tells: true }
 
 /**
  * The tutorial's rules on the view the URL asks for: what isn't introduced is left out of it, so a
@@ -43,6 +51,7 @@ export function tutorialRules(asked: CanvasView): TutorialRules {
     looking: step.menu,
     lets: (hex) => ({ click: step.open && hex.role === 'center', recenter: step.recenter }),
     composer: step.composer,
+    tells: step.tells,
   }
 }
 

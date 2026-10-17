@@ -92,6 +92,41 @@ export function linesOf(words: Words): Words[] {
   return lines
 }
 
+/** A numbered list's item: its number, as written, and its words. */
+interface Item {
+  readonly number: string
+  readonly words: Words
+}
+
+/** A text's lines as a reader sees them laid out: a line, or a numbered list's items, together. */
+export type Block = { readonly line: Words } | { readonly list: readonly Item[] }
+
+/** A line opening a numbered list's item, as Markdown writes one: `1. `. */
+const numbered = /^(\d+)\.\s+/
+
+/**
+ * A text's lines (`linesOf`), each run of lines opening with a number and a dot, as Markdown writes
+ * a numbered list, gathered into one list, its items' numbers as written: the rest of Markdown waits
+ * for the seam's renderer.
+ */
+export function blocksOf(words: Words): Block[] {
+  const blocks: Array<{ line: Words } | { list: Item[] }> = []
+  for (const line of linesOf(words)) {
+    const [first, ...rest] = line
+    const opening = typeof first === 'string' ? numbered.exec(first) : null
+    if (typeof first !== 'string' || opening === null) {
+      blocks.push({ line })
+      continue
+    }
+    const after = first.slice(opening[0].length)
+    const item = { number: opening[1] ?? '', words: after === '' ? rest : [after, ...rest] }
+    const last = blocks.at(-1)
+    if (last !== undefined && 'list' in last) last.list.push(item)
+    else blocks.push({ list: [item] })
+  }
+  return blocks
+}
+
 /** Where the marks a sentence is read with begin: Unicode's private use area, which no message holds. */
 const firstMark = 0xe000
 const marks = /([\uE000-\uF8FF])/

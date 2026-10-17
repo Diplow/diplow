@@ -1,12 +1,14 @@
 // Who touches a tile, on /design-system (HEX-108's proposal, ported from components.html's #marks):
 // each mark on a tile of the fixture System at 1:1, held still, or played once it shows and again on
-// its button; then a proposed move's arc on Software Engineering's frame. The crossings, the page's
+// its button, the agent telling of a tile's title, then its preview, among them (HEX-120); then a
+// proposed move's arc on Software Engineering's frame. The crossings, the page's
 // first section, show them live, answering the chat.
 import type { ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { GalleryGroup, GallerySection, GalleryState } from '../../../gallery/frame'
+import { toldUpTo } from '../../../motion'
 import { directions, neighbor, type Hex } from '../../geometry/geometry'
 import { Replayed, Specimen, type Play } from '../gallery'
 import { Slot } from '../places'
@@ -56,8 +58,24 @@ const yours = (): readonly MarkSample[] => [
   },
 ]
 
+/** The parts the agent tells of a tile's words, in turn, the sample's steps. */
+const toldParts = toldUpTo('body')
+
+/**
+ * The agent telling of a tile's words, alone at the center as the tutorial's is: its title lit, then
+ * its preview, then neither, as its body goes to the chat. Played on the gallery's clock, as every
+ * played sample is; home's beats are `--stagger-beat` apart.
+ */
+const told: Play = {
+  steps: [0, 1600, 3200],
+  draw: (hex, step) => (
+    <Tile hex={hex} {...projects} place="alone" mark={{ told: toldParts[step] }} />
+  ),
+}
+
 const agents = (): readonly MarkSample[] => [
   { name: m.gallery_state_mark_reads, note: m.gallery_mark_reads, draw: glinted('agent') },
+  { name: m.gallery_state_mark_told, note: m.gallery_mark_told, draw: told },
   {
     name: m.gallery_state_mark_working,
     note: m.gallery_mark_working,

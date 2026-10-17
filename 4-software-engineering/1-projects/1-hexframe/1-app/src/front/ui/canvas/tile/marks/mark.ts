@@ -2,11 +2,13 @@
 // in your amber, where the chat points; the agent in its violet, reading a tile, working in it,
 // changing it or proposing to; a Key from outside, hollow. What happened while you looked away stays
 // as a dot until you open the tile. Each mark is a light on the tile, never a box, and what lasts of it
-// a screen reader hears from the tile, as its hover card says it. Pure: the tile draws them
+// a screen reader hears from the tile, as its hover card says it. The agent telling of its title or
+// its preview lights that part of its words (HEX-120). Pure: the tile draws them
 // (`Marks.tsx`), the caller says which tile carries which.
 import { m } from '#/paraglide/messages'
 
 import type { CardNote } from '../../../layouts/HoverCard'
+import type { ToldPart } from '../../../motion'
 
 /** Who acts on a tile: you, the agent, or a Key from outside. */
 export type By = 'human' | 'agent' | 'key'
@@ -29,6 +31,12 @@ export interface TileMark {
   unseen?: Exclude<By, 'human'>
   /** What an open Proposal would do to it: its rim dashed in violet, since it isn't done yet. */
   proposed?: Proposed
+  /**
+   * The part of its words the agent tells of, as the chat says it: its title or its preview, lit in
+   * the agent's violet round the words, which keep their contrast; its body, which the chat shows,
+   * lighting nothing here (HEX-120).
+   */
+  told?: ToldPart
 }
 
 const unseenSaid: Record<Exclude<By, 'human'>, () => string> = {
@@ -45,7 +53,7 @@ const proposedSaid: Record<Proposed, () => string> = {
 /**
  * What lasts of a mark, in words, for its hover card's note, in the colour of who it tells of, and a
  * screen reader: the agent working here, then what changed it or what is proposed. A light that
- * passes, the chat pointing or a glint, says nothing: the chat already says it.
+ * passes, the chat pointing, a glint or a part told, says nothing: the chat already says it.
  */
 export function markNote(mark: TileMark | undefined): CardNote | undefined {
   if (mark === undefined) return undefined
