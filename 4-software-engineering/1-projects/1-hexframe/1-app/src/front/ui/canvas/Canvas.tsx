@@ -142,20 +142,14 @@ interface CanvasProps {
 }
 
 export function Canvas(props: CanvasProps) {
-  const { system, view, onViewChange, emptySlots, move, writes, marks, onCarry } = props
+  const { system, view, onViewChange, emptySlots, move, writes, marks, onCarry, lets } = props
   const acting: CanvasActing | undefined =
     props.acting ??
     (props.looking === true
       ? { tile: (hex) => lookingAt(system, hex, lookOf(hex)), slot: () => undefined }
       : undefined)
   const finger = useFinger()
-  const { state, actions } = useCanvasState({
-    system,
-    view,
-    onViewChange,
-    finger,
-    lets: props.lets,
-  })
+  const { state, actions } = useCanvasState({ system, view, onViewChange, finger, lets })
   const svg = useRef<SVGSVGElement>(null)
   const scale = useScale(svg, canvasSize)
   const { width, height } = canvasSize

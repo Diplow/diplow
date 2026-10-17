@@ -7,9 +7,9 @@
 // view live in the search params, so a link shows what its sender saw, and a Message's link in the
 // Conversation centers the canvas, as on home. What ui/ can't reach the route hands it: the
 // features' specimens, the Conversation, the breadcrumb and Help, Mapping's limit on a Preview,
-// IAM's rule for a Key's name, the timeline's words for a navigation, and Assistant's rule for
-// where a Turn works (HEX-108). The Screen's specimens are drawn here, since they show the
-// breadcrumb and Help.
+// IAM's rule for a Key's name, the timeline's words for a navigation, Assistant's rule for where a
+// Turn works (HEX-108), and the tutorial, which the onboarding's invitation journeys to (HEX-119).
+// The Screen's specimens are drawn here, since they show the breadcrumb and Help.
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 
@@ -151,7 +151,7 @@ function Slide({ slide, piece, view, onViewChange, onCenter, onGo }: SlideProps)
     case 'canvas':
       return <CanvasSlide view={view} onViewChange={onViewChange} onGo={onGo} />
     case 'onboarding':
-      return <OnboardingSlide onGo={onGo} />
+      return <OnboardingTour onGo={onGo} />
     case 'crossings':
       return <CrossingSlide piece={piece} onGo={onGo} />
     case 'tokens':
@@ -350,6 +350,16 @@ const tell = tellIn(ulysse)
  * link picked written by its Tile's id (`encoded`), then Assistant's own rule (`turnLocation`).
  */
 const where: Where = ({ value, links }, center) => turnLocation(encoded(value, links), center)
+
+/**
+ * The onboarding, played on into the journey its invitation takes, to the tutorial, read in the
+ * page's language as home reads it, beside the slide, never throwing.
+ */
+function OnboardingTour({ onGo }: { onGo: Go }) {
+  const { data } = useShipped('tutorial', getLocale(), { throwing: false })
+  const tutorial = useMemo(() => (data === undefined ? undefined : canvasTree(data)), [data])
+  return <OnboardingSlide onGo={onGo} tutorial={tutorial} />
+}
 
 /** The help widget's section, on Help itself, read in the page's language as `/help` reads it. */
 function HelpGallery() {

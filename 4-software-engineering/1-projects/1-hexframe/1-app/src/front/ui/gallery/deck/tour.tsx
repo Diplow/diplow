@@ -2,8 +2,8 @@
 // words about the chat, its two voices drawn as the chat draws them, its curve and what it lacks; on
 // the canvas's, the first tile, alone and large, whose six tell what the canvas is, in the reader's
 // language, read at render; and on the onboarding's, a new account's first visit, played on the
-// whole screen as home plays it, into the agent's invitation to a first command, from the start
-// again at will.
+// whole screen as home plays it, into the agent's invitation to a first command and the journey it
+// takes to the tutorial, from the start again at will.
 import { RotateCcw } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 
@@ -11,6 +11,7 @@ import { m } from '#/paraglide/messages'
 
 import { Act } from '../../atoms/controls/act'
 import { Canvas } from '../../canvas/Canvas'
+import { Journey } from '../../canvas/layouts/Journey'
 import { Rail } from '../../canvas/layouts/Rail'
 import { directionName } from '../../canvas/tile/menu/verbs'
 import { directions } from '../../canvas/geometry/geometry'
@@ -151,22 +152,35 @@ export function canvasTour(): TileNode {
   }
 }
 
+interface OnboardingSlideProps {
+  onGo: Go
+  /**
+   * The tutorial's Tiles as home's canvas draws them, in the reader's language, which the route reads;
+   * none while they are read, the invitation's click then saying what it does.
+   */
+  tutorial?: TileNode | undefined
+}
+
 /**
  * The onboarding, a new account's first visit, on the whole screen as home plays it
  * (`routes/index.tsx`, `features/system/widget/`), on the same pieces: the chat asking the pseudo
  * alone, its composer held back, the corner's mark alone, the untitled root its lamp, the pseudo
  * showing on it as it is typed; then, taken, the dawn, from the corner down, its receipt saying it
  * alone, as home's timeline leaves it to the receipt, and, once the composer rose, the agent's line
- * inviting the first command, `/tutorial` (`features/conversation/`'s `ChatInvitation`), whose
- * click says here what it does on home, the journey being HEX-119's. Played again from the start at
- * will, the page landing anew. What changes on home's onboarding changes here too.
+ * inviting the first command, `/tutorial` (`features/conversation/`'s `ChatInvitation`), whose click
+ * takes the journey to the tutorial's center, alone and large, the corner naming it, nothing on it
+ * answering and the composer held back, as the tutorial's rules have it at its arrival
+ * (`features/shipped/tutorial/rules.ts`), the corner's mark carrying the canvas back to the root.
+ * Played again from the start at will, the page landing anew. What changes on home's onboarding and
+ * its journey changes here too.
  */
-export function OnboardingSlide({ onGo }: { onGo: Go }) {
+export function OnboardingSlide({ onGo, tutorial }: OnboardingSlideProps) {
   const [play, setPlay] = useState(0)
   return (
     <FirstVisit
       key={play}
       onGo={onGo}
+      tutorial={tutorial}
       onAgain={() => {
         setPlay(play + 1)
       }}
@@ -198,14 +212,26 @@ function rootOf(typed: string, named: Named | undefined): TileNode {
   }
 }
 
-/** One play of the onboarding, from the page landing. */
-function FirstVisit({ onGo, onAgain }: { onGo: Go; onAgain: () => void }) {
+interface FirstVisitProps {
+  onGo: Go
+  tutorial: TileNode | undefined
+  onAgain: () => void
+}
+
+/** Nothing on the tutorial's canvas answers at its arrival: no click, no going in. */
+const arrival = () => ({ click: false, goIn: false })
+
+/** One play of the onboarding, from the page landing, into the journey to the tutorial and back. */
+function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
   const [typed, setTyped] = useState('')
   const [named, setNamed] = useState<Named>()
   const [view, setView] = useState<CanvasView>({})
   // Each thing done, which the mark turns whole at, as home's does: the pseudo taken, each gesture.
   const [done, setDone] = useState(0)
+  // The tutorial reached by its command, the canvas its own until the corner's mark brings it back.
+  const [away, setAway] = useState(false)
   const system = rootOf(typed, named)
+  const there = away ? tutorial : undefined
   const went = (next: CanvasView) => {
     setView(next)
     setDone(done + 1)
@@ -213,31 +239,61 @@ function FirstVisit({ onGo, onAgain }: { onGo: Go; onAgain: () => void }) {
   const center = (id: string) => {
     went(centerOn(system, id))
   }
+  // As home's: the tutorial at its Root, the root's view set aside; back, the root alone.
+  const travel = (to: boolean) => {
+    setAway(to)
+    setView({})
+    setDone(done + 1)
+  }
   return (
     <ScreenSlide
       slide="onboarding"
       onGo={onGo}
       lines={<Again onAgain={onAgain} />}
       canvas={
-        <div className="flex min-w-0 flex-1 flex-col gap-3 p-4">
-          <Canvas
-            system={system}
-            view={view}
-            onViewChange={went}
-            looking
-            className="min-h-0 flex-1"
-          />
-        </div>
+        <Journey at={there === undefined ? 'home' : 'tutorial'}>
+          <div className="flex min-w-0 flex-1 flex-col gap-3 p-4">
+            {there === undefined ? (
+              <Canvas
+                system={system}
+                view={view}
+                onViewChange={went}
+                looking
+                className="min-h-0 flex-1"
+              />
+            ) : (
+              <Canvas
+                system={there}
+                view={{}}
+                onViewChange={() => undefined}
+                lets={arrival}
+                className="min-h-0 flex-1"
+              />
+            )}
+          </div>
+        </Journey>
       }
       corner={
-        // The mark alone until the pseudo is taken, then the path coming down from it.
-        <Rail
-          steps={named === undefined ? [] : pathTo(system, showView(system, view).center.id)}
-          onSelect={center}
-          turns={done}
-        />
+        // The mark alone until the pseudo is taken, then the path coming down from it; in the
+        // tutorial, its center named, the mark the way back.
+        there === undefined ? (
+          <Rail
+            steps={named === undefined ? [] : pathTo(system, showView(system, view).center.id)}
+            onSelect={center}
+            turns={done}
+          />
+        ) : (
+          <Rail
+            steps={pathTo(there, there.id)}
+            onSelect={() => undefined}
+            turns={done}
+            onHome={() => {
+              travel(false)
+            }}
+          />
+        )
       }
-      composerAway={named === undefined}
+      composerAway={named === undefined || there !== undefined}
       foot={
         // As home's chat: the tile widget, which goes from question to receipt, one widget so the
         // focus goes along; the timeline leaves the pseudo taken to the receipt.
@@ -270,7 +326,13 @@ function FirstVisit({ onGo, onAgain }: { onGo: Go; onAgain: () => void }) {
             />
             <Message
               voice="agent"
-              words={tutorialInvitation(said(m.composer_command_tutorial_does()))}
+              words={tutorialInvitation(
+                tutorial === undefined
+                  ? said(m.composer_command_tutorial_does())
+                  : () => {
+                      travel(true)
+                    },
+              )}
               dawning
             />
           </>
