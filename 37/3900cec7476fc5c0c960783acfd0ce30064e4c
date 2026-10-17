@@ -1,0 +1,69 @@
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_7b92c93552a78d::t_658001625c0441 592-593,636,906-907
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/Tile.tsx
+  s_7b92c93552a78d::t_421bfbcde00909 9-11,60-61,67,136-140,252-254,304,370-375,379,384-386,391,478-479,482,517,519-524
+  s_7b92c93552a78d::t_e2faa245408c3c 518
+  s_7b92c93552a78d::t_b51d7aeb5f36ac 525-526
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/tutorial/rules.ts
+  s_7b92c93552a78d::t_0ae00c0301e1ba 3-10,13,25,32,43-48,50-60,62-65,68-72,74-75,80,86,88
+  s_7b92c93552a78d::t_62ffafc4e67cc2 11,34-35,49,61,78
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/useCanvasState.ts
+  s_7b92c93552a78d::t_4c5af9935de80e 51-59,63,65-69
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/search.ts
+  s_7b92c93552a78d::t_6997700a1744a9 19
+  s_7b92c93552a78d::t_ddcc670dbd63d3 106-107,111,115
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/deck/tour.tsx
+  s_7b92c93552a78d::t_8cb3b702a31310 6-7,25,159-160,162,165,167-175,178,183-184,197-199,243,254-255,257,260-263,275,286,297-301,320,329
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_7b92c93552a78d::t_4d06ff849c3b28 358-359
+  s_7b92c93552a78d::t_e84c38d8a4efa0 425
+  s_7b92c93552a78d::t_658001625c0441 35
+  s_7b92c93552a78d::t_8cb3b702a31310 367
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/gallery.tsx
+  s_7b92c93552a78d::t_045aa0825d533f 1-47
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_7b92c93552a78d::t_658001625c0441 592-593,636,906-907
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/Canvas.tsx
+  s_7b92c93552a78d::t_a777ab3bc0f406 161-162,313-319
+  s_7b92c93552a78d::t_e9b96a22839f46 14-15,39,125-126,128,135-140,211-212,321-324
+  s_7b92c93552a78d::t_4b8975ed1ae0e3 52
+  s_7b92c93552a78d::t_fc94ab599fdad0 320,325
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/search.test.ts
+  s_7b92c93552a78d::t_52dda4f09f75bb 170-176
+  s_7b92c93552a78d::t_32137b87e5dc2d 3-4
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/tutorial/rules.test.ts
+  s_7b92c93552a78d::t_b6ce4f3c41c7f8 4,8-9,14-15,21-22,30-33,40,44-53,56,59-96
+  s_7b92c93552a78d::t_ecbd2c55f01ef3 34-39
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/hexes.tsx
+  s_7b92c93552a78d::t_9d6a7fb9a1dbfc 31-32,58-60,62-67,73-74,76,168
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/Shipped.tsx
+  s_7b92c93552a78d::t_ddcc670dbd63d3 5-6,36-38,48
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/Tokens.tsx
+  s_7b92c93552a78d::t_94a2c096a6cfab 57
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/menu/TileMenu.tsx
+  s_7b92c93552a78d::t_9d6a7fb9a1dbfc 76-80,93,103
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_7b92c93552a78d::t_04335836ebf365 248-249
+  s_7b92c93552a78d::t_ef5b058763f321 31-33
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/gallery.tsx
+  s_7b92c93552a78d::t_e84c38d8a4efa0 222-227
+  s_7b92c93552a78d::t_7dd8e67709b7e5 221
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/styles.css
+  s_7b92c93552a78d::t_9b6e395d94ea27 352
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "373900cec7476fc5c0c960783acfd0ce30064e4c",
+  "prompts": {},
+  "sessions": {
+    "s_7b92c93552a78d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "df1e2743-42cd-4ee5-8710-130ad5db0a14",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
