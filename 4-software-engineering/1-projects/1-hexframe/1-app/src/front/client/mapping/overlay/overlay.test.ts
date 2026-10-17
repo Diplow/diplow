@@ -85,9 +85,10 @@ const servedWith = (...tiles: ReadonlyArray<PlacedTile>): System => ({
   tiles: { ...served.tiles, ...Object.fromEntries(tiles.map((tile) => [tile.id, tile])) },
 })
 
-/** The System's stand-in answers `system` from now on. */
+/** The System's stand-in answers `system` from now on, read by its owner: no gap. */
 function serving(system: System) {
-  vi.mocked(Mapping.system).mockImplementation(() => Promise.resolve({ ok: true, value: system }))
+  const seen = { ...system, rights: {}, gaps: [] }
+  vi.mocked(Mapping.system).mockImplementation(() => Promise.resolve({ ok: true, value: seen }))
 }
 
 /** A promise the case settles when it chooses, as a slow server would. */

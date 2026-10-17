@@ -157,6 +157,11 @@ export class Tiles extends Context.Service<
      */
     readonly ownerOf: (star: string) => Effect.Effect<string | undefined>
     /**
+     * The id of the Root of the System holding the row of this id, its star, `undefined` when no row
+     * has it: what names the System a read from one Tile reaches.
+     */
+    readonly starHolding: (id: string) => Effect.Effect<string | undefined>
+    /**
      * The row of this id in the owner's System, then the rows below it, `depth` generations down,
      * one query per generation, that row and the rows below each with only the content columns
      * asked of them. `undefined` when the System holds no row of this id.
@@ -229,6 +234,9 @@ const columns = {
 
 /** The rows standing under another, for a row to find what lies below it. */
 const under = alias(tile, 'under')
+
+/** The Root of the System a row is of, for a row to find its star. */
+const star = alias(tile, 'star')
 
 /** A query that only holds inside a transaction: it requires one, so it runs in no other. */
 const inTransaction = <A, E>(query: Effect.Effect<A, E>) => InTransaction.use(() => query)
@@ -315,7 +323,7 @@ function idsOf(rows: ReadonlyArray<BatchRow>) {
   return { ids, placed }
 }
 
-/** A System's star, the id of its owner's Root, and the owner a star names. */
+/** A System's star, the id of its owner's Root, the owner a star names, and the star a row is of. */
 const starsOf = (database: Database['Service']) => {
   const rootId = (owner: string) =>
     database
@@ -355,6 +363,16 @@ const starsOf = (database: Database['Service']) => {
         .pipe(
           Effect.orDie,
           Effect.map(([found]) => found?.ownerId),
+        ),
+    starHolding: (id: string) =>
+      database
+        .select({ id: star.id })
+        .from(tile)
+        .innerJoin(star, and(eq(star.ownerId, tile.ownerId), isNull(star.parentId)))
+        .where(eq(tile.id, id))
+        .pipe(
+          Effect.orDie,
+          Effect.map(([found]) => found?.id),
         ),
   }
 }
