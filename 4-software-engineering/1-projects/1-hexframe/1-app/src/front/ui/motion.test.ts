@@ -2,11 +2,21 @@
 import { act as settled, cleanup, renderHook } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { durationOf, easingOf, movingFor, toldUpTo, useBeats, useTold } from './motion'
+import {
+  aroundUpTo,
+  durationOf,
+  easingOf,
+  movingFor,
+  toldUpTo,
+  useAround,
+  useBeats,
+  useTold,
+} from './motion'
 
 // A motion's duration read from its token on the page: in ms or in s, none where it is unset or no
 // number, and none for what moves under reduced motion, while a light that only fades keeps its own;
-// and the beats of a play, one every `--stagger-beat`, as long with reduced motion.
+// and the beats of a play, one every `--stagger-beat`, as long with reduced motion; and a tile's six
+// as they land around it, lit until a flare after the last, and what the agent says of them.
 
 const root = document.documentElement.style
 
@@ -21,6 +31,9 @@ afterEach(() => {
   vi.unstubAllGlobals()
   root.removeProperty('--duration-fold')
   root.removeProperty('--stagger-beat')
+  for (const token of ['--duration-bloom', '--stagger-step', '--duration-flare']) {
+    root.removeProperty(token)
+  }
 })
 
 describe('durationOf', () => {
@@ -166,5 +179,81 @@ describe('toldUpTo', () => {
     expect(toldUpTo(undefined)).toEqual([])
     expect(toldUpTo('preview')).toEqual(['title', 'preview'])
     expect(toldUpTo('body')).toEqual(['title', 'preview', 'body'])
+  })
+})
+
+describe('useAround', () => {
+  /** A tile's six around it, or not, on the page's tokens. */
+  function around(on: boolean) {
+    vi.useFakeTimers()
+    root.setProperty('--duration-bloom', '800ms')
+    root.setProperty('--stagger-step', '280ms')
+    root.setProperty('--duration-flare', '1.3s')
+    root.setProperty('--stagger-beat', '2s')
+    return renderHook((props: { on: boolean }) => useAround(props.on), { initialProps: { on } })
+  }
+
+  /** The clock moved on by `ms`. */
+  function after(ms: number) {
+    settled(() => {
+      vi.advanceTimersByTime(ms)
+    })
+  }
+
+  it('lands the six one by one, a step apart after the first bloom, then lets their light fade', () => {
+    reduced(false)
+    const { result } = around(true)
+    expect(result.current.landed).toBe(0)
+    after(800)
+    expect(result.current.landed).toBe(1)
+    after(280)
+    expect(result.current.landed).toBe(2)
+    after(280 * 4)
+    expect(result.current.landed).toBe(6)
+    after(1299)
+    expect(result.current.landed).toBe(6)
+    after(1)
+    expect(result.current.landed).toBe(0)
+  })
+
+  it('lands them all at once under reduced motion, their light fading as long', () => {
+    reduced(true)
+    const { result } = around(true)
+    after(0)
+    expect(result.current.landed).toBe(6)
+    after(1300)
+    expect(result.current.landed).toBe(0)
+  })
+
+  it('says they are the same six, then that yours is waiting, a beat apart', () => {
+    reduced(false)
+    const { result } = around(true)
+    expect(result.current.said).toBeUndefined()
+    after(2000)
+    expect(result.current.said).toBe('same')
+    after(2000)
+    expect(result.current.said).toBe('yours')
+  })
+
+  it('lands nothing and says nothing while the six are not around, and starts again anew', () => {
+    reduced(false)
+    const { result, rerender } = around(false)
+    after(10_000)
+    expect(result.current).toEqual({ landed: 0, said: undefined })
+    rerender({ on: true })
+    after(4000)
+    rerender({ on: false })
+    expect(result.current).toEqual({ landed: 0, said: undefined })
+    rerender({ on: true })
+    after(800)
+    expect(result.current).toEqual({ landed: 1, said: undefined })
+  })
+})
+
+describe('aroundUpTo', () => {
+  it('lists what was said around a tile so far, in turn, none before the first', () => {
+    expect(aroundUpTo(undefined)).toEqual([])
+    expect(aroundUpTo('same')).toEqual(['same'])
+    expect(aroundUpTo('yours')).toEqual(['same', 'yours'])
   })
 })
