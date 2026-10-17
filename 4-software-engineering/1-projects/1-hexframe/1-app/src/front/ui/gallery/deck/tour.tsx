@@ -13,7 +13,7 @@ import { Act } from '../../atoms/controls/act'
 import { Canvas } from '../../canvas/Canvas'
 import { Journey } from '../../canvas/layouts/Journey'
 import { Rail } from '../../canvas/layouts/Rail'
-import type { TileHex, TileLets } from '../../canvas/state/useCanvasState'
+import type { CanvasRules } from '../../canvas/state/useCanvasState'
 import { directionName } from '../../canvas/tile/menu/verbs'
 import { directions } from '../../canvas/geometry/geometry'
 import { pathTo, type TileNode } from '../../canvas/view/tiles'
@@ -158,12 +158,9 @@ export function canvasTour(): TileNode {
  * reach the feature that rules it (`features/shipped/tutorial/rules.ts`): its Tiles in the reader's
  * language, the view its rules show, and what they let through, on the canvas and to the composer.
  */
-interface TutorialArrival {
+interface TutorialArrival extends CanvasRules {
   system: TileNode
-  view: CanvasView
-  /** Each Tile's menu, beside its hover card. */
-  looking: boolean
-  lets: (hex: TileHex) => TileLets
+  /** The composer, held back while it is not let through. */
   composer: boolean
 }
 

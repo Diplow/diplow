@@ -47,6 +47,16 @@ export interface TileLets {
   recenter: boolean
 }
 
+/**
+ * A canvas with rules of its own, the tutorial's, as its caller hands them on: the view it shows,
+ * each Tile's menu, the view's lines alone (`looking`), and what each Tile lets through.
+ */
+export interface CanvasRules {
+  view: CanvasView
+  looking: boolean
+  lets: (hex: TileHex) => TileLets
+}
+
 /** Every gesture let through, as on any canvas whose caller holds none back. */
 const everything: TileLets = { click: true, recenter: true }
 

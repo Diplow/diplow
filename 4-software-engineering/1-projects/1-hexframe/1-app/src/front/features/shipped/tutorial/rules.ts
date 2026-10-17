@@ -4,17 +4,15 @@
 // the step follows from the view alone. For now the tutorial has one step, its arrival, its center
 // alone and large, which lets nothing through; each later step lifts exactly what it introduces
 // ("hexframe app: Tutorial" in Linear). Pure.
-import type { TileHex, TileLets } from '#/front/ui/canvas/state/useCanvasState'
+import type { CanvasRules } from '#/front/ui/canvas/state/useCanvasState'
 import type { CanvasView } from '#/front/ui/canvas/view/view'
 
-/** What the tutorial shows and lets through, on a view asked for, as the canvas and the chat take it. */
-export interface TutorialRules {
-  /** The view the tutorial shows: the one asked for, less what isn't introduced yet. */
-  view: CanvasView
-  /** Each Tile's menu, the view's lines alone, beside its hover card. */
-  looking: boolean
-  /** What each Tile answers: the center's click, moving the center. */
-  lets: (hex: TileHex) => TileLets
+/**
+ * What the tutorial shows and lets through, on a view asked for, as the canvas and the chat take it:
+ * the canvas's rules, the view it shows the one asked for less what isn't introduced yet, and the
+ * composer.
+ */
+export interface TutorialRules extends CanvasRules {
   /** The composer, at the chat's foot: held back meanwhile, as during the onboarding. */
   composer: boolean
 }
