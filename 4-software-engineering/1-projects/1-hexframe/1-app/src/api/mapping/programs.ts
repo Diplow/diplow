@@ -52,42 +52,40 @@ const forAccount = <A, E, R>(operation: (acting: Mapping.Acting) => Effect.Effec
   )
 
 /**
- * Runs a read for the signed-in Account on the System this star names, its own when none is named,
+ * Runs a read for the signed-in Account on the System the star `named` answers names, its own when
+ * it answers none, looked up once the request is proven signed in, so nothing is looked up for a
+ * request nothing proves,
  * Mapping deciding what the Account may read there. A Turn's Key reads the System its Turn started in
  * alone, its Account's own, whatever else the Account may read: another it names is `TileNotFound`,
  * as a Tile Mapping keeps from it is.
  */
-const onSystem = <A, E, R>(
-  named: string | undefined,
+const onSystem = <A, E, R, N, R2>(
+  named: (signed: Iam.SignedIn) => Effect.Effect<string | undefined, N, R2>,
   operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>,
 ) =>
-  Effect.flatMap(Iam.signedIn, ({ account, by }) =>
+  Effect.flatMap(Iam.signedIn, (signed) =>
     Effect.flatMap(
-      actingOnOwn(account.id, { session: by._tag === 'Session' }),
-      (own): Effect.Effect<A, E | TileNotFound, R> => {
-        if (named === undefined || named === own.system) return operation(own)
-        if (by._tag === 'TurnKey') return Effect.fail(new TileNotFound())
-        return operation({ ...own, system: named })
+      Effect.all([
+        actingOnOwn(signed.account.id, { session: signed.by._tag === 'Session' }),
+        named(signed),
+      ]),
+      ([own, star]): Effect.Effect<A, E | TileNotFound, R> => {
+        if (star === undefined || star === own.system) return operation(own)
+        if (signed.by._tag === 'TurnKey') return Effect.fail(new TileNotFound())
+        return operation({ ...own, system: star })
       },
     ),
   )
 
 /**
- * Runs a read from one Tile for the signed-in Account, once it is, on the System holding it (`Mapping.holding`),
+ * Runs a read from one Tile for the signed-in Account on the System holding it (`Mapping.holding`),
  * its own when no id is given, or for an id no System holds, a shipped System's included, which
  * Mapping reads by its id alone (`onSystem`).
  */
 const fromTile = <A, E, R>(
   id: string | undefined,
   operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>,
-) =>
-  // Signed in first, so a request nothing proves looks up no Tile.
-  Effect.andThen(
-    Iam.signedIn,
-    Effect.flatMap(id === undefined ? Effect.succeed(undefined) : Mapping.holding(id), (named) =>
-      onSystem(named, operation),
-    ),
-  )
+) => onSystem(() => (id === undefined ? Effect.succeed(undefined) : Mapping.holding(id)), operation)
 
 /** Runs a change for the signed-in Account, in one transaction: it commits whole, or not at all. */
 const changeForAccount = <A, E, R>(operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>) =>
@@ -98,7 +96,8 @@ const changeForAccount = <A, E, R>(operation: (acting: Mapping.Acting) => Effect
  * star's card; its own when none is named, its Root, the user, and every Tile and Reference below it
  * by id.
  */
-export const systemAt = (star: string | undefined) => onSystem(star, Mapping.system)
+export const systemAt = (star: string | undefined) =>
+  onSystem(() => Effect.succeed(star), Mapping.system)
 
 /** The Account's own System, flat, whole: its Root, the user, and every Tile and Reference below it. */
 export const system = systemAt(undefined)

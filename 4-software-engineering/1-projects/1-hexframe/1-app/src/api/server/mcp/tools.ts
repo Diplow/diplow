@@ -109,7 +109,8 @@ const openTile = read({
   name: 'open_tile',
   kind: 'read',
   description:
-    "Opens one Tile of the user's System: what it says (its Title, Preview and Body, or only the " +
+    "Opens one Tile of the user's System, or of a System its owner lets the user read: what " +
+    'it says (its Title, Preview and Body, or only the ' +
     'fields asked), its parent, and its Children and Context, each with its Title and Preview only. ' +
     'Without an id, opens the Root, which is the user. Read a System as its author laid it out: ' +
     "open a Tile, read its Children's Previews, then open only the ones that matter to your task. " +
@@ -128,7 +129,8 @@ const map = read({
   name: 'map',
   kind: 'read',
   description:
-    "Maps the user's System, or Help, below a Tile, the Root when no id is given, several generations at " +
+    "Maps the user's System, another its owner lets the user read, or Help, below a Tile, the " +
+    'Root when no id is given, several generations at ' +
     'once: depth 0 to 3, 2 when not given, each Tile with its Title and Preview. Use it to find ' +
     'where something lives, then open_tile what matters; ask for body only when you need every ' +
     'Body below, since it costs far more. ' +

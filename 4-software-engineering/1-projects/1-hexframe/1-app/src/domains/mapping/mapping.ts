@@ -40,8 +40,9 @@ import {
   type ReadTile,
   carded,
   rowDirection,
-  seeing,
   seenBy,
+  shownRow,
+  sightOf,
   sharingOf,
   showing,
   type System,
@@ -69,7 +70,6 @@ import {
   fold,
   type MappingEvent,
   type MoveTile,
-  may,
   type Operation,
   type OperationEvent,
   summariesIn,
@@ -145,9 +145,7 @@ const reading = ({ actor, system }: Acting) =>
       [Tiles.use((tiles) => tiles.places(owner)), grantsIn(owner)],
       { concurrency: 'unbounded' },
     )
-    const sharing = sharingOf(owner, lineageFrom(places), grants)
-    const reads = (id: string) => may(actor, sharing, id, 'read')
-    return { owner, reads, shows: seeing(system, reads) }
+    return { owner, ...sightOf(actor, sharingOf(owner, lineageFrom(places), grants), system) }
   })
 
 /**
@@ -323,9 +321,7 @@ const findOwn = <O extends Field, F extends Field>(
       const opened = reads(from) ? found.opened : carded(found.opened)
       // What the actor may not read is left out, and what stands below it with it, and a Reference
       // to a Tile they may not read, whose id would tell of it.
-      const below = found.below.filter(
-        ({ id, target }) => reads(id) && (target === null || shows(target)),
-      )
+      const below = found.below.filter((row) => shownRow(row, { reads, shows }))
       const targets = below.flatMap(({ target }) => (target === null ? [] : [target]))
       const parentIds = opened.parentId === null || !shows(opened.parentId) ? [] : [opened.parentId]
       const [parents, pointedAt] = yield* Effect.all(

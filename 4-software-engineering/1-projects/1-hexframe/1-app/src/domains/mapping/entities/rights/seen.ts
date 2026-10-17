@@ -42,14 +42,32 @@ export const carded = <C extends object>(found: C): C => ({
 export const cardOf = ({ id, title, preview, body, version }: FoundTile): FoundTile =>
   carded({ _tag: 'Tile', id, title, preview, body, version })
 
+/** What an actor may read of a System, by id, and what they are shown. */
+export interface Sight {
+  readonly reads: (id: string) => boolean
+  readonly shows: (id: string) => boolean
+}
+
 /**
- * What an actor is shown of a System, by id, from what they may read: that, and the star, whose card
- * anyone sees.
+ * What an actor may read of a System, from the Grants its Tiles carry, every Tile for its owner; and
+ * what they are shown (`shows`): what they may read, and the star, whose card anyone sees. The one
+ * reading of it, which the System's read (`seenBy`) and every read from one Tile share.
  */
-export const seeing =
-  (star: string, reads: (id: string) => boolean) =>
-  (id: string): boolean =>
-    id === star || reads(id)
+export function sightOf(actor: Actor, sharing: Sharing, star: string): Sight {
+  if (owns(actor, sharing.owner)) return { reads: () => true, shows: () => true }
+  const reads = (id: string) => rightsOn(actor, sharing, id).has('read')
+  return { reads, shows: (id) => id === star || reads(id) }
+}
+
+/**
+ * Whether a row an actor may come upon is shown them, where its parent is: when they may read it,
+ * and, a Reference, the Tile it points at, or the star, since its id would tell of a Tile kept from
+ * them otherwise.
+ */
+export const shownRow = (
+  { id, target }: { readonly id: string; readonly target: string | null },
+  { reads, shows }: Sight,
+) => reads(id) && (target === null || shows(target))
 
 /** How the actor sees one Tile or Reference below the star. */
 type Shown =
@@ -63,13 +81,10 @@ type Shown =
  * they see; else, a Tile under one they may not read, a gap, with no place; a Reference there means
  * nothing without the Tile holding it, and is hidden.
  */
-function shownOf(
-  held: PlacedTile | PlacedReference,
-  { reads, shows }: { reads: (id: string) => boolean; shows: (id: string) => boolean },
-): Shown {
-  if (!reads(held.id)) return { as: 'hidden' }
-  if (held._tag === 'Reference' && !shows(held.target)) return { as: 'hidden' }
-  if (shows(held.parent)) return { as: 'placed', held }
+function shownOf(held: PlacedTile | PlacedReference, sight: Sight): Shown {
+  const target = held._tag === 'Reference' ? held.target : null
+  if (!shownRow({ id: held.id, target }, sight)) return { as: 'hidden' }
+  if (sight.shows(held.parent)) return { as: 'placed', held }
   if (held._tag === 'Reference') return { as: 'hidden' }
   return { as: 'gap', tile: Struct.omit(held, ['parent', 'slot']) }
 }
@@ -92,12 +107,11 @@ export function seenBy(actor: Actor, system: System, sharing: Sharing): Seen {
     )
     return { ...system, rights: Object.fromEntries(every), gaps: {} }
   }
-  const reads = (id: string) => rightsOn(actor, sharing, id).has('read')
-  const shows = seeing(star, reads)
+  const sight = sightOf(actor, sharing, star)
   const tiles: Record<string, PlacedTile | PlacedReference> = {}
   const gaps: Record<string, FoundTile> = {}
   for (const held of Object.values(system.tiles)) {
-    const shown = shownOf(held, { reads, shows })
+    const shown = shownOf(held, sight)
     if (shown.as === 'placed') tiles[held.id] = shown.held
     if (shown.as === 'gap') gaps[held.id] = shown.tile
   }
@@ -105,7 +119,7 @@ export function seenBy(actor: Actor, system: System, sharing: Sharing): Seen {
   const rights = seen.map((id) => [id, [...rightsOn(actor, sharing, id)]] as const)
   return {
     ...system,
-    root: reads(star) ? system.root : cardOf(system.root),
+    root: sight.reads(star) ? system.root : cardOf(system.root),
     tiles,
     version: 0,
     rights: Object.fromEntries(rights),
