@@ -16,4 +16,6 @@ A seam is one file a library sits behind, so swapping the library changes that f
 | `Markdown.tsx` | The seam for a Tile's content, holding for now `CodeBlock`, text shown as written, which a Leaf that isn't Markdown shows its Body in: the Markdown renderer, when a Body is rendered, comes in here |
 | `gallery.tsx` | `SeamsGallery`, `CodeBlock` on `/design-system` |
 
+Until the Markdown renderer comes, one piece of Markdown is read outside this seam: a numbered list in the agent's words, which `blocksOf` (`chat/text/words.tsx`) gathers into a list, so the tutorial's body, told in the chat, shows its six steps as one (HEX-120, `hexframe-app-tutorial/decisions.md#DEC-11`). It reads no library, only the lines that open with a number and a dot; the renderer, once here, replaces it.
+
 The hotkeys seam STACK.md names for TanStack Hotkeys comes here too, with the first shortcut.

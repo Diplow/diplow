@@ -21,9 +21,8 @@ import { pathTo, type TileNode } from '../../canvas/view/tiles'
 import { centerOn, showView, type CanvasView } from '../../canvas/view/view'
 import { said } from '../../chat/samples'
 import { tutorialInvitation } from '../../chat/composer/commands'
-import { Message, Told, toldInTurn, type ToldPart } from '../../chat/text/Message'
+import { Message, Told, useTold, type ToldPart } from '../../chat/text/Message'
 import { TileWidget } from '../../chat/widgets/tile/TileWidget'
-import { useBeats } from '../../motion'
 import { ScreenSlide, type Go } from './Deck'
 
 /** The canvas, while the chat is told: what a chat is for, in words. */
@@ -247,7 +246,7 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
   const system = rootOf(typed, named)
   const there = away ? tutorial : undefined
   // Arrived, what the agent has told of the center's words, a beat at a time, as on home.
-  const told = toldInTurn[useBeats(toldInTurn.length, there?.tells === true) - 1]
+  const told = useTold(there?.tells === true)
   const went = (next: CanvasView) => {
     setView(next)
     setDone(done + 1)
@@ -361,12 +360,9 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
   )
 }
 
-/**
- * The part of the tutorial's center's words the agent tells of, lit on its canvas as on home's, its
- * title or its preview; its body goes to the chat.
- */
+/** The part of the tutorial's center's words the agent tells of, on its canvas as on home's. */
 function toldOn(there: TutorialArrival, told: ToldPart | undefined): CanvasMarks | undefined {
-  if (told === undefined || told === 'body') return undefined
+  if (told === undefined) return undefined
   const center = showView(there.system, there.view).center.id
   return { tile: (id) => (id === center ? { told } : undefined) }
 }

@@ -16,6 +16,7 @@ import { m } from '#/paraglide/messages'
 import { Act } from '../../atoms/controls/act'
 import { toast } from '../../atoms/Toaster'
 import { runsToCurve, toCurve, toCurveHolding } from '../../layouts/screen/state/useAlongCurve'
+import { useBeats } from '../../motion'
 import { Dawn } from '../atoms/dawn'
 import { HexMark } from '../atoms/hex'
 import type { Voice } from './Mention'
@@ -131,8 +132,14 @@ function Blocks({ words }: { words: Words }) {
         <Said words={block.line} voice="agent" />
       </span>
     ) : (
-      // Its marks drawn as its numbers are, so a list keeps its role where its style removes it.
-      <ol key={index} role="list" className="grid list-none">
+      // Its marks drawn as its numbers are, so a list keeps its role where its style removes it, and
+      // starts where its first number does, as a screen reader counts it.
+      <ol
+        key={index}
+        role="list"
+        start={Number(block.list[0]?.number ?? 1)}
+        className="grid list-none"
+      >
         {block.list.map((item, at) => (
           <li
             key={at}
@@ -237,7 +244,7 @@ function Copies({ words, copies = true, busy, className, children }: CopiesProps
 }
 
 /** What the agent tells of a tile, one at each beat: its title, its preview, then its body. */
-export const toldInTurn = ['title', 'preview', 'body'] as const
+const toldInTurn = ['title', 'preview', 'body'] as const
 
 export type ToldPart = (typeof toldInTurn)[number]
 
@@ -246,6 +253,18 @@ const toldSaid: Record<ToldPart, () => string> = {
   title: m.chat_told_title,
   preview: m.chat_told_preview,
   body: m.chat_told_body,
+}
+
+/**
+ * What the agent has told of a tile so far, a beat at a time while `telling` (`useBeats`), from the
+ * start each time it tells anew; `onTold` hears each part as it comes.
+ */
+export function useTold(telling: boolean, onTold?: (part: ToldPart) => void): ToldPart | undefined {
+  const beat = useBeats(toldInTurn.length, telling, (reached) => {
+    const part = toldInTurn[reached - 1]
+    if (part !== undefined) onTold?.(part)
+  })
+  return toldInTurn[beat - 1]
 }
 
 interface ToldProps {
@@ -261,8 +280,8 @@ interface ToldProps {
  * (HEX-120). A screen reader hears each as it comes. Under reduced motion each is simply there.
  */
 export function Told({ told, body }: ToldProps) {
-  if (told === undefined) return null
-  const said = toldInTurn.slice(0, toldInTurn.indexOf(told) + 1)
+  const said = told === undefined ? [] : toldInTurn.slice(0, toldInTurn.indexOf(told) + 1)
+  // The live region is there before its first beat, so a screen reader hears that one too.
   return (
     <div aria-live="polite" className="grid gap-2">
       {said.map((part, index) => (

@@ -83,8 +83,7 @@ import {
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
-import { Told, toldInTurn, type ToldPart } from '#/front/ui/chat/text/Message'
-import { useBeats } from '#/front/ui/motion'
+import { Told, useTold, type ToldPart } from '#/front/ui/chat/text/Message'
 import { Screen } from '#/front/ui/layouts/screen/Screen'
 import { useScreenState } from '#/front/ui/layouts/screen/state/useScreenState'
 import type { CanvasMarks } from '#/front/ui/canvas/Canvas'
@@ -201,12 +200,12 @@ function useTutorialNavigation(
   const { data } = useShipped('tutorial', getLocale(), { throwing: false, enabled })
   const tree = useMemo(() => (data === undefined ? undefined : canvasTree(data)), [data])
   const tells = data !== undefined && shippedOnCanvas(search)?.rules?.tells === true
-  const beat = useBeats(toldInTurn.length, tells, (reached) => {
-    if (toldInTurn[reached - 1] === 'body') turning.turn('chat')
+  const told = useTold(tells, (part) => {
+    if (part === 'body') turning.turn('chat')
   })
   return {
     tree,
-    told: toldInTurn[beat - 1],
+    told,
     body: data?.body,
     onViewChange: (view: CanvasView) => {
       void navigate({ search: (current) => tutorialOn(current, view) })
@@ -262,8 +261,7 @@ function shippedSide(
         view={view}
         onViewChange={onViewChange}
         rules={rules}
-        // The body is told in the chat: the canvas lights its title and its preview.
-        told={told === 'body' ? undefined : told}
+        told={told}
       />
     ),
     corner: (

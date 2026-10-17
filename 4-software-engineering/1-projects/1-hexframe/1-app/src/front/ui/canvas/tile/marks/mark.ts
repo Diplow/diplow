@@ -31,10 +31,11 @@ export interface TileMark {
   /** What an open Proposal would do to it: its rim dashed in violet, since it isn't done yet. */
   proposed?: Proposed
   /**
-   * The part of its words the agent tells of, as the chat says it, its title or its preview: lit in
-   * the agent's violet, under the words, which keep their contrast (HEX-120).
+   * The part of its words the agent tells of, as the chat says it: its title or its preview, lit in
+   * the agent's violet round the words, which keep their contrast; its body, which the chat shows,
+   * lighting nothing here (HEX-120).
    */
-  told?: 'title' | 'preview'
+  told?: 'title' | 'preview' | 'body'
 }
 
 const unseenSaid: Record<Exclude<By, 'human'>, () => string> = {

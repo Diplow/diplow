@@ -8,11 +8,11 @@ import { m } from '#/paraglide/messages'
 
 import { Button } from '../../atoms/controls/button'
 import { toast } from '../../atoms/Toaster'
-import { GallerySection, GalleryState, useSteps } from '../../gallery/frame'
+import { GallerySection, GalleryState } from '../../gallery/frame'
 import { tutorialInvitation } from '../composer/commands'
 import { said, sampleTiles, sampleWords } from '../samples'
 import { Mention, type Voice } from './Mention'
-import { Message, Told, toldInTurn } from './Message'
+import { Message, Told, useTold } from './Message'
 import { Thinking } from './Thinking'
 import type { Word, Words } from './words'
 
@@ -162,16 +162,13 @@ function Streaming({ words }: { words: Words }) {
   )
 }
 
-/** When each beat comes, in ms from the start: shorter than home's, a sample's. */
-const beats = [0, 1200, 2400, 3600]
-
 /**
- * The agent telling a tile's words a beat at a time, as the tutorial's center is told, the canvas
- * lighting each: its title, its preview, then its body, its numbered list a list; replayed on a click.
+ * The agent telling a tile's words a beat at a time, as the tutorial's center is told, on home's
+ * clock (`--stagger-beat`), the canvas lighting each: its title, its preview, then its body, its
+ * numbered list a list; told again on a click.
  */
 function Telling() {
   const [turn, setTurn] = useState(0)
-  const beat = useSteps(beats, turn)
   return (
     <div className={column}>
       <Button
@@ -185,9 +182,14 @@ function Telling() {
         <RotateCcw aria-hidden />
         {m.gallery_replay_told()}
       </Button>
-      <Told told={toldInTurn[beat - 1]} body={[m.gallery_sample_chat_told_body()]} />
+      <Once key={turn} />
     </div>
   )
+}
+
+/** One telling, from its first beat. */
+function Once() {
+  return <Told told={useTold(true)} body={[m.gallery_sample_chat_told_body()]} />
 }
 
 /** The agent thinking, its seconds counting and its lines coming, over and over. */
