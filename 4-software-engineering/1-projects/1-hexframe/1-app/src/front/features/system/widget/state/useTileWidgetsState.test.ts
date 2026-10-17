@@ -11,7 +11,7 @@ import { type Receipt, useTileWidgetsState } from './useTileWidgetsState'
 
 // What follows a tile's widget in the chat, over a stand-in for the export's server function: a
 // receipt once a form is sent, gone once another form opens or one closes unsent; an export working,
-// then saved under its file's name, or failed, then let go.
+// then saved under its file's name, or failed, then let go; and the pseudo a new account types.
 vi.mock('#/api/mapping/mapping', () => ({ exportTile: vi.fn() }))
 vi.mock('#/front/ui/atoms/Toaster', () => ({ toast: { error: vi.fn() } }))
 
@@ -81,6 +81,27 @@ describe('what follows a tile widget', () => {
       actions.clear()
     })
     expect(result.current.state.shown).toBeUndefined()
+  })
+
+  it('tells the timeline the change its receipt says, by its event, until it goes', () => {
+    const { result, run } = render()
+    expect(result.current.state.told).toBeUndefined()
+    run((actions) => {
+      actions.sent(receipt)
+    })
+    expect(result.current.state.told).toEqual({
+      tile: 'tooling',
+      verb: 'TileCreated',
+      at: receipt.at,
+    })
+    run((actions) => {
+      actions.sent({ ...receipt, key: 'name', did: 'named', tile: { id: 'root', title: 'Ada' } })
+    })
+    expect(result.current.state.told).toMatchObject({ tile: 'root', verb: 'TileEdited' })
+    run((actions) => {
+      actions.clear()
+    })
+    expect(result.current.state.told).toBeUndefined()
   })
 })
 
@@ -153,7 +174,11 @@ describe('an export', () => {
     run((actions) => {
       actions.clear()
     })
-    expect(result.current.state).toEqual({ shown: undefined, exporting: true })
+    expect(result.current.state).toEqual({
+      shown: undefined,
+      exporting: true,
+      naming: '',
+    })
     answer(
       new Response('PK', {
         headers: { 'content-disposition': 'attachment; filename="tooling.zip"' },
@@ -178,5 +203,24 @@ describe('an export', () => {
       actions.sent(receipt)
     })
     expect(result.current.state.shown).toEqual(receipt)
+  })
+})
+
+describe('the pseudo being typed', () => {
+  it('is held for the canvas as it is typed, kept by a receipt, and gone once a form opens', () => {
+    const { result, run } = render()
+    expect(result.current.state.naming).toBe('')
+    run((actions) => {
+      actions.name('Uly')
+    })
+    expect(result.current.state.naming).toBe('Uly')
+    run((actions) => {
+      actions.sent(receipt)
+    })
+    expect(result.current.state.naming).toBe('Uly')
+    run((actions) => {
+      actions.clear()
+    })
+    expect(result.current.state.naming).toBe('')
   })
 })

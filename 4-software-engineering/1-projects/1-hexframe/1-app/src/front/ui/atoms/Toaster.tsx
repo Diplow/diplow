@@ -2,8 +2,6 @@ import { CircleCheck, Info, LoaderCircle, OctagonX, TriangleAlert } from 'lucide
 import type { CSSProperties } from 'react'
 import { Toaster as Sonner, toast } from 'sonner'
 
-import { useThemeState } from '#/front/ui/theme'
-
 // Sonner's own colours are literals; its variables are pointed at the theme's tokens instead.
 const tokens = {
   '--normal-bg': 'var(--popover)',
@@ -14,10 +12,10 @@ const tokens = {
 
 /** Where toasts appear: mounted once, in the document shell. */
 export function Toaster() {
-  const { state } = useThemeState()
   return (
     <Sonner
-      theme={state.theme}
+      // hexframe is dark, its one theme.
+      theme="dark"
       style={tokens}
       icons={{
         success: <CircleCheck className="size-4 text-success" />,

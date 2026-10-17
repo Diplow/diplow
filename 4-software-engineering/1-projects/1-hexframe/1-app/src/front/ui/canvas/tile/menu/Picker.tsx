@@ -17,6 +17,8 @@ import type { Frame, Seat } from '../moving/move'
 interface PickerChoice {
   label: string
   onSelect: () => void
+  /** Choosing it opens what takes the focus: a new tile's title. */
+  takesFocus?: boolean
 }
 
 /** A frame as a picker draws it: the tile at its heart, and what holds each of its Directions. */
@@ -79,6 +81,7 @@ export function Picker({ frame, self, choose }: PickerProps) {
               key={direction}
               label={choice.label}
               onSelect={choice.onSelect}
+              takesFocus={choice.takesFocus === true}
               onHighlight={(lit) => {
                 setSaid(lit ? choice.label : undefined)
               }}

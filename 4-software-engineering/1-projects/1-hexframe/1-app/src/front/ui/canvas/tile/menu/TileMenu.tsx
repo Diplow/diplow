@@ -68,6 +68,11 @@ interface TileMenuProps {
   without?: readonly Verb[]
   /** Told when it opens and closes: the canvas steps the other tiles back while it is open. */
   onOpenChange?: (open: boolean) => void
+  /**
+   * Not there yet, the untitled root's lamp: no card and no menu. It stays in its menu meanwhile, so
+   * the tile is the same once it wakes, its light rising rather than drawn anew.
+   */
+  asleep?: boolean
   /** The tile, or the free slot, handed what its menu and its card need of it. */
   children: (hand: Hand) => ReactElement
 }
@@ -79,6 +84,7 @@ export function TileMenu({
   onAct,
   without = [],
   onOpenChange,
+  asleep = false,
   children,
 }: TileMenuProps) {
   const title = subject.kind === 'slot' ? m.tile_menu_free_slot() : subject.title
@@ -88,6 +94,7 @@ export function TileMenu({
   return (
     <Menu
       opensOn="context"
+      disabled={asleep}
       label={m.tile_menu_label({ title })}
       header={{ title, detail: place, description: card?.description }}
       entries={entriesOf(subject, frames, onAct, without)}
@@ -99,7 +106,7 @@ export function TileMenu({
         subject.kind === 'slot' ? (
           pass
         ) : (
-          <HoverCard place={place} title={title} within="svg" shut={menuOpen} {...card}>
+          <HoverCard place={place} title={title} within="svg" shut={menuOpen || asleep} {...card}>
             {pass}
           </HoverCard>
         )
@@ -225,7 +232,13 @@ function lineOf(verb: Verb, subject: Subject): Line {
         tone: 'destructive',
       }
     case 'new-tile':
-      return { icon: <Plus />, shortcut: { key: 'n' }, label: m.tile_menu_new_tile }
+      // Its widget opens in the chat, its title taking the focus.
+      return {
+        icon: <Plus />,
+        shortcut: { key: 'n' },
+        label: m.tile_menu_new_tile,
+        takesFocus: true,
+      }
     case 'import':
       return { icon: <FolderInput />, shortcut: { key: 'i' }, label: m.tile_menu_import }
   }
@@ -287,11 +300,15 @@ function submenuOf(
             frame={holds}
             choose={(at) =>
               holds.seats[at] === undefined
-                ? choice(
-                    onAct,
-                    { verb: 'add', at },
-                    m.tile_menu_add_at({ direction: directionName(at), hub: holds.hub }),
-                  )
+                ? {
+                    // The new tile's widget opens in the chat, its title taking the focus.
+                    ...choice(
+                      onAct,
+                      { verb: 'add', at },
+                      m.tile_menu_add_at({ direction: directionName(at), hub: holds.hub }),
+                    ),
+                    takesFocus: true,
+                  }
                 : undefined
             }
           />

@@ -1,5 +1,5 @@
 import { cn } from 'cn'
-import type { ComponentProps } from 'react'
+import type { ComponentProps, ReactNode } from 'react'
 
 import { ariaShortcut, Keys, type Shortcut } from '../keys'
 
@@ -36,6 +36,11 @@ interface ActProps extends ComponentProps<'button'> {
    * `disabled` would drop to the page.
    */
   waits?: boolean
+  /**
+   * A line icon saying what it does, in the small hex's place before a `text` action's word, or before
+   * a solid one's: Create's, Cancel's, Import's. Without it, the small hex.
+   */
+  icon?: ReactNode
 }
 
 // The ink of a text action, and the light a solid one is cut from.
@@ -54,6 +59,7 @@ export function Act({
   tone = 'quiet',
   shortcut,
   waits = false,
+  icon,
   className,
   children,
   type = 'button',
@@ -71,7 +77,9 @@ export function Act({
         look === 'text'
           ? [
               textTones[tone],
-              'before:size-2 before:shrink-0 before:bg-current before:[clip-path:polygon(50%_0,100%_25%,100%_75%,50%_100%,0_75%,0_25%)] hover:text-foreground disabled:text-faint disabled:opacity-60 aria-disabled:cursor-default aria-disabled:text-faint aria-disabled:opacity-60',
+              icon === undefined &&
+                'before:size-2 before:shrink-0 before:bg-current before:[clip-path:polygon(50%_0,100%_25%,100%_75%,50%_100%,0_75%,0_25%)]',
+              'hover:text-foreground disabled:text-faint disabled:opacity-60 aria-disabled:cursor-default aria-disabled:text-faint aria-disabled:opacity-60',
             ]
           : [
               hexTones[tone],
@@ -81,6 +89,14 @@ export function Act({
       )}
       {...props}
     >
+      {icon !== undefined && (
+        <span
+          aria-hidden
+          className="grid shrink-0 place-items-center [&_svg]:size-3.5 [&_svg]:stroke-[1.6]"
+        >
+          {icon}
+        </span>
+      )}
       {children}
       {shortcut !== undefined && (
         <span className="ml-0.5">

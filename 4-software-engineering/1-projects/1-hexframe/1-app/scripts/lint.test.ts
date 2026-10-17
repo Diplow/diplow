@@ -176,7 +176,7 @@ describe('the UI library boundary', () => {
   })
 
   it('exempts src/front/ui/ and nothing else', () => {
-    expect(exempt.test('src/front/ui/canvas/layouts/Drawer.tsx')).toBe(true)
+    expect(exempt.test('src/front/ui/canvas/layouts/Rail.tsx')).toBe(true)
     expect(exempt.test('src/front/routes/index.tsx')).toBe(false)
   })
 })

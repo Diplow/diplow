@@ -82,6 +82,8 @@ interface MenuProps {
   align?: 'start' | 'end'
   /** Told when it opens and closes, so what it acts on stays lit while it is open. */
   onOpenChange?: (open: boolean) => void
+  /** Where it opens on its thing: nothing to act on yet, so nothing opens it, nor runs a line's key. */
+  disabled?: boolean
 }
 
 type Line = Exclude<MenuEntry, 'separator'>
@@ -111,6 +113,7 @@ export function Menu({
   entries,
   align = 'start',
   onOpenChange,
+  disabled = false,
 }: MenuProps) {
   // The submenu a key typed on the thing asked for, opened once the menu is.
   const opening = useRef<number>(undefined)
@@ -149,7 +152,9 @@ export function Menu({
       >
         <ContextMenu.Trigger
           asChild
+          disabled={disabled}
           onKeyDown={(event) => {
+            if (disabled) return
             if (opensByKeyboard(event)) openAtTheThing(event.currentTarget)
             else runOnTheThing(event, entries, opening)
           }}
@@ -448,6 +453,8 @@ interface MenuChoiceProps {
   onSelect: () => void
   /** Told when it is lit and when it is no longer, by the pointer or the keyboard. */
   onHighlight?: (lit: boolean) => void
+  /** Its choice takes the focus elsewhere, as a line's may (`MenuItem`): a new tile's title. */
+  takesFocus?: boolean
   /** What it is drawn as: an element that takes a ref, focus and a role, an SVG group included. */
   children: ReactElement
 }
@@ -456,13 +463,20 @@ interface MenuChoiceProps {
  * One choice of a picture inside a menu, a place in a frame: a line of the menu as the keyboard and a
  * screen reader take it, ↑ and ↓ reaching it, Enter choosing it, drawn as its caller draws it.
  */
-export function MenuChoice({ label, onSelect, onHighlight, children }: MenuChoiceProps) {
+export function MenuChoice({
+  label,
+  onSelect,
+  onHighlight,
+  takesFocus,
+  children,
+}: MenuChoiceProps) {
   const { parts } = useContext(KitContext)
+  const taken = useContext(FocusTaken)
   return (
     <parts.Item
       asChild
       aria-label={label}
-      onSelect={onSelect}
+      onSelect={selected({ label, onSelect, ...(takesFocus === true && { takesFocus }) }, taken)}
       onFocus={() => onHighlight?.(true)}
       onBlur={() => onHighlight?.(false)}
       ref={clickable}

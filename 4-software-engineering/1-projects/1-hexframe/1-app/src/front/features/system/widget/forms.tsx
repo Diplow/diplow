@@ -1,10 +1,10 @@
-// A Tile's forms, in the chat, as the tile widget draws them (ui's `TileWidget`): a new Tile, where it
-// goes on the map of its parent's places, or a Tile's edit, then, once sent, the receipt the widget
-// leaves, the focus handed to it. Each form is one widget from its first word to its receipt, so the
-// receipt takes the form's focus. What the user writes is `useTileWordsState`'s; the write goes
-// through Mapping's form submits, which answer at once, and its refusal comes back through the page
-// (`useRefusalState`), the user's words put back and the refusal on its field. The Root has no place
-// to draw, so its edit stays in the drawer, on the shared form, until a proposal draws it.
+// A Tile's forms, in the chat, as the tile widget draws them (ui's `TileWidget`): a new Tile, in the
+// place the user clicked on the canvas, which says its kind, or a Tile's edit, the Root's included,
+// which has no place to draw, then, once sent, the receipt the widget leaves, the focus handed to it.
+// Each form is one widget from its first word to its receipt, so the receipt takes the form's focus.
+// What the user writes is `useTileWordsState`'s; the write goes through Mapping's form submits, which
+// answer at once, and its refusal comes back through the page (`useRefusalState`), the user's words
+// put back and the refusal on its field.
 import { useState } from 'react'
 
 import {
@@ -13,22 +13,12 @@ import {
   type Slot,
   type System as FlatSystem,
 } from '#/domains/mapping/entities'
-import {
-  type TileContent,
-  type TileSubmit,
-  useCreateTileSubmit,
-  useEditTileSubmit,
-} from '#/front/client/mapping/queries'
-import type { FormErrors } from '#/front/client/channels'
-import { m } from '#/paraglide/messages'
-import { openedOnRefusal, useAppForm } from '#/front/ui/atoms/forms/form'
-import { Drawer } from '#/front/ui/canvas/layouts/Drawer'
+import { useCreateTileSubmit, useEditTileSubmit } from '#/front/client/mapping/queries'
 import type { MentionProps } from '#/front/ui/chat/text/Mention'
 import type { TilePlace, TileWords } from '#/front/ui/chat/widgets/tile/parts'
 import { TileWidget } from '#/front/ui/chat/widgets/tile/TileWidget'
 
-import type { Reopened } from '../state/useRefusalState'
-import { editedOf, slotForKind, slotOf, whereIn } from './place'
+import { editedOf, whereIn } from './place'
 import { type Refilled, useTileWordsState } from './state/useTileWordsState'
 import type { Opened, Receipt } from './state/useTileWidgetsState'
 
@@ -54,15 +44,13 @@ interface NewTileProps extends FormProps {
   /** The Tile it goes under, its id and its Title as the canvas shows it. */
   parent: { id: string; title: string }
   slot: Slot
-  /** Another place, or another kind, picked: the slot it now goes in; none once it is a receipt. */
-  onSlotChange?: (slot: Slot) => void
   /** Imports files into this slot instead; none once it is a receipt. */
   onImport?: () => void
 }
 
 /** A new Tile's form, in the slot it was opened on, then its receipt. */
 export function NewTileWidget(props: NewTileProps) {
-  const { formKey, refilled, receipt, system, parent, slot, onSlotChange } = props
+  const { formKey, refilled, receipt, system, parent, slot } = props
   const submit = useCreateTileSubmit({ parent: parent.id, slot })
   const { state, actions } = useTileWordsState(blank, refilled)
   if (receipt !== undefined) return <TileWidget {...done(receipt, props)} />
@@ -75,13 +63,7 @@ export function NewTileWidget(props: NewTileProps) {
       onWordsChange={actions.change}
       previewLimit={previewLimit}
       refused={state.refused}
-      onPlaceChange={(place) => {
-        onSlotChange?.(slotOf(where.kind, place))
-      }}
-      onKindChange={(kind) => {
-        const next = slotForKind(system, parent.id, slot, kind)
-        if (next !== undefined) onSlotChange?.(next)
-      }}
+      takesFocus
       onCreate={() => {
         props.onSent({
           key: formKey,
@@ -100,8 +82,8 @@ export function NewTileWidget(props: NewTileProps) {
 
 interface EditTileProps extends FormProps {
   tile: Opened
-  /** Where it stands: its parent, its kind and its place. */
-  where: TilePlace
+  /** Where it stands: its parent, its kind and its place; none for the Root. */
+  where: TilePlace | undefined
   /** Deletes it, once the user confirms, with how many Tiles go below it; none once sent. */
   deleting?: { below: number; confirm: () => void } | undefined
 }
@@ -151,6 +133,47 @@ export function EditTileWidget(props: EditTileProps) {
   )
 }
 
+interface NameRootProps extends FormProps {
+  /** The Root, untitled, as the page draws it. */
+  root: Opened
+  /** The pseudo typed so far, the page's, so the canvas shows it on the Root as it is typed. */
+  name: string
+  onNameChange: (name: string) => void
+  /** Imports a vault as the Root instead, an empty System's; none otherwise. */
+  onImport?: (() => void) | undefined
+}
+
+/**
+ * A new account's first question: the pseudo the user goes by, sent as the Root's Title, so their own
+ * tile carries it on the canvas at once; then its receipt. A blank pseudo sends nothing.
+ */
+export function NameRootWidget(props: NameRootProps) {
+  const { formKey, receipt, root, name, onNameChange, onImport } = props
+  const submit = useEditTileSubmit(root)
+  if (receipt !== undefined) return <TileWidget {...done(receipt, props)} />
+  return (
+    <TileWidget
+      mode="name"
+      name={name}
+      onNameChange={onNameChange}
+      onName={() => {
+        const title = name.trim()
+        if (title === '') return
+        props.onSent({
+          key: formKey,
+          session: { kind: 'name', root },
+          did: 'named',
+          tile: { id: submit({ title, preview: root.preview, body: root.body }), title },
+          where: undefined,
+          at: new Date(),
+        })
+      }}
+      onImport={onImport}
+      takesFocus
+    />
+  )
+}
+
 /**
  * The receipt a form leaves, the Tile named centering the canvas while it stands: the same
  * `TileWidget` the form was, given its receipt, so the focus the form held goes to it.
@@ -174,116 +197,4 @@ function done(receipt: Receipt, { system, onCenter }: Pick<FormProps, 'system' |
     where,
     at,
   } as const
-}
-
-interface RootFormProps {
-  /** The Root, when its edit is under way; none closes the drawer. */
-  root: Opened | undefined
-  /** What a refusal put back, as the shared form shows it. */
-  refilled: Reopened | undefined
-  onSent: () => void
-  onClose: () => void
-}
-
-/**
- * The Root's edit, in the drawer, on the shared form: the widget has no place to draw it in, until a
- * proposal draws the Root's widget (`hexframe-app-design-system-v1/decisions.md#DEC-38`).
- */
-export function RootDrawer({ root, refilled, onSent, onClose }: RootFormProps) {
-  return (
-    <Drawer
-      open={root !== undefined}
-      onOpenChange={(open) => {
-        if (!open) onClose()
-      }}
-      title={root === undefined ? undefined : m.system_edit_title({ title: titled(root.title) })}
-    >
-      {root !== undefined && (
-        // A refusal reopens its form afresh, keyed by its turn, with what the user typed.
-        <RootForm
-          key={String(refilled?.turn ?? '')}
-          root={root}
-          refilled={refilled}
-          onSent={onSent}
-        />
-      )}
-    </Drawer>
-  )
-}
-
-/** The Root's Title as a reader sees it: untitled until the user names it. */
-const titled = (title: string) => (title === '' ? m.system_untitled() : title)
-
-function RootForm({
-  root,
-  refilled,
-  onSent,
-}: Pick<RootFormProps, 'refilled' | 'onSent'> & { root: Opened }) {
-  const submit = useEditTileSubmit(root)
-  const { title, preview, body } = root
-  return (
-    <TileForm
-      defaults={refilled?.content ?? { title, preview, body }}
-      shown={refilled?.shown}
-      submit={submit}
-      onSent={onSent}
-    />
-  )
-}
-
-interface TileFormProps {
-  defaults: TileContent
-  /** What the form shows of its last write's refusal, reopened by it: on the fields it names. */
-  shown: FormErrors | undefined
-  submit: TileSubmit
-  onSent: () => void
-}
-
-/** A Tile's Title, Preview and Body. What each must be is Mapping's to say, on the field at fault. */
-function TileForm({ defaults, shown, submit, onSent }: TileFormProps) {
-  const form = useAppForm({
-    defaultValues: defaults,
-    onSubmit: ({ value }) => {
-      submit(value)
-      onSent()
-    },
-    // A form reopened by a refusal shows it as a refused submit would; a refusal on no field is in
-    // its toast already.
-    ...openedOnRefusal(shown !== undefined && 'fields' in shown ? shown.fields : undefined),
-  })
-  return (
-    <form
-      noValidate
-      className="grid gap-4 pb-4"
-      onSubmit={(event) => {
-        event.preventDefault()
-        void form.handleSubmit()
-      }}
-    >
-      <form.AppField name="title">
-        {(field) => <field.TextField label={m.system_field_title()} />}
-      </form.AppField>
-      <form.AppField name="preview">
-        {(field) => (
-          <field.TextareaField
-            label={m.system_field_preview()}
-            description={m.system_field_preview_description()}
-          />
-        )}
-      </form.AppField>
-      <form.AppField name="body">
-        {(field) => (
-          <field.TextareaField
-            label={m.system_field_body()}
-            description={m.system_field_body_description()}
-          />
-        )}
-      </form.AppField>
-      <div>
-        <form.AppForm>
-          <form.SubmitButton>{m.system_save()}</form.SubmitButton>
-        </form.AppForm>
-      </div>
-    </form>
-  )
 }

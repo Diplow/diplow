@@ -166,6 +166,18 @@ describe('turning a Tile into the other kind', () => {
     })
   })
 
+  it('grows a Leaf into a Branch before a new Tile goes under it, the new one a Leaf', async () => {
+    answering('moveTile', done)
+    const { result, onSearchChange } = render()
+    choose(result, 'tile:run.yaml', { verb: 'add', at: 2 })
+    expect(changed(onSearchChange)).toMatchObject({ add: 'run.yaml', slot: { leaf: 2 } })
+    await waitFor(() => {
+      expect(Mapping.moveTile).toHaveBeenCalledWith({
+        data: { id: 'run.yaml', version: 1, parent: 'root', slot: 4 },
+      })
+    })
+  })
+
   it('moves a bare Branch to the Leaf slot of its own Direction', async () => {
     answering('moveTile', done)
     const { result } = render()
@@ -279,7 +291,7 @@ describe('a line that opens something', () => {
     choose(result, 'tile:holding', { verb: 'edit' })
     expect(changed(onSearchChange)).toMatchObject({ edit: 'holding' })
     choose(result, 'tile:holding', { verb: 'add', at: 3 })
-    expect(changed(onSearchChange)).toMatchObject({ add: 'holding', slot: 3 })
+    expect(changed(onSearchChange)).toMatchObject({ add: 'holding', slot: { leaf: 3 } })
     choose(result, 'tile:holding', { verb: 'move-elsewhere' })
     expect(changed(onSearchChange)).toMatchObject({ move: 'holding' })
     choose(result, 'tile:root', { verb: 'import' })
@@ -326,7 +338,7 @@ describe("a free slot's menu", () => {
     act(() => {
       menu?.onAct({ verb: 'new-tile' }, '')
     })
-    expect(changed(onSearchChange)).toMatchObject({ add: 'root', slot: slot.direction })
+    expect(changed(onSearchChange)).toMatchObject({ add: 'root', slot: { leaf: slot.direction } })
     act(() => {
       menu?.onAct({ verb: 'import' }, '')
     })
@@ -373,7 +385,10 @@ describe('a click on a free slot', () => {
     act(() => {
       click?.onSelect()
     })
-    expect(changed(onSearchChange)).toMatchObject({ add: 'root', slot: slot?.direction })
+    expect(changed(onSearchChange)).toMatchObject({
+      add: 'root',
+      slot: { leaf: slot?.direction },
+    })
   })
 
   it('moves the Tile on the move there, ending the move as it is sent', async () => {

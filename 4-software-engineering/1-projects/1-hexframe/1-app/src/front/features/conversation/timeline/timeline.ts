@@ -1,8 +1,8 @@
 // The Conversation as the timeline shows it: Assistant's Entries (`domains/assistant/entities`), a
 // day of the reader's calendar at a time, with the Titles of the Tiles its navigations went to. Home
-// reads it a day at a time (`useConversation`); /design-system splits its fixtures by day. And what
-// the agent applied that `/undo` undoes, the latest that offers its Undo. Pure; the components render
-// it.
+// reads it a day at a time (`useConversation`); /design-system splits its fixtures by day. What a
+// receipt at the conversation's foot tells, the timeline leaves to it. And what the agent applied
+// that `/undo` undoes, the latest that offers its Undo. Pure; the components render it.
 import { dayAt, type Entry, type Navigation, offersUndo } from '#/domains/assistant/entities'
 
 /**
@@ -50,6 +50,38 @@ export function splitByDay(entries: readonly Entry[], now: Date, titles: Titles)
 
 /** The date of the reader's calendar an instant falls on, `2026-09-27`, by Assistant's day split. */
 const dayKey = (at: Date) => dayAt(at, -at.getTimezoneOffset()).date
+
+/**
+ * What a receipt at the conversation's foot tells, a form's write the user sent: its change, by its
+ * Tile and its verb as Mapping names the event, and when it came, which tells one receipt from the
+ * next.
+ */
+export interface Receipted {
+  readonly tile: string
+  readonly verb: string
+  readonly at: Date
+}
+
+/**
+ * Today's Entries beside a receipt at the conversation's foot: the change it tells, the user's of its
+ * Tile by its verb, recorded since it came, is left to it, the two saying the same thing, and told
+ * once it goes; what was read before it came stays, an earlier change of that Tile included.
+ */
+export function besideReceipt(
+  today: ReadonlyArray<Entry>,
+  receipt: Receipted | undefined,
+  before: ReadonlySet<string>,
+): ReadonlyArray<Entry> {
+  if (receipt === undefined) return today
+  return today.filter(
+    (entry) =>
+      before.has(entry.id) ||
+      entry._tag !== 'Change' ||
+      entry.actor._tag !== 'You' ||
+      entry.tile.id !== receipt.tile ||
+      entry.verb !== receipt.verb,
+  )
+}
 
 /**
  * What `/undo` undoes: of the Entries, oldest first, the latest that offers its Undo, an accepted

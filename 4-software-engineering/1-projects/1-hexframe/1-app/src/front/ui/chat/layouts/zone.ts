@@ -10,6 +10,7 @@ export const zone =
 
 /**
  * The padding of what sits at the chat's foot, the Composer and the sign-in widget: wide, clear of the
- * curve by the inset the screen's foot hands it (`--screen-foot-inset`), so no caller pads it again.
+ * curve by the inset the screen's foot hands it (`--screen-foot-inset`), as far right as the
+ * conversation's lines, so no caller pads it again.
  */
-export const footPadding = 'px-4 @wide:pr-[calc(1.5rem+var(--screen-foot-inset,0px))] @wide:pl-9'
+export const footPadding = 'px-4 @wide:pr-[var(--screen-foot-inset,1.5rem)] @wide:pl-9'

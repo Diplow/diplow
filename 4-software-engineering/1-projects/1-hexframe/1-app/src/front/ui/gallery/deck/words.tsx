@@ -1,7 +1,8 @@
 // The deck's first two slides, words on the ground alone, before there is a screen: why hexframe
-// exists, beside a sun drawn in the root's warm light, the brand's Sunstone at its heart, since each
-// person is one in hexframe's universe; then the six principles its look follows, which rise one
-// after another. The screen comes with the slide after, the chat first.
+// exists, agents unfolding their work on its tiles so the reader keeps up at the altitude they
+// choose, beside a sun drawn in the root's warm light, the brand's Sunstone at its heart, since
+// each person is one in hexframe's universe; then the six principles its look follows, which rise
+// one after another. The screen comes with the slide after, the chat first.
 import { cn } from 'cn'
 import type { CSSProperties } from 'react'
 
@@ -31,7 +32,7 @@ export function WordsSlide({ slide, onGo }: { slide: 'why' | 'principles'; onGo:
 /** Each part rises after the one before it: the slide's own entrance, motion telling its order. */
 const rise = (step: number): CSSProperties => ({ animationDelay: `${String(step * 90)}ms` })
 
-/** Why hexframe exists: intelligence is common, experience is not, and each person is a sun. */
+/** Why hexframe exists: agents do more than we follow, so they unfold their work; you, a sun. */
 function Thesis() {
   return (
     <article className="grid max-w-2xl gap-7">

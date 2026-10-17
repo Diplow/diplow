@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { plainOf, weave } from './words'
+import { linesOf, plainOf, weave } from './words'
 
 const projects = { tile: { title: 'Projects' } }
 const site = { tile: { title: 'Site' } }
@@ -38,5 +38,31 @@ describe('weave', () => {
 describe('plainOf', () => {
   it('reads each tile by its title and each name as it is', () => {
     expect(plainOf(['Move ', site, ' for ', { name: 'a Key' }, '.'])).toBe('Move Site for a Key.')
+  })
+})
+
+describe('linesOf', () => {
+  it('cuts the text where it breaks a line, a tile kept whole on its line', () => {
+    expect(linesOf(['See ', site, ' now\nthen ', projects])).toEqual([
+      ['See ', site, ' now'],
+      ['then ', projects],
+    ])
+  })
+
+  it('keeps a blank line, as an empty one', () => {
+    expect(linesOf(['First\n\nThird'])).toEqual([['First'], [], ['Third']])
+  })
+
+  it('opens a line with a tile that follows a break', () => {
+    expect(linesOf(['Look:\n', site])).toEqual([['Look:'], [site]])
+  })
+
+  it('draws no line after a last break, as a reader sees none', () => {
+    expect(linesOf(['Done\n'])).toEqual([['Done']])
+  })
+
+  it('leaves a text of one line, or none, as one line', () => {
+    expect(linesOf(['One line'])).toEqual([['One line']])
+    expect(linesOf([])).toEqual([[]])
   })
 })

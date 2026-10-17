@@ -111,7 +111,7 @@ export const pieces = [
     name: 'Message',
     tier: 'chat',
     sources: ['ui/chat/text/Message.tsx'],
-    madeOf: ['Mention', 'Act', 'Button', 'Toaster'],
+    madeOf: ['Mention', 'Act', 'Toaster'],
     note: m.gallery_note_message,
   },
   {
@@ -262,22 +262,8 @@ export const pieces = [
     name: 'Rail',
     tier: 'canvas',
     sources: ['ui/canvas/layouts/Rail.tsx'],
-    madeOf: ['ThemeToggle'],
+    madeOf: [],
     note: m.gallery_note_rail,
-  },
-  {
-    name: 'Drawer',
-    tier: 'canvas',
-    sources: ['ui/canvas/layouts/Drawer.tsx'],
-    madeOf: [],
-    note: m.gallery_note_drawer,
-  },
-  {
-    name: 'ThemeToggle',
-    tier: 'canvas',
-    sources: ['ui/canvas/atoms/ThemeToggle.tsx'],
-    madeOf: [],
-    note: m.gallery_note_theme_toggle,
   },
   {
     name: 'Screen',

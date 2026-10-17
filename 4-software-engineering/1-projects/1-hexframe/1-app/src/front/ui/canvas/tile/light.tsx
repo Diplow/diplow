@@ -28,11 +28,26 @@ export interface Fade {
   diagonal?: boolean
 }
 
-export function FadeDef({ id, fade }: { id: string; fade: Fade }) {
+/**
+ * `rising`, a change of its colours lightens it slowly, for `--duration-sunrise`, as the root's, a
+ * stagger of the dawn after it changed (`--stagger-dawn`).
+ */
+export function FadeDef({
+  id,
+  fade,
+  rising = false,
+}: {
+  id: string
+  fade: Fade
+  rising?: boolean
+}) {
+  const slow = rising
+    ? 'transition-[stop-color] duration-(--duration-sunrise) ease-glide delay-(--stagger-dawn) motion-reduce:transition-none'
+    : undefined
   return (
     <linearGradient id={id} x1="0" y1="0" x2={fade.diagonal ? 1 : 0} y2="1">
-      <stop offset="0" style={{ stopColor: fade.top }} />
-      <stop offset="1" style={{ stopColor: fade.foot }} />
+      <stop offset="0" className={slow} style={{ stopColor: fade.top }} />
+      <stop offset="1" className={slow} style={{ stopColor: fade.foot }} />
     </linearGradient>
   )
 }

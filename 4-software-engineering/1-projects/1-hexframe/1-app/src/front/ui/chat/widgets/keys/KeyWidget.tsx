@@ -2,9 +2,10 @@
 // so it carries no voice. A name, then the Key shown once, inking in from a blur beside the command
 // that uses it, ready to paste, and one ember line saying it won't be shown again; then the Keys
 // already given, each with its start, its dates and a light while in use, and its revoke, asked
-// first. Done, or leaving, forgets the secret: the widget leaves a receipt that names the Key, never
-// the secret. Opened by the agent, it shows the Keys but issues none: that takes the user's session.
-// Controlled: the name, the Keys and what each action does are its caller's.
+// first, each row running on to the curve at its height. Done, or leaving, forgets the secret: the
+// widget leaves a receipt that names the Key, never the secret. Opened by the agent, it shows the Keys
+// but issues none: that takes the user's session. Controlled: the name, the Keys and what each action
+// does are its caller's.
 import { cn } from 'cn'
 import { Check, Copy, Eye, KeyRound, Trash2 } from 'lucide-react'
 import { useState } from 'react'
@@ -13,6 +14,7 @@ import { m } from '#/paraglide/messages'
 
 import { toast } from '../../../atoms/Toaster'
 import { Dialog } from '../../../layouts/Dialog'
+import { runsToCurve, toCurve } from '../../../layouts/screen/state/useAlongCurve'
 import { UntilDecided } from '../../entries/Receipt'
 import { Widget } from '../../layouts/Widget'
 import { weave } from '../../text/words'
@@ -163,7 +165,13 @@ function Secret({ name, secret, command, onDone }: Shown) {
         <Copyable value={secret} label={m.keys_secret()} inking />
         <Caption aside={m.widget_key_claude_code()}>{m.widget_key_in_terminal()}</Caption>
         <Copyable value={command} label={m.keys_command()} quiet />
-        <p className="mt-2 flex items-center gap-2 text-[0.78125rem] leading-snug font-light text-warning">
+        <p
+          ref={toCurve}
+          className={cn(
+            runsToCurve,
+            'mt-2 flex items-center gap-2 text-[0.78125rem] leading-snug font-light text-warning',
+          )}
+        >
           <Eye className="size-3.5 shrink-0" aria-hidden />
           {m.widget_key_once()}
         </p>
@@ -174,7 +182,13 @@ function Secret({ name, secret, command, onDone }: Shown) {
 
 function Caption({ aside, children }: { aside?: string; children: string }) {
   return (
-    <span className="mt-2 flex items-baseline justify-between text-[0.71875rem] text-muted-foreground first:mt-0">
+    <span
+      ref={toCurve}
+      className={cn(
+        runsToCurve,
+        'mt-2 flex items-baseline justify-between text-[0.71875rem] text-muted-foreground first:mt-0',
+      )}
+    >
       <span>{children}</span>
       {aside !== undefined && <span>{aside}</span>}
     </span>
@@ -191,7 +205,10 @@ function copy(value: string, onCopied?: () => void) {
   )
 }
 
-/** A value to copy, in full on a faint ground, its copy at its corner turning to a check. */
+/**
+ * A value to copy, in full on a faint ground running on to the curve, its copy at its corner turning
+ * to a check.
+ */
 function Copyable({
   value,
   label,
@@ -206,7 +223,10 @@ function Copyable({
 }) {
   const [copied, setCopied] = useState(false)
   return (
-    <div className="relative bg-foreground/5 py-2.5 pr-11 pl-3 font-mono">
+    <div
+      ref={toCurve}
+      className={cn(runsToCurve, 'relative bg-foreground/5 py-2.5 pr-11 pl-3 font-mono')}
+    >
       <code
         className={cn(
           'block text-[0.8125rem] leading-[1.55] break-all text-foreground',
@@ -262,7 +282,11 @@ function Keys({ keys, onRevoke, onNew, onDone, byAgent = false }: Listed) {
           {keys.map((key) => (
             <li
               key={key.id}
-              className="group/key grid grid-cols-[1fr_auto] items-center border-t border-border py-2.5 last:border-b"
+              ref={toCurve}
+              className={cn(
+                runsToCurve,
+                'group/key grid grid-cols-[1fr_auto] items-center border-t border-border py-2.5 last:border-b',
+              )}
             >
               <div className="min-w-0">
                 <p className="flex items-center gap-2 text-sm text-foreground">

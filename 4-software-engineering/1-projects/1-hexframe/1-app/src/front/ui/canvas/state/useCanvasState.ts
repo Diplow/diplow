@@ -43,6 +43,8 @@ type TileGesture = TileAction | 'show-context'
  * no double click to go in with: its tap on a Branch of the ring goes in, rather than opening it.
  */
 function tileAction(hex: TileHex, shown: ShownView, finger = false): TileAction | undefined {
+  // The untitled root, its lamp alone, is not there yet: a click on it does nothing.
+  if (hex.tile.root === 'untitled' || hex.tile.root === 'empty') return undefined
   switch (hex.role) {
     case 'center':
       if (shown.frame !== undefined) return 'collapse'

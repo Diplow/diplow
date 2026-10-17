@@ -1,9 +1,9 @@
 // The slides /design-system shows, one at a time, in order: words first, on the ground alone, why
 // hexframe exists and the principles its look follows; then the screen as it builds up, the chat,
-// then the canvas; then where the two sides answer each other, each side's pieces and those they
-// share, each piece on the canvas and its words in the chat; then the tokens. A chapter is a slide
-// that shows pieces of the catalogue, by tier, one at a time. Which slide shows, and which piece of
-// its chapter, is the URL's. Pure.
+// then the canvas, then the onboarding, a new account's first visit; then where the two sides
+// answer each other, each side's pieces and those they share, each piece on the canvas and its
+// words in the chat; then the tokens. A chapter is a slide that shows pieces of the catalogue, by
+// tier, one at a time. Which slide shows, and which piece of its chapter, is the URL's. Pure.
 import { Schema } from 'effect'
 
 import { m } from '#/paraglide/messages'
@@ -18,6 +18,7 @@ export const slideIds = [
   'principles',
   'chat',
   'canvas',
+  'onboarding',
   'crossings',
   'chat-pieces',
   'canvas-pieces',
@@ -85,6 +86,7 @@ const titles: Record<SlideId, () => string> = {
   principles: m.deck_title_principles,
   chat: m.deck_title_chat,
   canvas: m.deck_title_canvas,
+  onboarding: m.deck_title_onboarding,
   crossings: m.deck_title_crossings,
   'chat-pieces': m.deck_title_chat_pieces,
   'canvas-pieces': m.deck_title_canvas_pieces,
@@ -100,6 +102,7 @@ const names: Record<SlideId, () => string> = {
   principles: m.deck_name_principles,
   chat: m.deck_name_chat,
   canvas: m.deck_name_canvas,
+  onboarding: m.deck_name_onboarding,
   crossings: m.deck_name_crossings,
   'chat-pieces': m.deck_name_chat_pieces,
   'canvas-pieces': m.deck_name_canvas_pieces,

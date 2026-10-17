@@ -13,7 +13,7 @@ Where the client meets [[4-software-engineering/1-projects/1-hexframe/1-app/src/
 
 | File | Holds |
 |---|---|
-| `iam.ts` | `signUp`, `signIn` and `session`, the server functions (signing out has none until the composer's `/sign-out` runs one), and `issueKey`, `keys` and `revokeKey`, the Account's Keys. Their schemas bound the strings; what an email, a password or a Key's name must be is IAM's to say, on the field. A Key's id is letters and digits, as Better Auth makes them |
+| `iam.ts` | `signUp`, `signIn`, `signOut`, which the composer's `/logout` runs, and `session`, the server functions, and `issueKey`, `keys` and `revokeKey`, the Account's Keys. Their schemas bound the strings; what an email, a password or a Key's name must be is IAM's to say, on the field. A Key's id is letters and digits, as Better Auth makes them |
 | `iam.test.ts` | The programs through `run`, on the runtime's Better Auth over PGlite, one browser per device: signed out, sign-up and the Session its cookie proves, sign-in and sign-out on another device, every refusal as it crosses the wire; a Key issued, listed and revoked, `SessionRequired` for a request a Key proves; the schemas' bounds |
 
 The client's side, home's read of the Session, which shows a signed-out visit the screen signed out, and the way back once signed in, is `front/client/iam/guard.ts`: [[4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE|front]].

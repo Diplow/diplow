@@ -2,17 +2,19 @@
 // topic shows its place among its six, its page, and where to read on; its hex is Help's own frame,
 // the topic lit, and a pick on another place turns the page, so the map is also the way around. `/help`
 // and a few words list the topics they show in, what was typed marked; `?` shows the shortcuts,
-// grouped by where they work. Controlled: the topic, what was found and what each pick does are its
-// caller's.
+// grouped by where they work. Each of its rows runs on to the curve at its height, its page a line at
+// a time. Controlled: the topic, what was found and what each pick does are its caller's.
+import { cn } from 'cn'
 import { BookOpen, Keyboard, Search } from 'lucide-react'
-import { Fragment } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Keys } from '../../../atoms/keys'
+import { runsToCurve, toCurve } from '../../../layouts/screen/state/useAlongCurve'
 import { HexMark } from '../../atoms/hex'
 import { Widget } from '../../layouts/Widget'
 import { Mention } from '../../text/Mention'
+import { linesOf, Said } from '../../text/words'
 import { namesByPlace, Places, places, type Place } from '../Places'
 import type { Found } from './topics'
 import { shortcuts } from './shortcuts'
@@ -106,11 +108,21 @@ function Topic({
       onDismiss={onDismiss}
     >
       <div className="grid gap-4">
+        {/* Its page line by line, each running on to the curve at its own height. */}
         <p className="text-sm leading-[1.65] font-light whitespace-pre-wrap text-muted-foreground">
-          {body}
+          {linesOf([body]).map((line, index) => (
+            // The lines of one page, never reordered: their place is their key.
+            <span key={index} ref={toCurve} className={cn(runsToCurve, 'block min-h-[1lh]')}>
+              <Said words={line} />
+            </span>
+          ))}
         </p>
         {readOn.length > 0 && (
-          <nav aria-label={m.widget_help_read_on()} className="flex flex-wrap gap-x-4 gap-y-1.5">
+          <nav
+            ref={toCurve}
+            aria-label={m.widget_help_read_on()}
+            className={cn(runsToCurve, 'flex flex-wrap gap-x-4 gap-y-1.5')}
+          >
             <span className="w-full font-mono text-[0.6875rem] text-muted-foreground">
               {m.widget_help_read_on()}
             </span>
@@ -147,7 +159,11 @@ function Results({ typed, found, onFound, onDismiss }: Searching) {
       {found.length > 0 ? (
         <ul className="grid">
           {found.slice(0, shownAtMost).map(({ id, title, excerpt }) => (
-            <li key={id} className="border-t border-border last:border-b">
+            <li
+              key={id}
+              ref={toCurve}
+              className={cn(runsToCurve, 'border-t border-border last:border-b')}
+            >
               <button
                 type="button"
                 onClick={() => {
@@ -193,17 +209,22 @@ function ShortcutsShown({ onDismiss }: Shortcuts) {
         {shortcuts.map(({ where, rows }) => (
           <section key={where()} className="grid gap-1.5">
             <h4 className="font-mono text-[0.6875rem] text-muted-foreground">{where()}</h4>
-            <dl className="grid grid-cols-[1fr_auto] items-center gap-x-5 gap-y-[7px] text-[0.8125rem] leading-normal font-light text-muted-foreground">
+            <dl className="grid gap-y-[7px] text-[0.8125rem] leading-normal font-light text-muted-foreground">
               {rows.map(({ does, keys }) => (
-                <Fragment key={does()}>
-                  <dt>{does()}</dt>
-                  <dd className="flex gap-1.5 justify-self-end text-foreground">
+                // A row each, so its keys run on to the curve at its height.
+                <div
+                  key={does()}
+                  ref={toCurve}
+                  className={cn(runsToCurve, 'flex items-center justify-between gap-x-5')}
+                >
+                  <dt className="min-w-0">{does()}</dt>
+                  <dd className="flex shrink-0 gap-1.5 text-foreground">
                     <span className="sr-only">{keys.map(said).join(', ')}</span>
                     {keys.map((shortcut) => (
                       <Keys key={said(shortcut)} shortcut={shortcut} />
                     ))}
                   </dd>
-                </Fragment>
+                </div>
               ))}
             </dl>
           </section>

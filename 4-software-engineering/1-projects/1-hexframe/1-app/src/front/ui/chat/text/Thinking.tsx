@@ -1,11 +1,12 @@
-// The agent's thinking, quieter than its words: smaller, fainter, on a dotted violet line. Live, its
-// last lines scroll past under "Thinking"; once the answer comes it folds into one line that says how
-// long it thought, open on a click (`Fold`).
+// The agent's thinking, quieter than its words: smaller, fainter, on a dotted violet line, running on
+// to the curve at its height as the words do. Live, its last lines scroll past under "Thinking"; once
+// the answer comes it folds into one line that says how long it thought, open on a click (`Fold`).
 import { cn } from 'cn'
 import { Sparkle } from 'lucide-react'
 
 import { m } from '#/paraglide/messages'
 
+import { runsToCurve, toCurve } from '../../layouts/screen/state/useAlongCurve'
 import { Fold } from '../atoms/fold'
 
 interface ThinkingProps {
@@ -20,7 +21,13 @@ const line = 'border-l border-dotted border-agent/45 pl-3 whitespace-pre-wrap wr
 
 export function Thinking({ state, seconds, text }: ThinkingProps) {
   return (
-    <div className="grid grid-cols-[0.875rem_minmax(0,1fr)] gap-x-2.5 font-agent text-xs leading-relaxed text-faint">
+    <div
+      ref={toCurve}
+      className={cn(
+        runsToCurve,
+        'grid grid-cols-[0.875rem_minmax(0,1fr)] gap-x-2.5 font-agent text-xs leading-relaxed text-faint',
+      )}
+    >
       {state === 'live' ? (
         <Live seconds={seconds} text={text} />
       ) : (

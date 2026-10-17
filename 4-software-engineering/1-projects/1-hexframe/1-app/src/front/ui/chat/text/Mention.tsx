@@ -1,8 +1,9 @@
-// A tile named in the chat, wherever it is: its title, a small hex before it, a faint underline. A
-// click centers the canvas on it. Hovered, or focused from the keyboard, it opens the tile's card, as
-// the tile itself does on the canvas, above its line, whose next words stay within reach, and tells
-// its caller it is pointed at, which the canvas lights
-// (a crossing, HEX-108). A tile the agent drafts is violet until it exists; a deleted one is struck
+// A tile named in the chat, wherever it is: its title, a small hex before it, a faint underline, whole
+// on a line where it fits, wrapping within the line where it is longer, so a long title never pushes
+// the conversation past its lines' end. A click centers the canvas on it. Hovered, or focused from the
+// keyboard, it opens the tile's card, as the tile itself does on the canvas, above its line, whose
+// next words stay within reach, and tells its caller it is pointed at, which the canvas lights (a
+// crossing, HEX-108). A tile the agent drafts is violet until it exists; a deleted one is struck
 // through and goes nowhere.
 import { cn } from 'cn'
 import type { ComponentProps } from 'react'
@@ -40,7 +41,7 @@ interface Voiced extends MentionProps {
 
 export function Mention({ title, standing = 'live', onCenter, card, onPoint, voice }: Voiced) {
   const look = cn(
-    'group/mention whitespace-nowrap underline decoration-1 underline-offset-3 transition-[text-decoration-color]',
+    'group/mention inline-block text-start underline decoration-1 underline-offset-3 transition-[text-decoration-color]',
     standing === 'live' && 'text-foreground decoration-foreground/20 hover:decoration-current',
     standing === 'draft' && 'text-agent decoration-agent/30 hover:decoration-current',
     standing === 'gone' && 'text-faint line-through decoration-faint',

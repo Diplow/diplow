@@ -75,20 +75,24 @@ describe('lookOf', () => {
     })
   })
 
-  it("draws the user's Root warm, untitled until they name themselves, and asks for a vault when empty", () => {
+  it("draws the user's Root warm, and untitled, empty or not, saying nothing until they name themselves", () => {
     const center = { role: 'center' } as const
     expect(lookOf(hexOf(node('me', { root: 'named' }), center))).toMatchObject({
       kind: 'root',
       foot: [],
     })
-    expect(lookOf(hexOf(node('me', { root: 'untitled' }), center))).toEqual({
-      kind: 'untitled',
-      words: words('me'),
-    })
-    expect(lookOf(hexOf(node('me', { root: 'empty' }), center))).toEqual({
-      kind: 'untitled',
-      words: { title: 'ME', preview: m.tile_untitled_preview() },
-    })
+    for (const root of ['untitled', 'empty'] as const) {
+      expect(lookOf(hexOf(node('me', { root }), center))).toEqual({
+        kind: 'untitled',
+        words: { title: '' },
+      })
+    }
+  })
+
+  it('shows on the untitled Root the pseudo being typed for it', () => {
+    expect(
+      lookOf(hexOf(node('me', { root: 'empty', naming: 'Ulys' }), { role: 'center' })),
+    ).toEqual({ kind: 'untitled', words: { title: 'Ulys' } })
   })
 
   it("draws another System's root, Help's, as the Branch it is", () => {

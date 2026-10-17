@@ -1,6 +1,6 @@
 // Help on the canvas, read-only: no empty slot takes a click and no Tile offers a swap, so a reader
-// only looks around, as on home, the centered topic alone and large, its preview whole, until a click
-// opens it. In the chat, under the agent's lines, its offer to read that topic's page in full, in the
+// only looks around, as on home, the Root alone and large, its preview whole, until a click opens it,
+// a topic centered landing with its own around it. In the chat, under the agent's lines, its offer to read that topic's page in full, in the
 // help widget. Like the canvas, it holds no state: the view is the URL's, and the route navigates.
 import { m } from '#/paraglide/messages'
 import { Act, voiceOf } from '#/front/ui/atoms/controls/act'

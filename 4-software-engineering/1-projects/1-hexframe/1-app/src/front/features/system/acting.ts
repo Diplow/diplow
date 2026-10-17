@@ -83,7 +83,7 @@ function directionOf(located: Located): Direction | undefined {
   }
 }
 
-/** Whether a new Tile fits under it: a Direction neither a Branch nor a Leaf holds. */
+/** Whether a Tile has room for another: a Direction neither a Branch nor a Leaf holds. */
 const holds = (tile: SystemTile) =>
   directions.some((direction) => !tile.branches[direction] && !tile.leaves[direction])
 
@@ -98,19 +98,29 @@ function childrenOf(tile: TileNode): PickerFrame['seats'] {
 }
 
 /**
+ * Whether a new Tile fits under it: a Direction neither a Branch nor a Leaf holds; under a Leaf, any,
+ * once it grows into a Branch, where Mapping lets it (`turnOf`), as a Leaf does once its owner adds a
+ * Tile under it.
+ */
+function takesOne(flat: System, located: Located | undefined) {
+  if (located?.kind === 'leaf') return turnOf(flat, located) !== undefined
+  return located !== undefined && holds(located.tile)
+}
+
+/**
  * What a Tile's menu says of it: its kind as the canvas draws it, where it stands, the center or a
  * Direction of the ring it is in, the Tile above it, how many are below it, and whether it takes a
- * new Tile or turns into the other kind; none for a ring too full, which is no Tile.
+ * new Tile, a Leaf growing into a Branch for it, or turns into the other kind; none for a ring too
+ * full, which is no Tile.
  */
 export function subjectOf({ root, flat, tree }: Systems, hex: TileHex): Subject | undefined {
   const { kind } = lookOf(hex)
   if (kind === 'list') return undefined
   const { id, title } = hex.tile
   const located = hex.tile.reference === undefined ? tileIn(root, id) : undefined
-  const tile = located?.kind === 'leaf' ? undefined : located?.tile
   const own = {
     title,
-    holds: tile !== undefined && holds(tile),
+    holds: takesOne(flat, located),
     ...(located && { below: tilesBelow(flat, id) }),
     turns: turnOf(flat, located) !== undefined,
   }
@@ -166,12 +176,17 @@ function standsIn(systems: Systems, hex: TileHex, located: Located): PickerFrame
   }
 }
 
-/** The frames a Tile's Add and Move submenus draw: the ring it holds, the one it stands in. */
+/**
+ * The frames a Tile's Add and Move submenus draw: the ring it holds, a Leaf's empty until it grows,
+ * the one it stands in.
+ */
 export function framesOf(systems: Systems, hex: TileHex) {
   const located = hex.tile.reference === undefined ? tileIn(systems.root, hex.tile.id) : undefined
   if (located === undefined) return {}
   const frames: { holds?: PickerFrame; standsIn?: PickerFrame } = {}
-  if (located.kind !== 'leaf') frames.holds = { hub: hex.tile.title, seats: childrenOf(hex.tile) }
+  if (takesOne(systems.flat, located)) {
+    frames.holds = { hub: hex.tile.title, seats: childrenOf(hex.tile) }
+  }
   const ring = standsIn(systems, hex, located)
   if (ring !== undefined) frames.standsIn = ring
   return frames

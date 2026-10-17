@@ -1,14 +1,16 @@
 // Signed out, the chat asks who you are where you would write: the sign-in widget takes the
 // Composer's place at the chat's foot, on the same zone, warm for you. The question in the agent's
 // mono, then an email and a password on their underlines, the one solid act, and the way to the other
-// of signing in and signing up. A refusal shows on the field at fault, or under the act when it names
-// none. Controlled: what is typed, which of the two it is and what the act does are its caller's.
+// of signing in and signing up, each row running on to the curve at its height, a field beside another
+// staying in its place. A refusal shows on the field at fault, or under the act when it names none.
+// Controlled: what is typed, which of the two it is and what the act does are its caller's.
 import { cn } from 'cn'
 import { useId } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Act } from '../../../atoms/controls/act'
+import { runsToCurve, toCurve } from '../../../layouts/screen/state/useAlongCurve'
 import { footPadding, zone } from '../../layouts/zone'
 import { Field } from '../fields'
 
@@ -80,7 +82,7 @@ export function SignInWidget({
         className,
       )}
     >
-      <div className="grid gap-px">
+      <div ref={toCurve} className={cn(runsToCurve, 'grid gap-px')}>
         <p className="font-agent text-[0.71875rem] leading-normal text-agent">
           {m.widget_sign_in_kicker()}
         </p>
@@ -110,7 +112,7 @@ export function SignInWidget({
           error={refused?.password}
         />
       </div>
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+      <div ref={toCurve} className={cn(runsToCurve, 'flex flex-wrap items-center gap-x-6 gap-y-2')}>
         <Act
           type="submit"
           look="hex"
@@ -131,7 +133,11 @@ export function SignInWidget({
           </Act>
         </span>
       </div>
-      <p aria-live="polite" className="-mt-2 text-xs text-destructive empty:hidden">
+      <p
+        ref={toCurve}
+        aria-live="polite"
+        className={cn(runsToCurve, '-mt-2 text-xs text-destructive empty:hidden')}
+      >
         {refused?.form}
       </p>
     </form>

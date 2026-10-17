@@ -152,10 +152,7 @@ const kindSamples: readonly KindSample[] = [
   {
     name: m.gallery_state_tile_untitled,
     note: m.gallery_tile_untitled,
-    tile: {
-      kind: 'untitled',
-      words: { title: m.tile_untitled(), preview: m.tile_untitled_preview() },
-    },
+    tile: { kind: 'untitled', words: { title: '' } },
   },
   {
     name: m.gallery_state_tile_clash,

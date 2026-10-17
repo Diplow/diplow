@@ -1,13 +1,15 @@
 // A vault in, or a tile out, in the conversation. An import waits for files where the tile would go,
 // its pickers its actions, then works, then says what it came to: the tiles created and every file
-// left behind, or every fault and nothing written. An export works a moment, then leaves its receipt,
-// the zip's name in it. Controlled: the phase and the report are the import's state hook's.
+// left behind, or every fault and nothing written, each line running on to the curve. An export works
+// a moment, then leaves its receipt, the zip's name in it. Controlled: the phase and the report are the
+// import's state hook's.
 import { cn } from 'cn'
 import { FolderInput, PackageOpen } from 'lucide-react'
 import { useRef, useState, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
+import { runsToCurve, toCurve } from '../../../layouts/screen/state/useAlongCurve'
 import { UntilDecided } from '../../entries/Receipt'
 import { Widget } from '../../layouts/Widget'
 import type { MentionProps } from '../../text/Mention'
@@ -149,8 +151,9 @@ function Pickers({
       onDismiss={onDone}
     >
       <div className="grid gap-2.5">
-        {/* A ground the files are dropped on, lit in the voice while they hover it. */}
+        {/* A ground the files are dropped on, lit in the voice while they hover it, to the curve. */}
         <div
+          ref={toCurve}
           onDragOver={(event) => {
             event.preventDefault()
             setOver(true)
@@ -164,6 +167,7 @@ function Pickers({
             onDrop(event.dataTransfer)
           }}
           className={cn(
+            runsToCurve,
             'grid min-h-20 place-items-center bg-foreground/5 px-4 py-5 text-center text-[0.8125rem] font-light text-muted-foreground transition-colors duration-300',
             over && 'bg-(--voice)/12 text-foreground',
           )}
@@ -171,7 +175,10 @@ function Pickers({
           {fileOnly ? m.system_import_drop_file() : m.system_import_drop()}
         </div>
         {!fileOnly && (
-          <p className="text-xs leading-normal font-light text-muted-foreground">
+          <p
+            ref={toCurve}
+            className={cn(runsToCurve, 'text-xs leading-normal font-light text-muted-foreground')}
+          >
             {m.system_import_hint()}
           </p>
         )}
@@ -213,7 +220,11 @@ function Lines({ title, lines }: { title: string; lines: readonly ReportLine[] }
         {lines.map(({ where, why }, index) => (
           <li
             key={`${String(index)}:${where}`}
-            className="grid gap-0.5 border-t border-border pt-2 text-[0.8125rem] font-light"
+            ref={toCurve}
+            className={cn(
+              runsToCurve,
+              'grid gap-0.5 border-t border-border pt-2 text-[0.8125rem] font-light',
+            )}
           >
             <code className="font-mono text-xs break-all text-foreground">{where}</code>
             <span className="text-muted-foreground">{why}</span>
@@ -278,7 +289,13 @@ export function TileExport({
         onDismiss={onDismiss}
       >
         {failed && reason !== undefined ? (
-          <p className="text-[0.84375rem] leading-normal font-light text-muted-foreground">
+          <p
+            ref={toCurve}
+            className={cn(
+              runsToCurve,
+              'text-[0.84375rem] leading-normal font-light text-muted-foreground',
+            )}
+          >
             {reason}
           </p>
         ) : undefined}

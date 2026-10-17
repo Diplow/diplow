@@ -24,8 +24,9 @@ import { flushSync } from 'react-dom'
 import { m } from '#/paraglide/messages'
 
 import { focusHeld, focusLost, giveFocusBack } from '../../focus'
-import { cutAlongCurve, reach } from './curve'
+import { columnMargin, cutAlongCurve, reach } from './curve'
 import { keptAtFoot } from './state/latest'
+import { useCurveFollowed } from './state/useAlongCurve'
 import { Scrollbar } from './Scrollbar'
 import { Sunstone } from './Sunstone'
 
@@ -50,6 +51,12 @@ interface ScreenProps {
   messages: ReactNode
   /** The zone at the chat's foot: the composer, or signed out, the sign-in widget's place. */
   composer: ReactNode
+  /**
+   * The zone at the foot held back, below the screen, while there is nothing to say to it yet: a new
+   * account asked its pseudo, the conversation running down to the foot meanwhile. It rises as this
+   * turns false, last of the dawn, from the corner down (`--stagger-dawn`, `--duration-dawn`).
+   */
+  composerAway?: boolean
   /** On a phone, the side in front; a wide screen shows both. */
   front: Side
   /** The seam turned it, or, on a phone, a hand took the canvas in front: it stays. */
@@ -74,17 +81,17 @@ const cut = cutAlongCurve('var(--screen-edge)')
 const bulge = `${String(reach)}px`
 
 /** What the chat's column holds past the bulge, as `--screen-margin`, so the curve's line isn't cut. */
-const margin = '0.375rem'
+const margin = `${String(columnMargin)}px`
 
 /**
- * How far the chat's foot keeps its content in from the column's right, as `--screen-clear`: back
- * inside the chat's width, past the 1.125rem to the edge, the bulge and the column's margin, with the
- * margin again to spare, so nothing reaches the curve. A slot's ground runs on under it to the cut.
- * The foot hands it to what sits there as `--screen-foot-inset`, wide only, which the Composer and the
- * sign-in widget add to their own padding, so no caller pads them again.
+ * How far the chat keeps its content in from the column's right, as `--screen-clear`: past the bulge
+ * and the column's margin, to where the curve leaves the top and comes back at the foot, its nearest to
+ * the chat, then one fixed gap, so every line, field and button runs as far right as the curve lets it.
+ * A slot's ground runs on under it to the cut. The conversation's lines keep it as `--chat-right`, and
+ * the foot hands it to what sits there as `--screen-foot-inset`, wide only, which the Composer and the
+ * sign-in widget take as their padding, so no caller pads them again.
  */
-const clear =
-  'calc(var(--screen-edge) - var(--screen-chat) + var(--screen-bulge) + 2 * var(--screen-margin))'
+const clear = 'calc(var(--screen-bulge) + var(--screen-margin) + 1.25rem)'
 
 /**
  * The seam above the composer while the canvas is in front, as `--screen-seam`: on a phone the canvas
@@ -100,6 +107,7 @@ export function Screen({
   corner,
   messages,
   composer,
+  composerAway = false,
   front,
   onFrontChange,
   said,
@@ -111,6 +119,7 @@ export function Screen({
   const foot = useRef<HTMLDivElement>(null)
   const chat = useRef<HTMLElement>(null)
   useLatestShown(scroller, content, foot)
+  useCurveFollowed(scroller, content)
   useComposerHeight(screen, foot)
   const chatInFront = front === 'chat'
   // A move made from a seam hands the focus to the seam on the other side, once the screen has
@@ -128,9 +137,11 @@ export function Screen({
     ;(to === 'chat' ? toCanvas : toChat).current?.focus()
   }
   return (
+    // Clipped, never scrolled: the composer held back waits below the foot, and a field taking the
+    // focus as it rises would scroll a hidden overflow, lifting the whole screen by the composer.
     <div
       ref={screen}
-      className={cn('@container relative isolate overflow-hidden bg-background', className)}
+      className={cn('@container relative isolate overflow-clip bg-background', className)}
       style={
         {
           '--screen-chat': chatWidth,
@@ -148,6 +159,8 @@ export function Screen({
       <section
         ref={chat}
         aria-label={m.screen_chat()}
+        // What rides the curve finds the column cut along it here (`useAlongCurve`).
+        data-curve=""
         className={cn(
           'pointer-events-none absolute inset-0 z-20 flex flex-col',
           '@wide:pointer-events-auto @wide:right-auto @wide:w-[calc(var(--screen-edge)+var(--screen-bulge)+var(--screen-margin))] @wide:[clip-path:var(--screen-cut)]',
@@ -170,8 +183,7 @@ export function Screen({
             onMove={move('canvas')}
             className="h-24 items-end"
           />
-          <Brand />
-          <Messages scroller={scroller} content={content}>
+          <Messages scroller={scroller} content={content} footless={composerAway}>
             {messages}
           </Messages>
         </div>
@@ -185,9 +197,21 @@ export function Screen({
               className="h-(--screen-seam) items-center bg-linear-to-b from-transparent to-background/70"
             />
           )}
-          {/* Wide, its zone runs on to the cut and keeps its content clear of the curve itself. */}
-          <div ref={foot} className="@wide:[--screen-foot-inset:var(--screen-clear)]">
-            {composer}
+          {/*
+            Wide, its zone runs on to the cut and keeps its content clear of the curve itself. Held
+            back, its row closes and it waits below the screen's foot, which hides it; it rises from
+            there as its row opens, fourth of the dawn, after the path, the root's light and the receipt.
+          */}
+          <div
+            ref={foot}
+            inert={composerAway}
+            className={cn(
+              'grid @wide:[--screen-foot-inset:var(--screen-clear)]',
+              'transition-[grid-template-rows,opacity] duration-(--duration-dawn) ease-glide motion-reduce:transition-none',
+              composerAway ? 'grid-rows-[0fr] opacity-0' : `grid-rows-[1fr] ${dawnsLast}`,
+            )}
+          >
+            <div className="min-h-0">{composer}</div>
           </div>
         </div>
       </section>
@@ -371,6 +395,9 @@ export function Brand() {
   )
 }
 
+/** The composer coming back, and the room it takes: fourth of a new account's dawn. */
+const dawnsLast = 'delay-[calc(var(--stagger-dawn)*3)]'
+
 /**
  * The conversation's scroller. Wide, its own scrollbar gives way to the star on the curve; it stays
  * focusable, so the keyboard scrolls it. Its content sits at its foot, the latest last, in one element
@@ -380,10 +407,13 @@ export function Brand() {
 function Messages({
   scroller,
   content,
+  footless,
   children,
 }: {
   scroller: RefObject<HTMLDivElement | null>
   content: RefObject<HTMLDivElement | null>
+  /** No composer below: the last of the conversation sits on the screen's foot, as it would. */
+  footless: boolean
   children: ReactNode
 }) {
   return (
@@ -394,10 +424,12 @@ function Messages({
       role="region"
       aria-label={m.screen_messages()}
       className={cn(
-        'flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain pt-6 pb-7 outline-none [mask-image:linear-gradient(transparent,black_1.75rem)] focus-visible:ring-1 focus-visible:ring-human/60 focus-visible:ring-inset',
+        'flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain pt-6 outline-none [mask-image:linear-gradient(transparent,black_1.75rem)] focus-visible:ring-1 focus-visible:ring-human/60 focus-visible:ring-inset',
         // How far its lines keep from the chat's sides, which a widget runs on past, the curve its edge.
         '[--chat-left:1.25rem] [--chat-right:1.25rem] pr-(--chat-right) pl-(--chat-left)',
-        '@wide:[--chat-left:2.25rem] @wide:[--chat-right:6.25rem] @wide:[scrollbar-width:none] @wide:[&::-webkit-scrollbar]:hidden',
+        '@wide:[--chat-left:2.25rem] @wide:[--chat-right:var(--screen-clear)] @wide:[scrollbar-width:none] @wide:[&::-webkit-scrollbar]:hidden',
+        'transition-[padding] duration-(--duration-dawn) ease-glide motion-reduce:transition-none',
+        footless ? 'pb-0' : `pb-7 ${dawnsLast}`,
       )}
     >
       <div ref={content} className="mt-auto">

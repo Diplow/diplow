@@ -197,6 +197,8 @@
   --animate-breathe: breathe 3.2s ease-in-out infinite;
   --animate-draw: draw 0.45s var(--ease-glide) both;
   --animate-unfold: unfold var(--duration-bloom) 0.12s var(--ease-glide) both;
+  --animate-descend: descend var(--duration-dawn) var(--ease-glide) backwards;
+  --animate-dawn: rise var(--duration-dawn) var(--ease-glide) both;
   --animate-rise: rise 0.55s var(--ease-glide) both;
   --animate-sweep: sweep 1.8s linear infinite;
   --animate-bloom: bloom var(--duration-bloom) var(--ease-glide) both;
@@ -225,6 +227,15 @@
     }
     to {
       clip-path: inset(0 0 0 0);
+    }
+  }
+  /* Shown from its top down, what hangs past its sides and its foot included; once shown, unclipped. */
+  @keyframes descend {
+    from {
+      clip-path: inset(-4px -100vw 100% -100vw);
+    }
+    to {
+      clip-path: inset(-4px -100vw -4rem -100vw);
     }
   }
   @keyframes rise {
@@ -309,11 +320,14 @@
     --duration-fold: 500ms;
     --duration-camera: 800ms;
     --duration-camera-level: 300ms;
-    --duration-turn: 600ms;
+    --duration-turn: 900ms;
     --duration-glide: 600ms;
     --duration-flare: 1.3s;
     --duration-glint: 1.8s;
     --duration-glance: 2.8s;
+    --duration-sunrise: 3.2s;
+    --duration-dawn: 1.6s;
+    --stagger-dawn: 0.8s;
     --stagger-bloom: 40ms;
   }
   html {

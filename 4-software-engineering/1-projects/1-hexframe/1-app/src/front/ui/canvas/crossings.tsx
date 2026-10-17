@@ -94,8 +94,17 @@ export function subjectIn(system: TileNode, id: string, center = false): Subject
     title: tile.title,
     at: center ? 'center' : at,
     parent: parent.title,
-    holds: kind !== 'leaf' && holdsIn(tile),
+    holds: kind === 'leaf' ? grows(parent, id) : holdsIn(tile),
   }
+}
+
+/**
+ * Whether a Leaf takes a new Tile, growing into a Branch for it, as home's `turnOf` reads Mapping: its
+ * own Direction free of a Branch under its parent.
+ */
+function grows(parent: TileNode, id: string) {
+  const own = directions.find((direction) => parent.leaves?.[direction]?.id === id)
+  return own !== undefined && parent.branches?.[own] === undefined
 }
 
 /** A Tile of the System as the chat names it: its title, and what its card says beside it. */

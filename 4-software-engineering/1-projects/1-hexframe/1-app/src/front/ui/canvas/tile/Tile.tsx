@@ -206,7 +206,8 @@ const teal: Lights = {
 
 const lights: Record<TileKind, Lights> = {
   root: { rest: warm(34, 6), lit: warm(46, 12) },
-  untitled: { rest: warm(15, 3), lit: warm(22, 6) },
+  // Untitled, it has no colour of its own yet, its lamp alone: the root's warm light, none of it.
+  untitled: { rest: warm(0, 0), lit: warm(0, 0) },
   branch: tile,
   list: tile,
   leaf: {
@@ -233,6 +234,8 @@ function drafted(voice: 'agent' | 'human'): Lights {
 interface Rim {
   color: string
   dash?: string
+  /** Not lit yet: the untitled root's, which lights as its light rises. */
+  unlit?: boolean
 }
 
 const ember: Rim = { color: tint('warning', 60) }
@@ -241,7 +244,6 @@ const rims: Partial<Record<TileKind, Rim>> = {
   context: { color: tint('context', 45) },
   reference: { color: tint('context', 45), dash: '3 3' },
   broken: { color: tint('faint', 70), dash: '2 4' },
-  untitled: { color: tint('glow', 55), dash: '3 4' },
   list: ember,
   // What a Proposal would create: dashed violet, since it isn't done yet.
   ghost: proposedRim,
@@ -257,7 +259,7 @@ const opacities: Record<TilePlace, string> = {
 }
 
 export function Tile(props: TileProps) {
-  const { hex, words, place = 'ring', write, held, motion, action, onGoIn } = props
+  const { hex, place = 'ring', write, held, motion, action, onGoIn } = props
   const { scale = 1, hand, mark } = props
   const id = useId()
   const pending = write === 'pending'
@@ -294,7 +296,7 @@ export function Tile(props: TileProps) {
           {...(action === undefined
             ? {
                 role: 'img',
-                'aria-label': words.title,
+                'aria-label': nameOf(props),
                 ...(hand && { tabIndex: 0, className: 'group outline-none' }),
               }
             : pressable(action, onGoIn))}
@@ -319,6 +321,9 @@ export function Tile(props: TileProps) {
     </g>
   )
 }
+
+/** Its name for a screen reader: its title, or its kind's where its hex says nothing, untitled. */
+const nameOf = ({ kind, words }: TileLook) => (words.title === '' ? kindNames[kind]() : words.title)
 
 /**
  * What makes it a button: its name, a click, Enter and Space, and going in where its caller says, by
@@ -359,13 +364,17 @@ function origin({ x, y }: Point, order?: number): CSSProperties {
   }
 }
 
-/** Its line of its own, if any: a clash's ember, its kind's hairline, or the center's steady line. */
+/**
+ * Its line of its own, if any: a clash's ember, its kind's hairline, or the center's steady line; the
+ * untitled root's unlit, since it is not there yet but for its lamp.
+ */
 function rimOf(props: TileProps, id: string): Rim | undefined {
   const { kind, place = 'ring' } = props
   if (clashOf(props) !== undefined) return ember
   const own = rims[kind]
   if (own !== undefined || !centered(place)) return own
-  return { color: kind === 'root' || kind === 'untitled' ? `url(#${id}-rim)` : 'var(--input)' }
+  if (rises(kind)) return { color: `url(#${id}-rim)`, unlit: kind === 'untitled' }
+  return { color: 'var(--input)' }
 }
 
 /** Its fill, lit or not, its lines, and the lights around it. */
@@ -381,8 +390,8 @@ function Light(props: TileProps & { id: string }) {
   return (
     <>
       <defs>
-        <FadeDef id={`${id}-rest`} fade={lights[props.kind].rest} />
-        <FadeDef id={`${id}-lit`} fade={lights[props.kind].lit} />
+        <FadeDef id={`${id}-rest`} fade={lights[props.kind].rest} rising={rises(props.kind)} />
+        <FadeDef id={`${id}-lit`} fade={lights[props.kind].lit} rising={rises(props.kind)} />
         <FadeDef
           id={`${id}-rim`}
           fade={{ top: 'var(--glow-soft)', foot: tint('human', 20), diagonal: true }}
@@ -418,6 +427,10 @@ function Light(props: TileProps & { id: string }) {
           strokeDasharray={rim.dash}
           strokeWidth={1}
           vectorEffect="non-scaling-stroke"
+          className={cn(
+            'transition-opacity duration-(--duration-sunrise) ease-glide delay-(--stagger-dawn) motion-reduce:transition-none',
+            rim.unlit === true && 'opacity-0',
+          )}
         />
       )}
       <polygon
@@ -436,8 +449,15 @@ function Light(props: TileProps & { id: string }) {
 }
 
 /**
- * The lights behind it: the root's halo, a draft breathing in its writer's voice, and the blur they,
- * and who touches it, glow by.
+ * Whether its light rises as it changes: the root's, small and faint while untitled, which grows to
+ * its glow and lightens once the user names it, for `--duration-sunrise`, second of the dawn, once
+ * the corner's path has started down (`--stagger-dawn`).
+ */
+const rises = (kind: TileKind) => kind === 'root' || kind === 'untitled'
+
+/**
+ * The lights behind it: the root's halo, small while it is untitled, a draft breathing in its
+ * writer's voice, and the blur they, and who touches it, glow by.
  */
 function Glows(props: TileProps & { id: string }) {
   const { hex, kind, id } = props
@@ -452,13 +472,17 @@ function Glows(props: TileProps & { id: string }) {
         </radialGradient>
         <BlurDef id={`${id}-blur`} />
       </defs>
-      {kind === 'root' ? (
+      {rises(kind) ? (
         <circle
           cx={hex.center.x}
           cy={hex.center.y}
           r={hex.radius * 1.45}
           fill={`url(#${id}-halo)`}
-          className="pointer-events-none"
+          className={cn(
+            'pointer-events-none transition-[scale,opacity] duration-(--duration-sunrise) ease-glide delay-(--stagger-dawn) motion-reduce:transition-none',
+            kind === 'untitled' && 'scale-[.28] opacity-75',
+          )}
+          style={origin(hex.center)}
         />
       ) : null}
       {kind === 'draft' || kind === 'writing' ? (
@@ -561,7 +585,10 @@ function Words(props: TileProps & { sized: Sized }) {
   )
 }
 
-/** The title's type: the human's serif, a file's mono, the agent's for its draft, faint for none yet. */
+/**
+ * The title's type: the human's serif, the untitled root's pseudo as it is typed included, a file's
+ * mono, the agent's for its draft, faint for a broken Reference.
+ */
 function titleClass(look: TileLook & { place?: TilePlace }, alone: boolean): string {
   const { kind } = look
   return cn(
@@ -571,7 +598,7 @@ function titleClass(look: TileLook & { place?: TilePlace }, alone: boolean): str
     kind === 'leaf' && look.file === true && 'font-mono text-[.8em]',
     // The agent's words are its mono, a draft it writes or a tile it proposes; yours keep your serif.
     (kind === 'draft' || kind === 'ghost') && 'font-agent text-[.86em] text-agent',
-    (kind === 'broken' || kind === 'untitled') && 'text-faint italic',
+    kind === 'broken' && 'text-faint italic',
   )
 }
 
