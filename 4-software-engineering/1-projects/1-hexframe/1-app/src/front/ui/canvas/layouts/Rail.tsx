@@ -2,6 +2,7 @@
 // on, a point per step, with hexframe's mark, the Sunstone, at its head, threaded on the line, so the
 // corner reads as one mark rather than a sign beside a list; it turns whole at each thing done.
 // With no step, the mark stands alone; the line and its points come down from it once there is one.
+// Where its caller gives one, the mark is the way back to the reader's own System, from another.
 // Every part sits on the line's axis: the line is 1px wide and the mark and the points odd in size, so
 // each centre falls on the line's centre and the line stays one crisp pixel. Under a finger, every
 // step grows to a 44px target and the points spread to match.
@@ -23,19 +24,36 @@ interface RailProps {
   onSelect: (id: string) => void
   /** How many things were done since the page opened: the mark turns whole at each. */
   turns?: number
+  /**
+   * The mark chosen, on another System than the reader's: the caller carries the canvas back to
+   * their own Root. Without it, the mark is only hexframe's.
+   */
+  onHome?: (() => void) | undefined
   className?: string
 }
 
-export function Rail({ steps, onSelect, turns = 0, className }: RailProps) {
+export function Rail({ steps, onSelect, turns = 0, onHome, className }: RailProps) {
+  const mark = <Sunstone turns={turns} className="h-[23px] w-[21px]" />
   return (
     <div className={cn('relative w-[31px] pointer-coarse:w-11', className)}>
-      <span
-        role="img"
-        aria-label={m.screen_brand()}
-        className="grid size-[31px] place-items-center pointer-coarse:size-11"
-      >
-        <Sunstone turns={turns} className="h-[23px] w-[21px]" />
-      </span>
+      {onHome === undefined ? (
+        <span role="img" aria-label={m.screen_brand()} className={markPlace}>
+          {mark}
+        </span>
+      ) : (
+        <button
+          type="button"
+          aria-label={m.breadcrumb_home()}
+          title={m.breadcrumb_home()}
+          className={cn(
+            markPlace,
+            'cursor-pointer rounded-full outline-none focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-human',
+          )}
+          onClick={onHome}
+        >
+          {mark}
+        </button>
+      )}
       {steps.length > 0 && (
         <div className="motion-safe:animate-descend">
           {/* The line starts at the foot of the mark and fades out below the last point. */}
@@ -62,6 +80,9 @@ export function Rail({ steps, onSelect, turns = 0, className }: RailProps) {
     </div>
   )
 }
+
+/** Where the mark sits, a 44px target under a finger. */
+const markPlace = 'grid size-[31px] place-items-center pointer-coarse:size-11'
 
 interface StepProps {
   step: RailStep

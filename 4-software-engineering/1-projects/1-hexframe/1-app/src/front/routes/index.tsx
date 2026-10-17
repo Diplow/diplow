@@ -23,7 +23,11 @@
 // go (HEX-110). A new account is asked its pseudo first, the composer and the corner's path held back
 // until it names the Root; then, while its Root holds nothing and nothing was said, the agent's one
 // line after the receipt invites its first command, `/tutorial`, which the tutorial's param
-// answers, and which the composer offers first (HEX-118). Signed out, the same screen: Help on the
+// answers, and which the composer offers first (HEX-118). `/tutorial` is a journey: the canvas leaves
+// the user's sun for the tutorial's center, which arrives alone and large, and the tutorial follows
+// its own rules, what it has not introduced yet absent, the composer held back as during the
+// onboarding; the corner's mark carries the canvas back to the user's Root (HEX-119). Signed out, the
+// same screen: Help on the
 // canvas, two lines from the agent and its offer to read the centered topic in full, and the
 // sign-in widget in the composer's place, which signs in or up, then comes back where the user was.
 // While the help widget is open, a topic centered on Help's canvas turns its page.
@@ -54,6 +58,7 @@ import {
   withTutorial,
 } from '#/front/features/shipped/search'
 import { HelpRead, ShippedCanvas } from '#/front/features/shipped/Shipped'
+import type { TutorialLets } from '#/front/features/shipped/tutorial/rules'
 import { KeyWidgets } from '#/front/features/keys/KeyWidgets'
 import { readKeysSearch, withKeys } from '#/front/features/keys/search'
 import { useKeyWidgetState } from '#/front/features/keys/state/useKeyWidgetState'
@@ -79,6 +84,7 @@ import { Skeleton } from '#/front/ui/atoms/skeleton'
 import { Screen } from '#/front/ui/layouts/screen/Screen'
 import { useScreenState } from '#/front/ui/layouts/screen/state/useScreenState'
 import type { CanvasMarks } from '#/front/ui/canvas/Canvas'
+import { Journey } from '#/front/ui/canvas/layouts/Journey'
 import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { centerOn, withViewIn, type CanvasView, type ViewAction } from '#/front/ui/canvas/view/view'
@@ -175,8 +181,9 @@ function useHelpNavigation(turning: ReturnType<typeof useScreenState>['actions']
 
 /**
  * The tutorial's navigation on home, read-only: its Tiles, for the corner, read beside the canvas
- * without throwing, and only while it is `open` on the canvas, and its canvas's view, whose center
- * its param holds.
+ * without throwing, and only while it is `open` on the canvas, its canvas's view, whose center its
+ * param holds, and the way back, the corner's mark, which carries the canvas to the user's Root, the
+ * System's view and change set aside as they were when the tutorial took it.
  */
 function useTutorialNavigation(open: boolean) {
   const navigate = Route.useNavigate()
@@ -187,32 +194,55 @@ function useTutorialNavigation(open: boolean) {
     onViewChange: (view: CanvasView) => {
       void navigate({ search: (current) => tutorialOn(current, view) })
     },
+    onHome: () => {
+      void navigate({ search: (current) => ({ ...screenOf(current), ...withTutorial(undefined) }) })
+    },
   }
 }
 
-/** How home moves around a System hexframe ships: its Tiles, for the corner, and its view. */
+/**
+ * How home moves around a System hexframe ships: its Tiles, for the corner, its view, and, from the
+ * tutorial, the way back.
+ */
 interface ShippedNavigation {
   tree: TileNode | undefined
   onViewChange: (view: CanvasView) => void
+  onHome?: () => void
 }
 
 /**
- * The canvas and its corner while a System hexframe ships has them, read-only; none, the Account's
- * System's then. The URL's view is the canvas's, so meanwhile the System's view is its Root, which a
- * Message is sent from.
+ * The canvas and its corner while a System hexframe ships has them, read-only, the tutorial by its
+ * rules (`lets`), which the chat follows too; none, the Account's System's then. The URL's view is the
+ * canvas's, so meanwhile the System's view is its Root, which a Message is sent from.
  */
 function shippedSide(search: HomeSearch, navigation: Record<ShippedRoot, ShippedNavigation>) {
   const shown = shippedOnCanvas(search)
   if (shown === undefined) return undefined
-  const { shipped, view } = shown
-  const { tree, onViewChange } = navigation[shipped]
+  const { shipped, view, lets } = shown
+  const { tree, onViewChange, onHome } = navigation[shipped]
   const systemView: CanvasView = {}
   return {
     systemView,
-    canvas: <ShippedSide key={shipped} shipped={shipped} view={view} onViewChange={onViewChange} />,
-    corner: <Breadcrumb system={tree} view={view} onViewChange={onViewChange} />,
+    lets,
+    canvas: (
+      <ShippedSide
+        key={shipped}
+        shipped={shipped}
+        view={view}
+        onViewChange={onViewChange}
+        lets={lets}
+      />
+    ),
+    corner: <Breadcrumb system={tree} view={view} onViewChange={onViewChange} onHome={onHome} />,
   }
 }
+
+/**
+ * Which System the canvas shows, as a journey goes: the tutorial is another star; the Account's own
+ * and Help, which opens over it, are home.
+ */
+const journeyAt = (search: HomeSearch) =>
+  shippedOnCanvas(search)?.shipped === 'tutorial' ? 'tutorial' : 'home'
 
 /**
  * The Account's System, read outside every boundary without throwing, for what the chat sends and the
@@ -245,9 +275,9 @@ function useOpenKeys(turning: ReturnType<typeof useScreenState>['actions']) {
 }
 
 /**
- * `/tutorial`, typed or clicked in the agent's invitation: the tutorial on the canvas, at its Root,
+ * `/tutorial`, typed or clicked in the agent's invitation: the journey to the tutorial, at its Root,
  * read-only, Help's widget closed and the System's view and change set aside, as the tutorial takes
- * the canvas, which a phone brings to the front. The journey there is HEX-119's.
+ * the canvas, which a phone brings to the front. Taken again, it replays from the Root.
  */
 function useOpenTutorial(turning: ReturnType<typeof useScreenState>['actions']) {
   const navigate = Route.useNavigate()
@@ -382,6 +412,7 @@ function SignedIn() {
   const view = viewOf(search)
   const side = shippedSide(search, { help, tutorial }) ?? {
     systemView: view,
+    lets: undefined,
     canvas: (
       <SystemPage
         search={search}
@@ -411,9 +442,14 @@ function SignedIn() {
         onFrontChange={turning.turn}
         said={screen.said}
         className="size-full"
-        canvas={<ReadBoundary>{side.canvas}</ReadBoundary>}
+        canvas={
+          <Journey at={journeyAt(search)}>
+            <ReadBoundary>{side.canvas}</ReadBoundary>
+          </Journey>
+        }
         corner={side.corner}
-        composerAway={welcoming}
+        // The tutorial holds the composer back, as the onboarding does, until it introduces it.
+        composerAway={welcoming || side.lets?.composer === false}
         messages={
           <div className="grid gap-5">
             <ReadBoundary>
@@ -503,10 +539,15 @@ interface ShippedSideProps {
   shipped: ShippedRoot
   view: CanvasView
   onViewChange: (view: CanvasView) => void
+  /** What the tutorial lets through; none for Help. */
+  lets?: TutorialLets | undefined
 }
 
-/** The canvas side of a System hexframe ships, Help's or the tutorial's: on the canvas, read-only. */
-function ShippedSide({ shipped, view, onViewChange }: ShippedSideProps) {
+/**
+ * The canvas side of a System hexframe ships, Help's or the tutorial's: on the canvas, read-only, the
+ * tutorial by its rules.
+ */
+function ShippedSide({ shipped, view, onViewChange, lets }: ShippedSideProps) {
   // The page's language, from its URL: a shipped System's ids are the same in every language, so the
   // view holds.
   const { data } = useShipped(shipped, getLocale())
@@ -518,6 +559,7 @@ function ShippedSide({ shipped, view, onViewChange }: ShippedSideProps) {
         tree={tree}
         view={view}
         onViewChange={onViewChange}
+        lets={lets}
         className="min-h-0 flex-1"
       />
     </div>

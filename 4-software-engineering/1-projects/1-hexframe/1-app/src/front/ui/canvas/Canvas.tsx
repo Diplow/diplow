@@ -33,7 +33,12 @@ import { nearestOf } from './state/move/targets'
 import type { CarriedTile, CarryInput } from './state/move/carry'
 import { useMove } from './state/move/useMove'
 import { useCamera } from './state/useCamera'
-import { useCanvasState, type TileAction, type TileHex } from './state/useCanvasState'
+import {
+  useCanvasState,
+  type TileAction,
+  type TileHex,
+  type TileLets,
+} from './state/useCanvasState'
 import { useScale } from './state/useScale'
 import { useFinger } from './tile/menu/TileMenu'
 import { unitsIn } from './tile/moving/drag'
@@ -113,6 +118,12 @@ interface CanvasProps {
    */
   looking?: boolean
   /**
+   * What each Tile lets through of the gestures on it, its click and going into it, for a canvas with
+   * rules of its own, the tutorial's: a Tile whose click is held back is no button, takes no focus and
+   * opens nothing. Without it, every gesture goes through.
+   */
+  lets?: (hex: TileHex) => TileLets
+  /**
    * A Tile on the move: lifted, its free slots offering themselves where `emptySlots` lands it, the
    * Tiles `swapTargets` names offering their swap on a disc at their foot, no Branch showing its
    * frame there, the rest stepped back, a banner at the canvas's foot. Without it, nothing moves.
@@ -138,7 +149,13 @@ export function Canvas(props: CanvasProps) {
       ? { tile: (hex) => lookingAt(system, hex, lookOf(hex)), slot: () => undefined }
       : undefined)
   const finger = useFinger()
-  const { state, actions } = useCanvasState({ system, view, onViewChange, finger })
+  const { state, actions } = useCanvasState({
+    system,
+    view,
+    onViewChange,
+    finger,
+    lets: props.lets,
+  })
   const svg = useRef<SVGSVGElement>(null)
   const scale = useScale(svg, canvasSize)
   const { width, height } = canvasSize

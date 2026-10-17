@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import { tutorialRules } from './tutorial/rules'
 import {
   fromHelpPage,
   readHelpSearch,
@@ -156,10 +157,10 @@ describe("the System hexframe ships on home's canvas", () => {
     })
   })
 
-  it('is the tutorial while its param names it, centered by it', () => {
+  it('is the tutorial while its param names it, by its rules on the view it centers', () => {
     expect(shippedOnCanvas({ ...view, help: undefined, tutorial: 'tutorial/2' })).toEqual({
       shipped: 'tutorial',
-      view: { ...view, center: 'tutorial/2' },
+      ...tutorialRules({ ...view, center: 'tutorial/2' }),
     })
   })
 

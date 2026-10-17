@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { TileNode } from '../view/tiles'
 import type { CanvasView, ViewAction } from '../view/view'
 
-import { useCanvasState, type TileHex } from './useCanvasState'
+import { useCanvasState, type TileHex, type TileLets } from './useCanvasState'
 
 // The canvas's state over a System made by hand: what each Tile's click does, and the next view each
 // gesture hands the route, with the gesture's name and its Tile. The view stays the caller's:
@@ -39,9 +39,12 @@ const open: CanvasView = { frame: 'children' }
 /** `a` centered, as a gesture leaves it: opened into its first ring, so its Tiles show around it. */
 const inA: CanvasView = { center: 'a', frame: 'children' }
 
-function render(view: CanvasView, { finger = false } = {}) {
+function render(
+  view: CanvasView,
+  { finger = false, lets }: { finger?: boolean; lets?: (hex: TileHex) => TileLets } = {},
+) {
   const onViewChange = vi.fn<(view: CanvasView, action: ViewAction) => void>()
-  const { result } = renderHook(() => useCanvasState({ system, view, onViewChange, finger }))
+  const { result } = renderHook(() => useCanvasState({ system, view, onViewChange, finger, lets }))
   return { ...result.current, onViewChange }
 }
 
@@ -377,6 +380,48 @@ describe('centering', () => {
   it('leaves the center where it is', () => {
     const { state, actions: act, onViewChange } = render(open)
     act.center(hexOf(state.hexes, 'tile:root'), 'keyboard')
+    expect(onViewChange).not.toHaveBeenCalled()
+  })
+})
+
+describe('what its caller holds back', () => {
+  const nothing = () => ({ click: false, goIn: false })
+
+  it('leaves every Tile without a click, the center included, so none is a button', () => {
+    const { state, actions: act } = render(open, { lets: nothing })
+    const clicks = state.hexes.flatMap((hex) => (hex.kind === 'tile' ? [act.actionOf(hex)] : []))
+    expect(clicks).not.toHaveLength(0)
+    expect(clicks.every((action) => action === undefined)).toBe(true)
+  })
+
+  it('opens nothing and goes in nowhere, by a click, a double click, Shift+Enter or a menu', () => {
+    const { state, actions: act, onViewChange } = render({}, { lets: nothing })
+    const center = hexOf(state.hexes, 'tile:root')
+    act.click(center)
+    act.go(center, 'open')
+    expect(onViewChange).not.toHaveBeenCalled()
+    const {
+      state: opened,
+      actions: inOpened,
+      onViewChange: changed,
+    } = render(open, {
+      lets: nothing,
+    })
+    const a = hexOf(opened.hexes, 'tile:a')
+    inOpened.click(a)
+    inOpened.center(a, 'pointer')
+    inOpened.center(a, 'keyboard')
+    inOpened.go(a, 'go-in')
+    expect(changed).not.toHaveBeenCalled()
+  })
+
+  it('lets through what it lets through, Tile by Tile: the center opening, nothing going in', () => {
+    const lets = (hex: TileHex) => ({ click: hex.role === 'center', goIn: false })
+    expect(actions({})).toEqual({ 'tile:root': 'expand' })
+    const { state, actions: act, onViewChange } = render(open, { lets })
+    expect(act.actionOf(hexOf(state.hexes, 'tile:root'))).toBe('collapse')
+    expect(act.actionOf(hexOf(state.hexes, 'tile:a'))).toBeUndefined()
+    act.center(hexOf(state.hexes, 'tile:a'), 'keyboard')
     expect(onViewChange).not.toHaveBeenCalled()
   })
 })

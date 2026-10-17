@@ -1,8 +1,8 @@
 // A fixture System for /design-system's canvas and Conversation: the top of this very vault, the
 // user, their six domains and the files beside them, and a little below, deep enough to open a
 // Branch two generations down, mix Branches and Leaves in a ring of Children, clash a Leaf with a
-// Branch, and split a Tile of more than six into its Branches and its Leaves. Its content is the
-// user's own, in their words, so it is not translated.
+// Branch, and split a Tile of more than six into its Branches and its Leaves; and another System, for
+// a journey to reach. Its content is the user's own, in their words, so it is not translated.
 import type { TileNode } from './view/tiles'
 import type { CanvasView } from './view/view'
 
@@ -102,6 +102,12 @@ export const tooling: TileNode = {
   title: 'Tooling',
   preview: 'What I build with, and why.',
 }
+
+/**
+ * Another System than the user's, which a journey reaches: hexframe, read as a System of its own, a
+ * star apart from the user's sun.
+ */
+export const elsewhere: TileNode = hexframe
 
 /** A view per state the canvas has to get right, named by the fixture's own Tiles. */
 export const fixtureViews = {

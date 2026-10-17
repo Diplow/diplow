@@ -56,6 +56,10 @@ export const valueNotes: readonly Note[] = [
   { tokens: ['stagger-bloom'], note: m.tokens_motion_stagger },
   { tokens: ['duration-camera'], note: m.tokens_motion_camera },
   { tokens: ['duration-camera-level'], note: m.tokens_motion_camera_level },
+  {
+    tokens: ['duration-journey', 'animate-recede', 'animate-approach'],
+    note: m.tokens_motion_journey,
+  },
   { tokens: ['duration-turn'], note: m.tokens_motion_turn },
   { tokens: ['duration-glide'], note: m.tokens_motion_glide_duration },
   { tokens: ['animate-breathe'], note: m.tokens_motion_breathe },

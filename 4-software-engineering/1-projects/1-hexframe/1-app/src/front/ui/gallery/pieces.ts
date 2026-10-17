@@ -266,6 +266,13 @@ export const pieces = [
     note: m.gallery_note_rail,
   },
   {
+    name: 'Journey',
+    tier: 'canvas',
+    sources: ['ui/canvas/layouts/Journey.tsx'],
+    madeOf: [],
+    note: m.gallery_note_journey,
+  },
+  {
     name: 'Screen',
     tier: 'layouts',
     sources: ['ui/layouts/screen/Screen.tsx'],

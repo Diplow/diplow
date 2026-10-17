@@ -17,6 +17,8 @@ import {
   withViewIn,
 } from '#/front/ui/canvas/view/view'
 
+import { tutorialRules, type TutorialLets } from './tutorial/rules'
+
 /** Where a System hexframe ships is open: one of its Tiles by its id, or `true`, its Root. */
 const ShippedAt = Schema.optionalKey(orDefault(Schema.Union([Schema.Literal(true), TileId])))
 
@@ -84,16 +86,27 @@ export const tutorialOn = <S extends CanvasView & TutorialSearch>(
   ...withTutorial(view.center ?? true),
 })
 
+/** A System hexframe ships on home's canvas, its view, and what the tutorial lets through. */
+interface OnCanvas {
+  shipped: ShippedRoot
+  view: CanvasView
+  /** The tutorial's rules, which the canvas and the chat follow; none for Help, which cuts nothing. */
+  lets?: TutorialLets
+}
+
 /**
  * The System hexframe ships that has home's canvas, if one does, and its view: Help while its widget
- * is open, on the URL's view, else the tutorial while its param names it, centered by it. None leaves
+ * is open, on the URL's view, else the tutorial while its param names it, centered by it, by its own
+ * rules, what it has not introduced yet left out of the view and of what it lets through. None leaves
  * the canvas to the Account's System.
  */
 export function shippedOnCanvas(
   search: CanvasView & HelpSearch & TutorialSearch,
-): { shipped: ShippedRoot; view: CanvasView } | undefined {
+): OnCanvas | undefined {
   if (search.help !== undefined) return { shipped: 'help', view: viewIn(search) }
-  if (search.tutorial !== undefined) return { shipped: 'tutorial', view: tutorialViewOf(search) }
+  if (search.tutorial !== undefined) {
+    return { shipped: 'tutorial', ...tutorialRules(tutorialViewOf(search)) }
+  }
   return undefined
 }
 
