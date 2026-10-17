@@ -15,8 +15,6 @@ import { directionName } from '../../canvas/tile/menu/verbs'
 import { directions } from '../../canvas/geometry/geometry'
 import { pathTo, type TileNode } from '../../canvas/view/tiles'
 import { centerOn, showView, type CanvasView } from '../../canvas/view/view'
-import { DaySplit } from '../../chat/entries/DaySplit'
-import { Events, type Happened } from '../../chat/entries/Events'
 import { said } from '../../chat/samples'
 import { Message } from '../../chat/text/Message'
 import { TileWidget } from '../../chat/widgets/tile/TileWidget'
@@ -152,35 +150,19 @@ export function canvasTour(): TileNode {
 }
 
 /**
- * How home's timeline tells the pseudo taken once the server has recorded it, the Root's edit by
- * the user, its Tile centering the canvas: the route's to say, the timeline's words being a
- * feature's.
- */
-export type TellNamed = (named: {
-  tile: { id: string; title: string }
-  at: Date
-  onCenter: (id: string) => void
-}) => Happened
-
-interface OnboardingSlideProps {
-  onGo: Go
-  tellNamed: TellNamed
-}
-
-/**
  * The onboarding, a new account's first visit, on the whole screen as home plays it
  * (`routes/index.tsx`, `features/system/widget/`), on the same pieces: the chat asking the pseudo
  * alone, its composer held back, the corner's mark alone, the untitled root its lamp, the pseudo
- * showing on it as it is typed; then, taken, the dawn, from the corner down, and the line home's
- * timeline tells of it. Played again from the start at will, the page landing anew. What changes on
- * home's onboarding changes here too.
+ * showing on it as it is typed; then, taken, the dawn, from the corner down, its receipt saying it
+ * alone, as home's timeline leaves it to the receipt. Played again from the start at will, the page
+ * landing anew. What changes on home's onboarding changes here too.
  */
-export function OnboardingSlide(props: OnboardingSlideProps) {
+export function OnboardingSlide({ onGo }: { onGo: Go }) {
   const [play, setPlay] = useState(0)
   return (
     <FirstVisit
       key={play}
-      {...props}
+      onGo={onGo}
       onAgain={() => {
         setPlay(play + 1)
       }}
@@ -213,7 +195,7 @@ function rootOf(typed: string, named: Named | undefined): TileNode {
 }
 
 /** One play of the onboarding, from the page landing. */
-function FirstVisit({ onGo, tellNamed, onAgain }: OnboardingSlideProps & { onAgain: () => void }) {
+function FirstVisit({ onGo, onAgain }: { onGo: Go; onAgain: () => void }) {
   const [typed, setTyped] = useState('')
   const [named, setNamed] = useState<Named>()
   const [view, setView] = useState<CanvasView>({})
@@ -253,50 +235,35 @@ function FirstVisit({ onGo, tellNamed, onAgain }: OnboardingSlideProps & { onAga
       }
       composerAway={named === undefined}
       foot={
-        // As home's chat: the timeline, then the tile widget, which goes from question to receipt.
-        <div className="grid gap-5">
-          {named !== undefined && (
-            <section aria-label={m.conversation_today()} className="grid gap-5">
-              <DaySplit label={m.conversation_today()} />
-              <Events
-                lines={[
-                  tellNamed({
-                    tile: { id: yours, title: named.title },
-                    at: named.at,
-                    onCenter: center,
-                  }),
-                ]}
-              />
-            </section>
-          )}
-          {named === undefined ? (
-            <TileWidget
-              mode="name"
-              name={typed}
-              onNameChange={setTyped}
-              onName={() => {
-                const title = typed.trim()
-                if (title === '') return
-                setNamed({ title, at: new Date() })
-                setDone(done + 1)
-              }}
-              onImport={said(m.widget_tile_name_import())}
-              takesFocus
-            />
-          ) : (
-            <TileWidget
-              mode="done"
-              did="named"
-              tile={{
-                title: named.title,
-                onCenter: () => {
-                  center(yours)
-                },
-              }}
-              at={named.at}
-            />
-          )}
-        </div>
+        // As home's chat: the tile widget, which goes from question to receipt, one widget so the
+        // focus goes along; the timeline leaves the pseudo taken to the receipt.
+        named === undefined ? (
+          <TileWidget
+            mode="name"
+            name={typed}
+            onNameChange={setTyped}
+            onName={() => {
+              const title = typed.trim()
+              if (title === '') return
+              setNamed({ title, at: new Date() })
+              setDone(done + 1)
+            }}
+            onImport={said(m.widget_tile_name_import())}
+            takesFocus
+          />
+        ) : (
+          <TileWidget
+            mode="done"
+            did="named"
+            tile={{
+              title: named.title,
+              onCenter: () => {
+                center(yours)
+              },
+            }}
+            at={named.at}
+          />
+        )
       }
     />
   )

@@ -84,7 +84,7 @@ interface ReceiptProps {
   takesFocus?: boolean
   /**
    * It comes in third of a new account's dawn, after the corner's path and the root's light, rising
-   * (`animate-dawn`, `--stagger-dawn`): the receipt of the pseudo taken.
+   * within its own line (`animate-dawn`, `--stagger-dawn`): the receipt of the pseudo taken.
    */
   dawning?: boolean
 }
@@ -110,7 +110,7 @@ export function Receipt({
   useEffect(() => {
     if (undone && undoFocused.current) line.current?.focus()
   }, [undone])
-  return (
+  const receipt = (
     <div
       ref={line}
       tabIndex={-1}
@@ -166,6 +166,9 @@ export function Receipt({
       )}
     </div>
   )
+  // Dawning, the conversation sits on the screen's foot, the composer still away: a line held below
+  // its place would reach past the foot, the conversation scrolling by it and the curve's star lit.
+  return dawning ? <div className="overflow-y-clip">{receipt}</div> : receipt
 }
 
 interface UntilDecidedProps {

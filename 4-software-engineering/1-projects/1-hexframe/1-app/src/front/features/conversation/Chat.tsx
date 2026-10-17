@@ -1,20 +1,21 @@
 // The chat on home, in the screen's two slots. `ChatTimeline`, the Account's own Conversation, read a
 // day at a time, today first and each earlier day holding an Entry as the reader asks for it, a Tile
 // named handing its Tile to the route to center, an open Proposal accepted or discarded where it
-// stands, and what was applied undone; after it, the user's Messages still on their way, or refused
-// with a retry, where they went that it doesn't hold yet, each gesture joining the navigation under
-// way, and the agent's step while a Turn runs, as the route's poll last saw it. `ChatComposer`,
-// the composer, whose Message the route posts after the navigation it follows, saying so when the
-// Account may not use the Assistant, and where the next Turn works, the canvas's center unless the
-// Message opens with a link, naming a Tile carried from the canvas or one a menu asks the agent
-// about; its commands switch the Mode, undo what the agent last applied, open Help or the Keys, or go
-// to another language. While a Turn runs, the field waits and send becomes Stop. It offers the
-// Account's Tiles to `@`, from the System the page holds. The Mode, as the poll last saw it, shows
-// under the field, switched through `useSetMode`, the one switched to shown while the switch is on
-// its way. Each is shown inside a ReadBoundary, which a failed read lands in.
-import { type ComponentProps, useMemo } from 'react'
+// stands, and what was applied undone, the change a receipt at its foot says left to it; after it,
+// the user's Messages still on their way, or refused with a retry, where they went that it doesn't
+// hold yet, each gesture joining the navigation under way, and the agent's step while a Turn runs,
+// as the route's poll last saw it. `ChatComposer`, the composer, whose Message the route posts
+// after the navigation it follows, saying so when the Account may not use the Assistant, and where
+// the next Turn works, the canvas's center unless the Message opens with a link, naming a Tile
+// carried from the canvas or one a menu asks the agent about; its commands switch the Mode, undo
+// what the agent last applied, open Help or the Keys, or go to another language. While a Turn runs,
+// the field waits and send becomes Stop. It offers the Account's Tiles to `@`, from the System the
+// page holds. The Mode, as the poll last saw it, shows under the field, switched through
+// `useSetMode`, the one switched to shown while the switch is on its way. Each is shown inside a
+// ReadBoundary, which a failed read lands in.
+import { type ComponentProps, useMemo, useState } from 'react'
 
-import type { Mode } from '#/domains/assistant/entities'
+import type { Entry, Mode } from '#/domains/assistant/entities'
 import {
   type Sent,
   useAcceptProposal,
@@ -37,7 +38,13 @@ import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 
 import { mentionablesOf } from './composer/mention'
 import { ConversationFoot, Timeline } from './Conversation'
-import { dayOf, latestUndoable, type Went } from './timeline/timeline'
+import {
+  besideReceipt,
+  dayOf,
+  latestUndoable,
+  type Receipted,
+  type Went,
+} from './timeline/timeline'
 
 /** The Account's Tiles the chat names and offers to `@`, from the System the page holds. */
 function useTiles() {
@@ -57,6 +64,20 @@ function useEntries() {
   return data?.pages.toReversed().flatMap(({ entries }) => entries)
 }
 
+/**
+ * Today's Entries beside the receipt at the conversation's foot (`besideReceipt`): those read as it
+ * came, held as it renders, stay told, so what is recorded since, its change, is left to it.
+ */
+function useBesideReceipt(today: ReadonlyArray<Entry> | undefined, receipt: Receipted | undefined) {
+  const came = receipt?.at.getTime()
+  const [read, setRead] = useState(() => ({ came, before: idsOf(today) }))
+  if (read.came !== came) setRead({ came, before: idsOf(today) })
+  return (entries: ReadonlyArray<Entry>) => besideReceipt(entries, receipt, read.before)
+}
+
+const idsOf = (entries: ReadonlyArray<Entry> | undefined): ReadonlySet<string> =>
+  new Set(entries?.map(({ id }) => id))
+
 interface ChatTimelineProps {
   /** Centers the canvas on a Tile named. */
   onCenter: (tile: string) => void
@@ -68,10 +89,18 @@ interface ChatTimelineProps {
   resend: (sent: Sent) => void
   /** Where the user went since the last navigation sent, merged, and when they last went. */
   underWay: Went | undefined
+  /**
+   * What the receipt at the conversation's foot says, a form's write the user sent, which the
+   * timeline leaves to it while it shows; none while no receipt is there.
+   */
+  receipt: Receipted | undefined
 }
 
-export function ChatTimeline({ onCenter, pointing, turn, resend, underWay }: ChatTimelineProps) {
+export function ChatTimeline(props: ChatTimelineProps) {
+  const { onCenter, pointing, turn, resend, underWay, receipt } = props
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useConversation()
+  // Today's page comes first, where what the receipt says is recorded.
+  const beside = useBesideReceipt(data?.pages[0]?.entries, receipt)
   const accepting = useAcceptProposal()
   const discarding = useDiscardProposal()
   const undoing = useUndo()
@@ -87,8 +116,8 @@ export function ChatTimeline({ onCenter, pointing, turn, resend, underWay }: Cha
   if (data === undefined) return <Skeleton className="h-40" />
   const now = new Date()
   // The pages come today first; the timeline reads oldest first.
-  const days = data.pages.map(({ day, entries, titles }) =>
-    dayOf({ date: day.date, entries, titles }, now),
+  const days = data.pages.map(({ day, entries, titles }, index) =>
+    dayOf({ date: day.date, entries: index === 0 ? beside(entries) : entries, titles }, now),
   )
   return (
     <Timeline

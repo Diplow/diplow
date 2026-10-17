@@ -2,11 +2,13 @@
 // an export, working, then its receipt naming the zip, or failed. The form under way is the URL's;
 // this is what follows it, held by the page so the canvas's menus and the chat share it. One at
 // a time: a form opening ends it, a write sent leaves its receipt in its place, an export takes it,
-// and a form closed unsent leaves nothing. And the pseudo a new account is typing, which the canvas
-// shows on its untitled Root as it is typed, until a form opens.
+// and a form closed unsent leaves nothing. What a receipt says, the change its write made, it tells
+// the timeline, which leaves it to the receipt. And the pseudo a new account is typing, which the
+// canvas shows on its untitled Root as it is typed, until a form opens.
 import { useState } from 'react'
 
 import type { SystemTile } from '#/domains/mapping/entities'
+import type { OperationEvent } from '#/domains/mapping/operations'
 import { type TileContent, useExportTile } from '#/front/client/mapping/queries'
 import type { TilePlace } from '#/front/ui/chat/widgets/tile/parts'
 
@@ -35,6 +37,14 @@ export interface Receipt {
   readonly where: TilePlace | undefined
   readonly at: Date
 }
+
+/** The event each receipt's write makes, as Mapping names it, the timeline's verb for it. */
+const events = {
+  created: 'TileCreated',
+  edited: 'TileEdited',
+  named: 'TileEdited',
+  deleted: 'TileDeleted',
+} as const satisfies Record<Receipt['did'], OperationEvent['_tag']>
 
 /** A Tile exported, and how many go along with it. */
 export interface Exported {
@@ -73,6 +83,14 @@ export function useTileWidgetsState() {
   return {
     state: {
       shown,
+      /**
+       * What the receipt says, the change its write made, by its Tile and its event, and when it
+       * came, which the timeline leaves to it; none without a receipt.
+       */
+      told:
+        last?.kind === 'receipt'
+          ? { tile: last.tile.id, verb: events[last.did], at: last.at }
+          : undefined,
       /** An export on its way: the menu's Export waits. */
       exporting: isPending,
       /** The pseudo being typed for the untitled Root, which its hex shows; empty while none is. */

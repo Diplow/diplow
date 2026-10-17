@@ -350,6 +350,8 @@ function SignedIn() {
                 turn={turn}
                 resend={postMessage}
                 underWay={underWay}
+                // What the tile widget's receipt says below, the timeline leaves to it.
+                receipt={widgets.state.told}
               />
             </ReadBoundary>
             <ReadBoundary>

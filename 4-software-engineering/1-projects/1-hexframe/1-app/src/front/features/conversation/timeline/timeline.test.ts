@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import type { Entry } from '#/domains/assistant/entities'
+import type { Actor, Entry } from '#/domains/assistant/entities'
 
-import { dayOf, laterOf, latestUndoable, splitByDay } from './timeline'
+import { besideReceipt, dayOf, laterOf, latestUndoable, splitByDay } from './timeline'
 
 // Local dates, so the tests hold in any time zone: days are the reader's.
 const at = (day: number, hour: number, minute = 0) => new Date(2026, 8, day, hour, minute)
@@ -73,6 +73,49 @@ describe('dayOf', () => {
     expect(dayOf({ ...read, date: '2026-09-27' }, now).relative).toBe('today')
     expect(dayOf({ ...read, date: '2026-09-26' }, now).relative).toBe('yesterday')
     expect(dayOf({ ...read, date: '2026-09-25' }, now)).not.toHaveProperty('relative')
+  })
+})
+
+describe('besideReceipt', () => {
+  const change = (
+    id: string,
+    tile: string,
+    verb: string,
+    actor: Actor = { _tag: 'You' },
+  ): Entry => ({
+    _tag: 'Change',
+    id,
+    at: at(27, 9),
+    verb,
+    tile: { id: tile, title: tile },
+    actor,
+  })
+  const receipt = { tile: 'games', verb: 'TileEdited', at: at(27, 9) }
+  const ids = (entries: ReadonlyArray<Entry>) => entries.map((entry) => entry.id)
+
+  it('leaves the change a receipt tells, recorded since it came, to it', () => {
+    const today = [message('hello', at(27, 8)), change('named', 'games', 'TileEdited')]
+    expect(ids(besideReceipt(today, receipt, new Set(['hello'])))).toEqual(['hello'])
+  })
+
+  it('keeps an earlier change of its Tile, read before it came', () => {
+    const today = [change('first', 'games', 'TileEdited'), change('again', 'games', 'TileEdited')]
+    expect(ids(besideReceipt(today, receipt, new Set(['first'])))).toEqual(['first'])
+  })
+
+  it('keeps what it does not tell: another Tile, another verb, someone else', () => {
+    const today = [
+      change('other', 'design', 'TileEdited'),
+      change('moved', 'games', 'TileMoved'),
+      change('key', 'games', 'TileEdited', { _tag: 'Key', name: 'Laptop' }),
+      change('agent', 'games', 'TileEdited', { _tag: 'Assistant' }),
+    ]
+    expect(ids(besideReceipt(today, receipt, new Set()))).toEqual(ids(today))
+  })
+
+  it('tells everything while no receipt is there', () => {
+    const today = [change('named', 'games', 'TileEdited')]
+    expect(ids(besideReceipt(today, undefined, new Set()))).toEqual(['named'])
   })
 })
 

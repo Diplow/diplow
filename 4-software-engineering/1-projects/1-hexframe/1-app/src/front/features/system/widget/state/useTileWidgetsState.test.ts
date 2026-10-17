@@ -82,6 +82,27 @@ describe('what follows a tile widget', () => {
     })
     expect(result.current.state.shown).toBeUndefined()
   })
+
+  it('tells the timeline the change its receipt says, by its event, until it goes', () => {
+    const { result, run } = render()
+    expect(result.current.state.told).toBeUndefined()
+    run((actions) => {
+      actions.sent(receipt)
+    })
+    expect(result.current.state.told).toEqual({
+      tile: 'tooling',
+      verb: 'TileCreated',
+      at: receipt.at,
+    })
+    run((actions) => {
+      actions.sent({ ...receipt, key: 'name', did: 'named', tile: { id: 'root', title: 'Ada' } })
+    })
+    expect(result.current.state.told).toMatchObject({ tile: 'root', verb: 'TileEdited' })
+    run((actions) => {
+      actions.clear()
+    })
+    expect(result.current.state.told).toBeUndefined()
+  })
 })
 
 describe('an export', () => {
