@@ -55,7 +55,7 @@ const titled = (acting: Mapping.Acting, id: string) =>
 /** A change run as the API layer runs it, in the transaction it opens. */
 const changed = transactional
 
-layer(TestTiles)('a System shared by its Grants, over PGlite', (it) => {
+layer(TestTiles)('a System shared by its Grants, read, over PGlite', (it) => {
   it.effect('lets Bob, in Family, read Journal, and keeps it from a stranger', () =>
     Effect.gen(function* () {
       const { star, journal, entry } = yield* scenario
@@ -92,7 +92,9 @@ layer(TestTiles)('a System shared by its Grants, over PGlite', (it) => {
       ).toMatchObject({ title: 'Mine' })
     }),
   )
+})
 
+layer(TestTiles)('a System shared by its Grants, changed, over PGlite', (it) => {
   it.effect('refuses a write the reader may not make NotAllowed, and lets a writer make it', () =>
     Effect.gen(function* () {
       const { ana, star, journal } = yield* scenario
@@ -163,7 +165,9 @@ layer(TestTiles)('a System shared by its Grants, over PGlite', (it) => {
         expect(yield* titled(visitor(star), entry.id)).toMatchObject({ title: 'Entry' })
       }),
   )
+})
 
+layer(TestTiles)('a System shared by its Grants, batched, moved and deleted, over PGlite', (it) => {
   it.effect('refuses a batch its owner runs without a Session when it opens a Tile', () =>
     Effect.gen(function* () {
       const { ana, star, entry, garden } = yield* scenario
@@ -201,7 +205,9 @@ layer(TestTiles)('a System shared by its Grants, over PGlite', (it) => {
       })
       const within = new MoveTile({ id: entry.id, version: 1, parent: journal.id, slot: 4 })
       yield* changed(Mapping.moveTile(bob, within))
-      expect(yield* titled(bob, journal.id)).toMatchObject({ branches: { 4: { title: 'Entry' } } })
+      expect(yield* titled(bob, journal.id)).toMatchObject({
+        branches: { 4: { title: 'Entry' } },
+      })
     }),
   )
 
@@ -219,7 +225,12 @@ layer(TestTiles)('a System shared by its Grants, over PGlite', (it) => {
         const kept = yield* Tiles.use((tiles) => tiles.grants(ana))
         expect(kept.map(({ tile }) => tile)).toEqual([star, star])
         const exit = yield* Effect.exit(
-          granting(ana, { tile: star, subject: 'everyone', subjectId: null, value: 'read+write' }),
+          granting(ana, {
+            tile: star,
+            subject: 'everyone',
+            subjectId: null,
+            value: 'read+write',
+          }),
         )
         expect(Exit.hasDies(exit)).toBe(true)
       }),
