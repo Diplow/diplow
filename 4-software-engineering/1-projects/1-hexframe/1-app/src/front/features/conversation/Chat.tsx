@@ -96,10 +96,15 @@ interface ChatTimelineProps {
    * timeline leaves to it while it shows; none while no receipt is there.
    */
   receipt: Receipted | undefined
+  /**
+   * The Tiles of the System the page visits, someone else's, by id with their Titles, which the chat
+   * names as it names the Account's own, a gesture there on its way included (HEX-127).
+   */
+  elsewhere?: ReadonlyMap<string, string> | undefined
 }
 
 export function ChatTimeline(props: ChatTimelineProps) {
-  const { onCenter, pointing, turn, resend, underWay, receipt } = props
+  const { onCenter, pointing, turn, resend, underWay, receipt, elsewhere } = props
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useConversation()
   // Today's page comes first, where what the receipt says is recorded.
   const beside = useBesideReceipt(data?.pages[0]?.entries, receipt)
@@ -110,8 +115,11 @@ export function ChatTimeline(props: ChatTimelineProps) {
   const undoPending = useUndoing()
   const tiles = useTiles()
   const system = useMemo(
-    () => (tiles === undefined ? undefined : new Map(tiles.map(({ id, title }) => [id, title]))),
-    [tiles],
+    () =>
+      tiles === undefined
+        ? undefined
+        : new Map([...(elsewhere ?? []), ...tiles.map(({ id, title }) => [id, title] as const)]),
+    [tiles, elsewhere],
   )
   const { messages, forget } = useMessagesOnTheirWay()
   const recording = useNavigationsOnTheirWay()

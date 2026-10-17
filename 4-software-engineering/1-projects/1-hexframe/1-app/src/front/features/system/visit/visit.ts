@@ -50,6 +50,15 @@ export function visitTree({ system, root, gaps }: Pick<SystemShown, 'system' | '
 }
 
 /**
+ * The Titles of the Tiles of someone else's System a visitor sees, by id, its gaps' and its star's
+ * card's included: what the chat names them by, as it names the Account's own.
+ */
+export function titlesIn({ system, gaps }: Pick<SystemShown, 'system' | 'gaps'>) {
+  const tiles = [system.root, ...Object.values(gaps), ...Object.values(system.tiles)]
+  return new Map(tiles.flatMap((held) => (held._tag === 'Tile' ? [[held.id, held.title]] : [])))
+}
+
+/**
  * What a visitor may do on someone else's System: read what Mapping lets them read, and no more for
  * now, whatever else its Grants give them. A write the page sends acts on the Account's own System
  * until a write reaches the System it names (HEX-132), and a Turn starts in its own System alone

@@ -369,9 +369,8 @@ function visitedSide(
   const { star, tree } = visit
   if (star === undefined) return undefined
   const { onHome, ...page } = props
-  const systemView: CanvasView = {}
   return {
-    systemView,
+    systemView: {},
     rules: undefined,
     at: star,
     canvas: (
@@ -609,6 +608,7 @@ function SignedIn() {
                 underWay={underWay}
                 // What the tile widget's receipt says below, the timeline leaves to it.
                 receipt={widgets.state.told}
+                elsewhere={visit.titles}
               />
             </ReadBoundary>
             <ReadBoundary>
