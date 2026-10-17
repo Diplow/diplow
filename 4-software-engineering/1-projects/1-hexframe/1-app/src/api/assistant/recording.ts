@@ -46,7 +46,10 @@ export const recordedInConversation = on(MappingEvent, (event, actor) =>
     onSome: (signedIn) =>
       Effect.gen(function* () {
         const accountId = signedIn.account.id
-        const summary = yield* Mapping.summary(yield* actingOnOwn(accountId), event)
+        const summary = yield* Mapping.summary(
+          yield* actingOnOwn(accountId, { session: false }),
+          event,
+        )
         const actor = yield* actorOf(signedIn)
         yield* transactional(Assistant.recordChange(accountId, summary, actor))
       }),

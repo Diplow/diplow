@@ -31,13 +31,10 @@ import { tileLink, tileOfLink } from './files/download'
  * Organizations and Groups, and whether a Session proves the request, which only a server function
  * the user calls from the app says; the System, named by the Account's star. The one place the API
  * layer resolves both, for every program of every domain that reaches Mapping, fresh on every call,
- * for now always on the Account's own System. Anything acting for the user without a Session, a Key,
- * a Turn's Key or the Assistant, says none.
+ * for now always on the Account's own System. Every caller says whether a Session proves it: anything
+ * acting for the user without one, a Key, a Turn's Key or the Assistant, says it doesn't.
  */
-export const actingOnOwn = (
-  accountId: string,
-  { session }: { session: boolean } = { session: false },
-) =>
+export const actingOnOwn = (accountId: string, { session }: { readonly session: boolean }) =>
   Effect.map(Mapping.starOf(accountId), (system): Mapping.Acting => ({
     actor: { account: accountId, groups: [], owners: [accountId], session },
     system,

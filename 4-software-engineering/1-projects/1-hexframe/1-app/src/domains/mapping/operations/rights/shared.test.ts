@@ -189,6 +189,26 @@ layer(TestTiles)('a System shared by its Grants, batched, moved and deleted, ove
     }),
   )
 
+  it.effect('undoes a batch that kept a Tile from someone only for its owner from a Session', () =>
+    Effect.gen(function* () {
+      const { ana, star, garden, journal } = yield* scenario
+      const fromSession: Mapping.Acting = {
+        actor: { account: ana, groups: [], owners: [ana], session: true },
+        system: star,
+      }
+      const byKey = { ...fromSession, actor: { ...fromSession.actor, session: false } }
+      // Under Journal, Garden is kept from Everyone; its undo would open it again.
+      const keeping = new MoveTile({ id: garden.id, version: 1, parent: journal.id, slot: 2 })
+      const { batched } = yield* Mapping.addToBatch(byKey, [], keeping)
+      const { undo } = yield* changed(Mapping.runBatch(byKey, [batched]))
+      expect(yield* Effect.flip(changed(Mapping.undo(byKey, undo)))).toMatchObject({
+        _tag: 'NotAllowed',
+      })
+      yield* changed(Mapping.undo(fromSession, undo))
+      expect(yield* titled(visitor(star), garden.id)).toMatchObject({ title: 'Garden' })
+    }),
+  )
+
   it.effect('refuses a move without write on the parent it lands under', () =>
     Effect.gen(function* () {
       const { ana, star, journal, entry, garden } = yield* scenario

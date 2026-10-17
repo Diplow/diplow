@@ -92,7 +92,7 @@ const drafted = <O extends Operation>(accountId: string, turnId: string, operati
       Assistant.draft(accountId, turnId, (open) =>
         Effect.gen(function* () {
           const added = yield* Mapping.addToBatch(
-            yield* MappingPrograms.actingOnOwn(accountId),
+            yield* MappingPrograms.actingOnOwn(accountId, { session: false }),
             yield* batchOf(open),
             operation,
           )
@@ -118,7 +118,7 @@ const ranForTurn = <O extends Operation>(accountId: string, turnId: string, oper
       AssistantUndo.applyInTurn(accountId, turnId, (soFar) =>
         Effect.gen(function* () {
           const run = yield* Mapping.runOperation(
-            yield* MappingPrograms.actingOnOwn(accountId),
+            yield* MappingPrograms.actingOnOwn(accountId, { session: false }),
             operation,
             yield* keptUndo(soFar),
           )
@@ -207,7 +207,8 @@ export const acceptProposal = ({ proposal }: { readonly proposal: string }) =>
               by: { _tag: 'TurnKey', turnId: accepted.turn },
             }
             const batch = yield* batchOf(accepted)
-            const own = yield* MappingPrograms.actingOnOwn(account.id)
+            // The Proposal's writes are its Turn's, published as the Assistant's, not the Session's.
+            const own = yield* MappingPrograms.actingOnOwn(account.id, { session: false })
             const run = yield* actingAs(assistant)(Mapping.runBatch(own, batch))
             return { undo: encodedUndo(run.undo), changes: run.changes }
           }),
@@ -235,7 +236,11 @@ export const undo = ({ applied: id }: { readonly applied: string }) =>
     transactional(
       Effect.gen(function* () {
         const inverse = yield* Effect.orDie(decodedUndo(yield* AssistantUndo.undo(accountId, id)))
-        yield* Mapping.undo(yield* MappingPrograms.actingOnOwn(accountId), inverse)
+        // The user's own Undo, from the Session that proves it.
+        yield* Mapping.undo(
+          yield* MappingPrograms.actingOnOwn(accountId, { session: true }),
+          inverse,
+        )
         return null
       }),
     ),
