@@ -1,0 +1,47 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/rights.ts
+  s_eb2c82211b20e8::t_f23249de4894d9 92-94
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/may.test.ts
+  s_eb2c82211b20e8::t_497bd540588d5f 250-256
+  s_eb2c82211b20e8::t_1d08035a905926 168-174,249,257
+  s_eb2c82211b20e8::t_8dcdd16ac41e80 258
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/shared.test.ts
+  s_eb2c82211b20e8::t_1d08035a905926 171-194,217-234
+  s_eb2c82211b20e8::t_dc69acb12ae4d3 235-236
+4-software-engineering/1-projects/1-hexframe/1-app/dependency-cruiser.config.ts
+  s_eb2c82211b20e8::t_d73a83354cc357 166-172
+  s_eb2c82211b20e8::t_a0b8baf60c2e46 165
+4-software-engineering/1-projects/1-hexframe/1-app/scripts/lint.test.ts
+  s_eb2c82211b20e8::t_d73a83354cc357 449-464
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_eb2c82211b20e8::t_f23249de4894d9 747-748
+  s_eb2c82211b20e8::t_0db0fa3c1ad7d6 151-154,757-759,762-764
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/programs.ts
+  s_eb2c82211b20e8::t_bccfd77654d0d9 31-35
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/may.ts
+  s_eb2c82211b20e8::t_e937710e935bf6 158-160
+  s_eb2c82211b20e8::t_9736a01ac614ac 109-116,127-128,141-142,148-149,161-163
+4-software-engineering/1-projects/1-hexframe/1-app/CLAUDE.md
+  s_eb2c82211b20e8::t_6d95d11069bc8b 75
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-sharing-organizations/decisions.md
+  s_eb2c82211b20e8::t_f78e6caeeace3b 35
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_eb2c82211b20e8::t_1382a4043d84fc 46
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/CLAUDE.md
+  s_eb2c82211b20e8::t_abce90ca8262d1 27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "129743cc65b1aa8f2fbaa4358107061fe9a0999e",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
