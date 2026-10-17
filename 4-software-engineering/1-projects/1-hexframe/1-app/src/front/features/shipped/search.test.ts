@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest'
 
+import type { TileHex } from '#/front/ui/canvas/state/useCanvasState'
+
 import { tutorialRules } from './tutorial/rules'
 import {
   fromHelpPage,
   readHelpSearch,
   readTutorialSearch,
   shippedOnCanvas,
+  shippedTells,
   topicOf,
   turnedTo,
   tutorialOn,
@@ -163,6 +166,20 @@ describe("the System hexframe ships on home's canvas", () => {
     const rules = tutorialRules({ ...view, center: 'tutorial/2' })
     expect(shown).toMatchObject({ shipped: 'tutorial', view: rules.view, away: true })
     expect(shown?.rules).toMatchObject({ looking: rules.looking, composer: rules.composer })
+  })
+
+  it('follows what the agent has told: the center answers once its body is told', () => {
+    const arrival = { help: undefined, tutorial: true as const }
+    const center = { role: 'center' } as TileHex
+    expect(shippedOnCanvas(arrival, 'preview')?.rules?.lets(center).click).toBe(false)
+    expect(shippedOnCanvas(arrival, 'body')?.rules?.lets(center).click).toBe(true)
+  })
+
+  it("starts the clock of the tutorial's words while it has the canvas, never Help's", () => {
+    expect(shippedTells({ help: undefined, tutorial: true })).toBe(true)
+    expect(shippedTells({ help: undefined, tutorial: true, frame: 'children' })).toBe(true)
+    expect(shippedTells({ help: true, tutorial: true })).toBe(false)
+    expect(shippedTells({ help: undefined, tutorial: undefined })).toBe(false)
   })
 
   it("is none with neither named, the canvas the Account's System's", () => {

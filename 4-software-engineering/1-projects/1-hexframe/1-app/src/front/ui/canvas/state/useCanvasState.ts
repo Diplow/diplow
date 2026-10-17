@@ -48,13 +48,25 @@ export interface TileLets {
 }
 
 /**
- * A canvas with rules of its own, the tutorial's, as its caller hands them on: the view it shows,
- * each Tile's menu, the view's lines alone (`looking`), and what each Tile lets through.
+ * How a canvas only looked at shows each Tile, past its words: its menu, the view's lines alone,
+ * beside its hover card (`menu`); its hover card alone (`card`); or neither (`false`).
+ */
+export type Looking = 'menu' | 'card' | false
+
+/**
+ * A canvas with rules of its own, the tutorial's, as its caller hands them on: the view it shows, how
+ * each Tile is looked at (`looking`), what each Tile lets through, and whether it introduces opening
+ * its center (`introducesOpening`).
  */
 export interface CanvasRules {
   view: CanvasView
-  looking: boolean
+  looking: Looking
   lets: (hex: TileHex) => TileLets
+  /**
+   * Opening the center is introduced: where a click would open it, the center invites that click,
+   * and its six arrive one by one (HEX-121).
+   */
+  introducesOpening: boolean
 }
 
 /** Every gesture let through, as on any canvas whose caller holds none back. */

@@ -16,8 +16,9 @@ import {
   viewIn,
   withViewIn,
 } from '#/front/ui/canvas/view/view'
+import type { ToldPart } from '#/front/ui/motion'
 
-import { tutorialRules, type TutorialRules } from './tutorial/rules'
+import { tutorialRules, tutorialTells, type TutorialRules } from './tutorial/rules'
 
 /** Where a System hexframe ships is open: one of its Tiles by its id, or `true`, its Root. */
 const ShippedAt = Schema.optionalKey(orDefault(Schema.Union([Schema.Literal(true), TileId])))
@@ -61,6 +62,15 @@ export type TutorialSearch = typeof TutorialSearch.Type
 /** Reads the URL's search param, which falls back on the tutorial away from the canvas. */
 export const readTutorialSearch = readSearch(TutorialSearch)
 
+/**
+ * Whether the tutorial has home's canvas and the agent tells its center's words there, from the URL
+ * alone: what starts the clock whose part told `shippedOnCanvas` then reads.
+ */
+export const shippedTells = (search: CanvasView & HelpSearch & TutorialSearch): boolean =>
+  search.help === undefined &&
+  search.tutorial !== undefined &&
+  tutorialTells(tutorialViewOf(search))
+
 /** The search param with the tutorial on the canvas, centered on this Tile or its Root, or gone. */
 export const withTutorial = (at: string | true | undefined): TutorialSearch => ({ tutorial: at })
 
@@ -102,15 +112,16 @@ interface OnCanvas {
 /**
  * The System hexframe ships that has home's canvas, if one does, and its view: Help while its widget
  * is open, on the URL's view, else the tutorial while its param names it, centered by it, by its own
- * rules, what it has not introduced yet left out of the view and of what it lets through. None leaves
- * the canvas to the Account's System.
+ * rules, what it has not introduced yet left out of the view and of what it lets through, the agent
+ * having told `told` of its center's words. None leaves the canvas to the Account's System.
  */
 export function shippedOnCanvas(
   search: CanvasView & HelpSearch & TutorialSearch,
+  told?: ToldPart,
 ): OnCanvas | undefined {
   if (search.help !== undefined) return { shipped: 'help', view: viewIn(search), away: false }
   if (search.tutorial !== undefined) {
-    const rules = tutorialRules(tutorialViewOf(search))
+    const rules = tutorialRules(tutorialViewOf(search), told)
     return { shipped: 'tutorial', view: rules.view, away: true, rules }
   }
   return undefined

@@ -73,6 +73,12 @@ interface TileMenuProps {
    * the tile is the same once it wakes, its light rising rather than drawn anew.
    */
   asleep?: boolean
+  /**
+   * Its hover card alone, where its caller lets no line through, the tutorial's six (HEX-121): no
+   * menu opens, nor does a line's key run; under a finger, which opens no card, the long press opens
+   * the menu's header alone, its title and its preview, what the card would have said.
+   */
+  cardAlone?: boolean
   /** The tile, or the free slot, handed what its menu and its card need of it. */
   children: (hand: Hand) => ReactElement
 }
@@ -85,19 +91,21 @@ export function TileMenu({
   without = [],
   onOpenChange,
   asleep = false,
+  cardAlone = false,
   children,
 }: TileMenuProps) {
   const title = subject.kind === 'slot' ? m.tile_menu_free_slot() : subject.title
   const place = placeOf(subject)
   const pass = <Pass>{children}</Pass>
   const [menuOpen, setMenuOpen] = useState(false)
+  const finger = useFinger()
   return (
     <Menu
       opensOn="context"
-      disabled={asleep}
+      disabled={asleep || (cardAlone && !finger)}
       label={m.tile_menu_label({ title })}
       header={{ title, detail: place, description: card?.description }}
-      entries={entriesOf(subject, frames, onAct, without)}
+      entries={cardAlone ? [] : entriesOf(subject, frames, onAct, without)}
       onOpenChange={(open) => {
         setMenuOpen(open)
         onOpenChange?.(open)

@@ -28,9 +28,9 @@
 // its own rules, what it has not introduced yet absent, the composer held back as during the
 // onboarding; the corner's mark carries the canvas back to the user's Root (HEX-119). Arrived, its
 // center alone, the agent tells its words a beat at a time, its title lit, then its preview, then its
-// body in the chat, again whenever it arrives anew (HEX-120). Signed out, the
-// same screen: Help on the
-// canvas, two lines from the agent and its offer to read the centered topic in full, and the
+// body in the chat, again whenever it arrives anew (HEX-120); once the body is told, the center
+// invites the click that opens it, its six arriving one by one (HEX-121). Signed out, the same
+// screen: Help on the canvas, two lines from the agent and its offer to read the centered topic in full, and the
 // sign-in widget in the composer's place, which signs in or up, then comes back where the user was.
 // While the help widget is open, a topic centered on Help's canvas turns its page.
 import { createFileRoute, useRouter } from '@tanstack/react-router'
@@ -54,6 +54,7 @@ import {
   readHelpSearch,
   readTutorialSearch,
   shippedOnCanvas,
+  shippedTells,
   turnedTo,
   tutorialOn,
   withHelp,
@@ -199,8 +200,8 @@ function useTutorialNavigation(
   const enabled = search.tutorial !== undefined
   const { data } = useShipped('tutorial', getLocale(), { throwing: false, enabled })
   const tree = useMemo(() => (data === undefined ? undefined : canvasTree(data)), [data])
-  const tells = data !== undefined && shippedOnCanvas(search)?.rules?.tells === true
-  const told = useTold(tells, (part) => {
+  // The clock starts from the URL alone; the rules then read the part it reached (`shippedSide`).
+  const told = useTold(data !== undefined && shippedTells(search), (part) => {
     if (part === 'body') turning.turn('chat')
   })
   return {
@@ -245,7 +246,8 @@ function shippedSide(
   navigation: Record<ShippedRoot, ShippedNavigation>,
   onHome: () => void,
 ) {
-  const shown = shippedOnCanvas(search)
+  // The tutorial's rules follow what the agent has told: its center answers once its body is told.
+  const shown = shippedOnCanvas(search, navigation.tutorial.told)
   if (shown === undefined) return undefined
   const { shipped, view, away, rules } = shown
   const { tree, onViewChange, told } = navigation[shipped]

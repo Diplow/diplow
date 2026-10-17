@@ -2,7 +2,8 @@
 // and no Tile offers a swap, so a reader only looks around, as on home, the Root alone and large, its
 // preview whole, until a click opens it, a Tile centered landing with its own around it; the tutorial
 // by its own rules, what it has not introduced yet absent (`tutorial/rules.ts`), the part of its
-// center's words the agent tells of lit. In the chat,
+// center's words the agent tells of lit, its center inviting the click that opens it once they are
+// told, its six arriving one by one, their hover cards alone. In the chat,
 // under the agent's lines, its offer to read the centered topic of Help's page in full, in the help
 // widget. Like the canvas, it holds no state: the view is the URL's, and the route navigates.
 import { m } from '#/paraglide/messages'
@@ -32,8 +33,9 @@ interface ShippedCanvasProps {
 /**
  * A System hexframe ships on the canvas, which only changes the view: each Tile's menu holds the lines
  * that go somewhere, its Context among them, beside its hover card (`looking`, never `acting`); the
- * tutorial's only where it lets them through, its center opening only once it lets a click through,
- * the part of its words the agent tells of lit (HEX-120).
+ * tutorial's only where it lets them through, its hover card alone where it lets that through, its
+ * center opening only once it lets a click through, which it then invites, its six arriving one by
+ * one (HEX-121), the part of its words the agent tells of lit (HEX-120).
  */
 export function ShippedCanvas(props: ShippedCanvasProps) {
   const { tree, view, onViewChange, rules, told, className } = props
@@ -42,8 +44,8 @@ export function ShippedCanvas(props: ShippedCanvasProps) {
       system={tree}
       view={view}
       onViewChange={onViewChange}
-      looking={rules?.looking ?? true}
-      {...(rules && { lets: rules.lets })}
+      looking={rules?.looking ?? 'menu'}
+      {...(rules && { lets: rules.lets, introducesOpening: rules.introducesOpening })}
       marks={{ told }}
       className={className}
     />

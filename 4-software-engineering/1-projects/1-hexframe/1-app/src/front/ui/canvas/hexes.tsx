@@ -8,7 +8,7 @@ import type { PointerEvent, ReactElement } from 'react'
 import type { EmptySlotTarget } from './geometry/shape'
 import type { Action, Hand } from './keys'
 import type { Target } from './state/move/useMove'
-import { isViewVerb, type TileHex, type ViewVerb } from './state/useCanvasState'
+import { isViewVerb, type Looking, type TileHex, type ViewVerb } from './state/useCanvasState'
 import { TileMenu } from './tile/menu/TileMenu'
 import type { PickerFrame } from './tile/menu/Picker'
 import { groupsOf, slotPlace, type Subject, type TileAct, type Verb } from './tile/menu/verbs'
@@ -28,6 +28,8 @@ export interface Acting {
   without?: readonly Verb[]
   /** A chosen line that goes nowhere: the caller's. Open, Go in, Show its Context and Back out are the canvas's. */
   onAct: (act: TileAct, said: string) => void
+  /** Its hover card alone, no menu, where a canvas only looked at lets no line through. */
+  cardAlone?: boolean
 }
 
 /**
@@ -53,19 +55,25 @@ const acts = Object.keys(acting) as Exclude<Verb, ViewVerb>[]
 
 /**
  * A Tile's menu on a canvas only looked at, Help's or a page's: the lines that go somewhere alone,
- * Open, Go in, Show its Context and Back out, and its hover card. The Tile is told by where it is
- * drawn, a root in the ring as a Branch, since only the center is ever a root to its menu.
+ * Open, Go in, Show its Context and Back out, and its hover card; or its card alone (`card`), the
+ * tutorial's once its six are around its center (HEX-121). The Tile is told by where it is drawn, a
+ * root in the ring as a Branch, since only the center is ever a root to its menu.
  */
-export function lookingAt(system: TileNode, hex: TileHex, look: TileLook): Acting | undefined {
+export function lookingAt(
+  system: TileNode,
+  hex: TileHex,
+  look: TileLook,
+  looking: Exclude<Looking, false>,
+): Acting | undefined {
   const { kind } = look
   if (kind === 'list' || kind === 'ghost' || kind === 'writing') return undefined
   const at = hex.role === 'center' ? undefined : hex.direction
   const parent = at === undefined ? pathTo(system, hex.tile.id).at(-2) : hex.parent
   const words = { title: hex.tile.title, ...(parent && { parent: parent.title }) }
-  const onAct = () => undefined
-  if (at === undefined) return { subject: { ...words, kind, at: 'center' }, without: acts, onAct }
+  const looked = { without: acts, onAct: () => undefined, cardAlone: looking === 'card' }
+  if (at === undefined) return { subject: { ...words, kind, at: 'center' }, ...looked }
   const own = kind === 'root' || kind === 'untitled' ? 'branch' : kind
-  return { subject: { ...words, kind: own, at }, without: acts, onAct }
+  return { subject: { ...words, kind: own, at }, ...looked }
 }
 
 /** A Tile on the move, and which Tiles offer to trade places with it. */
@@ -157,6 +165,7 @@ export function TileHexView(props: TileHexProps) {
               {...(acting.without && { without: acting.without })}
               onOpenChange={props.onMenu}
               asleep={asleep}
+              cardAlone={acting.cardAlone === true}
               onAct={(act, said) => {
                 if (isViewVerb(act.verb)) props.go(act.verb)
                 else acting.onAct(act, said)
