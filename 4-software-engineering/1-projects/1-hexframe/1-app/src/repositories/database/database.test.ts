@@ -42,10 +42,10 @@ layer(TestDatabase)('the test database', (it) => {
   it.effect('keeps a tile in a Branch, a Leaf or a Context slot, and a Root in none', () =>
     Effect.gen(function* () {
       const database = yield* Database
-      // Each row of an Account of its own, so no unique index refuses it: only the checks may.
+      // Each row of a System of its own, so no unique index refuses it: only the checks may.
       const row = (parentId: string | null, direction: number | null) => ({
         id: crypto.randomUUID(),
-        accountId: crypto.randomUUID(),
+        ownerId: crypto.randomUUID(),
         parentId,
         direction,
         title: '',

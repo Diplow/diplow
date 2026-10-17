@@ -155,12 +155,14 @@ export type FrontmatterColumn = Readonly<Record<string, string | number | boolea
 
 /**
  * A row is a Tile or, when `target` is set, a Reference to the Tile of that id, standing in a Context
- * slot, whose content columns stay empty. A Root has no parent and no direction: one per Account. Any
+ * slot, whose content columns stay empty. Every row carries `owner_id`, the id of its System's owner,
+ * by which the System's rows are found: an Account's today, an Organization's later, opaque to Mapping
+ * as to this table. A Root, the System's star, has no parent and no direction: one per owner. Any
  * other row stands under its parent in a direction: 1 to 6 for a Branch, 7 to 12 for a Leaf, its
  * Direction past the six Branch slots, so a Leaf and a Branch may share a Direction, and -1 to -6 for
  * a Context slot. One row at most holds a slot; the checks refuse any other, which would hold a slot
  * no reader sees. Deleting a row deletes everything below it; a Reference to it has no key to it, so it stays,
- * broken. `account_id` has no key to `user`: Mapping ignores IAM (hexframe-v0-mapping DEC-1).
+ * broken. `owner_id` has no key to `user`: Mapping ignores IAM (hexframe-v0-mapping DEC-1).
  * `name`, `config` and `frontmatter` keep what an imported file carried, each null when it carried
  * nothing: the name it was imported under, its folder's settings and the frontmatter keys Mapping has no
  * use for, both as JSON objects, the latter in its file's order. Mapping bounds them before writing them and decides what they mean.
@@ -171,7 +173,7 @@ export const tile = pgTable(
   'tile',
   {
     id: text('id').primaryKey(),
-    accountId: text('account_id').notNull(),
+    ownerId: text('owner_id').notNull(),
     parentId: text('parent_id').references((): AnyPgColumn => tile.id, { onDelete: 'cascade' }),
     direction: smallint('direction'),
     title: text('title').notNull(),
@@ -190,8 +192,8 @@ export const tile = pgTable(
     systemVersion: integer('system_version').default(0).notNull(),
   },
   (table) => [
-    index('tile_accountId_idx').on(table.accountId),
-    uniqueIndex('tile_root_idx').on(table.accountId).where(isNull(table.parentId)),
+    index('tile_ownerId_idx').on(table.ownerId),
+    uniqueIndex('tile_root_idx').on(table.ownerId).where(isNull(table.parentId)),
     uniqueIndex('tile_slot_idx').on(table.parentId, table.direction),
     check('tile_root_check', eq(isNull(table.parentId), isNull(table.direction))),
     check(
@@ -206,7 +208,7 @@ export const tile = pgTable(
 
 /**
  * An Account's Conversation, one at most, added with its first Entry or its Mode's first switch.
- * `account_id` has no key to `user`, as `tile`'s has none: Assistant ignores IAM. `mode` is the Mode
+ * `account_id` has no key to `user`, as `tile`'s `owner_id` has none: Assistant ignores IAM. `mode` is the Mode
  * its Turns take as they start, as Assistant names it, `ask` until the user switches it.
  */
 export const conversation = pgTable('conversation', {

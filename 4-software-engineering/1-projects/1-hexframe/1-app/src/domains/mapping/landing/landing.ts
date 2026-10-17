@@ -1,6 +1,6 @@
 // An import, from an upload to the Tiles it lands: `planImport` reads the upload into a plan, its
 // archive unpacked within its bounds through the zip repository, outside any transaction; then
-// `importTiles` lands the plan in the Account's System as a change does, the Root locked, its slot
+// `importTiles` lands the plan in the System its actor acts on as a change does, its star locked, its slot
 // checked, every row written in one batch, all of it or nothing, then its one event, `TilesImported`,
 // which the plan makes, counted on the System's Version and published as an Operation's are. It always
 // creates: every Tile gets a new id, so importing twice makes two copies
@@ -8,7 +8,6 @@
 import { Effect } from 'effect'
 
 import type { BatchRow, RowRef, TileRow } from '#/repositories/database/tiles/tiles'
-import { Tiles } from '#/repositories/database/tiles/tiles'
 import { Zip } from '#/repositories/zip/zip'
 
 import { DirectionTaken, TileNotFound } from '../errors'
@@ -32,7 +31,7 @@ import {
   systemOf,
   tileRow,
 } from '../entities'
-import { changing, untitled } from '../mapping'
+import { type Acting, changing, untitled } from '../mapping'
 import { evolve, freeSlot, type Placement } from '../operations'
 import { type Upload, archiveBounds, folderOf } from './archive'
 
@@ -154,8 +153,8 @@ function reportOf(
  * A plan landed in a free slot under a Tile of the System, never under a Leaf nor in Help: its root a
  * new Tile there, with everything below it. A Leaf slot takes a plan that is one file alone.
  */
-const inSlot = (accountId: string, plan: ImportPlan, place: Placement) =>
-  changing(accountId, [place.parent], (rows, writes) =>
+const inSlot = (acting: Acting, plan: ImportPlan, place: Placement) =>
+  changing(acting, [place.parent], (rows, writes) =>
     Effect.gen(function* () {
       const system = systemFrom(rows, { owned: true })
       if (system === undefined) return yield* new TileNotFound()
@@ -186,49 +185,47 @@ const inSlot = (accountId: string, plan: ImportPlan, place: Placement) =>
  * Title, Preview, Body, config and Frontmatter, and everything below it lands below the Root. A System
  * holding anything, its Root's own content included, is `DirectionTaken`: the Root's place is taken.
  */
-const asRoot = (accountId: string, plan: ImportPlan) =>
-  Effect.andThen(
-    Tiles.use((tiles) => tiles.root(accountId, untitled)),
-    changing(accountId, [], (rows, writes) =>
-      Effect.gen(function* () {
-        const found = systemFrom(rows, { owned: true })
-        if (found === undefined) return yield* Effect.die(new Error('A Root was added, then lost'))
-        const stored = systemOf(found)
-        if (!isEmptySystem(stored)) return yield* new DirectionTaken()
-        const { root } = plan
-        const nameOf: NameOf = (path) =>
-          path === root.path ? { _tag: 'Stored', id: stored.id } : { _tag: 'Batch', key: path }
-        const resolve = (target: ReferenceTarget) => targetOf(target, { rows, nameOf })
-        const { title, preview, body, config, frontmatter } = root
-        // The Root says what the import gave it now, its Version counted by the import's event: a
-        // writer that read it empty is refused.
-        const event = importedAs(plan, stored.id)
-        yield* writes.update(stored.id, {
-          version: evolve(found, event).root.version,
-          title,
-          preview,
-          body,
-          ...(config === undefined ? {} : { config }),
-          ...(frontmatter === undefined ? {} : { frontmatter }),
-        })
-        const batch =
-          root._tag === 'Tile' ? rowsBelow(root, { parent: nameOf(root.path), resolve }) : []
-        yield* writes.insertAll(batch)
-        return {
-          answer: reportOf(batch, { id: stored.id, plan, replaced: true }),
-          events: [event],
-        }
-      }),
-    ),
+const asRoot = (acting: Acting, plan: ImportPlan) =>
+  changing(acting, [], (rows, writes) =>
+    Effect.gen(function* () {
+      const found = systemFrom(rows, { owned: true })
+      if (found === undefined)
+        return yield* Effect.die(new Error('A System was locked without a Root'))
+      const stored = systemOf(found)
+      if (!isEmptySystem(stored)) return yield* new DirectionTaken()
+      const { root } = plan
+      const nameOf: NameOf = (path) =>
+        path === root.path ? { _tag: 'Stored', id: stored.id } : { _tag: 'Batch', key: path }
+      const resolve = (target: ReferenceTarget) => targetOf(target, { rows, nameOf })
+      const { title, preview, body, config, frontmatter } = root
+      // The Root says what the import gave it now, its Version counted by the import's event: a
+      // writer that read it empty is refused.
+      const event = importedAs(plan, stored.id)
+      yield* writes.update(stored.id, {
+        version: evolve(found, event).root.version,
+        title,
+        preview,
+        body,
+        ...(config === undefined ? {} : { config }),
+        ...(frontmatter === undefined ? {} : { frontmatter }),
+      })
+      const batch =
+        root._tag === 'Tile' ? rowsBelow(root, { parent: nameOf(root.path), resolve }) : []
+      yield* writes.insertAll(batch)
+      return {
+        answer: reportOf(batch, { id: stored.id, plan, replaced: true }),
+        events: [event],
+      }
+    }),
   )
 
 /**
- * Lands an import plan in the Account's System, all of it or nothing: in a free slot under one of its
+ * Lands an import plan in the System the actor acts on, all of it or nothing: in a free slot under one of its
  * Tiles, or as the Root of an empty System. Every Tile gets a new id. A Reference to a Tile of the plan
  * points at the new one; one to an app link resolves only to a Tile of this System, and is broken
  * otherwise, as a Reference to nothing is. A slot taken since the plan was made is `DirectionTaken`.
  */
 export const importTiles = (
-  accountId: string,
+  acting: Acting,
   { plan, place }: { plan: ImportPlan; place: ImportPlace },
-) => (place._tag === 'Root' ? asRoot(accountId, plan) : inSlot(accountId, plan, place))
+) => (place._tag === 'Root' ? asRoot(acting, plan) : inSlot(acting, plan, place))

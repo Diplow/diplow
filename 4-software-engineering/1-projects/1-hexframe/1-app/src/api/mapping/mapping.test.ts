@@ -16,7 +16,9 @@ import type {
   TitleMissing,
 } from '#/domains/mapping/errors'
 import { systemOf } from '#/domains/mapping/entities'
-import { glimpses, ownTile } from '#/domains/mapping/mapping'
+import * as Service from '#/domains/mapping/mapping'
+import { EditTile } from '#/domains/mapping/operations'
+import { transactional } from '#/repositories/database/database'
 
 import type { Failure } from '../report/errors/failure'
 import { noKey, run, type Services, type StartContext } from '../server/run'
@@ -345,7 +347,7 @@ describe('a create under the id its caller chose', () => {
 describe("the errors Mapping's server functions can fail with", () => {
   it('are each listed by its type, a write refusing the Systems hexframe ships', () => {
     type ErrorOf<P> = P extends Effect.Effect<unknown, infer E, unknown> ? E : never
-    expectTypeOf<ErrorOf<typeof Mapping.system>>().toEqualTypeOf<SignedOut>()
+    expectTypeOf<ErrorOf<typeof Mapping.system>>().toEqualTypeOf<SignedOut | TileNotFound>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.shipped>>>().toEqualTypeOf<never>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createTile>>>().toEqualTypeOf<
       | SignedOut
@@ -528,7 +530,9 @@ describe('the Tiles a Turn is shown, as Mapping reads them', () => {
     const glimpsed = await value(
       run(
         context,
-        Effect.flatMap(signedInAccount, (id) => glimpses(id, ids)),
+        Effect.flatMap(signedInAccount, (id) =>
+          Effect.flatMap(Mapping.actingOnOwn(id), (acting) => Service.glimpses(acting, ids)),
+        ),
       ),
     )
     expect(glimpsed).toEqual([
@@ -537,13 +541,51 @@ describe('the Tiles a Turn is shown, as Mapping reads them', () => {
     ])
     const own = await run(
       context,
-      Effect.flatMap(signedInAccount, (id) => ownTile(id, child.id)),
+      Effect.flatMap(signedInAccount, (id) =>
+        Effect.flatMap(Mapping.actingOnOwn(id), (acting) => Service.ownTile(acting, child.id)),
+      ),
     )
     expect(own.ok).toBe(true)
     const theirs = await run(
       context,
-      Effect.flatMap(signedInAccount, (id) => ownTile(id, stranger.child.id)),
+      Effect.flatMap(signedInAccount, (id) =>
+        Effect.flatMap(Mapping.actingOnOwn(id), (acting) =>
+          Service.ownTile(acting, stranger.child.id),
+        ),
+      ),
     )
     expect(theirs).toMatchObject({ ok: false, failure: { _tag: 'TileNotFound' } })
+  })
+})
+
+describe('who acts, and on which System', () => {
+  it('lets no actor reach a System it does not own, even by naming its star', async () => {
+    const { context, root, child } = await withAChild()
+    const stranger = request()
+    const strangerId = await value(run(stranger, signedInAccount))
+    const named = (system: string): Service.Acting => ({ actor: { owners: [strangerId] }, system })
+    const attempts = (acting: Service.Acting): ReadonlyArray<Program> => [
+      Service.system(acting),
+      Service.systemVersion(acting),
+      Service.readTile(acting, { depth: 1, fields: ['title'], language: 'en' }),
+      Service.titles(acting, [child.id]),
+      transactional(
+        Service.editTile(acting, new EditTile({ id: child.id, version: 1, title: 'Mine now' })),
+      ),
+      // The change that is no Operation, an import's, before it looks at a row.
+      transactional(
+        Service.changing(acting, [], () => Effect.succeed({ answer: null, events: [] })),
+      ),
+    ]
+    // The other Account's star, and a star that names no System at all, refused alike.
+    for (const acting of [named(root.id), named(crypto.randomUUID())]) {
+      for (const attempt of attempts(acting)) {
+        expect(await run(stranger, attempt)).toMatchObject({
+          ok: false,
+          failure: { _tag: 'TileNotFound', kind: 'NotFound' },
+        })
+      }
+    }
+    expect((await systemTree(context)).branches[1]).toMatchObject({ title: 'Child', version: 1 })
   })
 })

@@ -91,7 +91,11 @@ const drafted = <O extends Operation>(accountId: string, turnId: string, operati
     Effect.map(
       Assistant.draft(accountId, turnId, (open) =>
         Effect.gen(function* () {
-          const added = yield* Mapping.addToBatch(accountId, yield* batchOf(open), operation)
+          const added = yield* Mapping.addToBatch(
+            yield* MappingPrograms.actingOnOwn(accountId),
+            yield* batchOf(open),
+            operation,
+          )
           const write = encodedBatched(added.batched)
           return { write, changes: added.changes, tile: added.tile }
         }),
@@ -113,7 +117,11 @@ const ranForTurn = <O extends Operation>(accountId: string, turnId: string, oper
     Effect.map(
       AssistantUndo.applyInTurn(accountId, turnId, (soFar) =>
         Effect.gen(function* () {
-          const run = yield* Mapping.runOperation(accountId, operation, yield* keptUndo(soFar))
+          const run = yield* Mapping.runOperation(
+            yield* MappingPrograms.actingOnOwn(accountId),
+            operation,
+            yield* keptUndo(soFar),
+          )
           return { undo: encodedUndo(run.undo), changes: run.changes, tile: run.tile }
         }),
       ),
@@ -199,7 +207,8 @@ export const acceptProposal = ({ proposal }: { readonly proposal: string }) =>
               by: { _tag: 'TurnKey', turnId: accepted.turn },
             }
             const batch = yield* batchOf(accepted)
-            const run = yield* actingAs(assistant)(Mapping.runBatch(account.id, batch))
+            const own = yield* MappingPrograms.actingOnOwn(account.id)
+            const run = yield* actingAs(assistant)(Mapping.runBatch(own, batch))
             return { undo: encodedUndo(run.undo), changes: run.changes }
           }),
         ),
@@ -226,7 +235,7 @@ export const undo = ({ applied: id }: { readonly applied: string }) =>
     transactional(
       Effect.gen(function* () {
         const inverse = yield* Effect.orDie(decodedUndo(yield* AssistantUndo.undo(accountId, id)))
-        yield* Mapping.undo(accountId, inverse)
+        yield* Mapping.undo(yield* MappingPrograms.actingOnOwn(accountId), inverse)
         return null
       }),
     ),
