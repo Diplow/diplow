@@ -1,0 +1,35 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/seen.test.ts
+  s_eb2c82211b20e8::t_299f88183fffce 47-52,220-221,262
+  s_eb2c82211b20e8::t_9d712f100c608b 209-210
+  s_eb2c82211b20e8::t_22f8cea4900886 10-12,20-21,202-208,211-219,222-261
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/programs.ts
+  s_eb2c82211b20e8::t_bb9e477e59c7e7 10,23,163-192
+  s_eb2c82211b20e8::t_79cccd5e358c9b 193
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.ts
+  s_eb2c82211b20e8::t_c8a9a810d34384 163-164,169
+  s_eb2c82211b20e8::t_bb9e477e59c7e7 2-3,9,161-162,165-168,170-181
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_eb2c82211b20e8::t_705334dc52848c 409-410
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/report/errors/messages.test.ts
+  s_eb2c82211b20e8::t_705334dc52848c 63-78
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/report/errors/messages.ts
+  s_eb2c82211b20e8::t_705334dc52848c 14,33,54-55
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_eb2c82211b20e8::t_705334dc52848c 409-410
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2f8281e5598156a97cbd2bbcf57f02bb9e133d3e",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
