@@ -1,0 +1,58 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/HelpWidgets.tsx
+  s_3d562821fd0d86::t_1e6642dbb0f627 1-57
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/search.test.ts
+  s_3d562821fd0d86::t_b27ac76f8ee10d 1-146
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_3d562821fd0d86::t_1e6642dbb0f627 21,27,356,442
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/CLAUDE.md
+  s_3d562821fd0d86::t_2640d5c65562fa 64
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/search.ts
+  s_3d562821fd0d86::t_b5a9dfa05c85cb 1-6
+  s_3d562821fd0d86::t_acd2c6475dca1f 77-80
+  s_3d562821fd0d86::t_f62878728c6d26 18-76,81-83,90,93,97
+  s_3d562821fd0d86::t_40ec67b0d8deae 84
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_3d562821fd0d86::t_d84b6cd95a84b5 34,42-53,86-87,93,122,173-188,193-196,270
+  s_3d562821fd0d86::t_f49b4f675f45d5 197-220,369-385
+  s_3d562821fd0d86::t_5f56a263baf0d3 189-192
+  s_3d562821fd0d86::t_5a05e7a7fcee58 10-13
+  s_3d562821fd0d86::t_7f66253257a06e 221,311-314,325,355,359-360,367,438,460-487,492-497
+  s_3d562821fd0d86::t_acd2c6475dca1f 501-506
+  s_3d562821fd0d86::t_2a387344e38e71 222
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/CLAUDE.md
+  s_3d562821fd0d86::t_5f2102ebb62b02 2-31,36
+  s_3d562821fd0d86::t_9ac452bc47dd95 32
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/Shipped.tsx
+  s_3d562821fd0d86::t_6b56ef13cc3a07 1-24
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/CLAUDE.md
+  s_3d562821fd0d86::t_b506a49b7e306e 10-12,16,24
+  s_3d562821fd0d86::t_e9bfa73e674cfa 21
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/help.tsx
+  s_3d562821fd0d86::t_1e6642dbb0f627 5
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_3d562821fd0d86::t_e9bfa73e674cfa 18,43
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_3d562821fd0d86::t_ee20fdfbd693d2 60,258-263,265-268,270-276,278,280
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/CLAUDE.md
+  s_3d562821fd0d86::t_2640d5c65562fa 15,21
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.test.ts
+  s_3d562821fd0d86::t_ee20fdfbd693d2 44,206-209,218-238
+  s_3d562821fd0d86::t_e2e8404c4ebbb8 29
+  s_3d562821fd0d86::t_252f9c2574fc48 239-240
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c61268be093ab756dd4a4f16a3a65f60cbc11e39",
+  "prompts": {},
+  "sessions": {
+    "s_3d562821fd0d86": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ccd5882d-475a-41ae-8120-111e40b75008",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
