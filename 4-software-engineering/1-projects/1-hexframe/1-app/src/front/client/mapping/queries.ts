@@ -255,11 +255,11 @@ export function useEachSystemWrite(react: () => void, moment: 'made' | 'settled'
   useSyncExternalStore(subscribe, nothing, nothing)
 }
 
-/** The server function that reads each System hexframe ships whole, by its name. */
-const shippedReads = { help, tutorial }
-
 /** A System hexframe ships, by its name, its server function's: Help or the tutorial. */
-export type Shipped = keyof typeof shippedReads
+export type Shipped = 'help' | 'tutorial'
+
+/** The server function that reads a System hexframe ships whole, looked up when it is read. */
+const readerOf = (shipped: Shipped) => ({ help, tutorial })[shipped]
 
 /**
  * A System hexframe ships, Help or the tutorial, whole, in the page's language, Bodies included, read
@@ -272,12 +272,12 @@ export function useShipped(
   language: Locale,
   { throwing = true }: { throwing?: boolean } = {},
 ) {
-  const shippedRead = read({
+  const query = read({
     scope: shipped,
     key: [language],
-    call: () => shippedReads[shipped]({ data: { language } }),
+    call: () => readerOf(shipped)({ data: { language } }),
   })
-  return useQuery(throwing ? shippedRead : { ...shippedRead, throwOnError: false })
+  return useQuery(throwing ? query : { ...query, throwOnError: false })
 }
 
 /**
