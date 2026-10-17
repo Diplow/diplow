@@ -7,7 +7,9 @@ import type { GrantRow } from '#/repositories/database/tiles/grants'
 import { granted } from '#/repositories/database/tiles/testing'
 
 import { noKey, run, type StartContext } from '../server/run'
-import { SystemRead, TileVisit } from './mapping'
+import { GrantChange } from '#/domains/mapping/entities'
+
+import { SystemRead, TileReach, TileVisit } from './mapping'
 import * as Service from '#/domains/mapping/mapping'
 
 import * as Mapping from './programs'
@@ -15,7 +17,8 @@ import * as Mapping from './programs'
 // Another Account's System, read through Mapping's programs as the server functions and the MCP run
 // them, over PGlite: `system` naming a star, and `readTile` and `openTile` reading from a Tile of the
 // System holding it, each as the Account may see it, a Turn's Key never past its own System; where a
-// link to a Tile leads (`visit`), and the Titles a timeline names across Systems (Mapping's `titlesAcross`).
+// link to a Tile leads (`visit`), and the Titles a timeline names across Systems (Mapping's `titlesAcross`);
+// and who reaches a Tile, set and read by its owner from a Session alone (`setGrant`, `whoReaches`).
 
 /** How a request is proven: by a Session, by an Account's Key, or by a Turn's Key. */
 type Proof = 'session' | 'key' | 'turn key'
@@ -40,6 +43,12 @@ function request(account: { id: string; email: string }, proof: Proof = 'session
     key: proof === 'session' ? noKey : Exit.succeed(Option.some({ account, by })),
   }
 }
+
+/** A request nothing proves. */
+const signedOut = (): StartContext => ({
+  ...request(someone()),
+  session: Exit.succeed(Option.none()),
+})
 
 /** Someone no other test is, by a Session unless said otherwise. */
 const someone = () => ({ id: crypto.randomUUID(), email: 'someone@example.com' })
@@ -188,5 +197,66 @@ describe('a link to a Tile, and the Titles a timeline names, across Systems', ()
       ),
     )
     expect(titles).toEqual({ [garden.id]: 'Garden', [mine.id]: 'Mine' })
+  })
+})
+
+describe('who reaches a Tile, set by its owner from a Session', () => {
+  const everyone = { _tag: 'Everyone' } as const
+
+  it('opens a Tile to Everyone, a stranger reading it, then lets it inherit again', async () => {
+    const { ana, bob, star, journal } = await anasSystem()
+    const stranger = someone()
+    const set = (to: 'read' | 'none' | 'inherit') =>
+      value(run(request(ana), Mapping.setGrant({ tile: journal.id, subject: everyone, value: to })))
+    await set('read')
+    expect(await value(run(request(ana), Mapping.whoReaches({ tile: journal.id })))).toEqual([
+      { subject: everyone, value: 'read', from: journal.id },
+    ])
+    const read = await value(run(request(stranger), Mapping.systemAt(star)))
+    expect(Object.keys(read.tiles)).toEqual([journal.id])
+    await set('inherit')
+    const after = await value(run(request(stranger), Mapping.systemAt(star)))
+    expect(Object.keys(after.tiles)).toEqual([])
+    // Bob, who never read Journal, learns nothing of who does.
+    expect(await run(request(bob), Mapping.whoReaches({ tile: journal.id }))).toMatchObject(notFound)
+  })
+
+  it('refuses a Key, a Turn’s Key, anyone but the owner, and a signed-out call', async () => {
+    const { ana, bob, journal, garden } = await anasSystem()
+    const change = { tile: garden.id, subject: everyone, value: 'read' } as const
+    for (const proof of ['key', 'turn key'] as const) {
+      for (const program of [Mapping.setGrant(change), Mapping.whoReaches({ tile: garden.id })]) {
+        expect(await run(request(ana, proof), program)).toMatchObject({
+          ok: false,
+          failure: { _tag: 'SessionRequired' },
+        })
+      }
+    }
+    // Bob reads Garden by his Grant, and changes nothing of who else does.
+    expect(await run(request(bob), Mapping.setGrant(change))).toMatchObject({
+      ok: false,
+      failure: { _tag: 'NotAllowed' },
+    })
+    expect(
+      await run(request(bob), Mapping.setGrant({ ...change, tile: journal.id })),
+    ).toMatchObject(notFound)
+    expect(await run(signedOut(), Mapping.setGrant(change))).toMatchObject({
+      ok: false,
+      failure: { _tag: 'SignedOut' },
+    })
+    expect(await value(run(request(ana), Mapping.whoReaches({ tile: garden.id })))).toEqual([
+      { subject: everyone, value: 'none', from: null },
+      { subject: { _tag: 'Account', id: bob.id }, value: 'read', from: garden.id },
+    ])
+  })
+
+  it('takes Everyone’s read, none or inherit on a Tile by its UUID, and nothing more', () => {
+    const tile = crypto.randomUUID()
+    const sets = (input: unknown) => Schema.is(GrantChange)(input)
+    expect(sets({ tile, subject: everyone, value: 'inherit' })).toBe(true)
+    expect(sets({ tile, subject: everyone, value: 'read+write' })).toBe(false)
+    expect(sets({ tile: 'help', subject: everyone, value: 'read' })).toBe(false)
+    expect(Schema.is(TileReach)({ tile })).toBe(true)
+    expect(Schema.is(TileReach)({ tile: 'help/3' })).toBe(false)
   })
 })

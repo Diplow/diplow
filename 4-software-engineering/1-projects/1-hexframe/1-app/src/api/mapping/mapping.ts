@@ -1,12 +1,12 @@
 // Mapping's server functions: one per operation, for the signed-in Account, which the middleware has
-// already put on the context as its Session, and `shipped`, a System hexframe ships whole, Help or the
-// tutorial, for any visitor. Each validates its input, then hands its program (./programs.ts) to the
+// already put on the context as its Session, `shipped`, a System hexframe ships whole, Help or the
+// tutorial, for any visitor, and who reaches a Tile, set and read by its owner from a Session alone. Each validates its input, then hands its program (./programs.ts) to the
 // helper; its type lists the errors it can fail with. `exportTile` answers its zip as a download
 // (./files/download.ts); `importTiles` takes a form.
 import { createServerFn } from '@tanstack/react-start'
 import { Schema, Struct } from 'effect'
 
-import { shippedRoots, TileId } from '#/domains/mapping/entities'
+import { GrantChange, shippedRoots, TileId } from '#/domains/mapping/entities'
 import {
   CreateReference,
   CreateTile,
@@ -158,3 +158,24 @@ export const createReference = createServerFn({ method: 'POST' })
 export const deleteReference = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(ReferenceSlot))
   .handler(({ data, context }) => run(context, Mapping.deleteReference(data)))
+
+/**
+ * Sets a Tile's Grant for Everyone, `read` or `none`, or removes it, `inherit`, so the Tile inherits
+ * again, its input Mapping's `GrantChange`, never more than `read`: its owner's alone, from
+ * a Session, never a Key's (`SessionRequired`); anyone else is `NotAllowed`, or `TileNotFound` where
+ * they may not read the Tile, and a Tile hexframe ships is `ShippedReadOnly`.
+ */
+export const setGrant = createServerFn({ method: 'POST' })
+  .validator(Schema.toStandardSchemaV1(GrantChange))
+  .handler(({ data, context }) => run(context, Mapping.setGrant(data)))
+
+/** The Tile whose reach is read, by its id, a UUID, as Mapping's `TileId` bounds it. */
+export const TileReach = Schema.Struct({ tile: TileId })
+
+/**
+ * Who reaches a Tile, Everyone and each subject a Grant names, with its value and the Tile it comes
+ * from: read by its owner alone, from a Session, as `setGrant` refuses everyone else.
+ */
+export const whoReaches = createServerFn({ method: 'GET' })
+  .validator(Schema.toStandardSchemaV1(TileReach))
+  .handler(({ data, context }) => run(context, Mapping.whoReaches(data)))
