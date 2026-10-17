@@ -25,6 +25,8 @@ import { encoded } from '#/front/features/conversation/composer/mention'
 import { happenedOf } from '#/front/features/conversation/entry/words'
 import { ConversationGallery } from '#/front/features/conversation/gallery'
 import { helpNodeOf } from '#/front/features/shipped/nodes'
+import { ringOf, sameSixOf } from '#/front/features/shipped/tutorial/ring'
+import type { SixPlaying } from '#/front/ui/motion'
 import { tutorialRules, tutorialTells } from '#/front/features/shipped/tutorial/rules'
 import { canvasTree } from '#/front/features/system/tree'
 import { m } from '#/paraglide/messages'
@@ -356,22 +358,23 @@ const where: Where = ({ value, links }, center) => turnLocation(encoded(value, l
 /**
  * The onboarding, played on into the journey its invitation takes, to the tutorial, read in the
  * page's language as home reads it, beside the slide, never throwing, and shown by its own rules, as
- * `/tutorial` lands on home, its Root's body told last in the chat, then opened by a click.
+ * `/tutorial` lands on home, its Root's body told last in the chat, then opened by a click, its
+ * body's lines and its six lighting each other.
  */
 function OnboardingTour({ onGo }: { onGo: Go }) {
   const { data } = useShipped('tutorial', getLocale(), { throwing: false })
-  const tutorial = useMemo(
-    () =>
-      data === undefined
-        ? undefined
-        : {
-            system: canvasTree(data),
-            body: data.body,
-            tells: tutorialTells,
-            rules: tutorialRules,
-          },
-    [data],
-  )
+  const tutorial = useMemo(() => {
+    if (data === undefined) return undefined
+    const system = canvasTree(data)
+    const ring = ringOf(system, data.body)
+    return {
+      system,
+      body: data.body,
+      tells: tutorialTells,
+      rules: tutorialRules,
+      sameSix: (playing: SixPlaying) => sameSixOf(ring, playing),
+    }
+  }, [data])
   return <OnboardingSlide onGo={onGo} tutorial={tutorial} />
 }
 

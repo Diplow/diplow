@@ -111,6 +111,8 @@ export interface TileHexProps {
   /** Another hex's menu is open: this one steps back. */
   aside: boolean
   onMenu: (open: boolean) => void
+  /** Pointed at, its card or its menu open, and let go: lit elsewhere meanwhile (HEX-122). */
+  onPoint?: ((pointing: boolean) => void) | undefined
   /** What the move's hook says of this Tile. */
   shift: { by: { x: number; y: number }; glides: boolean }
   /** No landing may start: its tile is in the air. */
@@ -164,6 +166,7 @@ export function TileHexView(props: TileHexProps) {
               {...(acting.frames && { frames: acting.frames })}
               {...(acting.without && { without: acting.without })}
               onOpenChange={props.onMenu}
+              onPoint={props.onPoint}
               asleep={asleep}
               cardAlone={acting.cardAlone === true}
               onAct={(act, said) => {

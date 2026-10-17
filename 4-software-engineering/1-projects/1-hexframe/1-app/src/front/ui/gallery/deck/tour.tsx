@@ -4,14 +4,15 @@
 // language, read at render; and on the onboarding's, a new account's first visit, played on the
 // whole screen as home plays it, into the agent's invitation to a first command and the journey it
 // takes to the tutorial, whose center's words the agent tells a beat at a time, then whose center
-// invites the click that opens it, its six arriving one by one, from the start again at will.
+// invites the click that opens it, its six arriving one by one, its body's lines and its six
+// lighting each other, to the tutorial's end, from the start again at will.
 import { RotateCcw } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Act } from '../../atoms/controls/act'
-import { Canvas } from '../../canvas/Canvas'
+import { Canvas, type PointAt } from '../../canvas/Canvas'
 import { Journey } from '../../canvas/layouts/Journey'
 import { Rail } from '../../canvas/layouts/Rail'
 import type { CanvasRules } from '../../canvas/state/useCanvasState'
@@ -21,8 +22,8 @@ import { pathTo, type TileNode } from '../../canvas/view/tiles'
 import { centerOn, showView, type CanvasView } from '../../canvas/view/view'
 import { said } from '../../chat/samples'
 import { tutorialInvitation } from '../../chat/composer/commands'
-import { Message, Told } from '../../chat/text/Message'
-import { useTold, type ToldPart } from '../../motion'
+import { Message, Told, type ToldSix } from '../../chat/text/Message'
+import { useSixPlaying, useTold, type SixPlaying, type ToldPart } from '../../motion'
 import { TileWidget } from '../../chat/widgets/tile/TileWidget'
 import { ScreenSlide, type Go } from './Deck'
 
@@ -162,6 +163,8 @@ export function canvasTour(): TileNode {
 interface TutorialShown extends CanvasRules {
   /** The composer, held back while it is not let through. */
   composer: boolean
+  /** Its center's body and its ring shown as the same six, each lighting the other (HEX-122). */
+  sameSix: boolean
 }
 
 /**
@@ -176,6 +179,11 @@ interface Tutorial {
   /** Whether the agent tells its center's words in turn on a view, which starts their clock. */
   tells: (view: CanvasView) => boolean
   rules: (view: CanvasView, told: ToldPart | undefined) => TutorialShown
+  /** What the canvas and the chat take of its center's body and its ring as the same six. */
+  sameSix: (playing: SixPlaying) => {
+    canvas: { pointed: string | undefined; onPoint: PointAt }
+    chat: ToldSix
+  }
 }
 
 interface OnboardingSlideProps {
@@ -195,8 +203,10 @@ interface OnboardingSlideProps {
  * answering and the composer held back, as the tutorial's rules have it at its arrival
  * (`features/shipped/tutorial/rules.ts`), the agent telling its words a beat at a time, its title
  * lit, then its preview, then its body in the chat (HEX-120), the center then inviting the click that
- * opens it, its six arriving one by one, each with its hover card alone (HEX-121), the corner's mark
- * carrying the canvas back to the root.
+ * opens it, its six arriving one by one, each with its hover card alone (HEX-121), each lighting the
+ * line of the body that names it, then a line pointed at lighting its tile and a tile its line, the
+ * agent saying they are the same six, then that yours is waiting, where the tutorial stops
+ * (HEX-122), the corner's mark carrying the canvas back to the root.
  * Played again from the start at will, the page landing anew. What changes on home's onboarding and
  * its journey changes here too.
  */
@@ -261,6 +271,9 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
   // tutorial's rules once it has, its center answering once its body is told.
   const told = useTold(there?.tells(asked) === true)
   const shown = there?.rules(asked, told)
+  // Its body and its ring the same six once its rules show them, as on home (`useSameSix`).
+  const playing = useSixPlaying(shown?.sameSix === true)
+  const same = shown?.sameSix === true ? there?.sameSix(playing) : undefined
   const went = (next: CanvasView) => {
     setView(next)
     setDone(done + 1)
@@ -299,7 +312,8 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
                 looking={shown.looking}
                 lets={shown.lets}
                 introducesOpening={shown.introducesOpening}
-                marks={{ told }}
+                marks={{ told, pointed: same?.canvas.pointed }}
+                onPoint={same?.canvas.onPoint}
                 className="min-h-0 flex-1"
               />
             )}
@@ -368,7 +382,7 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
               )}
               dawning
             />
-            {there !== undefined && <Told told={told} body={[there.body]} />}
+            {there !== undefined && <Told told={told} body={[there.body]} six={same?.chat} />}
           </>
         )
       }
