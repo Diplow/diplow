@@ -73,7 +73,7 @@ const onSystem = <A, E, R>(
   )
 
 /**
- * Runs a read from one Tile for the signed-in Account on the System holding it (`Mapping.holding`),
+ * Runs a read from one Tile for the signed-in Account, once it is, on the System holding it (`Mapping.holding`),
  * its own when no id is given, or for an id no System holds, a shipped System's included, which
  * Mapping reads by its id alone (`onSystem`).
  */
@@ -81,8 +81,12 @@ const fromTile = <A, E, R>(
   id: string | undefined,
   operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>,
 ) =>
-  Effect.flatMap(id === undefined ? Effect.succeed(undefined) : Mapping.holding(id), (named) =>
-    onSystem(named, operation),
+  // Signed in first, so a request nothing proves looks up no Tile.
+  Effect.andThen(
+    Iam.signedIn,
+    Effect.flatMap(id === undefined ? Effect.succeed(undefined) : Mapping.holding(id), (named) =>
+      onSystem(named, operation),
+    ),
   )
 
 /** Runs a change for the signed-in Account, in one transaction: it commits whole, or not at all. */

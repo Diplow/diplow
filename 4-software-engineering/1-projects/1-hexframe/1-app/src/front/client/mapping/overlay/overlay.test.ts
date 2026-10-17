@@ -87,7 +87,7 @@ const servedWith = (...tiles: ReadonlyArray<PlacedTile>): System => ({
 
 /** The System's stand-in answers `system` from now on, read by its owner: no gap. */
 function serving(system: System) {
-  const seen = { ...system, rights: {}, gaps: [] }
+  const seen = { ...system, rights: {}, gaps: {} }
   vi.mocked(Mapping.system).mockImplementation(() => Promise.resolve({ ok: true, value: seen }))
 }
 

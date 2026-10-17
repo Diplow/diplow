@@ -237,17 +237,10 @@ const unplaced = (tile: PlacedTile): FoundTile => Struct.omit(tile, ['parent', '
 
 /**
  * A System's tree: its Root with everything below it, each Tile with its Branches, its Leaves and its
- * Context, a Reference with the Tile it points at, or broken when it points at none. A System as a
- * reader sees it may mark gaps (`Seen`, `rights/seen.ts`): a Tile placed under the star because they
- * may not read the Tile it stands under, which is none of the star's Children, so the tree leaves it
- * out of the star's slots.
+ * Context, a Reference with the Tile it points at, or broken when it points at none.
  */
-export function systemOf(system: System & { readonly gaps?: ReadonlyArray<string> }): SystemTile {
-  const gaps = new Set(system.gaps)
-  const under = byParent(
-    Object.values(system.tiles).filter((held) => !gaps.has(held.id)),
-    (held) => held.parent,
-  )
+export function systemOf(system: System): SystemTile {
+  const under = byParent(Object.values(system.tiles), (held) => held.parent)
 
   const refer = (target: string) => referenceTo(target, tileAt(system, target), tileOf)
 

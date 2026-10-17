@@ -7,7 +7,15 @@ import { granted } from '#/repositories/database/tiles/testing'
 
 import { type Actor, systemOf } from '../../entities'
 import * as Mapping from '../../mapping'
-import { actingOnOwn, createTile, editTile, held, TestTiles, tree } from '../../testing'
+import {
+  actingOnOwn,
+  createReference,
+  createTile,
+  editTile,
+  held,
+  TestTiles,
+  tree,
+} from '../../testing'
 
 // A System read as the actor may see it, from its star, over PGlite: the owner's read as it always
 // was, whole; a stranger's of a star with no Grant, its card; and Bob's of Ana's System, on the
@@ -63,7 +71,7 @@ layer(TestTiles)('a System read as its owner sees it, over PGlite', (it) => {
       const { ana, star, journal, entry, garden, grants } = yield* scenario
       yield* granting(ana, grants.everyone, grants.journalHidden, grants.family)
       const read = yield* Mapping.system(yield* actingOnOwn(ana))
-      expect(read).toMatchObject({ root: { id: star, title: 'Ana', body: '# Ana' }, gaps: [] })
+      expect(read).toMatchObject({ root: { id: star, title: 'Ana', body: '# Ana' }, gaps: {} })
       expect(Object.keys(read.tiles).sort()).toEqual([journal.id, entry.id, garden.id].sort())
       expect(read.tiles[entry.id]).toMatchObject({ body: '# Entry', parent: journal.id })
       for (const id of [star, journal.id, entry.id, garden.id]) {
@@ -87,9 +95,9 @@ layer(TestTiles)('a System read as someone else sees it, over PGlite', (it) => {
         title: 'Ana',
         preview: 'Ana, in short.',
         body: '',
-        version: 2,
+        version: 1,
       })
-      expect(read).toMatchObject({ tiles: {}, rights: { [star]: [] }, gaps: [] })
+      expect(read).toMatchObject({ tiles: {}, rights: { [star]: [] }, gaps: {}, version: 0 })
       const opened = yield* Mapping.openTile(stranger, {
         fields: ['title', 'body'],
         language: 'en',
@@ -107,7 +115,7 @@ layer(TestTiles)('a System read as someone else sees it, over PGlite', (it) => {
       expect(mapped.tile).toEqual({
         _tag: 'Tile',
         id: star,
-        version: 2,
+        version: 1,
         title: 'Ana',
         preview: 'Ana, in short.',
         body: '',
@@ -145,26 +153,43 @@ layer(TestTiles)('a System read as someone else sees it, over PGlite', (it) => {
       }),
   )
 
-  it.effect(
-    'places a Tile read below one kept from the reader under the star, the gap marked',
-    () =>
-      Effect.gen(function* () {
-        const { ana, star, journal, entry, grants } = yield* scenario
-        yield* granting(ana, grants.everyone, grants.journalHidden, {
-          tile: entry.id,
-          subject: 'everyone',
-          subjectId: null,
-          value: 'read',
-        })
-        const read = yield* Mapping.system(visitor(star))
-        expect(read.tiles[entry.id]).toMatchObject({ title: 'Entry', parent: star, slot: 1 })
-        expect(read.tiles[journal.id]).toBeUndefined()
-        expect(read.gaps).toEqual([entry.id])
-        // Journal's id is nowhere in what the stranger reads.
-        expect(JSON.stringify(read)).not.toContain(journal.id)
-        // Entry is none of the star's Children: the star's tree leaves it out.
-        expect(systemOf(read).branches[1]).toBeUndefined()
-      }),
+  it.effect('hangs a Tile read below one kept from the reader from the star, across a gap', () =>
+    Effect.gen(function* () {
+      const { ana, star, journal, entry, garden, grants } = yield* scenario
+      yield* granting(ana, grants.everyone, grants.journalHidden, {
+        tile: entry.id,
+        subject: 'everyone',
+        subjectId: null,
+        value: 'read',
+      })
+      const read = yield* Mapping.system(visitor(star))
+      expect(read.gaps).toEqual({ [entry.id]: { _tag: 'Tile', ...entry } })
+      expect(Object.keys(read.tiles)).toEqual([garden.id])
+      // Journal's id is nowhere in what the stranger reads.
+      expect(JSON.stringify(read)).not.toContain(journal.id)
+      // Entry is none of the star's Children: the star's tree leaves it out.
+      expect(systemOf(read).branches[1]).toBeUndefined()
+    }),
+  )
+
+  it.effect('says nothing of a Tile kept from the reader through a Reference to it', () =>
+    Effect.gen(function* () {
+      const { ana, star, journal, garden, grants } = yield* scenario
+      yield* granting(ana, grants.everyone, grants.journalHidden)
+      yield* createReference(ana, { parent: garden.id, slot: -1, target: journal.id })
+      yield* createReference(ana, { parent: garden.id, slot: -2, target: star })
+      const stranger = visitor(star)
+      const opened = yield* Mapping.openTile(stranger, {
+        id: garden.id,
+        fields: ['title'],
+        language: 'en',
+      })
+      // The Reference to the star stays, its card anyone's; the one to Journal is left out.
+      expect(Object.keys(opened.context)).toEqual(['-2'])
+      expect(JSON.stringify(opened)).not.toContain(journal.id)
+      const read = yield* Mapping.system(stranger)
+      expect(JSON.stringify(read)).not.toContain(journal.id)
+    }),
   )
 
   it.effect('reads no System, nor any Tile, from a star that names none', () =>

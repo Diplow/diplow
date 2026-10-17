@@ -1,7 +1,7 @@
-import { Schema } from 'effect'
+import { Schema, Struct } from 'effect'
 import { describe, expect, it } from 'vitest'
 
-import type { FoundTile, PlacedTile, System } from '../system'
+import type { FoundTile, PlacedReference, PlacedTile, System } from '../system'
 import { systemOf } from '../system'
 import { type Actor, Grant, type GrantValue, lineageOf, sharingOf, type Subject } from './rights'
 import { cardOf, seenBy } from './seen'
@@ -85,7 +85,7 @@ describe('a System as its owner sees it', () => {
         ['ana', 'journal', 'entry', 'draft', 'garden'].map((id) => [id, ['read', 'write', '@']]),
       ),
     )
-    expect(seen.gaps).toEqual([])
+    expect(seen.gaps).toEqual({})
   })
 })
 
@@ -101,19 +101,31 @@ describe('a System as anyone else sees it', () => {
       'pinned',
     ])
     expect(seen.rights).toMatchObject({ ana: ['read'], journal: ['read'], draft: ['read'] })
-    expect(seen.gaps).toEqual([])
-    expect(seen.version).toBe(9)
+    expect(seen.gaps).toEqual({})
+    // How many changes the System saw would tell of the Tiles kept from him: he is shown none.
+    expect(seen.version).toBe(0)
   })
 
-  it('keeps Journal and what is below it from a stranger, a Reference to it left in its slot', () => {
+  it('keeps Journal and what is below it from a stranger, a Reference to it too', () => {
     const seen = seenBy(actor('stranger'), system, scenario)
-    expect(Object.keys(seen.tiles).sort()).toEqual(['garden', 'pinned'])
+    expect(Object.keys(seen.tiles).sort()).toEqual(['garden'])
     expect(seen.rights).toEqual({ ana: ['read'], garden: ['read'] })
-    // The Reference stands where it stood; the tree shows it broken, its Tile one they can't read.
-    expect(systemOf(seen).branches[2]?.context[-1]).toEqual({
-      _tag: 'BrokenReference',
-      target: 'journal',
-    })
+    // The Reference would say Journal's id: Garden's Context holds nothing the stranger sees.
+    expect(JSON.stringify(seen)).not.toContain('journal')
+    expect(systemOf(seen).branches[2]?.context).toEqual({})
+  })
+
+  it('keeps a Reference to the star, whose card anyone sees', () => {
+    const toStar: PlacedReference = {
+      _tag: 'Reference',
+      id: 'home',
+      parent: 'garden',
+      slot: -2,
+      target: 'ana',
+    }
+    const withHome: System = { ...system, tiles: { ...system.tiles, home: toStar } }
+    const sharing = sharingOf('ana', lineageOf(withHome), [grant('garden', everyone, 'read')])
+    expect(seenBy(actor('stranger'), withHome, sharing).tiles['home']).toEqual(toStar)
   })
 
   it('shows a star with no Grant as its card only, its Title and Preview', () => {
@@ -124,7 +136,7 @@ describe('a System as anyone else sees it', () => {
       title: 'Ana',
       preview: 'Who Ana is.',
       body: '',
-      version: 3,
+      version: 1,
     })
     expect(seen.root).toEqual(cardOf(star))
     expect(seen.tiles).toEqual({})
@@ -135,18 +147,20 @@ describe('a System as anyone else sees it', () => {
     const seen = seenBy(actor('stranger'), system, sharedBy(grant('journal', everyone, 'read')))
     expect(Object.keys(seen.tiles).sort()).toEqual(['draft', 'entry', 'journal'])
     expect(seen.tiles['journal']).toEqual(system.tiles['journal'])
-    expect(seen.gaps).toEqual([])
+    expect(seen.gaps).toEqual({})
     expect(systemOf(seen).branches[1]?.branches[1]?.title).toBe('entry')
   })
 
-  it('places a Tile below one they may not read under the star, the gap marked, the tree leaving it out', () => {
-    const toBob = grant('draft', { _tag: 'Account', id: 'bob' }, 'read+write')
+  it('hangs a Tile below one they may not read from the star across a gap, with no place', () => {
+    const toBob = grant('entry', { _tag: 'Account', id: 'bob' }, 'read+write')
     const seen = seenBy(actor('bob'), system, sharedBy(toBob))
-    expect(Object.keys(seen.tiles)).toEqual(['draft'])
-    expect(seen.tiles['draft']).toEqual({ ...system.tiles['draft'], parent: 'ana' })
-    expect(seen.gaps).toEqual(['draft'])
-    expect(seen.rights).toEqual({ ana: [], draft: ['read', 'write'] })
-    // The draft stands under no Tile of the star's: the star's tree holds none of its Children.
+    const entry = Struct.omit(tile('entry', 'journal', 1), ['parent', 'slot'])
+    expect(seen.gaps).toEqual({ entry })
+    // What stands below the gap stands under it, where it stood.
+    expect(seen.tiles).toEqual({ draft: system.tiles['draft'] })
+    expect(seen.rights).toEqual({ ana: [], draft: ['read', 'write'], entry: ['read', 'write'] })
+    // Journal's id and its slot are nowhere; the star's tree holds none of the gap's.
+    expect(JSON.stringify(seen)).not.toContain('journal')
     expect(systemOf(seen)).toMatchObject({ branches: {}, leaves: {}, context: {} })
   })
 
@@ -157,6 +171,6 @@ describe('a System as anyone else sees it', () => {
       sharedBy(grant('pinned', everyone, 'read'), grant('journal', everyone, 'read')),
     )
     expect(Object.keys(seen.tiles).sort()).toEqual(['draft', 'entry', 'journal'])
-    expect(seen.gaps).toEqual([])
+    expect(seen.gaps).toEqual({})
   })
 })

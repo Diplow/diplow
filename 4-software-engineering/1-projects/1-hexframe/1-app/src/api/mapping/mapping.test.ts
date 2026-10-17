@@ -101,7 +101,7 @@ describe('the System, read flat', () => {
       owned: true,
       version: 0,
       rights: { [first.root.id]: ['read', 'write', '@'] },
-      gaps: [],
+      gaps: {},
     })
     expect((await value(run(context, Mapping.system))).root.id).toBe(first.root.id)
   })

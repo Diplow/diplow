@@ -38,7 +38,9 @@ import {
   owns,
   readOf,
   type ReadTile,
+  carded,
   rowDirection,
+  seeing,
   seenBy,
   sharingOf,
   showing,
@@ -145,7 +147,7 @@ const reading = ({ actor, system }: Acting) =>
     )
     const sharing = sharingOf(owner, lineageFrom(places), grants)
     const reads = (id: string) => may(actor, sharing, id, 'read')
-    return { owner, reads, shows: (id: string) => id === system || reads(id) }
+    return { owner, reads, shows: seeing(system, reads) }
   })
 
 /**
@@ -318,10 +320,13 @@ const findOwn = <O extends Field, F extends Field>(
       // A Reference's row is no Tile: its id names nothing to open.
       if (found === undefined || found.opened.target !== null) return yield* new TileNotFound()
       // The star's card, when the actor may not read it: its Title and Preview, never its Body.
-      const opened = reads(from) ? found.opened : { ...found.opened, body: '' }
-      // What the actor may not read is left out, and what stands below it with it.
-      const below = found.below.filter(({ id }) => reads(id))
-      const targets = below.flatMap(({ target }) => (target === null ? [] : [target])).filter(reads)
+      const opened = reads(from) ? found.opened : carded(found.opened)
+      // What the actor may not read is left out, and what stands below it with it, and a Reference
+      // to a Tile they may not read, whose id would tell of it.
+      const below = found.below.filter(
+        ({ id, target }) => reads(id) && (target === null || shows(target)),
+      )
+      const targets = below.flatMap(({ target }) => (target === null ? [] : [target]))
       const parentIds = opened.parentId === null || !shows(opened.parentId) ? [] : [opened.parentId]
       const [parents, pointedAt] = yield* Effect.all(
         [tiles.ofIds(owner, parentIds, ['title']), tiles.ofIds(owner, targets, glimpsed)],
