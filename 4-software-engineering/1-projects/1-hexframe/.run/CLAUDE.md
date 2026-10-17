@@ -71,6 +71,8 @@ The app's runs all write `1-app/` and Mapping, so they go one after the other: t
 
 Design system v1's run is the one that stops for me on purpose. Half its tickets are proposals ("Propose …"), drawn with me in `ui/` and reviewed on their pull request's preview; its never list forbids the run to implement one. It builds in `blockedBy` order and halts on the first proposal that hasn't landed. I land that proposal with do-ticket, a pull request into `project/design-system-v1`, then resume with `--resume`, which skips it as landed. Its run writes `1-app/` and may delete `4-software-engineering/1-projects/3-design-system/` (HEX-112), editing the three files that point at it, and freezes claude-mod, the plugin and `.obsidian/` as the Assistant's does.
 
+Sharing & organizations' run waits for `project/tutorial` to be merged into `main`, since it moves Help and the tutorial under the Hexframe Organization. It writes `1-app/` only, freezes what the Tutorial's run freezes, reads Help's and the tutorial's tiles without writing them, and its never list keeps every Tile closed to anyone its owner didn't open it to, Grants and Organizations out of reach of a Key or an agent, and membership read fresh on every request.
+
 ## Registers
 
 The run writes to `registers/<project slug>/`, the slug being the Linear project's name in lowercase with dashes (`hexframe-v0-design-system`).

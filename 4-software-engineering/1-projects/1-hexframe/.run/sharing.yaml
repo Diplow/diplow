@@ -80,11 +80,13 @@ halting:
     - Never let the front import a domain past its door (its `entities/index.ts`, `operations/index.ts` and `errors.ts`), nor let anything reachable through that door touch a repository, the application service, a concept folder, another domain, Node, the environment or the config, not even through a type-only import.
     - Never exceed the rule of 6; when a folder is full, regroup and record the regrouping in the register.
     - Never let a test or a gate reach Blaxel or Anthropic; they run on the fakes.
-    - Never edit the tutorial's tiles or Help's (1-app/tutorial/, 1-app/help/): their words are Ulysse's. A step that needs a tile to say something else parks, with the words it needs in the entry.
-    - Never let Help or the tutorial be written to, by the user, an Organization's admin, an agent or the MCP: they are read by Everyone and written by none.
-    - Never make a Tile readable by anyone it was not before without a Grant its owner set. No migration or default opens an existing System, and a move by anyone but the owner that would widen who reads a Tile is refused. Two exceptions, both by design: a star's card (its Title and Preview), which anyone sees, and Everyone's read at the Hexframe Organization's star, the one Grant a migration may create.
-    - Never give Everyone more than read, nor let a Tile's existence show to someone who may not read it: without read, the answer is TileNotFound, a star's card aside.
-    - Never let anything but a Session change Grants or manage an Organization, its members, Groups or join requests: no MCP tool, Key, Turn's Key or agent.
+    - Never edit the tutorial's tiles or Help's (1-app/tutorial/, 1-app/help/). Their words are Ulysse's. A step that needs a tile to say something else parks, with the words it needs in the entry.
+    - Never let Help or the tutorial be written to, by the user, an Organization's admin, an agent or the MCP. They are read by Everyone and written by none.
+    - Never make a Tile readable by anyone it was not before without a Grant its owner set from a Session. No migration or default opens an existing System, and a move that would widen who reads a Tile is refused to anyone but the owner acting from a Session. A star's card (its Title and Preview), which anyone sees, is the one exception by design; Help and the tutorial are read by Everyone by being shipped, with no stored Grant.
+    - Never give Everyone more than read, nor let a Tile's existence show to someone who may not read it. Without read, the answer is TileNotFound; the two deliberate exceptions are a star's card and TileIdTaken on a create under a chosen id.
+    - Never let anything but a Session change Grants or manage an Organization, its members, Groups or join requests. No MCP tool, Key, Turn's Key or agent.
+    - Never cache who belongs where. The owners an Account stands for and its Groups are read from IAM on every request and every MCP call of a Turn, so a removal holds from the next one.
+    - Never put the platform Anthropic key, Vercel's bypass for automation, or any other secret into a sandbox. The Turn's own Key alone enters it, in its processes' environment and the MCP client's config, never in its prompt or its files.
     - Never send an email or add an email provider.
     - Never touch a ticket, branch or pull request of another project.
   # The repo's own tooling and review setup, hexframe's STACK.md (the bar the
