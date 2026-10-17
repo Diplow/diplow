@@ -167,11 +167,12 @@ layer(TestTiles)('a System read as someone else sees it, over PGlite', (it) => {
       }),
   )
 
-  it.effect('reads no System from a star that names none', () =>
+  it.effect('reads no System, nor any Tile, from a star that names none', () =>
     Effect.gen(function* () {
-      expect(yield* Effect.flip(Mapping.system(visitor(crypto.randomUUID())))).toMatchObject({
-        _tag: 'TileNotFound',
-      })
+      const nowhere = visitor(crypto.randomUUID())
+      expect(yield* Effect.flip(Mapping.system(nowhere))).toMatchObject({ _tag: 'TileNotFound' })
+      const fromStar = Mapping.readTile(nowhere, { depth: 1, fields: ['title'], language: 'en' })
+      expect(yield* Effect.flip(fromStar)).toMatchObject({ _tag: 'TileNotFound' })
     }),
   )
 })

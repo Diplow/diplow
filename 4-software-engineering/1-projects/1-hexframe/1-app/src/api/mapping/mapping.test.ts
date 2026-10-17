@@ -595,11 +595,6 @@ describe('who acts, and on which System', () => {
       actor: { account: strangerId, groups: [], owners: [strangerId], session: true },
       system,
     })
-    // What the star's card shows anyone: a read of the System, or from its star, reaches no further.
-    const reads = (acting: Service.Acting): ReadonlyArray<Program> => [
-      Service.system(acting),
-      Service.readTile(acting, { depth: 1, fields: ['title'], language: 'en' }),
-    ]
     const attempts = (acting: Service.Acting): ReadonlyArray<Program> => [
       Service.systemVersion(acting),
       Service.ownTile(acting, child.id),
@@ -611,14 +606,14 @@ describe('who acts, and on which System', () => {
         Service.changing(acting, [], () => Effect.succeed({ answer: null, events: [] })),
       ),
     ]
-    // The other Account's star, and a star that names no System at all, refused alike, the reads of
-    // a star that names none too.
-    const refused = [
+    // The other Account's star, and a star that names no System at all, refused alike; and a read
+    // of the System, which shows anyone a star's card, refused that one.
+    const nowhere = named(crypto.randomUUID())
+    for (const attempt of [
       ...attempts(named(root.id)),
-      ...attempts(named(crypto.randomUUID())),
-      ...reads(named(crypto.randomUUID())),
-    ]
-    for (const attempt of refused) {
+      ...attempts(nowhere),
+      Service.system(nowhere),
+    ]) {
       expect(await run(stranger, attempt)).toMatchObject({
         ok: false,
         failure: { _tag: 'TileNotFound', kind: 'NotFound' },

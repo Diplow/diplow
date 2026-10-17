@@ -19,9 +19,8 @@ import * as Operations from './operations'
  * every right on every Tile and no gap, so it compares with what `decide` and `evolve` make of it.
  */
 export const held = (accountId: string) =>
-  Effect.map(
-    Effect.flatMap(actingOnOwn(accountId), Mapping.system),
-    (seen): System => Struct.omit(seen, ['rights', 'gaps']),
+  Effect.map(Effect.flatMap(actingOnOwn(accountId), Mapping.system), (seen): System =>
+    Struct.omit(seen, ['rights', 'gaps']),
   )
 
 /** The Account's System, read flat, as its tree: what the canvas draws, as the client builds it. */

@@ -200,11 +200,7 @@ export const systemVersion = (acting: Acting) =>
  * The Titles of the Tiles of the System the actor acts on among these ids that pass `kept`, by id: a
  * deleted one's, a Reference's or an id it holds no Tile of has none.
  */
-const titledIn = (
-  owner: string,
-  ids: ReadonlyArray<string>,
-  kept: (id: string) => boolean,
-) =>
+const titledIn = (owner: string, ids: ReadonlyArray<string>, kept: (id: string) => boolean) =>
   Tiles.use((tiles) =>
     Effect.map(tiles.ofIds(owner, ids.filter(kept), ['title']), (rows) =>
       Object.fromEntries(

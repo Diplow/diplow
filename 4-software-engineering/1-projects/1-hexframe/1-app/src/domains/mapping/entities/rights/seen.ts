@@ -71,7 +71,9 @@ export function seenBy(actor: Actor, system: System, sharing: Sharing): Seen {
     if (shown !== undefined) tiles[shown.id] = shown
     if (gap) gaps.push(held.id)
   }
-  const rights = [star, ...tilesOf(tiles)].map((id) => [id, [...rightsOn(actor, sharing, id)]])
+  const rights = [star, ...tilesOf(tiles)].map(
+    (id) => [id, [...rightsOn(actor, sharing, id)]] as const,
+  )
   return {
     ...system,
     root: reads(star) ? system.root : cardOf(system.root),
