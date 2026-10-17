@@ -3,7 +3,8 @@
 // pointer or at once on keyboard focus. The menu names what it acts on, then offers what its kind and
 // its place allow (`groupsOf`), each line with its key, which runs it on the focused tile too; where
 // the action is a place, adding a tile or moving this one, its submenu is the frame itself
-// (`Picker`). A free slot has a menu and no card. What each line does is the caller's (`onAct`).
+// (`Picker`). A free slot has a menu and no card. What each line does is the caller's (`onAct`), and
+// so is what the tile pointed at lights elsewhere while its card or its menu is open (`onPoint`).
 import {
   ArrowUpRight,
   AtSign,
@@ -37,7 +38,7 @@ import { m } from '#/paraglide/messages'
 import { Menu, MenuDrawn, type MenuEntry } from '../../../atoms/Menu'
 import type { Shortcut } from '../../../atoms/keys'
 import type { Hand } from '../../keys'
-import { HoverCard } from '../../../layouts/HoverCard'
+import { HoverCard, useOpenTold } from '../../../layouts/HoverCard'
 import { partOf } from '../moving/move'
 import { Picker, type PickerFrame } from './Picker'
 import {
@@ -69,10 +70,21 @@ interface TileMenuProps {
   /** Told when it opens and closes: the canvas steps the other tiles back while it is open. */
   onOpenChange?: (open: boolean) => void
   /**
+   * Told when the tile is pointed at and let go: while its card or its menu is open, by a pointer,
+   * the keyboard's focus or a finger's long press, which a crossing lights elsewhere (HEX-122).
+   */
+  onPoint?: ((pointing: boolean) => void) | undefined
+  /**
    * Not there yet, the untitled root's lamp: no card and no menu. It stays in its menu meanwhile, so
    * the tile is the same once it wakes, its light rising rather than drawn anew.
    */
   asleep?: boolean
+  /**
+   * Its hover card alone, where its caller lets no line through, the tutorial's six (HEX-121): no
+   * menu opens, nor does a line's key run; under a finger, which opens no card, the long press opens
+   * the menu's header alone, its title and its preview, what the card would have said.
+   */
+  cardAlone?: boolean
   /** The tile, or the free slot, handed what its menu and its card need of it. */
   children: (hand: Hand) => ReactElement
 }
@@ -84,20 +96,25 @@ export function TileMenu({
   onAct,
   without = [],
   onOpenChange,
+  onPoint,
   asleep = false,
+  cardAlone = false,
   children,
 }: TileMenuProps) {
   const title = subject.kind === 'slot' ? m.tile_menu_free_slot() : subject.title
   const place = placeOf(subject)
   const pass = <Pass>{children}</Pass>
   const [menuOpen, setMenuOpen] = useState(false)
+  const [cardOpen, setCardOpen] = useState(false)
+  useOpenTold(menuOpen || cardOpen, onPoint)
+  const finger = useFinger()
   return (
     <Menu
       opensOn="context"
-      disabled={asleep}
+      disabled={asleep || (cardAlone && !finger)}
       label={m.tile_menu_label({ title })}
       header={{ title, detail: place, description: card?.description }}
-      entries={entriesOf(subject, frames, onAct, without)}
+      entries={cardAlone ? [] : entriesOf(subject, frames, onAct, without)}
       onOpenChange={(open) => {
         setMenuOpen(open)
         onOpenChange?.(open)
@@ -106,7 +123,14 @@ export function TileMenu({
         subject.kind === 'slot' ? (
           pass
         ) : (
-          <HoverCard place={place} title={title} within="svg" shut={menuOpen || asleep} {...card}>
+          <HoverCard
+            place={place}
+            title={title}
+            within="svg"
+            shut={menuOpen || asleep}
+            onOpenChange={setCardOpen}
+            {...card}
+          >
             {pass}
           </HoverCard>
         )

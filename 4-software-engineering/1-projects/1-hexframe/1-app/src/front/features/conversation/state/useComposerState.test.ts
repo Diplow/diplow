@@ -6,6 +6,7 @@ import { linkTo } from '#/domains/assistant/entities'
 import { publish } from '#/front/features/bus'
 import { AskedAboutTile } from '#/front/features/facts'
 import { m } from '#/paraglide/messages'
+import { overwriteGetLocale } from '#/paraglide/runtime'
 
 import type { Mentionable } from '../composer/mention'
 import { offered, type Offering } from '../composer/typing'
@@ -21,6 +22,7 @@ import { useComposerState } from './useComposerState'
 afterEach(() => {
   cleanup()
   document.body.replaceChildren()
+  overwriteGetLocale(() => 'en')
 })
 
 const tiles: ReadonlyArray<Mentionable> = [
@@ -144,6 +146,36 @@ describe("the composer's commands", () => {
     expect(send()).toEqual({ help: '' })
     type(`/${m.composer_command_keys()}`)
     expect(send()).toEqual({ command: 'keys' })
+  })
+
+  it('offers `/tutorial` where the page shows the tutorial, first while the chat invites it', () => {
+    const offering = { modes: true, undoable: false, help: true, tutorial: true }
+    const { type, rows } = render(offering)
+    type('/')
+    expect(rows()).toEqual(['ask', 'apply', 'language', 'help', 'tutorial'])
+    const invited = render({ ...offering, invited: 'tutorial' })
+    invited.type('/')
+    expect(invited.rows()).toEqual(['tutorial', 'language', 'help', 'ask', 'apply'])
+    const bare = render({ modes: false, undoable: false })
+    bare.type('/tu')
+    expect(bare.rows()).toEqual([])
+  })
+
+  it('shows the tutorial on `/tutorial`, the words after it sent once it ran', () => {
+    const { type, send } = render({ modes: false, undoable: false, tutorial: true })
+    type(`/${m.composer_command_tutorial()}`)
+    expect(send()).toEqual({ command: 'tutorial' })
+    type('/tutorial where do I start?')
+    expect(send()).toEqual({ command: 'tutorial', then: 'where do I start?' })
+  })
+
+  it('reads `/tutoriel` in French, as it lists it', () => {
+    overwriteGetLocale(() => 'fr')
+    const { type, rows, send } = render({ modes: false, undoable: false, tutorial: true })
+    type('/tut')
+    expect(rows()).toEqual(['tutorial'])
+    type('/tutoriel')
+    expect(send()).toEqual({ command: 'tutorial' })
   })
 
   it('offers `/logout` where someone is signed in, and signs out on it', () => {

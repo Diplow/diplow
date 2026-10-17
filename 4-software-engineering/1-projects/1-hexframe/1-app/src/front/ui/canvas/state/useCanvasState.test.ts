@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { TileNode } from '../view/tiles'
 import type { CanvasView, ViewAction } from '../view/view'
 
-import { useCanvasState, type TileHex } from './useCanvasState'
+import { useCanvasState, type TileHex, type TileLets } from './useCanvasState'
 
 // The canvas's state over a System made by hand: what each Tile's click does, and the next view each
 // gesture hands the route, with the gesture's name and its Tile. The view stays the caller's:
@@ -39,9 +39,12 @@ const open: CanvasView = { frame: 'children' }
 /** `a` centered, as a gesture leaves it: opened into its first ring, so its Tiles show around it. */
 const inA: CanvasView = { center: 'a', frame: 'children' }
 
-function render(view: CanvasView, { finger = false } = {}) {
+function render(
+  view: CanvasView,
+  { finger = false, lets }: { finger?: boolean; lets?: (hex: TileHex) => TileLets } = {},
+) {
   const onViewChange = vi.fn<(view: CanvasView, action: ViewAction) => void>()
-  const { result } = renderHook(() => useCanvasState({ system, view, onViewChange, finger }))
+  const { result } = renderHook(() => useCanvasState({ system, view, onViewChange, finger, lets }))
   return { ...result.current, onViewChange }
 }
 
@@ -377,6 +380,62 @@ describe('centering', () => {
   it('leaves the center where it is', () => {
     const { state, actions: act, onViewChange } = render(open)
     act.center(hexOf(state.hexes, 'tile:root'), 'keyboard')
+    expect(onViewChange).not.toHaveBeenCalled()
+  })
+})
+
+describe('what its caller holds back', () => {
+  const nothing = () => ({ click: false, recenter: false })
+
+  it('leaves every Tile without a click, the center included, so none is a button', () => {
+    const { state, actions: act } = render(open, { lets: nothing })
+    const clicks = state.hexes.flatMap((hex) => (hex.kind === 'tile' ? [act.actionOf(hex)] : []))
+    expect(clicks).not.toHaveLength(0)
+    expect(clicks.every((action) => action === undefined)).toBe(true)
+  })
+
+  it('opens nothing and goes in nowhere, by a click, a double click, Shift+Enter or a menu', () => {
+    const { state, actions: act, onViewChange } = render({}, { lets: nothing })
+    const center = hexOf(state.hexes, 'tile:root')
+    act.click(center)
+    act.go(center, 'open')
+    expect(onViewChange).not.toHaveBeenCalled()
+    const opened = render(open, { lets: nothing })
+    const a = hexOf(opened.state.hexes, 'tile:a')
+    opened.actions.click(a)
+    opened.actions.center(a, 'pointer')
+    opened.actions.center(a, 'keyboard')
+    opened.actions.go(a, 'go-in')
+    opened.actions.go(a, 'show-context')
+    expect(opened.onViewChange).not.toHaveBeenCalled()
+  })
+
+  it('moves the center nowhere where that is held, by a click, a menu or Back out', () => {
+    const clicks = () => ({ click: true, recenter: false })
+    const { state, actions: act, onViewChange } = render(open, { lets: clicks })
+    const notes = hexOf(state.hexes, 'tile:notes')
+    expect(act.actionOf(notes)).toBeUndefined()
+    act.click(notes)
+    act.go(notes, 'show-context')
+    expect(onViewChange).not.toHaveBeenCalled()
+    const inside = render(inA, { lets: clicks })
+    const a = hexOf(inside.state.hexes, 'tile:a')
+    inside.actions.go(a, 'back-out')
+    expect(inside.onViewChange).not.toHaveBeenCalled()
+    inside.actions.click(a)
+    expect(inside.onViewChange).toHaveBeenCalledExactlyOnceWith(
+      { center: 'a' },
+      { gesture: 'collapse', tile: 'a' },
+    )
+  })
+
+  it('lets through what it lets through, Tile by Tile: the center opening, nothing going in', () => {
+    const lets = (hex: TileHex) => ({ click: hex.role === 'center', recenter: false })
+    expect(actions({})).toEqual({ 'tile:root': 'expand' })
+    const { state, actions: act, onViewChange } = render(open, { lets })
+    expect(act.actionOf(hexOf(state.hexes, 'tile:root'))).toBe('collapse')
+    expect(act.actionOf(hexOf(state.hexes, 'tile:a'))).toBeUndefined()
+    act.center(hexOf(state.hexes, 'tile:a'), 'keyboard')
     expect(onViewChange).not.toHaveBeenCalled()
   })
 })

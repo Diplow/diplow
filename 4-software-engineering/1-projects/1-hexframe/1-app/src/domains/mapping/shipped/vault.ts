@@ -2,11 +2,12 @@
 // `<n>-<slug>/` for a Child in Direction n and `.<n>-<slug>/` for a Tile of its Context in slot -n,
 // each with a note, a `CLAUDE.md` or its twin in another language, whose frontmatter holds the Tile's
 // Title and Preview and whose rest is its Body. Pure: the notes come in as text, from whoever read or
-// bundled them. Help holds its notes to more than an import does, every field written and every folder
-// numbered, and says what keeps a folder from reading as a Tile, named; the notes that pass are then
-// read the way an import reads files (`files/import/`), the app's one reader of a vault folder, each
-// language's note in the place of the folder's `CLAUDE.md`, so every language reads alike.
-import { missingFrom, noteOf } from '#/repositories/help/note'
+// bundled them. A System hexframe ships holds its notes to more than an import does, every field
+// written and every folder numbered, and says what keeps a folder from reading as a Tile, named; the
+// notes that pass are then read the way an import reads files (`files/import/`), the app's one reader
+// of a vault folder, each language's note in the place of the folder's `CLAUDE.md`, so every language
+// reads alike.
+import { missingFrom, noteOf } from '#/repositories/shipped/note'
 import { Result } from 'effect'
 
 import { importOf } from '../files/import/read'
@@ -24,7 +25,7 @@ function slotOf(name: string): number | undefined {
   return match[1] === '.' ? -direction : direction
 }
 
-/** A folder's note, named `file`, when Help reads it; else what keeps it from being a Tile's. */
+/** A folder's note, named `file`, when a shipped System reads it; else what keeps it from a Tile. */
 function noteChecked(
   text: string | undefined,
   file: string,
@@ -33,8 +34,8 @@ function noteChecked(
   const note = noteOf(text)
   if (note === undefined) return { problem: `its ${file} opens with no frontmatter` }
   const { title = '', preview = '' } = note.fields
-  // A Tile has a Title, as Mapping requires of every Tile, and a Tile of Help a Preview, since a
-  // reader opens Help by its Previews; the vault's own fields are the repository's to name.
+  // A Tile has a Title, as Mapping requires of every Tile, and a Tile of a shipped System a Preview,
+  // since a reader opens one by its Previews; the vault's own fields are the repository's to name.
   const missing = [
     ...(title.trim() === '' ? ['title'] : []),
     ...missingFrom(note),
@@ -58,7 +59,7 @@ type Place = Pick<Row, 'id' | 'parentId' | 'direction'>
 
 /**
  * The rows of a planned Tile and of the Tiles below it, Context first, each id its parent's and the
- * slot the import seated it in, but for the folders whose note Help refused, which `read` leaves out:
+ * slot the import seated it in, but for the folders whose note was refused, which `read` leaves out:
  * they read as no Tile.
  */
 function rowsOf(tile: PlannedTile, place: Place, read: ReadonlySet<string>): Array<Row> {
@@ -75,7 +76,8 @@ function rowsOf(tile: PlannedTile, place: Place, read: ReadonlySet<string>): Arr
           title: tile.title,
           preview: tile.preview,
           body: tile.body.trim(),
-          // Help never changes: every Tile of it stays at its first Version, and Help at none.
+          // A shipped System never changes: every Tile of it stays at its first Version, and the
+          // System at none.
           version: 1,
           systemVersion: 0,
           ...keepsNothing,
@@ -95,8 +97,9 @@ function rowsOf(tile: PlannedTile, place: Place, read: ReadonlySet<string>): Arr
 const folderOf = (path: string) => path.replace(/(^|\/)CLAUDE\.md$/, '')
 
 /**
- * The id a folder's name gives it in Help, the path of its slots from `root`; none for a name that is
- * no slot. Help's own rule, so no two of its folders claim one slot; the import seats them alike.
+ * The id a folder's name gives it, the path of its slots from `root`; none for a name that is no
+ * slot. The shipped Systems' own rule, so no two of a System's folders claim one slot; the import
+ * seats them alike.
  */
 function idOf(root: string, path: string): string | undefined {
   const slots = path === '' ? [] : path.split('/').map(slotOf)
@@ -104,8 +107,9 @@ function idOf(root: string, path: string): string | undefined {
 }
 
 /**
- * The notes Help reads, by their folder's path, those that pass its rules and stand each in a slot of
- * its own, the first in path order keeping it; and what keeps each other folder from reading as a Tile.
+ * The notes a shipped System reads, by their folder's path, those that pass its rules and stand each
+ * in a slot of its own, the first in path order keeping it; and what keeps each other folder from
+ * reading as a Tile.
  */
 function notesRead(
   root: string,
@@ -136,7 +140,7 @@ const utf8 = new TextEncoder()
 const noteAt = (path: string) => (path === '' ? 'CLAUDE.md' : `${path}/CLAUDE.md`)
 
 /**
- * The rows the notes Help reads give, read as an import reads the files of a folder, each note in the
+ * The rows the notes read give, read as an import reads the files of a folder, each note in the
  * place of its folder's `CLAUDE.md`; none, with the faults the reading found, each on its folder, when
  * it refuses them.
  */

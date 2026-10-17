@@ -1,13 +1,14 @@
 // The Account's Conversation on the client, over Assistant's server functions
 // (src/api/assistant/assistant.ts): read a day at a time in the reader's calendar, today first, then
-// each earlier day holding an Entry as the reader scrolls back, one query; a Message posted, from the
-// view it was sent from, which starts a Turn; the Turn running stopped; a merged navigation recorded;
-// whether the Account may use the Assistant; and its Mode switched, its Proposal accepted or
-// discarded. The writes wait their turn in the Conversation's queue, so a navigation sent before a
-// Message reaches the server before it, and each reads the Conversation again once it settles, failed
-// or not; a Message, a Stop, a switch and a decided Proposal poll the latest too, so the page follows
-// the Turn they started or ended, the Mode now, and the System an accepted Proposal changed. Failures go to their channels (../channels.ts): a
-// hook's caller handles none.
+// each earlier day holding an Entry as the reader scrolls back, one query, which the chat's
+// invitation reads beside it without throwing; a Message posted, from the view it was sent from,
+// which starts a Turn; the Turn running stopped; a merged navigation recorded; whether the Account
+// may use the Assistant; and its Mode switched, its Proposal accepted or discarded. The writes wait
+// their turn in the Conversation's queue, so a navigation sent before a Message reaches the server
+// before it, and each reads the Conversation again once it settles, failed or not; a Message, a
+// Stop, a switch and a decided Proposal poll the latest too, so the page follows the Turn they
+// started or ended, the Mode now, and the System an accepted Proposal changed. Failures go to their
+// channels (../channels.ts): a hook's caller handles none.
 import {
   infiniteQueryOptions,
   type Mutation,
@@ -95,9 +96,12 @@ export const conversationRead = infiniteQueryOptions({
  * The Account's Conversation, today first, each page a day: the day, its Entries oldest first, the
  * Titles of the Tiles its navigations went to, by id, and, on every page, the Entry last recorded.
  * `fetchNextPage` reads the day before the oldest one shown that holds an Entry, `hasNextPage` saying
- * whether there is one. Shown inside a ReadBoundary; signed out, it sends the user to sign in.
+ * whether there is one. Shown inside a ReadBoundary; signed out, it sends the user to sign in. Or,
+ * `throwing: false`, the same Query read beside the chat, left undefined should it fail, its
+ * failure the chat's boundary's: what the chat invites after its receipt (HEX-118).
  */
-export const useConversation = () => useInfiniteQuery(conversationRead)
+export const useConversation = ({ throwing = true }: { throwing?: boolean } = {}) =>
+  useInfiniteQuery(throwing ? conversationRead : { ...conversationRead, throwOnError: false })
 
 /** A Proposal's writes, as Mapping batched them; none it cannot read back. */
 const decodeWrites = Schema.decodeUnknownOption(Schema.Array(Batched))

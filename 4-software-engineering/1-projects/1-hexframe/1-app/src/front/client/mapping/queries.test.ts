@@ -24,7 +24,6 @@ import {
   useEditTile,
   useEditTileSubmit,
   useExportTile,
-  useHelp,
   useImportTiles,
   useMoveTile,
   useSwapTiles,
@@ -40,7 +39,6 @@ vi.mock('#/api/mapping/mapping', async (original) => ({
   ImportUpload: (await original<typeof Mapping>()).ImportUpload,
   importTiles: vi.fn(),
   system: vi.fn(),
-  help: vi.fn(),
   createTile: vi.fn(),
   editTile: vi.fn(),
   moveTile: vi.fn(),
@@ -196,19 +194,6 @@ describe("Mapping's hooks", () => {
       })
     })
     expect(Mapping.system).toHaveBeenCalledWith({ data: undefined })
-  })
-
-  it('read Help in the language asked, each language a query of its own', async () => {
-    answering(undefined)
-    vi.mocked(Mapping.help).mockImplementation((({ data }: { data: { language: string } }) =>
-      Promise.resolve({ ok: true, value: { ...root, id: 'help', title: data.language } })) as never)
-    const { result } = render(() => ({ en: useHelp('en'), fr: useHelp('fr') }))
-    await waitFor(() => {
-      expect(result.current.hook.fr.data).toMatchObject({ id: 'help', title: 'fr' })
-    })
-    expect(result.current.hook.en.data).toMatchObject({ id: 'help', title: 'en' })
-    expect(Mapping.help).toHaveBeenCalledWith({ data: { language: 'en' } })
-    expect(Mapping.help).toHaveBeenCalledWith({ data: { language: 'fr' } })
   })
 
   it.each([

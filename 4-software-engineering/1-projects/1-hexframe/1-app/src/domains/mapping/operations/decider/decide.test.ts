@@ -89,8 +89,8 @@ const system: System = {
  */
 const v = (tileId: string) => tileAt(system, tileId)?.version ?? 1
 
-/** Help, made by hand: the same System, owned by no Account. */
-const help: System = { ...system, owned: false }
+/** A System hexframe ships, made by hand: the same System, owned by no Account. */
+const shipped: System = { ...system, owned: false }
 
 const content = { title: 'New', preview: 'New, in short.', body: '# New' }
 
@@ -110,7 +110,7 @@ function refusalOf(decided: Decided) {
 }
 
 describe('decide, refusing everything on a System no Account owns', () => {
-  it('refuses Help every Operation, even one its System would take', () => {
+  it('refuses a System hexframe ships every Operation, even one its System would take', () => {
     const operations: ReadonlyArray<Operation> = [
       new CreateTile({ parent: id.root, slot: 6, ...content }),
       new EditTile({ id: id.branch, version: v(id.branch), title: 'Mine' }),
@@ -127,16 +127,16 @@ describe('decide, refusing everything on a System no Account owns', () => {
     ]
     for (const operation of operations) {
       expect(eventsOf(decided(operation)).length, operation._tag).toBe(1)
-      expect(refusalOf(decided(operation, help)), operation._tag).toMatchObject({
-        _tag: 'HelpReadOnly',
+      expect(refusalOf(decided(operation, shipped)), operation._tag).toMatchObject({
+        _tag: 'ShippedReadOnly',
         kind: 'Forbidden',
       })
     }
   })
 
-  it('refuses Help first, before any other rule an Operation breaks', () => {
+  it('refuses a shipped System first, before any other rule an Operation breaks', () => {
     const broken = new CreateTile({ parent: id.nowhere, slot: 1, ...content, title: '' })
-    expect(refusalOf(decided(broken, help))).toMatchObject({ _tag: 'HelpReadOnly' })
+    expect(refusalOf(decided(broken, shipped))).toMatchObject({ _tag: 'ShippedReadOnly' })
   })
 })
 

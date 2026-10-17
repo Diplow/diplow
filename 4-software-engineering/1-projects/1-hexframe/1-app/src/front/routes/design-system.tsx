@@ -7,9 +7,9 @@
 // view live in the search params, so a link shows what its sender saw, and a Message's link in the
 // Conversation centers the canvas, as on home. What ui/ can't reach the route hands it: the
 // features' specimens, the Conversation, the breadcrumb and Help, Mapping's limit on a Preview,
-// IAM's rule for a Key's name, the timeline's words for a navigation, and Assistant's rule for
-// where a Turn works (HEX-108). The Screen's specimens are drawn here, since they show the
-// breadcrumb and Help.
+// IAM's rule for a Key's name, the timeline's words for a navigation, Assistant's rule for where a
+// Turn works (HEX-108), and the tutorial, which the onboarding's invitation journeys to (HEX-119).
+// The Screen's specimens are drawn here, since they show the breadcrumb and Help.
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 
@@ -18,19 +18,23 @@ import { keyNameBounds, keyNameOf } from '#/domains/iam/entities'
 import { previewLimit } from '#/domains/mapping/entities'
 import { ChannelsGallery } from '#/front/client/gallery'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
-import { useHelp } from '#/front/client/mapping/queries'
+import { useShipped } from '#/front/client/mapping/queries'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { BreadcrumbGallery } from '#/front/features/breadcrumb/gallery'
 import { encoded } from '#/front/features/conversation/composer/mention'
 import { happenedOf } from '#/front/features/conversation/entry/words'
 import { ConversationGallery } from '#/front/features/conversation/gallery'
-import { helpNodeOf } from '#/front/features/help/nodes'
+import { helpNodeOf } from '#/front/features/shipped/nodes'
+import { ringOf, sameSixOf } from '#/front/features/shipped/tutorial/ring'
+import type { SixPlaying } from '#/front/ui/motion'
+import { tutorialRules, tutorialTells } from '#/front/features/shipped/tutorial/rules'
 import { canvasTree } from '#/front/features/system/tree'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
 import { AtomsGallery } from '#/front/ui/atoms/gallery'
 import { Canvas } from '#/front/ui/canvas/Canvas'
+import { IntroducedCanvas } from '#/front/ui/canvas/gallery'
 import { fixtureViews, ulysse } from '#/front/ui/canvas/fixtures'
 import { CanvasLayoutsGallery } from '#/front/ui/canvas/layouts/gallery'
 import { TileGallery } from '#/front/ui/canvas/tile/gallery'
@@ -151,7 +155,7 @@ function Slide({ slide, piece, view, onViewChange, onCenter, onGo }: SlideProps)
     case 'canvas':
       return <CanvasSlide view={view} onViewChange={onViewChange} onGo={onGo} />
     case 'onboarding':
-      return <OnboardingSlide onGo={onGo} />
+      return <OnboardingTour onGo={onGo} />
     case 'crossings':
       return <CrossingSlide piece={piece} onGo={onGo} />
     case 'tokens':
@@ -213,7 +217,7 @@ function CanvasSlide(props: {
             system={tour}
             view={view}
             onViewChange={moved}
-            looking
+            looking="menu"
             className="min-h-0 flex-1"
           />
         </div>
@@ -351,9 +355,32 @@ const tell = tellIn(ulysse)
  */
 const where: Where = ({ value, links }, center) => turnLocation(encoded(value, links), center)
 
+/**
+ * The onboarding, played on into the journey its invitation takes, to the tutorial, read in the
+ * page's language as home reads it, beside the slide, never throwing, and shown by its own rules, as
+ * `/tutorial` lands on home, its Root's body told last in the chat, then opened by a click, its
+ * body's lines and its six lighting each other.
+ */
+function OnboardingTour({ onGo }: { onGo: Go }) {
+  const { data } = useShipped('tutorial', getLocale(), { throwing: false })
+  const tutorial = useMemo(() => {
+    if (data === undefined) return undefined
+    const system = canvasTree(data)
+    const ring = ringOf(system, data.body)
+    return {
+      system,
+      body: data.body,
+      tells: tutorialTells,
+      rules: tutorialRules,
+      sameSix: (playing: SixPlaying) => sameSixOf(ring, playing),
+    }
+  }, [data])
+  return <OnboardingSlide onGo={onGo} tutorial={tutorial} />
+}
+
 /** The help widget's section, on Help itself, read in the page's language as `/help` reads it. */
 function HelpGallery() {
-  const { data: help } = useHelp(getLocale())
+  const { data: help } = useShipped('help', getLocale())
   if (help === undefined) return <Skeleton className="h-96 w-[37.5rem] max-w-full" />
   return <HelpWidgetGallery help={helpNodeOf(help)} />
 }
@@ -400,9 +427,10 @@ function CanvasGallery({ view, onViewChange }: CanvasGalleryProps) {
           system={ulysse}
           view={view}
           onViewChange={onViewChange}
-          looking
+          looking="menu"
           className="h-[36rem] max-h-[80dvh] w-full"
         />
+        <IntroducedCanvas />
       </div>
     </GallerySection>
   )
@@ -439,7 +467,7 @@ function ScreenGallery() {
 
 /** Signed out, the canvas shows Help, read in the page's language as `/help` reads it. */
 function SignedOutSpecimen({ className }: { className: string }) {
-  const { data: help } = useHelp(getLocale())
+  const { data: help } = useShipped('help', getLocale())
   if (help === undefined) return <Skeleton className={className} />
   return <ScreenSpecimen system={canvasTree(help)} signedIn={false} className={className} />
 }
@@ -475,7 +503,7 @@ function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
           system={system}
           view={view}
           onViewChange={setView}
-          looking
+          looking="menu"
           className="flex-1 p-4 pb-8"
         />
       }

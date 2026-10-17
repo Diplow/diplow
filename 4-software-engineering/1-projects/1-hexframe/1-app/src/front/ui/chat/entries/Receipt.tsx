@@ -15,6 +15,7 @@ import { m } from '#/paraglide/messages'
 import { Act } from '../../atoms/controls/act'
 import { focusHeld, focusLost, giveFocusBack } from '../../focus'
 import { runsToCurve, toCurve, useToCurve } from '../../layouts/screen/state/useAlongCurve'
+import { Dawn } from '../atoms/dawn'
 import { Fold } from '../atoms/fold'
 import { HexMark } from '../atoms/hex'
 import { useHandOffState } from '../layouts/useHandOffState'
@@ -84,7 +85,7 @@ interface ReceiptProps {
   takesFocus?: boolean
   /**
    * It comes in third of a new account's dawn, after the corner's path and the root's light, rising
-   * within its own line (`animate-dawn`, `--stagger-dawn`): the receipt of the pseudo taken.
+   * within its own line (`Dawn`): the receipt of the pseudo taken.
    */
   dawning?: boolean
 }
@@ -117,7 +118,6 @@ export function Receipt({
       className={cn(
         runsToCurve,
         'flex flex-wrap items-center gap-x-2.5 gap-y-1 font-agent text-[0.78125rem] leading-normal text-muted-foreground outline-none',
-        dawning && 'motion-safe:animate-dawn [animation-delay:calc(var(--stagger-dawn)*2)]!',
       )}
     >
       <HexMark
@@ -166,9 +166,8 @@ export function Receipt({
       )}
     </div>
   )
-  // Dawning, the conversation sits on the screen's foot, the composer still away: a line held below
-  // its place would reach past the foot, the conversation scrolling by it and the curve's star lit.
-  return dawning ? <div className="overflow-y-clip">{receipt}</div> : receipt
+  // Dawning, it rises within its own line, third of the dawn (`Dawn`).
+  return dawning ? <Dawn beat="receipt">{receipt}</Dawn> : receipt
 }
 
 interface UntilDecidedProps {

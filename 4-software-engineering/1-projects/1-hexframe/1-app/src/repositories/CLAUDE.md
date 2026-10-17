@@ -7,17 +7,18 @@ preview: >-
   complexity, one folder per SDK family: the database (Drizzle over Neon, PGlite
   in tests), auth (Better Auth, Stripe to come), observability (Sentry,
   PostHog), zip archives (fflate) and the agent's sandbox (Blaxel) and model
-  relay (Anthropic, plain fetch); and Help's notes, bundled at build time.
+  relay (Anthropic, plain fetch); and the notes of the Systems hexframe ships,
+  Help and the tutorial, bundled at build time.
 ---
 # repositories
 
-The layer under [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE|domains]]: the errands of fetching and parsing, so a domain reads and writes in its own language and never meets an SDK nor a file format. An Effect layer where a repository wraps a library that talks to the outside world; plain functions where its data is a constant of the bundle, as Help's notes are. Each folder is the one place its SDKs may be imported (`dependency-cruiser.config.ts`, `sdks`).
+The layer under [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/CLAUDE|domains]]: the errands of fetching and parsing, so a domain reads and writes in its own language and never meets an SDK nor a file format. An Effect layer where a repository wraps a library that talks to the outside world; plain functions where its data is a constant of the bundle, as the shipped Systems' notes are. Each folder is the one place its SDKs may be imported (`dependency-cruiser.config.ts`, `sdks`).
 
 | Folder | Holds |
 |---|---|
 | `database/` | Drizzle over Effect's Postgres client, the committed migrations' runner, the PGlite test harness, and the repositories that query it, Mapping's `tiles/` first: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE\|database]] |
 | `auth/` | Better Auth over the database, called through its server API, with its test harness; and the allowlist, the Accounts let into the Assistant by hand, which its Stripe plugin replaces: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/auth/CLAUDE\|auth]] |
-| `help/` | Help's notes, the app's `help/` folder bundled into the server at build time, and the reader of a note's frontmatter: no SDK, but the errands of fetching and parsing, which Mapping leaves here: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/help/CLAUDE\|help]] |
+| `shipped/` | The notes of the Systems hexframe ships, the app's `help/` and `tutorial/` folders bundled into the server at build time, and the reader of a note's frontmatter: no SDK, but the errands of fetching and parsing, which Mapping leaves here: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/shipped/CLAUDE\|shipped]] |
 | `observability/` | Sentry and PostHog, on both sides: where errors, traces and the leveled event log go, and the flag that raises one user's verbosity. Plain functions for the browser, Effect services for the server's runtime: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/observability/CLAUDE\|observability]] |
 | `agent/` | What a Turn of the Assistant runs on: `sandbox/`, Blaxel (`@blaxel/core`), an Account's sandbox holding its System as read-only files and running the agent's processes, and its fake on this machine for the tests and `pnpm dev`; and `anthropic/`, the model relay, plain `fetch`, a Turn's calls to Anthropic with the platform's key added and their answers relayed as they come, and its fake in the process: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/agent/CLAUDE\|agent]] |
 | `zip/` | fflate: a list of files streamed into a zip archive, for an export, and an archive a user sends unpacked in memory, counted as it inflates, for an import, through the `Zip` service on the server; plain functions for the browser, which unpacks a zip the user gave and zips an import before its upload; and, for tests, archives written and read back: [[4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/zip/CLAUDE\|zip]] |

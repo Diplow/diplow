@@ -53,9 +53,10 @@ export interface PlacedReference extends Standing {
 /**
  * A System, Mapping's aggregate, flat, as a change decides on it and the client holds it: its Root,
  * the one Tile without a parent; every Tile and Reference below it by id, each with its parent and
- * its slot; whether an Account owns it, Help, which every Account reads, owned by none, so the
- * System alone says that nothing in it may change; and its Version, how many events changed it, 0
- * before the first, which a client polls to know when to read it again.
+ * its slot; whether an Account owns it, a System hexframe ships, Help or the tutorial, which every
+ * Account reads, owned by none, so the System alone says that nothing in it may change; and its
+ * Version, how many events changed it, 0 before the first, which a client polls to know when to read
+ * it again.
  */
 export interface System {
   readonly root: FoundTile
@@ -63,6 +64,17 @@ export interface System {
   readonly owned: boolean
   readonly version: number
 }
+
+/**
+ * The Systems hexframe ships, owned by no Account, by the ids of their Roots: Help's, then the
+ * tutorial's. A Root's id is the name of the app's folder it is written in, and every other id of its
+ * System a path of slots from it (`tutorial/2`). Mapping says which they are; the bundle holds a
+ * folder for each.
+ */
+export const shippedRoots = ['help', 'tutorial'] as const
+
+/** The Root of a System hexframe ships, by its id. */
+export type ShippedRoot = (typeof shippedRoots)[number]
 
 /** A Leaf in its System's tree: one file's worth, a Tile with nothing below it and no Context. */
 export type LeafTile = FoundTile
@@ -113,9 +125,9 @@ function placedOf(row: Row, parent: string): PlacedTile | PlacedReference | unde
 }
 
 /**
- * The System these rows hold, owned by an Account or, Help, by none, at the Version its Root's row
- * keeps; `undefined` when they hold no Root. A row the Root is not above stays in it, out of its
- * tree's reach.
+ * The System these rows hold, owned by an Account or, one hexframe ships, by none, at the Version
+ * its Root's row keeps; `undefined` when they hold no Root. A row the Root is not above stays in it,
+ * out of its tree's reach.
  */
 export function systemFrom(
   rows: ReadonlyArray<Row>,

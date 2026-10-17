@@ -1,11 +1,26 @@
-// The chat's text in pieces: plain words, a tile named, and who acted, named. Every piece of the chat
-// takes its text this way, so a tile reads the same in a Message, an event, a Proposal's change and a
-// receipt. A sentence keeps its order in each language: its message is read with a mark in each
-// tile's place, then cut at the marks and woven with the tiles (`weave`).
+// The chat's text in pieces: plain words, a tile named, who acted, named, and a command named,
+// which a click runs (HEX-118). Every piece of the chat takes its text this way, so a tile reads
+// the same in a Message, an event, a Proposal's change and a receipt. A sentence keeps its order in
+// each language: its message is read with a mark in each tile's place, then cut at the marks and
+// woven with the tiles (`weave`).
 import { Mention, type MentionProps, type Voice } from './Mention'
 
-/** One piece of a text: words, a tile named, or who acted, by name, in the first ink. */
-export type Word = string | { readonly tile: MentionProps } | { readonly name: string }
+/** A command named in the chat: as it is typed, its `/` first, in the reader's language. */
+interface CommandNamed {
+  readonly name: string
+  /** Runs it, as typing it would. */
+  readonly onRun: () => void
+}
+
+/**
+ * One piece of a text: words, a tile named, who acted, by name, in the first ink, or a command
+ * named, which a click runs.
+ */
+export type Word =
+  | string
+  | { readonly tile: MentionProps }
+  | { readonly name: string }
+  | { readonly command: CommandNamed }
 
 /** A text, its pieces in order. */
 export type Words = readonly Word[]
@@ -16,6 +31,7 @@ export function Said({ words, voice }: { words: Words; voice?: Voice }) {
     // The pieces of one text, never reordered: their place is their key.
     if (typeof word === 'string') return word
     if ('tile' in word) return <Mention key={index} {...word.tile} voice={voice} />
+    if ('command' in word) return <Command key={index} {...word.command} />
     return (
       <span key={index} className="text-foreground">
         {word.name}
@@ -24,11 +40,33 @@ export function Said({ words, voice }: { words: Words; voice?: Voice }) {
   })
 }
 
+/**
+ * A command named, in the user's amber, as the composer marks it typed, since it is theirs to run,
+ * a faint underline under it: a click runs it. Inline, it cannot grow to a finger's 44px; its hit
+ * area does, beyond its line.
+ */
+function Command({ name, onRun }: CommandNamed) {
+  return (
+    <button
+      type="button"
+      className="relative cursor-pointer text-human underline decoration-human/35 decoration-1 underline-offset-3 outline-offset-2 transition-[text-decoration-color] hover:decoration-current focus-visible:outline pointer-coarse:after:absolute pointer-coarse:after:-inset-x-1 pointer-coarse:after:-inset-y-3"
+      onClick={onRun}
+    >
+      {name}
+    </button>
+  )
+}
+
+/** A piece as plain words: a tile by its title, a command as it is typed. */
+function plainWord(word: Word): string {
+  if (typeof word === 'string') return word
+  if ('tile' in word) return word.tile.title
+  if ('command' in word) return word.command.name
+  return word.name
+}
+
 /** A text as plain words, each tile by its title: what a copy takes. */
-export const plainOf = (words: Words): string =>
-  words
-    .map((word) => (typeof word === 'string' ? word : 'tile' in word ? word.tile.title : word.name))
-    .join('')
+export const plainOf = (words: Words): string => words.map(plainWord).join('')
 
 /**
  * A text cut at its line breaks, each line its own pieces, a tile never cut: the lines a reader sees
@@ -52,6 +90,62 @@ export function linesOf(words: Words): Words[] {
   }
   if (line.length > 0 || lines.length === 0) lines.push(line)
   return lines
+}
+
+/** A numbered list's item: its number, as written, and its words. */
+interface Item {
+  readonly number: string
+  readonly words: Words
+}
+
+/** A text's lines as a reader sees them laid out: a line, or a numbered list's items, together. */
+export type Block = { readonly line: Words } | { readonly list: readonly Item[] }
+
+/** A line opening a numbered list's item, as Markdown writes one: `1. `. */
+const numbered = /^(\d+)\.\s+/
+
+/**
+ * A text's lines (`linesOf`), each run of lines opening with a number and a dot, as Markdown writes
+ * a numbered list, gathered into one list, its items' numbers as written: the rest of Markdown waits
+ * for the seam's renderer.
+ */
+export function blocksOf(words: Words): Block[] {
+  const blocks: Array<{ line: Words } | { list: Item[] }> = []
+  for (const line of linesOf(words)) {
+    const [first, ...rest] = line
+    const opening = typeof first === 'string' ? numbered.exec(first) : null
+    if (typeof first !== 'string' || opening === null) {
+      blocks.push({ line })
+      continue
+    }
+    const after = first.slice(opening[0].length)
+    const item = { number: opening[1] ?? '', words: after === '' ? rest : [after, ...rest] }
+    const last = blocks.at(-1)
+    if (last !== undefined && 'list' in last) last.list.push(item)
+    else blocks.push({ list: [item] })
+  }
+  return blocks
+}
+
+/**
+ * Whether a numbered list's item is the first of its number in the text, by its block and its place
+ * in it (`blocksOf`): the one line a number names something by, a later one with the same number a
+ * line as any other (HEX-122).
+ */
+export function firstNumbered(blocks: readonly Block[]): (block: number, item: number) => boolean {
+  const first = new Map<string, string>()
+  blocks.forEach((block, at) => {
+    if (!('list' in block)) return
+    block.list.forEach(({ number }, place) => {
+      if (!first.has(number)) first.set(number, `${String(at)}.${String(place)}`)
+    })
+  })
+  return (block, item) => {
+    const found = blocks[block]
+    if (found === undefined || !('list' in found)) return false
+    const number = found.list[item]?.number
+    return number !== undefined && first.get(number) === `${String(block)}.${String(item)}`
+  }
 }
 
 /** Where the marks a sentence is read with begin: Unicode's private use area, which no message holds. */

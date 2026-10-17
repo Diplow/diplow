@@ -11,7 +11,8 @@
 // Where its caller takes a tile carried off it, a tile dragged off the canvas follows the pointer
 // over the page, for its caller to hand on. As the center changes, the camera flies from the last
 // view to the next (`useCamera`): into a child it zooms in, to a parent out, the last view drawn still
-// beneath the next as it flies past and fades.
+// beneath the next as it flies past and fades. Where its caller introduces opening the center, the
+// tutorial's, the center invites the click that would open it, and its six arrive one by one.
 import { useRef, useState, type ReactNode, type RefObject } from 'react'
 import { cn } from 'cn'
 
@@ -33,15 +34,22 @@ import { nearestOf } from './state/move/targets'
 import type { CarriedTile, CarryInput } from './state/move/carry'
 import { useMove } from './state/move/useMove'
 import { useCamera } from './state/useCamera'
-import { useCanvasState, type TileAction, type TileHex } from './state/useCanvasState'
+import {
+  useCanvasState,
+  type Looking,
+  type TileAction,
+  type TileHex,
+  type TileLets,
+} from './state/useCanvasState'
 import { useScale } from './state/useScale'
 import { useFinger } from './tile/menu/TileMenu'
 import { unitsIn } from './tile/moving/drag'
 import { Carried, MoveBanner } from './tile/moving/Moving'
 import { Arc } from './tile/marks/Marks'
+import type { ToldPart } from '../motion'
 import { wayTo, type TileMark } from './tile/marks/mark'
 import { Ground, Slot } from './tile/places'
-import { Tile, type StandingLook, type TileWrite } from './tile/Tile'
+import { Tile, type StandingLook, type TileMotion, type TileWrite } from './tile/Tile'
 import { listOf, lookOf, placeOf } from './view/looks'
 import { pathTo, type TileNode } from './view/tiles'
 import type { CanvasView, ViewAction } from './view/view'
@@ -78,9 +86,17 @@ export interface CanvasMarks {
   pointed?: string | undefined
   /** What stands in a free slot before it is there: a tile being written, one a Proposal creates. */
   slot?: (slot: EmptySlotTarget) => SlotStanding | undefined
+  /**
+   * The part of the center's words the agent tells of, as the chat says it: its title or its preview
+   * lit, its body, told in the chat, lighting nothing (HEX-120).
+   */
+  told?: ToldPart | undefined
   /** A Proposal's moves, each from a Tile to the free slot it would land in, drawn where both are. */
   arcs?: ReadonlyArray<{ from: string; to: { parent: string; direction: Direction } }>
 }
+
+/** A Tile pointed at, by its id, or let go: the canvas's end of a crossing (HEX-122). */
+export type PointAt = (tile: string, pointing: boolean) => void
 
 /** Moving a Tile: the one on the move, if any, and how a move starts and stops. */
 interface CanvasMove {
@@ -109,9 +125,22 @@ interface CanvasProps {
   acting?: CanvasActing
   /**
    * A canvas only looked at, Help's or a page's: without `acting`, each Tile's menu holds the lines
-   * that go somewhere alone, Open, Go in, Show its Context, Back out, beside its hover card.
+   * that go somewhere alone, Open, Go in, Show its Context, Back out, beside its hover card (`menu`);
+   * or its hover card alone (`card`).
    */
-  looking?: boolean
+  looking?: Looking
+  /**
+   * What each Tile lets through of the gestures on it, its click and going into it, for a canvas with
+   * rules of its own, the tutorial's: a Tile whose click is held back is no button, takes no focus and
+   * opens nothing. Without it, every gesture goes through.
+   */
+  lets?: (hex: TileHex) => TileLets
+  /**
+   * Opening the center is introduced, the tutorial's: where a click would open it, the center invites
+   * that click, the one thing that answers, and its six arrive one by one, `--stagger-step` apart, in
+   * their order from the top left (HEX-121).
+   */
+  introducesOpening?: boolean
   /**
    * A Tile on the move: lifted, its free slots offering themselves where `emptySlots` lands it, the
    * Tiles `swapTargets` names offering their swap on a disc at their foot, no Branch showing its
@@ -127,18 +156,21 @@ interface CanvasProps {
    * once it comes back or is let go, which ends its move. Without it, a drag stays on the canvas.
    */
   onCarry?: ((tile: CarriedTile | undefined) => void) | undefined
+  /**
+   * A Tile pointed at, its card open under a mouse, a pen or the keyboard's focus, or its menu under
+   * a finger's long press, by its id, and let go: the canvas's end of a crossing, the chat lighting
+   * the line that names it (HEX-122). Without it, pointing at a Tile lights nothing elsewhere.
+   */
+  onPoint?: PointAt | undefined
   className?: string
 }
 
 export function Canvas(props: CanvasProps) {
-  const { system, view, onViewChange, emptySlots, move, writes, marks, onCarry } = props
-  const acting: CanvasActing | undefined =
-    props.acting ??
-    (props.looking === true
-      ? { tile: (hex) => lookingAt(system, hex, lookOf(hex)), slot: () => undefined }
-      : undefined)
+  const { system, view, onViewChange, emptySlots, move, writes, marks, onCarry, lets } = props
+  const { introducesOpening: introduces = false } = props
+  const acting = props.acting ?? lookedAt(system, props.looking)
   const finger = useFinger()
-  const { state, actions } = useCanvasState({ system, view, onViewChange, finger })
+  const { state, actions } = useCanvasState({ system, view, onViewChange, finger, lets })
   const svg = useRef<SVGSVGElement>(null)
   const scale = useScale(svg, canvasSize)
   const { width, height } = canvasSize
@@ -161,7 +193,7 @@ export function Canvas(props: CanvasProps) {
   const inTheAir = gesture.landing !== undefined && gesture.landing !== 'landed'
   // While a tile moves, nothing stands in a free slot: they offer themselves to it.
   const standing = moving === undefined ? marks?.slot : undefined
-  const markOf = tileMarksOf(system, state.hexes, { ...marks, slot: standing })
+  const markOf = tileMarksOf(system, state.hexes, { ...marks, slot: standing }, state.center.id)
   const onMenu = (key: string) => (open: boolean) => {
     setMenu((current) => (open ? key : current === key ? undefined : current))
   }
@@ -185,7 +217,8 @@ export function Canvas(props: CanvasProps) {
             scale={scale}
             write={writes?.tile(hex.tile.id)}
             mark={mark}
-            motion={actions.motionOf(hex.key)}
+            motion={paced(actions.motionOf(hex.key), introduces)}
+            invites={introduces && hex.role === 'center' && action === 'expand'}
             action={
               action && {
                 label: actionLabel(action, hex.tile.title),
@@ -207,6 +240,7 @@ export function Canvas(props: CanvasProps) {
         moving={moving}
         aside={menu !== undefined && menu !== hex.key}
         onMenu={onMenu(hex.key)}
+        onPoint={pointingAt(hex.tile.id, props.onPoint)}
         shift={hex.tile.reference === undefined ? gesture.shiftOf(hex.tile.id) : still}
         inTheAir={inTheAir}
         swap={targetAt.get(hex.key)}
@@ -285,6 +319,26 @@ export function Canvas(props: CanvasProps) {
     </div>
   )
 }
+
+/** What a canvas only looked at lets each Tile show: its menu and its card, its card alone, or neither. */
+function lookedAt(system: TileNode, looking: Looking = false): CanvasActing | undefined {
+  if (looking === false) return undefined
+  return {
+    tile: (hex) => lookingAt(system, hex, lookOf(hex), looking),
+    slot: () => undefined,
+  }
+}
+
+/** A Tile pointed at and let go, handed on by its id where the caller takes it. */
+const pointingAt = (id: string, onPoint: CanvasProps['onPoint']) =>
+  onPoint &&
+  ((pointing: boolean) => {
+    onPoint(id, pointing)
+  })
+
+/** A bloom one by one, a step apart, where the canvas introduces opening its center. */
+const paced = (motion: TileMotion | undefined, introduces: boolean) =>
+  motion && introduces ? { ...motion, paced: true } : motion
 
 interface CameraProps {
   system: TileNode
@@ -369,10 +423,16 @@ const still = { by: { x: 0, y: 0 }, glides: false }
 type Hexes = ReturnType<typeof useCanvasState>['state']['hexes']
 
 /**
- * Each Tile's mark, by its id: what the caller says of it, and the chat pointing at it, or at a tile
- * below it off the canvas, whose way it is. A tile standing in a slot is drawn under its own id.
+ * Each Tile's mark, by its id: what the caller says of it, the part of the center's words the agent
+ * tells of, and the chat pointing at it, or at a tile below it off the canvas, whose way it is. A tile
+ * standing in a slot is drawn under its own id.
  */
-function tileMarksOf(system: TileNode, hexes: Hexes, marks: CanvasMarks | undefined) {
+function tileMarksOf(
+  system: TileNode,
+  hexes: Hexes,
+  marks: CanvasMarks | undefined,
+  center: string,
+) {
   const pointed = marks?.pointed
   const drawn = new Set<string>()
   for (const hex of hexes) {
@@ -387,7 +447,9 @@ function tileMarksOf(system: TileNode, hexes: Hexes, marks: CanvasMarks | undefi
       ? undefined
       : wayTo(pointed, pathTo(system, pointed), (id) => drawn.has(id))
   return (id: string): TileMark | undefined => {
-    const mark = marks?.tile?.(id)
+    const told = marks?.told
+    const mark =
+      told !== undefined && id === center ? { ...marks?.tile?.(id), told } : marks?.tile?.(id)
     if (way?.id !== id) return mark
     return { ...mark, pointed: way.way ? 'way' : 'tile' }
   }

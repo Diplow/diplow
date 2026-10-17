@@ -1,12 +1,13 @@
 // What a `/` at the start of a Message offers: the commands that take the place of a menu, each run by
 // the app itself, never sent to the agent. On a tile, what the canvas's menu holds; on the agent, what
-// the Mode and a Turn answer to; on the user, what the header held, the language among them. Each is
-// named in the reader's language; the language also answers to its name in every other one, so a
-// reader lost in a language they cannot read still finds it. A page offers those it runs (`among`):
-// what the caret stands in lists them (`commandTypingAt`), the command a Message opens with is marked
-// in the field (`commandMarkOf`) and run once sent (`openingCommand`), and the language lists the
-// languages, each in its own words. How the field shows a Tile's link once picked, whole, is read here
-// too (`wholeLink`, `showsLink`), and what the field marks (`fieldMarksOf`), so the feature's `@` and
+// the Mode and a Turn answer to; on the user, what the header held, the language among them, and
+// the tutorial, which the chat invites a new account to (HEX-118). Each is named in the reader's
+// language; the language also answers to its name in every other one, so a reader lost in a
+// language they cannot read still finds it. A page offers those it runs (`among`): what the caret
+// stands in lists them (`commandTypingAt`), the command a Message opens with is marked in the field
+// (`commandMarkOf`) and run once sent (`openingCommand`), and the language lists the languages,
+// each in its own words. How the field shows a Tile's link once picked, whole, is read here too
+// (`wholeLink`, `showsLink`), and what the field marks (`fieldMarksOf`), so the feature's `@` and
 // the gallery's demo read them alike. Pure.
 import {
   ArrowUpRight,
@@ -18,6 +19,7 @@ import {
   Languages,
   LogOut,
   Move,
+  Orbit,
   Pencil,
   Sparkles,
   Square,
@@ -30,6 +32,7 @@ import { m } from '#/paraglide/messages'
 import { getLocale, locales } from '#/paraglide/runtime'
 
 import { cutAround, folded } from '../atoms/cut'
+import { weave, type Words } from '../text/words'
 import type { Mark } from './Composer'
 import type { Listing, Row } from './List'
 
@@ -56,6 +59,7 @@ export type CommandId =
   | 'language'
   | 'keys'
   | 'help'
+  | 'tutorial'
   | 'sign-out'
 
 export interface Command {
@@ -80,6 +84,15 @@ const takesNames: Record<Takes, () => string> = {
   tile: m.composer_takes_tile,
   where: m.composer_takes_where,
   topic: m.composer_takes_topic,
+}
+
+/** The tutorial, which the agent invites a new account to (`tutorialInvitation`). */
+const tutorial: Command = {
+  id: 'tutorial',
+  group: 'you',
+  name: m.composer_command_tutorial,
+  does: m.composer_command_tutorial_does,
+  icon: Orbit,
 }
 
 /** The commands, group after group. */
@@ -181,6 +194,7 @@ export const commands: ReadonlyArray<Command> = [
     does: m.composer_command_help_does,
     icon: CircleHelp,
   },
+  tutorial,
   {
     id: 'sign-out',
     group: 'you',
@@ -189,6 +203,14 @@ export const commands: ReadonlyArray<Command> = [
     icon: LogOut,
   },
 ]
+
+/**
+ * The agent's line inviting a new account's first command, `/tutorial` named as it is typed, in the
+ * reader's language, which a click runs as typing it does (`onRun`): one sentence for home's chat and
+ * the onboarding slide alike (HEX-118).
+ */
+export const tutorialInvitation = (onRun: () => void): Words =>
+  weave(m.conversation_invitation, { command: { command: { name: `/${tutorial.name()}`, onRun } } })
 
 /** The names a command answers to: its own, and the language's in every language. */
 const namesOf = (command: Command) =>

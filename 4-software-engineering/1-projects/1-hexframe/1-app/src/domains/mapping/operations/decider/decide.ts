@@ -21,7 +21,7 @@ import {
 } from '../../entities'
 import {
   type DirectionTaken,
-  HelpReadOnly,
+  ShippedReadOnly,
   type LeafHoldsNothing,
   MovedUnderItself,
   type PreviewTooLong,
@@ -53,15 +53,20 @@ import type {
 import { freeSlot } from '../placement'
 
 /**
- * What `decide` may refuse each Operation, by its tag: Help's System refuses every one, and each
- * refuses only what its rules check, so a caller handles no refusal its Operation never gets.
+ * What `decide` may refuse each Operation, by its tag: a System hexframe ships refuses every one, and
+ * each refuses only what its rules check, so a caller handles no refusal its Operation never gets.
  */
 export interface Refusals {
   readonly CreateTile:
-    HelpReadOnly | TitleMissing | PreviewTooLong | TileNotFound | LeafHoldsNothing | DirectionTaken
-  readonly EditTile: HelpReadOnly | TitleMissing | PreviewTooLong | TileNotFound | TileChanged
+    | ShippedReadOnly
+    | TitleMissing
+    | PreviewTooLong
+    | TileNotFound
+    | LeafHoldsNothing
+    | DirectionTaken
+  readonly EditTile: ShippedReadOnly | TitleMissing | PreviewTooLong | TileNotFound | TileChanged
   readonly MoveTile:
-    | HelpReadOnly
+    | ShippedReadOnly
     | TileNotFound
     | TileChanged
     | RootFixed
@@ -69,11 +74,11 @@ export interface Refusals {
     | DirectionTaken
     | LeafHoldsNothing
   readonly SwapTiles:
-    HelpReadOnly | TileNotFound | TileChanged | RootFixed | MovedUnderItself | LeafHoldsNothing
-  readonly DeleteTile: HelpReadOnly | TileNotFound | TileChanged | RootFixed
+    ShippedReadOnly | TileNotFound | TileChanged | RootFixed | MovedUnderItself | LeafHoldsNothing
+  readonly DeleteTile: ShippedReadOnly | TileNotFound | TileChanged | RootFixed
   readonly CreateReference:
-    HelpReadOnly | TileNotFound | TileChanged | LeafHoldsNothing | DirectionTaken
-  readonly DeleteReference: HelpReadOnly | TileNotFound | TileChanged
+    ShippedReadOnly | TileNotFound | TileChanged | LeafHoldsNothing | DirectionTaken
+  readonly DeleteReference: ShippedReadOnly | TileNotFound | TileChanged
 }
 
 /** Every refusal `decide` may answer, each a Mapping error with its kind. */
@@ -229,8 +234,8 @@ function given(made: Made | undefined): Made {
 /**
  * What an Operation does to a System: the events it makes, in the order they apply (`evolve`), none
  * when it changes nothing, or the refusal Mapping answers it. A create is given the id of what it
- * makes (`Made`). A System no Account owns, Help's, takes no change at all (`HelpReadOnly`), whatever
- * the Operation names.
+ * makes (`Made`). A System no Account owns, one hexframe ships, Help or the tutorial, takes no change at
+ * all (`ShippedReadOnly`), whatever the Operation names.
  */
 export function decide(system: System, operation: CreateTile, made: Made): Decided<'CreateTile'>
 export function decide(system: System, operation: EditTile): Decided<'EditTile'>
@@ -249,7 +254,7 @@ export function decide(
 ): Decided
 export function decide(system: System, operation: Operation, made: Made): Decided
 export function decide(system: System, operation: Operation, made?: Made): Decided {
-  if (!system.owned) return refused(new HelpReadOnly())
+  if (!system.owned) return refused(new ShippedReadOnly())
   switch (operation._tag) {
     case 'CreateTile':
       return createTile(system, operation, given(made))

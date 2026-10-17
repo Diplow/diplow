@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { linesOf, plainOf, weave } from './words'
+import { blocksOf, firstNumbered, linesOf, plainOf, weave } from './words'
 
 const projects = { tile: { title: 'Projects' } }
 const site = { tile: { title: 'Site' } }
@@ -33,11 +33,22 @@ describe('weave', () => {
     const key = { name: 'Claude Code, laptop' }
     expect(weave(edited, { key, projects })).toEqual([key, ' edited ', projects])
   })
+
+  it('weaves a command named where the sentence puts it', () => {
+    const invite = (inputs: { command: string }) => `Type ${inputs.command} to reach it.`
+    const command = { command: { name: '/tutorial', onRun: () => undefined } }
+    expect(weave(invite, { command })).toEqual(['Type ', command, ' to reach it.'])
+  })
 })
 
 describe('plainOf', () => {
   it('reads each tile by its title and each name as it is', () => {
     expect(plainOf(['Move ', site, ' for ', { name: 'a Key' }, '.'])).toBe('Move Site for a Key.')
+  })
+
+  it('reads a command named as it is typed', () => {
+    const command = { command: { name: '/tutorial', onRun: () => undefined } }
+    expect(plainOf(['Type ', command, '.'])).toBe('Type /tutorial.')
   })
 })
 
@@ -64,5 +75,54 @@ describe('linesOf', () => {
   it('leaves a text of one line, or none, as one line', () => {
     expect(linesOf(['One line'])).toEqual([['One line']])
     expect(linesOf([])).toEqual([[]])
+  })
+})
+
+describe('blocksOf', () => {
+  it('gathers the lines opening with a number and a dot into one list, the rest lines', () => {
+    const body = ['Here, the steps.\n\n1. Go in: the center.\n2. Six at most.\n\nOpen it.']
+    expect(blocksOf(body)).toEqual([
+      { line: ['Here, the steps.'] },
+      { line: [] },
+      {
+        list: [
+          { number: '1', words: ['Go in: the center.'] },
+          { number: '2', words: ['Six at most.'] },
+        ],
+      },
+      { line: [] },
+      { line: ['Open it.'] },
+    ])
+  })
+
+  it('keeps a tile an item names, and its number as written', () => {
+    expect(blocksOf(['3. Read ', projects, '\n4. Then ', site])).toEqual([
+      {
+        list: [
+          { number: '3', words: ['Read ', projects] },
+          { number: '4', words: ['Then ', site] },
+        ],
+      },
+    ])
+  })
+
+  it('leaves a line that opens with a tile, or a number without its dot, a line', () => {
+    expect(blocksOf([projects, ' 1. first\n2020 was a year'])).toEqual([
+      { line: [projects, ' 1. first'] },
+      { line: ['2020 was a year'] },
+    ])
+  })
+})
+
+describe('firstNumbered', () => {
+  it('names each number by its first item, a later item with the same number naming nothing', () => {
+    const first = firstNumbered(
+      blocksOf(['1. Go in.\n2. Six at most.\n\nAgain:\n\n1. Go in, again.']),
+    )
+    expect([first(0, 0), first(0, 1), first(2, 0)]).toEqual([true, true, false])
+  })
+
+  it('names nothing by a line that is no list item', () => {
+    expect(firstNumbered(blocksOf(['Here.\n1. Go in.']))(0, 0)).toBe(false)
   })
 })

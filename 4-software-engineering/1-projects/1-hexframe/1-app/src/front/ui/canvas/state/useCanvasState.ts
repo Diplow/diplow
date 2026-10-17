@@ -5,7 +5,8 @@
 // center's ring included, blooms out of its heart, and folds back into it for `--duration-fold` before
 // the view that closes it is handed on, at once with reduced motion. Under a finger, a tap on a Branch
 // of the ring goes in, opening it in place waiting in its menu; the menu's lines that go somewhere,
-// open, go in, show the Context, back out, are gestures too.
+// open, go in, show the Context, back out, are gestures too. Where its caller holds a Tile's click or
+// its going in back, that gesture does nothing there.
 import { useEffect, useRef, useState } from 'react'
 
 import { directions, type Point } from '../geometry/geometry'
@@ -34,6 +35,42 @@ export type TileHex = Extract<CanvasHex, { kind: 'tile' }>
  * depth 2. A double-click, or Shift+Enter, centers any Tile but the center.
  */
 export type TileAction = Extract<Gesture, 'expand' | 'collapse' | 'center'>
+
+/**
+ * What a Tile lets through of the gestures made on it: its click, Enter and Space, and its menu's
+ * Open (`click`); and moving the center from it (`recenter`), a click that would center it, going
+ * into it by a double click, Shift+Enter or its menu's Go in, centering it with its Context by Show
+ * its Context, or its menu's Back out.
+ */
+export interface TileLets {
+  click: boolean
+  recenter: boolean
+}
+
+/**
+ * How a canvas only looked at shows each Tile, past its words: its menu, the view's lines alone,
+ * beside its hover card (`menu`); its hover card alone (`card`); or neither (`false`).
+ */
+export type Looking = 'menu' | 'card' | false
+
+/**
+ * A canvas with rules of its own, the tutorial's, as its caller hands them on: the view it shows, how
+ * each Tile is looked at (`looking`), what each Tile lets through, and whether it introduces opening
+ * its center (`introducesOpening`).
+ */
+export interface CanvasRules {
+  view: CanvasView
+  looking: Looking
+  lets: (hex: TileHex) => TileLets
+  /**
+   * Opening the center is introduced: where a click would open it, the center invites that click,
+   * and its six arrive one by one (HEX-121).
+   */
+  introducesOpening: boolean
+}
+
+/** Every gesture let through, as on any canvas whose caller holds none back. */
+const everything: TileLets = { click: true, recenter: true }
 
 /** What a gesture on a Tile asks of the view: a click's, or its menu's Show its Context. */
 type TileGesture = TileAction | 'show-context'
@@ -151,9 +188,12 @@ interface CanvasInput {
   onViewChange: (view: CanvasView, action: ViewAction) => void
   /** The hand is a finger (`pointer-coarse`): its tap on a Branch of the ring goes in. */
   finger?: boolean
+  /** What each Tile lets through of the gestures on it; without it, every one. */
+  lets?: ((hex: TileHex) => TileLets) | undefined
 }
 
-export function useCanvasState({ system, view, onViewChange, finger = false }: CanvasInput) {
+export function useCanvasState(input: CanvasInput) {
+  const { system, view, onViewChange, finger = false, lets = () => everything } = input
   const shown = showView(system, view)
   const hexes = layoutCanvas(shown)
   const { inside, hubs } = openedIn(hexes)
@@ -236,13 +276,23 @@ export function useCanvasState({ system, view, onViewChange, finger = false }: C
     }, duration)
   }
 
+  /**
+   * What a click on `hex` does, by a pointer or a finger; nothing where its click is held back, nor
+   * a centering where moving the center is.
+   */
+  const actionOf = (hex: TileHex, hand = finger) => {
+    const { click, recenter } = lets(hex)
+    const action = click ? tileAction(hex, shown, hand) : undefined
+    return action === 'center' && !recenter ? undefined : action
+  }
+
   return {
     state: {
       center: shown.center,
       hexes,
     },
     actions: {
-      actionOf: (hex: TileHex) => tileAction(hex, shown, finger),
+      actionOf: (hex: TileHex) => actionOf(hex),
       /**
        * How a hex drawn inside one opened in place, or in the center's ring, moves: blooming out of
        * its heart, after its elder siblings, or folding back into it, all of them as the center
@@ -257,12 +307,12 @@ export function useCanvasState({ system, view, onViewChange, finger = false }: C
       },
       /** A click, Enter or Space on `hex`, a tap under a finger; none while a fold is under way. */
       click: (hex: TileHex) => {
-        press(hex, tileAction(hex, shown, finger))
+        press(hex, actionOf(hex))
       },
       /** A double-click, or Shift+Enter, on `hex`, a fold under way given up for it. */
       center: (hex: TileHex, from: 'pointer' | 'keyboard') => {
         const again = from === 'keyboard' || clicked.current === hex.key
-        if (!again || hex.tile.id === shown.center.id) return
+        if (!again || hex.tile.id === shown.center.id || !lets(hex).recenter) return
         centerTile(hex.tile.id)
       },
       /**
@@ -274,20 +324,21 @@ export function useCanvasState({ system, view, onViewChange, finger = false }: C
       go: (hex: TileHex, verb: ViewVerb) => {
         const tile = hex.tile.id
         const centered = tile === shown.center.id
+        const { recenter } = lets(hex)
         switch (verb) {
           case 'open':
-            press(hex, tileAction(hex, shown))
+            press(hex, actionOf(hex, false))
             return
           case 'go-in':
-            if (!centered) centerTile(tile)
+            if (!centered && recenter) centerTile(tile)
             return
           case 'show-context':
-            if (!centered) centerTile(tile, true)
-            else if (shown.inner !== 'context') act(hex, 'show-context')
+            if (!centered && recenter) centerTile(tile, true)
+            else if (centered && shown.inner !== 'context') act(hex, 'show-context')
             return
           case 'back-out': {
             const parent = pathTo(system, shown.center.id).at(-2)
-            if (parent !== undefined) centerTile(parent.id)
+            if (parent !== undefined && recenter) centerTile(parent.id)
           }
         }
       },

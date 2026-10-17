@@ -5,7 +5,7 @@ import { parse } from 'yaml'
 import { splitFrontmatter } from '../../../../../2-claude-mod/hooks/shape/node'
 import type { TileRow } from '#/repositories/database/tiles/tiles'
 
-import { helpSystem } from '../help/help'
+import { shippedSystem } from '../shipped/shipped'
 import { isSegment, keepsNothing, systemFrom, systemOf } from '../entities'
 import { type File, exportOf, placesOf } from './files'
 import { yamlOf } from './frontmatter'
@@ -355,7 +355,7 @@ describe('the YAML an export writes', () => {
 describe('Help, exported', () => {
   it.effect('reads like any Tile: a file per Tile, each one read back whole', () =>
     Effect.gen(function* () {
-      const help = yield* helpSystem('en')
+      const help = yield* shippedSystem('help', 'en')
       const files = exportOf(help, help.id, link)?.files ?? []
       const ids = files.map((file) => (read(files, file.path).fields as { id: string }).id)
       expect(ids).toContain(help.id)

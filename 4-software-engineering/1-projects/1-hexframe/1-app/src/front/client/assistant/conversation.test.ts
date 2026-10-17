@@ -17,6 +17,7 @@ import {
   undo,
 } from '#/api/assistant/assistant'
 
+import { makeQueryClient } from '../channels'
 import {
   latestRead,
   useAcceptProposal,
@@ -230,6 +231,23 @@ describe("the Conversation's hooks", () => {
       expect(latest).toHaveBeenCalledTimes(2)
     })
     expect(undo).toHaveBeenCalledWith({ data: { applied: 'turn-1' } })
+  })
+
+  it('leave the Conversation read beside the chat undefined once its read failed, thrown nowhere', async () => {
+    vi.mocked(conversationDay).mockResolvedValueOnce({
+      ok: false,
+      failure: { _tag: 'Unexpected', kind: 'Unexpected' },
+      requestId: 'req-1',
+    } as never)
+    // The app's QueryClient, which throws a read's failure to the nearest boundary.
+    const client = makeQueryClient()
+    const wrapper = ({ children }: { children: ReactNode }) =>
+      createElement(QueryClientProvider, { client }, children)
+    const { result } = renderHook(() => useConversation({ throwing: false }), { wrapper })
+    await waitFor(() => {
+      expect(result.current.isError).toBe(true)
+    })
+    expect(result.current.data).toBeUndefined()
   })
 })
 

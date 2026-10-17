@@ -2,7 +2,7 @@
 // widget open in the chat on the Body that was open, or on Help's Root.
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
-import { fromHelpPage } from '#/front/features/help/search'
+import { fromHelpPage } from '#/front/features/shipped/search'
 
 export const Route = createFileRoute('/help')({
   // Read again from the URL: the search `beforeLoad` gets keeps the raw params, `open` among them.

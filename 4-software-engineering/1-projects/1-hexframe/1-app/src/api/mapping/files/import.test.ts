@@ -4,9 +4,9 @@ import { describe, expect, expectTypeOf, it } from 'vitest'
 import type { SignedOut } from '#/domains/iam/errors'
 import type {
   DirectionTaken,
-  HelpReadOnly,
   ImportRefused,
   LeafHoldsNothing,
+  ShippedReadOnly,
   TileNotFound,
 } from '#/domains/mapping/errors'
 import { uploadLimit } from '#/domains/mapping/landing/landing'
@@ -180,7 +180,7 @@ describe('an import, over the wire', () => {
   it('lists the errors it can fail with by its type', () => {
     type ErrorOf<P> = P extends Effect.Effect<unknown, infer E, unknown> ? E : never
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.importTiles>>>().toEqualTypeOf<
-      ImportRefused | SignedOut | TileNotFound | DirectionTaken | LeafHoldsNothing | HelpReadOnly
+      ImportRefused | SignedOut | TileNotFound | DirectionTaken | LeafHoldsNothing | ShippedReadOnly
     >()
   })
 })

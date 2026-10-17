@@ -27,7 +27,7 @@ Where a Tile is written on home since HEX-102: in the chat, at the conversation'
 
 | Folder | Holds |
 |---|---|
-| `state/` | `useTileWordsState.ts`, what the user writes, opened on a Tile or blank, a refusal's words put back once per turn; `useTileWidgetsState.ts`, what follows a form, a receipt or the export, whose mutation it owns, an export let go running to its end, what the receipt says, which the timeline leaves to it, and the pseudo a new account is typing, which the canvas shows; each tested beside it |
+| `state/` | `useTileWordsState.ts`, what the user writes, opened on a Tile or blank, a refusal's words put back once per turn; `useTileWidgetsState.ts`, what follows a form, a receipt or the export, whose mutation it owns, an export let go running to its end, what the receipt says, which the timeline leaves to it, the pseudo a new account is typing, which the canvas shows, and whether the pseudo's receipt shows (`dawning`), the dawn the agent's invitation under it rises last of (HEX-118); each tested beside it |
 
 ## Not wired
 

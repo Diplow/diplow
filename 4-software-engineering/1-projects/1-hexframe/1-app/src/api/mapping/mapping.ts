@@ -1,11 +1,12 @@
 // Mapping's server functions: one per operation, for the signed-in Account, which the middleware has
-// already put on the context as its Session, and `help`, Help whole, for any visitor. Each validates
-// its input, then hands its program (./programs.ts) to the helper; its type lists the errors it can
-// fail with. `exportTile` answers its zip as a download (./files/download.ts); `importTiles` takes a form.
+// already put on the context as its Session, and `shipped`, a System hexframe ships whole, Help or the
+// tutorial, for any visitor. Each validates its input, then hands its program (./programs.ts) to the
+// helper; its type lists the errors it can fail with. `exportTile` answers its zip as a download
+// (./files/download.ts); `importTiles` takes a form.
 import { createServerFn } from '@tanstack/react-start'
 import { Schema, Struct } from 'effect'
 
-import { TileId } from '#/domains/mapping/entities'
+import { shippedRoots, TileId } from '#/domains/mapping/entities'
 import {
   CreateReference,
   CreateTile,
@@ -69,8 +70,14 @@ export const ImportUpload = Schema.fromFormData(
   }),
 )
 
-/** Help, in one of the app's languages: the page's, from its URL. */
-export const HelpLanguage = Schema.Struct({ language: Schema.Literals(locales) })
+/**
+ * A System hexframe ships, by its Root, as Mapping names it, Help's or the tutorial's, in one of the
+ * app's languages: the page's.
+ */
+export const ShippedRead = Schema.Struct({
+  root: Schema.Literals(shippedRoots),
+  language: Schema.Literals(locales),
+})
 
 /** A call that takes nothing. */
 const Nothing = Schema.toStandardSchemaV1(Schema.Undefined)
@@ -84,12 +91,12 @@ export const system = createServerFn({ method: 'GET' })
   .handler(({ context }) => run(context, Mapping.system))
 
 /**
- * Help whole, in the language asked: its Root with everything below it, Bodies included. Signed in or
- * not, anyone reads it.
+ * A System hexframe ships whole, by its Root, in the language asked: its Root with everything below
+ * it, Bodies included. Signed in or not, anyone reads it.
  */
-export const help = createServerFn({ method: 'GET' })
-  .validator(Schema.toStandardSchemaV1(HelpLanguage))
-  .handler(({ data, context }) => run(context, Mapping.help(data)))
+export const shipped = createServerFn({ method: 'GET' })
+  .validator(Schema.toStandardSchemaV1(ShippedRead))
+  .handler(({ data, context }) => run(context, Mapping.shipped(data)))
 
 /**
  * A Tile of the Account's System and everything below it, as a zip to download, `<slug>.zip`: on the

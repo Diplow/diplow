@@ -7,8 +7,10 @@
 // names bringing the canvas forward. The view and the change under way live in the search params, so
 // a link shows what its sender saw; a Tile's form, its import and its export open in the chat, at the
 // conversation's foot, as the tile widget, which a phone brings to the front, and so do the Keys
-// (`keys`) and Help (`help`), Help taking the canvas while its widget is open. Every gesture that
-// changes the view of the System is published on the client bus as a navigation fact, which the
+// (`keys`) and Help (`help`), Help taking the canvas while its widget is open; the tutorial takes it,
+// read-only as Help, while the URL names it (`tutorial`), and gives it back to the System when it
+// goes. Every gesture that changes the view of the System is published on the client bus as a
+// navigation fact, which the
 // Conversation's navigation sender merges and records once something else enters the timeline, a
 // Message the chat posts included, or the page is hidden. The page follows the System and the
 // Conversation, so a write it did not make, an agent's, a Key's or another tab's, shows on the canvas
@@ -19,28 +21,50 @@
 // Turn works; a Tile's menu asks the agent through it, naming the Tile first; and a Tile dragged off
 // the canvas under a mouse or a pen is carried over the page, the composer naming it where it is let
 // go (HEX-110). A new account is asked its pseudo first, the composer and the corner's path held back
-// until it names the Root. Signed out, the same screen: Help on the
-// canvas, two lines from the agent and its offer to read the centered topic in full, and the sign-in
-// widget in the composer's place, which signs in or up, then comes back where the user was. While the
-// help widget is open, a topic centered on Help's canvas turns its page.
+// until it names the Root; then, while its Root holds nothing and nothing was said, the agent's one
+// line after the receipt invites its first command, `/tutorial`, which the tutorial's param
+// answers, and which the composer offers first (HEX-118). `/tutorial` is a journey: the canvas leaves
+// the user's sun for the tutorial's center, which arrives alone and large, and the tutorial follows
+// its own rules, what it has not introduced yet absent, the composer held back as during the
+// onboarding; the corner's mark carries the canvas back to the user's Root (HEX-119). Arrived, its
+// center alone, the agent tells its words a beat at a time, its title lit, then its preview, then its
+// body in the chat, again whenever it arrives anew (HEX-120); once the body is told, the center
+// invites the click that opens it, its six arriving one by one (HEX-121), each lighting the line of
+// the body that names it as it lands, then a line pointed at lighting its tile and a tile its line,
+// the agent saying they are the same six, then that yours is waiting (HEX-122). Signed out, the same
+// screen: Help on the canvas, two lines from the agent and its offer to read the centered topic in full, and the
+// sign-in widget in the composer's place, which signs in or up, then comes back where the user was.
+// While the help widget is open, a topic centered on Help's canvas turns its page.
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { readSignInSearch, sessionIfAny } from '#/front/client/iam/guard'
 import { useFollowLatest } from '#/front/client/assistant/follow'
-import { useHelp, useSystem } from '#/front/client/mapping/queries'
+import { useShipped, useSystem } from '#/front/client/mapping/queries'
 import { accessOf, readAccessSearch, wayBack, withAccess } from '#/front/features/access/search'
 import { SignedOutLines, SignInFoot } from '#/front/features/access/SignedOut'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { publish } from '#/front/features/bus'
 import { ChatComposer, ChatTimeline } from '#/front/features/conversation/Chat'
+import { ChatInvitation } from '#/front/features/conversation/invitation/Invitation'
 import { useNavigationSender } from '#/front/features/conversation/state/useNavigationSender'
 import { AskedAboutTile, Navigated } from '#/front/features/facts'
-import { HelpCanvas, HelpRead } from '#/front/features/help/Help'
-import { HelpWidgets } from '#/front/features/help/HelpWidgets'
-import { helpNodeOf, topicFound } from '#/front/features/help/nodes'
-import { readHelpSearch, turnedTo, withHelp } from '#/front/features/help/search'
+import { HelpWidgets } from '#/front/features/shipped/HelpWidgets'
+import { helpNodeOf, topicFound } from '#/front/features/shipped/nodes'
+import {
+  readHelpSearch,
+  readTutorialSearch,
+  shippedOnCanvas,
+  shippedTells,
+  turnedTo,
+  tutorialOn,
+  withHelp,
+  withTutorial,
+} from '#/front/features/shipped/search'
+import { HelpRead, ShippedCanvas } from '#/front/features/shipped/Shipped'
+import type { TutorialRules } from '#/front/features/shipped/tutorial/rules'
+import { useSameSix } from '#/front/features/shipped/tutorial/six'
 import { KeyWidgets } from '#/front/features/keys/KeyWidgets'
 import { readKeysSearch, withKeys } from '#/front/features/keys/search'
 import { useKeyWidgetState } from '#/front/features/keys/state/useKeyWidgetState'
@@ -63,22 +87,27 @@ import {
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
+import { Told } from '#/front/ui/chat/text/Message'
+import { useTold, type ToldPart } from '#/front/ui/motion'
 import { Screen } from '#/front/ui/layouts/screen/Screen'
 import { useScreenState } from '#/front/ui/layouts/screen/state/useScreenState'
-import type { CanvasMarks } from '#/front/ui/canvas/Canvas'
+import type { CanvasMarks, PointAt } from '#/front/ui/canvas/Canvas'
+import { Journey } from '#/front/ui/canvas/layouts/Journey'
 import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { centerOn, withViewIn, type CanvasView, type ViewAction } from '#/front/ui/canvas/view/view'
-import type { Direction } from '#/domains/mapping/entities'
+import type { Direction, ShippedRoot } from '#/domains/mapping/entities'
 
 /**
  * Home's search params, each feature's read on its own: the System's view and change, the Keys and
- * Help open in the chat, and, signed out, signing up and where to go once signed in.
+ * Help open in the chat, the tutorial on the canvas, and, signed out, signing up and where to go once
+ * signed in.
  */
 const readHomeSearch = (search: Record<string, unknown>) => ({
   ...readSystemSearch(search),
   ...readKeysSearch(search),
   ...readHelpSearch(search),
+  ...readTutorialSearch(search),
   ...readAccessSearch(search),
   ...readSignInSearch(search),
 })
@@ -107,7 +136,7 @@ const screenOf = ({ keys, help }: HomeSearch) => ({ keys, help })
  * the help widget reads its topics.
  */
 function useHelpTree() {
-  const { data } = useHelp(getLocale(), { throwing: false })
+  const { data } = useShipped('help', getLocale(), { throwing: false })
   return useMemo(
     () => (data === undefined ? undefined : { tree: canvasTree(data), topics: helpNodeOf(data) }),
     [data],
@@ -159,6 +188,117 @@ function useHelpNavigation(turning: ReturnType<typeof useScreenState>['actions']
 }
 
 /**
+ * The tutorial's navigation on home, read-only: its Tiles, for the corner, read beside the canvas
+ * without throwing, and only while it is on the canvas, and its canvas's view, whose center its param
+ * holds; and, once read, while its rules have the agent tell its center's words, what it has told,
+ * a beat at a time from the start whenever it plays anew, and the center's body, which it tells last,
+ * in the chat, which a phone brings to the front then (HEX-120). The center is its Root while it
+ * tells: the arrival's. Opened, its body and its ring shown as the same six, each lighting the
+ * other, a line clicked or tapped bringing the canvas forward on a phone for a glance (HEX-122).
+ */
+function useTutorialNavigation(
+  search: HomeSearch,
+  turning: ReturnType<typeof useScreenState>['actions'],
+) {
+  const navigate = Route.useNavigate()
+  const enabled = search.tutorial !== undefined
+  const { data } = useShipped('tutorial', getLocale(), { throwing: false, enabled })
+  const tree = useMemo(() => (data === undefined ? undefined : canvasTree(data)), [data])
+  // The clock starts from the URL alone; the rules then read the part it reached (`shippedSide`).
+  const told = useTold(data !== undefined && shippedTells(search), (part) => {
+    if (part === 'body') turning.turn('chat')
+  })
+  const same = useSameSix({
+    tree,
+    body: data?.body,
+    shown: shippedOnCanvas(search, told)?.rules?.sameSix === true,
+    onShow: (title) => {
+      turning.cross(m.crossing_phone_said({ title }))
+    },
+  })
+  return {
+    tree,
+    told,
+    body: data?.body,
+    ...same?.canvas,
+    six: same?.chat,
+    onViewChange: (view: CanvasView) => {
+      void navigate({ search: (current) => tutorialOn(current, view) })
+    },
+  }
+}
+
+/**
+ * The way back from a System away from home, the corner's mark: the canvas to the user's Root, the
+ * System's view and change set aside as they were when the tutorial took it.
+ */
+function useWayHome() {
+  const navigate = Route.useNavigate()
+  return () => {
+    void navigate({ search: (current) => ({ ...screenOf(current), ...withTutorial(undefined) }) })
+  }
+}
+
+/**
+ * How home moves around a System hexframe ships: its Tiles, for the corner, its view, what the agent
+ * has told of its center's words, and the tile pointed at, the tutorial's.
+ */
+interface ShippedNavigation {
+  tree: TileNode | undefined
+  onViewChange: (view: CanvasView) => void
+  told?: ToldPart | undefined
+  pointed?: string | undefined
+  onPoint?: PointAt | undefined
+}
+
+/**
+ * The canvas and its corner while a System hexframe ships has them, read-only, the tutorial by its
+ * rules, which the chat follows too; none, the Account's System's then. A System away from home, the
+ * tutorial, is reached by a journey (`at`), and the corner's mark leads back from it. The URL's view
+ * is the canvas's, so meanwhile the System's view is its Root, which a Message is sent from.
+ */
+function shippedSide(
+  search: HomeSearch,
+  navigation: Record<ShippedRoot, ShippedNavigation>,
+  onHome: () => void,
+) {
+  // The tutorial's rules follow what the agent has told: its center answers once its body is told.
+  const shown = shippedOnCanvas(search, navigation.tutorial.told)
+  if (shown === undefined) return undefined
+  const { shipped, view, away, rules } = shown
+  const { tree, onViewChange, told, pointed, onPoint } = navigation[shipped]
+  const systemView: CanvasView = {}
+  return {
+    systemView,
+    rules,
+    at: away ? shipped : home,
+    canvas: (
+      <ShippedSide
+        key={shipped}
+        shipped={shipped}
+        view={view}
+        onViewChange={onViewChange}
+        rules={rules}
+        told={told}
+        pointed={pointed}
+        onPoint={onPoint}
+      />
+    ),
+    corner: (
+      <Breadcrumb
+        system={tree}
+        view={view}
+        onViewChange={onViewChange}
+        onHome={away ? onHome : undefined}
+      />
+    ),
+  }
+}
+
+/** Where the canvas is, as a journey goes, while it shows the user's System or Help over it. */
+const home = 'home'
+
+/**
  * The Account's System, read outside every boundary without throwing, for what the chat sends and the
  * corner shows: a failed read shows on the canvas, in its own boundary, and leaves the chat up,
  * waiting to send, and the mark alone at the corner's head; and its Tiles as the canvas draws them,
@@ -188,6 +328,25 @@ function useOpenKeys(turning: ReturnType<typeof useScreenState>['actions']) {
   }
 }
 
+/**
+ * `/tutorial`, typed or clicked in the agent's invitation: the journey to the tutorial, at its Root,
+ * read-only, Help's widget closed and the System's view and change set aside, as the tutorial takes
+ * the canvas, which a phone brings to the front. Taken again, it replays from the Root.
+ */
+function useOpenTutorial(turning: ReturnType<typeof useScreenState>['actions']) {
+  const navigate = Route.useNavigate()
+  return () => {
+    void navigate({
+      search: (current) => ({
+        ...screenOf(current),
+        ...withHelp(undefined),
+        ...withTutorial(true),
+      }),
+    })
+    turning.turn('canvas')
+  }
+}
+
 /** Signed out: Help on the canvas, the agent's two lines and Help's widget, and signing in. */
 function SignedOut() {
   const search = Route.useSearch()
@@ -205,7 +364,7 @@ function SignedOut() {
         className="size-full"
         canvas={
           <ReadBoundary>
-            <HelpSide view={view} onViewChange={help.onViewChange} />
+            <ShippedSide shipped="help" view={view} onViewChange={help.onViewChange} />
           </ReadBoundary>
         }
         corner={<Breadcrumb system={help.tree} view={view} onViewChange={help.onViewChange} />}
@@ -246,7 +405,10 @@ function SignedOut() {
   )
 }
 
-/** Signed in: the Account's System and its Conversation, the Keys and Help in the chat. */
+/**
+ * Signed in: the Account's System and its Conversation, the Keys and Help in the chat, Help or the
+ * tutorial taking the canvas while the URL names it.
+ */
 function SignedIn() {
   const search = Route.useSearch()
   const navigate = Route.useNavigate()
@@ -257,7 +419,10 @@ function SignedIn() {
   // The key widget's step: the receipt outlives the widget.
   const keys = useKeyWidgetState(search.keys === true)
   const help = useHelpNavigation(turning)
+  const tutorial = useTutorialNavigation(search, turning)
   const openKeys = useOpenKeys(turning)
+  const openTutorial = useOpenTutorial(turning)
+  const wayHome = useWayHome()
   const onSearchChange = (next: SearchChange) => {
     // A form, an import or an edit, opening: the tile widget comes, in front on a phone.
     if (opensWidget(search, next)) {
@@ -286,44 +451,39 @@ function SignedIn() {
     marks.actions.went(action)
   }
   // A Tile the chat names crosses to the canvas: centered on it, glinting as it arrives, the canvas
-  // comes forward, saying what it shows, the System's again should Help have had it.
+  // comes forward, saying what it shows, the System's again should Help or the tutorial have had it.
   const onCenter = (tile: string) => {
     if (tree === undefined) return
     const view = centerOn(tree, tile)
-    void navigate({ search: (current) => ({ ...withView(current, view), ...withHelp(undefined) }) })
+    const away = { ...withHelp(undefined), ...withTutorial(undefined) }
+    void navigate({ search: (current) => ({ ...withView(current, view), ...away }) })
     publish(new Navigated({ gesture: 'center', tile }))
     marks.actions.arrive(tile)
     // The canvas's tree names an untitled Root already.
     const title = findTile(tree, tile)?.title
     turning.cross(title === undefined ? undefined : m.crossing_phone_said({ title }))
   }
-  // What the canvas shows: Help while its widget is open, else the System. The URL's view is the
-  // canvas's, so while Help has it the System's view is its Root, which a Message is sent from.
+  // What the canvas shows: a System hexframe ships while the URL names it, else the Account's.
   const view = viewOf(search)
-  const side =
-    search.help === undefined
-      ? {
-          systemView: view,
-          canvas: (
-            <SystemPage
-              search={search}
-              onSearchChange={onSearchChange}
-              onViewChange={onViewChange}
-              widgets={widgets}
-              onExport={() => {
-                turning.turn('chat')
-              }}
-              marks={marks.marks}
-              onCarry={setCarried}
-            />
-          ),
-          corner: <Breadcrumb system={path} view={view} onViewChange={onViewChange} />,
-        }
-      : {
-          systemView: {},
-          canvas: <HelpSide view={view} onViewChange={help.onViewChange} />,
-          corner: <Breadcrumb system={help.tree} view={view} onViewChange={help.onViewChange} />,
-        }
+  const side = shippedSide(search, { help, tutorial }, wayHome) ?? {
+    systemView: view,
+    rules: undefined,
+    at: home,
+    canvas: (
+      <SystemPage
+        search={search}
+        onSearchChange={onSearchChange}
+        onViewChange={onViewChange}
+        widgets={widgets}
+        onExport={() => {
+          turning.turn('chat')
+        }}
+        marks={marks.marks}
+        onCarry={setCarried}
+      />
+    ),
+    corner: <Breadcrumb system={path} view={view} onViewChange={onViewChange} />,
+  }
   const onSend =
     tree === undefined
       ? undefined
@@ -338,9 +498,14 @@ function SignedIn() {
         onFrontChange={turning.turn}
         said={screen.said}
         className="size-full"
-        canvas={<ReadBoundary>{side.canvas}</ReadBoundary>}
+        canvas={
+          <Journey at={side.at}>
+            <ReadBoundary>{side.canvas}</ReadBoundary>
+          </Journey>
+        }
         corner={side.corner}
-        composerAway={welcoming}
+        // The tutorial holds the composer back, as the onboarding does, until it introduces it.
+        composerAway={welcoming || side.rules?.composer === false}
         messages={
           <div className="grid gap-5">
             <ReadBoundary>
@@ -365,6 +530,10 @@ function SignedIn() {
                 }}
               />
             </ReadBoundary>
+            <ChatInvitation onTutorial={openTutorial} dawning={widgets.state.dawning} />
+            {tutorial.body !== undefined && (
+              <Told told={tutorial.told} body={[tutorial.body]} six={tutorial.six} />
+            )}
             {(search.keys !== undefined || keys.state.step.kind === 'done') && (
               <ReadBoundary>
                 <KeyWidgets
@@ -376,20 +545,7 @@ function SignedIn() {
                 />
               </ReadBoundary>
             )}
-            {search.help !== undefined && (
-              <ReadBoundary>
-                <HelpWidgets
-                  topic={search.help}
-                  onTopic={help.onTopic}
-                  // Help gives the canvas back to the System, at its Root.
-                  onDismiss={() => {
-                    void navigate({
-                      search: (current) => ({ ...screenOf(current), ...withHelp(undefined) }),
-                    })
-                  }}
-                />
-              </ReadBoundary>
-            )}
+            <HelpFoot topic={search.help} onTopic={help.onTopic} />
           </div>
         }
         composer={
@@ -403,6 +559,7 @@ function SignedIn() {
               carried={carried}
               onHelp={help.onOpen}
               onKeys={openKeys}
+              onTutorial={openTutorial}
             />
           </ReadBoundary>
         }
@@ -411,20 +568,69 @@ function SignedIn() {
   )
 }
 
-interface HelpSideProps {
-  view: CanvasView
-  onViewChange: (view: CanvasView) => void
+interface HelpFootProps {
+  /** The topic the help widget is open on; closed when absent. */
+  topic: string | true | undefined
+  onTopic: (id: string, center: boolean) => void
 }
 
-/** The canvas side, Help's: Help on the canvas, read-only. */
-function HelpSide({ view, onViewChange }: HelpSideProps) {
-  // The page's language, from its URL: Help's ids are the same in every language, so the view holds.
-  const { data: help } = useHelp(getLocale())
-  const tree = useMemo(() => (help === undefined ? undefined : canvasTree(help)), [help])
+/**
+ * The help widget at the conversation's foot while it is open, signed in. Dismissed, Help gives the
+ * canvas back to the System, at its Root.
+ */
+function HelpFoot({ topic, onTopic }: HelpFootProps) {
+  const navigate = Route.useNavigate()
+  if (topic === undefined) return null
+  return (
+    <ReadBoundary>
+      <HelpWidgets
+        topic={topic}
+        onTopic={onTopic}
+        onDismiss={() => {
+          void navigate({ search: (current) => ({ ...screenOf(current), ...withHelp(undefined) }) })
+        }}
+      />
+    </ReadBoundary>
+  )
+}
+
+interface ShippedSideProps {
+  shipped: ShippedRoot
+  view: CanvasView
+  onViewChange: (view: CanvasView) => void
+  /** The tutorial's rules; none for Help. */
+  rules?: TutorialRules | undefined
+  /** The part of the center's words the agent tells of, lit: the tutorial's. */
+  told?: ToldPart | undefined
+  /** The tile pointed at, lit, and a tile pointed at handed on: the tutorial's. */
+  pointed?: string | undefined
+  onPoint?: PointAt | undefined
+}
+
+/**
+ * The canvas side of a System hexframe ships, Help's or the tutorial's: on the canvas, read-only, the
+ * tutorial by its rules, the part of its center's words the agent tells of lit, and the tile pointed
+ * at, from its line or on the canvas.
+ */
+function ShippedSide(props: ShippedSideProps) {
+  const { shipped, view, onViewChange, rules, told, pointed, onPoint } = props
+  // The page's language, from its URL: a shipped System's ids are the same in every language, so the
+  // view holds.
+  const { data } = useShipped(shipped, getLocale())
+  const tree = useMemo(() => (data === undefined ? undefined : canvasTree(data)), [data])
   if (tree === undefined) return <Loading />
   return (
     <div className={side}>
-      <HelpCanvas tree={tree} view={view} onViewChange={onViewChange} className="min-h-0 flex-1" />
+      <ShippedCanvas
+        tree={tree}
+        view={view}
+        onViewChange={onViewChange}
+        rules={rules}
+        told={told}
+        pointed={pointed}
+        onPoint={onPoint}
+        className="min-h-0 flex-1"
+      />
     </div>
   )
 }
