@@ -217,7 +217,7 @@ layer(TestLayer)("the Conversation recording Mapping's events, over PGlite", (it
       const edit = new EditTile({ id: root, version: 1, title: 'Never said' })
       const rolledBack = transactional(
         Effect.andThen(
-          MappingService.editTile(yield* MappingService.ownSystem(account.id), edit),
+          MappingService.editTile(yield* Mapping.actingOnOwn(account.id), edit),
           Effect.fail('rolled back'),
         ),
       )

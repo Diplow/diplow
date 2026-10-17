@@ -14,6 +14,7 @@ import { MappingEvent } from '#/domains/mapping/operations'
 import { transactional } from '#/repositories/database/database'
 
 import { on } from '../server/bus'
+import { actingOnOwn } from '../mapping/programs'
 
 /**
  * Who acted, as the timeline shows it: "you" for a Session, a Key by its name, read now, and the
@@ -45,7 +46,7 @@ export const recordedInConversation = on(MappingEvent, (event, actor) =>
     onSome: (signedIn) =>
       Effect.gen(function* () {
         const accountId = signedIn.account.id
-        const summary = yield* Mapping.summary(yield* Mapping.ownSystem(accountId), event)
+        const summary = yield* Mapping.summary(yield* actingOnOwn(accountId), event)
         const actor = yield* actorOf(signedIn)
         yield* transactional(Assistant.recordChange(accountId, summary, actor))
       }),

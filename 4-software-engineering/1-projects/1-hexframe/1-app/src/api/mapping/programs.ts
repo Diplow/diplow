@@ -26,14 +26,23 @@ import { transactional } from '#/repositories/database/database'
 import { tileLink, tileOfLink } from './files/download'
 
 /**
+ * The Account acting on its own System, as Mapping takes who acts and where: the actor, the owners
+ * the Account stands for, for now itself alone, until IAM knows its Organizations and Groups; the
+ * System, named by the Account's star. The one place the API layer resolves both, for every program
+ * of every domain that reaches Mapping, for now always on the Account's own System.
+ */
+export const actingOnOwn = (accountId: string) =>
+  Effect.map(Mapping.starOf(accountId), (system): Mapping.Acting => ({
+    actor: { owners: [accountId] },
+    system,
+  }))
+
+/**
  * Runs an operation for the signed-in Account, the one the request proves, never one a caller sends,
- * on its own System (`Mapping.ownSystem`): where the API layer resolves the System a request acts on,
- * for now always the signed-in Account's own, and who acts, for now that Account alone.
+ * on its own System (`actingOnOwn`).
  */
 const forAccount = <A, E, R>(operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>) =>
-  Effect.flatMap(Iam.signedIn, ({ account }) =>
-    Effect.flatMap(Mapping.ownSystem(account.id), operation),
-  )
+  Effect.flatMap(Iam.signedIn, ({ account }) => Effect.flatMap(actingOnOwn(account.id), operation))
 
 /** Runs a change for the signed-in Account, in one transaction: it commits whole, or not at all. */
 const changeForAccount = <A, E, R>(operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>) =>

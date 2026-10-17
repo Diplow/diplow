@@ -531,7 +531,7 @@ describe('the Tiles a Turn is shown, as Mapping reads them', () => {
       run(
         context,
         Effect.flatMap(signedInAccount, (id) =>
-          Effect.flatMap(Service.ownSystem(id), (acting) => Service.glimpses(acting, ids)),
+          Effect.flatMap(Mapping.actingOnOwn(id), (acting) => Service.glimpses(acting, ids)),
         ),
       ),
     )
@@ -542,14 +542,14 @@ describe('the Tiles a Turn is shown, as Mapping reads them', () => {
     const own = await run(
       context,
       Effect.flatMap(signedInAccount, (id) =>
-        Effect.flatMap(Service.ownSystem(id), (acting) => Service.ownTile(acting, child.id)),
+        Effect.flatMap(Mapping.actingOnOwn(id), (acting) => Service.ownTile(acting, child.id)),
       ),
     )
     expect(own.ok).toBe(true)
     const theirs = await run(
       context,
       Effect.flatMap(signedInAccount, (id) =>
-        Effect.flatMap(Service.ownSystem(id), (acting) =>
+        Effect.flatMap(Mapping.actingOnOwn(id), (acting) =>
           Service.ownTile(acting, stranger.child.id),
         ),
       ),

@@ -13,6 +13,7 @@ import {
   TestTiles,
   tree,
   readTile,
+  actingOnOwn,
 } from './testing'
 
 // Leaves beside Branches, over PGlite: a Tile holds six of each in their own Directions, a Leaf holds
@@ -81,7 +82,7 @@ layer(TestTiles)('Leaves beside Branches, over PGlite', (it) => {
         1: { _tag: 'Tile', ...branch, branches: {}, leaves: {}, context: {} },
       })
       expect(found.leaves).toEqual({ 1: { _tag: 'Tile', ...file } })
-      const opened = yield* Mapping.openTile(yield* Mapping.ownSystem(accountId), {
+      const opened = yield* Mapping.openTile(yield* actingOnOwn(accountId), {
         fields: ['title'],
         language: 'en',
       })

@@ -91,18 +91,11 @@ export interface Acting {
 }
 
 /**
- * An owner acting on its own System: the actor standing for that owner alone, the System named by
- * its star, the id of its Root, added untitled on the first read, until the user names it; any later
- * read, or two at once, finds that one. What the API layer resolves an Account's own System by, and
- * Mapping's tests too, so the two never drift apart.
+ * The star of the owner's System, the id of its Root, added untitled on the first read, until the
+ * user names it; any later read, or two at once, finds that one. What the API layer names an
+ * Account's own System by. Who acts on it is the API layer's to say, from IAM.
  */
-export const ownSystem = (owner: string) =>
-  Tiles.use((tiles) =>
-    Effect.map(tiles.root(owner, untitled), (system): Acting => ({
-      actor: { owners: [owner] },
-      system,
-    })),
-  )
+export const starOf = (owner: string) => Tiles.use((tiles) => tiles.root(owner, untitled))
 
 /**
  * The owner of the System an actor acts on, once Mapping found the actor may reach it: the one check

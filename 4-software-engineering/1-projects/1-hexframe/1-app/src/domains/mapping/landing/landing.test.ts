@@ -14,6 +14,7 @@ import { type SystemTile, systemOf } from '../entities'
 import * as Mapping from '../mapping'
 import { CreateTile, EditTile, TilesImported } from '../operations'
 import { type ImportPlace, importTiles, planImport } from './landing'
+import { actingOnOwn } from '../testing'
 
 // An import landed in a System over PGlite, as the API layer runs it: the plan read outside any
 // transaction, then landed in one. Into a Branch, a Leaf and a Context slot, as the Root of an empty
@@ -23,7 +24,7 @@ import { type ImportPlace, importTiles, planImport } from './landing'
 
 /** The Account's System, read flat, as its tree: what the canvas draws, as the client builds it. */
 const tree = (accountId: string) =>
-  Effect.map(Effect.flatMap(Mapping.ownSystem(accountId), Mapping.system), systemOf)
+  Effect.map(Effect.flatMap(actingOnOwn(accountId), Mapping.system), systemOf)
 
 /** The bus, as Mapping publishes on it: these tests hear nothing it publishes. */
 const Unheard = Layer.succeed(Bus)({ publish: () => Effect.void })
@@ -62,7 +63,7 @@ const land = (
   link = noLink,
 ) =>
   Effect.flatMap(planOf(files, link), (plan) =>
-    Effect.flatMap(Mapping.ownSystem(accountId), (acting) =>
+    Effect.flatMap(actingOnOwn(accountId), (acting) =>
       transactional(importTiles(acting, { plan, place })),
     ),
   )
@@ -146,7 +147,7 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
         })
         const plan = yield* planOfFile('STACK.md', '---\ntitle: Stack\n---\n\nThe stack.\n')
         const report = yield* transactional(
-          importTiles(yield* Mapping.ownSystem(accountId), { plan, place }),
+          importTiles(yield* actingOnOwn(accountId), { plan, place }),
         )
         expect(report).toMatchObject({ tiles: 1, references: 0 })
         expect((yield* tree(accountId)).leaves[2]).toMatchObject({
@@ -175,7 +176,7 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
       const named = yield* someone
       yield* transactional(
         Mapping.editTile(
-          yield* Mapping.ownSystem(named.accountId),
+          yield* actingOnOwn(named.accountId),
           new EditTile({ id: named.root.id, version: 1, title: 'Ulysse' }),
         ),
       )
@@ -188,7 +189,7 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
         const untitled = yield* someone
         yield* transactional(
           Mapping.editTile(
-            yield* Mapping.ownSystem(untitled.accountId),
+            yield* actingOnOwn(untitled.accountId),
             new EditTile({ id: untitled.root.id, version: 1, ...written }),
           ),
         )
@@ -221,14 +222,14 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
       const plan = yield* planOf(vault)
       const taken = yield* transactional(
         Mapping.createTile(
-          yield* Mapping.ownSystem(accountId),
+          yield* actingOnOwn(accountId),
           new CreateTile({ parent: root.id, slot: 4, ...content('First') }),
         ),
       )
       const place = { _tag: 'Slot', parent: root.id, slot: 4 } as const
       expect(
         yield* Effect.flip(
-          transactional(importTiles(yield* Mapping.ownSystem(accountId), { plan, place })),
+          transactional(importTiles(yield* actingOnOwn(accountId), { plan, place })),
         ),
       ).toMatchObject({
         _tag: 'DirectionTaken',
@@ -246,14 +247,14 @@ layer(TestLayers)('what an import writes, over PGlite', (it) => {
       const { accountId, root } = yield* someone
       const own = yield* transactional(
         Mapping.createTile(
-          yield* Mapping.ownSystem(accountId),
+          yield* actingOnOwn(accountId),
           new CreateTile({ parent: root.id, slot: 1, ...content('Own') }),
         ),
       )
       const other = yield* someone
       const foreign = yield* transactional(
         Mapping.createTile(
-          yield* Mapping.ownSystem(other.accountId),
+          yield* actingOnOwn(other.accountId),
           new CreateTile({ parent: other.root.id, slot: 1, ...content('Not') }),
         ),
       )
@@ -358,7 +359,7 @@ const HeardLayers = Layer.mergeAll(
 
 /** The System's Version as its poll reads it. */
 const versionOf = (accountId: string) =>
-  Effect.flatMap(Mapping.ownSystem(accountId), Mapping.systemVersion)
+  Effect.flatMap(actingOnOwn(accountId), Mapping.systemVersion)
 
 layer(HeardLayers)('an import’s event, over PGlite', (it) => {
   it.effect(
@@ -372,9 +373,7 @@ layer(HeardLayers)('an import’s event, over PGlite', (it) => {
         // The vault's Games, its Notes, Tools and Principles came with it; its Reference is no Tile.
         expect(heard).toEqual([new TilesImported({ id: report.id, count: 4 })])
         expect(yield* versionOf(accountId)).toBe(before + 1)
-        expect((yield* Mapping.system(yield* Mapping.ownSystem(accountId))).version).toBe(
-          before + 1,
-        )
+        expect((yield* Mapping.system(yield* actingOnOwn(accountId))).version).toBe(before + 1)
       }),
   )
 
@@ -387,7 +386,7 @@ layer(HeardLayers)('an import’s event, over PGlite', (it) => {
         heard.length = 0
         const report = yield* land(accountId, { _tag: 'Root' })
         expect(heard).toEqual([new TilesImported({ id: report.id, count: 4 })])
-        const system = yield* Mapping.system(yield* Mapping.ownSystem(accountId))
+        const system = yield* Mapping.system(yield* actingOnOwn(accountId))
         expect(system).toMatchObject({ version: 1, root: { id: report.id, version: 2 } })
       }),
   )
