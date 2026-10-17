@@ -1,15 +1,16 @@
-// Help on the canvas, read-only: no empty slot takes a click and no Tile offers a swap, so a reader
-// only looks around, as on home, the Root alone and large, its preview whole, until a click opens it,
-// a topic centered landing with its own around it. In the chat, under the agent's lines, its offer to read that topic's page in full, in the
-// help widget. Like the canvas, it holds no state: the view is the URL's, and the route navigates.
+// A System hexframe ships on the canvas, Help or the tutorial, read-only: no empty slot takes a click
+// and no Tile offers a swap, so a reader only looks around, as on home, the Root alone and large, its
+// preview whole, until a click opens it, a Tile centered landing with its own around it. In the chat,
+// under the agent's lines, its offer to read the centered topic of Help's page in full, in the help
+// widget. Like the canvas, it holds no state: the view is the URL's, and the route navigates.
 import { m } from '#/paraglide/messages'
 import { Act, voiceOf } from '#/front/ui/atoms/controls/act'
 import { Canvas } from '#/front/ui/canvas/Canvas'
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
 import { showView, type CanvasView } from '#/front/ui/canvas/view/view'
 
-interface HelpCanvasProps {
-  /** Help's Tiles as the canvas draws them (`canvasTree`). */
+interface ShippedCanvasProps {
+  /** The shipped System's Tiles as the canvas draws them (`canvasTree`). */
   tree: TileNode
   view: CanvasView
   onViewChange: (view: CanvasView) => void
@@ -17,10 +18,10 @@ interface HelpCanvasProps {
 }
 
 /**
- * Help on the canvas, which only changes the view: each topic's menu holds the lines that go
- * somewhere, its Context among them, beside its hover card.
+ * A System hexframe ships on the canvas, which only changes the view: each Tile's menu holds the lines
+ * that go somewhere, its Context among them, beside its hover card (`looking`, never `acting`).
  */
-export function HelpCanvas({ tree, view, onViewChange, className }: HelpCanvasProps) {
+export function ShippedCanvas({ tree, view, onViewChange, className }: ShippedCanvasProps) {
   return (
     <Canvas system={tree} view={view} onViewChange={onViewChange} looking className={className} />
   )

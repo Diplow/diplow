@@ -24,9 +24,9 @@ import {
   useEditTile,
   useEditTileSubmit,
   useExportTile,
-  useHelp,
   useImportTiles,
   useMoveTile,
+  useShipped,
   useSwapTiles,
   useSystem,
   useSystemRefusals,
@@ -41,6 +41,7 @@ vi.mock('#/api/mapping/mapping', async (original) => ({
   importTiles: vi.fn(),
   system: vi.fn(),
   help: vi.fn(),
+  tutorial: vi.fn(),
   createTile: vi.fn(),
   editTile: vi.fn(),
   moveTile: vi.fn(),
@@ -202,13 +203,39 @@ describe("Mapping's hooks", () => {
     answering(undefined)
     vi.mocked(Mapping.help).mockImplementation((({ data }: { data: { language: string } }) =>
       Promise.resolve({ ok: true, value: { ...root, id: 'help', title: data.language } })) as never)
-    const { result } = render(() => ({ en: useHelp('en'), fr: useHelp('fr') }))
+    const { result } = render(() => ({
+      en: useShipped('help', 'en'),
+      fr: useShipped('help', 'fr'),
+    }))
     await waitFor(() => {
       expect(result.current.hook.fr.data).toMatchObject({ id: 'help', title: 'fr' })
     })
     expect(result.current.hook.en.data).toMatchObject({ id: 'help', title: 'en' })
     expect(Mapping.help).toHaveBeenCalledWith({ data: { language: 'en' } })
     expect(Mapping.help).toHaveBeenCalledWith({ data: { language: 'fr' } })
+  })
+
+  it('read the tutorial apart from Help, by its own server function', async () => {
+    answering(undefined)
+    vi.mocked(Mapping.help).mockImplementation((() =>
+      Promise.resolve({ ok: true, value: { ...root, id: 'help', title: 'Hexframe' } })) as never)
+    vi.mocked(Mapping.tutorial).mockImplementation((({ data }: { data: { language: string } }) =>
+      Promise.resolve({
+        ok: true,
+        value: { ...root, id: 'tutorial', title: `Tutorial ${data.language}` },
+      })) as never)
+    const { result } = render(() => ({
+      help: useShipped('help', 'fr'),
+      tutorial: useShipped('tutorial', 'fr'),
+    }))
+    await waitFor(() => {
+      expect(result.current.hook.tutorial.data).toMatchObject({
+        id: 'tutorial',
+        title: 'Tutorial fr',
+      })
+    })
+    expect(result.current.hook.help.data).toMatchObject({ id: 'help', title: 'Hexframe' })
+    expect(Mapping.tutorial).toHaveBeenCalledWith({ data: { language: 'fr' } })
   })
 
   it.each([

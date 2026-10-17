@@ -57,6 +57,7 @@ import {
   moveTile,
   swapTiles,
   system,
+  tutorial,
 } from '#/api/mapping/mapping'
 
 import type { Locale } from '#/paraglide/runtime'
@@ -254,18 +255,29 @@ export function useEachSystemWrite(react: () => void, moment: 'made' | 'settled'
   useSyncExternalStore(subscribe, nothing, nothing)
 }
 
+/** The server function that reads each System hexframe ships whole, by its name. */
+const shippedReads = { help, tutorial }
+
+/** A System hexframe ships, by its name, its server function's: Help or the tutorial. */
+export type Shipped = keyof typeof shippedReads
+
 /**
- * Help whole, in the page's language, Bodies included, read as the System is. Anyone reads it, so it
- * never sends the user to sign in. With `throwing: false`, for the canvas's corner beside it, the same
- * Query, whose failure throws nothing there and leaves it undefined, the canvas's boundary showing it.
+ * A System hexframe ships, Help or the tutorial, whole, in the page's language, Bodies included, read
+ * as the System is. Anyone reads it, so it never sends the user to sign in. With `throwing: false`,
+ * for the canvas's corner beside it, the same Query, whose failure throws nothing there and leaves it
+ * undefined, the canvas's boundary showing it.
  */
-export function useHelp(language: Locale, { throwing = true }: { throwing?: boolean } = {}) {
-  const helpRead = read({
-    scope: 'help',
+export function useShipped(
+  shipped: Shipped,
+  language: Locale,
+  { throwing = true }: { throwing?: boolean } = {},
+) {
+  const shippedRead = read({
+    scope: shipped,
     key: [language],
-    call: () => help({ data: { language } }),
+    call: () => shippedReads[shipped]({ data: { language } }),
   })
-  return useQuery(throwing ? helpRead : { ...helpRead, throwOnError: false })
+  return useQuery(throwing ? shippedRead : { ...shippedRead, throwOnError: false })
 }
 
 /**
