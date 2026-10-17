@@ -165,6 +165,13 @@ describe('what an Operation needs', () => {
     expect(verdict(bob, new DeleteTile({ id: id.journal, version: 1 }))).toBe('NotAllowed')
   })
 
+  it('refuses a delete without a Session of a Tile carrying a Grant, which no undo puts back', () => {
+    const square = new DeleteTile({ id: id.square, version: 1 })
+    expect(verdict(actor('ana', false), square)).toBe('NotAllowed')
+    expect(verdict(ana, square)).toBe('ok')
+    expect(verdict(actor('ana', false), new DeleteTile({ id: id.garden, version: 1 }))).toBe('ok')
+  })
+
   it('refuses a move without write on what it carries, or on the parent it lands under', () => {
     expect(verdict(bob, move(id.journal, id.garden, 1))).toBe('NotAllowed')
     const readOnly = sharingOf('ana', lineageOf(system), [
@@ -237,6 +244,16 @@ describe('a batch, run by its owner', () => {
     const opened = movedUnder(id.garden, id.square)
     expect(batchVerdict(actor('ana', false), opened)).toBe('NotAllowed')
     expect(batchVerdict(ana, opened)).toBe('ok')
+  })
+
+  it('is refused without a Session when it deletes a Tile carrying a Grant, which no undo puts back', () => {
+    const without = (...gone: ReadonlyArray<string>): System => ({
+      ...system,
+      tiles: Object.fromEntries(Object.entries(system.tiles).filter(([at]) => !gone.includes(at))),
+    })
+    expect(batchVerdict(actor('ana', false), without(id.square, id.bench))).toBe('NotAllowed')
+    expect(batchVerdict(ana, without(id.square, id.bench))).toBe('ok')
+    expect(batchVerdict(actor('ana', false), without(id.entry))).toBe('ok')
   })
 
   it('goes through when it opens nothing that stood, a Tile it makes under a public one included', () => {

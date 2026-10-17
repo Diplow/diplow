@@ -89,8 +89,9 @@ export function grantOf(row: GrantRow): Grant | undefined {
 /**
  * Who acts, as Mapping reads them, handed over by the API layer fresh for every request, never
  * cached: their Account; the Groups they belong to; the owners they stand for, their own Account and,
- * later, the Organizations they are an admin of; and whether a Session proves the request, rather than
- * a Key, a Turn's Key or an agent. Every id is opaque to Mapping.
+ * later, the Organizations they are an admin of; and whether the change is the user's own, made from
+ * a Session, rather than a Key's, a Turn's Key's or an agent's, an accepted Proposal's included until
+ * its writes are the user's (HEX-135). Every id is opaque to Mapping.
  */
 export interface Actor {
   readonly account: string

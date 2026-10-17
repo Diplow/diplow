@@ -168,25 +168,30 @@ layer(TestTiles)('a System shared by its Grants, changed, over PGlite', (it) => 
 })
 
 layer(TestTiles)('a System shared by its Grants, batched, moved and deleted, over PGlite', (it) => {
-  it.effect('refuses a batch its owner runs without a Session when it opens a Tile', () =>
-    Effect.gen(function* () {
-      const { ana, star, entry, garden } = yield* scenario
-      const byKey: Mapping.Acting = {
-        actor: { account: ana, groups: [], owners: [ana], session: false },
-        system: star,
-      }
-      const opening = new MoveTile({ id: entry.id, version: 1, parent: garden.id, slot: 1 })
-      const { batched } = yield* Mapping.addToBatch(byKey, [], opening)
-      expect(yield* Effect.flip(changed(Mapping.runBatch(byKey, [batched])))).toMatchObject({
-        _tag: 'NotAllowed',
-      })
-      expect(yield* Effect.flip(titled(visitor(star), entry.id))).toMatchObject({
-        _tag: 'TileNotFound',
-      })
-      const fromSession = { ...byKey, actor: { ...byKey.actor, session: true } }
-      yield* changed(Mapping.runBatch(fromSession, [batched]))
-      expect(yield* titled(visitor(star), entry.id)).toMatchObject({ title: 'Entry' })
-    }),
+  it.effect(
+    'refuses a batch its owner adds to or runs without a Session when it opens a Tile',
+    () =>
+      Effect.gen(function* () {
+        const { ana, star, entry, garden } = yield* scenario
+        const byKey: Mapping.Acting = {
+          actor: { account: ana, groups: [], owners: [ana], session: false },
+          system: star,
+        }
+        const fromSession = { ...byKey, actor: { ...byKey.actor, session: true } }
+        const opening = new MoveTile({ id: entry.id, version: 1, parent: garden.id, slot: 1 })
+        expect(yield* Effect.flip(Mapping.addToBatch(byKey, [], opening))).toMatchObject({
+          _tag: 'NotAllowed',
+        })
+        const { batched } = yield* Mapping.addToBatch(fromSession, [], opening)
+        expect(yield* Effect.flip(changed(Mapping.runBatch(byKey, [batched])))).toMatchObject({
+          _tag: 'NotAllowed',
+        })
+        expect(yield* Effect.flip(titled(visitor(star), entry.id))).toMatchObject({
+          _tag: 'TileNotFound',
+        })
+        yield* changed(Mapping.runBatch(fromSession, [batched]))
+        expect(yield* titled(visitor(star), entry.id)).toMatchObject({ title: 'Entry' })
+      }),
   )
 
   it.effect('undoes a batch that kept a Tile from someone only for its owner from a Session', () =>
@@ -207,6 +212,26 @@ layer(TestTiles)('a System shared by its Grants, batched, moved and deleted, ove
       yield* changed(Mapping.undo(fromSession, undo))
       expect(yield* titled(visitor(star), garden.id)).toMatchObject({ title: 'Garden' })
     }),
+  )
+
+  it.effect(
+    'refuses a delete without a Session of a Tile carrying a Grant, which no undo puts back',
+    () =>
+      Effect.gen(function* () {
+        const { ana, star, journal } = yield* scenario
+        const byKey: Mapping.Acting = {
+          actor: { account: ana, groups: [], owners: [ana], session: false },
+          system: star,
+        }
+        const deletion = new DeleteTile({ id: journal.id, version: 1 })
+        expect(yield* Effect.flip(changed(Mapping.deleteTile(byKey, deletion)))).toMatchObject({
+          _tag: 'NotAllowed',
+        })
+        expect(yield* Effect.flip(Mapping.addToBatch(byKey, [], deletion))).toMatchObject({
+          _tag: 'NotAllowed',
+        })
+        expect(yield* titled(byKey, journal.id)).toMatchObject({ title: 'Journal' })
+      }),
   )
 
   it.effect('refuses a move without write on the parent it lands under', () =>

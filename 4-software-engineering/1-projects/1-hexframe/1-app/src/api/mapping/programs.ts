@@ -28,11 +28,11 @@ import { tileLink, tileOfLink } from './files/download'
 /**
  * The Account acting on its own System, as Mapping takes who acts and where: the actor, the Account,
  * its Groups and the owners it stands for, for now itself alone and in no Group, until IAM knows its
- * Organizations and Groups, and whether a Session proves the request, which only a server function
- * the user calls from the app says; the System, named by the Account's star. The one place the API
- * layer resolves both, for every program of every domain that reaches Mapping, fresh on every call,
- * for now always on the Account's own System. Every caller says whether a Session proves it: anything
- * acting for the user without one, a Key, a Turn's Key or the Assistant, says it doesn't.
+ * Organizations and Groups, and whether the change is the user's own, from a Session; the System,
+ * named by the Account's star. The one place the API layer resolves both, for every program of every
+ * domain that reaches Mapping, fresh on every call, for now always on the Account's own System. Every
+ * caller says whether its change is the user's own from a Session: a server function a Session proves
+ * and the user's Undo do; a Key, a Turn's Key and the Assistant, an accepted Proposal included, don't.
  */
 export const actingOnOwn = (accountId: string, { session }: { readonly session: boolean }) =>
   Effect.map(Mapping.starOf(accountId), (system): Mapping.Acting => ({

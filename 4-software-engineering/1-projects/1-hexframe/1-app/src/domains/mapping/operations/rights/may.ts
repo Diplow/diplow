@@ -106,6 +106,14 @@ function widens(system: System, sharing: Sharing, moved: ReadonlyMap<string, str
  */
 const mayOpen = (actor: Actor, sharing: Sharing) => owns(actor, sharing.owner) && actor.session
 
+/**
+ * Whether a change without a Session would delete one of these Tiles while it carries a Grant. It may
+ * not: such a change is the one an undo undoes (an applied Turn's, an accepted Proposal's), and an
+ * undo makes a deleted Tile again with no Grant, so a Tile kept from someone would come back open.
+ */
+const dropsGrants = (actor: Actor, sharing: Sharing, gone: ReadonlyArray<string>) =>
+  !actor.session && gone.some((id) => (sharing.grants.get(id)?.size ?? 0) > 0)
+
 /** A System decided on, and how it is shared. */
 interface On {
   readonly system: System
@@ -116,7 +124,8 @@ interface On {
  * Whether the actor may make this Operation on the System it is decided on. Without `read` on a Tile
  * it names, `TileNotFound`, as for a Tile that isn't there. With `read`, but without `write` on what
  * it changes, carries or goes under, `NotAllowed`; and so is a move or a swap that would give someone
- * a right on a Tile they did not hold before, for anyone but the System's owner acting from a Session.
+ * a right on a Tile they did not hold before, for anyone but the System's owner acting from a Session,
+ * and a delete without a Session over a Tile that carries a Grant.
  */
 export function allowed(
   actor: Actor,
@@ -129,13 +138,15 @@ export function allowed(
   if (!mayOpen(actor, sharing) && widens(system, sharing, moved)) {
     return Result.fail(new NotAllowed())
   }
-  return Result.void
+  const deleted = operation._tag === 'DeleteTile' ? [...below(system, operation.id)] : []
+  return dropsGrants(actor, sharing, deleted) ? Result.fail(new NotAllowed()) : Result.void
 }
 
 /**
  * Whether the System's owner may run a batch, or an undo, that leaves it as `after`: from a Session
  * always; else only when no Tile that stood before it gives anyone a right they did not hold, a Tile
- * the batch makes opening nothing that stood. `NotAllowed` otherwise, the whole batch with it.
+ * the batch makes opening nothing that stood, and none it deletes carries a Grant. `NotAllowed`
+ * otherwise, the whole batch with it.
  */
 export function allowedBatch(
   actor: Actor,
@@ -144,6 +155,10 @@ export function allowedBatch(
 ): Result.Result<void, NotAllowed> {
   if (mayOpen(actor, sharing)) return Result.void
   const now = lineageOf(after)
-  const stood = [...sharing.lineage.keys()].filter((id) => now.has(id))
-  return opens(sharing, now, stood) ? Result.fail(new NotAllowed()) : Result.void
+  const stood = [...sharing.lineage.keys()]
+  const kept = stood.filter((id) => now.has(id))
+  const gone = stood.filter((id) => !now.has(id))
+  return opens(sharing, now, kept) || dropsGrants(actor, sharing, gone)
+    ? Result.fail(new NotAllowed())
+    : Result.void
 }

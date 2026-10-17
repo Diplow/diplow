@@ -148,9 +148,11 @@ const reading = ({ actor, system }: Acting) =>
  * The System the actor acts on, flat: its Root, its star, and every Tile and Reference below it by
  * id, Bodies included, owned; `systemOf` builds its tree. Its owner's read alone (`reached`).
  */
-export const system = (acting: Acting) =>
+export const system = (acting: Acting) => Effect.flatMap(reached(acting), wholeOf)
+
+/** The owner's System, flat, as `system` reads it. */
+const wholeOf = (owner: string) =>
   Effect.gen(function* () {
-    const owner = yield* reached(acting)
     const rows = yield* Tiles.use((tiles) => tiles.read(owner))
     const found = systemFrom(rows, { owned: true })
     if (found === undefined) return yield* Effect.die(new Error('A System was read without a Root'))
@@ -742,6 +744,8 @@ const tileAnswered = (after: System, operation: Operation, made: string | undefi
  * it as the batch keeps it, Mapping's summary of each event it makes there, and, for a create or an
  * edit, the Tile as the batch now makes it, with its Version, which the writer's next write to it
  * names. `decide` refuses each Operation only what its overload says, so the refusal is typed by it.
+ * And `NotAllowed` for one its run would refuse (`allowedBatch`): a batch that, run without a Session,
+ * opens a Tile to someone or deletes one carrying a Grant.
  */
 export const addToBatch = <O extends Operation>(
   acting: Acting,
@@ -750,9 +754,14 @@ export const addToBatch = <O extends Operation>(
 ) =>
   Effect.gen(function* () {
     yield* outsideShipped(namedBy(operation))
-    const folded = yield* Effect.fromResult(whole(yield* system(acting), over))
+    const owner = yield* reached(acting)
+    const held = yield* wholeOf(owner)
+    const folded = yield* Effect.fromResult(whole(held, over))
     const made = yield* madeFor(operation)
     const next = yield* Effect.fromResult(added(folded, operation, made))
+    // Refused now what its run would refuse, so a batch holds nothing it can't run.
+    const sharing = sharingOf(owner, lineageOf(held), yield* grantsIn(owner))
+    yield* Effect.fromResult(allowedBatch(acting.actor, sharing, next.system))
     const tile = yield* tileAnswered(next.system, operation, made)
     return {
       batched: next.batched,
