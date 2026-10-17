@@ -233,8 +233,10 @@ export const titlesAcross = (acting: Acting, ids: ReadonlyArray<string>) =>
     for (const [id, star] of stars) {
       if (star !== acting.system) elsewhere.set(star, [...(elsewhere.get(star) ?? []), id])
     }
-    const found = yield* Effect.forEach([...elsewhere], ([star, named]) =>
-      titles({ ...acting, system: star }, named),
+    const found = yield* Effect.forEach(
+      [...elsewhere],
+      ([star, named]) => titles({ ...acting, system: star }, named),
+      { concurrency: 'unbounded' },
     )
     return Object.fromEntries([here, ...found].flatMap((named) => Object.entries(named)))
   })

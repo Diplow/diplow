@@ -13,25 +13,19 @@ import { Button } from '#/front/ui/atoms/controls/button'
 import { EmptyState } from '#/front/ui/layouts/states'
 
 export const Route = createFileRoute('/t/$id')({
+  // The router's redirects are thrown (`throw: true`), as the old pages' are.
   beforeLoad: async ({ params: { id } }) => {
     const { session } = await sessionIfAny()
     if (session === undefined) {
-      redirect({
-        to: '/',
-        search: { redirect: `/t/${encodeURIComponent(id)}` },
-        replace: true,
-        throw: true,
-      })
+      const back = `/t/${encodeURIComponent(id)}`
+      redirect({ to: '/', search: { redirect: back }, replace: true, throw: true })
     }
     const led = await leadsTo(id)
-    if (led === undefined) return { missing: true }
-    redirect({
-      to: '/',
-      search: { ...withVisit(led.system), center: id },
-      replace: true,
-      throw: true,
-    })
-    return { missing: false }
+    // Leading nowhere, the page shows that nothing is there.
+    if (led !== undefined) {
+      const search = { ...withVisit(led.system), center: id }
+      redirect({ to: '/', search, replace: true, throw: true })
+    }
   },
   component: Missing,
 })

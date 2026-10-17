@@ -153,7 +153,10 @@ function pendingOf(mutation: Mutation): Pending {
   return pending
 }
 
-/** The System as the page shows it, with what the Account may do on each of its Tiles. */
+/** No pending write, the same every render. */
+const noWrites: ReadonlyArray<Pending> = []
+
+/** The System as the page shows it, and the gaps in what the Account may read of it. */
 export interface SystemShown {
   /** Flat, the server's with every pending write folded over it, which Mapping's `decide` rules on. */
   readonly system: System
@@ -161,11 +164,6 @@ export interface SystemShown {
   readonly root: SystemTile
   /** What the writes on their way change. */
   readonly underway: Underway
-  /**
-   * The Account's rights on each Tile by id, as Mapping's `Seen` says them: every right on every Tile
-   * of its own; none yet for a Tile a pending write makes.
-   */
-  readonly rights: Seen['rights']
   /** The Tiles it may read below Tiles kept from it, by id: none on its own System. */
   readonly gaps: Seen['gaps']
 }
@@ -174,7 +172,8 @@ export interface SystemShown {
  * The Account's System as the page shows it, or, by its star, another's as the Account may see it:
  * the server's, with every write to it still pending
  * folded over it in order, flat, which Mapping's `decide` rules on, and its tree, its Root, the user,
- * with everything below it, the rights on each Tile and the gaps. A write that settles stops being
+ * with everything below it, and the gaps; another's with no pending write laid over it, every write
+ * the page sends being the Account's own System's. A write that settles stops being
  * pending once the System read again has
  * landed, so nothing flickers between its answer and the read. Undefined until the first read lands.
  * Shown inside a ReadBoundary, where its failure appears; signed out, it sends the user to sign in.
@@ -187,10 +186,12 @@ export function useSystem({ throwing = true, star }: { throwing?: boolean; star?
 } {
   const query = star === undefined ? systemRead : visitRead(star)
   const { data } = useQuery(throwing ? query : { ...query, throwOnError: false })
-  const pending = useMutationState({
+  const writes = useMutationState({
     filters: { status: 'pending', predicate: inSystemQueue },
     select: pendingOf,
   })
+  // Every write the page sends is the Account's own System's: none is laid over another's.
+  const pending = star === undefined ? writes : noWrites
   return {
     data: useMemo(() => {
       if (data === undefined) return undefined
@@ -199,7 +200,6 @@ export function useSystem({ throwing = true, star }: { throwing?: boolean; star?
         system: shown,
         root: systemOf(shown),
         underway: underwayOf(pending, data.root.id),
-        rights: data.rights,
         gaps: data.gaps,
       }
     }, [data, pending]),

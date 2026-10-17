@@ -4,6 +4,7 @@
 // them hung from the star across a gap, and where a Tile the chat names is centered. Pure.
 import { Schema } from 'effect'
 
+import { tilePage } from '#/api/mapping/files/download'
 import { systemOf } from '#/domains/mapping/entities'
 import type { SystemShown } from '#/front/client/mapping/queries'
 import { localizeUrl } from '#/paraglide/runtime'
@@ -29,11 +30,11 @@ export const readVisitSearch = readSearch(VisitSearch)
 export const withVisit = (star: string | undefined): VisitSearch => ({ system: star })
 
 /**
- * The link a Tile is visited by, on the site the page is on, in its language: what Copy link copies
- * and the Share widget will (HEX-128), which leads whoever may read the Tile to it, in its System.
+ * The link a Tile is visited by, its page (`tilePage`, which an import reads back), on the site the
+ * page is on, in its language: what Copy link copies and the Share widget will (HEX-128), which leads
+ * whoever may read the Tile to it, in its System.
  */
-export const visitLinkOf = (id: string, page: string) =>
-  localizeUrl(new URL(`/t/${encodeURIComponent(id)}`, page)).href
+export const visitLinkOf = (id: string, page: string) => localizeUrl(tilePage(page)(id)).href
 
 /**
  * Someone else's System as the canvas and the corner draw it: from its star, its card unless the

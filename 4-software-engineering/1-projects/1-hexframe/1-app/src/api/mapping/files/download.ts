@@ -77,6 +77,25 @@ export const tileLink =
     new URL(`/?center=${encodeURIComponent(id)}`, requestUrl).href
 
 /**
+ * Where a link to a Tile leads, its own page, on the site a page or a request is on: `/t/<id>`, which
+ * leads whoever may read the Tile to it, in its System (HEX-127). What Copy link copies, in the page's
+ * language, and what `tileOfLink` reads back.
+ */
+export const tilePage =
+  (siteUrl: string) =>
+  (id: string): string =>
+    new URL(`/t/${encodeURIComponent(id)}`, siteUrl).href
+
+/** A path segment decoded, or none for one no URL would carry, a bad escape such as `%zz`. */
+function decoded(segment: string): string | undefined {
+  try {
+    return decodeURIComponent(segment)
+  } catch {
+    return undefined
+  }
+}
+
+/**
  * A Tile's page on the site, `/t/<id>`, the link Copy link copies (HEX-127), in any of the app's
  * languages, `/fr/t/<id>` included: its id is the path's last segment.
  */
@@ -96,7 +115,7 @@ export const tileOfLink =
     const home = new URL('/', requestUrl)
     if (url.origin !== home.origin) return undefined
     const visited = visitPath.exec(url.pathname)?.[1]
-    if (visited !== undefined) return decodeURIComponent(visited)
+    if (visited !== undefined) return decoded(visited)
     const center = url.searchParams.get('center')
     return url.pathname === home.pathname && center !== null && center !== '' ? center : undefined
   }
