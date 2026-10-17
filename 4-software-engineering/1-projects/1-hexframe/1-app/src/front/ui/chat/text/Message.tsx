@@ -132,17 +132,17 @@ function Blocks({ words }: { words: Words }) {
         <Said words={block.line} voice="agent" />
       </span>
     ) : (
-      // Its marks drawn as its numbers are, so a list keeps its role where its style removes it, and
-      // starts where its first number does, as a screen reader counts it.
+      // Its marks drawn as its numbers are, so a list keeps its role where its style removes it, each
+      // item counted by the number written, as a screen reader hears it and the eye reads it.
       <ol
         key={index}
         role="list"
-        start={Number(block.list[0]?.number ?? 1)}
         className="grid list-none grid-cols-[auto_minmax(0,1fr)] gap-x-[1ch]"
       >
         {block.list.map((item, at) => (
           <li
             key={at}
+            value={Number(item.number)}
             ref={toCurve}
             className={cn(runsToCurve, 'col-span-2 grid grid-cols-subgrid')}
           >

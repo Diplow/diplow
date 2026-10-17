@@ -8,6 +8,7 @@ import type { ReactNode } from 'react'
 import { m } from '#/paraglide/messages'
 
 import { GalleryGroup, GallerySection, GalleryState } from '../../../gallery/frame'
+import { toldUpTo } from '../../../motion'
 import { directions, neighbor, type Hex } from '../../geometry/geometry'
 import { Replayed, Specimen, type Play } from '../gallery'
 import { Slot } from '../places'
@@ -58,7 +59,7 @@ const yours = (): readonly MarkSample[] => [
 ]
 
 /** The parts the agent tells of a tile's words, in turn, the sample's steps. */
-const toldParts = ['title', 'preview', 'body'] as const
+const toldParts = toldUpTo('body')
 
 /**
  * The agent telling of a tile's words, alone at the center as the tutorial's is: its title lit, then

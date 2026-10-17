@@ -561,7 +561,7 @@ function Words(props: TileProps & { sized: Sized }) {
         className="flex size-full flex-col items-center justify-center overflow-hidden text-center hyphens-auto text-foreground select-none"
         style={{ fontSize: sized.title }}
       >
-        <span className={cn(titleClass(props, alone), toldOf(mark?.told === 'title'))}>
+        <span className={cn(titleClass(props, alone), toldOf(mark?.told, 'title'))}>
           {words.title}
         </span>
         {!alone && words.preview ? (
@@ -570,7 +570,7 @@ function Words(props: TileProps & { sized: Sized }) {
             className={cn(
               'mt-[.7em] max-w-[90%] shrink-0 overflow-hidden font-sans font-light leading-[1.4] text-muted-foreground',
               (centered(place) || kind === 'root') && 'text-foreground/80',
-              toldOf(mark?.told === 'preview'),
+              toldOf(mark?.told, 'preview'),
             )}
             style={{
               fontSize: sized.preview,
@@ -591,12 +591,14 @@ function Words(props: TileProps & { sized: Sized }) {
 /**
  * A part of its words the agent tells of, its title or its preview: lit in the agent's violet, a
  * light glowing round the words' own shapes, which keep their ink, fading in and out but under
- * reduced motion. A filter rather than a text shadow, which the line clamp would cut to a box.
+ * reduced motion, only on a tile told of. A filter rather than a text shadow, which the line clamp
+ * would cut to a box.
  */
-function toldOf(told: boolean): string {
+function toldOf(told: TileMark['told'], part: 'title' | 'preview'): string | undefined {
+  if (told === undefined) return undefined
   return cn(
     'transition-[color,filter] duration-500 motion-reduce:transition-none',
-    told &&
+    told === part &&
       'text-foreground [filter:drop-shadow(0_0_.3em_var(--color-agent))_drop-shadow(0_0_.8em_color-mix(in_oklab,var(--color-agent)_60%,transparent))]',
   )
 }
