@@ -1,10 +1,12 @@
 // @vitest-environment happy-dom
+import { act as settled, cleanup, renderHook } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { durationOf, easingOf, movingFor } from './motion'
+import { durationOf, easingOf, movingFor, useBeats } from './motion'
 
 // A motion's duration read from its token on the page: in ms or in s, none where it is unset or no
-// number, and none for what moves under reduced motion, while a light that only fades keeps its own.
+// number, and none for what moves under reduced motion, while a light that only fades keeps its own;
+// and the beats of a play, one every `--stagger-beat`, as long with reduced motion.
 
 const root = document.documentElement.style
 
@@ -14,8 +16,11 @@ function reduced(still: boolean) {
 }
 
 afterEach(() => {
+  cleanup()
+  vi.useRealTimers()
   vi.unstubAllGlobals()
   root.removeProperty('--duration-fold')
+  root.removeProperty('--stagger-beat')
 })
 
 describe('durationOf', () => {
@@ -64,5 +69,58 @@ describe('easingOf', () => {
     expect(easingOf(element)).toBe('ease-in-out')
     expect(easingOf(null)).toBe('ease-in-out')
     element.remove()
+  })
+})
+
+describe('useBeats', () => {
+  /** A play of three beats, two seconds apart, on or off. */
+  function play(playing: boolean) {
+    vi.useFakeTimers()
+    root.setProperty('--stagger-beat', '2s')
+    return renderHook((props: { playing: boolean }) => useBeats(3, props.playing), {
+      initialProps: { playing },
+    })
+  }
+
+  /** The clock moved on by `ms`, its beats landed. */
+  function after(ms: number) {
+    settled(() => {
+      vi.advanceTimersByTime(ms)
+    })
+  }
+
+  it('reaches one beat every stagger, up to its count', () => {
+    const { result } = play(true)
+    expect(result.current).toBe(0)
+    after(2000)
+    expect(result.current).toBe(1)
+    after(2000)
+    expect(result.current).toBe(2)
+    after(6000)
+    expect(result.current).toBe(3)
+  })
+
+  it('keeps its beats under reduced motion, which show without moving', () => {
+    reduced(true)
+    const { result } = play(true)
+    after(2000)
+    expect(result.current).toBe(1)
+  })
+
+  it('stays at none while it does not play', () => {
+    const { result } = play(false)
+    after(10_000)
+    expect(result.current).toBe(0)
+  })
+
+  it('plays from the start again each time it plays anew', () => {
+    const { result, rerender } = play(true)
+    after(6000)
+    rerender({ playing: false })
+    expect(result.current).toBe(0)
+    rerender({ playing: true })
+    expect(result.current).toBe(0)
+    after(2000)
+    expect(result.current).toBe(1)
   })
 })

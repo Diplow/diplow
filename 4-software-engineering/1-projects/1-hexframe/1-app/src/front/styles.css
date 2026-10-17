@@ -347,6 +347,7 @@
     --duration-sunrise: 3.2s;
     --duration-dawn: 1.6s;
     --stagger-dawn: 0.8s;
+    --stagger-beat: 2s;
     --stagger-bloom: 40ms;
   }
   html {
