@@ -1,9 +1,11 @@
 // Acting on the System from the canvas, a Tile's menu as Mapping reads it: what the menu says of a
 // Tile (`Subject`: its kind, where it stands, what is below it, whether it takes a new Tile or turns
 // into the other kind), the frames its Add and Move submenus draw, each place offering what Mapping
-// would make of it, and the lines home leaves out. What a line sends: a Tile moved to a place of
-// its ring or turned into the other kind, a swap, a Reference removed. Pure: Mapping's `decide`
-// rules on the flat System the page shows, so the client knows no rule of its own.
+// would make of it, and the lines home leaves out, those the user's rights on the Tile don't let
+// through among them (`Reach`, HEX-127). What a line sends: a Tile moved to a place of its ring or
+// turned into the other kind, a swap, a Reference removed. Pure: Mapping's `decide` rules on the
+// flat System the page shows, and Mapping's rights on each Tile say who may do what, so the client
+// knows no rule of its own.
 import { Result } from 'effect'
 
 import {
@@ -11,6 +13,8 @@ import {
   type Direction,
   directions,
   isEmptySystem,
+  Right,
+  type Seen,
   type Slot,
   type System,
   type SystemTile,
@@ -31,12 +35,78 @@ export function tradeOf(flat: System, moving: TileNode, held: TileNode) {
   return swapsWith(flat, moving, held) ? swapOf(flat, moving.id, held.id) : undefined
 }
 
+/**
+ * What the user may do on the System the canvas draws: their rights on each Tile, by its id, as
+ * Mapping's `Seen` says them, and whether the System is their own, which an export and an import as
+ * its Root ask, the API layer reading the System whole for its owner alone.
+ */
+export interface Reach {
+  readonly rights: (id: string) => ReadonlySet<Right>
+  readonly yours: boolean
+}
+
+/** Every right on every Tile, the user's own System's: what its owner may do there. */
+export const owned: Reach = { rights: () => new Set(Right.literals), yours: true }
+
+/**
+ * What the user may do on a System, from Mapping's rights on its Tiles by id (`Seen`'s), a Tile a
+ * pending write makes, which has none yet, taking its parent's, as Mapping's Grants inherit.
+ */
+export function reachOf(rights: Seen['rights'], flat: System, yours: boolean): Reach {
+  const of = (id: string, walked: ReadonlySet<string>): ReadonlySet<Right> => {
+    const held = rights[id]
+    if (held !== undefined) return new Set(held)
+    const tile = tileAt(flat, id)
+    if (tile === undefined || !('parent' in tile) || walked.has(tile.parent)) return new Set()
+    return of(tile.parent, new Set([...walked, id]))
+  }
+  return { rights: (id) => of(id, new Set()), yours }
+}
+
 /** The System three ways: its tree, Mapping's; flat, which `decide` rules on; as the canvas draws it. */
 export interface Systems {
   root: SystemTile
   flat: System
   tree: TileNode
+  /** What the user may do on it. */
+  reach: Reach
 }
+
+/** A Tile's lines that change it, or what is under it: each needs *write* on it. */
+const writes = ['edit', 'make-leaf', 'make-branch', 'add', 'move', 'delete'] as const
+
+/**
+ * The lines of a Tile's menu the user's rights don't let through: those that change it without
+ * *write* on it; removing a Reference without *write* on the Tile holding it; the agent's without
+ * *@*; an export and an import as the Root anywhere but on their own System.
+ */
+export function withheldOn({ rights, yours }: Reach, hex: TileHex): Verb[] {
+  const on = rights(hex.tile.id)
+  const holder = hex.parent === undefined ? on : rights(hex.parent.id)
+  return [
+    ...(on.has('write') ? [] : writes),
+    ...(holder.has('write') ? [] : (['remove-reference'] as const)),
+    ...(on.has('@') ? [] : (['ask-agent'] as const)),
+    ...(yours ? [] : (['export', 'import'] as const)),
+  ]
+}
+
+/**
+ * The lines of a free slot's menu the user's rights on the Tile it stands under don't let through: a
+ * new Tile there and an import into it without *write*, an import anywhere but on their own System,
+ * the agent's without *@*.
+ */
+export function withheldUnder({ rights, yours }: Reach, parent: string): Verb[] {
+  const under = rights(parent)
+  return [
+    ...(under.has('write') ? [] : (['new-tile'] as const)),
+    ...(under.has('write') && yours ? [] : (['import'] as const)),
+    ...(under.has('@') ? [] : (['ask-agent'] as const)),
+  ]
+}
+
+/** Whether the user may write this Tile, or put a Tile under it: what a move or a swap asks of both. */
+export const writable = ({ rights }: Reach, id: string) => rights(id).has('write')
 
 /**
  * The move of a Tile to a place, where Mapping would make it on the System as the page shows it:
@@ -194,14 +264,16 @@ export function framesOf(systems: Systems, hex: TileHex) {
 
 /**
  * The lines home leaves out of a Tile's menu: a Leaf's Context, which a Leaf has none of; an import
- * as the Root, but into an empty System's; the agent's on a broken Reference, which names no Tile.
+ * as the Root, but into an empty System's; the agent's on a broken Reference, which names no Tile;
+ * and those the user's rights don't let through (`withheldOn`).
  */
-export function withoutOf({ root }: Systems, hex: TileHex): Verb[] {
-  return [
+export function withoutOf({ root, reach }: Systems, hex: TileHex): Verb[] {
+  const left: Verb[] = [
     ...(hex.tile.broken === true ? (['ask-agent'] as const) : []),
     ...(hex.tile.leaf === true ? (['show-context'] as const) : []),
     ...(hex.tile.root !== undefined && !isEmptySystem(root) ? (['import'] as const) : []),
   ]
+  return [...left, ...withheldOn(reach, hex).filter((verb) => !left.includes(verb))]
 }
 
 /** The move of a Tile to the free place `at` of the ring it stands in, as Mapping would make it. */

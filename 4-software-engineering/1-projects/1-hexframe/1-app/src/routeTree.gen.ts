@@ -17,6 +17,7 @@ import { Route as accessSignInRouteImport } from './front/routes/(access)/sign-i
 import { Route as accessSignUpRouteImport } from './front/routes/(access)/sign-up'
 import { Route as AssistantEventsRouteImport } from './front/routes/assistant/events'
 import { Route as SettingsKeysRouteImport } from './front/routes/settings/keys'
+import { Route as TIdRouteImport } from './front/routes/t/$id'
 import { Route as AssistantAnthropicSplatRouteImport } from './front/routes/assistant/anthropic.$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -59,6 +60,11 @@ const SettingsKeysRoute = SettingsKeysRouteImport.update({
   path: '/settings/keys',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TIdRoute = TIdRouteImport.update({
+  id: '/t/$id',
+  path: '/t/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AssistantAnthropicSplatRoute = AssistantAnthropicSplatRouteImport.update({
   id: '/assistant/anthropic/$',
   path: '/assistant/anthropic/$',
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/sign-up': typeof accessSignUpRoute
   '/assistant/events': typeof AssistantEventsRoute
   '/settings/keys': typeof SettingsKeysRoute
+  '/t/$id': typeof TIdRoute
   '/assistant/anthropic/$': typeof AssistantAnthropicSplatRoute
 }
 export interface FileRoutesByTo {
@@ -85,6 +92,7 @@ export interface FileRoutesByTo {
   '/sign-up': typeof accessSignUpRoute
   '/assistant/events': typeof AssistantEventsRoute
   '/settings/keys': typeof SettingsKeysRoute
+  '/t/$id': typeof TIdRoute
   '/assistant/anthropic/$': typeof AssistantAnthropicSplatRoute
 }
 export interface FileRoutesById {
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/(access)/sign-up': typeof accessSignUpRoute
   '/assistant/events': typeof AssistantEventsRoute
   '/settings/keys': typeof SettingsKeysRoute
+  '/t/$id': typeof TIdRoute
   '/assistant/anthropic/$': typeof AssistantAnthropicSplatRoute
 }
 export interface FileRouteTypes {
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/assistant/events'
     | '/settings/keys'
+    | '/t/$id'
     | '/assistant/anthropic/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/assistant/events'
     | '/settings/keys'
+    | '/t/$id'
     | '/assistant/anthropic/$'
   id:
     | '__root__'
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
     | '/(access)/sign-up'
     | '/assistant/events'
     | '/settings/keys'
+    | '/t/$id'
     | '/assistant/anthropic/$'
   fileRoutesById: FileRoutesById
 }
@@ -144,6 +156,7 @@ export interface RootRouteChildren {
   accessSignUpRoute: typeof accessSignUpRoute
   AssistantEventsRoute: typeof AssistantEventsRoute
   SettingsKeysRoute: typeof SettingsKeysRoute
+  TIdRoute: typeof TIdRoute
   AssistantAnthropicSplatRoute: typeof AssistantAnthropicSplatRoute
 }
 
@@ -205,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsKeysRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/t/$id': {
+      id: '/t/$id'
+      path: '/t/$id'
+      fullPath: '/t/$id'
+      preLoaderRoute: typeof TIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/assistant/anthropic/$': {
       id: '/assistant/anthropic/$'
       path: '/assistant/anthropic/$'
@@ -224,6 +244,7 @@ const rootRouteChildren: RootRouteChildren = {
   accessSignUpRoute: accessSignUpRoute,
   AssistantEventsRoute: AssistantEventsRoute,
   SettingsKeysRoute: SettingsKeysRoute,
+  TIdRoute: TIdRoute,
   AssistantAnthropicSplatRoute: AssistantAnthropicSplatRoute,
 }
 export const routeTree = rootRouteImport

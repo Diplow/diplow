@@ -1,4 +1,5 @@
-// The user's System on the canvas, and acting on it where it is: each Tile's menu and hover card, each
+// A System on the canvas, the user's or one they visit, and acting on it where their rights on each
+// Tile let them (HEX-127): each Tile's menu and hover card, each
 // free slot's menu, a click on a free slot opening the new Tile's form there, and a Tile moved, dragged
 // under a mouse, from its menu's frame or through "Somewhere else…", its free slots offering
 // themselves and the Tiles it can trade places with their swap. A write ends its change as it is sent,
@@ -22,6 +23,7 @@ import type { TileNode } from '#/front/ui/canvas/view/tiles'
 import type { CanvasView, ViewAction } from '#/front/ui/canvas/view/view'
 import { Dialog } from '#/front/ui/layouts/Dialog'
 
+import type { Reach } from './acting'
 import { viewOf, type SearchChange, type SystemSearch } from './search/search'
 import { useActingState } from './state/useActingState'
 import { useWritesState } from './state/useWritesState'
@@ -36,6 +38,11 @@ interface SystemProps {
   tree: TileNode
   /** What the writes on their way change (`useSystem`). */
   underway: Underway
+  /**
+   * What the user may do on it, Tile by Tile: a line, a free slot or a move their rights don't let
+   * through is not offered.
+   */
+  reach: Reach
   search: SystemSearch
   /** The next view, after a gesture on the canvas, and the gesture, on which Tile. */
   onViewChange: (view: CanvasView, action: ViewAction) => void
@@ -56,6 +63,7 @@ export function System({
   root,
   tree,
   underway,
+  reach,
   search,
   onViewChange,
   onSearchChange,
@@ -68,7 +76,7 @@ export function System({
   const writes = useWritesState(underway)
   useLeaveGuard(useSystemWriting())
   const { acting, emptySlots, move, deleting } = useActingState({
-    systems: { root, flat: system, tree },
+    systems: { root, flat: system, tree, reach },
     search,
     onSearchChange,
     exporting,

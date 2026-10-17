@@ -16,10 +16,14 @@ import { firstKindOf } from '#/front/ui/canvas/view/tiles'
 import {
   framesOf,
   moveTo,
+  owned,
+  reachOf,
   referenceAt,
   subjectOf,
   swapAt,
   turnOf,
+  withheldOn,
+  withheldUnder,
   withoutOf,
   type Systems,
 } from './acting'
@@ -85,7 +89,7 @@ const opened = (view: CanvasView): CanvasView => ({
   frame: firstKindOf(showView(tree, view).center),
   ...view,
 })
-const systems: Systems = { root, flat, tree }
+const systems: Systems = { root, flat, tree, reach: owned }
 
 /** The hexes a view draws, each Tile's by its key. */
 function hexesOf(view: CanvasView = {}): Record<string, TileHex> {
@@ -258,7 +262,88 @@ describe('the lines home leaves out', () => {
     const [center] = layoutCanvas(showView(alone, {})).filter(
       (drawn): drawn is TileHex => drawn.kind === 'tile',
     )
-    expect(center && withoutOf({ root: bare, flat: empty, tree: alone }, center)).toEqual([])
+    expect(
+      center && withoutOf({ root: bare, flat: empty, tree: alone, reach: owned }, center),
+    ).toEqual([])
+  })
+})
+
+describe('the lines the rights on a Tile let through', () => {
+  // A visitor's rights, Tile by Tile, as Mapping's `Seen` says them: Holding read, Framed written,
+  // Bare open to the agent, the Root and the rest none.
+  const rights = {
+    root: [],
+    holding: ['read'],
+    framed: ['read', 'write'],
+    bare: ['read', '@'],
+  } as const
+  const visitor = reachOf(rights, flat, false)
+  const theirs: Systems = { ...systems, reach: visitor }
+  const changing = ['edit', 'make-leaf', 'make-branch', 'add', 'move', 'delete']
+
+  it('offers on a Tile read alone the lines that look, none that change it, nor the agent, nor an export', () => {
+    expect(withheldOn(visitor, hex('tile:holding'))).toEqual([
+      ...changing,
+      'remove-reference',
+      'ask-agent',
+      'export',
+      'import',
+    ])
+  })
+
+  it('offers what changes a Tile written, and the agent where @ lets it', () => {
+    expect(withheldOn(visitor, hex('tile:framed'))).toEqual([
+      'remove-reference',
+      'ask-agent',
+      'export',
+      'import',
+    ])
+    expect(withheldOn(visitor, hex('tile:bare'))).toEqual([
+      ...changing,
+      'remove-reference',
+      'export',
+      'import',
+    ])
+  })
+
+  it('removes a Reference only from a Tile written, the Tile holding it', () => {
+    const toBare = hex('tile:root:context:3', { inner: 'context' })
+    expect(withheldOn(visitor, toBare)).toContain('remove-reference')
+    expect(withheldOn(owned, toBare)).toEqual([])
+  })
+
+  it('leaves out of the menu what home leaves out, and what the rights withhold, once each', () => {
+    expect(withoutOf(theirs, hex('tile:notes'))).toEqual([
+      'show-context',
+      ...changing,
+      'remove-reference',
+      'ask-agent',
+      'export',
+      'import',
+    ])
+    expect(withoutOf(systems, hex('tile:notes'))).toEqual(['show-context'])
+  })
+
+  it('offers in a free slot a new Tile under a Tile written, the agent under one open to it, an import on your own System alone', () => {
+    expect(withheldUnder(visitor, 'framed')).toEqual(['import', 'ask-agent'])
+    expect(withheldUnder(visitor, 'bare')).toEqual(['new-tile', 'import'])
+    expect(withheldUnder(visitor, 'holding')).toEqual(['new-tile', 'import', 'ask-agent'])
+    expect(withheldUnder(owned, 'holding')).toEqual([])
+  })
+
+  it('gives a Tile a pending write makes, which Mapping has no rights for yet, its parent’s', () => {
+    const made: System = {
+      ...flat,
+      tiles: {
+        ...flat.tiles,
+        fresh: placed('fresh', 'framed', 2),
+        deeper: placed('deeper', 'fresh', 1),
+      },
+    }
+    const reach = reachOf(rights, made, false)
+    expect([...reach.rights('deeper')]).toEqual(['read', 'write'])
+    expect([...reach.rights('nowhere')]).toEqual([])
+    expect([...reach.rights('principles')]).toEqual([])
   })
 })
 

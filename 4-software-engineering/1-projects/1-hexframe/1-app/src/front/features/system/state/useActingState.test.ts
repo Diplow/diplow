@@ -21,6 +21,7 @@ import type { TileAct } from '#/front/ui/canvas/tile/menu/verbs'
 import { showView, type CanvasView } from '#/front/ui/canvas/view/view'
 import { firstKindOf } from '#/front/ui/canvas/view/tiles'
 
+import { owned, type Reach } from '../acting'
 import type { SearchChange, SystemSearch } from '../search/search'
 import { canvasTree } from '../tree'
 import { useActingState } from './useActingState'
@@ -106,7 +107,10 @@ function answering(
 
 const done = { ok: true, value: undefined }
 
-function render(search: SystemSearch = {}, { exporting = false } = {}) {
+function render(
+  search: SystemSearch = {},
+  { exporting = false, reach = owned }: { exporting?: boolean; reach?: Reach } = {},
+) {
   const client = makeQueryClient()
   const onSearchChange = vi.fn<(change: SearchChange) => void>()
   const start = vi.fn()
@@ -116,7 +120,7 @@ function render(search: SystemSearch = {}, { exporting = false } = {}) {
   const { result } = renderHook(
     () =>
       useActingState({
-        systems: { root, flat, tree },
+        systems: { root, flat, tree, reach },
         search,
         onSearchChange,
         exporting: { start, pending: exporting },
@@ -445,5 +449,53 @@ describe('a move under way', () => {
       expect(Mapping.swapTiles).toHaveBeenCalledOnce()
     })
     expect(changed(onSearchChange, { move: 'bare' })).toMatchObject({ move: undefined })
+  })
+})
+
+describe('on a System whose Tiles the rights let the user only read', () => {
+  // A visitor's: every Tile read, none written, the agent nowhere, the System not theirs.
+  const read: Reach = { rights: () => new Set(['read']), yours: false }
+  const free = (view: CanvasView = {}) =>
+    layoutCanvas(showView(tree, opened(view))).flatMap((drawn) =>
+      drawn.kind === 'empty' ? [drawn.slot] : [],
+    )
+
+  it('offers no free slot a click, nor a menu', () => {
+    const { result } = render({}, { reach: read })
+    const slots = free()
+    expect(slots.length).toBeGreaterThan(0)
+    for (const slot of slots) {
+      expect(result.current.emptySlots(slot)).toBeUndefined()
+      expect(result.current.acting.slot(slot)).toBeUndefined()
+    }
+  })
+
+  it('leaves every line that changes a Tile out of its menu, and the agent’s', () => {
+    const { result } = render({}, { reach: read })
+    expect(result.current.acting.tile(hex('tile:holding'))?.without).toEqual(
+      expect.arrayContaining(['edit', 'move', 'delete', 'add', 'ask-agent', 'export']),
+    )
+  })
+
+  it('is no move for a Tile the user may not write, as a link may name it', () => {
+    const { result } = render({ move: 'bare' }, { reach: read })
+    expect(result.current.move.moving).toBeUndefined()
+    // Its free slots add nothing either.
+    expect(free().map((slot) => result.current.emptySlots(slot))).toEqual(
+      free().map(() => undefined),
+    )
+  })
+
+  it('lands a Tile written only under a Tile written, and swaps it only with one', () => {
+    const some: Reach = {
+      rights: (id) => new Set(id === 'bare' ? ['read', 'write'] : ['read']),
+      yours: false,
+    }
+    const { result } = render({ move: 'bare' }, { reach: some })
+    expect(result.current.move.moving).toMatchObject({ id: 'bare' })
+    expect(result.current.move.moving?.swapTargets(hex('tile:holding').tile)).toBeUndefined()
+    expect(free().map((slot) => result.current.emptySlots(slot))).toEqual(
+      free().map(() => undefined),
+    )
   })
 })

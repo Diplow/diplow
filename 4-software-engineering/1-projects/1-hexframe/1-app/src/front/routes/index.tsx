@@ -34,7 +34,11 @@
 // the agent saying they are the same six, then that yours is waiting (HEX-122). Signed out, the same
 // screen: Help on the canvas, two lines from the agent and its offer to read the centered topic in full, and the
 // sign-in widget in the composer's place, which signs in or up, then comes back where the user was.
-// While the help widget is open, a topic centered on Help's canvas turns its page.
+// While the help widget is open, a topic centered on Help's canvas turns its page. A link to a Tile
+// of someone else's System, `/t/<id>`, lands here visiting it (`system`, HEX-127): the canvas on
+// their System from its star, as the Account may see it, centered on the Tile, the journey taking it
+// there, the corner from their star, a "…" for the Tiles kept from them, and its mark back home;
+// only what their rights let through offered, the gestures told in their own timeline as ever.
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 
@@ -77,8 +81,16 @@ import {
   type SystemSearch,
 } from '#/front/features/system/search/search'
 import { useMarksState } from '#/front/features/system/marks/useMarksState'
+import { reachOf } from '#/front/features/system/acting'
 import { System } from '#/front/features/system/System'
 import { canvasTree, onScreen } from '#/front/features/system/tree'
+import { readVisitSearch, withVisit } from '#/front/features/system/visit/visit'
+import {
+  useVisited,
+  type Visited,
+  VisitPage,
+  type VisitPageProps,
+} from '#/front/features/system/visit/VisitPage'
 import { TileWidgets } from '#/front/features/system/widget/TileWidgets'
 import {
   type TileWidgetsState,
@@ -105,6 +117,7 @@ import type { Direction, ShippedRoot } from '#/domains/mapping/entities'
  */
 const readHomeSearch = (search: Record<string, unknown>) => ({
   ...readSystemSearch(search),
+  ...readVisitSearch(search),
   ...readKeysSearch(search),
   ...readHelpSearch(search),
   ...readTutorialSearch(search),
@@ -126,10 +139,11 @@ function Home() {
 }
 
 /**
- * What signed-in home holds beside the System's own search params, the widgets open, which a change of
- * the System keeps. `access` and `redirect` mean something signed out alone, so they go.
+ * What signed-in home holds beside the System's own search params, the widgets open and the System
+ * visited, which a change of the System keeps. `access` and `redirect` mean something signed out
+ * alone, so they go.
  */
-const screenOf = ({ keys, help }: HomeSearch) => ({ keys, help })
+const screenOf = ({ keys, help, system }: HomeSearch) => ({ keys, help, system })
 
 /**
  * Help, read in the page's language beside the canvas, never throwing: as the canvas draws it, and as
@@ -230,12 +244,19 @@ function useTutorialNavigation(
 
 /**
  * The way back from a System away from home, the corner's mark: the canvas to the user's Root, the
- * System's view and change set aside as they were when the tutorial took it.
+ * System's view and change set aside as they were when the tutorial took it, or the System visited
+ * left.
  */
 function useWayHome() {
   const navigate = Route.useNavigate()
   return () => {
-    void navigate({ search: (current) => ({ ...screenOf(current), ...withTutorial(undefined) }) })
+    void navigate({
+      search: (current) => ({
+        ...screenOf(current),
+        ...withTutorial(undefined),
+        ...withVisit(undefined),
+      }),
+    })
   }
 }
 
@@ -290,6 +311,80 @@ function shippedSide(
         view={view}
         onViewChange={onViewChange}
         onHome={away ? onHome : undefined}
+      />
+    ),
+  }
+}
+
+interface Centering {
+  /** The Account's System as the canvas draws it. */
+  tree: TileNode | undefined
+  /** The System visited, if any, by its star, as the canvas draws it. */
+  visit: Visited
+  /** The Tile arriving, which glints. */
+  arrive: (tile: string) => void
+  turning: ReturnType<typeof useScreenState>['actions']
+}
+
+/**
+ * A Tile the chat names crossing to the canvas: centered on it, glinting as it arrives, the canvas
+ * coming forward, saying what it shows, the System's again should Help or the tutorial have had it,
+ * the one visited if it holds it, the Account's otherwise; a Tile of neither is visited by its link.
+ */
+function useCenterFromChat({ tree, visit, arrive, turning }: Centering) {
+  const navigate = Route.useNavigate()
+  const router = useRouter()
+  return (tile: string) => {
+    const visited = visit.tree !== undefined && findTile(visit.tree, tile) !== undefined
+    const shown = visited ? visit.tree : tree
+    if (shown === undefined) return
+    if (!visited && findTile(shown, tile) === undefined) {
+      void router.navigate({ to: '/t/$id', params: { id: tile } })
+      return
+    }
+    const view = centerOn(shown, tile)
+    const away = {
+      ...withHelp(undefined),
+      ...withTutorial(undefined),
+      ...withVisit(visited ? visit.star : undefined),
+    }
+    void navigate({ search: (current) => ({ ...withView(current, view), ...away }) })
+    publish(new Navigated({ gesture: 'center', tile }))
+    arrive(tile)
+    // The canvas's tree names an untitled Root already.
+    const title = findTile(shown, tile)?.title
+    turning.cross(title === undefined ? undefined : m.crossing_phone_said({ title }))
+  }
+}
+
+/**
+ * The canvas and its corner while the URL visits someone else's System: from its star, the journey
+ * taking the canvas there, the corner's mark the way home. A Message is sent from the Account's own
+ * System meanwhile, where the Turn answering it starts.
+ */
+function visitedSide(
+  visit: Visited,
+  props: Omit<VisitPageProps, 'star'> & { search: HomeSearch; onHome: () => void },
+) {
+  const { star, tree } = visit
+  if (star === undefined) return undefined
+  const { onHome, ...page } = props
+  const systemView: CanvasView = {}
+  return {
+    systemView,
+    rules: undefined,
+    at: star,
+    canvas: (
+      <div className={side}>
+        <VisitPage star={star} {...page} />
+      </div>
+    ),
+    corner: (
+      <Breadcrumb
+        system={tree}
+        view={viewOf(props.search)}
+        onViewChange={props.onViewChange}
+        onHome={onHome}
       />
     ),
   }
@@ -440,6 +535,7 @@ function SignedIn() {
   // The chat's Messages go after the navigation they follow, from the view they were sent from.
   const { postMessage, underWay } = useNavigationSender()
   const { system, tree, welcoming, path } = useYourSystem()
+  const visit = useVisited(search.system, system?.root.id)
   // What crosses from the chat to the canvas: the Tile it points at, the one it centered, where the
   // running Turn works, the changes made meanwhile, and the open Proposal.
   const marks = useMarksState({ system, working: turn?.location })
@@ -450,40 +546,36 @@ function SignedIn() {
     publish(new Navigated(action))
     marks.actions.went(action)
   }
-  // A Tile the chat names crosses to the canvas: centered on it, glinting as it arrives, the canvas
-  // comes forward, saying what it shows, the System's again should Help or the tutorial have had it.
-  const onCenter = (tile: string) => {
-    if (tree === undefined) return
-    const view = centerOn(tree, tile)
-    const away = { ...withHelp(undefined), ...withTutorial(undefined) }
-    void navigate({ search: (current) => ({ ...withView(current, view), ...away }) })
-    publish(new Navigated({ gesture: 'center', tile }))
-    marks.actions.arrive(tile)
-    // The canvas's tree names an untitled Root already.
-    const title = findTile(tree, tile)?.title
-    turning.cross(title === undefined ? undefined : m.crossing_phone_said({ title }))
-  }
-  // What the canvas shows: a System hexframe ships while the URL names it, else the Account's.
+  const onCenter = useCenterFromChat({ tree, visit, arrive: marks.actions.arrive, turning })
+  // What the canvas shows: a System hexframe ships while the URL names it, else the one it visits,
+  // else the Account's.
   const view = viewOf(search)
-  const side = shippedSide(search, { help, tutorial }, wayHome) ?? {
-    systemView: view,
-    rules: undefined,
-    at: home,
-    canvas: (
-      <SystemPage
-        search={search}
-        onSearchChange={onSearchChange}
-        onViewChange={onViewChange}
-        widgets={widgets}
-        onExport={() => {
-          turning.turn('chat')
-        }}
-        marks={marks.marks}
-        onCarry={setCarried}
-      />
-    ),
-    corner: <Breadcrumb system={path} view={view} onViewChange={onViewChange} />,
-  }
+  const side = shippedSide(search, { help, tutorial }, wayHome) ??
+    visitedSide(visit, {
+      search,
+      onSearchChange,
+      onViewChange,
+      marks: marks.marks,
+      onHome: wayHome,
+    }) ?? {
+      systemView: view,
+      rules: undefined,
+      at: home,
+      canvas: (
+        <SystemPage
+          search={search}
+          onSearchChange={onSearchChange}
+          onViewChange={onViewChange}
+          widgets={widgets}
+          onExport={() => {
+            turning.turn('chat')
+          }}
+          marks={marks.marks}
+          onCarry={setCarried}
+        />
+      ),
+      corner: <Breadcrumb system={path} view={view} onViewChange={onViewChange} />,
+    }
   const onSend =
     tree === undefined
       ? undefined
@@ -658,7 +750,7 @@ function SystemPage(props: SystemPageProps) {
   const { search, onSearchChange, onViewChange, widgets, onExport, marks, onCarry } = props
   const { data } = useSystem()
   if (data === undefined) return <Loading />
-  const { system, root, underway } = data
+  const { system, root, underway, rights } = data
   // The pseudo a new account is typing shows on its Root as it is typed.
   const tree: TileNode = canvasTree(root, { yours: true, naming: widgets.state.naming })
   return (
@@ -668,6 +760,7 @@ function SystemPage(props: SystemPageProps) {
         root={root}
         tree={tree}
         underway={underway}
+        reach={reachOf(rights, system, true)}
         search={search}
         onViewChange={onViewChange}
         onSearchChange={onSearchChange}

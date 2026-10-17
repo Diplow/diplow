@@ -7,7 +7,6 @@
 // composer, which names the Tile first (HEX-110). Lines that go somewhere are the canvas's own. A refusal takes its channel, a toast, or brings the move back (`useRefusalState`).
 import { useState } from 'react'
 
-import { tileLink } from '#/api/mapping/files/download'
 import { linkTo } from '#/domains/assistant/entities'
 import {
   useDeleteReference,
@@ -16,7 +15,6 @@ import {
   useSwapTiles,
 } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
-import { localizeUrl } from '#/paraglide/runtime'
 import { toast } from '#/front/ui/atoms/Toaster'
 import type { Acting, Moving } from '#/front/ui/canvas/Canvas'
 import type { Direction } from '#/domains/mapping/entities'
@@ -30,12 +28,15 @@ import {
   allows,
   framesOf,
   moveTo,
+  type Reach,
   referenceAt,
   subjectOf,
   swapAt,
   tradeOf,
   turnOf,
+  withheldUnder,
   withoutOf,
+  writable,
   type Systems,
 } from '../acting'
 import {
@@ -47,6 +48,7 @@ import {
   type SystemSearch,
 } from '../search/search'
 import { slotOf, tileIn } from '../tree'
+import { visitLinkOf } from '../visit/visit'
 import type { Exported } from '../widget/state/useTileWidgetsState'
 import { tilesBelow } from '../widget/place'
 
@@ -100,11 +102,12 @@ function newTileOf(target: EmptySlotTarget) {
 }
 
 /**
- * What each of Copy's lines copies of a Tile: the link to home centered on it, in the page's
- * language; its title; the mention a Message links it by (Assistant's `linkTo`).
+ * What each of Copy's lines copies of a Tile: the link it is visited by, which leads whoever may
+ * read it there, in the page's language (`visitLinkOf`); its title; the mention a Message links it
+ * by (Assistant's `linkTo`).
  */
 const copied = {
-  'copy-link': ({ id }: TileNode) => localizeUrl(tileLink(location.href)(id)).href,
+  'copy-link': ({ id }: TileNode) => visitLinkOf(id, location.href),
   'copy-title': ({ title }: TileNode) => title,
   'copy-mention': ({ id }: TileNode) => linkTo(id),
 }
@@ -199,10 +202,13 @@ export function useActingState(input: ActingInput) {
     }
   }
 
-  /** A click on a free slot, or New tile here: the new Tile's form, for that slot. */
+  /**
+   * A click on a free slot, or New tile here: the new Tile's form, for that slot, where the user may
+   * write the Tile it stands under.
+   */
   const addHere = (target: EmptySlotTarget): Action | undefined => {
     const place = newTileOf(target)
-    if (place === undefined) return undefined
+    if (place === undefined || !writable(systems.reach, target.parent.id)) return undefined
     const labels = {
       children: m.system_add_child,
       branches: m.system_add_child,
@@ -217,13 +223,18 @@ export function useActingState(input: ActingInput) {
     }
   }
 
-  /** A free slot's menu: a new Tile there, an import into it, or the agent asked for one. */
+  /**
+   * A free slot's menu: a new Tile there, an import into it, or the agent asked for one, each where
+   * the user's rights on the Tile it stands under let it through; none when none is.
+   */
   const slotActing = (target: EmptySlotTarget): Acting | undefined => {
     const place = placeOf(target)
-    if (place === undefined) return undefined
+    const without = withheldUnder(systems.reach, target.parent.id)
+    if (place === undefined || without.length === slotVerbs) return undefined
     const fresh = newTileOf(target) ?? place
     return {
       subject: { kind: 'slot', at: target.direction, parent: target.parent.title },
+      without,
       onAct: ({ verb }) => {
         if (verb === 'new-tile') begin({ kind: 'add', ...fresh })
         if (verb === 'import') begin({ kind: 'import', place: { _tag: 'Slot', ...place } })
@@ -270,14 +281,18 @@ export function useActingState(input: ActingInput) {
       slot: slotActing,
     },
     deleting: deleting === undefined ? undefined : deleteOf(deleting),
-    ...movingOf({ tree, search, flat, begin, sent, move, swap, addHere }),
+    ...movingOf({ tree, search, flat, reach: systems.reach, begin, sent, move, swap, addHere }),
   }
 }
+
+/** How many lines a free slot's menu holds: a new Tile, an import, the agent's. */
+const slotVerbs = 3
 
 interface MovingInput {
   tree: TileNode
   search: SystemSearch
   flat: Systems['flat']
+  reach: Reach
   begin: (change: Change) => void
   sent: () => void
   move: ReturnType<typeof useMoveTile>
@@ -288,14 +303,21 @@ interface MovingInput {
 /**
  * The move under way, the URL's: the Tile on the move, its free slots and its swaps, each sending
  * its write and ending the move as it is sent; a drag starting one, Escape or Stop ending it. A move
- * whose Tile is gone, deleted from another tab or an old link, is no move: the free slots add a Tile.
+ * whose Tile is gone, deleted from another tab or an old link, is no move: the free slots add a Tile;
+ * nor is one of a Tile the user may not write. It lands only under a Tile they may write, and trades
+ * places only with one they may.
  */
-function movingOf({ tree, search, flat, begin, sent, move, swap, addHere }: MovingInput) {
+function movingOf(input: MovingInput) {
+  const { tree, search, flat, reach, begin, sent, move, swap, addHere } = input
   const change = changeOf(search)
-  const tile = change.kind === 'move' ? findTile(tree, change.id) : undefined
+  const named = change.kind === 'move' ? findTile(tree, change.id) : undefined
+  const tile = named !== undefined && writable(reach, named.id) ? named : undefined
   const moveHere = (going: TileNode) => (target: EmptySlotTarget) => {
     const place = placeOf(target, going)
-    const moved = place === undefined ? undefined : allows(flat, going.id, place)
+    const moved =
+      place === undefined || !writable(reach, place.parent)
+        ? undefined
+        : allows(flat, going.id, place)
     if (moved === undefined) return undefined
     const names = { tile: going.title, title: target.parent.title }
     return {
@@ -307,7 +329,7 @@ function movingOf({ tree, search, flat, begin, sent, move, swap, addHere }: Movi
     }
   }
   const swapWith = (going: TileNode) => (held: TileNode) => {
-    const swapped = tradeOf(flat, going, held)
+    const swapped = writable(reach, held.id) ? tradeOf(flat, going, held) : undefined
     return swapped !== undefined
       ? {
           label: m.system_swap_with({ title: held.title }),
