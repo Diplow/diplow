@@ -385,7 +385,7 @@ describe('centering', () => {
 })
 
 describe('what its caller holds back', () => {
-  const nothing = () => ({ click: false, goIn: false })
+  const nothing = () => ({ click: false, recenter: false })
 
   it('leaves every Tile without a click, the center included, so none is a button', () => {
     const { state, actions: act } = render(open, { lets: nothing })
@@ -400,38 +400,37 @@ describe('what its caller holds back', () => {
     act.click(center)
     act.go(center, 'open')
     expect(onViewChange).not.toHaveBeenCalled()
-    const {
-      state: opened,
-      actions: inOpened,
-      onViewChange: changed,
-    } = render(open, {
-      lets: nothing,
-    })
-    const a = hexOf(opened.hexes, 'tile:a')
-    inOpened.click(a)
-    inOpened.center(a, 'pointer')
-    inOpened.center(a, 'keyboard')
-    inOpened.go(a, 'go-in')
-    inOpened.go(a, 'show-context')
-    expect(changed).not.toHaveBeenCalled()
+    const opened = render(open, { lets: nothing })
+    const a = hexOf(opened.state.hexes, 'tile:a')
+    opened.actions.click(a)
+    opened.actions.center(a, 'pointer')
+    opened.actions.center(a, 'keyboard')
+    opened.actions.go(a, 'go-in')
+    opened.actions.go(a, 'show-context')
+    expect(opened.onViewChange).not.toHaveBeenCalled()
   })
 
-  it('moves the center nowhere by a menu where going in is held, Back out included', () => {
-    const {
-      state,
-      actions: act,
-      onViewChange,
-    } = render(inA, {
-      lets: () => ({ click: true, goIn: false }),
-    })
-    const a = hexOf(state.hexes, 'tile:a')
-    act.go(hexOf(state.hexes, 'tile:a3'), 'show-context')
-    act.go(a, 'back-out')
+  it('moves the center nowhere where that is held, by a click, a menu or Back out', () => {
+    const clicks = () => ({ click: true, recenter: false })
+    const { state, actions: act, onViewChange } = render(open, { lets: clicks })
+    const notes = hexOf(state.hexes, 'tile:notes')
+    expect(act.actionOf(notes)).toBeUndefined()
+    act.click(notes)
+    act.go(notes, 'show-context')
     expect(onViewChange).not.toHaveBeenCalled()
+    const inside = render(inA, { lets: clicks })
+    const a = hexOf(inside.state.hexes, 'tile:a')
+    inside.actions.go(a, 'back-out')
+    expect(inside.onViewChange).not.toHaveBeenCalled()
+    inside.actions.click(a)
+    expect(inside.onViewChange).toHaveBeenCalledExactlyOnceWith(
+      { center: 'a' },
+      { gesture: 'collapse', tile: 'a' },
+    )
   })
 
   it('lets through what it lets through, Tile by Tile: the center opening, nothing going in', () => {
-    const lets = (hex: TileHex) => ({ click: hex.role === 'center', goIn: false })
+    const lets = (hex: TileHex) => ({ click: hex.role === 'center', recenter: false })
     expect(actions({})).toEqual({ 'tile:root': 'expand' })
     const { state, actions: act, onViewChange } = render(open, { lets })
     expect(act.actionOf(hexOf(state.hexes, 'tile:root'))).toBe('collapse')

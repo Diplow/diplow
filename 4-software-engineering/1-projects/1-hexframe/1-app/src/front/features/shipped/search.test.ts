@@ -154,14 +154,15 @@ describe("the System hexframe ships on home's canvas", () => {
     expect(shippedOnCanvas({ ...view, help: true, tutorial: 'tutorial/2' })).toEqual({
       shipped: 'help',
       view,
+      away: false,
     })
   })
 
-  it('is the tutorial while its param names it, by its rules on the view it centers', () => {
-    expect(shippedOnCanvas({ ...view, help: undefined, tutorial: 'tutorial/2' })).toEqual({
-      shipped: 'tutorial',
-      ...tutorialRules({ ...view, center: 'tutorial/2' }),
-    })
+  it('is the tutorial while its param names it, away from home, by its rules on the view it centers', () => {
+    const shown = shippedOnCanvas({ ...view, help: undefined, tutorial: 'tutorial/2' })
+    const rules = tutorialRules({ ...view, center: 'tutorial/2' })
+    expect(shown).toMatchObject({ shipped: 'tutorial', view: rules.view, away: true })
+    expect(shown?.rules).toMatchObject({ looking: rules.looking, composer: rules.composer })
   })
 
   it("is none with neither named, the canvas the Account's System's", () => {

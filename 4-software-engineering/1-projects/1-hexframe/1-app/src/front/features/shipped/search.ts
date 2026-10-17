@@ -17,7 +17,7 @@ import {
   withViewIn,
 } from '#/front/ui/canvas/view/view'
 
-import { tutorialRules, type TutorialLets } from './tutorial/rules'
+import { tutorialRules, type TutorialRules } from './tutorial/rules'
 
 /** Where a System hexframe ships is open: one of its Tiles by its id, or `true`, its Root. */
 const ShippedAt = Schema.optionalKey(orDefault(Schema.Union([Schema.Literal(true), TileId])))
@@ -90,8 +90,13 @@ export const tutorialOn = <S extends CanvasView & TutorialSearch>(
 interface OnCanvas {
   shipped: ShippedRoot
   view: CanvasView
+  /**
+   * Another System than the user's, reached by a journey, which the corner's mark leads back from:
+   * the tutorial; Help opens over the user's System as a widget's page.
+   */
+  away: boolean
   /** The tutorial's rules, which the canvas and the chat follow; none for Help, which cuts nothing. */
-  lets?: TutorialLets
+  rules?: TutorialRules
 }
 
 /**
@@ -103,9 +108,10 @@ interface OnCanvas {
 export function shippedOnCanvas(
   search: CanvasView & HelpSearch & TutorialSearch,
 ): OnCanvas | undefined {
-  if (search.help !== undefined) return { shipped: 'help', view: viewIn(search) }
+  if (search.help !== undefined) return { shipped: 'help', view: viewIn(search), away: false }
   if (search.tutorial !== undefined) {
-    return { shipped: 'tutorial', ...tutorialRules(tutorialViewOf(search)) }
+    const rules = tutorialRules(tutorialViewOf(search))
+    return { shipped: 'tutorial', view: rules.view, away: true, rules }
   }
   return undefined
 }

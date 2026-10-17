@@ -25,7 +25,6 @@ import { encoded } from '#/front/features/conversation/composer/mention'
 import { happenedOf } from '#/front/features/conversation/entry/words'
 import { ConversationGallery } from '#/front/features/conversation/gallery'
 import { helpNodeOf } from '#/front/features/shipped/nodes'
-import { tileLetsOf } from '#/front/features/shipped/Shipped'
 import { tutorialRules } from '#/front/features/shipped/tutorial/rules'
 import { canvasTree } from '#/front/features/system/tree'
 import { m } from '#/paraglide/messages'
@@ -360,12 +359,10 @@ const where: Where = ({ value, links }, center) => turnLocation(encoded(value, l
  */
 function OnboardingTour({ onGo }: { onGo: Go }) {
   const { data } = useShipped('tutorial', getLocale(), { throwing: false })
-  const tutorial = useMemo(() => {
-    if (data === undefined) return undefined
-    const { view, lets } = tutorialRules({})
-    const system = canvasTree(data)
-    return { system, view, looking: lets.menu, lets: tileLetsOf(lets), composer: lets.composer }
-  }, [data])
+  const tutorial = useMemo(
+    () => (data === undefined ? undefined : { system: canvasTree(data), ...tutorialRules({}) }),
+    [data],
+  )
   return <OnboardingSlide onGo={onGo} tutorial={tutorial} />
 }
 

@@ -7,11 +7,10 @@
 import { m } from '#/paraglide/messages'
 import { Act, voiceOf } from '#/front/ui/atoms/controls/act'
 import { Canvas } from '#/front/ui/canvas/Canvas'
-import type { TileHex, TileLets } from '#/front/ui/canvas/state/useCanvasState'
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
 import { showView, type CanvasView } from '#/front/ui/canvas/view/view'
 
-import type { TutorialLets } from './tutorial/rules'
+import type { TutorialRules } from './tutorial/rules'
 
 interface ShippedCanvasProps {
   /** The shipped System's Tiles as the canvas draws them (`canvasTree`). */
@@ -19,10 +18,10 @@ interface ShippedCanvasProps {
   view: CanvasView
   onViewChange: (view: CanvasView) => void
   /**
-   * What the tutorial lets through, by its rules: the center's click, the menus, going in. Without
-   * it, Help's, every way of looking.
+   * The tutorial's rules, what its menus and Tiles let through. Without them, Help's, every way of
+   * looking.
    */
-  lets?: TutorialLets | undefined
+  rules?: TutorialRules | undefined
   className?: string
 }
 
@@ -31,26 +30,18 @@ interface ShippedCanvasProps {
  * that go somewhere, its Context among them, beside its hover card (`looking`, never `acting`); the
  * tutorial's only where it lets them through, its center opening only once it lets a click through.
  */
-export function ShippedCanvas({ tree, view, onViewChange, lets, className }: ShippedCanvasProps) {
+export function ShippedCanvas({ tree, view, onViewChange, rules, className }: ShippedCanvasProps) {
   return (
     <Canvas
       system={tree}
       view={view}
       onViewChange={onViewChange}
-      looking={lets?.menu ?? true}
-      {...(lets && { lets: tileLetsOf(lets) })}
+      looking={rules?.looking ?? true}
+      {...(rules && { lets: rules.lets })}
       className={className}
     />
   )
 }
-
-/**
- * What each Tile of the tutorial's canvas lets through, by its rules: the center's click once it
- * lets the center open, going in once it lets that. `/design-system`'s onboarding slide reads it too.
- */
-export const tileLetsOf =
-  (lets: TutorialLets) =>
-  (hex: TileHex): TileLets => ({ click: lets.open && hex.role === 'center', goIn: lets.goIn })
 
 interface HelpReadProps {
   tree: TileNode

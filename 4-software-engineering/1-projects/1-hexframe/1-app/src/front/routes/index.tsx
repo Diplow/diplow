@@ -58,7 +58,7 @@ import {
   withTutorial,
 } from '#/front/features/shipped/search'
 import { HelpRead, ShippedCanvas } from '#/front/features/shipped/Shipped'
-import type { TutorialLets } from '#/front/features/shipped/tutorial/rules'
+import type { TutorialRules } from '#/front/features/shipped/tutorial/rules'
 import { KeyWidgets } from '#/front/features/keys/KeyWidgets'
 import { readKeysSearch, withKeys } from '#/front/features/keys/search'
 import { useKeyWidgetState } from '#/front/features/keys/state/useKeyWidgetState'
@@ -181,9 +181,8 @@ function useHelpNavigation(turning: ReturnType<typeof useScreenState>['actions']
 
 /**
  * The tutorial's navigation on home, read-only: its Tiles, for the corner, read beside the canvas
- * without throwing, and only while it is `open` on the canvas, its canvas's view, whose center its
- * param holds, and the way back, the corner's mark, which carries the canvas to the user's Root, the
- * System's view and change set aside as they were when the tutorial took it.
+ * without throwing, and only while it is `open` on the canvas, and its canvas's view, whose center
+ * its param holds.
  */
 function useTutorialNavigation(open: boolean) {
   const navigate = Route.useNavigate()
@@ -194,55 +193,68 @@ function useTutorialNavigation(open: boolean) {
     onViewChange: (view: CanvasView) => {
       void navigate({ search: (current) => tutorialOn(current, view) })
     },
-    onHome: () => {
-      void navigate({ search: (current) => ({ ...screenOf(current), ...withTutorial(undefined) }) })
-    },
   }
 }
 
 /**
- * How home moves around a System hexframe ships: its Tiles, for the corner, its view, and, from the
- * tutorial, the way back.
+ * The way back from a System away from home, the corner's mark: the canvas to the user's Root, the
+ * System's view and change set aside as they were when the tutorial took it.
  */
+function useWayHome() {
+  const navigate = Route.useNavigate()
+  return () => {
+    void navigate({ search: (current) => ({ ...screenOf(current), ...withTutorial(undefined) }) })
+  }
+}
+
+/** How home moves around a System hexframe ships: its Tiles, for the corner, and its view. */
 interface ShippedNavigation {
   tree: TileNode | undefined
   onViewChange: (view: CanvasView) => void
-  onHome?: () => void
 }
 
 /**
  * The canvas and its corner while a System hexframe ships has them, read-only, the tutorial by its
- * rules (`lets`), which the chat follows too; none, the Account's System's then. The URL's view is the
- * canvas's, so meanwhile the System's view is its Root, which a Message is sent from.
+ * rules, which the chat follows too; none, the Account's System's then. A System away from home, the
+ * tutorial, is reached by a journey (`at`), and the corner's mark leads back from it. The URL's view
+ * is the canvas's, so meanwhile the System's view is its Root, which a Message is sent from.
  */
-function shippedSide(search: HomeSearch, navigation: Record<ShippedRoot, ShippedNavigation>) {
+function shippedSide(
+  search: HomeSearch,
+  navigation: Record<ShippedRoot, ShippedNavigation>,
+  onHome: () => void,
+) {
   const shown = shippedOnCanvas(search)
   if (shown === undefined) return undefined
-  const { shipped, view, lets } = shown
-  const { tree, onViewChange, onHome } = navigation[shipped]
+  const { shipped, view, away, rules } = shown
+  const { tree, onViewChange } = navigation[shipped]
   const systemView: CanvasView = {}
   return {
     systemView,
-    lets,
+    rules,
+    at: away ? shipped : home,
     canvas: (
       <ShippedSide
         key={shipped}
         shipped={shipped}
         view={view}
         onViewChange={onViewChange}
-        lets={lets}
+        rules={rules}
       />
     ),
-    corner: <Breadcrumb system={tree} view={view} onViewChange={onViewChange} onHome={onHome} />,
+    corner: (
+      <Breadcrumb
+        system={tree}
+        view={view}
+        onViewChange={onViewChange}
+        onHome={away ? onHome : undefined}
+      />
+    ),
   }
 }
 
-/**
- * Which System the canvas shows, as a journey goes: the tutorial is another star; the Account's own
- * and Help, which opens over it, are home.
- */
-const journeyAt = (search: HomeSearch) =>
-  shippedOnCanvas(search)?.shipped === 'tutorial' ? 'tutorial' : 'home'
+/** Where the canvas is, as a journey goes, while it shows the user's System or Help over it. */
+const home = 'home'
 
 /**
  * The Account's System, read outside every boundary without throwing, for what the chat sends and the
@@ -368,6 +380,7 @@ function SignedIn() {
   const tutorial = useTutorialNavigation(search.tutorial !== undefined)
   const openKeys = useOpenKeys(turning)
   const openTutorial = useOpenTutorial(turning)
+  const wayHome = useWayHome()
   const onSearchChange = (next: SearchChange) => {
     // A form, an import or an edit, opening: the tile widget comes, in front on a phone.
     if (opensWidget(search, next)) {
@@ -410,9 +423,10 @@ function SignedIn() {
   }
   // What the canvas shows: a System hexframe ships while the URL names it, else the Account's.
   const view = viewOf(search)
-  const side = shippedSide(search, { help, tutorial }) ?? {
+  const side = shippedSide(search, { help, tutorial }, wayHome) ?? {
     systemView: view,
-    lets: undefined,
+    rules: undefined,
+    at: home,
     canvas: (
       <SystemPage
         search={search}
@@ -443,13 +457,13 @@ function SignedIn() {
         said={screen.said}
         className="size-full"
         canvas={
-          <Journey at={journeyAt(search)}>
+          <Journey at={side.at}>
             <ReadBoundary>{side.canvas}</ReadBoundary>
           </Journey>
         }
         corner={side.corner}
         // The tutorial holds the composer back, as the onboarding does, until it introduces it.
-        composerAway={welcoming || side.lets?.composer === false}
+        composerAway={welcoming || side.rules?.composer === false}
         messages={
           <div className="grid gap-5">
             <ReadBoundary>
@@ -539,15 +553,15 @@ interface ShippedSideProps {
   shipped: ShippedRoot
   view: CanvasView
   onViewChange: (view: CanvasView) => void
-  /** What the tutorial lets through; none for Help. */
-  lets?: TutorialLets | undefined
+  /** The tutorial's rules; none for Help. */
+  rules?: TutorialRules | undefined
 }
 
 /**
  * The canvas side of a System hexframe ships, Help's or the tutorial's: on the canvas, read-only, the
  * tutorial by its rules.
  */
-function ShippedSide({ shipped, view, onViewChange, lets }: ShippedSideProps) {
+function ShippedSide({ shipped, view, onViewChange, rules }: ShippedSideProps) {
   // The page's language, from its URL: a shipped System's ids are the same in every language, so the
   // view holds.
   const { data } = useShipped(shipped, getLocale())
@@ -559,7 +573,7 @@ function ShippedSide({ shipped, view, onViewChange, lets }: ShippedSideProps) {
         tree={tree}
         view={view}
         onViewChange={onViewChange}
-        lets={lets}
+        rules={rules}
         className="min-h-0 flex-1"
       />
     </div>
