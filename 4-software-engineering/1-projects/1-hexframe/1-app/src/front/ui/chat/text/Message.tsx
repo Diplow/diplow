@@ -345,12 +345,24 @@ const aroundSaid: Record<AroundPart, () => string> = {
  * The tile's body and its six as the same six (HEX-122), once they are around it: what the agent has
  * said of them, how many have landed, and the body's lines that name one, by their numbers.
  */
-export interface ToldSix extends Omit<NamingLines, 'lit'> {
+interface ToldSix extends Omit<NamingLines, 'lit'> {
   said: AroundPart | undefined
   /** How many of the six have landed, in their order, while their landing is lit (`useAround`). */
   landed: number
   /** The line whose tile is pointed at, from its line or from the canvas; none while none is. */
   pointed: number | undefined
+}
+
+/**
+ * What the canvas and the chat each take of a tile's six as they play (HEX-122): the tile pointed at,
+ * from its line or on the canvas, lit there, what pointing at a tile on the canvas does, and the
+ * chat's `Told`.
+ */
+export interface SameSix {
+  pointed: string | undefined
+  /** A tile pointed at on the canvas, or let go; one no line names lights nothing. */
+  onPoint: (tile: string, pointing: boolean) => void
+  six: ToldSix
 }
 
 interface ToldProps {

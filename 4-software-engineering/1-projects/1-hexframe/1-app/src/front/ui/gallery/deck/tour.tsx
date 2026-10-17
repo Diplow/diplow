@@ -22,8 +22,8 @@ import { pathTo, type TileNode } from '../../canvas/view/tiles'
 import { centerOn, showView, type CanvasView } from '../../canvas/view/view'
 import { said } from '../../chat/samples'
 import { tutorialInvitation } from '../../chat/composer/commands'
-import { Message, Told, type ToldSix } from '../../chat/text/Message'
-import { useAround, useTold, type AroundPart, type ToldPart } from '../../motion'
+import { Message, Told, type SameSix } from '../../chat/text/Message'
+import { useSixPlaying, useTold, type SixPlaying, type ToldPart } from '../../motion'
 import { TileWidget } from '../../chat/widgets/tile/TileWidget'
 import { ScreenSlide, type Go } from './Deck'
 
@@ -167,21 +167,6 @@ interface TutorialShown extends CanvasRules {
   sameSix: boolean
 }
 
-/** The same six as they play on the slide, as on home: the six landing, the words, the tile pointed. */
-interface SixPlaying {
-  around: { landed: number; said: AroundPart | undefined }
-  pointed: string | undefined
-  setPointed: (next: (current: string | undefined) => string | undefined) => void
-  onShow: (tile: string) => void
-}
-
-/** What the canvas and the chat take of the same six: the tile pointed at, and the body's lines. */
-interface SameSix {
-  pointed: string | undefined
-  onPoint: (tile: string, pointing: boolean) => void
-  six: ToldSix
-}
-
 /**
  * The tutorial as home shows it, which the route reads and hands on, since `ui/` can't reach the
  * feature that rules it (`features/shipped/tutorial/rules.ts`): its Tiles in the reader's language,
@@ -283,11 +268,9 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
   // tutorial's rules once it has, its center answering once its body is told.
   const told = useTold(there?.tells(asked) === true)
   const shown = there?.rules(asked, told)
-  const same = useSameSix(there, shown?.sameSix === true)
-  const ask = (next: CanvasView) => {
-    setAsked(next)
-    same.letGo()
-  }
+  // Its body and its ring the same six once its rules show them, as on home (`useSameSix`).
+  const playing = useSixPlaying(shown?.sameSix === true)
+  const same = shown?.sameSix === true ? there?.sameSix(playing) : undefined
   const went = (next: CanvasView) => {
     setView(next)
     setDone(done + 1)
@@ -299,7 +282,7 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
   const travel = (to: boolean) => {
     setAway(to)
     setView({})
-    ask({})
+    setAsked({})
     setDone(done + 1)
   }
   return (
@@ -322,12 +305,12 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
               <Canvas
                 system={there.system}
                 view={shown.view}
-                onViewChange={ask}
+                onViewChange={setAsked}
                 looking={shown.looking}
                 lets={shown.lets}
                 introducesOpening={shown.introducesOpening}
-                marks={{ told, pointed: same.pointed }}
-                onPoint={same.onPoint}
+                marks={{ told, pointed: same?.pointed }}
+                onPoint={same?.onPoint}
                 className="min-h-0 flex-1"
               />
             )}
@@ -396,33 +379,12 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
               )}
               dawning
             />
-            {there !== undefined && <Told told={told} body={[there.body]} six={same.six} />}
+            {there !== undefined && <Told told={told} body={[there.body]} six={same?.six} />}
           </>
         )
       }
     />
   )
-}
-
-/** The tile pointed at let go, as the view changes. */
-interface Gone {
-  letGo: () => void
-}
-
-/**
- * The same six on the slide, as home plays them (`features/shipped/tutorial/six.ts`), while the
- * tutorial's rules show them: the six landing and the agent's words on one clock, the tile pointed
- * at, from its line or on the canvas, let go as the view changes. The deck holds the screen, so a
- * line shown brings nothing forward.
- */
-function useSameSix(tutorial: Tutorial | undefined, shown: boolean): Partial<SameSix> & Gone {
-  const around = useAround(shown)
-  const [pointed, setPointed] = useState<string>()
-  const letGo = () => {
-    setPointed(undefined)
-  }
-  if (!shown || tutorial === undefined) return { letGo }
-  return { ...tutorial.sameSix({ around, pointed, setPointed, onShow: () => undefined }), letGo }
 }
 
 /** Plays the onboarding again from the start, the page landing anew. */

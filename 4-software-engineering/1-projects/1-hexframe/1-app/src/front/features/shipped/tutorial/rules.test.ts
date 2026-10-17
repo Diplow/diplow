@@ -91,9 +91,16 @@ describe("the tutorial's center opened", () => {
     expect(tutorialTells(opened)).toBe(true)
   })
 
-  it('shows its body and its ring as the same six', () => {
-    expect(tutorialRules(opened).sameSix).toBe(true)
+  it('shows its body and its ring as the same six once its body is told', () => {
+    expect(tutorialRules(opened, 'body').sameSix).toBe(true)
   })
+
+  it.each([undefined, 'title', 'preview'] as const)(
+    'waits for its body, told again after a reload, while the agent has told %s',
+    (told: ToldPart | undefined) => {
+      expect(tutorialRules(opened, told).sameSix).toBe(false)
+    },
+  )
 
   it('is where a link asking for its ring lands, whatever the agent has told', () => {
     expect(tutorialRules(opened, undefined).view).toEqual(opened)

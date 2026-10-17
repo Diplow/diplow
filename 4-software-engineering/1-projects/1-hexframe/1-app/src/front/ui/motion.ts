@@ -7,7 +7,8 @@
 // of a play in beats, one every `--stagger-beat`, and the parts the tutorial tells a tile's words in
 // by it, lit on the canvas and said in the chat at once (HEX-120); and a tile's six as they land
 // around it, which the chat lights its body's lines by, and what the agent says of them then
-// (HEX-122). Both sides and the screen read it, so it sits beside the theme.
+// (HEX-122), and which of them is pointed at. Both sides and the screen read it, so it sits beside
+// the theme.
 import { useEffect, useEffectEvent, useState } from 'react'
 
 /**
@@ -131,6 +132,35 @@ export function useAround(around: boolean): Around {
   const landed = useLanded(around)
   const beat = useBeats(aroundInTurn.length, around)
   return { landed, said: aroundInTurn[beat - 1] }
+}
+
+/**
+ * A tile's six around it as they play (HEX-122): their landing and the agent's words on one clock
+ * (`useAround`), and the one of them pointed at, by its id, from a line naming it in the chat or on
+ * the canvas, which both sides light.
+ */
+export interface SixPlaying {
+  around: Around
+  /** The tile pointed at; none while none is. */
+  pointed: string | undefined
+  /** Where the tile pointed at is kept, as a state's setter keeps it. */
+  setPointed: (next: (current: string | undefined) => string | undefined) => void
+}
+
+/**
+ * A tile's six around it as they play while `shown`, from the start each time they show anew: the
+ * clock of `useAround`, and the tile pointed at, let go once they no longer show, so none is lit
+ * when they come back.
+ */
+export function useSixPlaying(shown: boolean): SixPlaying {
+  const around = useAround(shown)
+  const [pointed, setPointed] = useState<string>()
+  const [was, setWas] = useState(shown)
+  if (was !== shown) {
+    setWas(shown)
+    setPointed(undefined)
+  }
+  return { around, pointed, setPointed }
 }
 
 /** How many tiles there are around one: its six. */

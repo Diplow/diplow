@@ -2,12 +2,13 @@
 // its six landing one by one, each lighting the line of the body that names it, the agent's few
 // words then, and a line pointed at in the chat, or a tile on the canvas, lighting both, the tile
 // and its line; a line clicked or tapped shows its tile, which a phone brings forward for a glance.
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
-import { useAround } from '#/front/ui/motion'
+import type { SameSix } from '#/front/ui/chat/text/Message'
+import { useSixPlaying } from '#/front/ui/motion'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 
-import { ringOf, sameSixOf, type SameSix } from './ring'
+import { ringOf, sameSixOf } from './ring'
 
 interface SameSixInput {
   /** The tutorial's Tiles as the canvas draws them, its center their Root; none until read. */
@@ -21,31 +22,17 @@ interface SameSixInput {
 }
 
 /**
- * The same six as home plays them, from the start each time its rules show them anew: the six
- * landing and the agent's words on one clock (`useAround`), and the tile pointed at, from either
- * side, let go once they are no longer shown.
+ * The same six as home plays them, from the start each time its rules show them anew, on the
+ * tutorial's ring (`useSixPlaying`, `sameSixOf`), a line shown naming its tile by its title.
  */
 export function useSameSix({ tree, body, shown, onShow }: SameSixInput): Partial<SameSix> {
   const ring = useMemo(
     () => (tree === undefined || body === undefined ? undefined : ringOf(tree, body)),
     [tree, body],
   )
-  const on = shown && ring !== undefined
-  const around = useAround(on)
-  const [pointed, setPointed] = useState<string>()
-  // A tile pointed at while the six showed is let go with them, so none is lit when they come back.
-  const [wasOn, setWasOn] = useState(on)
-  if (wasOn !== on) {
-    setWasOn(on)
-    setPointed(undefined)
-  }
+  const playing = useSixPlaying(shown && ring !== undefined)
   if (!shown || ring === undefined || tree === undefined) return {}
-  return sameSixOf(ring, {
-    around,
-    pointed,
-    setPointed,
-    onShow: (tile) => {
-      onShow(findTile(tree, tile)?.title ?? tile)
-    },
+  return sameSixOf(ring, playing, (tile) => {
+    onShow(findTile(tree, tile)?.title ?? tile)
   })
 }

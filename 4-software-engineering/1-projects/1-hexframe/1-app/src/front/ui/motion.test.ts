@@ -10,6 +10,7 @@ import {
   toldUpTo,
   useAround,
   useBeats,
+  useSixPlaying,
   useTold,
 } from './motion'
 
@@ -255,5 +256,25 @@ describe('aroundUpTo', () => {
     expect(aroundUpTo(undefined)).toEqual([])
     expect(aroundUpTo('same')).toEqual(['same'])
     expect(aroundUpTo('yours')).toEqual(['same', 'yours'])
+  })
+})
+
+describe('useSixPlaying', () => {
+  it('keeps the tile pointed at while the six show, and lets it go once they no longer do', () => {
+    vi.useFakeTimers()
+    const { result, rerender } = renderHook(
+      (props: { shown: boolean }) => useSixPlaying(props.shown),
+      {
+        initialProps: { shown: true },
+      },
+    )
+    settled(() => {
+      result.current.setPointed(() => 'tutorial/2')
+    })
+    expect(result.current.pointed).toBe('tutorial/2')
+    rerender({ shown: false })
+    expect(result.current.pointed).toBeUndefined()
+    rerender({ shown: true })
+    expect(result.current.pointed).toBeUndefined()
   })
 })

@@ -43,7 +43,7 @@ interface Step {
    * then its body in the chat (HEX-120), which stays told once the center opens.
    */
   tells: boolean
-  /** The center's body and its ring shown as the same six (HEX-122). */
+  /** The center's body and its ring shown as the same six, once its body is told (HEX-122). */
   sameSix: boolean
 }
 
@@ -88,7 +88,8 @@ export function tutorialRules(asked: CanvasView, told?: ToldPart): TutorialRules
     lets: (hex) => ({ click: step.open && hex.role === 'center', recenter: step.recenter }),
     introducesOpening: step.open,
     composer: step.composer,
-    sameSix: step.sameSix,
+    // The lines are the body's, so they show once the body is told, after a reload too.
+    sameSix: step.sameSix && told === 'body',
   }
 }
 

@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest'
 
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
+import type { SixPlaying } from '#/front/ui/motion'
 
-import { ringOf, sameSixOf, type SixPlaying } from './ring'
+import { ringOf, sameSixOf } from './ring'
 
 // A tile's body and its ring as the same six: each numbered line names the Child in the Direction
 // its number says, and that Child names its line back; a line that names no Child lights nothing.
@@ -59,9 +60,8 @@ describe('sameSixOf', () => {
       setPointed: (next) => {
         state.pointed = next(state.pointed)
       },
-      onShow: (id) => state.shown.push(id),
     }
-    return { same: sameSixOf(ring, play), state }
+    return { same: sameSixOf(ring, play, (id) => state.shown.push(id)), state }
   }
 
   it('says what the agent said and how many landed, and which lines name a tile', () => {
