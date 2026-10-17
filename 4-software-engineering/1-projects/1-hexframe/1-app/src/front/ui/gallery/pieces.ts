@@ -175,6 +175,13 @@ export const pieces = [
     note: m.gallery_note_key_widget,
   },
   {
+    name: 'ShareWidget',
+    tier: 'chat',
+    sources: ['ui/chat/widgets/share/ShareWidget.tsx'],
+    madeOf: ['Widget'],
+    note: m.gallery_note_share_widget,
+  },
+  {
     name: 'HelpWidget',
     tier: 'chat',
     sources: ['ui/chat/widgets/help/HelpWidget.tsx'],

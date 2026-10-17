@@ -218,7 +218,9 @@ describe('who reaches a Tile, set by its owner from a Session', () => {
     const after = await value(run(request(stranger), Mapping.systemAt(star)))
     expect(Object.keys(after.tiles)).toEqual([])
     // Bob, who never read Journal, learns nothing of who does.
-    expect(await run(request(bob), Mapping.whoReaches({ tile: journal.id }))).toMatchObject(notFound)
+    expect(await run(request(bob), Mapping.whoReaches({ tile: journal.id }))).toMatchObject(
+      notFound,
+    )
   })
 
   it('refuses a Key, a Turn’s Key, anyone but the owner, and a signed-out call', async () => {

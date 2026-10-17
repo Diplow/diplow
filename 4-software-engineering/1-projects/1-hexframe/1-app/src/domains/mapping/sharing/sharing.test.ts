@@ -90,26 +90,28 @@ layer(TestTiles)('who reaches a Tile, set by its owner, over PGlite', (it) => {
     }),
   )
 
-  it.effect('refuses anyone but its owner, and the owner without a Session, and changes nothing', () =>
-    Effect.gen(function* () {
-      const { own, star, journal, entry, garden } = yield* anasSystem
-      yield* setting(own, journal.id, 'read')
-      const passer = stranger(star)
-      const keyed: Mapping.Acting = { ...own, actor: { ...own.actor, session: false } }
-      const refusals = [
-        // A Tile the stranger reads: NotAllowed, which says nothing of who else does.
-        [passer, journal.id, 'NotAllowed'],
-        // One kept from them: no Tile at all.
-        [passer, garden.id, 'TileNotFound'],
-        // The owner through a Key, a Turn's Key or an agent.
-        [keyed, garden.id, 'NotAllowed'],
-      ] as const
-      for (const [acting, tile, refused] of refusals) {
-        expect(yield* Effect.flip(setting(acting, tile, 'read'))).toMatchObject({ _tag: refused })
-        expect(yield* Effect.flip(whoReaches(acting, tile))).toMatchObject({ _tag: refused })
-      }
-      expect(yield* readBy(passer)).toEqual([entry.id, journal.id].sort())
-    }),
+  it.effect(
+    'refuses anyone but its owner, and the owner without a Session, and changes nothing',
+    () =>
+      Effect.gen(function* () {
+        const { own, star, journal, entry, garden } = yield* anasSystem
+        yield* setting(own, journal.id, 'read')
+        const passer = stranger(star)
+        const keyed: Mapping.Acting = { ...own, actor: { ...own.actor, session: false } }
+        const refusals = [
+          // A Tile the stranger reads: NotAllowed, which says nothing of who else does.
+          [passer, journal.id, 'NotAllowed'],
+          // One kept from them: no Tile at all.
+          [passer, garden.id, 'TileNotFound'],
+          // The owner through a Key, a Turn's Key or an agent.
+          [keyed, garden.id, 'NotAllowed'],
+        ] as const
+        for (const [acting, tile, refused] of refusals) {
+          expect(yield* Effect.flip(setting(acting, tile, 'read'))).toMatchObject({ _tag: refused })
+          expect(yield* Effect.flip(whoReaches(acting, tile))).toMatchObject({ _tag: refused })
+        }
+        expect(yield* readBy(passer)).toEqual([entry.id, journal.id].sort())
+      }),
   )
 
   it.effect('refuses a Tile hexframe ships, a Reference and an id the System holds none of', () =>

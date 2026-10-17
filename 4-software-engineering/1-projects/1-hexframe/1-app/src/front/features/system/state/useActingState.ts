@@ -3,7 +3,8 @@
 // swaps. A line that changes the URL opens a form, an import or the move there (`withChange`); one
 // that writes sends its write at once, the change ending as it is sent: a Tile moved to a free place
 // of its ring, swapped, turned into the other kind, a Reference removed, a delete once the dialog is
-// confirmed. A copy goes to the clipboard, an export to the chat, and the agent's lines to the
+// confirmed. Share opens who may see the Tile in the chat, through the URL, as a form does. A copy goes
+// to the clipboard, an export to the chat, and the agent's lines to the
 // composer, which names the Tile first (HEX-110). Lines that go somewhere are the canvas's own. A refusal takes its channel, a toast, or brings the move back (`useRefusalState`).
 import { useState } from 'react'
 
@@ -180,6 +181,9 @@ export function useActingState(input: ActingInput) {
         // One export at a time, as the chat shows one.
         if (!exporting.pending)
           exporting.start({ tile: { id, title }, below: tilesBelow(flat, id) })
+        return
+      case 'share':
+        begin({ kind: 'share', id })
         return
       case 'delete':
         setDeleting(hex.tile)

@@ -52,7 +52,7 @@ export const grantsOf = (database: Database['Service']) => ({
 })
 
 /** The subject of a Grant, as a row names it: its kind, and its id, none for Everyone. */
-export type GrantSubjectRow = Pick<GrantRow, 'subject' | 'subjectId'>
+type GrantSubjectRow = Pick<GrantRow, 'subject' | 'subjectId'>
 
 /** The rows of a subject's Grants: its kind, and its id or, for Everyone, none. */
 const ofSubject = ({ subject, subjectId }: GrantSubjectRow) =>
@@ -80,10 +80,7 @@ const inTransaction = <A, E>(query: Effect.Effect<A, E>) => InTransaction.use(()
 
 /** The writes of the Grants of the owner's System, each to a Tile it holds alone. */
 export const grantWritesOf = (database: Database['Service'], owner: string): GrantWrites => {
-  const tilesOfOwner = database
-    .select({ id: tile.id })
-    .from(tile)
-    .where(eq(tile.ownerId, owner))
+  const tilesOfOwner = database.select({ id: tile.id }).from(tile).where(eq(tile.ownerId, owner))
   return {
     setGrant: (row) =>
       inTransaction(

@@ -20,6 +20,7 @@ import {
   Pencil,
   Plus,
   Search,
+  Share2,
   Sparkles,
   Split,
   Trash2,
@@ -237,6 +238,9 @@ function lineOf(verb: Verb, subject: Subject): Line {
       }
     case 'copy':
       return { icon: <Copy />, label: m.tile_menu_copy }
+    case 'share':
+      // Its widget opens in the chat.
+      return { icon: <Share2 />, shortcut: { key: 's' }, label: m.tile_menu_share }
     case 'export':
       return { icon: <Download />, shortcut: { key: 'e', shift: true }, label: m.tile_menu_export }
     case 'delete': {
