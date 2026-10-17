@@ -1,8 +1,8 @@
-// The chat's text in pieces: plain words, a tile named, who acted, named, and a command named, which a
-// click runs (HEX-118). Every piece of the chat takes its text this way, so a tile reads the same in a
-// Message, an event, a Proposal's change and a receipt. A sentence keeps its order in each language:
-// its message is read with a mark in each tile's place, then cut at the marks and woven with the
-// tiles (`weave`).
+// The chat's text in pieces: plain words, a tile named, who acted, named, and a command named,
+// which a click runs (HEX-118). Every piece of the chat takes its text this way, so a tile reads
+// the same in a Message, an event, a Proposal's change and a receipt. A sentence keeps its order in
+// each language: its message is read with a mark in each tile's place, then cut at the marks and
+// woven with the tiles (`weave`).
 import { Mention, type MentionProps, type Voice } from './Mention'
 
 /** A command named in the chat: as it is typed, its `/` first, in the reader's language. */
@@ -13,8 +13,8 @@ interface CommandNamed {
 }
 
 /**
- * One piece of a text: words, a tile named, who acted, by name, in the first ink, or a command named,
- * which a click runs.
+ * One piece of a text: words, a tile named, who acted, by name, in the first ink, or a command
+ * named, which a click runs.
  */
 export type Word =
   | string
@@ -41,9 +41,9 @@ export function Said({ words, voice }: { words: Words; voice?: Voice }) {
 }
 
 /**
- * A command named, in the user's amber, as the composer marks it typed, since it is theirs to run, a
- * faint underline under it: a click runs it. Inline, it cannot grow to a finger's 44px; its hit area
- * does, beyond its line.
+ * A command named, in the user's amber, as the composer marks it typed, since it is theirs to run,
+ * a faint underline under it: a click runs it. Inline, it cannot grow to a finger's 44px; its hit
+ * area does, beyond its line.
  */
 function Command({ name, onRun }: CommandNamed) {
   return (

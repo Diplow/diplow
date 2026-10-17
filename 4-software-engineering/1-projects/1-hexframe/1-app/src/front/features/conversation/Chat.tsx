@@ -9,12 +9,13 @@
 // the next Turn works, the canvas's center unless the Message opens with a link, naming a Tile
 // carried from the canvas or one a menu asks the agent about; its commands switch the Mode, undo
 // what the agent last applied, open Help or the Keys, show the tutorial, or go to another language.
-// While a Turn runs, the field waits and send becomes Stop. It offers the Account's Tiles to `@`, from
-// the System the page holds. The Mode, as the poll last saw it, shows under the field, switched
-// through `useSetMode`, the one switched to shown while the switch is on its way. Each is shown inside
-// a ReadBoundary, which a failed read lands in. And `ChatInvitation`, the agent's one line after the
-// receipt at the conversation's foot, inviting a new account's first command, `/tutorial`, while its
-// Root holds nothing and nothing was said, which the composer then offers first (HEX-118).
+// While a Turn runs, the field waits and send becomes Stop. It offers the Account's Tiles to `@`,
+// from the System the page holds. The Mode, as the poll last saw it, shows under the field,
+// switched through `useSetMode`, the one switched to shown while the switch is on its way. Each is
+// shown inside a ReadBoundary, which a failed read lands in. And `ChatInvitation`, the agent's one
+// line after the receipt at the conversation's foot, inviting a new account's first command,
+// `/tutorial`, while its Root holds nothing and nothing was said, which the composer then offers
+// first (HEX-118).
 import { type ComponentProps, useMemo, useState } from 'react'
 
 import type { Entry, Mode } from '#/domains/assistant/entities'
@@ -84,9 +85,9 @@ const idsOf = (entries: ReadonlyArray<Entry> | undefined): ReadonlySet<string> =
   new Set(entries?.map(({ id }) => id))
 
 /**
- * Whether the chat invites the tutorial now (`invitesTutorial`), from the System and the days of the
- * Conversation the page holds, each read without throwing, its failure another boundary's, and the
- * Messages on their way; never before both are read.
+ * Whether the chat invites the tutorial now (`invitesTutorial`), from the System and the days of
+ * the Conversation the page holds, each read without throwing, its failure another boundary's, and
+ * the Messages on their way; never before both are read.
  */
 function useInvited(): boolean {
   const { data: system } = useSystem({ throwing: false })
@@ -273,7 +274,7 @@ export function ChatComposer(props: ChatComposerProps) {
 interface ChatInvitationProps {
   /** `/tutorial`: the tutorial on the canvas. */
   onTutorial: () => void
-  /** It comes with a new account's dawn, the pseudo's receipt above it: fifth, once the composer rose. */
+  /** It comes with a new account's dawn, under the pseudo's receipt: fifth, after the composer. */
   dawning: boolean
 }
 

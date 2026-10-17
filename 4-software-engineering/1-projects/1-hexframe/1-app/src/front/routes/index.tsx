@@ -22,11 +22,11 @@
 // the canvas under a mouse or a pen is carried over the page, the composer naming it where it is let
 // go (HEX-110). A new account is asked its pseudo first, the composer and the corner's path held back
 // until it names the Root; then, while its Root holds nothing and nothing was said, the agent's one
-// line after the receipt invites its first command, `/tutorial`, which the tutorial's param answers,
-// and which the composer offers first (HEX-118). Signed out, the same screen: Help on the
-// canvas, two lines from the agent and its offer to read the centered topic in full, and the sign-in
-// widget in the composer's place, which signs in or up, then comes back where the user was. While the
-// help widget is open, a topic centered on Help's canvas turns its page.
+// line after the receipt invites its first command, `/tutorial`, which the tutorial's param
+// answers, and which the composer offers first (HEX-118). Signed out, the same screen: Help on the
+// canvas, two lines from the agent and its offer to read the centered topic in full, and the
+// sign-in widget in the composer's place, which signs in or up, then comes back where the user was.
+// While the help widget is open, a topic centered on Help's canvas turns its page.
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 

@@ -3,8 +3,10 @@
 // sending the line dims and the words wait in grey; failed, the line turns destructive with a retry.
 // While the agent's are coming each word inks in from a slight blur, and a small violet hex breathes
 // where the next will land. Both run on to the curve line by line, each line at its own height, and a
-// click on one copies its words, as Enter does on one the keyboard reached: no tool waits beside them.
-// Hovered, one that copies lights up, its line or its hex and its ground.
+// click on one copies its words, as Enter does on one the keyboard reached: no tool waits beside
+// them, and a click on a tile or a command it names does what that does instead. Hovered, one that
+// copies lights up, its line or its hex and its ground. The agent's invitation to a new account's
+// first command rises fifth of its dawn (HEX-118).
 import { cn } from 'cn'
 import { useId, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react'
 

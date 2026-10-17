@@ -1,13 +1,13 @@
 // What a `/` at the start of a Message offers: the commands that take the place of a menu, each run by
 // the app itself, never sent to the agent. On a tile, what the canvas's menu holds; on the agent, what
-// the Mode and a Turn answer to; on the user, what the header held, the language among them, and the
-// tutorial, which the chat invites a new account to (HEX-118). Each is
-// named in the reader's language; the language also answers to its name in every other one, so a
-// reader lost in a language they cannot read still finds it. A page offers those it runs (`among`):
-// what the caret stands in lists them (`commandTypingAt`), the command a Message opens with is marked
-// in the field (`commandMarkOf`) and run once sent (`openingCommand`), and the language lists the
-// languages, each in its own words. How the field shows a Tile's link once picked, whole, is read here
-// too (`wholeLink`, `showsLink`), and what the field marks (`fieldMarksOf`), so the feature's `@` and
+// the Mode and a Turn answer to; on the user, what the header held, the language among them, and
+// the tutorial, which the chat invites a new account to (HEX-118). Each is named in the reader's
+// language; the language also answers to its name in every other one, so a reader lost in a
+// language they cannot read still finds it. A page offers those it runs (`among`): what the caret
+// stands in lists them (`commandTypingAt`), the command a Message opens with is marked in the field
+// (`commandMarkOf`) and run once sent (`openingCommand`), and the language lists the languages,
+// each in its own words. How the field shows a Tile's link once picked, whole, is read here too
+// (`wholeLink`, `showsLink`), and what the field marks (`fieldMarksOf`), so the feature's `@` and
 // the gallery's demo read them alike. Pure.
 import {
   ArrowUpRight,

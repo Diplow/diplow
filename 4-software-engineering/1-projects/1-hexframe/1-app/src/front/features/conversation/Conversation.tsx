@@ -5,12 +5,12 @@
 // user's Messages still on their way, or refused with a retry, and where they went that it doesn't
 // hold yet, the navigation under way included, and the agent's step while a Turn runs.
 // And its foot, the composer: the user writes to the agent, `@`s their Tiles, opens a command with a
-// `/`, the language among them, and sees the Mode under the field, or that the Account may not use the
-// Assistant, and where the next Turn works; while a Turn runs the field waits and send becomes Stop. A
-// Tile carried from the canvas is named where it is let go over the composer, and one a menu asks the
-// agent about is named first (HEX-110). Home's screen takes the two apart,
-// the timeline beside the curve and the foot at the chat's foot; `Conversation` lays them out
-// together, for /design-system.
+// `/`, the language and the tutorial among them, the one the chat invites listed first, and sees
+// the Mode under the field, or that the Account may not use the Assistant, and where the next Turn
+// works; while a Turn runs the field waits and send becomes Stop. A Tile carried from the canvas is
+// named where it is let go over the composer, and one a menu asks the agent about is named first
+// (HEX-110). Home's screen takes the two apart, the timeline beside the curve and the foot at the
+// chat's foot; `Conversation` lays them out together, for /design-system.
 import { cn } from 'cn'
 import { useRef } from 'react'
 
@@ -282,8 +282,8 @@ function goTo(locale: string) {
 /**
  * The composer, through its state hook: a pick put in the field, its caret after it, or the language
  * gone to; a Message sent as words, or a command the field opens with run, the Mode's by its switch,
- * `/undo` by `onUndo`, `/keys` by `onKeys`, `/tutorial` by `onTutorial`, the words after it sent once
- * it ran, `/help` by `onHelp`, the words after it the topic it looks for, and `/logout` by
+ * `/undo` by `onUndo`, `/keys` by `onKeys`, `/tutorial` by `onTutorial`, the words after it sent
+ * once it ran, `/help` by `onHelp`, the words after it the topic it looks for, and `/logout` by
  * `onSignOut`, alone. The command the chat invites comes first in what a `/` lists.
  */
 export function ConversationFoot({

@@ -161,10 +161,10 @@ export function pickOf(
 
 /**
  * What the field submits: a language to go to; Help to open, on the topic the words after it find, if
- * any; the Mode, an Undo, the Keys or the tutorial, and the words after the command, if any, a Message
- * to send once it ran; or a Message, trimmed, each link picked by its Tile's id. A `/` no command
- * offered answers is sent as words, as the list says. None when it names a language hexframe is not
- * in: the field keeps what was typed.
+ * any; the Mode, an Undo, the Keys or the tutorial, and the words after the command, if any, a
+ * Message to send once it ran; or a Message, trimmed, each link picked by its Tile's id. A `/` no
+ * command offered answers is sent as words, as the list says. None when it names a language
+ * hexframe is not in: the field keeps what was typed.
  */
 export type Submitted =
   | { readonly language: string }
