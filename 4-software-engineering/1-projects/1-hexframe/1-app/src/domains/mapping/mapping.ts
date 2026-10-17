@@ -4,7 +4,8 @@
 // it locked (`decide`, ./operations/), then writes one change per event it made, and publishes them.
 // Every operation is for one Account, which the API layer takes from IAM's Session. A change runs in
 // the transaction the API layer opens around it (`transactional`): its type requires one. Beside each
-// Account's System, every Account reads Help (./help/help.ts), which no change may name.
+// Account's System, every Account reads the Systems hexframe ships, Help and the tutorial
+// (./shipped/shipped.ts), which no change may name.
 import { Effect, Result, Struct } from 'effect'
 
 import { Bus } from '#/domains/bus'
@@ -12,9 +13,15 @@ import type { InTransaction } from '#/repositories/database/database'
 import { type IdTaken, Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/tiles'
 import { Zip } from '#/repositories/zip/zip'
 
-import { BatchOutdated, HelpReadOnly, TileIdTaken, TileNotFound } from './errors'
+import { BatchOutdated, ShippedReadOnly, TileIdTaken, TileNotFound } from './errors'
 import { type LinkOf, exportOf, placesOf } from './files/files'
-import { findInHelp, flatHelp, type HelpLanguage, isHelpId } from './help/help'
+import {
+  findInShipped,
+  flatShipped,
+  isShippedId,
+  type ShippedLanguage,
+  shippedOf,
+} from './shipped/shipped'
 import {
   type Content,
   type Depth,
@@ -62,7 +69,7 @@ import {
   extended,
 } from './operations'
 
-export { HelpId, helpRoot, helpSystem } from './help/help'
+export { HelpId, helpRoot, type ShippedRoot, shippedSystem, tutorialRoot } from './shipped/shipped'
 
 /** The content of a Root nobody has named yet, and of every Reference, which keeps none of its own. */
 export const untitled: Content = { title: '', preview: '', body: '' }
@@ -143,29 +150,31 @@ interface Read<F extends Field> {
 }
 
 /**
- * Where a read starts, how far down it goes, what it asks of each Tile, and Help's language; and the
- * batch it shows folded over the System, Operations kept to run later, none when it reads the
- * System as it stands.
+ * Where a read starts, how far down it goes, what it asks of each Tile, and the language of a System
+ * hexframe ships; and the batch it shows folded over the System, Operations kept to run later, none
+ * when it reads the System as it stands.
  */
 interface ReadFrom<O extends Field, F extends Field> {
   readonly id?: string | undefined
   readonly depth: Depth
   readonly fields: FieldsAsked<O, F>
-  readonly language: HelpLanguage
+  readonly language: ShippedLanguage
   readonly over?: ReadonlyArray<Batched> | undefined
 }
 
 /**
  * What a read from a Tile of the Account's System finds, its Root when no id is given, or from a Tile
- * of Help by its id, `depth` generations down, with only the fields asked of the Tile and of each Tile
- * below it. A Tile of another System is `TileNotFound`, as is a Help id no Tile of Help has. Reading
- * the Root adds it.
+ * of a System hexframe ships by its id, `depth` generations down, with only the fields asked of the
+ * Tile and of each Tile below it. A Tile of another System is `TileNotFound`, as is an id of a shipped
+ * System that none of its Tiles has. Reading the Root adds it.
  */
 const find = <O extends Field, F extends Field>(
   accountId: string,
   { id, depth, fields, language, over = [] }: ReadFrom<O, F>,
 ): Effect.Effect<Found<O, F>, TileNotFound, Tiles> => {
-  if (id !== undefined && isHelpId(id)) return findInHelp(id, { fields, language })
+  const shipped = id === undefined ? undefined : shippedOf(id)
+  if (id !== undefined && shipped !== undefined)
+    return findInShipped(shipped, id, { fields, language })
   if (over.length === 0) return findOwn(accountId, { id, depth, fields })
   return Effect.flatMap(system(accountId), (held) => {
     const found = foundIn(fold(held, over).system, { id, depth, fields })
@@ -205,12 +214,13 @@ const findOwn = <O extends Field, F extends Field>(
   )
 
 /**
- * A Tile of the Account's System, its Root when no id is given, or a Tile of Help by its id, read
- * `depth` generations down with only the fields asked of each Tile, and its parent. A Reference shows
- * the id, Title and Preview of the Tile it points at. A Body is read only when asked, and a Tile of
- * another System is `TileNotFound`, as is a Help id no Tile of Help has. A Tile of Help is read in
- * `language`, which the caller picks. Reading the Root adds it, as `system` does. With a batch `over`
- * it, the System it reads is the one the batch makes (`fold`).
+ * A Tile of the Account's System, its Root when no id is given, or a Tile of a System hexframe ships,
+ * Help or the tutorial, by its id, read `depth` generations down with only the fields asked of each
+ * Tile, and its parent. A Reference shows the id, Title and Preview of the Tile it points at. A Body is
+ * read only when asked, and a Tile of another System is `TileNotFound`, as is an id of a shipped
+ * System that none of its Tiles has. A shipped System is read in `language`, which the caller picks.
+ * Reading the Root adds it, as `system` does. With a batch `over` it, the System it reads is the one
+ * the batch makes (`fold`).
  */
 export const readTile = <F extends Field>(
   accountId: string,
@@ -233,11 +243,11 @@ type Around = Required<Pick<ReadTile<(typeof glimpsed)[number]>, 'branches' | 'l
 export type Opened<F extends Field> = Read<F> & Around
 
 /**
- * A Tile of the Account's System, its Root when no id is given, or a Tile of Help by its id, opened:
- * it with only the fields asked, its parent, and its Branches, Leaves and Context by Title and
- * Preview, as a reader opens a Tile before deciding which of them to open next. One read, one
- * generation down, and a Body below the Tile never leaves the database. With a batch `over` it, the
- * System it reads is the one the batch makes (`fold`).
+ * A Tile of the Account's System, its Root when no id is given, or a Tile of a System hexframe ships
+ * by its id, opened: it with only the fields asked, its parent, and its Branches, Leaves and Context
+ * by Title and Preview, as a reader opens a Tile before deciding which of them to open next. One read,
+ * one generation down, and a Body below the Tile never leaves the database. With a batch `over` it,
+ * the System it reads is the one the batch makes (`fold`).
  */
 export const openTile = <F extends Field>(
   accountId: string,
@@ -299,11 +309,11 @@ export const systemFiles = (accountId: string, link: LinkOf, over: ReadonlyArray
   })
 
 /**
- * Refuses a change that names a Tile of Help, whichever schema let its ids through: Help is read by
- * every Account and written by none.
+ * Refuses a change that names a Tile of a System hexframe ships, Help or the tutorial, whichever
+ * schema let its ids through: each is read by every Account and written by none.
  */
-const outsideHelp = (ids: ReadonlyArray<string>) =>
-  ids.some(isHelpId) ? Effect.fail(new HelpReadOnly()) : Effect.void
+const outsideShipped = (ids: ReadonlyArray<string>) =>
+  ids.some(isShippedId) ? Effect.fail(new ShippedReadOnly()) : Effect.void
 
 /**
  * Ends a change that made these events, written already: writes the System's Version as `evolve` left
@@ -334,7 +344,7 @@ export interface Changed<A> {
 
 /**
  * A change to the Account's System that is no Operation, `landing/`'s import, naming these Tiles, none
- * of them Help's, on its rows as they stand once its Root is locked: alone until the transaction
+ * of them a shipped System's, on its rows as they stand once its Root is locked: alone until the transaction
  * around it ends, so what it checked still holds when it writes. Once it wrote its rows, it is ended
  * as an Operation is: the System's Version it leaves written, its events published.
  */
@@ -347,7 +357,7 @@ export const changing = <A, E>(
   ) => Effect.Effect<Changed<A>, E, InTransaction>,
 ) =>
   Effect.andThen(
-    outsideHelp(names),
+    outsideShipped(names),
     Tiles.use((tiles) =>
       Effect.gen(function* () {
         const writes = tiles.writes(accountId)
@@ -385,13 +395,18 @@ const rooted = (found: System | undefined) =>
     : Effect.succeed(found)
 
 /**
- * The System an Operation is decided on. Help's, which no Account owns, when it names a Tile of Help,
- * whichever end of a move or a swap, so `decide` refuses it. Otherwise the Account's, its Root added
- * on its first read as any read adds it, then locked until the transaction ends: no other change runs
- * meanwhile, so what `decide` ruled on still holds when its events are written.
+ * The System an Operation is decided on. The System hexframe ships whose Tile it names, Help's or the
+ * tutorial's, whichever end of a move or a swap, which no Account owns, so `decide` refuses it.
+ * Otherwise the Account's, its Root added on its first read as any read adds it, then locked until the
+ * transaction ends: no other change runs meanwhile, so what `decide` ruled on still holds when its
+ * events are written.
  */
-const decidedOn = (accountId: string, operation: Operation) =>
-  namedBy(operation).some(isHelpId) ? rooted(flatHelp('en')) : locked(accountId)
+const decidedOn = (accountId: string, operation: Operation) => {
+  const shipped = namedBy(operation)
+    .map(shippedOf)
+    .find((root) => root !== undefined)
+  return shipped === undefined ? locked(accountId) : rooted(flatShipped(shipped, 'en'))
+}
 
 /**
  * The Account's System, its Root added on its first read as any read adds it, then locked until the
@@ -622,7 +637,7 @@ export const addToBatch = <O extends Operation>(
   operation: O,
 ) =>
   Effect.gen(function* () {
-    yield* outsideHelp(namedBy(operation))
+    yield* outsideShipped(namedBy(operation))
     const folded = yield* Effect.fromResult(whole(yield* system(accountId), over))
     const made = yield* madeFor(operation)
     const next = yield* Effect.fromResult(added(folded, operation, made))
@@ -646,7 +661,7 @@ const ranWhole = <T>(
   { folding, onTaken }: { folding: typeof whole; onTaken: OnTaken<T> },
 ) =>
   Effect.gen(function* () {
-    yield* outsideHelp(batch.flatMap(({ operation }) => namedBy(operation)))
+    yield* outsideShipped(batch.flatMap(({ operation }) => namedBy(operation)))
     const system = yield* locked(accountId)
     const { events } = yield* Effect.fromResult(folding(system, batch))
     yield* writtenAll(accountId, system, events, onTaken)
@@ -659,8 +674,8 @@ const ranWhole = <T>(
  * before it made, a create under the id it was added with. One that no longer applies, a Tile it
  * names changed since, by the Version it carries, or gone, refuses the whole batch, `BatchOutdated`,
  * nothing written nor published (`whole`); else every event is written and published as an
- * Operation's are. A batch naming a Tile of Help is `HelpReadOnly`. Answers how many events it made
- * and what undoes it (`undoOf`), from the System it ran on.
+ * Operation's are. A batch naming a Tile of a System hexframe ships is `ShippedReadOnly`. Answers how
+ * many events it made and what undoes it (`undoOf`), from the System it ran on.
  */
 export const runBatch = (accountId: string, batch: ReadonlyArray<Batched>) =>
   Effect.map(

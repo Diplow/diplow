@@ -5,11 +5,11 @@ import type { SignedOut } from '#/domains/iam/errors'
 import { type KeyProof, type Session, signedIn } from '#/domains/iam/iam'
 import type {
   DirectionTaken,
-  HelpReadOnly,
   LeafHoldsNothing,
   MovedUnderItself,
   PreviewTooLong,
   RootFixed,
+  ShippedReadOnly,
   TileChanged,
   TileIdTaken,
   TileNotFound,
@@ -21,7 +21,7 @@ import { glimpses, ownTile } from '#/domains/mapping/mapping'
 import type { Failure } from '../report/errors/failure'
 import { noKey, run, type Services, type StartContext } from '../server/run'
 import {
-  HelpLanguage,
+  ShippedLanguage,
   NewReference,
   NewTile,
   ReferenceSlot,
@@ -155,6 +155,15 @@ describe("Mapping's server functions", () => {
     expect(english.branches[5]).toMatchObject({ id: 'help/5', title: 'Operations' })
     expect(french.branches[5]).toMatchObject({ id: 'help/5', title: 'Les opérations' })
     expect(french.branches[5]?.body).toMatch(/Déplacer/)
+  })
+
+  it('reads the tutorial whole for anyone, signed out included, in the language asked', async () => {
+    const english = await value(run(request(false), Mapping.tutorial({ language: 'en' })))
+    const french = await value(run(request(), Mapping.tutorial({ language: 'fr' })))
+    expect(english).toMatchObject({ _tag: 'Tile', id: 'tutorial', title: 'Tutorial' })
+    expect(english.branches[1]).toMatchObject({ id: 'tutorial/1', title: 'Go in' })
+    expect(french.branches[1]).toMatchObject({ id: 'tutorial/1', title: 'Entrer' })
+    expect(french.body).toMatch(/^Ceci est le contenu/)
   })
 
   it('runs for an Account its Key proves as for one its Session proves', async () => {
@@ -328,10 +337,11 @@ describe('a create under the id its caller chose', () => {
 })
 
 describe("the errors Mapping's server functions can fail with", () => {
-  it('are each listed by its type, a write refusing Help', () => {
+  it('are each listed by its type, a write refusing the Systems hexframe ships', () => {
     type ErrorOf<P> = P extends Effect.Effect<unknown, infer E, unknown> ? E : never
     expectTypeOf<ErrorOf<typeof Mapping.system>>().toEqualTypeOf<SignedOut>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.help>>>().toEqualTypeOf<never>()
+    expectTypeOf<ErrorOf<ReturnType<typeof Mapping.tutorial>>>().toEqualTypeOf<never>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createTile>>>().toEqualTypeOf<
       | SignedOut
       | TitleMissing
@@ -340,10 +350,10 @@ describe("the errors Mapping's server functions can fail with", () => {
       | DirectionTaken
       | TileIdTaken
       | LeafHoldsNothing
-      | HelpReadOnly
+      | ShippedReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.editTile>>>().toEqualTypeOf<
-      SignedOut | TitleMissing | PreviewTooLong | TileNotFound | TileChanged | HelpReadOnly
+      SignedOut | TitleMissing | PreviewTooLong | TileNotFound | TileChanged | ShippedReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.moveTile>>>().toEqualTypeOf<
       | SignedOut
@@ -353,7 +363,7 @@ describe("the errors Mapping's server functions can fail with", () => {
       | MovedUnderItself
       | DirectionTaken
       | LeafHoldsNothing
-      | HelpReadOnly
+      | ShippedReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.swapTiles>>>().toEqualTypeOf<
       | SignedOut
@@ -362,16 +372,16 @@ describe("the errors Mapping's server functions can fail with", () => {
       | RootFixed
       | MovedUnderItself
       | LeafHoldsNothing
-      | HelpReadOnly
+      | ShippedReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.deleteTile>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | TileChanged | RootFixed | HelpReadOnly
+      SignedOut | TileNotFound | TileChanged | RootFixed | ShippedReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createReference>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | TileChanged | DirectionTaken | LeafHoldsNothing | HelpReadOnly
+      SignedOut | TileNotFound | TileChanged | DirectionTaken | LeafHoldsNothing | ShippedReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.deleteReference>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | TileChanged | HelpReadOnly
+      SignedOut | TileNotFound | TileChanged | ShippedReadOnly
     >()
   })
 })
@@ -409,16 +419,14 @@ describe("the schemas Mapping's server functions validate by", () => {
     expect(accepts(TileMove, { id: t, version: 1, parent: p, slot: { leaf: 3 } })).toBe(true)
   })
 
-  it("read Help in one of the app's languages, nothing else", () => {
-    expect(['en', 'fr'].map((language) => accepts(HelpLanguage, { language }))).toEqual([
+  it("read Help or the tutorial in one of the app's languages, nothing else", () => {
+    expect(['en', 'fr'].map((language) => accepts(ShippedLanguage, { language }))).toEqual([
       true,
       true,
     ])
-    expect(['de', '', undefined].map((language) => accepts(HelpLanguage, { language }))).toEqual([
-      false,
-      false,
-      false,
-    ])
+    expect(['de', '', undefined].map((language) => accepts(ShippedLanguage, { language }))).toEqual(
+      [false, false, false],
+    )
   })
 
   it('swap two Tiles named by their ids, each with the Version read of it', () => {

@@ -18,12 +18,12 @@ import {
 import {
   BatchOutdated,
   DirectionTaken,
-  HelpReadOnly,
   ImportRefused,
   LeafHoldsNothing,
   MovedUnderItself,
   PreviewTooLong,
   RootFixed,
+  ShippedReadOnly,
   TileChanged,
   TileIdTaken,
   TileNotFound,
@@ -182,7 +182,10 @@ describe("the message table, on Mapping's refusals", () => {
       new LeafHoldsNothing(),
       "A leaf is a single file: nothing goes under it, and a tile with anything below it can't become one.",
     ],
-    [new HelpReadOnly(), "Help is hexframe's guide: everyone reads it, nobody changes it."],
+    [
+      new ShippedReadOnly(),
+      "Help and the tutorial are hexframe's own: everyone reads them, nobody changes them.",
+    ],
     [
       new ImportRefused({ fields: ['files'], faults: [{ path: '', fault: 'UploadTooLarge' }] }),
       'This import was refused and nothing was written: each file at fault says why.',
@@ -240,8 +243,8 @@ describe("the message table, on Mapping's refusals", () => {
       'Une feuille est un seul fichier : rien ne va dessous, et une tuile qui a quelque chose dessous ne peut pas en devenir une.',
     ],
     [
-      new HelpReadOnly(),
-      'L’aide est le guide de hexframe : tout le monde la lit, personne ne la modifie.',
+      new ShippedReadOnly(),
+      'L’aide et le tutoriel appartiennent à hexframe : tout le monde les lit, personne ne les modifie.',
     ],
   ])("words Mapping's %s in French too", (failure, sentence) => {
     overwriteGetLocale(() => 'fr')

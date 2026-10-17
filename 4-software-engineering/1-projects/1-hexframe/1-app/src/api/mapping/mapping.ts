@@ -1,7 +1,8 @@
 // Mapping's server functions: one per operation, for the signed-in Account, which the middleware has
-// already put on the context as its Session, and `help`, Help whole, for any visitor. Each validates
-// its input, then hands its program (./programs.ts) to the helper; its type lists the errors it can
-// fail with. `exportTile` answers its zip as a download (./files/download.ts); `importTiles` takes a form.
+// already put on the context as its Session, and `help` and `tutorial`, a System hexframe ships
+// whole, for any visitor. Each validates its input, then hands its program (./programs.ts) to the
+// helper; its type lists the errors it can fail with. `exportTile` answers its zip as a download
+// (./files/download.ts); `importTiles` takes a form.
 import { createServerFn } from '@tanstack/react-start'
 import { Schema, Struct } from 'effect'
 
@@ -69,8 +70,8 @@ export const ImportUpload = Schema.fromFormData(
   }),
 )
 
-/** Help, in one of the app's languages: the page's, from its URL. */
-export const HelpLanguage = Schema.Struct({ language: Schema.Literals(locales) })
+/** A System hexframe ships, Help or the tutorial, in one of the app's languages: the page's. */
+export const ShippedLanguage = Schema.Struct({ language: Schema.Literals(locales) })
 
 /** A call that takes nothing. */
 const Nothing = Schema.toStandardSchemaV1(Schema.Undefined)
@@ -88,8 +89,16 @@ export const system = createServerFn({ method: 'GET' })
  * not, anyone reads it.
  */
 export const help = createServerFn({ method: 'GET' })
-  .validator(Schema.toStandardSchemaV1(HelpLanguage))
+  .validator(Schema.toStandardSchemaV1(ShippedLanguage))
   .handler(({ data, context }) => run(context, Mapping.help(data)))
+
+/**
+ * The tutorial whole, in the language asked, as Help is read: its Root with everything below it,
+ * Bodies included. Signed in or not, anyone reads it.
+ */
+export const tutorial = createServerFn({ method: 'GET' })
+  .validator(Schema.toStandardSchemaV1(ShippedLanguage))
+  .handler(({ data, context }) => run(context, Mapping.tutorial(data)))
 
 /**
  * A Tile of the Account's System and everything below it, as a zip to download, `<slug>.zip`: on the
