@@ -1,0 +1,53 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_eb2c82211b20e8::t_371649bc617fb6 6-7,171-172,305-306
+  s_eb2c82211b20e8::t_6ad8f3b6aa9848 56,781-783
+  s_eb2c82211b20e8::t_d9a3bb9f57f41a 8-10,307-308
+  s_eb2c82211b20e8::t_391a8f9ec16e52 767-770
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/grants.ts
+  s_eb2c82211b20e8::t_616bab64bf2741 1-6
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/may.test.ts
+  s_eb2c82211b20e8::t_08e021eaadcccc 15,179,210-251
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/testing.ts
+  s_eb2c82211b20e8::t_616bab64bf2741 1-35
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE.md
+  s_eb2c82211b20e8::t_b821e665670a49 28
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-sharing-organizations/decisions.md
+  s_eb2c82211b20e8::t_b821e665670a49 35,37
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_eb2c82211b20e8::t_b821e665670a49 43,46,77
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/tiles.ts
+  s_eb2c82211b20e8::t_616bab64bf2741 8-9,16
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.test.ts
+  s_eb2c82211b20e8::t_75fe9e300e8b78 23,50-53,619-639
+  s_eb2c82211b20e8::t_133fe9e16b17cd 640-641
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/rights.ts
+  s_eb2c82211b20e8::t_9735bbd0e92e4d 5-6
+  s_eb2c82211b20e8::t_d9a3bb9f57f41a 116-119
+  s_eb2c82211b20e8::t_ee77a27a4aced8 4,67,80-81,176-178,182,187
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/CLAUDE.md
+  s_eb2c82211b20e8::t_b821e665670a49 27
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/shared.test.ts
+  s_eb2c82211b20e8::t_504ff5ac74ed57 6,23
+  s_eb2c82211b20e8::t_0c809a70769df5 167-187
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/may.ts
+  s_eb2c82211b20e8::t_7490d7a34c6cbf 94-96,104-106,142
+  s_eb2c82211b20e8::t_9735bbd0e92e4d 10-12,80-93,101-103,107-112,118-119,123,129-131,134-141,143-149
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/CLAUDE.md
+  s_eb2c82211b20e8::t_b821e665670a49 27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e67e52a0599bbc6066978de7050ac7ed48b29d59",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
