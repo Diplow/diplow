@@ -22,6 +22,7 @@ import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from 're
 
 import type { Failure, Outcome } from '#/api/report/errors/failure'
 import {
+  type Seen,
   type ShippedRoot,
   type System,
   type SystemTile,
@@ -62,6 +63,8 @@ import {
   shipped,
   swapTiles,
   system,
+  TileVisit,
+  visit,
 } from '#/api/mapping/mapping'
 
 import type { Locale } from '#/paraglide/runtime'
@@ -88,6 +91,32 @@ interface ImportVariables {
 export const systemRead = {
   ...read({ scope: systemScope, key: [], call: () => system({ data: undefined }) }),
   refetchOnWindowFocus: false,
+}
+
+/**
+ * The read of another's System, by its star, as the Account may see it (HEX-127), a query of its own
+ * beside the Account's. No Version is a visitor's to poll, since a count of changes would tell of
+ * the Tiles kept from them (`hexframe-app-sharing-organizations/decisions.md#DEC-3`): it is read
+ * again whenever the tab regains focus, and, as the Account's, once a write to the System settles.
+ */
+const visitRead = (star: string) => ({
+  ...read({ scope: systemScope, key: [star], call: () => system({ data: { system: star } }) }),
+  refetchOnWindowFocus: true,
+})
+
+/**
+ * Where a link to a Tile leads the Account (`/t/<id>`, HEX-127): the star of the System holding it,
+ * none for its own; undefined for a Tile it may not read, as for one that doesn't exist, and for a
+ * link naming no Tile, which is not sent. Any other failure is thrown, for the route to show.
+ */
+export async function leadsTo(tile: string): Promise<{ readonly system?: string } | undefined> {
+  if (!Schema.is(TileVisit)({ tile })) return undefined
+  try {
+    return await settle('visit', visit({ data: { tile } }))
+  } catch (error) {
+    if (asCallFailed(error, 'visit').failure.kind === 'NotFound') return undefined
+    throw error
+  }
 }
 
 /**
@@ -124,29 +153,55 @@ function pendingOf(mutation: Mutation): Pending {
   return pending
 }
 
+/** No pending write, the same every render. */
+const noWrites: ReadonlyArray<Pending> = []
+
+/** The System as the page shows it, and the gaps in what the Account may read of it. */
+export interface SystemShown {
+  /** Flat, the server's with every pending write folded over it, which Mapping's `decide` rules on. */
+  readonly system: System
+  /** Its tree, from its star. */
+  readonly root: SystemTile
+  /** What the writes on their way change. */
+  readonly underway: Underway
+  /** The Tiles it may read below Tiles kept from it, by id: none on its own System. */
+  readonly gaps: Seen['gaps']
+}
+
 /**
- * The Account's System as the page shows it: the server's, with every write to it still pending
+ * The Account's System as the page shows it, or, by its star, another's as the Account may see it:
+ * the server's, with every write to it still pending
  * folded over it in order, flat, which Mapping's `decide` rules on, and its tree, its Root, the user,
- * with everything below it. A write that settles stops being pending once the System read again has
+ * with everything below it, and the gaps; another's with no pending write laid over it, every write
+ * the page sends being the Account's own System's. A write that settles stops being
+ * pending once the System read again has
  * landed, so nothing flickers between its answer and the read. Undefined until the first read lands.
  * Shown inside a ReadBoundary, where its failure appears; signed out, it sends the user to sign in.
  * With `throwing: false`, for what shows beside the canvas, the chat: the same Query, read once,
  * whose failure throws nothing there and leaves it undefined, the canvas's boundary showing it. Not
  * a `frame` read, which would be a Query of its own and read the System twice.
  */
-export function useSystem({ throwing = true }: { throwing?: boolean } = {}): {
-  data: { system: System; root: SystemTile; underway: Underway } | undefined
+export function useSystem({ throwing = true, star }: { throwing?: boolean; star?: string } = {}): {
+  data: SystemShown | undefined
 } {
-  const { data } = useQuery(throwing ? systemRead : { ...systemRead, throwOnError: false })
-  const pending = useMutationState({
+  const query = star === undefined ? systemRead : visitRead(star)
+  const { data } = useQuery(throwing ? query : { ...query, throwOnError: false })
+  const writes = useMutationState({
     filters: { status: 'pending', predicate: inSystemQueue },
     select: pendingOf,
   })
+  // Every write the page sends is the Account's own System's: none is laid over another's.
+  const pending = star === undefined ? writes : noWrites
   return {
     data: useMemo(() => {
       if (data === undefined) return undefined
       const shown = overlaid(data, pending)
-      return { system: shown, root: systemOf(shown), underway: underwayOf(pending, data.root.id) }
+      return {
+        system: shown,
+        root: systemOf(shown),
+        underway: underwayOf(pending, data.root.id),
+        gaps: data.gaps,
+      }
     }, [data, pending]),
   }
 }

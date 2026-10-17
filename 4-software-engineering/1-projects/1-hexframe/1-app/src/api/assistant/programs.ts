@@ -36,8 +36,9 @@ const forSession = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, 
 /**
  * A day of the Account's Conversation, today when no date is asked: the day, its Entries oldest
  * first, and the Titles of the Tiles its navigations went to and its Messages link, as the System
- * holds them now, by id. A navigation and a link keep a Tile's id alone; a Tile the System no longer
- * holds has no Title there. With them, `earlier`, the instant of the latest Entry before the day,
+ * holding each now shows it to the Account, its own or one it visited (Mapping's `titlesAcross`), by id. A
+ * navigation and a link keep a Tile's id alone; a Tile no System holds any longer, or one kept from
+ * the Account since, has no Title there. With them, `earlier`, the instant of the latest Entry before the day,
  * where a reader scrolling back goes next, and `lastEntry`, the Entry last recorded in the
  * Conversation, and `proposal`, its open Proposal, how many writes it holds, which the page's poll
  * compares with its own (`latest`), and the writes themselves, which the canvas draws (`proposalNow`).
@@ -51,7 +52,7 @@ export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
       const proposal = yield* proposalNow(accountId)
       const day = { date: date ?? (yield* Assistant.today(offsets.offset)).date, ...offsets }
       const entries = yield* Assistant.day(accountId, day)
-      const titles = yield* Mapping.titles(
+      const titles = yield* Mapping.titlesAcross(
         yield* actingOnOwn(accountId, { session: false }),
         namedTiles(entries),
       )

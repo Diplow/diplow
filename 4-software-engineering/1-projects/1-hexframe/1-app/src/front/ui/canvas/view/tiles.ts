@@ -27,6 +27,14 @@ export interface TileNode {
   root?: 'named' | 'untitled' | 'empty'
   /** The pseudo the user is typing for their untitled Root, which its hex shows as they type. */
   naming?: string
+  /**
+   * A star's Tiles the reader may read under Tiles kept from them, each with what stands below it,
+   * hung from the star across the gap (`across`): drawn in none of its rings, since where each
+   * stands is not said, and reached by centering it, its ancestors a "…".
+   */
+  gaps?: readonly TileNode[]
+  /** A Tile hung from its star across a gap, one of the star's `gaps`: a "…" stands above it. */
+  across?: true
 }
 
 /** The Frame kinds of the ring around the center's hex. */
@@ -71,16 +79,20 @@ export function firstKindOf(tile: TileNode): OuterKind | undefined {
 
 /**
  * The Tiles from the System's root down to the one with this id, both included, Leaves and Context
- * Tiles included: the ancestors a breadcrumb shows. A Reference drawn under the id is not the Tile,
- * which stands elsewhere. Empty when no Tile has the id.
+ * Tiles included, and a Tile hung from the star across a gap, which comes right below the star: the
+ * ancestors a breadcrumb shows. A Reference drawn under the id is not the Tile, which stands
+ * elsewhere. Empty when no Tile has the id.
  */
 export function pathTo(system: TileNode, id: string): TileNode[] {
   if (system.id === id && system.reference === undefined) return [system]
-  const below = directions.flatMap((direction) => [
-    system.branches?.[direction],
-    system.leaves?.[direction],
-    system.context?.[direction],
-  ])
+  const below = [
+    ...directions.flatMap((direction) => [
+      system.branches?.[direction],
+      system.leaves?.[direction],
+      system.context?.[direction],
+    ]),
+    ...(system.gaps ?? []),
+  ]
   for (const tile of below) {
     const path = tile ? pathTo(tile, id) : []
     if (path.length > 0) return [system, ...path]

@@ -162,6 +162,13 @@ export class Tiles extends Context.Service<
      */
     readonly starHolding: (id: string) => Effect.Effect<string | undefined>
     /**
+     * The star of the System holding the row of each of these ids, by id, in one query: an id no row
+     * has is left out. What names the Systems a timeline's Tiles stand in.
+     */
+    readonly starsHolding: (
+      ids: ReadonlyArray<string>,
+    ) => Effect.Effect<ReadonlyMap<string, string>>
+    /**
      * The row of this id in the owner's System, then the rows below it, `depth` generations down,
      * one query per generation, that row and the rows below each with only the content columns
      * asked of them. `undefined` when the System holds no row of this id.
@@ -374,6 +381,18 @@ const starsOf = (database: Database['Service']) => {
           Effect.orDie,
           Effect.map(([found]) => found?.id),
         ),
+    starsHolding: (ids: ReadonlyArray<string>) =>
+      ids.length === 0
+        ? Effect.succeed(new Map<string, string>())
+        : database
+            .select({ id: tile.id, star: star.id })
+            .from(tile)
+            .innerJoin(star, and(eq(star.ownerId, tile.ownerId), isNull(star.parentId)))
+            .where(inArray(tile.id, [...ids]))
+            .pipe(
+              Effect.orDie,
+              Effect.map((rows) => new Map(rows.map((row) => [row.id, row.star] as const))),
+            ),
   }
 }
 

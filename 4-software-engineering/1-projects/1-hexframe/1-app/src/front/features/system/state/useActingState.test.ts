@@ -21,6 +21,7 @@ import type { TileAct } from '#/front/ui/canvas/tile/menu/verbs'
 import { showView, type CanvasView } from '#/front/ui/canvas/view/view'
 import { firstKindOf } from '#/front/ui/canvas/view/tiles'
 
+import type { Reach } from '../acting'
 import type { SearchChange, SystemSearch } from '../search/search'
 import { canvasTree } from '../tree'
 import { useActingState } from './useActingState'
@@ -106,7 +107,10 @@ function answering(
 
 const done = { ok: true, value: undefined }
 
-function render(search: SystemSearch = {}, { exporting = false } = {}) {
+function render(
+  search: SystemSearch = {},
+  { exporting = false, reach = 'owned' }: { exporting?: boolean; reach?: Reach } = {},
+) {
   const client = makeQueryClient()
   const onSearchChange = vi.fn<(change: SearchChange) => void>()
   const start = vi.fn()
@@ -116,7 +120,7 @@ function render(search: SystemSearch = {}, { exporting = false } = {}) {
   const { result } = renderHook(
     () =>
       useActingState({
-        systems: { root, flat, tree },
+        systems: { root, flat, tree, reach },
         search,
         onSearchChange,
         exporting: { start, pending: exporting },
@@ -445,5 +449,37 @@ describe('a move under way', () => {
       expect(Mapping.swapTiles).toHaveBeenCalledOnce()
     })
     expect(changed(onSearchChange, { move: 'bare' })).toMatchObject({ move: undefined })
+  })
+})
+
+describe("on a System only looked at, someone else's", () => {
+  const free = (view: CanvasView = {}) =>
+    layoutCanvas(showView(tree, opened(view))).flatMap((drawn) =>
+      drawn.kind === 'empty' ? [drawn.slot] : [],
+    )
+
+  it('offers no free slot a click, nor a menu', () => {
+    const { result } = render({}, { reach: 'looking' })
+    const slots = free()
+    expect(slots.length).toBeGreaterThan(0)
+    for (const slot of slots) {
+      expect(result.current.emptySlots(slot)).toBeUndefined()
+      expect(result.current.acting.slot(slot)).toBeUndefined()
+    }
+  })
+
+  it("leaves every line that acts out of a Tile's menu, Copy aside", () => {
+    const { result } = render({}, { reach: 'looking' })
+    const without = result.current.acting.tile(hex('tile:holding'))?.without
+    expect(without).toEqual(expect.arrayContaining(['edit', 'move', 'delete', 'add', 'ask-agent']))
+    expect(without).not.toContain('copy')
+  })
+
+  it('is no move, as a link may name one', () => {
+    const { result } = render({ move: 'bare' }, { reach: 'looking' })
+    expect(result.current.move.moving).toBeUndefined()
+    expect(free().map((slot) => result.current.emptySlots(slot))).toEqual(
+      free().map(() => undefined),
+    )
   })
 })

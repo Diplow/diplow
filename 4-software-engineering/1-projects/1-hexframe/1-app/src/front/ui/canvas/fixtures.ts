@@ -109,6 +109,17 @@ export const tooling: TileNode = {
  */
 export const elsewhere: TileNode = hexframe
 
+/**
+ * Someone else's System as a visitor sees it (HEX-127): its star, by its card, and hexframe, which
+ * they share, hung from it across the Tiles kept from the visitor, a "…" in the corner.
+ */
+export const visited: TileNode = {
+  id: 'ana',
+  title: 'Ana',
+  preview: 'Ana’s System, as you may see it.',
+  gaps: [{ ...hexframe, across: true }],
+}
+
 /** A view per state the canvas has to get right, named by the fixture's own Tiles. */
 export const fixtureViews = {
   folded: {},

@@ -1,9 +1,10 @@
 // Acting on the System from the canvas, a Tile's menu as Mapping reads it: what the menu says of a
 // Tile (`Subject`: its kind, where it stands, what is below it, whether it takes a new Tile or turns
 // into the other kind), the frames its Add and Move submenus draw, each place offering what Mapping
-// would make of it, and the lines home leaves out. What a line sends: a Tile moved to a place of
-// its ring or turned into the other kind, a swap, a Reference removed. Pure: Mapping's `decide`
-// rules on the flat System the page shows, so the client knows no rule of its own.
+// would make of it, and the lines home leaves out, every one that acts but Copy on a System only
+// looked at, someone else's (`Reach`, HEX-127). What a line sends: a Tile moved to a place of its
+// ring or turned into the other kind, a swap, a Reference removed. Pure: Mapping's `decide` rules on
+// the flat System the page shows, so the client knows no rule of its own.
 import { Result } from 'effect'
 
 import {
@@ -19,7 +20,7 @@ import {
 import { decide } from '#/domains/mapping/operations'
 import type { TileHex } from '#/front/ui/canvas/state/useCanvasState'
 import type { PickerFrame } from '#/front/ui/canvas/tile/menu/Picker'
-import type { Subject, Verb } from '#/front/ui/canvas/tile/menu/verbs'
+import { groupsOf, type Subject, type Verb } from '#/front/ui/canvas/tile/menu/verbs'
 import { lookOf } from '#/front/ui/canvas/view/looks'
 import { pathTo, type TileNode } from '#/front/ui/canvas/view/tiles'
 
@@ -31,11 +32,28 @@ export function tradeOf(flat: System, moving: TileNode, held: TileNode) {
   return swapsWith(flat, moving, held) ? swapOf(flat, moving.id, held.id) : undefined
 }
 
+/**
+ * How far the user acts on the System the canvas draws: on their own, every line; on one they visit,
+ * someone else's, they look and copy alone for now, whatever Mapping's Grants give them there, since
+ * a write the page sends acts on their own System until a write reaches the one it names (HEX-132)
+ * and a Turn starts at home alone until one may start elsewhere (HEX-134). What a visitor sees at all
+ * is Mapping's to say (`Seen`); `hexframe-app-sharing-organizations/decisions.md#DEC-4`.
+ */
+export type Reach = 'owned' | 'looking'
+
+/** Whether the user acts on the System beyond looking: writes it, moves in it, asks the agent there. */
+export const acts = (reach: Reach) => reach === 'owned'
+
+/** The lines a Tile's menu keeps on a System only looked at: those that go somewhere, and Copy. */
+const looks: ReadonlySet<Verb> = new Set(['back-out', 'open', 'go-in', 'show-context', 'copy'])
+
 /** The System three ways: its tree, Mapping's; flat, which `decide` rules on; as the canvas draws it. */
 export interface Systems {
   root: SystemTile
   flat: System
   tree: TileNode
+  /** What the user may do on it. */
+  reach: Reach
 }
 
 /**
@@ -194,14 +212,19 @@ export function framesOf(systems: Systems, hex: TileHex) {
 
 /**
  * The lines home leaves out of a Tile's menu: a Leaf's Context, which a Leaf has none of; an import
- * as the Root, but into an empty System's; the agent's on a broken Reference, which names no Tile.
+ * as the Root, but into an empty System's; the agent's on a broken Reference, which names no Tile;
+ * and, on a System only looked at, every line that acts but Copy.
  */
-export function withoutOf({ root }: Systems, hex: TileHex): Verb[] {
-  return [
+export function withoutOf(systems: Systems, hex: TileHex): Verb[] {
+  const left: Verb[] = [
     ...(hex.tile.broken === true ? (['ask-agent'] as const) : []),
     ...(hex.tile.leaf === true ? (['show-context'] as const) : []),
-    ...(hex.tile.root !== undefined && !isEmptySystem(root) ? (['import'] as const) : []),
+    ...(hex.tile.root !== undefined && !isEmptySystem(systems.root) ? (['import'] as const) : []),
   ]
+  if (acts(systems.reach)) return left
+  const subject = subjectOf(systems, hex)
+  const acting = subject === undefined ? [] : groupsOf(subject).flat()
+  return [...left, ...acting.filter((verb) => !looks.has(verb) && !left.includes(verb))]
 }
 
 /** The move of a Tile to the free place `at` of the ring it stands in, as Mapping would make it. */

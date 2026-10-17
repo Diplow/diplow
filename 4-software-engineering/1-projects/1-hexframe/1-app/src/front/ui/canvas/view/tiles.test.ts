@@ -55,6 +55,14 @@ describe('pathTo', () => {
     expect(pathTo(referenced, 'b').map((found) => found.id)).toEqual(['root', 'b'])
     expect(findTile(referenced, 'b')?.branches?.[1]?.id).toBe('b1')
   })
+
+  it('reaches a Tile hung from the star across a gap, and what stands below it, right below the star', () => {
+    const across = tile('far', { across: true, branches: { 2: tile('far2') } })
+    const visited = tile('star', { branches: { 1: tile('near') }, gaps: [across] })
+    expect(pathTo(visited, 'far2').map((found) => found.id)).toEqual(['star', 'far', 'far2'])
+    expect(findTile(visited, 'far')?.across).toBe(true)
+    expect(pathTo(visited, 'near').map((found) => found.id)).toEqual(['star', 'near'])
+  })
 })
 
 describe('kindsOf', () => {

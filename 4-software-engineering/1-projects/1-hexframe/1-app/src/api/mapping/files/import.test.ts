@@ -14,7 +14,7 @@ import { systemOf } from '#/domains/mapping/entities'
 import { archiveOf } from '#/repositories/zip/testing'
 
 import { noKey, run, type StartContext } from '../../server/run'
-import { tileLink, tileOfLink } from './download'
+import { tileLink, tileOfLink, tilePage } from './download'
 import { ImportUpload } from '../mapping'
 import * as Mapping from '../programs'
 
@@ -190,6 +190,16 @@ describe('the link an import reads back as a Tile', () => {
 
   it('is the link an export writes, home centered on it, on the site the request reached', () => {
     expect(tileOfLink(site)(tileLink(site)(id))).toBe(id)
+  })
+
+  it('is the Tile’s own page on the site, the link Copy link copies, in any language', () => {
+    expect(tileOfLink(site)(`https://hexframe.test/t/${id}`)).toBe(id)
+    expect(tileOfLink(site)(`https://hexframe.test/fr/t/${id}`)).toBe(id)
+    expect(tileOfLink(site)(`https://elsewhere.test/t/${id}`)).toBeUndefined()
+    expect(tileOfLink(site)(`https://hexframe.test/t/${id}/more`)).toBeUndefined()
+    expect(tileOfLink(site)(tilePage(site)(id))).toBe(id)
+    // A bad escape is no link, not a failed import.
+    expect(tileOfLink(site)('https://hexframe.test/t/%zz')).toBeUndefined()
   })
 
   it('is no Tile on another site, another page, without a center, or not a link at all', () => {

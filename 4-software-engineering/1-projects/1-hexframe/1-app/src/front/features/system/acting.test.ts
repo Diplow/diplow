@@ -85,7 +85,7 @@ const opened = (view: CanvasView): CanvasView => ({
   frame: firstKindOf(showView(tree, view).center),
   ...view,
 })
-const systems: Systems = { root, flat, tree }
+const systems: Systems = { root, flat, tree, reach: 'owned' }
 
 /** The hexes a view draws, each Tile's by its key. */
 function hexesOf(view: CanvasView = {}): Record<string, TileHex> {
@@ -258,7 +258,45 @@ describe('the lines home leaves out', () => {
     const [center] = layoutCanvas(showView(alone, {})).filter(
       (drawn): drawn is TileHex => drawn.kind === 'tile',
     )
-    expect(center && withoutOf({ root: bare, flat: empty, tree: alone }, center)).toEqual([])
+    expect(
+      center && withoutOf({ root: bare, flat: empty, tree: alone, reach: 'owned' }, center),
+    ).toEqual([])
+  })
+})
+
+describe('the lines a System only looked at leaves out', () => {
+  // Someone else's System, visited: looked at, whatever its Grants give the visitor.
+  const theirs: Systems = { ...systems, reach: 'looking' }
+
+  it('keeps on a Tile the lines that go somewhere and Copy, none that acts', () => {
+    expect(withoutOf(theirs, hex('tile:holding'))).toEqual([
+      'edit',
+      'add',
+      'move',
+      'ask-agent',
+      'export',
+      'delete',
+    ])
+    expect(withoutOf(systems, hex('tile:holding'))).toEqual([])
+  })
+
+  it('leaves out what home leaves out, then the rest that acts, once each', () => {
+    const without = withoutOf(theirs, hex('tile:notes'))
+    expect(without[0]).toBe('show-context')
+    expect(without).toEqual(expect.arrayContaining(['edit', 'move', 'ask-agent', 'delete']))
+    expect(new Set(without).size).toBe(without.length)
+  })
+
+  it('takes a Reference out of no slot, and offers the center no line that acts', () => {
+    expect(withoutOf(theirs, hex('tile:root:context:3', { inner: 'context' }))).toEqual([
+      'ask-agent',
+      'remove-reference',
+    ])
+    const center = withoutOf(theirs, hex('tile:root'))
+    expect(center).toEqual(expect.arrayContaining(['import', 'edit', 'ask-agent', 'export']))
+    expect(center.filter((verb) => verb === 'import')).toHaveLength(1)
+    expect(center).not.toEqual(expect.arrayContaining(['back-out']))
+    expect(center).not.toContain('copy')
   })
 })
 
