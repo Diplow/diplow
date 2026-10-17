@@ -21,7 +21,12 @@ import { Schema } from 'effect'
 import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 
 import type { Failure, Outcome } from '#/api/report/errors/failure'
-import { type System, type SystemTile, systemOf } from '#/domains/mapping/entities'
+import {
+  type ShippedRoot,
+  type System,
+  type SystemTile,
+  systemOf,
+} from '#/domains/mapping/entities'
 import type { Operation, OperationName } from '#/domains/mapping/operations'
 import { type Download, downloaded } from '#/api/mapping/files/download'
 import { type Given, type LeftOut, type Prepared, prepared } from './import/upload'
@@ -52,9 +57,9 @@ import {
   deleteTile,
   editTile,
   exportTile,
-  help,
   importTiles,
   moveTile,
+  shipped,
   swapTiles,
   system,
 } from '#/api/mapping/mapping'
@@ -255,17 +260,26 @@ export function useEachSystemWrite(react: () => void, moment: 'made' | 'settled'
 }
 
 /**
- * Help whole, in the page's language, Bodies included, read as the System is. Anyone reads it, so it
- * never sends the user to sign in. With `throwing: false`, for the canvas's corner beside it, the same
- * Query, whose failure throws nothing there and leaves it undefined, the canvas's boundary showing it.
+ * A System hexframe ships, Help or the tutorial, by its Root, whole, in the page's language, Bodies
+ * included, read as the System is. Anyone reads it, so it never sends the user to sign in. With
+ * `throwing: false`, for the canvas's corner beside it, the same Query, whose failure throws nothing
+ * there and leaves it undefined, the canvas's boundary showing it; with `enabled: false`, the same
+ * Query read by nobody but the canvas, so a corner reads a System only while the canvas shows it.
  */
-export function useHelp(language: Locale, { throwing = true }: { throwing?: boolean } = {}) {
-  const helpRead = read({
-    scope: 'help',
-    key: [language],
-    call: () => help({ data: { language } }),
-  })
-  return useQuery(throwing ? helpRead : { ...helpRead, throwOnError: false })
+export function useShipped(
+  root: ShippedRoot,
+  language: Locale,
+  { throwing = true, enabled = true }: { throwing?: boolean; enabled?: boolean } = {},
+) {
+  const query = {
+    ...read({
+      scope: 'shipped',
+      key: [root, language],
+      call: () => shipped({ data: { root, language } }),
+    }),
+    enabled,
+  }
+  return useQuery(throwing ? query : { ...query, throwOnError: false })
 }
 
 /**

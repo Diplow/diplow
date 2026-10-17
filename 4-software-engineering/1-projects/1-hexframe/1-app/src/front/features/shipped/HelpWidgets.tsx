@@ -5,7 +5,7 @@
 // URL's (`search.ts`); the route navigates.
 import { useMemo } from 'react'
 
-import { useHelp } from '#/front/client/mapping/queries'
+import { useShipped } from '#/front/client/mapping/queries'
 import { getLocale } from '#/paraglide/runtime'
 import { HelpWidget } from '#/front/ui/chat/widgets/help/HelpWidget'
 
@@ -23,7 +23,7 @@ interface HelpWidgetsProps {
 /** The help widget, open on a topic of Help. */
 export function HelpWidgets({ topic, onTopic, onDismiss }: HelpWidgetsProps) {
   // The page's language, from its URL: Help's ids are the same in every language, so the topic holds.
-  const { data } = useHelp(getLocale())
+  const { data } = useShipped('help', getLocale())
   const help = useMemo(() => (data === undefined ? undefined : helpNodeOf(data)), [data])
   if (help === undefined) return null
   const {

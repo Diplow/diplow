@@ -7,8 +7,10 @@
 // names bringing the canvas forward. The view and the change under way live in the search params, so
 // a link shows what its sender saw; a Tile's form, its import and its export open in the chat, at the
 // conversation's foot, as the tile widget, which a phone brings to the front, and so do the Keys
-// (`keys`) and Help (`help`), Help taking the canvas while its widget is open. Every gesture that
-// changes the view of the System is published on the client bus as a navigation fact, which the
+// (`keys`) and Help (`help`), Help taking the canvas while its widget is open; the tutorial takes it,
+// read-only as Help, while the URL names it (`tutorial`), and gives it back to the System when it
+// goes. Every gesture that changes the view of the System is published on the client bus as a
+// navigation fact, which the
 // Conversation's navigation sender merges and records once something else enters the timeline, a
 // Message the chat posts included, or the page is hidden. The page follows the System and the
 // Conversation, so a write it did not make, an agent's, a Key's or another tab's, shows on the canvas
@@ -29,7 +31,7 @@ import { useMemo, useState } from 'react'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { readSignInSearch, sessionIfAny } from '#/front/client/iam/guard'
 import { useFollowLatest } from '#/front/client/assistant/follow'
-import { useHelp, useSystem } from '#/front/client/mapping/queries'
+import { useShipped, useSystem } from '#/front/client/mapping/queries'
 import { accessOf, readAccessSearch, wayBack, withAccess } from '#/front/features/access/search'
 import { SignedOutLines, SignInFoot } from '#/front/features/access/SignedOut'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
@@ -37,10 +39,18 @@ import { publish } from '#/front/features/bus'
 import { ChatComposer, ChatTimeline } from '#/front/features/conversation/Chat'
 import { useNavigationSender } from '#/front/features/conversation/state/useNavigationSender'
 import { AskedAboutTile, Navigated } from '#/front/features/facts'
-import { HelpCanvas, HelpRead } from '#/front/features/help/Help'
-import { HelpWidgets } from '#/front/features/help/HelpWidgets'
-import { helpNodeOf, topicFound } from '#/front/features/help/nodes'
-import { readHelpSearch, turnedTo, withHelp } from '#/front/features/help/search'
+import { HelpWidgets } from '#/front/features/shipped/HelpWidgets'
+import { helpNodeOf, topicFound } from '#/front/features/shipped/nodes'
+import {
+  readHelpSearch,
+  readTutorialSearch,
+  shippedOnCanvas,
+  turnedTo,
+  tutorialOn,
+  withHelp,
+  withTutorial,
+} from '#/front/features/shipped/search'
+import { HelpRead, ShippedCanvas } from '#/front/features/shipped/Shipped'
 import { KeyWidgets } from '#/front/features/keys/KeyWidgets'
 import { readKeysSearch, withKeys } from '#/front/features/keys/search'
 import { useKeyWidgetState } from '#/front/features/keys/state/useKeyWidgetState'
@@ -69,16 +79,18 @@ import type { CanvasMarks } from '#/front/ui/canvas/Canvas'
 import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { centerOn, withViewIn, type CanvasView, type ViewAction } from '#/front/ui/canvas/view/view'
-import type { Direction } from '#/domains/mapping/entities'
+import type { Direction, ShippedRoot } from '#/domains/mapping/entities'
 
 /**
  * Home's search params, each feature's read on its own: the System's view and change, the Keys and
- * Help open in the chat, and, signed out, signing up and where to go once signed in.
+ * Help open in the chat, the tutorial on the canvas, and, signed out, signing up and where to go once
+ * signed in.
  */
 const readHomeSearch = (search: Record<string, unknown>) => ({
   ...readSystemSearch(search),
   ...readKeysSearch(search),
   ...readHelpSearch(search),
+  ...readTutorialSearch(search),
   ...readAccessSearch(search),
   ...readSignInSearch(search),
 })
@@ -107,7 +119,7 @@ const screenOf = ({ keys, help }: HomeSearch) => ({ keys, help })
  * the help widget reads its topics.
  */
 function useHelpTree() {
-  const { data } = useHelp(getLocale(), { throwing: false })
+  const { data } = useShipped('help', getLocale(), { throwing: false })
   return useMemo(
     () => (data === undefined ? undefined : { tree: canvasTree(data), topics: helpNodeOf(data) }),
     [data],
@@ -159,6 +171,47 @@ function useHelpNavigation(turning: ReturnType<typeof useScreenState>['actions']
 }
 
 /**
+ * The tutorial's navigation on home, read-only: its Tiles, for the corner, read beside the canvas
+ * without throwing, and only while it is `open` on the canvas, and its canvas's view, whose center
+ * its param holds.
+ */
+function useTutorialNavigation(open: boolean) {
+  const navigate = Route.useNavigate()
+  const { data } = useShipped('tutorial', getLocale(), { throwing: false, enabled: open })
+  const tree = useMemo(() => (data === undefined ? undefined : canvasTree(data)), [data])
+  return {
+    tree,
+    onViewChange: (view: CanvasView) => {
+      void navigate({ search: (current) => tutorialOn(current, view) })
+    },
+  }
+}
+
+/** How home moves around a System hexframe ships: its Tiles, for the corner, and its view. */
+interface ShippedNavigation {
+  tree: TileNode | undefined
+  onViewChange: (view: CanvasView) => void
+}
+
+/**
+ * The canvas and its corner while a System hexframe ships has them, read-only; none, the Account's
+ * System's then. The URL's view is the canvas's, so meanwhile the System's view is its Root, which a
+ * Message is sent from.
+ */
+function shippedSide(search: HomeSearch, navigation: Record<ShippedRoot, ShippedNavigation>) {
+  const shown = shippedOnCanvas(search)
+  if (shown === undefined) return undefined
+  const { shipped, view } = shown
+  const { tree, onViewChange } = navigation[shipped]
+  const systemView: CanvasView = {}
+  return {
+    systemView,
+    canvas: <ShippedSide key={shipped} shipped={shipped} view={view} onViewChange={onViewChange} />,
+    corner: <Breadcrumb system={tree} view={view} onViewChange={onViewChange} />,
+  }
+}
+
+/**
  * The Account's System, read outside every boundary without throwing, for what the chat sends and the
  * corner shows: a failed read shows on the canvas, in its own boundary, and leaves the chat up,
  * waiting to send, and the mark alone at the corner's head; and its Tiles as the canvas draws them,
@@ -205,7 +258,7 @@ function SignedOut() {
         className="size-full"
         canvas={
           <ReadBoundary>
-            <HelpSide view={view} onViewChange={help.onViewChange} />
+            <ShippedSide shipped="help" view={view} onViewChange={help.onViewChange} />
           </ReadBoundary>
         }
         corner={<Breadcrumb system={help.tree} view={view} onViewChange={help.onViewChange} />}
@@ -246,7 +299,10 @@ function SignedOut() {
   )
 }
 
-/** Signed in: the Account's System and its Conversation, the Keys and Help in the chat. */
+/**
+ * Signed in: the Account's System and its Conversation, the Keys and Help in the chat, Help or the
+ * tutorial taking the canvas while the URL names it.
+ */
 function SignedIn() {
   const search = Route.useSearch()
   const navigate = Route.useNavigate()
@@ -257,6 +313,7 @@ function SignedIn() {
   // The key widget's step: the receipt outlives the widget.
   const keys = useKeyWidgetState(search.keys === true)
   const help = useHelpNavigation(turning)
+  const tutorial = useTutorialNavigation(search.tutorial !== undefined)
   const openKeys = useOpenKeys(turning)
   const onSearchChange = (next: SearchChange) => {
     // A form, an import or an edit, opening: the tile widget comes, in front on a phone.
@@ -286,44 +343,37 @@ function SignedIn() {
     marks.actions.went(action)
   }
   // A Tile the chat names crosses to the canvas: centered on it, glinting as it arrives, the canvas
-  // comes forward, saying what it shows, the System's again should Help have had it.
+  // comes forward, saying what it shows, the System's again should Help or the tutorial have had it.
   const onCenter = (tile: string) => {
     if (tree === undefined) return
     const view = centerOn(tree, tile)
-    void navigate({ search: (current) => ({ ...withView(current, view), ...withHelp(undefined) }) })
+    const away = { ...withHelp(undefined), ...withTutorial(undefined) }
+    void navigate({ search: (current) => ({ ...withView(current, view), ...away }) })
     publish(new Navigated({ gesture: 'center', tile }))
     marks.actions.arrive(tile)
     // The canvas's tree names an untitled Root already.
     const title = findTile(tree, tile)?.title
     turning.cross(title === undefined ? undefined : m.crossing_phone_said({ title }))
   }
-  // What the canvas shows: Help while its widget is open, else the System. The URL's view is the
-  // canvas's, so while Help has it the System's view is its Root, which a Message is sent from.
+  // What the canvas shows: a System hexframe ships while the URL names it, else the Account's.
   const view = viewOf(search)
-  const side =
-    search.help === undefined
-      ? {
-          systemView: view,
-          canvas: (
-            <SystemPage
-              search={search}
-              onSearchChange={onSearchChange}
-              onViewChange={onViewChange}
-              widgets={widgets}
-              onExport={() => {
-                turning.turn('chat')
-              }}
-              marks={marks.marks}
-              onCarry={setCarried}
-            />
-          ),
-          corner: <Breadcrumb system={path} view={view} onViewChange={onViewChange} />,
-        }
-      : {
-          systemView: {},
-          canvas: <HelpSide view={view} onViewChange={help.onViewChange} />,
-          corner: <Breadcrumb system={help.tree} view={view} onViewChange={help.onViewChange} />,
-        }
+  const side = shippedSide(search, { help, tutorial }) ?? {
+    systemView: view,
+    canvas: (
+      <SystemPage
+        search={search}
+        onSearchChange={onSearchChange}
+        onViewChange={onViewChange}
+        widgets={widgets}
+        onExport={() => {
+          turning.turn('chat')
+        }}
+        marks={marks.marks}
+        onCarry={setCarried}
+      />
+    ),
+    corner: <Breadcrumb system={path} view={view} onViewChange={onViewChange} />,
+  }
   const onSend =
     tree === undefined
       ? undefined
@@ -376,20 +426,7 @@ function SignedIn() {
                 />
               </ReadBoundary>
             )}
-            {search.help !== undefined && (
-              <ReadBoundary>
-                <HelpWidgets
-                  topic={search.help}
-                  onTopic={help.onTopic}
-                  // Help gives the canvas back to the System, at its Root.
-                  onDismiss={() => {
-                    void navigate({
-                      search: (current) => ({ ...screenOf(current), ...withHelp(undefined) }),
-                    })
-                  }}
-                />
-              </ReadBoundary>
-            )}
+            <HelpFoot topic={search.help} onTopic={help.onTopic} />
           </div>
         }
         composer={
@@ -411,20 +448,53 @@ function SignedIn() {
   )
 }
 
-interface HelpSideProps {
+interface HelpFootProps {
+  /** The topic the help widget is open on; closed when absent. */
+  topic: string | true | undefined
+  onTopic: (id: string, center: boolean) => void
+}
+
+/**
+ * The help widget at the conversation's foot while it is open, signed in. Dismissed, Help gives the
+ * canvas back to the System, at its Root.
+ */
+function HelpFoot({ topic, onTopic }: HelpFootProps) {
+  const navigate = Route.useNavigate()
+  if (topic === undefined) return null
+  return (
+    <ReadBoundary>
+      <HelpWidgets
+        topic={topic}
+        onTopic={onTopic}
+        onDismiss={() => {
+          void navigate({ search: (current) => ({ ...screenOf(current), ...withHelp(undefined) }) })
+        }}
+      />
+    </ReadBoundary>
+  )
+}
+
+interface ShippedSideProps {
+  shipped: ShippedRoot
   view: CanvasView
   onViewChange: (view: CanvasView) => void
 }
 
-/** The canvas side, Help's: Help on the canvas, read-only. */
-function HelpSide({ view, onViewChange }: HelpSideProps) {
-  // The page's language, from its URL: Help's ids are the same in every language, so the view holds.
-  const { data: help } = useHelp(getLocale())
-  const tree = useMemo(() => (help === undefined ? undefined : canvasTree(help)), [help])
+/** The canvas side of a System hexframe ships, Help's or the tutorial's: on the canvas, read-only. */
+function ShippedSide({ shipped, view, onViewChange }: ShippedSideProps) {
+  // The page's language, from its URL: a shipped System's ids are the same in every language, so the
+  // view holds.
+  const { data } = useShipped(shipped, getLocale())
+  const tree = useMemo(() => (data === undefined ? undefined : canvasTree(data)), [data])
   if (tree === undefined) return <Loading />
   return (
     <div className={side}>
-      <HelpCanvas tree={tree} view={view} onViewChange={onViewChange} className="min-h-0 flex-1" />
+      <ShippedCanvas
+        tree={tree}
+        view={view}
+        onViewChange={onViewChange}
+        className="min-h-0 flex-1"
+      />
     </div>
   )
 }

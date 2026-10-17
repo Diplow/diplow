@@ -9,7 +9,7 @@ import { archiveOf } from '#/repositories/zip/testing'
 import { layer as zipLayer } from '#/repositories/zip/zip'
 
 import type { IdOfLink } from '../files/import/plan'
-import { helpRoot } from '../help/help'
+import { helpRoot, tutorialRoot } from '../shipped/shipped'
 import { type SystemTile, systemOf } from '../entities'
 import * as Mapping from '../mapping'
 import { CreateTile, EditTile, TilesImported } from '../operations'
@@ -195,15 +195,19 @@ layer(TestLayers)('an import landed where it was asked, over PGlite', (it) => {
     }),
   )
 
-  it.effect('refuses a slot of Help, which no import writes', () =>
-    Effect.gen(function* () {
-      const { accountId } = yield* someone
-      const place = { _tag: 'Slot', parent: helpRoot, slot: 1 } as const
-      expect(yield* Effect.flip(land(accountId, place))).toMatchObject({
-        _tag: 'HelpReadOnly',
-        kind: 'Forbidden',
-      })
-    }),
+  it.effect(
+    'refuses a slot of a System hexframe ships, Help or the tutorial, which no import writes',
+    () =>
+      Effect.gen(function* () {
+        const { accountId } = yield* someone
+        for (const parent of [helpRoot, tutorialRoot, `${tutorialRoot}/2`]) {
+          const place = { _tag: 'Slot', parent, slot: 1 } as const
+          expect(yield* Effect.flip(land(accountId, place)), parent).toMatchObject({
+            _tag: 'ShippedReadOnly',
+            kind: 'Forbidden',
+          })
+        }
+      }),
   )
 
   it.effect('refuses a slot taken since the plan was made, and writes nothing', () =>

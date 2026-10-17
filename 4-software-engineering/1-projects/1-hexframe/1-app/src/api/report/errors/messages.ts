@@ -50,7 +50,7 @@ const table: readonly Entry[] = [
   { tag: 'MovedUnderItself', message: m.error_mapping_moved_under_itself },
   { tag: 'RootFixed', message: m.error_mapping_root_fixed },
   { tag: 'LeafHoldsNothing', message: m.error_mapping_leaf_holds_nothing },
-  { tag: 'HelpReadOnly', message: m.error_mapping_help_read_only },
+  { tag: 'ShippedReadOnly', message: m.error_mapping_shipped_read_only },
   { tag: 'BatchOutdated', scope: 'undo', message: m.error_assistant_undo_outdated },
   { tag: 'BatchOutdated', message: m.error_mapping_batch_outdated },
   { tag: 'ImportRefused', message: m.error_mapping_import_refused },

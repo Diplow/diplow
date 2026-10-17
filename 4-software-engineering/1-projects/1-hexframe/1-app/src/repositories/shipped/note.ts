@@ -1,19 +1,20 @@
 // A note of a vault folder split into its frontmatter and its Markdown: the format the files are
-// written in, which Mapping reads Help's Tiles from (src/domains/mapping/help/). A frontmatter opens
-// with a `---` first line and closes with the next one, and holds scalar fields only, which is all the
-// vault's notes use, so no YAML library is needed. Pure, and free of `import.meta.glob`, so the
-// build's check of Help (scripts/check-help.ts) loads it with the Vite config.
+// written in, which Mapping reads the Tiles of the Systems hexframe ships from
+// (src/domains/mapping/shipped/). A frontmatter opens with a `---` first line and closes with the
+// next one, and holds scalar fields only, which is all the vault's notes use, so no YAML library is
+// needed. Pure, and free of `import.meta.glob`, so the build's check of those Systems' folders
+// (scripts/check-shipped.ts) loads it with the Vite config.
 
 /**
  * The name of a note in each language it may be written in: `CLAUDE.md` in English, and a twin beside
  * it in each other language, `CLAUDE.fr.md` in French, so every language shares one structure. Which
- * languages Help is written in is Mapping's to say (src/domains/mapping/help/).
+ * languages the shipped Systems are written in is Mapping's to say (src/domains/mapping/shipped/).
  */
 export const noteFiles = { en: 'CLAUDE.md', fr: 'CLAUDE.fr.md' } as const
 
 /**
  * What every note's frontmatter holds to place it in this vault. A Tile's own fields, its Title and
- * Preview, are Mapping's to check (src/domains/mapping/help/vault.ts).
+ * Preview, are Mapping's to check (src/domains/mapping/shipped/vault.ts).
  */
 const required = ['parent', 'owner'] as const
 

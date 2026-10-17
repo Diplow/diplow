@@ -390,7 +390,7 @@
   "error_mapping_root_fixed": "Votre tuile racine, c’est vous : elle ne peut être ni déplacée ni supprimée.",
   "error_mapping_leaf_holds_nothing": "Une feuille est un seul fichier : rien ne va dessous, et une tuile qui a quelque chose dessous ne peut pas en devenir une.",
   "error_mapping_swapped_in_line": "Deux tuiles ne s’échangent que si aucune n’est sous l’autre.",
-  "error_mapping_help_read_only": "L’aide est le guide de hexframe : tout le monde la lit, personne ne la modifie.",
+  "error_mapping_shipped_read_only": "L’aide et le tutoriel appartiennent à hexframe : tout le monde les lit, personne ne les modifie.",
   "error_mapping_import_refused": "Cet import a été refusé et rien n’a été écrit : chaque fichier en faute dit pourquoi.",
   "error_mapping_import_place_taken": "Cette place est prise désormais : un import va dans une place libre, ou dans un système vide.",
   "system_title": "Votre système",

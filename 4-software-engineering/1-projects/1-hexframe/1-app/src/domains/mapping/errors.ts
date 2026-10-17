@@ -83,10 +83,10 @@ export class BatchOutdated extends Schema.TaggedError<BatchOutdated>()('BatchOut
 }) {}
 
 /**
- * Help is hexframe's own System, which every Account reads and none writes: a change naming one of its
- * Tiles is refused, whichever end of a move or a swap it is.
+ * The Systems hexframe ships, Help and the tutorial, are read by every Account and written by none: a
+ * change naming one of their Tiles is refused, whichever end of a move or a swap it is.
  */
-export class HelpReadOnly extends Schema.TaggedError<HelpReadOnly>()('HelpReadOnly', {
+export class ShippedReadOnly extends Schema.TaggedError<ShippedReadOnly>()('ShippedReadOnly', {
   kind: kind('Forbidden'),
 }) {}
 
@@ -159,7 +159,7 @@ export const mappingFailures = [
   MovedUnderItself,
   LeafHoldsNothing,
   RootFixed,
-  HelpReadOnly,
+  ShippedReadOnly,
   BatchOutdated,
   ImportRefused,
 ] as const

@@ -390,7 +390,7 @@
   "error_mapping_root_fixed": "Your root tile is you: it can't be moved or deleted.",
   "error_mapping_leaf_holds_nothing": "A leaf is a single file: nothing goes under it, and a tile with anything below it can't become one.",
   "error_mapping_swapped_in_line": "Two tiles can only swap when neither lies below the other.",
-  "error_mapping_help_read_only": "Help is hexframe's guide: everyone reads it, nobody changes it.",
+  "error_mapping_shipped_read_only": "Help and the tutorial are hexframe's own: everyone reads them, nobody changes them.",
   "error_mapping_import_refused": "This import was refused and nothing was written: each file at fault says why.",
   "error_mapping_import_place_taken": "This place holds something now: an import goes into an empty slot, or into an empty system.",
   "system_title": "Your system",

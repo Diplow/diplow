@@ -18,13 +18,13 @@ import { keyNameBounds, keyNameOf } from '#/domains/iam/entities'
 import { previewLimit } from '#/domains/mapping/entities'
 import { ChannelsGallery } from '#/front/client/gallery'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
-import { useHelp } from '#/front/client/mapping/queries'
+import { useShipped } from '#/front/client/mapping/queries'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { BreadcrumbGallery } from '#/front/features/breadcrumb/gallery'
 import { encoded } from '#/front/features/conversation/composer/mention'
 import { happenedOf } from '#/front/features/conversation/entry/words'
 import { ConversationGallery } from '#/front/features/conversation/gallery'
-import { helpNodeOf } from '#/front/features/help/nodes'
+import { helpNodeOf } from '#/front/features/shipped/nodes'
 import { canvasTree } from '#/front/features/system/tree'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
@@ -353,7 +353,7 @@ const where: Where = ({ value, links }, center) => turnLocation(encoded(value, l
 
 /** The help widget's section, on Help itself, read in the page's language as `/help` reads it. */
 function HelpGallery() {
-  const { data: help } = useHelp(getLocale())
+  const { data: help } = useShipped('help', getLocale())
   if (help === undefined) return <Skeleton className="h-96 w-[37.5rem] max-w-full" />
   return <HelpWidgetGallery help={helpNodeOf(help)} />
 }
@@ -439,7 +439,7 @@ function ScreenGallery() {
 
 /** Signed out, the canvas shows Help, read in the page's language as `/help` reads it. */
 function SignedOutSpecimen({ className }: { className: string }) {
-  const { data: help } = useHelp(getLocale())
+  const { data: help } = useShipped('help', getLocale())
   if (help === undefined) return <Skeleton className={className} />
   return <ScreenSpecimen system={canvasTree(help)} signedIn={false} className={className} />
 }
