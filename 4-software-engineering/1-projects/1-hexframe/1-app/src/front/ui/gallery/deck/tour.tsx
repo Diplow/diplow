@@ -171,8 +171,15 @@ interface TutorialShown extends CanvasRules {
 interface SixPlaying {
   around: { landed: number; said: AroundPart | undefined }
   pointed: string | undefined
-  onPoint: (tile: string, pointing: boolean) => void
+  setPointed: (next: (current: string | undefined) => string | undefined) => void
   onShow: (tile: string) => void
+}
+
+/** What the canvas and the chat take of the same six: the tile pointed at, and the body's lines. */
+interface SameSix {
+  pointed: string | undefined
+  onPoint: (tile: string, pointing: boolean) => void
+  six: ToldSix
 }
 
 /**
@@ -187,8 +194,8 @@ interface Tutorial {
   /** Whether the agent tells its center's words in turn on a view, which starts their clock. */
   tells: (view: CanvasView) => boolean
   rules: (view: CanvasView, told: ToldPart | undefined) => TutorialShown
-  /** What the chat takes of its center's body and its ring as the same six, as they play. */
-  six: (playing: SixPlaying) => ToldSix
+  /** What the canvas and the chat take of its center's body and its ring as the same six. */
+  sameSix: (playing: SixPlaying) => SameSix
 }
 
 interface OnboardingSlideProps {
@@ -397,24 +404,25 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
   )
 }
 
+/** The tile pointed at let go, as the view changes. */
+interface Gone {
+  letGo: () => void
+}
+
 /**
  * The same six on the slide, as home plays them (`features/shipped/tutorial/six.ts`), while the
  * tutorial's rules show them: the six landing and the agent's words on one clock, the tile pointed
  * at, from its line or on the canvas, let go as the view changes. The deck holds the screen, so a
  * line shown brings nothing forward.
  */
-function useSameSix(tutorial: Tutorial | undefined, shown: boolean) {
+function useSameSix(tutorial: Tutorial | undefined, shown: boolean): Partial<SameSix> & Gone {
   const around = useAround(shown)
   const [pointed, setPointed] = useState<string>()
-  const onPoint = (tile: string, pointing: boolean) => {
-    setPointed((current) => (pointing ? tile : current === tile ? undefined : current))
-  }
   const letGo = () => {
     setPointed(undefined)
   }
-  if (!shown || tutorial === undefined) return { pointed: undefined, onPoint, letGo }
-  const six = tutorial.six({ around, pointed, onPoint, onShow: () => undefined })
-  return { pointed, onPoint, letGo, six }
+  if (!shown || tutorial === undefined) return { letGo }
+  return { ...tutorial.sameSix({ around, pointed, setPointed, onShow: () => undefined }), letGo }
 }
 
 /** Plays the onboarding again from the start, the page landing anew. */

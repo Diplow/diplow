@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
 
-import { pointedAfter, ringOf, toldSixOf, type SixPlaying } from './ring'
+import { ringOf, sameSixOf, type SixPlaying } from './ring'
 
 // A tile's body and its ring as the same six: each numbered line names the Child in the Direction
 // its number says, and that Child names its line back; a line that names no Child lights nothing.
@@ -47,54 +47,62 @@ describe('ringOf', () => {
   })
 })
 
-describe('pointedAfter', () => {
-  it('points at the tile pointed at last, and lets go of it alone', () => {
-    expect(pointedAfter(undefined, 'a', true)).toBe('a')
-    expect(pointedAfter('a', 'b', true)).toBe('b')
-    expect(pointedAfter('b', 'a', false)).toBe('b')
-    expect(pointedAfter('b', 'b', false)).toBeUndefined()
-  })
-})
-
-describe('toldSixOf', () => {
+describe('sameSixOf', () => {
   const ring = ringOf(tile, '1. Go in.\n2. Six at most.\n3. Context.')
 
-  /** The same six playing, what each of its callbacks heard kept in `heard`. */
-  function playing(pointed?: string) {
-    const heard: string[] = []
+  /** The same six playing on a tile pointed at, kept as a state keeps it, and the tiles shown. */
+  function playing(at?: string) {
+    const state = { pointed: at, shown: [] as string[] }
     const play: SixPlaying = {
       around: { landed: 2, said: 'same' },
-      pointed,
-      onPoint: (id, pointing) => heard.push(`${id} ${pointing ? 'pointed' : 'let go'}`),
-      onShow: (id) => heard.push(`${id} shown`),
+      pointed: at,
+      setPointed: (next) => {
+        state.pointed = next(state.pointed)
+      },
+      onShow: (id) => state.shown.push(id),
     }
-    return { six: toldSixOf(ring, play), heard }
+    return { same: sameSixOf(ring, play), state }
   }
 
   it('says what the agent said and how many landed, and which lines name a tile', () => {
-    const { six } = playing()
+    const { six } = playing().same
     expect({ landed: six.landed, said: six.said }).toEqual({ landed: 2, said: 'same' })
     expect([1, 2, 3].map(six.names)).toEqual([true, false, true])
   })
 
-  it('names the line whose tile is pointed at, from either side, none for a tile no line names', () => {
-    expect(playing('tutorial/3').six.pointed).toBe(3)
-    expect(playing('tutorial/9').six.pointed).toBeUndefined()
-    expect(playing().six.pointed).toBeUndefined()
+  it('lights the tile pointed at on the canvas, and its line in the chat', () => {
+    const { same } = playing('tutorial/3')
+    expect({ canvas: same.pointed, chat: same.six.pointed }).toEqual({
+      canvas: 'tutorial/3',
+      chat: 3,
+    })
+  })
+
+  it('points at a tile of the ring from the canvas, and lets it go, another let go leaving it', () => {
+    const { same, state } = playing()
+    same.onPoint('tutorial/1', true)
+    same.onPoint('tutorial/3', true)
+    same.onPoint('tutorial/1', false)
+    expect(state.pointed).toBe('tutorial/3')
+    same.onPoint('tutorial/3', false)
+    expect(state.pointed).toBeUndefined()
+  })
+
+  it('lights nothing for a tile no line names, the center', () => {
+    const { same, state } = playing()
+    same.onPoint('tutorial', true)
+    expect(state.pointed).toBeUndefined()
   })
 
   it('points at the tile a line names, and shows it once clicked, a line naming none doing nothing', () => {
-    const { six, heard } = playing()
-    six.onPoint(1, true)
-    six.onPoint(1, false)
-    six.onShow(3)
-    six.onPoint(2, true)
-    six.onShow(2)
-    expect(heard).toEqual([
-      'tutorial/1 pointed',
-      'tutorial/1 let go',
-      'tutorial/3 pointed',
-      'tutorial/3 shown',
-    ])
+    const { same, state } = playing()
+    same.six.onPoint(1, true)
+    expect(state.pointed).toBe('tutorial/1')
+    same.six.onPoint(1, false)
+    same.six.onPoint(2, true)
+    same.six.onShow(2)
+    expect(state).toEqual({ pointed: undefined, shown: [] })
+    same.six.onShow(3)
+    expect(state).toEqual({ pointed: 'tutorial/3', shown: ['tutorial/3'] })
   })
 })

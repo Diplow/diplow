@@ -46,11 +46,7 @@ function childAt(tile: TileNode, line: number): TileNode | undefined {
  * The tile pointed at once `tile` is pointed at, or let go: letting go of another than the one
  * pointed at leaves it, as a card shutting after the next one opened does.
  */
-export function pointedAfter(
-  current: string | undefined,
-  tile: string,
-  pointing: boolean,
-): string | undefined {
+function pointedAfter(current: string | undefined, tile: string, pointing: boolean) {
   if (pointing) return tile
   return current === tile ? undefined : current
 }
@@ -59,38 +55,57 @@ export function pointedAfter(
 export interface SixPlaying {
   /** How many of the six landed while lit, and what the agent said of them (`useAround`). */
   around: { landed: number; said: AroundPart | undefined }
-  /** The tile pointed at, from its line or on the canvas; none while none is. */
+  /** The tile of the ring pointed at, from its line or on the canvas; none while none is. */
   pointed: string | undefined
-  /** A tile pointed at, or let go. */
-  onPoint: (tile: string, pointing: boolean) => void
+  /** Where the tile pointed at is kept, as a state's setter keeps it. */
+  setPointed: (next: (current: string | undefined) => string | undefined) => void
   /** A tile shown, its line clicked or tapped, which a phone brings forward. */
   onShow: (tile: string) => void
 }
 
+/** What the canvas and the chat each take of the same six. */
+export interface SameSix {
+  /** The tile of the ring pointed at, lit on the canvas; none while none is. */
+  pointed: string | undefined
+  /** A tile pointed at on the canvas, or let go: one the body names no line for, the center's, lights nothing. */
+  onPoint: (tile: string, pointing: boolean) => void
+  /** The chat's: what the agent says, what landed, and each line naming a tile. */
+  six: ToldSix
+}
+
 /**
- * What the chat takes of the same six: the body's lines that name a tile of the ring, the one whose
- * tile is pointed at, and a line pointed at, or shown, pointing at its tile.
+ * The same six as the canvas and the chat take them: the tile of the ring pointed at, from either
+ * side, lit on both, the body's lines that name a tile of the ring, and a line pointed at, or shown,
+ * pointing at its tile.
  */
-export function toldSixOf(ring: Ring, playing: SixPlaying): ToldSix {
-  const { around, pointed, onPoint, onShow } = playing
-  const onTile = (line: number, does: (tile: string) => void) => {
+export function sameSixOf(ring: Ring, playing: SixPlaying): SameSix {
+  const { around, pointed, setPointed, onShow } = playing
+  const onPoint = (tile: string, pointing: boolean) => {
+    if (ring.lineOf(tile) === undefined) return
+    setPointed((current) => pointedAfter(current, tile, pointing))
+  }
+  const onLine = (line: number, does: (tile: string) => void) => {
     const tile = ring.tileOf(line)
     if (tile !== undefined) does(tile)
   }
   return {
-    ...around,
-    pointed: pointed === undefined ? undefined : ring.lineOf(pointed),
-    names: (line) => ring.tileOf(line) !== undefined,
-    onPoint: (line, pointing) => {
-      onTile(line, (tile) => {
-        onPoint(tile, pointing)
-      })
-    },
-    onShow: (line) => {
-      onTile(line, (tile) => {
-        onPoint(tile, true)
-        onShow(tile)
-      })
+    pointed,
+    onPoint,
+    six: {
+      ...around,
+      pointed: pointed === undefined ? undefined : ring.lineOf(pointed),
+      names: (line) => ring.tileOf(line) !== undefined,
+      onPoint: (line, pointing) => {
+        onLine(line, (tile) => {
+          onPoint(tile, pointing)
+        })
+      },
+      onShow: (line) => {
+        onLine(line, (tile) => {
+          onPoint(tile, true)
+          onShow(tile)
+        })
+      },
     },
   }
 }

@@ -4,11 +4,10 @@
 // and its line; a line clicked or tapped shows its tile, which a phone brings forward for a glance.
 import { useMemo, useState } from 'react'
 
-import type { ToldSix } from '#/front/ui/chat/text/Message'
 import { useAround } from '#/front/ui/motion'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 
-import { pointedAfter, ringOf, toldSixOf } from './ring'
+import { ringOf, sameSixOf, type SameSix } from './ring'
 
 interface SameSixInput {
   /** The tutorial's Tiles as the canvas draws them, its center their Root; none until read. */
@@ -21,22 +20,12 @@ interface SameSixInput {
   onShow: (title: string) => void
 }
 
-/** What the canvas and the chat each take of the same six. */
-interface SameSix {
-  /** The tile pointed at, from its line or on the canvas, lit there; none while none is. */
-  pointed: string | undefined
-  /** A tile pointed at on the canvas, or let go. */
-  onPoint: (tile: string, pointing: boolean) => void
-  /** The chat's: what the agent says, what landed, and each line naming a tile; none until shown. */
-  six: ToldSix | undefined
-}
-
 /**
  * The same six as home plays them, from the start each time its rules show them anew: the six
  * landing and the agent's words on one clock (`useAround`), and the tile pointed at, from either
  * side, let go once they are no longer shown.
  */
-export function useSameSix({ tree, body, shown, onShow }: SameSixInput): SameSix {
+export function useSameSix({ tree, body, shown, onShow }: SameSixInput): Partial<SameSix> {
   const ring = useMemo(
     () => (tree === undefined || body === undefined ? undefined : ringOf(tree, body)),
     [tree, body],
@@ -50,22 +39,13 @@ export function useSameSix({ tree, body, shown, onShow }: SameSixInput): SameSix
     setWasOn(on)
     setPointed(undefined)
   }
-  const onPoint = (tile: string, pointing: boolean) => {
-    setPointed((current) => pointedAfter(current, tile, pointing))
-  }
-  if (!shown || ring === undefined || tree === undefined) {
-    return { pointed: undefined, onPoint, six: undefined }
-  }
-  return {
+  if (!shown || ring === undefined || tree === undefined) return {}
+  return sameSixOf(ring, {
+    around,
     pointed,
-    onPoint,
-    six: toldSixOf(ring, {
-      around,
-      pointed,
-      onPoint,
-      onShow: (tile) => {
-        onShow(findTile(tree, tile)?.title ?? tile)
-      },
-    }),
-  }
+    setPointed,
+    onShow: (tile) => {
+      onShow(findTile(tree, tile)?.title ?? tile)
+    },
+  })
 }

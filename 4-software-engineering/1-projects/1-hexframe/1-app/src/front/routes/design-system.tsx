@@ -25,7 +25,7 @@ import { encoded } from '#/front/features/conversation/composer/mention'
 import { happenedOf } from '#/front/features/conversation/entry/words'
 import { ConversationGallery } from '#/front/features/conversation/gallery'
 import { helpNodeOf } from '#/front/features/shipped/nodes'
-import { ringOf, toldSixOf, type SixPlaying } from '#/front/features/shipped/tutorial/ring'
+import { ringOf, sameSixOf, type SixPlaying } from '#/front/features/shipped/tutorial/ring'
 import { tutorialRules, tutorialTells } from '#/front/features/shipped/tutorial/rules'
 import { canvasTree } from '#/front/features/system/tree'
 import { m } from '#/paraglide/messages'
@@ -371,7 +371,7 @@ function OnboardingTour({ onGo }: { onGo: Go }) {
       body: data.body,
       tells: tutorialTells,
       rules: tutorialRules,
-      six: (playing: SixPlaying) => toldSixOf(ring, playing),
+      sameSix: (playing: SixPlaying) => sameSixOf(ring, playing),
     }
   }, [data])
   return <OnboardingSlide onGo={onGo} tutorial={tutorial} />
