@@ -1,0 +1,46 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/mcp.test.ts
+  s_eb2c82211b20e8::t_df9625d9a34a91 1,5-6,270-304
+  s_eb2c82211b20e8::t_de6cb45209f0fc 305-306
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/batch/batch.test.ts
+  s_eb2c82211b20e8::t_e8cda393929de5 182
+  s_eb2c82211b20e8::t_c86a2f47ce141c 20,164
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/shared.test.ts
+  s_eb2c82211b20e8::t_c783ac8de5ab7b 81,88-93
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/testing.ts
+  s_eb2c82211b20e8::t_e8cda393929de5 6,13,17-25
+  s_eb2c82211b20e8::t_cc6f912f9c7f02 26
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/seen.test.ts
+  s_eb2c82211b20e8::t_14198c043738da 24-26,31-35,132-134,139
+  s_eb2c82211b20e8::t_1cfac09b8c2cf6 1,4,135-138,140-142
+  s_eb2c82211b20e8::t_4a618ebb6bba52 2-3,5-23,27-30,36-131,143-145
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/seen.test.ts
+  s_eb2c82211b20e8::t_9188a0ebd3b5e2 1-9,11-36,38-92,97-120,146-147,168-177
+  s_eb2c82211b20e8::t_e0d79eaf716f4f 10,37,93-96,121-145,148-167
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/tools.ts
+  s_eb2c82211b20e8::t_e48bdb4fd6358f 88-90
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/decider/agreement.test.ts
+  s_eb2c82211b20e8::t_e8cda393929de5 24,57,60
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.test.ts
+  s_eb2c82211b20e8::t_a0dbc3b24a12f9 103-104,357-359,590,598-599,602-604,614-625,627-633,636
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/seen.test.ts
+  s_eb2c82211b20e8::t_ed33bd4a3cf9cc 66,96-102,143-144
+  s_eb2c82211b20e8::t_10c5cc851ae11e 1-65,67-95,103-142,145-162
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/__snapshots__/mcp.test.ts.snap
+  s_eb2c82211b20e8::t_0b14e82cb8e856 42,96
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cdcbae2773a57440fa340674bdb4fb2bfd339071",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
