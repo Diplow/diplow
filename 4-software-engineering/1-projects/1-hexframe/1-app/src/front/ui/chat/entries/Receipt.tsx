@@ -105,7 +105,7 @@ export function Receipt({
       ref={line}
       tabIndex={-1}
       className={cn(
-        'flex flex-wrap items-center gap-x-2.5 gap-y-1 font-agent text-[0.78125rem] leading-normal text-muted-foreground outline-none',
+        'relative flex flex-wrap items-center gap-x-2.5 gap-y-1 font-agent text-[0.78125rem] leading-normal text-muted-foreground outline-none',
         dawning && 'motion-safe:animate-dawn [animation-delay:calc(var(--stagger-dawn)*2)]!',
       )}
     >
