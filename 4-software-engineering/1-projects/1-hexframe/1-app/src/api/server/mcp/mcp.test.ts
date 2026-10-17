@@ -1,7 +1,9 @@
-import { Exit } from 'effect'
+import { Effect, Exit } from 'effect'
 import { describe, expect, it, vi } from 'vitest'
 
 import * as Iam from '#/domains/iam/iam'
+import { transactional } from '#/repositories/database/database'
+import { granted } from '#/repositories/database/tiles/testing'
 
 import { provenKey, run } from '../run'
 import { methodNotAllowed, serveMcp } from './mcp'
@@ -263,6 +265,43 @@ describe('the MCP endpoint', () => {
       expect(error).toMatch(/^TileNotFound: .+ \(request [0-9a-f-]{36}\)$/)
       expect(error).not.toContain('Frontend')
     }
+  })
+
+  it("reads another Account's Tile its owner lets the Key's Account read, from the System holding it", async () => {
+    const owner = await signedUp()
+    const { child, grandchild } = await aSystem(owner.signedIn)
+    const ownerId = await value(
+      run(
+        owner.signedIn,
+        Effect.map(Iam.signedIn, ({ account }) => account.id),
+      ),
+    )
+    const reader = await signedUp()
+    const readerId = await value(
+      run(
+        reader.signedIn,
+        Effect.map(Iam.signedIn, ({ account }) => account.id),
+      ),
+    )
+    const toReader = { subject: 'account', subjectId: readerId, value: 'read' } as const
+    await value(
+      run(owner.signedIn, transactional(granted(ownerId, { tile: grandchild.id, ...toReader }))),
+    )
+    const client = await connect(bearer(reader.secret))
+    expect(await call(client, 'open_tile', { id: grandchild.id, fields: ['title'] })).toMatchObject(
+      {
+        value: { tile: { id: grandchild.id, title: 'Routes' } },
+      },
+    )
+    expect(await call(client, 'map', { id: grandchild.id, depth: 0 })).toMatchObject({
+      value: { tile: { title: 'Routes', preview: 'Routes, in short.' } },
+    })
+    // Frontend, above it, stays kept from the reader: TileNotFound, and the read names no parent.
+    const { error } = await call(client, 'open_tile', { id: child.id })
+    expect(error).toMatch(/^TileNotFound: /)
+    expect(await call(client, 'open_tile', { id: grandchild.id })).toMatchObject({
+      value: { parent: null },
+    })
   })
 
   it('refuses a request without a Key, with a revoked one, or with a cookie alone, unread', async () => {

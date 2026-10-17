@@ -85,7 +85,9 @@ const Fields = (fallback: ReadonlyArray<Field>, description: string) =>
 const ReadId = Schema.Union([TileId, HelpId]).annotate({
   description:
     "A Tile's id, as open_tile and map answer it: a Tile of the user's System, or of Help, from " +
-    `its Root, "${helpRoot}". Without one, the user's Root: the user.`,
+    `its Root, "${helpRoot}", or of another user's System, as far as its owner lets the user read ` +
+    "it, though an agent hexframe runs for the user reads the user's System alone. Without one, " +
+    "the user's Root: the user.",
 })
 
 const help =
