@@ -77,14 +77,14 @@ function needsOf(system: System, sharing: Sharing, operation: Operation): Needs 
 /**
  * Whether moving these Tiles under these parents lets a subject read a Tile they carry that it could
  * not read before: a Tile inheriting from a new parent would otherwise be opened by no Grant its
- * owner set.
+ * owner set. A move under a Tile it carries opens nothing, since `decide` refuses it.
  */
 function widens(system: System, sharing: Sharing, moved: ReadonlyMap<string, string>) {
-  if (moved.size === 0) return false
+  const carried = new Set([...moved.keys()].flatMap((id) => [...below(system, id)]))
+  if ([...moved.values()].some((parent) => carried.has(parent))) return false
   const after: Sharing = { ...sharing, lineage: new Map([...sharing.lineage, ...moved]) }
-  const carried = [...moved.keys()].flatMap((id) => [...below(system, id)])
   return sharing.subjects.some((subject) =>
-    carried.some((tile) => reads(after, subject, tile) && !reads(sharing, subject, tile)),
+    [...carried].some((tile) => reads(after, subject, tile) && !reads(sharing, subject, tile)),
   )
 }
 

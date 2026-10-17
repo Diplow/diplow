@@ -21,6 +21,7 @@ import {
   ImportRefused,
   LeafHoldsNothing,
   MovedUnderItself,
+  NotAllowed,
   PreviewTooLong,
   RootFixed,
   ShippedReadOnly,
@@ -183,6 +184,10 @@ describe("the message table, on Mapping's refusals", () => {
       "A leaf is a single file: nothing goes under it, and a tile with anything below it can't become one.",
     ],
     [
+      new NotAllowed(),
+      'You can read this tile, but not change it this way. Its owner decides who writes here, and who may see it.',
+    ],
+    [
       new ShippedReadOnly(),
       "Help and the tutorial are hexframe's own: everyone reads them, nobody changes them.",
     ],
@@ -241,6 +246,10 @@ describe("the message table, on Mapping's refusals", () => {
     [
       new LeafHoldsNothing(),
       'Une feuille est un seul fichier : rien ne va dessous, et une tuile qui a quelque chose dessous ne peut pas en devenir une.',
+    ],
+    [
+      new NotAllowed(),
+      'Vous pouvez lire cette tuile, mais pas la modifier ainsi. Son propriétaire décide qui y écrit, et qui peut la voir.',
     ],
     [
       new ShippedReadOnly(),

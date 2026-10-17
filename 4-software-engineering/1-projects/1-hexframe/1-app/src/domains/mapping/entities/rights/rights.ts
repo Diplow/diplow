@@ -102,7 +102,7 @@ export interface Actor {
 export const owns = (actor: Actor, owner: string) => actor.owners.includes(owner)
 
 /** The subjects covering an actor: their Account, each of their Groups, and Everyone. */
-export const subjectsOf = (actor: Actor): ReadonlyArray<Subject> => [
+const subjectsOf = (actor: Actor): ReadonlyArray<Subject> => [
   { _tag: 'Account', id: actor.account },
   ...actor.groups.map((id): Subject => ({ _tag: 'Group', id })),
   { _tag: 'Everyone' },
@@ -153,14 +153,17 @@ export function sharingOf(owner: string, lineage: Lineage, grants: ReadonlyArray
 
 /**
  * The value a subject has on a Tile: the nearest explicit one walking up from it, `none` at the star,
- * which inherits nothing, and `none` for an id the System doesn't hold.
+ * which inherits nothing, and `none` for an id the System doesn't hold, or a walk that comes back to
+ * a Tile it passed, which no System holds.
  */
 export function valueOn(sharing: Sharing, subject: Subject, tile: string): GrantValue {
   const key = keyOf(subject)
+  const passed = new Set<string>()
   let at: string | null | undefined = tile
-  while (at !== null && at !== undefined) {
+  while (at !== null && at !== undefined && !passed.has(at)) {
     const explicit = sharing.grants.get(at)?.get(key)
     if (explicit !== undefined) return explicit
+    passed.add(at)
     at = sharing.lineage.get(at)
   }
   return 'none'

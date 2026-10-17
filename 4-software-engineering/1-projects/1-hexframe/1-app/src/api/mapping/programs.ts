@@ -26,23 +26,31 @@ import { transactional } from '#/repositories/database/database'
 import { tileLink, tileOfLink } from './files/download'
 
 /**
- * The Account acting on its own System, as Mapping takes who acts and where: the actor, the owners
- * the Account stands for, for now itself alone, until IAM knows its Organizations and Groups; the
- * System, named by the Account's star. The one place the API layer resolves both, for every program
- * of every domain that reaches Mapping, for now always on the Account's own System.
+ * The Account acting on its own System, as Mapping takes who acts and where: the actor, the Account,
+ * its Groups and the owners it stands for, for now itself alone and in no Group, until IAM knows its
+ * Organizations and Groups, and whether a Session proves the request, which only a server function
+ * the user calls from the app says; the System, named by the Account's star. The one place the API
+ * layer resolves both, for every program of every domain that reaches Mapping, fresh on every call,
+ * for now always on the Account's own System. Anything acting for the user without a Session, a Key,
+ * a Turn's Key or the Assistant, says none.
  */
-export const actingOnOwn = (accountId: string) =>
+export const actingOnOwn = (
+  accountId: string,
+  { session }: { session: boolean } = { session: false },
+) =>
   Effect.map(Mapping.starOf(accountId), (system): Mapping.Acting => ({
-    actor: { owners: [accountId] },
+    actor: { account: accountId, groups: [], owners: [accountId], session },
     system,
   }))
 
 /**
  * Runs an operation for the signed-in Account, the one the request proves, never one a caller sends,
- * on its own System (`actingOnOwn`).
+ * on its own System (`actingOnOwn`), a Session said only when one proves the request.
  */
 const forAccount = <A, E, R>(operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>) =>
-  Effect.flatMap(Iam.signedIn, ({ account }) => Effect.flatMap(actingOnOwn(account.id), operation))
+  Effect.flatMap(Iam.signedIn, ({ account, by }) =>
+    Effect.flatMap(actingOnOwn(account.id, { session: by._tag === 'Session' }), operation),
+  )
 
 /** Runs a change for the signed-in Account, in one transaction: it commits whole, or not at all. */
 const changeForAccount = <A, E, R>(operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>) =>

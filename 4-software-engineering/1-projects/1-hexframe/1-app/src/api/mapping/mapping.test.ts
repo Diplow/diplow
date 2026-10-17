@@ -7,6 +7,7 @@ import type {
   DirectionTaken,
   LeafHoldsNothing,
   MovedUnderItself,
+  NotAllowed,
   PreviewTooLong,
   RootFixed,
   ShippedReadOnly,
@@ -345,7 +346,7 @@ describe('a create under the id its caller chose', () => {
 })
 
 describe("the errors Mapping's server functions can fail with", () => {
-  it('are each listed by its type, a write refusing the Systems hexframe ships', () => {
+  it('are each listed by its type, a write refusing the Systems hexframe ships and what the actor may not do', () => {
     type ErrorOf<P> = P extends Effect.Effect<unknown, infer E, unknown> ? E : never
     expectTypeOf<ErrorOf<typeof Mapping.system>>().toEqualTypeOf<SignedOut | TileNotFound>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.shipped>>>().toEqualTypeOf<never>()
@@ -357,10 +358,17 @@ describe("the errors Mapping's server functions can fail with", () => {
       | DirectionTaken
       | TileIdTaken
       | LeafHoldsNothing
+      | NotAllowed
       | ShippedReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.editTile>>>().toEqualTypeOf<
-      SignedOut | TitleMissing | PreviewTooLong | TileNotFound | TileChanged | ShippedReadOnly
+      | SignedOut
+      | TitleMissing
+      | PreviewTooLong
+      | TileNotFound
+      | TileChanged
+      | NotAllowed
+      | ShippedReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.moveTile>>>().toEqualTypeOf<
       | SignedOut
@@ -370,6 +378,7 @@ describe("the errors Mapping's server functions can fail with", () => {
       | MovedUnderItself
       | DirectionTaken
       | LeafHoldsNothing
+      | NotAllowed
       | ShippedReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.swapTiles>>>().toEqualTypeOf<
@@ -379,16 +388,23 @@ describe("the errors Mapping's server functions can fail with", () => {
       | RootFixed
       | MovedUnderItself
       | LeafHoldsNothing
+      | NotAllowed
       | ShippedReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.deleteTile>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | TileChanged | RootFixed | ShippedReadOnly
+      SignedOut | TileNotFound | TileChanged | RootFixed | NotAllowed | ShippedReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createReference>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | TileChanged | DirectionTaken | LeafHoldsNothing | ShippedReadOnly
+      | SignedOut
+      | TileNotFound
+      | TileChanged
+      | DirectionTaken
+      | LeafHoldsNothing
+      | NotAllowed
+      | ShippedReadOnly
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.deleteReference>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | TileChanged | ShippedReadOnly
+      SignedOut | TileNotFound | TileChanged | NotAllowed | ShippedReadOnly
     >()
   })
 })
@@ -563,12 +579,15 @@ describe('who acts, and on which System', () => {
     const { context, root, child } = await withAChild()
     const stranger = request()
     const strangerId = await value(run(stranger, signedInAccount))
-    const named = (system: string): Service.Acting => ({ actor: { owners: [strangerId] }, system })
+    const named = (system: string): Service.Acting => ({
+      actor: { account: strangerId, groups: [], owners: [strangerId], session: true },
+      system,
+    })
     const attempts = (acting: Service.Acting): ReadonlyArray<Program> => [
       Service.system(acting),
       Service.systemVersion(acting),
       Service.readTile(acting, { depth: 1, fields: ['title'], language: 'en' }),
-      Service.titles(acting, [child.id]),
+      Service.ownTile(acting, child.id),
       transactional(
         Service.editTile(acting, new EditTile({ id: child.id, version: 1, title: 'Mine now' })),
       ),
@@ -586,6 +605,11 @@ describe('who acts, and on which System', () => {
         })
       }
     }
+    // The Titles of what it may read: none of the other Account's, whose Tiles it reads none of.
+    expect(await run(stranger, Service.titles(named(root.id), [root.id, child.id]))).toEqual({
+      ok: true,
+      value: {},
+    })
     expect((await systemTree(context)).branches[1]).toMatchObject({ title: 'Child', version: 1 })
   })
 })

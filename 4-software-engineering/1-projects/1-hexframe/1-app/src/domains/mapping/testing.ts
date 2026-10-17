@@ -20,12 +20,12 @@ export const tree = (accountId: string) =>
 
 /**
  * The Account acting on its own System, as the API layer resolves it from a request
- * (`api/mapping/programs.ts`, `actingOnOwn`): the actor standing for the Account alone, the System
- * named by its star, added on its first read.
+ * (`api/mapping/programs.ts`, `actingOnOwn`): the actor standing for the Account alone, in no Group,
+ * from a Session, as the canvas acts; the System named by its star, added on its first read.
  */
 export const actingOnOwn = (accountId: string) =>
   Effect.map(Mapping.starOf(accountId), (system): Mapping.Acting => ({
-    actor: { owners: [accountId] },
+    actor: { account: accountId, groups: [], owners: [accountId], session: true },
     system,
   }))
 
