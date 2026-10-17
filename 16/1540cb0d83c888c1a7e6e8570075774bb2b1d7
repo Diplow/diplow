@@ -1,0 +1,105 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/schema.ts
+  s_eb2c82211b20e8::t_5a63ce070c9b7a 158-160,165,176,195-196
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/recording.ts
+  s_eb2c82211b20e8::t_27c842b899a5d8 16,49
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/batch/batch.test.ts
+  s_eb2c82211b20e8::t_d57478b9383e12 20,46,64,75,78,84,105,125,133,142,158,175-176,189,196-197,203,220,254,256
+  s_eb2c82211b20e8::t_6666ebf05bea1a 224-226,236-239,242-247
+  s_eb2c82211b20e8::t_200df04ecb144a 94-97,111-113,116-118,147-151,199-201,207-209,259-264
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.test.ts
+  s_eb2c82211b20e8::t_03a28b33039861 21
+  s_eb2c82211b20e8::t_200df04ecb144a 612-614
+  s_eb2c82211b20e8::t_c9123904e95e26 346
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/shipped/shipped.test.ts
+  s_eb2c82211b20e8::t_200df04ecb144a 374-376,385-387,403-405,407-409
+  s_eb2c82211b20e8::t_d57478b9383e12 24,176,194,210,229,244,266,284,347,350,388,410
+  s_eb2c82211b20e8::t_6666ebf05bea1a 323,328,330,332,334,336,338,340
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/programs.ts
+  s_eb2c82211b20e8::t_200df04ecb144a 94-98
+  s_eb2c82211b20e8::t_27c842b899a5d8 120,122-124
+  s_eb2c82211b20e8::t_bd519476f5bbfc 121,210-211,238
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_eb2c82211b20e8::t_5f0f990b17e403 541,548,554,556-558,567,573,607,613,622,624,634-635,642-643,646-647,653,655,659-660,678,687,693,705,711,717,719,724-725,732,734,742,750,756,766,771,775
+  s_eb2c82211b20e8::t_accae620ec0d62 2-9,79-81,84-119,121-122,129-130,132-135,138-140,142-148,153-155,160-162,164-167,178,182-184,186,209-212,215,221-222,231,233,238-240,247,261-266,269,273,289-290,296,307,327-330,332,334,341,346,348,389-393,396,407-409,445-447,449,453-455,459-460,462-468
+  s_eb2c82211b20e8::t_4afdaa1e3f7f2a 83
+  s_eb2c82211b20e8::t_200df04ecb144a 168-177,187
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/tiles.ts
+  s_eb2c82211b20e8::t_200df04ecb144a 384-386
+  s_eb2c82211b20e8::t_7dfeeaf0b32578 1-6,17,93,136-137,139-140,142,144-145,147,149-154,159,166,168,173-175,177-179,230-231,237,242,248,253,259,359-360,362,397,404,407,413,418,420,427,431,435,441,452,456,460,464,472,477,479
+  s_eb2c82211b20e8::t_26f064be12661d 233-234,312-353,469
+  s_eb2c82211b20e8::t_5a63ce070c9b7a 367,459
+  s_eb2c82211b20e8::t_6605ea05b5934f 232,354-355
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261017191758_tile-owner/migration.sql
+  s_eb2c82211b20e8::t_c18d8f1f9a0259 1-2
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/testing.ts
+  s_eb2c82211b20e8::t_03a28b33039861 13,32-39,46
+  s_eb2c82211b20e8::t_c9f27cc57907f1 2-5,17-21,27,29,55-58,61-65,68,75-76,83-84,92-93,97,102-103,110,112,121,123
+  s_eb2c82211b20e8::t_d57478b9383e12 22,30,66,74
+  s_eb2c82211b20e8::t_be9c73c255cce3 47,49,67
+  s_eb2c82211b20e8::t_200df04ecb144a 23-26,98
+  s_eb2c82211b20e8::t_11300f21382915 31
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/programs.ts
+  s_eb2c82211b20e8::t_200df04ecb144a 35-38
+  s_eb2c82211b20e8::t_7f8bff10e75189 2-4,28-34,39-45,48-49,69,78,85,88,100,103,106,109,112,115,118,135,140
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/programs.ts
+  s_eb2c82211b20e8::t_27c842b899a5d8 22,54,78,165,222-223,227
+  s_eb2c82211b20e8::t_200df04ecb144a 226
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/landing/landing.test.ts
+  s_eb2c82211b20e8::t_c9123904e95e26 277
+  s_eb2c82211b20e8::t_200df04ecb144a 149-151,231-233
+  s_eb2c82211b20e8::t_6666ebf05bea1a 26-27,66-68,361
+  s_eb2c82211b20e8::t_d57478b9383e12 17,179,192,225,250,257,375,388
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/recording.test.ts
+  s_eb2c82211b20e8::t_200df04ecb144a 219-222
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.test.ts
+  s_eb2c82211b20e8::t_200df04ecb144a 552-554
+  s_eb2c82211b20e8::t_abdf642b0be119 19-21,534,545,560-585
+  s_eb2c82211b20e8::t_6666ebf05bea1a 533,535,544,546,551,555
+  s_eb2c82211b20e8::t_c9123904e95e26 350
+  s_eb2c82211b20e8::t_262d5c0cf3601c 586-587
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/decider/agreement.test.ts
+  s_eb2c82211b20e8::t_200df04ecb144a 171-174,190-193,207-210,219-222,258-261,263-266
+  s_eb2c82211b20e8::t_d57478b9383e12 24,57,60,74,79,102,116,136,145,155,237,246,270,275
+  s_eb2c82211b20e8::t_6666ebf05bea1a 86,105-107
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/assistant.test.ts
+  s_eb2c82211b20e8::t_abdf642b0be119 249
+  s_eb2c82211b20e8::t_c9123904e95e26 230,232-235
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/leaves.test.ts
+  s_eb2c82211b20e8::t_d57478b9383e12 15
+  s_eb2c82211b20e8::t_200df04ecb144a 85
+  s_eb2c82211b20e8::t_03a28b33039861 16,92
+  s_eb2c82211b20e8::t_e8eec4dc10ea5c 89-91
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/batch/undo.test.ts
+  s_eb2c82211b20e8::t_200df04ecb144a 129-132,152-154,159-161,165-167,264-266,269-271
+  s_eb2c82211b20e8::t_d57478b9383e12 20,59,74,89,92,99,102,123,134,138,150,169,178,183-184,187,196,198,200,214,231,234,253,262,273
+  s_eb2c82211b20e8::t_6666ebf05bea1a 51-54,63-65,82-83
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/kept.test.ts
+  s_eb2c82211b20e8::t_6666ebf05bea1a 29-30,43-45
+  s_eb2c82211b20e8::t_d57478b9383e12 22,77,84,148
+  s_eb2c82211b20e8::t_200df04ecb144a 70-73
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/database.test.ts
+  s_eb2c82211b20e8::t_881a7ca450b849 48
+  s_eb2c82211b20e8::t_c9f27cc57907f1 45
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261017191758_tile-owner/snapshot.json
+  s_eb2c82211b20e8::t_c18d8f1f9a0259 1-2337
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/landing/landing.ts
+  s_eb2c82211b20e8::t_2018e441f502db 223,229,231
+  s_eb2c82211b20e8::t_f925138b958578 3,34,156-157,188-189
+  s_eb2c82211b20e8::t_200df04ecb144a 190-219
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "161540cb0d83c888c1a7e6e8570075774bb2b1d7",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
