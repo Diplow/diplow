@@ -8,13 +8,13 @@ import * as Mapping from '#/api/mapping/mapping'
 
 import { useShipped } from './queries'
 
-// The Systems hexframe ships, Help and the tutorial, read whole on the client: each by its own server
-// function, a query per System and per language. Over stand-ins for the server functions; the
-// functions themselves are covered in src/api/mapping/mapping.test.ts.
+// The Systems hexframe ships, Help and the tutorial, read whole on the client: each by its Root
+// through the one server function, a query per System and per language, and none at all while its
+// read is not enabled. Over a stand-in for the server function; the function itself is covered in
+// src/api/mapping/mapping.test.ts.
 vi.mock('#/api/mapping/mapping', async (original) => ({
   ...(await original<typeof Mapping>()),
-  help: vi.fn(),
-  tutorial: vi.fn(),
+  shipped: vi.fn(),
 }))
 
 afterEach(() => {
@@ -22,13 +22,12 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 
-/** A server function's stand-in answering a shipped System's Root, titled by the language asked. */
-const answering = (id: string) =>
-  (({ data }: { data: { language: string } }) =>
-    Promise.resolve({
-      ok: true,
-      value: { _tag: 'Tile', id, title: data.language, preview: '', body: '', version: 1 },
-    })) as never
+/** The server function's stand-in: the Root of the System asked, titled by the language asked. */
+const answering = (({ data }: { data: { root: string; language: string } }) =>
+  Promise.resolve({
+    ok: true,
+    value: { _tag: 'Tile', id: data.root, title: data.language, preview: '', body: '', version: 1 },
+  })) as never
 
 /** Renders `hook` under a QueryClient of its own, which retries nothing. */
 function render<T>(hook: () => T) {
@@ -39,36 +38,37 @@ function render<T>(hook: () => T) {
 }
 
 describe('a System hexframe ships, read whole', () => {
-  it('reads Help in the language asked, each language a query of its own', async () => {
-    vi.mocked(Mapping.help).mockImplementation(answering('help'))
+  it('reads each System by its Root in the language asked, each a query of its own', async () => {
+    vi.mocked(Mapping.shipped).mockImplementation(answering)
     const { result } = render(() => ({
-      en: useShipped('help', 'en'),
-      fr: useShipped('help', 'fr'),
-    }))
-    await waitFor(() => {
-      expect(result.current).toMatchObject({
-        en: { data: { id: 'help', title: 'en' } },
-        fr: { data: { id: 'help', title: 'fr' } },
-      })
-    })
-    expect(Mapping.help).toHaveBeenCalledWith({ data: { language: 'en' } })
-    expect(Mapping.help).toHaveBeenCalledWith({ data: { language: 'fr' } })
-  })
-
-  it('reads the tutorial by its own server function, a query apart from Help’s', async () => {
-    vi.mocked(Mapping.help).mockImplementation(answering('help'))
-    vi.mocked(Mapping.tutorial).mockImplementation(answering('tutorial'))
-    const { result } = render(() => ({
-      help: useShipped('help', 'fr'),
+      helpEn: useShipped('help', 'en'),
+      helpFr: useShipped('help', 'fr'),
       tutorial: useShipped('tutorial', 'fr'),
     }))
     await waitFor(() => {
       expect(result.current).toMatchObject({
-        help: { data: { id: 'help', title: 'fr' } },
+        helpEn: { data: { id: 'help', title: 'en' } },
+        helpFr: { data: { id: 'help', title: 'fr' } },
         tutorial: { data: { id: 'tutorial', title: 'fr' } },
       })
     })
-    expect(Mapping.tutorial).toHaveBeenCalledExactlyOnceWith({ data: { language: 'fr' } })
-    expect(Mapping.help).toHaveBeenCalledExactlyOnceWith({ data: { language: 'fr' } })
+    expect(Mapping.shipped).toHaveBeenCalledTimes(3)
+    expect(Mapping.shipped).toHaveBeenCalledWith({ data: { root: 'tutorial', language: 'fr' } })
+  })
+
+  it('reads nothing while not enabled, and shows what the canvas read of the same System', async () => {
+    vi.mocked(Mapping.shipped).mockImplementation(answering)
+    const alone = render(() => useShipped('tutorial', 'en', { throwing: false, enabled: false }))
+    await new Promise((settled) => setTimeout(settled, 50))
+    expect(alone.result.current.data).toBeUndefined()
+    expect(Mapping.shipped).not.toHaveBeenCalled()
+    const beside = render(() => ({
+      corner: useShipped('tutorial', 'en', { throwing: false, enabled: false }),
+      canvas: useShipped('tutorial', 'en'),
+    }))
+    await waitFor(() => {
+      expect(beside.result.current.corner.data).toMatchObject({ id: 'tutorial', title: 'en' })
+    })
+    expect(Mapping.shipped).toHaveBeenCalledOnce()
   })
 })

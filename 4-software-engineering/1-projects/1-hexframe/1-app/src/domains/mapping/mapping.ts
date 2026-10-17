@@ -69,7 +69,7 @@ import {
   extended,
 } from './operations'
 
-export { HelpId, helpRoot, type ShippedRoot, shippedSystem, tutorialRoot } from './shipped/shipped'
+export { HelpId, helpRoot, shippedSystem } from './shipped/shipped'
 
 /** The content of a Root nobody has named yet, and of every Reference, which keeps none of its own. */
 export const untitled: Content = { title: '', preview: '', body: '' }

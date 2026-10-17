@@ -6,7 +6,7 @@
 import { Effect } from 'effect'
 
 import * as Iam from '#/domains/iam/iam'
-import type { Field } from '#/domains/mapping/entities'
+import type { Field, ShippedRoot } from '#/domains/mapping/entities'
 import {
   CreateReference,
   CreateTile,
@@ -36,20 +36,12 @@ const changeForAccount = <A, E, R>(operation: (accountId: string) => Effect.Effe
 export const system = forAccount(Mapping.system)
 
 /**
- * A System hexframe ships, whole, in the page's language, for any visitor: no Account owns it, so it
- * asks for none. The app's locales are the languages the shipped Systems are written in, which its
- * type requires.
+ * A System hexframe ships whole, by its Root, in the page's language, for any visitor: no Account
+ * owns it, so it asks for none. The app's locales are the languages the shipped Systems are written
+ * in, which its type requires.
  */
-const shipped =
-  (root: Mapping.ShippedRoot) =>
-  ({ language }: { language: Locale }) =>
-    Mapping.shippedSystem(root, language)
-
-/** Help whole, for any visitor. */
-export const help = shipped(Mapping.helpRoot)
-
-/** The tutorial whole, for any visitor. */
-export const tutorial = shipped(Mapping.tutorialRoot)
+export const shipped = ({ root, language }: { root: ShippedRoot; language: Locale }) =>
+  Mapping.shippedSystem(root, language)
 
 /**
  * A Tile of the Account's System, its Root when no id is given, read to a depth with only the fields

@@ -1,19 +1,9 @@
 // A note of a vault folder split into its frontmatter and its Markdown: the format the files are
 // written in, which Mapping reads the Tiles of the Systems hexframe ships from
-// (src/domains/mapping/shipped/); and the app's folders those Systems are written in. A frontmatter
-// opens with a `---` first line and closes with the next one, and holds scalar fields only, which is
-// all the vault's notes use, so no YAML library is needed. Pure, and free of `import.meta.glob`, so
-// the build's check of those folders (scripts/check-shipped.ts) loads it with the Vite config.
-
-/**
- * The app's folders the build bundles into the server, each a System hexframe ships, by its name:
- * Help, then the tutorial. The bundle globs each by name (`./shipped.ts`), since Vite takes a glob's
- * arguments as literals only.
- */
-export const shippedFolders = ['help', 'tutorial'] as const
-
-/** The folder of one System hexframe ships. */
-export type ShippedFolder = (typeof shippedFolders)[number]
+// (src/domains/mapping/shipped/). A frontmatter opens with a `---` first line and closes with the
+// next one, and holds scalar fields only, which is all the vault's notes use, so no YAML library is
+// needed. Pure, and free of `import.meta.glob`, so the build's check of those Systems' folders
+// (scripts/check-shipped.ts) loads it with the Vite config.
 
 /**
  * The name of a note in each language it may be written in: `CLAUDE.md` in English, and a twin beside

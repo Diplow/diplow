@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { missingFrom, noteOf, shippedFolders } from './note'
+import { missingFrom, noteOf } from './note'
 import { shippedNotes } from './shipped'
 
 describe('a note of a vault folder', () => {
@@ -26,10 +26,10 @@ describe("the vault's fields every note holds", () => {
 
 describe('the notes of the Systems hexframe ships, as the build bundles them', () => {
   it('bundles a folder of notes for each of them, Help and the tutorial, a Root in each', () => {
-    expect(Object.keys(shippedNotes)).toEqual([...shippedFolders])
-    for (const folder of shippedFolders) {
-      expect(shippedNotes[folder].en['']).toMatch(/^---\ntitle: /)
-      expect(shippedNotes[folder].fr['']).toMatch(/^---\ntitle: /)
+    expect(Object.keys(shippedNotes)).toEqual(['help', 'tutorial'])
+    for (const notes of Object.values(shippedNotes)) {
+      expect(notes.en['']).toMatch(/^---\ntitle: /)
+      expect(notes.fr['']).toMatch(/^---\ntitle: /)
     }
   })
 
@@ -59,10 +59,8 @@ describe('the notes of the Systems hexframe ships, as the build bundles them', (
   })
 
   it("holds each folder's French twin under the same path, apart from its English note", () => {
-    for (const folder of shippedFolders) {
-      expect(Object.keys(shippedNotes[folder].fr).sort()).toEqual(
-        Object.keys(shippedNotes[folder].en).sort(),
-      )
+    for (const notes of Object.values(shippedNotes)) {
+      expect(Object.keys(notes.fr).sort()).toEqual(Object.keys(notes.en).sort())
     }
     expect(shippedNotes.help.fr['2-tiles']).toMatch(/^---\ntitle: Les tuiles\n/)
     expect(shippedNotes.help.en['2-tiles']).toMatch(/^---\ntitle: Tiles\n/)

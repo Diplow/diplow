@@ -108,32 +108,27 @@ describe("home's search param for the tutorial", () => {
 })
 
 describe("the tutorial's view on the canvas", () => {
-  it("is the URL's, its Root alone when the URL names no Tile", () => {
-    expect(tutorialViewOf({ tutorial: true })).toEqual({
+  it('centers the Tile its param names, its Root for `true`, the rest the URL’s view', () => {
+    expect(tutorialViewOf({ tutorial: true, frame: 'children' })).toEqual({
       center: undefined,
-      frame: undefined,
-      inner: undefined,
-      expanded: undefined,
-    })
-    expect(tutorialViewOf({ tutorial: true, center: 'tutorial/2', frame: 'children' })).toEqual({
-      center: 'tutorial/2',
       frame: 'children',
       inner: undefined,
       expanded: undefined,
     })
-  })
-
-  it('centers the Tile a link names when the URL names no center, the center winning else', () => {
     expect(tutorialViewOf({ tutorial: 'tutorial/4' }).center).toBe('tutorial/4')
-    expect(tutorialViewOf({ tutorial: 'tutorial/4', center: 'tutorial' }).center).toBe('tutorial')
   })
 
-  it('moves with the canvas, its param following the Tile centered, the rest kept', () => {
-    const current = { tutorial: true as const, keys: true as const, center: undefined }
+  it("leaves the URL's center to the System, whatever it names", () => {
+    expect(tutorialViewOf({ tutorial: true, center: 'tutorial/2' }).center).toBeUndefined()
+    expect(tutorialViewOf({ tutorial: 'tutorial/4', center: 'tutorial' }).center).toBe('tutorial/4')
+  })
+
+  it('moves with the canvas, the Tile centered in its param alone, the rest kept', () => {
+    const current = { tutorial: true as const, keys: true as const, center: 'own' }
     expect(tutorialOn(current, { center: 'tutorial/5', frame: 'children' })).toEqual({
       tutorial: 'tutorial/5',
       keys: true,
-      center: 'tutorial/5',
+      center: undefined,
       frame: 'children',
       inner: undefined,
       expanded: undefined,

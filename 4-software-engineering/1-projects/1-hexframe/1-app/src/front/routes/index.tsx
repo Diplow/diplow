@@ -31,7 +31,7 @@ import { useMemo, useState } from 'react'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { readSignInSearch, sessionIfAny } from '#/front/client/iam/guard'
 import { useFollowLatest } from '#/front/client/assistant/follow'
-import { type Shipped, useShipped, useSystem } from '#/front/client/mapping/queries'
+import { useShipped, useSystem } from '#/front/client/mapping/queries'
 import { accessOf, readAccessSearch, wayBack, withAccess } from '#/front/features/access/search'
 import { SignedOutLines, SignInFoot } from '#/front/features/access/SignedOut'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
@@ -79,7 +79,7 @@ import type { CanvasMarks } from '#/front/ui/canvas/Canvas'
 import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { centerOn, withViewIn, type CanvasView, type ViewAction } from '#/front/ui/canvas/view/view'
-import type { Direction } from '#/domains/mapping/entities'
+import type { Direction, ShippedRoot } from '#/domains/mapping/entities'
 
 /**
  * Home's search params, each feature's read on its own: the System's view and change, the Keys and
@@ -171,12 +171,13 @@ function useHelpNavigation(turning: ReturnType<typeof useScreenState>['actions']
 }
 
 /**
- * The tutorial's navigation on home, read-only: its Tiles, read beside the canvas without throwing,
- * for the corner, and its canvas's view, which its param follows to the Tile centered.
+ * The tutorial's navigation on home, read-only: its Tiles, for the corner, read beside the canvas
+ * without throwing, and only while it is `open` on the canvas, and its canvas's view, whose center
+ * its param holds.
  */
-function useTutorialNavigation() {
+function useTutorialNavigation(open: boolean) {
   const navigate = Route.useNavigate()
-  const { data } = useShipped('tutorial', getLocale(), { throwing: false })
+  const { data } = useShipped('tutorial', getLocale(), { throwing: false, enabled: open })
   const tree = useMemo(() => (data === undefined ? undefined : canvasTree(data)), [data])
   return {
     tree,
@@ -190,7 +191,7 @@ function useTutorialNavigation() {
  * The System hexframe ships that has the canvas, if one does: Help while its widget is open, else the
  * tutorial while the URL names it; and its view, the URL's.
  */
-function shippedShown(search: HomeSearch): { shipped: Shipped; view: CanvasView } | undefined {
+function shippedShown(search: HomeSearch): { shipped: ShippedRoot; view: CanvasView } | undefined {
   if (search.help !== undefined) return { shipped: 'help', view: viewOf(search) }
   if (search.tutorial !== undefined) return { shipped: 'tutorial', view: tutorialViewOf(search) }
   return undefined
@@ -207,7 +208,7 @@ interface ShippedNavigation {
  * System's then. The URL's view is the canvas's, so meanwhile the System's view is its Root, which a
  * Message is sent from.
  */
-function shippedSide(search: HomeSearch, navigation: Record<Shipped, ShippedNavigation>) {
+function shippedSide(search: HomeSearch, navigation: Record<ShippedRoot, ShippedNavigation>) {
   const shown = shippedShown(search)
   if (shown === undefined) return undefined
   const { shipped, view } = shown
@@ -322,7 +323,7 @@ function SignedIn() {
   // The key widget's step: the receipt outlives the widget.
   const keys = useKeyWidgetState(search.keys === true)
   const help = useHelpNavigation(turning)
-  const tutorial = useTutorialNavigation()
+  const tutorial = useTutorialNavigation(search.tutorial !== undefined)
   const openKeys = useOpenKeys(turning)
   const onSearchChange = (next: SearchChange) => {
     // A form, an import or an edit, opening: the tile widget comes, in front on a phone.
@@ -484,7 +485,7 @@ function HelpFoot({ topic, onTopic }: HelpFootProps) {
 }
 
 interface ShippedSideProps {
-  shipped: Shipped
+  shipped: ShippedRoot
   view: CanvasView
   onViewChange: (view: CanvasView) => void
 }

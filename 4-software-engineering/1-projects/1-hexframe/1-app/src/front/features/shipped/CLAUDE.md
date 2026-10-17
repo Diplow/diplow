@@ -16,14 +16,14 @@ What home shows of the Systems hexframe ships, each read whole through `useShipp
 
 - **Read-only.** No empty slot takes a click and no Tile offers a swap: the canvas only changes the view, as on home; each Tile's menu holds the lines that go somewhere, Open, Go in, Show its Context and Back out, beside its hover card (the canvas's `looking`, never `acting`), so Help's Context is a right click away.
 - **A topic of Help opens in the chat.** Help's Root stands alone and large on the canvas, its Preview whole, until a click opens it, and a topic centered lands with its own around it, one with none alone and large; signed out, the agent offers to read it in full under its two lines (`HelpRead`), which opens its page in the help widget, where the centered Tile's card and its Read were; signed in, `/help` opens it, on the topic the words after it find. While the widget is open, a topic centered on the canvas turns its page; the map turns the page, a topic it reads on and Open in Help center the canvas on it (`hexframe-app-design-system-v1/decisions.md#DEC-43`).
-- **The tutorial stands where the URL puts it.** Its Root alone and large for `true`, the Tile a link names when the URL names no center, and the param follows the Tile centered as the help widget's page does. Help's widget open takes the canvas from it.
+- **The tutorial stands where its param puts it.** Its Root alone and large for `true`, else the Tile it names, the one field that says where the tutorial is centered: a move on its canvas writes the Tile centered there and leaves the view's `center`, the System's, empty. Help's widget open takes the canvas from it.
 
 | File | Holds |
 |---|---|
 | `Shipped.tsx` | `ShippedCanvas`, a System hexframe ships on the canvas, each Tile's menu the view's lines alone, Help's or the tutorial's, and `HelpRead`, the agent's offer to read Help's centered topic in full, a quiet act in its voice |
 | `HelpWidgets.tsx` | `HelpWidgets`, the help widget on the topic the URL names |
 | `nodes.ts` | `helpNodeOf`, Mapping's Tiles as the widget's topics, `readingOf`, what the widget shows of a topic: where it stands, its parent's titles and six, and where it reads on, and `topicFound`, the topic a few words after `/help` find, a title first. Pure and tested |
-| `search.ts` | Home's search params of the shipped Systems, each one of their Tiles by its id, or `true`, its Root, in one schema: `help`, the help widget's topic, with `topicOf`, `withHelp`, `turnedTo`, and `fromHelpPage`, where an old link to the Help page lands; and `tutorial`, the Tile the tutorial is on, with `withTutorial`, `tutorialViewOf`, its view on the canvas, and `tutorialOn`, the params once its canvas moved. Pure and tested |
+| `search.ts` | Home's search params of the shipped Systems, each one of their Tiles by its id, or `true`, its Root, in one schema: `help`, the help widget's topic, with `topicOf`, `withHelp`, `turnedTo`, and `fromHelpPage`, where an old link to the Help page lands; and `tutorial`, the Tile the tutorial is centered on, with `withTutorial`, `tutorialViewOf`, its view on the canvas, centered by the param, and `tutorialOn`, the params once its canvas moved. Pure and tested |
 
 ## Rules
 

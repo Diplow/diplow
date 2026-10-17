@@ -65,6 +65,17 @@ export interface System {
   readonly version: number
 }
 
+/**
+ * The Systems hexframe ships, owned by no Account, by the ids of their Roots: Help's, then the
+ * tutorial's. A Root's id is the name of the app's folder it is written in, and every other id of its
+ * System a path of slots from it (`tutorial/2`). Mapping says which they are; the bundle holds a
+ * folder for each.
+ */
+export const shippedRoots = ['help', 'tutorial'] as const
+
+/** The Root of a System hexframe ships, by its id. */
+export type ShippedRoot = (typeof shippedRoots)[number]
+
 /** A Leaf in its System's tree: one file's worth, a Tile with nothing below it and no Context. */
 export type LeafTile = FoundTile
 

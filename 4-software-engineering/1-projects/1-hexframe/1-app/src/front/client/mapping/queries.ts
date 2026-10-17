@@ -21,7 +21,12 @@ import { Schema } from 'effect'
 import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 
 import type { Failure, Outcome } from '#/api/report/errors/failure'
-import { type System, type SystemTile, systemOf } from '#/domains/mapping/entities'
+import {
+  type ShippedRoot,
+  type System,
+  type SystemTile,
+  systemOf,
+} from '#/domains/mapping/entities'
 import type { Operation, OperationName } from '#/domains/mapping/operations'
 import { type Download, downloaded } from '#/api/mapping/files/download'
 import { type Given, type LeftOut, type Prepared, prepared } from './import/upload'
@@ -52,12 +57,11 @@ import {
   deleteTile,
   editTile,
   exportTile,
-  help,
   importTiles,
   moveTile,
+  shipped,
   swapTiles,
   system,
-  tutorial,
 } from '#/api/mapping/mapping'
 
 import type { Locale } from '#/paraglide/runtime'
@@ -255,28 +259,26 @@ export function useEachSystemWrite(react: () => void, moment: 'made' | 'settled'
   useSyncExternalStore(subscribe, nothing, nothing)
 }
 
-/** A System hexframe ships, by its name, its server function's: Help or the tutorial. */
-export type Shipped = 'help' | 'tutorial'
-
-/** The server function that reads a System hexframe ships whole, looked up when it is read. */
-const readerOf = (shipped: Shipped) => ({ help, tutorial })[shipped]
-
 /**
- * A System hexframe ships, Help or the tutorial, whole, in the page's language, Bodies included, read
- * as the System is. Anyone reads it, so it never sends the user to sign in. With `throwing: false`,
- * for the canvas's corner beside it, the same Query, whose failure throws nothing there and leaves it
- * undefined, the canvas's boundary showing it.
+ * A System hexframe ships, Help or the tutorial, by its Root, whole, in the page's language, Bodies
+ * included, read as the System is. Anyone reads it, so it never sends the user to sign in. With
+ * `throwing: false`, for the canvas's corner beside it, the same Query, whose failure throws nothing
+ * there and leaves it undefined, the canvas's boundary showing it; with `enabled: false`, the same
+ * Query read by nobody but the canvas, so a corner reads a System only while the canvas shows it.
  */
 export function useShipped(
-  shipped: Shipped,
+  root: ShippedRoot,
   language: Locale,
-  { throwing = true }: { throwing?: boolean } = {},
+  { throwing = true, enabled = true }: { throwing?: boolean; enabled?: boolean } = {},
 ) {
-  const query = read({
-    scope: shipped,
-    key: [language],
-    call: () => readerOf(shipped)({ data: { language } }),
-  })
+  const query = {
+    ...read({
+      scope: 'shipped',
+      key: [root, language],
+      call: () => shipped({ data: { root, language } }),
+    }),
+    enabled,
+  }
   return useQuery(throwing ? query : { ...query, throwOnError: false })
 }
 

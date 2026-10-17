@@ -21,10 +21,10 @@ import { glimpses, ownTile } from '#/domains/mapping/mapping'
 import type { Failure } from '../report/errors/failure'
 import { noKey, run, type Services, type StartContext } from '../server/run'
 import {
-  ShippedLanguage,
   NewReference,
   NewTile,
   ReferenceSlot,
+  ShippedRead,
   TileEdit,
   TileMove,
   TileExport,
@@ -149,8 +149,10 @@ describe("Mapping's server functions", () => {
   })
 
   it('reads Help whole for anyone, signed out included, in the language asked', async () => {
-    const english = await value(run(request(false), Mapping.help({ language: 'en' })))
-    const french = await value(run(request(), Mapping.help({ language: 'fr' })))
+    const english = await value(
+      run(request(false), Mapping.shipped({ root: 'help', language: 'en' })),
+    )
+    const french = await value(run(request(), Mapping.shipped({ root: 'help', language: 'fr' })))
     expect(english).toMatchObject({ _tag: 'Tile', id: 'help', title: 'Hexframe' })
     expect(english.branches[5]).toMatchObject({ id: 'help/5', title: 'Operations' })
     expect(french.branches[5]).toMatchObject({ id: 'help/5', title: 'Les opérations' })
@@ -158,8 +160,12 @@ describe("Mapping's server functions", () => {
   })
 
   it('reads the tutorial whole for anyone, signed out included, in the language asked', async () => {
-    const english = await value(run(request(false), Mapping.tutorial({ language: 'en' })))
-    const french = await value(run(request(), Mapping.tutorial({ language: 'fr' })))
+    const english = await value(
+      run(request(false), Mapping.shipped({ root: 'tutorial', language: 'en' })),
+    )
+    const french = await value(
+      run(request(), Mapping.shipped({ root: 'tutorial', language: 'fr' })),
+    )
     expect(english).toMatchObject({ _tag: 'Tile', id: 'tutorial', title: 'Tutorial' })
     expect(english.branches[1]).toMatchObject({ id: 'tutorial/1', title: 'Go in' })
     expect(french.branches[1]).toMatchObject({ id: 'tutorial/1', title: 'Entrer' })
@@ -340,8 +346,7 @@ describe("the errors Mapping's server functions can fail with", () => {
   it('are each listed by its type, a write refusing the Systems hexframe ships', () => {
     type ErrorOf<P> = P extends Effect.Effect<unknown, infer E, unknown> ? E : never
     expectTypeOf<ErrorOf<typeof Mapping.system>>().toEqualTypeOf<SignedOut>()
-    expectTypeOf<ErrorOf<ReturnType<typeof Mapping.help>>>().toEqualTypeOf<never>()
-    expectTypeOf<ErrorOf<ReturnType<typeof Mapping.tutorial>>>().toEqualTypeOf<never>()
+    expectTypeOf<ErrorOf<ReturnType<typeof Mapping.shipped>>>().toEqualTypeOf<never>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createTile>>>().toEqualTypeOf<
       | SignedOut
       | TitleMissing
@@ -419,14 +424,24 @@ describe("the schemas Mapping's server functions validate by", () => {
     expect(accepts(TileMove, { id: t, version: 1, parent: p, slot: { leaf: 3 } })).toBe(true)
   })
 
-  it("read Help or the tutorial in one of the app's languages, nothing else", () => {
-    expect(['en', 'fr'].map((language) => accepts(ShippedLanguage, { language }))).toEqual([
+  it("read Help or the tutorial, by its Root, in one of the app's languages, nothing else", () => {
+    const read = (root: unknown, language: unknown) => accepts(ShippedRead, { root, language })
+    expect([read('help', 'en'), read('help', 'fr'), read('tutorial', 'fr')]).toEqual([
+      true,
       true,
       true,
     ])
-    expect(['de', '', undefined].map((language) => accepts(ShippedLanguage, { language }))).toEqual(
-      [false, false, false],
-    )
+    expect(['de', '', undefined].map((language) => read('help', language))).toEqual([
+      false,
+      false,
+      false,
+    ])
+    expect(['helper', 'tutorial/1', '', undefined].map((root) => read(root, 'en'))).toEqual([
+      false,
+      false,
+      false,
+      false,
+    ])
   })
 
   it('swap two Tiles named by their ids, each with the Version read of it', () => {

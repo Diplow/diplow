@@ -1,6 +1,7 @@
 // The Systems hexframe ships, which no Account owns: every Account reads them, none writes them. Two
 // so far, Help, hexframe's guide, and the tutorial, a new account's first journey, each the same
-// thing by its Root. Their Tiles are the folders of the app's `help/` and `tutorial/`, whose notes the
+// thing by its Root, which Mapping's door names (`shippedRoots`, ../entities/system.ts), so the front
+// names them alike. Their Tiles are the folders of the app's `help/` and `tutorial/`, whose notes the
 // shipped repository bundles into the server at build time, so nothing reads the file system at
 // request time and nothing of them lives in the database. Each folder holds a note per language,
 // `CLAUDE.md` in English and `CLAUDE.fr.md` in French, so a shipped System reads the same in both but
@@ -10,7 +11,7 @@
 // (vite.config.ts).
 import { Effect, Schema } from 'effect'
 
-import { noteFiles, type ShippedFolder, shippedFolders } from '#/repositories/shipped/note'
+import { noteFiles } from '#/repositories/shipped/note'
 import { shippedNotes } from '#/repositories/shipped/shipped'
 
 import { TileNotFound } from '../errors'
@@ -20,14 +21,13 @@ import {
   type Field,
   type FieldsAsked,
   type Found,
+  type ShippedRoot,
+  shippedRoots,
   systemFrom,
   systemOf,
   withContent,
 } from '../entities'
 import { type Vault, vaultOf } from './vault'
-
-/** The Root of a System hexframe ships, its id: the name of the folder it is written in. */
-export type ShippedRoot = ShippedFolder
 
 /** The id of Help's Root. */
 export const helpRoot = 'help' satisfies ShippedRoot
@@ -41,7 +41,7 @@ export const tutorialRoot = 'tutorial' satisfies ShippedRoot
  * one is refused, so `help/../x` is Help's too.
  */
 export const shippedOf = (id: string): ShippedRoot | undefined =>
-  shippedFolders.find((root) => id === root || id.startsWith(`${root}/`))
+  shippedRoots.find((root) => id === root || id.startsWith(`${root}/`))
 
 /** Whether an id names a System hexframe ships, Help or the tutorial (`shippedOf`). */
 export const isShippedId = (id: string) => shippedOf(id) !== undefined

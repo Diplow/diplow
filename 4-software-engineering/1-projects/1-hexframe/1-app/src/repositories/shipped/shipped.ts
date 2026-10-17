@@ -3,9 +3,10 @@
 // language, then by the path of its folder from the System's, `''` for the Root. Vite's
 // `import.meta.glob` reads them when it builds the server, `exhaustive` so the Context Tiles' dot
 // folders come too; nothing reads the file system at request time. Vite takes a glob's arguments as
-// literals only, hence one call per language, each folder written out. Mapping decides what each note
-// means (src/domains/mapping/shipped/).
-import type { noteFiles, ShippedFolder } from './note'
+// literals only, hence one call per language, each folder written out. Mapping says which Systems it
+// ships and decides what each note means (src/domains/mapping/shipped/), so its type asks this
+// bundle for a folder of notes per Root.
+import type { noteFiles } from './note'
 
 /** The text of notes, by the path of each note's folder. */
 type Notes = Readonly<Record<string, string>>
@@ -27,7 +28,7 @@ const french = import.meta.glob<string>(['/help/**/CLAUDE.fr.md', '/tutorial/**/
 })
 
 /** The notes bundled under one System's folder, by the path of each note's folder from it. */
-function under(files: Notes, folder: ShippedFolder): Notes {
+function under(files: Notes, folder: string): Notes {
   const prefix = `/${folder}/`
   return Object.fromEntries(
     Object.entries(files).flatMap(([file, text]) =>
@@ -39,7 +40,7 @@ function under(files: Notes, folder: ShippedFolder): Notes {
 }
 
 /** One System's notes, in each language its notes are written in. */
-const notesOf = (folder: ShippedFolder) => ({
+const notesOf = (folder: string): Readonly<Record<keyof typeof noteFiles, Notes>> => ({
   en: under(english, folder),
   fr: under(french, folder),
 })
@@ -48,6 +49,4 @@ const notesOf = (folder: ShippedFolder) => ({
  * The text of the notes of each System hexframe ships, by its folder, then by language, then by the
  * path of each note's folder from the System's.
  */
-export const shippedNotes: Readonly<
-  Record<ShippedFolder, Readonly<Record<keyof typeof noteFiles, Notes>>>
-> = { help: notesOf('help'), tutorial: notesOf('tutorial') }
+export const shippedNotes = { help: notesOf('help'), tutorial: notesOf('tutorial') } as const

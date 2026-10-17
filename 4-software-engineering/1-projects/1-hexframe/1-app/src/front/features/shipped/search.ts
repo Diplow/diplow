@@ -1,9 +1,10 @@
 // What home carries in its URL of the Systems hexframe ships, each in a param of its own, which says
 // the System is open on one of its Tiles, by its id, or on `true`, its Root, which a link cannot name
-// before it is read: `help`, the help widget open on a topic, Help on the canvas while it is, signed
-// in; `tutorial`, the tutorial on the canvas. While one is on the canvas, its view is the canvas's, in
-// the same fields as the System's, and its param follows the Tile centered. An old link to the Help
-// page, its view and `open`, the Tile whose Body was open, lands on home as these. Pure.
+// before it is read. `help`: the help widget open on a topic, Help on the canvas while it is, signed
+// in, in the view's fields, the System's otherwise, the widget's page following the Tile centered.
+// `tutorial`: the tutorial on the canvas, centered on that Tile, the one field that names where it
+// stands, the view's other fields the canvas's. An old link to the Help page, its view and `open`, the
+// Tile whose Body was open, lands on home as these. Pure.
 import { Schema } from 'effect'
 
 import {
@@ -48,7 +49,7 @@ export function turnedTo<S extends CanvasView & HelpSearch>(
 }
 
 const TutorialSearch = Schema.Struct({
-  /** The Tile the tutorial is on, on the canvas; the canvas is the System's when absent. */
+  /** The Tile the tutorial is centered on, on the canvas; the canvas is the System's when absent. */
   tutorial: ShippedAt,
 })
 
@@ -57,28 +58,28 @@ export type TutorialSearch = typeof TutorialSearch.Type
 /** Reads the URL's search param, which falls back on the tutorial away from the canvas. */
 export const readTutorialSearch = readSearch(TutorialSearch)
 
-/** The search param with the tutorial on the canvas, on this Tile or its Root, or gone from it. */
+/** The search param with the tutorial on the canvas, centered on this Tile or its Root, or gone. */
 export const withTutorial = (at: string | true | undefined): TutorialSearch => ({ tutorial: at })
 
 /**
- * The tutorial's view on the canvas: the URL's, the canvas's while the tutorial has it, centered on the
- * Tile the param names when the URL names no center, so a link to one of its Tiles opens there.
+ * The tutorial's view on the canvas: centered on the Tile its param names, its Root for `true`, the
+ * view's other fields the URL's, the canvas's while the tutorial has it. The URL's `center` is the
+ * System's, never the tutorial's.
  */
-export function tutorialViewOf(search: CanvasView & TutorialSearch): CanvasView {
-  const view = viewIn(search)
-  const at = search.tutorial
-  return view.center === undefined && typeof at === 'string' ? { ...view, center: at } : view
-}
+export const tutorialViewOf = (search: CanvasView & TutorialSearch): CanvasView => ({
+  ...viewIn(search),
+  center: search.tutorial === true ? undefined : search.tutorial,
+})
 
 /**
- * A page's search params with the tutorial's canvas on `view`, the rest kept, the param following
- * the Tile centered, as the help widget's page follows Help's canvas.
+ * A page's search params with the tutorial's canvas on `view`, the rest kept: the Tile centered in
+ * the tutorial's param, the one field that names it, and none in the view's `center`.
  */
 export const tutorialOn = <S extends CanvasView & TutorialSearch>(
   search: S,
   view: CanvasView,
 ): S => ({
-  ...withViewIn(search, view),
+  ...withViewIn(search, { ...view, center: undefined }),
   ...withTutorial(view.center ?? true),
 })
 

@@ -9,8 +9,9 @@ import { basename, join, relative, resolve } from 'node:path'
 
 import type { Plugin } from 'vite'
 
+import { shippedRoots } from '../src/domains/mapping/entities'
 import { vaultOf } from '../src/domains/mapping/shipped/vault'
-import { noteFiles, shippedFolders } from '../src/repositories/shipped/note'
+import { noteFiles } from '../src/repositories/shipped/note'
 
 /**
  * What keeps each folder under `folder` from reading as a Tile of the System whose Root is `root`, in
@@ -36,10 +37,11 @@ export function problemsIn(folder: string, root: string): ReadonlyArray<string> 
 
 /**
  * Fails the build, and `dev` when it starts, while a folder of a System hexframe ships reads as no
- * Tile, naming each. Each folder is found from Vite's root, as the bundle's `import.meta.glob('/help/**')`
- * finds it, wherever Vite was started from, and its System's Root is its name.
+ * Tile, naming each: by default the folder of each Root Mapping names, its name the Root's id. Each
+ * is found from Vite's root, as the bundle's `import.meta.glob('/help/**')` finds it, wherever Vite
+ * was started from.
  */
-export function shippedChecked(folders: ReadonlyArray<string> = shippedFolders): Plugin {
+export function shippedChecked(folders: ReadonlyArray<string> = shippedRoots): Plugin {
   let root = process.cwd()
   return {
     name: 'hexframe:shipped-checked',
