@@ -1,0 +1,39 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/text/gallery.tsx
+  s_7b92c93552a78d::t_ec2ca3390c06e4 166-168
+  s_7b92c93552a78d::t_83eb7bbcdd4da9 11,15,185,190-192
+  s_7b92c93552a78d::t_687836aad9a600 193-194
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/deck/tour.tsx
+  s_7b92c93552a78d::t_ec2ca3390c06e4 24,249,363,365
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/text/Message.tsx
+  s_7b92c93552a78d::t_ec2ca3390c06e4 19,135-142,258-261,263-269,283-284
+  s_7b92c93552a78d::t_83eb7bbcdd4da9 262
+  s_7b92c93552a78d::t_179ae12fe2f378 247
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/CLAUDE.md
+  s_7b92c93552a78d::t_2793d1630baaaf 19
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/marks/mark.ts
+  s_7b92c93552a78d::t_ec2ca3390c06e4 34-36,38
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/CLAUDE.md
+  s_7b92c93552a78d::t_2793d1630baaaf 29,42
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_7b92c93552a78d::t_ec2ca3390c06e4 86,203-204,208,264
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/seams/CLAUDE.md
+  s_7b92c93552a78d::t_2793d1630baaaf 19-20
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-tutorial/decisions.md
+  s_7b92c93552a78d::t_2793d1630baaaf 53,57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "38575e3bc59cac9c8eb36e5213fe22eb72bafd44",
+  "prompts": {},
+  "sessions": {
+    "s_7b92c93552a78d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "df1e2743-42cd-4ee5-8710-130ad5db0a14",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
