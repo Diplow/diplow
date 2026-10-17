@@ -1,0 +1,50 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_eb2c82211b20e8::t_ecc99026b423db 104-108,127,171,579
+4-software-engineering/1-projects/1-hexframe/1-app/dependency-cruiser.config.ts
+  s_eb2c82211b20e8::t_9e254660f0bd44 168
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/testing.ts
+  s_eb2c82211b20e8::t_9e254660f0bd44 1-3
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/rights.ts
+  s_eb2c82211b20e8::t_ecc99026b423db 79-84
+  s_eb2c82211b20e8::t_30e8217de22c33 166-168,170-174,180,184,187-189
+  s_eb2c82211b20e8::t_9141a1b606251d 40
+  s_eb2c82211b20e8::t_19c992d186bdf9 190
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/sharing/sharing.ts
+  s_eb2c82211b20e8::t_ecc99026b423db 1-70
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/reach.test.ts
+  s_eb2c82211b20e8::t_5a1c68def5ed54 1-88
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/index.ts
+  s_eb2c82211b20e8::t_9141a1b606251d 8
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/reach.ts
+  s_eb2c82211b20e8::t_9141a1b606251d 1-44
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/grants.ts
+  s_eb2c82211b20e8::t_669e34a30091ea 2-7,10,53-120
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/tiles.ts
+  s_eb2c82211b20e8::t_669e34a30091ea 16,99-103,409
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/may.ts
+  s_eb2c82211b20e8::t_7b50bda8e4db8e 110-122
+  s_eb2c82211b20e8::t_6b82f02d05f129 109
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/sharing/sharing.test.ts
+  s_eb2c82211b20e8::t_d7f67113f6056d 1-7,9-45,47-94,96-110,112-118,122-133
+  s_eb2c82211b20e8::t_20b786e3cd49db 8,46,119-121
+  s_eb2c82211b20e8::t_df831b45ad56b1 95,111
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/may.test.ts
+  s_eb2c82211b20e8::t_5056eadd4c9454 22,270-292
+  s_eb2c82211b20e8::t_0e2fc3348e2f69 293
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b6b5f25294fe04c447d49b5889602f506633fe91",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
