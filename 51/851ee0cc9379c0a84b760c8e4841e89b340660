@@ -1,0 +1,48 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/rights.ts
+  s_eb2c82211b20e8::t_b3c77cfec1fb70 50-54
+  s_eb2c82211b20e8::t_120589aa643694 137-138,144,149,151
+  s_eb2c82211b20e8::t_4f19e3fe658b11 1-49,55-136,139-143,145-148,150,152-187
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/may.ts
+  s_eb2c82211b20e8::t_b3c77cfec1fb70 7-16
+  s_eb2c82211b20e8::t_f4127cf80fc565 1-6,17-108
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/index.ts
+  s_eb2c82211b20e8::t_5c1cbdd9a8c049 2,8
+  s_eb2c82211b20e8::t_a6e46b4833567e 3-4
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/index.ts
+  s_eb2c82211b20e8::t_a6e46b4833567e 1-4
+  s_eb2c82211b20e8::t_497de58dfcf8b3 12
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/errors.ts
+  s_eb2c82211b20e8::t_fc5991c2818f3b 6-9,88-97,175
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/grants.ts
+  s_eb2c82211b20e8::t_8122e81db91ddd 1-61,64-73
+  s_eb2c82211b20e8::t_b3c77cfec1fb70 62-63
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261017201531_grant/snapshot.json
+  s_eb2c82211b20e8::t_c2199d10867dce 1-2457
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261017201531_grant/migration.sql
+  s_eb2c82211b20e8::t_c2199d10867dce 1-14
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/tiles.ts
+  s_eb2c82211b20e8::t_32a235cb1cf02c 8-9,16,133-137,145-148,427,482
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/schema.ts
+  s_eb2c82211b20e8::t_c2199d10867dce 4,207-213,239,241-242,244-247,250-251
+  s_eb2c82211b20e8::t_b3c77cfec1fb70 235-237
+  s_eb2c82211b20e8::t_1ad4cf118b0f64 240,243
+  s_eb2c82211b20e8::t_d6d7de7d918211 18,214-234,248-249
+  s_eb2c82211b20e8::t_9ce9498a2952f6 238
+  s_eb2c82211b20e8::t_11f930594d1f7d 252-254
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "51851ee0cc9379c0a84b760c8e4841e89b340660",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
