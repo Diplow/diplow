@@ -3,7 +3,10 @@ import { Schema } from 'effect'
 
 import { invalid, kind } from '../kind'
 
-/** No Tile of this id in the Account's System: it was deleted, or it is someone else's. */
+/**
+ * No Tile of this id that the actor may read: it was deleted, it was never there, or it is in a
+ * System, or under a Grant, that keeps it from them. Nobody learns this way that a Tile exists.
+ */
 export class TileNotFound extends Schema.TaggedError<TileNotFound>()('TileNotFound', {
   kind: kind('NotFound'),
 }) {}
@@ -83,6 +86,16 @@ export class BatchOutdated extends Schema.TaggedError<BatchOutdated>()('BatchOut
 }) {}
 
 /**
+ * The actor may read the Tile, but not do what was asked: write it, write a Tile a delete or a move
+ * carries, write the parent a create or a move goes under, or move a Tile where someone could read it
+ * who could not before, which only its owner does, from a Session. It never says which Tile, nor who
+ * else reads it.
+ */
+export class NotAllowed extends Schema.TaggedError<NotAllowed>()('NotAllowed', {
+  kind: kind('Forbidden'),
+}) {}
+
+/**
  * The Systems hexframe ships, Help and the tutorial, are read by every Account and written by none: a
  * change naming one of their Tiles is refused, whichever end of a move or a swap it is.
  */
@@ -159,6 +172,7 @@ export const mappingFailures = [
   MovedUnderItself,
   LeafHoldsNothing,
   RootFixed,
+  NotAllowed,
   ShippedReadOnly,
   BatchOutdated,
   ImportRefused,

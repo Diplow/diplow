@@ -5,13 +5,15 @@
 // its star, first, inside the transaction the API layer opened, so two changes to one System never
 // interleave between what Mapping checked and what it wrote. A read from
 // one Tile walks down a generation per query and selects only the content columns asked, so a Body
-// nobody asked for never leaves the database.
+// nobody asked for never leaves the database. The Grants a System's Tiles carry are read here too
+// (./grants.ts).
 import { type SQL, and, eq, inArray, isNull } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import { Context, Data, Effect, Layer } from 'effect'
 
 import { Database, InTransaction } from '../database'
 import { type FrontmatterColumn, type TileConfigColumn, tile } from '../schema'
+import { type GrantRow, grantsOf, type PlaceRow } from './grants'
 
 /**
  * One row of the `tile` table, as its System's owner reads it. A Root has no parent and no
@@ -135,6 +137,10 @@ export class Tiles extends Context.Service<
   {
     /** Every row of the owner's System, none for an owner without a Root. */
     readonly read: (owner: string) => Effect.Effect<ReadonlyArray<TileRow>>
+    /** Where every row of the owner's System stands, its id and its parent's, and nothing else. */
+    readonly places: (owner: string) => Effect.Effect<ReadonlyArray<PlaceRow>>
+    /** Every Grant the Tiles of the owner's System carry. */
+    readonly grants: (owner: string) => Effect.Effect<ReadonlyArray<GrantRow>>
     /**
      * The `system_version` of the owner's Root's row, read alone, `undefined` for an owner without a
      * Root.
@@ -467,6 +473,7 @@ const make = Effect.gen(function* () {
           Effect.map(([found]) => found?.systemVersion),
         ),
     ...starsOf(database),
+    ...grantsOf(database),
     generationsFrom,
     ofIds,
     lock: (owner) =>

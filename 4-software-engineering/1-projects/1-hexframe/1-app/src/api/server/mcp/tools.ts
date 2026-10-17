@@ -186,6 +186,10 @@ const refusal = {
     'a Leaf is one file, with nothing below it: nothing goes under one, and a Tile holding ' +
     'anything takes no Leaf slot. Move the Leaf to a Branch slot first, or move out what the ' +
     'Tile holds.',
+  NotAllowed:
+    'the user may read that Tile but not do this: write it, write a Tile it carries, write the ' +
+    "parent it goes under, or move it where someone could read it who couldn't before, which " +
+    'only its owner does, from the app. Leave it as it is, and say so in your answer.',
   ShippedReadOnly:
     "that Tile is hexframe's own, Help's or the tutorial's, which every user reads and none " +
     "writes; change a Tile of the user's System instead.",
@@ -260,6 +264,7 @@ const createTile = write({
     TitleMissing: refusal.TitleMissing,
     PreviewTooLong: refusal.PreviewTooLong,
     LeafHoldsNothing: refusal.LeafHoldsNothing,
+    NotAllowed: refusal.NotAllowed,
     ShippedReadOnly: refusal.ShippedReadOnly,
     BatchOutdated: refusal.BatchOutdated,
     TurnOver: refusal.TurnOver,
@@ -284,6 +289,7 @@ const editTile = write({
     TileChanged: refusal.TileChanged,
     TitleMissing: refusal.TitleMissing,
     PreviewTooLong: refusal.PreviewTooLong,
+    NotAllowed: refusal.NotAllowed,
     ShippedReadOnly: refusal.ShippedReadOnly,
     BatchOutdated: refusal.BatchOutdated,
     TurnOver: refusal.TurnOver,
@@ -319,6 +325,7 @@ const moveTile = write({
     MovedUnderItself:
       'a Tile cannot move under itself or anything below it; pick a parent outside it.',
     LeafHoldsNothing: refusal.LeafHoldsNothing,
+    NotAllowed: refusal.NotAllowed,
     ShippedReadOnly: refusal.ShippedReadOnly,
     BatchOutdated: refusal.BatchOutdated,
     TurnOver: refusal.TurnOver,
@@ -348,6 +355,7 @@ const swapTiles = write({
     RootFixed: refusal.RootFixed,
     MovedUnderItself: 'neither Tile may lie below the other; move one of them instead.',
     LeafHoldsNothing: refusal.LeafHoldsNothing,
+    NotAllowed: refusal.NotAllowed,
     ShippedReadOnly: refusal.ShippedReadOnly,
     BatchOutdated: refusal.BatchOutdated,
     TurnOver: refusal.TurnOver,
@@ -377,6 +385,7 @@ const deleteTile = write({
     TileNotFound: refusal.TileNotFound,
     TileChanged: refusal.TileChanged,
     RootFixed: refusal.RootFixed,
+    NotAllowed: refusal.NotAllowed,
     ShippedReadOnly: refusal.ShippedReadOnly,
     BatchOutdated: refusal.BatchOutdated,
     TurnOver: refusal.TurnOver,
@@ -404,6 +413,7 @@ const createReference = write({
     TileChanged: refusal.TileChanged,
     DirectionTaken: refusal.DirectionTaken,
     LeafHoldsNothing: refusal.LeafHoldsNothing,
+    NotAllowed: refusal.NotAllowed,
     ShippedReadOnly: refusal.ShippedReadOnly,
     BatchOutdated: refusal.BatchOutdated,
     TurnOver: refusal.TurnOver,
@@ -433,6 +443,7 @@ const deleteReference = write({
   refusals: {
     TileNotFound: refusal.TileNotFound,
     TileChanged: refusal.TileChanged,
+    NotAllowed: refusal.NotAllowed,
     ShippedReadOnly: refusal.ShippedReadOnly,
     BatchOutdated: refusal.BatchOutdated,
     TurnOver: refusal.TurnOver,

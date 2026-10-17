@@ -3,10 +3,11 @@
 // repository keeps the rows (src/repositories/database/tiles/); Mapping decides what an Operation
 // does to the System it locked (`decide`, ./operations/), then writes one change per event it made,
 // and publishes them. Every read and every change is `Acting`: an actor, who acts, on a System,
-// named by its star, which the API layer resolves from the request; Mapping checks the actor may
-// reach it (`reached`). A change runs in the transaction the API layer opens around it
-// (`transactional`): its type requires one. Beside the Systems it reaches, every actor reads the
-// Systems hexframe ships, Help and the tutorial (./shipped/shipped.ts), which no change may name.
+// named by its star, which the API layer resolves from the request; Mapping asks `may` what the
+// actor may read and do there, from the Grants its Tiles carry (./operations/rights/). A change runs
+// in the transaction the API layer opens around it (`transactional`): its type requires one. Beside
+// the Systems it reaches, every actor reads the Systems hexframe ships, Help and the tutorial
+// (./shipped/shipped.ts), which no change may name.
 import { Effect, Result, Struct } from 'effect'
 
 import { Bus } from '#/domains/bus'
@@ -24,15 +25,21 @@ import {
   shippedOf,
 } from './shipped/shipped'
 import {
+  type Actor,
   type Content,
   type Depth,
   type Field,
   type FieldsAsked,
   type Found,
   foundIn,
+  grantOf,
+  lineageFrom,
+  lineageOf,
+  owns,
   readOf,
   type ReadTile,
   rowDirection,
+  sharingOf,
   showing,
   type System,
   systemFrom,
@@ -45,6 +52,8 @@ import {
 } from './entities'
 import {
   added,
+  allowed,
+  allowedBatch,
   type Batched,
   type CreateReference,
   type CreateTile,
@@ -57,6 +66,7 @@ import {
   fold,
   type MappingEvent,
   type MoveTile,
+  may,
   type Operation,
   type OperationEvent,
   summariesIn,
@@ -75,15 +85,6 @@ export { HelpId, helpRoot, shippedSystem } from './shipped/shipped'
 /** The content of a Root nobody has named yet, and of every Reference, which keeps none of its own. */
 export const untitled: Content = { title: '', preview: '', body: '' }
 
-/**
- * Who acts on a System, as Mapping reads them: the owners they stand for, ids opaque to Mapping, a
- * System's owner among them. The API layer hands it over, fresh for every request: for now, the
- * signed-in Account's own id alone.
- */
-interface Actor {
-  readonly owners: ReadonlyArray<string>
-}
-
 /** Who acts, and on which System, named by its star, the id of its Root. */
 export interface Acting {
   readonly actor: Actor
@@ -97,28 +98,61 @@ export interface Acting {
  */
 export const starOf = (owner: string) => Tiles.use((tiles) => tiles.root(owner, untitled))
 
-/**
- * The owner of the System an actor acts on, once Mapping found the actor may reach it: the one check
- * of who may act on which System, every read and every change of a System asking it. The rule, for
- * now: the actor stands for the System's owner. A System it may not reach is `TileNotFound`, as is a
- * star that names none, so nothing says whether it exists.
- */
-const reached = ({ actor, system }: Acting) =>
+/** The owner of the System a star names, `TileNotFound` for a star that names none. */
+const ownerOf = (system: string) =>
   Tiles.use((tiles) =>
     Effect.flatMap(tiles.ownerOf(system), (owner) =>
-      owner !== undefined && actor.owners.includes(owner)
-        ? Effect.succeed(owner)
-        : Effect.fail(new TileNotFound()),
+      owner === undefined ? Effect.fail(new TileNotFound()) : Effect.succeed(owner),
     ),
   )
 
 /**
- * The System the actor acts on, flat: its Root, its star, and every Tile and Reference below it by
- * id, Bodies included, owned; `systemOf` builds its tree.
+ * The owner of the System the actor acts on, once Mapping found the actor stands for it: what a read
+ * of the System whole, a batch and an import ask, which only its owner makes until they read and
+ * write as the actor may (`hexframe-app-sharing-organizations/decisions.md#DEC-2`). Anyone else is
+ * `TileNotFound`, as is a star that names none, so nothing says whether it exists.
  */
-export const system = (acting: Acting) =>
+const reached = ({ actor, system }: Acting) =>
+  Effect.flatMap(ownerOf(system), (owner) =>
+    owns(actor, owner) ? Effect.succeed(owner) : Effect.fail(new TileNotFound()),
+  )
+
+/** The Grants the Tiles of the owner's System carry, a row that is no Grant left out. */
+const grantsIn = (owner: string) =>
+  Tiles.use((tiles) =>
+    Effect.map(tiles.grants(owner), (rows) =>
+      rows.flatMap((row) => {
+        const found = grantOf(row)
+        return found === undefined ? [] : [found]
+      }),
+    ),
+  )
+
+/**
+ * What the actor may read of the System it acts on, by id, with its owner: every Tile, for its owner;
+ * else what `may` says, from where its Tiles stand and the Grants they carry, read for this request.
+ */
+const reading = ({ actor, system }: Acting) =>
   Effect.gen(function* () {
-    const owner = yield* reached(acting)
+    const owner = yield* ownerOf(system)
+    if (owns(actor, owner)) return { owner, reads: (): boolean => true }
+    const [places, grants] = yield* Effect.all(
+      [Tiles.use((tiles) => tiles.places(owner)), grantsIn(owner)],
+      { concurrency: 'unbounded' },
+    )
+    const sharing = sharingOf(owner, lineageFrom(places), grants)
+    return { owner, reads: (id: string) => may(actor, sharing, id, 'read') }
+  })
+
+/**
+ * The System the actor acts on, flat: its Root, its star, and every Tile and Reference below it by
+ * id, Bodies included, owned; `systemOf` builds its tree. Its owner's read alone (`reached`).
+ */
+export const system = (acting: Acting) => Effect.flatMap(reached(acting), wholeOf)
+
+/** The owner's System, flat, as `system` reads it. */
+const wholeOf = (owner: string) =>
+  Effect.gen(function* () {
     const rows = yield* Tiles.use((tiles) => tiles.read(owner))
     const found = systemFrom(rows, { owned: true })
     if (found === undefined) return yield* Effect.die(new Error('A System was read without a Root'))
@@ -127,7 +161,7 @@ export const system = (acting: Acting) =>
 
 /**
  * The Version of the System the actor acts on, how many events changed it, read alone: what a client
- * polls to know when to read the System again. 0 before its first change.
+ * polls to know when to read the System again. 0 before its first change. Its owner's read alone.
  */
 export const systemVersion = (acting: Acting) =>
   Effect.flatMap(reached(acting), (owner) =>
@@ -136,13 +170,13 @@ export const systemVersion = (acting: Acting) =>
 
 /**
  * The Titles of the Tiles of the System the actor acts on among these ids, by id: an id it holds no
- * Tile of, a deleted one's or a Reference's, has none. What the timeline names a Tile by where it
- * keeps its id.
+ * Tile of, a deleted one's or a Reference's, or one the actor may not read, has none. What the
+ * timeline names a Tile by where it keeps its id.
  */
 export const titles = (acting: Acting, ids: ReadonlyArray<string>) =>
-  Effect.flatMap(reached(acting), (owner) =>
+  Effect.flatMap(reading(acting), ({ owner, reads }) =>
     Tiles.use((tiles) =>
-      Effect.map(tiles.ofIds(owner, ids, ['title']), (rows) =>
+      Effect.map(tiles.ofIds(owner, ids.filter(reads), ['title']), (rows) =>
         Object.fromEntries(
           rows.flatMap(({ id, target, title }) => (target === null ? [[id, title] as const] : [])),
         ),
@@ -150,7 +184,10 @@ export const titles = (acting: Acting, ids: ReadonlyArray<string>) =>
     ),
   )
 
-/** Nothing when the id is a Tile of the System the actor acts on, else `TileNotFound`. */
+/**
+ * Nothing when the id is a Tile of the System the actor acts on that they may read, else
+ * `TileNotFound`.
+ */
 export const ownTile = (acting: Acting, id: string) =>
   Effect.flatMap(titles(acting, [id]), (titled) =>
     id in titled ? Effect.void : Effect.fail(new TileNotFound()),
@@ -158,13 +195,13 @@ export const ownTile = (acting: Acting, id: string) =>
 
 /**
  * The Title and Preview of the Tiles of the System the actor acts on among these ids, in their order:
- * an id it holds no Tile of, a deleted one's or a Reference's, is left out: a glimpse of each, for a
- * reader shown several at once.
+ * an id it holds no Tile of, a deleted one's or a Reference's, or one the actor may not read, is left
+ * out: a glimpse of each, for a reader shown several at once.
  */
 export const glimpses = (acting: Acting, ids: ReadonlyArray<string>) =>
-  Effect.flatMap(reached(acting), (owner) =>
+  Effect.flatMap(reading(acting), ({ owner, reads }) =>
     Tiles.use((tiles) =>
-      Effect.map(tiles.ofIds(owner, ids, ['title', 'preview']), (rows) => {
+      Effect.map(tiles.ofIds(owner, ids.filter(reads), ['title', 'preview']), (rows) => {
         const found = new Map(
           rows.flatMap(({ id, target, title, preview }) =>
             target === null ? [[id, { id, title, preview }] as const] : [],
@@ -208,8 +245,8 @@ interface ReadFrom<O extends Field, F extends Field> {
 /**
  * What a read from a Tile of the System the actor acts on finds, its star when no id is given, or
  * from a Tile of a System hexframe ships by its id, `depth` generations down, with only the fields
- * asked of the Tile and of each Tile below it. A Tile of another System is `TileNotFound`, as is an
- * id of a shipped System that none of its Tiles has.
+ * asked of the Tile and of each Tile below it. A Tile the actor may not read is `TileNotFound`, as is
+ * an id of a shipped System that none of its Tiles has.
  */
 const find = <O extends Field, F extends Field>(
   acting: Acting,
@@ -228,21 +265,27 @@ const find = <O extends Field, F extends Field>(
 /** What a reader sees of a Tile beside the one opened: enough to decide whether to open it. */
 const glimpsed = ['title', 'preview'] as const satisfies ReadonlyArray<Field>
 
-/** What a read from a Tile of the System the actor acts on finds, its star when no id is given. */
+/**
+ * What a read from a Tile of the System the actor acts on finds, its star when no id is given: only
+ * what the actor may read, its parent none when they may not read it.
+ */
 const findOwn = <O extends Field, F extends Field>(
   acting: Acting,
   { id, depth, fields }: Omit<ReadFrom<O, F>, 'language' | 'over'>,
 ) =>
   Tiles.use((tiles) =>
     Effect.gen(function* () {
-      const owner = yield* reached(acting)
+      const { owner, reads } = yield* reading(acting)
       const from = id ?? acting.system
+      if (!reads(from)) return yield* new TileNotFound()
       const found = yield* tiles.generationsFrom(owner, { id: from, depth, columns: fields })
       // A Reference's row is no Tile: its id names nothing to open.
       if (found === undefined || found.opened.target !== null) return yield* new TileNotFound()
-      const { opened, below } = found
-      const targets = below.flatMap(({ target }) => (target === null ? [] : [target]))
-      const parentIds = opened.parentId === null ? [] : [opened.parentId]
+      const { opened } = found
+      // What the actor may not read is left out, and what stands below it with it.
+      const below = found.below.filter(({ id }) => reads(id))
+      const targets = below.flatMap(({ target }) => (target === null ? [] : [target])).filter(reads)
+      const parentIds = opened.parentId === null || !reads(opened.parentId) ? [] : [opened.parentId]
       const [parents, pointedAt] = yield* Effect.all(
         [tiles.ofIds(owner, parentIds, ['title']), tiles.ofIds(owner, targets, glimpsed)],
         { concurrency: 'unbounded' },
@@ -261,9 +304,10 @@ const findOwn = <O extends Field, F extends Field>(
  * A Tile of the System the actor acts on, its star when no id is given, or a Tile of a System
  * hexframe ships, Help or the tutorial, by its id, read `depth` generations down with only the fields
  * asked of each Tile, and its parent. A Reference shows the id, Title and Preview of the Tile it
- * points at. A Body is read only when asked, and a Tile of another System is `TileNotFound`, as is an
- * id of a shipped System that none of its Tiles has. A shipped System is read in `language`, which
- * the caller picks. With a batch `over` it, the System it reads is the one the batch makes (`fold`).
+ * points at. A Body is read only when asked. A Tile the actor may not read is `TileNotFound`, as is
+ * an id of a shipped System that none of its Tiles has, and what lies below the Tile is left out
+ * where they may not read it. A shipped System is read in `language`, which the caller picks. With a
+ * batch `over` it, the System it reads is the one the batch makes (`fold`).
  */
 export const readTile = <F extends Field>(
   acting: Acting,
@@ -442,31 +486,49 @@ const rooted = (found: System | undefined) =>
 /**
  * The System an Operation is decided on. The System hexframe ships whose Tile it names, Help's or the
  * tutorial's, whichever end of a move or a swap, which no Account owns, so `decide` refuses it.
- * Otherwise the one the actor acts on, locked until the transaction ends: no other change runs
- * meanwhile, so what `decide` ruled on still holds when its events are written. Answers it with the
- * owner whose rows a change writes, none for a shipped System, which no change writes.
+ * Otherwise the one the actor acts on, locked until the transaction ends, once `may` found the actor
+ * may make the Operation there (`allowed`): no other change runs meanwhile, so what `decide` ruled on
+ * still holds when its events are written. Answers it with the owner whose rows a change writes,
+ * none for a shipped System, which no change writes.
  */
 const decidedOn = (acting: Acting, operation: Operation) => {
   const shipped = namedBy(operation)
     .map(shippedOf)
     .find((root) => root !== undefined)
   return shipped === undefined
-    ? locked(acting)
+    ? allowedOn(acting, operation)
     : Effect.map(rooted(flatShipped(shipped, 'en')), (system) => ({ system, owner: undefined }))
 }
 
+/** The owner's System, its star locked until the transaction ends: no other change runs meanwhile. */
+const lockedOf = (owner: string) =>
+  Tiles.use((tiles) =>
+    Effect.flatMap(tiles.lock(owner), (rows) => rooted(systemFrom(rows, { owned: true }))),
+  )
+
 /**
- * The System the actor acts on, its star locked until the transaction ends: no other change runs
- * meanwhile. Answers it with its owner, whose rows a change writes.
+ * The System the actor acts on, locked, once `may` found the actor may make this Operation on it,
+ * from the Grants its Tiles carry as they stand under the lock: `TileNotFound` for a Tile it names
+ * that the actor may not read, `NotAllowed` for anything else it may not do. Answers it with its
+ * owner, whose rows a change writes.
+ */
+const allowedOn = ({ actor, system: star }: Acting, operation: Operation) =>
+  Effect.gen(function* () {
+    const owner = yield* ownerOf(star)
+    const system = yield* lockedOf(owner)
+    const sharing = sharingOf(owner, lineageOf(system), yield* grantsIn(owner))
+    yield* Effect.fromResult(allowed(actor, { system, sharing }, operation))
+    return { system, owner }
+  })
+
+/**
+ * The System the actor acts on, its star locked until the transaction ends, once Mapping found the
+ * actor stands for its owner (`reached`): what a batch runs on. Answers it with its owner, whose rows
+ * a change writes.
  */
 const locked = (acting: Acting) =>
   Effect.flatMap(reached(acting), (owner) =>
-    Tiles.use((tiles) =>
-      tiles.lock(owner).pipe(
-        Effect.flatMap((rows) => rooted(systemFrom(rows, { owned: true }))),
-        Effect.map((system) => ({ system, owner })),
-      ),
-    ),
+    Effect.map(lockedOf(owner), (system) => ({ system, owner })),
   )
 
 /** The Version `evolve` gave the Tile of this id, for the row a change writes it to. */
@@ -682,6 +744,8 @@ const tileAnswered = (after: System, operation: Operation, made: string | undefi
  * it as the batch keeps it, Mapping's summary of each event it makes there, and, for a create or an
  * edit, the Tile as the batch now makes it, with its Version, which the writer's next write to it
  * names. `decide` refuses each Operation only what its overload says, so the refusal is typed by it.
+ * And `NotAllowed` for one its run would refuse (`allowedBatch`): a batch that, run without a Session,
+ * opens a Tile to someone or deletes one carrying a Grant.
  */
 export const addToBatch = <O extends Operation>(
   acting: Acting,
@@ -690,9 +754,14 @@ export const addToBatch = <O extends Operation>(
 ) =>
   Effect.gen(function* () {
     yield* outsideShipped(namedBy(operation))
-    const folded = yield* Effect.fromResult(whole(yield* system(acting), over))
+    const owner = yield* reached(acting)
+    const held = yield* wholeOf(owner)
+    const folded = yield* Effect.fromResult(whole(held, over))
     const made = yield* madeFor(operation)
     const next = yield* Effect.fromResult(added(folded, operation, made))
+    // Refused now what its run would refuse, so a batch holds nothing it can't run.
+    const sharing = sharingOf(owner, lineageOf(held), yield* grantsIn(owner))
+    yield* Effect.fromResult(allowedBatch(acting.actor, sharing, next.system))
     const tile = yield* tileAnswered(next.system, operation, made)
     return {
       batched: next.batched,
@@ -704,8 +773,10 @@ export const addToBatch = <O extends Operation>(
 /**
  * Runs a batch on the System the actor acts on as it stands, its star locked, all of it or nothing, folded by
  * `folding`: one that no longer applies refuses the whole, `BatchOutdated`, nothing written nor
- * published; else every event is written and published as an Operation's are, a write under an id
- * already taken answering `onTaken`. Answers the System it ran on and the events it made.
+ * published; then, unless the owner runs it from a Session, one that would give anyone a right on a
+ * Tile they did not hold before refuses the whole, `NotAllowed` (`allowedBatch`); else every event is
+ * written and published as an Operation's are, a write under an id already taken answering
+ * `onTaken`. Answers the System it ran on and the events it made.
  */
 const ranWhole = <T>(
   acting: Acting,
@@ -716,6 +787,9 @@ const ranWhole = <T>(
     yield* outsideShipped(batch.flatMap(({ operation }) => namedBy(operation)))
     const { system, owner } = yield* locked(acting)
     const { events } = yield* Effect.fromResult(folding(system, batch))
+    const sharing = sharingOf(owner, lineageOf(system), yield* grantsIn(owner))
+    const after = events.reduce<System>(evolve, system)
+    yield* Effect.fromResult(allowedBatch(acting.actor, sharing, after))
     yield* writtenAll(owner, system, events, onTaken)
     return { system, events }
   })

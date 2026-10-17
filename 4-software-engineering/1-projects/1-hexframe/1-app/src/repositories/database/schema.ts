@@ -1,7 +1,7 @@
 // Every table hexframe keeps, in Drizzle's schema language. `drizzle-kit generate` diffs this file
 // against the last migration's snapshot and writes the next migration into ../../../migrations/.
 // Tables arrive with the domains that own them: IAM's, then Mapping's, then Assistant's.
-import { eq, inArray, isNull } from 'drizzle-orm'
+import { type SQL, eq, inArray, isNotNull, isNull, ne, or } from 'drizzle-orm'
 import {
   type AnyPgColumn,
   bigint,
@@ -15,6 +15,7 @@ import {
   smallint,
   text,
   timestamp,
+  unique,
   uniqueIndex,
 } from 'drizzle-orm/pg-core'
 
@@ -199,6 +200,54 @@ export const tile = pgTable(
     check(
       'tile_direction_check',
       inArray(table.direction, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, -1, -2, -3, -4, -5, -6]),
+    ),
+  ],
+)
+
+/** Two conditions, one of which holds: `or` of two, which is never none. */
+function either(a: SQL, b: SQL): SQL {
+  const one = or(a, b)
+  if (one === undefined) throw new Error('Two conditions made none')
+  return one
+}
+
+/** Who a `grant` row is for, and the values it may hold, as Mapping names them. */
+const grantSubjects = ['account', 'group', 'everyone'] as const
+const grantValues = ['none', 'read', 'read+write', 'read+@', 'read+write+@'] as const
+
+/**
+ * A Tile's Grant for one subject, an Account or a Group by an id opaque to Mapping, as `owner_id` is,
+ * or Everyone, which has none. A subject without a row inherits its parent's value: inherit is never
+ * stored. One row per Tile and subject; deleting a Tile deletes its Grants, and everything below it
+ * theirs. Everyone is never given more than `read`. Mapping decides what a value allows.
+ */
+export const grant = pgTable(
+  'grant',
+  {
+    tileId: text('tile_id')
+      .notNull()
+      .references(() => tile.id, { onDelete: 'cascade' }),
+    subject: text('subject', { enum: grantSubjects }).notNull(),
+    subjectId: text('subject_id'),
+    value: text('value', { enum: grantValues }).notNull(),
+  },
+  (table) => [
+    unique('grant_subject_unique')
+      .on(table.tileId, table.subject, table.subjectId)
+      .nullsNotDistinct(),
+    check('grant_subject_check', inArray(table.subject, [...grantSubjects])),
+    check('grant_value_check', inArray(table.value, [...grantValues])),
+    check(
+      'grant_everyone_id_check',
+      either(ne(table.subject, 'everyone'), isNull(table.subjectId)),
+    ),
+    check(
+      'grant_named_id_check',
+      either(eq(table.subject, 'everyone'), isNotNull(table.subjectId)),
+    ),
+    check(
+      'grant_everyone_check',
+      either(ne(table.subject, 'everyone'), inArray(table.value, ['none', 'read'])),
     ),
   ],
 )

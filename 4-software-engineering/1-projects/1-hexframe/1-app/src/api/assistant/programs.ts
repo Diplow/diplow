@@ -51,7 +51,10 @@ export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
       const proposal = yield* proposalNow(accountId)
       const day = { date: date ?? (yield* Assistant.today(offsets.offset)).date, ...offsets }
       const entries = yield* Assistant.day(accountId, day)
-      const titles = yield* Mapping.titles(yield* actingOnOwn(accountId), namedTiles(entries))
+      const titles = yield* Mapping.titles(
+        yield* actingOnOwn(accountId, { session: false }),
+        namedTiles(entries),
+      )
       const earlier = yield* Assistant.before(accountId, day)
       return {
         day,
@@ -75,7 +78,7 @@ export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
  */
 export const latest = forSession((accountId) =>
   Effect.gen(function* () {
-    const version = yield* Mapping.systemVersion(yield* actingOnOwn(accountId))
+    const version = yield* Mapping.systemVersion(yield* actingOnOwn(accountId, { session: false }))
     const lastEntry = yield* Assistant.lastEntry(accountId)
     const live = yield* Assistant.liveTurn(accountId)
     const { mode, proposal } = yield* conversationNow(accountId)
@@ -162,7 +165,7 @@ const turnStarted = (accountId: string, start: { message: string; location: stri
 export const messageAndTurn = (account: Iam.Session['account'], text: string, location: string) =>
   Effect.gen(function* () {
     yield* Iam.entitledOnly(account, 'assistant')
-    yield* Mapping.ownTile(yield* actingOnOwn(account.id), location)
+    yield* Mapping.ownTile(yield* actingOnOwn(account.id, { session: false }), location)
     return yield* transactional(
       Effect.gen(function* () {
         const posted = yield* Assistant.postMessage(account.id, text)
@@ -219,7 +222,7 @@ const agentStarted = (
   Effect.gen(function* () {
     const { url } = yield* HttpExchange
     const over = yield* shownTo(accountId, turn.id)
-    const own = yield* actingOnOwn(accountId)
+    const own = yield* actingOnOwn(accountId, { session: false })
     const { files, places } = yield* Mapping.systemFiles(own, tileLink(url), over)
     const entries = yield* Agent.latestToday(accountId, offset)
     const linked = linksOf(text)

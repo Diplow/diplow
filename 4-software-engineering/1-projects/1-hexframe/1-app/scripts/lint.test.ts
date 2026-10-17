@@ -446,6 +446,22 @@ describe('the door to a domain', () => {
     ).toEqual([])
   })
 
+  it('refuses a program the tiles repository’s Grant write, and lets a test and a testing.ts', async () => {
+    const write = { 'src/repositories/database/tiles/testing.ts': 'export const granted = 1\n' }
+    const importing =
+      "import { granted } from '../../repositories/database/tiles/testing'\nexport const used = granted\n"
+    expect(await broken({ ...write, 'src/domains/d/program.ts': importing })).toEqual([
+      'no-program-importing-the-grant-write: src/domains/d/program.ts → src/repositories/database/tiles/testing.ts',
+    ])
+    expect(
+      await broken({
+        ...write,
+        'src/domains/d/d.test.ts': importing,
+        'src/domains/d/testing.ts': importing,
+      }),
+    ).toEqual([])
+  })
+
   it('lets the front import the door, and the door reach its pure model, effect, the kinds and the bus', async () => {
     expect(await broken({})).toEqual([])
   })
