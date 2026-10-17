@@ -1,0 +1,36 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/hexes.tsx
+  s_7b92c93552a78d::t_099341dd1c1feb 66
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-tutorial/decisions.md
+  s_7b92c93552a78d::t_0785a49be173de 61
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/tutorial/rules.test.ts
+  s_7b92c93552a78d::t_099341dd1c1feb 27,84
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/CLAUDE.md
+  s_7b92c93552a78d::t_0785a49be173de 26,34-35
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_7b92c93552a78d::t_9a2b429242c559 57
+  s_7b92c93552a78d::t_099341dd1c1feb 64,203-204
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/tutorial/rules.ts
+  s_7b92c93552a78d::t_099341dd1c1feb 34-37
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/search.test.ts
+  s_7b92c93552a78d::t_ac12b78ec0ea5f 11,178-182
+  s_7b92c93552a78d::t_0f111a4ee0c563 183-184
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/search.ts
+  s_7b92c93552a78d::t_099341dd1c1feb 21,65-72
+  s_7b92c93552a78d::t_2d22ad7d5397f3 73
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b4612f8813dde8e386710e1daa67db286f7da747",
+  "prompts": {},
+  "sessions": {
+    "s_7b92c93552a78d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "df1e2743-42cd-4ee5-8710-130ad5db0a14",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
