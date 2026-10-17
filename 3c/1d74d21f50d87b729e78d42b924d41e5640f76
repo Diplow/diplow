@@ -1,0 +1,25 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE.md
+  s_7b92c93552a78d::t_d188ebe0f4310e 25
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/tutorial/rules.ts
+  s_7b92c93552a78d::t_6dd89e1e71d4d4 7,10-15
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/useCanvasState.ts
+  s_7b92c93552a78d::t_6dd89e1e71d4d4 50-59
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/deck/tour.tsx
+  s_7b92c93552a78d::t_6dd89e1e71d4d4 16,161,163
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3c1d74d21f50d87b729e78d42b924d41e5640f76",
+  "prompts": {},
+  "sessions": {
+    "s_7b92c93552a78d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "df1e2743-42cd-4ee5-8710-130ad5db0a14",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
