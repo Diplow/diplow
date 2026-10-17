@@ -1,0 +1,49 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_7b92c93552a78d::t_6df1f72420057c 63,202-204
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-tutorial/decisions.md
+  s_7b92c93552a78d::t_836bd8a437158f 61,63,65
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/CLAUDE.md
+  s_7b92c93552a78d::t_836bd8a437158f 27,31
+  s_7b92c93552a78d::t_1dc77c68948e34 35
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/deck/tour.tsx
+  s_7b92c93552a78d::t_6df1f72420057c 176-177,262
+  s_7b92c93552a78d::t_97821142a6ace0 301
+  s_7b92c93552a78d::t_a7a18cb819d576 291
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/tutorial/rules.test.ts
+  s_7b92c93552a78d::t_970411d64093c0 6,40,50,91-99
+  s_7b92c93552a78d::t_3d4b6b44f00275 100-101
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/tutorial/rules.ts
+  s_7b92c93552a78d::t_970411d64093c0 75,80,86-100,105
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/Shipped.tsx
+  s_7b92c93552a78d::t_97821142a6ace0 48
+  s_7b92c93552a78d::t_4c1c841ba71a94 47
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/CLAUDE.md
+  s_7b92c93552a78d::t_836bd8a437158f 26-27,53
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_7b92c93552a78d::t_6df1f72420057c 28,218,367-372
+  s_7b92c93552a78d::t_556c866af7fc02 427,503
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/Canvas.tsx
+  s_7b92c93552a78d::t_3a0563a9482596 125-126,140,161,317
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/gallery.tsx
+  s_7b92c93552a78d::t_1459f477bddc00 32
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/hexes.tsx
+  s_7b92c93552a78d::t_9210e8b61e4ee3 11,66,73
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/state/useCanvasState.ts
+  s_7b92c93552a78d::t_505e142e9f3cf2 52,54,59,69
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f7453b85a2f095231a3edc77a7b4539d3e0a0f24",
+  "prompts": {},
+  "sessions": {
+    "s_7b92c93552a78d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "df1e2743-42cd-4ee5-8710-130ad5db0a14",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
