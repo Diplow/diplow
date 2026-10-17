@@ -1,0 +1,64 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/keys/KeyWidgets.tsx
+  s_49deb953175ce1::t_bc75b5c526fe44 6,64
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/Composer.tsx
+  s_49deb953175ce1::t_7862db82e74c88 202-204
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/TileWidgets.tsx
+  s_49deb953175ce1::t_0637ed42ace2ca 17-22,26,69,99-103,146-150,218-220
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/CLAUDE.md
+  s_49deb953175ce1::t_acd1ccac70e169 28
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/forms.tsx
+  s_49deb953175ce1::t_0637ed42ace2ca 49-50,70
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/keys/KeyWidget.tsx
+  s_49deb953175ce1::t_bc75b5c526fe44 42-43,109,140
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE.md
+  s_49deb953175ce1::t_e18697ba1b7a3e 20,23
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/count.test.ts
+  s_49deb953175ce1::t_acd1ccac70e169 34-38
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/fields.tsx
+  s_49deb953175ce1::t_bc75b5c526fe44 28-29,78,91
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/layouts/useHandOffState.test.ts
+  s_49deb953175ce1::t_ab0fee1d9ff1b2 107,109-115
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/commands.test.ts
+  s_49deb953175ce1::t_7438ab987a3b8d 107-111
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/composer/commands.ts
+  s_49deb953175ce1::t_7438ab987a3b8d 473-474,477,479
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE.md
+  s_49deb953175ce1::t_acd1ccac70e169 32
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useActingState.ts
+  s_49deb953175ce1::t_0637ed42ace2ca 131-133
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/atoms/Menu.tsx
+  s_49deb953175ce1::t_dc20ac5ded65f9 242-243,250
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/CLAUDE.md
+  s_49deb953175ce1::t_e18697ba1b7a3e 20
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/count.ts
+  s_49deb953175ce1::t_bc75b5c526fe44 24-28
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useActingState.test.ts
+  s_49deb953175ce1::t_d05761740cf154 169,173
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/atoms/cut.test.ts
+  s_49deb953175ce1::t_6cfdddd6e66bee 3,23-27
+  s_49deb953175ce1::t_529b58795b5ff9 28-29
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/atoms/cut.ts
+  s_49deb953175ce1::t_6cfdddd6e66bee 11-13,26-30
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/entities/key.test.ts
+  s_49deb953175ce1::t_acd1ccac70e169 3,23-25
+  s_49deb953175ce1::t_21bc2203f8a623 26-27
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/entities/key.ts
+  s_49deb953175ce1::t_bc75b5c526fe44 9-13,20
+  s_49deb953175ce1::t_3079d3bdab5216 21-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "11825fb800e25d923f4806b8b07440d8cb1808a6",
+  "prompts": {},
+  "sessions": {
+    "s_49deb953175ce1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f7b3df5f-b9e8-4bbf-849c-79a81f8332b7",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
