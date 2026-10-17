@@ -1,0 +1,40 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/assistant.test.ts
+  s_eb2c82211b20e8::t_1da007cd3f1227 249
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/shared.test.ts
+  s_eb2c82211b20e8::t_4fb2c78afdd557 192-211
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/recording.ts
+  s_eb2c82211b20e8::t_4fb2c78afdd557 49-52
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/programs.ts
+  s_eb2c82211b20e8::t_1da007cd3f1227 95,121,210-211,239
+  s_eb2c82211b20e8::t_4fb2c78afdd557 240-243
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/recording.test.ts
+  s_eb2c82211b20e8::t_1da007cd3f1227 220
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/programs.ts
+  s_eb2c82211b20e8::t_1da007cd3f1227 81,168,225
+  s_eb2c82211b20e8::t_4fb2c78afdd557 54-57
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.test.ts
+  s_eb2c82211b20e8::t_4fb2c78afdd557 553-555,566-568
+  s_eb2c82211b20e8::t_1da007cd3f1227 575
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/programs.ts
+  s_eb2c82211b20e8::t_1da007cd3f1227 34-35,37
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-sharing-organizations/decisions.md
+  s_eb2c82211b20e8::t_0fc331bf098078 29,35
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/CLAUDE.md
+  s_eb2c82211b20e8::t_8158d3443e4c6a 33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b3d6015e8cdc5e95aa1d7946fcc05e391fae62e0",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
