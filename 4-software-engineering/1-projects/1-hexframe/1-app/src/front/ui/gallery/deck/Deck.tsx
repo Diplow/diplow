@@ -13,6 +13,7 @@ import {
   Palette,
   Shapes,
   Sun,
+  Sunrise,
   type LucideIcon,
 } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
@@ -62,6 +63,10 @@ const told: Partial<Record<SlideId, ReadonlyArray<{ voice: Line['voice']; say: (
   canvas: [
     { voice: 'agent', say: m.deck_canvas_say_1 },
     { voice: 'agent', say: m.deck_canvas_say_2 },
+  ],
+  onboarding: [
+    { voice: 'agent', say: m.deck_onboarding_say_1 },
+    { voice: 'agent', say: m.deck_onboarding_say_2 },
   ],
   tokens: [
     { voice: 'agent', say: m.deck_tokens_say_1 },
@@ -121,15 +126,23 @@ interface ScreenSlideProps {
   corner?: ReactNode
   /** The chat's foot; the deck's composer when absent, where a `/` lists the slides. */
   composer?: ReactNode
+  /** The chat's foot held back, as home holds it back while a new account is asked its pseudo. */
+  composerAway?: boolean
+  /**
+   * What the chat shows last, after the way on, at the conversation's foot as on home: the
+   * onboarding, its question flush with the screen's foot while the composer is away.
+   */
+  foot?: ReactNode
 }
 
 /**
  * A slide of the screen: the agent telling it in the chat, then what its caller adds there and the
- * way on, the canvas beside, the corner and the composer. What the reader writes stays in the chat in
- * their voice, and the agent answers that nobody does yet, but where a `/` goes.
+ * way on, then its foot, the canvas beside, the corner and the composer. What the reader writes
+ * stays in the chat in their voice, and the agent answers that nobody does yet, but where a `/`
+ * goes.
  */
 export function ScreenSlide(props: ScreenSlideProps) {
-  const { slide, piece, onGo, lines, canvas, corner, composer } = props
+  const { slide, piece, onGo, lines, canvas, corner, composer, composerAway, foot } = props
   const { state: screen, actions: turning } = useScreenState()
   const [written, setWritten] = useState<readonly string[]>([])
   const answered = written.flatMap((text): Line[] => [
@@ -144,12 +157,14 @@ export function ScreenSlide(props: ScreenSlideProps) {
       className="size-full"
       canvas={canvas}
       corner={corner ?? <DeckRail slide={slide} piece={piece} onGo={onGo} />}
+      composerAway={composerAway}
       messages={
         <div className="grid gap-[1.375rem]">
           <Lines lines={toldOn(slide)} />
           {lines}
           {answered.length > 0 && <Lines lines={answered} />}
           <WayOn slide={slide} onGo={onGo} />
+          {foot}
         </div>
       }
       composer={
@@ -257,6 +272,7 @@ const icons: Record<SlideId, LucideIcon> = {
   principles: ListOrdered,
   chat: MessageSquare,
   canvas: Hexagon,
+  onboarding: Sunrise,
   crossings: Columns2,
   'chat-pieces': MessagesSquare,
   'canvas-pieces': Shapes,

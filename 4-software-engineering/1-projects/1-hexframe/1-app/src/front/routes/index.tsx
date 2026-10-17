@@ -165,6 +165,8 @@ function useHelpNavigation(turning: ReturnType<typeof useScreenState>['actions']
  * yours. A new account is asked its pseudo before anything else (`welcoming`): the chat holds back its
  * composer and the corner its path (`path`), the mark alone, until the pseudo names the Root; then
  * they come one after another, from the corner down to the composer, as the dawn's tokens time them.
+ * `/design-system`'s Onboarding slide plays it again on the same pieces
+ * (`ui/gallery/deck/tour.tsx`): what changes here changes there too.
  */
 function useYourSystem() {
   const { data } = useSystem({ throwing: false })

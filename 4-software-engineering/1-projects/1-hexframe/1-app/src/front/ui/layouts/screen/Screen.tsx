@@ -137,9 +137,11 @@ export function Screen({
     ;(to === 'chat' ? toCanvas : toChat).current?.focus()
   }
   return (
+    // Clipped, never scrolled: the composer held back waits below the foot, and a field taking the
+    // focus as it rises would scroll a hidden overflow, lifting the whole screen by the composer.
     <div
       ref={screen}
-      className={cn('@container relative isolate overflow-hidden bg-background', className)}
+      className={cn('@container relative isolate overflow-clip bg-background', className)}
       style={
         {
           '--screen-chat': chatWidth,

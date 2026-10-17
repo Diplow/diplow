@@ -1,14 +1,15 @@
 // The design system, for anyone, in production too, as a deck of slides (`ui/gallery/deck/`): why
 // hexframe exists and the principles its look follows, in words on the ground alone; then the screen
-// as it builds up, the chat, then the canvas, its first tile alone and large; then where the two
-// sides answer each other, each crossing played on the whole screen; then each side's pieces and
-// those they share, one at a time, on the canvas, told in the chat; then the tokens. The slide, its
-// piece and the canvas's view live in the search params, so a link shows what its sender saw, and a
-// Message's link in the Conversation centers the canvas, as on home. What ui/ can't reach the route
-// hands it: the features' specimens, the Conversation, the breadcrumb and Help, Mapping's limit on a
-// Preview, IAM's rule for a Key's name, the timeline's words for a navigation and Assistant's rule
-// for where a Turn works (HEX-108). The Screen's specimens are drawn here, since they show the
-// breadcrumb and Help.
+// as it builds up, the chat, then the canvas, its first tile alone and large, then the onboarding,
+// a new account's first visit, played again at will; then where the two sides answer each other,
+// each crossing played on the whole screen; then each side's pieces and those they share, one at a
+// time, on the canvas, told in the chat; then the tokens. The slide, its piece and the canvas's
+// view live in the search params, so a link shows what its sender saw, and a Message's link in the
+// Conversation centers the canvas, as on home. What ui/ can't reach the route hands it: the
+// features' specimens, the Conversation, the breadcrumb and Help, Mapping's limit on a Preview,
+// IAM's rule for a Key's name, the timeline's words for a navigation and for the Root named, and
+// Assistant's rule for where a Turn works (HEX-108). The Screen's specimens are drawn here, since
+// they show the breadcrumb and Help.
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 
@@ -74,7 +75,7 @@ import {
   type ChapterId,
   type SlideId,
 } from '#/front/ui/gallery/deck/slides'
-import { ChatPage, canvasTour } from '#/front/ui/gallery/deck/tour'
+import { ChatPage, canvasTour, OnboardingSlide, type TellNamed } from '#/front/ui/gallery/deck/tour'
 import { WordsSlide } from '#/front/ui/gallery/deck/words'
 import { GallerySection, GalleryState, GalleryTier } from '#/front/ui/gallery/frame'
 import { Tokens } from '#/front/ui/gallery/Tokens'
@@ -149,6 +150,8 @@ function Slide({ slide, piece, view, onViewChange, onCenter, onGo }: SlideProps)
       return <ScreenSlide slide="chat" onGo={onGo} canvas={<ChatPage />} />
     case 'canvas':
       return <CanvasSlide view={view} onViewChange={onViewChange} onGo={onGo} />
+    case 'onboarding':
+      return <OnboardingSlide onGo={onGo} tellNamed={tellNamed} />
     case 'crossings':
       return <CrossingSlide piece={piece} onGo={onGo} />
     case 'tokens':
@@ -341,6 +344,16 @@ function tellIn(system: TileNode): Tell {
 
 /** A run of gestures on a crossing's canvas, the fixture System's. */
 const tell = tellIn(ulysse)
+
+/**
+ * The pseudo taken, as home's timeline tells it once recorded: the Root's edit, by the user
+ * (Assistant's `Change`, as Mapping names the event), told by `happenedOf`.
+ */
+const tellNamed: TellNamed = ({ tile, at, onCenter }) =>
+  happenedOf(
+    { _tag: 'Change', id: 'named', at, verb: 'TileEdited', tile, actor: { _tag: 'You' } },
+    { titles: {}, system: new Map([[tile.id, tile.title]]), onCenter },
+  )
 
 /**
  * Where the Turn answering a crossing's Message works: the Message as home's composer sends it, each
