@@ -246,7 +246,7 @@ describe("the System in the Account's sandbox", () => {
   const inSandbox = (accountId: string) =>
     Effect.gen(function* () {
       const { files, places } = yield* MappingService.systemFiles(
-        yield* Mapping.ownSystem(accountId),
+        yield* MappingService.ownSystem(accountId),
         (id) => `/?center=${id}`,
       )
       const box = yield* Agent.writeSystem(accountId, files)

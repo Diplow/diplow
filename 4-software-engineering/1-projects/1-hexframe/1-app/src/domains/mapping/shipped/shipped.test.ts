@@ -21,7 +21,6 @@ import {
 } from '../operations'
 import { shipped, shippedOf } from './shipped'
 import { vaultOf } from './vault'
-import { ownSystem } from '../testing'
 
 // The Systems hexframe ships, Help and the tutorial, as the build bundles them, read through Mapping's
 // `readTile` like a System, and refused to every write; then a vault folder read from notes made by
@@ -173,7 +172,7 @@ describe('a System hexframe ships, whole, as home draws it', () => {
 layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
   it.effect('opens its Root with its Children and its Context, to the depth asked', () =>
     Effect.gen(function* () {
-      const read = yield* Mapping.readTile(yield* ownSystem(someone()), {
+      const read = yield* Mapping.readTile(yield* Mapping.ownSystem(someone()), {
         language: 'en',
         id: 'help',
         depth: 1,
@@ -191,7 +190,7 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
 
   it.effect('opens a Tile below with the fields asked, and names its parent', () =>
     Effect.gen(function* () {
-      const read = yield* Mapping.readTile(yield* ownSystem(someone()), {
+      const read = yield* Mapping.readTile(yield* Mapping.ownSystem(someone()), {
         language: 'en',
         id: 'help/3',
         depth: 1,
@@ -207,7 +206,7 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
 
   it.effect('opens the same Tile in French, at the same id', () =>
     Effect.gen(function* () {
-      const read = yield* Mapping.readTile(yield* ownSystem(someone()), {
+      const read = yield* Mapping.readTile(yield* Mapping.ownSystem(someone()), {
         id: 'help/3',
         depth: 1,
         fields: ['title'],
@@ -226,7 +225,7 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
   it.effect('finds no Tile at an id Help has none at, a path that climbs out included', () =>
     Effect.gen(function* () {
       for (const id of ['help/7', 'help/1/1/1', 'help/../../x', 'help/3/../../package.json']) {
-        const refused = yield* Mapping.readTile(yield* ownSystem(someone()), {
+        const refused = yield* Mapping.readTile(yield* Mapping.ownSystem(someone()), {
           language: 'en',
           id,
           depth: 0,
@@ -241,7 +240,7 @@ layer(TestTiles)("Help, read through Mapping's readTile", (it) => {
 layer(TestTiles)("the tutorial, read through Mapping's readTile and openTile", (it) => {
   it.effect('opens its Root with its six steps, in the language asked', () =>
     Effect.gen(function* () {
-      const read = yield* Mapping.readTile(yield* ownSystem(someone()), {
+      const read = yield* Mapping.readTile(yield* Mapping.ownSystem(someone()), {
         language: 'fr',
         id: 'tutorial',
         depth: 1,
@@ -263,7 +262,7 @@ layer(TestTiles)("the tutorial, read through Mapping's readTile and openTile", (
 
   it.effect('opens a step, its Body when asked, its parent named', () =>
     Effect.gen(function* () {
-      const opened = yield* Mapping.openTile(yield* ownSystem(someone()), {
+      const opened = yield* Mapping.openTile(yield* Mapping.ownSystem(someone()), {
         language: 'en',
         id: 'tutorial/3',
         fields: ['title', 'body'],
@@ -281,7 +280,7 @@ layer(TestTiles)("the tutorial, read through Mapping's readTile and openTile", (
   it.effect('finds no Tile at an id that no slot gives, a path that climbs out included', () =>
     Effect.gen(function* () {
       for (const id of ['tutorial/7', 'tutorial/0', 'tutorial/x', 'tutorial/../help']) {
-        const refused = yield* Mapping.readTile(yield* ownSystem(someone()), {
+        const refused = yield* Mapping.readTile(yield* Mapping.ownSystem(someone()), {
           language: 'en',
           id,
           depth: 0,
@@ -344,10 +343,10 @@ function run(
 /** An Account no other test uses, with a Tile of its own under its Root, untouched since. */
 const withOwnTile = Effect.gen(function* () {
   const accountId = someone()
-  const { root } = yield* Mapping.system(yield* ownSystem(accountId))
+  const { root } = yield* Mapping.system(yield* Mapping.ownSystem(accountId))
   const own = yield* transactional(
     Mapping.createTile(
-      yield* ownSystem(accountId),
+      yield* Mapping.ownSystem(accountId),
       new CreateTile({
         parent: root.id,
         slot: 1,
@@ -372,7 +371,7 @@ layer(TestTiles)('the Systems hexframe ships, refused to every write in Mapping 
         for (const shippedRoot of ['help', 'tutorial']) {
           for (const operation of writesTo(shippedRoot, { root, own })) {
             const refused = yield* Effect.flip(
-              transactional(run(yield* ownSystem(accountId), operation)),
+              transactional(run(yield* Mapping.ownSystem(accountId), operation)),
             )
             expect(refused, `${operation._tag} on ${shippedRoot}`).toMatchObject(readOnly)
           }
@@ -383,9 +382,9 @@ layer(TestTiles)('the Systems hexframe ships, refused to every write in Mapping 
           unchecked,
         )
         expect(
-          yield* Effect.flip(transactional(run(yield* ownSystem(accountId), across))),
+          yield* Effect.flip(transactional(run(yield* Mapping.ownSystem(accountId), across))),
         ).toMatchObject(readOnly)
-        const after = systemOf(yield* Mapping.system(yield* ownSystem(accountId)))
+        const after = systemOf(yield* Mapping.system(yield* Mapping.ownSystem(accountId)))
         expect(after.branches[1]).toMatchObject({ id: own, title: 'Own', context: {} })
         expect(Object.keys(after.branches)).toEqual(['1'])
       }),
@@ -401,13 +400,17 @@ layer(TestTiles)('the Systems hexframe ships, refused to every write in Mapping 
         unchecked,
       )
       expect(
-        yield* Effect.flip(Mapping.addToBatch(yield* ownSystem(accountId), [], intoTutorial)),
+        yield* Effect.flip(
+          Mapping.addToBatch(yield* Mapping.ownSystem(accountId), [], intoTutorial),
+        ),
       ).toMatchObject(readOnly)
       const batch = [{ operation: edit }, { operation: intoTutorial }]
       expect(
-        yield* Effect.flip(transactional(Mapping.runBatch(yield* ownSystem(accountId), batch))),
+        yield* Effect.flip(
+          transactional(Mapping.runBatch(yield* Mapping.ownSystem(accountId), batch)),
+        ),
       ).toMatchObject(readOnly)
-      const after = systemOf(yield* Mapping.system(yield* ownSystem(accountId)))
+      const after = systemOf(yield* Mapping.system(yield* Mapping.ownSystem(accountId)))
       expect(after.branches[1]).toMatchObject({ id: own, title: 'Own' })
     }),
   )

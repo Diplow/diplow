@@ -17,7 +17,6 @@ import {
   MoveTile,
   type Undo,
 } from '..'
-import { ownSystem } from '../../testing'
 
 // An undo over the database, over PGlite: a batch run whole answers what undoes it, and the undo puts
 // the System back as it stood, a deleted Tile under its id, each event published as an Operation's;
@@ -49,18 +48,18 @@ const said = (held: System) => ({
 /** The Version the Account's System holds a Tile at now, as a writer reads it before it writes. */
 const versionOf = (accountId: string, id: string) =>
   Effect.map(
-    Effect.flatMap(ownSystem(accountId), Mapping.system),
+    Effect.flatMap(Mapping.ownSystem(accountId), Mapping.system),
     (held) => tileAt(held, id)?.version ?? 1,
   )
 
 /** An Account whose Root holds Work, which holds Team, and a Reference to Team in its Context. */
 const seeded = Effect.gen(function* () {
   const accountId = crypto.randomUUID()
-  const root = (yield* Mapping.system(yield* ownSystem(accountId))).root
+  const root = (yield* Mapping.system(yield* Mapping.ownSystem(accountId))).root
   const create = (parent: string, slot: CreateTile['slot'], title: string) =>
     Effect.map(
       transactional(
-        Effect.flatMap(ownSystem(accountId), (acting) =>
+        Effect.flatMap(Mapping.ownSystem(accountId), (acting) =>
           Mapping.createTile(acting, new CreateTile({ parent, slot, ...content(title) })),
         ),
       ),
@@ -71,7 +70,7 @@ const seeded = Effect.gen(function* () {
   const parentVersion = yield* versionOf(accountId, root.id)
   yield* transactional(
     Mapping.createReference(
-      yield* ownSystem(accountId),
+      yield* Mapping.ownSystem(accountId),
       new CreateReference({ parent: root.id, parentVersion, slot: -1, target: team }),
     ),
   )
@@ -80,26 +79,30 @@ const seeded = Effect.gen(function* () {
 
 /** Runs an undo for good, in its own transaction. */
 const undone = (accountId: string, undo: Undo) =>
-  Effect.flatMap(ownSystem(accountId), (acting) => transactional(Mapping.undo(acting, undo)))
+  Effect.flatMap(Mapping.ownSystem(accountId), (acting) =>
+    transactional(Mapping.undo(acting, undo)),
+  )
 
 layer(TestTiles)('an undo over the System', (it) => {
   it.effect('undoes a batch run whole: the System as it stood, a deleted Tile under its id', () =>
     Effect.gen(function* () {
       const { accountId, root, work, team } = yield* seeded
-      const before = yield* Mapping.system(yield* ownSystem(accountId))
+      const before = yield* Mapping.system(yield* Mapping.ownSystem(accountId))
       const made = crypto.randomUUID()
       const { undo, changes } = yield* transactional(
-        Mapping.runBatch(yield* ownSystem(accountId), [
+        Mapping.runBatch(yield* Mapping.ownSystem(accountId), [
           { operation: new CreateTile({ parent: root, slot: 3, ...content('Plans') }), made },
           { operation: new EditTile({ id: team, version: 1, title: 'Crew' }) },
           { operation: new DeleteTile({ id: work, version: 1 }) },
         ]),
       )
       expect(changes).toBe(3)
-      expect(tileAt(yield* Mapping.system(yield* ownSystem(accountId)), team)).toBeUndefined()
+      expect(
+        tileAt(yield* Mapping.system(yield* Mapping.ownSystem(accountId)), team),
+      ).toBeUndefined()
       heard.length = 0
       yield* undone(accountId, undo)
-      const back = yield* Mapping.system(yield* ownSystem(accountId))
+      const back = yield* Mapping.system(yield* Mapping.ownSystem(accountId))
       expect(said(back)).toEqual(said(before))
       expect(heard.map(({ _tag }) => _tag)).toEqual([
         'TileCreated',
@@ -120,22 +123,22 @@ layer(TestTiles)('an undo over the System', (it) => {
     Effect.gen(function* () {
       const { accountId, team } = yield* seeded
       const { undo } = yield* transactional(
-        Mapping.runBatch(yield* ownSystem(accountId), [
+        Mapping.runBatch(yield* Mapping.ownSystem(accountId), [
           { operation: new EditTile({ id: team, version: 1, title: 'Crew' }) },
         ]),
       )
       const version = yield* versionOf(accountId, team)
       yield* transactional(
         Mapping.editTile(
-          yield* ownSystem(accountId),
+          yield* Mapping.ownSystem(accountId),
           new EditTile({ id: team, version, body: 'Mine.' }),
         ),
       )
-      const before = yield* Mapping.system(yield* ownSystem(accountId))
+      const before = yield* Mapping.system(yield* Mapping.ownSystem(accountId))
       heard.length = 0
       const refused = yield* Effect.flip(undone(accountId, undo))
       expect(refused._tag).toBe('BatchOutdated')
-      expect(yield* Mapping.system(yield* ownSystem(accountId))).toEqual(before)
+      expect(yield* Mapping.system(yield* Mapping.ownSystem(accountId))).toEqual(before)
       expect(heard).toEqual([])
       const outdated = yield* Effect.flip(undone(accountId, { _tag: 'Outdated' }))
       expect(outdated._tag).toBe('BatchOutdated')
@@ -147,26 +150,28 @@ layer(TestTiles)('an undo over the System', (it) => {
     () =>
       Effect.gen(function* () {
         const { accountId, root, work, team } = yield* seeded
-        const before = yield* Mapping.system(yield* ownSystem(accountId))
+        const before = yield* Mapping.system(yield* Mapping.ownSystem(accountId))
         const create = new CreateTile({ parent: root, slot: 4, ...content('Plans') })
         const first = yield* transactional(
-          Mapping.runOperation(yield* ownSystem(accountId), create, undefined),
+          Mapping.runOperation(yield* Mapping.ownSystem(accountId), create, undefined),
         )
         expect(first.tile).toMatchObject({ title: 'Plans', version: 1 })
         expect(first.changes).toBe(1)
         const plans = first.tile?.id ?? ''
         const move = new MoveTile({ id: team, version: 1, parent: plans, slot: 1 })
         const second = yield* transactional(
-          Mapping.runOperation(yield* ownSystem(accountId), move, first.undo),
+          Mapping.runOperation(yield* Mapping.ownSystem(accountId), move, first.undo),
         )
         expect(second.tile).toBeUndefined()
         const version = yield* versionOf(accountId, work)
         const remove = new DeleteTile({ id: work, version })
         const third = yield* transactional(
-          Mapping.runOperation(yield* ownSystem(accountId), remove, second.undo),
+          Mapping.runOperation(yield* Mapping.ownSystem(accountId), remove, second.undo),
         )
         yield* undone(accountId, third.undo)
-        expect(said(yield* Mapping.system(yield* ownSystem(accountId)))).toEqual(said(before))
+        expect(said(yield* Mapping.system(yield* Mapping.ownSystem(accountId)))).toEqual(
+          said(before),
+        )
       }),
   )
 
@@ -175,16 +180,16 @@ layer(TestTiles)('an undo over the System', (it) => {
       const { accountId, root } = yield* seeded
       const made = crypto.randomUUID()
       const { undo } = yield* transactional(
-        Mapping.runBatch(yield* ownSystem(accountId), [
+        Mapping.runBatch(yield* Mapping.ownSystem(accountId), [
           { operation: new CreateTile({ parent: root, slot: 3, ...content('Plans') }), made },
         ]),
       )
       const mine = new CreateTile({ parent: made, slot: 1, ...content('Mine') })
-      yield* transactional(Mapping.createTile(yield* ownSystem(accountId), mine))
-      const before = yield* Mapping.system(yield* ownSystem(accountId))
+      yield* transactional(Mapping.createTile(yield* Mapping.ownSystem(accountId), mine))
+      const before = yield* Mapping.system(yield* Mapping.ownSystem(accountId))
       const refused = yield* Effect.flip(undone(accountId, undo))
       expect(refused._tag).toBe('BatchOutdated')
-      expect(yield* Mapping.system(yield* ownSystem(accountId))).toEqual(before)
+      expect(yield* Mapping.system(yield* Mapping.ownSystem(accountId))).toEqual(before)
     }),
   )
 
@@ -193,11 +198,11 @@ layer(TestTiles)('an undo over the System', (it) => {
       const { accountId, team } = yield* seeded
       const edit = (version: number, title: string) => new EditTile({ id: team, version, title })
       const first = yield* transactional(
-        Mapping.runOperation(yield* ownSystem(accountId), edit(1, 'Crew'), undefined),
+        Mapping.runOperation(yield* Mapping.ownSystem(accountId), edit(1, 'Crew'), undefined),
       )
-      yield* transactional(Mapping.editTile(yield* ownSystem(accountId), edit(2, 'Mine')))
+      yield* transactional(Mapping.editTile(yield* Mapping.ownSystem(accountId), edit(2, 'Mine')))
       const second = yield* transactional(
-        Mapping.runOperation(yield* ownSystem(accountId), edit(3, 'Squad'), first.undo),
+        Mapping.runOperation(yield* Mapping.ownSystem(accountId), edit(3, 'Squad'), first.undo),
       )
       expect(second.undo).toEqual({ _tag: 'Outdated' })
       const refused = yield* Effect.flip(undone(accountId, second.undo))
@@ -211,7 +216,7 @@ layer(TestTiles)('an undo over the System', (it) => {
       const refused = yield* Effect.flip(
         transactional(
           Mapping.runOperation(
-            yield* ownSystem(accountId),
+            yield* Mapping.ownSystem(accountId),
             new EditTile({ id: team, version: 9, title: 'X' }),
             undefined,
           ),
@@ -228,10 +233,10 @@ layer(TestTiles)('an undo of a Reference whose Tile its batch deleted before it'
     () =>
       Effect.gen(function* () {
         const { accountId, root, team } = yield* seeded
-        const before = yield* Mapping.system(yield* ownSystem(accountId))
+        const before = yield* Mapping.system(yield* Mapping.ownSystem(accountId))
         const plans = crypto.randomUUID()
         const { undo } = yield* transactional(
-          Mapping.runBatch(yield* ownSystem(accountId), [
+          Mapping.runBatch(yield* Mapping.ownSystem(accountId), [
             {
               operation: new CreateTile({ parent: root, slot: 3, ...content('Plans') }),
               made: plans,
@@ -250,7 +255,9 @@ layer(TestTiles)('an undo of a Reference whose Tile its batch deleted before it'
           ]),
         )
         yield* undone(accountId, undo)
-        expect(said(yield* Mapping.system(yield* ownSystem(accountId)))).toEqual(said(before))
+        expect(said(yield* Mapping.system(yield* Mapping.ownSystem(accountId)))).toEqual(
+          said(before),
+        )
       }),
   )
 
@@ -259,18 +266,20 @@ layer(TestTiles)('an undo of a Reference whose Tile its batch deleted before it'
     () =>
       Effect.gen(function* () {
         const { accountId, root, team } = yield* seeded
-        const before = yield* Mapping.system(yield* ownSystem(accountId))
+        const before = yield* Mapping.system(yield* Mapping.ownSystem(accountId))
         const remove = new DeleteTile({ id: team, version: 1 })
         const first = yield* transactional(
-          Mapping.runOperation(yield* ownSystem(accountId), remove, undefined),
+          Mapping.runOperation(yield* Mapping.ownSystem(accountId), remove, undefined),
         )
         const parentVersion = yield* versionOf(accountId, root)
         const unlink = new DeleteReference({ parent: root, parentVersion, slot: -1 })
         const second = yield* transactional(
-          Mapping.runOperation(yield* ownSystem(accountId), unlink, first.undo),
+          Mapping.runOperation(yield* Mapping.ownSystem(accountId), unlink, first.undo),
         )
         yield* undone(accountId, second.undo)
-        expect(said(yield* Mapping.system(yield* ownSystem(accountId)))).toEqual(said(before))
+        expect(said(yield* Mapping.system(yield* Mapping.ownSystem(accountId)))).toEqual(
+          said(before),
+        )
       }),
   )
 })

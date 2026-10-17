@@ -14,27 +14,16 @@ import { type Field, systemOf, tileAt, type Version } from './entities'
 import * as Mapping from './mapping'
 import * as Operations from './operations'
 
-/**
- * The Account acting on its own System, as the API layer resolves it from a request
- * (`api/mapping/programs.ts`, `ownSystem`): the actor standing for the Account alone, the System
- * named by its star, added on its first read.
- */
-export const ownSystem = (accountId: string) =>
-  Effect.map(Mapping.starOf(accountId), (system): Mapping.Acting => ({
-    actor: { owners: [accountId] },
-    system,
-  }))
-
 /** The Account's System, read flat, as its tree: what the canvas draws, as the client builds it. */
 export const tree = (accountId: string) =>
-  Effect.map(Effect.flatMap(ownSystem(accountId), Mapping.system), systemOf)
+  Effect.map(Effect.flatMap(Mapping.ownSystem(accountId), Mapping.system), systemOf)
 
 /** A read of the Account's own System, where the language Help is read in plays no part. */
 export const readTile = <F extends Field>(
   accountId: string,
   read: Omit<Parameters<typeof Mapping.readTile<F>>[1], 'language'>,
 ) =>
-  Effect.flatMap(ownSystem(accountId), (acting) =>
+  Effect.flatMap(Mapping.ownSystem(accountId), (acting) =>
     Mapping.readTile(acting, { ...read, language: 'en' }),
   )
 
@@ -63,7 +52,7 @@ const change = <A, E>(
     v: (id: string) => Version,
   ) => Effect.Effect<A, E, Tiles | Bus | InTransaction>,
 ) =>
-  Effect.flatMap(ownSystem(accountId), (acting) =>
+  Effect.flatMap(Mapping.ownSystem(accountId), (acting) =>
     Effect.flatMap(versions(acting), (v) => transactional(made(acting, v))),
   )
 
@@ -71,7 +60,7 @@ const change = <A, E>(
 type Fields<O, Filled extends string = never> = Omit<O, '_tag' | Filled>
 
 export const createTile = (accountId: string, fields: Fields<Operations.CreateTile>) =>
-  Effect.flatMap(ownSystem(accountId), (acting) =>
+  Effect.flatMap(Mapping.ownSystem(accountId), (acting) =>
     transactional(Mapping.createTile(acting, new Operations.CreateTile(fields))),
   )
 

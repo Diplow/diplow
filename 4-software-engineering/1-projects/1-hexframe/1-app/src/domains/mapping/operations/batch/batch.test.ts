@@ -17,7 +17,6 @@ import {
   fold,
   type Operation,
 } from '..'
-import { ownSystem } from '../../testing'
 
 // A batch over the Account's System, over PGlite: Operations added to it, decided on the System it
 // makes and written nowhere, the Tiles it creates under the ids they were given; reads and files
@@ -43,7 +42,11 @@ const batched = (
     const batch: Array<Batched> = []
     const tiles = []
     for (const operation of made) {
-      const added = yield* Mapping.addToBatch(yield* ownSystem(accountId), batch, operation(batch))
+      const added = yield* Mapping.addToBatch(
+        yield* Mapping.ownSystem(accountId),
+        batch,
+        operation(batch),
+      )
       batch.push(added.batched)
       tiles.push(added.tile)
     }
@@ -61,7 +64,8 @@ layer(TestTiles)('a batch over the System', (it) => {
   it.effect('batches a create, then a child under it, writing nothing, and reads show both', () =>
     Effect.gen(function* () {
       const accountId = crypto.randomUUID()
-      const before = yield* Mapping.system(yield* ownSystem(accountId))
+      const acting = yield* Mapping.ownSystem(accountId)
+      const before = yield* Mapping.system(acting)
       const root = before.root.id
       heard.length = 0
       const { batch, tiles } = yield* batched(
@@ -72,16 +76,16 @@ layer(TestTiles)('a batch over the System', (it) => {
       const [work, team] = tiles
       expect(work).toMatchObject({ id: madeAt(batch, 0), title: 'Work', version: 1 })
       expect(team).toMatchObject({ id: madeAt(batch, 1), title: 'Team', version: 1 })
-      expect(yield* Mapping.system(yield* ownSystem(accountId))).toEqual(before)
+      expect(yield* Mapping.system(acting)).toEqual(before)
       expect(heard).toEqual([])
 
-      const opened = yield* Mapping.openTile(yield* ownSystem(accountId), {
+      const opened = yield* Mapping.openTile(acting, {
         fields: ['title'],
         language: 'en',
         over: batch,
       })
       expect(opened.branches[1]).toMatchObject({ id: madeAt(batch, 0), title: 'Work' })
-      const mapped = yield* Mapping.readTile(yield* ownSystem(accountId), {
+      const mapped = yield* Mapping.readTile(acting, {
         id: madeAt(batch, 0),
         depth: 1,
         fields: ['title'],
@@ -91,10 +95,7 @@ layer(TestTiles)('a batch over the System', (it) => {
       expect(mapped.parent).toEqual({ id: root, title: '' })
       expect(mapped.tile.branches?.[2]).toMatchObject({ title: 'Team', version: 1 })
       // Without the batch, the System as it stands: neither is there.
-      const plain = yield* Mapping.openTile(yield* ownSystem(accountId), {
-        fields: ['title'],
-        language: 'en',
-      })
+      const plain = yield* Mapping.openTile(acting, { fields: ['title'], language: 'en' })
       expect(plain.branches).toEqual({})
     }),
   )
@@ -102,19 +103,20 @@ layer(TestTiles)('a batch over the System', (it) => {
   it.effect('refuses an Operation added as `decide` refuses it on the System the batch makes', () =>
     Effect.gen(function* () {
       const accountId = crypto.randomUUID()
-      const root = (yield* Mapping.system(yield* ownSystem(accountId))).root.id
+      const root = (yield* Mapping.system(yield* Mapping.ownSystem(accountId))).root.id
       const { batch } = yield* batched(
         accountId,
         () => new CreateTile({ parent: root, slot: 1, ...content('Work') }),
       )
       const taken = new CreateTile({ parent: root, slot: 1, ...content('Again') })
       const refused = yield* Effect.flip(
-        Mapping.addToBatch(yield* ownSystem(accountId), batch, taken),
+        Mapping.addToBatch(yield* Mapping.ownSystem(accountId), batch, taken),
       )
       expect(refused._tag).toBe('DirectionTaken')
       const stale = new EditTile({ id: madeAt(batch, 0), version: 2, title: 'Job' })
       expect(
-        (yield* Effect.flip(Mapping.addToBatch(yield* ownSystem(accountId), batch, stale)))._tag,
+        (yield* Effect.flip(Mapping.addToBatch(yield* Mapping.ownSystem(accountId), batch, stale)))
+          ._tag,
       ).toBe('TileChanged')
     }),
   )
@@ -122,7 +124,7 @@ layer(TestTiles)('a batch over the System', (it) => {
   it.effect('reads a Tile the batch deleted as gone, and writes the files it makes', () =>
     Effect.gen(function* () {
       const accountId = crypto.randomUUID()
-      const root = (yield* Mapping.system(yield* ownSystem(accountId))).root.id
+      const root = (yield* Mapping.system(yield* Mapping.ownSystem(accountId))).root.id
       const { batch } = yield* batched(
         accountId,
         () => new CreateTile({ parent: root, slot: 3, ...content('Games') }),
@@ -130,7 +132,7 @@ layer(TestTiles)('a batch over the System', (it) => {
         () => new CreateTile({ parent: root, slot: 4, ...content('Gone') }),
         (so) => new DeleteTile({ id: madeAt(so, 2), version: 1 }),
       )
-      const gone = Mapping.readTile(yield* ownSystem(accountId), {
+      const gone = Mapping.readTile(yield* Mapping.ownSystem(accountId), {
         id: madeAt(batch, 2),
         depth: 0,
         fields: ['title'],
@@ -139,13 +141,17 @@ layer(TestTiles)('a batch over the System', (it) => {
       })
       expect((yield* Effect.flip(gone))._tag).toBe('TileNotFound')
       const link = (id: string) => `https://hexframe.test/?center=${id}`
-      const { files, places } = yield* Mapping.systemFiles(yield* ownSystem(accountId), link, batch)
+      const { files, places } = yield* Mapping.systemFiles(
+        yield* Mapping.ownSystem(accountId),
+        link,
+        batch,
+      )
       const chess = places.get(madeAt(batch, 1))
       expect(chess?.file).toBe('3-games/1-chess.md')
       expect(files.map(({ path }) => path)).toContain('3-games/1-chess.md')
       expect(places.has(madeAt(batch, 2))).toBe(false)
       expect(
-        (yield* Mapping.systemFiles(yield* ownSystem(accountId), link)).places.has(
+        (yield* Mapping.systemFiles(yield* Mapping.ownSystem(accountId), link)).places.has(
           madeAt(batch, 0),
         ),
       ).toBe(false)
@@ -155,7 +161,7 @@ layer(TestTiles)('a batch over the System', (it) => {
   it.effect('runs the batch whole: every event written and published, as the fold made them', () =>
     Effect.gen(function* () {
       const accountId = crypto.randomUUID()
-      const before = yield* Mapping.system(yield* ownSystem(accountId))
+      const before = yield* Mapping.system(yield* Mapping.ownSystem(accountId))
       const root = before.root
       const { batch } = yield* batched(
         accountId,
@@ -172,8 +178,8 @@ layer(TestTiles)('a batch over the System', (it) => {
       )
       const folded = fold(before, batch)
       heard.length = 0
-      yield* transactional(Mapping.runBatch(yield* ownSystem(accountId), batch))
-      const after = yield* Mapping.system(yield* ownSystem(accountId))
+      yield* transactional(Mapping.runBatch(yield* Mapping.ownSystem(accountId), batch))
+      const after = yield* Mapping.system(yield* Mapping.ownSystem(accountId))
       expect(after).toEqual(folded.system)
       expect(heard).toEqual(folded.events)
       expect(tileAt(after, madeAt(batch, 1))).toMatchObject({ title: 'Team', version: 1 })
@@ -186,26 +192,27 @@ layer(TestTiles)('a batch over the System', (it) => {
     () =>
       Effect.gen(function* () {
         const accountId = crypto.randomUUID()
-        const root = (yield* Mapping.system(yield* ownSystem(accountId))).root
+        const root = (yield* Mapping.system(yield* Mapping.ownSystem(accountId))).root
         const { batch } = yield* batched(
           accountId,
           () => new CreateTile({ parent: root.id, slot: 1, ...content('Work') }),
           () => new EditTile({ id: root.id, version: root.version, title: 'Ada' }),
         )
         const edit = new EditTile({ id: root.id, version: root.version, title: 'Grace' })
-        yield* transactional(Mapping.editTile(yield* ownSystem(accountId), edit))
-        const before = yield* Mapping.system(yield* ownSystem(accountId))
+        yield* transactional(Mapping.editTile(yield* Mapping.ownSystem(accountId), edit))
+        const before = yield* Mapping.system(yield* Mapping.ownSystem(accountId))
         heard.length = 0
         const refused = yield* Effect.flip(
-          transactional(Mapping.runBatch(yield* ownSystem(accountId), batch)),
+          transactional(Mapping.runBatch(yield* Mapping.ownSystem(accountId), batch)),
         )
         expect(refused._tag).toBe('BatchOutdated')
-        expect(yield* Mapping.system(yield* ownSystem(accountId))).toEqual(before)
+        expect(yield* Mapping.system(yield* Mapping.ownSystem(accountId))).toEqual(before)
         expect(heard).toEqual([])
         // Nothing more is added to it: it can no longer run.
         const more = new CreateTile({ parent: root.id, slot: 2, ...content('More') })
         expect(
-          (yield* Effect.flip(Mapping.addToBatch(yield* ownSystem(accountId), batch, more)))._tag,
+          (yield* Effect.flip(Mapping.addToBatch(yield* Mapping.ownSystem(accountId), batch, more)))
+            ._tag,
         ).toBe('BatchOutdated')
       }),
   )
@@ -217,11 +224,11 @@ layer(TestTiles)('a System held whole', (it) => {
     () =>
       Effect.gen(function* () {
         const accountId = crypto.randomUUID()
-        const root = (yield* Mapping.system(yield* ownSystem(accountId))).root.id
+        const root = (yield* Mapping.system(yield* Mapping.ownSystem(accountId))).root.id
         const create = (parent: string, slot: CreateTile['slot'], title: string) =>
           Effect.map(
             transactional(
-              Effect.flatMap(ownSystem(accountId), (acting) =>
+              Effect.flatMap(Mapping.ownSystem(accountId), (acting) =>
                 Mapping.createTile(acting, new CreateTile({ parent, slot, ...content(title) })),
               ),
             ),
@@ -234,12 +241,12 @@ layer(TestTiles)('a System held whole', (it) => {
         const gone = yield* create(root, 4, 'Gone')
         const version = (id: string) =>
           Effect.map(
-            Effect.flatMap(ownSystem(accountId), Mapping.system),
+            Effect.flatMap(Mapping.ownSystem(accountId), Mapping.system),
             (held) => tileAt(held, id)?.version ?? 1,
           )
         const refer = (slot: -2 | -3, target: string) =>
           Effect.flatMap(version(root), (parentVersion) =>
-            Effect.flatMap(ownSystem(accountId), (acting) =>
+            Effect.flatMap(Mapping.ownSystem(accountId), (acting) =>
               transactional(
                 Mapping.createReference(
                   acting,
@@ -251,12 +258,15 @@ layer(TestTiles)('a System held whole', (it) => {
         yield* refer(-2, team)
         yield* refer(-3, gone)
         yield* transactional(
-          Mapping.deleteTile(yield* ownSystem(accountId), new DeleteTile({ id: gone, version: 1 })),
+          Mapping.deleteTile(
+            yield* Mapping.ownSystem(accountId),
+            new DeleteTile({ id: gone, version: 1 }),
+          ),
         )
-        const held = yield* Mapping.system(yield* ownSystem(accountId))
+        const held = yield* Mapping.system(yield* Mapping.ownSystem(accountId))
         for (const id of [undefined, work, team]) {
           for (const depth of [0, 1, 2, 3] as const) {
-            const read = yield* Mapping.readTile(yield* ownSystem(accountId), {
+            const read = yield* Mapping.readTile(yield* Mapping.ownSystem(accountId), {
               id,
               depth,
               fields,

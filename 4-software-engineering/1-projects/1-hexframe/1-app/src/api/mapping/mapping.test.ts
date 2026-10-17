@@ -531,7 +531,7 @@ describe('the Tiles a Turn is shown, as Mapping reads them', () => {
       run(
         context,
         Effect.flatMap(signedInAccount, (id) =>
-          Effect.flatMap(Mapping.ownSystem(id), (acting) => Service.glimpses(acting, ids)),
+          Effect.flatMap(Service.ownSystem(id), (acting) => Service.glimpses(acting, ids)),
         ),
       ),
     )
@@ -542,14 +542,14 @@ describe('the Tiles a Turn is shown, as Mapping reads them', () => {
     const own = await run(
       context,
       Effect.flatMap(signedInAccount, (id) =>
-        Effect.flatMap(Mapping.ownSystem(id), (acting) => Service.ownTile(acting, child.id)),
+        Effect.flatMap(Service.ownSystem(id), (acting) => Service.ownTile(acting, child.id)),
       ),
     )
     expect(own.ok).toBe(true)
     const theirs = await run(
       context,
       Effect.flatMap(signedInAccount, (id) =>
-        Effect.flatMap(Mapping.ownSystem(id), (acting) =>
+        Effect.flatMap(Service.ownSystem(id), (acting) =>
           Service.ownTile(acting, stranger.child.id),
         ),
       ),
@@ -571,6 +571,10 @@ describe('who acts, and on which System', () => {
       Service.titles(acting, [child.id]),
       transactional(
         Service.editTile(acting, new EditTile({ id: child.id, version: 1, title: 'Mine now' })),
+      ),
+      // The change that is no Operation, an import's, before it looks at a row.
+      transactional(
+        Service.changing(acting, [], () => Effect.succeed({ answer: null, events: [] })),
       ),
     ]
     // The other Account's star, and a star that names no System at all, refused alike.

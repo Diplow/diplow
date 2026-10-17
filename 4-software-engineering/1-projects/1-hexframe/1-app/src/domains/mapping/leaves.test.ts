@@ -12,7 +12,6 @@ import {
   swapTiles,
   TestTiles,
   tree,
-  ownSystem,
   readTile,
 } from './testing'
 
@@ -82,7 +81,7 @@ layer(TestTiles)('Leaves beside Branches, over PGlite', (it) => {
         1: { _tag: 'Tile', ...branch, branches: {}, leaves: {}, context: {} },
       })
       expect(found.leaves).toEqual({ 1: { _tag: 'Tile', ...file } })
-      const opened = yield* Mapping.openTile(yield* ownSystem(accountId), {
+      const opened = yield* Mapping.openTile(yield* Mapping.ownSystem(accountId), {
         fields: ['title'],
         language: 'en',
       })

@@ -19,7 +19,6 @@ import {
 import { exportOf } from './files/files'
 import * as Mapping from './mapping'
 import { CreateTile, EditTile, MoveTile, SwapTiles } from './operations'
-import { ownSystem } from './testing'
 
 // What a Tile keeps from the files it was imported from, over PGlite: a Tile keeps them through an
 // edit, a move and a swap, and a read gives them back. The checks themselves, on values made by hand,
@@ -27,7 +26,7 @@ import { ownSystem } from './testing'
 
 /** The Account's System, read flat, as its tree: what the canvas draws, as the client builds it. */
 const tree = (accountId: string) =>
-  Effect.map(Effect.flatMap(ownSystem(accountId), Mapping.system), systemOf)
+  Effect.map(Effect.flatMap(Mapping.ownSystem(accountId), Mapping.system), systemOf)
 
 /** The bus, as Mapping publishes on it: these tests hear nothing it publishes. */
 const Unheard = Layer.succeed(Bus)({ publish: () => Effect.void })
@@ -40,7 +39,7 @@ const createTile = (
   { name, config, frontmatter, ...fields }: Omit<CreateTile, '_tag'> & ToKeep,
 ) =>
   transactional(
-    Effect.flatMap(ownSystem(accountId), (acting) =>
+    Effect.flatMap(Mapping.ownSystem(accountId), (acting) =>
       Mapping.createTile(acting, new CreateTile(fields), { name, config, frontmatter }),
     ),
   )
@@ -68,20 +67,20 @@ layer(TestTiles)('what a Tile keeps, over the tiles repository', (it) => {
       const other = yield* createTile(accountId, { parent: root.id, slot: 2, ...content('Other') })
       yield* transactional(
         Mapping.editTile(
-          yield* ownSystem(accountId),
+          yield* Mapping.ownSystem(accountId),
           new EditTile({ id: kept.id, version: 1, title: 'The stack' }),
         ),
       )
       yield* transactional(
         Mapping.moveTile(
-          yield* ownSystem(accountId),
+          yield* Mapping.ownSystem(accountId),
           new MoveTile({ id: kept.id, version: 2, parent: root.id, slot: 3 }),
         ),
       )
       expect((yield* tree(accountId)).branches[3]).toMatchObject({ title: 'The stack', name })
       yield* transactional(
         Mapping.swapTiles(
-          yield* ownSystem(accountId),
+          yield* Mapping.ownSystem(accountId),
           new SwapTiles({ a: kept.id, aVersion: 3, b: other.id, bVersion: 1 }),
         ),
       )
@@ -145,7 +144,7 @@ layer(TestTiles)('what a Tile keeps, over the tiles repository', (it) => {
       })
       yield* transactional(
         Mapping.editTile(
-          yield* ownSystem(accountId),
+          yield* Mapping.ownSystem(accountId),
           new EditTile({ id: tile.id, version: 1, ...content('Do a ticket') }),
         ),
       )

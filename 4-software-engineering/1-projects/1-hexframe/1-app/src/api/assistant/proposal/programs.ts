@@ -92,7 +92,7 @@ const drafted = <O extends Operation>(accountId: string, turnId: string, operati
       Assistant.draft(accountId, turnId, (open) =>
         Effect.gen(function* () {
           const added = yield* Mapping.addToBatch(
-            yield* MappingPrograms.ownSystem(accountId),
+            yield* Mapping.ownSystem(accountId),
             yield* batchOf(open),
             operation,
           )
@@ -118,7 +118,7 @@ const ranForTurn = <O extends Operation>(accountId: string, turnId: string, oper
       AssistantUndo.applyInTurn(accountId, turnId, (soFar) =>
         Effect.gen(function* () {
           const run = yield* Mapping.runOperation(
-            yield* MappingPrograms.ownSystem(accountId),
+            yield* Mapping.ownSystem(accountId),
             operation,
             yield* keptUndo(soFar),
           )
@@ -207,7 +207,7 @@ export const acceptProposal = ({ proposal }: { readonly proposal: string }) =>
               by: { _tag: 'TurnKey', turnId: accepted.turn },
             }
             const batch = yield* batchOf(accepted)
-            const own = yield* MappingPrograms.ownSystem(account.id)
+            const own = yield* Mapping.ownSystem(account.id)
             const run = yield* actingAs(assistant)(Mapping.runBatch(own, batch))
             return { undo: encodedUndo(run.undo), changes: run.changes }
           }),
@@ -235,7 +235,7 @@ export const undo = ({ applied: id }: { readonly applied: string }) =>
     transactional(
       Effect.gen(function* () {
         const inverse = yield* Effect.orDie(decodedUndo(yield* AssistantUndo.undo(accountId, id)))
-        yield* Mapping.undo(yield* MappingPrograms.ownSystem(accountId), inverse)
+        yield* Mapping.undo(yield* Mapping.ownSystem(accountId), inverse)
         return null
       }),
     ),
