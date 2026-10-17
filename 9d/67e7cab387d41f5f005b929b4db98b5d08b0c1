@@ -1,0 +1,62 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/batch/batch.test.ts
+  s_eb2c82211b20e8::t_25210545079eb8 20,47,68,107,114,127,135,145,154,164,181-182,195,202-203,206,209,226,230,243,248,261,265,268
+  s_eb2c82211b20e8::t_03f61acd801206 119,214
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_eb2c82211b20e8::t_73e5749b5a8cfb 28,52,57
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/decider/agreement.test.ts
+  s_eb2c82211b20e8::t_25210545079eb8 24,57,60,74,79,86,102,105,116,136,145,155,173,192,209,221,237,246,260,265,270,275
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/assistant.test.ts
+  s_eb2c82211b20e8::t_25210545079eb8 249
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/leaves.test.ts
+  s_eb2c82211b20e8::t_25210545079eb8 16,85
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/programs.ts
+  s_eb2c82211b20e8::t_25210545079eb8 27,54,78,165,222
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/programs.ts
+  s_eb2c82211b20e8::t_25210545079eb8 29-34,39,42
+  s_eb2c82211b20e8::t_03f61acd801206 35-38,45
+  s_eb2c82211b20e8::t_d5e585e73d506f 28
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_eb2c82211b20e8::t_25210545079eb8 94-96,98
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/landing/landing.test.ts
+  s_eb2c82211b20e8::t_25210545079eb8 17,27,66,150,179,192,225,232,250,257,362,389
+  s_eb2c82211b20e8::t_03f61acd801206 376
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-sharing-organizations/decisions.md
+  s_eb2c82211b20e8::t_73e5749b5a8cfb 18
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/CLAUDE.md
+  s_eb2c82211b20e8::t_73e5749b5a8cfb 20,33
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/programs.ts
+  s_eb2c82211b20e8::t_25210545079eb8 95,121,210,238
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/kept.test.ts
+  s_eb2c82211b20e8::t_25210545079eb8 22,30,43,71,77,84,148
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/testing.ts
+  s_eb2c82211b20e8::t_25210545079eb8 19-26,37,66,74
+  s_eb2c82211b20e8::t_03f61acd801206 27-30
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/shipped/shipped.test.ts
+  s_eb2c82211b20e8::t_03f61acd801206 404,408
+  s_eb2c82211b20e8::t_25210545079eb8 24,176,194,210,229,244,266,284,347,350,375,386,388,410
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/recording.test.ts
+  s_eb2c82211b20e8::t_25210545079eb8 220
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.test.ts
+  s_eb2c82211b20e8::t_25210545079eb8 534,545,552
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/batch/undo.test.ts
+  s_eb2c82211b20e8::t_25210545079eb8 20,52,59,63,74,89,92,102,123,130,134,138,150,153,160,166,178,183-184,187,196,198,200,214,231,234,262,265,270
+  s_eb2c82211b20e8::t_03f61acd801206 83,99,169,253,273
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/recording.ts
+  s_eb2c82211b20e8::t_25210545079eb8 17,49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9d67e7cab387d41f5f005b929b4db98b5d08b0c1",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
