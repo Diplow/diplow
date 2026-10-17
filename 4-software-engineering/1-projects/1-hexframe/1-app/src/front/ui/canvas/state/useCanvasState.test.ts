@@ -412,7 +412,22 @@ describe('what its caller holds back', () => {
     inOpened.center(a, 'pointer')
     inOpened.center(a, 'keyboard')
     inOpened.go(a, 'go-in')
+    inOpened.go(a, 'show-context')
     expect(changed).not.toHaveBeenCalled()
+  })
+
+  it('moves the center nowhere by a menu where going in is held, Back out included', () => {
+    const {
+      state,
+      actions: act,
+      onViewChange,
+    } = render(inA, {
+      lets: () => ({ click: true, goIn: false }),
+    })
+    const a = hexOf(state.hexes, 'tile:a')
+    act.go(hexOf(state.hexes, 'tile:a3'), 'show-context')
+    act.go(a, 'back-out')
+    expect(onViewChange).not.toHaveBeenCalled()
   })
 
   it('lets through what it lets through, Tile by Tile: the center opening, nothing going in', () => {

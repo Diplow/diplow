@@ -38,7 +38,8 @@ export type TileAction = Extract<Gesture, 'expand' | 'collapse' | 'center'>
 
 /**
  * What a Tile lets through of the gestures made on it: its click, Enter and Space, and its menu's
- * Open (`click`); going into it, by a double click, Shift+Enter or its menu's Go in (`goIn`).
+ * Open (`click`); moving the center from it, going into it by a double click, Shift+Enter or its
+ * menu's Go in, centering it with its Context by Show its Context, or Back out (`goIn`).
  */
 export interface TileLets {
   click: boolean
@@ -294,20 +295,21 @@ export function useCanvasState(input: CanvasInput) {
       go: (hex: TileHex, verb: ViewVerb) => {
         const tile = hex.tile.id
         const centered = tile === shown.center.id
+        const { goIn } = lets(hex)
         switch (verb) {
           case 'open':
             press(hex, actionOf(hex, false))
             return
           case 'go-in':
-            if (!centered && lets(hex).goIn) centerTile(tile)
+            if (!centered && goIn) centerTile(tile)
             return
           case 'show-context':
-            if (!centered) centerTile(tile, true)
-            else if (shown.inner !== 'context') act(hex, 'show-context')
+            if (!centered && goIn) centerTile(tile, true)
+            else if (centered && shown.inner !== 'context') act(hex, 'show-context')
             return
           case 'back-out': {
             const parent = pathTo(system, shown.center.id).at(-2)
-            if (parent !== undefined) centerTile(parent.id)
+            if (parent !== undefined && goIn) centerTile(parent.id)
           }
         }
       },

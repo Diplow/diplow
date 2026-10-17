@@ -7,6 +7,7 @@
 import { m } from '#/paraglide/messages'
 import { Act, voiceOf } from '#/front/ui/atoms/controls/act'
 import { Canvas } from '#/front/ui/canvas/Canvas'
+import type { TileHex, TileLets } from '#/front/ui/canvas/state/useCanvasState'
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
 import { showView, type CanvasView } from '#/front/ui/canvas/view/view'
 
@@ -37,13 +38,19 @@ export function ShippedCanvas({ tree, view, onViewChange, lets, className }: Shi
       view={view}
       onViewChange={onViewChange}
       looking={lets?.menu ?? true}
-      {...(lets && {
-        lets: (hex) => ({ click: lets.open && hex.role === 'center', goIn: lets.goIn }),
-      })}
+      {...(lets && { lets: tileLetsOf(lets) })}
       className={className}
     />
   )
 }
+
+/**
+ * What each Tile of the tutorial's canvas lets through, by its rules: the center's click once it
+ * lets the center open, going in once it lets that. `/design-system`'s onboarding slide reads it too.
+ */
+export const tileLetsOf =
+  (lets: TutorialLets) =>
+  (hex: TileHex): TileLets => ({ click: lets.open && hex.role === 'center', goIn: lets.goIn })
 
 interface HelpReadProps {
   tree: TileNode

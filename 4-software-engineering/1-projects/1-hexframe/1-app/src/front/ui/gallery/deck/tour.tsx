@@ -13,6 +13,7 @@ import { Act } from '../../atoms/controls/act'
 import { Canvas } from '../../canvas/Canvas'
 import { Journey } from '../../canvas/layouts/Journey'
 import { Rail } from '../../canvas/layouts/Rail'
+import type { TileHex, TileLets } from '../../canvas/state/useCanvasState'
 import { directionName } from '../../canvas/tile/menu/verbs'
 import { directions } from '../../canvas/geometry/geometry'
 import { pathTo, type TileNode } from '../../canvas/view/tiles'
@@ -152,13 +153,24 @@ export function canvasTour(): TileNode {
   }
 }
 
+/**
+ * The tutorial as home shows it at its arrival, which the route reads and hands on, since `ui/` can't
+ * reach the feature that rules it (`features/shipped/tutorial/rules.ts`): its Tiles in the reader's
+ * language, the view its rules show, and what they let through, on the canvas and to the composer.
+ */
+interface TutorialArrival {
+  system: TileNode
+  view: CanvasView
+  /** Each Tile's menu, beside its hover card. */
+  looking: boolean
+  lets: (hex: TileHex) => TileLets
+  composer: boolean
+}
+
 interface OnboardingSlideProps {
   onGo: Go
-  /**
-   * The tutorial's Tiles as home's canvas draws them, in the reader's language, which the route reads;
-   * none while they are read, the invitation's click then saying what it does.
-   */
-  tutorial?: TileNode | undefined
+  /** The tutorial at its arrival; none while it is read, the invitation's click saying what it does. */
+  tutorial?: TutorialArrival | undefined
 }
 
 /**
@@ -214,12 +226,9 @@ function rootOf(typed: string, named: Named | undefined): TileNode {
 
 interface FirstVisitProps {
   onGo: Go
-  tutorial: TileNode | undefined
+  tutorial: TutorialArrival | undefined
   onAgain: () => void
 }
-
-/** Nothing on the tutorial's canvas answers at its arrival: no click, no going in. */
-const arrival = () => ({ click: false, goIn: false })
 
 /** One play of the onboarding, from the page landing, into the journey to the tutorial and back. */
 function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
@@ -263,10 +272,11 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
               />
             ) : (
               <Canvas
-                system={there}
-                view={{}}
+                system={there.system}
+                view={there.view}
                 onViewChange={() => undefined}
-                lets={arrival}
+                looking={there.looking}
+                lets={there.lets}
                 className="min-h-0 flex-1"
               />
             )}
@@ -284,7 +294,7 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
           />
         ) : (
           <Rail
-            steps={pathTo(there, there.id)}
+            steps={pathTo(there.system, showView(there.system, there.view).center.id)}
             onSelect={() => undefined}
             turns={done}
             onHome={() => {
@@ -293,7 +303,7 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
           />
         )
       }
-      composerAway={named === undefined || there !== undefined}
+      composerAway={named === undefined || there?.composer === false}
       foot={
         // As home's chat: the tile widget, which goes from question to receipt, one widget so the
         // focus goes along; the timeline leaves the pseudo taken to the receipt.
