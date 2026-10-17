@@ -26,7 +26,7 @@ export interface TutorialRules extends CanvasRules {
 interface Step {
   /** The center opened, or folded back, by a click, Enter or Space; and its ring shown. */
   open: boolean
-  /** A Tile's hover card, its title and its preview (`card`), and its menu beside it (`true`). */
+  /** A Tile's hover card, its title and its preview (`card`), its menu beside it (`menu`), or neither. */
   looking: Looking
   /** The center moved to another Tile, going into it or out. */
   recenter: boolean
