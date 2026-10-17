@@ -1,0 +1,86 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useActingState.ts
+  s_eb2c82211b20e8::t_db02645d49415b 31,37,39,205-208,211,226-229,232-233,237,284,288-290,295,306-308,310-311,313-314,317-320,332
+  s_eb2c82211b20e8::t_46f4f457b9cf2e 51,105-107,110
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/visit/visit.ts
+  s_eb2c82211b20e8::t_7a49f210743504 5-7
+  s_eb2c82211b20e8::t_3c9d37798965a8 44-47
+  s_eb2c82211b20e8::t_46f4f457b9cf2e 1-4,8-43,48-62
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/layouts/Rail.tsx
+  s_eb2c82211b20e8::t_8e883a8517a547 5-6,19-20,69-70,78-79,91-110
+  s_eb2c82211b20e8::t_2ad790be7b7da5 111
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_eb2c82211b20e8::t_31ae33087dafcd 359,396-397,679
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/fixtures.ts
+  s_eb2c82211b20e8::t_fba2d748bbc4ce 112-122
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/System.tsx
+  s_eb2c82211b20e8::t_7a49f210743504 1-2,26,41-45,66,79
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_eb2c82211b20e8::t_a803e02208d321 66-67,96,106-120
+  s_eb2c82211b20e8::t_e8949aa24b5db4 25,97-105,121,156-172,174-175,177-178,185-186,188-189,198-204
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/t/$id.tsx
+  s_eb2c82211b20e8::t_a803e02208d321 1-55
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_eb2c82211b20e8::t_d1f51d8cd1a712 538,550-551,553
+  s_eb2c82211b20e8::t_9993f117177d84 93
+  s_eb2c82211b20e8::t_86d83e847ed758 753,763
+  s_eb2c82211b20e8::t_bfe2af9701229f 554-560
+  s_eb2c82211b20e8::t_c80008a74af548 87,89-92,319-376,382-387,390-391,549
+  s_eb2c82211b20e8::t_ec05032d741028 37-41,84,88,120,142-144,146,247-248,253-259
+  s_eb2c82211b20e8::t_3c9d37798965a8 377-381,389,561-578
+  s_eb2c82211b20e8::t_f6d95c662eb621 388,392
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/acting.ts
+  s_eb2c82211b20e8::t_bc3437013e8134 271
+  s_eb2c82211b20e8::t_16153ae9a953b9 4-8,16-17,38-65,71-72,75-101,103-104,106,108-110,267-268,270,276
+  s_eb2c82211b20e8::t_4266d067f008ff 102,105
+  s_eb2c82211b20e8::t_8be89939f5d9ef 107
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/layouts/gallery.tsx
+  s_eb2c82211b20e8::t_fba2d748bbc4ce 1-2,11-12,29-31,42-44,48
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_eb2c82211b20e8::t_31ae33087dafcd 359,396-397,679
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useActingState.test.ts
+  s_eb2c82211b20e8::t_f5a2b912f3dd9f 24,110-113
+  s_eb2c82211b20e8::t_1b3bd6c34198c8 454-501
+  s_eb2c82211b20e8::t_bc3437013e8134 123
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/visit/visit.test.ts
+  s_eb2c82211b20e8::t_2900945d5da7b8 1-71,75-101
+  s_eb2c82211b20e8::t_3c9d37798965a8 72-74
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/view/tiles.test.ts
+  s_eb2c82211b20e8::t_9320e676e56c08 58-65
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/view/tiles.ts
+  s_eb2c82211b20e8::t_8cdb277d755c21 30-37,82-84,88-95
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/acting.test.ts
+  s_eb2c82211b20e8::t_1a3803598fd9d5 268,271-336,342-345
+  s_eb2c82211b20e8::t_d1284ecfc0c6b2 346
+  s_eb2c82211b20e8::t_bc3437013e8134 92
+  s_eb2c82211b20e8::t_f5a2b912f3dd9f 19-20,25-26
+  s_eb2c82211b20e8::t_3c9d37798965a8 265-267,337-341
+  s_eb2c82211b20e8::t_6da1f5d2d5af95 269-270
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/visit/VisitPage.tsx
+  s_eb2c82211b20e8::t_54ea03d0f48bf0 1-78
+4-software-engineering/1-projects/1-hexframe/1-app/src/routeTree.gen.ts
+  s_cbc68e4599c252::t_b31e729b81919e 20,63-67,83,95,108,122,134,146,159,221-227,247
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a8883b2bc56331639eca3c7b97c674e0aedfcbfd",
+  "prompts": {},
+  "sessions": {
+    "s_cbc68e4599c252": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a896c2751e1fc64da",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
