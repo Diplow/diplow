@@ -1,0 +1,26 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/motion.test.ts
+  s_7b92c93552a78d::t_61eb72d4e9b67c 110-122
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/index.tsx
+  s_7b92c93552a78d::t_0c4a56555698b0 191-193,195-198,204-206,404
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/motion.ts
+  s_7b92c93552a78d::t_61eb72d4e9b67c 10,43-45,49-51,55-61
+  s_7b92c93552a78d::t_b5b0e4c335966a 47
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/canvas/tile/Tile.tsx
+  s_7b92c93552a78d::t_d362f07a809f44 593-594,598,600
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ae326e82b1286cb0da5d4b34e4c0f222d2383fbb",
+  "prompts": {},
+  "sessions": {
+    "s_7b92c93552a78d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "df1e2743-42cd-4ee5-8710-130ad5db0a14",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
