@@ -7,7 +7,7 @@
 // of a play in beats, one every `--stagger-beat`, which the tutorial tells a tile's words by, lit on
 // the canvas and said in the chat at once (HEX-120). Both sides and the screen read it, so it sits
 // beside the theme.
-import { useEffect, useState } from 'react'
+import { useEffect, useEffectEvent, useState } from 'react'
 
 /**
  * A duration token's value in milliseconds, `500ms` or `1.3s`, as the page's root sets it, a stagger's
@@ -40,22 +40,25 @@ export function easingOf(element: Element | null): string {
 
 /**
  * The beat a play has reached, one every `--stagger-beat` once `playing` turns on, up to `count`: 0
- * before the first, and again from the start each time `playing` turns on anew. A beat only lights
- * and says something, so it lasts as long with reduced motion: what it shows comes without moving.
+ * before the first, and again from the start each time `playing` turns on anew; `onBeat` hears each
+ * as it comes. A beat only lights and says something, so it lasts as long with reduced motion: what
+ * it shows comes without moving.
  */
-export function useBeats(count: number, playing: boolean): number {
+export function useBeats(count: number, playing: boolean, onBeat?: (beat: number) => void): number {
   const [beat, setBeat] = useState(0)
+  const heard = useEffectEvent((reached: number) => {
+    onBeat?.(reached)
+  })
   useEffect(() => {
     if (!playing) return
     const every = durationOf('--stagger-beat')
-    const timers = Array.from({ length: count }, (_, index) =>
-      setTimeout(
-        () => {
-          setBeat(index + 1)
-        },
-        every * (index + 1),
-      ),
-    )
+    const timers = Array.from({ length: count }, (_, index) => {
+      const reached = index + 1
+      return setTimeout(() => {
+        setBeat(reached)
+        heard(reached)
+      }, every * reached)
+    })
     return () => {
       timers.forEach(clearTimeout)
       setBeat(0)

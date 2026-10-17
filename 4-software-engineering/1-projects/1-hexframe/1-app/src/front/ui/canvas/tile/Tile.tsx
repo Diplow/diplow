@@ -590,13 +590,14 @@ function Words(props: TileProps & { sized: Sized }) {
 
 /**
  * A part of its words the agent tells of, its title or its preview: lit in the agent's violet, a
- * light glowing under the words, which keep their ink, fading in and out but under reduced motion.
+ * light glowing round the words' own shapes, which keep their ink, fading in and out but under
+ * reduced motion. A filter rather than a text shadow, which the line clamp would cut to a box.
  */
 function toldOf(told: boolean): string {
   return cn(
-    'transition-[color,text-shadow] duration-500 motion-reduce:transition-none',
+    'transition-[color,filter] duration-500 motion-reduce:transition-none',
     told &&
-      'text-foreground [text-shadow:0_0_.45em_var(--color-agent),0_0_1.1em_color-mix(in_oklab,var(--color-agent)_55%,transparent)]',
+      'text-foreground [filter:drop-shadow(0_0_.3em_var(--color-agent))_drop-shadow(0_0_.8em_color-mix(in_oklab,var(--color-agent)_60%,transparent))]',
   )
 }
 

@@ -188,16 +188,22 @@ function useHelpNavigation(turning: ReturnType<typeof useScreenState>['actions']
  * The tutorial's navigation on home, read-only: its Tiles, for the corner, read beside the canvas
  * without throwing, and only while it is on the canvas, and its canvas's view, whose center its param
  * holds; and, once read, while its rules have the agent tell its center's words, what it has told,
- * a beat at a time from the start whenever it plays anew, and the center's body, which it tells last
- * (HEX-120). The center is its Root while it tells: the arrival's.
+ * a beat at a time from the start whenever it plays anew, and the center's body, which it tells last,
+ * in the chat, which a phone brings to the front then (HEX-120). The center is its Root while it
+ * tells: the arrival's.
  */
-function useTutorialNavigation(search: HomeSearch) {
+function useTutorialNavigation(
+  search: HomeSearch,
+  turning: ReturnType<typeof useScreenState>['actions'],
+) {
   const navigate = Route.useNavigate()
   const enabled = search.tutorial !== undefined
   const { data } = useShipped('tutorial', getLocale(), { throwing: false, enabled })
   const tree = useMemo(() => (data === undefined ? undefined : canvasTree(data)), [data])
   const tells = data !== undefined && shippedOnCanvas(search)?.rules?.tells === true
-  const beat = useBeats(toldInTurn.length, tells)
+  const beat = useBeats(toldInTurn.length, tells, (reached) => {
+    if (toldInTurn[reached - 1] === 'body') turning.turn('chat')
+  })
   return {
     tree,
     told: toldInTurn[beat - 1],
@@ -395,7 +401,7 @@ function SignedIn() {
   // The key widget's step: the receipt outlives the widget.
   const keys = useKeyWidgetState(search.keys === true)
   const help = useHelpNavigation(turning)
-  const tutorial = useTutorialNavigation(search)
+  const tutorial = useTutorialNavigation(search, turning)
   const openKeys = useOpenKeys(turning)
   const openTutorial = useOpenTutorial(turning)
   const wayHome = useWayHome()

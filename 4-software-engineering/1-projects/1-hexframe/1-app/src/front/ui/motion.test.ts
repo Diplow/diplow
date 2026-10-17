@@ -107,6 +107,19 @@ describe('useBeats', () => {
     expect(result.current).toBe(1)
   })
 
+  it('tells each beat as it comes', () => {
+    vi.useFakeTimers()
+    root.setProperty('--stagger-beat', '2s')
+    const heard: number[] = []
+    renderHook(() =>
+      useBeats(3, true, (beat) => {
+        heard.push(beat)
+      }),
+    )
+    after(4000)
+    expect(heard).toEqual([1, 2])
+  })
+
   it('stays at none while it does not play', () => {
     const { result } = play(false)
     after(10_000)
