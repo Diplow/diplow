@@ -29,7 +29,7 @@ export function IntroducedCanvas() {
         onViewChange={setView}
         looking="card"
         lets={(hex) => ({ click: hex.role === 'center', recenter: false })}
-        introduces
+        introducesOpening
         className="h-96 w-[37.5rem] max-w-full"
       />
       <Act

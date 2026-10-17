@@ -44,8 +44,8 @@ export function ShippedCanvas(props: ShippedCanvasProps) {
       system={tree}
       view={view}
       onViewChange={onViewChange}
-      looking={rules?.looking ?? true}
-      {...(rules && { lets: rules.lets, introduces: rules.introduces })}
+      looking={rules?.looking ?? 'menu'}
+      {...(rules && { lets: rules.lets, introducesOpening: rules.introducesOpening })}
       marks={{ told }}
       className={className}
     />

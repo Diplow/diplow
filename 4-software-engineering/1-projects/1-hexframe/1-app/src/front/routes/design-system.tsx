@@ -25,7 +25,7 @@ import { encoded } from '#/front/features/conversation/composer/mention'
 import { happenedOf } from '#/front/features/conversation/entry/words'
 import { ConversationGallery } from '#/front/features/conversation/gallery'
 import { helpNodeOf } from '#/front/features/shipped/nodes'
-import { tutorialRules } from '#/front/features/shipped/tutorial/rules'
+import { tutorialRules, tutorialTells } from '#/front/features/shipped/tutorial/rules'
 import { canvasTree } from '#/front/features/system/tree'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
@@ -215,7 +215,7 @@ function CanvasSlide(props: {
             system={tour}
             view={view}
             onViewChange={moved}
-            looking
+            looking="menu"
             className="min-h-0 flex-1"
           />
         </div>
@@ -364,7 +364,12 @@ function OnboardingTour({ onGo }: { onGo: Go }) {
     () =>
       data === undefined
         ? undefined
-        : { system: canvasTree(data), body: data.body, rules: tutorialRules },
+        : {
+            system: canvasTree(data),
+            body: data.body,
+            tells: tutorialTells,
+            rules: tutorialRules,
+          },
     [data],
   )
   return <OnboardingSlide onGo={onGo} tutorial={tutorial} />
@@ -419,7 +424,7 @@ function CanvasGallery({ view, onViewChange }: CanvasGalleryProps) {
           system={ulysse}
           view={view}
           onViewChange={onViewChange}
-          looking
+          looking="menu"
           className="h-[36rem] max-h-[80dvh] w-full"
         />
         <IntroducedCanvas />
@@ -495,7 +500,7 @@ function ScreenSpecimen({ system, signedIn, className }: ScreenSpecimenProps) {
           system={system}
           view={view}
           onViewChange={setView}
-          looking
+          looking="menu"
           className="flex-1 p-4 pb-8"
         />
       }

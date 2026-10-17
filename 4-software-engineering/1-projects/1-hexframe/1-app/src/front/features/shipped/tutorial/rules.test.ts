@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import type { TileHex } from '#/front/ui/canvas/state/useCanvasState'
 import type { ToldPart } from '#/front/ui/motion'
 
-import { tutorialRules } from './rules'
+import { tutorialRules, tutorialTells } from './rules'
 
 // The tutorial's rules, from the view the URL asks for and what the agent has told of its center's
 // words: what it shows, and what it lets through to the canvas and the chat.
@@ -37,7 +37,7 @@ describe("the tutorial's arrival", () => {
         false,
         false,
       ])
-      expect(rules.introduces).toBe(false)
+      expect(rules.introducesOpening).toBe(false)
     },
   )
 
@@ -47,7 +47,7 @@ describe("the tutorial's arrival", () => {
     for (const role of ['branch', 'leaf', 'context'] as const) {
       expect(rules.lets(drawn(role))).toEqual({ click: false, recenter: false })
     }
-    expect(rules.introduces).toBe(true)
+    expect(rules.introducesOpening).toBe(true)
     expect(rules.view).toEqual({})
   })
 
@@ -86,6 +86,17 @@ describe("the tutorial's center opened", () => {
 
   it('is where a link asking for its ring lands, whatever the agent has told', () => {
     expect(tutorialRules(opened, undefined).view).toEqual(opened)
+  })
+
+  it.each(['branches', 'leaves'] as const)(
+    'shows its six Children for a link asking its %s around it',
+    (frame) => {
+      expect(tutorialRules({ frame }).view).toEqual(opened)
+    },
+  )
+
+  it('starts the clock of its words, as its arrival does', () => {
+    expect([tutorialTells({}), tutorialTells(opened)]).toEqual([true, true])
   })
 
   it.each([

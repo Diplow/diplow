@@ -72,22 +72,36 @@ const opened: Step = {
  * shows, nor does a Branch opened in place.
  */
 export function tutorialRules(asked: CanvasView, told?: ToldPart): TutorialRules {
-  const step = asked.frame === undefined ? arrival(told) : opened
+  const step = stepOf(asked, told)
   return {
     view: shownWith(asked, step),
     looking: step.looking,
     lets: (hex) => ({ click: step.open && hex.role === 'center', recenter: step.recenter }),
-    introduces: step.open,
+    introducesOpening: step.open,
     composer: step.composer,
     tells: step.tells,
   }
 }
 
-/** A view less what a step hasn't introduced: no Tile gone into, no Branch open, no Context. */
+/** The step a view asked for is: the center's ring asked for, opened; else the arrival. */
+const stepOf = (asked: CanvasView, told?: ToldPart) =>
+  asked.frame === undefined ? arrival(told) : opened
+
+/**
+ * Whether the agent tells the center's words in turn on the view asked for, whatever it has told so
+ * far: what starts the clock that `tutorialRules` then reads (`useTold`).
+ */
+export const tutorialTells = (asked: CanvasView): boolean => stepOf(asked).tells
+
+/**
+ * A view less what a step hasn't introduced: no Tile gone into, no Branch open, no Context, and of
+ * the rings around the center, its six Children alone, the ring its tile tells of, whichever was
+ * asked for.
+ */
 function shownWith(asked: CanvasView, step: Step): CanvasView {
   const { center, frame } = asked
   return {
     ...(step.recenter && center !== undefined && { center }),
-    ...(step.open && frame !== undefined && { frame }),
+    ...(step.open && frame !== undefined && { frame: 'children' as const }),
   }
 }

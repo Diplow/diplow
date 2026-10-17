@@ -8,7 +8,7 @@ import type { PointerEvent, ReactElement } from 'react'
 import type { EmptySlotTarget } from './geometry/shape'
 import type { Action, Hand } from './keys'
 import type { Target } from './state/move/useMove'
-import { isViewVerb, type TileHex, type ViewVerb } from './state/useCanvasState'
+import { isViewVerb, type Looking, type TileHex, type ViewVerb } from './state/useCanvasState'
 import { TileMenu } from './tile/menu/TileMenu'
 import type { PickerFrame } from './tile/menu/Picker'
 import { groupsOf, slotPlace, type Subject, type TileAct, type Verb } from './tile/menu/verbs'
@@ -63,14 +63,14 @@ export function lookingAt(
   system: TileNode,
   hex: TileHex,
   look: TileLook,
-  card = false,
+  looking: Exclude<Looking, false> = 'menu',
 ): Acting | undefined {
   const { kind } = look
   if (kind === 'list' || kind === 'ghost' || kind === 'writing') return undefined
   const at = hex.role === 'center' ? undefined : hex.direction
   const parent = at === undefined ? pathTo(system, hex.tile.id).at(-2) : hex.parent
   const words = { title: hex.tile.title, ...(parent && { parent: parent.title }) }
-  const looked = { without: acts, onAct: () => undefined, cardAlone: card }
+  const looked = { without: acts, onAct: () => undefined, cardAlone: looking === 'card' }
   if (at === undefined) return { subject: { ...words, kind, at: 'center' }, ...looked }
   const own = kind === 'root' || kind === 'untitled' ? 'branch' : kind
   return { subject: { ...words, kind: own, at }, ...looked }

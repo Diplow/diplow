@@ -162,8 +162,6 @@ export function canvasTour(): TileNode {
 interface TutorialShown extends CanvasRules {
   /** The composer, held back while it is not let through. */
   composer: boolean
-  /** The agent tells its center's words in turn, as its rules have it (HEX-120). */
-  tells: boolean
 }
 
 /**
@@ -175,6 +173,8 @@ interface Tutorial {
   system: TileNode
   /** Its center's body, which the agent tells last, in the chat. */
   body: string
+  /** Whether the agent tells its center's words in turn on a view, which starts their clock. */
+  tells: (view: CanvasView) => boolean
   rules: (view: CanvasView, told: ToldPart | undefined) => TutorialShown
 }
 
@@ -259,7 +259,7 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
   const there = away ? tutorial : undefined
   // Arrived, what the agent has told of the center's words, a beat at a time, as on home; and the
   // tutorial's rules once it has, its center answering once its body is told.
-  const told = useTold(there?.rules(asked, undefined).tells === true)
+  const told = useTold(there?.tells(asked) === true)
   const shown = there?.rules(asked, told)
   const went = (next: CanvasView) => {
     setView(next)
@@ -288,7 +288,7 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
                 system={system}
                 view={view}
                 onViewChange={went}
-                looking
+                looking="menu"
                 className="min-h-0 flex-1"
               />
             ) : (
@@ -298,7 +298,7 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
                 onViewChange={setAsked}
                 looking={shown.looking}
                 lets={shown.lets}
-                introduces={shown.introduces}
+                introducesOpening={shown.introducesOpening}
                 marks={{ told }}
                 className="min-h-0 flex-1"
               />

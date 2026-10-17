@@ -60,7 +60,7 @@ import {
   withTutorial,
 } from '#/front/features/shipped/search'
 import { HelpRead, ShippedCanvas } from '#/front/features/shipped/Shipped'
-import type { TutorialRules } from '#/front/features/shipped/tutorial/rules'
+import { tutorialTells, type TutorialRules } from '#/front/features/shipped/tutorial/rules'
 import { KeyWidgets } from '#/front/features/keys/KeyWidgets'
 import { readKeysSearch, withKeys } from '#/front/features/keys/search'
 import { useKeyWidgetState } from '#/front/features/keys/state/useKeyWidgetState'
@@ -199,7 +199,9 @@ function useTutorialNavigation(
   const enabled = search.tutorial !== undefined
   const { data } = useShipped('tutorial', getLocale(), { throwing: false, enabled })
   const tree = useMemo(() => (data === undefined ? undefined : canvasTree(data)), [data])
-  const tells = data !== undefined && shippedOnCanvas(search)?.rules?.tells === true
+  // The clock starts from the view alone; the rules then read the part it reached (`shippedSide`).
+  const shown = shippedOnCanvas(search)
+  const tells = data !== undefined && shown?.shipped === 'tutorial' && tutorialTells(shown.view)
   const told = useTold(tells, (part) => {
     if (part === 'body') turning.turn('chat')
   })

@@ -122,8 +122,8 @@ interface CanvasProps {
   acting?: CanvasActing
   /**
    * A canvas only looked at, Help's or a page's: without `acting`, each Tile's menu holds the lines
-   * that go somewhere alone, Open, Go in, Show its Context, Back out, beside its hover card; `card`,
-   * its hover card alone, no menu.
+   * that go somewhere alone, Open, Go in, Show its Context, Back out, beside its hover card (`menu`);
+   * or its hover card alone (`card`).
    */
   looking?: Looking
   /**
@@ -137,7 +137,7 @@ interface CanvasProps {
    * that click, the one thing that answers, and its six arrive one by one, `--stagger-step` apart, in
    * their order from the top left (HEX-121).
    */
-  introduces?: boolean
+  introducesOpening?: boolean
   /**
    * A Tile on the move: lifted, its free slots offering themselves where `emptySlots` lands it, the
    * Tiles `swapTargets` names offering their swap on a disc at their foot, no Branch showing its
@@ -158,7 +158,7 @@ interface CanvasProps {
 
 export function Canvas(props: CanvasProps) {
   const { system, view, onViewChange, emptySlots, move, writes, marks, onCarry, lets } = props
-  const { introduces = false } = props
+  const { introducesOpening: introduces = false } = props
   const acting = props.acting ?? lookedAt(system, props.looking)
   const finger = useFinger()
   const { state, actions } = useCanvasState({ system, view, onViewChange, finger, lets })
@@ -314,7 +314,7 @@ export function Canvas(props: CanvasProps) {
 function lookedAt(system: TileNode, looking: Looking = false): CanvasActing | undefined {
   if (looking === false) return undefined
   return {
-    tile: (hex) => lookingAt(system, hex, lookOf(hex), looking === 'card'),
+    tile: (hex) => lookingAt(system, hex, lookOf(hex), looking),
     slot: () => undefined,
   }
 }
