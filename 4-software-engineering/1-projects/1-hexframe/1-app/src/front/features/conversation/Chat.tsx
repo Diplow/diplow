@@ -11,11 +11,9 @@
 // what the agent last applied, open Help or the Keys, show the tutorial, or go to another language.
 // While a Turn runs, the field waits and send becomes Stop. It offers the Account's Tiles to `@`,
 // from the System the page holds. The Mode, as the poll last saw it, shows under the field,
-// switched through `useSetMode`, the one switched to shown while the switch is on its way. Each is
-// shown inside a ReadBoundary, which a failed read lands in. And `ChatInvitation`, the agent's one
-// line after the receipt at the conversation's foot, inviting a new account's first command,
-// `/tutorial`, while its Root holds nothing and nothing was said, which the composer then offers
-// first (HEX-118).
+// switched through `useSetMode`, the one switched to shown while the switch is on its way; while the
+// chat invites a new account's first command (`./invitation/`), `/tutorial` comes first in its list
+// (HEX-118). Each is shown inside a ReadBoundary, which a failed read lands in.
 import { type ComponentProps, useMemo, useState } from 'react'
 
 import type { Entry, Mode } from '#/domains/assistant/entities'
@@ -38,15 +36,13 @@ import { useSystem } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
 import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
-import { tutorialInvitation } from '#/front/ui/chat/composer/commands'
-import { Message } from '#/front/ui/chat/text/Message'
 
 import { mentionablesOf } from './composer/mention'
 import { ConversationFoot, Timeline } from './Conversation'
+import { useInvited } from './invitation/Invitation'
 import {
   besideReceipt,
   dayOf,
-  invitesTutorial,
   latestUndoable,
   type Receipted,
   type Went,
@@ -83,21 +79,6 @@ function useBesideReceipt(today: ReadonlyArray<Entry> | undefined, receipt: Rece
 
 const idsOf = (entries: ReadonlyArray<Entry> | undefined): ReadonlySet<string> =>
   new Set(entries?.map(({ id }) => id))
-
-/**
- * Whether the chat invites the tutorial now (`invitesTutorial`), from the System and the days of
- * the Conversation the page holds, each read without throwing, its failure another boundary's, and
- * the Messages on their way; never before both are read.
- */
-function useInvited(): boolean {
-  const { data: system } = useSystem({ throwing: false })
-  const { data: conversation } = useConversation({ throwing: false })
-  const { messages } = useMessagesOnTheirWay()
-  const root = system?.root
-  if (root === undefined || conversation === undefined) return false
-  const entries = conversation.pages.flatMap((page) => page.entries)
-  return invitesTutorial(root, entries, messages.length > 0)
-}
 
 interface ChatTimelineProps {
   /** Centers the canvas on a Tile named. */
@@ -269,22 +250,4 @@ export function ChatComposer(props: ChatComposerProps) {
       }
     />
   )
-}
-
-interface ChatInvitationProps {
-  /** `/tutorial`: the tutorial on the canvas. */
-  onTutorial: () => void
-  /** It comes with a new account's dawn, under the pseudo's receipt: fifth, after the composer. */
-  dawning: boolean
-}
-
-/**
- * The agent's one line after the receipt at the conversation's foot, inviting a new account's first
- * command, `/tutorial`, which a click runs as typing it does: while the chat invites it, its Root
- * holding nothing and nothing said (`invitesTutorial`); gone once either changes.
- */
-export function ChatInvitation({ onTutorial, dawning }: ChatInvitationProps) {
-  const invited = useInvited()
-  if (!invited) return null
-  return <Message voice="agent" words={tutorialInvitation(onTutorial)} dawning={dawning} />
 }

@@ -8,13 +8,14 @@
 // copies lights up, its line or its hex and its ground. The agent's invitation to a new account's
 // first command rises fifth of its dawn (HEX-118).
 import { cn } from 'cn'
-import { useId, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react'
+import { useId, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Act } from '../../atoms/controls/act'
 import { toast } from '../../atoms/Toaster'
 import { runsToCurve, toCurve, toCurveHolding } from '../../layouts/screen/state/useAlongCurve'
+import { Dawn } from '../atoms/dawn'
 import { HexMark } from '../atoms/hex'
 import type { Voice } from './Mention'
 import { linesOf, plainOf, Said, type Words } from './words'
@@ -36,7 +37,7 @@ interface AgentProps {
   continued?: boolean
   /**
    * It comes in fifth of a new account's dawn, once the composer has risen, rising within its own
-   * line (`animate-dawn`, `--stagger-dawn`): the agent's invitation to a first command (HEX-118).
+   * line (`Dawn`): the agent's invitation to a first command (HEX-118).
    */
   dawning?: boolean
 }
@@ -80,8 +81,6 @@ function Human({ words, state = 'sent', onRetry }: HumanProps) {
 
 function Agent({ words, state = 'done', continued = false, dawning = false }: AgentProps) {
   const streaming = state === 'streaming'
-  // Dawning, whether it has risen to its place, after which nothing need clip it.
-  const [risen, setRisen] = useState(false)
   const message = (
     <Copies
       words={words}
@@ -106,22 +105,7 @@ function Agent({ words, state = 'done', continued = false, dawning = false }: Ag
       </p>
     </Copies>
   )
-  if (!dawning) return message
-  // Dawning, the conversation sits on the screen's foot until the composer rises: a line held below
-  // its place would reach past the foot, as the receipt's would (`Receipt`), so its line clips it
-  // while it rises, and no longer once it has, its outline then whole under the keyboard's focus.
-  return (
-    <div className={cn(!risen && 'motion-safe:overflow-y-clip')}>
-      <div
-        className="motion-safe:animate-dawn [animation-delay:calc(var(--stagger-dawn)*4)]!"
-        onAnimationEnd={(event) => {
-          if (event.target === event.currentTarget) setRisen(true)
-        }}
-      >
-        {message}
-      </div>
-    </div>
-  )
+  return dawning ? <Dawn beat="invitation">{message}</Dawn> : message
 }
 
 /** The words line by line, each line running on to the curve at its own height. */

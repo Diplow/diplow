@@ -1,11 +1,9 @@
 // The Conversation as the timeline shows it: Assistant's Entries (`domains/assistant/entities`), a
 // day of the reader's calendar at a time, with the Titles of the Tiles its navigations went to. Home
 // reads it a day at a time (`useConversation`); /design-system splits its fixtures by day. What a
-// receipt at the conversation's foot tells, the timeline leaves to it. What the agent applied that
-// `/undo` undoes, the latest that offers its Undo. And whether the chat invites a new account's
-// first command, `/tutorial`. Pure; the components render it.
+// receipt at the conversation's foot tells, the timeline leaves to it. And what the agent applied
+// that `/undo` undoes, the latest that offers its Undo. Pure; the components render it.
 import { dayAt, type Entry, type Navigation, offersUndo } from '#/domains/assistant/entities'
-import { holdsNothing, type SystemTile } from '#/domains/mapping/entities'
 
 /**
  * The Titles of the Tiles a day names by their id alone, those its navigations went to and its
@@ -94,26 +92,6 @@ export function latestUndoable(entries: ReadonlyArray<Entry>): string | undefine
   if (latest?._tag === 'Proposal') return latest.proposal
   if (latest?._tag === 'TurnApplied') return latest.turn
   return undefined
-}
-
-/**
- * Whether the chat invites a new account's first command, `/tutorial` (HEX-118): while its Root,
- * named, holds nothing below it (Mapping's `holdsNothing`), and nothing was said, no Message among
- * the Entries read, nor one the user sent on its way or refused. Derived, never stored, so it goes
- * once either changes. The change that named the Root, which the Conversation records, says
- * nothing, nor does a navigation (`hexframe-app-tutorial/decisions.md#DEC-4`).
- */
-export function invitesTutorial(
-  root: Pick<SystemTile, 'title' | 'branches' | 'leaves' | 'context'>,
-  entries: ReadonlyArray<Entry>,
-  sending: boolean,
-): boolean {
-  return (
-    root.title !== '' &&
-    holdsNothing(root) &&
-    !sending &&
-    !entries.some((entry) => entry._tag === 'Message')
-  )
 }
 
 /** Where the user went that the Conversation does not hold yet, and when they last went, in ms. */
