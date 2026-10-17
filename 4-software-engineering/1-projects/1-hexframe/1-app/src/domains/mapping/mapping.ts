@@ -144,7 +144,7 @@ const reading = ({ actor, system }: Acting) =>
 
 /**
  * The System the actor acts on, flat: its Root, its star, and every Tile and Reference below it by
- * id, Bodies included, owned; `systemOf` builds its tree.
+ * id, Bodies included, owned; `systemOf` builds its tree. Its owner's read alone (`reached`).
  */
 export const system = (acting: Acting) =>
   Effect.gen(function* () {
@@ -157,7 +157,7 @@ export const system = (acting: Acting) =>
 
 /**
  * The Version of the System the actor acts on, how many events changed it, read alone: what a client
- * polls to know when to read the System again. 0 before its first change.
+ * polls to know when to read the System again. 0 before its first change. Its owner's read alone.
  */
 export const systemVersion = (acting: Acting) =>
   Effect.flatMap(reached(acting), (owner) =>
@@ -166,7 +166,7 @@ export const systemVersion = (acting: Acting) =>
 
 /**
  * The Titles of the Tiles of the System the actor acts on among these ids, by id: an id it holds no
- * Tile of, a deleted one's or a Reference's, has none. What the timeline names a Tile by where it
+ * Tile of, a deleted one's or a Reference's, or one the actor may not read, has none. What the timeline names a Tile by where it
  * keeps its id.
  */
 export const titles = (acting: Acting, ids: ReadonlyArray<string>) =>
@@ -180,7 +180,10 @@ export const titles = (acting: Acting, ids: ReadonlyArray<string>) =>
     ),
   )
 
-/** Nothing when the id is a Tile of the System the actor acts on, else `TileNotFound`. */
+/**
+ * Nothing when the id is a Tile of the System the actor acts on that they may read, else
+ * `TileNotFound`.
+ */
 export const ownTile = (acting: Acting, id: string) =>
   Effect.flatMap(titles(acting, [id]), (titled) =>
     id in titled ? Effect.void : Effect.fail(new TileNotFound()),
@@ -188,8 +191,8 @@ export const ownTile = (acting: Acting, id: string) =>
 
 /**
  * The Title and Preview of the Tiles of the System the actor acts on among these ids, in their order:
- * an id it holds no Tile of, a deleted one's or a Reference's, is left out: a glimpse of each, for a
- * reader shown several at once.
+ * an id it holds no Tile of, a deleted one's or a Reference's, or one the actor may not read, is left
+ * out: a glimpse of each, for a reader shown several at once.
  */
 export const glimpses = (acting: Acting, ids: ReadonlyArray<string>) =>
   Effect.flatMap(reading(acting), ({ owner, reads }) =>
@@ -238,8 +241,8 @@ interface ReadFrom<O extends Field, F extends Field> {
 /**
  * What a read from a Tile of the System the actor acts on finds, its star when no id is given, or
  * from a Tile of a System hexframe ships by its id, `depth` generations down, with only the fields
- * asked of the Tile and of each Tile below it. A Tile of another System is `TileNotFound`, as is an
- * id of a shipped System that none of its Tiles has.
+ * asked of the Tile and of each Tile below it. A Tile the actor may not read is `TileNotFound`, as is
+ * an id of a shipped System that none of its Tiles has.
  */
 const find = <O extends Field, F extends Field>(
   acting: Acting,
@@ -258,7 +261,10 @@ const find = <O extends Field, F extends Field>(
 /** What a reader sees of a Tile beside the one opened: enough to decide whether to open it. */
 const glimpsed = ['title', 'preview'] as const satisfies ReadonlyArray<Field>
 
-/** What a read from a Tile of the System the actor acts on finds, its star when no id is given. */
+/**
+ * What a read from a Tile of the System the actor acts on finds, its star when no id is given: only
+ * what the actor may read, its parent none when they may not read it.
+ */
 const findOwn = <O extends Field, F extends Field>(
   acting: Acting,
   { id, depth, fields }: Omit<ReadFrom<O, F>, 'language' | 'over'>,
@@ -294,8 +300,9 @@ const findOwn = <O extends Field, F extends Field>(
  * A Tile of the System the actor acts on, its star when no id is given, or a Tile of a System
  * hexframe ships, Help or the tutorial, by its id, read `depth` generations down with only the fields
  * asked of each Tile, and its parent. A Reference shows the id, Title and Preview of the Tile it
- * points at. A Body is read only when asked, and a Tile of another System is `TileNotFound`, as is an
- * id of a shipped System that none of its Tiles has. A shipped System is read in `language`, which
+ * points at. A Body is read only when asked. A Tile the actor may not read is `TileNotFound`, as is an
+ * id of a shipped System that none of its Tiles has, and what lies below the Tile is left out where
+ * they may not read it. A shipped System is read in `language`, which
  * the caller picks. With a batch `over` it, the System it reads is the one the batch makes (`fold`).
  */
 export const readTile = <F extends Field>(
