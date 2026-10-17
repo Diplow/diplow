@@ -208,7 +208,7 @@ export const tile = pgTable(
 
 /**
  * An Account's Conversation, one at most, added with its first Entry or its Mode's first switch.
- * `account_id` has no key to `user`, as `tile`'s has none: Assistant ignores IAM. `mode` is the Mode
+ * `account_id` has no key to `user`, as `tile`'s `owner_id` has none: Assistant ignores IAM. `mode` is the Mode
  * its Turns take as they start, as Assistant names it, `ask` until the user switches it.
  */
 export const conversation = pgTable('conversation', {
