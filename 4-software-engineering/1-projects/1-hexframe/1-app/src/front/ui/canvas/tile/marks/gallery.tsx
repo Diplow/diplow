@@ -57,19 +57,18 @@ const yours = (): readonly MarkSample[] => [
   },
 ]
 
+/** The parts the agent tells of a tile's words, in turn, the sample's steps. */
+const toldParts = ['title', 'preview', 'body'] as const
+
 /**
  * The agent telling of a tile's words, alone at the center as the tutorial's is: its title lit, then
- * its preview, then neither, as its body goes to the chat.
+ * its preview, then neither, as its body goes to the chat. Played on the gallery's clock, as every
+ * played sample is; home's beats are `--stagger-beat` apart.
  */
 const told: Play = {
   steps: [0, 1600, 3200],
   draw: (hex, step) => (
-    <Tile
-      hex={hex}
-      {...projects}
-      place="alone"
-      mark={step < 2 ? { told: step === 0 ? 'title' : 'preview' } : undefined}
-    />
+    <Tile hex={hex} {...projects} place="alone" mark={{ told: toldParts[step] }} />
   ),
 }
 

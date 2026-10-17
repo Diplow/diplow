@@ -83,13 +83,13 @@ import {
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
-import { Told, useTold, type ToldPart } from '#/front/ui/chat/text/Message'
+import { Told } from '#/front/ui/chat/text/Message'
+import { useTold, type ToldPart } from '#/front/ui/motion'
 import { Screen } from '#/front/ui/layouts/screen/Screen'
 import { useScreenState } from '#/front/ui/layouts/screen/state/useScreenState'
 import type { CanvasMarks } from '#/front/ui/canvas/Canvas'
 import { Journey } from '#/front/ui/canvas/layouts/Journey'
 import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
-import type { TileMark } from '#/front/ui/canvas/tile/marks/mark'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { centerOn, withViewIn, type CanvasView, type ViewAction } from '#/front/ui/canvas/view/view'
 import type { Direction, ShippedRoot } from '#/domains/mapping/entities'
@@ -579,7 +579,7 @@ interface ShippedSideProps {
   /** The tutorial's rules; none for Help. */
   rules?: TutorialRules | undefined
   /** The part of the center's words the agent tells of, lit: the tutorial's. */
-  told?: TileMark['told']
+  told?: ToldPart | undefined
 }
 
 /**

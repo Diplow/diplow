@@ -8,7 +8,7 @@
 import { m } from '#/paraglide/messages'
 import { Act, voiceOf } from '#/front/ui/atoms/controls/act'
 import { Canvas } from '#/front/ui/canvas/Canvas'
-import type { TileMark } from '#/front/ui/canvas/tile/marks/mark'
+import type { ToldPart } from '#/front/ui/motion'
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
 import { showView, type CanvasView } from '#/front/ui/canvas/view/view'
 
@@ -25,7 +25,7 @@ interface ShippedCanvasProps {
    */
   rules?: TutorialRules | undefined
   /** The part of the center's words the agent tells of, lit: the tutorial's, as its rules tell them. */
-  told?: TileMark['told']
+  told?: ToldPart | undefined
   className?: string
 }
 
@@ -37,7 +37,6 @@ interface ShippedCanvasProps {
  */
 export function ShippedCanvas(props: ShippedCanvasProps) {
   const { tree, view, onViewChange, rules, told, className } = props
-  const center = showView(tree, view).center.id
   return (
     <Canvas
       system={tree}
@@ -45,7 +44,7 @@ export function ShippedCanvas(props: ShippedCanvasProps) {
       onViewChange={onViewChange}
       looking={rules?.looking ?? true}
       {...(rules && { lets: rules.lets })}
-      {...(told && { marks: { tile: (id) => (id === center ? { told } : undefined) } })}
+      marks={{ told }}
       className={className}
     />
   )

@@ -4,8 +4,8 @@
 // the canvas stays in front on a phone after a crossing, `--duration-glance`; and how a motion eases,
 // read off the element its utility eases (`ease-camera`). What moves waits for nothing with reduced
 // motion; a light that only fades, the flare, and a glance, last as long either way. And the clock
-// of a play in beats, one every `--stagger-beat`, which the tutorial tells a tile's words by, lit on
-// the canvas and said in the chat at once (HEX-120). Both sides and the screen read it, so it sits
+// of a play in beats, one every `--stagger-beat`, and the parts the tutorial tells a tile's words in
+// by it, lit on the canvas and said in the chat at once (HEX-120). Both sides and the screen read it, so it sits
 // beside the theme.
 import { useEffect, useEffectEvent, useState } from 'react'
 
@@ -66,3 +66,27 @@ export function useBeats(count: number, playing: boolean, onBeat?: (beat: number
   }, [count, playing])
   return playing ? beat : 0
 }
+
+/**
+ * What the agent tells of a tile, one part at each beat: its title, its preview, then its body. Both
+ * sides read it: the canvas lights the part told, the chat says it (HEX-120).
+ */
+const toldInTurn = ['title', 'preview', 'body'] as const
+
+export type ToldPart = (typeof toldInTurn)[number]
+
+/**
+ * The part of a tile's words the agent has told so far, a beat at a time while `telling`, from the
+ * start each time it tells anew; none before the first; `onTold` hears each part as it comes.
+ */
+export function useTold(telling: boolean, onTold?: (part: ToldPart) => void): ToldPart | undefined {
+  const beat = useBeats(toldInTurn.length, telling, (reached) => {
+    const part = toldInTurn[reached - 1]
+    if (part !== undefined) onTold?.(part)
+  })
+  return toldInTurn[beat - 1]
+}
+
+/** The parts told up to `told`, in turn: none before the first. */
+export const toldUpTo = (told: ToldPart | undefined): readonly ToldPart[] =>
+  told === undefined ? [] : toldInTurn.slice(0, toldInTurn.indexOf(told) + 1)

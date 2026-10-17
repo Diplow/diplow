@@ -2,7 +2,7 @@
 import { act as settled, cleanup, renderHook } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { durationOf, easingOf, movingFor, useBeats } from './motion'
+import { durationOf, easingOf, movingFor, toldUpTo, useBeats, useTold } from './motion'
 
 // A motion's duration read from its token on the page: in ms or in s, none where it is unset or no
 // number, and none for what moves under reduced motion, while a light that only fades keeps its own;
@@ -135,5 +135,36 @@ describe('useBeats', () => {
     expect(result.current).toBe(0)
     after(2000)
     expect(result.current).toBe(1)
+  })
+})
+
+describe('useTold', () => {
+  it("tells a tile's title, its preview, then its body, a beat apart, each heard as it comes", () => {
+    vi.useFakeTimers()
+    root.setProperty('--stagger-beat', '2s')
+    const heard: string[] = []
+    const { result } = renderHook(() =>
+      useTold(true, (part) => {
+        heard.push(part)
+      }),
+    )
+    expect(result.current).toBeUndefined()
+    settled(() => {
+      vi.advanceTimersByTime(2000)
+    })
+    expect(result.current).toBe('title')
+    settled(() => {
+      vi.advanceTimersByTime(4000)
+    })
+    expect(result.current).toBe('body')
+    expect(heard).toEqual(['title', 'preview', 'body'])
+  })
+})
+
+describe('toldUpTo', () => {
+  it('lists the parts told so far, in turn, none before the first', () => {
+    expect(toldUpTo(undefined)).toEqual([])
+    expect(toldUpTo('preview')).toEqual(['title', 'preview'])
+    expect(toldUpTo('body')).toEqual(['title', 'preview', 'body'])
   })
 })

@@ -16,7 +16,7 @@ import { m } from '#/paraglide/messages'
 import { Act } from '../../atoms/controls/act'
 import { toast } from '../../atoms/Toaster'
 import { runsToCurve, toCurve, toCurveHolding } from '../../layouts/screen/state/useAlongCurve'
-import { useBeats } from '../../motion'
+import { toldUpTo, type ToldPart } from '../../motion'
 import { Dawn } from '../atoms/dawn'
 import { HexMark } from '../atoms/hex'
 import type { Voice } from './Mention'
@@ -122,7 +122,7 @@ function Lines({ words, voice }: { words: Words; voice: Voice }) {
 
 /**
  * The agent's words line by line, as `Lines` draws them, a numbered list as a list, each item a line
- * of its own, its number hanging before it.
+ * of its own, its number hanging before it, the list's numbers in one column as wide as its longest.
  */
 function Blocks({ words }: { words: Words }) {
   return blocksOf(words).map((block, index) =>
@@ -138,13 +138,13 @@ function Blocks({ words }: { words: Words }) {
         key={index}
         role="list"
         start={Number(block.list[0]?.number ?? 1)}
-        className="grid list-none"
+        className="grid list-none grid-cols-[auto_minmax(0,1fr)] gap-x-[1ch]"
       >
         {block.list.map((item, at) => (
           <li
             key={at}
             ref={toCurve}
-            className={cn(runsToCurve, 'grid grid-cols-[3ch_minmax(0,1fr)]')}
+            className={cn(runsToCurve, 'col-span-2 grid grid-cols-subgrid')}
           >
             <span aria-hidden>{item.number}.</span>
             <span>
@@ -243,28 +243,11 @@ function Copies({ words, copies = true, busy, className, children }: CopiesProps
   )
 }
 
-/** What the agent tells of a tile, one at each beat: its title, its preview, then its body. */
-const toldInTurn = ['title', 'preview', 'body'] as const
-
-export type ToldPart = (typeof toldInTurn)[number]
-
 /** What the agent says at each beat, a few words: the thing itself is lit, not explained. */
 const toldSaid: Record<ToldPart, () => string> = {
   title: m.chat_told_title,
   preview: m.chat_told_preview,
   body: m.chat_told_body,
-}
-
-/**
- * What the agent has told of a tile so far, a beat at a time while `telling` (`useBeats`), from the
- * start each time it tells anew; `onTold` hears each part as it comes.
- */
-export function useTold(telling: boolean, onTold?: (part: ToldPart) => void): ToldPart | undefined {
-  const beat = useBeats(toldInTurn.length, telling, (reached) => {
-    const part = toldInTurn[reached - 1]
-    if (part !== undefined) onTold?.(part)
-  })
-  return toldInTurn[beat - 1]
 }
 
 interface ToldProps {
@@ -280,7 +263,7 @@ interface ToldProps {
  * (HEX-120). A screen reader hears each as it comes. Under reduced motion each is simply there.
  */
 export function Told({ told, body }: ToldProps) {
-  const said = told === undefined ? [] : toldInTurn.slice(0, toldInTurn.indexOf(told) + 1)
+  const said = toldUpTo(told)
   // The live region is there before its first beat, so a screen reader hears that one too.
   return (
     <div aria-live="polite" className="grid gap-2">

@@ -11,7 +11,7 @@ import { useState, type ReactNode } from 'react'
 import { m } from '#/paraglide/messages'
 
 import { Act } from '../../atoms/controls/act'
-import { Canvas, type CanvasMarks } from '../../canvas/Canvas'
+import { Canvas } from '../../canvas/Canvas'
 import { Journey } from '../../canvas/layouts/Journey'
 import { Rail } from '../../canvas/layouts/Rail'
 import type { CanvasRules } from '../../canvas/state/useCanvasState'
@@ -21,7 +21,8 @@ import { pathTo, type TileNode } from '../../canvas/view/tiles'
 import { centerOn, showView, type CanvasView } from '../../canvas/view/view'
 import { said } from '../../chat/samples'
 import { tutorialInvitation } from '../../chat/composer/commands'
-import { Message, Told, useTold, type ToldPart } from '../../chat/text/Message'
+import { Message, Told } from '../../chat/text/Message'
+import { useTold } from '../../motion'
 import { TileWidget } from '../../chat/widgets/tile/TileWidget'
 import { ScreenSlide, type Go } from './Deck'
 
@@ -283,7 +284,7 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
                 onViewChange={() => undefined}
                 looking={there.looking}
                 lets={there.lets}
-                marks={toldOn(there, told)}
+                marks={{ told }}
                 className="min-h-0 flex-1"
               />
             )}
@@ -358,13 +359,6 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
       }
     />
   )
-}
-
-/** The part of the tutorial's center's words the agent tells of, on its canvas as on home's. */
-function toldOn(there: TutorialArrival, told: ToldPart | undefined): CanvasMarks | undefined {
-  if (told === undefined) return undefined
-  const center = showView(there.system, there.view).center.id
-  return { tile: (id) => (id === center ? { told } : undefined) }
 }
 
 /** Plays the onboarding again from the start, the page landing anew. */

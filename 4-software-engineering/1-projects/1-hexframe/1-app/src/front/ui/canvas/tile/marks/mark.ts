@@ -8,6 +8,7 @@
 import { m } from '#/paraglide/messages'
 
 import type { CardNote } from '../../../layouts/HoverCard'
+import type { ToldPart } from '../../../motion'
 
 /** Who acts on a tile: you, the agent, or a Key from outside. */
 export type By = 'human' | 'agent' | 'key'
@@ -35,7 +36,7 @@ export interface TileMark {
    * the agent's violet round the words, which keep their contrast; its body, which the chat shows,
    * lighting nothing here (HEX-120).
    */
-  told?: 'title' | 'preview' | 'body'
+  told?: ToldPart
 }
 
 const unseenSaid: Record<Exclude<By, 'human'>, () => string> = {
