@@ -160,8 +160,5 @@ describe('Everyone', () => {
     expect(grantOf({ tile: 'ana', subject: 'account', subjectId: null, value: 'read' })).toBe(
       undefined,
     )
-    expect(grantOf({ tile: 'ana', subject: 'account', subjectId: 'bob', value: 'all' })).toBe(
-      undefined,
-    )
   })
 })

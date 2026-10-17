@@ -3,6 +3,7 @@ import { Effect, Exit } from 'effect'
 
 import { transactional } from '#/repositories/database/database'
 import type { GrantRow } from '#/repositories/database/tiles/grants'
+import { granted } from '#/repositories/database/tiles/testing'
 import { Tiles } from '#/repositories/database/tiles/tiles'
 
 import type { Actor } from '../../entities'
@@ -19,7 +20,7 @@ const content = (title: string) => ({ title, preview: `${title}, in short.`, bod
 
 /** Sets Grants on the owner's System, as a Session's write of them will. */
 const granting = (owner: string, ...rows: ReadonlyArray<GrantRow>) =>
-  transactional(Tiles.use((tiles) => Effect.forEach(rows, (row) => tiles.writes(owner).grant(row))))
+  transactional(Effect.forEach(rows, (row) => granted(owner, row), { discard: true }))
 
 /** Someone acting on Ana's System who doesn't own it, in these Groups. */
 const visitor = (system: string, groups: ReadonlyArray<string> = []): Mapping.Acting => {
@@ -161,6 +162,27 @@ layer(TestTiles)('a System shared by its Grants, over PGlite', (it) => {
         )
         expect(yield* titled(visitor(star), entry.id)).toMatchObject({ title: 'Entry' })
       }),
+  )
+
+  it.effect('refuses a batch its owner runs without a Session when it opens a Tile', () =>
+    Effect.gen(function* () {
+      const { ana, star, entry, garden } = yield* scenario
+      const byKey: Mapping.Acting = {
+        actor: { account: ana, groups: [], owners: [ana], session: false },
+        system: star,
+      }
+      const opening = new MoveTile({ id: entry.id, version: 1, parent: garden.id, slot: 1 })
+      const { batched } = yield* Mapping.addToBatch(byKey, [], opening)
+      expect(yield* Effect.flip(changed(Mapping.runBatch(byKey, [batched])))).toMatchObject({
+        _tag: 'NotAllowed',
+      })
+      expect(yield* Effect.flip(titled(visitor(star), entry.id))).toMatchObject({
+        _tag: 'TileNotFound',
+      })
+      const fromSession = { ...byKey, actor: { ...byKey.actor, session: true } }
+      yield* changed(Mapping.runBatch(fromSession, [batched]))
+      expect(yield* titled(visitor(star), entry.id)).toMatchObject({ title: 'Entry' })
+    }),
   )
 
   it.effect('refuses a move without write on the parent it lands under', () =>

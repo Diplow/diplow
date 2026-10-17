@@ -1,7 +1,9 @@
-// The `grant` table (../schema.ts), the Grants a System's Tiles carry, read and written one System at a
-// time, found through the `tile` rows they belong to, by their owner's id. Part of Mapping's repository
-// (./tiles.ts), which merges these in: it speaks rows, and Mapping decides what a Grant allows.
-import { and, eq } from 'drizzle-orm'
+// The `grant` table (../schema.ts), the Grants a System's Tiles carry, read one System at a time, found
+// through the `tile` rows they belong to, by their owner's id. Part of Mapping's repository
+// (./tiles.ts), which merges these in: it speaks rows, and Mapping decides what a Grant allows. No
+// program writes a Grant yet: the Share widget brings the one write, a Session's (HEX-128); the tests
+// set theirs through ./testing.ts.
+import { eq } from 'drizzle-orm'
 import { Effect } from 'effect'
 
 import type { Database } from '../database'
@@ -47,27 +49,3 @@ export const grantsOf = (database: Database['Service']) => ({
       .where(eq(tile.ownerId, owner))
       .pipe(Effect.orDie),
 })
-
-/**
- * Sets a Tile's Grant for one subject, in place of the one it had: a Tile of the owner's System only,
- * which Mapping found before asking. A Tile it doesn't hold is a defect.
- */
-export const granted = (database: Database['Service'], owner: string, row: GrantRow) =>
-  Effect.gen(function* () {
-    const [held] = yield* database
-      .select({ id: tile.id })
-      .from(tile)
-      .where(and(eq(tile.ownerId, owner), eq(tile.id, row.tile)))
-      .pipe(Effect.orDie)
-    if (held === undefined)
-      return yield* Effect.die(new Error('A Grant named a Tile its System does not hold'))
-    const { tile: tileId, ...rest } = row
-    yield* database
-      .insert(grant)
-      .values({ tileId, ...rest })
-      .onConflictDoUpdate({
-        target: [grant.tileId, grant.subject, grant.subjectId],
-        set: { value: row.value },
-      })
-      .pipe(Effect.orDie)
-  })

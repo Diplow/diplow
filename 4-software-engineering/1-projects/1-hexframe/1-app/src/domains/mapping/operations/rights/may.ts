@@ -7,8 +7,10 @@ import { Result } from 'effect'
 import {
   type Actor,
   below,
+  heldBy,
+  type Lineage,
+  lineageOf,
   owns,
-  reads,
   type Right,
   rightsOn,
   type Sharing,
@@ -75,34 +77,73 @@ function needsOf(system: System, sharing: Sharing, operation: Operation): Needs 
 }
 
 /**
- * Whether moving these Tiles under these parents lets a subject read a Tile they carry that it could
- * not read before: a Tile inheriting from a new parent would otherwise be opened by no Grant its
- * owner set. A move under a Tile it carries opens nothing, since `decide` refuses it.
+ * Whether, where the Tiles stand in `after`, a subject holds on one of these Tiles a right it did not
+ * hold before: who may read it, write it or run the agent at it would change by no Grant its owner
+ * set.
+ */
+function opens(before: Sharing, after: Lineage, tiles: ReadonlyArray<string>) {
+  const moved: Sharing = { ...before, lineage: after }
+  return before.subjects.some((subject) =>
+    tiles.some((tile) => {
+      const held = heldBy(before, subject, tile)
+      return heldBy(moved, subject, tile).some((right) => !held.includes(right))
+    }),
+  )
+}
+
+/**
+ * Whether moving these Tiles under these parents opens a Tile they carry to a subject. A move under a
+ * Tile it carries opens nothing, since `decide` refuses it.
  */
 function widens(system: System, sharing: Sharing, moved: ReadonlyMap<string, string>) {
   const carried = new Set([...moved.keys()].flatMap((id) => [...below(system, id)]))
   if ([...moved.values()].some((parent) => carried.has(parent))) return false
-  const after: Sharing = { ...sharing, lineage: new Map([...sharing.lineage, ...moved]) }
-  return sharing.subjects.some((subject) =>
-    [...carried].some((tile) => reads(after, subject, tile) && !reads(sharing, subject, tile)),
-  )
+  return opens(sharing, new Map([...sharing.lineage, ...moved]), [...carried])
+}
+
+/**
+ * Whether the actor may change who may do what on a Tile, as a Grant does: the owner, from a Session.
+ */
+const mayOpen = (actor: Actor, sharing: Sharing) => owns(actor, sharing.owner) && actor.session
+
+/** A System decided on, and how it is shared. */
+interface On {
+  readonly system: System
+  readonly sharing: Sharing
 }
 
 /**
  * Whether the actor may make this Operation on the System it is decided on. Without `read` on a Tile
  * it names, `TileNotFound`, as for a Tile that isn't there. With `read`, but without `write` on what
- * it changes, carries or goes under, `NotAllowed`; and so is a move or a swap that would let someone
- * read a Tile they could not before, for anyone but the System's owner acting from a Session.
+ * it changes, carries or goes under, `NotAllowed`; and so is a move or a swap that would give someone
+ * a right on a Tile they did not hold before, for anyone but the System's owner acting from a Session.
  */
 export function allowed(
   actor: Actor,
-  { system, sharing }: { readonly system: System; readonly sharing: Sharing },
+  { system, sharing }: On,
   operation: Operation,
 ): Result.Result<void, TileNotFound | NotAllowed> {
   const { named, written, moved } = needsOf(system, sharing, operation)
   if (!named.every((id) => may(actor, sharing, id, 'read'))) return Result.fail(new TileNotFound())
   if (!written.every((id) => may(actor, sharing, id, 'write'))) return Result.fail(new NotAllowed())
-  const widening = !(owns(actor, sharing.owner) && actor.session)
-  if (widening && widens(system, sharing, moved)) return Result.fail(new NotAllowed())
+  if (!mayOpen(actor, sharing) && widens(system, sharing, moved)) {
+    return Result.fail(new NotAllowed())
+  }
   return Result.void
+}
+
+/**
+ * Whether the System's owner may run a batch, or an undo, that leaves it as `after`: from a Session
+ * always; else only when no Tile that stood before it gives anyone a right they did not hold, a Tile
+ * the batch makes opening nothing that stood. `NotAllowed` otherwise, the whole batch with it.
+ */
+export function allowedBatch(
+  actor: Actor,
+  sharing: Sharing,
+  after: System,
+): Result.Result<void, NotAllowed> {
+  if (mayOpen(actor, sharing)) return Result.void
+  const now = lineageOf(after)
+  const stood = [...sharing.lineage.keys()].filter((id) => now.has(id))
+  return opens(sharing, now, stood) ? Result.fail(new NotAllowed()) : Result.void
 }

@@ -20,6 +20,7 @@ import { systemOf } from '#/domains/mapping/entities'
 import * as Service from '#/domains/mapping/mapping'
 import { EditTile } from '#/domains/mapping/operations'
 import { transactional } from '#/repositories/database/database'
+import { granted } from '#/repositories/database/tiles/testing'
 
 import type { Failure } from '../report/errors/failure'
 import { noKey, run, type Services, type StartContext } from '../server/run'
@@ -46,8 +47,10 @@ type Program = Effect.Effect<unknown, Failure, Services>
  * A request from someone signed in as an Account no other test uses, by a Session or by one of their
  * Keys, or from nobody.
  */
-function request(signedIn: boolean | 'by key' = true): StartContext {
-  const account = { id: crypto.randomUUID(), email: 'someone@example.com' }
+function request(
+  signedIn: boolean | 'by key' = true,
+  account = { id: crypto.randomUUID(), email: 'someone@example.com' },
+): StartContext {
   const session: Session = { account, expiresAt: new Date(Date.now() + 60_000) }
   const key: KeyProof = { account, by: { _tag: 'Key', keyId: 'key-1' } }
   return {
@@ -611,5 +614,28 @@ describe('who acts, and on which System', () => {
       value: {},
     })
     expect((await systemTree(context)).branches[1]).toMatchObject({ title: 'Child', version: 1 })
+  })
+})
+
+describe('a move that would open a Tile to someone', () => {
+  it('is the owner’s from a Session, and refused through one of their Keys', async () => {
+    const account = { id: crypto.randomUUID(), email: 'someone@example.com' }
+    const [bySession, byKey] = [request(true, account), request('by key', account)]
+    const root = await systemTree(bySession)
+    const kept = await value(
+      run(bySession, Mapping.createTile({ parent: root.id, slot: 1, ...content('Kept') })),
+    )
+    const open = await value(
+      run(bySession, Mapping.createTile({ parent: root.id, slot: 2, ...content('Open') })),
+    )
+    const everyone = { subject: 'everyone', subjectId: null, value: 'read' } as const
+    await value(run(bySession, transactional(granted(account.id, { tile: open.id, ...everyone }))))
+    // Under Open, Kept would be read by Everyone, which its star keeps it from.
+    const opening = Mapping.moveTile({ id: kept.id, version: 1, parent: open.id, slot: 1 })
+    expect(await run(byKey, opening)).toMatchObject({
+      ok: false,
+      failure: { _tag: 'NotAllowed', kind: 'Forbidden' },
+    })
+    expect(await run(bySession, opening)).toMatchObject({ ok: true })
   })
 })

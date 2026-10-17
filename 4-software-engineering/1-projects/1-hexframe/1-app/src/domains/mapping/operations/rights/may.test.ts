@@ -12,6 +12,7 @@ import {
 } from '../../entities'
 import {
   allowed,
+  allowedBatch,
   CreateReference,
   CreateTile,
   DeleteReference,
@@ -175,7 +176,7 @@ describe('what an Operation needs', () => {
   })
 })
 
-describe('a move that would widen who reads', () => {
+describe('a move that would widen who may do what', () => {
   const inherits = move(id.garden, id.square, 1)
 
   it('is refused to anyone but the owner: Bob’s move of an inheriting Tile under a public parent', () => {
@@ -204,5 +205,47 @@ describe('a move that would widen who reads', () => {
     expect(verdict(ana, swap)).toBe('ok')
     const level = new SwapTiles({ a: id.garden, aVersion: 1, b: id.entry, bVersion: 1 })
     expect(verdict(bob, level)).toBe('ok')
+  })
+})
+
+describe('a move that would give a right other than read', () => {
+  it('is refused too: Family, reading Garden, would write it under Journal', () => {
+    const family = { _tag: 'Group', id: 'family' } as const
+    const writable = sharingOf('ana', lineageOf(system), [
+      bobsGrant,
+      { tile: id.ana, subject: family, value: 'read' },
+      { tile: id.journal, subject: family, value: 'read+write' },
+    ])
+    expect(verdict(bob, move(id.garden, id.journal, 3), writable)).toBe('NotAllowed')
+    expect(verdict(ana, move(id.garden, id.journal, 3), writable)).toBe('ok')
+    expect(verdict(bob, move(id.entry, id.garden, 1), writable)).toBe('ok')
+  })
+})
+
+describe('a batch, run by its owner', () => {
+  const movedUnder = (tile: string, parent: string): System => {
+    const held = system.tiles[tile]
+    if (held === undefined) throw new Error(`No Tile ${tile}`)
+    return { ...system, tiles: { ...system.tiles, [tile]: { ...held, parent } } }
+  }
+  const batchVerdict = (who: Actor, after: System) => {
+    const result = allowedBatch(who, sharing, after)
+    return Result.isFailure(result) ? result.failure._tag : 'ok'
+  }
+
+  it('is refused without a Session when it leaves a Tile that stood before open to someone', () => {
+    const opened = movedUnder(id.garden, id.square)
+    expect(batchVerdict(actor('ana', false), opened)).toBe('NotAllowed')
+    expect(batchVerdict(ana, opened)).toBe('ok')
+  })
+
+  it('goes through when it opens nothing that stood, a Tile it makes under a public one included', () => {
+    expect(batchVerdict(actor('ana', false), movedUnder(id.entry, id.garden))).toBe('ok')
+    const made = uuid()
+    const withNew: System = {
+      ...system,
+      tiles: { ...system.tiles, [made]: placed(made, id.square, 2) },
+    }
+    expect(batchVerdict(actor('ana', false), withNew)).toBe('ok')
   })
 })

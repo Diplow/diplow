@@ -1,8 +1,9 @@
 // Rights on a Tile, and the Grants they come from. A Tile carries a Grant for any number of subjects,
 // an Account, a Group or Everyone; a subject without one inherits its parent's value, and a star, which
 // has no parent, gives none. What an actor may do on a Tile is, for each subject covering them, the
-// nearest explicit value walking up, then the union of those; its owner may do everything. Pure: the
-// API layer says who the actor is, the tiles repository keeps the Grants, Mapping decides here.
+// nearest explicit value walking up, then the union of those; its owner may do everything. Everyone
+// reads at most: a Grant giving it more is none. Pure: the API layer says who the actor is, the tiles
+// repository keeps the Grants, Mapping decides here.
 import { Option, Schema } from 'effect'
 
 import type { Row } from '../rows'
@@ -63,7 +64,7 @@ export interface GrantRow {
   readonly tile: string
   readonly subject: 'account' | 'group' | 'everyone'
   readonly subjectId: string | null
-  readonly value: string
+  readonly value: GrantValue
 }
 
 const decodeGrant = Schema.decodeUnknownOption(Grant)
@@ -76,8 +77,8 @@ function subjectOf({ subject, subjectId }: GrantRow): Subject | undefined {
 }
 
 /**
- * The Grant a row keeps, none for a row that is no Grant, Everyone given more than `read` among
- * them: such a row resolves for nobody.
+ * The Grant a row keeps, none for a row that is no Grant, Everyone given more than `read` or an
+ * Account or a Group without an id: such a row resolves for nobody.
  */
 export function grantOf(row: GrantRow): Grant | undefined {
   const subject = subjectOf(row)
@@ -112,7 +113,10 @@ const subjectsOf = (actor: Actor): ReadonlyArray<Subject> => [
 const keyOf = (subject: Subject) =>
   subject._tag === 'Everyone' ? 'Everyone' : `${subject._tag}:${subject.id}`
 
-/** Where each Tile and Reference of a System stands, as rights read it: its parent's id, `null` for the star. */
+/**
+ * Where each Tile and Reference of a System stands, as rights read it: its parent's id, `null` for
+ * the star.
+ */
 export type Lineage = ReadonlyMap<string, string | null>
 
 /** The lineage of a System's rows. */
@@ -169,22 +173,16 @@ export function valueOn(sharing: Sharing, subject: Subject, tile: string): Grant
   return 'none'
 }
 
-/** The rights a subject has on a Tile, Everyone's never more than `read`. */
-const rightsOf = (sharing: Sharing, subject: Subject, tile: string): ReadonlyArray<Right> => {
-  const rights = given[valueOn(sharing, subject, tile)]
-  return subject._tag === 'Everyone' ? rights.filter((right) => right === 'read') : rights
-}
-
-/** Whether a subject reads a Tile: what a move must not widen. */
-export const reads = (sharing: Sharing, subject: Subject, tile: string) =>
-  rightsOf(sharing, subject, tile).includes('read')
+/** The rights a subject holds on a Tile: what the value it has there gives. */
+export const heldBy = (sharing: Sharing, subject: Subject, tile: string): ReadonlyArray<Right> =>
+  given[valueOn(sharing, subject, tile)]
 
 /**
  * The rights an actor has on a Tile of a System: every one when they stand for its owner, else the
- * union of what each subject covering them has there. None on an id the System doesn't hold.
+ * union of what each subject covering them holds there. None on an id the System doesn't hold.
  */
 export function rightsOn(actor: Actor, sharing: Sharing, tile: string): ReadonlySet<Right> {
   if (!sharing.lineage.has(tile)) return new Set()
   if (owns(actor, sharing.owner)) return new Set(Right.literals)
-  return new Set(subjectsOf(actor).flatMap((subject) => rightsOf(sharing, subject, tile)))
+  return new Set(subjectsOf(actor).flatMap((subject) => heldBy(sharing, subject, tile)))
 }

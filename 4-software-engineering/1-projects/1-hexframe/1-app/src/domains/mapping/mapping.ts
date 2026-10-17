@@ -3,10 +3,11 @@
 // repository keeps the rows (src/repositories/database/tiles/); Mapping decides what an Operation
 // does to the System it locked (`decide`, ./operations/), then writes one change per event it made,
 // and publishes them. Every read and every change is `Acting`: an actor, who acts, on a System,
-// named by its star, which the API layer resolves from the request; Mapping asks `may` what the actor
-// may read and do there, from the Grants its Tiles carry (./operations/rights/). A change runs in the transaction the API layer opens around it
-// (`transactional`): its type requires one. Beside the Systems it reaches, every actor reads the
-// Systems hexframe ships, Help and the tutorial (./shipped/shipped.ts), which no change may name.
+// named by its star, which the API layer resolves from the request; Mapping asks `may` what the
+// actor may read and do there, from the Grants its Tiles carry (./operations/rights/). A change runs
+// in the transaction the API layer opens around it (`transactional`): its type requires one. Beside
+// the Systems it reaches, every actor reads the Systems hexframe ships, Help and the tutorial
+// (./shipped/shipped.ts), which no change may name.
 import { Effect, Result, Struct } from 'effect'
 
 import { Bus } from '#/domains/bus'
@@ -52,6 +53,7 @@ import {
 import {
   added,
   allowed,
+  allowedBatch,
   type Batched,
   type CreateReference,
   type CreateTile,
@@ -166,8 +168,8 @@ export const systemVersion = (acting: Acting) =>
 
 /**
  * The Titles of the Tiles of the System the actor acts on among these ids, by id: an id it holds no
- * Tile of, a deleted one's or a Reference's, or one the actor may not read, has none. What the timeline names a Tile by where it
- * keeps its id.
+ * Tile of, a deleted one's or a Reference's, or one the actor may not read, has none. What the
+ * timeline names a Tile by where it keeps its id.
  */
 export const titles = (acting: Acting, ids: ReadonlyArray<string>) =>
   Effect.flatMap(reading(acting), ({ owner, reads }) =>
@@ -300,10 +302,10 @@ const findOwn = <O extends Field, F extends Field>(
  * A Tile of the System the actor acts on, its star when no id is given, or a Tile of a System
  * hexframe ships, Help or the tutorial, by its id, read `depth` generations down with only the fields
  * asked of each Tile, and its parent. A Reference shows the id, Title and Preview of the Tile it
- * points at. A Body is read only when asked. A Tile the actor may not read is `TileNotFound`, as is an
- * id of a shipped System that none of its Tiles has, and what lies below the Tile is left out where
- * they may not read it. A shipped System is read in `language`, which
- * the caller picks. With a batch `over` it, the System it reads is the one the batch makes (`fold`).
+ * points at. A Body is read only when asked. A Tile the actor may not read is `TileNotFound`, as is
+ * an id of a shipped System that none of its Tiles has, and what lies below the Tile is left out
+ * where they may not read it. A shipped System is read in `language`, which the caller picks. With a
+ * batch `over` it, the System it reads is the one the batch makes (`fold`).
  */
 export const readTile = <F extends Field>(
   acting: Acting,
@@ -762,8 +764,10 @@ export const addToBatch = <O extends Operation>(
 /**
  * Runs a batch on the System the actor acts on as it stands, its star locked, all of it or nothing, folded by
  * `folding`: one that no longer applies refuses the whole, `BatchOutdated`, nothing written nor
- * published; else every event is written and published as an Operation's are, a write under an id
- * already taken answering `onTaken`. Answers the System it ran on and the events it made.
+ * published; then, unless the owner runs it from a Session, one that would give anyone a right on a
+ * Tile they did not hold before refuses the whole, `NotAllowed` (`allowedBatch`); else every event is
+ * written and published as an Operation's are, a write under an id already taken answering
+ * `onTaken`. Answers the System it ran on and the events it made.
  */
 const ranWhole = <T>(
   acting: Acting,
@@ -774,6 +778,9 @@ const ranWhole = <T>(
     yield* outsideShipped(batch.flatMap(({ operation }) => namedBy(operation)))
     const { system, owner } = yield* locked(acting)
     const { events } = yield* Effect.fromResult(folding(system, batch))
+    const sharing = sharingOf(owner, lineageOf(system), yield* grantsIn(owner))
+    const after = events.reduce<System>(evolve, system)
+    yield* Effect.fromResult(allowedBatch(acting.actor, sharing, after))
     yield* writtenAll(owner, system, events, onTaken)
     return { system, events }
   })

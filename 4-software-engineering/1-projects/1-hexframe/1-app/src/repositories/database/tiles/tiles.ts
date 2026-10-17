@@ -5,15 +5,15 @@
 // its star, first, inside the transaction the API layer opened, so two changes to one System never
 // interleave between what Mapping checked and what it wrote. A read from
 // one Tile walks down a generation per query and selects only the content columns asked, so a Body
-// nobody asked for never leaves the database. The Grants a System's Tiles carry are read and written
-// here too (./grants.ts).
+// nobody asked for never leaves the database. The Grants a System's Tiles carry are read here too
+// (./grants.ts).
 import { type SQL, and, eq, inArray, isNull } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import { Context, Data, Effect, Layer } from 'effect'
 
 import { Database, InTransaction } from '../database'
 import { type FrontmatterColumn, type TileConfigColumn, tile } from '../schema'
-import { type GrantRow, granted, grantsOf, type PlaceRow } from './grants'
+import { type GrantRow, grantsOf, type PlaceRow } from './grants'
 
 /**
  * One row of the `tile` table, as its System's owner reads it. A Root has no parent and no
@@ -130,11 +130,6 @@ export interface Writes {
   readonly swap: (a: string, b: string) => Effect.Effect<void, never, InTransaction>
   /** Sets the System's Version, on its Root's row, to the one Mapping decided after a change. */
   readonly setSystemVersion: (version: number) => Effect.Effect<void, never, InTransaction>
-  /**
-   * Sets a Tile's Grant for one subject, in place of the one it had: a Tile of this System, which
-   * Mapping found before.
-   */
-  readonly grant: (row: GrantRow) => Effect.Effect<void, never, InTransaction>
 }
 
 export class Tiles extends Context.Service<
@@ -424,7 +419,6 @@ const make = Effect.gen(function* () {
           .where(rootOf(owner))
           .pipe(Effect.asVoid, Effect.orDie),
       ),
-    grant: (row) => inTransaction(granted(database, owner, row)),
   })
 
   /** The owner's rows matching `where`, with only the content columns asked. */
