@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { m } from '#/paraglide/messages'
 
+import { plainOf } from '../text/words'
 import {
   commandGroups,
   commandMarkOf,
@@ -15,6 +16,7 @@ import {
   namedFirst,
   openingCommand,
   showsLink,
+  tutorialInvitation,
   wholeLink,
 } from './commands'
 
@@ -104,6 +106,16 @@ describe('a page offering some commands', () => {
     const languages = commandTypingAt('/language ')
     if (languages === undefined) throw new Error('no typing')
     expect(commandPicked('/language ', 10, languages, 'fr')).toEqual({ language: 'fr' })
+  })
+})
+
+describe('the invitation to the tutorial', () => {
+  it('names `/tutorial` as it is typed, in the sentence of the reader’s language, a click running it', () => {
+    const onRun = () => undefined
+    const typed = `/${m.composer_command_tutorial()}`
+    const words = tutorialInvitation(onRun)
+    expect(words).toContainEqual({ command: { name: typed, onRun } })
+    expect(plainOf(words)).toBe(m.conversation_invitation({ command: typed }))
   })
 })
 

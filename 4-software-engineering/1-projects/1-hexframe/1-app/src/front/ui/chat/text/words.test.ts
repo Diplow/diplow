@@ -33,11 +33,22 @@ describe('weave', () => {
     const key = { name: 'Claude Code, laptop' }
     expect(weave(edited, { key, projects })).toEqual([key, ' edited ', projects])
   })
+
+  it('weaves a command named where the sentence puts it', () => {
+    const invite = (inputs: { command: string }) => `Type ${inputs.command} to reach it.`
+    const command = { command: { name: '/tutorial', onRun: () => undefined } }
+    expect(weave(invite, { command })).toEqual(['Type ', command, ' to reach it.'])
+  })
 })
 
 describe('plainOf', () => {
   it('reads each tile by its title and each name as it is', () => {
     expect(plainOf(['Move ', site, ' for ', { name: 'a Key' }, '.'])).toBe('Move Site for a Key.')
+  })
+
+  it('reads a command named as it is typed', () => {
+    const command = { command: { name: '/tutorial', onRun: () => undefined } }
+    expect(plainOf(['Type ', command, '.'])).toBe('Type /tutorial.')
   })
 })
 

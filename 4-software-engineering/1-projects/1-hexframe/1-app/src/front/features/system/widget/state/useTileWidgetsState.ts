@@ -3,8 +3,9 @@
 // this is what follows it, held by the page so the canvas's menus and the chat share it. One at
 // a time: a form opening ends it, a write sent leaves its receipt in its place, an export takes it,
 // and a form closed unsent leaves nothing. What a receipt says, the change its write made, it tells
-// the timeline, which leaves it to the receipt. And the pseudo a new account is typing, which the
-// canvas shows on its untitled Root as it is typed, until a form opens.
+// the timeline, which leaves it to the receipt. The pseudo a new account is typing, which the canvas
+// shows on its untitled Root as it is typed, until a form opens; and whether its receipt shows, the
+// dawn that naming plays, which the agent's invitation rises last of (HEX-118).
 import { useState } from 'react'
 
 import type { SystemTile } from '#/domains/mapping/entities'
@@ -93,6 +94,11 @@ export function useTileWidgetsState() {
           : undefined,
       /** An export on its way: the menu's Export waits. */
       exporting: isPending,
+      /**
+       * The pseudo's receipt shows: the page just played a new account's dawn, which the agent's
+       * invitation under it rises last of; once another form opens, it is simply there.
+       */
+      dawning: last?.kind === 'receipt' && last.did === 'named',
       /** The pseudo being typed for the untitled Root, which its hex shows; empty while none is. */
       naming,
     },

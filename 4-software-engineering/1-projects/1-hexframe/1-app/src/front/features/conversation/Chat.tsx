@@ -8,11 +8,12 @@
 // after the navigation it follows, saying so when the Account may not use the Assistant, and where
 // the next Turn works, the canvas's center unless the Message opens with a link, naming a Tile
 // carried from the canvas or one a menu asks the agent about; its commands switch the Mode, undo
-// what the agent last applied, open Help or the Keys, or go to another language. While a Turn runs,
-// the field waits and send becomes Stop. It offers the Account's Tiles to `@`, from the System the
-// page holds. The Mode, as the poll last saw it, shows under the field, switched through
-// `useSetMode`, the one switched to shown while the switch is on its way. Each is shown inside a
-// ReadBoundary, which a failed read lands in.
+// what the agent last applied, open Help or the Keys, show the tutorial, or go to another language.
+// While a Turn runs, the field waits and send becomes Stop. It offers the Account's Tiles to `@`,
+// from the System the page holds. The Mode, as the poll last saw it, shows under the field,
+// switched through `useSetMode`, the one switched to shown while the switch is on its way; while the
+// chat invites a new account's first command (`./invitation/`), `/tutorial` comes first in its list
+// (HEX-118). Each is shown inside a ReadBoundary, which a failed read lands in.
 import { type ComponentProps, useMemo, useState } from 'react'
 
 import type { Entry, Mode } from '#/domains/assistant/entities'
@@ -38,6 +39,7 @@ import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 
 import { mentionablesOf } from './composer/mention'
 import { ConversationFoot, Timeline } from './Conversation'
+import { useInvited } from './invitation/Invitation'
 import {
   besideReceipt,
   dayOf,
@@ -180,11 +182,15 @@ interface ChatComposerProps {
   onHelp: (words: string) => void
   /** `/keys`: the Account's Keys opened in the chat. */
   onKeys: () => void
+  /** `/tutorial`: the tutorial on the canvas. */
+  onTutorial: () => void
 }
 
 export function ChatComposer(props: ChatComposerProps) {
-  const { onSend, turn, mode, onPoint, center, carried, onHelp, onKeys } = props
+  const { onSend, turn, mode, onPoint, center, carried, onHelp, onKeys, onTutorial } = props
   const tiles = useTiles()
+  // While the chat invites it, a `/` offers `/tutorial` first.
+  const invited = useInvited()
   const entries = useEntries()
   const { data: available } = useAssistantAvailable()
   const { mutate: stop, isPending: stopping } = useStopTurn()
@@ -209,6 +215,8 @@ export function ChatComposer(props: ChatComposerProps) {
       }
       onHelp={onHelp}
       onKeys={onKeys}
+      onTutorial={onTutorial}
+      invited={invited ? 'tutorial' : undefined}
       onSignOut={() => {
         signOut()
       }}

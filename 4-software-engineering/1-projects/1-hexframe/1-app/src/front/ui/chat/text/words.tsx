@@ -1,11 +1,26 @@
-// The chat's text in pieces: plain words, a tile named, and who acted, named. Every piece of the chat
-// takes its text this way, so a tile reads the same in a Message, an event, a Proposal's change and a
-// receipt. A sentence keeps its order in each language: its message is read with a mark in each
-// tile's place, then cut at the marks and woven with the tiles (`weave`).
+// The chat's text in pieces: plain words, a tile named, who acted, named, and a command named,
+// which a click runs (HEX-118). Every piece of the chat takes its text this way, so a tile reads
+// the same in a Message, an event, a Proposal's change and a receipt. A sentence keeps its order in
+// each language: its message is read with a mark in each tile's place, then cut at the marks and
+// woven with the tiles (`weave`).
 import { Mention, type MentionProps, type Voice } from './Mention'
 
-/** One piece of a text: words, a tile named, or who acted, by name, in the first ink. */
-export type Word = string | { readonly tile: MentionProps } | { readonly name: string }
+/** A command named in the chat: as it is typed, its `/` first, in the reader's language. */
+interface CommandNamed {
+  readonly name: string
+  /** Runs it, as typing it would. */
+  readonly onRun: () => void
+}
+
+/**
+ * One piece of a text: words, a tile named, who acted, by name, in the first ink, or a command
+ * named, which a click runs.
+ */
+export type Word =
+  | string
+  | { readonly tile: MentionProps }
+  | { readonly name: string }
+  | { readonly command: CommandNamed }
 
 /** A text, its pieces in order. */
 export type Words = readonly Word[]
@@ -16,6 +31,7 @@ export function Said({ words, voice }: { words: Words; voice?: Voice }) {
     // The pieces of one text, never reordered: their place is their key.
     if (typeof word === 'string') return word
     if ('tile' in word) return <Mention key={index} {...word.tile} voice={voice} />
+    if ('command' in word) return <Command key={index} {...word.command} />
     return (
       <span key={index} className="text-foreground">
         {word.name}
@@ -24,11 +40,33 @@ export function Said({ words, voice }: { words: Words; voice?: Voice }) {
   })
 }
 
+/**
+ * A command named, in the user's amber, as the composer marks it typed, since it is theirs to run,
+ * a faint underline under it: a click runs it. Inline, it cannot grow to a finger's 44px; its hit
+ * area does, beyond its line.
+ */
+function Command({ name, onRun }: CommandNamed) {
+  return (
+    <button
+      type="button"
+      className="relative cursor-pointer text-human underline decoration-human/35 decoration-1 underline-offset-3 outline-offset-2 transition-[text-decoration-color] hover:decoration-current focus-visible:outline pointer-coarse:after:absolute pointer-coarse:after:-inset-x-1 pointer-coarse:after:-inset-y-3"
+      onClick={onRun}
+    >
+      {name}
+    </button>
+  )
+}
+
+/** A piece as plain words: a tile by its title, a command as it is typed. */
+function plainWord(word: Word): string {
+  if (typeof word === 'string') return word
+  if ('tile' in word) return word.tile.title
+  if ('command' in word) return word.command.name
+  return word.name
+}
+
 /** A text as plain words, each tile by its title: what a copy takes. */
-export const plainOf = (words: Words): string =>
-  words
-    .map((word) => (typeof word === 'string' ? word : 'tile' in word ? word.tile.title : word.name))
-    .join('')
+export const plainOf = (words: Words): string => words.map(plainWord).join('')
 
 /**
  * A text cut at its line breaks, each line its own pieces, a tile never cut: the lines a reader sees
