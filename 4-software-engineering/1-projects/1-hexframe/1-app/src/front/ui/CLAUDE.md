@@ -17,6 +17,8 @@ hexframe's design system: the look, the words for its screen, and the closed lis
 
 ## The direction
 
+hexframe's why is in [[4-software-engineering/1-projects/1-hexframe/CLAUDE|hexframe]]: agents now do more than we can follow, so an agent **unfolds** its work on a hierarchy of tiles, goal first, and the user keeps up with it at the **altitude** they choose. The look follows: going down a level is getting closer, the screen a universe explored one altitude at a time.
+
 Intelligence has become common; experience has not. A person stands at the crossroads of the things they care about, and hexframe bets that this care deserves their best: to deepen what they understand of each, lay it out, what matters most first, and share it, with the world and with the agents that work beside them. In hexframe's universe each person is a sun: what they understand turns around them, and the agents work by its light. The look is futuristic because hexframe is a bet on a future worth wanting: human experience at the center, people directing agents that help them find where they want to explore. Futuristic here means space, imbalance, fine lines and light, not chrome. Obsidian is the closest relative. `/design-system` opens on this, in words, before any screen.
 
 1. **Empty space and imbalance.** Nothing is centered for its own sake. On hexframe's main screen the canvas takes about 60% of the width, off to the right, and the tiles around the center run on behind the conversation instead of stopping at a frame. Space is the luxury: a screen is never filled to show it is busy.
