@@ -86,6 +86,7 @@ halting:
     - Never give Everyone more than read, nor let a Tile's existence show to someone who may not read it. Without read, the answer is TileNotFound; the two deliberate exceptions are a star's card and TileIdTaken on a create under a chosen id.
     - Never let anything but a Session change Grants or manage an Organization, its members, Groups or join requests. No MCP tool, Key, Turn's Key or agent.
     - Never cache who belongs where. The owners an Account stands for and its Groups are read from IAM on every request and every MCP call of a Turn, so a removal holds from the next one.
+    - Never let a Turn's Key reach outside the System its Turn started in. It reads and writes there alone, with its Account's rights, whatever else that Account may reach.
     - Never put the platform Anthropic key, Vercel's bypass for automation, or any other secret into a sandbox. The Turn's own Key alone enters it, in its processes' environment and the MCP client's config, never in its prompt or its files.
     - Never send an email or add an email provider.
     - Never touch a ticket, branch or pull request of another project.
