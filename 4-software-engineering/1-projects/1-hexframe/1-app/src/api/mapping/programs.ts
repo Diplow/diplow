@@ -105,8 +105,9 @@ export const system = systemAt(undefined)
 
 /**
  * Where a link to a Tile leads the Account (`/t/<id>`): the star of the System holding it, none when
- * it is the Account's own, once Mapping found the Account may read the Tile, or the star's card, which
- * anyone sees; `TileNotFound` otherwise, a Tile kept from it answered as one that doesn't exist.
+ * it is the Account's own, once Mapping found the Account is shown the Tile (`shownTile`: one it may
+ * read, or the star's card, which anyone sees); `TileNotFound` otherwise, a Tile kept from it
+ * answered as one that doesn't exist.
  */
 export const visit = ({ tile }: { tile: string }) =>
   onSystem(
@@ -114,38 +115,9 @@ export const visit = ({ tile }: { tile: string }) =>
     (acting, own) => {
       const led: { readonly system?: string } =
         acting.system === own.system ? {} : { system: acting.system }
-      return Effect.as(readable(acting, tile), led)
+      return Effect.as(Mapping.shownTile(acting, tile), led)
     },
   )
-
-/**
- * Nothing when the actor may read the Tile of this id in the System they act on, or it is that
- * System's star, whose card anyone sees; `TileNotFound` otherwise: a read from it asking no field and
- * nothing below it, Mapping's `readTile` deciding as it does for every read from one Tile.
- */
-const readable = (acting: Mapping.Acting, tile: string) =>
-  Effect.asVoid(Mapping.readTile(acting, { id: tile, depth: 0, fields: [], language: 'en' }))
-
-/**
- * The Titles of the Tiles among these ids the Account may read, by id, whichever System holds them:
- * its own first, then, for an id its own holds no Tile of, the System holding it, as the Account may
- * see it there, so its timeline names a Tile of a System it visited as it names its own. An id no
- * System holds, a deleted Tile's, has none; nor has a Tile kept from the Account.
- */
-export const titlesReached = (own: Mapping.Acting, ids: ReadonlyArray<string>) =>
-  Effect.gen(function* () {
-    const titles = yield* Mapping.titles(own, ids)
-    const rest = [...new Set(ids)].filter((id) => !(id in titles))
-    const stars = yield* Mapping.holdingEach(rest)
-    const elsewhere = new Map<string, string[]>()
-    for (const [id, star] of stars) {
-      if (star !== own.system) elsewhere.set(star, [...(elsewhere.get(star) ?? []), id])
-    }
-    const found = yield* Effect.forEach([...elsewhere], ([star, named]) =>
-      Mapping.titles({ ...own, system: star }, named),
-    )
-    return Object.fromEntries([titles, ...found].flatMap((named) => Object.entries(named)))
-  })
 
 /**
  * A System hexframe ships whole, by its Root, in the page's language, for any visitor: no Account

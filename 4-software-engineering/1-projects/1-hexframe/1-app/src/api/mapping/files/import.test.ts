@@ -192,6 +192,13 @@ describe('the link an import reads back as a Tile', () => {
     expect(tileOfLink(site)(tileLink(site)(id))).toBe(id)
   })
 
+  it('is the Tile’s own page on the site, the link Copy link copies, in any language', () => {
+    expect(tileOfLink(site)(`https://hexframe.test/t/${id}`)).toBe(id)
+    expect(tileOfLink(site)(`https://hexframe.test/fr/t/${id}`)).toBe(id)
+    expect(tileOfLink(site)(`https://elsewhere.test/t/${id}`)).toBeUndefined()
+    expect(tileOfLink(site)(`https://hexframe.test/t/${id}/more`)).toBeUndefined()
+  })
+
   it('is no Tile on another site, another page, without a center, or not a link at all', () => {
     const elsewhere = [
       tileLink('https://elsewhere.test/')(id),

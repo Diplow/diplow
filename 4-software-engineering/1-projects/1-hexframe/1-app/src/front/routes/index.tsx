@@ -38,7 +38,7 @@
 // of someone else's System, `/t/<id>`, lands here visiting it (`system`, HEX-127): the canvas on
 // their System from its star, as the Account may see it, centered on the Tile, the journey taking it
 // there, the corner from their star, a "…" for the Tiles kept from them, and its mark back home;
-// only what their rights let through offered, the gestures told in their own timeline as ever.
+// looked at, not acted on, for now, the gestures told in their own timeline as ever.
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 
@@ -81,7 +81,6 @@ import {
   type SystemSearch,
 } from '#/front/features/system/search/search'
 import { useMarksState } from '#/front/features/system/marks/useMarksState'
-import { owned } from '#/front/features/system/acting'
 import { System } from '#/front/features/system/System'
 import { canvasTree, onScreen } from '#/front/features/system/tree'
 import { centeringOf, readVisitSearch, withVisit } from '#/front/features/system/visit/visit'
@@ -756,8 +755,7 @@ function SystemPage(props: SystemPageProps) {
         root={root}
         tree={tree}
         underway={underway}
-        // The Account's own System: its owner may do everything there.
-        reach={owned}
+        reach="owned"
         search={search}
         onViewChange={onViewChange}
         onSearchChange={onSearchChange}

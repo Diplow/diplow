@@ -188,13 +188,6 @@ const ownersWhole = (acting: Acting) => Effect.flatMap(reached(acting), wholeOf)
 export const holding = (id: string) => Tiles.use((tiles) => tiles.starHolding(id))
 
 /**
- * The star of the System holding each of these ids, by id, in one lookup, an id no System holds left
- * out: what names the Systems a timeline's Tiles stand in. Says nothing of who may read them.
- */
-export const holdingEach = (ids: ReadonlyArray<string>) =>
-  Tiles.use((tiles) => tiles.starsHolding(ids))
-
-/**
  * The Version of the System the actor acts on, how many events changed it, read alone: what a client
  * polls to know when to read the System again. 0 before its first change. Its owner's read alone.
  */
@@ -225,15 +218,47 @@ export const titles = (acting: Acting, ids: ReadonlyArray<string>) =>
   Effect.flatMap(reading(acting), ({ owner, shows }) => titledIn(owner, ids, shows))
 
 /**
- * Nothing when the id is a Tile of the System the actor acts on that they may read, else
- * `TileNotFound`: a star they may not read too, whose card is no Tile they read.
+ * The Titles of these ids the actor is shown, whichever System holds them: the System they act on
+ * first, then each other one holding an id it holds no Tile of, all found in one lookup, each as the
+ * actor may see it there (`titles`). What the timeline names a Tile of a System visited by, as it
+ * names one of its own. An id no System holds, a deleted Tile's, has none, nor has a Tile kept from
+ * the actor.
  */
-export const ownTile = (acting: Acting, id: string) =>
-  Effect.flatMap(reading(acting), ({ owner, reads }) =>
-    Effect.flatMap(titledIn(owner, [id], reads), (titled) =>
+export const titlesAcross = (acting: Acting, ids: ReadonlyArray<string>) =>
+  Effect.gen(function* () {
+    const here = yield* titles(acting, ids)
+    const rest = [...new Set(ids)].filter((id) => !(id in here))
+    const stars = yield* Tiles.use((tiles) => tiles.starsHolding(rest))
+    const elsewhere = new Map<string, string[]>()
+    for (const [id, star] of stars) {
+      if (star !== acting.system) elsewhere.set(star, [...(elsewhere.get(star) ?? []), id])
+    }
+    const found = yield* Effect.forEach([...elsewhere], ([star, named]) =>
+      titles({ ...acting, system: star }, named),
+    )
+    return Object.fromEntries([here, ...found].flatMap((named) => Object.entries(named)))
+  })
+
+/** Nothing when the id is a Tile of the System the actor acts on that `kept` lets through. */
+const tileKept = (acting: Acting, id: string, kept: 'reads' | 'shows') =>
+  Effect.flatMap(reading(acting), (sight) =>
+    Effect.flatMap(titledIn(sight.owner, [id], sight[kept]), (titled) =>
       id in titled ? Effect.void : Effect.fail(new TileNotFound()),
     ),
   )
+
+/**
+ * Nothing when the id is a Tile of the System the actor acts on that they may read, else
+ * `TileNotFound`: a star they may not read too, whose card is no Tile they read.
+ */
+export const ownTile = (acting: Acting, id: string) => tileKept(acting, id, 'reads')
+
+/**
+ * Nothing when the actor is shown the Tile of this id in the System they act on: one they may read,
+ * or its star, whose card anyone sees; `TileNotFound` otherwise, a Tile kept from them answered as
+ * one that isn't there. Where a link to a Tile may lead them.
+ */
+export const shownTile = (acting: Acting, id: string) => tileKept(acting, id, 'shows')
 
 /**
  * The Title and Preview of the Tiles of the System the actor acts on among these ids, in their order:

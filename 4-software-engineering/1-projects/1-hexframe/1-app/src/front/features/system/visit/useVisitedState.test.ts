@@ -49,13 +49,13 @@ function answering() {
     Promise.resolve({ ok: true, value: data?.system === 'ana' ? anas : bobs })) as never)
 }
 
-function render(initial: { star: string | undefined }) {
+function render(initial: { star: string | undefined; own?: string | undefined }) {
   const client = makeQueryClient()
   const wrapper = ({ children }: { children: ReactNode }) =>
     createElement(QueryClientProvider, { client }, children)
-  return renderHook(({ star: visited }) => useVisitedState(visited, 'bob'), {
+  return renderHook(({ star: visited, own }) => useVisitedState(visited, own), {
     wrapper,
-    initialProps: initial,
+    initialProps: { own: 'bob', ...initial },
   })
 }
 
@@ -70,6 +70,13 @@ describe('the System the URL visits', () => {
     expect(Mapping.system).not.toHaveBeenCalledWith({ data: { system: 'bob' } })
   })
 
+  it('is none before the Account’s own System is read, which tells whose star it names', () => {
+    answering()
+    const { result } = render({ star: 'ana', own: undefined })
+    expect(result.current.star).toBeUndefined()
+    expect(Mapping.system).not.toHaveBeenCalledWith({ data: { system: 'ana' } })
+  })
+
   it('is someone else’s from their star, its Titles kept for the chat once the canvas went home', async () => {
     answering()
     const { result, rerender } = render({ star: 'ana' })
@@ -77,7 +84,7 @@ describe('the System the URL visits', () => {
       expect(result.current.tree).toMatchObject({ id: 'ana', branches: { 2: { id: 'garden' } } })
     })
     expect(result.current.star).toBe('ana')
-    rerender({ star: undefined })
+    rerender({ star: undefined, own: 'bob' })
     expect(result.current.star).toBeUndefined()
     expect(result.current.tree).toBeUndefined()
     expect(result.current.titles.get('garden')).toBe('Garden')

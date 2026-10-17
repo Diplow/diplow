@@ -10,15 +10,7 @@ import {
 import { pathTo } from '#/front/ui/canvas/view/tiles'
 import { centerOn, showView } from '#/front/ui/canvas/view/view'
 
-import {
-  centeringOf,
-  readVisitSearch,
-  titlesIn,
-  visiting,
-  visitLinkOf,
-  visitTree,
-  withVisit,
-} from './visit'
+import { centeringOf, readVisitSearch, titlesIn, visitLinkOf, visitTree, withVisit } from './visit'
 
 // Someone else's System as a visitor sees it, made by hand as Mapping's `Seen` answers it: Ana's
 // star, her card; Garden under it, which Bob reads; Seeds under a Tile kept from him, a gap, and
@@ -93,18 +85,6 @@ describe('someone else’s System on the canvas', () => {
 
   it('has no gap on a System seen whole', () => {
     expect(visitTree({ ...shown, gaps: {} }).gaps).toBeUndefined()
-  })
-})
-
-describe('what a visitor may do', () => {
-  const reach = visiting(shown)
-
-  it('reads what Mapping lets them read, and nothing more yet, whatever else it grants', () => {
-    expect([...reach.rights('garden')]).toEqual(['read'])
-    expect([...reach.rights('seeds')]).toEqual(['read'])
-    expect([...reach.rights('ana')]).toEqual([])
-    expect([...reach.rights('nowhere')]).toEqual([])
-    expect(reach.yours).toBe(false)
   })
 })
 

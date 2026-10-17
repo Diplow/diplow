@@ -22,10 +22,11 @@ export interface Visited {
 /**
  * The System the URL visits, read outside every boundary without throwing, for the corner and for a
  * Tile the chat names; none on the Account's own, its star named included, so a link to it is no
- * visit. Not visiting, it reads the Account's own Query, which the page reads already.
+ * visit, nor before the Account's own is read, which tells. Not visiting, it reads the Account's own Query, which the page reads already.
  */
 export function useVisitedState(star: string | undefined, own: string | undefined): Visited {
-  const visited = star !== undefined && star !== own ? star : undefined
+  // Whose star it names is known once the Account's own is read: no visit before.
+  const visited = star !== undefined && own !== undefined && star !== own ? star : undefined
   const { data } = useSystem({ throwing: false, ...(visited !== undefined && { star: visited }) })
   const shown = visited === undefined ? undefined : data
   const tree = useMemo(() => (shown === undefined ? undefined : visitTree(shown)), [shown])

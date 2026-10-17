@@ -1,16 +1,15 @@
 // A visit (HEX-127): someone else's System on home's canvas, reached by a link to one of its Tiles
 // (`/t/<id>`, `visitLinkOf`), as the Account may see it, from its star: the param home carries it in,
 // its Tiles as the canvas and the corner draw them, each Tile they may read below Tiles kept from
-// them hung from the star across a gap, and what the visitor may do there. Pure.
+// them hung from the star across a gap, and where a Tile the chat names is centered. Pure.
 import { Schema } from 'effect'
 
-import { type Right, systemOf } from '#/domains/mapping/entities'
+import { systemOf } from '#/domains/mapping/entities'
 import type { SystemShown } from '#/front/client/mapping/queries'
 import { localizeUrl } from '#/paraglide/runtime'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { orDefault, readSearch, TileId } from '#/front/ui/canvas/view/view'
 
-import type { Reach } from '../acting'
 import { canvasTree } from '../tree'
 
 const VisitSearch = Schema.Struct({
@@ -76,18 +75,4 @@ export function centeringOf(
 export function titlesIn({ system, gaps }: Pick<SystemShown, 'system' | 'gaps'>) {
   const tiles = [system.root, ...Object.values(gaps), ...Object.values(system.tiles)]
   return new Map(tiles.flatMap((held) => (held._tag === 'Tile' ? [[held.id, held.title]] : [])))
-}
-
-/**
- * What a visitor may do on someone else's System: read what Mapping lets them read, and no more for
- * now, whatever else its Grants give them. A write the page sends acts on the Account's own System
- * until a write reaches the System it names (HEX-132), and a Turn starts in its own System alone
- * until one may start in another (HEX-134): offering either would be offering a refusal.
- */
-export function visiting({ rights }: Pick<SystemShown, 'rights'>): Reach {
-  const reads = new Set<Right>(['read'])
-  return {
-    rights: (id) => (rights[id]?.includes('read') === true ? reads : new Set()),
-    yours: false,
-  }
 }

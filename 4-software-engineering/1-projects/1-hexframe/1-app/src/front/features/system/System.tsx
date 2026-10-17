@@ -1,5 +1,5 @@
-// A System on the canvas, the user's or one they visit, and acting on it where their rights on each
-// Tile let them (HEX-127): each Tile's menu and hover card, each
+// A System on the canvas, the user's, or one they visit, which they only look at for now (HEX-127),
+// and acting on it where it is: each Tile's menu and hover card, each
 // free slot's menu, a click on a free slot opening the new Tile's form there, and a Tile moved, dragged
 // under a mouse, from its menu's frame or through "Somewhere else…", its free slots offering
 // themselves and the Tiles it can trade places with their swap. A write ends its change as it is sent,
@@ -39,8 +39,8 @@ interface SystemProps {
   /** What the writes on their way change (`useSystem`). */
   underway: Underway
   /**
-   * What the user may do on it, Tile by Tile: a line, a free slot or a move their rights don't let
-   * through is not offered.
+   * How far the user acts on it: their own, every line; someone else's, visited, looked at and copied
+   * from alone, no free slot, move or line that acts offered (`Reach`).
    */
   reach: Reach
   search: SystemSearch

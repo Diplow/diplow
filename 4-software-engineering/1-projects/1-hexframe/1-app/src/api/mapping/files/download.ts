@@ -7,6 +7,8 @@
 // of the front's, which the front's own tests read back, and the id an import reads back from such a
 // link; and which Leaf an export writes as its content alone, Mapping's rule, which the front's card
 // follows. Pure: no module of the server's reaches the client here.
+import { locales } from '#/paraglide/runtime'
+
 import type { Failure, Outcome } from '../../report/errors/failure'
 
 /**
@@ -75,9 +77,16 @@ export const tileLink =
     new URL(`/?center=${encodeURIComponent(id)}`, requestUrl).href
 
 /**
+ * A Tile's page on the site, `/t/<id>`, the link Copy link copies (HEX-127), in any of the app's
+ * languages, `/fr/t/<id>` included: its id is the path's last segment.
+ */
+const visitPath = new RegExp(`^/(?:(?:${locales.join('|')})/)?t/([^/]+)$`)
+
+/**
  * The id of the Tile a link points at, when `tileLink` would have built it on the site a request
- * reached: home, centered on it; `undefined` for any other text. An import reads a Reference's link
- * by it, and lands it only on a Tile of the importer's own System.
+ * reached, home centered on it, or when it is the Tile's page there, `/t/<id>`, the link Copy link
+ * copies; `undefined` for any other text. An import reads a Reference's link by it, and lands it only
+ * on a Tile of the importer's own System.
  */
 export const tileOfLink =
   (requestUrl: string) =>
@@ -85,7 +94,9 @@ export const tileOfLink =
     if (!URL.canParse(link)) return undefined
     const url = new URL(link)
     const home = new URL('/', requestUrl)
+    if (url.origin !== home.origin) return undefined
+    const visited = visitPath.exec(url.pathname)?.[1]
+    if (visited !== undefined) return decodeURIComponent(visited)
     const center = url.searchParams.get('center')
-    const plain = url.origin === home.origin && url.pathname === home.pathname
-    return plain && center !== null && center !== '' ? center : undefined
+    return url.pathname === home.pathname && center !== null && center !== '' ? center : undefined
   }

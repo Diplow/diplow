@@ -8,12 +8,14 @@ import { granted } from '#/repositories/database/tiles/testing'
 
 import { noKey, run, type StartContext } from '../server/run'
 import { SystemRead, TileVisit } from './mapping'
+import * as Service from '#/domains/mapping/mapping'
+
 import * as Mapping from './programs'
 
 // Another Account's System, read through Mapping's programs as the server functions and the MCP run
 // them, over PGlite: `system` naming a star, and `readTile` and `openTile` reading from a Tile of the
 // System holding it, each as the Account may see it, a Turn's Key never past its own System; where a
-// link to a Tile leads (`visit`), and the Titles a timeline names across Systems (`titlesReached`).
+// link to a Tile leads (`visit`), and the Titles a timeline names across Systems (Mapping's `titlesAcross`).
 
 /** How a request is proven: by a Session, by an Account's Key, or by a Turn's Key. */
 type Proof = 'session' | 'key' | 'turn key'
@@ -181,7 +183,7 @@ describe('a link to a Tile, and the Titles a timeline names, across Systems', ()
       run(
         request(bob),
         Effect.flatMap(Mapping.actingOnOwn(bob.id, { session: false }), (own) =>
-          Mapping.titlesReached(own, [garden.id, journal.id, mine.id, gone, garden.id]),
+          Service.titlesAcross(own, [garden.id, journal.id, mine.id, gone, garden.id]),
         ),
       ),
     )
