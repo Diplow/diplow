@@ -1,5 +1,6 @@
-// What Mapping's tests set below it, which no program of the app does yet: a Tile's Grant for one
-// subject, as the Share widget's write, a Session's, will set it (HEX-128). For tests only.
+// What Mapping's tests set below it, past every check: a Tile's Grant for any subject, outside any
+// transaction, which no program does. A program sets one through `Writes.setGrant` (./grants.ts),
+// which Mapping's sharing asks only of the System's owner, from a Session (HEX-128). For tests only.
 import { and, eq } from 'drizzle-orm'
 import { Effect } from 'effect'
 

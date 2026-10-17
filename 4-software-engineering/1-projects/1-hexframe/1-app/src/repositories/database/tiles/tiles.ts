@@ -13,7 +13,7 @@ import { Context, Data, Effect, Layer } from 'effect'
 
 import { Database, InTransaction } from '../database'
 import { type FrontmatterColumn, type TileConfigColumn, tile } from '../schema'
-import { type GrantRow, grantsOf, type PlaceRow } from './grants'
+import { type GrantRow, grantsOf, type GrantWrites, grantWritesOf, type PlaceRow } from './grants'
 
 /**
  * One row of the `tile` table, as its System's owner reads it. A Root has no parent and no
@@ -96,8 +96,11 @@ export interface BatchRow extends Omit<NewTileRow, 'parentId' | 'target'> {
  */
 export class IdTaken extends Data.TaggedError('IdTaken')<{ readonly id: string }> {}
 
-/** What a change may write, to the System it locked only, inside the same transaction. */
-export interface Writes {
+/**
+ * What a change may write, to the System it locked only, inside the same transaction: its rows, and
+ * the Grants its Tiles carry (`GrantWrites`, ./grants.ts).
+ */
+export interface Writes extends GrantWrites {
   /**
    * Adds a row under the id it carries, made by `Tiles.newId` or chosen by a caller. An id a row of
    * any System already has is `IdTaken`, and nothing is written.
@@ -403,6 +406,7 @@ const make = Effect.gen(function* () {
     database.select(columns).from(tile).where(ofOwner(owner)).pipe(Effect.orDie)
 
   const writes = (owner: string): Writes => ({
+    ...grantWritesOf(database, owner),
     insert: (row) =>
       inTransaction(
         database

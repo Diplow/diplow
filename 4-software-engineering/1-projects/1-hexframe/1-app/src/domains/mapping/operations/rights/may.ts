@@ -107,6 +107,20 @@ function widens(system: System, sharing: Sharing, moved: ReadonlyMap<string, str
 const mayOpen = (actor: Actor, sharing: Sharing) => owns(actor, sharing.owner) && actor.session
 
 /**
+ * Whether the actor may change who reaches this Tile, or read who does: its System's owner, from a
+ * Session, never through a Key, a Turn's Key or an agent. Without `read` on it, `TileNotFound`, as for
+ * a Tile that isn't there; with `read`, `NotAllowed`, which says nothing of who else reads it.
+ */
+export function mayShare(
+  actor: Actor,
+  sharing: Sharing,
+  tile: string,
+): Result.Result<void, TileNotFound | NotAllowed> {
+  if (!may(actor, sharing, tile, 'read')) return Result.fail(new TileNotFound())
+  return mayOpen(actor, sharing) ? Result.void : Result.fail(new NotAllowed())
+}
+
+/**
  * Whether a change without a Session would delete one of these Tiles while it carries a Grant. It may
  * not: such a change is the one an undo undoes (an applied Turn's, an accepted Proposal's), and an
  * undo makes a deleted Tile again with no Grant, so a Tile kept from someone would come back open.

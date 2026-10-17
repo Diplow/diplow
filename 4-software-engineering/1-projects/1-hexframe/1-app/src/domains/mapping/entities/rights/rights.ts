@@ -37,7 +37,7 @@ const Named = Schema.Union([
 ])
 
 /** Anyone holding the link to a Tile, signed in or not. */
-const Everyone = Schema.TaggedStruct('Everyone', {})
+export const Everyone = Schema.TaggedStruct('Everyone', {})
 
 /** Who a Grant is for: an Account, a Group, or Everyone. */
 export type Subject = typeof Named.Type | typeof Everyone.Type
@@ -75,6 +75,12 @@ function subjectOf({ subject, subjectId }: GrantRow): Subject | undefined {
   if (subjectId === null) return undefined
   return { _tag: subject === 'account' ? 'Account' : 'Group', id: subjectId }
 }
+
+/** A subject as a row names it, the inverse of `subjectOf`: its kind, and its id, none for Everyone. */
+export const subjectRowOf = (subject: Subject): Pick<GrantRow, 'subject' | 'subjectId'> =>
+  subject._tag === 'Everyone'
+    ? { subject: 'everyone', subjectId: null }
+    : { subject: subject._tag === 'Account' ? 'account' : 'group', subjectId: subject.id }
 
 /**
  * The Grant a row keeps, none for a row that is no Grant, Everyone given more than `read` or an
@@ -157,22 +163,30 @@ export function sharingOf(owner: string, lineage: Lineage, grants: ReadonlyArray
 }
 
 /**
- * The value a subject has on a Tile: the nearest explicit one walking up from it, `none` at the star,
- * which inherits nothing, and `none` for an id the System doesn't hold, or a walk that comes back to
- * a Tile it passed, which no System holds.
+ * The value a subject has on a Tile, and the Tile whose Grant gives it: the nearest explicit one
+ * walking up from it; `none` from nowhere at the star, which inherits nothing, for an id the System
+ * doesn't hold, or for a walk that comes back to a Tile it passed, which no System holds.
  */
-export function valueOn(sharing: Sharing, subject: Subject, tile: string): GrantValue {
+export function originOn(
+  sharing: Sharing,
+  subject: Subject,
+  tile: string,
+): { readonly value: GrantValue; readonly from: string | null } {
   const key = keyOf(subject)
   const passed = new Set<string>()
   let at: string | null | undefined = tile
   while (at !== null && at !== undefined && !passed.has(at)) {
     const explicit = sharing.grants.get(at)?.get(key)
-    if (explicit !== undefined) return explicit
+    if (explicit !== undefined) return { value: explicit, from: at }
     passed.add(at)
     at = sharing.lineage.get(at)
   }
-  return 'none'
+  return { value: 'none', from: null }
 }
+
+/** The value a subject has on a Tile: the nearest explicit one walking up from it (`originOn`). */
+export const valueOn = (sharing: Sharing, subject: Subject, tile: string): GrantValue =>
+  originOn(sharing, subject, tile).value
 
 /** The rights a subject holds on a Tile: what the value it has there gives. */
 export const heldBy = (sharing: Sharing, subject: Subject, tile: string): ReadonlyArray<Right> =>
