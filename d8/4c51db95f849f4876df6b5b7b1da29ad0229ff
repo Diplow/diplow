@@ -1,0 +1,27 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/tutorial/ring.ts
+  s_7b92c93552a78d::t_b933a61973809b 49,58,60-61,66-75,77-79,81-87,92-108
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/gallery/deck/tour.tsx
+  s_7b92c93552a78d::t_d0ad14e18e362d 174,178-184,197-198,407-411,418,424-425
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/tutorial/six.ts
+  s_7b92c93552a78d::t_b933a61973809b 10,28,42-44,46-50
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/design-system.tsx
+  s_7b92c93552a78d::t_d0ad14e18e362d 28,374
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/shipped/tutorial/ring.test.ts
+  s_7b92c93552a78d::t_d0ad14e18e362d 5,50,53-55,58-62,64,68,73-94,98-106
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "d84c51db95f849f4876df6b5b7b1da29ad0229ff",
+  "prompts": {},
+  "sessions": {
+    "s_7b92c93552a78d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "df1e2743-42cd-4ee5-8710-130ad5db0a14",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
