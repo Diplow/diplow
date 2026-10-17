@@ -1,10 +1,11 @@
 // What a decision leaves in the conversation once the widget that asked for it gives its surface back:
 // one line, a small hex in the agent's voice, what was done, its Undo while one is possible, the time,
-// and its changes, folded, one on a line below it once opened. An accepted Proposal and a Turn that
-// applied its changes leave one alike; a discarded Proposal one with what it would have changed; once
-// undone, it says so. Its Undo speaks up when it changes, so a screen reader hears the undoing land, and it keeps the focus its
-// Undo had once that is gone. Arriving, it says nothing itself: whoever swaps it in announces it, as the
-// Proposal does, or the conversation's log.
+// and its changes, folded, one on a line below it once opened, each running on to the curve. An
+// accepted Proposal and a Turn that applied its changes leave one alike; a discarded Proposal one with
+// what it would have changed; once undone, it says so. Its Undo speaks up when it changes, so a screen
+// reader hears the undoing land, and it keeps the focus its Undo had once that is gone. Arriving, it
+// says nothing itself: whoever swaps it in announces it, as the Proposal does, or the conversation's
+// log.
 import { cn } from 'cn'
 import type { LucideIcon } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
@@ -13,6 +14,7 @@ import { m } from '#/paraglide/messages'
 
 import { Act } from '../../atoms/controls/act'
 import { focusHeld, focusLost, giveFocusBack } from '../../focus'
+import { runsToCurve, toCurve, useToCurve } from '../../layouts/screen/state/useAlongCurve'
 import { Fold } from '../atoms/fold'
 import { HexMark } from '../atoms/hex'
 import { useHandOffState } from '../layouts/useHandOffState'
@@ -25,7 +27,7 @@ export interface Change {
   words: Words
 }
 
-/** The changes of one decision, each on a line, its icon in violet. */
+/** The changes of one decision, each on a line running on to the curve, its icon in violet. */
 export function Changes({
   changes,
   className,
@@ -37,7 +39,14 @@ export function Changes({
     <ul className={cn('grid gap-2 font-light text-muted-foreground', className)}>
       {changes.map(({ icon: Icon, words }, index) => (
         // The changes of one decision, never reordered: their place is their key.
-        <li key={index} className="grid grid-cols-[0.875rem_minmax(0,1fr)] gap-2.5 leading-snug">
+        <li
+          key={index}
+          ref={toCurve}
+          className={cn(
+            runsToCurve,
+            'grid grid-cols-[0.875rem_minmax(0,1fr)] gap-2.5 leading-snug',
+          )}
+        >
           <Icon aria-hidden strokeWidth={1.4} className="mt-0.5 size-3.5 text-agent" />
           <span className="wrap-anywhere">
             <Said words={words} voice="agent" />
@@ -92,6 +101,7 @@ export function Receipt({
   dawning = false,
 }: ReceiptProps) {
   const line = useRef<HTMLDivElement>(null)
+  useToCurve(line)
   const undoFocused = useRef(false)
   useEffect(() => {
     if (takesFocus) line.current?.focus()
@@ -105,7 +115,8 @@ export function Receipt({
       ref={line}
       tabIndex={-1}
       className={cn(
-        'relative flex flex-wrap items-center gap-x-2.5 gap-y-1 font-agent text-[0.78125rem] leading-normal text-muted-foreground outline-none',
+        runsToCurve,
+        'flex flex-wrap items-center gap-x-2.5 gap-y-1 font-agent text-[0.78125rem] leading-normal text-muted-foreground outline-none',
         dawning && 'motion-safe:animate-dawn [animation-delay:calc(var(--stagger-dawn)*2)]!',
       )}
     >

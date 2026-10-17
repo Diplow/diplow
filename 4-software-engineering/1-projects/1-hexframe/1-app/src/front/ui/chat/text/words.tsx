@@ -30,6 +30,30 @@ export const plainOf = (words: Words): string =>
     .map((word) => (typeof word === 'string' ? word : 'tile' in word ? word.tile.title : word.name))
     .join('')
 
+/**
+ * A text cut at its line breaks, each line its own pieces, a tile never cut: the lines a reader sees
+ * start where the text starts one, a blank line kept, a last line break left as a reader sees it, with
+ * no line after it.
+ */
+export function linesOf(words: Words): Words[] {
+  const lines: Words[] = []
+  let line: Word[] = []
+  for (const word of words) {
+    if (typeof word !== 'string') {
+      line.push(word)
+      continue
+    }
+    const [first = '', ...rest] = word.split('\n')
+    if (first !== '') line.push(first)
+    for (const next of rest) {
+      lines.push(line)
+      line = next === '' ? [] : [next]
+    }
+  }
+  if (line.length > 0 || lines.length === 0) lines.push(line)
+  return lines
+}
+
 /** Where the marks a sentence is read with begin: Unicode's private use area, which no message holds. */
 const firstMark = 0xe000
 const marks = /([\uE000-\uF8FF])/

@@ -2,17 +2,19 @@
 // agent's in Geist Mono, smaller, in the second ink, behind a violet hex outline. While the user's are
 // sending the line dims and the words wait in grey; failed, the line turns destructive with a retry.
 // While the agent's are coming each word inks in from a slight blur, and a small violet hex breathes
-// where the next will land. Both run the chat's width, and copy from its end, by the curve.
+// where the next will land. Both run on to the curve line by line, each line at its own height, and a
+// click on one copies its words, as Enter does on one the keyboard reached: no tool waits beside them.
 import { cn } from 'cn'
-import { Copy } from 'lucide-react'
+import { useId, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Act } from '../../atoms/controls/act'
-import { Button } from '../../atoms/controls/button'
 import { toast } from '../../atoms/Toaster'
+import { runsToCurve, toCurve, toCurveHolding } from '../../layouts/screen/state/useAlongCurve'
 import { HexMark } from '../atoms/hex'
-import { plainOf, Said, type Words } from './words'
+import type { Voice } from './Mention'
+import { linesOf, plainOf, Said, type Words } from './words'
 
 interface HumanProps {
   voice: 'human'
@@ -39,7 +41,7 @@ export function Message(props: MessageProps) {
 
 function Human({ words, state = 'sent', onRetry }: HumanProps) {
   return (
-    <div className="group grid grid-cols-[minmax(0,1fr)_auto] gap-x-2">
+    <Copies words={words} className="focus-visible:outline-human/60">
       {/* `text-prose` outside `cn`, which knows no such size, takes it for a colour and drops it. */}
       <p
         className={`text-prose ${cn(
@@ -50,10 +52,9 @@ function Human({ words, state = 'sent', onRetry }: HumanProps) {
         )}`}
       >
         <span className="sr-only">{m.chat_you_said()} </span>
-        <Said words={words} voice="human" />
+        <Lines words={words} voice="human" />
         {state === 'sending' && <span className="sr-only"> ({m.chat_message_sending()})</span>}
       </p>
-      <CopyTool words={words} />
       {state === 'failed' && (
         <p className="flex flex-wrap items-center gap-x-3.5 pt-1.5 pl-3.5 text-xs text-destructive">
           <span>{m.chat_message_failed()}</span>
@@ -64,16 +65,18 @@ function Human({ words, state = 'sent', onRetry }: HumanProps) {
           )}
         </p>
       )}
-    </div>
+    </Copies>
   )
 }
 
 function Agent({ words, state = 'done', continued = false }: AgentProps) {
   const streaming = state === 'streaming'
   return (
-    <div
-      aria-busy={streaming}
-      className="group grid grid-cols-[0.875rem_minmax(0,1fr)_auto] gap-x-2.5 font-agent text-mono text-muted-foreground"
+    <Copies
+      words={words}
+      copies={!streaming}
+      busy={streaming}
+      className="grid grid-cols-[0.875rem_minmax(0,1fr)] gap-x-2.5 font-agent text-mono text-muted-foreground focus-visible:outline-agent/60"
     >
       <HexMark
         flat
@@ -82,14 +85,23 @@ function Agent({ words, state = 'done', continued = false }: AgentProps) {
       />
       <p className="whitespace-pre-wrap wrap-anywhere">
         <span className="sr-only">{m.chat_agent_said()} </span>
-        {streaming ? <Inking words={words} /> : <Said words={words} voice="agent" />}
+        {streaming ? <Inking words={words} /> : <Lines words={words} voice="agent" />}
         {streaming && (
           <HexMark className="ml-1 size-2 text-agent drop-shadow-[0_0_4px_var(--color-agent)] [animation-duration:1.1s] motion-safe:animate-breathe" />
         )}
       </p>
-      {!streaming && <CopyTool words={words} />}
-    </div>
+    </Copies>
   )
+}
+
+/** The words line by line, each line running on to the curve at its own height. */
+function Lines({ words, voice }: { words: Words; voice: Voice }) {
+  return linesOf(words).map((line, index) => (
+    // The lines of one message, never reordered: their place is their key.
+    <span key={index} ref={toCurve} className={cn(runsToCurve, 'block min-h-[1lh]')}>
+      <Said words={line} voice={voice} />
+    </span>
+  ))
 }
 
 /** Words still coming: each inks in from a slight blur as it lands, the words before it staying put. */
@@ -113,25 +125,63 @@ function Inking({ words }: { words: Words }) {
   })
 }
 
-/** Copies the words, each tile by its title; shown on hover or focus, always under a finger. */
-function CopyTool({ words }: { words: Words }) {
+interface CopiesProps {
+  words: Words
+  /** It copies them; not while they are still coming. */
+  copies?: boolean
+  /** Its words are still coming. */
+  busy?: boolean
+  className: string
+  children: ReactNode
+}
+
+/**
+ * A message, running on as far as its farthest line, so it holds them all, or, while its words are
+ * still coming in one run, as far as all of them may; and copying its words, each tile by its title:
+ * on a click, unless the click lands on a control inside it, a tile named or a retry, or ends a
+ * selection the reader made to copy that instead; and on Enter once the keyboard reached it, which a
+ * screen reader is told. A toast says it copied, or that it couldn't.
+ */
+function Copies({ words, copies = true, busy, className, children }: CopiesProps) {
+  const hint = useId()
+  const copy = () => {
+    // Without a secure context there is no clipboard: that fails as a refused copy does.
+    void Promise.resolve(plainOf(words))
+      .then((text) => navigator.clipboard.writeText(text))
+      .then(
+        () => toast(m.chat_copied()),
+        () => toast.error(m.chat_copy_failed()),
+      )
+  }
+  const onClick = (event: MouseEvent<HTMLElement>) => {
+    const control = event.target instanceof Element ? event.target.closest('button, a') : null
+    if (control !== null && event.currentTarget.contains(control)) return
+    if (window.getSelection()?.isCollapsed === false) return
+    copy()
+  }
+  const onKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    // Enter on the message itself: a tile named inside it keeps its own.
+    if (event.key !== 'Enter' || event.target !== event.currentTarget) return
+    event.preventDefault()
+    copy()
+  }
   return (
-    <Button
-      variant="ghost"
-      size="icon-xs"
-      aria-label={m.chat_copy()}
-      className="text-faint opacity-0 group-hover:opacity-100 focus-visible:opacity-100 pointer-coarse:size-11 pointer-coarse:opacity-100"
-      onClick={() => {
-        // Without a secure context there is no clipboard: that fails as a refused copy does.
-        void Promise.resolve(plainOf(words))
-          .then((text) => navigator.clipboard.writeText(text))
-          .then(
-            () => toast(m.chat_copied()),
-            () => toast.error(m.chat_copy_failed()),
-          )
-      }}
+    <div
+      ref={busy === true ? toCurve : toCurveHolding}
+      aria-busy={busy}
+      {...(copies && { tabIndex: 0, 'aria-describedby': hint, onClick, onKeyDown })}
+      className={cn(
+        runsToCurve,
+        copies && 'cursor-copy focus-visible:outline-1 focus-visible:outline-offset-4',
+        className,
+      )}
     >
-      <Copy aria-hidden />
-    </Button>
+      {children}
+      {copies && (
+        <span id={hint} hidden>
+          {m.chat_copy_hint()}
+        </span>
+      )}
+    </div>
   )
 }

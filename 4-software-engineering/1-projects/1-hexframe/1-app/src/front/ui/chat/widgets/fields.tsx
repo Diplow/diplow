@@ -1,11 +1,14 @@
 // The widgets' fields: one underline each, never a box (the direction's second principle). The line
 // draws itself in the widget's voice from the left as the field takes the focus, glowing a little, and
 // turns destructive while the field is refused. Above it a quiet label, a dot after it once the field
-// was changed, and its count near its limit; under it what was refused, said as it changes. Every
-// field is controlled: what it holds is its widget's caller's.
+// was changed, and its count near its limit; under it what was refused, said as it changes. A field
+// that reaches the chat's lines' end runs on to the curve at its height, its line and its count with
+// it; one beside another stays in its place. Every field is controlled: what it holds is its widget's
+// caller's.
 import { cn } from 'cn'
 import { useId, type KeyboardEvent, type ReactNode } from 'react'
 
+import { runsToCurve, toCurve } from '../../layouts/screen/state/useAlongCurve'
 import { countOf, type CountTone } from './count'
 
 interface FieldProps {
@@ -107,7 +110,7 @@ export function Field({
     ),
   }
   return (
-    <div className="grid content-start gap-1">
+    <div ref={toCurve} className={cn(runsToCurve, 'grid content-start gap-1')}>
       <div
         className={cn(
           'flex items-baseline justify-between gap-3 text-[0.71875rem] text-muted-foreground',

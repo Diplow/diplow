@@ -1,13 +1,14 @@
 // What happens between the two voices, one line each on a thread of small hexes, coloured by who
 // acted: amber for the user, violet for the agent, hollow for a Key from outside, faint for hexframe
 // itself. A navigation, a change, the agent's step under way, a Turn's end. The tool in faint mono, the
-// time at the end. A run of reads folds into one line, open on a click; what changes something stays
-// out.
+// time at the end, each line running on to the curve at its height. A run of reads folds into one
+// line, open on a click; what changes something stays out.
 import { cn } from 'cn'
 
 import { m } from '#/paraglide/messages'
 
 import type { Voice } from '../../atoms/controls/act'
+import { runsToCurve, toCurve } from '../../layouts/screen/state/useAlongCurve'
 import { Fold } from '../atoms/fold'
 import { HexMark } from '../atoms/hex'
 import { Said, type Words } from '../text/words'
@@ -66,7 +67,9 @@ function Line({ event }: { event: Happened }) {
   const mark = marks[who]
   return (
     <li
+      ref={toCurve}
       className={cn(
+        runsToCurve,
         'relative flex items-baseline gap-2.5',
         state === 'failed' && 'text-destructive',
       )}

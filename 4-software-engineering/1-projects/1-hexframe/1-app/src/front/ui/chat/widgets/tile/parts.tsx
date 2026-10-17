@@ -1,6 +1,6 @@
 // What the tile's widgets share: a tile's words and their fields' names, its kinds and what each
 // means, the six places by name, where a tile stands, said in a few words and drawn as its place, and
-// a field read rather than written, an edit shown where it falls.
+// a field read rather than written, an edit shown where it falls, each running on to the curve.
 // `ui/` knows no domain, so these mirror Mapping's (`entities/tile.ts`): a Branch, a Leaf or a Context
 // Tile, in one of six Directions; how long a Preview may be is its caller's to say.
 import { cn } from 'cn'
@@ -8,6 +8,7 @@ import { Fragment, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
+import { runsToCurve, toCurve } from '../../../layouts/screen/state/useAlongCurve'
 import { namesByPlace, Places, type Place } from '../Places'
 
 /** What a reader finds in a tile, as the widget writes it. */
@@ -102,7 +103,10 @@ export interface Segment {
   readonly text: string
 }
 
-/** A field read, not written: its label, then what it holds, the page in the user's serif. */
+/**
+ * A field read, not written: its label, then what it holds, the page in the user's serif, running on
+ * to the curve at its height.
+ */
 export function Read({
   label,
   prose = false,
@@ -113,7 +117,7 @@ export function Read({
   children: ReactNode
 }) {
   return (
-    <div className="grid gap-[3px]">
+    <div ref={toCurve} className={cn(runsToCurve, 'grid gap-[3px]')}>
       <span className="text-[0.71875rem] text-muted-foreground">{label}</span>
       <p
         className={

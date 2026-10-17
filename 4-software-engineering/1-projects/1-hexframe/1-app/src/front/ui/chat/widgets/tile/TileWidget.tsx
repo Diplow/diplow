@@ -7,12 +7,14 @@
 // what, and Enter decides nothing. A refused write comes back as it left, the user's words put back and
 // the refusal on the field at fault. Once written, its receipt, the focus handed to it. Controlled: the
 // words, the place and what each action does are its caller's.
+import { cn } from 'cn'
 import { Check, FolderInput, Maximize2, Pencil, Plus, Trash2, UserRound, X } from 'lucide-react'
 import { useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { Dialog } from '../../../layouts/Dialog'
+import { runsToCurve, toCurve } from '../../../layouts/screen/state/useAlongCurve'
 import { UntilDecided } from '../../entries/Receipt'
 import { Widget } from '../../layouts/Widget'
 import type { MentionProps } from '../../text/Mention'
@@ -466,13 +468,20 @@ function Page({ text }: { text: string }) {
   )
 }
 
-/** Who changed the tile while the user typed, and that their words are still here. */
+/**
+ * Who changed the tile while the user typed, and that their words are still here, between two lines
+ * running on to the curve.
+ */
 function ChangedMeanwhile({ changed }: { changed: Changed }) {
   return (
     <div className="grid gap-3">
       <p
+        ref={toCurve}
         role="status"
-        className="grid grid-cols-[1rem_1fr] gap-2.5 border-y border-border py-[11px] text-[0.8125rem] leading-normal font-light text-muted-foreground [&_b]:font-normal [&_b]:text-foreground"
+        className={cn(
+          runsToCurve,
+          'grid grid-cols-[1rem_1fr] gap-2.5 border-y border-border py-[11px] text-[0.8125rem] leading-normal font-light text-muted-foreground [&_b]:font-normal [&_b]:text-foreground',
+        )}
       >
         <Pencil className="mt-0.5 size-[0.9375rem] text-warning" aria-hidden />
         <span>

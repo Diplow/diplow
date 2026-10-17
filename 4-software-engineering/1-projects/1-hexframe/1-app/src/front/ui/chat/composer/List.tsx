@@ -1,13 +1,14 @@
-// The list the composer opens upward from its top line, as wide as the conversation: what a `/` or an
-// `@` finds, in groups, the row the user is on lit in their amber. The field keeps the focus and the
-// keys (`Composer`); the list shows, follows the pointer and takes a click. Under a finger each row is
-// a thumb's height and the keys' hints give way.
+// The list the composer opens upward from its top line, as wide as the conversation, running on to the
+// curve across its height: what a `/` or an `@` finds, in groups, the row the user is on lit in their
+// amber. The field keeps the focus and the keys (`Composer`); the list shows, follows the pointer and
+// takes a click. Under a finger each row is a thumb's height and the keys' hints give way.
 import { cn } from 'cn'
 import { Check, type LucideIcon } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 
 import { m } from '#/paraglide/messages'
 
+import { toCurve } from '../../layouts/screen/state/useAlongCurve'
 import { cutAround } from '../atoms/cut'
 
 /** A command: its icon, its name, what it takes and what it does. */
@@ -76,7 +77,10 @@ export function List({ id, listing, active, onHover, onPick }: ListProps) {
     })
   }, [id, active])
   return (
-    <div className="absolute bottom-full left-0 right-[var(--screen-foot-inset,0px)] z-30 flex max-h-[min(19rem,45dvh)] flex-col bg-popover text-popover-foreground shadow-lg before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-linear-to-r before:from-input before:to-input/30 motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1.5">
+    <div
+      ref={toCurve}
+      className="absolute bottom-full left-0 right-[calc(var(--screen-foot-inset,0px)-var(--to-curve,0px))] z-30 flex max-h-[min(19rem,45dvh)] flex-col bg-popover text-popover-foreground shadow-lg before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-linear-to-r before:from-input before:to-input/30 motion-safe:animate-in motion-safe:fade-in-0 motion-safe:slide-in-from-bottom-1.5"
+    >
       <div
         ref={box}
         id={id}

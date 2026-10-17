@@ -111,7 +111,7 @@ export const pieces = [
     name: 'Message',
     tier: 'chat',
     sources: ['ui/chat/text/Message.tsx'],
-    madeOf: ['Mention', 'Act', 'Button', 'Toaster'],
+    madeOf: ['Mention', 'Act', 'Toaster'],
     note: m.gallery_note_message,
   },
   {

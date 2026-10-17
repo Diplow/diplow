@@ -26,6 +26,7 @@ import { m } from '#/paraglide/messages'
 import { focusHeld, focusLost, giveFocusBack } from '../../focus'
 import { columnMargin, cutAlongCurve, reach } from './curve'
 import { keptAtFoot } from './state/latest'
+import { useCurveFollowed } from './state/useAlongCurve'
 import { Scrollbar } from './Scrollbar'
 import { Sunstone } from './Sunstone'
 
@@ -118,6 +119,7 @@ export function Screen({
   const foot = useRef<HTMLDivElement>(null)
   const chat = useRef<HTMLElement>(null)
   useLatestShown(scroller, content, foot)
+  useCurveFollowed(scroller, content)
   useComposerHeight(screen, foot)
   const chatInFront = front === 'chat'
   // A move made from a seam hands the focus to the seam on the other side, once the screen has

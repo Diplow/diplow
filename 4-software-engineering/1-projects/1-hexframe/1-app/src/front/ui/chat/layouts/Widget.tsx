@@ -15,7 +15,7 @@ import { m } from '#/paraglide/messages'
 import { Act, voiceOf, type Voice as AnyVoice } from '../../atoms/controls/act'
 import { pressed, type Shortcut } from '../../atoms/keys'
 import { Menu, type MenuEntry } from '../../atoms/Menu'
-import { useAlongCurve, useToCurve } from '../../layouts/screen/state/useAlongCurve'
+import { runsToCurve, toCurve, useAlongCurve } from '../../layouts/screen/state/useAlongCurve'
 import { zone } from './zone'
 
 /** Whose the widget is: the agent asking, the user's own words, or the app's (a key, help). */
@@ -98,8 +98,8 @@ const risesInTurn = 'motion-safe:animate-rise'
 /**
  * Everything the conversation asks of the user or shows them beyond words: a zone in the flow of
  * messages, tinted toward the curve by whose it is. One shape for all of them, learned once: an icon,
- * a kicker and a title beside it, a subtitle, then a body and its actions the zone's whole width, and
- * its tools riding the curve when the user reaches for them.
+ * a kicker and a title beside it, a subtitle, then a body and its actions the zone's whole width, each
+ * running on to the curve at its height, and its tools riding the curve when the user reaches for them.
  */
 export function Widget(props: WidgetProps) {
   return props.state === 'done' ? <Receipt {...props} /> : <Zone {...props} />
@@ -124,9 +124,6 @@ function Zone({
   const [folded, setFolded] = useState(defaultFolded)
   const [menuOpen, setMenuOpen] = useState(false)
   const titleId = useId()
-  // How far past the zone's content its body may run, the curve's nearest across the widget.
-  const frame = useRef<HTMLDivElement>(null)
-  useToCurve(frame)
   const failed = state === 'failed'
   // An action's key runs it while the focus is in the widget and its actions show, and Enter in a
   // one-line field runs its submit; never while the action waits, nor while what was asked runs. A key
@@ -170,18 +167,24 @@ function Zone({
           'motion-safe:animate-unfold motion-safe:before:animate-draw',
         )}
       >
-        <div
-          ref={frame}
-          className="grid grid-cols-[2.25rem_1fr] gap-x-3.5 sm:grid-cols-[3.375rem_1fr] sm:gap-x-[1.125rem]"
-        >
+        <div className="grid grid-cols-[2.25rem_1fr] gap-x-3.5 sm:grid-cols-[3.375rem_1fr] sm:gap-x-[1.125rem]">
           <Mark state={state} icon={icon} mark={mark} />
-          {/* Its words beside the hex, centered on it; a subtitle left empty takes no room. */}
-          <div className="min-w-0 self-center">
+          {/*
+            Its words beside the hex, centered on it, running on to the curve at their height; a
+            subtitle left empty takes no room.
+          */}
+          <div ref={toCurve} className={cn(runsToCurve, 'min-w-0 self-center')}>
             {/*
               The tools sit over the kicker and the title's end, which leave them the room they take
-              where they ride the curve (`--along-curve`), and no more, so a title field runs on.
+              where they ride the curve (`--along-curve`) short of where the words run to
+              (`--to-curve`), and no more, so a title field runs on.
             */}
-            <div className={cn(tools && 'pr-[var(--along-curve,5rem)] pointer-coarse:pr-12')}>
+            <div
+              className={cn(
+                tools &&
+                  'pr-[max(0px,calc(var(--to-curve,0px)+var(--along-curve,5rem)))] pointer-coarse:pr-12',
+              )}
+            >
               {kicker !== undefined && (
                 <p
                   aria-live="polite"
@@ -229,9 +232,17 @@ function Zone({
           </div>
           {/*
             Below the hex and the title, its body and its actions take the zone's whole width, and
-            past it, wide, as far as the curve lets them at their height, the chat's gap short of it.
+            past it, wide, as far as the curve lets them at their height, the chat's gap short of it;
+            a row of its own inside runs on further where the curve bows out at the row's height, past
+            the body, which clips only as it folds.
           */}
-          <Collapsible.Content className="col-span-2 mr-[calc(var(--to-curve,0px)*-1)] min-w-0 overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down motion-reduce:animate-none!">
+          <Collapsible.Content
+            ref={toCurve}
+            className={cn(
+              runsToCurve,
+              'col-span-2 min-w-0 overflow-x-visible overflow-y-clip data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down motion-reduce:animate-none!',
+            )}
+          >
             {(state === 'working' || children !== undefined) && (
               <div className={cn('pt-4', risesInTurn)} style={rise(4)}>
                 {state === 'working' ? <LinesToCome /> : children}
@@ -286,13 +297,15 @@ function Mark({
 
 /**
  * Its actions in a row, the first the one it expects, in its voice, one that loses something in the
- * destructive voice.
+ * destructive voice; the row running on to the curve at its height, so one set apart sits against it.
  */
 function Actions({ actions }: { actions: readonly WidgetAction[] }) {
   if (actions.length === 0) return null
   return (
     <div
+      ref={toCurve}
       className={cn(
+        runsToCurve,
         'mt-[1.125rem] flex flex-wrap items-center gap-x-[1.375rem] gap-y-1',
         risesInTurn,
       )}
@@ -440,13 +453,18 @@ function Tools({ folded, held, onMenuOpenChange, settings, onFold, onDismiss }: 
 const tool =
   'grid size-[1.625rem] cursor-pointer place-items-center text-faint transition-colors hover:bg-foreground/7 hover:text-foreground focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-(--voice) pointer-coarse:size-11 [&_svg]:size-[0.9375rem]'
 
-/** Once done, the zone gives its surface back and leaves one line in the conversation. */
+/**
+ * Once done, the zone gives its surface back and leaves one line in the conversation, running on to
+ * the curve, its time at its end.
+ */
 function Receipt({ voice, receipt }: DoneProps) {
   return (
     <p
+      ref={toCurve}
       role="status"
       className={cn(
         voiceOf(voice),
+        runsToCurve,
         'flex items-center gap-2.5 px-4 font-agent text-[0.78125rem] leading-normal text-muted-foreground motion-safe:animate-rise sm:px-9 [&_b]:font-normal [&_b]:text-foreground',
       )}
     >

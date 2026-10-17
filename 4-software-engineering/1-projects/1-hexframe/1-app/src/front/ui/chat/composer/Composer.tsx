@@ -4,7 +4,8 @@
 // list rises from the composer's top line (`List`); the field keeps the focus and the keys, the arrows
 // moving the row, Enter or Tab taking it, Escape leaving. A command and each Tile picked show marked
 // in the field. While a Turn runs the field waits and send becomes Stop. Controlled: what is typed,
-// what is listed and what a pick does are its user's, its state hook's on a real page. Its crossings
+// what is listed and what a pick does are its user's, its state hook's on a real page. Wide, its rows
+// and its list run on to the curve at their height, the send hex against it. Its crossings
 // (HEX-108): the Tile row the user is on is told, for the canvas to light; under the field, where the
 // next Turn works; a tile carried from the canvas is offered a place, and named where it is let go.
 import { cn } from 'cn'
@@ -12,6 +13,7 @@ import { type ReactNode, type Ref, useEffect, useEffectEvent, useId, useRef, use
 
 import { m } from '#/paraglide/messages'
 
+import { runsToCurve, toCurve } from '../../layouts/screen/state/useAlongCurve'
 import { HexMark } from '../atoms/hex'
 import { footPadding, zone } from '../layouts/zone'
 import { Said, weave } from '../text/words'
@@ -142,7 +144,7 @@ export function Composer({
           onPick={onPick}
         />
       )}
-      <div className="flex items-end gap-4">
+      <div ref={toCurve} className={cn(runsToCurve, 'flex items-end gap-4')}>
         <div className={cn('relative min-w-0 flex-1', waits && 'opacity-45')}>
           {/* The field's text, drawn under it with what is marked, since a textarea marks nothing. */}
           <div
@@ -211,7 +213,10 @@ export function Composer({
       </div>
       <Dropping carried={carried} over={drop.over} named={drop.named} />
       {(mode !== undefined || place !== undefined) && (
-        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+        <div
+          ref={toCurve}
+          className={cn(runsToCurve, 'flex flex-wrap items-center justify-between gap-x-4 gap-y-1')}
+        >
           {mode !== undefined && <ModeSwitch {...mode} />}
           {place !== undefined && <Place {...place} />}
         </div>
