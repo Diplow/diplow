@@ -1,0 +1,19 @@
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-tutorial/decisions.md
+  s_3d562821fd0d86::t_88a973226e5c6b 15,19,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b47cb2f588b40b5d4d0359cebdfec2921ad9db9d",
+  "prompts": {},
+  "sessions": {
+    "s_3d562821fd0d86": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ccd5882d-475a-41ae-8120-111e40b75008",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
