@@ -100,6 +100,8 @@ describe('the System, read flat', () => {
       tiles: {},
       owned: true,
       version: 0,
+      rights: { [first.root.id]: ['read', 'write', '@'] },
+      gaps: {},
     })
     expect((await value(run(context, Mapping.system))).root.id).toBe(first.root.id)
   })
@@ -352,6 +354,9 @@ describe("the errors Mapping's server functions can fail with", () => {
   it('are each listed by its type, a write refusing the Systems hexframe ships and what the actor may not do', () => {
     type ErrorOf<P> = P extends Effect.Effect<unknown, infer E, unknown> ? E : never
     expectTypeOf<ErrorOf<typeof Mapping.system>>().toEqualTypeOf<SignedOut | TileNotFound>()
+    expectTypeOf<ErrorOf<ReturnType<typeof Mapping.systemAt>>>().toEqualTypeOf<
+      SignedOut | TileNotFound
+    >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.shipped>>>().toEqualTypeOf<never>()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createTile>>>().toEqualTypeOf<
       | SignedOut
@@ -582,7 +587,7 @@ describe('the Tiles a Turn is shown, as Mapping reads them', () => {
 })
 
 describe('who acts, and on which System', () => {
-  it('lets no actor reach a System it does not own, even by naming its star', async () => {
+  it('lets no actor reach a System it does not own past its star’s card, even by naming its star', async () => {
     const { context, root, child } = await withAChild()
     const stranger = request()
     const strangerId = await value(run(stranger, signedInAccount))
@@ -591,9 +596,7 @@ describe('who acts, and on which System', () => {
       system,
     })
     const attempts = (acting: Service.Acting): ReadonlyArray<Program> => [
-      Service.system(acting),
       Service.systemVersion(acting),
-      Service.readTile(acting, { depth: 1, fields: ['title'], language: 'en' }),
       Service.ownTile(acting, child.id),
       transactional(
         Service.editTile(acting, new EditTile({ id: child.id, version: 1, title: 'Mine now' })),
@@ -603,19 +606,29 @@ describe('who acts, and on which System', () => {
         Service.changing(acting, [], () => Effect.succeed({ answer: null, events: [] })),
       ),
     ]
-    // The other Account's star, and a star that names no System at all, refused alike.
-    for (const acting of [named(root.id), named(crypto.randomUUID())]) {
-      for (const attempt of attempts(acting)) {
-        expect(await run(stranger, attempt)).toMatchObject({
-          ok: false,
-          failure: { _tag: 'TileNotFound', kind: 'NotFound' },
-        })
-      }
+    // The other Account's star, and a star that names no System at all, refused alike; and a read
+    // of the System, which shows anyone a star's card, refused that one.
+    const nowhere = named(crypto.randomUUID())
+    for (const attempt of [
+      ...attempts(named(root.id)),
+      ...attempts(nowhere),
+      Service.system(nowhere),
+    ]) {
+      expect(await run(stranger, attempt)).toMatchObject({
+        ok: false,
+        failure: { _tag: 'TileNotFound', kind: 'NotFound' },
+      })
     }
-    // The Titles of what it may read: none of the other Account's, whose Tiles it reads none of.
+    // The other Account's star read: its card, untitled, and nothing below it.
+    expect(await value(run(stranger, Service.system(named(root.id))))).toMatchObject({
+      root: { id: root.id, title: '', body: '' },
+      tiles: {},
+      rights: { [root.id]: [] },
+    })
+    // The Titles of what it may read: the star's alone, its card's, of the other Account's.
     expect(await run(stranger, Service.titles(named(root.id), [root.id, child.id]))).toEqual({
       ok: true,
-      value: {},
+      value: { [root.id]: '' },
     })
     expect((await systemTree(context)).branches[1]).toMatchObject({ title: 'Child', version: 1 })
   })

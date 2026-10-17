@@ -5,7 +5,8 @@ owner: diplo
 preview: >-
   /mcp, the MCP endpoint, the API layer's other door and the one folder that
   imports the MCP server's SDK. How a Claude Code connects with a Key; the tool
-  table: open_tile and map read the user's System, or Help, and a write per
+  table: open_tile and map read the user's System, another's as far as its
+  owner lets the user read it, or Help, and a write per
   Mapping operation changes the user's, each for the Account its Bearer Key
   proves; with a Turn's Key in ask, drafted into the Proposal, which its reads
   show. OAuth, for clients that can't send a header, comes later.
@@ -19,7 +20,7 @@ The other door into [[4-software-engineering/1-projects/1-hexframe/1-app/src/api
 | `mcp.ts` | `serveMcp`, which proves the Bearer Key, then hands the request to the SDK with one `McpServer` built for it, its two lines of `instructions` (what hexframe is, then `open_tile({ id: "help" })`) and every tool of the table registered with its annotations; and `methodNotAllowed`, for GET and DELETE |
 | `tools.ts` | The tool table: a read, `{ name, description, input, kind: 'read', program }`, or a write, which adds its `operation`, the name of one of Mapping's Operations, and `destructive?`; each read and each write runs through `assistant/proposal/`'s routing, the write as its Operation and its server function's program. And `systemRules`, how an agent that starts from the System's files reads and writes it here, lines worded from the table: what a System is and its files, its tools by their names, `TileChanged` by the table's own key, and where Help opens, which the API layer hands a Turn's prompt, so a tool renamed is renamed there too (`hexframe-app-assistant/decisions.md#DEC-21`) |
 | `testing.ts` | What the tests share: an Account signed up with a Key, an MCP client over the SDK's own transport, a System to work on |
-| `mcp.test.ts` | The endpoint and the reads, over PGlite: the instructions, the tool list and its annotations, and every tool as an agent lists it, pinned word for word in `__snapshots__/`, `open_tile` and `map` on the user's System and on Help, inputs refused by their schema, a Help id that climbs out included, another Account's Tile, a request no Key proves |
+| `mcp.test.ts` | The endpoint and the reads, over PGlite: the instructions, the tool list and its annotations, and every tool as an agent lists it, pinned word for word in `__snapshots__/`, `open_tile` and `map` on the user's System and on Help, inputs refused by their schema, a Help id that climbs out included, another Account's Tile, kept from the Key's Account or read by a Grant to it, a request no Key proves |
 | `writes.test.ts` | The writes, over PGlite: each one, each refusal as a tool error, another Account's Tile, a Key revoked under a connected client |
 
 ## Connect a Claude Code
@@ -38,8 +39,8 @@ The tests drive the endpoint in-process. Against a real Claude Code, the accepta
 
 | Tool | Kind | Does | Runs |
 |---|---|---|---|
-| `open_tile` | read | One Tile, the Root without an id, of the user's System or of Help, with the fields asked, its parent, and its Branches, Leaves and Context by Title and Preview | `openTile` |
-| `map` | read | The System, or Help, below a Tile, 0 to 3 generations, Title and Preview unless more is asked | `readTile` |
+| `open_tile` | read | One Tile, the Root without an id, of the user's System, of another's as far as its owner lets the user read it, or of Help, with the fields asked, its parent, and its Branches, Leaves and Context by Title and Preview | `openTile` |
+| `map` | read | The System, another's as far as its owner lets the user read it, or Help, below a Tile, 0 to 3 generations, Title and Preview unless more is asked | `readTile` |
 | `create_tile` | write | A Tile in a free slot under another, never under a Leaf: a Branch, 1 to 6, a Leaf, `{ leaf: 1 }` to `{ leaf: 6 }`, or a Context Tile, −1 to −6; answers it with its id | `createTile` |
 | `edit_tile` | write | Any of a Tile's Title, Preview and Body, at the `version` read of it; answers the Tile as it now reads, at its new Version | `editTile` |
 | `move_tile` | write | A Tile with everything below it, at the `version` read of it, to a free slot; a Leaf grows into a Branch, and a bare Branch shrinks into a Leaf, this way | `moveTile` |
@@ -60,8 +61,9 @@ Each runs the program of `api/mapping/programs.ts` its server function runs, a w
 - **A tool is its server function, seen by an agent.** Same program, same input Schema, same Account: the one the request proves. A new Mapping operation gets its tool here, and nothing in this folder decides what the System may become.
 - **A description teaches the refusals.** Each write's description names every refusal it may meet by its tag, what it means and how to get past it (a seventh Child is refused: regroup by moving), since the agent reads the tag first in the tool error. A write is built by `write`, whose `refusals` is typed by its program's errors: a refusal the operation gains, or one it loses, fails the typecheck until the description follows. Spell each record out, since a spread slips an extra line past the check.
 - **A refusal comes back as a tool error**, `<tag>: <the message table's English sentence> (at fault: <fields>) (request <id>)`, the fields only for an `Invalid` one. A write words its refusals in the scope of its `operation`, the Operation's name, which its server function bears, so the message table knows the operations and never the tools: `swap_tiles` words `MovedUnderItself` as a swap, as `swapTiles` does. Its run is still scoped by the tool's name, for the logs.
+- **A read reaches the System holding its Tile.** `open_tile` and `map` given a Tile's id read the System that holds it, as the Key's Account may read it, from its star's card (`mapping/programs.ts`'s `fromTile`): a Tile its owner keeps from the Account is `TileNotFound`, as one that never was. A Turn's Key reads the System its Turn started in alone, its Account's own, whatever else the Account may read; a write always acts on the Account's own System (`hexframe-app-sharing-organizations/decisions.md#DEC-3`).
 - **The reads take Help's ids, the writes don't.** `open_tile` and `map` take a Tile's UUID or a Help id, `help` then up to six slots (`help/3/-1`), never one of the tutorial's, which only home shows; a write keeps its server function's UUID schema, and still teaches `ShippedReadOnly`, which Mapping raises whatever reaches it naming Help or the tutorial (`hexframe-app-mcp-server/decisions.md#DEC-17`, `hexframe-app-tutorial/decisions.md#DEC-2`).
-- **Annotations come from the table.** Every tool says whether it only reads (`readOnlyHint`), whether it erases what the user wrote (`destructiveHint`, the deletes alone) and that it reaches nothing but the user's System (`openWorldHint: false`).
+- **Annotations come from the table.** Every tool says whether it only reads (`readOnlyHint`), whether it erases what the user wrote (`destructiveHint`, the deletes alone) and that it reaches nothing outside hexframe (`openWorldHint: false`): a read, the Systems the user may read, a write, the user's own.
 
 ## Later
 

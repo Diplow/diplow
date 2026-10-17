@@ -51,7 +51,10 @@ const nothing: Underway = { tiles: new Set(), slots: [] }
 const parent: TileNode = { id: id.b, title: 'B', preview: '' }
 
 function render(underway: Underway = nothing) {
-  vi.mocked(Mapping.system).mockResolvedValue({ ok: true, value: served })
+  vi.mocked(Mapping.system).mockResolvedValue({
+    ok: true,
+    value: { ...served, rights: {}, gaps: {} },
+  })
   const client = makeQueryClient()
   const wrapper = ({ children }: { children: ReactNode }) =>
     createElement(QueryClientProvider, { client }, children)

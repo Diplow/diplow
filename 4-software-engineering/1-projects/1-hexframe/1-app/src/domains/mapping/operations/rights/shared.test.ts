@@ -78,14 +78,19 @@ layer(TestTiles)('a System shared by its Grants, read, over PGlite', (it) => {
     }),
   )
 
-  it.effect('gives nobody but the owner anything of a star with no Grant', () =>
+  it.effect('gives nobody but the owner anything of a star with no Grant, but its card', () =>
     Effect.gen(function* () {
       const ana = crypto.randomUUID()
       const star = (yield* tree(ana)).id
       const child = yield* createTile(ana, { parent: star, slot: 1, ...content('Mine') })
       for (const acting of [visitor(star), visitor(star, ['family'])]) {
         expect(yield* Effect.flip(titled(acting, child.id))).toMatchObject({ _tag: 'TileNotFound' })
-        expect(yield* Mapping.glimpses(acting, [star, child.id])).toEqual([])
+        expect(yield* Mapping.glimpses(acting, [star, child.id])).toEqual([
+          { id: star, title: '', preview: '' },
+        ])
+        expect(yield* Effect.flip(Mapping.ownTile(acting, star))).toMatchObject({
+          _tag: 'TileNotFound',
+        })
       }
       expect(
         (yield* readTile(ana, { id: child.id, depth: 0, fields: ['title'] })).tile,

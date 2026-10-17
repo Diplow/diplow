@@ -3,16 +3,25 @@
 // tree, and each change run as the API layer runs it, on the Account's own System, in the transaction
 // it opens, naming each Tile it changes at the Version it has just before, as a writer that just read
 // the System would.
-import { Effect, Layer } from 'effect'
+import { Effect, Layer, Struct } from 'effect'
 
 import { Bus } from '#/domains/bus'
 import { type InTransaction, transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 import { type Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 
-import { type Field, systemOf, tileAt, type Version } from './entities'
+import { type Field, type System, systemOf, tileAt, type Version } from './entities'
 import * as Mapping from './mapping'
 import * as Operations from './operations'
+
+/**
+ * The Account's System as Mapping holds it, flat: its read, without what its owner is shown beside it,
+ * every right on every Tile and no gap, so it compares with what `decide` and `evolve` make of it.
+ */
+export const held = (accountId: string) =>
+  Effect.map(Effect.flatMap(actingOnOwn(accountId), Mapping.system), (seen): System =>
+    Struct.omit(seen, ['rights', 'gaps']),
+  )
 
 /** The Account's System, read flat, as its tree: what the canvas draws, as the client builds it. */
 export const tree = (accountId: string) =>

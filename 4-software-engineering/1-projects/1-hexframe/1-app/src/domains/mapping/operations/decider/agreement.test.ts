@@ -21,7 +21,7 @@ import {
   type Operation,
   SwapTiles,
 } from '..'
-import { actingOnOwn } from '../../testing'
+import { actingOnOwn, held } from '../../testing'
 
 // The Decider and the service agree: for each Operation, `evolve` folded over the events `decide`
 // makes on the System as it stood equals the System read back once the service ran it over PGlite,
@@ -54,10 +54,10 @@ interface Run<A, E> {
  */
 const agrees = <A, E>(accountId: string, { operation, change, made }: Run<A, E>) =>
   Effect.gen(function* () {
-    const before = yield* Mapping.system(yield* actingOnOwn(accountId))
+    const before = yield* held(accountId)
     heard.length = 0
     const answer = yield* transactional(change)
-    const after = yield* Mapping.system(yield* actingOnOwn(accountId))
+    const after = yield* held(accountId)
     // An Operation that makes nothing never reads what it is given.
     const given = made?.(answer, after) ?? { id: crypto.randomUUID() }
     const events = Result.getOrThrow(decide(before, operation, given))

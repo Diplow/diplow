@@ -79,16 +79,20 @@ export const ShippedRead = Schema.Struct({
   language: Schema.Literals(locales),
 })
 
-/** A call that takes nothing. */
-const Nothing = Schema.toStandardSchemaV1(Schema.Undefined)
+/**
+ * The System a read names, by its star, a UUID, as Mapping's `TileId` bounds it: none for the
+ * Account's own.
+ */
+export const SystemRead = Schema.UndefinedOr(Schema.Struct({ system: TileId }))
 
 /**
- * The Account's System, flat: its Root, the user, and every Tile and Reference below it by id, owned
- * by the Account, the Root added on the first read. The client builds its tree.
+ * A System, flat, as the Account may see it, its Root and every Tile and Reference below it by id
+ * that it may read, each Tile with its rights on it: its own, the Root added on the first read, or,
+ * by its star, another's, from the star's card. The client builds its tree.
  */
 export const system = createServerFn({ method: 'GET' })
-  .validator(Nothing)
-  .handler(({ context }) => run(context, Mapping.system))
+  .validator(Schema.toStandardSchemaV1(SystemRead))
+  .handler(({ data, context }) => run(context, Mapping.systemAt(data?.system)))
 
 /**
  * A System hexframe ships whole, by its Root, in the language asked: its Root with everything below

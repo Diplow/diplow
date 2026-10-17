@@ -17,7 +17,7 @@ import {
   fold,
   type Operation,
 } from '..'
-import { actingOnOwn } from '../../testing'
+import { actingOnOwn, held } from '../../testing'
 
 // A batch over the Account's System, over PGlite: Operations added to it, decided on the System it
 // makes and written nowhere, the Tiles it creates under the ids they were given; reads and files
@@ -161,7 +161,7 @@ layer(TestTiles)('a batch over the System', (it) => {
   it.effect('runs the batch whole: every event written and published, as the fold made them', () =>
     Effect.gen(function* () {
       const accountId = crypto.randomUUID()
-      const before = yield* Mapping.system(yield* actingOnOwn(accountId))
+      const before = yield* held(accountId)
       const root = before.root
       const { batch } = yield* batched(
         accountId,
@@ -179,7 +179,7 @@ layer(TestTiles)('a batch over the System', (it) => {
       const folded = fold(before, batch)
       heard.length = 0
       yield* transactional(Mapping.runBatch(yield* actingOnOwn(accountId), batch))
-      const after = yield* Mapping.system(yield* actingOnOwn(accountId))
+      const after = yield* held(accountId)
       expect(after).toEqual(folded.system)
       expect(heard).toEqual(folded.events)
       expect(tileAt(after, madeAt(batch, 1))).toMatchObject({ title: 'Team', version: 1 })
