@@ -5,8 +5,9 @@
 // where the next will land. Both run on to the curve line by line, each line at its own height, and a
 // click on one copies its words, as Enter does on one the keyboard reached: no tool waits beside
 // them, and a click on a tile or a command it names does what that does instead. Hovered, one that
-// copies lights up, its line or its hex and its ground. The agent's invitation to a new account's
-// first command rises fifth of its dawn (HEX-118).
+// copies lights up, its line or its hex and its ground. The agent's numbered list is a list. The
+// agent's invitation to a new account's first command rises fifth of its dawn (HEX-118), and its
+// telling of a tile's words, a few words a beat, then the body, comes one beat after another (HEX-120).
 import { cn } from 'cn'
 import { useId, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react'
 
@@ -18,7 +19,7 @@ import { runsToCurve, toCurve, toCurveHolding } from '../../layouts/screen/state
 import { Dawn } from '../atoms/dawn'
 import { HexMark } from '../atoms/hex'
 import type { Voice } from './Mention'
-import { linesOf, plainOf, Said, type Words } from './words'
+import { blocksOf, linesOf, plainOf, Said, type Words } from './words'
 
 interface HumanProps {
   voice: 'human'
@@ -96,13 +97,13 @@ function Agent({ words, state = 'done', continued = false, dawning = false }: Ag
           continued && 'invisible',
         )}
       />
-      <p className="whitespace-pre-wrap wrap-anywhere">
+      <div className="whitespace-pre-wrap wrap-anywhere">
         <span className="sr-only">{m.chat_agent_said()} </span>
-        {streaming ? <Inking words={words} /> : <Lines words={words} voice="agent" />}
+        {streaming ? <Inking words={words} /> : <Blocks words={words} />}
         {streaming && (
           <HexMark className="ml-1 size-2 text-agent drop-shadow-[0_0_4px_var(--color-agent)] [animation-duration:1.1s] motion-safe:animate-breathe" />
         )}
-      </p>
+      </div>
     </Copies>
   )
   return dawning ? <Dawn beat="invitation">{message}</Dawn> : message
@@ -116,6 +117,37 @@ function Lines({ words, voice }: { words: Words; voice: Voice }) {
       <Said words={line} voice={voice} />
     </span>
   ))
+}
+
+/**
+ * The agent's words line by line, as `Lines` draws them, a numbered list as a list, each item a line
+ * of its own, its number hanging before it.
+ */
+function Blocks({ words }: { words: Words }) {
+  return blocksOf(words).map((block, index) =>
+    // The blocks of one message, never reordered: their place is their key.
+    'line' in block ? (
+      <span key={index} ref={toCurve} className={cn(runsToCurve, 'block min-h-[1lh]')}>
+        <Said words={block.line} voice="agent" />
+      </span>
+    ) : (
+      // Its marks drawn as its numbers are, so a list keeps its role where its style removes it.
+      <ol key={index} role="list" className="grid list-none">
+        {block.list.map((item, at) => (
+          <li
+            key={at}
+            ref={toCurve}
+            className={cn(runsToCurve, 'grid grid-cols-[3ch_minmax(0,1fr)]')}
+          >
+            <span aria-hidden>{item.number}.</span>
+            <span>
+              <Said words={item.words} voice="agent" />
+            </span>
+          </li>
+        ))}
+      </ol>
+    ),
+  )
 }
 
 /** Words still coming: each inks in from a slight blur as it lands, the words before it staying put. */
@@ -199,6 +231,49 @@ function Copies({ words, copies = true, busy, className, children }: CopiesProps
         <span id={hint} hidden>
           {m.chat_copy_hint()}
         </span>
+      )}
+    </div>
+  )
+}
+
+/** What the agent tells of a tile, one at each beat: its title, its preview, then its body. */
+export const toldInTurn = ['title', 'preview', 'body'] as const
+
+export type ToldPart = (typeof toldInTurn)[number]
+
+/** What the agent says at each beat, a few words: the thing itself is lit, not explained. */
+const toldSaid: Record<ToldPart, () => string> = {
+  title: m.chat_told_title,
+  preview: m.chat_told_preview,
+  body: m.chat_told_body,
+}
+
+interface ToldProps {
+  /** The beat reached: what the agent has told of the tile so far; nothing before the first. */
+  told: ToldPart | undefined
+  /** The tile's body, which comes with the last beat, in the agent's voice. */
+  body: Words
+}
+
+/**
+ * The agent telling a tile's words in turn, in its voice, as the canvas lights each: its few words at
+ * each beat, each rising as it comes, then, with the last, the body itself, its numbered list a list
+ * (HEX-120). A screen reader hears each as it comes. Under reduced motion each is simply there.
+ */
+export function Told({ told, body }: ToldProps) {
+  if (told === undefined) return null
+  const said = toldInTurn.slice(0, toldInTurn.indexOf(told) + 1)
+  return (
+    <div aria-live="polite" className="grid gap-2">
+      {said.map((part, index) => (
+        <div key={part} className="motion-safe:animate-rise">
+          <Message voice="agent" words={[toldSaid[part]()]} continued={index > 0} />
+        </div>
+      ))}
+      {told === 'body' && (
+        <div className="motion-safe:animate-rise">
+          <Message voice="agent" words={body} continued />
+        </div>
       )}
     </div>
   )

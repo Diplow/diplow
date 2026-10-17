@@ -5,8 +5,8 @@
 // focus is the ring's amber line; the center keeps the one steady line. A write still on its way
 // sweeps a light over it; refused, it flares and its caller puts it back. Who touches it marks it
 // (`marks/`, HEX-108): the chat pointing at it, the agent at work, a change you haven't seen, what a
-// Proposal would do; a tile being written breathes in its writer's voice, and one a Proposal would
-// create waits as a ghost. Its words are fitted to its size on screen (words.ts). It is an SVG
+// Proposal would do, the part of its words the agent tells of (HEX-120); a tile being written
+// breathes in its writer's voice, and one a Proposal would create waits as a ghost. Its words are fitted to its size on screen (words.ts). It is an SVG
 // group, drawn inside the canvas's <svg> at its hex, and a button when its caller says what a click
 // does.
 import { Link } from 'lucide-react'
@@ -543,7 +543,7 @@ const kindNames: Record<TileKind, () => string> = {
  * word under them.
  */
 function Words(props: TileProps & { sized: Sized }) {
-  const { hex, kind, words, place = 'ring', sized } = props
+  const { hex, kind, words, place = 'ring', sized, mark } = props
   const alone = sized.preview === undefined
   const label = useRef<HTMLDivElement>(null)
   const lines = usePreviewLines(label)
@@ -561,13 +561,16 @@ function Words(props: TileProps & { sized: Sized }) {
         className="flex size-full flex-col items-center justify-center overflow-hidden text-center hyphens-auto text-foreground select-none"
         style={{ fontSize: sized.title }}
       >
-        <span className={titleClass(props, alone)}>{words.title}</span>
+        <span className={cn(titleClass(props, alone), toldOf(mark?.told === 'title'))}>
+          {words.title}
+        </span>
         {!alone && words.preview ? (
           <span
             data-preview
             className={cn(
               'mt-[.7em] max-w-[90%] shrink-0 overflow-hidden font-sans font-light leading-[1.4] text-muted-foreground',
               (centered(place) || kind === 'root') && 'text-foreground/80',
+              toldOf(mark?.told === 'preview'),
             )}
             style={{
               fontSize: sized.preview,
@@ -582,6 +585,18 @@ function Words(props: TileProps & { sized: Sized }) {
         {alone ? null : <Below {...props} />}
       </div>
     </foreignObject>
+  )
+}
+
+/**
+ * A part of its words the agent tells of, its title or its preview: lit in the agent's violet, a
+ * light glowing under the words, which keep their ink, fading in and out but under reduced motion.
+ */
+function toldOf(told: boolean): string {
+  return cn(
+    'transition-[color,text-shadow] duration-500 motion-reduce:transition-none',
+    told &&
+      'text-foreground [text-shadow:0_0_.45em_var(--color-agent),0_0_1.1em_color-mix(in_oklab,var(--color-agent)_55%,transparent)]',
   )
 }
 

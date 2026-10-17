@@ -1,6 +1,6 @@
 // The chat's text on /design-system: the two voices in their states, the agent's answer coming word
-// after word, a command it names, its thinking live and folded, and a tile named, on the chat's
-// samples.
+// after word, its telling of a tile's words a beat at a time, a command it names, its thinking live
+// and folded, and a tile named, on the chat's samples.
 import { RotateCcw } from 'lucide-react'
 import { type ReactNode, useEffect, useState } from 'react'
 
@@ -8,11 +8,11 @@ import { m } from '#/paraglide/messages'
 
 import { Button } from '../../atoms/controls/button'
 import { toast } from '../../atoms/Toaster'
-import { GallerySection, GalleryState } from '../../gallery/frame'
+import { GallerySection, GalleryState, useSteps } from '../../gallery/frame'
 import { tutorialInvitation } from '../composer/commands'
 import { said, sampleTiles, sampleWords } from '../samples'
 import { Mention, type Voice } from './Mention'
-import { Message } from './Message'
+import { Message, Told, toldInTurn } from './Message'
 import { Thinking } from './Thinking'
 import type { Word, Words } from './words'
 
@@ -52,6 +52,9 @@ export function ChatTextGallery() {
         </GalleryState>
         <GalleryState label={m.gallery_state_chat_streaming()}>
           <Streaming words={words.answer} />
+        </GalleryState>
+        <GalleryState label={m.gallery_state_chat_told()}>
+          <Telling />
         </GalleryState>
         <GalleryState label={m.gallery_state_chat_command()}>
           <div className={column}>
@@ -155,6 +158,34 @@ function Streaming({ words }: { words: Words }) {
         {m.gallery_replay_answer()}
       </Button>
       <Message voice="agent" words={pieces.slice(0, shown)} state={done ? 'done' : 'streaming'} />
+    </div>
+  )
+}
+
+/** When each beat comes, in ms from the start: shorter than home's, a sample's. */
+const beats = [0, 1200, 2400, 3600]
+
+/**
+ * The agent telling a tile's words a beat at a time, as the tutorial's center is told, the canvas
+ * lighting each: its title, its preview, then its body, its numbered list a list; replayed on a click.
+ */
+function Telling() {
+  const [turn, setTurn] = useState(0)
+  const beat = useSteps(beats, turn)
+  return (
+    <div className={column}>
+      <Button
+        variant="outline"
+        size="sm"
+        className="justify-self-start"
+        onClick={() => {
+          setTurn(turn + 1)
+        }}
+      >
+        <RotateCcw aria-hidden />
+        {m.gallery_replay_told()}
+      </Button>
+      <Told told={toldInTurn[beat - 1]} body={[m.gallery_sample_chat_told_body()]} />
     </div>
   )
 }
