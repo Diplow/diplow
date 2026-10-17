@@ -6,7 +6,7 @@ preview: >-
   How hexframe's projects get built with nobody watching: run.yaml for the v0
   initiative, one config per project run (claude-mod, obsidian-plugin,
   mcp-server, import-export, optimistic-writes, assistant, design-system,
-  tutorial), each landing on one branch I merge into main at the end, and the
+  tutorial, sharing), each landing on one branch I merge into main at the end, and the
   registers the runs write their decisions to.
 ---
 # autonomous runs
@@ -24,6 +24,7 @@ An inner child of hexframe: how its projects get built by [[.skills/4-softeng/1-
 | `assistant.yaml` | The run config of the "hexframe app: Assistant" project, landing on `project/assistant` |
 | `design-system.yaml` | The run config of the "hexframe app: Design system v1" project, landing on `project/design-system-v1`; it halts on each proposal I haven't landed yet |
 | `tutorial.yaml` | The run config of the "hexframe app: Tutorial" project, landing on `project/tutorial`; it reads the tutorial's tiles and Help's and never writes them |
+| `sharing.yaml` | The run config of the "hexframe app: Sharing & organizations" project, landing on `project/sharing`; it opens no Tile to anyone its owner didn't, and gives the MCP no way to change who sees what |
 | `registers/` | What the run records, one folder per project, created by the first entry |
 
 ## One run, one branch
@@ -64,6 +65,8 @@ The app's runs all write `1-app/` and Mapping, so they go one after the other: t
 /softeng:ship:run-autonomous-project "hexframe app: Design system v1" --config 4-software-engineering/1-projects/1-hexframe/.run/design-system.yaml
 # merge project/design-system-v1 into main, the onboarding (#131) with it
 /softeng:ship:run-autonomous-project "hexframe app: Tutorial" --config 4-software-engineering/1-projects/1-hexframe/.run/tutorial.yaml
+# merge project/tutorial into main
+/softeng:ship:run-autonomous-project "hexframe app: Sharing & organizations" --config 4-software-engineering/1-projects/1-hexframe/.run/sharing.yaml
 ```
 
 Design system v1's run is the one that stops for me on purpose. Half its tickets are proposals ("Propose …"), drawn with me in `ui/` and reviewed on their pull request's preview; its never list forbids the run to implement one. It builds in `blockedBy` order and halts on the first proposal that hasn't landed. I land that proposal with do-ticket, a pull request into `project/design-system-v1`, then resume with `--resume`, which skips it as landed. Its run writes `1-app/` and may delete `4-software-engineering/1-projects/3-design-system/` (HEX-112), editing the three files that point at it, and freezes claude-mod, the plugin and `.obsidian/` as the Assistant's does.
