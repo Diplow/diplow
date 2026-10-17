@@ -188,6 +188,13 @@ const ownersWhole = (acting: Acting) => Effect.flatMap(reached(acting), wholeOf)
 export const holding = (id: string) => Tiles.use((tiles) => tiles.starHolding(id))
 
 /**
+ * The star of the System holding each of these ids, by id, in one lookup, an id no System holds left
+ * out: what names the Systems a timeline's Tiles stand in. Says nothing of who may read them.
+ */
+export const holdingEach = (ids: ReadonlyArray<string>) =>
+  Tiles.use((tiles) => tiles.starsHolding(ids))
+
+/**
  * The Version of the System the actor acts on, how many events changed it, read alone: what a client
  * polls to know when to read the System again. 0 before its first change. Its owner's read alone.
  */

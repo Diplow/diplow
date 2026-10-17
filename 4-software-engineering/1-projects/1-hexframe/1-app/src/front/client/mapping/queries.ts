@@ -163,7 +163,7 @@ export interface SystemShown {
   readonly underway: Underway
   /**
    * The Account's rights on each Tile by id, as Mapping's `Seen` says them: every right on every Tile
-   * of its own; none yet for a Tile a pending write makes, which takes its parent's.
+   * of its own; none yet for a Tile a pending write makes.
    */
   readonly rights: Seen['rights']
   /** The Tiles it may read below Tiles kept from it, by id: none on its own System. */

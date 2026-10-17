@@ -114,12 +114,17 @@ export const visit = ({ tile }: { tile: string }) =>
     (acting, own) => {
       const led: { readonly system?: string } =
         acting.system === own.system ? {} : { system: acting.system }
-      return Effect.as(
-        Mapping.readTile(acting, { id: tile, depth: 0, fields: [], language: 'en' }),
-        led,
-      )
+      return Effect.as(readable(acting, tile), led)
     },
   )
+
+/**
+ * Nothing when the actor may read the Tile of this id in the System they act on, or it is that
+ * System's star, whose card anyone sees; `TileNotFound` otherwise: a read from it asking no field and
+ * nothing below it, Mapping's `readTile` deciding as it does for every read from one Tile.
+ */
+const readable = (acting: Mapping.Acting, tile: string) =>
+  Effect.asVoid(Mapping.readTile(acting, { id: tile, depth: 0, fields: [], language: 'en' }))
 
 /**
  * The Titles of the Tiles among these ids the Account may read, by id, whichever System holds them:
@@ -131,13 +136,11 @@ export const titlesReached = (own: Mapping.Acting, ids: ReadonlyArray<string>) =
   Effect.gen(function* () {
     const titles = yield* Mapping.titles(own, ids)
     const rest = [...new Set(ids)].filter((id) => !(id in titles))
-    const stars = yield* Effect.forEach(rest, (id) => Mapping.holding(id))
+    const stars = yield* Mapping.holdingEach(rest)
     const elsewhere = new Map<string, string[]>()
-    rest.forEach((id, index) => {
-      const star = stars[index]
-      if (star === undefined || star === own.system) return
-      elsewhere.set(star, [...(elsewhere.get(star) ?? []), id])
-    })
+    for (const [id, star] of stars) {
+      if (star !== own.system) elsewhere.set(star, [...(elsewhere.get(star) ?? []), id])
+    }
     const found = yield* Effect.forEach([...elsewhere], ([star, named]) =>
       Mapping.titles({ ...own, system: star }, named),
     )

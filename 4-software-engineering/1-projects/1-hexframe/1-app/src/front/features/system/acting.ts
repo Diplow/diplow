@@ -14,7 +14,6 @@ import {
   directions,
   isEmptySystem,
   Right,
-  type Seen,
   type Slot,
   type System,
   type SystemTile,
@@ -23,7 +22,8 @@ import {
 import { decide } from '#/domains/mapping/operations'
 import type { TileHex } from '#/front/ui/canvas/state/useCanvasState'
 import type { PickerFrame } from '#/front/ui/canvas/tile/menu/Picker'
-import type { Subject, Verb } from '#/front/ui/canvas/tile/menu/verbs'
+import { groupsOf, type Subject, type Verb } from '#/front/ui/canvas/tile/menu/verbs'
+import type { EmptySlotTarget } from '#/front/ui/canvas/geometry/shape'
 import { lookOf } from '#/front/ui/canvas/view/looks'
 import { pathTo, type TileNode } from '#/front/ui/canvas/view/tiles'
 
@@ -47,21 +47,6 @@ export interface Reach {
 
 /** Every right on every Tile, the user's own System's: what its owner may do there. */
 export const owned: Reach = { rights: () => new Set(Right.literals), yours: true }
-
-/**
- * What the user may do on a System, from Mapping's rights on its Tiles by id (`Seen`'s), a Tile a
- * pending write makes, which has none yet, taking its parent's, as Mapping's Grants inherit.
- */
-export function reachOf(rights: Seen['rights'], flat: System, yours: boolean): Reach {
-  const of = (id: string, walked: ReadonlySet<string>): ReadonlySet<Right> => {
-    const held = rights[id]
-    if (held !== undefined) return new Set(held)
-    const tile = tileAt(flat, id)
-    if (tile === undefined || !('parent' in tile) || walked.has(tile.parent)) return new Set()
-    return of(tile.parent, new Set([...walked, id]))
-  }
-  return { rights: (id) => of(id, new Set()), yours }
-}
 
 /** The System three ways: its tree, Mapping's; flat, which `decide` rules on; as the canvas draws it. */
 export interface Systems {
@@ -103,6 +88,19 @@ export function withheldUnder({ rights, yours }: Reach, parent: string): Verb[] 
     ...(under.has('write') && yours ? [] : (['import'] as const)),
     ...(under.has('@') ? [] : (['ask-agent'] as const)),
   ]
+}
+
+/**
+ * What a free slot's menu says of it and leaves out (`withheldUnder`); none when the user's rights on
+ * the Tile it stands under let no line of it through.
+ */
+export function slotMenuOf(reach: Reach, target: EmptySlotTarget) {
+  const subject = { kind: 'slot', at: target.direction, parent: target.parent.title } as const
+  const without = withheldUnder(reach, target.parent.id)
+  const offers = groupsOf(subject)
+    .flat()
+    .some((verb) => !without.includes(verb))
+  return offers ? { subject, without } : undefined
 }
 
 /** Whether the user may write this Tile, or put a Tile under it: what a move or a swap asks of both. */

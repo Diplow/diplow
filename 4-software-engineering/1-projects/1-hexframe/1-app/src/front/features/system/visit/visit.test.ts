@@ -10,7 +10,15 @@ import {
 import { pathTo } from '#/front/ui/canvas/view/tiles'
 import { centerOn, showView } from '#/front/ui/canvas/view/view'
 
-import { readVisitSearch, visiting, visitLinkOf, visitTree, withVisit } from './visit'
+import {
+  centeringOf,
+  readVisitSearch,
+  titlesIn,
+  visiting,
+  visitLinkOf,
+  visitTree,
+  withVisit,
+} from './visit'
 
 // Someone else's System as a visitor sees it, made by hand as Mapping's `Seen` answers it: Ana's
 // star, her card; Garden under it, which Bob reads; Seeds under a Tile kept from him, a gap, and
@@ -97,5 +105,42 @@ describe('what a visitor may do', () => {
     expect([...reach.rights('ana')]).toEqual([])
     expect([...reach.rights('nowhere')]).toEqual([])
     expect(reach.yours).toBe(false)
+  })
+})
+
+describe('a Tile the chat names', () => {
+  const visited = visitTree(shown)
+  const own = visitTree({
+    ...shown,
+    root: systemOf({ ...seen, root: found('bob', 'Bob'), tiles: {} }),
+    gaps: {},
+  })
+
+  it('is centered on the System visited when it holds it, the Account’s own otherwise', () => {
+    expect(centeringOf('sprouts', { own, visited })).toEqual({ on: 'visited', tree: visited })
+    expect(centeringOf('bob', { own, visited })).toEqual({ on: 'own', tree: own })
+    expect(centeringOf('bob', { own, visited: undefined })).toEqual({ on: 'own', tree: own })
+  })
+
+  it('is visited by its link when neither holds it, and goes nowhere before the Account’s System is read', () => {
+    expect(centeringOf('elsewhere', { own, visited })).toEqual({ on: 'link' })
+    expect(centeringOf('elsewhere', { own: undefined, visited })).toBeUndefined()
+    expect(centeringOf('seeds', { own: undefined, visited })).toEqual({
+      on: 'visited',
+      tree: visited,
+    })
+  })
+})
+
+describe('the Titles the chat names a System visited by', () => {
+  it('holds its star’s card, its gaps and its Tiles', () => {
+    expect(titlesIn(shown)).toEqual(
+      new Map([
+        ['ana', 'Ana'],
+        ['seeds', 'Seeds'],
+        ['garden', 'Garden'],
+        ['sprouts', 'Sprouts'],
+      ]),
+    )
   })
 })

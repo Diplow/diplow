@@ -81,16 +81,12 @@ import {
   type SystemSearch,
 } from '#/front/features/system/search/search'
 import { useMarksState } from '#/front/features/system/marks/useMarksState'
-import { reachOf } from '#/front/features/system/acting'
+import { owned } from '#/front/features/system/acting'
 import { System } from '#/front/features/system/System'
 import { canvasTree, onScreen } from '#/front/features/system/tree'
-import { readVisitSearch, withVisit } from '#/front/features/system/visit/visit'
-import {
-  useVisited,
-  type Visited,
-  VisitPage,
-  type VisitPageProps,
-} from '#/front/features/system/visit/VisitPage'
+import { centeringOf, readVisitSearch, withVisit } from '#/front/features/system/visit/visit'
+import { useVisitedState, type Visited } from '#/front/features/system/visit/useVisitedState'
+import { VisitPage, type VisitPageProps } from '#/front/features/system/visit/VisitPage'
 import { TileWidgets } from '#/front/features/system/widget/TileWidgets'
 import {
   type TileWidgetsState,
@@ -335,18 +331,18 @@ function useCenterFromChat({ tree, visit, arrive, turning }: Centering) {
   const navigate = Route.useNavigate()
   const router = useRouter()
   return (tile: string) => {
-    const visited = visit.tree !== undefined && findTile(visit.tree, tile) !== undefined
-    const shown = visited ? visit.tree : tree
-    if (shown === undefined) return
-    if (!visited && findTile(shown, tile) === undefined) {
+    const centering = centeringOf(tile, { own: tree, visited: visit.tree })
+    if (centering === undefined) return
+    if (centering.on === 'link') {
       void router.navigate({ to: '/t/$id', params: { id: tile } })
       return
     }
+    const shown = centering.tree
     const view = centerOn(shown, tile)
     const away = {
       ...withHelp(undefined),
       ...withTutorial(undefined),
-      ...withVisit(visited ? visit.star : undefined),
+      ...withVisit(centering.on === 'visited' ? visit.star : undefined),
     }
     void navigate({ search: (current) => ({ ...withView(current, view), ...away }) })
     publish(new Navigated({ gesture: 'center', tile }))
@@ -534,7 +530,7 @@ function SignedIn() {
   // The chat's Messages go after the navigation they follow, from the view they were sent from.
   const { postMessage, underWay } = useNavigationSender()
   const { system, tree, welcoming, path } = useYourSystem()
-  const visit = useVisited(search.system, system?.root.id)
+  const visit = useVisitedState(search.system, system?.root.id)
   // What crosses from the chat to the canvas: the Tile it points at, the one it centered, where the
   // running Turn works, the changes made meanwhile, and the open Proposal.
   const marks = useMarksState({ system, working: turn?.location })
@@ -608,7 +604,7 @@ function SignedIn() {
                 underWay={underWay}
                 // What the tile widget's receipt says below, the timeline leaves to it.
                 receipt={widgets.state.told}
-                elsewhere={visit.titles}
+                visitedTitles={visit.titles}
               />
             </ReadBoundary>
             <ReadBoundary>
@@ -750,7 +746,7 @@ function SystemPage(props: SystemPageProps) {
   const { search, onSearchChange, onViewChange, widgets, onExport, marks, onCarry } = props
   const { data } = useSystem()
   if (data === undefined) return <Loading />
-  const { system, root, underway, rights } = data
+  const { system, root, underway } = data
   // The pseudo a new account is typing shows on its Root as it is typed.
   const tree: TileNode = canvasTree(root, { yours: true, naming: widgets.state.naming })
   return (
@@ -760,7 +756,8 @@ function SystemPage(props: SystemPageProps) {
         root={root}
         tree={tree}
         underway={underway}
-        reach={reachOf(rights, system, true)}
+        // The Account's own System: its owner may do everything there.
+        reach={owned}
         search={search}
         onViewChange={onViewChange}
         onSearchChange={onSearchChange}

@@ -17,7 +17,6 @@ import {
   framesOf,
   moveTo,
   owned,
-  reachOf,
   referenceAt,
   subjectOf,
   swapAt,
@@ -25,6 +24,7 @@ import {
   withheldOn,
   withheldUnder,
   withoutOf,
+  type Reach,
   type Systems,
 } from './acting'
 import { canvasTree, tileIn } from './tree'
@@ -277,7 +277,10 @@ describe('the lines the rights on a Tile let through', () => {
     framed: ['read', 'write'],
     bare: ['read', '@'],
   } as const
-  const visitor = reachOf(rights, flat, false)
+  const visitor: Reach = {
+    rights: (id) => new Set(rights[id as keyof typeof rights]),
+    yours: false,
+  }
   const theirs: Systems = { ...systems, reach: visitor }
   const changing = ['edit', 'make-leaf', 'make-branch', 'add', 'move', 'delete']
 
@@ -329,21 +332,6 @@ describe('the lines the rights on a Tile let through', () => {
     expect(withheldUnder(visitor, 'bare')).toEqual(['new-tile', 'import'])
     expect(withheldUnder(visitor, 'holding')).toEqual(['new-tile', 'import', 'ask-agent'])
     expect(withheldUnder(owned, 'holding')).toEqual([])
-  })
-
-  it('gives a Tile a pending write makes, which Mapping has no rights for yet, its parent’s', () => {
-    const made: System = {
-      ...flat,
-      tiles: {
-        ...flat.tiles,
-        fresh: placed('fresh', 'framed', 2),
-        deeper: placed('deeper', 'fresh', 1),
-      },
-    }
-    const reach = reachOf(rights, made, false)
-    expect([...reach.rights('deeper')]).toEqual(['read', 'write'])
-    expect([...reach.rights('nowhere')]).toEqual([])
-    expect([...reach.rights('principles')]).toEqual([])
   })
 })
 

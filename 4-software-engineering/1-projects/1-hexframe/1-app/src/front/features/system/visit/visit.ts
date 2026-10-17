@@ -7,10 +7,10 @@ import { Schema } from 'effect'
 import { type Right, systemOf } from '#/domains/mapping/entities'
 import type { SystemShown } from '#/front/client/mapping/queries'
 import { localizeUrl } from '#/paraglide/runtime'
-import type { TileNode } from '#/front/ui/canvas/view/tiles'
+import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 import { orDefault, readSearch, TileId } from '#/front/ui/canvas/view/view'
 
-import { type Reach, reachOf } from '../acting'
+import type { Reach } from '../acting'
 import { canvasTree } from '../tree'
 
 const VisitSearch = Schema.Struct({
@@ -50,6 +50,26 @@ export function visitTree({ system, root, gaps }: Pick<SystemShown, 'system' | '
 }
 
 /**
+ * Where a Tile the chat names is centered: on the System visited when it holds it, else on the
+ * Account's own when it does, else nowhere on the page, the Tile visited by its link instead
+ * (`/t/<id>`), which leads wherever the Account may read it; none before the Account's System is
+ * read.
+ */
+export function centeringOf(
+  tile: string,
+  { own, visited }: { own: TileNode | undefined; visited: TileNode | undefined },
+):
+  | { readonly on: 'visited' | 'own'; readonly tree: TileNode }
+  | { readonly on: 'link' }
+  | undefined {
+  if (visited !== undefined && findTile(visited, tile) !== undefined) {
+    return { on: 'visited', tree: visited }
+  }
+  if (own === undefined) return undefined
+  return findTile(own, tile) === undefined ? { on: 'link' } : { on: 'own', tree: own }
+}
+
+/**
  * The Titles of the Tiles of someone else's System a visitor sees, by id, its gaps' and its star's
  * card's included: what the chat names them by, as it names the Account's own.
  */
@@ -64,8 +84,10 @@ export function titlesIn({ system, gaps }: Pick<SystemShown, 'system' | 'gaps'>)
  * until a write reaches the System it names (HEX-132), and a Turn starts in its own System alone
  * until one may start in another (HEX-134): offering either would be offering a refusal.
  */
-export function visiting({ system, rights }: Pick<SystemShown, 'system' | 'rights'>): Reach {
-  const reach = reachOf(rights, system, false)
+export function visiting({ rights }: Pick<SystemShown, 'rights'>): Reach {
   const reads = new Set<Right>(['read'])
-  return { rights: (id) => (reach.rights(id).has('read') ? reads : new Set()), yours: false }
+  return {
+    rights: (id) => (rights[id]?.includes('read') === true ? reads : new Set()),
+    yours: false,
+  }
 }

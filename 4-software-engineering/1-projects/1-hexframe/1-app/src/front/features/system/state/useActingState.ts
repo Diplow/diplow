@@ -34,7 +34,7 @@ import {
   swapAt,
   tradeOf,
   turnOf,
-  withheldUnder,
+  slotMenuOf,
   withoutOf,
   writable,
   type Systems,
@@ -229,12 +229,11 @@ export function useActingState(input: ActingInput) {
    */
   const slotActing = (target: EmptySlotTarget): Acting | undefined => {
     const place = placeOf(target)
-    const without = withheldUnder(systems.reach, target.parent.id)
-    if (place === undefined || without.length === slotVerbs) return undefined
+    const menu = slotMenuOf(systems.reach, target)
+    if (place === undefined || menu === undefined) return undefined
     const fresh = newTileOf(target) ?? place
     return {
-      subject: { kind: 'slot', at: target.direction, parent: target.parent.title },
-      without,
+      ...menu,
       onAct: ({ verb }) => {
         if (verb === 'new-tile') begin({ kind: 'add', ...fresh })
         if (verb === 'import') begin({ kind: 'import', place: { _tag: 'Slot', ...place } })
@@ -284,9 +283,6 @@ export function useActingState(input: ActingInput) {
     ...movingOf({ tree, search, flat, reach: systems.reach, begin, sent, move, swap, addHere }),
   }
 }
-
-/** How many lines a free slot's menu holds: a new Tile, an import, the agent's. */
-const slotVerbs = 3
 
 interface MovingInput {
   tree: TileNode
