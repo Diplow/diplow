@@ -139,11 +139,11 @@ The project "hexframe app: Optimistic writes and patterns" builds this shape, it
 
 ### IAM
 
-Identity and access: who someone is (an Account, its Sessions and its Keys), and what they may do (its Entitlements), on Better Auth. The language now lives in [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE|iam]].
+Identity and access: who someone is (an Account, its Sessions and its Keys), what they may do (its Entitlements), and, with sharing, where they belong (Organizations, their members and Groups), on Better Auth. The language now lives in [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE|iam]].
 
 ### Mapping
 
-The core domain: someone lays out a System they maintain (a codebase, a team, their own life) as a hierarchy of Tiles where what comes first is what matters most, so AI works along their intent. One System per Account, whose Root tile is the user. The language, and what sharing, export and the MCP server will take from it, now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE|mapping]].
+The core domain: someone lays out a System they maintain (a codebase, a team, their own life) as a hierarchy of Tiles where what comes first is what matters most, so AI works along their intent. One System per Account, whose Root tile is the user, and with sharing one per Organization; a System's star is seen by anyone, the rest by the Grants on its Tiles, which Mapping decides, never IAM. The language, and what sharing, export and the MCP server will take from it, now live in [[4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE|mapping]].
 
 ### Assistant
 

@@ -18,7 +18,7 @@ The ground: a TanStack Start app on Vercel. Server functions (`createServerFn`) 
 
 Start middleware resolves the Session and puts it on Start's `context`; every server function receives it from there as an Effect service. The MCP endpoint, `/mcp`, is the one other door: it proves its Account by a Key and nothing else. Flag:
 
-- a server function that reads or writes an Account's data without the auth middleware in its chain;
+- a server function that reads or writes an Account's data without the auth middleware in its chain. The one read without a Session is Everyone's, with sharing: a Tile Everyone may read, and a star's card, served signed out, which reaches no data beyond them;
 - a server function that reads the session itself from cookies, headers or Better Auth instead of taking it from `context`;
 - access guarded only in the client: a hidden button, a route `beforeLoad`, a component check. The server function behind it must refuse on its own;
 - an Account id taken from the input where it should come from the Session or the Key, so a caller can act as someone else;
@@ -26,7 +26,8 @@ Start middleware resolves the Session and puts it on Start's `context`; every se
 - a sandbox door reading its body before it has verified the Turn's Key from `Authorization: Bearer`, taking the Account, Conversation or Turn from its input instead of from that Key, or decoding its body with anything but an Effect Schema; a proxy relaying anything but the messages endpoint for a model the settings name, or a body field its strict schema doesn't name (`mcp_servers`, a server tool, an unnamed beta), or forwarding a call before checking the Turn's ceiling and the month's allowance; any secret but the Turn's Key reaching a sandbox, its prompt or its files;
 - `/mcp` reading or dispatching its body before it has verified the `Authorization: Bearer` Key, or accepting a cookie, a Session, or a Key from a query parameter;
 - an MCP tool that takes the Account from its arguments rather than from the Key, or validates its input with anything but an Effect Schema;
-- a Key reaching what only a Session may do: issuing or revoking a Key, or changing the Account itself (email, password, billing). A leaked Key must not be able to keep itself alive.
+- a Key reaching what only a Session may do: issuing or revoking a Key, or changing the Account itself (email, password, billing); with sharing, changing a Tile's Grants, a move that widens who reads a Tile, or managing an Organization, its members, Groups or join requests. A leaked Key must not be able to keep itself alive, nor open a System to anyone;
+- with sharing, the owners an Account stands for or its Groups kept in a Session, a Turn or any cache instead of read from IAM on each request: a removed member would keep their access.
 
 An unauthenticated call fails with the `Unauthenticated` kind; a signed-in caller without the right fails with `Forbidden`.
 
@@ -55,6 +56,6 @@ Queries go through Drizzle's query builder, inside repository layers. Flag `sql.
 
 ## Beyond the four
 
-Flag any other clear hole you find in the diff (an open redirect, a write to a Tile outside the caller's System, Help's included, such as a move or a swap with one end in Help, a Context Reference to a Tile the caller can't read, a Help id used as a file path rather than looked up in the bundled set), stated the same way. Don't flag hypotheticals the diff doesn't touch. A clean change gets no comment from this agent.
+Flag any other clear hole you find in the diff (an open redirect, a write to a Tile the caller may not write, by the rights in Mapping's sharing language, Help's included, such as a move or a swap with one end in Help, a Context Reference to a Tile the caller can't read, a Help id used as a file path rather than looked up in the bundled set), stated the same way. Don't flag hypotheticals the diff doesn't touch. A clean change gets no comment from this agent.
 
-Source: the security bar in `4-software-engineering/1-projects/1-hexframe/STACK.md`, "Where the code lives and how it lands". When the bar changes there, change it here.
+Source: the security bar in `4-software-engineering/1-projects/1-hexframe/STACK.md`, "Where the code lives and how it lands", and the rights in Mapping's and IAM's `CLAUDE.md`. When either changes, change it here.
