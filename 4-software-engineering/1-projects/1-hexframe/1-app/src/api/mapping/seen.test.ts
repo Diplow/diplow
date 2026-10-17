@@ -1,4 +1,4 @@
-import { Exit, Option, Schema } from 'effect'
+import { Effect, Exit, Option, Schema } from 'effect'
 import { describe, expect, it } from 'vitest'
 
 import type { KeyProof, Session } from '#/domains/iam/iam'
@@ -7,12 +7,13 @@ import type { GrantRow } from '#/repositories/database/tiles/grants'
 import { granted } from '#/repositories/database/tiles/testing'
 
 import { noKey, run, type StartContext } from '../server/run'
-import { SystemRead } from './mapping'
+import { SystemRead, TileVisit } from './mapping'
 import * as Mapping from './programs'
 
 // Another Account's System, read through Mapping's programs as the server functions and the MCP run
 // them, over PGlite: `system` naming a star, and `readTile` and `openTile` reading from a Tile of the
-// System holding it, each as the Account may see it, a Turn's Key never past its own System.
+// System holding it, each as the Account may see it, a Turn's Key never past its own System; where a
+// link to a Tile leads (`visit`), and the Titles a timeline names across Systems (`titlesReached`).
 
 /** How a request is proven: by a Session, by an Account's Key, or by a Turn's Key. */
 type Proof = 'session' | 'key' | 'turn key'
@@ -141,5 +142,49 @@ describe('a read from a Tile, on the System holding it', () => {
       await value(run(byTurn, Mapping.openTile({ id: mine.id, fields: ['title'] }))),
     ).toMatchObject({ tile: { title: 'Mine' } })
     expect(await run(byTurn, Mapping.openTile({ fields: ['title'] }))).toMatchObject({ ok: true })
+  })
+})
+
+describe('a link to a Tile, and the Titles a timeline names, across Systems', () => {
+  it('leads to the System holding a Tile the Account may read, none for its own, nowhere past one kept from it', async () => {
+    const { bob, star, journal, garden } = await anasSystem()
+    const visit = (tile: string, proof?: Proof) => run(request(bob, proof), Mapping.visit({ tile }))
+    expect(await value(visit(garden.id))).toEqual({ system: star })
+    // The star itself, whose card anyone sees.
+    expect(await value(visit(star))).toEqual({ system: star })
+    // A Tile kept from Bob is no Tile at all to him.
+    for (const tile of [journal.id, crypto.randomUUID()]) {
+      expect(await visit(tile)).toMatchObject(notFound)
+    }
+    const { root } = await value(run(request(bob), Mapping.system))
+    expect(await value(visit(root.id))).toEqual({})
+    // A Turn's Key is led nowhere but its own System.
+    expect(await visit(garden.id, 'turn key')).toMatchObject(notFound)
+    expect(await value(visit(root.id, 'turn key'))).toEqual({})
+  })
+
+  it('takes a Tile by its UUID alone', () => {
+    const accepts = (input: unknown) => Schema.is(TileVisit)(input)
+    expect(accepts({ tile: crypto.randomUUID() })).toBe(true)
+    expect(accepts({ tile: 'help' })).toBe(false)
+    expect(accepts({})).toBe(false)
+  })
+
+  it('names a Tile of another System the Account may read, as it names its own, and none kept from it', async () => {
+    const { bob, journal, garden } = await anasSystem()
+    const { root } = await value(run(request(bob), Mapping.system))
+    const mine = await value(
+      run(request(bob), Mapping.createTile({ parent: root.id, slot: 1, ...content('Mine') })),
+    )
+    const gone = crypto.randomUUID()
+    const titles = await value(
+      run(
+        request(bob),
+        Effect.flatMap(Mapping.actingOnOwn(bob.id, { session: false }), (own) =>
+          Mapping.titlesReached(own, [garden.id, journal.id, mine.id, gone, garden.id]),
+        ),
+      ),
+    )
+    expect(titles).toEqual({ [garden.id]: 'Garden', [mine.id]: 'Mine' })
   })
 })

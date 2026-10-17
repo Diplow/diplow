@@ -57,11 +57,12 @@ const forAccount = <A, E, R>(operation: (acting: Mapping.Acting) => Effect.Effec
  * request nothing proves,
  * Mapping deciding what the Account may read there. A Turn's Key reads the System its Turn started in
  * alone, its Account's own, whatever else the Account may read: another it names is `TileNotFound`,
- * as a Tile Mapping keeps from it is.
+ * as a Tile Mapping keeps from it is. The read is handed the Account acting on its own System too,
+ * for one that answers whose System it read.
  */
 const onSystem = <A, E, R, N, R2>(
   named: (signed: Iam.SignedIn) => Effect.Effect<string | undefined, N, R2>,
-  operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>,
+  operation: (acting: Mapping.Acting, own: Mapping.Acting) => Effect.Effect<A, E, R>,
 ) =>
   Effect.flatMap(Iam.signedIn, (signed) =>
     Effect.flatMap(
@@ -70,9 +71,9 @@ const onSystem = <A, E, R, N, R2>(
         named(signed),
       ]),
       ([own, star]): Effect.Effect<A, E | TileNotFound, R> => {
-        if (star === undefined || star === own.system) return operation(own)
+        if (star === undefined || star === own.system) return operation(own, own)
         if (signed.by._tag === 'TurnKey') return Effect.fail(new TileNotFound())
-        return operation({ ...own, system: star })
+        return operation({ ...own, system: star }, own)
       },
     ),
   )
@@ -101,6 +102,47 @@ export const systemAt = (star: string | undefined) =>
 
 /** The Account's own System, flat, whole: its Root, the user, and every Tile and Reference below it. */
 export const system = systemAt(undefined)
+
+/**
+ * Where a link to a Tile leads the Account (`/t/<id>`): the star of the System holding it, none when
+ * it is the Account's own, once Mapping found the Account may read the Tile, or the star's card, which
+ * anyone sees; `TileNotFound` otherwise, a Tile kept from it answered as one that doesn't exist.
+ */
+export const visit = ({ tile }: { tile: string }) =>
+  onSystem(
+    () => Mapping.holding(tile),
+    (acting, own) => {
+      const led: { readonly system?: string } =
+        acting.system === own.system ? {} : { system: acting.system }
+      return Effect.as(
+        Mapping.readTile(acting, { id: tile, depth: 0, fields: [], language: 'en' }),
+        led,
+      )
+    },
+  )
+
+/**
+ * The Titles of the Tiles among these ids the Account may read, by id, whichever System holds them:
+ * its own first, then, for an id its own holds no Tile of, the System holding it, as the Account may
+ * see it there, so its timeline names a Tile of a System it visited as it names its own. An id no
+ * System holds, a deleted Tile's, has none; nor has a Tile kept from the Account.
+ */
+export const titlesReached = (own: Mapping.Acting, ids: ReadonlyArray<string>) =>
+  Effect.gen(function* () {
+    const titles = yield* Mapping.titles(own, ids)
+    const rest = [...new Set(ids)].filter((id) => !(id in titles))
+    const stars = yield* Effect.forEach(rest, (id) => Mapping.holding(id))
+    const elsewhere = new Map<string, string[]>()
+    rest.forEach((id, index) => {
+      const star = stars[index]
+      if (star === undefined || star === own.system) return
+      elsewhere.set(star, [...(elsewhere.get(star) ?? []), id])
+    })
+    const found = yield* Effect.forEach([...elsewhere], ([star, named]) =>
+      Mapping.titles({ ...own, system: star }, named),
+    )
+    return Object.fromEntries([titles, ...found].flatMap((named) => Object.entries(named)))
+  })
 
 /**
  * A System hexframe ships whole, by its Root, in the page's language, for any visitor: no Account

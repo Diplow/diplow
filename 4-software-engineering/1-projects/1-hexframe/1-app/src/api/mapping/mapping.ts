@@ -94,6 +94,18 @@ export const system = createServerFn({ method: 'GET' })
   .validator(Schema.toStandardSchemaV1(SystemRead))
   .handler(({ data, context }) => run(context, Mapping.systemAt(data?.system)))
 
+/** The Tile a link leads to, by its id, a UUID, as Mapping's `TileId` bounds it. */
+export const TileVisit = Schema.Struct({ tile: TileId })
+
+/**
+ * Where a link to a Tile leads the Account, `/t/<id>`: the star of the System holding it, none for
+ * its own, once it may read the Tile; a Tile kept from it is `TileNotFound`, as one that doesn't
+ * exist.
+ */
+export const visit = createServerFn({ method: 'GET' })
+  .validator(Schema.toStandardSchemaV1(TileVisit))
+  .handler(({ data, context }) => run(context, Mapping.visit(data)))
+
 /**
  * A System hexframe ships whole, by its Root, in the language asked: its Root with everything below
  * it, Bodies included. Signed in or not, anyone reads it.
