@@ -13,6 +13,7 @@ import * as Mapping from '#/domains/mapping/mapping'
 import { MappingEvent } from '#/domains/mapping/operations'
 import { transactional } from '#/repositories/database/database'
 
+import { ownSystem } from '../mapping/programs'
 import { on } from '../server/bus'
 
 /**
@@ -45,7 +46,7 @@ export const recordedInConversation = on(MappingEvent, (event, actor) =>
     onSome: (signedIn) =>
       Effect.gen(function* () {
         const accountId = signedIn.account.id
-        const summary = yield* Mapping.summary(accountId, event)
+        const summary = yield* Mapping.summary(yield* ownSystem(accountId), event)
         const actor = yield* actorOf(signedIn)
         yield* transactional(Assistant.recordChange(accountId, summary, actor))
       }),

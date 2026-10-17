@@ -12,6 +12,8 @@ import {
   swapTiles,
   TestTiles,
   tree,
+  ownSystem,
+  readTile,
 } from './testing'
 
 // Leaves beside Branches, over PGlite: a Tile holds six of each in their own Directions, a Leaf holds
@@ -80,15 +82,14 @@ layer(TestTiles)('Leaves beside Branches, over PGlite', (it) => {
         1: { _tag: 'Tile', ...branch, branches: {}, leaves: {}, context: {} },
       })
       expect(found.leaves).toEqual({ 1: { _tag: 'Tile', ...file } })
-      const opened = yield* Mapping.openTile(accountId, { fields: ['title'], language: 'en' })
-      expect(opened.leaves).toEqual({
-        1: { _tag: 'Tile', id: file.id, version: 1, title: 'Leaf', preview: file.preview },
-      })
-      const read = yield* Mapping.readTile(accountId, {
-        depth: 2,
+      const opened = yield* Mapping.openTile(yield* ownSystem(accountId), {
         fields: ['title'],
         language: 'en',
       })
+      expect(opened.leaves).toEqual({
+        1: { _tag: 'Tile', id: file.id, version: 1, title: 'Leaf', preview: file.preview },
+      })
+      const read = yield* readTile(accountId, { depth: 2, fields: ['title'] })
       expect(read.tile.leaves).toEqual({
         1: { _tag: 'Tile', id: file.id, version: 1, title: 'Leaf' },
       })

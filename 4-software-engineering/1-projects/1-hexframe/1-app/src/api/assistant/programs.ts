@@ -19,6 +19,7 @@ import { HttpExchange } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
 
 import { tileLink } from '../mapping/files/download'
+import { ownSystem } from '../mapping/programs'
 import { WaitUntil } from '../server/bus'
 import { systemRules } from '../server/mcp/tools'
 
@@ -50,7 +51,7 @@ export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
       const proposal = yield* proposalNow(accountId)
       const day = { date: date ?? (yield* Assistant.today(offsets.offset)).date, ...offsets }
       const entries = yield* Assistant.day(accountId, day)
-      const titles = yield* Mapping.titles(accountId, namedTiles(entries))
+      const titles = yield* Mapping.titles(yield* ownSystem(accountId), namedTiles(entries))
       const earlier = yield* Assistant.before(accountId, day)
       return {
         day,
@@ -74,7 +75,7 @@ export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
  */
 export const latest = forSession((accountId) =>
   Effect.gen(function* () {
-    const version = yield* Mapping.systemVersion(accountId)
+    const version = yield* Mapping.systemVersion(yield* ownSystem(accountId))
     const lastEntry = yield* Assistant.lastEntry(accountId)
     const live = yield* Assistant.liveTurn(accountId)
     const { mode, proposal } = yield* conversationNow(accountId)
@@ -161,7 +162,7 @@ const turnStarted = (accountId: string, start: { message: string; location: stri
 export const messageAndTurn = (account: Iam.Session['account'], text: string, location: string) =>
   Effect.gen(function* () {
     yield* Iam.entitledOnly(account, 'assistant')
-    yield* Mapping.ownTile(account.id, location)
+    yield* Mapping.ownTile(yield* ownSystem(account.id), location)
     return yield* transactional(
       Effect.gen(function* () {
         const posted = yield* Assistant.postMessage(account.id, text)
@@ -218,15 +219,12 @@ const agentStarted = (
   Effect.gen(function* () {
     const { url } = yield* HttpExchange
     const over = yield* shownTo(accountId, turn.id)
-    const { files, places } = yield* Mapping.systemFiles(accountId, tileLink(url), over)
+    const own = yield* ownSystem(accountId)
+    const { files, places } = yield* Mapping.systemFiles(own, tileLink(url), over)
     const entries = yield* Agent.latestToday(accountId, offset)
     const linked = linksOf(text)
-    const titles = yield* Mapping.titles(accountId, [
-      ...namedTiles(entries),
-      ...linked,
-      turn.location,
-    ])
-    const onScreen = yield* Mapping.glimpses(accountId, [view.center, ...view.shown])
+    const titles = yield* Mapping.titles(own, [...namedTiles(entries), ...linked, turn.location])
+    const onScreen = yield* Mapping.glimpses(own, [view.center, ...view.shown])
     const placeOf = (id: string) => {
       const title = titles[id]
       const place = places.get(id)

@@ -227,10 +227,13 @@ describe("Assistant's server functions", () => {
     expectTypeOf<Errors<ReturnType<typeof Assistant.sendMessage>>>().toEqualTypeOf<
       SignedOut | SessionRequired | EntitlementMissing | TileNotFound | AllowanceSpent | TurnRunning
     >()
+    // Mapping's `TileNotFound` for a System the Account may not reach: never its own, which they read.
     expectTypeOf<Errors<ReturnType<typeof Assistant.conversationDay>>>().toEqualTypeOf<
-      SignedOut | SessionRequired
+      SignedOut | SessionRequired | TileNotFound
     >()
-    expectTypeOf<Errors<typeof Assistant.latest>>().toEqualTypeOf<SignedOut | SessionRequired>()
+    expectTypeOf<Errors<typeof Assistant.latest>>().toEqualTypeOf<
+      SignedOut | SessionRequired | TileNotFound
+    >()
   })
 })
 
@@ -243,7 +246,7 @@ describe("the System in the Account's sandbox", () => {
   const inSandbox = (accountId: string) =>
     Effect.gen(function* () {
       const { files, places } = yield* MappingService.systemFiles(
-        accountId,
+        yield* Mapping.ownSystem(accountId),
         (id) => `/?center=${id}`,
       )
       const box = yield* Agent.writeSystem(accountId, files)

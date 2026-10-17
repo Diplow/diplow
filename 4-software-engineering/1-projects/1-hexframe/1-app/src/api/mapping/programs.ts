@@ -1,6 +1,7 @@
 // The programs behind Mapping's server functions (./mapping.ts): each runs one of Mapping's operations
-// for the Account the request proves, by its Session or its Key, or fails with IAM's `SignedOut`, and a change in the
-// transaction it opens. They sit in a module of their own because they reach the domain and the
+// for the Account the request proves, by its Session or its Key, on the System the request names, for
+// now always that Account's own, or fails with IAM's `SignedOut`, and a change in the transaction it
+// opens. They sit in a module of their own because they reach the domain and the
 // database: the client imports the server functions, and only their handlers import this module,
 // which Start strips from the client.
 import { Effect } from 'effect'
@@ -24,13 +25,28 @@ import { transactional } from '#/repositories/database/database'
 
 import { tileLink, tileOfLink } from './files/download'
 
-/** Runs an operation for the signed-in Account: the one the request proves, never one a caller sends. */
-const forAccount = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, E, R>) =>
-  Effect.flatMap(Iam.signedIn, ({ account }) => operation(account.id))
+/**
+ * The Account acting on its own System, as Mapping takes who acts and where: the actor standing for
+ * the Account alone, read from IAM's proof of the request, and the System named by the Account's star,
+ * added on its first read. Where the API layer resolves the System a request acts on, for now always
+ * the signed-in Account's own.
+ */
+export const ownSystem = (accountId: string) =>
+  Effect.map(Mapping.starOf(accountId), (system): Mapping.Acting => ({
+    actor: { owners: [accountId] },
+    system,
+  }))
+
+/**
+ * Runs an operation for the signed-in Account, the one the request proves, never one a caller sends,
+ * on its own System.
+ */
+const forAccount = <A, E, R>(operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>) =>
+  Effect.flatMap(Iam.signedIn, ({ account }) => Effect.flatMap(ownSystem(account.id), operation))
 
 /** Runs a change for the signed-in Account, in one transaction: it commits whole, or not at all. */
-const changeForAccount = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, E, R>) =>
-  forAccount((accountId) => transactional(operation(accountId)))
+const changeForAccount = <A, E, R>(operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>) =>
+  forAccount((acting) => transactional(operation(acting)))
 
 /** The Account's System, flat: its Root, the user, and every Tile and Reference below it by id. */
 export const system = forAccount(Mapping.system)
@@ -50,7 +66,7 @@ export const shipped = ({ root, language }: { root: ShippedRoot; language: Local
  */
 export const readTile = <F extends Field>(
   input: Omit<Parameters<typeof Mapping.readTile<F>>[1], 'language'>,
-) => forAccount((accountId) => Mapping.readTile(accountId, { ...input, language: 'en' }))
+) => forAccount((acting) => Mapping.readTile(acting, { ...input, language: 'en' }))
 
 /**
  * A Tile of the Account's System, its Root when no id is given, opened: it with the fields asked, its
@@ -59,17 +75,17 @@ export const readTile = <F extends Field>(
  */
 export const openTile = <F extends Field>(
   input: Omit<Parameters<typeof Mapping.openTile<F>>[1], 'language'>,
-) => forAccount((accountId) => Mapping.openTile(accountId, { ...input, language: 'en' }))
+) => forAccount((acting) => Mapping.openTile(acting, { ...input, language: 'en' }))
 
 /**
  * A Tile of the Account's System and everything below it, zipped: the archive's name and its bytes,
  * streamed. A Reference whose Tile is left out links it on the site the request reached.
  */
 export const exportTile = ({ id }: { id: string }) =>
-  forAccount((accountId) =>
+  forAccount((acting) =>
     Effect.gen(function* () {
       const { url } = yield* HttpExchange
-      return yield* Mapping.exportTile(accountId, { id, link: tileLink(url) })
+      return yield* Mapping.exportTile(acting, { id, link: tileLink(url) })
     }),
   )
 
@@ -81,25 +97,25 @@ type Fields<O> = Omit<O, '_tag'>
  * under one Mapping makes.
  */
 export const createTile = (input: Fields<CreateTile>) =>
-  changeForAccount((accountId) => Mapping.createTile(accountId, new CreateTile(input)))
+  changeForAccount((acting) => Mapping.createTile(acting, new CreateTile(input)))
 
 export const editTile = (input: Fields<EditTile>) =>
-  changeForAccount((accountId) => Mapping.editTile(accountId, new EditTile(input)))
+  changeForAccount((acting) => Mapping.editTile(acting, new EditTile(input)))
 
 export const moveTile = (input: Fields<MoveTile>) =>
-  changeForAccount((accountId) => Mapping.moveTile(accountId, new MoveTile(input)))
+  changeForAccount((acting) => Mapping.moveTile(acting, new MoveTile(input)))
 
 export const swapTiles = (input: Fields<SwapTiles>) =>
-  changeForAccount((accountId) => Mapping.swapTiles(accountId, new SwapTiles(input)))
+  changeForAccount((acting) => Mapping.swapTiles(acting, new SwapTiles(input)))
 
 export const deleteTile = (input: Fields<DeleteTile>) =>
-  changeForAccount((accountId) => Mapping.deleteTile(accountId, new DeleteTile(input)))
+  changeForAccount((acting) => Mapping.deleteTile(acting, new DeleteTile(input)))
 
 export const createReference = (input: Fields<CreateReference>) =>
-  changeForAccount((accountId) => Mapping.createReference(accountId, new CreateReference(input)))
+  changeForAccount((acting) => Mapping.createReference(acting, new CreateReference(input)))
 
 export const deleteReference = (input: Fields<DeleteReference>) =>
-  changeForAccount((accountId) => Mapping.deleteReference(accountId, new DeleteReference(input)))
+  changeForAccount((acting) => Mapping.deleteReference(acting, new DeleteReference(input)))
 
 /** An upload, as the import's server function decodes it: the file, what it is, where it lands. */
 interface ImportUpload {
@@ -116,12 +132,12 @@ interface ImportUpload {
 export const importTiles = ({ upload, as, place }: ImportUpload) =>
   Effect.andThen(
     Landing.fitsUpload(upload.size),
-    forAccount((accountId) =>
+    forAccount((acting) =>
       Effect.gen(function* () {
         const { url } = yield* HttpExchange
         const bytes = new Uint8Array(yield* Effect.promise(() => upload.arrayBuffer()))
         const plan = yield* Landing.planImport({ as, name: upload.name, bytes }, tileOfLink(url))
-        return yield* transactional(Landing.importTiles(accountId, { plan, place }))
+        return yield* transactional(Landing.importTiles(acting, { plan, place }))
       }),
     ),
   )
