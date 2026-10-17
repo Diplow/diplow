@@ -63,7 +63,7 @@ export function lookingAt(
   system: TileNode,
   hex: TileHex,
   look: TileLook,
-  looking: Exclude<Looking, false> = 'menu',
+  looking: Exclude<Looking, false>,
 ): Acting | undefined {
   const { kind } = look
   if (kind === 'list' || kind === 'ghost' || kind === 'writing') return undefined

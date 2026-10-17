@@ -20,11 +20,6 @@ import type { ToldPart } from '#/front/ui/motion'
 export interface TutorialRules extends CanvasRules {
   /** The composer, at the chat's foot: held back meanwhile, as during the onboarding. */
   composer: boolean
-  /**
-   * The agent tells the center's words in turn, as the canvas lights each: its title, its preview,
-   * then its body in the chat (HEX-120), which stays told once the center opens.
-   */
-  tells: boolean
 }
 
 /** What a step of the tutorial has introduced. */
@@ -36,7 +31,10 @@ interface Step {
   /** The center moved to another Tile, going into it or out. */
   recenter: boolean
   composer: boolean
-  /** The center's words told in turn. */
+  /**
+   * The agent tells the center's words in turn, as the canvas lights each: its title, its preview,
+   * then its body in the chat (HEX-120), which stays told once the center opens.
+   */
   tells: boolean
 }
 
@@ -79,7 +77,6 @@ export function tutorialRules(asked: CanvasView, told?: ToldPart): TutorialRules
     lets: (hex) => ({ click: step.open && hex.role === 'center', recenter: step.recenter }),
     introducesOpening: step.open,
     composer: step.composer,
-    tells: step.tells,
   }
 }
 

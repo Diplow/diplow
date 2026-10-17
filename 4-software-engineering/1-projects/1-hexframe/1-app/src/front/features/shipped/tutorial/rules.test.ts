@@ -24,7 +24,7 @@ describe("the tutorial's arrival", () => {
   })
 
   it("tells its center's words in turn, its title, its preview, then its body", () => {
-    expect(tutorialRules({}).tells).toBe(true)
+    expect(tutorialTells({})).toBe(true)
   })
 
   it.each([undefined, 'title', 'preview'] as const)(
@@ -81,7 +81,7 @@ describe("the tutorial's center opened", () => {
   })
 
   it('keeps its body told in the chat', () => {
-    expect(tutorialRules(opened).tells).toBe(true)
+    expect(tutorialTells(opened)).toBe(true)
   })
 
   it('is where a link asking for its ring lands, whatever the agent has told', () => {
@@ -94,10 +94,6 @@ describe("the tutorial's center opened", () => {
       expect(tutorialRules({ frame }).view).toEqual(opened)
     },
   )
-
-  it('starts the clock of its words, as its arrival does', () => {
-    expect([tutorialTells({}), tutorialTells(opened)]).toEqual([true, true])
-  })
 
   it.each([
     ['a Tile below the center', { center: 'tutorial/2' }],

@@ -8,6 +8,7 @@ import {
   readHelpSearch,
   readTutorialSearch,
   shippedOnCanvas,
+  shippedTells,
   topicOf,
   turnedTo,
   tutorialOn,
@@ -172,6 +173,13 @@ describe("the System hexframe ships on home's canvas", () => {
     const center = { role: 'center' } as TileHex
     expect(shippedOnCanvas(arrival, 'preview')?.rules?.lets(center).click).toBe(false)
     expect(shippedOnCanvas(arrival, 'body')?.rules?.lets(center).click).toBe(true)
+  })
+
+  it("starts the clock of the tutorial's words while it has the canvas, never Help's", () => {
+    expect(shippedTells({ help: undefined, tutorial: true })).toBe(true)
+    expect(shippedTells({ help: undefined, tutorial: true, frame: 'children' })).toBe(true)
+    expect(shippedTells({ help: true, tutorial: true })).toBe(false)
+    expect(shippedTells({ help: undefined, tutorial: undefined })).toBe(false)
   })
 
   it("is none with neither named, the canvas the Account's System's", () => {
