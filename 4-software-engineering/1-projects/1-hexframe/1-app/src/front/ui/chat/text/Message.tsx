@@ -59,7 +59,7 @@ interface AgentProps {
  * A numbered list's lines that name something drawn elsewhere, by the number written before each:
  * the tutorial's body's, its six on the canvas (HEX-122).
  */
-export interface NamingLines {
+interface NamingLines {
   /** Whether the line numbered so names something; one that names nothing is a line as any other. */
   names: (line: number) => boolean
   /** Whether it is lit: what it names landing, or pointed at, here or there. */
@@ -152,6 +152,13 @@ function Lines({ words, voice }: { words: Words; voice: Voice }) {
  * an item that names something elsewhere lighting it (`NamingLine`).
  */
 function Blocks({ words, lines }: { words: Words; lines: NamingLines | undefined }) {
+  // A number names its tile once, on its first line, as the ring ties it.
+  const named = new Set<number>()
+  const naming = (line: number) => {
+    if (lines?.names(line) !== true || named.has(line)) return false
+    named.add(line)
+    return true
+  }
   return blocksOf(words).map((block, index) =>
     // The blocks of one message, never reordered: their place is their key.
     'line' in block ? (
@@ -174,7 +181,7 @@ function Blocks({ words, lines }: { words: Words; lines: NamingLines | undefined
             className={cn(runsToCurve, 'col-span-2 grid grid-cols-subgrid')}
           >
             <span aria-hidden>{item.number}.</span>
-            {lines?.names(Number(item.number)) === true ? (
+            {lines !== undefined && naming(Number(item.number)) ? (
               <NamingLine line={Number(item.number)} lines={lines}>
                 <Said words={item.words} voice="agent" />
               </NamingLine>
@@ -343,26 +350,11 @@ const aroundSaid: Record<AroundPart, () => string> = {
 
 /**
  * The tile's body and its six as the same six (HEX-122), once they are around it: what the agent has
- * said of them, how many have landed, and the body's lines that name one, by their numbers.
+ * said of them, and the body's lines that name one, each lit as its tile lands or is pointed at.
  */
-interface ToldSix extends Omit<NamingLines, 'lit'> {
+export interface ToldSix {
   said: AroundPart | undefined
-  /** How many of the six have landed, in their order, while their landing is lit (`useAround`). */
-  landed: number
-  /** The line whose tile is pointed at, from its line or from the canvas; none while none is. */
-  pointed: number | undefined
-}
-
-/**
- * What the canvas and the chat each take of a tile's six as they play (HEX-122): the tile pointed at,
- * from its line or on the canvas, lit there, what pointing at a tile on the canvas does, and the
- * chat's `Told`.
- */
-export interface SameSix {
-  pointed: string | undefined
-  /** A tile pointed at on the canvas, or let go; one no line names lights nothing. */
-  onPoint: (tile: string, pointing: boolean) => void
-  six: ToldSix
+  lines: NamingLines
 }
 
 interface ToldProps {
@@ -393,7 +385,7 @@ export function Told({ told, body, six }: ToldProps) {
       ))}
       {told === 'body' && (
         <div className="motion-safe:animate-rise">
-          <Message voice="agent" words={body} continued lines={six && namingOf(six)} />
+          <Message voice="agent" words={body} continued lines={six?.lines} />
         </div>
       )}
       {aroundUpTo(six?.said).map((part) => (
@@ -404,14 +396,3 @@ export function Told({ told, body, six }: ToldProps) {
     </div>
   )
 }
-
-/**
- * The body's lines as its six name them: a line naming one lit once its tile, in its order, has
- * landed, while their landing is lit, or while it is pointed at.
- */
-const namingOf = ({ names, onPoint, onShow, landed, pointed }: ToldSix): NamingLines => ({
-  names,
-  onPoint,
-  onShow,
-  lit: (line) => names(line) && (line <= landed || line === pointed),
-})

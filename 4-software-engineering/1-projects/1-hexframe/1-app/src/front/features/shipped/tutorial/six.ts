@@ -4,11 +4,10 @@
 // and its line; a line clicked or tapped shows its tile, which a phone brings forward for a glance.
 import { useMemo } from 'react'
 
-import type { SameSix } from '#/front/ui/chat/text/Message'
 import { useSixPlaying } from '#/front/ui/motion'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 
-import { ringOf, sameSixOf } from './ring'
+import { ringOf, sameSixOf, type SameSix } from './ring'
 
 interface SameSixInput {
   /** The tutorial's Tiles as the canvas draws them, its center their Root; none until read. */
@@ -25,13 +24,13 @@ interface SameSixInput {
  * The same six as home plays them, from the start each time its rules show them anew, on the
  * tutorial's ring (`useSixPlaying`, `sameSixOf`), a line shown naming its tile by its title.
  */
-export function useSameSix({ tree, body, shown, onShow }: SameSixInput): Partial<SameSix> {
+export function useSameSix({ tree, body, shown, onShow }: SameSixInput): SameSix | undefined {
   const ring = useMemo(
     () => (tree === undefined || body === undefined ? undefined : ringOf(tree, body)),
     [tree, body],
   )
   const playing = useSixPlaying(shown && ring !== undefined)
-  if (!shown || ring === undefined || tree === undefined) return {}
+  if (!shown || ring === undefined || tree === undefined) return undefined
   return sameSixOf(ring, playing, (tile) => {
     onShow(findTile(tree, tile)?.title ?? tile)
   })

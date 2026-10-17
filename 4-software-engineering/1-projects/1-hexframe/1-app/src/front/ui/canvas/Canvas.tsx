@@ -95,6 +95,9 @@ export interface CanvasMarks {
   arcs?: ReadonlyArray<{ from: string; to: { parent: string; direction: Direction } }>
 }
 
+/** A Tile pointed at, by its id, or let go: the canvas's end of a crossing (HEX-122). */
+export type PointAt = (tile: string, pointing: boolean) => void
+
 /** Moving a Tile: the one on the move, if any, and how a move starts and stops. */
 interface CanvasMove {
   moving?: Moving | undefined
@@ -158,7 +161,7 @@ interface CanvasProps {
    * a finger's long press, by its id, and let go: the canvas's end of a crossing, the chat lighting
    * the line that names it (HEX-122). Without it, pointing at a Tile lights nothing elsewhere.
    */
-  onPoint?: ((tile: string, pointing: boolean) => void) | undefined
+  onPoint?: PointAt | undefined
   className?: string
 }
 

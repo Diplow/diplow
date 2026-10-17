@@ -91,7 +91,7 @@ import { Told } from '#/front/ui/chat/text/Message'
 import { useTold, type ToldPart } from '#/front/ui/motion'
 import { Screen } from '#/front/ui/layouts/screen/Screen'
 import { useScreenState } from '#/front/ui/layouts/screen/state/useScreenState'
-import type { CanvasMarks } from '#/front/ui/canvas/Canvas'
+import type { CanvasMarks, PointAt } from '#/front/ui/canvas/Canvas'
 import { Journey } from '#/front/ui/canvas/layouts/Journey'
 import type { CarriedTile } from '#/front/ui/canvas/state/move/carry'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
@@ -220,7 +220,8 @@ function useTutorialNavigation(
     tree,
     told,
     body: data?.body,
-    ...same,
+    ...same?.canvas,
+    six: same?.chat,
     onViewChange: (view: CanvasView) => {
       void navigate({ search: (current) => tutorialOn(current, view) })
     },
@@ -247,7 +248,7 @@ interface ShippedNavigation {
   onViewChange: (view: CanvasView) => void
   told?: ToldPart | undefined
   pointed?: string | undefined
-  onPoint?: ((tile: string, pointing: boolean) => void) | undefined
+  onPoint?: PointAt | undefined
 }
 
 /**
@@ -603,7 +604,7 @@ interface ShippedSideProps {
   told?: ToldPart | undefined
   /** The tile pointed at, lit, and a tile pointed at handed on: the tutorial's. */
   pointed?: string | undefined
-  onPoint?: ((tile: string, pointing: boolean) => void) | undefined
+  onPoint?: PointAt | undefined
 }
 
 /**

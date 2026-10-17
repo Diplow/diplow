@@ -64,45 +64,52 @@ describe('sameSixOf', () => {
     return { same: sameSixOf(ring, play, (id) => state.shown.push(id)), state }
   }
 
-  it('says what the agent said and how many landed, and which lines name a tile', () => {
-    const { six } = playing().same
-    expect({ landed: six.landed, said: six.said }).toEqual({ landed: 2, said: 'same' })
-    expect([1, 2, 3].map(six.names)).toEqual([true, false, true])
+  it('says what the agent said, and which lines name a tile', () => {
+    const { chat } = playing().same
+    expect(chat.said).toBe('same')
+    expect([1, 2, 3].map(chat.lines.names)).toEqual([true, false, true])
   })
 
-  it('lights the tile pointed at on the canvas, and its line in the chat', () => {
-    const { same } = playing('tutorial/3')
-    expect({ canvas: same.pointed, chat: same.six.pointed }).toEqual({
-      canvas: 'tutorial/3',
-      chat: 3,
-    })
+  it('lights a line once its tile has landed, while their landing is lit', () => {
+    const { lines } = playing().same.chat
+    expect([1, 2, 3].map(lines.lit)).toEqual([true, false, false])
+  })
+
+  it('lights a line while its tile is pointed at, landed or not, on the canvas too', () => {
+    const { canvas, chat } = playing('tutorial/3').same
+    expect(canvas.pointed).toBe('tutorial/3')
+    expect([1, 2, 3].map(chat.lines.lit)).toEqual([true, false, true])
+  })
+
+  it('never lights a line that names no tile, its number landed', () => {
+    expect(playing().same.chat.lines.lit(2)).toBe(false)
   })
 
   it('points at a tile of the ring from the canvas, and lets it go, another let go leaving it', () => {
     const { same, state } = playing()
-    same.onPoint('tutorial/1', true)
-    same.onPoint('tutorial/3', true)
-    same.onPoint('tutorial/1', false)
+    same.canvas.onPoint('tutorial/1', true)
+    same.canvas.onPoint('tutorial/3', true)
+    same.canvas.onPoint('tutorial/1', false)
     expect(state.pointed).toBe('tutorial/3')
-    same.onPoint('tutorial/3', false)
+    same.canvas.onPoint('tutorial/3', false)
     expect(state.pointed).toBeUndefined()
   })
 
   it('lights nothing for a tile no line names, the center', () => {
     const { same, state } = playing()
-    same.onPoint('tutorial', true)
+    same.canvas.onPoint('tutorial', true)
     expect(state.pointed).toBeUndefined()
   })
 
   it('points at the tile a line names, and shows it once clicked, a line naming none doing nothing', () => {
     const { same, state } = playing()
-    same.six.onPoint(1, true)
+    same.chat.lines.onPoint(1, true)
     expect(state.pointed).toBe('tutorial/1')
-    same.six.onPoint(1, false)
-    same.six.onPoint(2, true)
-    same.six.onShow(2)
+    same.chat.lines.onPoint(1, false)
+    same.chat.lines.onPoint(2, true)
+    same.chat.lines.onShow(2)
     expect(state).toEqual({ pointed: undefined, shown: [] })
-    same.six.onShow(3)
+    same.chat.lines.onShow(3)
     expect(state).toEqual({ pointed: 'tutorial/3', shown: ['tutorial/3'] })
   })
 })

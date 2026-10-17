@@ -9,7 +9,7 @@
 // widget. Like the canvas, it holds no state: the view is the URL's, and the route navigates.
 import { m } from '#/paraglide/messages'
 import { Act, voiceOf } from '#/front/ui/atoms/controls/act'
-import { Canvas } from '#/front/ui/canvas/Canvas'
+import { Canvas, type PointAt } from '#/front/ui/canvas/Canvas'
 import type { ToldPart } from '#/front/ui/motion'
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
 import { showView, type CanvasView } from '#/front/ui/canvas/view/view'
@@ -31,7 +31,7 @@ interface ShippedCanvasProps {
   /** The tile pointed at, lit: the tutorial's, from the line of its center's body naming it. */
   pointed?: string | undefined
   /** A tile pointed at, or let go, for the chat to light the line naming it: the tutorial's. */
-  onPoint?: ((tile: string, pointing: boolean) => void) | undefined
+  onPoint?: PointAt | undefined
   className?: string
 }
 

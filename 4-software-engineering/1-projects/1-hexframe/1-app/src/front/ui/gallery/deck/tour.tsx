@@ -12,7 +12,7 @@ import { useState, type ReactNode } from 'react'
 import { m } from '#/paraglide/messages'
 
 import { Act } from '../../atoms/controls/act'
-import { Canvas } from '../../canvas/Canvas'
+import { Canvas, type PointAt } from '../../canvas/Canvas'
 import { Journey } from '../../canvas/layouts/Journey'
 import { Rail } from '../../canvas/layouts/Rail'
 import type { CanvasRules } from '../../canvas/state/useCanvasState'
@@ -22,7 +22,7 @@ import { pathTo, type TileNode } from '../../canvas/view/tiles'
 import { centerOn, showView, type CanvasView } from '../../canvas/view/view'
 import { said } from '../../chat/samples'
 import { tutorialInvitation } from '../../chat/composer/commands'
-import { Message, Told, type SameSix } from '../../chat/text/Message'
+import { Message, Told, type ToldSix } from '../../chat/text/Message'
 import { useSixPlaying, useTold, type SixPlaying, type ToldPart } from '../../motion'
 import { TileWidget } from '../../chat/widgets/tile/TileWidget'
 import { ScreenSlide, type Go } from './Deck'
@@ -180,7 +180,10 @@ interface Tutorial {
   tells: (view: CanvasView) => boolean
   rules: (view: CanvasView, told: ToldPart | undefined) => TutorialShown
   /** What the canvas and the chat take of its center's body and its ring as the same six. */
-  sameSix: (playing: SixPlaying) => SameSix
+  sameSix: (playing: SixPlaying) => {
+    canvas: { pointed: string | undefined; onPoint: PointAt }
+    chat: ToldSix
+  }
 }
 
 interface OnboardingSlideProps {
@@ -309,8 +312,8 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
                 looking={shown.looking}
                 lets={shown.lets}
                 introducesOpening={shown.introducesOpening}
-                marks={{ told, pointed: same?.pointed }}
-                onPoint={same?.onPoint}
+                marks={{ told, pointed: same?.canvas.pointed }}
+                onPoint={same?.canvas.onPoint}
                 className="min-h-0 flex-1"
               />
             )}
@@ -379,7 +382,7 @@ function FirstVisit({ onGo, tutorial, onAgain }: FirstVisitProps) {
               )}
               dawning
             />
-            {there !== undefined && <Told told={told} body={[there.body]} six={same?.six} />}
+            {there !== undefined && <Told told={told} body={[there.body]} six={same?.chat} />}
           </>
         )
       }
