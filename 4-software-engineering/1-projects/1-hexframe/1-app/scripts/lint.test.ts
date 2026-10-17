@@ -21,7 +21,7 @@ async function restrictedSyntax(code: string, filePath: string) {
 }
 
 const feature = 'src/front/routes/index.tsx'
-const inUi = 'src/front/ui/data/DataTable.tsx'
+const inUi = 'src/front/ui/layouts/Dialog.tsx'
 const colour = /theme token/
 
 // The first type-aware lint builds the TypeScript program of the whole app, which takes seconds on a
@@ -56,6 +56,23 @@ describe('the colour lint', () => {
   it('applies inside ui/ too', async () => {
     const messages = await restrictedSyntax(`export const a = 'text-white'\n`, inUi)
     expect(messages).toHaveLength(1)
+  })
+})
+
+describe('the reduced motion lint', () => {
+  it.each(['data-[state=open]:animate-in fade-in-0', 'data-[state=closed]:animate-out'])(
+    'refuses %s without the reduced motion beside it',
+    async (literal) => {
+      const code = `export const a = '${literal}'\nexport const b = \`p-2 ${literal}\`\n`
+      const messages = await restrictedSyntax(code, inUi)
+      expect(messages).toHaveLength(2)
+      expect(messages.every((message) => /reduced motion/.test(message))).toBe(true)
+    },
+  )
+
+  it('lets it through with motion-reduce:animate-none! beside it', async () => {
+    const code = `export const a = 'data-[state=open]:animate-in motion-reduce:animate-none!'\nexport const b = 'animate-in motion-reduce:animate-none'\n`
+    expect(await restrictedSyntax(code, inUi)).toEqual([])
   })
 })
 
@@ -106,7 +123,8 @@ describe('the Effect run lint', () => {
     "import { Effect } from 'effect'\nEffect['runSync'](Effect.void)\n",
     "import { Effect } from 'effect'\nconst { runFork } = Effect\nrunFork(Effect.void)\n",
   ]
-  const files = [feature, inUi, 'src/api/dev/provoke.ts']
+  // A server function's file runs no program either: the helper does.
+  const files = [feature, inUi, 'src/api/iam/iam.ts']
 
   it.each(files.flatMap((file) => runs.map((code) => [file, code] as const)))(
     'refuses a program run in %s: %s',
@@ -158,7 +176,7 @@ describe('the UI library boundary', () => {
   })
 
   it('exempts src/front/ui/ and nothing else', () => {
-    expect(exempt.test('src/front/ui/overlays/Drawer.tsx')).toBe(true)
+    expect(exempt.test('src/front/ui/canvas/layouts/Rail.tsx')).toBe(true)
     expect(exempt.test('src/front/routes/index.tsx')).toBe(false)
   })
 })
@@ -276,6 +294,115 @@ describe('the transaction lint', () => {
   })
 })
 
+/** The rule each import of an app made of these files breaks, cruised with the app's rules. */
+async function violations(files: Readonly<Record<string, string>>) {
+  const root = realpathSync(mkdtempSync(join(tmpdir(), 'cruise-')))
+  try {
+    for (const [path, text] of Object.entries(files)) {
+      mkdirSync(dirname(join(root, path)), { recursive: true })
+      writeFileSync(join(root, path), text)
+    }
+    const { output } = await cruise(['src'], {
+      baseDir: root,
+      validate: true,
+      ruleSet: { forbidden: depcruise.forbidden ?? [] },
+      doNotFollow: depcruise.options?.doNotFollow ?? {},
+      tsPreCompilationDeps: depcruise.options?.tsPreCompilationDeps ?? true,
+    })
+    if (typeof output === 'string') throw new Error(output)
+    return output.summary.violations.map(({ rule, from, to }) => `${rule.name}: ${from} → ${to}`)
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+}
+
+describe('the tiers and sides of the design system', () => {
+  // A small design system: a seam, a shared atom and layout, and a piece of each side. As written it breaks
+  // no rule, each importing only below it; each case adds one import that must.
+  const ui: Readonly<Record<string, string>> = {
+    'src/front/ui/seams/markdown.ts': 'export const markdown = 1\n',
+    'src/front/ui/atoms/button.ts':
+      "import { markdown } from '../seams/markdown'\nexport const button = markdown\n",
+    'src/front/ui/layouts/dialog.ts':
+      "import { button } from '../atoms/button'\nexport const dialog = button\n",
+    'src/front/ui/chat/composer.ts':
+      "import { dialog } from '../layouts/dialog'\nexport const composer = dialog\n",
+    'src/front/ui/canvas/atoms/tooltip.ts': 'export const tooltip = 1\n',
+    'src/front/ui/canvas/tile.ts':
+      "import { button } from '../atoms/button'\nimport { tooltip } from './atoms/tooltip'\nexport const tile = [button, tooltip]\n",
+    'src/front/ui/crossings.ts':
+      "import { composer } from './chat/composer'\nimport { tile } from './canvas/tile'\nexport const crossing = [composer, tile]\n",
+  }
+  const importing = (path: string) => `import * as above from '${path}'\nexport const a = above\n`
+
+  it('lets a side import its own pieces and the shared ones, a layout an atom, an atom a seam, and the crossings both sides', async () => {
+    expect(await violations(ui)).toEqual([])
+  })
+
+  it.each([
+    [
+      'the chat the canvas',
+      'src/front/ui/chat/reach.ts',
+      '../canvas/tile',
+      'src/front/ui/canvas/tile.ts',
+      'no-side-importing-the-other',
+    ],
+    [
+      'the canvas the chat',
+      'src/front/ui/canvas/atoms/reach.ts',
+      '../../chat/composer',
+      'src/front/ui/chat/composer.ts',
+      'no-side-importing-the-other',
+    ],
+    [
+      'a shared layout a side',
+      'src/front/ui/layouts/reach.ts',
+      '../chat/composer',
+      'src/front/ui/chat/composer.ts',
+      'no-layouts-importing-up',
+    ],
+    [
+      'a shared atom a side',
+      'src/front/ui/atoms/reach.ts',
+      '../canvas/tile',
+      'src/front/ui/canvas/tile.ts',
+      'no-atoms-importing-up',
+    ],
+    [
+      'a shared atom a layout',
+      'src/front/ui/atoms/reach.ts',
+      '../layouts/dialog',
+      'src/front/ui/layouts/dialog.ts',
+      'no-atoms-importing-up',
+    ],
+    [
+      'a seam an atom',
+      'src/front/ui/seams/reach.ts',
+      '../atoms/button',
+      'src/front/ui/atoms/button.ts',
+      'no-seams-importing-up',
+    ],
+    [
+      'another file at its root a side',
+      'src/front/ui/reach.ts',
+      './chat/composer',
+      'src/front/ui/chat/composer.ts',
+      'no-ui-root-joining-the-sides',
+    ],
+    [
+      'a piece the crossings',
+      'src/front/ui/layouts/reach.ts',
+      '../crossings',
+      'src/front/ui/crossings.ts',
+      'no-ui-importing-the-crossings',
+    ],
+  ])('refuses %s', async (_, from, path, to, rule) => {
+    expect(await violations({ ...ui, [from]: importing(path) })).toEqual([
+      `${rule}: ${from} → ${to}`,
+    ])
+  })
+})
+
 describe('the door to a domain', () => {
   // A small app, written to a folder of its own and cruised with the app's rules: a domain `d` with its
   // door, its application service and a concept folder; another domain; a repository; and a route
@@ -298,26 +425,7 @@ describe('the door to a domain', () => {
   }
 
   /** The rule each import an app with these files added breaks, and what it imports. */
-  async function broken(added: Readonly<Record<string, string>>) {
-    const root = realpathSync(mkdtempSync(join(tmpdir(), 'door-')))
-    try {
-      for (const [path, text] of Object.entries({ ...app, ...added })) {
-        mkdirSync(dirname(join(root, path)), { recursive: true })
-        writeFileSync(join(root, path), text)
-      }
-      const { output } = await cruise(['src'], {
-        baseDir: root,
-        validate: true,
-        ruleSet: { forbidden: depcruise.forbidden ?? [] },
-        doNotFollow: depcruise.options?.doNotFollow ?? {},
-        tsPreCompilationDeps: depcruise.options?.tsPreCompilationDeps ?? true,
-      })
-      if (typeof output === 'string') throw new Error(output)
-      return output.summary.violations.map(({ rule, from, to }) => `${rule.name}: ${from} → ${to}`)
-    } finally {
-      rmSync(root, { recursive: true, force: true })
-    }
-  }
+  const broken = (added: Readonly<Record<string, string>>) => violations({ ...app, ...added })
 
   const tile = 'src/domains/d/entities/tile.ts'
   const reaching = 'no-door-reaching-past-the-pure-model'

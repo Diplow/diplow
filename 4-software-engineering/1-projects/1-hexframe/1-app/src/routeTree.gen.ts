@@ -10,17 +10,12 @@
 
 import { Route as rootRouteImport } from './front/routes/__root'
 import { Route as IndexRouteImport } from './front/routes/index'
-import { Route as DevRouteRouteImport } from './front/routes/dev/route'
+import { Route as DesignSystemRouteImport } from './front/routes/design-system'
 import { Route as HelpRouteImport } from './front/routes/help'
 import { Route as McpRouteImport } from './front/routes/mcp'
 import { Route as accessSignInRouteImport } from './front/routes/(access)/sign-in'
 import { Route as accessSignUpRouteImport } from './front/routes/(access)/sign-up'
 import { Route as AssistantEventsRouteImport } from './front/routes/assistant/events'
-import { Route as DevErrorsRouteImport } from './front/routes/dev/errors'
-import { Route as DevHexRouteImport } from './front/routes/dev/hex'
-import { Route as DevSessionRouteImport } from './front/routes/dev/session'
-import { Route as DevSystemRouteImport } from './front/routes/dev/system'
-import { Route as DevUiRouteImport } from './front/routes/dev/ui'
 import { Route as SettingsKeysRouteImport } from './front/routes/settings/keys'
 import { Route as AssistantAnthropicSplatRouteImport } from './front/routes/assistant/anthropic.$'
 
@@ -29,9 +24,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DevRouteRoute = DevRouteRouteImport.update({
-  id: '/dev',
-  path: '/dev',
+const DesignSystemRoute = DesignSystemRouteImport.update({
+  id: '/design-system',
+  path: '/design-system',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HelpRoute = HelpRouteImport.update({
@@ -59,31 +54,6 @@ const AssistantEventsRoute = AssistantEventsRouteImport.update({
   path: '/assistant/events',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DevErrorsRoute = DevErrorsRouteImport.update({
-  id: '/errors',
-  path: '/errors',
-  getParentRoute: () => DevRouteRoute,
-} as any)
-const DevHexRoute = DevHexRouteImport.update({
-  id: '/hex',
-  path: '/hex',
-  getParentRoute: () => DevRouteRoute,
-} as any)
-const DevSessionRoute = DevSessionRouteImport.update({
-  id: '/session',
-  path: '/session',
-  getParentRoute: () => DevRouteRoute,
-} as any)
-const DevSystemRoute = DevSystemRouteImport.update({
-  id: '/system',
-  path: '/system',
-  getParentRoute: () => DevRouteRoute,
-} as any)
-const DevUiRoute = DevUiRouteImport.update({
-  id: '/ui',
-  path: '/ui',
-  getParentRoute: () => DevRouteRoute,
-} as any)
 const SettingsKeysRoute = SettingsKeysRouteImport.update({
   id: '/settings/keys',
   path: '/settings/keys',
@@ -97,50 +67,35 @@ const AssistantAnthropicSplatRoute = AssistantAnthropicSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dev': typeof DevRouteRouteWithChildren
+  '/design-system': typeof DesignSystemRoute
   '/help': typeof HelpRoute
   '/mcp': typeof McpRoute
   '/sign-in': typeof accessSignInRoute
   '/sign-up': typeof accessSignUpRoute
   '/assistant/events': typeof AssistantEventsRoute
-  '/dev/errors': typeof DevErrorsRoute
-  '/dev/hex': typeof DevHexRoute
-  '/dev/session': typeof DevSessionRoute
-  '/dev/system': typeof DevSystemRoute
-  '/dev/ui': typeof DevUiRoute
   '/settings/keys': typeof SettingsKeysRoute
   '/assistant/anthropic/$': typeof AssistantAnthropicSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dev': typeof DevRouteRouteWithChildren
+  '/design-system': typeof DesignSystemRoute
   '/help': typeof HelpRoute
   '/mcp': typeof McpRoute
   '/sign-in': typeof accessSignInRoute
   '/sign-up': typeof accessSignUpRoute
   '/assistant/events': typeof AssistantEventsRoute
-  '/dev/errors': typeof DevErrorsRoute
-  '/dev/hex': typeof DevHexRoute
-  '/dev/session': typeof DevSessionRoute
-  '/dev/system': typeof DevSystemRoute
-  '/dev/ui': typeof DevUiRoute
   '/settings/keys': typeof SettingsKeysRoute
   '/assistant/anthropic/$': typeof AssistantAnthropicSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dev': typeof DevRouteRouteWithChildren
+  '/design-system': typeof DesignSystemRoute
   '/help': typeof HelpRoute
   '/mcp': typeof McpRoute
   '/(access)/sign-in': typeof accessSignInRoute
   '/(access)/sign-up': typeof accessSignUpRoute
   '/assistant/events': typeof AssistantEventsRoute
-  '/dev/errors': typeof DevErrorsRoute
-  '/dev/hex': typeof DevHexRoute
-  '/dev/session': typeof DevSessionRoute
-  '/dev/system': typeof DevSystemRoute
-  '/dev/ui': typeof DevUiRoute
   '/settings/keys': typeof SettingsKeysRoute
   '/assistant/anthropic/$': typeof AssistantAnthropicSplatRoute
 }
@@ -148,56 +103,41 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/dev'
+    | '/design-system'
     | '/help'
     | '/mcp'
     | '/sign-in'
     | '/sign-up'
     | '/assistant/events'
-    | '/dev/errors'
-    | '/dev/hex'
-    | '/dev/session'
-    | '/dev/system'
-    | '/dev/ui'
     | '/settings/keys'
     | '/assistant/anthropic/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/dev'
+    | '/design-system'
     | '/help'
     | '/mcp'
     | '/sign-in'
     | '/sign-up'
     | '/assistant/events'
-    | '/dev/errors'
-    | '/dev/hex'
-    | '/dev/session'
-    | '/dev/system'
-    | '/dev/ui'
     | '/settings/keys'
     | '/assistant/anthropic/$'
   id:
     | '__root__'
     | '/'
-    | '/dev'
+    | '/design-system'
     | '/help'
     | '/mcp'
     | '/(access)/sign-in'
     | '/(access)/sign-up'
     | '/assistant/events'
-    | '/dev/errors'
-    | '/dev/hex'
-    | '/dev/session'
-    | '/dev/system'
-    | '/dev/ui'
     | '/settings/keys'
     | '/assistant/anthropic/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DevRouteRoute: typeof DevRouteRouteWithChildren
+  DesignSystemRoute: typeof DesignSystemRoute
   HelpRoute: typeof HelpRoute
   McpRoute: typeof McpRoute
   accessSignInRoute: typeof accessSignInRoute
@@ -216,11 +156,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dev': {
-      id: '/dev'
-      path: '/dev'
-      fullPath: '/dev'
-      preLoaderRoute: typeof DevRouteRouteImport
+    '/design-system': {
+      id: '/design-system'
+      path: '/design-system'
+      fullPath: '/design-system'
+      preLoaderRoute: typeof DesignSystemRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/help': {
@@ -258,41 +198,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssistantEventsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dev/errors': {
-      id: '/dev/errors'
-      path: '/errors'
-      fullPath: '/dev/errors'
-      preLoaderRoute: typeof DevErrorsRouteImport
-      parentRoute: typeof DevRouteRoute
-    }
-    '/dev/hex': {
-      id: '/dev/hex'
-      path: '/hex'
-      fullPath: '/dev/hex'
-      preLoaderRoute: typeof DevHexRouteImport
-      parentRoute: typeof DevRouteRoute
-    }
-    '/dev/session': {
-      id: '/dev/session'
-      path: '/session'
-      fullPath: '/dev/session'
-      preLoaderRoute: typeof DevSessionRouteImport
-      parentRoute: typeof DevRouteRoute
-    }
-    '/dev/system': {
-      id: '/dev/system'
-      path: '/system'
-      fullPath: '/dev/system'
-      preLoaderRoute: typeof DevSystemRouteImport
-      parentRoute: typeof DevRouteRoute
-    }
-    '/dev/ui': {
-      id: '/dev/ui'
-      path: '/ui'
-      fullPath: '/dev/ui'
-      preLoaderRoute: typeof DevUiRouteImport
-      parentRoute: typeof DevRouteRoute
-    }
     '/settings/keys': {
       id: '/settings/keys'
       path: '/settings/keys'
@@ -310,29 +215,9 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface DevRouteRouteChildren {
-  DevErrorsRoute: typeof DevErrorsRoute
-  DevHexRoute: typeof DevHexRoute
-  DevSessionRoute: typeof DevSessionRoute
-  DevSystemRoute: typeof DevSystemRoute
-  DevUiRoute: typeof DevUiRoute
-}
-
-const DevRouteRouteChildren: DevRouteRouteChildren = {
-  DevErrorsRoute: DevErrorsRoute,
-  DevHexRoute: DevHexRoute,
-  DevSessionRoute: DevSessionRoute,
-  DevSystemRoute: DevSystemRoute,
-  DevUiRoute: DevUiRoute,
-}
-
-const DevRouteRouteWithChildren = DevRouteRoute._addFileChildren(
-  DevRouteRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DevRouteRoute: DevRouteRouteWithChildren,
+  DesignSystemRoute: DesignSystemRoute,
   HelpRoute: HelpRoute,
   McpRoute: McpRoute,
   accessSignInRoute: accessSignInRoute,

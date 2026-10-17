@@ -11,6 +11,12 @@ const layers = [['front'], ['api'], ['domains'], ['repositories']]
 // a route, and neither the client nor the design system imports a feature.
 const frontLayers = [['routes'], ['features'], ['client', 'ui']]
 
+// Inside the design system, top to bottom: the two sides, the Chat and the Canvas, each with its own
+// components and the atoms and layouts only it uses; then the layouts the sides share; then the atoms
+// they share; then the seams, each a library behind one file, which any piece may draw with. A shared
+// piece never imports a side, nor an atom a layout, nor a seam anything of the design system.
+const uiTiers = [['chat', 'canvas'], ['layouts'], ['atoms'], ['seams']]
+
 /** One rule per tier below the top: it never imports a tier above it. */
 function upward(root: string, tiers: string[][]): NonNullable<IConfiguration['forbidden']> {
   return tiers.slice(1).map((tier, index) => {
@@ -70,7 +76,7 @@ const shapeReadingRules = '2-claude-mod/hooks/shape/(node|exclusions)\\.ts$'
 const shapeSeam = '^src/domains/mapping/(files/import/shape\\.ts|.+\\.test\\.ts)$'
 const shapeLayout = '2-claude-mod/hooks/shape/layout\\.ts$'
 const shapeTypes = '2-claude-mod/hooks/shape/node\\.ts$'
-const layoutSeam = '^src/front/ui/hex/geometry/shape(\\.test)?\\.ts$'
+const layoutSeam = '^src/front/ui/canvas/geometry/shape(\\.test)?\\.ts$'
 
 // A domain's door, the front's one way into the domains: its entities, its operations and its errors,
 // pure by what they are (STACK.md, "Domains"). What they reach stays inside that pure model: the
@@ -99,6 +105,31 @@ const config: IConfiguration = {
   forbidden: [
     ...upward('src/', layers),
     ...upward('src/front/', frontLayers),
+    ...upward('src/front/ui/', uiTiers),
+    {
+      name: 'no-side-importing-the-other',
+      comment:
+        'The Chat and the Canvas ignore each other in ui/: a piece both use moves to the shared atoms/ or layouts/.',
+      severity: 'error',
+      from: { path: '^src/front/ui/(chat|canvas)/' },
+      to: { path: '^src/front/ui/(chat|canvas)/', pathNot: '^src/front/ui/$1/' },
+    },
+    {
+      name: 'no-ui-root-joining-the-sides',
+      comment:
+        'Of the files at ui/’s root, outside the tiers, crossings.tsx alone imports the sides, joining them for /design-system as home’s route does.',
+      severity: 'error',
+      from: { path: '^src/front/ui/[^/]+$', pathNot: '^src/front/ui/crossings\\.tsx?$' },
+      to: { path: '^src/front/ui/(chat|canvas)/' },
+    },
+    {
+      name: 'no-ui-importing-the-crossings',
+      comment:
+        'The crossings join the sides for the page alone: the route imports ui/crossings.tsx, nothing in ui/ does.',
+      severity: 'error',
+      from: { path: '^src/front/ui/', pathNot: '^src/front/ui/crossings\\.tsx?$' },
+      to: { path: '^src/front/ui/crossings\\.tsx?$' },
+    },
     {
       name: 'no-front-past-a-domains-door',
       comment:
@@ -156,7 +187,7 @@ const config: IConfiguration = {
     {
       name: 'no-shape-outside-its-seams',
       comment:
-        'The shape is imported by src/domains/mapping/files/import/shape.ts and Mapping’s tests, and by src/front/ui/hex/geometry/shape.ts and its test, only.',
+        'The shape is imported by src/domains/mapping/files/import/shape.ts and Mapping’s tests, and by src/front/ui/canvas/geometry/shape.ts and its test, only.',
       severity: 'error',
       from: { path: '^src/', pathNot: [shapeSeam, layoutSeam] },
       to: { path: '2-claude-mod/' },

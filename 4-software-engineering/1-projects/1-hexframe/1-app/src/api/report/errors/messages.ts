@@ -11,7 +11,7 @@ import type { Failure } from './failure'
  * which its server function bears and the MCP tool that runs it names too, or another server function
  * by its own.
  */
-type Scope = OperationName | 'importTiles' | 'undo' | 'submitDevTitle'
+type Scope = OperationName | 'importTiles' | 'undo'
 
 interface Entry {
   tag: Failure['_tag']
@@ -54,9 +54,6 @@ const table: readonly Entry[] = [
   { tag: 'BatchOutdated', scope: 'undo', message: m.error_assistant_undo_outdated },
   { tag: 'BatchOutdated', message: m.error_mapping_batch_outdated },
   { tag: 'ImportRefused', message: m.error_mapping_import_refused },
-  { tag: 'DevInvalid', scope: 'submitDevTitle', message: m.error_dev_title_missing },
-  { tag: 'DevConflict', scope: 'submitDevTitle', message: m.error_dev_title_taken },
-  { tag: 'DevNotFound', message: m.error_dev_not_found },
 ]
 
 /** What a failure of each kind says when the table has no entry for it. */

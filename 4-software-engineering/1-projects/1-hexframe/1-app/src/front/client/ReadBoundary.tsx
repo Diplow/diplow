@@ -4,7 +4,7 @@ import { QueryErrorResetBoundary } from '@tanstack/react-query'
 import { CatchBoundary, useLocation } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 
-import { ErrorState, Forbidden } from '#/front/ui/feedback/states'
+import { ErrorState, Forbidden } from '#/front/ui/layouts/states'
 import { channelFor } from '#/api/report/errors/channel'
 import { messageFor } from '#/api/report/errors/messages'
 
@@ -41,8 +41,12 @@ export function ReadBoundary({ children }: { children: ReactNode }) {
   )
 }
 
-// Anything else thrown while rendering is a bug, reported as it is caught, and shows as Unexpected.
-function ReadFailure({ error, onRetry }: { error: unknown; onRetry: () => void }) {
+/**
+ * What the boundary shows in place of what it caught: a read's failure, by its channel, `Forbidden` or
+ * `ErrorState`; anything else thrown while rendering is a bug, reported as it is caught, and shows as
+ * Unexpected. /design-system shows it on failures made up for it.
+ */
+export function ReadFailure({ error, onRetry }: { error: unknown; onRetry: () => void }) {
   const { failure, scope, requestId } = asCallFailed(error, 'render')
   const message = messageFor(failure, scope)
   if (channelFor('read', failure.kind) === 'forbidden') return <Forbidden message={message} />

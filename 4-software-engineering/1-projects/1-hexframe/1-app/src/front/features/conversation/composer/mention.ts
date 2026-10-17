@@ -1,10 +1,12 @@
 // What the composer does with an `@`: the search it opens over the Account's Tiles by Title, as the
 // user types after it; the link it inserts once one is picked, shown in the input as `@` and the Tile's
 // Title; and the Message it sends, each link it inserted written as Assistant keeps it, by the Tile's id
-// (`linkTo`), whatever the Tile is called by the time someone reads it. Pure; the composer's state hook
-// (`../state/useMentionState.ts`) runs it.
+// (`linkTo`), whatever the Tile is called by the time someone reads it, wherever the input still shows
+// it whole, as ui's `commands.ts` reads it (`wholeLink`). Pure; the composer's state hook
+// (`../state/useComposerState.ts`) runs it, through `./typing.ts`.
 import { linkTo } from '#/domains/assistant/entities'
 import { contextSlotOf, directions, type SystemTile } from '#/domains/mapping/entities'
+import { wholeLink } from '#/front/ui/chat/composer/commands'
 
 /** A Tile the user may `@`: its id, its Title as shown, and the Titles of the Tiles above it. */
 export interface Mentionable {
@@ -126,12 +128,6 @@ export interface Inserted {
   readonly shown: string
 }
 
-/** A text read as itself inside a pattern. */
-const escaped = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-
-/** Nothing a word goes on with: what ends a link as the input shows it. */
-const ended = '(?![\\p{L}\\p{N}])'
-
 /**
  * How the input shows a link to a Tile: `@` and its Title, unless another Tile picked already shows
  * so; then with the Title above it, then its whole trail, then a number, so two Tiles of one Title
@@ -148,10 +144,6 @@ export function shownOf(tile: Mentionable, links: ReadonlyArray<Inserted>): stri
   ]
   return tried.find((shown) => !taken(shown)) ?? `@${tile.title} (${String(links.length + 2)})`
 }
-
-/** Whether the input shows one of the links picked whole at `at`, nothing a word goes on with after. */
-export const showsLink = (value: string, at: number, links: ReadonlyArray<Inserted>) =>
-  links.some(({ shown }) => new RegExp(`^${escaped(shown)}${ended}`, 'u').test(value.slice(at)))
 
 /** The input's next value, and where its caret goes. */
 export interface Edited {
@@ -178,9 +170,5 @@ export function inserted(value: string, query: Query, shown: string): Edited {
 export function encoded(value: string, links: ReadonlyArray<Inserted>): string {
   return [...links]
     .sort((a, b) => b.shown.length - a.shown.length)
-    .reduce(
-      (text, { id, shown }) =>
-        text.replace(new RegExp(`(?<!\\S)${escaped(shown)}${ended}`, 'gu'), linkTo(id)),
-      value,
-    )
+    .reduce((text, { id, shown }) => text.replace(wholeLink(shown), linkTo(id)), value)
 }

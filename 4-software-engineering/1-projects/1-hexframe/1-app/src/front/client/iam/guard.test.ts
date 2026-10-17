@@ -1,4 +1,3 @@
-import { isRedirect } from '@tanstack/react-router'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { DevUnauthenticated } from '#/api/dev/failures'
@@ -7,7 +6,7 @@ import { forget, identify } from '#/api/report/observability/client'
 import { session } from '#/api/iam/iam'
 
 import { CallFailed } from '../calls'
-import { continueTo, provedSession, readSignInSearch, signedInOnly } from './guard'
+import { continueTo, readSignInSearch, sessionIfAny } from './guard'
 
 vi.mock('#/api/iam/iam', () => ({ session: vi.fn() }))
 vi.mock('#/api/report/observability/client', () => ({ identify: vi.fn(), forget: vi.fn() }))
@@ -27,7 +26,7 @@ const assign = vi.fn()
 beforeEach(() => {
   vi.clearAllMocks()
   vi.stubGlobal('window', {
-    location: { href: 'http://localhost/sign-in', origin: 'http://localhost', assign },
+    location: { href: 'http://localhost/', origin: 'http://localhost', assign },
   })
 })
 
@@ -35,10 +34,10 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-describe("sign-in's search params", () => {
+describe("home's search param, signed out", () => {
   it('keep a path on this site, with its search and hash', () => {
-    expect(readSignInSearch({ redirect: '/dev/session?a=1#x' })).toEqual({
-      redirect: '/dev/session?a=1#x',
+    expect(readSignInSearch({ redirect: '/?help=true#x' })).toEqual({
+      redirect: '/?help=true#x',
     })
   })
 
@@ -48,7 +47,7 @@ describe("sign-in's search params", () => {
     ['a backslash', '/\\evil.example'],
     ['a tab a browser would drop', '/\t/evil.example'],
     ['a newline a browser would drop', '/\n/evil.example'],
-    ['a relative path', 'dev/session'],
+    ['a relative path', 'settings/keys'],
     ['something that is not a string', 42],
   ])('drop %s, so sign-in goes home', (_, redirect) => {
     expect(readSignInSearch({ redirect })).toEqual({ redirect: undefined })
@@ -61,8 +60,8 @@ describe("sign-in's search params", () => {
 
 describe('the way back once signed in', () => {
   it('goes where the user was, with a full load', () => {
-    continueTo('/dev/session?a=1', 'a-1')
-    expect(assign).toHaveBeenCalledExactlyOnceWith('/dev/session?a=1')
+    continueTo('/?keys=true', 'a-1')
+    expect(assign).toHaveBeenCalledExactlyOnceWith('/?keys=true')
   })
 
   it('goes home without a place', () => {
@@ -81,49 +80,37 @@ describe('the way back once signed in', () => {
   })
 })
 
-describe('the guard of a page only a signed-in Account sees', () => {
-  const location = { href: '/dev/session?a=1' } as Parameters<typeof signedInOnly>[0]['location']
+describe("home's read of the Session", () => {
   const account = { id: 'a-1', email: 'ada@example.com' }
 
   it('puts the Session on the route context', async () => {
     const found = { account, expiresAt: new Date() }
     answering({ ok: true, value: found })
-    expect(await signedInOnly({ location })).toEqual({ session: found })
-  })
-
-  it("leaves a context the header's links read as signed in", async () => {
-    answering({ ok: true, value: { account, expiresAt: new Date(0) } })
-    expect(provedSession(await signedInOnly({ location }))).toBe(true)
-    expect(provedSession({})).toBe(false)
-    expect(provedSession(undefined)).toBe(false)
+    expect(await sessionIfAny()).toEqual({ session: found })
   })
 
   it('ties the device to the Account whose Session it found', async () => {
     answering({ ok: true, value: { account, expiresAt: new Date() } })
-    await signedInOnly({ location })
+    await sessionIfAny()
     expect(identify).toHaveBeenCalledExactlyOnceWith('a-1')
     expect(forget).not.toHaveBeenCalled()
   })
 
   it('unties the device from any Account when the visit is signed out', async () => {
     answering(failing(new DevUnauthenticated()))
-    await signedInOnly({ location }).catch(() => undefined)
+    await sessionIfAny()
     expect(forget).toHaveBeenCalledOnce()
     expect(identify).not.toHaveBeenCalled()
   })
 
-  it('redirects a signed-out visit to sign-in, carrying where it was', async () => {
+  it('shows a signed-out visit signed out, sending it nowhere', async () => {
     answering(failing(new DevUnauthenticated()))
-    const thrown: unknown = await signedInOnly({ location }).catch((error: unknown) => error)
-    expect(isRedirect(thrown)).toBe(true)
-    expect(thrown).toMatchObject({
-      options: { to: '/sign-in', search: { redirect: '/dev/session?a=1' } },
-    })
+    expect(await sessionIfAny()).toEqual({ session: undefined })
   })
 
   it('makes any other failure the route’s error', async () => {
     answering(failing(new Unexpected()))
-    const thrown: unknown = await signedInOnly({ location }).catch((error: unknown) => error)
+    const thrown: unknown = await sessionIfAny().catch((error: unknown) => error)
     expect(thrown).toBeInstanceOf(CallFailed)
     expect(thrown).toMatchObject({ failure: { _tag: 'Unexpected' }, scope: 'session' })
   })

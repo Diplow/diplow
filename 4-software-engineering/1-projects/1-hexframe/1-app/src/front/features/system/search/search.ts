@@ -1,19 +1,20 @@
-// What the System's page carries in its URL: the canvas's view (front/ui/hex/view), and the change the user
+// What the System's page carries in its URL: the canvas's view (front/ui/canvas/view), and the change the user
 // has under way, if any: a new Tile's form, an import, a Tile's form, or a Tile to move. A link shows
 // the page as its sender saw it, the open form included. Every function here is pure.
 import { Schema } from 'effect'
 
 import { Slot } from '#/domains/mapping/entities'
 import type { ImportPlace } from '#/front/client/mapping/queries'
-import { findTile, type TileNode } from '#/front/ui/hex/view/tiles'
+import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 import {
   CanvasView,
+  centerOn,
   orDefault,
   readSearch,
   TileId,
   viewIn,
   withViewIn,
-} from '#/front/ui/hex/view/view'
+} from '#/front/ui/canvas/view/view'
 
 /** What `import` says for the Root of an empty System, where a Tile's id goes otherwise. */
 const rootPlace = 'root'
@@ -28,7 +29,7 @@ const SystemSearch = Schema.Struct({
   add: Schema.optionalKey(orDefault(TileId)),
   slot: Schema.optionalKey(orDefault(Slot)),
   /**
-   * Where an import lands, its drawer open: in `slot` under this Tile, or, `root`, as the Root of an
+   * Where an import lands, its widget open: in `slot` under this Tile, or, `root`, as the Root of an
    * empty System.
    */
   import: Schema.optionalKey(orDefault(ImportInto)),
@@ -136,3 +137,26 @@ export function withoutTile(search: SystemSearch, gone: TileNode): SystemSearch 
     ? withChange(search, { kind: 'none' })
     : search
 }
+
+/**
+ * Whether going to `next` opens a form the tile widget shows, a new Tile's, an import or an edit,
+ * another than the one under way. A change that lands later, made from the search params of that
+ * moment, opens none: it is a refusal putting a form back.
+ */
+export function opensWidget(current: SystemSearch, next: SearchChange): boolean {
+  if (typeof next === 'function') return false
+  const change = changeOf(next)
+  return (
+    (change.kind === 'add' || change.kind === 'import' || change.kind === 'edit') &&
+    keyOf(change) !== keyOf(changeOf(current))
+  )
+}
+
+/**
+ * Where a delete leaves the page, from the search params of its moment: centered on the Tile `gone`
+ * stood under, the change under way ended if it named `gone` or a Tile below it.
+ */
+export const afterDelete =
+  (tree: TileNode, parent: string, gone: TileNode) =>
+  (current: SystemSearch): SystemSearch =>
+    withoutTile(withView(current, centerOn(tree, parent)), gone)

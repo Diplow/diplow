@@ -1,9 +1,10 @@
-// IAM's server functions: signing up, in and out, the Session a page only a signed-in Account sees is
-// guarded by (front/client/iam/guard.ts), and the Account's Keys: issuing, listing, revoking. The
+// IAM's server functions: signing up, in and out, the Session home reads before it renders, signed in
+// or out (front/client/iam/guard.ts), and the Account's Keys: issuing, listing, revoking. The
 // middleware has already put the request's Session on context.
 import { createServerFn } from '@tanstack/react-start'
 import { Schema } from 'effect'
 
+import { keyNameBounds } from '#/domains/iam/entities'
 import * as Iam from '#/domains/iam/iam'
 
 import { run } from '../server/run'
@@ -17,11 +18,17 @@ export const Credentials = Schema.Struct({
   password: Schema.String.check(Schema.isMaxLength(1024)),
 })
 
+/** The most UTF-16 units a reader's character takes here: an emoji is up to 19 (a family, skin toned). */
+const unitsPerCharacter = 32
+
 /**
- * What issuing a Key sends: its name. Bounded here, so nothing unbounded reaches Better Auth; what a
- * name must be is IAM's to say, on the field.
+ * What issuing a Key sends: its name. Bounded here, so nothing unbounded reaches IAM or Better Auth;
+ * what a name must be is IAM's to say, on the field. IAM counts its characters as a reader does, so
+ * the bound, in UTF-16 units, leaves room for its most characters, emoji each, and their spaces.
  */
-export const KeyName = Schema.Struct({ name: Schema.String.check(Schema.isMaxLength(256)) })
+export const KeyName = Schema.Struct({
+  name: Schema.String.check(Schema.isMaxLength(keyNameBounds.max * unitsPerCharacter)),
+})
 
 /** What revoking a Key sends: its id, as Better Auth makes them: letters and digits. */
 export const KeyId = Schema.Struct({
@@ -39,11 +46,12 @@ export const signIn = createServerFn({ method: 'POST' })
   .validator(Schema.toStandardSchemaV1(Credentials))
   .handler(({ data, context }) => run(context, Iam.signIn(data)))
 
+/** Signs out on this device, the composer's `/logout`: its Session ended, its cookie cleared. */
 export const signOut = createServerFn({ method: 'POST' })
   .validator(Nothing)
   .handler(({ context }) => run(context, Iam.signOut))
 
-/** The request's Session, or `SignedOut`: what a guarded page reads before anything renders. */
+/** The request's Session, or `SignedOut`: what home reads before anything renders. */
 export const session = createServerFn({ method: 'GET' })
   .validator(Nothing)
   .handler(({ context }) => run(context, Iam.sessionOnly))

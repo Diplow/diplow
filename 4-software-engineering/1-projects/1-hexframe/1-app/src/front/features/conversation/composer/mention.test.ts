@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest'
 
 import { linkTo, partsOf } from '#/domains/assistant/entities'
 import type { SystemTile } from '#/domains/mapping/entities'
+import { mentionablesIn } from '#/front/ui/canvas/crossings'
+import type { TileNode } from '#/front/ui/canvas/view/tiles'
+import { m } from '#/paraglide/messages'
 
 import {
   encoded,
@@ -12,7 +15,6 @@ import {
   mostOffered,
   queryAt,
   shownOf,
-  showsLink,
 } from './mention'
 
 // The composer's `@`, on a System and texts made by hand: the Tiles it offers, the search the caret
@@ -67,6 +69,43 @@ describe('the Tiles the user may @', () => {
       title: 'Team',
       trail: ['Untitled', 'Work'],
     })
+  })
+})
+
+describe("the design system's `@`, on the canvas's tiles alone", () => {
+  /**
+   * The System above as the canvas draws it (`features/system/tree.ts`'s `canvasTree`, which this
+   * feature can't import): the untitled Root named so, a Reference under its Tile's id, a broken one
+   * under an id of its own.
+   */
+  const drawn: TileNode = {
+    id: 'root',
+    title: m.system_untitled(),
+    preview: '',
+    branches: {
+      1: {
+        id: 'work',
+        title: 'Work',
+        preview: '',
+        branches: { 2: { id: 'team', title: 'Team', preview: '' } },
+      },
+      4: { id: 'games', title: 'Jeux vidéo', preview: '' },
+    },
+    leaves: { 3: { id: 'notes', title: 'Notes', preview: '', leaf: true } },
+    context: {
+      1: { id: 'why', title: 'Why I work', preview: '' },
+      2: { id: 'team', title: 'Team', preview: '', reference: { from: 'Work' } },
+      3: { id: 'broken:root:-3', title: 'Broken', preview: '', broken: true },
+    },
+  }
+
+  it('finds the Tiles home finds, in its order, each with the Titles above it', () => {
+    // `/design-system`'s crossings `@` the canvas's own tiles, which no Mapping System stands behind
+    // there (`ui/canvas/crossings.tsx`'s `mentionablesIn`): held here to the feature's reading.
+    const home = mentionablesOf(system, m.system_untitled())
+    expect(mentionablesIn(drawn)).toEqual(
+      home.map(({ id, title, trail }) => ({ id, title, path: trail.join(' / ') })),
+    )
   })
 })
 
@@ -149,14 +188,6 @@ describe('the link the composer inserts, and the Message it sends', () => {
         { id: 'notes-5', shown: '@Ada / Work / Notes' },
       ]),
     ).toBe('@Notes (2)')
-  })
-
-  it('finds a link picked shown whole at an `@`, never one a longer word goes on from', () => {
-    const picked = [{ id: 'work', shown: '@Work' }]
-    expect(showsLink('Ask @Work now', 4, picked)).toBe(true)
-    expect(showsLink('Ask @Work', 4, picked)).toBe(true)
-    expect(showsLink('Ask @Workshop', 4, picked)).toBe(false)
-    expect(showsLink('Ask @Wor', 4, picked)).toBe(false)
   })
 
   it('sends each link it inserted by its Tile’s id, wherever the input still shows it whole', () => {

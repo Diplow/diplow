@@ -5,7 +5,7 @@
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query'
 
 import { deLocalizeHref, localizeHref } from '#/paraglide/runtime'
-import { toast } from '#/front/ui/feedback/Toaster'
+import { toast } from '#/front/ui/atoms/Toaster'
 import { channelFor, type Call } from '#/api/report/errors/channel'
 import type { Failure, Outcome } from '#/api/report/errors/failure'
 import { messageFor } from '#/api/report/errors/messages'
@@ -15,18 +15,46 @@ import { CallFailed, Foreseen, asCallFailed, settle } from './calls'
 
 let signingIn = false
 
-// One redirect, however many calls fail at once, carrying where the user was, without its language
-// prefix, as the router's own redirect (./iam/guard.ts) carries it, and untying this device from the
-// Account whose Session ended, as that guard does. On the server there is no window to move: a read
-// made while rendering a page is guarded by the route's `beforeLoad`, `signedInOnly`.
+// One full load of home, however many calls fail at once, which shows it signed out, the sign-in
+// widget at the chat's foot, carrying where the user was, without its language prefix, and untying
+// this device from the Account whose Session ended, as home's read of the Session does
+// (./iam/guard.ts). On the server there is no window to move: home reads the Session in its
+// `beforeLoad`, `sessionIfAny`, before anything renders, and draws no signed-in read signed out. It
+// loads home once in a while at most (`reloadedLately`): should home find a Session that a call then
+// refuses, the page would otherwise load itself for ever.
 function signIn() {
-  if (signingIn || typeof window === 'undefined') return
+  if (signingIn || typeof window === 'undefined' || reloadedLately(() => window.sessionStorage)) {
+    return
+  }
   signingIn = true
   forget()
   const here = deLocalizeHref(
     `${window.location.pathname}${window.location.search}${window.location.hash}`,
   )
-  window.location.assign(localizeHref(`/sign-in?redirect=${encodeURIComponent(here)}`))
+  window.location.assign(localizeHref(`/?redirect=${encodeURIComponent(here)}`))
+}
+
+/** The mark of the last load this channel made, which outlives it in the tab. */
+const reloadMark = 'hexframe:signing-in'
+
+/** How long a load this channel made keeps it from making another. */
+const reloadPause = 10_000
+
+/**
+ * Whether this channel loaded home less than `reloadPause` ago in this tab; if not, marks now. A tab
+ * that keeps nothing, its storage absent or refused (a sandboxed frame, a private mode), never counts
+ * as reloaded: the channel loads home as it did before the mark.
+ */
+function reloadedLately(storage: () => Storage | undefined) {
+  try {
+    const kept = storage()
+    const now = Date.now()
+    if (now - Number(kept?.getItem(reloadMark) ?? 0) < reloadPause) return true
+    kept?.setItem(reloadMark, String(now))
+  } catch {
+    return false
+  }
+  return false
 }
 
 /**

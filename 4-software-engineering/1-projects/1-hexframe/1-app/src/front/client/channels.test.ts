@@ -1,14 +1,14 @@
 import type { MutationOptions, Query } from '@tanstack/react-query'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { toast } from '#/front/ui/feedback/Toaster'
+import { toast } from '#/front/ui/atoms/Toaster'
 import { DevConflict, DevForbidden, DevInvalid, DevUnauthenticated } from '#/api/dev/failures'
 import { Unexpected, encodeFailure, type Failure, type Outcome } from '#/api/report/errors/failure'
 
 import { CallFailed, read, write } from './calls'
 import { caught, makeQueryClient, submitMutation, submitWrite } from './channels'
 
-vi.mock('#/front/ui/feedback/Toaster', () => ({ toast: { error: vi.fn() } }))
+vi.mock('#/front/ui/atoms/Toaster', () => ({ toast: { error: vi.fn() } }))
 vi.mock('#/api/report/observability/client', async (original) => ({
   ...(await original<object>()),
   forget: vi.fn(),
@@ -23,9 +23,9 @@ beforeEach(() => {
   vi.clearAllMocks()
   vi.stubGlobal('window', {
     location: {
-      href: 'http://localhost/dev/errors?a=1#x',
+      href: 'http://localhost/design-system?a=1#x',
       origin: 'http://localhost',
-      pathname: '/dev/errors',
+      pathname: '/design-system',
       search: '?a=1',
       hash: '#x',
       assign,
@@ -43,7 +43,7 @@ afterEach(async () => {
 
 describe("a form's write", () => {
   const submit = (call: () => Promise<Outcome<{ title: string }, Failure>>, onSaved = vi.fn()) =>
-    submitWrite({ scope: 'submitDevTitle', call, onSaved })({ value: { title: 'x' } })
+    submitWrite({ scope: 'createTile', call, onSaved })({ value: { title: 'x' } })
 
   it('hands the value to onSaved and reports no error', async () => {
     const onSaved = vi.fn()
@@ -54,7 +54,7 @@ describe("a form's write", () => {
 
   it("puts an Invalid failure's message on the fields it names, and raises no toast", async () => {
     expect(await submit(() => failing(new DevInvalid({ fields: ['title'] })))).toEqual({
-      fields: { title: 'Give it a title.' },
+      fields: { title: 'Some fields need another look.' },
     })
     expect(toast.error).not.toHaveBeenCalled()
   })
@@ -62,9 +62,11 @@ describe("a form's write", () => {
   it('raises one toast for any other failure, and keeps the submit from counting as done', async () => {
     const onSaved = vi.fn()
     expect(await submit(() => failing(new DevConflict()), onSaved)).toEqual({
-      form: 'That title is taken.',
+      form: 'This changed in the meantime. Reload, then try again.',
     })
-    expect(toast.error).toHaveBeenCalledExactlyOnceWith('That title is taken.')
+    expect(toast.error).toHaveBeenCalledExactlyOnceWith(
+      'This changed in the meantime. Reload, then try again.',
+    )
     expect(onSaved).not.toHaveBeenCalled()
   })
 })
@@ -76,7 +78,7 @@ describe("a form's write through a mutation", () => {
     onSaved = vi.fn(),
   ) => {
     const client = makeQueryClient()
-    const options = write('submitDevTitle', answer, { as: 'submit' })
+    const options = write('createTile', answer, { as: 'submit' })
     return submitMutation({
       mutate: (value: { title: string }) =>
         client.getMutationCache().build(client, options).execute(value),
@@ -93,7 +95,7 @@ describe("a form's write through a mutation", () => {
 
   it("shows an Invalid failure's message on the fields it names, and raises no toast", async () => {
     expect(await submit(() => failing(new DevInvalid({ fields: ['title'] })))).toEqual({
-      fields: { title: 'Give it a title.' },
+      fields: { title: 'Some fields need another look.' },
     })
     expect(toast.error).not.toHaveBeenCalled()
   })
@@ -102,16 +104,18 @@ describe("a form's write through a mutation", () => {
     const { overwriteGetLocale } = await import('#/paraglide/runtime')
     overwriteGetLocale(() => 'fr')
     expect(await submit(() => failing(new DevInvalid({ fields: ['title'] })))).toEqual({
-      fields: { title: 'Donnez-lui un titre.' },
+      fields: { title: 'Certains champs sont à revoir.' },
     })
   })
 
   it('raises one toast for any other failure, and keeps the submit from counting as done', async () => {
     const onSaved = vi.fn()
     expect(await submit(() => failing(new DevConflict()), onSaved)).toEqual({
-      form: 'That title is taken.',
+      form: 'This changed in the meantime. Reload, then try again.',
     })
-    expect(toast.error).toHaveBeenCalledExactlyOnceWith('That title is taken.')
+    expect(toast.error).toHaveBeenCalledExactlyOnceWith(
+      'This changed in the meantime. Reload, then try again.',
+    )
     expect(onSaved).not.toHaveBeenCalled()
   })
 
@@ -126,7 +130,7 @@ describe("a form's write through a mutation", () => {
   })
 })
 
-describe('the sign-in redirect', () => {
+describe('the way to signing in, home signed out', () => {
   // Fresh modules for each case, so the one-redirect flag in channels.ts starts down.
   const signingIn = async () => {
     vi.resetModules()
@@ -144,7 +148,7 @@ describe('the sign-in redirect', () => {
     await submit()
     await submit()
     expect(assign).toHaveBeenCalledExactlyOnceWith(
-      `/sign-in?redirect=${encodeURIComponent('/dev/errors?a=1#x')}`,
+      `/?redirect=${encodeURIComponent('/design-system?a=1#x')}`,
     )
   })
 
@@ -160,9 +164,9 @@ describe('the sign-in redirect', () => {
   it('carries the place without its language prefix, and signs in in that language', async () => {
     vi.stubGlobal('window', {
       location: {
-        href: 'http://localhost/fr/dev/errors?a=1',
+        href: 'http://localhost/fr/design-system?a=1',
         origin: 'http://localhost',
-        pathname: '/fr/dev/errors',
+        pathname: '/fr/design-system',
         search: '?a=1',
         hash: '',
         assign,
@@ -174,8 +178,58 @@ describe('the sign-in redirect', () => {
     overwriteGetLocale(() => 'fr')
     await submit()
     expect(assign).toHaveBeenCalledExactlyOnceWith(
-      `/fr/sign-in?redirect=${encodeURIComponent('/dev/errors?a=1')}`,
+      `/fr/?redirect=${encodeURIComponent('/design-system?a=1')}`,
     )
+  })
+
+  it('loads home once in a while at most, so a Session a call refuses never loops', async () => {
+    const kept = new Map<string, string>()
+    const storage = {
+      getItem: (key: string) => kept.get(key) ?? null,
+      setItem: (key: string, value: string) => kept.set(key, value),
+    }
+    const at = (pathname: string) => ({
+      location: {
+        href: `http://localhost${pathname}`,
+        origin: 'http://localhost',
+        pathname,
+        search: '',
+        hash: '',
+        assign,
+      },
+      sessionStorage: storage,
+    })
+    vi.stubGlobal('window', at('/design-system'))
+    await (
+      await signingIn()
+    )()
+    expect(assign).toHaveBeenCalledOnce()
+    // The page loaded again, its module afresh, and a call is refused at once: no second load.
+    vi.stubGlobal('window', at('/'))
+    await (
+      await signingIn()
+    )()
+    expect(assign).toHaveBeenCalledOnce()
+  })
+
+  it('loads home still where the tab refuses its storage', async () => {
+    vi.stubGlobal('window', {
+      location: {
+        href: 'http://localhost/',
+        origin: 'http://localhost',
+        pathname: '/',
+        search: '',
+        hash: '',
+        assign,
+      },
+      get sessionStorage(): Storage {
+        throw new DOMException('denied', 'SecurityError')
+      },
+    })
+    await (
+      await signingIn()
+    )()
+    expect(assign).toHaveBeenCalledOnce()
   })
 
   it('does nothing on the server, where there is no window to move', async () => {
@@ -262,7 +316,7 @@ describe("the QueryClient's channels", () => {
 
   it("raises one toast for a write's failure", async () => {
     await expect(
-      executed(write('provokeWrite', () => failing(new DevForbidden()))),
+      executed(write('editTile', () => failing(new DevForbidden()))),
     ).rejects.toBeInstanceOf(CallFailed)
     expect(toast.error).toHaveBeenCalledExactlyOnceWith(
       "This belongs to someone who hasn't shared it with you.",
@@ -271,13 +325,13 @@ describe("the QueryClient's channels", () => {
 
   it("raises one toast for a write's Invalid failure, which has no form to show it", async () => {
     await expect(
-      executed(write('submitDevTitle', () => failing(new DevInvalid({ fields: ['title'] })))),
+      executed(write('createTile', () => failing(new DevInvalid({ fields: ['title'] })))),
     ).rejects.toBeInstanceOf(CallFailed)
-    expect(toast.error).toHaveBeenCalledExactlyOnceWith('Give it a title.')
+    expect(toast.error).toHaveBeenCalledExactlyOnceWith('Some fields need another look.')
   })
 
   it("leaves a submit's Invalid failure to the form's fields, and raises no toast", async () => {
-    const options = write('submitDevTitle', () => failing(new DevInvalid({ fields: ['title'] })), {
+    const options = write('createTile', () => failing(new DevInvalid({ fields: ['title'] })), {
       as: 'submit',
     })
     await expect(executed(options)).rejects.toBeInstanceOf(CallFailed)
@@ -285,19 +339,21 @@ describe("the QueryClient's channels", () => {
   })
 
   it("raises one toast for a submit's other failure", async () => {
-    const options = write('submitDevTitle', () => failing(new DevConflict()), { as: 'submit' })
+    const options = write('createTile', () => failing(new DevConflict()), { as: 'submit' })
     await expect(executed(options)).rejects.toBeInstanceOf(CallFailed)
-    expect(toast.error).toHaveBeenCalledExactlyOnceWith('That title is taken.')
+    expect(toast.error).toHaveBeenCalledExactlyOnceWith(
+      'This changed in the meantime. Reload, then try again.',
+    )
   })
 
   it('reports a write that never reached the server under the scope its key names', async () => {
     const report = vi.spyOn(console, 'error').mockImplementation(() => undefined)
     const lost = new TypeError('Failed to fetch')
-    await expect(
-      executed(write('provokeWrite', () => Promise.reject(lost))),
-    ).rejects.toBeInstanceOf(CallFailed)
+    await expect(executed(write('editTile', () => Promise.reject(lost)))).rejects.toBeInstanceOf(
+      CallFailed,
+    )
     expect(report).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ cause: lost }), {
-      scope: 'provokeWrite',
+      scope: 'editTile',
       kind: 'Unexpected',
       code: 'Unexpected',
     })

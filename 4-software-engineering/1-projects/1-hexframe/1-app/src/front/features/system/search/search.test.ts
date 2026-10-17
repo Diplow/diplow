@@ -1,12 +1,14 @@
 import { describe, expect, it } from 'vitest'
 
-import type { TileNode } from '#/front/ui/hex/view/tiles'
+import type { TileNode } from '#/front/ui/canvas/view/tiles'
 
 import { tileLink } from '#/api/mapping/files/download'
 
 import {
+  afterDelete,
   changeOf,
   keyOf,
+  opensWidget,
   readSystemSearch,
   viewOf,
   withChange,
@@ -123,7 +125,7 @@ describe('withoutTile', () => {
     leaves: { 4: { id: 'a4', title: 'A4', preview: '', leaf: true } },
     context: {
       2: { id: 'a2', title: 'A2', preview: '' },
-      3: { id: 'b', title: 'B', preview: '', reference: true },
+      3: { id: 'b', title: 'B', preview: '', reference: { from: 'A' } },
     },
   }
 
@@ -182,5 +184,69 @@ describe('keyOf', () => {
     expect(new Set([keyOf({ kind: 'add', parent: 'a', slot: { leaf: 2 } }), ...others]).size).toBe(
       6,
     )
+  })
+})
+
+describe('opensWidget', () => {
+  const none = readSystemSearch({})
+  const adding = withChange(none, { kind: 'add', parent: 'a', slot: 2 })
+
+  it('opens the widget for a new Tile, an import or an edit', () => {
+    expect(opensWidget(none, adding)).toBe(true)
+    expect(opensWidget(none, withChange(none, { kind: 'edit', id: 'a' }))).toBe(true)
+    expect(opensWidget(none, withChange(none, { kind: 'import', place: { _tag: 'Root' } }))).toBe(
+      true,
+    )
+  })
+
+  it('opens another form over the one under way, but not the same one again', () => {
+    expect(opensWidget(adding, withChange(none, { kind: 'add', parent: 'a', slot: 3 }))).toBe(true)
+    expect(opensWidget(adding, withView(adding, { center: 'b' }))).toBe(false)
+  })
+
+  it('opens none for a move, an end, or a change made later from the URL of its moment', () => {
+    expect(opensWidget(none, withChange(none, { kind: 'move', id: 'a' }))).toBe(false)
+    expect(opensWidget(adding, withChange(adding, { kind: 'none' }))).toBe(false)
+    expect(opensWidget(none, (current) => withChange(current, { kind: 'edit', id: 'a' }))).toBe(
+      false,
+    )
+  })
+})
+
+describe('afterDelete', () => {
+  const gone: TileNode = {
+    id: 'a',
+    title: 'A',
+    preview: '',
+    branches: { 1: { id: 'a1', title: 'A1', preview: '' } },
+  }
+  const tree: TileNode = {
+    id: 'root',
+    title: 'Root',
+    preview: '',
+    branches: {
+      2: { id: 'p', title: 'P', preview: '', branches: { 3: gone } },
+      5: { id: 'q', title: 'Q', preview: '' },
+    },
+  }
+  const deleted = afterDelete(tree, 'p', gone)
+
+  it('centers the page on the Tile the deleted one stood under', () => {
+    expect(viewOf(deleted(readSystemSearch({ center: 'a' }))).center).toBe('p')
+  })
+
+  it('ends a change that named the Tile gone or one below it', () => {
+    for (const search of [{ edit: 'a' }, { move: 'a1' }, { add: 'a1', slot: 2 }]) {
+      expect(changeOf(deleted(readSystemSearch({ center: 'a', ...search })))).toEqual({
+        kind: 'none',
+      })
+    }
+  })
+
+  it('keeps any other change under way', () => {
+    expect(changeOf(deleted(readSystemSearch({ center: 'a', edit: 'q' })))).toEqual({
+      kind: 'edit',
+      id: 'q',
+    })
   })
 })

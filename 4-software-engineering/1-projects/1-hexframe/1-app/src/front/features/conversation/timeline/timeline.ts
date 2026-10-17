@@ -1,8 +1,9 @@
 // The Conversation as the timeline shows it: Assistant's Entries (`domains/assistant/entities`), a
 // day of the reader's calendar at a time, with the Titles of the Tiles its navigations went to. Home
-// reads it a day at a time (`useConversation`); /dev/system splits its fixtures by day. Pure; the
-// components render it.
-import { dayAt, type Entry, type MessagePart } from '#/domains/assistant/entities'
+// reads it a day at a time (`useConversation`); /design-system splits its fixtures by day. What a
+// receipt at the conversation's foot tells, the timeline leaves to it. And what the agent applied
+// that `/undo` undoes, the latest that offers its Undo. Pure; the components render it.
+import { dayAt, type Entry, type Navigation, offersUndo } from '#/domains/assistant/entities'
 
 /**
  * The Titles of the Tiles a day names by their id alone, those its navigations went to and its
@@ -50,49 +51,86 @@ export function splitByDay(entries: readonly Entry[], now: Date, titles: Titles)
 /** The date of the reader's calendar an instant falls on, `2026-09-27`, by Assistant's day split. */
 const dayKey = (at: Date) => dayAt(at, -at.getTimezoneOffset()).date
 
-/** Splits a text into what a reader sees as characters, as Mapping counts a Tile's. */
-const graphemes = new Intl.Segmenter()
-
 /**
- * The start of a text too long to show whole, cut at a word and ended with an ellipsis, or
- * `undefined` when it fits within `limit` characters and there is nothing to hide. Characters are
- * graphemes, so an emoji, even one joined from several (👩‍👩‍👧), is never cut in half.
+ * What a receipt at the conversation's foot tells, a form's write the user sent: its change, by its
+ * Tile and its verb as Mapping names the event, and when it came, which tells one receipt from the
+ * next.
  */
-export function excerpt(text: string, limit: number): string | undefined {
-  const characters = Array.from(graphemes.segment(text), ({ segment }) => segment)
-  if (characters.length <= limit) return undefined
-  const cut = characters.slice(0, limit)
-  const lastSpace = cut.findLastIndex((character) => /\s/.test(character))
-  // A word longer than half the limit is cut through rather than dropped whole.
-  const words = lastSpace > limit / 2 ? cut.slice(0, lastSpace) : cut
-  return `${words.join('').replace(/[\s,;:.]+$/, '')}…`
+export interface Receipted {
+  readonly tile: string
+  readonly verb: string
+  readonly at: Date
 }
 
-/** How many characters a text holds, as a reader counts them. */
-const lengthOf = (text: string) => Array.from(graphemes.segment(text)).length
+/**
+ * Today's Entries beside a receipt at the conversation's foot: the change it tells, the user's of its
+ * Tile by its verb, recorded since it came, is left to it, the two saying the same thing, and told
+ * once it goes; what was read before it came stays, an earlier change of that Tile included.
+ */
+export function besideReceipt(
+  today: ReadonlyArray<Entry>,
+  receipt: Receipted | undefined,
+  before: ReadonlySet<string>,
+): ReadonlyArray<Entry> {
+  if (receipt === undefined) return today
+  return today.filter(
+    (entry) =>
+      before.has(entry.id) ||
+      entry._tag !== 'Change' ||
+      entry.actor._tag !== 'You' ||
+      entry.tile.id !== receipt.tile ||
+      entry.verb !== receipt.verb,
+  )
+}
 
 /**
- * The start of a Message too long to show whole, in pieces: its words, and its links counted as the
- * Title they show (`shown`), cut at a word within `limit` characters and ended with an ellipsis, a
- * link that would pass it left out; `undefined` when it fits.
+ * What `/undo` undoes: of the Entries, oldest first, the latest that offers its Undo, an accepted
+ * Proposal or an applied Turn, by the id the Undo takes; none when nothing may be undone.
  */
-export function excerptOf(
-  parts: ReadonlyArray<MessagePart>,
-  shown: (tile: string) => string,
-  limit: number,
-): ReadonlyArray<MessagePart> | undefined {
-  const kept: MessagePart[] = []
-  let left = limit
-  for (const part of parts) {
-    const length = lengthOf(part._tag === 'Text' ? part.text : shown(part.tile))
-    if (length <= left) {
-      kept.push(part)
-      left -= length
-      continue
-    }
-    const cut = part._tag === 'Text' ? excerpt(part.text, left) : undefined
-    kept.push({ _tag: 'Text', text: cut ?? '…' })
-    return kept
-  }
+export function latestUndoable(entries: ReadonlyArray<Entry>): string | undefined {
+  const latest = entries.findLast(offersUndo)
+  if (latest?._tag === 'Proposal') return latest.proposal
+  if (latest?._tag === 'TurnApplied') return latest.turn
   return undefined
+}
+
+/** Where the user went that the Conversation does not hold yet, and when they last went, in ms. */
+export interface Went {
+  readonly navigation: Navigation
+  readonly at: number
+}
+
+/** A write on its way, by its order: its `mutationId` in the MutationCache, which numbers each write. */
+interface Sequenced {
+  readonly id: number
+}
+
+/** What comes after the last Entry: a Message on its way, or where the user went. */
+export type Later<M, N> =
+  | { readonly kind: 'message'; readonly key: string; readonly message: M }
+  | { readonly kind: 'went'; readonly key: string; readonly went: N }
+
+/**
+ * What comes after the last Entry, in the order it was sent: the Messages and the navigations on their
+ * way, by their writes' order, then the navigation under way, which comes last, since a Message sends
+ * it first.
+ */
+export function laterOf<M extends Sequenced, N extends Sequenced, U>(
+  messages: ReadonlyArray<M>,
+  navigations: ReadonlyArray<N>,
+  underWay: U | undefined,
+): ReadonlyArray<Later<M, N | U>> {
+  const sent: { order: number; later: Later<M, N | U> }[] = [
+    ...messages.map((message) => ({
+      order: message.id,
+      later: { kind: 'message' as const, key: `message-${String(message.id)}`, message },
+    })),
+    ...navigations.map((went) => ({
+      order: went.id,
+      later: { kind: 'went' as const, key: `went-${String(went.id)}`, went },
+    })),
+  ]
+  const ordered = sent.sort((a, b) => a.order - b.order).map(({ later }) => later)
+  if (underWay === undefined) return ordered
+  return [...ordered, { kind: 'went', key: 'under-way', went: underWay }]
 }

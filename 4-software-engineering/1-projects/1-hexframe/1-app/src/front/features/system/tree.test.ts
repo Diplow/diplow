@@ -7,10 +7,10 @@ import {
   type SystemTile,
   systemOf,
 } from '#/domains/mapping/entities'
-import type { TileNode } from '#/front/ui/hex/view/tiles'
+import type { TileNode } from '#/front/ui/canvas/view/tiles'
 import { m } from '#/paraglide/messages'
 
-import { canvasTree, moveOf, onScreen, slotOf, swapOf, swapsWith, tileIn } from './tree'
+import { canvasTree, moveOf, onScreen, slotOf, standsFor, swapOf, swapsWith, tileIn } from './tree'
 
 const tile = (
   id: string,
@@ -63,25 +63,49 @@ describe('canvasTree', () => {
     expect(tree.context?.[1]).toMatchObject({ id: 'why', branches: { 2: { id: 'deep' } } })
   })
 
-  it('draws a Reference as the Tile it points at, under that Tile id', () => {
+  it('marks a Leaf that is no Markdown as a file, its Title its name', () => {
+    const file = { ...tile('script'), title: 'build.sh', preview: '', name: 'build.sh' }
+    const named = canvasTree({ ...system, leaves: { 1: file } })
+    expect(named.leaves?.[1]).toMatchObject({ id: 'script', leaf: true, file: true })
+    expect(tree.leaves?.[1]).not.toHaveProperty('file')
+  })
+
+  it('draws a Reference as the Tile it points at, under that Tile id, from where it stands', () => {
     expect(tree.context?.[2]).toEqual({
       id: 'a3',
       title: 'A3',
       preview: 'A child',
-      reference: true,
+      reference: { from: 'A' },
     })
   })
 
   it('draws a broken Reference as broken, under an id no Tile has', () => {
     expect(tree.context?.[5]).toEqual({
       id: 'broken:root:-5',
-      title: m.system_reference_broken(),
+      title: m.tile_broken_title(),
       preview: '',
+      broken: true,
     })
   })
 
   it('names the untitled Root as untitled', () => {
     expect(tree.title).toBe(m.system_untitled())
+  })
+
+  it("marks the Root as the user's only when the System is theirs: named, untitled or empty", () => {
+    expect(tree).not.toHaveProperty('root')
+    expect(canvasTree(system, { yours: true }).root).toBe('untitled')
+    expect(canvasTree({ ...system, title: 'Ulysse' }, { yours: true }).root).toBe('named')
+    const empty = { ...tile('root'), title: '', preview: '' }
+    expect(canvasTree(empty, { yours: true }).root).toBe('empty')
+  })
+
+  it('shows on the untitled Root the pseudo being typed, never on a named one nor Help', () => {
+    expect(canvasTree(system, { yours: true, naming: 'Uly' }).naming).toBe('Uly')
+    expect(canvasTree(system, { yours: true, naming: '  ' })).not.toHaveProperty('naming')
+    expect(canvasTree(system, { naming: 'Uly' })).not.toHaveProperty('naming')
+    const named = { ...system, title: 'Ulysse' }
+    expect(canvasTree(named, { yours: true, naming: 'Uly' })).not.toHaveProperty('naming')
   })
 })
 
@@ -219,18 +243,44 @@ describe('slotOf', () => {
 describe('onScreen', () => {
   const tree = canvasTree(system)
 
-  it('shows the Root and its Children when the view names no center', () => {
-    expect(onScreen(tree, {})).toEqual({ center: 'root', shown: ['root', 'a', 'b', 'notes'] })
+  it('shows the Root alone when the view names no center, and its Children once it opens', () => {
+    expect(onScreen(tree, {})).toEqual({ center: 'root', shown: ['root'] })
+    expect(onScreen(tree, { frame: 'children' })).toEqual({
+      center: 'root',
+      shown: ['root', 'a', 'b', 'notes'],
+    })
   })
 
   it('shows the ring inside the center, and the rings its opened Branches show', () => {
-    const { shown } = onScreen(tree, { inner: 'context', expanded: { 1: 'children' } })
+    const view = { frame: 'children', inner: 'context', expanded: { 1: 'children' } } as const
+    const { shown } = onScreen(tree, view)
     // A Reference by the Tile it points at, a3 once though it shows twice; a broken one by its own id.
     expect(shown).toEqual(['root', 'a', 'b', 'notes', 'why', 'a3', 'broken:root:-5'])
   })
 
   it('centers a Tile below, and falls back to the Root for one the System does not hold', () => {
-    expect(onScreen(tree, { center: 'a' })).toEqual({ center: 'a', shown: ['a', 'a3'] })
+    expect(onScreen(tree, { center: 'a' })).toEqual({ center: 'a', shown: ['a'] })
+    expect(onScreen(tree, { center: 'a', frame: 'children' })).toEqual({
+      center: 'a',
+      shown: ['a', 'a3'],
+    })
     expect(onScreen(tree, { center: 'nowhere' }).center).toBe('root')
+  })
+})
+
+describe('standsFor', () => {
+  it("reads a ring of Children's Direction as a Branch's slot and a Leaf's alike", () => {
+    expect(standsFor('children', 2, 2)).toBe(true)
+    expect(standsFor('children', 2, { leaf: 2 })).toBe(true)
+    expect(standsFor('children', 2, 3)).toBe(false)
+  })
+
+  it("reads a ring of Branches', of Leaves' and of Context's as their own kind of slot alone", () => {
+    expect(standsFor('branches', 4, 4)).toBe(true)
+    expect(standsFor('branches', 4, { leaf: 4 })).toBe(false)
+    expect(standsFor('leaves', 4, { leaf: 4 })).toBe(true)
+    expect(standsFor('leaves', 4, 4)).toBe(false)
+    expect(standsFor('context', 4, -4)).toBe(true)
+    expect(standsFor('children', 4, -4)).toBe(false)
   })
 })

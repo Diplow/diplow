@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import type { Entry } from '#/domains/assistant/entities'
+import type { Actor, Entry } from '#/domains/assistant/entities'
 
-import { dayOf, excerpt, excerptOf, splitByDay } from './timeline'
+import { besideReceipt, dayOf, laterOf, latestUndoable, splitByDay } from './timeline'
 
 // Local dates, so the tests hold in any time zone: days are the reader's.
 const at = (day: number, hour: number, minute = 0) => new Date(2026, 8, day, hour, minute)
@@ -76,58 +76,108 @@ describe('dayOf', () => {
   })
 })
 
-describe('excerpt', () => {
-  it('has nothing to hide in a text that fits', () => {
-    expect(excerpt('Short enough.', 13)).toBeUndefined()
+describe('besideReceipt', () => {
+  const change = (
+    id: string,
+    tile: string,
+    verb: string,
+    actor: Actor = { _tag: 'You' },
+  ): Entry => ({
+    _tag: 'Change',
+    id,
+    at: at(27, 9),
+    verb,
+    tile: { id: tile, title: tile },
+    actor,
+  })
+  const receipt = { tile: 'games', verb: 'TileEdited', at: at(27, 9) }
+  const ids = (entries: ReadonlyArray<Entry>) => entries.map((entry) => entry.id)
+
+  it('leaves the change a receipt tells, recorded since it came, to it', () => {
+    const today = [message('hello', at(27, 8)), change('named', 'games', 'TileEdited')]
+    expect(ids(besideReceipt(today, receipt, new Set(['hello'])))).toEqual(['hello'])
   })
 
-  it('cuts a longer text at a word and ends it with an ellipsis', () => {
-    expect(excerpt('How software gets built in the AI era', 20)).toBe('How software gets…')
+  it('keeps an earlier change of its Tile, read before it came', () => {
+    const today = [change('first', 'games', 'TileEdited'), change('again', 'games', 'TileEdited')]
+    expect(ids(besideReceipt(today, receipt, new Set(['first'])))).toEqual(['first'])
   })
 
-  it('drops the punctuation a cut leaves behind', () => {
-    expect(excerpt('Leading teams, and the people in them', 14)).toBe('Leading teams…')
+  it('keeps what it does not tell: another Tile, another verb, someone else', () => {
+    const today = [
+      change('other', 'design', 'TileEdited'),
+      change('moved', 'games', 'TileMoved'),
+      change('key', 'games', 'TileEdited', { _tag: 'Key', name: 'Laptop' }),
+      change('agent', 'games', 'TileEdited', { _tag: 'Assistant' }),
+    ]
+    expect(ids(besideReceipt(today, receipt, new Set()))).toEqual(ids(today))
   })
 
-  it('cuts at any whitespace, a line break included', () => {
-    expect(excerpt('How software\ngets built in the AI era', 20)).toBe('How software\ngets…')
-  })
-
-  it('counts an emoji as one character, and never cuts it in half', () => {
-    expect(excerpt('🧭🧭🧭 compass', 11)).toBeUndefined()
-    expect(excerpt('🧭🧭🧭🧭🧭🧭 tiles', 5)).toBe('🧭🧭🧭🧭🧭…')
-  })
-
-  it('counts an emoji joined from several as one character, and never cuts it apart', () => {
-    expect(excerpt('👩‍👩‍👧👩‍👩‍👧 family', 9)).toBeUndefined()
-    expect(excerpt('👩‍👩‍👧👩‍👩‍👧👩‍👩‍👧 family', 2)).toBe('👩‍👩‍👧👩‍👩‍👧…')
-  })
-
-  it('cuts through a word longer than half the limit', () => {
-    expect(excerpt('a Supercalifragilistic word', 12)).toBe('a Supercalif…')
+  it('tells everything while no receipt is there', () => {
+    const today = [change('named', 'games', 'TileEdited')]
+    expect(ids(besideReceipt(today, undefined, new Set()))).toEqual(['named'])
   })
 })
 
-describe('excerptOf', () => {
-  const shown = (tile: string) => `@${tile.toUpperCase()}`
-  const text = (words: string) => ({ _tag: 'Text', text: words }) as const
-  const link = (tile: string) => ({ _tag: 'Link', tile }) as const
-
-  it('keeps a Message that fits whole, its links counted as the Titles they show', () => {
-    expect(excerptOf([link('work'), text(' is fine')], shown, 13)).toBeUndefined()
+describe('latestUndoable', () => {
+  const applied = (turn: string, undone: boolean): Entry => ({
+    _tag: 'TurnApplied',
+    id: `applied-${turn}`,
+    at: now,
+    turn,
+    changes: 2,
+    undone,
+  })
+  const accepted = (proposal: string, undone?: boolean): Entry => ({
+    _tag: 'Proposal',
+    id: `proposal-${proposal}`,
+    at: now,
+    proposal,
+    changes: [],
+    fate: 'accepted',
+    ...(undone !== undefined && { undone }),
   })
 
-  it('cuts a Message’s words at a word, the links before kept', () => {
-    expect(excerptOf([link('work'), text(' needs a long tidy up')], shown, 16)).toEqual([
-      link('work'),
-      text(' needs a…'),
-    ])
+  it('undoes the latest that offers its Undo, by the id the Undo takes', () => {
+    expect(latestUndoable([applied('t1', false), accepted('p1', false)])).toBe('p1')
+    expect(latestUndoable([accepted('p1', false), applied('t1', false)])).toBe('t1')
   })
 
-  it('leaves out a link that would pass the limit, an ellipsis in its place', () => {
-    expect(excerptOf([text('Look at '), link('everything'), text(' now')], shown, 12)).toEqual([
-      text('Look at '),
-      text('…'),
+  it('passes over what was undone, or was accepted before undos were kept', () => {
+    expect(latestUndoable([applied('t1', false), applied('t2', true)])).toBe('t1')
+    expect(latestUndoable([applied('t1', false), accepted('p1')])).toBe('t1')
+  })
+
+  it('undoes nothing when nothing offers its Undo', () => {
+    expect(latestUndoable([message('a', now)])).toBeUndefined()
+    expect(latestUndoable([])).toBeUndefined()
+  })
+})
+
+describe('laterOf', () => {
+  it('orders the Messages and navigations on their way by their writes, the one under way last', () => {
+    const later = laterOf(
+      [
+        { id: 4, text: 'second' },
+        { id: 2, text: 'first' },
+      ],
+      [
+        { id: 3, to: 'b' },
+        { id: 1, to: 'a' },
+      ],
+      { to: 'c' },
+    )
+    expect(later.map(({ key }) => key)).toEqual([
+      'went-1',
+      'message-2',
+      'went-3',
+      'message-4',
+      'under-way',
     ])
+    expect(later.at(-1)).toEqual({ kind: 'went', key: 'under-way', went: { to: 'c' } })
+  })
+
+  it('is nothing while nothing is on its way', () => {
+    expect(laterOf([], [], undefined)).toEqual([])
   })
 })

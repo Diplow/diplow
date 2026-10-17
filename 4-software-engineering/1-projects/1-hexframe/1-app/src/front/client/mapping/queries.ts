@@ -25,7 +25,17 @@ import { type System, type SystemTile, systemOf } from '#/domains/mapping/entiti
 import type { Operation, OperationName } from '#/domains/mapping/operations'
 import { type Download, downloaded } from '#/api/mapping/files/download'
 import { type Given, type LeftOut, type Prepared, prepared } from './import/upload'
-import { operationOf, overlaid, type Pending, refusalOf } from './overlay/overlay'
+import {
+  importing,
+  landingOf,
+  underwayOf,
+  type Underway,
+  operationOf,
+  overlaid,
+  type Pending,
+  refusalOf,
+} from './overlay/overlay'
+import type { ImportPlace } from '#/api/mapping/places'
 import {
   ImportUpload,
   type NewReference,
@@ -59,6 +69,11 @@ const systemScope = 'system'
 
 /** The queue every write to the System waits its turn in, so they reach the server in order. */
 const systemQueue = 'system'
+/** What an import is given: the files, and where they land. */
+interface ImportVariables {
+  given: Given | Promise<Given>
+  place: ImportPlace
+}
 
 /**
  * The System's read, whose cache holds the System as the server last answered it, flat. Never read
@@ -89,14 +104,16 @@ const pendingByState = new WeakMap<Mutation['state'], Pending>()
 
 /**
  * A pending write to the System, as the overlay folds it: its turn, and the Operation it sends, read
- * back from its key and variables by Mapping's schema.
+ * back from its key and variables by Mapping's schema, or where an import lands, by its own.
  */
 function pendingOf(mutation: Mutation): Pending {
   const known = pendingByState.get(mutation.state)
   if (known !== undefined) return known
+  const name = mutation.options.mutationKey?.[0]
   const pending = {
     turn: mutation.mutationId,
-    operation: operationOf(mutation.options.mutationKey?.[0], mutation.state.variables),
+    operation: operationOf(name, mutation.state.variables),
+    landing: landingOf(name, mutation.state.variables),
   }
   pendingByState.set(mutation.state, pending)
   return pending
@@ -113,7 +130,7 @@ function pendingOf(mutation: Mutation): Pending {
  * a `frame` read, which would be a Query of its own and read the System twice.
  */
 export function useSystem({ throwing = true }: { throwing?: boolean } = {}): {
-  data: { system: System; root: SystemTile } | undefined
+  data: { system: System; root: SystemTile; underway: Underway } | undefined
 } {
   const { data } = useQuery(throwing ? systemRead : { ...systemRead, throwOnError: false })
   const pending = useMutationState({
@@ -124,7 +141,7 @@ export function useSystem({ throwing = true }: { throwing?: boolean } = {}): {
     data: useMemo(() => {
       if (data === undefined) return undefined
       const shown = overlaid(data, pending)
-      return { system: shown, root: systemOf(shown) }
+      return { system: shown, root: systemOf(shown), underway: underwayOf(pending, data.root.id) }
     }, [data, pending]),
   }
 }
@@ -160,7 +177,7 @@ const takersOf = new WeakMap<QueryClient, Set<{ readonly current: Take }>>()
  * each write of the System's queue to them the moment it turns `error`, once the System read again
  * after it has landed, its channel already carried out. The takers registered then decide: if none
  * shows a form's refusal, which its channel shows on the form's fields, it goes to a toast instead
- * (`unshown`), so none is lost. An import, which is no Operation, is no refusal here: its drawer
+ * (`unshown`), so none is lost. An import, which is no Operation, is no refusal here: its widget
  * shows its own. Made with the client's first System write or page, and kept as long as the client.
  */
 function listenForRefusals(client: QueryClient) {
@@ -239,10 +256,17 @@ export function useEachSystemWrite(react: () => void, moment: 'made' | 'settled'
 
 /**
  * Help whole, in the page's language, Bodies included, read as the System is. Anyone reads it, so it
- * never sends the user to sign in.
+ * never sends the user to sign in. With `throwing: false`, for the canvas's corner beside it, the same
+ * Query, whose failure throws nothing there and leaves it undefined, the canvas's boundary showing it.
  */
-export const useHelp = (language: Locale) =>
-  useQuery(read({ scope: 'help', key: [language], call: () => help({ data: { language } }) }))
+export function useHelp(language: Locale, { throwing = true }: { throwing?: boolean } = {}) {
+  const helpRead = read({
+    scope: 'help',
+    key: [language],
+    call: () => help({ data: { language } }),
+  })
+  return useQuery(throwing ? helpRead : { ...helpRead, throwOnError: false })
+}
 
 /**
  * A write to the System, scoped by the Operation it runs and queued behind the writes made before it.
@@ -335,7 +359,7 @@ function save({ name, blob }: Download) {
 }
 
 /** Where an import lands: a free slot under a Tile, or the Root of an empty System. */
-export type ImportPlace = (typeof ImportUpload.Type)['place']
+export type { ImportPlace }
 
 /** What an import landed, as the server answers: the Tile it landed as, what it wrote and skipped. */
 type ImportReport = Extract<Awaited<ReturnType<typeof importTiles>>, { ok: true }>['value']
@@ -363,19 +387,13 @@ export type Imported =
 export const useImportTiles = () => {
   const client = useQueryClient()
   return useMutation({
-    ...writing('importTiles', { queue: systemQueue }),
-    mutationFn: async ({
-      given,
-      place,
-    }: {
-      given: Given | Promise<Given>
-      place: ImportPlace
-    }): Promise<Imported> => {
+    ...writing(importing, { queue: systemQueue }),
+    mutationFn: async ({ given, place }: ImportVariables): Promise<Imported> => {
       const ready = await prepared(await given)
       if (ready._tag === 'Refused') return ready
       const { upload, as, leftOut } = ready
       const form = Schema.encodeSync(ImportUpload)({ upload, as, place })
-      const submitted = await settleSubmit('importTiles', importTiles({ data: form }))
+      const submitted = await settleSubmit(importing, importTiles({ data: form }))
       if (submitted.ok) return { _tag: 'Landed', report: submitted.value, leftOut }
       return { _tag: 'Refused', faults: submitted.failure.faults, leftOut }
     },
@@ -391,10 +409,11 @@ export type TileContent = Pick<SystemTile, (typeof contentFields)[number]>
 
 /**
  * A Tile form's submit: sends what the form holds as a write, queued behind the others, and answers at
- * once, so the form closes as if the write had landed. Its refusal comes back through
- * `useSystemRefusals`, its channel carried out: a toast, or nothing, for the reopened form to show.
+ * once with the id of the Tile written, so the form closes as if the write had landed and its receipt
+ * can name the Tile. Its refusal comes back through `useSystemRefusals`, its channel carried out: a
+ * toast, or nothing, for the reopened form to show.
  */
-export type TileSubmit = (content: TileContent) => void
+export type TileSubmit = (content: TileContent) => string
 
 /**
  * Submits a new Tile's form through `useCreateTile`: the Tile goes in this free slot, a Child or a Tile
@@ -406,7 +425,9 @@ export const useCreateTileSubmit = (
 ): TileSubmit => {
   const { mutate } = useCreateTile()
   return (content) => {
-    mutate({ id: crypto.randomUUID(), ...where, ...content })
+    const id = crypto.randomUUID()
+    mutate({ id, ...where, ...content })
+    return id
   }
 }
 
@@ -423,6 +444,7 @@ export const useEditTileSubmit = (
   const [opened] = useState(tile)
   return (content) => {
     mutate({ id: opened.id, version: opened.version, ...changed(opened, content) })
+    return opened.id
   }
 }
 

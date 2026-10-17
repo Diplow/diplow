@@ -9,7 +9,7 @@ import { decodeFailure } from '#/api/report/errors/failure'
 import { TileId } from '#/domains/mapping/entities'
 import { messageFor } from '#/api/report/errors/messages'
 import * as Mapping from '#/api/mapping/mapping'
-import { toast } from '#/front/ui/feedback/Toaster'
+import { toast } from '#/front/ui/atoms/Toaster'
 import { overwriteGetLocale } from '#/paraglide/runtime'
 
 import { CallFailed } from '../calls'
@@ -51,7 +51,7 @@ vi.mock('#/api/mapping/mapping', async (original) => ({
   exportTile: vi.fn(),
 }))
 
-vi.mock('#/front/ui/feedback/Toaster', () => ({ toast: { error: vi.fn() } }))
+vi.mock('#/front/ui/atoms/Toaster', () => ({ toast: { error: vi.fn() } }))
 
 const titleMissing = { _tag: 'TitleMissing', kind: 'Invalid', fields: ['title'] } as const
 
@@ -175,7 +175,7 @@ function writing<I>(
 }
 
 describe("Mapping's hooks", () => {
-  it('read the System flat through its server function, and build its tree', async () => {
+  it('read the System flat through its server function, and build its tree, nothing on its way', async () => {
     answering(undefined)
     const { result } = render(() => undefined)
     const child = { _tag: 'Tile', id: 'child', title: 'Child', preview: '', body: '', version: 1 }
@@ -192,6 +192,7 @@ describe("Mapping's hooks", () => {
             },
           },
         },
+        underway: { tiles: new Set(), slots: [] },
       })
     })
     expect(Mapping.system).toHaveBeenCalledWith({ data: undefined })
@@ -461,7 +462,7 @@ const placed = {
  * read; what the MutationCache holds of the System's writes, as the canvas will read them; and
  * every refusal handed back, as the page's state hook takes it.
  */
-async function submitting(hook: () => (value: typeof content) => void) {
+async function submitting(hook: () => (value: typeof content) => string) {
   const refused: Refused[] = []
   const { result } = render(() => {
     useSystemRefusals((refusal) => {
@@ -483,9 +484,9 @@ async function submitting(hook: () => (value: typeof content) => void) {
   await read(result)
   return Object.assign(
     (value: typeof content) => {
-      act(() => {
-        result.current.hook.submit(value)
-      })
+      let written = ''
+      act(() => void (written = result.current.hook.submit(value)))
+      return written
     },
     { writes: () => result.current.hook.writes, refused },
   )
@@ -495,22 +496,22 @@ describe("Mapping's form submits", () => {
   it('create a Tile in the slot the form was opened on, under an id of its choosing, as a mutation', async () => {
     answering({ id: 't' })
     const submit = await submitting(() => useCreateTileSubmit({ parent: 'root', slot: -3 }))
-    submit(content)
+    const written = submit(content)
     await waitFor(() => {
       expect(Mapping.createTile).toHaveBeenCalledOnce()
     })
     const [[{ data }]] = vi.mocked(Mapping.createTile).mock.calls as unknown as [
       [{ data: { id: string } }],
     ]
-    const chosen = data.id
-    expect(Schema.is(TileId)(chosen)).toBe(true)
-    expect(data).toEqual({ id: chosen, parent: 'root', slot: -3, ...content })
+    // The id the submit answered: of its choosing, and the one it sent.
+    expect(Schema.is(TileId)(written)).toBe(true)
+    expect(data).toEqual({ id: written, parent: 'root', slot: -3, ...content })
     await waitFor(() => {
       expect(submit.writes()).toEqual([
         {
           key: ['createTile'],
           status: 'success',
-          variables: { id: chosen, parent: 'root', slot: -3, ...content },
+          variables: { id: written, parent: 'root', slot: -3, ...content },
         },
       ])
     })
@@ -531,7 +532,7 @@ describe("Mapping's form submits", () => {
     answering({ id: 't' })
     const tile = { id: 't', version: 3, title: '', preview: '', body: '' }
     const submit = await submitting(() => useEditTileSubmit(tile))
-    submit({ title: '', preview: '', body: '# Me' })
+    expect(submit({ title: '', preview: '', body: '# Me' })).toBe('t')
     await waitFor(() => {
       expect(Mapping.editTile).toHaveBeenCalledWith({ data: { id: 't', version: 3, body: '# Me' } })
     })

@@ -23,7 +23,7 @@ import { WaitUntil } from '../server/bus'
 import { systemRules } from '../server/mcp/tools'
 
 import type { DayAsked, MergedNavigation, SentMessage } from './assistant'
-import { conversationNow, shownTo } from './proposal/programs'
+import { conversationNow, proposalNow, shownTo } from './proposal/programs'
 
 /**
  * Runs an operation for the Account the request's Session proves: the Conversation is the user's,
@@ -38,15 +38,16 @@ const forSession = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, 
  * holds them now, by id. A navigation and a link keep a Tile's id alone; a Tile the System no longer
  * holds has no Title there. With them, `earlier`, the instant of the latest Entry before the day,
  * where a reader scrolling back goes next, and `lastEntry`, the Entry last recorded in the
- * Conversation, and `proposal`, its open Proposal and how many writes it holds, which the page's poll
- * compares with its own (`latest`). Both are read first: an Entry recorded or a write drafted
- * meanwhile is among the day's, and the next poll reads the day again for nothing rather than never.
+ * Conversation, and `proposal`, its open Proposal, how many writes it holds, which the page's poll
+ * compares with its own (`latest`), and the writes themselves, which the canvas draws (`proposalNow`).
+ * Both are read first: an Entry recorded or a write drafted meanwhile is among the day's, and the
+ * next poll reads the day again for nothing rather than never.
  */
 export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
   forSession((accountId) =>
     Effect.gen(function* () {
       const lastEntry = yield* Assistant.lastEntry(accountId)
-      const { proposal } = yield* conversationNow(accountId)
+      const proposal = yield* proposalNow(accountId)
       const day = { date: date ?? (yield* Assistant.today(offsets.offset)).date, ...offsets }
       const entries = yield* Assistant.day(accountId, day)
       const titles = yield* Mapping.titles(accountId, namedTiles(entries))
@@ -65,7 +66,8 @@ export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
 /**
  * The latest of what home shows, the smallest reads there are, which the page polls: the System's
  * Version, the id of the Entry last recorded in the Conversation, none before the first, the Turn
- * running before its deadline, by its id, with its agent's step now, the Conversation's Mode, and its
+ * running before its deadline, by its id, with the Tile it works in, its location, and its agent's
+ * step now, the Conversation's Mode, and its
  * open Proposal, by its id, with how many writes it holds. The page reads the System again once the
  * Version moved, and the Conversation once its last Entry or its Proposal is another, and follows
  * closely while a Turn runs.
@@ -79,7 +81,11 @@ export const latest = forSession((accountId) =>
     const turn =
       live === undefined
         ? undefined
-        : { id: live.id, ...(live.step !== undefined && { step: live.step }) }
+        : {
+            id: live.id,
+            location: live.location,
+            ...(live.step !== undefined && { step: live.step }),
+          }
     return {
       version,
       mode,

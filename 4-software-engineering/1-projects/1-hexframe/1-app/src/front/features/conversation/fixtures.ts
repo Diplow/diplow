@@ -1,13 +1,14 @@
-// A fixture Conversation for /dev/system, about the fixture System /dev/hex draws: four days of
+// A fixture Conversation for /design-system, about the fixture System its canvas draws: four days of
 // Assistant's Entries, every kind at least once, a change by each kind of actor, a Message linking
 // Tiles, one of them deleted since, a Proposal accepted and one open, a Turn's change applied, which
-// it offers to undo, and the Titles of the Tiles its navigations went to and its Messages link; and
-// the fixture System's Tiles, which its composer offers to `@`. Its days are counted back from `now`, so the timeline always shows a today and a yesterday.
+// it offers to undo, a Turn stopped, and the Titles of the Tiles its navigations went to and its
+// Messages link; and the fixture System's Tiles, which its composer offers to `@`. Its days are
+// counted back from `now`, so the timeline always shows a today and a yesterday.
 // Like the System, its content is the user's own, so it is not translated.
 import { type Entry, linkTo } from '#/domains/assistant/entities'
-import { ulysse } from '#/front/ui/hex/fixtures'
-import { directions } from '#/front/ui/hex/geometry/geometry'
-import { findTile, type TileNode } from '#/front/ui/hex/view/tiles'
+import { ulysse } from '#/front/ui/canvas/fixtures'
+import { directions } from '#/front/ui/canvas/geometry/geometry'
+import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
 
 import type { Mentionable } from './composer/mention'
 import type { Titles } from './timeline/timeline'
@@ -24,7 +25,7 @@ const drafts = { id: 'drafts', title: 'Drafts' }
 
 const you = { _tag: 'You' } as const
 
-/** A Proposal the user accepted: a Reference the assistant drafted, which landed. */
+/** A Proposal the user accepted: a Reference the agent drafted, which landed. */
 const acceptedProposal = (at: Date): Entry => ({
   _tag: 'Proposal',
   undone: false,
@@ -37,7 +38,7 @@ const acceptedProposal = (at: Date): Entry => ({
   fate: 'accepted',
 })
 
-/** A Proposal waiting for the user: Games' Children, as the assistant drafted them. */
+/** A Proposal waiting for the user: Games' Children, as the agent drafted them. */
 const openProposal = (at: Date): Entry => {
   const design = { id: 'design', title: 'Games I design' }
   const play = { id: 'play', title: 'Games I play' }
@@ -88,6 +89,7 @@ export function conversationFixture(now: Date): { entries: Entry[]; titles: Titl
       'agent',
       'Let’s start from you: Ulysse is your root. Put the six domains around it, the one you most want a reader to open first in the first direction.',
     ),
+    { _tag: 'TurnEnded', id: 'e1', at: at(3, 18, 4), how: 'stopped' },
     {
       _tag: 'Change',
       id: 'c1',
@@ -189,7 +191,7 @@ export function conversationFixture(now: Date): { entries: Entry[]; titles: Titl
 export function fixtureMentionables(): ReadonlyArray<Mentionable> {
   const found: Mentionable[] = []
   const walk = (node: TileNode, trail: ReadonlyArray<string>) => {
-    if (node.reference === true) return
+    if (node.reference !== undefined) return
     found.push({ id: node.id, title: node.title, trail })
     for (const direction of directions) {
       for (const below of [node.branches, node.leaves, node.context]) {
