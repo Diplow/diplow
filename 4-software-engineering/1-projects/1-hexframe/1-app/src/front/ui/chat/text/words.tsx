@@ -127,6 +127,27 @@ export function blocksOf(words: Words): Block[] {
   return blocks
 }
 
+/**
+ * Whether a numbered list's item is the first of its number in the text, by its block and its place
+ * in it (`blocksOf`): the one line a number names something by, a later one with the same number a
+ * line as any other (HEX-122).
+ */
+export function firstNumbered(blocks: readonly Block[]): (block: number, item: number) => boolean {
+  const first = new Map<string, string>()
+  blocks.forEach((block, at) => {
+    if (!('list' in block)) return
+    block.list.forEach(({ number }, place) => {
+      if (!first.has(number)) first.set(number, `${String(at)}.${String(place)}`)
+    })
+  })
+  return (block, item) => {
+    const found = blocks[block]
+    if (found === undefined || !('list' in found)) return false
+    const number = found.list[item]?.number
+    return number !== undefined && first.get(number) === `${String(block)}.${String(item)}`
+  }
+}
+
 /** Where the marks a sentence is read with begin: Unicode's private use area, which no message holds. */
 const firstMark = 0xe000
 const marks = /([\uE000-\uF8FF])/

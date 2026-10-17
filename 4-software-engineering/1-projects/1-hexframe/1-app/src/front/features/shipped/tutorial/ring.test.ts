@@ -41,11 +41,6 @@ describe('ringOf', () => {
     expect(ring.lineOf('tutorial/1')).toBeUndefined()
     expect(ring.tileOf(3)).toBe('tutorial/3')
   })
-
-  it('leaves a Child to the first line that names it', () => {
-    const ring = ringOf(tile, '1. Go in.\n\nAgain:\n\n1. Go in, again.')
-    expect(ring.lineOf('tutorial/1')).toBe(1)
-  })
 })
 
 describe('sameSixOf', () => {

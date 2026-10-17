@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { blocksOf, linesOf, plainOf, weave } from './words'
+import { blocksOf, firstNumbered, linesOf, plainOf, weave } from './words'
 
 const projects = { tile: { title: 'Projects' } }
 const site = { tile: { title: 'Site' } }
@@ -111,5 +111,18 @@ describe('blocksOf', () => {
       { line: [projects, ' 1. first'] },
       { line: ['2020 was a year'] },
     ])
+  })
+})
+
+describe('firstNumbered', () => {
+  it('names each number by its first item, a later item with the same number naming nothing', () => {
+    const first = firstNumbered(
+      blocksOf(['1. Go in.\n2. Six at most.\n\nAgain:\n\n1. Go in, again.']),
+    )
+    expect([first(0, 0), first(0, 1), first(2, 0)]).toEqual([true, true, false])
+  })
+
+  it('names nothing by a line that is no list item', () => {
+    expect(firstNumbered(blocksOf(['Here.\n1. Go in.']))(0, 0)).toBe(false)
   })
 })

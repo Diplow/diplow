@@ -29,7 +29,7 @@ import { aroundUpTo, toldUpTo, type AroundPart, type ToldPart } from '../../moti
 import { Dawn } from '../atoms/dawn'
 import { HexMark } from '../atoms/hex'
 import type { Voice } from './Mention'
-import { blocksOf, linesOf, plainOf, Said, type Words } from './words'
+import { blocksOf, firstNumbered, linesOf, plainOf, Said, type Words } from './words'
 
 interface HumanProps {
   voice: 'human'
@@ -152,14 +152,10 @@ function Lines({ words, voice }: { words: Words; voice: Voice }) {
  * an item that names something elsewhere lighting it (`NamingLine`).
  */
 function Blocks({ words, lines }: { words: Words; lines: NamingLines | undefined }) {
-  // A number names its tile once, on its first line, as the ring ties it.
-  const named = new Set<number>()
-  const naming = (line: number) => {
-    if (lines?.names(line) !== true || named.has(line)) return false
-    named.add(line)
-    return true
-  }
-  return blocksOf(words).map((block, index) =>
+  const blocks = blocksOf(words)
+  // A number names something once, on its first line.
+  const first = firstNumbered(blocks)
+  return blocks.map((block, index) =>
     // The blocks of one message, never reordered: their place is their key.
     'line' in block ? (
       <span key={index} ref={toCurve} className={cn(runsToCurve, 'block min-h-[1lh]')}>
@@ -181,7 +177,7 @@ function Blocks({ words, lines }: { words: Words; lines: NamingLines | undefined
             className={cn(runsToCurve, 'col-span-2 grid grid-cols-subgrid')}
           >
             <span aria-hidden>{item.number}.</span>
-            {lines !== undefined && naming(Number(item.number)) ? (
+            {lines?.names(Number(item.number)) === true && first(index, at) ? (
               <NamingLine line={Number(item.number)} lines={lines}>
                 <Said words={item.words} voice="agent" />
               </NamingLine>

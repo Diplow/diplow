@@ -20,7 +20,8 @@ export interface Ring {
 
 /**
  * The numbered lines of `body`, the tile's own, each tied to the Child of `tile` in the Direction its
- * number says, as Markdown numbers a list (`blocksOf`): the first line to name a Child keeps it.
+ * number says, as Markdown numbers a list (`blocksOf`); a number repeated names its Child by its
+ * first line alone, as the chat draws it (`firstNumbered`).
  */
 export function ringOf(tile: TileNode, body: string): Ring {
   const named = new Map<number, string>()
@@ -29,7 +30,7 @@ export function ringOf(tile: TileNode, body: string): Ring {
     for (const { number } of block.list) {
       const line = Number(number)
       const child = childAt(tile, line)
-      if (child !== undefined && !named.has(line)) named.set(line, child.id)
+      if (child !== undefined) named.set(line, child.id)
     }
   }
   const lines = new Map([...named].map(([line, id]) => [id, line]))
