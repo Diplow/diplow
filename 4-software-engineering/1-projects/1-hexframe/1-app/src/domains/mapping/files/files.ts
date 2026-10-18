@@ -11,6 +11,7 @@ import {
   inherited,
   type LeafTile,
   type Naming,
+  noTarget,
   type Reference,
   reservedKeys,
   type SystemTile,
@@ -187,7 +188,7 @@ const referenceTo = (
   { inside, link }: { inside: string | undefined; link: LinkOf },
 ) => {
   if (inside !== undefined) return `[[${inside}]]`
-  return target === '' ? '' : link(target)
+  return target === noTarget ? '' : link(target)
 }
 
 /** The files one placed Tile writes, its References resolved against what the export holds. */

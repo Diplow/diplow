@@ -59,6 +59,7 @@ import {
   tileAt,
   type ToKeep,
   pointing,
+  pointsAt,
   shownAlone,
   type Version,
   withContent,
@@ -308,12 +309,11 @@ const findOwn = <O extends Field, F extends Field>(
       const away = targets.filter((target) => !here.has(target))
       const pinned = across ? yield* pinnedFor(acting.actor, away, acting.system) : {}
       // A Reference to no Tile they are shown says nothing of it, to its System's owner either.
-      const shownAt = <R extends { readonly target: string | null }>(row: R) =>
-        pointing(row, (target) => here.has(target) || Object.hasOwn(pinned, target))
+      const shown = pointsAt((target) => here.has(target), pinned)
       const parent = parents[0]
       return {
         opened: withContent(opened, fields.opened),
-        rows: below.map((row) => withContent(shownAt(row), fields.below)),
+        rows: below.map((row) => withContent(pointing(row, shown), fields.below)),
         pointedAt: pointedAt.map((row) => withContent(row, glimpsed)),
         pinned,
         parent: parent === undefined ? null : { id: parent.id, title: parent.title },
@@ -403,7 +403,7 @@ export const exportTile = (
   { id, link, across }: { id: string; link: LinkOf; across: boolean },
 ) =>
   Effect.gen(function* () {
-    const { system, pinned } = yield* pinnedShown(acting, yield* ownersWhole(acting), across)
+    const { system, pinned } = yield* pinnedShown(acting, yield* ownersWhole(acting), { across })
     const exported = exportOf(systemOf(system, pinned), id, link)
     if (exported === undefined) return yield* new TileNotFound()
     const { zipped } = yield* Zip

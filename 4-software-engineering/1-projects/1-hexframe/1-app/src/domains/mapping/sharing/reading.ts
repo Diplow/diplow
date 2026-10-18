@@ -13,6 +13,7 @@ import {
   lineageFrom,
   owns,
   type PinnedTiles,
+  pointsAt,
   referencesShown,
   sharingOf,
   sightOf,
@@ -131,13 +132,17 @@ export const pinnedFor = (actor: Actor, ids: ReadonlyArray<string>, here: string
  * shown them (`referencesShown`), each pin with the Tile it points at while they may read it there
  * (`pinned`), resolved unless `across` says none.
  */
-export const pinnedShown = (acting: Acting, held: System, across: boolean) =>
+export const pinnedShown = (
+  acting: Acting,
+  held: System,
+  { across }: { readonly across: boolean },
+) =>
   Effect.map(
     across ? pinnedFor(acting.actor, outside(held), acting.system) : Effect.succeed({}),
     (pinned: PinnedTiles) => ({
       system: referencesShown(
         held,
-        (target) => tileAt(held, target) !== undefined || Object.hasOwn(pinned, target),
+        pointsAt((target) => tileAt(held, target) !== undefined, pinned),
       ),
       pinned,
     }),

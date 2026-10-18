@@ -80,9 +80,12 @@ export function sightOf(actor: Actor, sharing: Sharing, star: string): Sight {
  * Tile exists nor its id is told, and someone who could never read it sees what someone who lost
  * *read* on it sees.
  */
+/** The target an unavailable Reference is shown with: no id (`unavailable`). */
+export const noTarget = ''
+
 const unavailable = <R extends { readonly target: string | null }>(reference: R): R => ({
   ...reference,
-  target: '',
+  target: noTarget,
 })
 
 /**
@@ -119,14 +122,18 @@ export const shownAlone = (system: System): System =>
   referencesShown(system, (target) => tileAt(system, target) !== undefined)
 
 /**
- * Whether a reader is shown the Tile a Reference points at: one of the System, as `sight` shows it;
- * one it does not hold, among the Tiles of other Systems they may read (`pinned`), a deleted one in
- * none.
+ * Whether a reader is shown the Tile a Reference points at, the one rule of it: a Tile its System
+ * holds that `here` shows them, or one of another System among those they may read (`pinned`); a
+ * deleted one is neither. `here` is told only of ids it holds.
  */
-const pointsAtShown =
-  (system: System, sight: Sight, pinned: PinnedTiles) =>
+export const pointsAt =
+  (here: (target: string) => boolean, pinned: PinnedTiles) =>
   (target: string): boolean =>
-    tileAt(system, target) === undefined ? Object.hasOwn(pinned, target) : sight.shows(target)
+    here(target) || Object.hasOwn(pinned, target)
+
+/** What a reader is shown of a System's own Tiles, as `pointsAt`'s `here` asks it, by `sight`. */
+const pointsAtShown = (system: System, sight: Sight, pinned: PinnedTiles) =>
+  pointsAt((target) => tileAt(system, target) !== undefined && sight.shows(target), pinned)
 
 /** How the actor sees one Tile or Reference below the star. */
 type Shown =
