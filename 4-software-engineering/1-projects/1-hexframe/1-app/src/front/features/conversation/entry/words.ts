@@ -15,7 +15,7 @@ import {
   type Actor,
   type BadEnd,
   type Entry,
-  type JoinAsked,
+  type AskedToJoin,
   type Membership,
   isTheirs,
   partsOf,
@@ -323,7 +323,7 @@ function membershipWords(entry: Omit<Membership, '_tag'>, naming: Naming): Words
 }
 
 /** What someone asking to join an Organization the user is an admin of, or one of its Groups, says. */
-export function joinAskedWords(entry: JoinAsked, naming: Naming): Words {
+export function askedToJoinWords(entry: AskedToJoin, naming: Naming): Words {
   const said =
     entry.group === undefined ? m.conversation_join_asked : m.conversation_join_asked_group
   return weave(said, { who: outsider(entry.by), ...joinedPieces(entry, naming) })
@@ -445,7 +445,7 @@ export type Block =
     }
   | { readonly kind: 'proposal'; readonly entry: Extract<Entry, { _tag: 'Proposal' }> }
   | { readonly kind: 'applied'; readonly entry: Extract<Entry, { _tag: 'TurnApplied' }> }
-  | { readonly kind: 'asked'; readonly entry: Extract<Entry, { _tag: 'JoinAsked' }> }
+  | { readonly kind: 'asked'; readonly entry: Extract<Entry, { _tag: 'AskedToJoin' }> }
 
 /** The Entries of a day, oldest first, cut into what the timeline draws, the lines run together. */
 export function blocksOf(entries: ReadonlyArray<Entry>): ReadonlyArray<Block> {
@@ -465,7 +465,7 @@ export function blocksOf(entries: ReadonlyArray<Entry>): ReadonlyArray<Block> {
       case 'TurnApplied':
         blocks.push({ kind: 'applied', entry })
         return
-      case 'JoinAsked':
+      case 'AskedToJoin':
         blocks.push({ kind: 'asked', entry })
         return
       case 'Change':

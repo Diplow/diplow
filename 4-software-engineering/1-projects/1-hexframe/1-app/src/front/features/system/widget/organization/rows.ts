@@ -36,12 +36,9 @@ const whoOf = ({ star, you }: { star: Member['star']; you: boolean }) => {
   return you ? m.widget_members_you({ who }) : who
 }
 
-/**
- * Whether the reader may ask to join a Group, or asked and waits: none where they are in it.
- * HEX-138.
- */
-const joiningOf = ({ members, asked }: Group): GroupRow['joining'] =>
-  members.some((member) => member.you) ? undefined : asked ? 'asked' : 'ask'
+/** Whether the reader may ask to join a Group, or asked, as IAM says: none where they are in it. */
+const joiningOf = ({ joining }: Group): GroupRow['joining'] =>
+  joining === 'in' ? undefined : joining
 
 /**
  * The Groups as the Groups widget shows them, each by its name and who is in it, keyed by its id,

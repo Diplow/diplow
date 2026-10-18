@@ -195,14 +195,14 @@ export type Membership = typeof Membership.Type
  * Members. How it stands, open or decided, by this admin or another, is read anew with the day,
  * never kept here.
  */
-const JoinAsked = Schema.TaggedStruct('JoinAsked', {
+const AskedToJoin = Schema.TaggedStruct('AskedToJoin', {
   request: Schema.String,
   by: Schema.String,
   organization: Named,
   group: Schema.optionalKey(Schema.String),
 })
 
-export type JoinAsked = typeof JoinAsked.Type
+export type AskedToJoin = typeof AskedToJoin.Type
 
 /** What an Entry says, whichever kind it is: what is stored of it, and what it is decoded by. */
 export const EntryContent = Schema.Union([
@@ -216,7 +216,7 @@ export const EntryContent = Schema.Union([
   TurnApplied,
   Shared,
   Membership,
-  JoinAsked,
+  AskedToJoin,
 ])
 
 export type EntryContent = typeof EntryContent.Type
@@ -269,5 +269,5 @@ export const namedTiles = (entries: ReadonlyArray<Entry>): ReadonlyArray<string>
 
 /** The requests to join some Entries name, each once: those whose state the day reads anew. */
 export const namedRequests = (entries: ReadonlyArray<Entry>): ReadonlyArray<string> => [
-  ...new Set(entries.flatMap((entry) => (entry._tag === 'JoinAsked' ? [entry.request] : []))),
+  ...new Set(entries.flatMap((entry) => (entry._tag === 'AskedToJoin' ? [entry.request] : []))),
 ]

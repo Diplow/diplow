@@ -19,10 +19,17 @@ export type Role = typeof Role.Type
 export const GroupId = Schema.String.check(Schema.isUUID())
 
 /**
- * Where an Account stands in an Organization: among its members, by its role, or `outside` it, where
- * it may ask to join (HEX-138).
+ * Where an Account stands in an Organization: among its members, by its role; `outside` it, where it
+ * may ask to join; or outside it having `asked`, its request open or declined a short while ago, so
+ * it may not ask again yet (HEX-138).
  */
-export type Standing = Role | 'outside'
+export type Standing = Role | 'outside' | 'asked'
+
+/**
+ * Where a member stands toward one of its Organization's Groups: `in` it; outside it, where it may
+ * `ask` to join; or having `asked`, as `Standing` says it (HEX-138).
+ */
+export type GroupStanding = 'in' | 'ask' | 'asked'
 
 /**
  * How a request to join an Organization, or one of its Groups, stands: waiting for one of its

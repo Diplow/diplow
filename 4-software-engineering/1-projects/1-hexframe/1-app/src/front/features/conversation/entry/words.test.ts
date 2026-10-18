@@ -7,7 +7,7 @@ import type { Word } from '#/front/ui/chat/text/words'
 import {
   blocksOf,
   happenedOf,
-  joinAskedWords,
+  askedToJoinWords,
   messageWords,
   type Naming,
   proposedOf,
@@ -147,12 +147,14 @@ describe('happenedOf', () => {
   })
 
   it('tells someone asking to join, by their star, the Organization and its Group', () => {
-    const asked = { _tag: 'JoinAsked', id: 'j', at, request: 'r', by: 'Cleo Diaz' } as const
+    const asked = { _tag: 'AskedToJoin', id: 'j', at, request: 'r', by: 'Cleo Diaz' } as const
     const organization = { id: 'atelier', title: 'Atelier' }
-    const toMembers = joinAskedWords({ ...asked, organization }, naming)
+    const toMembers = askedToJoinWords({ ...asked, organization }, naming)
     expect(toMembers[0]).toEqual({ name: 'Cleo Diaz' })
     expect(toMembers).not.toContain('Design')
-    expect(joinAskedWords({ ...asked, organization, group: 'Design' }, naming)).toContain('Design')
+    expect(askedToJoinWords({ ...asked, organization, group: 'Design' }, naming)).toContain(
+      'Design',
+    )
     expect(blocksOf([{ ...asked, organization }]).map(({ kind }) => kind)).toEqual(['asked'])
   })
 

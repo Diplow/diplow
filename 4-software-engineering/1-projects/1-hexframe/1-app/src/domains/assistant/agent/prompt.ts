@@ -206,7 +206,7 @@ function lineOf(entry: Entry, titles: PromptOf['titles']): string {
       return `${accountOf(entry.by)} shared ${named(entry.tile.title, entry.tile.id)} with the user, who may ${mayDo(entry.rights)} there; it stands in that Account's System, not the user's.`
     case 'Membership':
       return `${accountOf(entry.by)} ${membershipSaid[entry.what](organizationOf(entry))}.`
-    case 'JoinAsked':
+    case 'AskedToJoin':
       return `${accountOf(entry.by)} asked to join ${organizationOf(entry)}, of which the user is an admin; the user accepts or declines it in the timeline, not you.`
   }
 }

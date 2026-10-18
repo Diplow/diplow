@@ -15,7 +15,7 @@ import { Bus } from '#/domains/bus'
 
 import { type MemberRow, Organizations } from '#/repositories/database/organizations/organizations'
 
-import type { Role, Standing } from '../entities'
+import type { Role } from '../entities'
 import {
   AccountNotFound,
   AdminRequired,
@@ -36,10 +36,16 @@ export class MemberAdded extends Schema.TaggedClass<MemberAdded>()('MemberAdded'
 }) {}
 
 /**
- * An Account taken out of an Organization, by one of its admins or by itself, leaving: published once
- * the transaction commits. Who took it out rides on the bus's envelope.
+ * An Account taken out of an Organization by one of its admins: published once the transaction
+ * commits. Who took it out rides on the bus's envelope.
  */
 export class MemberRemoved extends Schema.TaggedClass<MemberRemoved>()('MemberRemoved', {
+  organization: Schema.String,
+  account: Schema.String,
+}) {}
+
+/** An Account that left an Organization of its own accord: published once the transaction commits. */
+export class MemberLeft extends Schema.TaggedClass<MemberLeft>()('MemberLeft', {
   organization: Schema.String,
   account: Schema.String,
 }) {}
@@ -101,18 +107,6 @@ export const members = (organization: string) =>
     const found = yield* Organizations.use((organizations) => organizations.members(organization))
     if (roleIn(found, account.id) === undefined) return yield* new OrganizationNotFound()
     return found
-  })
-
-/**
- * Where the Account the request's Session proves stands in an Organization, read now: its role among
- * its members, or `outside` it, where it may ask to join.
- */
-export const standingIn = (organization: string) =>
-  Effect.gen(function* () {
-    const { account } = yield* sessionOnly
-    const found = yield* Organizations.use((organizations) => organizations.members(organization))
-    const standing: Standing = roleIn(found, account.id) ?? 'outside'
-    return standing
   })
 
 /**
@@ -195,10 +189,10 @@ export const setRole = (organization: string, account: string, role: Role) =>
 const leftBy = (organization: string, account: string) =>
   Effect.gen(function* () {
     const { account: asking } = yield* sessionOnly
-    if (asking.id !== account) return yield* managedBy(organization)
+    if (asking.id !== account) return { found: yield* managedBy(organization), leaving: false }
     const found = yield* Organizations.use((organizations) => organizations.locked(organization))
     if (roleIn(found, account) === undefined) return yield* new OrganizationNotFound()
-    return found
+    return { found, leaving: true }
   })
 
 /**
@@ -206,12 +200,13 @@ const leftBy = (organization: string, account: string) =>
  * itself, leaving, whatever its role, so nobody stays in one they never chose. `MemberNotFound` for
  * an Account not among its members, and `LastAdmin` for its last admin who joined
  * (`lastJoinedAdmin`). Holds from the next request on, since nothing is kept of it. Its open
- * requests to join the Organization or its Groups go with it, so no old one brings it back. Publishes `MemberRemoved`, so someone taken
- * out by an admin is told. Inside a transaction.
+ * requests to join the Organization or its Groups go with it, so no old one brings it back.
+ * Publishes `MemberRemoved` for someone an admin took out, who is told, and `MemberLeft` for someone
+ * who left. Inside a transaction.
  */
 export const removeMember = (organization: string, account: string) =>
   Effect.gen(function* () {
-    const found = yield* leftBy(organization, account)
+    const { found, leaving } = yield* leftBy(organization, account)
     const role = yield* roleOf(found, account)
     if (role === 'admin' && lastJoinedAdmin(found, account)) return yield* new LastAdmin()
     yield* Organizations.use((organizations) => organizations.remove(organization, account))
@@ -219,5 +214,9 @@ export const removeMember = (organization: string, account: string) =>
       organizations.dropOpenRequests(organization, account),
     )
     const { publish } = yield* Bus
-    yield* publish(new MemberRemoved({ organization, account }))
+    yield* publish(
+      leaving
+        ? new MemberLeft({ organization, account })
+        : new MemberRemoved({ organization, account }),
+    )
   })

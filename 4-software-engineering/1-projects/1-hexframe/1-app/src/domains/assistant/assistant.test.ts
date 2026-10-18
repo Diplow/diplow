@@ -12,7 +12,7 @@ import {
   lastEntry,
   postMessage,
   recordChange,
-  recordJoinAsked,
+  recordAskedToJoin,
   recordMembership,
   recordNavigation,
   recordShared,
@@ -58,8 +58,8 @@ function recording(accountId: string, content: EntryContent, ago: number) {
       return recordShared(accountId, Struct.omit(content, ['_tag']))
     case 'Membership':
       return recordMembership(accountId, Struct.omit(content, ['_tag']))
-    case 'JoinAsked':
-      return recordJoinAsked(accountId, Struct.omit(content, ['_tag']))
+    case 'AskedToJoin':
+      return recordAskedToJoin(accountId, Struct.omit(content, ['_tag']))
     case 'TurnEnded':
     case 'Proposal':
     case 'TurnApplied':
@@ -161,7 +161,7 @@ layer(TestLayer)('the Conversation, over PGlite', (it) => {
           organization: atelier,
           group: 'Design',
         },
-        { _tag: 'JoinAsked', request, by: 'Cleo Diaz', organization: atelier, group: 'Design' },
+        { _tag: 'AskedToJoin', request, by: 'Cleo Diaz', organization: atelier, group: 'Design' },
       ]
       for (const content of kinds) yield* recorded(account, content)
       const read = yield* day(account, { date: '2026-10-10', offset: 0 })

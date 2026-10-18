@@ -83,7 +83,7 @@ const today = (who: Someone) => value(who.as(Assistant.conversationDay({ offset:
 /** What an Organization's admins or members were told today, the Entries of those two kinds. */
 const told = async (who: Someone) =>
   (await today(who)).entries.flatMap((entry: Entry) =>
-    entry._tag === 'Membership' || entry._tag === 'JoinAsked' ? [entry] : [],
+    entry._tag === 'Membership' || entry._tag === 'AskedToJoin' ? [entry] : [],
   )
 
 /** The Tiles of the Organization's System someone may read, by id. */
@@ -118,17 +118,19 @@ describe('a request to join an Organization', () => {
     expect(await value(bob.as(Organizations.standingIn({ star })))).toBe('outside')
     expect(await reads(bob, star)).toEqual([])
     expect(await value(bob.as(Organizations.askToJoin({ star })))).toBeNull()
+    // Asked, the star's menu offers it no more, and asking again is refused.
+    expect(await value(bob.as(Organizations.standingIn({ star })))).toBe('asked')
     expect(await refusal(bob.as(Organizations.askToJoin({ star })))).toBe('JoinRequestOpen')
     // Each admin is told, Accept and Decline offered while it is open.
     const atelierStar = { id: star, title: 'Atelier' }
     for (const admin of [ana, dan]) {
-      const [asked] = (await told(admin)).filter((entry) => entry._tag === 'JoinAsked')
+      const [asked] = (await told(admin)).filter((entry) => entry._tag === 'AskedToJoin')
       expect(asked).toMatchObject({ by: 'Bob Martin', organization: atelierStar })
-      if (asked?._tag !== 'JoinAsked') throw new Error('Expected a request')
+      if (asked?._tag !== 'AskedToJoin') throw new Error('Expected a request')
       expect((await today(admin)).requests).toEqual({ [asked.request]: 'open' })
     }
     const [asked] = await told(ana)
-    if (asked?._tag !== 'JoinAsked') throw new Error('Expected a request')
+    if (asked?._tag !== 'AskedToJoin') throw new Error('Expected a request')
     const decision = { request: asked.request, accept: true }
     // Its admins' alone to decide, from a Session.
     expect(await refusal(bob.as(Organizations.decideJoinRequest(decision)))).toBe(
@@ -156,12 +158,12 @@ describe('a request to join an Organization', () => {
     const bob = await someone('Bob Martin')
     await value(bob.as(Organizations.askToJoin({ star })))
     const [asked] = await told(ana)
-    if (asked?._tag !== 'JoinAsked') throw new Error('Expected a request')
+    if (asked?._tag !== 'AskedToJoin') throw new Error('Expected a request')
     await value(ana.as(Organizations.decideJoinRequest({ request: asked.request, accept: false })))
     expect(await told(bob)).toMatchObject([
       { _tag: 'Membership', what: 'declined', by: 'Ana Lima' },
     ])
-    expect(await value(bob.as(Organizations.standingIn({ star })))).toBe('outside')
+    expect(await value(bob.as(Organizations.standingIn({ star })))).toBe('asked')
     expect(await reads(bob, star)).toEqual([])
     expect(await refusal(bob.as(Organizations.members({ star })))).toBe('OrganizationNotFound')
   })
@@ -177,14 +179,14 @@ describe('a request to join an Organization', () => {
     )
     await value(bob.as(Organizations.askToJoin({ star, group: design })))
     expect(await value(bob.as(Organizations.groups({ star })))).toMatchObject([
-      { id: design, asked: true },
+      { id: design, joining: 'asked' },
     ])
-    const asked = (await told(ana)).find((entry) => entry._tag === 'JoinAsked')
+    const asked = (await told(ana)).find((entry) => entry._tag === 'AskedToJoin')
     expect(asked).toMatchObject({ by: 'Bob Martin', group: 'Design' })
-    if (asked?._tag !== 'JoinAsked') throw new Error('Expected a request')
+    if (asked?._tag !== 'AskedToJoin') throw new Error('Expected a request')
     await value(ana.as(Organizations.decideJoinRequest({ request: asked.request, accept: true })))
     const [group] = await value(bob.as(Organizations.groups({ star })))
-    expect(group).toMatchObject({ asked: false, members: [{ you: true }] })
+    expect(group).toMatchObject({ joining: 'in', members: [{ you: true }] })
     expect((await told(bob)).at(-1)).toMatchObject({
       _tag: 'Membership',
       what: 'accepted',
@@ -240,7 +242,7 @@ describe('being added, removed, or leaving', () => {
     const bob = await someone('Bob Martin')
     await value(bob.as(Organizations.askToJoin({ star })))
     const [asked] = await told(ana)
-    if (asked?._tag !== 'JoinAsked') throw new Error('Expected a request')
+    if (asked?._tag !== 'AskedToJoin') throw new Error('Expected a request')
     await value(dan.as(Organizations.decideJoinRequest({ request: asked.request, accept: true })))
     await value(ana.as(Organizations.setMemberRole({ star, member: bob.star, role: 'admin' })))
     expect(await value(ana.as(Organizations.removeMember({ star, member: ana.star })))).toBeNull()

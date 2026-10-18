@@ -19,7 +19,7 @@ import {
   type Block,
   changeWords,
   happenedOf,
-  joinAskedWords,
+  askedToJoinWords,
   messageWords,
   type Naming,
 } from './words'
@@ -73,7 +73,7 @@ export function EntryBlock({ block, naming, decide, joining }: BlockProps) {
       )
     }
     case 'asked':
-      return <JoinAskedEntry entry={block.entry} naming={naming} joining={joining} />
+      return <AskedToJoinEntry entry={block.entry} naming={naming} joining={joining} />
     case 'applied': {
       const { entry } = block
       return (
@@ -103,7 +103,7 @@ export function EntryBlock({ block, naming, decide, joining }: BlockProps) {
  * Someone asking to join an Organization the user is an admin of: Accept and Decline while it is
  * open, then how it was decided; neither once it is no longer theirs to decide.
  */
-function JoinAskedEntry({
+function AskedToJoinEntry({
   entry,
   naming,
   joining,
@@ -118,7 +118,7 @@ function JoinAskedEntry({
   }
   return (
     <Receipt
-      words={joinAskedWords(entry, naming)}
+      words={askedToJoinWords(entry, naming)}
       at={entry.at}
       tone="quiet"
       said={state === undefined || state === 'open' ? undefined : decided[state]()}

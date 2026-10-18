@@ -45,10 +45,14 @@ export interface JoinRows {
     id: string,
     decided: { readonly state: Exclude<RequestState, 'open'>; readonly at: Date },
   ) => Effect.Effect<void, never, InTransaction>
-  /** Deletes the requests an Account has open to an Organization. Inside a transaction. */
+  /**
+   * Deletes the requests an Account has open to an Organization, or to one of its Groups alone.
+   * Inside a transaction.
+   */
   readonly dropOpenRequests: (
     organization: string,
     account: string,
+    group?: string,
   ) => Effect.Effect<void, never, InTransaction>
 }
 
@@ -107,7 +111,7 @@ export const joinRowsOf = (database: Database['Service']): JoinRows => ({
         .where(and(eq(joinRequest.id, id), eq(joinRequest.state, 'open')))
         .pipe(Effect.orDie, Effect.asVoid),
     ),
-  dropOpenRequests: (organization, account) =>
+  dropOpenRequests: (organization, account, group) =>
     inTransaction(
       database
         .delete(joinRequest)
@@ -116,6 +120,7 @@ export const joinRowsOf = (database: Database['Service']): JoinRows => ({
             eq(joinRequest.organizationId, organization),
             eq(joinRequest.accountId, account),
             eq(joinRequest.state, 'open'),
+            group === undefined ? undefined : eq(joinRequest.groupId, group),
           ),
         )
         .pipe(Effect.orDie, Effect.asVoid),

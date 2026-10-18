@@ -288,7 +288,7 @@ const entries: ReadonlyArray<Entry> = [
     at,
   },
   {
-    _tag: 'JoinAsked',
+    _tag: 'AskedToJoin',
     request: 'r1',
     by: 'Cleo Diaz',
     organization: { id: 'atelier', title: 'Atelier' },

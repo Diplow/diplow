@@ -1,4 +1,4 @@
-import { expect, layer } from '@effect/vitest'
+import { describe, expect, it, layer } from '@effect/vitest'
 import { Effect, Exit, Layer, Option } from 'effect'
 import { TestClock } from 'effect/testing'
 
@@ -10,18 +10,21 @@ import { layer as organizationsLayer } from '#/repositories/database/organizatio
 import { CurrentKey, CurrentSession, signUp } from '../iam'
 import { createGroup, setInGroup } from './groups'
 import {
+  askedAlready,
   askToJoin,
   decideJoinRequest,
-  groupsAskedBy,
+  groupStandings,
   JoinAsked,
   JoinDecided,
   requestsSeen,
+  standingIn,
 } from './joining'
 import {
   addMember,
   belonging,
   createOrganization,
   MemberAdded,
+  MemberLeft,
   MemberRemoved,
   members,
   membersGroupOf,
@@ -139,7 +142,9 @@ layer(TestLayer)('Joining an Organization', (it) => {
     Effect.gen(function* () {
       const { ana, team } = yield* atelier
       const bob = yield* someone
+      expect(yield* bob.asSession(standingIn(team))).toBe('outside')
       const request = yield* bob.asSession(askToJoin(team))
+      expect(yield* bob.asSession(standingIn(team))).toBe('asked')
       yield* ana.asSession(decideJoinRequest(request, false))
       expect(published.at(-1)).toMatchObject({ _tag: 'JoinDecided', accepted: false })
       expect(yield* ana.asSession(members(team))).toHaveLength(1)
@@ -149,7 +154,9 @@ layer(TestLayer)('Joining an Organization', (it) => {
       )
       // Not again at once, so a declined Account fills no admin's timeline: the next day.
       expect(yield* failedWith(bob.asSession(askToJoin(team)))).toBe('JoinRequestDeclined')
+      expect(yield* bob.asSession(standingIn(team))).toBe('asked')
       yield* TestClock.adjust('25 hours')
+      expect(yield* bob.asSession(standingIn(team))).toBe('outside')
       const again = yield* bob.asSession(askToJoin(team))
       expect(again).not.toBe(request)
     }),
@@ -197,23 +204,35 @@ layer(TestLayer)('Joining an Organization', (it) => {
       expect(published.at(-1)).toEqual(
         new JoinAsked({ request, organization: team, group: design, account: bob.account.id }),
       )
-      expect(yield* groupsAskedBy(bob.account.id, team)).toEqual(new Set([design]))
+      const towardDesign = (members: ReadonlyArray<string> = []) =>
+        Effect.map(groupStandings(bob.account.id, team, [{ id: design, members }]), (standings) =>
+          standings.get(design),
+        )
+      expect(yield* towardDesign()).toBe('asked')
       expect(yield* failedWith(bob.asSession(askToJoin(team, design)))).toBe('JoinRequestOpen')
       yield* ana.asSession(decideJoinRequest(request, true))
       expect((yield* belonging(bob.account.id)).groups).toEqual([membersGroupOf(team), design])
-      expect(yield* groupsAskedBy(bob.account.id, team)).toEqual(new Set())
+      expect(yield* towardDesign([bob.account.id])).toBe('in')
       expect(yield* failedWith(bob.asSession(askToJoin(team, design)))).toBe('AlreadyInGroup')
-      // Taken out of it, he asks again; once he leaves the Organization, his request goes with him.
-      yield* ana.asSession(setInGroup(team, { group: design, account: bob.account.id, in: false }))
+      // Taken out of it, he asks again; put back in by Ana, his request has nothing left to decide.
+      const out = { group: design, account: bob.account.id, in: false }
+      yield* ana.asSession(setInGroup(team, out))
+      const back = yield* bob.asSession(askToJoin(team, design))
+      yield* ana.asSession(setInGroup(team, { ...out, in: true }))
+      expect(yield* ana.asSession(requestsSeen([back]))).toEqual(new Map())
+      // Out again and asking, once he leaves the Organization, his request goes with him.
+      yield* ana.asSession(setInGroup(team, out))
       const again = yield* bob.asSession(askToJoin(team, design))
       yield* bob.asSession(removeMember(team, bob.account.id))
-      expect(yield* groupsAskedBy(bob.account.id, team)).toEqual(new Set())
+      expect(yield* towardDesign()).toBe('ask')
       expect(yield* failedWith(ana.asSession(decideJoinRequest(again, true)))).toBe(
         'JoinRequestNotFound',
       )
     }),
   )
+})
 
+layer(TestLayer)('Adding, removing and leaving', (it) => {
   it.effect('drops a request once its Account is added, so none brings back someone who left', () =>
     Effect.gen(function* () {
       const { ana, team } = yield* atelier
@@ -231,17 +250,41 @@ layer(TestLayer)('Joining an Organization', (it) => {
     }),
   )
 
-  it.effect('leaves nothing to tell of whoever an admin adds or takes out but the fact', () =>
-    Effect.gen(function* () {
-      const { ana, team } = yield* atelier
-      const bob = yield* someone
-      const from = published.length
-      yield* ana.asSession(addMember(team, bob.account.id))
-      yield* ana.asSession(removeMember(team, bob.account.id))
-      expect(published.slice(from)).toEqual([
-        new MemberAdded({ organization: team, account: bob.account.id }),
-        new MemberRemoved({ organization: team, account: bob.account.id }),
-      ])
-    }),
+  it.effect(
+    'tells whoever an admin adds or takes out apart from whoever leaves, by the fact alone',
+    () =>
+      Effect.gen(function* () {
+        const { ana, team } = yield* atelier
+        const bob = yield* someone
+        const from = published.length
+        yield* ana.asSession(addMember(team, bob.account.id))
+        yield* ana.asSession(removeMember(team, bob.account.id))
+        yield* ana.asSession(addMember(team, bob.account.id))
+        yield* bob.asSession(removeMember(team, bob.account.id))
+        const facts = [MemberAdded, MemberRemoved, MemberAdded, MemberLeft].map(
+          (Fact) => new Fact({ organization: team, account: bob.account.id }),
+        )
+        expect(published.slice(from)).toEqual(facts)
+      }),
   )
+})
+
+describe('asking again', () => {
+  const day = 24 * 60 * 60_000
+  const now = 10 * day
+  const decided = (state: 'accepted' | 'declined', ago: number, group?: string) => ({
+    group,
+    state,
+    decidedAt: new Date(now - ago),
+  })
+
+  it('waits while one for the same is open, and a day after one declined, for the same alone', () => {
+    const open = { group: 'design', state: 'open' as const, decidedAt: undefined }
+    expect(askedAlready([open], 'design', now)).toBe('open')
+    expect(askedAlready([open], undefined, now)).toBeUndefined()
+    expect(askedAlready([decided('declined', day - 1)], undefined, now)).toBe('declined')
+    expect(askedAlready([decided('declined', day)], undefined, now)).toBeUndefined()
+    expect(askedAlready([decided('accepted', 1)], undefined, now)).toBeUndefined()
+    expect(askedAlready([decided('declined', 1, 'ops')], 'design', now)).toBeUndefined()
+  })
 })

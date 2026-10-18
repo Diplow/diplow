@@ -96,7 +96,7 @@ const starsNamed = (owners: ReadonlyArray<string>) =>
  * What a change of someone's place in an Organization names, read now: who acted, by their star's
  * Title, the Organization by its star, and the Group by its name, none for its Members.
  */
-const membershipOf = (
+const namedForTimeline = (
   { account }: SignedIn,
   { organization, group }: { readonly organization: string; readonly group?: string },
 ) =>
@@ -117,7 +117,7 @@ const toldMembership = (
   told: { readonly organization: string; readonly group?: string },
   signedIn: SignedIn,
 ) =>
-  Effect.flatMap(membershipOf(signedIn, told), (named) =>
+  Effect.flatMap(namedForTimeline(signedIn, told), (named) =>
     transactional(Assistant.recordMembership(accountId, { what, ...named })),
   )
 
@@ -130,16 +130,13 @@ export const toldAdded = on(MemberAdded, (added, actor) =>
 )
 
 /**
- * Records an Account taken out of an Organization by an admin, in its own Conversation; nothing for
- * one that left, which it did itself.
+ * Records an Account taken out of an Organization by an admin, in its own Conversation. One that
+ * left, IAM's `MemberLeft`, is told nothing: it did it itself.
  */
 export const toldRemoved = on(MemberRemoved, (removed, actor) =>
   Option.match(actor, {
     onNone: () => Effect.void,
-    onSome: (signedIn) =>
-      signedIn.account.id === removed.account
-        ? Effect.void
-        : toldMembership(removed.account, 'removed', removed, signedIn),
+    onSome: (signedIn) => toldMembership(removed.account, 'removed', removed, signedIn),
   }),
 )
 
@@ -167,10 +164,20 @@ export const toldAsked = on(Joining.JoinAsked, (asked, actor) =>
     onNone: () => Effect.void,
     onSome: (signedIn) =>
       Effect.gen(function* () {
-        const named = yield* membershipOf(signedIn, asked)
+        const named = yield* namedForTimeline(signedIn, asked)
         const admins = yield* Joining.adminsOf(asked.organization)
-        yield* Effect.forEach(admins, (admin) =>
-          transactional(Assistant.recordJoinAsked(admin, { request: asked.request, ...named })),
+        // Each admin told on their own: one Entry that fails is reported, and the others still land.
+        yield* Effect.forEach(
+          admins,
+          (admin) =>
+            transactional(
+              Assistant.recordAskedToJoin(admin, { request: asked.request, ...named }),
+            ).pipe(
+              Effect.catchCause((cause) =>
+                Effect.logError('An admin was not told of a request to join', cause),
+              ),
+            ),
+          { discard: true },
         )
       }),
   }),

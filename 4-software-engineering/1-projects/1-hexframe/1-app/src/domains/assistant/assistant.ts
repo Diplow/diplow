@@ -30,7 +30,7 @@ import {
   firstMode,
   isBadEnd,
   Mode,
-  type JoinAsked,
+  type AskedToJoin,
   type Membership,
   type Navigation,
   type OwnActor,
@@ -167,8 +167,8 @@ export const recordMembership = (accountId: string, membership: Omit<Membership,
  * in the Account's own Conversation, as the API layer tells it: the request, by its id, who asked,
  * the Organization and the Group.
  */
-export const recordJoinAsked = (accountId: string, asked: Omit<JoinAsked, '_tag'>) =>
-  record(accountId, { _tag: 'JoinAsked', ...asked })
+export const recordAskedToJoin = (accountId: string, asked: Omit<AskedToJoin, '_tag'>) =>
+  record(accountId, { _tag: 'AskedToJoin', ...asked })
 
 /**
  * Rewrites one of the Account's Entries as `change` says, the Entry as Assistant decoded it. An Entry

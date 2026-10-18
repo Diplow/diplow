@@ -11,7 +11,7 @@
 // client.
 import { Effect } from 'effect'
 
-import type { Role } from '#/domains/iam/entities'
+import type { GroupStanding, Role } from '#/domains/iam/entities'
 import { OrganizationNotFound } from '#/domains/iam/errors'
 import * as Iam from '#/domains/iam/iam'
 import * as Groups from '#/domains/iam/organizations/groups'
@@ -77,7 +77,7 @@ export const standingIn = ({ star }: { readonly star: string }) =>
     const organization = yield* organizationAt(star).pipe(
       Effect.catchTag('OrganizationNotFound', () => Effect.succeed(undefined)),
     )
-    return organization === undefined ? null : yield* Organizations.standingIn(organization)
+    return organization === undefined ? null : yield* Joining.standingIn(organization)
   })
 
 /** One member of an Organization as the Members widget shows them: by their star, and their role. */
@@ -162,8 +162,8 @@ export const removeMember = ({
 export interface GroupShown {
   readonly id: string
   readonly name: string
-  /** Whether the Account reading asked to join it and waits for an admin (HEX-138). */
-  readonly asked: boolean
+  /** Where the Account reading stands toward it: in it, may ask to join, or asked (HEX-138). */
+  readonly joining: GroupStanding
   /** Who is in it, the earliest first, each by their star's card, none while they have no System. */
   readonly members: ReadonlyArray<{ readonly star: StarCard | undefined; readonly you: boolean }>
 }
@@ -178,11 +178,11 @@ export const groups = ({ star }: { readonly star: string }) =>
     const organization = yield* organizationAt(star)
     const found = yield* Groups.groups(organization)
     const stars = yield* Stars.starsOf(found.flatMap((group) => group.members))
-    const asked = yield* Joining.groupsAskedBy(account.id, organization)
+    const standings = yield* Joining.groupStandings(account.id, organization, found)
     return found.map((group): GroupShown => ({
       id: group.id,
       name: group.name,
-      asked: asked.has(group.id),
+      joining: standings.get(group.id) ?? 'ask',
       members: group.members.map((member) => ({
         star: stars.get(member),
         you: member === account.id,

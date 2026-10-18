@@ -11,7 +11,7 @@ import { Clock, Effect, Schema } from 'effect'
 import { Bus } from '#/domains/bus'
 import { Organizations } from '#/repositories/database/organizations/organizations'
 
-import type { JoinState } from '../entities'
+import type { GroupStanding, JoinState, Standing } from '../entities'
 import {
   AlreadyInGroup,
   AlreadyMember,
@@ -70,25 +70,47 @@ const mayAsk = (organization: string, account: string, group: string | undefined
 /** How long after a decline an Account may ask for the same again, in milliseconds: a day. */
 const askAgainAfter = 24 * 60 * 60_000
 
+/** A request to join as the rules read it: what it asks for, how it stands, and when it was decided. */
+interface Asked {
+  readonly group: string | undefined
+  readonly state: JoinState
+  readonly decidedAt: Date | undefined
+}
+
 /**
- * That the Account may ask for this again, by its requests to the Organization so far, now:
- * `JoinRequestOpen` while one for the same waits; `JoinRequestDeclined` within a day of one an admin
- * declined, so a declined Account cannot fill every admin's timeline, and their agent's prompt, with
- * a request at each click.
+ * Why an Account may not ask for this again now, by its requests to the Organization so far: one for
+ * the same still `open`, or one an admin `declined` within a day, so a declined Account cannot fill
+ * every admin's timeline, and their agent's prompt, with a request at each click; none when it may.
+ * Pure: asking, where an Account stands and its Groups read it alike.
  */
+export function askedAlready(
+  requests: ReadonlyArray<Asked>,
+  group: string | undefined,
+  now: number,
+): 'open' | 'declined' | undefined {
+  const same = requests.filter((one) => one.group === group)
+  if (same.some((one) => one.state === 'open')) return 'open'
+  const lately = (one: Asked) =>
+    one.state === 'declined' &&
+    one.decidedAt !== undefined &&
+    now - one.decidedAt.getTime() < askAgainAfter
+  return same.some(lately) ? 'declined' : undefined
+}
+
+/** An Account's requests to an Organization, and the instant now, which `askedAlready` reads. */
+const askedSoFar = (account: string, organization: string) =>
+  Effect.all([
+    Organizations.use((organizations) => organizations.requestsBy(account, organization)),
+    Clock.currentTimeMillis,
+  ])
+
+/** That the Account may ask for this again now: `JoinRequestOpen` or `JoinRequestDeclined` otherwise. */
 const mayAskAgain = (organization: string, account: string, group: string | undefined) =>
   Effect.gen(function* () {
-    const now = yield* Clock.currentTimeMillis
-    const before = yield* Organizations.use((organizations) =>
-      organizations.requestsBy(account, organization),
-    )
-    const same = before.filter((one) => one.group === group)
-    if (same.some((one) => one.state === 'open')) return yield* new JoinRequestOpen()
-    const declinedLately = (one: (typeof same)[number]) =>
-      one.state === 'declined' &&
-      one.decidedAt !== undefined &&
-      now - one.decidedAt.getTime() < askAgainAfter
-    if (same.some(declinedLately)) return yield* new JoinRequestDeclined()
+    const [requests, now] = yield* askedSoFar(account, organization)
+    const already = askedAlready(requests, group, now)
+    if (already === 'open') return yield* new JoinRequestOpen()
+    if (already === 'declined') return yield* new JoinRequestDeclined()
   })
 
 /**
@@ -130,7 +152,7 @@ export const decideJoinRequest = (request: string, accept: boolean) =>
   Effect.gen(function* () {
     yield* sessionOnly
     const { organization } = yield* requestOf(request)
-    const found = yield* managedBy(organization).pipe(
+    yield* managedBy(organization).pipe(
       Effect.catchTags({
         OrganizationNotFound: () => Effect.fail(new JoinRequestNotFound()),
         AdminRequired: () => Effect.fail(new JoinRequestNotFound()),
@@ -139,11 +161,12 @@ export const decideJoinRequest = (request: string, accept: boolean) =>
     // Read again under the lock, so two admins deciding at once decide one after the other.
     const { group, account, state } = yield* requestOf(request)
     if (state !== 'open') return yield* new JoinRequestDecided()
-    if (accept && group === undefined) {
-      yield* Organizations.use((organizations) => organizations.join(organization, account))
-    } else if (accept && group !== undefined && roleIn(found, account) !== undefined) {
+    // A Group's request is a member's, and leaving drops it: `group_member`'s key holds that too.
+    if (accept) {
       yield* Organizations.use((organizations) =>
-        organizations.addToGroup(organization, { group, account }),
+        group === undefined
+          ? organizations.join(organization, account)
+          : organizations.addToGroup(organization, { group, account }),
       )
     }
     const at = new Date(yield* Clock.currentTimeMillis)
@@ -183,17 +206,43 @@ export const requestsSeen = (ids: ReadonlyArray<string>) =>
   })
 
 /**
- * The Groups of an Organization an Account asked to join and waits for, by their ids, read now: what
- * the Groups widget says asked.
+ * Where the Account the request's Session proves stands in an Organization, read now: its role among
+ * its members; `outside` it, where it may ask to join; or having `asked`, its request open or
+ * declined lately (`askedAlready`).
  */
-export const groupsAskedBy = (account: string, organization: string) =>
+export const standingIn = (organization: string) =>
+  Effect.gen(function* () {
+    const { account } = yield* sessionOnly
+    const found = yield* Organizations.use((organizations) => organizations.members(organization))
+    const role = roleIn(found, account.id)
+    if (role !== undefined) return role satisfies Standing
+    const [requests, now] = yield* askedSoFar(account.id, organization)
+    const standing: Standing =
+      askedAlready(requests, undefined, now) === undefined ? 'outside' : 'asked'
+    return standing
+  })
+
+/**
+ * Where an Account stands toward each of some Groups of an Organization, read now: `in` it, may `ask`
+ * to join it, or has `asked` (`askedAlready`). What the Groups widget offers each by.
+ */
+export const groupStandings = (
+  account: string,
+  organization: string,
+  groups: ReadonlyArray<{ readonly id: string; readonly members: ReadonlyArray<string> }>,
+) =>
   Effect.map(
-    Organizations.use((organizations) => organizations.requestsBy(account, organization)),
-    (asked) =>
-      new Set(
-        asked.flatMap((one) =>
-          one.state === 'open' && one.group !== undefined ? [one.group] : [],
-        ),
+    askedSoFar(account, organization),
+    ([requests, now]) =>
+      new Map(
+        groups.map(({ id, members }): readonly [string, GroupStanding] => [
+          id,
+          members.includes(account)
+            ? 'in'
+            : askedAlready(requests, id, now) === undefined
+              ? 'ask'
+              : 'asked',
+        ]),
       ),
   )
 

@@ -102,7 +102,7 @@ const inAtelier = (at: Date): Entry[] => [
     organization: atelier,
   },
   {
-    _tag: 'JoinAsked',
+    _tag: 'AskedToJoin',
     id: 'o2',
     at,
     request: 'cleo-asks',
@@ -110,7 +110,7 @@ const inAtelier = (at: Date): Entry[] => [
     organization: atelier,
   },
   {
-    _tag: 'JoinAsked',
+    _tag: 'AskedToJoin',
     id: 'o3',
     at,
     request: 'dan-asks',
