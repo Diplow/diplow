@@ -7,8 +7,8 @@ import { useState } from 'react'
 
 import { m } from '#/paraglide/messages'
 
-import { toast } from '../../../atoms/Toaster'
-import { GalleryColumn, GallerySection, GalleryState } from '../../../gallery/frame'
+import { toast } from '../../../../atoms/Toaster'
+import { GalleryColumn, GallerySection, GalleryState } from '../../../../gallery/frame'
 import { type StarShown, type StarsShown, StarPicker } from './StarPicker'
 
 /**

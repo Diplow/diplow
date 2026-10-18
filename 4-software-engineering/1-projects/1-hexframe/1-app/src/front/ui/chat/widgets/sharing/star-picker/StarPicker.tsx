@@ -9,10 +9,10 @@ import { Sun } from 'lucide-react'
 
 import { m } from '#/paraglide/messages'
 
-import { runsToCurve, toCurve } from '../../../layouts/screen/state/useAlongCurve'
-import { HexMark } from '../../atoms/hex'
-import { Widget } from '../../layouts/Widget'
-import { Field } from '../fields'
+import { runsToCurve, toCurve } from '../../../../layouts/screen/state/useAlongCurve'
+import { HexMark } from '../../../atoms/hex'
+import { Widget } from '../../../layouts/Widget'
+import { Field } from '../../fields'
 
 /** A star as the widget shows it: its id, and its card, its Title and Preview. */
 export interface StarShown {

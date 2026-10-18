@@ -11,7 +11,7 @@ import { Schema } from 'effect'
 import { tileOfLink } from '#/api/mapping/files/download'
 import { findStars, setGrant, starOfLink, whoReaches } from '#/api/mapping/mapping'
 import { type GrantChange, type LinkedStar, starQueryOf, TileId } from '#/domains/mapping/entities'
-import type { StarsShown } from '#/front/ui/chat/widgets/star-picker/StarPicker'
+import type { StarsShown } from '#/front/ui/chat/widgets/sharing/star-picker/StarPicker'
 
 import { read, write } from '../calls'
 

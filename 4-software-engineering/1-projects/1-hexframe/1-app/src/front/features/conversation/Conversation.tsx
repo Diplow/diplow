@@ -93,6 +93,8 @@ interface FootProps {
   onHelp?: ((words: string) => void) | undefined
   /** Opens the Account's Keys, which `/keys` runs; none where the page has none. */
   onKeys?: (() => void) | undefined
+  /** Opens the widget that makes an Organization, which `/organization` runs; none where none. */
+  onOrganization?: (() => void) | undefined
   /** Shows the tutorial on the canvas, which `/tutorial` runs; none where the page has none. */
   onTutorial?: (() => void) | undefined
   /** The command the chat invites the user to run now, which a `/` offers first. */
@@ -282,7 +284,8 @@ function goTo(locale: string) {
 /**
  * The composer, through its state hook: a pick put in the field, its caret after it, or the language
  * gone to; a Message sent as words, or a command the field opens with run, the Mode's by its switch,
- * `/undo` by `onUndo`, `/keys` by `onKeys`, `/tutorial` by `onTutorial`, the words after it sent
+ * `/undo` by `onUndo`, `/keys` by `onKeys`, `/organization` by `onOrganization`, `/tutorial` by
+ * `onTutorial`, the words after it sent
  * once it ran, `/help` by `onHelp`, the words after it the topic it looks for, and `/logout` by
  * `onSignOut`, alone. The command the chat invites comes first in what a `/` lists.
  */
@@ -292,6 +295,7 @@ export function ConversationFoot({
   onUndo,
   onHelp,
   onKeys,
+  onOrganization,
   onTutorial,
   invited,
   onSignOut,
@@ -309,6 +313,7 @@ export function ConversationFoot({
     undoable: onUndo !== undefined,
     help: onHelp !== undefined,
     keys: onKeys !== undefined,
+    organization: onOrganization !== undefined,
     tutorial: onTutorial !== undefined,
     signOut: onSignOut !== undefined,
     invited,
@@ -346,9 +351,13 @@ export function ConversationFoot({
             onSignOut?.()
             return
           }
-          if (command === 'undo') onUndo?.()
-          else if (command === 'keys') onKeys?.()
-          else if (command === 'tutorial') onTutorial?.()
+          const opens = {
+            undo: onUndo,
+            keys: onKeys,
+            organization: onOrganization,
+            tutorial: onTutorial,
+          }
+          if (command !== 'ask' && command !== 'apply') opens[command]?.()
           else if (mode !== undefined && modeOf[command] !== mode.mode) mode.choose(modeOf[command])
           if (then !== undefined) onSend(then)
         }

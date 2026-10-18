@@ -71,12 +71,14 @@ import { HelpRead, ShippedCanvas } from '#/front/features/shipped/Shipped'
 import type { TutorialRules } from '#/front/features/shipped/tutorial/rules'
 import { useSameSix } from '#/front/features/shipped/tutorial/six'
 import { KeyWidgets } from '#/front/features/keys/KeyWidgets'
+import { useOpenKeys } from '#/front/features/keys/open'
 import { readKeysSearch, withKeys } from '#/front/features/keys/search'
 import { useKeyWidgetState } from '#/front/features/keys/state/useKeyWidgetState'
 import {
   opensWidget,
   readSystemSearch,
   viewOf,
+  withChange,
   withView,
   type SearchChange,
   type SystemSearch,
@@ -409,15 +411,6 @@ function useYourSystem() {
   return { system: data?.system, tree, welcoming, path: welcoming ? undefined : tree }
 }
 
-/** `/keys`: the key widget opened at the conversation's foot, which a phone brings to the front. */
-function useOpenKeys(turning: ReturnType<typeof useScreenState>['actions']) {
-  const navigate = Route.useNavigate()
-  return () => {
-    void navigate({ search: (current) => ({ ...current, ...withKeys(true) }) })
-    turning.turn('chat')
-  }
-}
-
 /**
  * `/tutorial`, typed or clicked in the agent's invitation: the journey to the tutorial, at its Root,
  * read-only, Help's widget closed and the System's view and change set aside, as the tutorial takes
@@ -650,6 +643,9 @@ function SignedIn() {
               carried={carried}
               onHelp={help.onOpen}
               onKeys={openKeys}
+              onOrganization={() => {
+                onSearchChange(withChange(search, { kind: 'organization' }))
+              }}
               onTutorial={openTutorial}
               visiting={visit.star}
             />

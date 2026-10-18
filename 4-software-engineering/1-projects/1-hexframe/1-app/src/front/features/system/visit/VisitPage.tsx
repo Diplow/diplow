@@ -2,8 +2,10 @@
 // its star as the Account may see it, from its card, the Tiles it may read below Tiles kept from it
 // hung from the star across a gap, each Tile's menu holding the lines that look, Copy, those that
 // write where the Account's rights there let it (HEX-132), and the agent's where it holds *@* there,
-// the Turn then starting in that Tile, of their System (HEX-134).
+// the Turn then starting in that Tile, of their System (HEX-134); an Organization's, its owner's
+// lines to its admins, and its star's Members widget to its members (HEX-136).
 import type { Direction } from '#/domains/mapping/entities'
+import { useRoleIn } from '#/front/client/iam/organizations'
 import { useSystem } from '#/front/client/mapping/queries'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
 import type { CanvasMarks } from '#/front/ui/canvas/Canvas'
@@ -42,6 +44,8 @@ const none = () => undefined
 export function VisitPage(props: VisitPageProps) {
   const { star, search, onSearchChange, onViewChange, marks, onAsk } = props
   const { data } = useSystem({ star })
+  // Whether the star is an Organization's the Account belongs to, read without throwing: a menu line.
+  const { data: role } = useRoleIn(star)
   if (data === undefined) return <Skeleton className="min-h-0 flex-1" />
   return (
     <System
@@ -49,8 +53,13 @@ export function VisitPage(props: VisitPageProps) {
       root={data.root}
       tree={visitTree(data)}
       underway={data.underway}
-      // As far as the rights Mapping showed the visitor there let them: `Reach`, DEC-9.
-      reach={{ visiting: data.rights }}
+      // As far as the rights Mapping showed the visitor there let them, its owner's lines to an
+      // Organization's admin: `Reach`, DEC-9, DEC-13.
+      reach={{
+        visiting: data.rights,
+        owner: data.owned,
+        members: role !== undefined && role !== null,
+      }}
       search={search}
       pinned={data.pinned}
       onViewChange={onViewChange}

@@ -18,7 +18,7 @@ export const OrganizationName = Schema.Struct({
 })
 
 /** An Organization, by its star's id. */
-export const OrganizationAt = Schema.Struct({ star: TileId })
+const OrganizationAt = Schema.Struct({ star: TileId })
 
 /** A member of an Organization, by their star's id, in the Organization a star names. */
 export const MemberAt = Schema.Struct({ star: TileId, member: TileId })

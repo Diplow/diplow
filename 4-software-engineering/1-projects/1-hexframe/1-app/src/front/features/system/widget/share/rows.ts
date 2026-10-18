@@ -1,9 +1,9 @@
 // Who reaches a Tile, as the share widget words it, pure: each subject, what it may do there, and
 // where that comes from, set on the Tile, on the star, on a Tile above by its Title, or nowhere, with
-// what its owner chose there, Mapping's (`choiceOn`), for Everyone and for each Account, named by its
-// star's Title, its star kept so a choice names it; and what a choice on a row sends, and how the
-// rows show the one on its way. Mapping answers who reaches it (`reachOn`); this says it in the
-// page's language.
+// what its owner chose there, Mapping's (`choiceOn`), for Everyone, for each Account, named by its
+// star's Title, and for an Organization's Members, by its star's (HEX-136), its star kept so a choice
+// names it; and what a choice on a row sends, and how the rows show the one on its way. Mapping
+// answers who reaches it (`reachOn`); this says it in the page's language.
 import { Schema } from 'effect'
 
 import {
@@ -17,8 +17,8 @@ import {
   rightsOf,
   subjectKeyOf,
 } from '#/domains/mapping/entities'
-import { rightsSaid } from '#/front/ui/chat/widgets/share/rights'
-import type { Chosen, ReachRow } from '#/front/ui/chat/widgets/share/ShareWidget'
+import { rightsSaid } from '#/front/ui/chat/widgets/sharing/share/rights'
+import type { Chosen, ReachRow } from '#/front/ui/chat/widgets/sharing/share/ShareWidget'
 import { m } from '#/paraglide/messages'
 
 /** Where a Tile stands among the System's, as its rows name them. */
@@ -32,8 +32,8 @@ export interface Around {
 }
 
 /**
- * Who a subject is, in words: Everyone, someone by their star's Title, one not named yet said so, or
- * a group, until IAM names them.
+ * Who a subject is, in words: Everyone, someone by their star's Title, one not named yet said so, an
+ * Organization's Members by its star's, or a group, until IAM names them.
  */
 function whoOf(subject: Reach['subject'], star: NamedReach['star']) {
   switch (subject._tag) {
@@ -43,7 +43,10 @@ function whoOf(subject: Reach['subject'], star: NamedReach['star']) {
       if (star === undefined) return m.widget_share_account()
       return star.title === '' ? m.widget_star_untitled() : star.title
     case 'Group':
-      return m.widget_share_group()
+      if (star === undefined) return m.widget_share_group()
+      return m.widget_share_members({
+        title: star.title === '' ? m.widget_star_untitled() : star.title,
+      })
   }
 }
 
@@ -63,7 +66,10 @@ const rowOf = (reach: Reach, around: Around, star?: NamedReach['star']): ReachRo
   from: fromOf(reach.from, around),
 })
 
-/** Someone's row: an Account named by its star, what its owner chose there, the star a choice names. */
+/**
+ * Someone's row: an Account named by its star, or an Organization's Members by its own, what its
+ * owner chose there, the star a choice names.
+ */
 type SomeoneRow = ReachRow & Chosen & { readonly star: string }
 
 /** Someone else reaching the Tile, as its row words it: someone's, or a Group's, with no choice yet. */
@@ -74,7 +80,7 @@ const starOf = (row: OtherRow) => ('star' in row ? row.star : undefined)
 
 const otherOf = (reach: NamedReach, around: Around): OtherRow => {
   const row = rowOf(reach, around, reach.star)
-  if (reach.subject._tag !== 'Account' || reach.star === undefined) return row
+  if (reach.subject._tag === 'Everyone' || reach.star === undefined) return row
   const choice = choiceOn(reach, around.tile)
   return { ...row, choice, offered: Choice.literals, star: reach.star.id }
 }

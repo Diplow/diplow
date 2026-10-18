@@ -122,6 +122,34 @@ describe('someone the Tile is shared with', () => {
     expect(changeOf(rows, entry, 'Group:family', 'none')).toBeUndefined()
   })
 
+  it("names an Organization's Members by its star, and sends their choice by it", () => {
+    const atelier = { id: crypto.randomUUID(), title: 'Atelier', preview: '' }
+    const members = { _tag: 'Group', id: 'atelier' } as const
+    const { others } = shareRowsOf(
+      {
+        everyone: everyone('none', null),
+        others: [{ subject: members, value: 'read', from: entry, star: atelier }],
+      },
+      around,
+    )
+    expect(others).toEqual([
+      {
+        key: 'Group:atelier',
+        who: "Atelier's members",
+        value: 'read',
+        from: 'set here',
+        choice: 'read',
+        offered: ['none', 'read', 'read+write', 'read+@', 'read+write+@', 'inherit'],
+        star: atelier.id,
+      },
+    ])
+    expect(changeOf({ everyone: rows.everyone, others }, entry, 'Group:atelier', 'none')).toEqual({
+      tile: entry,
+      subject: { _tag: 'Account', star: atelier.id },
+      value: 'none',
+    })
+  })
+
   it('shows the choice on its way on the row it was sent for alone', () => {
     const sent = {
       tile: entry,
