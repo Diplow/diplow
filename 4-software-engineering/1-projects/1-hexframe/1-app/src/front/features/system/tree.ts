@@ -177,20 +177,33 @@ export function standsFor(ring: FrameKind, direction: Direction, slot: Slot): bo
 
 /**
  * Where a Tile stands: a Leaf in its Direction under its parent, or a Tile with what it holds, under
- * its parent in a Branch's Direction or a Context slot, or the Root, under nothing.
+ * its parent in a Branch's Direction or a Context slot, or the Root, under nothing; or, on a System
+ * visited, a Tile hung from its star across a gap, under nothing the visitor is shown.
  */
 export type Located =
   | { kind: 'leaf'; tile: LeafTile; parent: SystemTile; direction: Direction }
   | { kind: 'branch'; tile: SystemTile; parent: SystemTile; direction: Direction }
   | { kind: 'context'; tile: SystemTile; parent: SystemTile; slot: ContextDirection }
   | { kind: 'root'; tile: SystemTile; parent: undefined }
+  | { kind: 'across'; tile: SystemTile; parent: undefined }
 
 /**
- * The Tile of this id, anywhere in the System, Leaves and Context Tiles included, and where it stands
- * (`Located`); `undefined` when no Tile has it, as for a broken Reference.
+ * The Tile of this id, anywhere in the System, Leaves and Context Tiles included, or anywhere across
+ * its gaps (`across`, each a tree from the Tile hung from the star there, Mapping's `acrossGaps`), and
+ * where it stands (`Located`); `undefined` when no Tile has it, as for a broken Reference.
  */
-export function tileIn(system: SystemTile, id: string): Located | undefined {
-  return system.id === id ? { kind: 'root', tile: system, parent: undefined } : below(system, id)
+export function tileIn(
+  system: SystemTile,
+  id: string,
+  across: ReadonlyArray<SystemTile> = [],
+): Located | undefined {
+  if (system.id === id) return { kind: 'root', tile: system, parent: undefined }
+  for (const tree of [system, ...across]) {
+    if (tree !== system && tree.id === id) return { kind: 'across', tile: tree, parent: undefined }
+    const found = below(tree, id)
+    if (found) return found
+  }
+  return undefined
 }
 
 /** The Tile of this id below `parent`, at any depth, and where it stands. */

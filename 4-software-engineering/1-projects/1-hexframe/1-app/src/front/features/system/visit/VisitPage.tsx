@@ -5,7 +5,7 @@
 // the Turn then starting in that Tile, of their System (HEX-134); an Organization's, its owner's
 // lines to its admins, its star's Members and Groups widgets to its members (HEX-136), and Ask to
 // join to anyone outside it (HEX-138).
-import type { Direction } from '#/domains/mapping/entities'
+import { acrossGaps, type Direction } from '#/domains/mapping/entities'
 import { useStandingIn } from '#/front/client/iam/organizations'
 import { useSystem } from '#/front/client/mapping/queries'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
@@ -52,6 +52,7 @@ export function VisitPage(props: VisitPageProps) {
     <System
       system={data.system}
       root={data.root}
+      across={acrossGaps(data.system, data.gaps, data.pinned)}
       tree={visitTree(data)}
       underway={data.underway}
       // As far as the rights Mapping showed the visitor there let them, its owner's lines to an

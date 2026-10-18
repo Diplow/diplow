@@ -104,11 +104,27 @@ export const slotWithout = (systems: Pick<Systems, 'reach'>, parent: string): Ve
 /** The System three ways: its tree, Mapping's; flat, which `decide` rules on; as the canvas draws it. */
 export interface Systems {
   root: SystemTile
+  /**
+   * The Tiles hung from its star across a gap, each a tree of its own, with what the user may read
+   * below it (Mapping's `acrossGaps`): none on their own System.
+   */
+  across: ReadonlyArray<SystemTile>
   flat: System
   tree: TileNode
   /** What the user may do on it. */
   reach: Reach
 }
+
+/**
+ * The Tile of this id on the System drawn, from its star or across a gap, and where it stands
+ * (`tileIn`); none when it holds no Tile of that id.
+ */
+export const tileOn = ({ root, across }: Pick<Systems, 'root' | 'across'>, id: string) =>
+  tileIn(root, id, across)
+
+/** Where a Tile the canvas draws stands; none for a Reference, drawn as a Tile standing elsewhere. */
+const locatedAt = (systems: Pick<Systems, 'root' | 'across'>, hex: TileHex) =>
+  hex.tile.reference === undefined ? tileOn(systems, hex.tile.id) : undefined
 
 /**
  * Whether the user may make this Operation on the System drawn, as far as the page can tell: on
@@ -194,6 +210,7 @@ export function turnOf(systems: Pick<Systems, 'reach' | 'flat'>, located: Locate
 function directionOf(located: Located): Direction | undefined {
   switch (located.kind) {
     case 'root':
+    case 'across':
       return undefined
     case 'context':
       return -located.slot as Direction
@@ -234,11 +251,11 @@ function takesOne(systems: Pick<Systems, 'reach' | 'flat'>, located: Located | u
  * full, which is no Tile.
  */
 export function subjectOf(systems: Systems, hex: TileHex): Subject | undefined {
-  const { root, flat, tree } = systems
+  const { flat, tree } = systems
   const { kind } = lookOf(hex)
   if (kind === 'list') return undefined
   const { id, title } = hex.tile
-  const located = hex.tile.reference === undefined ? tileIn(root, id) : undefined
+  const located = locatedAt(systems, hex)
   const own = {
     title,
     holds: takesOne(systems, located),
@@ -278,7 +295,7 @@ function slotAt(located: Located, direction: Direction): Slot {
 /** The ring a Tile stands in, as its Move submenu draws it: whom it trades with, where it lands. */
 function standsIn(systems: Systems, hex: TileHex, located: Located): PickerFrame | undefined {
   const parent = hex.parent
-  if (parent === undefined || located.kind === 'root') return undefined
+  if (parent === undefined || located.parent === undefined) return undefined
   const ring = ringOf(parent, located)
   const seats: PickerFrame['seats'] = {}
   for (const direction of directions) {
@@ -304,7 +321,7 @@ function standsIn(systems: Systems, hex: TileHex, located: Located): PickerFrame
  * the one it stands in.
  */
 export function framesOf(systems: Systems, hex: TileHex) {
-  const located = hex.tile.reference === undefined ? tileIn(systems.root, hex.tile.id) : undefined
+  const located = locatedAt(systems, hex)
   if (located === undefined) return {}
   const frames: { holds?: PickerFrame; standsIn?: PickerFrame } = {}
   if (takesOne(systems, located)) {
@@ -370,15 +387,15 @@ function heldBack(systems: Systems, hex: TileHex, verb: Verb) {
 
 /** The move of a Tile to the free place `at` of the ring it stands in, as Mapping would make it. */
 export function moveTo(systems: Systems, hex: TileHex, at: Direction) {
-  const located = tileIn(systems.root, hex.tile.id)
+  const located = tileOn(systems, hex.tile.id)
   const parent = hex.parent
-  if (located === undefined || located.kind === 'root' || parent === undefined) return undefined
+  if (located?.parent === undefined || parent === undefined) return undefined
   return allows(systems, hex.tile.id, { parent: parent.id, slot: slotAt(located, at) })
 }
 
 /** The swap of a Tile with the one seated at `at` in the ring it stands in, where it trades. */
 export function swapAt(systems: Systems, hex: TileHex, at: Direction) {
-  const located = tileIn(systems.root, hex.tile.id)
+  const located = tileOn(systems, hex.tile.id)
   const parent = hex.parent
   if (located === undefined || parent === undefined) return undefined
   const seated = ringOf(parent, located)[at]

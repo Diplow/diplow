@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  acrossGaps,
   type PlacedReference,
   type PlacedTile,
   type Slot,
@@ -11,7 +12,7 @@ import { subjectIn } from '#/front/ui/canvas/crossings'
 import { layoutCanvas } from '#/front/ui/canvas/geometry/shape'
 import type { TileHex } from '#/front/ui/canvas/state/useCanvasState'
 import { showView, type CanvasView } from '#/front/ui/canvas/view/view'
-import { firstKindOf } from '#/front/ui/canvas/view/tiles'
+import { firstKindOf, type TileNode } from '#/front/ui/canvas/view/tiles'
 
 import {
   framesOf,
@@ -25,6 +26,7 @@ import {
   type Systems,
 } from './acting'
 import { canvasTree, tileIn } from './tree'
+import { visitTree } from './visit/visit'
 
 // A Tile's menu on home, as Mapping reads it, over a System made by hand, flat as the server reads
 // it: what the menu says of each Tile, the frames its Add and Move submenus draw, the lines home
@@ -81,22 +83,22 @@ const root = systemOf(flat)
 const tree = canvasTree(root, { yours: true })
 
 /** A view with the center opened into its first ring, unless it says otherwise, as a click leaves it. */
-const opened = (view: CanvasView): CanvasView => ({
-  frame: firstKindOf(showView(tree, view).center),
+const opened = (view: CanvasView, drawn: TileNode = tree): CanvasView => ({
+  frame: firstKindOf(showView(drawn, view).center),
   ...view,
 })
-const systems: Systems = { root, flat, tree, reach: 'owned' }
+const systems: Systems = { root, across: [], flat, tree, reach: 'owned' }
 
-/** The hexes a view draws, each Tile's by its key. */
-function hexesOf(view: CanvasView = {}): Record<string, TileHex> {
-  const hexes = layoutCanvas(showView(tree, opened(view)))
+/** The hexes a view of the System drawn draws, each Tile's by its key. */
+function hexesOf(view: CanvasView = {}, drawn: TileNode = tree): Record<string, TileHex> {
+  const hexes = layoutCanvas(showView(drawn, opened(view, drawn)))
   return Object.fromEntries(
     hexes.flatMap((hex) => (hex.kind === 'tile' ? [[hex.key, hex] as const] : [])),
   )
 }
 
-const hex = (key: string, view?: CanvasView) => {
-  const found = hexesOf(view)[key]
+const hex = (key: string, view?: CanvasView, drawn?: TileNode) => {
+  const found = hexesOf(view, drawn)[key]
   if (found === undefined) throw new Error(`No Tile is drawn under ${key}`)
   return found
 }
@@ -261,7 +263,8 @@ describe('the lines home leaves out', () => {
       (drawn): drawn is TileHex => drawn.kind === 'tile',
     )
     expect(
-      center && withoutOf({ root: bare, flat: empty, tree: alone, reach: 'owned' }, center),
+      center &&
+        withoutOf({ root: bare, across: [], flat: empty, tree: alone, reach: 'owned' }, center),
     ).toEqual(['members', 'groups', 'join'])
   })
 })
@@ -379,6 +382,56 @@ describe('the lines a System visited leaves out', () => {
     // A swap with a Tile of the Root's they only read is held back too.
     expect(swapAt(writer, hex('tile:holding'), 2)).toBeUndefined()
     expect(swapAt(systems, hex('tile:holding'), 2)).toBeDefined()
+  })
+})
+
+describe('a System visited, across a gap', () => {
+  // Ana's System, from her star, kept from the visitor but its card: Deep, below a Tile kept from
+  // them, hangs from the star across the gap; Kid stands under it in 2, holding the Leaf Page in 1.
+  // They write all three.
+  const gap = {
+    _tag: 'Tile',
+    id: 'deep',
+    title: 'DEEP',
+    preview: '',
+    body: '',
+    version: 3,
+  } as const
+  const gaps = { deep: gap }
+  const visited: System = {
+    root: { _tag: 'Tile', id: 'ana', title: 'Ana', preview: '', body: '', version: 1 },
+    tiles: { kid: placed('kid', 'deep', 2), page: placed('page', 'kid', { leaf: 1 }) },
+    version: 0,
+  }
+  const star = systemOf(visited)
+  const writes = ['read', 'write'] as const
+  const theirs: Systems = {
+    root: star,
+    across: acrossGaps(visited, gaps),
+    flat: visited,
+    tree: visitTree({ system: visited, root: star, gaps, pinned: {} }),
+    reach: { visiting: { ana: [], deep: [...writes], kid: [...writes], page: [...writes] } },
+  }
+  const at = (key: string, center: string) => hex(key, { center }, theirs.tree)
+
+  it('says what is below a Tile hung from the star, and that it takes a new one there', () => {
+    const deep = at('tile:deep', 'deep')
+    expect(subjectOf(theirs, deep)).toMatchObject({ at: 'center', below: 2, holds: true })
+    expect(framesOf(theirs, deep).holds?.seats).toEqual({ 2: { title: 'KID', swaps: false } })
+    // Where it stands is kept from them: no ring to move it in.
+    expect(framesOf(theirs, deep).standsIn).toBeUndefined()
+  })
+
+  it('turns and moves a Tile below it within the Tile it stands under', () => {
+    const page = at('tile:page', 'kid')
+    expect(subjectOf(theirs, page)).toMatchObject({ kind: 'leaf', at: 1, turns: true })
+    expect(framesOf(theirs, page).standsIn?.lands?.(3)).toBe(true)
+    expect(moveTo(theirs, page, 3)).toEqual({
+      id: 'page',
+      version: 1,
+      parent: 'kid',
+      slot: { leaf: 3 },
+    })
   })
 })
 

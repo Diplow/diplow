@@ -8,6 +8,7 @@ import * as Organizations from '#/api/iam/organizations/organizations'
 import * as Mapping from '#/api/mapping/mapping'
 import { makeQueryClient } from '#/front/client/channels'
 import {
+  acrossGaps,
   type PlacedReference,
   type PlacedTile,
   type Slot,
@@ -20,11 +21,12 @@ import { layoutCanvas } from '#/front/ui/canvas/geometry/shape'
 import type { TileHex } from '#/front/ui/canvas/state/useCanvasState'
 import type { TileAct } from '#/front/ui/canvas/tile/menu/verbs'
 import { showView, type CanvasView } from '#/front/ui/canvas/view/view'
-import { firstKindOf } from '#/front/ui/canvas/view/tiles'
+import { firstKindOf, type TileNode } from '#/front/ui/canvas/view/tiles'
 
-import type { Reach } from '../acting'
+import type { Reach, Systems } from '../acting'
 import type { SearchChange, SystemSearch } from '../search/search'
 import { canvasTree } from '../tree'
+import { visitTree } from '../visit/visit'
 import { useActingState } from './useActingState'
 
 // What a Tile's menu and a free slot's do on home, over stand-ins for the server functions: what
@@ -89,8 +91,8 @@ const root = systemOf(flat)
 const tree = canvasTree(root, { yours: true })
 
 /** A view with the center opened into its first ring, unless it says otherwise, as a click leaves it. */
-const opened = (view: CanvasView): CanvasView => ({
-  frame: firstKindOf(showView(tree, view).center),
+const opened = (view: CanvasView, drawn: TileNode = tree): CanvasView => ({
+  frame: firstKindOf(showView(drawn, view).center),
   ...view,
 })
 
@@ -108,9 +110,16 @@ function answering(
 
 const done = { ok: true, value: undefined }
 
+/** The System drawn: home's own, unless a test draws another. */
+type Drawn = Pick<Systems, 'root' | 'across' | 'flat' | 'tree'>
+
 function render(
   search: SystemSearch = {},
-  { exporting = false, reach = 'owned' }: { exporting?: boolean; reach?: Reach } = {},
+  {
+    exporting = false,
+    reach = 'owned',
+    drawn = { root, across: [], flat, tree },
+  }: { exporting?: boolean; reach?: Reach; drawn?: Drawn } = {},
 ) {
   const client = makeQueryClient()
   const onSearchChange = vi.fn<(change: SearchChange) => void>()
@@ -121,7 +130,7 @@ function render(
   const { result } = renderHook(
     () =>
       useActingState({
-        systems: { root, flat, tree, reach },
+        systems: { ...drawn, reach },
         search,
         onSearchChange,
         exporting: { start, pending: exporting },
@@ -133,8 +142,8 @@ function render(
 }
 
 /** The hex a view draws under this key. */
-function hex(key: string, view: CanvasView = {}): TileHex {
-  const found = layoutCanvas(showView(tree, opened(view))).find(
+function hex(key: string, view: CanvasView = {}, drawn: TileNode = tree): TileHex {
+  const found = layoutCanvas(showView(drawn, opened(view, drawn))).find(
     (drawn): drawn is TileHex => drawn.kind === 'tile' && drawn.key === key,
   )
   if (found === undefined) throw new Error(`No Tile is drawn under ${key}`)
@@ -147,9 +156,10 @@ function choose(
   key: string,
   line: TileAct,
   view?: CanvasView,
+  drawn?: TileNode,
 ) {
   act(() => {
-    result.current.acting.tile(hex(key, view))?.onAct(line, '')
+    result.current.acting.tile(hex(key, view, drawn))?.onAct(line, '')
   })
 }
 
@@ -530,5 +540,38 @@ describe("on someone else's System, visited", () => {
     }
     const moving = render({ move: 'inner', center: 'holding' }, { reach: writer })
     expect(moving.result.current.move.moving).toMatchObject({ id: 'inner' })
+  })
+
+  it('deletes a Tile hung from the star across a gap once confirmed, the star centered', async () => {
+    answering('deleteTile', done)
+    // Holding stands below a Tile kept from the visitor: across a gap, with its Leaf below it.
+    const gap = {
+      _tag: 'Tile',
+      id: 'holding',
+      title: 'holding',
+      preview: '',
+      body: '',
+      version: 1,
+    } as const
+    const tiles = Object.entries(flat.tiles).filter(([id]) => id !== 'holding')
+    const shown: System = { ...flat, tiles: Object.fromEntries(tiles) }
+    const star = systemOf(shown)
+    const gaps = { holding: gap }
+    const drawn: Drawn = {
+      root: star,
+      across: acrossGaps(shown, gaps),
+      flat: shown,
+      tree: visitTree({ system: shown, root: star, gaps, pinned: {} }),
+    }
+    const { result, onSearchChange } = render({}, { reach: visiting('holding', 'inner'), drawn })
+    choose(result, 'tile:holding', { verb: 'delete' }, { center: 'holding' }, drawn.tree)
+    expect(result.current.deleting).toMatchObject({ title: 'holding', below: 1 })
+    act(() => {
+      result.current.deleting?.confirm()
+    })
+    await waitFor(() => {
+      expect(Mapping.deleteTile).toHaveBeenCalledWith({ data: { id: 'holding', version: 1 } })
+    })
+    expect(changed(onSearchChange, { center: 'holding' })).toMatchObject({ center: undefined })
   })
 })

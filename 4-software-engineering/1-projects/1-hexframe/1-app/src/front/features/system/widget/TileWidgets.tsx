@@ -6,10 +6,12 @@
 // One at a time, the latest. A write ends its form as it is sent, its receipt in the form's place at
 // once, and a refusal puts the form back (`useRefusalState`), the user's words with it. The Root's
 // edit is a widget too, with no place to draw, a pencil in its hex. While the URL visits someone
-// else's System, the forms are of its Tiles (HEX-132), and neither an import nor a pseudo is asked.
+// else's System, the forms are of its Tiles (HEX-132), those across a gap included, and neither an
+// import nor a pseudo is asked.
 import { useMemo } from 'react'
 
 import {
+  acrossGaps,
   isEmptySystem,
   isLeafSlot,
   tileAt,
@@ -32,7 +34,8 @@ import {
   type SystemSearch,
 } from '../search/search'
 import { type Reopened, useRefusalState } from '../state/useRefusalState'
-import { canvasTree, tileIn } from '../tree'
+import { tileIn } from '../tree'
+import { visitTree } from '../visit/visit'
 import { EditTileWidget, NameRootWidget, NewTileWidget } from './forms'
 import { freeFor, slotOf, tilesBelow, whereIn } from './place'
 import { GroupsWidgets } from './organization/GroupsWidgets'
@@ -70,9 +73,17 @@ export function TileWidgets({
     if (formBack) onFormBack()
   })
   const remove = useDeleteTile()
-  const root = data?.root
-  const tree = useMemo(() => (root === undefined ? undefined : canvasTree(root)), [root])
-  if (data === undefined || root === undefined || tree === undefined) return null
+  // The System as the canvas draws it, the Tiles across its gaps included, a visitor's forms on them.
+  const drawn = useMemo(
+    () =>
+      data === undefined
+        ? undefined
+        : { tree: visitTree(data), across: acrossGaps(data.system, data.gaps, data.pinned) },
+    [data],
+  )
+  if (data === undefined || drawn === undefined) return null
+  const { root } = data
+  const { tree, across } = drawn
   const change = changeOf(search)
   const end = () => {
     onSearchChange((current) => withChange(current, { kind: 'none' }))
@@ -80,6 +91,7 @@ export function TileWidgets({
   const page: WidgetContext = {
     system: data.system,
     root,
+    across,
     tree,
     visited: visiting !== undefined,
     reopened,
@@ -132,6 +144,8 @@ function nameOf(page: WidgetContext) {
 interface WidgetContext {
   system: System
   root: SystemTile
+  /** The Tiles hung from the star across a gap, each a tree of its own: none at home. */
+  across: ReadonlyArray<SystemTile>
   tree: TileNode
   /** Someone else's System, visited: nothing imported into it, which only lands at home. */
   visited: boolean
@@ -332,13 +346,20 @@ function rootOf(key: string, page: WidgetContext) {
   )
 }
 
-/** The Tile an edit is open on, below the Root, where it stands; none once it is gone. */
+/**
+ * The Tile an edit is open on, below the Root or across a gap, where it stands, none for one across
+ * a gap, whose place is kept from the visitor; none once it is gone.
+ */
 function editingOf(id: string, page: WidgetContext) {
-  const located = tileIn(page.root, id)
+  const located = tileIn(page.root, id, page.across)
   const node = findTile(page.tree, id)
+  if (located === undefined || located.kind === 'root' || node === undefined) return undefined
+  // Hung from the star, which is centered once it goes.
+  if (located.kind === 'across') {
+    return { tile: located.tile, node, parent: page.root.id, where: undefined }
+  }
   const placed = tileAt(page.system, id)
-  if (located?.parent === undefined || node === undefined || placed === undefined) return undefined
-  if (!('slot' in placed)) return undefined
+  if (placed === undefined || !('slot' in placed)) return undefined
   const { parent } = located
   const title = findTile(page.tree, parent.id)?.title ?? parent.title
   return {
