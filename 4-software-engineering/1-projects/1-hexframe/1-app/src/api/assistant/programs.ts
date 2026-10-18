@@ -306,7 +306,7 @@ const agentStarted = (
       onScreen,
       systemRules,
       ...(turn.elsewhere !== undefined && {
-        elsewhere: { star: titles[acting.system] ?? '', rights, across },
+        elsewhere: { starTitle: titles[acting.system] ?? '', rights, across },
       }),
     })
   })

@@ -7,7 +7,6 @@
 // acted, as a timeline shows it, which both read.
 import { Effect, Option, Schema } from 'effect'
 
-import * as Assistant from '#/domains/assistant/assistant'
 import type { OwnActor, Someone } from '#/domains/assistant/entities'
 import * as AssistantUndo from '#/domains/assistant/undo/undo'
 import { keyName, type SignedIn } from '#/domains/iam/iam'
@@ -94,7 +93,8 @@ export const writtenInAnothers = <O extends Operation>(
  * `batchAllowed`), `BatchOutdated`, `TileNotFound` or `NotAllowed` otherwise, nothing run; then
  * each of its writes as `writtenInAnothers` runs one, in order, its owner told of each and offered
  * its Undo, the writer's own timeline told of each as made elsewhere. The owner's Conversation is
- * locked before the System, as every write there takes the two. Answers how many writes it ran.
+ * locked already, with the writer's, in one order, by Assistant's `acceptProposal`, its one caller's
+ * step, before the System is. Answers how many writes it ran.
  */
 export const batchInAnothers = (
   signed: SignedIn,
@@ -102,7 +102,6 @@ export const batchInAnothers = (
   batch: ReadonlyArray<Batched>,
 ) =>
   Effect.gen(function* () {
-    yield* Assistant.lockConversation(yield* Mapping.ownerOf(acting.system))
     yield* Mapping.batchAllowed(acting, batch)
     // Found to run whole under the lock, each write runs as it was found to: a refusal is a defect.
     yield* Effect.forEach(

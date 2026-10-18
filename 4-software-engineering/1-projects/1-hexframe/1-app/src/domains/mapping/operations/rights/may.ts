@@ -12,7 +12,7 @@ import {
   type Lineage,
   lineageOf,
   owns,
-  type Right,
+  Right,
   rightsOn,
   type Seen,
   type Sharing,
@@ -34,6 +34,20 @@ export const may = (actor: Actor, sharing: Sharing, tile: string, right: Right) 
  * agent's line and the composer's Tiles by.
  */
 export const runsAgent = (rights: Iterable<Right>) => [...rights].includes('@')
+
+/**
+ * Whether the actor may start a Turn at a Tile, by their rights there and whether it is a Tile of the
+ * System at all: `TileNotFound` without *read*, or for no Tile, as for none, so nothing tells it
+ * exists; `NotAllowed` with *read* but no *@*; else their rights, in their order.
+ */
+export function agentAllowed(
+  rights: ReadonlySet<Right>,
+  { isTile }: { readonly isTile: boolean },
+): Result.Result<ReadonlyArray<Right>, TileNotFound | NotAllowed> {
+  if (!isTile || !rights.has('read')) return Result.fail(new TileNotFound())
+  if (!runsAgent(rights)) return Result.fail(new NotAllowed())
+  return Result.succeed(Right.literals.filter((right) => rights.has(right)))
+}
 
 /**
  * What an Operation needs: `read` on every Tile it names, of the System decided on, `write` on every

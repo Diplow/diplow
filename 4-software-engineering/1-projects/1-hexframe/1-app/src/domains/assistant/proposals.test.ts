@@ -71,7 +71,16 @@ const drafted = (account: string, turn: string, title: string) =>
 
 /** Accepts the Account's Proposal of this id, its writes run as `undo` undoes them. */
 const accepted = (account: string, proposal: string, undo: unknown = { mapping: 0 }) =>
-  transactional(acceptProposal(account, proposal, () => Effect.succeed({ undo, changes: 1 })))
+  transactional(
+    acceptProposal(account, proposal, {
+      own: () => Effect.succeed({ undo, changes: 1 }),
+      // Every Proposal here is over the Account's own System.
+      elsewhere: {
+        owner: () => Effect.die(new Error('No Proposal here is over another System')),
+        run: () => Effect.die(new Error('No Proposal here is over another System')),
+      },
+    }),
+  )
 
 /**
  * Applies a write of one of the Account's Turns, as the API layer does, its run answering what undoes

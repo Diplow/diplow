@@ -25,8 +25,8 @@ import {
   systemFrom,
   tileAt,
 } from '../entities'
-import { NotAllowed, TileNotFound } from '../errors'
-import { type Batched, fold, type Operation, runsAgent } from '../operations'
+import { TileNotFound } from '../errors'
+import { agentAllowed, type Batched, fold, type Operation } from '../operations'
 
 /** Who acts, and on which System, named by its star, the id of its Root. */
 export interface Acting {
@@ -293,10 +293,8 @@ export const agentAt = (acting: Acting, id: string) =>
           ([places, grants]) =>
             rightsOn(acting.actor, sharingOf(owner, lineageFrom(places), grants), id),
         )
-    const titled = yield* titledIn(owner, [id], () => rights.has('read'))
-    if (!(id in titled)) return yield* new TileNotFound()
-    if (!runsAgent(rights)) return yield* new NotAllowed()
-    return Right.literals.filter((right) => rights.has(right))
+    const titled = yield* titledIn(owner, [id], () => true)
+    return yield* Effect.fromResult(agentAllowed(rights, { isTile: id in titled }))
   })
 
 /**

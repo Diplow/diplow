@@ -27,6 +27,7 @@ import {
   shownAllowed,
   SwapTiles,
 } from '..'
+import { agentAllowed, runsAgent } from './may'
 
 // What each Operation needs of the Tiles it names, carries and lands under, on a System made by hand:
 // `read` on what it names, else `TileNotFound`; `write` on what it changes, carries and goes under,
@@ -372,5 +373,21 @@ describe('what the rights a reader was shown let them make, as the client forese
     }
     expect(shownAllowed(rights, pinned, new DeleteTile({ id: id.garden, version: 1 }))).toBe(true)
     expect(shownAllowed(rights, shown, edit(id.secret))).toBe(false)
+  })
+})
+
+describe('where the agent may run, its *@*', () => {
+  it('answers the rights with @, refuses read alone, and keeps a Tile unread or none', () => {
+    expect(Result.getOrThrow(agentAllowed(new Set(['@', 'read']), { isTile: true }))).toEqual([
+      'read',
+      '@',
+    ])
+    const tagOf = (refused: Result.Result<unknown, { readonly _tag: string }>) =>
+      Result.isFailure(refused) ? refused.failure._tag : undefined
+    expect(tagOf(agentAllowed(new Set(['read', 'write']), { isTile: true }))).toBe('NotAllowed')
+    expect(tagOf(agentAllowed(new Set(['read', '@']), { isTile: false }))).toBe('TileNotFound')
+    expect(tagOf(agentAllowed(new Set(), { isTile: true }))).toBe('TileNotFound')
+    expect(runsAgent(['read', '@'])).toBe(true)
+    expect(runsAgent(['read', 'write'])).toBe(false)
   })
 })

@@ -509,31 +509,40 @@ export interface Applying {
 }
 
 /**
- * What an accepted Proposal applied, as the API layer hands it: its changes, and what undoes them,
- * opaque, which a Proposal over the Account's own System must answer and one over someone else's
- * (`elsewhere`) need not, its owner holding the Undo of each write.
+ * How an accept runs the Proposal's writes on the System they change, the API layer's, by whose
+ * System it is: the Account's own, answering what undoes them and their changes, which the Proposal
+ * keeps and its Entry offers; or someone else's (`elsewhere`), each write that System's owner's to
+ * undo, so the Proposal keeps none, whose owner it names first, so both Conversations are locked in
+ * one order before the accept takes the Account's own.
  */
-export interface Accepting {
-  readonly undo?: unknown
-  readonly changes: number
+export interface AcceptRuns<A, B, E, R> {
+  readonly own: (accepted: OpenProposal) => Effect.Effect<A, E, R>
+  readonly elsewhere: {
+    readonly owner: (star: string) => Effect.Effect<string, E, R>
+    readonly run: (accepted: OpenProposal, star: string) => Effect.Effect<B, E, R>
+  }
 }
 
 /**
- * Accepts the Account's open Proposal of this id, whole, in the one order it holds in: decided,
- * `ProposalClosed` when it is open no longer, as `decide` rules; then `run` given it as it stood,
- * which runs its writes on the System (Mapping's, in the API layer) and answers what undoes them and
- * the changes they made; and that kept with the Proposal, offered by its Entry, which then says it may
- * be undone (`offeringEntry`), so a Proposal accepted before undos were kept offers none; nor does
- * a Proposal over someone else's System (`elsewhere`), whose owner is offered the Undo of each write
- * instead. Answers what `run` answered. What `run` refuses rolls the
- * accept back with the transaction. In the transaction the API layer opened.
+ * Accepts the Account's open Proposal of this id, whole, in the one order it holds in: over someone
+ * else's System, that System's owner's Conversation locked with the Account's, in the order of their
+ * ids (`lockConversations`), as every write in two Conversations takes them; then decided,
+ * `ProposalClosed` when it is open no longer, as `decide` rules; then its writes run, by the run of
+ * its System (`AcceptRuns`): over its own, what undoes them kept with the Proposal and offered by its
+ * Entry, which then says it may be undone (`offeringEntry`); over someone else's, nothing kept, its
+ * owner offered each write's Undo. Answers what the run answered. What it refuses rolls the accept
+ * back with the transaction. In the transaction the API layer opened.
  */
-export const acceptProposal = <A extends Accepting, E, R>(
+export const acceptProposal = <A extends Applying, B, E, R>(
   accountId: string,
   proposal: string,
-  run: (accepted: OpenProposal) => Effect.Effect<A, E, R>,
+  runs: AcceptRuns<A, B, E, R>,
 ) =>
   Effect.gen(function* () {
+    const open = (yield* conversationState(accountId)).open
+    if (open?.elsewhere !== undefined) {
+      yield* lockConversations([accountId, yield* runs.elsewhere.owner(open.elsewhere)])
+    }
     const { before, entry } = yield* operate(accountId, (state) =>
       decide(state, new AcceptProposal({ proposal })),
     )
@@ -541,13 +550,14 @@ export const acceptProposal = <A extends Accepting, E, R>(
     if (accepted === undefined || entry === undefined) {
       return yield* Effect.die(new Error('A Proposal was accepted that was not open'))
     }
-    const ran = yield* run(accepted)
-    const { undo, changes } = ran
-    // Over someone else's System, each write's Undo is its owner's: the Proposal keeps none.
-    if (accepted.elsewhere !== undefined) return ran
-    if (undo === undefined) {
-      return yield* Effect.die(new Error("A Proposal over the Account's own System kept no undo"))
+    if (accepted.elsewhere !== undefined) {
+      if (accepted.elsewhere !== open?.elsewhere) {
+        return yield* Effect.die(new Error('A Proposal changed its System while it was accepted'))
+      }
+      return yield* runs.elsewhere.run(accepted, accepted.elsewhere)
     }
+    const ran = yield* runs.own(accepted)
+    const { undo, changes } = ran
     yield* Applied.use((applied) =>
       applied.keep(accountId, accepted.id, { undo, changes, entryId: entry }),
     )
@@ -587,15 +597,16 @@ export const route = (accountId: string, turnId: string) =>
   Effect.map(turn(accountId, turnId), routeOf)
 
 /**
- * The star of the System one of the Account's Turns started in, by its id, when it is someone
- * else's (`elsewhere`), read on every call: what its Key reads and writes alone. None for the
- * Account's own, and none for a Turn of no Conversation of the Account's, whose Key would then reach
- * the Account's own System, as every Turn's did before one could start elsewhere.
+ * Where one of the Account's Turns started, by its id, read on every call its Key makes: its location
+ * and, when it is someone else's System, that System's star (`elsewhere`). None for a Turn of no
+ * Conversation of the Account's, whose Key then reaches the Account's own System, as every Turn's
+ * did before one could start elsewhere.
  */
-export const startedElsewhere = (accountId: string, turnId: string) =>
+export const turnPlace = (accountId: string, turnId: string) =>
   Effect.map(
     Turns.use((turns) => turns.byId(accountId, turnId)),
-    (row) => row?.elsewhere ?? undefined,
+    (row) =>
+      row === undefined ? undefined : { location: row.location, ...elsewhereOf(row.elsewhere) },
   )
 
 /**

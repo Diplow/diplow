@@ -81,15 +81,22 @@ export const actingAt = (own: Mapping.Acting, star: string | undefined): Mapping
 
 /**
  * The Account acting where its request works when it names no System: for a Turn's Key, the System
- * its Turn started in, someone else's when the Turn says so (Assistant's `startedElsewhere`), read
- * from the Turn on every call, never kept; the Account's own for any other proof. What a Turn's Key
- * reads and writes alone (HEX-134).
+ * its Turn started in, someone else's when the Turn says so (Assistant's `turnPlace`), read from the
+ * Turn on every call, never kept, once Mapping found the Account still may run the agent at the
+ * Turn's Tile there (`agentAt`), so *@* taken back holds from the next call, `TileNotFound` when it
+ * may not. The Account's own for a Turn at home, for a Key whose Turn is none of the Account's, as
+ * every Turn's Key was bound before one could start elsewhere, and for any other proof. What a Turn's Key reads and writes alone (HEX-134).
  */
 export const homeOf = (signed: Iam.SignedIn, own: Mapping.Acting) =>
   signed.by._tag === 'TurnKey'
-    ? Effect.map(Assistant.startedElsewhere(signed.account.id, signed.by.turnId), (star) =>
-        actingAt(own, star),
-      )
+    ? Effect.flatMap(Assistant.turnPlace(signed.account.id, signed.by.turnId), (place) => {
+        if (place?.elsewhere === undefined) return Effect.succeed(own)
+        const acting = actingAt(own, place.elsewhere)
+        return Effect.as(
+          Effect.mapError(Mapping.agentAt(acting, place.location), () => new TileNotFound()),
+          acting,
+        )
+      })
     : Effect.succeed(own)
 
 /**

@@ -232,19 +232,6 @@ export const proposalNow = (accountId: string) =>
   )
 
 /**
- * Locks, in one order, the Account's Conversation and that of the owner of someone else's System its
- * open Proposal of this id changes, if it does (Assistant's `lockConversations`): what an accept over
- * someone else's System takes first, as a Turn's write there does, so two such writes, each in the
- * other's System, never wait on each other. Nothing for one over the Account's own System.
- */
-const lockedForAccept = (accountId: string, proposal: string) =>
-  Effect.gen(function* () {
-    const open = yield* Assistant.openProposal(accountId)
-    if (open?.id !== proposal || open.elsewhere === undefined) return
-    yield* Assistant.lockConversations([accountId, yield* Mapping.ownerOf(open.elsewhere)])
-  })
-
-/**
  * Accepts the Account's open Proposal of this id, whole, in one transaction: Assistant accepts it,
  * `ProposalClosed` once it is open no longer, then its writes run by Mapping on the System as it
  * stands, under the Root's lock, all of them or none, each event published as the Assistant's, by the
@@ -252,39 +239,44 @@ const lockedForAccept = (accountId: string, proposal: string) =>
  * `BatchOutdated` once one of them no longer applies, a Tile changed since, by the Version it names,
  * or gone, the accept rolled back with it. A Proposal over someone else's System, a Turn's that
  * worked there (HEX-134), runs there as the Account may write there, `NotAllowed` or `TileNotFound`
- * once it may no longer, each write told to that System's owner, who is offered its Undo, so the
+ * once it may no longer, both Conversations locked first in one order (Assistant's
+ * `acceptProposal`), each write told to that System's owner, who is offered its Undo, so the
  * Proposal's own Entry offers none (`../someone/`'s `batchInAnothers`).
  */
 export const acceptProposal = ({ proposal }: { readonly proposal: string }) =>
   Effect.flatMap(Iam.sessionOnly, ({ account }) =>
-    transactional(
-      Effect.andThen(
-        lockedForAccept(account.id, proposal),
-        Effect.as(
-          Assistant.acceptProposal(account.id, proposal, (accepted) =>
+    Effect.gen(function* () {
+      // The Proposal's writes are its Turn's, published as the Assistant's, not the Session's.
+      const assistant = (accepted: OpenProposal): Iam.SignedIn => ({
+        account,
+        by: { _tag: 'TurnKey', turnId: accepted.turn },
+      })
+      const own = yield* MappingPrograms.actingOnOwn(account.id, { session: false })
+      yield* transactional(
+        Assistant.acceptProposal(account.id, proposal, {
+          own: (accepted) =>
             Effect.gen(function* () {
-              const assistant: Iam.SignedIn = {
-                account,
-                by: { _tag: 'TurnKey', turnId: accepted.turn },
-              }
               const batch = yield* batchOf(accepted)
-              // The Proposal's writes are its Turn's, published as the Assistant's, not the Session's.
-              const own = yield* MappingPrograms.actingOnOwn(account.id, { session: false })
-              if (accepted.elsewhere !== undefined) {
-                const acting = MappingPrograms.actingAt(own, accepted.elsewhere)
-                const changes = yield* actingAs(assistant)(
-                  Someone.batchInAnothers(assistant, { acting, own }, batch),
-                )
-                return { changes }
-              }
-              const run = yield* actingAs(assistant)(Mapping.runBatch(own, batch))
+              const run = yield* actingAs(assistant(accepted))(Mapping.runBatch(own, batch))
               return { undo: encodedUndo(run.undo), changes: run.changes }
             }),
-          ),
-          null,
-        ),
-      ),
-    ),
+          elsewhere: {
+            owner: Mapping.ownerOf,
+            run: (accepted, star) =>
+              Effect.flatMap(batchOf(accepted), (batch) =>
+                actingAs(assistant(accepted))(
+                  Someone.batchInAnothers(
+                    assistant(accepted),
+                    { acting: MappingPrograms.actingAt(own, star), own },
+                    batch,
+                  ),
+                ),
+              ),
+          },
+        }),
+      )
+      return null
+    }),
   )
 
 /** Discards the Account's open Proposal of this id: `ProposalClosed` once it is open no longer. */

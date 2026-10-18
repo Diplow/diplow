@@ -350,7 +350,7 @@ describe("a Turn's prompt", () => {
         links: [],
         systemRules: [],
         mode: 'apply',
-        elsewhere: { star: 'Ana Lima', rights, across },
+        elsewhere: { starTitle: 'Ana Lima', rights, across },
       })
     const reading = elsewhere(['read', '@'])
     expect(reading).toContain(

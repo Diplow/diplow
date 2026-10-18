@@ -168,6 +168,28 @@ describe('a Turn on a Tile of someone else’s System', () => {
     await home.end()
   })
 
+  it('reaches nothing more once Ana takes *@* back, from its next call', async () => {
+    const { ana, journal } = await shared('read+write+@')
+    const { client, end } = await bobsTurn(journal.id, 'apply')
+    expect(await call(client, 'open_tile', { id: journal.id })).toMatchObject({
+      value: { tile: { title: 'Journal' } },
+    })
+    const toBob = { _tag: 'Account', star: (await bob).star } as const
+    await value(
+      run(
+        ana.signedIn,
+        Mapping.setGrant({ tile: journal.id, subject: toBob, value: 'read+write' }),
+      ),
+    )
+    expect(refusal(await call(client, 'open_tile', { id: journal.id }))).toBe('TileNotFound')
+    expect(
+      refusal(await call(client, 'edit_tile', { id: journal.id, version: 1, title: 'Ours' })),
+    ).toBe('TileNotFound')
+    await end()
+  })
+})
+
+describe('a Turn’s writes in someone else’s System, by its Mode', () => {
   it('writes in apply as Bob’s agent, told in both timelines, Ana’s offering its Undo', async () => {
     const { ana, journal } = await shared('read+write+@')
     const { signedIn } = await bob

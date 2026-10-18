@@ -43,7 +43,7 @@ export interface Linked {
  * folder holding them, from the System folder.
  */
 interface Elsewhere {
-  readonly star: string
+  readonly starTitle: string
   readonly rights: ReadonlyArray<SharedRight>
   readonly across?: string | undefined
 }
@@ -226,9 +226,9 @@ const modes: Record<Mode, string> = {
  */
 function elsewhereRules(elsewhere: Elsewhere | undefined): ReadonlyArray<string> {
   if (elsewhere === undefined) return []
-  const { star, rights, across } = elsewhere
+  const { starTitle, rights, across } = elsewhere
   return [
-    `- This Turn works in the System of ${anotherOf(star)}, not the user's own. You read and ` +
+    `- This Turn works in the System of ${anotherOf(starTitle)}, not the user's own. You read and ` +
       "write there alone, with the user's rights: the user's own System and any other are out of " +
       `reach from here. Where you start, the user may ${mayDo(rights)}; a Tile below may differ, ` +
       'and a write its owner does not let the user make is refused.',
