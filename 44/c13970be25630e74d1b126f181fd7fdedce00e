@@ -1,0 +1,46 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/CLAUDE.md
+  s_eb2c82211b20e8::t_f44ed28dfc4b46 15,21,35
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/sharing/CLAUDE.md
+  s_eb2c82211b20e8::t_79dacec7a857da 28
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/CLAUDE.md
+  s_eb2c82211b20e8::t_cc851656c8d784 24
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/CLAUDE.md
+  s_eb2c82211b20e8::t_e2c594fa2f2fe6 30,32,39,46,57,59,65,70
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/CLAUDE.md
+  s_eb2c82211b20e8::t_79dacec7a857da 44,47,56
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE.md
+  s_eb2c82211b20e8::t_cc851656c8d784 29,35,42,44
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-sharing-organizations/decisions.md
+  s_eb2c82211b20e8::t_5298e1e5545045 16-17,125-139
+  s_eb2c82211b20e8::t_38ac211eeabb4a 140
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/CLAUDE.md
+  s_eb2c82211b20e8::t_e4595949dc7d14 29
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/CLAUDE.md
+  s_eb2c82211b20e8::t_e4595949dc7d14 19,27
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/CLAUDE.md
+  s_eb2c82211b20e8::t_f44ed28dfc4b46 8-9,13-14,31-33,40-41,52
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/CLAUDE.md
+  s_eb2c82211b20e8::t_cc851656c8d784 31,35,38
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/CLAUDE.md
+  s_eb2c82211b20e8::t_e4595949dc7d14 48,60,80
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/undo/CLAUDE.md
+  s_eb2c82211b20e8::t_e2c594fa2f2fe6 12,16,18,22
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/CLAUDE.md
+  s_eb2c82211b20e8::t_fd99a7f476c2da 18,25,77-78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "44c13970be25630e74d1b126f181fd7fdedce00e",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
