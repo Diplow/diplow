@@ -30,6 +30,9 @@ const given: Readonly<Record<GrantValue, ReadonlyArray<Right>>> = {
   'read+write+@': ['read', 'write', '@'],
 }
 
+/** The rights a value gives, `read` first: none for `none`. */
+export const rightsOf = (value: GrantValue): ReadonlyArray<Right> => given[value]
+
 /** An Account or a Group a Grant is for, by an id opaque to Mapping: IAM's to say who it is. */
 const Named = Schema.Union([
   Schema.TaggedStruct('Account', { id: Schema.String }),

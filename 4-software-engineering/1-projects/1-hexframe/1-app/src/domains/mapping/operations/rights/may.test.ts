@@ -270,7 +270,7 @@ describe('a batch, run by its owner', () => {
 
 describe('who may change who reaches a Tile', () => {
   const shareVerdict = (who: Actor, tile: string) => {
-    const result = mayShare(who, sharing, tile)
+    const result = mayShare(who, { system, sharing }, tile)
     return Result.isFailure(result) ? result.failure._tag : 'ok'
   }
 

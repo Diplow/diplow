@@ -25,9 +25,10 @@ const grant = (tile: string, subject: Subject, value: GrantValue): Grant =>
 
 describe('who reaches a Tile', () => {
   it('lists Everyone alone, at none from nowhere, on a System no Grant opens', () => {
-    expect(reachOn(sharingOf('ana', lineage, []), 'entry')).toEqual([
-      { subject: everyone, value: 'none', from: null },
-    ])
+    expect(reachOn(sharingOf('ana', lineage, []), 'entry')).toEqual({
+      everyone: { subject: everyone, value: 'none', from: null },
+      others: [],
+    })
   })
 
   it('says where each value comes from: set here, or the nearest Tile above, the star among them', () => {
@@ -36,19 +37,19 @@ describe('who reaches a Tile', () => {
       grant('journal', everyone, 'none'),
       grant('ana', family, 'read'),
     ])
-    expect(reachOn(sharing, 'garden')).toEqual([
-      { subject: everyone, value: 'read', from: 'ana' },
-      { subject: family, value: 'read', from: 'ana' },
-    ])
-    expect(reachOn(sharing, 'journal')).toEqual([
-      { subject: everyone, value: 'none', from: 'journal' },
-      { subject: family, value: 'read', from: 'ana' },
-    ])
+    expect(reachOn(sharing, 'garden')).toEqual({
+      everyone: { subject: everyone, value: 'read', from: 'ana' },
+      others: [{ subject: family, value: 'read', from: 'ana' }],
+    })
+    expect(reachOn(sharing, 'journal')).toEqual({
+      everyone: { subject: everyone, value: 'none', from: 'journal' },
+      others: [{ subject: family, value: 'read', from: 'ana' }],
+    })
     // Through inherit: the entry, which sets nothing, takes what journal sets.
-    expect(reachOn(sharing, 'entry')).toEqual([
-      { subject: everyone, value: 'none', from: 'journal' },
-      { subject: family, value: 'read', from: 'ana' },
-    ])
+    expect(reachOn(sharing, 'entry')).toEqual({
+      everyone: { subject: everyone, value: 'none', from: 'journal' },
+      others: [{ subject: family, value: 'read', from: 'ana' }],
+    })
   })
 
   it('leaves out a subject that reaches nothing there, unless a Grant on the Tile itself says none', () => {
@@ -56,15 +57,14 @@ describe('who reaches a Tile', () => {
       grant('garden', bob, 'read+write'),
       grant('journal', family, 'none'),
     ])
-    expect(reachOn(sharing, 'entry')).toEqual([{ subject: everyone, value: 'none', from: null }])
-    expect(reachOn(sharing, 'journal')).toEqual([
-      { subject: everyone, value: 'none', from: null },
+    expect(reachOn(sharing, 'entry').others).toEqual([])
+    expect(reachOn(sharing, 'journal').others).toEqual([
       { subject: family, value: 'none', from: 'journal' },
     ])
-    expect(reachOn(sharing, 'garden')).toEqual([
-      { subject: everyone, value: 'none', from: null },
-      { subject: bob, value: 'read+write', from: 'garden' },
-    ])
+    expect(reachOn(sharing, 'garden')).toEqual({
+      everyone: { subject: everyone, value: 'none', from: null },
+      others: [{ subject: bob, value: 'read+write', from: 'garden' }],
+    })
   })
 })
 

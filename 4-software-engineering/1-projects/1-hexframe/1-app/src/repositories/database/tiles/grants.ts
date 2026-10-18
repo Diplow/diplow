@@ -4,7 +4,7 @@
 // the subject inherits again. Part of Mapping's repository (./tiles.ts), which merges these in: it
 // speaks rows, and Mapping decides what a Grant allows and who may set one, its owner from a Session
 // alone (`domains/mapping/sharing/`). The tests set theirs below any check through ./testing.ts.
-import { and, eq, inArray, isNull } from 'drizzle-orm'
+import { and, eq, isNull } from 'drizzle-orm'
 import { Effect } from 'effect'
 
 import { type Database, InTransaction } from '../database'
@@ -65,7 +65,7 @@ const ofSubject = ({ subject, subjectId }: GrantSubjectRow) =>
 export interface GrantWrites {
   /**
    * Sets a Tile's Grant for one subject, in place of the one it had. A Tile the owner's System
-   * doesn't hold is a defect: Mapping found it there first.
+   * doesn't hold is a defect, for both writes: Mapping found it there first.
    */
   readonly setGrant: (row: GrantRow) => Effect.Effect<void, never, InTransaction>
   /** Removes a Tile's Grant for one subject, if it has one: the subject inherits there again. */
@@ -80,38 +80,43 @@ const inTransaction = <A, E>(query: Effect.Effect<A, E>) => InTransaction.use(()
 
 /** The writes of the Grants of the owner's System, each to a Tile it holds alone. */
 export const grantWritesOf = (database: Database['Service'], owner: string): GrantWrites => {
-  const tilesOfOwner = database.select({ id: tile.id }).from(tile).where(eq(tile.ownerId, owner))
+  /** Nothing when the owner's System holds this Tile; a defect otherwise: Mapping found it there. */
+  const held = (tileId: string) =>
+    Effect.flatMap(
+      database
+        .select({ id: tile.id })
+        .from(tile)
+        .where(and(eq(tile.ownerId, owner), eq(tile.id, tileId)))
+        .pipe(Effect.orDie),
+      ([found]) =>
+        found === undefined
+          ? Effect.die(new Error('A Grant named a Tile its System does not hold'))
+          : Effect.void,
+    )
   return {
-    setGrant: (row) =>
+    setGrant: ({ tile: tileId, ...rest }) =>
       inTransaction(
-        Effect.gen(function* () {
-          const [held] = yield* database
-            .select({ id: tile.id })
-            .from(tile)
-            .where(and(eq(tile.ownerId, owner), eq(tile.id, row.tile)))
-            .pipe(Effect.orDie)
-          if (held === undefined) {
-            return yield* Effect.die(new Error('A Grant named a Tile its System does not hold'))
-          }
-          const { tile: tileId, ...rest } = row
-          yield* database
+        Effect.andThen(
+          held(tileId),
+          database
             .insert(grant)
             .values({ tileId, ...rest })
             .onConflictDoUpdate({
               target: [grant.tileId, grant.subject, grant.subjectId],
-              set: { value: row.value },
+              set: { value: rest.value },
             })
-            .pipe(Effect.orDie)
-        }),
+            .pipe(Effect.orDie),
+        ),
       ),
     removeGrant: (tileId, subject) =>
       inTransaction(
-        database
-          .delete(grant)
-          .where(
-            and(eq(grant.tileId, tileId), ofSubject(subject), inArray(grant.tileId, tilesOfOwner)),
-          )
-          .pipe(Effect.asVoid, Effect.orDie),
+        Effect.andThen(
+          held(tileId),
+          database
+            .delete(grant)
+            .where(and(eq(grant.tileId, tileId), ofSubject(subject)))
+            .pipe(Effect.orDie),
+        ),
       ),
   }
 }

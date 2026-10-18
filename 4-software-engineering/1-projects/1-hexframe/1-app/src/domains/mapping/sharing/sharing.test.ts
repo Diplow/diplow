@@ -52,25 +52,33 @@ layer(TestTiles)('who reaches a Tile, set by its owner, over PGlite', (it) => {
 
       yield* setting(own, journal.id, 'read')
       expect(yield* readBy(passer)).toEqual([entry.id, journal.id].sort())
-      expect(yield* whoReaches(own, entry.id)).toEqual([
-        { subject: everyone, value: 'read', from: journal.id },
-      ])
+      expect((yield* whoReaches(own, entry.id)).everyone).toEqual({
+        subject: everyone,
+        value: 'read',
+        from: journal.id,
+      })
 
       yield* setting(own, entry.id, 'none')
       expect(yield* readBy(passer)).toEqual([journal.id])
-      expect(yield* whoReaches(own, entry.id)).toEqual([
-        { subject: everyone, value: 'none', from: entry.id },
-      ])
+      expect((yield* whoReaches(own, entry.id)).everyone).toEqual({
+        subject: everyone,
+        value: 'none',
+        from: entry.id,
+      })
 
       yield* setting(own, entry.id, 'inherit')
-      expect(yield* whoReaches(own, entry.id)).toEqual([
-        { subject: everyone, value: 'read', from: journal.id },
-      ])
+      expect((yield* whoReaches(own, entry.id)).everyone).toEqual({
+        subject: everyone,
+        value: 'read',
+        from: journal.id,
+      })
       yield* setting(own, journal.id, 'inherit')
       expect(yield* readBy(passer)).toEqual([])
-      expect(yield* whoReaches(own, garden.id)).toEqual([
-        { subject: everyone, value: 'none', from: null },
-      ])
+      expect((yield* whoReaches(own, garden.id)).everyone).toEqual({
+        subject: everyone,
+        value: 'none',
+        from: null,
+      })
       // A second inherit, where nothing is set, changes nothing.
       yield* setting(own, journal.id, 'inherit')
     }),
@@ -82,9 +90,11 @@ layer(TestTiles)('who reaches a Tile, set by its owner, over PGlite', (it) => {
       const before = yield* Mapping.systemVersion(own)
       yield* setting(own, star, 'read')
       expect(yield* readBy(stranger(star))).toEqual([journal.id, entry.id, garden.id].sort())
-      expect(yield* whoReaches(own, garden.id)).toEqual([
-        { subject: everyone, value: 'read', from: star },
-      ])
+      expect((yield* whoReaches(own, garden.id)).everyone).toEqual({
+        subject: everyone,
+        value: 'read',
+        from: star,
+      })
       expect(yield* Mapping.systemVersion(own)).toBe(before)
       expect((yield* tree(ana)).id).toBe(star)
     }),

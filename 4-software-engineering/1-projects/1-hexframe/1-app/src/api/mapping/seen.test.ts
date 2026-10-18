@@ -209,9 +209,10 @@ describe('who reaches a Tile, set by its owner from a Session', () => {
     const set = (to: 'read' | 'none' | 'inherit') =>
       value(run(request(ana), Mapping.setGrant({ tile: journal.id, subject: everyone, value: to })))
     await set('read')
-    expect(await value(run(request(ana), Mapping.whoReaches({ tile: journal.id })))).toEqual([
-      { subject: everyone, value: 'read', from: journal.id },
-    ])
+    expect(await value(run(request(ana), Mapping.whoReaches({ tile: journal.id })))).toEqual({
+      everyone: { subject: everyone, value: 'read', from: journal.id },
+      others: [],
+    })
     const read = await value(run(request(stranger), Mapping.systemAt(star)))
     expect(Object.keys(read.tiles)).toEqual([journal.id])
     await set('inherit')
@@ -246,10 +247,10 @@ describe('who reaches a Tile, set by its owner from a Session', () => {
       ok: false,
       failure: { _tag: 'SignedOut' },
     })
-    expect(await value(run(request(ana), Mapping.whoReaches({ tile: garden.id })))).toEqual([
-      { subject: everyone, value: 'none', from: null },
-      { subject: { _tag: 'Account', id: bob.id }, value: 'read', from: garden.id },
-    ])
+    expect(await value(run(request(ana), Mapping.whoReaches({ tile: garden.id })))).toEqual({
+      everyone: { subject: everyone, value: 'none', from: null },
+      others: [{ subject: { _tag: 'Account', id: bob.id }, value: 'read', from: garden.id }],
+    })
   })
 
   it('takes Everyone’s read, none or inherit on a Tile by its UUID, and nothing more', () => {

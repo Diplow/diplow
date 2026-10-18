@@ -30,15 +30,26 @@ export interface Reach {
   readonly from: string | null
 }
 
+/** Who reaches a Tile: Everyone, always, and everyone else who does. */
+export interface Reaching {
+  readonly everyone: Reach
+  readonly others: ReadonlyArray<Reach>
+}
+
 /**
- * Every subject that reaches a Tile, each with its value and where it comes from: Everyone first,
- * always, since its owner may open the Tile to it whatever it has now; then each subject a Grant of
+ * Every subject that reaches a Tile, each with its value and where it comes from: Everyone, always,
+ * since its owner may open the Tile to it whatever it has now; then each other subject a Grant of
  * the System names, when it has more than `none` there or a Grant set on the Tile itself, which its
  * owner may take back.
  */
-export const reachOn = (sharing: Sharing, tile: string): ReadonlyArray<Reach> =>
-  sharing.subjects.flatMap((subject) => {
-    const { value, from } = originOn(sharing, subject, tile)
-    const listed = subject._tag === 'Everyone' || value !== 'none' || from === tile
-    return listed ? [{ subject, value, from }] : []
-  })
+export function reachOn(sharing: Sharing, tile: string): Reaching {
+  const reachOf = (subject: Subject): Reach => ({ subject, ...originOn(sharing, subject, tile) })
+  return {
+    everyone: reachOf({ _tag: 'Everyone' }),
+    others: sharing.subjects.flatMap((subject) => {
+      if (subject._tag === 'Everyone') return []
+      const reach = reachOf(subject)
+      return reach.value !== 'none' || reach.from === tile ? [reach] : []
+    }),
+  }
+}

@@ -36,11 +36,13 @@ describe('who reaches a Tile, in words', () => {
 
   it('words Everyone first, with its choice, then everyone else, their rights one after another', () => {
     const rows = shareRowsOf(
-      [
-        everyone('read', star),
-        { subject: { _tag: 'Group', id: 'family' }, value: 'read+write', from: journal },
-        { subject: { _tag: 'Account', id: 'bob' }, value: 'none', from: entry },
-      ],
+      {
+        everyone: everyone('read', star),
+        others: [
+          { subject: { _tag: 'Group', id: 'family' }, value: 'read+write+@', from: journal },
+          { subject: { _tag: 'Account', id: 'bob' }, value: 'none', from: entry },
+        ],
+      },
       around,
     )
     expect(rows.everyone).toEqual({
@@ -51,13 +53,15 @@ describe('who reaches a Tile, in words', () => {
       choice: 'inherit',
     })
     expect(rows.others).toEqual([
-      { key: 'Group:family', who: 'A group', value: 'read, write', from: 'from Journal' },
+      { key: 'Group:family', who: 'A group', value: 'read, write, @', from: 'from Journal' },
       { key: 'Account:bob', who: 'An account', value: 'none', from: 'set here' },
     ])
   })
 
-  it('shows Everyone at none, by default, should Mapping list nobody', () => {
-    expect(shareRowsOf([], around).everyone).toMatchObject({
+  it('shows Everyone at none, by default, on a Tile nothing above opens', () => {
+    expect(
+      shareRowsOf({ everyone: everyone('none', null), others: [] }, around).everyone,
+    ).toMatchObject({
       value: 'none',
       from: 'by default',
       choice: 'inherit',

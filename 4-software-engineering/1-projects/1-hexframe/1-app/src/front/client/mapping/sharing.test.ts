@@ -20,7 +20,7 @@ afterEach(() => {
 
 const tile = crypto.randomUUID()
 const everyone = { _tag: 'Everyone' } as const
-const reached = [{ subject: everyone, value: 'read', from: tile }]
+const reached = { everyone: { subject: everyone, value: 'read', from: tile }, others: [] }
 
 /** The stand-ins: the read answers Everyone reading the Tile, and the write succeeds. */
 function answering() {

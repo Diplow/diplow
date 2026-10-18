@@ -2,7 +2,14 @@
 // where that comes from, set on the Tile, on the star, on a Tile above by its Title, or nowhere; and
 // what its owner set for Everyone on the Tile, which the widget's choice shows. Mapping answers who
 // reaches it (`reachOn`); this says it in the page's language.
-import type { GrantValue, Reach, Subject } from '#/domains/mapping/entities'
+import {
+  type GrantValue,
+  type Reach,
+  type Reaching,
+  type Right,
+  rightsOf,
+  type Subject,
+} from '#/domains/mapping/entities'
 import type { ReachRow, ShareChoice } from '#/front/ui/chat/widgets/share/ShareWidget'
 import { m } from '#/paraglide/messages'
 
@@ -16,18 +23,18 @@ export interface Around {
   readonly titleOf: (id: string) => string | undefined
 }
 
-/** What a value gives, in words, its rights one after another: "read, write". */
+/** Each right, in words. */
+const rightWords: Record<Right, () => string> = {
+  read: m.widget_share_read,
+  write: m.widget_share_write,
+  '@': m.widget_share_agent,
+}
+
+/** What a value gives, in words, its rights one after another as Mapping lists them: "read, write". */
 const valueWords = (value: GrantValue) => {
-  if (value === 'none') return m.widget_share_none()
-  const rights = {
-    read: m.widget_share_read,
-    write: m.widget_share_write,
-    '@': m.widget_share_agent,
-  } as const
-  return value
-    .split('+')
-    .map((right) => rights[right as keyof typeof rights]())
-    .join(m.widget_share_from_joiner())
+  const rights = rightsOf(value)
+  if (rights.length === 0) return m.widget_share_none()
+  return rights.map((right) => rightWords[right]()).join(m.widget_share_from_joiner())
 }
 
 /** Who a subject is, in words: Everyone, or an account or a group, until IAM names them (HEX-131). */
@@ -71,19 +78,11 @@ export const choiceOf = ({ value, from }: Reach, { tile }: Pick<Around, 'tile'>)
   return value === 'read' ? 'read' : 'none'
 }
 
-/** The everyone Mapping always lists first: none set anywhere, should it be missing. */
-const nobodySet: Reach = { subject: { _tag: 'Everyone' }, value: 'none', from: null }
-
 /**
  * Who reaches the Tile, as the share widget shows them: Everyone's row with its choice, then everyone
  * else's.
  */
-export function shareRowsOf(reached: ReadonlyArray<Reach>, around: Around) {
-  const everyone = reached.find(({ subject }) => subject._tag === 'Everyone') ?? nobodySet
-  return {
-    everyone: { ...rowOf(everyone, around), choice: choiceOf(everyone, around) },
-    others: reached
-      .filter(({ subject }) => subject._tag !== 'Everyone')
-      .map((reach) => rowOf(reach, around)),
-  }
-}
+export const shareRowsOf = ({ everyone, others }: Reaching, around: Around) => ({
+  everyone: { ...rowOf(everyone, around), choice: choiceOf(everyone, around) },
+  others: others.map((reach) => rowOf(reach, around)),
+})

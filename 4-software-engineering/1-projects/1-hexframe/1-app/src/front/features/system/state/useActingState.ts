@@ -16,7 +16,6 @@ import {
   useSwapTiles,
 } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
-import { toast } from '#/front/ui/atoms/Toaster'
 import type { Acting, Moving } from '#/front/ui/canvas/Canvas'
 import type { Direction } from '#/domains/mapping/entities'
 import type { EmptySlotTarget } from '#/front/ui/canvas/geometry/shape'
@@ -47,6 +46,7 @@ import {
   type SearchChange,
   type SystemSearch,
 } from '../search/search'
+import { copy } from '../copy'
 import { slotOf, tileIn } from '../tree'
 import { visitLinkOf } from '../visit/visit'
 import type { Exported } from '../widget/state/useTileWidgetsState'
@@ -72,17 +72,6 @@ interface Deleting {
   below: number
   confirm: () => void
   cancel: () => void
-}
-
-/** Copies `text`, saying so; without a secure context there is no clipboard, which fails alike. */
-function copy(text: string) {
-  // Over plain HTTP there is no clipboard at all: that fails as a refused copy does.
-  void Promise.resolve(text)
-    .then((copied) => navigator.clipboard.writeText(copied))
-    .then(
-      () => toast(m.system_copied()),
-      () => toast.error(m.system_copy_failed()),
-    )
 }
 
 /** The slot an empty Direction stands for, for an import or the moving one; none takes no click. */

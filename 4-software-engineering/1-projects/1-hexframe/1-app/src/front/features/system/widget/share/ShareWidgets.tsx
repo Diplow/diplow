@@ -6,10 +6,10 @@
 // no Operation: the System's queue, its overlay and the timeline know nothing of it.
 import { type System, tileAt } from '#/domains/mapping/entities'
 import { useSetGrant, useWhoReaches } from '#/front/client/mapping/sharing'
-import { toast } from '#/front/ui/atoms/Toaster'
 import { ShareWidget } from '#/front/ui/chat/widgets/share/ShareWidget'
 import { m } from '#/paraglide/messages'
 
+import { copy } from '../../copy'
 import { visitLinkOf } from '../../visit/visit'
 import { shareRowsOf } from './rows'
 
@@ -20,16 +20,6 @@ interface ShareWidgetsProps {
   tile: string
   /** Closes it: the URL lets it go. */
   onClose: () => void
-}
-
-/** Copies the link, saying so; without a secure context there is no clipboard, which fails alike. */
-function copy(text: string) {
-  void Promise.resolve(text)
-    .then((copied) => navigator.clipboard.writeText(copied))
-    .then(
-      () => toast(m.system_copied()),
-      () => toast.error(m.system_copy_failed()),
-    )
 }
 
 /**

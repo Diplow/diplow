@@ -16,20 +16,17 @@ import {
   sharingOf,
   subjectRowOf,
   type System,
-  tileAt,
 } from '../entities'
-import { ShippedReadOnly, TileNotFound } from '../errors'
+import { ShippedReadOnly } from '../errors'
 import { type Acting, grantsIn, lockedOf, ownerOf, wholeOf } from '../mapping'
 import { mayShare } from '../operations'
 import { isShippedId } from '../shipped/shipped'
 
 /**
- * The System the actor acts on, read by `read`, and how it is shared, once Mapping found the actor
- * may change or read who reaches this Tile of it: its owner, from a Session (`mayShare`). A Tile of a
- * System hexframe ships, Help's or the tutorial's, is `ShippedReadOnly`, read by Everyone for being
- * shipped, its Grants nobody's; an id the System holds no Tile of, a Reference's included, and a
- * Tile the actor may not read are `TileNotFound`; anyone else, or the owner without a Session, is
- * `NotAllowed`.
+ * The System the actor acts on, read by `read`, and how it is shared, once `mayShare` found the actor
+ * may change or read who reaches this Tile of it: its owner, from a Session. A Tile of a System
+ * hexframe ships, Help's or the tutorial's, is refused first, `ShippedReadOnly`, as every Operation
+ * naming one is (`outsideShipped`): read by Everyone for being shipped, its Grants nobody's.
  */
 const sharedOn = <E, R>(
   acting: Acting,
@@ -41,8 +38,7 @@ const sharedOn = <E, R>(
     const owner = yield* ownerOf(acting.system)
     const system = yield* read(owner)
     const sharing = sharingOf(owner, lineageOf(system), yield* grantsIn(owner))
-    if (tileAt(system, tile) === undefined) return yield* new TileNotFound()
-    yield* Effect.fromResult(mayShare(acting.actor, sharing, tile))
+    yield* Effect.fromResult(mayShare(acting.actor, { system, sharing }, tile))
     return { owner, sharing }
   })
 
