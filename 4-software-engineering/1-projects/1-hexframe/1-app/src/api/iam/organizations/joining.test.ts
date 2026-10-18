@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { Entry } from '#/domains/assistant/entities'
 import * as Iam from '#/domains/iam/iam'
+import { hexframeStar } from '#/domains/mapping/entities'
 import { browser } from '#/repositories/auth/testing'
 
 import * as Assistant from '../../assistant/programs'
@@ -20,9 +21,10 @@ import * as Organizations from './programs'
 // someone asking to join, every admin told in their timeline, Accept and Decline there, how the
 // request stands read anew with the day, whoever asked told the outcome; an accepted request giving
 // membership and the rights the Organization's Grants carry, a declined one nothing, a second open
-// one refused; someone added or taken out told, leaving telling nothing; a removed member's read and
-// their running Turn's next write refused, since who belongs where is read on every call; and the
-// last admin who joined kept, someone who joined by asking able to take that place.
+// one refused, one to the Hexframe Organization, with no admin yet, waiting for one; someone added
+// or taken out told, leaving telling nothing; a removed member's read and their running Turn's next
+// write refused, since who belongs where is read on every call; and the last admin who joined kept,
+// someone who joined by asking able to take that place.
 
 /** Someone signed up, their star titled, and a way to run a program as their Session proves them. */
 async function someone(name: string, email = `${crypto.randomUUID()}@example.com`) {
@@ -166,6 +168,15 @@ describe('a request to join an Organization', () => {
     expect(await value(bob.as(Organizations.standingIn({ star })))).toBe('asked')
     expect(await reads(bob, star)).toEqual([])
     expect(await refusal(bob.as(Organizations.members({ star })))).toBe('OrganizationNotFound')
+  })
+
+  it('to the Hexframe Organization, offered while it has no admin, waits for one', async () => {
+    const bob = await someone('Bob Martin')
+    const star = hexframeStar
+    expect(await value(bob.as(Organizations.standingIn({ star })))).toBe('outside')
+    expect(await value(bob.as(Organizations.askToJoin({ star })))).toBeNull()
+    expect(await value(bob.as(Organizations.standingIn({ star })))).toBe('asked')
+    expect(await refusal(bob.as(Organizations.askToJoin({ star })))).toBe('JoinRequestOpen')
   })
 
   it('of one of its Groups is a member’s, its outcome told by the Group’s name', async () => {

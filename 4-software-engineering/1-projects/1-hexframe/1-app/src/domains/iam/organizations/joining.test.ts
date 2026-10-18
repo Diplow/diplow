@@ -10,6 +10,7 @@ import { layer as organizationsLayer } from '#/repositories/database/organizatio
 import { CurrentKey, CurrentSession, signUp } from '../iam'
 import { createGroup, setInGroup } from './groups'
 import {
+  adminsOf,
   askedAlready,
   askRefusal,
   askToJoin,
@@ -89,6 +90,12 @@ const heardSince = (from: number) =>
     const about = event as unknown as { readonly account?: string }
     return [event._tag, about.account] as const
   })
+
+/**
+ * The Hexframe Organization, its migration's (`20261018133429_hexframe-organization`): an
+ * Organization with no member, its first admin made by hand.
+ */
+const hexframe = '98c9e80b-a66d-4ad1-84ff-9ed917ef86eb'
 
 /** Ana's Organization, Ana its one admin. */
 const atelier = Effect.gen(function* () {
@@ -229,6 +236,25 @@ layer(TestLayer)('Joining an Organization', (it) => {
       expect(yield* towardDesign()).toBe('ask')
       expect(yield* failedWith(ana.asSession(decideJoinRequest(again, true)))).toBe(
         'JoinRequestNotFound',
+      )
+    }),
+  )
+
+  it.effect('of an Organization with no admin yet is asked as offered, waiting for one', () =>
+    Effect.gen(function* () {
+      const bob = yield* someone
+      // Offered Ask to join, he asks, and the request waits for the admin made by hand.
+      expect(yield* bob.asSession(standingIn(hexframe))).toBe('outside')
+      const request = yield* bob.asSession(askToJoin(hexframe))
+      expect(published.at(-1)).toEqual(
+        new JoinAsked({ request, organization: hexframe, account: bob.account.id }),
+      )
+      expect(yield* bob.asSession(standingIn(hexframe))).toBe('asked')
+      expect(yield* adminsOf(hexframe)).toEqual([])
+      expect(yield* failedWith(bob.asSession(askToJoin(hexframe)))).toBe('JoinRequestOpen')
+      // A Group of it is still its members' to see.
+      expect(yield* failedWith(bob.asSession(askToJoin(hexframe, crypto.randomUUID())))).toBe(
+        'GroupNotFound',
       )
     }),
   )

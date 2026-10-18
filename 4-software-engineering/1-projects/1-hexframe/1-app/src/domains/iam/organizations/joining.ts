@@ -23,7 +23,7 @@ import {
   OrganizationNotFound,
 } from '../errors'
 import { sessionOnly } from '../iam'
-import { managedBy, roleIn } from './organizations'
+import { isOrganization, managedBy, roleIn } from './organizations'
 
 /**
  * An Account asked to join an Organization's Members, or one of its Groups (`group`, none for the
@@ -75,12 +75,15 @@ export function askRefusal(
 /**
  * That the asking Account may ask to join this, the Organization's row locked: `OrganizationNotFound`
  * for an id no Organization has, then as `askRefusal` says, `AlreadyMember`, `AlreadyInGroup` or
- * `GroupNotFound`.
+ * `GroupNotFound`. An Organization with no member yet, the Hexframe one until its admin is made by
+ * hand, is asked as any other, as `standingIn` offers it: the request waits for an admin.
  */
 const mayAsk = (organization: string, account: string, group: string | undefined) =>
   Effect.gen(function* () {
     const members = yield* Organizations.use((organizations) => organizations.locked(organization))
-    if (members.length === 0) return yield* new OrganizationNotFound()
+    if (members.length === 0 && !(yield* isOrganization(organization))) {
+      return yield* new OrganizationNotFound()
+    }
     const groups =
       group === undefined
         ? []
