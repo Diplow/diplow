@@ -7,7 +7,7 @@ import { starQueryOf, starsFoundAtMost } from '../entities'
 import type * as Mapping from '../mapping'
 import { actingOnOwn, createTile, editTile, TestTiles } from '../testing'
 import { grant } from './sharing'
-import { starShowing, starsTitled } from './stars'
+import { linkedStar, starShowing, starsTitled } from './stars'
 
 // A star found over PGlite: by its Title, whatever its case, those it starts first, by its card
 // alone, a private System's too, never a Tile below a star, the finder's own left out, a few at most,
@@ -144,6 +144,21 @@ layer(TestTiles)('a star found by its Title or by a link, over PGlite', (it) => 
       })
     }),
   )
+
+  it('answers where a link leads, its star, the reader’s own, or nowhere, and never refuses', () =>
+    Effect.gen(function* () {
+      const ana = yield* starTitled('Ana')
+      const me = yield* finder
+      const onAnas: Mapping.Acting = { ...me, system: ana.star }
+      const card = { id: ana.star, title: 'Ana', preview: 'Ana, in short.' }
+      expect(yield* linkedStar(onAnas, me.system, ana.star)).toEqual({ _tag: 'Star', star: card })
+      // A Tile kept from the reader, and one no System holds: nowhere, alike.
+      for (const tile of [ana.tile.id, crypto.randomUUID()]) {
+        expect(yield* linkedStar(onAnas, me.system, tile)).toEqual({ _tag: 'Nowhere' })
+      }
+      expect(yield* linkedStar(me, me.system, me.system)).toEqual({ _tag: 'Own' })
+      expect(yield* linkedStar(me, me.system, crypto.randomUUID())).toEqual({ _tag: 'Nowhere' })
+    }))
 
   it('makes a query long enough, trimmed, of what is typed, its first units past its bound', () => {
     expect(starQueryOf('  An ')).toBe('An')

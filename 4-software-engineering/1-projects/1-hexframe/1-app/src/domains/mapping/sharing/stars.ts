@@ -37,19 +37,19 @@ export const starShowing = (acting: Acting, tile: string) =>
   )
 
 /** Where a link to a Tile of the reader's own System leads: their own star, which they never pick. */
-const ownStar: LinkedStar = { _tag: 'Own' }
+const theirOwn: LinkedStar = { _tag: 'Own' }
 
 /**
  * Where a link to the Tile of this id leads the actor, on the System holding it, which they act on:
- * to its star, by its card, once they are shown the Tile (`starShowing`); to their own star, `own`
- * naming it, which they never pick; nowhere for a Tile kept from them, as for one that isn't there.
+ * to its star, by its card, once they are shown the Tile (`starShowing`); to their own star, which
+ * `ownStar` names, which they never pick; nowhere for a Tile kept from them, as for one that isn't there.
  * An answer, never a refusal, so whoever asked says it where the link was given, and it says nothing
  * of a Tile the actor may not read.
  */
-export const linkedStar = (acting: Acting, own: string, tile: string) => {
+export const linkedStar = (acting: Acting, ownStar: string, tile: string) => {
   const led: Effect.Effect<LinkedStar, TileNotFound, Tiles> =
-    acting.system === own
-      ? Effect.as(shownTile(acting, tile), ownStar)
+    acting.system === ownStar
+      ? Effect.as(shownTile(acting, tile), theirOwn)
       : Effect.map(starShowing(acting, tile), (star): LinkedStar => ({ _tag: 'Star', star }))
   return Effect.catchTag(led, 'TileNotFound', () => Effect.succeed(nowhere))
 }
