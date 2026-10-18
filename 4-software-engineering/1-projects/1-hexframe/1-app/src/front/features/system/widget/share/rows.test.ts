@@ -39,7 +39,7 @@ describe('who reaches a Tile, in words', () => {
       around,
     )
     expect(rows.everyone).toEqual({
-      key: 'everyone',
+      key: 'Everyone',
       who: 'Everyone',
       value: 'read',
       from: 'from your star',

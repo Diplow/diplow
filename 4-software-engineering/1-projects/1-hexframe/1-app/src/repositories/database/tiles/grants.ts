@@ -7,7 +7,7 @@
 import { and, eq, isNull } from 'drizzle-orm'
 import { Effect } from 'effect'
 
-import { type Database, InTransaction } from '../database'
+import { type Database, type InTransaction, inTransaction } from '../database'
 import { grant, tile } from '../schema'
 
 /**
@@ -74,12 +74,6 @@ export interface GrantWrites {
     subject: GrantSubjectRow,
   ) => Effect.Effect<void, never, InTransaction>
 }
-
-/**
- * A query that only holds inside a transaction: it requires one, so it runs in no other. The tiles
- * repository's writes take it from here too.
- */
-export const inTransaction = <A, E>(query: Effect.Effect<A, E>) => InTransaction.use(() => query)
 
 /** The writes of the Grants of the owner's System, each to a Tile it holds alone. */
 export const grantWritesOf = (database: Database['Service'], owner: string): GrantWrites => {

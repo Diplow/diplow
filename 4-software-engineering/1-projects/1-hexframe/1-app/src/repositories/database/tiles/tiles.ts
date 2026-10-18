@@ -11,16 +11,9 @@ import { type SQL, and, eq, inArray, isNull } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import { Context, Data, Effect, Layer } from 'effect'
 
-import { Database, InTransaction } from '../database'
+import { Database, InTransaction, inTransaction } from '../database'
 import { type FrontmatterColumn, type TileConfigColumn, tile } from '../schema'
-import {
-  type GrantRow,
-  grantsOf,
-  type GrantWrites,
-  grantWritesOf,
-  inTransaction,
-  type PlaceRow,
-} from './grants'
+import { type GrantRow, grantsOf, type GrantWrites, grantWritesOf, type PlaceRow } from './grants'
 
 /**
  * One row of the `tile` table, as its System's owner reads it. A Root has no parent and no

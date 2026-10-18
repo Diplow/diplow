@@ -10,6 +10,7 @@ import {
   type Right,
   rightsOf,
   type Subject,
+  subjectKeyOf,
 } from '#/domains/mapping/entities'
 import type { ReachRow } from '#/front/ui/chat/widgets/share/ShareWidget'
 import { m } from '#/paraglide/messages'
@@ -50,10 +51,6 @@ function whoOf(subject: Subject) {
   }
 }
 
-/** One subject's key among the rows, the same for one subject. */
-const keyOf = (subject: Subject) =>
-  subject._tag === 'Everyone' ? 'everyone' : `${subject._tag}:${subject.id}`
-
 /** Where a value comes from, in words: set here, from your star, from the Tile above, by default. */
 export function fromOf(from: string | null, { tile, star, titleOf }: Around) {
   if (from === null) return m.widget_share_by_default()
@@ -64,7 +61,7 @@ export function fromOf(from: string | null, { tile, star, titleOf }: Around) {
 
 /** One subject reaching the Tile, as its row words it. */
 const rowOf = ({ subject, value, from }: Reach, around: Around): ReachRow => ({
-  key: keyOf(subject),
+  key: subjectKeyOf(subject),
   who: whoOf(subject),
   value: valueWords(value),
   from: fromOf(from, around),

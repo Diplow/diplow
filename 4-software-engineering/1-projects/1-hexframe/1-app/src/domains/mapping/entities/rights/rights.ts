@@ -119,8 +119,8 @@ const subjectsOf = (actor: Actor): ReadonlyArray<Subject> => [
   { _tag: 'Everyone' },
 ]
 
-/** One subject's key, the same for two equal subjects. */
-const keyOf = (subject: Subject) =>
+/** One subject's key, the same for two equal subjects: what the front keys a subject's row by too. */
+export const subjectKeyOf = (subject: Subject) =>
   subject._tag === 'Everyone' ? 'Everyone' : `${subject._tag}:${subject.id}`
 
 /**
@@ -158,9 +158,9 @@ export function sharingOf(owner: string, lineage: Lineage, grants: ReadonlyArray
   const subjects = new Map<string, Subject>([['Everyone', { _tag: 'Everyone' }]])
   for (const { tile, subject, value } of grants) {
     const held = byTile.get(tile) ?? new Map<string, GrantValue>()
-    held.set(keyOf(subject), value)
+    held.set(subjectKeyOf(subject), value)
     byTile.set(tile, held)
-    subjects.set(keyOf(subject), subject)
+    subjects.set(subjectKeyOf(subject), subject)
   }
   return { owner, lineage, grants: byTile, subjects: [...subjects.values()] }
 }
@@ -175,7 +175,7 @@ export function originOn(
   subject: Subject,
   tile: string,
 ): { readonly value: GrantValue; readonly from: string | null } {
-  const key = keyOf(subject)
+  const key = subjectKeyOf(subject)
   const passed = new Set<string>()
   let at: string | null | undefined = tile
   while (at !== null && at !== undefined && !passed.has(at)) {
