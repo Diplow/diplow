@@ -81,7 +81,7 @@ const table: readonly Entry[] = [
   { tag: 'NotAllowed', scope: 'postMessage', message: m.error_assistant_agent_not_allowed },
   { tag: 'NotAllowed', scope: 'acceptProposal', message: m.error_assistant_accept_not_allowed },
   { tag: 'NotAllowed', message: m.error_mapping_not_allowed },
-  { tag: 'ShippedReadOnly', message: m.error_mapping_shipped_read_only },
+  { tag: 'Shipped', message: m.error_mapping_shipped },
   { tag: 'BatchOutdated', scope: 'undo', message: m.error_assistant_undo_outdated },
   { tag: 'BatchOutdated', message: m.error_mapping_batch_outdated },
   { tag: 'ImportRefused', message: m.error_mapping_import_refused },

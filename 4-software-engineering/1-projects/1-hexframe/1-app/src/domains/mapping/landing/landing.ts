@@ -156,7 +156,7 @@ function reportOf(
 const inSlot = (acting: Acting, plan: ImportPlan, place: Placement) =>
   changing(acting, [place.parent], (rows, writes) =>
     Effect.gen(function* () {
-      const system = systemFrom(rows, { owned: true })
+      const system = systemFrom(rows)
       if (system === undefined) return yield* new TileNotFound()
       yield* Effect.fromResult(freeSlot(system, place))
       const { root } = plan
@@ -188,7 +188,7 @@ const inSlot = (acting: Acting, plan: ImportPlan, place: Placement) =>
 const asRoot = (acting: Acting, plan: ImportPlan) =>
   changing(acting, [], (rows, writes) =>
     Effect.gen(function* () {
-      const found = systemFrom(rows, { owned: true })
+      const found = systemFrom(rows)
       if (found === undefined)
         return yield* Effect.die(new Error('A System was locked without a Root'))
       const stored = systemOf(found)

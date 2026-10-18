@@ -82,7 +82,6 @@ const flat: System = {
     ),
     toBare: { _tag: 'Reference', id: 'toBare', parent: 'root', slot: -3, target: 'bare' },
   } satisfies Record<string, PlacedTile | PlacedReference>,
-  owned: true,
   version: 0,
 }
 
@@ -103,7 +102,7 @@ function answering(
   vi.mocked(Mapping[write]).mockResolvedValue(outcome as never)
   vi.mocked(Mapping.system).mockResolvedValue({
     ok: true,
-    value: { root: flat.root, tiles: {}, version: 0, owned: true },
+    value: { root: flat.root, tiles: {}, version: 0 },
   } as never)
 }
 

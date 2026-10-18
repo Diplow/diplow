@@ -1,15 +1,17 @@
 // A System, Mapping's aggregate, flat: its Root and every Tile and Reference below it by id, each where
-// it stands, and whether an Account owns it, built from the repository's rows. Its tree, the Root with
+// it stands, built from the repository's rows. Its tree, the Root with
 // everything below it, is a view built from it, for drawing and for writing a Tile as files. Or one
 // Tile read to a depth, with only the fields asked. Pure: what a row means is decided here.
-import { Struct } from 'effect'
+import { Schema, Struct } from 'effect'
 
 import { type Kept, keptOf } from './kept/kept'
 import { contentWith, type FieldsAsked, type Row, type RowWith, withContent } from './rows'
 import {
   type Content,
+  contextDirections,
   type ContextDirection,
   type Direction,
+  directions,
   isContextSlot,
   isLeafSlot,
   rowDirection,
@@ -55,28 +57,60 @@ export interface PlacedReference extends Standing {
 /**
  * A System, Mapping's aggregate, flat, as a change decides on it and the client holds it: its Root,
  * the one Tile without a parent; every Tile and Reference below it by id, each with its parent and
- * its slot; whether an Account owns it, a System hexframe ships, Help or the tutorial, which every
- * Account reads, owned by none, so the System alone says that nothing in it may change; and its
- * Version, how many events changed it, 0 before the first, which a client polls to know when to read
- * it again.
+ * its slot; and its Version, how many events changed it, 0 before the first, which a client polls to
+ * know when to read it again.
  */
 export interface System {
   readonly root: FoundTile
   readonly tiles: Readonly<Record<string, PlacedTile | PlacedReference>>
-  readonly owned: boolean
   readonly version: number
 }
 
 /**
- * The Systems hexframe ships, owned by no Account, by the ids of their Roots: Help's, then the
- * tutorial's. A Root's id is the name of the app's folder it is written in, and every other id of its
- * System a path of slots from it (`tutorial/2`). Mapping says which they are; the bundle holds a
- * folder for each.
+ * The Systems hexframe ships, by the ids of their Roots: Help's, then the tutorial's. A Root's id is
+ * the name of the app's folder it is written in, and every other id of its System a path of slots
+ * from it (`tutorial/2`). Mapping says which they are; the bundle holds a folder for each.
  */
 export const shippedRoots = ['help', 'tutorial'] as const
 
 /** The Root of a System hexframe ships, by its id. */
 export type ShippedRoot = (typeof shippedRoots)[number]
+
+/**
+ * The star of the Hexframe Organization's System, the same in every environment, made by a migration
+ * (`migrations/20261018133429_hexframe-organization`): the Systems hexframe ships are mounted under
+ * it, each Root a Child of it in its own Direction (`shipped/mount.ts`), read and pinned as any Tile of
+ * that System is (HEX-139).
+ */
+export const hexframeStar = '1444d914-02ce-4951-84f5-5f344fd76718'
+
+/**
+ * The System hexframe ships that an id names, by its Root: the Root or anything below it, well formed
+ * or not, whether a Tile stands there or not; none for any other id. A change writing one is refused,
+ * so `help/../x` is Help's too.
+ */
+export const shippedOf = (id: string): ShippedRoot | undefined =>
+  shippedRoots.find((root) => id === root || id.startsWith(`${root}/`))
+
+/**
+ * Whether an id names a Tile hexframe ships, Help's or the tutorial's (`shippedOf`): being shipped is
+ * the one source of its rights, read by Everyone and written by nobody, its owner included, its Grants
+ * changed by nobody, with no stored Grant saying so.
+ */
+export const isShippedId = (id: string) => shippedOf(id) !== undefined
+
+/** A slot, as a shipped id writes it: a Child's Direction or a Context slot. */
+const slot = [...directions, ...contextDirections].join('|')
+
+/**
+ * A well-formed id of a Tile hexframe ships, as a reader may send one: a shipped Root, then the slot
+ * of each generation below it, `help/3/-1`, `tutorial/2`. The id of every shipped Tile has this form;
+ * not every id of this form has a Tile. What a link and a Reference take beside a `TileId`.
+ */
+export const ShippedId = Schema.String.check(
+  Schema.isMaxLength(64),
+  Schema.isPattern(new RegExp(`^(${shippedRoots.join('|')})(/(${slot}))*$`)),
+)
 
 /** A Leaf in its System's tree: one file's worth, a Tile with nothing below it and no Context. */
 export type LeafTile = FoundTile
@@ -152,14 +186,10 @@ function placedOf(row: Row, parent: string): PlacedTile | PlacedReference | unde
 }
 
 /**
- * The System these rows hold, owned by an Account or, one hexframe ships, by none, at the Version
- * its Root's row keeps; `undefined` when they hold no Root. A row the Root is not above stays in it,
- * out of its tree's reach.
+ * The System these rows hold, at the Version its Root's row keeps; `undefined` when they hold no Root.
+ * A row the Root is not above stays in it, out of its tree's reach.
  */
-export function systemFrom(
-  rows: ReadonlyArray<Row>,
-  { owned }: { owned: boolean },
-): System | undefined {
+export function systemFrom(rows: ReadonlyArray<Row>): System | undefined {
   const root = rows.find((row) => row.parentId === null)
   if (root === undefined) return undefined
   const tiles = Object.fromEntries(
@@ -168,7 +198,7 @@ export function systemFrom(
       return placed === undefined ? [] : [[row.id, placed] as const]
     }),
   )
-  return { root: foundOf(root), tiles, owned, version: root.systemVersion }
+  return { root: foundOf(root), tiles, version: root.systemVersion }
 }
 
 /** What finding a Tile's row needs of a row: its id, and whether it is a Reference. */

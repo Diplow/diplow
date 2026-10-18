@@ -71,7 +71,6 @@ const system: System = {
     [id.square]: placed(id.square, id.ana, 3),
     [id.bench]: placed(id.bench, id.square, 1),
   },
-  owned: true,
   version: 1,
 }
 

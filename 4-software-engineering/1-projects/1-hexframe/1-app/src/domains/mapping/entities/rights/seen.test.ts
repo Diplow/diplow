@@ -56,7 +56,6 @@ const system: System = {
     garden: tile('garden', 'ana', 2),
     pinned: { _tag: 'Reference', id: 'pinned', parent: 'garden', slot: -1, target: 'journal' },
   },
-  owned: true,
   version: 9,
 }
 
@@ -95,9 +94,8 @@ describe('a System as anyone else sees it', () => {
   it('holds what Bob, in Family, reads, each Tile with his rights on it', () => {
     const seen = seenBy(actor('bob', ['family']), system, scenario)
     expect(seen.root).toEqual(star)
-    // He stands for no owner, yet the System is still one an owner holds.
+    // He stands for no owner.
     expect(seen.asOwner).toBe(false)
-    expect(seen.owned).toBe(system.owned)
     expect(Object.keys(seen.tiles).sort()).toEqual([
       'draft',
       'entry',

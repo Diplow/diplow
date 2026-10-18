@@ -69,7 +69,7 @@ import {
   visit,
 } from '#/api/mapping/mapping'
 
-import type { Locale } from '#/paraglide/runtime'
+import { getLocale, type Locale } from '#/paraglide/runtime'
 
 import { Foreseen, asCallFailed, read, settle, write, writing, type WriteCall } from '../calls'
 import { type FormErrors, settleSubmit, shownOnForm, unshown } from '../channels'
@@ -91,7 +91,11 @@ interface ImportVariables {
  * it moved (`./follow.ts`).
  */
 export const systemRead = {
-  ...read({ scope: systemScope, key: [], call: () => system({ data: undefined }) }),
+  ...read({
+    scope: systemScope,
+    key: [],
+    call: () => system({ data: { language: getLocale() } }),
+  }),
   refetchOnWindowFocus: false,
 }
 
@@ -100,10 +104,15 @@ export const systemRead = {
  * beside the Account's. Its Version is how what the Account sees there stands, no count of changes,
  * which would tell of the Tiles kept from it (Mapping's `sightVersion`): the page polls it as it
  * polls its own (`../assistant/follow.ts`) and reads the System again once it is another, and, as
- * the Account's, once a write to a System settles (HEX-132).
+ * the Account's, once a write to a System settles (HEX-132). A Tile hexframe ships among it, the
+ * Hexframe Organization's Help and tutorial or a pin of one, comes in the page's language (HEX-139).
  */
 export const visitRead = (star: string) => ({
-  ...read({ scope: systemScope, key: [star], call: () => system({ data: { system: star } }) }),
+  ...read({
+    scope: systemScope,
+    key: [star],
+    call: () => system({ data: { system: star, language: getLocale() } }),
+  }),
   refetchOnWindowFocus: false,
 })
 
@@ -142,7 +151,7 @@ export async function leadsTo(tile: string): Promise<{ readonly system?: string 
 export async function publicSystemOf(tile: string): Promise<Seen | undefined> {
   if (!Schema.is(TileVisit)({ tile })) return undefined
   try {
-    return await settle('publicSystem', publicSystem({ data: { tile } }))
+    return await settle('publicSystem', publicSystem({ data: { tile, language: getLocale() } }))
   } catch (error) {
     if (asCallFailed(error, 'publicSystem').failure.kind === 'NotFound') return undefined
     throw error

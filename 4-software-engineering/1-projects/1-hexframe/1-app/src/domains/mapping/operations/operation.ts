@@ -4,7 +4,7 @@
 // Operation may do to a System is the service's to decide.
 import { Schema } from 'effect'
 
-import { ContextDirection, contentBounds, Slot, TileId, Version } from '../entities'
+import { ContextDirection, contentBounds, ShippedId, Slot, TileId, Version } from '../entities'
 
 /**
  * What a Tile says, bounded so nothing unbounded reaches the service, which says what a Title and a
@@ -66,12 +66,14 @@ export class DeleteTile extends Schema.TaggedClass<DeleteTile>()('DeleteTile', {
 /**
  * Puts a Reference to `target` in a free Context slot of the Tile `parent`, named with the Version
  * read of it: a Reference has none of its own, so its writes count on the Tile whose slot they change.
+ * Its target is a Tile's id, or a Tile hexframe ships by its own (`ShippedId`), which anyone may pin
+ * as any Tile they read (HEX-139).
  */
 export class CreateReference extends Schema.TaggedClass<CreateReference>()('CreateReference', {
   parent: TileId,
   parentVersion: Version,
   slot: ContextDirection,
-  target: TileId,
+  target: Schema.Union([TileId, ShippedId]),
 }) {}
 
 /** Empties a Context slot of the Tile `parent`, named with the Version read of it, that holds a Reference. */
@@ -114,6 +116,27 @@ export function madeAt(operation: Operation): string {
       return operation.id
     case 'SwapTiles':
       return operation.a
+  }
+}
+
+/**
+ * The Tiles an Operation writes: those it changes, and those it puts something under or moves
+ * something to; a Reference's target is only pointed at. A change writing one hexframe ships is
+ * refused `Shipped` (`decide`, and the service before it locks anything), whoever makes it.
+ */
+export function writtenAt(operation: Operation): ReadonlyArray<string> {
+  switch (operation._tag) {
+    case 'CreateTile':
+    case 'CreateReference':
+    case 'DeleteReference':
+      return [operation.parent]
+    case 'EditTile':
+    case 'DeleteTile':
+      return [operation.id]
+    case 'MoveTile':
+      return [operation.id, operation.parent]
+    case 'SwapTiles':
+      return [operation.a, operation.b]
   }
 }
 

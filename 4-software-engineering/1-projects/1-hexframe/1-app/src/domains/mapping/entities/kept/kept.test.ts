@@ -159,7 +159,7 @@ describe('the naming in force, on rows made by hand', () => {
     row('inside', 'context', 3),
     row('plain', 'root', 2),
   ]
-  const found = systemFrom(rows, { owned: true })
+  const found = systemFrom(rows)
   if (found === undefined) throw new Error('These rows hold a Root')
   const root = systemOf(found)
 

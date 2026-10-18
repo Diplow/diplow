@@ -193,7 +193,6 @@ describe('swapsWith', () => {
       toA3: { _tag: 'Reference', id: 'toA3', parent: 'root', slot: -2, target: 'a3' },
       toGone: { _tag: 'Reference', id: 'toGone', parent: 'root', slot: -5, target: 'gone' },
     },
-    owned: true,
     version: 0,
   }
   const tree = canvasTree(systemOf(flat))

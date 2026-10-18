@@ -6,7 +6,7 @@
 // it answers is indexed, nor kept by a cache, so a Grant removed holds from the next fetch.
 import { Schema } from 'effect'
 
-import { TileId } from '#/domains/mapping/entities'
+import { ShippedId, TileId } from '#/domains/mapping/entities'
 
 import { publicTile } from '../../mapping/programs'
 import { noKey, noSession, run, waitUntilOf, type StartContext } from '../run'
@@ -22,7 +22,8 @@ const notFound = () =>
     headers: { ...unkept, 'content-type': 'text/plain; charset=utf-8' },
   })
 
-const isTileId = Schema.is(TileId)
+/** Whether an id names a Tile at all: a UUID, or the id of a Tile hexframe ships (HEX-139). */
+const isTileId = Schema.is(Schema.Union([TileId, ShippedId]))
 
 /** The link a Tile's Markdown is read by, on the site the request reached. */
 export const markdownLink = (url: string) => (id: string) =>

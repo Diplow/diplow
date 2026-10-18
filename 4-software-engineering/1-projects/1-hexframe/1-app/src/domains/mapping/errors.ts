@@ -96,10 +96,13 @@ export class NotAllowed extends Schema.TaggedError<NotAllowed>()('NotAllowed', {
 }) {}
 
 /**
- * The Systems hexframe ships, Help and the tutorial, are read by every Account and written by none: a
- * change naming one of their Tiles is refused, whichever end of a move or a swap it is.
+ * A Tile hexframe ships, Help's or the tutorial's, mounted under the Hexframe star, is read by
+ * Everyone and written by nobody, its owner and the Organization's admins included, and nobody
+ * changes its Grants: a change writing one, whichever end of a move or a swap it is, or under one,
+ * and a Grant set on one are refused, for everyone. Being shipped is the one source of it, no stored
+ * Grant (HEX-139, `HelpReadOnly` and `ShippedReadOnly` before it).
  */
-export class ShippedReadOnly extends Schema.TaggedError<ShippedReadOnly>()('ShippedReadOnly', {
+export class Shipped extends Schema.TaggedError<Shipped>()('Shipped', {
   kind: kind('Forbidden'),
 }) {}
 
@@ -173,7 +176,7 @@ export const mappingFailures = [
   LeafHoldsNothing,
   RootFixed,
   NotAllowed,
-  ShippedReadOnly,
+  Shipped,
   BatchOutdated,
   ImportRefused,
 ] as const

@@ -41,7 +41,6 @@ const system: System = {
       slot: 1,
     },
   },
-  owned: true,
   version: 1,
 }
 

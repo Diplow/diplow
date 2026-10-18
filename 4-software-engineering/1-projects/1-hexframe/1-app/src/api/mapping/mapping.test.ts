@@ -10,7 +10,7 @@ import type {
   NotAllowed,
   PreviewTooLong,
   RootFixed,
-  ShippedReadOnly,
+  Shipped,
   TileChanged,
   TileIdTaken,
   TileNotFound,
@@ -97,7 +97,6 @@ describe('the System, read flat', () => {
     expect(first).toEqual({
       root: { _tag: 'Tile', id: first.root.id, title: '', preview: '', body: '', version: 1 },
       tiles: {},
-      owned: true,
       version: 0,
       rights: { [first.root.id]: ['read', 'write', '@'] },
       gaps: {},
@@ -368,16 +367,10 @@ describe("the errors Mapping's server functions can fail with", () => {
       | TileIdTaken
       | LeafHoldsNothing
       | NotAllowed
-      | ShippedReadOnly
+      | Shipped
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.editTile>>>().toEqualTypeOf<
-      | SignedOut
-      | TitleMissing
-      | PreviewTooLong
-      | TileNotFound
-      | TileChanged
-      | NotAllowed
-      | ShippedReadOnly
+      SignedOut | TitleMissing | PreviewTooLong | TileNotFound | TileChanged | NotAllowed | Shipped
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.moveTile>>>().toEqualTypeOf<
       | SignedOut
@@ -388,7 +381,7 @@ describe("the errors Mapping's server functions can fail with", () => {
       | DirectionTaken
       | LeafHoldsNothing
       | NotAllowed
-      | ShippedReadOnly
+      | Shipped
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.swapTiles>>>().toEqualTypeOf<
       | SignedOut
@@ -398,10 +391,10 @@ describe("the errors Mapping's server functions can fail with", () => {
       | MovedUnderItself
       | LeafHoldsNothing
       | NotAllowed
-      | ShippedReadOnly
+      | Shipped
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.deleteTile>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | TileChanged | RootFixed | NotAllowed | ShippedReadOnly
+      SignedOut | TileNotFound | TileChanged | RootFixed | NotAllowed | Shipped
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.createReference>>>().toEqualTypeOf<
       | SignedOut
@@ -410,10 +403,10 @@ describe("the errors Mapping's server functions can fail with", () => {
       | DirectionTaken
       | LeafHoldsNothing
       | NotAllowed
-      | ShippedReadOnly
+      | Shipped
     >()
     expectTypeOf<ErrorOf<ReturnType<typeof Mapping.deleteReference>>>().toEqualTypeOf<
-      SignedOut | TileNotFound | TileChanged | NotAllowed | ShippedReadOnly
+      SignedOut | TileNotFound | TileChanged | NotAllowed | Shipped
     >()
   })
 })

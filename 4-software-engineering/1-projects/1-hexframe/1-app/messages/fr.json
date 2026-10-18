@@ -431,7 +431,7 @@
   "error_mapping_leaf_holds_nothing": "Une feuille est un seul fichier : rien ne va dessous, et une tuile qui a quelque chose dessous ne peut pas en devenir une.",
   "error_mapping_swapped_in_line": "Deux tuiles ne s’échangent que si aucune n’est sous l’autre.",
   "error_mapping_not_allowed": "Vous pouvez lire cette tuile, mais pas la modifier ainsi. Son propriétaire décide qui y écrit, et qui peut la voir.",
-  "error_mapping_shipped_read_only": "L’aide et le tutoriel appartiennent à hexframe : tout le monde les lit, personne ne les modifie.",
+  "error_mapping_shipped": "L’aide et le tutoriel appartiennent à hexframe : tout le monde les lit, personne ne les modifie.",
   "error_mapping_share_session_required": "Qui peut voir une tuile ne se change que depuis votre navigateur connecté, jamais avec une clé.",
   "error_mapping_share_owner_only": "Seul le propriétaire de cette tuile décide qui peut la voir.",
   "error_mapping_import_refused": "Cet import a été refusé et rien n’a été écrit : chaque fichier en faute dit pourquoi.",

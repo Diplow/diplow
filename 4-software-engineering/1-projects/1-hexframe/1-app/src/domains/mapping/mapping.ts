@@ -7,7 +7,8 @@
 // actor may read and do there, from the Grants its Tiles carry (./operations/rights/). A change runs
 // in the transaction the API layer opens around it (`transactional`): its type requires one. Beside
 // the Systems it reaches, every actor reads the Systems hexframe ships, Help and the tutorial
-// (./shipped/shipped.ts), which no change may name.
+// (./shipped/shipped.ts), mounted under the Hexframe Organization's star (./shipped/mount.ts), which
+// no change may write.
 import { Effect, Result, Struct } from 'effect'
 
 import { Bus } from '#/domains/bus'
@@ -15,7 +16,7 @@ import type { InTransaction } from '#/repositories/database/database'
 import { type IdTaken, Tiles, type TileRow, type Writes } from '#/repositories/database/tiles/tiles'
 import { Zip } from '#/repositories/zip/zip'
 
-import { BatchOutdated, ShippedReadOnly, TileIdTaken, TileNotFound } from './errors'
+import { BatchOutdated, Shipped, TileIdTaken, TileNotFound } from './errors'
 import {
   type Acting,
   type Across,
@@ -27,17 +28,13 @@ import {
   pinning,
   reading,
   seenThrough,
+  titles,
   titlesAcross,
   wholeOf,
 } from './sharing/reading'
 import { acrossFolder, type LinkOf, exportOf, seenFiles } from './files/files'
-import {
-  findInShipped,
-  flatShipped,
-  isShippedId,
-  type ShippedLanguage,
-  shippedOf,
-} from './shipped/shipped'
+import { withMounted } from './shipped/mount'
+import { findInShipped, type ShippedLanguage } from './shipped/shipped'
 import {
   type Content,
   type Depth,
@@ -45,12 +42,16 @@ import {
   type FieldsAsked,
   type Found,
   acrossGaps,
+  anyone,
   foundInSeen,
+  hexframeStar,
+  isShippedId,
   lineageOf,
   owns,
   readOf,
   type ReadTile,
   carded,
+  shippedOf,
   rowDirection,
   seenBy,
   sharingOf,
@@ -93,10 +94,11 @@ import {
   undoOf,
   untitledIn,
   whole,
+  writtenAt,
   extended,
 } from './operations'
 
-export { HelpId, helpRoot, shippedSystem } from './shipped/shipped'
+export { HelpId, helpRoot, type ShippedLanguage, shippedSystem } from './shipped/shipped'
 export type { Acting, Across } from './sharing/reading'
 export {
   agentAt,
@@ -139,15 +141,20 @@ const reached = ({ actor, system }: Acting) =>
  * with the actor's rights on it; the star as its card, its Title and Preview, when they may not read
  * it; a Tile below one they may not read placed under the star, the gap marked; and the Tiles of
  * other Systems its References point at that they may read there (`pinnedFor`), unless a read
- * resolves none (`Across`). Its owner reads it whole, in one query as before. `systemOf` builds its
- * tree. `TileNotFound` for a star that names no System.
+ * resolves none (`Across`). Its owner reads it whole, in one query as before. The Hexframe
+ * Organization's holds the Systems hexframe ships mounted under its star, and a pin may be one of
+ * their Tiles: each read in `language`, English by default. `systemOf` builds its tree.
+ * `TileNotFound` for a star that names no System.
  */
-export const system = ({ actor, system: star }: Acting, { across = true }: Across = {}) =>
+export const system = (
+  { actor, system: star }: Acting,
+  { across = true, language = 'en' }: Across & { readonly language?: ShippedLanguage } = {},
+) =>
   Effect.gen(function* () {
     const owner = yield* ownerOf(star)
-    const whole = yield* wholeOf(owner)
+    const whole = yield* wholeOf(owner, language)
     const grants = owns(actor, owner) ? [] : yield* grantsIn(owner)
-    const pinned = across ? yield* pinnedFor(actor, outside(whole), star) : {}
+    const pinned = across ? yield* pinnedFor(actor, outside(whole), star, language) : {}
     return seenBy(actor, whole, sharingOf(owner, lineageOf(whole), grants), pinned)
   })
 
@@ -204,7 +211,9 @@ interface ReadFrom<O extends Field, F extends Field> extends Across {
  * What a read from a Tile of the System the actor acts on finds, its star when no id is given, or
  * from a Tile of a System hexframe ships by its id, `depth` generations down, with only the fields
  * asked of the Tile and of each Tile below it. A Tile the actor may not read is `TileNotFound`, as is
- * an id of a shipped System that none of its Tiles has.
+ * an id of a shipped System that none of its Tiles has. A shipped Tile is read from the bundle, by its
+ * id alone, wherever the read works, a Turn's included, its Root's parent the Hexframe star, by its
+ * card, which anyone sees; from the Hexframe star, its System is read whole, with them mounted.
  */
 const find = <O extends Field, F extends Field>(
   acting: Acting,
@@ -212,7 +221,9 @@ const find = <O extends Field, F extends Field>(
 ): Effect.Effect<Found<O, F>, TileNotFound, Tiles> => {
   const shipped = id === undefined ? undefined : shippedOf(id)
   if (id !== undefined && shipped !== undefined)
-    return findInShipped(shipped, id, { fields, language })
+    return Effect.flatMap(findInShipped(shipped, id, { fields, language }), mountedParent)
+  if (over.length === 0 && acting.system === hexframeStar)
+    return findMounted(acting, { id, depth, fields, across, language })
   if (over.length === 0) return findOwn(acting, { id, depth, fields, across })
   // A Turn reads through its batch, as the actor may see the System it makes (`seenThrough`).
   return Effect.flatMap(seenThrough(acting, over), (seen) => {
@@ -220,6 +231,37 @@ const find = <O extends Field, F extends Field>(
     return found === undefined ? Effect.fail(new TileNotFound()) : Effect.succeed(found)
   })
 }
+
+/**
+ * A read from a Tile hexframe ships, its Root's parent the star it is mounted under, the Hexframe
+ * star, by its Title, which anyone sees on its card.
+ */
+const mountedParent = <O extends Field, F extends Field>(found: Found<O, F>) =>
+  found.parent !== null
+    ? Effect.succeed(found)
+    : Effect.map(
+        titles({ actor: anyone, system: hexframeStar }, [hexframeStar]),
+        (named): Found<O, F> => ({
+          ...found,
+          parent: { id: hexframeStar, title: named[hexframeStar] ?? '' },
+        }),
+      )
+
+/**
+ * What a read from a Tile of the Hexframe Organization's System finds, its star when no id is given:
+ * that System read whole as the actor may see it (`system`), the Systems hexframe ships mounted under
+ * its star in `language`, then the read made in it, the star as its card when they may not read it.
+ */
+const findMounted = <O extends Field, F extends Field>(
+  acting: Acting,
+  { id, depth, fields, across, language }: Omit<ReadFrom<O, F>, 'over'>,
+) =>
+  Effect.flatMap(system(acting, { across, language }), (seen) => {
+    const found = foundInSeen(seen, { id, depth, fields })
+    return found === undefined
+      ? Effect.fail(new TileNotFound())
+      : Effect.succeed({ ...found, pinned: seen.pinned } satisfies Found<O, F>)
+  })
 
 /** What a reader sees of a Tile beside the one opened: enough to decide whether to open it. */
 const glimpsed = ['title', 'preview'] as const satisfies ReadonlyArray<Field>
@@ -380,12 +422,13 @@ export const systemFiles = (acting: Acting, link: LinkOf, over: ReadonlyArray<Ba
   })
 
 /**
- * Refuses a change that names a Tile of a System hexframe ships, Help or the tutorial, whichever
- * schema let its ids through: each is read by every Account and written by none. Exported for
- * `sharing/`, whose Grants on such a Tile are nobody's.
+ * Refuses a change that writes a Tile hexframe ships, Help's or the tutorial's, whichever schema let
+ * its ids through, before anything is read or locked: each is read by Everyone and written by nobody,
+ * its owner and the Hexframe Organization's admins included (`Shipped`). Exported for `sharing/`,
+ * whose Grants on such a Tile are nobody's.
  */
 export const outsideShipped = (ids: ReadonlyArray<string>) =>
-  ids.some(isShippedId) ? Effect.fail(new ShippedReadOnly()) : Effect.void
+  ids.some(isShippedId) ? Effect.fail(new Shipped()) : Effect.void
 
 /**
  * Ends a change that made these events, written already: writes the System's Version as `evolve` left
@@ -416,10 +459,11 @@ export interface Changed<A> {
 
 /**
  * A change to the System the actor acts on that is no Operation, `landing/`'s import, naming these
- * Tiles, none of them a shipped System's, on its rows as they stand once its star is locked: alone
- * until the transaction around it ends, so what it checked still holds when it writes. Once it wrote
- * its rows, it is ended as an Operation is: the System's Version it leaves written, its events
- * published.
+ * Tiles, none of them a shipped System's, on its rows as they stand once its star is locked, the
+ * Tiles hexframe ships mounted among them in the Hexframe Organization's, so a slot one holds is
+ * taken: alone until the transaction around it ends, so what it checked still holds when it writes.
+ * Once it wrote its rows, it is ended as an Operation is: the System's Version it leaves written, its
+ * events published.
  */
 export const changing = <A, E>(
   acting: Acting,
@@ -435,32 +479,14 @@ export const changing = <A, E>(
       Effect.gen(function* () {
         const owner = yield* reached(acting)
         const writes = tiles.writes(owner)
-        const rows = yield* tiles.lock(owner)
+        const rows = withMounted(yield* tiles.lock(owner))
         const { answer, events } = yield* change(rows, writes)
-        const before = yield* rooted(systemFrom(rows, { owned: true }))
+        const before = yield* rooted(systemFrom(rows))
         yield* ended(writes, { after: events.reduce(evolve, before), events })
         return answer
       }),
     ),
   )
-
-/** The ids an Operation names: the Tiles it changes, and those it puts something under or points at. */
-function namedBy(operation: Operation): ReadonlyArray<string> {
-  switch (operation._tag) {
-    case 'CreateTile':
-    case 'DeleteReference':
-      return [operation.parent]
-    case 'EditTile':
-    case 'DeleteTile':
-      return [operation.id]
-    case 'MoveTile':
-      return [operation.id, operation.parent]
-    case 'SwapTiles':
-      return [operation.a, operation.b]
-    case 'CreateReference':
-      return [operation.parent, operation.target]
-  }
-}
 
 /** A System no read should find without its Root: a defect, never a refusal. */
 const rooted = (found: System | undefined) =>
@@ -469,33 +495,22 @@ const rooted = (found: System | undefined) =>
     : Effect.succeed(found)
 
 /**
- * The System an Operation is decided on. The System hexframe ships whose Tile it names, Help's or the
- * tutorial's, whichever end of a move or a swap, which no Account owns, so `decide` refuses it.
- * Otherwise the one the actor acts on, locked until the transaction ends, once `may` found the actor
- * may make the Operation there (`allowed`): no other change runs meanwhile, so what `decide` ruled on
- * still holds when its events are written. Answers it with the owner whose rows a change writes,
- * none for a shipped System, which no change writes.
+ * The owner's System, its star locked until the transaction ends: no other change runs meanwhile. The
+ * Hexframe Organization's holds the Tiles hexframe ships, mounted under its star, which no change
+ * writes, so a slot one holds is taken.
  */
-const decidedOn = (acting: Acting, operation: Operation) => {
-  const shipped = namedBy(operation)
-    .map(shippedOf)
-    .find((root) => root !== undefined)
-  return shipped === undefined
-    ? allowedOn(acting, operation)
-    : Effect.map(rooted(flatShipped(shipped, 'en')), (system) => ({ system, owner: undefined }))
-}
-
-/** The owner's System, its star locked until the transaction ends: no other change runs meanwhile. */
 export const lockedOf = (owner: string) =>
   Tiles.use((tiles) =>
-    Effect.flatMap(tiles.lock(owner), (rows) => rooted(systemFrom(rows, { owned: true }))),
+    Effect.flatMap(tiles.lock(owner), (rows) => rooted(systemFrom(withMounted(rows)))),
   )
 
 /**
- * The System the actor acts on, locked, once `may` found the actor may make this Operation on it,
- * from the Grants its Tiles carry as they stand under the lock: `TileNotFound` for a Tile it names
- * that the actor may not read, `NotAllowed` for anything else it may not do. Answers it with its
- * owner, whose rows a change writes.
+ * The System an Operation is decided on: the one the actor acts on, locked until the transaction
+ * ends, once `may` found the actor may make this Operation on it, from the Grants its Tiles carry as
+ * they stand under the lock: `TileNotFound` for a Tile it names that the actor may not read,
+ * `NotAllowed` for anything else it may not do. No other change runs meanwhile, so what `decide`
+ * ruled on still holds when its events are written. Answers it with its owner, whose rows a change
+ * writes.
  */
 const allowedOn = ({ actor, system: star }: Acting, operation: Operation) =>
   Effect.gen(function* () {
@@ -585,10 +600,12 @@ const madeHere: OnTaken<never> = (taken) => Effect.die(taken)
 const chosen: OnTaken<TileIdTaken> = () => Effect.fail(new TileIdTaken())
 
 /**
- * Runs an Operation on the System the actor acts on: locks it, loads it flat, asks `decide` through `decided`,
- * then writes one change per event, as `evolve` leaves the System after it, and the System's Version,
- * publishes the events, and answers the System it ran on, the events and the System they leave. Every rule lives in `decide`: what it
- * refuses is refused here, with nothing written and nothing published. A write under an id already taken answers `onTaken`: a defect, unless the
+ * Runs an Operation on the System the actor acts on: refuses it `Shipped` first when it writes a Tile
+ * hexframe ships (`writtenAt`), then locks the System, loads it flat, asks `decide` through
+ * `decided`, then writes one change per event, as `evolve` leaves the System after it, and the
+ * System's Version, publishes the events, and answers the System it ran on, the events and the System
+ * they leave. Every rule lives in `decide`: what it refuses is refused here, with nothing written and
+ * nothing published. A write under an id already taken answers `onTaken`: a defect, unless the
  * Operation's caller chose the id. The bus holds what is published until the transaction commits.
  */
 const operate = <E, T = never>(
@@ -598,10 +615,9 @@ const operate = <E, T = never>(
   onTaken: OnTaken<T> = madeHere,
 ) =>
   Effect.gen(function* () {
-    const { system, owner } = yield* decidedOn(acting, operation)
+    yield* outsideShipped(writtenAt(operation))
+    const { system, owner } = yield* allowedOn(acting, operation)
     const events = yield* Effect.fromResult(decided(system))
-    // `decide` refuses every change to a System no one owns, a shipped one: none reaches its writes.
-    if (owner === undefined) return yield* Effect.die(new Error('A shipped System was changed'))
     return { system, events, after: yield* writtenAll(owner, system, events, onTaken) }
   })
 
@@ -747,7 +763,7 @@ export const addToBatch = <O extends Operation>(
   operation: O,
 ) =>
   Effect.gen(function* () {
-    yield* outsideShipped(namedBy(operation))
+    yield* outsideShipped(writtenAt(operation))
     const owner = yield* ownerOf(acting.system)
     const held = yield* wholeOf(owner)
     const grants = yield* grantsIn(owner)
@@ -782,7 +798,7 @@ const ranWhole = <T>(
   { folding, onTaken }: { folding: typeof whole; onTaken: OnTaken<T> },
 ) =>
   Effect.gen(function* () {
-    yield* outsideShipped(batch.flatMap(({ operation }) => namedBy(operation)))
+    yield* outsideShipped(batch.flatMap(({ operation }) => writtenAt(operation)))
     const { system, owner } = yield* locked(acting)
     const { events } = yield* Effect.fromResult(folding(system, batch))
     const sharing = sharingOf(owner, lineageOf(system), yield* grantsIn(owner))
@@ -798,7 +814,7 @@ const ranWhole = <T>(
  * before it made, a create under the id it was added with. One that no longer applies, a Tile it
  * names changed since, by the Version it carries, or gone, refuses the whole batch, `BatchOutdated`,
  * nothing written nor published (`whole`); else every event is written and published as an
- * Operation's are. A batch naming a Tile of a System hexframe ships is `ShippedReadOnly`. Answers how
+ * Operation's are. A batch writing a Tile hexframe ships is `Shipped`. Answers how
  * many events it made and what undoes it (`undoOf`), from the System it ran on.
  */
 export const runBatch = (acting: Acting, batch: ReadonlyArray<Batched>) =>
@@ -821,7 +837,7 @@ export const runBatch = (acting: Acting, batch: ReadonlyArray<Batched>) =>
  */
 export const batchAllowed = (acting: Acting, batch: ReadonlyArray<Batched>) =>
   Effect.gen(function* () {
-    yield* outsideShipped(batch.flatMap(({ operation }) => namedBy(operation)))
+    yield* outsideShipped(batch.flatMap(({ operation }) => writtenAt(operation)))
     const owner = yield* ownerOf(acting.system)
     const system = yield* lockedOf(owner)
     const grants = yield* grantsIn(owner)

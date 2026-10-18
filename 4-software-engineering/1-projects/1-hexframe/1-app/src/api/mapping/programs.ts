@@ -16,6 +16,7 @@ import {
   type Field,
   type GrantChange,
   groupsUnnamedIn,
+  isShippedId,
   nowhere,
   type ShippedRoot,
   withGroups,
@@ -162,16 +163,25 @@ const onSystem = <A, E, R, N, R2>(
   )
 
 /**
- * Runs a read from one Tile for the signed-in Account on the System holding it (`Mapping.holding`),
- * its own when no id is given, or for an id no System holds, a shipped System's included, which
- * Mapping reads by its id alone (`onSystem`).
+ * The star of the System holding the Tile a request reads from or writes at, by its id, for a read
+ * or a change made where it works: none for a Tile hexframe ships, which Mapping reads, and refuses
+ * every write of, by its id alone, wherever the request works, a Turn's Key's included, as it did
+ * before Help and the tutorial were mounted under the Hexframe star (HEX-139).
+ */
+const heldAt = (id: string) =>
+  isShippedId(id) ? Effect.succeed<string | undefined>(undefined) : Mapping.holding(id)
+
+/**
+ * Runs a read from one Tile for the signed-in Account on the System holding it (`heldAt`), its own
+ * when no id is given, or for an id no System holds, or a Tile hexframe ships, which Mapping reads by
+ * its id alone (`onSystem`).
  */
 const fromTile = <A, E, R>(
   id: string | undefined,
   operation: (acting: Mapping.Acting, across: Mapping.Across) => Effect.Effect<A, E, R>,
 ) =>
   onSystem(
-    () => (id === undefined ? Effect.succeed(undefined) : Mapping.holding(id)),
+    () => (id === undefined ? Effect.succeed(undefined) : heldAt(id)),
     (acting, _own, across) => operation(acting, across),
   )
 
@@ -181,8 +191,9 @@ const fromTile = <A, E, R>(
  * or not at all: its own, by the Operation's own function, `own`; or someone else's, a Grant letting it write there, by
  * `../assistant/someone/`, where Mapping decides what it may do and the owner's timeline tells it
  * with what undoes it, its answer the Tile for a create or an edit (`answer`). An id no System holds
- * is decided on its own System, `TileNotFound` there. A Turn's Key changes the System its Turn
- * started in alone: another is `TileNotFound`, as for a Tile kept from it.
+ * is decided on its own System, `TileNotFound` there, and a Tile hexframe ships too, `Shipped` there
+ * (`heldAt`). A Turn's Key changes the System its Turn started in alone: another is `TileNotFound`,
+ * as for a Tile kept from it.
  */
 const changeAt = <O extends Operation, A, E, R>(
   made: () => O,
@@ -195,7 +206,7 @@ const changeAt = <O extends Operation, A, E, R>(
     const operation = made()
     const [mine, star] = yield* Effect.all([
       actingOnOwn(signed.account.id, { session: signed.by._tag === 'Session' }),
-      Mapping.holding(madeAt(operation)),
+      heldAt(madeAt(operation)),
     ])
     const home = yield* homeOf(signed, mine)
     if (turnKeyElsewhere(signed, home, star ?? mine.system)) {
@@ -227,12 +238,13 @@ const nothing = () => Effect.void
 /**
  * A System, flat, as the Account may see it: by its star, what the Account may read of it, from the
  * star's card; its own when none is named, its Root, the user, and every Tile and Reference below it
- * by id.
+ * by id. A Tile hexframe ships, mounted in the Hexframe Organization's or pinned, in the page's
+ * language, English when none is given.
  */
-export const systemAt = (star: string | undefined) =>
+export const systemAt = (star: string | undefined, language?: Locale) =>
   onSystem(
     () => Effect.succeed(star),
-    (acting, _own, across) => Mapping.system(acting, across),
+    (acting, _own, across) => Mapping.system(acting, { ...across, language }),
   )
 
 /** The Account's own System, flat, whole: its Root, the user, and every Tile and Reference below it. */
@@ -297,9 +309,11 @@ const forEveryone = <A, E, R>(
 
 /**
  * The System holding a public Tile, flat, as anyone may see it, from its star's card (`Seen`): what
- * the read-only canvas of `/t/<id>` draws signed out (HEX-129).
+ * the read-only canvas of `/t/<id>` draws signed out (HEX-129), a Tile hexframe ships among it in the
+ * page's language, English when none is given, Help's and the tutorial's under the Hexframe star.
  */
-export const publicSystem = ({ tile }: { tile: string }) => forEveryone(tile, Mapping.system)
+export const publicSystem = ({ tile, language }: { tile: string; language?: Locale | undefined }) =>
+  forEveryone(tile, (acting) => Mapping.system(acting, { language }))
 
 /**
  * A public Tile opened as anyone may read it, as the MCP's `open_tile` opens one (`Mapping.openTile`,

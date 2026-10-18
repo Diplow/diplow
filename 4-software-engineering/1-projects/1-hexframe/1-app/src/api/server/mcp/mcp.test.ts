@@ -103,7 +103,7 @@ describe('the tool table, as an agent lists it', () => {
     const description = (name: string) => tools.find((tool) => tool.name === name)?.description
     for (const tool of tools.filter(({ annotations }) => annotations?.readOnlyHint === false)) {
       expect(tool.description).toMatch(/TileNotFound: .+; map or open_tile/)
-      expect(tool.description).toMatch(/ShippedReadOnly: that Tile is hexframe's own, Help's or/)
+      expect(tool.description).toMatch(/Shipped: that Tile is hexframe's own, Help's or/)
     }
     for (const name of ['open_tile', 'map']) {
       expect(description(name)).toMatch(/Help, hexframe's own guide, .+ id "help"/)

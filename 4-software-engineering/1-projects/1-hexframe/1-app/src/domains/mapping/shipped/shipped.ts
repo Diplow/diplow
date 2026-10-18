@@ -1,7 +1,7 @@
-// The Systems hexframe ships, which no Account owns: every Account reads them, none writes them. Two
-// so far, Help, hexframe's guide, and the tutorial, a new account's first journey, each the same
-// thing by its Root, which Mapping's door names (`shippedRoots`, ../entities/system.ts), so the front
-// names them alike. Their Tiles are the folders of the app's `help/` and `tutorial/`, whose notes the
+// The Systems hexframe ships, mounted under the Hexframe Organization's star (./mount.ts): Everyone
+// reads them, nobody writes them, for being shipped. Two so far, Help, hexframe's guide, and the
+// tutorial, a new account's first journey, each the same thing by its Root, which Mapping's door
+// names (`shippedRoots`, ../entities/system.ts), so the front names them alike. Their Tiles are the folders of the app's `help/` and `tutorial/`, whose notes the
 // shipped repository bundles into the server at build time, so nothing reads the file system at
 // request time and nothing of them lives in the database. Each folder holds a note per language,
 // `CLAUDE.md` in English and `CLAUDE.fr.md` in French, so a shipped System reads the same in both but
@@ -22,7 +22,6 @@ import {
   type FieldsAsked,
   type Found,
   type ShippedRoot,
-  shippedRoots,
   systemFrom,
   systemOf,
   withContent,
@@ -34,17 +33,6 @@ export const helpRoot = 'help' satisfies ShippedRoot
 
 /** The id of the tutorial's Root. */
 export const tutorialRoot = 'tutorial' satisfies ShippedRoot
-
-/**
- * The System hexframe ships that an id names, by its Root: the Root or anything below it, well formed
- * or not, whether a Tile stands there or not; none for an id of an Account's System. A change naming
- * one is refused, so `help/../x` is Help's too.
- */
-export const shippedOf = (id: string): ShippedRoot | undefined =>
-  shippedRoots.find((root) => id === root || id.startsWith(`${root}/`))
-
-/** Whether an id names a System hexframe ships, Help or the tutorial (`shippedOf`). */
-export const isShippedId = (id: string) => shippedOf(id) !== undefined
 
 /** A slot, as a Help id writes it: a Child's Direction or a Context slot. */
 const slot = [...directions, ...contextDirections].join('|')
@@ -80,20 +68,13 @@ export const shipped = {
 } satisfies Record<ShippedRoot, Record<ShippedLanguage, Vault>>
 
 /**
- * A System hexframe ships, flat, in a language: owned by no Account, so `decide` refuses it every
- * change. `undefined` only for a bundle without a Root, which the build refuses.
- */
-export const flatShipped = (root: ShippedRoot, language: ShippedLanguage) =>
-  systemFrom(shipped[root][language].rows, { owned: false })
-
-/**
  * A System hexframe ships, whole, in a language, as its tree: its Root with everything below it,
- * Bodies included, built from its flat System, which no Account owns, as the client builds an
- * Account's. Every visitor reads it, signed in or not, so it takes no Account.
+ * Bodies included, built from its flat System, as the client builds an Account's, apart from the
+ * Hexframe star it is mounted under. Every visitor reads it, signed in or not, so it takes no Account.
  */
 export const shippedSystem = (root: ShippedRoot, language: ShippedLanguage) =>
   Effect.suspend(() => {
-    const found = flatShipped(root, language)
+    const found = systemFrom(shipped[root][language].rows)
     return found === undefined
       ? Effect.die(new Error(`The ${root} System in ${language} was bundled without a Root`))
       : Effect.succeed(systemOf(found))

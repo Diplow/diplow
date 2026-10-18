@@ -153,7 +153,7 @@ layer(TestTiles)('who reaches a Tile, set by its owner, over PGlite', (it) => {
       )?.id
       expect(pinned).toBeDefined()
       expect(yield* Effect.flip(setting(own, 'help/3', 'read'))).toMatchObject({
-        _tag: 'ShippedReadOnly',
+        _tag: 'Shipped',
       })
       for (const tile of [pinned ?? '', crypto.randomUUID()]) {
         expect(yield* Effect.flip(setting(own, tile, 'read'))).toMatchObject({

@@ -40,7 +40,6 @@ const placed = (tileId: string, parent: string, slot: Slot, version = 1): Placed
 const system: System = {
   root: { _tag: 'Tile', id: id.root, title: 'Ada', preview: '', body: '', version: 2 },
   tiles: { [id.branch]: placed(id.branch, id.root, 1, 3) },
-  owned: true,
   version: 4,
 }
 

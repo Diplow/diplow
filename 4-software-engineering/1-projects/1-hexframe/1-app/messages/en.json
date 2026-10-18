@@ -431,7 +431,7 @@
   "error_mapping_leaf_holds_nothing": "A leaf is a single file: nothing goes under it, and a tile with anything below it can't become one.",
   "error_mapping_swapped_in_line": "Two tiles can only swap when neither lies below the other.",
   "error_mapping_not_allowed": "You can read this tile, but not change it this way. Its owner decides who writes here, and who may see it.",
-  "error_mapping_shipped_read_only": "Help and the tutorial are hexframe's own: everyone reads them, nobody changes them.",
+  "error_mapping_shipped": "Help and the tutorial are hexframe's own: everyone reads them, nobody changes them.",
   "error_mapping_share_session_required": "Who may see a tile is changed from your own signed-in browser, never with a key.",
   "error_mapping_share_owner_only": "Only this tile's owner decides who may see it.",
   "error_mapping_import_refused": "This import was refused and nothing was written: each file at fault says why.",
