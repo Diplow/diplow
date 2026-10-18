@@ -182,6 +182,13 @@ export const pieces = [
     note: m.gallery_note_share_widget,
   },
   {
+    name: 'StarPicker',
+    tier: 'chat',
+    sources: ['ui/chat/widgets/star-picker/StarPicker.tsx'],
+    madeOf: ['Widget'],
+    note: m.gallery_note_star_picker,
+  },
+  {
     name: 'HelpWidget',
     tier: 'chat',
     sources: ['ui/chat/widgets/help/HelpWidget.tsx'],

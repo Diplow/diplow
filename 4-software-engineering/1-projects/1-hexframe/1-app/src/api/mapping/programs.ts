@@ -12,6 +12,7 @@ import {
   anyone,
   type Field,
   type GrantChange,
+  type LinkedStar,
   type ShippedRoot,
 } from '#/domains/mapping/entities'
 import { TileNotFound } from '#/domains/mapping/errors'
@@ -27,6 +28,7 @@ import {
 import * as Landing from '#/domains/mapping/landing/landing'
 import * as Mapping from '#/domains/mapping/mapping'
 import * as Sharing from '#/domains/mapping/sharing/sharing'
+import * as Stars from '#/domains/mapping/sharing/stars'
 import type { Locale } from '#/paraglide/runtime'
 import { HttpExchange } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
@@ -124,6 +126,42 @@ export const visit = ({ tile }: { tile: string }) =>
         acting.system === own.system ? {} : { system: acting.system }
       return Effect.as(Mapping.shownTile(acting, tile), led)
     },
+  )
+
+/**
+ * The stars whose Title holds the query, by their cards, those it starts first, a few at most, the
+ * Account's own left out: stars alone, a private System's included, whose card anyone sees, never a
+ * Tile below one. What the star picker finds someone by (HEX-130).
+ */
+export const findStars = ({ query }: { query: string }) =>
+  forAccount((acting) => Stars.starsTitled(acting, query))
+
+/** Where a link to a Tile of the Account's own System leads it: to its own star, which it never picks. */
+const ownStar: LinkedStar = { _tag: 'Own' }
+
+/** Where a link to a Tile leads, for one the Account is not shown: nowhere. */
+const nowhere: LinkedStar = { _tag: 'Nowhere' }
+
+/**
+ * Where a link to a Tile leads the star picker (HEX-130): the star of the System holding it, by its
+ * card, once Mapping found the Account is shown the Tile (`shownTile`, as `visit` asks), its own
+ * answered as its own, which it never picks; nowhere for a Tile kept from it, as for one that doesn't
+ * exist, an answer rather than a refusal, so the picker says it where the link was pasted.
+ */
+export const starOfLink = ({ tile }: { tile: string }) =>
+  Effect.catchTag(
+    onSystem(
+      () => Mapping.holding(tile),
+      (acting, own) =>
+        acting.system === own.system
+          ? Effect.as(Mapping.shownTile(acting, tile), ownStar)
+          : Effect.map(Stars.starShowing(acting, tile), (star): LinkedStar => ({
+              _tag: 'Star',
+              star,
+            })),
+    ),
+    'TileNotFound',
+    () => Effect.succeed(nowhere),
   )
 
 /**

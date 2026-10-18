@@ -7,7 +7,7 @@
 // one Tile walks down a generation per query and selects only the content columns asked, so a Body
 // nobody asked for never leaves the database. The Grants a System's Tiles carry are read here too
 // (./grants.ts).
-import { type SQL, and, eq, inArray, isNull } from 'drizzle-orm'
+import { type SQL, and, asc, eq, ilike, inArray, isNull, ne, notIlike } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import { Context, Data, Effect, Layer } from 'effect'
 
@@ -74,6 +74,16 @@ type NewTileRow = Omit<
     readonly parentId: string
     readonly direction: number
   }
+
+/** A star as a search finds it: its id, and its Title and Preview, never its Body. */
+export type StarRow = Pick<TileRow, 'id' | 'title' | 'preview'>
+
+/** What a star search asks: the text a Title holds, the star left out, and how many at most. */
+export interface StarSearch {
+  readonly query: string
+  readonly except: string
+  readonly atMost: number
+}
 
 /** A row a batch names: one of the batch, by the key the caller gave it, or one already stored. */
 export type RowRef =
@@ -171,6 +181,12 @@ export class Tiles extends Context.Service<
     readonly starsHolding: (
       ids: ReadonlyArray<string>,
     ) => Effect.Effect<ReadonlyMap<string, string>>
+    /**
+     * The Roots of every System whose Title holds `query`, whatever its case, but the `except` one,
+     * each with its id, Title and Preview and nothing else: those whose Title starts with it first,
+     * then the others, each group by Title, `atMost` in all. What finds a star by its Title.
+     */
+    readonly starsTitled: (search: StarSearch) => Effect.Effect<ReadonlyArray<StarRow>>
     /**
      * The row of this id in the owner's System, then the rows below it, `depth` generations down,
      * one query per generation, that row and the rows below each with only the content columns
@@ -330,6 +346,9 @@ function idsOf(rows: ReadonlyArray<BatchRow>) {
   return { ids, placed }
 }
 
+/** `text` as a `LIKE` pattern matches it, its wildcards and its escape matched as themselves. */
+const literally = (text: string) => text.replace(/[\\%_]/g, (character) => `\\${character}`)
+
 /** A System's star, the id of its owner's Root, the owner a star names, and the star a row is of. */
 const starsOf = (database: Database['Service']) => {
   const rootId = (owner: string) =>
@@ -393,6 +412,25 @@ const starsOf = (database: Database['Service']) => {
               Effect.orDie,
               Effect.map((rows) => new Map(rows.map((row) => [row.id, row.star] as const))),
             ),
+    starsTitled: ({ query, except, atMost }: StarSearch) =>
+      Effect.gen(function* () {
+        const starting = `${literally(query)}%`
+        const titled = (holds: SQL | undefined, limit: number) =>
+          database
+            .select({ id: tile.id, title: tile.title, preview: tile.preview })
+            .from(tile)
+            .where(and(isNull(tile.parentId), ne(tile.id, except), holds))
+            .orderBy(asc(tile.title), asc(tile.id))
+            .limit(limit)
+            .pipe(Effect.orDie)
+        const first = yield* titled(ilike(tile.title, starting), atMost)
+        if (first.length >= atMost) return first
+        const rest = yield* titled(
+          and(ilike(tile.title, `%${literally(query)}%`), notIlike(tile.title, starting)),
+          atMost - first.length,
+        )
+        return [...first, ...rest]
+      }),
   }
 }
 

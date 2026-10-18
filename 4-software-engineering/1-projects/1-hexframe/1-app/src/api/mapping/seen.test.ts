@@ -9,7 +9,7 @@ import { granted } from '#/repositories/database/tiles/testing'
 import { noKey, run, type StartContext } from '../server/run'
 import { GrantChange } from '#/domains/mapping/entities'
 
-import { SystemRead, TileReach, TileVisit } from './mapping'
+import { StarSearch, SystemRead, TileReach, TileVisit } from './mapping'
 import * as Service from '#/domains/mapping/mapping'
 
 import * as Mapping from './programs'
@@ -18,7 +18,8 @@ import * as Mapping from './programs'
 // them, over PGlite: `system` naming a star, and `readTile` and `openTile` reading from a Tile of the
 // System holding it, each as the Account may see it, a Turn's Key never past its own System; where a
 // link to a Tile leads (`visit`), and the Titles a timeline names across Systems (Mapping's `titlesAcross`);
-// and who reaches a Tile, set and read by its owner from a Session alone (`setGrant`, `whoReaches`).
+// who reaches a Tile, set and read by its owner from a Session alone (`setGrant`, `whoReaches`); and a
+// star found by its Title or by a link (`findStars`, `starOfLink`).
 
 /** How a request is proven: by a Session, by an Account's Key, or by a Turn's Key. */
 type Proof = 'session' | 'key' | 'turn key'
@@ -261,5 +262,66 @@ describe('who reaches a Tile, set by its owner from a Session', () => {
     expect(sets({ tile: 'help', subject: everyone, value: 'read' })).toBe(false)
     expect(Schema.is(TileReach)({ tile })).toBe(true)
     expect(Schema.is(TileReach)({ tile: 'help/3' })).toBe(false)
+  })
+})
+
+describe('a star found by its Title or by a link, for the star picker', () => {
+  /** Ana's System, her star titled with a word no other test's Titles hold, and Journal below it. */
+  async function anaTitled() {
+    const system = await anasSystem()
+    const word = `w${crypto.randomUUID().slice(0, 8)}`
+    const title = `Ana ${word}`
+    await value(
+      run(
+        request(system.ana),
+        Mapping.editTile({ id: system.star, version: 1, title, preview: 'Gardens.' }),
+      ),
+    )
+    await value(
+      run(
+        request(system.ana),
+        Mapping.editTile({ id: system.journal.id, version: 1, title: `Journal ${word}` }),
+      ),
+    )
+    return { ...system, word, card: { id: system.star, title, preview: 'Gardens.' } }
+  }
+
+  it('finds another’s star by its card, private as it is, never a Tile below, nor its own', async () => {
+    const { ana, bob, word, card } = await anaTitled()
+    expect(await value(run(request(bob), Mapping.findStars({ query: word })))).toEqual([card])
+    expect(await value(run(request(ana), Mapping.findStars({ query: word })))).toEqual([])
+    expect(await run(signedOut(), Mapping.findStars({ query: word }))).toMatchObject({
+      ok: false,
+      failure: { _tag: 'SignedOut' },
+    })
+  })
+
+  it('takes a query trimmed, long enough to search, never too long', () => {
+    const accepts = (query: string) => Schema.is(StarSearch)({ query })
+    expect(accepts('An')).toBe(true)
+    expect(accepts('A')).toBe(false)
+    expect(accepts(' Ana')).toBe(false)
+    expect(accepts('a'.repeat(101))).toBe(false)
+  })
+
+  it('leads a link to the star of a Tile the Account is shown, its own as its own, nowhere past one kept from it', async () => {
+    const { bob, star, journal, garden, card } = await anaTitled()
+    const linked = (tile: string, proof?: Proof) =>
+      value(run(request(bob, proof), Mapping.starOfLink({ tile })))
+    // Garden, by Bob's Grant, and her star, whose card anyone sees.
+    expect(await linked(garden.id)).toEqual({ _tag: 'Star', star: card })
+    expect(await linked(star)).toEqual({ _tag: 'Star', star: card })
+    // Journal, kept from Bob, is no Tile at all to him, as one no System holds.
+    for (const tile of [journal.id, crypto.randomUUID()]) {
+      expect(await linked(tile)).toEqual({ _tag: 'Nowhere' })
+    }
+    const { root } = await value(run(request(bob), Mapping.system))
+    expect(await linked(root.id)).toEqual({ _tag: 'Own' })
+    // A Turn's Key is led nowhere outside its own System.
+    expect(await linked(garden.id, 'turn key')).toEqual({ _tag: 'Nowhere' })
+    expect(await run(signedOut(), Mapping.starOfLink({ tile: garden.id }))).toMatchObject({
+      ok: false,
+      failure: { _tag: 'SignedOut' },
+    })
   })
 })
