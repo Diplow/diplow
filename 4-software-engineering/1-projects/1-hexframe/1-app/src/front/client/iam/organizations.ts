@@ -39,6 +39,12 @@ const roleScope = 'roleIn'
 /** An Organization's members, by the server function's name. */
 const membersScope = 'members'
 
+/** An Organization's Groups, by the server function's name. */
+const groupsScope = 'groups'
+
+/** The Groups the Account may name in a Grant, by the server function's name. */
+const shareableScope = 'groupsToShareWith'
+
 /**
  * The Account's role in the Organization a star names, `admin` or `member`, none for a star of no
  * Organization of its: what offers the star's Members widget.
@@ -77,8 +83,8 @@ const readAgain = (client: ReturnType<typeof useQueryClient>) =>
   Promise.all([
     client.invalidateQueries({ queryKey: [roleScope] }),
     client.invalidateQueries({ queryKey: [membersScope] }),
-    client.invalidateQueries({ queryKey: ['groups'] }),
-    client.invalidateQueries({ queryKey: ['groupsToShareWith'] }),
+    client.invalidateQueries({ queryKey: [groupsScope] }),
+    client.invalidateQueries({ queryKey: [shareableScope] }),
     client.invalidateQueries({ queryKey: ['system'] }),
   ])
 
@@ -112,12 +118,6 @@ export const useRemoveMember = () => {
 /** Creates an Organization, the Account its first admin: answers its star, which it is visited by. */
 export const useCreateOrganization = () =>
   useMutation(write('createOrganization', (name: string) => createOrganization({ data: { name } })))
-
-/** An Organization's Groups, by the server function's name. */
-const groupsScope = 'groups'
-
-/** The Groups the Account may name in a Grant, by the server function's name. */
-const shareableScope = 'groupsToShareWith'
 
 /**
  * The Groups of the Organization a star names, the earliest first, each with who is in it by their

@@ -14,7 +14,13 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 
 import { merged, turnLocation, type Navigation } from '#/domains/assistant/entities'
-import { groupNameBounds, groupNameOf, keyNameBounds, keyNameOf } from '#/domains/iam/entities'
+import {
+  groupNameBounds,
+  groupNameOf,
+  keyNameBounds,
+  keyNameOf,
+  sameGroupName,
+} from '#/domains/iam/entities'
 import { previewLimit } from '#/domains/mapping/entities'
 import { ChannelsGallery } from '#/front/client/gallery'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
@@ -301,7 +307,11 @@ function Specimens({ chapter, view, onViewChange, onCenter }: SpecimensProps) {
           <GroupPickerGallery />
           <OrganizationWidgetGallery />
           <MembersWidgetGallery />
-          <GroupsWidgetGallery nameOf={groupNameOf} nameLimit={groupNameBounds.max} />
+          <GroupsWidgetGallery
+            nameOf={groupNameOf}
+            nameLimit={groupNameBounds.max}
+            sameName={sameGroupName}
+          />
           <ReadBoundary>
             <HelpGallery />
           </ReadBoundary>

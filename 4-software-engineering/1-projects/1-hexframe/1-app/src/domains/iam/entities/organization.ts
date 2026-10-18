@@ -37,7 +37,8 @@ export function groupNameOf(name: string): string | undefined {
 
 /**
  * Whether two names of Groups are one, as an Organization holds them apart: whatever their case, so
- * `Design` and `design` never stand side by side.
+ * `Design` and `design` never stand side by side, folded the same way whatever the locale of the
+ * machine comparing them, the server's and the browser's alike.
  */
 export const sameGroupName = (one: string, other: string) =>
-  one.toLocaleLowerCase() === other.toLocaleLowerCase()
+  one.toLowerCase() === other.toLowerCase()

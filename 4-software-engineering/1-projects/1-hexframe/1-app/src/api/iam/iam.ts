@@ -18,8 +18,11 @@ export const Credentials = Schema.Struct({
   password: Schema.String.check(Schema.isMaxLength(1024)),
 })
 
-/** The most UTF-16 units a reader's character takes here: an emoji is up to 19 (a family, skin toned). */
-const unitsPerCharacter = 32
+/**
+ * The most UTF-16 units a reader's character takes here: an emoji is up to 19 (a family, skin toned).
+ * A Group's name is bounded by it too (`./organizations/groups.ts`).
+ */
+export const unitsPerCharacter = 32
 
 /**
  * What issuing a Key sends: its name. Bounded here, so nothing unbounded reaches IAM or Better Auth;

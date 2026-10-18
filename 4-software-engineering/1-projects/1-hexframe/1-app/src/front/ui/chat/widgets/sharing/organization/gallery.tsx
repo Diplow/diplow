@@ -133,10 +133,12 @@ interface GroupsWidgetGalleryProps {
   nameOf: (name: string) => string | undefined
   /** The most characters a name holds. */
   nameLimit: number
+  /** IAM's rule for two names being one, whatever their case. */
+  sameName: (one: string, other: string) => boolean
 }
 
-export function GroupsWidgetGallery({ nameOf, nameLimit }: GroupsWidgetGalleryProps) {
-  const rule = { nameOf, nameLimit }
+export function GroupsWidgetGallery({ nameOf, nameLimit, sameName }: GroupsWidgetGalleryProps) {
+  const rule = { nameOf, nameLimit, sameName }
   return (
     <GallerySection name="GroupsWidget">
       <GalleryState label={m.gallery_state_groups_admin()}>
@@ -193,6 +195,7 @@ function LiveGroups({
   manages,
   nameOf,
   nameLimit,
+  sameName,
 }: { manages: boolean } & GroupsWidgetGalleryProps) {
   const [groups, setGroups] = useState(sampleGroups)
   const [open, setOpen] = useState<string>()
@@ -226,7 +229,7 @@ function LiveGroups({
         onSave={() => {
           const kept = nameOf(name)
           const taken = groups.some(
-            (group) => group.key !== open && group.name.toLowerCase() === kept?.toLowerCase(),
+            (group) => group.key !== open && kept !== undefined && sameName(group.name, kept),
           )
           if (kept === undefined || taken) {
             setRefused(

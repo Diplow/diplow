@@ -10,10 +10,8 @@ import { GroupId, groupNameBounds } from '#/domains/iam/entities'
 import { TileId } from '#/domains/mapping/entities'
 
 import { run } from '../../server/run'
+import { unitsPerCharacter } from '../iam'
 import * as Organizations from './programs'
-
-/** The most UTF-16 units a reader's character takes here: an emoji is up to 19 (a family, skin toned). */
-const unitsPerCharacter = 32
 
 /**
  * A Group's name as it is sent, bounded here so nothing unbounded reaches IAM, which counts its

@@ -197,9 +197,9 @@ layer(TestLayer)('an Organization’s Groups', (it) => {
       const { ana, bob, cleo, team } = yield* atelier
       const design = yield* ana.changes(createGroup(team, 'Design'))
       yield* bob.asSession(shareableGroup(design))
-      yield* bob.asSession(shareableGroup(membersGroupOf(team)))
       expect(yield* failedWith(cleo.asSession(shareableGroup(design)))).toBe('GroupNotFound')
-      expect(yield* failedWith(cleo.asSession(shareableGroup(membersGroupOf(team))))).toBe(
+      // The Members are named by their Organization's star alone, never by its id as a Group's.
+      expect(yield* failedWith(bob.asSession(shareableGroup(membersGroupOf(team))))).toBe(
         'GroupNotFound',
       )
       expect(yield* bob.asSession(groupsToShareWith)).toEqual([

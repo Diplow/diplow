@@ -156,18 +156,21 @@ export const groupsNamed = (ids: ReadonlyArray<string>) =>
 export const groupsToShareWith = Effect.gen(function* () {
   const { account } = yield* sessionOnly
   const rows = yield* Organizations.use((organizations) => organizations.membershipsOf(account.id))
-  return yield* Effect.forEach(rows, ({ organization }) =>
-    Effect.map(
-      Organizations.use((organizations) => organizations.groupsOf(organization)),
-      (found) => ({ organization, groups: found.map(({ id, name }) => ({ id, name })) }),
+  const theirs = rows.map(({ organization }) => organization)
+  const found = yield* Organizations.use((organizations) => organizations.groupsAmong(theirs))
+  return theirs.map((organization) => ({
+    organization,
+    groups: found.flatMap((group) =>
+      group.organization === organization ? [{ id: group.id, name: group.name }] : [],
     ),
-  )
+  }))
 })
 
 /**
- * That a Grant may name this Group for the Account the request's Session proves: a Group of an
- * Organization it is a member of, its Members Group or one of its own. `GroupNotFound` otherwise, a
- * deleted Group's included, so nobody names a Group they cannot see.
+ * That a Grant may name this Group of an Organization's own for the Account the request's Session
+ * proves: one of an Organization it is a member of. `GroupNotFound` otherwise, a deleted Group's and
+ * an id no Group's row has included, an Organization's own, so nobody names a Group they cannot see,
+ * and the Members are named one way alone, by their Organization's star.
  */
 export const shareableGroup = (group: string) =>
   Effect.gen(function* () {
@@ -175,7 +178,6 @@ export const shareableGroup = (group: string) =>
     const rows = yield* Organizations.use((organizations) =>
       organizations.membershipsOf(account.id),
     )
-    const named = yield* groupsNamed([group])
-    const organization = named.get(group)?.organization ?? group
+    const organization = (yield* groupsNamed([group])).get(group)?.organization
     if (!rows.some((row) => row.organization === organization)) return yield* new GroupNotFound()
   })

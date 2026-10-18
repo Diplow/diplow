@@ -29,6 +29,10 @@ export interface GroupRows {
   readonly groupsOf: (organization: string) => Effect.Effect<ReadonlyArray<GroupRow>>
   /** The Groups some ids name, each with its name and its Organization; none for an id of none. */
   readonly groupsNamed: (ids: ReadonlyArray<string>) => Effect.Effect<ReadonlyArray<GroupOfRow>>
+  /** The Groups of some Organizations, the earliest first, each with its name and Organization. */
+  readonly groupsAmong: (
+    organizations: ReadonlyArray<string>,
+  ) => Effect.Effect<ReadonlyArray<GroupOfRow>>
   /** The ids of the Groups an Account is in, in no order. */
   readonly groupsIn: (account: string) => Effect.Effect<ReadonlyArray<string>>
   /** Adds a Group to an Organization under this id and name. Inside a transaction. */
@@ -103,6 +107,19 @@ export const groupRowsOf = (database: Database['Service']): GroupRows => {
             })
             .from(organizationGroup)
             .where(inArray(organizationGroup.id, [...ids]))
+            .pipe(Effect.orDie),
+    groupsAmong: (organizations) =>
+      organizations.length === 0
+        ? Effect.succeed([])
+        : database
+            .select({
+              id: organizationGroup.id,
+              name: organizationGroup.name,
+              organization: organizationGroup.organizationId,
+            })
+            .from(organizationGroup)
+            .where(inArray(organizationGroup.organizationId, [...organizations]))
+            .orderBy(asc(organizationGroup.createdAt), asc(organizationGroup.id))
             .pipe(Effect.orDie),
     groupsIn: (account) =>
       database
