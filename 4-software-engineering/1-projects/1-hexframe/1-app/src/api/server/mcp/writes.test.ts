@@ -106,7 +106,7 @@ describe('the MCP write tools', () => {
     expect(await call(client, 'delete_tile', { id: child.id, version: 1 })).toEqual({ value: null })
     const { branches, context } = await opened(client)
     expect(branches[1]).toBeUndefined()
-    expect(context[-2]).toEqual({ _tag: 'BrokenReference', target: child.id })
+    expect(context[-2]).toEqual({ _tag: 'BrokenReference', target: '' })
     const { error } = await call(client, 'open_tile', { id: grandchild.id })
     expect(error).toMatch(/^TileNotFound: /)
   })

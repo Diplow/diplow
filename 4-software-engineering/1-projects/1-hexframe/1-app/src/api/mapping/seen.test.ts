@@ -174,7 +174,7 @@ describe('a pin, a Reference to a Tile of another System, through the programs',
     expect(await run(request(bob), pin(journal.id, -2, root.version + 1))).toMatchObject(notFound)
     const own = await value(run(request(bob), Mapping.systemAt(undefined)))
     expect(Object.values(own.pinned)).toEqual([
-      { id: garden.id, title: 'Garden', preview: 'Garden, in short.', star: '' },
+      { id: garden.id, title: 'Garden', preview: 'Garden, in short.', starTitle: '' },
     ])
     expect(JSON.stringify(own)).not.toContain(journal.id)
   })
@@ -196,7 +196,7 @@ describe('a pin, a Reference to a Tile of another System, through the programs',
       tile: { id: garden.id, title: 'Garden' },
     })
     const byTurn = await opened('turn key')
-    expect(byTurn.context[-1]).toEqual({ _tag: 'BrokenReference', target: garden.id })
+    expect(byTurn.context[-1]).toEqual({ _tag: 'BrokenReference', target: '' })
     expect(JSON.stringify(byTurn)).not.toContain('Garden')
   })
 })

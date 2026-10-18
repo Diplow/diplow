@@ -90,7 +90,7 @@ function contextNode(entry: ContextEntry, slot: string, root: SystemTile): TileN
       // The Root stands under nothing: a Reference to it is from the Root itself. A pin is from the
       // star of the System holding its Tile.
       const above = tileIn(root, entry.tile.id)?.parent ?? entry.tile
-      const from = entry.elsewhere?.star ?? above.title
+      const from = entry.elsewhere?.starTitle ?? above.title
       return {
         id: entry.tile.id,
         title: titleOf(entry.tile.title),

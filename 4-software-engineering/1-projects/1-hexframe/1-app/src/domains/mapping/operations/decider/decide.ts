@@ -87,14 +87,14 @@ export type Refusal = Refusals[keyof Refusals]
 /**
  * What a create is given beside its Operation: the id of what it makes, which `decide` never makes
  * itself; for a Tile an import makes, what it keeps from its file, each part already checked
- * (`entities/kept/`); and, for a Reference, `pinned` when its target is a Tile of another System that
- * the service found the actor may read there, which no System decided on holds, so only the whole
- * table knows it, as it knows an id taken.
+ * (`entities/kept/`); and, for a Reference, `targetElsewhere` when its target is a Tile of another
+ * System that the service found the actor may read there, a pin, which no System decided on holds, so
+ * only the whole table knows it, as it knows an id taken.
  */
 export interface Made {
   readonly id: string
   readonly kept?: ToKeep | undefined
-  readonly pinned?: boolean | undefined
+  readonly targetElsewhere?: boolean | undefined
 }
 
 /**
@@ -198,16 +198,17 @@ const deleteTile = (system: System, { id, version }: DeleteTile): Decided<'Delet
 
 /**
  * Puts a Reference in a free Context slot of a Tile, never of a Leaf, that Tile at the Version its
- * writer read: to a Tile of the System, or, `pinned`, to one of another System, which the service
- * found the actor may read there.
+ * writer read: to a Tile of the System, or, `targetElsewhere`, to one of another System, a pin,
+ * which the service found the actor may read there.
  */
 const createReference = (
   system: System,
   { parent, parentVersion, slot, target }: CreateReference,
-  { id, pinned = false }: Made,
+  { id, targetElsewhere = false }: Made,
 ): Decided<'CreateReference'> =>
   Result.gen(function* () {
-    if (!pinned && tileAt(system, target) === undefined) return yield* refused(new TileNotFound())
+    if (!targetElsewhere && tileAt(system, target) === undefined)
+      return yield* refused(new TileNotFound())
     yield* read(system, parent, parentVersion)
     yield* freeSlot(system, { parent, slot })
     return [new ReferenceCreated({ id, parent, slot, target })]

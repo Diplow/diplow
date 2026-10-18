@@ -101,7 +101,7 @@ const directions =
   '(`context`) says what it is, keyed -1 to -6. A Context slot may hold a Reference instead of a ' +
   'Tile: ' +
   "`_tag: 'Reference'`, with the id, Title and Preview of the Tile it points at, and `elsewhere` " +
-  "with its star's Title when another System holds it, or `_tag: 'BrokenReference'`, unavailable, " +
+  "with its star's Title (`starTitle`) when another System holds it, or `_tag: 'BrokenReference'`, unavailable, " +
   'once that Tile is deleted or not yours to read, alike. Every Tile carries its `version`, how many ' +
   'changes touched it: a write to a Tile names the version you read of it, and is refused once ' +
   'the Tile changed since.'

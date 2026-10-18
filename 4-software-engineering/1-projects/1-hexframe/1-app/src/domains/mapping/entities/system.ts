@@ -41,7 +41,9 @@ export interface PlacedTile extends FoundTile, Standing {}
 
 /**
  * A Reference of a System, where it stands, always a Context slot: a link to the Tile of `target`, by
- * its id, so it survives a move. It has an id of its own, and no content.
+ * its id, so it survives a move. It has an id of its own, and no content. A read shows its `target`
+ * as `''` when the reader is shown no Tile there (`pointing`, `rights/seen.ts`); what Mapping holds
+ * keeps the id.
  */
 export interface PlacedReference extends Standing {
   readonly _tag: 'Reference'
@@ -91,19 +93,18 @@ export interface SystemTile extends FoundTile {
 
 /**
  * A Context slot holding a link to a Tile drawn elsewhere, by its id, so it survives a move; and, for
- * a Tile of another System, a pin, the Title of the star holding it (`elsewhere`).
+ * a Tile of another System, a pin, the Title of the star holding it (`elsewhere.starTitle`).
  */
 export interface Reference<T = Tile> {
   readonly _tag: 'Reference'
   readonly tile: T
-  readonly elsewhere?: { readonly star: string }
+  readonly elsewhere?: { readonly starTitle: string }
 }
 
 /**
  * A Reference whose Tile its reader is not shown, unavailable: deleted, which it never blocked, or
- * one they may not read, alike, so nothing tells which. `target` is the id it points at, which only
- * the owner of the System holding it is shown, as they stored it; anyone else is shown none, `''`
- * (`unavailable`, `rights/seen.ts`).
+ * one they may not read, alike, so nothing tells which. `target` is the id it points at in what Mapping
+ * holds, and none, `''`, in any read, whoever reads it (`pointing`, `rights/seen.ts`).
  */
 export interface BrokenReference {
   readonly _tag: 'BrokenReference'
@@ -112,12 +113,12 @@ export interface BrokenReference {
 
 /**
  * A Tile of another System a Reference points at, as its reader may read it there: what a reader
- * needs to decide to open it, its Title and Preview, and `star`, the Title of the star holding it,
+ * needs to decide to open it, its Title and Preview, and `starTitle`, the Title of the star holding it,
  * whose card anyone sees. What a read resolves a pin by, for that reader, on every read, by the
  * Tile's id.
  */
 export interface Pinned extends Pick<Tile, 'id' | 'title' | 'preview'> {
-  readonly star: string
+  readonly starTitle: string
 }
 
 /** The Tiles of other Systems a reader's References point at that they may read, by id. */
@@ -260,7 +261,7 @@ const referenceTo = <R, T>(
   if (tile !== undefined) return { _tag: 'Reference', tile: shown(tile) }
   const pin = pinnedAt(pinned, target)
   if (pin === undefined) return { _tag: 'BrokenReference', target }
-  return { _tag: 'Reference', tile: glimpsed(pin), elsewhere: { star: pin.star } }
+  return { _tag: 'Reference', tile: glimpsed(pin), elsewhere: { starTitle: pin.starTitle } }
 }
 
 /**

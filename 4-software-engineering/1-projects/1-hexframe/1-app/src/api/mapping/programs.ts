@@ -76,7 +76,7 @@ const turnKeyElsewhere = (signed: Iam.SignedIn, own: Mapping.Acting, star: strin
  * there (Mapping's `Across`): not for a Turn's Key, which reads the System its Turn started in alone,
  * so its pins show unavailable; for a Session or an Account's Key, which read what the Account may.
  */
-const acrossFor = (signed: Iam.SignedIn): Mapping.Across => ({
+const acrossFor = (signed: Iam.SignedIn): { readonly across: boolean } => ({
   across: signed.by._tag !== 'TurnKey',
 })
 
@@ -153,7 +153,10 @@ const changeAt = <O extends Operation, A, E, R>(
     if (turnKeyElsewhere(signed, mine, star)) return yield* Effect.fail(new TileNotFound())
     const acting = { ...mine, system: star }
     return yield* transactional(
-      Effect.flatMap(Someone.writtenInAnothers(signed, { acting, own: mine }, operation), answer),
+      Effect.flatMap(
+        Someone.writtenInAnothers(signed, { acting, own: mine, ...acrossFor(signed) }, operation),
+        answer,
+      ),
     )
   })
 

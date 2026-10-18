@@ -72,13 +72,13 @@ layer(TestTiles)('a pin, a Reference to a Tile of another System, over PGlite', 
       yield* transactional(Mapping.createReference(yield* actingOnOwn(bob), pin(desk, journal.id)))
       const { seen, drawn, opened } = yield* shownToBob(bob, desk.id)
       const tile = { id: journal.id, title: 'Journal', preview: 'Journal, in short.' }
-      expect(seen.pinned).toEqual({ [journal.id]: { ...tile, star: 'Ana' } })
+      expect(seen.pinned).toEqual({ [journal.id]: { ...tile, starTitle: 'Ana' } })
       expect(drawn).toEqual({
         _tag: 'Reference',
         tile: { ...tile, body: '' },
-        elsewhere: { star: 'Ana' },
+        elsewhere: { starTitle: 'Ana' },
       })
-      expect(opened).toEqual({ _tag: 'Reference', tile, elsewhere: { star: 'Ana' } })
+      expect(opened).toEqual({ _tag: 'Reference', tile, elsewhere: { starTitle: 'Ana' } })
     }),
   )
 
@@ -105,11 +105,11 @@ layer(TestTiles)('a pin, a Reference to a Tile of another System, over PGlite', 
       yield* transactional(Mapping.createReference(yield* actingOnOwn(bob), pin(desk, journal.id)))
       yield* granting(ana, toAccount(journal.id, bob, 'none'))
       const { seen, drawn, opened } = yield* shownToBob(bob, desk.id)
-      // His own, as he stored it: the id he pinned, nothing more of the Tile.
+      // Nothing of the Tile, not even its id, in his own System's read.
       expect(seen.pinned).toEqual({})
-      expect(drawn).toEqual({ _tag: 'BrokenReference', target: journal.id })
-      expect(opened).toEqual({ _tag: 'BrokenReference', target: journal.id })
-      expect(JSON.stringify(seen)).not.toContain('Journal')
+      expect(drawn).toEqual({ _tag: 'BrokenReference', target: '' })
+      expect(opened).toEqual({ _tag: 'BrokenReference', target: '' })
+      expect(JSON.stringify(seen)).not.toContain(journal.id)
     }),
   )
 
@@ -138,7 +138,7 @@ layer(TestTiles)('a pin, a Reference to a Tile of another System, over PGlite', 
         yield* granting(ana, toAccount(journal.id, carol, 'read'))
         expect(yield* opened()).toMatchObject({
           tile: { title: 'Journal' },
-          elsewhere: { star: 'Ana' },
+          elsewhere: { starTitle: 'Ana' },
         })
       }),
   )
@@ -164,7 +164,10 @@ layer(TestTiles)('a pin, a Reference to a Tile of another System, over PGlite', 
       const { journal, bob, desk } = yield* scenario
       const bobs = yield* actingOnOwn(bob)
       const turns = { ...bobs, actor: { ...bobs.actor, session: false } }
-      const applied = Mapping.runOperation(turns, pin(desk, journal.id), undefined)
+      const applied = Mapping.runOperation(turns, pin(desk, journal.id), {
+        earlier: undefined,
+        across: false,
+      })
       expect(yield* Effect.flip(transactional(applied))).toMatchObject({ _tag: 'TileNotFound' })
       const drafted = Mapping.addToBatch(turns, [], pin(desk, journal.id))
       expect(yield* Effect.flip(drafted)).toMatchObject({ _tag: 'TileNotFound' })
@@ -176,7 +179,7 @@ layer(TestTiles)('a pin, a Reference to a Tile of another System, over PGlite', 
         language: 'en',
         across: false,
       })
-      expect(opened.context[-1]).toEqual({ _tag: 'BrokenReference', target: journal.id })
+      expect(opened.context[-1]).toEqual({ _tag: 'BrokenReference', target: '' })
     }),
   )
 
@@ -187,12 +190,12 @@ layer(TestTiles)('a pin, a Reference to a Tile of another System, over PGlite', 
       const actor: Actor = { account: ana, groups: [], owners: [ana], session: true }
       const bobsStar = (yield* actingOnOwn(bob)).system
       const ran = yield* transactional(
-        Mapping.runUndoable({ actor, system: bobsStar }, pin(desk, journal.id)),
+        Mapping.runUndoable({ actor, system: bobsStar }, pin(desk, journal.id), { across: true }),
       )
       expect(ran.change).toMatchObject({ verb: 'ReferenceCreated' })
       const { drawn } = yield* shownToBob(bob, desk.id)
       // Bob may read Journal, shared with him: he sees what Ana pinned.
-      expect(drawn).toMatchObject({ tile: { title: 'Journal' }, elsewhere: { star: 'Ana' } })
+      expect(drawn).toMatchObject({ tile: { title: 'Journal' }, elsewhere: { starTitle: 'Ana' } })
     }),
   )
 

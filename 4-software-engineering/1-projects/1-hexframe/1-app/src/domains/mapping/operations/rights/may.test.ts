@@ -165,6 +165,24 @@ describe('what an Operation needs', () => {
     expect(verdict(actor('ana', false), edit(id.secret))).toBe('ok')
   })
 
+  it('asks nothing of a target the System does not hold, a pin, which the service read first', () => {
+    const pin = new CreateReference({
+      parent: id.garden,
+      parentVersion: 1,
+      slot: -1,
+      target: id.nowhere,
+    })
+    // Write on the slot's Tile is still asked; read on another System's Tile is the service's.
+    expect(verdict(bob, pin)).toBe('ok')
+    const onSquare = new CreateReference({
+      parent: id.square,
+      parentVersion: 1,
+      slot: -1,
+      target: id.nowhere,
+    })
+    expect(verdict(stranger, onSquare)).toBe('NotAllowed')
+  })
+
   it('refuses a delete over a subtree holding a Tile set to none for the actor', () => {
     expect(verdict(bob, new DeleteTile({ id: id.journal, version: 1 }))).toBe('NotAllowed')
   })

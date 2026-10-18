@@ -141,7 +141,7 @@ describe('the Titles the chat names a System visited by', () => {
 })
 
 describe('a pin followed on the canvas', () => {
-  const pinned = { shed: { id: 'shed', title: 'Shed', preview: 'Tools', star: 'Bob' } }
+  const pinned = { shed: { id: 'shed', title: 'Shed', preview: 'Tools', starTitle: 'Bob' } }
 
   it('visits the Tile of another System a gesture follows a Reference to, by its link', () => {
     expect(pinFollowed(pinned, { gesture: 'center', tile: 'shed' })).toBe('shed')

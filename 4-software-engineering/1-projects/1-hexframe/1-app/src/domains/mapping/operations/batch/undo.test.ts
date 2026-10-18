@@ -150,20 +150,29 @@ layer(TestTiles)('an undo over the System', (it) => {
         const before = yield* Mapping.system(yield* actingOnOwn(accountId))
         const create = new CreateTile({ parent: root, slot: 4, ...content('Plans') })
         const first = yield* transactional(
-          Mapping.runOperation(yield* actingOnOwn(accountId), create, undefined),
+          Mapping.runOperation(yield* actingOnOwn(accountId), create, {
+            earlier: undefined,
+            across: false,
+          }),
         )
         expect(first.tile).toMatchObject({ title: 'Plans', version: 1 })
         expect(first.changes).toBe(1)
         const plans = first.tile?.id ?? ''
         const move = new MoveTile({ id: team, version: 1, parent: plans, slot: 1 })
         const second = yield* transactional(
-          Mapping.runOperation(yield* actingOnOwn(accountId), move, first.undo),
+          Mapping.runOperation(yield* actingOnOwn(accountId), move, {
+            earlier: first.undo,
+            across: false,
+          }),
         )
         expect(second.tile).toBeUndefined()
         const version = yield* versionOf(accountId, work)
         const remove = new DeleteTile({ id: work, version })
         const third = yield* transactional(
-          Mapping.runOperation(yield* actingOnOwn(accountId), remove, second.undo),
+          Mapping.runOperation(yield* actingOnOwn(accountId), remove, {
+            earlier: second.undo,
+            across: false,
+          }),
         )
         yield* undone(accountId, third.undo)
         expect(said(yield* Mapping.system(yield* actingOnOwn(accountId)))).toEqual(said(before))
@@ -193,11 +202,17 @@ layer(TestTiles)('an undo over the System', (it) => {
       const { accountId, team } = yield* seeded
       const edit = (version: number, title: string) => new EditTile({ id: team, version, title })
       const first = yield* transactional(
-        Mapping.runOperation(yield* actingOnOwn(accountId), edit(1, 'Crew'), undefined),
+        Mapping.runOperation(yield* actingOnOwn(accountId), edit(1, 'Crew'), {
+          earlier: undefined,
+          across: false,
+        }),
       )
       yield* transactional(Mapping.editTile(yield* actingOnOwn(accountId), edit(2, 'Mine')))
       const second = yield* transactional(
-        Mapping.runOperation(yield* actingOnOwn(accountId), edit(3, 'Squad'), first.undo),
+        Mapping.runOperation(yield* actingOnOwn(accountId), edit(3, 'Squad'), {
+          earlier: first.undo,
+          across: false,
+        }),
       )
       expect(second.undo).toEqual({ _tag: 'Outdated' })
       const refused = yield* Effect.flip(undone(accountId, second.undo))
@@ -213,7 +228,7 @@ layer(TestTiles)('an undo over the System', (it) => {
           Mapping.runOperation(
             yield* actingOnOwn(accountId),
             new EditTile({ id: team, version: 9, title: 'X' }),
-            undefined,
+            { earlier: undefined, across: false },
           ),
         ),
       )
@@ -262,12 +277,18 @@ layer(TestTiles)('an undo of a Reference whose Tile its batch deleted before it'
         const before = yield* Mapping.system(yield* actingOnOwn(accountId))
         const remove = new DeleteTile({ id: team, version: 1 })
         const first = yield* transactional(
-          Mapping.runOperation(yield* actingOnOwn(accountId), remove, undefined),
+          Mapping.runOperation(yield* actingOnOwn(accountId), remove, {
+            earlier: undefined,
+            across: false,
+          }),
         )
         const parentVersion = yield* versionOf(accountId, root)
         const unlink = new DeleteReference({ parent: root, parentVersion, slot: -1 })
         const second = yield* transactional(
-          Mapping.runOperation(yield* actingOnOwn(accountId), unlink, first.undo),
+          Mapping.runOperation(yield* actingOnOwn(accountId), unlink, {
+            earlier: first.undo,
+            across: false,
+          }),
         )
         yield* undone(accountId, second.undo)
         expect(said(yield* Mapping.system(yield* actingOnOwn(accountId)))).toEqual(said(before))

@@ -80,10 +80,31 @@ export function sightOf(actor: Actor, sharing: Sharing, star: string): Sight {
  * Tile exists nor its id is told, and someone who could never read it sees what someone who lost
  * *read* on it sees.
  */
-export const unavailable = <R extends { readonly target: string | null }>(reference: R): R => ({
+const unavailable = <R extends { readonly target: string | null }>(reference: R): R => ({
   ...reference,
   target: '',
 })
+
+/**
+ * A Reference, or its row, as a reader is shown it: as it stands while they are shown the Tile it
+ * points at (`shown`), else `unavailable`, whoever they are, the owner of the System holding it
+ * included, so a pin someone else made never tells them an id. The one rule of it, which `seenBy`
+ * and the service's reads from one Tile share; a row that is a Tile passes as it is.
+ */
+export const pointing = <R extends { readonly target: string | null }>(
+  reference: R,
+  shown: (target: string) => boolean,
+): R => (reference.target === null || shown(reference.target) ? reference : unavailable(reference))
+
+/**
+ * Whether a reader is shown the Tile a Reference points at: one of the System, as `sight` shows it;
+ * one it does not hold, among the Tiles of other Systems they may read (`pinned`), a deleted one in
+ * none.
+ */
+const pointsAtShown =
+  (system: System, sight: Sight, pinned: PinnedTiles) =>
+  (target: string): boolean =>
+    tileAt(system, target) === undefined ? Object.hasOwn(pinned, target) : sight.shows(target)
 
 /** How the actor sees one Tile or Reference below the star. */
 type Shown =
@@ -105,10 +126,7 @@ function shownOf(
   if (!sight.reads(held.id)) return { as: 'hidden' }
   if (sight.shows(held.parent)) {
     if (held._tag === 'Tile') return { as: 'placed', held }
-    const { target } = held
-    const shown =
-      tileAt(system, target) === undefined ? Object.hasOwn(pinned, target) : sight.shows(target)
-    return { as: 'placed', held: shown ? held : unavailable(held) }
+    return { as: 'placed', held: pointing(held, pointsAtShown(system, sight, pinned)) }
   }
   if (held._tag === 'Reference') return { as: 'hidden' }
   return { as: 'gap', tile: Struct.omit(held, ['parent', 'slot']) }
@@ -136,7 +154,7 @@ export function sightVersion({ root, tiles, gaps, rights, pinned }: Omit<Seen, '
     ...Object.values(gaps).map((gap) => `gap ${gap.id} ${String(gap.version)}`),
     ...Object.entries(rights).map(([id, held]) => `rights ${id} ${held.join('+')}`),
     ...Object.values(pinned).map(
-      (pin) => `pinned ${pin.id} ${JSON.stringify([pin.title, pin.preview, pin.star])}`,
+      (pin) => `pinned ${pin.id} ${JSON.stringify([pin.title, pin.preview, pin.starTitle])}`,
     ),
   ].sort()
   let hash = 0x811c9dc5
@@ -177,18 +195,26 @@ export function seenBy(
   pinned: PinnedTiles = {},
 ): Seen {
   const star = system.root.id
+  const sight = sightOf(actor, sharing, star)
   if (owns(actor, sharing.owner)) {
     const every = [star, ...tileIds(Object.values(system.tiles))].map(
       (id) => [id, Right.literals] as const,
     )
+    const shown = pointsAtShown(system, sight, pinned)
+    const tiles = Object.fromEntries(
+      Object.entries(system.tiles).map(([id, held]) => [
+        id,
+        held._tag === 'Reference' ? pointing(held, shown) : held,
+      ]),
+    )
     return {
       ...system,
+      tiles,
       rights: Object.fromEntries(every),
       gaps: {},
-      pinned: pinsOf(system.tiles, pinned),
+      pinned: pinsOf(tiles, pinned),
     }
   }
-  const sight = sightOf(actor, sharing, star)
   const tiles: Record<string, PlacedTile | PlacedReference> = {}
   const gaps: Record<string, FoundTile> = {}
   for (const held of Object.values(system.tiles)) {

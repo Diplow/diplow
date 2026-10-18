@@ -91,10 +91,10 @@ const pinnedIn = (acting: Acting, ids: ReadonlyArray<string>) =>
       Effect.map(
         tiles.ofIds(owner, [acting.system, ...ids.filter(reads)], ['title', 'preview']),
         (rows) => {
-          const star = rows.find(({ id }) => id === acting.system)?.title ?? ''
+          const starTitle = rows.find(({ id }) => id === acting.system)?.title ?? ''
           return rows.flatMap(({ id, target, title, preview }) =>
             target === null && ids.includes(id) && reads(id)
-              ? [[id, { id, title, preview, star }] as const]
+              ? [[id, { id, title, preview, starTitle }] as const]
               : [],
           )
         },

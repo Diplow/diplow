@@ -9,7 +9,8 @@
 // the page, for the composer to name (HEX-110). While a write to the System is on its way, closing or reloading the tab asks first.
 // Like the canvas, it holds no state of its own: the view and the change under way are the URL's,
 // and it hands the next view, with the gesture that asked for it, and the next search params to the
-// route.
+// route; but a gesture following a pin, a Reference to a Tile of another System, which it visits by
+// its link, since it alone holds the pins of the System it draws, own or visited (HEX-133).
 import { useRouter } from '@tanstack/react-router'
 import { cn } from 'cn'
 

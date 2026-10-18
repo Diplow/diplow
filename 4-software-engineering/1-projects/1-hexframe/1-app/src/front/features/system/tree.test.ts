@@ -86,7 +86,7 @@ describe('canvasTree', () => {
         [-3]: {
           _tag: 'Reference',
           tile: { id: 'shed', title: 'Shed', preview: 'Tools', body: '' },
-          elsewhere: { star: 'Bob' },
+          elsewhere: { starTitle: 'Bob' },
         },
       },
     })

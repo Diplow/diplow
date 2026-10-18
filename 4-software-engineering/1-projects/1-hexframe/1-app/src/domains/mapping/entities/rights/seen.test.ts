@@ -224,7 +224,7 @@ describe('a pin, a Reference to a Tile of another System', () => {
       shed: { _tag: 'Reference', id: 'shed', parent: 'garden', slot: -3, target: 'bobs-shed' },
     },
   }
-  const shed = { id: 'bobs-shed', title: 'Shed', preview: 'Where the tools are.', star: 'Bob' }
+  const shed = { id: 'bobs-shed', title: 'Shed', preview: 'Where the tools are.', starTitle: 'Bob' }
   const sharing = sharingOf('ana', lineageOf(withShed), [
     grant('ana', everyone, 'read'),
     grant('journal', everyone, 'none'),
@@ -237,7 +237,7 @@ describe('a pin, a Reference to a Tile of another System', () => {
     expect(systemOf(seen, seen.pinned).branches[2]?.context[-3]).toEqual({
       _tag: 'Reference',
       tile: { id: 'bobs-shed', title: 'Shed', preview: 'Where the tools are.', body: '' },
-      elsewhere: { star: 'Bob' },
+      elsewhere: { starTitle: 'Bob' },
     })
   })
 
@@ -252,13 +252,15 @@ describe('a pin, a Reference to a Tile of another System', () => {
     })
   })
 
-  it('keeps for the owner the id they stored, the Tile itself shown only while they may read it', () => {
+  it('shows its owner what anyone else is shown, a pin someone else made telling no id', () => {
     const owned = seenBy(actor('ana'), withShed, sharing)
-    expect(owned.tiles['shed']).toEqual(withShed.tiles['shed'])
+    expect(owned.tiles['shed']).toEqual({ ...withShed.tiles['shed'], target: '' })
     expect(systemOf(owned, owned.pinned).branches[2]?.context[-3]).toEqual({
       _tag: 'BrokenReference',
-      target: 'bobs-shed',
+      target: '',
     })
+    const readable = seenBy(actor('ana'), withShed, sharing, { 'bobs-shed': shed })
+    expect(readable.tiles['shed']).toEqual(withShed.tiles['shed'])
   })
 
   it('shows only the pins of the References the reader is shown', () => {

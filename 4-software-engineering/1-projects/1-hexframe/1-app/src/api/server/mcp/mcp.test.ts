@@ -179,7 +179,7 @@ describe('Help, through the MCP endpoint', () => {
 describe('the MCP endpoint', () => {
   it('opens the Root by default: all it says, and its neighbours by Title and Preview only', async () => {
     const { signedIn, secret } = await signedUp()
-    const { root, child, principles, gone } = await aSystem(signedIn)
+    const { root, child, principles } = await aSystem(signedIn)
     const client = await connect(bearer(secret))
     const opened = await call(client, 'open_tile')
     expect(opened).toEqual({
@@ -194,7 +194,7 @@ describe('the MCP endpoint', () => {
             _tag: 'Reference',
             tile: { id: child.id, title: 'Frontend', preview: child.preview },
           },
-          '-3': { _tag: 'BrokenReference', target: gone.id },
+          '-3': { _tag: 'BrokenReference', target: '' },
         },
       },
     })

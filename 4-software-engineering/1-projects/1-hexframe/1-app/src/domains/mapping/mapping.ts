@@ -57,7 +57,7 @@ import {
   type Tile,
   tileAt,
   type ToKeep,
-  unavailable,
+  pointing,
   type Version,
   withContent,
 } from './entities'
@@ -303,12 +303,9 @@ const findOwn = <O extends Field, F extends Field>(
       const here = new Set(pointedAt.flatMap((row) => (row.target === null ? [row.id] : [])))
       const away = targets.filter((target) => !here.has(target))
       const pinned = across ? yield* pinnedFor(acting.actor, away, acting.system) : {}
-      // A Reference to no Tile they are shown says nothing of it to anyone but the System's owner.
-      const whole = owns(acting.actor, owner)
-      const shownAt = <R extends { target: string | null }>(row: R) =>
-        whole || row.target === null || here.has(row.target) || Object.hasOwn(pinned, row.target)
-          ? row
-          : unavailable(row)
+      // A Reference to no Tile they are shown says nothing of it, to its System's owner either.
+      const shownAt = <R extends { readonly target: string | null }>(row: R) =>
+        pointing(row, (target) => here.has(target) || Object.hasOwn(pinned, target))
       const parent = parents[0]
       return {
         opened: withContent(opened, fields.opened),
@@ -739,8 +736,10 @@ export const deleteTile = (acting: Acting, operation: DeleteTile) =>
 export const createReference = (acting: Acting, operation: CreateReference) =>
   Effect.gen(function* () {
     const id = yield* newId
-    const pinned = yield* pinning(acting, operation)
-    yield* operate(acting, operation, (system) => decide(system, operation, { id, pinned }))
+    const targetElsewhere = yield* pinning(acting, operation)
+    yield* operate(acting, operation, (system) =>
+      decide(system, operation, { id, targetElsewhere }),
+    )
   })
 
 /** Empties a Context slot holding a Reference; the Tile it pointed at is untouched. */
@@ -842,7 +841,7 @@ export const runBatch = (acting: Acting, batch: ReadonlyArray<Batched>) =>
  * Runs an Operation on the System the actor acts on by the same `operate` as an Operation's own
  * function, a create under its id or a fresh one, decided by `decidedOne`, a write under an id taken
  * answering `onTaken`, a Reference pinning a Tile of another System as `createReference` pins it
- * when `across` lets it. Answers the System it ran on, the events it made, the System they leave and,
+ * when its caller's `across` lets it. Answers the System it ran on, the events it made, the System they leave and,
  * for a create or an edit, the Tile as it now stands: what `runOperation` and `runUndoable` both
  * make what undoes it from.
  */
@@ -853,11 +852,11 @@ const ranOne = <O extends Operation, T>(
 ) =>
   Effect.gen(function* () {
     const made = yield* madeFor(operation)
-    const pinned = across ? yield* pinning(acting, operation) : false
+    const elsewhere = across ? yield* pinning(acting, operation) : false
     const { system, events, after } = yield* operate(
       acting,
       operation,
-      (held) => Result.map(decidedOne(held, operation, made, pinned), (next) => next.events),
+      (held) => Result.map(decidedOne(held, operation, made, elsewhere), (next) => next.events),
       onTaken,
     )
     const tile = yield* tileAnswered(after, operation, made)
@@ -869,16 +868,17 @@ const ranOne = <O extends Operation, T>(
  * now stands for a create or an edit, how many events it made and what undoes it: its inverse, from
  * the System it ran on, after `earlier`, the undo of what ran before it in the same batch, when one
  * is given (`extended`), as a batch that runs in several goes runs one Operation after the other. A
- * clash on a create's id is a defect: such a create carries none. A Turn's, which runs on the System
- * it started in alone, so it pins no Tile of another (`TileNotFound`, as `decide` answers one).
+ * clash on a create's id is a defect: such a create carries none. A Reference pins a Tile of another
+ * System only as `across` lets it, which its caller says: never a Turn's, which runs on the System it
+ * started in alone (`TileNotFound`, as `decide` answers one).
  */
 export const runOperation = <O extends Operation>(
   acting: Acting,
   operation: O,
-  earlier: Undo | undefined,
+  { earlier, across }: { readonly earlier: Undo | undefined; readonly across: boolean },
 ) =>
   Effect.map(
-    ranOne(acting, operation, { onTaken: madeHere, across: false }),
+    ranOne(acting, operation, { onTaken: madeHere, across }),
     ({ system, events, tile }) => ({
       undo: earlier === undefined ? undoOf(system, events) : extended(earlier, system, events),
       changes: events.length,
@@ -889,19 +889,24 @@ export const runOperation = <O extends Operation>(
 /**
  * Runs an Operation on the System the actor acts on (`ranOne`) as its own function runs it, a create
  * under the id its caller chose refused `TileIdTaken`, as `createTile` refuses it, a Reference
- * pinning a Tile of another System the actor may read there, as `createReference` pins it, and answers,
+ * pinning a Tile of another System the actor may read there, as `createReference` pins it, as far as
+ * `across`, its caller's, lets it, and answers,
  * beside the Tile as it now stands for a create or an edit, what undoes it, from the System it ran
  * on, and Mapping's summary of the change it made, as the System it leaves holds it, none for one
  * that changed nothing: what the API layer runs a write someone else makes in a System by, so its
  * owner may undo it.
  */
-export const runUndoable = <O extends Operation>(acting: Acting, operation: O) => {
+export const runUndoable = <O extends Operation>(
+  acting: Acting,
+  operation: O,
+  { across }: { readonly across: boolean },
+) => {
   // Only a create carries an id its caller chose, so only a create's type lists `TileIdTaken`.
   const onTaken = (
     operation._tag === 'CreateTile' && operation.id !== undefined ? chosen : madeHere
   ) as OnTaken<O extends CreateTile ? TileIdTaken : never>
   return Effect.map(
-    ranOne(acting, operation, { onTaken, across: true }),
+    ranOne(acting, operation, { onTaken, across }),
     ({ system, events, after, tile }) => {
       const [change] = summariesIn(after, events)
       return {
