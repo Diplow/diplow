@@ -120,7 +120,11 @@ export const deleteGroup = (organization: string, group: string) =>
  */
 export const setInGroup = (
   organization: string,
-  { group, account, in: placed }: { readonly group: string; readonly account: string; readonly in: boolean },
+  {
+    group,
+    account,
+    in: placed,
+  }: { readonly group: string; readonly account: string; readonly in: boolean },
 ) =>
   Effect.gen(function* () {
     const { members, groups: found } = yield* changedBy(organization)
@@ -141,7 +145,8 @@ export const setInGroup = (
 export const groupsNamed = (ids: ReadonlyArray<string>) =>
   Effect.map(
     Organizations.use((organizations) => organizations.groupsNamed(ids)),
-    (rows) => new Map(rows.map((row) => [row.id, { name: row.name, organization: row.organization }])),
+    (rows) =>
+      new Map(rows.map((row) => [row.id, { name: row.name, organization: row.organization }])),
   )
 
 /**
@@ -167,7 +172,9 @@ export const groupsToShareWith = Effect.gen(function* () {
 export const shareableGroup = (group: string) =>
   Effect.gen(function* () {
     const { account } = yield* sessionOnly
-    const rows = yield* Organizations.use((organizations) => organizations.membershipsOf(account.id))
+    const rows = yield* Organizations.use((organizations) =>
+      organizations.membershipsOf(account.id),
+    )
     const named = yield* groupsNamed([group])
     const organization = named.get(group)?.organization ?? group
     if (!rows.some((row) => row.organization === organization)) return yield* new GroupNotFound()

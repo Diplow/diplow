@@ -223,13 +223,10 @@ describe("an Organization's Groups, managed", () => {
   it('are seen with who is in them by every member, changed by its admins alone', async () => {
     const { ana, bob, cleo, dan, star, design } = await atelier()
     const listed = await value(run(cleo.as, Organizations.groups({ star })))
-    expect(listed).toEqual([
-      {
-        id: design,
-        name: 'Design',
-        members: [{ star: expect.objectContaining({ id: bob.star }), you: false }],
-      },
+    expect(listed).toMatchObject([
+      { id: design, name: 'Design', members: [{ star: { id: bob.star }, you: false }] },
     ])
+    expect(listed[0]?.members).toHaveLength(1)
     expect((await value(run(bob.as, Organizations.groups({ star }))))[0]?.members[0]?.you).toBe(
       true,
     )

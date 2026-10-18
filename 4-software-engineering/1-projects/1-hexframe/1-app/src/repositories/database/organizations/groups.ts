@@ -10,14 +10,14 @@ import { type Database, type InTransaction, inTransaction } from '../database'
 import { groupMember, organizationGroup } from '../schema'
 
 /** One Group of an Organization's own: its id, its name, and its members' Accounts, earliest first. */
-export interface GroupRow {
+interface GroupRow {
   readonly id: string
   readonly name: string
   readonly members: ReadonlyArray<string>
 }
 
 /** A Group by its id, with its name and the Organization it belongs to. */
-export interface GroupOfRow {
+interface GroupOfRow {
   readonly id: string
   readonly name: string
   readonly organization: string

@@ -14,7 +14,7 @@ import { HexMark } from '../../../atoms/hex'
 import { Widget } from '../../../layouts/Widget'
 
 /** A group as the picker offers it, every word its caller's. */
-export interface GroupShown {
+interface GroupShown {
   readonly key: string
   readonly name: string
   /** The tile is shared with it already: said so, and not offered. */

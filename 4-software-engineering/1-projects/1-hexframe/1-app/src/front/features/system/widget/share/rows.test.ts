@@ -150,79 +150,6 @@ describe('someone the Tile is shared with', () => {
     })
   })
 
-  it('names a Group of an Organization’s own by its name and sends its choice by its id', () => {
-    const design = crypto.randomUUID()
-    const atelier = { id: crypto.randomUUID(), title: 'Atelier', preview: '' }
-    const { others } = shareRowsOf(
-      {
-        everyone: everyone('none', null),
-        others: [
-          {
-            subject: { _tag: 'Group', id: design },
-            value: 'read',
-            from: null,
-            star: undefined,
-            group: { name: 'Design', organization: atelier },
-          },
-        ],
-      },
-      around,
-    )
-    expect(others).toEqual([
-      {
-        key: `Group:${design}`,
-        who: 'Design, in Atelier',
-        value: 'read',
-        from: 'by default',
-        choice: 'inherit',
-        offered: ['none', 'read', 'read+write', 'read+@', 'read+write+@', 'inherit'],
-        named: { _tag: 'Group', id: design },
-      },
-    ])
-    const shown = { everyone: rows.everyone, others }
-    expect(changeOf(shown, entry, `Group:${design}`, 'read+write')).toEqual({
-      tile: entry,
-      subject: { _tag: 'Group', id: design },
-      value: 'read+write',
-    })
-    expect(namedGroup(shown, design)).toBe(true)
-    expect(named(shown, design)).toBe(false)
-    const sent = { tile: entry, subject: { _tag: 'Group', id: design }, value: 'none' } as const
-    expect(withSent(shown, sent).others[0]).toMatchObject({ choice: 'none' })
-  })
-
-  it('offers a deleted Group’s Grant set here to be cleared alone, as inherit', () => {
-    const gone = crypto.randomUUID()
-    const { others } = shareRowsOf(
-      {
-        everyone: everyone('none', null),
-        others: [
-          {
-            subject: { _tag: 'Group', id: gone },
-            value: 'read',
-            from: entry,
-            star: undefined,
-            gone: true,
-          },
-        ],
-      },
-      around,
-    )
-    expect(others).toEqual([
-      {
-        key: `Group:${gone}`,
-        who: 'A deleted group',
-        value: 'read',
-        from: 'set here',
-        clears: true,
-        named: { _tag: 'Group', id: gone },
-      },
-    ])
-    expect(
-      changeOf({ everyone: rows.everyone, others }, entry, `Group:${gone}`, 'inherit'),
-    ).toEqual({ tile: entry, subject: { _tag: 'Group', id: gone }, value: 'inherit' })
-  })
-
   it('shows the choice on its way on the row it was sent for alone', () => {
     const sent = {
       tile: entry,
@@ -244,5 +171,81 @@ describe('someone the Tile is shared with', () => {
   it('is named among the rows by their star, so picking them again sends nothing', () => {
     expect(named(rows, bobsStar)).toBe(true)
     expect(named(rows, crypto.randomUUID())).toBe(false)
+  })
+})
+
+describe('a Group the Tile is shared with', () => {
+  it('names a Group of an Organization’s own by its name and sends its choice by its id', () => {
+    const design = crypto.randomUUID()
+    const atelier = { id: crypto.randomUUID(), title: 'Atelier', preview: '' }
+    const shown = shareRowsOf(
+      {
+        everyone: everyone('none', null),
+        others: [
+          {
+            subject: { _tag: 'Group', id: design },
+            value: 'read',
+            from: null,
+            star: undefined,
+            group: { name: 'Design', organization: atelier },
+          },
+        ],
+      },
+      around,
+    )
+    expect(shown.others).toEqual([
+      {
+        key: `Group:${design}`,
+        who: 'Design, in Atelier',
+        value: 'read',
+        from: 'by default',
+        choice: 'inherit',
+        offered: ['none', 'read', 'read+write', 'read+@', 'read+write+@', 'inherit'],
+        named: { _tag: 'Group', id: design },
+      },
+    ])
+    expect(changeOf(shown, entry, `Group:${design}`, 'read+write')).toEqual({
+      tile: entry,
+      subject: { _tag: 'Group', id: design },
+      value: 'read+write',
+    })
+    expect(namedGroup(shown, design)).toBe(true)
+    expect(named(shown, design)).toBe(false)
+    const sent = { tile: entry, subject: { _tag: 'Group', id: design }, value: 'none' } as const
+    expect(withSent(shown, sent).others[0]).toMatchObject({ choice: 'none' })
+  })
+
+  it('offers a deleted Group’s Grant set here to be cleared alone, as inherit', () => {
+    const gone = crypto.randomUUID()
+    const shown = shareRowsOf(
+      {
+        everyone: everyone('none', null),
+        others: [
+          {
+            subject: { _tag: 'Group', id: gone },
+            value: 'read',
+            from: entry,
+            star: undefined,
+            gone: true,
+          },
+        ],
+      },
+      around,
+    )
+    expect(shown.others).toEqual([
+      {
+        key: `Group:${gone}`,
+        who: 'A deleted group',
+        value: 'read',
+        from: 'set here',
+        clears: true,
+        named: { _tag: 'Group', id: gone },
+      },
+    ])
+    expect(changeOf(shown, entry, `Group:${gone}`, 'inherit')).toEqual({
+      tile: entry,
+      subject: { _tag: 'Group', id: gone },
+      value: 'inherit',
+    })
   })
 })
