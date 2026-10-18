@@ -36,6 +36,7 @@ import {
   referenceAt,
   subjectOf,
   swapAt,
+  tileOn,
   tradeOf,
   turnOf,
   slotWithout,
@@ -51,7 +52,7 @@ import {
   type SystemSearch,
 } from '../search/search'
 import { copy } from '../copy'
-import { slotOf, tileIn } from '../tree'
+import { slotOf } from '../tree'
 import { visitLinkOf } from '../visit/visit'
 import type { Exported } from '../widget/state/useTileWidgetsState'
 import { tilesBelow } from '../widget/place'
@@ -80,7 +81,7 @@ interface Deleting {
 
 /** The move a Leaf takes to grow into a Branch before a Tile goes under it; none for any other. */
 const growing = (systems: Systems, hex: TileHex) =>
-  hex.tile.leaf === true ? turnOf(systems, tileIn(systems.root, hex.tile.id)) : undefined
+  hex.tile.leaf === true ? turnOf(systems, tileOn(systems, hex.tile.id)) : undefined
 
 /** The slot an empty Direction stands for, for an import or the moving one; none takes no click. */
 function placeOf(target: EmptySlotTarget, going?: TileNode) {
@@ -193,7 +194,7 @@ export function useActingState(input: ActingInput) {
       case 'make-branch': {
         // Shown at once, offering the change back: a second one while the first is on its way would
         // undo it, so it waits.
-        const turned = turnOf(systems, tileIn(root, id))
+        const turned = turnOf(systems, tileOn(systems, id))
         if (turned !== undefined && !move.isPending) move.mutate(turned)
         return
       }
@@ -269,10 +270,11 @@ export function useActingState(input: ActingInput) {
   }
 
   const deleteOf = (gone: TileNode): Deleting | undefined => {
-    const found = tileIn(root, gone.id)
-    if (found?.parent === undefined) return undefined
+    const found = tileOn(systems, gone.id)
+    if (found === undefined || found.kind === 'root') return undefined
     const { version } = found.tile
-    const parent = found.parent.id
+    // A Tile across a gap hangs from the star, which is centered once it goes.
+    const parent = found.kind === 'across' ? root.id : found.parent.id
     return {
       title: gone.title,
       below: tilesBelow(flat, gone.id),

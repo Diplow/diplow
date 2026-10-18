@@ -754,6 +754,7 @@ function SystemPage(props: SystemPageProps) {
       <System
         system={system}
         root={root}
+        across={[]}
         tree={tree}
         underway={underway}
         reach="owned"

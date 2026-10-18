@@ -165,6 +165,19 @@ describe('tileIn', () => {
     expect(tileIn(system, 'broken:root:-5')).toBeUndefined()
     expect(tileIn(system, 'nowhere')).toBeUndefined()
   })
+
+  it('finds a Tile hung from the star across a gap, under nothing shown, and what is below it', () => {
+    const gap = tile('gap', { leaves: { 4: tile('page') } })
+    expect(tileIn(system, 'gap')).toBeUndefined()
+    expect(tileIn(system, 'gap', [gap])).toEqual({ kind: 'across', tile: gap, parent: undefined })
+    expect(tileIn(system, 'page', [gap])).toEqual({
+      kind: 'leaf',
+      tile: gap.leaves[4],
+      parent: gap,
+      direction: 4,
+    })
+    expect(tileIn(system, 'root', [gap])).toMatchObject({ kind: 'root' })
+  })
 })
 
 describe('swapsWith', () => {

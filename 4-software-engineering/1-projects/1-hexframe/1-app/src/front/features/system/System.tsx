@@ -42,6 +42,11 @@ interface SystemProps {
   system: FlatSystem
   /** Its tree, Mapping's, from the Root. */
   root: SystemTile
+  /**
+   * The Tiles hung from its star across a gap, each a tree of its own (Mapping's `acrossGaps`): none
+   * on the user's own.
+   */
+  across: ReadonlyArray<SystemTile>
   /** The System's Tiles as the canvas draws them (`canvasTree`). */
   tree: TileNode
   /** What the writes on their way change (`useSystem`). */
@@ -74,6 +79,7 @@ interface SystemProps {
 export function System({
   system,
   root,
+  across,
   tree,
   underway,
   reach,
@@ -91,7 +97,7 @@ export function System({
   const writes = useWritesState(underway)
   useLeaveGuard(useSystemWriting())
   const { acting, emptySlots, move, deleting } = useActingState({
-    systems: { root, flat: system, tree, reach },
+    systems: { root, across, flat: system, tree, reach },
     search,
     onSearchChange,
     exporting,
