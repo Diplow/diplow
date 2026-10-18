@@ -83,18 +83,25 @@ describe('touchesOf, the changes made since the page opened', () => {
     ])
   })
 
-  it("makes the change the user's acceptance made theirs, once, a later one by the agent its own", () => {
+  it("touches the change the user's acceptance made as theirs, once, their own later ones not", () => {
     const entries = [
       change('before', 'b', agent),
       proposal('seen', 'accepted', ['b']),
-      change('landed', 'b', agent),
-      change('later', 'b', agent),
+      change('landed', 'b', you),
+      change('later', 'b', you),
+      change('agent', 'b', agent),
     ]
     const accepted = acceptedOf(entries, new Set(['seen']))
     expect(touchesOf(entries, { known: new Set(['before']), accepted })).toEqual([
       { tile: 'b', by: 'human', entry: 'landed' },
-      { tile: 'b', by: 'agent', entry: 'later' },
+      { tile: 'b', by: 'agent', entry: 'agent' },
     ])
+  })
+
+  it("leaves out the user's change no acceptance the page saw made", () => {
+    const entries = [proposal('unseen', 'accepted', ['b']), change('landed', 'b', you)]
+    const accepted = acceptedOf(entries, new Set())
+    expect(touchesOf(entries, { known, accepted })).toEqual([])
   })
 })
 

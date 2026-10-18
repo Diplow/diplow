@@ -113,8 +113,8 @@ describe('an accepted Proposal', () => {
     expect(await titlesHeld()).toEqual([])
     const changes = await changesRecorded(4)
     expect(changes.map(({ verb, actor }) => `${actor._tag} ${verb}`)).toEqual([
-      'Assistant TileCreated',
-      'Assistant TileCreated',
+      'You TileCreated',
+      'You TileCreated',
       'You TileDeleted',
       'You TileDeleted',
     ])

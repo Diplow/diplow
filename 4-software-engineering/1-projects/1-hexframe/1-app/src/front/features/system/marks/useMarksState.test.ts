@@ -174,7 +174,7 @@ describe('useMarksState, what crosses from the chat to the canvas', () => {
       })
     })
     expect(result.current.cardOf(id.made)).toMatchObject({ description: 'Tools' })
-    await readAgain([proposalEntry('accepted'), change('landed', { _tag: 'Assistant' })])
+    await readAgain([proposalEntry('accepted'), change('landed', { _tag: 'You' })])
     await waitFor(() => {
       expect(result.current.marks.tile?.(id.work)).toEqual({
         glint: { by: 'human', key: 'landed' },
