@@ -278,6 +278,23 @@ const entries: ReadonlyArray<Entry> = [
     id: 'e14',
     at,
   },
+  {
+    _tag: 'Membership',
+    what: 'accepted',
+    by: 'Ana Lima',
+    organization: { id: 'atelier', title: 'Atelier' },
+    group: 'Design',
+    id: 'e15',
+    at,
+  },
+  {
+    _tag: 'JoinAsked',
+    request: 'r1',
+    who: 'Cleo Diaz',
+    organization: { id: 'atelier', title: 'Atelier' },
+    id: 'e16',
+    at,
+  },
 ]
 
 describe("a Turn's prompt", () => {
@@ -402,6 +419,8 @@ describe("a Turn's prompt", () => {
       '- 14:02 UTC: The user TileEdited "Our journal" (id "journal"), in another Account\'s System, not the user\'s.',
       '- 14:02 UTC: A key of another Account, whose star is titled "Bob", TileCreated "Note" (id "note").',
       '- 14:02 UTC: The agent of another Account, whose star has no title, TileEdited "Games" (id "games"), which the user undid.',
+      '- 14:02 UTC: Another Account, whose star is titled "Ana Lima", accepted the user\'s request to join the group "Design" of the Organization "Atelier" (id "atelier").',
+      '- 14:02 UTC: Another Account, whose star is titled "Cleo Diaz", asked to join the Organization "Atelier" (id "atelier"), of which the user is an admin; the user accepts or declines it in the timeline, not you.',
     ])
   })
 

@@ -243,7 +243,7 @@
   "conversation_shared": "{who} a partagé {title} avec vous",
   "conversation_member_added": "{who} vous a ajouté à {organization}",
   "conversation_member_added_group": "{who} vous a ajouté à {group}, dans {organization}",
-  "conversation_member_removed": "{who} vous a retiré de {organization}",
+  "conversation_member_removed": "{who} vous a retiré de l’organisation {organization}",
   "conversation_member_removed_group": "{who} vous a retiré de {group}, dans {organization}",
   "conversation_join_accepted": "{who} a accepté votre demande pour rejoindre {organization}",
   "conversation_join_accepted_group": "{who} a accepté votre demande pour rejoindre {group}, dans {organization}",
