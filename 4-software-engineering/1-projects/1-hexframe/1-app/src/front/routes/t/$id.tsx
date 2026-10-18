@@ -29,6 +29,8 @@ export const Route = createFileRoute('/t/$id')({
     if (session !== undefined) return visited(id)
     return (await publicSystemOf(id)) ?? missing()
   },
+  // Read once per link: a gesture changes the search alone, which reads nothing again.
+  shouldReload: false,
   head: () => ({ meta: [{ name: 'robots', content: 'noindex' }] }),
   component: Public,
   notFoundComponent: Missing,
