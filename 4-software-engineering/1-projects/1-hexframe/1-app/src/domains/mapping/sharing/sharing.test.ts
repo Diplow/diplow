@@ -1,17 +1,21 @@
 import { expect, layer } from '@effect/vitest'
 import { Effect } from 'effect'
 
+import { Bus, type DomainEvent } from '#/domains/bus'
 import { transactional } from '#/repositories/database/database'
 
-import type { Actor, GrantChange } from '../entities'
+import type { Actor, Choice, GrantChange } from '../entities'
 import * as Mapping from '../mapping'
 import { actingOnOwn, createReference, createTile, held, TestTiles, tree } from '../testing'
-import { grant, whoReaches } from './sharing'
+import { grant, TileShared, whoReaches } from './sharing'
 
 // Who reaches a Tile, set and read by its owner over PGlite: Everyone set to read on a Tile, then to
 // none below it, then back to inherit, each read back with where it comes from and seen by a
-// stranger; nobody else, nor the owner without a Session, changing or reading it; no shipped Tile, no
-// Reference; and no count of the System's changes moved. Who reaches, on a System made by hand, is
+// stranger; an Account named by its star given any value, reading what it opens, told once when a
+// Grant first opens a Tile to them and never by a change after, listed by its star's card; nobody
+// else, nor the owner without a Session, changing or reading it; no shipped Tile, no Reference, no
+// star that names nothing, no Tile that is no star, nor the owner's own; and no count of the
+// System's changes moved. Who reaches, on a System made by hand, is
 // `../entities/rights/reach.test.ts`'s; who may share, `../operations/rights/may.test.ts`'s.
 
 const everyone = { _tag: 'Everyone' } as const
@@ -29,8 +33,24 @@ const anasSystem = Effect.gen(function* () {
 })
 
 /** Ana, setting Everyone's value on a Tile, as the API layer runs it, in the transaction it opens. */
-const setting = (acting: Mapping.Acting, tile: string, value: GrantChange['value']) =>
+const setting = (acting: Mapping.Acting, tile: string, value: 'read' | 'none' | 'inherit') =>
   transactional(grant(acting, { tile, subject: everyone, value }))
+
+/** Ana, setting the value of the Account a star stands for, as `setting` sets Everyone's. */
+const sharing = (acting: Mapping.Acting, tile: string, star: string, value: Choice) =>
+  transactional(grant(acting, { tile, subject: { _tag: 'Account', star }, value }))
+
+/** What a program published on the bus, kept in order, once it ran. */
+const heardFrom = <A, E, R>(program: Effect.Effect<A, E, R>) =>
+  Effect.gen(function* () {
+    const heard: DomainEvent[] = []
+    const publish = (event: DomainEvent) =>
+      Effect.sync(() => {
+        heard.push(event)
+      })
+    yield* Effect.provideService(program, Bus, { publish })
+    return heard
+  })
 
 /** Someone who owns nothing of the System, from a Session. */
 const stranger = (system: string): Mapping.Acting => {
@@ -140,6 +160,69 @@ layer(TestTiles)('who reaches a Tile, set by its owner, over PGlite', (it) => {
           _tag: 'TileNotFound',
         })
       }
+    }),
+  )
+
+  it.effect('shares a Tile with an Account by its star, who reads it then, told once', () =>
+    Effect.gen(function* () {
+      const { own, star, journal, entry, garden } = yield* anasSystem
+      const bob = yield* actingOnOwn(crypto.randomUUID())
+      const bobs = { ...bob, system: star }
+      expect(yield* readBy(bobs)).toEqual([])
+
+      expect(yield* heardFrom(sharing(own, journal.id, bob.system, 'read'))).toEqual([
+        new TileShared({
+          tile: journal.id,
+          title: 'Journal',
+          account: bob.actor.account ?? '',
+          value: 'read',
+        }),
+      ])
+      expect(yield* readBy(bobs)).toEqual([entry.id, journal.id].sort())
+
+      // A change of a value that lets Bob read already, a removal, says nothing.
+      for (const value of ['read+write', 'inherit'] as const) {
+        expect(yield* heardFrom(sharing(own, journal.id, bob.system, value))).toEqual([])
+      }
+      expect(yield* readBy(bobs)).toEqual([])
+      // Nor does none, and the read that follows it opens the Tile, so it is told.
+      expect(yield* heardFrom(sharing(own, garden.id, bob.system, 'none'))).toEqual([])
+      expect(yield* heardFrom(sharing(own, garden.id, bob.system, 'read+@'))).toMatchObject([
+        { _tag: 'TileShared', tile: garden.id, title: 'Garden', value: 'read+@' },
+      ])
+      expect((yield* whoReaches(own, garden.id)).others).toEqual([
+        {
+          subject: { _tag: 'Account', id: bob.actor.account },
+          value: 'read+@',
+          from: garden.id,
+          star: { id: bob.system, title: '', preview: '' },
+        },
+      ])
+    }),
+  )
+
+  it.effect('refuses a star that names nothing, a Tile that is no star, and the owner’s own', () =>
+    Effect.gen(function* () {
+      const { own, star, journal, entry } = yield* anasSystem
+      const bob = yield* actingOnOwn(crypto.randomUUID())
+      const refusals = [
+        [crypto.randomUUID(), 'TileNotFound'],
+        [entry.id, 'TileNotFound'],
+        [star, 'NotAllowed'],
+      ] as const
+      for (const [named, refused] of refusals) {
+        expect(yield* Effect.flip(sharing(own, journal.id, named, 'read'))).toMatchObject({
+          _tag: refused,
+        })
+      }
+      // Bob, reading Journal by his Grant, shares it with nobody, himself included.
+      yield* sharing(own, journal.id, bob.system, 'read+write')
+      expect(
+        yield* Effect.flip(sharing({ ...bob, system: star }, journal.id, bob.system, 'read+write+@')),
+      ).toMatchObject({ _tag: 'NotAllowed' })
+      expect((yield* whoReaches(own, journal.id)).others).toMatchObject([
+        { value: 'read+write', from: journal.id },
+      ])
     }),
   )
 })
