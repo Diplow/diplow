@@ -1,0 +1,89 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/organizations/CLAUDE.md
+  s_eb2c82211b20e8::t_3e556b7593b109 19,34
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/assistant.test.ts
+  s_eb2c82211b20e8::t_1cc7059310d7f9 164
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/organizations/joining.test.ts
+  s_eb2c82211b20e8::t_5246d82055ff51 3,150-152,217-230
+  s_eb2c82211b20e8::t_c8202b270c61a3 231-233
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_eb2c82211b20e8::t_3e556b7593b109 1422
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/agent/agent.test.ts
+  s_eb2c82211b20e8::t_1cc7059310d7f9 293
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/errors.ts
+  s_eb2c82211b20e8::t_343e06a8cc2b02 133-138,173
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261018122007_join-request-open-keys/migration.sql
+  s_eb2c82211b20e8::t_59c1cbb29579b5 1-3
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE.md
+  s_eb2c82211b20e8::t_3e556b7593b109 22,30
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/organizations/joining.ts
+  s_eb2c82211b20e8::t_343e06a8cc2b02 9,19,70-93,97-98,104,131,149,151,191-192,194-195
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/organizations/joining.ts
+  s_eb2c82211b20e8::t_3eb950bd432db2 4-6,17,25,34-38,41,43,46-51,62,65-72,86,102,106,110-120
+  s_eb2c82211b20e8::t_6dd4ef995b061f 90
+  s_eb2c82211b20e8::t_b9b1a0366e7a1c 121-122
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/schema.ts
+  s_eb2c82211b20e8::t_1ce672b5e82c08 4,517-519,552-553,555-557
+  s_eb2c82211b20e8::t_fef13ca84650c7 545-546,551
+  s_eb2c82211b20e8::t_59c1cbb29579b5 216-222,547-550,554
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/fixtures.ts
+  s_eb2c82211b20e8::t_1cc7059310d7f9 109,117
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE.md
+  s_eb2c82211b20e8::t_3e556b7593b109 33,38,40
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/organizations/organizations.ts
+  s_eb2c82211b20e8::t_b0587806ff5ae5 31,74
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/entry.ts
+  s_eb2c82211b20e8::t_1cc7059310d7f9 193,200
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/report/errors/messages.ts
+  s_eb2c82211b20e8::t_3e556b7593b109 59
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/entry/words.test.ts
+  s_eb2c82211b20e8::t_1cc7059310d7f9 150
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-sharing-organizations/decisions.md
+  s_eb2c82211b20e8::t_3e556b7593b109 230,236
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/agent/prompt.ts
+  s_eb2c82211b20e8::t_1cc7059310d7f9 210
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/entities/organization.ts
+  s_eb2c82211b20e8::t_343e06a8cc2b02 22-26
+  s_eb2c82211b20e8::t_4f9f4a42033f8d 21
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/entry/words.ts
+  s_eb2c82211b20e8::t_1cc7059310d7f9 329
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261018122007_join-request-open-keys/snapshot.json
+  s_eb2c82211b20e8::t_59c1cbb29579b5 1-3185
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useActingState.test.ts
+  s_eb2c82211b20e8::t_6dd4ef995b061f 7,42,338-346
+  s_eb2c82211b20e8::t_6cee86f902cb1b 347
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_eb2c82211b20e8::t_3e556b7593b109 1422
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/iam/organizations.ts
+  s_eb2c82211b20e8::t_b0587806ff5ae5 19,215
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/organizations/joining.test.ts
+  s_eb2c82211b20e8::t_1cc7059310d7f9 126,183
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/organizations/programs.ts
+  s_eb2c82211b20e8::t_b0587806ff5ae5 70-73,80
+  s_eb2c82211b20e8::t_6dd4ef995b061f 292
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/organizations/organizations.ts
+  s_eb2c82211b20e8::t_343e06a8cc2b02 18,106-117,155-156,209
+  s_eb2c82211b20e8::t_6dd4ef995b061f 167-169,218-220
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/CLAUDE.md
+  s_eb2c82211b20e8::t_3e556b7593b109 18
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/recording.ts
+  s_eb2c82211b20e8::t_1cc7059310d7f9 170
+  s_eb2c82211b20e8::t_6dd4ef995b061f 173
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/organizations/organizations.ts
+  s_eb2c82211b20e8::t_1ce672b5e82c08 13,189
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f9d8e41b660aa155fc0fe1c64d30e9fd26cc3ff1",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
