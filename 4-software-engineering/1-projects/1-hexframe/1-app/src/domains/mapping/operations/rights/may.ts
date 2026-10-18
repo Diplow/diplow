@@ -22,6 +22,8 @@ import {
 } from '../../entities'
 import { BatchOutdated, NotAllowed, TileNotFound } from '../../errors'
 import { afterOne, type Batched, type Folded, whole } from '../batch/fold'
+import { evolve } from '../decider/evolve'
+import type { OperationEvent } from '../events'
 import type { Operation } from '../operation'
 
 /** Whether the actor has this right on the Tile of this id: `rightsOn`, asked of one right. */
@@ -201,31 +203,51 @@ export function allowed(
   return dropsGrants(actor, sharing, deleted) ? Result.fail(new NotAllowed()) : Result.void
 }
 
-/**
- * Whether the System's owner may run a batch, or an undo, that leaves it as `after`: from a Session
- * always; else only when no Tile that stood before it gives anyone a right they did not hold, a Tile
- * the batch makes opening nothing that stood, and none it deletes carries a Grant. `NotAllowed`
- * otherwise, the whole batch with it.
- */
-export function allowedBatch(
-  actor: Actor,
-  sharing: Sharing,
-  after: System,
-): Result.Result<void, NotAllowed> {
-  if (mayOpen(actor, sharing)) return Result.void
-  const now = lineageOf(after)
-  const stood = [...sharing.lineage.keys()]
-  const kept = stood.filter((id) => now.has(id))
-  const gone = stood.filter((id) => !now.has(id))
-  return opens(sharing, now, kept) || dropsGrants(actor, sharing, gone)
-    ? Result.fail(new NotAllowed())
-    : Result.void
-}
-
 /** What a System's rights are read from beside where its Tiles stand: its owner, and its Grants. */
 export interface Granted {
   readonly owner: string
   readonly grants: ReadonlyArray<Grant>
+}
+
+/**
+ * What these events leave of a System, and the ids of its Tiles they delete on the way, each with
+ * everything below it, whether a later event makes a Tile under one of them again or not.
+ */
+function leftBy(before: System, events: ReadonlyArray<OperationEvent>) {
+  const deleted = new Set<string>()
+  let after = before
+  for (const event of events) {
+    if (event._tag === 'TileDeleted') for (const id of below(after, event.id)) deleted.add(id)
+    after = evolve(after, event)
+  }
+  return { after, deleted }
+}
+
+/**
+ * Whether the System's owner may run a batch, or an undo, that makes these events on it as it stood
+ * before: from a Session always; else only when no Tile that stood before it, and was never deleted
+ * on the way, gives anyone a right they did not hold, a Tile the batch makes opening nothing that
+ * stood, and none it deletes carries a Grant. A deleted Tile's Grants go with it, the table's key
+ * cascading, so a Tile the batch makes again under a deleted one's id is a new Tile, with no Grant of
+ * its own: its delete is ruled on as any other's, and once none it deletes carried a Grant, the
+ * Grants left are the ones it found. `NotAllowed` otherwise, the whole batch with it.
+ */
+export function allowedBatch(
+  actor: Actor,
+  { owner, grants }: Granted,
+  before: System,
+  events: ReadonlyArray<OperationEvent>,
+): Result.Result<void, NotAllowed> {
+  const sharing = sharingOf(owner, lineageOf(before), grants)
+  if (mayOpen(actor, sharing)) return Result.void
+  const { after, deleted } = leftBy(before, events)
+  const now = lineageOf(after)
+  const stood = [...sharing.lineage.keys()]
+  const kept = stood.filter((id) => now.has(id) && !deleted.has(id))
+  const gone = stood.filter((id) => !kept.includes(id))
+  return opens(sharing, now, kept) || dropsGrants(actor, sharing, gone)
+    ? Result.fail(new NotAllowed())
+    : Result.void
 }
 
 /**
@@ -251,6 +273,8 @@ export const allowedStep = (
  * Tile the batch made reading as its parent lets it. All of it, or the first refusal: `TileNotFound`
  * or `NotAllowed` as `allowed` answers, so a Grant taken back since refuses it, or `BatchOutdated`
  * once an Operation no longer applies. What the whole batch leaves is `allowedBatch`'s to rule on.
+ * Each step reads the Grants as they stood: a Tile it deleted carried none, `allowed` refusing anyone
+ * but the owner a delete over a Grant, so one it makes again under that id is judged with none too.
  */
 export function allowedThrough(
   actor: Actor,

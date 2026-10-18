@@ -771,8 +771,8 @@ export const addToBatch = <O extends Operation>(
     const made = yield* madeFor(operation)
     const next = yield* Effect.fromResult(added(folded, operation, made))
     // Refused now what its run would refuse, so a batch holds nothing it can't run.
-    const sharing = sharingOf(owner, lineageOf(held), grants)
-    yield* Effect.fromResult(allowedBatch(acting.actor, sharing, next.system))
+    const events = [...folded.events, ...next.events]
+    yield* Effect.fromResult(allowedBatch(acting.actor, { owner, grants }, held, events))
     const tile = yield* tileAnswered(next.system, operation, made)
     return {
       batched: next.batched,
@@ -798,9 +798,8 @@ const ranWhole = <T>(
     yield* outsideShipped(batch.flatMap(({ operation }) => writtenAt(operation)))
     const { system, owner } = yield* locked(acting)
     const { events } = yield* Effect.fromResult(folding(system, batch))
-    const sharing = sharingOf(owner, lineageOf(system), yield* grantsIn(owner))
-    const after = events.reduce<System>(evolve, system)
-    yield* Effect.fromResult(allowedBatch(acting.actor, sharing, after))
+    const granted = { owner, grants: yield* grantsIn(owner) }
+    yield* Effect.fromResult(allowedBatch(acting.actor, granted, system, events))
     yield* writtenAll(owner, system, events, onTaken)
     return { system, events }
   })
@@ -841,8 +840,7 @@ export const batchAllowed = (acting: Acting, batch: ReadonlyArray<Batched>) =>
     const folded = yield* Effect.fromResult(
       allowedThrough(acting.actor, { owner, grants }, system, batch),
     )
-    const sharing = sharingOf(owner, lineageOf(system), grants)
-    yield* Effect.fromResult(allowedBatch(acting.actor, sharing, folded.system))
+    yield* Effect.fromResult(allowedBatch(acting.actor, { owner, grants }, system, folded.events))
   })
 
 /**

@@ -14,6 +14,8 @@ import {
 import {
   allowed,
   allowedBatch,
+  allowedThrough,
+  type Batched,
   CreateReference,
   CreateTile,
   DeleteReference,
@@ -24,8 +26,12 @@ import {
   mayShare,
   MoveTile,
   type Operation,
+  type OperationEvent,
   shownAllowed,
   SwapTiles,
+  TileCreated,
+  TileDeleted,
+  TileMoved,
 } from '..'
 import { agentAllowed, runsAgent } from './may'
 
@@ -261,40 +267,67 @@ describe('a move that would give a right other than read', () => {
 })
 
 describe('a batch, run by its owner', () => {
-  const movedUnder = (tile: string, parent: string): System => {
-    const held = system.tiles[tile]
-    if (held === undefined) throw new Error(`No Tile ${tile}`)
-    return { ...system, tiles: { ...system.tiles, [tile]: { ...held, parent } } }
-  }
-  const batchVerdict = (who: Actor, after: System) => {
-    const result = allowedBatch(who, sharing, after)
+  const movedUnder = (tile: string, parent: string, slot: Slot) =>
+    new TileMoved({ id: tile, parent, slot })
+  const deleted = (tile: string) => new TileDeleted({ id: tile, title: tile })
+  const created = (tile: string, parent: string, slot: Slot) =>
+    new TileCreated({ id: tile, parent, slot, title: tile, preview: '', body: '' })
+  const batchVerdict = (who: Actor, events: ReadonlyArray<OperationEvent>) => {
+    const result = allowedBatch(who, { owner: 'ana', grants }, system, events)
     return Result.isFailure(result) ? result.failure._tag : 'ok'
   }
 
   it('is refused without a Session when it leaves a Tile that stood before open to someone', () => {
-    const opened = movedUnder(id.garden, id.square)
+    const opened = [movedUnder(id.garden, id.square, 2)]
     expect(batchVerdict(actor('ana', false), opened)).toBe('NotAllowed')
     expect(batchVerdict(ana, opened)).toBe('ok')
   })
 
   it('is refused without a Session when it deletes a Tile carrying a Grant, which no undo puts back', () => {
-    const without = (...gone: ReadonlyArray<string>): System => ({
-      ...system,
-      tiles: Object.fromEntries(Object.entries(system.tiles).filter(([at]) => !gone.includes(at))),
-    })
-    expect(batchVerdict(actor('ana', false), without(id.square, id.bench))).toBe('NotAllowed')
-    expect(batchVerdict(ana, without(id.square, id.bench))).toBe('ok')
-    expect(batchVerdict(actor('ana', false), without(id.entry))).toBe('ok')
+    expect(batchVerdict(actor('ana', false), [deleted(id.square)])).toBe('NotAllowed')
+    expect(batchVerdict(ana, [deleted(id.square)])).toBe('ok')
+    expect(batchVerdict(actor('ana', false), [deleted(id.entry)])).toBe('ok')
   })
 
   it('goes through when it opens nothing that stood, a Tile it makes under a public one included', () => {
-    expect(batchVerdict(actor('ana', false), movedUnder(id.entry, id.garden))).toBe('ok')
-    const made = uuid()
-    const withNew: System = {
-      ...system,
-      tiles: { ...system.tiles, [made]: placed(made, id.square, 2) },
-    }
-    expect(batchVerdict(actor('ana', false), withNew)).toBe('ok')
+    expect(batchVerdict(actor('ana', false), [movedUnder(id.entry, id.garden, 1)])).toBe('ok')
+    expect(batchVerdict(actor('ana', false), [created(uuid(), id.square, 2)])).toBe('ok')
+  })
+
+  it('takes a Tile it deletes and makes again under the same id for a new one, with no Grant of its own', () => {
+    // Secret, kept from Bob, made again where it stood: its delete took the Grant, so Bob would read it.
+    const remade = [deleted(id.secret), created(id.secret, id.journal, 2)]
+    expect(batchVerdict(actor('ana', false), remade)).toBe('NotAllowed')
+    expect(batchVerdict(ana, remade)).toBe('ok')
+    // Made again elsewhere, a Tile with no Grant opens nothing: a new Tile, as any it makes.
+    const elsewhere = [deleted(id.entry), created(id.entry, id.square, 2)]
+    expect(batchVerdict(actor('ana', false), elsewhere)).toBe('ok')
+  })
+})
+
+describe('a batch folded for anyone but its owner', () => {
+  it('never deletes a Tile carrying a Grant, so one it makes again under that id carries none', () => {
+    const family = { _tag: 'Group', id: 'family' } as const
+    const kept: ReadonlyArray<Grant> = [
+      bobsGrant,
+      { tile: id.garden, subject: family, value: 'none' },
+    ]
+    const again = new CreateTile({
+      parent: id.ana,
+      slot: 2,
+      title: 'Garden',
+      preview: '',
+      body: '',
+    })
+    const remade: ReadonlyArray<Batched> = [
+      { operation: new DeleteTile({ id: id.garden, version: 1 }) },
+      { operation: again, made: id.garden },
+    ]
+    const result = allowedThrough(bob, { owner: 'ana', grants: kept }, system, remade)
+    expect(Result.isFailure(result) && result.failure._tag).toBe('NotAllowed')
+    // Without the Grant, its delete goes through, and so does the Tile made again.
+    const open = allowedThrough(bob, { owner: 'ana', grants: [bobsGrant] }, system, remade)
+    expect(Result.isSuccess(open)).toBe(true)
   })
 })
 
