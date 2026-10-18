@@ -116,7 +116,8 @@ export const deleteGroup = (organization: string, group: string) =>
  * Puts one of an Organization's members in one of its Groups, or takes them out, by one of its
  * admins from a Session: `GroupNotFound` for an id none of its Groups has, `MemberNotFound` for an
  * Account not among its members. Putting someone in twice, or taking out someone not in it, changes
- * nothing. Holds from their next request on. Inside a transaction.
+ * nothing; put in, their open request to join it goes. Holds from their next request on. Inside a
+ * transaction.
  */
 export const setInGroup = (
   organization: string,
@@ -135,6 +136,12 @@ export const setInGroup = (
         ? organizations.addToGroup(organization, { group, account })
         : organizations.removeFromGroup(organization, { group, account }),
     )
+    // Put in, a request of theirs to join it has nothing left to decide.
+    if (placed) {
+      yield* Organizations.use((organizations) =>
+        organizations.dropGroupRequest(organization, { group, account }),
+      )
+    }
   })
 
 /**

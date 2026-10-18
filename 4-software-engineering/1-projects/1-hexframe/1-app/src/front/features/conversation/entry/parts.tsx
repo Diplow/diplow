@@ -1,6 +1,6 @@
 // What the timeline's Entries share: a Title as the timeline says it, the icon of each of Mapping's
-// changes, which a change and a Proposal draw alike, and how the user decides on what the agent
-// proposed or applied.
+// changes, which a change and a Proposal draw alike, how the user decides on what the agent
+// proposed or applied, and on someone's request to join an Organization they are an admin of.
 import {
   ArrowLeftRight,
   Link,
@@ -12,6 +12,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 
+import type { JoinState } from '#/domains/iam/entities'
 import type { OperationEvent } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 
@@ -24,6 +25,17 @@ export interface Deciding {
   accept: (proposal: string) => void
   discard: (proposal: string) => void
   undo: (applied: string) => void
+  pending: boolean
+}
+
+/**
+ * How the user, an admin, decides on a request to join one of their Organizations, or one of its
+ * Groups (HEX-138): how each request the day names stands now, by its id, none for one no longer
+ * theirs to decide; accepted or declined by its id; and whether a decision is on its way.
+ */
+export interface Joining {
+  states: Readonly<Record<string, JoinState>>
+  decide: (request: string, accept: boolean) => void
   pending: boolean
 }
 

@@ -1,8 +1,10 @@
 // What an Entry says, as the chat's pieces take it (`Words`, `Happened`, ui's `chat/`): a Message's
 // text with its links woven in as the Tiles they name; a change, an import, a navigation and a Turn's
 // end as a line by who acted, the user, the agent, a Key, or hexframe itself; a Tile shared with the
-// user as a line by whoever shared it, from outside, its Tile visited on a click; and a Proposal's
-// changes.
+// user as a line by whoever shared it, from outside, its Tile visited on a click; the user's place in
+// an Organization changed by one of its admins, a line from outside, its star visited on a click, and
+// someone asking to join one the user is an admin of, which they accept or decline (HEX-138); and a
+// Proposal's changes.
 // A Tile named shows as the Title it had, centering the canvas while the System still holds it, the
 // agent's draft while a Proposal only proposes it, struck through once deleted. And the Entries cut
 // into what the timeline draws: a run of lines on one thread, a Message, a Proposal, what a Turn
@@ -13,6 +15,8 @@ import {
   type Actor,
   type BadEnd,
   type Entry,
+  type AskedToJoin,
+  type Membership,
   isTheirs,
   partsOf,
   type ProposedChange,
@@ -255,7 +259,7 @@ const turnEnds: Record<BadEnd, Pick<Happened, 'who' | 'state'> & { text: () => s
 /** An Entry the timeline tells in a line. */
 export type Told = Extract<
   Entry,
-  { _tag: 'Change' | 'Import' | 'Navigation' | 'TurnEnded' | 'Shared' }
+  { _tag: 'Change' | 'Import' | 'Navigation' | 'TurnEnded' | 'Shared' | 'Membership' }
 >
 
 /** The line an Entry is told in, on the thread of what happened. */
@@ -274,7 +278,55 @@ export function happenedOf(entry: Told, naming: Naming): Happened {
     }
     case 'Shared':
       return sharedOf(entry, naming)
+    case 'Membership':
+      return { who: 'outside', words: membershipWords(entry, naming), at }
   }
+}
+
+type Joined = 'who' | 'organization' | 'group'
+
+/**
+ * What one of an Organization's admins did to the user's place there, by its Members or one of its
+ * Groups.
+ */
+const memberships: Record<
+  Membership['what'],
+  Record<'members' | 'group', (inputs: Record<Joined, string>) => string>
+> = {
+  added: { members: m.conversation_member_added, group: m.conversation_member_added_group },
+  removed: { members: m.conversation_member_removed, group: m.conversation_member_removed_group },
+  accepted: { members: m.conversation_join_accepted, group: m.conversation_join_accepted_group },
+  declined: { members: m.conversation_join_declined, group: m.conversation_join_declined_group },
+}
+
+/** Someone from outside, by the Title their star had then, "Someone" for one not named yet. */
+const outsider = (star: string): Word => ({ name: star === '' ? m.conversation_someone() : star })
+
+/** What an Organization's line names: its star, visited on a click, and its Group, if any. */
+const joinedPieces = (
+  { organization, group }: Pick<Membership, 'organization' | 'group'>,
+  naming: Naming,
+) => ({
+  organization: {
+    tile: {
+      title: named(organization.title),
+      onCenter: centering(organization.id, naming.onCenter),
+    },
+  },
+  group: group ?? '',
+})
+
+/** What a change of the user's place in an Organization says, by the admin who made it. */
+function membershipWords(entry: Omit<Membership, '_tag'>, naming: Naming): Words {
+  const said = memberships[entry.what][entry.group === undefined ? 'members' : 'group']
+  return weave(said, { who: outsider(entry.by), ...joinedPieces(entry, naming) })
+}
+
+/** What someone asking to join an Organization the user is an admin of, or one of its Groups, says. */
+export function askedToJoinWords(entry: AskedToJoin, naming: Naming): Words {
+  const said =
+    entry.group === undefined ? m.conversation_join_asked : m.conversation_join_asked_group
+  return weave(said, { who: outsider(entry.by), ...joinedPieces(entry, naming) })
 }
 
 /**
@@ -393,6 +445,7 @@ export type Block =
     }
   | { readonly kind: 'proposal'; readonly entry: Extract<Entry, { _tag: 'Proposal' }> }
   | { readonly kind: 'applied'; readonly entry: Extract<Entry, { _tag: 'TurnApplied' }> }
+  | { readonly kind: 'asked'; readonly entry: Extract<Entry, { _tag: 'AskedToJoin' }> }
 
 /** The Entries of a day, oldest first, cut into what the timeline draws, the lines run together. */
 export function blocksOf(entries: ReadonlyArray<Entry>): ReadonlyArray<Block> {
@@ -411,6 +464,9 @@ export function blocksOf(entries: ReadonlyArray<Entry>): ReadonlyArray<Block> {
         return
       case 'TurnApplied':
         blocks.push({ kind: 'applied', entry })
+        return
+      case 'AskedToJoin':
+        blocks.push({ kind: 'asked', entry })
         return
       case 'Change':
         if (isTheirs(entry)) blocks.push({ kind: 'theirs', entry })

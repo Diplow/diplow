@@ -4,6 +4,7 @@ import { act, cleanup, renderHook, waitFor } from '@testing-library/react'
 import { createElement, type ReactNode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+import * as Organizations from '#/api/iam/organizations/organizations'
 import * as Mapping from '#/api/mapping/mapping'
 import { makeQueryClient } from '#/front/client/channels'
 import {
@@ -38,6 +39,7 @@ vi.mock('#/api/mapping/mapping', () => ({
   deleteReference: vi.fn(),
   system: vi.fn(),
 }))
+vi.mock('#/api/iam/organizations/organizations', () => ({ askToJoin: vi.fn() }))
 vi.mock('#/front/ui/atoms/Toaster', () => ({ toast: Object.assign(vi.fn(), { error: vi.fn() }) }))
 
 afterEach(() => {
@@ -332,6 +334,16 @@ describe('a line that opens something', () => {
     })
     expect(writeText).toHaveBeenCalledWith('holding')
     vi.unstubAllGlobals()
+  })
+
+  it('asks to join the Organization a star names, saying so once asked (HEX-138)', async () => {
+    vi.mocked(Organizations.askToJoin).mockResolvedValue(done as never)
+    const { result } = render()
+    choose(result, 'tile:root', { verb: 'join' })
+    await waitFor(() => {
+      expect(toast).toHaveBeenCalledWith(m.organization_join_asked({ title: 'Me' }))
+    })
+    expect(Organizations.askToJoin).toHaveBeenCalledWith({ data: { star: 'root' } })
   })
 })
 

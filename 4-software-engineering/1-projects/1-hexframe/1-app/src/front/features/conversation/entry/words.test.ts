@@ -4,7 +4,15 @@ import { type Entry, linkTo, type OwnActor, type Someone } from '#/domains/assis
 import { m } from '#/paraglide/messages'
 import type { Word } from '#/front/ui/chat/text/words'
 
-import { blocksOf, happenedOf, messageWords, type Naming, proposedOf, type Told } from './words'
+import {
+  blocksOf,
+  happenedOf,
+  askedToJoinWords,
+  messageWords,
+  type Naming,
+  proposedOf,
+  type Told,
+} from './words'
 
 // What an Entry says as the chat's pieces take it, over Entries made by hand: who a line is by, a Tile
 // named as it stands now, a Message's links woven in, a Proposal's draft, and a day cut into blocks.
@@ -107,6 +115,47 @@ describe('happenedOf', () => {
     if (typeof journal === 'object' && 'tile' in journal) journal.tile.onCenter?.()
     expect(visited).toEqual(['journal'])
     expect(happenedOf(shared(''), naming).words[0]).toEqual({ name: m.conversation_someone() })
+  })
+
+  it('tells the user’s place in an Organization changed by an admin, from outside, its star visited', () => {
+    const visited: string[] = []
+    const atelier = { id: 'atelier', title: 'Atelier' }
+    const membership = (what: 'added' | 'declined', by: string, group?: string): Told => ({
+      _tag: 'Membership',
+      id: 'o',
+      at,
+      what,
+      by,
+      organization: atelier,
+      ...(group !== undefined && { group }),
+    })
+    const onCenter = (id: string) => {
+      visited.push(id)
+    }
+    const added = happenedOf(membership('added', 'Ana Lima'), { ...naming, onCenter })
+    expect(added.who).toBe('outside')
+    expect(added.words[0]).toEqual({ name: 'Ana Lima' })
+    const star = added.words.find((word) => typeof word === 'object' && 'tile' in word)
+    expect(tile(star)).toEqual({ title: 'Atelier', standing: 'live' })
+    if (typeof star === 'object' && 'tile' in star) star.tile.onCenter?.()
+    expect(visited).toEqual(['atelier'])
+    // A Group named in its own words, by no one named yet.
+    const declined = happenedOf(membership('declined', '', 'Design'), naming)
+    expect(declined.words[0]).toEqual({ name: m.conversation_someone() })
+    expect(declined.words).toContain('Design')
+    expect(declined.words).not.toEqual(added.words)
+  })
+
+  it('tells someone asking to join, by their star, the Organization and its Group', () => {
+    const asked = { _tag: 'AskedToJoin', id: 'j', at, request: 'r', by: 'Cleo Diaz' } as const
+    const organization = { id: 'atelier', title: 'Atelier' }
+    const toMembers = askedToJoinWords({ ...asked, organization }, naming)
+    expect(toMembers[0]).toEqual({ name: 'Cleo Diaz' })
+    expect(toMembers).not.toContain('Design')
+    expect(askedToJoinWords({ ...asked, organization, group: 'Design' }, naming)).toContain(
+      'Design',
+    )
+    expect(blocksOf([{ ...asked, organization }]).map(({ kind }) => kind)).toEqual(['asked'])
   })
 
   it('tells a change someone else made in the user’s System by their star, and who of theirs', () => {

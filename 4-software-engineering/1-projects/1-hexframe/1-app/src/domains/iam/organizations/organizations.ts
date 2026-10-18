@@ -7,8 +7,11 @@
 // its maker did: that last can neither leave, nor be removed, nor be made a member, while someone an
 // admin added without asking, and made an admin, may always be taken out, themselves leaving
 // included, so nobody is left holding an Organization they never chose. Its name and Handle are its
-// star's, Mapping's, which IAM never keeps.
-import { Effect } from 'effect'
+// star's, Mapping's, which IAM never keeps. Someone added, or taken out, is a fact on the bus
+// (`MemberAdded`, `MemberRemoved`), which the API layer tells in their timeline (HEX-138).
+import { Effect, Schema } from 'effect'
+
+import { Bus } from '#/domains/bus'
 
 import { type MemberRow, Organizations } from '#/repositories/database/organizations/organizations'
 
@@ -22,6 +25,30 @@ import {
   OrganizationNotFound,
 } from '../errors'
 import { sessionOnly } from '../iam'
+
+/**
+ * An Account added to an Organization by one of its admins, without asking first: published once the
+ * transaction commits. It says nothing of who added it, which the bus's envelope carries.
+ */
+export class MemberAdded extends Schema.TaggedClass<MemberAdded>()('MemberAdded', {
+  organization: Schema.String,
+  account: Schema.String,
+}) {}
+
+/**
+ * An Account taken out of an Organization by one of its admins: published once the transaction
+ * commits. Who took it out rides on the bus's envelope.
+ */
+export class MemberRemoved extends Schema.TaggedClass<MemberRemoved>()('MemberRemoved', {
+  organization: Schema.String,
+  account: Schema.String,
+}) {}
+
+/** An Account that left an Organization of its own accord: published once the transaction commits. */
+export class MemberLeft extends Schema.TaggedClass<MemberLeft>()('MemberLeft', {
+  organization: Schema.String,
+  account: Schema.String,
+}) {}
 
 /**
  * The id of an Organization's Members Group, which holds every member, admins included, and is kept
@@ -119,7 +146,8 @@ const lastJoinedAdmin = (found: ReadonlyArray<MemberRow>, account: string) => {
 /**
  * Adds an Account to an Organization, a member, by one of its admins from a Session, without asking
  * first: `AccountNotFound` for an id no Account has, an Organization's included, and `AlreadyMember`
- * for one among its members. Inside a transaction.
+ * for one among its members. A request of theirs to join it, open, has nothing left to decide and
+ * goes. Publishes `MemberAdded`, so they are told. Inside a transaction.
  */
 export const addMember = (organization: string, account: string) =>
   Effect.gen(function* () {
@@ -130,6 +158,11 @@ export const addMember = (organization: string, account: string) =>
       organizations.add(organization, { account, role: 'member' }),
     )
     if (!added) return yield* new AlreadyMember()
+    yield* Organizations.use((organizations) =>
+      organizations.dropOpenRequests(organization, account),
+    )
+    const { publish } = yield* Bus
+    yield* publish(new MemberAdded({ organization, account }))
   })
 
 /**
@@ -156,23 +189,34 @@ export const setRole = (organization: string, account: string, role: Role) =>
 const leftBy = (organization: string, account: string) =>
   Effect.gen(function* () {
     const { account: asking } = yield* sessionOnly
-    if (asking.id !== account) return yield* managedBy(organization)
+    if (asking.id !== account) return { found: yield* managedBy(organization), leaving: false }
     const found = yield* Organizations.use((organizations) => organizations.locked(organization))
     if (roleIn(found, account) === undefined) return yield* new OrganizationNotFound()
-    return found
+    return { found, leaving: true }
   })
 
 /**
  * Takes an Account out of an Organization, from a Session: by one of its admins, or by the Account
  * itself, leaving, whatever its role, so nobody stays in one they never chose. `MemberNotFound` for
  * an Account not among its members, and `LastAdmin` for its last admin who joined
- * (`lastJoinedAdmin`). Holds from the next request on, since nothing is kept of it. Inside a
- * transaction.
+ * (`lastJoinedAdmin`). Holds from the next request on, since nothing is kept of it. Its open
+ * requests to join the Organization or its Groups go with it, so no old one brings it back.
+ * Publishes `MemberRemoved` for someone an admin took out, who is told, and `MemberLeft` for someone
+ * who left. Inside a transaction.
  */
 export const removeMember = (organization: string, account: string) =>
   Effect.gen(function* () {
-    const found = yield* leftBy(organization, account)
+    const { found, leaving } = yield* leftBy(organization, account)
     const role = yield* roleOf(found, account)
     if (role === 'admin' && lastJoinedAdmin(found, account)) return yield* new LastAdmin()
     yield* Organizations.use((organizations) => organizations.remove(organization, account))
+    yield* Organizations.use((organizations) =>
+      organizations.dropOpenRequests(organization, account),
+    )
+    const { publish } = yield* Bus
+    yield* publish(
+      leaving
+        ? new MemberLeft({ organization, account })
+        : new MemberRemoved({ organization, account }),
+    )
   })

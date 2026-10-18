@@ -10,8 +10,15 @@ import type { Redacted } from 'effect'
 
 import * as Agent from '#/domains/assistant/agent/agent'
 import * as Assistant from '#/domains/assistant/assistant'
-import { linksOf, namedTiles, type TurnEnd, turnLocation } from '#/domains/assistant/entities'
+import {
+  linksOf,
+  namedRequests,
+  namedTiles,
+  type TurnEnd,
+  turnLocation,
+} from '#/domains/assistant/entities'
 import * as Iam from '#/domains/iam/iam'
+import * as Joining from '#/domains/iam/organizations/joining'
 import type { Turn } from '#/domains/assistant/entities'
 import * as Spending from '#/domains/assistant/spending/admission'
 import type { Right } from '#/domains/mapping/entities'
@@ -39,7 +46,10 @@ const forSession = <A, E, R>(operation: (accountId: string) => Effect.Effect<A, 
  * first, and the Titles of the Tiles its navigations went to and its Messages link, as the System
  * holding each now shows it to the Account, its own or one it visited (Mapping's `titlesAcross`), by id. A
  * navigation and a link keep a Tile's id alone; a Tile no System holds any longer, or one kept from
- * the Account since, has no Title there. With them, `earlier`, the instant of the latest Entry before the day,
+ * the Account since, has no Title there. With them, `requests`, when it names any, how each request to join an
+ * Organization its Entries name stands now, by its id, for the requests of an Organization the
+ * Account is an admin of now (IAM's `requestsSeen`, HEX-138), so an admin's timeline offers Accept
+ * and Decline while it is open, whoever decided it since; `earlier`, the instant of the latest Entry before the day,
  * where a reader scrolling back goes next, and `lastEntry`, the Entry last recorded in the
  * Conversation, and `proposal`, its open Proposal, how many writes it holds, which the page's poll
  * compares with its own (`latest`), and the writes themselves, which the canvas draws (`proposalNow`).
@@ -57,11 +67,13 @@ export const conversationDay = ({ date, ...offsets }: typeof DayAsked.Type) =>
         yield* actingOnOwn(accountId, { session: false }),
         namedTiles(entries),
       )
+      const requests = yield* Joining.requestsSeen(namedRequests(entries))
       const earlier = yield* Assistant.before(accountId, day)
       return {
         day,
         entries,
         titles,
+        ...(requests.size > 0 && { requests: Object.fromEntries(requests) }),
         ...(earlier !== undefined && { earlier }),
         ...(lastEntry !== undefined && { lastEntry }),
         ...(proposal !== undefined && { proposal }),

@@ -1,8 +1,9 @@
 // The Conversation's Entries: what its timeline holds, oldest first. A Message between the user and the
 // agent; a change to the System, whoever made it; an import; where the user went, consecutive
 // navigations merged into one (./navigation.ts); how a Turn ended, when not by its answer; a
-// Proposal, the changes its agent drafted in ask, and how the user decided it; and a Tile someone
-// shared with the user, which lives in their System, not the user's. A change and an import
+// Proposal, the changes its agent drafted in ask, and how the user decided it; a Tile someone
+// shared with the user, which lives in their System, not the user's; and the user's place in an
+// Organization changed by one of its admins, or someone asking an admin to join it. A change and an import
 // are recorded as Mapping summarized them when they happened, with who acted, and never rebuilt: the
 // timeline is a record of the past; a Proposal's Entry alone follows it until the user decides it.
 // Assistant knows no Tile: a change names its verb and its Tiles as they came. Pure.
@@ -171,6 +172,38 @@ const Shared = Schema.TaggedStruct('Shared', {
 
 export type Shared = typeof Shared.Type
 
+/**
+ * The user's place in an Organization, changed by one of its admins, as the API layer told it: added
+ * without being asked first, taken out, or their request to join it, or one of its Groups, accepted
+ * or declined. Who acted, by the Title their star had then, `''` for one not named yet; the
+ * Organization by its star, its id and the Title it had then; the Group by the name it had then,
+ * none for the Organization's Members. Leaving says nothing: the user did it.
+ */
+const Membership = Schema.TaggedStruct('Membership', {
+  what: Schema.Literals(['added', 'removed', 'accepted', 'declined']),
+  by: Schema.String,
+  organization: Named,
+  group: Schema.optionalKey(Schema.String),
+})
+
+export type Membership = typeof Membership.Type
+
+/**
+ * Someone asking to join an Organization the user is an admin of, or one of its Groups, as the API
+ * layer told it: the request by its id, which the user accepts or declines; who asked (`by`), by the Title
+ * their star had then; the Organization by its star; the Group by the name it had then, none for its
+ * Members. How it stands, open or decided, by this admin or another, is read anew with the day,
+ * never kept here.
+ */
+const AskedToJoin = Schema.TaggedStruct('AskedToJoin', {
+  request: Schema.String,
+  by: Schema.String,
+  organization: Named,
+  group: Schema.optionalKey(Schema.String),
+})
+
+export type AskedToJoin = typeof AskedToJoin.Type
+
 /** What an Entry says, whichever kind it is: what is stored of it, and what it is decoded by. */
 export const EntryContent = Schema.Union([
   Message,
@@ -182,6 +215,8 @@ export const EntryContent = Schema.Union([
   Proposal,
   TurnApplied,
   Shared,
+  Membership,
+  AskedToJoin,
 ])
 
 export type EntryContent = typeof EntryContent.Type
@@ -230,4 +265,9 @@ export const namedTiles = (entries: ReadonlyArray<Entry>): ReadonlyArray<string>
       return []
     }),
   ),
+]
+
+/** The requests to join some Entries name, each once: those whose state the day reads anew. */
+export const namedRequests = (entries: ReadonlyArray<Entry>): ReadonlyArray<string> => [
+  ...new Set(entries.flatMap((entry) => (entry._tag === 'AskedToJoin' ? [entry.request] : []))),
 ]

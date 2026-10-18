@@ -1,6 +1,7 @@
 import { expect, layer } from '@effect/vitest'
 import { Effect, Exit, Layer, Option } from 'effect'
 
+import { Bus } from '#/domains/bus'
 import { browser, TestAuth } from '#/repositories/auth/testing'
 import { transactional } from '#/repositories/database/database'
 import { layer as organizationsLayer } from '#/repositories/database/organizations/organizations'
@@ -30,7 +31,10 @@ import {
 // from anyone else; and who is in which read anew each time, a deleted Group's id and a member who
 // left in no answer from the next read on.
 
-const TestLayer = Layer.provideMerge(organizationsLayer, TestAuth)
+/** A bus nobody listens to: what IAM publishes is the API layer's to tell. */
+const Unheard = Layer.succeed(Bus)({ publish: () => Effect.void })
+
+const TestLayer = Layer.mergeAll(Layer.provideMerge(organizationsLayer, TestAuth), Unheard)
 
 let accounts = 0
 

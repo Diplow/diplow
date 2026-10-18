@@ -1,7 +1,7 @@
 // The Conversation on /design-system, on fixtures: four days of Entries, the composer offering the
 // fixture's Tiles to `@` and the commands home runs, the Mode under its field, a Tile named handed to
-// the page to center its canvas, and the open Proposal accepted, discarded or undone in the page
-// alone, `/undo` included. Days and times are the reader's own, so the page draws it in the browser
+// the page to center its canvas, the open Proposal accepted, discarded or undone in the page
+// alone, `/undo` included, and a request to join accepted or declined there too. Days and times are the reader's own, so the page draws it in the browser
 // only.
 import { ClientOnly } from '@tanstack/react-router'
 import { useState } from 'react'
@@ -39,8 +39,14 @@ function FixtureConversation({ onCenter }: { onCenter: (tile: string) => void })
   // The fixture stands in for what the server will know; what the user sends is kept for the page.
   const [fixture] = useState(() => conversationFixture(new Date()))
   const [entries, setEntries] = useState(fixture.entries)
-  const [tiles] = useState(fixtureMentionables)
-  const [system] = useState(() => new Map(tiles.map(({ id, title }) => [id, title])))
+  const [{ tiles, system }] = useState(() => {
+    const mentionables = fixtureMentionables()
+    return {
+      tiles: mentionables,
+      system: new Map(mentionables.map(({ id, title }) => [id, title])),
+    }
+  })
+  const [requests, setRequests] = useState(fixture.requests)
   const [mode, setMode] = useState<Mode>('ask')
   const onSend = (text: string) => {
     const sent: Entry = {
@@ -79,7 +85,7 @@ function FixtureConversation({ onCenter }: { onCenter: (tile: string) => void })
   const undoable = latestUndoable(entries)
   return (
     <Conversation
-      days={splitByDay(entries, new Date(), fixture.titles)}
+      days={splitByDay(entries, new Date(), fixture.titles, requests)}
       system={system}
       onSend={onSend}
       onUndo={
@@ -96,6 +102,12 @@ function FixtureConversation({ onCenter }: { onCenter: (tile: string) => void })
         accept: decided('accepted'),
         discard: decided('discarded'),
         undo,
+        pending: false,
+      }}
+      joining={{
+        decide: (request, accept) => {
+          setRequests((before) => ({ ...before, [request]: accept ? 'accepted' : 'declined' }))
+        },
         pending: false,
       }}
       className={size}

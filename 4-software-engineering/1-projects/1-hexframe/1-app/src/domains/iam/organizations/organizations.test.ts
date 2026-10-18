@@ -1,6 +1,7 @@
 import { describe, expect, it, layer } from '@effect/vitest'
 import { Effect, Exit, Layer, Option } from 'effect'
 
+import { Bus } from '#/domains/bus'
 import { browser, TestAuth } from '#/repositories/auth/testing'
 import { transactional } from '#/repositories/database/database'
 import { layer as organizationsLayer } from '#/repositories/database/organizations/organizations'
@@ -22,7 +23,10 @@ import {
 // out by its admins alone, from a Session, never a Key; its last admin kept; and who an Account
 // stands for and belongs to, read anew each time.
 
-const TestLayer = Layer.provideMerge(organizationsLayer, TestAuth)
+/** A bus nobody listens to: what IAM publishes is the API layer's to tell. */
+const Unheard = Layer.succeed(Bus)({ publish: () => Effect.void })
+
+const TestLayer = Layer.mergeAll(Layer.provideMerge(organizationsLayer, TestAuth), Unheard)
 
 let accounts = 0
 

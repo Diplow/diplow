@@ -11,7 +11,7 @@ import {
   useAddMember,
   useMembers,
   useRemoveMember,
-  useRoleIn,
+  useStandingIn,
   useSetMemberRole,
 } from '#/front/client/iam/organizations'
 import { useStarsFor } from '#/front/client/mapping/sharing'
@@ -35,7 +35,7 @@ interface MembersWidgetsProps {
  * its place while someone is being added; managed by its admins, read by its members.
  */
 export function MembersWidgets({ star, title, onClose }: MembersWidgetsProps) {
-  const { data: role } = useRoleIn(star)
+  const { data: standing } = useStandingIn(star)
   const { data: members } = useMembers(star)
   const add = useAddMember()
   const setRole = useSetMemberRole()
@@ -69,7 +69,7 @@ export function MembersWidgets({ star, title, onClose }: MembersWidgetsProps) {
     <MembersWidget
       title={shown}
       members={memberRowsOf(members)}
-      manages={role === 'admin'}
+      manages={standing === 'admin'}
       sending={add.isPending || setRole.isPending || remove.isPending}
       onRole={(key, next) => {
         const member = starOfRow(key)

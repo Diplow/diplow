@@ -37,7 +37,14 @@ import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 import { TurnKeys, layer as turnKeysLayer } from '#/repositories/database/turn-keys/turn-keys'
 import { Zip, layer as zipLayer } from '#/repositories/zip/zip'
 
-import { recordedInConversation, toldShared } from '../assistant/recording'
+import {
+  recordedInConversation,
+  toldAdded,
+  toldAsked,
+  toldDecided,
+  toldRemoved,
+  toldShared,
+} from '../assistant/recording'
 import { Failure, Unexpected, encodeFailure, type Outcome } from '../report/errors/failure'
 import {
   CurrentRequestLog,
@@ -142,12 +149,17 @@ const repositories: Layer.Layer<Repositories> = Layer.mergeAll(
 /**
  * Who reacts to which domain event: the API layer composes domains here, one `on(Event, reaction)`
  * per subscription. A reaction may use the repositories, which the bus is built over. Every change to
- * a System lands in the Conversation of the Account that made it, and a Tile shared in the one of
- * the Account it was shared with (`../assistant/recording.ts`).
+ * a System lands in the Conversation of the Account that made it, a Tile shared in the one of the
+ * Account it was shared with, someone's place in an Organization changed by an admin in their own,
+ * and a request to join in each admin's (`../assistant/recording.ts`).
  */
 const subscriptions: ReadonlyArray<Subscription<Repositories>> = [
   recordedInConversation,
   toldShared,
+  toldAdded,
+  toldRemoved,
+  toldAsked,
+  toldDecided,
 ]
 
 /**

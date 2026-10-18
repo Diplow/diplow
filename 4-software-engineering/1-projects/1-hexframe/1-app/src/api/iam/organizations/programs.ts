@@ -4,14 +4,18 @@
 // deleted and filled by its admins, each from a Session alone (IAM's `sessionOnly`), never a Key nor
 // a Turn's Key. IAM keeps who belongs where, Mapping the System and its star, which names the
 // Organization: the browser names an Organization and each of its members by their stars, never by
-// an id of IAM's, and a Group of its own by its id, a Group having no star (HEX-137). In a module of
-// their own since they reach the domains and the database, which Start strips from the client.
+// an id of IAM's, and a Group of its own by its id, a Group having no star (HEX-137). And joining one
+// of one's own accord (HEX-138): any Account asks to join an Organization from its star, a member
+// one of its Groups, and an admin accepts or declines the request, by its id, from the timeline. In a
+// module of their own since they reach the domains and the database, which Start strips from the
+// client.
 import { Effect } from 'effect'
 
-import type { Role } from '#/domains/iam/entities'
+import type { GroupStanding, Role } from '#/domains/iam/entities'
 import { OrganizationNotFound } from '#/domains/iam/errors'
 import * as Iam from '#/domains/iam/iam'
 import * as Groups from '#/domains/iam/organizations/groups'
+import * as Joining from '#/domains/iam/organizations/joining'
 import * as Organizations from '#/domains/iam/organizations/organizations'
 import type { StarCard } from '#/domains/mapping/entities'
 import * as Mapping from '#/domains/mapping/mapping'
@@ -63,19 +67,17 @@ const accountAt = (star: string) =>
   Effect.catchTag(Mapping.ownerOf(star), 'TileNotFound', () => Effect.succeed(''))
 
 /**
- * The role of the Account the request's Session proves in the Organization a star names, none when
- * the star names no Organization or the Account is not among its members: what tells the page that a
- * star's menu offers its Members widget. Read now, never kept.
+ * Where the Account the request's Session proves stands in the Organization a star names, IAM's
+ * `standingIn`: its role, or `outside` it, where it may ask to join; none for a star that names no
+ * Organization. What tells the page that a star's menu offers its Members and Groups widgets, or Ask
+ * to join. Read now, never kept.
  */
-export const roleIn = ({ star }: { readonly star: string }) =>
+export const standingIn = ({ star }: { readonly star: string }) =>
   Effect.gen(function* () {
-    const { account } = yield* Iam.sessionOnly
-    const found = yield* organizationAt(star).pipe(
-      Effect.flatMap(Organizations.members),
-      Effect.catchTag('OrganizationNotFound', () => Effect.succeed([])),
+    const organization = yield* organizationAt(star).pipe(
+      Effect.catchTag('OrganizationNotFound', () => Effect.succeed(undefined)),
     )
-    const role: Role | null = found.find((member) => member.account === account.id)?.role ?? null
-    return role
+    return organization === undefined ? null : yield* Joining.standingIn(organization)
   })
 
 /** One member of an Organization as the Members widget shows them: by their star, and their role. */
@@ -160,6 +162,8 @@ export const removeMember = ({
 export interface GroupShown {
   readonly id: string
   readonly name: string
+  /** Where the Account reading stands toward it: in it, may ask to join, or asked (HEX-138). */
+  readonly joining: GroupStanding
   /** Who is in it, the earliest first, each by their star's card, none while they have no System. */
   readonly members: ReadonlyArray<{ readonly star: StarCard | undefined; readonly you: boolean }>
 }
@@ -174,9 +178,11 @@ export const groups = ({ star }: { readonly star: string }) =>
     const organization = yield* organizationAt(star)
     const found = yield* Groups.groups(organization)
     const stars = yield* Stars.starsOf(found.flatMap((group) => group.members))
-    return found.map((group): GroupShown => ({
+    const standings = yield* Joining.groupStandings(account.id, organization, found)
+    return standings.map((group): GroupShown => ({
       id: group.id,
       name: group.name,
+      joining: group.joining,
       members: group.members.map((member) => ({
         star: stars.get(member),
         you: member === account.id,
@@ -258,3 +264,29 @@ export const groupsToShareWith = Effect.gen(function* () {
     return card === undefined ? [] : [{ star: card, groups: its }]
   })
 })
+
+/**
+ * Asks to join the Organization a star names, for the Account the request's Session proves, or, a
+ * member, one of its Groups, in one transaction: `AlreadyMember` or `AlreadyInGroup` where it is
+ * already, `GroupNotFound` for a Group of no Organization of its, and `JoinRequestOpen` while it
+ * asked already. Every admin is told, in their timeline, once it committed.
+ */
+export const askToJoin = ({ star, group }: { readonly star: string; readonly group?: string }) =>
+  Effect.gen(function* () {
+    const organization = yield* organizationAt(star)
+    yield* transactional(Joining.askToJoin(organization, group))
+    return null
+  })
+
+/**
+ * Accepts or declines a request to join, by its id, by one of its Organization's admins from a
+ * Session, in one transaction: `JoinRequestNotFound` for anyone else, `JoinRequestDecided` once
+ * decided already. Whoever asked is told, in their timeline, once it committed.
+ */
+export const decideJoinRequest = ({
+  request,
+  accept,
+}: {
+  readonly request: string
+  readonly accept: boolean
+}) => Effect.as(transactional(Joining.decideJoinRequest(request, accept)), null)

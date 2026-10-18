@@ -30,6 +30,8 @@ import {
   firstMode,
   isBadEnd,
   Mode,
+  type AskedToJoin,
+  type Membership,
   type Navigation,
   type OwnActor,
   ProposedChange,
@@ -152,6 +154,21 @@ export const recordChange = (
  */
 export const recordShared = (accountId: string, shared: Omit<Shared, '_tag'>) =>
   record(accountId, { _tag: 'Shared', ...shared })
+
+/**
+ * Records a change of the Account's place in an Organization, in its own Conversation, as the API
+ * layer tells it: who of its admins acted, the Organization, the Group, and what they did.
+ */
+export const recordMembership = (accountId: string, membership: Omit<Membership, '_tag'>) =>
+  record(accountId, { _tag: 'Membership', ...membership })
+
+/**
+ * Records someone asking to join an Organization the Account is an admin of, or one of its Groups,
+ * in the Account's own Conversation, as the API layer tells it: the request, by its id, who asked,
+ * the Organization and the Group.
+ */
+export const recordAskedToJoin = (accountId: string, asked: Omit<AskedToJoin, '_tag'>) =>
+  record(accountId, { _tag: 'AskedToJoin', ...asked })
 
 /**
  * Rewrites one of the Account's Entries as `change` says, the Entry as Assistant decoded it. An Entry

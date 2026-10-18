@@ -48,6 +48,7 @@ const acting: Record<Exclude<Verb, ViewVerb>, true> = {
   export: true,
   members: true,
   groups: true,
+  join: true,
   delete: true,
   'remove-reference': true,
   'new-tile': true,

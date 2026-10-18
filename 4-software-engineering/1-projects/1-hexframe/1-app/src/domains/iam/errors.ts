@@ -120,6 +120,34 @@ export class GroupNotFound extends Schema.TaggedError<GroupNotFound>()('GroupNot
   kind: kind('NotFound'),
 }) {}
 
+/** The Account is in this Group of the Organization already. */
+export class AlreadyInGroup extends Schema.TaggedError<AlreadyInGroup>()('AlreadyInGroup', {
+  kind: kind('Conflict'),
+}) {}
+
+/** The Account asked already to join this, and its request waits for an admin. */
+export class JoinRequestOpen extends Schema.TaggedError<JoinRequestOpen>()('JoinRequestOpen', {
+  kind: kind('Conflict'),
+}) {}
+
+/** An admin declined the Account's request for this a short while ago: it asks again tomorrow. */
+export class JoinRequestDeclined extends Schema.TaggedError<JoinRequestDeclined>()(
+  'JoinRequestDeclined',
+  { kind: kind('Conflict') },
+) {}
+
+/** No request to join the Organization has this id. */
+export class JoinRequestNotFound extends Schema.TaggedError<JoinRequestNotFound>()(
+  'JoinRequestNotFound',
+  { kind: kind('NotFound') },
+) {}
+
+/** The request to join was decided already, by another admin or in another tab. */
+export class JoinRequestDecided extends Schema.TaggedError<JoinRequestDecided>()(
+  'JoinRequestDecided',
+  { kind: kind('Conflict') },
+) {}
+
 export const iamFailures = [
   SignedOut,
   CredentialsRejected,
@@ -140,4 +168,9 @@ export const iamFailures = [
   GroupNameInvalid,
   GroupNameTaken,
   GroupNotFound,
+  AlreadyInGroup,
+  JoinRequestOpen,
+  JoinRequestDeclined,
+  JoinRequestNotFound,
+  JoinRequestDecided,
 ] as const

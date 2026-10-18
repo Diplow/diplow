@@ -55,6 +55,7 @@ export type Verb =
   | 'export'
   | 'members'
   | 'groups'
+  | 'join'
   | 'delete'
   | 'remove-reference'
   | 'new-tile'
@@ -136,6 +137,7 @@ function centerGroups(subject: Extract<Subject, { title: string }>): readonly Gr
       own && 'export',
       own && 'members',
       own && 'groups',
+      own && 'join',
     ],
   ]
 }
