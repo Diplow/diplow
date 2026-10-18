@@ -21,6 +21,7 @@ import { layer as conversationsLayer } from '#/repositories/database/conversatio
 import { layer as proposalsLayer } from '#/repositories/database/conversations/proposals'
 import { layer as turnsLayer } from '#/repositories/database/conversations/turns'
 import { transactional } from '#/repositories/database/database'
+import { layer as organizationsLayer } from '#/repositories/database/organizations/organizations'
 import { layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 import { archiveOf } from '#/repositories/zip/testing'
 import { layer as zipLayer } from '#/repositories/zip/zip'
@@ -38,6 +39,7 @@ import { recordedInConversation, toldShared } from './recording'
 
 const TestLayer = Layer.mergeAll(
   tilesLayer,
+  organizationsLayer,
   conversationsLayer,
   proposalsLayer,
   appliedLayer,

@@ -48,8 +48,10 @@ export interface Reach {
 }
 
 /**
- * One subject reaching a Tile, named: an Account by its star's card, none for an Account with no
- * star, nor for a Group, which IAM names later. What the Share widget lists (`namedBy`).
+ * One subject reaching a Tile, named: an Account by its star's card, a Group by the card of the star
+ * whose owner has its id, as an Organization's Members Group has its own (HEX-136), none for either
+ * with no such star, a Group IAM names otherwise included, which comes later. What the Share widget
+ * lists (`namedBy`).
  */
 export interface NamedReach extends Reach {
   readonly star: StarCard | undefined
@@ -86,11 +88,14 @@ export function reachOn(sharing: Sharing, tile: string): Reaching {
   }
 }
 
-/** The Accounts reaching a Tile, by id, whose stars name them. */
-export const accountsIn = ({ others }: Reaching): ReadonlyArray<string> =>
-  others.flatMap(({ subject }) => (subject._tag === 'Account' ? [subject.id] : []))
+/** The Accounts and Groups reaching a Tile, by id, which stars may name. */
+export const namedIn = ({ others }: Reaching): ReadonlyArray<string> =>
+  others.flatMap(({ subject }) => (subject._tag === 'Everyone' ? [] : [subject.id]))
 
-/** Who reaches a Tile, each Account named by its star, by the owner it stands for. */
+/**
+ * Who reaches a Tile, each Account named by its star, by the owner it stands for, and each Group by
+ * the star of the owner of its id, when there is one.
+ */
 export const namedBy = (
   { everyone, others }: Reaching,
   stars: ReadonlyMap<string, StarCard>,
@@ -98,7 +103,7 @@ export const namedBy = (
   everyone,
   others: others.map((reach) => ({
     ...reach,
-    star: reach.subject._tag === 'Account' ? stars.get(reach.subject.id) : undefined,
+    star: reach.subject._tag === 'Everyone' ? undefined : stars.get(reach.subject.id),
   })),
 })
 

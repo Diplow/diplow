@@ -4,10 +4,11 @@
 // of another (HEX-132), or fails with IAM's `SignedOut`, and a change in the transaction it opens. They sit in a module of their own because they reach the domain and the
 // database: the client imports the server functions, and only their handlers import this module,
 // which Start strips from the client.
-import { Effect } from 'effect'
+import { Effect, Option } from 'effect'
 
 import * as Assistant from '#/domains/assistant/assistant'
 import * as Iam from '#/domains/iam/iam'
+import * as Organizations from '#/domains/iam/organizations/organizations'
 import {
   type Actor,
   anyone,
@@ -41,19 +42,24 @@ import { tileLink, tileOfLink } from './files/download'
 
 /**
  * The Account acting on its own System, as Mapping takes who acts and where: the actor, the Account,
- * its Groups and the owners it stands for, for now itself alone and in no Group, until IAM knows its
- * Organizations and Groups, and whether the change is the user's own, from a Session; the System,
- * named by the Account's star. The one place the API layer resolves both, for every program of every
- * domain that reaches Mapping, fresh on every call, on the Account's own System, which a read may
- * then trade for another (`onSystem`). Every caller says whether its change is the user's own from a
- * Session: a server function a Session proves and the user's Undo do; a Key, a Turn's Key and the
- * Assistant, an accepted Proposal included, don't.
+ * the Groups it belongs to and the owners it stands for, itself and the Organizations it is an admin
+ * of, as IAM answers them now (`belonging`), each Organization's Members Group among its Groups, and
+ * whether the change is the user's own, from a Session; the System, named by the Account's star. The
+ * one place the API layer resolves both, for every program of every domain that reaches Mapping,
+ * fresh on every call, never from a copy, so a member removed or an admin demoted holds from the next
+ * one, on the Account's own System, which a read may then trade for another (`onSystem`). Every
+ * caller says whether its change is the user's own from a Session: a server function a Session
+ * proves and the user's Undo do; a Key, a Turn's Key and the Assistant, an accepted Proposal
+ * included, don't.
  */
 export const actingOnOwn = (accountId: string, { session }: { readonly session: boolean }) =>
-  Effect.map(Mapping.starOf(accountId), (system): Mapping.Acting => ({
-    actor: { account: accountId, groups: [], owners: [accountId], session } satisfies Actor,
-    system,
-  }))
+  Effect.map(
+    Effect.all([Mapping.starOf(accountId), Organizations.belonging(accountId)]),
+    ([system, { admins, groups }]): Mapping.Acting => ({
+      actor: { account: accountId, groups, owners: [accountId, ...admins], session } satisfies Actor,
+      system,
+    }),
+  )
 
 /**
  * Runs an operation for the signed-in Account, the one the request proves, never one a caller sends,
@@ -361,14 +367,32 @@ const fromSession = <A, E, R>(
   )
 
 /**
+ * The Grant a change sets, as Mapping keeps it: one naming the star of an Organization's System is
+ * for its Members Group, every one of its members (HEX-136); any other as it came, Mapping finding
+ * the Account a star names, or refusing a star that names nothing.
+ */
+const grantOf = (change: GrantChange) =>
+  Effect.gen(function* () {
+    if (change.subject._tag === 'Everyone') return change
+    const owner = yield* Effect.option(Mapping.ownerOf(change.subject.star))
+    if (Option.isNone(owner) || !(yield* Organizations.isOrganization(owner.value))) return change
+    const members = { _tag: 'Group', id: Organizations.membersGroupOf(owner.value) } as const
+    const grant: Sharing.GroupGrant = { tile: change.tile, subject: members, value: change.value }
+    return grant
+  })
+
+/**
  * A Tile's Grant for Everyone set, `read` or `none`, or for someone named by their star, any value,
- * or removed, `inherit`, by the owner of the System holding it, from a Session, in one transaction.
- * No Operation: it is neither proposed nor undone. One that first opens the Tile to someone
- * publishes Mapping's `TileShared`, which `../assistant/recording.ts` tells in their timeline once
- * the transaction committed; no other change of who reaches a Tile is told.
+ * or removed, `inherit`, by the owner of the System holding it, from a Session, in one transaction:
+ * an Organization named by its star is its Members Group (`grantOf`). No Operation: it is neither
+ * proposed nor undone. One that first opens the Tile to an Account publishes Mapping's `TileShared`,
+ * which `../assistant/recording.ts` tells in their timeline once the transaction committed; no other
+ * change of who reaches a Tile is told.
  */
 export const setGrant = (change: GrantChange) =>
-  fromSession(change.tile, (acting) => transactional(Sharing.grant(acting, change)))
+  fromSession(change.tile, (acting) =>
+    transactional(Effect.flatMap(grantOf(change), (grant) => Sharing.grant(acting, grant))),
+  )
 
 /**
  * Who reaches a Tile, each subject with its value and the Tile it comes from, each Account by its

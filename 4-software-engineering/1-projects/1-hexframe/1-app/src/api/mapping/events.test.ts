@@ -9,6 +9,7 @@ import { layer as appliedLayer } from '#/repositories/database/conversations/app
 import { layer as conversationsLayer } from '#/repositories/database/conversations/conversations'
 import { layer as proposalsLayer } from '#/repositories/database/conversations/proposals'
 import { layer as turnsLayer } from '#/repositories/database/conversations/turns'
+import { layer as organizationsLayer } from '#/repositories/database/organizations/organizations'
 import { layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 import { archiveOf } from '#/repositories/zip/testing'
 import { layer as zipLayer } from '#/repositories/zip/zip'
@@ -33,7 +34,14 @@ const keep = on(MappingEvent, (event, actor, elsewhere) =>
 // a Turn's Key works where its Turn started, so its program needs the Conversation's repositories, the
 // Turns' and IAM's beside the tiles'.
 const TestLayer = Layer.mergeAll(
-  Layer.mergeAll(tilesLayer, conversationsLayer, proposalsLayer, appliedLayer, turnsLayer).pipe(
+  Layer.mergeAll(
+    tilesLayer,
+    conversationsLayer,
+    proposalsLayer,
+    appliedLayer,
+    turnsLayer,
+    organizationsLayer,
+  ).pipe(
     Layer.provideMerge(TestAuth),
   ),
   zipLayer,

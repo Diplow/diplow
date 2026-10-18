@@ -43,6 +43,12 @@ export interface Seen extends System {
    * lose *read* on shows unavailable from the next (`systemOf`'s `pinned`).
    */
   readonly pinned: PinnedTiles
+  /**
+   * Whether the actor stands for the System's owner, so holds every right on it and what its owner
+   * alone does, sharing its Tiles among it: an Account on its own, and on the Systems whose owners
+   * the API layer says it stands for (`Actor.owners`).
+   */
+  readonly owned: boolean
 }
 
 /**
@@ -235,6 +241,7 @@ export function seenBy(
       rights: Object.fromEntries(every),
       gaps: {},
       pinned: pinsOf(tiles, pinned),
+      owned: true,
     }
   }
   const tiles: Record<string, PlacedTile | PlacedReference> = {}
@@ -253,6 +260,7 @@ export function seenBy(
     rights: Object.fromEntries(rights),
     gaps,
     pinned: pinsOf(tiles, pinned),
+    owned: false,
   }
   return { ...shown, version: sightVersion(shown) }
 }

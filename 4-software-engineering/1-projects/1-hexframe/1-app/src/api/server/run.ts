@@ -29,6 +29,10 @@ import {
 import { Proposals, layer as proposalsLayer } from '#/repositories/database/conversations/proposals'
 import { Turns, layer as turnsLayer } from '#/repositories/database/conversations/turns'
 import { type Database, layer as databaseLayer } from '#/repositories/database/database'
+import {
+  Organizations,
+  layer as organizationsLayer,
+} from '#/repositories/database/organizations/organizations'
 import { Tiles, layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 import { TurnKeys, layer as turnKeysLayer } from '#/repositories/database/turn-keys/turn-keys'
 import { Zip, layer as zipLayer } from '#/repositories/zip/zip'
@@ -91,14 +95,15 @@ const anthropic =
     : anthropicLayer
 
 /**
- * What the domains use: Better Auth, the allowlist and the Turn's Keys, the tiles repository, Zip, the
- * conversations, Turns, Proposals and Applied repositories, the sandbox, the model relay, and the
- * database itself.
+ * What the domains use: Better Auth, the allowlist, the Turn's Keys and the Organizations, the tiles
+ * repository, Zip, the conversations, Turns, Proposals and Applied repositories, the sandbox, the
+ * model relay, and the database itself.
  */
 type Repositories =
   | Auth
   | Allowlist
   | TurnKeys
+  | Organizations
   | Database
   | Tiles
   | Zip
@@ -110,10 +115,10 @@ type Repositories =
   | Anthropic
 
 /**
- * The repositories the domains use: Better Auth, the allowlist and the Turn's Keys for IAM, the tiles
- * repository and Zip for Mapping, the conversations, Turns, Proposals and Applied repositories, the
- * sandbox and the model relay for Assistant; and the database itself, for the transaction a program opens
- * (`transactional`).
+ * The repositories the domains use: Better Auth, the allowlist, the Turn's Keys and the Organizations
+ * for IAM, the tiles repository and Zip for Mapping, the conversations, Turns, Proposals and Applied
+ * repositories, the sandbox and the model relay for Assistant; and the database itself, for the
+ * transaction a program opens (`transactional`).
  */
 const repositories: Layer.Layer<Repositories> = Layer.mergeAll(
   Layer.provideMerge(
@@ -124,6 +129,7 @@ const repositories: Layer.Layer<Repositories> = Layer.mergeAll(
       proposalsLayer,
       appliedLayer,
       turnKeysLayer,
+      organizationsLayer,
     ),
     auth,
   ),

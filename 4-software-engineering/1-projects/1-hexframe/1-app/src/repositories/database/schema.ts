@@ -12,6 +12,7 @@ import {
   json,
   jsonb,
   pgTable,
+  primaryKey,
   smallint,
   text,
   timestamp,
@@ -404,4 +405,43 @@ export const turnKey = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [index('turn_key_accountId_idx').on(table.accountId)],
+)
+
+// IAM's own (./organizations/organizations.ts): Organizations and who belongs to them.
+
+/**
+ * An Organization, a team that owns a System of its own, by its id, which owns that System's rows as
+ * an Account's id owns its own (`tile`'s `owner_id`). It keeps no name: its name is its star's
+ * Title, in Mapping, the one source of it.
+ */
+export const organization = pgTable('organization', {
+  id: text('id').primaryKey(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+})
+
+/** The roles an Account holds in an Organization, as IAM names them. */
+const memberRoles = ['admin', 'member'] as const
+
+/**
+ * An Account's place in an Organization, one at most per Account and Organization, an `admin` or a
+ * `member`. Deleting either deletes it. That an Organization keeps one admin at least is IAM's to
+ * hold, under the Organization's row's lock, never a check here.
+ */
+export const membership = pgTable(
+  'membership',
+  {
+    organizationId: text('organization_id')
+      .notNull()
+      .references(() => organization.id, { onDelete: 'cascade' }),
+    accountId: text('account_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    role: text('role', { enum: memberRoles }).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.organizationId, table.accountId] }),
+    index('membership_accountId_idx').on(table.accountId),
+    check('membership_role_check', inArray(table.role, [...memberRoles])),
+  ],
 )

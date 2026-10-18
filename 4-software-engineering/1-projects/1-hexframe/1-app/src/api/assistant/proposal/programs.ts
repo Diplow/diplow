@@ -157,7 +157,7 @@ const ranElsewhere = <O extends Operation>(
   operation: O,
 ) =>
   transactional(
-    Effect.flatMap(Mapping.ownerOf(acting.system), (owner) =>
+    Effect.flatMap(Someone.toldOwner(acting.system), (owner) =>
       AssistantUndo.writtenInTurnElsewhere(
         { accountId: signed.account.id, turnId: signed.by.turnId, owner },
         Someone.writtenInAnothers(signed, { acting, own, across: false }, operation),
@@ -259,7 +259,7 @@ export const acceptProposal = ({ proposal }: { readonly proposal: string }) =>
               return { undo: encodedUndo(run.undo), changes: run.changes }
             }),
           elsewhere: {
-            owner: Mapping.ownerOf,
+            owner: Someone.toldOwner,
             run: (accepted, star) =>
               Effect.flatMap(batchOf(accepted), (batch) =>
                 Someone.batchInAnothers(

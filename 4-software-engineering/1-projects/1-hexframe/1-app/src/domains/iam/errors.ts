@@ -60,6 +60,43 @@ export class EntitlementMissing extends Schema.TaggedError<EntitlementMissing>()
   { kind: kind('Forbidden'), entitlement: Entitlement },
 ) {}
 
+/**
+ * No Organization the Account belongs to has this star: none has it, or the Account is not one of its
+ * members. Which of the two is not said.
+ */
+export class OrganizationNotFound extends Schema.TaggedError<OrganizationNotFound>()(
+  'OrganizationNotFound',
+  { kind: kind('NotFound') },
+) {}
+
+/** The Account is a member of the Organization, not an admin: only an admin manages its members. */
+export class AdminRequired extends Schema.TaggedError<AdminRequired>()('AdminRequired', {
+  kind: kind('Forbidden'),
+}) {}
+
+/**
+ * The change would leave the Organization without an admin: its last admin can neither leave, nor be
+ * removed, nor be made a member.
+ */
+export class LastAdmin extends Schema.TaggedError<LastAdmin>()('LastAdmin', {
+  kind: kind('Conflict'),
+}) {}
+
+/** The star named belongs to no Account: an Organization's, or none. Only an Account joins one. */
+export class AccountNotFound extends Schema.TaggedError<AccountNotFound>()('AccountNotFound', {
+  kind: kind('NotFound'),
+}) {}
+
+/** The Account named is a member of the Organization already. */
+export class AlreadyMember extends Schema.TaggedError<AlreadyMember>()('AlreadyMember', {
+  kind: kind('Conflict'),
+}) {}
+
+/** The Account named is no member of the Organization. */
+export class MemberNotFound extends Schema.TaggedError<MemberNotFound>()('MemberNotFound', {
+  kind: kind('NotFound'),
+}) {}
+
 export const iamFailures = [
   SignedOut,
   CredentialsRejected,
@@ -71,4 +108,10 @@ export const iamFailures = [
   KeyNameInvalid,
   KeyNotFound,
   EntitlementMissing,
+  OrganizationNotFound,
+  AdminRequired,
+  LastAdmin,
+  AccountNotFound,
+  AlreadyMember,
+  MemberNotFound,
 ] as const
