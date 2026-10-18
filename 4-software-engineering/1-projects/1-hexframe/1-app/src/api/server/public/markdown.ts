@@ -6,17 +6,19 @@
 import {
   contextDirections,
   directions,
-  type BrokenReference,
-  type Reference,
-  type ReadTile,
+  type ContextDirection,
+  type Direction,
 } from '#/domains/mapping/entities'
 import type { Opened } from '#/domains/mapping/mapping'
 
 /** What `/t/<id>.md` reads of a Tile: all three of its fields. */
 type Read = 'title' | 'preview' | 'body'
 
+/** What a Context slot of the Tile opened holds, as Mapping's read says it. */
+type InContext = NonNullable<Opened<Read>['context'][ContextDirection]>
+
 /** A Tile beside the one opened, as the read glimpses it: enough to decide whether to open it. */
-type Glimpsed = Pick<ReadTile<'title' | 'preview'>, 'id' | 'title' | 'preview'>
+type Glimpsed = Pick<NonNullable<Opened<Read>['branches'][Direction]>, 'id' | 'title' | 'preview'>
 
 /** The link a Tile's Markdown is read by, from its id. */
 export type MarkdownLink = (id: string) => string
@@ -41,7 +43,7 @@ const section = (heading: string, tiles: ReadonlyArray<Glimpsed>, link: Markdown
   tiles.length === 0 ? [] : [`## ${heading}\n\n${tiles.map((tile) => item(tile, link)).join('\n')}`]
 
 /** What a Context slot shows: its Tile, or the Tile its Reference points at; a broken one nothing. */
-function inContext(held: ReadTile<'title' | 'preview'> | Reference<Glimpsed> | BrokenReference) {
+function inContext(held: InContext): ReadonlyArray<Glimpsed> {
   if (held._tag === 'BrokenReference') return []
   return [held._tag === 'Reference' ? held.tile : held]
 }

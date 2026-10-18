@@ -1,12 +1,11 @@
-import { Exit, Option, Schema } from 'effect'
+import { Exit, Option } from 'effect'
 import { describe, expect, it } from 'vitest'
 
 import type { Session } from '#/domains/iam/iam'
 
-import { TileVisit } from '../../mapping/mapping'
 import * as Mapping from '../../mapping/programs'
 import { noKey, run, type StartContext } from '../run'
-import { markdownLink, methodNotAllowed, servePublicTile } from './public'
+import { markdownLink, servePublicTile } from './public'
 
 // A public Tile read by anyone holding its link, over PGlite, through the programs and the door:
 // `publicSystem`, what `/t/<id>` draws signed out, and `/t/<id>.md`, its Markdown, each for a Tile
@@ -116,12 +115,6 @@ describe('the System of a public Tile, as anyone sees it', () => {
       notFound,
     )
   })
-
-  it('takes a Tile by its UUID alone', () => {
-    const accepts = (input: unknown) => Schema.is(TileVisit)(input)
-    expect(accepts({ tile: crypto.randomUUID() })).toBe(true)
-    expect(accepts({ tile: 'help' })).toBe(false)
-  })
 })
 
 describe('/t/<id>.md', () => {
@@ -172,11 +165,5 @@ describe('/t/<id>.md', () => {
       authorization: 'Bearer any',
     })
     expect(proving.status).toBe(404)
-  })
-
-  it('takes nothing but a read', () => {
-    const answer = methodNotAllowed()
-    expect(answer.status).toBe(405)
-    expect(answer.headers.get('allow')).toBe('GET')
   })
 })

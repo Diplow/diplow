@@ -27,9 +27,7 @@ export const Route = createFileRoute('/t/$id')({
   // The router's redirects and its 404 are thrown (`throw: true`), as the old pages' are.
   loader: async ({ params: { id }, context: { session } }) => {
     if (session !== undefined) return visited(id)
-    const seen = await publicSystemOf(id)
-    if (seen === undefined) notFound({ throw: true })
-    return seen
+    return (await publicSystemOf(id)) ?? missing()
   },
   head: () => ({ meta: [{ name: 'robots', content: 'noindex' }] }),
   component: Public,
@@ -40,16 +38,26 @@ export const Route = createFileRoute('/t/$id')({
  * Signed in, where the link leads the Account: home visiting the System holding the Tile, centered on
  * it, or the 404 for a Tile it may not read. Never comes back.
  */
-async function visited(id: string): Promise<undefined> {
-  const led = await leadsTo(id)
-  if (led === undefined) notFound({ throw: true })
+async function visited(id: string): Promise<never> {
+  const led = (await leadsTo(id)) ?? missing()
   redirect({
     to: '/',
-    search: { ...withVisit(led?.system), center: id },
+    search: { ...withVisit(led.system), center: id },
     replace: true,
     throw: true,
   })
-  return undefined
+  return thrown()
+}
+
+/** The page's 404, thrown by the router: a Tile no one may show the reader. */
+function missing(): never {
+  notFound({ throw: true })
+  return thrown()
+}
+
+/** What the type can't see: the router has thrown the redirect or the 404 it was handed by now. */
+function thrown(): never {
+  throw new Error('The router throws what it is handed with `throw: true`')
 }
 
 /** Where signing in or up goes back to: this page, which then leads the Account on. */
@@ -65,8 +73,7 @@ function Public() {
   const seen = Route.useLoaderData()
   const search = Route.useSearch()
   const navigate = Route.useNavigate()
-  const tree = useMemo(() => (seen === undefined ? undefined : treeOf(seen)), [seen])
-  if (tree === undefined) return <Missing />
+  const tree = useMemo(() => treeOf(seen), [seen])
   const view = search.center === undefined ? centerOn(tree, id) : viewIn(search)
   // A view's center absent is the star; here it is the Tile linked, so the star is named outright.
   const onViewChange = (next: CanvasView) => {
