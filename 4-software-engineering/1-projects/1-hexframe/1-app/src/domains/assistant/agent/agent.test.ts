@@ -340,6 +340,33 @@ describe("a Turn's prompt", () => {
     expect(plain).not.toContain('ask Mode')
   })
 
+  it('tells a Turn in someone else’s System whose it is, what the user may do there, and that it writes nothing without write', () => {
+    const elsewhere = (rights: ReadonlyArray<'read' | 'write' | '@'>, across?: string) =>
+      promptOf({
+        entries: [],
+        titles: {},
+        onScreen: [],
+        location: { id: 'journal', title: 'Journal', folder: '1-journal' },
+        links: [],
+        systemRules: [],
+        mode: 'apply',
+        elsewhere: { star: 'Ana Lima', rights, across },
+      })
+    const reading = elsewhere(['read', '@'])
+    expect(reading).toContain(
+      'This Turn works in the System of another Account, whose star is titled "Ana Lima", not ' +
+        "the user's own.",
+    )
+    expect(reading).toContain('Where you start, the user may read it, run you at it;')
+    expect(reading).toContain('The user may not write where you start')
+    const writing = elsewhere(['read', 'write', '@'], '…')
+    expect(writing).toContain('the user may read it, write it, run you at it;')
+    expect(writing).not.toContain('The user may not write')
+    expect(writing).toContain('stand in "…", each a folder of its own')
+    // At home, none of it.
+    expect(prompt).not.toContain('This Turn works in the System of')
+  })
+
   it('tells a Turn in ask that its writes are drafted into a Proposal, and what a Proposal drafted', () => {
     expect(prompt).toContain(
       'This Turn is in ask Mode: your writes change nothing in the System yet.',
