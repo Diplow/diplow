@@ -3,7 +3,8 @@
 // swaps. A line that changes the URL opens a form, an import or the move there (`withChange`); one
 // that writes sends its write at once, the change ending as it is sent: a Tile moved to a free place
 // of its ring, swapped, turned into the other kind, a Reference removed, a delete once the dialog is
-// confirmed. A copy goes to the clipboard, an export to the chat, and the agent's lines to the
+// confirmed. Share opens who may see the Tile in the chat, through the URL, as a form does. A copy goes
+// to the clipboard, an export to the chat, and the agent's lines to the
 // composer, which names the Tile first (HEX-110). Lines that go somewhere are the canvas's own. A refusal takes its channel, a toast, or brings the move back (`useRefusalState`).
 import { useState } from 'react'
 
@@ -15,7 +16,6 @@ import {
   useSwapTiles,
 } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
-import { toast } from '#/front/ui/atoms/Toaster'
 import type { Acting, Moving } from '#/front/ui/canvas/Canvas'
 import type { Direction } from '#/domains/mapping/entities'
 import type { EmptySlotTarget } from '#/front/ui/canvas/geometry/shape'
@@ -46,6 +46,7 @@ import {
   type SearchChange,
   type SystemSearch,
 } from '../search/search'
+import { copy } from '../copy'
 import { slotOf, tileIn } from '../tree'
 import { visitLinkOf } from '../visit/visit'
 import type { Exported } from '../widget/state/useTileWidgetsState'
@@ -71,17 +72,6 @@ interface Deleting {
   below: number
   confirm: () => void
   cancel: () => void
-}
-
-/** Copies `text`, saying so; without a secure context there is no clipboard, which fails alike. */
-function copy(text: string) {
-  // Over plain HTTP there is no clipboard at all: that fails as a refused copy does.
-  void Promise.resolve(text)
-    .then((copied) => navigator.clipboard.writeText(copied))
-    .then(
-      () => toast(m.system_copied()),
-      () => toast.error(m.system_copy_failed()),
-    )
 }
 
 /** The slot an empty Direction stands for, for an import or the moving one; none takes no click. */
@@ -180,6 +170,9 @@ export function useActingState(input: ActingInput) {
         // One export at a time, as the chat shows one.
         if (!exporting.pending)
           exporting.start({ tile: { id, title }, below: tilesBelow(flat, id) })
+        return
+      case 'share':
+        begin({ kind: 'share', id })
         return
       case 'delete':
         setDeleting(hex.tile)

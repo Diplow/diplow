@@ -7,7 +7,7 @@
 import { Effect } from 'effect'
 
 import * as Iam from '#/domains/iam/iam'
-import type { Actor, Field, ShippedRoot } from '#/domains/mapping/entities'
+import type { Actor, Field, GrantChange, ShippedRoot } from '#/domains/mapping/entities'
 import { TileNotFound } from '#/domains/mapping/errors'
 import {
   CreateReference,
@@ -20,6 +20,7 @@ import {
 } from '#/domains/mapping/operations'
 import * as Landing from '#/domains/mapping/landing/landing'
 import * as Mapping from '#/domains/mapping/mapping'
+import * as Sharing from '#/domains/mapping/sharing/sharing'
 import type { Locale } from '#/paraglide/runtime'
 import { HttpExchange } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
@@ -158,6 +159,37 @@ export const exportTile = ({ id }: { id: string }) =>
       return yield* Mapping.exportTile(acting, { id, link: tileLink(url) })
     }),
   )
+
+/**
+ * Runs a read or a change of who reaches a Tile for the Account the request's Session proves, never a
+ * Key's nor a Turn's Key's (IAM's `sessionOnly`, `SessionRequired`), on the System holding the Tile
+ * (`Mapping.holding`), its own for an id none holds: Mapping refuses anyone but the owner there.
+ */
+const fromSession = <A, E, R>(
+  tile: string,
+  operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>,
+) =>
+  Effect.flatMap(Iam.sessionOnly, ({ account }) =>
+    Effect.flatMap(
+      Effect.all([actingOnOwn(account.id, { session: true }), Mapping.holding(tile)]),
+      ([own, star]) => operation(star === undefined ? own : { ...own, system: star }),
+    ),
+  )
+
+/**
+ * A Tile's Grant for Everyone set, `read` or `none`, or removed, `inherit`, by the owner of the System
+ * holding it, from a Session, in one transaction. No Operation: it is neither proposed nor undone,
+ * and no timeline tells of it.
+ */
+export const setGrant = (change: GrantChange) =>
+  fromSession(change.tile, (acting) => transactional(Sharing.grant(acting, change)))
+
+/**
+ * Who reaches a Tile, each subject with its value and the Tile it comes from, read by the owner of the
+ * System holding it, from a Session.
+ */
+export const whoReaches = ({ tile }: { tile: string }) =>
+  fromSession(tile, (acting) => Sharing.whoReaches(acting, tile))
 
 /** An Operation as a server function decodes it: its fields, without the tag its name says. */
 type Fields<O> = Omit<O, '_tag'>

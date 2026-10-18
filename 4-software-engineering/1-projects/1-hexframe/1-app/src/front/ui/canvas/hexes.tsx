@@ -44,6 +44,7 @@ const acting: Record<Exclude<Verb, ViewVerb>, true> = {
   move: true,
   'ask-agent': true,
   copy: true,
+  share: true,
   export: true,
   delete: true,
   'remove-reference': true,

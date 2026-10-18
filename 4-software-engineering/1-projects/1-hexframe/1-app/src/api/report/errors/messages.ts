@@ -11,7 +11,7 @@ import type { Failure } from './failure'
  * which its server function bears and the MCP tool that runs it names too, or another server function
  * by its own.
  */
-type Scope = OperationName | 'importTiles' | 'undo'
+type Scope = OperationName | 'importTiles' | 'undo' | 'setGrant' | 'whoReaches'
 
 interface Entry {
   tag: Failure['_tag']
@@ -30,6 +30,8 @@ const table: readonly Entry[] = [
   { tag: 'EmailMalformed', message: m.error_iam_email_malformed },
   { tag: 'PasswordLengthInvalid', message: m.error_iam_password_length },
   { tag: 'TooManyAttempts', message: m.error_iam_too_many_attempts },
+  { tag: 'SessionRequired', scope: 'setGrant', message: m.error_mapping_share_session_required },
+  { tag: 'SessionRequired', scope: 'whoReaches', message: m.error_mapping_share_session_required },
   { tag: 'SessionRequired', message: m.error_iam_session_required },
   { tag: 'KeyNameInvalid', message: m.error_iam_key_name_invalid },
   { tag: 'KeyNotFound', message: m.error_iam_key_not_found },
@@ -50,6 +52,8 @@ const table: readonly Entry[] = [
   { tag: 'MovedUnderItself', message: m.error_mapping_moved_under_itself },
   { tag: 'RootFixed', message: m.error_mapping_root_fixed },
   { tag: 'LeafHoldsNothing', message: m.error_mapping_leaf_holds_nothing },
+  { tag: 'NotAllowed', scope: 'setGrant', message: m.error_mapping_share_owner_only },
+  { tag: 'NotAllowed', scope: 'whoReaches', message: m.error_mapping_share_owner_only },
   { tag: 'NotAllowed', message: m.error_mapping_not_allowed },
   { tag: 'ShippedReadOnly', message: m.error_mapping_shipped_read_only },
   { tag: 'BatchOutdated', scope: 'undo', message: m.error_assistant_undo_outdated },

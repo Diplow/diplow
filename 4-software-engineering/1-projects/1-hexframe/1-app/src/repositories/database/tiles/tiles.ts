@@ -11,9 +11,9 @@ import { type SQL, and, eq, inArray, isNull } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import { Context, Data, Effect, Layer } from 'effect'
 
-import { Database, InTransaction } from '../database'
+import { Database, InTransaction, inTransaction } from '../database'
 import { type FrontmatterColumn, type TileConfigColumn, tile } from '../schema'
-import { type GrantRow, grantsOf, type PlaceRow } from './grants'
+import { type GrantRow, grantsOf, type GrantWrites, grantWritesOf, type PlaceRow } from './grants'
 
 /**
  * One row of the `tile` table, as its System's owner reads it. A Root has no parent and no
@@ -96,8 +96,11 @@ export interface BatchRow extends Omit<NewTileRow, 'parentId' | 'target'> {
  */
 export class IdTaken extends Data.TaggedError('IdTaken')<{ readonly id: string }> {}
 
-/** What a change may write, to the System it locked only, inside the same transaction. */
-export interface Writes {
+/**
+ * What a change may write, to the System it locked only, inside the same transaction: its rows, and
+ * the Grants its Tiles carry (`GrantWrites`, ./grants.ts).
+ */
+export interface Writes extends GrantWrites {
   /**
    * Adds a row under the id it carries, made by `Tiles.newId` or chosen by a caller. An id a row of
    * any System already has is `IdTaken`, and nothing is written.
@@ -244,9 +247,6 @@ const under = alias(tile, 'under')
 
 /** The Root of the System a row is of, for a row to find its star. */
 const star = alias(tile, 'star')
-
-/** A query that only holds inside a transaction: it requires one, so it runs in no other. */
-const inTransaction = <A, E>(query: Effect.Effect<A, E>) => InTransaction.use(() => query)
 
 /** The rows of the owner's System: every row carries its System's owner. */
 const ofOwner = (owner: string) => eq(tile.ownerId, owner)
@@ -403,6 +403,7 @@ const make = Effect.gen(function* () {
     database.select(columns).from(tile).where(ofOwner(owner)).pipe(Effect.orDie)
 
   const writes = (owner: string): Writes => ({
+    ...grantWritesOf(database, owner),
     insert: (row) =>
       inTransaction(
         database

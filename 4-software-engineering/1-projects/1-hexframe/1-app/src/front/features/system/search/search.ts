@@ -1,6 +1,7 @@
 // What the System's page carries in its URL: the canvas's view (front/ui/canvas/view), and the change the user
-// has under way, if any: a new Tile's form, an import, a Tile's form, or a Tile to move. A link shows
-// the page as its sender saw it, the open form included. Every function here is pure.
+// has under way, if any: a new Tile's form, an import, a Tile's form, who may see a Tile, or a Tile to
+// move. A link shows the page as its sender saw it, the open form included. Every function here is
+// pure.
 import { Schema } from 'effect'
 
 import { Slot } from '#/domains/mapping/entities'
@@ -35,6 +36,8 @@ const SystemSearch = Schema.Struct({
   import: Schema.optionalKey(orDefault(ImportInto)),
   /** The Tile whose form is open. */
   edit: Schema.optionalKey(orDefault(TileId)),
+  /** The Tile whose share widget is open: who may see it, which its owner sets (HEX-128). */
+  share: Schema.optionalKey(orDefault(TileId)),
   /** The Tile being moved: the next empty slot clicked is where it goes. */
   move: Schema.optionalKey(orDefault(TileId)),
 })
@@ -54,6 +57,7 @@ export type Change =
   | { kind: 'add'; parent: string; slot: Slot }
   | { kind: 'import'; place: ImportPlace }
   | { kind: 'edit'; id: string }
+  | { kind: 'share'; id: string }
   | { kind: 'move'; id: string }
 
 /** Reads the URL's search params, field by field: the route's `validateSearch`. */
@@ -71,14 +75,15 @@ function importPlaceOf(into: string, slot: Slot | undefined): ImportPlace | unde
 }
 
 /**
- * The change under way. The URL holds one at most; were it to hold several, a form wins over a move,
- * since the form covers the canvas.
+ * The change under way. The URL holds one at most; were it to hold several, a form wins over who may
+ * see a Tile, and both over a move, since a widget covers the canvas.
  */
-export function changeOf({ add, slot, import: into, edit, move }: SystemSearch): Change {
+export function changeOf({ add, slot, import: into, edit, share, move }: SystemSearch): Change {
   if (edit !== undefined) return { kind: 'edit', id: edit }
   if (add !== undefined && slot !== undefined) return { kind: 'add', parent: add, slot }
   const place = into === undefined ? undefined : importPlaceOf(into, slot)
   if (place !== undefined) return { kind: 'import', place }
+  if (share !== undefined) return { kind: 'share', id: share }
   if (move !== undefined) return { kind: 'move', id: move }
   return { kind: 'none' }
 }
@@ -101,6 +106,7 @@ export function withChange(search: SystemSearch, change: Change): SystemSearch {
     import: undefined,
     ...(change.kind === 'import' && importSearch(change.place)),
     edit: change.kind === 'edit' ? change.id : undefined,
+    share: change.kind === 'share' ? change.id : undefined,
     move: change.kind === 'move' ? change.id : undefined,
   }
 }
@@ -121,6 +127,7 @@ function namedBy(change: Change): string | undefined {
     case 'import':
       return change.place._tag === 'Slot' ? change.place.parent : undefined
     case 'edit':
+    case 'share':
     case 'move':
       return change.id
   }
@@ -138,18 +145,18 @@ export function withoutTile(search: SystemSearch, gone: TileNode): SystemSearch 
     : search
 }
 
+/** The changes the chat shows at its foot, each in a widget: every one but a move, and none. */
+const inWidget: ReadonlySet<Change['kind']> = new Set(['add', 'import', 'edit', 'share'])
+
 /**
- * Whether going to `next` opens a form the tile widget shows, a new Tile's, an import or an edit,
- * another than the one under way. A change that lands later, made from the search params of that
- * moment, opens none: it is a refusal putting a form back.
+ * Whether going to `next` opens a widget at the chat's foot, a new Tile's form, an import, an edit or
+ * who may see a Tile, another than the one under way. A change that lands later, made from the search
+ * params of that moment, opens none: it is a refusal putting a form back.
  */
 export function opensWidget(current: SystemSearch, next: SearchChange): boolean {
   if (typeof next === 'function') return false
   const change = changeOf(next)
-  return (
-    (change.kind === 'add' || change.kind === 'import' || change.kind === 'edit') &&
-    keyOf(change) !== keyOf(changeOf(current))
-  )
+  return inWidget.has(change.kind) && keyOf(change) !== keyOf(changeOf(current))
 }
 
 /**

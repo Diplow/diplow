@@ -274,6 +274,7 @@ describe('the lines a System only looked at leaves out', () => {
       'add',
       'move',
       'ask-agent',
+      'share',
       'export',
       'delete',
     ])

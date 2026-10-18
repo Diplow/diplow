@@ -21,12 +21,13 @@ Where a Tile is written on home since HEX-102: in the chat, at the conversation'
 
 | File | Holds |
 |---|---|
-| `TileWidgets.tsx` | `TileWidgets`, at the conversation's foot: the form of the change under way, the Root's edit included, or its receipt while the URL still holds it; else what followed the last form, its receipt or the export; else, while the Root is untitled, a new account's pseudo. It is where the page reads the refused writes (`useRefusalState`) and deletes from an edit |
+| `TileWidgets.tsx` | `TileWidgets`, at the conversation's foot: the form of the change under way, the Root's edit included, or its receipt while the URL still holds it, or who may see a Tile (`share/`); else what followed the last form, its receipt or the export; else, while the Root is untitled, a new account's pseudo. It is where the page reads the refused writes (`useRefusalState`) and deletes from an edit |
 | `forms.tsx` | `NewTileWidget`, `EditTileWidget` and `NameRootWidget`, each from form to receipt, on Mapping's form submits |
 | `place.ts` | The widget in Mapping's words, pure: `seatOf` and `slotOf`, a slot as a kind and a place and back; `freeFor`, the places a kind may take under a Tile; `whereIn`, where a Tile goes or stands; `slotForKind`, the slot another kind takes; `tilesBelow`, the Tiles that go along with one; `editedOf`, an edit's changed fields; `refusalOf` and `stillRefused`, a refusal on the widget's fields, cleared as they change. Tested in `place.test.ts` |
 
 | Folder | Holds |
 |---|---|
+| `share/` | Who may see a Tile (HEX-128), its menu's Share, the change under way `share` drawn here: `ShareWidgets.tsx`, `ShareWidgets`, ui's `ShareWidget` on a Tile of the Account's own System, once who reaches it is read (`useWhoReaches`), Everyone's choice sent through `useSetGrant` and shown while on its way, the link it is visited by copied (`visitLinkOf`), Done ending the change; `rows.ts`, who reaches it in the page's language, pure: where each value comes from, set here, from your star, from the Tile above by its Title, by default (`fromOf`), Everyone's choice as Mapping reads it (`choiceOn`), an account or a group by its kind until IAM names them (HEX-131), and the rows the widget shows (`shareRowsOf`); `rows.test.ts`. Setting a Grant is no Operation: no queue, overlay, receipt nor timeline knows of it |
 | `state/` | `useTileWordsState.ts`, what the user writes, opened on a Tile or blank, a refusal's words put back once per turn; `useTileWidgetsState.ts`, what follows a form, a receipt or the export, whose mutation it owns, an export let go running to its end, what the receipt says, which the timeline leaves to it, the pseudo a new account is typing, which the canvas shows, and whether the pseudo's receipt shows (`dawning`), the dawn the agent's invitation under it rises last of (HEX-118); each tested beside it |
 
 ## Not wired

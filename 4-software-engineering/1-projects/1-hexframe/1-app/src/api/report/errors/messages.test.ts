@@ -60,6 +60,24 @@ describe('the message table', () => {
     )
   })
 
+  it('tells who may change who sees a tile, its owner from a browser', () => {
+    expect(messageFor(new NotAllowed(), 'setGrant')).toBe(
+      "Only this tile's owner decides who may see it.",
+    )
+    expect(messageFor(new NotAllowed(), 'whoReaches')).toBe(
+      "Only this tile's owner decides who may see it.",
+    )
+    for (const scope of ['setGrant', 'whoReaches']) {
+      expect(messageFor(new SessionRequired(), scope)).toBe(
+        'Who may see a tile is changed from your own signed-in browser, never with a key.',
+      )
+    }
+    overwriteGetLocale(() => 'fr')
+    expect(messageFor(new NotAllowed(), 'setGrant')).toBe(
+      'Seul le propriétaire de cette tuile décide qui peut la voir.',
+    )
+  })
+
   it('takes an unscoped entry in every scope', () => {
     const sentence = "This tile doesn't exist, or no longer does."
     expect(messageFor(new TileNotFound(), 'editTile')).toBe(sentence)

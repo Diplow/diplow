@@ -60,6 +60,7 @@ import { ChatLayoutsGallery } from '#/front/ui/chat/layouts/gallery'
 import { ChatTextGallery } from '#/front/ui/chat/text/gallery'
 import { HelpWidgetGallery } from '#/front/ui/chat/widgets/help/gallery'
 import { KeyWidgetGallery } from '#/front/ui/chat/widgets/keys/gallery'
+import { ShareWidgetGallery } from '#/front/ui/chat/widgets/share/gallery'
 import { SignInWidgetGallery } from '#/front/ui/chat/widgets/sign-in/gallery'
 import { SignInWidget, type Access } from '#/front/ui/chat/widgets/sign-in/SignInWidget'
 import { TileWidgetGallery } from '#/front/ui/chat/widgets/tile/gallery'
@@ -285,6 +286,7 @@ function Specimens({ chapter, view, onViewChange, onCenter }: SpecimensProps) {
           <ChatEntriesGallery />
           <TileWidgetGallery previewLimit={previewLimit} />
           <KeyWidgetGallery nameLimit={keyNameBounds.max} nameOf={keyNameOf} />
+          <ShareWidgetGallery />
           <ReadBoundary>
             <HelpGallery />
           </ReadBoundary>

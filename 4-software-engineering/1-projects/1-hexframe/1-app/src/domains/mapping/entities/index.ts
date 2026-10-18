@@ -5,6 +5,7 @@
 export * from './kept/kept'
 export * from './kept/naming'
 export * from './leaves/leaves'
+export * from './rights/reach'
 export * from './rights/rights'
 export * from './rights/seen'
 export * from './rows'

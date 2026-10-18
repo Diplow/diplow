@@ -34,6 +34,7 @@ describe('readSystemSearch', () => {
       slot: -2,
       import: undefined,
       edit: undefined,
+      share: undefined,
       move: undefined,
     })
   })
@@ -52,6 +53,7 @@ describe('changeOf', () => {
     expect(read({})).toEqual({ kind: 'none' })
     expect(read({ add: 'a', slot: 3 })).toEqual({ kind: 'add', parent: 'a', slot: 3 })
     expect(read({ edit: 'a' })).toEqual({ kind: 'edit', id: 'a' })
+    expect(read({ share: 'a' })).toEqual({ kind: 'share', id: 'a' })
     expect(read({ move: 'a' })).toEqual({ kind: 'move', id: 'a' })
     expect(read({ import: 'a', slot: { leaf: 2 } })).toEqual({
       kind: 'import',
@@ -69,6 +71,11 @@ describe('changeOf', () => {
     expect(read({ move: 'a', edit: 'b' })).toEqual({ kind: 'edit', id: 'b' })
     expect(read({ move: 'a', add: 'b', slot: 1 })).toMatchObject({ kind: 'add' })
     expect(read({ move: 'a', import: 'root' })).toMatchObject({ kind: 'import' })
+  })
+
+  it('lets a form win over who may see a Tile, and both over a move', () => {
+    expect(read({ share: 'a', edit: 'b' })).toEqual({ kind: 'edit', id: 'b' })
+    expect(read({ move: 'a', share: 'b' })).toEqual({ kind: 'share', id: 'b' })
   })
 })
 
@@ -133,6 +140,7 @@ describe('withoutTile', () => {
     for (const search of [
       { move: 'a' },
       { edit: 'a' },
+      { share: 'a' },
       { add: 'a', slot: 2 },
       { import: 'a', slot: 2 },
     ]) {
@@ -191,9 +199,11 @@ describe('opensWidget', () => {
   const none = readSystemSearch({})
   const adding = withChange(none, { kind: 'add', parent: 'a', slot: 2 })
 
-  it('opens the widget for a new Tile, an import or an edit', () => {
+  it('opens the widget for a new Tile, an import, an edit or who may see a Tile', () => {
     expect(opensWidget(none, adding)).toBe(true)
     expect(opensWidget(none, withChange(none, { kind: 'edit', id: 'a' }))).toBe(true)
+    expect(opensWidget(none, withChange(none, { kind: 'share', id: 'a' }))).toBe(true)
+    expect(opensWidget(adding, withChange(adding, { kind: 'share', id: 'a' }))).toBe(true)
     expect(opensWidget(none, withChange(none, { kind: 'import', place: { _tag: 'Root' } }))).toBe(
       true,
     )

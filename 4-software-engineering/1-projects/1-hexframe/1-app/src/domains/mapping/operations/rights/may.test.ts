@@ -19,6 +19,7 @@ import {
   DeleteTile,
   EditTile,
   may,
+  mayShare,
   MoveTile,
   type Operation,
   SwapTiles,
@@ -264,5 +265,29 @@ describe('a batch, run by its owner', () => {
       tiles: { ...system.tiles, [made]: placed(made, id.square, 2) },
     }
     expect(batchVerdict(actor('ana', false), withNew)).toBe('ok')
+  })
+})
+
+describe('who may change who reaches a Tile', () => {
+  const shareVerdict = (who: Actor, tile: string) => {
+    const result = mayShare(who, { system, sharing }, tile)
+    return Result.isFailure(result) ? result.failure._tag : 'ok'
+  }
+
+  it('is its owner, from a Session, on any Tile of the System, its star included', () => {
+    for (const tile of [id.ana, id.secret, id.bench]) expect(shareVerdict(ana, tile)).toBe('ok')
+  })
+
+  it('refuses the owner through a Key, a Turn’s Key or an agent NotAllowed', () => {
+    expect(shareVerdict(actor('ana', false), id.garden)).toBe('NotAllowed')
+  })
+
+  it('refuses anyone else NotAllowed where they read, TileNotFound where they may not', () => {
+    // Bob writes from Ana's star down, and still sets nothing there.
+    expect(shareVerdict(bob, id.garden)).toBe('NotAllowed')
+    expect(shareVerdict(stranger, id.square)).toBe('NotAllowed')
+    expect(shareVerdict(bob, id.secret)).toBe('TileNotFound')
+    expect(shareVerdict(stranger, id.garden)).toBe('TileNotFound')
+    expect(shareVerdict(ana, id.nowhere)).toBe('TileNotFound')
   })
 })

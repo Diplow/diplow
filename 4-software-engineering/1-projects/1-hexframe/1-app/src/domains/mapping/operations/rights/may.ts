@@ -15,6 +15,7 @@ import {
   rightsOn,
   type Sharing,
   type System,
+  tileAt,
 } from '../../entities'
 import { NotAllowed, TileNotFound } from '../../errors'
 import type { Operation } from '../operation'
@@ -105,6 +106,25 @@ function widens(system: System, sharing: Sharing, moved: ReadonlyMap<string, str
  * Whether the actor may change who may do what on a Tile, as a Grant does: the owner, from a Session.
  */
 const mayOpen = (actor: Actor, sharing: Sharing) => owns(actor, sharing.owner) && actor.session
+
+/**
+ * Whether the actor may change who reaches this Tile of the System, or read who does: its owner, from
+ * a Session, never through a Key, a Turn's Key or an agent. An id the System holds no Tile of, a
+ * Reference's included, which has no reach of its own, and a Tile the actor may not read are
+ * `TileNotFound`, alike; with `read`, `NotAllowed`, which says nothing of who else reads it. A Tile of
+ * a System hexframe ships is the service's to refuse first (`ShippedReadOnly`), as for an Operation,
+ * since the shipped ids are no rule of the System.
+ */
+export function mayShare(
+  actor: Actor,
+  { system, sharing }: On,
+  tile: string,
+): Result.Result<void, TileNotFound | NotAllowed> {
+  if (tileAt(system, tile) === undefined || !may(actor, sharing, tile, 'read')) {
+    return Result.fail(new TileNotFound())
+  }
+  return mayOpen(actor, sharing) ? Result.void : Result.fail(new NotAllowed())
+}
 
 /**
  * Whether a change without a Session would delete one of these Tiles while it carries a Grant. It may

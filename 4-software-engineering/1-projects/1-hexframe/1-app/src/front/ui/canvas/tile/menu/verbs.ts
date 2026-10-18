@@ -51,6 +51,7 @@ export type Verb =
   | 'move'
   | 'ask-agent'
   | 'copy'
+  | 'share'
   | 'export'
   | 'delete'
   | 'remove-reference'
@@ -85,7 +86,7 @@ function ringGroups(
         ['edit', turns && 'make-leaf'],
         [holds && 'add', 'move'],
         ['ask-agent'],
-        ['copy', 'export'],
+        ['copy', 'share', 'export'],
         ['delete'],
       ]
     case 'leaf':
@@ -94,7 +95,7 @@ function ringGroups(
         ['edit', turns && 'make-branch'],
         [holds && 'add', 'move'],
         ['ask-agent'],
-        ['copy', 'export'],
+        ['copy', 'share', 'export'],
         ['delete'],
       ]
     case 'context':
@@ -103,7 +104,7 @@ function ringGroups(
         ['edit'],
         [holds && 'add', 'move'],
         ['ask-agent'],
-        ['copy', 'export'],
+        ['copy', 'share', 'export'],
         ['delete'],
       ]
     case 'reference':
@@ -127,7 +128,7 @@ function centerGroups(subject: Extract<Subject, { title: string }>): readonly Gr
     [own && 'edit'],
     [holds && 'add', kind === 'untitled' && 'import'],
     ['ask-agent'],
-    [kind !== 'broken' && 'copy', own && 'export'],
+    [kind !== 'broken' && 'copy', own && 'share', own && 'export'],
   ]
 }
 

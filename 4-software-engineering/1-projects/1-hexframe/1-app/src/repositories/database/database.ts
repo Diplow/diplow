@@ -30,6 +30,9 @@ export class InTransaction extends Context.Service<InTransaction, true>()(
   'hexframe/InTransaction',
 ) {}
 
+/** A query that only holds inside a transaction: it requires one, so it runs in no other. */
+export const inTransaction = <A, E>(query: Effect.Effect<A, E>) => InTransaction.use(() => query)
+
 /**
  * Present while a program runs in the transaction `transactional` opened: defers a piece of work to
  * its commit. The work runs once the transaction has committed, in the program's own fiber, and is

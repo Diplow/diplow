@@ -308,6 +308,14 @@ describe('a line that opens something', () => {
     expect(start).toHaveBeenCalledWith({ tile: { id: 'holding', title: 'holding' }, below: 1 })
   })
 
+  it('opens who may see a Tile in the URL, the root included', () => {
+    const { result, onSearchChange } = render()
+    choose(result, 'tile:holding', { verb: 'share' })
+    expect(changed(onSearchChange)).toMatchObject({ share: 'holding' })
+    choose(result, 'tile:root', { verb: 'share' })
+    expect(changed(onSearchChange)).toMatchObject({ share: 'root' })
+  })
+
   it('exports nothing more while an export is on its way', () => {
     const { result, start } = render({}, { exporting: true })
     choose(result, 'tile:holding', { verb: 'export' })
@@ -471,7 +479,9 @@ describe("on a System only looked at, someone else's", () => {
   it("leaves every line that acts out of a Tile's menu, Copy aside", () => {
     const { result } = render({}, { reach: 'looking' })
     const without = result.current.acting.tile(hex('tile:holding'))?.without
-    expect(without).toEqual(expect.arrayContaining(['edit', 'move', 'delete', 'add', 'ask-agent']))
+    expect(without).toEqual(
+      expect.arrayContaining(['edit', 'move', 'delete', 'add', 'ask-agent', 'share']),
+    )
     expect(without).not.toContain('copy')
   })
 

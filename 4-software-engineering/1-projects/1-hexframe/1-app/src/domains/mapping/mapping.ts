@@ -101,8 +101,11 @@ export interface Acting {
  */
 export const starOf = (owner: string) => Tiles.use((tiles) => tiles.root(owner, untitled))
 
-/** The owner of the System a star names, `TileNotFound` for a star that names none. */
-const ownerOf = (system: string) =>
+/**
+ * The owner of the System a star names, `TileNotFound` for a star that names none. Exported for
+ * `sharing/`, which reads and changes a Tile's Grants on the System it names.
+ */
+export const ownerOf = (system: string) =>
   Tiles.use((tiles) =>
     Effect.flatMap(tiles.ownerOf(system), (owner) =>
       owner === undefined ? Effect.fail(new TileNotFound()) : Effect.succeed(owner),
@@ -121,7 +124,7 @@ const reached = ({ actor, system }: Acting) =>
   )
 
 /** The Grants the Tiles of the owner's System carry, a row that is no Grant left out. */
-const grantsIn = (owner: string) =>
+export const grantsIn = (owner: string) =>
   Tiles.use((tiles) =>
     Effect.map(tiles.grants(owner), (rows) =>
       rows.flatMap((row) => {
@@ -165,7 +168,7 @@ export const system = ({ actor, system: star }: Acting) =>
   })
 
 /** The owner's System, flat, whole. */
-const wholeOf = (owner: string) =>
+export const wholeOf = (owner: string) =>
   Effect.gen(function* () {
     const rows = yield* Tiles.use((tiles) => tiles.read(owner))
     const found = systemFrom(rows, { owned: true })
@@ -469,9 +472,10 @@ export const systemFiles = (acting: Acting, link: LinkOf, over: ReadonlyArray<Ba
 
 /**
  * Refuses a change that names a Tile of a System hexframe ships, Help or the tutorial, whichever
- * schema let its ids through: each is read by every Account and written by none.
+ * schema let its ids through: each is read by every Account and written by none. Exported for
+ * `sharing/`, whose Grants on such a Tile are nobody's.
  */
-const outsideShipped = (ids: ReadonlyArray<string>) =>
+export const outsideShipped = (ids: ReadonlyArray<string>) =>
   ids.some(isShippedId) ? Effect.fail(new ShippedReadOnly()) : Effect.void
 
 /**
@@ -573,7 +577,7 @@ const decidedOn = (acting: Acting, operation: Operation) => {
 }
 
 /** The owner's System, its star locked until the transaction ends: no other change runs meanwhile. */
-const lockedOf = (owner: string) =>
+export const lockedOf = (owner: string) =>
   Tiles.use((tiles) =>
     Effect.flatMap(tiles.lock(owner), (rows) => rooted(systemFrom(rows, { owned: true }))),
   )
