@@ -12,6 +12,7 @@ import * as Assistant from '#/domains/assistant/assistant'
 import type { Actor } from '#/domains/assistant/entities'
 import { keyName, type SignedIn } from '#/domains/iam/iam'
 import * as Mapping from '#/domains/mapping/mapping'
+import { rightsOf } from '#/domains/mapping/entities'
 import { MappingEvent } from '#/domains/mapping/operations'
 import { TileShared } from '#/domains/mapping/sharing/sharing'
 import { transactional } from '#/repositories/database/database'
@@ -75,7 +76,7 @@ export const toldShared = on(TileShared, (shared, actor) =>
           Assistant.recordShared(shared.account, {
             by: star?.title ?? '',
             tile: { id: shared.tile, title: shared.title },
-            rights: shared.value,
+            rights: rightsOf(shared.value),
           }),
         )
       }),

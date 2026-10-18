@@ -135,7 +135,7 @@ layer(TestLayer)('the Conversation, over PGlite', (it) => {
           steps: [{ gesture: 'center', tile: tile.id }],
           gestures: 3,
         },
-        { _tag: 'Shared', by: 'Ana Lima', tile, rights: 'read+write' },
+        { _tag: 'Shared', by: 'Ana Lima', tile, rights: ['read', 'write'] },
       ]
       for (const content of kinds) yield* recorded(account, content)
       const read = yield* day(account, { date: '2026-10-10', offset: 0 })

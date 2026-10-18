@@ -166,7 +166,7 @@ export function conversationFixture(now: Date): { entries: Entry[]; titles: Titl
       at: today(5),
       by: 'Ana Lima',
       tile: { id: 'ana-garden', title: 'Garden' },
-      rights: 'read+write',
+      rights: ['read', 'write'],
     },
     { _tag: 'Change', id: 'c6', at: today(4), verb: 'TileDeleted', tile: drafts, actor: you },
     said('m3', today(3), 'user', 'What would you add to Games?'),

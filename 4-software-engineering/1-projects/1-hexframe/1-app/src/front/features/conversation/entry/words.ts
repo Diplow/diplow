@@ -16,7 +16,6 @@ import {
   partsOf,
   type ProposedChange,
 } from '#/domains/assistant/entities'
-import { rightsOf } from '#/domains/mapping/entities'
 import type { OperationEvent } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 import { Gesture } from '#/front/ui/canvas/view/view'
@@ -266,7 +265,7 @@ function sharedOf(entry: Extract<Told, { _tag: 'Shared' }>, naming: Naming): Hap
   return {
     who: 'outside',
     words: weave(m.conversation_shared, { who, title }),
-    detail: rightsSaid(rightsOf(rights)),
+    detail: rightsSaid(rights),
     at,
   }
 }

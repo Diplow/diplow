@@ -94,7 +94,7 @@ describe('happenedOf', () => {
       at,
       by,
       tile: { id: 'journal', title: 'Journal' },
-      rights: 'read+write',
+      rights: ['read', 'write'],
     })
     const told = happenedOf(shared('Ana Lima'), {
       ...naming,

@@ -256,7 +256,7 @@ layer(TestLayer)(
           _tag: 'Shared',
           by: 'Ana Lima',
           tile: { id: journal.id, title: 'Journal' },
-          rights: 'read',
+          rights: ['read'],
         }
         expect(yield* recordedFor(bob.account.id)).toEqual([told])
         // Bob reads it now, through `may`.

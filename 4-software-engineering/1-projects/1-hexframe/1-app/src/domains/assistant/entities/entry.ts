@@ -107,21 +107,24 @@ const Import = Schema.TaggedStruct('Import', {
 /** A Turn that ended otherwise than by its answer, and how: a Stop, a limit, its time, its sandbox. */
 const TurnEnded = Schema.TaggedStruct('TurnEnded', { how: BadEnd })
 
-/** What a Tile shared lets the user do there: read it, and maybe write it, or run the agent at it. */
-export const SharedRights = Schema.Literals(['read', 'read+write', 'read+@', 'read+write+@'])
+/**
+ * A right a Tile shared gives the user there, as the API layer hands it over: read it, write it, or
+ * run the agent at it, `@`.
+ */
+export const SharedRight = Schema.Literals(['read', 'write', '@'])
 
-export type SharedRights = typeof SharedRights.Type
+export type SharedRight = typeof SharedRight.Type
 
 /**
  * A Tile someone shared with the user, as the API layer told it when a Grant first opened it to
  * them: who shared it, by the Title of their star then, the Tile, by its id and the Title it had
- * then, in their System, and what the user may do there. Changing it later, or taking it back, says
- * nothing.
+ * then, in their System, and the rights the user has there, in order. Changing it later, or taking it
+ * back, says nothing.
  */
 const Shared = Schema.TaggedStruct('Shared', {
   by: Schema.String,
   tile: Named,
-  rights: SharedRights,
+  rights: Schema.Array(SharedRight),
 })
 
 export type Shared = typeof Shared.Type
