@@ -66,7 +66,7 @@ export function typedOf(typed: string, page: string): Typed {
  */
 export type StarsFound =
   | { readonly state: 'short' | 'looking' | 'nowhere' | 'own' }
-  | { readonly state: 'found'; readonly stars: ReadonlyArray<StarCard> }
+  | { readonly state: 'found'; readonly stars: ReadonlyArray<StarCard>; readonly stale?: boolean }
 
 /** Where a link led, as the picker shows it. */
 const linkedAs = (linked: LinkedStar): StarsFound => {
@@ -76,8 +76,8 @@ const linkedAs = (linked: LinkedStar): StarsFound => {
 
 /**
  * The stars what is typed in the star picker leads to, on this page (`typedOf`): those whose Title
- * holds it, a query by what it makes (`['findStars', 'read', query]`), the last stars found shown
- * while the next are on their way; or the star a link leads to, a query by its Tile
+ * holds it, a query by what it makes (`['findStars', 'read', query]`), the last stars found shown,
+ * `stale`, while the next are on their way; or the star a link leads to, a query by its Tile
  * (`['starOfLink', 'read', tile]`). Nothing is asked while it is too short, or names no Tile.
  */
 export function useStarsFor(typed: string, page: string): StarsFound {
@@ -106,5 +106,8 @@ export function useStarsFor(typed: string, page: string): StarsFound {
     return linked.data === undefined ? { state: 'looking' } : linkedAs(linked.data)
   }
   if (query === undefined) return { state: 'short' }
-  return titled.data === undefined ? { state: 'looking' } : { state: 'found', stars: titled.data }
+  if (titled.data === undefined) return { state: 'looking' }
+  return titled.isPlaceholderData
+    ? { state: 'found', stars: titled.data, stale: true }
+    : { state: 'found', stars: titled.data }
 }

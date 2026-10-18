@@ -1,8 +1,8 @@
 // The star picker on /design-system, live on sample stars: a few letters of a title find those it
 // starts first, then those holding it, two of one name told apart by their previews; a link pasted
 // leads to its star, to nowhere, or to the user's own. Nothing reaches Mapping: what is typed is read
-// by Mapping's own rule, which the route hands over, the stars found as Mapping would answer, and a
-// pick says in a toast who home would hand on.
+// as home reads it, a Title or a link, by the reading the route hands over, the stars found as Mapping
+// would answer, and a pick says in a toast who home would hand on.
 import { useState } from 'react'
 
 import { m } from '#/paraglide/messages'
@@ -11,42 +11,55 @@ import { toast } from '../../../atoms/Toaster'
 import { GalleryColumn, GallerySection, GalleryState } from '../../../gallery/frame'
 import { type StarShown, type StarsShown, StarPicker } from './StarPicker'
 
+/**
+ * What is typed, as home reads it on a page: a link, to the Tile it names on that page's site, or a
+ * Title, the query it makes, none while too short to search.
+ */
+type Typed =
+  | { readonly by: 'link'; readonly tile: string | undefined }
+  | { readonly by: 'title'; readonly query: string | undefined }
+
+/** How home reads what is typed in the picker, on the page at `page`. */
+type TypedOf = (typed: string, page: string) => Typed
+
 interface StarPickerGalleryProps {
-  /** Mapping's reading of what is typed: the query it makes, none while too short to search. */
-  queryOf: (typed: string) => string | undefined
+  typedOf: TypedOf
 }
 
-export function StarPickerGallery({ queryOf }: StarPickerGalleryProps) {
+export function StarPickerGallery({ typedOf }: StarPickerGalleryProps) {
   return (
     <GallerySection name="StarPicker">
       <GalleryState label={m.gallery_state_star_live()}>
         <GalleryColumn>
-          <LivePicker queryOf={queryOf} first="" />
+          <LivePicker typedOf={typedOf} first="" />
         </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_star_homonyms()}>
         <GalleryColumn>
-          <LivePicker queryOf={queryOf} first="Ana Lima" />
+          <LivePicker typedOf={typedOf} first="Ana Lima" />
         </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_star_nowhere()}>
         <GalleryColumn>
-          <LivePicker queryOf={queryOf} first={`/t/${keptTile}`} />
+          <LivePicker typedOf={typedOf} first={`/t/${keptTile}`} />
         </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_star_own()}>
         <GalleryColumn>
-          <LivePicker queryOf={queryOf} first={`/t/${ownStar}`} />
+          <LivePicker typedOf={typedOf} first={`/t/${ownStar}`} />
         </GalleryColumn>
       </GalleryState>
       <GalleryState label={m.gallery_state_widget_phone()}>
         <GalleryColumn phone>
-          <LivePicker queryOf={queryOf} first="an" />
+          <LivePicker typedOf={typedOf} first="an" />
         </GalleryColumn>
       </GalleryState>
     </GallerySection>
   )
 }
+
+/** The page the samples' links are read on, plainly a sample's. */
+const samplePage = 'https://hexframe.ai/'
 
 /** A sample star's id, plainly a sample's. */
 const sampleId = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`
@@ -66,18 +79,18 @@ const sampleStars = (): readonly StarShown[] => [
 
 /**
  * Where what is typed leads, as Mapping would answer on these samples: a link to a sample star's
- * page leads to it, to the user's own star as their own, anywhere else nowhere; a Title finds the
+ * tile leads to it, to the user's own star as their own, anywhere else nowhere; a Title finds the
  * stars it starts first, then those holding it, whatever its case.
  */
-function foundFor(typed: string, queryOf: (typed: string) => string | undefined): StarsShown {
+function foundFor(typed: string, typedOf: TypedOf): StarsShown {
   const stars = sampleStars()
-  const text = typed.trim()
-  if (/^(?:\/|https?:\/\/)/i.test(text)) {
-    if (text.endsWith(ownStar)) return { state: 'own' }
-    const linked = stars.find(({ id }) => text.endsWith(id))
+  const read = typedOf(typed, samplePage)
+  if (read.by === 'link') {
+    if (read.tile === ownStar) return { state: 'own' }
+    const linked = stars.find(({ id }) => id === read.tile)
     return linked === undefined ? { state: 'nowhere' } : { state: 'found', stars: [linked] }
   }
-  const query = queryOf(text)?.toLocaleLowerCase()
+  const query = read.query?.toLocaleLowerCase()
   if (query === undefined) return { state: 'short' }
   const titled = (star: StarShown) => star.title.toLocaleLowerCase()
   return {
@@ -89,20 +102,14 @@ function foundFor(typed: string, queryOf: (typed: string) => string | undefined)
   }
 }
 
-function LivePicker({
-  first,
-  queryOf,
-}: {
-  first: string
-  queryOf: (typed: string) => string | undefined
-}) {
+function LivePicker({ first, typedOf }: { first: string; typedOf: TypedOf }) {
   const [typed, setTyped] = useState(first)
   return (
     <StarPicker
       title={m.gallery_star_ask()}
       typed={typed}
       onType={setTyped}
-      found={foundFor(typed, queryOf)}
+      found={foundFor(typed, typedOf)}
       onPick={(star) => {
         toast(m.gallery_star_picked({ title: star.title }))
       }}

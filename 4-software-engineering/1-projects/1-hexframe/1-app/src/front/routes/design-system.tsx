@@ -15,10 +15,11 @@ import { useMemo, useState } from 'react'
 
 import { merged, turnLocation, type Navigation } from '#/domains/assistant/entities'
 import { keyNameBounds, keyNameOf } from '#/domains/iam/entities'
-import { previewLimit, starQueryOf } from '#/domains/mapping/entities'
+import { previewLimit } from '#/domains/mapping/entities'
 import { ChannelsGallery } from '#/front/client/gallery'
 import { ReadBoundary } from '#/front/client/ReadBoundary'
 import { useShipped } from '#/front/client/mapping/queries'
+import { typedOf } from '#/front/client/mapping/sharing'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
 import { BreadcrumbGallery } from '#/front/features/breadcrumb/gallery'
 import { encoded } from '#/front/features/conversation/composer/mention'
@@ -288,7 +289,7 @@ function Specimens({ chapter, view, onViewChange, onCenter }: SpecimensProps) {
           <TileWidgetGallery previewLimit={previewLimit} />
           <KeyWidgetGallery nameLimit={keyNameBounds.max} nameOf={keyNameOf} />
           <ShareWidgetGallery />
-          <StarPickerGallery queryOf={starQueryOf} />
+          <StarPickerGallery typedOf={typedOf} />
           <ReadBoundary>
             <HelpGallery />
           </ReadBoundary>

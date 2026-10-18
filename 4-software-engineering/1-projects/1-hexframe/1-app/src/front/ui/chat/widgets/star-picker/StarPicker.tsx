@@ -22,18 +22,17 @@ export interface StarShown {
 }
 
 /**
- * Where what is typed leads: too short to look; on its way; the stars found, a link's one among them;
- * nowhere, a link to no tile the user may see; or to the user's own star, which they never pick.
+ * Where what is typed leads: too short to look; on its way; the stars found, a link's one among them,
+ * `stale` while they are the last search's, shown until the next answers; nowhere, a link to no tile
+ * the user may see; or to the user's own star, which they never pick.
  */
 export type StarsShown =
   | { readonly state: 'short' | 'looking' | 'nowhere' | 'own' }
-  | { readonly state: 'found'; readonly stars: readonly StarShown[] }
+  | { readonly state: 'found'; readonly stars: readonly StarShown[]; readonly stale?: boolean }
 
 interface StarPickerProps {
   /** What a star is picked for, its caller's question: "Share Tooling with whom?" */
   title: string
-  /** Who, or what for, in a few words; "find a star" when none is given. */
-  kicker?: string
   /** What is typed: a Title, a part of one, or a link. */
   typed: string
   onType: (typed: string) => void
@@ -41,8 +40,6 @@ interface StarPickerProps {
   /** A star picked, handed to whoever opened the widget. */
   onPick: (star: StarShown) => void
   onCancel: () => void
-  /** The field takes the focus as the widget comes, opened by the step the user just took. */
-  takesFocus?: boolean
 }
 
 /** What the widget says where what is typed leads to no star to pick, in place of the list. */
@@ -54,23 +51,15 @@ const said: Record<Exclude<StarsShown['state'], 'found'>, () => string> = {
 }
 
 /** The star picker: a Title or a link typed, and the stars it leads to, by their cards. */
-export function StarPicker({
-  title,
-  kicker,
-  typed,
-  onType,
-  found,
-  onPick,
-  onCancel,
-  takesFocus = false,
-}: StarPickerProps) {
+export function StarPicker({ title, typed, onType, found, onPick, onCancel }: StarPickerProps) {
   const stars = found.state === 'found' ? found.stars : []
+  const stale = found.state === 'found' && found.stale === true
   const [only] = stars
   return (
     <Widget
       voice="app"
       icon={<Sun />}
-      kicker={kicker ?? m.widget_star_kicker()}
+      kicker={m.widget_star_kicker()}
       title={title}
       subtitle={m.widget_star_what()}
       actions={[{ label: m.widget_star_cancel(), onSelect: onCancel }]}
@@ -82,10 +71,9 @@ export function StarPicker({
         onChange={onType}
         placeholder={m.widget_star_placeholder()}
         autoComplete="off"
-        takesFocus={takesFocus}
-        // Enter picks the one star found, never one among several.
+        // Enter picks the one star found, never one among several, nor one the last search found.
         onEnter={
-          stars.length === 1 && only !== undefined
+          !stale && stars.length === 1 && only !== undefined
             ? () => {
                 onPick(only)
               }
@@ -100,7 +88,7 @@ export function StarPicker({
           : said[found.state]()}
       </p>
       {stars.length > 0 && (
-        <ul className="mt-1.5 grid">
+        <ul className="mt-1.5 grid" aria-busy={stale}>
           {stars.map((star) => (
             <li
               key={star.id}

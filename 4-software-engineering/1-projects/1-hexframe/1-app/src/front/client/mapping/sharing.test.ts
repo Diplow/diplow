@@ -150,7 +150,7 @@ describe('the stars what is typed leads to', () => {
       expect(result.current).toEqual({ state: 'found', stars: [star] })
     })
     rerender({ text: 'Anab' })
-    expect(result.current).toEqual({ state: 'found', stars: [star] })
+    expect(result.current).toEqual({ state: 'found', stars: [star], stale: true })
   })
 
   it('leads a link to its star, to the user’s own, or nowhere', async () => {

@@ -136,32 +136,20 @@ export const visit = ({ tile }: { tile: string }) =>
 export const findStars = ({ query }: { query: string }) =>
   forAccount((acting) => Stars.starsTitled(acting, query))
 
-/** Where a link to a Tile of the Account's own System leads it: to its own star, which it never picks. */
-const ownStar: LinkedStar = { _tag: 'Own' }
-
-/** Where a link to a Tile leads, for one the Account is not shown: nowhere. */
-const nowhere: LinkedStar = { _tag: 'Nowhere' }
-
 /**
- * Where a link to a Tile leads the star picker (HEX-130): the star of the System holding it, by its
- * card, once Mapping found the Account is shown the Tile (`shownTile`, as `visit` asks), its own
- * answered as its own, which it never picks; nowhere for a Tile kept from it, as for one that doesn't
- * exist, an answer rather than a refusal, so the picker says it where the link was pasted.
+ * Where a link to a Tile leads the star picker (HEX-130), on the System holding it, as `visit` names
+ * it (`onSystem`): Mapping's `linkedStar`, its star by its card once the Account is shown the Tile, its
+ * own said to be its own, nowhere for a Tile kept from it or none. A Turn's Key, which `onSystem` keeps
+ * from every other System, is led nowhere too, an answer rather than a refusal, as Mapping answers.
  */
 export const starOfLink = ({ tile }: { tile: string }) =>
   Effect.catchTag(
     onSystem(
       () => Mapping.holding(tile),
-      (acting, own) =>
-        acting.system === own.system
-          ? Effect.as(Mapping.shownTile(acting, tile), ownStar)
-          : Effect.map(Stars.starShowing(acting, tile), (star): LinkedStar => ({
-              _tag: 'Star',
-              star,
-            })),
+      (acting, own) => Stars.linkedStar(acting, own.system, tile),
     ),
     'TileNotFound',
-    () => Effect.succeed(nowhere),
+    (): Effect.Effect<LinkedStar> => Effect.succeed({ _tag: 'Nowhere' }),
   )
 
 /**

@@ -79,7 +79,7 @@ type NewTileRow = Omit<
 export type StarRow = Pick<TileRow, 'id' | 'title' | 'preview'>
 
 /** What a star search asks: the text a Title holds, the star left out, and how many at most. */
-export interface StarSearch {
+export interface StarsTitledQuery {
   readonly query: string
   readonly except: string
   readonly atMost: number
@@ -186,7 +186,7 @@ export class Tiles extends Context.Service<
      * each with its id, Title and Preview and nothing else: those whose Title starts with it first,
      * then the others, each group by Title, `atMost` in all. What finds a star by its Title.
      */
-    readonly starsTitled: (search: StarSearch) => Effect.Effect<ReadonlyArray<StarRow>>
+    readonly starsTitled: (search: StarsTitledQuery) => Effect.Effect<ReadonlyArray<StarRow>>
     /**
      * The row of this id in the owner's System, then the rows below it, `depth` generations down,
      * one query per generation, that row and the rows below each with only the content columns
@@ -412,7 +412,7 @@ const starsOf = (database: Database['Service']) => {
               Effect.orDie,
               Effect.map((rows) => new Map(rows.map((row) => [row.id, row.star] as const))),
             ),
-    starsTitled: ({ query, except, atMost }: StarSearch) =>
+    starsTitled: ({ query, except, atMost }: StarsTitledQuery) =>
       Effect.gen(function* () {
         const starting = `${literally(query)}%`
         const titled = (holds: SQL | undefined, limit: number) =>

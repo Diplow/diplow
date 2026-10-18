@@ -7,7 +7,8 @@ import { Effect } from 'effect'
 
 import { Tiles } from '#/repositories/database/tiles/tiles'
 
-import { type StarCard, starsFoundAtMost } from '../entities'
+import { type LinkedStar, type StarCard, starsFoundAtMost } from '../entities'
+import type { TileNotFound } from '../errors'
 import { type Acting, glimpses, shownTile } from '../mapping'
 
 /**
@@ -34,3 +35,24 @@ export const starShowing = (acting: Acting, tile: string) =>
         : Effect.succeed(card),
     ),
   )
+
+/** Where a link to a Tile of the reader's own System leads: their own star, which they never pick. */
+const ownStar: LinkedStar = { _tag: 'Own' }
+
+/** Where a link leads that names a Tile kept from the reader, or none. */
+const nowhere: LinkedStar = { _tag: 'Nowhere' }
+
+/**
+ * Where a link to the Tile of this id leads the actor, on the System holding it, which they act on:
+ * to its star, by its card, once they are shown the Tile (`starShowing`); to their own star, `own`
+ * naming it, which they never pick; nowhere for a Tile kept from them, as for one that isn't there.
+ * An answer, never a refusal, so whoever asked says it where the link was given, and it says nothing
+ * of a Tile the actor may not read.
+ */
+export const linkedStar = (acting: Acting, own: string, tile: string) => {
+  const led: Effect.Effect<LinkedStar, TileNotFound, Tiles> =
+    acting.system === own
+      ? Effect.as(shownTile(acting, tile), ownStar)
+      : Effect.map(starShowing(acting, tile), (star): LinkedStar => ({ _tag: 'Star', star }))
+  return Effect.catchTag(led, 'TileNotFound', () => Effect.succeed(nowhere))
+}
