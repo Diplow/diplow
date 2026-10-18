@@ -1,0 +1,64 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/public/public.ts
+  s_eb2c82211b20e8::t_4677b9df411922 1-59
+  s_eb2c82211b20e8::t_937368e8607d1e 60
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/rights.ts
+  s_eb2c82211b20e8::t_6b1575127ea9a3 100-104,107,113-119,123,125
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/mapping.ts
+  s_eb2c82211b20e8::t_33169d196bb9b6 3-4,110-117
+  s_eb2c82211b20e8::t_c59beb998c5f17 118
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/public/markdown.ts
+  s_eb2c82211b20e8::t_f2a87b4dee4152 1-71
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_eb2c82211b20e8::t_913e67843f0f10 398-402
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/public/markdown.test.ts
+  s_eb2c82211b20e8::t_e8978431cba1d0 1-77
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/shared.test.ts
+  s_eb2c82211b20e8::t_a085f16e992159 26,28-29
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/rights.test.ts
+  s_eb2c82211b20e8::t_141943b4790fae 6,165-177
+  s_eb2c82211b20e8::t_81193e072366bf 178
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/queries.ts
+  s_eb2c82211b20e8::t_764283f6736e7c 63,123-134
+  s_eb2c82211b20e8::t_fd2fb72a523d4d 135-138
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/t/{$id}[.]md.ts
+  s_eb2c82211b20e8::t_4677b9df411922 1-17
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/routes/t/$id.tsx
+  s_eb2c82211b20e8::t_ed2728a61cb3a9 2-8,10,12,14-16,19-21,25-32,34-36,39-45,52-110,112-113,122-128
+  s_eb2c82211b20e8::t_937368e8607d1e 46-51
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/public/public.test.ts
+  s_eb2c82211b20e8::t_937368e8607d1e 93-95,170-173
+  s_eb2c82211b20e8::t_e8978431cba1d0 1,121-123,159,169,174
+  s_eb2c82211b20e8::t_b6dc492415ff08 2-92,96-120,124-158,160-168,175-182
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/programs.ts
+  s_eb2c82211b20e8::t_a745b34819ae0f 129-159
+  s_eb2c82211b20e8::t_937368e8607d1e 10-16
+  s_eb2c82211b20e8::t_67eca86647a779 160-161
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_eb2c82211b20e8::t_913e67843f0f10 398-402
+4-software-engineering/1-projects/1-hexframe/1-app/src/routeTree.gen.ts
+  s_a2ce43db235df9::t_b987b9f43c1ba4 21,69-73,90,103,117,132,145,158,172,241-247,268
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ac7328062328c72079db1614133a47863a08ab1d",
+  "prompts": {},
+  "sessions": {
+    "s_a2ce43db235df9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-a4eda4803838b9ca7",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    },
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
