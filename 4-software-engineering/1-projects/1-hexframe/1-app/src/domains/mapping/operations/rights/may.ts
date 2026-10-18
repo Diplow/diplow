@@ -228,6 +228,22 @@ export interface Granted {
 }
 
 /**
+ * Whether the actor may make one Operation of a batch on the System the ones before it made, by its
+ * Grants and where each Tile stands there, a Tile the batch made reading as its parent lets it: as
+ * `allowed` answers, for anyone but its owner, whose every right it is. The one step of a batch's
+ * rights, which `allowedThrough` folds and the service asks of an Operation added to a batch.
+ */
+export const allowedStep = (
+  actor: Actor,
+  { owner, grants }: Granted,
+  system: System,
+  operation: Operation,
+): Result.Result<void, TileNotFound | NotAllowed> =>
+  owns(actor, owner)
+    ? Result.void
+    : allowed(actor, { system, sharing: sharingOf(owner, lineageOf(system), grants) }, operation)
+
+/**
  * A batch folded whole over the System the actor runs it on, or adds to it: for its owner, every
  * right theirs, as `whole` folds it; for anyone else, each Operation once `allowed` found they may
  * make it on what the ones before it made, by the System's Grants and where each Tile stands then, a
@@ -244,11 +260,7 @@ export function allowedThrough(
   if (owns(actor, owner)) return whole(system, batch)
   let folded: Folded = { system, events: [], left: [] }
   for (const batched of batch) {
-    const on = {
-      system: folded.system,
-      sharing: sharingOf(owner, lineageOf(folded.system), grants),
-    }
-    const rights = allowed(actor, on, batched.operation)
+    const rights = allowedStep(actor, { owner, grants }, folded.system, batched.operation)
     if (Result.isFailure(rights)) return Result.fail(rights.failure)
     const next = afterOne(folded.system, batched)
     if (Result.isFailure(next)) return Result.fail(new BatchOutdated())

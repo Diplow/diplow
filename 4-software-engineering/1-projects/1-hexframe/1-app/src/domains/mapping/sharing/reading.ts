@@ -298,6 +298,14 @@ export const agentAt = (acting: Acting, id: string) =>
   })
 
 /**
+ * Whether a Turn already running in a System not its Account's own still reaches it, asked on every
+ * call its Key makes: as `agentAt` asks it at the Turn's Tile, every refusal `TileNotFound`, so a Key
+ * whose *@* was taken back learns nothing of what else its Account may still do there (HEX-134).
+ */
+export const agentStillAt = (acting: Acting, id: string) =>
+  Effect.mapError(agentAt(acting, id), () => new TileNotFound())
+
+/**
  * Whether an Operation pins a Tile of another System, a Reference's create whose target another
  * System holds: once the actor may read it there (`ownTile`), before the System it is made in is
  * locked, so `decide` takes a target that System does not hold; `TileNotFound` when they may not, as

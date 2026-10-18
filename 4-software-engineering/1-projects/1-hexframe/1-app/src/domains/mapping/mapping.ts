@@ -70,6 +70,7 @@ import {
   added,
   allowed,
   allowedBatch,
+  allowedStep,
   allowedThrough,
   type Batched,
   type CreateReference,
@@ -99,6 +100,7 @@ export { HelpId, helpRoot, shippedSystem } from './shipped/shipped'
 export type { Acting, Across } from './sharing/reading'
 export {
   agentAt,
+  agentStillAt,
   glimpses,
   grantsIn,
   holding,
@@ -752,13 +754,7 @@ export const addToBatch = <O extends Operation>(
     const folded = yield* Effect.fromResult(
       allowedThrough(acting.actor, { owner, grants }, held, over),
     )
-    if (!owns(acting.actor, owner)) {
-      const on = {
-        system: folded.system,
-        sharing: sharingOf(owner, lineageOf(folded.system), grants),
-      }
-      yield* Effect.fromResult(allowed(acting.actor, on, operation))
-    }
+    yield* Effect.fromResult(allowedStep(acting.actor, { owner, grants }, folded.system, operation))
     const made = yield* madeFor(operation)
     const next = yield* Effect.fromResult(added(folded, operation, made))
     // Refused now what its run would refuse, so a batch holds nothing it can't run.

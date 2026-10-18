@@ -92,10 +92,7 @@ export const homeOf = (signed: Iam.SignedIn, own: Mapping.Acting) =>
     ? Effect.flatMap(Assistant.turnPlace(signed.account.id, signed.by.turnId), (place) => {
         if (place?.elsewhere === undefined) return Effect.succeed(own)
         const acting = actingAt(own, place.elsewhere)
-        return Effect.as(
-          Effect.mapError(Mapping.agentAt(acting, place.location), () => new TileNotFound()),
-          acting,
-        )
+        return Effect.as(Mapping.agentStillAt(acting, place.location), acting)
       })
     : Effect.succeed(own)
 
