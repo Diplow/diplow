@@ -145,10 +145,11 @@ layer(TestTiles)('a star found by its Title or by a link, over PGlite', (it) => 
     }),
   )
 
-  it('asks for a query long enough, trimmed, never one too long', () => {
+  it('makes a query long enough, trimmed, of what is typed, its first units past its bound', () => {
     expect(starQueryOf('  An ')).toBe('An')
     expect(starQueryOf(' A ')).toBeUndefined()
     expect(starQueryOf('')).toBeUndefined()
-    expect(starQueryOf('a'.repeat(101))).toBeUndefined()
+    // Past its bound, its first 100 units, which every Title holding the whole holds too.
+    expect(starQueryOf(` ${'a'.repeat(120)}`)).toBe('a'.repeat(100))
   })
 })

@@ -10,13 +10,8 @@ import { Schema } from 'effect'
 
 import { tileOfLink } from '#/api/mapping/files/download'
 import { findStars, setGrant, starOfLink, whoReaches } from '#/api/mapping/mapping'
-import {
-  type GrantChange,
-  type LinkedStar,
-  type StarCard,
-  starQueryOf,
-  TileId,
-} from '#/domains/mapping/entities'
+import { type GrantChange, type LinkedStar, starQueryOf, TileId } from '#/domains/mapping/entities'
+import type { StarsShown } from '#/front/ui/chat/widgets/star-picker/StarPicker'
 
 import { read, write } from '../calls'
 
@@ -59,28 +54,20 @@ export function typedOf(typed: string, page: string): Typed {
   return { by: 'link', tile: tile !== undefined && Schema.is(TileId)(tile) ? tile : undefined }
 }
 
-/**
- * Where what is typed leads the star picker, as its widget shows it: too short to search; on its way;
- * the stars found, a link's one star among them; nowhere, a link to no Tile the user is shown; or to
- * their own star, which they never pick.
- */
-export type StarsFound =
-  | { readonly state: 'short' | 'looking' | 'nowhere' | 'own' }
-  | { readonly state: 'found'; readonly stars: ReadonlyArray<StarCard>; readonly stale?: boolean }
-
 /** Where a link led, as the picker shows it. */
-const linkedAs = (linked: LinkedStar): StarsFound => {
+const linkedAs = (linked: LinkedStar): StarsShown => {
   if (linked._tag === 'Star') return { state: 'found', stars: [linked.star] }
   return { state: linked._tag === 'Own' ? 'own' : 'nowhere' }
 }
 
 /**
- * The stars what is typed in the star picker leads to, on this page (`typedOf`): those whose Title
+ * The stars what is typed in the star picker leads to, on this page (`typedOf`), as its widget shows
+ * them (`StarsShown`): those whose Title
  * holds it, a query by what it makes (`['findStars', 'read', query]`), the last stars found shown,
  * `stale`, while the next are on their way; or the star a link leads to, a query by its Tile
  * (`['starOfLink', 'read', tile]`). Nothing is asked while it is too short, or names no Tile.
  */
-export function useStarsFor(typed: string, page: string): StarsFound {
+export function useStarsFor(typed: string, page: string): StarsShown {
   const asked = typedOf(typed, page)
   const query = asked.by === 'title' ? asked.query : undefined
   const tile = asked.by === 'link' ? asked.tile : undefined

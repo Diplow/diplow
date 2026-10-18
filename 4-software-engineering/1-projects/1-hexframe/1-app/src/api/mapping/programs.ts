@@ -12,7 +12,7 @@ import {
   anyone,
   type Field,
   type GrantChange,
-  type LinkedStar,
+  nowhere,
   type ShippedRoot,
 } from '#/domains/mapping/entities'
 import { TileNotFound } from '#/domains/mapping/errors'
@@ -149,7 +149,7 @@ export const starOfLink = ({ tile }: { tile: string }) =>
       (acting, own) => Stars.linkedStar(acting, own.system, tile),
     ),
     'TileNotFound',
-    (): Effect.Effect<LinkedStar> => Effect.succeed({ _tag: 'Nowhere' }),
+    () => Effect.succeed(nowhere),
   )
 
 /**

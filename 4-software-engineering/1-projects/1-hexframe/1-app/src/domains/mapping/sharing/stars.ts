@@ -7,7 +7,7 @@ import { Effect } from 'effect'
 
 import { Tiles } from '#/repositories/database/tiles/tiles'
 
-import { type LinkedStar, type StarCard, starsFoundAtMost } from '../entities'
+import { type LinkedStar, nowhere, type StarCard, starsFoundAtMost } from '../entities'
 import type { TileNotFound } from '../errors'
 import { type Acting, glimpses, shownTile } from '../mapping'
 
@@ -38,9 +38,6 @@ export const starShowing = (acting: Acting, tile: string) =>
 
 /** Where a link to a Tile of the reader's own System leads: their own star, which they never pick. */
 const ownStar: LinkedStar = { _tag: 'Own' }
-
-/** Where a link leads that names a Tile kept from the reader, or none. */
-const nowhere: LinkedStar = { _tag: 'Nowhere' }
 
 /**
  * Where a link to the Tile of this id leads the actor, on the System holding it, which they act on:

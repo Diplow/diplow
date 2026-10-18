@@ -17,9 +17,12 @@ export const StarQuery = Schema.String.check(
   Schema.isLengthBetween(starQueryBounds.shortest, starQueryBounds.longest),
 )
 
-/** The query what was typed makes, trimmed, `undefined` while too short to search, or too long. */
+/**
+ * The query what was typed makes, trimmed, its first `longest` units alone past them, which every
+ * Title holding the whole holds too; `undefined` while too short to search.
+ */
 export function starQueryOf(typed: string): string | undefined {
-  const query = typed.trim()
+  const query = typed.trim().slice(0, starQueryBounds.longest).trim()
   return Schema.is(StarQuery)(query) ? query : undefined
 }
 
@@ -41,3 +44,6 @@ export type LinkedStar =
   | { readonly _tag: 'Star'; readonly star: StarCard }
   | { readonly _tag: 'Own' }
   | { readonly _tag: 'Nowhere' }
+
+/** Where a link leads that names a Tile kept from the reader, or none: nowhere, whatever kept it. */
+export const nowhere: LinkedStar = { _tag: 'Nowhere' }
