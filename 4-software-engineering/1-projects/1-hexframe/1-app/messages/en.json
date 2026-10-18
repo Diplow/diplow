@@ -1267,6 +1267,7 @@
   "widget_share_from": "from {title}",
   "widget_share_by_default": "by default",
   "widget_share_from_joiner": ", ",
+  "widget_share_rights_joiner": ", ",
   "widget_share_choose": "What Everyone may do on this tile",
   "widget_share_choice_read": "Read",
   "widget_share_choice_none": "None",

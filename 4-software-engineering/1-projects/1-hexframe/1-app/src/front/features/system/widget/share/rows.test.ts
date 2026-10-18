@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { Reach } from '#/domains/mapping/entities'
 
-import { choiceOf, fromOf, shareRowsOf } from './rows'
+import { fromOf, shareRowsOf } from './rows'
 
 // Who reaches a Tile, as the share widget words it: where each value comes from, and what its owner
 // set for Everyone there, through inherit. What Mapping answers is `domains/mapping/entities/rights/`'s.
@@ -25,13 +25,6 @@ describe('who reaches a Tile, in words', () => {
     expect(fromOf(star, around)).toBe('from your star')
     expect(fromOf(journal, around)).toBe('from Journal')
     expect(fromOf(null, around)).toBe('by default')
-  })
-
-  it('shows Everyone’s choice set on the Tile, or inherit where it comes from above', () => {
-    expect(choiceOf(everyone('read', entry), around)).toBe('read')
-    expect(choiceOf(everyone('none', entry), around)).toBe('none')
-    expect(choiceOf(everyone('read', journal), around)).toBe('inherit')
-    expect(choiceOf(everyone('none', null), around)).toBe('inherit')
   })
 
   it('words Everyone first, with its choice, then everyone else, their rights one after another', () => {

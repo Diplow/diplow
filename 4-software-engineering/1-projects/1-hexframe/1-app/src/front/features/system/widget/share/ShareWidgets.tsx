@@ -16,8 +16,8 @@ import { shareRowsOf } from './rows'
 interface ShareWidgetsProps {
   /** The Account's own System, as the page shows it. */
   system: System
-  /** The Tile it is open on, as the URL says, one the System holds. */
-  tile: string
+  /** The Tile it is open on, as the URL says, one the System holds, by its id and its Title. */
+  tile: { readonly id: string; readonly title: string }
   /** Closes it: the URL lets it go. */
   onClose: () => void
 }
@@ -26,12 +26,10 @@ interface ShareWidgetsProps {
  * The share widget on a Tile of the Account's own System, once who reaches it is read. While
  * Everyone's choice is on its way, the widget shows it and waits.
  */
-export function ShareWidgets({ system, tile, onClose }: ShareWidgetsProps) {
+export function ShareWidgets({ system, tile: { id: tile, title }, onClose }: ShareWidgetsProps) {
   const { data: reached } = useWhoReaches(tile)
   const setGrant = useSetGrant()
   if (reached === undefined) return null
-  const found = tileAt(system, tile)
-  if (found === undefined) return null
   const { everyone, others } = shareRowsOf(reached, {
     tile,
     star: system.root.id,
@@ -41,7 +39,7 @@ export function ShareWidgets({ system, tile, onClose }: ShareWidgetsProps) {
   const link = visitLinkOf(tile, location.href)
   return (
     <ShareWidget
-      title={found.title === '' ? m.tile_word_root() : found.title}
+      title={title === '' ? m.tile_word_root() : title}
       everyone={{ ...everyone, choice: sending ? setGrant.variables.value : everyone.choice }}
       others={others}
       sending={sending}

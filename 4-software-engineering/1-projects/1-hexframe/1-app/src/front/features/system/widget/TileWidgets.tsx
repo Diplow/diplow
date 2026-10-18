@@ -145,19 +145,25 @@ function widgetOf(change: Change, widgets: TileWidgetsState, page: WidgetContext
     case 'import':
       return importOf(change.place, page)
     case 'share':
-      // Who may see a Tile of the Account's own System: none for a Tile it no longer holds.
-      return tileAt(page.system, change.id) === undefined ? null : (
-        <ShareWidgets
-          key={`share:${change.id}`}
-          system={page.system}
-          tile={change.id}
-          onClose={page.onCancel}
-        />
-      )
+      return shareOf(change.id, page)
     case 'none':
     case 'move':
       return shownOf(widgets, page)
   }
+}
+
+/** Who may see a Tile of the Account's own System; none for a Tile it no longer holds. */
+function shareOf(id: string, page: WidgetContext) {
+  const shared = tileAt(page.system, id)
+  if (shared === undefined) return null
+  return (
+    <ShareWidgets
+      key={`share:${id}`}
+      system={page.system}
+      tile={{ id, title: shared.title }}
+      onClose={page.onCancel}
+    />
+  )
 }
 
 /** The receipt a form left, or the export under way, once no form is open. */

@@ -1267,6 +1267,7 @@
   "widget_share_from": "depuis {title}",
   "widget_share_by_default": "par défaut",
   "widget_share_from_joiner": ", ",
+  "widget_share_rights_joiner": ", ",
   "widget_share_choose": "Ce que tout le monde peut faire sur cette tuile",
   "widget_share_choice_read": "Lire",
   "widget_share_choice_none": "Rien",

@@ -31,6 +31,7 @@ const table: readonly Entry[] = [
   { tag: 'PasswordLengthInvalid', message: m.error_iam_password_length },
   { tag: 'TooManyAttempts', message: m.error_iam_too_many_attempts },
   { tag: 'SessionRequired', scope: 'setGrant', message: m.error_mapping_share_session_required },
+  { tag: 'SessionRequired', scope: 'whoReaches', message: m.error_mapping_share_session_required },
   { tag: 'SessionRequired', message: m.error_iam_session_required },
   { tag: 'KeyNameInvalid', message: m.error_iam_key_name_invalid },
   { tag: 'KeyNotFound', message: m.error_iam_key_not_found },

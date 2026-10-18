@@ -67,9 +67,11 @@ describe('the message table', () => {
     expect(messageFor(new NotAllowed(), 'whoReaches')).toBe(
       "Only this tile's owner decides who may see it.",
     )
-    expect(messageFor(new SessionRequired(), 'setGrant')).toBe(
-      'Who may see a tile is changed from your own signed-in browser, never with a key.',
-    )
+    for (const scope of ['setGrant', 'whoReaches']) {
+      expect(messageFor(new SessionRequired(), scope)).toBe(
+        'Who may see a tile is changed from your own signed-in browser, never with a key.',
+      )
+    }
     overwriteGetLocale(() => 'fr')
     expect(messageFor(new NotAllowed(), 'setGrant')).toBe(
       'Seul le propriétaire de cette tuile décide qui peut la voir.',

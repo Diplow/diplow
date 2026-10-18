@@ -30,6 +30,15 @@ export interface Reach {
   readonly from: string | null
 }
 
+/**
+ * What a subject's value on a Tile reads as the owner's choice there, `GrantChange`'s inverse: its
+ * value where its Grant is set on the Tile, Everyone's being `read` or `none`, else `inherit`.
+ */
+export const choiceOn = ({ value, from }: Reach, tile: string): GrantChange['value'] => {
+  if (from !== tile) return 'inherit'
+  return value === 'read' ? 'read' : 'none'
+}
+
 /** Who reaches a Tile: Everyone, always, and everyone else who does. */
 export interface Reaching {
   readonly everyone: Reach

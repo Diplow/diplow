@@ -17,10 +17,8 @@ import {
   subjectRowOf,
   type System,
 } from '../entities'
-import { ShippedReadOnly } from '../errors'
-import { type Acting, grantsIn, lockedOf, ownerOf, wholeOf } from '../mapping'
+import { type Acting, grantsIn, lockedOf, outsideShipped, ownerOf, wholeOf } from '../mapping'
 import { mayShare } from '../operations'
-import { isShippedId } from '../shipped/shipped'
 
 /**
  * The System the actor acts on, read by `read`, and how it is shared, once `mayShare` found the actor
@@ -34,7 +32,7 @@ const sharedOn = <E, R>(
   read: (owner: string) => Effect.Effect<System, E, R>,
 ) =>
   Effect.gen(function* () {
-    if (isShippedId(tile)) return yield* new ShippedReadOnly()
+    yield* outsideShipped([tile])
     const owner = yield* ownerOf(acting.system)
     const system = yield* read(owner)
     const sharing = sharingOf(owner, lineageOf(system), yield* grantsIn(owner))

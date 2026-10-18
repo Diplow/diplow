@@ -1,7 +1,7 @@
 import { Schema } from 'effect'
 import { describe, expect, it } from 'vitest'
 
-import { GrantChange, reachOn } from './reach'
+import { choiceOn, GrantChange, reachOn } from './reach'
 import { Grant, type GrantValue, lineageFrom, sharingOf, type Subject } from './rights'
 
 // Who reaches a Tile, on a System made by hand: each subject with its value and the Tile it comes
@@ -65,6 +65,17 @@ describe('who reaches a Tile', () => {
       everyone: { subject: everyone, value: 'none', from: null },
       others: [{ subject: bob, value: 'read+write', from: 'garden' }],
     })
+  })
+})
+
+describe('what its owner chose for Everyone on a Tile', () => {
+  const at = (value: GrantValue, from: string | null) => ({ subject: everyone, value, from })
+
+  it('is the value set on the Tile, or inherit where it comes from above or nowhere', () => {
+    expect(choiceOn(at('read', 'entry'), 'entry')).toBe('read')
+    expect(choiceOn(at('none', 'entry'), 'entry')).toBe('none')
+    expect(choiceOn(at('read', 'journal'), 'entry')).toBe('inherit')
+    expect(choiceOn(at('none', null), 'entry')).toBe('inherit')
   })
 })
 

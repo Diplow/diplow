@@ -472,9 +472,10 @@ export const systemFiles = (acting: Acting, link: LinkOf, over: ReadonlyArray<Ba
 
 /**
  * Refuses a change that names a Tile of a System hexframe ships, Help or the tutorial, whichever
- * schema let its ids through: each is read by every Account and written by none.
+ * schema let its ids through: each is read by every Account and written by none. Exported for
+ * `sharing/`, whose Grants on such a Tile are nobody's.
  */
-const outsideShipped = (ids: ReadonlyArray<string>) =>
+export const outsideShipped = (ids: ReadonlyArray<string>) =>
   ids.some(isShippedId) ? Effect.fail(new ShippedReadOnly()) : Effect.void
 
 /**

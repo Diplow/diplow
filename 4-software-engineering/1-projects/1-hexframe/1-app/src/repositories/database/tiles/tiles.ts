@@ -13,7 +13,14 @@ import { Context, Data, Effect, Layer } from 'effect'
 
 import { Database, InTransaction } from '../database'
 import { type FrontmatterColumn, type TileConfigColumn, tile } from '../schema'
-import { type GrantRow, grantsOf, type GrantWrites, grantWritesOf, type PlaceRow } from './grants'
+import {
+  type GrantRow,
+  grantsOf,
+  type GrantWrites,
+  grantWritesOf,
+  inTransaction,
+  type PlaceRow,
+} from './grants'
 
 /**
  * One row of the `tile` table, as its System's owner reads it. A Root has no parent and no
@@ -247,9 +254,6 @@ const under = alias(tile, 'under')
 
 /** The Root of the System a row is of, for a row to find its star. */
 const star = alias(tile, 'star')
-
-/** A query that only holds inside a transaction: it requires one, so it runs in no other. */
-const inTransaction = <A, E>(query: Effect.Effect<A, E>) => InTransaction.use(() => query)
 
 /** The rows of the owner's System: every row carries its System's owner. */
 const ofOwner = (owner: string) => eq(tile.ownerId, owner)

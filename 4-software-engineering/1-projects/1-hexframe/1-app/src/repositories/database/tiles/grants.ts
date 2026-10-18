@@ -75,12 +75,19 @@ export interface GrantWrites {
   ) => Effect.Effect<void, never, InTransaction>
 }
 
-/** A query that only holds inside a transaction: it requires one, so it runs in no other. */
-const inTransaction = <A, E>(query: Effect.Effect<A, E>) => InTransaction.use(() => query)
+/**
+ * A query that only holds inside a transaction: it requires one, so it runs in no other. The tiles
+ * repository's writes take it from here too.
+ */
+export const inTransaction = <A, E>(query: Effect.Effect<A, E>) => InTransaction.use(() => query)
 
 /** The writes of the Grants of the owner's System, each to a Tile it holds alone. */
 export const grantWritesOf = (database: Database['Service'], owner: string): GrantWrites => {
-  /** Nothing when the owner's System holds this Tile; a defect otherwise: Mapping found it there. */
+  /**
+   * Nothing when the owner's System holds this Tile; a defect otherwise. Mapping found it there
+   * already; a Grant decides who reads a Tile, so its write keeps a guard of its own, one lookup by
+   * the table's key, and no mistake above it can open a Tile of another System.
+   */
   const held = (tileId: string) =>
     Effect.flatMap(
       database

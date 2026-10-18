@@ -62,7 +62,7 @@ const others = (): ReachRow[] => [
   {
     key: 'group',
     who: m.widget_share_group(),
-    value: `${m.widget_share_read()}, ${m.widget_share_write()}`,
+    value: [m.widget_share_read(), m.widget_share_write()].join(m.widget_share_rights_joiner()),
     from: m.widget_share_from({ title: m.gallery_sample_chat_projects() }),
   },
 ]
