@@ -73,6 +73,13 @@ const forAccount = <A, E, R>(
   )
 
 /**
+ * The Account acting on the System a star names, someone else's, or on its own for none: what a
+ * Turn's `elsewhere`, a Tile's `holding` and a Proposal's System name. The one rule of it.
+ */
+export const actingAt = (own: Mapping.Acting, star: string | undefined): Mapping.Acting =>
+  star === undefined ? own : { ...own, system: star }
+
+/**
  * The Account acting where its request works when it names no System: for a Turn's Key, the System
  * its Turn started in, someone else's when the Turn says so (Assistant's `startedElsewhere`), read
  * from the Turn on every call, never kept; the Account's own for any other proof. What a Turn's Key
@@ -80,9 +87,8 @@ const forAccount = <A, E, R>(
  */
 export const homeOf = (signed: Iam.SignedIn, own: Mapping.Acting) =>
   signed.by._tag === 'TurnKey'
-    ? Effect.map(
-        Assistant.startedElsewhere(signed.account.id, signed.by.turnId),
-        (star): Mapping.Acting => (star === undefined ? own : { ...own, system: star }),
+    ? Effect.map(Assistant.startedElsewhere(signed.account.id, signed.by.turnId), (star) =>
+        actingAt(own, star),
       )
     : Effect.succeed(own)
 

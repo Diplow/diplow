@@ -19,7 +19,7 @@ import {
   type SystemTile,
   tileAt,
 } from '#/domains/mapping/entities'
-import { decide, type Operation, shownAllowed } from '#/domains/mapping/operations'
+import { decide, type Operation, runsAgent, shownAllowed } from '#/domains/mapping/operations'
 import type { TileHex } from '#/front/ui/canvas/state/useCanvasState'
 import type { PickerFrame } from '#/front/ui/canvas/tile/menu/Picker'
 import { groupsOf, type Subject, type Verb } from '#/front/ui/canvas/tile/menu/verbs'
@@ -54,7 +54,7 @@ const ownersAlone: ReadonlySet<Verb> = new Set(visitorsWithout)
  * then starting there, in their own Conversation (HEX-134). The server asks again as the Turn starts.
  */
 const asksAt = ({ reach }: Pick<Systems, 'reach'>, tile: string) =>
-  reach === 'owned' || (reach.visiting[tile]?.includes('@') ?? false)
+  reach === 'owned' || runsAgent(reach.visiting[tile] ?? [])
 
 /**
  * The lines a free slot's menu leaves out under a Tile of the System drawn: none on the user's own;

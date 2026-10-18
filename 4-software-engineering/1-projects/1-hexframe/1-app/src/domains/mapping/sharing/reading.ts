@@ -9,10 +9,6 @@ import { Tiles } from '#/repositories/database/tiles/tiles'
 
 import {
   type Actor,
-  type Depth,
-  type Field,
-  type FieldsAsked,
-  foundIn,
   grantOf,
   lineageFrom,
   lineageOf,
@@ -22,7 +18,6 @@ import {
   referencesShown,
   Right,
   rightsOn,
-  type Seen,
   seenBy,
   sharingOf,
   sightOf,
@@ -31,7 +26,7 @@ import {
   tileAt,
 } from '../entities'
 import { NotAllowed, TileNotFound } from '../errors'
-import { type Batched, fold, type Operation } from '../operations'
+import { type Batched, fold, type Operation, runsAgent } from '../operations'
 
 /** Who acts, and on which System, named by its star, the id of its Root. */
 export interface Acting {
@@ -85,18 +80,6 @@ export const seenThrough = (acting: Acting, over: ReadonlyArray<Batched>) =>
     const grants = owns(acting.actor, owner) ? [] : yield* grantsIn(owner)
     return seenBy(acting.actor, folded, sharingOf(owner, lineageOf(folded), grants))
   })
-
-/**
- * What a read from a Tile of a System as a reader is shown it finds: from a Tile across a gap as from
- * its own Root, its place above being kept from them, so its parent is none.
- */
-export const foundInSeen = <O extends Field, F extends Field>(
-  seen: Seen,
-  { id, depth, fields }: { id?: string | undefined; depth: Depth; fields: FieldsAsked<O, F> },
-) => {
-  const gap = id === undefined || !Object.hasOwn(seen.gaps, id) ? undefined : seen.gaps[id]
-  return foundIn(gap === undefined ? seen : { ...seen, root: gap }, { id, depth, fields })
-}
 
 /**
  * What the actor may read of the System it acts on, by id, with its owner: every Tile, for its owner;
@@ -312,7 +295,7 @@ export const agentAt = (acting: Acting, id: string) =>
         )
     const titled = yield* titledIn(owner, [id], () => rights.has('read'))
     if (!(id in titled)) return yield* new TileNotFound()
-    if (!rights.has('@')) return yield* new NotAllowed()
+    if (!runsAgent(rights)) return yield* new NotAllowed()
     return Right.literals.filter((right) => rights.has(right))
   })
 

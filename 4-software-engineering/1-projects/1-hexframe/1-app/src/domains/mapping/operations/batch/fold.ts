@@ -5,14 +5,14 @@
 // applies, a Tile changed or gone since, is left out of the fold and said so, by its refusal, so the
 // rest still folds for a reader; running the batch for good, or adding to it, refuses it whole then
 // (`whole`, `BatchOutdated`). Pure.
-import { Result, Schema } from 'effect'
+import { Result, Schema, Struct } from 'effect'
 
 import { Frontmatter, Name, type System, TileConfig, TileId, tileAt } from '../../entities'
 import { BatchOutdated } from '../../errors'
 import { decide, type Decided, type Made, type Refusal, type Refusals } from '../decider/decide'
 import { evolve } from '../decider/evolve'
 import { changeOf, type ChangeSummary, type OperationEvent } from '../events'
-import { Operation } from '../operation'
+import { CreateTile, Operation } from '../operation'
 
 /** What a Tile kept from its files, each part by the Schema that checked it before it was stored. */
 export const KeptParts = Schema.Struct({
@@ -106,6 +106,16 @@ export const whole = (
   const folded = fold(system, batch)
   return folded.left.length === 0 ? Result.succeed(folded) : Result.fail(new BatchOutdated())
 }
+
+/**
+ * A batched Operation as it runs alone, a create under the id it was batched with, so what the
+ * batch's later Operations name it by still names it: what someone else's batch runs as, one write
+ * at a time, each its own to undo.
+ */
+export const runAlone = ({ operation, made }: Batched): Operation =>
+  operation._tag === 'CreateTile' && operation.id === undefined && made !== undefined
+    ? new CreateTile({ ...Struct.omit(operation, ['_tag']), id: made })
+    : operation
 
 /** An Operation as a batch keeps it, a create with `made`, the id of what it makes. */
 const batchedOf = (operation: Operation, made: string | undefined): Batched =>

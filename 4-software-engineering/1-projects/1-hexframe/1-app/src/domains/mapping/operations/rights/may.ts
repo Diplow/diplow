@@ -29,6 +29,13 @@ export const may = (actor: Actor, sharing: Sharing, tile: string, right: Right) 
   rightsOn(actor, sharing, tile).has(right)
 
 /**
+ * Whether rights on a Tile let their holder run the agent there, a Turn starting at it: *@*, which
+ * includes *read*. What Mapping asks before a Turn starts (`agentAt`), and what the front offers the
+ * agent's line and the composer's Tiles by.
+ */
+export const runsAgent = (rights: Iterable<Right>) => [...rights].includes('@')
+
+/**
  * What an Operation needs: `read` on every Tile it names, of the System decided on, `write` on every
  * Tile it changes or carries and on the parent it goes under, and the parents a move or a swap puts
  * its Tiles under, by Tile. A Reference's target that the System does not hold is no Tile of it.

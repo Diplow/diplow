@@ -19,7 +19,6 @@ import { BatchOutdated, ShippedReadOnly, TileIdTaken, TileNotFound } from './err
 import {
   type Acting,
   type Across,
-  foundInSeen,
   grantsIn,
   outside,
   ownerOf,
@@ -45,6 +44,8 @@ import {
   type Field,
   type FieldsAsked,
   type Found,
+  acrossGaps,
+  foundInSeen,
   lineageOf,
   owns,
   readOf,
@@ -371,11 +372,7 @@ export const exportTile = (
  */
 export const systemFiles = (acting: Acting, link: LinkOf, over: ReadonlyArray<Batched> = []) =>
   Effect.map(seenThrough(acting, over), (seen) => {
-    // Across a gap in the order of their Titles, then their ids, so two Turns number them alike.
-    const gaps = Object.values(seen.gaps).toSorted(
-      (a, b) => a.title.localeCompare(b.title) || a.id.localeCompare(b.id),
-    )
-    const across = gaps.map((gap) => systemOf({ ...seen, root: gap }))
+    const across = acrossGaps(seen, seen.gaps)
     const { files, places } = seenFiles(systemOf(seen), across, link)
     return { files, places, ...(across.length > 0 && { across: acrossFolder }) }
   })

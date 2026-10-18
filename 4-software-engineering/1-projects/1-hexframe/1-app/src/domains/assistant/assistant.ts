@@ -21,6 +21,7 @@ import { type TurnRow, Turns } from '#/repositories/database/conversations/turns
 import {
   type Day,
   dayAt,
+  elsewhereOf,
   deadlineOf,
   type Entry,
   overdue,
@@ -211,7 +212,7 @@ const turnOf = (row: TurnRow) =>
       conversationId,
       message: messageId,
       location,
-      ...(row.elsewhere !== null && { elsewhere: row.elsewhere }),
+      ...elsewhereOf(row.elsewhere),
       mode,
       startedAt,
       spent,
@@ -352,7 +353,7 @@ const stateOf = (row: ConversationRow | undefined) =>
       id,
       turn: turnId,
       drafts: yield* Effect.orDie(decodedDrafts(drafts)),
-      ...(elsewhere !== null && { elsewhere }),
+      ...elsewhereOf(elsewhere),
     }
     return { state: { mode, open } satisfies ConversationState, entry: entryId }
   })
@@ -492,9 +493,10 @@ export const draft = <A extends Drafting, E, R>(
     const drafted = yield* step(yield* Effect.fromResult(continuedBy(state, elsewhere)))
     const { write, changes } = drafted
     const proposal = crypto.randomUUID()
-    const where = elsewhere === undefined ? {} : { elsewhere }
     const { after } = yield* operate(accountId, (locked) =>
-      decide(locked, new Draft({ turn: turnId, write, changes, ...where }), { proposal }),
+      decide(locked, new Draft({ turn: turnId, write, changes, ...elsewhereOf(elsewhere) }), {
+        proposal,
+      }),
     )
     if (after.open === undefined) return yield* Effect.die(new Error('A draft left no Proposal'))
     return { proposal: after.open, drafted }
@@ -508,7 +510,8 @@ export interface Applying {
 
 /**
  * What an accepted Proposal applied, as the API layer hands it: its changes, and what undoes them,
- * opaque, none when it changed someone else's System, whose owner holds the Undo of each write.
+ * opaque, which a Proposal over the Account's own System must answer and one over someone else's
+ * (`elsewhere`) need not, its owner holding the Undo of each write.
  */
 export interface Accepting {
   readonly undo?: unknown
@@ -520,9 +523,9 @@ export interface Accepting {
  * `ProposalClosed` when it is open no longer, as `decide` rules; then `run` given it as it stood,
  * which runs its writes on the System (Mapping's, in the API layer) and answers what undoes them and
  * the changes they made; and that kept with the Proposal, offered by its Entry, which then says it may
- * be undone (`offeringEntry`), so a Proposal accepted before undos were kept offers none, nor one
- * whose run answers nothing that undoes it, a Proposal over someone else's System, whose owner is
- * offered the Undo of each write instead. Answers what `run` answered. What `run` refuses rolls the
+ * be undone (`offeringEntry`), so a Proposal accepted before undos were kept offers none; nor does
+ * a Proposal over someone else's System (`elsewhere`), whose owner is offered the Undo of each write
+ * instead. Answers what `run` answered. What `run` refuses rolls the
  * accept back with the transaction. In the transaction the API layer opened.
  */
 export const acceptProposal = <A extends Accepting, E, R>(
@@ -540,7 +543,11 @@ export const acceptProposal = <A extends Accepting, E, R>(
     }
     const ran = yield* run(accepted)
     const { undo, changes } = ran
-    if (undo === undefined) return ran
+    // Over someone else's System, each write's Undo is its owner's: the Proposal keeps none.
+    if (accepted.elsewhere !== undefined) return ran
+    if (undo === undefined) {
+      return yield* Effect.die(new Error("A Proposal over the Account's own System kept no undo"))
+    }
     yield* Applied.use((applied) =>
       applied.keep(accountId, accepted.id, { undo, changes, entryId: entry }),
     )

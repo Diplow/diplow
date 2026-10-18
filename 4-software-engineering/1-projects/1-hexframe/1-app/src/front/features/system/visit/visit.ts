@@ -5,7 +5,7 @@
 import { Schema } from 'effect'
 
 import { tilePage } from '#/api/mapping/files/download'
-import { systemOf } from '#/domains/mapping/entities'
+import { acrossGaps } from '#/domains/mapping/entities'
 import type { SystemShown } from '#/front/client/mapping/queries'
 import { localizeUrl } from '#/paraglide/runtime'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
@@ -46,8 +46,8 @@ export function visitTree({
   gaps,
   pinned,
 }: Pick<SystemShown, 'system' | 'root' | 'gaps' | 'pinned'>) {
-  const across = Object.values(gaps).map((gap): TileNode => ({
-    ...canvasTree(systemOf({ ...system, root: gap }, pinned)),
+  const across = acrossGaps(system, gaps, pinned).map((tree): TileNode => ({
+    ...canvasTree(tree),
     across: true,
   }))
   const tree: TileNode = { ...canvasTree(root), ...(across.length > 0 && { gaps: across }) }

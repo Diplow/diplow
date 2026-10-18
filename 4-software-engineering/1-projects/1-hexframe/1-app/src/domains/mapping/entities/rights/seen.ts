@@ -7,14 +7,20 @@
 import { Struct } from 'effect'
 
 import {
+  type Depth,
+  type Field,
+  foundIn,
   type FoundTile,
   type Pinned,
   type PinnedTiles,
   type PlacedReference,
   type PlacedTile,
   type System,
+  type SystemTile,
+  systemOf,
   tileAt,
 } from '../system'
+import type { FieldsAsked } from '../rows'
 import { type Actor, owns, Right, rightsOn, type Sharing } from './rights'
 
 /**
@@ -249,4 +255,32 @@ export function seenBy(
     pinned: pinsOf(tiles, pinned),
   }
   return { ...shown, version: sightVersion(shown) }
+}
+
+/**
+ * What a reader is shown of a System across its gaps, as trees: each Tile across a gap as a Root of
+ * its own, with what they may read below it, its place above being kept from them, in the order of
+ * their Titles, then their ids, so two readers order them alike. What the canvas hangs from the star,
+ * the composer offers and a Turn's files write each in a folder of its own.
+ */
+export function acrossGaps(
+  system: System,
+  gaps: Seen['gaps'],
+  pinned: PinnedTiles = {},
+): ReadonlyArray<SystemTile> {
+  return Object.values(gaps)
+    .toSorted((a, b) => a.title.localeCompare(b.title) || a.id.localeCompare(b.id))
+    .map((gap) => systemOf({ ...system, root: gap }, pinned))
+}
+
+/**
+ * What a read from a Tile of a System as a reader is shown it finds: from a Tile across a gap as from
+ * its own Root, its place above being kept from them, so its parent is none.
+ */
+export function foundInSeen<O extends Field, F extends Field>(
+  seen: Seen,
+  { id, depth, fields }: { id?: string | undefined; depth: Depth; fields: FieldsAsked<O, F> },
+) {
+  const gap = id === undefined || !Object.hasOwn(seen.gaps, id) ? undefined : seen.gaps[id]
+  return foundIn(gap === undefined ? seen : { ...seen, root: gap }, { id, depth, fields })
 }

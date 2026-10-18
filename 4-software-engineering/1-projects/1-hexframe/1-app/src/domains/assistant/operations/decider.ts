@@ -7,7 +7,7 @@
 // given, never made here.
 import { Result } from 'effect'
 
-import type { Mode, ProposedChange } from '../entities'
+import { elsewhereOf, type Mode, type ProposedChange } from '../entities'
 import { ProposalClosed, ProposalElsewhere } from '../errors'
 import {
   type AcceptProposal,
@@ -110,9 +110,10 @@ export function decide(
       return Result.map(continuedBy(state, elsewhere), (open) => {
         const proposal = open?.id ?? made?.proposal
         if (proposal === undefined) throw new Error('A draft opened a Proposal without its id')
-        const where = elsewhere === undefined ? {} : { elsewhere }
         const opened =
-          open === undefined ? [new ProposalOpened({ id: proposal, turn, ...where })] : []
+          open === undefined
+            ? [new ProposalOpened({ id: proposal, turn, ...elsewhereOf(elsewhere) })]
+            : []
         return [...opened, new Drafted({ proposal, write, changes })]
       })
     }
@@ -129,8 +130,8 @@ export function evolve(state: ConversationState, event: ConversationEvent): Conv
     case 'ModeSet':
       return { ...state, mode: event.mode }
     case 'ProposalOpened': {
-      const where = event.elsewhere === undefined ? {} : { elsewhere: event.elsewhere }
-      return { ...state, open: { id: event.id, turn: event.turn, drafts: [], ...where } }
+      const { id, turn, elsewhere } = event
+      return { ...state, open: { id, turn, drafts: [], ...elsewhereOf(elsewhere) } }
     }
     case 'Drafted': {
       const { open } = state

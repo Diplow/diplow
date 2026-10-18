@@ -271,7 +271,7 @@ export const acceptProposal = ({ proposal }: { readonly proposal: string }) =>
               // The Proposal's writes are its Turn's, published as the Assistant's, not the Session's.
               const own = yield* MappingPrograms.actingOnOwn(account.id, { session: false })
               if (accepted.elsewhere !== undefined) {
-                const acting = { ...own, system: accepted.elsewhere }
+                const acting = MappingPrograms.actingAt(own, accepted.elsewhere)
                 const changes = yield* actingAs(assistant)(
                   Someone.batchInAnothers(assistant, { acting, own }, batch),
                 )

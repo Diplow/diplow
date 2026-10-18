@@ -71,6 +71,13 @@ export interface Turn {
 }
 
 /**
+ * Someone else's System as a Turn, a Proposal or a draft keeps it, by its star: the field when there
+ * is one, none for the Account's own, whether it comes as `undefined` or as a row's `null`.
+ */
+export const elsewhereOf = (star: string | null | undefined): { readonly elsewhere?: string } =>
+  star === null || star === undefined ? {} : { elsewhere: star }
+
+/**
  * Where the Turn answering a Message starts, its location, by its Tile's id: the Tile the Message opens
  * with a link to, else `center`, the one centered on the view it was sent from.
  */

@@ -18,7 +18,8 @@
 import { type ComponentProps, useMemo, useState } from 'react'
 
 import type { Entry, Mode } from '#/domains/assistant/entities'
-import { systemOf } from '#/domains/mapping/entities'
+import { acrossGaps } from '#/domains/mapping/entities'
+import { runsAgent } from '#/domains/mapping/operations'
 import {
   type Sent,
   useAcceptProposal,
@@ -73,10 +74,9 @@ function useVisitedTiles(star: string | undefined) {
   return useMemo(() => {
     if (shown === undefined) return []
     const { system, root, gaps, pinned, rights } = shown
-    const across = Object.values(gaps).map((gap) => systemOf({ ...system, root: gap }, pinned))
-    return [root, ...across]
+    return [root, ...acrossGaps(system, gaps, pinned)]
       .flatMap((tree) => mentionablesOf(tree, m.system_untitled()))
-      .filter(({ id }) => rights[id]?.includes('@') === true)
+      .filter(({ id }) => runsAgent(rights[id] ?? []))
   }, [shown])
 }
 

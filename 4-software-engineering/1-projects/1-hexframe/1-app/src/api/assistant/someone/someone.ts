@@ -12,7 +12,7 @@ import type { OwnActor, Someone } from '#/domains/assistant/entities'
 import * as AssistantUndo from '#/domains/assistant/undo/undo'
 import { keyName, type SignedIn } from '#/domains/iam/iam'
 import * as Mapping from '#/domains/mapping/mapping'
-import { type Batched, CreateTile, type Operation, Undo } from '#/domains/mapping/operations'
+import { type Batched, type Operation, runAlone, Undo } from '#/domains/mapping/operations'
 
 import { changingIn } from '../../server/bus'
 
@@ -86,18 +86,6 @@ export const writtenInAnothers = <O extends Operation>(
     )
     return ran.tile
   })
-
-/**
- * A batched Operation as it runs alone, a create under the id it was batched with, so what the
- * batch's later Operations name it by still names it.
- */
-const runAlone = ({ operation, made }: Batched): Operation => {
-  if (operation._tag !== 'CreateTile' || operation.id !== undefined || made === undefined) {
-    return operation
-  }
-  const { parent, slot, title, preview, body } = operation
-  return new CreateTile({ id: made, parent, slot, title, preview, body })
-}
 
 /**
  * Runs a batch the signed-in Account makes in someone else's System, the one `acting` names, an

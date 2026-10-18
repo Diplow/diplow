@@ -25,7 +25,7 @@ import { systemRules } from '../server/mcp/tools'
 
 import type { DayAsked, LatestAsked, MergedNavigation, SentMessage } from './assistant'
 import { conversationNow, proposalNow, shownTo } from './proposal/programs'
-import { actingOnOwn } from '../mapping/programs'
+import { actingAt, actingOnOwn } from '../mapping/programs'
 
 /**
  * Runs an operation for the Account the request's Session proves: the Conversation is the user's,
@@ -202,8 +202,7 @@ export const messageAndTurn = (account: Iam.Session['account'], text: string, lo
   Effect.gen(function* () {
     yield* Iam.entitledOnly(account, 'assistant')
     const own = yield* actingOnOwn(account.id, { session: false })
-    const star = yield* Mapping.holding(location)
-    const acting = star === undefined ? own : { ...own, system: star }
+    const acting = actingAt(own, yield* Mapping.holding(location))
     const rights = yield* Mapping.agentAt(acting, location)
     const elsewhere = acting.system === own.system ? undefined : acting.system
     return yield* transactional(
@@ -271,7 +270,7 @@ const agentStarted = (
     const { url } = yield* HttpExchange
     const over = yield* shownTo(accountId, turn.id)
     const own = yield* actingOnOwn(accountId, { session: false })
-    const acting = turn.elsewhere === undefined ? own : { ...own, system: turn.elsewhere }
+    const acting = actingAt(own, turn.elsewhere)
     const { files, places, across } = yield* Mapping.systemFiles(acting, tileLink(url), over)
     const entries = yield* Agent.latestToday(accountId, offset)
     const linked = linksOf(text)
