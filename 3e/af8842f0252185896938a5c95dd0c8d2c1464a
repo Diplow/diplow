@@ -1,0 +1,44 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/organizations/groups.ts
+  s_eb2c82211b20e8::t_716b354d4d6ed4 1-154
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/entities/organization.ts
+  s_eb2c82211b20e8::t_67de97824480c3 1-4,7-8,16-43
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261018102006_organization-group/snapshot.json
+  s_eb2c82211b20e8::t_38106432dbc2d8 1-2906
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261018102006_organization-group/migration.sql
+  s_eb2c82211b20e8::t_38106432dbc2d8 1-21
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/entities/index.ts
+  s_eb2c82211b20e8::t_5d2328fbe65739 1-3
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/entities/key.ts
+  s_eb2c82211b20e8::t_67de97824480c3 9-13,21
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/entities/organization.test.ts
+  s_eb2c82211b20e8::t_67de97824480c3 1-22
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/schema.ts
+  s_eb2c82211b20e8::t_38106432dbc2d8 10,451-501
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/organizations/organizations.ts
+  s_eb2c82211b20e8::t_c34753340fcac4 3-5,11,34,102
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/organizations/groups.ts
+  s_eb2c82211b20e8::t_07e7e810c4c092 1-174
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/errors.ts
+  s_eb2c82211b20e8::t_923ede850a8e39 100-122,140-142
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/organizations/organizations.ts
+  s_eb2c82211b20e8::t_923ede850a8e39 36-38,42-45,47,68,88
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/organizations/groups.test.ts
+  s_eb2c82211b20e8::t_0bdbec207c8254 1-132,142-218,227,233-235
+  s_eb2c82211b20e8::t_81d635aa44c99d 133-141,219-226,228-232
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3eaf8842f0252185896938a5c95dd0c8d2c1464a",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
