@@ -1,0 +1,24 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/programs.ts
+  s_eb2c82211b20e8::t_900af374f7cbe3 186-187
+  s_eb2c82211b20e8::t_8322a723c896b0 34,185,198-199
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/may.ts
+  s_eb2c82211b20e8::t_8322a723c896b0 143-146
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/seen.test.ts
+  s_eb2c82211b20e8::t_8322a723c896b0 218-232
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dc719137eddb89ca50ba4922047295b90ea9e886",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
