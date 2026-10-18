@@ -7,11 +7,7 @@
 import { Effect } from 'effect'
 
 import type { Role } from '#/domains/iam/entities'
-import {
-  AccountNotFound,
-  MemberNotFound,
-  OrganizationNotFound,
-} from '#/domains/iam/errors'
+import { AccountNotFound, MemberNotFound, OrganizationNotFound } from '#/domains/iam/errors'
 import * as Iam from '#/domains/iam/iam'
 import * as Organizations from '#/domains/iam/organizations/organizations'
 import type { StarCard } from '#/domains/mapping/entities'
@@ -95,13 +91,11 @@ export const members = ({ star }: { readonly star: string }) =>
     const organization = yield* organizationAt(star)
     const found = yield* Organizations.members(organization)
     const stars = yield* Stars.starsOf(found.map((member) => member.account))
-    return found.map(
-      (member): MemberShown => ({
-        star: stars.get(member.account),
-        role: member.role,
-        you: member.account === account.id,
-      }),
-    )
+    return found.map((member): MemberShown => ({
+      star: stars.get(member.account),
+      role: member.role,
+      you: member.account === account.id,
+    }))
   })
 
 /**
@@ -142,7 +136,13 @@ export const setMemberRole = ({
  * themselves included, in one transaction: `MemberNotFound` for a star of no member, and `LastAdmin`
  * for its last admin. Holds from their next request on.
  */
-export const removeMember = ({ star, member }: { readonly star: string; readonly member: string }) =>
+export const removeMember = ({
+  star,
+  member,
+}: {
+  readonly star: string
+  readonly member: string
+}) =>
   Effect.gen(function* () {
     const organization = yield* organizationAt(star)
     const account = yield* accountAt(member, () => new MemberNotFound())

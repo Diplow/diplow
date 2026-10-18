@@ -7,10 +7,7 @@
 // removed, nor be made a member. Its name and Handle are its star's, Mapping's, which IAM never keeps.
 import { Effect } from 'effect'
 
-import {
-  type MemberRow,
-  Organizations,
-} from '#/repositories/database/organizations/organizations'
+import { type MemberRow, Organizations } from '#/repositories/database/organizations/organizations'
 
 import type { Role } from '../entities'
 import {
@@ -22,12 +19,6 @@ import {
   OrganizationNotFound,
 } from '../errors'
 import { sessionOnly } from '../iam'
-
-/** A member of an Organization: the Account, by its id, and its role there. */
-export interface Member {
-  readonly account: string
-  readonly role: Role
-}
 
 /**
  * The id of an Organization's Members Group, which holds every member, admins included, and is kept
@@ -66,7 +57,7 @@ export const createOrganization = Effect.gen(function* () {
   return id
 })
 
-/** Its role in the Organization of the Account the request's Session proves, by its members. */
+/** The role an Account holds among an Organization's members, none when it is not among them. */
 const roleIn = (members: ReadonlyArray<MemberRow>, account: string) =>
   members.find((member) => member.account === account)?.role
 
@@ -79,7 +70,7 @@ export const members = (organization: string) =>
     const { account } = yield* sessionOnly
     const found = yield* Organizations.use((organizations) => organizations.members(organization))
     if (roleIn(found, account.id) === undefined) return yield* new OrganizationNotFound()
-    return found satisfies ReadonlyArray<Member>
+    return found
   })
 
 /**

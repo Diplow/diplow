@@ -111,14 +111,11 @@ layer(TestLayer)('Organizations', (it) => {
       const [ana, bob, cleo] = [yield* someone, yield* someone, yield* someone]
       const team = yield* madeBy(ana)
       yield* ana.asSession(transactional(addMember(team, bob.account.id)))
-      const byBob = [
-        addMember(team, cleo.account.id),
-        setRole(team, bob.account.id, 'admin'),
-        removeMember(team, ana.account.id),
-      ]
-      for (const change of byBob) {
-        expect(yield* failedWith(bob.asSession(transactional(change)))).toBe('AdminRequired')
-      }
+      const byBob = <A, E extends { readonly _tag: string }, R>(change: Effect.Effect<A, E, R>) =>
+        failedWith(bob.asSession(transactional(change)))
+      expect(yield* byBob(addMember(team, cleo.account.id))).toBe('AdminRequired')
+      expect(yield* byBob(setRole(team, bob.account.id, 'admin'))).toBe('AdminRequired')
+      expect(yield* byBob(removeMember(team, ana.account.id))).toBe('AdminRequired')
       expect(yield* failedWith(cleo.asSession(members(team)))).toBe('OrganizationNotFound')
       expect(
         yield* failedWith(cleo.asSession(transactional(addMember(team, cleo.account.id)))),
@@ -133,7 +130,8 @@ layer(TestLayer)('Organizations', (it) => {
     Effect.gen(function* () {
       const [ana, bob] = [yield* someone, yield* someone]
       const team = yield* madeBy(ana)
-      const byAna = <A, E, R>(program: Effect.Effect<A, E, R>) => ana.asSession(transactional(program))
+      const byAna = <A, E, R>(program: Effect.Effect<A, E, R>) =>
+        ana.asSession(transactional(program))
       expect(yield* failedWith(byAna(setRole(team, ana.account.id, 'member')))).toBe('LastAdmin')
       expect(yield* failedWith(byAna(removeMember(team, ana.account.id)))).toBe('LastAdmin')
       yield* byAna(addMember(team, bob.account.id))
@@ -144,7 +142,8 @@ layer(TestLayer)('Organizations', (it) => {
       expect(yield* bob.asSession(members(team))).toEqual([
         { account: bob.account.id, role: 'admin' },
       ])
-      const byBob = <A, E, R>(program: Effect.Effect<A, E, R>) => bob.asSession(transactional(program))
+      const byBob = <A, E, R>(program: Effect.Effect<A, E, R>) =>
+        bob.asSession(transactional(program))
       expect(yield* failedWith(byBob(setRole(team, bob.account.id, 'member')))).toBe('LastAdmin')
       expect(yield* failedWith(byBob(removeMember(team, ana.account.id)))).toBe('MemberNotFound')
     }),
@@ -154,7 +153,8 @@ layer(TestLayer)('Organizations', (it) => {
     Effect.gen(function* () {
       const [ana, bob] = [yield* someone, yield* someone]
       const team = yield* madeBy(ana)
-      const byAna = <A, E, R>(program: Effect.Effect<A, E, R>) => ana.asSession(transactional(program))
+      const byAna = <A, E, R>(program: Effect.Effect<A, E, R>) =>
+        ana.asSession(transactional(program))
       yield* byAna(addMember(team, bob.account.id))
       yield* byAna(setRole(team, bob.account.id, 'admin'))
       expect((yield* belonging(bob.account.id)).admins).toEqual([team])

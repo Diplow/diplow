@@ -9,7 +9,7 @@ import { Database, InTransaction, inTransaction } from '../database'
 import { membership, organization, user } from '../schema'
 
 /** A role in an Organization, as the `membership` table keeps it. */
-export type MemberRole = 'admin' | 'member'
+type MemberRole = 'admin' | 'member'
 
 /** One Organization an Account belongs to, by its id, and the role the Account holds there. */
 export interface MembershipRow {

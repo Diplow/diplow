@@ -41,9 +41,7 @@ const TestLayer = Layer.mergeAll(
     appliedLayer,
     turnsLayer,
     organizationsLayer,
-  ).pipe(
-    Layer.provideMerge(TestAuth),
-  ),
+  ).pipe(Layer.provideMerge(TestAuth)),
   zipLayer,
   serverBus([keep]),
 )

@@ -56,7 +56,12 @@ export const actingOnOwn = (accountId: string, { session }: { readonly session: 
   Effect.map(
     Effect.all([Mapping.starOf(accountId), Organizations.belonging(accountId)]),
     ([system, { admins, groups }]): Mapping.Acting => ({
-      actor: { account: accountId, groups, owners: [accountId, ...admins], session } satisfies Actor,
+      actor: {
+        account: accountId,
+        groups,
+        owners: [accountId, ...admins],
+        session,
+      } satisfies Actor,
       system,
     }),
   )

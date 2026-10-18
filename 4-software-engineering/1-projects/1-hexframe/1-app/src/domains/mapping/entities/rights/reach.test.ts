@@ -153,7 +153,10 @@ describe('who reaches a Tile, named', () => {
   })
 
   it("names a Group by the star whose owner has its id, an Organization's Members", () => {
-    const reaching = reachOn(sharingOf('ana', lineage, [grant('journal', family, 'read')]), 'journal')
+    const reaching = reachOn(
+      sharingOf('ana', lineage, [grant('journal', family, 'read')]),
+      'journal',
+    )
     const card = { id: 'familys-star', title: 'Family', preview: '' }
     expect(namedBy(reaching, new Map([['family', card]])).others).toEqual([
       { subject: family, value: 'read', from: 'journal', star: card },
