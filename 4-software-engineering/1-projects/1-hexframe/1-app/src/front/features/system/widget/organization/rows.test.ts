@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { isMember, memberRowsOf, starOfRow } from './rows'
+import { groupMembersOf, groupRowsOf, isMember, memberRowsOf, saveOf, starOfRow } from './rows'
 
 // The Members widget's rows, as they word IAM's members: by their stars, keyed by them.
 
@@ -38,5 +38,44 @@ describe('the Members widget’s rows', () => {
   it('tell a star among the members', () => {
     expect(isMember([ana, cleo], 'anas-star')).toBe(true)
     expect(isMember([ana, cleo], 'bobs-star')).toBe(false)
+  })
+})
+
+describe('the Groups widget’s rows', () => {
+  const design = {
+    id: 'design',
+    name: 'Design',
+    members: [
+      { star: ana.star, you: true },
+      { star: undefined, you: false },
+    ],
+  }
+  const ops = { id: 'ops', name: 'Ops', members: [] }
+
+  it('name each Group and who is in it, keyed by its id, an empty one said so', () => {
+    const [designs, opss] = groupRowsOf([design, ops])
+    expect(designs).toMatchObject({ key: 'design', name: 'Design' })
+    expect(designs?.who).toContain('Ana Lima')
+    expect(opss?.key).toBe('ops')
+    expect(opss?.who).not.toBe('')
+    expect(opss?.who).not.toBe(designs?.who)
+  })
+
+  it('offer each member with a star, in the Group or not, keyed by their star', () => {
+    expect(
+      groupMembersOf([ana, bob, cleo], design).map(({ key, in: placed }) => ({ key, placed })),
+    ).toEqual([
+      { key: 'anas-star', placed: true },
+      { key: 'bobs-star', placed: false },
+    ])
+  })
+})
+
+describe('saving a Group’s widget', () => {
+  it('makes a new Group, renames one under another name, and sends nothing for the same', () => {
+    expect(saveOf(undefined, 'Design')).toEqual({ _tag: 'Create', name: 'Design' })
+    const design = { id: 'design', name: 'Design' }
+    expect(saveOf(design, 'Design')).toEqual({ _tag: 'Back' })
+    expect(saveOf(design, 'design')).toEqual({ _tag: 'Rename', group: 'design', name: 'design' })
   })
 })

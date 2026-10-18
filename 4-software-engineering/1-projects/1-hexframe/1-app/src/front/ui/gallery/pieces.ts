@@ -189,6 +189,13 @@ export const pieces = [
     note: m.gallery_note_star_picker,
   },
   {
+    name: 'GroupPicker',
+    tier: 'chat',
+    sources: ['ui/chat/widgets/sharing/share/GroupPicker.tsx'],
+    madeOf: ['Widget'],
+    note: m.gallery_note_group_picker,
+  },
+  {
     name: 'OrganizationWidget',
     tier: 'chat',
     sources: ['ui/chat/widgets/sharing/organization/OrganizationWidget.tsx'],
@@ -201,6 +208,13 @@ export const pieces = [
     sources: ['ui/chat/widgets/sharing/organization/MembersWidget.tsx'],
     madeOf: ['Widget'],
     note: m.gallery_note_members_widget,
+  },
+  {
+    name: 'GroupsWidget',
+    tier: 'chat',
+    sources: ['ui/chat/widgets/sharing/organization/GroupsWidget.tsx'],
+    madeOf: ['Widget'],
+    note: m.gallery_note_groups_widget,
   },
   {
     name: 'HelpWidget',

@@ -155,6 +155,7 @@ export function useActingState(input: ActingInput) {
       case 'edit':
       case 'share':
       case 'members':
+      case 'groups':
         begin({ kind: chosen.verb, id })
         return
       case 'make-leaf':

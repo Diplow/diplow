@@ -3,11 +3,12 @@
 // tile or on one above it; Everyone first, whose value its owner sets here, read, none, or inherit,
 // which leaves it to the tile above; then each person it is shared with, named by their star, whose
 // value the owner sets to none, to read and to any of read's companions, write and @, or back to
-// inherit; each row running on to the curve at its height; then the link the tile is visited by.
-// Someone is added, and the link copied, from the widget's actions. Controlled: the rows are worded
-// by the caller, who says what each choice does, as Mapping decides it, and who finds someone.
+// inherit, a group's alike (HEX-137), and a grant left to a group no longer there cleared; each row
+// running on to the curve at its height; then the link the tile is visited by. Someone or a group is
+// added, and the link copied, from the widget's actions. Controlled: the rows are worded by the
+// caller, who says what each choice does, as Mapping decides it, and who finds someone.
 import { cn } from 'cn'
-import { Link, Share2, UserPlus } from 'lucide-react'
+import { Eraser, Link, Share2, UserPlus, UsersRound } from 'lucide-react'
 import { useId, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
@@ -25,6 +26,8 @@ export interface ReachRow {
   readonly value: string
   /** Where that comes from: set here, from your star, from the tile above that sets it. */
   readonly from: string
+  /** Its grant reaches nobody, its group gone: the owner clears it, which `onChoose` sends as inherit. */
+  readonly clears?: boolean
 }
 
 /** A row whose value the owner sets here: what they set for it on this tile, and what it offers. */
@@ -47,6 +50,8 @@ interface ShareWidgetProps {
   onChoose: (key: string, choice: ShareChoice) => void
   /** Opens what finds someone to share the tile with. */
   onAdd: () => void
+  /** Opens what picks a group to share the tile with, where the user has groups to pick. */
+  onAddGroup?: (() => void) | undefined
   /** The link the tile is visited by, which leads whoever may read it there. */
   link: string
   onCopyLink: () => void
@@ -61,6 +66,7 @@ export function ShareWidget({
   sending = false,
   onChoose,
   onAdd,
+  onAddGroup,
   link,
   onCopyLink,
   onDone,
@@ -74,6 +80,9 @@ export function ShareWidget({
       subtitle={m.widget_share_what()}
       actions={[
         { label: m.widget_share_add(), icon: <UserPlus />, onSelect: onAdd },
+        ...(onAddGroup === undefined
+          ? []
+          : [{ label: m.widget_share_add_group(), icon: <UsersRound />, onSelect: onAddGroup }]),
         // The action keeps its word, and its focus: the toast says it is copied.
         { label: m.widget_share_copy_link(), icon: <Link />, onSelect: onCopyLink },
         { label: m.widget_share_done(), onSelect: onDone },
@@ -94,6 +103,19 @@ export function ShareWidget({
         </Row>
         {others.map((row) => (
           <Row key={row.key} row={row}>
+            {row.clears === true && (
+              <button
+                type="button"
+                disabled={sending}
+                onClick={() => {
+                  onChoose(row.key, 'inherit')
+                }}
+                className="inline-flex items-center gap-1.5 justify-self-start px-1 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-(--voice) disabled:opacity-50 pointer-coarse:py-2.5 [&_svg]:size-3.5"
+              >
+                <Eraser aria-hidden />
+                {m.widget_share_clear()}
+              </button>
+            )}
             {row.choice !== undefined && row.offered !== undefined && (
               <Choices
                 offered={row.offered}

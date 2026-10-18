@@ -8,6 +8,9 @@ import {
   EmailMalformed,
   EmailTaken,
   EntitlementMissing,
+  GroupNameInvalid,
+  GroupNameTaken,
+  GroupNotFound,
   KeyNameInvalid,
   KeyNotFound,
   PasswordLengthInvalid,
@@ -108,6 +111,9 @@ describe('the message table', () => {
     ],
     [new KeyNameInvalid({ fields: ['name'] }), 'Give the key a name of 1 to 32 characters.'],
     [new KeyNotFound(), "This key doesn't exist, or was already revoked."],
+    [new GroupNameInvalid({ fields: ['name'] }), 'Give the group a name of 1 to 40 characters.'],
+    [new GroupNameTaken({ fields: ['name'] }), 'Another group of this Organization has this name.'],
+    [new GroupNotFound(), "This group doesn't exist any more, or it's no group of yours."],
   ])("words IAM's %s in its own sentence", (failure, sentence) => {
     expect(messageFor(failure, 'signIn')).toBe(sentence)
   })
@@ -131,6 +137,12 @@ describe('the message table', () => {
     ],
     [new KeyNameInvalid({ fields: ['name'] }), 'Donnez à la clé un nom de 1 à 32 caractères.'],
     [new KeyNotFound(), 'Cette clé n’existe pas, ou a déjà été révoquée.'],
+    [new GroupNameInvalid({ fields: ['name'] }), 'Donnez au groupe un nom de 1 à 40 caractères.'],
+    [
+      new GroupNameTaken({ fields: ['name'] }),
+      'Un autre groupe de cette organisation porte déjà ce nom.',
+    ],
+    [new GroupNotFound(), 'Ce groupe n’existe plus, ou ce n’est pas l’un de vos groupes.'],
   ])("words IAM's %s in French too", (failure, sentence) => {
     overwriteGetLocale(() => 'fr')
     expect(messageFor(failure, 'signIn')).toBe(sentence)

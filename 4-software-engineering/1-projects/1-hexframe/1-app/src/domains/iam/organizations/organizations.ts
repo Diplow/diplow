@@ -33,14 +33,20 @@ export const membersGroupOf = (organization: string) => organization
 /**
  * Who an Account stands for and belongs to, read now, never from a copy: the Organizations it is an
  * admin of, whose Systems it acts on as their owner, and the Groups it is in, the Members Group of
- * each Organization it belongs to. What the API layer hands Mapping on every request.
+ * each Organization it belongs to and each Group of an Organization's own it was put in (HEX-137). A
+ * deleted Group is in no answer, so its Grants resolve for nobody from the next request on. What the
+ * API layer hands Mapping on every request.
  */
 export const belonging = (account: string) =>
   Effect.map(
-    Organizations.use((organizations) => organizations.membershipsOf(account)),
-    (rows) => ({
+    Organizations.use((organizations) =>
+      Effect.all([organizations.membershipsOf(account), organizations.groupsIn(account)], {
+        concurrency: 'unbounded',
+      }),
+    ),
+    ([rows, groups]) => ({
       admins: rows.flatMap(({ organization, role }) => (role === 'admin' ? [organization] : [])),
-      groups: rows.map(({ organization }) => membersGroupOf(organization)),
+      groups: [...rows.map(({ organization }) => membersGroupOf(organization)), ...groups],
     }),
   )
 
@@ -61,7 +67,7 @@ export const createOrganization = Effect.gen(function* () {
 })
 
 /** The role an Account holds among an Organization's members, none when it is not among them. */
-const roleIn = (members: ReadonlyArray<MemberRow>, account: string) =>
+export const roleIn = (members: ReadonlyArray<MemberRow>, account: string) =>
   members.find((member) => member.account === account)?.role
 
 /**
@@ -81,7 +87,7 @@ export const members = (organization: string) =>
  * from a Session asks to change them: `OrganizationNotFound` for anyone not among them, and
  * `AdminRequired` for a member.
  */
-const managedBy = (organization: string) =>
+export const managedBy = (organization: string) =>
   Effect.gen(function* () {
     const { account } = yield* sessionOnly
     const found = yield* Organizations.use((organizations) => organizations.locked(organization))

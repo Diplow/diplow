@@ -36,7 +36,7 @@ import { tilesBelow } from './widget/place'
  * where they hold *@* (HEX-134), and never who sees a Tile, its export nor an import, which are the
  * owner's or land at home; unless they stand for its owner there (`asOwner`, as `Seen` says it), an
  * Organization's admin, who shares its Tiles as its owner does (HEX-136). Its star's menu opens the
- * Organization's Members widget for each of its members (`members`). What a visitor sees at all is
+ * Organization's Members and Groups widgets for each of its members (`members`). What a visitor sees at all is
  * Mapping's to say; `hexframe-app-sharing-organizations/decisions.md#DEC-4`, `#DEC-9`, `#DEC-11`,
  * `#DEC-13`.
  */
@@ -67,8 +67,8 @@ const notTheirs = (reach: Exclude<Reach, 'owned'>) =>
   reach.asOwner === true ? homeAlone : ownersAlone
 
 /**
- * Whether a Tile's menu opens an Organization's Members widget for the user: on its star, of an
- * Organization they belong to.
+ * Whether a Tile's menu opens an Organization's Members and Groups widgets for the user: on its star,
+ * of an Organization they belong to.
  */
 const membersAt = ({ reach, root }: Pick<Systems, 'reach' | 'root'>, hex: TileHex) =>
   reach !== 'owned' && reach.members === true && hex.tile.id === root.id
@@ -307,7 +307,7 @@ export function framesOf(systems: Systems, hex: TileHex) {
 /**
  * The lines home leaves out of a Tile's menu: a Leaf's Context, which a Leaf has none of; an import
  * as the Root, but into an empty System's; the agent's on a broken Reference, which names no Tile;
- * the Members widget's, but on the star of an Organization the user belongs to; and, on a System
+ * the Members and Groups widgets', but on the star of an Organization the user belongs to; and, on a System
  * visited, the owner's lines, but for its admin, the agent's where the user holds no *@*, and each
  * line that writes where the user's rights hold it back (`heldBack`).
  */
@@ -316,7 +316,7 @@ export function withoutOf(systems: Systems, hex: TileHex): Verb[] {
     ...(hex.tile.broken === true ? (['ask-agent'] as const) : []),
     ...(hex.tile.leaf === true ? (['show-context'] as const) : []),
     ...(hex.tile.root !== undefined && !isEmptySystem(systems.root) ? (['import'] as const) : []),
-    ...(hex.role === 'center' && !membersAt(systems, hex) ? (['members'] as const) : []),
+    ...(hex.role === 'center' && !membersAt(systems, hex) ? (['members', 'groups'] as const) : []),
   ]
   const { reach } = systems
   if (reach === 'owned') return left
