@@ -120,7 +120,8 @@ const ranForTurn = <O extends Operation>(accountId: string, turnId: string, oper
           const run = yield* Mapping.runOperation(
             yield* MappingPrograms.actingOnOwn(accountId, { session: false }),
             operation,
-            yield* keptUndo(soFar),
+            // A Turn reads and writes the System it started in alone: it pins no Tile of another.
+            { earlier: yield* keptUndo(soFar), across: false },
           )
           return { undo: encodedUndo(run.undo), changes: run.changes, tile: run.tile }
         }),

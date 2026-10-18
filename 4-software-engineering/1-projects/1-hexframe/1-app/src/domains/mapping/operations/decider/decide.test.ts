@@ -347,6 +347,28 @@ describe('decide, creating and deleting a Reference', () => {
     expect(refusalOf(create(id.leaf, id.child))).toMatchObject({ _tag: 'LeafHoldsNothing' })
   })
 
+  it('takes a target the System does not hold once told it stands in another System, a pin', () => {
+    const pin = new CreateReference({
+      parent: id.bare,
+      parentVersion: v(id.bare),
+      slot: -1,
+      target: id.nowhere,
+    })
+    expect(eventsOf(decide(system, pin, { ...made, targetElsewhere: true }))).toEqual([
+      new ReferenceCreated({ id: id.made, parent: id.bare, slot: -1, target: id.nowhere }),
+    ])
+    // Every other rule still holds: the slot free, the holder at the Version read.
+    const held = new CreateReference({
+      parent: id.root,
+      parentVersion: v(id.root),
+      slot: -1,
+      target: id.nowhere,
+    })
+    expect(refusalOf(decide(system, held, { ...made, targetElsewhere: true }))).toMatchObject({
+      _tag: 'DirectionTaken',
+    })
+  })
+
   it('empties the slot of a Reference, and changes nothing in a slot holding none', () => {
     const empty = (parent: string, slot: ContextDirection) =>
       decided(new DeleteReference({ parent, parentVersion: v(parent), slot }))

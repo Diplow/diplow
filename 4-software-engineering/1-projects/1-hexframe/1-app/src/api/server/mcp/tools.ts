@@ -100,8 +100,9 @@ const directions =
   'one file with nothing below it, keyed by the same six Directions, their own. Its Context ' +
   '(`context`) says what it is, keyed -1 to -6. A Context slot may hold a Reference instead of a ' +
   'Tile: ' +
-  "`_tag: 'Reference'`, with the id, Title and Preview of the Tile it points at, or " +
-  "`_tag: 'BrokenReference'` once that Tile is deleted. Every Tile carries its `version`, how many " +
+  "`_tag: 'Reference'`, with the id, Title and Preview of the Tile it points at, and `elsewhere` " +
+  "with its star's Title (`starTitle`) when another System holds it, or `_tag: 'BrokenReference'`, unavailable, " +
+  'once that Tile is deleted or not yours to read, alike. Every Tile carries its `version`, how many ' +
   'changes touched it: a write to a Tile names the version you read of it, and is refused once ' +
   'the Tile changed since.'
 
@@ -409,9 +410,10 @@ const createReference = write({
   name: 'create_reference',
   operation: 'createReference',
   description:
-    "Puts a Reference in a free Context slot of a Tile: a link to another Tile of the user's " +
-    'System, by id, that follows it when it moves and shows broken once it is deleted. Answers ' +
-    'null.',
+    'Puts a Reference in a free Context slot of a Tile: a link to another Tile, by id, of the ' +
+    "user's System or of another System the user may read, that follows it when it moves and shows " +
+    'unavailable to whoever may not read it, once it is deleted too. A Turn works in its own ' +
+    'System alone, and pins no Tile of another. Answers null.',
   refusals: {
     TileNotFound: refusal.TileNotFound,
     TileChanged: refusal.TileChanged,
@@ -429,7 +431,9 @@ const createReference = write({
       slot: (field) => field.annotate({ description: `${described.contextSlot} It must be free.` }),
       target: (field) =>
         field.annotate({
-          description: 'The id of the Tile the Reference points at, in the same System.',
+          description:
+            "The id of the Tile the Reference points at, in the user's System or in another the " +
+            'user may read.',
         }),
     }),
   ),

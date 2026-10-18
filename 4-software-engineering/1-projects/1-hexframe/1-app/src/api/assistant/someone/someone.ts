@@ -57,11 +57,17 @@ const someoneOf = (signed: SignedIn, own: Mapping.Acting) =>
  * Mapping decides it may there (`runUndoable`), in the transaction the caller opened: told in the
  * owner's timeline by who acted, offering its Undo once (`undo/`'s `writtenBySomeone`), each event
  * it publishes saying where it was made, for the writer's own timeline. `own` is the writer acting on
- * their own System, whose star names them. Answers the Tile as it now stands for a create or an edit.
+ * their own System, whose star names them; `across`, whether their request may pin a Tile of a third
+ * System (Mapping's `Across`, the API layer's to say). Answers the Tile as it now stands for a create
+ * or an edit.
  */
 export const writtenInAnothers = <O extends Operation>(
   signed: SignedIn,
-  { acting, own }: { readonly acting: Mapping.Acting; readonly own: Mapping.Acting },
+  {
+    acting,
+    own,
+    across,
+  }: { readonly acting: Mapping.Acting; readonly own: Mapping.Acting; readonly across: boolean },
   operation: O,
 ) =>
   Effect.gen(function* () {
@@ -71,7 +77,7 @@ export const writtenInAnothers = <O extends Operation>(
       AssistantUndo.writtenBySomeone(
         owner,
         actor,
-        Effect.map(Mapping.runUndoable(acting, operation), (run) => ({
+        Effect.map(Mapping.runUndoable(acting, operation, { across }), (run) => ({
           ...run,
           undo: encodedUndo(run.undo),
         })),

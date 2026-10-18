@@ -41,7 +41,9 @@ export interface PlacedTile extends FoundTile, Standing {}
 
 /**
  * A Reference of a System, where it stands, always a Context slot: a link to the Tile of `target`, by
- * its id, so it survives a move. It has an id of its own, and no content.
+ * its id, so it survives a move. It has an id of its own, and no content. A read shows its `target`
+ * as `''` when the reader is shown no Tile there (`pointing`, `rights/seen.ts`); what Mapping holds
+ * keeps the id.
  */
 export interface PlacedReference extends Standing {
   readonly _tag: 'Reference'
@@ -89,17 +91,42 @@ export interface SystemTile extends FoundTile {
   readonly context: Partial<Record<ContextDirection, SystemTile | Reference | BrokenReference>>
 }
 
-/** A Context slot holding a link to a Tile drawn elsewhere, by its id, so it survives a move. */
+/**
+ * A Context slot holding a link to a Tile drawn elsewhere, by its id, so it survives a move; and, for
+ * a Tile of another System, a pin, the Title of the star holding it (`elsewhere.starTitle`).
+ */
 export interface Reference<T = Tile> {
   readonly _tag: 'Reference'
   readonly tile: T
+  readonly elsewhere?: { readonly starTitle: string }
 }
 
-/** A Reference whose Tile was deleted: shown as broken, it never blocked the delete. */
+/**
+ * A Reference whose Tile its reader is not shown, unavailable: deleted, which it never blocked, or
+ * one they may not read, alike, so nothing tells which. `target` is the id it points at in what Mapping
+ * holds, and none, `''`, in any read, whoever reads it (`pointing`, `rights/seen.ts`).
+ */
 export interface BrokenReference {
   readonly _tag: 'BrokenReference'
   readonly target: string
 }
+
+/**
+ * A Tile of another System a Reference points at, as its reader may read it there: what a reader
+ * needs to decide to open it, its Title and Preview, and `starTitle`, the Title of the star holding it,
+ * whose card anyone sees. What a read resolves a pin by, for that reader, on every read, by the
+ * Tile's id.
+ */
+export interface Pinned extends Pick<Tile, 'id' | 'title' | 'preview'> {
+  readonly starTitle: string
+}
+
+/** The Tiles of other Systems a reader's References point at that they may read, by id. */
+export type PinnedTiles = Readonly<Record<string, Pinned>>
+
+/** The Tile a pin points at, by its id, among those its reader may read; none otherwise. */
+const pinnedAt = (pinned: PinnedTiles, target: string) =>
+  Object.hasOwn(pinned, target) ? pinned[target] : undefined
 
 const tileOf = ({ id, title, preview, body }: Tile): Tile => ({ id, title, preview, body })
 
@@ -222,27 +249,48 @@ function slotsOf<R, T, Leaf, Held>(
   return { branches, leaves, context }
 }
 
-/** A Reference to this Tile, shown as `shown` says, or a broken one when it is no Tile. */
+/**
+ * A Reference to this Tile, shown as `shown` says; else to the Tile of another System its reader may
+ * read there, a pin, with the star holding it; else a broken one, unavailable.
+ */
 const referenceTo = <R, T>(
   target: string,
   tile: R | undefined,
-  shown: (tile: R) => T,
-): Reference<T> | BrokenReference =>
-  tile === undefined
-    ? { _tag: 'BrokenReference', target }
-    : { _tag: 'Reference', tile: shown(tile) }
+  { shown, pinned, glimpsed }: ShownAs<R, T>,
+): Reference<T> | BrokenReference => {
+  if (tile !== undefined) return { _tag: 'Reference', tile: shown(tile) }
+  const pin = pinnedAt(pinned, target)
+  if (pin === undefined) return { _tag: 'BrokenReference', target }
+  return { _tag: 'Reference', tile: glimpsed(pin), elsewhere: { starTitle: pin.starTitle } }
+}
+
+/**
+ * How a Reference shows the Tile it points at: one of its System, as `shown` says; one of another
+ * System its reader may read, among `pinned`, as `glimpsed` says.
+ */
+interface ShownAs<R, T> {
+  readonly shown: (tile: R) => T
+  readonly pinned: PinnedTiles
+  readonly glimpsed: (pin: Pinned) => T
+}
 
 /** A Tile below its System's Root, without where it stands, as its tree holds it. */
 const unplaced = (tile: PlacedTile): FoundTile => Struct.omit(tile, ['parent', 'slot'])
 
 /**
  * A System's tree: its Root with everything below it, each Tile with its Branches, its Leaves and its
- * Context, a Reference with the Tile it points at, or broken when it points at none.
+ * Context, a Reference with the Tile it points at, of the System or, among `pinned`, of another, or
+ * broken when it points at none its reader is shown.
  */
-export function systemOf(system: System): SystemTile {
+export function systemOf(system: System, pinned: PinnedTiles = {}): SystemTile {
   const under = byParent(Object.values(system.tiles), (held) => held.parent)
 
-  const refer = (target: string) => referenceTo(target, tileAt(system, target), tileOf)
+  const refer = (target: string) =>
+    referenceTo(target, tileAt(system, target), {
+      shown: tileOf,
+      pinned,
+      glimpsed: ({ id, title, preview }) => ({ id, title, preview, body: '' }),
+    })
 
   // Its Tiles take its slots, a Branch's, a Leaf's or a Context one; its References only a Context one.
   const place = (tile: FoundTile): SystemTile => {
@@ -305,13 +353,14 @@ export type ReadTile<F extends Field> = ReadBase<F> & {
 
 /**
  * What a read from one Tile finds, before it is shaped: the Tile's row and the rows below it, each with
- * the fields asked of it, the rows of the Tiles their References point at, and its parent, by id and
- * Title.
+ * the fields asked of it, the rows of the Tiles their References point at, the Tiles of other Systems
+ * they point at that the reader may read (`pinned`), and its parent, by id and Title.
  */
 export interface Found<O extends Field, F extends Field> {
   readonly opened: RowWith<O>
   readonly rows: ReadonlyArray<RowWith<F>>
   readonly pointedAt: ReadonlyArray<RowWith<'title' | 'preview'>>
+  readonly pinned?: PinnedTiles | undefined
   readonly parent: Pick<Tile, 'id' | 'title'> | null
 }
 
@@ -322,8 +371,9 @@ export const showing = <U extends Field, F extends U>(
 ): RowWith<F> => ({ ...row, content: contentWith(row.content, fields) })
 
 /**
- * The Tile of this row read `depth` generations down, from the rows reached below it and the rows of
- * the Tiles their References point at.
+ * The Tile of this row read `depth` generations down, from the rows reached below it, the rows of the
+ * Tiles their References point at, and the Tiles of other Systems they point at that the reader may
+ * read (`pinned`).
  */
 export function readOf<F extends Field>(
   opened: RowWith<F>,
@@ -331,10 +381,12 @@ export function readOf<F extends Field>(
     rows,
     depth,
     pointedAt,
+    pinned = {},
   }: {
     rows: ReadonlyArray<RowWith<F>>
     depth: Depth
     pointedAt: ReadonlyArray<RowWith<'title' | 'preview'>>
+    pinned?: PinnedTiles | undefined
   },
 ): ReadTile<F> {
   const targets = new Map(pointedAt.map((row) => [row.id, row]))
@@ -343,10 +395,11 @@ export function readOf<F extends Field>(
   // A Reference's row points at no Tile.
   const refer = (target: string) => {
     const pointed = targets.get(target)
-    return referenceTo(target, pointed?.target === null ? pointed : undefined, (row) => ({
-      id: row.id,
-      ...row.content,
-    }))
+    return referenceTo(target, pointed?.target === null ? pointed : undefined, {
+      shown: (row): Glimpse => ({ id: row.id, ...row.content }),
+      pinned,
+      glimpsed: ({ id, title, preview }) => ({ id, title, preview }),
+    })
   }
 
   const found = (row: RowWith<F>): ReadBase<F> => ({

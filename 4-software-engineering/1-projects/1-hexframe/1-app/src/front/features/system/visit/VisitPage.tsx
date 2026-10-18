@@ -47,6 +47,7 @@ export function VisitPage({ star, search, onSearchChange, onViewChange, marks }:
       // As far as the rights Mapping showed the visitor there let them: `Reach`, DEC-9.
       reach={{ visiting: data.rights }}
       search={search}
+      pinned={data.pinned}
       onViewChange={onViewChange}
       onSearchChange={onSearchChange}
       exporting={noExport}

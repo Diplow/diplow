@@ -9,7 +9,7 @@ import { Result, Schema } from 'effect'
 
 import { Frontmatter, Name, type System, TileConfig, TileId, tileAt } from '../../entities'
 import { BatchOutdated } from '../../errors'
-import { decide, type Decided, type Refusal, type Refusals } from '../decider/decide'
+import { decide, type Decided, type Made, type Refusal, type Refusals } from '../decider/decide'
 import { evolve } from '../decider/evolve'
 import { changeOf, type ChangeSummary, type OperationEvent } from '../events'
 import { Operation } from '../operation'
@@ -43,9 +43,17 @@ export interface Folded {
   readonly left: ReadonlyArray<Refusal>
 }
 
-/** What a batched Operation makes on a System, decided as `decide` decides it. */
-function decided(system: System, { operation, made, kept }: Batched): Decided {
-  if (made !== undefined) return decide(system, operation, { id: made, kept })
+/**
+ * What a batched Operation makes on a System, decided as `decide` decides it, a Reference pinning a
+ * Tile of another System when its caller found it readable just now (`targetElsewhere`), which a
+ * batch never keeps.
+ */
+function decided(
+  system: System,
+  { operation, made, kept }: Batched,
+  targetElsewhere = false,
+): Decided {
+  if (made !== undefined) return decide(system, operation, { id: made, kept, targetElsewhere })
   if (operation._tag === 'CreateTile' || operation._tag === 'CreateReference') {
     throw new Error('A batched create lost the id of what it makes')
   }
@@ -59,8 +67,12 @@ interface Step {
 }
 
 /** A batched Operation on a System: its events and the System after them, or its refusal. */
-const afterOne = (system: System, batched: Batched): Result.Result<Step, Refusal> =>
-  Result.map(decided(system, batched), (events) => ({
+const afterOne = (
+  system: System,
+  batched: Batched,
+  targetElsewhere = false,
+): Result.Result<Step, Refusal> =>
+  Result.map(decided(system, batched, targetElsewhere), (events) => ({
     events,
     system: events.reduce(evolve, system),
   }))
@@ -97,12 +109,22 @@ const batchedOf = (operation: Operation, made: string | undefined): Batched =>
   made === undefined ? { operation } : { operation, made }
 
 /**
- * One Operation decided on a System, a create given `made`, the id of what it makes: the events it
- * makes and the System after them, or what `decide` refuses it there, typed by its tag as `decide`'s
- * overloads type it, which the union `decided` goes through loses, so it is said once, here.
+ * One Operation decided on a System, a create given `made`, the id of what it makes, a Reference
+ * pinning a Tile of another System when its caller just found the actor may read it there
+ * (`targetElsewhere`): the events it makes and the System after them, or what `decide` refuses it
+ * there, typed by its tag as `decide`'s overloads type it, which the union `decided` goes through
+ * loses, so it is said once, here.
  */
-export const decidedOne = <O extends Operation>(system: System, operation: O, made?: string) =>
-  afterOne(system, batchedOf(operation, made)) as Result.Result<Step, Refusals[O['_tag']]>
+export const decidedOne = <O extends Operation>(
+  system: System,
+  operation: O,
+  made?: string,
+  { targetElsewhere = false }: Pick<Made, 'targetElsewhere'> = {},
+) =>
+  afterOne(system, batchedOf(operation, made), targetElsewhere) as Result.Result<
+    Step,
+    Refusals[O['_tag']]
+  >
 
 /**
  * One more Operation for a batch already folded over a System: decided on the System the batch
@@ -117,10 +139,16 @@ export const added = <O extends Operation>(folded: Folded, operation: O, made?: 
 
 /**
  * What a timeline tells of some events of a batch, each a change summarized by Mapping (`changeOf`),
- * the Titles it does not say read from `after`, the System once they applied.
+ * the Titles it does not say read from `after`, the System once they applied; the other Tile a
+ * Reference points at left out when `after` does not hold it, a pin's, which whoever's timeline it
+ * is may not read, so not even its id is told.
  */
 export const summariesIn = (
   after: System,
   events: ReadonlyArray<OperationEvent>,
 ): ReadonlyArray<ChangeSummary> =>
-  events.map((event) => changeOf(event, (id) => tileAt(after, id)?.title ?? ''))
+  events.map((event) => {
+    const change = changeOf(event, (id) => tileAt(after, id)?.title ?? '')
+    const { other, ...rest } = change
+    return other === undefined || tileAt(after, other.id) !== undefined ? change : rest
+  })

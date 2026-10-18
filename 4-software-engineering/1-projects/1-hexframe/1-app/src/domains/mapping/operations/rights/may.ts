@@ -26,8 +26,9 @@ export const may = (actor: Actor, sharing: Sharing, tile: string, right: Right) 
   rightsOn(actor, sharing, tile).has(right)
 
 /**
- * What an Operation needs: `read` on every Tile it names, `write` on every Tile it changes or carries
- * and on the parent it goes under, and the parents a move or a swap puts its Tiles under, by Tile.
+ * What an Operation needs: `read` on every Tile it names, of the System decided on, `write` on every
+ * Tile it changes or carries and on the parent it goes under, and the parents a move or a swap puts
+ * its Tiles under, by Tile. A Reference's target that the System does not hold is no Tile of it.
  */
 interface Needs {
   readonly named: ReadonlyArray<string>
@@ -48,12 +49,12 @@ function needsOf(system: System, parentOf: ParentOf, operation: Operation): Need
     case 'CreateTile':
     case 'DeleteReference':
       return { named: [operation.parent], written: [operation.parent], moved: none }
-    case 'CreateReference':
-      return {
-        named: [operation.parent, operation.target],
-        written: [operation.parent],
-        moved: none,
-      }
+    case 'CreateReference': {
+      // A target another System holds is read there, by the service, before the System is locked.
+      const { parent, target } = operation
+      const named = tileAt(system, target) === undefined ? [parent] : [parent, target]
+      return { named, written: [parent], moved: none }
+    }
     case 'EditTile':
       return { named: [operation.id], written: [operation.id], moved: none }
     case 'DeleteTile':

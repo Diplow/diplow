@@ -58,9 +58,17 @@ export const actingOnOwn = (accountId: string, { session }: { readonly session: 
  * Runs an operation for the signed-in Account, the one the request proves, never one a caller sends,
  * on its own System (`actingOnOwn`), a Session said only when one proves the request.
  */
-const forAccount = <A, E, R>(operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>) =>
-  Effect.flatMap(Iam.signedIn, ({ account, by }) =>
-    Effect.flatMap(actingOnOwn(account.id, { session: by._tag === 'Session' }), operation),
+const forAccount = <A, E, R>(
+  operation: (
+    acting: Mapping.Acting,
+    across: { readonly across: boolean },
+  ) => Effect.Effect<A, E, R>,
+) =>
+  Effect.flatMap(Iam.signedIn, (signed) =>
+    Effect.flatMap(
+      actingOnOwn(signed.account.id, { session: signed.by._tag === 'Session' }),
+      (acting) => operation(acting, acrossFor(signed)),
+    ),
   )
 
 /**
@@ -70,6 +78,15 @@ const forAccount = <A, E, R>(operation: (acting: Mapping.Acting) => Effect.Effec
  */
 const turnKeyElsewhere = (signed: Iam.SignedIn, own: Mapping.Acting, star: string) =>
   signed.by._tag === 'TurnKey' && star !== own.system
+
+/**
+ * Whether a read the request makes resolves a Reference to a Tile of another System for the Account
+ * there (Mapping's `Across`): not for a Turn's Key, which reads the System its Turn started in alone,
+ * so its pins show unavailable; for a Session or an Account's Key, which read what the Account may.
+ */
+const acrossFor = (signed: Iam.SignedIn): { readonly across: boolean } => ({
+  across: signed.by._tag !== 'TurnKey',
+})
 
 /**
  * Runs a read for the signed-in Account on the System the star `named` answers names, its own when
@@ -82,7 +99,11 @@ const turnKeyElsewhere = (signed: Iam.SignedIn, own: Mapping.Acting, star: strin
  */
 const onSystem = <A, E, R, N, R2>(
   named: (signed: Iam.SignedIn) => Effect.Effect<string | undefined, N, R2>,
-  operation: (acting: Mapping.Acting, own: Mapping.Acting) => Effect.Effect<A, E, R>,
+  operation: (
+    acting: Mapping.Acting,
+    own: Mapping.Acting,
+    across: Mapping.Across,
+  ) => Effect.Effect<A, E, R>,
 ) =>
   Effect.flatMap(Iam.signedIn, (signed) =>
     Effect.flatMap(
@@ -91,9 +112,10 @@ const onSystem = <A, E, R, N, R2>(
         named(signed),
       ]),
       ([own, star]): Effect.Effect<A, E | TileNotFound, R> => {
-        if (star === undefined || star === own.system) return operation(own, own)
+        const across = acrossFor(signed)
+        if (star === undefined || star === own.system) return operation(own, own, across)
         if (turnKeyElsewhere(signed, own, star)) return Effect.fail(new TileNotFound())
-        return operation({ ...own, system: star }, own)
+        return operation({ ...own, system: star }, own, across)
       },
     ),
   )
@@ -105,8 +127,12 @@ const onSystem = <A, E, R, N, R2>(
  */
 const fromTile = <A, E, R>(
   id: string | undefined,
-  operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>,
-) => onSystem(() => (id === undefined ? Effect.succeed(undefined) : Mapping.holding(id)), operation)
+  operation: (acting: Mapping.Acting, across: Mapping.Across) => Effect.Effect<A, E, R>,
+) =>
+  onSystem(
+    () => (id === undefined ? Effect.succeed(undefined) : Mapping.holding(id)),
+    (acting, _own, across) => operation(acting, across),
+  )
 
 /**
  * Runs a change for the signed-in Account, the Operation `made` makes, on the System holding the
@@ -135,7 +161,10 @@ const changeAt = <O extends Operation, A, E, R>(
     if (turnKeyElsewhere(signed, mine, star)) return yield* Effect.fail(new TileNotFound())
     const acting = { ...mine, system: star }
     return yield* transactional(
-      Effect.flatMap(Someone.writtenInAnothers(signed, { acting, own: mine }, operation), answer),
+      Effect.flatMap(
+        Someone.writtenInAnothers(signed, { acting, own: mine, ...acrossFor(signed) }, operation),
+        answer,
+      ),
     )
   })
 
@@ -157,7 +186,10 @@ const nothing = () => Effect.void
  * by id.
  */
 export const systemAt = (star: string | undefined) =>
-  onSystem(() => Effect.succeed(star), Mapping.system)
+  onSystem(
+    () => Effect.succeed(star),
+    (acting, _own, across) => Mapping.system(acting, across),
+  )
 
 /** The Account's own System, flat, whole: its Root, the user, and every Tile and Reference below it. */
 export const system = systemAt(undefined)
@@ -251,7 +283,10 @@ export const shipped = ({ root, language }: { root: ShippedRoot; language: Local
  */
 export const readTile = <F extends Field>(
   input: Omit<Parameters<typeof Mapping.readTile<F>>[1], 'language'>,
-) => fromTile(input.id, (acting) => Mapping.readTile(acting, { ...input, language: 'en' }))
+) =>
+  fromTile(input.id, (acting, across) =>
+    Mapping.readTile(acting, { ...input, ...across, language: 'en' }),
+  )
 
 /**
  * A Tile of the System holding it, as the Account may read it (`fromTile`), the Account's own Root
@@ -261,17 +296,21 @@ export const readTile = <F extends Field>(
  */
 export const openTile = <F extends Field>(
   input: Omit<Parameters<typeof Mapping.openTile<F>>[1], 'language'>,
-) => fromTile(input.id, (acting) => Mapping.openTile(acting, { ...input, language: 'en' }))
+) =>
+  fromTile(input.id, (acting, across) =>
+    Mapping.openTile(acting, { ...input, ...across, language: 'en' }),
+  )
 
 /**
  * A Tile of the Account's System and everything below it, zipped: the archive's name and its bytes,
- * streamed. A Reference whose Tile is left out links it on the site the request reached.
+ * streamed. A Reference whose Tile is left out links it on the site the request reached, a pin while
+ * the Account may read its Tile, but by a Turn's Key, which resolves none (`acrossFor`).
  */
 export const exportTile = ({ id }: { id: string }) =>
-  forAccount((acting) =>
+  forAccount((acting, across) =>
     Effect.gen(function* () {
       const { url } = yield* HttpExchange
-      return yield* Mapping.exportTile(acting, { id, link: tileLink(url) })
+      return yield* Mapping.exportTile(acting, { id, link: tileLink(url), ...across })
     }),
   )
 

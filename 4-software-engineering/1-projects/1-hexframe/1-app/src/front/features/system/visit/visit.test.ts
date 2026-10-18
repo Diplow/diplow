@@ -10,7 +10,15 @@ import {
 import { pathTo } from '#/front/ui/canvas/view/tiles'
 import { centerOn, showView } from '#/front/ui/canvas/view/view'
 
-import { centeringOf, readVisitSearch, titlesIn, visitLinkOf, visitTree, withVisit } from './visit'
+import {
+  centeringOf,
+  pinFollowed,
+  readVisitSearch,
+  titlesIn,
+  visitLinkOf,
+  visitTree,
+  withVisit,
+} from './visit'
 
 // Someone else's System as a visitor sees it, made by hand as Mapping's `Seen` answers it: Ana's
 // star, her card; Garden under it, which Bob reads; Seeds under a Tile kept from him, a gap, and
@@ -39,11 +47,18 @@ const seen: Seen = {
   },
   gaps: { seeds: found('seeds', 'Seeds') },
   rights: { ana: [], garden: ['read', 'write'], seeds: ['read', '@'], sprouts: ['read'] },
+  pinned: {},
   owned: true,
   version: 0,
 }
 
-const shown = { system: seen, root: systemOf(seen), gaps: seen.gaps, rights: seen.rights }
+const shown = {
+  system: seen,
+  root: systemOf(seen),
+  gaps: seen.gaps,
+  rights: seen.rights,
+  pinned: seen.pinned,
+}
 
 describe('a visit in the URL', () => {
   it('names someone else’s System by its star, and falls back on the Account’s own', () => {
@@ -122,5 +137,20 @@ describe('the Titles the chat names a System visited by', () => {
         ['sprouts', 'Sprouts'],
       ]),
     )
+  })
+})
+
+describe('a pin followed on the canvas', () => {
+  const pinned = { shed: { id: 'shed', title: 'Shed', preview: 'Tools', starTitle: 'Bob' } }
+
+  it('visits the Tile of another System a gesture follows a Reference to, by its link', () => {
+    expect(pinFollowed(pinned, { gesture: 'center', tile: 'shed' })).toBe('shed')
+  })
+
+  it('leaves any other gesture to the canvas, a Tile of the System drawn included', () => {
+    expect(pinFollowed(pinned, { gesture: 'center', tile: 'garden' })).toBeUndefined()
+    expect(pinFollowed({}, { gesture: 'center', tile: 'shed' })).toBeUndefined()
+    expect(pinFollowed(pinned, { gesture: 'expand', tile: 'shed' })).toBeUndefined()
+    expect(pinFollowed(pinned, { gesture: 'show-context', tile: 'shed' })).toBe('shed')
   })
 })

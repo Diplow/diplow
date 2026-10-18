@@ -5,6 +5,8 @@ import type { SignedOut } from '#/domains/iam/errors'
 import type { TileNotFound } from '#/domains/mapping/errors'
 import { exportOf } from '#/domains/mapping/files/files'
 import { systemOf } from '#/domains/mapping/entities'
+import { transactional } from '#/repositories/database/database'
+import { granted } from '#/repositories/database/tiles/testing'
 import { unzipped } from '#/repositories/zip/testing'
 
 import type { Unexpected } from '../../report/errors/failure'
@@ -120,6 +122,45 @@ describe('a Tile exported as a zip', () => {
     const files = unzipped(new Uint8Array(await answer.arrayBuffer()))
     const reference = files.find(({ path }) => path.startsWith('.3-'))
     expect(reference?.content).toMatch(/reference: https:\/\/hexframe\.test\/\?center=[0-9a-f-]+\n/)
+  })
+
+  it('links a pin while its Tile may be read, with its words, and by no id once it may not', async () => {
+    const anaAccount = { id: crypto.randomUUID(), email: 'ana@example.com' }
+    const asAna: StartContext = {
+      ...request(),
+      session: Exit.succeed(
+        Option.some({ account: anaAccount, expiresAt: new Date(Date.now() + 60_000) }),
+      ),
+    }
+    const ana = await systemTree(asAna)
+    const journal = await value(
+      run(asAna, Mapping.createTile({ parent: ana.id, slot: 1, ...content('Journal') })),
+    )
+    const { context: asBob, branch } = await aSystem()
+    const bob = await value(run(asBob, Mapping.system))
+    const share = (value: 'read' | 'none') =>
+      run(
+        asAna,
+        transactional(
+          granted(anaAccount.id, { tile: journal.id, subject: 'everyone', subjectId: null, value }),
+        ),
+      )
+    await share('read')
+    const pin = { parent: branch.id, parentVersion: branch.version + 1, slot: -4 as const }
+    await value(run(asBob, Mapping.createReference({ ...pin, target: journal.id })))
+    const pinned = async () => {
+      const answer = await answered(asBob, bob.root.id)
+      if (!(answer instanceof Response)) throw new Error('Expected a download')
+      const files = unzipped(new Uint8Array(await answer.arrayBuffer()))
+      return files.find(({ path }) => path.includes('/.4-'))?.content ?? ''
+    }
+    const readable = await pinned()
+    expect(readable).toContain('title: Journal')
+    expect(readable).toContain(`reference: https://hexframe.test/?center=${journal.id}`)
+    await share('none')
+    const kept = await pinned()
+    expect(kept).toContain('reference: ""')
+    expect(kept).not.toContain(journal.id)
   })
 
   it("answers TileNotFound for another Account's Tile, as for one that never was", async () => {

@@ -391,10 +391,9 @@ layer(TestTiles)('References, over PGlite', (it) => {
         })
         yield* deleteTile(accountId, shared.id)
         const broken = yield* tree(accountId)
-        expect(broken.branches[1]?.context[-2]).toEqual({
-          _tag: 'BrokenReference',
-          target: shared.id,
-        })
+        // Unavailable, its id told to nobody, the owner included: a deleted Tile and one kept from
+        // the reader look alike.
+        expect(broken.branches[1]?.context[-2]).toEqual({ _tag: 'BrokenReference', target: '' })
         expect(outline(broken)).toEqual({
           title: '',
           branches: { 1: { title: 'Child', branches: {}, context: { [-2]: '⚠' } } },
@@ -571,16 +570,13 @@ layer(TestTiles)('reading one Tile to a depth, over PGlite', (it) => {
     'shows a Reference as its Tile’s id, Title and Preview, and a broken one as broken',
     () =>
       Effect.gen(function* () {
-        const { accountId, ids, gone } = yield* fourDeep
+        const { accountId, ids } = yield* fourDeep
         const { tile } = yield* readTile(accountId, { depth: 2, fields: ['body'] })
         expect(tile.context?.[-2]).toEqual({
           _tag: 'Reference',
           tile: { id: ids[1], title: 'Child', preview: 'Child, in short.' },
         })
-        expect(tile.branches?.[1]?.context?.[-1]).toEqual({
-          _tag: 'BrokenReference',
-          target: gone,
-        })
+        expect(tile.branches?.[1]?.context?.[-1]).toEqual({ _tag: 'BrokenReference', target: '' })
         const shallow = yield* readTile(accountId, { depth: 0, fields: ['title'] })
         // The Root counted its edit and the Reference taking its slot -2.
         expect(shallow.tile).toEqual({ _tag: 'Tile', id: ids[0], version: 3, title: 'Ada' })

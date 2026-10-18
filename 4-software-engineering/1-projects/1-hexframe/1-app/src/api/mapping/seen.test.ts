@@ -157,6 +157,50 @@ describe('a read from a Tile, on the System holding it', () => {
   })
 })
 
+describe('a pin, a Reference to a Tile of another System, through the programs', () => {
+  /** Bob's Root, read by his Session, at the Version a write to its Context slots names. */
+  const bobsRoot = async (bob: { id: string; email: string }) =>
+    (await value(run(request(bob), Mapping.system))).root
+
+  it('pins by a Session or an Account’s Key a Tile a Grant lets the Account read, and no other', async () => {
+    const { bob, journal, garden } = await anasSystem()
+    const root = await bobsRoot(bob)
+    const pin = (target: string, slot: -1 | -2, parentVersion: number) =>
+      Mapping.createReference({ parent: root.id, parentVersion, slot, target })
+    expect(await run(request(bob, 'key'), pin(garden.id, -1, root.version))).toMatchObject({
+      ok: true,
+    })
+    // Journal, which Bob never read, is no Tile to him, as one that doesn't exist.
+    expect(await run(request(bob), pin(journal.id, -2, root.version + 1))).toMatchObject(notFound)
+    const own = await value(run(request(bob), Mapping.systemAt(undefined)))
+    expect(Object.values(own.pinned)).toEqual([
+      { id: garden.id, title: 'Garden', preview: 'Garden, in short.', starTitle: '' },
+    ])
+    expect(JSON.stringify(own)).not.toContain(journal.id)
+  })
+
+  it('shows a Turn’s Key a pin unavailable, its Tile outside the System it reads', async () => {
+    const { bob, garden } = await anasSystem()
+    const root = await bobsRoot(bob)
+    const pin = Mapping.createReference({
+      parent: root.id,
+      parentVersion: root.version,
+      slot: -1,
+      target: garden.id,
+    })
+    await value(run(request(bob), pin))
+    const opened = (proof: Proof) =>
+      value(run(request(bob, proof), Mapping.openTile({ fields: ['title'] })))
+    expect((await opened('key')).context[-1]).toMatchObject({
+      _tag: 'Reference',
+      tile: { id: garden.id, title: 'Garden' },
+    })
+    const byTurn = await opened('turn key')
+    expect(byTurn.context[-1]).toEqual({ _tag: 'BrokenReference', target: '' })
+    expect(JSON.stringify(byTurn)).not.toContain('Garden')
+  })
+})
+
 describe('a link to a Tile, and the Titles a timeline names, across Systems', () => {
   it('leads to the System holding a Tile the Account may read, none for its own, nowhere past one kept from it', async () => {
     const { bob, star, journal, garden } = await anasSystem()

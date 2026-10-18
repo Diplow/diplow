@@ -89,9 +89,14 @@ describe('the System of a public Tile, as anyone sees it', () => {
     for (const tile of [garden.id, seeds.id, notes.id]) {
       const seen = await value(run(request(), Mapping.publicSystem({ tile })))
       expect(seen.root).toMatchObject({ id: star, body: '' })
-      expect(Object.keys(seen.tiles).sort()).toEqual(
+      const placed = Object.values(seen.tiles)
+      expect(placed.flatMap((held) => (held._tag === 'Tile' ? [held.id] : [])).sort()).toEqual(
         [garden.id, seeds.id, notes.id, soil.id].sort(),
       )
+      // Garden's Reference to Journal shows, unavailable, as one whose Tile was deleted would.
+      expect(placed.filter((held) => held._tag === 'Reference')).toEqual([
+        expect.objectContaining({ parent: garden.id, slot: -2, target: '' }),
+      ])
       expect(seen.rights[garden.id]).toEqual(['read'])
       expect(seen.rights[star]).toEqual([])
       const said = JSON.stringify(seen)

@@ -11,6 +11,7 @@ import {
   inherited,
   type LeafTile,
   type Naming,
+  noTarget,
   type Reference,
   reservedKeys,
   type SystemTile,
@@ -178,6 +179,18 @@ function fieldsOf(tile: LeafTile, folder: string): Fields {
   return { ...own, ...Object.fromEntries(kept) }
 }
 
+/**
+ * What a Reference's file says it points at: a file of the export by its path, else the Tile's link
+ * in the app; an unavailable one, pointing at no id, nothing, which an import lands unavailable again.
+ */
+const referenceTo = (
+  target: string,
+  { inside, link }: { inside: string | undefined; link: LinkOf },
+) => {
+  if (inside !== undefined) return `[[${inside}]]`
+  return target === noTarget ? '' : link(target)
+}
+
 /** The files one placed Tile writes, its References resolved against what the export holds. */
 function filesOf(
   written: Placed,
@@ -196,7 +209,7 @@ function filesOf(
       title: titleOf(held),
       parent: parentOf(folder),
       preview: held._tag === 'Reference' ? held.tile.preview : '',
-      reference: inside === undefined ? link(target) : `[[${inside}]]`,
+      reference: referenceTo(target, { inside, link }),
     }
     return [{ path: join(folder, fileName), content: markdownOf(fields, '') }]
   }

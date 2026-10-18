@@ -195,6 +195,8 @@ export interface SystemShown {
   readonly gaps: Seen['gaps']
   /** The Account's rights on each Tile it is shown, by id, as the server read them: every one on its own. */
   readonly rights: Seen['rights']
+  /** The Tiles of other Systems its References point at that the Account may read, by id. */
+  readonly pinned: Seen['pinned']
 }
 
 /**
@@ -228,10 +230,11 @@ export function useSystem({ throwing = true, star }: { throwing?: boolean; star?
       const shown = overlaid(data, pending)
       return {
         system: shown,
-        root: systemOf(shown),
+        root: systemOf(shown, data.pinned),
         underway: underwayOf(pending, data.root.id),
         gaps: data.gaps,
         rights: data.rights,
+        pinned: data.pinned,
       }
     }, [data, writes, star]),
   }

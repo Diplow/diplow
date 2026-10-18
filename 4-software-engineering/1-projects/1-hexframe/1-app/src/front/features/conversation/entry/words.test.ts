@@ -147,6 +147,30 @@ describe('happenedOf', () => {
   })
 })
 
+describe('a pin in the timeline', () => {
+  it('names the Tile a Reference points at in another System as it was, visited on a click, never struck', () => {
+    const visited: string[] = []
+    const pinned: Changed = {
+      ...change({ _tag: 'You' }, 'ReferenceCreated'),
+      other: { id: 'journal', title: 'Journal' },
+    }
+    const told = happenedOf(pinned, {
+      ...naming,
+      onCenter: (id) => {
+        visited.push(id)
+      },
+    })
+    const words = told.words.filter((word) => typeof word === 'object' && 'tile' in word)
+    expect(words.map(tile)).toEqual([
+      { title: 'Journal', standing: 'live' },
+      { title: 'Games', standing: 'live' },
+    ])
+    const [journal] = words
+    if (typeof journal === 'object' && 'tile' in journal) journal.tile.onCenter?.()
+    expect(visited).toEqual(['journal'])
+  })
+})
+
 describe('messageWords', () => {
   it('weaves each link in as its Tile now, a deleted one struck through', () => {
     const words = messageWords(`Look at ${linkTo('games')} and ${linkTo('drafts')}.`, naming)
