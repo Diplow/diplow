@@ -38,7 +38,8 @@
 // of someone else's System, `/t/<id>`, lands here visiting it (`system`, HEX-127): the canvas on
 // their System from its star, as the Account may see it, centered on the Tile, the journey taking it
 // there, the corner from their star, a "…" for the Tiles kept from them, and its mark back home;
-// looked at, not acted on, for now, the gestures told in their own timeline as ever.
+// acted on as far as the Account's rights there let it, the agent asked where it holds *@*, its Turn
+// starting there (HEX-134), the gestures told in their own timeline as ever.
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useMemo, useState } from 'react'
 
@@ -551,6 +552,7 @@ function SignedIn() {
       onSearchChange,
       onViewChange,
       marks: marks.marks,
+      onAsk: ask,
       onHome: wayHome,
     }) ?? {
       systemView: view,
@@ -649,6 +651,7 @@ function SignedIn() {
               onHelp={help.onOpen}
               onKeys={openKeys}
               onTutorial={openTutorial}
+              visiting={visit.star}
             />
           </ReadBoundary>
         }

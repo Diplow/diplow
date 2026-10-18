@@ -306,3 +306,48 @@ export function placesOf(system: SystemTile): ReadonlyMap<string, Place> {
     ),
   )
 }
+
+/**
+ * The folder at the root of a reader's files that holds the Tiles they may read below a Tile kept
+ * from them, those across a gap: no name of a System's own, which are numbered or dotted, so nothing
+ * of the System stands there, and the "…" the canvas draws where the hidden Tiles stand.
+ */
+export const acrossFolder = '…'
+
+/** One path set below a folder: `''` is that folder itself. */
+const under = (folder: string, path: string) => (path === '' ? folder : join(folder, path))
+
+/**
+ * A System as a reader is shown it written as files: the export of its star, as its tree holds what
+ * they may read below it, and the Tiles across a gap, each with everything they may read below it,
+ * exported each into a folder of its own in `acrossFolder`, `<n>-<slug>` in the order given, since
+ * their place above is not theirs to see; and where each Tile lives in them, by id, as `placesOf`
+ * answers it. A Reference between two of those exports links the other by the app, as one to a Tile
+ * the files leave out does. What a Turn on someone else's System starts with.
+ */
+export function seenFiles(
+  system: SystemTile,
+  across: ReadonlyArray<SystemTile>,
+  link: LinkOf,
+): { readonly files: ReadonlyArray<File>; readonly places: ReadonlyMap<string, Place> } {
+  const exported = (tile: SystemTile, folder: string) => {
+    const written = exportOf(tile, tile.id, link)
+    if (written === undefined) throw new Error('A tree exports its own Root')
+    const files = written.files.map((file) => ({ ...file, path: under(folder, file.path) }))
+    const places = [...placesOf(tile)].map(
+      ([id, { folder: at, file }]) =>
+        [id, { folder: under(folder, at), file: under(folder, file) }] as const,
+    )
+    return { files, places }
+  }
+  const all = [
+    exported(system, ''),
+    ...across.map((gap, index) =>
+      exported(gap, join(acrossFolder, `${String(index + 1)}-${slugOf(gap.title)}`)),
+    ),
+  ]
+  return {
+    files: all.flatMap(({ files }) => files),
+    places: new Map(all.flatMap(({ places }) => places)),
+  }
+}

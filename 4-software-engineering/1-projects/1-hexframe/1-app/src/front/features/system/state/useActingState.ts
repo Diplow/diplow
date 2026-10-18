@@ -35,7 +35,7 @@ import {
   swapAt,
   tradeOf,
   turnOf,
-  visitorsWithout,
+  slotWithout,
   withoutOf,
   type Systems,
 } from '../acting'
@@ -222,8 +222,8 @@ export function useActingState(input: ActingInput) {
 
   /**
    * A free slot's menu: a new Tile there, an import into it, or the agent asked for one; none where
-   * the user's rights hold it back, and on a System visited, a new Tile alone, an import and the
-   * agent starting from home.
+   * the user's rights hold it back, and on a System visited, a new Tile and the agent alone, the
+   * agent where the user holds *@* under it, an import landing at home.
    */
   const slotActing = (target: EmptySlotTarget): Acting | undefined => {
     const place = placeOf(target)
@@ -231,7 +231,7 @@ export function useActingState(input: ActingInput) {
     const fresh = newTileOf(target) ?? place
     return {
       subject: { kind: 'slot', at: target.direction, parent: target.parent.title },
-      ...(systems.reach !== 'owned' && { without: visitorsWithout }),
+      ...(systems.reach !== 'owned' && { without: slotWithout(systems, place.parent) }),
       onAct: ({ verb }) => {
         if (verb === 'new-tile') begin({ kind: 'add', ...fresh })
         if (verb === 'import') begin({ kind: 'import', place: { _tag: 'Slot', ...place } })

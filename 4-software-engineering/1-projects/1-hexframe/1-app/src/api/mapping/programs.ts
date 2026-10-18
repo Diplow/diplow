@@ -6,6 +6,7 @@
 // which Start strips from the client.
 import { Effect } from 'effect'
 
+import * as Assistant from '#/domains/assistant/assistant'
 import * as Iam from '#/domains/iam/iam'
 import {
   type Actor,
@@ -72,12 +73,37 @@ const forAccount = <A, E, R>(
   )
 
 /**
- * Whether the request is a Turn's Key's naming another System than its Account's own: a Turn's Key
- * reads and writes the System its Turn started in alone, whatever else its Account may reach, so
- * every read and every change of another System answers it `TileNotFound`.
+ * The Account acting on the System a star names, someone else's, or on its own for none: what a
+ * Turn's `elsewhere`, a Tile's `holding` and a Proposal's System name. The one rule of it.
  */
-const turnKeyElsewhere = (signed: Iam.SignedIn, own: Mapping.Acting, star: string) =>
-  signed.by._tag === 'TurnKey' && star !== own.system
+export const actingAt = (own: Mapping.Acting, star: string | undefined): Mapping.Acting =>
+  star === undefined ? own : { ...own, system: star }
+
+/**
+ * The Account acting where its request works when it names no System: for a Turn's Key, the System
+ * its Turn started in, someone else's when the Turn says so (Assistant's `turnPlace`), read from the
+ * Turn on every call, never kept, once Mapping found the Account still may run the agent at the
+ * Turn's Tile there (`agentAt`), so *@* taken back holds from the next call, `TileNotFound` when it
+ * may not. The Account's own for a Turn at home, for a Key whose Turn is none of the Account's, as
+ * every Turn's Key was bound before one could start elsewhere, and for any other proof. What a Turn's Key reads and writes alone (HEX-134).
+ */
+export const homeOf = (signed: Iam.SignedIn, own: Mapping.Acting) =>
+  signed.by._tag === 'TurnKey'
+    ? Effect.flatMap(Assistant.turnPlace(signed.account.id, signed.by.turnId), (place) => {
+        if (place?.elsewhere === undefined) return Effect.succeed(own)
+        const acting = actingAt(own, place.elsewhere)
+        return Effect.as(Mapping.agentStillAt(acting, place.location), acting)
+      })
+    : Effect.succeed(own)
+
+/**
+ * Whether the request is a Turn's Key's naming another System than the one its Turn started in
+ * (`homeOf`): a Turn's Key reads and writes there alone, whatever else its Account may reach, its own
+ * System included when the Turn started in someone else's, so every read and every change of another
+ * System answers it `TileNotFound`.
+ */
+const turnKeyElsewhere = (signed: Iam.SignedIn, home: Mapping.Acting, star: string) =>
+  signed.by._tag === 'TurnKey' && star !== home.system
 
 /**
  * Whether a read the request makes resolves a Reference to a Tile of another System for the Account
@@ -89,13 +115,13 @@ const acrossFor = (signed: Iam.SignedIn): { readonly across: boolean } => ({
 })
 
 /**
- * Runs a read for the signed-in Account on the System the star `named` answers names, its own when
- * it answers none, looked up once the request is proven signed in, so nothing is looked up for a
- * request nothing proves,
+ * Runs a read for the signed-in Account on the System the star `named` answers names, where its
+ * request works when it answers none (`homeOf`), looked up once the request is proven signed in, so
+ * nothing is looked up for a request nothing proves,
  * Mapping deciding what the Account may read there. A Turn's Key reads the System its Turn started in
- * alone, its Account's own, whatever else the Account may read: another it names is `TileNotFound`,
- * as a Tile Mapping keeps from it is. The read is handed the Account acting on its own System too,
- * for one that answers whose System it read.
+ * alone, whatever else the Account may read: another it names is `TileNotFound`, as a Tile Mapping
+ * keeps from it is. The read is handed the Account acting on its own System too, for one that
+ * answers whose System it read.
  */
 const onSystem = <A, E, R, N, R2>(
   named: (signed: Iam.SignedIn) => Effect.Effect<string | undefined, N, R2>,
@@ -111,12 +137,13 @@ const onSystem = <A, E, R, N, R2>(
         actingOnOwn(signed.account.id, { session: signed.by._tag === 'Session' }),
         named(signed),
       ]),
-      ([own, star]): Effect.Effect<A, E | TileNotFound, R> => {
-        const across = acrossFor(signed)
-        if (star === undefined || star === own.system) return operation(own, own, across)
-        if (turnKeyElsewhere(signed, own, star)) return Effect.fail(new TileNotFound())
-        return operation({ ...own, system: star }, own, across)
-      },
+      ([own, star]) =>
+        Effect.flatMap(homeOf(signed, own), (home): Effect.Effect<A, E | TileNotFound, R> => {
+          const across = acrossFor(signed)
+          if (star === undefined || star === home.system) return operation(home, own, across)
+          if (turnKeyElsewhere(signed, home, star)) return Effect.fail(new TileNotFound())
+          return operation({ ...own, system: star }, own, across)
+        }),
     ),
   )
 
@@ -156,9 +183,12 @@ const changeAt = <O extends Operation, A, E, R>(
       actingOnOwn(signed.account.id, { session: signed.by._tag === 'Session' }),
       Mapping.holding(madeAt(operation)),
     ])
+    const home = yield* homeOf(signed, mine)
+    if (turnKeyElsewhere(signed, home, star ?? mine.system)) {
+      return yield* Effect.fail(new TileNotFound())
+    }
     if (star === undefined || star === mine.system)
       return yield* transactional(own(mine, operation))
-    if (turnKeyElsewhere(signed, mine, star)) return yield* Effect.fail(new TileNotFound())
     const acting = { ...mine, system: star }
     return yield* transactional(
       Effect.flatMap(

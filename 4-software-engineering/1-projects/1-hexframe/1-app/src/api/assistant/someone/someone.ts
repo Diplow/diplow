@@ -11,7 +11,7 @@ import type { OwnActor, Someone } from '#/domains/assistant/entities'
 import * as AssistantUndo from '#/domains/assistant/undo/undo'
 import { keyName, type SignedIn } from '#/domains/iam/iam'
 import * as Mapping from '#/domains/mapping/mapping'
-import { type Operation, Undo } from '#/domains/mapping/operations'
+import { type Batched, type Operation, runAlone, Undo } from '#/domains/mapping/operations'
 
 import { changingIn } from '../../server/bus'
 
@@ -84,4 +84,31 @@ export const writtenInAnothers = <O extends Operation>(
       ),
     )
     return ran.tile
+  })
+
+/**
+ * Runs a batch the signed-in Account makes in someone else's System, the one `acting` names, an
+ * accepted Proposal of a Turn that worked there (HEX-134), in the transaction the caller opened,
+ * whole or not at all: found to run as the writer may there, its star locked (Mapping's
+ * `batchAllowed`), `BatchOutdated`, `TileNotFound` or `NotAllowed` otherwise, nothing run; then
+ * each of its writes as `writtenInAnothers` runs one, in order, its owner told of each and offered
+ * its Undo, the writer's own timeline told of each as made elsewhere. The owner's Conversation is
+ * locked already, with the writer's, in one order, by Assistant's `acceptProposal`, its one caller's
+ * step, before the System is. Answers how many writes it ran.
+ */
+export const batchInAnothers = (
+  signed: SignedIn,
+  { acting, own }: { readonly acting: Mapping.Acting; readonly own: Mapping.Acting },
+  batch: ReadonlyArray<Batched>,
+) =>
+  Effect.gen(function* () {
+    yield* Mapping.batchAllowed(acting, batch)
+    // Found to run whole under the lock, each write runs as it was found to: a refusal is a defect.
+    yield* Effect.forEach(
+      batch,
+      (batched) =>
+        Effect.orDie(writtenInAnothers(signed, { acting, own, across: false }, runAlone(batched))),
+      { discard: true },
+    )
+    return batch.length
   })

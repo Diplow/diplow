@@ -1,7 +1,8 @@
 // What a Turn's agent is told, appended to Claude Code's own system prompt: what it must know of the
 // Turn (its files are a read-only snapshot, in ask its writes are drafted into a Proposal, `@[<id>]`
 // links a Tile), how the System is read and written, as the API layer words it from the MCP's tools
-// and hands it in, where it starts, the Tiles the user's Message links and where each lives now, the
+// and hands it in, whose System it works in when not the user's own and what the user may do there,
+// where it starts, the Tiles the user's Message links and where each lives now, the
 // Tiles the user has on screen, and today's latest Entries of the Conversation, its only memory. Every
 // ancestor's `CLAUDE.md` loads by itself from its working folder, so the System's own words are not
 // repeated.
@@ -35,6 +36,18 @@ export interface Linked {
   readonly place?: { readonly title: string; readonly file: string }
 }
 
+/**
+ * Someone else's System a Turn works in, as the API layer tells it: whose it is, by the Title of its
+ * star, `''` while it has none; what the user may do at the Tile the Turn starts in, Mapping's rights
+ * there; and, when its files hold Tiles the user may read whose place above is kept from them, the
+ * folder holding them, from the System folder.
+ */
+interface Elsewhere {
+  readonly starTitle: string
+  readonly rights: ReadonlyArray<SharedRight>
+  readonly across?: string | undefined
+}
+
 /** What a Turn's prompt is made of. */
 export interface PromptOf {
   /** Today's latest Entries of the Conversation, oldest first, the Message answered last. */
@@ -51,6 +64,8 @@ export interface PromptOf {
   readonly systemRules: ReadonlyArray<string>
   /** The Mode the Turn started in: whether its writes are drafted into a Proposal or applied. */
   readonly mode: Mode
+  /** Someone else's System the Turn works in, none for the user's own. */
+  readonly elsewhere?: Elsewhere | undefined
 }
 
 /** A text of the user's System or timeline, quoted: one line, its quotes and breaks escaped. */
@@ -203,6 +218,35 @@ const modes: Record<Mode, string> = {
   apply: '- This Turn is in apply Mode: your writes change the System as they come.',
 }
 
+/**
+ * What a Turn in someone else's System must know of it, as rules of the Turn: whose System it is, that
+ * it reads and writes there alone, with the user's rights, and what those let the user do where it
+ * starts; where the Tiles across a gap stand in its files; and, without *write* there, that it writes
+ * nothing. None for a Turn in the user's own System.
+ */
+function elsewhereRules(elsewhere: Elsewhere | undefined): ReadonlyArray<string> {
+  if (elsewhere === undefined) return []
+  const { starTitle, rights, across } = elsewhere
+  return [
+    `- This Turn works in the System of ${anotherOf(starTitle)}, not the user's own. You read and ` +
+      "write there alone, with the user's rights: the user's own System and any other are out of " +
+      `reach from here. Where you start, the user may ${mayDo(rights)}; a Tile below may differ, ` +
+      'and a write its owner does not let the user make is refused.',
+    '- The files around you hold what the user may read of that System, from its star, whose Title ' +
+      'and Preview anyone sees.' +
+      (across === undefined
+        ? ''
+        : ` The Tiles the user may read below a Tile kept from them stand in ${quoted(across)}, ` +
+          'each a folder of its own, since their place above is not the user’s to see.'),
+    ...(rights.includes('write')
+      ? []
+      : [
+          '- The user may not write where you start: every write there is refused, and no ' +
+            'Proposal is made either. Write nothing; answer from what you read.',
+        ]),
+  ]
+}
+
 /** The prompt appended to Claude Code's own, in Markdown. */
 export function promptOf({
   entries,
@@ -212,6 +256,7 @@ export function promptOf({
   links,
   systemRules,
   mode,
+  elsewhere,
 }: PromptOf): string {
   const folder = location.folder === '' ? 'the System folder itself' : quoted(location.folder)
   return [
@@ -225,6 +270,7 @@ export function promptOf({
     '- The files around you are a read-only snapshot of the System as this Turn started: read them ' +
       'to find your way, never write them.',
     ...systemRules,
+    ...elsewhereRules(elsewhere),
     modes[mode],
     '- In a Message, `@[<id>]` links a Tile by its id. A Message opening with a link starts you in ' +
       "that Tile's folder; every Tile the user's last Message links is listed below with its path.",

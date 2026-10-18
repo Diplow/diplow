@@ -1,7 +1,9 @@
 // Someone else's System on home's canvas while the URL visits it (HEX-127), the canvas side: read by
 // its star as the Account may see it, from its card, the Tiles it may read below Tiles kept from it
-// hung from the star across a gap, each Tile's menu holding the lines that look, Copy, and those that
-// write where the Account's rights there let it (HEX-132).
+// hung from the star across a gap, each Tile's menu holding the lines that look, Copy, those that
+// write where the Account's rights there let it (HEX-132), and the agent's where it holds *@* there,
+// the Turn then starting in that Tile, of their System (HEX-134).
+import type { Direction } from '#/domains/mapping/entities'
 import { useSystem } from '#/front/client/mapping/queries'
 import { Skeleton } from '#/front/ui/atoms/skeleton'
 import type { CanvasMarks } from '#/front/ui/canvas/Canvas'
@@ -19,15 +21,17 @@ export interface VisitPageProps {
   onViewChange: (view: CanvasView, action: ViewAction) => void
   /** Who touches what the canvas draws, as the page holds it (`marks/`). */
   marks: CanvasMarks
+  /**
+   * Asks the agent through the chat about a Tile visited, or for a new one under it, where the
+   * Account holds *@*: the chat names it first, so the Turn starts there.
+   */
+  onAsk: (tile: string, place?: Direction) => void
 }
 
 /** Nothing to export from a System visited, whose export is its owner's alone. */
 const noExport = { start: () => undefined, pending: false }
 
-/**
- * Neither the agent nor a carry to the composer is offered on a System visited: a Turn starts at
- * home alone (HEX-134).
- */
+/** No carry to the composer is offered on a System visited: the agent's line names a Tile there. */
 const none = () => undefined
 
 /**
@@ -35,7 +39,8 @@ const none = () => undefined
  * its star, its gaps hung from it, acted on as far as the Account's rights there let it (`Reach`); a
  * skeleton while it is read.
  */
-export function VisitPage({ star, search, onSearchChange, onViewChange, marks }: VisitPageProps) {
+export function VisitPage(props: VisitPageProps) {
+  const { star, search, onSearchChange, onViewChange, marks, onAsk } = props
   const { data } = useSystem({ star })
   if (data === undefined) return <Skeleton className="min-h-0 flex-1" />
   return (
@@ -52,7 +57,7 @@ export function VisitPage({ star, search, onSearchChange, onViewChange, marks }:
       onSearchChange={onSearchChange}
       exporting={noExport}
       marks={marks}
-      onAsk={none}
+      onAsk={onAsk}
       onCarry={none}
       className="min-h-0 flex-1"
     />

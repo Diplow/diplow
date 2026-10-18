@@ -7,23 +7,47 @@ import { Result } from 'effect'
 import {
   type Actor,
   below,
+  type Grant,
   heldBy,
   type Lineage,
   lineageOf,
   owns,
-  type Right,
+  Right,
   rightsOn,
   type Seen,
   type Sharing,
+  sharingOf,
   type System,
   tileAt,
 } from '../../entities'
-import { NotAllowed, TileNotFound } from '../../errors'
+import { BatchOutdated, NotAllowed, TileNotFound } from '../../errors'
+import { afterOne, type Batched, type Folded, whole } from '../batch/fold'
 import type { Operation } from '../operation'
 
 /** Whether the actor has this right on the Tile of this id: `rightsOn`, asked of one right. */
 export const may = (actor: Actor, sharing: Sharing, tile: string, right: Right) =>
   rightsOn(actor, sharing, tile).has(right)
+
+/**
+ * Whether rights on a Tile let their holder run the agent there, a Turn starting at it: *@*, which
+ * includes *read*. What Mapping asks before a Turn starts (`agentAt`), and what the front offers the
+ * agent's line and the composer's Tiles by.
+ */
+export const runsAgent = (rights: Iterable<Right>) => [...rights].includes('@')
+
+/**
+ * Whether the actor may start a Turn at a Tile, by their rights there and whether it is a Tile of the
+ * System at all: `TileNotFound` without *read*, or for no Tile, as for none, so nothing tells it
+ * exists; `NotAllowed` with *read* but no *@*; else their rights, in their order.
+ */
+export function agentAllowed(
+  rights: ReadonlySet<Right>,
+  { isTile }: { readonly isTile: boolean },
+): Result.Result<ReadonlyArray<Right>, TileNotFound | NotAllowed> {
+  if (!isTile || !rights.has('read')) return Result.fail(new TileNotFound())
+  if (!runsAgent(rights)) return Result.fail(new NotAllowed())
+  return Result.succeed(Right.literals.filter((right) => rights.has(right)))
+}
 
 /**
  * What an Operation needs: `read` on every Tile it names, of the System decided on, `write` on every
@@ -195,6 +219,55 @@ export function allowedBatch(
   return opens(sharing, now, kept) || dropsGrants(actor, sharing, gone)
     ? Result.fail(new NotAllowed())
     : Result.void
+}
+
+/** What a System's rights are read from beside where its Tiles stand: its owner, and its Grants. */
+export interface Granted {
+  readonly owner: string
+  readonly grants: ReadonlyArray<Grant>
+}
+
+/**
+ * Whether the actor may make one Operation of a batch on the System the ones before it made, by its
+ * Grants and where each Tile stands there, a Tile the batch made reading as its parent lets it: as
+ * `allowed` answers, for anyone but its owner, whose every right it is. The one step of a batch's
+ * rights, which `allowedThrough` folds and the service asks of an Operation added to a batch.
+ */
+export const allowedStep = (
+  actor: Actor,
+  { owner, grants }: Granted,
+  system: System,
+  operation: Operation,
+): Result.Result<void, TileNotFound | NotAllowed> =>
+  owns(actor, owner)
+    ? Result.void
+    : allowed(actor, { system, sharing: sharingOf(owner, lineageOf(system), grants) }, operation)
+
+/**
+ * A batch folded whole over the System the actor runs it on, or adds to it: for its owner, every
+ * right theirs, as `whole` folds it; for anyone else, each Operation once `allowed` found they may
+ * make it on what the ones before it made, by the System's Grants and where each Tile stands then, a
+ * Tile the batch made reading as its parent lets it. All of it, or the first refusal: `TileNotFound`
+ * or `NotAllowed` as `allowed` answers, so a Grant taken back since refuses it, or `BatchOutdated`
+ * once an Operation no longer applies. What the whole batch leaves is `allowedBatch`'s to rule on.
+ */
+export function allowedThrough(
+  actor: Actor,
+  { owner, grants }: Granted,
+  system: System,
+  batch: ReadonlyArray<Batched>,
+): Result.Result<Folded, BatchOutdated | TileNotFound | NotAllowed> {
+  if (owns(actor, owner)) return whole(system, batch)
+  let folded: Folded = { system, events: [], left: [] }
+  for (const batched of batch) {
+    const rights = allowedStep(actor, { owner, grants }, folded.system, batched.operation)
+    if (Result.isFailure(rights)) return Result.fail(rights.failure)
+    const next = afterOne(folded.system, batched)
+    if (Result.isFailure(next)) return Result.fail(new BatchOutdated())
+    const { events, system: after } = next.success
+    folded = { ...folded, system: after, events: [...folded.events, ...events] }
+  }
+  return Result.succeed(folded)
 }
 
 /**

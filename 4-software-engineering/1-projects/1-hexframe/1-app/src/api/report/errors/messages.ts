@@ -11,7 +11,14 @@ import type { Failure } from './failure'
  * which its server function bears and the MCP tool that runs it names too, or another server function
  * by its own.
  */
-type Scope = OperationName | 'importTiles' | 'undo' | 'setGrant' | 'whoReaches'
+type Scope =
+  | OperationName
+  | 'importTiles'
+  | 'undo'
+  | 'setGrant'
+  | 'whoReaches'
+  | 'postMessage'
+  | 'acceptProposal'
 
 interface Entry {
   tag: Failure['_tag']
@@ -39,6 +46,7 @@ const table: readonly Entry[] = [
   { tag: 'TurnRunning', message: m.error_assistant_turn_running },
   { tag: 'AllowanceSpent', message: m.error_assistant_allowance_spent },
   { tag: 'ProposalClosed', message: m.error_assistant_proposal_closed },
+  { tag: 'ProposalElsewhere', message: m.error_assistant_proposal_elsewhere },
   { tag: 'NothingToUndo', message: m.error_assistant_nothing_to_undo },
   { tag: 'TurnOver', message: m.error_assistant_turn_over },
   { tag: 'TileNotFound', message: m.error_mapping_tile_not_found },
@@ -54,6 +62,8 @@ const table: readonly Entry[] = [
   { tag: 'LeafHoldsNothing', message: m.error_mapping_leaf_holds_nothing },
   { tag: 'NotAllowed', scope: 'setGrant', message: m.error_mapping_share_owner_only },
   { tag: 'NotAllowed', scope: 'whoReaches', message: m.error_mapping_share_owner_only },
+  { tag: 'NotAllowed', scope: 'postMessage', message: m.error_assistant_agent_not_allowed },
+  { tag: 'NotAllowed', scope: 'acceptProposal', message: m.error_assistant_accept_not_allowed },
   { tag: 'NotAllowed', message: m.error_mapping_not_allowed },
   { tag: 'ShippedReadOnly', message: m.error_mapping_shipped_read_only },
   { tag: 'BatchOutdated', scope: 'undo', message: m.error_assistant_undo_outdated },

@@ -10,13 +10,16 @@
 // carried from the canvas or one a menu asks the agent about; its commands switch the Mode, undo
 // what the agent last applied, open Help or the Keys, show the tutorial, or go to another language.
 // While a Turn runs, the field waits and send becomes Stop. It offers the Account's Tiles to `@`,
-// from the System the page holds. The Mode, as the poll last saw it, shows under the field,
+// from the System the page holds, and, on a visit, the Tiles of the System visited the Account may
+// run the agent at, its *@*, a Message opening with one starting its Turn there (HEX-134). The Mode, as the poll last saw it, shows under the field,
 // switched through `useSetMode`, the one switched to shown while the switch is on its way; while the
 // chat invites a new account's first command (`./invitation/`), `/tutorial` comes first in its list
 // (HEX-118). Each is shown inside a ReadBoundary, which a failed read lands in.
 import { type ComponentProps, useMemo, useState } from 'react'
 
 import type { Entry, Mode } from '#/domains/assistant/entities'
+import { acrossGaps } from '#/domains/mapping/entities'
+import { runsAgent } from '#/domains/mapping/operations'
 import {
   type Sent,
   useAcceptProposal,
@@ -57,6 +60,24 @@ function useTiles() {
     () => (root === undefined ? undefined : mentionablesOf(root, m.system_untitled())),
     [root],
   )
+}
+
+/**
+ * The Tiles of the System the page visits, someone else's, that the Account may run the agent at,
+ * its *@* there as Mapping showed it: what the composer offers to `@` beside the Account's own, from
+ * the star and from each Tile across a gap, so a Message opening with one starts its Turn there. None
+ * at home.
+ */
+function useVisitedTiles(star: string | undefined) {
+  const { data } = useSystem({ throwing: false, ...(star !== undefined && { star }) })
+  const shown = star === undefined ? undefined : data
+  return useMemo(() => {
+    if (shown === undefined) return []
+    const { system, root, gaps, pinned, rights } = shown
+    return [root, ...acrossGaps(system, gaps, pinned)]
+      .flatMap((tree) => mentionablesOf(tree, m.system_untitled()))
+      .filter(({ id }) => runsAgent(rights[id] ?? []))
+  }, [shown])
 }
 
 /** The Entries of the days read so far, oldest first; none before today is read. */
@@ -195,11 +216,18 @@ interface ChatComposerProps {
   onKeys: () => void
   /** `/tutorial`: the tutorial on the canvas. */
   onTutorial: () => void
+  /** The star of the System the page visits, someone else's; none at home. */
+  visiting?: string | undefined
 }
 
 export function ChatComposer(props: ChatComposerProps) {
   const { onSend, turn, mode, onPoint, center, carried, onHelp, onKeys, onTutorial } = props
-  const tiles = useTiles()
+  const own = useTiles()
+  const visited = useVisitedTiles(props.visiting)
+  const tiles = useMemo(
+    () => (own === undefined ? undefined : [...own, ...visited]),
+    [own, visited],
+  )
   // While the chat invites it, a `/` offers `/tutorial` first.
   const invited = useInvited()
   const entries = useEntries()

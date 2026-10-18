@@ -22,6 +22,16 @@ export class ProposalClosed extends Schema.TaggedError<ProposalClosed>()('Propos
 }) {}
 
 /**
+ * The open Proposal is over another System than the one this Turn works in: one Proposal is open at a
+ * time, and it changes one System, so a Turn started elsewhere drafts nothing into it until the user
+ * accepts or discards it. Nothing changes.
+ */
+export class ProposalElsewhere extends Schema.TaggedError<ProposalElsewhere>()(
+  'ProposalElsewhere',
+  { kind: kind('Conflict') },
+) {}
+
+/**
  * Nothing is left to undo: the user undid it already, in another tab say, or it never applied
  * anything that is the Account's to undo. Nothing changes; the timeline says it was undone.
  */
@@ -43,6 +53,7 @@ export const assistantFailures = [
   TurnRunning,
   AllowanceSpent,
   ProposalClosed,
+  ProposalElsewhere,
   NothingToUndo,
   TurnOver,
 ] as const

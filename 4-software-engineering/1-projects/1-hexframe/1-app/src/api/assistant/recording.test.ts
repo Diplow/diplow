@@ -19,6 +19,7 @@ import { browser, TestAuth } from '#/repositories/auth/testing'
 import { layer as appliedLayer } from '#/repositories/database/conversations/applied'
 import { layer as conversationsLayer } from '#/repositories/database/conversations/conversations'
 import { layer as proposalsLayer } from '#/repositories/database/conversations/proposals'
+import { layer as turnsLayer } from '#/repositories/database/conversations/turns'
 import { transactional } from '#/repositories/database/database'
 import { layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 import { archiveOf } from '#/repositories/zip/testing'
@@ -40,6 +41,7 @@ const TestLayer = Layer.mergeAll(
   conversationsLayer,
   proposalsLayer,
   appliedLayer,
+  turnsLayer,
   zipLayer,
 ).pipe(Layer.provideMerge(TestAuth), (repositories) =>
   Layer.provideMerge(serverBus([recordedInConversation, toldShared]), repositories),

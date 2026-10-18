@@ -17,6 +17,7 @@ import {
   framesOf,
   moveTo,
   referenceAt,
+  slotWithout,
   subjectOf,
   swapAt,
   turnOf,
@@ -308,6 +309,19 @@ describe('the lines a System visited leaves out', () => {
     expect(center.filter((verb) => verb === 'import')).toHaveLength(1)
     expect(center).not.toEqual(expect.arrayContaining(['back-out']))
     expect(center).not.toContain('copy')
+  })
+
+  it('offers the agent where they hold @, the Turn starting there, and nowhere else', () => {
+    const read = visiting()
+    const asking: Systems = {
+      ...systems,
+      reach: read === 'owned' ? read : { visiting: { ...read.visiting, holding: ['read', '@'] } },
+    }
+    expect(withoutOf(asking, hex('tile:holding'))).not.toContain('ask-agent')
+    expect(withoutOf(asking, hex('tile:notes'))).toContain('ask-agent')
+    expect(slotWithout(asking, 'holding')).toEqual(['share', 'export', 'import'])
+    expect(slotWithout(asking, 'root')).toEqual(['share', 'export', 'import', 'ask-agent'])
+    expect(slotWithout(systems, 'root')).toEqual([])
   })
 
   it('offers what their rights let them write, the owner’s lines and the agent’s never', () => {

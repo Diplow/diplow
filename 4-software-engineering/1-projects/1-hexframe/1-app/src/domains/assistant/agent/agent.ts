@@ -62,6 +62,8 @@ export interface TurnStart {
   readonly onScreen: ReadonlyArray<Glimpse>
   /** The rules of the System, as the API layer words them from the MCP's tools. */
   readonly systemRules: PromptOf['systemRules']
+  /** Someone else's System the Turn works in, as the API layer tells it; none for the Account's own. */
+  readonly elsewhere?: PromptOf['elsewhere']
 }
 
 /**
@@ -84,6 +86,7 @@ export const startAgent = (accountId: string, start: TurnStart) =>
       links: start.links,
       systemRules: start.systemRules,
       mode: start.turn.mode,
+      elsewhere: start.elsewhere,
     })
     const { files, run } = launchOf({
       turnId: start.turn.id,

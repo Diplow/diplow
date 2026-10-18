@@ -8,6 +8,7 @@ import { TestAuth } from '#/repositories/auth/testing'
 import { layer as appliedLayer } from '#/repositories/database/conversations/applied'
 import { layer as conversationsLayer } from '#/repositories/database/conversations/conversations'
 import { layer as proposalsLayer } from '#/repositories/database/conversations/proposals'
+import { layer as turnsLayer } from '#/repositories/database/conversations/turns'
 import { layer as tilesLayer } from '#/repositories/database/tiles/tiles'
 import { archiveOf } from '#/repositories/zip/testing'
 import { layer as zipLayer } from '#/repositories/zip/zip'
@@ -28,10 +29,11 @@ const keep = on(MappingEvent, (event, actor, elsewhere) =>
   Effect.sync(() => void heard.push({ event, actor, elsewhere })),
 )
 
-// A write may land in someone else's System, told in its owner's timeline (../assistant/someone/), so
-// its program needs the Conversation's repositories and IAM's beside the tiles'.
+// A write may land in someone else's System, told in its owner's timeline (../assistant/someone/), and
+// a Turn's Key works where its Turn started, so its program needs the Conversation's repositories, the
+// Turns' and IAM's beside the tiles'.
 const TestLayer = Layer.mergeAll(
-  Layer.mergeAll(tilesLayer, conversationsLayer, proposalsLayer, appliedLayer).pipe(
+  Layer.mergeAll(tilesLayer, conversationsLayer, proposalsLayer, appliedLayer, turnsLayer).pipe(
     Layer.provideMerge(TestAuth),
   ),
   zipLayer,

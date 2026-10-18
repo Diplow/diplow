@@ -11,7 +11,7 @@
 // each locks the Conversation's row first. The sub-models that run on it sit in concept folders the
 // API layer calls as directly: how a Turn's agent runs (./agent/agent.ts), what a Turn spends on the
 // model (./spending/admission.ts), and what the Assistant applied, undone once (./undo/undo.ts).
-import { Clock, Effect, Schema } from 'effect'
+import { Clock, Effect, Result, Schema } from 'effect'
 
 import { Applied } from '#/repositories/database/conversations/applied'
 import { Conversations } from '#/repositories/database/conversations/conversations'
@@ -21,6 +21,7 @@ import { type TurnRow, Turns } from '#/repositories/database/conversations/turns
 import {
   type Day,
   dayAt,
+  elsewhereOf,
   deadlineOf,
   type Entry,
   overdue,
@@ -48,6 +49,7 @@ import { AllowanceSpent, TurnRunning } from './errors'
 import {
   AcceptProposal,
   changesOf,
+  continuedBy,
   type ConversationEvent,
   type ConversationState,
   type Decided,
@@ -181,6 +183,16 @@ export const rewritten = (
 export const lockConversation = (accountId: string) =>
   Proposals.use((proposals) => proposals.locked(accountId))
 
+/**
+ * Locks the Conversations of these Accounts until the transaction ends, each as `lockConversation`
+ * locks it, in the order of their ids, whatever order they are given in: what a write that takes two
+ * locks first, a Turn's in someone else's System, its own Account's Conversation and the owner's, so
+ * two such writes, each in the other's System, never wait on each other. A lock taken again in the
+ * same transaction is held already.
+ */
+export const lockConversations = (accountIds: ReadonlyArray<string>) =>
+  Effect.forEach([...new Set(accountIds)].sort(), lockConversation, { discard: true })
+
 const decodedEnd = Schema.decodeUnknownEffect(TurnEnd)
 
 const decodedMode = Schema.decodeUnknownEffect(Mode)
@@ -195,7 +207,16 @@ const turnOf = (row: TurnRow) =>
   Effect.gen(function* () {
     const { id, conversationId, messageId, location, startedAt, spent, endedAt, end } = row
     const mode = yield* Effect.orDie(decodedMode(row.mode))
-    const turn: Turn = { id, conversationId, message: messageId, location, mode, startedAt, spent }
+    const turn: Turn = {
+      id,
+      conversationId,
+      message: messageId,
+      location,
+      ...elsewhereOf(row.elsewhere),
+      mode,
+      startedAt,
+      spent,
+    }
     if (endedAt === null) {
       if (row.step === null) return turn
       return { ...turn, step: yield* Effect.orDie(decodedStep(row.step)) }
@@ -242,12 +263,16 @@ export const endOverdueTurn = (accountId: string) =>
 
 /**
  * Starts a Turn answering one of the Account's Messages, by its Entry's id, in the Tile `location`
- * names, in the Mode its Conversation is in, and answers it: `AllowanceSpent` once the Account's Turns
+ * names, of the System `elsewhere` names when it is someone else's, by its star, which Assistant
+ * keeps as it came, in the Mode its Conversation is in, and answers it: `AllowanceSpent` once the Account's Turns
  * spent the month's allowance; `TurnRunning` while another runs in its Conversation, one at a time,
  * one past its deadline included until `endOverdueTurn` ended it, which the caller does first, so it
  * revokes its Key with it.
  */
-export const startTurn = (accountId: string, start: { message: string; location: string }) =>
+export const startTurn = (
+  accountId: string,
+  start: { message: string; location: string; elsewhere?: string | undefined },
+) =>
   Effect.gen(function* () {
     const startedAt = new Date(yield* Clock.currentTimeMillis)
     const month = yield* Turns.use((turns) => turns.spentSince(accountId, monthOf(startedAt)))
@@ -257,6 +282,7 @@ export const startTurn = (accountId: string, start: { message: string; location:
       turns.start(accountId, {
         messageId: start.message,
         location: start.location,
+        elsewhere: start.elsewhere,
         mode,
         startedAt,
       }),
@@ -322,11 +348,12 @@ const stateOf = (row: ConversationRow | undefined) =>
     if (row === undefined) return { state: { mode: firstMode } satisfies ConversationState }
     const mode = yield* Effect.orDie(decodedMode(row.mode))
     if (row.open === undefined) return { state: { mode } satisfies ConversationState }
-    const { id, entryId, turnId, drafts } = row.open
+    const { id, entryId, turnId, drafts, elsewhere } = row.open
     const open: OpenProposal = {
       id,
       turn: turnId,
       drafts: yield* Effect.orDie(decodedDrafts(drafts)),
+      ...elsewhereOf(elsewhere),
     }
     return { state: { mode, open } satisfies ConversationState, entry: entryId }
   })
@@ -382,7 +409,13 @@ const written = (accountId: string, { event, before, after, entry }: Written) =>
         return entry
       case 'ProposalOpened': {
         const opened = yield* record(accountId, proposalEntry(event.id, [], 'open'))
-        const opening = { id: event.id, entryId: opened.id, turnId: event.turn, at: now }
+        const opening = {
+          id: event.id,
+          entryId: opened.id,
+          turnId: event.turn,
+          elsewhere: event.elsewhere,
+          at: now,
+        }
         yield* proposals.open(accountId, { ...opening, drafts: encodedDrafts([]) })
         return opened.id
       }
@@ -441,11 +474,13 @@ export interface Drafting {
  * one order it holds in: the Conversation locked until the transaction ends, so no other draft, accept
  * nor discard decides on the Proposal meanwhile; the Turn read once the lock is held, as its end takes
  * it, `TurnOver` once it ended (`stillRunning`), so a write proven just before a Stop finds the Turn
- * over rather than a Proposal the user decided on since; then its open Proposal, if one is, given to
- * `step`, which decides the write on the System the Proposal makes and answers it, opaque, with the
- * changes it makes there (Mapping's, in the API layer); then the write kept in the Proposal, which it
- * opens with its Entry when none is. Answers the Proposal as the draft leaves it, and what `step`
- * answered. What `step` refuses is refused, nothing kept. In the transaction the API layer opened.
+ * over rather than a Proposal the user decided on since; then the open Proposal the write continues,
+ * if one is, `ProposalElsewhere` when the one open changes another System than the Turn works in
+ * (`continuedBy`), given to `step`, which decides the write on the System the Proposal makes and
+ * answers it, opaque, with the changes it makes there (Mapping's, in the API layer); then the write
+ * kept in the Proposal, which it opens with its Entry when none is, over the Turn's System. Answers
+ * the Proposal as the draft leaves it, and what `step` answered. What `step` refuses is refused,
+ * nothing kept. In the transaction the API layer opened.
  */
 export const draft = <A extends Drafting, E, R>(
   accountId: string,
@@ -454,12 +489,14 @@ export const draft = <A extends Drafting, E, R>(
 ) =>
   Effect.gen(function* () {
     const { state } = yield* stateOf(yield* lockConversation(accountId))
-    yield* writingTurn(accountId, turnId)
-    const drafted = yield* step(state.open)
+    const { elsewhere } = yield* writingTurn(accountId, turnId)
+    const drafted = yield* step(yield* Effect.fromResult(continuedBy(state, elsewhere)))
     const { write, changes } = drafted
     const proposal = crypto.randomUUID()
     const { after } = yield* operate(accountId, (locked) =>
-      decide(locked, new Draft({ turn: turnId, write, changes }), { proposal }),
+      decide(locked, new Draft({ turn: turnId, write, changes, ...elsewhereOf(elsewhere) }), {
+        proposal,
+      }),
     )
     if (after.open === undefined) return yield* Effect.die(new Error('A draft left no Proposal'))
     return { proposal: after.open, drafted }
@@ -472,20 +509,40 @@ export interface Applying {
 }
 
 /**
- * Accepts the Account's open Proposal of this id, whole, in the one order it holds in: decided,
- * `ProposalClosed` when it is open no longer, as `decide` rules; then `run` given it as it stood,
- * which runs its writes on the System (Mapping's, in the API layer) and answers what undoes them and
- * the changes they made; and that kept with the Proposal, offered by its Entry, which then says it may
- * be undone (`offeringEntry`), so a Proposal accepted before undos were kept offers none. Answers what
- * `run` answered. What `run` refuses rolls the accept back with the transaction. In the transaction
- * the API layer opened.
+ * How an accept runs the Proposal's writes on the System they change, the API layer's, by whose
+ * System it is: the Account's own, answering what undoes them and their changes, which the Proposal
+ * keeps and its Entry offers; or someone else's (`elsewhere`), each write that System's owner's to
+ * undo, so the Proposal keeps none, whose owner it names first, so both Conversations are locked in
+ * one order before the accept takes the Account's own.
  */
-export const acceptProposal = <A extends Applying, E, R>(
+export interface AcceptRuns<A, B, E, R> {
+  readonly own: (accepted: OpenProposal) => Effect.Effect<A, E, R>
+  readonly elsewhere: {
+    readonly owner: (star: string) => Effect.Effect<string, E, R>
+    readonly run: (accepted: OpenProposal, star: string) => Effect.Effect<B, E, R>
+  }
+}
+
+/**
+ * Accepts the Account's open Proposal of this id, whole, in the one order it holds in: over someone
+ * else's System, that System's owner's Conversation locked with the Account's, in the order of their
+ * ids (`lockConversations`), as every write in two Conversations takes them; then decided,
+ * `ProposalClosed` when it is open no longer, as `decide` rules; then its writes run, by the run of
+ * its System (`AcceptRuns`): over its own, what undoes them kept with the Proposal and offered by its
+ * Entry, which then says it may be undone (`offeringEntry`); over someone else's, nothing kept, its
+ * owner offered each write's Undo. Answers what the run answered. What it refuses rolls the accept
+ * back with the transaction. In the transaction the API layer opened.
+ */
+export const acceptProposal = <A extends Applying, B, E, R>(
   accountId: string,
   proposal: string,
-  run: (accepted: OpenProposal) => Effect.Effect<A, E, R>,
+  runs: AcceptRuns<A, B, E, R>,
 ) =>
   Effect.gen(function* () {
+    const open = (yield* conversationState(accountId)).open
+    if (open?.elsewhere !== undefined) {
+      yield* lockConversations([accountId, yield* runs.elsewhere.owner(open.elsewhere)])
+    }
     const { before, entry } = yield* operate(accountId, (state) =>
       decide(state, new AcceptProposal({ proposal })),
     )
@@ -493,7 +550,13 @@ export const acceptProposal = <A extends Applying, E, R>(
     if (accepted === undefined || entry === undefined) {
       return yield* Effect.die(new Error('A Proposal was accepted that was not open'))
     }
-    const ran = yield* run(accepted)
+    if (accepted.elsewhere !== undefined) {
+      if (accepted.elsewhere !== open?.elsewhere) {
+        return yield* Effect.die(new Error('A Proposal changed its System while it was accepted'))
+      }
+      return yield* runs.elsewhere.run(accepted, accepted.elsewhere)
+    }
+    const ran = yield* runs.own(accepted)
     const { undo, changes } = ran
     yield* Applied.use((applied) =>
       applied.keep(accountId, accepted.id, { undo, changes, entryId: entry }),
@@ -532,3 +595,29 @@ export const writingTurn = (accountId: string, turnId: string) =>
  */
 export const route = (accountId: string, turnId: string) =>
   Effect.map(turn(accountId, turnId), routeOf)
+
+/**
+ * Where one of the Account's Turns started, by its id, read on every call its Key makes: its location
+ * and, when it is someone else's System, that System's star (`elsewhere`). None for a Turn of no
+ * Conversation of the Account's, whose Key then reaches the Account's own System, as every Turn's
+ * did before one could start elsewhere.
+ */
+export const turnPlace = (accountId: string, turnId: string) =>
+  Effect.map(
+    Turns.use((turns) => turns.byId(accountId, turnId)),
+    (row) =>
+      row === undefined ? undefined : { location: row.location, ...elsewhereOf(row.elsewhere) },
+  )
+
+/**
+ * The open Proposal one of the Account's Turns shows over the System it reads, by its route and the
+ * System it works in: the open one for a Turn that drafts, when it changes that System; none for a
+ * Turn that applies, or when it changes another (`continuedBy`), which the Turn drafts nothing into.
+ */
+export const shownProposal = (accountId: string, turnId: string) =>
+  Effect.gen(function* () {
+    const read = yield* turn(accountId, turnId)
+    if (routeOf(read) === 'apply') return undefined
+    const state = yield* conversationState(accountId)
+    return Result.getOrUndefined(continuedBy(state, read.elsewhere))
+  })

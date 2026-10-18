@@ -19,7 +19,8 @@ import * as Proposal from './proposal/programs'
 // real: started from a Session for an Account the allowlist names (`vitest.config.ts` names
 // `entitled@example.com`), by the transaction `sendMessage` runs, its Key taken by `/mcp`, whose
 // writes the timeline labels "Assistant", then refused once the Turn ended, or expired; refused
-// wherever only a Session may act; and what `sendMessage` checks before it starts one.
+// wherever only a Session may act; and what `sendMessage` checks before it starts one. A Turn on
+// someone else's Tile is `./someone/turn.test.ts`'s.
 
 /** Someone signed up with this email, a request their Session proves, and their Root. */
 async function signedUp(email: string) {
@@ -163,7 +164,7 @@ describe('a Turn and its Key', () => {
     await value(run(signedIn, Assistant.endTurn(accountId, turn.id, 'stopped')))
   })
 
-  it("starts only in a Tile of the Account's own System", async () => {
+  it('starts nowhere the Account may not read, a stranger’s Tile as one of no System', async () => {
     const { signedIn } = await entitled
     const stranger = await signedUp(`${crypto.randomUUID()}@example.com`)
     for (const location of [stranger.location, crypto.randomUUID()]) {
