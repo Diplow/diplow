@@ -246,7 +246,20 @@ describe('a Turn’s writes in someone else’s System, by its Mode', () => {
     })
     expect(
       theirs((await value(run(ana.signedIn, Assistant.conversationDay({ offset: 0 })))).entries),
-    ).toMatchObject([{ verb: 'TileCreated', undone: false, actor: { star: 'Bob Martin' } }])
+    ).toMatchObject([
+      {
+        verb: 'TileCreated',
+        undone: false,
+        actor: { _tag: 'Someone', star: 'Bob Martin', by: { _tag: 'You' } },
+      },
+    ])
+    // His own timeline tells it as his, made elsewhere: he decided it, his agent only drafted it.
+    const own = await told(signedIn, (entries) =>
+      entries.some((entry) => entry._tag === 'Change' && entry.verb === 'TileCreated'),
+    )
+    expect(
+      own.find((entry) => entry._tag === 'Change' && entry.verb === 'TileCreated'),
+    ).toMatchObject({ actor: { _tag: 'You' }, elsewhere: true })
     // His Proposal offers no Undo: the owner holds it.
     expect(await run(signedIn, Proposal.undo({ applied: proposal.id }))).toMatchObject({
       ok: false,

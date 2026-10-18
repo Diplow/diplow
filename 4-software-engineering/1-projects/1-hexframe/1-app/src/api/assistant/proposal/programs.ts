@@ -4,9 +4,9 @@
 // drafted into the Conversation's Proposal, decided by Mapping on the System the Proposal makes and
 // written nowhere. The reads made with that Key, and the files its Turn starts with, show the same
 // Proposal over the System. The user switches the Mode, and accepts a Proposal, its writes run by
-// Mapping in one transaction as the Assistant's, what undoes them kept, or discards it; and undoes an
-// applied Turn or an accepted Proposal, once, as themselves, from a Session. They sit in a module of
-// their own because they reach the domains and the database.
+// Mapping in one transaction as the user's, who decided them, what undoes them kept, or discards it;
+// and undoes an applied Turn or an accepted Proposal, once, as themselves, from a Session. They sit
+// in a module of their own because they reach the domains and the database.
 import { Effect, Schema } from 'effect'
 
 import * as Assistant from '#/domains/assistant/assistant'
@@ -20,7 +20,6 @@ import { Batched, type Operation, Undo } from '#/domains/mapping/operations'
 import { transactional } from '#/repositories/database/database'
 
 import * as MappingPrograms from '../../mapping/programs'
-import { actingAs } from '../../server/bus'
 import * as Someone from '../someone/someone'
 
 const decodedBatch = Schema.decodeUnknownEffect(Schema.Array(Batched))
@@ -234,8 +233,8 @@ export const proposalNow = (accountId: string) =>
 /**
  * Accepts the Account's open Proposal of this id, whole, in one transaction: Assistant accepts it,
  * `ProposalClosed` once it is open no longer, then its writes run by Mapping on the System as it
- * stands, under the Root's lock, all of them or none, each event published as the Assistant's, by the
- * Turn whose write opened it, and what undoes them kept with it, which its Entry then offers;
+ * stands, under the Root's lock, all of them or none, each event published as the user's, who
+ * decided them, by the Session, and what undoes them kept with it, which its Entry then offers;
  * `BatchOutdated` once one of them no longer applies, a Tile changed since, by the Version it names,
  * or gone, the accept rolled back with it. A Proposal over someone else's System, a Turn's that
  * worked there (HEX-134), runs there as the Account may write there, `NotAllowed` or `TileNotFound`
@@ -246,30 +245,26 @@ export const proposalNow = (accountId: string) =>
 export const acceptProposal = ({ proposal }: { readonly proposal: string }) =>
   Effect.flatMap(Iam.sessionOnly, ({ account }) =>
     Effect.gen(function* () {
-      // The Proposal's writes are its Turn's, published as the Assistant's, not the Session's.
-      const assistant = (accepted: OpenProposal): Iam.SignedIn => ({
-        account,
-        by: { _tag: 'TurnKey', turnId: accepted.turn },
-      })
+      // The user decided the writes, so they are the user's, published as the Session's, which proves
+      // the request; the agent only drafted them, as the Proposal's own Entry tells. Mapping still
+      // takes them as no write of the Session's own: an agent's draft widens who reads no Tile.
+      const signed: Iam.SignedIn = { account, by: { _tag: 'Session' } }
       const own = yield* MappingPrograms.actingOnOwn(account.id, { session: false })
       yield* transactional(
         Assistant.acceptProposal(account.id, proposal, {
           own: (accepted) =>
             Effect.gen(function* () {
-              const batch = yield* batchOf(accepted)
-              const run = yield* actingAs(assistant(accepted))(Mapping.runBatch(own, batch))
+              const run = yield* Mapping.runBatch(own, yield* batchOf(accepted))
               return { undo: encodedUndo(run.undo), changes: run.changes }
             }),
           elsewhere: {
             owner: Mapping.ownerOf,
             run: (accepted, star) =>
               Effect.flatMap(batchOf(accepted), (batch) =>
-                actingAs(assistant(accepted))(
-                  Someone.batchInAnothers(
-                    assistant(accepted),
-                    { acting: MappingPrograms.actingAt(own, star), own },
-                    batch,
-                  ),
+                Someone.batchInAnothers(
+                  signed,
+                  { acting: MappingPrograms.actingAt(own, star), own },
+                  batch,
                 ),
               ),
           },

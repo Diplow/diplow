@@ -65,21 +65,6 @@ interface Delivery {
 }
 
 /**
- * Who a program acts as, when it is not who the request proves: the Assistant, by the Turn whose
- * writes a user accepted, for the changes an accepted Proposal makes (`actingAs`).
- */
-class ActingAs extends Context.Service<ActingAs, SignedIn>()('hexframe/ActingAs') {}
-
-/**
- * Runs a program as `signedIn` acted, for the bus: each event it publishes rides in an envelope saying
- * so, whoever the request proves. It proves nothing: IAM still reads the request's own proofs.
- */
-export const actingAs =
-  (signedIn: SignedIn) =>
-  <A, E, R>(program: Effect.Effect<A, E, R>): Effect.Effect<A, E, Exclude<R, ActingAs>> =>
-    Effect.provideService(program, ActingAs, signedIn)
-
-/**
  * The System a program changes when it is not its actor's own, by its star: someone else's, where a
  * write was made that a Grant let through (HEX-132).
  */
@@ -95,13 +80,8 @@ export const changingIn =
   <A, E, R>(program: Effect.Effect<A, E, R>): Effect.Effect<A, E, Exclude<R, ChangingIn>> =>
     Effect.provideService(program, ChangingIn, star)
 
-/**
- * Who acted, as the request proves it, by IAM's rule, unless the program acts as another
- * (`actingAs`): none outside a request, or when nothing proves it.
- */
+/** Who acted, as the request proves it, by IAM's rule: none outside a request, or when nothing proves it. */
 const actor = Effect.gen(function* () {
-  const acting = yield* Effect.serviceOption(ActingAs)
-  if (Option.isSome(acting)) return acting
   const session = yield* Effect.serviceOption(CurrentSession)
   const key = yield* Effect.serviceOption(CurrentKey)
   return signedInBy(Option.flatten(session), Option.flatten(key))
