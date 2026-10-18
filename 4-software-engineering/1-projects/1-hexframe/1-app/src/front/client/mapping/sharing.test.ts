@@ -105,10 +105,19 @@ describe('what is typed in the star picker', () => {
     }
   })
 
-  it('reads a link to no Tile, on another site or by no UUID, as one naming none', () => {
+  it('reads a link to a Tile hexframe ships as that Tile, by the id a visit takes (HEX-139)', () => {
+    expect(typedOf('/t/help', page)).toEqual({ by: 'link', tile: 'help' })
+    expect(typedOf('https://hexframe.ai/fr/t/help%2F3', page)).toEqual({
+      by: 'link',
+      tile: 'help/3',
+    })
+  })
+
+  it('reads a link to no Tile, on another site or by an id no Tile could have, as one naming none', () => {
     for (const link of [
       `https://elsewhere.example/t/${crypto.randomUUID()}`,
-      '/t/help',
+      '/t/nothing',
+      '/t/help%2F9',
       '/settings',
       'https://',
     ]) {
@@ -172,6 +181,19 @@ describe('the stars what is typed leads to', () => {
       unmount()
     }
     expect(starOfLink).toHaveBeenCalledWith({ data: { tile } })
+  })
+
+  it('leads a link to Help to the star holding it, the Hexframe Organization’s', async () => {
+    const hexframe = { id: crypto.randomUUID(), title: 'Hexframe', preview: '' }
+    vi.mocked(starOfLink).mockResolvedValue({
+      ok: true,
+      value: { _tag: 'Star', star: hexframe },
+    } as never)
+    const { result } = rendering('/t/help')
+    await waitFor(() => {
+      expect(result.current).toEqual({ state: 'found', stars: [hexframe] })
+    })
+    expect(starOfLink).toHaveBeenCalledWith({ data: { tile: 'help' } })
   })
 
   it('asks nothing of a link that names no Tile', () => {

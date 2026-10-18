@@ -10,7 +10,12 @@ import { Schema } from 'effect'
 
 import { tileOfLink } from '#/api/mapping/files/download'
 import { findStars, setGrant, starOfLink, whoReaches } from '#/api/mapping/mapping'
-import { type GrantChange, type LinkedStar, starQueryOf, TileId } from '#/domains/mapping/entities'
+import {
+  AnyTileId,
+  type GrantChange,
+  type LinkedStar,
+  starQueryOf,
+} from '#/domains/mapping/entities'
 import type { StarsShown } from '#/front/ui/chat/widgets/sharing/star-picker/StarPicker'
 
 import { read, write } from '../calls'
@@ -39,8 +44,9 @@ export const useSetGrant = () => {
 
 /**
  * What is typed in the star picker, read: a link, when it reads as one, its scheme's or a path on
- * this site, `/t/<id>`, which leads to the Tile it names on the page's site, a UUID, `undefined` for
- * one that names none; else a Title, the query it makes, `undefined` while too short to search.
+ * this site, `/t/<id>`, which leads to the Tile it names on the page's site, by an id `starOfLink`
+ * takes, a UUID or a shipped Tile's (Mapping's `AnyTileId`, HEX-139), `undefined` for one that names
+ * none; else a Title, the query it makes, `undefined` while too short to search.
  */
 export type Typed =
   | { readonly by: 'link'; readonly tile: string | undefined }
@@ -54,7 +60,7 @@ export function typedOf(typed: string, page: string): Typed {
   const text = typed.trim()
   if (!asLink.test(text)) return { by: 'title', query: starQueryOf(text) }
   const tile = URL.canParse(text, page) ? tileOfLink(page)(new URL(text, page).href) : undefined
-  return { by: 'link', tile: tile !== undefined && Schema.is(TileId)(tile) ? tile : undefined }
+  return { by: 'link', tile: tile !== undefined && Schema.is(AnyTileId)(tile) ? tile : undefined }
 }
 
 /** Where a link led, as the picker shows it. */
