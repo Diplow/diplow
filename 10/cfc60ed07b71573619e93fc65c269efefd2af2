@@ -1,0 +1,55 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/rights.ts
+  s_eb2c82211b20e8::t_651befbd2933fb 33-35
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/sharing/sharing.test.ts
+  s_eb2c82211b20e8::t_f5efcb15b383e1 55-59,63-67,70-74,77-81,93-97
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/reach.test.ts
+  s_eb2c82211b20e8::t_0abfa4a85c32cc 28-31,40-47,49-52,60-61,64-67
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/may.ts
+  s_eb2c82211b20e8::t_747c9e545d6bfd 18,111-116,120,123-125
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/share/rows.test.ts
+  s_eb2c82211b20e8::t_f5efcb15b383e1 39-45,56,61-64
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/share/rows.ts
+  s_eb2c82211b20e8::t_f5efcb15b383e1 5-12,26-33,35-37,85-88
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/copy.ts
+  s_eb2c82211b20e8::t_9001c99afc6a6f 1-15
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/state/useActingState.ts
+  s_eb2c82211b20e8::t_9001c99afc6a6f 49
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/tiles/grants.ts
+  s_eb2c82211b20e8::t_9001c99afc6a6f 7,68,83-95,97,99-101,106,108-109,113-119
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/may.test.ts
+  s_eb2c82211b20e8::t_747c9e545d6bfd 273
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/share/ShareWidgets.tsx
+  s_eb2c82211b20e8::t_9001c99afc6a6f 12
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/CLAUDE.md
+  s_eb2c82211b20e8::t_fd923f2dc40274 27
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/CLAUDE.md
+  s_eb2c82211b20e8::t_fd923f2dc40274 36
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/sharing/sharing.ts
+  s_eb2c82211b20e8::t_747c9e545d6bfd 20,26-29,41
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/seen.test.ts
+  s_eb2c82211b20e8::t_0abfa4a85c32cc 212-215,250-253
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/client/mapping/sharing.test.ts
+  s_eb2c82211b20e8::t_0abfa4a85c32cc 23
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/CLAUDE.md
+  s_eb2c82211b20e8::t_fd923f2dc40274 28
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/sharing/CLAUDE.md
+  s_eb2c82211b20e8::t_fd923f2dc40274 18
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/reach.ts
+  s_eb2c82211b20e8::t_651befbd2933fb 33-38,40-41,45-55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "10cfc60ed07b71573619e93fc65c269efefd2af2",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
