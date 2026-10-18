@@ -1,0 +1,32 @@
+4-software-engineering/1-projects/1-hexframe/.cubic/security.md
+  s_eb2c82211b20e8::t_357c5a2137c37c 31
+  s_eb2c82211b20e8::t_2a218f1804b737 61
+  s_eb2c82211b20e8::t_61eca6c048ef42 29
+  s_eb2c82211b20e8::t_b73fd5b5d55b07 25
+4-software-engineering/1-projects/1-hexframe/STACK.md
+  s_eb2c82211b20e8::t_d7194fd0dd6561 60
+  s_eb2c82211b20e8::t_a7bc18bc80cc36 146
+  s_eb2c82211b20e8::t_b2f41fbb0c1706 153
+  s_eb2c82211b20e8::t_87e41a4ac9c9db 20
+  s_eb2c82211b20e8::t_7e7831d18751ed 134
+  s_eb2c82211b20e8::t_2cfe973c6d10fb 152
+  s_eb2c82211b20e8::t_078f80f856e923 18
+  s_eb2c82211b20e8::t_dbf618d0f337af 142
+  s_eb2c82211b20e8::t_3ef95456240a54 42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1b087509f96941b15249ab34e328afea83186f93",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
