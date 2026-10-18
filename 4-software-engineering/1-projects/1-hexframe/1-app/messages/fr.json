@@ -1361,5 +1361,6 @@
   "gallery_members_add": "L’accueil ouvrirait la recherche d’étoile, pour trouver quelqu’un par son étoile",
   "gallery_note_organization_widget": "Une organisation créée depuis le chat : son nom, avec lequel naît son étoile, puis Créer, l’utilisateur son premier admin ; une fois créée, un message qui la nomme, et le canevas parti vers son système. Le widget de l’application, sans voix donc.",
   "gallery_note_members_widget": "Qui appartient à une organisation, ouvert depuis le menu de son étoile : chaque membre par le titre de son étoile et son rôle, admin ou membre ; un admin change chaque rôle, retire quelqu’un, lui-même compris, et ajoute quelqu’un trouvé par son étoile, le dernier admin gardé. Le widget de l’application, sans voix donc ; ses mots sont ceux d’IAM.",
-  "gallery_organization_made": "L’accueil créerait {name}, puis visiterait son système"
+  "gallery_organization_made": "L’accueil créerait {name}, puis visiterait son système",
+  "widget_organization_name_too_long": "Le nom d’une organisation tient en {most} caractères au plus."
 }

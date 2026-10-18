@@ -1361,5 +1361,6 @@
   "gallery_members_add": "Home would open the star picker, to find someone by their star",
   "gallery_note_organization_widget": "An Organization made from the chat: its name, which its star is born with, then Create, the user its first admin; once made, a toast naming it, and the canvas off to its system. The app's own widget, so it carries no voice.",
   "gallery_note_members_widget": "Who belongs to an Organization, opened from its star's menu: each member by their star's title and their role, an admin or a member; an admin sets each role, removes someone, themselves included, and adds someone found by their star, the last admin kept. The app's own widget, so it carries no voice; its words are IAM's.",
-  "gallery_organization_made": "Home would make {name}, then visit its system"
+  "gallery_organization_made": "Home would make {name}, then visit its system",
+  "widget_organization_name_too_long": "An Organization's name holds {most} characters at most."
 }
