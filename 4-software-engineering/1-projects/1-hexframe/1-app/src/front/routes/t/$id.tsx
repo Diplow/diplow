@@ -68,8 +68,9 @@ function Public() {
   const tree = useMemo(() => (seen === undefined ? undefined : treeOf(seen)), [seen])
   if (tree === undefined) return <Missing />
   const view = search.center === undefined ? centerOn(tree, id) : viewIn(search)
+  // A view's center absent is the star; here it is the Tile linked, so the star is named outright.
   const onViewChange = (next: CanvasView) => {
-    void navigate({ search: next })
+    void navigate({ search: { ...next, center: next.center ?? tree.id } })
   }
   return (
     <main className="relative h-dvh overflow-hidden">
