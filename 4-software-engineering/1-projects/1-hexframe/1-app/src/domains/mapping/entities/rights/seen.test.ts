@@ -215,6 +215,21 @@ describe('the Version a reader who is not the owner is shown', () => {
     const toStranger = grant('garden', { _tag: 'Account', id: 'stranger' }, 'read+write')
     expect(strangerOn(system, scenarioWith(toStranger))).not.toBe(before)
   })
+  it('names a pin of a Tile hexframe ships by its id alone, whatever language its words come in', () => {
+    const shownWith = (id: string, words: { title: string; preview: string; starTitle: string }) =>
+      sightVersion({
+        root: star,
+        tiles: {},
+        gaps: {},
+        rights: {},
+        pinned: { [id]: { id, ...words } },
+        asOwner: false,
+      })
+    const english = { title: 'Children and Directions', preview: 'Six.', starTitle: 'Hexframe' }
+    const french = { title: 'Enfants et directions', preview: 'Six.', starTitle: 'Hexframe' }
+    expect(shownWith('help/3', french)).toBe(shownWith('help/3', english))
+    expect(shownWith('journal', french)).not.toBe(shownWith('journal', english))
+  })
 })
 
 describe('a pin, a Reference to a Tile of another System', () => {
