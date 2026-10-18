@@ -55,16 +55,6 @@ export const shownTo = (accountId: string, turnId: string) =>
   Effect.flatMap(Assistant.shownProposal(accountId, turnId), batchOf)
 
 /**
- * Where a write a Turn's Key made works: its Account acting on the System its Turn started in
- * (`homeOf`), someone else's or its own, and on its own.
- */
-const turnActing = (signed: Iam.SignedIn) =>
-  Effect.gen(function* () {
-    const own = yield* MappingPrograms.actingOnOwn(signed.account.id, { session: false })
-    return { acting: yield* MappingPrograms.homeOf(signed, own), own }
-  })
-
-/**
  * The batch the request's reads show over the System: the Proposal its Turn drafts into, for a request
  * a Turn's Key proves; none for a Session or an Account's Key, which read the System as it stands.
  */
@@ -153,14 +143,14 @@ const ranForTurn = <O extends Operation>(
  */
 const ranElsewhere = <O extends Operation>(
   signed: Iam.SignedIn & { readonly by: { readonly _tag: 'TurnKey' } },
-  { acting, own }: { readonly acting: Mapping.Acting; readonly own: Mapping.Acting },
+  reach: MappingPrograms.Reach,
   operation: O,
 ) =>
   transactional(
-    Effect.flatMap(Someone.toldOwner(acting.system), (owner) =>
+    Effect.flatMap(Someone.toldOwner(reach.acting.system), (owner) =>
       AssistantUndo.writtenInTurnElsewhere(
         { accountId: signed.account.id, turnId: signed.by.turnId, owner },
-        Someone.writtenInAnothers(signed, { acting, own, across: false }, operation),
+        Someone.writtenInAnothers(signed, reach, operation),
       ),
     ),
   )
@@ -169,8 +159,9 @@ const ranElsewhere = <O extends Operation>(
  * A write made through the MCP, routed by what Assistant decides: drafted into the Proposal when a
  * Turn's Key that drafts made it, applied with what undoes it kept when one that applies did, on the
  * System its Turn started in, someone else's applied as theirs to undo; and `apply`d otherwise, the
- * write's own program given the same Operation. The tool table names the Operation and its program,
- * and never asks the Mode.
+ * write's own program given the same Operation. Where a Turn's Key's write works is where its
+ * request reaches (`mapping/programs.ts`'s `actingFor`), a Turn's resolving no pin. The tool table
+ * names the Operation and its program, and never asks the Mode.
  */
 export const written = <O extends Operation, A, E, R>(
   operation: O,
@@ -181,7 +172,7 @@ export const written = <O extends Operation, A, E, R>(
     const { account, by } = signed
     if (by._tag !== 'TurnKey') return yield* apply(operation)
     const turn = { accountId: account.id, turnId: by.turnId }
-    const where = yield* turnActing(signed)
+    const where = yield* MappingPrograms.actingFor(signed, undefined)
     if ((yield* Assistant.route(account.id, by.turnId)) === 'apply') {
       return where.acting.system === where.own.system
         ? yield* ranForTurn(turn, where.acting, operation)
