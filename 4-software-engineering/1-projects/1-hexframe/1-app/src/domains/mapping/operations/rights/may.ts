@@ -7,6 +7,7 @@ import { Result } from 'effect'
 import {
   type Actor,
   below,
+  type Grant,
   heldBy,
   type Lineage,
   lineageOf,
@@ -15,10 +16,12 @@ import {
   rightsOn,
   type Seen,
   type Sharing,
+  sharingOf,
   type System,
   tileAt,
 } from '../../entities'
-import { NotAllowed, TileNotFound } from '../../errors'
+import { BatchOutdated, NotAllowed, TileNotFound } from '../../errors'
+import { afterOne, type Batched, type Folded, whole } from '../batch/fold'
 import type { Operation } from '../operation'
 
 /** Whether the actor has this right on the Tile of this id: `rightsOn`, asked of one right. */
@@ -195,6 +198,40 @@ export function allowedBatch(
   return opens(sharing, now, kept) || dropsGrants(actor, sharing, gone)
     ? Result.fail(new NotAllowed())
     : Result.void
+}
+
+/** What a System's rights are read from beside where its Tiles stand: its owner, and its Grants. */
+export interface Granted {
+  readonly owner: string
+  readonly grants: ReadonlyArray<Grant>
+}
+
+/**
+ * A batch folded whole over the System the actor runs it on, or adds to it: for its owner, every
+ * right theirs, as `whole` folds it; for anyone else, each Operation once `allowed` found they may
+ * make it on what the ones before it made, by the System's Grants and where each Tile stands then, a
+ * Tile the batch made reading as its parent lets it. All of it, or the first refusal: `TileNotFound`
+ * or `NotAllowed` as `allowed` answers, so a Grant taken back since refuses it, or `BatchOutdated`
+ * once an Operation no longer applies. What the whole batch leaves is `allowedBatch`'s to rule on.
+ */
+export function allowedThrough(
+  actor: Actor,
+  { owner, grants }: Granted,
+  system: System,
+  batch: ReadonlyArray<Batched>,
+): Result.Result<Folded, BatchOutdated | TileNotFound | NotAllowed> {
+  if (owns(actor, owner)) return whole(system, batch)
+  let folded: Folded = { system, events: [], left: [] }
+  for (const batched of batch) {
+    const on = { system: folded.system, sharing: sharingOf(owner, lineageOf(folded.system), grants) }
+    const rights = allowed(actor, on, batched.operation)
+    if (Result.isFailure(rights)) return Result.fail(rights.failure)
+    const next = afterOne(folded.system, batched)
+    if (Result.isFailure(next)) return Result.fail(new BatchOutdated())
+    const { events, system: after } = next.success
+    folded = { ...folded, system: after, events: [...folded.events, ...events] }
+  }
+  return Result.succeed(folded)
 }
 
 /**

@@ -28,7 +28,7 @@ import {
   reading,
   titledIn,
 } from './sharing/reading'
-import { type LinkOf, exportOf, placesOf } from './files/files'
+import { acrossFolder, type LinkOf, exportOf, seenFiles } from './files/files'
 import {
   findInShipped,
   flatShipped,
@@ -49,6 +49,7 @@ import {
   type ReadTile,
   carded,
   rowDirection,
+  type Seen,
   seenBy,
   sharingOf,
   showing,
@@ -60,7 +61,6 @@ import {
   type ToKeep,
   pointing,
   pointsAt,
-  shownAlone,
   type Version,
   withContent,
 } from './entities'
@@ -68,6 +68,7 @@ import {
   added,
   allowed,
   allowedBatch,
+  allowedThrough,
   type Batched,
   type CreateReference,
   type CreateTile,
@@ -95,7 +96,7 @@ import {
 
 export { HelpId, helpRoot, shippedSystem } from './shipped/shipped'
 export type { Acting, Across } from './sharing/reading'
-export { grantsIn, holding, ownerOf, ownTile, shownTile } from './sharing/reading'
+export { agentAt, grantsIn, holding, ownerOf, ownTile, shownTile } from './sharing/reading'
 
 /** The content of a Root nobody has named yet, and of every Reference, which keeps none of its own. */
 export const untitled: Content = { title: '', preview: '', body: '' }
@@ -146,10 +147,38 @@ export const wholeOf = (owner: string) =>
   })
 
 /**
- * The System the actor acts on, flat and whole, its owner's read alone (`reached`): what an export,
- * a Turn's files and a read through a batch read, until they read as the actor may.
+ * The System the actor acts on, flat and whole, its owner's read alone (`reached`): what an export
+ * reads, until it reads as the actor may.
  */
 const ownersWhole = (acting: Acting) => Effect.flatMap(reached(acting), wholeOf)
+
+/**
+ * The System the actor acts on as they may see it with a batch folded over it, the System the batch
+ * makes (`fold`), as a Turn reads it through its Proposal, and with none, as it stands: its owner's
+ * whole, anyone else's as `seenBy` shows it them there, by the Grants it carries, a Tile the batch
+ * makes read as its parent lets them read it; and no Tile of another System resolved, a Turn reading
+ * the System it started in alone, so a Reference to a Tile it does not hold, a pin or a deleted
+ * Tile's, says no id (`pointing`).
+ */
+const seenThrough = (acting: Acting, over: ReadonlyArray<Batched>) =>
+  Effect.gen(function* () {
+    const owner = yield* ownerOf(acting.system)
+    const folded = fold(yield* wholeOf(owner), over).system
+    const grants = owns(acting.actor, owner) ? [] : yield* grantsIn(owner)
+    return seenBy(acting.actor, folded, sharingOf(owner, lineageOf(folded), grants))
+  })
+
+/**
+ * What a read from a Tile of a System as a reader is shown it finds: from a Tile across a gap as from
+ * its own Root, its place above being kept from them, so its parent is none.
+ */
+const foundInSeen = <O extends Field, F extends Field>(
+  seen: Seen,
+  { id, depth, fields }: { id?: string | undefined; depth: Depth; fields: FieldsAsked<O, F> },
+) => {
+  const gap = id === undefined || !Object.hasOwn(seen.gaps, id) ? undefined : seen.gaps[id]
+  return foundIn(gap === undefined ? seen : { ...seen, root: gap }, { id, depth, fields })
+}
 
 /**
  * The Version of the System the actor acts on, as they are shown it: what a client polls to know when
@@ -262,10 +291,9 @@ const find = <O extends Field, F extends Field>(
   if (id !== undefined && shipped !== undefined)
     return findInShipped(shipped, id, { fields, language })
   if (over.length === 0) return findOwn(acting, { id, depth, fields, across })
-  // A Turn reads through its batch, on its own System alone: a Reference to a Tile that System does
-  // not hold, a pin or a deleted Tile's, says no id (`pointing`).
-  return Effect.flatMap(ownersWhole(acting), (held) => {
-    const found = foundIn(shownAlone(fold(held, over).system), { id, depth, fields })
+  // A Turn reads through its batch, as the actor may see the System it makes (`seenThrough`).
+  return Effect.flatMap(seenThrough(acting, over), (seen) => {
+    const found = foundInSeen(seen, { id, depth, fields })
     return found === undefined ? Effect.fail(new TileNotFound()) : Effect.succeed(found)
   })
 }
@@ -411,19 +439,25 @@ export const exportTile = (
   })
 
 /**
- * The System the actor acts on as files, the export of its Root, and where each of its Tiles lives in them,
- * by id, both from one read, so a reader of the files finds a Tile's folder or file by its id. `link`
- * is where the app shows a Tile, for a Reference whose Tile the files leave out. With a batch `over`
- * it, the System the batch makes (`fold`), as the reads through it show it. A Turn's files, read on
- * its own System alone: a Reference to a Tile that System does not hold, a pin or a deleted Tile's,
- * by no id (`referencesShown`).
+ * The System the actor acts on as files, as they may see it (`seenThrough`), and where each of its
+ * Tiles lives in them, by id, both from one read, so a reader of the files finds a Tile's folder or
+ * file by its id: its owner's the export of its Root, whole; anyone else's the export of its star as
+ * they are shown it, from its card, nothing they may not read, and each Tile across a gap with what
+ * they may read below it in a folder of its own (`seenFiles`), whose name it answers when there is
+ * one. `link` is where the app shows a Tile, for a Reference whose Tile the files leave out. With a
+ * batch `over` it, the System the batch makes, as the reads through it show it. A Turn's files, read on
+ * the System it started in alone: a Reference to a Tile that System does not hold, a pin or a deleted
+ * Tile's, by no id.
  */
 export const systemFiles = (acting: Acting, link: LinkOf, over: ReadonlyArray<Batched> = []) =>
-  Effect.gen(function* () {
-    const whole = systemOf(shownAlone(fold(yield* ownersWhole(acting), over).system))
-    const exported = exportOf(whole, whole.id, link)
-    if (exported === undefined) return yield* Effect.die(new Error('A System exports its Root'))
-    return { files: exported.files, places: placesOf(whole) }
+  Effect.map(seenThrough(acting, over), (seen) => {
+    // Across a gap in the order of their Titles, then their ids, so two Turns number them alike.
+    const gaps = Object.values(seen.gaps).toSorted(
+      (a, b) => a.title.localeCompare(b.title) || a.id.localeCompare(b.id),
+    )
+    const across = gaps.map((gap) => systemOf({ ...seen, root: gap }))
+    const { files, places } = seenFiles(systemOf(seen), across, link)
+    return { files, places, ...(across.length > 0 && { across: acrossFolder }) }
   })
 
 /**
@@ -775,14 +809,18 @@ const tileAnswered = (after: System, operation: Operation, made: string | undefi
 
 /**
  * Adds an Operation to a batch kept over the System the actor acts on, writing nothing: `BatchOutdated` once
- * the batch no longer applies whole (`whole`), so nothing is added to a batch that can no longer run;
- * else decided by `decide` on the System the batch makes, refused as it would be there, a create given
+ * the batch no longer applies whole, so nothing is added to a batch that can no longer run, and, for
+ * anyone but its owner, what `allowed` refuses of one of its Operations on what the ones before it
+ * made, a Grant taken back since included (`allowedThrough`); then the Operation, `allowed` asked of
+ * it there for anyone but the owner, then decided by `decide` on the System the batch makes, refused
+ * as it would be there, a create given
  * the id of what it makes now, fresh, so it keeps that id each time the batch is folded again. Answers
  * it as the batch keeps it, Mapping's summary of each event it makes there, and, for a create or an
  * edit, the Tile as the batch now makes it, with its Version, which the writer's next write to it
  * names. `decide` refuses each Operation only what its overload says, so the refusal is typed by it.
  * And `NotAllowed` for one its run would refuse (`allowedBatch`): a batch that, run without a Session,
- * opens a Tile to someone or deletes one carrying a Grant.
+ * opens a Tile to someone or deletes one carrying a Grant. Who adds to it reads what they may there,
+ * so a batch over someone else's System holds only what the actor may write (HEX-134).
  */
 export const addToBatch = <O extends Operation>(
   acting: Acting,
@@ -791,13 +829,20 @@ export const addToBatch = <O extends Operation>(
 ) =>
   Effect.gen(function* () {
     yield* outsideShipped(namedBy(operation))
-    const owner = yield* reached(acting)
+    const owner = yield* ownerOf(acting.system)
     const held = yield* wholeOf(owner)
-    const folded = yield* Effect.fromResult(whole(held, over))
+    const grants = yield* grantsIn(owner)
+    const folded = yield* Effect.fromResult(
+      allowedThrough(acting.actor, { owner, grants }, held, over),
+    )
+    if (!owns(acting.actor, owner)) {
+      const on = { system: folded.system, sharing: sharingOf(owner, lineageOf(folded.system), grants) }
+      yield* Effect.fromResult(allowed(acting.actor, on, operation))
+    }
     const made = yield* madeFor(operation)
     const next = yield* Effect.fromResult(added(folded, operation, made))
     // Refused now what its run would refuse, so a batch holds nothing it can't run.
-    const sharing = sharingOf(owner, lineageOf(held), yield* grantsIn(owner))
+    const sharing = sharingOf(owner, lineageOf(held), grants)
     yield* Effect.fromResult(allowedBatch(acting.actor, sharing, next.system))
     const tile = yield* tileAnswered(next.system, operation, made)
     return {
@@ -848,6 +893,28 @@ export const runBatch = (acting: Acting, batch: ReadonlyArray<Batched>) =>
       changes: events.length,
     }),
   )
+
+/**
+ * Whether a batch runs whole on the System the actor acts on as it stands, as the actor may make it,
+ * its star locked until the transaction ends, writing nothing: for anyone but its owner, each
+ * Operation `allowed` on what the ones before it made (`allowedThrough`), then the whole as
+ * `allowedBatch` rules on it; `BatchOutdated` once one no longer applies, `TileNotFound` or
+ * `NotAllowed` once the actor may not make it, a Grant taken back since included. What the API layer
+ * asks before it runs a batch over someone else's System one write at a time, each its owner's to
+ * undo, under the same lock, so each then runs as it was found to.
+ */
+export const batchAllowed = (acting: Acting, batch: ReadonlyArray<Batched>) =>
+  Effect.gen(function* () {
+    yield* outsideShipped(batch.flatMap(({ operation }) => namedBy(operation)))
+    const owner = yield* ownerOf(acting.system)
+    const system = yield* lockedOf(owner)
+    const grants = yield* grantsIn(owner)
+    const folded = yield* Effect.fromResult(
+      allowedThrough(acting.actor, { owner, grants }, system, batch),
+    )
+    const sharing = sharingOf(owner, lineageOf(system), grants)
+    yield* Effect.fromResult(allowedBatch(acting.actor, sharing, folded.system))
+  })
 
 /**
  * Runs an Operation on the System the actor acts on by the same `operate` as an Operation's own

@@ -66,8 +66,11 @@ interface Step {
   readonly system: System
 }
 
-/** A batched Operation on a System: its events and the System after them, or its refusal. */
-const afterOne = (
+/**
+ * A batched Operation on a System: its events and the System after them, or its refusal. Exported for
+ * `../rights/may.ts`, which folds a batch one Operation at a time, asking `allowed` of each first.
+ */
+export const afterOne = (
   system: System,
   batched: Batched,
   targetElsewhere = false,

@@ -1,5 +1,6 @@
-// A Turn: one run of the agent answering a Message, started afresh in a Tile's folder, the Conversation
-// its only memory, in the Mode its Conversation was in. It records what it spent, what its agent is
+// A Turn: one run of the agent answering a Message, started afresh in a Tile's folder, of the
+// Account's own System or of someone else's (`elsewhere`), the Conversation its only memory, in the
+// Mode its Conversation was in. It records what it spent, what its agent is
 // doing now, and how it ended; one runs at most per Conversation. Pure.
 import { Result, Schema } from 'effect'
 
@@ -53,6 +54,11 @@ export interface Turn {
   readonly message: string
   /** The Tile it starts in, by its id. */
   readonly location: string
+  /**
+   * The star of the System it started in, by its id, when that System is someone else's: the one
+   * its writes and its reads reach alone. None for the Account's own.
+   */
+  readonly elsewhere?: string
   /** The Mode its Conversation was in as it started, which its writes keep until it ends. */
   readonly mode: Mode
   readonly startedAt: Date

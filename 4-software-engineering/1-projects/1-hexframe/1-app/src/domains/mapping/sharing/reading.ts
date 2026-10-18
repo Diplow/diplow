@@ -15,12 +15,14 @@ import {
   type PinnedTiles,
   pointsAt,
   referencesShown,
+  Right,
+  rightsOn,
   sharingOf,
   sightOf,
   type System,
   tileAt,
 } from '../entities'
-import { TileNotFound } from '../errors'
+import { NotAllowed, TileNotFound } from '../errors'
 import type { Operation } from '../operations'
 
 /** Who acts, and on which System, named by its star, the id of its Root. */
@@ -193,6 +195,31 @@ export const ownTile = (acting: Acting, id: string) => tileKept(acting, id, 'rea
  * one that isn't there. Where a link to a Tile may lead them.
  */
 export const shownTile = (acting: Acting, id: string) => tileKept(acting, id, 'shows')
+
+/**
+ * The rights the actor has on a Tile of the System they act on, where they would run the agent, its
+ * *@*: every right for its owner; `TileNotFound` for a Tile they may not read, as for a Reference's
+ * id or one the System holds none of, so nothing tells whether it exists; `NotAllowed` for one they
+ * may read without *@*, which never says what else they may do there. Where a Turn starts, asked
+ * before it starts (HEX-134).
+ */
+export const agentAt = (acting: Acting, id: string) =>
+  Effect.gen(function* () {
+    const owner = yield* ownerOf(acting.system)
+    const rights = owns(acting.actor, owner)
+      ? new Set(Right.literals)
+      : yield* Effect.map(
+          Effect.all([Tiles.use((tiles) => tiles.places(owner)), grantsIn(owner)], {
+            concurrency: 'unbounded',
+          }),
+          ([places, grants]) =>
+            rightsOn(acting.actor, sharingOf(owner, lineageFrom(places), grants), id),
+        )
+    const titled = yield* titledIn(owner, [id], () => rights.has('read'))
+    if (!(id in titled)) return yield* new TileNotFound()
+    if (!rights.has('@')) return yield* new NotAllowed()
+    return Right.literals.filter((right) => rights.has(right))
+  })
 
 /**
  * Whether an Operation pins a Tile of another System, a Reference's create whose target another

@@ -7,11 +7,12 @@
 // acted, as a timeline shows it, which both read.
 import { Effect, Option, Schema } from 'effect'
 
+import * as Assistant from '#/domains/assistant/assistant'
 import type { OwnActor, Someone } from '#/domains/assistant/entities'
 import * as AssistantUndo from '#/domains/assistant/undo/undo'
 import { keyName, type SignedIn } from '#/domains/iam/iam'
 import * as Mapping from '#/domains/mapping/mapping'
-import { type Operation, Undo } from '#/domains/mapping/operations'
+import { type Batched, CreateTile, type Operation, Undo } from '#/domains/mapping/operations'
 
 import { changingIn } from '../../server/bus'
 
@@ -84,4 +85,45 @@ export const writtenInAnothers = <O extends Operation>(
       ),
     )
     return ran.tile
+  })
+
+/**
+ * A batched Operation as it runs alone, a create under the id it was batched with, so what the
+ * batch's later Operations name it by still names it.
+ */
+const runAlone = ({ operation, made }: Batched): Operation => {
+  if (operation._tag !== 'CreateTile' || operation.id !== undefined || made === undefined) {
+    return operation
+  }
+  const { parent, slot, title, preview, body } = operation
+  return new CreateTile({ id: made, parent, slot, title, preview, body })
+}
+
+/**
+ * Runs a batch the signed-in Account makes in someone else's System, the one `acting` names, an
+ * accepted Proposal of a Turn that worked there (HEX-134), in the transaction the caller opened,
+ * whole or not at all: found to run as the writer may there, its star locked (Mapping's
+ * `batchAllowed`), `BatchOutdated`, `TileNotFound` or `NotAllowed` otherwise, nothing run; then
+ * each of its writes as `writtenInAnothers` runs one, in order, its owner told of each and offered
+ * its Undo, the writer's own timeline told of each as made elsewhere. The owner's Conversation is
+ * locked before the System, as every write there takes the two. Answers how many writes it ran.
+ */
+export const batchInAnothers = (
+  signed: SignedIn,
+  { acting, own }: { readonly acting: Mapping.Acting; readonly own: Mapping.Acting },
+  batch: ReadonlyArray<Batched>,
+) =>
+  Effect.gen(function* () {
+    yield* Assistant.lockConversation(yield* Mapping.ownerOf(acting.system))
+    yield* Mapping.batchAllowed(acting, batch)
+    // Found to run whole under the lock, each write runs as it was found to: a refusal is a defect.
+    yield* Effect.forEach(
+      batch,
+      (batched) =>
+        Effect.orDie(
+          writtenInAnothers(signed, { acting, own, across: false }, runAlone(batched)),
+        ),
+      { discard: true },
+    )
+    return batch.length
   })

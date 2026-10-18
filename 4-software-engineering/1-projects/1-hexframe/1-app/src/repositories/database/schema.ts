@@ -292,7 +292,9 @@ export const conversationEntry = pgTable(
 
 /**
  * A Turn of the agent, answering one Message of a Conversation (`message_id`, its Entry), started in
- * the Tile `location` names, which has no key to `tile`: Assistant ignores Mapping. `spent` is what it
+ * the Tile `location` names, which has no key to `tile`: Assistant ignores Mapping. `elsewhere` is the
+ * star of the System it started in when that System is someone else's, by its id, with no key either,
+ * null for the Account's own, as every Turn before HEX-134 was. `spent` is what it
  * spent on the model, in millionths of a dollar, and `reserved` what its calls under way reserved,
  * the most they may cost, until each settles. `step` is what its agent is doing now, a read or a
  * shell command, as Assistant encodes it, null between steps and once it ended. `mode` is the Mode
@@ -312,6 +314,7 @@ export const turn = pgTable(
       .notNull()
       .references(() => conversationEntry.id, { onDelete: 'cascade' }),
     location: text('location').notNull(),
+    elsewhere: text('elsewhere'),
     mode: text('mode').default('apply').notNull(),
     startedAt: timestamp('started_at', { withTimezone: true }).notNull(),
     spent: integer('spent').default(0).notNull(),
@@ -331,7 +334,8 @@ export const turn = pgTable(
  * decides it. `drafts` is the array of them, in the order they were drafted, as Assistant encodes
  * them: each write as the API layer encoded it, which neither the repository nor Assistant reads, and
  * the changes it makes. `entry_id` is its Entry in the
- * timeline, `turn_id` the Turn whose write opened it. `decided_at` and `fate` say when and how the user
+ * timeline, `turn_id` the Turn whose write opened it, `elsewhere` the star of the System its drafts change
+ * when it is someone else's, that Turn's, null for the Account's own. `decided_at` and `fate` say when and how the user
  * decided it, both null while it is open, and `proposal_open_idx` lets one be open at most per
  * Conversation. Deleting a Conversation, its Entry or its Turn deletes it.
  */
@@ -349,6 +353,7 @@ export const proposal = pgTable(
       .notNull()
       .references(() => turn.id, { onDelete: 'cascade' }),
     drafts: jsonb('drafts').notNull(),
+    elsewhere: text('elsewhere'),
     openedAt: timestamp('opened_at', { withTimezone: true }).notNull(),
     decidedAt: timestamp('decided_at', { withTimezone: true }),
     fate: text('fate'),

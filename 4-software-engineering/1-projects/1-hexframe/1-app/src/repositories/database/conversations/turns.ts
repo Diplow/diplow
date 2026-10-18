@@ -19,6 +19,8 @@ export interface TurnRow {
   readonly conversationId: string
   readonly messageId: string
   readonly location: string
+  /** The star of the System it started in when someone else's, as Assistant gave it; null otherwise. */
+  readonly elsewhere: string | null
   /** The Mode it started in, as Assistant names it. */
   readonly mode: string
   readonly startedAt: Date
@@ -36,12 +38,13 @@ export interface Spending {
 }
 
 /**
- * A Turn as it starts: the Message it answers, by its Entry's id, the Tile it starts in, the Mode it
- * starts in, and when.
+ * A Turn as it starts: the Message it answers, by its Entry's id, the Tile it starts in, the star of
+ * the System that Tile stands in when it is someone else's, the Mode it starts in, and when.
  */
 export interface TurnStart {
   readonly messageId: string
   readonly location: string
+  readonly elsewhere?: string | undefined
   readonly mode: string
   readonly startedAt: Date
 }
@@ -118,6 +121,7 @@ const columns = {
   conversationId: turn.conversationId,
   messageId: turn.messageId,
   location: turn.location,
+  elsewhere: turn.elsewhere,
   mode: turn.mode,
   startedAt: turn.startedAt,
   spent: turn.spent,
@@ -157,7 +161,10 @@ const make = Effect.gen(function* () {
       .from(conversation)
       .where(eq(conversation.accountId, accountId))
 
-  const start = (accountId: string, { messageId, location, mode, startedAt }: TurnStart) =>
+  const start = (
+    accountId: string,
+    { messageId, location, elsewhere, mode, startedAt }: TurnStart,
+  ) =>
     conversationFirst(accountId)(
       Effect.gen(function* () {
         const [message] = yield* database
@@ -181,6 +188,7 @@ const make = Effect.gen(function* () {
             conversationId: message.conversationId,
             messageId,
             location,
+            elsewhere: elsewhere ?? null,
             mode,
             startedAt,
           })

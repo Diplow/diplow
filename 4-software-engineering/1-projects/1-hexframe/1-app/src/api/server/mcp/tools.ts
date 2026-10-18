@@ -206,6 +206,10 @@ const refusal = {
     "in ask, your writes are drafted into the user's Proposal, and it no longer applies to the " +
     'System: the user changed a Tile it names since. Write nothing more; say so in your answer, ' +
     'so the user discards it and asks again.',
+  ProposalElsewhere:
+    "in ask, your writes are drafted into the user's Proposal, and the one open changes another " +
+    'System than the one this Turn works in: write nothing more; say so in your answer, so the ' +
+    'user accepts or discards it first.',
   TurnOver:
     'your Turn of the Assistant has ended, by its answer, a Stop, its time or its budget, and an ' +
     'ended Turn writes nothing: write nothing more, and end your answer.',
@@ -272,14 +276,17 @@ const createTile = write({
     NotAllowed: refusal.NotAllowed,
     ShippedReadOnly: refusal.ShippedReadOnly,
     BatchOutdated: refusal.BatchOutdated,
+    ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
   },
   input: NewTileOfAgent,
   // An agent sends no id, so Mapping makes it, fresh: a clash on it is a defect, never a refusal
   // to teach (`TileIdTaken` comes only to a caller that chose its id).
   program: (input: typeof NewTileOfAgent.Type) =>
-    Proposal.written(new CreateTile(input), (operation) =>
-      Effect.catchTag(Mapping.createTile(operation), 'TileIdTaken', (taken) => Effect.die(taken)),
+    Effect.catchTag(
+      Proposal.written(new CreateTile(input), Mapping.createTile),
+      'TileIdTaken',
+      (taken) => Effect.die(taken),
     ),
 })
 
@@ -297,6 +304,7 @@ const editTile = write({
     NotAllowed: refusal.NotAllowed,
     ShippedReadOnly: refusal.ShippedReadOnly,
     BatchOutdated: refusal.BatchOutdated,
+    ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
   },
   input: TileEdit.mapFields(
@@ -333,6 +341,7 @@ const moveTile = write({
     NotAllowed: refusal.NotAllowed,
     ShippedReadOnly: refusal.ShippedReadOnly,
     BatchOutdated: refusal.BatchOutdated,
+    ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
   },
   input: TileMove.mapFields(
@@ -363,6 +372,7 @@ const swapTiles = write({
     NotAllowed: refusal.NotAllowed,
     ShippedReadOnly: refusal.ShippedReadOnly,
     BatchOutdated: refusal.BatchOutdated,
+    ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
   },
   input: TileSwap.mapFields(
@@ -393,6 +403,7 @@ const deleteTile = write({
     NotAllowed: refusal.NotAllowed,
     ShippedReadOnly: refusal.ShippedReadOnly,
     BatchOutdated: refusal.BatchOutdated,
+    ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
   },
   input: TileDelete.mapFields(
@@ -422,6 +433,7 @@ const createReference = write({
     NotAllowed: refusal.NotAllowed,
     ShippedReadOnly: refusal.ShippedReadOnly,
     BatchOutdated: refusal.BatchOutdated,
+    ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
   },
   input: NewReference.mapFields(
@@ -454,6 +466,7 @@ const deleteReference = write({
     NotAllowed: refusal.NotAllowed,
     ShippedReadOnly: refusal.ShippedReadOnly,
     BatchOutdated: refusal.BatchOutdated,
+    ProposalElsewhere: refusal.ProposalElsewhere,
     TurnOver: refusal.TurnOver,
   },
   input: ReferenceSlot.mapFields(
