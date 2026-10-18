@@ -2,7 +2,9 @@
 // thread of what happened, by who acted (`Events`); a Message in its voice, the user's or the agent's,
 // its links woven in as the Tiles they name, a run of the agent's marked on its first only
 // (`Message`); a Proposal, which the user accepts or discards, then may undo (`./Proposal.tsx`); and
-// what a Turn in apply wrote, the receipt it leaves with its Undo, then undone (`Receipt`).
+// what a Turn in apply wrote, the receipt it leaves with its Undo, then undone (`Receipt`); and a
+// change someone else made in the user's System, by who of theirs acted, from outside, its Undo
+// offered once, then undone (`Receipt`, quiet).
 import { offersUndo } from '#/domains/assistant/entities'
 import { m } from '#/paraglide/messages'
 import { Events } from '#/front/ui/chat/entries/Events'
@@ -11,7 +13,7 @@ import { Message } from '#/front/ui/chat/text/Message'
 
 import type { Deciding } from './parts'
 import { ProposalEntry } from './Proposal'
-import { type Block, happenedOf, messageWords, type Naming } from './words'
+import { type Block, changeWords, happenedOf, messageWords, type Naming } from './words'
 
 interface BlockProps {
   block: Block
@@ -34,6 +36,25 @@ export function EntryBlock({ block, naming, decide }: BlockProps) {
     }
     case 'proposal':
       return <ProposalEntry entry={block.entry} naming={naming} decide={decide} />
+    case 'theirs': {
+      const { entry } = block
+      return (
+        <Receipt
+          words={changeWords(entry, naming)}
+          at={entry.at}
+          tone="quiet"
+          undone={entry.undone}
+          onUndo={
+            offersUndo(entry)
+              ? () => {
+                  decide.undo(entry.id)
+                }
+              : undefined
+          }
+          pending={decide.pending}
+        />
+      )
+    }
     case 'applied': {
       const { entry } = block
       return (

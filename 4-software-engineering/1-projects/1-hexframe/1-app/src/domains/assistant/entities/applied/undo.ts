@@ -1,13 +1,14 @@
-// What the Assistant applied, an applied Turn's writes or an accepted Proposal's, undone once: when a
-// Turn's is offered, the Entry of an accepted Proposal once it offers its Undo, whether it may be
-// undone, and the Entry that offered it once it was. What was applied is an aggregate of its own, kept
-// one row per applied Turn or accepted Proposal and locked while it is decided, outside the
-// Conversation's Decider: these rules decide it, as the Turn's are decided outside it too
-// (`hexframe-app-assistant/decisions.md#DEC-23`). Pure.
+// What was applied to the user's System by another than themselves, undone once: an applied Turn's
+// writes or an accepted Proposal's, the Assistant's, and a write someone else made there (HEX-132).
+// When a Turn's is offered, the Entry of an accepted Proposal once it offers its Undo, whether it may
+// be undone, and the Entry that offered it once it was. What was applied is an aggregate of its own,
+// kept one row per applied Turn, accepted Proposal or write of someone else's, and locked while it is
+// decided, outside the Conversation's Decider: these rules decide it, as the Turn's are decided
+// outside it too (`hexframe-app-assistant/decisions.md#DEC-23`). Pure.
 import { Result } from 'effect'
 
 import { NothingToUndo } from '../../errors'
-import type { EntryContent } from '../entry'
+import { type EntryContent, isTheirs } from '../entry'
 
 /**
  * The Entry of an accepted Proposal once what undoes its writes was kept: it then offers its Undo,
@@ -21,9 +22,10 @@ export function offeringEntry(content: EntryContent): EntryContent | undefined {
 }
 
 /**
- * An Entry that offers to undo what the Assistant applied, once the user undid it: an accepted
- * Proposal's, which says it may be undone once what undoes it was kept (`undone: false`), or an
- * applied Turn's, said undone. None for any other, which offers no Undo.
+ * An Entry that offers to undo what was applied, once the user undid it: an accepted Proposal's, which
+ * says it may be undone once what undoes it was kept (`undone: false`), an applied Turn's, and a
+ * change someone else made in the user's System, which says it may be undone as it is recorded, each
+ * said undone. None for any other, which offers no Undo.
  */
 export function undoneEntry(content: EntryContent): EntryContent | undefined {
   switch (content._tag) {
@@ -33,12 +35,17 @@ export function undoneEntry(content: EntryContent): EntryContent | undefined {
         : undefined
     case 'TurnApplied':
       return content.undone ? undefined : { ...content, undone: true }
+    case 'Change':
+      return isTheirs(content) && !content.undone ? { ...content, undone: true } : undefined
     default:
       return undefined
   }
 }
 
-/** Whether an Entry offers to undo what the Assistant applied: an accepted Proposal's, or a Turn's not yet undone. */
+/**
+ * Whether an Entry offers to undo what was applied: an accepted Proposal's, a Turn's or someone
+ * else's change not yet undone.
+ */
 export const offersUndo = (content: EntryContent) => undoneEntry(content) !== undefined
 
 /** What a Turn applied, as Assistant decides whether to offer its Undo: its changes, and its Entry. */

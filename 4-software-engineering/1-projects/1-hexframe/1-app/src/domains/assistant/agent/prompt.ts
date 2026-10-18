@@ -8,7 +8,16 @@
 // What the user's System and timeline say is quoted as data, each text one JSON string in a fenced
 // block, so no Title, Preview or Message reads as one of the Turn's rules. It holds no secret, ever:
 // the Turn's Key never reaches it. Pure.
-import type { Actor, Entry, Fate, Mode, ProposedChange, SharedRight } from '../entities'
+import {
+  type Actor,
+  type Entry,
+  type Fate,
+  isTheirs,
+  type Mode,
+  type ProposedChange,
+  type SharedRight,
+  type Someone,
+} from '../entities'
 
 /** A Tile as the user has it on screen: its id, its Title and its Preview, as Mapping reads them. */
 export interface Glimpse {
@@ -51,6 +60,12 @@ const quoted = (text: string) => JSON.stringify(text)
 const named = (title: string | undefined, id: string) =>
   `${title === undefined || title === '' ? 'an untitled Tile' : quoted(title)} (id ${quoted(id)})`
 
+/** Another Account, as the agent reads it: by its star's Title, if it has one, never as a party. */
+const anotherOf = (star: string) =>
+  star === ''
+    ? 'another Account, whose star has no title'
+    : `another Account, whose star is titled ${quoted(star)}`
+
 /** Who acted, as the agent reads it. */
 const actorOf = (actor: Actor): string => {
   switch (actor._tag) {
@@ -60,6 +75,21 @@ const actorOf = (actor: Actor): string => {
       return 'You, the Assistant,'
     case 'Key':
       return actor.name === undefined ? 'A revoked key' : `The key ${quoted(actor.name)}`
+    case 'Someone':
+      return someoneOf(actor)
+  }
+}
+
+/** Someone else who wrote in the user's System, as the agent reads it: who of theirs acted. */
+function someoneOf({ star, by }: Someone): string {
+  const another = anotherOf(star)
+  switch (by._tag) {
+    case 'You':
+      return `${another.charAt(0).toUpperCase()}${another.slice(1)},`
+    case 'Assistant':
+      return `The agent of ${another},`
+    case 'Key':
+      return `A key of ${another},`
   }
 }
 
@@ -73,10 +103,7 @@ const ends = {
 } as const
 
 /** Who shared a Tile, as the agent reads it: another Account, by its star's Title, if it has one. */
-const sharerOf = (by: string) =>
-  by === ''
-    ? 'Another Account, whose star has no title,'
-    : `Another Account, whose star is titled ${quoted(by)},`
+const sharerOf = (by: string) => someoneOf({ _tag: 'Someone', star: by, by: { _tag: 'You' } })
 
 /** What each right a Tile shared gives lets the user do there, as the agent reads it. */
 const sharedRights: Record<SharedRight, string> = {
@@ -100,13 +127,25 @@ const fates: Record<Fate, string> = {
 const changeLine = ({ verb, tile, other }: ProposedChange) =>
   `${verb} ${named(tile.title, tile.id)}${other === undefined ? '' : `, with ${named(other.title, other.id)}`}`
 
+/**
+ * A change, as a line of the prompt, by who acted: made by the user in someone else's System, said
+ * so; made by someone else in the user's, whether the user undid it.
+ */
+function changeSaid(entry: Extract<Entry, { _tag: 'Change' }>): string {
+  const told = `${actorOf(entry.actor)} ${changeLine(entry)}`
+  if (isTheirs(entry)) return `${told}${entry.undone ? ', which the user undid' : ''}.`
+  return entry.elsewhere === true
+    ? `${told}, in another Account's System, not the user's.`
+    : `${told}.`
+}
+
 /** One Entry, as a line of the prompt. */
 function lineOf(entry: Entry, titles: PromptOf['titles']): string {
   switch (entry._tag) {
     case 'Message':
       return `${entry.author === 'user' ? 'User' : 'You'}: ${quoted(entry.text)}`
     case 'Change':
-      return `${actorOf(entry.actor)} ${changeLine(entry)}.`
+      return changeSaid(entry)
     case 'Proposal': {
       const changes =
         entry.changes.length === 0 ? 'nothing yet' : entry.changes.map(changeLine).join('; ')

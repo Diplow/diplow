@@ -6,7 +6,7 @@ import { createElement, type ReactNode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { conversationDay } from '#/api/assistant/assistant'
-import type { Actor, Entry } from '#/domains/assistant/entities'
+import type { Entry, OwnActor } from '#/domains/assistant/entities'
 import type { System } from '#/domains/mapping/entities'
 import { Batched, CreateTile } from '#/domains/mapping/operations'
 import type { TileNode } from '#/front/ui/canvas/view/tiles'
@@ -47,7 +47,7 @@ const system: System = {
 
 const at = new Date('2026-10-12T10:00:00Z')
 
-const change = (entry: string, actor: Actor): Entry => ({
+const change = (entry: string, actor: OwnActor): Entry => ({
   _tag: 'Change',
   id: entry,
   at,

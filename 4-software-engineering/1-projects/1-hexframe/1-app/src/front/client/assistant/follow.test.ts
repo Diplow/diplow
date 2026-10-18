@@ -43,8 +43,8 @@ function reading(first: unknown, then: unknown) {
 }
 
 /**
- * What the poll answers: the System at a Version, and the Conversation's last Entry and the Turn
- * running, if any.
+ * What the poll answers: the System at a Version, and the Conversation's last Entry, the Turn
+ * running and the Version of a System visited, if any.
  */
 type Latest =
   | number
@@ -53,6 +53,7 @@ type Latest =
       lastEntry?: string
       turn?: { id: string; step?: { tool: string } }
       proposal?: { id: string; drafts: number }
+      visited?: number
     }
 
 /** A Turn running, at the System's Version, its agent at this step if any. */
@@ -351,5 +352,60 @@ describe('the page following the Conversation', () => {
       expect(result.current.said).toMatchObject({ text: 'two drafts' })
     })
     expect(Mapping.system).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('the page following a System it visits', () => {
+  /** Ana's System, as the visitor is shown it, at the Version they are shown. */
+  const visitedAt = (version: number, title: string) => ({
+    ...systemAt(version, title),
+    root: { ...systemAt(version, title).root, id: 'ana' },
+    rights: { ana: ['read'] },
+    gaps: {},
+  })
+
+  /** The visit's stand-ins: Ana's System on its reads, `first` then `then`; the visitor's own beside it. */
+  function visiting(first: unknown, then: unknown) {
+    let visits = 0
+    vi.mocked(Mapping.system).mockImplementation((options) => {
+      if (options?.data === undefined) return ok(systemAt(1, 'Mine'))
+      visits += 1
+      return ok(visits === 1 ? first : then)
+    })
+  }
+
+  function renderVisit() {
+    conversing(dayWith(), dayWith())
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+    const wrapper = ({ children }: { children: ReactNode }) =>
+      createElement(QueryClientProvider, { client }, children)
+    return renderHook(
+      () => {
+        useFollowLatest('ana')
+        return { visited: useSystem({ star: 'ana' }).data?.system }
+      },
+      { wrapper },
+    )
+  }
+
+  it('reads it again on focus once the Version it is shown is another, and not while it stays', async () => {
+    visiting(visitedAt(7, 'First'), visitedAt(9, 'Read again'))
+    polling({ version: 1, visited: 7 }, { version: 1, visited: 7 }, { version: 1, visited: 9 })
+    const { result } = renderVisit()
+    await waitFor(() => {
+      expect(result.current.visited?.root.title).toBe('First')
+    })
+    await waitFor(() => {
+      expect(Assistant.latest).toHaveBeenCalledWith({ data: { visiting: 'ana' } })
+    })
+    refocus()
+    await waitFor(() => {
+      expect(Assistant.latest).toHaveBeenCalledTimes(2)
+    })
+    expect(result.current.visited?.root.title).toBe('First')
+    refocus()
+    await waitFor(() => {
+      expect(result.current.visited?.root.title).toBe('Read again')
+    })
   })
 })

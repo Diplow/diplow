@@ -4,7 +4,8 @@
 // sent, the receipt it leaves; or an export a Tile's menu started, working, then its receipt, or failed.
 // One at a time, the latest. A write ends its form as it is sent, its receipt in the form's place at
 // once, and a refusal puts the form back (`useRefusalState`), the user's words with it. The Root's
-// edit is a widget too, with no place to draw, a pencil in its hex.
+// edit is a widget too, with no place to draw, a pencil in its hex. While the URL visits someone
+// else's System, the forms are of its Tiles (HEX-132), and neither an import nor a pseudo is asked.
 import { useMemo } from 'react'
 
 import {
@@ -45,6 +46,8 @@ interface TileWidgetsProps {
   widgets: TileWidgetsState
   /** A form a refusal put back: on a phone, the chat comes to the front to show it. */
   onFormBack: () => void
+  /** The star of the System the URL visits, someone else's, whose Tiles the forms write; none at home. */
+  visiting?: string | undefined
 }
 
 export function TileWidgets({
@@ -53,9 +56,10 @@ export function TileWidgets({
   onCenter,
   widgets,
   onFormBack,
+  visiting,
 }: TileWidgetsProps) {
   // Read without throwing, as the chat does: a failed read shows on the canvas.
-  const { data } = useSystem({ throwing: false })
+  const { data } = useSystem({ throwing: false, star: visiting })
   // A refused write's receipt goes, and a form put back comes to the front.
   const reopened = useRefusalState(search, onSearchChange, ({ tile, formBack }) => {
     if (tile !== undefined) widgets.actions.refused(tile)
@@ -73,6 +77,7 @@ export function TileWidgets({
     system: data.system,
     root,
     tree,
+    visited: visiting !== undefined,
     reopened,
     onCenter,
     naming: { name: widgets.state.naming, onNameChange: widgets.actions.name },
@@ -92,8 +97,9 @@ export function TileWidgets({
       onSearchChange(afterDelete(tree, parent, node))
     },
   }
-  // A new account is asked its pseudo until it gives one.
-  if (root.title === '' && change.kind === 'none' && widgets.state.shown === undefined) {
+  // A new account is asked its pseudo until it gives one, at home: a star visited is someone else's.
+  const unnamed = root.title === '' && !page.visited
+  if (unnamed && change.kind === 'none' && widgets.state.shown === undefined) {
     return nameOf(page)
   }
   return widgetOf(change, widgets, page)
@@ -123,6 +129,8 @@ interface WidgetContext {
   system: System
   root: SystemTile
   tree: TileNode
+  /** Someone else's System, visited: nothing imported into it, which only lands at home. */
+  visited: boolean
   reopened: Reopened | undefined
   onCenter: (id: string) => void
   /** The pseudo typed so far for the untitled Root, which the canvas shows as it is typed. */
@@ -216,12 +224,20 @@ function newTileOf(
       {...formOf(page, key, undefined)}
       parent={{ id: change.parent, title: parent.title }}
       slot={change.slot}
-      onImport={() => {
-        page.begin({
-          kind: 'import',
-          place: { _tag: 'Slot', parent: change.parent, slot: importSlotOf(page.system, change) },
-        })
-      }}
+      onImport={
+        page.visited
+          ? undefined
+          : () => {
+              page.begin({
+                kind: 'import',
+                place: {
+                  _tag: 'Slot',
+                  parent: change.parent,
+                  slot: importSlotOf(page.system, change),
+                },
+              })
+            }
+      }
     />
   )
 }

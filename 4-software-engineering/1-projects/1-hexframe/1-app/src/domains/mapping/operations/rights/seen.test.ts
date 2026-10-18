@@ -5,7 +5,7 @@ import { transactional } from '#/repositories/database/database'
 import type { GrantRow } from '#/repositories/database/tiles/grants'
 import { granted } from '#/repositories/database/tiles/testing'
 
-import { type Actor, systemOf } from '../../entities'
+import { type Actor, sightVersion, systemOf } from '../../entities'
 import * as Mapping from '../../mapping'
 import {
   actingOnOwn,
@@ -97,7 +97,10 @@ layer(TestTiles)('a System read as someone else sees it, over PGlite', (it) => {
         body: '',
         version: 1,
       })
-      expect(read).toMatchObject({ tiles: {}, rights: { [star]: [] }, gaps: {}, version: 0 })
+      expect(read).toMatchObject({ tiles: {}, rights: { [star]: [] }, gaps: {} })
+      // No count of the System's changes: how what the stranger sees stands, which its poll reads.
+      expect(read.version).toBe(sightVersion(read))
+      expect(yield* Mapping.systemVersion(stranger)).toBe(read.version)
       const opened = yield* Mapping.openTile(stranger, {
         fields: ['title', 'body'],
         language: 'en',

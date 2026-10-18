@@ -525,7 +525,8 @@ function SignedIn() {
       }),
     })
   }
-  const { turn, mode } = useFollowLatest()
+  // The System visited, if any, is followed as the Account's own is.
+  const { turn, mode } = useFollowLatest(search.system)
   // The chat's Messages go after the navigation they follow, from the view they were sent from.
   const { postMessage, underWay } = useNavigationSender()
   const { system, tree, welcoming, path } = useYourSystem()
@@ -615,6 +616,7 @@ function SignedIn() {
                 onFormBack={() => {
                   turning.turn('chat')
                 }}
+                visiting={visit.star}
               />
             </ReadBoundary>
             <ChatInvitation onTutorial={openTutorial} dawning={widgets.state.dawning} />

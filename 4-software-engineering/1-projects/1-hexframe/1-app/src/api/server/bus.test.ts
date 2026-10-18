@@ -6,7 +6,7 @@ import { CurrentKey, CurrentSession, type KeyProof } from '#/domains/iam/iam'
 import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 
-import { type Envelope, WaitUntil, on, serverBus, type Subscription } from './bus'
+import { changingIn, type Envelope, WaitUntil, on, serverBus, type Subscription } from './bus'
 
 // Two events, named for the test rather than in a domain's language.
 class DevHappened extends Schema.TaggedClass<DevHappened>()('DevHappened', { n: Schema.Number }) {}
@@ -138,8 +138,8 @@ describe('the server bus', () => {
 /** A bus whose one subscription keeps every envelope it hears, and what it heard. */
 const listening = () => {
   const heard: Array<Envelope> = []
-  const keep = on(DevHappened, (event, actor) =>
-    Effect.sync(() => void heard.push({ event, actor })),
+  const keep = on(DevHappened, (event, actor, elsewhere) =>
+    Effect.sync(() => void heard.push({ event, actor, elsewhere })),
   )
   return { heard, bus: bus(keep) }
 }
@@ -220,10 +220,18 @@ describe('the envelope', () => {
       Effect.gen(function* () {
         const event = new DevHappened({ n: 1 })
         expect(yield* heardOn({ session: true })).toEqual([
-          { event, actor: Option.some({ account, by: { _tag: 'Session' } }) },
+          {
+            event,
+            actor: Option.some({ account, by: { _tag: 'Session' } }),
+            elsewhere: Option.none(),
+          },
         ])
         expect(yield* heardOn({ keyId: 'k-1' })).toEqual([
-          { event, actor: Option.some({ account, by: { _tag: 'Key', keyId: 'k-1' } }) },
+          {
+            event,
+            actor: Option.some({ account, by: { _tag: 'Key', keyId: 'k-1' } }),
+            elsewhere: Option.none(),
+          },
         ])
       }),
   )
@@ -232,10 +240,25 @@ describe('the envelope', () => {
     Effect.gen(function* () {
       const { heard, bus: listened } = listening()
       yield* settled(new DevHappened({ n: 1 })).pipe(Effect.provide(listened))
-      expect(yield* heardOn({})).toEqual([
-        { event: new DevHappened({ n: 1 }), actor: Option.none() },
+      const none = {
+        event: new DevHappened({ n: 1 }),
+        actor: Option.none(),
+        elsewhere: Option.none(),
+      }
+      expect(yield* heardOn({})).toEqual([none])
+      expect(heard).toEqual([none])
+    }),
+  )
+
+  it.effect("carries where a change was made, by a program changing someone else's System", () =>
+    Effect.gen(function* () {
+      const { heard, bus: listened } = listening()
+      yield* changingIn('star-1')(settled(new DevHappened({ n: 1 }))).pipe(Effect.provide(listened))
+      yield* settled(new DevHappened({ n: 2 })).pipe(Effect.provide(listened))
+      expect(heard.map(({ elsewhere }) => elsewhere)).toEqual([
+        Option.some('star-1'),
+        Option.none(),
       ])
-      expect(heard).toEqual([{ event: new DevHappened({ n: 1 }), actor: Option.none() }])
     }),
   )
 })

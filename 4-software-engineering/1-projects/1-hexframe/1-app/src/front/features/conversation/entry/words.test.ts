@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { type Entry, linkTo } from '#/domains/assistant/entities'
+import { type Entry, linkTo, type OwnActor, type Someone } from '#/domains/assistant/entities'
 import { m } from '#/paraglide/messages'
 import type { Word } from '#/front/ui/chat/text/words'
 
@@ -22,14 +22,11 @@ const tile = (word: Word | undefined) =>
 
 type Changed = Extract<Told, { _tag: 'Change' }>
 
-const change = (actor: Changed['actor'], verb = 'TileEdited'): Changed => ({
-  _tag: 'Change',
-  id: 'c',
-  at,
-  verb,
-  tile: games,
-  actor,
-})
+/** A change by one of the user's own, or by someone else, who offers its Undo until undone. */
+function change(actor: OwnActor | Someone, verb = 'TileEdited'): Changed {
+  const said = { _tag: 'Change', id: 'c', at, verb, tile: games } as const
+  return actor._tag === 'Someone' ? { ...said, actor, undone: false } : { ...said, actor }
+}
 
 describe('happenedOf', () => {
   it('tells a change by who made it, the agent without its name', () => {
@@ -110,6 +107,43 @@ describe('happenedOf', () => {
     if (typeof journal === 'object' && 'tile' in journal) journal.tile.onCenter?.()
     expect(visited).toEqual(['journal'])
     expect(happenedOf(shared(''), naming).words[0]).toEqual({ name: m.conversation_someone() })
+  })
+
+  it('tells a change someone else made in the user’s System by their star, and who of theirs', () => {
+    const by = (of: Someone['by'], star = 'Bob Martin') =>
+      happenedOf(change({ _tag: 'Someone', star, by: of }), naming)
+    expect(by({ _tag: 'You' })).toMatchObject({ who: 'outside' })
+    expect(by({ _tag: 'You' }).words[0]).toEqual({ name: 'Bob Martin' })
+    expect(by({ _tag: 'Assistant' }).words[0]).toEqual({
+      name: m.conversation_someones_agent({ name: 'Bob Martin' }),
+    })
+    expect(by({ _tag: 'Key' }).words[0]).toEqual({
+      name: m.conversation_someones_key({ name: 'Bob Martin' }),
+    })
+    expect(by({ _tag: 'You' }, '').words[0]).toEqual({ name: m.conversation_someone() })
+    // In the user's own System: the Tile as it holds it.
+    expect(tile(by({ _tag: 'You' }).words.at(-1))).toEqual({ title: 'Games', standing: 'live' })
+  })
+
+  it('names the Tiles of a change made in someone else’s System as they were, visited on a click', () => {
+    const visited: string[] = []
+    const there: Changed = {
+      ...change({ _tag: 'You' }, 'TileDeleted'),
+      tile: drafts,
+      elsewhere: true,
+    }
+    const told = happenedOf(there, {
+      ...naming,
+      onCenter: (id) => {
+        visited.push(id)
+      },
+    })
+    expect(told.who).toBe('human')
+    // The user's own System never holds it: not struck through for that.
+    const named = told.words.at(-1)
+    expect(tile(named)).toEqual({ title: 'Drafts', standing: 'live' })
+    if (typeof named === 'object' && 'tile' in named) named.tile.onCenter?.()
+    expect(visited).toEqual(['drafts'])
   })
 })
 
@@ -202,5 +236,18 @@ describe('blocksOf', () => {
       false,
       false,
     ])
+  })
+
+  it('draws a change someone else made in the user’s System apart, with its Undo', () => {
+    const theirs: Entry = {
+      ...change({ _tag: 'Someone', star: 'Bob', by: { _tag: 'You' } }),
+      id: 'c3',
+    }
+    const blocks = blocksOf([
+      change({ _tag: 'You' }),
+      theirs,
+      { ...change({ _tag: 'You' }), id: 'c4' },
+    ])
+    expect(blocks.map((block) => block.kind)).toEqual(['lines', 'theirs', 'lines'])
   })
 })

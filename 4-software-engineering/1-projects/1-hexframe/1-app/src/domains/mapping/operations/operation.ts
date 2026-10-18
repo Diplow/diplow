@@ -97,6 +97,27 @@ export const Operation = Schema.Union([
 export type Operation = typeof Operation.Type
 
 /**
+ * The Tile an Operation is made at: the one it changes, the first a swap names, the one a create or a
+ * Reference goes under. Every Tile it names stands in one System, so the System holding this one is the
+ * System it changes, which the API layer names a write's System by, and the client the System it
+ * decides a write on.
+ */
+export function madeAt(operation: Operation): string {
+  switch (operation._tag) {
+    case 'CreateTile':
+    case 'CreateReference':
+    case 'DeleteReference':
+      return operation.parent
+    case 'EditTile':
+    case 'MoveTile':
+    case 'DeleteTile':
+      return operation.id
+    case 'SwapTiles':
+      return operation.a
+  }
+}
+
+/**
  * An Operation by its name, its tag in camelCase (`swapTiles`): the application service's function
  * that runs it, and the server function and the MCP write that take it.
  */

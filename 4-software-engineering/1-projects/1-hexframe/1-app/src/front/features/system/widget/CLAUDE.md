@@ -21,7 +21,7 @@ Where a Tile is written on home since HEX-102: in the chat, at the conversation'
 
 | File | Holds |
 |---|---|
-| `TileWidgets.tsx` | `TileWidgets`, at the conversation's foot: the form of the change under way, the Root's edit included, or its receipt while the URL still holds it, or who may see a Tile (`share/`); else what followed the last form, its receipt or the export; else, while the Root is untitled, a new account's pseudo. It is where the page reads the refused writes (`useRefusalState`) and deletes from an edit |
+| `TileWidgets.tsx` | `TileWidgets`, at the conversation's foot, on the System the URL visits while it visits one (`visiting`, HEX-132), no pseudo asked nor import offered there: the form of the change under way, the Root's edit included, or its receipt while the URL still holds it, or who may see a Tile (`share/`); else what followed the last form, its receipt or the export; else, while the Root is untitled, a new account's pseudo. It is where the page reads the refused writes (`useRefusalState`) and deletes from an edit |
 | `forms.tsx` | `NewTileWidget`, `EditTileWidget` and `NameRootWidget`, each from form to receipt, on Mapping's form submits |
 | `place.ts` | The widget in Mapping's words, pure: `seatOf` and `slotOf`, a slot as a kind and a place and back; `freeFor`, the places a kind may take under a Tile; `whereIn`, where a Tile goes or stands; `slotForKind`, the slot another kind takes; `tilesBelow`, the Tiles that go along with one; `editedOf`, an edit's changed fields; `refusalOf` and `stillRefused`, a refusal on the widget's fields, cleared as they change. Tested in `place.test.ts` |
 

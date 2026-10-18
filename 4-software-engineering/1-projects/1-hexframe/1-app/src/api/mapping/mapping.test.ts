@@ -596,7 +596,6 @@ describe('who acts, and on which System', () => {
       system,
     })
     const attempts = (acting: Service.Acting): ReadonlyArray<Program> => [
-      Service.systemVersion(acting),
       Service.ownTile(acting, child.id),
       transactional(
         Service.editTile(acting, new EditTile({ id: child.id, version: 1, title: 'Mine now' })),
@@ -607,19 +606,21 @@ describe('who acts, and on which System', () => {
       ),
     ]
     // The other Account's star, and a star that names no System at all, refused alike; and a read
-    // of the System, which shows anyone a star's card, refused that one.
+    // of the System, which shows anyone a star's card, and its Version, refused that one.
     const nowhere = named(crypto.randomUUID())
     for (const attempt of [
       ...attempts(named(root.id)),
       ...attempts(nowhere),
       Service.system(nowhere),
+      Service.systemVersion(nowhere),
     ]) {
       expect(await run(stranger, attempt)).toMatchObject({
         ok: false,
         failure: { _tag: 'TileNotFound', kind: 'NotFound' },
       })
     }
-    // The other Account's star read: its card, untitled, and nothing below it.
+    // The other Account's star read: its card, untitled, and nothing below it; its Version is how
+    // that stands (`operations/rights/seen.test.ts`).
     expect(await value(run(stranger, Service.system(named(root.id))))).toMatchObject({
       root: { id: root.id, title: '', body: '' },
       tiles: {},

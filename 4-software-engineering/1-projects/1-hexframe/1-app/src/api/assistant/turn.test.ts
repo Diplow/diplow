@@ -147,7 +147,7 @@ describe('a Turn and its Key', () => {
     const byKey = await byBearer(Redacted.value(key.secret))
     const sessionOnly: ReadonlyArray<Effect.Effect<unknown, Failure, Services>> = [
       Assistant.sendMessage(sent('Me again', location)),
-      Assistant.latest,
+      Assistant.latestOf(undefined),
       Assistant.assistantAvailable,
       Iam.issueKey('mine now'),
       Iam.keys,
@@ -196,7 +196,7 @@ describe('a Turn and its Key', () => {
     const answered = await value(run(signedIn, Assistant.sendMessage(sent('Hello.', location))))
     expect(answered).not.toHaveProperty('turn')
     expect(answered.entry).toMatchObject({ _tag: 'Message', author: 'user', text: 'Hello.' })
-    expect(await value(run(signedIn, Assistant.latest))).not.toHaveProperty('turn')
+    expect(await value(run(signedIn, Assistant.latestOf(undefined)))).not.toHaveProperty('turn')
   })
 
   it('starts nowhere without a Session', async () => {

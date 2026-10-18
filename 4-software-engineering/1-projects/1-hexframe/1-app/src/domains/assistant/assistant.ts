@@ -19,7 +19,6 @@ import { type ConversationRow, Proposals } from '#/repositories/database/convers
 import { type TurnRow, Turns } from '#/repositories/database/conversations/turns'
 
 import {
-  type Actor,
   type Day,
   dayAt,
   deadlineOf,
@@ -31,6 +30,7 @@ import {
   isBadEnd,
   Mode,
   type Navigation,
+  type OwnActor,
   ProposedChange,
   routeOf,
   type Shared,
@@ -126,11 +126,22 @@ export const recordNavigation = (accountId: string, navigation: Navigation, ago:
   record(accountId, navigation, ago)
 
 /**
- * Records a change to the System, or an import, as Mapping summarized it, with who acted: an Entry
- * of the Conversation of the Account it changed.
+ * Records a change to a System, or an import, as Mapping summarized it, with who acted: an Entry of
+ * the Conversation of the Account that made it, in its own System or, `elsewhere`, in someone else's,
+ * which the Entry then says, its Tiles standing there.
  */
-export const recordChange = (accountId: string, summarized: Summarized, actor: Actor) =>
-  record(accountId, { ...summarized, actor })
+export const recordChange = (
+  accountId: string,
+  summarized: Summarized,
+  actor: OwnActor,
+  { elsewhere = false }: { readonly elsewhere?: boolean } = {},
+) =>
+  record(
+    accountId,
+    elsewhere && summarized._tag === 'Change'
+      ? { ...summarized, actor, elsewhere }
+      : { ...summarized, actor },
+  )
 
 /**
  * Records a Tile shared with the Account, in its own Conversation, as the API layer tells it: who

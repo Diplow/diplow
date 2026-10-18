@@ -84,11 +84,14 @@ export function besideReceipt(
 }
 
 /**
- * What `/undo` undoes: of the Entries, oldest first, the latest that offers its Undo, an accepted
- * Proposal or an applied Turn, by the id the Undo takes; none when nothing may be undone.
+ * What `/undo` undoes, the agent's last change: of the Entries, oldest first, the latest accepted
+ * Proposal or applied Turn that offers its Undo, by the id the Undo takes; none when nothing may be
+ * undone. Someone else's change is undone from its own Entry, never by `/undo`.
  */
 export function latestUndoable(entries: ReadonlyArray<Entry>): string | undefined {
-  const latest = entries.findLast(offersUndo)
+  const latest = entries.findLast(
+    (entry) => (entry._tag === 'Proposal' || entry._tag === 'TurnApplied') && offersUndo(entry),
+  )
   if (latest?._tag === 'Proposal') return latest.proposal
   if (latest?._tag === 'TurnApplied') return latest.turn
   return undefined

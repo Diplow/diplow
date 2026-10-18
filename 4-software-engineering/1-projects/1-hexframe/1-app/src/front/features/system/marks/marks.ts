@@ -67,7 +67,8 @@ export function acceptedOf(
 
 /**
  * The changes to the System recorded since the page read today first (`known`, the Entries it held
- * then), by the agent or a Key, each Tile they name touched; the user's own are left out. A change
+ * then), by the agent, a Key or someone else, each Tile they name touched, someone else's marked as a
+ * Key's, from outside; the user's own are left out. A change
  * the user's acceptance of a Proposal made is recorded as the agent's: the first Change by the
  * Assistant after the Proposal's Entry that matches one of its changes is theirs (`accepted`), and
  * each of its changes is answered once, so a later change by the agent to the same Tile stays the
@@ -86,7 +87,9 @@ export function touchesOf(
         : -1
     if (landed !== -1) owed.splice(landed, 1)
     if (known.has(entry.id)) return []
-    const by: By = entry.actor._tag === 'Key' ? 'key' : landed === -1 ? 'agent' : 'human'
+    // A Key and someone else alike come from outside the user and their agent.
+    const outside = entry.actor._tag === 'Key' || entry.actor._tag === 'Someone'
+    const by: By = outside ? 'key' : landed === -1 ? 'agent' : 'human'
     const tiles = [entry.tile.id, ...(entry.other === undefined ? [] : [entry.other.id])]
     return tiles.map((tile): Touch => ({ tile, by, entry: entry.id }))
   })

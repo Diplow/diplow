@@ -50,7 +50,9 @@ async function answered(text: string) {
   await waited()
   await until(
     async () =>
-      (await value(run(signedIn, Assistant.latest))).turn === undefined ? true : undefined,
+      (await value(run(signedIn, Assistant.latestOf(undefined)))).turn === undefined
+        ? true
+        : undefined,
     'ended',
   )
   return sent

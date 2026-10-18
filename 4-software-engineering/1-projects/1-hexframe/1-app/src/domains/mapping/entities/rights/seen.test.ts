@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import type { FoundTile, PlacedReference, PlacedTile, System } from '../system'
 import { systemOf } from '../system'
 import { type Actor, Grant, type GrantValue, lineageOf, sharingOf, type Subject } from './rights'
-import { cardOf, seenBy } from './seen'
+import { cardOf, seenBy, sightVersion } from './seen'
 
 // A System as an actor may see it, on a System made by hand: whole for its owner, every right on
 // every Tile; for anyone else, only what they may read, the star as its card, and a Tile below one
@@ -102,8 +102,10 @@ describe('a System as anyone else sees it', () => {
     ])
     expect(seen.rights).toMatchObject({ ana: ['read'], journal: ['read'], draft: ['read'] })
     expect(seen.gaps).toEqual({})
-    // How many changes the System saw would tell of the Tiles kept from him: he is shown none.
-    expect(seen.version).toBe(0)
+    // How many changes the System saw would tell of the Tiles kept from him: he is shown how what he
+    // sees stands instead.
+    expect(seen.version).toBe(sightVersion(seen))
+    expect(seen.version).not.toBe(system.version)
   })
 
   it('keeps Journal and what is below it from a stranger, a Reference to it too', () => {
@@ -172,5 +174,40 @@ describe('a System as anyone else sees it', () => {
     )
     expect(Object.keys(seen.tiles).sort()).toEqual(['draft', 'entry', 'journal'])
     expect(seen.gaps).toEqual({})
+  })
+})
+
+describe('the Version a reader who is not the owner is shown', () => {
+  /** Ana's System with one of its Tiles changed, as a write would leave it, its count moved on. */
+  const changed = (id: string, change: Partial<PlacedTile>): System => {
+    const held = system.tiles[id]
+    if (held?._tag !== 'Tile') throw new Error(`No Tile ${id}`)
+    return { ...system, tiles: { ...system.tiles, [id]: { ...held, ...change } }, version: 10 }
+  }
+
+  const strangerOn = (seen: System, sharing = scenario) =>
+    seenBy(actor('stranger'), seen, sharing).version
+
+  it('stays as it is for a change to a Tile kept from them, the count moving on', () => {
+    expect(strangerOn(changed('entry', { title: 'Hidden', version: 2 }))).toBe(strangerOn(system))
+  })
+
+  it('moves for a change to a Tile they see, its card, a Tile come or gone, and their rights', () => {
+    const before = strangerOn(system)
+    expect(strangerOn(changed('garden', { title: 'Orchard', version: 2 }))).not.toBe(before)
+    expect(strangerOn({ ...system, root: { ...star, title: 'Ana Lima' } })).not.toBe(before)
+    const left = Object.fromEntries(Object.entries(system.tiles).filter(([id]) => id !== 'garden'))
+    expect(strangerOn({ ...system, tiles: left })).not.toBe(before)
+    // The same rights by another Grant say the same; a right more says another.
+    const scenarioWith = (more: Grant) =>
+      sharedBy(
+        grant('ana', everyone, 'read'),
+        grant('journal', everyone, 'none'),
+        grant('ana', family, 'read'),
+        more,
+      )
+    expect(strangerOn(system, scenarioWith(grant('garden', everyone, 'read')))).toBe(before)
+    const toStranger = grant('garden', { _tag: 'Account', id: 'stranger' }, 'read+write')
+    expect(strangerOn(system, scenarioWith(toStranger))).not.toBe(before)
   })
 })
