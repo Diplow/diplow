@@ -1383,7 +1383,7 @@
   "widget_group_rename": "Rename it",
   "widget_group_delete": "Delete the group",
   "widget_group_back": "Back",
-  "widget_group_deleted": "{name} deleted: what it was shared, it reaches no one now.",
+  "widget_group_deleted": "{name} deleted: what was shared with it reaches no one now.",
   "widget_group_picker_kicker": "groups",
   "widget_group_picker_what": "The groups of the Organizations you belong to.",
   "widget_group_picker_none": "You belong to no Organization yet.",
