@@ -43,13 +43,14 @@ export const actorOf = ({ account, by }: SignedIn) => {
  * a Key of theirs by no name, the one they gave it being theirs alone.
  */
 const someoneOf = (signed: SignedIn, own: Mapping.Acting) =>
-  Effect.map(Mapping.glimpses(own, [own.system]), ([star]): Someone => ({
-    _tag: 'Someone',
-    star: star?.title ?? '',
-    by: {
-      _tag: signed.by._tag === 'Session' ? 'You' : signed.by._tag === 'Key' ? 'Key' : 'Assistant',
-    },
-  }))
+  Effect.map(
+    Effect.all([Mapping.glimpses(own, [own.system]), actorOf(signed)]),
+    ([[star], acted]): Someone => ({
+      _tag: 'Someone',
+      star: star?.title ?? '',
+      by: acted._tag === 'Key' ? { _tag: 'Key' } : acted,
+    }),
+  )
 
 /**
  * Runs a write the signed-in Account makes in someone else's System, the one `acting` names, as
