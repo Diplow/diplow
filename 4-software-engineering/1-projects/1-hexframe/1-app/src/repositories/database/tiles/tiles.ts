@@ -6,7 +6,7 @@
 // interleave between what Mapping checked and what it wrote. A read from
 // one Tile walks down a generation per query and selects only the content columns asked, so a Body
 // nobody asked for never leaves the database. The Grants a System's Tiles carry are read here too
-// (./grants.ts).
+// (./grants.ts), and the stars whose Title holds a query, across every System (`starsTitled`).
 import { type SQL, and, asc, eq, ilike, inArray, isNull, ne, notIlike } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import { Context, Data, Effect, Layer } from 'effect'
