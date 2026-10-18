@@ -17,16 +17,23 @@ export interface MembershipRow {
   readonly role: MemberRole
 }
 
-/** One member of an Organization: the Account, by its id, and its role. */
+/**
+ * One member of an Organization: the Account, by its id, its role, and whether it joined of its own
+ * accord, as the Organization's maker did, rather than being added without asking.
+ */
 export interface MemberRow {
   readonly account: string
   readonly role: MemberRole
+  readonly joined: boolean
 }
 
 export class Organizations extends Context.Service<
   Organizations,
   {
-    /** Adds an Organization of this id, its first member this Account, an admin. Inside a transaction. */
+    /**
+     * Adds an Organization of this id, its first member this Account, an admin who joined. Inside a
+     * transaction.
+     */
     readonly create: (
       organization: string,
       admin: string,
@@ -46,15 +53,18 @@ export class Organizations extends Context.Service<
     readonly locked: (
       organization: string,
     ) => Effect.Effect<ReadonlyArray<MemberRow>, never, InTransaction>
-    /** Adds an Account to an Organization with a role, answering false when it was one already. */
+    /**
+     * Adds an Account to an Organization with a role, as no member who joined, answering false when
+     * it was one already.
+     */
     readonly add: (
       organization: string,
-      member: MemberRow,
+      member: Omit<MemberRow, 'joined'>,
     ) => Effect.Effect<boolean, never, InTransaction>
     /** Sets a member's role. Inside a transaction. */
     readonly setRole: (
       organization: string,
-      member: MemberRow,
+      member: Omit<MemberRow, 'joined'>,
     ) => Effect.Effect<void, never, InTransaction>
     /** Takes an Account out of an Organization. Inside a transaction. */
     readonly remove: (
@@ -69,7 +79,7 @@ const make = Effect.gen(function* () {
 
   const membersOf = (id: string) =>
     database
-      .select({ account: membership.accountId, role: membership.role })
+      .select({ account: membership.accountId, role: membership.role, joined: membership.joined })
       .from(membership)
       .where(eq(membership.organizationId, id))
       .orderBy(asc(membership.createdAt), asc(membership.accountId))
@@ -93,7 +103,7 @@ const make = Effect.gen(function* () {
           yield* database.insert(organization).values({ id }).pipe(Effect.orDie)
           yield* database
             .insert(membership)
-            .values({ organizationId: id, accountId: admin, role: 'admin' })
+            .values({ organizationId: id, accountId: admin, role: 'admin', joined: true })
             .pipe(Effect.orDie)
         }),
       ),

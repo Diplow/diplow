@@ -57,7 +57,7 @@ export function VisitPage(props: VisitPageProps) {
       // Organization's admin: `Reach`, DEC-9, DEC-13.
       reach={{
         visiting: data.rights,
-        owner: data.asOwner,
+        asOwner: data.asOwner,
         members: role !== undefined && role !== null,
       }}
       search={search}

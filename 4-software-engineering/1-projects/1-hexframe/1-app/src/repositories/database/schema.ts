@@ -424,8 +424,9 @@ const memberRoles = ['admin', 'member'] as const
 
 /**
  * An Account's place in an Organization, one at most per Account and Organization, an `admin` or a
- * `member`. Deleting either deletes it. That an Organization keeps one admin at least is IAM's to
- * hold, under the Organization's row's lock, never a check here.
+ * `member`, and whether it joined of its own accord (`joined`), as its maker did, rather than being
+ * added by an admin without asking. Deleting either deletes it. That an Organization keeps an admin
+ * who joined is IAM's to hold, under the Organization's row's lock, never a check here.
  */
 export const membership = pgTable(
   'membership',
@@ -437,6 +438,7 @@ export const membership = pgTable(
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
     role: text('role', { enum: memberRoles }).notNull(),
+    joined: boolean('joined').default(false).notNull(),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [

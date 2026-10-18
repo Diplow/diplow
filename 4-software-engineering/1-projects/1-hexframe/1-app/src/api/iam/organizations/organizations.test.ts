@@ -6,6 +6,7 @@ import * as Service from '#/domains/mapping/mapping'
 import { browser } from '#/repositories/auth/testing'
 import { Conversations } from '#/repositories/database/conversations/conversations'
 
+import * as Someone from '../../assistant/someone/someone'
 import * as Mapping from '../../mapping/programs'
 import { noKey, run, type StartContext } from '../../server/run'
 import { MemberRole, OrganizationName } from './organizations'
@@ -111,12 +112,16 @@ describe('an Organization, made', () => {
   })
 
   it('keeps no timeline: its admin’s write there is told in no Conversation of its own', async () => {
-    const { asAna, star, plans } = await atelier()
+    const { ana, asAna, star, plans } = await atelier()
     const edit = { id: plans.id, version: plans.version, preview: 'The year ahead.' }
     await value(run(asAna, Mapping.editTile(edit)))
     expect(await value(run(asAna, Mapping.visit({ tile: plans.id })))).toEqual({ system: star })
     const organization = await value(run(signedOut, Service.ownerOf(star)))
     expect(await lastEntryOf(organization)).toBeUndefined()
+    // Whose timeline a write there tells, beside the writer's, the one rule a Turn's write and an
+    // accepted Proposal there lock Conversations by: none for an Organization, the owner for an Account.
+    expect(await value(run(signedOut, Someone.toldOwner(star)))).toBeUndefined()
+    expect(await value(run(signedOut, Someone.toldOwner(ana.star)))).toBe(ana.account.id)
     const seen = await value(run(asAna, Mapping.systemAt(star)))
     expect(seen.tiles[plans.id]).toMatchObject({ preview: 'The year ahead.' })
   })
@@ -255,6 +260,21 @@ describe("an Organization's members", () => {
     expect(
       await refusal(run(asAna, Organizations.addMember({ star: ana.star, member: cleo.star }))),
     ).toBe('OrganizationNotFound')
+    // A stranger naming a star of nobody learns nothing more than that it is no Organization of theirs.
+    const asCleo = request(cleo.account)
+    const nobody = crypto.randomUUID()
+    for (const outcome of [
+      run(asCleo, Organizations.addMember({ star, member: nobody })),
+      run(asCleo, Organizations.removeMember({ star, member: nobody })),
+    ]) {
+      expect(await refusal(outcome)).toBe('OrganizationNotFound')
+    }
+    expect(await refusal(run(asAna, Organizations.addMember({ star, member: nobody })))).toBe(
+      'AccountNotFound',
+    )
+    expect(await refusal(run(asAna, Organizations.removeMember({ star, member: nobody })))).toBe(
+      'MemberNotFound',
+    )
   })
 
   it('keep their last admin, and are managed from a Session alone', async () => {

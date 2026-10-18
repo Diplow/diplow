@@ -34,7 +34,7 @@ import { tilesBelow } from './widget/place'
  * through; on one they visit, someone else's, those the rights Mapping showed them there let through
  * too (`Seen`'s, asked of Mapping's `shownAllowed`, a preview the server decides again), the agent
  * where they hold *@* (HEX-134), and never who sees a Tile, its export nor an import, which are the
- * owner's or land at home; unless they stand for its owner there (`owner`, `Seen`'s `owned`), an
+ * owner's or land at home; unless they stand for its owner there (`asOwner`, as `Seen` says it), an
  * Organization's admin, who shares its Tiles as its owner does (HEX-136). Its star's menu opens the
  * Organization's Members widget for each of its members (`members`). What a visitor sees at all is
  * Mapping's to say; `hexframe-app-sharing-organizations/decisions.md#DEC-4`, `#DEC-9`, `#DEC-11`,
@@ -45,7 +45,7 @@ export type Reach =
   | {
       readonly visiting: Seen['rights']
       /** Whether the user stands for the owner of the System visited: an Organization's admin. */
-      readonly owner?: boolean
+      readonly asOwner?: boolean
       /** Whether the star visited is an Organization's the user belongs to. */
       readonly members?: boolean
     }
@@ -64,7 +64,7 @@ const homeAlone: ReadonlySet<Verb> = new Set(['export', 'import'])
 
 /** The lines the user may not take on a System visited for not being its owner, or for being away. */
 const notTheirs = (reach: Exclude<Reach, 'owned'>) =>
-  reach.owner === true ? homeAlone : ownersAlone
+  reach.asOwner === true ? homeAlone : ownersAlone
 
 /**
  * Whether a Tile's menu opens an Organization's Members widget for the user: on its star, of an

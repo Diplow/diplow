@@ -2,6 +2,7 @@ CREATE TABLE "membership" (
 	"organization_id" text,
 	"account_id" text,
 	"role" text NOT NULL,
+	"joined" boolean DEFAULT false NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "membership_pkey" PRIMARY KEY("organization_id","account_id"),
 	CONSTRAINT "membership_role_check" CHECK ("role" in ('admin', 'member'))

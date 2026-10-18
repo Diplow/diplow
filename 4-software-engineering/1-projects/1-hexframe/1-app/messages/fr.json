@@ -1349,7 +1349,7 @@
   "widget_share_members": "Les membres de {title}",
   "error_iam_organization_not_found": "Cette organisation n’existe pas, ou vous n’en êtes pas membre.",
   "error_iam_admin_required": "Seuls les admins de cette organisation gèrent ses membres.",
-  "error_iam_last_admin": "Une organisation garde au moins un admin : faites d’abord de quelqu’un d’autre un admin.",
+  "error_iam_last_admin": "Une organisation garde un admin qui l’a rejointe de lui-même : quelqu’un ajouté par un admin ne peut pas encore prendre cette place.",
   "error_iam_account_not_found": "Seule l’étoile de quelqu’un peut rejoindre : celle-ci est celle d’une organisation, ou de personne.",
   "error_iam_already_member": "Cette personne est déjà membre.",
   "error_iam_member_not_found": "Cette personne n’est pas membre de cette organisation.",

@@ -7,7 +7,7 @@
 import { Effect } from 'effect'
 
 import type { Role } from '#/domains/iam/entities'
-import { AccountNotFound, MemberNotFound, OrganizationNotFound } from '#/domains/iam/errors'
+import { OrganizationNotFound } from '#/domains/iam/errors'
 import * as Iam from '#/domains/iam/iam'
 import * as Organizations from '#/domains/iam/organizations/organizations'
 import type { StarCard } from '#/domains/mapping/entities'
@@ -50,11 +50,14 @@ const organizationAt = (star: string) =>
   )
 
 /**
- * The Account a member's star names, by its id, or `refused` for a star that names none. Whether it
- * is an Account at all, rather than an Organization, is IAM's to say.
+ * The Account a member's star names, by its id, `''` for a star that names none, which no Account
+ * nor member has: IAM then refuses it after it found the request is an admin's, so a stranger
+ * learns nothing of a member's star (`AccountNotFound`, `MemberNotFound`) before
+ * `OrganizationNotFound`. Whether it is an Account at all, rather than an Organization, is IAM's to
+ * say.
  */
-const accountAt = <E>(star: string, refused: () => E) =>
-  Effect.catchTag(Mapping.ownerOf(star), 'TileNotFound', () => Effect.fail(refused()))
+const accountAt = (star: string) =>
+  Effect.catchTag(Mapping.ownerOf(star), 'TileNotFound', () => Effect.succeed(''))
 
 /**
  * The role of the Account the request's Session proves in the Organization a star names, none when
@@ -106,7 +109,7 @@ export const members = ({ star }: { readonly star: string }) =>
 export const addMember = ({ star, member }: { readonly star: string; readonly member: string }) =>
   Effect.gen(function* () {
     const organization = yield* organizationAt(star)
-    const account = yield* accountAt(member, () => new AccountNotFound())
+    const account = yield* accountAt(member)
     yield* transactional(Organizations.addMember(organization, account))
     return null
   })
@@ -126,7 +129,7 @@ export const setMemberRole = ({
 }) =>
   Effect.gen(function* () {
     const organization = yield* organizationAt(star)
-    const account = yield* accountAt(member, () => new MemberNotFound())
+    const account = yield* accountAt(member)
     yield* transactional(Organizations.setRole(organization, account, role))
     return null
   })
@@ -145,7 +148,7 @@ export const removeMember = ({
 }) =>
   Effect.gen(function* () {
     const organization = yield* organizationAt(star)
-    const account = yield* accountAt(member, () => new MemberNotFound())
+    const account = yield* accountAt(member)
     yield* transactional(Organizations.removeMember(organization, account))
     return null
   })

@@ -3,8 +3,11 @@
 // admin, read on every request, never kept in a Session or a Turn; what an admin may do in the
 // Organization's System is Mapping's, which counts them as its owner, as the API layer hands it
 // (`belonging`). Creating one and managing its members take a Session (`sessionOnly`), never a Key
-// nor a Turn's Key. An Organization keeps one admin at least: its last can neither leave, nor be
-// removed, nor be made a member. Its name and Handle are its star's, Mapping's, which IAM never keeps.
+// nor a Turn's Key. An Organization keeps one admin at least who joined it of their own accord, as
+// its maker did: that last can neither leave, nor be removed, nor be made a member, while someone an
+// admin added without asking, and made an admin, may always be taken out, themselves leaving
+// included, so nobody is left holding an Organization they never chose. Its name and Handle are its
+// star's, Mapping's, which IAM never keeps.
 import { Effect } from 'effect'
 
 import { type MemberRow, Organizations } from '#/repositories/database/organizations/organizations'
@@ -94,9 +97,18 @@ const roleOf = (found: ReadonlyArray<MemberRow>, account: string) => {
   return role === undefined ? Effect.fail(new MemberNotFound()) : Effect.succeed(role)
 }
 
-/** Whether an Organization's members hold one admin alone, this Account. */
-const lastAdmin = (found: ReadonlyArray<MemberRow>, account: string) =>
-  found.every((member) => member.role !== 'admin' || member.account === account)
+/**
+ * Whether this Account is the Organization's last admin who joined of their own accord: taking it
+ * out, or making it a member, would leave the Organization to admins who never chose it, or none.
+ * An admin added without asking is never that one, so they may always leave.
+ */
+const lastJoinedAdmin = (found: ReadonlyArray<MemberRow>, account: string) => {
+  const holds = (member: MemberRow) => member.role === 'admin' && member.joined
+  return (
+    found.some((member) => member.account === account && holds(member)) &&
+    !found.some((member) => member.account !== account && holds(member))
+  )
+}
 
 /**
  * Adds an Account to an Organization, a member, by one of its admins from a Session, without asking
@@ -116,15 +128,15 @@ export const addMember = (organization: string, account: string) =>
 
 /**
  * Makes a member an admin, or an admin a member, by one of its admins from a Session:
- * `MemberNotFound` for an Account not among its members, and `LastAdmin` for its last admin made a
- * member. Inside a transaction.
+ * `MemberNotFound` for an Account not among its members, and `LastAdmin` for its last admin who
+ * joined made a member (`lastJoinedAdmin`). Inside a transaction.
  */
 export const setRole = (organization: string, account: string, role: Role) =>
   Effect.gen(function* () {
     const found = yield* managedBy(organization)
     const was = yield* roleOf(found, account)
     if (was === role) return
-    if (role === 'member' && lastAdmin(found, account)) return yield* new LastAdmin()
+    if (role === 'member' && lastJoinedAdmin(found, account)) return yield* new LastAdmin()
     yield* Organizations.use((organizations) =>
       organizations.setRole(organization, { account, role }),
     )
@@ -132,13 +144,14 @@ export const setRole = (organization: string, account: string, role: Role) =>
 
 /**
  * Takes an Account out of an Organization, by one of its admins from a Session, themselves included:
- * `MemberNotFound` for an Account not among its members, and `LastAdmin` for its last admin. Holds
- * from the next request on, since nothing is kept of it. Inside a transaction.
+ * `MemberNotFound` for an Account not among its members, and `LastAdmin` for its last admin who
+ * joined (`lastJoinedAdmin`). Holds from the next request on, since nothing is kept of it. Inside a
+ * transaction.
  */
 export const removeMember = (organization: string, account: string) =>
   Effect.gen(function* () {
     const found = yield* managedBy(organization)
     const role = yield* roleOf(found, account)
-    if (role === 'admin' && lastAdmin(found, account)) return yield* new LastAdmin()
+    if (role === 'admin' && lastJoinedAdmin(found, account)) return yield* new LastAdmin()
     yield* Organizations.use((organizations) => organizations.remove(organization, account))
   })

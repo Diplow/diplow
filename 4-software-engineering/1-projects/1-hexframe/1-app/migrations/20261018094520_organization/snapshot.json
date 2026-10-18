@@ -1,7 +1,7 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "339e8b94-877a-40c1-9bd2-ae156c92d6ef",
+  "id": "2beede71-33c0-4855-bc1e-3250e7b33d6f",
   "prevIds": [
     "87620f9a-0941-425f-b362-b77df41c3a1c"
   ],
@@ -848,6 +848,19 @@
       "generated": null,
       "identity": null,
       "name": "role",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "membership"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "name": "joined",
       "entityType": "columns",
       "schema": "public",
       "table": "membership"

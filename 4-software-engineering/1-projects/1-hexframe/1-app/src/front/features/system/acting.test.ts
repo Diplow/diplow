@@ -329,7 +329,7 @@ describe('the lines a System visited leaves out', () => {
     const read = visiting()
     const admin: Systems = {
       ...systems,
-      reach: read === 'owned' ? read : { ...read, owner: true },
+      reach: read === 'owned' ? read : { ...read, asOwner: true },
     }
     const center = withoutOf(admin, hex('tile:root'))
     expect(center).not.toContain('share')

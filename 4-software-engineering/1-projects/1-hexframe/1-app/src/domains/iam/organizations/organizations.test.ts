@@ -68,7 +68,7 @@ layer(TestLayer)('Organizations', (it) => {
       expect(yield* isOrganization(team)).toBe(true)
       expect(yield* isOrganization(ana.account.id)).toBe(false)
       expect(yield* ana.asSession(members(team))).toEqual([
-        { account: ana.account.id, role: 'admin' },
+        { account: ana.account.id, role: 'admin', joined: true },
       ])
       expect(yield* belonging(ana.account.id)).toEqual({
         admins: [team],
@@ -83,8 +83,8 @@ layer(TestLayer)('Organizations', (it) => {
       const team = yield* madeBy(ana)
       yield* ana.asSession(transactional(addMember(team, bob.account.id)))
       expect(yield* bob.asSession(members(team))).toEqual([
-        { account: ana.account.id, role: 'admin' },
-        { account: bob.account.id, role: 'member' },
+        { account: ana.account.id, role: 'admin', joined: true },
+        { account: bob.account.id, role: 'member', joined: false },
       ])
       expect(yield* belonging(bob.account.id)).toEqual({
         admins: [],
@@ -126,26 +126,43 @@ layer(TestLayer)('Organizations', (it) => {
     }),
   )
 
-  it.effect('keep their last admin: never demoted nor removed, leaving once another is one', () =>
+  it.effect(
+    'keep their last admin who joined: never demoted nor removed, themselves included',
+    () =>
+      Effect.gen(function* () {
+        const [ana, bob] = [yield* someone, yield* someone]
+        const team = yield* madeBy(ana)
+        const byAna = <A, E, R>(program: Effect.Effect<A, E, R>) =>
+          ana.asSession(transactional(program))
+        expect(yield* failedWith(byAna(setRole(team, ana.account.id, 'member')))).toBe('LastAdmin')
+        expect(yield* failedWith(byAna(removeMember(team, ana.account.id)))).toBe('LastAdmin')
+        // Bob, added without asking and made an admin, never takes her place: she still may not leave.
+        yield* byAna(addMember(team, bob.account.id))
+        yield* byAna(setRole(team, bob.account.id, 'admin'))
+        expect((yield* belonging(bob.account.id)).admins).toEqual([team])
+        expect(yield* failedWith(byAna(removeMember(team, ana.account.id)))).toBe('LastAdmin')
+        expect(yield* failedWith(byAna(setRole(team, ana.account.id, 'member')))).toBe('LastAdmin')
+        expect(yield* failedWith(byAna(removeMember(team, crypto.randomUUID())))).toBe(
+          'MemberNotFound',
+        )
+      }),
+  )
+
+  it.effect('let an admin added without asking leave, so nobody holds one they never chose', () =>
     Effect.gen(function* () {
       const [ana, bob] = [yield* someone, yield* someone]
       const team = yield* madeBy(ana)
-      const byAna = <A, E, R>(program: Effect.Effect<A, E, R>) =>
-        ana.asSession(transactional(program))
-      expect(yield* failedWith(byAna(setRole(team, ana.account.id, 'member')))).toBe('LastAdmin')
-      expect(yield* failedWith(byAna(removeMember(team, ana.account.id)))).toBe('LastAdmin')
-      yield* byAna(addMember(team, bob.account.id))
-      yield* byAna(setRole(team, bob.account.id, 'admin'))
-      expect((yield* belonging(bob.account.id)).admins).toEqual([team])
-      yield* byAna(removeMember(team, ana.account.id))
-      expect(yield* belonging(ana.account.id)).toEqual({ admins: [], groups: [] })
-      expect(yield* bob.asSession(members(team))).toEqual([
-        { account: bob.account.id, role: 'admin' },
-      ])
+      yield* ana.asSession(transactional(addMember(team, bob.account.id)))
+      yield* ana.asSession(transactional(setRole(team, bob.account.id, 'admin')))
       const byBob = <A, E, R>(program: Effect.Effect<A, E, R>) =>
         bob.asSession(transactional(program))
-      expect(yield* failedWith(byBob(setRole(team, bob.account.id, 'member')))).toBe('LastAdmin')
-      expect(yield* failedWith(byBob(removeMember(team, ana.account.id)))).toBe('MemberNotFound')
+      yield* byBob(setRole(team, bob.account.id, 'member'))
+      yield* ana.asSession(transactional(setRole(team, bob.account.id, 'admin')))
+      yield* byBob(removeMember(team, bob.account.id))
+      expect(yield* belonging(bob.account.id)).toEqual({ admins: [], groups: [] })
+      expect(yield* ana.asSession(members(team))).toEqual([
+        { account: ana.account.id, role: 'admin', joined: true },
+      ])
     }),
   )
 

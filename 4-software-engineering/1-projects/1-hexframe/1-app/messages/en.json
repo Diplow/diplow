@@ -1349,7 +1349,7 @@
   "widget_share_members": "{title}'s members",
   "error_iam_organization_not_found": "This Organization doesn't exist, or you're not among its members.",
   "error_iam_admin_required": "Only this Organization's admins manage its members.",
-  "error_iam_last_admin": "An Organization keeps one admin at least: make someone else an admin first.",
+  "error_iam_last_admin": "An Organization keeps one admin who joined it of their own accord: someone an admin added can't take that place yet.",
   "error_iam_account_not_found": "Only someone's star can join: this one is an Organization's, or no one's.",
   "error_iam_already_member": "They're a member already.",
   "error_iam_member_not_found": "They're not a member of this Organization.",
