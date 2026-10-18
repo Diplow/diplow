@@ -7,6 +7,7 @@ import {
   bigint,
   boolean,
   check,
+  foreignKey,
   index,
   integer,
   json,
@@ -445,5 +446,56 @@ export const membership = pgTable(
     primaryKey({ columns: [table.organizationId, table.accountId] }),
     index('membership_accountId_idx').on(table.accountId),
     check('membership_role_check', inArray(table.role, [...memberRoles])),
+  ],
+)
+
+/**
+ * A Group of an Organization's own (HEX-137), beside its Members Group, which needs no row: by its id,
+ * a UUID IAM makes, which a Grant names, opaque to Mapping, and its name, one per Organization. IAM
+ * compares names whatever their case, under the Organization's row's lock; the key here holds them
+ * apart as written. Deleting the Organization deletes it.
+ */
+export const organizationGroup = pgTable(
+  'organization_group',
+  {
+    id: text('id').primaryKey(),
+    organizationId: text('organization_id')
+      .notNull()
+      .references(() => organization.id, { onDelete: 'cascade' }),
+    name: text('name').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    unique('organization_group_name_unique').on(table.organizationId, table.name),
+    unique('organization_group_of_unique').on(table.id, table.organizationId),
+  ],
+)
+
+/**
+ * An Account in a Group, one at most per Group and Account, always among the Group's Organization's
+ * members: its key to `membership` deletes it once the Account leaves the Organization, its key to
+ * the Group, of that same Organization, once the Group is deleted.
+ */
+export const groupMember = pgTable(
+  'group_member',
+  {
+    groupId: text('group_id').notNull(),
+    organizationId: text('organization_id').notNull(),
+    accountId: text('account_id').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.groupId, table.accountId] }),
+    foreignKey({
+      name: 'group_member_group_fkey',
+      columns: [table.groupId, table.organizationId],
+      foreignColumns: [organizationGroup.id, organizationGroup.organizationId],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'group_member_membership_fkey',
+      columns: [table.organizationId, table.accountId],
+      foreignColumns: [membership.organizationId, membership.accountId],
+    }).onDelete('cascade'),
+    index('group_member_accountId_idx').on(table.accountId),
   ],
 )

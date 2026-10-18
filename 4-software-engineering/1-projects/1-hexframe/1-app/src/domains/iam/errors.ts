@@ -97,6 +97,29 @@ export class MemberNotFound extends Schema.TaggedError<MemberNotFound>()('Member
   kind: kind('NotFound'),
 }) {}
 
+/**
+ * A Group's name is blank, or longer than 40 characters, counted as a reader counts them
+ * (`groupNameBounds`).
+ */
+export class GroupNameInvalid extends Schema.TaggedError<GroupNameInvalid>()(
+  'GroupNameInvalid',
+  invalid,
+) {}
+
+/** Another Group of the Organization has this name already, whatever its case. */
+export class GroupNameTaken extends Schema.TaggedError<GroupNameTaken>()(
+  'GroupNameTaken',
+  invalid,
+) {}
+
+/**
+ * No Group of this id: none has it, it was deleted, or it belongs to no Organization the Account is
+ * a member of. Which is not said.
+ */
+export class GroupNotFound extends Schema.TaggedError<GroupNotFound>()('GroupNotFound', {
+  kind: kind('NotFound'),
+}) {}
+
 export const iamFailures = [
   SignedOut,
   CredentialsRejected,
@@ -114,4 +137,7 @@ export const iamFailures = [
   AccountNotFound,
   AlreadyMember,
   MemberNotFound,
+  GroupNameInvalid,
+  GroupNameTaken,
+  GroupNotFound,
 ] as const

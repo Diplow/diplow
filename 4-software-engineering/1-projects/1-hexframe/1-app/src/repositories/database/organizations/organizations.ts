@@ -1,12 +1,14 @@
 // IAM's Organizations: the `organization` and `membership` tables (../schema.ts), which Better Auth
 // does not keep. An Organization is its id alone, its name being its star's Title in Mapping; who
-// belongs to it is a membership per Account, an admin or a member. IAM decides what a role lets
-// someone do, and that an Organization keeps an admin; this folder reads and writes the rows.
+// belongs to it is a membership per Account, an admin or a member; and its Groups of its own, with who
+// is in each (./groups.ts, merged in here). IAM decides what a role lets someone do, and that an
+// Organization keeps an admin; this folder reads and writes the rows.
 import { and, asc, eq } from 'drizzle-orm'
 import { Context, Effect, Layer } from 'effect'
 
 import { Database, InTransaction, inTransaction } from '../database'
 import { membership, organization, user } from '../schema'
+import { type GroupRows, groupRowsOf } from './groups'
 
 /** A role in an Organization, as the `membership` table keeps it. */
 type MemberRole = 'admin' | 'member'
@@ -29,7 +31,7 @@ export interface MemberRow {
 
 export class Organizations extends Context.Service<
   Organizations,
-  {
+  GroupRows & {
     /**
      * Adds an Organization of this id, its first member this Account, an admin who joined. Inside a
      * transaction.
@@ -97,6 +99,7 @@ const make = Effect.gen(function* () {
     and(eq(membership.organizationId, id), eq(membership.accountId, account))
 
   return Organizations.of({
+    ...groupRowsOf(database),
     create: (id, admin) =>
       inTransaction(
         Effect.gen(function* () {
