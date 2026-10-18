@@ -4,14 +4,20 @@ import { cleanup, renderHook, waitFor } from '@testing-library/react'
 import { createElement, type ReactNode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { setGrant, whoReaches } from '#/api/mapping/mapping'
+import { findStars, setGrant, starOfLink, whoReaches } from '#/api/mapping/mapping'
 
 import { CallFailed } from '../calls'
-import { useSetGrant, useWhoReaches } from './sharing'
+import { typedOf, useSetGrant, useStarsFor, useWhoReaches } from './sharing'
 
 // The hooks over stand-ins for Mapping's server functions: what each calls, and when who reaches a
-// Tile is read again. The server functions themselves are covered in src/api/mapping/seen.test.ts.
-vi.mock('#/api/mapping/mapping', () => ({ whoReaches: vi.fn(), setGrant: vi.fn() }))
+// Tile is read again; and what is typed in the star picker, read as a Title or a link, and the stars
+// it leads to. The server functions themselves are covered in src/api/mapping/seen.test.ts.
+vi.mock('#/api/mapping/mapping', () => ({
+  whoReaches: vi.fn(),
+  setGrant: vi.fn(),
+  findStars: vi.fn(),
+  starOfLink: vi.fn(),
+}))
 
 afterEach(() => {
   cleanup()
@@ -74,5 +80,103 @@ describe('who reaches a Tile, on the client', () => {
     await waitFor(() => {
       expect(whoReaches).toHaveBeenCalledTimes(2)
     })
+  })
+})
+
+const page = 'https://hexframe.ai/fr/?center=x'
+const star = { id: crypto.randomUUID(), title: 'Ana', preview: 'Gardens.' }
+
+describe('what is typed in the star picker', () => {
+  it('reads a Title as the query it makes, none while too short', () => {
+    expect(typedOf('  Ana ', page)).toEqual({ by: 'title', query: 'Ana' })
+    expect(typedOf('A', page)).toEqual({ by: 'title', query: undefined })
+    expect(typedOf('t/abc', page)).toEqual({ by: 'title', query: 't/abc' })
+  })
+
+  it('reads a link to a Tile on this site, its page or home centered on it, as that Tile', () => {
+    const tile = crypto.randomUUID()
+    for (const link of [
+      `/t/${tile}`,
+      `/fr/t/${tile}`,
+      `https://hexframe.ai/t/${tile}`,
+      `HTTPS://hexframe.ai/?center=${tile}`,
+    ]) {
+      expect(typedOf(link, page)).toEqual({ by: 'link', tile })
+    }
+  })
+
+  it('reads a link to no Tile, on another site or by no UUID, as one naming none', () => {
+    for (const link of [
+      `https://elsewhere.example/t/${crypto.randomUUID()}`,
+      '/t/help',
+      '/settings',
+      'https://',
+    ]) {
+      expect(typedOf(link, page)).toEqual({ by: 'link', tile: undefined })
+    }
+  })
+})
+
+/** Renders the stars `typed` leads to, under a QueryClient of its own. */
+function rendering(typed: string) {
+  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+  const wrapper = ({ children }: { children: ReactNode }) =>
+    createElement(QueryClientProvider, { client }, children)
+  return renderHook(({ text }) => useStarsFor(text, page), {
+    wrapper,
+    initialProps: { text: typed },
+  })
+}
+
+describe('the stars what is typed leads to', () => {
+  it('asks nothing while too short, then finds the stars a Title holds', async () => {
+    vi.mocked(findStars).mockResolvedValue({ ok: true, value: [star] } as never)
+    const { result, rerender } = rendering('A')
+    expect(result.current).toEqual({ state: 'short' })
+    expect(findStars).not.toHaveBeenCalled()
+    rerender({ text: 'Ana' })
+    expect(result.current).toEqual({ state: 'looking' })
+    await waitFor(() => {
+      expect(result.current).toEqual({ state: 'found', stars: [star] })
+    })
+    expect(findStars).toHaveBeenCalledWith({ data: { query: 'Ana' } })
+  })
+
+  it('keeps the stars found while the next are on their way', async () => {
+    vi.mocked(findStars).mockResolvedValueOnce({ ok: true, value: [star] } as never)
+    vi.mocked(findStars).mockReturnValueOnce(new Promise(() => undefined) as never)
+    const { result, rerender } = rendering('Ana')
+    await waitFor(() => {
+      expect(result.current).toEqual({ state: 'found', stars: [star] })
+    })
+    rerender({ text: 'Anab' })
+    expect(result.current).toEqual({ state: 'found', stars: [star], stale: true })
+  })
+
+  it('leads a link to its star, to the user’s own, or nowhere', async () => {
+    const tile = crypto.randomUUID()
+    const answers = [
+      [
+        { _tag: 'Star', star },
+        { state: 'found', stars: [star] },
+      ],
+      [{ _tag: 'Own' }, { state: 'own' }],
+      [{ _tag: 'Nowhere' }, { state: 'nowhere' }],
+    ] as const
+    for (const [answer, shown] of answers) {
+      vi.mocked(starOfLink).mockResolvedValue({ ok: true, value: answer } as never)
+      const { result, unmount } = rendering(`/t/${tile}`)
+      await waitFor(() => {
+        expect(result.current).toEqual(shown)
+      })
+      unmount()
+    }
+    expect(starOfLink).toHaveBeenCalledWith({ data: { tile } })
+  })
+
+  it('asks nothing of a link that names no Tile', () => {
+    const { result } = rendering('/settings')
+    expect(result.current).toEqual({ state: 'nowhere' })
+    expect(starOfLink).not.toHaveBeenCalled()
   })
 })

@@ -12,6 +12,7 @@ import {
   anyone,
   type Field,
   type GrantChange,
+  nowhere,
   type ShippedRoot,
 } from '#/domains/mapping/entities'
 import { TileNotFound } from '#/domains/mapping/errors'
@@ -27,6 +28,7 @@ import {
 import * as Landing from '#/domains/mapping/landing/landing'
 import * as Mapping from '#/domains/mapping/mapping'
 import * as Sharing from '#/domains/mapping/sharing/sharing'
+import * as Stars from '#/domains/mapping/sharing/stars'
 import type { Locale } from '#/paraglide/runtime'
 import { HttpExchange } from '#/repositories/auth/auth'
 import { transactional } from '#/repositories/database/database'
@@ -124,6 +126,30 @@ export const visit = ({ tile }: { tile: string }) =>
         acting.system === own.system ? {} : { system: acting.system }
       return Effect.as(Mapping.shownTile(acting, tile), led)
     },
+  )
+
+/**
+ * The stars whose Title holds the query, by their cards, those it starts first, a few at most, the
+ * Account's own left out: stars alone, a private System's included, whose card anyone sees, never a
+ * Tile below one. What the star picker finds someone by (HEX-130).
+ */
+export const findStars = ({ query }: { query: string }) =>
+  forAccount((acting) => Stars.starsTitled(acting, query))
+
+/**
+ * Where a link to a Tile leads the star picker (HEX-130), on the System holding it, as `visit` names
+ * it (`onSystem`): Mapping's `linkedStar`, its star by its card once the Account is shown the Tile, its
+ * own said to be its own, nowhere for a Tile kept from it or none. A Turn's Key, which `onSystem` keeps
+ * from every other System, is led nowhere too, an answer rather than a refusal, as Mapping answers.
+ */
+export const starOfLink = ({ tile }: { tile: string }) =>
+  Effect.catchTag(
+    onSystem(
+      () => Mapping.holding(tile),
+      (acting, own) => Stars.linkedStar(acting, own.system, tile),
+    ),
+    'TileNotFound',
+    () => Effect.succeed(nowhere),
   )
 
 /**
