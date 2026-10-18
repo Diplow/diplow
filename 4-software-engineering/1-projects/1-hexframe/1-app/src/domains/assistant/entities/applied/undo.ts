@@ -1,5 +1,7 @@
 // What was applied to the user's System by another than themselves, undone once: an applied Turn's
-// writes or an accepted Proposal's, the Assistant's, and a write someone else made there (HEX-132).
+// writes, the Assistant's, or an accepted Proposal's, the agent's draft the user decided, theirs once
+// accepted (`hexframe-app-sharing-organizations/decisions.md#DEC-12`), and a write someone else made
+// there (HEX-132).
 // When a Turn's is offered, the Entry of an accepted Proposal once it offers its Undo, whether it may
 // be undone, and the Entry that offered it once it was. What was applied is an aggregate of its own,
 // kept one row per applied Turn, accepted Proposal or write of someone else's, and locked while it is
