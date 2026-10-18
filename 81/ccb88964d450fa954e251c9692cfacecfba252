@@ -1,0 +1,54 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/share/gallery.tsx
+  s_eb2c82211b20e8::t_9b5dd4a556c55f 2-5,13-14,36,46-49,51,54-55,59-66,68-74,84,89-93,97,102
+  s_eb2c82211b20e8::t_b4fd1e0c635337 94-95
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/sharing/sharing.test.ts
+  s_eb2c82211b20e8::t_7fb32545304869 221-223
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_eb2c82211b20e8::t_3e3be57ee84dc2 243-244,1279,1281-1283,1287-1288,1292-1294
+  s_eb2c82211b20e8::t_6d4be25b268606 1295
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/share/rows.ts
+  s_eb2c82211b20e8::t_f83d0e91142668 3,17-18,31-35,40-41,56-60,63-74,81
+  s_eb2c82211b20e8::t_08354acf4e4163 4-8,10,12,83-110,115-122
+  s_eb2c82211b20e8::t_7fb32545304869 111-114
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/share/rights.ts
+  s_eb2c82211b20e8::t_0165cfb72a44d4 1-27
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/ui/chat/widgets/share/ShareWidget.tsx
+  s_eb2c82211b20e8::t_91eb843e502b28 4-8,10,17,19-23,28,36-40,45-48,50-53,67,80,89-97,100-112,151-171,174,176-177,182-183,191-192,211
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/share/ShareWidgets.tsx
+  s_eb2c82211b20e8::t_08354acf4e4163 19,33-35,45,51-54,62,65,67,72,77,81
+  s_eb2c82211b20e8::t_e0ebefe0ebc64d 3-4,6-10,12,14,31-32,40-42,44,50,55-61,63-64,66,68-71,76,79-80,82-85
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/entry/words.test.ts
+  s_eb2c82211b20e8::t_6b2aeefdee3030 108
+  s_eb2c82211b20e8::t_47b9894cc2ee2f 88-107,109-113
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/entry/words.ts
+  s_eb2c82211b20e8::t_9817dd926127b1 3-5,23,224-227,249-269
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/widget/share/rows.test.ts
+  s_eb2c82211b20e8::t_5dbed8d35aadca 5,7-9,65-130
+  s_eb2c82211b20e8::t_d31486e61d3a6b 131
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/recording.test.ts
+  s_eb2c82211b20e8::t_922e196dd396dd 232,234-247,249-276
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/entities/rights/reach.ts
+  s_eb2c82211b20e8::t_48ba76f5cb2065 27
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_eb2c82211b20e8::t_6d4be25b268606 1295
+  s_eb2c82211b20e8::t_3e3be57ee84dc2 243-244,1279,1281-1283,1287-1288,1292-1294
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/conversation/fixtures.ts
+  s_eb2c82211b20e8::t_7fb32545304869 4-5,163-169
+  s_eb2c82211b20e8::t_5af46b3eb40a1d 170
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "81ccb88964d450fa954e251c9692cfacecfba252",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
