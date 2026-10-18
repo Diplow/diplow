@@ -1,0 +1,56 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/acting.test.ts
+  s_eb2c82211b20e8::t_42562d34f7b459 332
+4-software-engineering/1-projects/1-hexframe/1-app/messages/en.json
+  s_eb2c82211b20e8::t_74ea7098bcfc5f 1352
+4-software-engineering/1-projects/1-hexframe/.run/registers/hexframe-app-sharing-organizations/decisions.md
+  s_eb2c82211b20e8::t_5309abc8970c9f 194
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/schema.ts
+  s_eb2c82211b20e8::t_1579c752dae2fe 427-429,441
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/visit/VisitPage.tsx
+  s_eb2c82211b20e8::t_42562d34f7b459 60
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/organizations/CLAUDE.md
+  s_eb2c82211b20e8::t_c52d6f0c8904ca 1-25
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/CLAUDE.md
+  s_eb2c82211b20e8::t_5309abc8970c9f 39
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/acting.ts
+  s_eb2c82211b20e8::t_42562d34f7b459 37,48,67
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261018094520_organization/snapshot.json
+  s_eb2c82211b20e8::t_1579c752dae2fe 1-2669
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/organizations/organizations.test.ts
+  s_eb2c82211b20e8::t_c52d6f0c8904ca 129-148
+  s_eb2c82211b20e8::t_74ea7098bcfc5f 71,86-87,149-151,155-156,159-165
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/organizations/organizations.test.ts
+  s_eb2c82211b20e8::t_ab575fdec34d43 263-277
+  s_eb2c82211b20e8::t_42562d34f7b459 9,115,121-124
+4-software-engineering/1-projects/1-hexframe/1-app/src/front/features/system/search/search.test.ts
+  s_eb2c82211b20e8::t_c52d6f0c8904ca 80-95,223-224
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261018094520_organization/migration.sql
+  s_eb2c82211b20e8::t_1579c752dae2fe 1-18
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/iam/organizations/organizations.ts
+  s_eb2c82211b20e8::t_1579c752dae2fe 6-10,100-106,109,111,131-132,139,147-149,155
+  s_eb2c82211b20e8::t_c52d6f0c8904ca 107-108,110
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/CLAUDE.md
+  s_eb2c82211b20e8::t_5309abc8970c9f 22,30
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/organizations/organizations.ts
+  s_eb2c82211b20e8::t_1579c752dae2fe 20-23,27,33-36,56-59,62,67,82,106
+4-software-engineering/1-projects/1-hexframe/1-app/messages/fr.json
+  s_eb2c82211b20e8::t_74ea7098bcfc5f 1352
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/iam/organizations/programs.ts
+  s_eb2c82211b20e8::t_ab575fdec34d43 10,53-57,59-60,112,132,151
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f051120c8290279aa1422e42c0c6dd6454c5a32f",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "unknown"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
