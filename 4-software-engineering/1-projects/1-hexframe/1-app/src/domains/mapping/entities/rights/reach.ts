@@ -1,23 +1,40 @@
 // Who reaches a Tile, and from where, as its owner reads it in the Share widget: for each subject a
 // System's Grants name, and Everyone, the value it has on the Tile and the Tile whose Grant gives
-// it; and what the owner sets there, for Everyone so far, `inherit` removing the Tile's Grant so its
-// value comes from above again. Pure: Mapping's sharing (`../../sharing/`) reads and writes the
-// Grants, the front words the list.
+// it, an Account named by its star; and what the owner sets there, for Everyone or for someone named
+// by their star, `inherit` removing the Tile's Grant so its value comes from above again, and when
+// that first opens the Tile to someone, which their timeline is told. Pure: Mapping's sharing
+// (`../../sharing/`) reads and writes the Grants, the front words the list.
 import { Schema } from 'effect'
 
+import type { StarCard } from '../star'
 import { TileId } from '../tile'
-import { Everyone, type GrantValue, originOn, type Sharing, type Subject } from './rights'
+import { Everyone, GrantValue, originOn, Reading, type Sharing, type Subject } from './rights'
+
+/** What the owner sets on a Tile for Everyone: `read`, `none`, or `inherit`. Never more than read. */
+export const EveryoneChoice = Schema.Literals(['read', 'none', 'inherit'])
 
 /**
- * A Tile's Grant as its owner sets it, for Everyone: `read`, `none`, or `inherit`, which removes the
- * Grant so the Tile's value comes from its parent again. Everyone reads at most, so neither `write`
- * nor `@` is ever offered. An Account comes with HEX-131, a Group after it.
+ * What the owner sets on a Tile for someone: any value, `none` to `read+write+@`, or `inherit`,
+ * which removes the Tile's Grant so the value comes from the Tile above again.
  */
-export const GrantChange = Schema.Struct({
-  tile: TileId,
-  subject: Everyone,
-  value: Schema.Literals(['read', 'none', 'inherit']),
-})
+export const Choice = Schema.Literals([...GrantValue.literals, 'inherit'])
+export type Choice = typeof Choice.Type
+
+/**
+ * Someone a Grant is set for, as its owner names them: by their star, their Handle, its id, never by
+ * an id of IAM's, which nobody types (HEX-130). Mapping finds the Account it stands for.
+ */
+const Someone = Schema.TaggedStruct('Account', { star: TileId })
+
+/**
+ * A Tile's Grant as its owner sets it, a Tile by its UUID: for Everyone, `read`, `none`, or
+ * `inherit`, so neither `write` nor `@` is ever offered; for someone named by their star, any
+ * `Choice`. A Group comes after.
+ */
+export const GrantChange = Schema.Union([
+  Schema.Struct({ tile: TileId, subject: Everyone, value: EveryoneChoice }),
+  Schema.Struct({ tile: TileId, subject: Someone, value: Choice }),
+])
 export type GrantChange = typeof GrantChange.Type
 
 /**
@@ -31,18 +48,24 @@ export interface Reach {
 }
 
 /**
- * What a subject's value on a Tile reads as the owner's choice there, `GrantChange`'s inverse: its
- * value where its Grant is set on the Tile, Everyone's being `read` or `none`, else `inherit`.
+ * One subject reaching a Tile, named: an Account by its star's card, none for an Account with no
+ * star, nor for a Group, which IAM names later. What the Share widget lists (`namedBy`).
  */
-export const choiceOn = ({ value, from }: Reach, tile: string): GrantChange['value'] => {
-  if (from !== tile) return 'inherit'
-  return value === 'read' ? 'read' : 'none'
+export interface NamedReach extends Reach {
+  readonly star: StarCard | undefined
 }
 
-/** Who reaches a Tile: Everyone, always, and everyone else who does. */
-export interface Reaching {
+/**
+ * What a subject's value on a Tile reads as the owner's choice there, `GrantChange`'s inverse: its
+ * value where its Grant is set on the Tile, else `inherit`.
+ */
+export const choiceOn = ({ value, from }: Reach, tile: string): Choice =>
+  from === tile ? value : 'inherit'
+
+/** Who reaches a Tile: Everyone, always, and everyone else who does, named or not yet. */
+export interface Reaching<Other extends Reach = Reach> {
   readonly everyone: Reach
-  readonly others: ReadonlyArray<Reach>
+  readonly others: ReadonlyArray<Other>
 }
 
 /**
@@ -62,3 +85,31 @@ export function reachOn(sharing: Sharing, tile: string): Reaching {
     }),
   }
 }
+
+/** The Accounts reaching a Tile, by id, whose stars name them. */
+export const accountsIn = ({ others }: Reaching): ReadonlyArray<string> =>
+  others.flatMap(({ subject }) => (subject._tag === 'Account' ? [subject.id] : []))
+
+/** Who reaches a Tile, each Account named by its star, by the owner it stands for. */
+export const namedBy = (
+  { everyone, others }: Reaching,
+  stars: ReadonlyMap<string, StarCard>,
+): Reaching<NamedReach> => ({
+  everyone,
+  others: others.map((reach) => ({
+    ...reach,
+    star: reach.subject._tag === 'Account' ? stars.get(reach.subject.id) : undefined,
+  })),
+})
+
+const reads = Schema.is(Reading)
+
+/**
+ * Whether a choice opens the Tile to its subject by a Grant of its own: before it, the Tile set
+ * nothing for them; after it, it lets them read, or more. What tells someone a Tile was shared with
+ * them, once per Grant: any change of a Grant set there already says nothing, `none` to `read`
+ * included, so toggling a value never tells again, nor does `none`, nor `inherit`, whatever the Tile
+ * above gives. A Grant removed then set again is a share of its own.
+ */
+export const opens = (before: Reach, tile: string, choice: Choice): choice is Reading =>
+  reads(choice) && choiceOn(before, tile) === 'inherit'

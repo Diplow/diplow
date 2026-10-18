@@ -127,6 +127,13 @@ export function mayShare(
 }
 
 /**
+ * Whether a Grant on the System may name this Account: anyone but its owner, who may do everything
+ * there already, so a Grant to them would only list them among those it is shared with, `NotAllowed`.
+ */
+export const grantableTo = (sharing: Sharing, account: string): Result.Result<void, NotAllowed> =>
+  account === sharing.owner ? Result.fail(new NotAllowed()) : Result.void
+
+/**
  * Whether a change without a Session would delete one of these Tiles while it carries a Grant. It may
  * not: such a change is the one an undo undoes (an applied Turn's, an accepted Proposal's), and an
  * undo makes a deleted Tile again with no Grant, so a Tile kept from someone would come back open.

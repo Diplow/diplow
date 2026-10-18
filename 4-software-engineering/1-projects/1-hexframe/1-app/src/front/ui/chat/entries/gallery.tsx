@@ -119,7 +119,7 @@ function samplesAt(now: Date) {
   const at = (minutes: number) => minutesAgo(now, minutes)
   const keyName = { name: m.gallery_sample_chat_key_name() }
   const keyEdit: Happened = {
-    who: 'key',
+    who: 'outside',
     words: weave(m.gallery_sample_chat_key_edited, { key: keyName, projects }),
     at: at(7),
   }
@@ -137,7 +137,7 @@ function samplesAt(now: Date) {
     },
     keyEdit,
     {
-      who: 'key',
+      who: 'outside',
       words: weave(m.gallery_sample_chat_revoked_deleted, { old: oldSite }),
       at: at(6),
     },

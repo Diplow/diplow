@@ -33,6 +33,7 @@ import {
   type Navigation,
   ProposedChange,
   routeOf,
+  type Shared,
   spanOf,
   stillRunning,
   type Summarized,
@@ -130,6 +131,14 @@ export const recordNavigation = (accountId: string, navigation: Navigation, ago:
  */
 export const recordChange = (accountId: string, summarized: Summarized, actor: Actor) =>
   record(accountId, { ...summarized, actor })
+
+/**
+ * Records a Tile shared with the Account, in its own Conversation, as the API layer tells it: who
+ * shared it, the Tile as it was then, and what the Account may do there. The one Entry an Account's
+ * Conversation holds of a change it did not make: the owner of the Tile made it, in their System.
+ */
+export const recordShared = (accountId: string, shared: Omit<Shared, '_tag'>) =>
+  record(accountId, { _tag: 'Shared', ...shared })
 
 /**
  * Rewrites one of the Account's Entries as `change` says, the Entry as Assistant decoded it. An Entry

@@ -8,7 +8,7 @@
 // What the user's System and timeline say is quoted as data, each text one JSON string in a fenced
 // block, so no Title, Preview or Message reads as one of the Turn's rules. It holds no secret, ever:
 // the Turn's Key never reaches it. Pure.
-import type { Actor, Entry, Fate, Mode, ProposedChange } from '../entities'
+import type { Actor, Entry, Fate, Mode, ProposedChange, SharedRight } from '../entities'
 
 /** A Tile as the user has it on screen: its id, its Title and its Preview, as Mapping reads them. */
 export interface Glimpse {
@@ -72,6 +72,23 @@ const ends = {
   sandbox: 'its sandbox failed',
 } as const
 
+/** Who shared a Tile, as the agent reads it: another Account, by its star's Title, if it has one. */
+const sharerOf = (by: string) =>
+  by === ''
+    ? 'Another Account, whose star has no title,'
+    : `Another Account, whose star is titled ${quoted(by)},`
+
+/** What each right a Tile shared gives lets the user do there, as the agent reads it. */
+const sharedRights: Record<SharedRight, string> = {
+  read: 'read it',
+  write: 'write it',
+  '@': 'run you at it',
+}
+
+/** What the rights a Tile shared gives let the user do, as the agent reads it: "read it, write it". */
+const mayDo = (rights: ReadonlyArray<SharedRight>) =>
+  rights.length === 0 ? 'do nothing' : rights.map((right) => sharedRights[right]).join(', ')
+
 /** How a Proposal stands, as the agent reads it. */
 const fates: Record<Fate, string> = {
   open: 'open, waiting for the user',
@@ -110,6 +127,8 @@ function lineOf(entry: Entry, titles: PromptOf['titles']): string {
       const made = entry.changes === 1 ? '1 change' : `${String(entry.changes)} changes`
       return `A Turn of yours in apply made ${made}${entry.undone ? ', which the user undid' : ''}.`
     }
+    case 'Shared':
+      return `${sharerOf(entry.by)} shared ${named(entry.tile.title, entry.tile.id)} with the user, who may ${mayDo(entry.rights)} there; it stands in that Account's System, not the user's.`
   }
 }
 

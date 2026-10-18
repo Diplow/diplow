@@ -18,6 +18,7 @@ import {
   DeleteReference,
   DeleteTile,
   EditTile,
+  grantableTo,
   may,
   mayShare,
   MoveTile,
@@ -289,5 +290,14 @@ describe('who may change who reaches a Tile', () => {
     expect(shareVerdict(bob, id.secret)).toBe('TileNotFound')
     expect(shareVerdict(stranger, id.garden)).toBe('TileNotFound')
     expect(shareVerdict(ana, id.nowhere)).toBe('TileNotFound')
+  })
+})
+
+describe('who a Grant may name', () => {
+  it('is anyone but the owner, who may do everything there already', () => {
+    expect(Result.isSuccess(grantableTo(sharing, 'bob'))).toBe(true)
+    expect(Result.isSuccess(grantableTo(sharing, 'cleo'))).toBe(true)
+    const owner = grantableTo(sharing, 'ana')
+    expect(Result.isFailure(owner) && owner.failure._tag).toBe('NotAllowed')
   })
 })

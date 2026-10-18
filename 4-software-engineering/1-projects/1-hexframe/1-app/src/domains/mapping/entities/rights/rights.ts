@@ -17,8 +17,12 @@ import type { System } from '../system'
 export const Right = Schema.Literals(['read', 'write', '@'])
 export type Right = typeof Right.Type
 
+/** A value that lets its subject read: every one but `none`, `read` always among the rights it gives. */
+export const Reading = Schema.Literals(['read', 'read+write', 'read+@', 'read+write+@'])
+export type Reading = typeof Reading.Type
+
 /** A Grant's value for its subject: `none`, or the rights it gives, `read` always among them. */
-export const GrantValue = Schema.Literals(['none', 'read', 'read+write', 'read+@', 'read+write+@'])
+export const GrantValue = Schema.Literals(['none', ...Reading.literals])
 export type GrantValue = typeof GrantValue.Type
 
 /** The rights each value gives. */

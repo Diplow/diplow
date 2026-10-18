@@ -1,6 +1,8 @@
 // What an Entry says, as the chat's pieces take it (`Words`, `Happened`, ui's `chat/`): a Message's
 // text with its links woven in as the Tiles they name; a change, an import, a navigation and a Turn's
-// end as a line by who acted, the user, the agent, a Key, or hexframe itself; and a Proposal's changes.
+// end as a line by who acted, the user, the agent, a Key, or hexframe itself; a Tile shared with the
+// user as a line by whoever shared it, from outside, its Tile visited on a click; and a Proposal's
+// changes.
 // A Tile named shows as the Title it had, centering the canvas while the System still holds it, the
 // agent's draft while a Proposal only proposes it, struck through once deleted. And the Entries cut
 // into what the timeline draws: a run of lines on one thread, a Message, a Proposal, what a Turn
@@ -18,6 +20,7 @@ import type { OperationEvent } from '#/domains/mapping/operations'
 import { m } from '#/paraglide/messages'
 import { Gesture } from '#/front/ui/canvas/view/view'
 import type { Happened } from '#/front/ui/chat/entries/Events'
+import { rightsSaid } from '#/front/ui/chat/widgets/share/rights'
 import type { Change } from '#/front/ui/chat/entries/Receipt'
 import type { MentionProps } from '#/front/ui/chat/text/Mention'
 import { type Word, type Words, weave } from '#/front/ui/chat/text/words'
@@ -104,7 +107,7 @@ export const messageWords = (text: string, naming: Naming): Words =>
 
 /** Who acted, as a line's mark says it: the user, the agent, or a Key from outside. */
 const whoOf = (actor: Actor): Happened['who'] =>
-  actor._tag === 'You' ? 'human' : actor._tag === 'Assistant' ? 'agent' : 'key'
+  actor._tag === 'You' ? 'human' : actor._tag === 'Assistant' ? 'agent' : 'outside'
 
 /** The Key that acted, named, or a revoked one, which has no name left. */
 const keyOf = (actor: Extract<Actor, { _tag: 'Key' }>): Word =>
@@ -218,7 +221,10 @@ const turnEnds: Record<BadEnd, Pick<Happened, 'who' | 'state'> & { text: () => s
 }
 
 /** An Entry the timeline tells in a line. */
-export type Told = Extract<Entry, { _tag: 'Change' | 'Import' | 'Navigation' | 'TurnEnded' }>
+export type Told = Extract<
+  Entry,
+  { _tag: 'Change' | 'Import' | 'Navigation' | 'TurnEnded' | 'Shared' }
+>
 
 /** The line an Entry is told in, on the thread of what happened. */
 export function happenedOf(entry: Told, naming: Naming): Happened {
@@ -240,6 +246,27 @@ export function happenedOf(entry: Told, naming: Naming): Happened {
       const { text, ...end } = turnEnds[entry.how]
       return { ...end, words: [text()], at }
     }
+    case 'Shared':
+      return sharedOf(entry, naming)
+  }
+}
+
+/**
+ * A Tile someone shared with the user, by the Title their star had then, from outside, and what the
+ * user may do there: its Tile, in their System, by the Title it had then, visited on a click, the
+ * page leading there by its link, or "Nothing to see here" once taken back.
+ */
+function sharedOf(entry: Extract<Told, { _tag: 'Shared' }>, naming: Naming): Happened {
+  const { by, tile, rights, at } = entry
+  const title: Word = {
+    tile: { title: named(tile.title), onCenter: centering(tile.id, naming.onCenter) },
+  }
+  const who: Word = { name: by === '' ? m.conversation_someone() : by }
+  return {
+    who: 'outside',
+    words: weave(m.conversation_shared, { who, title }),
+    detail: rightsSaid(rights),
+    at,
   }
 }
 

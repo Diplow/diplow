@@ -248,17 +248,63 @@ describe('who reaches a Tile, set by its owner from a Session', () => {
       ok: false,
       failure: { _tag: 'SignedOut' },
     })
+    // Bob's requests named his star, which names him in the list.
+    const bobs = (await value(run(request(bob), Mapping.system))).root.id
     expect(await value(run(request(ana), Mapping.whoReaches({ tile: garden.id })))).toEqual({
       everyone: { subject: everyone, value: 'none', from: null },
-      others: [{ subject: { _tag: 'Account', id: bob.id }, value: 'read', from: garden.id }],
+      others: [
+        {
+          subject: { _tag: 'Account', id: bob.id },
+          value: 'read',
+          from: garden.id,
+          star: { id: bobs, title: '', preview: '' },
+        },
+      ],
     })
   })
 
-  it('takes Everyone’s read, none or inherit on a Tile by its UUID, and nothing more', () => {
+  it('shares with someone by their star, nobody else, and a star that names nothing with nobody', async () => {
+    const { ana, bob, star, garden } = await anasSystem()
+    const bobs = await value(run(request(bob), Mapping.system))
+    const toBob = { tile: garden.id, subject: { _tag: 'Account', star: bobs.root.id } } as const
+    await value(run(request(ana), Mapping.setGrant({ ...toBob, value: 'read+write' })))
+    expect(await value(run(request(ana), Mapping.whoReaches({ tile: garden.id })))).toEqual({
+      everyone: { subject: everyone, value: 'none', from: null },
+      others: [
+        {
+          subject: { _tag: 'Account', id: bob.id },
+          value: 'read+write',
+          from: garden.id,
+          star: { id: bobs.root.id, title: '', preview: '' },
+        },
+      ],
+    })
+    // Bob, who reads and writes Garden, shares it with nobody, himself included.
+    expect(await run(request(bob), Mapping.setGrant({ ...toBob, value: 'read' }))).toMatchObject({
+      ok: false,
+      failure: { _tag: 'NotAllowed' },
+    })
+    const nobody = { _tag: 'Account', star: crypto.randomUUID() } as const
+    expect(
+      await run(
+        request(ana),
+        Mapping.setGrant({ tile: garden.id, subject: nobody, value: 'read' }),
+      ),
+    ).toMatchObject(notFound)
+    const own = { _tag: 'Account', star } as const
+    expect(
+      await run(request(ana), Mapping.setGrant({ tile: garden.id, subject: own, value: 'read' })),
+    ).toMatchObject({ ok: false, failure: { _tag: 'NotAllowed' } })
+  })
+
+  it('takes Everyone’s read, none or inherit, someone’s any value by their star, on a Tile by its UUID', () => {
     const tile = crypto.randomUUID()
     const sets = (input: unknown) => Schema.is(GrantChange)(input)
     expect(sets({ tile, subject: everyone, value: 'inherit' })).toBe(true)
     expect(sets({ tile, subject: everyone, value: 'read+write' })).toBe(false)
+    const star = crypto.randomUUID()
+    expect(sets({ tile, subject: { _tag: 'Account', star }, value: 'read+write+@' })).toBe(true)
+    expect(sets({ tile, subject: { _tag: 'Account', id: star }, value: 'read' })).toBe(false)
     expect(sets({ tile: 'help', subject: everyone, value: 'read' })).toBe(false)
     expect(Schema.is(TileReach)({ tile })).toBe(true)
     expect(Schema.is(TileReach)({ tile: 'help/3' })).toBe(false)

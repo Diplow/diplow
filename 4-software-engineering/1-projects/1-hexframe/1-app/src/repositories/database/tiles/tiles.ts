@@ -6,7 +6,8 @@
 // interleave between what Mapping checked and what it wrote. A read from
 // one Tile walks down a generation per query and selects only the content columns asked, so a Body
 // nobody asked for never leaves the database. The Grants a System's Tiles carry are read here too
-// (./grants.ts), and the stars whose Title holds a query, across every System (`starsTitled`).
+// (./grants.ts), the stars whose Title holds a query, across every System (`starsTitled`), and the
+// stars of some owners (`starsOwnedBy`).
 import { type SQL, and, asc, eq, ilike, inArray, isNull, ne, notIlike } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import { Context, Data, Effect, Layer } from 'effect'
@@ -187,6 +188,14 @@ export class Tiles extends Context.Service<
      * then the others, each group by Title, `atMost` in all. What finds a star by its Title.
      */
     readonly starsTitled: (search: StarsTitledQuery) => Effect.Effect<ReadonlyArray<StarRow>>
+    /**
+     * The Root of each of these owners' Systems, by owner, with its id, Title and Preview and nothing
+     * else, in one query: an owner without a Root is left out. What names the Accounts a Tile's
+     * Grants reach by their stars.
+     */
+    readonly starsOwnedBy: (
+      owners: ReadonlyArray<string>,
+    ) => Effect.Effect<ReadonlyMap<string, StarRow>>
     /**
      * The row of this id in the owner's System, then the rows below it, `depth` generations down,
      * one query per generation, that row and the rows below each with only the content columns
@@ -411,6 +420,19 @@ const starsOf = (database: Database['Service']) => {
             .pipe(
               Effect.orDie,
               Effect.map((rows) => new Map(rows.map((row) => [row.id, row.star] as const))),
+            ),
+    starsOwnedBy: (owners: ReadonlyArray<string>) =>
+      owners.length === 0
+        ? Effect.succeed(new Map<string, StarRow>())
+        : database
+            .select({ owner: tile.ownerId, id: tile.id, title: tile.title, preview: tile.preview })
+            .from(tile)
+            .where(and(isNull(tile.parentId), inArray(tile.ownerId, [...owners])))
+            .pipe(
+              Effect.orDie,
+              Effect.map(
+                (rows) => new Map(rows.map(({ owner, ...star }) => [owner, star] as const)),
+              ),
             ),
     starsTitled: ({ query, except, atMost }: StarsTitledQuery) =>
       Effect.gen(function* () {

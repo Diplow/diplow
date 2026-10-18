@@ -1,25 +1,25 @@
 // Who may see a tile, in the conversation: the app's own widget, so it carries no voice. Every one
 // who reaches the tile, each with what they may do there and where that comes from, set on this
 // tile or on one above it; Everyone first, whose value its owner sets here, read, none, or inherit,
-// which leaves it to the tile above, each row running on to the curve at its height; then the link
-// the tile is visited by, copied from the widget's actions. Controlled: the rows are worded by the
-// caller, who says what each choice does, as Mapping decides it.
+// which leaves it to the tile above; then each person it is shared with, named by their star, whose
+// value the owner sets to none, to read and to any of read's companions, write and @, or back to
+// inherit; each row running on to the curve at its height; then the link the tile is visited by.
+// Someone is added, and the link copied, from the widget's actions. Controlled: the rows are worded
+// by the caller, who says what each choice does, as Mapping decides it, and who finds someone.
 import { cn } from 'cn'
-import { Link, Share2 } from 'lucide-react'
+import { Link, Share2, UserPlus } from 'lucide-react'
 import { useId, type ReactNode } from 'react'
 
 import { m } from '#/paraglide/messages'
 
 import { runsToCurve, toCurve } from '../../../layouts/screen/state/useAlongCurve'
 import { Widget } from '../../layouts/Widget'
-
-/** What the owner sets on the tile for Everyone: read, none, or what the tile above has. */
-export type ShareChoice = 'read' | 'none' | 'inherit'
+import { choiceSaid, type ShareChoice } from './rights'
 
 /** Someone who reaches the tile, as its row shows them, every word already its caller's. */
 export interface ReachRow {
   readonly key: string
-  /** Who: Everyone, an account, a group. */
+  /** Who: Everyone, someone by their star's title, a group. */
   readonly who: string
   /** What they may do there: read, none, read and write. */
   readonly value: string
@@ -27,16 +27,26 @@ export interface ReachRow {
   readonly from: string
 }
 
+/** A row whose value the owner sets here: what they set for it on this tile, and what it offers. */
+export interface Chosen {
+  readonly choice: ShareChoice
+  /** The choices offered, in order, as Mapping lets them: Everyone never writes. */
+  readonly offered: readonly ShareChoice[]
+}
+
 interface ShareWidgetProps {
   /** The tile shared, by its title. */
   title: string
   /** Everyone's row, and what its owner set for it on this tile. */
-  everyone: ReachRow & { readonly choice: ShareChoice }
-  /** Everyone else who reaches it. */
-  others: readonly ReachRow[]
-  /** Everyone's choice on its way: the choices wait. */
+  everyone: ReachRow & Chosen
+  /** Everyone else who reaches it: someone, with what its owner set, or a group, which they don't. */
+  others: readonly (ReachRow & Partial<Chosen>)[]
+  /** A choice on its way: the choices wait. */
   sending?: boolean
-  onChoose: (choice: ShareChoice) => void
+  /** A choice made, on the row of this key, Everyone's included. */
+  onChoose: (key: string, choice: ShareChoice) => void
+  /** Opens what finds someone to share the tile with. */
+  onAdd: () => void
   /** The link the tile is visited by, which leads whoever may read it there. */
   link: string
   onCopyLink: () => void
@@ -50,6 +60,7 @@ export function ShareWidget({
   others,
   sending = false,
   onChoose,
+  onAdd,
   link,
   onCopyLink,
   onDone,
@@ -62,6 +73,7 @@ export function ShareWidget({
       title={title}
       subtitle={m.widget_share_what()}
       actions={[
+        { label: m.widget_share_add(), icon: <UserPlus />, onSelect: onAdd },
         // The action keeps its word, and its focus: the toast says it is copied.
         { label: m.widget_share_copy_link(), icon: <Link />, onSelect: onCopyLink },
         { label: m.widget_share_done(), onSelect: onDone },
@@ -70,10 +82,30 @@ export function ShareWidget({
     >
       <ul className="grid">
         <Row row={everyone} hint={m.widget_share_everyone_hint()}>
-          <Choices chosen={everyone.choice} sending={sending} onChoose={onChoose} />
+          <Choices
+            offered={everyone.offered}
+            legend={m.widget_share_choose()}
+            chosen={everyone.choice}
+            sending={sending}
+            onChoose={(choice) => {
+              onChoose(everyone.key, choice)
+            }}
+          />
         </Row>
         {others.map((row) => (
-          <Row key={row.key} row={row} />
+          <Row key={row.key} row={row}>
+            {row.choice !== undefined && row.offered !== undefined && (
+              <Choices
+                offered={row.offered}
+                legend={m.widget_share_choose_for({ who: row.who })}
+                chosen={row.choice}
+                sending={sending}
+                onChoose={(choice) => {
+                  onChoose(row.key, choice)
+                }}
+              />
+            )}
+          </Row>
         ))}
       </ul>
       <p
@@ -112,18 +144,16 @@ function Row({ row, hint, children }: { row: ReachRow; hint?: string; children?:
   )
 }
 
-const choices: readonly { readonly choice: ShareChoice; readonly label: () => string }[] = [
-  { choice: 'read', label: m.widget_share_choice_read },
-  { choice: 'none', label: m.widget_share_choice_none },
-  { choice: 'inherit', label: m.widget_share_choice_inherit },
-]
-
-/** Everyone's value on the tile, one of three, as a radio group the arrows go round. */
+/** A row's value on the tile, one of those offered, as a radio group the arrows go round. */
 function Choices({
+  offered,
+  legend,
   chosen,
   sending,
   onChoose,
 }: {
+  offered: readonly ShareChoice[]
+  legend: string
   chosen: ShareChoice
   sending: boolean
   onChoose: (choice: ShareChoice) => void
@@ -131,8 +161,8 @@ function Choices({
   const name = useId()
   return (
     <fieldset className="flex flex-wrap gap-1.5" aria-busy={sending}>
-      <legend className="sr-only">{m.widget_share_choose()}</legend>
-      {choices.map(({ choice, label }) => (
+      <legend className="sr-only">{legend}</legend>
+      {offered.map((choice) => (
         <label
           key={choice}
           className={cn(
@@ -151,7 +181,7 @@ function Choices({
             }}
             className="sr-only"
           />
-          {label()}
+          {choiceSaid(choice)}
         </label>
       ))}
     </fieldset>

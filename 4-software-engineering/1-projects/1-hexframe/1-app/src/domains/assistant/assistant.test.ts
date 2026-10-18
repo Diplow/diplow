@@ -6,7 +6,15 @@ import { layer as conversationsLayer } from '#/repositories/database/conversatio
 import { transactional } from '#/repositories/database/database'
 import { TestDatabase } from '#/repositories/database/testing'
 
-import { before, day, lastEntry, postMessage, recordChange, recordNavigation } from './assistant'
+import {
+  before,
+  day,
+  lastEntry,
+  postMessage,
+  recordChange,
+  recordNavigation,
+  recordShared,
+} from './assistant'
 import {
   type EntryContent,
   leadingLink,
@@ -39,11 +47,13 @@ const recorded = (accountId: string, content: EntryContent, ago = 0) =>
       ? postMessage(accountId, content.text)
       : content._tag === 'Navigation'
         ? recordNavigation(accountId, content, ago)
-        : content._tag === 'TurnEnded' ||
-            content._tag === 'Proposal' ||
-            content._tag === 'TurnApplied'
-          ? Effect.die(new Error('A Turn’s end and what it did are recorded as they happen'))
-          : recordChange(accountId, summarizedOf(content), content.actor),
+        : content._tag === 'Shared'
+          ? recordShared(accountId, Struct.omit(content, ['_tag']))
+          : content._tag === 'TurnEnded' ||
+              content._tag === 'Proposal' ||
+              content._tag === 'TurnApplied'
+            ? Effect.die(new Error('A Turn’s end and what it did are recorded as they happen'))
+            : recordChange(accountId, summarizedOf(content), content.actor),
   )
 
 /** A change or an import as Mapping would have summarized it, who acted left out. */
@@ -125,6 +135,7 @@ layer(TestLayer)('the Conversation, over PGlite', (it) => {
           steps: [{ gesture: 'center', tile: tile.id }],
           gestures: 3,
         },
+        { _tag: 'Shared', by: 'Ana Lima', tile, rights: ['read', 'write'] },
       ]
       for (const content of kinds) yield* recorded(account, content)
       const read = yield* day(account, { date: '2026-10-10', offset: 0 })

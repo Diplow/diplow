@@ -40,7 +40,7 @@ describe('happenedOf', () => {
     expect(agents.who).toBe('agent')
     expect(agents.words[0]).toBe(m.conversation_edited_agent({ title: '' }))
     const keys = happenedOf(change({ _tag: 'Key', name: 'laptop' }), naming)
-    expect(keys.who).toBe('key')
+    expect(keys.who).toBe('outside')
     expect(keys.words[0]).toEqual({ name: m.conversation_key({ name: 'laptop' }) })
     expect(happenedOf(change({ _tag: 'Key' }), naming).words[0]).toBe(m.conversation_revoked_key())
   })
@@ -84,6 +84,32 @@ describe('happenedOf', () => {
     const ended = (how: 'stopped' | 'sandbox'): Told => ({ _tag: 'TurnEnded', id: 'e', at, how })
     expect(happenedOf(ended('stopped'), naming)).toMatchObject({ who: 'human' })
     expect(happenedOf(ended('sandbox'), naming)).toMatchObject({ who: 'app', state: 'failed' })
+  })
+
+  it('tells a Tile shared by whoever shared it, from outside, its Tile visited on a click, and what the user may do there', () => {
+    const visited: string[] = []
+    const shared = (by: string): Told => ({
+      _tag: 'Shared',
+      id: 's',
+      at,
+      by,
+      tile: { id: 'journal', title: 'Journal' },
+      rights: ['read', 'write'],
+    })
+    const told = happenedOf(shared('Ana Lima'), {
+      ...naming,
+      onCenter: (id) => {
+        visited.push(id)
+      },
+    })
+    expect(told).toMatchObject({ who: 'outside', detail: 'read, write' })
+    expect(told.words[0]).toEqual({ name: 'Ana Lima' })
+    // Not the user's own System's: shown as it was shared, never struck through, and visited.
+    const journal = told.words.find((word) => typeof word === 'object' && 'tile' in word)
+    expect(tile(journal)).toEqual({ title: 'Journal', standing: 'live' })
+    if (typeof journal === 'object' && 'tile' in journal) journal.tile.onCenter?.()
+    expect(visited).toEqual(['journal'])
+    expect(happenedOf(shared(''), naming).words[0]).toEqual({ name: m.conversation_someone() })
   })
 })
 
