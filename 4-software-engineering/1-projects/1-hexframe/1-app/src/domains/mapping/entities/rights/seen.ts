@@ -115,13 +115,6 @@ export const referencesShown = (system: System, shown: (target: string) => boole
 })
 
 /**
- * A System as a reader who reads it alone is shown it, a Turn its own: each Reference to a Tile it
- * does not hold, a pin or a deleted Tile's, unavailable (`referencesShown`).
- */
-export const shownAlone = (system: System): System =>
-  referencesShown(system, (target) => tileAt(system, target) !== undefined)
-
-/**
  * Whether a reader is shown the Tile a Reference points at, the one rule of it: a Tile its System
  * holds that `here` shows them, or one of another System among those they may read (`pinned`); a
  * deleted one is neither. `here` is told only of ids it holds.

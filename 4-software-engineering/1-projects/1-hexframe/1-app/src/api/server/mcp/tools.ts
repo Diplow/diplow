@@ -86,8 +86,8 @@ const ReadId = Schema.Union([TileId, HelpId]).annotate({
   description:
     "A Tile's id, as open_tile and map answer it: a Tile of the user's System, or of Help, from " +
     `its Root, "${helpRoot}", or of another user's System, as far as its owner lets the user read ` +
-    "it, though an agent hexframe runs for the user reads the user's System alone. Without one, " +
-    "the user's Root: the user.",
+    'it, though an agent hexframe runs for the user reads the System its Turn started in alone. ' +
+    "Without one, the user's Root: the user, or, for such an agent, that System's star.",
 })
 
 const help =
@@ -423,8 +423,8 @@ const createReference = write({
   description:
     'Puts a Reference in a free Context slot of a Tile: a link to another Tile, by id, of the ' +
     "user's System or of another System the user may read, that follows it when it moves and shows " +
-    'unavailable to whoever may not read it, once it is deleted too. A Turn works in its own ' +
-    'System alone, and pins no Tile of another. Answers null.',
+    'unavailable to whoever may not read it, once it is deleted too. A Turn works in the System ' +
+    'it started in alone, and pins no Tile of another. Answers null.',
   refusals: {
     TileNotFound: refusal.TileNotFound,
     TileChanged: refusal.TileChanged,

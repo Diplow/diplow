@@ -586,7 +586,10 @@ export const route = (accountId: string, turnId: string) =>
  * the Account's own System, as every Turn's did before one could start elsewhere.
  */
 export const startedElsewhere = (accountId: string, turnId: string) =>
-  Effect.map(Turns.use((turns) => turns.byId(accountId, turnId)), (row) => row?.elsewhere ?? undefined)
+  Effect.map(
+    Turns.use((turns) => turns.byId(accountId, turnId)),
+    (row) => row?.elsewhere ?? undefined,
+  )
 
 /**
  * The open Proposal one of the Account's Turns shows over the System it reads, by its route and the

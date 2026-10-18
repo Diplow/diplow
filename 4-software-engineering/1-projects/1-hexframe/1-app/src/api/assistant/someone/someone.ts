@@ -120,9 +120,7 @@ export const batchInAnothers = (
     yield* Effect.forEach(
       batch,
       (batched) =>
-        Effect.orDie(
-          writtenInAnothers(signed, { acting, own, across: false }, runAlone(batched)),
-        ),
+        Effect.orDie(writtenInAnothers(signed, { acting, own, across: false }, runAlone(batched))),
       { discard: true },
     )
     return batch.length

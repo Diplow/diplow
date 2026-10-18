@@ -19,6 +19,7 @@ import { BatchOutdated, ShippedReadOnly, TileIdTaken, TileNotFound } from './err
 import {
   type Acting,
   type Across,
+  foundInSeen,
   grantsIn,
   outside,
   ownerOf,
@@ -26,7 +27,9 @@ import {
   pinnedShown,
   pinning,
   reading,
-  titledIn,
+  seenThrough,
+  titlesAcross,
+  wholeOf,
 } from './sharing/reading'
 import { acrossFolder, type LinkOf, exportOf, seenFiles } from './files/files'
 import {
@@ -42,14 +45,12 @@ import {
   type Field,
   type FieldsAsked,
   type Found,
-  foundIn,
   lineageOf,
   owns,
   readOf,
   type ReadTile,
   carded,
   rowDirection,
-  type Seen,
   seenBy,
   sharingOf,
   showing,
@@ -78,7 +79,6 @@ import {
   type DeleteTile,
   type EditTile,
   evolve,
-  fold,
   type MappingEvent,
   type MoveTile,
   type Operation,
@@ -96,7 +96,18 @@ import {
 
 export { HelpId, helpRoot, shippedSystem } from './shipped/shipped'
 export type { Acting, Across } from './sharing/reading'
-export { agentAt, grantsIn, holding, ownerOf, ownTile, shownTile } from './sharing/reading'
+export {
+  agentAt,
+  glimpses,
+  grantsIn,
+  holding,
+  ownerOf,
+  ownTile,
+  shownTile,
+  titles,
+  titlesAcross,
+  wholeOf,
+} from './sharing/reading'
 
 /** The content of a Root nobody has named yet, and of every Reference, which keeps none of its own. */
 export const untitled: Content = { title: '', preview: '', body: '' }
@@ -137,48 +148,11 @@ export const system = ({ actor, system: star }: Acting, { across = true }: Acros
     return seenBy(actor, whole, sharingOf(owner, lineageOf(whole), grants), pinned)
   })
 
-/** The owner's System, flat, whole. */
-export const wholeOf = (owner: string) =>
-  Effect.gen(function* () {
-    const rows = yield* Tiles.use((tiles) => tiles.read(owner))
-    const found = systemFrom(rows, { owned: true })
-    if (found === undefined) return yield* Effect.die(new Error('A System was read without a Root'))
-    return found
-  })
-
 /**
  * The System the actor acts on, flat and whole, its owner's read alone (`reached`): what an export
  * reads, until it reads as the actor may.
  */
 const ownersWhole = (acting: Acting) => Effect.flatMap(reached(acting), wholeOf)
-
-/**
- * The System the actor acts on as they may see it with a batch folded over it, the System the batch
- * makes (`fold`), as a Turn reads it through its Proposal, and with none, as it stands: its owner's
- * whole, anyone else's as `seenBy` shows it them there, by the Grants it carries, a Tile the batch
- * makes read as its parent lets them read it; and no Tile of another System resolved, a Turn reading
- * the System it started in alone, so a Reference to a Tile it does not hold, a pin or a deleted
- * Tile's, says no id (`pointing`).
- */
-const seenThrough = (acting: Acting, over: ReadonlyArray<Batched>) =>
-  Effect.gen(function* () {
-    const owner = yield* ownerOf(acting.system)
-    const folded = fold(yield* wholeOf(owner), over).system
-    const grants = owns(acting.actor, owner) ? [] : yield* grantsIn(owner)
-    return seenBy(acting.actor, folded, sharingOf(owner, lineageOf(folded), grants))
-  })
-
-/**
- * What a read from a Tile of a System as a reader is shown it finds: from a Tile across a gap as from
- * its own Root, its place above being kept from them, so its parent is none.
- */
-const foundInSeen = <O extends Field, F extends Field>(
-  seen: Seen,
-  { id, depth, fields }: { id?: string | undefined; depth: Depth; fields: FieldsAsked<O, F> },
-) => {
-  const gap = id === undefined || !Object.hasOwn(seen.gaps, id) ? undefined : seen.gaps[id]
-  return foundIn(gap === undefined ? seen : { ...seen, root: gap }, { id, depth, fields })
-}
 
 /**
  * The Version of the System the actor acts on, as they are shown it: what a client polls to know when
@@ -191,60 +165,6 @@ export const systemVersion = (acting: Acting) =>
     owns(acting.actor, owner)
       ? Tiles.use((tiles) => Effect.map(tiles.systemVersion(owner), (version) => version ?? 0))
       : Effect.map(system(acting), ({ version }) => version),
-  )
-
-/**
- * The Titles of the Tiles of the System the actor acts on among these ids, by id: an id it holds no
- * Tile of, a deleted one's or a Reference's, or one the actor may not read, has none, but the star's,
- * whose card anyone sees. What the timeline names a Tile by where it keeps its id.
- */
-export const titles = (acting: Acting, ids: ReadonlyArray<string>) =>
-  Effect.flatMap(reading(acting), ({ owner, shows }) => titledIn(owner, ids, shows))
-
-/**
- * The Titles of these ids the actor is shown, whichever System holds them: the System they act on
- * first, then each other one holding an id it holds no Tile of, all found in one lookup, each as the
- * actor may see it there (`titles`). What the timeline names a Tile of a System visited by, as it
- * names one of its own. An id no System holds, a deleted Tile's, has none, nor has a Tile kept from
- * the actor.
- */
-export const titlesAcross = (acting: Acting, ids: ReadonlyArray<string>) =>
-  Effect.gen(function* () {
-    const here = yield* titles(acting, ids)
-    const rest = [...new Set(ids)].filter((id) => !(id in here))
-    const stars = yield* Tiles.use((tiles) => tiles.starsHolding(rest))
-    const elsewhere = new Map<string, string[]>()
-    for (const [id, star] of stars) {
-      if (star !== acting.system) elsewhere.set(star, [...(elsewhere.get(star) ?? []), id])
-    }
-    const found = yield* Effect.forEach(
-      [...elsewhere],
-      ([star, named]) => titles({ ...acting, system: star }, named),
-      { concurrency: 'unbounded' },
-    )
-    return Object.fromEntries([here, ...found].flatMap((named) => Object.entries(named)))
-  })
-
-/**
- * The Title and Preview of the Tiles of the System the actor acts on among these ids, in their order:
- * an id it holds no Tile of, a deleted one's or a Reference's, or one the actor may not read, is left
- * out, but the star, whose card anyone sees: a glimpse of each, for a reader shown several at once.
- */
-export const glimpses = (acting: Acting, ids: ReadonlyArray<string>) =>
-  Effect.flatMap(reading(acting), ({ owner, shows }) =>
-    Tiles.use((tiles) =>
-      Effect.map(tiles.ofIds(owner, ids.filter(shows), ['title', 'preview']), (rows) => {
-        const found = new Map(
-          rows.flatMap(({ id, target, title, preview }) =>
-            target === null ? [[id, { id, title, preview }] as const] : [],
-          ),
-        )
-        return [...new Set(ids)].flatMap((id) => {
-          const glimpse = found.get(id)
-          return glimpse === undefined ? [] : [glimpse]
-        })
-      }),
-    ),
   )
 
 /**
@@ -836,7 +756,10 @@ export const addToBatch = <O extends Operation>(
       allowedThrough(acting.actor, { owner, grants }, held, over),
     )
     if (!owns(acting.actor, owner)) {
-      const on = { system: folded.system, sharing: sharingOf(owner, lineageOf(folded.system), grants) }
+      const on = {
+        system: folded.system,
+        sharing: sharingOf(owner, lineageOf(folded.system), grants),
+      }
       yield* Effect.fromResult(allowed(acting.actor, on, operation))
     }
     const made = yield* madeFor(operation)

@@ -111,7 +111,8 @@ export function decide(
         const proposal = open?.id ?? made?.proposal
         if (proposal === undefined) throw new Error('A draft opened a Proposal without its id')
         const where = elsewhere === undefined ? {} : { elsewhere }
-        const opened = open === undefined ? [new ProposalOpened({ id: proposal, turn, ...where })] : []
+        const opened =
+          open === undefined ? [new ProposalOpened({ id: proposal, turn, ...where })] : []
         return [...opened, new Drafted({ proposal, write, changes })]
       })
     }

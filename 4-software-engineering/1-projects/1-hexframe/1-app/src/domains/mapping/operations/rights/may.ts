@@ -223,7 +223,10 @@ export function allowedThrough(
   if (owns(actor, owner)) return whole(system, batch)
   let folded: Folded = { system, events: [], left: [] }
   for (const batched of batch) {
-    const on = { system: folded.system, sharing: sharingOf(owner, lineageOf(folded.system), grants) }
+    const on = {
+      system: folded.system,
+      sharing: sharingOf(owner, lineageOf(folded.system), grants),
+    }
     const rights = allowed(actor, on, batched.operation)
     if (Result.isFailure(rights)) return Result.fail(rights.failure)
     const next = afterOne(folded.system, batched)

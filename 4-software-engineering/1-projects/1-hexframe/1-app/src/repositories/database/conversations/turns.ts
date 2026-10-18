@@ -161,10 +161,7 @@ const make = Effect.gen(function* () {
       .from(conversation)
       .where(eq(conversation.accountId, accountId))
 
-  const start = (
-    accountId: string,
-    { messageId, location, elsewhere, mode, startedAt }: TurnStart,
-  ) =>
+  const start = (accountId: string, starting: TurnStart) =>
     conversationFirst(accountId)(
       Effect.gen(function* () {
         const [message] = yield* database
@@ -172,7 +169,7 @@ const make = Effect.gen(function* () {
           .from(conversationEntry)
           .where(
             and(
-              eq(conversationEntry.id, messageId),
+              eq(conversationEntry.id, starting.messageId),
               inArray(conversationEntry.conversationId, conversationOf(accountId)),
             ),
           )
@@ -186,11 +183,8 @@ const make = Effect.gen(function* () {
           .values({
             id: crypto.randomUUID(),
             conversationId: message.conversationId,
-            messageId,
-            location,
-            elsewhere: elsewhere ?? null,
-            mode,
-            startedAt,
+            ...starting,
+            elsewhere: starting.elsewhere ?? null,
           })
           .onConflictDoNothing()
           .returning(columns)

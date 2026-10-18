@@ -42,7 +42,7 @@ export interface Linked {
  * there; and, when its files hold Tiles the user may read whose place above is kept from them, the
  * folder holding them, from the System folder.
  */
-export interface Elsewhere {
+interface Elsewhere {
   readonly star: string
   readonly rights: ReadonlyArray<SharedRight>
   readonly across?: string | undefined

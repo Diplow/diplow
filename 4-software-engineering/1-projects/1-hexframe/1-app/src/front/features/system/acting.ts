@@ -32,26 +32,38 @@ import { tilesBelow } from './widget/place'
 /**
  * How far the user acts on the System the canvas draws: on their own, every line `decide` lets
  * through; on one they visit, someone else's, those the rights Mapping showed them there let through
- * too (`Seen`'s, asked of Mapping's `shownAllowed`, a preview the server decides again), and never
- * who sees a Tile, its export, an import nor the agent, which are the owner's or start at home alone
- * until a Turn may start elsewhere (HEX-134). What a visitor sees at all is Mapping's to say;
- * `hexframe-app-sharing-organizations/decisions.md#DEC-4`, `#DEC-9`.
+ * too (`Seen`'s, asked of Mapping's `shownAllowed`, a preview the server decides again), the agent
+ * where they hold *@* (HEX-134), and never who sees a Tile, its export nor an import, which are the
+ * owner's or land at home. What a visitor sees at all is Mapping's to say;
+ * `hexframe-app-sharing-organizations/decisions.md#DEC-4`, `#DEC-9`, `#DEC-11`.
  */
 export type Reach = 'owned' | { readonly visiting: Seen['rights'] }
 
 /**
  * The lines a menu never offers on a System visited, a Tile's or a free slot's: who sees a Tile and
- * its export, which are its owner's, an import, which lands in the Account's own System, and the
- * agent, whose Turn starts there alone. The server refuses each anyway; the page offers none.
+ * its export, which are its owner's, and an import, which lands in the Account's own System. The
+ * server refuses each anyway; the page offers none.
  */
-export const visitorsWithout = [
-  'share',
-  'export',
-  'import',
-  'ask-agent',
-] as const satisfies ReadonlyArray<Verb>
+const visitorsWithout = ['share', 'export', 'import'] as const satisfies ReadonlyArray<Verb>
 
 const ownersAlone: ReadonlySet<Verb> = new Set(visitorsWithout)
+
+/**
+ * Whether the user may ask the agent at a Tile of the System drawn, as far as the page can tell: on
+ * their own, anywhere; on one they visit, where Mapping showed them *@* (`Seen`'s rights), the Turn
+ * then starting there, in their own Conversation (HEX-134). The server asks again as the Turn starts.
+ */
+const asksAt = ({ reach }: Pick<Systems, 'reach'>, tile: string) =>
+  reach === 'owned' || (reach.visiting[tile]?.includes('@') ?? false)
+
+/**
+ * The lines a free slot's menu leaves out under a Tile of the System drawn: none on the user's own;
+ * on one they visit, the owner's, and the agent's where they hold no *@* on that Tile.
+ */
+export const slotWithout = (systems: Pick<Systems, 'reach'>, parent: string): Verb[] =>
+  systems.reach === 'owned'
+    ? []
+    : [...visitorsWithout, ...(asksAt(systems, parent) ? [] : (['ask-agent'] as const))]
 
 /** The System three ways: its tree, Mapping's; flat, which `decide` rules on; as the canvas draws it. */
 export interface Systems {
@@ -270,8 +282,8 @@ export function framesOf(systems: Systems, hex: TileHex) {
 /**
  * The lines home leaves out of a Tile's menu: a Leaf's Context, which a Leaf has none of; an import
  * as the Root, but into an empty System's; the agent's on a broken Reference, which names no Tile;
- * and, on a System visited, the owner's lines and the agent's, and each line that writes where the
- * user's rights hold it back (`heldBack`).
+ * and, on a System visited, the owner's lines, the agent's where the user holds no *@*, and each
+ * line that writes where the user's rights hold it back (`heldBack`).
  */
 export function withoutOf(systems: Systems, hex: TileHex): Verb[] {
   const left: Verb[] = [
@@ -289,9 +301,10 @@ export function withoutOf(systems: Systems, hex: TileHex): Verb[] {
 }
 
 /**
- * Whether the user's rights on the System visited hold a line that writes back, as far as the page
- * can tell: an edit, a move, a delete, a Reference's removal. Adding a Tile and turning one into the
- * other kind are left out of the menu already (`subjectOf`), as they are where `decide` refuses them.
+ * Whether the user's rights on the System visited hold a line back, as far as the page can tell: one
+ * that writes, an edit, a move, a delete, a Reference's removal, and the agent's, without *@*. Adding
+ * a Tile and turning one into the other kind are left out of the menu already (`subjectOf`), as they
+ * are where `decide` refuses them.
  */
 function heldBack(systems: Systems, hex: TileHex, verb: Verb) {
   const { id } = hex.tile
@@ -307,6 +320,8 @@ function heldBack(systems: Systems, hex: TileHex, verb: Verb) {
       const slot = referenceAt(systems, hex)
       return slot === undefined || !mayMake(systems, { _tag: 'DeleteReference', ...slot })
     }
+    case 'ask-agent':
+      return !asksAt(systems, id)
     default:
       return false
   }

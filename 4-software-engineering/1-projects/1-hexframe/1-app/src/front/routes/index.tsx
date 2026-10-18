@@ -551,6 +551,7 @@ function SignedIn() {
       onSearchChange,
       onViewChange,
       marks: marks.marks,
+      onAsk: ask,
       onHome: wayHome,
     }) ?? {
       systemView: view,
@@ -649,6 +650,7 @@ function SignedIn() {
               onHelp={help.onOpen}
               onKeys={openKeys}
               onTutorial={openTutorial}
+              visiting={visit.star}
             />
           </ReadBoundary>
         }
