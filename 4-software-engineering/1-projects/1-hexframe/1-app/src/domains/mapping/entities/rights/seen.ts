@@ -189,8 +189,8 @@ export function sightVersion({ root, tiles, gaps, rights, pinned }: Omit<Seen, '
     ),
     ...Object.values(gaps).map((gap) => `gap ${gap.id} ${String(gap.version)}`),
     ...Object.entries(rights).map(([id, held]) => `rights ${id} ${held.join('+')}`),
-    // A pin of a Tile hexframe ships says no words here: they change with a deploy alone and read
-    // in the page's language, which the poll does not send, so it never reads the System again.
+    // A pin of a Tile hexframe ships says no words here: they change with a deploy alone, never by a
+    // write, and differ only by the language they are read in, which is no change of the System.
     ...Object.values(pinned).map((pin) =>
       isShippedId(pin.id)
         ? `pinned ${pin.id}`

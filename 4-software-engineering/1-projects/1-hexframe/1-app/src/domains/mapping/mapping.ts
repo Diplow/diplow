@@ -224,7 +224,7 @@ const find = <O extends Field, F extends Field>(
     return Effect.flatMap(findInShipped(shipped, id, { fields, language }), mountedParent)
   if (over.length === 0 && acting.system === hexframeStar)
     return findMounted(acting, { id, depth, fields, across, language })
-  if (over.length === 0) return findOwn(acting, { id, depth, fields, across })
+  if (over.length === 0) return findOwn(acting, { id, depth, fields, across, language })
   // A Turn reads through its batch, as the actor may see the System it makes (`seenThrough`).
   return Effect.flatMap(seenThrough(acting, over), (seen) => {
     const found = foundInSeen(seen, { id, depth, fields })
@@ -272,7 +272,7 @@ const glimpsed = ['title', 'preview'] as const satisfies ReadonlyArray<Field>
  */
 const findOwn = <O extends Field, F extends Field>(
   acting: Acting,
-  { id, depth, fields, across = true }: Omit<ReadFrom<O, F>, 'language' | 'over'>,
+  { id, depth, fields, across = true, language }: Omit<ReadFrom<O, F>, 'over'>,
 ) =>
   Tiles.use((tiles) =>
     Effect.gen(function* () {
@@ -297,7 +297,7 @@ const findOwn = <O extends Field, F extends Field>(
       )
       const here = new Set(pointedAt.flatMap((row) => (row.target === null ? [row.id] : [])))
       const away = targets.filter((target) => !here.has(target))
-      const pinned = across ? yield* pinnedFor(acting.actor, away, acting.system) : {}
+      const pinned = across ? yield* pinnedFor(acting.actor, away, acting.system, language) : {}
       // A Reference to no Tile they are shown says nothing of it, to its System's owner either.
       const shown = pointsAt((target) => here.has(target), pinned)
       const parent = parents[0]

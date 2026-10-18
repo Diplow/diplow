@@ -31,7 +31,6 @@ import {
   MoveTile,
   type Operation,
   SwapTiles,
-  writtenAt,
 } from '#/domains/mapping/operations'
 import * as Landing from '#/domains/mapping/landing/landing'
 import * as Mapping from '#/domains/mapping/mapping'
@@ -182,9 +181,10 @@ const fromTile = <A, E, R>(
  * not at all: its own, by the Operation's own function, `own`; or someone else's, a Grant letting it
  * write there, by `../assistant/someone/`, where Mapping decides what it may do and the owner's
  * timeline tells it with what undoes it, its answer the Tile for a create or an edit (`answer`). An
- * id no System holds is decided on its own System, `TileNotFound` there; a write of a Tile hexframe
- * ships is `Shipped` first, wherever the request works. A Turn's Key changes the System its Turn
- * started in alone: another is `TileNotFound`, as for a Tile kept from it.
+ * id no System holds is decided on its own System, `TileNotFound` there, and a Tile hexframe ships
+ * too, which every write's schema refuses first, Mapping's `Shipped` there for one a schema let
+ * through. A Turn's Key changes the System its Turn started in alone: another is `TileNotFound`, as
+ * for a Tile kept from it.
  */
 const changeAt = <O extends Operation, A, E, R>(
   made: () => O,
@@ -195,8 +195,6 @@ const changeAt = <O extends Operation, A, E, R>(
     const signed = yield* Iam.signedIn
     // Made once the request is proven, as the fields a caller sent are only decoded then.
     const operation = made()
-    // A write of a Tile hexframe ships is `Shipped` wherever the request works, a Turn's elsewhere too.
-    yield* Mapping.outsideShipped(writtenAt(operation))
     const [mine, star] = yield* Effect.all([
       actingOnOwn(signed.account.id, { session: signed.by._tag === 'Session' }),
       Mapping.workingAt(madeAt(operation)),
