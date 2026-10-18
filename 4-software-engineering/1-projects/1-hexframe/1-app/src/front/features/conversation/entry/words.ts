@@ -298,16 +298,22 @@ function sharedOf(entry: Extract<Told, { _tag: 'Shared' }>, naming: Naming): Hap
 
 /**
  * What a change says, by who acted, its Tiles by the Titles they had: in the user's System, as it
- * holds them now; made in someone else's, visited by their links (`elsewhereOf`).
+ * holds them now; made in someone else's, visited by their links (`elsewhereOf`). The Tile a
+ * Reference points at that the user's System does not hold, a pin's, stands elsewhere too, visited by
+ * its link, never struck through (HEX-133).
  */
 export function changeWords(entry: Extract<Entry, { _tag: 'Change' }>, naming: Naming): Words {
   const said = isVerb(entry.verb) ? changes[entry.verb] : changed
   const elsewhere = !isTheirs(entry) && entry.elsewhere === true
   const tileOf = (tile: { id: string; title: string }) =>
     elsewhere ? elsewhereOf(tile, naming) : recorded(tile, naming)
+  const pinned = (tile: { id: string }) =>
+    entry.verb === 'ReferenceCreated' && naming.system !== undefined && !naming.system.has(tile.id)
+  const otherOf = (tile: { id: string; title: string }) =>
+    pinned(tile) ? elsewhereOf(tile, naming) : tileOf(tile)
   const pieces = {
     title: tileOf(entry.tile),
-    other: entry.other === undefined ? named('') : tileOf(entry.other),
+    other: entry.other === undefined ? named('') : otherOf(entry.other),
   }
   return by(said, entry.actor, pieces)
 }

@@ -7,7 +7,7 @@ import { granted } from '#/repositories/database/tiles/testing'
 
 import { type Actor, systemOf } from '../../entities'
 import * as Mapping from '../../mapping'
-import { CreateReference } from '..'
+import { CreateReference, ReferenceCreated } from '..'
 import { actingOnOwn, createTile, editTile, held, TestTiles, tree } from '../../testing'
 
 // A pin, over PGlite: a Reference from a Context slot to a Tile of another System, which its creator
@@ -79,6 +79,23 @@ layer(TestTiles)('a pin, a Reference to a Tile of another System, over PGlite', 
         elsewhere: { star: 'Ana' },
       })
       expect(opened).toEqual({ _tag: 'Reference', tile, elsewhere: { star: 'Ana' } })
+    }),
+  )
+
+  it.effect('names the pinned Tile in Bob’s timeline as he may see it there', () =>
+    Effect.gen(function* () {
+      const { journal, bob, desk } = yield* scenario
+      const bobs = yield* actingOnOwn(bob)
+      const made = new ReferenceCreated({
+        id: crypto.randomUUID(),
+        parent: desk.id,
+        slot: -1,
+        target: journal.id,
+      })
+      expect(yield* Mapping.summary(bobs, made)).toMatchObject({
+        tile: { id: desk.id, title: 'Desk' },
+        other: { id: journal.id, title: 'Journal' },
+      })
     }),
   )
 

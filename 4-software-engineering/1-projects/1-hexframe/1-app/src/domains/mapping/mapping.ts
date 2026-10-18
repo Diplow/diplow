@@ -217,11 +217,14 @@ export const glimpses = (acting: Acting, ids: ReadonlyArray<string>) =>
 
 /**
  * Summarizes one of Mapping's events, on the System it changed, which the actor acts on
- * (`summaryOf`). A Title the event does not say is read as the System holds it now, after the change;
- * a deleted Tile's comes from its event, since no read finds it.
+ * (`summaryOf`), for the actor's own timeline. A Title the event does not say is read as the System
+ * holds it now, after the change, or, a pin's, as another System holds it, as the actor may see it
+ * there (`titlesAcross`); a deleted Tile's comes from its event, since no read finds it.
  */
 export const summary = (acting: Acting, event: MappingEvent) =>
-  Effect.map(titles(acting, untitledIn(event)), (read) => summaryOf(event, (id) => read[id] ?? ''))
+  Effect.map(titlesAcross(acting, untitledIn(event)), (read) =>
+    summaryOf(event, (id) => read[id] ?? ''),
+  )
 
 /** A Tile read from, with the id and Title of its parent, `null` for the Root. */
 interface Read<F extends Field> {
