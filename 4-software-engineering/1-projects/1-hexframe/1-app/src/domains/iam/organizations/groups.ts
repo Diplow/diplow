@@ -149,6 +149,16 @@ export const groupsNamed = (ids: ReadonlyArray<string>) =>
   )
 
 /**
+ * The Organizations the Account the request's Session proves is a member of, read now: the one rule
+ * of which Groups it sees, those of these Organizations, which `groups` shows its members alone.
+ */
+const seenBySession = Effect.gen(function* () {
+  const { account } = yield* sessionOnly
+  const rows = yield* Organizations.use((organizations) => organizations.membershipsOf(account.id))
+  return rows.map(({ organization }) => organization)
+})
+
+/**
  * The Groups of an Organization's own some ids name as the Account the request's Session proves may
  * see them, for the owner of a Tile whose Grants name them, who reads who reaches it: by its name and
  * its Organization where the Account is one of its members, as `groups` shows them; with no name
@@ -157,12 +167,8 @@ export const groupsNamed = (ids: ReadonlyArray<string>) =>
  */
 export const groupsSeen = (ids: ReadonlyArray<string>) =>
   Effect.gen(function* () {
-    const { account } = yield* sessionOnly
-    const rows = yield* Organizations.use((organizations) =>
-      organizations.membershipsOf(account.id),
-    )
+    const theirs = new Set(yield* seenBySession)
     const named = yield* groupsNamed(ids)
-    const theirs = new Set(rows.map(({ organization }) => organization))
     return new Map(
       [...named].map(([id, group]) => [id, theirs.has(group.organization) ? group : undefined]),
     )
@@ -173,9 +179,7 @@ export const groupsSeen = (ids: ReadonlyArray<string>) =>
  * own, by their ids and names, the earliest first: the Groups it may name in a Grant.
  */
 export const groupsToShareWith = Effect.gen(function* () {
-  const { account } = yield* sessionOnly
-  const rows = yield* Organizations.use((organizations) => organizations.membershipsOf(account.id))
-  const theirs = rows.map(({ organization }) => organization)
+  const theirs = yield* seenBySession
   const found = yield* Organizations.use((organizations) => organizations.groupsAmong(theirs))
   return theirs.map((organization) => ({
     organization,
@@ -193,10 +197,9 @@ export const groupsToShareWith = Effect.gen(function* () {
  */
 export const shareableGroup = (group: string) =>
   Effect.gen(function* () {
-    const { account } = yield* sessionOnly
-    const rows = yield* Organizations.use((organizations) =>
-      organizations.membershipsOf(account.id),
-    )
+    const theirs = yield* seenBySession
     const organization = (yield* groupsNamed([group])).get(group)?.organization
-    if (!rows.some((row) => row.organization === organization)) return yield* new GroupNotFound()
+    if (organization === undefined || !theirs.includes(organization)) {
+      return yield* new GroupNotFound()
+    }
   })

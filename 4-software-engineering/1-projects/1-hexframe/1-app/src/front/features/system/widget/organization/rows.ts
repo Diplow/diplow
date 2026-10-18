@@ -63,3 +63,21 @@ export const groupMembersOf = (members: readonly Member[], group: Group): GroupM
           },
         ],
   )
+
+/**
+ * What saving a Group's widget does with the name kept: a new Group made under it, none open yet;
+ * nothing sent, the list back, for the name it has already; or that Group renamed.
+ */
+export type Save =
+  | { readonly _tag: 'Create'; readonly name: string }
+  | { readonly _tag: 'Back' }
+  | { readonly _tag: 'Rename'; readonly group: string; readonly name: string }
+
+/** What saving does, for the Group open, none for a new one, and the name kept. */
+export function saveOf(
+  opened: { readonly id: string; readonly name: string } | undefined,
+  name: string,
+): Save {
+  if (opened === undefined) return { _tag: 'Create', name }
+  return name === opened.name ? { _tag: 'Back' } : { _tag: 'Rename', group: opened.id, name }
+}

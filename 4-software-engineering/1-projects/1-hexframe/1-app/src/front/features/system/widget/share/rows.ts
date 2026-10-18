@@ -90,10 +90,10 @@ type SomeoneRow = ReachRow & Chosen & { readonly named: Named }
  * A Group's row the owner names nothing for, its Grant set here: a Group gone, or one of an
  * Organization they are not in, whose name stays its members'. No choice, its Grant cleared alone.
  */
-type GoneRow = ReachRow & { readonly clears: true; readonly named: GroupNamed }
+type ClearOnlyRow = ReachRow & { readonly clears: true; readonly named: GroupNamed }
 
 /** Someone else reaching the Tile, as its row words it: with a choice, cleared, or neither yet. */
-type OtherRow = ReachRow | SomeoneRow | GoneRow
+type OtherRow = ReachRow | SomeoneRow | ClearOnlyRow
 
 /** Whom a row's choice names, none for a row no choice is sent for. */
 const namedOf = (row: OtherRow) => ('named' in row ? row.named : undefined)

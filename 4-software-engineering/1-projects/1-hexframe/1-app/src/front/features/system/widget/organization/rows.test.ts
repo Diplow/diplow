@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { groupMembersOf, groupRowsOf, isMember, memberRowsOf, starOfRow } from './rows'
+import { groupMembersOf, groupRowsOf, isMember, memberRowsOf, saveOf, starOfRow } from './rows'
 
 // The Members widget's rows, as they word IAM's members: by their stars, keyed by them.
 
@@ -68,5 +68,14 @@ describe('the Groups widget’s rows', () => {
       { key: 'anas-star', placed: true },
       { key: 'bobs-star', placed: false },
     ])
+  })
+})
+
+describe('saving a Group’s widget', () => {
+  it('makes a new Group, renames one under another name, and sends nothing for the same', () => {
+    expect(saveOf(undefined, 'Design')).toEqual({ _tag: 'Create', name: 'Design' })
+    const design = { id: 'design', name: 'Design' }
+    expect(saveOf(design, 'Design')).toEqual({ _tag: 'Back' })
+    expect(saveOf(design, 'design')).toEqual({ _tag: 'Rename', group: 'design', name: 'design' })
   })
 })

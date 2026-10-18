@@ -26,7 +26,7 @@ import {
 } from '#/front/ui/chat/widgets/sharing/organization/GroupsWidget'
 import { m } from '#/paraglide/messages'
 
-import { groupMembersOf, groupRowsOf } from './rows'
+import { groupMembersOf, groupRowsOf, saveOf } from './rows'
 
 interface GroupsWidgetsProps {
   /** The Organization's star, as the URL says. */
@@ -96,19 +96,20 @@ export function GroupsWidgets({ star, title, onClose }: GroupsWidgetsProps) {
         onSave={() => {
           const kept = named()
           if (kept === undefined || sending) return
-          if (opened === undefined) {
+          const save = saveOf(opened, kept)
+          if (save._tag === 'Back') {
+            back()
+          } else if (save._tag === 'Create') {
             const submit = submitMutation({
               mutate: create.mutateAsync,
               onSaved: ({ id }) => {
-                openOn({ id, name: kept })
+                openOn({ id, name: save.name })
               },
             })
-            void submit({ value: { star, name: kept } }).then(onRefused)
-          } else if (kept === opened.name) {
-            back()
+            void submit({ value: { star, name: save.name } }).then(onRefused)
           } else {
             const submit = submitMutation({ mutate: rename.mutateAsync, onSaved: back })
-            void submit({ value: { star, group: opened.id, name: kept } }).then(onRefused)
+            void submit({ value: { star, group: save.group, name: save.name } }).then(onRefused)
           }
         }}
         onToggle={(member, placed) => {
