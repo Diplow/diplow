@@ -167,12 +167,10 @@ export const toldAsked = on(Joining.JoinAsked, (asked, actor) =>
     onNone: () => Effect.void,
     onSome: (signedIn) =>
       Effect.gen(function* () {
-        const { by, ...named } = yield* membershipOf(signedIn, asked)
+        const named = yield* membershipOf(signedIn, asked)
         const admins = yield* Joining.adminsOf(asked.organization)
         yield* Effect.forEach(admins, (admin) =>
-          transactional(
-            Assistant.recordJoinAsked(admin, { request: asked.request, who: by, ...named }),
-          ),
+          transactional(Assistant.recordJoinAsked(admin, { request: asked.request, ...named })),
         )
       }),
   }),

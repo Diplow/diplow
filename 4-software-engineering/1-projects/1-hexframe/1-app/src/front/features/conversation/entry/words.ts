@@ -326,7 +326,7 @@ function membershipWords(entry: Omit<Membership, '_tag'>, naming: Naming): Words
 export function joinAskedWords(entry: JoinAsked, naming: Naming): Words {
   const said =
     entry.group === undefined ? m.conversation_join_asked : m.conversation_join_asked_group
-  return weave(said, { who: outsider(entry.who), ...joinedPieces(entry, naming) })
+  return weave(said, { who: outsider(entry.by), ...joinedPieces(entry, naming) })
 }
 
 /**

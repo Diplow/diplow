@@ -1,0 +1,3 @@
+CREATE UNIQUE INDEX "join_request_open_members_idx" ON "join_request" ("organization_id","account_id") WHERE (("state" = 'open') and (("group_id" is null)));--> statement-breakpoint
+CREATE UNIQUE INDEX "join_request_open_group_idx" ON "join_request" ("organization_id","account_id","group_id") WHERE "state" = 'open';--> statement-breakpoint
+ALTER TABLE "join_request" ADD CONSTRAINT "join_request_decided_check" CHECK ((((("state" = 'open') and (("decided_at" is null)))) or ((("state" <> 'open') and (("decided_at" is not null))))));

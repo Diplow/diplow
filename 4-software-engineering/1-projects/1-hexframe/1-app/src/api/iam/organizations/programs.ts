@@ -67,28 +67,17 @@ const accountAt = (star: string) =>
   Effect.catchTag(Mapping.ownerOf(star), 'TileNotFound', () => Effect.succeed(''))
 
 /**
- * Where an Account stands in the Organization a star names: among its members, by its role; or
- * `outside` it, where it may ask to join. None for a star that names no Organization. What tells the
- * page that a star's menu offers its Members and Groups widgets, or Ask to join.
- */
-type Standing = Role | 'outside' | null
-
-/**
- * Where the Account the request's Session proves stands in the Organization a star names, read now,
- * never kept.
+ * Where the Account the request's Session proves stands in the Organization a star names, IAM's
+ * `standingIn`: its role, or `outside` it, where it may ask to join; none for a star that names no
+ * Organization. What tells the page that a star's menu offers its Members and Groups widgets, or Ask
+ * to join. Read now, never kept.
  */
 export const standingIn = ({ star }: { readonly star: string }) =>
   Effect.gen(function* () {
-    const { account } = yield* Iam.sessionOnly
     const organization = yield* organizationAt(star).pipe(
       Effect.catchTag('OrganizationNotFound', () => Effect.succeed(undefined)),
     )
-    if (organization === undefined) return null satisfies Standing
-    const found = yield* Organizations.members(organization).pipe(
-      Effect.catchTag('OrganizationNotFound', () => Effect.succeed([])),
-    )
-    const standing: Standing = Organizations.roleIn(found, account.id) ?? 'outside'
-    return standing
+    return organization === undefined ? null : yield* Organizations.standingIn(organization)
   })
 
 /** One member of an Organization as the Members widget shows them: by their star, and their role. */
@@ -300,8 +289,4 @@ export const decideJoinRequest = ({
 }: {
   readonly request: string
   readonly accept: boolean
-}) =>
-  Effect.andThen(
-    Iam.sessionOnly,
-    Effect.as(transactional(Joining.decideJoinRequest(request, accept)), null),
-  )
+}) => Effect.as(transactional(Joining.decideJoinRequest(request, accept)), null)

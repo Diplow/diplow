@@ -1,5 +1,6 @@
 import { expect, layer } from '@effect/vitest'
 import { Effect, Exit, Layer, Option } from 'effect'
+import { TestClock } from 'effect/testing'
 
 import { Bus, type DomainEvent } from '#/domains/bus'
 import { browser, TestAuth } from '#/repositories/auth/testing'
@@ -146,6 +147,9 @@ layer(TestLayer)('Joining an Organization', (it) => {
       expect(yield* ana.asSession(requestsSeen([request]))).toEqual(
         new Map([[request, 'declined']]),
       )
+      // Not again at once, so a declined Account fills no admin's timeline: the next day.
+      expect(yield* failedWith(bob.asSession(askToJoin(team)))).toBe('JoinRequestDeclined')
+      yield* TestClock.adjust('25 hours')
       const again = yield* bob.asSession(askToJoin(team))
       expect(again).not.toBe(request)
     }),
@@ -207,6 +211,23 @@ layer(TestLayer)('Joining an Organization', (it) => {
       expect(yield* failedWith(ana.asSession(decideJoinRequest(again, true)))).toBe(
         'JoinRequestNotFound',
       )
+    }),
+  )
+
+  it.effect('drops a request once its Account is added, so none brings back someone who left', () =>
+    Effect.gen(function* () {
+      const { ana, team } = yield* atelier
+      const bob = yield* someone
+      const request = yield* bob.asSession(askToJoin(team))
+      yield* ana.asSession(addMember(team, bob.account.id))
+      expect(yield* ana.asSession(requestsSeen([request]))).toEqual(new Map())
+      yield* bob.asSession(removeMember(team, bob.account.id))
+      expect(yield* failedWith(ana.asSession(decideJoinRequest(request, true)))).toBe(
+        'JoinRequestNotFound',
+      )
+      expect((yield* belonging(bob.account.id)).groups).toEqual([])
+      // Gone, he may ask anew.
+      yield* bob.asSession(askToJoin(team))
     }),
   )
 

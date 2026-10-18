@@ -161,7 +161,7 @@ layer(TestLayer)('the Conversation, over PGlite', (it) => {
           organization: atelier,
           group: 'Design',
         },
-        { _tag: 'JoinAsked', request, who: 'Cleo Diaz', organization: atelier, group: 'Design' },
+        { _tag: 'JoinAsked', request, by: 'Cleo Diaz', organization: atelier, group: 'Design' },
       ]
       for (const content of kinds) yield* recorded(account, content)
       const read = yield* day(account, { date: '2026-10-10', offset: 0 })

@@ -1,7 +1,7 @@
 // Every table hexframe keeps, in Drizzle's schema language. `drizzle-kit generate` diffs this file
 // against the last migration's snapshot and writes the next migration into ../../../migrations/.
 // Tables arrive with the domains that own them: IAM's, then Mapping's, then Assistant's.
-import { type SQL, eq, inArray, isNotNull, isNull, ne, or } from 'drizzle-orm'
+import { type SQL, and, eq, inArray, isNotNull, isNull, ne, or } from 'drizzle-orm'
 import {
   type AnyPgColumn,
   bigint,
@@ -211,6 +211,13 @@ function either(a: SQL, b: SQL): SQL {
   const one = or(a, b)
   if (one === undefined) throw new Error('Two conditions made none')
   return one
+}
+
+/** Two conditions, both holding, as `either` takes one of two. */
+function both(a: SQL, b: SQL): SQL {
+  const all = and(a, b)
+  if (all === undefined) throw new Error('Two conditions made none')
+  return all
 }
 
 /** Who a `grant` row is for, and the values it may hold, as Mapping names them. */
@@ -507,9 +514,9 @@ const joinRequestStates = ['open', 'accepted', 'declined'] as const
  * An Account asking to join an Organization's Members, or a member one of its Groups (HEX-138): by an
  * id IAM makes, a UUID, which the admins' timelines name it by; the Group asked for, null for the
  * Members, which need no row, its key to that Group of that same Organization deleting the request
- * with it; and how it stands, open until an admin decides it, then when. That one at most is open per
- * Account and Group is IAM's to hold, under the Organization's row's lock, never a check here.
- * Deleting the Organization or the Account deletes it.
+ * with it; and how it stands, open until an admin decides it, then when. One at most is open per
+ * Account and Group, which IAM decides under the Organization's row's lock and two partial keys hold
+ * behind it, one for the Members, one for a Group. Deleting the Organization or the Account deletes it.
  */
 export const joinRequest = pgTable(
   'join_request',
@@ -535,5 +542,18 @@ export const joinRequest = pgTable(
     index('join_request_organizationId_idx').on(table.organizationId),
     index('join_request_accountId_idx').on(table.accountId),
     check('join_request_state_check', inArray(table.state, [...joinRequestStates])),
+    check(
+      'join_request_decided_check',
+      either(
+        both(eq(table.state, 'open'), isNull(table.decidedAt)),
+        both(ne(table.state, 'open'), isNotNull(table.decidedAt)),
+      ),
+    ),
+    uniqueIndex('join_request_open_members_idx')
+      .on(table.organizationId, table.accountId)
+      .where(both(eq(table.state, 'open'), isNull(table.groupId))),
+    uniqueIndex('join_request_open_group_idx')
+      .on(table.organizationId, table.accountId, table.groupId)
+      .where(eq(table.state, 'open')),
   ],
 )

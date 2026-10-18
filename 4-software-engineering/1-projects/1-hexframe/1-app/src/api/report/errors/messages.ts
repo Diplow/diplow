@@ -56,6 +56,7 @@ const table: readonly Entry[] = [
   { tag: 'GroupNotFound', message: m.error_iam_group_not_found },
   { tag: 'AlreadyInGroup', message: m.error_iam_already_in_group },
   { tag: 'JoinRequestOpen', message: m.error_iam_join_request_open },
+  { tag: 'JoinRequestDeclined', message: m.error_iam_join_request_declined },
   { tag: 'JoinRequestNotFound', message: m.error_iam_join_request_not_found },
   { tag: 'JoinRequestDecided', message: m.error_iam_join_request_decided },
   { tag: 'TurnRunning', message: m.error_assistant_turn_running },

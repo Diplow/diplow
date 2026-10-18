@@ -16,7 +16,7 @@ import {
   askToJoin,
   createOrganization,
   decideJoinRequest,
-  type JoinAsked,
+  type AskToJoin,
   type JoinDecision,
   type MemberAt,
   type MemberRole,
@@ -212,7 +212,7 @@ export const useSetInGroup = () => {
 export const useAskToJoin = () => {
   const client = useQueryClient()
   return useMutation({
-    ...write('askToJoin', (data: typeof JoinAsked.Type) => askToJoin({ data })),
+    ...write('askToJoin', (data: typeof AskToJoin.Type) => askToJoin({ data })),
     onSettled: () =>
       Promise.all([
         client.invalidateQueries({ queryKey: [standingScope] }),

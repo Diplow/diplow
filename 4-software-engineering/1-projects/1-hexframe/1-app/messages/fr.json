@@ -1419,6 +1419,7 @@
   "error_iam_join_already_member": "Vous en êtes déjà membre.",
   "error_iam_already_in_group": "Vous faites déjà partie de ce groupe.",
   "error_iam_join_request_open": "Vous avez déjà demandé : un admin décidera.",
+  "error_iam_join_request_declined": "Un admin vient de refuser votre demande : vous pourrez la refaire demain.",
   "error_iam_join_request_not_found": "Cette demande n’existe plus, ou ce n’est pas à vous d’en décider.",
   "error_iam_join_request_decided": "Un autre admin a déjà décidé de cette demande.",
   "gallery_state_groups_admin": "En admin : un groupe créé, renommé, rempli et supprimé, un nom refusé",

@@ -106,7 +106,7 @@ const inAtelier = (at: Date): Entry[] => [
     id: 'o2',
     at,
     request: 'cleo-asks',
-    who: 'Cleo Diaz',
+    by: 'Cleo Diaz',
     organization: atelier,
   },
   {
@@ -114,7 +114,7 @@ const inAtelier = (at: Date): Entry[] => [
     id: 'o3',
     at,
     request: 'dan-asks',
-    who: 'Dan Okafor',
+    by: 'Dan Okafor',
     organization: atelier,
     group: 'Design',
   },

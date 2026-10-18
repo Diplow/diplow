@@ -190,14 +190,14 @@ export type Membership = typeof Membership.Type
 
 /**
  * Someone asking to join an Organization the user is an admin of, or one of its Groups, as the API
- * layer told it: the request by its id, which the user accepts or declines; who asked, by the Title
+ * layer told it: the request by its id, which the user accepts or declines; who asked (`by`), by the Title
  * their star had then; the Organization by its star; the Group by the name it had then, none for its
  * Members. How it stands, open or decided, by this admin or another, is read anew with the day,
  * never kept here.
  */
 const JoinAsked = Schema.TaggedStruct('JoinAsked', {
   request: Schema.String,
-  who: Schema.String,
+  by: Schema.String,
   organization: Named,
   group: Schema.optionalKey(Schema.String),
 })

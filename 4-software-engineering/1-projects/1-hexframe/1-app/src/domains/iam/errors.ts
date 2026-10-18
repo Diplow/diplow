@@ -130,6 +130,12 @@ export class JoinRequestOpen extends Schema.TaggedError<JoinRequestOpen>()('Join
   kind: kind('Conflict'),
 }) {}
 
+/** An admin declined the Account's request for this a short while ago: it asks again tomorrow. */
+export class JoinRequestDeclined extends Schema.TaggedError<JoinRequestDeclined>()(
+  'JoinRequestDeclined',
+  { kind: kind('Conflict') },
+) {}
+
 /** No request to join the Organization has this id. */
 export class JoinRequestNotFound extends Schema.TaggedError<JoinRequestNotFound>()(
   'JoinRequestNotFound',
@@ -164,6 +170,7 @@ export const iamFailures = [
   GroupNotFound,
   AlreadyInGroup,
   JoinRequestOpen,
+  JoinRequestDeclined,
   JoinRequestNotFound,
   JoinRequestDecided,
 ] as const

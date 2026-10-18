@@ -19,6 +19,12 @@ export type Role = typeof Role.Type
 export const GroupId = Schema.String.check(Schema.isUUID())
 
 /**
+ * Where an Account stands in an Organization: among its members, by its role, or `outside` it, where
+ * it may ask to join (HEX-138).
+ */
+export type Standing = Role | 'outside'
+
+/**
  * How a request to join an Organization, or one of its Groups, stands: waiting for one of its
  * admins, accepted, or declined (HEX-138).
  */

@@ -207,7 +207,7 @@ function lineOf(entry: Entry, titles: PromptOf['titles']): string {
     case 'Membership':
       return `${accountOf(entry.by)} ${membershipSaid[entry.what](organizationOf(entry))}.`
     case 'JoinAsked':
-      return `${accountOf(entry.who)} asked to join ${organizationOf(entry)}, of which the user is an admin; the user accepts or declines it in the timeline, not you.`
+      return `${accountOf(entry.by)} asked to join ${organizationOf(entry)}, of which the user is an admin; the user accepts or declines it in the timeline, not you.`
   }
 }
 

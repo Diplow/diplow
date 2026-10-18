@@ -6,7 +6,7 @@
 // bus (`JoinAsked`, `JoinDecided`), which the API layer tells: a request in every admin's timeline,
 // its outcome in the timeline of whoever asked. Asking and deciding take a Session (`sessionOnly`),
 // never a Key nor a Turn's Key.
-import { Effect, Schema } from 'effect'
+import { Clock, Effect, Schema } from 'effect'
 
 import { Bus } from '#/domains/bus'
 import { Organizations } from '#/repositories/database/organizations/organizations'
@@ -16,6 +16,7 @@ import {
   AlreadyInGroup,
   AlreadyMember,
   GroupNotFound,
+  JoinRequestDeclined,
   JoinRequestDecided,
   JoinRequestNotFound,
   JoinRequestOpen,
@@ -66,22 +67,41 @@ const mayAsk = (organization: string, account: string, group: string | undefined
     if (asked.members.includes(account)) return yield* new AlreadyInGroup()
   })
 
+/** How long after a decline an Account may ask for the same again, in milliseconds: a day. */
+const askAgainAfter = 24 * 60 * 60_000
+
+/**
+ * That the Account may ask for this again, by its requests to the Organization so far, now:
+ * `JoinRequestOpen` while one for the same waits; `JoinRequestDeclined` within a day of one an admin
+ * declined, so a declined Account cannot fill every admin's timeline, and their agent's prompt, with
+ * a request at each click.
+ */
+const mayAskAgain = (organization: string, account: string, group: string | undefined) =>
+  Effect.gen(function* () {
+    const now = yield* Clock.currentTimeMillis
+    const before = yield* Organizations.use((organizations) =>
+      organizations.requestsBy(account, organization),
+    )
+    const same = before.filter((one) => one.group === group)
+    if (same.some((one) => one.state === 'open')) return yield* new JoinRequestOpen()
+    const declinedLately = (one: (typeof same)[number]) =>
+      one.state === 'declined' &&
+      one.decidedAt !== undefined &&
+      now - one.decidedAt.getTime() < askAgainAfter
+    if (same.some(declinedLately)) return yield* new JoinRequestDeclined()
+  })
+
 /**
  * Asks, for the Account the request's Session proves, to join an Organization's Members, or one of
  * its Groups, and answers the request's id: `OrganizationNotFound` for an id no Organization has,
- * refused as `mayAsk` says, and `JoinRequestOpen` while another of the Account's for the same waits,
- * decided under the Organization's row's lock. Publishes `JoinAsked`. Inside a transaction.
+ * refused as `mayAsk` and `mayAskAgain` say, decided under the Organization's row's lock. Publishes
+ * `JoinAsked`. Inside a transaction.
  */
 export const askToJoin = (organization: string, group?: string) =>
   Effect.gen(function* () {
     const { account } = yield* sessionOnly
     yield* mayAsk(organization, account.id, group)
-    const open = yield* Organizations.use((organizations) =>
-      organizations.openRequestsBy(account.id),
-    )
-    if (open.some((one) => one.organization === organization && one.group === group)) {
-      return yield* new JoinRequestOpen()
-    }
+    yield* mayAskAgain(organization, account.id, group)
     const id = crypto.randomUUID()
     const asked = { organization, ...(group !== undefined && { group }), account: account.id }
     yield* Organizations.use((organizations) => organizations.addRequest({ id, group, ...asked }))
@@ -108,6 +128,7 @@ const requestOf = (request: string) =>
  */
 export const decideJoinRequest = (request: string, accept: boolean) =>
   Effect.gen(function* () {
+    yield* sessionOnly
     const { organization } = yield* requestOf(request)
     const found = yield* managedBy(organization).pipe(
       Effect.catchTags({
@@ -125,8 +146,9 @@ export const decideJoinRequest = (request: string, accept: boolean) =>
         organizations.addToGroup(organization, { group, account }),
       )
     }
+    const at = new Date(yield* Clock.currentTimeMillis)
     yield* Organizations.use((organizations) =>
-      organizations.decideRequest(request, accept ? 'accepted' : 'declined'),
+      organizations.decideRequest(request, { state: accept ? 'accepted' : 'declined', at }),
     )
     const { publish } = yield* Bus
     yield* publish(
@@ -166,11 +188,11 @@ export const requestsSeen = (ids: ReadonlyArray<string>) =>
  */
 export const groupsAskedBy = (account: string, organization: string) =>
   Effect.map(
-    Organizations.use((organizations) => organizations.openRequestsBy(account)),
-    (open) =>
+    Organizations.use((organizations) => organizations.requestsBy(account, organization)),
+    (asked) =>
       new Set(
-        open.flatMap((one) =>
-          one.organization === organization && one.group !== undefined ? [one.group] : [],
+        asked.flatMap((one) =>
+          one.state === 'open' && one.group !== undefined ? [one.group] : [],
         ),
       ),
   )

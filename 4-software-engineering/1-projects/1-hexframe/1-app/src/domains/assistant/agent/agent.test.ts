@@ -290,7 +290,7 @@ const entries: ReadonlyArray<Entry> = [
   {
     _tag: 'JoinAsked',
     request: 'r1',
-    who: 'Cleo Diaz',
+    by: 'Cleo Diaz',
     organization: { id: 'atelier', title: 'Atelier' },
     id: 'e16',
     at,

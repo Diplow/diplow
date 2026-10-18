@@ -10,7 +10,7 @@ import { Context, Effect, Layer } from 'effect'
 import { Database, InTransaction, inTransaction } from '../database'
 import { membership, organization, user } from '../schema'
 import { type GroupRows, groupRowsOf } from './groups'
-import { groupRequestsDropped, type JoinRows, joinRowsOf } from './joining'
+import { type JoinRows, joinRowsOf } from './joining'
 
 /** A role in an Organization, as the `membership` table keeps it. */
 type MemberRole = 'admin' | 'member'
@@ -186,10 +186,7 @@ const make = Effect.gen(function* () {
       ),
     remove: (id, account) =>
       inTransaction(
-        Effect.andThen(
-          groupRequestsDropped(database, id, account),
-          database.delete(membership).where(ofOne(id, account)).pipe(Effect.orDie, Effect.asVoid),
-        ),
+        database.delete(membership).where(ofOne(id, account)).pipe(Effect.orDie, Effect.asVoid),
       ),
   })
 })

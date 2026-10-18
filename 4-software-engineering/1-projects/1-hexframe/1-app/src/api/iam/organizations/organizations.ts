@@ -28,7 +28,7 @@ export const MemberAt = Schema.Struct({ star: TileId, member: TileId })
 export const MemberRole = Schema.Struct({ star: TileId, member: TileId, role: Role })
 
 /** A request to join the Organization a star names, its Members, or one of its Groups by its id. */
-export const JoinAsked = Schema.Struct({ star: TileId, group: Schema.optionalKey(GroupId) })
+export const AskToJoin = Schema.Struct({ star: TileId, group: Schema.optionalKey(GroupId) })
 
 /** A request to join, by its id, a UUID IAM made, accepted or declined. */
 export const JoinDecision = Schema.Struct({
@@ -71,7 +71,7 @@ export const removeMember = createServerFn({ method: 'POST' })
 
 /** Asks to join the Organization a star names, or one of its Groups: its admins are told. */
 export const askToJoin = createServerFn({ method: 'POST' })
-  .validator(Schema.toStandardSchemaV1(JoinAsked))
+  .validator(Schema.toStandardSchemaV1(AskToJoin))
   .handler(({ data, context }) => run(context, Organizations.askToJoin(data)))
 
 /** Accepts or declines a request to join: its Organization's admins' alone. */

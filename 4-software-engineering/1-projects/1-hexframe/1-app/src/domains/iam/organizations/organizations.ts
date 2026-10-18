@@ -15,7 +15,7 @@ import { Bus } from '#/domains/bus'
 
 import { type MemberRow, Organizations } from '#/repositories/database/organizations/organizations'
 
-import type { Role } from '../entities'
+import type { Role, Standing } from '../entities'
 import {
   AccountNotFound,
   AdminRequired,
@@ -104,6 +104,18 @@ export const members = (organization: string) =>
   })
 
 /**
+ * Where the Account the request's Session proves stands in an Organization, read now: its role among
+ * its members, or `outside` it, where it may ask to join.
+ */
+export const standingIn = (organization: string) =>
+  Effect.gen(function* () {
+    const { account } = yield* sessionOnly
+    const found = yield* Organizations.use((organizations) => organizations.members(organization))
+    const standing: Standing = roleIn(found, account.id) ?? 'outside'
+    return standing
+  })
+
+/**
  * The members of an Organization, its row locked until the transaction ends, once its admin acting
  * from a Session asks to change them: `OrganizationNotFound` for anyone not among them, and
  * `AdminRequired` for a member.
@@ -140,7 +152,8 @@ const lastJoinedAdmin = (found: ReadonlyArray<MemberRow>, account: string) => {
 /**
  * Adds an Account to an Organization, a member, by one of its admins from a Session, without asking
  * first: `AccountNotFound` for an id no Account has, an Organization's included, and `AlreadyMember`
- * for one among its members. Publishes `MemberAdded`, so they are told. Inside a transaction.
+ * for one among its members. A request of theirs to join it, open, has nothing left to decide and
+ * goes. Publishes `MemberAdded`, so they are told. Inside a transaction.
  */
 export const addMember = (organization: string, account: string) =>
   Effect.gen(function* () {
@@ -151,6 +164,9 @@ export const addMember = (organization: string, account: string) =>
       organizations.add(organization, { account, role: 'member' }),
     )
     if (!added) return yield* new AlreadyMember()
+    yield* Organizations.use((organizations) =>
+      organizations.dropOpenRequests(organization, account),
+    )
     const { publish } = yield* Bus
     yield* publish(new MemberAdded({ organization, account }))
   })
@@ -190,7 +206,7 @@ const leftBy = (organization: string, account: string) =>
  * itself, leaving, whatever its role, so nobody stays in one they never chose. `MemberNotFound` for
  * an Account not among its members, and `LastAdmin` for its last admin who joined
  * (`lastJoinedAdmin`). Holds from the next request on, since nothing is kept of it. Its open
- * requests to join the Organization's Groups go with it. Publishes `MemberRemoved`, so someone taken
+ * requests to join the Organization or its Groups go with it, so no old one brings it back. Publishes `MemberRemoved`, so someone taken
  * out by an admin is told. Inside a transaction.
  */
 export const removeMember = (organization: string, account: string) =>
@@ -199,6 +215,9 @@ export const removeMember = (organization: string, account: string) =>
     const role = yield* roleOf(found, account)
     if (role === 'admin' && lastJoinedAdmin(found, account)) return yield* new LastAdmin()
     yield* Organizations.use((organizations) => organizations.remove(organization, account))
+    yield* Organizations.use((organizations) =>
+      organizations.dropOpenRequests(organization, account),
+    )
     const { publish } = yield* Bus
     yield* publish(new MemberRemoved({ organization, account }))
   })

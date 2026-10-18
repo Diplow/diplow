@@ -123,7 +123,7 @@ describe('a request to join an Organization', () => {
     const atelierStar = { id: star, title: 'Atelier' }
     for (const admin of [ana, dan]) {
       const [asked] = (await told(admin)).filter((entry) => entry._tag === 'JoinAsked')
-      expect(asked).toMatchObject({ who: 'Bob Martin', organization: atelierStar })
+      expect(asked).toMatchObject({ by: 'Bob Martin', organization: atelierStar })
       if (asked?._tag !== 'JoinAsked') throw new Error('Expected a request')
       expect((await today(admin)).requests).toEqual({ [asked.request]: 'open' })
     }
@@ -180,7 +180,7 @@ describe('a request to join an Organization', () => {
       { id: design, asked: true },
     ])
     const asked = (await told(ana)).find((entry) => entry._tag === 'JoinAsked')
-    expect(asked).toMatchObject({ who: 'Bob Martin', group: 'Design' })
+    expect(asked).toMatchObject({ by: 'Bob Martin', group: 'Design' })
     if (asked?._tag !== 'JoinAsked') throw new Error('Expected a request')
     await value(ana.as(Organizations.decideJoinRequest({ request: asked.request, accept: true })))
     const [group] = await value(bob.as(Organizations.groups({ star })))
