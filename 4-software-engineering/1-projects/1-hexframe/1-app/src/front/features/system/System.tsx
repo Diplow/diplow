@@ -10,9 +10,15 @@
 // Like the canvas, it holds no state of its own: the view and the change under way are the URL's,
 // and it hands the next view, with the gesture that asked for it, and the next search params to the
 // route.
+import { useRouter } from '@tanstack/react-router'
 import { cn } from 'cn'
 
-import type { Direction, System as FlatSystem, SystemTile } from '#/domains/mapping/entities'
+import type {
+  Direction,
+  PinnedTiles,
+  System as FlatSystem,
+  SystemTile,
+} from '#/domains/mapping/entities'
 import type { Underway } from '#/front/client/mapping/overlay/overlay'
 import { useSystemWriting } from '#/front/client/mapping/queries'
 import { m } from '#/paraglide/messages'
@@ -26,6 +32,7 @@ import { Dialog } from '#/front/ui/layouts/Dialog'
 import type { Reach } from './acting'
 import { viewOf, type SearchChange, type SystemSearch } from './search/search'
 import { useActingState } from './state/useActingState'
+import { pinFollowed } from './visit/visit'
 import { useWritesState } from './state/useWritesState'
 import type { Exported } from './widget/state/useTileWidgetsState'
 
@@ -44,6 +51,11 @@ interface SystemProps {
    */
   reach: Reach
   search: SystemSearch
+  /**
+   * The Tiles of other Systems its References point at that the user may read, by id: a gesture
+   * following one visits it by its link rather than changing the view (`pinFollowed`).
+   */
+  pinned: PinnedTiles
   /** The next view, after a gesture on the canvas, and the gesture, on which Tile. */
   onViewChange: (view: CanvasView, action: ViewAction) => void
   onSearchChange: (change: SearchChange) => void
@@ -65,6 +77,7 @@ export function System({
   underway,
   reach,
   search,
+  pinned,
   onViewChange,
   onSearchChange,
   exporting,
@@ -73,6 +86,7 @@ export function System({
   onCarry,
   className,
 }: SystemProps) {
+  const router = useRouter()
   const writes = useWritesState(underway)
   useLeaveGuard(useSystemWriting())
   const { acting, emptySlots, move, deleting } = useActingState({
@@ -87,7 +101,11 @@ export function System({
       <Canvas
         system={tree}
         view={viewOf(search)}
-        onViewChange={onViewChange}
+        onViewChange={(view, action) => {
+          const pin = pinFollowed(pinned, action)
+          if (pin === undefined) onViewChange(view, action)
+          else void router.navigate({ to: '/t/$id', params: { id: pin } })
+        }}
         emptySlots={emptySlots}
         acting={acting}
         move={move}

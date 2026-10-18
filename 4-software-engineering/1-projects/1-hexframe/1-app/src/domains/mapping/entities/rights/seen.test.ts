@@ -75,10 +75,11 @@ const scenario = sharedBy(
 describe('a System as its owner sees it', () => {
   it('is the System whole, every right on every Tile, no gap', () => {
     const seen = seenBy(actor('ana'), system, scenario)
-    expect({ ...seen, rights: undefined, gaps: undefined }).toEqual({
+    expect({ ...seen, rights: undefined, gaps: undefined, pinned: undefined }).toEqual({
       ...system,
       rights: undefined,
       gaps: undefined,
+      pinned: undefined,
     })
     expect(seen.rights).toEqual(
       Object.fromEntries(
@@ -108,13 +109,15 @@ describe('a System as anyone else sees it', () => {
     expect(seen.version).not.toBe(system.version)
   })
 
-  it('keeps Journal and what is below it from a stranger, a Reference to it too', () => {
+  it('keeps Journal and what is below it from a stranger, a Reference to it unavailable', () => {
     const seen = seenBy(actor('stranger'), system, scenario)
-    expect(Object.keys(seen.tiles).sort()).toEqual(['garden'])
+    expect(Object.keys(seen.tiles).sort()).toEqual(['garden', 'pinned'])
     expect(seen.rights).toEqual({ ana: ['read'], garden: ['read'] })
-    // The Reference would say Journal's id: Garden's Context holds nothing the stranger sees.
+    // The Reference shows as one whose Tile was deleted would, with no id: Journal's is nowhere.
     expect(JSON.stringify(seen)).not.toContain('journal')
-    expect(systemOf(seen).branches[2]?.context).toEqual({})
+    expect(systemOf(seen).branches[2]?.context).toEqual({
+      [-1]: { _tag: 'BrokenReference', target: '' },
+    })
   })
 
   it('keeps a Reference to the star, whose card anyone sees', () => {
@@ -209,5 +212,66 @@ describe('the Version a reader who is not the owner is shown', () => {
     expect(strangerOn(system, scenarioWith(grant('garden', everyone, 'read')))).toBe(before)
     const toStranger = grant('garden', { _tag: 'Account', id: 'stranger' }, 'read+write')
     expect(strangerOn(system, scenarioWith(toStranger))).not.toBe(before)
+  })
+})
+
+describe('a pin, a Reference to a Tile of another System', () => {
+  /** Ana's Garden holds a Reference to Bob's Shed, which no Tile of hers is. */
+  const withShed: System = {
+    ...system,
+    tiles: {
+      ...system.tiles,
+      shed: { _tag: 'Reference', id: 'shed', parent: 'garden', slot: -3, target: 'bobs-shed' },
+    },
+  }
+  const shed = { id: 'bobs-shed', title: 'Shed', preview: 'Where the tools are.', star: 'Bob' }
+  const sharing = sharingOf('ana', lineageOf(withShed), [
+    grant('ana', everyone, 'read'),
+    grant('journal', everyone, 'none'),
+  ])
+
+  it('shows its Tile to a reader who may read it there, from the star holding it', () => {
+    const seen = seenBy(actor('carol'), withShed, sharing, { 'bobs-shed': shed })
+    expect(seen.tiles['shed']).toEqual(withShed.tiles['shed'])
+    expect(seen.pinned).toEqual({ 'bobs-shed': shed })
+    expect(systemOf(seen, seen.pinned).branches[2]?.context[-3]).toEqual({
+      _tag: 'Reference',
+      tile: { id: 'bobs-shed', title: 'Shed', preview: 'Where the tools are.', body: '' },
+      elsewhere: { star: 'Bob' },
+    })
+  })
+
+  it('shows it unavailable to a reader who may not, as one whose Tile was deleted, no id told', () => {
+    const seen = seenBy(actor('carol'), withShed, sharing)
+    expect(seen.tiles['shed']).toEqual({ ...withShed.tiles['shed'], target: '' })
+    expect(seen.pinned).toEqual({})
+    expect(JSON.stringify(seen)).not.toContain('bobs-shed')
+    expect(systemOf(seen, seen.pinned).branches[2]?.context[-3]).toEqual({
+      _tag: 'BrokenReference',
+      target: '',
+    })
+  })
+
+  it('keeps for the owner the id they stored, the Tile itself shown only while they may read it', () => {
+    const owned = seenBy(actor('ana'), withShed, sharing)
+    expect(owned.tiles['shed']).toEqual(withShed.tiles['shed'])
+    expect(systemOf(owned, owned.pinned).branches[2]?.context[-3]).toEqual({
+      _tag: 'BrokenReference',
+      target: 'bobs-shed',
+    })
+  })
+
+  it('shows only the pins of the References the reader is shown', () => {
+    const seen = seenBy(actor('carol'), withShed, sharing, {
+      'bobs-shed': shed,
+      elsewhere: { ...shed, id: 'elsewhere' },
+    })
+    expect(Object.keys(seen.pinned)).toEqual(['bobs-shed'])
+  })
+
+  it('moves the Version a reader is shown once the Tile it pins changes', () => {
+    const before = seenBy(actor('carol'), withShed, sharing, { 'bobs-shed': shed }).version
+    const renamed = { 'bobs-shed': { ...shed, title: 'Workshop' } }
+    expect(seenBy(actor('carol'), withShed, sharing, renamed).version).not.toBe(before)
   })
 })

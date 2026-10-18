@@ -759,6 +759,7 @@ function SystemPage(props: SystemPageProps) {
         underway={underway}
         reach="owned"
         search={search}
+        pinned={data.pinned}
         onViewChange={onViewChange}
         onSearchChange={onSearchChange}
         exporting={{

@@ -9,7 +9,7 @@ import { systemOf } from '#/domains/mapping/entities'
 import type { SystemShown } from '#/front/client/mapping/queries'
 import { localizeUrl } from '#/paraglide/runtime'
 import { findTile, type TileNode } from '#/front/ui/canvas/view/tiles'
-import { orDefault, readSearch, TileId } from '#/front/ui/canvas/view/view'
+import { orDefault, readSearch, TileId, type ViewAction } from '#/front/ui/canvas/view/view'
 
 import { canvasTree } from '../tree'
 
@@ -40,14 +40,27 @@ export const visitLinkOf = (id: string, page: string) => localizeUrl(tilePage(pa
  * Someone else's System as the canvas and the corner draw it: from its star, its card unless the
  * visitor may read it, with its gaps hung from it, each with everything they may read below it.
  */
-export function visitTree({ system, root, gaps }: Pick<SystemShown, 'system' | 'root' | 'gaps'>) {
+export function visitTree({
+  system,
+  root,
+  gaps,
+  pinned,
+}: Pick<SystemShown, 'system' | 'root' | 'gaps' | 'pinned'>) {
   const across = Object.values(gaps).map((gap): TileNode => ({
-    ...canvasTree(systemOf({ ...system, root: gap })),
+    ...canvasTree(systemOf({ ...system, root: gap }, pinned)),
     across: true,
   }))
   const tree: TileNode = { ...canvasTree(root), ...(across.length > 0 && { gaps: across }) }
   return tree
 }
+
+/**
+ * The Tile a gesture on the canvas follows a pin to, a Reference to a Tile of another System, which
+ * the canvas draws under that Tile's id but never draws itself: visited by its link (`/t/<id>`)
+ * rather than centered, leading wherever the Account may read it; none for any other gesture.
+ */
+export const pinFollowed = (pinned: SystemShown['pinned'], { tile }: ViewAction) =>
+  Object.hasOwn(pinned, tile) ? tile : undefined
 
 /**
  * Where a Tile the chat names is centered: on the System visited when it holds it, else on the

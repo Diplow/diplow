@@ -20,7 +20,7 @@ import * as Operations from './operations'
  */
 export const held = (accountId: string) =>
   Effect.map(Effect.flatMap(actingOnOwn(accountId), Mapping.system), (seen): System =>
-    Struct.omit(seen, ['rights', 'gaps']),
+    Struct.omit(seen, ['rights', 'gaps', 'pinned']),
   )
 
 /** The Account's System, read flat, as its tree: what the canvas draws, as the client builds it. */

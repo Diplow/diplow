@@ -23,13 +23,15 @@ export const KeptParts = Schema.Struct({
 
 /**
  * An Operation as a batch keeps it, decided once already: a create with `made`, the id of what it
- * makes, given when it was first decided, so every fold makes it under that id; and, for a Tile an
- * undo makes again, `kept`, what it kept from its files.
+ * makes, given when it was first decided, so every fold makes it under that id; for a Tile an undo
+ * makes again, `kept`, what it kept from its files; and, for a Reference to a Tile of another System
+ * the actor was found to read there, `pinned` (`Made`'s).
  */
 export const Batched = Schema.Struct({
   operation: Operation,
   made: Schema.optionalKey(TileId),
   kept: Schema.optionalKey(KeptParts),
+  pinned: Schema.optionalKey(Schema.Literal(true)),
 })
 export type Batched = typeof Batched.Type
 
@@ -44,8 +46,8 @@ export interface Folded {
 }
 
 /** What a batched Operation makes on a System, decided as `decide` decides it. */
-function decided(system: System, { operation, made, kept }: Batched): Decided {
-  if (made !== undefined) return decide(system, operation, { id: made, kept })
+function decided(system: System, { operation, made, kept, pinned }: Batched): Decided {
+  if (made !== undefined) return decide(system, operation, { id: made, kept, pinned })
   if (operation._tag === 'CreateTile' || operation._tag === 'CreateReference') {
     throw new Error('A batched create lost the id of what it makes')
   }
@@ -92,17 +94,30 @@ export const whole = (
   return folded.left.length === 0 ? Result.succeed(folded) : Result.fail(new BatchOutdated())
 }
 
-/** An Operation as a batch keeps it, a create with `made`, the id of what it makes. */
-const batchedOf = (operation: Operation, made: string | undefined): Batched =>
-  made === undefined ? { operation } : { operation, made }
+/**
+ * An Operation as a batch keeps it, a create with `made`, the id of what it makes, a Reference to a
+ * Tile of another System `pinned`.
+ */
+const batchedOf = (operation: Operation, made: string | undefined, pinned = false): Batched => ({
+  operation,
+  ...(made !== undefined && { made }),
+  ...(pinned && { pinned }),
+})
 
 /**
- * One Operation decided on a System, a create given `made`, the id of what it makes: the events it
- * makes and the System after them, or what `decide` refuses it there, typed by its tag as `decide`'s
- * overloads type it, which the union `decided` goes through loses, so it is said once, here.
+ * One Operation decided on a System, a create given `made`, the id of what it makes, a Reference
+ * `pinned` when its target is a Tile of another System the actor was found to read there: the events
+ * it makes and the System after them, or what `decide` refuses it there, typed by its tag as
+ * `decide`'s overloads type it, which the union `decided` goes through loses, so it is said once,
+ * here.
  */
-export const decidedOne = <O extends Operation>(system: System, operation: O, made?: string) =>
-  afterOne(system, batchedOf(operation, made)) as Result.Result<Step, Refusals[O['_tag']]>
+export const decidedOne = <O extends Operation>(
+  system: System,
+  operation: O,
+  made?: string,
+  pinned = false,
+) =>
+  afterOne(system, batchedOf(operation, made, pinned)) as Result.Result<Step, Refusals[O['_tag']]>
 
 /**
  * One more Operation for a batch already folded over a System: decided on the System the batch

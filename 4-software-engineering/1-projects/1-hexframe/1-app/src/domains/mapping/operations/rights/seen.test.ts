@@ -187,8 +187,10 @@ layer(TestTiles)('a System read as someone else sees it, over PGlite', (it) => {
         fields: ['title'],
         language: 'en',
       })
-      // The Reference to the star stays, its card anyone's; the one to Journal is left out.
-      expect(Object.keys(opened.context)).toEqual(['-2'])
+      // The Reference to the star stays, its card anyone's; the one to Journal shows unavailable,
+      // as one whose Tile was deleted, with no id.
+      expect(Object.keys(opened.context).sort()).toEqual(['-1', '-2'])
+      expect(opened.context[-1]).toEqual({ _tag: 'BrokenReference', target: '' })
       expect(JSON.stringify(opened)).not.toContain(journal.id)
       const read = yield* Mapping.system(stranger)
       expect(JSON.stringify(read)).not.toContain(journal.id)

@@ -79,6 +79,25 @@ describe('canvasTree', () => {
     })
   })
 
+  it('draws a pin, a Reference to a Tile of another System, from the star holding it', () => {
+    const pinned = canvasTree({
+      ...system,
+      context: {
+        [-3]: {
+          _tag: 'Reference',
+          tile: { id: 'shed', title: 'Shed', preview: 'Tools', body: '' },
+          elsewhere: { star: 'Bob' },
+        },
+      },
+    })
+    expect(pinned.context?.[3]).toEqual({
+      id: 'shed',
+      title: 'Shed',
+      preview: 'Tools',
+      reference: { from: 'Bob' },
+    })
+  })
+
   it('draws a broken Reference as broken, under an id no Tile has', () => {
     expect(tree.context?.[5]).toEqual({
       id: 'broken:root:-5',

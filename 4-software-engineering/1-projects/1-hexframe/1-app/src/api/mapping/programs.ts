@@ -72,6 +72,15 @@ const turnKeyElsewhere = (signed: Iam.SignedIn, own: Mapping.Acting, star: strin
   signed.by._tag === 'TurnKey' && star !== own.system
 
 /**
+ * Whether a read the request makes resolves a Reference to a Tile of another System for the Account
+ * there (Mapping's `Across`): not for a Turn's Key, which reads the System its Turn started in alone,
+ * so its pins show unavailable; for a Session or an Account's Key, which read what the Account may.
+ */
+const acrossFor = (signed: Iam.SignedIn): Mapping.Across => ({
+  across: signed.by._tag !== 'TurnKey',
+})
+
+/**
  * Runs a read for the signed-in Account on the System the star `named` answers names, its own when
  * it answers none, looked up once the request is proven signed in, so nothing is looked up for a
  * request nothing proves,
@@ -82,7 +91,11 @@ const turnKeyElsewhere = (signed: Iam.SignedIn, own: Mapping.Acting, star: strin
  */
 const onSystem = <A, E, R, N, R2>(
   named: (signed: Iam.SignedIn) => Effect.Effect<string | undefined, N, R2>,
-  operation: (acting: Mapping.Acting, own: Mapping.Acting) => Effect.Effect<A, E, R>,
+  operation: (
+    acting: Mapping.Acting,
+    own: Mapping.Acting,
+    across: Mapping.Across,
+  ) => Effect.Effect<A, E, R>,
 ) =>
   Effect.flatMap(Iam.signedIn, (signed) =>
     Effect.flatMap(
@@ -91,9 +104,10 @@ const onSystem = <A, E, R, N, R2>(
         named(signed),
       ]),
       ([own, star]): Effect.Effect<A, E | TileNotFound, R> => {
-        if (star === undefined || star === own.system) return operation(own, own)
+        const across = acrossFor(signed)
+        if (star === undefined || star === own.system) return operation(own, own, across)
         if (turnKeyElsewhere(signed, own, star)) return Effect.fail(new TileNotFound())
-        return operation({ ...own, system: star }, own)
+        return operation({ ...own, system: star }, own, across)
       },
     ),
   )
@@ -105,8 +119,12 @@ const onSystem = <A, E, R, N, R2>(
  */
 const fromTile = <A, E, R>(
   id: string | undefined,
-  operation: (acting: Mapping.Acting) => Effect.Effect<A, E, R>,
-) => onSystem(() => (id === undefined ? Effect.succeed(undefined) : Mapping.holding(id)), operation)
+  operation: (acting: Mapping.Acting, across: Mapping.Across) => Effect.Effect<A, E, R>,
+) =>
+  onSystem(
+    () => (id === undefined ? Effect.succeed(undefined) : Mapping.holding(id)),
+    (acting, _own, across) => operation(acting, across),
+  )
 
 /**
  * Runs a change for the signed-in Account, the Operation `made` makes, on the System holding the
@@ -157,7 +175,10 @@ const nothing = () => Effect.void
  * by id.
  */
 export const systemAt = (star: string | undefined) =>
-  onSystem(() => Effect.succeed(star), Mapping.system)
+  onSystem(
+    () => Effect.succeed(star),
+    (acting, _own, across) => Mapping.system(acting, across),
+  )
 
 /** The Account's own System, flat, whole: its Root, the user, and every Tile and Reference below it. */
 export const system = systemAt(undefined)
@@ -251,7 +272,10 @@ export const shipped = ({ root, language }: { root: ShippedRoot; language: Local
  */
 export const readTile = <F extends Field>(
   input: Omit<Parameters<typeof Mapping.readTile<F>>[1], 'language'>,
-) => fromTile(input.id, (acting) => Mapping.readTile(acting, { ...input, language: 'en' }))
+) =>
+  fromTile(input.id, (acting, across) =>
+    Mapping.readTile(acting, { ...input, ...across, language: 'en' }),
+  )
 
 /**
  * A Tile of the System holding it, as the Account may read it (`fromTile`), the Account's own Root
@@ -261,7 +285,10 @@ export const readTile = <F extends Field>(
  */
 export const openTile = <F extends Field>(
   input: Omit<Parameters<typeof Mapping.openTile<F>>[1], 'language'>,
-) => fromTile(input.id, (acting) => Mapping.openTile(acting, { ...input, language: 'en' }))
+) =>
+  fromTile(input.id, (acting, across) =>
+    Mapping.openTile(acting, { ...input, ...across, language: 'en' }),
+  )
 
 /**
  * A Tile of the Account's System and everything below it, zipped: the archive's name and its bytes,

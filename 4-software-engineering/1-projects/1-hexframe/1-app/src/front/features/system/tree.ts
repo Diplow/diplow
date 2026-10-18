@@ -1,7 +1,8 @@
 // The System as the canvas draws it. Mapping keeps each Tile's Branches and Leaves by Direction and
 // its Context by slot, −1 to −6, where a slot holds a Tile of its own or a Reference; the canvas takes
 // TileNodes, with the same Branches and Leaves, a Leaf marked as one, and the Context keyed by
-// Direction, each marked with what its light shows: the Root, a file, a Reference, broken or not. Pure: what the canvas shows of a Tile is decided here.
+// Direction, each marked with what its light shows: the Root, a file, a Reference, broken or not, a
+// pin of another System's Tile from its star. Pure: what the canvas shows of a Tile is decided here.
 import { Result } from 'effect'
 
 import { isVerbatim } from '#/api/mapping/files/download'
@@ -35,8 +36,8 @@ export const titleOf = (title: string) => (title === '' ? m.system_untitled() : 
 /**
  * The System's Tiles as the canvas draws them, from its Root down. A Leaf that isn't Markdown is
  * marked as a file's. A Reference is drawn as the Tile it points at, under that Tile's id, so
- * centering on it and acting on it reach the Tile itself, with where that Tile stands; a broken one
- * says so, under an id no Tile has. With `yours`, the Root is the user's, the Account's System's
+ * centering on it and acting on it reach the Tile itself, with where that Tile stands, a pin's the
+ * star of the System holding it; a broken one, unavailable, says so, under an id no Tile has. With `yours`, the Root is the user's, the Account's System's
  * and not Help's: named, untitled, or an empty System's (Mapping's `isEmptySystem`); untitled, it
  * shows the pseudo the user is `naming` it with as they type it.
  */
@@ -86,13 +87,15 @@ function contextNode(entry: ContextEntry, slot: string, root: SystemTile): TileN
     case 'Tile':
       return nodeOf(entry, root)
     case 'Reference': {
-      // The Root stands under nothing: a Reference to it is from the Root itself.
+      // The Root stands under nothing: a Reference to it is from the Root itself. A pin is from the
+      // star of the System holding its Tile.
       const above = tileIn(root, entry.tile.id)?.parent ?? entry.tile
+      const from = entry.elsewhere?.star ?? above.title
       return {
         id: entry.tile.id,
         title: titleOf(entry.tile.title),
         preview: entry.tile.preview,
-        reference: { from: titleOf(above.title) },
+        reference: { from: titleOf(from) },
       }
     }
     case 'BrokenReference':

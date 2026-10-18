@@ -13,11 +13,17 @@ import { systemOf, type Seen } from '#/domains/mapping/entities'
 import { sessionIfAny } from '#/front/client/iam/guard'
 import { leadsTo, publicSystemOf } from '#/front/client/mapping/queries'
 import { Breadcrumb } from '#/front/features/breadcrumb/Breadcrumb'
-import { visitTree, withVisit } from '#/front/features/system/visit/visit'
+import { pinFollowed, visitTree, withVisit } from '#/front/features/system/visit/visit'
 import { m } from '#/paraglide/messages'
 import { Button } from '#/front/ui/atoms/controls/button'
 import { Canvas } from '#/front/ui/canvas/Canvas'
-import { centerOn, readCanvasView, viewIn, type CanvasView } from '#/front/ui/canvas/view/view'
+import {
+  centerOn,
+  readCanvasView,
+  viewIn,
+  type CanvasView,
+  type ViewAction,
+} from '#/front/ui/canvas/view/view'
 import { cornerPlace } from '#/front/ui/layouts/screen/Screen'
 import { EmptyState } from '#/front/ui/layouts/states'
 
@@ -78,8 +84,11 @@ function Public() {
   const tree = useMemo(() => treeOf(seen), [seen])
   const view = search.center === undefined ? centerOn(tree, id) : viewIn(search)
   // A view's center absent is the star; here it is the Tile linked, so the star is named outright.
-  const onViewChange = (next: CanvasView) => {
-    void navigate({ search: { ...next, center: next.center ?? tree.id } })
+  // A pin followed leads to the Tile of the other System, by its own link.
+  const onViewChange = (next: CanvasView, action: ViewAction) => {
+    const pin = pinFollowed(seen.pinned, action)
+    if (pin !== undefined) void navigate({ to: '/t/$id', params: { id: pin }, search: {} })
+    else void navigate({ search: { ...next, center: next.center ?? tree.id } })
   }
   return (
     <main className="relative h-dvh overflow-hidden">
@@ -112,7 +121,13 @@ function Public() {
 }
 
 /** The System as the canvas and the corner draw it: from its star, its gaps hung from it. */
-const treeOf = (seen: Seen) => visitTree({ system: seen, root: systemOf(seen), gaps: seen.gaps })
+const treeOf = (seen: Seen) =>
+  visitTree({
+    system: seen,
+    root: systemOf(seen, seen.pinned),
+    gaps: seen.gaps,
+    pinned: seen.pinned,
+  })
 
 /**
  * A Tile no one may show the reader: kept from them or gone, it can't tell. Signed in, the way home;
