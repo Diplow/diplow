@@ -219,6 +219,14 @@ describe('who reaches a Tile, its Groups named by their caller', () => {
       { subject: gone, value: 'none', from: 'journal', star: undefined, gone: true },
       expect.objectContaining({ subject: family }),
     ])
+    // A Group its caller knows but names not, for a reader outside its Organization, stays unnamed.
+    const unseen = withGroups(reaching, 'journal', new Map([['design', undefined]]))
+    expect(unseen.others[0]).toEqual({
+      subject: design,
+      value: 'read',
+      from: 'ana',
+      star: undefined,
+    })
     // Below, where the gone Group's Grant comes from above, it is no row at all.
     const below = withGroups(
       namedBy(

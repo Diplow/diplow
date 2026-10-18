@@ -215,6 +215,33 @@ describe('a Group the Tile is shared with', () => {
     expect(withSent(shown, sent).others[0]).toMatchObject({ choice: 'none' })
   })
 
+  it('offers a Group it names nothing for its Grant set here cleared alone, none from above', () => {
+    const theirs = crypto.randomUUID()
+    const unnamed = (from: string) =>
+      shareRowsOf(
+        {
+          everyone: everyone('none', null),
+          others: [
+            { subject: { _tag: 'Group', id: theirs }, value: 'read', from, star: undefined },
+          ],
+        },
+        around,
+      ).others
+    expect(unnamed(entry)).toEqual([
+      {
+        key: `Group:${theirs}`,
+        who: 'A group',
+        value: 'read',
+        from: 'set here',
+        clears: true,
+        named: { _tag: 'Group', id: theirs },
+      },
+    ])
+    expect(unnamed(journal)).toEqual([
+      { key: `Group:${theirs}`, who: 'A group', value: 'read', from: 'from Journal' },
+    ])
+  })
+
   it('offers a deleted Group’s Grant set here to be cleared alone, as inherit', () => {
     const gone = crypto.randomUUID()
     const shown = shareRowsOf(

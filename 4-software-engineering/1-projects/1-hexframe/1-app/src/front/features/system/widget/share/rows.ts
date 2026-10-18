@@ -86,7 +86,10 @@ type GroupNamed = { readonly _tag: 'Group'; readonly id: string }
 /** Someone's row, or a Group's, with what its owner chose there and whom a choice names. */
 type SomeoneRow = ReachRow & Chosen & { readonly named: Named }
 
-/** A Group's row whose Group is gone: no choice, its Grant cleared alone. */
+/**
+ * A Group's row the owner names nothing for, its Grant set here: a Group gone, or one of an
+ * Organization they are not in, whose name stays its members'. No choice, its Grant cleared alone.
+ */
 type GoneRow = ReachRow & { readonly clears: true; readonly named: GroupNamed }
 
 /** Someone else reaching the Tile, as its row words it: with a choice, cleared, or neither yet. */
@@ -95,11 +98,11 @@ type OtherRow = ReachRow | SomeoneRow | GoneRow
 /** Whom a row's choice names, none for a row no choice is sent for. */
 const namedOf = (row: OtherRow) => ('named' in row ? row.named : undefined)
 
-/** Whom a subject's row names, none for one with no star nor name yet. */
+/** Whom a subject's row names a choice for, none for one with no star nor name. */
 function namedFor(reach: NamedReach): Named | undefined {
   if (reach.subject._tag === 'Everyone') return undefined
   if (reach.star !== undefined) return { _tag: 'Account', star: reach.star.id }
-  if (reach.subject._tag === 'Group' && (reach.group !== undefined || reach.gone === true)) {
+  if (reach.subject._tag === 'Group' && reach.group !== undefined) {
     return { _tag: 'Group', id: reach.subject.id }
   }
   return undefined
@@ -108,9 +111,11 @@ function namedFor(reach: NamedReach): Named | undefined {
 const otherOf = (reach: NamedReach, around: Around): OtherRow => {
   const row = rowOf(reach, around)
   const named = namedFor(reach)
-  if (named === undefined) return row
-  if (named._tag === 'Group' && reach.gone === true) return { ...row, clears: true, named }
-  return { ...row, choice: choiceOn(reach, around.tile), offered: Choice.literals, named }
+  if (named !== undefined) {
+    return { ...row, choice: choiceOn(reach, around.tile), offered: Choice.literals, named }
+  }
+  if (reach.subject._tag !== 'Group' || reach.from !== around.tile) return row
+  return { ...row, clears: true, named: { _tag: 'Group', id: reach.subject.id } }
 }
 
 /**

@@ -139,8 +139,7 @@ export const setInGroup = (
 
 /**
  * The Groups of an Organization's own some ids name, each with its name and its Organization, an id
- * of none left out: a deleted Group's included, which the API layer then names as gone. Read for the
- * owner of a Tile whose Grants name them, who reads who reaches it.
+ * of none left out, a deleted Group's included.
  */
 export const groupsNamed = (ids: ReadonlyArray<string>) =>
   Effect.map(
@@ -148,6 +147,26 @@ export const groupsNamed = (ids: ReadonlyArray<string>) =>
     (rows) =>
       new Map(rows.map((row) => [row.id, { name: row.name, organization: row.organization }])),
   )
+
+/**
+ * The Groups of an Organization's own some ids name as the Account the request's Session proves may
+ * see them, for the owner of a Tile whose Grants name them, who reads who reaches it: by its name and
+ * its Organization where the Account is one of its members, as `groups` shows them; with no name
+ * where it is not, so an Organization's Group names stay its members'; an id no Group has left out,
+ * a deleted Group's, which the API layer then says gone.
+ */
+export const groupsSeen = (ids: ReadonlyArray<string>) =>
+  Effect.gen(function* () {
+    const { account } = yield* sessionOnly
+    const rows = yield* Organizations.use((organizations) =>
+      organizations.membershipsOf(account.id),
+    )
+    const named = yield* groupsNamed(ids)
+    const theirs = new Set(rows.map(({ organization }) => organization))
+    return new Map(
+      [...named].map(([id, group]) => [id, theirs.has(group.organization) ? group : undefined]),
+    )
+  })
 
 /**
  * The Organizations the Account the request's Session proves belongs to, each with its Groups of its

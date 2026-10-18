@@ -219,6 +219,25 @@ describe("an Organization's Groups, in Grants", () => {
   })
 })
 
+describe("an Organization's Groups, named to an owner", () => {
+  it('keep their names to their Organization’s members, a Grant to one still cleared', async () => {
+    const { ana, bob, star, design } = await atelier()
+    const group = { _tag: 'Group', id: design } as const
+    await value(run(bob.as, Mapping.setGrant({ tile: bob.star, subject: group, value: 'read' })))
+    const named = await value(run(bob.as, Mapping.whoReaches({ tile: bob.star })))
+    expect(named.others).toMatchObject([{ subject: group, group: { name: 'Design' } }])
+    // Once Bob is no longer in Atelier, his own Tile's Grant to Design shows no name, nor gone.
+    await value(run(ana.as, Organizations.removeMember({ star, member: bob.star })))
+    const unnamed = await value(run(bob.as, Mapping.whoReaches({ tile: bob.star })))
+    expect(unnamed.others).toEqual([
+      { subject: group, value: 'read', from: bob.star, star: undefined },
+    ])
+    expect(JSON.stringify(unnamed)).not.toContain('Design')
+    await value(run(bob.as, Mapping.setGrant({ tile: bob.star, subject: group, value: 'inherit' })))
+    expect((await value(run(bob.as, Mapping.whoReaches({ tile: bob.star })))).others).toEqual([])
+  })
+})
+
 describe("an Organization's Groups, managed", () => {
   it('are seen with who is in them by every member, changed by its admins alone', async () => {
     const { ana, bob, cleo, dan, star, design } = await atelier()

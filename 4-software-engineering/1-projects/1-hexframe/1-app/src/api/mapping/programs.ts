@@ -412,20 +412,23 @@ export const setGrant = (change: GrantChange) =>
 /**
  * Who reaches a Tile, each subject with its value and the Tile it comes from, each Account by its
  * star's card, an Organization's Members by its star's, and each Group of an Organization's own by
- * its name, IAM's, and its Organization's star's card, read now; a Group IAM no longer knows, a
- * deleted one, left out, but where its Grant is set on the Tile, said gone so the owner may clear it
- * (Mapping's `withGroups`, HEX-137). Read by the owner of the System holding it, from a Session.
+ * its name, IAM's, and its Organization's star's card, read now, where the reader is one of that
+ * Organization's members, with no name otherwise, so its name stays its members' (IAM's
+ * `groupsSeen`); a Group IAM no longer knows, a deleted one, left out, but where its Grant is set on
+ * the Tile, said gone so the owner may clear it (Mapping's `withGroups`, HEX-137). Read by the owner
+ * of the System holding it, from a Session.
  */
 export const whoReaches = ({ tile }: { tile: string }) =>
   fromSession(tile, (acting) =>
     Effect.gen(function* () {
       const reaching = yield* Sharing.whoReaches(acting, tile)
-      const named = yield* Groups.groupsNamed(groupsUnnamedIn(reaching))
-      const stars = yield* Stars.starsOf([...named.values()].map((group) => group.organization))
+      const seen = yield* Groups.groupsSeen(groupsUnnamedIn(reaching))
+      const shown = [...seen.values()].flatMap((group) => (group ? [group.organization] : []))
+      const stars = yield* Stars.starsOf(shown)
       const cards = new Map(
-        [...named].map(([id, { name, organization }]) => [
+        [...seen].map(([id, group]) => [
           id,
-          { name, organization: stars.get(organization) },
+          group && { name: group.name, organization: stars.get(group.organization) },
         ]),
       )
       return withGroups(reaching, tile, cards)

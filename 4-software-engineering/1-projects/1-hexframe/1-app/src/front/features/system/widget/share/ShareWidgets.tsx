@@ -57,12 +57,13 @@ export function ShareWidgets({ system, tile: { id: tile, title }, onClose }: Sha
     setTyped('')
   }
   if (picking === 'group') {
+    const offered = groupsOffered(shareable, rows)
     return (
       <GroupPicker
         title={m.widget_share_with_which_group({ title: shown })}
-        organizations={groupsOffered(shareable, rows)}
-        onPick={(organization, group) => {
-          const change = groupPicked(shareable, tile, { organization, group })
+        organizations={offered.organizations}
+        onPick={(_organization, group) => {
+          const change = groupPicked(offered, tile, group)
           if (change !== undefined) setGrant.mutate(change)
           back()
         }}

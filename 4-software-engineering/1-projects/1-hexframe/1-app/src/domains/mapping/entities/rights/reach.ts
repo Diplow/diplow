@@ -136,19 +136,22 @@ export const groupsUnnamedIn = ({ others }: Reaching<NamedReach>): ReadonlyArray
 
 /**
  * Who reaches a Tile once its caller named the Groups no star names, IAM's (`groupsUnnamedIn`):
- * each by its name and its Organization; one no longer named, a deleted Group, which reaches nobody,
- * left out, but where its Grant is set on the Tile itself, said `gone`, so its owner may clear it.
+ * each by its name and its Organization; one its caller knows but names not, for a reader who may
+ * not see its name, left as it was; one its caller no longer knows, a deleted Group, which reaches
+ * nobody, left out, but where its Grant is set on the Tile itself, said `gone`, so its owner may
+ * clear it.
  */
 export const withGroups = (
   { everyone, others }: Reaching<NamedReach>,
   tile: string,
-  groups: ReadonlyMap<string, GroupCard>,
+  groups: ReadonlyMap<string, GroupCard | undefined>,
 ): Reaching<NamedReach> => ({
   everyone,
   others: others.flatMap((reach): NamedReach[] => {
     if (reach.subject._tag !== 'Group' || reach.star !== undefined) return [reach]
     const group = groups.get(reach.subject.id)
     if (group !== undefined) return [{ ...reach, group }]
+    if (groups.has(reach.subject.id)) return [reach]
     return reach.from === tile ? [{ ...reach, gone: true }] : []
   }),
 })

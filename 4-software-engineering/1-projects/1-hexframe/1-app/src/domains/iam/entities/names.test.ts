@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { keyNameBounds, keyNameOf } from './key'
+import { groupNameBounds, groupNameOf, keyNameBounds, keyNameOf, sameGroupName } from './names'
 
 /** One character to a reader, eleven UTF-16 units: a family of four, joined. */
 const family = '\u{1F468}‍\u{1F469}‍\u{1F467}‍\u{1F466}'
@@ -22,5 +22,21 @@ describe("a Key's name", () => {
 
   it('is refused empty, of spaces only, or past 32 characters', () => {
     for (const name of ['', '   ', 'x'.repeat(33)]) expect(keyNameOf(name)).toBeUndefined()
+  })
+})
+
+describe('a Group’s name', () => {
+  it('is trimmed, and refused blank or past its bound, counted as a reader counts it', () => {
+    expect(groupNameOf('  Design  ')).toBe('Design')
+    expect(groupNameOf('   ')).toBeUndefined()
+    expect(groupNameOf('x'.repeat(groupNameBounds.max))).toHaveLength(groupNameBounds.max)
+    expect(groupNameOf('x'.repeat(groupNameBounds.max + 1))).toBeUndefined()
+    // Forty emoji of several code points each are forty characters.
+    expect(groupNameOf('👩‍🎨'.repeat(groupNameBounds.max))).toBeDefined()
+  })
+
+  it('is one with another whatever their case', () => {
+    expect(sameGroupName('Design', 'design')).toBe(true)
+    expect(sameGroupName('Design', 'Designers')).toBe(false)
   })
 })

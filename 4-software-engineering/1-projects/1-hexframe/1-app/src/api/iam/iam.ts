@@ -8,6 +8,7 @@ import { keyNameBounds } from '#/domains/iam/entities'
 import * as Iam from '#/domains/iam/iam'
 
 import { run } from '../server/run'
+import { nameOnTheWire } from './names'
 
 /**
  * What a sign-up or a sign-in sends. Bounded here, so nothing unbounded reaches Better Auth; what an
@@ -19,18 +20,12 @@ export const Credentials = Schema.Struct({
 })
 
 /**
- * The most UTF-16 units a reader's character takes here: an emoji is up to 19 (a family, skin toned).
- * A Group's name is bounded by it too (`./organizations/groups.ts`).
- */
-export const unitsPerCharacter = 32
-
-/**
  * What issuing a Key sends: its name. Bounded here, so nothing unbounded reaches IAM or Better Auth;
  * what a name must be is IAM's to say, on the field. IAM counts its characters as a reader does, so
  * the bound, in UTF-16 units, leaves room for its most characters, emoji each, and their spaces.
  */
 export const KeyName = Schema.Struct({
-  name: Schema.String.check(Schema.isMaxLength(keyNameBounds.max * unitsPerCharacter)),
+  name: nameOnTheWire(keyNameBounds.max),
 })
 
 /** What revoking a Key sends: its id, as Better Auth makes them: letters and digits. */

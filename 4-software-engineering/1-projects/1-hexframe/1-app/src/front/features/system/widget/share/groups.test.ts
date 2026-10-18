@@ -6,7 +6,7 @@ import { shareRowsOf } from './rows'
 // The groups the share widget offers, as they word IAM's: by Organization, its Members first, each
 // said shared already where a row names it, and whom a pick names.
 
-const atelier = { id: 'atelier-star', title: 'Atelier', preview: '' }
+const atelier = { id: '00000000-0000-4000-8000-0000000a7e11', title: 'Atelier', preview: '' }
 const design = '00000000-0000-4000-8000-00000000d351'
 const ops = '00000000-0000-4000-8000-0000000000a5'
 const shareable = [
@@ -46,25 +46,27 @@ const rows = shareRowsOf(
 
 describe('the groups the share widget offers', () => {
   it('list each Organization’s Members, then its own, those shared already said so', () => {
-    const [offered] = groupsOffered(shareable, rows)
+    const [offered] = groupsOffered(shareable, rows).organizations
     expect(offered?.name).toBe('Atelier')
-    expect(offered?.groups.map(({ key, named }) => ({ key, named }))).toEqual([
-      { key: 'members', named: true },
-      { key: design, named: true },
-      { key: ops, named: false },
+    expect(offered?.groups.map(({ name, named }) => ({ name, named }))).toEqual([
+      { name: 'Members', named: true },
+      { name: 'Design', named: true },
+      { name: 'Ops', named: false },
     ])
   })
 
   it('name the Members by their star, a Group by its id, nothing offered by nothing', () => {
-    const picked = (organization: string, group: string) =>
-      groupPicked(shareable, 'plans', { organization, group })
-    expect(picked(atelier.id, 'members')).toEqual({
+    const offered = groupsOffered(shareable, rows)
+    const [members, , opss] = offered.organizations[0]?.groups ?? []
+    expect(groupPicked(offered, 'plans', members?.key ?? '')).toEqual({
       tile: 'plans',
       subject: { _tag: 'Account', star: atelier.id },
       value: 'read',
     })
-    expect(picked(atelier.id, ops)?.subject).toEqual({ _tag: 'Group', id: ops })
-    expect(picked(atelier.id, crypto.randomUUID())).toBeUndefined()
-    expect(picked('elsewhere', ops)).toBeUndefined()
+    expect(groupPicked(offered, 'plans', opss?.key ?? '')?.subject).toEqual({
+      _tag: 'Group',
+      id: ops,
+    })
+    expect(groupPicked(offered, 'plans', 'members')).toBeUndefined()
   })
 })

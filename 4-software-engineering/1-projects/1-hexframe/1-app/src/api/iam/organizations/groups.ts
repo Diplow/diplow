@@ -10,14 +10,11 @@ import { GroupId, groupNameBounds } from '#/domains/iam/entities'
 import { TileId } from '#/domains/mapping/entities'
 
 import { run } from '../../server/run'
-import { unitsPerCharacter } from '../iam'
+import { nameOnTheWire } from '../names'
 import * as Organizations from './programs'
 
-/**
- * A Group's name as it is sent, bounded here so nothing unbounded reaches IAM, which counts its
- * characters as a reader does and says what a name must be, on the field.
- */
-const GroupName = Schema.String.check(Schema.isMaxLength(groupNameBounds.max * unitsPerCharacter))
+/** A Group's name as it is sent, bounded before IAM counts it (`nameOnTheWire`). */
+const GroupName = nameOnTheWire(groupNameBounds.max)
 
 /** An Organization, by its star's id. */
 const OrganizationAt = Schema.Struct({ star: TileId })

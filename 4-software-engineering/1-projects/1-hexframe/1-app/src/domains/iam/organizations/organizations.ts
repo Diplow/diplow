@@ -40,7 +40,9 @@ export const membersGroupOf = (organization: string) => organization
 export const belonging = (account: string) =>
   Effect.map(
     Organizations.use((organizations) =>
-      Effect.all([organizations.membershipsOf(account), organizations.groupsIn(account)]),
+      Effect.all([organizations.membershipsOf(account), organizations.groupsIn(account)], {
+        concurrency: 'unbounded',
+      }),
     ),
     ([rows, groups]) => ({
       admins: rows.flatMap(({ organization, role }) => (role === 'admin' ? [organization] : [])),
