@@ -1,0 +1,82 @@
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/operations/operation.ts
+  s_eb2c82211b20e8::t_cdb435da652595 16-17,23,42-46,50
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/conversations/turns.ts
+  s_eb2c82211b20e8::t_bbd7ad8a00f70e 22-23,41-42,47,124,164-167,191
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/agent/prompt.ts
+  s_eb2c82211b20e8::t_67e96f89896497 4-5,39-50,67-68,221-249,259,273
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/batch/fold.ts
+  s_eb2c82211b20e8::t_04da7c1fd4652b 69-73
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/programs.ts
+  s_eb2c82211b20e8::t_0cf746dda1f265 17,172-175,190-199,204-208,212-213,243-249,252-262,268,274-275,278-284,309-311,324-326,339-343,347
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/conversations/proposals.ts
+  s_eb2c82211b20e8::t_bbd7ad8a00f70e 13-16,22,31-34,40,88,149,158-166
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/recording.test.ts
+  s_eb2c82211b20e8::t_18ef691f3629f9 22,44
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261018065053_turn-elsewhere/migration.sql
+  s_eb2c82211b20e8::t_aeebba68a8efde 1-2
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/operations/rights/may.ts
+  s_eb2c82211b20e8::t_04da7c1fd4652b 10,19,23-24,203-227,229-230,233-235
+  s_eb2c82211b20e8::t_02881ddcc7382e 228,231-232
+  s_eb2c82211b20e8::t_f2aedd2a80492c 236
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/errors.ts
+  s_eb2c82211b20e8::t_52aea2e2a58e3c 25-33,56
+  s_eb2c82211b20e8::t_944e3f74662490 24
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/assistant.ts
+  s_eb2c82211b20e8::t_e81b29271a87da 14,51,185-194,209-218,265-266,271-274,284,350,355,411-417,476-482,491-492,495,497,509-517,523-526,528,543,581-602
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/mapping.ts
+  s_eb2c82211b20e8::t_a654344330700f 912,916
+  s_eb2c82211b20e8::t_20bf332addaf8b 31,52,71,99,150-151,155-182,294-296,442-450,453-460,812-816,822-823,832,834-841,845,897-911,913-915,917
+  s_eb2c82211b20e8::t_3e5f3267ff4a11 918
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/assistant.test.ts
+  s_eb2c82211b20e8::t_5a3b99cf1a3fc2 13
+  s_eb2c82211b20e8::t_1131aaae88588a 228-234
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/files/files.ts
+  s_eb2c82211b20e8::t_bba117dddd337a 309-353
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/entities/turn/turn.ts
+  s_eb2c82211b20e8::t_cdb435da652595 1-3,57-61
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/events.test.ts
+  s_eb2c82211b20e8::t_18ef691f3629f9 11,32-34,36
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/server/mcp/tools.ts
+  s_eb2c82211b20e8::t_2188b217386417 286-289
+  s_eb2c82211b20e8::t_02881ddcc7382e 209-212,279,307,344,375,406,436,469
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/agent/agent.ts
+  s_eb2c82211b20e8::t_cba4e08a97ed98 65-66,89
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/mapping/sharing/reading.ts
+  s_eb2c82211b20e8::t_a654344330700f 18-19,25,199-222
+  s_eb2c82211b20e8::t_7d47795064f1f1 223
+4-software-engineering/1-projects/1-hexframe/1-app/src/repositories/database/schema.ts
+  s_eb2c82211b20e8::t_aeebba68a8efde 295-297,317,337-338,356
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/undo/undo.ts
+  s_eb2c82211b20e8::t_c313526ded4cc6 6-8
+  s_eb2c82211b20e8::t_69d1a0486fb3b3 4,13-20,49-66
+  s_eb2c82211b20e8::t_352467fd9ac722 5
+  s_eb2c82211b20e8::t_29392d0ab08c93 67-68
+4-software-engineering/1-projects/1-hexframe/1-app/src/domains/assistant/operations/decider.ts
+  s_eb2c82211b20e8::t_fc9131f1f333b0 5-6,11,32-34,40,60-73,93,102,109-116,130-133
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/mapping/programs.ts
+  s_eb2c82211b20e8::t_3dee8c12d76947 9,76-79,81-96,108-110,112-114,130-136,176-179
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/proposal/programs.ts
+  s_eb2c82211b20e8::t_9f6da14ad74020 24,50-53,56-66,90-96,98-102,107,124-128,134,146-168,171-174,181-182,184-185,187-189,191,234-246,253-256,261-284
+4-software-engineering/1-projects/1-hexframe/1-app/migrations/20261018065053_turn-elsewhere/snapshot.json
+  s_eb2c82211b20e8::t_aeebba68a8efde 1-2483
+4-software-engineering/1-projects/1-hexframe/1-app/src/api/assistant/someone/someone.ts
+  s_eb2c82211b20e8::t_3672af85ce40e9 15,89-108,110-116,118-128
+  s_eb2c82211b20e8::t_76397aa0fff810 10,109,117
+  s_eb2c82211b20e8::t_99638b358a6c15 129
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "aa4d02d9cdd2cfb8e150300d5d86bb3da0c1019b",
+  "prompts": {},
+  "sessions": {
+    "s_eb2c82211b20e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ede5bf1-d138-4eff-9ff5-9a6bac9ee001",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Ulysse Boillot <ulysse@hodor.ai>"
+    }
+  }
+}
